@@ -10,8 +10,8 @@
                                 <item value="golden">Golden ratio</item>
                                 <item value="3;3">Rule-of-third</item>
                         </param>
-                        <param name="vertical_guides"  type="int"   min="1" max="100" _gui-text="Columns">2</param>
-                        <param name="horizontal_guides"  type="int"   min="1" max="100" _gui-text="Rows">3</param>
+                        <param name="vertical_guides"  type="int"   min="1" max="1000" _gui-text="Columns">2</param>
+                        <param name="horizontal_guides"  type="int"   min="1" max="1000" _gui-text="Rows">3</param>
                         <param name="start_from_edges" type="boolean" _gui-text="Start from edges">false</param>
                 	<param name="delete_existing_guides" type="boolean" _gui-text="Delete existing guides">false</param>
                 </page>
@@ -77,8 +77,8 @@
                 		<item value="0">None</item>
                 	</param>
                         
-                        <param name="vertical_subdivisions"  type="int"   min="1" max="100" _gui-text="Columns">2</param>
-                        <param name="horizontal_subdivisions"  type="int"   min="1" max="100" _gui-text="Rows">3</param>
+                        <param name="vertical_subdivisions"  type="int"   min="1" max="1000" _gui-text="Columns">2</param>
+                        <param name="horizontal_subdivisions"  type="int"   min="1" max="1000" _gui-text="Rows">3</param>
                         <param name="start_from_edges2" type="boolean" _gui-text="Start from edges">false</param>
                         <param name="delete_existing_guides3" type="boolean" _gui-text="Delete existing guides">false</param>
                 
