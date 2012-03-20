@@ -62,8 +62,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
   _blur_tag(Glib::ustring(history_prefix) + ":blur"),
   _opacity_tag(Glib::ustring(history_prefix) + ":opacity"),
   _opacity_vbox(false, 0),
-  _opacity_label_box(false, 0),
-  _opacity_label(_("_Opacity (%):"), 0.0, 1.0, true),
+  _opacity_label(_("Opacity:")),
   _opacity_adjustment(100.0, 0.0, 100.0, 1.0, 1.0, 0.0),
   _opacity_hscale(_opacity_adjustment),
   _opacity_spin_button(_opacity_adjustment, 0.01, 1),
@@ -72,6 +71,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
   _fe_alignment(1, 1, 1, 1),
   _blocked(false)
 {
+
     // Filter Effects
     pack_start(_fe_vbox, false, false, 2);
     _fe_alignment.set_padding(0, 0, 4, 0);
@@ -81,10 +81,19 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
 
     // Opacity
     pack_start(_opacity_vbox, false, false, 2);
-    _opacity_label_box.pack_start(_opacity_label, false, false, 4);
-    _opacity_vbox.pack_start(_opacity_label_box, false, false, 0);
+    if (_opacity_label.get_text().length() < 7) {
+        _opacity_label.set_width_chars(7);
+    }
+#if WITH_GTKMM_2_22
+    _opacity_label.set_alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER);
+#else
+    _opacity_label.set_alignment(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER);
+#endif
+
+    _opacity_hbox.pack_start(_opacity_label, false, false, 3);
+    //_opacity_vbox.pack_start(_opacity_label_box, false, false, 0);
     _opacity_vbox.pack_start(_opacity_hbox, false, false, 0);
-    _opacity_hbox.pack_start(_opacity_hscale, true, true, 4);
+    _opacity_hbox.pack_start(_opacity_hscale, true, true, 0);
     _opacity_hbox.pack_start(_opacity_spin_button, false, false, 0);
     _opacity_hscale.set_draw_value(false);
     _opacity_adjustment.signal_value_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));

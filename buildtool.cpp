@@ -4,6 +4,7 @@
  * Authors:
  *   Bob Jamison
  *   Jasper van de Gronde
+ *   Johan Engelen
  *
  * Copyright (C) 2006-2008 Bob Jamison
  *
@@ -25,7 +26,7 @@
 /**
  * To use this file, compile with:
  * <pre>
- * g++ -O3 buildtool.cpp -o btool.exe
+ * g++ -O3 buildtool.cpp -o btool.exe -fopenmp
  * (or whatever your compiler might be)
  * Then
  * btool
@@ -35,11 +36,11 @@
  * Note: if you are using MinGW, and a not very recent version of it,
  * gettimeofday() might be missing.  If so, just build this file with
  * this command:
- * g++ -O3 -DNEED_GETTIMEOFDAY buildtool.cpp -o btool.exe
+ * g++ -O3 -DNEED_GETTIMEOFDAY buildtool.cpp -o btool.exe -fopenmp
  *
  */
 
-#define BUILDTOOL_VERSION  "BuildTool v0.9.9"
+#define BUILDTOOL_VERSION  "BuildTool v0.9.9multi"
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -61,7 +62,6 @@
 #ifdef __WIN32__
 #include <windows.h>
 #endif
-
 
 #include <errno.h>
 
@@ -3080,6 +3080,12 @@ public:
         { uri.parse(uristr); }
 
     /**
+     * Set the number of threads that can be used
+     */
+    void setNumThreads(const int num)
+        { numThreads = num; }
+
+    /**
      *  Resolve another path relative to this one
      */
     String resolve(const String &otherPath);
@@ -3096,6 +3102,13 @@ public:
      * Assume that the string has already been syntax validated
      */
     bool evalBool(const String &s, bool defaultVal);
+
+    /**
+     * replace variable refs like ${a} with their values
+     * return the value parsed as an integer
+     * Assume that the string has already been syntax validated
+     */
+    int evalInt(const String &s, int defaultVal);
 
     /**
      *  Get an element attribute, performing substitutions if necessary
@@ -3161,7 +3174,12 @@ protected:
      *    The path to the file associated with this object
      */     
     URI uri;
-    
+
+    /**
+     *    The number of threads that can be used
+     */     
+    static int numThreads;
+
     /**
      *    If this prefix is seen in a substitution, use an environment
      *    variable.
@@ -3406,7 +3424,7 @@ private:
 
 };
 
-
+int MakeBase::numThreads = 1;
 
 /**
  * Define the pkg-config class here, since it will be used in MakeBase method
@@ -4867,6 +4885,15 @@ bool MakeBase::evalBool(const String &s, bool defaultVal)
         return false;
 }
 
+int MakeBase::evalInt(const String &s, int defaultVal)
+{
+    if (s.size()==0) {
+        return defaultVal;
+    }
+    int val = atoi(s.c_str());
+    // perhaps some error checking, but... bah! waste of time
+    return val;
+}
 
 /**
  * Get a string attribute, testing it for proper syntax and
@@ -6953,15 +6980,43 @@ public:
             dname.append(dirName);
             incs.append(parent.resolve(dname));
             }
-            
+
+// First create all directories, fails if done in OpenMP parallel loop below... goes superfast anyway, so don't optimize
+        for (unsigned int fi = 0; fi < deps.size() ; ++fi)
+        {
+            DepRec dep = deps[fi];
+ 
+            //## Make paths
+            String destPath = dest;
+            if (dep.path.size()>0)
+            {
+                destPath.append("/");
+                destPath.append(dep.path);
+            }
+            //## Make sure destination directory exists
+            if (!createDirectory(destPath))
+            {
+                taskstatus("problem creating folder: %s", destPath.c_str());
+                if (f) {
+                    fclose(f);
+                }
+                return false;
+            }
+        }
+
         /**
          * Compile each of the C files that need it
          */
-        bool errorOccurred = false;                 
-        std::vector<String> cfiles;
-        for (viter=deps.begin() ; viter!=deps.end() ; viter++)
-            {
-            DepRec dep = *viter;
+        bool errorOccurred = false;
+
+#ifdef _OPENMP 
+        taskstatus("compile with %d threads in parallel", numThreads);
+#       pragma omp parallel for num_threads(numThreads)
+#endif
+
+        for (unsigned int fi = 0; fi < deps.size() ; ++fi)
+        {
+            DepRec dep = deps[fi];
 
             //## Select command
             String sfx = dep.suffix;
@@ -6974,22 +7029,13 @@ public:
             String destPath = dest;
             String srcPath  = source;
             if (dep.path.size()>0)
-                {
+            {
                 destPath.append("/");
                 destPath.append(dep.path);
                 srcPath.append("/");
                 srcPath.append(dep.path);
-                }
-            //## Make sure destination directory exists
-            if (!createDirectory(destPath))
-            {
-                if (f)
-                {
-                fclose(f);
-                }
-                return false;
             }
-			
+
             //## Check whether it needs to be done
             String destName;
             if (destPath.size()>0)
@@ -7102,11 +7148,15 @@ public:
                 error("problem compiling: %s", errString.c_str());
                 errorOccurred = true;
                 }
-            if (errorOccurred && !continueOnError)
+
+            if (errorOccurred && !continueOnError) {
+#ifndef _OPENMP // figure out a way to break the loop here with OpenMP
                 break;
+#endif
+            }
 
             removeFromStatCache(getNativePath(destFullName));
-            }
+        }
 
         if (f)
             {
@@ -10301,7 +10351,7 @@ static bool parseOptions(int argc, char **argv)
                 }
             else if (arg == "-f" || arg == "-file")
                 {
-                if (i>=argc)
+                if (i>=argc-1)
                    {
                    usage(argc, argv);
                    return false;
@@ -10309,6 +10359,19 @@ static bool parseOptions(int argc, char **argv)
                 i++; //eat option
                 make.setURI(argv[i]);
                 }
+            else if (arg == "-j")
+            {
+                if (i>=argc-1) {  // if -j is given as last argument
+                    make.setNumThreads(20); // default to some high value
+                } else {
+                    i++; //eat option
+                    if (argv[i] && (*argv[i] == '-')) { // if -j is followed by another '-...' option
+                        make.setNumThreads(20); // default to some high value
+                    } else {
+                        make.setNumThreads(atoi(argv[i]));
+                    }
+                }
+            }
             else if (arg.size()>2 && sequ(arg, "-D"))
                 {
                 String s = arg.substr(2, arg.size());

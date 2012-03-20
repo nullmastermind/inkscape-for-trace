@@ -30,6 +30,7 @@
 #include <iostream>
 #include "enums.h"
 #include "desktop-handles.h"
+#include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
 #include "selection.h"
@@ -481,14 +482,14 @@ void InkscapePreferences::initPageUI()
         _("English/Canada (en_CA)"), _("English/Great Britain (en_GB)"), _("Pig Latin (en_US@piglatin)"),
         _("Esperanto (eo)"), _("Estonian (et)"), _("Farsi (fa)"), _("Finnish (fi)"),
         _("French (fr)"), _("Irish (ga)"), _("Galician (gl)"), _("Hebrew (he)"), _("Hungarian (hu)"),
-        _("Indonesian (id)"), _("Italian (it)"), _("Japanese (ja)"), _("Khmer (km)"), _("Kinyarwanda (rw)"), _("Korean (ko)"), _("Lithuanian (lt)"), _("Macedonian (mk)"),
+        _("Indonesian (id)"), _("Italian (it)"), _("Japanese (ja)"), _("Khmer (km)"), _("Kinyarwanda (rw)"), _("Korean (ko)"), _("Lithuanian (lt)"), _("Latvian (lv)"), _("Macedonian (mk)"),
         _("Mongolian (mn)"), _("Nepali (ne)"), _("Norwegian Bokmål (nb)"), _("Norwegian Nynorsk (nn)"), _("Panjabi (pa)"),
         _("Polish (pl)"), _("Portuguese (pt)"), _("Portuguese/Brazil (pt_BR)"), _("Romanian (ro)"), _("Russian (ru)"),
         _("Serbian (sr)"), _("Serbian in Latin script (sr@latin)"), _("Slovak (sk)"), _("Slovenian (sl)"),  _("Spanish (es)"), _("Spanish/Mexico (es_MX)"),
         _("Swedish (sv)"),_("Telugu (te_IN)"), _("Thai (th)"), _("Turkish (tr)"), _("Ukrainian (uk)"), _("Vietnamese (vi)")};
     Glib::ustring langValues[] = {"", "sq", "am", "ar", "hy", "az", "eu", "be", "bg", "bn", "br", "ca", "ca@valencia", "zh_CN", "zh_TW", "hr", "cs", "da", "nl",
         "dz", "de", "el", "en", "en_AU", "en_CA", "en_GB", "en_US@piglatin", "eo", "et", "fa", "fi", "fr", "ga",
-        "gl", "he", "hu", "id", "it", "ja", "km", "rw", "ko", "lt", "mk", "mn", "ne", "nb", "nn", "pa",
+        "gl", "he", "hu", "id", "it", "ja", "km", "rw", "ko", "lt", "lv", "mk", "mn", "ne", "nb", "nn", "pa",
         "pl", "pt", "pt_BR", "ro", "ru", "sr", "sr@latin", "sk", "sl", "es", "es_MX", "sv", "te_IN", "th", "tr", "uk", "vi" };
 
     {
@@ -1306,6 +1307,12 @@ void InkscapePreferences::initPageBitmaps()
     _bitmap_copy_res.init("/options/createbitmap/resolution", 1.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
     _page_bitmaps.add_line( false, _("Resolution for Create Bitmap Copy:"), _bitmap_copy_res, _("dpi"),
                             _("Resolution used by the Create Bitmap Copy command"), false);
+    {
+        Glib::ustring labels[] = {_("Always embed"), _("Always link"), _("Ask")};
+        Glib::ustring values[] = {"embed", "link", "ask"};
+        _bitmap_import.init("/dialogs/import/link", labels, values, G_N_ELEMENTS(values), "ask");
+        _page_bitmaps.add_line( false, _("Bitmap import:"), _bitmap_import, "", "", false);
+    }
 
     this->AddPage(_page_bitmaps, _("Bitmaps"), PREFS_PAGE_BITMAPS);
 }
