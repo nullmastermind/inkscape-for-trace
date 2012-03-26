@@ -796,6 +796,7 @@ TileDialog::TileDialog()
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
 
     TileBox.pack_start(SpinsHBox, false, false, MARGIN);
+    TileBox.pack_start(anchorSelector);
 
     {
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/

@@ -20,6 +20,7 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/radiobutton.h>
 
+#include "ui/widget/anchor-selector.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/scalar-unit.h"
@@ -77,6 +78,8 @@ private:
 
     bool userHidden;
     bool updating;
+
+    AnchorSelector        anchorSelector;
 
     Gtk::Notebook   notebook;
 

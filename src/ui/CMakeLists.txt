@@ -72,6 +72,7 @@ set(ui_SRC
 	# dialog/whiteboard-sharewithchat.cpp
 	# dialog/whiteboard-sharewithuser.cpp
 
+	widget/anchor-selector.cpp
 	widget/button.cpp
 	widget/color-picker.cpp
 	widget/color-preview.cpp
@@ -200,6 +201,7 @@ set(ui_SRC
 	view/view-widget.h
 	view/view.h
 
+	widget/anchor-selector.h
 	widget/attr-widget.h
 	widget/button.h
 	widget/color-picker.h
