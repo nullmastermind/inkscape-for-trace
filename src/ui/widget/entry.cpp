@@ -24,7 +24,6 @@ Entry::Entry(  Glib::ustring const &label, Glib::ustring const &tooltip,
     : Labelled(label, tooltip, new Gtk::Entry(), suffix, icon, mnemonic)
 {    
 }
-    
 
 } // namespace Widget
 } // namespace UI

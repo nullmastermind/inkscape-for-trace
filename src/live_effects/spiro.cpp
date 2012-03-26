@@ -1,6 +1,8 @@
 /*
-ppedit - A pattern plate editor for Spiro splines.
-Copyright (C) 2007 Raph Levien
+Copyright (C) 2007-2012 Authors
+
+Authors: Raph Levien
+         Johan Engelen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,12 +22,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 /* C implementation of third-order polynomial spirals. */
 
+#include "spiro.h"
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "bezctx_intf.h"
-#include "spiro.h"
+#include "display/curve.h"
+#include <2geom/math-utils.h>
+
+#define SPIRO_SHOW_INFINITE_COORDINATE_CALLS
+
+namespace Spiro {
+
+void spiro_run(const spiro_cp *src, int src_len, SPCurve &curve)
+{
+    spiro_seg *s = Spiro::run_spiro(src, src_len);
+    Spiro::ConverterSPCurve bc(curve);
+    Spiro::spiro_to_otherpath(s, src_len, bc);
+    free(s);
+}
+
+void spiro_run(const spiro_cp *src, int src_len, Geom::Path &path)
+{
+    spiro_seg *s = Spiro::run_spiro(src, src_len);
+    Spiro::ConverterPath bc(path);
+    Spiro::spiro_to_otherpath(s, src_len, bc);
+    free(s);
+}
+
+
+/************************************
+ * Spiro math
+ */
 
 struct spiro_seg_s {
     double x;
@@ -814,15 +843,15 @@ solve_spiro(spiro_seg *s, int nseg)
 }
 
 static void
-spiro_seg_to_bpath(const double ks[4],
+spiro_seg_to_otherpath(const double ks[4],
 		   double x0, double y0, double x1, double y1,
-		   bezctx *bc, int depth)
+		   ConverterBase &bc, int depth)
 {
     double bend = fabs(ks[0]) + fabs(.5 * ks[1]) + fabs(.125 * ks[2]) +
 	fabs((1./48) * ks[3]);
 
     if (!bend > 1e-8) {
-	bezctx_lineto(bc, x1, y1);
+        bc.lineto(x1, y1);
     } else {
 	double seg_ch = hypot(x1 - x0, y1 - y0);
 	double seg_th = atan2(y1 - y0, x1 - x0);
@@ -845,7 +874,7 @@ spiro_seg_to_bpath(const double ks[4],
 	    vl = (scale * (1./3)) * sin(th_even - th_odd);
 	    ur = (scale * (1./3)) * cos(th_even + th_odd);
 	    vr = (scale * (1./3)) * sin(th_even + th_odd);
-	    bezctx_curveto(bc, x0 + ul, y0 + vl, x1 - ur, y1 - vr, x1, y1);
+        bc.curveto(x0 + ul, y0 + vl, x1 - ur, y1 - vr, x1, y1);
 	} else {
 	    /* subdivide */
 	    double ksub[4];
@@ -864,11 +893,11 @@ spiro_seg_to_bpath(const double ks[4],
 	    integrate_spiro(ksub, xysub);
 	    xmid = x0 + cth * xysub[0] - sth * xysub[1];
 	    ymid = y0 + cth * xysub[1] + sth * xysub[0];
-	    spiro_seg_to_bpath(ksub, x0, y0, xmid, ymid, bc, depth + 1);
+	    spiro_seg_to_otherpath(ksub, x0, y0, xmid, ymid, bc, depth + 1);
 	    ksub[0] += .25 * ks[1] + (1./384) * ks[3];
 	    ksub[1] += .125 * ks[2];
 	    ksub[2] += (1./16) * ks[3];
-	    spiro_seg_to_bpath(ksub, xmid, ymid, x1, y1, bc, depth + 1);
+	    spiro_seg_to_otherpath(ksub, xmid, ymid, x1, y1, bc, depth + 1);
 	}
     }
 }
@@ -890,7 +919,7 @@ free_spiro(spiro_seg *s)
 }
 
 void
-spiro_to_bpath(const spiro_seg *s, int n, bezctx *bc)
+spiro_to_otherpath(const spiro_seg *s, int n, ConverterBase &bc)
 {
     int i;
     int nsegs = s[n - 1].ty == '}' ? n - 1 : n;
@@ -901,10 +930,10 @@ spiro_to_bpath(const spiro_seg *s, int n, bezctx *bc)
 	double x1 = s[i + 1].x;
 	double y1 = s[i + 1].y;
 
-	if (i == 0)
-	    bezctx_moveto(bc, x0, y0, s[0].ty == '{');
-	bezctx_mark_knot(bc, i);
-	spiro_seg_to_bpath(s[i].ks, x0, y0, x1, y1, bc, 0);
+        if (i == 0) {
+            bc.moveto(x0, y0, s[0].ty == '{');
+        }
+        spiro_seg_to_otherpath(s[i].ks, x0, y0, x1, y1, bc, 0);
     }
 }
 
@@ -922,9 +951,19 @@ get_knot_th(const spiro_seg *s, int i)
     }
 }
 
+
+} // namespace Spiro
+
+/************************************
+ * Unit_test code
+ */
+
+
 #ifdef UNIT_TEST
 #include <stdio.h>
 #include <sys/time.h> /* for gettimeofday */
+
+using namespace Spiro;
 
 static double
 get_time (void)

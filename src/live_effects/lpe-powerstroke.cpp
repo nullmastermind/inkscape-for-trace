@@ -5,7 +5,7 @@
 /* Authors:
  *   Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
  *
- * Copyright (C) 2010-2011 Authors
+ * Copyright (C) 2010-2012 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -26,9 +26,12 @@
 #include <2geom/svg-path.h>
 #include <2geom/path-intersection.h>
 #include <2geom/crossing.h>
+#include <2geom/ellipse.h>
+
+#include "spiro.h"
 
 namespace Geom {
-
+// should all be moved to 2geom at some point
 
 Point unitTangentAt( D2<SBasis> const & a, Coord t, unsigned n = 3) {
     std::vector<Point> derivs = a.valueAndDerivatives(t, n);
@@ -55,7 +58,47 @@ boost::optional<Point> intersection_point( Point const & origin_a, Point const &
     return boost::none;
 }
 
+Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in)
+{
+    std::vector<Geom::Point> temp;
+    sbasis_to_bezier(temp, sbasis_in, 4);
+    return Geom::CubicBezier( temp );
 }
+
+/**
+ * document this!
+ * very quick: this finds the ellipse with minimum eccentricity
+   passing through point P and Q, with tangent PO at P and QO at Q
+   http://mathforum.org/kb/message.jspa?messageID=7471596&tstart=0
+ */
+static Ellipse find_ellipse(Point P, Point Q, Point O)
+{
+    Point p = P - O;
+    Point q = Q - O;
+    Coord K = 4 * dot(p,q) / (L2sq(p) + L2sq(q));
+
+    double cross = p[Y]*q[X] - p[X]*q[Y];
+    double a = -q[Y]/cross;
+    double b = q[X]/cross;
+    double c = (O[X]*q[Y] - O[Y]*q[X])/cross;
+
+    double d = p[Y]/cross;
+    double e = -p[X]/cross;
+    double f = (-O[X]*p[Y] + O[Y]*p[X])/cross;
+
+    // Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0
+    double A = (a*d*K+d*d+a*a);
+    double B = (a*e*K+b*d*K+2*d*e+2*a*b);
+    double C = (b*e*K+e*e+b*b);
+    double D = (a*f*K+c*d*K+2*d*f-2*d+2*a*c-2*a);
+    double E = (b*f*K+c*e*K+2*e*f-2*e+2*b*c-2*b);
+    double F = c*f*K+f*f-2*f+c*c-2*c+1;
+
+    return Ellipse(A, B, C, D, E, F);
+}
+
+
+} // namespace Geom
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -84,19 +127,21 @@ static const Util::EnumData<unsigned> LineCapTypeData[] = {
 };
 static const Util::EnumDataConverter<unsigned> LineCapTypeConverter(LineCapTypeData, sizeof(LineCapTypeData)/sizeof(*LineCapTypeData));
 
-enum LineCuspType {
-  LINECUSP_BEVEL,
-  LINECUSP_ROUND,
-  LINECUSP_EXTRP_MITER,
-  LINECUSP_MITER
+enum LineJoinType {
+  LINEJOIN_BEVEL,
+  LINEJOIN_ROUND,
+  LINEJOIN_EXTRP_MITER,
+  LINEJOIN_MITER,
+  LINEJOIN_SPIRO
 };
-static const Util::EnumData<unsigned> LineCuspTypeData[] = {
-    {LINECUSP_BEVEL, N_("Beveled"),   "bevel"},
-    {LINECUSP_ROUND, N_("Rounded"),   "round"},
-    {LINECUSP_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"},
-    {LINECUSP_MITER, N_("Miter"),     "miter"},
+static const Util::EnumData<unsigned> LineJoinTypeData[] = {
+    {LINEJOIN_BEVEL, N_("Beveled"),   "bevel"},
+    {LINEJOIN_ROUND, N_("Rounded"),   "round"},
+    {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"},
+    {LINEJOIN_MITER, N_("Miter"),     "miter"},
+    {LINEJOIN_SPIRO, N_("Spiro"),     "spiro"},
 };
-static const Util::EnumDataConverter<unsigned> LineCuspTypeConverter(LineCuspTypeData, sizeof(LineCuspTypeData)/sizeof(*LineCuspTypeData));
+static const Util::EnumDataConverter<unsigned> LineJoinTypeConverter(LineJoinTypeData, sizeof(LineJoinTypeData)/sizeof(*LineJoinTypeData));
 
 LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
@@ -105,7 +150,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     interpolator_type(_("Interpolator type"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path."), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CUBICBEZIER_JOHAN),
     interpolator_beta(_("Smoothness"), _("Sets the smoothness for the CubicBezierJohan interpolator. 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
     start_linecap_type(_("Start cap"), _("Determines the shape of the path's start."), "start_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ROUND),
-    cusp_linecap_type(_("Join"), _("Specifies the shape of the path's corners."), "cusp_linecap_type", LineCuspTypeConverter, &wr, this, LINECUSP_ROUND),
+    linejoin_type(_("Join"), _("Specifies the shape of the path's corners."), "linejoin_type", LineJoinTypeConverter, &wr, this, LINEJOIN_ROUND),
     miter_limit(_("Miter limit"), _("Maximum length of the miter (in units of stroke width)"), "miter_limit", &wr, this, 4.),
     end_linecap_type(_("End cap"), _("Determines the shape of the path's end."), "end_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ROUND)
 {
@@ -121,7 +166,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     registerParameter( dynamic_cast<Parameter *>(&interpolator_type) );
     registerParameter( dynamic_cast<Parameter *>(&interpolator_beta) );
     registerParameter( dynamic_cast<Parameter *>(&start_linecap_type) );
-    registerParameter( dynamic_cast<Parameter *>(&cusp_linecap_type) );
+    registerParameter( dynamic_cast<Parameter *>(&linejoin_type) );
     registerParameter( dynamic_cast<Parameter *>(&miter_limit) );
     registerParameter( dynamic_cast<Parameter *>(&end_linecap_type) );
 }
@@ -163,9 +208,9 @@ static bool compare_offsets (Geom::Point first, Geom::Point second)
 
 // find discontinuities in input path
 struct discontinuity_data {
-    Geom::Point der0; // unit derivative of 'left' side of cusp
-    Geom::Point der1; // unit derivative of 'right' side of cusp
-    double width; // intended stroke width at cusp
+    Geom::Point der0; // unit derivative of 'left' side of join
+    Geom::Point der1; // unit derivative of 'right' side of join
+    double width; // intended stroke width at join
 };
 std::vector<discontinuity_data> find_discontinuities( Geom::Piecewise<Geom::D2<Geom::SBasis> > const & der,
                                                       Geom::Piecewise<Geom::SBasis> const & x,
@@ -176,8 +221,16 @@ std::vector<discontinuity_data> find_discontinuities( Geom::Piecewise<Geom::D2<G
     for(unsigned i = 1; i < der.size(); i++) {
         if ( ! are_near(der[i-1].at1(), der[i].at0(), eps) ) {
             discontinuity_data data;
+
             data.der0 = der[i-1].at1();
             data.der1 = der[i].at0();
+            if ( Geom::are_near(data.der0.length(), 0) ) {
+                data.der0 = unitTangentAt(der[i-1], 1, 2);
+            }
+            if ( Geom::are_near(data.der1.length(), 0) ) {
+                data.der1 = unitTangentAt(der[i], 0, 2);
+            }
+
             double t = der.cuts[i];
             std::vector< double > rts = roots (x - t);  /// @todo this has multiple solutions for general strokewidth paths (generated by spiro interpolator...), ignore for now
             if (!rts.empty()) {
@@ -194,12 +247,12 @@ std::vector<discontinuity_data> find_discontinuities( Geom::Piecewise<Geom::D2<G
 
 Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis> > const & B,
                                           std::vector<discontinuity_data> const & cusps,
-                                          LineCuspType cusp_linecap,
+                                          LineJoinType jointype,
                                           double miter_limit,
                                           bool forward_direction,
                                           double tol=Geom::EPSILON)
 {
-/* per definition, each discontinuity should be fixed with a cusp-ending, as defined by cusp_linecap_type
+/* per definition, each discontinuity should be fixed with a join-ending, as defined by linejoin_type
 */
     Geom::PathBuilder pb;
     if (B.size() == 0) {
@@ -223,14 +276,41 @@ Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis>
         { // discontinuity found, so fix it :-)
             discontinuity_data cusp = cusps[cusp_i];
 
-            switch (cusp_linecap) {
-            case LINECUSP_ROUND:  // properly bugged ^_^
-                pb.arcTo( abs(cusp.width), abs(cusp.width),
-                          angle_between(cusp.der0, cusp.der1), false, cusp.width < 0,
-                          B[i].at0() );
+            bool on_outside = ( sign*cusp.width*angle_between(cusp.der0, cusp.der1) < 0. );
+
+            switch (jointype) {
+            case LINEJOIN_ROUND: {
+                if (on_outside) {
+                    // we are on the outside: round corner
+                    /* for constant width paths, the rounding is a circular arc (rx == ry),
+                       for non-constant width paths, the rounding can be done with an ellipse but is hard and ambiguous.
+                       The elliptical arc should go through the discontinuity's start and end points (of course!)
+                       and also should match the discontinuity tangents at those start and end points.
+                       To resolve the ambiguity, the elliptical arc with minimal eccentricity should be chosen.
+                       A 2Geom method was created to do exactly this :)
+                       */
+
+                    Geom::Point tang1 = unitTangentAt(B[prev_i],1);
+                    Geom::Point tang2 = unitTangentAt(B[i],0);
+                    boost::optional<Geom::Point> O = intersection_point( B[prev_i].at1(), tang1,
+                                                                              B[i].at0(), tang2 );
+                    if (!O) {
+                        // no center found, i.e. 180 degrees round
+                       pb.lineTo(B[i].at0()); // default to bevel for too shallow cusp angles
+                       break;
+                    }
+
+                    Geom::Ellipse ellipse = find_ellipse(B[prev_i].at1(), B[i].at0(), *O);
+                    pb.arcTo( ellipse.ray(Geom::X), ellipse.ray(Geom::Y), ellipse.rot_angle(),
+                              false, cusp.width < 0, B[i].at0() );
+                } else {
+                    // we are on the inside, do a simple bevel to connect the paths
+                    pb.lineTo(B[i].at0()); // default to bevel for too shallow cusp angles
+                }
                 break;
-/*            case LINECUSP_NONE: {
-                if ( sign*cusp.width*angle_between(cusp.der0, cusp.der1) < 0.) {
+            }
+/*            case LINEJOIN_NONE: {
+                if ( on_outside ) {
                     // we are on the outside
                     Geom::Point der1 = unitTangentAt(B[prev_i],1);
                     Geom::Point point_on_path = B[prev_i].at1() - rot90(der1) * cusp.width;
@@ -241,24 +321,18 @@ Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis>
                     pb.lineTo(B[i].at0()); // default to bevel for too shallow cusp angles
                 }
             } */
-            case LINECUSP_EXTRP_MITER: {
-                // first figure out whether we are on the outside or inside of the corner in the path
-                if ( sign*cusp.width*angle_between(cusp.der0, cusp.der1) < 0.) {
+            case LINEJOIN_EXTRP_MITER: {
+                if (on_outside) {
                     // we are on the outside, do something complicated to make it look good ;)
 
                     Geom::Point der1 = unitTangentAt(B[prev_i],1);
                     Geom::Point der2 = unitTangentAt(B[i],0);
 
                     Geom::D2<Geom::SBasis> newcurve1 = B[prev_i] * Geom::reflection(rot90(der1), B[prev_i].at1());
-                    newcurve1 = reverse(newcurve1);
-                    std::vector<Geom::Point> temp;
-                    sbasis_to_bezier(temp, newcurve1, 4);
-                    Geom::CubicBezier bzr1( temp );
+                    Geom::CubicBezier bzr1 = sbasis_to_cubicbezier( reverse(newcurve1) );
 
                     Geom::D2<Geom::SBasis> newcurve2 = B[i] * Geom::reflection(rot90(der2), B[i].at0());
-                    newcurve2 = reverse(newcurve2);
-                    sbasis_to_bezier(temp, newcurve2, 4);
-                    Geom::CubicBezier bzr2( temp );
+                    Geom::CubicBezier bzr2 = sbasis_to_cubicbezier( reverse(newcurve2) );
 
                     Geom::Crossings cross = crossings(bzr1, bzr2);
                     if (cross.empty()) {
@@ -285,9 +359,8 @@ Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis>
                 }
                 break;
             }
-            case LINECUSP_MITER: {
-                // first figure out whether we are on the outside or inside of the corner in the path
-                if ( sign*cusp.width*angle_between(cusp.der0, cusp.der1) < 0.) {
+            case LINEJOIN_MITER: {
+                if (on_outside) {
                     // we are on the outside, do something complicated to make it look good ;)
 
                     Geom::Point der1 = unitTangentAt(B[prev_i],1);
@@ -310,7 +383,39 @@ Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis>
                 }
                 break;
             }
-            case LINECUSP_BEVEL:
+            case LINEJOIN_SPIRO: {
+                if (on_outside) {
+                    Geom::Point tang1 = unitTangentAt(B[prev_i],1);
+                    Geom::Point tang2 = unitTangentAt(B[i],0);
+
+                    Geom::Point direction = B[i].at0() - B[prev_i].at1();
+                    double tang1_sign = dot(direction,tang1);
+                    double tang2_sign = dot(direction,tang2);
+
+                    Spiro::spiro_cp *controlpoints = g_new (Spiro::spiro_cp, 4);
+                    controlpoints[0].x = (B[prev_i].at1() - tang1_sign*tang1)[Geom::X];
+                    controlpoints[0].y = (B[prev_i].at1() - tang1_sign*tang1)[Geom::Y];
+                    controlpoints[0].ty = '{';
+                    controlpoints[1].x = B[prev_i].at1()[Geom::X];
+                    controlpoints[1].y = B[prev_i].at1()[Geom::Y];
+                    controlpoints[1].ty = ']';
+                    controlpoints[2].x = B[i].at0()[Geom::X];
+                    controlpoints[2].y = B[i].at0()[Geom::Y];
+                    controlpoints[2].ty = '[';
+                    controlpoints[3].x = (B[i].at0() + tang2_sign*tang2)[Geom::X];
+                    controlpoints[3].y = (B[i].at0() + tang2_sign*tang2)[Geom::Y];
+                    controlpoints[3].ty = '}';
+
+                    Geom::Path spiro;
+                    Spiro::spiro_run(controlpoints, 4, spiro);
+                    pb.append(spiro.portion(1,spiro.size_open()-1), Geom::Path::STITCH_DISCONTINUOUS);
+                } else {
+                    // we are on the inside, do a simple bevel to connect the paths
+                    pb.lineTo(B[i].at0()); // default to bevel for too shallow cusp angles
+                }
+                break;
+            }
+            case LINEJOIN_BEVEL:
             default:
                 pb.lineTo(B[i].at0());
                 break;
@@ -388,13 +493,13 @@ LPEPowerStroke::doEffect_path (std::vector<Geom::Path> const & path_in)
     }
 
     std::vector<discontinuity_data> cusps = find_discontinuities(der, x, y);
-    LineCuspType cusp_linecap = static_cast<LineCuspType>(cusp_linecap_type.get_value());
+    LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
 
     Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
     Piecewise<D2<SBasis> > mirrorpath = reverse(compose(pwd2_in,x) - y*compose(n,x));
 
-    Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   cusps, cusp_linecap, miter_limit, true, LPE_CONVERSION_TOLERANCE);
-    Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, cusps, cusp_linecap, miter_limit, false, LPE_CONVERSION_TOLERANCE);
+    Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   cusps, jointype, miter_limit, true, LPE_CONVERSION_TOLERANCE);
+    Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, cusps, jointype, miter_limit, false, LPE_CONVERSION_TOLERANCE);
 
     if (path_in[0].closed()) {
         fixed_path.close(true);
