@@ -67,8 +67,7 @@ public:
     void on_rowSize_spinbutton_changed();
     void on_colSize_spinbutton_changed();
     void Spacing_button_changed();
-    void VertAlign_changed();
-    void HorizAlign_changed();
+    void Align_changed();
 
     static TileDialog& getInstance() { return *new TileDialog(); }
 
@@ -78,8 +77,6 @@ private:
 
     bool userHidden;
     bool updating;
-
-    AnchorSelector        anchorSelector;
 
     Gtk::Notebook   notebook;
 
@@ -112,24 +109,10 @@ private:
     bool AutoColSize;
     Gtk::CheckButton      ColumnWidthButton;
 
-    // Vertical align
-    Gtk::Label            VertAlignLabel;
-    Gtk::HBox             VertAlignHBox;
-    Gtk::VBox             VertAlignVBox;
-    Gtk::RadioButtonGroup VertAlignGroup;
-    Gtk::RadioButton      VertCentreRadioButton;
-    Gtk::RadioButton      VertTopRadioButton;
-    Gtk::RadioButton      VertBotRadioButton;
+    // Alignment
+    Gtk::Label            AlignLabel;
+    AnchorSelector        AlignmentSelector;
     double VertAlign;
-
-    // Horizontal align
-    Gtk::Label            HorizAlignLabel;
-    Gtk::VBox             HorizAlignVBox;
-    Gtk::HBox             HorizAlignHBox;
-    Gtk::RadioButtonGroup HorizAlignGroup;
-    Gtk::RadioButton      HorizCentreRadioButton;
-    Gtk::RadioButton      HorizLeftRadioButton;
-    Gtk::RadioButton      HorizRightRadioButton;
     double HorizAlign;
 
     Inkscape::UI::Widget::ScalarUnit    XPadding;

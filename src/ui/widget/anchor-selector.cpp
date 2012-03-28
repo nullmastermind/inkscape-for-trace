@@ -3,6 +3,8 @@
  *
  *  Created on: Mar 22, 2012
  *      Author: denis
+ *
+ * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
 #include <iostream>
@@ -34,17 +36,9 @@ AnchorSelector::AnchorSelector()
 	setupButton(INKSCAPE_ICON("boundingbox_bottom"),       _buttons[7]);
 	setupButton(INKSCAPE_ICON("boundingbox_bottom_right"), _buttons[8]);
 
-	_buttons[0].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_tl_activated));
-	_buttons[1].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_t_activated));
-	_buttons[2].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_tr_activated));
-	_buttons[3].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_l_activated));
-	_buttons[4].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_c_activated));
-	_buttons[5].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_r_activated));
-	_buttons[6].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_bl_activated));
-	_buttons[7].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_b_activated));
-	_buttons[8].signal_clicked().connect(sigc::mem_fun(*this, &AnchorSelector::btn_br_activated));
-
 	for(int i = 0; i < 9; ++i) {
+		_buttons[i].signal_clicked().connect(
+				sigc::bind(sigc::mem_fun(*this, &AnchorSelector::btn_activated), i));
 		_container.attach(_buttons[i], i % 3, i % 3+1, i / 3, i / 3+1, Gtk::FILL, Gtk::FILL);
 	}
 	_selection = 4;
@@ -60,64 +54,16 @@ AnchorSelector::~AnchorSelector()
 
 void AnchorSelector::btn_activated(int index)
 {
-	if(_buttons[index].get_active())
+
+	if(_selection == index && _buttons[index].get_active() == false)
 	{
-		std::cout << "btn_activated(" << index << ", old=" << _selection << ");" << std::endl;
-		if(index != _selection)
-		{
-			_buttons[_selection].set_active(false);
-			_buttons[index].set_active();
-			_selection = index;
-		} else {
-			_buttons[index].set_active();
-		}
+		_buttons[index].set_active(true);
+	}
+	else if(_selection != index && _buttons[index].get_active())
+	{
+		int old_selection = _selection;
+		_selection = index;
+		_buttons[old_selection].set_active(false);
+		_selectionChanged.emit();
 	}
 }
-
-void AnchorSelector::btn_tl_activated()
-{
-	btn_activated(0);
-}
-
-void AnchorSelector::btn_t_activated()
-{
-	btn_activated(1);
-}
-
-void AnchorSelector::btn_tr_activated()
-{
-	btn_activated(2);
-}
-
-void AnchorSelector::btn_l_activated()
-{
-	btn_activated(3);
-}
-
-void AnchorSelector::btn_c_activated()
-{
-	btn_activated(4);
-}
-
-void AnchorSelector::btn_r_activated()
-{
-	btn_activated(5);
-}
-
-void AnchorSelector::btn_bl_activated()
-{
-	btn_activated(6);
-}
-
-void AnchorSelector::btn_b_activated()
-{
-	btn_activated(7);
-}
-
-void AnchorSelector::btn_br_activated()
-{
-	btn_activated(8);
-}
-
-
-

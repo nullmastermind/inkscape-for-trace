@@ -517,39 +517,15 @@ void TileDialog::Spacing_button_changed()
 }
 
 /**
- * changed Radio button in Vertical Align group.
+ * changed Anchor selection widget.
  */
-void TileDialog::VertAlign_changed()
+void TileDialog::Align_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (VertTopRadioButton.get_active()) {
-        VertAlign = 0;
-        prefs->setInt("/dialogs/gridtiler/VertAlign", 0);
-    } else if (VertCentreRadioButton.get_active()){
-        VertAlign = 1;
-        prefs->setInt("/dialogs/gridtiler/VertAlign", 1);
-    } else if (VertBotRadioButton.get_active()){
-        VertAlign = 2;
-        prefs->setInt("/dialogs/gridtiler/VertAlign", 2);
-    }
-}
-
-/**
- * changed Radio button in Vertical Align group.
- */
-void TileDialog::HorizAlign_changed()
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (HorizLeftRadioButton.get_active()) {
-        HorizAlign = 0;
-        prefs->setInt("/dialogs/gridtiler/HorizAlign", 0);
-    } else if (HorizCentreRadioButton.get_active()){
-        HorizAlign = 1;
-        prefs->setInt("/dialogs/gridtiler/HorizAlign", 1);
-    } else if (HorizRightRadioButton.get_active()){
-        HorizAlign = 2;
-        prefs->setInt("/dialogs/gridtiler/HorizAlign", 2);
-    }
+    VertAlign = AlignmentSelector.getVerticalAlignment();
+    prefs->setInt("/dialogs/gridtiler/VertAlign", VertAlign);
+    HorizAlign = AlignmentSelector.getHorizontalAlignment();
+    prefs->setInt("/dialogs/gridtiler/HorizAlign", HorizAlign);
 }
 
 /**
@@ -685,8 +661,8 @@ TileDialog::TileDialog()
     RowHeightButton.set_tooltip_text(_("If not set, each row has the height of the tallest object in it"));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
 
- {
-        /*#### Radio buttons to control vertical alignment ####*/
+/* {
+        /*#### Radio buttons to control vertical alignment ####*//*
 
         VertAlignLabel.set_label(_("Align:"));
         VertAlignHBox.pack_start(VertAlignLabel, false, false, MARGIN);
@@ -715,7 +691,7 @@ TileDialog::TileDialog()
         }
         VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
         NoOfRowsBox.pack_start(VertAlignHBox, false, false, MARGIN);
-    }
+    }*/
 
     SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
 
@@ -757,8 +733,8 @@ TileDialog::TileDialog()
     ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
 
 
-    {
-        /*#### Radio buttons to control horizontal alignment ####*/
+    /*{
+        /*#### Radio buttons to control horizontal alignment ####*//*
 
         HorizAlignLabel.set_label(_("Align:"));
         HorizAlignVBox.pack_start(HorizAlignLabel, false, false, MARGIN);
@@ -791,12 +767,18 @@ TileDialog::TileDialog()
         }
         HorizAlignVBox.pack_start(HorizAlignHBox, false, false, MARGIN);
         NoOfColsBox.pack_start(HorizAlignVBox, false, false, MARGIN);
-    }
+    }*/
 
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
 
     TileBox.pack_start(SpinsHBox, false, false, MARGIN);
-    TileBox.pack_start(anchorSelector);
+
+
+    // Anchor selection widget
+    AlignLabel.set_label("Alignment:");
+    AlignmentSelector.on_selectionChanged().connect(sigc::mem_fun(*this, &TileDialog::Align_changed));
+    TileBox.pack_start(AlignLabel, false, false, MARGIN);
+    TileBox.pack_start(AlignmentSelector, true, false, MARGIN);
 
     {
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
