@@ -661,38 +661,6 @@ TileDialog::TileDialog()
     RowHeightButton.set_tooltip_text(_("If not set, each row has the height of the tallest object in it"));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
 
-/* {
-        /*#### Radio buttons to control vertical alignment ####*//*
-
-        VertAlignLabel.set_label(_("Align:"));
-        VertAlignHBox.pack_start(VertAlignLabel, false, false, MARGIN);
-
-        VertTopRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
-        VertAlignGroup = VertTopRadioButton.get_group();
-        VertAlignVBox.pack_start(VertTopRadioButton, false, false, 0);
-
-        VertCentreRadioButton.set_group(VertAlignGroup);
-        VertCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
-        VertAlignVBox.pack_start(VertCentreRadioButton, false, false, 0);
-
-        VertBotRadioButton.set_group(VertAlignGroup);
-        VertBotRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
-        VertAlignVBox.pack_start(VertBotRadioButton, false, false, 0);
-
-        VertAlign = prefs->getInt("/dialogs/gridtiler/VertAlign", 1);
-        if (VertAlign == 0) {
-            VertTopRadioButton.set_active(TRUE);
-        }
-        else if (VertAlign == 1) {
-            VertCentreRadioButton.set_active(TRUE);
-        }
-        else if (VertAlign == 2){
-            VertBotRadioButton.set_active(TRUE);
-        }
-        VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
-        NoOfRowsBox.pack_start(VertAlignHBox, false, false, MARGIN);
-    }*/
-
     SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
 
 
@@ -731,43 +699,6 @@ TileDialog::TileDialog()
 
     ColumnWidthButton.set_tooltip_text(_("If not set, each column has the width of the widest object in it"));
     ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
-
-
-    /*{
-        /*#### Radio buttons to control horizontal alignment ####*//*
-
-        HorizAlignLabel.set_label(_("Align:"));
-        HorizAlignVBox.pack_start(HorizAlignLabel, false, false, MARGIN);
-
-        HorizAlignHBox.pack_start(*(new Gtk::HBox()), true, true, 0); // centering strut
-
-        HorizLeftRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
-        HorizAlignGroup = HorizLeftRadioButton.get_group();
-        HorizAlignHBox.pack_start(HorizLeftRadioButton, false, false, 0);
-
-        HorizCentreRadioButton.set_group(HorizAlignGroup);
-        HorizCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
-        HorizAlignHBox.pack_start(HorizCentreRadioButton, false, false, 0);
-
-        HorizRightRadioButton.set_group(HorizAlignGroup);
-        HorizRightRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
-        HorizAlignHBox.pack_start(HorizRightRadioButton, false, false, 0);
-
-        HorizAlignHBox.pack_start(*(new Gtk::HBox()), true, true, 0); // centering strut
-
-        HorizAlign = prefs->getInt("/dialogs/gridtiler/HorizAlign", 1);
-        if (HorizAlign == 0) {
-            HorizLeftRadioButton.set_active(TRUE);
-        }
-        else if (HorizAlign == 1) {
-            HorizCentreRadioButton.set_active(TRUE);
-        }
-        else if (HorizAlign == 2) {
-            HorizRightRadioButton.set_active(TRUE);
-        }
-        HorizAlignVBox.pack_start(HorizAlignHBox, false, false, MARGIN);
-        NoOfColsBox.pack_start(HorizAlignVBox, false, false, MARGIN);
-    }*/
 
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
 
