@@ -33,19 +33,58 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+/**
+ * This interface should be implemented by each arrange mode.
+ * The class is a Gtk::VBox and will be displayed as a tab in
+ * the dialog
+ */
+class ArrangeTab : public Gtk::VBox
+{
+public:
+	ArrangeTab() {};
+	virtual ~ArrangeTab() {};
+
+	/**
+	 * Do the actual work!
+	 */
+	virtual void arrange() = 0;
+};
+
+class GridArrangeTab;
+
+class ArrangeDialog : public UI::Widget::Panel {
+private:
+	Gtk::VBox      _arrangeBox;
+	Gtk::Notebook  _notebook;
+
+	GridArrangeTab *_gridArrangeTab;
+
+	Gtk::Button    *_arrangeButton;
+
+public:
+	ArrangeDialog();
+	virtual ~ArrangeDialog() {};
+
+    /**
+     * Callback from Apply
+     */
+    virtual void _apply();
+
+	static ArrangeDialog& getInstance() { return *new ArrangeDialog(); }
+};
 
 /**
  * Dialog for tiling an object
  */
-class TileDialog : public UI::Widget::Panel {
+class GridArrangeTab : public ArrangeTab {
 public:
-    TileDialog() ;
-    virtual ~TileDialog() {};
+	GridArrangeTab(ArrangeDialog *parent);
+    virtual ~GridArrangeTab() {};
 
     /**
      * Do the actual work
      */
-    void Grid_Arrange();
+    virtual void arrange();
 
     /**
      * Respond to selection change
@@ -69,16 +108,15 @@ public:
     void Spacing_button_changed();
     void Align_changed();
 
-    static TileDialog& getInstance() { return *new TileDialog(); }
 
 private:
-    TileDialog(TileDialog const &d); // no copy
-    void operator=(TileDialog const &d); // no assign
+    GridArrangeTab(GridArrangeTab const &d); // no copy
+    void operator=(GridArrangeTab const &d); // no assign
+
+    ArrangeDialog         *Parent;
 
     bool userHidden;
     bool updating;
-
-    Gtk::Notebook   notebook;
 
     Gtk::VBox             TileBox;
     Gtk::Button           *TileOkButton;

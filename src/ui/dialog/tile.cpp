@@ -109,6 +109,34 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+ArrangeDialog::ArrangeDialog()
+	: UI::Widget::Panel("", "/dialogs/gridtiler", SP_VERB_SELECTION_GRIDTILE),
+	  _gridArrangeTab(new GridArrangeTab(this))
+{
+    Gtk::Box *contents = this->_getContents();
+
+    _notebook.append_page(*_gridArrangeTab, C_("Arrange dialog", "Rectangular grid"));
+    _arrangeBox.pack_start(_notebook);
+
+    _arrangeButton = this->addResponseButton(C_("Arrange dialog","_Arrange"), GTK_RESPONSE_APPLY);
+    _arrangeButton->set_use_underline(true);
+    _arrangeButton->set_tooltip_text(_("Arrange selected objects"));
+    _arrangeBox.pack_start(*_arrangeButton);
+    contents->pack_start(_arrangeBox);
+    show_all_children();
+}
+
+void ArrangeDialog::_apply()
+{
+	switch(_notebook.get_current_page())
+	{
+	case 0:
+		_gridArrangeTab->arrange();
+		break;
+	}
+}
+
+
 
 //#########################################################################
 //## E V E N T S
@@ -120,7 +148,7 @@ namespace Dialog {
  *
  */
 
-void TileDialog::Grid_Arrange ()
+void GridArrangeTab::arrange()
 {
 
     int cnt,row_cnt,col_cnt,a,row,col;
@@ -159,7 +187,7 @@ void TileDialog::Grid_Arrange ()
     grid_left = 99999;
     grid_top = 99999;
 
-    SPDesktop *desktop = getDesktop();
+    SPDesktop *desktop = Parent->getDesktop();
     sp_desktop_document(desktop)->ensureUpToDate();
 
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
@@ -356,16 +384,16 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
 //#########################################################################
 
 
-void TileDialog::_apply()
+void GridArrangeTab::_apply()
 {
-    Grid_Arrange();
+	arrange();
 }
 
 
 /**
  * changed value in # of columns spinbox.
  */
-void TileDialog::on_row_spinbutton_changed()
+void GridArrangeTab::on_row_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -374,7 +402,7 @@ void TileDialog::on_row_spinbutton_changed()
 
     // in turn, prevent listener from responding
     updating = true;
-    SPDesktop *desktop = getDesktop();
+    SPDesktop *desktop = Parent->getDesktop();
 
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail( selection );
@@ -392,7 +420,7 @@ void TileDialog::on_row_spinbutton_changed()
 /**
  * changed value in # of rows spinbox.
  */
-void TileDialog::on_col_spinbutton_changed()
+void GridArrangeTab::on_col_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -401,7 +429,7 @@ void TileDialog::on_col_spinbutton_changed()
 
     // in turn, prevent listener from responding
     updating = true;
-    SPDesktop *desktop = getDesktop();
+    SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail(selection);
 
@@ -419,7 +447,7 @@ void TileDialog::on_col_spinbutton_changed()
 /**
  * changed value in x padding spinbox.
  */
-void TileDialog::on_xpad_spinbutton_changed()
+void GridArrangeTab::on_xpad_spinbutton_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble("/dialogs/gridtiler/XPad", XPadding.getValue("px"));
@@ -429,7 +457,7 @@ void TileDialog::on_xpad_spinbutton_changed()
 /**
  * changed value in y padding spinbox.
  */
-void TileDialog::on_ypad_spinbutton_changed()
+void GridArrangeTab::on_ypad_spinbutton_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble("/dialogs/gridtiler/YPad", YPadding.getValue("px"));
@@ -439,7 +467,7 @@ void TileDialog::on_ypad_spinbutton_changed()
 /**
  * checked/unchecked autosize Rows button.
  */
-void TileDialog::on_RowSize_checkbutton_changed()
+void GridArrangeTab::on_RowSize_checkbutton_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (RowHeightButton.get_active()) {
@@ -453,7 +481,7 @@ void TileDialog::on_RowSize_checkbutton_changed()
 /**
  * checked/unchecked autosize Rows button.
  */
-void TileDialog::on_ColSize_checkbutton_changed()
+void GridArrangeTab::on_ColSize_checkbutton_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (ColumnWidthButton.get_active()) {
@@ -467,7 +495,7 @@ void TileDialog::on_ColSize_checkbutton_changed()
 /**
  * changed value in columns spinbox.
  */
-void TileDialog::on_rowSize_spinbutton_changed()
+void GridArrangeTab::on_rowSize_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -485,7 +513,7 @@ void TileDialog::on_rowSize_spinbutton_changed()
 /**
  * changed value in rows spinbox.
  */
-void TileDialog::on_colSize_spinbutton_changed()
+void GridArrangeTab::on_colSize_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -503,7 +531,7 @@ void TileDialog::on_colSize_spinbutton_changed()
 /**
  * changed Radio button in Spacing group.
  */
-void TileDialog::Spacing_button_changed()
+void GridArrangeTab::Spacing_button_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (SpaceManualRadioButton.get_active()) {
@@ -519,7 +547,7 @@ void TileDialog::Spacing_button_changed()
 /**
  * changed Anchor selection widget.
  */
-void TileDialog::Align_changed()
+void GridArrangeTab::Align_changed()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     VertAlign = AlignmentSelector.getVerticalAlignment();
@@ -531,7 +559,7 @@ void TileDialog::Align_changed()
 /**
  * Desktop selection changed
  */
-void TileDialog::updateSelection()
+void GridArrangeTab::updateSelection()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -541,7 +569,7 @@ void TileDialog::updateSelection()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // in turn, prevent listener from responding
     updating = true;
-    SPDesktop *desktop = getDesktop();
+    SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     GSList const *items = selection ? selection->itemList() : 0;
 
@@ -577,7 +605,7 @@ void TileDialog::updateSelection()
 ## Experimental
 ##########################*/
 
-static void updateSelectionCallback(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, TileDialog *dlg)
+static void updateSelectionCallback(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, GridArrangeTab *dlg)
 {
     dlg->updateSelection();
 }
@@ -589,8 +617,8 @@ static void updateSelectionCallback(Inkscape::Application */*inkscape*/, Inkscap
 /**
  * Constructor
  */
-TileDialog::TileDialog()
-    : UI::Widget::Panel("", "/dialogs/gridtiler", SP_VERB_SELECTION_GRIDTILE),
+GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
+    : Parent(parent),
       XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns"),
       YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows")
 {
@@ -608,13 +636,13 @@ TileDialog::TileDialog()
         g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
     }
 
-    Gtk::Box *contents = _getContents();
+    Gtk::Box *contents = this;
 
 #define MARGIN 2
 
     //##Set up the panel
 
-    SPDesktop *desktop = getDesktop();
+    SPDesktop *desktop = Parent->getDesktop();
 
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail( selection );
@@ -642,7 +670,7 @@ TileDialog::TileDialog()
     NoOfRowsSpinner.set_increments(1, 0);
     NoOfRowsSpinner.set_range(1.0, 10000.0);
     NoOfRowsSpinner.set_value(PerCol);
-    NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_col_spinbutton_changed));
+    NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_col_spinbutton_changed));
     NoOfRowsSpinner.set_tooltip_text(_("Number of rows"));
     NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
     gtk_size_group_add_widget(_col1, (GtkWidget *) NoOfRowsBox.gobj());
@@ -659,7 +687,7 @@ TileDialog::TileDialog()
     NoOfRowsBox.pack_start(RowHeightButton, false, false, MARGIN);
 
     RowHeightButton.set_tooltip_text(_("If not set, each row has the height of the tallest object in it"));
-    RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
+    RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &GridArrangeTab::on_RowSize_checkbutton_changed));
 
     SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
 
@@ -682,7 +710,7 @@ TileDialog::TileDialog()
     NoOfColsSpinner.set_increments(1, 0);
     NoOfColsSpinner.set_range(1.0, 10000.0);
     NoOfColsSpinner.set_value(PerRow);
-    NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_row_spinbutton_changed));
+    NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_row_spinbutton_changed));
     NoOfColsSpinner.set_tooltip_text(_("Number of columns"));
     NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
     gtk_size_group_add_widget(_col3, (GtkWidget *) NoOfColsBox.gobj());
@@ -698,7 +726,7 @@ TileDialog::TileDialog()
     NoOfColsBox.pack_start(ColumnWidthButton, false, false, MARGIN);
 
     ColumnWidthButton.set_tooltip_text(_("If not set, each column has the width of the widest object in it"));
-    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
+    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &GridArrangeTab::on_ColSize_checkbutton_changed));
 
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
 
@@ -707,7 +735,7 @@ TileDialog::TileDialog()
 
     // Anchor selection widget
     AlignLabel.set_label("Alignment:");
-    AlignmentSelector.on_selectionChanged().connect(sigc::mem_fun(*this, &TileDialog::Align_changed));
+    AlignmentSelector.on_selectionChanged().connect(sigc::mem_fun(*this, &GridArrangeTab::Align_changed));
     TileBox.pack_start(AlignLabel, false, false, MARGIN);
     TileBox.pack_start(AlignmentSelector, true, false, MARGIN);
 
@@ -715,7 +743,7 @@ TileDialog::TileDialog()
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
         SpaceByBBoxRadioButton.set_label(_("_Fit into selection box"));
         SpaceByBBoxRadioButton.set_use_underline (true);
-        SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
+        SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &GridArrangeTab::Spacing_button_changed));
         SpacingGroup = SpaceByBBoxRadioButton.get_group();
 
         SpacingVBox.pack_start(SpaceByBBoxRadioButton, false, false, MARGIN);
@@ -723,7 +751,7 @@ TileDialog::TileDialog()
         SpaceManualRadioButton.set_label(_("_Set spacing:"));
         SpaceManualRadioButton.set_use_underline (true);
         SpaceManualRadioButton.set_group(SpacingGroup);
-        SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
+        SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &GridArrangeTab::Spacing_button_changed));
         SpacingVBox.pack_start(SpaceManualRadioButton, false, false, MARGIN);
 
         TileBox.pack_start(SpacingVBox, false, false, MARGIN);
@@ -737,7 +765,7 @@ TileDialog::TileDialog()
         YPadding.setRange(-10000, 10000);
         double yPad = prefs->getDouble("/dialogs/gridtiler/YPad", 15);
         YPadding.setValue(yPad, "px");
-        YPadding.signal_value_changed().connect(sigc::mem_fun(*this, &TileDialog::on_ypad_spinbutton_changed));
+        YPadding.signal_value_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_ypad_spinbutton_changed));
 
         XPadding.setDigits(5);
         XPadding.setIncrements(0.2, 0);
@@ -745,7 +773,7 @@ TileDialog::TileDialog()
         double xPad = prefs->getDouble("/dialogs/gridtiler/XPad", 15);
         XPadding.setValue(xPad, "px");
 
-        XPadding.signal_value_changed().connect(sigc::mem_fun(*this, &TileDialog::on_xpad_spinbutton_changed));
+        XPadding.signal_value_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_xpad_spinbutton_changed));
     }
     TileBox.pack_start(XPadding, false, false, MARGIN);
     TileBox.pack_start(YPadding, false, false, MARGIN);
@@ -763,10 +791,10 @@ TileDialog::TileDialog()
     XPadding.set_sensitive (ManualSpacing);
     YPadding.set_sensitive (ManualSpacing);
 
-    //## The OK button
-    TileOkButton = addResponseButton(C_("Rows and columns dialog","_Arrange"), GTK_RESPONSE_APPLY);
+    //## The OK button FIXME
+    /*TileOkButton = addResponseButton(C_("Rows and columns dialog","_Arrange"), GTK_RESPONSE_APPLY);
     TileOkButton->set_use_underline(true);
-    TileOkButton->set_tooltip_text(_("Arrange selected objects"));
+    TileOkButton->set_tooltip_text(_("Arrange selected objects"));*/
 
     show_all_children();
 }

@@ -121,7 +121,7 @@ DialogManager::DialogManager() {
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       FloatingBehavior>);
 #endif
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
-        registerFactory("TileDialog",          &create<TileDialog,           FloatingBehavior>);
+        registerFactory("TileDialog",          &create<ArrangeDialog,           FloatingBehavior>);
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
         registerFactory("Transformation",      &create<Transformation,       FloatingBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          FloatingBehavior>);
@@ -156,7 +156,7 @@ DialogManager::DialogManager() {
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       DockBehavior>);
 #endif
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
-        registerFactory("TileDialog",          &create<TileDialog,           DockBehavior>);
+        registerFactory("TileDialog",          &create<ArrangeDialog,           DockBehavior>);
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
         registerFactory("Transformation",      &create<Transformation,       DockBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          DockBehavior>);
