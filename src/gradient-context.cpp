@@ -345,7 +345,7 @@ sp_gradient_context_get_stop_intervals (GrDrag *drag, GSList **these_stops, GSLi
     return coords;
 }
 
-static void
+void
 sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
 {
     SPDocument *doc = NULL;
@@ -361,6 +361,13 @@ sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
         GrDragger *dragger = (GrDragger *) drag->selected->data;
         for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
             GrDraggable *d = (GrDraggable *) j->data;
+            if (d->point_type == POINT_RG_FOCUS) {
+                /*
+                 *  There are 2 draggables at the center (start) of a radial gradient
+                 *  To avoid creating 2 seperate stops, ignore this draggable point type
+                 */
+                continue;
+            }
             SPGradient *gradient = sp_item_gradient (d->item, d->fill_or_stroke);
             SPGradient *vector = sp_gradient_get_forked_vector_if_necessary (gradient, false);
             SPStop *this_stop = sp_get_stop_i (vector, d->point_i);
@@ -375,6 +382,8 @@ sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
     // now actually create the new stops
     GSList *i = these_stops;
     GSList *j = next_stops;
+    GSList *new_stops = NULL;
+
     for (; i != NULL && j != NULL; i = i->next, j = j->next) {
         SPStop *this_stop = (SPStop *) i->data;
         SPStop *next_stop = (SPStop *) j->data;
@@ -382,7 +391,8 @@ sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
         SPObject *parent = this_stop->parent;
         if (SP_IS_GRADIENT (parent)) {
             doc = parent->document;
-            sp_vector_add_stop (SP_GRADIENT (parent), this_stop, next_stop, offset);
+            SPStop *new_stop = sp_vector_add_stop (SP_GRADIENT (parent), this_stop, next_stop, offset);
+            new_stops = g_slist_prepend (new_stops, new_stop);
             SP_GRADIENT(parent)->ensureVector();
         }
     }
@@ -392,12 +402,17 @@ sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
         drag->updateDraggers();
         // so that it does not automatically update draggers in idle loop, as this would deselect
         drag->local_change = true;
-        // select all the old selected and new created draggers
-        drag->selectByCoords(coords);
+
+        // select the newly created stops
+        for (GSList *s = new_stops; s != NULL; s = s->next) {
+            drag->selectByStop((SPStop *)s->data);
+        }
+
     }
 
     g_slist_free (these_stops);
     g_slist_free (next_stops);
+    g_slist_free (new_stops);
 }
 
 double sqr(double x) {return x*x;}
@@ -478,12 +493,14 @@ sp_gradient_context_add_stop_near_point (SPGradientContext *rc, SPItem *item,  G
 
     double tolerance = (double) ec->tolerance;
 
-    ec->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
+    SPStop *newstop = ec->get_drag()->addStopNearPoint (item, mouse_p, tolerance/desktop->current_zoom());
 
     DocumentUndo::done(sp_desktop_document (desktop), SP_VERB_CONTEXT_GRADIENT,
                        _("Add gradient stop"));
 
     ec->get_drag()->updateDraggers();
+    ec->get_drag()->local_change = true;
+    ec->get_drag()->selectByStop(newstop);
 }
 
 
@@ -630,17 +647,17 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     case GDK_BUTTON_RELEASE:
         event_context->xp = event_context->yp = 0;
         if ( event->button.button == 1 && !event_context->space_panning ) {
-            if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
-                bool over_line = false;
-                SPCtrlLine *line = NULL;
-                if (drag->lines) {
-                    for (GSList *l = drag->lines; (l != NULL) && (!over_line); l = l->next) {
-                        line = (SPCtrlLine*) l->data;
-                        over_line = sp_gradient_context_is_over_line (rc, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
-                        if (over_line)
-                            break;
-                    }
+            bool over_line = false;
+            SPCtrlLine *line = NULL;
+            if (drag->lines) {
+                for (GSList *l = drag->lines; (l != NULL) && (!over_line); l = l->next) {
+                    line = (SPCtrlLine*) l->data;
+                    over_line = sp_gradient_context_is_over_line (rc, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
+                    if (over_line)
+                        break;
                 }
+            }
+            if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
                 if (over_line && line) {
                     sp_gradient_context_add_stop_near_point(rc, line->item, rc->mousepoint_doc, 0);
                     ret = TRUE;
@@ -667,11 +684,17 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     }
 
                 } else if (event_context->item_to_select) {
-                    // no dragging, select clicked item if any
-                    if (event->button.state & GDK_SHIFT_MASK) {
-                        selection->toggle(event_context->item_to_select);
-                    } else {
-                        selection->set(event_context->item_to_select);
+                    if (over_line && line) {
+                        // Clicked on an existing gradient line, dont change selection. This stops
+                        // possible change in selection during a double click with overlapping objects
+                    }
+                    else {
+                        // no dragging, select clicked item if any
+                        if (event->button.state & GDK_SHIFT_MASK) {
+                            selection->toggle(event_context->item_to_select);
+                        } else {
+                            selection->set(event_context->item_to_select);
+                        }
                     }
                 } else {
                     // click in an empty space; do the same as Esc
