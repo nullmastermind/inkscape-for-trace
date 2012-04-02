@@ -31,6 +31,8 @@ public:
 
 	sigc::signal<void> &on_selectionChanged() { return _selectionChanged; }
 
+	void setAlignment(int horizontal, int vertical);
+
 	AnchorSelector();
 	virtual ~AnchorSelector();
 };

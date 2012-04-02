@@ -13,7 +13,7 @@
 #include "ui/widget/anchor-selector.h"
 
 void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& button) {
-	Gtk::Widget*  buttonIcon = Gtk::manage(sp_icon_get_icon(icon, Inkscape::ICON_SIZE_LARGE_TOOLBAR));
+	Gtk::Widget*  buttonIcon = Gtk::manage(sp_icon_get_icon(icon, Inkscape::ICON_SIZE_SMALL_TOOLBAR));
 	buttonIcon->show();
 
 	button.set_relief(Gtk::RELIEF_NONE);
@@ -65,5 +65,14 @@ void AnchorSelector::btn_activated(int index)
 		_selection = index;
 		_buttons[old_selection].set_active(false);
 		_selectionChanged.emit();
+	}
+}
+
+void AnchorSelector::setAlignment(int horizontal, int vertical)
+{
+	int index = 3 * vertical + horizontal;
+	if(index >= 0 && index < 9)
+	{
+		_buttons[index].set_active(!_buttons[index].get_active());
 	}
 }

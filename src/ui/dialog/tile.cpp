@@ -732,9 +732,13 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     TileBox.pack_start(SpinsHBox, false, false, MARGIN);
 
+    VertAlign = prefs->getInt("/dialogs/gridtiler/VertAlign", 1);
+    HorizAlign = prefs->getInt("/dialogs/gridtiler/HorizAlign", 1);
 
     // Anchor selection widget
     AlignLabel.set_label("Alignment:");
+    AlignLabel.set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
+    AlignmentSelector.setAlignment(HorizAlign, VertAlign);
     AlignmentSelector.on_selectionChanged().connect(sigc::mem_fun(*this, &GridArrangeTab::Align_changed));
     TileBox.pack_start(AlignLabel, false, false, MARGIN);
     TileBox.pack_start(AlignmentSelector, true, false, MARGIN);
