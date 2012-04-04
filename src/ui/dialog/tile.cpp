@@ -737,7 +737,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     // Anchor selection widget
     AlignLabel.set_label("Alignment:");
-    AlignLabel.set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
+    AlignLabel.set_alignment(Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
     AlignmentSelector.setAlignment(HorizAlign, VertAlign);
     AlignmentSelector.on_selectionChanged().connect(sigc::mem_fun(*this, &GridArrangeTab::Align_changed));
     TileBox.pack_start(AlignLabel, false, false, MARGIN);
