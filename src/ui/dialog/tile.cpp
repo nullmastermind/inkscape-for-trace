@@ -111,11 +111,13 @@ namespace Dialog {
 
 ArrangeDialog::ArrangeDialog()
 	: UI::Widget::Panel("", "/dialogs/gridtiler", SP_VERB_SELECTION_GRIDTILE),
-	  _gridArrangeTab(new GridArrangeTab(this))
+	  _gridArrangeTab(new GridArrangeTab(this)),
+      _polarArrangeTab(new PolarArrangeTab(this))
 {
     Gtk::Box *contents = this->_getContents();
 
     _notebook.append_page(*_gridArrangeTab, C_("Arrange dialog", "Rectangular grid"));
+    _notebook.append_page(*_polarArrangeTab, C_("Arrange dialog", "Polar Coordinates"));
     _arrangeBox.pack_start(_notebook);
 
     _arrangeButton = this->addResponseButton(C_("Arrange dialog","_Arrange"), GTK_RESPONSE_APPLY);
@@ -133,9 +135,51 @@ void ArrangeDialog::_apply()
 	case 0:
 		_gridArrangeTab->arrange();
 		break;
+	case 1:
+		_polarArrangeTab->arrange();
+		break;
 	}
 }
 
+PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
+	: parent(parent_)
+{
+	anchorPointLabel.set_text("Anchor point:");
+	anchorPointLabel.set_alignment(Gtk::ALIGN_START);
+	pack_start(anchorPointLabel, false, false);
+
+	anchorBoundingBoxRadio.set_label("Object's bounding box:");
+	anchorBoundingBoxRadio.set_group(anchorRadioGroup);
+	pack_start(anchorBoundingBoxRadio, false, false);
+
+	pack_start(anchorSelector, false, false);
+
+	anchorObjectPivotRadio.set_label("Object's rotational center");
+	anchorObjectPivotRadio.set_group(anchorRadioGroup);
+	pack_start(anchorObjectPivotRadio, false, false);
+
+	arrangeOnLabel.set_text("Arrange on:");
+	arrangeOnLabel.set_alignment(Gtk::ALIGN_START);
+	pack_start(arrangeOnLabel, false, false);
+
+	arrangeOnCircleRadio.set_label("Last selected circle/ellipse/arc");
+	anchorObjectPivotRadio.set_group(arrangeRadioGroup);
+	pack_start(arrangeOnCircleRadio, false, false);
+
+	arrangeOnParametersRadio.set_label("Parameterized:");
+	anchorObjectPivotRadio.set_group(arrangeRadioGroup);
+	pack_start(arrangeOnParametersRadio, false, false);
+}
+
+void PolarArrangeTab::arrange()
+{
+	std::cout << "PolarArrangeTab::arrange()" << std::endl;
+}
+
+void PolarArrangeTab::updateSelection()
+{
+
+}
 
 
 //#########################################################################
@@ -382,13 +426,6 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
 //#########################################################################
 //## E V E N T S
 //#########################################################################
-
-
-void GridArrangeTab::_apply()
-{
-	arrange();
-}
-
 
 /**
  * changed value in # of columns spinbox.

@@ -51,15 +51,17 @@ public:
 };
 
 class GridArrangeTab;
+class PolarArrangeTab;
 
 class ArrangeDialog : public UI::Widget::Panel {
 private:
-	Gtk::VBox      _arrangeBox;
-	Gtk::Notebook  _notebook;
+	Gtk::VBox       _arrangeBox;
+	Gtk::Notebook   _notebook;
 
-	GridArrangeTab *_gridArrangeTab;
+	GridArrangeTab  *_gridArrangeTab;
+	PolarArrangeTab *_polarArrangeTab;
 
-	Gtk::Button    *_arrangeButton;
+	Gtk::Button     *_arrangeButton;
 
 public:
 	ArrangeDialog();
@@ -90,11 +92,6 @@ public:
      * Respond to selection change
      */
     void updateSelection();
-
-    /**
-     * Callback from Apply
-     */
-    virtual void _apply();
 
     // Callbacks from spinbuttons
     void on_row_spinbutton_changed();
@@ -174,6 +171,46 @@ private:
     Gtk::HBox             ColumnWidthBox;
     Gtk::Label            ColumnWidthLabel;
     Inkscape::UI::Widget::SpinButton ColumnWidthSpinner;
+};
+
+class PolarArrangeTab : public ArrangeTab {
+public:
+	PolarArrangeTab(ArrangeDialog *parent_);
+    virtual ~PolarArrangeTab() {};
+
+    /**
+     * Do the actual work
+     */
+    virtual void arrange();
+
+    /**
+     * Respond to selection change
+     */
+    void updateSelection();
+
+private:
+    PolarArrangeTab(PolarArrangeTab const &d); // no copy
+    void operator=(PolarArrangeTab const &d); // no assign
+
+    ArrangeDialog         *parent;
+
+    Gtk::Label             anchorPointLabel;
+
+    Gtk::RadioButtonGroup  anchorRadioGroup;
+    Gtk::RadioButton       anchorBoundingBoxRadio;
+    Gtk::RadioButton       anchorObjectPivotRadio;
+    AnchorSelector         anchorSelector;
+
+    Gtk::Label             arrangeOnLabel;
+
+    Gtk::RadioButtonGroup  arrangeRadioGroup;
+    Gtk::RadioButton       arrangeOnCircleRadio;
+    Gtk::RadioButton       arrangeOnParametersRadio;
+
+    Inkscape::UI::Widget::SpinButton centerXSpin;
+    Inkscape::UI::Widget::SpinButton centerYSpin;
+
+
 };
 
 
