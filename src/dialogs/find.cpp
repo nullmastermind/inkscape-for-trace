@@ -108,7 +108,11 @@ void
 sp_find_squeeze_window()
 {
     GtkRequisition r;
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_get_preferred_size(dlg, &r, NULL);
+#else
     gtk_widget_size_request(dlg, &r);
+#endif
     gtk_window_resize ((GtkWindow *) dlg, r.width, r.height);
 }
 
@@ -418,7 +422,12 @@ sp_find_dialog_reset (GObject *, GObject *dlg)
 void
 sp_find_new_searchfield (GtkWidget *dlg, GtkWidget *vb, const gchar *label, const gchar *id, const gchar *tip)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
     GtkWidget *l = gtk_label_new_with_mnemonic (label);
     gtk_widget_set_size_request (l, FIND_LABELWIDTH, -1);
     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
@@ -491,7 +500,12 @@ sp_find_types_checkbox (GtkWidget *w, const gchar *data, gboolean active,
                         const gchar *label,
                         void (*toggled)(GtkToggleButton *, gpointer))
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
     gtk_widget_show (hb);
 
     {
@@ -514,7 +528,12 @@ sp_find_types_checkbox_indented (GtkWidget *w, const gchar *data, gboolean activ
                                  const gchar *label,
                                  void (*toggled)(GtkToggleButton *, gpointer), guint indent)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
     gtk_widget_show (hb);
 
     { // empty label for indent
@@ -534,11 +553,21 @@ sp_find_types_checkbox_indented (GtkWidget *w, const gchar *data, gboolean activ
 GtkWidget *
 sp_find_types ()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+    gtk_box_new(GTK_BOX(vb), FALSE);
+#else
     GtkWidget *vb = gtk_vbox_new (FALSE, 4);
+#endif
     gtk_widget_show (vb);
 
     {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
         GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
         gtk_widget_show (hb);
 
         {
@@ -556,7 +585,12 @@ sp_find_types ()
     }
 
     {
+#if GTK_CHECK_VERSION(3,0,0)
+        GtkWidget *vb_all = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_box_new(GTK_BOX(vb_all), FALSE);
+#else
         GtkWidget *vb_all = gtk_vbox_new (FALSE, 0);
+#endif
         gtk_widget_show (vb_all);
 
         {
@@ -566,7 +600,12 @@ sp_find_types ()
 
 
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
             gtk_widget_show (hb);
 
             { // empty label for alignment
@@ -694,7 +733,12 @@ sp_find_dialog_old (void)
         gtk_container_set_border_width (GTK_CONTAINER (dlg), 4);
 
         /* Toplevel vbox */
+#if GTK_CHECK_VERSION(3,0,0)
+        GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        gtk_box_new(GTK_BOX(vb), FALSE);
+#else
         GtkWidget *vb = gtk_vbox_new (FALSE, 0);
+#endif
         gtk_container_add (GTK_CONTAINER (dlg), vb);
 
         sp_find_new_searchfield (dlg, vb, _("_Text:"), "text", _("Find objects by their text content (exact or partial match)"));
@@ -751,7 +795,12 @@ sp_find_dialog_old (void)
         }
 
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
             gtk_widget_show (hb);
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 

@@ -289,7 +289,6 @@ static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs)
     gl = g_slist_reverse(gl);
 
     gint pos = 0;
-    gint idx = 0;
 
     if (!gvs->doc) {
         gtk_list_store_append (gvs->store, &iter);
@@ -307,6 +306,7 @@ static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs)
         gtk_widget_set_sensitive (gvs->combo_box, FALSE);
 
     } else {
+        gint idx = 0;
         while (gl) {
             SPGradient *gr;
             gr = SP_GRADIENT(gl->data);
@@ -457,7 +457,7 @@ static gboolean blocked = FALSE;
 static void grad_edit_dia_stop_added_or_removed(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node */*child*/, Inkscape::XML::Node */*ref*/, gpointer data)
 {
     GtkWidget *vb = GTK_WIDGET(data);
-    SPGradient *gradient = (SPGradient *)g_object_get_data(G_OBJECT(vb), "gradient");
+    SPGradient *gradient = static_cast<SPGradient *>(g_object_get_data(G_OBJECT(vb), "gradient"));
     update_stop_list(vb, gradient, NULL);
 }
 
@@ -596,7 +596,7 @@ static void update_stop_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_s
 
 
 // user selected existing stop from list
-static void sp_grad_edit_combo_box_changed (GtkComboBox *widget, GtkWidget *tbl)
+static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget *tbl)
 {
     SPStop *stop = get_selected_stop(tbl);
     if (!stop) {
@@ -792,7 +792,12 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
 
     g_return_val_if_fail(!gradient || SP_IS_GRADIENT(gradient), NULL);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, PAD);
+    gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
+#else
     vb = gtk_vbox_new(FALSE, PAD);
+#endif
     g_signal_connect(G_OBJECT(vb), "destroy", G_CALLBACK(sp_gradient_vector_widget_destroy), NULL);
 
     w = sp_gradient_image_new(gradient);
@@ -825,7 +830,12 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     g_signal_connect(G_OBJECT(combo_box), "changed", G_CALLBACK(sp_grad_edit_combo_box_changed), vb);
 
     /* Add and Remove buttons */
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+#endif
     // TRANSLATORS: "Stop" means: a "phase" of a gradient
     GtkWidget *b = gtk_button_new_with_label(_("Add stop"));
     gtk_widget_show(b);
@@ -842,7 +852,12 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     gtk_box_pack_start(GTK_BOX(vb),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
     /*  Offset Slider and stuff   */
+#if GTK_CHECK_VERSION(3,0,0)
+    hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     hb = gtk_hbox_new(FALSE, 0);
+#endif
 
     /* Label */
     GtkWidget *l = gtk_label_new(_("Offset:"));
@@ -863,7 +878,11 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     gtk_adjustment_set_value(Offset_adj, stop->offset);
 
     /* Slider */
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *slider = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, Offset_adj);
+#else
     GtkWidget *slider = gtk_hscale_new(Offset_adj);
+#endif
     gtk_scale_set_draw_value( GTK_SCALE(slider), FALSE );
     gtk_widget_show(slider);
     gtk_box_pack_start(GTK_BOX(hb),slider, TRUE, TRUE, AUX_BETWEEN_BUTTON_GROUPS);
@@ -996,14 +1015,14 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
 
     SPGradient *old;
 
-    old = (SPGradient*)g_object_get_data(G_OBJECT(widget), "gradient");
+    old = static_cast<SPGradient*>(g_object_get_data(G_OBJECT(widget), "gradient"));
 
     if (old != gradient) {
         sigc::connection *release_connection;
         sigc::connection *modified_connection;
 
-        release_connection = (sigc::connection *)g_object_get_data(G_OBJECT(widget), "gradient_release_connection");
-        modified_connection = (sigc::connection *)g_object_get_data(G_OBJECT(widget), "gradient_modified_connection");
+        release_connection = static_cast<sigc::connection *>(g_object_get_data(G_OBJECT(widget), "gradient_release_connection"));
+        modified_connection = static_cast<sigc::connection *>(g_object_get_data(G_OBJECT(widget), "gradient_modified_connection"));
 
         if (old) {
             g_assert( release_connection != NULL );

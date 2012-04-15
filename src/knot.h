@@ -15,11 +15,12 @@
  */
 
 #include <gdk/gdk.h>
-#include <gtk/gtk.h>
 #include <2geom/point.h>
 #include "knot-enums.h"
 #include <stddef.h>
 #include <sigc++/sigc++.h>
+#include "enums.h"
+#include <gtk/gtk.h>
 
 class SPDesktop;
 class SPKnot;
@@ -31,6 +32,7 @@ struct SPCanvasItem;
 #define SP_KNOT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_KNOT, SPKnotClass))
 #define SP_IS_KNOT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_KNOT))
 #define SP_IS_KNOT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_KNOT))
+
 
 /**
  * Desktop-bound visual control object.
@@ -47,7 +49,7 @@ struct SPKnot : GObject {
     Geom::Point pos;   /**< Our desktop coordinates. */
     Geom::Point grabbed_rel_pos;  /**< Grabbed relative position. */
     Geom::Point drag_origin;      /**< Origin of drag. */
-    GtkAnchorType anchor;    /**< Anchor. */
+    SPAnchorType anchor;    /**< Anchor. */
 
     SPKnotShapeType shape;   /**< Shape type. */
     SPKnotModeType mode;
@@ -80,7 +82,7 @@ struct SPKnot : GObject {
     //TODO: all the members above should eventualle become private, accessible via setters/getters
     inline void setSize (guint i) {size = i;}
     inline void setShape (guint i) {shape = (SPKnotShapeType) i;}
-    inline void setAnchor (guint i) {anchor = (GtkAnchorType) i;}
+    inline void setAnchor (guint i) {anchor = (SPAnchorType) i;}
     inline void setMode (guint i) {mode = (SPKnotModeType) i;}
     inline void setPixbuf (gpointer p) {pixbuf = p;}
     inline void setFill (guint32 normal, guint32 mouseover, guint32 dragging) {
@@ -100,27 +102,51 @@ struct SPKnot : GObject {
     }
     inline void setCursor (GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging) {
         if (cursor[SP_KNOT_STATE_NORMAL]) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_unref(cursor[SP_KNOT_STATE_NORMAL]);
+#else
             gdk_cursor_unref(cursor[SP_KNOT_STATE_NORMAL]);
+#endif
         }
         cursor[SP_KNOT_STATE_NORMAL] = normal;
         if (normal) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_ref(normal);
+#else
             gdk_cursor_ref(normal);
+#endif
         }
 
         if (cursor[SP_KNOT_STATE_MOUSEOVER]) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_unref(cursor[SP_KNOT_STATE_MOUSEOVER]);
+#else
             gdk_cursor_unref(cursor[SP_KNOT_STATE_MOUSEOVER]);
+#endif
         }
         cursor[SP_KNOT_STATE_MOUSEOVER] = mouseover;
         if (mouseover) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_ref(mouseover);
+#else
             gdk_cursor_ref(mouseover);
+#endif
         }
 
         if (cursor[SP_KNOT_STATE_DRAGGING]) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_unref(cursor[SP_KNOT_STATE_DRAGGING]);
+#else
             gdk_cursor_unref(cursor[SP_KNOT_STATE_DRAGGING]);
+#endif
         }
         cursor[SP_KNOT_STATE_DRAGGING] = dragging;
         if (dragging) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_ref(dragging);
+#else
             gdk_cursor_ref(dragging);
+#endif
         }
     }
 

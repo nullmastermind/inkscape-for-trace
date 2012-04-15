@@ -25,6 +25,7 @@
 #include <vector>
 #include <cstring>
 #include <string>
+#include <map>
 
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
@@ -37,6 +38,10 @@
 #include "verbs.h"
 #include "xml/node-iterators.h"
 #include "xml/repr.h"
+
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_VoidSymbol 0xffffff
+#endif
 
 using namespace Inkscape;
 
@@ -60,8 +65,8 @@ sp_shortcut_invoke(unsigned int shortcut, Inkscape::UI::View::View *view)
     return false;
 }
 
-static GHashTable *verbs = NULL;
-static GHashTable *primary_shortcuts = NULL;
+static std::map<unsigned int, Inkscape::Verb * > *verbs = NULL;
+static std::map<Inkscape::Verb *, unsigned int> *primary_shortcuts = NULL;
 
 static void
 sp_shortcut_init()
@@ -71,8 +76,8 @@ sp_shortcut_init()
     using Inkscape::IO::Resource::USER;
     using Inkscape::IO::Resource::KEYS;
 
-    verbs = g_hash_table_new(NULL, NULL);
-    primary_shortcuts = g_hash_table_new(NULL, NULL);
+    verbs = new std::map<unsigned int, Inkscape::Verb * >();
+    primary_shortcuts = new std::map<Inkscape::Verb *, unsigned int>();
 
     read_shortcuts_file(get_path(SYSTEM, KEYS, "default.xml"));
     try_shortcuts_file(get_path(USER, KEYS, "default.xml"));
@@ -126,7 +131,7 @@ static void read_shortcuts_file(char const *filename) {
         }
 
         guint keyval=gdk_keyval_from_name(keyval_name);
-        if (keyval == GDK_VoidSymbol || keyval == 0) {
+        if (keyval == GDK_KEY_VoidSymbol || keyval == 0) {
             g_warning("Unknown keyval %s for %s", keyval_name, verb_name);
             continue;
         }
@@ -175,20 +180,20 @@ sp_shortcut_set(unsigned int const shortcut, Inkscape::Verb *const verb, bool co
 {
     if (!verbs) sp_shortcut_init();
 
-    Inkscape::Verb *old_verb = (Inkscape::Verb *)(g_hash_table_lookup(verbs, GINT_TO_POINTER(shortcut)));
-    g_hash_table_insert(verbs, GINT_TO_POINTER(shortcut), (gpointer)(verb));
+    Inkscape::Verb *old_verb = (*verbs)[shortcut];
+    (*verbs)[shortcut] = verb;
 
     /* Maintain the invariant that sp_shortcut_get_primary(v) returns either 0 or a valid shortcut for v. */
     if (old_verb && old_verb != verb) {
-        unsigned int const old_primary = (unsigned int)GPOINTER_TO_INT(g_hash_table_lookup(primary_shortcuts, (gpointer)old_verb));
+        unsigned int const old_primary = (*primary_shortcuts)[old_verb];
 
         if (old_primary == shortcut) {
-            g_hash_table_insert(primary_shortcuts, (gpointer)old_verb, GINT_TO_POINTER(0));
+            (*primary_shortcuts)[old_verb] = 0;
         }
     }
 
     if (is_primary) {
-        g_hash_table_insert(primary_shortcuts, (gpointer)(verb), GINT_TO_POINTER(shortcut));
+        (*primary_shortcuts)[verb] = shortcut;
     }
 }
 
@@ -196,18 +201,18 @@ Inkscape::Verb *
 sp_shortcut_get_verb(unsigned int shortcut)
 {
     if (!verbs) sp_shortcut_init();
-    return (Inkscape::Verb *)(g_hash_table_lookup(verbs, GINT_TO_POINTER(shortcut)));
+    return (*verbs)[shortcut];
 }
 
 unsigned int sp_shortcut_get_primary(Inkscape::Verb *verb)
 {
-    unsigned int result = GDK_VoidSymbol;
+    unsigned int result = GDK_KEY_VoidSymbol;
     if (!primary_shortcuts) {
         sp_shortcut_init();
     }
-    gpointer value = 0;
-    if (g_hash_table_lookup_extended(primary_shortcuts, static_cast<gpointer>(verb), NULL, &value)) {
-        result = static_cast<unsigned int>(GPOINTER_TO_INT(value));
+    
+    if (primary_shortcuts->count(verb)) {
+        result = (*primary_shortcuts)[verb];
     }
     return result;
 }
@@ -224,7 +229,7 @@ gchar *sp_shortcut_get_label(unsigned int shortcut)
      * gtk_label_set_text_with_mnemonic(lbl, str).
      */
     gchar *result = 0;
-    if (shortcut != GDK_VoidSymbol) {
+    if (shortcut != GDK_KEY_VoidSymbol) {
         result = gtk_accelerator_get_label(
             shortcut & (~SP_SHORTCUT_MODIFIER_MASK), static_cast<GdkModifierType>(
                 ((shortcut & SP_SHORTCUT_SHIFT_MASK) ? GDK_SHIFT_MASK : 0) |

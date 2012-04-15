@@ -25,6 +25,12 @@ struct SPKnot;
 class SPDesktop;
 class KnotHolder;
 
+namespace Inkscape {
+namespace LivePathEffect {
+    class Effect;
+}
+}
+
 typedef void (* SPKnotHolderSetFunc) (SPItem *item, Geom::Point const &p, Geom::Point const &origin, guint state);
 typedef Geom::Point (* SPKnotHolderGetFunc) (SPItem *item);
 /* fixme: Think how to make callbacks most sensitive (Lauris) */
@@ -41,12 +47,6 @@ public:
                         SPKnotShapeType shape = SP_KNOT_SHAPE_DIAMOND,
                         SPKnotModeType mode = SP_KNOT_MODE_XOR,
                         guint32 color = 0xffffff00);
-
-    /* derived classes used for LPE knotholder handles use this to indicate that they
-       must not be deleted when a knotholder is destroyed */
-    // TODO: it would be nice to ditch this but then we need to dynamically create instances of different
-    //       KnotHolderEntity classes in Effect::addKnotHolderEntities. How to do this???
-    virtual bool isDeletable() { return true; }
 
     /* the get/set/click handlers are virtual functions; each handler class for a knot
        should be derived from KnotHolderEntity and override these functions */
@@ -83,7 +83,10 @@ public:
 
 // derived KnotHolderEntity class for LPEs
 class LPEKnotHolderEntity : public KnotHolderEntity {
-    virtual bool isDeletable() { return false; }
+public:
+    LPEKnotHolderEntity(Inkscape::LivePathEffect::Effect *effect) : _effect(effect) {};
+protected:
+    Inkscape::LivePathEffect::Effect *_effect;
 };
 
 /* pattern manipulation */

@@ -948,7 +948,7 @@ void FileOpenDialogImplWin32::free_preview()
         DestroyIcon(_preview_file_icon);
     _preview_file_icon = NULL;
 
-    _preview_bitmap_image.clear();
+    _preview_bitmap_image.reset();
     _preview_emf_image = false;
     _mutex->unlock();
 }
@@ -1714,7 +1714,7 @@ void FileSaveDialogImplWin32::GetSaveFileName_thread()
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = current_directory_string;
     ofn.lpstrTitle = _title;
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING;
     ofn.lpstrFilter = _filter;
     ofn.nFilterIndex = _filter_index;
     ofn.lpfnHook = GetSaveFileName_hookproc;

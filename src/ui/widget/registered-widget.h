@@ -12,11 +12,11 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
+#include "ui/widget/scalar.h"
 #include <2geom/affine.h>
 #include "xml/node.h"
 #include "registry.h"
 
-#include "ui/widget/scalar.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/point.h"
 #include "ui/widget/text.h"
@@ -29,6 +29,8 @@
 #include "document-undo.h"
 #include "desktop-handles.h"
 #include "sp-namedview.h"
+
+#include <gtkmm/checkbutton.h>
 
 class SPUnit;
 class SPDocument;

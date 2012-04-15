@@ -113,6 +113,10 @@
 #include "toolbox.h"
 #include <gtk/gtk.h>
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_VoidSymbol 0xffffff
+#endif
+
 //#define DEBUG_TEXT
 
 using Inkscape::UnitTracker;
@@ -860,7 +864,7 @@ GtkWidget * sp_toolbox_button_new_from_verb_with_doubleclick(GtkWidget *t, Inksc
 
 
     unsigned int shortcut = sp_shortcut_get_primary(verb);
-    if (shortcut != GDK_VoidSymbol) {
+    if (shortcut != GDK_KEY_VoidSymbol) {
         gchar *key = sp_shortcut_get_label(shortcut);
         gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
         if ( t ) {
@@ -1058,14 +1062,24 @@ static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType han
 
 GtkWidget *ToolboxFactory::createToolToolbox()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *tb = gtk_box_new(GTK_ORIENTATION, 0);
+    gtk_box_new(GTK_BOX(tb), FALSE);
+#else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
+#endif
 
     return toolboxNewCommon( tb, BAR_TOOL, GTK_POS_TOP );
 }
 
 GtkWidget *ToolboxFactory::createAuxToolbox()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_new(GTK_BOX(tb), FALSE);
+#else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
+#endif
 
     return toolboxNewCommon( tb, BAR_AUX, GTK_POS_LEFT );
 }
@@ -1076,14 +1090,24 @@ GtkWidget *ToolboxFactory::createAuxToolbox()
 
 GtkWidget *ToolboxFactory::createCommandsToolbox()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_new(GTK_BOX(tb), FALSE);
+#else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
+#endif
 
     return toolboxNewCommon( tb, BAR_COMMANDS, GTK_POS_LEFT );
 }
 
 GtkWidget *ToolboxFactory::createSnapToolbox()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_new(GTK_BOX(tb), FALSE);
+#else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
+#endif
 
     return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
 }
@@ -3091,7 +3115,12 @@ static void sp_stb_defaults( GtkWidget * /*widget*/, GObject *dataKludge )
 // public:
 void sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *boxl = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(boxl), FALSE);
+#else
     GtkWidget *boxl = gtk_hbox_new(FALSE, 0);
+#endif
     if (wide) {
         gtk_widget_set_size_request(boxl, MODE_LABEL_WIDTH, -1);
     }

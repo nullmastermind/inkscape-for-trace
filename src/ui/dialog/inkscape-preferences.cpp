@@ -129,7 +129,6 @@ InkscapePreferences::InkscapePreferences()
     initPageRendering();
     initPageSpellcheck();
 
-
     signalPresent().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
 
     //calculate the size request for this dialog
@@ -364,7 +363,7 @@ void InkscapePreferences::initPageTools()
     AddGradientCheckbox(_page_zoom, "/tools/zoom", false);
 
     //Measure
-    this->AddPage(_page_measure, _("Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
+    this->AddPage(_page_measure, C_("Measurement tool", "Measure"), iter_tools, PREFS_PAGE_TOOLS_MEASURE);
     PrefCheckButton* cb = Gtk::manage( new PrefCheckButton);
     cb->init ( _("Ignore first and last points"), "/tools/measure/ignore_1st_and_last", true);
     _page_measure.add_line( false, "", *cb, "", _("The start and end of the measurement tool's control line will not be considered for calculating lengths. Only lengths between actual curve intersections will be displayed."));
@@ -1344,38 +1343,41 @@ void InkscapePreferences::initPageSpellcheck()
     GetModuleFileName(NULL, exeName, MAX_PATH);
     char *slashPos = strrchr(exeName, '\\');
     if (slashPos)
+    {
         *slashPos = '\0';
-    g_print ("%s\n", exeName);
+    }
+    // g_print ("%s\n", exeName);
     aspell_config_replace(config, "prefix", exeName);
 #endif
 
-  /* the returned pointer should _not_ need to be deleted */
-  AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
+    /* the returned pointer should _not_ need to be deleted */
+    AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
+    
+    /* config is no longer needed */
+    delete_aspell_config(config);
+    
+    AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
+    
+    languages.push_back(Glib::ustring(_("None")));
+    langValues.push_back(Glib::ustring(""));
+    
+    const AspellDictInfo *entry;
+    int en_index = 0;
+    int i = 0;
+    while ( (entry = aspell_dict_info_enumeration_next(dels)) != 0)
+    {
+        languages.push_back(Glib::ustring(entry->name));
+        langValues.push_back(Glib::ustring(entry->name));
+        if (!strcmp (entry->name, "en"))
+        {
+            en_index = i;
+        }
+        i++;
+    }
 
-  /* config is no longer needed */
-  delete_aspell_config(config);
+    delete_aspell_dict_info_enumeration(dels);
 
-  AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
-
-  languages.push_back(Glib::ustring(_("None")));
-  langValues.push_back(Glib::ustring(""));
-
-  const AspellDictInfo *entry;
-  int en_index = 0;
-  int i = 0;
-  while ( (entry = aspell_dict_info_enumeration_next(dels)) != 0)
-  {
-      languages.push_back(Glib::ustring(entry->name));
-      langValues.push_back(Glib::ustring(entry->name));
-      if (!strcmp (entry->name, "en"))
-          en_index = i;
-      i ++;
-  }
-
-  delete_aspell_dict_info_enumeration(dels);
-
-
-  _spell_language.init( "/dialogs/spellcheck/lang", &languages[0], &langValues[0], languages.size(), languages[en_index]);
+    _spell_language.init( "/dialogs/spellcheck/lang", &languages[0], &langValues[0], languages.size(), languages[en_index]);
     _page_spellcheck.add_line( false, _("Language:"), _spell_language, "",
                               _("Set the main spell check language"), false);
 

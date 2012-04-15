@@ -16,8 +16,8 @@
 # include "config.h"
 #endif
 
+#include "ui/widget/color-preview.h"
 #include "verbs.h"
-#include <gtk/gtk.h>
 
 #include "macros.h"
 #include "widgets/button.h"
@@ -51,7 +51,6 @@
 #include "../ink-comboboxentry-action.h"
 
 #include "sp-stop.h"
-#include "ui/widget/color-preview.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 #include "desktop-style.h"
@@ -176,7 +175,6 @@ gboolean gr_vector_list(GtkWidget *combo_box, SPDesktop *desktop, bool selection
     gl = g_slist_reverse (gl);
 
     guint pos = 0;
-    guint idx = 0;
 
     if (!gl) {
         // The document has no gradients
@@ -206,6 +204,7 @@ gboolean gr_vector_list(GtkWidget *combo_box, SPDesktop *desktop, bool selection
             sensitive = FALSE;
         }
 
+        guint idx = 0;
         while (gl) {
             SPGradient *gradient = SP_GRADIENT (gl->data);
             gl = g_slist_remove (gl, gradient);
@@ -940,14 +939,14 @@ static void gr_stop_set_offset (GtkComboBox */*widget*/, GtkWidget *data)
  * Callback functions for user actions
  */
 
-static void gr_new_type_changed( EgeSelectOneAction *act, GObject *tbl )
+static void gr_new_type_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint typemode = ege_select_one_action_get_active( act ) == 0 ? SP_GRADIENT_TYPE_LINEAR : SP_GRADIENT_TYPE_RADIAL;
     prefs->setInt("/tools/gradient/newgradient", typemode);
 }
 
-static void gr_new_fillstroke_changed( EgeSelectOneAction *act, GObject *tbl )
+static void gr_new_fillstroke_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool fillmode = ege_select_one_action_get_active( act ) == 0;
@@ -1011,7 +1010,7 @@ void gr_spread_change (EgeSelectOneAction *act, GtkWidget *widget)
 /*
  * User selected a stop from the combobox
  */
-static void gr_stop_combo_changed (GtkComboBox *widget, GtkWidget *data)
+static void gr_stop_combo_changed (GtkComboBox * /*widget*/, GtkWidget *data)
 {
     if (blocked) {
         return;

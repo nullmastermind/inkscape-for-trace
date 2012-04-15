@@ -171,7 +171,7 @@ sp_color_slider_destroy (GtkObject *object)
 
 	if (slider->adjustment) {
 		g_signal_handlers_disconnect_matched (G_OBJECT (slider->adjustment), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, slider);
-		gtk_object_unref (GTK_OBJECT (slider->adjustment));
+		g_object_unref (slider->adjustment);
 		slider->adjustment = NULL;
 	}
 
@@ -343,11 +343,11 @@ void sp_color_slider_set_adjustment(SPColorSlider *slider, GtkAdjustment *adjust
 	if (slider->adjustment != adjustment) {
 		if (slider->adjustment) {
 			g_signal_handlers_disconnect_matched (G_OBJECT (slider->adjustment), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, slider);
-			gtk_object_unref (GTK_OBJECT (slider->adjustment));
+			g_object_unref (slider->adjustment);
 		}
 
 		slider->adjustment = adjustment;
-		gtk_object_ref (GTK_OBJECT (adjustment));
+		g_object_ref (adjustment);
 		g_object_ref_sink (adjustment);
 
 		g_signal_connect (G_OBJECT (adjustment), "changed",
@@ -585,30 +585,40 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	if (gdk_rectangle_intersect (area, &aarea, &apaint)) {
 		/* Draw arrow */
 		gdk_rectangle_intersect (&carea, &apaint, &apaint);
-		gdk_gc_set_clip_rectangle(style->white_gc, &apaint);
-		gdk_gc_set_clip_rectangle(style->black_gc, &apaint);
+		cairo_t* cr = gdk_cairo_create(window);
+		gdk_cairo_rectangle(cr, &apaint);
+		cairo_clip(cr);
 
 		x = aarea.x;
 		y1 = carea.y;
 		y2 = aarea.y + aarea.height - 1;
 		w = aarea.width;
+		cairo_set_line_width(cr, 1.0);
+
 		while ( w > 0 )
 		{
-			gdk_draw_line(window, style->white_gc, x, y1, x + w - 1, y1 );
-			gdk_draw_line(window, style->white_gc, x, y2, x + w - 1, y2 );
+			gdk_cairo_set_source_color(cr, &style->white);
+			cairo_move_to(cr, x - 0.5, y1 + 0.5);
+			cairo_line_to(cr, x + w - 1 + 0.5, y1 + 0.5);
+			cairo_move_to(cr, x - 0.5, y2 + 0.5);
+			cairo_line_to(cr, x + w - 1 + 0.5, y2 + 0.5);
+			cairo_stroke(cr);
 			w -=2;
 			x++;
 			if ( w > 0 )
 			{
-				gdk_draw_line(window, style->black_gc, x, y1, x + w - 1, y1 );
-				gdk_draw_line(window, style->black_gc, x, y2, x + w - 1, y2 );
+				gdk_cairo_set_source_color(cr, &style->black);
+				cairo_move_to(cr, x - 0.5, y1 + 0.5);
+				cairo_line_to(cr, x + w - 1 + 0.5, y1 + 0.5);
+				cairo_move_to(cr, x - 0.5, y2 + 0.5);
+				cairo_line_to(cr, x + w - 1 + 0.5, y2 + 0.5);
+				cairo_stroke(cr);
 			}
 			y1++;
 			y2--;
 		}
 
-		gdk_gc_set_clip_rectangle(style->white_gc, NULL);
-		gdk_gc_set_clip_rectangle(style->black_gc, NULL);
+		cairo_destroy(cr);
 	}
 }
 

@@ -19,6 +19,7 @@
 
 // needed for on-canvas editting:
 #include "desktop.h"
+#include "live_effects/lpeobject.h"
 
 namespace Inkscape {
 
@@ -31,7 +32,7 @@ PowerStrokePointArrayParam::PowerStrokePointArrayParam( const Glib::ustring& lab
 {
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode  = SP_KNOT_MODE_XOR;
-    knot_color = 0xff00ff00;
+    knot_color = 0xff88ff00;
 }
 
 PowerStrokePointArrayParam::~PowerStrokePointArrayParam()
@@ -117,7 +118,7 @@ PowerStrokePointArrayParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotMode
     knot_color = color;
 }
 
-class PowerStrokePointArrayParamKnotHolderEntity : public LPEKnotHolderEntity {
+class PowerStrokePointArrayParamKnotHolderEntity : public KnotHolderEntity {
 public:
     PowerStrokePointArrayParamKnotHolderEntity(PowerStrokePointArrayParam *p, unsigned int index);
     virtual ~PowerStrokePointArrayParamKnotHolderEntity() {}
@@ -183,22 +184,50 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_get()
 void
 PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
 {
-//g_print ("This is the %d handle associated to parameter '%s'\n", _index, _pparam->param_key.c_str());
-
     if (state & GDK_CONTROL_MASK) {
         if (state & GDK_MOD1_MASK) {
             // delete the clicked knot
             std::vector<Geom::Point> & vec = _pparam->_vector;
             vec.erase(vec.begin() + _index);
             _pparam->param_set_and_write_new_value(vec);
+
+            // remove knot from knotholder
+            parent_holder->entity.remove(this);
+            // shift knots down one index
+            for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {
+                PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(*ent);
+                if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
+                    if (pspa_ent->_index > this->_index) {
+                        --pspa_ent->_index;
+                    }
+                }
+            };
+            // delete self and return
+            delete this;
+            return;
         } else {
-            // add a knot
+            // add a knot to XML
             std::vector<Geom::Point> & vec = _pparam->_vector;
-            vec.insert(vec.begin() + _index, 1, vec.at(_index));
+            vec.insert(vec.begin() + _index, 1, vec.at(_index)); // this clicked knot is duplicated
             _pparam->param_set_and_write_new_value(vec);
+
+            // shift knots up one index
+            for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {
+                PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(*ent);
+                if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
+                    if (pspa_ent->_index > this->_index) {
+                        ++pspa_ent->_index;
+                    }
+                }
+            };
+            // add knot to knotholder
+            PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(_pparam, _index+1);
+            e->create(  this->desktop, this->item, parent_holder,
+                        _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it."),
+                        _pparam->knot_shape, _pparam->knot_mode, _pparam->knot_color);
+            parent_holder->add(e);
         }
     } 
-
 }
 
 void

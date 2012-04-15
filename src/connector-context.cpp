@@ -194,6 +194,13 @@
 
 using Inkscape::DocumentUndo;
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_Return 0xff0d
+#define GDK_KEY_KP_Enter 0xff8d
+#define GDK_KEY_Escape 0xff1b
+#define GDK_KEY_Delete 0xffff
+#endif
+
 static void sp_connector_context_class_init(SPConnectorContextClass *klass);
 static void sp_connector_context_init(SPConnectorContext *conn_context);
 static void sp_connector_context_dispose(GObject *object);
@@ -613,7 +620,7 @@ cc_select_handle(SPKnot* knot)
 {
     knot->setShape(SP_KNOT_SHAPE_SQUARE);
     knot->setSize(10);
-    knot->setAnchor(GTK_ANCHOR_CENTER);
+    knot->setAnchor(SP_ANCHOR_CENTER);
     knot->setFill(0x0000ffff, 0x0000ffff, 0x0000ffff);
     sp_knot_update_ctrl(knot);
 }
@@ -623,7 +630,7 @@ cc_deselect_handle(SPKnot* knot)
 {
     knot->setShape(SP_KNOT_SHAPE_SQUARE);
     knot->setSize(8);
-    knot->setAnchor(GTK_ANCHOR_CENTER);
+    knot->setAnchor(SP_ANCHOR_CENTER);
     knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff);
     sp_knot_update_ctrl(knot);
 }
@@ -1156,15 +1163,15 @@ connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
     if ( cc->mode == SP_CONNECTOR_CONTEXT_DRAWING_MODE )
     {
         switch (keyval) {
-            case GDK_Return:
-            case GDK_KP_Enter:
+            case GDK_KEY_Return:
+            case GDK_KEY_KP_Enter:
                 if (cc->npoints != 0) {
                     spcc_connector_finish(cc);
                     cc->state = SP_CONNECTOR_CONTEXT_IDLE;
                     ret = TRUE;
                 }
                 break;
-            case GDK_Escape:
+            case GDK_KEY_Escape:
                 if (cc->state == SP_CONNECTOR_CONTEXT_REROUTING) {
 
                     SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
@@ -1195,7 +1202,7 @@ connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
         switch ( cc->state )
         {
             case SP_CONNECTOR_CONTEXT_DRAGGING:
-                if ( keyval == GDK_Escape )
+                if ( keyval == GDK_KEY_Escape )
                 {
                     // Cancel connection point dragging
 
@@ -1209,7 +1216,7 @@ connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
                         _("Connection point drag cancelled."));
                     ret = TRUE;
                 }
-                else if ( keyval == GDK_Return || keyval == GDK_KP_Enter )
+                else if ( keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter )
                 {
                     // Put connection point at current position
 
@@ -1233,7 +1240,7 @@ connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
                 }
                 break;
             case SP_CONNECTOR_CONTEXT_NEWCONNPOINT:
-                if ( keyval == GDK_Escape )
+                if ( keyval == GDK_KEY_Escape )
                 {
                     // Just destroy the knot
                     g_object_unref( cc->selected_handle );
@@ -1241,7 +1248,7 @@ connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
                     cc->state = SP_CONNECTOR_CONTEXT_IDLE;
                     ret = TRUE;
                 }
-                else if ( keyval == GDK_Return || keyval == GDK_KP_Enter )
+                else if ( keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter )
                 {
                     SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
                     SPDocument *doc = sp_desktop_document(desktop);
@@ -1272,7 +1279,7 @@ connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
 
                 break;
             case SP_CONNECTOR_CONTEXT_IDLE:
-                if ( keyval == GDK_Delete && cc->selected_handle )
+                if ( keyval == GDK_KEY_Delete && cc->selected_handle )
                 {
                     cc->active_shape->avoidRef->deleteConnectionPoint(cc->connpthandles[cc->selected_handle]);
                     cc->selected_handle = NULL;
@@ -1630,7 +1637,7 @@ static void cc_active_shape_add_knot(SPDesktop* desktop, SPItem* item, Connectio
 
         knot->setShape(SP_KNOT_SHAPE_SQUARE);
         knot->setSize(8);
-        knot->setAnchor(GTK_ANCHOR_CENTER);
+        knot->setAnchor(SP_ANCHOR_CENTER);
         knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff);
         sp_knot_update_ctrl(knot);
 
@@ -1814,7 +1821,7 @@ cc_set_active_conn(SPConnectorContext *cc, SPItem *item)
 
             knot->setShape(SP_KNOT_SHAPE_SQUARE);
             knot->setSize(7);
-            knot->setAnchor(GTK_ANCHOR_CENTER);
+            knot->setAnchor(SP_ANCHOR_CENTER);
             knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff);
             knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff);
             sp_knot_update_ctrl(knot);

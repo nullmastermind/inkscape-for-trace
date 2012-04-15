@@ -36,6 +36,10 @@ using Inkscape::DocumentUndo;
 			 GDK_POINTER_MOTION_HINT_MASK | \
 			 GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_Escape 0xff1b
+#endif
+
 static bool nograb = false;
 
 static bool grabbed = FALSE;
@@ -189,7 +193,7 @@ static void sp_knot_init(SPKnot *knot)
     knot->size = 8;
     knot->pos = Geom::Point(0, 0);
     knot->grabbed_rel_pos = Geom::Point(0, 0);
-    knot->anchor = GTK_ANCHOR_CENTER;
+    knot->anchor = SP_ANCHOR_CENTER;
     knot->shape = SP_KNOT_SHAPE_SQUARE;
     knot->mode = SP_KNOT_MODE_XOR;
     knot->tip = NULL;
@@ -241,7 +245,11 @@ static void sp_knot_dispose(GObject *object)
 
     for (gint i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
         if (knot->cursor[i]) {
+#if GTK_CHECK_VERSION(3,0,0)
+            g_object_unref(knot->cursor[i]);
+#else
             gdk_cursor_unref(knot->cursor[i]);
+#endif
             knot->cursor[i] = NULL;
         }
     }
@@ -411,7 +419,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             break;
     case GDK_KEY_PRESS: // keybindings for knot
             switch (get_group0_keyval(&event->key)) {
-                case GDK_Escape:
+                case GDK_KEY_Escape:
                             sp_knot_set_flag(knot, SP_KNOT_GRABBED, FALSE);
                             if (!nograb) {
                                 sp_canvas_item_ungrab(knot->item, event->button.time);
@@ -472,7 +480,7 @@ SPKnot *sp_knot_new(SPDesktop *desktop, const gchar *tip)
 
     knot->item = sp_canvas_item_new(sp_desktop_controls (desktop),
                                     SP_TYPE_CTRL,
-                                    "anchor", GTK_ANCHOR_CENTER,
+                                    "anchor", SP_ANCHOR_CENTER,
                                     "size", 8.0,
                                     "filled", TRUE,
                                     "fill_color", 0xffffff00,

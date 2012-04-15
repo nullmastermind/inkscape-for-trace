@@ -84,6 +84,11 @@
 
 #include <gtk/gtk.h>
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_KP_Add 0xffab
+#define GDK_KEY_KP_Subtract 0xffad
+#endif
+
 using Inkscape::DocumentUndo;
 
 //#ifdef WITH_INKBOARD
@@ -961,6 +966,18 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_SELECT_ALL:
             SelectionHelper::selectAll(dt);
             break;
+        case SP_VERB_EDIT_SELECT_SAME_FILL_STROKE:
+            SelectionHelper::selectSameFillStroke(dt);
+            break;
+        case SP_VERB_EDIT_SELECT_SAME_FILL_COLOR:
+            SelectionHelper::selectSameFillColor(dt);
+            break;
+        case SP_VERB_EDIT_SELECT_SAME_STROKE_COLOR:
+            SelectionHelper::selectSameStrokeColor(dt);
+            break;
+        case SP_VERB_EDIT_SELECT_SAME_STROKE_STYLE:
+            SelectionHelper::selectSameStrokeStyle(dt);
+            break;
         case SP_VERB_EDIT_INVERT:
             SelectionHelper::invert(dt);
             break;
@@ -1644,7 +1661,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_ZOOM_IN:
         {
             gint mul = 1 + gobble_key_events(
-                 GDK_KP_Add, 0); // with any mask
+                 GDK_KEY_KP_Add, 0); // with any mask
             // While drawing with the pen/pencil tool, zoom towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -1662,7 +1679,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_ZOOM_OUT:
         {
             gint mul = 1 + gobble_key_events(
-                 GDK_KP_Subtract, 0); // with any mask
+                 GDK_KEY_KP_Subtract, 0); // with any mask
             // While drawing with the pen/pencil tool, zoom away from the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -2288,6 +2305,14 @@ Verb *Verb::_base_verbs[] = {
                  N_("Select all objects or all nodes"), GTK_STOCK_SELECT_ALL),
     new EditVerb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, "EditSelectAllInAllLayers", N_("Select All in All La_yers"),
                  N_("Select all objects in all visible and unlocked layers"), INKSCAPE_ICON("edit-select-all-layers")),
+    new EditVerb(SP_VERB_EDIT_SELECT_SAME_FILL_STROKE, "EditSelectSameFillStroke", N_("Fill _and Stroke"),
+                 N_("Select all objects with the same fill and stroke as the selected objects"), GTK_STOCK_SELECT_ALL),
+    new EditVerb(SP_VERB_EDIT_SELECT_SAME_FILL_COLOR, "EditSelectSameFillColor", N_("_Fill Color"),
+                N_("Select all objects with the same fill as the selected objects"), GTK_STOCK_SELECT_ALL),
+    new EditVerb(SP_VERB_EDIT_SELECT_SAME_STROKE_COLOR, "EditSelectSameStrokeColor", N_("_Stroke Color"),
+                N_("Select all objects with the same stroke as the selected objects"), GTK_STOCK_SELECT_ALL),
+    new EditVerb(SP_VERB_EDIT_SELECT_SAME_STROKE_STYLE, "EditSelectSameStrokeStyle", N_("Stroke St_yle"),
+                N_("Select all objects with the same stroke style (width, dsh, markers) as the selected objects"), GTK_STOCK_SELECT_ALL),
     new EditVerb(SP_VERB_EDIT_INVERT, "EditInvert", N_("In_vert Selection"),
                  N_("Invert selection (unselect what is selected and select everything else)"), INKSCAPE_ICON("edit-select-invert")),
     new EditVerb(SP_VERB_EDIT_INVERT_IN_ALL_LAYERS, "EditInvertInAllLayers", N_("Invert in All Layers"),
@@ -2490,7 +2515,7 @@ Verb *Verb::_base_verbs[] = {
                     N_("Create and edit gradients"), INKSCAPE_ICON("color-gradient")),
     new ContextVerb(SP_VERB_CONTEXT_ZOOM, "ToolZoom", N_("Zoom"),
                     N_("Zoom in or out"), INKSCAPE_ICON("zoom")),
-    new ContextVerb(SP_VERB_CONTEXT_MEASURE, "ToolMeasure", N_("Measure"),
+    new ContextVerb(SP_VERB_CONTEXT_MEASURE, "ToolMeasure", NC_("Measurement tool", "Measure"),
                     N_("Measurement tool"), INKSCAPE_ICON("tool-measure")),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER, "ToolDropper", N_("Dropper"),
                     N_("Pick colors from image"), INKSCAPE_ICON("color-picker")),

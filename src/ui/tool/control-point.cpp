@@ -27,6 +27,12 @@
 #include "ui/tool/event-utils.h"
 #include "ui/tool/transform-handle-set.h"
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_Escape 0xff1b
+#define GDK_KEY_Tab 0xff09
+#define GDK_KEY_ISO_Left_Tab 0xfe20
+#endif
+
 namespace Inkscape {
 namespace UI {
 
@@ -132,7 +138,7 @@ ControlPoint::ColorSet invisible_cset = {
  * @param group The canvas group the point's canvas item should be created in
  */
 ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
-        Gtk::AnchorType anchor, SPCtrlShapeType shape,
+        SPAnchorType anchor, SPCtrlShapeType shape,
         unsigned int size, ColorSet *cset, SPCanvasGroup *group)
     : _desktop (d)
     , _canvas_item (NULL)
@@ -142,7 +148,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
 {
     _canvas_item = sp_canvas_item_new(
         group ? group : sp_desktop_controls (_desktop), SP_TYPE_CTRL,
-        "anchor", (GtkAnchorType) anchor, "size", (gdouble) size, "shape", shape,
+        "anchor", (SPAnchorType) anchor, "size", (gdouble) size, "shape", shape,
         "filled", TRUE, "fill_color", _cset->normal.fill,
         "stroked", TRUE, "stroke_color", _cset->normal.stroke,
         "mode", SP_CTRL_MODE_XOR, NULL);
@@ -160,7 +166,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
  * @param group The canvas group the point's canvas item should be created in
  */
 ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
-        Gtk::AnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
+        SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
         ColorSet *cset, SPCanvasGroup *group)
     : _desktop (d)
     , _canvas_item (NULL)
@@ -169,7 +175,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
 {
     _canvas_item = sp_canvas_item_new(
         group ? group : sp_desktop_controls(_desktop), SP_TYPE_CTRL,
-        "anchor", (GtkAnchorType) anchor, "size", (gdouble) pixbuf->get_width(),
+        "anchor", (SPAnchorType) anchor, "size", (gdouble) pixbuf->get_width(),
         "shape", SP_CTRL_SHAPE_BITMAP, "pixbuf", pixbuf->gobj(),
         "filled", TRUE, "fill_color", _cset->normal.fill,
         "stroked", TRUE, "stroke_color", _cset->normal.stroke,
@@ -262,9 +268,9 @@ SPCtrlShapeType ControlPoint::_shape() const
     return ret;
 }
 
-GtkAnchorType ControlPoint::_anchor() const
+SPAnchorType ControlPoint::_anchor() const
 {
-    GtkAnchorType ret;
+    SPAnchorType ret;
     g_object_get(_canvas_item, "anchor", &ret, NULL);
     return ret;
 }
@@ -288,7 +294,7 @@ void ControlPoint::_setShape(SPCtrlShapeType shape)
     g_object_set(_canvas_item, "shape", shape, NULL);
 }
 
-void ControlPoint::_setAnchor(GtkAnchorType anchor)
+void ControlPoint::_setAnchor(SPAnchorType anchor)
 {
     g_object_set(_canvas_item, "anchor", anchor, NULL);
 }
@@ -440,7 +446,7 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
     case GDK_KEY_PRESS:
         switch (get_group0_keyval(&event->key))
         {
-        case GDK_Escape: {
+        case GDK_KEY_Escape: {
             // ignore Escape if this is not a drag
             if (!_drag_initiated) break;
 
@@ -480,7 +486,7 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
             ungrabbed(NULL); // ungrabbed handlers can handle a NULL event
             snapprefs.setSnapEnabledGlobally(snap_save);
             } return true;
-        case GDK_Tab:
+        case GDK_KEY_Tab:
             {// Downcast from ControlPoint to TransformHandle, if possible
              // This is an ugly hack; we should have the transform handle intercept the keystrokes itself
             TransformHandle *th = dynamic_cast<TransformHandle*>(this);
@@ -490,7 +496,7 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
             }
             break;
             }
-        case GDK_ISO_Left_Tab:
+        case GDK_KEY_ISO_Left_Tab:
             {// Downcast from ControlPoint to TransformHandle, if possible
              // This is an ugly hack; we should have the transform handle intercept the keystrokes itself
             TransformHandle *th = dynamic_cast<TransformHandle*>(this);

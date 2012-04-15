@@ -37,17 +37,18 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <gtk/gtk.h>
 #include <string>
 #include <cstring>
 #include <2geom/transforms.h>
 
+#include "widgets/desktop-widget.h"
 #include "desktop.h"
 #include "dir-util.h"
 #include "display/drawing-item.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "helper/units.h"
+#include "id-clash.h"
 #include "inkscape-private.h"
 #include "inkscape-version.h"
 #include "libavoid/router.h"
@@ -60,7 +61,6 @@
 #include "sp-object-repr.h"
 #include "transf_mat_3x4.h"
 #include "unit-constants.h"
-#include "widgets/desktop-widget.h"
 #include "xml/repr.h"
 #include "xml/rebase-hrefs.h"
 #include "libcroco/cr-cascade.h"
@@ -1429,8 +1429,29 @@ void SPDocument::setModifiedSinceSave(bool modified) {
     this->modified_since_save = modified;
     Gtk::Window *parent = SP_ACTIVE_DESKTOP->getToplevel();
     g_assert(parent != NULL);
-    SPDesktopWidget *dtw = (SPDesktopWidget *) parent->get_data("desktopwidget");
+    SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
     dtw->updateTitle( this->getName() );
+}
+
+
+/**
+ * Paste SVG defs from the document retrieved from the clipboard into the active document.
+ * @param clipdoc The document to paste.
+ * @pre @c clipdoc != NULL and pasting into the active document is possible.
+ */
+void SPDocument::importDefs(SPDocument *source)
+{
+    Inkscape::XML::Node *root = source->getReprRoot();
+    Inkscape::XML::Node *defs = sp_repr_lookup_name(root, "svg:defs", 1);
+    Inkscape::XML::Node *target_defs = this->getDefs()->getRepr();
+
+    prevent_id_clashes(source, this);
+
+    for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
+        Inkscape::XML::Node * dup = def->duplicate(this->getReprDoc());
+        target_defs->appendChild(dup);
+        Inkscape::GC::release(dup);
+    }
 }
 
 /*

@@ -19,6 +19,10 @@
 
 #include <gdk/gdkkeysyms.h>
 
+#if !GTK_CHECK_VERSION(2,22,0)
+#define GDK_KEY_Escape 0xff1b
+#endif
+
 namespace Inkscape {
 namespace UI {
 
@@ -29,7 +33,7 @@ namespace UI {
 class SelectorPoint : public ControlPoint {
 public:
     SelectorPoint(SPDesktop *d, SPCanvasGroup *group, Selector *s)
-        : ControlPoint(d, Geom::Point(0,0), Gtk::ANCHOR_CENTER, SP_CTRL_SHAPE_SQUARE,
+        : ControlPoint(d, Geom::Point(0,0), SP_ANCHOR_CENTER, SP_CTRL_SHAPE_SQUARE,
             1, &invisible_cset, group)
         , _selector(s)
         , _cancel(false)
@@ -49,7 +53,7 @@ public:
 
 protected:
     virtual bool _eventHandler(SPEventContext *event_context, GdkEvent *event) {
-        if (event->type == GDK_KEY_PRESS && shortcut_key(event->key) == GDK_Escape &&
+        if (event->type == GDK_KEY_PRESS && shortcut_key(event->key) == GDK_KEY_Escape &&
             sp_canvas_item_is_visible(_rubber))
         {
             _cancel = true;

@@ -151,6 +151,26 @@ void SelectionHelper::selectNone(SPDesktop *dt)
     }
 }
 
+void SelectionHelper::selectSameFillStroke(SPDesktop *dt)
+{
+    sp_select_same_fill_stroke_style(dt, true, true, true);
+}
+
+void SelectionHelper::selectSameFillColor(SPDesktop *dt)
+{
+    sp_select_same_fill_stroke_style(dt, true, false, false);
+}
+
+void SelectionHelper::selectSameStrokeColor(SPDesktop *dt)
+{
+    sp_select_same_fill_stroke_style(dt, false, true, false);
+}
+
+void SelectionHelper::selectSameStrokeStyle(SPDesktop *dt)
+{
+    sp_select_same_stroke_style(dt);
+}
+
 void SelectionHelper::invert(SPDesktop *dt)
 {
     if (tools_isactive(dt, TOOLS_NODES)) {
@@ -470,7 +490,17 @@ void sp_edit_clear_all(SPDesktop *dt)
                        _("Delete all"));
 }
 
-GSList *get_all_items(GSList *list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, GSList const *exclude)
+/*
+ * Return a list of SPItems that are the children of 'list'
+ *
+ * list - source list of items to search in
+ * desktop - desktop associated with the source list
+ * exclude - list of items to exclude from result
+ * onlyvisible - TRUE includes only items visible on canvas
+ * onlysensitive - TRUE includes only non-locked items
+ * ingroups - TRUE to recursively get grouped items children
+ */
+GSList *get_all_items(GSList *list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, GSList const *exclude)
 {
     for ( SPObject *child = from->firstChild() ; child; child = child->getNext() ) {
         if (SP_IS_ITEM(child) &&
@@ -483,8 +513,8 @@ GSList *get_all_items(GSList *list, SPObject *from, SPDesktop *desktop, bool onl
             list = g_slist_prepend(list, SP_ITEM(child));
         }
 
-        if (SP_IS_ITEM(child) && desktop->isLayer(SP_ITEM(child))) {
-            list = get_all_items(list, child, desktop, onlyvisible, onlysensitive, exclude);
+        if (ingroups || (SP_IS_ITEM(child) && desktop->isLayer(SP_ITEM(child)))) {
+            list = get_all_items(list, child, desktop, onlyvisible, onlysensitive, ingroups, exclude);
         }
     }
 
@@ -541,11 +571,11 @@ void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool invert)
             break;
         }
         case PREFS_SELECTION_LAYER_RECURSIVE: {
-            items = get_all_items(NULL, dt->currentLayer(), dt, onlyvisible, onlysensitive, exclude);
+            items = get_all_items(NULL, dt->currentLayer(), dt, onlyvisible, onlysensitive, FALSE, exclude);
             break;
         }
         default: {
-        items = get_all_items(NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive, exclude);
+        items = get_all_items(NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive, FALSE, exclude);
             break;
     }
     }
@@ -1608,6 +1638,244 @@ sp_selection_rotate(Inkscape::Selection *selection, gdouble const angle_degrees)
                               : "selector:rotate:cw" ),
                             SP_VERB_CONTEXT_SELECT,
                             _("Rotate"));
+}
+
+/*
+ * Selects all the visible items with the same fill and/or stroke color/style as the items in the current selection
+ *
+ * Params:
+ * desktop - set the selection on this desktop
+ * fill - select objects matching fill
+ * stroke - select objects matching stroke
+ */
+void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolean stroke, gboolean style)
+{
+    if (!desktop) {
+        return;
+    }
+
+    if (!fill && !stroke && !style) {
+        return;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
+    bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
+    bool ingroups = TRUE;
+
+    GSList *all_list = get_all_items(NULL, desktop->currentRoot(), desktop, onlyvisible, onlysensitive, ingroups, NULL);
+    GSList *all_matches = NULL;
+
+    Inkscape::Selection *selection = sp_desktop_selection (desktop);
+
+    for (GSList const* sel_iter = selection->itemList(); sel_iter; sel_iter = sel_iter->next) {
+        SPItem *sel = SP_ITEM(sel_iter->data);
+        GSList *matches = all_list;
+        if (fill) {
+            matches = sp_get_same_fill_or_stroke_color(sel, matches, SP_FILL_COLOR);
+        }
+        if (stroke) {
+            matches = sp_get_same_fill_or_stroke_color(sel, matches, SP_STROKE_COLOR);
+        }
+        if (style) {
+            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_WIDTH);
+            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_DASHES);
+            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_MARKERS);
+        }
+        all_matches = g_slist_concat (all_matches, matches);
+    }
+
+    selection->clear();
+    selection->setList(all_matches);
+
+    if (all_matches) {
+        g_slist_free(all_matches);
+    }
+    if (all_list) {
+        g_slist_free(all_list);
+    }
+
+}
+
+
+/*
+ * Selects all the visible items with the same stroke style as the items in the current selection
+ *
+ * Params:
+ * desktop - set the selection on this desktop
+ */
+void sp_select_same_stroke_style(SPDesktop *desktop)
+{
+    if (!desktop) {
+        return;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
+    bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
+    bool ingroups = TRUE;
+
+    GSList *all_list = get_all_items(NULL, desktop->currentRoot(), desktop, onlyvisible, onlysensitive, ingroups, NULL);
+    GSList *matches = all_list;
+
+    Inkscape::Selection *selection = sp_desktop_selection (desktop);
+
+    for (GSList const* sel_iter = selection->itemList(); sel_iter; sel_iter = sel_iter->next) {
+        SPItem *sel = SP_ITEM(sel_iter->data);
+        matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_WIDTH);
+        matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_DASHES);
+        matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_MARKERS);
+    }
+
+    selection->clear();
+    selection->setList(matches);
+
+    if (matches) {
+        g_slist_free(matches);
+    }
+    if (all_list) {
+        g_slist_free(all_list);
+    }
+}
+
+/*
+ * Find all items in src list that have the same fill or stroke style as sel
+ * Return the list of matching items
+ */
+GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrokeStyleType type)
+{
+    GSList *matches = NULL;
+    gboolean match = false;
+
+    SPIPaint *sel_paint = (type == SP_FILL_COLOR) ? &(sel->style->fill) : &(sel->style->stroke);
+
+    for (GSList *i = src; i != NULL; i = i->next) {
+        SPItem *iter = SP_ITEM(i->data);
+        SPIPaint *iter_paint = (type == SP_FILL_COLOR) ? &(iter->style->fill) : &(iter->style->stroke);
+        match = false;
+        if (sel_paint->isColor() && iter_paint->isColor() // color == color comparision doesnt seem to work here.
+                && (sel_paint->value.color.toRGBA32(1.0) == iter_paint->value.color.toRGBA32(1.0))) {
+            match = true;
+        } else if (sel_paint->isPaintserver() && iter_paint->isPaintserver()) {
+
+            SPPaintServer *sel_server =
+                    (type == SP_FILL_COLOR) ? sel->style->getFillPaintServer() : sel->style->getStrokePaintServer();
+            SPPaintServer *iter_server =
+                    (type == SP_FILL_COLOR) ? iter->style->getFillPaintServer() : iter->style->getStrokePaintServer();
+
+            if ((SP_IS_LINEARGRADIENT(sel_server) || SP_IS_RADIALGRADIENT(sel_server) ||
+                    (SP_IS_GRADIENT(sel_server) && SP_GRADIENT(sel_server)->getVector()->isSwatch()))
+                    &&
+                 (SP_IS_LINEARGRADIENT(iter_server) || SP_IS_RADIALGRADIENT(iter_server) ||
+                    (SP_IS_GRADIENT(iter_server) && SP_GRADIENT(iter_server)->getVector()->isSwatch()))) {
+                SPGradient *sel_vector = SP_GRADIENT(sel_server)->getVector();
+                SPGradient *iter_vector = SP_GRADIENT(iter_server)->getVector();
+                if (sel_vector == iter_vector) {
+                    match = true;
+                }
+
+            } else if (SP_IS_PATTERN(sel_server) && SP_IS_PATTERN(iter_server)) {
+                SPPattern *sel_pat = pattern_getroot(SP_PATTERN(sel_server));
+                SPPattern *iter_pat = pattern_getroot(SP_PATTERN(iter_server));
+                if (sel_pat == iter_pat) {
+                    match = true;
+                }
+            }
+        } else if (sel_paint->isNone() && iter_paint->isNone()) {
+            match = true;
+        } else if (sel_paint->isNoneSet() && iter_paint->isNoneSet()) {
+            match = true;
+        }
+
+        if (match) {
+            matches = g_slist_prepend(matches, iter);
+        }
+    }
+
+    return matches;
+}
+
+/*
+ * Find all items in src list that have the same stroke style as sel by type
+ * Return the list of matching items
+ */
+GSList *sp_get_same_stroke_style(SPItem *sel, GSList *src, SPSelectStrokeStyleType type)
+{
+    GSList *matches = NULL;
+    gboolean match = false;
+
+    SPStyle *sel_style = sel->style;
+
+    if (type == SP_FILL_COLOR || type == SP_STROKE_COLOR) {
+        return sp_get_same_fill_or_stroke_color(sel, src, type);
+    }
+
+    /*
+     * Stroke width needs to handle transformations, so call this function
+     * to get the transformed stroke width
+     */
+    GSList *objects = NULL;
+    SPStyle *sel_style_for_width = NULL;
+    if (type == SP_STROKE_STYLE_WIDTH) {
+        objects = g_slist_prepend(objects, sel);
+        sel_style_for_width = sp_style_new (SP_ACTIVE_DOCUMENT);
+        objects_query_strokewidth (objects, sel_style_for_width);
+    }
+
+    for (GSList *i = src; i != NULL; i = i->next) {
+        SPItem *iter = SP_ITEM(i->data);
+        SPStyle *iter_style = iter->style;
+        match = false;
+
+        if (type == SP_STROKE_STYLE_WIDTH) {
+            match = (sel_style->stroke_width.set == iter_style->stroke_width.set);
+            if (sel_style->stroke_width.set && iter_style->stroke_width.set) {
+                GSList *objects = NULL;
+                objects = g_slist_prepend(objects, iter);
+                SPStyle *iter_style_for_width = sp_style_new (SP_ACTIVE_DOCUMENT);
+                objects_query_strokewidth (objects, iter_style_for_width);
+
+                if (sel_style_for_width) {
+                    match = (sel_style_for_width->stroke_width.computed == iter_style_for_width->stroke_width.computed);
+                }
+                g_slist_free(objects);
+            }
+        }
+        else if (type == SP_STROKE_STYLE_DASHES ) {
+            match = (sel_style->stroke_dasharray_set == iter_style->stroke_dasharray_set);
+            if (sel_style->stroke_dasharray_set && iter_style->stroke_dasharray_set) {
+                match = (sel_style->stroke_dash.n_dash == iter_style->stroke_dash.n_dash);
+                if (sel_style->stroke_dash.n_dash == iter_style->stroke_dash.n_dash) {
+                    for (int i = 0; i < sel_style->stroke_dash.n_dash; i++) {
+                        if (sel_style->stroke_dash.dash[i] != iter_style->stroke_dash.dash[i]) {
+                            match = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if (type == SP_STROKE_STYLE_MARKERS) {
+                match = true;
+                int len = sizeof(sel_style->marker)/sizeof(SPIString);
+                for (int i = 0; i < len; i++) {
+                    match = (sel_style->marker[i].set == iter_style->marker[i].set);
+                    if (sel_style->marker[i].set && iter_style->marker[i].set &&
+                        (strcmp(sel_style->marker[i].value, iter_style->marker[i].value))) {
+                        match = false;
+                        break;
+                    }
+                }
+        }
+
+        if (match) {
+            matches = g_slist_prepend(matches, iter);
+        }
+    }
+
+    g_slist_free(objects);
+
+    return matches;
 }
 
 // helper function:
@@ -2907,7 +3175,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
 
         // Clean up
         Inkscape::GC::release(repr);
-        gdk_pixbuf_unref(pb);
+        g_object_unref(pb);
 
         // Complete undoable transaction
         DocumentUndo::done(document, SP_VERB_SELECTION_CREATE_BITMAP,

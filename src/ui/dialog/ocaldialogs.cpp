@@ -310,7 +310,7 @@ LoadingBox::LoadingBox() : Gtk::EventBox()
     signal_expose_event().connect(sigc::mem_fun(*this, &LoadingBox::_on_expose_event), false);
 }
 
-bool LoadingBox::_on_expose_event(GdkEventExpose* event)
+bool LoadingBox::_on_expose_event(GdkEventExpose* /*event*/)
 {
     Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
@@ -342,7 +342,7 @@ bool LoadingBox::_on_expose_event(GdkEventExpose* event)
 void LoadingBox::start()
 {
     // Timeout hasn't been stopped, so must be disconnected
-    if ((draw_spinner != false) & (timeout != NULL)) {
+    if ((draw_spinner != false) && timeout) {
         timeout.disconnect();
     }
     
@@ -447,7 +447,7 @@ void PreviewWidget::clear()
     image->hide();
 }
 
-bool PreviewWidget::_on_expose_event(GdkEventExpose* event)
+bool PreviewWidget::_on_expose_event(GdkEventExpose* /*event*/)
 {
     Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
@@ -532,11 +532,11 @@ SearchEntry::SearchEntry() : Gtk::Entry()
     gtk_entry_set_icon_from_stock(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
 }
 
-void SearchEntry::_on_icon_pressed(Gtk::EntryIconPosition icon_position, const GdkEventButton* event)
+void SearchEntry::_on_icon_pressed(Gtk::EntryIconPosition icon_position, const GdkEventButton* /*event*/)
 {
     if (icon_position == Gtk::ENTRY_ICON_SECONDARY) {
         grab_focus();
-        set_text("");
+        delete_text(0, -1);
     } else if (icon_position == Gtk::ENTRY_ICON_PRIMARY) {
         select_region(0, -1);
         grab_focus();
@@ -558,7 +558,7 @@ BaseBox::BaseBox() : Gtk::EventBox()
     set_visible_window(false);
 }
 
-bool BaseBox::_on_expose_event(GdkEventExpose* event)
+bool BaseBox::_on_expose_event(GdkEventExpose* /*event*/)
 {
     Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
@@ -595,7 +595,7 @@ LogoArea::LogoArea() : Gtk::EventBox()
     set_visible_window(false);
 }
 
-bool LogoArea::_on_expose_event(GdkEventExpose* event)
+bool LogoArea::_on_expose_event(GdkEventExpose* /*event*/)
 {
     if (draw_logo) {
         int x = get_allocation().get_x();
@@ -863,8 +863,8 @@ void ImportDialog::on_thumbnail_downloaded(Glib::ustring path, bool success)
 /*
  * Callback for row activated
  */
-void ImportDialog::on_list_results_row_activated(const Gtk::TreeModel::Path& path,
-    Gtk::TreeViewColumn* column)
+void ImportDialog::on_list_results_row_activated(const Gtk::TreeModel::Path& /*path*/,
+                                                 Gtk::TreeViewColumn* /*column*/)
 {
     on_list_results_cursor_changed();
     button_import->signal_clicked();
@@ -1075,12 +1075,14 @@ void ImportDialog::update_label_no_search_results()
 {
     Glib::ustring keywords = Glib::Markup::escape_text(entry_search->get_text());
     Gdk::Color grey = entry_search->get_style()->get_text_aa(entry_search->get_state());
-    
+    Glib::ustring msg_one = Glib::ustring::compose(
+        _("No clipart named <b>%1</b> was found."),
+        keywords);
+    Glib::ustring msg_two = _("Please make sure all keywords are spelled correctly,"
+                              " or try again with different keywords.");
     Glib::ustring markup = Glib::ustring::compose(
-        "<span size=\"large\">%1 <b>%2</b> %3</span>\n<span color=\"%4\">%5</span>",
-        _("No clipart named"), keywords, _("was found."), grey.to_string(),
-        _("Please make sure all keywords are spelled correctly, or try again with different keywords."));
-    
+        "<span size=\"large\">%1</span>\n<span color=\"%2\">%3</span>",
+        msg_one, grey.to_string(), msg_two);
     label_not_found->set_markup(markup);
 }
 

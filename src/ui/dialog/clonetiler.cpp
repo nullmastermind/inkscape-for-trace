@@ -93,7 +93,12 @@ CloneTiler::CloneTiler (void) :
 
         dlg = GTK_WIDGET(gobj());
 
+#if GTK_CHECK_VERSION(3,0,0)
+        GtkWidget *mainbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+        gtk_box_new(GTK_BOX(mainbox), FALSE);
+#else
         GtkWidget *mainbox = gtk_vbox_new(FALSE, 4);
+#endif
         gtk_container_set_border_width (GTK_CONTAINER (mainbox), 6);
 
         contents->pack_start (*Gtk::manage(Glib::wrap(mainbox)), true, true, 0);
@@ -648,7 +653,12 @@ CloneTiler::CloneTiler (void) :
             GtkWidget *vb = clonetiler_new_tab (nb, _("Co_lor"));
 
             {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
 
             GtkWidget *l = gtk_label_new (_("Initial color: "));
             gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -771,7 +781,12 @@ CloneTiler::CloneTiler (void) :
 
 
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
             GtkWidget *b  = gtk_check_button_new_with_label (_("Trace the drawing under the tiles"));
@@ -786,7 +801,12 @@ CloneTiler::CloneTiler (void) :
         }
 
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *vvb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+            gtk_box_new(GTK_BOX(vvb), FALSE);
+#else
             GtkWidget *vvb = gtk_vbox_new (FALSE, 0);
+#endif
             gtk_box_pack_start (GTK_BOX (vb), vvb, FALSE, FALSE, 0);
             g_object_set_data (G_OBJECT(dlg), "dotrace", (gpointer) vvb);
 
@@ -974,7 +994,12 @@ CloneTiler::CloneTiler (void) :
             gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, 0);
 
             {
+#if GTK_CHECK_VERSION(3,0,0)
+                GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+                gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
                 GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
                 g_object_set_data (G_OBJECT(dlg), "rowscols", (gpointer) hb);
 
                 {
@@ -1018,7 +1043,12 @@ CloneTiler::CloneTiler (void) :
             }
 
             {
+#if GTK_CHECK_VERSION(3,0,0)
+                GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+                gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
                 GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
                 g_object_set_data (G_OBJECT(dlg), "widthheight", (gpointer) hb);
 
                 // unitmenu
@@ -1103,7 +1133,12 @@ CloneTiler::CloneTiler (void) :
 
         // Use saved pos
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
             GtkWidget *b  = gtk_check_button_new_with_label (_("Use saved size and position of the tile"));
@@ -1118,7 +1153,12 @@ CloneTiler::CloneTiler (void) :
 
         // Statusbar
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
             gtk_box_pack_end (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
             GtkWidget *l = gtk_label_new("");
             g_object_set_data (G_OBJECT(dlg), "status", (gpointer) l);
@@ -1127,7 +1167,12 @@ CloneTiler::CloneTiler (void) :
 
         // Buttons
         {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
             {
@@ -1141,7 +1186,12 @@ CloneTiler::CloneTiler (void) :
             }
 
             { // buttons which are enabled only when there are tiled clones
+#if GTK_CHECK_VERSION(3,0,0)
+                GtkWidget *sb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+                gtk_box_set_homogeneous(GTK_BOX(sb), FALSE);
+#else
                 GtkWidget *sb = gtk_hbox_new(FALSE, 0);
+#endif
                 gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, 0);
                 g_object_set_data (G_OBJECT(dlg), "buttons_on_tiles", (gpointer) sb);
                 {
@@ -2534,7 +2584,12 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
 GtkWidget * CloneTiler::clonetiler_new_tab(GtkWidget *nb, const gchar *label)
 {
     GtkWidget *l = gtk_label_new_with_mnemonic (label);
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, VB_MARGIN);
+    gtk_box_new(GTK_BOX(vb), FALSE);
+#else
     GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
+#endif
     gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
     return vb;
@@ -2549,7 +2604,12 @@ void CloneTiler::clonetiler_checkbox_toggled(GtkToggleButton *tb, gpointer *data
 
 GtkWidget * CloneTiler::clonetiler_checkbox(const char *tip, const char *attr)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
 
     GtkWidget *b = gtk_check_button_new ();
     gtk_widget_set_tooltip_text (b, tip);
@@ -2576,7 +2636,12 @@ void CloneTiler::clonetiler_value_changed(GtkAdjustment *adj, gpointer data)
 
 GtkWidget * CloneTiler::clonetiler_spinbox(const char *tip, const char *attr, double lower, double upper, const gchar *suffix, bool exponent/* = false*/)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
     GtkWidget *hb = gtk_hbox_new(FALSE, 0);
+#endif
 
     {
         Gtk::Adjustment *a;
@@ -2704,7 +2769,12 @@ GtkWidget * CloneTiler::clonetiler_table_x_y_rand(int values)
     gtk_table_set_col_spacings (GTK_TABLE (table), 8);
 
     {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
         GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
 
         GtkWidget *i = sp_icon_new (Inkscape::ICON_SIZE_DECORATION, INKSCAPE_ICON("object-rows"));
         gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
@@ -2717,7 +2787,12 @@ GtkWidget * CloneTiler::clonetiler_table_x_y_rand(int values)
     }
 
     {
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
         GtkWidget *hb = gtk_hbox_new (FALSE, 0);
+#endif
 
         GtkWidget *i = sp_icon_new (Inkscape::ICON_SIZE_DECORATION, INKSCAPE_ICON("object-columns"));
         gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);

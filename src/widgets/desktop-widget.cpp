@@ -253,7 +253,14 @@ Geom::Point
 SPDesktopWidget::window_get_pointer()
 {
     gint x,y;
-    gdk_window_get_pointer(gtk_widget_get_window(GTK_WIDGET(canvas)), &x, &y, NULL);
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(canvas));
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDisplay *display = gdk_window_get_display(window);
+    gdk_window_get_device_position(window, display->core_pointer, &x, &y, NULL);
+#else
+    gdk_window_get_pointer(window, &x, &y, NULL);
+#endif
     return Geom::Point(x,y);
 }
 
@@ -325,10 +332,20 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_interaction_disabled_counter = 0;
 
     /* Main table */
+#if GTK_CHECK_VERSION(3,0,0)
+    dtw->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_new(GTK_BOX(dtw->vbox), FALSE);
+#else
     dtw->vbox = gtk_vbox_new (FALSE, 0);
+#endif
     gtk_container_add( GTK_CONTAINER(dtw), GTK_WIDGET(dtw->vbox) );
 
+#if GTK_CHECK_VERSION(3,0,0)
+    dtw->statusbar = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(dtw->statusbar), FALSE);
+#else
     dtw->statusbar = gtk_hbox_new (FALSE, 0);
+#endif
     //gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
     gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->statusbar, FALSE, TRUE, 0);
 
@@ -336,11 +353,16 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         using Inkscape::UI::Dialogs::SwatchesPanel;
 
         dtw->panels = new SwatchesPanel("/embedded/swatches");
-        dtw->panels->setOrientation( Gtk::ANCHOR_SOUTH );
+        dtw->panels->setOrientation(SP_ANCHOR_SOUTH);
         gtk_box_pack_end( GTK_BOX( dtw->vbox ), GTK_WIDGET(dtw->panels->gobj()), FALSE, TRUE, 0 );
     }
 
+#if GTK_CHECK_VERSION(3,0,0)
+    dtw->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(dtw->hbox), FALSE);
+#else
     dtw->hbox = gtk_hbox_new(FALSE, 0);
+#endif
     gtk_box_pack_end( GTK_BOX (dtw->vbox), dtw->hbox, TRUE, TRUE, 0 );
     gtk_widget_show(dtw->hbox);
 
@@ -395,7 +417,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_table_attach (GTK_TABLE (canvas_tbl), dtw->hscrollbar, 1, 2, 2, 3, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_SHRINK), 0, 0);
 
     /* Vertical scrollbar and the sticky zoom button */
+#if GTK_CHECK_VERSION(3,0,0)
+    dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_new(GTK_BOX(dtw->vscrollbar_box), FALSE);
+#else
     dtw->vscrollbar_box = gtk_vbox_new (FALSE, 0);
+#endif
     dtw->sticky_zoom = sp_button_new_from_data ( Inkscape::ICON_SIZE_DECORATION,
                                                  SP_BUTTON_TYPE_TOGGLE,
                                                  NULL,
@@ -573,7 +600,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
     // space label 2 pixels from left edge
     gtk_container_add (GTK_CONTAINER (dtw->select_status_eventbox), dtw->select_status);
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_box_pack_start(GTK_BOX(dtw->statusbar), 
+                       gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0), 
+                       FALSE, FALSE, 2);
+#else
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), gtk_hbox_new(FALSE, 0), FALSE, FALSE, 2);
+#endif
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->select_status_eventbox, TRUE, TRUE, 0);
 
     gtk_widget_show_all (dtw->vbox);

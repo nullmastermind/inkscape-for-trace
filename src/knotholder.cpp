@@ -66,15 +66,9 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
 
 KnotHolder::~KnotHolder() {
     g_object_unref(G_OBJECT(item));
-    for(std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i) {
-        KnotHolderEntity* e = (*i);
-        if (e->isDeletable()) {
-            delete (*i);
-        } else {
-            // we must not delete the entity (since it's attached to an LPE parameter),
-            // but the handle should be destroyed
-            g_object_unref(e->knot);
-        }
+    for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
+    {
+        delete (*i);
         (*i) = NULL;
     }
     entity.clear(); // is this necessary?
@@ -111,7 +105,8 @@ bool KnotHolder::knot_mouseover()
 void
 KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
 {
-	KnotHolder *knot_holder = this;
+    KnotHolder *knot_holder = this;
+    SPItem *saved_item = this->item; 
 
     for(std::list<KnotHolderEntity *>::iterator i = knot_holder->entity.begin(); i != knot_holder->entity.end(); ++i) {
         KnotHolderEntity *e = *i;
@@ -122,33 +117,33 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
         }
     }
 
-    if (SP_IS_SHAPE(item)) {
-        SP_SHAPE(item)->setShape();
+    if (SP_IS_SHAPE(saved_item)) {
+        SP_SHAPE(saved_item)->setShape();
     }
 
     knot_holder->update_knots();
 
     unsigned int object_verb = SP_VERB_NONE;
 
-    if (SP_IS_RECT(item))
+    if (SP_IS_RECT(saved_item))
         object_verb = SP_VERB_CONTEXT_RECT;
-    else if (SP_IS_BOX3D(item))
+    else if (SP_IS_BOX3D(saved_item))
         object_verb = SP_VERB_CONTEXT_3DBOX;
-    else if (SP_IS_GENERICELLIPSE(item))
+    else if (SP_IS_GENERICELLIPSE(saved_item))
         object_verb = SP_VERB_CONTEXT_ARC;
-    else if (SP_IS_STAR(item))
+    else if (SP_IS_STAR(saved_item))
         object_verb = SP_VERB_CONTEXT_STAR;
-    else if (SP_IS_SPIRAL(item))
+    else if (SP_IS_SPIRAL(saved_item))
         object_verb = SP_VERB_CONTEXT_SPIRAL;
-    else if (SP_IS_OFFSET(item)) {
-        if (SP_OFFSET(item)->sourceHref)
+    else if (SP_IS_OFFSET(saved_item)) {
+        if (SP_OFFSET(saved_item)->sourceHref)
             object_verb = SP_VERB_SELECTION_LINKED_OFFSET;
         else
             object_verb = SP_VERB_SELECTION_DYNAMIC_OFFSET;
     }
 
     // for drag, this is done by ungrabbed_handler, but for click we must do it here
-    DocumentUndo::done(item->document, object_verb,
+    DocumentUndo::done(saved_item->document, object_verb,
                        _("Change handle"));
 }
 
