@@ -142,14 +142,21 @@ void ArrangeDialog::_apply()
 }
 
 PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
-	: parent(parent_)
+	: parent(parent_),
+	  parametersTable(3, 3, false),
+	  centerY("", "Y coordinate of the center", UNIT_TYPE_LINEAR),
+	  centerX("", "X coordinate of the center", centerY),
+	  radiusY("", "Y coordinate of the radius", UNIT_TYPE_LINEAR),
+	  radiusX("", "X coordinate of the radius", radiusY),
+	  angleY("", "Starting angle", UNIT_TYPE_RADIAL),
+	  angleX("", "End angle", angleY)
 {
 	anchorPointLabel.set_text("Anchor point:");
 	anchorPointLabel.set_alignment(Gtk::ALIGN_START);
 	pack_start(anchorPointLabel, false, false);
 
 	anchorBoundingBoxRadio.set_label("Object's bounding box:");
-	anchorBoundingBoxRadio.set_group(anchorRadioGroup);
+	anchorRadioGroup = anchorBoundingBoxRadio.get_group();
 	pack_start(anchorBoundingBoxRadio, false, false);
 
 	pack_start(anchorSelector, false, false);
@@ -163,12 +170,28 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	pack_start(arrangeOnLabel, false, false);
 
 	arrangeOnCircleRadio.set_label("Last selected circle/ellipse/arc");
-	anchorObjectPivotRadio.set_group(arrangeRadioGroup);
+	arrangeRadioGroup = arrangeOnCircleRadio.get_group();
 	pack_start(arrangeOnCircleRadio, false, false);
 
 	arrangeOnParametersRadio.set_label("Parameterized:");
-	anchorObjectPivotRadio.set_group(arrangeRadioGroup);
+	arrangeOnParametersRadio.set_group(arrangeRadioGroup);
 	pack_start(arrangeOnParametersRadio, false, false);
+
+	centerLabel.set_text("Center X/Y:");
+	parametersTable.attach(centerLabel, 0, 1, 0, 1);
+	parametersTable.attach(centerX, 1, 2, 0, 1, Gtk::EXPAND);
+	parametersTable.attach(centerY, 2, 3, 0, 1, Gtk::EXPAND);
+
+	radiusLabel.set_text("Radius X/Y:");
+	parametersTable.attach(radiusLabel, 0, 1, 1, 2);
+	parametersTable.attach(radiusX, 1, 2, 1, 2, Gtk::EXPAND);
+	parametersTable.attach(radiusY, 2, 3, 1, 2, Gtk::EXPAND);
+
+	angleLabel.set_text("Center X/Y:");
+	parametersTable.attach(angleLabel, 0, 1, 2, 3);
+	parametersTable.attach(angleX, 1, 2, 2, 3, Gtk::EXPAND);
+	parametersTable.attach(angleY, 2, 3, 2, 3, Gtk::EXPAND);
+	pack_start(parametersTable, false, false);
 }
 
 void PolarArrangeTab::arrange()

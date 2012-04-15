@@ -207,8 +207,19 @@ private:
     Gtk::RadioButton       arrangeOnCircleRadio;
     Gtk::RadioButton       arrangeOnParametersRadio;
 
-    Inkscape::UI::Widget::SpinButton centerXSpin;
-    Inkscape::UI::Widget::SpinButton centerYSpin;
+    Gtk::Table             parametersTable;
+
+    Gtk::Label             centerLabel;
+    Inkscape::UI::Widget::ScalarUnit centerY;
+    Inkscape::UI::Widget::ScalarUnit centerX;
+
+    Gtk::Label             radiusLabel;
+    Inkscape::UI::Widget::ScalarUnit radiusY;
+    Inkscape::UI::Widget::ScalarUnit radiusX;
+
+    Gtk::Label             angleLabel;
+    Inkscape::UI::Widget::ScalarUnit angleY;
+    Inkscape::UI::Widget::ScalarUnit angleX;
 
 
 };
