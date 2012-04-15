@@ -197,6 +197,18 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 void PolarArrangeTab::arrange()
 {
 	std::cout << "PolarArrangeTab::arrange()" << std::endl;
+	Inkscape::Selection *selection = sp_desktop_selection(parent->getDesktop());
+	const GSList *items = selection->itemList();
+	int i = 0;
+	while(items)
+	{
+		SPItem *item = SP_ITEM(items->data);
+		Geom::Point move = Geom::Point(100 * i, -100 * i);
+        Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
+		item->set_i2d_affine(affine);
+		items = items->next;
+		++i;
+	}
 }
 
 void PolarArrangeTab::updateSelection()
