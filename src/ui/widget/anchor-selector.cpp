@@ -7,10 +7,10 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#include "ui/widget/anchor-selector.h"
 #include <iostream>
 #include "widgets/icon.h"
 #include "ui/icon-names.h"
-#include "ui/widget/anchor-selector.h"
 
 void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& button) {
 	Gtk::Widget*  buttonIcon = Gtk::manage(sp_icon_get_icon(icon, Inkscape::ICON_SIZE_SMALL_TOOLBAR));
