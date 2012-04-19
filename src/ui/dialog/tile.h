@@ -188,6 +188,9 @@ public:
      */
     void updateSelection();
 
+    void on_anchor_radio_changed();
+    void on_arrange_radio_changed();
+
 private:
     PolarArrangeTab(PolarArrangeTab const &d); // no copy
     void operator=(PolarArrangeTab const &d); // no assign
@@ -220,6 +223,8 @@ private:
     Gtk::Label             angleLabel;
     Inkscape::UI::Widget::ScalarUnit angleY;
     Inkscape::UI::Widget::ScalarUnit angleX;
+
+    Gtk::CheckButton       rotateObjectsCheckBox;
 
 
 };

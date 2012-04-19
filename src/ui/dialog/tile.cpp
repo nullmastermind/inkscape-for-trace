@@ -157,12 +157,14 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 
 	anchorBoundingBoxRadio.set_label("Object's bounding box:");
 	anchorRadioGroup = anchorBoundingBoxRadio.get_group();
+	anchorBoundingBoxRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_anchor_radio_changed));
 	pack_start(anchorBoundingBoxRadio, false, false);
 
 	pack_start(anchorSelector, false, false);
 
 	anchorObjectPivotRadio.set_label("Object's rotational center");
 	anchorObjectPivotRadio.set_group(anchorRadioGroup);
+	anchorObjectPivotRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_anchor_radio_changed));
 	pack_start(anchorObjectPivotRadio, false, false);
 
 	arrangeOnLabel.set_text("Arrange on:");
@@ -171,27 +173,71 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 
 	arrangeOnCircleRadio.set_label("Last selected circle/ellipse/arc");
 	arrangeRadioGroup = arrangeOnCircleRadio.get_group();
+	arrangeOnCircleRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
 	pack_start(arrangeOnCircleRadio, false, false);
 
 	arrangeOnParametersRadio.set_label("Parameterized:");
 	arrangeOnParametersRadio.set_group(arrangeRadioGroup);
+	arrangeOnParametersRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
 	pack_start(arrangeOnParametersRadio, false, false);
 
+	//FIXME: Objects in grid do not line up properly!
 	centerLabel.set_text("Center X/Y:");
 	parametersTable.attach(centerLabel, 0, 1, 0, 1);
-	parametersTable.attach(centerX, 1, 2, 0, 1, Gtk::EXPAND);
-	parametersTable.attach(centerY, 2, 3, 0, 1, Gtk::EXPAND);
+	centerX.setDigits(2);
+	centerX.set_size_request(60, -1);
+	centerX.setIncrements(0.2, 0);
+	centerX.setRange(-10000, 10000);
+	centerX.setValue(0, "px");
+	centerY.setDigits(2);
+	centerY.set_size_request(120, -1);
+	centerY.setIncrements(0.2, 0);
+	centerY.setRange(-10000, 10000);
+	centerY.setValue(0, "px");
+	parametersTable.attach(centerX, 1, 2, 0, 1);
+	parametersTable.attach(centerY, 2, 3, 0, 1);
 
 	radiusLabel.set_text("Radius X/Y:");
 	parametersTable.attach(radiusLabel, 0, 1, 1, 2);
-	parametersTable.attach(radiusX, 1, 2, 1, 2, Gtk::EXPAND);
-	parametersTable.attach(radiusY, 2, 3, 1, 2, Gtk::EXPAND);
+	radiusX.setDigits(2);
+	radiusX.set_size_request(60, -1);
+	radiusX.setIncrements(0.2, 0);
+	radiusX.setRange(-10000, 10000);
+	radiusX.setValue(0, "px");
+	radiusY.setDigits(2);
+	radiusY.set_size_request(120, -1);
+	radiusY.setIncrements(0.2, 0);
+	radiusY.setRange(-10000, 10000);
+	radiusY.setValue(0, "px");
+	parametersTable.attach(radiusX, 1, 2, 1, 2);
+	parametersTable.attach(radiusY, 2, 3, 1, 2);
 
 	angleLabel.set_text("Center X/Y:");
 	parametersTable.attach(angleLabel, 0, 1, 2, 3);
-	parametersTable.attach(angleX, 1, 2, 2, 3, Gtk::EXPAND);
-	parametersTable.attach(angleY, 2, 3, 2, 3, Gtk::EXPAND);
+	angleX.setDigits(2);
+	angleX.set_size_request(60, -1);
+	angleX.setIncrements(0.2, 0);
+	angleX.setRange(-10000, 10000);
+	angleX.setValue(0, "°");
+	angleY.setDigits(2);
+	angleY.set_size_request(120, -1);
+	angleY.setIncrements(0.2, 0);
+	angleY.setRange(-10000, 10000);
+	angleY.setValue(0, "°");
+	parametersTable.attach(angleX, 1, 2, 2, 3);
+	parametersTable.attach(angleY, 2, 3, 2, 3);
 	pack_start(parametersTable, false, false);
+
+	rotateObjectsCheckBox.set_label("Rotate objects");
+	rotateObjectsCheckBox.set_active(true);
+	pack_start(rotateObjectsCheckBox, false, false);
+
+	centerX.set_sensitive(false);
+	centerY.set_sensitive(false);
+	angleX.set_sensitive(false);
+	angleY.set_sensitive(false);
+	radiusX.set_sensitive(false);
+	radiusY.set_sensitive(false);
 }
 
 void PolarArrangeTab::arrange()
@@ -213,7 +259,27 @@ void PolarArrangeTab::arrange()
 
 void PolarArrangeTab::updateSelection()
 {
+}
 
+void PolarArrangeTab::on_arrange_radio_changed()
+{
+	bool arrangeParametric = !arrangeOnCircleRadio.get_active();
+
+	centerX.set_sensitive(arrangeParametric);
+	centerY.set_sensitive(arrangeParametric);
+
+	angleX.set_sensitive(arrangeParametric);
+	angleY.set_sensitive(arrangeParametric);
+
+	radiusX.set_sensitive(arrangeParametric);
+	radiusY.set_sensitive(arrangeParametric);
+}
+
+void PolarArrangeTab::on_anchor_radio_changed()
+{
+	bool anchorBoundingBox = anchorBoundingBoxRadio.get_active();
+
+	anchorSelector.set_sensitive(anchorBoundingBox);
 }
 
 
