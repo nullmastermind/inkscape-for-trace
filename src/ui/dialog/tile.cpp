@@ -34,6 +34,7 @@
 #include "sp-item.h"
 #include "widgets/icon.h"
 #include "desktop.h"
+#include "sp-item-transform.h"
 
 /*
  *    Sort items by their x co-ordinates, taking account of y (keeps rows intact)
@@ -249,9 +250,29 @@ void PolarArrangeTab::arrange()
 	while(items)
 	{
 		SPItem *item = SP_ITEM(items->data);
-		Geom::Point move = Geom::Point(100 * i, -100 * i);
-        Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
-		item->set_i2d_affine(affine);
+
+		float centerx = 1000;
+		float centery = 2000;
+
+		float radiusx = 1000;
+		float radiusy = 2000;
+
+		float objectx = - item->documentVisualBounds()->min()[Geom::X];
+		float objecty =   item->documentVisualBounds()->min()[Geom::Y];
+
+		float angle = M_PI / 36 * i;
+
+		float r = (radiusx * radiusy) /
+				sqrtf(powf(radiusy * cos(angle), 2) + powf(radiusx * sin(angle), 2));
+		float calcx = cos(angle) * r;
+		float calcy = sin(angle) * r;
+
+        sp_item_move_rel(item, Geom::Translate(objectx + calcx, objecty + calcy));
+        sp_item_rotate_rel(item, Geom::Rotate(angle));
+
+		//item->set_i2d_affine(item->i2dt_affine() * toOrigin * rotation);
+        //item->doWriteTransform(item->getRepr(), item->transform,  NULL);
+
 		items = items->next;
 		++i;
 	}
