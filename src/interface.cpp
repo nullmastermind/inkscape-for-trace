@@ -540,7 +540,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb
             gchar* c = sp_shortcut_get_label(shortcut);
 #if GTK_CHECK_VERSION(3,0,0)
             GtkWidget *const hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 16);
-	    gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
 #else
             GtkWidget *const hb = gtk_hbox_new(FALSE, 16);
 #endif
@@ -728,8 +728,8 @@ sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *
         gchar* c = sp_shortcut_get_label(shortcut);
 
 #if GTK_CHECK_VERSION(3,0,0)
-	GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 16);
-	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+        GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 16);
+        gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
 #else
         GtkWidget *hb = gtk_hbox_new(FALSE, 16);
 #endif
@@ -885,7 +885,7 @@ void addTaskMenuItems(GtkMenu *menu, Inkscape::UI::View::View *view)
 {
     gchar const* data[] = {
         C_("Interface setup", "Default"), _("Default interface setup"),
-        C_("Interface setup", "Custom"), _("Set the custom task"),
+        C_("Interface setup", "Custom"), _("Setup for custom task"),
         C_("Interface setup", "Wide"), _("Setup for widescreen work"),
         0, 0
     };
@@ -1589,7 +1589,6 @@ void injectRenamedIcons()
 
 ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     _item(item),
-    separators(),
     MIGroup(),
     MIParent(_("Go to parent"))
 {
@@ -1650,15 +1649,13 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
 
 ContextMenu::~ContextMenu(void)
 {
-// g_message("~ContextMenu");
 }
 
 Gtk::SeparatorMenuItem* ContextMenu::AddSeparator(void)
 {
-    Gtk::SeparatorMenuItem* sep = new Gtk::SeparatorMenuItem();
+    Gtk::SeparatorMenuItem* sep = manage(new Gtk::SeparatorMenuItem());
     sep->show();
     append(*sep);
-    separators.push_back(sep);
     return sep;
 }
 
@@ -1693,11 +1690,11 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
         unsigned int shortcut = sp_shortcut_get_primary(verb);
         if (shortcut!=GDK_KEY_VoidSymbol) {
             gchar* c = sp_shortcut_get_label(shortcut);
-            Gtk::HBox *const hb = new Gtk::HBox (FALSE, 16);
-            Gtk::Label *const name_lbl = new Gtk::Label(action->name, true);
+            Gtk::HBox *const hb = manage(new Gtk::HBox (FALSE, 16));
+            Gtk::Label *const name_lbl = manage(new Gtk::Label(action->name, true));
             name_lbl->set_alignment(0.0, 0.5);
             hb->pack_start(*name_lbl, TRUE, TRUE, 0);
-            Gtk::Label *const accel_lbl = new Gtk::Label(c);
+            Gtk::Label *const accel_lbl = manage(new Gtk::Label(c));
             accel_lbl->set_alignment(1.0, 0.5);
             hb->pack_end(*accel_lbl, FALSE, FALSE, 0);
             hb->show_all();
@@ -1712,9 +1709,9 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
             // if (radio) {
                 // item = gtk_radio_menu_item_new (group);
             // } else {
-                item = new Gtk::ImageMenuItem();
+                item = manage(new Gtk::ImageMenuItem());
             // }
-            Gtk::Label *const name_lbl = new Gtk::Label(action->name, true);
+            Gtk::Label *const name_lbl = manage(new Gtk::Label(action->name, true));
             name_lbl->set_alignment(0.0, 0.5);
             item->add(*name_lbl);
         }
@@ -1773,7 +1770,7 @@ void ContextMenu::MakeItemMenu (void)
     Gtk::MenuItem* mi;
 
     /* Item dialog */
-    mi = new Gtk::MenuItem(_("_Object Properties..."),1);
+    mi = manage(new Gtk::MenuItem(_("_Object Properties..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemProperties));
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
@@ -1781,7 +1778,7 @@ void ContextMenu::MakeItemMenu (void)
     AddSeparator();
     
     /* Select item */
-    mi = new Gtk::MenuItem(_("_Select This"),1);
+    mi = manage(new Gtk::MenuItem(_("_Select This"),1));
     if (_desktop->selection->includes(_item)) {
         mi->set_sensitive(FALSE);
     } else {
@@ -1791,7 +1788,7 @@ void ContextMenu::MakeItemMenu (void)
     append(*mi);
     
     /* Select same fill and stroke */
-    mi = new Gtk::MenuItem(_("_Select Same Fill and Stroke"),1);
+    mi = manage(new Gtk::MenuItem(_("_Select Same Fill and Stroke"),1));
     if (_desktop->selection->isEmpty()) {
         mi->set_sensitive(FALSE);
     } else {
@@ -1802,7 +1799,7 @@ void ContextMenu::MakeItemMenu (void)
     append(*mi);
 
     /* Create link */
-    mi = new Gtk::MenuItem(_("_Create Link"),1);
+    mi = manage(new Gtk::MenuItem(_("_Create Link"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemCreateLink));
     mi->set_sensitive(!SP_IS_ANCHOR(_item));
     mi->show();
@@ -1825,7 +1822,7 @@ void ContextMenu::MakeItemMenu (void)
         }
     }    
     /* Set mask */
-    mi = new Gtk::MenuItem(_("Set Mask"),1);
+    mi = manage(new Gtk::MenuItem(_("Set Mask"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetMask));
     if (ClipRefOK || MaskRefOK) {
         mi->set_sensitive(FALSE);
@@ -1836,7 +1833,7 @@ void ContextMenu::MakeItemMenu (void)
     append(*mi);
     
     /* Release mask */
-    mi = new Gtk::MenuItem(_("Release Mask"),1);
+    mi = manage(new Gtk::MenuItem(_("Release Mask"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseMask));
     if (MaskRefOK) {
         mi->set_sensitive(TRUE);
@@ -1847,7 +1844,7 @@ void ContextMenu::MakeItemMenu (void)
     append(*mi);
     
     /* Set Clip */
-    mi = new Gtk::MenuItem(_("Set _Clip"),1);
+    mi = manage(new Gtk::MenuItem(_("Set _Clip"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SetClip));
     if (ClipRefOK || MaskRefOK) {
         mi->set_sensitive(FALSE);
@@ -1858,7 +1855,7 @@ void ContextMenu::MakeItemMenu (void)
     append(*mi);
     
     /* Release Clip */
-    mi = new Gtk::MenuItem(_("Release C_lip"),1);
+    mi = manage(new Gtk::MenuItem(_("Release C_lip"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ReleaseClip));
     if (ClipRefOK) {
         mi->set_sensitive(TRUE);
@@ -1933,7 +1930,7 @@ void ContextMenu::ReleaseClip(void)
 void ContextMenu::MakeGroupMenu(void)
 {
     /* Ungroup */
-    Gtk::MenuItem* mi = new Gtk::MenuItem(_("_Ungroup"),1);
+    Gtk::MenuItem* mi = manage(new Gtk::MenuItem(_("_Ungroup"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ActivateUngroup));
     mi->show();
     append(*mi);
@@ -1953,19 +1950,19 @@ void ContextMenu::MakeAnchorMenu(void)
     Gtk::MenuItem* mi;
     
     /* Link dialog */
-    mi = new Gtk::MenuItem(_("Link _Properties..."),1);
+    mi = manage(new Gtk::MenuItem(_("Link _Properties..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkProperties));
     mi->show();
     insert(*mi,positionOfLastDialog++);
     
     /* Select item */
-    mi = new Gtk::MenuItem(_("_Follow Link"),1);
+    mi = manage(new Gtk::MenuItem(_("_Follow Link"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkFollow));
     mi->show();
     append(*mi);
     
     /* Reset transformations */
-    mi = new Gtk::MenuItem(_("_Remove Link"),1);
+    mi = manage(new Gtk::MenuItem(_("_Remove Link"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::AnchorLinkRemove));
     mi->show();
     append(*mi);
@@ -1995,13 +1992,13 @@ void ContextMenu::MakeImageMenu (void)
     const gchar *href = ir->attribute("xlink:href");
 
     /* Image properties */
-    mi = new Gtk::MenuItem(_("Image _Properties..."),1);
+    mi = manage(new Gtk::MenuItem(_("Image _Properties..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageProperties));
     mi->show();
     insert(*mi,positionOfLastDialog++);
 
     /* Edit externally */
-    mi = new Gtk::MenuItem(_("Edit Externally..."),1);
+    mi = manage(new Gtk::MenuItem(_("Edit Externally..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEdit));
     mi->show();
     insert(*mi,positionOfLastDialog++);
@@ -2011,7 +2008,7 @@ void ContextMenu::MakeImageMenu (void)
 
     /* Embed image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
-        mi = new Gtk::MenuItem(C_("Context menu", "Embed Image"));
+        mi = manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageEmbed));
         mi->show();
         insert(*mi,positionOfLastDialog++);
@@ -2022,7 +2019,7 @@ void ContextMenu::MakeImageMenu (void)
 
     /* Extract image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" )) {
-        mi = new Gtk::MenuItem(C_("Context menu", "Extract Image..."));
+        mi = manage(new Gtk::MenuItem(C_("Context menu", "Extract Image...")));
         mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageExtract));
         mi->show();
         insert(*mi,positionOfLastDialog++);
@@ -2155,7 +2152,7 @@ void ContextMenu::MakeShapeMenu (void)
     Gtk::MenuItem* mi;
     
     /* Item dialog */
-    mi = new Gtk::MenuItem(_("_Fill and Stroke..."),1);
+    mi = manage(new Gtk::MenuItem(_("_Fill and Stroke..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
@@ -2175,19 +2172,19 @@ void ContextMenu::MakeTextMenu (void)
     Gtk::MenuItem* mi;
 
     /* Fill and Stroke dialog */
-    mi = new Gtk::MenuItem(_("_Fill and Stroke..."),1);
+    mi = manage(new Gtk::MenuItem(_("_Fill and Stroke..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::FillSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
     
     /* Edit Text dialog */
-    mi = new Gtk::MenuItem(_("_Text and Font..."),1);
+    mi = manage(new Gtk::MenuItem(_("_Text and Font..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::TextSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
 
     /* Spellcheck dialog */
-    mi = new Gtk::MenuItem(_("Check Spellin_g..."),1);
+    mi = manage(new Gtk::MenuItem(_("Check Spellin_g..."),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SpellcheckSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);

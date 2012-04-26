@@ -120,7 +120,6 @@ class ContextMenu : public Gtk::Menu
         
         int positionOfLastDialog;
         
-        std::vector<Gtk::SeparatorMenuItem*> separators; //contains pointers to separators
         Gtk::MenuItem MIGroup; //menu entry to enter a group
         Gtk::MenuItem MIParent; //menu entry to leave a group
         

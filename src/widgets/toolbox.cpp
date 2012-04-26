@@ -538,6 +538,7 @@ static gchar const * ui_descr =
         "    <toolitem action='GradientNewFillStrokeAction' />"
         "    <separator />"
         "    <toolitem action='GradientSelectGradientAction' />"
+        "    <toolitem action='GradientEditLinkAction' />"
         "    <toolitem action='GradientEditReverseAction' />"
         "    <toolitem action='GradientSelectRepeatAction' />"
         "    <separator />"
@@ -584,7 +585,7 @@ static void update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext,
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
-static GtkWidget * sp_toolbox_button_new_from_verb_with_doubleclick( GtkWidget *t, Inkscape::IconSize size, SPButtonType type,
+static GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t, Inkscape::IconSize size, SPButtonType type,
                                                                      Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
                                                                      Inkscape::UI::View::View *view);
 
@@ -656,18 +657,19 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
 //     Gtk::Widget* widg = Gtk::Action::create_tool_item_vfunc();
     Inkscape::IconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small");
     GtkWidget* toolbox = 0;
-    GtkWidget *button = sp_toolbox_button_new_from_verb_with_doubleclick( toolbox, toolboxSize,
-                                                                          SP_BUTTON_TYPE_TOGGLE,
-                                                                          verb,
-                                                                          verb2,
-                                                                          view );
+    GtkToolItem *button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
+                                                                                      SP_BUTTON_TYPE_TOGGLE,
+                                                                                      verb,
+                                                                                      verb2,
+                                                                                      view );
+
+    GtkWidget* button_widget = gtk_bin_get_child(GTK_BIN(button_toolitem));
+
     if ( active ) {
-        sp_button_toggle_set_down( SP_BUTTON(button), active);
+        sp_button_toggle_set_down( SP_BUTTON(button_widget), active);
     }
-    gtk_widget_show_all( button );
-    Gtk::Widget* wrapped = Glib::wrap(button);
-    Gtk::ToolItem* holder = Gtk::manage(new Gtk::ToolItem());
-    holder->add(*wrapped);
+    gtk_widget_show_all( button_widget );
+    Gtk::ToolItem* holder = Glib::wrap(button_toolitem);
 
 //     g_message("create_tool_item_vfunc() = %p  for '%s'", holder, verb->get_id());
     return holder;
@@ -833,7 +835,7 @@ void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
     }
 }
 
-static void delete_prefspusher(GtkObject * /*obj*/, PrefPusher *watcher )
+static void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
 {
     delete watcher;
 }
@@ -841,7 +843,7 @@ static void delete_prefspusher(GtkObject * /*obj*/, PrefPusher *watcher )
 // ------------------------------------------------------
 
 
-GtkWidget * sp_toolbox_button_new_from_verb_with_doubleclick(GtkWidget *t, Inkscape::IconSize size, SPButtonType type,
+GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t, Inkscape::IconSize size, SPButtonType type,
                                                              Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
                                                              Inkscape::UI::View::View *view)
 {
@@ -861,24 +863,27 @@ GtkWidget * sp_toolbox_button_new_from_verb_with_doubleclick(GtkWidget *t, Inksc
     /* fixme: Implement sp_button_new_from_action */
     GtkWidget *b = sp_button_new(size, type, action, doubleclick_action);
     gtk_widget_show(b);
-
+    GtkToolItem *b_toolitem = gtk_tool_item_new();
+    gtk_container_add(GTK_CONTAINER(b_toolitem), b);
 
     unsigned int shortcut = sp_shortcut_get_primary(verb);
     if (shortcut != GDK_KEY_VoidSymbol) {
         gchar *key = sp_shortcut_get_label(shortcut);
         gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
         if ( t ) {
-            gtk_toolbar_append_widget( GTK_TOOLBAR(t), b, tip, 0 );
+           gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem, -1);
+           gtk_widget_set_tooltip_text(b, tip);
         }
         g_free(tip);
         g_free(key);
     } else {
         if ( t ) {
-            gtk_toolbar_append_widget( GTK_TOOLBAR(t), b, action->tip, 0 );
+            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem, -1);
+            gtk_widget_set_tooltip_text(b, action->tip);
         }
     }
 
-    return b;
+    return b_toolitem;
 }
 
 
@@ -1063,8 +1068,8 @@ static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType han
 GtkWidget *ToolboxFactory::createToolToolbox()
 {
 #if GTK_CHECK_VERSION(3,0,0)
-    GtkWidget *tb = gtk_box_new(GTK_ORIENTATION, 0);
-    gtk_box_new(GTK_BOX(tb), FALSE);
+    GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 #else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 #endif
@@ -1076,7 +1081,7 @@ GtkWidget *ToolboxFactory::createAuxToolbox()
 {
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_new(GTK_BOX(tb), FALSE);
+    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 #else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 #endif
@@ -1092,7 +1097,7 @@ GtkWidget *ToolboxFactory::createCommandsToolbox()
 {
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_new(GTK_BOX(tb), FALSE);
+    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 #else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 #endif
@@ -1104,7 +1109,7 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
 {
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *tb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_new(GTK_BOX(tb), FALSE);
+    gtk_box_set_homogeneous(GTK_BOX(tb), FALSE);
 #else
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 #endif
@@ -2075,7 +2080,7 @@ void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 void update_tool_toolbox( SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget * /*toolbox*/ )
 {
     gchar const *const tname = ( eventcontext
-                                 ? gtk_type_name(GTK_OBJECT_TYPE(eventcontext))
+                                 ? g_type_name(G_OBJECT_TYPE(eventcontext))
                                  : NULL );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
@@ -2178,7 +2183,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 void update_aux_toolbox(SPDesktop * /*desktop*/, SPEventContext *eventcontext, GtkWidget *toolbox)
 {
     gchar const *tname = ( eventcontext
-                           ? gtk_type_name(GTK_OBJECT_TYPE(eventcontext))
+                           ? g_type_name(G_OBJECT_TYPE(eventcontext))
                            : NULL );
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));
@@ -4041,7 +4046,7 @@ static void sp_spl_tb_t0_value_changed(GtkAdjustment *adj, GObject *tbl)
     sp_spl_tb_value_changed(adj, tbl, "t0");
 }
 
-static void sp_spl_tb_defaults(GtkWidget * /*widget*/, GtkObject *obj)
+static void sp_spl_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
 {
     GtkWidget *tbl = GTK_WIDGET(obj);
 
@@ -4052,19 +4057,19 @@ static void sp_spl_tb_defaults(GtkWidget * /*widget*/, GtkObject *obj)
     gdouble exp = 1.0;
     gdouble t0 = 0.0;
 
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(obj), "revolution");
+    adj = (GtkAdjustment*)g_object_get_data(obj, "revolution");
     gtk_adjustment_set_value(adj, rev);
     gtk_adjustment_value_changed(adj);
 
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(obj), "expansion");
+    adj = (GtkAdjustment*)g_object_get_data(obj, "expansion");
     gtk_adjustment_set_value(adj, exp);
     gtk_adjustment_value_changed(adj);
 
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(obj), "t0");
+    adj = (GtkAdjustment*)g_object_get_data(obj, "t0");
     gtk_adjustment_set_value(adj, t0);
     gtk_adjustment_value_changed(adj);
 
-    spinbutton_defocus(GTK_OBJECT(tbl));
+    spinbutton_defocus(tbl);
 }
 
 
@@ -4374,7 +4379,7 @@ static void sp_pen_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainAct
 }
 
 
-static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GtkObject *obj)
+static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
 {
     GtkWidget *tbl = GTK_WIDGET(obj);
 
@@ -4383,11 +4388,11 @@ static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GtkObject *obj)
     // fixme: make settable
     gdouble tolerance = 4;
 
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(obj), "tolerance");
+    adj = (GtkAdjustment*)g_object_get_data(obj, "tolerance");
     gtk_adjustment_set_value(adj, tolerance);
     gtk_adjustment_value_changed(adj);
 
-    spinbutton_defocus(GTK_OBJECT(tbl));
+    spinbutton_defocus(tbl);
 }
 
 static void sp_pencil_tb_tolerance_value_changed(GtkAdjustment *adj, GObject *tbl)
@@ -5720,7 +5725,7 @@ static void sp_arctb_defaults(GtkWidget *, GObject *obj)
     gtk_adjustment_set_value(adj, 0.0);
     gtk_adjustment_value_changed(adj);
 
-    spinbutton_defocus( GTK_OBJECT(obj) );
+    spinbutton_defocus(GTK_WIDGET(obj));
 }
 
 static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /*name*/,
@@ -5941,14 +5946,14 @@ static void toggle_dropper_pick_alpha( GtkToggleAction* act, gpointer tbl )
         }
     }
 
-    spinbutton_defocus(GTK_OBJECT(tbl));
+    spinbutton_defocus(GTK_WIDGET(tbl));
 }
 
 static void toggle_dropper_set_alpha( GtkToggleAction* act, gpointer tbl )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool( "/tools/dropper/setalpha", gtk_toggle_action_get_active( act ) );
-    spinbutton_defocus(GTK_OBJECT(tbl));
+    spinbutton_defocus(GTK_WIDGET(tbl));
 }
 
 
@@ -8172,7 +8177,7 @@ static void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 //##      Connector      ##
 //#########################
 
-static void sp_connector_mode_toggled( GtkToggleAction* act, GtkObject * /*tbl*/ )
+static void sp_connector_mode_toggled( GtkToggleAction* act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/connector/mode",
@@ -8357,14 +8362,14 @@ static void sp_connector_graph_layout(void)
     DocumentUndo::done(sp_desktop_document(SP_ACTIVE_DESKTOP), SP_VERB_DIALOG_ALIGN_DISTRIBUTE, _("Arrange connector network"));
 }
 
-static void sp_directed_graph_layout_toggled( GtkToggleAction* act, GtkObject * /*tbl*/ )
+static void sp_directed_graph_layout_toggled( GtkToggleAction* act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/connector/directedlayout",
                 gtk_toggle_action_get_active( act ));
 }
 
-static void sp_nooverlaps_graph_layout_toggled( GtkToggleAction* act, GtkObject * /*tbl*/ )
+static void sp_nooverlaps_graph_layout_toggled( GtkToggleAction* act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/connector/avoidoverlaplayout",
@@ -8393,7 +8398,7 @@ static void connector_tb_event_attr_changed(Inkscape::XML::Node *repr,
         gtk_adjustment_set_value(adj, spacing);
         gtk_adjustment_value_changed(adj);
 
-        spinbutton_defocus(GTK_OBJECT(tbl));
+        spinbutton_defocus(tbl);
     }
 }
 

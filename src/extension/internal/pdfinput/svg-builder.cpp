@@ -57,6 +57,7 @@ namespace Internal {
 #define TRACE(_args) IFTRACE(g_print _args)
 
 static double ttm[6] = {1, 0, 0, 1, 0, 0};	// temporary transform matrix
+static bool ttm_is_set = false;             // flag to forbid setting ttm
 
 /**
  * \struct SvgTransparencyGroup
@@ -214,7 +215,11 @@ Inkscape::XML::Node *SvgBuilder::pushGroup() {
             setAsLayer(_docname);
         }
     }
-
+    if (_container->parent()->attribute("inkscape:groupmode") != NULL) {
+        ttm[0] = ttm[3] = 1.0;    // clear ttm if parent is a layer
+        ttm[1] = ttm[2] = ttm[4] = ttm[5] = 0.0;
+        ttm_is_set = false;
+    }
     return _container;
 }
 
@@ -567,17 +572,14 @@ bool SvgBuilder::getTransform(double *transform) {
 void SvgBuilder::setTransform(double c0, double c1, double c2, double c3,
                               double c4, double c5) {
     // do not remember the group which is a layer
-    if (_container->attribute("inkscape:groupmode") != NULL) {
-        ttm[0] = ttm[3] = 1.0;
-        ttm[1] = ttm[2] = ttm[4] = ttm[5] = 0.0;
-    }
-    else {
+    if ((_container->attribute("inkscape:groupmode") == NULL) && !ttm_is_set) {
         ttm[0] = c0;
         ttm[1] = c1;
         ttm[2] = c2;
         ttm[3] = c3;
         ttm[4] = c4;
         ttm[5] = c5;
+        ttm_is_set = true;
     }
 
     // Avoid transforming a group with an already set clip-path
@@ -862,30 +864,29 @@ bool SvgBuilder::_addGradientStops(Inkscape::XML::Node *gradient, GfxShading *sh
     } else if ( type == 3 ) { // Stitching
         StitchingFunction *stitchingFunc = static_cast<StitchingFunction*>(func);
         double *bounds = stitchingFunc->getBounds();
+        double *encode = stitchingFunc->getEncode();
         int num_funcs = stitchingFunc->getNumFuncs();
+
         // Add stops from all the stitched functions
+        GfxRGB prev_color, color;
+        svgGetShadingColorRGB(shading, bounds[0], &prev_color);
+        _addStopToGradient(gradient, bounds[0], &prev_color, 1.0);
         for ( int i = 0 ; i < num_funcs ; i++ ) {
-            GfxRGB color;
-            svgGetShadingColorRGB(shading, bounds[i], &color);
-            bool is_continuation = false;
-            if ( i > 0 ) {  // Compare to previous stop
-                GfxRGB prev_color;
-                svgGetShadingColorRGB(shading, bounds[i-1], &prev_color);
-                if ( abs(color.r - prev_color.r) < INT_EPSILON &&
-                     abs(color.g - prev_color.g) < INT_EPSILON &&
-                     abs(color.b - prev_color.b) < INT_EPSILON ) {
-                    is_continuation = true;
+            svgGetShadingColorRGB(shading, bounds[i + 1], &color);
+            // Add stops
+            if (stitchingFunc->getFunc(i)->getType() == 2) {    // process exponential fxn
+                double expE = (static_cast<ExponentialFunction*>(stitchingFunc->getFunc(i)))->getE();
+                if (expE > 1.0) {
+                    expE = (bounds[i + 1] - bounds[i])/expE;    // approximate exponential as a single straight line at x=1
+                    if (encode[2*i] == 0) {    // normal sequence
+                        _addStopToGradient(gradient, bounds[i + 1] - expE, &prev_color, 1.0);
+                    } else {                   // reflected sequence
+                        _addStopToGradient(gradient, bounds[i] + expE, &color, 1.0);
+                    }
                 }
             }
-            // Add stops
-            if ( !is_continuation ) {
-                _addStopToGradient(gradient, bounds[i], &color, 1.0);
-            }
-            if ( is_continuation || ( i == num_funcs - 1 ) ) {
-                GfxRGB next_color;
-                svgGetShadingColorRGB(shading, bounds[i+1], &next_color);
-                _addStopToGradient(gradient, bounds[i+1], &next_color, 1.0);
-            }
+            _addStopToGradient(gradient, bounds[i + 1], &color, 1.0);
+            prev_color = color;
         }
     } else { // Unsupported function type
         return false;
@@ -911,10 +912,10 @@ void SvgBuilder::updateStyle(GfxState *state) {
     that a space in sp may be removed or replaced by some other tokens
     specified in the code. (Bug LP #179589)
 */
-static int MatchingChars(std::string s1, std::string sp)
+static size_t MatchingChars(std::string s1, std::string sp)
 {
-    unsigned int is = 0;
-    unsigned int ip = 0;
+    size_t is = 0;
+    size_t ip = 0;
 
     while(is < s1.length() && ip < sp.length()) {
         if (s1[is] == sp[ip]) {
@@ -928,7 +929,7 @@ static int MatchingChars(std::string s1, std::string sp)
             break;
         }
     }
-    return(ip);
+    return ip;
 }
 
 /*
@@ -945,12 +946,12 @@ std::string SvgBuilder::_BestMatchingFont(std::string PDFname)
         std::string fontname = _availableFontNames[i];
         
         // At least the first word of the font name should match.
-        guint minMatch = fontname.find(" ");
+        size_t minMatch = fontname.find(" ");
         if (minMatch == std::string::npos) {
            minMatch = fontname.length();
         }
         
-        int Match = MatchingChars(PDFname, fontname);
+        size_t Match = MatchingChars(PDFname, fontname);
         if (Match >= minMatch) {
             double relMatch = (float)Match / (fontname.length() + PDFname.length());
             if (relMatch > bestMatch) {

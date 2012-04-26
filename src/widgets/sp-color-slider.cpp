@@ -32,6 +32,17 @@ static void sp_color_slider_destroy (GtkObject *object);
 
 static void sp_color_slider_realize (GtkWidget *widget);
 static void sp_color_slider_size_request (GtkWidget *widget, GtkRequisition *requisition);
+
+#if GTK_CHECK_VERSION(3,0,0)
+static void sp_color_slider_get_preferred_width(GtkWidget *widget, 
+                                                   gint *minimal_width,
+						   gint *natural_width);
+
+static void sp_color_slider_get_preferred_height(GtkWidget *widget, 
+                                                    gint *minimal_height,
+						    gint *natural_height);
+#endif
+
 static void sp_color_slider_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 /*  static void sp_color_slider_draw (GtkWidget *widget, GdkRectangle *area); */
 /*  static void sp_color_slider_draw_focus (GtkWidget *widget); */
@@ -117,7 +128,12 @@ sp_color_slider_class_init (SPColorSliderClass *klass)
 	object_class->destroy = sp_color_slider_destroy;
 
 	widget_class->realize = sp_color_slider_realize;
+#if GTK_CHECK_VERSION(3,0,0)
+	widget_class->get_preferred_width = sp_color_slider_get_preferred_width;
+	widget_class->get_preferred_height = sp_color_slider_get_preferred_height;
+#else
 	widget_class->size_request = sp_color_slider_size_request;
+#endif
 	widget_class->size_allocate = sp_color_slider_size_allocate;
 /*  	widget_class->draw = sp_color_slider_draw; */
 /*  	widget_class->draw_focus = sp_color_slider_draw_focus; */
@@ -224,6 +240,22 @@ sp_color_slider_size_request (GtkWidget *widget, GtkRequisition *requisition)
 	requisition->width = SLIDER_WIDTH + style->xthickness * 2;
 	requisition->height = SLIDER_HEIGHT + style->ythickness * 2;
 }
+
+#if GTK_CHECK_VERSION(3,0,0)
+static void sp_color_slider_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width)
+{
+	GtkRequisition requisition;
+	sp_color_slider_size_request(widget, &requisition);
+	*minimal_width = *natural_width = requisition.width;
+}
+
+static void sp_color_slider_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
+{
+	GtkRequisition requisition;
+	sp_color_slider_size_request(widget, &requisition);
+	*minimal_height = *natural_height = requisition.height;
+}
+#endif
 
 static void
 sp_color_slider_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
@@ -512,12 +544,18 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 			b = sp_color_slider_render_map (cpaint.x - carea.x, cpaint.y - carea.y, cpaint.width, cpaint.height,
 																			slider->map, s, d,
 																			slider->b0, slider->b1, slider->bmask);
-			if (b != NULL) {
-				gdk_draw_rgb_image(window, style->black_gc,
-														cpaint.x, cpaint.y,
-														cpaint.width, cpaint.height,
-														GDK_RGB_DITHER_MAX,
-														(guchar *) b, cpaint.width * 3);
+			if (b != NULL && cpaint.width > 0) {
+
+                    GdkPixbuf *pb = gdk_pixbuf_new_from_data (b, GDK_COLORSPACE_RGB,
+                            0, 8, cpaint.width, cpaint.height, cpaint.width * 3, NULL, NULL);
+
+                    cairo_t *ct = gdk_cairo_create(window);
+                    gdk_cairo_set_source_pixbuf (ct, pb,  cpaint.x, cpaint.y);
+                    cairo_paint(ct);
+                    cairo_destroy(ct);
+
+                    g_object_unref(pb);
+
 			}
 
 		} else {
@@ -537,13 +575,18 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 													 c, dc,
 													 slider->b0, slider->b1, slider->bmask);
 
-				/* Draw pixelstore */
-				if (b != NULL) {
-					gdk_draw_rgb_image(window, style->black_gc,
-															cpaint.x, cpaint.y,
-															wi, cpaint.height,
-															GDK_RGB_DITHER_MAX,
-															(guchar *) b, wi * 3);
+				/* Draw pixelstore 1 */
+				if (b != NULL && wi > 0) {
+
+                    GdkPixbuf *pb = gdk_pixbuf_new_from_data (b, GDK_COLORSPACE_RGB,
+                        0, 8, wi, cpaint.height, wi * 3, NULL, NULL);
+
+                    cairo_t *ct = gdk_cairo_create(window);
+                    gdk_cairo_set_source_pixbuf (ct, pb, cpaint.x, cpaint.y);
+                    cairo_paint(ct);
+                    cairo_destroy(ct);
+
+                    g_object_unref(pb);
 				}
 			}
 
@@ -560,19 +603,24 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 												 c, dc,
 												 slider->b0, slider->b1, slider->bmask);
 
-				/* Draw pixelstore */
-				if (b != NULL) {
-					gdk_draw_rgb_image(window, style->black_gc,
-															MAX(cpaint.x, carea.width/2 + carea.x), cpaint.y,
-															wi, cpaint.height,
-															GDK_RGB_DITHER_MAX,
-															(guchar *) b, wi * 3);
+				/* Draw pixelstore 2 */
+				if (b != NULL && wi > 0) {
+
+					GdkPixbuf *pb = gdk_pixbuf_new_from_data (b, GDK_COLORSPACE_RGB,
+				            0, 8, wi, cpaint.height, wi * 3, NULL, NULL);
+
+                    cairo_t *ct = gdk_cairo_create(window);
+                    gdk_cairo_set_source_pixbuf (ct, pb, MAX(cpaint.x, carea.width/2 + carea.x), cpaint.y);
+                    cairo_paint(ct);
+                    cairo_destroy(ct);
+
+                    g_object_unref(pb);
 				}
 			}
 		}
 	}
 
-        /* Draw shadow */
+	    /* Draw shadow */
         if (!colorsOnTop) {
             gtk_paint_shadow( style, window,
                               gtk_widget_get_state(widget), GTK_SHADOW_IN,

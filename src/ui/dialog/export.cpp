@@ -94,8 +94,8 @@ namespace Dialog {
 Export::Export (void) :
     UI::Widget::Panel ("", "/dialogs/export/", SP_VERB_DIALOG_EXPORT),
     current_key(SELECTION_PAGE),
-    original_name(NULL),
-    doc_export_name(NULL),
+    original_name(),
+    doc_export_name(),
     filename_modified(false),
     was_empty(true),
     update(false),
@@ -116,6 +116,8 @@ Export::Export (void) :
     button_box(Gtk::BUTTONBOX_END),
     export_label(_("_Export"), 1),
     export_image(Gtk::StockID(Gtk::Stock::APPLY), Gtk::ICON_SIZE_BUTTON),
+    prog_dlg(NULL),
+    interrupted(false),
     prefs(NULL),
     desktop(NULL),
     deskTrack(),
@@ -164,27 +166,27 @@ Export::Export (void) :
         t->set_col_spacings (4);
 
         x0_adj = createSpinbutton ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   GTK_WIDGET(t->gobj()), 0, 0, _("_x0:"), NULL, EXPORT_COORD_PRECISION, 1,
+                                   t, 0, 0, _("_x0:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaX0Change);
 
         x1_adj = createSpinbutton ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   GTK_WIDGET(t->gobj()), 2, 0, _("x_1:"), NULL, EXPORT_COORD_PRECISION, 1,
+                                   t, 2, 0, _("x_1:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaX1Change);
 
         width_adj = createSpinbutton ( "width", 0.0, 0.0, PNG_UINT_31_MAX, 0.1, 1.0,
-                                   unit_selector->gobj(), GTK_WIDGET(t->gobj()), 4, 0, _("Wid_th:"), NULL, EXPORT_COORD_PRECISION, 1,
+                                   unit_selector->gobj(), t, 4, 0, _("Wid_th:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaWidthChange);
 
         y0_adj = createSpinbutton ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   GTK_WIDGET(t->gobj()), 0, 1, _("_y0:"), NULL, EXPORT_COORD_PRECISION, 1,
+                                   t, 0, 1, _("_y0:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaY0Change);
 
         y1_adj = createSpinbutton ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   GTK_WIDGET(t->gobj()), 2, 1, _("y_1:"), NULL, EXPORT_COORD_PRECISION, 1,
+                                   t, 2, 1, _("y_1:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaY1Change);
 
         height_adj = createSpinbutton ( "height", 0.0, 0.0, PNG_UINT_31_MAX, 0.1, 1.0,
-                                   unit_selector->gobj(), GTK_WIDGET(t->gobj()), 4, 1, _("Hei_ght:"), NULL, EXPORT_COORD_PRECISION, 1,
+                                   unit_selector->gobj(), t, 4, 1, _("Hei_ght:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaHeightChange);
 
         area_box.pack_start(togglebox, false, false, 3);
@@ -213,18 +215,18 @@ Export::Export (void) :
         size_box.pack_start(*t);
 
         bmwidth_adj = createSpinbutton ( "bmwidth", 16.0, 1.0, 1000000.0, 1.0, 10.0,
-                                   NULL, GTK_WIDGET(t->gobj()), 0, 0,
+                                   NULL, t, 0, 0,
                                    _("_Width:"), _("pixels at"), 0, 1,
                                    &Export::onBitmapWidthChange);
 
         xdpi_adj = createSpinbutton ( "xdpi",
                                    prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE),
-                                   0.01, 100000.0, 0.1, 1.0, NULL, GTK_WIDGET(t->gobj()), 3, 0,
-                                   NULL, _("dp_i"), 2, 1,
+                                   0.01, 100000.0, 0.1, 1.0, NULL, t, 3, 0,
+                                   "", _("dp_i"), 2, 1,
                                    &Export::onExportXdpiChange);
 
         bmheight_adj = createSpinbutton ( "bmheight", 16.0, 1.0, 1000000.0, 1.0, 10.0,
-                                   NULL, GTK_WIDGET(t->gobj()), 0, 1,
+                                   NULL, t, 0, 1,
                                    _("_Height:"), _("pixels at"), 0, 1,
                                    &Export::onBitmapHeightChange);
 
@@ -232,8 +234,8 @@ Export::Export (void) :
          *  There's no way to set ydpi currently, so we use the defaultxdpi value here, too...
          */
         ydpi_adj = createSpinbutton ( "ydpi", prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE),
-                                   0.01, 100000.0, 0.1, 1.0, NULL, GTK_WIDGET(t->gobj()), 3, 1,
-                                   NULL, _("dpi"), 2, 0, NULL );
+                                   0.01, 100000.0, 0.1, 1.0, NULL, t, 3, 1,
+                                   "", _("dpi"), 2, 0, NULL );
 
         singleexport_box.pack_start(size_box);
     }
@@ -262,7 +264,7 @@ Export::Export (void) :
 
         file_box.add(filename_box);
 
-        original_name = g_strdup(filename_entry.get_text().c_str());
+        original_name = filename_entry.get_text();
 
         // focus is in the filename initially:
         filename_entry.grab_focus();
@@ -317,10 +319,6 @@ Export::Export (void) :
 
 Export::~Export (void)
 {
-    g_free(original_name);
-    original_name = NULL;
-    g_free(doc_export_name);
-    doc_export_name = NULL;
     was_empty = TRUE;
 
     selectModifiedConn.disconnect();
@@ -353,7 +351,6 @@ void Export::setTargetDesktop(SPDesktop *desktop)
             //// Must check flags, so can't call widget_setup() directly.
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &Export::onSelectionModified)));
         }
-        //widget_setup();
     }
 }
 
@@ -406,77 +403,49 @@ void Export::set_default_filename () {
             g_free(name);
         }
 
-        doc_export_name = g_strdup(filename_entry.get_text().c_str());
+        doc_export_name = filename_entry.get_text();
     }
 
 }
 
-/**
- * Creates a new spin button for the export dialog.
- * @param  key  The name of the spin button
- * @param  val  A default value for the spin button
- * @param  min  Minimum value for the spin button
- * @param  max  Maximum value for the spin button
- * @param  step The step size for the spin button
- * @param  page Size of the page increment
- * @param  us   Unit selector that effects this spin button
- * @param  t    Table to put the spin button in
- * @param  x    X location in the table \c t to start with
- * @param  y    Y location in the table \c t to start with
- * @param  ll   Text to put on the left side of the spin button (optional)
- * @param  lr   Text to put on the right side of the spin button (optional)
- * @param  digits  Number of digits to display after the decimal
- * @param  sensitive  Whether the spin button is sensitive or not
- * @param  cb   Callback for when this spin button is changed (optional)
- */
 Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, float min, float max,
                                       float step, float page, GtkWidget *us,
-                                      GtkWidget *t, int x, int y,
-                                      const gchar *ll, const gchar *lr,
+                                      Gtk::Table *t, int x, int y,
+                                      const Glib::ustring ll, const Glib::ustring lr,
                                       int digits, unsigned int sensitive,
                                       void (Export::*cb)() )
 {
     Gtk::Adjustment *adj = new Gtk::Adjustment  ( val, min, max, step, page, 0 );
-
     if (us) {
-        sp_unit_selector_add_adjustment ( SP_UNIT_SELECTOR (us),
-                                          GTK_ADJUSTMENT (adj->gobj()) );
+        sp_unit_selector_add_adjustment ( SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (adj->gobj()) );
     }
 
     int pos = 0;
+    Gtk::Label *l = NULL;
 
-    GtkWidget *l = NULL;
-
-    if (ll) {
-
-        l = gtk_label_new_with_mnemonic ((const gchar *)ll);
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_table_attach ( GTK_TABLE (t), l, x + pos, x + pos + 1, y, y + 1,
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        gtk_widget_set_sensitive (l, sensitive);
-        pos += 1;
-
+    if (!ll.empty()) {
+        l = new Gtk::Label(ll,true);
+        l->set_alignment (1.0, 0.5);
+        t->attach (*l, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
+        l->set_sensitive(sensitive);
+        pos++;
     }
 
-    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (adj->gobj()), 1.0, digits);
-    gtk_table_attach ( GTK_TABLE (t), sb, x + pos, x + pos + 1, y, y + 1,
-                       (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-    gtk_widget_set_size_request (sb, 80, -1);
-    gtk_widget_set_sensitive (sb, sensitive);
-    pos += 1;
+    Gtk::SpinButton *sb = new Gtk::SpinButton(*adj, 1.0, digits);
+    t->attach (*sb, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
+    sb->set_size_request (80, -1);
+    sb->set_sensitive (sensitive);
+    pos++;
 
-    if (ll) { gtk_label_set_mnemonic_widget (GTK_LABEL(l), sb); }
+    if (!ll.empty()) { l->set_mnemonic_widget(*sb);}
 
-    if (lr) {
-
-        l = gtk_label_new_with_mnemonic ((const gchar *)lr);
-        gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
-        gtk_table_attach ( GTK_TABLE (t), l, x + pos, x + pos + 1, y, y + 1,
-                           (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-        gtk_widget_set_sensitive (l, sensitive);
-        pos += 1;
-
-        gtk_label_set_mnemonic_widget (GTK_LABEL(l), sb);
+    if (!lr.empty()) {
+        l = new Gtk::Label(lr,true);
+        l->set_alignment (0.0, 0.5);
+        t->attach (*l, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
+        l->set_sensitive (sensitive);
+        pos++;
+        l->set_mnemonic_widget (*sb);
     }
 
     if (cb) {
@@ -487,40 +456,36 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
 } // end of createSpinbutton()
 
 
-gchar* Export::create_filepath_from_id (const gchar *id, const gchar *file_entry_text) {
-
-    if (id == NULL) /* This should never happen */
+Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ustring &file_entry_text)
+{
+    if (id.empty())
+    {    /* This should never happen */
         id = "bitmap";
-
-    gchar *directory = NULL;
-
-    if (directory == NULL && file_entry_text != NULL && file_entry_text[0] != '\0') {
-        // std::cout << "Directory from dialog" << std::endl;
-        directory = g_path_get_dirname(file_entry_text);
     }
 
-    if (directory == NULL) {
+    Glib::ustring directory;
+
+    if (!file_entry_text.empty()) {
+        directory = Glib::path_get_dirname(file_entry_text);
+    }
+
+    if (directory.empty()) {
         /* Grab document directory */
-        if ( SP_ACTIVE_DOCUMENT->getURI() ) {
-            // std::cout << "Directory from document" << std::endl;
-            directory = g_path_get_dirname( SP_ACTIVE_DOCUMENT->getURI() );
+        const gchar* docURI = SP_ACTIVE_DOCUMENT->getURI();
+        if (docURI) {
+            directory = Glib::path_get_dirname(docURI);
         }
     }
 
-    if (directory == NULL) {
-        // std::cout << "Home Directory" << std::endl;
+    if (directory.empty()) {
         directory = homedir_path(NULL);
     }
 
-    gchar * id_ext = g_strconcat(id, ".png", NULL);
-    gchar *filename = g_build_filename(directory, id_ext, NULL);
-    g_free(directory);
-    g_free(id_ext);
+    Glib::ustring filename = Glib::build_filename(directory, id+".png");
     return filename;
 }
 
-void
-Export::onBatchClicked ()
+void Export::onBatchClicked ()
 {
     if (batch_export.get_active()) {
         singleexport_box.set_sensitive(false);
@@ -546,8 +511,7 @@ void Export::updateCheckbuttons ()
     }
 }
 
-inline void
-Export::findDefaultSelection()
+inline void Export::findDefaultSelection()
 {
     selection_type key = SELECTION_NUMBER_OF;
 
@@ -609,6 +573,7 @@ void Export::onSelectionChanged()
 
 void Export::onSelectionModified ( guint /*flags*/ )
 {
+    Inkscape::Selection * Sel;
     switch (current_key) {
         case SELECTION_DRAWING:
             if ( SP_ACTIVE_DESKTOP ) {
@@ -624,12 +589,16 @@ void Export::onSelectionModified ( guint /*flags*/ )
             }
             break;
         case SELECTION_SELECTION:
-            if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
-                Geom::OptRect bbox = (sp_desktop_selection (SP_ACTIVE_DESKTOP))->visualBounds();
-                setArea ( bbox->left(),
+            Sel = sp_desktop_selection(SP_ACTIVE_DESKTOP);
+            if (Sel->isEmpty() == false) {
+                Geom::OptRect bbox = Sel->visualBounds();
+                if (bbox)
+                {
+                    setArea ( bbox->left(),
                                           bbox->top(),
                                           bbox->right(),
                                           bbox->bottom());
+                }
             }
             break;
         default:
@@ -717,20 +686,18 @@ void Export::onAreaToggled ()
 
     if (SP_ACTIVE_DESKTOP && !filename_modified) {
 
-        const gchar * filename = NULL;
+        Glib::ustring filename;
         float xdpi = 0.0, ydpi = 0.0;
 
         switch (key) {
             case SELECTION_PAGE:
             case SELECTION_DRAWING: {
                 SPDocument * doc = SP_ACTIVE_DOCUMENT;
-                sp_document_get_export_hints (doc, &filename, &xdpi, &ydpi);
+                sp_document_get_export_hints (doc, filename, &xdpi, &ydpi);
 
-                if (filename == NULL) {
-                    if (doc_export_name != NULL) {
-                        filename = g_strdup(doc_export_name);
-                    } else {
-                        filename = g_strdup("");
+                if (filename.empty()) {
+                    if (!doc_export_name.empty()) {
+                        filename = doc_export_name;
                     }
                 }
                 break;
@@ -738,11 +705,11 @@ void Export::onAreaToggled ()
             case SELECTION_SELECTION:
                 if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
 
-                    sp_selection_get_export_hints (sp_desktop_selection(SP_ACTIVE_DESKTOP), &filename, &xdpi, &ydpi);
+                    sp_selection_get_export_hints (sp_desktop_selection(SP_ACTIVE_DESKTOP), filename, &xdpi, &ydpi);
 
                     /* If we still don't have a filename -- let's build
                        one that's nice */
-                    if (filename == NULL) {
+                    if (filename.empty()) {
                         const gchar * id = NULL;
                         const GSList * reprlst = sp_desktop_selection(SP_ACTIVE_DESKTOP)->reprList();
                         for(; reprlst != NULL; reprlst = reprlst->next) {
@@ -753,7 +720,7 @@ void Export::onAreaToggled ()
                             }
                         }
 
-                        filename = create_filepath_from_id (id, filename_entry.get_text().c_str());
+                        filename = create_filepath_from_id (id, filename_entry.get_text());
                     }
                 }
                 break;
@@ -762,9 +729,8 @@ void Export::onAreaToggled ()
                 break;
         }
 
-        if (filename != NULL) {
-            g_free(original_name);
-            original_name = g_strdup(filename);
+        if (!filename.empty()) {
+            original_name = filename;
             filename_entry.set_text(filename);
         }
 
@@ -784,75 +750,61 @@ void Export::onAreaToggled ()
 } // end of sp_export_area_toggled()
 
 /// Called when dialog is deleted
-
-gint Export::onProgressDelete ( GtkWidget * /*widget*/, GdkEvent * /*event*/, GObject *base )
+bool Export::onProgressDelete (GdkEventAny * /*event*/)
 {
-    g_object_set_data (base, "cancel", (gpointer) 1);
+    interrupted = true;
     return TRUE;
 } // end of sp_export_progress_delete()
 
 
 /// Called when progress is cancelled
-void Export::onProgressCancel ( GtkWidget * /*widget*/, GObject *base )
+void Export::onProgressCancel ()
 {
-    g_object_set_data (base, "cancel", (gpointer) 1);
+    interrupted = true;
 } // end of sp_export_progress_cancel()
 
 
 /// Called for every progress iteration
-unsigned int Export::onProgressCallback (float value, void *data)
+unsigned int Export::onProgressCallback (float value, void *dlg)
 {
-    GtkWidget *prg;
-    int evtcount;
-
-    if (g_object_get_data ((GObject *) data, "cancel"))
+    Gtk::Dialog *dlg2 = reinterpret_cast<Gtk::Dialog*>(dlg);
+    if (dlg2->get_data("cancel")){
         return FALSE;
+    }
 
-    prg = (GtkWidget *) g_object_get_data ((GObject *) data, "progress");
-    gtk_progress_bar_set_fraction ((GtkProgressBar *) prg, value);
+    Gtk::ProgressBar *prg = (Gtk::ProgressBar *) dlg2->get_data ("progress");
+    prg->set_fraction(value);
 
-    evtcount = 0;
+    int evtcount = 0;
     while ((evtcount < 16) && gdk_events_pending ()) {
             gtk_main_iteration_do (FALSE);
             evtcount += 1;
     }
 
     gtk_main_iteration_do (FALSE);
-
     return TRUE;
-
 } // end of sp_export_progress_callback()
 
-GtkWidget * Export::create_progress_dialog (Glib::ustring progress_text) {
-    GtkWidget *dlg, *prg, *btn; /* progressbar dlg widgets */
+Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
+    Gtk::Dialog *dlg = new Gtk::Dialog(_("Export in progress"), TRUE);
+    
+    Gtk::ProgressBar *prg = new Gtk::ProgressBar ();
+    prg->set_text(progress_text);
+    prg->set_orientation(Gtk::PROGRESS_LEFT_TO_RIGHT);
+    dlg->set_data ("progress", prg);
+#if GTK_CHECK_VERSION(3,0,0)
+    Gtk::Box* CA = dlg->get_content_area();
+#else
+    Gtk::Box* CA = dlg->get_vbox();
+#endif
+    CA->pack_start(*prg, FALSE, FALSE, 4);
 
-    dlg = gtk_dialog_new ();
+    Gtk::Button* btn = dlg->add_button (Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL );
 
-    GtkObject *base  = GTK_OBJECT(dlg);
+    btn->signal_clicked().connect( sigc::mem_fun(*this, &Export::onProgressCancel) );
+    dlg->signal_delete_event().connect( sigc::mem_fun(*this, &Export::onProgressDelete) );
 
-    gtk_window_set_title (GTK_WINDOW (dlg), _("Export in progress"));
-    prg = gtk_progress_bar_new ();
-    //sp_transientize (dlg);
-    gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
-    g_object_set_data ((GObject *) base, "progress", prg);
-
-    gtk_progress_bar_set_text ((GtkProgressBar *) prg, progress_text.c_str());
-
-    gtk_progress_bar_set_orientation ( (GtkProgressBar *) prg,
-                                       GTK_PROGRESS_LEFT_TO_RIGHT);
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area((GtkDialog *) dlg),
-                        prg, FALSE, FALSE, 4 );
-    btn = gtk_dialog_add_button ( GTK_DIALOG (dlg),
-                                  GTK_STOCK_CANCEL,
-                                  GTK_RESPONSE_CANCEL );
-
-    g_signal_connect ( (GObject *) dlg, "delete_event",
-                       (GCallback) onProgressDelete, base);
-    g_signal_connect ( (GObject *) btn, "clicked",
-                       (GCallback) onProgressCancel, base);
-    gtk_window_set_modal ((GtkWindow *) dlg, TRUE);
-    gtk_widget_show_all (dlg);
-
+    dlg->show_all ();
     return dlg;
 }
 
@@ -879,19 +831,18 @@ Glib::ustring Export::filename_add_extension (Glib::ustring filename, Glib::ustr
     }
 }
 
-gchar *Export::absolutize_path_from_document_location (SPDocument *doc, const gchar *filename)
+Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, const Glib::ustring &filename)
 {
-    gchar *path = 0;
+    Glib::ustring path;
     //Make relative paths go from the document location, if possible:
-    if (!g_path_is_absolute(filename) && doc->getURI()) {
-        gchar *dirname = g_path_get_dirname(doc->getURI());
-        if (dirname) {
-            path = g_build_filename(dirname, filename, NULL);
-            g_free(dirname);
+    if (!Glib::path_is_absolute(filename) && doc->getURI()) {
+        Glib::ustring dirname = Glib::path_get_dirname(doc->getURI());
+        if (!dirname.empty()) {
+            path = Glib::build_filename(dirname, filename);
         }
     }
-    if (!path) {
-        path = g_strdup(filename);
+    if (path.empty()) {
+        path = filename;
     }
     return path;
 }
@@ -914,18 +865,22 @@ void Export::onExport ()
         if (num < 1)
             return;
 
-        GtkWidget *prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 files"),num));
+        prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 files"),num));
 
         for (GSList *i = const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList());
-             i != NULL;
-             i = i->next) {
+                i != NULL;
+                i = i->next) {
+            if (interrupted){
+                break;
+            }
             SPItem *item = reinterpret_cast<SPItem *>(i->data);
 
             // retrieve export filename hint
             const gchar *filename = item->getRepr()->attribute("inkscape:export-filename");
-            gchar *path = NULL;
+            Glib::ustring path;
             if (!filename) {
-                path = create_filepath_from_id(item->getId(), NULL);
+                Glib::ustring tmp;
+                path = create_filepath_from_id(item->getId(), tmp);
             } else {
                 path = absolutize_path_from_document_location(doc, filename);
             }
@@ -947,14 +902,14 @@ void Export::onExport ()
 
                 if (width > 1 && height > 1) {
                     /* Do export */
-                    if (!sp_export_png_file (doc, path,
+                    if (!sp_export_png_file (doc, path.c_str(),
                                              *area, width, height, dpi, dpi,
                                              nv->pagecolor,
                                              NULL, NULL, TRUE,  // overwrite without asking
                                              hide ? const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList()) : NULL
                             )) {
                         gchar * error;
-                        gchar * safeFile = Inkscape::IO::sanitizeString(path);
+                        gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
                         error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
                         sp_ui_error_dialog(error);
                         g_free(safeFile);
@@ -963,148 +918,96 @@ void Export::onExport ()
                 }
             }
             n++;
-            g_free(path);
             onProgressCallback((float)n/num, prog_dlg);
         }
 
-        gtk_widget_destroy (prog_dlg);
-        //g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
+        delete prog_dlg;
+        prog_dlg = NULL;
+        interrupted = false;
 
     } else {
+        Glib::ustring filename = filename_entry.get_text();
 
-    Glib::ustring filename = filename_entry.get_text();
-
-    if (filename.empty()){
-        sp_ui_error_dialog(_("You have to enter a filename"));
-        return;
-    }
-    
-    float const x0 = getValuePx(x0_adj);
-    float const y0 = getValuePx(y0_adj);
-    float const x1 = getValuePx(x1_adj);
-    float const y1 = getValuePx(y1_adj);
-    float const xdpi = getValue(xdpi_adj);
-    float const ydpi = getValue(ydpi_adj);
-    unsigned long int const width = int(getValue(bmwidth_adj) + 0.5);
-    unsigned long int const height = int(getValue(bmheight_adj) + 0.5);
-
-    if (!((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0))) {
-        sp_ui_error_dialog (_("The chosen area to be exported is invalid"));
-        return;
-    }
-
-    // make sure that .png is the extension of the file:
-    Glib::ustring const filename_ext = filename_add_extension(filename, "png");
-    filename_entry.set_text(filename_ext);
-    gchar *path = absolutize_path_from_document_location(doc, filename_ext.c_str());
-
-    gchar *dirname = g_path_get_dirname(path);
-    if ( dirname == NULL
-         || !Inkscape::IO::file_test(dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) )
-    {
-        gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
-        gchar *error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"),
-                                       safeDir);
-        sp_ui_error_dialog(error);
-        g_free(safeDir);
-        g_free(error);
-        g_free(dirname);
-        g_free(path);
-        return;
-    }
-    g_free(dirname);
-
-    gchar *fn = g_path_get_basename (path);
-    GtkWidget *prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
-    g_free (fn);
-
-
-    /* Do export */
-    if (!sp_export_png_file (sp_desktop_document (SP_ACTIVE_DESKTOP), path,
-                             Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
-                             nv->pagecolor,
-                             onProgressCallback, prog_dlg, FALSE,
-                             hide ? const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList()) : NULL
-            )) {
-        gchar * error;
-        gchar * safeFile = Inkscape::IO::sanitizeString(path);
-        error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
-        sp_ui_error_dialog(error);
-        g_free(safeFile);
-        g_free(error);
-    }
-
-    /* Reset the filename so that it can be changed again by changing
-       selections and all that */
-    g_free(original_name);
-    original_name = const_cast<gchar*>(filename_ext.c_str());
-    filename_modified = false;
-
-    gtk_widget_destroy (prog_dlg);
-    //g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
-
-
-    /* Setup the values in the document */
-    switch (current_key) {
-        case SELECTION_PAGE:
-        case SELECTION_DRAWING: {
-            SPDocument * doc = SP_ACTIVE_DOCUMENT;
-            Inkscape::XML::Node * repr = doc->getReprRoot();
-            bool modified = false;
-
-            bool saved = DocumentUndo::getUndoSensitive(doc);
-            DocumentUndo::setUndoSensitive(doc, false);
-
-            gchar const *temp_string = repr->attribute("inkscape:export-filename");
-            if (temp_string == NULL || (filename_ext != temp_string)) {
-                repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
-                modified = true;
-            }
-            temp_string = repr->attribute("inkscape:export-xdpi");
-            if (temp_string == NULL || xdpi != atof(temp_string)) {
-                sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
-                modified = true;
-            }
-            temp_string = repr->attribute("inkscape:export-ydpi");
-            if (temp_string == NULL || ydpi != atof(temp_string)) {
-                sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
-                modified = true;
-            }
-            DocumentUndo::setUndoSensitive(doc, saved);
-
-            if (modified) {
-                doc->setModifiedSinceSave();
-            }
-            break;
+        if (filename.empty()){
+            sp_ui_error_dialog(_("You have to enter a filename"));
+            return;
         }
-        case SELECTION_SELECTION: {
-            const GSList * reprlst;
-            SPDocument * doc = SP_ACTIVE_DOCUMENT;
-            bool modified = false;
+        
+        float const x0 = getValuePx(x0_adj);
+        float const y0 = getValuePx(y0_adj);
+        float const x1 = getValuePx(x1_adj);
+        float const y1 = getValuePx(y1_adj);
+        float const xdpi = getValue(xdpi_adj);
+        float const ydpi = getValue(ydpi_adj);
+        unsigned long int const width = int(getValue(bmwidth_adj) + 0.5);
+        unsigned long int const height = int(getValue(bmheight_adj) + 0.5);
 
-            bool saved = DocumentUndo::getUndoSensitive(doc);
-            DocumentUndo::setUndoSensitive(doc, false);
-            reprlst = sp_desktop_selection(SP_ACTIVE_DESKTOP)->reprList();
+        if (!((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0))) {
+            sp_ui_error_dialog (_("The chosen area to be exported is invalid"));
+            return;
+        }
 
-            for(; reprlst != NULL; reprlst = reprlst->next) {
-                Inkscape::XML::Node * repr = static_cast<Inkscape::XML::Node *>(reprlst->data);
-                const gchar * temp_string;
-                Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
-                const gchar* docURI=SP_ACTIVE_DOCUMENT->getURI();
-                Glib::ustring docdir;
-                if (docURI)
-                {
-                    docdir = Glib::path_get_dirname(docURI);
-                }
-                if (repr->attribute("id") == NULL ||
-                        !(filename_ext.find_last_of(repr->attribute("id")) &&
-                          ( !docURI ||
-                            (dir == docdir)))) {
-                    temp_string = repr->attribute("inkscape:export-filename");
-                    if (temp_string == NULL || (filename_ext != temp_string)) {
-                        repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
-                        modified = true;
-                    }
+        // make sure that .png is the extension of the file:
+        Glib::ustring const filename_ext = filename_add_extension(filename, "png");
+        filename_entry.set_text(filename_ext);
+        Glib::ustring path = absolutize_path_from_document_location(doc, filename_ext);
+
+        Glib::ustring dirname = Glib::path_get_dirname(path);
+        if ( dirname.empty()
+             || !Inkscape::IO::file_test(dirname.c_str(), (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) )
+        {
+            gchar *safeDir = Inkscape::IO::sanitizeString(dirname.c_str());
+            gchar *error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"),
+                                           safeDir);
+            sp_ui_error_dialog(error);
+            g_free(safeDir);
+            g_free(error);
+            return;
+        }
+
+        Glib::ustring fn = path_get_basename (path);
+
+        prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
+
+        /* Do export */
+        if (!sp_export_png_file (sp_desktop_document (SP_ACTIVE_DESKTOP), path.c_str(),
+                                 Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
+                                 nv->pagecolor,
+                                 onProgressCallback, (void*)prog_dlg, FALSE,
+                                 hide ? const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList()) : NULL
+                )) {
+            gchar * error;
+            gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
+            error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
+            sp_ui_error_dialog(error);
+            g_free(safeFile);
+            g_free(error);
+        }
+
+        /* Reset the filename so that it can be changed again by changing
+           selections and all that */
+        original_name = filename_ext;
+        filename_modified = false;
+
+        delete prog_dlg;
+        prog_dlg = NULL;
+        interrupted = false;
+
+        /* Setup the values in the document */
+        switch (current_key) {
+            case SELECTION_PAGE:
+            case SELECTION_DRAWING: {
+                SPDocument * doc = SP_ACTIVE_DOCUMENT;
+                Inkscape::XML::Node * repr = doc->getReprRoot();
+                bool modified = false;
+
+                bool saved = DocumentUndo::getUndoSensitive(doc);
+                DocumentUndo::setUndoSensitive(doc, false);
+
+                gchar const *temp_string = repr->attribute("inkscape:export-filename");
+                if (temp_string == NULL || (filename_ext != temp_string)) {
+                    repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
+                    modified = true;
                 }
                 temp_string = repr->attribute("inkscape:export-xdpi");
                 if (temp_string == NULL || xdpi != atof(temp_string)) {
@@ -1116,18 +1019,63 @@ void Export::onExport ()
                     sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                     modified = true;
                 }
-            }
-            DocumentUndo::setUndoSensitive(doc, saved);
+                DocumentUndo::setUndoSensitive(doc, saved);
 
-            if (modified) {
-                doc->setModifiedSinceSave();
+                if (modified) {
+                    doc->setModifiedSinceSave();
+                }
+                break;
             }
-            break;
+            case SELECTION_SELECTION: {
+                const GSList * reprlst;
+                SPDocument * doc = SP_ACTIVE_DOCUMENT;
+                bool modified = false;
+
+                bool saved = DocumentUndo::getUndoSensitive(doc);
+                DocumentUndo::setUndoSensitive(doc, false);
+                reprlst = sp_desktop_selection(SP_ACTIVE_DESKTOP)->reprList();
+
+                for(; reprlst != NULL; reprlst = reprlst->next) {
+                    Inkscape::XML::Node * repr = static_cast<Inkscape::XML::Node *>(reprlst->data);
+                    const gchar * temp_string;
+                    Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
+                    const gchar* docURI=SP_ACTIVE_DOCUMENT->getURI();
+                    Glib::ustring docdir;
+                    if (docURI)
+                    {
+                        docdir = Glib::path_get_dirname(docURI);
+                    }
+                    if (repr->attribute("id") == NULL ||
+                            !(filename_ext.find_last_of(repr->attribute("id")) &&
+                              ( !docURI ||
+                                (dir == docdir)))) {
+                        temp_string = repr->attribute("inkscape:export-filename");
+                        if (temp_string == NULL || (filename_ext != temp_string)) {
+                            repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
+                            modified = true;
+                        }
+                    }
+                    temp_string = repr->attribute("inkscape:export-xdpi");
+                    if (temp_string == NULL || xdpi != atof(temp_string)) {
+                        sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
+                        modified = true;
+                    }
+                    temp_string = repr->attribute("inkscape:export-ydpi");
+                    if (temp_string == NULL || ydpi != atof(temp_string)) {
+                        sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
+                        modified = true;
+                    }
+                }
+                DocumentUndo::setUndoSensitive(doc, saved);
+
+                if (modified) {
+                    doc->setModifiedSinceSave();
+                }
+                break;
+            }
+            default:
+                break;
         }
-        default:
-            break;
-    }
-    g_free (path);
     }
 
 } // end of sp_export_export_clicked()
@@ -1137,7 +1085,7 @@ void Export::onExport ()
 void Export::onBrowse ()
 {
     GtkWidget *fs;
-    const gchar *filename;
+    Glib::ustring filename;
 
     fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
                                       (GtkWindow*)desktop->getToplevel(),
@@ -1156,13 +1104,14 @@ void Export::onBrowse ()
 
     gtk_window_set_modal(GTK_WINDOW (fs), true);
 
-    filename = filename_entry.get_text().c_str();
+    filename = filename_entry.get_text();
 
-    if (*filename == '\0') {
-        filename = create_filepath_from_id(NULL, NULL);
+    if (filename.empty()) {
+        Glib::ustring tmp;
+        filename = create_filepath_from_id(tmp, tmp);
     }
 
-    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fs), filename);
+    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fs), filename.c_str());
 
 #ifdef WIN32
     // code in this section is borrowed from ui/dialogs/filedialogimpl-win32.cpp
@@ -1177,7 +1126,7 @@ void Export::onBrowse ()
     // Copy the selected file name, converting from UTF-8 to UTF-16
     WCHAR _filename[_MAX_PATH + 1];
     memset(_filename, 0, sizeof(_filename));
-    gunichar2* utf16_path_string = g_utf8_to_utf16(filename, -1, NULL, NULL, NULL);
+    gunichar2* utf16_path_string = g_utf8_to_utf16(filename.c_str(), -1, NULL, NULL, NULL);
     wcsncpy(_filename, (wchar_t*)utf16_path_string, _MAX_PATH);
     g_free(utf16_path_string);
 
@@ -1792,7 +1741,7 @@ float Export::getValuePx(  Gtk::Adjustment *adj )
  */
 void Export::onFilenameModified()
 {
-    if (strcmp(original_name, filename_entry.get_text().c_str())==0) {
+    if (original_name == filename_entry.get_text()) {
         filename_modified = false;
     } else {
         filename_modified = true;

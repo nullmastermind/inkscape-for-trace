@@ -80,6 +80,7 @@ set(ui_SRC
 	widget/dock.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
+	widget/frame.cpp
 	widget/filter-effect-chooser.cpp
 	widget/handlebox.cpp
 	widget/icon-widget.cpp
@@ -211,6 +212,7 @@ set(ui_SRC
 	widget/dock.h
 	widget/entity-entry.h
 	widget/entry.h
+	widget/frame.h
 	widget/filter-effect-chooser.h
 	widget/handlebox.h
 	widget/icon-widget.h
