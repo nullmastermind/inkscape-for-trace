@@ -1827,7 +1827,7 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SVG_FONTS, "/dialogs/svgfonts") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_INPUT, "/dialogs/inputdevices") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_DISPLAY, "/dialogs/preferences") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_SELECTION_GRIDTILE, "/dialogs/gridtiler") );
+    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_SELECTION_ARRANGE, "/dialogs/gridtiler") ); //FIXME: denis: change also preferences?
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_SELECTION_TRACE, "/dialogs/trace") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_TEXT, "/dialogs/textandfont") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_EXPORT, "/dialogs/export") );

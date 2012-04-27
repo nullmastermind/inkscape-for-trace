@@ -210,7 +210,7 @@ static char const menus_skeleton[] =
 "       <separator/>\n"
 "       <verb verb-id=\"DialogTransform\" />\n"
 "       <verb verb-id=\"DialogAlignDistribute\" />\n"
-"       <verb verb-id=\"DialogGridArrange\" />\n"
+"       <verb verb-id=\"DialogArrange\" />\n"
 "   </submenu>\n"
 "   <submenu name=\"" N_("_Path") "\">\n"
 "       <verb verb-id=\"ObjectToPath\" />\n"
