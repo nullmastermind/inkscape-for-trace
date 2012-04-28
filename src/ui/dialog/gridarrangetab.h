@@ -36,7 +36,7 @@ class ArrangeDialog;
  */
 class GridArrangeTab : public ArrangeTab {
 public:
-	GridArrangeTab(ArrangeDialog *parent);
+    GridArrangeTab(ArrangeDialog *parent);
     virtual ~GridArrangeTab() {};
 
     /**
