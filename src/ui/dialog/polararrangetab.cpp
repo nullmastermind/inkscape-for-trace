@@ -149,7 +149,8 @@ void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation
 float calcAngle(float arcBegin, float arcEnd, int count, int n)
 {
 	float arcLength = arcEnd - arcBegin;
-	if(abs(abs(arcLength) - 2*M_PI) > 0.0001) count--; // If not a complete circle, put an object also at the extremes of the arc;
+	float delta = std::abs(std::abs(arcLength) - 2*M_PI);
+	if(delta > 0.01) count--; // If not a complete circle, put an object also at the extremes of the arc;
 
 	float angle = n / (float)count;
 	// Normalize for arcLength:
@@ -277,6 +278,9 @@ void PolarArrangeTab::arrange()
 		tmp = tmp->next;
 		++i;
 	}
+
+    DocumentUndo::done(sp_desktop_document(parent->getDesktop()), SP_VERB_SELECTION_ARRANGE,
+                       _("Arrange on ellipse"));
 }
 
 void PolarArrangeTab::updateSelection()
