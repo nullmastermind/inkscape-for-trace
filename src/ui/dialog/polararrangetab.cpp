@@ -71,49 +71,49 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 
 	//FIXME: Objects in grid do not line up properly!
 	centerLabel.set_text(_("Center X/Y:"));
-	parametersTable.attach(centerLabel, 0, 1, 0, 1);
+	parametersTable.attach(centerLabel, 0, 1, 0, 1, Gtk::FILL);
 	centerX.setDigits(2);
-	centerX.set_size_request(60, -1);
+	//centerX.set_size_request(60, -1);
 	centerX.setIncrements(0.2, 0);
 	centerX.setRange(-10000, 10000);
 	centerX.setValue(0, "px");
 	centerY.setDigits(2);
-	centerY.set_size_request(120, -1);
+	//centerY.set_size_request(120, -1);
 	centerY.setIncrements(0.2, 0);
 	centerY.setRange(-10000, 10000);
 	centerY.setValue(0, "px");
-	parametersTable.attach(centerX, 1, 2, 0, 1);
-	parametersTable.attach(centerY, 2, 3, 0, 1);
+	parametersTable.attach(centerX, 1, 2, 0, 1, Gtk::FILL);
+	parametersTable.attach(centerY, 2, 3, 0, 1, Gtk::FILL);
 
 	radiusLabel.set_text(_("Radius X/Y:"));
-	parametersTable.attach(radiusLabel, 0, 1, 1, 2);
+	parametersTable.attach(radiusLabel, 0, 1, 1, 2, Gtk::FILL);
 	radiusX.setDigits(2);
-	radiusX.set_size_request(60, -1);
+	//radiusX.set_size_request(60, -1);
 	radiusX.setIncrements(0.2, 0);
-	radiusX.setRange(-10000, 10000);
-	radiusX.setValue(0, "px");
+	radiusX.setRange(0.001, 10000);
+	radiusX.setValue(100, "px");
 	radiusY.setDigits(2);
-	radiusY.set_size_request(120, -1);
+	//radiusY.set_size_request(120, -1);
 	radiusY.setIncrements(0.2, 0);
-	radiusY.setRange(-10000, 10000);
-	radiusY.setValue(0, "px");
-	parametersTable.attach(radiusX, 1, 2, 1, 2);
-	parametersTable.attach(radiusY, 2, 3, 1, 2);
+	radiusY.setRange(0.001, 10000);
+	radiusY.setValue(100, "px");
+	parametersTable.attach(radiusX, 1, 2, 1, 2, Gtk::FILL);
+	parametersTable.attach(radiusY, 2, 3, 1, 2, Gtk::FILL);
 
-	angleLabel.set_text(_("Center X/Y:"));
-	parametersTable.attach(angleLabel, 0, 1, 2, 3);
+	angleLabel.set_text(_("Angle X/Y:"));
+	parametersTable.attach(angleLabel, 0, 1, 2, 3, Gtk::FILL);
 	angleX.setDigits(2);
-	angleX.set_size_request(60, -1);
+	//angleX.set_size_request(60, -1);
 	angleX.setIncrements(0.2, 0);
 	angleX.setRange(-10000, 10000);
 	angleX.setValue(0, "°");
 	angleY.setDigits(2);
-	angleY.set_size_request(120, -1);
+	//angleY.set_size_request(120, -1);
 	angleY.setIncrements(0.2, 0);
 	angleY.setRange(-10000, 10000);
-	angleY.setValue(0, "°");
-	parametersTable.attach(angleX, 1, 2, 2, 3);
-	parametersTable.attach(angleY, 2, 3, 2, 3);
+	angleY.setValue(180, "°");
+	parametersTable.attach(angleX, 1, 2, 2, 3, Gtk::FILL);
+	parametersTable.attach(angleY, 2, 3, 2, 3, Gtk::FILL);
 	pack_start(parametersTable, false, false);
 
 	rotateObjectsCheckBox.set_label(_("Rotate objects"));
@@ -128,39 +128,153 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	radiusY.set_sensitive(false);
 }
 
+void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation)
+{
+	Geom::Translate const s(center);
+	Geom::Affine affine = Geom::Affine(s).inverse() * Geom::Affine(rotation) * Geom::Affine(s);
+
+	// Save old center
+    center = item->getCenter();
+
+	item->set_i2d_affine(item->i2dt_affine() * affine);
+	item->doWriteTransform(item->getRepr(), item->transform);
+
+	if(item->isCenterSet())
+	{
+		item->setCenter(center * affine);
+		item->updateRepr();
+	}
+}
+
+float calcAngle(float arcBegin, float arcEnd, int count, int n)
+{
+	float arcLength = arcEnd - arcBegin;
+	if(abs(abs(arcLength) - 2*M_PI) > 0.0001) count--; // If not a complete circle, put an object also at the extremes of the arc;
+
+	float angle = n / (float)count;
+	// Normalize for arcLength:
+	angle = angle * arcLength;
+	angle += arcBegin;
+
+	return angle;
+}
+
+Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle)
+{
+	// Parameters for radius equation
+	float a = ry * cos(angle);
+	float b = rx * sin(angle);
+
+	float radius = (rx * ry) / sqrtf((a*a) + (b*b));
+
+	return Geom::Point(cos(angle) * radius + cx, sin(angle) * radius + cy);
+}
+
+Geom::Point getAnchorPoint(int anchor, SPItem *item)
+{
+	Geom::Point source;
+
+	Geom::OptRect bbox = item->documentVisualBounds();
+
+	switch(anchor)
+	{
+		case 0: // Top    - Left
+		case 3: // Middle - Left
+		case 6: // Bottom - Left
+			source[0] = bbox->min()[Geom::X];
+			break;
+		case 1: // Top    - Middle
+		case 4: // Middle - Middle
+		case 7: // Bottom - Middle
+			source[0] = (bbox->min()[Geom::X] + bbox->max()[Geom::X]) / 2.0f;
+			break;
+		case 2: // Top    - Right
+		case 5: // Middle - Right
+		case 8: // Bottom - Right
+			source[0] = bbox->max()[Geom::X];
+			break;
+	};
+
+	switch(anchor)
+	{
+		case 0: // Top    - Left
+		case 1: // Top    - Middle
+		case 2: // Top    - Right
+			source[1] = bbox->min()[Geom::Y];
+			break;
+		case 3: // Middle - Left
+		case 4: // Middle - Middle
+		case 5: // Middle - Right
+			source[1] = (bbox->min()[Geom::Y] + bbox->max()[Geom::Y]) / 2.0f;
+			break;
+		case 6: // Bottom - Left
+		case 7: // Bottom - Middle
+		case 8: // Bottom - Right
+			source[1] = bbox->max()[Geom::Y];
+			break;
+	};
+
+	// If using center
+	if(anchor == 9)
+		source = item->getCenter();
+	else
+	{
+		source[1] -= item->document->getHeight();
+		source[1] *= -1;
+	}
+
+	return source;
+}
+
+void moveToPoint(int anchor, SPItem *item, Geom::Point p)
+{
+	sp_item_move_rel(item, Geom::Translate(p - getAnchorPoint(anchor, item)));
+}
+
 void PolarArrangeTab::arrange()
 {
 	std::cout << "PolarArrangeTab::arrange()" << std::endl;
 	Inkscape::Selection *selection = sp_desktop_selection(parent->getDesktop());
-	const GSList *items = selection->itemList();
-	int i = 0;
-	while(items)
+	const GSList *items, *tmp;
+	tmp = items = selection->itemList();
+
+	int count = 0;
+	while(tmp)
 	{
-		SPItem *item = SP_ITEM(items->data);
+		tmp = tmp->next;
+		++count;
+	}
 
-		float centerx = 1000;
-		float centery = 2000;
+	// Read options from UI
+	float cx = centerX.getValue("px");
+	float cy = centerY.getValue("px");
+	float rx = radiusX.getValue("px");
+	float ry = radiusY.getValue("px");
+	float arcBeg = angleX.getValue("rad");
+	float arcEnd = angleY.getValue("rad");
 
-		float radiusx = 1000;
-		float radiusy = 2000;
+	int anchor = 9;
+	if(anchorBoundingBoxRadio.get_active())
+	{
+		anchor = anchorSelector.getHorizontalAlignment() +
+				anchorSelector.getVerticalAlignment() * 3;
+	}
 
-		float objectx = - item->documentVisualBounds()->min()[Geom::X];
-		float objecty =   item->documentVisualBounds()->min()[Geom::Y];
+	tmp = items;
+	int i = 0;
+	while(tmp)
+	{
+		SPItem *item = SP_ITEM(tmp->data);
 
-		float angle = M_PI / 36 * i;
+		float angle = calcAngle(arcBeg, arcEnd, count, i);
+		Geom::Point newLocation = calcPoint(cx, cy, rx, ry, angle);
 
-		float r = (radiusx * radiusy) /
-				sqrtf(powf(radiusy * cos(angle), 2) + powf(radiusx * sin(angle), 2));
-		float calcx = cos(angle) * r;
-		float calcy = sin(angle) * r;
+		moveToPoint(anchor, item, newLocation);
 
-        sp_item_move_rel(item, Geom::Translate(objectx + calcx, objecty + calcy));
-        sp_item_rotate_rel(item, Geom::Rotate(angle));
+		if(rotateObjectsCheckBox.get_active())
+			rotateAround(item, newLocation, Geom::Rotate(angle));
 
-		//item->set_i2d_affine(item->i2dt_affine() * toOrigin * rotation);
-        //item->doWriteTransform(item->getRepr(), item->transform,  NULL);
-
-		items = items->next;
+		tmp = tmp->next;
 		++i;
 	}
 }
