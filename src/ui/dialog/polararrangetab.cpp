@@ -39,38 +39,38 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	  angleY("", "Starting angle", UNIT_TYPE_RADIAL),
 	  angleX("", "End angle", angleY)
 {
-	anchorPointLabel.set_text("Anchor point:");
+	anchorPointLabel.set_text(C_("Polar arrange tab", "Anchor point:"));
 	anchorPointLabel.set_alignment(Gtk::ALIGN_START);
 	pack_start(anchorPointLabel, false, false);
 
-	anchorBoundingBoxRadio.set_label("Object's bounding box:");
+	anchorBoundingBoxRadio.set_label(C_("Polar arrange tab", "Object's bounding box:"));
 	anchorRadioGroup = anchorBoundingBoxRadio.get_group();
 	anchorBoundingBoxRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_anchor_radio_changed));
 	pack_start(anchorBoundingBoxRadio, false, false);
 
 	pack_start(anchorSelector, false, false);
 
-	anchorObjectPivotRadio.set_label("Object's rotational center");
+	anchorObjectPivotRadio.set_label(C_("Polar arrange tab", "Object's rotational center"));
 	anchorObjectPivotRadio.set_group(anchorRadioGroup);
 	anchorObjectPivotRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_anchor_radio_changed));
 	pack_start(anchorObjectPivotRadio, false, false);
 
-	arrangeOnLabel.set_text("Arrange on:");
+	arrangeOnLabel.set_text(C_("Polar arrange tab", "Arrange on:"));
 	arrangeOnLabel.set_alignment(Gtk::ALIGN_START);
 	pack_start(arrangeOnLabel, false, false);
 
-	arrangeOnCircleRadio.set_label("Last selected circle/ellipse/arc");
+	arrangeOnCircleRadio.set_label(C_("Polar arrange tab", "Last selected circle/ellipse/arc"));
 	arrangeRadioGroup = arrangeOnCircleRadio.get_group();
 	arrangeOnCircleRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
 	pack_start(arrangeOnCircleRadio, false, false);
 
-	arrangeOnParametersRadio.set_label("Parameterized:");
+	arrangeOnParametersRadio.set_label(C_("Polar arrange tab", "Parameterized:"));
 	arrangeOnParametersRadio.set_group(arrangeRadioGroup);
 	arrangeOnParametersRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
 	pack_start(arrangeOnParametersRadio, false, false);
 
 	//FIXME: Objects in grid do not line up properly!
-	centerLabel.set_text("Center X/Y:");
+	centerLabel.set_text(_("Center X/Y:"));
 	parametersTable.attach(centerLabel, 0, 1, 0, 1);
 	centerX.setDigits(2);
 	centerX.set_size_request(60, -1);
@@ -85,7 +85,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	parametersTable.attach(centerX, 1, 2, 0, 1);
 	parametersTable.attach(centerY, 2, 3, 0, 1);
 
-	radiusLabel.set_text("Radius X/Y:");
+	radiusLabel.set_text(_("Radius X/Y:"));
 	parametersTable.attach(radiusLabel, 0, 1, 1, 2);
 	radiusX.setDigits(2);
 	radiusX.set_size_request(60, -1);
@@ -100,7 +100,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	parametersTable.attach(radiusX, 1, 2, 1, 2);
 	parametersTable.attach(radiusY, 2, 3, 1, 2);
 
-	angleLabel.set_text("Center X/Y:");
+	angleLabel.set_text(_("Center X/Y:"));
 	parametersTable.attach(angleLabel, 0, 1, 2, 3);
 	angleX.setDigits(2);
 	angleX.set_size_request(60, -1);
@@ -116,7 +116,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	parametersTable.attach(angleY, 2, 3, 2, 3);
 	pack_start(parametersTable, false, false);
 
-	rotateObjectsCheckBox.set_label("Rotate objects");
+	rotateObjectsCheckBox.set_label(_("Rotate objects"));
 	rotateObjectsCheckBox.set_active(true);
 	pack_start(rotateObjectsCheckBox, false, false);
 
