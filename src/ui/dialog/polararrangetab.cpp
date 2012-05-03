@@ -23,6 +23,7 @@
 #include "sp-item.h"
 #include "widgets/icon.h"
 #include "desktop.h"
+#include "sp-ellipse.h"
 #include "sp-item-transform.h"
 
 namespace Inkscape {
@@ -128,6 +129,12 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	radiusY.set_sensitive(false);
 }
 
+/**
+ * This function rotates an item around a given point by a given amount
+ * @param item item to rotate
+ * @param center center of the rotation to perform
+ * @param rotation amount to rotate the object by
+ */
 void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation)
 {
 	Geom::Translate const s(center);
@@ -146,6 +153,15 @@ void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation
 	}
 }
 
+/**
+ * Calculates the angle at which to put an object given the total amount
+ * of objects, the index of the objects as well as the arc start and end
+ * points
+ * @param arcBegin angle at which the arc begins
+ * @param arcEnd angle at which the arc ends
+ * @param count number of objects in the selection
+ * @param n index of the object in the selection
+ */
 float calcAngle(float arcBegin, float arcEnd, int count, int n)
 {
 	float arcLength = arcEnd - arcBegin;
@@ -160,6 +176,10 @@ float calcAngle(float arcBegin, float arcEnd, int count, int n)
 	return angle;
 }
 
+/**
+ * Calculates the point at which the object needs to be, given the center of the ellipse,
+ * it's radius (x and y), as well as the angle
+ */
 Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle)
 {
 	// Parameters for radius equation
@@ -220,6 +240,7 @@ Geom::Point getAnchorPoint(int anchor, SPItem *item)
 		source = item->getCenter();
 	else
 	{
+		// FIXME:
 		source[1] -= item->document->getHeight();
 		source[1] *= -1;
 	}
@@ -235,24 +256,64 @@ void moveToPoint(int anchor, SPItem *item, Geom::Point p)
 void PolarArrangeTab::arrange()
 {
 	std::cout << "PolarArrangeTab::arrange()" << std::endl;
+
 	Inkscape::Selection *selection = sp_desktop_selection(parent->getDesktop());
 	const GSList *items, *tmp;
 	tmp = items = selection->itemList();
+	SPGenericEllipse *referenceEllipse = NULL; // Last ellipse in selection
 
 	int count = 0;
 	while(tmp)
 	{
+		SPItem *item = SP_ITEM(tmp->data);
+
+		// The last selected ellipse is actually the first in list
+		if(SP_IS_GENERICELLIPSE(item) && referenceEllipse == NULL)
+			referenceEllipse = SP_GENERICELLIPSE(item);
+
 		tmp = tmp->next;
 		++count;
 	}
 
-	// Read options from UI
-	float cx = centerX.getValue("px");
-	float cy = centerY.getValue("px");
-	float rx = radiusX.getValue("px");
-	float ry = radiusY.getValue("px");
-	float arcBeg = angleX.getValue("rad");
-	float arcEnd = angleY.getValue("rad");
+	float cx, cy; // Center of the ellipse
+	float rx, ry; // Radiuses of the ellipse in x and y direction
+	float arcBeg, arcEnd; // begin and end angles for arcs
+	Geom::Affine transformation; // Any additional transformation to apply to the objects
+
+	if(arrangeOnCircleRadio.get_active())
+	{
+		if(referenceEllipse == NULL)
+		{
+			Gtk::MessageDialog dialog(_("Couldn't find an ellipse in selection"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE, true);
+			dialog.run();
+			return;
+		} else {
+			cx = referenceEllipse->cx.value;
+			cy = referenceEllipse->cy.value;
+			rx = referenceEllipse->rx.value;
+			ry = referenceEllipse->ry.value;
+			arcBeg = referenceEllipse->start;
+			arcEnd = referenceEllipse->end;
+			transformation = referenceEllipse->i2dt_affine();
+
+			// We decrement the count by 1 as we are not going to lay
+			// out the reference ellipse
+			--count;
+		}
+
+	} else 	{
+		// Read options from UI
+		cx = centerX.getValue("px");
+		cy = centerY.getValue("px");
+		rx = radiusX.getValue("px");
+		ry = radiusY.getValue("px");
+		arcBeg = angleX.getValue("rad");
+		arcEnd = angleY.getValue("rad");
+		transformation.setIdentity();
+		referenceEllipse = NULL;
+	}
+
+
 
 	int anchor = 9;
 	if(anchorBoundingBoxRadio.get_active())
@@ -267,16 +328,21 @@ void PolarArrangeTab::arrange()
 	{
 		SPItem *item = SP_ITEM(tmp->data);
 
-		float angle = calcAngle(arcBeg, arcEnd, count, i);
-		Geom::Point newLocation = calcPoint(cx, cy, rx, ry, angle);
+		// Ignore the reference ellipse if any
+		if(item != referenceEllipse)
+		{
+			float angle = calcAngle(arcBeg, arcEnd, count, i);
+			Geom::Point newLocation = calcPoint(cx, cy, rx, ry, angle) * transformation;
 
-		moveToPoint(anchor, item, newLocation);
+			moveToPoint(anchor, item, newLocation);
 
-		if(rotateObjectsCheckBox.get_active())
-			rotateAround(item, newLocation, Geom::Rotate(angle));
+			if(rotateObjectsCheckBox.get_active())
+				rotateAround(item, newLocation, Geom::Rotate(angle));
+
+			++i;
+		}
 
 		tmp = tmp->next;
-		++i;
 	}
 
     DocumentUndo::done(sp_desktop_document(parent->getDesktop()), SP_VERB_SELECTION_ARRANGE,
