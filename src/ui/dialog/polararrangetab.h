@@ -57,7 +57,8 @@ private:
     Gtk::Label             arrangeOnLabel;
 
     Gtk::RadioButtonGroup  arrangeRadioGroup;
-    Gtk::RadioButton       arrangeOnCircleRadio;
+    Gtk::RadioButton       arrangeOnFirstCircleRadio;
+    Gtk::RadioButton       arrangeOnLastCircleRadio;
     Gtk::RadioButton       arrangeOnParametersRadio;
 
     Gtk::Table             parametersTable;

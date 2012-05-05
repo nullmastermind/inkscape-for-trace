@@ -60,10 +60,15 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	arrangeOnLabel.set_alignment(Gtk::ALIGN_START);
 	pack_start(arrangeOnLabel, false, false);
 
-	arrangeOnCircleRadio.set_label(C_("Polar arrange tab", "Last selected circle/ellipse/arc"));
-	arrangeRadioGroup = arrangeOnCircleRadio.get_group();
-	arrangeOnCircleRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
-	pack_start(arrangeOnCircleRadio, false, false);
+	arrangeOnFirstCircleRadio.set_label(C_("Polar arrange tab", "First selected circle/ellipse/arc"));
+	arrangeRadioGroup = arrangeOnFirstCircleRadio.get_group();
+	arrangeOnFirstCircleRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
+	pack_start(arrangeOnFirstCircleRadio, false, false);
+
+	arrangeOnLastCircleRadio.set_label(C_("Polar arrange tab", "Last selected circle/ellipse/arc"));
+	arrangeOnLastCircleRadio.set_group(arrangeRadioGroup);
+	arrangeOnLastCircleRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
+	pack_start(arrangeOnLastCircleRadio, false, false);
 
 	arrangeOnParametersRadio.set_label(C_("Polar arrange tab", "Parameterized:"));
 	arrangeOnParametersRadio.set_group(arrangeRadioGroup);
@@ -182,15 +187,16 @@ float calcAngle(float arcBegin, float arcEnd, int count, int n)
  */
 Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle)
 {
-	// Parameters for radius equation
-	float a = ry * cos(angle);
-	float b = rx * sin(angle);
-
-	float radius = (rx * ry) / sqrtf((a*a) + (b*b));
-
-	return Geom::Point(cos(angle) * radius + cx, sin(angle) * radius + cy);
+	return Geom::Point(cx + cos(angle) * rx, cy + sin(angle) * ry);
 }
 
+/**
+ * Returns the selected anchor point in document coordinates. If anchor
+ * is 0 to 8, then a bounding box point has been choosen. If it is 9 however
+ * the rotational center is chosen.
+ * @todo still using a hack to get the real coordinate space (subtracting document height
+ * 		 and inverting axes)
+ */
 Geom::Point getAnchorPoint(int anchor, SPItem *item)
 {
 	Geom::Point source;
@@ -262,15 +268,27 @@ void PolarArrangeTab::arrange()
 	tmp = items = selection->itemList();
 	SPGenericEllipse *referenceEllipse = NULL; // Last ellipse in selection
 
+	bool arrangeOnEllipse = !arrangeOnParametersRadio.get_active();
+	bool arrangeOnFirstEllipse = arrangeOnEllipse && arrangeOnFirstCircleRadio.get_active();
+
 	int count = 0;
 	while(tmp)
 	{
-		SPItem *item = SP_ITEM(tmp->data);
+		if(arrangeOnEllipse)
+		{
+			SPItem *item = SP_ITEM(tmp->data);
 
-		// The last selected ellipse is actually the first in list
-		if(SP_IS_GENERICELLIPSE(item) && referenceEllipse == NULL)
-			referenceEllipse = SP_GENERICELLIPSE(item);
-
+			if(arrangeOnFirstEllipse)
+			{
+				// The first selected ellipse is actually the last one in the list
+				if(SP_IS_GENERICELLIPSE(item))
+					referenceEllipse = SP_GENERICELLIPSE(item);
+			} else {
+				// The last selected ellipse is actually the first in list
+				if(SP_IS_GENERICELLIPSE(item) && referenceEllipse == NULL)
+					referenceEllipse = SP_GENERICELLIPSE(item);
+			}
+		}
 		tmp = tmp->next;
 		++count;
 	}
@@ -280,7 +298,7 @@ void PolarArrangeTab::arrange()
 	float arcBeg, arcEnd; // begin and end angles for arcs
 	Geom::Affine transformation; // Any additional transformation to apply to the objects
 
-	if(arrangeOnCircleRadio.get_active())
+	if(arrangeOnEllipse)
 	{
 		if(referenceEllipse == NULL)
 		{
@@ -294,6 +312,8 @@ void PolarArrangeTab::arrange()
 			ry = referenceEllipse->ry.value;
 			arcBeg = referenceEllipse->start;
 			arcEnd = referenceEllipse->end;
+
+			std::cout << "Arc: " << arcBeg << ", " << arcEnd << std::endl;
 			transformation = referenceEllipse->i2dt_affine();
 
 			// We decrement the count by 1 as we are not going to lay
@@ -313,14 +333,14 @@ void PolarArrangeTab::arrange()
 		referenceEllipse = NULL;
 	}
 
-
-
 	int anchor = 9;
 	if(anchorBoundingBoxRadio.get_active())
 	{
 		anchor = anchorSelector.getHorizontalAlignment() +
 				anchorSelector.getVerticalAlignment() * 3;
 	}
+
+	Geom::Point realCenter = Geom::Point(cx, cy) * transformation;
 
 	tmp = items;
 	int i = 0;
@@ -336,12 +356,16 @@ void PolarArrangeTab::arrange()
 
 			moveToPoint(anchor, item, newLocation);
 
-			if(rotateObjectsCheckBox.get_active())
+			if(rotateObjectsCheckBox.get_active()) {
+				// Calculate the angle by which to rotate each object
+				angle = -atan2f(newLocation.x() - realCenter.x(), newLocation.y() - realCenter.y());
 				rotateAround(item, newLocation, Geom::Rotate(angle));
+			}
+
+			std::cout << "object " << i << " out of " << count << ": " << angle << std::endl;
 
 			++i;
 		}
-
 		tmp = tmp->next;
 	}
 
@@ -355,7 +379,7 @@ void PolarArrangeTab::updateSelection()
 
 void PolarArrangeTab::on_arrange_radio_changed()
 {
-	bool arrangeParametric = !arrangeOnCircleRadio.get_active();
+	bool arrangeParametric = arrangeOnParametersRadio.get_active();
 
 	centerX.set_sensitive(arrangeParametric);
 	centerY.set_sensitive(arrangeParametric);
