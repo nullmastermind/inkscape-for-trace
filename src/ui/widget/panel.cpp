@@ -20,6 +20,9 @@
 #include <gtkmm/dialog.h> // for Gtk::RESPONSE_*
 #include <gtkmm/menu.h>
 #include <gtkmm/stock.h>
+#include <gtkmm/radiobutton.h>
+#include <gtkmm/radiomenuitem.h>
+#include <gtkmm/separatormenuitem.h>
 
 #include <gtk/gtk.h>
 

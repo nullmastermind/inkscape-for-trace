@@ -334,7 +334,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     /* Main table */
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_new(GTK_BOX(dtw->vbox), FALSE);
+    gtk_box_set_homogeneous(GTK_BOX(dtw->vbox), FALSE);
 #else
     dtw->vbox = gtk_vbox_new (FALSE, 0);
 #endif
@@ -413,13 +413,17 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     /* Horizontal scrollbar */
     dtw->hadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
+#if GTK_CHECK_VERSION(3,0,0)
+    dtw->hscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (dtw->hadj));
+#else
     dtw->hscrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (dtw->hadj));
+#endif
     gtk_table_attach (GTK_TABLE (canvas_tbl), dtw->hscrollbar, 1, 2, 2, 3, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_SHRINK), 0, 0);
 
     /* Vertical scrollbar and the sticky zoom button */
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_new(GTK_BOX(dtw->vscrollbar_box), FALSE);
+    gtk_box_set_homogeneous(GTK_BOX(dtw->vscrollbar_box), FALSE);
 #else
     dtw->vscrollbar_box = gtk_vbox_new (FALSE, 0);
 #endif
@@ -432,7 +436,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (dtw->sticky_zoom), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
     dtw->vadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
+#if GTK_CHECK_VERSION(3,0,0)
+    dtw->vscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT(dtw->vadj));
+#else
     dtw->vscrollbar = gtk_vscrollbar_new (GTK_ADJUSTMENT (dtw->vadj));
+#endif
     gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->vscrollbar, TRUE, TRUE, 0);
     gtk_table_attach (GTK_TABLE (canvas_tbl), dtw->vscrollbar_box, 2, 3, 0, 2, (GtkAttachOptions)(GTK_SHRINK), (GtkAttachOptions)(GTK_FILL), 0, 0);
 
@@ -517,7 +525,14 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->selected_style = new Inkscape::UI::Widget::SelectedStyle(true);
     GtkHBox *ss_ = dtw->selected_style->gobj();
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), GTK_WIDGET(ss_), FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), gtk_vseparator_new(), FALSE, FALSE, 0);
+
+    gtk_box_pack_start(GTK_BOX(dtw->statusbar), 
+#if GTK_CHECK_VERSION(3,0,0)
+		    gtk_separator_new(GTK_ORIENTATION_VERTICAL), 
+#else
+		    gtk_vseparator_new(), 
+#endif
+		    FALSE, FALSE, 0);
 
     // connect scrollbar signals
     g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
@@ -546,7 +561,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->coord_status = gtk_table_new (5, 2, FALSE);
     gtk_table_set_row_spacings(GTK_TABLE(dtw->coord_status), 0);
     gtk_table_set_col_spacings(GTK_TABLE(dtw->coord_status), 2);
-    gtk_table_attach(GTK_TABLE(dtw->coord_status), gtk_vseparator_new(), 0,1, 0,2, GTK_FILL, GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status), 
+#if GTK_CHECK_VERSION(3,0,0)
+		    gtk_separator_new(GTK_ORIENTATION_VERTICAL), 
+#else
+		    gtk_vseparator_new(), 
+#endif
+		    0,1, 0,2, GTK_FILL, GTK_FILL, 0, 0);
     eventbox = gtk_event_box_new ();
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
     gtk_widget_set_tooltip_text (eventbox, _("Cursor coordinates"));

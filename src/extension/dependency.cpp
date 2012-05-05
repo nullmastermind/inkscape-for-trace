@@ -141,7 +141,7 @@ Dependency::check (void) const
                 filetest |= Glib::FILE_TEST_IS_EXECUTABLE;
             }
 
-            std::string location(_string);
+            Glib::ustring location(_string);
             switch (_location) {
                 case LOCATION_EXTENSIONS: {
                     for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
@@ -173,55 +173,43 @@ Dependency::check (void) const
                     gchar * orig_path = path;
 
                     for (; path != NULL;) {
-                        gchar * local_path;
-                        gchar * final_name;
+                        gchar * local_path; // to have the path after detection of the separator
+                        Glib::ustring final_name;
 
                         local_path = path;
                         path = g_utf8_strchr(path, -1, G_SEARCHPATH_SEPARATOR);
                         /* Not sure whether this is UTF8 happy, but it would seem
                            like it considering that I'm searching (and finding)
                            the ':' character */
-                        if (path != local_path && path != NULL) {
+                        if (path != NULL) {
                             path[0] = '\0';
                             path++;
-                        } else {
-                            path = NULL;
                         }
 
-                        if (local_path == '\0') {
-                            final_name = g_strdup(_string);
+                        if (*local_path == '\0') {
+                            final_name = _string;
                         } else {
-                            final_name = g_build_filename(local_path, _string, NULL);
+                            final_name = Glib::build_filename(local_path, _string);
                         }
 
                         if (Glib::file_test(final_name, filetest)) {
-                            g_free(final_name);
                             g_free(orig_path);
                             return TRUE;
                         }
 
                         // give it a 2nd try with ".exe" added
-                        gchar * final_name_exe = g_strdup_printf("%s.exe", final_name);                        
+                        Glib::ustring final_name_exe = final_name + ".exe";
                         if (Glib::file_test(final_name_exe, filetest)) {
-                            g_free(final_name);
-                            g_free(final_name_exe);
                             g_free(orig_path);
                             return TRUE;
                         }
-                        g_free(final_name_exe);
 
                         // and a 3rd try with ".cmd" added (mainly for UniConvertor)
-                        gchar * final_name_cmd = g_strdup_printf("%s.cmd", final_name);
+                        Glib::ustring final_name_cmd = final_name + ".cmd";
                         if (Glib::file_test(final_name_cmd, filetest)) {
-                            g_free(final_name);
-                            g_free(final_name_cmd);
                             g_free(orig_path);
                             return TRUE;
                         }
-                        g_free(final_name_cmd);
-
-                        // give up
-                        g_free(final_name);
                     }
 
                     g_free(orig_path);

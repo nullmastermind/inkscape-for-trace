@@ -19,6 +19,8 @@
 #include <gtkmm/menu.h>
 #include <gtkmm/menuitem.h>
 #include <gtkmm/adjustment.h>
+#include <gtkmm/radiobuttongroup.h>
+#include <gtkmm/radiomenuitem.h>
 #include "ui/widget/spinbutton.h"
 
 #include <stddef.h>
@@ -134,7 +136,11 @@ protected:
     Gtk::EventBox _stroke_flag_place;
 
     Gtk::EventBox _opacity_place;
+#if WITH_GTKMM_3_0
+    Glib::RefPtr<Gtk::Adjustment> _opacity_adjustment;
+#else
     Gtk::Adjustment _opacity_adjustment;
+#endif
     Inkscape::UI::Widget::SpinButton _opacity_sb;
 
     Gtk::Label _na[2];

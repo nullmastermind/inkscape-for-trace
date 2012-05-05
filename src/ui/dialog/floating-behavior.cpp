@@ -32,30 +32,24 @@ namespace Behavior {
 FloatingBehavior::FloatingBehavior(Dialog &dialog) :
     Behavior(dialog),
     _d (new Gtk::Dialog(_dialog._title))
-#if GTK_VERSION_GE(2, 12)
     ,_dialog_active(_d->property_is_active())
     ,_steps(0)
     ,_trans_focus(Inkscape::Preferences::get()->getDoubleLimited("/dialogs/transparency/on-focus", 0.95, 0.0, 1.0))
     ,_trans_blur(Inkscape::Preferences::get()->getDoubleLimited("/dialogs/transparency/on-blur", 0.50, 0.0, 1.0))
     ,_trans_time(Inkscape::Preferences::get()->getIntLimited("/dialogs/transparency/animate-time", 100, 0, 5000))
-#endif
 {
     hide();
-    _d->set_has_separator(false);
 
     signal_delete_event().connect(sigc::mem_fun(_dialog, &Inkscape::UI::Dialog::Dialog::_onDeleteEvent));
 
     sp_transientize(GTK_WIDGET(_d->gobj()));
     _dialog.retransientize_suppress = false;
 
-#if GTK_VERSION_GE(2, 12)
     _focus_event();
     _dialog_active.signal_changed().connect(sigc::mem_fun(this, &FloatingBehavior::_focus_event));
-#endif
 
 }
 
-#if GTK_VERSION_GE(2, 12)
 /**
  * A function called when the window gets focus.
  *
@@ -126,8 +120,6 @@ bool FloatingBehavior::_trans_timer (void) {
     return true;
 }
 
-#endif
-
 FloatingBehavior::~FloatingBehavior()
 {
     delete _d;
@@ -142,7 +134,7 @@ FloatingBehavior::create(Dialog &dialog)
 
 inline FloatingBehavior::operator Gtk::Widget &()                          { return *_d; }
 inline GtkWidget *FloatingBehavior::gobj()                                { return GTK_WIDGET(_d->gobj()); }
-inline Gtk::VBox* FloatingBehavior::get_vbox()                            { return _d->get_vbox(); }
+inline Gtk::Box* FloatingBehavior::get_vbox()                            { return _d->get_vbox(); }
 inline void FloatingBehavior::present()                                   { _d->present(); }
 inline void FloatingBehavior::hide()                                      { _d->hide(); }
 inline void FloatingBehavior::show()                                      { _d->show(); }
@@ -151,7 +143,14 @@ inline void FloatingBehavior::resize(int width, int height)               { _d->
 inline void FloatingBehavior::move(int x, int y)                          { _d->move(x, y); }
 inline void FloatingBehavior::set_position(Gtk::WindowPosition position)  { _d->set_position(position); }
 inline void FloatingBehavior::set_size_request(int width, int height)     { _d->set_size_request(width, height); }
-inline void FloatingBehavior::size_request(Gtk::Requisition &requisition) {requisition = _d->size_request(); }
+inline void FloatingBehavior::size_request(Gtk::Requisition &requisition) {
+#if WITH_GTKMM_3_0
+	Gtk::Requisition requisition_natural;
+	_d->get_preferred_size(requisition, requisition_natural); 
+#else
+	requisition = _d->size_request(); 
+#endif
+}
 inline void FloatingBehavior::get_position(int &x, int &y)                { _d->get_position(x, y); }
 inline void FloatingBehavior::get_size(int &width, int &height)           { _d->get_size(width, height); }
 inline void FloatingBehavior::set_title(Glib::ustring title)              { _d->set_title(title); }

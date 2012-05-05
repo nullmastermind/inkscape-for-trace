@@ -13,6 +13,7 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
+#include <gtkmm/togglebutton.h>
 #include "spinbutton.h"
 #include "attr-widget.h"
 
@@ -37,8 +38,13 @@ public:
     double get_value() const;
     void set_value(const double);
 
+#if WITH_GTKMM_3_0
+    const Glib::RefPtr<Gtk::Adjustment> get_adjustment() const;
+    Glib::RefPtr<Gtk::Adjustment> get_adjustment();
+#else
     const Gtk::Adjustment& get_adjustment() const;
     Gtk::Adjustment& get_adjustment();
+#endif
     
     const Gtk::HScale& get_scale() const;
     Gtk::HScale& get_scale();
@@ -49,7 +55,11 @@ public:
     // Change the SpinSlider into a SpinButton with AttrWidget support)
     void remove_scale();
 private:
+#if WITH_GTKMM_3_0
+    Glib::RefPtr<Gtk::Adjustment> _adjustment;
+#else
     Gtk::Adjustment _adjustment;
+#endif
     Gtk::HScale _scale;
     Inkscape::UI::Widget::SpinButton _spin;
 };

@@ -54,14 +54,14 @@ gboolean sp_retransientize_again(gpointer dlgPtr)
     return FALSE; // so that it is only called once
 }
 
-void sp_dialog_shutdown(GtkObject */*object*/, gpointer dlgPtr)
+void sp_dialog_shutdown(GObject * /*object*/, gpointer dlgPtr)
 {
     Dialog *dlg = static_cast<Dialog *>(dlgPtr);
     dlg->onShutdown();
 }
 
 
-void hideCallback(GtkObject */*object*/, gpointer dlgPtr)
+void hideCallback(GObject * /*object*/, gpointer dlgPtr)
 {
     g_return_if_fail( dlgPtr != NULL );
 
@@ -69,7 +69,7 @@ void hideCallback(GtkObject */*object*/, gpointer dlgPtr)
     dlg->onHideF12();
 }
 
-void unhideCallback(GtkObject */*object*/, gpointer dlgPtr)
+void unhideCallback(GObject * /*object*/, gpointer dlgPtr)
 {
     g_return_if_fail( dlgPtr != NULL );
 
@@ -160,7 +160,7 @@ void Dialog::onShowF12()
 inline Dialog::operator Gtk::Widget &()                          { return *_behavior; }
 inline GtkWidget *Dialog::gobj()                                 { return _behavior->gobj(); }
 inline void Dialog::present()                                    { _behavior->present(); }
-inline Gtk::VBox *Dialog::get_vbox()                             {  return _behavior->get_vbox(); }
+inline Gtk::Box *Dialog::get_vbox()                             {  return _behavior->get_vbox(); }
 inline void Dialog::hide()                                       { _behavior->hide(); }
 inline void Dialog::show()                                       { _behavior->show(); }
 inline void Dialog::show_all_children()                          { _behavior->show_all_children(); }

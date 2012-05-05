@@ -32,7 +32,7 @@ enum BehaviorType { FLOATING, DOCK };
 
 void sp_retransientize(Inkscape::Application *inkscape, SPDesktop *desktop, gpointer dlgPtr);
 gboolean sp_retransientize_again(gpointer dlgPtr);
-void sp_dialog_shutdown(GtkObject *object, gpointer dlgPtr);
+void sp_dialog_shutdown(GObject *object, gpointer dlgPtr);
 
 /**
  * Base class for Inkscape dialogs.
@@ -79,7 +79,7 @@ public:
     virtual operator Gtk::Widget &();
     virtual GtkWidget *gobj();
     virtual void present();
-    virtual Gtk::VBox *get_vbox();
+    virtual Gtk::Box *get_vbox();
     virtual void show();
     virtual void hide();
     virtual void show_all_children();

@@ -64,8 +64,8 @@ namespace Dialog {
 Find::Find()
     : UI::Widget::Panel("", "/dialogs/find", SP_VERB_DIALOG_FIND),
 
-      entry_find(_("F_ind:"), _("Find objects by their content (exact or partial match)")),
-      entry_replace(_("Re_place:"), _("Replace found objects with this value ")),
+      entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
+      entry_replace(_("Re_place:"), _("Replace match with this value")),
 
       check_scope_all(_("_All"), _("Search in all layers")),
       check_scope_layer(_("Current _layer"), _("Limit search to the current layer")),
@@ -84,8 +84,8 @@ Find::Find()
       frame_options(_("General")),
 
       check_ids(_("_ID"), _("Search id name"), true),
-      check_attributename(_("Attribute _Name"), _("Search attribute name"), false),
-      check_attributevalue(_("Attribute _Value"), _("Search attribute value"), true),
+      check_attributename(_("Attribute _name"), _("Search attribute name"), false),
+      check_attributevalue(_("Attribute _value"), _("Search attribute value"), true),
       check_style(_("_Style"), _("Search style"), true),
       check_font(_("_Font"), _("Search fonts"), false),
       frame_properties(_("Properties")),
@@ -104,11 +104,11 @@ Find::Find()
 
       check_images(_("Images"), _("Search images"), false),
       check_offsets(_("Offsets"), _("Search offset objects"), false),
-      frame_types(_("Object Types")),
+      frame_types(_("Object types")),
 
       status(""),
-      button_find(_("_Find"), _("Select all objects matching the selected fields ")),
-      button_replace(_("_Replace All"), _("Replace all the matching objects")),
+      button_find(_("_Find"), _("Select all objects matching the selection criteria")),
+      button_replace(_("_Replace All"), _("Replace all matches")),
       _action_replace(false),
       blocked(false),
       desktop(NULL),
@@ -825,7 +825,14 @@ Find::onAction()
                                                  "<b>%d</b> objects found (out of <b>%d</b>), %s match.",
                                                  count),
                                         count, all, exact? _("exact") : _("partial"));
-        status.set_text(Glib::ustring::compose("%1 %2 %3", count, _("objects"), _action_replace? _("replaced") : _("found") ));
+        if (_action_replace){
+            // TRANSLATORS: "%1" is replaced with the number of matches
+            status.set_text(Glib::ustring::compose(_("%1 objects replaced"), count));
+        }
+        else {
+            // TRANSLATORS: "%1" is replaced with the number of matches
+            status.set_text(Glib::ustring::compose(_("%1 objects found"), count));
+        }
 
         Inkscape::Selection *selection = sp_desktop_selection (desktop);
         selection->clear();
@@ -837,7 +844,7 @@ Find::onAction()
         }
 
     } else {
-        status.set_text(_("Not found"));
+        status.set_text(_("Nothing found"));
         if (!check_scope_selection.get_active()) {
             Inkscape::Selection *selection = sp_desktop_selection (desktop);
             selection->clear();
@@ -863,7 +870,7 @@ Find::onToggleCheck ()
     }
 
     if (!objectok) {
-        status.set_text(_("Select an object"));
+        status.set_text(_("Select an object type"));
     }
 
 
