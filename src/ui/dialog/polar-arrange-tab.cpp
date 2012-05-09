@@ -261,8 +261,6 @@ void moveToPoint(int anchor, SPItem *item, Geom::Point p)
 
 void PolarArrangeTab::arrange()
 {
-	std::cout << "PolarArrangeTab::arrange()" << std::endl;
-
 	Inkscape::Selection *selection = sp_desktop_selection(parent->getDesktop());
 	const GSList *items, *tmp;
 	tmp = items = selection->itemList();
@@ -313,7 +311,6 @@ void PolarArrangeTab::arrange()
 			arcBeg = referenceEllipse->start;
 			arcEnd = referenceEllipse->end;
 
-			std::cout << "Arc: " << arcBeg << ", " << arcEnd << std::endl;
 			transformation = referenceEllipse->i2dt_affine();
 
 			// We decrement the count by 1 as we are not going to lay
@@ -361,8 +358,6 @@ void PolarArrangeTab::arrange()
 				angle = -atan2f(newLocation.x() - realCenter.x(), newLocation.y() - realCenter.y());
 				rotateAround(item, newLocation, Geom::Rotate(angle));
 			}
-
-			std::cout << "object " << i << " out of " << count << ": " << angle << std::endl;
 
 			++i;
 		}
