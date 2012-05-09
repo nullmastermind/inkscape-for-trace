@@ -40,7 +40,6 @@ ArrangeDialog::ArrangeDialog()
     _arrangeButton = this->addResponseButton(C_("Arrange dialog","_Arrange"), GTK_RESPONSE_APPLY);
     _arrangeButton->set_use_underline(true);
     _arrangeButton->set_tooltip_text(_("Arrange selected objects"));
-    _arrangeBox.pack_start(*_arrangeButton);
     contents->pack_start(_arrangeBox);
     show_all_children();
 }
