@@ -12,6 +12,10 @@
 #include "widgets/icon.h"
 #include "ui/icon-names.h"
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
 void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& button) {
 	Gtk::Widget*  buttonIcon = Gtk::manage(sp_icon_get_icon(icon, Inkscape::ICON_SIZE_SMALL_TOOLBAR));
 	buttonIcon->show();
@@ -76,3 +80,18 @@ void AnchorSelector::setAlignment(int horizontal, int vertical)
 		_buttons[index].set_active(!_buttons[index].get_active());
 	}
 }
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

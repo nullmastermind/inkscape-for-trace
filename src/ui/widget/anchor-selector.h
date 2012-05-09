@@ -12,6 +12,10 @@
 
 #include <gtkmm.h>
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
 class AnchorSelector : public Gtk::Alignment
 {
 private:
@@ -37,4 +41,19 @@ public:
 	virtual ~AnchorSelector();
 };
 
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
+
 #endif /* ANCHOR_SELECTOR_H_ */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

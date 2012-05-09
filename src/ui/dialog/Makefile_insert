@@ -49,8 +49,8 @@ ink_common_sources +=		\
 	ui/dialog/floating-behavior.h		\
 	ui/dialog/glyphs.cpp			\
 	ui/dialog/glyphs.h			\
-	ui/dialog/gridarrangetab.h		\
-	ui/dialog/gridarrangetab.cpp		\
+	ui/dialog/grid-arrange-tab.h		\
+	ui/dialog/grid-arrange-tab.cpp		\
 	ui/dialog/guides.cpp			\
 	ui/dialog/guides.h			\
 	ui/dialog/icon-preview.cpp		\
@@ -78,8 +78,8 @@ ink_common_sources +=		\
 	ui/dialog/object-properties.cpp \
 	ui/dialog/object-properties.h	\
 	ui/dialog/panel-dialog.h		\
-	ui/dialog/polararrangetab.cpp		\
-	ui/dialog/polararrangetab.h		\
+	ui/dialog/polar-arrange-tab.cpp		\
+	ui/dialog/polar-arrange-tab.h		\
 	ui/dialog/print.cpp			\
 	ui/dialog/print.h			\
 	ui/dialog/print-colors-preview-dialog.cpp		\

@@ -19,7 +19,7 @@
 # include <config.h>
 #endif
 
-#include "ui/dialog/gridarrangetab.h"
+#include "ui/dialog/grid-arrange-tab.h"
 #include <gtk/gtk.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
 #include <gtkmm/stock.h>

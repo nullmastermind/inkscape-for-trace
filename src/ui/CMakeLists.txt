@@ -43,7 +43,7 @@ set(ui_SRC
 	dialog/find.cpp
 	dialog/floating-behavior.cpp
 	dialog/glyphs.cpp
-	dialog/gridarrangetab.cpp
+	dialog/grid-arrange-tab.cpp
 	dialog/guides.cpp
 	dialog/icon-preview.cpp
 	dialog/inkscape-preferences.cpp
@@ -57,7 +57,7 @@ set(ui_SRC
 	dialog/object-attributes.cpp
 	dialog/object-properties.cpp
 	dialog/ocaldialogs.cpp
-	dialog/polararrangetab.cpp
+	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
 	dialog/scriptdialog.cpp
@@ -160,7 +160,7 @@ set(ui_SRC
 	dialog/floating-behavior.h
 	dialog/glyphs.h
 	dialog/guides.h
-	dialog/gridarrangetab.h
+	dialog/grid-arrange-tab.h
 	dialog/icon-preview.h
 	dialog/inkscape-preferences.h
 	dialog/input.h
@@ -174,7 +174,7 @@ set(ui_SRC
 	dialog/object-properties.h
 	dialog/ocaldialogs.h
 	dialog/panel-dialog.h
-	dialog/polararrangetab.h
+	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
 	dialog/scriptdialog.h

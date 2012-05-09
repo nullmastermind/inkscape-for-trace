@@ -102,7 +102,7 @@ private:
 
     // Alignment
     Gtk::Label            AlignLabel;
-    AnchorSelector        AlignmentSelector;
+    Inkscape::UI::Widget::AnchorSelector        AlignmentSelector;
     double VertAlign;
     double HorizAlign;
 

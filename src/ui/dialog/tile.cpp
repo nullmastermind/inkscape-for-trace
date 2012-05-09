@@ -19,8 +19,8 @@
 #include "tile.h"
 #include "verbs.h"
 
-#include "ui/dialog/gridarrangetab.h"
-#include "ui/dialog/polararrangetab.h"
+#include "ui/dialog/grid-arrange-tab.h"
+#include "ui/dialog/polar-arrange-tab.h"
 
 namespace Inkscape {
 namespace UI {

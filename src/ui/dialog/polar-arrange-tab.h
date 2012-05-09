@@ -52,7 +52,7 @@ private:
     Gtk::RadioButtonGroup  anchorRadioGroup;
     Gtk::RadioButton       anchorBoundingBoxRadio;
     Gtk::RadioButton       anchorObjectPivotRadio;
-    AnchorSelector         anchorSelector;
+    Inkscape::UI::Widget::AnchorSelector anchorSelector;
 
     Gtk::Label             arrangeOnLabel;
 

@@ -10,7 +10,7 @@
 #include <2geom/transforms.h>
 #include <glibmm/i18n.h>
 
-#include "ui/dialog/polararrangetab.h"
+#include "ui/dialog/polar-arrange-tab.h"
 #include "ui/dialog/tile.h"
 
 #include "verbs.h"
