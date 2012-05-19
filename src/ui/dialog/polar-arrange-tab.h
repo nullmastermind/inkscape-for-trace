@@ -23,13 +23,17 @@ namespace Dialog {
 
 class ArrangeDialog;
 
+/**
+ * PolarArrangeTab is a Tab displayed in the Arrange dialog and contains
+ * enables the user to arrange objects on a circular or elliptical shape
+ */
 class PolarArrangeTab : public ArrangeTab {
 public:
 	PolarArrangeTab(ArrangeDialog *parent_);
     virtual ~PolarArrangeTab() {};
 
     /**
-     * Do the actual work
+     * Do the actual arrangement
      */
     virtual void arrange();
 
@@ -85,3 +89,14 @@ private:
 } //namespace Inkscape
 
 #endif /* INKSCAPE_UI_DIALOG_POLAR_ARRANGE_TAB_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

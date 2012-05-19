@@ -140,7 +140,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
  * @param center center of the rotation to perform
  * @param rotation amount to rotate the object by
  */
-void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation)
+static void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation)
 {
 	Geom::Translate const s(center);
 	Geom::Affine affine = Geom::Affine(s).inverse() * Geom::Affine(rotation) * Geom::Affine(s);
@@ -167,7 +167,7 @@ void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &rotation
  * @param count number of objects in the selection
  * @param n index of the object in the selection
  */
-float calcAngle(float arcBegin, float arcEnd, int count, int n)
+static float calcAngle(float arcBegin, float arcEnd, int count, int n)
 {
 	float arcLength = arcEnd - arcBegin;
 	float delta = std::abs(std::abs(arcLength) - 2*M_PI);
@@ -182,10 +182,10 @@ float calcAngle(float arcBegin, float arcEnd, int count, int n)
 }
 
 /**
- * Calculates the point at which the object needs to be, given the center of the ellipse,
+ * Calculates the point at which an object needs to be, given the center of the ellipse,
  * it's radius (x and y), as well as the angle
  */
-Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle)
+static Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle)
 {
 	return Geom::Point(cx + cos(angle) * rx, cy + sin(angle) * ry);
 }
@@ -197,7 +197,7 @@ Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle)
  * @todo still using a hack to get the real coordinate space (subtracting document height
  * 		 and inverting axes)
  */
-Geom::Point getAnchorPoint(int anchor, SPItem *item)
+static Geom::Point getAnchorPoint(int anchor, SPItem *item)
 {
 	Geom::Point source;
 
@@ -254,7 +254,17 @@ Geom::Point getAnchorPoint(int anchor, SPItem *item)
 	return source;
 }
 
-void moveToPoint(int anchor, SPItem *item, Geom::Point p)
+/**
+ * Moves an SPItem to a given location, the location is based on the given anchor point.
+ * @param anchor 0 to 8 are the various bounding box points like follows:
+ *               0  1  2
+ *               3  4  5
+ *               6  7  8
+ *               Anchor mode 9 is the rotational center of the object
+ * @param item Item to move
+ * @param p point at which to move the object
+ */
+static void moveToPoint(int anchor, SPItem *item, Geom::Point p)
 {
 	sp_item_move_rel(item, Geom::Translate(p - getAnchorPoint(anchor, item)));
 }
