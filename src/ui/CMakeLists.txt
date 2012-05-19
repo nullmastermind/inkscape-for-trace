@@ -136,7 +136,7 @@ set(ui_SRC
 
 	dialog/aboutbox.h
 	dialog/align-and-distribute.h
-	dialog/arrangetab.h
+	dialog/arrange-tab.h
 	dialog/behavior.h
 	dialog/calligraphic-profile-rename.h
 	dialog/color-item.h

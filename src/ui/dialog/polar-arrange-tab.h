@@ -12,7 +12,7 @@
 
 #include <gtkmm.h>
 
-#include "ui/dialog/arrangetab.h"
+#include "ui/dialog/arrange-tab.h"
 
 #include "ui/widget/anchor-selector.h"
 #include "ui/widget/scalar-unit.h"
