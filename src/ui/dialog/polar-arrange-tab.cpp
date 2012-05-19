@@ -75,16 +75,13 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	arrangeOnParametersRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
 	pack_start(arrangeOnParametersRadio, false, false);
 
-	//FIXME: Objects in grid do not line up properly!
 	centerLabel.set_text(_("Center X/Y:"));
 	parametersTable.attach(centerLabel, 0, 1, 0, 1, Gtk::FILL);
 	centerX.setDigits(2);
-	//centerX.set_size_request(60, -1);
 	centerX.setIncrements(0.2, 0);
 	centerX.setRange(-10000, 10000);
 	centerX.setValue(0, "px");
 	centerY.setDigits(2);
-	//centerY.set_size_request(120, -1);
 	centerY.setIncrements(0.2, 0);
 	centerY.setRange(-10000, 10000);
 	centerY.setValue(0, "px");
@@ -94,12 +91,10 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	radiusLabel.set_text(_("Radius X/Y:"));
 	parametersTable.attach(radiusLabel, 0, 1, 1, 2, Gtk::FILL);
 	radiusX.setDigits(2);
-	//radiusX.set_size_request(60, -1);
 	radiusX.setIncrements(0.2, 0);
 	radiusX.setRange(0.001, 10000);
 	radiusX.setValue(100, "px");
 	radiusY.setDigits(2);
-	//radiusY.set_size_request(120, -1);
 	radiusY.setIncrements(0.2, 0);
 	radiusY.setRange(0.001, 10000);
 	radiusY.setValue(100, "px");
@@ -109,12 +104,10 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	angleLabel.set_text(_("Angle X/Y:"));
 	parametersTable.attach(angleLabel, 0, 1, 2, 3, Gtk::FILL);
 	angleX.setDigits(2);
-	//angleX.set_size_request(60, -1);
 	angleX.setIncrements(0.2, 0);
 	angleX.setRange(-10000, 10000);
 	angleX.setValue(0, "°");
 	angleY.setDigits(2);
-	//angleY.set_size_request(120, -1);
 	angleY.setIncrements(0.2, 0);
 	angleY.setRange(-10000, 10000);
 	angleY.setValue(180, "°");
@@ -394,6 +387,8 @@ void PolarArrangeTab::on_arrange_radio_changed()
 
 	radiusX.set_sensitive(arrangeParametric);
 	radiusY.set_sensitive(arrangeParametric);
+
+	parametersTable.set_visible(arrangeParametric);
 }
 
 void PolarArrangeTab::on_anchor_radio_changed()

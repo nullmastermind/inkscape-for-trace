@@ -54,6 +54,8 @@ public:
      */
     virtual void _apply();
 
+    virtual void on_show();
+
 	static ArrangeDialog& getInstance() { return *new ArrangeDialog(); }
 };
 

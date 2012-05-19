@@ -41,7 +41,14 @@ ArrangeDialog::ArrangeDialog()
     _arrangeButton->set_use_underline(true);
     _arrangeButton->set_tooltip_text(_("Arrange selected objects"));
     contents->pack_start(_arrangeBox);
-    show_all_children();
+    //show_all_children();
+}
+
+
+void ArrangeDialog::on_show()
+{
+	UI::Widget::Panel::on_show();
+	_polarArrangeTab->on_arrange_radio_changed();
 }
 
 void ArrangeDialog::_apply()
