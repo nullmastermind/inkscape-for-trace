@@ -120,11 +120,22 @@ SPItemClass::sp_item_class_init(SPItemClass *klass)
     klass->snappoints = SPItem::sp_item_private_snappoints;
 }
 
+// CPPIFY: remove
+CItem::CItem(SPItem* item) : CObject(item) {
+	this->spitem = item;
+}
+
+CItem::~CItem() {
+}
+
 /**
  * Callback for SPItem object initialization.
  */
 void SPItem::sp_item_init(SPItem *item)
 {
+	item->citem = new CItem(item);
+	item->cobject = item->citem;
+
     item->init();
 }
 
@@ -413,9 +424,9 @@ void SPItem::moveTo(SPItem *target, gboolean intoafter) {
     }
 }
 
+void CItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPItem* object = this->spitem;
 
-void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
     object->readAttr( "style" );
     object->readAttr( "transform" );
     object->readAttr( "clip-path" );
@@ -427,14 +438,17 @@ void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML
     object->readAttr( "inkscape:connector-avoid" );
     object->readAttr( "inkscape:connection-points" );
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->build) {
-        (* ((SPObjectClass *) (SPItemClass::static_parent_class))->build)(object, document, repr);
-    }
+    CObject::onBuild(document, repr);
 }
 
-void SPItem::sp_item_release(SPObject *object)
+// CPPIFY: remove
+void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPItem *item = (SPItem *) object;
+    ((SPItem*)object)->citem->onBuild(document, repr);
+}
+
+void CItem::onRelease() {
+	SPItem* item = this->spitem;
 
     // Note: do this here before the clip_ref is deleted, since calling
     // ensureUpToDate() for triggered routing may reference
@@ -447,20 +461,25 @@ void SPItem::sp_item_release(SPObject *object)
     delete item->clip_ref;
     delete item->mask_ref;
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->release) {
-        ((SPObjectClass *) SPItemClass::static_parent_class)->release(object);
-    }
+    CObject::onRelease();
 
     while (item->display) {
-        item->display = sp_item_view_list_remove(item->display, item->display);
+        item->display = SPItem::sp_item_view_list_remove(item->display, item->display);
     }
 
     item->_transformed_signal.~signal();
+
 }
 
-void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
+// CPPIFY: remove
+void SPItem::sp_item_release(SPObject *object)
 {
-    SPItem *item = (SPItem *) object;
+    ((SPItem*)object)->citem->onRelease();
+}
+
+void CItem::onSet(unsigned int key, gchar const* value) {
+    SPItem *item = this->spitem;
+    SPItem* object = item;
 
     switch (key) {
         case SP_ATTR_TRANSFORM: {
@@ -544,12 +563,16 @@ void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
                 sp_style_read_from_object(object->style, object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
-                if (((SPObjectClass *) (SPItemClass::static_parent_class))->set) {
-                    (* ((SPObjectClass *) (SPItemClass::static_parent_class))->set)(object, key, value);
-                }
+                CObject::onSet(key, value);
             }
             break;
     }
+}
+
+// CPPIFY: remove
+void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
+{
+	((SPItem*)object)->citem->onSet(key, value);
 }
 
 void SPItem::clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
@@ -601,13 +624,16 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
     }
 }
 
-void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    SPItem *item = SP_ITEM(object);
+void CItem::onUpdate(SPCtx *ctx, guint flags) {
+    SPItem *item = this->spitem;
+    SPItem* object = item;
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->update) {
-        (* ((SPObjectClass *) (SPItemClass::static_parent_class))->update)(object, ctx, flags);
-    }
+    // CPPIFY: As CItem is derived directly from CObject, this doesn't make no sense.
+    // CObject::onUpdate is pure. What was the idea behind these lines?
+//    if (((SPObjectClass *) (SPItemClass::static_parent_class))->update) {
+//        (* ((SPObjectClass *) (SPItemClass::static_parent_class))->update)(object, ctx, flags);
+//    }
+//    CObject::onUpdate(ctx, flags);
 
     // any of the modifications defined in sp-object.h might change bbox,
     // so we invalidate it unconditionally
@@ -661,9 +687,15 @@ void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
         item->avoidRef->handleSettingChange();
 }
 
-Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+// CPPIFY: remove
+void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    SPItem *item = SP_ITEM(object);
+    ((SPItem*)object)->citem->onUpdate(ctx, flags);
+}
+
+Inkscape::XML::Node* CItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    SPItem *item = this->spitem;
+    SPItem* object = item;
 
     // in the case of SP_OBJECT_WRITE_BUILD, the item should always be newly created,
     // so we need to add any children from the underlying object to the new repr
@@ -721,11 +753,20 @@ Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML
         }
     }
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->write) {
-        ((SPObjectClass *) (SPItemClass::static_parent_class))->write(object, xml_doc, repr, flags);
-    }
+    CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
+}
+
+// CPPIFY: remove
+Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+    return ((SPItem*)object)->citem->onWrite(xml_doc, repr, flags);
+}
+
+// CPPIFY: make pure virtual
+Geom::OptRect CItem::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+	throw;
 }
 
 /**
@@ -813,6 +854,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
 
     return bbox;
 }
+
 Geom::OptRect SPItem::bounds(BBoxType type, Geom::Affine const &transform) const
 {
     if (type == GEOMETRIC_BBOX) {
@@ -902,6 +944,12 @@ unsigned SPItem::pos_in_parent()
     return 0;
 }
 
+// CPPIFY: make pure virtual, see below!
+void CItem::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+	throw;
+}
+
+// CPPIFY: remove
 void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Inkscape::SnapCandidatePoint> &/*p*/, Inkscape::SnapPreferences const * /*snapprefs*/)
 {
     /* This will only be called if the derived class doesn't override this.
@@ -910,7 +958,6 @@ void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Ink
      * do nothing
      */
 }
-
 
 void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
 {
@@ -953,6 +1000,11 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
     }
 }
 
+// CPPIFY: make pure virtual
+void CItem::onPrint(SPPrintContext* ctx) {
+	throw;
+}
+
 void SPItem::invoke_print(SPPrintContext *ctx)
 {
     if ( !isHidden() ) {
@@ -970,9 +1022,15 @@ void SPItem::invoke_print(SPPrintContext *ctx)
     }
 }
 
-gchar *SPItem::sp_item_private_description(SPItem */*item*/)
+// CPPIFY: is it possible to combine this method with "SPItem::description()"?
+gchar* CItem::onDescription() {
+	return g_strdup(_("Object"));
+}
+
+// CPPIFY: remove
+gchar *SPItem::sp_item_private_description(SPItem *item)
 {
-    return g_strdup(_("Object"));
+    return item->citem->onDescription();
 }
 
 /**
@@ -1040,6 +1098,11 @@ unsigned SPItem::display_key_new(unsigned numkeys)
     return dkey - numkeys;
 }
 
+// CPPIFY: make pure virtual
+Inkscape::DrawingItem* CItem::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+	throw;
+}
+
 Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned key, unsigned flags)
 {
     Inkscape::DrawingItem *ai = NULL;
@@ -1092,6 +1155,11 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
     }
 
     return ai;
+}
+
+// CPPIFY: make pure virtual
+void CItem::onHide(unsigned int key) {
+	throw;
 }
 
 void SPItem::invoke_hide(unsigned key)
@@ -1323,6 +1391,11 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
     }
 }
 
+// CPPIFY:: make pure virtual
+Geom::Affine CItem::onSetTransform(Geom::Affine const &transform) {
+	throw;
+}
+
 /**
  * Set a new transform on an object.
  *
@@ -1425,6 +1498,11 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
     _transformed_signal.emit(&advertized_transform, this);
 }
 
+// CPPIFY: see below, do not make pure?
+gint CItem::onEvent(SPEvent* event) {
+	return FALSE;
+}
+
 gint SPItem::emitEvent(SPEvent &event)
 {
     if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->event) {
@@ -1449,15 +1527,22 @@ void SPItem::set_item_transform(Geom::Affine const &transform_matrix)
     }
 }
 
-void SPItem::convert_item_to_guides() {
-    // Use derived method if present ...
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides) {
-        (*((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides)(this);
-    } else {
-        // .. otherwise simply place the guides around the item's bounding box
+void CItem::onConvertToGuides() {
+	// CPPIFY: If not overridden, call SPItem::convert_to_guides(), see below!
+	this->spitem->convert_to_guides();
+}
 
-        convert_to_guides();
-    }
+// CPPIFY: remove
+void SPItem::convert_item_to_guides() {
+//    // Use derived method if present ...
+//    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides) {
+//        (*((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides)(this);
+//    } else {
+//        // .. otherwise simply place the guides around the item's bounding box
+//
+//        convert_to_guides();
+//    }
+	this->citem->onConvertToGuides();
 }
 
 

@@ -100,6 +100,7 @@ public:
 
 class SPItem;
 class SPItemClass;
+class CItem;
 
 #define SP_TYPE_ITEM (SPItem::getType ())
 #define SP_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_ITEM, SPItem))
@@ -119,6 +120,8 @@ public:
         // includes everything: correctly done stroke (with proper miters and caps), markers, filter margins (e.g. blur)
         VISUAL_BBOX
     };
+
+    CItem* citem;
 
     unsigned int sensitive : 1;
     unsigned int stop_paint: 1;
@@ -244,6 +247,7 @@ private:
     static void mask_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
     friend class SPItemClass;
+    friend class CItem;
 };
 
 /// The SPItem vtable.
@@ -283,7 +287,35 @@ public:
 	static void sp_item_class_init(SPItemClass *klass);
 
 	friend class SPItem;
+	friend class CItem;
 };
+
+
+class CItem : public CObject {
+public:
+	CItem(SPItem* item);
+	virtual ~CItem();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void onPrint(SPPrintContext *ctx);
+	virtual gchar* onDescription();
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onHide(unsigned int key);
+    virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+    virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+    virtual void onConvertToGuides();
+    virtual gint onEvent(SPEvent *event);
+
+protected:
+	SPItem* spitem;
+};
+
 
 // Utility
 
