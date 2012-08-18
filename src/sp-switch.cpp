@@ -30,7 +30,7 @@ static void sp_switch_init (SPSwitch *group);
 
 static SPGroupClass * parent_class;
 
-GType CSwitch::getType (void)
+GType SPSwitch::getType (void)
 {
 	static GType switch_type = 0;
 	if (!switch_type) {
@@ -56,24 +56,27 @@ sp_switch_class_init (SPSwitchClass *) {
     parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
 }
 
-static void sp_switch_init (SPSwitch *group)
-{
-    if (group->group)
-        delete group->group;
-
-    group->group = new CSwitch(group);
-}
-
-CSwitch::CSwitch(SPGroup *group) : CGroup(group), _cached_item(NULL) {
+CSwitch::CSwitch(SPSwitch* sw) : CGroup(sw) {
+	this->spswitch = sw;
 }
 
 CSwitch::~CSwitch() {
-    _releaseLastItem(_cached_item);
 }
 
-SPObject *CSwitch::_evaluateFirst() {
+static void sp_switch_init (SPSwitch *sw)
+{
+    sw->cswitch = new CSwitch(sw);
+    sw->cgroup = sw->cswitch;
+    sw->clpeitem = sw->cswitch;
+    sw->citem = sw->cswitch;
+    sw->cobject = sw->cswitch;
+
+    sw->_cached_item = 0;
+}
+
+SPObject *SPSwitch::_evaluateFirst() {
     SPObject *first = 0;
-    for (SPObject *child = _group->firstChild() ; child && !first ; child = child->getNext() ) {
+    for (SPObject *child = this->firstChild() ; child && !first ; child = child->getNext() ) {
         if (SP_IS_ITEM(child) && sp_item_evaluate(SP_ITEM(child))) {
 	    first = child;
 	}
@@ -81,9 +84,9 @@ SPObject *CSwitch::_evaluateFirst() {
     return first;
 }
 
-GSList *CSwitch::_childList(bool add_ref, SPObject::Action action) {
+GSList *SPSwitch::_childList(bool add_ref, SPObject::Action action) {
     if ( action != SPObject::ActionGeneral ) {
-        return _group->childList(add_ref, action);
+        return this->childList(add_ref, action);
     }
 
     SPObject *child = _evaluateFirst();
@@ -96,28 +99,28 @@ GSList *CSwitch::_childList(bool add_ref, SPObject::Action action) {
     return g_slist_prepend (NULL, child);
 }
 
-gchar *CSwitch::getDescription() {
-    gint len = getItemCount();
+gchar *CSwitch::onDescription() {
+    gint len = this->spgroup->getItemCount();
     return g_strdup_printf(
             ngettext("<b>Conditional group</b> of <b>%d</b> object",
                  "<b>Conditional group</b> of <b>%d</b> objects",
                  len), len);
 }
 
-void CSwitch::onChildAdded(Inkscape::XML::Node *) {
-    _reevaluate(true);
+void CSwitch::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+    this->spswitch->_reevaluate(true);
 }
 
-void CSwitch::onChildRemoved(Inkscape::XML::Node *) {
-    _reevaluate();
+void CSwitch::onRemoveChild(Inkscape::XML::Node *) {
+	this->spswitch->_reevaluate();
 }
 
 void CSwitch::onOrderChanged (Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *)
 {
-    _reevaluate();
+	this->spswitch->_reevaluate();
 }
 
-void CSwitch::_reevaluate(bool /*add_to_drawing*/) {
+void SPSwitch::_reevaluate(bool /*add_to_drawing*/) {
     SPObject *evaluated_child = _evaluateFirst();
     if (!evaluated_child || _cached_item == evaluated_child) {
         return;
@@ -138,29 +141,29 @@ void CSwitch::_reevaluate(bool /*add_to_drawing*/) {
     }
 
     _cached_item = evaluated_child;
-    _release_connection = evaluated_child->connectRelease(sigc::bind(sigc::ptr_fun(&CSwitch::_releaseItem), this));
+    _release_connection = evaluated_child->connectRelease(sigc::bind(sigc::ptr_fun(&SPSwitch::_releaseItem), this));
 
-    _group->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 }
 
-void CSwitch::_releaseItem(SPObject *obj, CSwitch *selection)
+void SPSwitch::_releaseItem(SPObject *obj, SPSwitch *selection)
 {
     selection->_releaseLastItem(obj);
 }
 
-void CSwitch::_releaseLastItem(SPObject *obj)
+void SPSwitch::_releaseLastItem(SPObject *obj)
 {
-    if (NULL == _cached_item || _cached_item != obj)
+    if (NULL == this->_cached_item || this->_cached_item != obj)
         return;
 
-    _release_connection.disconnect();
-    _cached_item = NULL;
+    this->_release_connection.disconnect();
+    this->_cached_item = NULL;
 }
 
-void CSwitch::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {
-    SPObject *evaluated_child = _evaluateFirst();
+void SPSwitch::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {
+    SPObject *evaluated_child = this->_evaluateFirst();
 
-    GSList *l = _childList(false, SPObject::ActionShow);
+    GSList *l = this->_childList(false, SPObject::ActionShow);
     while (l) {
         SPObject *o = SP_OBJECT (l->data);
         if (SP_IS_ITEM (o)) {

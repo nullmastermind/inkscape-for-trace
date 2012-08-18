@@ -33,7 +33,10 @@ class DrawingItem;
 
 } // namespace Inkscape
 
-struct SPGroup : public SPLPEItem {
+class SPGroup : public SPLPEItem {
+public:
+    CGroup *cgroup;
+
     enum LayerMode { GROUP, LAYER, MASK_HELPER };
 
     LayerMode _layer_mode;
@@ -54,8 +57,9 @@ struct SPGroup : public SPLPEItem {
     void setLayerDisplayMode(unsigned int display_key, LayerMode mode);
     void translateChildItems(Geom::Translate const &tr);
 
-    CGroup *group;
-    
+    gint getItemCount();
+    void _showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags);
+
 private:
     void _updateLayerMode(unsigned int display_key=0);
 };
@@ -64,32 +68,42 @@ struct SPGroupClass {
     SPLPEItemClass parent_class;
 };
 
+
 /*
  * Virtual methods of SPGroup
  */
-class CGroup {
+class CGroup : public CLPEItem {
 public:
     CGroup(SPGroup *group);
     virtual ~CGroup();
     
-    virtual void onChildAdded(Inkscape::XML::Node *child);
-    virtual void onChildRemoved(Inkscape::XML::Node *child);
+    virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+   	virtual void onRelease();
+
+    virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+    virtual void onRemoveChild(Inkscape::XML::Node *child);
+    virtual void onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref);
+
     virtual void onUpdate(SPCtx *ctx, unsigned int flags);
     virtual void onModified(guint flags);
-    virtual Geom::OptRect bounds(SPItem::BBoxType type, Geom::Affine const &transform);
-    virtual void onPrint(SPPrintContext *ctx);
-    virtual void onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref);
-    virtual gchar *getDescription();
-    virtual Inkscape::DrawingItem *show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-    virtual void hide (unsigned int key);
+    virtual void onSet(unsigned int key, gchar const* value);
 
-    gint getItemCount();
+    virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+    virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
+    virtual void onPrint(SPPrintContext *ctx);
+    virtual gchar *onDescription();
+    virtual Inkscape::DrawingItem *onShow (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+    virtual void onHide (unsigned int key);
+
+    virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+
+    virtual void onUpdatePatheffect(bool write);
 
 protected:
-    virtual void _showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags);
-
-    SPGroup *_group;
+    SPGroup *spgroup;
 };
+
 
 GType sp_group_get_type (void);
 
