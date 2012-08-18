@@ -28,8 +28,12 @@
 
 class SPRect;
 class SPRectClass;
+class CRect;
 
-struct SPRect : public SPShape {
+class SPRect : public SPShape {
+public:
+	CRect* crect;
+
 	SVGLength x;
 	SVGLength y;
 	SVGLength width;
@@ -40,6 +44,30 @@ struct SPRect : public SPShape {
 
 struct SPRectClass {
 	SPShapeClass parent_class;
+};
+
+
+class CRect : public CShape {
+public:
+	CRect(SPRect* sprect);
+	virtual ~CRect();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+
+	void onSet(unsigned key, gchar const *value);
+	void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual gchar* onDescription();
+
+	void onSetShape();
+	virtual Geom::Affine onSetTransform(Geom::Affine const& xform);
+
+	void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	void onConvertToGuides();
+
+protected:
+	SPRect* sprect;
 };
 
 

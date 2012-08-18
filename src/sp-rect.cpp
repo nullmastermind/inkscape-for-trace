@@ -93,9 +93,22 @@ sp_rect_class_init(SPRectClass *klass)
     shape_class->set_shape = sp_rect_set_shape;
 }
 
+CRect::CRect(SPRect* rect) : CShape(rect) {
+	this->sprect = rect;
+}
+
+CRect::~CRect() {
+}
+
 static void
-sp_rect_init(SPRect */*rect*/)
+sp_rect_init(SPRect *rect)
 {
+	rect->crect = new CRect(rect);
+	rect->cshape = rect->crect;
+	rect->clpeitem = rect->crect;
+	rect->citem = rect->crect;
+	rect->cobject = rect->crect;
+
     /* Initializing to zero is automatic */
     /* sp_svg_length_unset(&rect->x, SP_SVG_UNIT_NONE, 0.0, 0.0); */
     /* sp_svg_length_unset(&rect->y, SP_SVG_UNIT_NONE, 0.0, 0.0); */
@@ -105,11 +118,10 @@ sp_rect_init(SPRect */*rect*/)
     /* sp_svg_length_unset(&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0); */
 }
 
-static void
-sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) parent_class)->build)
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
+void CRect::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPRect* object = this->sprect;
+
+    CShape::onBuild(doc, repr);
 
     object->readAttr( "x" );
     object->readAttr( "y" );
@@ -119,10 +131,16 @@ sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     object->readAttr( "ry" );
 }
 
+// CPPIFY: remove
 static void
-sp_rect_set(SPObject *object, unsigned key, gchar const *value)
+sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPRect *rect = SP_RECT(object);
+	((SPRect*)object)->crect->onBuild(document, repr);
+}
+
+void CRect::onSet(unsigned key, gchar const *value) {
+	SPRect* rect = this->sprect;
+	SPRect* object = rect;
 
     /* fixme: We need real error processing some time */
 
@@ -160,15 +178,21 @@ sp_rect_set(SPObject *object, unsigned key, gchar const *value)
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            if (((SPObjectClass *) parent_class)->set)
-                ((SPObjectClass *) parent_class)->set(object, key, value);
+            CShape::onSet(key, value);
             break;
     }
 }
 
+// CPPIFY: remove
 static void
-sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
+sp_rect_set(SPObject *object, unsigned key, gchar const *value)
 {
+	((SPRect*)object)->crect->onSet(key, value);
+}
+
+void CRect::onUpdate(SPCtx* ctx, unsigned int flags) {
+	SPRect* object = this->sprect;
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         SPRect *rect = (SPRect *) object;
         SPStyle *style = object->style;
@@ -187,14 +211,18 @@ sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
 
-    if (((SPObjectClass *) parent_class)->update)
-        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
+    CShape::onUpdate(ctx, flags);
 }
 
-static Inkscape::XML::Node *
-sp_rect_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+// CPPIFY: remove
+static void
+sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    SPRect *rect = SP_RECT(object);
+	((SPRect*)object)->crect->onUpdate(ctx, flags);
+}
+
+Inkscape::XML::Node * CRect::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPRect* rect = this->sprect;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:rect");
@@ -207,26 +235,34 @@ sp_rect_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML:
     sp_repr_set_svg_double(repr, "x", rect->x.computed);
     sp_repr_set_svg_double(repr, "y", rect->y.computed);
 
-    if (((SPObjectClass *) parent_class)->write)
-        ((SPObjectClass *) parent_class)->write(object, xml_doc, repr, flags);
+    CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
+// CPPIFY: remove
+static Inkscape::XML::Node *
+sp_rect_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPRect*)object)->crect->onWrite(xml_doc, repr, flags);
+}
+
+gchar* CRect::onDescription() {
+	g_return_val_if_fail(SP_IS_RECT(this->sprect), NULL);
+	return g_strdup(_("<b>Rectangle</b>"));
+}
+
+// CPPIFY: remove
 static gchar *
 sp_rect_description(SPItem *item)
 {
-    g_return_val_if_fail(SP_IS_RECT(item), NULL);
-
-    return g_strdup(_("<b>Rectangle</b>"));
+    return ((SPRect*)item)->crect->onDescription();
 }
 
 #define C1 0.554
 
-static void
-sp_rect_set_shape(SPShape *shape)
-{
-    SPRect *rect = (SPRect *) shape;
+void CRect::onSetShape() {
+    SPRect *rect = this->sprect;
 
     if ((rect->height.computed < 1e-18) || (rect->width.computed < 1e-18)) {
         SP_SHAPE(rect)->setCurveInsync( NULL, TRUE);
@@ -288,6 +324,13 @@ sp_rect_set_shape(SPShape *shape)
     c->unref();
 }
 
+// CPPIFY: remove
+static void
+sp_rect_set_shape(SPShape *shape)
+{
+    ((SPRect*)shape)->crect->onSetShape();
+}
+
 /* fixme: Think (Lauris) */
 
 void
@@ -328,18 +371,9 @@ sp_rect_set_ry(SPRect *rect, gboolean set, gdouble value)
     SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-/*
- * Initially we'll do:
- * Transform x, y, set x, y, clear translation
- */
-
-/* fixme: Use preferred units somehow (Lauris) */
-/* fixme: Alternately preserve whatever units there are (lauris) */
-
-static Geom::Affine
-sp_rect_set_transform(SPItem *item, Geom::Affine const &xform)
-{
-    SPRect *rect = SP_RECT(item);
+Geom::Affine CRect::onSetTransform(Geom::Affine const& xform) {
+    SPRect *rect = this->sprect;
+    SPRect* item = rect;
 
     /* Calculate rect start in parent coords. */
     Geom::Point pos( Geom::Point(rect->x.computed, rect->y.computed) * xform );
@@ -393,6 +427,21 @@ sp_rect_set_transform(SPItem *item, Geom::Affine const &xform)
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
     return ret;
+}
+
+/*
+ * Initially we'll do:
+ * Transform x, y, set x, y, clear translation
+ */
+
+/* fixme: Use preferred units somehow (Lauris) */
+/* fixme: Alternately preserve whatever units there are (lauris) */
+
+// CPPIFY: remove
+static Geom::Affine
+sp_rect_set_transform(SPItem *item, Geom::Affine const &xform)
+{
+    return ((SPRect*)item)->crect->onSetTransform(xform);
 }
 
 
@@ -551,11 +600,10 @@ sp_rect_get_visible_height(SPRect *rect)
         rect->transform);
 }
 
-/**
- * Sets the snappoint p to the unrounded corners of the rectangle
- */
-static void sp_rect_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
+void CRect::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+    SPRect *rect = this->sprect;
+    SPRect* item = rect;
+
     /* This method overrides sp_shape_snappoints, which is the default for any shape. The default method
     returns all eight points along the path of a rounded rectangle, but not the real corners. Snapping
     the startpoint and endpoint of each rounded corner is not very useful and really confusing. Instead
@@ -565,8 +613,6 @@ static void sp_rect_snappoints(SPItem const *item, std::vector<Inkscape::SnapCan
 
     g_assert(item != NULL);
     g_assert(SP_IS_RECT(item));
-
-    SPRect *rect = SP_RECT(item);
 
     Geom::Affine const i2dt (item->i2dt_affine ());
 
@@ -592,12 +638,20 @@ static void sp_rect_snappoints(SPItem const *item, std::vector<Inkscape::SnapCan
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         p.push_back(Inkscape::SnapCandidatePoint((p0 + p2)/2, Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT));
     }
-
 }
 
-void
-sp_rect_convert_to_guides(SPItem *item) {
-    SPRect *rect = SP_RECT(item);
+// CPPIFY: remove
+/**
+ * Sets the snappoint p to the unrounded corners of the rectangle
+ */
+static void sp_rect_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
+{
+	((SPRect*)item)->crect->onSnappoints(p, snapprefs);
+}
+
+void CRect::onConvertToGuides() {
+	SPRect* rect = this->sprect;
+	SPRect* item = rect;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (!prefs->getBool("/tools/shapes/rect/convertguides", true)) {
@@ -620,6 +674,12 @@ sp_rect_convert_to_guides(SPItem *item) {
     pts.push_back(std::make_pair(A4, A1));
 
     sp_guide_pt_pairs_to_guides(item->document, pts);
+}
+
+// CPPIFY: remove
+void
+sp_rect_convert_to_guides(SPItem *item) {
+    ((SPRect*)item)->crect->onConvertToGuides();
 }
 
 /*
