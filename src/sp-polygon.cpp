@@ -72,18 +72,34 @@ static void sp_polygon_class_init(SPPolygonClass *pc)
     item_class->description = sp_polygon_description;
 }
 
-static void sp_polygon_init(SPPolygon */*polygon*/)
-{
-    /* Nothing here */
+CPolygon::CPolygon(SPPolygon* polygon) : CShape(polygon) {
+	this->sppolygon = polygon;
 }
 
-static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+CPolygon::~CPolygon() {
+}
+
+static void sp_polygon_init(SPPolygon *polygon)
 {
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
+	polygon->cpolygon = new CPolygon(polygon);
+	polygon->cshape = polygon->cpolygon;
+	polygon->clpeitem = polygon->cpolygon;
+	polygon->citem = polygon->cpolygon;
+	polygon->cobject = polygon->cpolygon;
+}
+
+void CPolygon::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPPolygon* object = this->sppolygon;
+
+    CShape::onBuild(document, repr);
 
     object->readAttr( "points" );
+}
+
+// CPPIFY: remove
+static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+{
+	((SPPolygon*)object)->cpolygon->onBuild(document, repr);
 }
 
 
@@ -110,9 +126,9 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
     return g_strdup(os.str().c_str());
 }
 
-static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPShape *shape = SP_SHAPE(object);
+Inkscape::XML::Node* CPolygon::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    SPShape *shape = this->sppolygon;
+
     // Tolerable workaround: we need to update the object's curve before we set points=
     // because it's out of sync when e.g. some extension attrs of the polygon or star are changed in XML editor
     shape->setShape();
@@ -126,11 +142,15 @@ static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Do
     repr->setAttribute("points", str);
     g_free(str);
 
-    if (((SPObjectClass *) (parent_class))->write) {
-        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
-    }
+    CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
+}
+
+// CPPIFY: remove
+static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPPolygon*)object)->cpolygon->onWrite(xml_doc, repr, flags);
 }
 
 
@@ -154,10 +174,8 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
     return true;
 }
 
-
-void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
-{
-    SPPolygon *polygon = SP_POLYGON(object);
+void CPolygon::onSet(unsigned int key, const gchar* value) {
+    SPPolygon *polygon = this->sppolygon;
 
     switch (key) {
         case SP_ATTR_POINTS: {
@@ -213,16 +231,25 @@ void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
             break;
         }
         default:
-            if (((SPObjectClass *) parent_class)->set) {
-                ((SPObjectClass *) parent_class)->set(object, key, value);
-            }
+            CShape::onSet(key, value);
             break;
     }
 }
 
-static gchar *sp_polygon_description(SPItem */*item*/)
+// CPPIFY: remove
+void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
 {
-    return g_strdup(_("<b>Polygon</b>"));
+	((SPPolygon*)object)->cpolygon->onSet(key, value);
+}
+
+gchar* CPolygon::onDescription() {
+	return g_strdup(_("<b>Polygon</b>"));
+}
+
+// CPPIFY: remove
+static gchar *sp_polygon_description(SPItem *item)
+{
+    return ((SPPolygon*)item)->cpolygon->onDescription();
 }
 
 /*

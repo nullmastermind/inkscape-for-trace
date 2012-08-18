@@ -21,12 +21,32 @@
 #define SP_IS_POLYGON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_POLYGON))
 #define SP_IS_POLYGON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_POLYGON))
 
-struct SPPolygon : public SPShape {
+class CPolygon;
+
+class SPPolygon : public SPShape {
+public:
+	CPolygon* cpolygon;
 };
 
 struct SPPolygonClass {
 	SPShapeClass parent_class;
 };
+
+
+class CPolygon : public CShape {
+public:
+	CPolygon(SPPolygon* polygon);
+	virtual ~CPolygon();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual gchar* onDescription();
+
+protected:
+	SPPolygon* sppolygon;
+};
+
 
 GType sp_polygon_get_type (void);
 
