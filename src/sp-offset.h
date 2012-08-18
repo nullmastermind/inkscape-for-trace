@@ -24,6 +24,7 @@
 
 class SPOffset;
 class SPOffsetClass;
+class COffset;
 class SPUseReference;
 
 /**
@@ -54,7 +55,10 @@ class SPUseReference;
  * points, or more precisely one control point, that's enough to define the
  * radius (look in object-edit).
  */
-struct SPOffset : public SPShape {
+class SPOffset : public SPShape {
+public:
+	COffset* coffset;
+
     void *originalPath; ///< will be a livarot Path, just don't declare it here to please the gcc linker
     char *original;     ///< SVG description of the source path
     float rad;          ///< offset radius
@@ -81,6 +85,27 @@ struct SPOffset : public SPShape {
 struct SPOffsetClass
 {
   SPShapeClass parent_class;
+};
+
+
+class COffset : public CShape {
+public:
+	COffset(SPOffset* offset);
+	~COffset();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onRelease();
+
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual gchar* onDescription();
+
+	virtual void onSetShape();
+
+protected:
+	SPOffset* spoffset;
 };
 
 

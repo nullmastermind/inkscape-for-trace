@@ -162,12 +162,25 @@ sp_offset_class_init(SPOffsetClass *klass)
     shape_class->set_shape = sp_offset_set_shape;
 }
 
+COffset::COffset(SPOffset* offset) : CShape(offset) {
+	this->spoffset = offset;
+}
+
+COffset::~COffset() {
+}
+
 /**
  * Callback for SPOffset object initialization.
  */
 static void
 sp_offset_init(SPOffset *offset)
 {
+	offset->coffset = new COffset(offset);
+	offset->cshape = offset->coffset;
+	offset->clpeitem = offset->coffset;
+	offset->citem = offset->coffset;
+	offset->cobject = offset->coffset;
+
     offset->rad = 1.0;
     offset->original = NULL;
     offset->originalPath = NULL;
@@ -207,14 +220,10 @@ sp_offset_finalize(GObject *obj)
     offset->_transformed_connection.~connection();
 }
 
-/**
- * Virtual build: set offset attributes from corresponding repr.
- */
-static void
-sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) parent_class)->build)
-        ((SPObjectClass *) parent_class)->build (object, document, repr);
+void COffset::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPOffset* object = this->spoffset;
+
+    CShape::onBuild(document, repr);
 
     //XML Tree being used directly here while it shouldn't be.
     if (object->getRepr()->attribute("inkscape:radius")) {
@@ -255,13 +264,19 @@ sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
     }
 }
 
+// CPPIFY: remove
 /**
- * Virtual write: write offset attributes to corresponding repr.
+ * Virtual build: set offset attributes from corresponding repr.
  */
-static Inkscape::XML::Node *
-sp_offset_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void
+sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPOffset *offset = SP_OFFSET (object);
+	((SPOffset*)object)->coffset->onBuild(document, repr);
+}
+
+Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPOffset* object = this->spoffset;
+    SPOffset *offset = object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:path");
@@ -290,19 +305,23 @@ sp_offset_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XM
     repr->setAttribute("d", d);
     g_free (d);
 
-    if (((SPObjectClass *) (parent_class))->write)
-        ((SPObjectClass *) (parent_class))->write (object, xml_doc, repr,
-                                                   flags | SP_SHAPE_WRITE_PATH);
+    CShape::onWrite(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
 }
 
+// CPPIFY: remove
 /**
- * Virtual release callback.
+ * Virtual write: write offset attributes to corresponding repr.
  */
-static void
-sp_offset_release(SPObject *object)
+static Inkscape::XML::Node *
+sp_offset_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+	return ((SPOffset*)object)->coffset->onWrite(xml_doc, repr, flags);
+}
+
+void COffset::onRelease() {
+	SPOffset* object = this->spoffset;
     SPOffset *offset = (SPOffset *) object;
 
     if (offset->original) free (offset->original);
@@ -317,20 +336,22 @@ sp_offset_release(SPObject *object)
     offset->sourceHref = NULL;
     offset->sourceRef->detach();
 
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release (object);
-    }
-
+    CShape::onRelease();
 }
 
+// CPPIFY: remove
 /**
- * Set callback: the function that is called whenever a change is made to
- * the description of the object.
+ * Virtual release callback.
  */
 static void
-sp_offset_set(SPObject *object, unsigned key, gchar const *value)
+sp_offset_release(SPObject *object)
 {
-    SPOffset *offset = SP_OFFSET (object);
+	((SPOffset*)object)->coffset->onRelease();
+}
+
+void COffset::onSet(unsigned int key, const gchar* value) {
+	SPOffset* object = this->spoffset;
+    SPOffset *offset = object;
 
     if ( offset->sourceDirty ) refresh_offset_source(offset);
 
@@ -389,19 +410,26 @@ sp_offset_set(SPObject *object, unsigned key, gchar const *value)
             }
             break;
         default:
-            if (((SPObjectClass *) parent_class)->set)
-                ((SPObjectClass *) parent_class)->set (object, key, value);
+            CShape::onSet(key, value);
             break;
     }
 }
 
+// CPPIFY: remove
 /**
- * Update callback: the object has changed, recompute its shape.
+ * Set callback: the function that is called whenever a change is made to
+ * the description of the object.
  */
 static void
-sp_offset_update(SPObject *object, SPCtx *ctx, guint flags)
+sp_offset_set(SPObject *object, unsigned key, gchar const *value)
 {
-    SPOffset* offset = SP_OFFSET(object);
+	((SPOffset*)object)->coffset->onSet(key, value);
+}
+
+void COffset::onUpdate(SPCtx *ctx, guint flags) {
+	SPOffset* object = this->spoffset;
+    SPOffset* offset = object;
+
     offset->isUpdating=true; // prevent sp_offset_set from requesting updates
     if ( offset->sourceDirty ) refresh_offset_source(offset);
     if (flags &
@@ -411,17 +439,22 @@ sp_offset_update(SPObject *object, SPCtx *ctx, guint flags)
     }
     offset->isUpdating=false;
 
-    if (((SPObjectClass *) parent_class)->update)
-        ((SPObjectClass *) parent_class)->update (object, ctx, flags);
+    CShape::onUpdate(ctx, flags);
 }
 
+// CPPIFY: remove
 /**
- * Returns a textual description of object.
+ * Update callback: the object has changed, recompute its shape.
  */
-static gchar *
-sp_offset_description(SPItem *item)
+static void
+sp_offset_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    SPOffset *offset = SP_OFFSET (item);
+    ((SPOffset*)object)->coffset->onUpdate(ctx, flags);
+}
+
+gchar* COffset::onDescription() {
+	SPOffset* item = this->spoffset;
+    SPOffset *offset = item;
 
     if ( offset->sourceHref ) {
         // TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
@@ -434,13 +467,19 @@ sp_offset_description(SPItem *item)
     }
 }
 
+// CPPIFY: remove
 /**
- * Compute and set shape's offset.
+ * Returns a textual description of object.
  */
-static void
-sp_offset_set_shape(SPShape *shape)
+static gchar *
+sp_offset_description(SPItem *item)
 {
-    SPOffset *offset = SP_OFFSET (shape);
+	return ((SPOffset*)item)->coffset->onDescription();
+}
+
+void COffset::onSetShape() {
+	SPOffset* shape = this->spoffset;
+    SPOffset *offset = shape;
 
     if ( offset->originalPath == NULL ) {
         // oops : no path?! (the offset object should do harakiri)
@@ -720,14 +759,27 @@ sp_offset_set_shape(SPShape *shape)
     }
 }
 
+// CPPIFY: remove
+/**
+ * Compute and set shape's offset.
+ */
+static void
+sp_offset_set_shape(SPShape *shape)
+{
+	((SPOffset*)shape)->coffset->onSetShape();
+}
+
+void COffset::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+    CShape::onSnappoints(p, snapprefs);
+}
+
+// CPPIFY: remove
 /**
  * Virtual snappoints function.
  */
 static void sp_offset_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
 {
-    if (((SPItemClass *) parent_class)->snappoints) {
-        ((SPItemClass *) parent_class)->snappoints (item, p, snapprefs);
-    }
+	((SPOffset*)item)->coffset->onSnappoints(p, snapprefs);
 }
 
 
