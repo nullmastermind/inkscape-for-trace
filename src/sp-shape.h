@@ -32,12 +32,15 @@
 
 class SPDesktop;
 namespace Inkscape { class DrawingItem; }
+class CShape;
 
 /**
  * Base class for shapes, including <path> element
  */
 class SPShape : public SPLPEItem {
 public:
+	CShape* cshape;
+
     static GType getType (void);
     void setShape ();
     SPCurve * getCurve () const;
@@ -79,6 +82,7 @@ private:
 
 
     friend class SPShapeClass;	
+    friend class CShape;
 };
 
 class SPShapeClass {
@@ -94,6 +98,35 @@ private:
 
     friend class SPShape;
 };
+
+
+class CShape : public CLPEItem {
+public:
+	CShape(SPShape* shape);
+	virtual ~CShape();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
+	virtual void onPrint(SPPrintContext* ctx);
+
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onHide(unsigned int key);
+
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+
+	virtual void onSetShape();
+
+protected:
+	SPShape* spshape;
+};
+
 
 void sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value);
 
