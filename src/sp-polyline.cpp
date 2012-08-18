@@ -59,24 +59,39 @@ void SPPolyLineClass::sp_polyline_class_init(SPPolyLineClass *klass)
     item_class->description = SPPolyLine::getDescription;
 }
 
-void SPPolyLine::init(SPPolyLine * /*polyline*/)
-{
-    /* Nothing here */
+CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {
+	this->sppolyline = polyline;
 }
 
-void SPPolyLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
+CPolyLine::~CPolyLine() {
+}
 
-    if (((SPObjectClass *) SPPolyLineClass::static_parent_class)->build) {
-        ((SPObjectClass *) SPPolyLineClass::static_parent_class)->build (object, document, repr);
-    }
+void SPPolyLine::init(SPPolyLine * polyline)
+{
+	polyline->cpolyline = new CPolyLine(polyline);
+	polyline->cshape = polyline->cpolyline;
+	polyline->clpeitem = polyline->cpolyline;
+	polyline->citem = polyline->cpolyline;
+	polyline->cobject = polyline->cpolyline;
+}
+
+void CPolyLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+	SPPolyLine* object = this->sppolyline;
+
+    CShape::onBuild(document, repr);
 
     object->readAttr( "points" );
 }
 
-void SPPolyLine::set(SPObject *object, unsigned int key, const gchar *value)
+// CPPIFY: remove
+void SPPolyLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
-    SPPolyLine *polyline = SP_POLYLINE(object);
+	((SPPolyLine*)object)->cpolyline->onBuild(document, repr);
+}
+
+void CPolyLine::onSet(unsigned int key, const gchar* value) {
+	SPPolyLine* object = this->sppolyline;
+    SPPolyLine *polyline = object;
 
     switch (key) {
 	case SP_ATTR_POINTS: {
@@ -125,16 +140,22 @@ void SPPolyLine::set(SPObject *object, unsigned int key, const gchar *value)
             break;
 	}
 	default:
-            if (((SPObjectClass *) SPPolyLineClass::static_parent_class)->set) {
-                ((SPObjectClass *) SPPolyLineClass::static_parent_class)->set (object, key, value);
-            }
+            CShape::onSet(key, value);
             break;
     }
 }
 
-Inkscape::XML::Node *SPPolyLine::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+// CPPIFY: remove
+void SPPolyLine::set(SPObject *object, unsigned int key, const gchar *value)
 {
-    SP_POLYLINE(object);
+	((SPPolyLine*)object)->cpolyline->onSet(key, value);
+}
+
+Inkscape::XML::Node* CPolyLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPPolyLine* object = this->sppolyline;
+
+	// CPPIFY: This is a simple type check?
+    //SP_POLYLINE(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polyline");
@@ -144,16 +165,25 @@ Inkscape::XML::Node *SPPolyLine::write(SPObject *object, Inkscape::XML::Document
         repr->mergeFrom(object->getRepr(), "id");
     }
 
-    if (((SPObjectClass *) (SPPolyLineClass::static_parent_class))->write) {
-        ((SPObjectClass *) (SPPolyLineClass::static_parent_class))->write (object, xml_doc, repr, flags);
-    }
+    CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar *SPPolyLine::getDescription(SPItem * /*item*/)
+// CPPIFY: remove
+Inkscape::XML::Node *SPPolyLine::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    return g_strdup(_("<b>Polyline</b>"));
+	return ((SPPolyLine*)object)->cpolyline->onWrite(xml_doc, repr, flags);
+}
+
+gchar* CPolyLine::onDescription() {
+	return g_strdup(_("<b>Polyline</b>"));
+}
+
+// CPPIFY: remove
+gchar *SPPolyLine::getDescription(SPItem * item)
+{
+	return ((SPPolyLine*)item)->cpolyline->onDescription();
 }
 
 

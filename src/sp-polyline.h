@@ -13,9 +13,12 @@
 
 class SPPolyLine;
 class SPPolyLineClass;
+class CPolyLine;
 
 class SPPolyLine : public SPShape {
 public:
+	CPolyLine* cpolyline;
+
     static GType sp_polyline_get_type (void);
 
 private:
@@ -40,6 +43,23 @@ private:
 
     friend class SPPolyLine;	
 };
+
+
+class CPolyLine : public CShape {
+public:
+	CPolyLine(SPPolyLine* polyline);
+	virtual ~CPolyLine();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual gchar* onDescription();
+
+protected:
+	SPPolyLine* sppolyline;
+};
+
 
 #endif // SEEN_SP_POLYLINE_H
 
