@@ -27,8 +27,12 @@
 
 class SPGenericEllipse;
 class SPGenericEllipseClass;
+class CGenericEllipse;
 
-struct SPGenericEllipse : public SPShape {
+class SPGenericEllipse : public SPShape {
+public:
+	CGenericEllipse* cgenericEllipse;
+
 	SVGLength cx;
 	SVGLength cy;
 	SVGLength rx;
@@ -41,6 +45,25 @@ struct SPGenericEllipse : public SPShape {
 struct SPGenericEllipseClass {
 	SPShapeClass parent_class;
 };
+
+
+class CGenericEllipse : public CShape {
+public:
+	CGenericEllipse(SPGenericEllipse* genericEllipse);
+	virtual ~CGenericEllipse();
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual void onSetShape();
+
+	virtual void onUpdatePatheffect(bool write);
+
+protected:
+	SPGenericEllipse* spgenericEllipse;
+};
+
 
 GType sp_genericellipse_get_type (void);
 
@@ -55,12 +78,32 @@ void sp_genericellipse_normalize (SPGenericEllipse *ellipse);
 #define SP_IS_ELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ELLIPSE))
 #define SP_IS_ELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ELLIPSE))
 
-struct SPEllipse : public SPGenericEllipse {
+class CEllipse;
+
+class SPEllipse : public SPGenericEllipse {
+public:
+	CEllipse* cellipse;
 };
 
 struct SPEllipseClass {
 	SPGenericEllipseClass parent_class;
 };
+
+
+class CEllipse : public CGenericEllipse {
+public:
+	CEllipse(SPEllipse* ellipse);
+	virtual ~CEllipse();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual gchar* onDescription();
+
+protected:
+	SPEllipse* spellipse;
+};
+
 
 GType sp_ellipse_get_type (void);
 
@@ -74,12 +117,32 @@ void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble
 #define SP_IS_CIRCLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CIRCLE))
 #define SP_IS_CIRCLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_CIRCLE))
 
-struct SPCircle : public SPGenericEllipse {
+class CCircle;
+
+class SPCircle : public SPGenericEllipse {
+public:
+	CCircle* ccircle;
 };
 
 struct SPCircleClass {
 	SPGenericEllipseClass parent_class;
 };
+
+
+class CCircle : public CGenericEllipse {
+public:
+	CCircle(SPCircle* circle);
+	virtual ~CCircle();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual gchar* onDescription();
+
+protected:
+	SPCircle* spcircle;
+};
+
 
 GType sp_circle_get_type (void);
 
@@ -91,12 +154,33 @@ GType sp_circle_get_type (void);
 #define SP_IS_ARC(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ARC))
 #define SP_IS_ARC_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ARC))
 
-struct SPArc : public SPGenericEllipse {
+class CArc;
+
+class SPArc : public SPGenericEllipse {
+public:
+	CArc* carc;
 };
 
 struct SPArcClass {
 	SPGenericEllipseClass parent_class;
 };
+
+
+class CArc : public CGenericEllipse {
+public:
+	CArc(SPArc* arc);
+	virtual ~CArc();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual gchar* onDescription();
+	virtual void onModified(unsigned int flags);
+
+protected:
+	SPArc* sparc;
+};
+
 
 GType sp_arc_get_type (void);
 void sp_arc_position_set (SPArc * arc, gdouble x, gdouble y, gdouble rx, gdouble ry);
