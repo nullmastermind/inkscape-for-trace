@@ -509,7 +509,6 @@ void SPShape::sp_shape_update_marker_view(SPShape *shape, Inkscape::DrawingItem 
 
 void CShape::onModified(unsigned int flags) {
 	SPShape* shape = this->spshape;
-	SPShape* object = shape;
 
     CLPEItem::onModified(flags);
 
@@ -1081,9 +1080,7 @@ void CShape::onSetShape() {
  */
 void SPShape::setShape()
 {
-    if (SP_SHAPE_CLASS (G_OBJECT_GET_CLASS (this))->set_shape) {
-      SP_SHAPE_CLASS (G_OBJECT_GET_CLASS (this))->set_shape (this);
-    }
+	this->cshape->onSetShape();
 }
 
 /**
