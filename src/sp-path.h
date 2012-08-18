@@ -20,6 +20,7 @@
 #include "sp-conn-end-pair.h"
 
 class SPCurve;
+class CPath;
 
 #define SP_TYPE_PATH (sp_path_get_type ())
 #define SP_PATH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PATH, SPPath))
@@ -30,6 +31,8 @@ class SPCurve;
  */
 class SPPath : public SPShape {
 public:
+	CPath* cpath;
+
     gint nodesInPath() const;
 
     // still in lowercase because the names should be clearer on whether curve, curve->copy or curve-ref is returned.
@@ -49,6 +52,30 @@ public:
 struct SPPathClass {
     SPShapeClass shape_class;
 };
+
+
+class CPath : public CShape {
+public:
+	CPath(SPPath* path);
+	~CPath();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual gchar* onDescription();
+	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+    virtual void onConvertToGuides();
+
+    virtual void onUpdatePatheffect(bool write);
+
+protected:
+	SPPath* sppath;
+};
+
 
 GType sp_path_get_type (void);
 

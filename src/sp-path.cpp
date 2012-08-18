@@ -129,9 +129,9 @@ gint SPPath::nodesInPath() const
     return _curve ? _curve->nodes_in_path() : 0;
 }
 
-static gchar *
-sp_path_description(SPItem * item)
-{
+gchar* CPath::onDescription() {
+	SPPath* item = this->sppath;
+
     int count = SP_PATH(item)->nodesInPath();
     if (SP_IS_LPE_ITEM(item) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
 
@@ -157,10 +157,16 @@ sp_path_description(SPItem * item)
     }
 }
 
-static void
-sp_path_convert_to_guides(SPItem *item)
+// CPPIFY: remove
+static gchar *
+sp_path_description(SPItem * item)
 {
-    SPPath *path = SP_PATH(item);
+	return ((SPPath*)item)->cpath->onDescription();
+}
+
+void CPath::onConvertToGuides() {
+	SPPath* item = this->sppath;
+    SPPath *path = item;
 
     if (!path->_curve) {
         return;
@@ -184,12 +190,32 @@ sp_path_convert_to_guides(SPItem *item)
     sp_guide_pt_pairs_to_guides(item->document, pts);
 }
 
+// CPPIFY: remove
+static void
+sp_path_convert_to_guides(SPItem *item)
+{
+	((SPPath*)item)->cpath->onConvertToGuides();
+}
+
+CPath::CPath(SPPath* path) : CShape(path) {
+	this->sppath = path;
+}
+
+CPath::~CPath() {
+}
+
 /**
  * Initializes an SPPath.
  */
 static void
 sp_path_init(SPPath *path)
 {
+	path->cpath = new CPath(path);
+	path->cshape = path->cpath;
+	path->clpeitem = path->cpath;
+	path->citem = path->cpath;
+	path->cobject = path->cpath;
+
     new (&path->connEndPair) SPConnEndPair(path);
 }
 
@@ -201,13 +227,9 @@ sp_path_finalize(GObject *obj)
     path->connEndPair.~SPConnEndPair();
 }
 
-/**
- *  Given a repr, this sets the data items in the path object such as
- *  fill & style attributes, markers, and CSS properties.
- */
-static void
-sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+void CPath::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPPath* object = this->sppath;
+
     /* Are these calls actually necessary? */
     object->readAttr( "marker" );
     object->readAttr( "marker-start" );
@@ -216,9 +238,7 @@ sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 
     sp_conn_end_pair_build(object);
 
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
+    CShape::onBuild(document, repr);
 
     object->readAttr( "inkscape:original-d" );
     object->readAttr( "d" );
@@ -230,25 +250,35 @@ sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     }
 }
 
+// CPPIFY: remove
+/**
+ *  Given a repr, this sets the data items in the path object such as
+ *  fill & style attributes, markers, and CSS properties.
+ */
 static void
-sp_path_release(SPObject *object)
+sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPPath *path = SP_PATH(object);
+	((SPPath*)object)->cpath->onBuild(document, repr);
+}
+
+void CPath::onRelease() {
+	SPPath* object = this->sppath;
+    SPPath *path = object;
 
     path->connEndPair.release();
 
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+    CShape::onRelease();
 }
 
-/**
- *  Sets a value in the path object given by 'key', to 'value'.  This is used
- *  for setting attributes and markers on a path object.
- */
+// CPPIFY: remove
 static void
-sp_path_set(SPObject *object, unsigned int key, gchar const *value)
+sp_path_release(SPObject *object)
 {
+	((SPPath*)object)->cpath->onRelease();
+}
+
+void CPath::onSet(unsigned int key, const gchar* value) {
+	SPPath* object = this->sppath;
     SPPath *path = (SPPath *) object;
 
     switch (key) {
@@ -294,21 +324,25 @@ sp_path_set(SPObject *object, unsigned int key, gchar const *value)
             path->connEndPair.setAttr(key, value);
             break;
         default:
-            if (((SPObjectClass *) parent_class)->set) {
-                ((SPObjectClass *) parent_class)->set(object, key, value);
-            }
+            CShape::onSet(key, value);
             break;
     }
 }
 
+// CPPIFY: remove
 /**
- *
- * Writes the path object into a Inkscape::XML::Node
+ *  Sets a value in the path object given by 'key', to 'value'.  This is used
+ *  for setting attributes and markers on a path object.
  */
-static Inkscape::XML::Node *
-sp_path_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void
+sp_path_set(SPObject *object, unsigned int key, gchar const *value)
 {
-    SPShape *shape = (SPShape *) object;
+	((SPPath*)object)->cpath->onSet(key, value);
+}
+
+Inkscape::XML::Node* CPath::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPPath* object = this->sppath;
+	SPShape *shape = (SPShape *) object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:path");
@@ -337,35 +371,45 @@ g_message("sp_path_write writes 'd' attribute");
 
     SP_PATH(shape)->connEndPair.writeRepr(repr);
 
-    if (((SPObjectClass *)(parent_class))->write) {
-        ((SPObjectClass *)(parent_class))->write(object, xml_doc, repr, flags);
-    }
+    CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
+// CPPIFY: remove
+/**
+ *
+ * Writes the path object into a Inkscape::XML::Node
+ */
+static Inkscape::XML::Node *
+sp_path_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPPath*)object)->cpath->onWrite(xml_doc, repr, flags);
+}
+
+void CPath::onUpdate(SPCtx *ctx, guint flags) {
+	SPPath* object = this->sppath;
+
+	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+	        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
+	    }
+
+	    CShape::onUpdate(ctx, flags);
+
+	    SPPath *path = SP_PATH(object);
+	    path->connEndPair.update();
+}
+
+// CPPIFY: remove
 static void
 sp_path_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
-    }
-
-    if (((SPObjectClass *) parent_class)->update) {
-        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
-    }
-
-    SPPath *path = SP_PATH(object);
-    path->connEndPair.update();
+	((SPPath*)object)->cpath->onUpdate(ctx, flags);
 }
 
+Geom::Affine CPath::onSetTransform(Geom::Affine const &transform) {
+	SPPath* item = this->sppath;
 
-/**
- * Writes the given transform into the repr for the given item.
- */
-static Geom::Affine
-sp_path_set_transform(SPItem *item, Geom::Affine const &xform)
-{
     if (!SP_IS_PATH(item)) {
         return Geom::identity();
     }
@@ -379,25 +423,25 @@ sp_path_set_transform(SPItem *item, Geom::Affine const &xform)
     if (path->_curve_before_lpe && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(item))) {
         if (sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(item), Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
             // if path has the CLONE_ORIGINAL LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-            return xform;
+            return transform;
         } else {
-            path->_curve_before_lpe->transform(xform);
+            path->_curve_before_lpe->transform(transform);
         }
     } else {
-        path->_curve->transform(xform);
+        path->_curve->transform(transform);
     }
 
     // Adjust stroke
-    item->adjust_stroke(xform.descrim());
+    item->adjust_stroke(transform.descrim());
 
     // Adjust pattern fill
-    item->adjust_pattern(xform);
+    item->adjust_pattern(transform);
 
     // Adjust gradient fill
-    item->adjust_gradient(xform);
+    item->adjust_gradient(transform);
 
     // Adjust LPE
-    item->adjust_livepatheffect(xform);
+    item->adjust_livepatheffect(transform);
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
@@ -405,11 +449,20 @@ sp_path_set_transform(SPItem *item, Geom::Affine const &xform)
     return Geom::identity();
 }
 
-
-static void
-sp_path_update_patheffect(SPLPEItem *lpeitem, bool write)
+// CPPIFY: remove
+/**
+ * Writes the given transform into the repr for the given item.
+ */
+static Geom::Affine
+sp_path_set_transform(SPItem *item, Geom::Affine const &xform)
 {
+	return ((SPPath*)item)->cpath->onSetTransform(xform);
+}
+
+void CPath::onUpdatePatheffect(bool write) {
+	SPPath* lpeitem = this->sppath;
     SPShape * const shape = (SPShape *) lpeitem;
+
     Inkscape::XML::Node *repr = shape->getRepr();
 
 #ifdef PATH_VERBOSE
@@ -449,6 +502,13 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
         shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         curve->unref();
     }
+}
+
+// CPPIFY: remove
+static void
+sp_path_update_patheffect(SPLPEItem *lpeitem, bool write)
+{
+	((SPPath*)lpeitem)->cpath->onUpdatePatheffect(write);
 }
 
 
