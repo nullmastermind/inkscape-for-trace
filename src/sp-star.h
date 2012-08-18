@@ -26,13 +26,17 @@
 
 class SPStar;
 class SPStarClass;
+class CStar;
 
 typedef enum {
 	SP_STAR_POINT_KNOT1,
 	SP_STAR_POINT_KNOT2
 } SPStarPoint;
 
-struct SPStar : public SPPolygon {
+class SPStar : public SPPolygon {
+public:
+	CStar* cstar;
+
 	gint sides;
 
 	Geom::Point center;
@@ -47,6 +51,31 @@ struct SPStar : public SPPolygon {
 struct SPStarClass {
 	SPPolygonClass parent_class;
 };
+
+// CPPIFY: This derivation is a bit weird.
+// parent_class = reinterpret_cast<SPShapeClass *>(g_type_class_ref(SP_TYPE_SHAPE));
+// So shouldn't star be derived from shape instead of polygon?
+// What does polygon have that shape doesn't?
+class CStar : public CPolygon {
+public:
+	CStar(SPStar* star);
+	virtual ~CStar();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+
+	virtual gchar* onDescription();
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+
+	virtual void onUpdatePatheffect(bool write);
+	virtual void onSetShape();
+
+protected:
+	SPStar* spstar;
+};
+
 
 GType sp_star_get_type (void);
 

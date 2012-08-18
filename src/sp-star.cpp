@@ -91,9 +91,23 @@ static void sp_star_class_init(SPStarClass *klass)
     shape_class->set_shape = sp_star_set_shape;
 }
 
+CStar::CStar(SPStar* star) : CPolygon(star) {
+	this->spstar = star;
+}
+
+CStar::~CStar() {
+}
+
 static void
 sp_star_init (SPStar * star)
 {
+	star->cstar = new CStar(star);
+	star->cpolygon = star->cstar;
+	star->cshape = star->cstar;
+	star->clpeitem = star->cstar;
+	star->citem = star->cstar;
+	star->cobject = star->cstar;
+
     star->sides = 5;
     star->center = Geom::Point(0, 0);
     star->r[0] = 1.0;
@@ -104,11 +118,11 @@ sp_star_init (SPStar * star)
     star->randomized = 0.0;
 }
 
-static void
-sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-    if (((SPObjectClass *) parent_class)->build)
-        ((SPObjectClass *) parent_class)->build (object, document, repr);
+void CStar::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+	SPStar* object = this->spstar;
+
+	// CPPIFY: see header file
+    CShape::onBuild(document, repr);
 
     object->readAttr( "sodipodi:cx" );
     object->readAttr( "sodipodi:cy" );
@@ -122,10 +136,16 @@ sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * r
     object->readAttr( "inkscape:randomized" );
 }
 
-static Inkscape::XML::Node *
-sp_star_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+// CPPIFY: remove
+static void
+sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
-    SPStar *star = SP_STAR (object);
+	((SPStar*)object)->cstar->onBuild(document, repr);
+}
+
+Inkscape::XML::Node* CStar::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPStar* object = this->spstar;
+    SPStar *star = object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:path");
@@ -150,18 +170,24 @@ sp_star_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML
     repr->setAttribute("d", d);
     g_free (d);
 
-    if (((SPObjectClass *) (parent_class))->write)
-        ((SPObjectClass *) (parent_class))->write (object, xml_doc, repr, flags);
+    // CPPIFY: see header file
+    CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-static void
-sp_star_set (SPObject *object, unsigned int key, const gchar *value)
+// CPPIFY: remove
+static Inkscape::XML::Node *
+sp_star_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    SVGLength::Unit unit;
+	return ((SPStar*)object)->cstar->onWrite(xml_doc, repr, flags);
+}
 
-    SPStar *star = SP_STAR (object);
+void CStar::onSet(unsigned int key, const gchar* value) {
+    SPStar* object = this->spstar;
+    SPStar *star = object;
+
+    SVGLength::Unit unit;
 
     /* fixme: we should really collect updates */
     switch (key) {
@@ -250,29 +276,43 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
         object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     default:
-        if (((SPObjectClass *) parent_class)->set)
-            ((SPObjectClass *) parent_class)->set (object, key, value);
+    	// CPPIFY: see header file
+        CShape::onSet(key, value);
         break;
     }
 }
 
+// CPPIFY: remove
 static void
-sp_star_update (SPObject *object, SPCtx *ctx, guint flags)
+sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 {
+	((SPStar*)object)->cstar->onSet(key, value);
+}
+
+void CStar::onUpdate(SPCtx *ctx, guint flags) {
+	SPStar* object = this->spstar;
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG |
              SP_OBJECT_STYLE_MODIFIED_FLAG |
              SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         ((SPShape *) object)->setShape ();
     }
 
-    if (((SPObjectClass *) parent_class)->update)
-        ((SPObjectClass *) parent_class)->update (object, ctx, flags);
+    // CPPIFY: see header file
+    CShape::onUpdate(ctx, flags);
 }
 
+// CPPIFY: remove
 static void
-sp_star_update_patheffect(SPLPEItem *lpeitem, bool write)
+sp_star_update (SPObject *object, SPCtx *ctx, guint flags)
 {
+	((SPStar*)object)->cstar->onUpdate(ctx, flags);
+}
+
+void CStar::onUpdatePatheffect(bool write) {
+	SPStar* lpeitem = this->spstar;
     SPShape *shape = (SPShape *) lpeitem;
+
     sp_star_set_shape(shape);
 
     if (write) {
@@ -289,10 +329,15 @@ sp_star_update_patheffect(SPLPEItem *lpeitem, bool write)
     ((SPObject *)shape)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static gchar *
-sp_star_description (SPItem *item)
+// CPPIFY: remove
+static void
+sp_star_update_patheffect(SPLPEItem *lpeitem, bool write)
 {
-    SPStar *star = SP_STAR (item);
+	((SPStar*)lpeitem)->cstar->onUpdatePatheffect(write);
+}
+
+gchar* CStar::onDescription() {
+    SPStar *star = this->spstar;
 
     // while there will never be less than 3 vertices, we still need to
     // make calls to ngettext because the pluralization may be different
@@ -305,6 +350,13 @@ sp_star_description (SPItem *item)
         return g_strdup_printf (ngettext("<b>Polygon</b> with %d vertex",
                          "<b>Polygon</b> with %d vertices",
                      star->sides), star->sides);
+}
+
+// CPPIFY: remove
+static gchar *
+sp_star_description (SPItem *item)
+{
+	return ((SPStar*)item)->cstar->onDescription();
 }
 
 /**
@@ -413,14 +465,12 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
     }
 }
 
-
 #define NEXT false
 #define PREV true
 
-static void
-sp_star_set_shape (SPShape *shape)
-{
-    SPStar *star = SP_STAR (shape);
+void CStar::onSetShape() {
+	SPStar* shape = this->spstar;
+    SPStar *star = shape;
 
     // perhaps we should convert all our shapes into LPEs without source path
     // and with knotholders for parameters, then this situation will be handled automatically
@@ -515,6 +565,13 @@ sp_star_set_shape (SPShape *shape)
     c->unref();
 }
 
+// CPPIFY: remove
+static void
+sp_star_set_shape (SPShape *shape)
+{
+	((SPStar*)shape)->cstar->onSetShape();
+}
+
 void
 sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized)
 {
@@ -537,21 +594,27 @@ sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, 
     star->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
+void CStar::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+	SPStar* item = this->spstar;
+
     // We will determine the star's midpoint ourselves, instead of trusting on the base class
     // Therefore snapping to object midpoints is temporarily disabled
     Inkscape::SnapPreferences local_snapprefs = *snapprefs;
     local_snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, false);
 
-    if (((SPItemClass *) parent_class)->snappoints) {
-        ((SPItemClass *) parent_class)->snappoints (item, p, &local_snapprefs);
-    }
+    // CPPIFY: see header file
+    CShape::onSnappoints(p, &local_snapprefs);
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         Geom::Affine const i2dt (item->i2dt_affine ());
         p.push_back(Inkscape::SnapCandidatePoint(SP_STAR(item)->center * i2dt,Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT));
     }
+}
+
+// CPPIFY: remove
+static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
+{
+	((SPStar const*)item)->cstar->onSnappoints(p, snapprefs);
 }
 
 /**
