@@ -97,12 +97,25 @@ static void sp_spiral_class_init(SPSpiralClass *klass)
     shape_class->set_shape = sp_spiral_set_shape;
 }
 
+CSpiral::CSpiral(SPSpiral* spiral) : CShape(spiral) {
+	this->spspiral = spiral;
+}
+
+CSpiral::~CSpiral() {
+}
+
 /**
  * Callback for SPSpiral object initialization.
  */
 static void
 sp_spiral_init (SPSpiral * spiral)
 {
+	spiral->cspiral = new CSpiral(spiral);
+	spiral->cshape = spiral->cspiral;
+	spiral->clpeitem = spiral->cspiral;
+	spiral->citem = spiral->cspiral;
+	spiral->cobject = spiral->cspiral;
+
     spiral->cx         = 0.0;
     spiral->cy         = 0.0;
     spiral->exp        = 1.0;
@@ -112,14 +125,10 @@ sp_spiral_init (SPSpiral * spiral)
     spiral->t0         = 0.0;
 }
 
-/**
- * Virtual build: set spiral properties from corresponding repr.
- */
-static void sp_spiral_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-    if (reinterpret_cast<SPObjectClass *>(parent_class)->build) {
-        reinterpret_cast<SPObjectClass *>(parent_class)->build(object, document, repr);
-    }
+void CSpiral::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+	SPSpiral* object = this->spspiral;
+
+    CShape::onBuild(document, repr);
 
     object->readAttr( "sodipodi:cx" );
     object->readAttr( "sodipodi:cy" );
@@ -130,13 +139,17 @@ static void sp_spiral_build(SPObject * object, SPDocument * document, Inkscape::
     object->readAttr( "sodipodi:t0" );
 }
 
+// CPPIFY: remove
 /**
- * Virtual write: write spiral attributes to corresponding repr.
+ * Virtual build: set spiral properties from corresponding repr.
  */
-static Inkscape::XML::Node *
-sp_spiral_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void sp_spiral_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
-    SPSpiral *spiral = SP_SPIRAL (object);
+	((SPSpiral*)object)->cspiral->onBuild(document, repr);
+}
+
+Inkscape::XML::Node* CSpiral::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    SPSpiral *spiral = this->spspiral;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:path");
@@ -168,19 +181,24 @@ sp_spiral_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::X
     repr->setAttribute("d", d);
     g_free (d);
 
-    if (reinterpret_cast<SPObjectClass *>(parent_class)->write) {
-        reinterpret_cast<SPObjectClass *>(parent_class)->write(object, xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
-    }
+    CShape::onWrite(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
 }
 
+// CPPIFY: remove
 /**
- * Virtual set: change spiral object attribute.
+ * Virtual write: write spiral attributes to corresponding repr.
  */
-static void sp_spiral_set(SPObject *object, unsigned int key, const gchar *value)
+static Inkscape::XML::Node *
+sp_spiral_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    SPSpiral *spiral = SP_SPIRAL(object);
+	return ((SPSpiral*)object)->cspiral->onWrite(xml_doc, repr, flags);
+}
+
+void CSpiral::onSet(unsigned int key, gchar const* value) {
+    SPSpiral *spiral = this->spspiral;
+    SPSpiral* object = spiral;
 
     /// \todo fixme: we should really collect updates
     switch (key) {
@@ -260,30 +278,42 @@ static void sp_spiral_set(SPObject *object, unsigned int key, const gchar *value
         object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     default:
-        if (reinterpret_cast<SPObjectClass *>(parent_class)->set) {
-            reinterpret_cast<SPObjectClass *>(parent_class)->set(object, key, value);
-        }
+        CShape::onSet(key, value);
         break;
     }
 }
 
+// CPPIFY: remove
+/**
+ * Virtual set: change spiral object attribute.
+ */
+static void sp_spiral_set(SPObject *object, unsigned int key, const gchar *value)
+{
+	((SPSpiral*)object)->cspiral->onSet(key, value);
+}
+
+void CSpiral::onUpdate(SPCtx *ctx, guint flags) {
+	SPSpiral* object = this->spspiral;
+
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+        reinterpret_cast<SPShape *>(object)->setShape();
+    }
+
+    CShape::onUpdate(ctx, flags);
+}
+
+// CPPIFY: remove
 /**
  * Virtual update callback.
  */
 static void sp_spiral_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        reinterpret_cast<SPShape *>(object)->setShape();
-    }
-
-    if (reinterpret_cast<SPObjectClass *>(parent_class)->update) {
-        reinterpret_cast<SPObjectClass *>(parent_class)->update(object, ctx, flags);
-    }
+	((SPSpiral*)object)->cspiral->onUpdate(ctx, flags);
 }
 
-static void sp_spiral_update_patheffect(SPLPEItem *lpeitem, bool write)
-{
-    SPShape *shape = static_cast<SPShape *>(lpeitem);
+void CSpiral::onUpdatePatheffect(bool write) {
+	SPSpiral* shape = this->spspiral;
+
     sp_spiral_set_shape(shape);
 
     if (write) {
@@ -300,14 +330,27 @@ static void sp_spiral_update_patheffect(SPLPEItem *lpeitem, bool write)
     shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+// CPPIFY: remove
+static void sp_spiral_update_patheffect(SPLPEItem *lpeitem, bool write)
+{
+	((SPSpiral*)lpeitem)->cspiral->onUpdatePatheffect(write);
+}
+
+gchar* CSpiral::onDescription() {
+	SPSpiral* item = this->spspiral;
+
+	// TRANSLATORS: since turn count isn't an integer, please adjust the
+    // string as needed to deal with an localized plural forms.
+	return g_strdup_printf (_("<b>Spiral</b> with %3f turns"), SP_SPIRAL(item)->revo);
+}
+
+// CPPIFY: remove
 /**
  * Return textual description of spiral.
  */
 static gchar *sp_spiral_description(SPItem * item)
 {
-    // TRANSLATORS: since turn count isn't an integer, please adjust the
-    // string as needed to deal with an localized plural forms.
-    return g_strdup_printf (_("<b>Spiral</b> with %3f turns"), SP_SPIRAL(item)->revo);
+	return ((SPSpiral*)item)->cspiral->onDescription();
 }
 
 
@@ -401,10 +444,9 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
     g_assert (is_unit_vector (hat2));
 }
 
-static void
-sp_spiral_set_shape (SPShape *shape)
-{
-    SPSpiral *spiral = SP_SPIRAL(shape);
+void CSpiral::onSetShape() {
+    SPSpiral *spiral = this->spspiral;
+    SPSpiral* shape = spiral;
 
     if (sp_lpe_item_has_broken_path_effect(SP_LPE_ITEM(shape))) {
         g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
@@ -469,6 +511,13 @@ sp_spiral_set_shape (SPShape *shape)
     c->unref();
 }
 
+// CPPIFY: remove
+static void
+sp_spiral_set_shape (SPShape *shape)
+{
+	((SPSpiral*)shape)->cspiral->onSetShape();
+}
+
 /**
  * Set spiral properties and update display.
  */
@@ -500,19 +549,15 @@ sp_spiral_position_set       (SPSpiral          *spiral,
     (static_cast<SPObject *>(spiral))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-/**
- * Virtual snappoints callback.
- */
-static void sp_spiral_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
+void CSpiral::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+	SPSpiral* item = this->spspiral;
+
     // We will determine the spiral's midpoint ourselves, instead of trusting on the base class
     // Therefore snapping to object midpoints is temporarily disabled
     Inkscape::SnapPreferences local_snapprefs = *snapprefs;
     local_snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, false);
 
-    if ((reinterpret_cast<SPItemClass *>(parent_class))->snappoints) {
-        (reinterpret_cast<SPItemClass *>(parent_class))->snappoints (item, p, &local_snapprefs);
-    }
+    CShape::onSnappoints(p, &local_snapprefs);
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         Geom::Affine const i2dt (item->i2dt_affine ());
@@ -521,6 +566,15 @@ static void sp_spiral_snappoints(SPItem const *item, std::vector<Inkscape::SnapC
         // This point is the start-point of the spiral, which is also returned when _snap_to_itemnode has been set
         // in the object snapper. In that case we will get a duplicate!
     }
+}
+
+// CPPIFY: remove
+/**
+ * Virtual snappoints callback.
+ */
+static void sp_spiral_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
+{
+	((SPSpiral*)item)->cspiral->onSnappoints(p, snapprefs);
 }
 
 /**

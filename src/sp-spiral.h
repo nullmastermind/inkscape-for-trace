@@ -31,6 +31,7 @@
 
 class SPSpiral;
 class SPSpiralClass;
+class CSpiral;
 
 /**
  * A spiral Shape.
@@ -44,7 +45,10 @@ class SPSpiralClass;
  *
  * \todo Should I remove these attributes?
  */
-struct SPSpiral : public SPShape {
+class SPSpiral : public SPShape {
+public:
+	CSpiral* cspiral;
+
 	float cx, cy;
 	float exp;  ///< Spiral expansion factor
 	float revo; ///< Spiral revolution factor
@@ -56,6 +60,27 @@ struct SPSpiral : public SPShape {
 /// The SPSpiral vtable.
 struct SPSpiralClass {
 	SPShapeClass parent_class;
+};
+
+
+class CSpiral : public CShape {
+public:
+	CSpiral(SPSpiral* spiral);
+	virtual ~CSpiral();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual gchar* onDescription();
+
+	virtual void onSetShape();
+	virtual void onUpdatePatheffect(bool write);
+
+protected:
+	SPSpiral* spspiral;
 };
 
 
