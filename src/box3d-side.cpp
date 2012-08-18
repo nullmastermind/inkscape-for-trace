@@ -76,27 +76,45 @@ static void box3d_side_class_init(Box3DSideClass *klass)
     shape_class->set_shape = box3d_side_set_shape;
 }
 
+CBox3DSide::CBox3DSide(Box3DSide* box3dside) : CPolygon(box3dside) {
+	this->spbox3dside = box3dside;
+}
+
+CBox3DSide::~CBox3DSide() {
+}
+
 static void
 box3d_side_init (Box3DSide * side)
 {
+	side->cbox3dside = new CBox3DSide(side);
+	side->cpolygon = side->cbox3dside;
+	side->cshape = side->cbox3dside;
+	side->clpeitem = side->cbox3dside;
+	side->citem = side->cbox3dside;
+	side->cobject = side->cbox3dside;
+
     side->dir1 = Box3D::NONE;
     side->dir2 = Box3D::NONE;
     side->front_or_rear = Box3D::FRONT;
 }
 
-static void box3d_side_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
+void CBox3DSide::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+	Box3DSide* object = this->spbox3dside;
+
+    CPolygon::onBuild(document, repr);
 
     object->readAttr( "inkscape:box3dsidetype" );
 }
 
-static Inkscape::XML::Node *
-box3d_side_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+// CPPIFY: remove
+static void box3d_side_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
-    Box3DSide *side = SP_BOX3D_SIDE (object);
+	((Box3DSide*)object)->cbox3dside->onBuild(document, repr);
+}
+
+Inkscape::XML::Node* CBox3DSide::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	Box3DSide* object = this->spbox3dside;
+    Box3DSide *side = object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         // this is where we end up when saving as plain SVG (also in other circumstances?)
@@ -120,16 +138,21 @@ box3d_side_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::
     repr->setAttribute("d", d);
     g_free (d);
 
-    if (((SPObjectClass *) (parent_class))->write)
-        ((SPObjectClass *) (parent_class))->write (object, xml_doc, repr, flags);
+    CPolygon::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-static void
-box3d_side_set (SPObject *object, unsigned int key, const gchar *value)
+// CPPIFY: remove
+static Inkscape::XML::Node *
+box3d_side_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    Box3DSide *side = SP_BOX3D_SIDE (object);
+	return ((Box3DSide*)object)->cbox3dside->onWrite(xml_doc, repr, flags);
+}
+
+void CBox3DSide::onSet(unsigned int key, const gchar* value) {
+	Box3DSide* object = this->spbox3dside;
+    Box3DSide *side = object;
 
     // TODO: In case the box was recreated (by undo, e.g.) we need to recreate the path
     //       (along with other info?) from the parent box.
@@ -154,15 +177,21 @@ box3d_side_set (SPObject *object, unsigned int key, const gchar *value)
             }
             break;
     default:
-        if (((SPObjectClass *) parent_class)->set)
-            ((SPObjectClass *) parent_class)->set (object, key, value);
+        CPolygon::onSet(key, value);
         break;
     }
 }
 
+// CPPIFY: remove
 static void
-box3d_side_update (SPObject *object, SPCtx *ctx, guint flags)
+box3d_side_set (SPObject *object, unsigned int key, const gchar *value)
 {
+	((Box3DSide*)object)->cbox3dside->onSet(key, value);
+}
+
+void CBox3DSide::onUpdate(SPCtx* ctx, guint flags) {
+	Box3DSide* object = this->spbox3dside;
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
@@ -173,8 +202,14 @@ box3d_side_update (SPObject *object, SPCtx *ctx, guint flags)
         static_cast<SPShape *>(object)->setShape ();
     }
 
-    if (((SPObjectClass *) parent_class)->update)
-        ((SPObjectClass *) parent_class)->update (object, ctx, flags);
+    CPolygon::onUpdate(ctx, flags);
+}
+
+// CPPIFY: remove
+static void
+box3d_side_update (SPObject *object, SPCtx *ctx, guint flags)
+{
+	((Box3DSide*)object)->cbox3dside->onUpdate(ctx, flags);
 }
 
 /* Create a new Box3DSide and append it to the parent box */
@@ -205,10 +240,10 @@ box3d_side_position_set (Box3DSide *side) {
     side->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void
-box3d_side_set_shape (SPShape *shape)
-{
-    Box3DSide *side = SP_BOX3D_SIDE (shape);
+void CBox3DSide::onSetShape() {
+	Box3DSide* shape = this->spbox3dside;
+    Box3DSide *side = shape;
+
     if (!side->document->getRoot()) {
         // avoid a warning caused by sp_document_height() (which is called from sp_item_i2d_affine() below)
         // when reading a file containing 3D boxes
@@ -264,6 +299,13 @@ box3d_side_set_shape (SPShape *shape)
         c_lpe->unref();
     }
     c->unref();
+}
+
+// CPPIFY: remove
+void
+box3d_side_set_shape (SPShape *shape)
+{
+	((Box3DSide*)shape)->cbox3dside->onSetShape();
 }
 
 gchar *box3d_side_axes_string(Box3DSide *side)

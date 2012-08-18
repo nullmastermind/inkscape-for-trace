@@ -25,10 +25,14 @@
 class SPBox3D;
 class Box3DSide;
 class Box3DSideClass;
+class CBox3DSide;
 class Persp3D;
 
 // FIXME: Would it be better to inherit from SPPath instead?
-struct Box3DSide : public SPPolygon {
+class Box3DSide : public SPPolygon {
+public:
+	CBox3DSide* cbox3dside;
+
     Box3D::Axis dir1;
     Box3D::Axis dir2;
     Box3D::FrontOrRear front_or_rear;
@@ -39,6 +43,24 @@ struct Box3DSide : public SPPolygon {
 struct Box3DSideClass {
     SPPolygonClass parent_class;
 };
+
+
+class CBox3DSide : public CPolygon {
+public:
+	CBox3DSide(Box3DSide* box3dside);
+	virtual ~CBox3DSide();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+
+	virtual void onSetShape();
+
+protected:
+	Box3DSide* spbox3dside;
+};
+
 
 GType box3d_side_get_type (void);
 
