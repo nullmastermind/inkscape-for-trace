@@ -68,20 +68,31 @@ void SPLineClass::sp_line_class_init(SPLineClass *klass)
     shape_class->set_shape = SPLine::setShape;
 }
 
+CLine::CLine(SPLine* line) : CShape(line) {
+	this->spline = line;
+}
+
+CLine::~CLine() {
+}
+
 void SPLine::init(SPLine * line)
 {
+	line->cline = new CLine(line);
+	line->cshape = line->cline;
+	line->clpeitem = line->cline;
+	line->citem = line->cline;
+	line->cobject = line->cline;
+
     line->x1.unset();
     line->y1.unset();
     line->x2.unset();
     line->y2.unset();
 }
 
+void CLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+	SPLine* object = this->spline;
 
-void SPLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-    if (((SPObjectClass *) SPLineClass::static_parent_class)->build) {
-        ((SPObjectClass *) SPLineClass::static_parent_class)->build(object, document, repr);
-    }
+    CShape::onBuild(document, repr);
 
     object->readAttr( "x1" );
     object->readAttr( "y1" );
@@ -89,9 +100,15 @@ void SPLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node
     object->readAttr( "y2" );
 }
 
-void SPLine::set(SPObject *object, unsigned int key, const gchar *value)
+// CPPIFY: remove
+void SPLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
-    SPLine * line = SP_LINE(object);
+	((SPLine*)object)->cline->onBuild(document, repr);
+}
+
+void CLine::onSet(unsigned int key, const gchar* value) {
+	SPLine* object = this->spline;
+    SPLine * line = object;
 
     /* fixme: we should really collect updates */
 
@@ -113,15 +130,20 @@ void SPLine::set(SPObject *object, unsigned int key, const gchar *value)
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            if (((SPObjectClass *) SPLineClass::static_parent_class)->set) {
-                ((SPObjectClass *) SPLineClass::static_parent_class)->set(object, key, value);
-            }
+            CShape::onSet(key, value);
             break;
     }
 }
 
-void SPLine::update(SPObject *object, SPCtx *ctx, guint flags)
+// CPPIFY: remove
+void SPLine::set(SPObject *object, unsigned int key, const gchar *value)
 {
+	((SPLine*)object)->cline->onSet(key, value);
+}
+
+void CLine::onUpdate(SPCtx *ctx, guint flags) {
+	SPLine* object = this->spline;
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         SPLine *line = SP_LINE(object);
 
@@ -139,15 +161,18 @@ void SPLine::update(SPObject *object, SPCtx *ctx, guint flags)
         ((SPShape *) object)->setShape();
     }
 
-    if (((SPObjectClass *) SPLineClass::static_parent_class)->update) {
-        ((SPObjectClass *) SPLineClass::static_parent_class)->update(object, ctx, flags);
-    }
+    CShape::onUpdate(ctx, flags);
 }
 
-
-Inkscape::XML::Node * SPLine::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+// CPPIFY: remove
+void SPLine::update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    SPLine *line  = SP_LINE(object);
+	((SPLine*)object)->cline->onUpdate(ctx, flags);
+}
+
+Inkscape::XML::Node* CLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPLine* object = this->spline;
+    SPLine *line  = object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:line");
@@ -162,21 +187,31 @@ Inkscape::XML::Node * SPLine::write(SPObject *object, Inkscape::XML::Document *x
     sp_repr_set_svg_double(repr, "x2", line->x2.computed);
     sp_repr_set_svg_double(repr, "y2", line->y2.computed);
 
-    if (((SPObjectClass *) (SPLineClass::static_parent_class))->write) {
-        ((SPObjectClass *) (SPLineClass::static_parent_class))->write(object, xml_doc, repr, flags);
-    }
+    CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar * SPLine::getDescription(SPItem */*item*/)
+// CPPIFY: remove
+Inkscape::XML::Node * SPLine::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    return g_strdup(_("<b>Line</b>"));
+	return ((SPLine*)object)->cline->onWrite(xml_doc, repr, flags);
 }
 
-void SPLine::convertToGuides(SPItem *item)
+gchar* CLine::onDescription() {
+	return g_strdup(_("<b>Line</b>"));
+}
+
+// CPPIFY: remove
+gchar * SPLine::getDescription(SPItem *item)
 {
-    SPLine *line = SP_LINE(item);
+    return ((SPLine*)item)->cline->onDescription();
+}
+
+void CLine::onConvertToGuides() {
+	SPLine* item = this->spline;
+    SPLine *line = item;
+
     Geom::Point points[2];
 
     Geom::Affine const i2dt(item->i2dt_affine());
@@ -187,32 +222,45 @@ void SPLine::convertToGuides(SPItem *item)
     SPGuide::createSPGuide(item->document, points[0], points[1]);
 }
 
-Geom::Affine SPLine::setTransform(SPItem *item, Geom::Affine const &xform)
+// CPPIFY: remove
+void SPLine::convertToGuides(SPItem *item)
 {
-    SPLine *line = SP_LINE(item);
+	((SPLine*)item)->cline->onConvertToGuides();
+}
+
+Geom::Affine CLine::onSetTransform(Geom::Affine const &transform) {
+	SPLine* item = this->spline;
+    SPLine *line = item;
+
     Geom::Point points[2];
 
     points[0] = Geom::Point(line->x1.computed, line->y1.computed);
     points[1] = Geom::Point(line->x2.computed, line->y2.computed);
 
-    points[0] *= xform;
-    points[1] *= xform;
+    points[0] *= transform;
+    points[1] *= transform;
 
     line->x1.computed = points[0][Geom::X];
     line->y1.computed = points[0][Geom::Y];
     line->x2.computed = points[1][Geom::X];
     line->y2.computed = points[1][Geom::Y];
 
-    item->adjust_stroke(xform.descrim());
+    item->adjust_stroke(transform.descrim());
 
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
     return Geom::identity();
 }
 
-void SPLine::setShape(SPShape *shape)
+// CPPIFY: remove
+Geom::Affine SPLine::setTransform(SPItem *item, Geom::Affine const &xform)
 {
-    SPLine *line = SP_LINE(shape);
+	return ((SPLine*)item)->cline->onSetTransform(xform);
+}
+
+void CLine::onSetShape() {
+	SPLine* shape = this->spline;
+    SPLine *line = shape;
 
     SPCurve *c = new SPCurve();
 
@@ -225,6 +273,12 @@ void SPLine::setShape(SPShape *shape)
     // LPE's cannot be applied to lines. (the result can (generally) not be represented as SPLine)
 
     c->unref();
+}
+
+// CPPIFY: remove
+void SPLine::setShape(SPShape *shape)
+{
+	((SPLine*)shape)->cline->onSetShape();
 }
 
 /*

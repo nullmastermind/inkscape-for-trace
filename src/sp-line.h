@@ -27,9 +27,12 @@
 
 class SPLine;
 class SPLineClass;
+class CLine;
 
 class SPLine : public SPShape {
 public:
+	CLine* cline;
+
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
@@ -62,6 +65,27 @@ private:
     static void sp_line_class_init(SPLineClass *klass);
 	
     friend class SPLine;
+};
+
+
+class CLine : public CShape {
+public:
+	CLine(SPLine* line);
+	virtual ~CLine();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onSet(unsigned int key, gchar const* value);
+
+	virtual gchar* onDescription();
+	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+	virtual void onConvertToGuides();
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+
+	virtual void onSetShape();
+
+protected:
+	SPLine* spline;
 };
 
 
