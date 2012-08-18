@@ -21,13 +21,37 @@
 #define SP_IS_ANCHOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ANCHOR))
 #define SP_IS_ANCHOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ANCHOR))
 
-struct SPAnchor : public SPGroup {
+class CAnchor;
+
+class SPAnchor : public SPGroup {
+public:
+	CAnchor* canchor;
+
 	gchar *href;
 };
 
 struct SPAnchorClass {
 	SPGroupClass parent_class;
 };
+
+
+class CAnchor : public CGroup {
+public:
+	CAnchor(SPAnchor* anchor);
+	virtual ~CAnchor();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual gchar* onDescription();
+	virtual gint onEvent(SPEvent *event);
+
+protected:
+	SPAnchor* spanchor;
+};
+
 
 GType sp_anchor_get_type (void);
 

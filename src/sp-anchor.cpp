@@ -77,16 +77,28 @@ static void sp_anchor_class_init(SPAnchorClass *ac)
     item_class->event = sp_anchor_event;
 }
 
+CAnchor::CAnchor(SPAnchor* anchor) : CGroup(anchor) {
+	this->spanchor = anchor;
+}
+
+CAnchor::~CAnchor() {
+}
+
 static void sp_anchor_init(SPAnchor *anchor)
 {
+	anchor->canchor = new CAnchor(anchor);
+	anchor->cgroup = anchor->canchor;
+	anchor->clpeitem = anchor->canchor;
+	anchor->citem = anchor->canchor;
+	anchor->cobject = anchor->canchor;
+
     anchor->href = NULL;
 }
 
-static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) (parent_class))->build) {
-        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-    }
+void CAnchor::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPAnchor* object = this->spanchor;
+
+    CGroup::onBuild(document, repr);
 
     object->readAttr( "xlink:type" );
     object->readAttr( "xlink:role" );
@@ -98,23 +110,32 @@ static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XM
     object->readAttr( "target" );
 }
 
-static void sp_anchor_release(SPObject *object)
+// CPPIFY: remove
+static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPAnchor *anchor = SP_ANCHOR(object);
+	((SPAnchor*)object)->canchor->onBuild(document, repr);
+}
+
+void CAnchor::onRelease() {
+    SPAnchor *anchor = this->spanchor;
 
     if (anchor->href) {
         g_free(anchor->href);
         anchor->href = NULL;
     }
 
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+    CGroup::onRelease();
 }
 
-static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value)
+// CPPIFY: remove
+static void sp_anchor_release(SPObject *object)
 {
-    SPAnchor *anchor = SP_ANCHOR(object);
+	((SPAnchor*)object)->canchor->onRelease();
+}
+
+void CAnchor::onSet(unsigned int key, const gchar* value) {
+    SPAnchor *anchor = this->spanchor;
+    SPAnchor* object = anchor;
 
     switch (key) {
 	case SP_ATTR_XLINK_HREF:
@@ -132,19 +153,22 @@ static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	default:
-            if (((SPObjectClass *) (parent_class))->set) {
-                ((SPObjectClass *) (parent_class))->set(object, key, value);
-            }
+            CGroup::onSet(key, value);
             break;
     }
 }
 
+// CPPIFY: remove
+static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value)
+{
+	((SPAnchor*)object)->canchor->onSet(key, value);
+}
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPAnchor *anchor = SP_ANCHOR(object);
+Inkscape::XML::Node* CAnchor::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    SPAnchor *anchor = this->spanchor;
+    SPAnchor* object = anchor;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:a");
@@ -164,16 +188,20 @@ static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Doc
         COPY_ATTR(repr, object->getRepr(), "target");
     }
 
-    if (((SPObjectClass *) (parent_class))->write) {
-        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
-    }
+    CGroup::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-static gchar *sp_anchor_description(SPItem *item)
+// CPPIFY: remove
+static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    SPAnchor *anchor = SP_ANCHOR(item);
+	return ((SPAnchor*)object)->canchor->onWrite(xml_doc, repr, flags);
+}
+
+gchar* CAnchor::onDescription() {
+    SPAnchor *anchor = this->spanchor;
+
     if (anchor->href) {
         char *quoted_href = xml_quote_strdup(anchor->href);
         char *ret = g_strdup_printf(_("<b>Link</b> to %s"), quoted_href);
@@ -184,11 +212,14 @@ static gchar *sp_anchor_description(SPItem *item)
     }
 }
 
-/* fixme: We should forward event to appropriate container/view */
-
-static gint sp_anchor_event(SPItem *item, SPEvent *event)
+// CPPIFY: remove
+static gchar *sp_anchor_description(SPItem *item)
 {
-    SPAnchor *anchor = SP_ANCHOR(item);
+	return ((SPAnchor*)item)->canchor->onDescription();
+}
+
+gint CAnchor::onEvent(SPEvent* event) {
+    SPAnchor *anchor = this->spanchor;
 
     switch (event->type) {
 	case SP_EVENT_ACTIVATE:
@@ -208,6 +239,14 @@ static gint sp_anchor_event(SPItem *item, SPEvent *event)
     }
 
     return FALSE;
+}
+
+/* fixme: We should forward event to appropriate container/view */
+
+// CPPIFY: remove
+static gint sp_anchor_event(SPItem *item, SPEvent *event)
+{
+	return ((SPAnchor*)item)->canchor->onEvent(event);
 }
 
 /*
