@@ -26,6 +26,7 @@
 
 struct LivePathEffectObject;
 struct SPCurve;
+class CLPEItem;
 
 namespace Inkscape{ 
 namespace Display {
@@ -41,6 +42,8 @@ typedef std::list<Inkscape::LivePathEffect::LPEObjectReference *> PathEffectList
 
 class SPLPEItem : public SPItem {
 public:
+	CLPEItem* clpeitem;
+
     int path_effects_enabled;
 
     PathEffectList* path_effect_list;
@@ -58,6 +61,32 @@ struct SPLPEItemClass {
 
     void (* update_patheffect) (SPLPEItem *lpeitem, bool write);
 };
+
+
+class CLPEItem : public CItem {
+public:
+	CLPEItem(SPLPEItem* lpeitem);
+	virtual ~CLPEItem();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, gchar const* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual void onUpdatePatheffect(bool write);
+
+protected:
+	SPLPEItem* splpeitem;
+};
+
 
 GType sp_lpe_item_get_type();
 
