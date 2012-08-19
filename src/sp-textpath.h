@@ -15,8 +15,12 @@ class Path;
 #define SP_IS_TEXTPATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_TEXTPATH))
 #define SP_IS_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TEXTPATH))
 
+class CTextPath;
 
-struct SPTextPath : public SPItem {
+class SPTextPath : public SPItem {
+public:
+	CTextPath* ctextpath;
+
     TextTagAttributes attributes;
     SVGLength startOffset;
 
@@ -28,6 +32,24 @@ struct SPTextPath : public SPItem {
 struct SPTextPathClass {
     SPItemClass parent_class;
 };
+
+
+class CTextPath : public CItem {
+public:
+	CTextPath(SPTextPath* textpath);
+	virtual ~CTextPath();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPTextPath* sptextpath;
+};
+
 
 GType sp_textpath_get_type();
 

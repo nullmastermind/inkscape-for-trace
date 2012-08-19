@@ -23,7 +23,12 @@ enum {
     SP_TSPAN_ROLE_LINE
 };
 
-struct SPTSpan : public SPItem {
+class CTSpan;
+
+class SPTSpan : public SPItem {
+public:
+	CTSpan* ctspan;
+
     guint role : 2;
     TextTagAttributes attributes;
 };
@@ -31,6 +36,27 @@ struct SPTSpan : public SPItem {
 struct SPTSpanClass {
     SPItemClass parent_class;
 };
+
+
+class CTSpan : public CItem {
+public:
+	CTSpan(SPTSpan* span);
+	virtual ~CTSpan();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual gchar* onDescription();
+
+protected:
+	SPTSpan* sptspan;
+};
+
 
 GType sp_tspan_get_type();
 

@@ -109,28 +109,42 @@ sp_tspan_class_init(SPTSpanClass *classname)
     item_class->description = sp_tspan_description;
 }
 
+CTSpan::CTSpan(SPTSpan* span) : CItem(span) {
+	this->sptspan = span;
+}
+
+CTSpan::~CTSpan() {
+}
+
 static void
 sp_tspan_init(SPTSpan *tspan)
 {
+	tspan->ctspan = new CTSpan(tspan);
+	tspan->citem = tspan->ctspan;
+	tspan->cobject = tspan->ctspan;
+
     tspan->role = SP_TSPAN_ROLE_UNSPECIFIED;
     new (&tspan->attributes) TextTagAttributes;
+}
+
+void CTSpan::onRelease() {
+	SPTSpan* object = this->sptspan;
+
+    SPTSpan *tspan = SP_TSPAN(object);
+
+    tspan->attributes.~TextTagAttributes();
+
+    CItem::onRelease();
 }
 
 static void
 sp_tspan_release(SPObject *object)
 {
-    SPTSpan *tspan = SP_TSPAN(object);
-
-    tspan->attributes.~TextTagAttributes();
-
-    if (((SPObjectClass *) tspan_parent_class)->release)
-        ((SPObjectClass *) tspan_parent_class)->release(object);
+	((SPTSpan*)object)->ctspan->onRelease();
 }
 
-static void
-sp_tspan_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
-{
-    //SPTSpan *tspan = SP_TSPAN(object);
+void CTSpan::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
+	SPTSpan* object = this->sptspan;
 
     object->readAttr( "x" );
     object->readAttr( "y" );
@@ -139,13 +153,18 @@ sp_tspan_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
     object->readAttr( "rotate" );
     object->readAttr( "sodipodi:role" );
 
-    if (((SPObjectClass *) tspan_parent_class)->build)
-        ((SPObjectClass *) tspan_parent_class)->build(object, doc, repr);
+    CItem::onBuild(doc, repr);
 }
 
 static void
-sp_tspan_set(SPObject *object, unsigned key, gchar const *value)
+sp_tspan_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
+	((SPTSpan*)object)->ctspan->onBuild(doc, repr);
+}
+
+void CTSpan::onSet(unsigned int key, const gchar* value) {
+	SPTSpan* object = this->sptspan;
+
     SPTSpan *tspan = SP_TSPAN(object);
 
     if (tspan->attributes.readSingleAttribute(key, value)) {
@@ -160,18 +179,22 @@ sp_tspan_set(SPObject *object, unsigned key, gchar const *value)
                 }
                 break;
             default:
-                if (((SPObjectClass *) tspan_parent_class)->set)
-                    (((SPObjectClass *) tspan_parent_class)->set)(object, key, value);
+                CItem::onSet(key, value);
                 break;
         }
     }
 }
 
-static void sp_tspan_update(SPObject *object, SPCtx *ctx, guint flags)
+static void
+sp_tspan_set(SPObject *object, unsigned key, gchar const *value)
 {
-    if (((SPObjectClass *) tspan_parent_class)->update) {
-        ((SPObjectClass *) tspan_parent_class)->update(object, ctx, flags);
-    }
+	((SPTSpan*)object)->ctspan->onSet(key, value);
+}
+
+void CTSpan::onUpdate(SPCtx *ctx, guint flags) {
+	SPTSpan* object = this->sptspan;
+
+    CItem::onUpdate(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -185,11 +208,20 @@ static void sp_tspan_update(SPObject *object, SPCtx *ctx, guint flags)
     }
 }
 
-static void sp_tspan_modified(SPObject *object, unsigned flags)
+static void sp_tspan_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    if (((SPObjectClass *) tspan_parent_class)->modified) {
-        ((SPObjectClass *) tspan_parent_class)->modified(object, flags);
-    }
+	((SPTSpan*)object)->ctspan->onUpdate(ctx, flags);
+}
+
+void CTSpan::onModified(unsigned int flags) {
+	SPTSpan* object = this->sptspan;
+
+	// CPPIFY: This doesn't make no sense.
+	// CObject::onModified is pure and CItem doesn't override this method. What was the idea behind these lines?
+//    if (((SPObjectClass *) tspan_parent_class)->modified) {
+//        ((SPObjectClass *) tspan_parent_class)->modified(object, flags);
+//    }
+//    CItem::onModified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -203,9 +235,14 @@ static void sp_tspan_modified(SPObject *object, unsigned flags)
     }
 }
 
-static Geom::OptRect
-sp_tspan_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
+static void sp_tspan_modified(SPObject *object, unsigned flags)
 {
+	((SPTSpan*)object)->ctspan->onModified(flags);
+}
+
+Geom::OptRect CTSpan::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+	SPTSpan* item = this->sptspan;
+
     Geom::OptRect bbox;
     // find out the ancestor text which holds our layout
     SPObject const *parent_text = item;
@@ -229,9 +266,15 @@ sp_tspan_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxTyp
     return bbox;
 }
 
-static Inkscape::XML::Node *
-sp_tspan_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static Geom::OptRect
+sp_tspan_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
 {
+	return ((SPTSpan*)item)->ctspan->onBbox(transform, type);
+}
+
+Inkscape::XML::Node* CTSpan::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPTSpan* object = this->sptspan;
+
     SPTSpan *tspan = SP_TSPAN(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -272,19 +315,29 @@ sp_tspan_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML
         }
     }
 
-    if (((SPObjectClass *) tspan_parent_class)->write) {
-        ((SPObjectClass *) tspan_parent_class)->write(object, xml_doc, repr, flags);
-    }
+    CItem::onWrite(xml_doc, repr, flags);
 
     return repr;
+}
+
+static Inkscape::XML::Node *
+sp_tspan_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPTSpan*)object)->ctspan->onWrite(xml_doc, repr, flags);
+}
+
+gchar* CTSpan::onDescription() {
+	SPTSpan* item = this->sptspan;
+
+	g_return_val_if_fail(SP_IS_TSPAN(item), NULL);
+
+    return g_strdup(_("<b>Text span</b>"));
 }
 
 static char *
 sp_tspan_description(SPItem *item)
 {
-    g_return_val_if_fail(SP_IS_TSPAN(item), NULL);
-
-    return g_strdup(_("<b>Text span</b>"));
+    return ((SPTSpan*)item)->ctspan->onDescription();
 }
 
 
@@ -350,9 +403,21 @@ static void sp_textpath_class_init(SPTextPathClass *classname)
     sp_object_class->write = sp_textpath_write;
 }
 
+
+CTextPath::CTextPath(SPTextPath* textpath) : CItem(textpath) {
+	this->sptextpath = textpath;
+}
+
+CTextPath::~CTextPath() {
+}
+
 static void
 sp_textpath_init(SPTextPath *textpath)
 {
+	textpath->ctextpath = new CTextPath(textpath);
+	textpath->citem = textpath->ctextpath;
+	textpath->cobject = textpath->ctextpath;
+
     new (&textpath->attributes) TextTagAttributes;
 
     textpath->startOffset._set = false;
@@ -371,9 +436,9 @@ sp_textpath_finalize(GObject *obj)
     delete textpath->sourcePath;
 }
 
-static void
-sp_textpath_release(SPObject *object)
-{
+void CTextPath::onRelease() {
+	SPTextPath* object = this->sptextpath;
+
     SPTextPath *textpath = SP_TEXTPATH(object);
 
     textpath->attributes.~TextTagAttributes();
@@ -381,12 +446,18 @@ sp_textpath_release(SPObject *object)
     if (textpath->originalPath) delete textpath->originalPath;
     textpath->originalPath = NULL;
 
-    if (((SPObjectClass *) textpath_parent_class)->release)
-        ((SPObjectClass *) textpath_parent_class)->release(object);
+    CItem::onRelease();
 }
 
-static void sp_textpath_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
+static void
+sp_textpath_release(SPObject *object)
 {
+	((SPTextPath*)object)->ctextpath->onRelease();
+}
+
+void CTextPath::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
+	SPTextPath* object = this->sptextpath;
+
     object->readAttr( "x" );
     object->readAttr( "y" );
     object->readAttr( "dx" );
@@ -410,14 +481,17 @@ static void sp_textpath_build(SPObject *object, SPDocument *doc, Inkscape::XML::
         repr->addChild(rch, NULL);
     }
 
-    if (((SPObjectClass *) textpath_parent_class)->build) {
-        ((SPObjectClass *) textpath_parent_class)->build(object, doc, repr);
-    }
+    CItem::onBuild(doc, repr);
 }
 
-static void
-sp_textpath_set(SPObject *object, unsigned key, gchar const *value)
+static void sp_textpath_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
+	((SPTextPath*)object)->ctextpath->onBuild(doc, repr);
+}
+
+void CTextPath::onSet(unsigned int key, const gchar* value) {
+	SPTextPath* object = this->sptextpath;
+
     SPTextPath *textpath = SP_TEXTPATH(object);
 
     if (textpath->attributes.readSingleAttribute(key, value)) {
@@ -432,15 +506,21 @@ sp_textpath_set(SPObject *object, unsigned key, gchar const *value)
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 break;
             default:
-                if (((SPObjectClass *) textpath_parent_class)->set)
-                    (((SPObjectClass *) textpath_parent_class)->set)(object, key, value);
+                CItem::onSet(key, value);
                 break;
         }
     }
 }
 
-static void sp_textpath_update(SPObject *object, SPCtx *ctx, guint flags)
+static void
+sp_textpath_set(SPObject *object, unsigned key, gchar const *value)
 {
+	((SPTextPath*)object)->ctextpath->onSet(key, value);
+}
+
+void CTextPath::onUpdate(SPCtx *ctx, guint flags) {
+	SPTextPath* object = this->sptextpath;
+
     SPTextPath *textpath = SP_TEXTPATH(object);
 
     textpath->isUpdating = true;
@@ -449,9 +529,7 @@ static void sp_textpath_update(SPObject *object, SPCtx *ctx, guint flags)
     }
     textpath->isUpdating = false;
 
-    if (((SPObjectClass *) textpath_parent_class)->update) {
-        ((SPObjectClass *) textpath_parent_class)->update(object, ctx, flags);
-    }
+    CItem::onUpdate(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -463,6 +541,11 @@ static void sp_textpath_update(SPObject *object, SPCtx *ctx, guint flags)
             ochild->updateDisplay(ctx, flags);
         }
     }
+}
+
+static void sp_textpath_update(SPObject *object, SPCtx *ctx, guint flags)
+{
+	((SPTextPath*)object)->ctextpath->onUpdate(ctx, flags);
 }
 
 
@@ -486,11 +569,15 @@ void   refresh_textpath_source(SPTextPath* tp)
     }
 }
 
-static void sp_textpath_modified(SPObject *object, unsigned flags)
-{
-    if (((SPObjectClass *) textpath_parent_class)->modified) {
-        ((SPObjectClass *) textpath_parent_class)->modified(object, flags);
-    }
+void CTextPath::onModified(unsigned int flags) {
+	SPTextPath* object = this->sptextpath;
+
+	// CPPIFY: This doesn't make no sense.
+	// CObject::onModified is pure and CItem doesn't override this method. What was the idea behind these lines?
+//    if (((SPObjectClass *) textpath_parent_class)->modified) {
+//        ((SPObjectClass *) textpath_parent_class)->modified(object, flags);
+//    }
+//    CItem::onModified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -503,9 +590,15 @@ static void sp_textpath_modified(SPObject *object, unsigned flags)
         }
     }
 }
-static Inkscape::XML::Node *
-sp_textpath_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+
+static void sp_textpath_modified(SPObject *object, unsigned flags)
 {
+	((SPTextPath*)object)->ctextpath->onModified(flags);
+}
+
+Inkscape::XML::Node* CTextPath::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPTextPath* object = this->sptextpath;
+
     SPTextPath *textpath = SP_TEXTPATH(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -559,11 +652,15 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::
         }
     }
 
-    if (((SPObjectClass *) textpath_parent_class)->write) {
-        ((SPObjectClass *) textpath_parent_class)->write(object, xml_doc, repr, flags);
-    }
+    CItem::onWrite(xml_doc, repr, flags);
 
     return repr;
+}
+
+static Inkscape::XML::Node *
+sp_textpath_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPTextPath*)object)->ctextpath->onWrite(xml_doc, repr, flags);
 }
 
 
