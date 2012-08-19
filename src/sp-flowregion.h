@@ -22,8 +22,13 @@ class Path;
 class Shape;
 class flow_dest;
 class FloatLigne;
+class CFlowregion;
+class CFlowregionExclude;
 
-struct SPFlowregion : public SPItem {
+class SPFlowregion : public SPItem {
+public:
+	CFlowregion* cflowregion;
+
 	std::vector<Shape*>     computed;
 	
 	void             UpdateComputed(void);
@@ -33,9 +38,28 @@ struct SPFlowregionClass {
 	SPItemClass parent_class;
 };
 
+class CFlowregion : public CItem {
+public:
+	CFlowregion(SPFlowregion* flowregion);
+	virtual ~CFlowregion();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node *child);
+	virtual void onUpdate(SPCtx *ctx, unsigned int flags);
+	virtual void onModified(guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual gchar *onDescription();
+
+protected:
+	SPFlowregion* spflowregion;
+};
+
 GType sp_flowregion_get_type (void);
 
-struct SPFlowregionExclude : public SPItem {
+class SPFlowregionExclude : public SPItem {
+public:
+	CFlowregionExclude* cflowregionexclude;
+
 	Shape            *computed;
 	
 	void             UpdateComputed(void);
@@ -43,6 +67,22 @@ struct SPFlowregionExclude : public SPItem {
 
 struct SPFlowregionExcludeClass {
 	SPItemClass parent_class;
+};
+
+class CFlowregionExclude : public CItem {
+public:
+	CFlowregionExclude(SPFlowregionExclude* flowregionexclude);
+	virtual ~CFlowregionExclude();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node *child);
+	virtual void onUpdate(SPCtx *ctx, unsigned int flags);
+	virtual void onModified(guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual gchar *onDescription();
+
+protected:
+	SPFlowregionExclude* spflowregionexclude;
 };
 
 GType sp_flowregionexclude_get_type (void);
