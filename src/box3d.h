@@ -29,9 +29,12 @@
 class Box3DSide;
 class Persp3D;
 class Persp3DReference;
+class CBox3D;
 
 class SPBox3D : public SPGroup {
 public:
+	CBox3D* cbox3d;
+
     gint z_orders[6]; // z_orders[i] holds the ID of the face at position #i in the group (from top to bottom)
 
     gchar *persp_href;
@@ -57,6 +60,27 @@ class SPBox3DClass {
 public:
     SPGroupClass parent_class;
 };
+
+
+class CBox3D : public CGroup {
+public:
+	CBox3D(SPBox3D* box3d);
+	virtual ~CBox3D();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual gchar *onDescription();
+	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+    virtual void onConvertToGuides();
+
+protected:
+	SPBox3D* spbox3d;
+};
+
 
 GType box3d_get_type (void);
 
