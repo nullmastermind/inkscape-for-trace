@@ -98,6 +98,13 @@ static void sp_marker_class_init(SPMarkerClass *klass)
 	sp_item_class->print = sp_marker_print;
 }
 
+CMarker::CMarker(SPMarker* marker) : CGroup(marker) {
+	this->spmarker = marker;
+}
+
+CMarker::~CMarker() {
+}
+
 /**
  * Initializes an SPMarker object.  This notes the marker's viewBox is
  * not set and initializes the marker's c2p identity matrix.
@@ -105,11 +112,33 @@ static void sp_marker_class_init(SPMarkerClass *klass)
 static void
 sp_marker_init (SPMarker *marker)
 {
+	marker->cmarker = new CMarker(marker);
+	marker->cgroup = marker->cmarker;
+	marker->clpeitem = marker->cmarker;
+	marker->citem = marker->cmarker;
+	marker->cobject = marker->cmarker;
+
     marker->viewBox = Geom::OptRect();
     marker->c2p.setIdentity();
     marker->views = NULL;
 }
 
+void CMarker::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPMarker* object = this->spmarker;
+
+    object->readAttr( "markerUnits" );
+    object->readAttr( "refX" );
+    object->readAttr( "refY" );
+    object->readAttr( "markerWidth" );
+    object->readAttr( "markerHeight" );
+    object->readAttr( "orient" );
+    object->readAttr( "viewBox" );
+    object->readAttr( "preserveAspectRatio" );
+
+    CGroup::onBuild(document, repr);
+}
+
+// CPPIFY: remove
 /**
  * Virtual build callback for SPMarker.
  *
@@ -122,20 +151,25 @@ sp_marker_init (SPMarker *marker)
  */
 static void sp_marker_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    object->readAttr( "markerUnits" );
-    object->readAttr( "refX" );
-    object->readAttr( "refY" );
-    object->readAttr( "markerWidth" );
-    object->readAttr( "markerHeight" );
-    object->readAttr( "orient" );
-    object->readAttr( "viewBox" );
-    object->readAttr( "preserveAspectRatio" );
-
-    if (reinterpret_cast<SPObjectClass *>(parent_class)->build) {
-        reinterpret_cast<SPObjectClass *>(parent_class)->build(object, document, repr);
-    }
+	((SPMarker*)object)->cmarker->onBuild(document, repr);
 }
 
+void CMarker::onRelease() {
+	SPMarker* object = this->spmarker;
+
+    SPMarker *marker = reinterpret_cast<SPMarker *>(object);
+
+    while (marker->views) {
+        // Destroy all DrawingItems etc.
+        // Parent class ::hide method
+        reinterpret_cast<SPItemClass *>(parent_class)->hide(marker, marker->views->key);
+        sp_marker_view_remove (marker, marker->views, TRUE);
+    }
+
+    CGroup::onRelease();
+}
+
+// CPPIFY: remove
 /**
  * Removes, releases and unrefs all children of object
  *
@@ -150,35 +184,12 @@ static void sp_marker_build(SPObject *object, SPDocument *document, Inkscape::XM
  */
 static void sp_marker_release(SPObject *object)
 {
-    SPMarker *marker = reinterpret_cast<SPMarker *>(object);
-
-    while (marker->views) {
-        // Destroy all DrawingItems etc.
-        // Parent class ::hide method
-        reinterpret_cast<SPItemClass *>(parent_class)->hide(marker, marker->views->key);
-        sp_marker_view_remove (marker, marker->views, TRUE);
-    }
-
-    if (reinterpret_cast<SPObjectClass *>(parent_class)->release) {
-        reinterpret_cast<SPObjectClass *>(parent_class)->release(object);
-    }
+	((SPMarker*)object)->cmarker->onRelease();
 }
 
-/**
- * Sets an attribute, 'key', of a marker object to 'value'.  Supported
- * attributes that can be set with this routine include:
- *
- *     SP_ATTR_MARKERUNITS
- *     SP_ATTR_REFX
- *     SP_ATTR_REFY
- *     SP_ATTR_MARKERWIDTH
- *     SP_ATTR_MARKERHEIGHT
- *     SP_ATTR_ORIENT
- *     SP_ATTR_VIEWBOX
- *     SP_ATTR_PRESERVEASPECTRATIO
- */
-static void sp_marker_set(SPObject *object, unsigned int key, const gchar *value)
-{
+void CMarker::onSet(unsigned int key, const gchar* value) {
+	SPMarker* object = this->spmarker;
+
 	SPMarker *marker = SP_MARKER(object);
 
 	switch (key) {
@@ -310,18 +321,33 @@ static void sp_marker_set(SPObject *object, unsigned int key, const gchar *value
 		}
 		break;
 	default:
-		if (((SPObjectClass *) parent_class)->set)
-			((SPObjectClass *) parent_class)->set (object, key, value);
+		CGroup::onSet(key, value);
 		break;
 	}
 }
 
+// CPPIFY: remove
 /**
- * Updates <marker> when its attributes have changed.  Takes care of setting up
- * transformations and viewBoxes.
+ * Sets an attribute, 'key', of a marker object to 'value'.  Supported
+ * attributes that can be set with this routine include:
+ *
+ *     SP_ATTR_MARKERUNITS
+ *     SP_ATTR_REFX
+ *     SP_ATTR_REFY
+ *     SP_ATTR_MARKERWIDTH
+ *     SP_ATTR_MARKERHEIGHT
+ *     SP_ATTR_ORIENT
+ *     SP_ATTR_VIEWBOX
+ *     SP_ATTR_PRESERVEASPECTRATIO
  */
-static void sp_marker_update(SPObject *object, SPCtx *ctx, guint flags)
+static void sp_marker_set(SPObject *object, unsigned int key, const gchar *value)
 {
+	((SPMarker*)object)->cmarker->onSet(key, value);
+}
+
+void CMarker::onUpdate(SPCtx *ctx, guint flags) {
+	SPMarker* object = this->spmarker;
+
     SPMarker *marker = SP_MARKER(object);
     SPItemCtx rctx;
 
@@ -429,9 +455,7 @@ static void sp_marker_update(SPObject *object, SPCtx *ctx, guint flags)
     }
 
     // And invoke parent method
-    if (((SPObjectClass *) (parent_class))->update) {
-        ((SPObjectClass *) (parent_class))->update (object, (SPCtx *) &rctx, flags);
-    }
+    CGroup::onUpdate((SPCtx *) &rctx, flags);
 
     // As last step set additional transform of drawing group
     for (SPMarkerView *v = marker->views; v != NULL; v = v->next) {
@@ -444,12 +468,19 @@ static void sp_marker_update(SPObject *object, SPCtx *ctx, guint flags)
     }
 }
 
+// CPPIFY: remove
 /**
- * Writes the object's properties into its repr object.
+ * Updates <marker> when its attributes have changed.  Takes care of setting up
+ * transformations and viewBoxes.
  */
-static Inkscape::XML::Node *
-sp_marker_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void sp_marker_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+	((SPMarker*)object)->cmarker->onUpdate(ctx, flags);
+}
+
+Inkscape::XML::Node* CMarker::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPMarker* object = this->spmarker;
+
 	SPMarker *marker;
 
 	marker = SP_MARKER (object);
@@ -502,12 +533,26 @@ sp_marker_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::X
 	//XML Tree being used directly here while it shouldn't be....
 	repr->setAttribute("preserveAspectRatio", object->getRepr()->attribute("preserveAspectRatio"));
 
-	if (((SPObjectClass *) (parent_class))->write)
-		((SPObjectClass *) (parent_class))->write (object, xml_doc, repr, flags);
+	CGroup::onWrite(xml_doc, repr, flags);
 
 	return repr;
 }
 
+// CPPIFY: remove
+/**
+ * Writes the object's properties into its repr object.
+ */
+static Inkscape::XML::Node *
+sp_marker_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPMarker*)object)->cmarker->onWrite(xml_doc, repr, flags);
+}
+
+Inkscape::DrawingItem* CMarker::onShow(Inkscape::Drawing &/*drawing*/, unsigned int /*key*/, unsigned int /*flags*/) {
+	return 0;
+}
+
+// CPPIFY: remove
 /**
  * This routine is disabled to break propagation.
  */
@@ -518,6 +563,11 @@ sp_marker_private_show (SPItem */*item*/, Inkscape::Drawing &/*drawing*/, unsign
     return NULL;
 }
 
+void CMarker::onHide(unsigned int key) {
+
+}
+
+// CPPIFY: remove
 /**
  * This routine is disabled to break propagation.
  */
@@ -527,6 +577,11 @@ sp_marker_private_hide (SPItem */*item*/, unsigned int /*key*/)
     /* Break propagation */
 }
 
+Geom::OptRect CMarker::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+	return Geom::OptRect();
+}
+
+// CPPIFY: remove
 /**
  * This routine is disabled to break propagation.
  */
@@ -537,6 +592,11 @@ sp_marker_bbox(SPItem const *, Geom::Affine const &, SPItem::BBoxType)
     return Geom::OptRect();
 }
 
+void CMarker::onPrint(SPPrintContext* ctx) {
+
+}
+
+// CPPIFY: remove
 /**
  * This routine is disabled to break propagation.
  */

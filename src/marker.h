@@ -25,6 +25,7 @@
 class SPMarker;
 class SPMarkerClass;
 class SPMarkerView;
+class CMarker;
 
 #include <2geom/rect.h>
 #include <2geom/affine.h>
@@ -34,7 +35,10 @@ class SPMarkerView;
 #include "sp-marker-loc.h"
 #include "uri-references.h"
 
-struct SPMarker : public SPGroup {
+class SPMarker : public SPGroup {
+public:
+	CMarker* cmarker;
+
 	/* units */
 	unsigned int markerUnits_set : 1;
 	unsigned int markerUnits : 1;
@@ -70,6 +74,30 @@ struct SPMarker : public SPGroup {
 struct SPMarkerClass {
 	SPGroupClass parent_class;
 };
+
+
+class CMarker : public CGroup {
+public:
+	CMarker(SPMarker* marker);
+	virtual ~CMarker();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onHide(unsigned int key);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void onPrint(SPPrintContext *ctx);
+
+protected:
+	SPMarker* spmarker;
+};
+
+
 
 GType sp_marker_get_type (void);
 
