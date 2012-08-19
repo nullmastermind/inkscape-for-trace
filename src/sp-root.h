@@ -26,9 +26,13 @@
 #define SP_IS_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_ROOT))
 
 class SPDefs;
+class CRoot;
 
 /** \<svg\> element */
-struct SPRoot : public SPGroup {
+class SPRoot : public SPGroup {
+public:
+	CRoot* croot;
+
     struct {
         Inkscape::Version svg;
         Inkscape::Version inkscape;
@@ -65,6 +69,30 @@ struct SPRoot : public SPGroup {
 struct SPRootClass {
     SPGroupClass parent_class;
 };
+
+
+class CRoot : public CGroup {
+public:
+	CRoot(SPRoot* root);
+	virtual ~CRoot();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual void onModified(unsigned int flags);
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onPrint(SPPrintContext *ctx);
+
+protected:
+	SPRoot* sproot;
+};
+
 
 GType sp_root_get_type();
 

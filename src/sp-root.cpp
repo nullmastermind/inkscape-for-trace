@@ -96,11 +96,24 @@ static void sp_root_class_init(SPRootClass *klass)
     sp_item_class->print = sp_root_print;
 }
 
+CRoot::CRoot(SPRoot* root) : CGroup(root) {
+	this->sproot = root;
+}
+
+CRoot::~CRoot() {
+}
+
 /**
  * Initializes an SPRoot object by setting its default parameter values.
  */
 static void sp_root_init(SPRoot *root)
 {
+	root->croot = new CRoot(root);
+	root->cgroup = root->croot;
+	root->clpeitem = root->croot;
+	root->citem = root->croot;
+	root->cobject = root->croot;
+
     static Inkscape::Version const zero_version(0, 0);
 
     sp_version_from_string(SVG_VERSION, &root->original.svg);
@@ -121,13 +134,9 @@ static void sp_root_init(SPRoot *root)
     root->defs = NULL;
 }
 
-/**
- * Fills in the data for an SPObject from its Inkscape::XML::Node object.
- * It fills in data such as version, x, y, width, height, etc.
- * It then calls the object's parent class object's build function.
- */
-static void sp_root_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+void CRoot::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPRoot* object = this->sproot;
+
     SPGroup *group = (SPGroup *) object;
     SPRoot *root = (SPRoot *) object;
 
@@ -147,8 +156,7 @@ static void sp_root_build(SPObject *object, SPDocument *document, Inkscape::XML:
     object->readAttr( "preserveAspectRatio" );
     object->readAttr( "onload" );
 
-    if (((SPObjectClass *) parent_class)->build)
-        (* ((SPObjectClass *) parent_class)->build) (object, document, repr);
+    CGroup::onBuild(document, repr);
 
     // Search for first <defs> node
     for (SPObject *o = group->firstChild() ; o ; o = o->getNext() ) {
@@ -162,25 +170,39 @@ static void sp_root_build(SPObject *object, SPDocument *document, Inkscape::XML:
     SP_ITEM(object)->transform = Geom::identity();
 }
 
+// CPPIFY: remove
+/**
+ * Fills in the data for an SPObject from its Inkscape::XML::Node object.
+ * It fills in data such as version, x, y, width, height, etc.
+ * It then calls the object's parent class object's build function.
+ */
+static void sp_root_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+{
+	((SPRoot*)object)->croot->onBuild(document, repr);
+}
+
+void CRoot::onRelease() {
+	SPRoot* object = this->sproot;
+
+    SPRoot *root = (SPRoot *) object;
+    root->defs = NULL;
+
+    CGroup::onRelease();
+}
+
+// CPPIFY: remove
 /**
  * This is a destructor routine for SPRoot objects.  It de-references any \<def\> items and calls
  * the parent class destructor.
  */
 static void sp_root_release(SPObject *object)
 {
-    SPRoot *root = (SPRoot *) object;
-    root->defs = NULL;
-
-    if (((SPObjectClass *) parent_class)->release)
-        ((SPObjectClass *) parent_class)->release(object);
+	((SPRoot*)object)->croot->onRelease();
 }
 
-/**
- * Sets the attribute given by key for SPRoot objects to the value specified by value.
- */
-static void sp_root_set(SPObject *object, unsigned int key, gchar const *value)
-{
-    SPRoot *root = SP_ROOT(object);
+void CRoot::onSet(unsigned int key, const gchar* value) {
+	SPRoot* object = this->sproot;
+    SPRoot *root = object;
 
     switch (key) {
         case SP_ATTR_VERSION:
@@ -315,25 +337,27 @@ static void sp_root_set(SPObject *object, unsigned int key, gchar const *value)
             break;
         default:
             /* Pass the set event to the parent */
-            if (((SPObjectClass *) parent_class)->set) {
-                ((SPObjectClass *) parent_class)->set(object, key, value);
-            }
+            CGroup::onSet(key, value);
             break;
     }
 }
 
+// CPPIFY: remove
 /**
- * This routine is for adding a child SVG object to an SPRoot object.
- * The SPRoot object is taken to be an SPGroup.
+ * Sets the attribute given by key for SPRoot objects to the value specified by value.
  */
-static void sp_root_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
+static void sp_root_set(SPObject *object, unsigned int key, gchar const *value)
 {
+	((SPRoot*)object)->croot->onSet(key, value);
+}
+
+void CRoot::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPRoot* object = this->sproot;
+
     SPRoot *root = (SPRoot *) object;
     SPGroup *group = (SPGroup *) object;
 
-    if (((SPObjectClass *) (parent_class))->child_added) {
-        (* ((SPObjectClass *) (parent_class))->child_added)(object, child, ref);
-    }
+    CGroup::onChildAdded(child, ref);
 
     SPObject *co = object->document->getObjectByRepr(child);
     g_assert (co != NULL || !strcmp("comment", child->name())); // comment repr node has no object
@@ -349,11 +373,19 @@ static void sp_root_child_added(SPObject *object, Inkscape::XML::Node *child, In
     }
 }
 
+// CPPIFY: remove
 /**
- * Removes the given child from this SPRoot object.
+ * This routine is for adding a child SVG object to an SPRoot object.
+ * The SPRoot object is taken to be an SPGroup.
  */
-static void sp_root_remove_child(SPObject *object, Inkscape::XML::Node *child)
+static void sp_root_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
+	((SPRoot*)object)->croot->onChildAdded(child, ref);
+}
+
+void CRoot::onRemoveChild(Inkscape::XML::Node* child) {
+	SPRoot* object = this->sproot;
+
     SPRoot *root = (SPRoot *) object;
 
     if ( root->defs && (root->defs->getRepr() == child) ) {
@@ -371,16 +403,21 @@ static void sp_root_remove_child(SPObject *object, Inkscape::XML::Node *child)
         }
     }
 
-    if (((SPObjectClass *) (parent_class))->remove_child) {
-        (* ((SPObjectClass *) (parent_class))->remove_child)(object, child);
-    }
+    CGroup::onRemoveChild(child);
 }
 
+// CPPIFY: remove
 /**
- * This callback routine updates the SPRoot object when its attributes have been changed.
+ * Removes the given child from this SPRoot object.
  */
-static void sp_root_update(SPObject *object, SPCtx *ctx, guint flags)
+static void sp_root_remove_child(SPObject *object, Inkscape::XML::Node *child)
 {
+	((SPRoot*)object)->croot->onRemoveChild(child);
+}
+
+void CRoot::onUpdate(SPCtx *ctx, guint flags) {
+	SPRoot* object = this->sproot;
+
     SPRoot *root = SP_ROOT(object);
     SPItemCtx *ictx = (SPItemCtx *) ctx;
 
@@ -508,8 +545,7 @@ static void sp_root_update(SPObject *object, SPCtx *ctx, guint flags)
     rctx.i2vp = Geom::identity();
 
     /* And invoke parent method */
-    if (((SPObjectClass *) (parent_class))->update)
-        ((SPObjectClass *) (parent_class))->update(object, (SPCtx *) &rctx, flags);
+    CGroup::onUpdate((SPCtx *) &rctx, flags);
 
     /* As last step set additional transform of drawing group */
     for (SPItemView *v = root->display; v != NULL; v = v->next) {
@@ -518,17 +554,21 @@ static void sp_root_update(SPObject *object, SPCtx *ctx, guint flags)
     }
 }
 
+// CPPIFY: remove
 /**
- * Calls the <tt>modified</tt> routine of the SPRoot object's parent class.
- * Also, if the viewport has been modified, it sets the document size to the new
- * height and width.
+ * This callback routine updates the SPRoot object when its attributes have been changed.
  */
-static void sp_root_modified(SPObject *object, guint flags)
+static void sp_root_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+	((SPRoot*)object)->croot->onUpdate(ctx, flags);
+}
+
+void CRoot::onModified(unsigned int flags) {
+	SPRoot* object = this->sproot;
+
     SPRoot *root = SP_ROOT(object);
 
-    if (((SPObjectClass *) (parent_class))->modified)
-        (* ((SPObjectClass *) (parent_class))->modified)(object, flags);
+    CGroup::onModified(flags);
 
     /* fixme: (Lauris) */
     if (!object->parent && (flags & SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -536,12 +576,20 @@ static void sp_root_modified(SPObject *object, guint flags)
     }
 }
 
+// CPPIFY: remove
 /**
- * Writes the object into the repr object, then calls the parent's write routine.
+ * Calls the <tt>modified</tt> routine of the SPRoot object's parent class.
+ * Also, if the viewport has been modified, it sets the document size to the new
+ * height and width.
  */
-static Inkscape::XML::Node *
-sp_root_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void sp_root_modified(SPObject *object, guint flags)
 {
+	((SPRoot*)object)->croot->onModified(flags);
+}
+
+Inkscape::XML::Node* CRoot::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPRoot* object = this->sproot;
+
     SPRoot *root = SP_ROOT(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -576,39 +624,51 @@ sp_root_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML:
         repr->setAttribute("viewBox", os.str().c_str());
     }
 
-    if (((SPObjectClass *) (parent_class))->write)
-        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
+    CGroup::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
+// CPPIFY: remove
+/**
+ * Writes the object into the repr object, then calls the parent's write routine.
+ */
+static Inkscape::XML::Node *
+sp_root_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPRoot*)object)->croot->onWrite(xml_doc, repr, flags);
+}
+
+Inkscape::DrawingItem* CRoot::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+	SPRoot* item = this->sproot;
+
+    SPRoot *root = SP_ROOT(item);
+
+    Inkscape::DrawingItem *ai = 0;
+
+    ai = CGroup::onShow(drawing, key, flags);
+
+    if (ai) {
+    	Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
+    	g->setChildTransform(root->c2p);
+    }
+
+    return ai;
+}
+
+// CPPIFY: remove
 /**
  * Displays the SPRoot item on the drawing.
  */
 static Inkscape::DrawingItem *
 sp_root_show(SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
 {
-    SPRoot *root = SP_ROOT(item);
-
-    Inkscape::DrawingItem *ai;
-    if (((SPItemClass *) (parent_class))->show) {
-        ai = ((SPItemClass *) (parent_class))->show(item, drawing, key, flags);
-        if (ai) {
-            Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
-            g->setChildTransform(root->c2p);
-        }
-    } else {
-        ai = NULL;
-    }
-
-    return ai;
+	return ((SPRoot*)item)->croot->onShow(drawing, key, flags);
 }
 
-/**
- * Virtual print callback.
- */
-static void sp_root_print(SPItem *item, SPPrintContext *ctx)
-{
+void CRoot::onPrint(SPPrintContext* ctx) {
+	SPRoot* item = this->sproot;
+
     SPRoot *root = SP_ROOT(item);
 
     sp_print_bind(ctx, root->c2p, 1.0);
@@ -620,6 +680,14 @@ static void sp_root_print(SPItem *item, SPPrintContext *ctx)
     sp_print_release(ctx);
 }
 
+// CPPIFY: remove
+/**
+ * Virtual print callback.
+ */
+static void sp_root_print(SPItem *item, SPPrintContext *ctx)
+{
+	((SPRoot*)item)->croot->onPrint(ctx);
+}
 
 /*
   Local Variables:
