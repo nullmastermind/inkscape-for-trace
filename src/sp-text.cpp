@@ -132,42 +132,63 @@ sp_text_class_init (SPTextClass *classname)
     item_class->print = sp_text_print;
 }
 
+CText::CText(SPText* text) : CItem(text) {
+	this->sptext = text;
+}
+
+CText::~CText() {
+}
+
 static void
 sp_text_init (SPText *text)
 {
+	text->ctext = new CText(text);
+	text->citem = text->ctext;
+	text->cobject = text->ctext;
+
     new (&text->layout) Inkscape::Text::Layout;
     new (&text->attributes) TextTagAttributes;
+}
+
+void CText::onRelease() {
+	SPText* object = this->sptext;
+
+    SPText *text = SP_TEXT(object);
+    text->attributes.~TextTagAttributes();
+    text->layout.~Layout();
+
+    CItem::onRelease();
 }
 
 static void
 sp_text_release (SPObject *object)
 {
-    SPText *text = SP_TEXT(object);
-    text->attributes.~TextTagAttributes();
-    text->layout.~Layout();
-
-    if (((SPObjectClass *) text_parent_class)->release)
-        ((SPObjectClass *) text_parent_class)->release(object);
+	((SPText*)object)->ctext->onRelease();
 }
 
-static void
-sp_text_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
-{
+void CText::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
+	SPText* object = this->sptext;
+
     object->readAttr( "x" );
     object->readAttr( "y" );
     object->readAttr( "dx" );
     object->readAttr( "dy" );
     object->readAttr( "rotate" );
 
-    if (((SPObjectClass *) text_parent_class)->build)
-        ((SPObjectClass *) text_parent_class)->build(object, doc, repr);
+    CItem::onBuild(doc, repr);
 
     object->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
 }
 
 static void
-sp_text_set(SPObject *object, unsigned key, gchar const *value)
+sp_text_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
+	((SPText*)object)->ctext->onBuild(doc, repr);
+}
+
+void CText::onSet(unsigned int key, const gchar* value) {
+	SPText* object = this->sptext;
+
     SPText *text = SP_TEXT (object);
 
     if (text->attributes.readSingleAttribute(key, value)) {
@@ -186,20 +207,40 @@ sp_text_set(SPObject *object, unsigned key, gchar const *value)
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;
             default:
-                if (((SPObjectClass *) text_parent_class)->set)
-                    ((SPObjectClass *) text_parent_class)->set (object, key, value);
+                CItem::onSet(key, value);
                 break;
         }
     }
 }
 
 static void
-sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref)
+sp_text_set(SPObject *object, unsigned key, gchar const *value)
 {
+	((SPText*)object)->ctext->onSet(key, value);
+}
+
+void CText::onChildAdded(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
+	SPText* object = this->sptext;
+
     SPText *text = SP_TEXT (object);
 
-    if (((SPObjectClass *) text_parent_class)->child_added)
-        ((SPObjectClass *) text_parent_class)->child_added (object, rch, ref);
+    CItem::onChildAdded(rch, ref);
+
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+}
+
+static void
+sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref)
+{
+	((SPText*)object)->ctext->onChildAdded(rch, ref);
+}
+
+void CText::onRemoveChild(Inkscape::XML::Node *rch) {
+	SPText* object = this->sptext;
+
+    SPText *text = SP_TEXT (object);
+
+    CItem::onRemoveChild(rch);
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
@@ -207,20 +248,15 @@ sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::
 static void
 sp_text_remove_child (SPObject *object, Inkscape::XML::Node *rch)
 {
-    SPText *text = SP_TEXT (object);
-
-    if (((SPObjectClass *) text_parent_class)->remove_child)
-        ((SPObjectClass *) text_parent_class)->remove_child (object, rch);
-
-    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+	((SPText*)object)->ctext->onRemoveChild(rch);
 }
 
-static void sp_text_update(SPObject *object, SPCtx *ctx, guint flags)
-{
+void CText::onUpdate(SPCtx *ctx, guint flags) {
+	SPText* object = this->sptext;
+
     SPText *text = SP_TEXT (object);
 
-    if (((SPObjectClass *) text_parent_class)->update)
-        ((SPObjectClass *) text_parent_class)->update (object, ctx, flags);
+    CItem::onUpdate(ctx, flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
     if (flags & SP_OBJECT_MODIFIED_FLAG) cflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -262,11 +298,20 @@ static void sp_text_update(SPObject *object, SPCtx *ctx, guint flags)
     }
 }
 
-static void sp_text_modified(SPObject *object, guint flags)
+static void sp_text_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    if (((SPObjectClass *) text_parent_class)->modified) {
-        ((SPObjectClass *) text_parent_class)->modified (object, flags);
-    }
+	((SPText*)object)->ctext->onUpdate(ctx, flags);
+}
+
+void CText::onModified(guint flags) {
+	SPText* object = this->sptext;
+
+	// CPPIFY: This doesn't make no sense.
+	// CObject::onModified is pure and CItem doesn't override this method. What was the idea behind these lines?
+//	if (((SPObjectClass *) text_parent_class)->modified) {
+//		((SPObjectClass *) text_parent_class)->modified (object, flags);
+//	}
+//	CItem::onModified(flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -305,8 +350,14 @@ static void sp_text_modified(SPObject *object, guint flags)
     }
 }
 
-static Inkscape::XML::Node *sp_text_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void sp_text_modified(SPObject *object, guint flags)
 {
+	((SPText*)object)->ctext->onModified(flags);
+}
+
+Inkscape::XML::Node *CText::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPText* object = this->sptext;
+
     SPText *text = SP_TEXT (object);
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
@@ -357,16 +408,19 @@ static Inkscape::XML::Node *sp_text_write(SPObject *object, Inkscape::XML::Docum
         text->getRepr()->setAttribute("sodipodi:linespacing", NULL);
     }
 
-    if (((SPObjectClass *) (text_parent_class))->write) {
-        ((SPObjectClass *) (text_parent_class))->write (object, xml_doc, repr, flags);
-    }
+    CItem::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-static Geom::OptRect
-sp_text_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
+static Inkscape::XML::Node *sp_text_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+	return ((SPText*)object)->ctext->onWrite(xml_doc, repr, flags);
+}
+
+Geom::OptRect CText::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+	SPText* item = this->sptext;
+
     Geom::OptRect bbox = SP_TEXT(item)->layout.bounds(transform);
 
     // FIXME this code is incorrect
@@ -377,10 +431,15 @@ sp_text_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType
     return bbox;
 }
 
-
-static Inkscape::DrawingItem *
-sp_text_show(SPItem *item, Inkscape::Drawing &drawing, unsigned /* key*/, unsigned /*flags*/)
+static Geom::OptRect
+sp_text_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
 {
+	return ((SPText*)item)->ctext->onBbox(transform, type);
+}
+
+Inkscape::DrawingItem* CText::onShow(Inkscape::Drawing &drawing, unsigned key, unsigned flags) {
+	SPText* item = this->sptext;
+
     SPText *group = (SPText *) item;
 
     Inkscape::DrawingGroup *flowed = new Inkscape::DrawingGroup(drawing);
@@ -393,15 +452,29 @@ sp_text_show(SPItem *item, Inkscape::Drawing &drawing, unsigned /* key*/, unsign
     return flowed;
 }
 
+static Inkscape::DrawingItem *
+sp_text_show(SPItem *item, Inkscape::Drawing &drawing, unsigned key, unsigned flags)
+{
+	return ((SPText*)item)->ctext->onShow(drawing, key, flags);
+}
+
+void CText::onHide(unsigned int key) {
+	// CPPIFY: This doesn't make no sense.
+	// CItem::onHide is pure and CLPEItem doesn't override it. What was the idea behind these lines?
+//    if (((SPItemClass *) text_parent_class)->hide)
+//        ((SPItemClass *) text_parent_class)->hide (item, key);
+//	CItem::onHide(key);
+}
+
 static void
 sp_text_hide(SPItem *item, unsigned key)
 {
-    if (((SPItemClass *) text_parent_class)->hide)
-        ((SPItemClass *) text_parent_class)->hide (item, key);
+	((SPText*)item)->ctext->onHide(key);
 }
 
-static char * sp_text_description(SPItem *item)
-{
+gchar* CText::onDescription() {
+	SPText* item = this->sptext;
+
     SPText *text = reinterpret_cast<SPText *>(item);
     SPStyle *style = text->style;
 
@@ -433,8 +506,14 @@ static char * sp_text_description(SPItem *item)
     return ret;
 }
 
-static void sp_text_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
+static char * sp_text_description(SPItem *item)
 {
+	return ((SPText*)item)->ctext->onDescription();
+}
+
+void CText::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+	SPText* item = this->sptext;
+
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_TEXT_BASELINE)) {
         // Choose a point on the baseline for snapping from or to, with the horizontal position
         // of this point depending on the text alignment (left vs. right)
@@ -448,9 +527,14 @@ static void sp_text_snappoints(SPItem const *item, std::vector<Inkscape::SnapCan
     }
 }
 
-static Geom::Affine
-sp_text_set_transform (SPItem *item, Geom::Affine const &xform)
+static void sp_text_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
 {
+	((SPText*)item)->ctext->onSnappoints(p, snapprefs);
+}
+
+Geom::Affine CText::onSetTransform(Geom::Affine const &xform) {
+	SPText* item = this->sptext;
+
     SPText *text = SP_TEXT(item);
 
     // we cannot optimize textpath because changing its fontsize will break its match to the path
@@ -497,9 +581,15 @@ sp_text_set_transform (SPItem *item, Geom::Affine const &xform)
     return ret;
 }
 
-static void
-sp_text_print (SPItem *item, SPPrintContext *ctx)
+static Geom::Affine
+sp_text_set_transform (SPItem *item, Geom::Affine const &xform)
 {
+	return ((SPText*)item)->ctext->onSetTransform(xform);
+}
+
+void CText::onPrint(SPPrintContext *ctx) {
+	SPText* item = this->sptext;
+
     SPText *group = SP_TEXT (item);
     Geom::OptRect pbox, bbox, dbox;
 
@@ -509,6 +599,12 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
     Geom::Affine const ctm (item->i2dt_affine());
 
     group->layout.print(ctx,pbox,dbox,bbox,ctm);
+}
+
+static void
+sp_text_print (SPItem *item, SPPrintContext *ctx)
+{
+	((SPText*)item)->ctext->onPrint(ctx);
 }
 
 /*

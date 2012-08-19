@@ -32,10 +32,14 @@
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 #define SP_TEXT_LAYOUT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
+class CText;
 
 /* SPText */
 
-struct SPText : public SPItem {
+class SPText : public SPItem {
+public:
+	CText* ctext;
+
     /** Converts the text object to its component curves */
     SPCurve *getNormalizedBpath() const
         {return layout.convertToCurves();}
@@ -71,6 +75,34 @@ private:
 struct SPTextClass {
     SPItemClass parent_class;
 };
+
+
+class CText : public CItem {
+public:
+	CText(SPText* text);
+	virtual ~CText();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void onPrint(SPPrintContext *ctx);
+	virtual gchar* onDescription();
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onHide(unsigned int key);
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+
+protected:
+	SPText* sptext;
+};
+
 
 GType sp_text_get_type();
 
