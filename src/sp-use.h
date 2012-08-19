@@ -28,8 +28,12 @@
 class SPUse;
 class SPUseClass;
 class SPUseReference;
+class CUse;
 
-struct SPUse : public SPItem {
+class SPUse : public SPItem {
+public:
+	CUse* cuse;
+
     // item built from the original's repr (the visible clone)
     // relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
     SPObject *child;
@@ -55,6 +59,31 @@ struct SPUse : public SPItem {
 struct SPUseClass {
     SPItemClass parent_class;
 };
+
+
+class CUse : public CItem {
+public:
+	CUse(SPUse* use);
+	virtual ~CUse();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned key, gchar const *value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
+	virtual gchar* onDescription();
+	virtual void onPrint(SPPrintContext *ctx);
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onHide(unsigned int key);
+	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+
+protected:
+	SPUse* spuse;
+};
+
 
 GType sp_use_get_type (void);
 
