@@ -453,9 +453,7 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
         top = lpeitem;
     }
 
-    if (SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (top))->update_patheffect) {
-        SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (top))->update_patheffect (top, write);
-    }
+    top->clpeitem->onUpdatePatheffect(write);
 }
 
 /**
