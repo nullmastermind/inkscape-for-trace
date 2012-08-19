@@ -115,9 +115,20 @@ sp_tref_class_init(SPTRefClass *tref_class)
     item_class->description = sp_tref_description;
 }
 
+CTRef::CTRef(SPTRef* tref) : CItem(tref) {
+	this->sptref = tref;
+}
+
+CTRef::~CTRef() {
+}
+
 static void
 sp_tref_init(SPTRef *tref)
 {
+	tref->ctref = new CTRef(tref);
+	tref->citem = tref->ctref;
+	tref->cobject = tref->ctref;
+
     new (&tref->attributes) TextTagAttributes;
 
     tref->href = NULL;
@@ -128,7 +139,6 @@ sp_tref_init(SPTRef *tref)
     tref->_changed_connection =
         tref->uriOriginalRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_tref_href_changed), tref));
 }
-
 
 static void
 sp_tref_finalize(GObject *obj)
@@ -141,16 +151,10 @@ sp_tref_finalize(GObject *obj)
     tref->_changed_connection.~connection();
 }
 
+void CTRef::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPTRef* object = this->sptref;
 
-/**
- * Reads the Inkscape::XML::Node, and initializes SPTRef variables.
- */
-static void
-sp_tref_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) tref_parent_class)->build) {
-        ((SPObjectClass *) tref_parent_class)->build(object, document, repr);
-    }
+    CItem::onBuild(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "x" );
@@ -161,11 +165,17 @@ sp_tref_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 }
 
 /**
- * Drops any allocated memory.
+ * Reads the Inkscape::XML::Node, and initializes SPTRef variables.
  */
 static void
-sp_tref_release(SPObject *object)
+sp_tref_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
+	((SPTRef*)object)->ctref->onBuild(document, repr);
+}
+
+void CTRef::onRelease() {
+	SPTRef* object = this->sptref;
+
     SPTRef *tref = SP_TREF(object);
 
     tref->attributes.~TextTagAttributes();
@@ -178,16 +188,21 @@ sp_tref_release(SPObject *object)
 
     tref->uriOriginalRef->detach();
 
-    if (((SPObjectClass *) tref_parent_class)->release)
-        ((SPObjectClass *) tref_parent_class)->release(object);
+    CItem::onRelease();
 }
 
 /**
- * Sets a specific value in the SPTRef.
+ * Drops any allocated memory.
  */
 static void
-sp_tref_set(SPObject *object, unsigned int key, gchar const *value)
+sp_tref_release(SPObject *object)
 {
+	((SPTRef*)object)->ctref->onRelease();
+}
+
+void CTRef::onSet(unsigned int key, const gchar* value) {
+	SPTRef* object = this->sptref;
+
     debug("0x%p %s(%u): '%s'",object,
             sp_attribute_name(key),key,value ? value : "<no value>");
 
@@ -225,27 +240,27 @@ sp_tref_set(SPObject *object, unsigned int key, gchar const *value)
         }
 
     } else { // default
-        if (((SPObjectClass *) tref_parent_class)->set) {
-            ((SPObjectClass *) tref_parent_class)->set(object, key, value);
-        }
+        CItem::onSet(key, value);
     }
-
-
 }
 
 /**
- * Receives update notifications.  Code based on sp_use_update and sp_tspan_update.
+ * Sets a specific value in the SPTRef.
  */
 static void
-sp_tref_update(SPObject *object, SPCtx *ctx, guint flags)
+sp_tref_set(SPObject *object, unsigned int key, gchar const *value)
 {
+	((SPTRef*)object)->ctref->onSet(key, value);
+}
+
+void CTRef::onUpdate(SPCtx *ctx, guint flags) {
+	SPTRef* object = this->sptref;
+
     debug("0x%p",object);
 
     SPTRef *tref = SP_TREF(object);
 
-    if (((SPObjectClass *) tref_parent_class)->update) {
-        ((SPObjectClass *) tref_parent_class)->update(object, ctx, flags);
-    }
+    CItem::onUpdate(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -259,13 +274,20 @@ sp_tref_update(SPObject *object, SPCtx *ctx, guint flags)
             child->updateDisplay(ctx, flags);
         }
     }
-
-
 }
 
+/**
+ * Receives update notifications.  Code based on sp_use_update and sp_tspan_update.
+ */
 static void
-sp_tref_modified(SPObject *object, guint flags)
+sp_tref_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+	((SPTRef*)object)->ctref->onUpdate(ctx, flags);
+}
+
+void CTRef::onModified(unsigned int flags) {
+	SPTRef* object = this->sptref;
+
     SPTRef *tref_obj = SP_TREF(object);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -284,12 +306,15 @@ sp_tref_modified(SPObject *object, guint flags)
     }
 }
 
-/**
- * Writes its settings to an incoming repr object, if any.
- */
-static Inkscape::XML::Node *
-sp_tref_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+static void
+sp_tref_modified(SPObject *object, guint flags)
 {
+	((SPTRef*)object)->ctref->onModified(flags);
+}
+
+Inkscape::XML::Node* CTRef::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPTRef* object = this->sptref;
+
     debug("0x%p",object);
 
     SPTRef *tref = SP_TREF(object);
@@ -307,19 +332,23 @@ sp_tref_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML:
         g_free(uri_string);
     }
 
-    if (((SPObjectClass *) tref_parent_class)->write) {
-        ((SPObjectClass *) tref_parent_class)->write(object, xml_doc, repr, flags);
-    }
+    CItem::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-/*
- *  The code for this function is swiped from the tspan bbox code, since tref should work pretty much the same way
+/**
+ * Writes its settings to an incoming repr object, if any.
  */
-static Geom::OptRect
-sp_tref_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
+static Inkscape::XML::Node *
+sp_tref_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+	return ((SPTRef*)object)->ctref->onWrite(xml_doc, repr, flags);
+}
+
+Geom::OptRect CTRef::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+	SPTRef* item = this->sptref;
+
     Geom::OptRect bbox;
     // find out the ancestor text which holds our layout
     SPObject const *parent_text = item;
@@ -343,10 +372,18 @@ sp_tref_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType
     return bbox;
 }
 
-
-static gchar *
-sp_tref_description(SPItem *item)
+/*
+ *  The code for this function is swiped from the tspan bbox code, since tref should work pretty much the same way
+ */
+static Geom::OptRect
+sp_tref_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
 {
+	return ((SPTRef*)item)->ctref->onBbox(transform, type);
+}
+
+gchar* CTRef::onDescription() {
+	SPTRef* item = this->sptref;
+
     SPTRef *tref = SP_TREF(item);
     
     if (tref)
@@ -371,6 +408,12 @@ sp_tref_description(SPItem *item)
         }
     }
     return g_strdup(_("<b>Orphaned cloned character data</b>"));
+}
+
+static gchar *
+sp_tref_description(SPItem *item)
+{
+	return ((SPTRef*)item)->ctref->onDescription();
 }
 
 

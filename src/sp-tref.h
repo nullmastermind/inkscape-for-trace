@@ -29,9 +29,12 @@
 #define SP_IS_TREF_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TREF))
 
 class SPTRef;
-class SPTRef;
+class CTRef;
 
-struct SPTRef : public SPItem {
+class SPTRef : public SPItem {
+public:
+	CTRef* ctref;
+
     // Attributes that are used in the same way they would be in a tspan
     TextTagAttributes attributes;
     
@@ -56,6 +59,27 @@ struct SPTRef : public SPItem {
 struct SPTRefClass {
     SPItemClass parent_class;
 };
+
+
+class CTRef : public CItem {
+public:
+	CTRef(SPTRef* tref);
+	virtual ~CTRef();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual gchar* onDescription();
+
+protected:
+	SPTRef* sptref;
+};
+
 
 GType sp_tref_get_type();
 
