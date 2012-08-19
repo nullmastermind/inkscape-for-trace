@@ -85,32 +85,53 @@ static void sp_symbol_class_init(SPSymbolClass *klass)
     sp_item_class->print = sp_symbol_print;
 }
 
+CSymbol::CSymbol(SPSymbol* symbol) : CGroup(symbol) {
+	this->spsymbol = symbol;
+}
+
+CSymbol::~CSymbol() {
+}
+
 static void sp_symbol_init(SPSymbol *symbol)
 {
-    symbol->viewBox_set = FALSE;
+	symbol->csymbol = new CSymbol(symbol);
+	symbol->cgroup = symbol->csymbol;
+	symbol->clpeitem = symbol->csymbol;
+	symbol->citem = symbol->csymbol;
+	symbol->cobject = symbol->csymbol;
 
+    symbol->viewBox_set = FALSE;
     symbol->c2p = Geom::identity();
 }
 
-static void sp_symbol_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+void CSymbol::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPSymbol* object = this->spsymbol;
+
     object->readAttr( "viewBox" );
     object->readAttr( "preserveAspectRatio" );
 
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build (object, document, repr);
-    }
+    CGroup::onBuild(document, repr);
 }
 
+// CPPIFY: remove
+static void sp_symbol_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+{
+	((SPSymbol*)object)->csymbol->onBuild(document, repr);
+}
+
+void CSymbol::onRelease() {
+	CGroup::onRelease();
+}
+
+// CPPIFY: remove
 static void sp_symbol_release(SPObject *object)
 {
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release (object);
-    }
+	((SPSymbol*)object)->csymbol->onRelease();
 }
 
-static void sp_symbol_set(SPObject *object, unsigned int key, const gchar *value)
-{
+void CSymbol::onSet(unsigned int key, const gchar* value) {
+	SPSymbol* object = this->spsymbol;
+
     SPSymbol *symbol = SP_SYMBOL(object);
 
     switch (key) {
@@ -202,22 +223,31 @@ static void sp_symbol_set(SPObject *object, unsigned int key, const gchar *value
         }
         break;
     default:
-        if (((SPObjectClass *) parent_class)->set)
-            ((SPObjectClass *) parent_class)->set (object, key, value);
+        CGroup::onSet(key, value);
         break;
     }
 }
 
-static void sp_symbol_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
+// CPPIFY: remove
+static void sp_symbol_set(SPObject *object, unsigned int key, const gchar *value)
 {
-    if (((SPObjectClass *) (parent_class))->child_added) {
-        ((SPObjectClass *) (parent_class))->child_added (object, child, ref);
-    }
+	((SPSymbol*)object)->csymbol->onSet(key, value);
 }
 
-static void sp_symbol_update(SPObject *object, SPCtx *ctx, guint flags)
+void CSymbol::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	CGroup::onChildAdded(child, ref);
+}
+
+// CPPIFY: remove
+static void sp_symbol_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
-    SPSymbol *symbol = SP_SYMBOL(object);
+	((SPSymbol*)object)->csymbol->onChildAdded(child, ref);
+}
+
+void CSymbol::onUpdate(SPCtx *ctx, guint flags) {
+	SPSymbol* object = this->spsymbol;
+    SPSymbol *symbol = object;
+
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx rctx;
 
@@ -315,9 +345,7 @@ static void sp_symbol_update(SPObject *object, SPCtx *ctx, guint flags)
         }
 
         // And invoke parent method
-        if (((SPObjectClass *) (parent_class))->update) {
-            ((SPObjectClass *) (parent_class))->update (object, (SPCtx *) &rctx, flags);
-	}
+        CGroup::onUpdate((SPCtx *) &rctx, flags);
 
         // As last step set additional transform of drawing group
         for (SPItemView *v = symbol->display; v != NULL; v = v->next) {
@@ -326,24 +354,28 @@ static void sp_symbol_update(SPObject *object, SPCtx *ctx, guint flags)
         }
     } else {
         // No-op
-        if (((SPObjectClass *) (parent_class))->update) {
-            ((SPObjectClass *) (parent_class))->update (object, ctx, flags);
-	}
+        CGroup::onUpdate(ctx, flags);
     }
 }
 
+// CPPIFY: remove
+static void sp_symbol_update(SPObject *object, SPCtx *ctx, guint flags)
+{
+	((SPSymbol*)object)->csymbol->onUpdate(ctx, flags);
+}
+
+void CSymbol::onModified(unsigned int flags) {
+	CGroup::onModified(flags);
+}
+
+// CPPIFY: remove
 static void sp_symbol_modified(SPObject *object, guint flags)
 {
-    SP_SYMBOL(object);
-
-    if (((SPObjectClass *) (parent_class))->modified) {
-        (* ((SPObjectClass *) (parent_class))->modified) (object, flags);
-    }
+	((SPSymbol*)object)->csymbol->onModified(flags);
 }
 
-static Inkscape::XML::Node *sp_symbol_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SP_SYMBOL(object);
+Inkscape::XML::Node* CSymbol::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPSymbol* object = this->spsymbol;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:symbol");
@@ -355,72 +387,96 @@ static Inkscape::XML::Node *sp_symbol_write(SPObject *object, Inkscape::XML::Doc
     //XML Tree being used directly here while it shouldn't be.
     repr->setAttribute("preserveAspectRatio", object->getRepr()->attribute("preserveAspectRatio"));
 
-    if (((SPObjectClass *) (parent_class))->write) {
-        ((SPObjectClass *) (parent_class))->write (object, xml_doc, repr, flags);
-    }
+    CGroup::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
 
-static Inkscape::DrawingItem *sp_symbol_show(SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
+// CPPIFY: remove
+static Inkscape::XML::Node *sp_symbol_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+	return ((SPSymbol*)object)->csymbol->onWrite(xml_doc, repr, flags);
+}
+
+Inkscape::DrawingItem* CSymbol::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+	SPSymbol* item = this->spsymbol;
+
     SPSymbol *symbol = SP_SYMBOL(item);
     Inkscape::DrawingItem *ai = 0;
 
     if (symbol->cloned) {
         // Cloned <symbol> is actually renderable
-        if (((SPItemClass *) (parent_class))->show) {
-            ai = ((SPItemClass *) (parent_class))->show (item, drawing, key, flags);
-            Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
-            if (g) {
-            	g->setChildTransform(symbol->c2p);
-            }
-        }
+        ai = CGroup::onShow(drawing, key, flags);
+        Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
+		if (g) {
+			g->setChildTransform(symbol->c2p);
+		}
     }
 
     return ai;
 }
 
-static void sp_symbol_hide(SPItem *item, unsigned int key)
+// CPPIFY: remove
+static Inkscape::DrawingItem *sp_symbol_show(SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
 {
+	return ((SPSymbol*)item)->csymbol->onShow(drawing, key, flags);
+}
+
+void CSymbol::onHide(unsigned int key) {
+	SPSymbol* item = this->spsymbol;
+
     SPSymbol *symbol = SP_SYMBOL(item);
 
     if (symbol->cloned) {
         /* Cloned <symbol> is actually renderable */
-        if (((SPItemClass *) (parent_class))->hide) {
-            ((SPItemClass *) (parent_class))->hide (item, key);
-	}
+        CGroup::onHide(key);
     }
 }
 
-static Geom::OptRect sp_symbol_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
+// CPPIFY: remove
+static void sp_symbol_hide(SPItem *item, unsigned int key)
 {
+	((SPSymbol*)item)->csymbol->onHide(key);
+}
+
+Geom::OptRect CSymbol::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+	SPSymbol* item = this->spsymbol;
+
     SPSymbol const *symbol = SP_SYMBOL(item);
     Geom::OptRect bbox;
 
     if (symbol->cloned) {
         // Cloned <symbol> is actually renderable
+    	Geom::Affine const a( symbol->c2p * transform );
+    	bbox = CGroup::onBbox(a, type);
 
-        if (((SPItemClass *) (parent_class))->bbox) {
-            Geom::Affine const a( symbol->c2p * transform );
-            bbox = ((SPItemClass *) (parent_class))->bbox(item, a, type);
-        }
     }
     return bbox;
 }
 
-static void sp_symbol_print(SPItem *item, SPPrintContext *ctx)
+// CPPIFY: remove
+static Geom::OptRect sp_symbol_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
 {
+	return ((SPSymbol*)item)->csymbol->onBbox(transform, type);
+}
+
+void CSymbol::onPrint(SPPrintContext* ctx) {
+	SPSymbol* item = this->spsymbol;
+
     SPSymbol *symbol = SP_SYMBOL(item);
     if (symbol->cloned) {
         // Cloned <symbol> is actually renderable
 
         sp_print_bind(ctx, symbol->c2p, 1.0);
 
-        if (((SPItemClass *) (parent_class))->print) {
-            ((SPItemClass *) (parent_class))->print (item, ctx);
-        }
+        CGroup::onPrint(ctx);
 
         sp_print_release (ctx);
     }
+}
+
+// CPPIFY: remove
+static void sp_symbol_print(SPItem *item, SPPrintContext *ctx)
+{
+	((SPSymbol*)item)->csymbol->onPrint(ctx);
 }

@@ -23,13 +23,17 @@
 
 class SPSymbol;
 class SPSymbolClass;
+class CSymbol;
 
 #include <2geom/affine.h>
 #include "svg/svg-length.h"
 #include "enums.h"
 #include "sp-item-group.h"
 
-struct SPSymbol : public SPGroup {
+class SPSymbol : public SPGroup {
+public:
+	CSymbol* csymbol;
+
 	/* viewBox; */
 	unsigned int viewBox_set : 1;
 	Geom::Rect viewBox;
@@ -46,6 +50,31 @@ struct SPSymbol : public SPGroup {
 struct SPSymbolClass {
 	SPGroupClass parent_class;
 };
+
+
+class CSymbol : public CGroup {
+public:
+	CSymbol(SPSymbol* symbol);
+	virtual ~CSymbol();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+	virtual void onModified(unsigned int flags);
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void onPrint(SPPrintContext *ctx);
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void onHide (unsigned int key);
+
+protected:
+	SPSymbol* spsymbol;
+};
+
 
 GType sp_symbol_get_type (void);
 
