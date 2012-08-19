@@ -37,23 +37,38 @@
 #define SP_IS_FLOWREGIONBREAK(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGIONBREAK))
 #define SP_IS_FLOWREGIONBREAK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWREGIONBREAK))
 
+class CFlowdiv;
+class CFlowtspan;
+class CFlowpara;
+class CFlowline;
+class CFlowregionbreak;
+
 // these 3 are derivatives of SPItem to get the automatic style handling
-struct SPFlowdiv : public SPItem {
+class SPFlowdiv : public SPItem {
+public:
+	CFlowdiv* cflowdiv;
 };
 
-struct SPFlowtspan : public SPItem {
+class SPFlowtspan : public SPItem {
+public:
+	CFlowtspan* cflowtspan;
 };
 
-struct SPFlowpara : public SPItem {
+class SPFlowpara : public SPItem {
+public:
+	CFlowpara* cflowpara;
 };
 
 // these do not need any style
-struct SPFlowline : public SPObject {
+class SPFlowline : public SPObject {
+public:
+	CFlowline* cflowline;
 };
 
-struct SPFlowregionbreak : public SPObject {
+class SPFlowregionbreak : public SPObject {
+public:
+	CFlowregionbreak* cflowregionbreak;
 };
-
 
 struct SPFlowdivClass {
 	SPItemClass parent_class;
@@ -74,6 +89,87 @@ struct SPFlowlineClass {
 struct SPFlowregionbreakClass {
 	SPObjectClass parent_class;
 };
+
+
+class CFlowdiv : public CItem {
+public:
+	CFlowdiv(SPFlowdiv* flowdiv);
+	virtual ~CFlowdiv();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPFlowdiv* spflowdiv;
+};
+
+class CFlowtspan : public CItem {
+public:
+	CFlowtspan(SPFlowtspan* flowtspan);
+	virtual ~CFlowtspan();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPFlowtspan* spflowtspan;
+};
+
+class CFlowpara : public CItem {
+public:
+	CFlowpara(SPFlowpara* flowpara);
+	virtual ~CFlowpara();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPFlowpara* spflowpara;
+};
+
+class CFlowline : public CObject {
+public:
+	CFlowline(SPFlowline* flowline);
+	virtual ~CFlowline();
+
+	virtual void onRelease();
+	virtual void onModified(unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPFlowline* spflowline;
+};
+
+class CFlowregionbreak : public CObject {
+public:
+	CFlowregionbreak(SPFlowregionbreak* flowregionbreak);
+	virtual ~CFlowregionbreak();
+
+	virtual void onRelease();
+	virtual void onModified(unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPFlowregionbreak* spflowregionbreak;
+};
+
 
 GType sp_flowdiv_get_type (void);
 GType sp_flowtspan_get_type (void);
