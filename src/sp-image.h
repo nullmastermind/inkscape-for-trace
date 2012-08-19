@@ -22,6 +22,7 @@
 
 class SPImage;
 class SPImageClass;
+class CImage;
 
 /* SPImage */
 
@@ -32,7 +33,10 @@ class SPImageClass;
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-struct SPImage : public SPItem {
+class SPImage : public SPItem {
+public:
+	CImage* cimage;
+
     SVGLength x;
     SVGLength y;
     SVGLength width;
@@ -64,6 +68,31 @@ struct SPImage : public SPItem {
 struct SPImageClass {
     SPItemClass parent_class;
 };
+
+
+class CImage : public CItem {
+public:
+	CImage(SPImage* image);
+	virtual ~CImage();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void onPrint(SPPrintContext *ctx);
+	virtual gchar* onDescription();
+	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+    virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+    virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+
+protected:
+	SPImage* spimage;
+};
+
 
 GType sp_image_get_type (void);
 
