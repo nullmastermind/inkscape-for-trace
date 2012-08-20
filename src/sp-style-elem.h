@@ -10,14 +10,34 @@
 #define SP_IS_STYLE_ELEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_STYLE_ELEM))
 #define SP_IS_STYLE_ELEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_STYLE_ELEM))
 
+class CStyleElem;
+
 class SPStyleElem : public SPObject {
 public:
+	CStyleElem* cstyleelem;
+
     Media media;
     bool is_css;
 };
 
 class SPStyleElemClass : public SPObjectClass {
 };
+
+
+class CStyleElem : public CObject {
+public:
+	CStyleElem(SPStyleElem* se);
+	virtual ~CStyleElem();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void onReadContent();
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPStyleElem* spstyleelem;
+};
+
 
 GType sp_style_elem_get_type();
 
