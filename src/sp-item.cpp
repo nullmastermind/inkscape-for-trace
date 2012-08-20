@@ -777,10 +777,10 @@ Geom::OptRect CItem::onBbox(Geom::Affine const &transform, SPItem::BBoxType type
 Geom::OptRect SPItem::geometricBounds(Geom::Affine const &transform) const
 {
     Geom::OptRect bbox;
+
     // call the subclass method
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox) {
-        bbox = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox(this, transform, SPItem::GEOMETRIC_BBOX);
-    }
+    bbox = this->citem->onBbox(transform, SPItem::GEOMETRIC_BBOX);
+
     return bbox;
 }
 
@@ -797,10 +797,8 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     Geom::OptRect bbox;
 
     if ( style && style->filter.href && style->getFilter() && SP_IS_FILTER(style->getFilter())) {
-         // call the subclass method
-        if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox) {
-            bbox = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox(this, Geom::identity(), SPItem::VISUAL_BBOX);
-        }
+        // call the subclass method
+    	bbox = this->citem->onBbox(Geom::identity(), SPItem::VISUAL_BBOX);
 
         SPFilter *filter = SP_FILTER(style->getFilter());
         // default filer area per the SVG spec:
@@ -843,10 +841,8 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         bbox = Geom::OptRect(minp, maxp);
         *bbox *= transform;
     } else {
-         // call the subclass method
-        if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox) {
-            bbox = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox(this, transform, SPItem::VISUAL_BBOX);
-        }
+        // call the subclass method
+    	bbox = this->citem->onBbox(transform, SPItem::VISUAL_BBOX);
     }
     if (clip_ref->getObject()) {
         bbox.intersectWith(SP_CLIPPATH(clip_ref->getObject())->geometricBounds(transform));
@@ -962,10 +958,7 @@ void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Ink
 void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
 {
     // Get the snappoints of the item
-    SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(this);
-    if (item_class.snappoints) {
-        item_class.snappoints(this, p, snapprefs);
-    }
+	this->citem->onSnappoints(p, snapprefs);
 
     // Get the snappoints at the item's center
     if (snapprefs != NULL && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
@@ -1008,17 +1001,13 @@ void CItem::onPrint(SPPrintContext* ctx) {
 void SPItem::invoke_print(SPPrintContext *ctx)
 {
     if ( !isHidden() ) {
-        if ( reinterpret_cast<SPItemClass *>(G_OBJECT_GET_CLASS(this))->print ) {
-            if (!transform.isIdentity()
-                || style->opacity.value != SP_SCALE24_MAX)
-            {
-                sp_print_bind(ctx, transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
-                reinterpret_cast<SPItemClass *>(G_OBJECT_GET_CLASS(this))->print(this, ctx);
-                sp_print_release(ctx);
-            } else {
-                reinterpret_cast<SPItemClass *>(G_OBJECT_GET_CLASS(this))->print(this, ctx);
-            }
-        }
+    	if (!transform.isIdentity() || style->opacity.value != SP_SCALE24_MAX) {
+			sp_print_bind(ctx, transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
+			this->citem->onPrint(ctx);
+			sp_print_release(ctx);
+    	} else {
+    		this->citem->onPrint(ctx);
+    	}
     }
 }
 
@@ -1040,34 +1029,29 @@ gchar *SPItem::sp_item_private_description(SPItem *item)
  */
 gchar *SPItem::description()
 {
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->description) {
-        gchar *s = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->description(this);
-        if (s && clip_ref->getObject()) {
-            gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
-            g_free (s);
-            s = snew;
-        }
-        if (s && mask_ref->getObject()) {
-            gchar *snew = g_strdup_printf (_("%s; <i>masked</i>"), s);
-            g_free (s);
-            s = snew;
-        }
-        if ( style && style->filter.href && style->filter.href->getObject() ) {
-            const gchar *label = style->filter.href->getObject()->label();
-            gchar *snew = 0;
-            if (label) {
-                snew = g_strdup_printf (_("%s; <i>filtered (%s)</i>"), s, _(label));
-            } else {
-                snew = g_strdup_printf (_("%s; <i>filtered</i>"), s);
-            }
-            g_free (s);
-            s = snew;
-        }
-        return s;
-    }
-
-    g_assert_not_reached();
-    return NULL;
+	gchar* s = this->citem->onDescription();
+	if (s && clip_ref->getObject()) {
+		gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
+		g_free (s);
+		s = snew;
+	}
+	if (s && mask_ref->getObject()) {
+		gchar *snew = g_strdup_printf (_("%s; <i>masked</i>"), s);
+		g_free (s);
+		s = snew;
+	}
+	if ( style && style->filter.href && style->filter.href->getObject() ) {
+		const gchar *label = style->filter.href->getObject()->label();
+		gchar *snew = 0;
+		if (label) {
+			snew = g_strdup_printf (_("%s; <i>filtered (%s)</i>"), s, _(label));
+		} else {
+			snew = g_strdup_printf (_("%s; <i>filtered</i>"), s);
+		}
+		g_free (s);
+		s = snew;
+	}
+	return s;
 }
 
 /**
@@ -1077,9 +1061,11 @@ gchar *SPItem::description()
 int SPItem::ifilt()
 {
     int retval=0;
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->description) {
-        if ( style && style->filter.href && style->filter.href->getObject() ) { retval=1; }
-    }
+
+    if ( style && style->filter.href && style->filter.href->getObject() ) {
+		retval=1;
+	}
+
     return retval;
 }
 
@@ -1106,9 +1092,8 @@ Inkscape::DrawingItem* CItem::onShow(Inkscape::Drawing &drawing, unsigned int ke
 Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned key, unsigned flags)
 {
     Inkscape::DrawingItem *ai = NULL;
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->show) {
-        ai = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->show(this, drawing, key, flags);
-    }
+
+    ai = this->citem->onShow(drawing, key, flags);
 
     if (ai != NULL) {
         Geom::OptRect item_bbox = geometricBounds();
@@ -1164,9 +1149,7 @@ void CItem::onHide(unsigned int key) {
 
 void SPItem::invoke_hide(unsigned key)
 {
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->hide) {
-        ((SPItemClass *) G_OBJECT_GET_CLASS(this))->hide(this, key);
-    }
+	this->citem->onHide(key);
 
     SPItemView *ref = NULL;
     SPItemView *v = display;
@@ -1461,13 +1444,14 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
     gint preserve = prefs->getBool("/options/preservetransform/value", 0);
     Geom::Affine transform_attr (transform);
     if ( // run the object's set_transform (i.e. embed transform) only if:
-         ((SPItemClass *) G_OBJECT_GET_CLASS(this))->set_transform && // it does have a set_transform method
              !preserve && // user did not chose to preserve all transforms
              !clip_ref->getObject() && // the object does not have a clippath
              !mask_ref->getObject() && // the object does not have a mask
              !(!transform.isTranslation() && style && style->getFilter()) // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
         ) {
-        transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->set_transform(this, transform);
+
+    	transform_attr = this->citem->onSetTransform(transform);
+
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
         }
@@ -1505,11 +1489,7 @@ gint CItem::onEvent(SPEvent* event) {
 
 gint SPItem::emitEvent(SPEvent &event)
 {
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->event) {
-        return ((SPItemClass *) G_OBJECT_GET_CLASS(this))->event(this, &event);
-    }
-
-    return FALSE;
+	return this->citem->onEvent(&event);
 }
 
 /**
