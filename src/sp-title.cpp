@@ -52,9 +52,30 @@ sp_title_class_init(SPTitleClass *klass)
     sp_object_class->write = sp_title_write;
 }
 
+CTitle::CTitle(SPTitle* title) : CObject(title) {
+	this->sptitle = title;
+}
+
+CTitle::~CTitle() {
+}
+
 static void
-sp_title_init(SPTitle */*desc*/)
+sp_title_init(SPTitle *desc)
 {
+	desc->ctitle = new CTitle(desc);
+	desc->cobject = desc->ctitle;
+}
+
+Inkscape::XML::Node* CTitle::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPTitle* object = this->sptitle;
+
+    if (!repr) {
+        repr = object->getRepr()->duplicate(xml_doc);
+    }
+
+    CObject::onWrite(xml_doc, repr, flags);
+
+    return repr;
 }
 
 /**
@@ -62,13 +83,5 @@ sp_title_init(SPTitle */*desc*/)
  */
 static Inkscape::XML::Node *sp_title_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
-    if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
-    }
-
-    if (((SPObjectClass *) title_parent_class)->write) {
-        ((SPObjectClass *) title_parent_class)->write(object, doc, repr, flags);
-    }
-
-    return repr;
+	return ((SPTitle*)object)->ctitle->onWrite(doc, repr, flags);
 }

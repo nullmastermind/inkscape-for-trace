@@ -19,13 +19,29 @@
 
 class SPTitle;
 class SPTitleClass;
+class CTitle;
 
-struct SPTitle : public SPObject {
+class SPTitle : public SPObject {
+public:
+	CTitle* ctitle;
 };
 
 struct SPTitleClass {
 	SPObjectClass parent_class;
 };
+
+
+class CTitle : public CObject {
+public:
+	CTitle(SPTitle* title);
+	virtual ~CTitle();
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPTitle* sptitle;
+};
+
 
 GType sp_title_get_type (void);
 
