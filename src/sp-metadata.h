@@ -23,13 +23,34 @@
 
 class SPMetadata;
 class SPMetadataClass;
+class CMetadata;
 
-struct SPMetadata : public SPObject {
+class SPMetadata : public SPObject {
+public:
+	CMetadata* cmetadata;
 };
 
 struct SPMetadataClass {
 	SPObjectClass parent_class;
 };
+
+
+class CMetadata : public CObject {
+public:
+	CMetadata(SPMetadata* metadata);
+	virtual ~CMetadata();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPMetadata* spmetadata;
+};
+
 
 GType sp_metadata_get_type (void);
 

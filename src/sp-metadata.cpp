@@ -80,9 +80,19 @@ sp_metadata_class_init (SPMetadataClass *klass)
     sp_object_class->update = sp_metadata_update;
 }
 
+CMetadata::CMetadata(SPMetadata* metadata) : CObject(metadata) {
+	this->spmetadata = metadata;
+}
+
+CMetadata::~CMetadata() {
+}
+
 static void
 sp_metadata_init (SPMetadata *metadata)
 {
+	metadata->cmetadata = new CMetadata(metadata);
+	metadata->cobject = metadata->cmetadata;
+
     (void)metadata;
     debug("0x%08x",(unsigned int)metadata);
 }
@@ -101,15 +111,8 @@ void strip_ids_recursively(Inkscape::XML::Node *node) {
 
 }
 
-/**
- * Reads the Inkscape::XML::Node, and initializes SPMetadata variables.
- *
- * For this to get called, our name must be associated with
- * a repr via "sp_object_type_register".  Best done through
- * sp-object-repr.cpp's repr_name_entries array.
- */
-static void sp_metadata_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+
+void CMetadata::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
     using Inkscape::XML::NodeSiblingIterator;
 
     debug("0x%08x",(unsigned int)object);
@@ -123,8 +126,27 @@ static void sp_metadata_build(SPObject *object, SPDocument *document, Inkscape::
         }
     }
 
-    if (((SPObjectClass *) metadata_parent_class)->build)
-        ((SPObjectClass *) metadata_parent_class)->build (object, document, repr);
+    CObject::onBuild(doc, repr);
+}
+
+/**
+ * Reads the Inkscape::XML::Node, and initializes SPMetadata variables.
+ *
+ * For this to get called, our name must be associated with
+ * a repr via "sp_object_type_register".  Best done through
+ * sp-object-repr.cpp's repr_name_entries array.
+ */
+static void sp_metadata_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+{
+	((SPMetadata*)object)->cmetadata->onBuild(document, repr);
+}
+
+void CMetadata::onRelease() {
+    debug("0x%08x",(unsigned int)object);
+
+    // handle ourself
+
+    CObject::onRelease();
 }
 
 /**
@@ -132,12 +154,16 @@ static void sp_metadata_build(SPObject *object, SPDocument *document, Inkscape::
  */
 static void sp_metadata_release(SPObject *object)
 {
-    debug("0x%08x",(unsigned int)object);
+	((SPMetadata*)object)->cmetadata->onRelease();
+}
 
-    // handle ourself
+void CMetadata::onSet(unsigned int key, const gchar* value) {
+    debug("0x%08x %s(%u): '%s'",(unsigned int)object,
+          sp_attribute_name(key),key,value);
+    //SP_METADATA(object); // ensures the object is of the proper type.
 
-    if (((SPObjectClass *) metadata_parent_class)->release)
-        ((SPObjectClass *) metadata_parent_class)->release (object);
+    // see if any parents need this value
+    CObject::onSet(key, value);
 }
 
 /**
@@ -145,21 +171,10 @@ static void sp_metadata_release(SPObject *object)
  */
 static void sp_metadata_set(SPObject *object, unsigned int key, const gchar *value)
 {
-    debug("0x%08x %s(%u): '%s'",(unsigned int)object,
-          sp_attribute_name(key),key,value);
-    SP_METADATA(object); // ensures the object is of the proper type.
-
-    // see if any parents need this value
-    if (reinterpret_cast<SPObjectClass *>(metadata_parent_class)->set) {
-        reinterpret_cast<SPObjectClass *>(metadata_parent_class)->set(object, key, value);
-    }
+	((SPMetadata*)object)->cmetadata->onSet(key, value);
 }
 
-/**
- * Receives update notifications.
- */
-static void sp_metadata_update(SPObject *object, SPCtx *ctx, guint flags)
-{
+void CMetadata::onUpdate(SPCtx* ctx, unsigned int flags) {
     debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);
 
@@ -170,15 +185,24 @@ static void sp_metadata_update(SPObject *object, SPCtx *ctx, guint flags)
 
     }
 
-    if (((SPObjectClass *) metadata_parent_class)->update)
-        ((SPObjectClass *) metadata_parent_class)->update(object, ctx, flags);
+    // CPPIFY: As CMetadata is derived directly from CObject, this doesn't make no sense.
+    // CObject::onUpdate is pure. What was the idea behind these lines?
+//    if (((SPObjectClass *) metadata_parent_class)->update)
+//    	((SPObjectClass *) metadata_parent_class)->update(object, ctx, flags);
+//    CObject::onUpdate(ctx, flags);
 }
 
 /**
- * Writes it's settings to an incoming repr object, if any.
+ * Receives update notifications.
  */
-static Inkscape::XML::Node *sp_metadata_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
+static void sp_metadata_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+	((SPMetadata*)object)->cmetadata->onUpdate(ctx, flags);
+}
+
+Inkscape::XML::Node* CMetadata::onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+	SPMetadata* object = this->spmetadata;
+
     debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);
 
@@ -190,11 +214,17 @@ static Inkscape::XML::Node *sp_metadata_write(SPObject *object, Inkscape::XML::D
         }
     }
 
-    if (((SPObjectClass *) metadata_parent_class)->write) {
-        ((SPObjectClass *) metadata_parent_class)->write(object, doc, repr, flags);
-    }
+    CObject::onWrite(doc, repr, flags);
 
     return repr;
+}
+
+/**
+ * Writes it's settings to an incoming repr object, if any.
+ */
+static Inkscape::XML::Node *sp_metadata_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPMetadata*)object)->cmetadata->onWrite(doc, repr, flags);
 }
 
 /**
