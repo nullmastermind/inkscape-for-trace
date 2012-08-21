@@ -103,8 +103,19 @@ static void sp_namedview_class_init(SPNamedViewClass * klass)
     sp_object_class->write = sp_namedview_write;
 }
 
+CNamedView::CNamedView(SPNamedView* view) : CObjectGroup(view) {
+	this->spnamedview = view;
+}
+
+CNamedView::~CNamedView() {
+}
+
 static void sp_namedview_init(SPNamedView *nv)
 {
+	nv->cnamedview = new CNamedView(nv);
+	nv->cobjectgroup = nv->cnamedview;
+	nv->cobject = nv->cnamedview;
+
     nv->editable = TRUE;
     nv->showguides = TRUE;
     nv->grids_visible = false;
@@ -210,14 +221,13 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
     }
 }
 
-static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+void CNamedView::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPNamedView* object = this->spnamedview;
+
     SPNamedView *nv = (SPNamedView *) object;
     SPObjectGroup *og = (SPObjectGroup *) object;
 
-    if (((SPObjectClass *) (parent_class))->build) {
-        (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
-    }
+    CObjectGroup::onBuild(document, repr);
 
     object->readAttr( "inkscape:document-units" );
     object->readAttr( "units" );
@@ -287,8 +297,13 @@ static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape:
     sp_namedview_generate_old_grid(nv, document, repr);
 }
 
-static void sp_namedview_release(SPObject *object)
+static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
+	((SPNamedView*)object)->cnamedview->onBuild(document, repr);
+}
+
+void CNamedView::onRelease() {
+	SPNamedView* object = this->spnamedview;
     SPNamedView *namedview = (SPNamedView *) object;
 
     if (namedview->guides) {
@@ -306,12 +321,19 @@ static void sp_namedview_release(SPObject *object)
     if (((SPObjectClass *) parent_class)->release) {
         ((SPObjectClass *) parent_class)->release(object);
     }
+    CObjectGroup::onRelease();
 
     namedview->snap_manager.~SnapManager();
 }
 
-static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value)
+static void sp_namedview_release(SPObject *object)
 {
+	((SPNamedView*)object)->cnamedview->onRelease();
+}
+
+void CNamedView::onSet(unsigned int key, const gchar* value) {
+	SPNamedView* object = this->spnamedview;
+
     SPNamedView *nv = SP_NAMEDVIEW(object);
 
     switch (key) {
@@ -624,11 +646,14 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
             break;
     }
     default:
-            if (((SPObjectClass *) (parent_class))->set) {
-                ((SPObjectClass *) (parent_class))->set(object, key, value);
-            }
+            CObjectGroup::onSet(key, value);
             break;
     }
+}
+
+static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value)
+{
+	((SPNamedView*)object)->cnamedview->onSet(key, value);
 }
 
 /**
@@ -672,13 +697,12 @@ sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *des
     return grid;
 }
 
-static void sp_namedview_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
+void CNamedView::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPNamedView* object = this->spnamedview;
+
     SPNamedView *nv = (SPNamedView *) object;
 
-    if (((SPObjectClass *) (parent_class))->child_added) {
-        (* ((SPObjectClass *) (parent_class))->child_added)(object, child, ref);
-    }
+    CObjectGroup::onChildAdded(child, ref);
 
     if (!strcmp(child->name(), "inkscape:grid")) {
         sp_namedview_add_grid(nv, child, NULL);
@@ -704,8 +728,13 @@ static void sp_namedview_child_added(SPObject *object, Inkscape::XML::Node *chil
     }
 }
 
-static void sp_namedview_remove_child(SPObject *object, Inkscape::XML::Node *child)
+static void sp_namedview_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
+	((SPNamedView*)object)->cnamedview->onChildAdded(child, ref);
+}
+
+void CNamedView::onRemoveChild(Inkscape::XML::Node *child) {
+	SPNamedView* object = this->spnamedview;
     SPNamedView *nv = (SPNamedView *) object;
 
     if (!strcmp(child->name(), "inkscape:grid")) {
@@ -730,24 +759,33 @@ static void sp_namedview_remove_child(SPObject *object, Inkscape::XML::Node *chi
         }
     }
 
-    if (((SPObjectClass *) (parent_class))->remove_child) {
-        (* ((SPObjectClass *) (parent_class))->remove_child)(object, child);
-    }
+    CObjectGroup::onRemoveChild(child);
 }
 
-static Inkscape::XML::Node *sp_namedview_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
+static void sp_namedview_remove_child(SPObject *object, Inkscape::XML::Node *child)
 {
+	((SPNamedView*)object)->cnamedview->onRemoveChild(child);
+}
+
+Inkscape::XML::Node* CNamedView::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPNamedView* object = this->spnamedview;
+
     if ( ( flags & SP_OBJECT_WRITE_EXT ) &&
          repr != object->getRepr() )
     {
         if (repr) {
             repr->mergeFrom(object->getRepr(), "id");
         } else {
-            repr = object->getRepr()->duplicate(doc);
+            repr = object->getRepr()->duplicate(xml_doc);
         }
     }
 
     return repr;
+}
+
+static Inkscape::XML::Node *sp_namedview_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPNamedView*)object)->cnamedview->onWrite(doc, repr, flags);
 }
 
 void SPNamedView::show(SPDesktop *desktop)

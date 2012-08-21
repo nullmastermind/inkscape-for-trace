@@ -36,7 +36,12 @@ enum {
     SP_BORDER_LAYER_TOP
 };
 
-struct SPNamedView : public SPObjectGroup {
+class CNamedView;
+
+class SPNamedView : public SPObjectGroup {
+public:
+	CNamedView* cnamedview;
+
     unsigned int editable : 1;
     unsigned int showguides : 1;
     unsigned int showborder : 1;
@@ -99,6 +104,26 @@ private:
 struct SPNamedViewClass {
     SPObjectGroupClass parent_class;
 };
+
+
+class CNamedView : public CObjectGroup {
+public:
+	CNamedView(SPNamedView* view);
+	virtual ~CNamedView();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, gchar const* value);
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPNamedView* spnamedview;
+};
+
 
 GType sp_namedview_get_type();
 
