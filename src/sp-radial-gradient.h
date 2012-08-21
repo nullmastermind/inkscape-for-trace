@@ -10,8 +10,13 @@
 #include "svg/svg-length.h"
 #include "sp-radial-gradient-fns.h"
 
+class CRadialGradient;
+
 /** Radial gradient. */
-struct SPRadialGradient : public SPGradient {
+class SPRadialGradient : public SPGradient {
+public:
+	CRadialGradient* cradialgradient;
+
     SVGLength cx;
     SVGLength cy;
     SVGLength r;
@@ -22,6 +27,21 @@ struct SPRadialGradient : public SPGradient {
 /// The SPRadialGradient vtable.
 struct SPRadialGradientClass {
     SPGradientClass parent_class;
+};
+
+
+class CRadialGradient : public CGradient {
+public:
+	CRadialGradient(SPRadialGradient* radialgradient);
+	virtual ~CRadialGradient();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onSet(unsigned key, gchar const *value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+
+protected:
+	SPRadialGradient* spradialgradient;
 };
 
 

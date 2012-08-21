@@ -27,8 +27,12 @@ struct SPMeshRowClass;
 
 GType sp_meshrow_get_type();
 
+class CMeshRow;
+
 /** Gradient MeshRow. */
-struct SPMeshRow : public SPObject {
+class SPMeshRow : public SPObject {
+public:
+	CMeshRow* cmeshrow;
 
     SPMeshRow* getNextMeshRow();
     SPMeshRow* getPrevMeshRow();
@@ -38,6 +42,21 @@ struct SPMeshRow : public SPObject {
 struct SPMeshRowClass {
     SPObjectClass parent_class;
 };
+
+
+class CMeshRow : public CObject {
+public:
+	CMeshRow(SPMeshRow* meshrow);
+	virtual ~CMeshRow();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPMeshRow* spmeshrow;
+};
+
 
 #endif /* !SEEN_SP_MESHROW_H */
 

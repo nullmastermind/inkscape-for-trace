@@ -101,9 +101,20 @@ sp_pattern_class_init (SPPatternClass *klass)
     ps_class->pattern_new = sp_pattern_create_pattern;
 }
 
+CPattern::CPattern(SPPattern* pattern) : CPaintServer(pattern) {
+	this->sppattern = pattern;
+}
+
+CPattern::~CPattern() {
+}
+
 static void
 sp_pattern_init (SPPattern *pat)
 {
+	pat->cpattern = new CPattern(pat);
+	pat->cpaintserver = pat->cpattern;
+	pat->cobject = pat->cpattern;
+
 	pat->ref = new SPPatternReference(pat);
 	pat->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), pat));
 
@@ -126,11 +137,10 @@ sp_pattern_init (SPPattern *pat)
 	new (&pat->modified_connection) sigc::connection();
 }
 
-static void
-sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	if (((SPObjectClass *) pattern_parent_class)->build)
-		(* ((SPObjectClass *) pattern_parent_class)->build) (object, document, repr);
+void CPattern::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPPattern* object = this->sppattern;
+
+	CPaintServer::onBuild(doc, repr);
 
 	object->readAttr( "patternUnits" );
 	object->readAttr( "patternContentUnits" );
@@ -143,11 +153,18 @@ sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *r
 	object->readAttr( "xlink:href" );
 
 	/* Register ourselves */
-	document->addResource("pattern", object);
+	doc->addResource("pattern", object);
 }
 
-static void sp_pattern_release(SPObject *object)
+static void
+sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
+	((SPPattern*)object)->cpattern->onBuild(document, repr);
+}
+
+void CPattern::onRelease() {
+	SPPattern* object = this->sppattern;
+
     SPPattern *pat = reinterpret_cast<SPPattern *>(object);
 
     if (object->document) {
@@ -164,14 +181,17 @@ static void sp_pattern_release(SPObject *object)
 
     pat->modified_connection.~connection();
 
-    if (((SPObjectClass *) pattern_parent_class)->release) {
-        ((SPObjectClass *) pattern_parent_class)->release (object);
-    }
+    CPaintServer::onRelease();
 }
 
-static void
-sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
+static void sp_pattern_release(SPObject *object)
 {
+	((SPPattern*)object)->cpattern->onRelease();
+}
+
+void CPattern::onSet(unsigned int key, const gchar* value) {
+	SPPattern* object = this->sppattern;
+
 	SPPattern *pat = SP_PATTERN (object);
 
 	switch (key) {
@@ -280,10 +300,15 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		break;
 	default:
-		if (((SPObjectClass *) pattern_parent_class)->set)
-			((SPObjectClass *) pattern_parent_class)->set (object, key, value);
+		CPaintServer::onSet(key, value);
 		break;
 	}
+}
+
+static void
+sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
+{
+	((SPPattern*)object)->cpattern->onSet(key, value);
 }
 
 /* TODO: do we need a ::remove_child handler? */
@@ -306,9 +331,9 @@ GSList *pattern_getchildren(SPPattern *pat)
   return l;
 }
 
-static void
-sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
-{
+void CPattern::onUpdate(SPCtx* ctx, unsigned int flags) {
+	SPPattern* object = this->sppattern;
+
 	SPPattern *pat = SP_PATTERN (object);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -329,8 +354,14 @@ sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 }
 
 static void
-sp_pattern_modified (SPObject *object, guint flags)
+sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
+	((SPPattern*)object)->cpattern->onUpdate(ctx, flags);
+}
+
+void CPattern::onModified(unsigned int flags) {
+	SPPattern* object = this->sppattern;
+
 	SPPattern *pat = SP_PATTERN (object);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -348,6 +379,12 @@ sp_pattern_modified (SPObject *object, guint flags)
 		}
 		sp_object_unref (child, NULL);
 	}
+}
+
+static void
+sp_pattern_modified (SPObject *object, guint flags)
+{
+	((SPPattern*)object)->cpattern->onModified(flags);
 }
 
 /**
@@ -601,12 +638,9 @@ bool pattern_hasItemChildren (SPPattern *pat)
     return hasChildren;
 }
 
-static cairo_pattern_t *
-sp_pattern_create_pattern(SPPaintServer *ps,
-                          cairo_t *base_ct,
-                          Geom::OptRect const &bbox,
-                          double opacity)
-{
+cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
+	SPPattern* ps = this->sppattern;
+
     SPPattern *pat = SP_PATTERN (ps);
     Geom::Affine ps2user;
     Geom::Affine vb2ps = Geom::identity();
@@ -717,6 +751,15 @@ sp_pattern_create_pattern(SPPaintServer *ps,
     cairo_pattern_set_extend(cp, CAIRO_EXTEND_REPEAT);
 
     return cp;
+}
+
+static cairo_pattern_t *
+sp_pattern_create_pattern(SPPaintServer *ps,
+                          cairo_t *base_ct,
+                          Geom::OptRect const &bbox,
+                          double opacity)
+{
+	return ((SPPattern*)ps)->cpattern->onCreatePattern(base_ct, bbox, opacity);
 }
 
 /*

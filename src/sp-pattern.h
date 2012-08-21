@@ -53,7 +53,12 @@ enum {
     SP_PATTERN_UNITS_OBJECTBOUNDINGBOX
 };
 
-struct SPPattern : public SPPaintServer {
+class CPattern;
+
+class SPPattern : public SPPaintServer {
+public:
+	CPattern* cpattern;
+
     /* Reference (href) */
     gchar *href;
     SPPatternReference *ref;
@@ -81,6 +86,24 @@ struct SPPattern : public SPPaintServer {
 struct SPPatternClass {
     SPPaintServerClass parent_class;
 };
+
+
+class CPattern : public CPaintServer {
+public:
+	CPattern(SPPattern* pattern);
+	virtual ~CPattern();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+
+protected:
+	SPPattern* sppattern;
+};
+
 
 guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);

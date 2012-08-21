@@ -87,6 +87,7 @@ std::vector<PaintTarget> const &allPaintTargets();
 
 } // namespace Inkscape
 
+class CGradient;
 
 /**
  * Gradient
@@ -95,6 +96,9 @@ std::vector<PaintTarget> const &allPaintTargets();
  * \todo fixme: Implement more here (Lauris)
  */
 class SPGradient : public SPPaintServer {
+public:
+	CGradient* cgradient;
+
 private:
     /** gradientUnits attribute */
     SPGradientUnits units;
@@ -197,7 +201,7 @@ private:
     void rebuildVector();
     void rebuildArray();
 
-    friend class SPGradientImpl;
+    friend class CGradient;
 //    friend class SPLGPainter;
 //    friend class SPRGPainter;
 };
@@ -207,6 +211,33 @@ private:
  */
 struct SPGradientClass {
     SPPaintServerClass parent_class;
+};
+
+
+class CGradient : public CPaintServer {
+public:
+	CGradient(SPGradient* gradient);
+	virtual ~CGradient();
+
+    static void classInit(SPGradientClass *klass);
+    static void init(SPGradient *gr);
+
+    virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+    virtual void onRelease();
+    virtual void onModified(guint flags);
+    virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+
+    static void gradientRefModified(SPObject *href, guint flags, SPGradient *gradient);
+    static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
+
+    virtual void onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+    virtual void onRemoveChild(Inkscape::XML::Node *child);
+
+    virtual void onSet(unsigned key, gchar const *value);
+
+protected:
+    SPGradient* spgradient;
 };
 
 

@@ -30,8 +30,12 @@ struct SPMeshPatchClass;
 
 GType sp_meshpatch_get_type();
 
+class CMeshPatch;
+
 /** Gradient MeshPatch. */
-struct SPMeshPatch : public SPObject {
+class SPMeshPatch : public SPObject {
+public:
+	CMeshPatch* cmeshpatch;
 
     SPMeshPatch* getNextMeshPatch();
     SPMeshPatch* getPrevMeshPatch();
@@ -44,6 +48,21 @@ struct SPMeshPatch : public SPObject {
 struct SPMeshPatchClass {
     SPObjectClass parent_class;
 };
+
+
+class CMeshPatch : public CObject {
+public:
+	CMeshPatch(SPMeshPatch* meshpatch);
+	virtual ~CMeshPatch();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPMeshPatch* spmeshpatch;
+};
+
 
 #endif /* !SEEN_SP_MESHPATCH_H */
 

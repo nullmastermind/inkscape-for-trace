@@ -9,8 +9,13 @@
 #include "svg/svg-length.h"
 #include "sp-linear-gradient-fns.h"
 
+class CLinearGradient;
+
 /** Linear gradient. */
-struct SPLinearGradient : public SPGradient {
+class SPLinearGradient : public SPGradient {
+public:
+	CLinearGradient* clineargradient;
+
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
@@ -21,6 +26,22 @@ struct SPLinearGradient : public SPGradient {
 struct SPLinearGradientClass {
     SPGradientClass parent_class;
 };
+
+
+class CLinearGradient : public CGradient {
+public:
+	CLinearGradient(SPLinearGradient* lineargradient);
+	virtual ~CLinearGradient();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onSet(unsigned key, gchar const *value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+
+protected:
+	SPLinearGradient* splineargradient;
+};
+
 
 #endif /* !SP_LINEAR_GRADIENT_H */
 

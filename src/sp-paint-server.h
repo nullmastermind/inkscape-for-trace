@@ -26,7 +26,12 @@
 #define SP_IS_PAINT_SERVER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PAINT_SERVER))
 #define SP_IS_PAINT_SERVER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_PAINT_SERVER))
 
-struct SPPaintServer : public SPObject {
+class CPaintServer;
+
+class SPPaintServer : public SPObject {
+public:
+	CPaintServer* cpaintserver;
+
 protected:
     bool swatch;
 public:
@@ -45,6 +50,19 @@ struct SPPaintServerClass {
     /** Get SPPaint instance. */
     cairo_pattern_t *(*pattern_new)(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 };
+
+
+class CPaintServer : public CObject {
+public:
+	CPaintServer(SPPaintServer* paintserver);
+	virtual ~CPaintServer();
+
+	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+
+protected:
+	SPPaintServer* sppaintserver;
+};
+
 
 cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 

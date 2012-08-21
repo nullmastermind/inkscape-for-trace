@@ -9,8 +9,13 @@
 #include "sp-gradient.h"
 #include "sp-mesh-gradient-fns.h"
 
+class CMeshGradient;
+
 /** Mesh gradient. */
-struct SPMeshGradient : public SPGradient {
+class SPMeshGradient : public SPGradient {
+public:
+	CMeshGradient* cmeshgradient;
+
     SVGLength x;  // Upper left corner of mesh
     SVGLength y;  // Upper right corner of mesh
 };
@@ -18,6 +23,21 @@ struct SPMeshGradient : public SPGradient {
 /// The SPMeshGradient vtable.
 struct SPMeshGradientClass {
     SPGradientClass parent_class;
+};
+
+
+class CMeshGradient : public CGradient {
+public:
+	CMeshGradient(SPMeshGradient* meshgradient);
+	virtual ~CMeshGradient();
+
+	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void onSet(unsigned key, gchar const *value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+
+protected:
+	SPMeshGradient* spmeshgradient;
 };
 
 

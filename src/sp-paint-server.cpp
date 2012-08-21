@@ -64,11 +64,20 @@ static void sp_paint_server_class_init(SPPaintServerClass *psc)
     parent_class = static_cast<SPObjectClass *>(g_type_class_ref(SP_TYPE_OBJECT));
 }
 
-void SPPaintServer::init(SPPaintServer * /*ps*/)
-{
+CPaintServer::CPaintServer(SPPaintServer* paintserver) : CObject(paintserver) {
+	this->sppaintserver = paintserver;
 }
 
-cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps,
+CPaintServer::~CPaintServer() {
+}
+
+void SPPaintServer::init(SPPaintServer * ps)
+{
+	ps->cpaintserver = new CPaintServer(ps);
+	ps->cobject = ps->cpaintserver;
+}
+
+cairo_pattern_t *sp_paint_server_invoke_create_pattern(SPPaintServer *ps,
                                                 cairo_t *ct,
                                                 Geom::OptRect const &bbox,
                                                 double opacity)
@@ -77,12 +86,23 @@ cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps,
     g_return_val_if_fail(SP_IS_PAINT_SERVER(ps), NULL);
 
     cairo_pattern_t *cp = NULL;
-    SPPaintServerClass *psc = (SPPaintServerClass *) G_OBJECT_GET_CLASS(ps);
-    if ( psc->pattern_new ) {
-        cp = (*psc->pattern_new)(ps, ct, bbox, opacity);
-    }
+
+    cp = ps->cpaintserver->onCreatePattern(ct, bbox, opacity);
 
     return cp;
+}
+
+// CPPIFY: make pure virtual
+cairo_pattern_t* CPaintServer::onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
+	throw;
+}
+
+cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps,
+                                                cairo_t *ct,
+                                                Geom::OptRect const &bbox,
+                                                double opacity)
+{
+	return sp_paint_server_invoke_create_pattern(ps, ct, bbox, opacity);
 }
 
 static cairo_pattern_t *

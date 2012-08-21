@@ -27,8 +27,13 @@ struct SPStopClass;
 
 GType sp_stop_get_type();
 
+class CStop;
+
 /** Gradient stop. */
-struct SPStop : public SPObject {
+class SPStop : public SPObject {
+public:
+	CStop* cstop;
+
     /// \todo fixme: Should be SPSVGPercentage
     gfloat offset;
 
@@ -59,6 +64,21 @@ struct SPStop : public SPObject {
 struct SPStopClass {
     SPObjectClass parent_class;
 };
+
+
+class CStop : public CObject {
+public:
+	CStop(SPStop* stop);
+	virtual ~CStop();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPStop* spstop;
+};
+
 
 guint32 sp_stop_get_rgba32(SPStop const *);
 
