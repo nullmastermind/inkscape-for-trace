@@ -28,6 +28,8 @@ class SPMask;
 class SPMaskClass;
 class SPMaskView;
 
+class CMask;
+
 namespace Inkscape {
 
 class Drawing;
@@ -36,7 +38,10 @@ class DrawingItem;
 } // namespace Inkscape
 
 
-struct SPMask : public SPObjectGroup {
+class SPMask : public SPObjectGroup {
+public:
+	CMask* cmask;
+
 	unsigned int maskUnits_set : 1;
 	unsigned int maskUnits : 1;
 
@@ -48,6 +53,27 @@ struct SPMask : public SPObjectGroup {
 
 struct SPMaskClass {
 	SPObjectGroupClass parent_class;
+};
+
+class CMask : public CObjectGroup {
+public:
+	CMask(SPMask* mask);
+	virtual ~CMask();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPMask* spmask;
 };
 
 GType sp_mask_get_type (void);
