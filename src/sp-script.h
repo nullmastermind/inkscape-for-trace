@@ -22,13 +22,36 @@
 
 /* SPScript */
 
-struct SPScript : public SPObject {
+class CScript;
+
+class SPScript : public SPObject {
+public:
+	CScript* cscript;
+
 	gchar *xlinkhref;
 };
 
 struct SPScriptClass {
     SPObjectClass parent_class;
 };
+
+
+class CScript : public CObject {
+public:
+	CScript(SPScript* script);
+	virtual ~CScript();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void onModified(unsigned int flags);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPScript* spscript;
+};
+
 
 GType sp_script_get_type();
 
