@@ -412,7 +412,12 @@ void CUse::onHide(unsigned int key) {
         SP_ITEM(use->child)->invoke_hide(key);
     }
 
-    CItem::onHide(key);
+    // CPPIFY: This doesn't make no sense.
+    // CItem::onHide is pure. What was the idea behind these lines?
+//	if (((SPItemClass *) parent_class)->hide) {
+//		((SPItemClass *) parent_class)->hide(item, key);
+//	}
+//  CItem::onHide(key);
 }
 
 static void

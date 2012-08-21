@@ -1374,9 +1374,11 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
     }
 }
 
-// CPPIFY:: make pure virtual
+// CPPIFY:: make pure virtual?
+// Not all SPItems must necessarily have a set transform method!
 Geom::Affine CItem::onSetTransform(Geom::Affine const &transform) {
-	throw;
+//	throw;
+	return transform;
 }
 
 /**
@@ -1443,6 +1445,11 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
 
     gint preserve = prefs->getBool("/options/preservetransform/value", 0);
     Geom::Affine transform_attr (transform);
+
+    // CPPIFY: check this code.
+    // If onSetTransform is not overridden, CItem::onSetTransform will return the transform it was given as a parameter.
+    // onSetTransform cannot be pure due to the fact that not all visible Items are transformable.
+
     if ( // run the object's set_transform (i.e. embed transform) only if:
              !preserve && // user did not chose to preserve all transforms
              !clip_ref->getObject() && // the object does not have a clippath
