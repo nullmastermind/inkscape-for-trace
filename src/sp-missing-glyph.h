@@ -25,7 +25,12 @@
 #define SP_IS_MISSING_GLYPH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_MISSING_GLYPH))
 #define SP_IS_MISSING_GLYPH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_MISSING_GLYPH))
 
-struct SPMissingGlyph : public SPObject {
+class CMissingGlyph;
+
+class SPMissingGlyph : public SPObject {
+public:
+	CMissingGlyph* cmissingglyph;
+
     char* d;
     double horiz_adv_x;
     double vert_origin_x;
@@ -36,6 +41,22 @@ struct SPMissingGlyph : public SPObject {
 struct SPMissingGlyphClass {
 	SPObjectClass parent_class;
 };
+
+
+class CMissingGlyph : public CObject {
+public:
+	CMissingGlyph(SPMissingGlyph* mg);
+	virtual ~CMissingGlyph();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPMissingGlyph* spmissingglyph;
+};
+
 
 GType sp_missing_glyph_get_type (void);
 

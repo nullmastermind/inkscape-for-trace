@@ -66,8 +66,18 @@ static void sp_missing_glyph_class_init(SPMissingGlyphClass *gc)
     sp_object_class->write = sp_missing_glyph_write;
 }
 
+CMissingGlyph::CMissingGlyph(SPMissingGlyph* mg) : CObject(mg) {
+	this->spmissingglyph = mg;
+}
+
+CMissingGlyph::~CMissingGlyph() {
+}
+
 static void sp_missing_glyph_init(SPMissingGlyph *glyph)
 {
+	glyph->cmissingglyph = new CMissingGlyph(glyph);
+	glyph->cobject = glyph->cmissingglyph;
+
 //TODO: correct these values:
     glyph->d = NULL;
     glyph->horiz_adv_x = 0;
@@ -76,11 +86,10 @@ static void sp_missing_glyph_init(SPMissingGlyph *glyph)
     glyph->vert_adv_y = 0;
 }
 
-static void sp_missing_glyph_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) (parent_class))->build) {
-        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-    }
+void CMissingGlyph::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPMissingGlyph* object = this->spmissingglyph;
+
+    CObject::onBuild(doc, repr);
 
     object->readAttr( "d" );
     object->readAttr( "horiz-adv-x" );
@@ -89,17 +98,23 @@ static void sp_missing_glyph_build(SPObject *object, SPDocument *document, Inksc
     object->readAttr( "vert-adv-y" );
 }
 
-static void sp_missing_glyph_release(SPObject *object)
+static void sp_missing_glyph_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    //SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
-
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+	((SPMissingGlyph*)object)->cmissingglyph->onBuild(document, repr);
 }
 
-static void sp_missing_glyph_set(SPObject *object, unsigned int key, const gchar *value)
+void CMissingGlyph::onRelease() {
+	CObject::onRelease();
+}
+
+static void sp_missing_glyph_release(SPObject *object)
 {
+	((SPMissingGlyph*)object)->cmissingglyph->onRelease();
+}
+
+void CMissingGlyph::onSet(unsigned int key, const gchar* value) {
+	SPMissingGlyph* object = this->spmissingglyph;
+
     SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
 
     switch (key) {
@@ -150,47 +165,54 @@ static void sp_missing_glyph_set(SPObject *object, unsigned int key, const gchar
         }
         default:
         {
-            if (((SPObjectClass *) (parent_class))->set) {
-                ((SPObjectClass *) (parent_class))->set(object, key, value);
-            }
+            CObject::onSet(key, value);
             break;
         }
     }
 }
 
+static void sp_missing_glyph_set(SPObject *object, unsigned int key, const gchar *value)
+{
+	((SPMissingGlyph*)object)->cmissingglyph->onSet(key, value);
+}
+
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
+
+Inkscape::XML::Node* CMissingGlyph::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+	SPMissingGlyph* object = this->spmissingglyph;
+
+	//    SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
+
+	    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+	        repr = xml_doc->createElement("svg:glyph");
+	    }
+
+	/* I am commenting out this part because I am not certain how does it work. I will have to study it later. Juca
+	    repr->setAttribute("d", glyph->d);
+	    sp_repr_set_svg_double(repr, "horiz-adv-x", glyph->horiz_adv_x);
+	    sp_repr_set_svg_double(repr, "vert-origin-x", glyph->vert_origin_x);
+	    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
+	    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
+	*/
+	    if (repr != object->getRepr()) {
+
+	        // All the COPY_ATTR functions below use
+	        //  XML Tree directly while they shouldn't.
+	        COPY_ATTR(repr, object->getRepr(), "d");
+	        COPY_ATTR(repr, object->getRepr(), "horiz-adv-x");
+	        COPY_ATTR(repr, object->getRepr(), "vert-origin-x");
+	        COPY_ATTR(repr, object->getRepr(), "vert-origin-y");
+	        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
+	    }
+
+	    CObject::onWrite(xml_doc, repr, flags);
+
+	    return repr;
+}
 
 static Inkscape::XML::Node *sp_missing_glyph_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-//    SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
-
-    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = xml_doc->createElement("svg:glyph");
-    }
-
-/* I am commenting out this part because I am not certain how does it work. I will have to study it later. Juca
-    repr->setAttribute("d", glyph->d);
-    sp_repr_set_svg_double(repr, "horiz-adv-x", glyph->horiz_adv_x);
-    sp_repr_set_svg_double(repr, "vert-origin-x", glyph->vert_origin_x);
-    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
-    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
-*/
-    if (repr != object->getRepr()) {
-
-        // All the COPY_ATTR functions below use
-        //  XML Tree directly while they shouldn't.
-        COPY_ATTR(repr, object->getRepr(), "d");
-        COPY_ATTR(repr, object->getRepr(), "horiz-adv-x");
-        COPY_ATTR(repr, object->getRepr(), "vert-origin-x");
-        COPY_ATTR(repr, object->getRepr(), "vert-origin-y");
-        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
-    }
-
-    if (((SPObjectClass *) (parent_class))->write) {
-        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
-    }
-
-    return repr;
+	return ((SPMissingGlyph*)object)->cmissingglyph->onWrite(xml_doc, repr, flags);
 }
 #endif //#ifdef ENABLE_SVG_FONTS
 /*
