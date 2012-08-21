@@ -20,12 +20,29 @@
 class SPDesc;
 class SPDescClass;
 
-struct SPDesc : public SPObject {
+class CDesc;
+
+class SPDesc : public SPObject {
+public:
+	CDesc* cdesc;
 };
 
 struct SPDescClass {
 	SPObjectClass parent_class;
 };
+
+
+class CDesc : public CObject {
+public:
+	CDesc(SPDesc* desc);
+	virtual ~CDesc();
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+protected:
+	SPDesc* spdesc;
+};
+
 
 GType sp_desc_get_type (void);
 

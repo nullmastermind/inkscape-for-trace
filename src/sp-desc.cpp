@@ -50,8 +50,29 @@ static void sp_desc_class_init(SPDescClass *klass)
     sp_object_class->write = sp_desc_write;
 }
 
-static void sp_desc_init(SPDesc */*desc*/)
+CDesc::CDesc(SPDesc* desc) : CObject(desc) {
+	this->spdesc = desc;
+}
+
+CDesc::~CDesc() {
+}
+
+static void sp_desc_init(SPDesc *desc)
 {
+	desc->cdesc = new CDesc(desc);
+	desc->cobject = desc->cdesc;
+}
+
+Inkscape::XML::Node* CDesc::onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+	SPDesc* object = this->spdesc;
+
+    if (!repr) {
+        repr = object->getRepr()->duplicate(doc);
+    }
+
+    CObject::onWrite(doc, repr, flags);
+
+    return repr;
 }
 
 /**
@@ -59,13 +80,5 @@ static void sp_desc_init(SPDesc */*desc*/)
  */
 static Inkscape::XML::Node *sp_desc_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
-    if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
-    }
-
-    if ((static_cast<SPObjectClass *>(desc_parent_class))->write) {
-        (static_cast<SPObjectClass *>(desc_parent_class))->write(object, doc, repr, flags);
-    }
-
-    return repr;
+	return ((SPDesc*)object)->cdesc->onWrite(doc, repr, flags);
 }
