@@ -22,8 +22,13 @@
 #define SP_IS_OBJECTGROUP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OBJECTGROUP))
 #define SP_IS_OBJECTGROUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_OBJECTGROUP))
 
+class CObjectGroup;
+
 class SPObjectGroup : public SPObject {
 public:
+	CObjectGroup* cobjectgroup;
+
+
     static GType sp_objectgroup_get_type(void);
 
 private:
@@ -47,6 +52,24 @@ private:
 
     friend class SPObjectGroup;	
 };
+
+
+class CObjectGroup : public CObject {
+public:
+	CObjectGroup(SPObjectGroup* gr);
+	virtual ~CObjectGroup();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual void onOrderChanged(Inkscape::XML::Node* child, Inkscape::XML::Node* old, Inkscape::XML::Node* new_repr);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+
+protected:
+	SPObjectGroup* spobjectgroup;
+};
+
 
 #endif // SEEN_SP_OBJECTGROUP_H
 /*

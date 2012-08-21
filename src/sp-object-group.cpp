@@ -52,40 +52,60 @@ void SPObjectGroupClass::sp_objectgroup_class_init(SPObjectGroupClass *klass)
     sp_object_class->write = SPObjectGroup::write;
 }
 
-void SPObjectGroup::init(SPObjectGroup * /*objectgroup*/)
+CObjectGroup::CObjectGroup(SPObjectGroup* gr) : CObject(gr) {
+	this->spobjectgroup = gr;
+}
+
+CObjectGroup::~CObjectGroup() {
+}
+
+void SPObjectGroup::init(SPObjectGroup * objectgroup)
 {
+	objectgroup->cobjectgroup = new CObjectGroup(objectgroup);
+	objectgroup->cobject = objectgroup->cobjectgroup;
+}
+
+void CObjectGroup::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPObjectGroup* object = this->spobjectgroup;
+
+	CObject::onChildAdded(child, ref);
+
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPObjectGroup::childAdded(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
-    if (((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->child_added) {
-        (* ((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->child_added)(object, child, ref);
-    }
+	((SPObjectGroup*)object)->cobjectgroup->onChildAdded(child, ref);
+}
 
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+void CObjectGroup::onRemoveChild(Inkscape::XML::Node *child) {
+	SPObjectGroup* object = this->spobjectgroup;
+
+	CObject::onRemoveChild(child);
+
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPObjectGroup::removeChild(SPObject *object, Inkscape::XML::Node *child)
 {
-    if (((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->remove_child) {
-        (* ((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->remove_child)(object, child);
-    }
+	((SPObjectGroup*)object)->cobjectgroup->onRemoveChild(child);
+}
 
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+void CObjectGroup::onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
+	SPObjectGroup* object = this->spobjectgroup;
+
+	CObject::onOrderChanged(child, old_ref, new_ref);
+
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPObjectGroup::orderChanged(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
 {
-    if (((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->order_changed) {
-        (* ((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->order_changed)(object, child, old_ref, new_ref);
-    }
-
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	((SPObjectGroup*)object)->cobjectgroup->onOrderChanged(child, old_ref, new_ref);
 }
 
-Inkscape::XML::Node *SPObjectGroup::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SP_OBJECTGROUP(object); // Ensure we have the right type of SPObject
+Inkscape::XML::Node *CObjectGroup::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPObjectGroup* object = this->spobjectgroup;
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr) {
@@ -109,11 +129,14 @@ Inkscape::XML::Node *SPObjectGroup::write(SPObject *object, Inkscape::XML::Docum
         }
     }
 
-    if (((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->write) {
-        ((SPObjectClass *) (SPObjectGroupClass::static_parent_class))->write(object, xml_doc, repr, flags);
-    }
+    CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
+}
+
+Inkscape::XML::Node *SPObjectGroup::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPObjectGroup*)object)->cobjectgroup->onWrite(xml_doc, repr, flags);
 }
 
 /*
