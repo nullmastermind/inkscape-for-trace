@@ -84,35 +84,53 @@ sp_string_class_init(SPStringClass *classname)
     sp_object_class->update       = sp_string_update;
 }
 
+CString::CString(SPString* str) : CObject(str) {
+	this->spstring = str;
+}
+
+CString::~CString() {
+}
+
 static void
 sp_string_init(SPString *string)
 {
+	string->cstring = new CString(string);
+	string->cobject = string->cstring;
+
     new (&string->string) Glib::ustring();
+}
+
+void CString::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
+	SPString* object = this->spstring;
+    sp_string_read_content(object);
+
+    CObject::onBuild(doc, repr);
 }
 
 static void
 sp_string_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
-    sp_string_read_content(object);
+	((SPString*)object)->cstring->onBuild(doc, repr);
+}
 
-    if (((SPObjectClass *) string_parent_class)->build)
-        ((SPObjectClass *) string_parent_class)->build(object, doc, repr);
+void CString::onRelease() {
+	SPString* object = this->spstring;
+    SPString *string = SP_STRING(object);
+
+    string->string.~ustring();
+
+    CObject::onRelease();
 }
 
 static void
 sp_string_release(SPObject *object)
 {
-    SPString *string = SP_STRING(object);
-
-    string->string.~ustring();
-
-    if (((SPObjectClass *) string_parent_class)->release)
-        ((SPObjectClass *) string_parent_class)->release(object);
+	((SPString*)object)->cstring->onRelease();
 }
 
-static void
-sp_string_read_content(SPObject *object)
-{
+void CString::onReadContent() {
+	SPString* object = this->spstring;
+
     SPString *string = SP_STRING(object);
 
     string->string.clear();
@@ -154,15 +172,28 @@ sp_string_read_content(SPObject *object)
 }
 
 static void
-sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags)
+sp_string_read_content(SPObject *object)
 {
-    if (((SPObjectClass *) string_parent_class)->update)
-        ((SPObjectClass *) string_parent_class)->update(object, ctx, flags);
+	((SPString*)object)->cstring->onReadContent();
+}
+
+void CString::onUpdate(SPCtx *ctx, unsigned flags) {
+	// CPPIFY: This doesn't make no sense.
+	// CObject::onUpdate is pure. What was the idea behind these lines?
+//	if (((SPObjectClass *) string_parent_class)->update)
+//	        ((SPObjectClass *) string_parent_class)->update(object, ctx, flags);
+//    CObject::onUpdate(ctx, flags);
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
         /* Parent style or we ourselves changed, so recalculate */
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
     }
+}
+
+static void
+sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags)
+{
+	((SPString*)object)->cstring->onUpdate(ctx, flags);
 }
 
 

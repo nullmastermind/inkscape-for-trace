@@ -16,14 +16,36 @@
 #define SP_IS_STRING(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_STRING))
 #define SP_IS_STRING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STRING))
 
+class CString;
 
-struct SPString : public SPObject {
+class SPString : public SPObject {
+public:
+	CString* cstring;
+
     Glib::ustring  string;
 };
 
 struct SPStringClass {
 	SPObjectClass parent_class;
 };
+
+
+class CString : public CObject {
+public:
+	CString(SPString* str);
+	virtual ~CString();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onReadContent();
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+protected:
+	SPString* spstring;
+};
+
 
 GType sp_string_get_type ();
 
