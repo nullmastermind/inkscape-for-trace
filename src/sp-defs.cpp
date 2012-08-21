@@ -56,20 +56,32 @@ void SPDefsClass::sp_defs_class_init(SPDefsClass *dc)
     sp_object_class->write = SPDefs::write;
 }
 
-void SPDefs::init(SPDefs */*defs*/)
-{
+CDefs::CDefs(SPDefs* defs) : CObject(defs) {
+	this->spdefs = defs;
+}
 
+CDefs::~CDefs() {
+}
+
+
+void SPDefs::init(SPDefs *defs)
+{
+	defs->cdefs = new CDefs(defs);
+	defs->cobject = defs->cdefs;
+}
+
+void CDefs::onRelease() {
+	CObject::onRelease();
 }
 
 void SPDefs::release(SPObject *object)
 {
-    if (((SPObjectClass *) (SPDefsClass::static_parent_class))->release) {
-        ((SPObjectClass *) (SPDefsClass::static_parent_class))->release(object);
-    }
+	((SPDefs*)object)->cdefs->onRelease();
 }
 
-void SPDefs::update(SPObject *object, SPCtx *ctx, guint flags)
-{
+void CDefs::onUpdate(SPCtx *ctx, guint flags) {
+	SPDefs* object = this->spdefs;
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -87,8 +99,14 @@ void SPDefs::update(SPObject *object, SPCtx *ctx, guint flags)
     }
 }
 
-void SPDefs::modified(SPObject *object, guint flags)
+void SPDefs::update(SPObject *object, SPCtx *ctx, guint flags)
 {
+	((SPDefs*)object)->cdefs->onUpdate(ctx, flags);
+}
+
+void CDefs::onModified(unsigned int flags) {
+	SPDefs* object = this->spdefs;
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -113,8 +131,14 @@ void SPDefs::modified(SPObject *object, guint flags)
     }
 }
 
-Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+void SPDefs::modified(SPObject *object, guint flags)
 {
+	((SPDefs*)object)->cdefs->onModified(flags);
+}
+
+Inkscape::XML::Node* CDefs::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPDefs* object = this->spdefs;
+
     if (flags & SP_OBJECT_WRITE_BUILD) {
 
         if (!repr) {
@@ -141,11 +165,14 @@ Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *x
         }
     }
 
-    if (((SPObjectClass *) (SPDefsClass::static_parent_class))->write) {
-        (* ((SPObjectClass *) (SPDefsClass::static_parent_class))->write)(object, xml_doc, repr, flags);
-    }
+    CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
+}
+
+Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+{
+	return ((SPDefs*)object)->cdefs->onWrite(xml_doc, repr, flags);
 }
 
 /*
