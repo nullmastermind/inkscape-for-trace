@@ -1236,7 +1236,9 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
         case SP_PROP_COLOR_INTERPOLATION_FILTERS:
             // We read it but issue warning
             SPS_READ_IENUM_IF_UNSET(&style->color_interpolation_filters, val, enum_color_interpolation, true);
-            if( style->color_interpolation_filters.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
+            static bool blab=true; // eliminate annoying repeated messages to console
+            if( blab && style->color_interpolation_filters.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
+                blab = false;
                 g_warning("Inkscape currently only supports color-interpolation-filters = sRGB");
             }
             break;
