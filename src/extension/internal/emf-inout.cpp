@@ -363,7 +363,7 @@ typedef struct {
 
 typedef struct emf_device_context {
     struct SPStyle style;
-    class SPTextStyle tstyle;
+    char *font_name;
     bool stroke_set;
     int  stroke_mode;  // enumeration from drawmode, not used if fill_set is not True
     int  stroke_idx;   // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
@@ -389,6 +389,7 @@ typedef struct emf_device_context {
 } EMF_DEVICE_CONTEXT, *PEMF_DEVICE_CONTEXT;
 
 #define EMF_MAX_DC 128
+
 
 typedef struct emf_callback_data {
     Glib::ustring *outsvg;
@@ -1320,8 +1321,8 @@ select_font(PEMF_CALLBACK_DATA d, int index)
     d->dc[d->level].style.font_style.value = (pEmr->elfw.elfLogFont.lfItalic ? SP_CSS_FONT_STYLE_ITALIC : SP_CSS_FONT_STYLE_NORMAL);
     d->dc[d->level].style.text_decoration.underline = pEmr->elfw.elfLogFont.lfUnderline;
     d->dc[d->level].style.text_decoration.line_through = pEmr->elfw.elfLogFont.lfStrikeOut;
-    if (d->dc[d->level].tstyle.font_family.value){ free(d->dc[d->level].tstyle.font_family.value); }
-    d->dc[d->level].tstyle.font_family.value =
+    if (d->dc[d->level].font_name){ free(d->dc[d->level].font_name); }
+    d->dc[d->level].font_name =
         U_Utf16leToUtf8((uint16_t *) (pEmr->elfw.elfLogFont.lfFaceName), U_LF_FACESIZE, NULL);
     d->dc[d->level].style.baseline_shift.value = ((pEmr->elfw.elfLogFont.lfEscapement + 3600) % 3600) / 10;   // use baseline_shift instead of text_transform to avoid overflow
 }
@@ -1384,7 +1385,8 @@ int myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
     if(off>=length)return(0);  //normally should exit from while after EMREOF sets OK to false.  
 
     lpEMFR = (PU_ENHMETARECORD)(contents + off);
-//  std::cout << "record type: " << lpEMFR->iType << " length: " << lpEMFR->nSize << "offset: " << off <<std::endl;
+//  Uncomment the following to track down toxic records
+//std::cout << "record type: " << lpEMFR->iType << " length: " << lpEMFR->nSize << " offset: " << off <<std::endl;
     off += lpEMFR->nSize;
  
     SVGOStringStream tmp_outsvg;
@@ -1888,6 +1890,9 @@ std::cout << "BEFORE DRAW"
 
             if (d->level < EMF_MAX_DC) {
                 d->dc[d->level + 1] = d->dc[d->level];
+                if(d->dc[d->level].font_name){
+                  d->dc[d->level + 1].font_name = strdup(d->dc[d->level].font_name); // or memory access problems because font name pointer duplicated
+                }
                 d->level = d->level + 1;
             }
             break;
@@ -1906,8 +1911,13 @@ std::cout << "BEFORE DRAW"
                     d->level = d->level + pEmr->iRelative;
             }
             while (old_level > d->level) {
-                if (d->dc[old_level].style.stroke_dash.dash && (old_level==0 || (old_level>0 && d->dc[old_level].style.stroke_dash.dash!=d->dc[old_level-1].style.stroke_dash.dash)))
+                if (d->dc[old_level].style.stroke_dash.dash && (old_level==0 || (old_level>0 && d->dc[old_level].style.stroke_dash.dash!=d->dc[old_level-1].style.stroke_dash.dash))){
                     delete[] d->dc[old_level].style.stroke_dash.dash;
+                }
+                if(d->dc[old_level].font_name){
+                   free(d->dc[old_level].font_name); // else memory leak
+                   d->dc[old_level].font_name = NULL;
+                }
                 old_level--;
             }
             break;
@@ -2653,9 +2663,9 @@ std::cout << "BEFORE DRAW"
 
             msdepua(dup_wt); //convert everything in Microsoft's private use area.  For Symbol, Wingdings, Dingbats
 
-            if(NonToUnicode(dup_wt, d->dc[d->level].tstyle.font_family.value)){
-               g_free(d->dc[d->level].tstyle.font_family.value);
-               d->dc[d->level].tstyle.font_family.value =  g_strdup("Times New Roman");
+            if(NonToUnicode(dup_wt, d->dc[d->level].font_name)){
+               g_free(d->dc[d->level].font_name);
+               d->dc[d->level].font_name =  g_strdup("Times New Roman");
             }
 
             char *ansi_text;
@@ -2718,7 +2728,7 @@ std::cout << "BEFORE DRAW"
                    << "font-weight:" << (b ? "bold" : "normal") << ";"
                    << "text-align:" << (lcr==2 ? "center" : lcr==1 ? "end" : "start") << ";"
                    << "text-anchor:" << (lcr==2 ? "middle" : lcr==1 ? "end" : "start") << ";"
-                   << "font-family:" << d->dc[d->level].tstyle.font_family.value << ";"
+                   << "font-family:" << d->dc[d->level].font_name << ";"
                    << "\"\n";
                 ts << "    >";
                 ts << escaped_text;
@@ -3017,6 +3027,10 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     memset(&d, 0, sizeof(d));
 
+    for(int i = 0; i < EMF_MAX_DC+1; i++){  // be sure all values and pointers are empty to start with
+       memset(&(d.dc[i]),0,sizeof(EMF_DEVICE_CONTEXT));
+    }
+    
     d.dc[0].worldTransform.eM11 = 1.0;
     d.dc[0].worldTransform.eM12 = 0.0;
     d.dc[0].worldTransform.eM21 = 0.0;
@@ -3078,6 +3092,10 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     
     if (d.dc[0].style.stroke_dash.dash)
         delete[] d.dc[0].style.stroke_dash.dash;
+     
+    for(int i=0; i<=d.level;i++){
+      if(d.dc[i].font_name)free(d.dc[i].font_name);
+    }
 
     return doc;
 }
