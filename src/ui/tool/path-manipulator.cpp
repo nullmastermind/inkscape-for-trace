@@ -949,10 +949,12 @@ void PathManipulator::hideDragPoint()
  * at the given time value */
 NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, double t)
 {
-    if (!first) throw std::invalid_argument("Subdivide after invalid iterator");
+    //throw originally used std::invalid_argument, that caused a link error against static libstdc++,
+    //this form was only used here.
+    if (!first) throw "Subdivide after invalid iterator";
     NodeList &list = NodeList::get(first);
     NodeList::iterator second = first.next();
-    if (!second) throw std::invalid_argument("Subdivide after last node in open path");
+    if (!second) throw "Subdivide after last node in open path";
 
     // We need to insert the segment after 'first'. We can't simply use 'second'
     // as the point of insertion, because when 'first' is the last node of closed path,
