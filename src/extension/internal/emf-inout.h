@@ -8,9 +8,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#ifndef SEEN_EXTENSION_INTERNAL_EMF_WIN32_H
-#define SEEN_EXTENSION_INTERNAL_EMF_WIN32_H
-#ifdef WIN32
+#ifndef SEEN_EXTENSION_INTERNAL_EMF_H
+#define SEEN_EXTENSION_INTERNAL_EMF_H
 
 #include "extension/implementation/implementation.h"
 
@@ -18,12 +17,12 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-class EmfWin32 : Inkscape::Extension::Implementation::Implementation { //This is a derived class
+class Emf : Inkscape::Extension::Implementation::Implementation { //This is a derived class
 
 public:
-    EmfWin32(); // Empty constructor
+    Emf(); // Empty constructor
 
-    virtual ~EmfWin32();//Destructor
+    virtual ~Emf();//Destructor
 
     bool check(Inkscape::Extension::Extension *module); //Can this module load (always yes for now)
 
@@ -41,9 +40,8 @@ private:
 
 } } }  /* namespace Inkscape, Extension, Implementation */
 
-#endif /* WIN32 */
 
-#endif /* EXTENSION_INTERNAL_EMF_WIN32_H */
+#endif /* EXTENSION_INTERNAL_EMF_H */
 
 /*
   Local Variables:

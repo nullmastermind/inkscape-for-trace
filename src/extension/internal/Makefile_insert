@@ -133,10 +133,14 @@ ink_common_sources +=	\
 	extension/internal/filter/filter.h \
 	extension/internal/filter/drop-shadow.h \
 	extension/internal/filter/snow.h \
-	extension/internal/emf-win32-print.h \
-	extension/internal/emf-win32-print.cpp \
-	extension/internal/emf-win32-inout.h \
-	extension/internal/emf-win32-inout.cpp \
+	extension/internal/uemf.c \
+	extension/internal/uemf.h \
+	extension/internal/uemf_endian.c \
+	extension/internal/uemf_endian.h \
+	extension/internal/emf-print.h \
+	extension/internal/emf-print.cpp \
+	extension/internal/emf-inout.h \
+	extension/internal/emf-inout.cpp \
 	extension/internal/image-resolution.h \
 	extension/internal/image-resolution.cpp
 	

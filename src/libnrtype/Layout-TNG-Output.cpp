@@ -20,6 +20,7 @@
 #include "extension/internal/cairo-render-context.h"
 #include "display/curve.h"
 #include <2geom/pathvector.h>
+#include "libunicode-convert/unicode-convert.h"
 
 #if !PANGO_VERSION_CHECK(1,24,0)
 #define PANGO_WEIGHT_THIN       static_cast<PangoWeight>(100)
@@ -42,6 +43,27 @@ using Inkscape::Extension::Internal::CairoGlyphInfo;
 
 namespace Inkscape {
 namespace Text {
+
+// the dx array is smuggled through to the EMF (ignored by others) as:
+//    text<nul>N w1 w2 w3 ...wN<nul><nul>
+// where the widths are floats 7 characters wide, including the space
+char *smuggle_adx_in(const char *string, int ndx, int size, float *adx){
+    int slen=strlen(string);
+    // holds:  string, fake terminator, Number of offsets, series of offsets, real (double) terminator.
+    int newsize=slen + 1 + 7 + 7*ndx + 2;
+    newsize = 8*((7 + newsize)/8);        // suppress valgrind messages if it is a multiple of 8 bytes???
+    char *smuggle=(char *)calloc(newsize,1);  //initialize all bytes, inluding terminators
+    strcpy(smuggle,string);
+    char *cptr = smuggle + slen + 1;        // immediately after the first terminator
+    sprintf(cptr,"%07d",ndx);
+    cptr+=7;
+    for(int i=0; i<ndx ; i++){
+      if(i<size){ sprintf(cptr," %6f",adx[i]); }
+      else {      sprintf(cptr," %6f",adx[0]); } //fill the rest with the width of the first character
+      cptr+=7;
+    }
+    return(smuggle);
+}
 
 void Layout::_clearOutputObjects()
 {
@@ -134,10 +156,18 @@ void Layout::print(SPPrintContext *ctx,
                    Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox,
                    Geom::Affine const &ctm) const
 {
+int doUTN=0;
+int lasttarget=0;
+int newtarget=0;
+#define MAX_DX 2048
+float hold_dx[MAX_DX]; // For smuggling dx values into print functions, unlikely any simple text output will be longer than this.
+int ndx=0;
+
     if (_input_stream.empty()) return;
 
     Direction block_progression = _blockProgression();
     bool text_to_path = ctx->module->textToPath();
+    doUTN = CanUTN();  // Unicode to Nonunicode translation enabled if true
     for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; ) {
         if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) {
             // invisible glyphs
@@ -180,25 +210,49 @@ void Layout::print(SPPrintContext *ctx,
             }
 
             // try to output as many characters as possible in one go by detecting kerning and stopping when we encounter it
+            // also break spans at changes in Unicode->nonunicode translations, so that each span
+            // sent down from here is translated the same way.  The translation happens much later 
+            // in the emf-print code.
+            // Note that the incoming stream has a predefined notion of what is in each "span" and it is not
+            // entirely clear why.  For instance, the string "%%% text %%%%", where % is the Unicode "Sagittarius"
+            // character has 3 spans, with the first two ending on the spaces.  Yet in the XML there is only one tspan.
+            // Consequently when the Unicode->NonUnicode detection is on the first space will go out by itself,
+            // because it is at the end of a span, whereas the second space goes with the "text".
+
             Glib::ustring span_string;
             double char_x = _characters[_glyphs[glyph_index].in_character].x;
             unsigned this_span_index = _characters[_glyphs[glyph_index].in_character].in_span;
+            if(doUTN)newtarget=lasttarget=SingleUnicodeToNon(*span_iter);
+
             do {
                 span_string += *span_iter;
                 span_iter++;
+                if(doUTN)newtarget=SingleUnicodeToNon(*span_iter);
 
                 unsigned same_character = _glyphs[glyph_index].in_character;
                 while (glyph_index < _glyphs.size() && _glyphs[glyph_index].in_character == same_character) {
                     char_x += _glyphs[glyph_index].width;
+                    if(ndx < MAX_DX){ hold_dx[ndx++] = _glyphs[glyph_index].width; }
                     glyph_index++;
                 }
             } while (glyph_index < _glyphs.size()
                      && _path_fitted == NULL
                      && _characters[_glyphs[glyph_index].in_character].in_span == this_span_index
-                     && fabs(char_x - _characters[_glyphs[glyph_index].in_character].x) < 1e-4);
+                     && fabs(char_x - _characters[_glyphs[glyph_index].in_character].x) < 1e-4
+                     && (doUTN ? (lasttarget==newtarget ? 1 : 0) : 1 )
+                     );
             sp_print_bind(ctx, glyph_matrix, 1.0);
-            sp_print_text(ctx, span_string.c_str(), g_pos, text_source->style);
+
+            // the dx array is smuggled through to the EMF (ignored by others) as:
+            //    text<nul>w1 w2 w3 ...wn<nul><nul>
+            // where the widths are floats 7 characters wide, including the space
+            
+            char *smuggle_string=smuggle_adx_in(span_string.c_str(),ndx,MAX_DX, &hold_dx[0]);
+//            sp_print_text(ctx, span_string.c_str(), g_pos, text_source->style);
+            sp_print_text(ctx, smuggle_string, g_pos, text_source->style);
+            free(smuggle_string);
             sp_print_release(ctx);
+            ndx=0;
         }
     }
 }
