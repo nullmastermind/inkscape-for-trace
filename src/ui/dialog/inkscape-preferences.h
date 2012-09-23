@@ -290,6 +290,7 @@ protected:
 
     UI::Widget::PrefSpinButton  _importexport_export_res;
     UI::Widget::PrefSpinButton  _importexport_import_res;
+    UI::Widget::PrefCheckButton _importexport_import_res_override;
     UI::Widget::PrefSlider      _snap_delay;
     UI::Widget::PrefSlider      _snap_weight;
     UI::Widget::PrefCheckButton _font_dialog;
@@ -300,6 +301,7 @@ protected:
     UI::Widget::PrefCheckButton _misc_default_metadata;
     UI::Widget::PrefCheckButton _misc_forkvectors;
     UI::Widget::PrefCheckButton _misc_gradienteditor;
+    UI::Widget::PrefSpinButton  _misc_gradientangle;
     UI::Widget::PrefCheckButton _misc_scripts;
     UI::Widget::PrefCheckButton _misc_namedicon_delay;
 

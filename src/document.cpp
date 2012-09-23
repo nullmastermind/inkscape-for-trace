@@ -865,6 +865,9 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
 SPObject *SPDocument::getObjectById(gchar const *id) const
 {
     g_return_val_if_fail(id != NULL, NULL);
+    if (!priv || !priv->iddef) {
+    	return NULL;
+    }
 
     GQuark idq = g_quark_from_string(id);
     gpointer rv = g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq));
@@ -1450,10 +1453,33 @@ void SPDocument::importDefs(SPDocument *source)
     prevent_id_clashes(source, this);
 
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
-        Inkscape::XML::Node * dup = def->duplicate(this->getReprDoc());
-        target_defs->appendChild(dup);
-        Inkscape::GC::release(dup);
+
+        // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
+        gboolean duplicate = false;
+        SPObject *src = source->getObjectByRepr(def);
+        if (src && SP_IS_GRADIENT(src)) {
+            SPGradient *gr = SP_GRADIENT(src);
+            if (gr->isSolid() || gr->getVector()->isSolid()) {
+                for (SPObject *trg = this->getDefs()->firstChild() ; trg ; trg = trg->getNext()) {
+                    if (trg && SP_IS_GRADIENT(trg) && src != trg) {
+                        if (gr->isEquivalent(SP_GRADIENT(trg))) {
+                            // Change object references to the existing equivalent gradient
+                            change_def_references(src, trg);
+                            duplicate = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!duplicate) {
+            Inkscape::XML::Node * dup = def->duplicate(this->getReprDoc());
+            target_defs->appendChild(dup);
+            Inkscape::GC::release(dup);
+        }
     }
+
 }
 
 /*

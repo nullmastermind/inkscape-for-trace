@@ -79,6 +79,7 @@
 // #include "inkscape.h"
 #include "ui/dialog/dialog-manager.h"
 // #include "../xml/repr.h"
+#include "ui/dialog/layer-properties.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -322,6 +323,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
         SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
         dt->change_document(doc);
         sp_namedview_window_from_document(dt);
+        sp_namedview_update_layers_from_document(dt);
         return;
     }
 
@@ -1766,15 +1768,16 @@ void ContextMenu::MakeItemMenu (void)
     AddSeparator();
     
     /* Select item */
-    mi = manage(new Gtk::MenuItem(_("_Select This"),1));
-    if (_desktop->selection->includes(_item)) {
-        mi->set_sensitive(FALSE);
-    } else {
-        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemSelectThis));
+    if (Inkscape::Verb::getbyid( "org.inkscape.followlink" )) {
+        mi = manage(new Gtk::MenuItem(_("_Select This"),1));
+        if (_desktop->selection->includes(_item)) {
+            mi->set_sensitive(FALSE);
+        } else {
+            mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemSelectThis));
+        }
+        mi->show();
+        append(*mi);
     }
-    mi->show();
-    append(*mi);
-    
 
 
     mi = manage(new Gtk::MenuItem(_("Select Same")));
@@ -1820,6 +1823,16 @@ void ContextMenu::MakeItemMenu (void)
     mi->set_sensitive(!SP_IS_ANCHOR(_item));
     mi->show();
     select_same_submenu->append(*mi);
+
+    /* Move to layer */
+    mi = manage(new Gtk::MenuItem(_("_Move to layer ..."),1));
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
+    } else {
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemMoveTo));
+    }
+    mi->show();
+    append(*mi);
 
     /* Create link */
     mi = manage(new Gtk::MenuItem(_("Create _Link"),1));
@@ -1936,6 +1949,13 @@ void ContextMenu::ItemSelectThis(void)
     _desktop->selection->set(_item);
 }
 
+void ContextMenu::ItemMoveTo(void)
+{
+    Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(_desktop, _desktop->currentLayer());
+}
+
+
+
 void ContextMenu::ItemCreateLink(void)
 {
     Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
@@ -2034,7 +2054,18 @@ void ContextMenu::AnchorLinkProperties(void)
 
 void ContextMenu::AnchorLinkFollow(void)
 {
-    /* shell out to an external browser here */
+
+    if (_desktop->selection->isEmpty()) {
+        _desktop->selection->set(_item);
+    }
+    // Opening the selected links with a python extension
+    Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.followlink" );
+    if (verb) {
+        SPAction *action = verb->get_action(_desktop);
+        if (action) {
+            sp_action_perform(action, NULL);
+        }
+    }
 }
 
 void ContextMenu::AnchorLinkRemove(void)
@@ -2064,6 +2095,15 @@ void ContextMenu::MakeImageMenu (void)
     insert(*mi,positionOfLastDialog++);
     if ( (!href) || ((strncmp(href, "data:", 5) == 0)) ) {
         mi->set_sensitive( FALSE );
+    }
+
+    /* Trace Bitmap */
+    mi = manage(new Gtk::MenuItem(_("_Trace Bitmap..."),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTraceBitmap));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
     }
 
     /* Embed image */
@@ -2175,6 +2215,12 @@ void ContextMenu::ImageEdit(void)
         g_error_free(errThing);
         errThing = 0;
     }
+}
+
+void ContextMenu::ImageTraceBitmap(void)
+{
+    inkscape_dialogs_unhide();
+    _desktop->_dlg_mgr->showDialog("Trace");
 }
 
 void ContextMenu::ImageEmbed(void)

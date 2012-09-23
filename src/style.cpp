@@ -3892,10 +3892,9 @@ sp_style_write_istring(gchar *p, gint const len, gchar const *const key,
         if (val->inherit) {
             res = g_snprintf(p, len, "%s:inherit;", key);
         } else {
-            gchar *val_quoted = css2_escape_quote(val->value);
-            if (val_quoted) {
-                res = g_snprintf(p, len, "%s:%s;", key, val_quoted);
-                g_free (val_quoted);
+            Glib::ustring val_quoted = css2_escape_quote(val->value);
+            if (~val_quoted.empty()) {
+                res = g_snprintf(p, len, "%s:%s;", key, val_quoted.c_str());
             }
         }
     }
@@ -4712,8 +4711,7 @@ attribute_unquote(gchar const *val)
 /**
  * Quote and/or escape string for writing to CSS (style=). Returned value must be g_free'd.
  */
-gchar *
-css2_escape_quote(gchar const *val) {
+Glib::ustring css2_escape_quote(gchar const *val) {
 
     Glib::ustring t;
     bool quote = false;
@@ -4757,7 +4755,7 @@ css2_escape_quote(gchar const *val) {
         t.push_back('\'');
     }
 
-    return (t.empty() ? NULL : g_strdup (t.c_str()));
+    return t;
 }
 
 /*

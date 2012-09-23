@@ -1222,13 +1222,16 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = sp_style_css_size_px_to_units(query->font_size.computed, unit);
 
-        gchar size_text[G_ASCII_DTOSTR_BUF_SIZE];
-        g_ascii_dtostr (size_text, sizeof (size_text), size);
+        //gchar size_text[G_ASCII_DTOSTR_BUF_SIZE];
+        //g_ascii_dtostr (size_text, sizeof (size_text), size);
+
+        Inkscape::CSSOStringStream os;
+        os << size;
 
         Ink_ComboBoxEntry_Action* fontSizeAction =
             INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontSizeAction" ) );
         sp_text_set_sizes(GTK_LIST_STORE(ink_comboboxentry_action_get_model(fontSizeAction)), unit);
-        ink_comboboxentry_action_set_active_text( fontSizeAction, size_text );
+        ink_comboboxentry_action_set_active_text( fontSizeAction, os.str().c_str() );
 
         Glib::ustring tooltip = Glib::ustring::format("Font size (", sp_style_get_css_unit_string(unit), ")");
         ink_comboboxentry_action_set_tooltip ( fontSizeAction, tooltip.c_str());
@@ -1461,7 +1464,8 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                                       GTK_TREE_MODEL(model),
                                                                       -1,                // Entry width
                                                                       50,                // Extra list width
-                                                                      (gpointer)cell_data_func ); // Cell layout
+                                                                      (gpointer)cell_data_func,// Cell layout
+                                                                      GTK_WIDGET(desktop->canvas)); // Focus widget
         ink_comboboxentry_action_popup_enable( act ); // Enable entry completion
         gchar *const warning = _("Font not found on system");
         ink_comboboxentry_action_set_warning( act, warning ); // Show icon with tooltip if missing font
@@ -1495,7 +1499,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                                       _(tooltip.c_str()),
                                                                       NULL,
                                                                       GTK_TREE_MODEL(model_size),
-                                                                      4 ); // Width in characters
+                                                                      4,  // Width in characters
+                                                                      0,      // Extra list width
+                                                                      NULL,   // Cell layout
+                                                                      GTK_WIDGET(desktop->canvas)); // Focus widget
+
         g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(sp_text_fontsize_value_changed), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
         g_object_set_data( holder, "TextFontSizeAction", act );
@@ -1510,7 +1518,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                                       _("Font style"),
                                                                       NULL,
                                                                       GTK_TREE_MODEL(model_style),
-                                                                      12 ); // Width in characters
+                                                                      12, // Width in characters
+                                                                       0,      // Extra list width
+                                                                       NULL,   // Cell layout
+                                                                       GTK_WIDGET(desktop->canvas)); // Focus widget
+
         g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(sp_text_fontstyle_value_changed), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
         g_object_set_data( holder, "TextFontStyleAction", act );
