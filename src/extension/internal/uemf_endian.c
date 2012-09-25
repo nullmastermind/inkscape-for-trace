@@ -14,8 +14,8 @@
 
 /*
 File:      uemf_endian.h
-Version:   0.0.4
-Date:      25-JUL-2012
+Version:   0.0.8
+Date:      17-SEP-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -1540,6 +1540,7 @@ void U_EMRGRADIENTFILL_swap(char *record, int torev){
    if(nTriVert){
          trivertex_swap((PU_TRIVERTEX)(record),nTriVert);    // TriVert[]
    }
+   record += nTriVert * sizeof(U_TRIVERTEX);
    if(nGradObj){
       if(     ulMode == U_GRADIENT_FILL_TRIANGLE){
          gradient3_swap((PU_GRADIENT3)(record), nGradObj);   // GradObj[]
