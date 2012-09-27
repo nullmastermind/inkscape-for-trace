@@ -44,24 +44,37 @@ using Inkscape::Extension::Internal::CairoGlyphInfo;
 namespace Inkscape {
 namespace Text {
 
-// the dx array is smuggled through to the EMF (ignored by others) as:
-//    text<nul>N w1 w2 w3 ...wN<nul><nul>
-// where the widths are floats 7 characters wide, including the space
-char *smuggle_adx_in(const char *string, int ndx, int size, float *adx){
+/*
+ dx array (character widths) and
+ ky (vertical kerning for entire span) 
+
+ are smuggled through to the EMF (ignored by others) as:
+    text<nul>N w1 w2 w3 ...wN<nul>y1 y2 y3 .. yN<nul><nul>
+ where the widths and y kern values are floats 7 characters wide, including the space
+*/
+char *smuggle_adxky_in(const char *string, int ndx, float *adx, float ky){
     int slen=strlen(string);
-    // holds:  string, fake terminator, Number of offsets, series of offsets, real (double) terminator.
-    int newsize=slen + 1 + 7 + 7*ndx + 2;
-    newsize = 8*((7 + newsize)/8);        // suppress valgrind messages if it is a multiple of 8 bytes???
-    char *smuggle=(char *)calloc(newsize,1);  //initialize all bytes, inluding terminators
-    strcpy(smuggle,string);
-    char *cptr = smuggle + slen + 1;        // immediately after the first terminator
-    sprintf(cptr,"%07d",ndx);
+    /* holds:  string
+               fake terminator         (one \0)
+               Number of widths        (ndxy)
+               series of widths        (ndxy entries)
+               fake terminator         (one \0)
+               y kern value            (one float)
+               real terminator         (two \0)
+    */
+    int newsize=slen + 1 + 7 + 7*ndx + 1 + 7 + 2;
+    newsize = 8*((7 + newsize)/8);            // suppress valgrind messages if it is a multiple of 8 bytes???
+    char *smuggle=(char *)calloc(newsize,1);  // initialize all bytes, inluding terminators
+    strcpy(smuggle,string);                   // text to pass
+    char *cptr = smuggle + slen + 1;          // immediately after the first fake terminator
+    sprintf(cptr,"%07d",ndx);                 // number of widths to pass
     cptr+=7;
-    for(int i=0; i<ndx ; i++){
-      if(i<size){ sprintf(cptr," %6f",adx[i]); }
-      else {      sprintf(cptr," %6f",adx[0]); } //fill the rest with the width of the first character
-      cptr+=7;
+    for(int i=0; i<ndx ; i++){                // all the widths
+       sprintf(cptr," %6f",adx[i]);
+       cptr+=7;
     }
+    cptr++;                                   // second fake terminator
+    sprintf(cptr," %6f",ky);                 // y kern for span
     return(smuggle);
 }
 
@@ -160,7 +173,8 @@ int doUTN=0;
 int lasttarget=0;
 int newtarget=0;
 #define MAX_DX 2048
-float hold_dx[MAX_DX]; // For smuggling dx values into print functions, unlikely any simple text output will be longer than this.
+float hold_dx[MAX_DX]; // For smuggling dx values (character widths) into print functions, unlikely any simple text output will be longer than this.
+float ky;              // For smuggling y kern value for span
 int ndx=0;
 
     if (_input_stream.empty()) return;
@@ -225,14 +239,30 @@ int ndx=0;
             if(doUTN)newtarget=lasttarget=SingleUnicodeToNon(*span_iter);
 
             do {
+/*
+std::cout << "glyph info at:" << glyph_index
+<<  " glyphNo:"      <<    _glyphs[glyph_index].glyph
+<<  " in_character:" <<    _glyphs[glyph_index].in_character
+<<  " x:"            <<    _glyphs[glyph_index].x 
+<<  " y:"            <<    _glyphs[glyph_index].y 
+<<  " rotation:"     <<    _glyphs[glyph_index].rotation  
+<<  " width:"        <<    _glyphs[glyph_index].width
+<< std::endl;
+*/
                 span_string += *span_iter;
                 span_iter++;
                 if(doUTN)newtarget=SingleUnicodeToNon(*span_iter);
 
                 unsigned same_character = _glyphs[glyph_index].in_character;
+                ky = _glyphs[glyph_index].y;  // same value for all positions in a span
                 while (glyph_index < _glyphs.size() && _glyphs[glyph_index].in_character == same_character) {
                     char_x += _glyphs[glyph_index].width;
-                    if(ndx < MAX_DX){ hold_dx[ndx++] = _glyphs[glyph_index].width; }
+                    if(ndx < MAX_DX){
+                        hold_dx[ndx++]   = _glyphs[glyph_index].width; 
+                    }
+                    else { // silently truncate any text line silly enough to be longer than MAX_DX
+                        break;
+                    }
                     glyph_index++;
                 }
             } while (glyph_index < _glyphs.size()
@@ -247,7 +277,7 @@ int ndx=0;
             //    text<nul>w1 w2 w3 ...wn<nul><nul>
             // where the widths are floats 7 characters wide, including the space
             
-            char *smuggle_string=smuggle_adx_in(span_string.c_str(),ndx,MAX_DX, &hold_dx[0]);
+            char *smuggle_string=smuggle_adxky_in(span_string.c_str(),ndx, &hold_dx[0], ky);
 //            sp_print_text(ctx, span_string.c_str(), g_pos, text_source->style);
             sp_print_text(ctx, smuggle_string, g_pos, text_source->style);
             free(smuggle_string);
