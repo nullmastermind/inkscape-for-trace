@@ -34,6 +34,7 @@
 #include "widgets/icon.h"
 #include "widgets/shrink-wrap-button.h"
 #include "xml/node-event-vector.h"
+#include "widgets/gradient-vector.h"
 
 namespace Inkscape {
 namespace Widgets {
@@ -239,7 +240,9 @@ private:
 
 void LayerSelector::_layersChanged()
 {
-    //_selectLayer(_desktop->currentLayer());
+    if (_desktop) {
+        _selectLayer(_desktop->currentLayer());
+    }
 }
 
 /** Selects the given layer in the dropdown selector.
@@ -579,7 +582,7 @@ void LayerSelector::_prepareLabelRenderer(
         gchar const *label;
         if ( object != root ) {
             label = object->label();
-            if (!label) {
+            if (!object->label()) {
                 label = object->defaultLabel();
                 label_defaulted = true;
             }
@@ -587,7 +590,7 @@ void LayerSelector::_prepareLabelRenderer(
             label = _("(root)");
         }
 
-        gchar *text = g_markup_printf_escaped(format, label);
+        gchar *text = g_markup_printf_escaped(format, gr_ellipsize_text (label, 50).c_str());
         _label_renderer.property_markup() = text;
         g_free(text);
         g_free(format);
@@ -599,6 +602,7 @@ void LayerSelector::_prepareLabelRenderer(
     _label_renderer.property_style() = ( label_defaulted ?
                                          Pango::STYLE_ITALIC :
                                          Pango::STYLE_NORMAL );
+
 }
 
 void LayerSelector::_lockLayer(bool lock) {
