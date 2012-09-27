@@ -14,8 +14,8 @@
 
 /*
 File:      uemf.c
-Version:   0.0.8
-Date:      14-SEP-2012
+Version:   0.0.89
+Date:      25-SEP-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -59,7 +59,7 @@ definitions are not needed in end user code, so they are here rather than in uem
      D = UP4(C);          /*  pixel array might not be a multiples of 4 bytes*/ \
      E    = sizeof(U_BITMAPINFOHEADER) +  4 * B->bmiHeader.biClrUsed;  /*  bmiheader + colortable*/ \
    }\
-   else { D = 0; E=0; }
+   else { C = 0; D = 0; E=0; }
 
 // variable "off" must be declared in the function
 

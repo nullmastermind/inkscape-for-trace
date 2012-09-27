@@ -207,22 +207,27 @@ static FFNEXUS *last=NULL;
   search_long_fflist(fontname, f1, f2, f3);
 }
 
-void smuggle_adx_out(const char *string, uint32_t **adx, int *ndx, float scale){
+void smuggle_adxky_out(const char *string, uint32_t **adx, double *ky, int *ndx, float scale){
     float       fdx;
     int         i;
     uint32_t   *ladx;
-    const char *cptr=&string[strlen(string)+1];
+    const char *cptr=&string[strlen(string)+1]; // this works because of the first fake terminator
 
-    *adx=NULL;
+    *adx = NULL;
+    *ky  = 0.0;       // set a default value
     sscanf(cptr,"%7d",ndx);
     if(!*ndx)return;  // this could happen with an empty string
     cptr += 7;
     ladx = (uint32_t *) malloc(*ndx * sizeof(uint32_t) );
+    if(!ladx)throw "Out of memory";
     *adx=ladx;
     for(i=0; i<*ndx; i++,cptr+=7, ladx++){
       sscanf(cptr,"%7f",&fdx);
       *ladx=(uint32_t) round(fdx * scale);
     }
+    cptr++; // skip 2nd fake terminator
+    sscanf(cptr,"%7f",&fdx);
+    *ky=fdx;
 }
 
 /* convert an  0RGB color to EMF U_COLORREF.
@@ -1915,23 +1920,12 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     double rotb = -std::atan2(tf[1], tf[0]);  // rotation for baseline offset for superscript/subscript, used below
     double dx,dy;
     double f1,f2,f3;
-
-#ifdef USE_PANGO_WIN32
-/*
-    font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value, font_style_to_pos(*style));
-    if (tf) {
-        LOGFONT *lf = pango_win32_font_logfont(tf->pFont);
-        tf->Unref();
-        hfont = CreateFontIndirect(lf);
-        g_free(lf);
-    }
-*/
-#endif
+    double ky;
 
     // the dx array is smuggled in like: text<nul>w1 w2 w3 ...wn<nul><nul>, where the widths are floats 7 characters wide, including the space
     int ndx;
     uint32_t *adx;
-    smuggle_adx_out(text, &adx, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
+    smuggle_adxky_out(text, &adx, &ky, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
     
     char *text2 = strdup(text);  // because U_Utf8ToUtf16le calls iconv which does not like a const char *
     uint16_t *unicode_text = U_Utf8ToUtf16le( text2, 0, NULL );
@@ -2045,8 +2039,12 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     Geom::Point p2 = p * tf;
 
     //Handle super/subscripts.  Negative sign because of geometry of MM_TEXT.
+/*
     p2[Geom::X] -= style->baseline_shift.computed * std::sin( rotb );
     p2[Geom::Y] -= style->baseline_shift.computed * std::cos( rotb );
+*/
+    p2[Geom::X] += ky * std::sin( rotb );
+    p2[Geom::Y] += ky * std::cos( rotb );
 
     //Conditionally handle compensation for PPT EMF import bug (affects PPT 2003-2010, at least)
     if(FixPPTCharPos){

@@ -138,7 +138,7 @@ my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
   p->size += length;
 }
 
-void toPNG(PMEMPNG accum, int width, int height, char *px, uint32_t cbPx){
+void toPNG(PMEMPNG accum, int width, int height, char *px){
     bitmap_t bmstore;
     bitmap_t *bitmap=&bmstore;
     accum->buffer=NULL;  // PNG constructed in memory will end up here, caller must free().
@@ -650,8 +650,7 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
          toPNG(         // Get the image from the RGBA px into mempng                               
              &mempng,                                                                               
              width, height,                                                                         
-             rgba_px,                                                                               
-             4 * width * height);                                                                   
+             rgba_px);                                                                   
          free(rgba_px);                                                                             
       }                                                                                             
    }
@@ -1462,7 +1461,8 @@ std::cout << "BEFORE DRAW"
             tmp_outdef << "<svg\n";
             tmp_outdef << "  xmlns:svg=\"http://www.w3.org/2000/svg\"\n";
             tmp_outdef << "  xmlns=\"http://www.w3.org/2000/svg\"\n";
-            tmp_outdef << "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"; //mathog
+            tmp_outdef << "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
+            tmp_outdef << "  xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n"; // needed for sodipodi:role
             tmp_outdef << "  version=\"1.0\"\n";
 
             d->xDPI = 2540;
@@ -2557,8 +2557,7 @@ std::cout << "BEFORE DRAW"
                   toPNG(         // Get the image from the RGBA px into mempng
                       &mempng,
                       width, height,
-                      rgba_px,
-                      4 * width * height);
+                      rgba_px);
                   free(rgba_px);
                }
             }
@@ -2710,18 +2709,20 @@ std::cout << "BEFORE DRAW"
                 // EMF textalignment is a bit strange: 0x6 is center, 0x2 is right, 0x0 is left, the value 0x4 is also drawn left
                 int lcr = ((d->dc[d->level].textAlign & U_TA_CENTER) == U_TA_CENTER) ? 2 : ((d->dc[d->level].textAlign & U_TA_CENTER) == U_TA_LEFT) ? 0 : 1;
 
-                ts << "    <text\n";
-//                ts << "        id=\"" << (d->id++) << "\"\n";
-                ts << "        xml:space=\"preserve\"\n";
-                ts << "        x=\"" << x << "\"\n";
-                ts << "        y=\"" << y << "\"\n";
+                ts << "<text\n";
+                ts << "  xml:space=\"preserve\"\n";
+                ts << "    x=\"" << x << "\"\n";
+                ts << "    y=\"" << y << "\"\n";
                 if (d->dc[d->level].style.baseline_shift.value) {
-                    ts << "        transform=\""
+                    ts << "    transform=\""
                        << "rotate(-" << d->dc[d->level].style.baseline_shift.value
                        << " " << x << " " << y << ")"
                        << "\"\n";
                 }
-                ts << "        style=\""
+                ts << "><tspan sodipodi:role=\"line\"";
+                ts << "    x=\"" << x << "\"\n";
+                ts << "    y=\"" << y << "\"\n";
+                ts << "    style=\""
                    << "font-size:" << fabs(d->dc[d->level].style.font_size.computed) << "px;"
                    << tmp
                    << "font-style:" << (i ? "italic" : "normal") << ";"
@@ -2732,6 +2733,7 @@ std::cout << "BEFORE DRAW"
                    << "\"\n";
                 ts << "    >";
                 ts << escaped_text;
+                ts << "  </tspan>";
                 ts << "</text>\n";
                 
                 *(d->outsvg) += ts.str().c_str();
@@ -2989,7 +2991,7 @@ std::cout << "BEFORE DRAW"
 
     }  //end of while
 // When testing, uncomment the following to show the final SVG derived from the EMF
-// std::cout << *(d->outsvg) << std::endl; 
+std::cout << *(d->outsvg) << std::endl; 
 
     return 1;
 }
@@ -3019,6 +3021,12 @@ typedef struct
 } APMHEADER, *PAPMHEADER;
 #pragma pack( pop )
 
+void free_emf_strings(EMF_STRINGS name){
+   if(name.count){
+      for(int i=0; i< name.count; i++){ free(name.strings[i]); }
+      free(name.strings);
+   }
+}
 
 SPDocument *
 Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
@@ -3080,9 +3088,9 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     delete d.path;
     delete d.outdef;
     delete d.defs;
-    if(d.hatches.count){ free(d.hatches.strings); }
-    if(d.images.count){  free(d.images.strings);  }
-
+    free_emf_strings(d.hatches);
+    free_emf_strings(d.images);
+    
     if (d.emf_obj) {
         int i;
         for (i=0; i<d.n_obj; i++)
