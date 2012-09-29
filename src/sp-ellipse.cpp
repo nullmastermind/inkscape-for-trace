@@ -117,8 +117,8 @@ static void sp_genericellipse_class_init(SPGenericEllipseClass *klass)
 
     item_class->snappoints = sp_genericellipse_snappoints;
 
-    shape_class->set_shape = sp_genericellipse_set_shape;
-    lpe_item_class->update_patheffect = sp_genericellipse_update_patheffect;
+    //shape_class->set_shape = sp_genericellipse_set_shape;
+    //lpe_item_class->update_patheffect = sp_genericellipse_update_patheffect;
 }
 
 CGenericEllipse::CGenericEllipse(SPGenericEllipse* genericEllipse) : CShape(genericEllipse) {

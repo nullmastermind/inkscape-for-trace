@@ -65,7 +65,7 @@ void SPLineClass::sp_line_class_init(SPLineClass *klass)
     sp_object_class->update = SPLine::update;
 
     SPShapeClass *shape_class = (SPShapeClass *) klass;
-    shape_class->set_shape = SPLine::setShape;
+    //shape_class->set_shape = SPLine::setShape;
 }
 
 CLine::CLine(SPLine* line) : CShape(line) {

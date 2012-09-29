@@ -73,7 +73,7 @@ static void box3d_side_class_init(Box3DSideClass *klass)
     sp_object_class->set = box3d_side_set;
     sp_object_class->update = box3d_side_update;
 
-    shape_class->set_shape = box3d_side_set_shape;
+    //shape_class->set_shape = box3d_side_set_shape;
 }
 
 CBox3DSide::CBox3DSide(Box3DSide* box3dside) : CPolygon(box3dside) {

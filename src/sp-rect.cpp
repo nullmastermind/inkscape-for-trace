@@ -90,7 +90,7 @@ sp_rect_class_init(SPRectClass *klass)
     item_class->convert_to_guides = sp_rect_convert_to_guides;
     item_class->snappoints = sp_rect_snappoints; //override the default sp_shape_snappoints; see sp_rect_snappoints for details
 
-    shape_class->set_shape = sp_rect_set_shape;
+    //shape_class->set_shape = sp_rect_set_shape;
 }
 
 CRect::CRect(SPRect* rect) : CShape(rect) {

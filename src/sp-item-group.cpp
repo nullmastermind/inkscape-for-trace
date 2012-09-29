@@ -135,7 +135,7 @@ sp_group_class_init (SPGroupClass *klass)
     item_class->hide = sp_group_hide;
     item_class->snappoints = sp_group_snappoints;
 
-    lpe_item_class->update_patheffect = sp_group_update_patheffect;
+    //lpe_item_class->update_patheffect = sp_group_update_patheffect;
 }
 
 CGroup::CGroup(SPGroup *group) : CLPEItem(group) {
@@ -851,9 +851,10 @@ void CGroup::onUpdatePatheffect(bool write) {
     for ( GSList const *iter = item_list; iter; iter = iter->next ) {
         SPObject *subitem = static_cast<SPObject *>(iter->data);
         if (SP_IS_LPE_ITEM(subitem)) {
-            if (SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (subitem))->update_patheffect) {
-                SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (subitem))->update_patheffect (SP_LPE_ITEM(subitem), write);
-            }
+            //if (SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (subitem))->update_patheffect) {
+            //    SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (subitem))->update_patheffect (SP_LPE_ITEM(subitem), write);
+            //}
+        	((SPLPEItem*)subitem)->clpeitem->onUpdatePatheffect(write);
         }
     }
 

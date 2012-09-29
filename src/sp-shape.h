@@ -90,7 +90,7 @@ public:
     SPLPEItemClass item_class;
 
     /* Build bpath from extra shape attributes */
-    void (* set_shape) (SPShape *shape);
+    //void (* set_shape) (SPShape *shape);
 
 private:
     static SPLPEItemClass *parent_class;

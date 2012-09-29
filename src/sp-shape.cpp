@@ -106,9 +106,10 @@ void SPShapeClass::sp_shape_class_init(SPShapeClass *klass)
     item_class->show = SPShape::sp_shape_show;
     item_class->hide = SPShape::sp_shape_hide;
     item_class->snappoints = SPShape::sp_shape_snappoints;
-    lpe_item_class->update_patheffect = NULL;
 
-    klass->set_shape = NULL;
+    //lpe_item_class->update_patheffect = NULL;
+
+    //klass->set_shape = NULL;
 }
 
 CShape::CShape(SPShape* shape) : CLPEItem(shape) {

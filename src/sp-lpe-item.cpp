@@ -108,7 +108,7 @@ sp_lpe_item_class_init(SPLPEItemClass *klass)
     sp_object_class->child_added = sp_lpe_item_child_added;
     sp_object_class->remove_child = sp_lpe_item_remove_child;
 
-    klass->update_patheffect = NULL;
+    //klass->update_patheffect = NULL;
 }
 
 // CPPIFY: remove
@@ -404,7 +404,7 @@ bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve) {
 
 // CPPIFY: make pure virtual
 void CLPEItem::onUpdatePatheffect(bool write) {
-	throw;
+	//throw;
 }
 
 /**

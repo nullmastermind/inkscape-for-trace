@@ -59,7 +59,7 @@ public:
 struct SPLPEItemClass {
     SPItemClass parent_class;
 
-    void (* update_patheffect) (SPLPEItem *lpeitem, bool write);
+    //void (* update_patheffect) (SPLPEItem *lpeitem, bool write);
 };
 
 

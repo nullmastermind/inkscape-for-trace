@@ -120,7 +120,7 @@ sp_path_class_init(SPPathClass * klass)
     item_class->set_transform = sp_path_set_transform;
     item_class->convert_to_guides = sp_path_convert_to_guides;
 
-    lpe_item_class->update_patheffect = sp_path_update_patheffect;
+    //lpe_item_class->update_patheffect = sp_path_update_patheffect;
 }
 
 

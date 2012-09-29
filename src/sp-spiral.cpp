@@ -92,9 +92,9 @@ static void sp_spiral_class_init(SPSpiralClass *klass)
     item_class->description = sp_spiral_description;
     item_class->snappoints = sp_spiral_snappoints;
 
-    lpe_item_class->update_patheffect = sp_spiral_update_patheffect;
+    //lpe_item_class->update_patheffect = sp_spiral_update_patheffect;
 
-    shape_class->set_shape = sp_spiral_set_shape;
+    //shape_class->set_shape = sp_spiral_set_shape;
 }
 
 CSpiral::CSpiral(SPSpiral* spiral) : CShape(spiral) {

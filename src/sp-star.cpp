@@ -86,9 +86,9 @@ static void sp_star_class_init(SPStarClass *klass)
     item_class->description = sp_star_description;
     item_class->snappoints = sp_star_snappoints;
 
-    lpe_item_class->update_patheffect = sp_star_update_patheffect;
+    //lpe_item_class->update_patheffect = sp_star_update_patheffect;
 
-    shape_class->set_shape = sp_star_set_shape;
+    //shape_class->set_shape = sp_star_set_shape;
 }
 
 CStar::CStar(SPStar* star) : CPolygon(star) {
