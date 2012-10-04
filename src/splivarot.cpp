@@ -1977,7 +1977,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
 
 
 //return true if we changed something, else false
-bool
+static bool
 sp_selected_path_simplify_item(SPDesktop *desktop,
                  Inkscape::Selection *selection, SPItem *item,
                  float threshold,  bool justCoalesce,
@@ -2181,7 +2181,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
     return didSomething;
 }
 
-void
+static void
 sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool justCoalesce,
                                     float angleLimit, bool breakableAngles)
 {

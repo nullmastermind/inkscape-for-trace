@@ -755,7 +755,7 @@ struct Baselines
     {}
 };
 
-bool operator< (const Baselines &a, const Baselines &b)
+static bool operator< (const Baselines &a, const Baselines &b)
 {
     return (a._base[a._orientation] < b._base[b._orientation]);
 }
@@ -873,14 +873,14 @@ private :
 
 
 
-void on_tool_changed(Inkscape::Application */*inkscape*/, SPEventContext */*context*/, AlignAndDistribute *daad)
+static void on_tool_changed(Inkscape::Application */*inkscape*/, SPEventContext */*context*/, AlignAndDistribute *daad)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && sp_desktop_event_context(desktop))
         daad->setMode(tools_active(desktop) == TOOLS_NODES);
 }
 
-void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
+static void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
 {
     daad->randomize_bbox = Geom::OptRect();
 }

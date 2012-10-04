@@ -42,16 +42,16 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection *selection, Transformation *daad)
+static void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection *selection, Transformation *daad)
 {
     int page = daad->getCurrentPage();
     daad->updateSelection((Inkscape::UI::Dialog::Transformation::PageType)page, selection);
 }
 
-void on_selection_modified( Inkscape::Application */*inkscape*/,
-                            Inkscape::Selection *selection,
-                            guint /*flags*/,
-                            Transformation *daad )
+static void on_selection_modified( Inkscape::Application */*inkscape*/,
+                                   Inkscape::Selection *selection,
+                                   guint /*flags*/,
+                                   Transformation *daad )
 {
     int page = daad->getCurrentPage();
     daad->updateSelection((Inkscape::UI::Dialog::Transformation::PageType)page, selection);
