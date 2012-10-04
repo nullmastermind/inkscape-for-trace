@@ -543,7 +543,7 @@ void pixelformatdescriptor_print(
 /**
     \brief Print a Pointer to a U_EMRTEXT record
     \param emt      Pointer to a U_EMRTEXT record 
-    \param record   Pointer to the start of the record which contains this U_ERMTEXT
+    \param record   Pointer to the start of the record which contains this U_EMRTEXT
     \param type     0 for 8 bit character, anything else for 16 
 */
 void emrtext_print(

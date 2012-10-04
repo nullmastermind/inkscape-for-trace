@@ -62,7 +62,7 @@ namespace Internal {
 static float device_scale = DEVICESCALE;
 static U_RECTL rc_old;
 static bool clipset = false;
-static uint32_t ICMmode=0;
+static uint32_t ICMmode=0;  // not used yet, but code to read it from EMF implemented
 static uint32_t BLTmode=0;
 
 /** Construct a PNG in memory from an RGB from the EMF file 
@@ -120,8 +120,8 @@ static pixel_t * pixel_at (bitmap_t * bitmap, int x, int y)
 void
 my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  /* with libpng15 next line causes pointer deference error; use libpng12 */
-  PMEMPNG p=(PMEMPNG)png_ptr->io_ptr;
+  PMEMPNG p=(PMEMPNG)png_get_io_ptr(png_ptr);
+   
   size_t nsize = p->size + length;
 
   /* allocate or grow buffer */
@@ -221,16 +221,6 @@ void toPNG(PMEMPNG accum, int width, int height, char *px){
     
 }
 
-/* Given "value" and "max", the maximum value which we expect "value"
-   to take, this returns an integer between 0 and 255 proportional to
-   "value" divided by "max". */
-
-static int pix (int value, int max)
-{
-    if (value < 0)
-        return 0;
-    return (int) (256.0 *((double) (value)/(double) max));
-}
 
 /* convert an EMF RGB(A) color to 0RGB
 inverse of gethexcolor() in emf-print.cpp
@@ -2944,10 +2934,8 @@ std::cout << "BEFORE DRAW"
         case U_EMR_SETICMMODE:
         {
             dbg_str << "<!-- U_EMR_SETICMMODE -->\n";
-#if 0
-            PU_EMRENABLEICM pEmr = (PU_EMRENABLEICM) lpEMFR;
+            PU_EMRSETICMMODE pEmr = (PU_EMRSETICMMODE) lpEMFR;
             ICMmode= pEmr->iMode;
-#endif //0
             break;
         }
         case U_EMR_CREATECOLORSPACE:     dbg_str << "<!-- U_EMR_CREATECOLORSPACE -->\n";     break;
@@ -2991,7 +2979,7 @@ std::cout << "BEFORE DRAW"
 
     }  //end of while
 // When testing, uncomment the following to show the final SVG derived from the EMF
-std::cout << *(d->outsvg) << std::endl; 
+// std::cout << *(d->outsvg) << std::endl; 
 
     return 1;
 }

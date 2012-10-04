@@ -2038,8 +2038,8 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
     Geom::Point p2 = p * tf;
 
-    //Handle super/subscripts.  Negative sign because of geometry of MM_TEXT.
-/*
+    //Handle super/subscripts and vertical kerning
+/*  Previously used this, but vertical kerning was not supported
     p2[Geom::X] -= style->baseline_shift.computed * std::sin( rotb );
     p2[Geom::Y] -= style->baseline_shift.computed * std::cos( rotb );
 */

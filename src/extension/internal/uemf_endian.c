@@ -18,7 +18,7 @@
 /*
 File:      uemf_endian.h
 Version:   0.0.9
-Date:      26-SEP-2012
+Date:      27-SEP-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -376,7 +376,7 @@ void pixelformatdescriptor_swap(
 /**
     \brief Convert a Pointer to a U_EMRTEXT record
     \param pemt      Pointer to a U_EMRTEXT record 
-    \param record    Pointer to the start of the record which contains this U_ERMTEXT
+    \param record    Pointer to the start of the record which contains this U_EMRTEXT
     \param torev     1 for native to reversed, 0 for reversed to native
 */
 void emrtext_swap(

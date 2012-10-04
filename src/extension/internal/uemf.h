@@ -13,8 +13,8 @@
 
 /*
 File:      uemf.h
-Version:   0.0.8
-Date:      14-SEP-2012
+Version:   0.0.9
+Date:      27-SEP-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -1940,7 +1940,7 @@ typedef struct {
   U_EMRSETSTRETCHBLTMODE, *PU_EMRSETSTRETCHBLTMODE,  //!< StretchMode Enumeration
   U_EMRSETTEXTALIGN,      *PU_EMRSETTEXTALIGN,       //!< TextAlignment enumeration
   U_EMRSELECTCLIPPATH,    *PU_EMRSELECTCLIPPATH,     //!< RegionMode Enumeration
-  U_EMRSETICMMODE,        *PU_ERMSETICMMODE,         //!< ICMMode Enumeration
+  U_EMRSETICMMODE,        *PU_EMRSETICMMODE,         //!< ICMMode Enumeration
   U_EMRSETLAYOUT,         *PU_EMRSETLAYOUT;          //!< Mirroring Enumeration
 
 /* Index  23 */
