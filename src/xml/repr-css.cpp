@@ -361,10 +361,8 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
     * HACK for now is to strip off em and ex units and add them back at the end
     */
     int l = strlen(value_unquoted);
-    if (l>2 &&
-            (!strncmp(&value_unquoted[l-2], "em", 2) ||
-             !strncmp(&value_unquoted[l-2], "ex", 2)
-            )) {
+    if (!strncmp(&value_unquoted[l-2], "em", 2) ||
+            !strncmp(&value_unquoted[l-2], "ex", 2)) {
         units = g_strndup(&value_unquoted[l-2], 2);
         value_unquoted = g_strndup(value_unquoted, l-2);
     }
