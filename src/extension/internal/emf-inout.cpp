@@ -1383,7 +1383,8 @@ int myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
     SVGOStringStream tmp_str;
     SVGOStringStream dbg_str;
     
-    emr_mask = emr_properties(lpEMFR->iType);
+    emr_mask = emr_properties(lpEMFR->iType); 
+    if(emr_mask == U_EMR_INVALID){ throw "Inkscape fatal memory allocation error - cannot continue"; }
 
 // std::cout << "BEFORE DRAW logic d->mask: " << std::hex << d->mask << " emr_mask: " << emr_mask << std::dec << std::endl;
 /*
@@ -2980,6 +2981,7 @@ std::cout << "BEFORE DRAW"
     }  //end of while
 // When testing, uncomment the following to show the final SVG derived from the EMF
 // std::cout << *(d->outsvg) << std::endl; 
+    (void) emr_properties(U_EMR_INVALID);  // force the release of the lookup table memory, returned value is irrelevant
 
     return 1;
 }

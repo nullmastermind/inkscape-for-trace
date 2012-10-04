@@ -14,7 +14,7 @@
 /*
 File:      uemf.h
 Version:   0.0.9
-Date:      27-SEP-2012
+Date:      04-OCT-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -188,6 +188,8 @@ extern "C" {
 
 #define U_EMR_MIN 1                      //!< Minimum U_EMR_ value.
 #define U_EMR_MAX 122                    //!< Maximum U_EMR_ value.  Not much beyond 104 is implemented
+
+#define U_EMR_INVALID         0xFFFFFFFF //!< Not any valid U_EMF_ value
 /** @} */
 
 /** \defgroup U_DRAW_PROPERTIES

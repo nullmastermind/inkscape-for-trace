@@ -14,8 +14,8 @@
 
 /*
 File:      uemf.c
-Version:   0.0.89
-Date:      25-SEP-2012
+Version:   0.0.9
+Date:      04-OCT-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -583,144 +583,151 @@ uint32_t *dx_set(
 /**
     \brief Look up the properties (a bit map) of a type of EMR record.
         
-    \return bitmap of EMR record properties, or 0xFFFFFFFF on error
-    \param type EMR record type
+    \return bitmap of EMR record properties, or U_EMR_INVALID on error or release of all memory
+    \param type EMR record type.  If U_EMR_INVALID release memory. (There is no U_EMR_INVALID EMR record type)
     
 */
 uint32_t emr_properties(uint32_t type){
    static uint32_t *table=NULL;
-   if(!table){
-      table = (uint32_t *) malloc(sizeof(uint32_t)*(1 + U_EMR_MAX));
-      if(!table)return(0xFFFFFFFF); 
-//                                                              0x40 0x20 0x10 0x08 0x04 0x02 0x01
-//                 Path properties (U_DRAW_*)                        ALTERS    ONLYTO    VISIBLE   
-//                                                              PATH      FORCE     CLOSED    NOTEMPTY
-      table[  0] = 0x00;   //!<   Does not map to any EMR record
-      table[  1] = 0x00;   //!<   U_EMRHEADER                   0    0    0    0    0    0    0 
-      table[  2] = 0x03;   //!<   U_EMRPOLYBEZIER               0    0    0    0    0    1    1
-      table[  3] = 0x07;   //!<   U_EMRPOLYGON                  0    0    0    0    1    1    1
-      table[  4] = 0x03;   //!<   U_EMRPOLYLINE                 0    0    0    0    0    1    1
-      table[  5] = 0x0B;   //!<   U_EMRPOLYBEZIERTO             0    0    0    1    0    1    1
-      table[  6] = 0x0B;   //!<   U_EMRPOLYLINETO               0    0    0    1    0    1    1
-      table[  7] = 0x03;   //!<   U_EMRPOLYPOLYLINE             0    0    0    0    0    1    1
-      table[  8] = 0x07;   //!<   U_EMRPOLYPOLYGON              0    0    0    0    1    1    1
-      table[  9] = 0x20;   //!<   U_EMRSETWINDOWEXTEX           0    1    0    0    0    0    0
-      table[ 10] = 0x20;   //!<   U_EMRSETWINDOWORGEX           0    1    0    0    0    0    0
-      table[ 11] = 0x20;   //!<   U_EMRSETVIEWPORTEXTEX         0    1    0    0    0    0    0
-      table[ 12] = 0x20;   //!<   U_EMRSETVIEWPORTORGEX         0    1    0    0    0    0    0
-      table[ 13] = 0x20;   //!<   U_EMRSETBRUSHORGEX            0    1    0    0    0    0    0
-      table[ 14] = 0x02;   //!<   U_EMREOF                      0    1    0    0    0    0    0  Force out any pending draw
-      table[ 15] = 0x02;   //!<   U_EMRSETPIXELV                0    0    0    0    0    1    0
-      table[ 16] = 0x20;   //!<   U_EMRSETMAPPERFLAGS           0    1    0    0    0    0    0
-      table[ 17] = 0x20;   //!<   U_EMRSETMAPMODE               0    1    0    0    0    0    0
-      table[ 18] = 0x20;   //!<   U_EMRSETBKMODE                0    1    0    0    0    0    0
-      table[ 19] = 0x20;   //!<   U_EMRSETPOLYFILLMODE          0    1    0    0    0    0    0
-      table[ 20] = 0x20;   //!<   U_EMRSETROP2                  0    1    0    0    0    0    0
-      table[ 21] = 0x20;   //!<   U_EMRSETSTRETCHBLTMODE        0    1    0    0    0    0    0
-      table[ 22] = 0x20;   //!<   U_EMRSETTEXTALIGN             0    1    0    0    0    0    0
-      table[ 23] = 0x20;   //!<   U_EMRSETCOLORADJUSTMENT       0    1    0    0    0    0    0
-      table[ 24] = 0x20;   //!<   U_EMRSETTEXTCOLOR             0    1    0    0    0    0    0
-      table[ 25] = 0x20;   //!<   U_EMRSETBKCOLOR               0    1    0    0    0    0    0
-      table[ 26] = 0x20;   //!<   U_EMROFFSETCLIPRGN            0    1    0    0    0    0    0
-      table[ 27] = 0x09;   //!<   U_EMRMOVETOEX                 0    0    0    1    0    0    1
-      table[ 28] = 0x20;   //!<   U_EMRSETMETARGN               0    1    0    0    0    0    0
-      table[ 29] = 0x20;   //!<   U_EMREXCLUDECLIPRECT          0    1    0    0    0    0    0
-      table[ 30] = 0x20;   //!<   U_EMRINTERSECTCLIPRECT        0    1    0    0    0    0    0
-      table[ 31] = 0x20;   //!<   U_EMRSCALEVIEWPORTEXTEX       0    1    0    0    0    0    0
-      table[ 32] = 0x20;   //!<   U_EMRSCALEWINDOWEXTEX         0    1    0    0    0    0    0
-      table[ 33] = 0x20;   //!<   U_EMRSAVEDC                   0    1    0    0    0    0    0
-      table[ 34] = 0x20;   //!<   U_EMRRESTOREDC                0    1    0    0    0    0    0
-      table[ 35] = 0x20;   //!<   U_EMRSETWORLDTRANSFORM        0    1    0    0    0    0    0
-      table[ 36] = 0x20;   //!<   U_EMRMODIFYWORLDTRANSFORM     0    1    0    0    0    0    0
-      table[ 37] = 0x20;   //!<   U_EMRSELECTOBJECT             0    1    0    0    0    0    0
-      table[ 38] = 0x20;   //!<   U_EMRCREATEPEN                0    1    0    0    0    0    0
-      table[ 39] = 0x20;   //!<   U_EMRCREATEBRUSHINDIRECT      0    1    0    0    0    0    0
-      table[ 40] = 0x20;   //!<   U_EMRDELETEOBJECT             0    1    0    0    0    0    0
-      table[ 41] = 0x03;   //!<   U_EMRANGLEARC                 0    0    0    0    0    1    1
-      table[ 42] = 0x07;   //!<   U_EMRELLIPSE                  0    0    0    0    1    1    1
-      table[ 43] = 0x07;   //!<   U_EMRRECTANGLE                0    0    0    0    1    1    1
-      table[ 44] = 0x07;   //!<   U_EMRROUNDRECT                0    0    0    0    1    1    1
-      table[ 45] = 0x03;   //!<   U_EMRARC                      0    0    0    0    0    1    1
-      table[ 46] = 0x07;   //!<   U_EMRCHORD                    0    0    0    0    1    1    1
-      table[ 47] = 0x07;   //!<   U_EMRPIE                      0    0    0    0    1    1    1
-      table[ 48] = 0x20;   //!<   U_EMRSELECTPALETTE            0    1    0    0    0    0    0
-      table[ 49] = 0x20;   //!<   U_EMRCREATEPALETTE            0    1    0    0    0    0    0
-      table[ 50] = 0x20;   //!<   U_EMRSETPALETTEENTRIES        0    1    0    0    0    0    0
-      table[ 51] = 0x20;   //!<   U_EMRRESIZEPALETTE            0    1    0    0    0    0    0
-      table[ 52] = 0x20;   //!<   U_EMRREALIZEPALETTE           0    1    0    0    0    0    0
-      table[ 53] = 0x02;   //!<   U_EMREXTFLOODFILL             0    0    0    0    0    1    0
-      table[ 54] = 0x0B;   //!<   U_EMRLINETO                   0    0    0    1    0    1    1
-      table[ 55] = 0x0B;   //!<   U_EMRARCTO                    0    0    0    1    0    1    1
-      table[ 56] = 0x03;   //!<   U_EMRPOLYDRAW                 0    0    0    0    0    1    1
-      table[ 57] = 0x20;   //!<   U_EMRSETARCDIRECTION          0    1    0    0    0    0    0
-      table[ 58] = 0x20;   //!<   U_EMRSETMITERLIMIT            0    1    0    0    0    0    0
-      table[ 59] = 0x60;   //!<   U_EMRBEGINPATH                1    1    0    0    0    0    0
-      table[ 60] = 0x00;   //!<   U_EMRENDPATH                  0    0    0    0    0    0    0
-      table[ 61] = 0x04;   //!<   U_EMRCLOSEFIGURE              0    0    0    0    1    0    0
-      table[ 62] = 0x14;   //!<   U_EMRFILLPATH                 0    0    1    0    1    0    0
-      table[ 63] = 0x14;   //!<   U_EMRSTROKEANDFILLPATH        0    0    1    0    1    0    0
-      table[ 64] = 0x10;   //!<   U_EMRSTROKEPATH               0    0    1    0    0    0    0
-      table[ 65] = 0x20;   //!<   U_EMRFLATTENPATH              0    1    0    0    0    0    0
-      table[ 66] = 0x20;   //!<   U_EMRWIDENPATH                0    1    0    0    0    0    0
-      table[ 67] = 0x20;   //!<   U_EMRSELECTCLIPPATH           0    1    0    0    0    0    0
-      table[ 68] = 0x20;   //!<   U_EMRABORTPATH                0    1    0    0    0    0    0
-      table[ 69] = 0x20;   //!<   U_EMRUNDEF69                  0    1    0    0    0    0    0
-      table[ 70] = 0x00;   //!<   U_EMRCOMMENT                  0    0    0    0    0    0    0
-      table[ 71] = 0x02;   //!<   U_EMRFILLRGN                  0    0    0    0    0    1    0
-      table[ 72] = 0x02;   //!<   U_EMRFRAMERGN                 0    0    0    0    0    1    0
-      table[ 73] = 0x02;   //!<   U_EMRINVERTRGN                0    0    0    0    0    1    0
-      table[ 74] = 0x02;   //!<   U_EMRPAINTRGN                 0    0    0    0    0    1    0
-      table[ 75] = 0x20;   //!<   U_EMREXTSELECTCLIPRGN         0    1    0    0    0    0    0
-      table[ 76] = 0x02;   //!<   U_EMRBITBLT                   0    0    0    0    0    1    0
-      table[ 77] = 0x02;   //!<   U_EMRSTRETCHBLT               0    0    0    0    0    1    0
-      table[ 78] = 0x02;   //!<   U_EMRMASKBLT                  0    0    0    0    0    1    0
-      table[ 79] = 0x02;   //!<   U_EMRPLGBLT                   0    0    0    0    0    1    0
-      table[ 80] = 0x20;   //!<   U_EMRSETDIBITSTODEVICE        0    1    0    0    0    0    0
-      table[ 81] = 0x20;   //!<   U_EMRSTRETCHDIBITS            0    1    0    0    0    0    0
-      table[ 82] = 0x20;   //!<   U_EMREXTCREATEFONTINDIRECTW   0    1    0    0    0    0    0
-      table[ 83] = 0x02;   //!<   U_EMREXTTEXTOUTA              0    0    0    0    0    1    0
-      table[ 84] = 0x02;   //!<   U_EMREXTTEXTOUTW              0    0    0    0    0    1    0
-      table[ 85] = 0x03;   //!<   U_EMRPOLYBEZIER16             0    0    0    0    0    1    1
-      table[ 86] = 0x03;   //!<   U_EMRPOLYGON16                0    0    0    0    0    1    1
-      table[ 87] = 0x03;   //!<   U_EMRPOLYLINE16               0    0    0    0    0    1    1
-      table[ 88] = 0x0B;   //!<   U_EMRPOLYBEZIERTO16           0    0    0    1    0    1    1
-      table[ 89] = 0x0B;   //!<   U_EMRPOLYLINETO16             0    0    0    1    0    1    1
-      table[ 90] = 0x03;   //!<   U_EMRPOLYPOLYLINE16           0    0    0    0    0    1    1
-      table[ 91] = 0x07;   //!<   U_EMRPOLYPOLYGON16            0    0    0    0    1    1    1
-      table[ 92] = 0x03;   //!<   U_EMRPOLYDRAW16               0    0    0    0    0    1    1
-      table[ 93] = 0x00;   //!<   U_EMRCREATEMONOBRUSH          0    0    0    0    0    0    0  Not selected yet, so no change in drawing conditions
-      table[ 94] = 0x00;   //!<   U_EMRCREATEDIBPATTERNBRUSHPT  0    0    0    0    0    0    0  "
-      table[ 95] = 0x00;   //!<   U_EMREXTCREATEPEN             0    0    0    0    0    0    0  "
-      table[ 96] = 0x02;   //!<   U_EMRPOLYTEXTOUTA             0    0    0    0    0    1    0
-      table[ 97] = 0x02;   //!<   U_EMRPOLYTEXTOUTW             0    0    0    0    0    1    0
-      table[ 98] = 0x20;   //!<   U_EMRSETICMMODE               0    1    0    0    0    0    0
-      table[ 99] = 0x20;   //!<   U_EMRCREATECOLORSPACE         0    1    0    0    0    0    0
-      table[100] = 0x20;   //!<   U_EMRSETCOLORSPACE            0    1    0    0    0    0    0
-      table[101] = 0x20;   //!<   U_EMRDELETECOLORSPACE         0    1    0    0    0    0    0
-      table[102] = 0x20;   //!<   U_EMRGLSRECORD                0    1    0    0    0    0    0
-      table[103] = 0x20;   //!<   U_EMRGLSBOUNDEDRECORD         0    1    0    0    0    0    0
-      table[104] = 0x20;   //!<   U_EMRPIXELFORMAT              0    1    0    0    0    0    0
-      table[105] = 0x20;   //!<   U_EMRDRAWESCAPE               0    1    0    0    0    0    0
-      table[106] = 0x20;   //!<   U_EMREXTESCAPE                0    1    0    0    0    0    0
-      table[107] = 0x20;   //!<   U_EMRUNDEF107                 0    1    0    0    0    0    0
-      table[108] = 0x02;   //!<   U_EMRSMALLTEXTOUT             0    0    0    0    0    1    0
-      table[109] = 0x20;   //!<   U_EMRFORCEUFIMAPPING          0    1    0    0    0    0    0
-      table[110] = 0x20;   //!<   U_EMRNAMEDESCAPE              0    1    0    0    0    0    0
-      table[111] = 0x20;   //!<   U_EMRCOLORCORRECTPALETTE      0    1    0    0    0    0    0
-      table[112] = 0x20;   //!<   U_EMRSETICMPROFILEA           0    1    0    0    0    0    0
-      table[113] = 0x20;   //!<   U_EMRSETICMPROFILEW           0    1    0    0    0    0    0
-      table[114] = 0x02;   //!<   U_EMRALPHABLEND               0    0    0    0    0    1    0
-      table[115] = 0x20;   //!<   U_EMRSETLAYOUT                0    1    0    0    0    0    0
-      table[116] = 0x02;   //!<   U_EMRTRANSPARENTBLT           0    0    0    0    0    1    0
-      table[117] = 0x20;   //!<   U_EMRUNDEF117                 0    1    0    0    0    0    0
-      table[118] = 0x02;   //!<   U_EMRGRADIENTFILL             0    0    0    0    0    1    0
-      table[119] = 0x20;   //!<   U_EMRSETLINKEDUFIS            0    1    0    0    0    0    0
-      table[120] = 0x20;   //!<   U_EMRSETTEXTJUSTIFICATION     0    1    0    0    0    0    0
-      table[121] = 0x20;   //!<   U_EMRCOLORMATCHTOTARGETW      0    1    0    0    0    0    0
-      table[122] = 0x20;   //!<   U_EMRCREATECOLORSPACEW        0    1    0    0    0    0    0
+   uint32_t result = U_EMR_INVALID;  // initialized to indicate an error (on a lookup) or nothing (on a memory release) 
+   if(type == U_EMR_INVALID){
+      if(table)free(table);
+      table=NULL;
    }
-   if(type<1 || type >U_EMR_MAX)return(0xFFFFFFFF);
-   return(table[type]);
+   else if(type>=1 && type<U_EMR_MAX){
+      if(!table){
+         table = (uint32_t *) malloc(sizeof(uint32_t)*(1 + U_EMR_MAX));
+         if(!table)return(result); 
+   //                                                              0x40 0x20 0x10 0x08 0x04 0x02 0x01
+   //                 Path properties (U_DRAW_*)                        ALTERS    ONLYTO    VISIBLE   
+   //                                                              PATH      FORCE     CLOSED    NOTEMPTY
+         table[  0] = 0x00;   //!<   Does not map to any EMR record
+         table[  1] = 0x00;   //!<   U_EMRHEADER                   0    0    0    0    0    0    0 
+         table[  2] = 0x03;   //!<   U_EMRPOLYBEZIER               0    0    0    0    0    1    1
+         table[  3] = 0x07;   //!<   U_EMRPOLYGON                  0    0    0    0    1    1    1
+         table[  4] = 0x03;   //!<   U_EMRPOLYLINE                 0    0    0    0    0    1    1
+         table[  5] = 0x0B;   //!<   U_EMRPOLYBEZIERTO             0    0    0    1    0    1    1
+         table[  6] = 0x0B;   //!<   U_EMRPOLYLINETO               0    0    0    1    0    1    1
+         table[  7] = 0x03;   //!<   U_EMRPOLYPOLYLINE             0    0    0    0    0    1    1
+         table[  8] = 0x07;   //!<   U_EMRPOLYPOLYGON              0    0    0    0    1    1    1
+         table[  9] = 0x20;   //!<   U_EMRSETWINDOWEXTEX           0    1    0    0    0    0    0
+         table[ 10] = 0x20;   //!<   U_EMRSETWINDOWORGEX           0    1    0    0    0    0    0
+         table[ 11] = 0x20;   //!<   U_EMRSETVIEWPORTEXTEX         0    1    0    0    0    0    0
+         table[ 12] = 0x20;   //!<   U_EMRSETVIEWPORTORGEX         0    1    0    0    0    0    0
+         table[ 13] = 0x20;   //!<   U_EMRSETBRUSHORGEX            0    1    0    0    0    0    0
+         table[ 14] = 0x02;   //!<   U_EMREOF                      0    1    0    0    0    0    0  Force out any pending draw
+         table[ 15] = 0x02;   //!<   U_EMRSETPIXELV                0    0    0    0    0    1    0
+         table[ 16] = 0x20;   //!<   U_EMRSETMAPPERFLAGS           0    1    0    0    0    0    0
+         table[ 17] = 0x20;   //!<   U_EMRSETMAPMODE               0    1    0    0    0    0    0
+         table[ 18] = 0x20;   //!<   U_EMRSETBKMODE                0    1    0    0    0    0    0
+         table[ 19] = 0x20;   //!<   U_EMRSETPOLYFILLMODE          0    1    0    0    0    0    0
+         table[ 20] = 0x20;   //!<   U_EMRSETROP2                  0    1    0    0    0    0    0
+         table[ 21] = 0x20;   //!<   U_EMRSETSTRETCHBLTMODE        0    1    0    0    0    0    0
+         table[ 22] = 0x20;   //!<   U_EMRSETTEXTALIGN             0    1    0    0    0    0    0
+         table[ 23] = 0x20;   //!<   U_EMRSETCOLORADJUSTMENT       0    1    0    0    0    0    0
+         table[ 24] = 0x20;   //!<   U_EMRSETTEXTCOLOR             0    1    0    0    0    0    0
+         table[ 25] = 0x20;   //!<   U_EMRSETBKCOLOR               0    1    0    0    0    0    0
+         table[ 26] = 0x20;   //!<   U_EMROFFSETCLIPRGN            0    1    0    0    0    0    0
+         table[ 27] = 0x09;   //!<   U_EMRMOVETOEX                 0    0    0    1    0    0    1
+         table[ 28] = 0x20;   //!<   U_EMRSETMETARGN               0    1    0    0    0    0    0
+         table[ 29] = 0x20;   //!<   U_EMREXCLUDECLIPRECT          0    1    0    0    0    0    0
+         table[ 30] = 0x20;   //!<   U_EMRINTERSECTCLIPRECT        0    1    0    0    0    0    0
+         table[ 31] = 0x20;   //!<   U_EMRSCALEVIEWPORTEXTEX       0    1    0    0    0    0    0
+         table[ 32] = 0x20;   //!<   U_EMRSCALEWINDOWEXTEX         0    1    0    0    0    0    0
+         table[ 33] = 0x20;   //!<   U_EMRSAVEDC                   0    1    0    0    0    0    0
+         table[ 34] = 0x20;   //!<   U_EMRRESTOREDC                0    1    0    0    0    0    0
+         table[ 35] = 0x20;   //!<   U_EMRSETWORLDTRANSFORM        0    1    0    0    0    0    0
+         table[ 36] = 0x20;   //!<   U_EMRMODIFYWORLDTRANSFORM     0    1    0    0    0    0    0
+         table[ 37] = 0x20;   //!<   U_EMRSELECTOBJECT             0    1    0    0    0    0    0
+         table[ 38] = 0x20;   //!<   U_EMRCREATEPEN                0    1    0    0    0    0    0
+         table[ 39] = 0x20;   //!<   U_EMRCREATEBRUSHINDIRECT      0    1    0    0    0    0    0
+         table[ 40] = 0x20;   //!<   U_EMRDELETEOBJECT             0    1    0    0    0    0    0
+         table[ 41] = 0x03;   //!<   U_EMRANGLEARC                 0    0    0    0    0    1    1
+         table[ 42] = 0x07;   //!<   U_EMRELLIPSE                  0    0    0    0    1    1    1
+         table[ 43] = 0x07;   //!<   U_EMRRECTANGLE                0    0    0    0    1    1    1
+         table[ 44] = 0x07;   //!<   U_EMRROUNDRECT                0    0    0    0    1    1    1
+         table[ 45] = 0x03;   //!<   U_EMRARC                      0    0    0    0    0    1    1
+         table[ 46] = 0x07;   //!<   U_EMRCHORD                    0    0    0    0    1    1    1
+         table[ 47] = 0x07;   //!<   U_EMRPIE                      0    0    0    0    1    1    1
+         table[ 48] = 0x20;   //!<   U_EMRSELECTPALETTE            0    1    0    0    0    0    0
+         table[ 49] = 0x20;   //!<   U_EMRCREATEPALETTE            0    1    0    0    0    0    0
+         table[ 50] = 0x20;   //!<   U_EMRSETPALETTEENTRIES        0    1    0    0    0    0    0
+         table[ 51] = 0x20;   //!<   U_EMRRESIZEPALETTE            0    1    0    0    0    0    0
+         table[ 52] = 0x20;   //!<   U_EMRREALIZEPALETTE           0    1    0    0    0    0    0
+         table[ 53] = 0x02;   //!<   U_EMREXTFLOODFILL             0    0    0    0    0    1    0
+         table[ 54] = 0x0B;   //!<   U_EMRLINETO                   0    0    0    1    0    1    1
+         table[ 55] = 0x0B;   //!<   U_EMRARCTO                    0    0    0    1    0    1    1
+         table[ 56] = 0x03;   //!<   U_EMRPOLYDRAW                 0    0    0    0    0    1    1
+         table[ 57] = 0x20;   //!<   U_EMRSETARCDIRECTION          0    1    0    0    0    0    0
+         table[ 58] = 0x20;   //!<   U_EMRSETMITERLIMIT            0    1    0    0    0    0    0
+         table[ 59] = 0x60;   //!<   U_EMRBEGINPATH                1    1    0    0    0    0    0
+         table[ 60] = 0x00;   //!<   U_EMRENDPATH                  0    0    0    0    0    0    0
+         table[ 61] = 0x04;   //!<   U_EMRCLOSEFIGURE              0    0    0    0    1    0    0
+         table[ 62] = 0x14;   //!<   U_EMRFILLPATH                 0    0    1    0    1    0    0
+         table[ 63] = 0x14;   //!<   U_EMRSTROKEANDFILLPATH        0    0    1    0    1    0    0
+         table[ 64] = 0x10;   //!<   U_EMRSTROKEPATH               0    0    1    0    0    0    0
+         table[ 65] = 0x20;   //!<   U_EMRFLATTENPATH              0    1    0    0    0    0    0
+         table[ 66] = 0x20;   //!<   U_EMRWIDENPATH                0    1    0    0    0    0    0
+         table[ 67] = 0x20;   //!<   U_EMRSELECTCLIPPATH           0    1    0    0    0    0    0
+         table[ 68] = 0x20;   //!<   U_EMRABORTPATH                0    1    0    0    0    0    0
+         table[ 69] = 0x20;   //!<   U_EMRUNDEF69                  0    1    0    0    0    0    0
+         table[ 70] = 0x00;   //!<   U_EMRCOMMENT                  0    0    0    0    0    0    0
+         table[ 71] = 0x02;   //!<   U_EMRFILLRGN                  0    0    0    0    0    1    0
+         table[ 72] = 0x02;   //!<   U_EMRFRAMERGN                 0    0    0    0    0    1    0
+         table[ 73] = 0x02;   //!<   U_EMRINVERTRGN                0    0    0    0    0    1    0
+         table[ 74] = 0x02;   //!<   U_EMRPAINTRGN                 0    0    0    0    0    1    0
+         table[ 75] = 0x20;   //!<   U_EMREXTSELECTCLIPRGN         0    1    0    0    0    0    0
+         table[ 76] = 0x02;   //!<   U_EMRBITBLT                   0    0    0    0    0    1    0
+         table[ 77] = 0x02;   //!<   U_EMRSTRETCHBLT               0    0    0    0    0    1    0
+         table[ 78] = 0x02;   //!<   U_EMRMASKBLT                  0    0    0    0    0    1    0
+         table[ 79] = 0x02;   //!<   U_EMRPLGBLT                   0    0    0    0    0    1    0
+         table[ 80] = 0x20;   //!<   U_EMRSETDIBITSTODEVICE        0    1    0    0    0    0    0
+         table[ 81] = 0x20;   //!<   U_EMRSTRETCHDIBITS            0    1    0    0    0    0    0
+         table[ 82] = 0x20;   //!<   U_EMREXTCREATEFONTINDIRECTW   0    1    0    0    0    0    0
+         table[ 83] = 0x02;   //!<   U_EMREXTTEXTOUTA              0    0    0    0    0    1    0
+         table[ 84] = 0x02;   //!<   U_EMREXTTEXTOUTW              0    0    0    0    0    1    0
+         table[ 85] = 0x03;   //!<   U_EMRPOLYBEZIER16             0    0    0    0    0    1    1
+         table[ 86] = 0x03;   //!<   U_EMRPOLYGON16                0    0    0    0    0    1    1
+         table[ 87] = 0x03;   //!<   U_EMRPOLYLINE16               0    0    0    0    0    1    1
+         table[ 88] = 0x0B;   //!<   U_EMRPOLYBEZIERTO16           0    0    0    1    0    1    1
+         table[ 89] = 0x0B;   //!<   U_EMRPOLYLINETO16             0    0    0    1    0    1    1
+         table[ 90] = 0x03;   //!<   U_EMRPOLYPOLYLINE16           0    0    0    0    0    1    1
+         table[ 91] = 0x07;   //!<   U_EMRPOLYPOLYGON16            0    0    0    0    1    1    1
+         table[ 92] = 0x03;   //!<   U_EMRPOLYDRAW16               0    0    0    0    0    1    1
+         table[ 93] = 0x00;   //!<   U_EMRCREATEMONOBRUSH          0    0    0    0    0    0    0  Not selected yet, so no change in drawing conditions
+         table[ 94] = 0x00;   //!<   U_EMRCREATEDIBPATTERNBRUSHPT  0    0    0    0    0    0    0  "
+         table[ 95] = 0x00;   //!<   U_EMREXTCREATEPEN             0    0    0    0    0    0    0  "
+         table[ 96] = 0x02;   //!<   U_EMRPOLYTEXTOUTA             0    0    0    0    0    1    0
+         table[ 97] = 0x02;   //!<   U_EMRPOLYTEXTOUTW             0    0    0    0    0    1    0
+         table[ 98] = 0x20;   //!<   U_EMRSETICMMODE               0    1    0    0    0    0    0
+         table[ 99] = 0x20;   //!<   U_EMRCREATECOLORSPACE         0    1    0    0    0    0    0
+         table[100] = 0x20;   //!<   U_EMRSETCOLORSPACE            0    1    0    0    0    0    0
+         table[101] = 0x20;   //!<   U_EMRDELETECOLORSPACE         0    1    0    0    0    0    0
+         table[102] = 0x20;   //!<   U_EMRGLSRECORD                0    1    0    0    0    0    0
+         table[103] = 0x20;   //!<   U_EMRGLSBOUNDEDRECORD         0    1    0    0    0    0    0
+         table[104] = 0x20;   //!<   U_EMRPIXELFORMAT              0    1    0    0    0    0    0
+         table[105] = 0x20;   //!<   U_EMRDRAWESCAPE               0    1    0    0    0    0    0
+         table[106] = 0x20;   //!<   U_EMREXTESCAPE                0    1    0    0    0    0    0
+         table[107] = 0x20;   //!<   U_EMRUNDEF107                 0    1    0    0    0    0    0
+         table[108] = 0x02;   //!<   U_EMRSMALLTEXTOUT             0    0    0    0    0    1    0
+         table[109] = 0x20;   //!<   U_EMRFORCEUFIMAPPING          0    1    0    0    0    0    0
+         table[110] = 0x20;   //!<   U_EMRNAMEDESCAPE              0    1    0    0    0    0    0
+         table[111] = 0x20;   //!<   U_EMRCOLORCORRECTPALETTE      0    1    0    0    0    0    0
+         table[112] = 0x20;   //!<   U_EMRSETICMPROFILEA           0    1    0    0    0    0    0
+         table[113] = 0x20;   //!<   U_EMRSETICMPROFILEW           0    1    0    0    0    0    0
+         table[114] = 0x02;   //!<   U_EMRALPHABLEND               0    0    0    0    0    1    0
+         table[115] = 0x20;   //!<   U_EMRSETLAYOUT                0    1    0    0    0    0    0
+         table[116] = 0x02;   //!<   U_EMRTRANSPARENTBLT           0    0    0    0    0    1    0
+         table[117] = 0x20;   //!<   U_EMRUNDEF117                 0    1    0    0    0    0    0
+         table[118] = 0x02;   //!<   U_EMRGRADIENTFILL             0    0    0    0    0    1    0
+         table[119] = 0x20;   //!<   U_EMRSETLINKEDUFIS            0    1    0    0    0    0    0
+         table[120] = 0x20;   //!<   U_EMRSETTEXTJUSTIFICATION     0    1    0    0    0    0    0
+         table[121] = 0x20;   //!<   U_EMRCOLORMATCHTOTARGETW      0    1    0    0    0    0    0
+         table[122] = 0x20;   //!<   U_EMRCREATECOLORSPACEW        0    1    0    0    0    0    0
+      }
+      result = table[type];
+   }
+   return(result);
 }
 
 /**
