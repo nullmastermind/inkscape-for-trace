@@ -33,8 +33,8 @@ static void box3d_side_build (SPObject *object, SPDocument *document, Inkscape::
 static Inkscape::XML::Node *box3d_side_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
 static void box3d_side_set (SPObject *object, unsigned int key, const gchar *value);
 static void box3d_side_update (SPObject *object, SPCtx *ctx, guint flags);
-
-static void box3d_side_set_shape (SPShape *shape);
+//
+//static void box3d_side_set_shape (SPShape *shape);
 
 static void box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]);
 
@@ -64,7 +64,7 @@ box3d_side_get_type (void)
 static void box3d_side_class_init(Box3DSideClass *klass)
 {
     SPObjectClass *sp_object_class = reinterpret_cast<SPObjectClass *>(klass);
-    SPShapeClass *shape_class = reinterpret_cast<SPShapeClass *>(klass);
+//    SPShapeClass *shape_class = reinterpret_cast<SPShapeClass *>(klass);
 
     parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
@@ -234,7 +234,8 @@ int Box3DSide::getFaceId()
 
 void
 box3d_side_position_set (Box3DSide *side) {
-    box3d_side_set_shape (SP_SHAPE (side));
+    //box3d_side_set_shape (SP_SHAPE (side));
+	side->cbox3dside->onSetShape();
 
     // This call is responsible for live update of the sides during the initial drag
     side->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -302,11 +303,11 @@ void CBox3DSide::onSetShape() {
 }
 
 // CPPIFY: remove
-void
-box3d_side_set_shape (SPShape *shape)
-{
-	((Box3DSide*)shape)->cbox3dside->onSetShape();
-}
+//void
+//box3d_side_set_shape (SPShape *shape)
+//{
+//	((Box3DSide*)shape)->cbox3dside->onSetShape();
+//}
 
 gchar *box3d_side_axes_string(Box3DSide *side)
 {

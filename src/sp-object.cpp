@@ -148,15 +148,15 @@ void SPObjectClass::sp_object_class_init(SPObjectClass *klass)
 
 // CPPIFY: make pure virtual
 void CObject::onReadContent() {
-	throw;
+	//throw;
 }
 
 void CObject::onUpdate(SPCtx* ctx, unsigned int flags) {
-	throw;
+	//throw;
 }
 
 void CObject::onModified(unsigned int flags) {
-	throw;
+	//throw;
 }
 
 
@@ -799,9 +799,10 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
     }
 
     /* Invoke derived methods, if any */
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->build) {
-        (*((SPObjectClass *) G_OBJECT_GET_CLASS(this))->build)(this, document, repr);
-    }
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->build) {
+//        (*((SPObjectClass *) G_OBJECT_GET_CLASS(this))->build)(this, document, repr);
+//    }
+    this->cobject->onBuild(document, repr);
 
     /* Signalling (should be connected AFTER processing derived methods */
     sp_repr_add_listener(repr, &object_event_vector, this);
@@ -839,10 +840,12 @@ void SPObject::releaseReferences() {
     sp_repr_remove_listener_by_data(this->repr, this);
 
     this->_release_signal.emit(this);
-    SPObjectClass *klass=(SPObjectClass *)G_OBJECT_GET_CLASS(this);
-    if (klass->release) {
-        klass->release(this);
-    }
+
+//    SPObjectClass *klass=(SPObjectClass *)G_OBJECT_GET_CLASS(this);
+//    if (klass->release) {
+//        klass->release(this);
+//    }
+    this->cobject->onRelease();
 
     /* all hrefs should be released by the "release" handlers */
     g_assert(this->hrefcount == 0);
@@ -888,27 +891,30 @@ void SPObject::sp_object_repr_child_added(Inkscape::XML::Node */*repr*/, Inkscap
 {
     SPObject *object = SP_OBJECT(data);
 
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->child_added) {
-        (*((SPObjectClass *)G_OBJECT_GET_CLASS(object))->child_added)(object, child, ref);
-    }
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->child_added) {
+//        (*((SPObjectClass *)G_OBJECT_GET_CLASS(object))->child_added)(object, child, ref);
+//    }
+    object->cobject->onChildAdded(child, ref);
 }
 
 void SPObject::sp_object_repr_child_removed(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node */*ref*/, gpointer data)
 {
     SPObject *object = SP_OBJECT(data);
 
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->remove_child) {
-        (* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->remove_child)(object, child);
-    }
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->remove_child) {
+//        (* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->remove_child)(object, child);
+//    }
+    object->cobject->onRemoveChild(child);
 }
 
 void SPObject::sp_object_repr_order_changed(Inkscape::XML::Node */*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data)
 {
     SPObject *object = SP_OBJECT(data);
 
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->order_changed) {
-        (* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->order_changed)(object, child, old, newer);
-    }
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->order_changed) {
+//        (* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->order_changed)(object, child, old, newer);
+//    }
+    object->cobject->onOrderChanged(child, old, newer);
 }
 
 void CObject::onSet(unsigned int key, gchar const* value) {
@@ -1008,9 +1014,10 @@ void SPObject::setKeyValue(unsigned int key, gchar const *value)
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
 
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->set) {
-        ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->set(this, key, value);
-    }
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->set) {
+//        ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->set(this, key, value);
+//    }
+	this->cobject->onSet(key, value);
 }
 
 void SPObject::readAttr(gchar const *key)
@@ -1048,9 +1055,10 @@ void SPObject::sp_object_repr_content_changed(Inkscape::XML::Node */*repr*/, gch
 {
     SPObject *object = SP_OBJECT(data);
 
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content) {
-        (*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content)(object);
-    }
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content) {
+//        (*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content)(object);
+//    }
+    object->cobject->onReadContent();
 }
 
 /**
@@ -1182,23 +1190,32 @@ Inkscape::XML::Node * SPObject::updateRepr(Inkscape::XML::Document *doc, Inkscap
         /* cloned objects have no repr */
         return NULL;
     }
-    if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write) {
-        if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-            repr = getRepr();
-        }
-        return ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write(this, doc, repr, flags);
-    } else {
-        g_warning("Class %s does not implement ::write", G_OBJECT_TYPE_NAME(this));
-        if (!repr) {
-            if (flags & SP_OBJECT_WRITE_BUILD) {
-                repr = getRepr()->duplicate(doc);
-            }
-            /// \todo FIXME: else probably error (Lauris) */
-        } else {
-            repr->mergeFrom(getRepr(), "id");
-        }
-        return repr;
-    }
+
+
+//    if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write) {
+//        if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+//            repr = getRepr();
+//        }
+//        return ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write(this, doc, repr, flags);
+//    } else {
+//        g_warning("Class %s does not implement ::write", G_OBJECT_TYPE_NAME(this));
+//        if (!repr) {
+//            if (flags & SP_OBJECT_WRITE_BUILD) {
+//                repr = getRepr()->duplicate(doc);
+//            }
+//            /// \todo FIXME: else probably error (Lauris) */
+//        } else {
+//            repr->mergeFrom(getRepr(), "id");
+//        }
+//        return repr;
+//    }
+
+	if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+		repr = getRepr();
+	}
+	//return ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write(this, doc, repr, flags);
+	return this->cobject->onWrite(doc, repr, flags);
+
 }
 
 /* Modification */
@@ -1264,9 +1281,10 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 
     try
     {
-        if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->update) {
-            ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->update(this, ctx, flags);
-        }
+//        if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->update) {
+//            ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->update(this, ctx, flags);
+//        }
+    	this->cobject->onUpdate(ctx, flags);
     }
     catch(...)
     {
@@ -1323,10 +1341,13 @@ void SPObject::emitModified(unsigned int flags)
     this->mflags = 0;
 
     g_object_ref(G_OBJECT(this));
-    SPObjectClass *klass=(SPObjectClass *)G_OBJECT_GET_CLASS(this);
-    if (klass->modified) {
-        klass->modified(this, flags);
-    }
+
+//    SPObjectClass *klass=(SPObjectClass *)G_OBJECT_GET_CLASS(this);
+//    if (klass->modified) {
+//        klass->modified(this, flags);
+//    }
+    this->cobject->onModified(flags);
+
     _modified_signal.emit(this, flags);
     g_object_unref(G_OBJECT(this));
 }
