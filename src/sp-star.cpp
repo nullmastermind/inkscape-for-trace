@@ -83,8 +83,8 @@ static void sp_star_class_init(SPStarClass *klass)
     sp_object_class->set = sp_star_set;
     sp_object_class->update = sp_star_update;
 
-    item_class->description = sp_star_description;
-    item_class->snappoints = sp_star_snappoints;
+//    item_class->description = sp_star_description;
+//    item_class->snappoints = sp_star_snappoints;
 
     //lpe_item_class->update_patheffect = sp_star_update_patheffect;
 

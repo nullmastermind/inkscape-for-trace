@@ -156,8 +156,8 @@ sp_offset_class_init(SPOffsetClass *klass)
     sp_object_class->update = sp_offset_update;
     sp_object_class->release = sp_offset_release;
 
-    item_class->description = sp_offset_description;
-    item_class->snappoints = sp_offset_snappoints;
+//    item_class->description = sp_offset_description;
+//    item_class->snappoints = sp_offset_snappoints;
 
     //shape_class->set_shape = sp_offset_set_shape;
 }

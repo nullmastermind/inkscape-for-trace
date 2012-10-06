@@ -115,7 +115,7 @@ static void sp_genericellipse_class_init(SPGenericEllipseClass *klass)
     sp_object_class->update = sp_genericellipse_update;
     sp_object_class->write = sp_genericellipse_write;
 
-    item_class->snappoints = sp_genericellipse_snappoints;
+    //item_class->snappoints = sp_genericellipse_snappoints;
 
     //shape_class->set_shape = sp_genericellipse_set_shape;
     //lpe_item_class->update_patheffect = sp_genericellipse_update_patheffect;
@@ -465,7 +465,7 @@ static void sp_ellipse_class_init(SPEllipseClass *klass)
     sp_object_class->write = sp_ellipse_write;
     sp_object_class->set = sp_ellipse_set;
 
-    item_class->description = sp_ellipse_description;
+//    item_class->description = sp_ellipse_description;
 }
 
 CEllipse::CEllipse(SPEllipse* ellipse) : CGenericEllipse(ellipse) {
@@ -640,7 +640,7 @@ sp_circle_class_init(SPCircleClass *klass)
     sp_object_class->write = sp_circle_write;
     sp_object_class->set = sp_circle_set;
 
-    item_class->description = sp_circle_description;
+//    item_class->description = sp_circle_description;
 }
 
 CCircle::CCircle(SPCircle* circle) : CGenericEllipse(circle) {
@@ -793,7 +793,7 @@ sp_arc_class_init(SPArcClass *klass)
     sp_object_class->set = sp_arc_set;
     sp_object_class->modified = sp_arc_modified;
 
-    item_class->description = sp_arc_description;
+//    item_class->description = sp_arc_description;
 }
 
 CArc::CArc(SPArc* arc) : CGenericEllipse(arc) {

@@ -58,9 +58,9 @@ void SPLineClass::sp_line_class_init(SPLineClass *klass)
     sp_object_class->write = SPLine::write;
 
     SPItemClass *item_class = (SPItemClass *) klass;
-    item_class->description = SPLine::getDescription;
-    item_class->set_transform = SPLine::setTransform;
-    item_class->convert_to_guides = SPLine::convertToGuides;
+//    item_class->description = SPLine::getDescription;
+//    item_class->set_transform = SPLine::setTransform;
+//    item_class->convert_to_guides = SPLine::convertToGuides;
 
     sp_object_class->update = SPLine::update;
 

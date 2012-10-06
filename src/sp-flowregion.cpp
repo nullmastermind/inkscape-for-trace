@@ -98,7 +98,7 @@ sp_flowregion_class_init (SPFlowregionClass *klass)
 	sp_object_class->modified = sp_flowregion_modified;
 	sp_object_class->write = sp_flowregion_write;
 
-	item_class->description = sp_flowregion_description;
+//	item_class->description = sp_flowregion_description;
 }
 
 CFlowregion::CFlowregion(SPFlowregion* flowregion) : CItem(flowregion) {
@@ -343,7 +343,7 @@ sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass)
 	sp_object_class->modified = sp_flowregionexclude_modified;
 	sp_object_class->write = sp_flowregionexclude_write;
 
-	item_class->description = sp_flowregionexclude_description;
+//	item_class->description = sp_flowregionexclude_description;
 }
 
 CFlowregionExclude::CFlowregionExclude(SPFlowregionExclude* flowregionexclude) : CItem(flowregionexclude) {

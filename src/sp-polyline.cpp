@@ -56,7 +56,7 @@ void SPPolyLineClass::sp_polyline_class_init(SPPolyLineClass *klass)
     sp_object_class->set = SPPolyLine::set;
     sp_object_class->write = SPPolyLine::write;
 
-    item_class->description = SPPolyLine::getDescription;
+//    item_class->description = SPPolyLine::getDescription;
 }
 
 CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {

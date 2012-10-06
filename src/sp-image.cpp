@@ -594,12 +594,12 @@ static void sp_image_class_init( SPImageClass * klass )
     sp_object_class->modified = sp_image_modified;
     sp_object_class->write = sp_image_write;
 
-    item_class->bbox = sp_image_bbox;
-    item_class->print = sp_image_print;
-    item_class->description = sp_image_description;
-    item_class->show = sp_image_show;
-    item_class->snappoints = sp_image_snappoints;
-    item_class->set_transform = sp_image_set_transform;
+//    item_class->bbox = sp_image_bbox;
+//    item_class->print = sp_image_print;
+//    item_class->description = sp_image_description;
+//    item_class->show = sp_image_show;
+//    item_class->snappoints = sp_image_snappoints;
+//    item_class->set_transform = sp_image_set_transform;
 }
 
 CImage::CImage(SPImage* image) : CItem(image) {

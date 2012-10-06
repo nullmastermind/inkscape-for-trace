@@ -79,10 +79,10 @@ static void sp_symbol_class_init(SPSymbolClass *klass)
     sp_object_class->modified = sp_symbol_modified;
     sp_object_class->write = sp_symbol_write;
 
-    sp_item_class->show = sp_symbol_show;
-    sp_item_class->hide = sp_symbol_hide;
-    sp_item_class->bbox = sp_symbol_bbox;
-    sp_item_class->print = sp_symbol_print;
+//    sp_item_class->show = sp_symbol_show;
+//    sp_item_class->hide = sp_symbol_hide;
+//    sp_item_class->bbox = sp_symbol_bbox;
+//    sp_item_class->print = sp_symbol_print;
 }
 
 CSymbol::CSymbol(SPSymbol* symbol) : CGroup(symbol) {

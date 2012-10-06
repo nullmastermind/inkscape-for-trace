@@ -89,8 +89,8 @@ static void sp_spiral_class_init(SPSpiralClass *klass)
     sp_object_class->set = sp_spiral_set;
     sp_object_class->update = sp_spiral_update;
 
-    item_class->description = sp_spiral_description;
-    item_class->snappoints = sp_spiral_snappoints;
+//    item_class->description = sp_spiral_description;
+//    item_class->snappoints = sp_spiral_snappoints;
 
     //lpe_item_class->update_patheffect = sp_spiral_update_patheffect;
 

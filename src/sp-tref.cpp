@@ -111,8 +111,8 @@ sp_tref_class_init(SPTRefClass *tref_class)
 
     SPItemClass *item_class = (SPItemClass *) tref_class;
 
-    item_class->bbox = sp_tref_bbox;
-    item_class->description = sp_tref_description;
+//    item_class->bbox = sp_tref_bbox;
+//    item_class->description = sp_tref_description;
 }
 
 CTRef::CTRef(SPTRef* tref) : CItem(tref) {

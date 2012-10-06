@@ -116,9 +116,9 @@ sp_path_class_init(SPPathClass * klass)
     sp_object_class->write = sp_path_write;
     sp_object_class->update = sp_path_update;
 
-    item_class->description = sp_path_description;
-    item_class->set_transform = sp_path_set_transform;
-    item_class->convert_to_guides = sp_path_convert_to_guides;
+//    item_class->description = sp_path_description;
+//    item_class->set_transform = sp_path_set_transform;
+//    item_class->convert_to_guides = sp_path_convert_to_guides;
 
     //lpe_item_class->update_patheffect = sp_path_update_patheffect;
 }

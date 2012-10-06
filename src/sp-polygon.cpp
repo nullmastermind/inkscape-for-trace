@@ -69,7 +69,7 @@ static void sp_polygon_class_init(SPPolygonClass *pc)
     sp_object_class->write = sp_polygon_write;
     sp_object_class->set = sp_polygon_set;
 
-    item_class->description = sp_polygon_description;
+//    item_class->description = sp_polygon_description;
 }
 
 CPolygon::CPolygon(SPPolygon* polygon) : CShape(polygon) {

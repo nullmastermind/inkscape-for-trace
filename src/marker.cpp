@@ -92,10 +92,10 @@ static void sp_marker_class_init(SPMarkerClass *klass)
 	sp_object_class->update = sp_marker_update;
 	sp_object_class->write = sp_marker_write;
 
-	sp_item_class->show = sp_marker_private_show;
-	sp_item_class->hide = sp_marker_private_hide;
-	sp_item_class->bbox = sp_marker_bbox;
-	sp_item_class->print = sp_marker_print;
+//	sp_item_class->show = sp_marker_private_show;
+//	sp_item_class->hide = sp_marker_private_hide;
+//	sp_item_class->bbox = sp_marker_bbox;
+//	sp_item_class->print = sp_marker_print;
 }
 
 CMarker::CMarker(SPMarker* marker) : CGroup(marker) {
@@ -162,7 +162,11 @@ void CMarker::onRelease() {
     while (marker->views) {
         // Destroy all DrawingItems etc.
         // Parent class ::hide method
-        reinterpret_cast<SPItemClass *>(parent_class)->hide(marker, marker->views->key);
+        //reinterpret_cast<SPItemClass *>(parent_class)->hide(marker, marker->views->key);
+    	// CPPIFY: correct one?
+    	CGroup::onHide(marker->views->key);
+
+
         sp_marker_view_remove (marker, marker->views, TRUE);
     }
 
@@ -548,8 +552,10 @@ sp_marker_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::X
 	return ((SPMarker*)object)->cmarker->onWrite(xml_doc, repr, flags);
 }
 
-Inkscape::DrawingItem* CMarker::onShow(Inkscape::Drawing &/*drawing*/, unsigned int /*key*/, unsigned int /*flags*/) {
-	return 0;
+Inkscape::DrawingItem* CMarker::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+	// CPPIFY: correct?
+	return CGroup::onShow(drawing, key, flags);
+	//return 0;
 }
 
 // CPPIFY: remove
@@ -564,7 +570,8 @@ sp_marker_private_show (SPItem */*item*/, Inkscape::Drawing &/*drawing*/, unsign
 }
 
 void CMarker::onHide(unsigned int key) {
-
+	// CPPIFY: correct?
+	CGroup::onHide(key);
 }
 
 // CPPIFY: remove
@@ -631,7 +638,10 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
     if (view && (view->items.size() != size)) {
         /* Free old view and allocate new */
         /* Parent class ::hide method */
-        ((SPItemClass *) parent_class)->hide ((SPItem *) marker, key);
+        // CPPIFY: correct one?
+    	//((SPItemClass *) parent_class)->hide ((SPItem *) marker, key);
+    	marker->cmarker->onHide(key);
+
         sp_marker_view_remove (marker, view, TRUE);
         view = NULL;
     }
@@ -670,9 +680,12 @@ sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
             }
             if (!v->items[pos]) {
                 /* Parent class ::show method */
-                v->items[pos] = ((SPItemClass *) parent_class)->show ((SPItem *) marker,
-                                                                      parent->drawing(), key,
-                                                                      SP_ITEM_REFERENCE_FLAGS);
+//                v->items[pos] = ((SPItemClass *) parent_class)->show ((SPItem *) marker,
+//                                                                      parent->drawing(), key,
+//                                                                      SP_ITEM_REFERENCE_FLAGS);
+            	// CPPIFY: correct one?
+            	v->items[pos] = marker->cmarker->onShow(parent->drawing(), key, SP_ITEM_REFERENCE_FLAGS);
+
                 if (v->items[pos]) {
                     /* fixme: Position (Lauris) */
                     parent->prependChild(v->items[pos]);
@@ -717,7 +730,10 @@ sp_marker_hide (SPMarker *marker, unsigned int key)
 		next = v->next;
 		if (v->key == key) {
 			/* Parent class ::hide method */
-			((SPItemClass *) parent_class)->hide ((SPItem *) marker, key);
+			// CPPIFY: correct one?
+			//((SPItemClass *) parent_class)->hide ((SPItem *) marker, key);
+			marker->cmarker->onHide(key);
+
 			sp_marker_view_remove (marker, v, TRUE);
 			return;
 		}

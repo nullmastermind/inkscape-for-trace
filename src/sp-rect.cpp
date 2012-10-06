@@ -85,10 +85,10 @@ sp_rect_class_init(SPRectClass *klass)
     sp_object_class->set = sp_rect_set;
     sp_object_class->update = sp_rect_update;
 
-    item_class->description = sp_rect_description;
-    item_class->set_transform = sp_rect_set_transform;
-    item_class->convert_to_guides = sp_rect_convert_to_guides;
-    item_class->snappoints = sp_rect_snappoints; //override the default sp_shape_snappoints; see sp_rect_snappoints for details
+//    item_class->description = sp_rect_description;
+//    item_class->set_transform = sp_rect_set_transform;
+//    item_class->convert_to_guides = sp_rect_convert_to_guides;
+//    item_class->snappoints = sp_rect_snappoints; //override the default sp_shape_snappoints; see sp_rect_snappoints for details
 
     //shape_class->set_shape = sp_rect_set_shape;
 }

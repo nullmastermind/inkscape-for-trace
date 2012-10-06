@@ -105,12 +105,12 @@ sp_use_class_init(SPUseClass *classname)
     sp_object_class->update = sp_use_update;
     sp_object_class->modified = sp_use_modified;
 
-    item_class->bbox = sp_use_bbox;
-    item_class->description = sp_use_description;
-    item_class->print = sp_use_print;
-    item_class->show = sp_use_show;
-    item_class->hide = sp_use_hide;
-    item_class->snappoints = sp_use_snappoints;
+//    item_class->bbox = sp_use_bbox;
+//    item_class->description = sp_use_description;
+//    item_class->print = sp_use_print;
+//    item_class->show = sp_use_show;
+//    item_class->hide = sp_use_hide;
+//    item_class->snappoints = sp_use_snappoints;
 }
 
 CUse::CUse(SPUse* use) : CItem(use) {

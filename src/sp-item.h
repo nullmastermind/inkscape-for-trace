@@ -238,8 +238,8 @@ private:
     static void sp_item_update(SPObject *object, SPCtx *ctx, guint flags);
     static Inkscape::XML::Node *sp_item_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
 
-    static gchar *sp_item_private_description(SPItem *item);
-    static void sp_item_private_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+//    static gchar *sp_item_private_description(SPItem *item);
+//    static void sp_item_private_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
     static SPItemView *sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, Inkscape::DrawingItem *arenaitem);
     static SPItemView *sp_item_view_list_remove(SPItemView *list, SPItemView *view);
@@ -255,32 +255,32 @@ class SPItemClass {
 public:
     SPObjectClass parent_class;
 
-    /** BBox union in given coordinate system */
-    Geom::OptRect (* bbox) (SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-
-    /** Printing method. Assumes ctm is set to item affine matrix */
-    /* \todo Think about it, and maybe implement generic export method instead (Lauris) */
-    void (* print) (SPItem *item, SPPrintContext *ctx);
-
-    /** Give short description of item (for status display) */
-    gchar * (* description) (SPItem * item);
-
-    Inkscape::DrawingItem * (* show) (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-    void (* hide) (SPItem *item, unsigned int key);
-
-    /** Write to an iterator the points that should be considered for snapping
-     * as the item's `nodes'.
-     */
-    void (* snappoints) (SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-
-    /** Apply the transform optimally, and return any residual transformation */
-    Geom::Affine (* set_transform)(SPItem *item, Geom::Affine const &transform);
-
-    /** Convert the item to guidelines */
-    void (* convert_to_guides)(SPItem *item);
-
-    /** Emit event, if applicable */
-    gint (* event) (SPItem *item, SPEvent *event);
+//    /** BBox union in given coordinate system */
+//    Geom::OptRect (* bbox) (SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
+//
+//    /** Printing method. Assumes ctm is set to item affine matrix */
+//    /* \todo Think about it, and maybe implement generic export method instead (Lauris) */
+//    void (* print) (SPItem *item, SPPrintContext *ctx);
+//
+//    /** Give short description of item (for status display) */
+//    gchar * (* description) (SPItem * item);
+//
+//    Inkscape::DrawingItem * (* show) (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+//    void (* hide) (SPItem *item, unsigned int key);
+//
+//    /** Write to an iterator the points that should be considered for snapping
+//     * as the item's `nodes'.
+//     */
+//    void (* snappoints) (SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+//
+//    /** Apply the transform optimally, and return any residual transformation */
+//    Geom::Affine (* set_transform)(SPItem *item, Geom::Affine const &transform);
+//
+//    /** Convert the item to guidelines */
+//    void (* convert_to_guides)(SPItem *item);
+//
+//    /** Emit event, if applicable */
+//    gint (* event) (SPItem *item, SPEvent *event);
 
 	private:
 	static SPObjectClass *static_parent_class;

@@ -101,11 +101,11 @@ void SPShapeClass::sp_shape_class_init(SPShapeClass *klass)
     sp_object_class->modified = SPShape::sp_shape_modified;
     sp_object_class->write = SPShape::sp_shape_write;
 
-    item_class->bbox = SPShape::sp_shape_bbox;
-    item_class->print = sp_shape_print;
-    item_class->show = SPShape::sp_shape_show;
-    item_class->hide = SPShape::sp_shape_hide;
-    item_class->snappoints = SPShape::sp_shape_snappoints;
+//    item_class->bbox = SPShape::sp_shape_bbox;
+//    item_class->print = sp_shape_print;
+//    item_class->show = SPShape::sp_shape_show;
+//    item_class->hide = SPShape::sp_shape_hide;
+//    item_class->snappoints = SPShape::sp_shape_snappoints;
 
     //lpe_item_class->update_patheffect = NULL;
 

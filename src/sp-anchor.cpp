@@ -73,8 +73,8 @@ static void sp_anchor_class_init(SPAnchorClass *ac)
     sp_object_class->set = sp_anchor_set;
     sp_object_class->write = sp_anchor_write;
 
-    item_class->description = sp_anchor_description;
-    item_class->event = sp_anchor_event;
+//    item_class->description = sp_anchor_description;
+//    item_class->event = sp_anchor_event;
 }
 
 CAnchor::CAnchor(SPAnchor* anchor) : CGroup(anchor) {

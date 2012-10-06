@@ -105,8 +105,8 @@ sp_tspan_class_init(SPTSpanClass *classname)
     sp_object_class->modified = sp_tspan_modified;
     sp_object_class->write = sp_tspan_write;
 
-    item_class->bbox = sp_tspan_bbox;
-    item_class->description = sp_tspan_description;
+//    item_class->bbox = sp_tspan_bbox;
+//    item_class->description = sp_tspan_description;
 }
 
 CTSpan::CTSpan(SPTSpan* span) : CItem(span) {

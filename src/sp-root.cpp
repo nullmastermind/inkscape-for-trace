@@ -92,8 +92,8 @@ static void sp_root_class_init(SPRootClass *klass)
     sp_object_class->modified = sp_root_modified;
     sp_object_class->write = sp_root_write;
 
-    sp_item_class->show = sp_root_show;
-    sp_item_class->print = sp_root_print;
+//    sp_item_class->show = sp_root_show;
+//    sp_item_class->print = sp_root_print;
 }
 
 CRoot::CRoot(SPRoot* root) : CGroup(root) {
@@ -673,9 +673,11 @@ void CRoot::onPrint(SPPrintContext* ctx) {
 
     sp_print_bind(ctx, root->c2p, 1.0);
 
-    if (((SPItemClass *) (parent_class))->print) {
-        ((SPItemClass *) (parent_class))->print(item, ctx);
-    }
+//    if (((SPItemClass *) (parent_class))->print) {
+//        ((SPItemClass *) (parent_class))->print(item, ctx);
+//    }
+    // CPPIFY: correct one?
+    CGroup::onPrint(ctx);
 
     sp_print_release(ctx);
 }

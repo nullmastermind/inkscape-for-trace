@@ -128,12 +128,12 @@ sp_group_class_init (SPGroupClass *klass)
     sp_object_class->release = sp_group_release;
     sp_object_class->build = sp_group_build;
 
-    item_class->bbox = sp_group_bbox;
-    item_class->print = sp_group_print;
-    item_class->description = sp_group_description;
-    item_class->show = sp_group_show;
-    item_class->hide = sp_group_hide;
-    item_class->snappoints = sp_group_snappoints;
+//    item_class->bbox = sp_group_bbox;
+//    item_class->print = sp_group_print;
+//    item_class->description = sp_group_description;
+//    item_class->show = sp_group_show;
+//    item_class->hide = sp_group_hide;
+//    item_class->snappoints = sp_group_snappoints;
 
     //lpe_item_class->update_patheffect = sp_group_update_patheffect;
 }

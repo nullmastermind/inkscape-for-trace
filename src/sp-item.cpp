@@ -116,8 +116,8 @@ SPItemClass::sp_item_class_init(SPItemClass *klass)
     sp_object_class->update = SPItem::sp_item_update;
     sp_object_class->write = SPItem::sp_item_write;
 
-    klass->description = SPItem::sp_item_private_description;
-    klass->snappoints = SPItem::sp_item_private_snappoints;
+//    klass->description = SPItem::sp_item_private_description;
+//    klass->snappoints = SPItem::sp_item_private_snappoints;
 }
 
 // CPPIFY: remove
@@ -946,14 +946,14 @@ void CItem::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
 }
 
 // CPPIFY: remove
-void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Inkscape::SnapCandidatePoint> &/*p*/, Inkscape::SnapPreferences const * /*snapprefs*/)
-{
+//void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Inkscape::SnapCandidatePoint> &/*p*/, Inkscape::SnapPreferences const * /*snapprefs*/)
+//{
     /* This will only be called if the derived class doesn't override this.
      * see for example sp_genericellipse_snappoints in sp-ellipse.cpp
      * We don't know what shape we could be dealing with here, so we'll just
      * do nothing
      */
-}
+//}
 
 void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
 {
@@ -1017,10 +1017,10 @@ gchar* CItem::onDescription() {
 }
 
 // CPPIFY: remove
-gchar *SPItem::sp_item_private_description(SPItem *item)
-{
-    return item->citem->onDescription();
-}
+//gchar *SPItem::sp_item_private_description(SPItem *item)
+//{
+//    return item->citem->onDescription();
+//}
 
 /**
  * Returns a string suitable for status bar, formatted in pango markup language.

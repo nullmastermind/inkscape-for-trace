@@ -96,9 +96,9 @@ box3d_class_init(SPBox3DClass *klass)
     sp_object_class->write = box3d_write;
     sp_object_class->update = box3d_update;
 
-    item_class->description = box3d_description;
-    item_class->set_transform = box3d_set_transform;
-    item_class->convert_to_guides = box3d_convert_to_guides;
+//    item_class->description = box3d_description;
+//    item_class->set_transform = box3d_set_transform;
+//    item_class->convert_to_guides = box3d_convert_to_guides;
 }
 
 CBox3D::CBox3D(SPBox3D* box) : CGroup(box) {
