@@ -480,7 +480,7 @@ void InkscapePreferences::initPageTools()
 
     _misc_gradientangle.init("/dialogs/gradienteditor/angle", -359, 359, 1, 90, 0, false, false);
     _page_gradient.add_line( false, _("Linear gradient _angle:"), _misc_gradientangle, "",
-                           _("Default angle of new linear gradients in degrees (clockwise from horizontal"), false);
+                           _("Default angle of new linear gradients in degrees (clockwise from horizontal)"), false);
 
 
     //Dropper
@@ -811,7 +811,7 @@ void InkscapePreferences::initPageIO()
                            _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), false);
 
     _mouse_grabsize.init("/options/grabsize/value", 1, 7, 1, 2, 3, 0);
-    _page_mouse.add_line(false, _("_Handle size"), _mouse_grabsize, "",
+    _page_mouse.add_line(false, _("_Handle size:"), _mouse_grabsize, "",
                          _("Set the relative size of node handles"), true);
 
     _mouse_use_ext_input.init( _("Use pressure-sensitive tablet (requires restart)"), "/options/useextinput/value", true);
@@ -1041,10 +1041,14 @@ void InkscapePreferences::initPageIO()
     // Autosave options
     _save_autosave_enable.init( _("Enable autosave (requires restart)"), "/options/autosave/enable", false);
     _page_autosave.add_line(false, "", _save_autosave_enable, "", _("Automatically save the current document(s) at a given interval, thus minimizing loss in case of a crash"), false);
+    _save_autosave_path.init("/options/autosave/path", true);
+    if (prefs->getString("/options/autosave/path").empty()) {
+        // Show the default fallback "tmp dir" if autosave path is not set.
+        _save_autosave_path.set_text(Glib::get_tmp_dir());
+    }
+    _page_autosave.add_line(false, C_("Filesystem", "Autosave _directory:"), _save_autosave_path, "", _("The directory where autosaves will be written. This should be an absolute path (starts with / on UNIX or a drive letter such as C: on Windows). "), false);
     _save_autosave_interval.init("/options/autosave/interval", 1.0, 10800.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Interval (in minutes):"), _save_autosave_interval, "", _("Interval (in minutes) at which document will be autosaved"), false);
-    _save_autosave_path.init("/options/autosave/path", true);
-    _page_autosave.add_line(false, C_("Filesystem", "_Path:"), _save_autosave_path, "", _("The directory where autosaves will be written"), false);
     _save_autosave_max.init("/options/autosave/max", 1.0, 100.0, 1.0, 10.0, 10.0, true, false);
     _page_autosave.add_line(false, _("_Maximum number of autosaves:"), _save_autosave_max, "", _("Maximum number of autosaved files; use this to limit the storage space used"), false);
 
