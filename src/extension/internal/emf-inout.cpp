@@ -1310,9 +1310,18 @@ select_font(PEMF_CALLBACK_DATA d, int index)
     d->dc[d->level].style.font_style.value = (pEmr->elfw.elfLogFont.lfItalic ? SP_CSS_FONT_STYLE_ITALIC : SP_CSS_FONT_STYLE_NORMAL);
     d->dc[d->level].style.text_decoration.underline = pEmr->elfw.elfLogFont.lfUnderline;
     d->dc[d->level].style.text_decoration.line_through = pEmr->elfw.elfLogFont.lfStrikeOut;
-    if (d->dc[d->level].font_name){ free(d->dc[d->level].font_name); }
-    d->dc[d->level].font_name =
-        U_Utf16leToUtf8((uint16_t *) (pEmr->elfw.elfLogFont.lfFaceName), U_LF_FACESIZE, NULL);
+    // malformed  EMF with empty filename may exist, ignore font change if encountered
+    char *ctmp = U_Utf16leToUtf8((uint16_t *) (pEmr->elfw.elfLogFont.lfFaceName), U_LF_FACESIZE, NULL);
+    if(ctmp){
+       if (d->dc[d->level].font_name){ free(d->dc[d->level].font_name); }
+       if(*ctmp){ 
+          d->dc[d->level].font_name = ctmp;
+       }
+       else {  // Malformed EMF might specify an empty font name
+          free(ctmp);
+          d->dc[d->level].font_name = strdup("Arial");  // Default font, EMF spec says device can pick whatever it wants
+       }
+    }
     d->dc[d->level].style.baseline_shift.value = ((pEmr->elfw.elfLogFont.lfEscapement + 3600) % 3600) / 10;   // use baseline_shift instead of text_transform to avoid overflow
 }
 
@@ -1355,6 +1364,76 @@ uint32_t *unknown_chars(size_t count){
    return res;
 }
 
+void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr, double l, double t, double r, double b, 
+  uint32_t iUsage, uint32_t offBits, uint32_t cbBits, uint32_t offBmi, uint32_t cbBmi){
+            SVGOStringStream tmp_image;
+            tmp_image << " y=\"" << t << "\"\n x=\"" << l <<"\"\n ";
+
+            // The image ID is filled in much later when tmp_image is converted
+
+            tmp_image << " xlink:href=\"data:image/png;base64,";
+           
+            MEMPNG mempng; // PNG in memory comes back in this
+            mempng.buffer = NULL;
+           
+            char *rgba_px=NULL;     // RGBA pixels
+            char *px=NULL;          // DIB pixels
+            uint32_t width, height, colortype, numCt, invert;
+            PU_RGBQUAD ct = NULL;
+            if(!cbBits || 
+               !cbBmi  || 
+               (iUsage != U_DIB_RGB_COLORS) || 
+               !get_DIB_params(  // this returns pointers and values, but allocates no memory
+                   pEmr,
+                   offBits,
+                   offBmi,
+                  &px,
+                  &ct,
+                  &numCt,
+                  &width,
+                  &height,
+                  &colortype,
+                  &invert
+               )){
+
+               if(!DIB_to_RGBA(
+                     px,         // DIB pixel array
+                     ct,         // DIB color table
+                     numCt,      // DIB color table number of entries
+                     &rgba_px,   // U_RGBA pixel array (32 bits), created by this routine, caller must free.
+                     width,      // Width of pixel array
+                     height,     // Height of pixel array
+                     colortype,  // DIB BitCount Enumeration
+                     numCt,      // Color table used if not 0
+                     invert      // If DIB rows are in opposite order from RGBA rows
+                     ) && 
+                  rgba_px)
+               {
+                  toPNG(         // Get the image from the RGBA px into mempng
+                      &mempng,
+                      width, height,
+                      rgba_px);
+                  free(rgba_px);
+               }
+            }
+            if(mempng.buffer){
+                gchar *base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+                free(mempng.buffer);
+                tmp_image << base64String ;
+                g_free(base64String);
+            }
+            else {
+              // insert a random 3x4 blotch otherwise
+              tmp_image << "iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAAA3NCSVQICAjb4U/gAAAALElEQVQImQXBQQ2AMAAAsUJQMSWI2H8qME1yMshojwrvGB8XcHKvR1XtOTc/8HENumHCsOMAAAAASUVORK5CYII=";
+            }
+               
+            tmp_image << "\"\n height=\"" << b-t+1 << "\"\n width=\"" << r-l+1 << "\"\n";
+
+            *(d->outsvg) += "\n\t <image\n";
+            *(d->outsvg) += tmp_image.str().c_str();
+            *(d->outsvg) += "/> \n";
+            *(d->path) = "";
+}
 
 /**
   \fn myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA lpData)
@@ -2461,14 +2540,14 @@ std::cout << "BEFORE DRAW"
             dbg_str << "<!-- U_EMR_BITBLT -->\n";
 
             PU_EMRBITBLT pEmr = (PU_EMRBITBLT) lpEMFR;
+            double l = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
+            double t = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
+            double r = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
+            double b = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
             // Treat all nonImage bitblts as a rectangular write.  Definitely not correct, but at
             // least it leaves objects where the operations should have been.
             if (!pEmr->cbBmiSrc) {
                 // should be an application of a DIBPATTERNBRUSHPT, use a solid color instead
-                double l = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double t = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double r = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
-                double b = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
 
                 SVGOStringStream tmp_rectangle;
                 tmp_rectangle << "\n\tM " << l << " " << t << " ";
@@ -2483,10 +2562,42 @@ std::cout << "BEFORE DRAW"
 
                 tmp_path <<   tmp_rectangle.str().c_str();
             }
+            else {
+                common_image_extraction(d,pEmr,l,t,r,b,
+                   pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
+            }
             break;
         }
-        case U_EMR_STRETCHBLT:           dbg_str << "<!-- U_EMR_STRETCHBLT -->\n";           break;
-        case U_EMR_MASKBLT:              dbg_str << "<!-- U_EMR_MASKBLT -->\n";              break;
+        case U_EMR_STRETCHBLT:
+        {
+            dbg_str << "<!-- U_EMR_STRETCHBLT -->\n";
+            PU_EMRSTRETCHBLT pEmr = (PU_EMRSTRETCHBLT) lpEMFR;
+            // Always grab image, ignore modes.
+            if (pEmr->cbBmiSrc) {
+                double l = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double t = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double r = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
+                double b = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
+                common_image_extraction(d,pEmr,l,t,r,b,
+                   pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
+            }
+            break;
+        }
+        case U_EMR_MASKBLT:
+        {
+            dbg_str << "<!-- U_EMR_MASKBLT -->\n";
+            PU_EMRMASKBLT pEmr = (PU_EMRMASKBLT) lpEMFR;
+            // Always grab image, ignore masks and modes.
+            if (pEmr->cbBmiSrc) {
+                double l = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double t = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double r = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
+                double b = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
+                common_image_extraction(d,pEmr,l,t,r,b,
+                   pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
+            }
+            break;
+        }
         case U_EMR_PLGBLT:               dbg_str << "<!-- U_EMR_PLGBLT -->\n";               break;
         case U_EMR_SETDIBITSTODEVICE:    dbg_str << "<!-- U_EMR_SETDIBITSTODEVICE -->\n";    break;
         case U_EMR_STRETCHDIBITS:
@@ -2502,73 +2613,8 @@ std::cout << "BEFORE DRAW"
             double t = pix_to_y_point( d, pEmr->Dest.x,                 pEmr->Dest.y                 );
             double r = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y );
             double b = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y );
-            SVGOStringStream tmp_image;
-            tmp_image << " y=\"" << t << "\"\n x=\"" << l <<"\"\n ";
-
-            // The image ID is filled in much later when tmp_image is converted
-
-            tmp_image << " xlink:href=\"data:image/png;base64,";
-           
-            MEMPNG mempng; // PNG in memory comes back in this
-            mempng.buffer = NULL;
-           
-            char *rgba_px=NULL;     // RGBA pixels
-            char *px=NULL;          // DIB pixels
-            uint32_t width, height, colortype, numCt, invert;
-            PU_RGBQUAD ct = NULL;
-            if(!pEmr->cbBitsSrc || 
-               !pEmr->cbBmiSrc  || 
-               (pEmr->iUsageSrc != U_DIB_RGB_COLORS) || 
-               !get_DIB_params(  // this returns pointers and values, but allocates no memory
-                   pEmr,
-                   pEmr->offBitsSrc,
-                   pEmr->offBmiSrc,
-                  &px,
-                  &ct,
-                  &numCt,
-                  &width,
-                  &height,
-                  &colortype,
-                  &invert
-               )){
-
-               if(!DIB_to_RGBA(
-                     px,         // DIB pixel array
-                     ct,         // DIB color table
-                     numCt,      // DIB color table number of entries
-                     &rgba_px,   // U_RGBA pixel array (32 bits), created by this routine, caller must free.
-                     width,      // Width of pixel array
-                     height,     // Height of pixel array
-                     colortype,  // DIB BitCount Enumeration
-                     numCt,      // Color table used if not 0
-                     invert      // If DIB rows are in opposite order from RGBA rows
-                     ) && 
-                  rgba_px)
-               {
-                  toPNG(         // Get the image from the RGBA px into mempng
-                      &mempng,
-                      width, height,
-                      rgba_px);
-                  free(rgba_px);
-               }
-            }
-            if(mempng.buffer){
-                gchar *base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
-                free(mempng.buffer);
-                tmp_image << base64String ;
-                g_free(base64String);
-            }
-            else {
-              // insert a random 3x4 blotch otherwise
-              tmp_image << "iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAAA3NCSVQICAjb4U/gAAAALElEQVQImQXBQQ2AMAAAsUJQMSWI2H8qME1yMshojwrvGB8XcHKvR1XtOTc/8HENumHCsOMAAAAASUVORK5CYII=";
-            }
-               
-            tmp_image << "\"\n height=\"" << b-t+1 << "\"\n width=\"" << r-l+1 << "\"\n";
-
-            *(d->outsvg) += "\n\t <image\n";
-            *(d->outsvg) += tmp_image.str().c_str();
-            *(d->outsvg) += "/> \n";
-            *(d->path) = "";
+            common_image_extraction(d,pEmr,l,t,r,b,
+               pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
 
             dbg_str << "<!-- U_EMR_STRETCHDIBITS -->\n";
             break;
@@ -2661,6 +2707,11 @@ std::cout << "BEFORE DRAW"
             char *ansi_text;
             ansi_text = (char *) U_Utf32leToUtf8((uint32_t *)dup_wt, 0, NULL);
             free(dup_wt);
+            // Empty string or starts with an invalid escape/control sequence, which is bogus text.  Throw it out before g_markup_escape_text can make things worse
+            if(*ansi_text <= 0x1F){
+               free(ansi_text);
+               ansi_text=NULL;
+            }
 
             if (ansi_text) {
 //                gchar *p = ansi_text;
@@ -2980,7 +3031,7 @@ std::cout << "BEFORE DRAW"
 
     }  //end of while
 // When testing, uncomment the following to show the final SVG derived from the EMF
-// std::cout << *(d->outsvg) << std::endl; 
+//std::cout << *(d->outsvg) << std::endl; 
     (void) emr_properties(U_EMR_INVALID);  // force the release of the lookup table memory, returned value is irrelevant
 
     return 1;
@@ -3035,7 +3086,8 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.dc[0].worldTransform.eM22 = 1.0;
     d.dc[0].worldTransform.eDx  = 0.0;
     d.dc[0].worldTransform.eDy  = 0.0;
-    
+    d.dc[0].font_name = strdup("Arial");  // Default font, EMF spec says device can pick whatever it wants
+        
     if (uri == NULL) {
         return NULL;
     }

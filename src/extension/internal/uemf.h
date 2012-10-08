@@ -309,11 +309,20 @@ extern "C" {
 #define U_DIB_PAL_COLORS   1
 /** @} */
 
-/** \defgroup U_EMR_COMMENT_PublicCommentIdentifier_Qualifiers EmrComment Enumeration
-  For U_EMR_COMMENT_* PublicCommentIdentifier fields
+/** \defgroup U_EMRCOMMENT_* cIdent Qualifiers
+  For U_EMRCOMMENT_* cIdent fields
   @{
 */
-#define U_EMR_COMMENT_IDENTIFIER        0x43494447
+#define U_EMR_COMMENT_PUBLIC            0x43494447
+#define U_EMR_COMMENT_SPOOL             0x00000000
+#define U_EMR_COMMENT_SPOOLFONTDEF      0x544F4E46
+#define U_EMR_COMMENT_EMFPLUSRECORD     0x2B464D45
+/** @} */
+
+/** \defgroup U_EMR_COMMENT_PUBLIC, AKA  EMRComment Enumeration
+  For U_EMRCOMMENT_PUBLI pcIdent fields
+  @{
+*/
 #define U_EMR_COMMENT_WINDOWS_METAFILE  0x80000001
 #define U_EMR_COMMENT_BEGINGROUP        0x00000002
 #define U_EMR_COMMENT_ENDGROUP          0x00000003
@@ -2168,6 +2177,30 @@ typedef struct {
     U_CBDATA            cbData;             //!< Number of bytes in comment
     uint8_t             Data[1];            //!< Comment (any binary data, interpretation is program specific)
 } U_EMRCOMMENT, *PU_EMRCOMMENT;             //!< AKA GDICOMMENT
+
+/* variant comment types */
+typedef struct {
+    U_EMR               emr;                //!< U_EMR
+    U_CBDATA            cbData;             //!< Number of bytes in comment
+    uint32_t            cIdent;             //!< Comment identifier, must be U_EMR_COMMENT_EMFPLUSRECORD
+    uint8_t             Data[1];            //!< EMF Plus record
+} U_EMRCOMMENT_EMFPLUS, *PU_EMRCOMMENT_EMFPLUS;    //!< EMF Plus comment
+
+typedef struct {
+    U_EMR               emr;                //!< U_EMR
+    U_CBDATA            cbData;             //!< Number of bytes in comment
+    uint32_t            cIdent;             //!< Comment identifier, must be U_EMR_COMMENT_SPOOL
+    uint32_t            esrIdent;           //!< EMFSpoolRecordIdentifier, may be  U_EMR_COMMENT_SPOOLFONTDEF
+    uint8_t             Data[1];            //!< EMF Spool records
+} U_EMRCOMMENT_SPOOL, *PU_EMRCOMMENT_SPOOL;    //!< EMF Spool comment
+
+typedef struct {
+    U_EMR               emr;                //!< U_EMR
+    U_CBDATA            cbData;             //!< Number of bytes in comment
+    uint32_t            cIdent;             //!< Comment identifier, must be U_EMR_COMMENT_PUBLIC
+    uint32_t            pcIdent;            //!< Public Comment Identifier, from EMRComment Enumeration
+    uint8_t             Data[1];            //!< Public comment data
+} U_EMRCOMMENT_PUBLIC, *PU_EMRCOMMENT_PUBLIC;    //!< EMF Public comment
 
 /* Index  71 */
 typedef struct {
