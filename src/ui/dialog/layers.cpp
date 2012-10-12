@@ -69,6 +69,9 @@ enum {
     BUTTON_SOLO,
     BUTTON_SHOW_ALL,
     BUTTON_HIDE_ALL,
+    BUTTON_LOCK_OTHERS,
+    BUTTON_LOCK_ALL,
+    BUTTON_UNLOCK_ALL,
     DRAGNDROP
 };
 
@@ -261,6 +264,21 @@ bool LayersPanel::_executeAction()
             case BUTTON_HIDE_ALL:
             {
                 _fireAction( SP_VERB_LAYER_HIDE_ALL );
+            }
+            break;
+            case BUTTON_LOCK_OTHERS:
+            {
+                _fireAction( SP_VERB_LAYER_LOCK_OTHERS );
+            }
+            break;
+            case BUTTON_LOCK_ALL:
+            {
+                _fireAction( SP_VERB_LAYER_LOCK_ALL );
+            }
+            break;
+            case BUTTON_UNLOCK_ALL:
+            {
+                _fireAction( SP_VERB_LAYER_UNLOCK_ALL );
             }
             break;
             case DRAGNDROP:
@@ -544,25 +562,35 @@ void LayersPanel::_handleButtonEvent(GdkEventButton* event)
 {
     static unsigned doubleclick = 0;
 
-    // TODO - fix to a better is-popup function
     if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) ) {
+        // TODO - fix to a better is-popup function
+        Gtk::TreeModel::Path path;
+        int x = static_cast<int>(event->x);
+        int y = static_cast<int>(event->y);
+        if ( _tree.get_path_at_pos( x, y, path ) ) {
+            _checkTreeSelection();
+            _popupMenu.popup(event->button, event->time);
+        }
+    }
 
-        {
-            Gtk::TreeModel::Path path;
-            Gtk::TreeViewColumn* col = 0;
-            int x = static_cast<int>(event->x);
-            int y = static_cast<int>(event->y);
-            int x2 = 0;
-            int y2 = 0;
-            if ( _tree.get_path_at_pos( x, y,
-                                        path, col,
-                                        x2, y2 ) ) {
-                _checkTreeSelection();
-                _popupMenu.popup(event->button, event->time);
+    if ( event->type == GDK_BUTTON_RELEASE && (event->button == 1)
+            && (event->state & GDK_SHIFT_MASK)) {
+        // Shift left click on the visible/lock columns toggles "solo" mode
+        Gtk::TreeModel::Path path;
+        Gtk::TreeViewColumn* col = 0;
+        int x = static_cast<int>(event->x);
+        int y = static_cast<int>(event->y);
+        int x2 = 0;
+        int y2 = 0;
+        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
+            if (col == _tree.get_column(COL_VISIBLE-1)) {
+                _takeAction(BUTTON_SOLO);
+            } else if (col == _tree.get_column(COL_LOCKED-1)) {
+                _takeAction(BUTTON_LOCK_OTHERS);
             }
         }
-
     }
+
 
     if ( (event->type == GDK_2BUTTON_PRESS) && (event->button == 1) ) {
         doubleclick = 1;
@@ -873,6 +901,12 @@ LayersPanel::LayersPanel() :
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, 0, "Solo", (int)BUTTON_SOLO ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, 0, "Show All", (int)BUTTON_SHOW_ALL ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, 0, "Hide All", (int)BUTTON_HIDE_ALL ) );
+
+        _popupMenu.append(*manage(new Gtk::SeparatorMenuItem()));
+
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, 0, "Lock Others", (int)BUTTON_LOCK_OTHERS ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, 0, "Lock All", (int)BUTTON_LOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, 0, "Unlock All", (int)BUTTON_UNLOCK_ALL ) );
 
         _popupMenu.append(*manage(new Gtk::SeparatorMenuItem()));
 
