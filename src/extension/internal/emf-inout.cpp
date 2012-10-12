@@ -2775,7 +2775,7 @@ std::cout << "BEFORE DRAW"
                    << "\"\n";
                 ts << "    >";
                 ts << escaped_text;
-                ts << "  </tspan>";
+                ts << "</tspan>";
                 ts << "</text>\n";
                 
                 *(d->outsvg) += ts.str().c_str();
