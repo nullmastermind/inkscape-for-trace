@@ -16,9 +16,6 @@ bin_PROGRAMS = inkscape inkview
 # Libraries which should be compiled by "make" but not installed.
 # Use this only for libraries that are really standalone, rather than for
 # source tree subdirectories.
-#if WITH_INKBOARD
-#libpedro = pedro/libpedro.a
-#endif
 
 if !WITH_EXT_GDL
 internal_GDL = libgdl/libgdl.a
@@ -35,7 +32,6 @@ noinst_LIBRARIES =	\
 	libvpsc/libvpsc.a	\
 	livarot/libvarot.a	\
 	2geom/lib2geom.a	\
-	$(libpedro)		\
 	libinkversion.a
 
 all_libs =			\
@@ -108,11 +104,6 @@ win32_sources = winmain.cpp registrytool.cpp registrytool.h
 win32ldflags = -lcomdlg32 -lmscms
 mwindows = -mwindows
 endif 
-
-if INKJAR
-inkjar_dir = inkjar
-inkjar_libs = inkjar/libinkjar.a
-endif
 
 # Include all partial makefiles from subdirectories
 include Makefile_insert
@@ -195,7 +186,6 @@ EXTRA_DIST +=	\
 	helper/sp-marshal.list	\
 	show-preview.bmp \
 	winconsole.cpp \
-	$(jabber_whiteboard_SOURCES) \
 	$(CXXTEST_TEMPLATE)
 
 # Extra files to remove when doing "make distclean"
