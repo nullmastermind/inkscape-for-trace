@@ -106,6 +106,8 @@ ink_common_sources += \
 	display/sodipodi-ctrlrect.h	\
 	display/sp-canvas.cpp	\
 	display/sp-canvas.h	\
+	display/sp-canvas-item.h \
+	display/sp-canvas-group.h \
 	display/sp-canvas-util.cpp	\
 	display/sp-canvas-util.h	\
 	display/sp-ctrlcurve.cpp	\
