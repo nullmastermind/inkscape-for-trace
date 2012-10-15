@@ -47,7 +47,6 @@
 	2geom/geom.h	\
 	2geom/hvlinesegment.h	\
 	2geom/interval.h	\
-	2geom/isnan.h	\
 	2geom/linear.h	\
 	2geom/line.cpp	\
 	2geom/line.h	\
@@ -70,7 +69,6 @@
 	2geom/piecewise.h	\
 	2geom/point.cpp	\
 	2geom/point.h	\
-	2geom/point-l.h	\
 	2geom/point-ops.h	\
 	2geom/poly.cpp	\
 	2geom/poly.h	\
@@ -101,7 +99,6 @@
 	2geom/solve-bezier-one-d.cpp	\
 	2geom/solve-bezier-parametric.cpp	\
 	2geom/solver.h	\
-	2geom/sturm.h	\
 	2geom/svg-elliptical-arc.cpp	\
 	2geom/svg-elliptical-arc.h	\
 	2geom/svg-path.cpp	\

@@ -156,7 +156,6 @@ EXTRA_DIST +=	\
 	$(top_srcdir)/Doxyfile	\
 	sp-skeleton.cpp sp-skeleton.h	\
 	util/makefile.in	\
-	application/makefile.in	\
 	bind/makefile.in	\
 	debug/makefile.in	\
 	dialogs/makefile.in	\
@@ -171,11 +170,8 @@ EXTRA_DIST +=	\
 	io/makefile.in	\
 	io/crystalegg.xml	\
 	io/doc2html.xsl 	\
-	pedro/makefile.in	\
-	jabber_whiteboard/makefile.in	\
 	libgdl/makefile.in	\
 	libcroco/makefile.in	\
-	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	libavoid/makefile.in	\
 	livarot/makefile.in	\
