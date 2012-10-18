@@ -2708,7 +2708,7 @@ std::cout << "BEFORE DRAW"
             ansi_text = (char *) U_Utf32leToUtf8((uint32_t *)dup_wt, 0, NULL);
             free(dup_wt);
             // Empty string or starts with an invalid escape/control sequence, which is bogus text.  Throw it out before g_markup_escape_text can make things worse
-            if(*ansi_text <= 0x1F){
+            if(*((uint8_t *)ansi_text) <= 0x1F){
                free(ansi_text);
                ansi_text=NULL;
             }
