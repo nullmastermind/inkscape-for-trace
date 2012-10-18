@@ -269,7 +269,9 @@ override) the bindings in the main default.xml.
   <bind key="b" modifiers="Ctrl" action="ToggleScrollbars" display="true" />
   <bind key="B" modifiers="Ctrl" action="ToggleScrollbars" />
 
-  <bind action="TogglePalette" />
+  <bind key="p" modifiers="Shift,Alt" action="TogglePalette" display="true" />
+  <bind key="P" modifiers="Shift,Alt" action="TogglePalette" />
+
   <bind action="ToggleStatusbar" />
   
   <bind action="ViewNew" />
