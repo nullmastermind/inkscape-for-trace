@@ -15,7 +15,7 @@
 /*
 File:      uemf.c
 Version:   0.0.9
-Date:      04-OCT-2012
+Date:      24-OCT-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -472,7 +472,8 @@ char *U_Utf16leToUtf8(
       size_t          max,
       size_t         *len
    ){
-   char *dst, *dst2, *ret;
+   char *dst, *dst2;
+   char *ret=NULL;
    size_t srclen,dstlen,status;
    if(max){ srclen = 2*max; }
    else {   srclen = 2*(1 +wchar16len(src)); } //include terminator, length in BYTES
@@ -482,10 +483,11 @@ char *U_Utf16leToUtf8(
    iconv_t conv = iconv_open("UTF-8", "UTF-16LE");
    status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
    iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=strlen(dst2);
-   ret=U_strdup(dst2);                        // make a string of exactly the right size
-   free(dst2);                              // free the one which was probably too big
+   if(status != (size_t) -1){
+      if(len)*len=strlen(dst2);
+      ret=U_strdup(dst2);                     // make a string of exactly the right size
+   }
+   free(dst2);                                // free the one which was probably too big
    return(ret);
 }
 
@@ -1074,11 +1076,15 @@ int get_DIB_params(
     \param ct         DIB color table
     \param numCt      DIB color table number of entries
     \param rgba_px    U_RGBA pixel array (32 bits), created by this routine, caller must free.
-    \param w          Width of pixel array
-    \param h          Height of pixel array
+    \param w          Width of pixel array in the record
+    \param h          Height of pixel array in the record
     \param colortype  DIB BitCount Enumeration
     \param use_ct     Kept for symmetry with RGBA_to_DIB, should be set to numCt
     \param invert     If DIB rows are in opposite order from RGBA rows
+    \param sl         start left position in the pixel array in the record to start extracting
+    \param st         start top  position in the pixel array in the record to start extracting
+    \param ew         Width of pixel array to extract
+    \param eh         Height of pixel array to extract
 */
 int DIB_to_RGBA(
        char        *px,
@@ -1089,7 +1095,11 @@ int DIB_to_RGBA(
        int          h,
        uint32_t     colortype,
        int          use_ct,
-       int          invert
+       int          invert,
+       int          sl,
+       int          st,
+       int          ew,
+       int          eh
    ){
    uint32_t     cbRgba_px;
    int          stride;
@@ -1103,6 +1113,7 @@ int DIB_to_RGBA(
    int          usedbytes;
    U_RGBQUAD    color;
    int32_t      index;
+   int          ilow,ihigh,rok; // For figuring out OK row when not entire array is converted
    
    // sanity checking
    if(!w || !h || !colortype || !px)return(1);
@@ -1110,8 +1121,8 @@ int DIB_to_RGBA(
    if(!use_ct && colortype < U_BCBM_COLOR16)return(3);   //color tables mandatory for < 16 bit
    if(use_ct && !numCt)return(4);                        //color table not adequately described
 
-   stride    = w * 4;
-   cbRgba_px = stride * h;
+   stride    = ew * 4;
+   cbRgba_px = stride * eh;
    bs = colortype/8;
    if(bs<1){
       bs=1;
@@ -1121,24 +1132,30 @@ int DIB_to_RGBA(
       usedbytes = w*bs;
    }
    pad = UP4(usedbytes) - usedbytes;        // DIB rows must be aligned on 4 byte boundaries, they are padded at the end to accomplish this.;
-   *rgba_px = (char *) malloc(cbRgba_px);  
+   *rgba_px = (char *) malloc(cbRgba_px);
    if(!rgba_px)return(4);
    
    if(invert){
      istart = h-1;
      iend   = -1;
      iinc   = -1;
+     ihigh  = istart - st;
+     ilow   = ihigh - eh + 1;
    }
    else {
      istart = 0;
      iend   = h;
      iinc   = 1;
+     ilow   = st;
+     ihigh  = st + eh -1;
    }
 
    pxptr = px;
    tmp8  = 0;  // silences a compiler warning, tmp8 always sets when j=0, so never used uninitialized
    for(i=istart; i!=iend; i+=iinc){
-      rptr= *rgba_px + i*stride;
+      if(i>=ilow && i<=ihigh){ rok=1; }
+      else {                   rok=0; }
+      rptr= *rgba_px + (i-ilow)*stride;
       for(j=0; j<w; j++){
           if(use_ct){
              switch(colortype){
@@ -1203,10 +1220,12 @@ int DIB_to_RGBA(
                   return(7);            // This should not be possible, but might happen with memory corruption  
              }
           }
-          *rptr++ = r;
-          *rptr++ = g;
-          *rptr++ = b;
-          *rptr++ = a;
+          if(rok && j>=sl && j<=sl+ew-1){
+             *rptr++ = r;
+             *rptr++ = g;
+             *rptr++ = b;
+             *rptr++ = a;
+          }
       }
       for(j=0; j<pad; j++){ pxptr++; }  // DIB rows are all 4 byte aligned
    } 
@@ -1605,6 +1624,7 @@ int device_size(
     \brief Set up fields for an EMR_HEADER for drawing by physical size in mm and dots per millimeter.
     Technically rclBounds is supposed to be the extent of the drawing within the EMF, but libUEMF has no way
     of knowing this since it never actually draws anything.  Instead this is set to the full drawing size.
+    Coordinates are inclusive inclusive, so 297 -> 0,29699.
     \return 0 for success, >=1 for failure.
     \param xmm        Drawing  width in millimeters
     \param ymm        Drawing height in millimeters
@@ -1622,12 +1642,12 @@ int drawing_size(
    if(xmm < 0 || ymm < 0 || dpmm < 0)return(1);
    rclBounds->left     =  0;
    rclBounds->top      =  0;
-   rclBounds->right    =  U_ROUND((float) xmm  * dpmm);  // because coordinate system is 0,0 in upper left, N,M in lower right
-   rclBounds->bottom   =  U_ROUND((float) ymm  * dpmm);
+   rclBounds->right    =  U_ROUND((float) xmm  * dpmm) - 1;  // because coordinate system is 0,0 in upper left, N,M in lower right
+   rclBounds->bottom   =  U_ROUND((float) ymm  * dpmm) - 1;
    rclFrame->left      =  0;       
    rclFrame->top       =  0; 
-   rclFrame->right     =  U_ROUND((float) xmm * 100.); 
-   rclFrame->bottom    =  U_ROUND((float) ymm * 100.);         
+   rclFrame->right     =  U_ROUND((float) xmm * 100.) - 1; 
+   rclFrame->bottom    =  U_ROUND((float) ymm * 100.) - 1;         
    return(0);
 }
 

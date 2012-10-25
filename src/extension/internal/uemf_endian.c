@@ -18,7 +18,7 @@
 /*
 File:      uemf_endian.h
 Version:   0.0.9
-Date:      27-SEP-2012
+Date:      19-SEP-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -642,24 +642,52 @@ void U_EMRNOTIMPLEMENTED_swap(char *record, int torev){
 
 // U_EMRHEADER                1
 void U_EMRHEADER_swap(char *record, int torev){
-   core5_swap(record, torev);
-
+   int nDesc,offDesc,nSize,cbPix,offPix;
    PU_EMRHEADER pEmr = (PU_EMRHEADER)(record);
+   if(torev){
+     nSize = pEmr->emr.nSize;
+   }
+   core5_swap(record, torev);
+   if(!torev){
+     nSize = pEmr->emr.nSize;
+   }
+
    rectl_swap(&(pEmr->rclBounds),2);        // rclBounds rclFrame
    U_swap4(&(pEmr->dSignature), 4);         // dSignature nVersion nBytes nRecords
    U_swap2(&(pEmr->nHandles), 2);           // nHandlessReserved
+   if(torev){
+      nDesc = pEmr->nDescription;
+      offDesc = pEmr->offDescription;
+   } 
    U_swap4(&(pEmr->nDescription), 3);       // nDescription offDescription nPalEntries 
+   if(!torev){
+      nDesc = pEmr->nDescription;
+      offDesc = pEmr->offDescription;
+   } 
    // UTF16-LE                                 Description
    sizel_swap(&(pEmr->szlDevice), 2);       // szlDevice szlMillimeters
-   if(torev && pEmr->cbPixelFormat){
-      pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
+   if((nDesc && (offDesc >= 100)) || 
+      (!offDesc && nSize >= 100)
+     ){
+     if(torev){
+        cbPix = pEmr->cbPixelFormat;
+        offPix = pEmr->offPixelFormat;
+        if(cbPix)pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
+     }
+     U_swap4(&(pEmr->cbPixelFormat), 2);      // cbPixelFormat offPixelFormat 
+     if(!torev){
+        cbPix = pEmr->cbPixelFormat;
+        offPix = pEmr->offPixelFormat;
+        if(cbPix)pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
+     }
+     U_swap4(&(pEmr->bOpenGL), 1);            // bOpenGL
+     if((nDesc && (offDesc >= 108)) || 
+        (cbPix && (offPix >=108)) ||
+        (!offDesc && !cbPix && nSize >= 108)
+       ){
+         sizel_swap(&(pEmr->szlMicrometers), 1);  // szlMicrometers
+       }
    }
-   U_swap4(&(pEmr->cbPixelFormat), 2);      // cbPixelFormat offPixelFormat 
-   if(!torev && pEmr->cbPixelFormat){
-      pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
-   }
-   U_swap4(&(pEmr->bOpenGL), 1);            // bOpenGL
-   sizel_swap(&(pEmr->szlMicrometers), 1);  // szlMicrometers
 }
 
 // U_EMRPOLYBEZIER                       2

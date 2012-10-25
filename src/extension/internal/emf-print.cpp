@@ -344,10 +344,10 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
     // dwInchesX x dwInchesY in micrometer units, dpi=90 -> 3543.3 dpm
     (void) drawing_size((int) ceil(dwInchesX*25.4), (int) ceil(dwInchesY*25.4), 3.543307, &rclBounds, &rclFrame);
 
-    // set up the device as A4 horizontal, 47.244094 dpmm (1200 dpi)
-    int MMX = 216;
-    int MMY = 279;
-    (void) device_size(MMX, MMY, 47.244094, &szlDev, &szlMm); // Drawing: A4 horizontal,  42744 dpm (1200 dpi)
+    // set up the reference device as 100 X A4 horizontal, (1200 dpi/25.4 -> dpmm).  Extra digits maintain dpi better in EMF
+    int MMX = 21600;
+    int MMY = 27900;
+    (void) device_size(MMX, MMY, 1200.0/25.4, &szlDev, &szlMm);
     int PixelsX = szlDev.cx;
     int PixelsY = szlDev.cy;
 
@@ -381,17 +381,15 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
     }
     
 
-    //  Correct for dpi in EMF vs dpi in Inkscape (always 90?)
-    //  Also correct for the scaling in PX2WORLD, which is set to 20.  Doesn't hurt for high resolution,
-    //  helps prevent rounding errors for low resolution EMF.  Low resolution EMF is possible if there
-    //  are no print devices and the screen resolution is low.
+    //  Correct for dpi in EMF (1200) vs dpi in Inkscape (always 90).
+    //  Also correct for the scaling in PX2WORLD, which is set to 20.
 
-    worldTransform.eM11 = ((float)PixelsX * 25.4f)/((float)MMX*90.0f*PX2WORLD);
-    worldTransform.eM12 = 0.0f;
-    worldTransform.eM21 = 0.0f;
-    worldTransform.eM22 = ((float)PixelsY * 25.4f)/((float)MMY*90.0f*PX2WORLD);
-    worldTransform.eDx = 0;
-    worldTransform.eDy = 0;
+    worldTransform.eM11 = 1200./(90.0*PX2WORLD);
+    worldTransform.eM12 = 0.0;
+    worldTransform.eM21 = 0.0;
+    worldTransform.eM22 = 1200./(90.0*PX2WORLD);
+    worldTransform.eDx  = 0;
+    worldTransform.eDy  = 0;
 
     rec = U_EMRMODIFYWORLDTRANSFORM_set(worldTransform, U_MWT_LEFTMULTIPLY);
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
@@ -785,7 +783,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
     int                  linecap   = 0;
     int                  linejoin  = 0;
     uint32_t             pen;
-    uint32_t             penStyle;
+    uint32_t             brushStyle;
     GdkPixbuf           *pixbuf;
     int                  hatchType;
     U_COLORREF           hatchColor;
@@ -803,7 +801,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
     if (!et) return 0;
 
     // set a default stroke  in case we can't figure out a better way to do it
-    penStyle   = U_BS_SOLID;
+    brushStyle  = U_BS_SOLID;
     hatchColor = U_RGB(0, 0, 0);
     hatchType  = U_HS_HORIZONTAL;
 
@@ -819,7 +817,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
            height = dheight;
            brush_classify(pat,0,&pixbuf,&hatchType,&hatchColor);
            if(pixbuf){
-              penStyle    = U_BS_DIBPATTERN;
+              brushStyle    = U_BS_DIBPATTERN;
               rgba_px = (char *) gdk_pixbuf_get_pixels(pixbuf); // Do NOT free this!!!
               colortype = U_BCBM_COLOR32;
               (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  rgba_px,  width, height, width*4, colortype, 0, 1);
@@ -830,7 +828,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
               Bmi = bitmapinfo_set(Bmih, ct);
            }
            else {  // pattern
-              penStyle    = U_BS_HATCHED;
+              brushStyle    = U_BS_HATCHED;
               if(hatchType == -1){  // Not a standard hatch, so force it to something
                  hatchType  = U_HS_CROSS;
                  hatchColor = U_RGB(0xFF,0xC3,0xC3);
@@ -838,7 +836,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
            }
            if(FixPPTPatternAsHatch){
               if(hatchType == -1){  // image or unclassified 
-                 penStyle     = U_BS_HATCHED;
+                 brushStyle   = U_BS_HATCHED;
                  hatchType    = U_HS_DIAGCROSS;
                  hatchColor   = U_RGB(0xFF,0xC3,0xC3);
               } 
@@ -886,7 +884,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
         }
         else if(style->stroke.isColor()){ // test last, always seems to be set, even for other types above
            sp_color_get_rgb_floatv( &style->stroke.value.color, rgb );
-           penStyle   = U_BS_SOLID;
+           brushStyle = U_BS_SOLID;
            hatchColor = U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]);
            hatchType  = U_HS_SOLIDCLR;
         }
@@ -934,7 +932,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
             style->stroke_dash.dash       )
         {
             if(FixPPTDashLine){ // will break up line into many smaller lines.  Override gradient if that was set, cannot do both.
-               penStyle   = U_BS_SOLID;
+               brushStyle = U_BS_SOLID;
                hatchType  = U_HS_HORIZONTAL;
             }
             else {
@@ -959,7 +957,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
         elp = extlogpen_set(
             U_PS_GEOMETRIC | linestyle | linecap | linejoin,
             linewidth,
-            penStyle,
+            brushStyle,
             hatchColor,
             hatchType,
             n_dash,

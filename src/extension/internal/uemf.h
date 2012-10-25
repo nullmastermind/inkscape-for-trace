@@ -14,7 +14,7 @@
 /*
 File:      uemf.h
 Version:   0.0.9
-Date:      04-OCT-2012
+Date:      24-OCT-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -2701,8 +2701,9 @@ int       get_DIB_params( void *pEmr, uint32_t offBitsSrc, uint32_t offBmiSrc,
                char **px, PU_RGBQUAD *ct, uint32_t *numCt, 
                uint32_t *width, uint32_t *height, uint32_t *colortype, uint32_t *invert );
 int       DIB_to_RGBA(char *px, PU_RGBQUAD ct, int numCt,
-               char **rgba_px, int w, int h, uint32_t colortype, int use_ct, int invert);
-
+               char **rgba_px, int w, int h, uint32_t colortype, int use_ct, int invert,
+               int sl, int st, int ew, int eh );
+ 
 int   device_size(const int xmm, const int ymm, const float dpmm, U_SIZEL *szlDev, U_SIZEL *szlMm);
 int   drawing_size(const int xmm, const int yum, const float dpmm, U_RECTL *rclBounds, U_RECTL *rclFrame);
 

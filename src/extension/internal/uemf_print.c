@@ -5,7 +5,7 @@
 /*
 File:      uemf_print.c
 Version:   0.0.9
-Date:      19-SEP-2012
+Date:      19-OCT-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -860,15 +860,24 @@ void U_EMRHEADER_print(char *contents, int recnum, size_t off){
    printf("   nPalEntries:    %d\n",       pEmr->nPalEntries   );
    printf("   szlDevice:      {%d,%d} \n", pEmr->szlDevice.cx,pEmr->szlDevice.cy);
    printf("   szlMillimeters: {%d,%d} \n", pEmr->szlMillimeters.cx,pEmr->szlMillimeters.cy);
-   printf("   cbPixelFormat:  %d\n",       pEmr->cbPixelFormat );
-   printf("   offPixelFormat: %d\n",       pEmr->offPixelFormat);
-   if(pEmr->cbPixelFormat){
-      printf("      PFD:");
-      pixelformatdescriptor_print( *(PU_PIXELFORMATDESCRIPTOR) (contents + off + pEmr->offPixelFormat));
-      printf("\n");
+   if((pEmr->nDescription && (pEmr->offDescription >= 100)) || 
+      (!pEmr->offDescription && pEmr->emr.nSize >= 100)
+     ){
+      printf("   cbPixelFormat:  %d\n",       pEmr->cbPixelFormat );
+      printf("   offPixelFormat: %d\n",       pEmr->offPixelFormat);
+      if(pEmr->cbPixelFormat){
+         printf("      PFD:");
+         pixelformatdescriptor_print( *(PU_PIXELFORMATDESCRIPTOR) (contents + off + pEmr->offPixelFormat));
+         printf("\n");
+      }
+      printf("   bOpenGL:        %d\n",pEmr->bOpenGL       );
+      if((pEmr->nDescription    && (pEmr->offDescription >= 108)) || 
+              (pEmr->cbPixelFormat   && (pEmr->offPixelFormat >=108)) ||
+              (!pEmr->offDescription && !pEmr->cbPixelFormat && pEmr->emr.nSize >= 108)
+             ){
+         printf("   szlMicrometers: {%d,%d} \n", pEmr->szlMicrometers.cx,pEmr->szlMicrometers.cy);
+     }
    }
-   printf("   bOpenGL:        %d\n",pEmr->bOpenGL       );
-   printf("   szlMicrometers: {%d,%d} \n", pEmr->szlMicrometers.cx,pEmr->szlMicrometers.cy);
 }
 
 // U_EMRPOLYBEZIER                       2
