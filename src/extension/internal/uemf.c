@@ -15,7 +15,7 @@
 /*
 File:      uemf.c
 Version:   0.0.9
-Date:      24-OCT-2012
+Date:      26-OCT-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -1081,10 +1081,6 @@ int get_DIB_params(
     \param colortype  DIB BitCount Enumeration
     \param use_ct     Kept for symmetry with RGBA_to_DIB, should be set to numCt
     \param invert     If DIB rows are in opposite order from RGBA rows
-    \param sl         start left position in the pixel array in the record to start extracting
-    \param st         start top  position in the pixel array in the record to start extracting
-    \param ew         Width of pixel array to extract
-    \param eh         Height of pixel array to extract
 */
 int DIB_to_RGBA(
        char        *px,
@@ -1095,11 +1091,7 @@ int DIB_to_RGBA(
        int          h,
        uint32_t     colortype,
        int          use_ct,
-       int          invert,
-       int          sl,
-       int          st,
-       int          ew,
-       int          eh
+       int          invert
    ){
    uint32_t     cbRgba_px;
    int          stride;
@@ -1113,7 +1105,6 @@ int DIB_to_RGBA(
    int          usedbytes;
    U_RGBQUAD    color;
    int32_t      index;
-   int          ilow,ihigh,rok; // For figuring out OK row when not entire array is converted
    
    // sanity checking
    if(!w || !h || !colortype || !px)return(1);
@@ -1121,8 +1112,8 @@ int DIB_to_RGBA(
    if(!use_ct && colortype < U_BCBM_COLOR16)return(3);   //color tables mandatory for < 16 bit
    if(use_ct && !numCt)return(4);                        //color table not adequately described
 
-   stride    = ew * 4;
-   cbRgba_px = stride * eh;
+   stride    = w * 4;
+   cbRgba_px = stride * h;
    bs = colortype/8;
    if(bs<1){
       bs=1;
@@ -1139,23 +1130,17 @@ int DIB_to_RGBA(
      istart = h-1;
      iend   = -1;
      iinc   = -1;
-     ihigh  = istart - st;
-     ilow   = ihigh - eh + 1;
    }
    else {
      istart = 0;
      iend   = h;
      iinc   = 1;
-     ilow   = st;
-     ihigh  = st + eh -1;
    }
 
    pxptr = px;
    tmp8  = 0;  // silences a compiler warning, tmp8 always sets when j=0, so never used uninitialized
    for(i=istart; i!=iend; i+=iinc){
-      if(i>=ilow && i<=ihigh){ rok=1; }
-      else {                   rok=0; }
-      rptr= *rgba_px + (i-ilow)*stride;
+      rptr= *rgba_px + i*stride;
       for(j=0; j<w; j++){
           if(use_ct){
              switch(colortype){
@@ -1220,17 +1205,85 @@ int DIB_to_RGBA(
                   return(7);            // This should not be possible, but might happen with memory corruption  
              }
           }
-          if(rok && j>=sl && j<=sl+ew-1){
-             *rptr++ = r;
-             *rptr++ = g;
-             *rptr++ = b;
-             *rptr++ = a;
-          }
+          *rptr++ = r;
+          *rptr++ = g;
+          *rptr++ = b;
+          *rptr++ = a;
       }
       for(j=0; j<pad; j++){ pxptr++; }  // DIB rows are all 4 byte aligned
    } 
    return(0);
 }
+
+/**
+    \brief Extract a subset of an RGBA bitmap array.
+    Frees the incoming bitmap array IF a subset is extracted, otherwise it is left alone.
+    If the entire array is extracted it just returns the incoming pointer.
+    If the subset requested is partially outside of the bitmap the region is clipped to the
+      bitmap boundaries and extracted.  This seems to be a (very) grey area in EMF files, and
+      even different Microsoft applications do not always do the same thing.  For instance,
+      XP Preview gives some different images for EMR_BITBLT records than does the "import image"
+      (but not unpacked) view in PowerPoint. Since all of these states are probably best viewed
+      as undefined or errors we can only try to do something reasonable and not blow up when
+      encountering one.
+    
+    \return Pointer to the sub array on success, NULL otherwise.
+    \param rgba_px    U_RGBA pixel array (32 bits), created by this routine, caller must free.
+    \param w          Width of pixel array in the record
+    \param h          Height of pixel array in the record
+    \param sl         start left position in the pixel array in the record to start extracting
+    \param st         start top  position in the pixel array in the record to start extracting
+    \param ew         Width of pixel array to extract
+    \param eh         Height of pixel array to extract
+*/
+char *RGBA_to_RGBA(
+       char        *rgba_px,
+       int          w,
+       int          h,
+       int          sl,
+       int          st,
+       int          *eew,
+       int          *eeh
+   ){
+   int          i;
+   char        *sub;
+   char        *sptr;
+   int          ew = *eew;
+   int          eh = *eeh;
+   
+   // sanity checking
+   if(w<=0 || h<=0 || ew<=0 || eh<=0 || !rgba_px)return(NULL);
+
+   if(sl>w || st >h)return(NULL);  // This is hopeless, the start point is outside of the array.
+   if(sl<0){
+      if(sl+ew<=0)return(NULL);    // This is hopeless, the start point is outside of the array.
+      ew += sl;
+      sl = 0;
+   }
+   if(st<0){
+      if(st+eh<=0)return(NULL);    // This is hopeless, the start point is outside of the array.
+      eh += st;
+      st = 0;
+   }
+   if(sl+ew > w)ew=w-sl;
+   if(st+eh > h)eh=h-st;
+   if(!sl && !st && (ew == w) && (eh == h)){
+      sub = rgba_px;
+   }
+   else {
+      sptr = sub = malloc(ew*eh*4);
+      if(!sub)return(NULL);
+      for(i=st; i<st+eh; i++){
+         memcpy(sptr,rgba_px + i*w*4 + sl*4,4*ew);
+         sptr += 4*ew;
+      }
+      free(rgba_px);
+   }
+   *eeh = eh;
+   *eew = ew;
+   return(sub);
+ }
+
 
 /* **********************************************************************************************
 These functions are for setting up, appending to, and then tearing down an EMF structure, including

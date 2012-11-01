@@ -59,7 +59,6 @@ namespace Extension {
 namespace Internal {
 
 
-static float device_scale = DEVICESCALE;
 static U_RECTL rc_old;
 static bool clipset = false;
 static uint32_t ICMmode=0;  // not used yet, but code to read it from EMF implemented
@@ -363,8 +362,6 @@ typedef struct emf_device_context {
 
     U_SIZEL sizeWnd;
     U_SIZEL sizeView;
-    float PixelsInX, PixelsInY;
-    float PixelsOutX, PixelsOutY;
     U_POINTL winorg;
     U_POINTL vieworg;
     double ScaleInX, ScaleInY;
@@ -390,8 +387,12 @@ typedef struct emf_callback_data {
     EMF_DEVICE_CONTEXT dc[EMF_MAX_DC+1]; // FIXME: This should be dynamic..
     int level;
     
-    double ulCornerX,ulCornerY;   // Upper left corner, from header rclBounds, in logical units
-    double ydir;                  // 1.0 if y is positive DOWN (usual case), -1.0 if y is negative DOWN
+    double W2PscaleX,W2PscaleY;   // World to Page scale.  Y may be negative for MM_LOMETRIC etc.
+    float  MM100InX, MM100InY;    // size of the drawing in hundredths of a millimeter
+    float  PixelsInX, PixelsInY;  // size of the drawing, in EMF device pixels
+    float  PixelsOutX, PixelsOutY;// size of the drawing, in Inkscape pixels
+    double ulCornerInX,ulCornerInY;     // Upper left corner, from header rclBounds, in logical units
+    double ulCornerOutX,ulCornerOutY;   // Upper left corner, in Inkscape pixels
     uint32_t mask;                // Draw properties
     int arcdir;                   //U_AD_COUNTERCLOCKWISE 1 or U_AD_CLOCKWISE 2
     
@@ -632,10 +633,7 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
             height,     // Height of pixel array in record                                                   
             colortype,  // DIB BitCount Enumeration                                                 
             numCt,      // Color table used if not 0                                                
-            invert,     // If DIB rows are in opposite order from RGBA rows                         
-            0,0,        // start position in pixel array in record
-            width,      // Width of extracted pixel array 
-            height      // Height of extracted pixel array 
+            invert      // If DIB rows are in opposite order from RGBA rows                         
             ) &&                                                                                    
          rgba_px)                                                                                   
       {                                                                                             
@@ -890,25 +888,21 @@ output_style(PEMF_CALLBACK_DATA d, int iType)
 static double
 _pix_x_to_point(PEMF_CALLBACK_DATA d, double px)
 {
-    double scale = (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0);
-    double tmp = px;
-    tmp -= d->dc[d->level].winorg.x;
-    tmp *= scale;
-    tmp -= d->ulCornerX;
-    tmp += d->dc[d->level].vieworg.x;
-    return tmp;
+    double scale = (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : d->W2PscaleX);
+    double tmp;
+    tmp = ((double) (px - d->dc[d->level].winorg.x))*scale
+              + d->dc[d->level].vieworg.x - d->ulCornerOutX;
+    return(tmp);
 }
 
 static double
 _pix_y_to_point(PEMF_CALLBACK_DATA d, double py)
 {
-    double scale = (d->dc[d->level].ScaleInY ? d->dc[d->level].ScaleInY : 1.0);
-    double tmp = py;
-    tmp -= d->dc[d->level].winorg.y;
-    tmp *= scale;
-    tmp += d->ydir*d->ulCornerY;
-    tmp += d->dc[d->level].vieworg.y;
-    return tmp;
+    double scale = (d->dc[d->level].ScaleInY ? d->dc[d->level].ScaleInY : d->W2PscaleY);
+    double tmp;
+    tmp = ((double) (py - d->dc[d->level].winorg.y))*scale
+              + d->dc[d->level].vieworg.y - d->ulCornerOutY;
+    return(tmp);
 }
 
 
@@ -917,13 +911,7 @@ pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py)
 {
     double wpx = px * d->dc[d->level].worldTransform.eM11 + py * d->dc[d->level].worldTransform.eM21 + d->dc[d->level].worldTransform.eDx;
     double x   = _pix_x_to_point(d, wpx);
-/*
-    double ppx = _pix_x_to_point(d, px);
-    double ppy = _pix_y_to_point(d, py);
-    double x = ppx * d->dc[d->level].worldTransform.eM11 + ppy * d->dc[d->level].worldTransform.eM21 + d->dc[d->level].worldTransform.eDx;
-*/
-    x *= device_scale;
-    
+
     return x;
 }
 
@@ -933,12 +921,6 @@ pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 
     double wpy = px * d->dc[d->level].worldTransform.eM12 + py * d->dc[d->level].worldTransform.eM22 + d->dc[d->level].worldTransform.eDy;
     double y   = _pix_y_to_point(d, wpy);
-/*
-    double ppx = _pix_x_to_point(d, px);
-    double ppy = _pix_y_to_point(d, py);
-    double y = ppx * d->dc[d->level].worldTransform.eM12 + ppy * d->dc[d->level].worldTransform.eM22 + d->dc[d->level].worldTransform.eDy;
-*/
-    y *= device_scale;
     
     return y;
 
@@ -947,13 +929,11 @@ pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 static double
 pix_to_size_point(PEMF_CALLBACK_DATA d, double px)
 {
-    double ppx = px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0);
-    double ppy = 0;
+    double ppx = px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : d->W2PscaleX);
+    // double ppy = 0;
 
-    double dx = ppx * d->dc[d->level].worldTransform.eM11 + ppy * d->dc[d->level].worldTransform.eM21;
-    dx *= device_scale;
-    double dy = ppx * d->dc[d->level].worldTransform.eM12 + ppy * d->dc[d->level].worldTransform.eM22;
-    dy *= device_scale;
+    double dx = ppx * d->dc[d->level].worldTransform.eM11;  // + ppy * d->dc[d->level].worldTransform.eM21
+    double dy = ppx * d->dc[d->level].worldTransform.eM12;  // + ppy * d->dc[d->level].worldTransform.eM22
 
     double tmp = sqrt(dx * dx + dy * dy);
     return tmp;
@@ -1315,11 +1295,12 @@ select_font(PEMF_CALLBACK_DATA d, int index)
     int cur_level = d->level;
     d->level = d->emf_obj[index].level;
     double font_size = pix_to_size_point( d, pEmr->elfw.elfLogFont.lfHeight );
-    /* snap the font_size to the nearest .01.  
-       See the notes where device_scale is set for the reason why.
+    /* snap the font_size to the nearest 1/32nd of a point.
+       (The size is converted from Pixels to points, snapped, and converted back.)
+       See the notes where d->W2Pscale[XY] are set for the reason why.
        Typically this will set the font to the desired exact size.  If some peculiar size
-       was intended this will, at worst, make it 1% off, which is unlikely to be a problem. */
-    font_size = round(100.0 * font_size)/100.0;
+       was intended this will, at worst, make it .03125 off, which is unlikely to be a problem. */
+    font_size = round(20.0 * 0.8 * font_size)/(20.0 * 0.8);
     d->level = cur_level;
     d->dc[d->level].style.font_size.computed = font_size;
     d->dc[d->level].style.font_weight.value =
@@ -1392,11 +1373,13 @@ int AI_hack(PU_EMRHEADER pEmr){
   PU_EMRSETMAPMODE nEmr = (PU_EMRSETMAPMODE) (ptr + pEmr->emr.nSize);
   char *string = NULL;
   if(pEmr->nDescription)string = U_Utf16leToUtf8((uint16_t *)((char *) pEmr + pEmr->offDescription), pEmr->nDescription, NULL);
-  if((pEmr->nDescription >= 13) && 
-     (0==strcmp("Adobe Systems",string)) &&
-     (nEmr->emr.iType == U_EMR_SETMAPMODE) && 
-     (nEmr->iMode == U_MM_ANISOTROPIC)){ ret=1; }
-  if(string)free(string);
+  if(string){
+     if((pEmr->nDescription >= 13) && 
+        (0==strcmp("Adobe Systems",string)) &&
+        (nEmr->emr.iType == U_EMR_SETMAPMODE) && 
+        (nEmr->iMode == U_MM_ANISOTROPIC)){ ret=1; }
+     free(string);
+  }
   return(ret);
 }
 
@@ -1442,6 +1425,7 @@ void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
             mempng.buffer = NULL;
            
             char *rgba_px=NULL;     // RGBA pixels
+            char *sub_px=NULL;      // RGBA pixels, subarray
             char *px=NULL;          // DIB pixels
             uint32_t width, height, colortype, numCt, invert;
             PU_RGBQUAD ct = NULL;
@@ -1474,17 +1458,24 @@ void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
                      height,     // Height of pixel array
                      colortype,  // DIB BitCount Enumeration
                      numCt,      // Color table used if not 0
-                     invert,     // If DIB rows are in opposite order from RGBA rows
-                     sl,st,      // starting point in pixel array
-                     sw,sh       // columns/rows to extract from the pixel array (output array size)
+                     invert      // If DIB rows are in opposite order from RGBA rows
                      ) && 
                   rgba_px)
                {
+                  sub_px = RGBA_to_RGBA(
+                     rgba_px,    // full pixel array from DIB
+                     width,      // Width of pixel array
+                     height,     // Height of pixel array
+                     sl,st,      // starting point in pixel array
+                     &sw,&sh     // columns/rows to extract from the pixel array (output array size)
+                  );
+
+                  if(!sub_px)sub_px=rgba_px;
                   toPNG(         // Get the image from the RGBA px into mempng
                       &mempng,
                       sw, sh,    // size of the extracted pixel array
-                      rgba_px);
-                  free(rgba_px);
+                      sub_px);
+                  free(sub_px);
                }
             }
             if(mempng.buffer){
@@ -1606,41 +1597,50 @@ std::cout << "BEFORE DRAW"
             tmp_outdef << "  xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n"; // needed for sodipodi:role
             tmp_outdef << "  version=\"1.0\"\n";
 
-            d->ulCornerX = pEmr->rclBounds.left;  // Upper left corner, from header rclBounds, in logical units, usually both 0, but not always
-            d->ulCornerY = pEmr->rclBounds.top;;  
-
-            if(pEmr->rclFrame.bottom < 0 || pEmr->rclFrame.top < 0){  d->ydir = -1.0; }
-            else {                                                    d->ydir =  1.0; }
 
             /* inclusive-inclusive, so the size is 1 more than the difference */
-            d->dc[d->level].PixelsInX = pEmr->rclFrame.right  - pEmr->rclFrame.left + 1;
-            d->dc[d->level].PixelsInY = pEmr->rclFrame.bottom - pEmr->rclFrame.top  + 1;
+            d->MM100InX  = pEmr->rclFrame.right    - pEmr->rclFrame.left + 1;
+            d->MM100InY  = pEmr->rclFrame.bottom   - pEmr->rclFrame.top  + 1;
+            d->PixelsInX = pEmr->rclBounds.right   - pEmr->rclBounds.left + 1;
+            d->PixelsInY = pEmr->rclBounds.bottom  - pEmr->rclBounds.top + 1;
+
             /* 
                calculate ratio of Inkscape dpi/device dpi
                This can cause problems later due to accuracy limits in the EMF.  A high resolution
-               EMF might have a final device_scale of 0.074998, and adjusting the (integer) device size
+               EMF might have a final W2Pscale[XY] of 0.074998, and adjusting the (integer) device size
                by 1 will still not get it exactly to 0.075.  Later when the font size is calculated it
                can end up as 29.9992 or 22.4994 instead of the intended 30 or 22.5.  This is handled by
                snapping font sizes to the nearest .01.  The best estimate is made by using both values.
             */
-               if (pEmr->szlMillimeters.cx && pEmr->szlDevice.cx) device_scale =  PX_PER_MM * 
-                    (pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
+            if (pEmr->szlMillimeters.cx && pEmr->szlDevice.cy){
+               d->W2PscaleX = d->W2PscaleY =  
+                   PX_PER_MM * 
+                   (pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/
+                   ( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
+            }
 
             /*  Adobe Illustrator files set mapmode to MM_ANISOTROPIC and somehow or other this 
                 converts the rclFrame values from MM_HIMETRIC to MM_HIENGLISH, with another factor of 3 thrown
                 in for good measure.  Ours not to question why...
             */
             if(AI_hack(pEmr)){
-               d->dc[d->level].PixelsInX *= 25.4/(10.0*3.0);
-               d->dc[d->level].PixelsInY *= 25.4/(10.0*3.0);
-               device_scale              *= 25.4/(10.0*3.0);
+               d->MM100InX  *= 25.4/(10.0*3.0);
+               d->MM100InY  *= 25.4/(10.0*3.0);
+               d->W2PscaleX *= 25.4/(10.0*3.0);
+               d->W2PscaleY *= 25.4/(10.0*3.0);
             }
 
-            d->MMX = d->dc[d->level].PixelsInX / 100.0;
-            d->MMY = d->dc[d->level].PixelsInY / 100.0;
+            d->MMX = d->MM100InX / 100.0;
+            d->MMY = d->MM100InY / 100.0;
 
-            d->dc[d->level].PixelsOutX = d->MMX * PX_PER_MM;
-            d->dc[d->level].PixelsOutY = d->MMY * PX_PER_MM;
+            d->PixelsOutX = d->MMX * PX_PER_MM;
+            d->PixelsOutY = d->MMY * PX_PER_MM;
+
+            // Upper left corner, from header rclBounds, in device units, usually both 0, but not always
+            d->ulCornerInX = pEmr->rclBounds.left;
+            d->ulCornerInY = pEmr->rclBounds.top;
+            d->ulCornerOutX = d->ulCornerInX * d->W2PscaleX;
+            d->ulCornerOutY = d->ulCornerInY * d->W2PscaleY;  
 
             tmp_outdef <<
                 "  width=\"" << d->MMX << "mm\"\n" <<
@@ -1847,8 +1847,8 @@ std::cout << "BEFORE DRAW"
             if (!d->dc[d->level].sizeWnd.cx || !d->dc[d->level].sizeWnd.cy) {
                 d->dc[d->level].sizeWnd = d->dc[d->level].sizeView;
                 if (!d->dc[d->level].sizeWnd.cx || !d->dc[d->level].sizeWnd.cy) {
-                    d->dc[d->level].sizeWnd.cx = d->dc[d->level].PixelsOutX;
-                    d->dc[d->level].sizeWnd.cy = d->dc[d->level].PixelsOutY;
+                    d->dc[d->level].sizeWnd.cx = d->PixelsOutX;
+                    d->dc[d->level].sizeWnd.cy = d->PixelsOutY;
                 }
             }
 
@@ -1856,17 +1856,17 @@ std::cout << "BEFORE DRAW"
                 d->dc[d->level].sizeView = d->dc[d->level].sizeWnd;
             }
 
-            d->dc[d->level].PixelsInX = d->dc[d->level].sizeWnd.cx;
-            d->dc[d->level].PixelsInY = d->dc[d->level].sizeWnd.cy;
-            
-            if (d->dc[d->level].PixelsInX && d->dc[d->level].PixelsInY) {
-                d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].PixelsInX;
-                d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].PixelsInY;
+            if (d->dc[d->level].sizeWnd.cx && d->dc[d->level].sizeWnd.cy) {
+                d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].sizeWnd.cx;
+                d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].sizeWnd.cy;
             }
             else {
                 d->dc[d->level].ScaleInX = 1;
                 d->dc[d->level].ScaleInY = 1;
             }
+            /* scales logical to EMF pixels, but we need logical to Inkscape pixels */
+            d->dc[d->level].ScaleInX *= d->PixelsOutX / d->PixelsInX;
+            d->dc[d->level].ScaleInY *= d->PixelsOutY / d->PixelsInY;
 
             break;
         }
@@ -1889,27 +1889,27 @@ std::cout << "BEFORE DRAW"
             if (!d->dc[d->level].sizeView.cx || !d->dc[d->level].sizeView.cy) {
                 d->dc[d->level].sizeView = d->dc[d->level].sizeWnd;
                 if (!d->dc[d->level].sizeView.cx || !d->dc[d->level].sizeView.cy) {
-                    d->dc[d->level].sizeView.cx = d->dc[d->level].PixelsOutX;
-                    d->dc[d->level].sizeView.cy = d->dc[d->level].PixelsOutY;
+                    d->dc[d->level].sizeView.cx = d->PixelsOutX;
+                    d->dc[d->level].sizeView.cy = d->PixelsOutY;
                 }
             }
 
             if (!d->dc[d->level].sizeWnd.cx || !d->dc[d->level].sizeWnd.cy) {
                 d->dc[d->level].sizeWnd = d->dc[d->level].sizeView;
             }
-
-            d->dc[d->level].PixelsInX = d->dc[d->level].sizeWnd.cx;
-            d->dc[d->level].PixelsInY = d->dc[d->level].sizeWnd.cy;
             
-            if (d->dc[d->level].PixelsInX && d->dc[d->level].PixelsInY) {
-                d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].PixelsInX;
-                d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].PixelsInY;
+            if (d->dc[d->level].sizeWnd.cx && d->dc[d->level].sizeWnd.cy) {
+                d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].sizeWnd.cx;
+                d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].sizeWnd.cy;
             }
             else {
                 d->dc[d->level].ScaleInX = 1;
                 d->dc[d->level].ScaleInY = 1;
             }
-
+            /* scales logical to EMF pixels, but we need logical to Inkscape pixels */
+            d->dc[d->level].ScaleInX *= d->PixelsOutX / d->PixelsInX;
+            d->dc[d->level].ScaleInY *= d->PixelsOutY / d->PixelsInY;
+            
             break;
         }
         case U_EMR_SETVIEWPORTORGEX:
@@ -1940,30 +1940,29 @@ std::cout << "BEFORE DRAW"
             switch (pEmr->iMode){
                case U_MM_TEXT:
                default:
-                  d->ydir = 1.0;
-                  // leave device_scale as is, device_scale maps LU pixels to inkscape pixels as set in the EMF header
+                  // Use values from the header.
                   break;
                case U_MM_LOMETRIC:  // 1 LU = 0.1 mm 
-                  d->ydir = -1.0;
-                  device_scale = 0.1 * PX_PER_MM;
+                  d->W2PscaleX = 0.1 * PX_PER_MM;
+                  d->W2PscaleY = -d->W2PscaleX;
                   break;
                case U_MM_HIMETRIC:  // 1 LU = 0.01 mm
-                  d->ydir = -1.0;
-                  device_scale = 0.01 * PX_PER_MM;
+                  d->W2PscaleX = 0.01 * PX_PER_MM;
+                  d->W2PscaleY = -d->W2PscaleX; 
                   break;
                case U_MM_LOENGLISH:  // 1 LU = 0.1 in
-                  d->ydir = -1.0;
-                  device_scale = 0.1 * PX_PER_IN;
+                  d->W2PscaleX = 0.01 * PX_PER_IN;
+                  d->W2PscaleY = -d->W2PscaleX;
                   break;
                case U_MM_HIENGLISH:  // 1 LU = 0.01 in
-                  d->ydir = -1.0;
-                  device_scale = 0.01 * PX_PER_IN;
+                  d->W2PscaleX = 0.001 * PX_PER_IN;
+                  d->W2PscaleY = -d->W2PscaleX; 
                   break;
                case U_MM_TWIPS:  // 1 LU = 1/1440  in
-                  d->ydir = -1.0;
-                  device_scale = (1.0/1440.0) * PX_PER_IN;
+                  d->W2PscaleX = (1.0/1440.0) * PX_PER_IN;
+                  d->W2PscaleY = -d->W2PscaleX;
                   break;
-               case U_MM_ISOTROPIC: // let scaleX etc. handle it, as set by SETVIEWPORTEXTEX and SETWINDOWEXTEX
+               case U_MM_ISOTROPIC: // ScaleIn[XY] should be set elsewhere by SETVIEWPORTEXTEX and SETWINDOWEXTEX
                   break;
                case U_MM_ANISOTROPIC:
                   break;
@@ -2710,8 +2709,6 @@ std::cout << "BEFORE DRAW"
                 int st = pEmr->Src.y + pEmr->xformSrc.eDy;
                 int sw = pEmr->cSrc.x; // extract the specified amount of the image 
                 int sh = pEmr->cSrc.y;
-                if(sl<0)sl=0;
-                if(st<0)st=0;
                 common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
                    pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
             }
@@ -2731,8 +2728,6 @@ std::cout << "BEFORE DRAW"
                 int st = pEmr->Src.y + pEmr->xformSrc.eDy;
                 int sw = 0; // extract all of the image
                 int sh = 0;
-                if(sl<0)sl=0;
-                if(st<0)st=0;
                 common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
                    pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
             }
@@ -2757,8 +2752,6 @@ std::cout << "BEFORE DRAW"
             int st = pEmr->Src.y;
             int sw = pEmr->cSrc.x; // extract the specified amount of the image 
             int sh = pEmr->cSrc.y;
-            if(sl<0)sl=0;
-            if(st<0)st=0;
             common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
                pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
 
@@ -3247,6 +3240,8 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.arcdir            = U_AD_COUNTERCLOCKWISE;
     d.dwRop2            = U_R2_COPYPEN;
     d.dwRop3            = 0;
+    d.W2PscaleX         = 1.0;
+    d.W2PscaleY         = 1.0;
     d.hatches.size      = 0;
     d.hatches.count     = 0;
     d.hatches.strings   = NULL;
