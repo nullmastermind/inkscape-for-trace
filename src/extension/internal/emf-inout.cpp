@@ -387,7 +387,8 @@ typedef struct emf_callback_data {
     EMF_DEVICE_CONTEXT dc[EMF_MAX_DC+1]; // FIXME: This should be dynamic..
     int level;
     
-    double W2PscaleX,W2PscaleY;   // World to Page scale.  Y may be negative for MM_LOMETRIC etc.
+    double E2IdirY;               // EMF Y direction relative to Inkscape Y direction.  Will be negative for MM_LOMETRIC etc.
+    double D2PscaleX,D2PscaleY;   // EMF device to Inkscape Page scale.
     float  MM100InX, MM100InY;    // size of the drawing in hundredths of a millimeter
     float  PixelsInX, PixelsInY;  // size of the drawing, in EMF device pixels
     float  PixelsOutX, PixelsOutY;// size of the drawing, in Inkscape pixels
@@ -888,20 +889,20 @@ output_style(PEMF_CALLBACK_DATA d, int iType)
 static double
 _pix_x_to_point(PEMF_CALLBACK_DATA d, double px)
 {
-    double scale = (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : d->W2PscaleX);
+    double scale = (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0);
     double tmp;
-    tmp = ((double) (px - d->dc[d->level].winorg.x))*scale
-              + d->dc[d->level].vieworg.x - d->ulCornerOutX;
+    tmp = ((((double) (px - d->dc[d->level].winorg.x))*scale) + d->dc[d->level].vieworg.x) * d->D2PscaleX;
+    tmp -= d->ulCornerOutX; //The EMF boundary rectangle can be anywhere, place its upper left corner in the Inkscape upper left corner
     return(tmp);
 }
 
 static double
 _pix_y_to_point(PEMF_CALLBACK_DATA d, double py)
 {
-    double scale = (d->dc[d->level].ScaleInY ? d->dc[d->level].ScaleInY : d->W2PscaleY);
+    double scale = (d->dc[d->level].ScaleInY ? d->dc[d->level].ScaleInY : 1.0);
     double tmp;
-    tmp = ((double) (py - d->dc[d->level].winorg.y))*scale
-              + d->dc[d->level].vieworg.y - d->ulCornerOutY;
+    tmp = ((((double) (py - d->dc[d->level].winorg.y))*scale) * d->E2IdirY + d->dc[d->level].vieworg.y) * d->D2PscaleY;
+    tmp -= d->ulCornerOutY; //The EMF boundary rectangle can be anywhere, place its upper left corner in the Inkscape upper left corner
     return(tmp);
 }
 
@@ -929,13 +930,13 @@ pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 static double
 pix_to_size_point(PEMF_CALLBACK_DATA d, double px)
 {
-    double ppx = px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : d->W2PscaleX);
+    double ppx = px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0) * d->D2PscaleX;
     // double ppy = 0;
 
     double dx = ppx * d->dc[d->level].worldTransform.eM11;  // + ppy * d->dc[d->level].worldTransform.eM21
     double dy = ppx * d->dc[d->level].worldTransform.eM12;  // + ppy * d->dc[d->level].worldTransform.eM22
 
-    double tmp = sqrt(dx * dx + dy * dy);
+    double tmp =  sqrt(dx * dx + dy * dy);
     return tmp;
 }
 
@@ -1297,7 +1298,7 @@ select_font(PEMF_CALLBACK_DATA d, int index)
     double font_size = pix_to_size_point( d, pEmr->elfw.elfLogFont.lfHeight );
     /* snap the font_size to the nearest 1/32nd of a point.
        (The size is converted from Pixels to points, snapped, and converted back.)
-       See the notes where d->W2Pscale[XY] are set for the reason why.
+       See the notes where d->D2Pscale[XY] are set for the reason why.
        Typically this will set the font to the desired exact size.  If some peculiar size
        was intended this will, at worst, make it .03125 off, which is unlikely to be a problem. */
     font_size = round(20.0 * 0.8 * font_size)/(20.0 * 0.8);
@@ -1605,18 +1606,18 @@ std::cout << "BEFORE DRAW"
             d->PixelsInY = pEmr->rclBounds.bottom  - pEmr->rclBounds.top + 1;
 
             /* 
-               calculate ratio of Inkscape dpi/device dpi
+               calculate ratio of Inkscape dpi/EMF device dpi
                This can cause problems later due to accuracy limits in the EMF.  A high resolution
-               EMF might have a final W2Pscale[XY] of 0.074998, and adjusting the (integer) device size
+               EMF might have a final D2Pscale[XY] of 0.074998, and adjusting the (integer) device size
                by 1 will still not get it exactly to 0.075.  Later when the font size is calculated it
                can end up as 29.9992 or 22.4994 instead of the intended 30 or 22.5.  This is handled by
                snapping font sizes to the nearest .01.  The best estimate is made by using both values.
             */
-            if (pEmr->szlMillimeters.cx && pEmr->szlDevice.cy){
-               d->W2PscaleX = d->W2PscaleY =  
-                   PX_PER_MM * 
-                   (pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/
-                   ( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
+            if ((pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy) && ( pEmr->szlDevice.cx + pEmr->szlDevice.cy)){
+               d->E2IdirY = 1.0;  // assume MM_TEXT, if not, this will be changed later
+               d->D2PscaleX = d->D2PscaleY = PX_PER_MM *
+                   (double)(pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/
+                   (double)( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
             }
 
             /*  Adobe Illustrator files set mapmode to MM_ANISOTROPIC and somehow or other this 
@@ -1626,8 +1627,8 @@ std::cout << "BEFORE DRAW"
             if(AI_hack(pEmr)){
                d->MM100InX  *= 25.4/(10.0*3.0);
                d->MM100InY  *= 25.4/(10.0*3.0);
-               d->W2PscaleX *= 25.4/(10.0*3.0);
-               d->W2PscaleY *= 25.4/(10.0*3.0);
+               d->D2PscaleX *= 25.4/(10.0*3.0);
+               d->D2PscaleY *= 25.4/(10.0*3.0);
             }
 
             d->MMX = d->MM100InX / 100.0;
@@ -1639,8 +1640,8 @@ std::cout << "BEFORE DRAW"
             // Upper left corner, from header rclBounds, in device units, usually both 0, but not always
             d->ulCornerInX = pEmr->rclBounds.left;
             d->ulCornerInY = pEmr->rclBounds.top;
-            d->ulCornerOutX = d->ulCornerInX * d->W2PscaleX;
-            d->ulCornerOutY = d->ulCornerInY * d->W2PscaleY;  
+            d->ulCornerOutX = d->ulCornerInX              * d->D2PscaleX;
+            d->ulCornerOutY = d->ulCornerInY * d->E2IdirY * d->D2PscaleY;  
 
             tmp_outdef <<
                 "  width=\"" << d->MMX << "mm\"\n" <<
@@ -1856,18 +1857,19 @@ std::cout << "BEFORE DRAW"
                 d->dc[d->level].sizeView = d->dc[d->level].sizeWnd;
             }
 
+            /* scales logical to EMF pixels, transfer a negative sign on Y, if any */
             if (d->dc[d->level].sizeWnd.cx && d->dc[d->level].sizeWnd.cy) {
                 d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].sizeWnd.cx;
                 d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].sizeWnd.cy;
+                if(d->dc[d->level].ScaleInY < 0){
+                   d->dc[d->level].ScaleInY *= -1.0;
+                   d->E2IdirY = -1.0;
+                }
             }
             else {
                 d->dc[d->level].ScaleInX = 1;
                 d->dc[d->level].ScaleInY = 1;
             }
-            /* scales logical to EMF pixels, but we need logical to Inkscape pixels */
-            d->dc[d->level].ScaleInX *= d->PixelsOutX / d->PixelsInX;
-            d->dc[d->level].ScaleInY *= d->PixelsOutY / d->PixelsInY;
-
             break;
         }
         case U_EMR_SETWINDOWORGEX:
@@ -1898,18 +1900,19 @@ std::cout << "BEFORE DRAW"
                 d->dc[d->level].sizeWnd = d->dc[d->level].sizeView;
             }
             
+            /* scales logical to EMF pixels, transfer a negative sign on Y, if any */
             if (d->dc[d->level].sizeWnd.cx && d->dc[d->level].sizeWnd.cy) {
                 d->dc[d->level].ScaleInX = (double) d->dc[d->level].sizeView.cx / (double) d->dc[d->level].sizeWnd.cx;
                 d->dc[d->level].ScaleInY = (double) d->dc[d->level].sizeView.cy / (double) d->dc[d->level].sizeWnd.cy;
+                if(d->dc[d->level].ScaleInY < 0){
+                   d->dc[d->level].ScaleInY *= -1.0;
+                   d->E2IdirY = -1.0;
+                }
             }
             else {
                 d->dc[d->level].ScaleInX = 1;
                 d->dc[d->level].ScaleInY = 1;
             }
-            /* scales logical to EMF pixels, but we need logical to Inkscape pixels */
-            d->dc[d->level].ScaleInX *= d->PixelsOutX / d->PixelsInX;
-            d->dc[d->level].ScaleInY *= d->PixelsOutY / d->PixelsInY;
-            
             break;
         }
         case U_EMR_SETVIEWPORTORGEX:
@@ -1940,31 +1943,21 @@ std::cout << "BEFORE DRAW"
             switch (pEmr->iMode){
                case U_MM_TEXT:
                default:
-                  // Use values from the header.
+                  // Use all values from the header.
                   break;
-               case U_MM_LOMETRIC:  // 1 LU = 0.1 mm 
-                  d->W2PscaleX = 0.1 * PX_PER_MM;
-                  d->W2PscaleY = -d->W2PscaleX;
-                  break;
+               /* For all of the following the indicated scale this will be encoded in WindowExtEx/ViewportExtex
+                  and show up in ScaleIn[XY]
+               */
+               case U_MM_LOMETRIC:  // 1 LU = 0.1 mm,
                case U_MM_HIMETRIC:  // 1 LU = 0.01 mm
-                  d->W2PscaleX = 0.01 * PX_PER_MM;
-                  d->W2PscaleY = -d->W2PscaleX; 
-                  break;
                case U_MM_LOENGLISH:  // 1 LU = 0.1 in
-                  d->W2PscaleX = 0.01 * PX_PER_IN;
-                  d->W2PscaleY = -d->W2PscaleX;
-                  break;
                case U_MM_HIENGLISH:  // 1 LU = 0.01 in
-                  d->W2PscaleX = 0.001 * PX_PER_IN;
-                  d->W2PscaleY = -d->W2PscaleX; 
-                  break;
                case U_MM_TWIPS:  // 1 LU = 1/1440  in
-                  d->W2PscaleX = (1.0/1440.0) * PX_PER_IN;
-                  d->W2PscaleY = -d->W2PscaleX;
+                  d->E2IdirY = -1.0;
+                  // Use d->D2Pscale[XY] values from the header.
                   break;
-               case U_MM_ISOTROPIC: // ScaleIn[XY] should be set elsewhere by SETVIEWPORTEXTEX and SETWINDOWEXTEX
-                  break;
-               case U_MM_ANISOTROPIC:
+              case U_MM_ISOTROPIC: // ScaleIn[XY] should be set elsewhere by SETVIEWPORTEXTEX and SETWINDOWEXTEX
+              case U_MM_ANISOTROPIC:
                   break;
             }
             break;
@@ -3240,8 +3233,9 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.arcdir            = U_AD_COUNTERCLOCKWISE;
     d.dwRop2            = U_R2_COPYPEN;
     d.dwRop3            = 0;
-    d.W2PscaleX         = 1.0;
-    d.W2PscaleY         = 1.0;
+    d.E2IdirY           = 1.0;
+    d.D2PscaleX         = 1.0;
+    d.D2PscaleY         = 1.0;
     d.hatches.size      = 0;
     d.hatches.count     = 0;
     d.hatches.strings   = NULL;
