@@ -558,7 +558,8 @@ bool LayersPanel::_handleKeyEvent(GdkEventKey *event)
     }
     return false;
 }
-void LayersPanel::_handleButtonEvent(GdkEventButton* event)
+
+bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
 {
     static unsigned doubleclick = 0;
 
@@ -573,9 +574,9 @@ void LayersPanel::_handleButtonEvent(GdkEventButton* event)
         }
     }
 
-    if ( event->type == GDK_BUTTON_RELEASE && (event->button == 1)
-            && (event->state & GDK_SHIFT_MASK)) {
-        // Shift left click on the visible/lock columns toggles "solo" mode
+    if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 1)
+            && (event->state & GDK_MOD1_MASK)) {
+        // Alt left click on the visible/lock columns - eat this event to keep row selection
         Gtk::TreeModel::Path path;
         Gtk::TreeViewColumn* col = 0;
         int x = static_cast<int>(event->x);
@@ -583,10 +584,45 @@ void LayersPanel::_handleButtonEvent(GdkEventButton* event)
         int x2 = 0;
         int y2 = 0;
         if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
-            if (col == _tree.get_column(COL_VISIBLE-1)) {
-                _takeAction(BUTTON_SOLO);
-            } else if (col == _tree.get_column(COL_LOCKED-1)) {
-                _takeAction(BUTTON_LOCK_OTHERS);
+            if (col == _tree.get_column(COL_VISIBLE-1) ||
+                    col == _tree.get_column(COL_LOCKED-1)) {
+                return true;
+            }
+        }
+    }
+
+    // TODO - ImageToggler doesn't seem to handle Shift/Alt clicks - so we deal with them here.
+    if ( (event->type == GDK_BUTTON_RELEASE) && (event->button == 1)
+            && (event->state & (GDK_SHIFT_MASK | GDK_MOD1_MASK))) {
+
+        Gtk::TreeModel::Path path;
+        Gtk::TreeViewColumn* col = 0;
+        int x = static_cast<int>(event->x);
+        int y = static_cast<int>(event->y);
+        int x2 = 0;
+        int y2 = 0;
+        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) ) {
+            if (event->state & GDK_SHIFT_MASK) {
+                // Shift left click on the visible/lock columns toggles "solo" mode
+                if (col == _tree.get_column(COL_VISIBLE - 1)) {
+                    _takeAction(BUTTON_SOLO);
+                } else if (col == _tree.get_column(COL_LOCKED - 1)) {
+                    _takeAction(BUTTON_LOCK_OTHERS);
+                }
+            } else if (event->state & GDK_MOD1_MASK) {
+                // Alt+left click on the visible/lock columns toggles "solo" mode and preserves selection
+                Gtk::TreeModel::iterator iter = _store->get_iter(path);
+                if (_store->iter_is_valid(iter)) {
+                    Gtk::TreeModel::Row row = *iter;
+                    SPObject *obj = row[_model->_colObject];
+                    if (col == _tree.get_column(COL_VISIBLE - 1)) {
+                        _desktop->toggleLayerSolo( obj );
+                        DocumentUndo::maybeDone(_desktop->doc(), "layer:solo", SP_VERB_LAYER_SOLO, _("Toggle layer solo"));
+                    } else if (col == _tree.get_column(COL_LOCKED - 1)) {
+                        _desktop->toggleLockOtherLayers( obj );
+                        DocumentUndo::maybeDone(_desktop->doc(), "layer:lockothers", SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
+                    }
+                }
             }
         }
     }
@@ -612,6 +648,7 @@ void LayersPanel::_handleButtonEvent(GdkEventButton* event)
         }
     }
 
+    return false;
 }
 
 /*
@@ -808,8 +845,8 @@ LayersPanel::LayersPanel() :
     _text_renderer->signal_edited().connect( sigc::mem_fun(*this, &LayersPanel::_handleEdited) );
     _text_renderer->signal_editing_canceled().connect( sigc::mem_fun(*this, &LayersPanel::_handleEditingCancelled) );
 
-    _tree.signal_button_press_event().connect_notify( sigc::mem_fun(*this, &LayersPanel::_handleButtonEvent) );
-    _tree.signal_button_release_event().connect_notify( sigc::mem_fun(*this, &LayersPanel::_handleButtonEvent) );
+    _tree.signal_button_press_event().connect( sigc::mem_fun(*this, &LayersPanel::_handleButtonEvent), false );
+    _tree.signal_button_release_event().connect( sigc::mem_fun(*this, &LayersPanel::_handleButtonEvent), false );
     _tree.signal_key_press_event().connect( sigc::mem_fun(*this, &LayersPanel::_handleKeyEvent), false );
 
     _scroller.add( _tree );
@@ -838,43 +875,34 @@ LayersPanel::LayersPanel() :
 
     SPDesktop* targetDesktop = getDesktop();
 
-#if !WITH_GTKMM_3_0
-    // TODO: This has been removed from Gtkmm 3.0. Check that everything still 
-    // looks OK!
-    _buttonsRow.set_child_min_width( 16 );
-#endif
-
-    _buttonsRow.set_layout (Gtk::BUTTONBOX_END);
-
     Gtk::Button* btn = manage( new Gtk::Button() );
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_NEW, GTK_STOCK_ADD, C_("Layers", "New") );
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_NEW) );
-    _buttonsRow.add( *btn );
-    _buttonsRow.set_child_secondary( *btn , true);
-
-    btn = manage( new Gtk::Button() );
-    _styleButton( *btn, targetDesktop, SP_VERB_LAYER_TO_TOP, GTK_STOCK_GOTO_TOP, C_("Layers", "Top") );
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_TOP) );
-    _watchingNonTop.push_back( btn );
-    _buttonsRow.add( *btn );
-
-    btn = manage( new Gtk::Button() );
-    _styleButton( *btn, targetDesktop, SP_VERB_LAYER_RAISE, GTK_STOCK_GO_UP, C_("Layers", "Up") );
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_UP) );
-    _watchingNonTop.push_back( btn );
-    _buttonsRow.add( *btn );
-
-    btn = manage( new Gtk::Button() );
-    _styleButton( *btn, targetDesktop, SP_VERB_LAYER_LOWER, GTK_STOCK_GO_DOWN, C_("Layers", "Dn") );
-    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DOWN) );
-    _watchingNonBottom.push_back( btn );
-    _buttonsRow.add( *btn );
+    _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
 
     btn = manage( new Gtk::Button() );
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_TO_BOTTOM, GTK_STOCK_GOTO_BOTTOM, C_("Layers", "Bot") );
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_BOTTOM) );
     _watchingNonBottom.push_back( btn );
-    _buttonsRow.add( *btn );
+    _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
+    
+    btn = manage( new Gtk::Button() );
+    _styleButton( *btn, targetDesktop, SP_VERB_LAYER_LOWER, GTK_STOCK_GO_DOWN, C_("Layers", "Dn") );
+    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DOWN) );
+    _watchingNonBottom.push_back( btn );
+    _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
+    
+    btn = manage( new Gtk::Button() );
+    _styleButton( *btn, targetDesktop, SP_VERB_LAYER_RAISE, GTK_STOCK_GO_UP, C_("Layers", "Up") );
+    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_UP) );
+    _watchingNonTop.push_back( btn );
+    _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
+    
+    btn = manage( new Gtk::Button() );
+    _styleButton( *btn, targetDesktop, SP_VERB_LAYER_TO_TOP, GTK_STOCK_GOTO_TOP, C_("Layers", "Top") );
+    btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_TOP) );
+    _watchingNonTop.push_back( btn );
+    _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
 
 //     btn = manage( new Gtk::Button("Dup") );
 //     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DUPLICATE) );
@@ -884,9 +912,10 @@ LayersPanel::LayersPanel() :
     _styleButton( *btn, targetDesktop, SP_VERB_LAYER_DELETE, GTK_STOCK_REMOVE, _("X") );
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &LayersPanel::_takeAction), (int)BUTTON_DELETE) );
     _watching.push_back( btn );
-    _buttonsRow.add( *btn );
-    _buttonsRow.set_child_secondary( *btn , true);
-
+    _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
+    
+    _buttonsRow.pack_start(_buttonsSecondary, Gtk::PACK_EXPAND_WIDGET);
+    _buttonsRow.pack_end(_buttonsPrimary, Gtk::PACK_EXPAND_WIDGET);
 
 
 

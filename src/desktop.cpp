@@ -549,12 +549,17 @@ void SPDesktop::toggleLayerSolo(SPObject *object) {
     bool othersShowing = false;
     std::vector<SPObject*> layers;
     for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
-        layers.push_back(obj);
-        othersShowing |= !SP_ITEM(obj)->isHidden();
+        // Don't hide ancestors, since that would in turn hide the layer as well
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersShowing |= !SP_ITEM(obj)->isHidden();
+        }
     }
     for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
-        layers.push_back(obj);
-        othersShowing |= !SP_ITEM(obj)->isHidden();
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersShowing |= !SP_ITEM(obj)->isHidden();
+        }
     }
 
 
@@ -1898,6 +1903,7 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_CLONETILER, "/dialogs/clonetiler") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_ITEM, "/dialogs/object") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SPELLCHECK, "/dialogs/spellcheck") );
+    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SYMBOLS, "/dialogs/symbols") );
 
     for (iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); iter++) {
         int verbId = iter->first;

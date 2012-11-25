@@ -19,6 +19,7 @@
 #include <gtk/gtk.h>
 
 #include "document.h"
+#include "../document-undo.h"
 #include "../document-private.h"
 #include "../gradient-chemistry.h"
 #include "inkscape.h"
@@ -169,7 +170,7 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     count_column->signal_clicked().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeCountColClick) );
 
     gvs->tree_select_connection = sel->treeview->get_selection()->signal_changed().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeSelection) );
-    sel->text_renderer->signal_edited().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeEdited) );
+    sel->text_renderer->signal_edited().connect( sigc::mem_fun(*sel, &SPGradientSelector::onGradientRename) );
 
     sel->scrolled_window = Gtk::manage(new Gtk::ScrolledWindow());
     sel->scrolled_window->add(*sel->treeview);
@@ -248,12 +249,9 @@ void SPGradientSelector::setSpread(SPGradientSpread spread)
 }
 
 
-GtkWidget *
-sp_gradient_selector_new (void)
+GtkWidget *sp_gradient_selector_new()
 {
-    SPGradientSelector *sel;
-
-    sel = (SPGradientSelector*)g_object_new (SP_TYPE_GRADIENT_SELECTOR, NULL);
+    SPGradientSelector *sel = SP_GRADIENT_SELECTOR(g_object_new (SP_TYPE_GRADIENT_SELECTOR, NULL));
 
     return (GtkWidget *) sel;
 }
@@ -289,7 +287,7 @@ SPGradientSpread SPGradientSelector::getSpread()
     return gradientSpread;
 }
 
-void SPGradientSelector::onTreeEdited( const Glib::ustring& path_string, const Glib::ustring& new_text)
+void SPGradientSelector::onGradientRename( const Glib::ustring& path_string, const Glib::ustring& new_text)
 {
     Gtk::TreePath path(path_string);
     Gtk::TreeModel::iterator iter = store->get_iter(path);
@@ -300,10 +298,12 @@ void SPGradientSelector::onTreeEdited( const Glib::ustring& path_string, const G
         if ( row ) {
             SPObject* obj = row[columns->data];
             if ( obj ) {
+                row[columns->name] = gr_prepare_label(obj);
                 if (!new_text.empty() && new_text != row[columns->name]) {
                   rename_id(obj, new_text );
+                  Inkscape::DocumentUndo::done(obj->document, SP_VERB_CONTEXT_GRADIENT,
+                                     _("Rename gradient"));
                 }
-                row[columns->name] = gr_prepare_label(obj);
             }
         }
     }
@@ -336,6 +336,14 @@ void SPGradientSelector::onTreeSelection()
         return;
     }
 
+    if (!treeview->has_focus()) {
+        /* Workaround for GTK bug on Windows/OS X
+         * When the treeview initially doesn't have focus and is clicked
+         * sometimes get_selection()->signal_changed() has the wrong selection
+         */
+        treeview->grab_focus();
+    }
+
     const Glib::RefPtr<Gtk::TreeSelection> sel = treeview->get_selection();
     if (!sel) {
         return;
@@ -350,7 +358,7 @@ void SPGradientSelector::onTreeSelection()
     }
 
     if (obj) {
-        sp_gradient_selector_vector_set (NULL, (SPGradient*)obj, this);
+        sp_gradient_selector_vector_set (NULL, SP_GRADIENT(obj), this);
     }
 }
 
@@ -363,7 +371,10 @@ bool SPGradientSelector::_checkForSelected(const Gtk::TreePath &path, const Gtk:
     {
         treeview->scroll_to_row(path, 0.5);
         Glib::RefPtr<Gtk::TreeSelection> select = treeview->get_selection();
+        bool wasBlocked = blocked;
+        blocked = true;
         select->select(iter);
+        blocked = wasBlocked;
         found = true;
     }
 
@@ -494,7 +505,7 @@ sp_gradient_selector_add_vector_clicked (GtkWidget */*w*/, SPGradientSelector *s
 
     Glib::ustring old_id = gr->getId();
 
-    gr = (SPGradient *) doc->getObjectByRepr(repr);
+    gr = SP_GRADIENT(doc->getObjectByRepr(repr));
 
     // Rename the new gradients id to be similar to the cloned gradients
     rename_id(gr, old_id);

@@ -296,7 +296,7 @@ Export::Export (void) :
     batch_box.pack_start(batch_export, false, false);
 
     hide_export.set_sensitive(true);
-    hide_export.set_active (true);
+    hide_export.set_active (prefs->getBool("/dialogs/export/hideexceptselected/value", false));
     hide_box.pack_start(hide_export, false, false);
 
 
@@ -328,6 +328,7 @@ Export::Export (void) :
     browse_button.signal_clicked().connect(sigc::mem_fun(*this, &Export::onBrowse));
     batch_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onBatchClicked));
     export_button.signal_clicked().connect(sigc::mem_fun(*this, &Export::onExport));
+    hide_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onHideExceptSelected));
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Export::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
@@ -547,7 +548,7 @@ void Export::updateCheckbuttons ()
         batch_export.set_sensitive(false);
     }
 
-    hide_export.set_sensitive (num > 0 && current_key == SELECTION_SELECTION);
+    //hide_export.set_sensitive (num > 0);
 }
 
 inline void Export::findDefaultSelection()
@@ -786,8 +787,6 @@ void Export::onAreaToggled ()
         }
     }
 
-    hide_export.set_sensitive (key == SELECTION_SELECTION);
-
     return;
 } // end of sp_export_area_toggled()
 
@@ -917,6 +916,11 @@ Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, c
         path = filename;
     }
     return path;
+}
+
+void Export::onHideExceptSelected ()
+{
+    prefs->setBool("/dialogs/export/hideexceptselected/value", hide_export.get_active());
 }
 
 /// Called when export button is clicked
@@ -1256,6 +1260,14 @@ void Export::onBrowse ()
     WCHAR* title_string = (WCHAR*)g_utf8_to_utf16(_("Select a filename for exporting"), -1, NULL, NULL, NULL);
     WCHAR* extension_string = (WCHAR*)g_utf8_to_utf16("*.png", -1, NULL, NULL, NULL);
     // Copy the selected file name, converting from UTF-8 to UTF-16
+    std::string dirname = Glib::path_get_dirname(filename.raw());
+    if ( !Glib::file_test(dirname, Glib::FILE_TEST_EXISTS) ||
+         Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) ||
+         dirname.empty() )
+    {
+        Glib::ustring tmp;
+        filename = create_filepath_from_id(tmp, tmp);
+    }
     WCHAR _filename[_MAX_PATH + 1];
     memset(_filename, 0, sizeof(_filename));
     gunichar2* utf16_path_string = g_utf8_to_utf16(filename.c_str(), -1, NULL, NULL, NULL);
@@ -1434,7 +1446,7 @@ void Export::areaXChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
         return;
     }
 
@@ -1481,7 +1493,7 @@ void Export::areaYChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj()))  {
+    if (sp_unit_selector_update_test (SP_UNIT_SELECTOR(unit_selector->gobj())))  {
         return;
     }
 
@@ -1636,7 +1648,7 @@ void Export::onBitmapWidthChange ()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
        return;
     }
 
@@ -1670,7 +1682,7 @@ void Export::onBitmapHeightChange ()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
        return;
     }
 
@@ -1730,7 +1742,7 @@ void Export::onExportXdpiChange()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
        return;
     }
 
@@ -1832,7 +1844,7 @@ void Export::setValuePx(Glib::RefPtr<Gtk::Adjustment>& adj, double val)
 void Export::setValuePx( Gtk::Adjustment *adj, double val)
 #endif
 {
-    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)unit_selector->gobj() );
+    const SPUnit *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(unit_selector->gobj()) );
 
     setValue(adj, sp_pixels_get_units (val, *unit));
 
@@ -1882,7 +1894,7 @@ float Export::getValuePx(  Gtk::Adjustment *adj )
 #endif
 {
     float value = getValue( adj);
-    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)unit_selector->gobj());
+    const SPUnit *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(unit_selector->gobj()));
 
     return sp_units_get_pixels (value, *unit);
 } // end of sp_export_value_get_px()
