@@ -1260,6 +1260,14 @@ void Export::onBrowse ()
     WCHAR* title_string = (WCHAR*)g_utf8_to_utf16(_("Select a filename for exporting"), -1, NULL, NULL, NULL);
     WCHAR* extension_string = (WCHAR*)g_utf8_to_utf16("*.png", -1, NULL, NULL, NULL);
     // Copy the selected file name, converting from UTF-8 to UTF-16
+    std::string dirname = Glib::path_get_dirname(filename.raw());
+    if ( !Glib::file_test(dirname, Glib::FILE_TEST_EXISTS) ||
+         Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) ||
+         dirname.empty() )
+    {
+        Glib::ustring tmp;
+        filename = create_filepath_from_id(tmp, tmp);
+    }
     WCHAR _filename[_MAX_PATH + 1];
     memset(_filename, 0, sizeof(_filename));
     gunichar2* utf16_path_string = g_utf8_to_utf16(filename.c_str(), -1, NULL, NULL, NULL);
@@ -1438,7 +1446,7 @@ void Export::areaXChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
         return;
     }
 
@@ -1485,7 +1493,7 @@ void Export::areaYChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj()))  {
+    if (sp_unit_selector_update_test (SP_UNIT_SELECTOR(unit_selector->gobj())))  {
         return;
     }
 
@@ -1640,7 +1648,7 @@ void Export::onBitmapWidthChange ()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
        return;
     }
 
@@ -1674,7 +1682,7 @@ void Export::onBitmapHeightChange ()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
        return;
     }
 
@@ -1734,7 +1742,7 @@ void Export::onExportXdpiChange()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
+    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
        return;
     }
 
@@ -1836,7 +1844,7 @@ void Export::setValuePx(Glib::RefPtr<Gtk::Adjustment>& adj, double val)
 void Export::setValuePx( Gtk::Adjustment *adj, double val)
 #endif
 {
-    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)unit_selector->gobj() );
+    const SPUnit *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(unit_selector->gobj()) );
 
     setValue(adj, sp_pixels_get_units (val, *unit));
 
@@ -1886,7 +1894,7 @@ float Export::getValuePx(  Gtk::Adjustment *adj )
 #endif
 {
     float value = getValue( adj);
-    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)unit_selector->gobj());
+    const SPUnit *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(unit_selector->gobj()));
 
     return sp_units_get_pixels (value, *unit);
 } // end of sp_export_value_get_px()

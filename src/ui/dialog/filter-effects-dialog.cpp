@@ -62,6 +62,7 @@
 
 #include "io/sys.h"
 #include <iostream>
+#include "selection-chemistry.h"
 
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/colorbutton.h>
@@ -1327,7 +1328,7 @@ void FilterEffectsDialog::FilterModifier::update_filters()
 
     for(const GSList *l = filters; l; l = l->next) {
         Gtk::TreeModel::Row row = *_model->append();
-        SPFilter* f = (SPFilter*)l->data;
+        SPFilter* f = SP_FILTER(l->data);
         row[_columns.filter] = f;
         const gchar* lbl = f->label();
         const gchar* id = f->getId();
@@ -1398,6 +1399,29 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
     if(filter) {
         SPDocument* doc = filter->document;
 
+        // Delete all references to this filter
+        GSList *all = get_all_items(NULL, _desktop->currentRoot(), _desktop, false, false, true, NULL);
+        for (GSList *i = all; i != NULL; i = i->next) {
+            if (!SP_IS_ITEM(i->data)) {
+                continue;
+            }
+            SPItem *item = SP_ITEM(i->data);
+            if (!item->style) {
+                continue;
+            }
+
+            const SPIFilter *ifilter = &(item->style->filter);
+            if (ifilter && ifilter->href) {
+                const SPObject *obj = ifilter->href->getObject();
+                if (obj && obj == (SPObject *)filter) {
+                    ::remove_filter(item, false);
+                }
+            }
+        }
+        if (all) {
+            g_slist_free(all);
+        }
+
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(filter->getRepr());
 
@@ -1454,7 +1478,7 @@ void FilterEffectsDialog::CellRendererConnection::get_size_vfunc(
     if(height) {
         // Scale the height depending on the number of inputs, unless it's
         // the first primitive, in which case there are no connections
-        SPFilterPrimitive* prim = (SPFilterPrimitive*)_primitive.get_value();
+        SPFilterPrimitive* prim = SP_FILTER_PRIMITIVE(_primitive.get_value());
         (*height) = size * input_count(prim);
     }
 }
@@ -1536,11 +1560,10 @@ void FilterEffectsDialog::PrimitiveList::update()
 {
     SPFilter* f = _dialog._filter_modifier.get_selected_filter();
     const SPFilterPrimitive* active_prim = get_selected();
-    bool active_found = false;
-
     _model->clear();
 
     if(f) {
+        bool active_found = false;
         _dialog._primitive_box.set_sensitive(true);
         _dialog.update_filter_general_settings_view();
         for(SPObject *prim_obj = f->children;
