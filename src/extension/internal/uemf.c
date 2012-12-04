@@ -14,8 +14,8 @@
 
 /*
 File:      uemf.c
-Version:   0.0.9
-Date:      26-OCT-2012
+Version:   0.0.10
+Date:      28-NOV-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -477,7 +477,8 @@ char *U_Utf16leToUtf8(
    size_t srclen,dstlen,status;
    if(max){ srclen = 2*max; }
    else {   srclen = 2*(1 +wchar16len(src)); } //include terminator, length in BYTES
-   dstlen = 1 + srclen;                     // this will always work, but may waste space
+   dstlen = 1 + 2*srclen;                      // this will always work, but may waste space
+                                               // worst case is all glyphs (==max) need 4 UTF-8 encoded bytes + terminator.
    dst2 = dst = (char *) calloc(dstlen,1);
    if(!dst)return(NULL);
    iconv_t conv = iconv_open("UTF-8", "UTF-16LE");
