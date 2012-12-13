@@ -14,8 +14,8 @@
 
 /*
 File:      uemf.c
-Version:   0.0.10
-Date:      28-NOV-2012
+Version:   0.0.11
+Date:      07-DEC-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -101,17 +101,6 @@ definitions are not needed in end user code, so they are here rather than in uem
          ((B *) A)->cbBitsMask   = 0;\
       }
       
-/* iconv() has a funny cast on some older systems, on most recent ones
-   it is just char **.  This tries to work around the issue.  If you build this
-   on another funky system this code may need to be modified, or define ICONV_CAST
-   on the compile line(but it may be tricky).
-*/
-#ifdef SOL8
-#define ICONV_CAST (const char **)
-#endif  //SOL8
-#if !defined(ICONV_CAST)
-#define ICONV_CAST (char **)
-#endif  //ICONV_CAST
 //! @endcond
 
 /* **********************************************************************************************
@@ -131,59 +120,6 @@ int memprobe(
    char *ptr=(char *)buf;
    for(;size;size--,ptr++){ sum += *ptr; }  // read all bytes, trigger valgrind warning if any uninitialized
    return(sum);
-}
-
-/**
-    \brief Dump a UTF8  string.  Not for use in production code.
-    \param src string to examine
-*/
-void wchar8show(
-      const char *src
-   ){
-   printf("char show\n");
-   size_t srclen = 0;
-   while(*src){ printf("%d %d %x\n",(int) srclen,*src,*src); srclen++; src++; }
-}
-
-/**
-    \brief Dump a UTF16  string.  Not for use in production code.
-    \param src string to examine
-*/
-void wchar16show(
-      const uint16_t *src
-   ){
-   printf("uint16_t show\n");
-   size_t srclen = 0;
-   while(*src){ printf("%d %d %x\n",(int) srclen,*src,*src); srclen++; src++; }
-}
-
-/** 
-    \brief Dump a UTF32 string.  Not for use in production code.
-*/
-void wchar32show(
-      const uint32_t *src
-   ){
-   printf("uint32_t show\n");
-   size_t srclen = 0;
-   while(*src){ printf("%d %d %x\n",(int) srclen,*src,*src); srclen++; src++; }
-}
-
-/**
-    \brief Dump a wchar_t string.  Not for use in production code.
-    \param src string to examine
-*/
-void wchartshow(
-      const wchar_t *src
-   ){
-   uint32_t val;
-   printf("wchar_t show\n");
-   size_t srclen = 0;
-   while(*src){
-      val = *src;  // because *src is wchar_t is not strictly an integer type, can cause warnings on next line
-      printf("%d %d %x\n",(int) srclen,val,val); 
-      srclen++; 
-      src++;
-   }
 }
 
 /**
@@ -212,348 +148,9 @@ void dumpeht(
 }
 
 /* **********************************************************************************************
-These functions are used for character type conversions, Image conversions, and other
-utility operations
+These functions are used for Image conversions and other
+utility operations.  Character type conversions are in uemf_utf.c
 *********************************************************************************************** */
-
-/**
-    \brief Find the number of (storage) characters in a 16 bit character string, not including terminator.
-    \param src string to examine
-*/
-size_t wchar16len(
-      const uint16_t *src
-   ){
-   size_t srclen = 0;
-   while(*src){ srclen++; src++; }
-   return(srclen);
-}
-
-/**
-    \brief Find the number of (storage) characters in a 32 bit character  string, not including terminator.
-    \param src string to examine
-*/
-size_t wchar32len(
-      const uint32_t *src
-   ){
-   size_t srclen = 0;
-   while(*src){ srclen++; src++; }
-   return(srclen);
-}
-
-/**
-    \brief Strncpy for wchar16 (UTF16).
-    \param dst destination (already allocated)  
-    \param src source                           
-    \param nchars number of characters to copy  
-*/
-void   wchar16strncpy(
-      uint16_t       *dst,
-      const uint16_t *src,
-      size_t          nchars
-   ){
-   for(;nchars;nchars--,dst++,src++){
-     *dst = *src;
-     if(!*src)break;
-   }
-}
-
-/**
-    \brief Fill the output string with N characters, if the input string is shorter than N, pad with nulls.
-    \param dst destination (already allocated) 
-    \param src source
-    \param nchars number of characters to copy 
-    
-*/
-void   wchar16strncpypad(
-      uint16_t       *dst,
-      const uint16_t *src,
-      size_t          nchars
-   ){
-   for(;*src && nchars;nchars--,dst++,src++){ *dst = *src; }
-   for(;nchars;nchars--,dst++){               *dst = 0;    }  // Pad the remainder
-}
-
-/*  For the following converstion functions, remember that iconv() modifies ALL of its parameters,
-    so save a pointer to the destination buffer!!!!
-    It isn't clear that terminators are being
-    copied properly, so be sure allocated space is a bit larger and cleared.
-*/
-
-/** 
-    \brief Convert a UTF32LE string to a UTF16LE string.
-    \returns pointer to new string or NULL if it fails
-    \param src wchar_t string to convert
-    \param max number of characters to convert, if 0, until terminator
-    \param len number of characters in new string, NOT including terminator
-*/
-uint16_t *U_Utf32leToUtf16le(
-      const uint32_t *src,
-      size_t          max,
-      size_t         *len
-   ){
-   char *dst,*dst2;
-   size_t srclen,dstlen,status;
-
-   if(max){ srclen = 4*max; }
-   else {   srclen = 4 + 4*wchar32len(src); } //include terminator, length in BYTES
-   
-   dstlen = 2 + srclen;                     // this will always work, but may waste space
-   dst2  = dst = calloc(dstlen,1);          // so there will be at least one terminator
-   if(!dst)return(NULL);
-   iconv_t conv = iconv_open("UTF-16LE", "UTF-32LE");
-   status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=wchar16len((uint16_t *)dst2);
-   return((uint16_t *)dst2);
-}
-
-/**
-    \brief  Convert a UTF16LE string to a UTF32LE string.
-    \return pointer to new string or NULL if it fails
-    \param src UTF16LE string to convert
-    \param max number of characters to convert, if 0, until terminator
-    \param len number of characters in new string, NOT including terminator
-*/
-uint32_t *U_Utf16leToUtf32le(
-      const uint16_t *src,
-      size_t          max,
-      size_t         *len
-   ){
-   char *dst,*dst2;
-   char *src2 = (char *) src;
-   size_t srclen,dstlen,status;
-   if(max){ srclen = 2*max; }
-   else {   srclen = 2*wchar16len(src)+2; } // include terminator, length in BYTES
-   dstlen = 2*(2 + srclen);                 // This should always work
-   dst2 = dst = calloc(dstlen,1);
-   if(!dst)return(NULL);
-   iconv_t conv = iconv_open("UTF-32LE",   "UTF-16LE");
-   if ( conv == (iconv_t)-1)return(NULL);
-   status = iconv(conv, ICONV_CAST &src2, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=wchar32len((uint32_t *)dst2);
-   return((uint32_t *) dst2);
-}
-
-/**
-    \brief  Convert a Latin1 string to a UTF32LE string.
-    \return pointer to new string or NULL if it fails
-    \param src Latin1 string to convert
-    \param max number of characters to convert, if 0, until terminator
-    \param len number of characters in new string, NOT including terminator
-    
-    
-    U_EMR_EXTTEXTOUTA records are "8 bit ASCII".  In theory that is ASCII in an 8
-    bit character, but numerous applications store Latin1 in them, and some
-    _may_ store UTF-8 in them.  Since very vew Latin1 strings are valid UTF-8 strings,
-    call U_Utf8ToUtf32le first, and if it fails, then call this function.
-*/
-uint32_t *U_Latin1ToUtf32le(
-      const char *src,
-      size_t      max,
-      size_t     *len
-   ){
-   char *dst,*dst2;
-   char *src2 = (char *) src;
-   size_t srclen,dstlen,status;
-   if(max){ srclen = max; }
-   else {   srclen = strlen(src)+1; }       // include terminator, length in BYTES
-   dstlen = sizeof(uint32_t)*(1 + srclen);  // This should always work but might waste some space
-   dst2 = dst = calloc(dstlen,1);
-   if(!dst)return(NULL);
-   iconv_t conv = iconv_open("UTF-32LE",   "LATIN1");
-   if ( conv == (iconv_t) -1)return(NULL);
-   status = iconv(conv, ICONV_CAST &src2, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=wchar32len((uint32_t *)dst2);
-   return((uint32_t *) dst2);
-}
-
-/**
-    \brief  Convert a UTF8 string to a UTF32LE string.
-    \return pointer to new string or NULL if it fails
-    \param src UTF8 string to convert
-    \param max number of characters to convert, if 0, until terminator
-    \param len number of characters in new string, NOT including terminator
-*/
-uint32_t *U_Utf8ToUtf32le(
-      const char *src,
-      size_t      max,
-      size_t     *len
-   ){
-   char *dst,*dst2;
-   char *src2 = (char *) src;
-   size_t srclen,dstlen,status;
-   if(max){ srclen = max; }
-   else {   srclen = strlen(src)+1; }       // include terminator, length in BYTES
-   dstlen = sizeof(uint32_t)*(1 + srclen);  // This should always work but might waste some space
-   dst2 = dst = calloc(dstlen,1);
-   if(!dst)return(NULL);
-   iconv_t conv = iconv_open("UTF-32LE",   "UTF-8");
-   if ( conv == (iconv_t) -1)return(NULL);
-   status = iconv(conv, ICONV_CAST &src2, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=wchar32len((uint32_t *)dst2);
-   return((uint32_t *) dst2);
-}
-
-/**
-    \brief  Convert a UTF32LE string to a UTF8 string.
-    \return pointer to new string or NULL if it fails
-    \param src wchar_t string to convert                                       
-    \param max number of characters to convert, if 0, until terminator         
-    \param len number of characters in new string, NOT including terminator    
-*/
-char *U_Utf32leToUtf8(
-      const uint32_t *src,
-      size_t          max,
-      size_t         *len
-   ){
-   char *dst,*dst2;
-   char *src2 = (char *) src;
-   size_t srclen,dstlen,status;
-   if(max){ srclen = 4*max; }
-   else {   srclen = 4*(1 + wchar32len(src)); } //include terminator, length in BYTES
-   dstlen = 1 + srclen;                         // This should always work but might waste some space
-   dst2 = dst = calloc(dstlen,1);
-   if(!dst)return(NULL);
-   iconv_t conv = iconv_open("UTF-8",   "UTF-32LE");
-   if ( conv == (iconv_t)-1)return(NULL);
-   status = iconv(conv, ICONV_CAST &src2, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=strlen(dst2);
-   return(dst2);
-}
-
-/**
-   \brief Convert a UTF-8 string to a UTF16-LE string.
-   \return pointer to new string or NULL if it fails
-   \param src UTF8 string to convert
-   \param max number of characters to convert, if 0, until terminator
-   \param len number of characters in new string, NOT including terminator
-*/
-uint16_t *U_Utf8ToUtf16le(
-      const char   *src,
-      size_t        max,
-      size_t       *len
-   ){
-   char *dst,*dst2;
-   size_t srclen,dstlen,status;
-   iconv_t conv;
-
-   if(max){ srclen = max; }
-   else {   srclen = strlen(src)+1; }       // include terminator, length in BYTES
-   dstlen = 2 * (1 + srclen);               // this will always work, but may waste space
-   dst2 = dst =calloc(dstlen,1);            // so there will always be a terminator
-   if(!dst)return(NULL);
-   conv = iconv_open("UTF-16LE", "UTF-8");
-   if (conv == (iconv_t) -1)return(NULL);
-   status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status == (size_t) -1)return(NULL);
-   if(len)*len=wchar16len((uint16_t *)dst2);
-   return((uint16_t *)dst2);
-}
-
-/**
-    \brief Convert a UTF16LE string to a UTF8 string.
-    \return pointer to new UTF8 string or NULL if it fails
-    \param src UTF16LE string to convert
-    \param max number of characters to convert, if 0, until terminator
-    \param len number of characters in new string, NOT including terminator
-*/
-char *U_Utf16leToUtf8(
-      const uint16_t *src,
-      size_t          max,
-      size_t         *len
-   ){
-   char *dst, *dst2;
-   char *ret=NULL;
-   size_t srclen,dstlen,status;
-   if(max){ srclen = 2*max; }
-   else {   srclen = 2*(1 +wchar16len(src)); } //include terminator, length in BYTES
-   dstlen = 1 + 2*srclen;                      // this will always work, but may waste space
-                                               // worst case is all glyphs (==max) need 4 UTF-8 encoded bytes + terminator.
-   dst2 = dst = (char *) calloc(dstlen,1);
-   if(!dst)return(NULL);
-   iconv_t conv = iconv_open("UTF-8", "UTF-16LE");
-   status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
-   iconv_close(conv);
-   if(status != (size_t) -1){
-      if(len)*len=strlen(dst2);
-      ret=U_strdup(dst2);                     // make a string of exactly the right size
-   }
-   free(dst2);                                // free the one which was probably too big
-   return(ret);
-}
-
-/**
-    \brief Put a single 16 bit character into UTF-16LE form.
-    
-    Used in conjunction with U_Utf16leEdit(), because the character
-    representation would otherwise be dependent on machine Endianness.
-  
-    \return UTF16LE representation of the character.
-    \param src 16 bit character
-   
-*/
-uint16_t U_Utf16le(const uint16_t src){
-    uint16_t dst=src;
-#if U_BYTE_SWAP
-    U_swap2(&dst,1);
-#endif
-    return(dst);
-}
-
-/**
-    \brief Single character replacement in a UTF-16LE string.
-    
-    Used solely for the Description field which contains
-    embedded nulls, which makes it difficult to manipulate.  Use some other character and then swap it.
-  
-    \return number of substitutions, or -1 if src is not defined 
-    \param src UTF16LE string to edit
-    \param find character to replace
-    \param replace replacestitute character
-   
-*/
-int U_Utf16leEdit(
-      uint16_t *src,
-      uint16_t  find,
-      uint16_t  replace
-   ){
-   int count=0;
-   if(!src)return(-1);
-   while(*src){ 
-     if(*src == find){ *src = replace; count++; } 
-     src++;
-   }
-   return(count);
-}
-
-/**
-    \brief strdup for when strict C99 compliance is enforced
-    \returns duplicate string or NULL on error
-    \param s string to duplicate
-*/
-char *U_strdup(const char *s){
-   char   *news=NULL;
-   size_t  slen;
-   if(s){
-      slen = strlen(s) + 1; //include the terminator!
-      news = malloc(slen);
-      if(news){
-         memcpy(news,s,slen);
-      }
-   }
-   return(news);
-   
-}
 
 /**
     \brief Make up an approximate dx array to pass to emrtext_set(), based on character height and weight.
@@ -601,132 +198,132 @@ uint32_t emr_properties(uint32_t type){
       if(!table){
          table = (uint32_t *) malloc(sizeof(uint32_t)*(1 + U_EMR_MAX));
          if(!table)return(result); 
-   //                                                              0x40 0x20 0x10 0x08 0x04 0x02 0x01
-   //                 Path properties (U_DRAW_*)                        ALTERS    ONLYTO    VISIBLE   
-   //                                                              PATH      FORCE     CLOSED    NOTEMPTY
+   //                                                               0x80 0x40 0x20 0x10 0x08 0x04 0x02 0x01
+   //                 Path properties (U_DRAW_*)                    TEXT      ALTERS    ONLYTO    VISIBLE   
+   //                                                                    PATH      FORCE     CLOSED    NOTEMPTY
          table[  0] = 0x00;   //!<   Does not map to any EMR record
-         table[  1] = 0x00;   //!<   U_EMRHEADER                   0    0    0    0    0    0    0 
-         table[  2] = 0x03;   //!<   U_EMRPOLYBEZIER               0    0    0    0    0    1    1
-         table[  3] = 0x07;   //!<   U_EMRPOLYGON                  0    0    0    0    1    1    1
-         table[  4] = 0x03;   //!<   U_EMRPOLYLINE                 0    0    0    0    0    1    1
-         table[  5] = 0x0B;   //!<   U_EMRPOLYBEZIERTO             0    0    0    1    0    1    1
-         table[  6] = 0x0B;   //!<   U_EMRPOLYLINETO               0    0    0    1    0    1    1
-         table[  7] = 0x03;   //!<   U_EMRPOLYPOLYLINE             0    0    0    0    0    1    1
-         table[  8] = 0x07;   //!<   U_EMRPOLYPOLYGON              0    0    0    0    1    1    1
-         table[  9] = 0x20;   //!<   U_EMRSETWINDOWEXTEX           0    1    0    0    0    0    0
-         table[ 10] = 0x20;   //!<   U_EMRSETWINDOWORGEX           0    1    0    0    0    0    0
-         table[ 11] = 0x20;   //!<   U_EMRSETVIEWPORTEXTEX         0    1    0    0    0    0    0
-         table[ 12] = 0x20;   //!<   U_EMRSETVIEWPORTORGEX         0    1    0    0    0    0    0
-         table[ 13] = 0x20;   //!<   U_EMRSETBRUSHORGEX            0    1    0    0    0    0    0
-         table[ 14] = 0x02;   //!<   U_EMREOF                      0    1    0    0    0    0    0  Force out any pending draw
-         table[ 15] = 0x02;   //!<   U_EMRSETPIXELV                0    0    0    0    0    1    0
-         table[ 16] = 0x20;   //!<   U_EMRSETMAPPERFLAGS           0    1    0    0    0    0    0
-         table[ 17] = 0x20;   //!<   U_EMRSETMAPMODE               0    1    0    0    0    0    0
-         table[ 18] = 0x20;   //!<   U_EMRSETBKMODE                0    1    0    0    0    0    0
-         table[ 19] = 0x20;   //!<   U_EMRSETPOLYFILLMODE          0    1    0    0    0    0    0
-         table[ 20] = 0x20;   //!<   U_EMRSETROP2                  0    1    0    0    0    0    0
-         table[ 21] = 0x20;   //!<   U_EMRSETSTRETCHBLTMODE        0    1    0    0    0    0    0
-         table[ 22] = 0x20;   //!<   U_EMRSETTEXTALIGN             0    1    0    0    0    0    0
-         table[ 23] = 0x20;   //!<   U_EMRSETCOLORADJUSTMENT       0    1    0    0    0    0    0
-         table[ 24] = 0x20;   //!<   U_EMRSETTEXTCOLOR             0    1    0    0    0    0    0
-         table[ 25] = 0x20;   //!<   U_EMRSETBKCOLOR               0    1    0    0    0    0    0
-         table[ 26] = 0x20;   //!<   U_EMROFFSETCLIPRGN            0    1    0    0    0    0    0
-         table[ 27] = 0x09;   //!<   U_EMRMOVETOEX                 0    0    0    1    0    0    1
-         table[ 28] = 0x20;   //!<   U_EMRSETMETARGN               0    1    0    0    0    0    0
-         table[ 29] = 0x20;   //!<   U_EMREXCLUDECLIPRECT          0    1    0    0    0    0    0
-         table[ 30] = 0x20;   //!<   U_EMRINTERSECTCLIPRECT        0    1    0    0    0    0    0
-         table[ 31] = 0x20;   //!<   U_EMRSCALEVIEWPORTEXTEX       0    1    0    0    0    0    0
-         table[ 32] = 0x20;   //!<   U_EMRSCALEWINDOWEXTEX         0    1    0    0    0    0    0
-         table[ 33] = 0x20;   //!<   U_EMRSAVEDC                   0    1    0    0    0    0    0
-         table[ 34] = 0x20;   //!<   U_EMRRESTOREDC                0    1    0    0    0    0    0
-         table[ 35] = 0x20;   //!<   U_EMRSETWORLDTRANSFORM        0    1    0    0    0    0    0
-         table[ 36] = 0x20;   //!<   U_EMRMODIFYWORLDTRANSFORM     0    1    0    0    0    0    0
-         table[ 37] = 0x20;   //!<   U_EMRSELECTOBJECT             0    1    0    0    0    0    0
-         table[ 38] = 0x20;   //!<   U_EMRCREATEPEN                0    1    0    0    0    0    0
-         table[ 39] = 0x20;   //!<   U_EMRCREATEBRUSHINDIRECT      0    1    0    0    0    0    0
-         table[ 40] = 0x20;   //!<   U_EMRDELETEOBJECT             0    1    0    0    0    0    0
-         table[ 41] = 0x03;   //!<   U_EMRANGLEARC                 0    0    0    0    0    1    1
-         table[ 42] = 0x07;   //!<   U_EMRELLIPSE                  0    0    0    0    1    1    1
-         table[ 43] = 0x07;   //!<   U_EMRRECTANGLE                0    0    0    0    1    1    1
-         table[ 44] = 0x07;   //!<   U_EMRROUNDRECT                0    0    0    0    1    1    1
-         table[ 45] = 0x03;   //!<   U_EMRARC                      0    0    0    0    0    1    1
-         table[ 46] = 0x07;   //!<   U_EMRCHORD                    0    0    0    0    1    1    1
-         table[ 47] = 0x07;   //!<   U_EMRPIE                      0    0    0    0    1    1    1
-         table[ 48] = 0x20;   //!<   U_EMRSELECTPALETTE            0    1    0    0    0    0    0
-         table[ 49] = 0x20;   //!<   U_EMRCREATEPALETTE            0    1    0    0    0    0    0
-         table[ 50] = 0x20;   //!<   U_EMRSETPALETTEENTRIES        0    1    0    0    0    0    0
-         table[ 51] = 0x20;   //!<   U_EMRRESIZEPALETTE            0    1    0    0    0    0    0
-         table[ 52] = 0x20;   //!<   U_EMRREALIZEPALETTE           0    1    0    0    0    0    0
-         table[ 53] = 0x02;   //!<   U_EMREXTFLOODFILL             0    0    0    0    0    1    0
-         table[ 54] = 0x0B;   //!<   U_EMRLINETO                   0    0    0    1    0    1    1
-         table[ 55] = 0x0B;   //!<   U_EMRARCTO                    0    0    0    1    0    1    1
-         table[ 56] = 0x03;   //!<   U_EMRPOLYDRAW                 0    0    0    0    0    1    1
-         table[ 57] = 0x20;   //!<   U_EMRSETARCDIRECTION          0    1    0    0    0    0    0
-         table[ 58] = 0x20;   //!<   U_EMRSETMITERLIMIT            0    1    0    0    0    0    0
-         table[ 59] = 0x60;   //!<   U_EMRBEGINPATH                1    1    0    0    0    0    0
-         table[ 60] = 0x00;   //!<   U_EMRENDPATH                  0    0    0    0    0    0    0
-         table[ 61] = 0x04;   //!<   U_EMRCLOSEFIGURE              0    0    0    0    1    0    0
-         table[ 62] = 0x14;   //!<   U_EMRFILLPATH                 0    0    1    0    1    0    0
-         table[ 63] = 0x14;   //!<   U_EMRSTROKEANDFILLPATH        0    0    1    0    1    0    0
-         table[ 64] = 0x10;   //!<   U_EMRSTROKEPATH               0    0    1    0    0    0    0
-         table[ 65] = 0x20;   //!<   U_EMRFLATTENPATH              0    1    0    0    0    0    0
-         table[ 66] = 0x20;   //!<   U_EMRWIDENPATH                0    1    0    0    0    0    0
-         table[ 67] = 0x20;   //!<   U_EMRSELECTCLIPPATH           0    1    0    0    0    0    0
-         table[ 68] = 0x20;   //!<   U_EMRABORTPATH                0    1    0    0    0    0    0
-         table[ 69] = 0x20;   //!<   U_EMRUNDEF69                  0    1    0    0    0    0    0
-         table[ 70] = 0x00;   //!<   U_EMRCOMMENT                  0    0    0    0    0    0    0
-         table[ 71] = 0x02;   //!<   U_EMRFILLRGN                  0    0    0    0    0    1    0
-         table[ 72] = 0x02;   //!<   U_EMRFRAMERGN                 0    0    0    0    0    1    0
-         table[ 73] = 0x02;   //!<   U_EMRINVERTRGN                0    0    0    0    0    1    0
-         table[ 74] = 0x02;   //!<   U_EMRPAINTRGN                 0    0    0    0    0    1    0
-         table[ 75] = 0x20;   //!<   U_EMREXTSELECTCLIPRGN         0    1    0    0    0    0    0
-         table[ 76] = 0x02;   //!<   U_EMRBITBLT                   0    0    0    0    0    1    0
-         table[ 77] = 0x02;   //!<   U_EMRSTRETCHBLT               0    0    0    0    0    1    0
-         table[ 78] = 0x02;   //!<   U_EMRMASKBLT                  0    0    0    0    0    1    0
-         table[ 79] = 0x02;   //!<   U_EMRPLGBLT                   0    0    0    0    0    1    0
-         table[ 80] = 0x20;   //!<   U_EMRSETDIBITSTODEVICE        0    1    0    0    0    0    0
-         table[ 81] = 0x20;   //!<   U_EMRSTRETCHDIBITS            0    1    0    0    0    0    0
-         table[ 82] = 0x20;   //!<   U_EMREXTCREATEFONTINDIRECTW   0    1    0    0    0    0    0
-         table[ 83] = 0x02;   //!<   U_EMREXTTEXTOUTA              0    0    0    0    0    1    0
-         table[ 84] = 0x02;   //!<   U_EMREXTTEXTOUTW              0    0    0    0    0    1    0
-         table[ 85] = 0x03;   //!<   U_EMRPOLYBEZIER16             0    0    0    0    0    1    1
-         table[ 86] = 0x03;   //!<   U_EMRPOLYGON16                0    0    0    0    0    1    1
-         table[ 87] = 0x03;   //!<   U_EMRPOLYLINE16               0    0    0    0    0    1    1
-         table[ 88] = 0x0B;   //!<   U_EMRPOLYBEZIERTO16           0    0    0    1    0    1    1
-         table[ 89] = 0x0B;   //!<   U_EMRPOLYLINETO16             0    0    0    1    0    1    1
-         table[ 90] = 0x03;   //!<   U_EMRPOLYPOLYLINE16           0    0    0    0    0    1    1
-         table[ 91] = 0x07;   //!<   U_EMRPOLYPOLYGON16            0    0    0    0    1    1    1
-         table[ 92] = 0x03;   //!<   U_EMRPOLYDRAW16               0    0    0    0    0    1    1
-         table[ 93] = 0x00;   //!<   U_EMRCREATEMONOBRUSH          0    0    0    0    0    0    0  Not selected yet, so no change in drawing conditions
-         table[ 94] = 0x00;   //!<   U_EMRCREATEDIBPATTERNBRUSHPT  0    0    0    0    0    0    0  "
-         table[ 95] = 0x00;   //!<   U_EMREXTCREATEPEN             0    0    0    0    0    0    0  "
-         table[ 96] = 0x02;   //!<   U_EMRPOLYTEXTOUTA             0    0    0    0    0    1    0
-         table[ 97] = 0x02;   //!<   U_EMRPOLYTEXTOUTW             0    0    0    0    0    1    0
-         table[ 98] = 0x20;   //!<   U_EMRSETICMMODE               0    1    0    0    0    0    0
-         table[ 99] = 0x20;   //!<   U_EMRCREATECOLORSPACE         0    1    0    0    0    0    0
-         table[100] = 0x20;   //!<   U_EMRSETCOLORSPACE            0    1    0    0    0    0    0
-         table[101] = 0x20;   //!<   U_EMRDELETECOLORSPACE         0    1    0    0    0    0    0
-         table[102] = 0x20;   //!<   U_EMRGLSRECORD                0    1    0    0    0    0    0
-         table[103] = 0x20;   //!<   U_EMRGLSBOUNDEDRECORD         0    1    0    0    0    0    0
-         table[104] = 0x20;   //!<   U_EMRPIXELFORMAT              0    1    0    0    0    0    0
-         table[105] = 0x20;   //!<   U_EMRDRAWESCAPE               0    1    0    0    0    0    0
-         table[106] = 0x20;   //!<   U_EMREXTESCAPE                0    1    0    0    0    0    0
-         table[107] = 0x20;   //!<   U_EMRUNDEF107                 0    1    0    0    0    0    0
-         table[108] = 0x02;   //!<   U_EMRSMALLTEXTOUT             0    0    0    0    0    1    0
-         table[109] = 0x20;   //!<   U_EMRFORCEUFIMAPPING          0    1    0    0    0    0    0
-         table[110] = 0x20;   //!<   U_EMRNAMEDESCAPE              0    1    0    0    0    0    0
-         table[111] = 0x20;   //!<   U_EMRCOLORCORRECTPALETTE      0    1    0    0    0    0    0
-         table[112] = 0x20;   //!<   U_EMRSETICMPROFILEA           0    1    0    0    0    0    0
-         table[113] = 0x20;   //!<   U_EMRSETICMPROFILEW           0    1    0    0    0    0    0
-         table[114] = 0x02;   //!<   U_EMRALPHABLEND               0    0    0    0    0    1    0
-         table[115] = 0x20;   //!<   U_EMRSETLAYOUT                0    1    0    0    0    0    0
-         table[116] = 0x02;   //!<   U_EMRTRANSPARENTBLT           0    0    0    0    0    1    0
-         table[117] = 0x20;   //!<   U_EMRUNDEF117                 0    1    0    0    0    0    0
-         table[118] = 0x02;   //!<   U_EMRGRADIENTFILL             0    0    0    0    0    1    0
-         table[119] = 0x20;   //!<   U_EMRSETLINKEDUFIS            0    1    0    0    0    0    0
-         table[120] = 0x20;   //!<   U_EMRSETTEXTJUSTIFICATION     0    1    0    0    0    0    0
-         table[121] = 0x20;   //!<   U_EMRCOLORMATCHTOTARGETW      0    1    0    0    0    0    0
-         table[122] = 0x20;   //!<   U_EMRCREATECOLORSPACEW        0    1    0    0    0    0    0
+         table[  1] = 0x80;   //!<   U_EMRHEADER                    1    0    0    0    0    0    0    0 
+         table[  2] = 0x83;   //!<   U_EMRPOLYBEZIER                1    0    0    0    0    0    1    1
+         table[  3] = 0x87;   //!<   U_EMRPOLYGON                   1    0    0    0    0    1    1    1
+         table[  4] = 0x83;   //!<   U_EMRPOLYLINE                  1    0    0    0    0    0    1    1
+         table[  5] = 0x8B;   //!<   U_EMRPOLYBEZIERTO              1    0    0    0    1    0    1    1
+         table[  6] = 0x8B;   //!<   U_EMRPOLYLINETO                1    0    0    0    1    0    1    1
+         table[  7] = 0x83;   //!<   U_EMRPOLYPOLYLINE              1    0    0    0    0    0    1    1
+         table[  8] = 0x87;   //!<   U_EMRPOLYPOLYGON               1    0    0    0    0    1    1    1
+         table[  9] = 0xA0;   //!<   U_EMRSETWINDOWEXTEX            1    0    1    0    0    0    0    0
+         table[ 10] = 0xA0;   //!<   U_EMRSETWINDOWORGEX            1    0    1    0    0    0    0    0
+         table[ 11] = 0xA0;   //!<   U_EMRSETVIEWPORTEXTEX          1    0    1    0    0    0    0    0
+         table[ 12] = 0xA0;   //!<   U_EMRSETVIEWPORTORGEX          1    0    1    0    0    0    0    0
+         table[ 13] = 0xA0;   //!<   U_EMRSETBRUSHORGEX             1    0    1    0    0    0    0    0
+         table[ 14] = 0x82;   //!<   U_EMREOF                       1    0    1    0    0    0    0    0  Force out any pending draw
+         table[ 15] = 0x82;   //!<   U_EMRSETPIXELV                 1    0    0    0    0    0    1    0
+         table[ 16] = 0xA0;   //!<   U_EMRSETMAPPERFLAGS            1    0    1    0    0    0    0    0
+         table[ 17] = 0xA0;   //!<   U_EMRSETMAPMODE                1    0    1    0    0    0    0    0
+         table[ 18] = 0x20;   //!<   U_EMRSETBKMODE                 0    0    1    0    0    0    0    0
+         table[ 19] = 0xA0;   //!<   U_EMRSETPOLYFILLMODE           1    0    1    0    0    0    0    0
+         table[ 20] = 0xA0;   //!<   U_EMRSETROP2                   1    0    1    0    0    0    0    0
+         table[ 21] = 0xA0;   //!<   U_EMRSETSTRETCHBLTMODE         1    0    1    0    0    0    0    0
+         table[ 22] = 0x20;   //!<   U_EMRSETTEXTALIGN              0    0    1    0    0    0    0    0
+         table[ 23] = 0xA0;   //!<   U_EMRSETCOLORADJUSTMENT        1    0    1    0    0    0    0    0
+         table[ 24] = 0x20;   //!<   U_EMRSETTEXTCOLOR              0    0    1    0    0    0    0    0
+         table[ 25] = 0x20;   //!<   U_EMRSETBKCOLOR                0    0    1    0    0    0    0    0
+         table[ 26] = 0xA0;   //!<   U_EMROFFSETCLIPRGN             1    0    1    0    0    0    0    0
+         table[ 27] = 0x89;   //!<   U_EMRMOVETOEX                  1    0    0    0    1    0    0    1
+         table[ 28] = 0xA0;   //!<   U_EMRSETMETARGN                1    0    1    0    0    0    0    0
+         table[ 29] = 0xA0;   //!<   U_EMREXCLUDECLIPRECT           1    0    1    0    0    0    0    0
+         table[ 30] = 0xA0;   //!<   U_EMRINTERSECTCLIPRECT         1    0    1    0    0    0    0    0
+         table[ 31] = 0xA0;   //!<   U_EMRSCALEVIEWPORTEXTEX        1    0    1    0    0    0    0    0
+         table[ 32] = 0xA0;   //!<   U_EMRSCALEWINDOWEXTEX          1    0    1    0    0    0    0    0
+         table[ 33] = 0xA0;   //!<   U_EMRSAVEDC                    1    0    1    0    0    0    0    0
+         table[ 34] = 0xA0;   //!<   U_EMRRESTOREDC                 1    0    1    0    0    0    0    0
+         table[ 35] = 0xA0;   //!<   U_EMRSETWORLDTRANSFORM         1    0    1    0    0    0    0    0
+         table[ 36] = 0xA0;   //!<   U_EMRMODIFYWORLDTRANSFORM      1    0    1    0    0    0    0    0
+         table[ 37] = 0x20;   //!<   U_EMRSELECTOBJECT              0    0    1    0    0    0    0    0
+         table[ 38] = 0x20;   //!<   U_EMRCREATEPEN                 0    0    1    0    0    0    0    0
+         table[ 39] = 0x20;   //!<   U_EMRCREATEBRUSHINDIRECT       0    0    1    0    0    0    0    0
+         table[ 40] = 0x20;   //!<   U_EMRDELETEOBJECT              0    0    1    0    0    0    0    0
+         table[ 41] = 0x83;   //!<   U_EMRANGLEARC                  1    0    0    0    0    0    1    1
+         table[ 42] = 0x87;   //!<   U_EMRELLIPSE                   1    0    0    0    0    1    1    1
+         table[ 43] = 0x87;   //!<   U_EMRRECTANGLE                 1    0    0    0    0    1    1    1
+         table[ 44] = 0x87;   //!<   U_EMRROUNDRECT                 1    0    0    0    0    1    1    1
+         table[ 45] = 0x83;   //!<   U_EMRARC                       1    0    0    0    0    0    1    1
+         table[ 46] = 0x87;   //!<   U_EMRCHORD                     1    0    0    0    0    1    1    1
+         table[ 47] = 0x87;   //!<   U_EMRPIE                       1    0    0    0    0    1    1    1
+         table[ 48] = 0xA0;   //!<   U_EMRSELECTPALETTE             1    0    1    0    0    0    0    0
+         table[ 49] = 0xA0;   //!<   U_EMRCREATEPALETTE             1    0    1    0    0    0    0    0
+         table[ 50] = 0xA0;   //!<   U_EMRSETPALETTEENTRIES         1    0    1    0    0    0    0    0
+         table[ 51] = 0xA0;   //!<   U_EMRRESIZEPALETTE             1    0    1    0    0    0    0    0
+         table[ 52] = 0xA0;   //!<   U_EMRREALIZEPALETTE            1    0    1    0    0    0    0    0
+         table[ 53] = 0x82;   //!<   U_EMREXTFLOODFILL              1    0    0    0    0    0    1    0
+         table[ 54] = 0x8B;   //!<   U_EMRLINETO                    1    0    0    0    1    0    1    1
+         table[ 55] = 0x8B;   //!<   U_EMRARCTO                     1    0    0    0    1    0    1    1
+         table[ 56] = 0x83;   //!<   U_EMRPOLYDRAW                  1    0    0    0    0    0    1    1
+         table[ 57] = 0xA0;   //!<   U_EMRSETARCDIRECTION           1    0    1    0    0    0    0    0
+         table[ 58] = 0xA0;   //!<   U_EMRSETMITERLIMIT             1    0    1    0    0    0    0    0
+         table[ 59] = 0xE0;   //!<   U_EMRBEGINPATH                 1    1    1    0    0    0    0    0
+         table[ 60] = 0x80;   //!<   U_EMRENDPATH                   1    0    0    0    0    0    0    0
+         table[ 61] = 0x84;   //!<   U_EMRCLOSEFIGURE               1    0    0    0    0    1    0    0
+         table[ 62] = 0x94;   //!<   U_EMRFILLPATH                  1    0    0    1    0    1    0    0
+         table[ 63] = 0x94;   //!<   U_EMRSTROKEANDFILLPATH         1    0    0    1    0    1    0    0
+         table[ 64] = 0x90;   //!<   U_EMRSTROKEPATH                1    0    0    1    0    0    0    0
+         table[ 65] = 0xA0;   //!<   U_EMRFLATTENPATH               1    0    1    0    0    0    0    0
+         table[ 66] = 0xA0;   //!<   U_EMRWIDENPATH                 1    0    1    0    0    0    0    0
+         table[ 67] = 0xA0;   //!<   U_EMRSELECTCLIPPATH            1    0    1    0    0    0    0    0
+         table[ 68] = 0xA0;   //!<   U_EMRABORTPATH                 1    0    1    0    0    0    0    0
+         table[ 69] = 0xA0;   //!<   U_EMRUNDEF69                   1    0    1    0    0    0    0    0
+         table[ 70] = 0x00;   //!<   U_EMRCOMMENT                   0    0    0    0    0    0    0    0
+         table[ 71] = 0x82;   //!<   U_EMRFILLRGN                   1    0    0    0    0    0    1    0
+         table[ 72] = 0x82;   //!<   U_EMRFRAMERGN                  1    0    0    0    0    0    1    0
+         table[ 73] = 0x82;   //!<   U_EMRINVERTRGN                 1    0    0    0    0    0    1    0
+         table[ 74] = 0x82;   //!<   U_EMRPAINTRGN                  1    0    0    0    0    0    1    0
+         table[ 75] = 0xA0;   //!<   U_EMREXTSELECTCLIPRGN          1    0    1    0    0    0    0    0
+         table[ 76] = 0x82;   //!<   U_EMRBITBLT                    1    0    0    0    0    0    1    0
+         table[ 77] = 0x82;   //!<   U_EMRSTRETCHBLT                1    0    0    0    0    0    1    0
+         table[ 78] = 0x82;   //!<   U_EMRMASKBLT                   1    0    0    0    0    0    1    0
+         table[ 79] = 0x82;   //!<   U_EMRPLGBLT                    1    0    0    0    0    0    1    0
+         table[ 80] = 0xA0;   //!<   U_EMRSETDIBITSTODEVICE         1    0    1    0    0    0    0    0
+         table[ 81] = 0xA0;   //!<   U_EMRSTRETCHDIBITS             1    0    1    0    0    0    0    0
+         table[ 82] = 0x20;   //!<   U_EMREXTCREATEFONTINDIRECTW    0    0    1    0    0    0    0    0
+         table[ 83] = 0x02;   //!<   U_EMREXTTEXTOUTA               0    0    0    0    0    0    1    0
+         table[ 84] = 0x02;   //!<   U_EMREXTTEXTOUTW               0    0    0    0    0    0    1    0
+         table[ 85] = 0x83;   //!<   U_EMRPOLYBEZIER16              1    0    0    0    0    0    1    1
+         table[ 86] = 0x83;   //!<   U_EMRPOLYGON16                 1    0    0    0    0    0    1    1
+         table[ 87] = 0x83;   //!<   U_EMRPOLYLINE16                1    0    0    0    0    0    1    1
+         table[ 88] = 0x8B;   //!<   U_EMRPOLYBEZIERTO16            1    0    0    0    1    0    1    1
+         table[ 89] = 0x8B;   //!<   U_EMRPOLYLINETO16              1    0    0    0    1    0    1    1
+         table[ 90] = 0x83;   //!<   U_EMRPOLYPOLYLINE16            1    0    0    0    0    0    1    1
+         table[ 91] = 0x87;   //!<   U_EMRPOLYPOLYGON16             1    0    0    0    0    1    1    1
+         table[ 92] = 0x83;   //!<   U_EMRPOLYDRAW16                1    0    0    0    0    0    1    1
+         table[ 93] = 0x80;   //!<   U_EMRCREATEMONOBRUSH           1    0    0    0    0    0    0    0  Not selected yet, so no change in drawing conditions
+         table[ 94] = 0x80;   //!<   U_EMRCREATEDIBPATTERNBRUSHPT   1    0    0    0    0    0    0    0  "
+         table[ 95] = 0x00;   //!<   U_EMREXTCREATEPEN              0    0    0    0    0    0    0    0  "
+         table[ 96] = 0x02;   //!<   U_EMRPOLYTEXTOUTA              0    0    0    0    0    0    1    0
+         table[ 97] = 0x02;   //!<   U_EMRPOLYTEXTOUTW              0    0    0    0    0    0    1    0
+         table[ 98] = 0xA0;   //!<   U_EMRSETICMMODE                1    0    1    0    0    0    0    0
+         table[ 99] = 0xA0;   //!<   U_EMRCREATECOLORSPACE          1    0    1    0    0    0    0    0
+         table[100] = 0xA0;   //!<   U_EMRSETCOLORSPACE             1    0    1    0    0    0    0    0
+         table[101] = 0xA0;   //!<   U_EMRDELETECOLORSPACE          1    0    1    0    0    0    0    0
+         table[102] = 0xA0;   //!<   U_EMRGLSRECORD                 1    0    1    0    0    0    0    0
+         table[103] = 0xA0;   //!<   U_EMRGLSBOUNDEDRECORD          1    0    1    0    0    0    0    0
+         table[104] = 0xA0;   //!<   U_EMRPIXELFORMAT               1    0    1    0    0    0    0    0
+         table[105] = 0xA0;   //!<   U_EMRDRAWESCAPE                1    0    1    0    0    0    0    0
+         table[106] = 0xA0;   //!<   U_EMREXTESCAPE                 1    0    1    0    0    0    0    0
+         table[107] = 0xA0;   //!<   U_EMRUNDEF107                  1    0    1    0    0    0    0    0
+         table[108] = 0x02;   //!<   U_EMRSMALLTEXTOUT              0    0    0    0    0    0    1    0
+         table[109] = 0xA0;   //!<   U_EMRFORCEUFIMAPPING           1    0    1    0    0    0    0    0
+         table[110] = 0xA0;   //!<   U_EMRNAMEDESCAPE               1    0    1    0    0    0    0    0
+         table[111] = 0xA0;   //!<   U_EMRCOLORCORRECTPALETTE       1    0    1    0    0    0    0    0
+         table[112] = 0xA0;   //!<   U_EMRSETICMPROFILEA            1    0    1    0    0    0    0    0
+         table[113] = 0xA0;   //!<   U_EMRSETICMPROFILEW            1    0    1    0    0    0    0    0
+         table[114] = 0x82;   //!<   U_EMRALPHABLEND                1    0    0    0    0    0    1    0
+         table[115] = 0xA0;   //!<   U_EMRSETLAYOUT                 1    0    1    0    0    0    0    0
+         table[116] = 0x82;   //!<   U_EMRTRANSPARENTBLT            1    0    0    0    0    0    1    0
+         table[117] = 0xA0;   //!<   U_EMRUNDEF117                  1    0    1    0    0    0    0    0
+         table[118] = 0x82;   //!<   U_EMRGRADIENTFILL              1    0    0    0    0    0    1    0
+         table[119] = 0xA0;   //!<   U_EMRSETLINKEDUFIS             1    0    1    0    0    0    0    0
+         table[120] = 0x20;   //!<   U_EMRSETTEXTJUSTIFICATION      0    0    1    0    0    0    0    0
+         table[121] = 0xA0;   //!<   U_EMRCOLORMATCHTOTARGETW       1    0    1    0    0    0    0    0
+         table[122] = 0xA0;   //!<   U_EMRCREATECOLORSPACEW         1    0    1    0    0    0    0    0
       }
       result = table[type];
    }

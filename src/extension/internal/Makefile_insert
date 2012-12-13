@@ -150,8 +150,12 @@ ink_common_sources +=	\
 	extension/internal/filter/filter-file.cpp \
 	extension/internal/filter/filter.cpp \
 	extension/internal/filter/filter.h \
+	extension/internal/text_reassemble.c \
+	extension/internal/text_reassemble.h \
 	extension/internal/uemf.c \
 	extension/internal/uemf.h \
+	extension/internal/uemf_utf.c \
+	extension/internal/uemf_utf.h \
 	extension/internal/uemf_endian.c \
 	extension/internal/uemf_endian.h \
 	extension/internal/emf-print.h \

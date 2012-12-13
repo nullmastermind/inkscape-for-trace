@@ -43,10 +43,15 @@
 #include "document.h"
 #include "libunicode-convert/unicode-convert.h"
 
+#include <png.h>   //This must precede text_reassemble.h or it blows up in pngconf.h when compiling
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 #include "emf-print.h"
 #include "emf-inout.h"
 #include "uemf.h"
+#include "text_reassemble.h"
 
 #define PRINT_EMF "org.inkscape.print.emf"
 
@@ -73,12 +78,14 @@ which was based on:
 http://stackoverflow.com/questions/1821806/how-to-encode-png-to-buffer-using-libpng
 
 gcc -Wall -o testpng testpng.c -lpng
-*/
+
+Originally here, but moved up
 
 #include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+*/
     
 /* A coloured pixel. */
 
@@ -409,6 +416,7 @@ typedef struct emf_callback_data {
                               // both of these end up in <defs> under the names shown here.  These structures allow duplicates to be avoided.
     EMF_STRINGS hatches;      // hold pattern names, all like EMFhatch#_$$$$$$ where # is the EMF hatch code and $$$$$$ is the color
     EMF_STRINGS images;       // hold images, all like Image#, where # is the slot the image lives.
+    TR_INFO    *tri;          // Text Reassembly data structure
 
 
     int n_obj;
@@ -1507,11 +1515,29 @@ void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
 //THis was a callback, just build it into a normal function
 int myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
 {
-    uint32_t off=0;
-    uint32_t emr_mask;
-    int      OK =1;
+    uint32_t         off=0;
+    uint32_t         emr_mask;
+    int              OK =1;
     PU_ENHMETARECORD lpEMFR;
-    
+    TCHUNK_SPECS     tsp;
+
+    /* initialize the tsp for text reassembly */
+    tsp.string     = NULL;
+    tsp.ori        = 0.0;  /* degrees */
+    tsp.fs         = 12.0; /* font size */
+    tsp.x          = 0.0;
+    tsp.y          = 0.0;
+    tsp.boff       = 0.0;  /* offset to baseline from LL corner of bounding rectangle, changes with fs and taln*/
+    tsp.vadvance   = 0.0;  /* meaningful only when a complex contains two or more lines */
+    tsp.taln       = ALILEFT + ALIBASE;
+    tsp.ldir       = LDIR_LR;
+    tsp.color      = 0;    /* RGBA Black */
+    tsp.italics    = 0;
+    tsp.weight     = 80;
+    tsp.condensed  = 100;
+    tsp.co         = 0;
+    tsp.fi_idx     = -1;  /* set to an invalid */
+     
     while(OK){
     if(off>=length)return(0);  //normally should exit from while after EMREOF sets OK to false.  
 
@@ -1528,7 +1554,18 @@ int myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
     emr_mask = emr_properties(lpEMFR->iType); 
     if(emr_mask == U_EMR_INVALID){ throw "Inkscape fatal memory allocation error - cannot continue"; }
 
-// std::cout << "BEFORE DRAW logic d->mask: " << std::hex << d->mask << " emr_mask: " << emr_mask << std::dec << std::endl;
+/* Uncomment the following to track down text problems */
+//std::cout << "tri->dirty:"<< d->tri->dirty << " emr_mask: " << std::hex << emr_mask << std::dec << std::endl;
+    if ( (emr_mask != 0xFFFFFFFF)   &&   (emr_mask & U_DRAW_TEXT) && d->tri->dirty){  // next record is valid type and forces pending text to be drawn immediately
+        TR_layout_analyze(d->tri);
+        TR_layout_2_svg(d->tri);
+        SVGOStringStream ts;
+        ts << d->tri->out;
+        *(d->outsvg) += ts.str().c_str();
+        d->tri = trinfo_clear(d->tri);
+    }
+
+//std::cout << "BEFORE DRAW logic d->mask: " << std::hex << d->mask << " emr_mask: " << emr_mask << std::dec << std::endl;
 /*
 std::cout << "BEFORE DRAW"
  << " test0 " << ( d->mask & U_DRAW_VISIBLE) 
@@ -1539,6 +1576,7 @@ std::cout << "BEFORE DRAW"
  << " test5 " << ((d->mask & U_DRAW_ONLYTO) && !(emr_mask & U_DRAW_ONLYTO)  )
  << std::endl;
 */
+
     if ( (emr_mask != 0xFFFFFFFF)   &&                                           // next record is valid type
          (d->mask & U_DRAW_VISIBLE) &&                                           // This record is drawable
          (  (d->mask & U_DRAW_FORCE)   ||                                        // This draw is forced by STROKE/FILL/STROKEANDFILL PATH
@@ -1619,6 +1657,7 @@ std::cout << "BEFORE DRAW"
                    (double)(pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/
                    (double)( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
             }
+            trinfo_load_qe(d->tri, d->D2PscaleX);  /* quantization error that will affect text positions */
 
             /*  Adobe Illustrator files set mapmode to MM_ANISOTROPIC and somehow or other this 
                 converts the rclFrame values from MM_HIMETRIC to MM_HIENGLISH, with another factor of 3 thrown
@@ -2791,17 +2830,7 @@ std::cout << "BEFORE DRAW"
             double x = pix_to_x_point(d, x1, y1);
             double y = pix_to_y_point(d, x1, y1);
 
-            double dfact;
-            if (d->dc[d->level].textAlign & U_TA_BASEBIT){    dfact =  0.00;    }  // alignments 0x10 to U_TA_BASELINE 0x18 
-            else if(d->dc[d->level].textAlign & U_TA_BOTTOM){ dfact = -0.35;    }  // alignments U_TA_BOTTOM 0x08 to 0x0E,  factor is approximate
-            else {                                            dfact =  0.85;    }  // alignments U_TA_TOP 0x00 to 0x07, factor is approximate
-            if (d->dc[d->level].style.baseline_shift.value) {
-                x += dfact * std::sin(d->dc[d->level].style.baseline_shift.value*M_PI/180.0)*fabs(d->dc[d->level].style.font_size.computed);
-                y += dfact * std::cos(d->dc[d->level].style.baseline_shift.value*M_PI/180.0)*fabs(d->dc[d->level].style.font_size.computed);
-            }
-            else {
-                y += dfact * fabs(d->dc[d->level].style.font_size.computed);
-            }
+            /* Rotation issues are handled entirely in libTERE now */
 
             uint32_t *dup_wt = NULL;
 
@@ -2846,71 +2875,67 @@ std::cout << "BEFORE DRAW"
             }
 
             if (ansi_text) {
-//                gchar *p = ansi_text;
-//                while (*p) {
-//                    if (*p < 32 || *p >= 127) {
-//                        g_free(ansi_text);
-//                        ansi_text = g_strdup("");
-//                        break;
-//                    }
-//                    p++;
-//                }
 
                 SVGOStringStream ts;
 
                 gchar *escaped_text = g_markup_escape_text(ansi_text, -1);
 
-//                float text_rgb[3];
-//                sp_color_get_rgb_floatv( &(d->dc[d->level].style.fill.value.color), text_rgb );
-
-//                if (!d->dc[d->level].textColorSet) {
-//                    d->dc[d->level].textColor = RGB(SP_COLOR_F_TO_U(text_rgb[0]),
-//                                       SP_COLOR_F_TO_U(text_rgb[1]),
-//                                       SP_COLOR_F_TO_U(text_rgb[2]));
-//                }
-
-                char tmp[128];
-                snprintf(tmp, 127,
-                         "fill:#%02x%02x%02x;",
-                         U_RGBAGetR(d->dc[d->level].textColor),
-                         U_RGBAGetG(d->dc[d->level].textColor),
-                         U_RGBAGetB(d->dc[d->level].textColor));
-
-                bool i = (d->dc[d->level].style.font_style.value == SP_CSS_FONT_STYLE_ITALIC);
-                //bool o = (d->dc[d->level].style.font_style.value == SP_CSS_FONT_STYLE_OBLIQUE);
-                bool b = (d->dc[d->level].style.font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) ||
-                    (d->dc[d->level].style.font_weight.value >= SP_CSS_FONT_WEIGHT_500 && d->dc[d->level].style.font_weight.value <= SP_CSS_FONT_WEIGHT_900);
-                // EMF textalignment is a bit strange: 0x6 is center, 0x2 is right, 0x0 is left, the value 0x4 is also drawn left
-                int lcr = ((d->dc[d->level].textAlign & U_TA_CENTER) == U_TA_CENTER) ? 2 : ((d->dc[d->level].textAlign & U_TA_CENTER) == U_TA_LEFT) ? 0 : 1;
-
-                ts << "<text\n";
-                ts << "  xml:space=\"preserve\"\n";
-                ts << "    x=\"" << x << "\"\n";
-                ts << "    y=\"" << y << "\"\n";
-                if (d->dc[d->level].style.baseline_shift.value) {
-                    ts << "    transform=\""
-                       << "rotate(-" << d->dc[d->level].style.baseline_shift.value
-                       << " " << x << " " << y << ")"
-                       << "\"\n";
+                tsp.x       = x*0.8;  // TERE expects sizes in points.
+                tsp.y       = y*0.8;
+                memcpy(&tsp.color, &d->dc[d->level].textColor, sizeof(uint32_t)); //It is already an RGBA binary value, but compiler is picky about types
+                switch(d->dc[d->level].style.font_style.value){
+                  case SP_CSS_FONT_STYLE_OBLIQUE:
+                     tsp.italics = FC_SLANT_OBLIQUE; break;
+                  case SP_CSS_FONT_STYLE_ITALIC:
+                     tsp.italics = FC_SLANT_ITALIC;  break;
+                  default:
+                  case SP_CSS_FONT_STYLE_NORMAL:
+                     tsp.italics = FC_SLANT_ROMAN;   break;
                 }
-                ts << "><tspan sodipodi:role=\"line\"";
-                ts << "    x=\"" << x << "\"\n";
-                ts << "    y=\"" << y << "\"\n";
-                ts << "    style=\""
-                   << "font-size:" << fabs(d->dc[d->level].style.font_size.computed) << "px;"
-                   << tmp
-                   << "font-style:" << (i ? "italic" : "normal") << ";"
-                   << "font-weight:" << (b ? "bold" : "normal") << ";"
-                   << "text-align:" << (lcr==2 ? "center" : lcr==1 ? "end" : "start") << ";"
-                   << "text-anchor:" << (lcr==2 ? "middle" : lcr==1 ? "end" : "start") << ";"
-                   << "font-family:" << d->dc[d->level].font_name << ";"
-                   << "\"\n";
-                ts << "    >";
-                ts << escaped_text;
-                ts << "</tspan>";
-                ts << "</text>\n";
-                
-                *(d->outsvg) += ts.str().c_str();
+                switch(d->dc[d->level].style.font_weight.value){
+                   case SP_CSS_FONT_WEIGHT_100:       tsp.weight =  FC_WEIGHT_THIN       ; break;
+                   case SP_CSS_FONT_WEIGHT_200:       tsp.weight =  FC_WEIGHT_EXTRALIGHT ; break;
+                   case SP_CSS_FONT_WEIGHT_300:       tsp.weight =  FC_WEIGHT_LIGHT      ; break;
+                   case SP_CSS_FONT_WEIGHT_400:       tsp.weight =  FC_WEIGHT_NORMAL     ; break;
+                   case SP_CSS_FONT_WEIGHT_500:       tsp.weight =  FC_WEIGHT_MEDIUM     ; break;
+                   case SP_CSS_FONT_WEIGHT_600:       tsp.weight =  FC_WEIGHT_SEMIBOLD   ; break;
+                   case SP_CSS_FONT_WEIGHT_700:       tsp.weight =  FC_WEIGHT_BOLD       ; break;
+                   case SP_CSS_FONT_WEIGHT_800:       tsp.weight =  FC_WEIGHT_EXTRABOLD  ; break;
+                   case SP_CSS_FONT_WEIGHT_900:       tsp.weight =  FC_WEIGHT_HEAVY      ; break;
+                   case SP_CSS_FONT_WEIGHT_NORMAL:    tsp.weight =  FC_WEIGHT_NORMAL     ; break;
+                   case SP_CSS_FONT_WEIGHT_BOLD:      tsp.weight =  FC_WEIGHT_BOLD       ; break;
+                   case SP_CSS_FONT_WEIGHT_LIGHTER:   tsp.weight =  FC_WEIGHT_EXTRALIGHT ; break;
+                   case SP_CSS_FONT_WEIGHT_BOLDER:    tsp.weight =  FC_WEIGHT_EXTRABOLD  ; break;
+                   default:                           tsp.weight =  FC_WEIGHT_NORMAL     ; break;
+                }
+
+                // EMF textalignment is a bit strange: 0x6 is center, 0x2 is right, 0x0 is left, the value 0x4 is also drawn left
+                tsp.taln  = ((d->dc[d->level].textAlign & U_TA_CENTER)  == U_TA_CENTER)  ? ALICENTER : 
+                           (((d->dc[d->level].textAlign & U_TA_CENTER)  == U_TA_LEFT)    ? ALILEFT   :
+                                                                                           ALIRIGHT);
+                tsp.taln |= ((d->dc[d->level].textAlign & U_TA_BASEBIT) ? ALIBASE : 
+                            ((d->dc[d->level].textAlign & U_TA_BOTTOM)  ? ALIBOT  :
+                                                                          ALITOP));
+                tsp.ldir  = (d->dc[d->level].textAlign & U_TA_RTLREADING ? LDIR_RL : LDIR_LR);  // language direction
+                tsp.condensed = FC_WIDTH_NORMAL; // Not implemented well in libTERE (yet)
+                tsp.ori = d->dc[d->level].style.baseline_shift.value;            // For now orientation is always the same as escapement
+                tsp.string = (uint8_t *) U_strdup(escaped_text);                 // this will be free'd much later at a trinfo_clear().
+                tsp.fs = d->dc[d->level].style.font_size.computed * 0.8;         // Font size in points
+                (void) trinfo_load_fontname(d->tri, (uint8_t *)d->dc[d->level].font_name, &tsp);
+                // when font name includes narrow it may not be set to "condensed".  Narrow fonts do not work well anyway though
+                // as the metrics from fontconfig may not match, or the font may not be present.
+                if(0<= TR_findcasesub(d->dc[d->level].font_name, (char *) "Narrow")){ tsp.co=1; }
+                else {                                                                tsp.co=0; }
+
+                int status = trinfo_load_textrec(d->tri, &tsp, tsp.ori,TR_EMFBOT);  // ori is actually escapement
+                if(status==-1){ // change of escapement, emit what we have and reset 
+                   TR_layout_analyze(d->tri);
+                   TR_layout_2_svg(d->tri);
+                   ts << d->tri->out;
+                   *(d->outsvg) += ts.str().c_str();
+                   d->tri = trinfo_clear(d->tri);
+                   (void) trinfo_load_textrec(d->tri, &tsp, tsp.ori,TR_EMFBOT); // ignore return status, it must work
+                }
                 
                 g_free(escaped_text);
                 free(ansi_text);
@@ -3248,7 +3273,12 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     if(emf_readdata(uri, &contents, &length))return(NULL);   
 
     d.pDesc = NULL;
-
+    
+    // set up the text reassembly system
+    if(!(d.tri = trinfo_init(NULL)))return(NULL);
+    (void) trinfo_load_ft_opts(d.tri, 1,
+      FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING  | FT_LOAD_NO_BITMAP, 
+      FT_KERNING_UNSCALED);
     
     (void) myEnhMetaFileProc(contents,length, &d);
     free(contents);
@@ -3281,6 +3311,8 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     for(int i=0; i<=d.level;i++){
       if(d.dc[i].font_name)free(d.dc[i].font_name);
     }
+
+    d.tri = trinfo_release_except_FC(d.tri);
 
     return doc;
 }

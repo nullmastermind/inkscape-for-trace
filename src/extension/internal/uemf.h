@@ -13,8 +13,8 @@
 
 /*
 File:      uemf.h
-Version:   0.0.9
-Date:      26-OCT-2012
+Version:   0.0.10
+Date:      04-DEC-2012
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
@@ -29,6 +29,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "uemf_utf.h"
 #include "uemf_endian.h"
 
 
@@ -203,6 +204,7 @@ extern "C" {
 #define U_DRAW_FORCE      0x10           //!< Path MUST be drawn
 #define U_DRAW_ALTERS     0x20           //!< Alters draw parameters (pen, brush, coordinates...)
 #define U_DRAW_PATH       0x40           //!< An explicit path is being used (with a BEGIN and END)
+#define U_DRAW_TEXT       0x80           //!< Current record forces all pending text to be drawn first.
 
 /** @} */
 /** \defgroup U_EMRSETARCDIRECTION_Qualifiers  ArcDirection Enumeration
@@ -2678,21 +2680,7 @@ void wchartshow(const wchar_t *src);
 void dumpeht(char *string, unsigned int *handle, EMFHANDLES *eht);
 
 
-size_t    wchar16len(const uint16_t *src);
-size_t    wchar32len(const uint32_t *src);
-void      wchar16strncpy(uint16_t *dst, const uint16_t *src, size_t nchars);
-void      wchar16strncpypad(uint16_t *dst, const uint16_t *src, size_t nchars);
-uint16_t *U_Utf8ToUtf16le(const char *src, size_t max, size_t *len);
-uint32_t *U_Utf8ToUtf32le(const char *src, size_t max, size_t *len);
-uint32_t *U_Latin1ToUtf32le(const char *src, size_t max, size_t *len);
-uint16_t *U_Utf32leToUtf16le(const uint32_t *src, size_t max, size_t *len);
-char     *U_Utf32leToUtf8(const uint32_t *src, size_t max, size_t *len);
-uint32_t *U_Utf16leToUtf32le(const uint16_t *src, size_t max, size_t *len);
-char     *U_Utf16leToUtf8(const uint16_t *src, size_t max, size_t *len);
-uint16_t  U_Utf16le(const uint16_t src);
-int       U_Utf16leEdit(uint16_t *src, uint16_t old, uint16_t sub);
 uint32_t *dx_set(int32_t height,  uint32_t weight, uint32_t members);
-char     *U_strdup(const char *s);
 uint32_t  emr_properties(uint32_t type);
 int       emr_arc_points(PU_ENHMETARECORD record, int *f1, int f2, PU_PAIRF center, PU_PAIRF start, PU_PAIRF end, PU_PAIRF size);
 int       RGBA_to_DIB( char **px, uint32_t *cbPx, PU_RGBQUAD *ct, int *numCt, 
