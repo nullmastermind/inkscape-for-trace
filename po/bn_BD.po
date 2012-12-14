@@ -11580,33 +11580,45 @@ msgstr "পাথ সম্পূর্ণ বিপরীতকরণ করু
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "বিপরীতকরণ করার জন্য নির্বাচনে <b>কোন পাথ নাই</b>।"
 
-#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "অঙ্কন বাতিল করা হয়েছে"
 
-#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "নির্বাচিত পাথ অব্যাহত রয়েছে"
 
-#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "নতুন পাথ তৈরি করা হচ্ছে"
 
-#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "নির্বাচিত পাথে জুড়ে দেয়া হচ্ছে"
 
-#: ../src/pen-context.cpp:660
+#: ../src/pen-context.cpp:790
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr "<b>ক্লিক করুন</b> অথবা <b>ক্লিক করুন এবং টানুন</b> বন্ধ এবং সমাপ্ত করতে পাথ।"
 
-#: ../src/pen-context.cpp:670
+#: ../src/pen-context.cpp:792 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to close and finish the path."
+" <b>Shift</b>to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:803
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>ক্লিক করুন</b> অথবা <b>ক্লিক করুন এবং টানুন</b> এই বিন্দু থেকে পাথ চালিয়ে যেতে।"
 
-#: ../src/pen-context.cpp:1265
+#: ../src/pen-context.cpp:805 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
+"<b>Shift</b> to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:1683
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11615,7 +11627,7 @@ msgstr ""
 "<b>বক্ররেখার অংশ</b>: কোণ %3.2f&#176;, দূরত্ব %s; <b>Ctrl সহযোগে</b> কোণ স্ন্যাপ "
 "করতে, <b>এন্টার</b> পাথ শেষ করতে"
 
-#: ../src/pen-context.cpp:1266
+#: ../src/pen-context.cpp:1684
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11624,7 +11636,14 @@ msgstr ""
 "<b>রেখার অংশ</b>: কোণ %3.2f&#176;, দূরত্ব %s; <b>Ctrl সহযোগে</b> কোণ স্ন্যাপ "
 "করতে, <b>এন্টার</b> পাথ শেষ করতে"
 
-#: ../src/pen-context.cpp:1283
+#: ../src/pen-context.cpp:1688 
+#, fuzzy, c-format 
+msgid ""
+"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
+"cusp node, <b>Enter</b> to finish the path"
+msgstr ""
+
+#: ../src/pen-context.cpp:1709
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11633,7 +11652,7 @@ msgstr ""
 "<b>বক্ররেখা প্রক্রিয়াকরণ</b>: কোণ %3.2f&#176;, দৈর্ঘ্য %s; <b>Ctrl সহযোগে</b> কোণ "
 "স্ন্যাপ করতে"
 
-#: ../src/pen-context.cpp:1305
+#: ../src/pen-context.cpp:1730
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -11642,7 +11661,7 @@ msgstr ""
 "<b>বক্ররেখা প্রক্রিয়াকরণ, প্রতিসম</b>: কোণ %3.2f&#176;, দৈর্ঘ্য %s; <b>Ctrl "
 "সহযোগে</b> কোণ স্ন্যাপ করতে, <b>Shift দ্বারা</b> শুধুমাত্র এই প্রক্রিয়া সরাতে"
 
-#: ../src/pen-context.cpp:1306
+#: ../src/pen-context.cpp:1731
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11651,7 +11670,7 @@ msgstr ""
 "<b>বক্ররেখা প্রক্রিয়াকরণ</b>: কোণ %3.2f&#176;, দৈর্ঘ্য %s; <b>Ctrl সহযোগে</b> কোণ "
 "স্ন্যাপ করতে, <b>Shift দ্বারা</b> শুধুমাত্র এই প্রক্রিয়া সরাতে"
 
-#: ../src/pen-context.cpp:1352
+#: ../src/pen-context.cpp:1777
 msgid "Drawing finished"
 msgstr "অঙ্কন সমাপ্ত"
 

@@ -45,6 +45,9 @@ enum EffectType {
     PATH_LENGTH,
     LINE_SEGMENT,
     DOEFFECTSTACK_TEST,
+    //BSpline
+    BSPLINE,
+    //BSpline End
     DYNASTROKE,
     RECURSIVE_SKELETON,
     EXTRUDE,

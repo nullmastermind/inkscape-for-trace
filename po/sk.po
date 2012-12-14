@@ -12093,35 +12093,47 @@ msgstr "Obrátiť smer cesty"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "Výber <b>neobsahuje cesty</b>, ktorých smer možno obrátiť."
 
-#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "Kreslenie zrušené"
 
-#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "Pokračovanie vybranej cesty"
 
-#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "Tvorba novej cesty"
 
-#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "Pripojiť k zvolenej ceste"
 
-#: ../src/pen-context.cpp:660
+#: ../src/pen-context.cpp:790
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>Kliknutím</b> alebo <b>kliknutím a ťahaním</b> zatvoriť a dokončiť cestu."
 
-#: ../src/pen-context.cpp:670
+#: ../src/pen-context.cpp:792 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to close and finish the path."
+" <b>Shift</b>to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:803
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>Kliknutím</b> alebo <b>kliknutím a ťahaním</b> pokračovať v ceste z tohto "
 "bodu."
 
-#: ../src/pen-context.cpp:1265
+#: ../src/pen-context.cpp:805 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
+"<b>Shift</b> to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:1683
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12130,7 +12142,7 @@ msgstr ""
 "<b>Úsek krivky</b>: uhol %3.2f&#176;, vzdialenosť %s; s <b>Ctrl</b> na "
 "prichytávanie k uhlu; <b>Enter</b> na ukončenie cesty"
 
-#: ../src/pen-context.cpp:1266
+#: ../src/pen-context.cpp:1684
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12139,7 +12151,14 @@ msgstr ""
 "<b>Úsek čiary</b>: uhol %3.2f&#176;, vzdialenosť %s; s <b>Ctrl</b> na "
 "prichytávanie k uhlu; <b>Enter</b> na ukončenie cesty"
 
-#: ../src/pen-context.cpp:1283
+#: ../src/pen-context.cpp:1688 
+#, fuzzy, c-format 
+msgid ""
+"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
+"cusp node, <b>Enter</b> to finish the path"
+msgstr ""
+
+#: ../src/pen-context.cpp:1709
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12148,7 +12167,7 @@ msgstr ""
 "<b>Úchop krivky</b>: uhol %3.2f&#176;, dĺžka %s; s <b>Ctrl</b> prichytávanie "
 "k uhlu"
 
-#: ../src/pen-context.cpp:1305
+#: ../src/pen-context.cpp:1730
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -12157,7 +12176,7 @@ msgstr ""
 "<b>Úchop krivky, symetrický</b>: uhol %3.2f&#176;, dĺžka %s; s <b>Ctrl</b> "
 "na prichytávanie k uhlu; so <b>Shift</b> na posun iba tohto úchopu"
 
-#: ../src/pen-context.cpp:1306
+#: ../src/pen-context.cpp:1731
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12166,7 +12185,7 @@ msgstr ""
 "<b>Úchop krivky</b>: uhol %3.2f&#176;, dĺžka %s; s <b>Ctrl</b> na "
 "prichytávanie k uhlu; so <b>Shift</b> na posun iba tohto úchopu"
 
-#: ../src/pen-context.cpp:1352
+#: ../src/pen-context.cpp:1777
 msgid "Drawing finished"
 msgstr "Kreslenie ukončené"
 

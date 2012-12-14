@@ -314,6 +314,11 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
+        //BSpline
+        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
+            Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
+        }
+        //BSPline End
 
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
         bool shape_applied = false;

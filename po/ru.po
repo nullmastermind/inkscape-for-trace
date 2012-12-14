@@ -12158,35 +12158,47 @@ msgstr "Развернуть контур"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "В выделении <b>нет контуров</b> для разворота."
 
-#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "Отмена рисования"
 
-#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "Продолжение выделенного контура"
 
-#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "Создание нового контура"
 
-#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "Добавление к выделенному контуру"
 
-#: ../src/pen-context.cpp:660
+#: ../src/pen-context.cpp:790
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>Щелчок</b> или <b>щелчок + перетаскивание</b> закрывают этот контур."
 
-#: ../src/pen-context.cpp:670
+#: ../src/pen-context.cpp:792 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to close and finish the path."
+" <b>Shift</b>to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:803
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>Щелчок</b> или <b>щелчок + перетаскивание</b> продолжает контур из этой "
 "точки."
 
-#: ../src/pen-context.cpp:1265
+#: ../src/pen-context.cpp:805 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
+"<b>Shift</b> to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:1683
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12195,7 +12207,7 @@ msgstr ""
 "<b>Сегмент кривой</b>: угол %3.2f&#176;, расстояние %s; <b>Ctrl</b> "
 "ограничивает угол, <b>Enter</b> завершает контур"
 
-#: ../src/pen-context.cpp:1266
+#: ../src/pen-context.cpp:1684
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12204,7 +12216,14 @@ msgstr ""
 "<b>Сегмент линии</b>: угол %3.2f&#176;, расстояние %s; <b>Ctrl</b> "
 "ограничивает угол, <b>Enter</b> завершает контур"
 
-#: ../src/pen-context.cpp:1283
+#: ../src/pen-context.cpp:1688 
+#, fuzzy, c-format 
+msgid ""
+"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
+"cusp node, <b>Enter</b> to finish the path"
+msgstr ""
+
+#: ../src/pen-context.cpp:1709
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12213,7 +12232,7 @@ msgstr ""
 "<b>Рычаг узла кривой</b>: угол %3.2f&#176;, длина %s; <b>Ctrl</b> "
 "ограничивает угол"
 
-#: ../src/pen-context.cpp:1305
+#: ../src/pen-context.cpp:1730
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -12222,7 +12241,7 @@ msgstr ""
 "<b>Рычаг узла, симметричный</b>: угол %3.2f°, длина %s; <b>Ctrl</b> "
 "ограничивает угол; с <b>Shift</b> меняется только этот рычаг"
 
-#: ../src/pen-context.cpp:1306
+#: ../src/pen-context.cpp:1731
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12231,7 +12250,7 @@ msgstr ""
 "<b>Рычаг узла</b>: угол %3.2f°, длина %s; <b>Ctrl</b> ограничивает угол; "
 "<b>Shift</b> синхронно вращает противоположный рычаг"
 
-#: ../src/pen-context.cpp:1352
+#: ../src/pen-context.cpp:1777
 msgid "Drawing finished"
 msgstr "Рисование закончено"
 

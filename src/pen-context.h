@@ -43,6 +43,11 @@ struct SPPenContext : public SPDrawContext {
 
     bool polylines_only;
     bool polylines_paraxial;
+    //SpiroLive
+    //Propiedad que guarda si el modo Spiro está activo o no
+    bool spiro;
+    bool bspline;
+    //SpiroLIve End
     int num_clicks;
 
     unsigned int expecting_clicks_for_LPE; // if positive, finish the path after this many clicks

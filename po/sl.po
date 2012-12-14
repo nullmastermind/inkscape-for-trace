@@ -11827,36 +11827,48 @@ msgstr "Preobrni pot"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "V izbiri <b>ni poti</b>, ki bi jih lahko obrnil."
 
-#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "Risanje preklicano"
 
-#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "Nadaljuj izbrano pot"
 
-#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "Ustari novo pot"
 
-#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "Dodaj k izbrani poti"
 
-#: ../src/pen-context.cpp:660
+#: ../src/pen-context.cpp:790
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>Kliknite</b> ali <b>kliknite in povlecite</b>, da zaključite in dokončate "
 "pot."
 
-#: ../src/pen-context.cpp:670
+#: ../src/pen-context.cpp:792 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to close and finish the path."
+" <b>Shift</b>to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:803
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>Kliknite</b> ali <b>kliknite in povlecite</b>, da nadaljujete pot od te "
 "točke."
 
-#: ../src/pen-context.cpp:1265
+#: ../src/pen-context.cpp:805 
+msgid ""
+"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
+"<b>Shift</b> to cusp node"
+msgstr ""
+
+#: ../src/pen-context.cpp:1683
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11865,7 +11877,7 @@ msgstr ""
 "<b>Odsek krivulje</b>: kot %3.2f&#176;, razdalja %s; s <b>Ctrl</b> pripnete "
 "na kot, z <b>Enter</b> zaključite pot"
 
-#: ../src/pen-context.cpp:1266
+#: ../src/pen-context.cpp:1684
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11874,7 +11886,14 @@ msgstr ""
 "<b>Odsek črte</b>: kot %3.2f&#176;, razdalja %s; s <b>Ctrl</b> pripnete na "
 "kot, z <b>Enter</b> zaključite pot"
 
-#: ../src/pen-context.cpp:1283
+#: ../src/pen-context.cpp:1688 
+#, fuzzy, c-format 
+msgid ""
+"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
+"cusp node, <b>Enter</b> to finish the path"
+msgstr ""
+
+#: ../src/pen-context.cpp:1709
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11883,7 +11902,7 @@ msgstr ""
 "<b>Ročica krivulje</b>: kot %3.2f&#176;, dolžina %s; s <b>Ctrl</b> prilepite "
 "kot"
 
-#: ../src/pen-context.cpp:1305
+#: ../src/pen-context.cpp:1730
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -11892,7 +11911,7 @@ msgstr ""
 "<b>Ročica krivulje, simetrična</b>: kot %3.2f&#176;, dolžina %s; s <b>Ctrl</"
 "b> pripnete na kot, s <b>Shift</b> premaknete le to ročico"
 
-#: ../src/pen-context.cpp:1306
+#: ../src/pen-context.cpp:1731
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11901,7 +11920,7 @@ msgstr ""
 "<b>Ročica krivulje</b>: kot %3.2f&#176;, dolžina %s; s <b>Ctrl</b> pripnete "
 "na kot, s <b>Shift</b> premaknete le to ročico"
 
-#: ../src/pen-context.cpp:1352
+#: ../src/pen-context.cpp:1777
 msgid "Drawing finished"
 msgstr "Risanje končano"
 

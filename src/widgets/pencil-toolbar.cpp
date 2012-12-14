@@ -139,7 +139,14 @@ static void sp_add_freehand_mode_toggle(GtkActionGroup* mainActions, GObject* ho
                                 1, _("Create Spiro path"),
                                 2, INKSCAPE_ICON("path-mode-spiro"),
                                 -1 );
-
+            //BSpline
+            gtk_list_store_append( model, &iter );
+            gtk_list_store_set( model, &iter,
+                                0, _("BSpline"),
+                                1, _("Create BSpline path"),
+                                2, INKSCAPE_ICON("path-mode-bspline"),
+                                -1 );
+            //BSpline
             if (!tool_is_pencil) {
                 gtk_list_store_append( model, &iter );
                 gtk_list_store_set( model, &iter,
