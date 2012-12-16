@@ -14,6 +14,9 @@
  */
 
 #include <glibmm/i18n.h>
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+#include <gtkmm/table.h>
 
 #include "ui/widget/registered-widget.h"
 #include "desktop.h"
@@ -36,10 +39,6 @@
 #include "xml/node-event-vector.h"
 #include "verbs.h"
 #include "display/sp-canvas.h"
-
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/table.h>
 
 using Inkscape::DocumentUndo;
 
@@ -275,9 +274,9 @@ CanvasGrid::NewGrid(SPNamedView * nv, Inkscape::XML::Node * repr, SPDocument * d
 
     switch (gridtype) {
         case GRID_RECTANGULAR:
-            return (CanvasGrid*) new CanvasXYGrid(nv, repr, doc);
+            return dynamic_cast<CanvasGrid*>(new CanvasXYGrid(nv, repr, doc));
         case GRID_AXONOMETRIC:
-            return (CanvasGrid*) new CanvasAxonomGrid(nv, repr, doc);
+            return dynamic_cast<CanvasGrid*>(new CanvasAxonomGrid(nv, repr, doc));
     }
 
     return NULL;
@@ -351,12 +350,13 @@ CanvasGrid::newWidget()
     _rcb_enabled->setSlaveWidgets(slaves);
 
     // set widget values
+    _wr.setUpdating (true);
     _rcb_visible->setActive(visible);
     if (snapper != NULL) {
         _rcb_enabled->setActive(snapper->getEnabled());
         _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
-
+    _wr.setUpdating (false);
     return dynamic_cast<Gtk::Widget *> (vbox);
 }
 
@@ -366,7 +366,7 @@ CanvasGrid::on_repr_attr_changed(Inkscape::XML::Node *repr, gchar const *key, gc
     if (!data)
         return;
 
-    ((CanvasGrid*) data)->onReprAttrChanged(repr, key, oldval, newval, is_interactive);
+    (static_cast<CanvasGrid*>(data))->onReprAttrChanged(repr, key, oldval, newval, is_interactive);
 }
 
 bool CanvasGrid::isEnabled()
@@ -735,7 +735,6 @@ _wr.setUpdating (true);
                 new Inkscape::UI::Widget::RegisteredCheckButton( _("_Show dots instead of lines"),
                        _("If set, displays dots at gridpoints instead of gridlines"),
                         "dotted", _wr, false, repr, doc) );
-_wr.setUpdating (false);
 
     Gtk::Widget const *const widget_array[] = {
         0,                  _rumg,
@@ -774,6 +773,8 @@ _wr.setUpdating (false);
     _rsi->setValue (empspacing);
 
     _rcb_dotted->setActive(render_dotted);
+
+    _wr.setUpdating (false);
 
     _rsu_ox->setProgrammatically = false;
     _rsu_oy->setProgrammatically = false;

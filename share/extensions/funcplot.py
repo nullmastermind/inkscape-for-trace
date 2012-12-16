@@ -25,11 +25,15 @@ Changes:
  * 21-Jun-2007: Tavmjong: Added polar coordinates
 
 '''
-import inkex, simplepath, simplestyle
+# standard library
 from math import *
 from random import *
-import gettext
-_ = gettext.gettext
+# local library
+import inkex
+import simplepath
+import simplestyle
+
+inkex.localize()
 
 def drawfunction(xstart, xend, ybottom, ytop, samples, width, height, left, bottom, 
     fx = "sin(x)", fpx = "cos(x)", fponum = True, times2pi = False, polar = False, isoscale = True, drawaxis = True, endpts = False):
@@ -39,6 +43,9 @@ def drawfunction(xstart, xend, ybottom, ytop, samples, width, height, left, bott
         xend   = 2 * pi * xend   
       
     # coords and scales based on the source rect
+    if xstart == xend:
+        inkex.errormsg(_("x-interval cannot be zero. Please modify 'Start X' or 'End X'"))
+        return []
     scalex = width / (xend - xstart)
     xoff = left
     coordx = lambda x: (x - xstart) * scalex + xoff  #convert x-value to coordinate
@@ -48,6 +55,9 @@ def drawfunction(xstart, xend, ybottom, ytop, samples, width, height, left, bott
         polar_scalex = width/2.0
         coordx = lambda x: x * polar_scalex + centerx  #convert x-value to coordinate
 
+    if ytop == ybottom:
+        inkex.errormsg(_("y-interval cannot be zero. Please modify 'Y top' or 'Y bottom'"))
+        return []
     scaley = height / (ytop - ybottom)
     yoff = bottom
     coordy = lambda y: (ybottom - y) * scaley + yoff  #convert y-value to coordinate

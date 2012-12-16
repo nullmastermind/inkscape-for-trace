@@ -40,15 +40,6 @@
 
 #include "icon.h"
 
-// Bring in work-around for Glib versions missing GStatBuf
-#if !GLIB_CHECK_VERSION(2,25,0)
-#if defined (_MSC_VER) && !defined(_WIN64)
-typedef struct _stat32 GStatBuf;
-#else //defined (_MSC_VER) && !defined(_WIN64)
-typedef struct stat GStatBuf;
-#endif //defined (_MSC_VER) && !defined(_WIN64)
-#endif //!GLIB_CHECK_VERSION(2,25,0)
-
 struct IconImpl {
     static void classInit(SPIconClass *klass);
     static void init(SPIcon *icon);
@@ -881,7 +872,7 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
 
     if ( !widget ) {
         //g_message("Creating an SPIcon instance for %s:%d", name, (int)lsize);
-        SPIcon *icon = (SPIcon *)g_object_new(SP_TYPE_ICON, NULL);
+        SPIcon *icon = SP_ICON(g_object_new(SP_TYPE_ICON, NULL));
         icon->lsize = lsize;
         icon->name = g_strdup(name);
         icon->psize = getPhysSize(lsize);

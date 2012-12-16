@@ -22,13 +22,6 @@
 #include "libnrtype/font-instance.h"
 #include "util/unordered-containers.h"
 
-#if !PANGO_VERSION_CHECK(1,24,0)
-#define PANGO_WEIGHT_THIN       static_cast<PangoWeight>(100)
-#define PANGO_WEIGHT_BOOK       static_cast<PangoWeight>(380)
-#define PANGO_WEIGHT_MEDIUM     static_cast<PangoWeight>(500)
-#define PANGO_WEIGHT_ULTRAHEAVY static_cast<PangoWeight>(1000)
-#endif
-
 typedef INK_UNORDERED_MAP<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 
 // need to avoid using the size field
@@ -276,7 +269,7 @@ family_name_compare(char const *a, char const *b)
 #endif
 }
 
-void noop(...) {}
+static void noop(...) {}
 //#define PANGO_DEBUG g_print
 #define PANGO_DEBUG noop
 
@@ -285,7 +278,7 @@ void noop(...) {}
 ///////////////////// FontFactory
 #ifndef USE_PANGO_WIN32
 // the substitute function to tell fontconfig to enforce outline fonts
-void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
+static void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
 {
     FcPatternAddBool(pattern, "FC_OUTLINE",FcTrue);
     //char *fam = NULL;

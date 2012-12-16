@@ -7,10 +7,12 @@
  *   bulia byak <buliabyak@users.sf.net>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
+ *   Tavmjong Bah <tavmjong@free.fr>
  *
  * Copyright (C) 2004-2005 MenTaLguY
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
+ * Copyright (C) 2012 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -59,6 +61,7 @@
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 #include "sp-object-repr.h"
+#include "sp-symbol.h"
 #include "transf_mat_3x4.h"
 #include "unit-constants.h"
 #include "xml/repr.h"
@@ -1107,7 +1110,7 @@ static GSList *find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, 
 /**
 Returns true if an item is among the descendants of group (recursively).
  */
-bool item_is_in_group(SPItem *item, SPGroup *group)
+static bool item_is_in_group(SPItem *item, SPGroup *group)
 {
     bool inGroup = false;
     for ( SPObject *o = group->firstChild() ; o && !inGroup; o = o->getNext() ) {
@@ -1158,7 +1161,7 @@ items. If upto != NULL, then if item upto is encountered (at any level), stops s
 upwards in z-order and returns what it has found so far (i.e. the found item is
 guaranteed to be lower than upto).
  */
-SPItem *find_item_at_point(unsigned int dkey, SPGroup *group, Geom::Point const p, gboolean into_groups, bool take_insensitive = false, SPItem *upto = NULL)
+static SPItem *find_item_at_point(unsigned int dkey, SPGroup *group, Geom::Point const p, gboolean into_groups, bool take_insensitive = false, SPItem *upto = NULL)
 {
     SPItem *seen = NULL;
     SPItem *newseen = NULL;
@@ -1203,7 +1206,7 @@ SPItem *find_item_at_point(unsigned int dkey, SPGroup *group, Geom::Point const 
 Returns the topmost non-layer group from the descendants of group which is at point
 p, or NULL if none. Recurses into layers but not into groups.
  */
-SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Point const p)
+static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Point const p)
 {
     SPItem *seen = NULL;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1374,7 +1377,7 @@ sp_document_resource_list_free(gpointer /*key*/, gpointer value, gpointer /*data
     return TRUE;
 }
 
-unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
+static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 {
     count++; // obj itself
 
@@ -1385,12 +1388,12 @@ unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
     return count;
 }
 
-unsigned int objects_in_document(SPDocument *document)
+static unsigned int objects_in_document(SPDocument *document)
 {
     return count_objects_recursive(document->getRoot(), 0);
 }
 
-void vacuum_document_recursive(SPObject *obj)
+static void vacuum_document_recursive(SPObject *obj)
 {
     if (SP_IS_DEFS(obj)) {
         for ( SPObject *def = obj->firstChild(); def; def = def->getNext()) {
@@ -1454,9 +1457,10 @@ void SPDocument::importDefs(SPDocument *source)
 
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
 
-        // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
         gboolean duplicate = false;
         SPObject *src = source->getObjectByRepr(def);
+
+        // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
         if (src && SP_IS_GRADIENT(src)) {
             SPGradient *gr = SP_GRADIENT(src);
             if (gr->isSolid() || gr->getVector()->isSolid()) {
@@ -1469,6 +1473,35 @@ void SPDocument::importDefs(SPDocument *source)
                             break;
                         }
                     }
+                }
+            }
+        }
+
+        // Prevent duplication of symbols... could be more clever.
+        // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol(). 
+        // We assume that symbols are in defs section (not required by SVG spec).
+        if (src && SP_IS_SYMBOL(src)) {
+
+            Glib::ustring id = src->getRepr()->attribute("id");
+            size_t pos = id.find( "_inkscape_duplicate" );
+            if( pos != Glib::ustring::npos ) {
+
+                // This is our symbol, now get rid of tag
+                id.erase( pos ); 
+
+                // Check that it really is a duplicate
+                for (SPObject *trg = this->getDefs()->firstChild() ; trg ; trg = trg->getNext()) {
+                    if( trg && SP_IS_SYMBOL(trg) && src != trg ) { 
+                        std::string id2 = trg->getRepr()->attribute("id");
+
+                        if( !id.compare( id2 ) ) {
+                            duplicate = true;
+                            break;
+                        }
+                    }
+                }
+                if ( !duplicate ) {
+                    src->getRepr()->setAttribute("id", id.c_str() );
                 }
             }
         }

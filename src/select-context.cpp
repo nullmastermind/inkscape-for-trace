@@ -272,7 +272,7 @@ sp_select_context_abort(SPEventContext *event_context)
     return false;
 }
 
-bool
+static bool
 key_is_a_modifier (guint key) {
     return (key == GDK_KEY_Alt_L ||
                 key == GDK_KEY_Alt_R ||
@@ -284,7 +284,7 @@ key_is_a_modifier (guint key) {
             key == GDK_KEY_Meta_R);
 }
 
-void
+static void
 sp_select_context_up_one_layer(SPDesktop *desktop)
 {
     /* Click in empty place, go up one level -- but don't leave a layer to root.
@@ -1140,8 +1140,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             }
             // set cursor to default.
             if (!desktop->isWaitingCursor()) {
-		GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
-                gdk_window_set_cursor(window, event_context->cursor);
+                // Do we need to reset the cursor here on key release ?
+                //GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
+                //gdk_window_set_cursor(window, event_context->cursor);
             }
             break;
         default:

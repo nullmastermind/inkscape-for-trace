@@ -280,7 +280,9 @@ public:
 
     void setCurrentLayer(SPObject *object);
     void toggleLayerSolo(SPObject *object);
-    void toggleAllLayers(bool hidden);
+    void toggleHideAllLayers(bool hide);
+    void toggleLockAllLayers(bool lock);
+    void toggleLockOtherLayers(SPObject *object);
     SPObject *layerForObject(SPObject *object);
     bool isLayer(SPObject *object) const;
     bool isWithinViewport(SPItem *item) const;
@@ -364,6 +366,7 @@ public:
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
+    void toggleToolbar(gchar const *toolbar_name);
 
     bool is_iconified();
     bool is_maximized();

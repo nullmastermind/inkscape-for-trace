@@ -55,6 +55,7 @@
 #include "document.h"
 #include "event-log.h"
 #include "helper/units.h"
+#include "interface.h"
 #include "inkscape-private.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
@@ -496,12 +497,50 @@ void SPDesktop::setCurrentLayer(SPObject *object) {
     _layer_hierarchy->setBottom(object);
 }
 
-void SPDesktop::toggleAllLayers(bool hide) {
+void SPDesktop::toggleHideAllLayers(bool hide) {
 
-    for ( SPObject* obj = currentRoot(); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
         SP_ITEM(obj)->setHidden(hide);
     }
 }
+
+void SPDesktop::toggleLockAllLayers(bool lock) {
+
+    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+        SP_ITEM(obj)->setLocked(lock);
+    }
+}
+
+void SPDesktop::toggleLockOtherLayers(SPObject *object) {
+    g_return_if_fail(SP_IS_GROUP(object));
+    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+
+    bool othersLocked = false;
+    std::vector<SPObject*> layers;
+    for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
+        // Dont lock any ancestors, since that would in turn lock the layer as well
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersLocked |= !SP_ITEM(obj)->isLocked();
+        }
+    }
+    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersLocked |= !SP_ITEM(obj)->isLocked();
+        }
+    }
+
+    SPItem *item = SP_ITEM(object);
+    if ( item->isLocked() ) {
+        item->setLocked(false);
+    }
+
+    for ( std::vector<SPObject*>::iterator it = layers.begin(); it != layers.end(); ++it ) {
+        SP_ITEM(*it)->setLocked(othersLocked);
+    }
+}
+
 
 void SPDesktop::toggleLayerSolo(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
@@ -510,12 +549,17 @@ void SPDesktop::toggleLayerSolo(SPObject *object) {
     bool othersShowing = false;
     std::vector<SPObject*> layers;
     for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
-        layers.push_back(obj);
-        othersShowing |= !SP_ITEM(obj)->isHidden();
+        // Don't hide ancestors, since that would in turn hide the layer as well
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersShowing |= !SP_ITEM(obj)->isHidden();
+        }
     }
     for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
-        layers.push_back(obj);
-        othersShowing |= !SP_ITEM(obj)->isHidden();
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersShowing |= !SP_ITEM(obj)->isHidden();
+        }
     }
 
 
@@ -1309,6 +1353,17 @@ SPDesktop::toggleScrollbars()
     _widget->toggleScrollbars();
 }
 
+
+void SPDesktop::toggleToolbar(gchar const *toolbar_name)
+{
+    Glib::ustring pref_path = getLayoutPrefPath(this) + toolbar_name + "/state";
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean visible = prefs->getBool(pref_path, true);
+    prefs->setBool(pref_path, !visible);
+
+    layoutWidget();
+}
+
 void
 SPDesktop::layoutWidget()
 {
@@ -1464,7 +1519,6 @@ void SPDesktop::toggleSnapGlobal()
     bool v = namedview->getSnapGlobal();
     namedview->setSnapGlobal(!v);
 }
-
 
 //----------------------------------------------------------------------
 // Callback implementations. The virtual ones are connected by the view.
@@ -1849,6 +1903,7 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_CLONETILER, "/dialogs/clonetiler") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_ITEM, "/dialogs/object") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SPELLCHECK, "/dialogs/spellcheck") );
+    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SYMBOLS, "/dialogs/symbols") );
 
     for (iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); iter++) {
         int verbId = iter->first;

@@ -107,7 +107,7 @@ sp_color_notebook_switch_page(GtkNotebook *notebook,
 {
     if ( colorbook )
     {
-        ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+        ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
         nb->switchPage( notebook, page, page_num );
 
         // remember the page we switched to
@@ -144,7 +144,7 @@ static gint sp_color_notebook_menu_handler( GtkWidget *widget, GdkEvent *event )
     if (event->type == GDK_BUTTON_PRESS)
     {
         SPColorSelector* csel = SP_COLOR_SELECTOR(widget);
-        ((ColorNotebook*)(csel->base))->menuHandler( event );
+        (dynamic_cast<ColorNotebook*>(csel->base))->menuHandler( event );
 
         /* Tell calling code that we have handled this event; the buck
          * stops here. */
@@ -173,11 +173,11 @@ static void sp_color_notebook_menuitem_response (GtkMenuItem *menuitem, gpointer
     {
         if ( active )
         {
-            ((ColorNotebook*)(SP_COLOR_SELECTOR(entry->backPointer)->base))->addPage(entry->type, entry->submode);
+            (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(entry->backPointer)->base))->addPage(entry->type, entry->submode);
         }
         else
         {
-            ((ColorNotebook*)(SP_COLOR_SELECTOR(entry->backPointer)->base))->removePage(entry->type, entry->submode);
+            (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(entry->backPointer)->base))->removePage(entry->type, entry->submode);
         }
     }
 }
@@ -195,7 +195,6 @@ sp_color_notebook_init (SPColorNotebook *colorbook)
 
 void ColorNotebook::init()
 {
-    GtkWidget* table = 0;
     guint row = 0;
     guint i = 0;
     guint j = 0;
@@ -279,22 +278,49 @@ void ColorNotebook::init()
         }
     }
 
-    table = gtk_table_new (2, 3, FALSE);
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget* table = gtk_grid_new();
+#else
+    GtkWidget* table = gtk_table_new(2, 3, FALSE);
+#endif
+
     gtk_widget_show (table);
 
     gtk_box_pack_start (GTK_BOX (_csel), table, TRUE, TRUE, 0);
 
     sp_set_font_size_smaller (_buttonbox);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_buttonbox, XPAD);
+    gtk_widget_set_margin_right(_buttonbox, XPAD);
+    gtk_widget_set_margin_top(_buttonbox, YPAD);
+    gtk_widget_set_margin_bottom(_buttonbox, YPAD);
+    gtk_widget_set_hexpand(_buttonbox, TRUE);
+    gtk_widget_set_valign(_buttonbox, GTK_ALIGN_CENTER);
+    gtk_grid_attach(GTK_GRID(table), _buttonbox, 0, row, 2, 1);
+#else
     gtk_table_attach (GTK_TABLE (table), _buttonbox, 0, 2, row, row + 1,
                       static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
-                      static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
+                      static_cast<GtkAttachOptions>(0),
                       XPAD, YPAD);
+#endif
+
     row++;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_book, XPAD*2);
+    gtk_widget_set_margin_right(_book, XPAD*2);
+    gtk_widget_set_margin_top(_book, YPAD);
+    gtk_widget_set_margin_bottom(_book, YPAD);
+    gtk_widget_set_hexpand(_book, TRUE);
+    gtk_widget_set_vexpand(_book, TRUE);
+    gtk_grid_attach(GTK_GRID(table), _book, 0, row, 2, 1);
+#else
     gtk_table_attach (GTK_TABLE (table), _book, 0, 2, row, row + 1,
                       static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
                       static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
                       XPAD*2, YPAD);
+#endif
 
     // restore the last active page
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -349,7 +375,6 @@ void ColorNotebook::init()
 
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *rgbabox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(rgbabox), FALSE);
 #else
     GtkWidget *rgbabox = gtk_hbox_new (FALSE, 0);
 #endif
@@ -376,7 +401,6 @@ void ColorNotebook::init()
     gtk_widget_set_tooltip_text (_box_toomuchink, _("Too much ink!"));
     gtk_widget_set_sensitive (_box_toomuchink, false);
     gtk_box_pack_start(GTK_BOX(rgbabox), _box_toomuchink, FALSE, FALSE, 2);
-
 #endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 
@@ -411,7 +435,15 @@ void ColorNotebook::init()
     gtk_widget_hide(GTK_WIDGET(_box_toomuchink));
 #endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(rgbabox, XPAD);
+    gtk_widget_set_margin_right(rgbabox, XPAD);
+    gtk_widget_set_margin_top(rgbabox, YPAD);
+    gtk_widget_set_margin_bottom(rgbabox, YPAD);
+    gtk_grid_attach(GTK_GRID(table), rgbabox, 0, row, 2, 1);
+#else
     gtk_table_attach (GTK_TABLE (table), rgbabox, 0, 2, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
+#endif
 
 #ifdef SPCS_PREVIEW
     _p = sp_color_preview_new (0xffffffff);
@@ -467,14 +499,11 @@ static void sp_color_notebook_hide(GtkWidget *widget)
     gtk_widget_hide(widget);
 }
 
-GtkWidget *
-sp_color_notebook_new (void)
+GtkWidget *sp_color_notebook_new()
 {
-    SPColorNotebook *colorbook;
+    SPColorNotebook *colorbook = SP_COLOR_NOTEBOOK(g_object_new (SP_TYPE_COLOR_NOTEBOOK, NULL));
 
-    colorbook = (SPColorNotebook*)g_object_new (SP_TYPE_COLOR_NOTEBOOK, NULL);
-
-    return GTK_WIDGET (colorbook);
+    return GTK_WIDGET(colorbook);
 }
 
 ColorNotebook::ColorNotebook( SPColorSelector* csel )
@@ -520,7 +549,7 @@ void ColorNotebook::_picker_clicked(GtkWidget *widget, SPColorNotebook *colorboo
 
 void ColorNotebook::_rgbaEntryChangedHook(GtkEntry *entry, SPColorNotebook *colorbook)
 {
-    ((ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base))->_rgbaEntryChanged( entry );
+    (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base))->_rgbaEntryChanged( entry );
 }
 
 void ColorNotebook::_rgbaEntryChanged(GtkEntry* entry)
@@ -630,7 +659,7 @@ void ColorNotebook::_setCurrentPage(int i)
 
 void ColorNotebook::_buttonClicked(GtkWidget *widget,  SPColorNotebook *colorbook)
 {
-    ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget))) {
         return;
@@ -645,14 +674,14 @@ void ColorNotebook::_buttonClicked(GtkWidget *widget,  SPColorNotebook *colorboo
 
 void ColorNotebook::_entryGrabbed (SPColorSelector *, SPColorNotebook *colorbook)
 {
-    ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
     nb->_grabbed();
 }
 
 void ColorNotebook::_entryDragged (SPColorSelector *csel, SPColorNotebook *colorbook)
 {
     gboolean oldState;
-    ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
 
     oldState = nb->_dragging;
 
@@ -664,14 +693,14 @@ void ColorNotebook::_entryDragged (SPColorSelector *csel, SPColorNotebook *color
 
 void ColorNotebook::_entryReleased (SPColorSelector *, SPColorNotebook *colorbook)
 {
-    ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
     nb->_released();
 }
 
 void ColorNotebook::_entryChanged (SPColorSelector *csel, SPColorNotebook *colorbook)
 {
     gboolean oldState;
-    ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
 
     oldState = nb->_dragging;
 
@@ -688,7 +717,7 @@ void ColorNotebook::_entryModified (SPColorSelector *csel, SPColorNotebook *colo
     g_return_if_fail (csel != NULL);
     g_return_if_fail (SP_IS_COLOR_SELECTOR (csel));
 
-    ColorNotebook* nb = (ColorNotebook*)(SP_COLOR_SELECTOR(colorbook)->base);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
     SPColor color;
     gfloat alpha = 1.0;
 

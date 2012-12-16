@@ -234,7 +234,7 @@ private:
     PushPull(const PushPull& other);
 };
 
-void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
+static void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
 {
 //    g_message( "user_read_data(%d)", length );
 
@@ -255,12 +255,12 @@ void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
 //    g_message("things out");
 }
 
-void user_write_data( png_structp /*png_ptr*/, png_bytep /*data*/, png_size_t /*length*/ )
+static void user_write_data( png_structp /*png_ptr*/, png_bytep /*data*/, png_size_t /*length*/ )
 {
     //g_message( "user_write_data(%d)", length );
 }
 
-void user_flush_data( png_structp /*png_ptr*/ )
+static void user_flush_data( png_structp /*png_ptr*/ )
 {
     //g_message( "user_flush_data" );
 }
@@ -424,7 +424,7 @@ static bool readPngAndHeaders( PushPull &youme, gint & dpiX, gint & dpiY )
     return good;
 }
 
-static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, gchar*& pixPath, GError **/*error*/ )
+GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, gchar*& pixPath, GError **/*error*/ )
 {
     GdkPixbuf* buf = NULL;
     PushPull youme;
@@ -433,10 +433,16 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
     modTime = 0;
     if ( pixPath ) {
         g_free(pixPath);
-        pixPath = 0;
+        pixPath = NULL;
+    }
+    
+    struct stat stdir;
+    g_stat(filename, &stdir);
+    if (stdir.st_mode & S_IFDIR){
+        //filename is not correct: it is a directory name and hence further code can not return valid results
+        return NULL;
     }
 
-    //buf = gdk_pixbuf_new_from_file( filename, error );
     dump_fopen_call( filename, "pixbuf_new_from_file" );
     FILE* fp = fopen_utf8name( filename, "r" );
     if ( fp )
@@ -479,7 +485,6 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
                         }
                     } else if ( !latter ) {
                         latter = TRUE;
-                        //g_message("  READing latter");
                     }
                     // Now clear out the buffer so we can read more.
                     // (dumping out unused)
@@ -492,23 +497,6 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
                 buf = gdk_pixbuf_loader_get_pixbuf( loader );
                 if ( buf ) {
                     g_object_ref(buf);
-
-                    if ( dpiX ) {
-                        gchar *tmp = g_strdup_printf( "%d", dpiX );
-                        if ( tmp ) {
-                            //g_message("Need to set DpiX: %s", tmp);
-                            //gdk_pixbuf_set_option( buf, "Inkscape::DpiX", tmp );
-                            g_free( tmp );
-                        }
-                    }
-                    if ( dpiY ) {
-                        gchar *tmp = g_strdup_printf( "%d", dpiY );
-                        if ( tmp ) {
-                            //g_message("Need to set DpiY: %s", tmp);
-                            //gdk_pixbuf_set_option( buf, "Inkscape::DpiY", tmp );
-                            g_free( tmp );
-                        }
-                    }
                 }
             } else {
                 // do something
@@ -524,22 +512,6 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
     } else {
         g_warning ("Unable to open linked file: %s", filename);
     }
-
-/*
-    if ( buf )
-    {
-        const gchar* bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiX" );
-        if ( bloop )
-        {
-            g_message("DPI X is [%s]", bloop);
-        }
-        bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiY" );
-        if ( bloop )
-        {
-            g_message("DPI Y is [%s]", bloop);
-        }
-    }
-*/
 
     return buf;
 }

@@ -19,6 +19,7 @@
 #include <gtk/gtk.h>
 
 #include "document.h"
+#include "../document-undo.h"
 #include "../document-private.h"
 #include "../gradient-chemistry.h"
 #include "inkscape.h"
@@ -52,6 +53,8 @@ static void sp_gradient_selector_dispose(GObject *object);
 static void sp_gradient_selector_vector_set (SPGradientVectorSelector *gvs, SPGradient *gr, SPGradientSelector *sel);
 static void sp_gradient_selector_edit_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
 static void sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
+static void sp_gradient_selector_delete_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
+
 
 static GtkVBoxClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
@@ -124,6 +127,7 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     sel->safelyInit = true;
     sel->blocked = false;
     new (&sel->nonsolid) std::vector<GtkWidget*>();
+    new (&sel->swatch_widgets) std::vector<GtkWidget*>();
 
     sel->mode = SPGradientSelector::MODE_LINEAR;
 
@@ -143,17 +147,17 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     sel->icon_renderer = Gtk::manage(new Gtk::CellRendererPixbuf());
     sel->text_renderer = Gtk::manage(new Gtk::CellRendererText());
 
-    sel->treeview->append_column("Gradient", *sel->icon_renderer);
+    sel->treeview->append_column(_("Gradient"), *sel->icon_renderer);
     Gtk::TreeView::Column* icon_column = sel->treeview->get_column(0);
     icon_column->add_attribute(sel->icon_renderer->property_pixbuf(), sel->columns->pixbuf);
     icon_column->set_sort_column(sel->columns->color);
     icon_column->set_clickable(true);
 
-    sel->treeview->append_column("Name", *sel->text_renderer);
+    sel->treeview->append_column(_("Name"), *sel->text_renderer);
     Gtk::TreeView::Column* name_column = sel->treeview->get_column(1);
     sel->text_renderer->property_editable() = true;
     name_column->add_attribute(sel->text_renderer->property_text(), sel->columns->name);
-    name_column->set_min_width(200);
+    name_column->set_min_width(180);
     name_column->set_clickable(true);
     name_column->set_resizable(true);
 
@@ -169,7 +173,7 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     count_column->signal_clicked().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeCountColClick) );
 
     gvs->tree_select_connection = sel->treeview->get_selection()->signal_changed().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeSelection) );
-    sel->text_renderer->signal_edited().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeEdited) );
+    sel->text_renderer->signal_edited().connect( sigc::mem_fun(*sel, &SPGradientSelector::onGradientRename) );
 
     sel->scrolled_window = Gtk::manage(new Gtk::ScrolledWindow());
     sel->scrolled_window->add(*sel->treeview);
@@ -188,7 +192,7 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
 #else
     GtkWidget *hb = gtk_hbox_new( FALSE, 2 );
 #endif
-    sel->nonsolid.push_back(hb);
+    //sel->nonsolid.push_back(hb);
     gtk_box_pack_start( GTK_BOX(sel), hb, FALSE, FALSE, 0 );
 
     sel->add = gtk_button_new ();
@@ -212,6 +216,16 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     gtk_button_set_relief(GTK_BUTTON(sel->edit), GTK_RELIEF_NONE);
     gtk_widget_set_tooltip_text( sel->edit, _("Edit gradient"));
 
+    sel->del = gtk_button_new ();
+    gtk_button_set_image((GtkButton*)sel->del , gtk_image_new_from_stock ( GTK_STOCK_REMOVE, GTK_ICON_SIZE_SMALL_TOOLBAR ) );
+
+    sel->swatch_widgets.push_back(sel->del);
+    gtk_box_pack_start (GTK_BOX (hb), sel->del, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (sel->del), "clicked", G_CALLBACK (sp_gradient_selector_delete_vector_clicked), sel);
+    gtk_widget_set_sensitive (sel->del, FALSE);
+    gtk_button_set_relief(GTK_BUTTON(sel->del), GTK_RELIEF_NONE);
+    gtk_widget_set_tooltip_text( sel->del, _("Delete swatch"));
+
     gtk_widget_show_all(hb);
 
 
@@ -225,6 +239,7 @@ static void sp_gradient_selector_dispose(GObject *object)
         sel->safelyInit = false;
         using std::vector;
         sel->nonsolid.~vector<GtkWidget*>();
+        sel->swatch_widgets.~vector<GtkWidget*>();
     }
 
     if (sel->icon_renderer) {
@@ -248,12 +263,9 @@ void SPGradientSelector::setSpread(SPGradientSpread spread)
 }
 
 
-GtkWidget *
-sp_gradient_selector_new (void)
+GtkWidget *sp_gradient_selector_new()
 {
-    SPGradientSelector *sel;
-
-    sel = (SPGradientSelector*)g_object_new (SP_TYPE_GRADIENT_SELECTOR, NULL);
+    SPGradientSelector *sel = SP_GRADIENT_SELECTOR(g_object_new (SP_TYPE_GRADIENT_SELECTOR, NULL));
 
     return (GtkWidget *) sel;
 }
@@ -267,9 +279,28 @@ void SPGradientSelector::setMode(SelectorMode mode)
             {
                 gtk_widget_hide(*it);
             }
+            for (std::vector<GtkWidget*>::iterator it = swatch_widgets.begin(); it != swatch_widgets.end(); ++it)
+            {
+                gtk_widget_show_all(*it);
+            }
+
+            Gtk::TreeView::Column* icon_column = treeview->get_column(0);
+            icon_column->set_title(_("Swatch"));
 
             SPGradientVectorSelector* vs = SP_GRADIENT_VECTOR_SELECTOR(vectors);
             vs->setSwatched();
+        } else {
+            for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+            {
+                gtk_widget_show_all(*it);
+            }
+            for (std::vector<GtkWidget*>::iterator it = swatch_widgets.begin(); it != swatch_widgets.end(); ++it)
+            {
+                gtk_widget_hide(*it);
+            }
+            Gtk::TreeView::Column* icon_column = treeview->get_column(0);
+            icon_column->set_title(_("Gradient"));
+
         }
     }
 }
@@ -289,7 +320,7 @@ SPGradientSpread SPGradientSelector::getSpread()
     return gradientSpread;
 }
 
-void SPGradientSelector::onTreeEdited( const Glib::ustring& path_string, const Glib::ustring& new_text)
+void SPGradientSelector::onGradientRename( const Glib::ustring& path_string, const Glib::ustring& new_text)
 {
     Gtk::TreePath path(path_string);
     Gtk::TreeModel::iterator iter = store->get_iter(path);
@@ -300,10 +331,12 @@ void SPGradientSelector::onTreeEdited( const Glib::ustring& path_string, const G
         if ( row ) {
             SPObject* obj = row[columns->data];
             if ( obj ) {
+                row[columns->name] = gr_prepare_label(obj);
                 if (!new_text.empty() && new_text != row[columns->name]) {
                   rename_id(obj, new_text );
+                  Inkscape::DocumentUndo::done(obj->document, SP_VERB_CONTEXT_GRADIENT,
+                                     _("Rename gradient"));
                 }
-                row[columns->name] = gr_prepare_label(obj);
             }
         }
     }
@@ -336,6 +369,14 @@ void SPGradientSelector::onTreeSelection()
         return;
     }
 
+    if (!treeview->has_focus()) {
+        /* Workaround for GTK bug on Windows/OS X
+         * When the treeview initially doesn't have focus and is clicked
+         * sometimes get_selection()->signal_changed() has the wrong selection
+         */
+        treeview->grab_focus();
+    }
+
     const Glib::RefPtr<Gtk::TreeSelection> sel = treeview->get_selection();
     if (!sel) {
         return;
@@ -350,7 +391,7 @@ void SPGradientSelector::onTreeSelection()
     }
 
     if (obj) {
-        sp_gradient_selector_vector_set (NULL, (SPGradient*)obj, this);
+        sp_gradient_selector_vector_set (NULL, SP_GRADIENT(obj), this);
     }
 }
 
@@ -363,7 +404,10 @@ bool SPGradientSelector::_checkForSelected(const Gtk::TreePath &path, const Gtk:
     {
         treeview->scroll_to_row(path, 0.5);
         Glib::RefPtr<Gtk::TreeSelection> select = treeview->get_selection();
+        bool wasBlocked = blocked;
+        blocked = true;
         select->select(iter);
+        blocked = wasBlocked;
         found = true;
     }
 
@@ -401,6 +445,17 @@ void SPGradientSelector::setVector(SPDocument *doc, SPGradient *vector)
                     gtk_widget_show_all(*it);
                 }
             }
+        } else if (mode != MODE_SWATCH) {
+
+            for (std::vector<GtkWidget*>::iterator it = swatch_widgets.begin(); it != swatch_widgets.end(); ++it)
+            {
+                gtk_widget_hide(*it);
+            }
+            for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+            {
+                gtk_widget_show_all(*it);
+            }
+
         }
 
         if (edit) {
@@ -409,12 +464,18 @@ void SPGradientSelector::setVector(SPDocument *doc, SPGradient *vector)
         if (add) {
             gtk_widget_set_sensitive(add, TRUE);
         }
+        if (del) {
+            gtk_widget_set_sensitive(del, TRUE);
+        }
     } else {
         if (edit) {
             gtk_widget_set_sensitive(edit, FALSE);
         }
         if (add) {
             gtk_widget_set_sensitive(add, (doc != NULL));
+        }
+        if (del) {
+            gtk_widget_set_sensitive(del, FALSE);
         }
     }
 }
@@ -438,6 +499,29 @@ sp_gradient_selector_vector_set (SPGradientVectorSelector *gvs, SPGradient *gr, 
         sel->blocked = FALSE;
 
     }
+}
+
+
+static void
+sp_gradient_selector_delete_vector_clicked (GtkWidget */*w*/, SPGradientSelector *sel)
+{
+    const Glib::RefPtr<Gtk::TreeSelection> selection = sel->treeview->get_selection();
+    if (!selection) {
+        return;
+    }
+
+    SPGradient *obj = NULL;
+    /* Single selection */
+    Gtk::TreeModel::iterator iter = selection->get_selected();
+    if ( iter ) {
+        Gtk::TreeModel::Row row = *iter;
+        obj = row[sel->columns->data];
+    }
+
+    if (obj) {
+        sp_gradient_unset_swatch(SP_ACTIVE_DESKTOP, obj->getId());
+    }
+
 }
 
 static void
@@ -494,7 +578,7 @@ sp_gradient_selector_add_vector_clicked (GtkWidget */*w*/, SPGradientSelector *s
 
     Glib::ustring old_id = gr->getId();
 
-    gr = (SPGradient *) doc->getObjectByRepr(repr);
+    gr = SP_GRADIENT(doc->getObjectByRepr(repr));
 
     // Rename the new gradients id to be similar to the cloned gradients
     rename_id(gr, old_id);

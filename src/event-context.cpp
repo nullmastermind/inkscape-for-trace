@@ -172,6 +172,27 @@ static void sp_event_context_dispose(GObject *object) {
 }
 
 /**
+ * Set the cursor to a standard GDK cursor
+ */
+static void sp_event_context_set_cursor(SPEventContext *event_context, GdkCursorType cursor_type) {
+
+    GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
+    GdkDisplay *display = gdk_display_get_default();
+    GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
+
+#if WITH_GTKMM_3_0
+    if (cursor) {
+          gdk_window_set_cursor (gtk_widget_get_window (w), cursor);
+          g_object_unref (cursor);
+    }
+#else
+    gdk_window_set_cursor (gtk_widget_get_window (w), cursor);
+    gdk_cursor_unref (cursor);
+#endif
+
+}
+
+/**
  * Recreates and draws cursor on desktop related to SPEventContext.
  */
 void sp_event_context_update_cursor(SPEventContext *ec) {
@@ -360,6 +381,7 @@ static gint sp_event_context_private_root_handler(
         SPEventContext *event_context, GdkEvent *event) {
     static Geom::Point button_w;
     static unsigned int panning = 0;
+    static unsigned int panning_cursor = 0;
     static unsigned int zoom_rb = 0;
 
     SPDesktop *desktop = event_context->desktop;
@@ -393,6 +415,7 @@ static gint sp_event_context_private_root_handler(
         switch (event->button.button) {
         case 1:
             if (event_context->space_panning) {
+
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 sp_event_context_discard_delayed_snap_event(event_context);
                 panning = 1;
@@ -408,6 +431,7 @@ static gint sp_event_context_private_root_handler(
             if (event->button.state & GDK_SHIFT_MASK) {
                 zoom_rb = 2;
             } else {
+
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 sp_event_context_discard_delayed_snap_event(event_context);
                 panning = 2;
@@ -415,6 +439,7 @@ static gint sp_event_context_private_root_handler(
                         GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->button.time - 1);
+
             }
             ret = TRUE;
             break;
@@ -439,10 +464,23 @@ static gint sp_event_context_private_root_handler(
         break;
     case GDK_MOTION_NOTIFY:
         if (panning) {
+            if (panning == 4 && !xp && !yp ) {
+                // <Space> + mouse panning started, save location and grab canvas
+                xp = event->motion.x;
+                yp = event->motion.y;
+                button_w = Geom::Point(event->motion.x, event->motion.y);
+
+                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                        GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
+                                | GDK_POINTER_MOTION_MASK
+                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                        event->motion.time - 1);
+
+
+            }
             if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
-                    || (panning == 1 && !(event->motion.state
-                            & GDK_BUTTON1_MASK)) || (panning == 3
-                    && !(event->motion.state & GDK_BUTTON3_MASK))) {
+                    || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
+                    || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
                 /* Gdk seems to lose button release for us sometimes :-( */
                 panning = 0;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
@@ -465,6 +503,11 @@ static gint sp_event_context_private_root_handler(
                 // when scrolling is slow
                 gobble_motion_events(panning == 2 ? GDK_BUTTON2_MASK : (panning
                         == 1 ? GDK_BUTTON1_MASK : GDK_BUTTON3_MASK));
+
+                if (panning_cursor == 0) {
+                    panning_cursor = 1;
+                    sp_event_context_set_cursor(event_context, GDK_FLEUR);
+                }
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
                 Geom::Point const moved_w(motion_w - button_w);
@@ -496,6 +539,11 @@ static gint sp_event_context_private_root_handler(
         break;
     case GDK_BUTTON_RELEASE:
         xp = yp = 0;
+        if (panning_cursor == 1) {
+            panning_cursor = 0;
+            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
+            gdk_window_set_cursor(gtk_widget_get_window (w), event_context->cursor);
+        }
         if (within_tolerance && (panning || zoom_rb)) {
             zoom_rb = 0;
             if (panning) {
@@ -535,6 +583,7 @@ static gint sp_event_context_private_root_handler(
             }
             ret = TRUE;
         }
+
         break;
     case GDK_KEY_PRESS: {
         double const acceleration = prefs->getDoubleLimited(
@@ -637,15 +686,13 @@ static gint sp_event_context_private_root_handler(
             }
             break;
         case GDK_KEY_space:
-            if (prefs->getBool("/options/spacepans/value")) {
-                event_context->space_panning = true;
-                event_context->_message_context->set(Inkscape::INFORMATION_MESSAGE,
-                        _("<b>Space+mouse drag</b> to pan canvas"));
-                ret = TRUE;
-            } else {
-                sp_toggle_selector(desktop);
-                ret = TRUE;
-            }
+            xp = yp = 0;
+            within_tolerance = true;
+            panning = 4;
+            event_context->space_panning = true;
+            event_context->_message_context->set(Inkscape::INFORMATION_MESSAGE,
+                    _("<b>Space+mouse move</b> to pan canvas"));
+            ret = TRUE;
             break;
         case GDK_KEY_z:
         case GDK_KEY_Z:
@@ -660,17 +707,32 @@ static gint sp_event_context_private_root_handler(
         }
         break;
     case GDK_KEY_RELEASE:
+
+        // Stop panning on any key release
+        if (event_context->space_panning) {
+            event_context->space_panning = false;
+            event_context->_message_context->clear();
+        }
+
+        if (panning) {
+            panning = 0;
+            xp = yp = 0;
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
+                    event->key.time);
+            desktop->updateNow();
+        }
+
+        if (panning_cursor == 1) {
+            panning_cursor = 0;
+            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
+            gdk_window_set_cursor(gtk_widget_get_window (w), event_context->cursor);
+        }
+
         switch (get_group0_keyval(&event->key)) {
         case GDK_KEY_space:
-            if (event_context->space_panning) {
-                event_context->space_panning = false;
-                event_context->_message_context->clear();
-                if (panning == 1) {
-                    panning = 0;
-                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                            event->key.time);
-                    desktop->updateNow();
-                }
+            if (within_tolerance == true) {
+                // Space was pressed, but not panned
+                sp_toggle_selector(desktop);
                 ret = TRUE;
             }
             break;
@@ -809,8 +871,8 @@ public:
         Inkscape::Preferences::Observer(path), _ec(ec) {
     }
     virtual void notify(Inkscape::Preferences::Entry const &val) {
-        if (((SPEventContextClass *) G_OBJECT_GET_CLASS(_ec))->set) {
-            ((SPEventContextClass *) G_OBJECT_GET_CLASS(_ec))->set(_ec,
+        if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set) {
+            (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set(_ec,
                     const_cast<Inkscape::Preferences::Entry*> (&val));
         }
     }
@@ -843,8 +905,8 @@ sp_event_context_new(GType type, SPDesktop *desktop, gchar const *pref_path,
         prefs->addObserver(*(ec->pref_observer));
     }
 
-    if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->setup)
-        ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->setup(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->setup)
+        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->setup(ec);
 
     return ec;
 }
@@ -862,8 +924,8 @@ void sp_event_context_finish(SPEventContext *ec) {
         g_warning("Finishing event context with active link\n");
     }
 
-    if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->finish)
-        ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->finish(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish)
+        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish(ec);
 }
 
 //-------------------------------member functions
@@ -919,11 +981,11 @@ void sp_event_context_read(SPEventContext *ec, gchar const *key) {
     g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
     g_return_if_fail(key != NULL);
 
-    if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set) {
+    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->set) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         Inkscape::Preferences::Entry val = prefs->getEntry(
                 ec->pref_observer->observed_path + '/' + key);
-        ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set(ec, &val);
+        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->set(ec, &val);
     }
 }
 
@@ -939,8 +1001,8 @@ void sp_event_context_activate(SPEventContext *ec) {
     // context should take care of this by itself.
     sp_event_context_discard_delayed_snap_event(ec);
 
-    if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->activate)
-        ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->activate(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->activate)
+        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->activate(ec);
 }
 
 /**
@@ -950,8 +1012,8 @@ void sp_event_context_deactivate(SPEventContext *ec) {
     g_return_if_fail(ec != NULL);
     g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
 
-    if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->deactivate)
-        ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->deactivate(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate)
+        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate(ec);
 }
 
 /**
@@ -992,7 +1054,7 @@ gint sp_event_context_virtual_root_handler(SPEventContext * event_context, GdkEv
     gint ret = false;
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
-        ret = ((SPEventContextClass *) G_OBJECT_GET_CLASS(event_context))->root_handler(event_context, event);
+        ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->root_handler(event_context, event);
         set_event_location(event_context->desktop, event);
     }
     return ret;
@@ -1031,7 +1093,7 @@ gint sp_event_context_virtual_item_handler(SPEventContext * event_context, SPIte
     gint ret = false;
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
-        ret = ((SPEventContextClass *) G_OBJECT_GET_CLASS(event_context))->item_handler(event_context, item, event);
+        ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);
         } else {

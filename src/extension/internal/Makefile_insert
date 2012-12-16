@@ -4,7 +4,12 @@ if WITH_LIBWPG
 ink_common_sources += \
 	extension/internal/wpg-input.cpp	\
 	extension/internal/wpg-input.h
+endif
 
+if WITH_LIBVISIO
+ink_common_sources += \
+	extension/internal/vsd-input.cpp	\
+	extension/internal/vsd-input.h
 endif
 
 if USE_IMAGE_MAGICK
@@ -127,12 +132,24 @@ ink_common_sources +=	\
 	extension/internal/latex-pstricks.h	\
 	extension/internal/latex-pstricks-out.cpp	\
 	extension/internal/latex-pstricks-out.h	\
+	extension/internal/filter/bevels.h	\
+	extension/internal/filter/blurs.h \
+	extension/internal/filter/bumps.h \
+	extension/internal/filter/color.h \
+	extension/internal/filter/distort.h \
+	extension/internal/filter/filter.h \
+	extension/internal/filter/image.h \
+	extension/internal/filter/morphology.h \
+	extension/internal/filter/overlays.h \
+	extension/internal/filter/paint.h \
+	extension/internal/filter/protrusions.h \
+	extension/internal/filter/shadows.h \
+	extension/internal/filter/textures.h \
+	extension/internal/filter/transparency.h \
 	extension/internal/filter/filter-all.cpp \
 	extension/internal/filter/filter-file.cpp \
 	extension/internal/filter/filter.cpp \
 	extension/internal/filter/filter.h \
-	extension/internal/filter/drop-shadow.h \
-	extension/internal/filter/snow.h \
 	extension/internal/emf-win32-print.h \
 	extension/internal/emf-win32-print.cpp \
 	extension/internal/emf-win32-inout.h \

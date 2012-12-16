@@ -129,11 +129,11 @@ static void sp_font_selector_class_init(SPFontSelectorClass *c)
     object_class->dispose = sp_font_selector_dispose;
 }
 
-void sp_font_selector_set_size_tooltip(SPFontSelector *fsel)
+static void sp_font_selector_set_size_tooltip(SPFontSelector *fsel)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-    Glib::ustring tooltip = Glib::ustring::format("Font size (", sp_style_get_css_unit_string(unit), ")");
+    Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", sp_style_get_css_unit_string(unit), ")");
     gtk_widget_set_tooltip_text (fsel->size, _(tooltip.c_str()));
 }
 
@@ -218,16 +218,7 @@ static void sp_font_selector_init(SPFontSelector *fsel)
         gtk_widget_show(hb);
         gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
 
-/*
-This would introduce dependency on gtk version 2.24 which is currently not available in
-Trisquel GNU/Linux 4.5.1 (released on May 25th, 2011)
-This conditional and its #else block can be deleted in the future.
-*/
-#if GTK_CHECK_VERSION(2, 24,0)
         fsel->size = gtk_combo_box_text_new_with_entry ();
-#else
-        fsel->size = gtk_combo_box_entry_new_text ();
-#endif
 
         sp_font_selector_set_size_tooltip(fsel);
         gtk_widget_set_size_request(fsel->size, 90, -1);
@@ -346,11 +337,7 @@ static void sp_font_selector_set_sizes( SPFontSelector *fsel )
     {
         double size = sizes[n] / ratios[unit];
 
-#if GTK_CHECK_VERSION(2, 24,0)
         gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(fsel->size), Glib::ustring::format(size).c_str());
-#else
-        gtk_combo_box_append_text (GTK_COMBO_BOX(fsel->size), size);
-#endif
     }
 
 }
@@ -358,11 +345,7 @@ static void sp_font_selector_set_sizes( SPFontSelector *fsel )
 static void sp_font_selector_size_changed( GtkComboBox */*cbox*/, SPFontSelector *fsel )
 {
     char *text = NULL;
-#if GTK_CHECK_VERSION(2, 24,0)
     text = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (fsel->size));
-#else
-    text = gtk_combo_box_get_active_text (GTK_COMBO_BOX (fsel->size));
-#endif
     gfloat old_size = fsel->fontsize;
 
     gchar *endptr;
@@ -448,7 +431,7 @@ static void sp_font_selector_emit_set (SPFontSelector *fsel)
 
 GtkWidget *sp_font_selector_new()
 {
-    SPFontSelector *fsel = (SPFontSelector*) g_object_new(SP_TYPE_FONT_SELECTOR, NULL);
+    SPFontSelector *fsel = SP_FONT_SELECTOR(g_object_new(SP_TYPE_FONT_SELECTOR, NULL));
 
     return (GtkWidget *) fsel;
 }

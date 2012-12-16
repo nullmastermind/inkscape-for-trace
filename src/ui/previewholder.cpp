@@ -12,10 +12,12 @@
 
 
 #include "previewholder.h"
+#include "preferences.h"
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/scrollbar.h>
+#include <gtkmm/adjustment.h>
 
 #define COLUMNS_FOR_SMALL 16
 #define COLUMNS_FOR_LARGE 8
@@ -38,7 +40,8 @@ PreviewHolder::PreviewHolder() :
     _baseSize(PREVIEW_SIZE_SMALL),
     _ratio(100),
     _view(VIEW_TYPE_LIST),
-    _wrap(false)
+    _wrap(false),
+    _border(BORDER_NONE)
 {
     _scroller = manage(new Gtk::ScrolledWindow());
     _insides = manage(new Gtk::Table( 1, 2 ));
@@ -54,9 +57,30 @@ PreviewHolder::PreviewHolder() :
 
 PreviewHolder::~PreviewHolder()
 {
+
 }
 
+bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
+{
+    // Scroll horizontally by page on mouse wheel
+#if WITH_GTKMM_3_0
+    Glib::RefPtr<Gtk::Adjustment> adj = dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->get_hadjustment();
+#else
+    Gtk::Adjustment *adj = dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->get_hadjustment();
+#endif
 
+    if (!adj) {
+        return FALSE;
+    }
+
+    int move = (event->direction == GDK_SCROLL_DOWN) ? adj->get_page_size() : -adj->get_page_size();
+
+    double value = std::min(adj->get_upper() - move, adj->get_value() + move );
+
+    adj->set_value(value);
+
+    return FALSE;
+}
 
 void PreviewHolder::clear()
 {
@@ -77,13 +101,13 @@ void PreviewHolder::addPreview( Previewable* preview )
         int i = items.size() - 1;
 
         if ( _view == VIEW_TYPE_LIST ) {
-            Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, VIEW_TYPE_LIST, _baseSize, _ratio));
-            Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_LIST, _baseSize, _ratio));
+            Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
+            Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
 
             _insides->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
             _insides->attach( *label, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
         } else {
-            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_GRID, _baseSize, _ratio));
+            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_GRID, _baseSize, _ratio, _border));
 
             int width = 1;
             int height = 1;
@@ -129,12 +153,13 @@ void PreviewHolder::thawUpdates()
     rebuildUI();
 }
 
-void PreviewHolder::setStyle( ::PreviewSize size, ViewType view, guint ratio )
+void PreviewHolder::setStyle( ::PreviewSize size, ViewType view, guint ratio, ::BorderStyle border )
 {
-    if ( size != _baseSize || view != _view || ratio != _ratio ) {
+    if ( size != _baseSize || view != _view || ratio != _ratio || border != _border ) {
         _baseSize = size;
         _view = view;
         _ratio = ratio;
+        _border = border;
         // Kludge to restore scrollbars
         if ( !_wrap && (_view != VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
             dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
@@ -304,12 +329,15 @@ void PreviewHolder::rebuildUI()
     if ( _view == VIEW_TYPE_LIST ) {
         _insides = manage(new Gtk::Table( 1, 2 ));
         _insides->set_col_spacings( 8 );
+        if (_border == BORDER_WIDE) {
+            _insides->set_row_spacings( 1 );
+        }
 
         for ( unsigned int i = 0; i < items.size(); i++ ) {
-            Gtk::Widget* label = manage(items[i]->getPreview(PREVIEW_STYLE_BLURB, _view, _baseSize, _ratio));
+            Gtk::Widget* label = manage(items[i]->getPreview(PREVIEW_STYLE_BLURB, _view, _baseSize, _ratio, _border));
             //label->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
 
-            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio));
+            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, _border));
 
             _insides->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
             _insides->attach( *label, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
@@ -322,11 +350,18 @@ void PreviewHolder::rebuildUI()
         int height = 1;
 
         for ( unsigned int i = 0; i < items.size(); i++ ) {
-            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio));
+
+            // If this is the last row, flag so the previews can draw a bottom
+            ::BorderStyle border = ((row == height -1) && (_border == BORDER_SOLID)) ? BORDER_SOLID_LAST_ROW : _border;
+            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, border));
 
             if ( !_insides ) {
                 calcGridSize( thing, items.size(), width, height );
                 _insides = manage(new Gtk::Table( height, width ));
+                if (_border == BORDER_WIDE) {
+                    _insides->set_col_spacings( 1 );
+                    _insides->set_row_spacings( 1 );
+                }
             }
 
             _insides->attach( *thing, col, col+1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );

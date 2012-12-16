@@ -111,11 +111,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _cropTypeCombo = Gtk::manage(new class Gtk::ComboBoxText());
     int num_crop_choices = sizeof(crop_setting_choices) / sizeof(crop_setting_choices[0]);
     for ( int i = 0 ; i < num_crop_choices ; i++ ) {
-#if WITH_GTKMM_2_24
         _cropTypeCombo->append(_(crop_setting_choices[i]));
-#else
-        _cropTypeCombo->append_text(_(crop_setting_choices[i]));
-#endif
     }
     _cropTypeCombo->set_active_text(_(crop_setting_choices[0]));
     _cropTypeCombo->set_sensitive(false);
@@ -140,11 +136,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     // Text options
     _labelText = Gtk::manage(new class Gtk::Label(_("Text handling:")));
     _textHandlingCombo = Gtk::manage(new class Gtk::ComboBoxText());
-#if WITH_GTKMM_2_24
     _textHandlingCombo->append(_("Import text as text"));
-#else
-    _textHandlingCombo->append_text(_("Import text as text"));
-#endif
     _textHandlingCombo->set_active_text(_("Import text as text"));
     _localFontsCheck = Gtk::manage(new class Gtk::CheckButton(_("Replace PDF fonts by closest-named installed fonts")));
 
@@ -588,11 +580,18 @@ void PdfImportDialog::_setPreviewPage(int page) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+bool
+PdfInput::wasCancelled () {
+    return _cancelled;
+}
+
 /**
  * Parses the selected page of the given PDF document using PdfParser.
  */
 SPDocument *
 PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
+
+    _cancelled = false;
 
     // Initialize the globalParams variable for poppler
     if (!globalParams) {
@@ -648,6 +647,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
     if (inkscape_use_gui()) {
         dlg = new PdfImportDialog(pdf_doc, uri);
         if (!dlg->showDialog()) {
+            _cancelled = true;
             delete dlg;
             delete pdf_doc;
             return NULL;

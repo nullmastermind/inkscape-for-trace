@@ -235,12 +235,16 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     SPDocument *doc = NULL;
+    bool cancelled = false;
     try {
         doc = Inkscape::Extension::open(key, uri.c_str());
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
         doc = NULL;
     } catch (Inkscape::Extension::Input::open_failed &e) {
         doc = NULL;
+    } catch (Inkscape::Extension::Input::open_cancelled &e) {
+        doc = NULL;
+        cancelled = true;
     }
 
     if (desktop) {
@@ -287,7 +291,7 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         return TRUE;
-    } else {
+    } else if (!cancelled) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), safeUri);
         sp_ui_error_dialog(text);
@@ -295,6 +299,8 @@ bool sp_file_open(const Glib::ustring &uri,
         g_free(safeUri);
         return FALSE;
     }
+
+    return FALSE;
 }
 
 /**
@@ -669,7 +675,12 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
     }
 
     SP_ACTIVE_DESKTOP->event_log->rememberFileSave();
-    Glib::ustring msg = Glib::ustring::format(_("Document saved."), " ", doc->getURI());
+    Glib::ustring msg;
+    if (doc->getURI() == NULL) {
+        msg = Glib::ustring::format(_("Document saved."));
+    } else {
+        msg = Glib::ustring::format(_("Document saved."), " ", doc->getURI());
+    }
     SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg.c_str());
     return true;
 }
@@ -946,7 +957,13 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
             }
         }
     } else {
-        Glib::ustring msg = Glib::ustring::format(_("No changes need to be saved."), " ", doc->getURI());
+        Glib::ustring msg;
+        if ( doc->getURI() == NULL )
+        {
+            msg = Glib::ustring::format(_("No changes need to be saved."));
+        } else {
+            msg = Glib::ustring::format(_("No changes need to be saved."), " ", doc->getURI());
+        }
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, msg.c_str());
         success = TRUE;
     }

@@ -35,6 +35,7 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 #include "verbs.h"
+#include "widgets/gradient-vector.h"
 
 #include "color.h" // for SP_RGBA32_U_COMPOSE
 
@@ -143,7 +144,7 @@ static void dieDieDie( GObject *obj, gpointer user_data )
     g_message("die die die %p  %p", obj, user_data );
 }
 
-static bool getBlock( std::string& dst, guchar ch, std::string const str )
+static bool getBlock( std::string& dst, guchar ch, std::string const & str )
 {
     bool good = false;
     std::string::size_type pos = str.find(ch);
@@ -355,6 +356,23 @@ void ColorItem::setGradient(SPGradient *grad)
         _grad = grad;
         // TODO regen and push to listeners
     }
+
+    setName( gr_prepare_label(_grad) );
+}
+
+void ColorItem::setName(const Glib::ustring name)
+{
+    //def.descr = name;
+
+    for ( std::vector<Gtk::Widget*>::iterator it = _previews.begin(); it != _previews.end(); ++it ) {
+        Gtk::Widget* widget = *it;
+        if ( IS_EEK_PREVIEW(widget->gobj()) ) {
+            gtk_widget_set_tooltip_text(GTK_WIDGET(widget->gobj()), name.c_str());
+        }
+        else if ( GTK_IS_LABEL(widget->gobj()) ) {
+            gtk_label_set_text(GTK_LABEL(widget->gobj()), name.c_str());
+        }
+    }
 }
 
 void ColorItem::setPattern(cairo_pattern_t *pattern)
@@ -366,6 +384,7 @@ void ColorItem::setPattern(cairo_pattern_t *pattern)
         cairo_pattern_destroy(_pattern);
     }
     _pattern = pattern;
+
     _updatePreviews();
 }
 
@@ -546,7 +565,7 @@ void ColorItem::_regenPreview(EekPreview * preview)
                                                 | (_isLive ? PREVIEW_LINK_OTHER:0)) );
 }
 
-Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewSize size, guint ratio)
+Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewSize size, guint ratio, guint border)
 {
     Gtk::Widget* widget = 0;
     if ( style == PREVIEW_STYLE_BLURB) {
@@ -565,7 +584,7 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewS
 
         _regenPreview(preview);
 
-        eek_preview_set_details( preview, (::PreviewStyle)style, (::ViewType)view, (::PreviewSize)size, ratio );
+        eek_preview_set_details( preview, (::PreviewStyle)style, (::ViewType)view, (::PreviewSize)size, ratio, border );
 
         def.addCallback( _colorDefChanged, this );
 

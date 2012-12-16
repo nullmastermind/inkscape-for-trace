@@ -78,6 +78,7 @@
 #include "ui/dialog/layers.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/swatches.h"
+#include "ui/dialog/symbols.h"
 #include "ui/dialog/spellcheck.h"
 #include "ui/icon-names.h"
 #include "ui/tool/node-tool.h"
@@ -132,7 +133,7 @@ public:
              gchar const *name,
              gchar const *tip,
              gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("File"))
     { }
 }; // FileVerb class
 
@@ -151,7 +152,7 @@ public:
              gchar const *name,
              gchar const *tip,
              gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Edit"))
     { }
 }; // EditVerb class
 
@@ -170,7 +171,7 @@ public:
                   gchar const *name,
                   gchar const *tip,
                   gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Selection"))
     { }
 }; // SelectionVerb class
 
@@ -189,7 +190,7 @@ public:
               gchar const *name,
               gchar const *tip,
               gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Layer"))
     { }
 }; // LayerVerb class
 
@@ -208,7 +209,7 @@ public:
                gchar const *name,
                gchar const *tip,
                gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Object"))
     { }
 }; // ObjectVerb class
 
@@ -227,7 +228,7 @@ public:
                 gchar const *name,
                 gchar const *tip,
                 gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Context"))
     { }
 }; // ContextVerb class
 
@@ -246,7 +247,7 @@ public:
              gchar const *name,
              gchar const *tip,
              gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("View"))
     { }
 }; // ZoomVerb class
 
@@ -266,7 +267,7 @@ public:
                gchar const *name,
                gchar const *tip,
                gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Dialog"))
     { }
 }; // DialogVerb class
 
@@ -285,7 +286,7 @@ public:
              gchar const *name,
              gchar const *tip,
              gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Help"))
     { }
 }; // HelpVerb class
 
@@ -304,7 +305,7 @@ public:
                  gchar const *name,
                  gchar const *tip,
                  gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Help"))
     { }
 }; // TutorialVerb class
 
@@ -323,7 +324,7 @@ public:
               gchar const *name,
               gchar const *tip,
               gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Text"))
     { }
 }; //TextVerb : public Verb
 
@@ -340,7 +341,7 @@ Verb::VerbIDTable Verb::_verb_ids;
  * each call it is incremented.  The list of allocated verbs is kept
  * in the \c _verbs hashtable which is indexed by the \c code.
  */
-Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *image) :
+Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *image, gchar const *group) :
     _actions(0),
     _id(id),
     _name(name),
@@ -349,6 +350,7 @@ Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *im
     _shortcut(0),
     _image(image),
     _code(0),
+    _group(group),
     _default_sensitive(false)
 {
     static int count = SP_VERB_LAST;
@@ -957,6 +959,12 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_UNTILE:
             sp_selection_untile(dt);
             break;
+        case SP_VERB_EDIT_SYMBOL:
+            sp_selection_symbol(dt);
+            break;
+        case SP_VERB_EDIT_UNSYMBOL:
+            sp_selection_unsymbol(dt);
+            break;
         case SP_VERB_EDIT_CLEAR_ALL:
             sp_edit_clear_all(dt);
             break;
@@ -1190,6 +1198,10 @@ void LayerVerb::perform(SPAction *action, void *data)
             sp_selection_to_prev_layer(dt);
             break;
         }
+        case SP_VERB_LAYER_MOVE_TO: {
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(dt, dt->currentLayer());
+            break;
+        }
         case SP_VERB_LAYER_TO_TOP:
         case SP_VERB_LAYER_TO_BOTTOM:
         case SP_VERB_LAYER_RAISE:
@@ -1338,17 +1350,34 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_SHOW_ALL: {
-            dt->toggleAllLayers( false );
+            dt->toggleHideAllLayers( false );
             DocumentUndo::maybeDone(sp_desktop_document(dt), "layer:showall", SP_VERB_LAYER_SHOW_ALL, _("Show all layers"));
             break;
         }
-
         case SP_VERB_LAYER_HIDE_ALL: {
-            dt->toggleAllLayers( true );
+            dt->toggleHideAllLayers( true );
             DocumentUndo::maybeDone(sp_desktop_document(dt), "layer:hideall", SP_VERB_LAYER_HIDE_ALL, _("Hide all layers"));
             break;
         }
-
+        case SP_VERB_LAYER_LOCK_ALL: {
+            dt->toggleLockAllLayers( true );
+            DocumentUndo::maybeDone(sp_desktop_document(dt), "layer:lockall", SP_VERB_LAYER_LOCK_ALL, _("Lock all layers"));
+            break;
+        }
+        case SP_VERB_LAYER_LOCK_OTHERS: {
+            if ( dt->currentLayer() == dt->currentRoot() ) {
+                dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
+            } else {
+                dt->toggleLockOtherLayers( dt->currentLayer() );
+                DocumentUndo::maybeDone(sp_desktop_document(dt), "layer:lockothers", SP_VERB_LAYER_LOCK_OTHERS, _("Lock other layers"));
+            }
+            break;
+        }
+        case SP_VERB_LAYER_UNLOCK_ALL: {
+            dt->toggleLockAllLayers( false );
+            DocumentUndo::maybeDone(sp_desktop_document(dt), "layer:unlockall", SP_VERB_LAYER_UNLOCK_ALL, _("Unlock all layers"));
+            break;
+        }
         case SP_VERB_LAYER_TOGGLE_LOCK:
         case SP_VERB_LAYER_TOGGLE_HIDE: {
             if ( dt->currentLayer() == dt->currentRoot() ) {
@@ -1771,6 +1800,24 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_TOGGLE_SCROLLBARS:
             dt->toggleScrollbars();
             break;
+        case SP_VERB_TOGGLE_COMMANDS_TOOLBAR:
+            dt->toggleToolbar("commands");
+            break;
+        case SP_VERB_TOGGLE_SNAP_TOOLBAR:
+            dt->toggleToolbar("snaptoolbox");
+            break;
+        case SP_VERB_TOGGLE_TOOL_TOOLBAR:
+            dt->toggleToolbar("toppanel");
+            break;
+        case SP_VERB_TOGGLE_TOOLBOX:
+            dt->toggleToolbar("toolbox");
+            break;
+        case SP_VERB_TOGGLE_PALETTE:
+            dt->toggleToolbar("panels");
+            break;
+        case SP_VERB_TOGGLE_STATUSBAR:
+            dt->toggleToolbar("statusbar");
+            break;
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, repr);
             break;
@@ -1829,6 +1876,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
             inkscape_dialogs_unhide();
             dt->_dlg_mgr->showDialog("IconPreviewPanel");
             break;
+
         default:
             break;
     }
@@ -1871,6 +1919,9 @@ void DialogVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_DIALOG_SWATCHES:
             dt->_dlg_mgr->showDialog("Swatches");
+            break;
+        case SP_VERB_DIALOG_SYMBOLS:
+            dt->_dlg_mgr->showDialog("Symbols");
             break;
         case SP_VERB_DIALOG_TRANSFORM:
             dt->_dlg_mgr->showDialog("Transformation");
@@ -1952,6 +2003,7 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PRINT_COLORS_PREVIEW:
             dt->_dlg_mgr->showDialog("PrintColorsPreviewDialog");
             break;
+
         default:
             break;
     }
@@ -2054,7 +2106,7 @@ public:
                    gchar const *name,
                    gchar const *tip,
                    gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Extensions"))
     {
         set_default_sensitive(false);
     }
@@ -2119,7 +2171,7 @@ public:
                    gchar const *name,
                    gchar const *tip,
                    gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("View"))
     {
         set_default_sensitive(false);
     }
@@ -2185,7 +2237,7 @@ public:
                    gchar const *name,
                    gchar const *tip,
                    gchar const *image) :
-        Verb(code, id, name, tip, image)
+        Verb(code, id, name, tip, image, _("Layer"))
     {
         set_default_sensitive(true);
     }
@@ -2244,8 +2296,8 @@ void LockAndHideVerb::perform(SPAction *action, void *data)
 // these must be in the same order as the SP_VERB_* enum in "verbs.h"
 Verb *Verb::_base_verbs[] = {
     // Header
-    new Verb(SP_VERB_INVALID, NULL, NULL, NULL, NULL),
-    new Verb(SP_VERB_NONE, "None", N_("None"), N_("Does nothing"), NULL),
+    new Verb(SP_VERB_INVALID, NULL, NULL, NULL, NULL, NULL),
+    new Verb(SP_VERB_NONE, "None", N_("None"), N_("Does nothing"), NULL, NULL),
 
     // File
     new FileVerb(SP_VERB_FILE_NEW, "FileNew", N_("Default"), N_("Create new document from the default template"),
@@ -2335,6 +2387,10 @@ Verb *Verb::_base_verbs[] = {
                  N_("Convert selection to a rectangle with tiled pattern fill"), NULL),
     new EditVerb(SP_VERB_EDIT_UNTILE, "ObjectsFromPattern", N_("Pattern to _Objects"),
                  N_("Extract objects from a tiled pattern fill"), NULL),
+    new EditVerb(SP_VERB_EDIT_SYMBOL, "ObjectsToSymbol", N_("Group to Symbol"),
+                 N_("Convert group to a symbol"), NULL),
+    new EditVerb(SP_VERB_EDIT_UNSYMBOL, "ObjectsFromSymbol", N_("Symbol to Group"),
+                 N_("Extract group from a symbol"), NULL),
     new EditVerb(SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
                  N_("Delete all objects from document"), NULL),
     new EditVerb(SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select Al_l"),
@@ -2465,6 +2521,8 @@ Verb *Verb::_base_verbs[] = {
                   N_("Move selection to the layer above the current"), INKSCAPE_ICON("selection-move-to-layer-above")),
     new LayerVerb(SP_VERB_LAYER_MOVE_TO_PREV, "LayerMoveToPrev", N_("Move Selection to Layer Bel_ow"),
                   N_("Move selection to the layer below the current"), INKSCAPE_ICON("selection-move-to-layer-below")),
+    new LayerVerb(SP_VERB_LAYER_MOVE_TO, "LayerMoveTo", N_("Move Selection to Layer..."),
+                  N_("Move selection to layer"), INKSCAPE_ICON("layer-rename")),
     new LayerVerb(SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Layer to _Top"),
                   N_("Raise the current layer to the top"), INKSCAPE_ICON("layer-top")),
     new LayerVerb(SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Layer to _Bottom"),
@@ -2483,6 +2541,12 @@ Verb *Verb::_base_verbs[] = {
                     N_("Show all the layers"), NULL),
     new LayerVerb(SP_VERB_LAYER_HIDE_ALL, "LayerHideAll", N_("_Hide all layers"),
                     N_("Hide all the layers"), NULL),
+    new LayerVerb(SP_VERB_LAYER_LOCK_ALL, "LayerLockAll", N_("_Lock all layers"),
+                    N_("Lock all the layers"), NULL),
+    new LayerVerb(SP_VERB_LAYER_LOCK_OTHERS, "LayerLockOthers", N_("Lock/Unlock _other layers"),
+                    N_("Lock all the other layers"), NULL),
+    new LayerVerb(SP_VERB_LAYER_UNLOCK_ALL, "LayerUnlockAll", N_("_Unlock all layers"),
+                    N_("Unlock all the layers"), NULL),
     new LayerVerb(SP_VERB_LAYER_TOGGLE_LOCK, "LayerToggleLock", N_("_Lock/Unlock Current Layer"),
                   N_("Toggle lock on current layer"), NULL),
     new LayerVerb(SP_VERB_LAYER_TOGGLE_HIDE, "LayerToggleHide", N_("_Show/hide Current Layer"),
@@ -2626,6 +2690,12 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("_Grid"), N_("Show or hide the grid"), INKSCAPE_ICON("show-grid")),
     new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"), N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
     new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
+    new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"), N_("Show or hide the Commands bar (under the menu)"), NULL),
+    new ZoomVerb(SP_VERB_TOGGLE_SNAP_TOOLBAR, "ToggleSnapToolbar", N_("Sn_ap Controls Bar"), N_("Show or hide the snapping controls"), NULL),
+    new ZoomVerb(SP_VERB_TOGGLE_TOOL_TOOLBAR, "ToggleToolToolbar", N_("T_ool Controls Bar"), N_("Show or hide the Tool Controls bar"), NULL),
+    new ZoomVerb(SP_VERB_TOGGLE_TOOLBOX, "ToggleToolbox", N_("_Toolbox"), N_("Show or hide the main toolbox (on the left)"), NULL),
+    new ZoomVerb(SP_VERB_TOGGLE_PALETTE, "TogglePalette", N_("_Palette"), N_("Show or hide the color palette"), NULL),
+    new ZoomVerb(SP_VERB_TOGGLE_STATUSBAR, "ToggleStatusbar", N_("_Statusbar"), N_("Show or hide the statusbar (at the bottom of the window)"), NULL),
     new ZoomVerb(SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t Zoom"), N_("Next zoom (from the history of zooms)"),
                  INKSCAPE_ICON("zoom-next")),
     new ZoomVerb(SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_vious Zoom"), N_("Previous zoom (from the history of zooms)"),
@@ -2639,7 +2709,7 @@ Verb *Verb::_base_verbs[] = {
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
     new ZoomVerb(SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Stretch this document window to full screen"),
                  INKSCAPE_ICON("view-fullscreen")),
-    new ZoomVerb(SP_VERB_FULLSCREENFOCUS, "FullScreenFocus", N_("Fullscreen & Focus Mode"), Glib::ustring::format(N_("Stretch this document window to full screen"), N_(" and "), N_("Remove excess toolbars to focus on drawing")).c_str(),
+    new ZoomVerb(SP_VERB_FULLSCREENFOCUS, "FullScreenFocus", N_("Fullscreen & Focus Mode"), N_("Stretch this document window to full screen"),
                  INKSCAPE_ICON("view-fullscreen")),
 #endif // HAVE_GTK_WINDOW_FULLSCREEN
     new ZoomVerb(SP_VERB_FOCUSTOGGLE, "FocusToggle", N_("Toggle _Focus Mode"), N_("Remove excess toolbars to focus on drawing"),
@@ -2694,6 +2764,8 @@ Verb *Verb::_base_verbs[] = {
     // TRANSLATORS: "Swatches" means: color samples
     new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),
                    N_("Select colors from a swatches palette"), GTK_STOCK_SELECT_COLOR),
+    new DialogVerb(SP_VERB_DIALOG_SYMBOLS, "DialogSymbols", N_("S_ymbols..."),
+                   N_("Select symbol from a symbols palette"), GTK_STOCK_SELECT_COLOR),
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
                    N_("Precisely control objects' transformations"), INKSCAPE_ICON("dialog-transform")),
     new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),
@@ -2744,7 +2816,6 @@ Verb *Verb::_base_verbs[] = {
                    N_("Select which color separations to render in Print Colors Preview rendermode"), NULL),
     new DialogVerb(SP_VERB_DIALOG_EXPORT, "DialogExport", N_("_Export PNG Image..."),
                 N_("Export this document or a selection as a PNG image"), INKSCAPE_ICON("document-export")),
-
     // Help
     new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("About E_xtensions"),
                  N_("Information on Inkscape extensions"), NULL),
@@ -2828,9 +2899,27 @@ Verb *Verb::_base_verbs[] = {
 
 
     // Footer
-    new Verb(SP_VERB_LAST, " '\"invalid id", NULL, NULL, NULL)
+    new Verb(SP_VERB_LAST, " '\"invalid id", NULL, NULL, NULL, NULL)
 };
 
+std::vector<Inkscape::Verb *>
+Verb::getList (void) {
+
+    std::vector<Verb *> verbs;
+    // Go through the dynamic verb table
+    for (VerbTable::iterator iter = _verbs.begin(); iter != _verbs.end(); ++iter) {
+        Verb * verb = iter->second;
+        if (verb->get_code() == SP_VERB_INVALID ||
+                verb->get_code() == SP_VERB_NONE ||
+                verb->get_code() == SP_VERB_LAST) {
+            continue;
+        }
+
+        verbs.push_back(verb);
+    }
+
+    return verbs;
+};
 
 void
 Verb::list (void) {

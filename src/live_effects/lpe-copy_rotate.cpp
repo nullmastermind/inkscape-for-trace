@@ -48,9 +48,9 @@ public:
 
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    starting_angle(_("Starting"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
-    rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 30.0),
-    num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 5),
+    starting_angle(_("Starting:"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
+    rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 30.0),
+    num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 5),
     origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this, "Adjust the origin of the rotation"),
     dist_angle_handle(100)
 {
@@ -152,7 +152,7 @@ KnotHolderEntityStartingAngle::knot_set(Geom::Point const &p, Geom::Point const 
 {
     LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     // I first suspected the minus sign to be a bug in 2geom but it is
     // likely due to SVG's choice of coordinate system orientation (max)
@@ -172,7 +172,7 @@ KnotHolderEntityRotationAngle::knot_set(Geom::Point const &p, Geom::Point const 
 {
     LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     // I first suspected the minus sign to be a bug in 2geom but it is
     // likely due to SVG's choice of coordinate system orientation (max)
@@ -191,14 +191,14 @@ Geom::Point
 KnotHolderEntityStartingAngle::knot_get()
 {
     LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
-    return snap_knot_position(lpe->start_pos);
+    return lpe->start_pos;
 }
 
 Geom::Point
 KnotHolderEntityRotationAngle::knot_get()
 {
     LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
-    return snap_knot_position(lpe->rot_pos);
+    return lpe->rot_pos;
 }
 
 } // namespace CR

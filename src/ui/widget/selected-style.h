@@ -27,6 +27,7 @@
 #include <sigc++/sigc++.h>
 
 #include "rotateable.h"
+#include "helper/units.h"
 
 class SPDesktop;
 class SPUnit;
@@ -60,8 +61,10 @@ public:
     ~RotateableSwatch();
 
     double color_adjust (float *hsl, double by, guint32 cc, guint state);
+
     virtual void do_motion (double by, guint state);
     virtual void do_release (double by, guint state);
+    virtual void do_scroll (double by, guint state);
 
 private:
     guint fillstroke;
@@ -86,6 +89,7 @@ public:
     double value_adjust(double current, double by, guint modifier, bool final);
     virtual void do_motion (double by, guint state);
     virtual void do_release (double by, guint state);
+    virtual void do_scroll (double by, guint state);
 
 private:
     SelectedStyle *parent;
@@ -250,12 +254,8 @@ protected:
 
     Gtk::Menu _popup_sw; 
     Gtk::RadioButtonGroup _sw_group;
-    Gtk::RadioMenuItem _popup_px; 
-    void on_popup_px();
-    Gtk::RadioMenuItem _popup_pt; 
-    void on_popup_pt();
-    Gtk::RadioMenuItem _popup_mm;
-    void on_popup_mm();
+    GSList *_unit_mis;
+    void on_popup_units(SPUnitId id);
     void on_popup_preset(int i);
     Gtk::MenuItem _popup_sw_remove;
 

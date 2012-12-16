@@ -59,6 +59,7 @@
 #include "dialogs/dialog-events.h"
 #include "message-context.h"
 #include "ui/uxmanager.h"
+#include "ui/clipboard.h"
 
 #include "display/sp-canvas.h"
 #include "color.h"
@@ -79,6 +80,7 @@
 // #include "inkscape.h"
 #include "ui/dialog/dialog-manager.h"
 // #include "../xml/repr.h"
+#include "ui/dialog/layer-properties.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -96,6 +98,7 @@ typedef enum {
     APP_X_INKY_COLOR,
     APP_X_COLOR,
     APP_OSWB_COLOR,
+    APP_X_INK_PASTE
 } ui_drop_target_info;
 
 static GtkTargetEntry ui_drop_target_entries [] = {
@@ -108,7 +111,8 @@ static GtkTargetEntry ui_drop_target_entries [] = {
     {(gchar *)"application/x-inkscape-color", 0, APP_X_INKY_COLOR},
 #endif // ENABLE_MAGIC_COLORS
     {(gchar *)"application/x-oswb-color",     0, APP_OSWB_COLOR  },
-    {(gchar *)"application/x-color",          0, APP_X_COLOR     }
+    {(gchar *)"application/x-color",          0, APP_X_COLOR     },
+    {(gchar *)"application/x-inkscape-paste", 0, APP_X_INK_PASTE }
 };
 
 static GtkTargetEntry *completeDropTargets = 0;
@@ -322,6 +326,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
         SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
         dt->change_document(doc);
         sp_namedview_window_from_document(dt);
+        sp_namedview_update_layers_from_document(dt);
         return;
     }
 
@@ -394,7 +399,7 @@ sp_ui_menu_deselect(gpointer object)
 /**
  * Creates and attaches a scaled icon to the given menu item.
  */
-void
+static void
 sp_ui_menuitem_add_icon( GtkWidget *item, gchar *icon_name )
 {
     static bool iconsInjected = false;
@@ -525,7 +530,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb
 } // end of sp_ui_menu_append_item_from_verb
 
 
-static Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
+Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
 {
     Glib::ustring prefPath;
 
@@ -552,7 +557,7 @@ checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
         sp_ui_menu_activate(menuitem, action);
 
     } else if (pref) {
-        // The Show/Hide menu items without actions
+        // All check menu items should have actions now, but just in case
         Glib::ustring pref_path = getLayoutPrefPath( view );
         pref_path += pref;
         pref_path += "/state";
@@ -594,19 +599,16 @@ static gboolean checkitem_update(GtkWidget *widget, GdkEventExpose * /*event*/, 
         if (!strcmp(action->id, "ToggleGrid")) {
             ison = dt->gridsEnabled();
         }
-        if (!strcmp(action->id, "ToggleGuides")) {
+        else if (!strcmp(action->id, "ToggleGuides")) {
             ison = dt->namedview->getGuides();
         }
-        if (!strcmp(action->id, "ToggleSnapGlobal")) {
+        else if (!strcmp(action->id, "ToggleSnapGlobal")) {
             ison = dt->namedview->getSnapGlobal();
         }
-        if (!strcmp(action->id, "ViewCmsToggle")) {
+        else if (!strcmp(action->id, "ViewCmsToggle")) {
             ison = dt->colorProfAdjustEnabled();
         }
-        if (!strcmp(action->id, "ToggleRulers")) {
-            ison = getViewStateFromPref(view, pref);
-        }
-        if (!strcmp(action->id, "ToggleScrollbars")) {
+        else  {
             ison = getViewStateFromPref(view, pref);
         }
     } else if (pref) {
@@ -684,7 +686,7 @@ static gboolean update_view_menu(GtkWidget *widget, GdkEventExpose * /*event*/, 
     return FALSE;
 }
 
-void
+static void
 sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *view, gchar const *label, gchar const *tip, gchar const *pref,
                                        void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
 #if GTK_CHECK_VERSION(3,0,0)
@@ -776,96 +778,144 @@ sp_file_new_from_template(GtkWidget */*widget*/, gchar const *uri)
     sp_file_new(uri);
 }
 
-void
-sp_menu_append_new_templates(GtkWidget *menu, Inkscape::UI::View::View *view)
-{
-    std::list<gchar *> sources;
-    sources.push_back( profile_path("templates") ); // first try user's local dir
-    sources.push_back( g_strdup(INKSCAPE_TEMPLATESDIR) ); // then the system templates dir
 
-    // Use this loop to iterate through a list of possible document locations.
-    while (!sources.empty()) {
-        gchar *dirname = sources.front();
+static bool
+compare_file_basenames(gchar const *a, gchar const *b) {
+    bool rc;
+    gchar *ba, *bb;
 
-        if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
-            GError *err = 0;
-            GDir *dir = g_dir_open(dirname, 0, &err);
-
-            if (dir) {
-                for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
-                    if (!g_str_has_suffix(file, ".svg") && !g_str_has_suffix(file, ".svgz")) {
-                        continue; // skip non-svg files
-                    }
-
-                    {
-                        gchar *basename = g_path_get_basename(file);
-                        if (g_str_has_suffix(basename, ".svg") && g_str_has_prefix(basename, "default.")) {
-                            g_free(basename);
-                            basename = 0;
-                            continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
-                        }
-                        g_free(basename);
-                        basename = 0;
-                    }
-
-                    gchar const *filepath = g_build_filename(dirname, file, NULL);
-                    gchar *dupfile = g_strndup(file, strlen(file) - 4);
-                    gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
-                    g_free(dupfile);
-                    GtkWidget *item = gtk_menu_item_new_with_label(filename);
-                    g_free(filename);
-
-                    gtk_widget_show(item);
-                    // how does "filepath" ever get freed?
-                    g_signal_connect(G_OBJECT(item),
-                                     "activate",
-                                     G_CALLBACK(sp_file_new_from_template),
-                                     (gpointer) filepath);
-
-                    if (view) {
-                        // set null tip for now; later use a description from the template file
-                        g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
-                        g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) NULL );
-                        g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
-                    }
-
-                    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-                }
-                g_dir_close(dir);
-            }
-        }
-
-        // toss the dirname
-        g_free(dirname);
-        sources.pop_front();
+    bool sort_by_fullname = true; // Sort by full name (including path) or just filename
+    if (sort_by_fullname) {
+        ba = g_strdup(a);
+        bb = g_strdup(b);
+    } else {
+        ba = g_path_get_basename(a);
+        bb = g_path_get_basename(b);
     }
+
+    gchar *fa =  g_filename_to_utf8(ba,  -1, NULL, NULL, NULL);
+    gchar *fb =  g_filename_to_utf8(bb,  -1, NULL, NULL, NULL);
+    g_free(ba);
+    g_free(bb);
+
+    rc = g_utf8_collate(fa, fb) < 0;
+
+    g_free(fa);
+    g_free(fb);
+
+    return rc;
 }
 
-void
+static void
+sp_menu_get_svg_filenames_from_dir(gchar const *dirname, std::list<gchar const*> *files)
+{
+    if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
+        GError *err = 0;
+        GDir *dir = g_dir_open(dirname, 0, &err);
+
+        if (dir) {
+            for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
+                if (!g_str_has_suffix(file, ".svg") && !g_str_has_suffix(file, ".svgz")) {
+                    continue; // skip non-svg files
+                }
+
+                {
+                    gchar *basename = g_path_get_basename(file);
+                    if (g_str_has_suffix(basename, ".svg") && g_str_has_prefix(basename, "default.")) {
+                        g_free(basename);
+                        basename = 0;
+                        continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
+                    }
+                    g_free(basename);
+                    basename = 0;
+                }
+
+                gchar const *filepath = g_build_filename(dirname, file, NULL);
+                files->push_front(filepath);
+            }
+            g_dir_close(dir);
+        }
+    }
+
+    files->sort(compare_file_basenames);
+}
+
+static void
+sp_menu_add_filenames_to_menu(GtkWidget *menu, Inkscape::UI::View::View *view, std::list<gchar const*> *files)
+{
+    if (!files->empty()) {
+        GtkWidget *sep = gtk_separator_menu_item_new();
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), sep);
+    }
+
+    for(std::list<gchar const*>::iterator it=files->begin(); it != files->end(); ++it) {
+        gchar const *filepath = *it;
+        gchar const *file = g_path_get_basename(filepath);
+        gchar *dupfile = g_strndup(file, strlen(file) - 4);
+        gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
+        g_free(dupfile);
+
+        GtkWidget *item = gtk_menu_item_new_with_label(filename);
+        g_free(filename);
+
+        gtk_widget_show(item);
+        // how does "filepath" ever get freed?
+        g_signal_connect(G_OBJECT(item),
+                         "activate",
+                         G_CALLBACK(sp_file_new_from_template),
+                         (gpointer) filepath);
+
+        if (view) {
+            // set null tip for now; later use a description from the template file
+            g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
+            g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) NULL );
+            g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
+        }
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+    }
+
+}
+static void
+sp_menu_append_new_templates(GtkWidget *menu, Inkscape::UI::View::View *view)
+{
+    // user's local dir
+    std::list<gchar const*> userfiles;
+    sp_menu_get_svg_filenames_from_dir(profile_path("templates"), &userfiles);
+    sp_menu_add_filenames_to_menu(menu, view, &userfiles);
+
+    // system templates dir
+    std::list<gchar const*> templatefiles;
+    sp_menu_get_svg_filenames_from_dir(INKSCAPE_TEMPLATESDIR, &templatefiles);
+    sp_menu_add_filenames_to_menu(menu, view, &templatefiles);
+
+}
+
+static void
 sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
 {
     //sp_ui_menu_append_check_item_from_verb(m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
     //                                       checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, _("_Commands Bar"), _("Show or hide the Commands bar (under the menu)"), "commands",
-                                           checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, _("Sn_ap Controls Bar"), _("Show or hide the snapping controls"), "snaptoolbox",
-                                           checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, _("T_ool Controls Bar"), _("Show or hide the Tool Controls bar"), "toppanel",
-                                           checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, _("_Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
-                                           checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "commands",
+                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_COMMANDS_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view,NULL, NULL, "snaptoolbox",
+                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SNAP_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "toppanel",
+                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_TOOL_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "toolbox",
+                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_TOOLBOX));
     sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "rulers",
                                            checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS));
     sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "scrollbars",
                                            checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
-    sp_ui_menu_append_check_item_from_verb(m, view, _("_Palette"), _("Show or hide the color palette"), "panels",
-                                           checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, _("_Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
-                                           checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "panels",
+                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_PALETTE));
+    sp_ui_menu_append_check_item_from_verb(m, view, NULL, NULL, "statusbar",
+                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_STATUSBAR));
 }
 
 
-void addTaskMenuItems(GtkMenu *menu, Inkscape::UI::View::View *view)
+static void addTaskMenuItems(GtkMenu *menu, Inkscape::UI::View::View *view)
 {
     gchar const* data[] = {
         C_("Interface setup", "Default"), _("Default interface setup"),
@@ -932,7 +982,7 @@ private:
  * @param  menu   Menu to be added to
  * @param  view   The View that this menu is being built for
  */
-void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view)
+static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view)
 {
     if (menus == NULL) return;
     if (menu == NULL)  return;
@@ -1383,6 +1433,13 @@ sp_ui_drag_data_received(GtkWidget *widget,
             break;
         }
 
+        case APP_X_INK_PASTE: {
+            Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+            cm->paste(desktop);
+            DocumentUndo::done( doc, SP_VERB_NONE, _("Drop Symbol") );
+            break;
+        }
+
         case PNG_DATA:
         case JPEG_DATA:
         case IMAGE_DATA: {
@@ -1822,6 +1879,16 @@ void ContextMenu::MakeItemMenu (void)
     mi->show();
     select_same_submenu->append(*mi);
 
+    /* Move to layer */
+    mi = manage(new Gtk::MenuItem(_("_Move to layer ..."),1));
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
+    } else {
+        mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemMoveTo));
+    }
+    mi->show();
+    append(*mi);
+
     /* Create link */
     mi = manage(new Gtk::MenuItem(_("Create _Link"),1));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ItemCreateLink));
@@ -1936,6 +2003,13 @@ void ContextMenu::ItemSelectThis(void)
 {
     _desktop->selection->set(_item);
 }
+
+void ContextMenu::ItemMoveTo(void)
+{
+    Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(_desktop, _desktop->currentLayer());
+}
+
+
 
 void ContextMenu::ItemCreateLink(void)
 {
@@ -2078,6 +2152,15 @@ void ContextMenu::MakeImageMenu (void)
         mi->set_sensitive( FALSE );
     }
 
+    /* Trace Bitmap */
+    mi = manage(new Gtk::MenuItem(_("_Trace Bitmap..."),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTraceBitmap));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
+    }
+
     /* Embed image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
         mi = manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
@@ -2187,6 +2270,12 @@ void ContextMenu::ImageEdit(void)
         g_error_free(errThing);
         errThing = 0;
     }
+}
+
+void ContextMenu::ImageTraceBitmap(void)
+{
+    inkscape_dialogs_unhide();
+    _desktop->_dlg_mgr->showDialog("Trace");
 }
 
 void ContextMenu::ImageEmbed(void)

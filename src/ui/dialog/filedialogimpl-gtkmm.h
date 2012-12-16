@@ -121,7 +121,7 @@ private:
     /**
      * The sp_svg_view widget
      */
-    GtkWidget *viewerGtk;
+    Gtk::Widget *viewerGtk;
 
     /**
      * are we currently showing the "no preview" image?
@@ -291,6 +291,7 @@ public:
     virtual void setSelectionType( Inkscape::Extension::Extension * key );
 
 	Glib::ustring getCurrentDirectory();
+	void addFileType(Glib::ustring name, Glib::ustring pattern);
 
 private:
     //void change_title(const Glib::ustring& title);

@@ -127,7 +127,7 @@ static void sp_gradient_image_destroy(GtkObject *object)
 
 static void sp_gradient_image_size_request(GtkWidget * /*widget*/, GtkRequisition *requisition)
 {
-    requisition->width = 64;
+    requisition->width = 54;
     requisition->height = 12;
 }
 
@@ -192,9 +192,7 @@ static gboolean sp_gradient_image_draw(GtkWidget *widget, cairo_t *ct)
 GtkWidget *
 sp_gradient_image_new (SPGradient *gradient)
 {
-	SPGradientImage *image;
-
-	image = (SPGradientImage*)g_object_new (SP_TYPE_GRADIENT_IMAGE, NULL);
+	SPGradientImage *image = SP_GRADIENT_IMAGE(g_object_new(SP_TYPE_GRADIENT_IMAGE, NULL));
 
 	sp_gradient_image_set_gradient (image, gradient);
 

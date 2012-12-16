@@ -963,11 +963,7 @@ void SearchResultList::populate_from_xml(xmlNode * a_node)
             {
                 if (!strcmp((const char*)cur_node->name, "title"))
                 {
-#if WITH_GTKMM_2_24
                     row_num = append("");
-#else
-                    row_num = append_text("");
-#endif
                     xmlChar *xml_title = xmlNodeGetContent(cur_node);
                     char* title = (char*) xml_title;
                     
@@ -1116,8 +1112,14 @@ void ImportDialog::on_xml_file_read(const Glib::RefPtr<Gio::AsyncResult>& result
     xmlDoc *doc = NULL;
     xmlNode *root_element = NULL;
 
-    doc = xmlReadMemory(data, (int) length, xml_uri.c_str(), NULL,
-            XML_PARSE_RECOVER + XML_PARSE_NOWARNING + XML_PARSE_NOERROR);
+    int parse_options = XML_PARSE_RECOVER + XML_PARSE_NOWARNING + XML_PARSE_NOERROR;  // do not use XML_PARSE_NOENT ! see bug lp:1025185
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
+    if (!allowNetAccess) {
+        parse_options |= XML_PARSE_NONET;
+    }
+
+    doc = xmlReadMemory(data, (int) length, xml_uri.c_str(), NULL, parse_options);
         
     if (doc == NULL) {
         // If nothing is returned, no results could be found

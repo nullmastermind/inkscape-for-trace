@@ -81,6 +81,7 @@ GtkWidget *sp_ui_main_menubar (Inkscape::UI::View::View *view);
 void sp_menu_append_recent_documents (GtkWidget *menu);
 void sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c);
 
+Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view );
 
 /**
  *
@@ -171,6 +172,7 @@ class ContextMenu : public Gtk::Menu
         //callbacks for the context menu entries of an SP_TYPE_ITEM object
         void ItemProperties(void);
         void ItemSelectThis(void);
+        void ItemMoveTo(void);
         void SelectSameFillStroke(void);
         void SelectSameFillColor(void);
         void SelectSameStrokeColor(void);
@@ -223,6 +225,11 @@ class ContextMenu : public Gtk::Menu
          */
         void ImageEmbed(void);
         
+        /**
+         * callback, is executed on clicking the "Trace Bitmap" menu entry
+         */
+        void ImageTraceBitmap(void);
+
         /**
          * callback, is executed on clicking the "Extract Image" menu entry
          */

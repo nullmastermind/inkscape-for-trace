@@ -266,7 +266,7 @@ sp_gradient_context_is_over_line (SPGradientContext *rc, SPItem *item, Geom::Poi
     return close;
 }
 
-std::vector<Geom::Point>
+static std::vector<Geom::Point>
 sp_gradient_context_get_stop_intervals (GrDrag *drag, GSList **these_stops, GSList **next_stops)
 {
     std::vector<Geom::Point> coords;
@@ -419,7 +419,7 @@ sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
     g_slist_free (new_stops);
 }
 
-double sqr(double x) {return x*x;}
+static double sqr(double x) {return x*x;}
 
 static void
 sp_gradient_simplify(SPGradientContext *rc, double tolerance)
@@ -837,18 +837,7 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
         case GDK_KEY_r:
         case GDK_KEY_R:
             if (MOD__SHIFT_ONLY) {
-                // First try selected dragger
-                if (drag && drag->selected) {
-                    drag->selected_reverse_vector();
-                } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
-                    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-                        sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_FILL);
-                        sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_STROKE);
-                    }
-                }
-                // we did an undoable action
-                DocumentUndo::done(sp_desktop_document (desktop), SP_VERB_CONTEXT_GRADIENT,
-                                   _("Invert gradient"));
+                sp_gradient_reverse_selected_gradients(desktop);
                 ret = TRUE;
             }
             break;
