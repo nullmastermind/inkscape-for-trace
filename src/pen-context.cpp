@@ -58,6 +58,11 @@
 #include "helper/geom-nodetype.h"
 #include "helper/geom-curves.h"
 
+// For handling un-continuous paths:
+#include "message-stack.h"
+#include "inkscape.h"
+#include "desktop.h"
+
 #include "live_effects/spiro.h"
 
 #define INKSCAPE_LPE_BSPLINE_C
@@ -87,20 +92,16 @@ static void spdc_pen_set_initial_point(SPPenContext *pc, Geom::Point const p);
 static void sp_pen_context_set_mode(SPPenContext *const pc, guint mode);
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void spiro_color(SPPenContext *const pc);
-//Combierte el el último nodo a CUSP
-static void spiro_node_cusp (SPPenContext *const pc);
-//Combierte el el último nodo a SYMM
-static void spiro_node_symm (SPPenContext *const pc);
-//preparates the curves for its trasformation into spiro curves.
-static void spiro_build(SPPenContext *const pc, bool Shift);
+//Preparamos la curva roja para que se muestre según esté pulsada la tecla SHIFT
+static void spiro_prepare(SPPenContext *const pc, bool Shift);
+//Unimos todas las curvas en juego y llamamos a la función doEffect.
+static void spiro_build(SPPenContext *const pc);
 //function spiro cloned from lpe-spiro.cpp
 static void spiro_doEffect(SPCurve * curve);
-//Combierte el el último nodo a CUSP
-static void bspline_node_cusp (SPPenContext *const pc);
-//Combierte el el último nodo a BSpline
-static void bspline_node (SPPenContext *const pc);
-//preparates the curves for its trasformation into bspline curves.
-static void bspline_build(SPPenContext *const pc, bool Shift);
+//Preparamos la curva roja para que se muestre según esté pulsada la tecla SHIFT
+static void bspline_prepare(SPPenContext *const pc,bool Shift);
+//Unimos todas las curvas en juego y llamamos a la función doEffect.
+static void bspline_build(SPPenContext *const pc);
 //function bspline cloned from lpe-bspline.cpp
 static void bspline_doEffect(SPCurve * curve);
 //BSpline end
@@ -476,7 +477,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
     SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
     //BSpline
     //with this we avoid creating a new point over the existing one
-    if((pc->spiro || pc->bspline) && (!anchor || pc->p[0] == pc->p[3]) && pc->p[0] ==  pc->desktop->w2d(event_w)){
+    if((pc->spiro || pc->bspline) && pc->npoints > 0 && pc->p[0] == pc->p[3]){
         return FALSE;
     } 
     //BSpline end
@@ -669,7 +670,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
     //"spiro_color" lo ejecutamos siempre sea o no spiro
     spiro_color(pc);
     if (pen_within_tolerance) {
-        if ( Geom::LInfty( event_w - pen_drag_origin_w ) < tolerance && mevent.time != 0) {
+        if ( Geom::LInfty( event_w - pen_drag_origin_w ) < tolerance) {
             return FALSE;   // Do not drag if we're within tolerance from origin.
         }
     }
@@ -766,8 +767,9 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
 
                     // snap the handle
                     spdc_endpoint_snap_handle(pc, p, mevent.state);
-
-                    if (!pc->polylines_only) {
+                    //BSpline
+                    if (!pc->polylines_only && !pc->bspline && !pc->spiro) {
+                    //BSpline End
                         spdc_pen_set_ctrl(pc, p, mevent.state);
                     } else {
                         spdc_pen_set_ctrl(pc, pc->p[1], mevent.state);
@@ -792,39 +794,14 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
             break;
     }
     //BSpline
-    if(pc->spiro){
-         //Here we redraw the Spiro curve when the cursor is moved
-         //and the tolerance distance is exceeded.
-         //the tolerance value can be multiplied to improve the performance
-         //but it would lost fluency.
-         //If the cursor stops the curve is also redrawed.
-        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
-            //and we redraw the spiro
-            if ((mevent.state & GDK_SHIFT_MASK)){
-                spiro_build(pc,true);
-            }else{
-                spiro_build(pc,false);
-            }
-            //we update the distance and the tolerance
-            pen_drag_origin_w = event_w;
+    if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
+        if(pc->spiro){
+            spiro_prepare(pc,(mevent.state & GDK_SHIFT_MASK));
         }
-    }
-    if(pc->bspline){
-         //Here we redraw the Bspline curve when the cursor is moved
-         //and the tolerance distance is exceeded.
-         //the tolerance value can be multiplied to improve the performance
-         //but it would lost fluency.
-         //If the cursor stops the curve is also redrawed.
-        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
-            //and we redraw the spiro
-            if ((mevent.state & GDK_SHIFT_MASK)){
-                bspline_build(pc,true);
-            }else{
-                bspline_build(pc,false);
-            }
-            //we update the distance and the tolerance
-            pen_drag_origin_w = event_w;
+        if(pc->bspline){
+            bspline_prepare(pc,(mevent.state & GDK_SHIFT_MASK));
         }
+        pen_drag_origin_w = event_w;
     }
     //BSpline End
     return ret;
@@ -841,7 +818,6 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
     }
     
     gint ret = FALSE;
-    
     SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
     if ( revent.button == 1  && !event_context->space_panning ) {
         SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
@@ -856,7 +832,7 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
         //BSpline
         if(pc->spiro || pc->bspline){
             //Si intentamos crear un nodo en el mismo sitio que el origen, paramos.
-            if((!anchor || pc->p[0] == pc->p[3]) && pc->p[0] == p){
+            if(pc->npoints > 0 && pc->p[0] == pc->p[3]){
                 return FALSE;
             }
         }
@@ -879,6 +855,14 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                                 p = anchor->dp;
                             }
                         }
+                        //BSpline
+                        if(pc->spiro){
+                            spiro_prepare(pc,(revent.state & GDK_SHIFT_MASK));
+                        }
+                        if(pc->bspline){
+                            bspline_prepare(pc,(revent.state & GDK_SHIFT_MASK));
+                        }
+                        //BSpline End
                         pc->state = SP_PEN_CONTEXT_CONTROL;
                         ret = TRUE;
                         break;
@@ -895,13 +879,13 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                             spdc_endpoint_snap(pc, p, revent.state);
                         }
                         spdc_pen_finish_segment(pc, p, revent.state);
-                        spdc_pen_finish(pc, TRUE);
                         //BSpline
                         //Ocultamos la guia del penultimo nodo al cerrar la curva
                         if(pc->spiro){
                             sp_canvas_item_hide(pc->c1);
                         }
                         //BSpline End
+                        spdc_pen_finish(pc, TRUE);
                         pc->state = SP_PEN_CONTEXT_POINT;
                         ret = TRUE;
                         break;
@@ -924,6 +908,12 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                     case SP_PEN_CONTEXT_CLOSE:
                         spdc_endpoint_snap(pc, p, revent.state);
                         spdc_pen_finish_segment(pc, p, revent.state);
+                        //BSpline
+                        //Ocultamos la guia del penultimo nodo al cerrar la curva
+                        if(pc->spiro){
+                            sp_canvas_item_hide(pc->c1);
+                        }
+                        //BSpline End
                         if (pc->green_closed) {
                             // finishing at the start anchor, close curve
                             spdc_pen_finish(pc, TRUE);
@@ -931,12 +921,6 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                             // finishing at some other anchor, finish curve but not close
                             spdc_pen_finish(pc, FALSE);
                         }
-                        //BSpline
-                        if(pc->spiro){
-                        //Ocultamos la guia del penultimo nodo al cerrar la curva
-                            sp_canvas_item_hide(pc->c1);
-                        }
-                        //BSpline End
                         break;
                     case SP_PEN_CONTEXT_STOP:
                         // This is allowed, if we just cancelled curve
@@ -960,28 +944,6 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
 
         dc->green_closed = FALSE;
     }
-    //BSpline
-    if(pc->spiro){
-        //Ejecutamos la función tipo de nodo segun tengamos la mayuscula presionada
-        if ((revent.state & GDK_SHIFT_MASK)){
-            spiro_node_cusp(pc);
-            spiro_build(pc,true);
-        }else{
-            spiro_node_symm(pc);
-            spiro_build(pc,false);
-        }
-    }
-    if(pc->bspline){
-        //Ejecutamos la función tipo de nodo segun tengamos la mayuscula presionada
-        if ((revent.state & GDK_SHIFT_MASK)){
-            bspline_node_cusp(pc);
-            bspline_build(pc, true);
-        }else{
-            bspline_node(pc);
-            bspline_build(pc, false);
-        }
-    }
-    //BSpline End
 
     // TODO: can we be sure that the path was created correctly?
     // TODO: should we offer an option to collect the clicks in a list?
@@ -1070,11 +1032,11 @@ static void pen_redraw_all (SPPenContext *const pc)
     //sino al final de esta
     if(pc->spiro){
         //we redraw spiro
-         spiro_build(pc, true);
+        spiro_build(pc);
     }
     if(pc->bspline){
         //we redraw bspline
-        bspline_build(pc, false);
+        bspline_build(pc);
     }
     //BSpline End
 }
@@ -1160,10 +1122,15 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
         B = pc->green_curve->last_segment()->finalPoint();
         previous->moveto(A);
         previous->lineto(B);
-        //we eliminate the last segment
-        pc->green_curve->backspace();
-        //and we add it again with the recreation
-        pc->green_curve->append_continuous(previous, 0.0625);
+        if( pc->green_curve->get_segment_count() == 1){
+            pc->green_curve = previous;
+        }else{
+            //we eliminate the last segment
+            pc->green_curve->backspace();
+            //and we add it again with the recreation
+            pc->green_curve->append_continuous(previous, 0.0625);
+        }
+        
     }
     //Spiro Live
     pen_redraw_all(pc);
@@ -1181,7 +1148,7 @@ static void pen_lastpoint_toline (SPPenContext *const pc)
     //BSpline
     //Para formar una recta necesitamos un nodo con manejador en el "lastpoint"
     //de esta manera modificamos el final de la "curva_verde" para que tenga manejador
-    if(pc->bspline){
+    if(pc->bspline && !pc->green_curve->is_empty()){
         Geom::Point A(0,0);
         Geom::Point B(0,0);
         Geom::Point C(0,0);
@@ -1190,14 +1157,19 @@ static void pen_lastpoint_toline (SPPenContext *const pc)
         //We obtain the last segment 4 points in the previous curve 
         A = pc->green_curve->last_segment()->initialPoint();
         B = pc->green_curve->last_segment()->initialPoint();
-        C = pc->p[0] + (Geom::Point)(pc->p[0] - pc->p[1]);
+        C = pc->green_curve->last_segment()->finalPoint() + (1./3)* (Geom::Point)(pc->green_curve->last_segment()->initialPoint() - pc->green_curve->last_segment()->finalPoint());
         D = pc->green_curve->last_segment()->finalPoint();
         previous->moveto(A);
         previous->curveto(B, C, D);
-        //we eliminate the last segment
-        pc->green_curve->backspace();
-        //and we add it again with the recreation
-        pc->green_curve->append_continuous(previous, 0.0625);
+
+        if( pc->green_curve->get_segment_count() == 1){
+            pc->green_curve = previous;
+        }else{
+            //we eliminate the last segment
+            pc->green_curve->backspace();
+            //and we add it again with the recreation
+            pc->green_curve->append_continuous(previous, 0.0625);
+        }
     }
 
     pen_redraw_all(pc);
@@ -1514,103 +1486,114 @@ static void spiro_color(SPPenContext *const pc)
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->red_bpath), pc->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 }
 
-//Combierte el el último nodo a CUSP
-static void spiro_node_cusp (SPPenContext *const pc)
+
+//Preparamos la curva roja para que se muestre según esté pulsada la tecla SHIFT
+static void spiro_prepare(SPPenContext *const pc, bool Shift)
 {
-    if(pc->green_curve->is_empty())
-        return;
-    Geom::Point P0(0,0);
-    Geom::Point P1(0,0);
-    Geom::Point P2(0,0);
-    Geom::Point P3(0,0);
-    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment());
-    if(cubic){
-        P0 = (*cubic)[0];
-        P1 = (*cubic)[1];
-        P2 = (*cubic)[3];
-        P3 = (*cubic)[3];
-    }
-    pc->p[0] + P3;
-    pc->p[1] = P3 - (1./3)*(Geom::Point)( P0 - P3 );
-    SPCurve * last = new SPCurve();
-    last->moveto(P0);
-    last->curveto(P1,P2,P3);
-    if( pc->green_curve->get_segment_count() == 1){
-        pc->green_curve = last;
+    if(Shift){
+        //Creamos un nodo CUSP
+        pc->npoints = 5;
+        pc->p[2] = pc->p[3];
+        //Si empezamos sobre otra curva en modo cusp la alteramos para que no tenga manejador final
+        //recreando la curva e igualando el punto del manejador al punto fiinal de la curva
+        if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && !pc->ea && pc->green_curve->is_empty()){
+            bool reverse = false;
+            Geom::CubicBezier const * cubic;
+            if(pc->sa->start){
+                reverse = true;
+                pc->sa->curve = reverse_then_reset(pc->sa->curve);
+            }
+            Geom::Point P0(0,0);
+            Geom::Point P1(0,0);
+            Geom::Point P2(0,0);
+            Geom::Point P3(0,0);
+            Geom::Point P4(0,0);
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->sa->curve->last_segment());
+            if(cubic){
+                P0 = pc->sa->curve->last_segment()->initialPoint();
+                P1 = (*cubic)[1];
+                P3 = pc->sa->curve->last_segment()->finalPoint();
+                P2 = P3;
+            }else{
+                P0 = pc->sa->curve->last_segment()->initialPoint();
+                P1 = P0;
+                P3 = pc->sa->curve->last_segment()->finalPoint();
+                P2 = P3;
+            }
+            SPCurve * last = new SPCurve();
+            last->moveto(P0);
+            last->curveto(P1,P2,P3);
+            if( pc->sa->curve->get_segment_count() == 1){
+                pc->sa->curve = last;
+            }else{
+                pc->sa->curve->backspace();
+                pc->sa->curve->append_continuous(last, 0.0625);
+            }
+            if(reverse){
+                pc->sa->curve = reverse_then_reset(pc->sa->curve);
+            }
+            delete last;
+        }
+
     }else{
-        pc->green_curve->backspace();
-        pc->green_curve->append_continuous(last, 0.0625);
+        //Symm nodo
+        using Geom::X;
+        using Geom::Y;
+        Geom::CubicBezier const * cubic;
+
+        //Damos valores a los puntos de la curva roja para que generen un nodo SYMM
+        if(!pc->red_curve->is_empty()){
+            pc->npoints = 5;
+            //Les damos valor
+            pc->p[0] = pc->red_curve->first_segment()->initialPoint();
+            pc->p[3] = pc->red_curve->first_segment()->finalPoint();
+            pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+            pc->p[4] = pc->p[3] + (Geom::Point)( pc->p[3] - pc->p[2] );
+            pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
+        }
+        //Continuamos la curva en modo SPIRO
+        if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && !pc->ea && pc->green_curve->is_empty()){
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->sa->curve->last_segment());
+            if (pc->sa->start) {
+                cubic = dynamic_cast<Geom::CubicBezier const *>( pc->sa->curve->create_reverse()->last_segment() );
+            }
+            if(cubic){
+                pc->p[1] = (pc->p[0] - (*cubic)[2]) + pc->p[0];
+            }
+        }
+        //Nos aseguramos que el primer nodo sea SYMM con el ultimo segmento de la curva verde
+        if(!pc->green_curve->is_empty()){
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment());
+            if(cubic && (*cubic)[2] != (*cubic)[3]){
+                pc->p[1] = (pc->p[0] - (*cubic)[2]) + pc->p[0];
+            }
+        }
+
+        //Si cerramos sobre otra curva ponemos simetrico a esta el manejador del punto de cierre
+        if(pc->ea && !pc->ea->curve->is_empty()){
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->ea->curve->last_segment() );
+            if (pc->ea->start) {
+                cubic = dynamic_cast<Geom::CubicBezier const *>( pc->ea->curve->create_reverse()->last_segment() );
+            }
+            if(cubic){
+                pc->p[2] = (pc->p[3]-(*cubic)[2]) + pc->p[3];
+            }
+        }
+        //Lo mismpo pero cerrando sobre la curva inicial
+        if(pc->green_anchor && pc->green_anchor->active){
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->first_segment() );
+            if(cubic){
+                pc->p[2] = (pc->p[3]-(*cubic)[1]) + pc->p[3];
+            }
+        }
+
     }
+    spiro_build(pc);
 }
 
-//Combierte el el último nodo a SYMM
-//Solo se ejecuta al final de el evento release button
-static void spiro_node_symm(SPPenContext *const pc)
-{
-    //Si empezamos sobre una curva ya existente
-    if(pc->green_curve->is_empty() && pc->sa && !pc->sa->curve->is_empty()){
-        Geom::CubicBezier const * cubic;
-        if (pc->sa->start) {
-            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->sa->curve->first_segment() );
-            if ( cubic ) {
-                pc->p[1] = (pc->p[0]-(*cubic)[1]) + pc->p[0];
-            }
-        }else{
-            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->sa->curve->last_segment() );
-            if ( cubic ) {
-                pc->p[1] = (pc->p[0]-(*cubic)[2]) + pc->p[0];
-            }
-        }
-    }
-    //Cuando cerramos el segmento
-    if (!pc->green_curve->is_empty()){
-        Geom::Point P0(0,0);
-        Geom::Point P1(0,0);
-        Geom::Point P2(0,0);
-        Geom::Point P3(0,0);
-        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment());
-        if(cubic){
-            P0 = (*cubic)[0];
-            P1 = (*cubic)[1];
-            P2 = (*cubic)[3] + (1./3)*((*cubic)[0] - (*cubic)[3]);
-            P3 = (*cubic)[3];
-        }else{
-            P0 = pc->green_curve->last_segment()->initialPoint();
-            P1 = P0;
-            P3 = pc->green_curve->last_segment()->finalPoint();
-            P2 = P3 + (1./3)*(P0 - P3);
-        }
-        pc->p[1] = pc->p[0] + (Geom::Point)( pc->p[0] - P2 );
-        SPCurve * last = new SPCurve();
-        last->moveto(P0);
-        last->curveto(P1,P2,P3);
-        if( pc->green_curve->get_segment_count() == 1){
-            pc->green_curve = last;
-        }else{
-            pc->green_curve->backspace();
-            pc->green_curve->append_continuous(last, 0.0625);
-        }
-    }
-    //por si cerramos la curva
-    if(pc->ea && !pc->ea->curve->is_empty()){
-        Geom::CubicBezier const * cubic;
-        if(pc->ea->start){
-            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->ea->curve->first_segment());
-            if(cubic){
-                pc->p[2] = pc->p[3] + (Geom::Point)( pc->p[3] - (*cubic)[1] );
-            }
-        }else{
-            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->ea->curve->last_segment());
-            if(cubic){
-                pc->p[2] = pc->p[3] + (Geom::Point)( pc->p[3] - (*cubic)[2] );
-            }
-        }
-    }
-}
 
-//preparates the curves for its trasformation into spiro curves.
-//Parámetro opcional que indica si la curva se cierra en que modo lo hace Cusp o Symm
-static void spiro_build(SPPenContext *const pc, bool Shift)
+//Unimos todas las curvas en juego y llamamos a la función doEffect.
+static void spiro_build(SPPenContext *const pc)
 {
     //We create the base curve
     SPCurve *curve = new SPCurve();
@@ -1622,49 +1605,23 @@ static void spiro_build(SPPenContext *const pc, bool Shift)
         }
     }
     //We add also the green curve
-    if (!pc->green_curve->is_empty()) {
+    if (!pc->green_curve->is_empty())
         curve->append_continuous(pc->green_curve, 0.0625);
-    }
+
     //and the red one
-    if (!pc->red_curve->is_empty()) {
-        //we add the curve to the modified values
-        if(!Shift){
-            if(pc->ea && !pc->ea->curve->is_empty()){
-                Geom::CubicBezier const * cubic;
-                if(pc->ea->start){
-                    cubic = dynamic_cast<Geom::CubicBezier const *>( pc->ea->curve->first_segment());
-                    if(cubic){
-                        pc->p[2] = pc->p[3] + (Geom::Point)( pc->p[3] - (*cubic)[1] );
-                    }
-                }else{
-                    cubic = dynamic_cast<Geom::CubicBezier const *>( pc->ea->curve->last_segment());
-                    if(cubic){
-                        pc->p[2] = pc->p[3] + (Geom::Point)( pc->p[3] - (*cubic)[2] );
-                    }
-                }
-            } else if(pc->green_anchor && pc->green_anchor->active){
-                Geom::CubicBezier const * cubic;
-                cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->first_segment());
-                if(cubic){
-                    pc->p[2] = pc->p[3] + (Geom::Point)( pc->p[3] - (*cubic)[1] );
-                }
-            }
-            if(pc->p[2] != pc->p[3]){
-                pc->red_curve->reset();
-                pc->npoints = 5;
-                pc->red_curve->moveto(pc->p[0]);
-                pc->red_curve->curveto(pc->p[1],pc->p[2],pc->p[3]);
-            }
-        }else{
-            if((pc->ea && !pc->ea->curve->is_empty()) || (pc->green_anchor && pc->green_anchor->active)){
-                pc->p[2] == pc->p[3];
-                pc->red_curve->reset();
-                pc->npoints = 5;
-                pc->red_curve->moveto(pc->p[0]);
-                pc->red_curve->curveto(pc->p[1],pc->p[2],pc->p[3]);
-            }
-        }
+    if (!pc->red_curve->is_empty()){
+        pc->red_curve->reset();
+        pc->red_curve->moveto(pc->p[0]);
+        pc->red_curve->curveto(pc->p[1],pc->p[2],pc->p[3]);
         curve->append_continuous(pc->red_curve, 0.0625);
+    }
+
+    if(!pc->sa && pc->ea && !pc->ea->curve->is_empty()){
+        if (pc->ea->start) {
+            curve->append_continuous(pc->ea->curve, 0.0625);
+        }else{
+            curve->append_continuous(pc->ea->curve->create_reverse(), 0.0625);
+        }
     }
     if(!curve->is_empty()){
         //cerramos la curva si estan cerca los puntos finales de la curva spiro
@@ -1675,7 +1632,7 @@ static void spiro_build(SPPenContext *const pc, bool Shift)
         //For example
         //using namespace Inkscape::LivePathEffect;
         //LivePathEffectObject *lpeobj = static_cast<LivePathEffectObject*> (curve);
-        //Effect *spr = static_cast<Effect*> ( new LPESpiro(lpeobj) );
+        //Effect *spr = static_cast<Effect*> ( new LPEspiro(lpeobj) );
         //spr->doEffect(curve);
         spiro_doEffect(curve);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->blue_bpath), curve);   
@@ -1805,95 +1762,70 @@ static void spiro_doEffect(SPCurve * curve)
     g_free (path);
 }
 
-//Combierte el el último nodo a CUSP
-//Crea una curva en el punto final de la green_curve
-static void bspline_node_cusp(SPPenContext *const pc)
+//Unimos todas las curvas en juego y llamamos a la función doEffect.
+static void bspline_prepare(SPPenContext *const pc, bool Shift)
 {
-
-    if (!pc->green_curve->is_empty()){
+    if(!Shift){
+        //Modo Bspline formado por nodos CUSP
+        if (pc->npoints == 5){
+            pc->npoints = 2;
+            pc->p[1]= pc->p[3];
+        }
+    }else{
+        //NODO CUSP formado por nodo SMOOTH
+        //solo mobemos el manejador del nodo final de cada segmento
+        //Es suficiente para mostrar el nodo como CUSP
         using Geom::X;
         using Geom::Y;
-        Geom::Point P0(0,0);
-        Geom::Point P1(0,0);
-        Geom::Point P2(0,0);
-        Geom::Point P3(0,0);
-        P0 =  pc->green_curve->last_segment()->initialPoint();
-        P1 = P0;
-        P3 = pc->green_curve->last_segment()->finalPoint();
-        P2 = P3 + (1./3)*(P0 - P3);
-        P2 = Geom::Point(P2[X]+1,P2[Y]+1);
-        pc->p[0] = P3;
-        pc->p[1] = P3;
-        SPCurve * last = new SPCurve();
-        last->moveto(P0);
-        last->curveto(P1, P2,P3);
-        if( pc->green_curve->get_segment_count() == 1){
-            pc->green_curve = last;
-        }else{
-            pc->green_curve->backspace();
-            pc->green_curve->append_continuous(last, 0.0625);
+        bool reverse = false;
+        //Usamos 5 puntos
+        if(pc->npoints == 2){
+            pc->npoints = 5;
+        }
+        pc->p[1] = pc->p[0];
+        //Les damos valor
+        pc->p[3] = pc->red_curve->first_segment()->finalPoint();
+        pc->p[4] = pc->p[3];
+        pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+        
+        //Si empezamos sobre otra curva hay que modificarla para que tenga manejador en el último nodo
+        if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && !pc->ea && pc->green_curve->is_empty()){
+            if(pc->sa->start){
+                reverse = true;
+                pc->sa->curve = reverse_then_reset(pc->sa->curve);
+            }
+            Geom::Point P0(0,0);
+            Geom::Point P1(0,0);
+            Geom::Point P2(0,0);
+            Geom::Point P3(0,0);
+            Geom::Point P4(0,0);
+            P0 = pc->sa->curve->last_segment()->initialPoint();
+            P1 = P0;
+            P3 = pc->sa->curve->last_segment()->finalPoint();
+            P2 = P3 + (1./3)*(P0 - P3);
+            SPCurve * last = new SPCurve();
+            last->moveto(P0);
+            last->curveto(P1,P2,P3);
+            if( pc->sa->curve->get_segment_count() == 1){
+                pc->sa->curve = last;
+            }else{
+                pc->sa->curve->backspace();
+                pc->sa->curve->append_continuous(last, 0.0625);
+            }
+            if(reverse){
+                pc->sa->curve = reverse_then_reset(pc->sa->curve);
+            }
+            delete last;
         }
     }
-    if (pc->sa && !pc->sa->curve->is_empty() && pc->green_curve->get_segment_count() == 1){
-        using Geom::X;
-        using Geom::Y;
-        if(pc->sa->start){
-            pc->sa->curve = reverse_then_reset(pc->sa->curve);
-        }
-        Geom::Point P0(0,0);
-        Geom::Point P1(0,0);
-        Geom::Point P2(0,0);
-        Geom::Point P3(0,0);
-        P0 = pc->sa->curve->last_segment()->initialPoint();
-        P1 = P0;
-        P3 = pc->sa->curve->last_segment()->finalPoint();
-        P2 = P3 + (1./3)*(P0 - P3);
-        P2 = Geom::Point(P2[X]+1,P2[Y]+1);
-        pc->p[0] = P3;
-        pc->p[1] = P3;
-        SPCurve * last = new SPCurve();
-        last->moveto(P0);
-        last->curveto(P1,P2,P3);
-        if( pc->sa->curve->get_segment_count() == 1){
-            pc->sa->curve = last;
-        }else{
-            pc->sa->curve->backspace();
-            pc->sa->curve->append_continuous(last, 0.0625);
-        }
-    }
-    //Lo ejacutamos para que se actualize tosa la curva por un fallo de redibujo
-    bspline_build(pc,true);
+bspline_build(pc);
 }
 
-//Combierte el el último nodo a SYMM
-//crea lineas rectas
-static void bspline_node(SPPenContext *const pc)
-{
 
-    if (!pc->green_curve->is_empty()){
-        Geom::Point P0(0,0);
-        Geom::Point P1(0,0);
-        P0 = pc->green_curve->last_segment()->initialPoint();
-        P1 = pc->green_curve->last_segment()->finalPoint();
-        pc->p[1] = P1;
-        pc->p[0] = P1;
-        SPCurve * last = new SPCurve();
-        last->moveto(P0);
-        last->lineto(P1);
-        if( pc->green_curve->get_segment_count() == 1){
-            pc->green_curve = last;
-        }else{
-            pc->green_curve->backspace();
-            pc->green_curve->append_continuous(last, 0.0625);
-        }
-    }
-}
 
 //preparates the curves for its trasformation into BSline curves.
-static void bspline_build(SPPenContext *const pc, bool Shift)
+static void bspline_build(SPPenContext *const pc)
 {
-    if (pc->green_curve->is_empty() && !pc->sa)
-        return;
     //We create the base curve
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
@@ -1904,30 +1836,27 @@ static void bspline_build(SPPenContext *const pc, bool Shift)
         }
     }
     //We add also the green curve
-    if (!pc->green_curve->is_empty()) {
+    if (!pc->green_curve->is_empty())
         curve->append_continuous(pc->green_curve, 0.0625);
-    }
+
     //and the red one
-    if (!pc->red_curve->is_empty()) {
-        //we add the curve to the modified values
-        if((pc->ea && !pc->ea->curve->is_empty()) || (pc->green_anchor && pc->green_anchor->active)){
-            if(Shift){
-                using Geom::X;
-                using Geom::Y;
-                pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
-                pc->p[2] = Geom::Point(pc->p[2][X]+1,pc->p[2][Y]+1);
-                pc->red_curve->reset();
-                pc->npoints = 5;
-                pc->red_curve->moveto(pc->p[0]);
-                pc->red_curve->curveto(pc->p[1],pc->p[2],pc->p[3]);
-            }else{
-                pc->red_curve->reset();
-                pc->npoints = 2;
-                pc->red_curve->moveto(pc->p[0]);
-                pc->red_curve->lineto(pc->red_curve->first_segment()->finalPoint());
-            }
+    if (!pc->red_curve->is_empty()){
+        pc->red_curve->reset();
+        pc->red_curve->moveto(pc->p[0]);
+        if(pc->npoints == 2){
+            pc->red_curve->lineto(pc->p[1]);
+        }else{
+            pc->red_curve->curveto(pc->p[1],pc->p[2],pc->p[3]);
         }
         curve->append_continuous(pc->red_curve, 0.0625);
+    }
+
+    if(!pc->sa && pc->ea && !pc->ea->curve->is_empty()){
+        if (pc->ea->start) {
+            curve->append_continuous(pc->ea->curve, 0.0625);
+        }else{
+            curve->append_continuous(pc->ea->curve->create_reverse(), 0.0625);
+        }
     }
     if(curve->get_segment_count() > 1 ){
         //cerramos la curva si estan cerca los puntos finales de la curva spiro
@@ -1938,7 +1867,7 @@ static void bspline_build(SPPenContext *const pc, bool Shift)
         //For example
         //using namespace Inkscape::LivePathEffect;
         //LivePathEffectObject *lpeobj = static_cast<LivePathEffectObject*> (curve);
-        //Effect *spr = static_cast<Effect*> ( new LPEBspline(lpeobj) );
+        //Effect *spr = static_cast<Effect*> ( new LPEbspline_prepare(lpeobj) );
         //spr->doEffect(curve);
         bspline_doEffect(curve);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->blue_bpath), curve);   
@@ -1951,7 +1880,7 @@ static void bspline_build(SPPenContext *const pc, bool Shift)
         sp_canvas_item_hide(pc->cl1);
         sp_canvas_item_hide(pc->c0);
         sp_canvas_item_hide(pc->cl0);
-    }else                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {
+    }else{
         //if the curve is empty
         sp_canvas_item_hide(pc->blue_bpath);
     }
@@ -1965,167 +1894,174 @@ static void bspline_doEffect(SPCurve * curve)
     // Make copy of old path as it is changed during processing
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
-    int ip = 0;
     //Sbasis
-    Geom::D2< Geom::SBasis > curveIn;
-    Geom::D2< Geom::SBasis > curveOut;
-    Geom::D2< Geom::SBasis > rectCurve;
-    Geom::D2< Geom::SBasis > rectCurveExtra;
-    //Puntos a usar. Ponemos todos los posibles para hacer más inteligible el código
-    Geom::Point startAnchor(0,0);
-    Geom::Point previousAnchor(0,0);
-    Geom::Point anchor(0,0);
-    Geom::Point previousSBasis0(0,0);
-    Geom::Point previousSBasis1(0,0);
-    Geom::Point previousSBasis2(0,0);
-    //Geom::Point previousSBasis3(0,0);
-    Geom::Point SBasis0(0,0);
-    Geom::Point SBasis1(0,0);
-    Geom::Point SBasis2(0,0);
-    Geom::Point SBasis3(0,0);
-    //Geom::Point nextSBasis0(0,0);
-    Geom::Point nextSBasis1(0,0);
-    Geom::Point nextSBasis2(0,0);
-    Geom::Point nextSBasis3(0,0);
+    Geom::D2< Geom::SBasis > SBasisIn;
+    Geom::D2< Geom::SBasis > SBasisOut;
+    Geom::D2< Geom::SBasis > SBasisEnd;
+    Geom::D2< Geom::SBasis > SBasisHelper;
+    //curves
+    SPCurve * in = new SPCurve();
+    SPCurve * out = new SPCurve();
+    SPCurve * end = new SPCurve();
     //Curvas temporales
-    SPCurve *BSplineRectTemp = new SPCurve();
-    SPCurve *BSplineCurveTemp = new SPCurve();
-    SPCurve *BSplinePreviousCurveTemp = new SPCurve();
+    SPCurve *lineHelper = new SPCurve();
+    SPCurve *curveHelper = new SPCurve();
+    SPCurve *nCurve = new SPCurve();
+    //Puntos a usar. Ponemos todos los posibles para hacer más inteligible el código
+    Geom::Point startNode(0,0);
+    Geom::Point previousNode(0,0);
+    Geom::Point node(0,0);
+    Geom::Point previousPointAt0(0,0);
+    Geom::Point previousPointAt1(0,0);
+    Geom::Point previousPointAt2(0,0);
+    //Geom::Point previousPointAt3(0,0);
+    Geom::Point pointAt0(0,0);
+    Geom::Point pointAt1(0,0);
+    Geom::Point pointAt2(0,0);
+    Geom::Point pointAt3(0,0);
+    //Geom::Point nextPointAt0(0,0);
+    Geom::Point nextPointAt1(0,0);
+    Geom::Point nextPointAt2(0,0);
+    Geom::Point nextPointAt3(0,0);
+
     //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
         //Si está vacío... 
         if (path_it->empty())
             continue;
-        //Declaramos las variables
-        //Itreador
+        //Itreadores
         Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());         // outgoing curve
-        Geom::Path::const_iterator curve_end = path_it->end();      // last curve
+        Geom::Path::const_iterator curve_end = path_it->end(); // end curve 
         Geom::Path::const_iterator curve_endit = path_it->end_default(); // this determines when the loop has to stop
-        //por defecto la linea es recta.
-        //Para formar las bsplines contamos que si el nodo es cusp -sin manejadores
-        //se calcula el nodo resultante como BSpline. Si por el contrario tiene un manejador
-        //en el últimp punto de la cuva (pc->p[2]) calculamos la curva resultante para que forme un nodo cusp
-        bool is_line = true;
-        bool previous_is_line = true;
-        if (path_it->closed()) {
-            SBasis2 = curve_it1->toSBasis().valueAt(0.3334);
-            nextSBasis1 = curve_end->toSBasis().valueAt(0.6664);
-            BSplineRectTemp->moveto(nextSBasis1);
-            BSplineRectTemp->lineto(SBasis2);
-            startAnchor = BSplineRectTemp->first_segment()->toSBasis().valueAt(0.5);
-            anchor = startAnchor;
-            BSplineRectTemp->reset();
+        //Las lineas rectas forman nodos BSpline
+        //Las curvas forman nodos CUSP
+        bool isBSpline = true;
+        //Creamos las lineas rectas que unen todos los puntos del trazado y donde se calcularán
+        //los puntos clave para los manejadores. 
+        //Esto hace que la curva BSpline no pierda su condición aunque se trasladen
+        //dichos manejadores
+        in->moveto(curve_it1->initialPoint());
+        in->lineto(curve_it1->finalPoint());
+        out->moveto(curve_it2->initialPoint());
+        out->lineto(curve_it2->finalPoint());
+        //este no cambia.
+        end->moveto(curve_end->initialPoint());
+        end->lineto(curve_end->finalPoint());
+        //Si la curva está cerrada calculamos el punto donde
+        //deveria estar el nodo BSpline de cierre/inicio de la curva
+        //en posible caso de que se cierre con una linea recta creando un nodo BSPline
+        if (path_it->closed() && is_straight_curve(*curve_end)) {
+            //Calculamos el nodo de inicio BSpline
+            SBasisIn = in->first_segment()->toSBasis();
+            SBasisEnd = end->first_segment()->toSBasis();
+            lineHelper->moveto(SBasisIn.valueAt(0.3334));
+            lineHelper->lineto(SBasisEnd.valueAt(0.6664));
+            SBasisHelper = lineHelper->first_segment()->toSBasis();
+            lineHelper->reset();
+            //Guardamos el principio de la curva
+            startNode = SBasisHelper.valueAt(0.5);
+            //Definimos el punto de inicio original de la curva resultante
+            node = startNode;
+        }else{
+            //Guardamos el principio de la curva
+            startNode = in->first_segment()->initialPoint();
+            //Definimos el punto de inicio original de la curva resultante
+            node = startNode;
         }
+        //Recorremos todos los segmentos menos el último
         while ( curve_it2 != curve_endit )
         {
-            //Calculamos los dos puntos para seleccional el punto central de la línea que los une
-            curveIn = curve_it1->toSBasis();
-            curveOut = curve_it2->toSBasis();
-            previousSBasis0 = SBasis0;
-            previousSBasis1 = SBasis1;
-            previousSBasis2 = SBasis2;
-            //previousSBasis3 = SBasis3;
-            SBasis0 = curveIn.valueAt(0);
-            SBasis1 = curveIn.valueAt(0.3334);
-            SBasis2 = curveIn.valueAt(0.6667);
-            SBasis3 = curveIn.valueAt(1);
-            //nextSBasis0 = curveOut.valueAt(0);
-            nextSBasis1 = curveOut.valueAt(0.3334);
-            nextSBasis2 = curveOut.valueAt(0.6667);;
-            nextSBasis3 = curveOut.valueAt(1);
-            //Se forma con la union de dos puntos, el primero está en la curva entrante
-            // y se conoce dividiendo por tres la curva y seleccionado el 
-            //punto mas cercano de los dos al nodo de union con la curva saliente.
-            //El otro punto es el puntio más cercano al nodo de union
-            //de la curva saliente dividida por tres.
-            BSplineRectTemp->moveto(SBasis2);
-            BSplineRectTemp->lineto(nextSBasis1);
-            previousAnchor = anchor;
-            anchor = BSplineRectTemp->first_segment()->toSBasis().valueAt(0.5);
-            BSplineRectTemp->reset();
-            //Vemos si el nodo es curva
-            previous_is_line = is_line;
-            is_line = is_straight_curve(*curve_it1);
-            if(!is_line  && curve->get_segment_count() > 1){
-                //Si no es curva convertimos la curva resultante a un nodo cusp
-                //aberiguamos el punto en donde deveria estar de manera fija
-                //independientemente de el manejador y movemos
-                BSplineRectTemp->moveto(SBasis0);
-                BSplineRectTemp->lineto(SBasis3);
-                SBasis1 = BSplineRectTemp->first_segment()->toSBasis().valueAt(0.3334);
-                SBasis2 = BSplineRectTemp->first_segment()->toSBasis().valueAt(0.6667);
-                BSplineRectTemp->reset();
-                BSplineRectTemp->moveto(SBasis1);
-                BSplineRectTemp->lineto(previousSBasis2);
-                previousAnchor = BSplineRectTemp->first_segment()->toSBasis().valueAt(0.5);
-                anchor = SBasis3;
-                BSplineRectTemp->reset();
-                //averiguamos el nuevo vinal de curva entrante recreando de nuevo
-                //una linea y seleccionando su centro como origen
-                if(previous_is_line){
-                    BSplineCurveTemp->moveto(previousAnchor);
-                    BSplineCurveTemp->curveto(SBasis1, SBasis2, anchor);
-                }else{
-                    BSplineCurveTemp->moveto(SBasis0);
-                    BSplineCurveTemp->lineto(anchor);
-                }
-                BSplineRectTemp->reset();
-                
-                //Como el origen ha cambiado, seleccionamos el ultimo punto
-                //de la curva ya creada y lo movemos al nuevo origen/final
-                Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( curve->last_segment());
-                if(cubic){
-                    BSplinePreviousCurveTemp->moveto((*cubic)[0]);
-                    if(previous_is_line){
-                        BSplinePreviousCurveTemp->curveto((*cubic)[1],(*cubic)[2],previousAnchor);
-                    } else {
-                        BSplinePreviousCurveTemp->curveto((*cubic)[1],(*cubic)[2],curve->last_segment()->finalPoint());
-                    }
-                }else{
-                    BSplinePreviousCurveTemp->moveto(curve->last_segment()->initialPoint());
-                    BSplinePreviousCurveTemp->lineto(curve->last_segment()->finalPoint());
-                }
-                if( curve->get_segment_count() == 1){
-                    curve = BSplinePreviousCurveTemp;
-                }else{
-                    curve->backspace();
-                    curve->append_continuous(BSplinePreviousCurveTemp, 0.0625);
-                }
-                BSplinePreviousCurveTemp->reset();
-            }else{
-                //Creamos la curva correspondiente a la posición actual del
-                //Iterador, para anexarla a la curva de salida
-                //almacena la SPCurve de un solo segmento que se va añadir al resiultado final
-                //en la itineración
-                if (ip == 0 && !path_it->closed()){
-                    BSplineCurveTemp->moveto(SBasis0);
-                }else{
-                    //Empezamos la curva el el final de la anterior curva
-                    BSplineCurveTemp->moveto(previousAnchor);
-                }
-                BSplineCurveTemp->curveto(SBasis1, SBasis2, anchor);
+            //Damos valor a el objeto SBasis para el path de entrada y el de salida
+            SBasisIn = in->first_segment()->toSBasis();
+            SBasisOut = out->first_segment()->toSBasis();
+            //Damos valor a los puntos calculados en el anterior paso del bucle
+            previousPointAt0 = pointAt0;
+            previousPointAt1 = pointAt1;
+            previousPointAt2 = pointAt2;
+            //previousPointAt3 = pointAt3;
+            //Calculamos los puntos que dividirían en tres segmentos iguales el path recto de entrada y de salida
+            pointAt0 = SBasisIn.valueAt(0);
+            pointAt1 = SBasisIn.valueAt(0.3334);
+            pointAt2 = SBasisIn.valueAt(0.6667);
+            pointAt3 = SBasisIn.valueAt(1);
+            //Y hacemos lo propio con el path de salida
+            //nextPointAt0 = curveOut.valueAt(0);
+            nextPointAt1 = SBasisOut.valueAt(0.3334);
+            nextPointAt2 = SBasisOut.valueAt(0.6667);;
+            nextPointAt3 = SBasisOut.valueAt(1);
+            //La curva BSpline se forma calculando el centro del segmanto de unión
+            //de el punto situado en las 2/3 partes de el segmento de entrada
+            //con el punto situado en la posición 1/3 del segmento de salida
+            //Estos dos puntos ademas estan posicionados en el lugas correspondiente de
+            //los manejadores de la curva
+            lineHelper->moveto(pointAt2);
+            lineHelper->lineto(nextPointAt1);
+            SBasisHelper = lineHelper->first_segment()->toSBasis();
+            lineHelper->reset();
+            //almacenamos el punto del anterior bucle -o el de cierre- que nos hara de principio de curva
+            previousNode = node;
+            //Y este hará de final de curva
+            node = SBasisHelper.valueAt(0.5);
+            //Vemos si el nodo es BSpline o CUSP
+            //Averiguamos si el path de entrada es recto o tiene manejadores
+            isBSpline = is_straight_curve(*curve_it1);
+            //Si no es recto, tenemos que generar la curva con nodo final CUSP
+            if(!isBSpline ){
+                //Definimos como nodo el final del segmento de entrada
+                node = pointAt3;
             }
-            curve->append_continuous(BSplineCurveTemp, 0.0625);
-            BSplineCurveTemp->reset();
+            curveHelper->moveto(previousNode);
+            curveHelper->curveto(pointAt1, pointAt2, node);
+            //añadimos la curva generada a la curva pricipal
+            nCurve->append_continuous(curveHelper, 0.0625);
+            curveHelper->reset();
+            //aumentamos los valores para el siguiente paso en el bucle
             ++curve_it1;
             ++curve_it2;
-            ip++;
+            in->reset();
+            in->moveto(curve_it1->initialPoint());
+            in->lineto(curve_it1->finalPoint());
+            out->reset();
+            if(curve_it1 != curve_end){
+                out->moveto(curve_it2->initialPoint());
+                out->lineto(curve_it2->finalPoint());
+            }
         }
-        //terminamos el trazado
-        BSplineCurveTemp->moveto(anchor);
-        is_line = is_straight_curve(*curve_it1);
-        if (path_it->closed() && is_line) {
-            BSplineCurveTemp->curveto(nextSBasis1, nextSBasis2, startAnchor);
-        }else{
-            BSplineCurveTemp->curveto(nextSBasis1, nextSBasis2, nextSBasis3);
-        }
-        curve->append_continuous(BSplineCurveTemp, 0.0625);
-        BSplineCurveTemp->reset();
+        //Aberiguamos la ultima parte de la curva correspondiente al último segmento
+        curveHelper->moveto(node);
+        //Si está cerrada la curva, la cerramos sobre  el valor guardado previamente
+        //Si no finalizamos en el punto final
         if (path_it->closed()) {
-            curve->closepath_current();
+            curveHelper->curveto(nextPointAt1, nextPointAt2, startNode);
+        }else{
+            curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
         }
+        //añadimos este último segmento
+        nCurve->append_continuous(curveHelper, 0.0625);
+        //y cerramos la curva
+        if (path_it->closed()) {
+            nCurve->closepath_current();
+        }
+        curve->append(nCurve,false);
+        nCurve->reset();
+        //Limpiamos
+        in->reset();
+        out->reset();
+        end->reset();
+        lineHelper->reset();
+        curveHelper->reset();
     }
+    delete in;
+    delete out;
+    delete end;
+    delete lineHelper;
+    delete curveHelper;
+    //Todo: remove?
+    //delete SBasisIn;
+    //delete SBasisOut;
+    //delete SBasisEnd;
+    //delete SBasisHelper;
 }
 
 //BSpline end
@@ -2235,6 +2171,14 @@ static void spdc_pen_finish_segment(SPPenContext *const pc, Geom::Point const p,
     ++pc->num_clicks;
 
     if (!pc->red_curve->is_empty()) {
+        //BSpline
+        if(pc->spiro){
+            spiro_prepare(pc, (state & GDK_SHIFT_MASK));
+        }
+        if(pc->bspline){
+            bspline_prepare(pc, (state & GDK_SHIFT_MASK));
+        }
+        //BSpline End
         pc->green_curve->append_continuous(pc->red_curve, 0.0625);
         SPCurve *curve = pc->red_curve->copy();
         /// \todo fixme:

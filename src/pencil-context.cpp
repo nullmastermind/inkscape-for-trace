@@ -780,7 +780,14 @@ interpolate(SPPencilContext *pc)
         /* Fit and draw and reset state */
         pc->green_curve->moveto(b[0]);
         for (int c = 0; c < n_segs; c++) {
-            pc->green_curve->curveto(b[4*c+1], b[4*c+2], b[4*c+3]);
+            //BSpline
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+            if(mode == 2){
+                pc->green_curve->lineto(b[4*c+3]);
+            }else{
+                pc->green_curve->curveto(b[4*c+1], b[4*c+2], b[4*c+3]);
+            }
         }
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->green_curve);
 
@@ -920,7 +927,15 @@ fit_and_split(SPPencilContext *pc)
         /* Fit and draw and reset state */
         pc->red_curve->reset();
         pc->red_curve->moveto(b[0]);
-        pc->red_curve->curveto(b[1], b[2], b[3]);
+        //BSpline
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+        if(mode == 2){
+            pc->red_curve->lineto(b[3]);
+        }else{
+            pc->red_curve->curveto(b[1], b[2], b[3]);
+        }
+        //BSpline End
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
         pc->red_curve_is_valid = true;
     } else {
