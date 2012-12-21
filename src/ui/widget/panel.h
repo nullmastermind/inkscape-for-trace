@@ -13,6 +13,10 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_PANEL_H
 #define SEEN_INKSCAPE_UI_WIDGET_PANEL_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/arrow.h>
 #include <gtkmm/button.h>
@@ -27,7 +31,13 @@ class SPDocument;
 
 namespace Gtk {
 	class CheckMenuItem;
+
+#if WITH_GTKMM_3_0
+	class ButtonBox;
+#else
 	class HButtonBox;
+#endif
+
 	class MenuItem;
 }
 
@@ -157,7 +167,13 @@ private:
     Gtk::EventBox    _menu_popper;
     Gtk::Button      _close_button;
     Gtk::Menu       *_menu;
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox *_action_area;  //< stores response buttons
+#else
     Gtk::HButtonBox *_action_area;  //< stores response buttons
+#endif
+
     std::vector<Gtk::Widget *> _non_horizontal;
     std::vector<Gtk::Widget *> _non_vertical;
     PreviewFillable *_fillable;

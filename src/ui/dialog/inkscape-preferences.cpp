@@ -1162,9 +1162,11 @@ void InkscapePreferences::initPageBehavior()
     _scroll_auto_thres.init ( "/options/autoscrolldistance/value", -600.0, 600.0, 1.0, 1.0, -10.0, true, false);
     _page_scrolling.add_line( true, _("_Threshold:"), _scroll_auto_thres, _("pixels"),
                            _("How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), false);
+/*
     _scroll_space.init ( _("Left mouse button pans when Space is pressed"), "/options/spacepans/value", false);
     _page_scrolling.add_line( false, "", _scroll_space, "",
                             _("When on, pressing and holding Space and dragging with left mouse button pans canvas (as in Adobe Illustrator); when off, Space temporarily switches to Selector tool (default)"));
+*/
     _wheel_zoom.init ( _("Mouse wheel zooms by default"), "/options/wheelzooms/value", false);
     _page_scrolling.add_line( false, "", _wheel_zoom, "",
                             _("When on, mouse wheel zooms without Ctrl and scrolls canvas with Ctrl; when off, it zooms with Ctrl and scrolls without Ctrl"));
@@ -1459,7 +1461,12 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     _page_keyshortcuts.attach(*scroller, 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL);
     row++;
 
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox *box_buttons = manage(new Gtk::ButtonBox);
+#else
     Gtk::HButtonBox *box_buttons = manage (new Gtk::HButtonBox);
+#endif
+
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
     box_buttons->set_spacing(4);
     _page_keyshortcuts.attach(*box_buttons, 0, 3, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
