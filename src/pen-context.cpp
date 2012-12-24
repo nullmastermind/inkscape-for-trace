@@ -1088,14 +1088,6 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
         return;
     //BSpline
     Geom::CubicBezier const * cubic;
-    if(!pc->bspline){
-        cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment() );
-        if ( cubic ) {
-            pc->p[1] = pc->p[0] + (Geom::Point)( (*cubic)[3] - (*cubic)[2] );
-        } else {
-            pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
-        }
-    }
 
     //Para formar una curva necesitamos un nodo symm en el "lastpoint"
     //de esta manera modificamos el final de la "curva_verde" para que sea symm con el pricipio de la "red_curve"
@@ -1105,8 +1097,7 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
         Geom::Point C(0,0);
         Geom::Point D(0,0);
         SPCurve * previous = new SPCurve();
-        using Geom::X;
-        using Geom::Y;
+        cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment() );
         //We obtain the last segment 4 points in the previous curve 
         if ( cubic ){
             A = (*cubic)[0];
@@ -1119,7 +1110,6 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
             C = pc->p[0] + (Geom::Point)(pc->p[0] - pc->p[1]);
             D = pc->green_curve->last_segment()->finalPoint();
         }
-        C = Geom::Point(C[X]+1,C[Y]+1);
         previous->moveto(A);
         previous->curveto(B, C, D);
         if( pc->green_curve->get_segment_count() == 1){
@@ -1131,6 +1121,16 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
             pc->green_curve->append_continuous(previous, 0.0625);
         }
     }
+
+    if(!pc->bspline){
+        cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment() );
+        if ( cubic ) {
+            pc->p[1] = pc->p[0] + (Geom::Point)( pc->p[0] - (*cubic)[2] );
+        } else {
+            pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
+        }
+    }
+
     //Para formar una curva bspline necesitamos un nodo cusp en el "lastpoint"
     //de esta manera modificamos el final de la "curva_verde" para que sea cusp con el pricipio de la "red_curve"
     //Que se quedará recta
