@@ -126,6 +126,13 @@ void FilterDiffuseLighting::render_cairo(FilterSlot &slot)
     cairo_surface_t *input = slot.getcairo(_input);
     cairo_surface_t *out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_COLOR_ALPHA);
 
+    // Only alpha channel of input is used, no need to check input color_interpolation_filter value.
+    SPColorInterpolation ci_fp  = SP_CSS_COLOR_INTERPOLATION_AUTO;
+    if( _style ) {
+        ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
+    }
+    set_cairo_surface_ci(out, ci_fp );
+
     Geom::Rect slot_area = slot.get_slot_area();
     Geom::Point p = slot_area.min();
     Geom::Affine trans = slot.get_units().get_matrix_primitiveunits2pb();

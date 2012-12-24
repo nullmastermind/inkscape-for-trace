@@ -553,6 +553,15 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     cairo_surface_t *in = slot.getcairo(_input);
     if (!in) return;
 
+    // We may need to transform input surface to correct color interpolation space. The input surface
+    // might be used as input to another primitive but it is likely that all the primitives in a given
+    // filter use the same color interpolation space so we don't copy the input before converting.
+    SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
+    if( _style ) {
+        ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
+    }
+    set_cairo_surface_ci( in, ci_fp );
+
     // zero deviation = no change in output
     if (_deviation_x <= 0 && _deviation_y <= 0) {
         cairo_surface_t *cp = ink_cairo_surface_copy(in);
@@ -660,10 +669,14 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
         cairo_paint(ct);
         cairo_destroy(ct);
 
+        set_cairo_surface_ci( upsampled, ci_fp );
+
         slot.set(_output, upsampled);
         cairo_surface_destroy(upsampled);
         cairo_surface_destroy(downsampled);
     } else {
+        set_cairo_surface_ci( downsampled, ci_fp );
+
         slot.set(_output, downsampled);
         cairo_surface_destroy(downsampled);
     }
