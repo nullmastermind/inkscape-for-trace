@@ -106,11 +106,9 @@ GType sp_event_context_get_type(void) {
  * Callback to set up the SPEventContext vtable.
  */
 static void sp_event_context_class_init(SPEventContextClass *klass) {
-    GObjectClass *object_class;
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-    object_class = (GObjectClass *) klass;
-
-    parent_class = (GObjectClass*) g_type_class_peek_parent(klass);
+    parent_class = G_OBJECT_CLASS(g_type_class_peek_parent(klass));
 
     object_class->dispose = sp_event_context_dispose;
 
@@ -464,10 +462,23 @@ static gint sp_event_context_private_root_handler(
         break;
     case GDK_MOTION_NOTIFY:
         if (panning) {
+            if (panning == 4 && !xp && !yp ) {
+                // <Space> + mouse panning started, save location and grab canvas
+                xp = event->motion.x;
+                yp = event->motion.y;
+                button_w = Geom::Point(event->motion.x, event->motion.y);
+
+                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                        GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
+                                | GDK_POINTER_MOTION_MASK
+                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                        event->motion.time - 1);
+
+
+            }
             if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
-                    || (panning == 1 && !(event->motion.state
-                            & GDK_BUTTON1_MASK)) || (panning == 3
-                    && !(event->motion.state & GDK_BUTTON3_MASK))) {
+                    || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
+                    || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
                 /* Gdk seems to lose button release for us sometimes :-( */
                 panning = 0;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
@@ -570,6 +581,7 @@ static gint sp_event_context_private_root_handler(
             }
             ret = TRUE;
         }
+
         break;
     case GDK_KEY_PRESS: {
         double const acceleration = prefs->getDoubleLimited(
@@ -672,15 +684,13 @@ static gint sp_event_context_private_root_handler(
             }
             break;
         case GDK_KEY_space:
-            if (prefs->getBool("/options/spacepans/value")) {
-                event_context->space_panning = true;
-                event_context->_message_context->set(Inkscape::INFORMATION_MESSAGE,
-                        _("<b>Space+mouse drag</b> to pan canvas"));
-                ret = TRUE;
-            } else {
-                sp_toggle_selector(desktop);
-                ret = TRUE;
-            }
+            xp = yp = 0;
+            within_tolerance = true;
+            panning = 4;
+            event_context->space_panning = true;
+            event_context->_message_context->set(Inkscape::INFORMATION_MESSAGE,
+                    _("<b>Space+mouse move</b> to pan canvas"));
+            ret = TRUE;
             break;
         case GDK_KEY_z:
         case GDK_KEY_Z:
@@ -695,18 +705,32 @@ static gint sp_event_context_private_root_handler(
         }
         break;
     case GDK_KEY_RELEASE:
+
+        // Stop panning on any key release
+        if (event_context->space_panning) {
+            event_context->space_panning = false;
+            event_context->_message_context->clear();
+        }
+
+        if (panning) {
+            panning = 0;
+            xp = yp = 0;
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
+                    event->key.time);
+            desktop->updateNow();
+        }
+
+        if (panning_cursor == 1) {
+            panning_cursor = 0;
+            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
+            gdk_window_set_cursor(gtk_widget_get_window (w), event_context->cursor);
+        }
+
         switch (get_group0_keyval(&event->key)) {
         case GDK_KEY_space:
-            if (event_context->space_panning) {
-                event_context->space_panning = false;
-                event_context->_message_context->clear();
-
-                if (panning == 1) {
-                    panning = 0;
-                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                            event->key.time);
-                    desktop->updateNow();
-                }
+            if (within_tolerance == true) {
+                // Space was pressed, but not panned
+                sp_toggle_selector(desktop);
                 ret = TRUE;
             }
             break;
@@ -1377,17 +1401,16 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         sp_event_context_virtual_root_handler(ec, dse->getEvent());
         break;
     case DelayedSnapEvent::EVENTCONTEXT_ITEM_HANDLER: {
-        SPItem* item = NULL;
-        item = SP_ITEM(dse->getItem());
+        gpointer item = dse->getItem();
         if (item && SP_IS_ITEM(item)) {
-            sp_event_context_virtual_item_handler(ec, item, dse->getEvent());
+            sp_event_context_virtual_item_handler(ec, SP_ITEM(item), dse->getEvent());
         }
     }
         break;
     case DelayedSnapEvent::KNOT_HANDLER: {
-        SPKnot* knot = SP_KNOT(dse->getItem2());
+        gpointer knot = dse->getItem2();
         if (knot && SP_IS_KNOT(knot)) {
-            sp_knot_handler_request_position(dse->getEvent(), knot);
+            sp_knot_handler_request_position(dse->getEvent(), SP_KNOT(knot));
         }
     }
         break;

@@ -1454,6 +1454,41 @@ Glib::PropertyProxy<void*> FilterEffectsDialog::CellRendererConnection::property
     return _primitive.get_proxy();
 }
 
+#if WITH_GTKMM_3_0
+void FilterEffectsDialog::CellRendererConnection::get_preferred_width_vfunc(Gtk::Widget& widget,
+                                                                            int& minimum_width,
+                                                                            int& natural_width) const
+{
+    PrimitiveList& primlist = dynamic_cast<PrimitiveList&>(widget);
+    minimum_width = natural_width = size * primlist.primitive_count() + primlist.get_input_type_width() * 6;
+}
+
+void FilterEffectsDialog::CellRendererConnection::get_preferred_width_for_height_vfunc(Gtk::Widget& widget,
+                                                                                       int /* height */,
+                                                                                       int& minimum_width,
+                                                                                       int& natural_width) const
+{
+    get_preferred_width(widget, minimum_width, natural_width);
+}
+
+void FilterEffectsDialog::CellRendererConnection::get_preferred_height_vfunc(Gtk::Widget& widget,
+                                                                             int& minimum_height,
+                                                                             int& natural_height) const
+{
+    // Scale the height depending on the number of inputs, unless it's
+    // the first primitive, in which case there are no connections
+    SPFilterPrimitive* prim = SP_FILTER_PRIMITIVE(_primitive.get_value());
+    minimum_height = natural_height = size * input_count(prim);
+}
+
+void FilterEffectsDialog::CellRendererConnection::get_preferred_height_for_width_vfunc(Gtk::Widget& widget,
+                                                                                       int /* width */,
+                                                                                       int& minimum_height,
+                                                                                       int& natural_height) const
+{
+    get_preferred_height(widget, minimum_height, natural_height);
+}
+#else
 void FilterEffectsDialog::CellRendererConnection::get_size_vfunc(
     Gtk::Widget& widget, const Gdk::Rectangle* /*cell_area*/,
     int* x_offset, int* y_offset, int* width, int* height) const
@@ -1473,6 +1508,7 @@ void FilterEffectsDialog::CellRendererConnection::get_size_vfunc(
         (*height) = size * input_count(prim);
     }
 }
+#endif
 
 /*** PrimitiveList ***/
 FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
@@ -1481,8 +1517,8 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
       _observer(new Inkscape::XML::SignalObserver)
 {
 #if WITH_GTKMM_3_0
-    d.signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw));
-    signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw));
+    d.signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
+    signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
 #else
     d.signal_expose_event().connect(sigc::mem_fun(*this, &PrimitiveList::on_expose_signal));
     signal_expose_event().connect(sigc::mem_fun(*this, &PrimitiveList::on_expose_signal));
@@ -1496,6 +1532,7 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
 
     set_model(_model);
     append_column(_("_Effect"), _columns.type);
+    set_headers_visible();
 
     _observer->signal_changed().connect(signal_primitive_changed().make_slot());
     get_selection()->signal_changed().connect(sigc::mem_fun(*this, &PrimitiveList::on_primitive_selection_changed));
@@ -1648,19 +1685,32 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
 }
 
 #if !WITH_GTKMM_3_0
-bool FilterEffectsDialog::PrimitiveList::on_expose_signal(GdkEventExpose* /*e*/)
+bool FilterEffectsDialog::PrimitiveList::on_expose_signal(GdkEventExpose *e)
 {
-    Glib::RefPtr<Gdk::Window> win = get_bin_window();
-    Cairo::RefPtr<Cairo::Context> cr = win->create_cairo_context();
-    return on_draw(cr);
+    bool result = false;
+
+    if (get_is_drawable())
+    {
+        Cairo::RefPtr<Cairo::Context> cr = get_bin_window()->create_cairo_context();
+        result = on_draw_signal(cr);
+    }
+
+    return result;
 }
 #endif
 
-bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
+bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cairo::Context> & cr)
 {
     cr->set_line_width(1.0);
 
 #if GTK_CHECK_VERSION(3,0,0)
+    // In GTK+ 3, the draw function receives the widget window, not the
+    // bin_window (i.e., just the area under the column headers).  We 
+    // therefore translate the origin of our coordinate system to account for this
+    int x_origin, y_origin;
+    convert_bin_window_to_widget_coords(0,0,x_origin,y_origin);
+    cr->translate(x_origin, y_origin);
+    
     GtkStyleContext *sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     GdkRGBA bg_color, fg_color;
     gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
@@ -2380,7 +2430,12 @@ FilterEffectsDialog::FilterEffectsDialog()
     _add_primitive_type.remove_row(NR_FILTER_COMPONENTTRANSFER);
 
     // Initialize widget hierarchy
+#if WITH_GTKMM_3_0
+    Gtk::Paned* hpaned = Gtk::manage(new Gtk::Paned);
+#else
     Gtk::HPaned* hpaned = Gtk::manage(new Gtk::HPaned);
+#endif
+
     Gtk::ScrolledWindow* sw_prims = Gtk::manage(new Gtk::ScrolledWindow);
     Gtk::HBox* infobox = Gtk::manage(new Gtk::HBox(/*homogeneous:*/false, /*spacing:*/4));
     Gtk::HBox* hb_prims = Gtk::manage(new Gtk::HBox);

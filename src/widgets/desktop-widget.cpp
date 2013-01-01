@@ -303,8 +303,8 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
 {
     dtw_parent_class = SP_VIEW_WIDGET_CLASS(g_type_class_peek_parent(klass));
 
-    GObjectClass *object_class = (GObjectClass *) klass;
-    GtkWidgetClass *widget_class = (GtkWidgetClass *) klass;
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->dispose = sp_desktop_widget_dispose;
 
@@ -321,8 +321,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     new (&dtw->modified_connection) sigc::connection();
 
-    GtkWidget *widget = GTK_WIDGET (dtw);
-
     dtw->window = 0;
     dtw->desktop = NULL;
     dtw->_interaction_disabled_counter = 0;
@@ -330,7 +328,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     /* Main table */
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(dtw->vbox), FALSE);
 #else
     dtw->vbox = gtk_vbox_new (FALSE, 0);
 #endif
@@ -338,7 +335,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->statusbar = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(dtw->statusbar), FALSE);
 #else
     dtw->statusbar = gtk_hbox_new (FALSE, 0);
 #endif
@@ -355,7 +351,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(dtw->hbox), FALSE);
 #else
     dtw->hbox = gtk_hbox_new(FALSE, 0);
 #endif
@@ -381,11 +376,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     GtkWidget *eventbox = gtk_event_box_new ();
     dtw->hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
     dtw->hruler_box = eventbox;
-    sp_ruler_set_metric(SP_RULER(dtw->hruler), SP_PT);
+    sp_ruler_set_unit(SP_RULER(dtw->hruler), SP_PT);
     gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT))));
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
-    guint xthickness = gtk_widget_get_style(widget)->xthickness;
-    guint ythickness = gtk_widget_get_style(widget)->ythickness;
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -394,21 +387,16 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     GtkWidget *tbl = gtk_grid_new();
     GtkWidget *canvas_tbl = gtk_grid_new();
     
-    gtk_widget_set_margin_left(eventbox, xthickness);
-    gtk_widget_set_margin_right(eventbox, xthickness);
-    
-    gtk_widget_set_halign(eventbox, GTK_ALIGN_FILL);
-    gtk_widget_set_hexpand(eventbox, TRUE);
-    gtk_widget_set_valign(eventbox, GTK_ALIGN_START);
-
     gtk_grid_attach(GTK_GRID(canvas_tbl), eventbox, 1, 0, 1, 1);
 #else
     GtkWidget *tbl = gtk_table_new(2, 3, FALSE);
     GtkWidget *canvas_tbl = gtk_table_new(3, 3, FALSE);
    
-    gtk_table_attach(GTK_TABLE (canvas_tbl), eventbox, 1, 2, 0, 1, 
-            GTK_FILL, GTK_FILL, 
-            xthickness, 0);
+    gtk_table_attach(GTK_TABLE(canvas_tbl),
+                     eventbox,
+                     1, 2,     0, 1, 
+		     GTK_FILL, GTK_FILL, 
+		     0,        0);
 #endif
 
     gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl, TRUE, TRUE, 1 );
@@ -417,23 +405,18 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     eventbox = gtk_event_box_new ();
     dtw->vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
     dtw->vruler_box = eventbox;
-    sp_ruler_set_metric (SP_RULER (dtw->vruler), SP_PT);
+    sp_ruler_set_unit (SP_RULER (dtw->vruler), SP_PT);
     gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT))));
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_top(eventbox, ythickness);
-    gtk_widget_set_margin_bottom(eventbox, ythickness);
-
-    gtk_widget_set_halign(eventbox, GTK_ALIGN_START);
-    gtk_widget_set_valign(eventbox, GTK_ALIGN_FILL);
-    gtk_widget_set_vexpand(eventbox, TRUE);
-
     gtk_grid_attach(GTK_GRID(canvas_tbl), eventbox, 0, 1, 1, 1);
 #else
-    gtk_table_attach(GTK_TABLE (canvas_tbl), eventbox, 0, 1, 1, 2,
-            GTK_FILL, GTK_FILL,
-            0, ythickness);
+    gtk_table_attach(GTK_TABLE (canvas_tbl),
+                     eventbox,
+		     0, 1,     1, 2,
+                     GTK_FILL, GTK_FILL,
+                     0,        0);
 #endif
 
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
@@ -441,15 +424,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 
     // Horizontal scrollbar
-    dtw->hadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
+    dtw->hadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
 
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->hscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (dtw->hadj));
-    gtk_widget_set_halign(dtw->hscrollbar, GTK_ALIGN_FILL);
-    gtk_widget_set_hexpand(dtw->hscrollbar, TRUE);
     gtk_grid_attach(GTK_GRID(canvas_tbl), dtw->hscrollbar, 1, 2, 1, 1);
     dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(dtw->vscrollbar_box), FALSE);
 #else
     dtw->hscrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (dtw->hadj));
     gtk_table_attach(GTK_TABLE (canvas_tbl), dtw->hscrollbar, 1, 2, 2, 3,
@@ -469,7 +449,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (dtw->sticky_zoom), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
 
     // Vertical scrollbar
-    dtw->vadj = (GtkAdjustment *) gtk_adjustment_new (0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
+    dtw->vadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
 
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->vscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT(dtw->vadj));
@@ -480,8 +460,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->vscrollbar, TRUE, TRUE, 0);
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_valign(dtw->vscrollbar, GTK_ALIGN_FILL);
-    gtk_widget_set_vexpand(dtw->vscrollbar, TRUE);
     gtk_grid_attach(GTK_GRID(canvas_tbl), dtw->vscrollbar_box, 2, 0, 1, 2);
 #else
     gtk_table_attach(GTK_TABLE(canvas_tbl), dtw->vscrollbar_box, 2, 3, 0, 2,
@@ -561,8 +539,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (dtw->canvas), "event", G_CALLBACK (sp_desktop_widget_event), dtw);
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_halign(GTK_WIDGET(dtw->canvas), GTK_ALIGN_FILL);
-    gtk_widget_set_valign(GTK_WIDGET(dtw->canvas), GTK_ALIGN_FILL);
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas), TRUE);
     gtk_grid_attach(GTK_GRID(canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 1, 1, 1);
@@ -578,7 +554,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     if (create_dock) {
         dtw->dock = new Inkscape::UI::Widget::Dock();
 
+#if WITH_GTKMM_3_0
+        Gtk::Paned *paned = new Gtk::Paned();
+#else
         Gtk::HPaned *paned = new Gtk::HPaned();
+#endif
+
         paned->pack1(*Glib::wrap(canvas_tbl));
         paned->pack2(dtw->dock->getWidget(), Gtk::FILL);
 
@@ -591,8 +572,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_set_hexpand(GTK_WIDGET(paned->gobj()), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(paned->gobj()), TRUE);
-        gtk_widget_set_halign(GTK_WIDGET(paned->gobj()), GTK_ALIGN_FILL);
-        gtk_widget_set_valign(GTK_WIDGET(paned->gobj()), GTK_ALIGN_FILL);
         gtk_grid_attach(GTK_GRID(tbl), GTK_WIDGET (paned->gobj()), 1, 1, 1, 1);
 #else
         gtk_table_attach (GTK_TABLE (tbl), GTK_WIDGET (paned->gobj()), 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
@@ -603,8 +582,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_set_hexpand(GTK_WIDGET(canvas_tbl), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(canvas_tbl), TRUE);
-        gtk_widget_set_halign(GTK_WIDGET(canvas_tbl), GTK_ALIGN_FILL);
-        gtk_widget_set_valign(GTK_WIDGET(canvas_tbl), GTK_ALIGN_FILL);
         gtk_grid_attach(GTK_GRID(tbl), GTK_WIDGET (canvas_tbl), 1, 1, 1, 1);
 #else
         gtk_table_attach (GTK_TABLE (tbl), GTK_WIDGET (canvas_tbl), 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
@@ -811,7 +788,7 @@ static void sp_desktop_widget_dispose(GObject *object)
 void
 SPDesktopWidget::updateTitle(gchar const* uri)
 {
-    Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
     if (window) {
         gchar const *fname = uri;
@@ -1121,7 +1098,7 @@ SPDesktopWidget::shutdown()
             switch (response) {
             case GTK_RESPONSE_YES:
             {
-                Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+                Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
                 doc->doRef();
                 sp_namedview_document_from_window(desktop);
@@ -1185,7 +1162,7 @@ SPDesktopWidget::shutdown()
             {
                 doc->doRef();
 
-                Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+                Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
                 if (sp_file_save_dialog(*window, doc, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG)) {
                     doc->doUnref();
@@ -1297,7 +1274,7 @@ SPDesktopWidget::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
     gboolean vis = gtk_widget_get_visible (GTK_WIDGET(this));
     (void)vis; // TODO figure out why it is here but not used.
 
-    Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
     if (window)
     {
@@ -1309,7 +1286,7 @@ SPDesktopWidget::getWindowGeometry (gint &x, gint &y, gint &w, gint &h)
 void
 SPDesktopWidget::setWindowPosition (Geom::Point p)
 {
-    Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
     if (window)
     {
@@ -1320,7 +1297,7 @@ SPDesktopWidget::setWindowPosition (Geom::Point p)
 void
 SPDesktopWidget::setWindowSize (gint w, gint h)
 {
-    Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
     if (window)
     {
@@ -1338,10 +1315,10 @@ SPDesktopWidget::setWindowSize (gint w, gint h)
 void
 SPDesktopWidget::setWindowTransient (void *p, int transient_policy)
 {
-    Gtk::Window *window = (Gtk::Window*)g_object_get_data(G_OBJECT(this), "window");
+    Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
     if (window)
     {
-        GtkWindow *w = (GtkWindow *) window->gobj();
+        GtkWindow *w = GTK_WINDOW(window->gobj());
         gtk_window_set_transient_for (GTK_WINDOW(p), w);
 
         /*
@@ -1586,7 +1563,7 @@ SPDesktopWidget::setToolboxSelectOneValue (gchar const *id, int value)
 {
     gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
     if (hb) {
-        ege_select_one_action_set_active((EgeSelectOneAction*) hb, value);
+        ege_select_one_action_set_active(EGE_SELECT_ONE_ACTION(hb), value);
     }
 }
 
@@ -1712,55 +1689,28 @@ void
 SPDesktopWidget::viewSetPosition (Geom::Point p)
 {
     Geom::Point const origin = ( p - ruler_origin );
-    gdouble hlower, hupper, hmax_range;
-    gdouble vlower, vupper, vmax_range;
-    sp_ruler_get_range(SP_RULER(hruler), &hlower, &hupper, NULL, &hmax_range);
-    sp_ruler_set_range(SP_RULER(hruler), hlower, hupper, origin[Geom::X], hmax_range);
-    sp_ruler_get_range(SP_RULER(vruler), &vlower, &vupper, NULL, &vmax_range);
-    sp_ruler_set_range(SP_RULER(vruler), vlower, vupper, origin[Geom::Y], vmax_range);
+    sp_ruler_set_position(SP_RULER(hruler), origin[Geom::X]);
+    sp_ruler_set_position(SP_RULER(vruler), origin[Geom::Y]);
 }
 
 void
 sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 {
-    sp_desktop_widget_update_hruler(dtw);
-    sp_desktop_widget_update_vruler(dtw);
-}
+    Geom::Rect viewbox = dtw->desktop->get_display_area();
 
-void
-sp_desktop_widget_update_hruler (SPDesktopWidget *dtw)
-{
-    /* The viewbox (in integers) must exactly match the size of SPCanvasbuf's pixel buffer.
-     * This is important because the former is being used for drawing the ruler, whereas
-     * the latter is used for drawing e.g. the grids and guides. Only when the viewbox
-     * coincides with the pixel buffer, everything will line up nicely.
-     */
-    Geom::IntRect viewbox = dtw->canvas->getViewboxIntegers();
-    gdouble position;
+    double lower_x = dtw->dt2r * (viewbox.left()  - dtw->ruler_origin[Geom::X]);
+    double upper_x = dtw->dt2r * (viewbox.right() - dtw->ruler_origin[Geom::X]);
+    sp_ruler_set_range(SP_RULER(dtw->hruler),
+	      	       lower_x,
+		       upper_x,
+		       (upper_x - lower_x));
 
-    double const scale = dtw->desktop->current_zoom();
-    double s = viewbox.min()[Geom::X] / scale - dtw->ruler_origin[Geom::X];
-    double e = viewbox.max()[Geom::X] / scale - dtw->ruler_origin[Geom::X];
-    sp_ruler_get_range(SP_RULER(dtw->hruler), NULL, NULL, &position, NULL);
-    sp_ruler_set_range(SP_RULER(dtw->hruler), s,  e, position, (e - s));
-}
-
-void
-sp_desktop_widget_update_vruler (SPDesktopWidget *dtw)
-{
-    /* The viewbox (in integers) must exactly match the size of SPCanvasbuf's pixel buffer.
-     * This is important because the former is being used for drawing the ruler, whereas
-     * the latter is used for drawing e.g. the grids and guides. Only when the viewbox
-     * coincides with the pixel buffer, everything will line up nicely.
-     */
-    Geom::IntRect viewbox = dtw->canvas->getViewboxIntegers();
-    gdouble position;
-
-    double const scale = dtw->desktop->current_zoom();
-    double s = viewbox.min()[Geom::Y] / -scale - dtw->ruler_origin[Geom::Y];
-    double e = viewbox.max()[Geom::Y] / -scale - dtw->ruler_origin[Geom::Y];
-    sp_ruler_get_range(SP_RULER(dtw->vruler), NULL, NULL, &position, NULL);
-    sp_ruler_set_range(SP_RULER(dtw->vruler), s, e, position, (e - s));
+    double lower_y = dtw->dt2r * (viewbox.bottom() - dtw->ruler_origin[Geom::Y]);
+    double upper_y = dtw->dt2r * (viewbox.top()    - dtw->ruler_origin[Geom::Y]);
+    sp_ruler_set_range(SP_RULER(dtw->vruler),
+                       lower_y,
+		       upper_y,
+		       (upper_y - lower_y));
 }
 
 
@@ -1772,8 +1722,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         this->dt2r = 1.0 / nv->doc_units->unittobase;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
-        sp_ruler_set_metric(SP_RULER (this->vruler), nv->getDefaultMetric());
-        sp_ruler_set_metric(SP_RULER (this->hruler), nv->getDefaultMetric());
+        sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultMetric());
+        sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultMetric());
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),

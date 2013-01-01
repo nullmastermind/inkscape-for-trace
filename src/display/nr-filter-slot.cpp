@@ -129,6 +129,9 @@ cairo_surface_t *FilterSlot::_get_transformed_source_graphic()
 
     if (trans.isTranslation()) {
         cairo_surface_reference(_source_graphic);
+
+        // Assume all source graphics are sRGB
+        set_cairo_surface_ci( _source_graphic, SP_CSS_COLOR_INTERPOLATION_SRGB );
         return _source_graphic;
     }
 
@@ -145,6 +148,8 @@ cairo_surface_t *FilterSlot::_get_transformed_source_graphic()
     cairo_paint(tsg_ct);
     cairo_destroy(tsg_ct);
 
+    // Assume all source graphics are sRGB
+    set_cairo_surface_ci( tsg, SP_CSS_COLOR_INTERPOLATION_SRGB );
     return tsg;
 }
 
@@ -171,6 +176,9 @@ cairo_surface_t *FilterSlot::_get_transformed_background()
     } else {
         tbg = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, _slot_w, _slot_h);
     }
+
+    // Assume all source graphics are sRGB
+    set_cairo_surface_ci( tbg, SP_CSS_COLOR_INTERPOLATION_SRGB );
 
     return tbg;
 }
