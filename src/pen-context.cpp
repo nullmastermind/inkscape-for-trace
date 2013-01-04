@@ -58,6 +58,7 @@
 #include "helper/geom-nodetype.h"
 #include "helper/geom-curves.h"
 
+
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -1501,14 +1502,6 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 
 
 //BSpline Set Functions
-//Creates a new curve resetting the original
-static SPCurve * reverse_then_reset(SPCurve *orig)
-{
-    SPCurve *ret = orig->create_reverse();
-    orig->reset();
-    return ret;
-}
-
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void spiro_color(SPPenContext *const pc)
 {
@@ -1794,6 +1787,14 @@ static void spiro_doEffect(SPCurve * curve)
 
     g_free (path);
 }
+//BSpline Set Functions
+//Creates a new curve resetting the original
+static SPCurve * reverse_then_reset(SPCurve *orig)
+{
+    SPCurve *ret = orig->create_reverse();
+    orig->reset();
+    return ret;
+}
 
 //Unimos todas las curvas en juego y llamamos a la función doEffect.
 static void bspline(SPPenContext *const pc, bool Shift)
@@ -1801,61 +1802,62 @@ static void bspline(SPPenContext *const pc, bool Shift)
     if(!Shift){
         //Modo Bspline formado por nodos CUSP
         if (pc->npoints == 5 || !pc->red_curve->is_empty()){
-            pc->npoints = 2;
-            pc->p[1]= pc->p[3];
+            pc->npoints = 5;
+            pc->p[2]= pc->p[3];
         }
     }else{
         using Geom::X;
         using Geom::Y;
+        Geom::CubicBezier const * cubic;
+        if(pc->green_curve->is_empty() && pc->red_curve->is_empty() && pc->sa && !pc->ea && !pc->sa->curve->is_empty()){
+            bool reverse = false;
+            if (pc->sa->start) {
+                reverse = true;
+                pc->sa->curve = reverse_then_reset(pc->sa->curve);
+            }
+            Geom::Point P0(0,0);
+            Geom::Point P1(0,0);
+            Geom::Point P2(0,0);
+            Geom::Point P3(0,0);
+            Geom::Point P4(0,0);
+            P0 = pc->sa->curve->last_segment()->initialPoint();
+            P1 = P0;
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->sa->curve->last_segment() );
+            if(cubic)
+                P1 = (*cubic)[2];
+            P3 = pc->sa->curve->last_segment()->finalPoint();
+            P2 = P3 + (1./3)*(P0 - P3);
+            P2 = Geom::Point(P2[X]+1,P2[Y]+1);
+            SPCurve * last = new SPCurve();
+            last->moveto(P0);
+            last->curveto(P1,P2,P3);
+            if( pc->sa->curve->get_segment_count() == 1){
+                pc->sa->curve = last;
+            }else{
+                pc->sa->curve->backspace();
+                pc->sa->curve->append_continuous(last, 0.0625);
+            }
+            if(reverse)
+                pc->sa->curve = reverse_then_reset(pc->sa->curve);
+            last->reset();
+            last->unref();
+        }
 
-/*
-.*      //TODO: No puedo conseguir que el siguoenmte codigo funcione
-.*      //Este trata de convertir el nodo de inicio de continuación de curva BSpline a CUSP
-.*      //modifiacandpo el segmento al que se trata de anexar la curva
-.*      //de manera que le obligue a tener manejador final
-.*
-.*      if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && pc->red_curve->is_empty()){
-.*          bool reverse = false;
-.*          if(pc->sa->start){
-.*              pc->sa->curve = reverse_then_reset(pc->sa->curve);
-.*              reverse = true;
-.*          }
-.*          Geom::Point P0(0,0);
-.*          Geom::Point P1(0,0);
-.*          Geom::Point P2(0,0);
-.*          Geom::Point P3(0,0);
-.*          Geom::Point P4(0,0);
-.*          P0 = pc->sa->curve->last_segment()->initialPoint();
-.*          P1 = P0;
-.*          P3 = pc->sa->curve->last_segment()->finalPoint();
-.*          P2 = P3 + (1./3)*(P0 - P3);
-.*          P2 = Geom::Point(P2[X]+1,P2[Y]+1);
-.*          SPCurve * last = new SPCurve();
-.*          last->moveto(P0);
-.*          last->curveto(P1,P2,P3);
-.*          if( pc->sa->curve->get_segment_count() == 1){
-.*              pc->sa->curve = last;
-.*          }else{
-.*              pc->sa->curve->backspace();
-.*              pc->sa->curve->append_continuous(last, 0.0625);
-.*              if(reverse)
-.*                  pc->sa->curve = reverse_then_reset(pc->sa->curve);
-.*          }
-.*          delete last;
-.*      }
-*/
-            //NODO CUSP formado por nodo SMOOTH
-            //solo mobemos el manejador del nodo final de cada segmento
-            //Es suficiente para mostrar el nodo como CUSP
-            //Usamos 5 puntos
+        //NODO CUSP formado por nodo SMOOTH
+        //solo mobemos el manejador del nodo final de cada segmento
+        //Es suficiente para mostrar el nodo como CUSP
+        //Usamos 5 puntos
         if(!pc->red_curve->is_empty()){
             pc->npoints = 5;
             pc->p[0] = pc->red_curve->first_segment()->initialPoint();
             pc->p[1] = pc->p[0];
+            cubic = dynamic_cast<Geom::CubicBezier const *>( pc->red_curve->first_segment() );
+            if(cubic)
+                pc->p[1]  = (*cubic)[1];
             pc->p[3] = pc->red_curve->first_segment()->finalPoint();
-            pc->p[4] = pc->p[3];
-            pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+            pc->p[2] = pc->p[0] + (1./3)*(pc->p[0] - pc->p[3]);
             pc->p[2] = Geom::Point(pc->p[2][X]+1,pc->p[2][Y]+1);
+            pc->p[4] = pc->p[3] + (1./3)*(pc->p[3] - pc->p[0]);
         }
     }
     bspline_build(pc);
@@ -1954,6 +1956,8 @@ static void bspline_doEffect(SPCurve * curve)
     Geom::Point nextPointAt1(0,0);
     Geom::Point nextPointAt2(0,0);
     Geom::Point nextPointAt3(0,0);
+    Geom::CubicBezier const * cubic;
+    Geom::PathVector newpathv;
 
     //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
@@ -1961,6 +1965,7 @@ static void bspline_doEffect(SPCurve * curve)
         if (path_it->empty())
             continue;
         //Itreadores
+        
         Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());         // outgoing curve
         Geom::Path::const_iterator curve_end = path_it->end(); // end curve 
@@ -1982,7 +1987,12 @@ static void bspline_doEffect(SPCurve * curve)
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
-        if (path_it->closed() && is_straight_curve(*curve_end)) {
+
+        cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_endit);
+        if((*cubic)[2] == (*cubic)[3])
+            isBSpline = false;
+        if (path_it->closed() && !isBSpline) {
+            isBSpline = true;
             //Calculamos el nodo de inicio BSpline
             SBasisIn = in->first_segment()->toSBasis();
             SBasisEnd = end->first_segment()->toSBasis();
@@ -2031,9 +2041,11 @@ static void bspline_doEffect(SPCurve * curve)
             //Y este hará de final de curva
             node = SBasisHelper.valueAt(0.5);
             //Vemos si el nodo es BSpline o CUSP
-            //Averiguamos si el path de entrada es recto o tiene manejadores
-            isBSpline = is_straight_curve(*curve_it1);
-            //Si no es recto, tenemos que generar la curva con nodo final CUSP
+            //Averiguamos si el punto de union tiene manejadores
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
+            if((*cubic)[2] == (*cubic)[3])
+                isBSpline = true;
+            //Si no tiene manejador, tenemos que generar la curva con nodo final CUSP
             if(!isBSpline ){
                 //Definimos como nodo el final del segmento de entrada
                 node = pointAt3;
@@ -2225,7 +2237,11 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
         // don't let the path be finished before we have collected the required number of mouse clicks
         return;
     }
+    //BSpline
+    if(pc->bspline && pc->green_curve->get_segment_count() < 2 && !pc->sa )
+        return;
 
+    //BSpline End
     pc->num_clicks = 0;
 
     pen_disable_events(pc);

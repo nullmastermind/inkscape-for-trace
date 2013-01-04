@@ -13,6 +13,7 @@
 #include <2geom/bezier-curve.h>
 #include "helper/geom-curves.h"
 
+
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -72,6 +73,8 @@ LPEBSpline::doEffect(SPCurve * curve)
     Geom::Point nextPointAt1(0,0);
     Geom::Point nextPointAt2(0,0);
     Geom::Point nextPointAt3(0,0);
+    Geom::CubicBezier const * cubic;
+    Geom::PathVector newpathv;
 
     //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
@@ -79,6 +82,7 @@ LPEBSpline::doEffect(SPCurve * curve)
         if (path_it->empty())
             continue;
         //Itreadores
+        
         Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());         // outgoing curve
         Geom::Path::const_iterator curve_end = path_it->end(); // end curve 
@@ -100,7 +104,12 @@ LPEBSpline::doEffect(SPCurve * curve)
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
-        if (path_it->closed() && is_straight_curve(*curve_end)) {
+
+        cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_endit);
+        if((*cubic)[2] == (*cubic)[3])
+            isBSpline = false;
+        if (path_it->closed() && !isBSpline) {
+            isBSpline = true;
             //Calculamos el nodo de inicio BSpline
             SBasisIn = in->first_segment()->toSBasis();
             SBasisEnd = end->first_segment()->toSBasis();
@@ -149,9 +158,11 @@ LPEBSpline::doEffect(SPCurve * curve)
             //Y este hará de final de curva
             node = SBasisHelper.valueAt(0.5);
             //Vemos si el nodo es BSpline o CUSP
-            //Averiguamos si el path de entrada es recto o tiene manejadores
-            isBSpline = is_straight_curve(*curve_it1);
-            //Si no es recto, tenemos que generar la curva con nodo final CUSP
+            //Averiguamos si el punto de union tiene manejadores
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
+            if((*cubic)[2] == (*cubic)[3])
+                isBSpline = true;
+            //Si no tiene manejador, tenemos que generar la curva con nodo final CUSP
             if(!isBSpline ){
                 //Definimos como nodo el final del segmento de entrada
                 node = pointAt3;
