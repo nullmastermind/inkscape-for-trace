@@ -1,5 +1,5 @@
+#define INKSCAPE_HELPER_GEOM_CURVES_H
 #define INKSCAPE_LPE_BSPLINE_C
-
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -73,9 +73,6 @@ LPEBSpline::doEffect(SPCurve * curve)
     Geom::Point nextPointAt1(0,0);
     Geom::Point nextPointAt2(0,0);
     Geom::Point nextPointAt3(0,0);
-    Geom::CubicBezier const * cubic;
-    Geom::PathVector newpathv;
-
     //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
         //Si está vacío... 
@@ -104,10 +101,10 @@ LPEBSpline::doEffect(SPCurve * curve)
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
-
-        cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_endit);
-        if((*cubic)[2] == (*cubic)[3])
-            isBSpline = false;
+        if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_end)){
+            if((*cubic)[2] == (*cubic)[3])
+                isBSpline = false;
+        }
         if (path_it->closed() && !isBSpline) {
             isBSpline = true;
             //Calculamos el nodo de inicio BSpline
@@ -159,9 +156,10 @@ LPEBSpline::doEffect(SPCurve * curve)
             node = SBasisHelper.valueAt(0.5);
             //Vemos si el nodo es BSpline o CUSP
             //Averiguamos si el punto de union tiene manejadores
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
-            if((*cubic)[2] == (*cubic)[3])
-                isBSpline = true;
+            if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1)){
+                if((*cubic)[2] == (*cubic)[3])
+                    isBSpline = true;
+            }
             //Si no tiene manejador, tenemos que generar la curva con nodo final CUSP
             if(!isBSpline ){
                 //Definimos como nodo el final del segmento de entrada
@@ -219,7 +217,6 @@ LPEBSpline::doEffect(SPCurve * curve)
     //delete SBasisEnd;
     //delete SBasisHelper;
 }
-
 
 
 }; //namespace LivePathEffect
