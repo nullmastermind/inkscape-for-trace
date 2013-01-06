@@ -151,8 +151,28 @@ private:
         static const int size = 24;
         
     protected:
+#if WITH_GTKMM_3_0
+        virtual void get_preferred_width_vfunc(Gtk::Widget& widget,
+                                               int& minimum_width,
+                                               int& natural_width) const;
+        
+        virtual void get_preferred_width_for_height_vfunc(Gtk::Widget& widget,
+                                                          int height,
+                                                          int& minimum_width,
+                                                          int& natural_width) const;
+
+        virtual void get_preferred_height_vfunc(Gtk::Widget& widget,
+                                                int& minimum_height,
+                                                int& natural_height) const;
+        
+        virtual void get_preferred_height_for_width_vfunc(Gtk::Widget& widget,
+                                                          int width,
+                                                          int& minimum_height,
+                                                          int& natural_height) const;
+#else
         virtual void get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area,
                                     int* x_offset, int* y_offset, int* width, int* height) const;
+#endif
     private:
         // void* should be SPFilterPrimitive*, some weirdness with properties prevents this
         Glib::Property<void*> _primitive;
@@ -177,7 +197,7 @@ private:
         int get_input_type_width() const;
 
     protected:
-        bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr);
+        bool on_draw_signal(const Cairo::RefPtr<Cairo::Context> &cr);
 
 #if !WITH_GTKMM_3_0
         bool on_expose_signal(GdkEventExpose*);

@@ -291,7 +291,7 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     static gboolean handleDraw(GtkWidget *widget, cairo_t *cr);
 #else
-    static gint handleExpose(GtkWidget *widget, GdkEventExpose *event);
+    static gboolean handleExpose(GtkWidget *widget, GdkEventExpose *event);
 #endif
 
     /**
@@ -2178,23 +2178,24 @@ void SPCanvas::endForcedFullRedraws()
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-
-//TODO: This could probably be done much more efficiently
 gboolean SPCanvasImpl::handleDraw(GtkWidget *widget, cairo_t *cr) {
 	SPCanvas *canvas = SP_CANVAS(widget);
-	gint width = gtk_widget_get_allocated_width(widget);
-	gint height = gtk_widget_get_allocated_height(widget);
 
-	Geom::IntRect r = Geom::IntRect::from_xywh(
-                canvas->x0, canvas->y0,
-                width, height);
+        cairo_rectangle_list_t *rects = cairo_copy_clip_rectangle_list(cr);
 
-	canvas->requestRedraw(r.left(), r.top(), r.right(), r.bottom());
+        for (int i = 0; i < rects->num_rectangles; i++) {
+            cairo_rectangle_t rectangle = rects->rectangles[i];
+
+            Geom::IntRect r = Geom::IntRect::from_xywh(rectangle.x + canvas->x0, rectangle.y + canvas->y0,
+                                                       rectangle.width, rectangle.height);
+
+            canvas->requestRedraw(r.left(), r.top(), r.right(), r.bottom());
+        }
 
 	return FALSE;
 }
 #else
-gint SPCanvasImpl::handleExpose(GtkWidget *widget, GdkEventExpose *event)
+gboolean SPCanvasImpl::handleExpose(GtkWidget *widget, GdkEventExpose *event)
 {
     SPCanvas *canvas = SP_CANVAS(widget);
 
@@ -2203,43 +2204,23 @@ gint SPCanvasImpl::handleExpose(GtkWidget *widget, GdkEventExpose *event)
         return FALSE;
     }
 
-#if GTK_CHECK_VERSION(3,0,0)
-    int n_rects = cairo_region_num_rectangles(event->region);
-#else
     int n_rects = 0;
     GdkRectangle *rects = NULL;
     gdk_region_get_rectangles(event->region, &rects, &n_rects);
 
     if(rects == NULL)
-	    return FALSE;
-#endif
+        return FALSE;
     
-    if (n_rects == 0)
-    {
-        return FALSE;
-    }
-    else
-    {
-        for (int i = 0; i < n_rects; i++) {
-#if GTK_CHECK_VERSION(3,0,0)
-		cairo_rectangle_int_t rectangle;
-		cairo_region_get_rectangle(event->region, i, &rectangle);
-#else
-		GdkRectangle rectangle = rects[i];
-#endif
-		
-            Geom::IntRect r = Geom::IntRect::from_xywh(
-                rectangle.x + canvas->x0, rectangle.y + canvas->y0,
-                rectangle.width, rectangle.height);
+    for (int i = 0; i < n_rects; i++) {
+        GdkRectangle rectangle = rects[i];
+
+        Geom::IntRect r = Geom::IntRect::from_xywh(rectangle.x + canvas->x0, rectangle.y + canvas->y0,
+                                                   rectangle.width, rectangle.height);
             
-            canvas->requestRedraw(r.left(), r.top(), r.right(), r.bottom());
-        }
-       
-#if !GTK_CHECK_VERSION(3,0,0)	
-        g_free (rects);
-#endif
-        return FALSE;
+        canvas->requestRedraw(r.left(), r.top(), r.right(), r.bottom());
     }
+
+    return FALSE;
 }
 #endif
 
