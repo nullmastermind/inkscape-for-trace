@@ -1566,7 +1566,7 @@ static void spiro(SPPenContext *const pc, bool Shift)
         }
         //Continuamos la curva en modo CUSP
         //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
-        if(pc->anchor_statusbar){
+        if(pc->anchor_statusbar && pc->red_curve->is_empty()){
             saShift = true;
         }
     }else{
@@ -1574,7 +1574,9 @@ static void spiro(SPPenContext *const pc, bool Shift)
         using Geom::X;
         using Geom::Y;
         Geom::CubicBezier const * cubic;
-
+        if(pc->anchor_statusbar && pc->red_curve->is_empty()){
+            saShift = false;
+        }
         if(!pc->red_curve->is_empty()){
             //Damos valores a los puntos de la curva roja para que generen un nodo SYMM
             pc->npoints = 5;
@@ -1798,64 +1800,43 @@ static void spiro_doEffect(SPCurve * curve)
 //Unimos todas las curvas en juego y llamamos a la función doEffect.
 static void bspline(SPPenContext *const pc, bool Shift)
 {
-    if(!Shift){
-        //Modo Bspline formado por nodos CUSP
-        if (pc->npoints == 5 || !pc->red_curve->is_empty()){
-            pc->npoints = 2;
-            pc->p[1]= pc->p[3];
+    if(Shift){
+        //Continuamos la curva en modo CUSP
+        //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
+        if(pc->anchor_statusbar && pc->red_curve->is_empty()){
+            saShift = true;
         }
-    }else{
         using Geom::X;
         using Geom::Y;
 
-/*
-.*      //TODO: No puedo conseguir que el siguoenmte codigo funcione
-.*      //Este trata de convertir el nodo de inicio de continuación de curva BSpline a CUSP
-.*      //modifiacandpo el segmento al que se trata de anexar la curva
-.*      //de manera que le obligue a tener manejador final
-.*
-.*      if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && pc->red_curve->is_empty()){
-.*          bool reverse = false;
-.*          if(pc->sa->start){
-.*              pc->sa->curve = reverse_then_reset(pc->sa->curve);
-.*              reverse = true;
-.*          }
-.*          Geom::Point P0(0,0);
-.*          Geom::Point P1(0,0);
-.*          Geom::Point P2(0,0);
-.*          Geom::Point P3(0,0);
-.*          Geom::Point P4(0,0);
-.*          P0 = pc->sa->curve->last_segment()->initialPoint();
-.*          P1 = P0;
-.*          P3 = pc->sa->curve->last_segment()->finalPoint();
-.*          P2 = P3 + (1./3)*(P0 - P3);
-.*          P2 = Geom::Point(P2[X]+1,P2[Y]+1);
-.*          SPCurve * last = new SPCurve();
-.*          last->moveto(P0);
-.*          last->curveto(P1,P2,P3);
-.*          if( pc->sa->curve->get_segment_count() == 1){
-.*              pc->sa->curve = last;
-.*          }else{
-.*              pc->sa->curve->backspace();
-.*              pc->sa->curve->append_continuous(last, 0.0625);
-.*              if(reverse)
-.*                  pc->sa->curve = reverse_then_reset(pc->sa->curve);
-.*          }
-.*          delete last;
-.*      }
-*/
-            //NODO CUSP formado por nodo SMOOTH
-            //solo mobemos el manejador del nodo final de cada segmento
-            //Es suficiente para mostrar el nodo como CUSP
-            //Usamos 5 puntos
+        //NODO CUSP formado por nodo SMOOTH
+        //solo mobemos el manejador del nodo final de cada segmento
+        //Es suficiente para mostrar el nodo como CUSP
+        //Usamos 5 puntos
+        //Continuamos la curva en modo CUSP
+        //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
+
         if(!pc->red_curve->is_empty()){
             pc->npoints = 5;
             pc->p[0] = pc->red_curve->first_segment()->initialPoint();
-            pc->p[1] = pc->p[0];
             pc->p[3] = pc->red_curve->first_segment()->finalPoint();
             pc->p[4] = pc->p[3];
             pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
             pc->p[2] = Geom::Point(pc->p[2][X]+1,pc->p[2][Y]+1);
+        }
+    }else{
+        if(pc->anchor_statusbar && pc->red_curve->is_empty()){
+            saShift = false;
+        }
+        if(!pc->green_curve->is_empty()){
+            //Damos valor original a la variable por si se necesita de nuevo
+            saShift = false;
+        }
+        //Modo Bspline formado por nodos CUSP
+        if (pc->npoints == 5 || !pc->red_curve->is_empty()){
+            pc->p[2]= pc->p[3];
+            if(pc->green_curve->is_empty() && saShift)
+                pc->p[1] = pc->p[0] + (1./3)*(pc->p[0] - pc->p[3]);
         }
     }
     bspline_build(pc);
@@ -1866,6 +1847,7 @@ static void bspline(SPPenContext *const pc, bool Shift)
 //preparates the curves for its trasformation into BSline curves.
 static void bspline_build(SPPenContext *const pc)
 {
+
     //We create the base curve
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
@@ -1897,7 +1879,8 @@ static void bspline_build(SPPenContext *const pc)
         if(Geom::are_near(curve->first_path()->initialPoint(), curve->last_path()->finalPoint())){
             curve->closepath_current();
         }
-        //TODO: CALL TO CLONED FUNCTION SPIRO::doEffect IN lpe-spiro.cpp
+
+        //TODO: CALL TO CLONED FUNCTION BSPLINE::doEffect IN lpe-bspline.cpp
         //For example
         //using namespace Inkscape::LivePathEffect;
         //LivePathEffectObject *lpeobj = static_cast<LivePathEffectObject*> (curve);
@@ -1954,6 +1937,7 @@ static void bspline_doEffect(SPCurve * curve)
     Geom::Point nextPointAt1(0,0);
     Geom::Point nextPointAt2(0,0);
     Geom::Point nextPointAt3(0,0);
+    Geom::CubicBezier const *cubic;
     //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
         //Si está vacío... 
@@ -1982,17 +1966,15 @@ static void bspline_doEffect(SPCurve * curve)
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
-        if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_end)){
-            if((*cubic)[2] == (*cubic)[3])
-                isBSpline = false;
-        }
-        if (path_it->closed() && !isBSpline) {
-            isBSpline = true;
+        cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_end);
+        if(cubic && (*cubic)[2] != (*cubic)[3])
+            isBSpline = false;
+        if (path_it->closed() && isBSpline) {
             //Calculamos el nodo de inicio BSpline
             SBasisIn = in->first_segment()->toSBasis();
             SBasisEnd = end->first_segment()->toSBasis();
             lineHelper->moveto(SBasisIn.valueAt(0.3334));
-            lineHelper->lineto(SBasisEnd.valueAt(0.6664));
+            lineHelper->lineto(SBasisEnd.valueAt(0.6667));
             SBasisHelper = lineHelper->first_segment()->toSBasis();
             lineHelper->reset();
             //Guardamos el principio de la curva
@@ -2000,6 +1982,7 @@ static void bspline_doEffect(SPCurve * curve)
             //Definimos el punto de inicio original de la curva resultante
             node = startNode;
         }else{
+            isBSpline = true;
             //Guardamos el principio de la curva
             startNode = in->first_segment()->initialPoint();
             //Definimos el punto de inicio original de la curva resultante
@@ -2037,13 +2020,16 @@ static void bspline_doEffect(SPCurve * curve)
             node = SBasisHelper.valueAt(0.5);
             //Vemos si el nodo es BSpline o CUSP
             //Averiguamos si el punto de union tiene manejadores
-            if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1)){
-                if((*cubic)[2] == (*cubic)[3])
-                    isBSpline = true;
-            }
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
+            if(cubic && (*cubic)[2] != (*cubic)[3])
+                isBSpline = false;
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
+            if(cubic && (*cubic)[0] != (*cubic)[1])
+                isBSpline = false;
             //Si no tiene manejador, tenemos que generar la curva con nodo final CUSP
             if(!isBSpline ){
                 //Definimos como nodo el final del segmento de entrada
+                isBSpline = true;
                 node = pointAt3;
             }
             curveHelper->moveto(previousNode);
@@ -2071,6 +2057,7 @@ static void bspline_doEffect(SPCurve * curve)
             curveHelper->curveto(nextPointAt1, nextPointAt2, startNode);
         }else{
             curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
+            isBSpline = true;
         }
         //añadimos este último segmento
         nCurve->append_continuous(curveHelper, 0.0625);
@@ -2128,7 +2115,7 @@ static void spdc_pen_set_subsequent_point(SPPenContext *const pc, Geom::Point co
     } else {
         // one of the 'regular' modes
         //SpiroLive
-        if (pc->p[1] != pc->p[0] || pc->spiro) {
+        if (pc->p[1] != pc->p[0] || pc->spiro ) {
         //SpiroLive End
             pc->red_curve->curveto(pc->p[1], p, p);
             is_curve = true;
