@@ -1801,24 +1801,22 @@ static void spiro_doEffect(SPCurve * curve)
 static void bspline(SPPenContext *const pc, bool Shift)
 {
     if(Shift){
+       
+        using Geom::X;
+        using Geom::Y;
         //Continuamos la curva en modo CUSP
         //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
         if(pc->anchor_statusbar && pc->red_curve->is_empty()){
             saShift = true;
         }
-        using Geom::X;
-        using Geom::Y;
-
-        //NODO CUSP formado por nodo SMOOTH
-        //solo mobemos el manejador del nodo final de cada segmento
-        //Es suficiente para mostrar el nodo como CUSP
-        //Usamos 5 puntos
-        //Continuamos la curva en modo CUSP
-        //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
-
+            //NODO CUSP formado por nodo SMOOTH
+            //solo mobemos el manejador del nodo final de cada segmento
+            //Es suficiente para mostrar el nodo como CUSP
+            //Usamos 5 puntos
         if(!pc->red_curve->is_empty()){
             pc->npoints = 5;
             pc->p[0] = pc->red_curve->first_segment()->initialPoint();
+            pc->p[1] = pc->p[0];
             pc->p[3] = pc->red_curve->first_segment()->finalPoint();
             pc->p[4] = pc->p[3];
             pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
@@ -1832,11 +1830,17 @@ static void bspline(SPPenContext *const pc, bool Shift)
             //Damos valor original a la variable por si se necesita de nuevo
             saShift = false;
         }
-        //Modo Bspline formado por nodos CUSP
+
+         //Modo Bspline formado por nodos CUSP
         if (pc->npoints == 5 || !pc->red_curve->is_empty()){
-            pc->p[2]= pc->p[3];
-            if(pc->green_curve->is_empty() && saShift)
-                pc->p[1] = pc->p[0] + (1./3)*(pc->p[0] - pc->p[3]);
+            pc->npoints = 2;
+            pc->p[1]= pc->p[3];
+        }
+        if(pc->green_curve->is_empty() && saShift){
+            pc->npoints = 5;
+            pc->p[3] = pc->p[1];
+            pc->p[2] = pc->p[3];
+            pc->p[1] = pc->p[0] + (1./3)*(pc->p[0] - pc->p[3]);
         }
     }
     bspline_build(pc);
@@ -1847,7 +1851,6 @@ static void bspline(SPPenContext *const pc, bool Shift)
 //preparates the curves for its trasformation into BSline curves.
 static void bspline_build(SPPenContext *const pc)
 {
-
     //We create the base curve
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
@@ -1879,8 +1882,7 @@ static void bspline_build(SPPenContext *const pc)
         if(Geom::are_near(curve->first_path()->initialPoint(), curve->last_path()->finalPoint())){
             curve->closepath_current();
         }
-
-        //TODO: CALL TO CLONED FUNCTION BSPLINE::doEffect IN lpe-bspline.cpp
+        //TODO: CALL TO CLONED FUNCTION SPIRO::doEffect IN lpe-spiro.cpp
         //For example
         //using namespace Inkscape::LivePathEffect;
         //LivePathEffectObject *lpeobj = static_cast<LivePathEffectObject*> (curve);
@@ -2115,7 +2117,7 @@ static void spdc_pen_set_subsequent_point(SPPenContext *const pc, Geom::Point co
     } else {
         // one of the 'regular' modes
         //SpiroLive
-        if (pc->p[1] != pc->p[0] || pc->spiro ) {
+        if (pc->p[1] != pc->p[0] || pc->spiro) {
         //SpiroLive End
             pc->red_curve->curveto(pc->p[1], p, p);
             is_curve = true;
@@ -2225,7 +2227,7 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
     if(pc->bspline && pc->green_curve->get_segment_count() < 2 && !pc->sa )
         return;
     //BSpline End
-
+    
     pc->num_clicks = 0;
 
     pen_disable_events(pc);
