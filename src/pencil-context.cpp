@@ -788,6 +788,7 @@ interpolate(SPPencilContext *pc)
             }else{
                 pc->green_curve->curveto(b[4*c+1], b[4*c+2], b[4*c+3]);
             }
+            //BSpline
         }
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->green_curve);
 
