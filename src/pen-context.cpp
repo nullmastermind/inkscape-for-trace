@@ -1909,7 +1909,8 @@ static void bspline_doEffect(SPCurve * curve)
 {
     using Geom::X;
     using Geom::Y;
-
+    if(curve->get_segment_count() < 2)
+        return;
     // Make copy of old path as it is changed during processing
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
@@ -2223,11 +2224,6 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
         return;
     }
 
-    //BSpline
-    if(pc->bspline && pc->green_curve->get_segment_count() < 2 && !pc->sa )
-        return;
-    //BSpline End
-    
     pc->num_clicks = 0;
 
     pen_disable_events(pc);

@@ -779,10 +779,12 @@ interpolate(SPPencilContext *pc)
     {
         /* Fit and draw and reset state */
         pc->green_curve->moveto(b[0]);
+        //BSpline
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+        //BSpline End
         for (int c = 0; c < n_segs; c++) {
-            //BSpline
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+            //BSpline            
             if(mode == 2){
                 pc->green_curve->lineto(b[4*c+3]);
             }else{
@@ -790,6 +792,7 @@ interpolate(SPPencilContext *pc)
             }
             //BSpline
         }
+
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->green_curve);
 
         /* Fit and draw and copy last point */

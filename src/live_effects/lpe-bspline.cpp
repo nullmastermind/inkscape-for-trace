@@ -43,6 +43,8 @@ LPEBSpline::doEffect(SPCurve * curve)
     using Geom::X;
     using Geom::Y;
 
+    if(curve->get_segment_count() < 2)
+    return;
     // Make copy of old path as it is changed during processing
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
