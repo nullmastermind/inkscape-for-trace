@@ -6,14 +6,14 @@
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007.
 # Alex <pilipchukap@rambler.ru>, 2005.
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 #: ../share/filters/filters.svg.h:1
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2012-12-05 23:16+0100\n"
-"PO-Revision-Date: 2012-12-29 19:17+0200\n"
+"POT-Creation-Date: 2012-12-27 20:22+0100\n"
+"PO-Revision-Date: 2013-01-12 17:36+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -974,8 +974,8 @@ msgstr "Хутро тигра з переходами і фасками навк
 msgid "Black Light"
 msgstr "Чорне світло"
 
-#: ../share/filters/filters.svg.h:1 ../src/ui/dialog/clonetiler.cpp:826
-#: ../src/ui/dialog/clonetiler.cpp:965
+#: ../share/filters/filters.svg.h:1 ../src/ui/dialog/clonetiler.cpp:832
+#: ../src/ui/dialog/clonetiler.cpp:983
 #: ../src/extension/internal/bitmap/colorize.cpp:52
 #: ../src/extension/internal/filter/bumps.h:101
 #: ../src/extension/internal/filter/bumps.h:324
@@ -3915,11 +3915,11 @@ msgstr ""
 msgid "1. Pick from the drawing:"
 msgstr "1. Взяти значення:"
 
-#: ../src/ui/dialog/clonetiler.cpp:827
+#: ../src/ui/dialog/clonetiler.cpp:833
 msgid "Pick the visible color and opacity"
 msgstr "Взяти видимий колір і прозорість"
 
-#: ../src/ui/dialog/clonetiler.cpp:834 ../src/ui/dialog/clonetiler.cpp:975
+#: ../src/ui/dialog/clonetiler.cpp:840 ../src/ui/dialog/clonetiler.cpp:993
 #: ../src/extension/internal/bitmap/opacity.cpp:38
 #: ../src/extension/internal/filter/transparency.h:279
 #: ../src/widgets/tweak-toolbar.cpp:353
@@ -3927,113 +3927,113 @@ msgstr "Взяти видимий колір і прозорість"
 msgid "Opacity"
 msgstr "Непрозорість"
 
-#: ../src/ui/dialog/clonetiler.cpp:835
+#: ../src/ui/dialog/clonetiler.cpp:841
 msgid "Pick the total accumulated opacity"
 msgstr "Взяти сумарну непрозорість у кожній точці"
 
-#: ../src/ui/dialog/clonetiler.cpp:842
+#: ../src/ui/dialog/clonetiler.cpp:848
 msgid "R"
 msgstr "R"
 
-#: ../src/ui/dialog/clonetiler.cpp:843
+#: ../src/ui/dialog/clonetiler.cpp:849
 msgid "Pick the Red component of the color"
 msgstr "Взяти червону компоненту кольору"
 
-#: ../src/ui/dialog/clonetiler.cpp:850
+#: ../src/ui/dialog/clonetiler.cpp:856
 msgid "G"
 msgstr "G"
 
-#: ../src/ui/dialog/clonetiler.cpp:851
+#: ../src/ui/dialog/clonetiler.cpp:857
 msgid "Pick the Green component of the color"
 msgstr "Взяти зелену компоненту кольору"
 
-#: ../src/ui/dialog/clonetiler.cpp:858
+#: ../src/ui/dialog/clonetiler.cpp:864
 msgid "B"
 msgstr "B"
 
-#: ../src/ui/dialog/clonetiler.cpp:859
+#: ../src/ui/dialog/clonetiler.cpp:865
 msgid "Pick the Blue component of the color"
 msgstr "Взяти блакитну компоненту кольору"
 
-#: ../src/ui/dialog/clonetiler.cpp:866
+#: ../src/ui/dialog/clonetiler.cpp:872
 msgctxt "Clonetiler color hue"
 msgid "H"
 msgstr "В"
 
-#: ../src/ui/dialog/clonetiler.cpp:867
+#: ../src/ui/dialog/clonetiler.cpp:873
 msgid "Pick the hue of the color"
 msgstr "Взяти відтінок кольору"
 
-#: ../src/ui/dialog/clonetiler.cpp:874
+#: ../src/ui/dialog/clonetiler.cpp:880
 msgctxt "Clonetiler color saturation"
 msgid "S"
 msgstr "Н"
 
-#: ../src/ui/dialog/clonetiler.cpp:875
+#: ../src/ui/dialog/clonetiler.cpp:881
 msgid "Pick the saturation of the color"
 msgstr "Взяти насиченість кольору"
 
-#: ../src/ui/dialog/clonetiler.cpp:882
+#: ../src/ui/dialog/clonetiler.cpp:888
 msgctxt "Clonetiler color lightness"
 msgid "L"
 msgstr "О"
 
-#: ../src/ui/dialog/clonetiler.cpp:883
+#: ../src/ui/dialog/clonetiler.cpp:889
 msgid "Pick the lightness of the color"
 msgstr "Взяти яскравість кольору"
 
-#: ../src/ui/dialog/clonetiler.cpp:893
+#: ../src/ui/dialog/clonetiler.cpp:899
 msgid "2. Tweak the picked value:"
 msgstr "2. Змінити взяте значення:"
 
-#: ../src/ui/dialog/clonetiler.cpp:903
+#: ../src/ui/dialog/clonetiler.cpp:916
 msgid "Gamma-correct:"
 msgstr "Гамма-корекція:"
 
-#: ../src/ui/dialog/clonetiler.cpp:907
+#: ../src/ui/dialog/clonetiler.cpp:920
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr "Зсунути середину діапазону взятих значень вгору (>0) чи вниз (<0)"
 
-#: ../src/ui/dialog/clonetiler.cpp:914
+#: ../src/ui/dialog/clonetiler.cpp:927
 msgid "Randomize:"
 msgstr "Випадково:"
 
-#: ../src/ui/dialog/clonetiler.cpp:918
+#: ../src/ui/dialog/clonetiler.cpp:931
 msgid "Randomize the picked value by this percentage"
 msgstr "Випадково міняти взяте значення, максимум на даний відсоток"
 
-#: ../src/ui/dialog/clonetiler.cpp:925
+#: ../src/ui/dialog/clonetiler.cpp:938
 msgid "Invert:"
 msgstr "Інвертувати:"
 
-#: ../src/ui/dialog/clonetiler.cpp:929
+#: ../src/ui/dialog/clonetiler.cpp:942
 msgid "Invert the picked value"
 msgstr "Інвертувати взяте значення"
 
-#: ../src/ui/dialog/clonetiler.cpp:935
+#: ../src/ui/dialog/clonetiler.cpp:948
 msgid "3. Apply the value to the clones':"
 msgstr "3. Застосувати це значення до клонів:"
 
-#: ../src/ui/dialog/clonetiler.cpp:945
+#: ../src/ui/dialog/clonetiler.cpp:963
 msgid "Presence"
 msgstr "Наявність"
 
-#: ../src/ui/dialog/clonetiler.cpp:948
+#: ../src/ui/dialog/clonetiler.cpp:966
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
 msgstr ""
 "Ймовірність появи кожного клону визначається значенням, взятим у даній точці"
 
-#: ../src/ui/dialog/clonetiler.cpp:955
+#: ../src/ui/dialog/clonetiler.cpp:973
 msgid "Size"
 msgstr "Розмір"
 
-#: ../src/ui/dialog/clonetiler.cpp:958
+#: ../src/ui/dialog/clonetiler.cpp:976
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr "Розмір кожного клону визначається значенням, взятим у даній точці"
 
-#: ../src/ui/dialog/clonetiler.cpp:968
+#: ../src/ui/dialog/clonetiler.cpp:986
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
@@ -4041,48 +4041,48 @@ msgstr ""
 "Кожен клон фарбується взятим у даній точці кольором (оригінал не повинен "
 "мати власний колір чи штрих)"
 
-#: ../src/ui/dialog/clonetiler.cpp:978
+#: ../src/ui/dialog/clonetiler.cpp:996
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr ""
 "Прозорість кожного кольору визначається значенням, взятим у даній точці"
 
-#: ../src/ui/dialog/clonetiler.cpp:1019
+#: ../src/ui/dialog/clonetiler.cpp:1044
 msgid "How many rows in the tiling"
 msgstr "Кількість рядків у мозаїці"
 
-#: ../src/ui/dialog/clonetiler.cpp:1049
+#: ../src/ui/dialog/clonetiler.cpp:1074
 msgid "How many columns in the tiling"
 msgstr "Кількість стовпчиків у мозаїці"
 
-#: ../src/ui/dialog/clonetiler.cpp:1093
+#: ../src/ui/dialog/clonetiler.cpp:1118
 msgid "Width of the rectangle to be filled"
 msgstr "Ширина області, що заповнюється"
 
-#: ../src/ui/dialog/clonetiler.cpp:1127
+#: ../src/ui/dialog/clonetiler.cpp:1152
 msgid "Height of the rectangle to be filled"
 msgstr "Висота області, що заповнюється"
 
-#: ../src/ui/dialog/clonetiler.cpp:1144
+#: ../src/ui/dialog/clonetiler.cpp:1169
 msgid "Rows, columns: "
 msgstr "Рядків, стовпчиків: "
 
-#: ../src/ui/dialog/clonetiler.cpp:1145
+#: ../src/ui/dialog/clonetiler.cpp:1170
 msgid "Create the specified number of rows and columns"
 msgstr "Створити вказану кількість рядків та стовпчиків"
 
-#: ../src/ui/dialog/clonetiler.cpp:1154
+#: ../src/ui/dialog/clonetiler.cpp:1179
 msgid "Width, height: "
 msgstr "Ширина, висота: "
 
-#: ../src/ui/dialog/clonetiler.cpp:1155
+#: ../src/ui/dialog/clonetiler.cpp:1180
 msgid "Fill the specified width and height with the tiling"
 msgstr "Заповнити мозаїкою вказану область"
 
-#: ../src/ui/dialog/clonetiler.cpp:1176
+#: ../src/ui/dialog/clonetiler.cpp:1201
 msgid "Use saved size and position of the tile"
 msgstr "Використовувати збережені розмір та позицію плитки"
 
-#: ../src/ui/dialog/clonetiler.cpp:1179
+#: ../src/ui/dialog/clonetiler.cpp:1204
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
@@ -4090,11 +4090,11 @@ msgstr ""
 "Сприяти, щоб розмір та позиція плиток були такі самі, як і останнього разу, "
 "коли ви їх розбивали на мозаїку, замість використання поточного розміру"
 
-#: ../src/ui/dialog/clonetiler.cpp:1213
+#: ../src/ui/dialog/clonetiler.cpp:1238
 msgid " <b>_Create</b> "
 msgstr "<b>_Створити</b> "
 
-#: ../src/ui/dialog/clonetiler.cpp:1215
+#: ../src/ui/dialog/clonetiler.cpp:1240
 msgid "Create and tile the clones of the selection"
 msgstr "Створити мозаїку з клонів позначеної ділянки"
 
@@ -4103,31 +4103,31 @@ msgstr "Створити мозаїку з клонів позначеної д�
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/ui/dialog/clonetiler.cpp:1235
+#: ../src/ui/dialog/clonetiler.cpp:1260
 msgid " _Unclump "
 msgstr "_Розгрупувати "
 
-#: ../src/ui/dialog/clonetiler.cpp:1236
+#: ../src/ui/dialog/clonetiler.cpp:1261
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr ""
 "Розповсюдити клони для послаблення групування; може бути застосовано повторно"
 
-#: ../src/ui/dialog/clonetiler.cpp:1242
+#: ../src/ui/dialog/clonetiler.cpp:1267
 msgid " Re_move "
 msgstr " В_илучити "
 
-#: ../src/ui/dialog/clonetiler.cpp:1243
+#: ../src/ui/dialog/clonetiler.cpp:1268
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr ""
 "Вилучити існуючі мозаїчні клони позначеного об'єкта (лише нащадків одного "
 "об'єкта)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1259
+#: ../src/ui/dialog/clonetiler.cpp:1284
 msgid " R_eset "
 msgstr "С_кинути "
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/ui/dialog/clonetiler.cpp:1261
+#: ../src/ui/dialog/clonetiler.cpp:1286
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -4135,44 +4135,44 @@ msgstr ""
 "Скинути усі зсуви, масштабування, обертання та зміни прозорості й кольору на "
 "нуль"
 
-#: ../src/ui/dialog/clonetiler.cpp:1334
+#: ../src/ui/dialog/clonetiler.cpp:1359
 msgid "<small>Nothing selected.</small>"
 msgstr "<small>Нічого не позначено.</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1340
+#: ../src/ui/dialog/clonetiler.cpp:1365
 msgid "<small>More than one object selected.</small>"
 msgstr "<small>позначено більше ніж один об'єкт.</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1347
+#: ../src/ui/dialog/clonetiler.cpp:1372
 #, c-format
 msgid "<small>Object has <b>%d</b> tiled clones.</small>"
 msgstr "<small>Об'єкт має<b>%d</b> мозаїчних клонів.</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1352
+#: ../src/ui/dialog/clonetiler.cpp:1377
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>Об'єкт не має мозаїчних клонів.</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2072
+#: ../src/ui/dialog/clonetiler.cpp:2097
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "Позначте <b>один об'єкт</b>, клони якого слід розгрупувати."
 
-#: ../src/ui/dialog/clonetiler.cpp:2094
+#: ../src/ui/dialog/clonetiler.cpp:2119
 msgid "Unclump tiled clones"
 msgstr "Розгрупувати мозаїку з клонів"
 
-#: ../src/ui/dialog/clonetiler.cpp:2123
+#: ../src/ui/dialog/clonetiler.cpp:2148
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Позначте <b>один об'єкт</b>, клони якого слід вилучити."
 
-#: ../src/ui/dialog/clonetiler.cpp:2146
+#: ../src/ui/dialog/clonetiler.cpp:2171
 msgid "Delete tiled clones"
 msgstr "Вилучити мозаїку з клонів"
 
-#: ../src/ui/dialog/clonetiler.cpp:2193 ../src/selection-chemistry.cpp:2469
+#: ../src/ui/dialog/clonetiler.cpp:2218 ../src/selection-chemistry.cpp:2469
 msgid "Select an <b>object</b> to clone."
 msgstr "Позначте <b>об'єкт</b> для клонування."
 
-#: ../src/ui/dialog/clonetiler.cpp:2199
+#: ../src/ui/dialog/clonetiler.cpp:2224
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -4180,23 +4180,23 @@ msgstr ""
 "Для клонування кількох об'єктів, <b>згрупуйте</b> їх та <b>клонуйте групу</"
 "b>."
 
-#: ../src/ui/dialog/clonetiler.cpp:2208
+#: ../src/ui/dialog/clonetiler.cpp:2233
 msgid "<small>Creating tiled clones...</small>"
 msgstr "<small>Створення мозаїчних клонів…</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2613
+#: ../src/ui/dialog/clonetiler.cpp:2638
 msgid "Create tiled clones"
 msgstr "Створити мозаїку з клонів"
 
-#: ../src/ui/dialog/clonetiler.cpp:2832
+#: ../src/ui/dialog/clonetiler.cpp:2871
 msgid "<small>Per row:</small>"
 msgstr "<small>У рядку:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2850
+#: ../src/ui/dialog/clonetiler.cpp:2889
 msgid "<small>Per column:</small>"
 msgstr "<small>У стовпчику:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2858
+#: ../src/ui/dialog/clonetiler.cpp:2897
 msgid "<small>Randomize:</small>"
 msgstr "<small>Випадковість:</small>"
 
@@ -4295,9 +4295,9 @@ msgid "_Height:"
 msgstr "_Висота:"
 
 #: ../src/ui/dialog/export.cpp:260
-#: ../src/ui/dialog/inkscape-preferences.cpp:1382
-#: ../src/ui/dialog/inkscape-preferences.cpp:1385
-#: ../src/ui/dialog/inkscape-preferences.cpp:1394
+#: ../src/ui/dialog/inkscape-preferences.cpp:1384
+#: ../src/ui/dialog/inkscape-preferences.cpp:1387
+#: ../src/ui/dialog/inkscape-preferences.cpp:1396
 msgid "dpi"
 msgstr "т/д"
 
@@ -4698,111 +4698,111 @@ msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "АаБбВвЇїЄєҐґIiPpQq12369$€¢?.;/()"
 
 #. Align buttons
-#: ../src/ui/dialog/text-edit.cpp:94 ../src/widgets/text-toolbar.cpp:1565
-#: ../src/widgets/text-toolbar.cpp:1566
+#: ../src/ui/dialog/text-edit.cpp:94 ../src/widgets/text-toolbar.cpp:1568
+#: ../src/widgets/text-toolbar.cpp:1569
 msgid "Align left"
 msgstr "Вирівнювання ліворуч"
 
-#: ../src/ui/dialog/text-edit.cpp:95 ../src/widgets/text-toolbar.cpp:1573
-#: ../src/widgets/text-toolbar.cpp:1574
+#: ../src/ui/dialog/text-edit.cpp:95 ../src/widgets/text-toolbar.cpp:1576
+#: ../src/widgets/text-toolbar.cpp:1577
 msgid "Align center"
 msgstr "Посередині"
 
-#: ../src/ui/dialog/text-edit.cpp:96 ../src/widgets/text-toolbar.cpp:1581
-#: ../src/widgets/text-toolbar.cpp:1582
+#: ../src/ui/dialog/text-edit.cpp:96 ../src/widgets/text-toolbar.cpp:1584
+#: ../src/widgets/text-toolbar.cpp:1585
 msgid "Align right"
 msgstr "Вирівнювання праворуч"
 
-#: ../src/ui/dialog/text-edit.cpp:97 ../src/widgets/text-toolbar.cpp:1590
+#: ../src/ui/dialog/text-edit.cpp:97 ../src/widgets/text-toolbar.cpp:1593
 msgid "Justify (only flowed text)"
 msgstr "Вирівняти раз шириною (лише неконтурний текст)"
 
 #. Direction buttons
-#: ../src/ui/dialog/text-edit.cpp:101 ../src/widgets/text-toolbar.cpp:1625
+#: ../src/ui/dialog/text-edit.cpp:106 ../src/widgets/text-toolbar.cpp:1628
 msgid "Horizontal text"
 msgstr "Горизонтальний текст"
 
-#: ../src/ui/dialog/text-edit.cpp:102 ../src/widgets/text-toolbar.cpp:1632
+#: ../src/ui/dialog/text-edit.cpp:107 ../src/widgets/text-toolbar.cpp:1635
 msgid "Vertical text"
 msgstr "Вертикальний текст"
 
-#: ../src/ui/dialog/text-edit.cpp:117 ../src/ui/dialog/text-edit.cpp:118
+#: ../src/ui/dialog/text-edit.cpp:127 ../src/ui/dialog/text-edit.cpp:128
 msgid "Spacing between lines (percent of font size)"
 msgstr "Інтервал між рядками (у відсотках щодо розміру шрифту)"
 
-#: ../src/ui/dialog/text-edit.cpp:551 ../src/text-context.cpp:1519
+#: ../src/ui/dialog/text-edit.cpp:561 ../src/text-context.cpp:1519
 msgid "Set text style"
 msgstr "Встановити стиль тексту"
 
-#: ../src/ui/dialog/xml-tree.cpp:70 ../src/ui/dialog/xml-tree.cpp:119
+#: ../src/ui/dialog/xml-tree.cpp:70 ../src/ui/dialog/xml-tree.cpp:123
 msgid "New element node"
 msgstr "Створити вузол елемента"
 
-#: ../src/ui/dialog/xml-tree.cpp:71 ../src/ui/dialog/xml-tree.cpp:125
+#: ../src/ui/dialog/xml-tree.cpp:71 ../src/ui/dialog/xml-tree.cpp:129
 msgid "New text node"
 msgstr "Створити вузол з текстом"
 
-#: ../src/ui/dialog/xml-tree.cpp:72 ../src/ui/dialog/xml-tree.cpp:139
+#: ../src/ui/dialog/xml-tree.cpp:72 ../src/ui/dialog/xml-tree.cpp:143
 msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "Вилучити вузол"
 
-#: ../src/ui/dialog/xml-tree.cpp:73 ../src/ui/dialog/xml-tree.cpp:131
-#: ../src/ui/dialog/xml-tree.cpp:970
+#: ../src/ui/dialog/xml-tree.cpp:73 ../src/ui/dialog/xml-tree.cpp:135
+#: ../src/ui/dialog/xml-tree.cpp:974
 msgid "Duplicate node"
 msgstr "Дублювати вузол"
 
-#: ../src/ui/dialog/xml-tree.cpp:79 ../src/ui/dialog/xml-tree.cpp:184
-#: ../src/ui/dialog/xml-tree.cpp:1005
+#: ../src/ui/dialog/xml-tree.cpp:79 ../src/ui/dialog/xml-tree.cpp:188
+#: ../src/ui/dialog/xml-tree.cpp:1009
 msgid "Delete attribute"
 msgstr "Вилучити атрибут"
 
-#: ../src/ui/dialog/xml-tree.cpp:83
+#: ../src/ui/dialog/xml-tree.cpp:87
 msgid "Set"
 msgstr "Встановити"
 
-#: ../src/ui/dialog/xml-tree.cpp:114
+#: ../src/ui/dialog/xml-tree.cpp:118
 msgid "Drag to reorder nodes"
 msgstr "Перевпорядкуйте вузли перетягуванням"
 
-#: ../src/ui/dialog/xml-tree.cpp:145 ../src/ui/dialog/xml-tree.cpp:146
-#: ../src/ui/dialog/xml-tree.cpp:1126
+#: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
+#: ../src/ui/dialog/xml-tree.cpp:1130
 msgid "Unindent node"
 msgstr "Перемістити до кореня"
 
-#: ../src/ui/dialog/xml-tree.cpp:150 ../src/ui/dialog/xml-tree.cpp:151
-#: ../src/ui/dialog/xml-tree.cpp:1104
+#: ../src/ui/dialog/xml-tree.cpp:154 ../src/ui/dialog/xml-tree.cpp:155
+#: ../src/ui/dialog/xml-tree.cpp:1108
 msgid "Indent node"
 msgstr "Перемістити від кореня"
 
-#: ../src/ui/dialog/xml-tree.cpp:155 ../src/ui/dialog/xml-tree.cpp:156
-#: ../src/ui/dialog/xml-tree.cpp:1055
+#: ../src/ui/dialog/xml-tree.cpp:159 ../src/ui/dialog/xml-tree.cpp:160
+#: ../src/ui/dialog/xml-tree.cpp:1059
 msgid "Raise node"
 msgstr "Підняти вузол"
 
-#: ../src/ui/dialog/xml-tree.cpp:160 ../src/ui/dialog/xml-tree.cpp:161
-#: ../src/ui/dialog/xml-tree.cpp:1073
+#: ../src/ui/dialog/xml-tree.cpp:164 ../src/ui/dialog/xml-tree.cpp:165
+#: ../src/ui/dialog/xml-tree.cpp:1077
 msgid "Lower node"
 msgstr "Опустити вузол"
 
-#: ../src/ui/dialog/xml-tree.cpp:201
+#: ../src/ui/dialog/xml-tree.cpp:205
 msgid "Attribute name"
 msgstr "Назва атрибута"
 
-#: ../src/ui/dialog/xml-tree.cpp:216
+#: ../src/ui/dialog/xml-tree.cpp:220
 msgid "Attribute value"
 msgstr "Значення атрибута"
 
-#: ../src/ui/dialog/xml-tree.cpp:304
+#: ../src/ui/dialog/xml-tree.cpp:308
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 "<b>Клацніть</b>, щоб позначити вузли, <b>перетягуванням</b> можна змінити "
 "порядок."
 
-#: ../src/ui/dialog/xml-tree.cpp:315
+#: ../src/ui/dialog/xml-tree.cpp:319
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>Клацніть мишею</b> на атрибуті для редагування."
 
-#: ../src/ui/dialog/xml-tree.cpp:319
+#: ../src/ui/dialog/xml-tree.cpp:323
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -4811,35 +4811,35 @@ msgstr ""
 "позначено атрибут <b>%s</b>. Натисніть <b>Ctrl+Enter</b>, коли закінчите "
 "редагування."
 
-#: ../src/ui/dialog/xml-tree.cpp:559
+#: ../src/ui/dialog/xml-tree.cpp:563
 msgid "Drag XML subtree"
 msgstr "Перетягування піддерева XML"
 
-#: ../src/ui/dialog/xml-tree.cpp:861
+#: ../src/ui/dialog/xml-tree.cpp:865
 msgid "New element node..."
 msgstr "Створити новий вузол…"
 
-#: ../src/ui/dialog/xml-tree.cpp:899
+#: ../src/ui/dialog/xml-tree.cpp:903
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: ../src/ui/dialog/xml-tree.cpp:905
+#: ../src/ui/dialog/xml-tree.cpp:909
 msgid "Create"
 msgstr "Створити"
 
-#: ../src/ui/dialog/xml-tree.cpp:936
+#: ../src/ui/dialog/xml-tree.cpp:940
 msgid "Create new element node"
 msgstr "Створити вузол елемента"
 
-#: ../src/ui/dialog/xml-tree.cpp:952
+#: ../src/ui/dialog/xml-tree.cpp:956
 msgid "Create new text node"
 msgstr "Створити вузол з текстом"
 
-#: ../src/ui/dialog/xml-tree.cpp:986
+#: ../src/ui/dialog/xml-tree.cpp:990
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "Вилучити вузол"
 
-#: ../src/ui/dialog/xml-tree.cpp:1029
+#: ../src/ui/dialog/xml-tree.cpp:1033
 msgid "Change attribute"
 msgstr "Змінити атрибут"
 
@@ -5317,9 +5317,9 @@ msgstr "<b>Малювання</b> штриха гумки"
 msgid "Draw eraser stroke"
 msgstr "Намалювати штрих гумкою"
 
-#: ../src/event-context.cpp:678
-msgid "<b>Space+mouse drag</b> to pan canvas"
-msgstr "<b>Пробіл+перетягування мишею</b> для переміщення полотна"
+#: ../src/event-context.cpp:694
+msgid "<b>Space+mouse move</b> to pan canvas"
+msgstr "<b>Пробіл+пересування миші</b> для переміщення полотна"
 
 #: ../src/event-log.cpp:37
 msgid "[Unchanged]"
@@ -5585,8 +5585,8 @@ msgstr "Додати шум"
 #: ../src/extension/internal/filter/color.h:1502
 #: ../src/extension/internal/filter/distort.h:69
 #: ../src/extension/internal/filter/morphology.h:60 ../src/rdf.cpp:241
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2467
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2546
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2472
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2551
 #: ../src/ui/dialog/object-attributes.cpp:48
 #: ../share/extensions/jessyInk_effects.inx.h:5
 #: ../share/extensions/jessyInk_export.inx.h:3
@@ -5636,7 +5636,7 @@ msgstr "Розмиття"
 #: ../src/extension/internal/bitmap/oilPaint.cpp:39
 #: ../src/extension/internal/bitmap/sharpen.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:43
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2524
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2529
 msgid "Radius:"
 msgstr "Радіус:"
 
@@ -5964,7 +5964,7 @@ msgstr ""
 
 #: ../src/extension/internal/bitmap/opacity.cpp:40
 #: ../src/extension/internal/filter/blurs.h:333
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2514
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2519
 #: ../src/widgets/dropper-toolbar.cpp:112
 msgid "Opacity:"
 msgstr "Непрозорість:"
@@ -6480,7 +6480,7 @@ msgstr "Темніше"
 #: ../src/extension/internal/filter/color.h:1511
 #: ../src/extension/internal/filter/paint.h:704
 #: ../src/extension/internal/filter/transparency.h:62
-#: ../src/filter-enums.cpp:53 ../src/ui/dialog/input.cpp:365
+#: ../src/filter-enums.cpp:53 ../src/ui/dialog/input.cpp:374
 msgid "Screen"
 msgstr "Ширма"
 
@@ -6974,47 +6974,47 @@ msgid "Extract Channel"
 msgstr "Видобування каналу"
 
 #: ../src/extension/internal/filter/color.h:636 ../src/filter-enums.cpp:100
-#: ../src/flood-context.cpp:246 ../src/widgets/sp-color-icc-selector.cpp:230
-#: ../src/widgets/sp-color-scales.cpp:432
-#: ../src/widgets/sp-color-scales.cpp:433
+#: ../src/flood-context.cpp:252 ../src/widgets/sp-color-icc-selector.cpp:227
+#: ../src/widgets/sp-color-scales.cpp:429
+#: ../src/widgets/sp-color-scales.cpp:430
 msgid "Red"
 msgstr "Червоний"
 
 #: ../src/extension/internal/filter/color.h:637 ../src/filter-enums.cpp:101
-#: ../src/flood-context.cpp:247 ../src/widgets/sp-color-icc-selector.cpp:230
-#: ../src/widgets/sp-color-scales.cpp:435
-#: ../src/widgets/sp-color-scales.cpp:436
+#: ../src/flood-context.cpp:253 ../src/widgets/sp-color-icc-selector.cpp:227
+#: ../src/widgets/sp-color-scales.cpp:432
+#: ../src/widgets/sp-color-scales.cpp:433
 msgid "Green"
 msgstr "Зелений"
 
 #: ../src/extension/internal/filter/color.h:638 ../src/filter-enums.cpp:102
-#: ../src/flood-context.cpp:248 ../src/widgets/sp-color-icc-selector.cpp:230
-#: ../src/widgets/sp-color-scales.cpp:438
-#: ../src/widgets/sp-color-scales.cpp:439
+#: ../src/flood-context.cpp:254 ../src/widgets/sp-color-icc-selector.cpp:227
+#: ../src/widgets/sp-color-scales.cpp:435
+#: ../src/widgets/sp-color-scales.cpp:436
 msgid "Blue"
 msgstr "Синій"
 
 #: ../src/extension/internal/filter/color.h:639
-#: ../src/widgets/sp-color-icc-selector.cpp:234
-#: ../src/widgets/sp-color-icc-selector.cpp:235
-#: ../src/widgets/sp-color-scales.cpp:486
-#: ../src/widgets/sp-color-scales.cpp:487
+#: ../src/widgets/sp-color-icc-selector.cpp:231
+#: ../src/widgets/sp-color-icc-selector.cpp:232
+#: ../src/widgets/sp-color-scales.cpp:483
+#: ../src/widgets/sp-color-scales.cpp:484
 msgid "Cyan"
 msgstr "Бірюзовий"
 
 #: ../src/extension/internal/filter/color.h:640
-#: ../src/widgets/sp-color-icc-selector.cpp:234
-#: ../src/widgets/sp-color-icc-selector.cpp:235
-#: ../src/widgets/sp-color-scales.cpp:489
-#: ../src/widgets/sp-color-scales.cpp:490
+#: ../src/widgets/sp-color-icc-selector.cpp:231
+#: ../src/widgets/sp-color-icc-selector.cpp:232
+#: ../src/widgets/sp-color-scales.cpp:486
+#: ../src/widgets/sp-color-scales.cpp:487
 msgid "Magenta"
 msgstr "Бузковий"
 
 #: ../src/extension/internal/filter/color.h:641
-#: ../src/widgets/sp-color-icc-selector.cpp:234
-#: ../src/widgets/sp-color-icc-selector.cpp:235
-#: ../src/widgets/sp-color-scales.cpp:492
-#: ../src/widgets/sp-color-scales.cpp:493
+#: ../src/widgets/sp-color-icc-selector.cpp:231
+#: ../src/widgets/sp-color-icc-selector.cpp:232
+#: ../src/widgets/sp-color-scales.cpp:489
+#: ../src/widgets/sp-color-scales.cpp:490
 msgid "Yellow"
 msgstr "Жовтий"
 
@@ -7047,9 +7047,9 @@ msgstr "Перетворення на:"
 
 #: ../src/extension/internal/filter/color.h:743
 #: ../src/ui/widget/selected-style.cpp:246
-#: ../src/widgets/sp-color-icc-selector.cpp:234
-#: ../src/widgets/sp-color-scales.cpp:495
-#: ../src/widgets/sp-color-scales.cpp:496
+#: ../src/widgets/sp-color-icc-selector.cpp:231
+#: ../src/widgets/sp-color-scales.cpp:492
+#: ../src/widgets/sp-color-scales.cpp:493
 msgid "Black"
 msgstr "Чорний"
 
@@ -7158,7 +7158,7 @@ msgstr "Зміщення червоного"
 #: ../src/extension/internal/filter/color.h:1206
 #: ../src/ui/dialog/object-attributes.cpp:65
 #: ../src/ui/dialog/object-attributes.cpp:73 ../src/ui/dialog/tile.cpp:615
-#: ../src/widgets/desktop-widget.cpp:671 ../src/widgets/node-toolbar.cpp:591
+#: ../src/widgets/desktop-widget.cpp:648 ../src/widgets/node-toolbar.cpp:591
 msgid "X:"
 msgstr "X:"
 
@@ -7167,7 +7167,7 @@ msgstr "X:"
 #: ../src/extension/internal/filter/color.h:1207
 #: ../src/ui/dialog/object-attributes.cpp:66
 #: ../src/ui/dialog/object-attributes.cpp:74 ../src/ui/dialog/tile.cpp:616
-#: ../src/widgets/desktop-widget.cpp:681 ../src/widgets/node-toolbar.cpp:609
+#: ../src/widgets/desktop-widget.cpp:658 ../src/widgets/node-toolbar.cpp:609
 msgid "Y:"
 msgstr "Y:"
 
@@ -7485,7 +7485,7 @@ msgid "XOR"
 msgstr "Виключне АБО (XOR)"
 
 #: ../src/extension/internal/filter/morphology.h:179
-#: ../src/ui/dialog/layer-properties.cpp:168
+#: ../src/ui/dialog/layer-properties.cpp:185
 msgid "Position:"
 msgstr "Розміщення:"
 
@@ -7650,7 +7650,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1048
-#: ../src/widgets/desktop-widget.cpp:1947
+#: ../src/widgets/desktop-widget.cpp:1903
 msgid "Drawing"
 msgstr "Малюнок"
 
@@ -7941,7 +7941,7 @@ msgid "Source:"
 msgstr "Джерело:"
 
 #: ../src/extension/internal/filter/transparency.h:59
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2464
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2469
 #: ../src/widgets/erasor-toolbar.cpp:129 ../src/widgets/pencil-toolbar.cpp:162
 #: ../src/widgets/spray-toolbar.cpp:203 ../src/widgets/tweak-toolbar.cpp:273
 #: ../share/extensions/extrude.inx.h:2 ../share/extensions/triangle.inx.h:8
@@ -8063,7 +8063,7 @@ msgstr "Вертикальний зсув:"
 #: ../share/extensions/draw_from_triangle.inx.h:58
 #: ../share/extensions/eqtexsvg.inx.h:4
 #: ../share/extensions/foldablebox.inx.h:9
-#: ../share/extensions/funcplot.inx.h:37 ../share/extensions/gears.inx.h:11
+#: ../share/extensions/funcplot.inx.h:38 ../share/extensions/gears.inx.h:11
 #: ../share/extensions/grid_cartesian.inx.h:23
 #: ../share/extensions/grid_isometric.inx.h:11
 #: ../share/extensions/grid_polar.inx.h:22
@@ -8351,11 +8351,11 @@ msgstr "Графічний файл WordPerfect (*.wpg)"
 msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "Формат векторної графіки, що використовується Corel WordPerfect"
 
-#: ../src/extension/prefdialog.cpp:249
+#: ../src/extension/prefdialog.cpp:254
 msgid "Live preview"
 msgstr "Перегляд у дії"
 
-#: ../src/extension/prefdialog.cpp:249
+#: ../src/extension/prefdialog.cpp:254
 msgid "Is the effect previewed live on canvas?"
 msgstr "Контролює, чи буде показано параметри ефекту вживу на полотні"
 
@@ -8478,7 +8478,7 @@ msgstr "Файл не було змінено. Збереження непотр
 msgid "Saving document..."
 msgstr "Збереження документа…"
 
-#: ../src/file.cpp:1219 ../src/ui/dialog/ocaldialogs.cpp:1207
+#: ../src/file.cpp:1219 ../src/ui/dialog/ocaldialogs.cpp:1225
 msgid "Import"
 msgstr "Імпорт"
 
@@ -8598,12 +8598,12 @@ msgstr "Обгортка"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:490
 #: ../src/ui/dialog/inkscape-preferences.cpp:331
 #: ../src/ui/dialog/inkscape-preferences.cpp:622
-#: ../src/ui/dialog/inkscape-preferences.cpp:1212
-#: ../src/ui/dialog/inkscape-preferences.cpp:1369
-#: ../src/ui/dialog/inkscape-preferences.cpp:1745
-#: ../src/ui/dialog/input.cpp:612 ../src/ui/dialog/input.cpp:613
-#: ../src/ui/dialog/input.cpp:1282 ../src/verbs.cpp:2300
-#: ../src/widgets/gradient-toolbar.cpp:1128
+#: ../src/ui/dialog/inkscape-preferences.cpp:1214
+#: ../src/ui/dialog/inkscape-preferences.cpp:1371
+#: ../src/ui/dialog/inkscape-preferences.cpp:1752
+#: ../src/ui/dialog/input.cpp:693 ../src/ui/dialog/input.cpp:694
+#: ../src/ui/dialog/input.cpp:1485 ../src/ui/dialog/input.cpp:1539
+#: ../src/verbs.cpp:2300 ../src/widgets/gradient-toolbar.cpp:1128
 #: ../src/widgets/pencil-toolbar.cpp:190
 #: ../share/extensions/gcodetools_area.inx.h:48
 #: ../share/extensions/gcodetools_dxf_points.inx.h:19
@@ -8617,7 +8617,7 @@ msgstr "Обгортка"
 msgid "None"
 msgstr "немає"
 
-#: ../src/filter-enums.cpp:103 ../src/flood-context.cpp:252
+#: ../src/filter-enums.cpp:103 ../src/flood-context.cpp:258
 msgid "Alpha"
 msgstr "Альфа-канал"
 
@@ -8645,59 +8645,59 @@ msgstr "Точкове джерело"
 msgid "Spot Light"
 msgstr "Прожектор"
 
-#: ../src/flood-context.cpp:245
+#: ../src/flood-context.cpp:251
 msgid "Visible Colors"
 msgstr "Видимі кольори"
 
-#: ../src/flood-context.cpp:249 ../src/widgets/sp-color-icc-selector.cpp:232
-#: ../src/widgets/sp-color-icc-selector.cpp:233
-#: ../src/widgets/sp-color-scales.cpp:458
-#: ../src/widgets/sp-color-scales.cpp:459 ../src/widgets/tweak-toolbar.cpp:305
+#: ../src/flood-context.cpp:255 ../src/widgets/sp-color-icc-selector.cpp:229
+#: ../src/widgets/sp-color-icc-selector.cpp:230
+#: ../src/widgets/sp-color-scales.cpp:455
+#: ../src/widgets/sp-color-scales.cpp:456 ../src/widgets/tweak-toolbar.cpp:305
 #: ../share/extensions/color_randomize.inx.h:3
 msgid "Hue"
 msgstr "Відтінок"
 
-#: ../src/flood-context.cpp:250 ../src/ui/dialog/inkscape-preferences.cpp:902
-#: ../src/widgets/sp-color-icc-selector.cpp:232
-#: ../src/widgets/sp-color-icc-selector.cpp:233
-#: ../src/widgets/sp-color-scales.cpp:461
-#: ../src/widgets/sp-color-scales.cpp:462 ../src/widgets/tweak-toolbar.cpp:321
+#: ../src/flood-context.cpp:256 ../src/ui/dialog/inkscape-preferences.cpp:902
+#: ../src/widgets/sp-color-icc-selector.cpp:229
+#: ../src/widgets/sp-color-icc-selector.cpp:230
+#: ../src/widgets/sp-color-scales.cpp:458
+#: ../src/widgets/sp-color-scales.cpp:459 ../src/widgets/tweak-toolbar.cpp:321
 #: ../share/extensions/color_randomize.inx.h:4
 msgid "Saturation"
 msgstr "Насиченість"
 
-#: ../src/flood-context.cpp:251 ../src/widgets/sp-color-icc-selector.cpp:233
-#: ../src/widgets/sp-color-scales.cpp:464
-#: ../src/widgets/sp-color-scales.cpp:465 ../src/widgets/tweak-toolbar.cpp:337
+#: ../src/flood-context.cpp:257 ../src/widgets/sp-color-icc-selector.cpp:230
+#: ../src/widgets/sp-color-scales.cpp:461
+#: ../src/widgets/sp-color-scales.cpp:462 ../src/widgets/tweak-toolbar.cpp:337
 #: ../share/extensions/color_randomize.inx.h:5
 msgid "Lightness"
 msgstr "Яскравість"
 
-#: ../src/flood-context.cpp:263
+#: ../src/flood-context.cpp:269
 msgctxt "Flood autogap"
 msgid "None"
 msgstr "Немає"
 
-#: ../src/flood-context.cpp:264
+#: ../src/flood-context.cpp:270
 msgctxt "Flood autogap"
 msgid "Small"
 msgstr "Малий"
 
-#: ../src/flood-context.cpp:265
+#: ../src/flood-context.cpp:271
 msgctxt "Flood autogap"
 msgid "Medium"
 msgstr "Середній"
 
-#: ../src/flood-context.cpp:266
+#: ../src/flood-context.cpp:272
 msgctxt "Flood autogap"
 msgid "Large"
 msgstr "Великий"
 
-#: ../src/flood-context.cpp:486
+#: ../src/flood-context.cpp:494
 msgid "<b>Too much inset</b>, the result is empty."
 msgstr "<b>Надто багато втягувань</b>, результат порожній."
 
-#: ../src/flood-context.cpp:527
+#: ../src/flood-context.cpp:535
 #, c-format
 msgid ""
 "Area filled, path with <b>%d</b> node created and unioned with selection."
@@ -8713,7 +8713,7 @@ msgstr[2] ""
 "Область заповнено, контур з <b>%d</b> вузлами створено та поєднано з "
 "позначеною областю."
 
-#: ../src/flood-context.cpp:533
+#: ../src/flood-context.cpp:541
 #, c-format
 msgid "Area filled, path with <b>%d</b> node created."
 msgid_plural "Area filled, path with <b>%d</b> nodes created."
@@ -8721,11 +8721,11 @@ msgstr[0] "Область заповнено, створено контур з <
 msgstr[1] "Область заповнено, створено контур з <b>%d</b> вузлами."
 msgstr[2] "Область заповнено, створено контур з <b>%d</b> вузлами."
 
-#: ../src/flood-context.cpp:801 ../src/flood-context.cpp:1100
+#: ../src/flood-context.cpp:809 ../src/flood-context.cpp:1119
 msgid "<b>Area is not bounded</b>, cannot fill."
 msgstr "<b>Область не обмежена</b>, заповнення неможливе."
 
-#: ../src/flood-context.cpp:1105
+#: ../src/flood-context.cpp:1124
 msgid ""
 "<b>Only the visible part of the bounded area was filled.</b> If you want to "
 "fill all of the area, undo, zoom out, and fill again."
@@ -8734,15 +8734,15 @@ msgstr ""
 "заповнити всю область, верніть зміни, зробіть меншим масштаб та заповніть "
 "знову."
 
-#: ../src/flood-context.cpp:1123 ../src/flood-context.cpp:1282
+#: ../src/flood-context.cpp:1142 ../src/flood-context.cpp:1301
 msgid "Fill bounded area"
 msgstr "Заповнення замкненої області"
 
-#: ../src/flood-context.cpp:1142
+#: ../src/flood-context.cpp:1161
 msgid "Set style on object"
 msgstr "Встановити стиль об'єкта"
 
-#: ../src/flood-context.cpp:1201
+#: ../src/flood-context.cpp:1220
 msgid "<b>Draw over</b> areas to add to fill, hold <b>Alt</b> for touch fill"
 msgstr ""
 "<b>Малювати по</b> областям для додавання заповнення, при утриманні <b>Alt</"
@@ -8955,15 +8955,15 @@ msgstr[2] ""
 "Точка градієнта спільна для <b>%d</b> градієнтів; для відокремлення "
 "перетягуйте з <b>Shift</b>"
 
-#: ../src/gradient-drag.cpp:2358
+#: ../src/gradient-drag.cpp:2369
 msgid "Move gradient handle(s)"
 msgstr "Перемістити вус(а) градієнта"
 
-#: ../src/gradient-drag.cpp:2394
+#: ../src/gradient-drag.cpp:2405
 msgid "Move gradient mid stop(s)"
 msgstr "Перемістити опорні точки градієнта"
 
-#: ../src/gradient-drag.cpp:2683
+#: ../src/gradient-drag.cpp:2694
 msgid "Delete gradient stop(s)"
 msgstr "Вилучити опорні точки градієнта"
 
@@ -9029,7 +9029,7 @@ msgstr "точок"
 msgid "Percent"
 msgstr "Відсоток"
 
-#: ../src/helper/units.cpp:42 ../src/ui/dialog/inkscape-preferences.cpp:1222
+#: ../src/helper/units.cpp:42 ../src/ui/dialog/inkscape-preferences.cpp:1224
 msgid "%"
 msgstr "%"
 
@@ -9485,7 +9485,7 @@ msgid "Dockitem which 'owns' this grip"
 msgstr "Елемент, що є «володарем» цього"
 
 #. Name
-#: ../src/libgdl/gdl-dock-item.c:298 ../src/widgets/text-toolbar.cpp:1637
+#: ../src/libgdl/gdl-dock-item.c:298 ../src/widgets/text-toolbar.cpp:1640
 #: ../share/extensions/gcodetools_graffiti.inx.h:9
 #: ../share/extensions/gcodetools_orientation_points.inx.h:1
 msgid "Orientation"
@@ -9634,7 +9634,7 @@ msgstr ""
 #: ../src/ui/dialog/align-and-distribute.cpp:1047
 #: ../src/ui/dialog/document-properties.cpp:144
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1546
-#: ../src/widgets/desktop-widget.cpp:1943
+#: ../src/widgets/desktop-widget.cpp:1899
 #: ../share/extensions/voronoi2svg.inx.h:9
 msgid "Page"
 msgstr "Сторінка"
@@ -9644,7 +9644,7 @@ msgid "The index of the current page"
 msgstr "Індекс поточної сторінки"
 
 #: ../src/libgdl/gdl-dock-object.c:125
-#: ../src/ui/dialog/inkscape-preferences.cpp:1429
+#: ../src/ui/dialog/inkscape-preferences.cpp:1431
 #: ../src/ui/widget/page-sizer.cpp:260
 #: ../src/widgets/gradient-selector.cpp:156
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
@@ -9870,7 +9870,7 @@ msgstr "Координата Y плаваючої панелі"
 msgid "Dock #%d"
 msgstr "Прикріпити #%d"
 
-#: ../src/libnrtype/FontFactory.cpp:910
+#: ../src/libnrtype/FontFactory.cpp:903
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Шрифт без сімейства, який може привести до збою Pango, ігнорується"
 
@@ -10538,7 +10538,7 @@ msgstr "Визначає форму початку контуру"
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: ../src/live_effects/lpe-powerstroke.cpp:238
-#: ../src/widgets/stroke-style.cpp:186
+#: ../src/widgets/stroke-style.cpp:193
 msgid "Join:"
 msgstr "З'єднання:"
 
@@ -10551,7 +10551,7 @@ msgid "Miter limit:"
 msgstr "Межа вістря:"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:239
-#: ../src/widgets/stroke-style.cpp:234
+#: ../src/widgets/stroke-style.cpp:241
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Найбільша довжина вістря (у одиницях товщини штриха)"
 
@@ -10933,7 +10933,7 @@ msgid "How many construction lines (tangents) to draw"
 msgstr "Кількість ліній побудови (дотичних) для малювання"
 
 #: ../src/live_effects/lpe-sketch.cpp:58
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2508
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2513
 #: ../share/extensions/render_alphabetsoup.inx.h:3
 msgid "Scale:"
 msgstr "Масштаб:"
@@ -11206,7 +11206,7 @@ msgid "The ID of the object to export"
 msgstr "Ідентифікатор об'єкта, що експортується"
 
 #: ../src/main.cpp:335 ../src/main.cpp:433
-#: ../src/ui/dialog/inkscape-preferences.cpp:1432
+#: ../src/ui/dialog/inkscape-preferences.cpp:1434
 msgid "ID"
 msgstr "Ідентифікатор"
 
@@ -11948,7 +11948,7 @@ msgstr "Зв'язок:"
 msgid "Unique URI to a related document"
 msgstr "Унікальний URI пов'язаного документа"
 
-#: ../src/rdf.cpp:264 ../src/ui/dialog/inkscape-preferences.cpp:1765
+#: ../src/rdf.cpp:264 ../src/ui/dialog/inkscape-preferences.cpp:1772
 msgid "Language:"
 msgstr "Мова:"
 
@@ -12301,7 +12301,7 @@ msgstr "Обернути на 90&#176; проти годинникової ст�
 msgid "Rotate 90&#176; CW"
 msgstr "Обернути на 90&#176; за годинниковою стрілкою"
 
-#: ../src/selection-chemistry.cpp:1690 ../src/seltrans.cpp:479
+#: ../src/selection-chemistry.cpp:1690 ../src/seltrans.cpp:471
 #: ../src/ui/dialog/transformation.cpp:800
 msgid "Rotate"
 msgstr "Обертати"
@@ -12310,7 +12310,7 @@ msgstr "Обертати"
 msgid "Rotate by pixels"
 msgstr "Обертати поточково"
 
-#: ../src/selection-chemistry.cpp:2099 ../src/seltrans.cpp:476
+#: ../src/selection-chemistry.cpp:2099 ../src/seltrans.cpp:468
 #: ../src/ui/dialog/transformation.cpp:775
 #: ../share/extensions/interp_att_g.inx.h:12
 msgid "Scale"
@@ -12329,7 +12329,7 @@ msgid "Move horizontally"
 msgstr "Перемістити горизонтально"
 
 #: ../src/selection-chemistry.cpp:2145 ../src/selection-chemistry.cpp:2171
-#: ../src/seltrans.cpp:473 ../src/ui/dialog/transformation.cpp:714
+#: ../src/seltrans.cpp:465 ../src/ui/dialog/transformation.cpp:714
 msgid "Move"
 msgstr "Перемістити"
 
@@ -12738,19 +12738,19 @@ msgstr[0] "; <i>%d фільтрований об'єкт</i> "
 msgstr[1] "; <i>%d фільтровані об'єкти</i> "
 msgstr[2] "; <i>%d фільтрованих об'єктів</i> "
 
-#: ../src/seltrans.cpp:482 ../src/ui/dialog/transformation.cpp:858
+#: ../src/seltrans.cpp:474 ../src/ui/dialog/transformation.cpp:858
 msgid "Skew"
 msgstr "Нахил"
 
-#: ../src/seltrans.cpp:494
+#: ../src/seltrans.cpp:486
 msgid "Set center"
 msgstr "Встановлення центру"
 
-#: ../src/seltrans.cpp:569
+#: ../src/seltrans.cpp:561
 msgid "Stamp"
 msgstr "Штамп"
 
-#: ../src/seltrans.cpp:598
+#: ../src/seltrans.cpp:590
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
@@ -12758,7 +12758,7 @@ msgstr ""
 "<b>Стиснути чи розтягнути</b> позначені об'єкти; з <b>Ctrl</b> — зберігати "
 "пропорцію; з <b>Shift</b> — навколо центру обертання"
 
-#: ../src/seltrans.cpp:599
+#: ../src/seltrans.cpp:591
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
@@ -12766,7 +12766,7 @@ msgstr ""
 "<b>Змінювати розмір</b> позначених об'єктів; з <b>Ctrl</b> — зберігати "
 "пропорцію; з <b>Shift</b> — навколо центру обертання"
 
-#: ../src/seltrans.cpp:603
+#: ../src/seltrans.cpp:595
 msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
@@ -12774,7 +12774,7 @@ msgstr ""
 "<b>Нахилити</b> позначені об'єкти; з <b>Ctrl</b> — обмежувати кут; з "
 "<b>Shift</b> — навколо протилежного кута"
 
-#: ../src/seltrans.cpp:604
+#: ../src/seltrans.cpp:596
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
@@ -12782,7 +12782,7 @@ msgstr ""
 "<b>Обертати</b> позначені об'єкти; з <b>Ctrl</b> — обмежувати кут; з "
 "<b>Shift</b> — навколо протилежного кута"
 
-#: ../src/seltrans.cpp:617
+#: ../src/seltrans.cpp:609
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
@@ -12790,11 +12790,11 @@ msgstr ""
 "<b>Центр</b> обертання та нахилу: його можна перетягнути; зміна розміру з "
 "Shift також відбувається навколо нього"
 
-#: ../src/seltrans.cpp:767
+#: ../src/seltrans.cpp:759
 msgid "Reset center"
 msgstr "Повернення до початкового центру"
 
-#: ../src/seltrans.cpp:1004 ../src/seltrans.cpp:1101
+#: ../src/seltrans.cpp:996 ../src/seltrans.cpp:1093
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
@@ -12802,24 +12802,24 @@ msgstr ""
 
 #. TRANSLATORS: don't modify the first ";"
 #. (it will NOT be displayed as ";" - only the second one will be)
-#: ../src/seltrans.cpp:1215
+#: ../src/seltrans.cpp:1207
 #, c-format
 msgid "<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Нахил</b>: %0.2f&#176;; з <b>Ctrl</b> — обмежити кут"
 
 #. TRANSLATORS: don't modify the first ";"
 #. (it will NOT be displayed as ";" - only the second one will be)
-#: ../src/seltrans.cpp:1290
+#: ../src/seltrans.cpp:1282
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Обертання</b>: %0.2f&#176;; з <b>Ctrl</b> — обмежити кут"
 
-#: ../src/seltrans.cpp:1325
+#: ../src/seltrans.cpp:1317
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr "Перемістити <b>центр</b> до %s, %s"
 
-#: ../src/seltrans.cpp:1501
+#: ../src/seltrans.cpp:1493
 #, c-format
 msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
@@ -14186,7 +14186,7 @@ msgstr "Найменший об'єкт"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1049
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1550 ../src/verbs.cpp:174
-#: ../src/widgets/desktop-widget.cpp:1951
+#: ../src/widgets/desktop-widget.cpp:1907
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "позначене"
@@ -14256,22 +14256,22 @@ msgstr "Перехоплювати повідомлення журналу"
 msgid "Release log messages"
 msgstr "Вимкнути повідомлення журналу"
 
-#: ../src/ui/dialog/document-metadata.cpp:71
+#: ../src/ui/dialog/document-metadata.cpp:88
 #: ../src/ui/dialog/document-properties.cpp:150
 msgid "Metadata"
 msgstr "Метадані"
 
-#: ../src/ui/dialog/document-metadata.cpp:72
+#: ../src/ui/dialog/document-metadata.cpp:89
 #: ../src/ui/dialog/document-properties.cpp:151
 msgid "License"
 msgstr "Ліцензія"
 
-#: ../src/ui/dialog/document-metadata.cpp:153
+#: ../src/ui/dialog/document-metadata.cpp:126
 #: ../src/ui/dialog/document-properties.cpp:763
 msgid "<b>Dublin Core Entities</b>"
 msgstr "<b>Пункти Dublin Core</b>"
 
-#: ../src/ui/dialog/document-metadata.cpp:175
+#: ../src/ui/dialog/document-metadata.cpp:168
 #: ../src/ui/dialog/document-properties.cpp:799
 msgid "<b>License</b>"
 msgstr "<b>Ліцензія</b>"
@@ -14309,9 +14309,11 @@ msgstr "Ко_лір тла:"
 
 #: ../src/ui/dialog/document-properties.cpp:106
 msgid ""
-"Color and transparency of the page background (also used for bitmap export)"
+"Color of the page background. Note: transparency setting ignored while "
+"editing but used when exporting to bitmap."
 msgstr ""
-"Колір та прозорість тла сторінки (враховується при експортуванні у растр)"
+"Колір тла сторінки. Зауваження: параметр прозорості буде проігноровано під "
+"час редагування, але враховано під час експортування до растра."
 
 #: ../src/ui/dialog/document-properties.cpp:107
 msgid "Border _color:"
@@ -15070,43 +15072,43 @@ msgstr "Не вибрано жодного ефекту"
 msgid "No filter selected"
 msgstr "Не вибрано жодного фільтра"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2403
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2408
 msgid "Effect parameters"
 msgstr "Параметри ефекту"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2404
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2409
 msgid "Filter General Settings"
 msgstr "Загальні параметри фільтра"
 
 #. default x:
 #. default y:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2460
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2465
 msgid "Coordinates:"
 msgstr "Координати:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2460
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2465
 msgid "X coordinate of the left corners of filter effects region"
 msgstr "Координата X лівих кутів області дії ефектів фільтра"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2460
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2465
 msgid "Y coordinate of the upper corners of filter effects region"
 msgstr "Координата X верхніх кутів області дії ефектів фільтра"
 
 #. default width:
 #. default height:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2461
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2466
 msgid "Dimensions:"
 msgstr "Розміри:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2461
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2466
 msgid "Width of filter effects region"
 msgstr "Ширина області дії ефектів фільтра"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2461
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2466
 msgid "Height of filter effects region"
 msgstr "Висота області дії ефектів фільтра"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2467
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2472
 msgid ""
 "Indicates the type of matrix operation. The keyword 'matrix' indicates that "
 "a full 5x4 matrix of values will be provided. The other keywords represent "
@@ -15117,23 +15119,23 @@ msgstr ""
 "матрицю значень розміром 5×4. Інші варіанти — це простий спосіб виконати "
 "найпростіші операції без визначення всієї матриці вручну."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2468
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2473
 msgid "Value(s):"
 msgstr "Значення:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2483
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2523
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2488
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2528
 msgid "Operator:"
 msgstr "Оператор:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2484
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2489
 msgid "K1:"
 msgstr "K1:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2484
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2485
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2486
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2487
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2489
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2490
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2491
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2492
 msgid ""
 "If the arithmetic operation is chosen, each result pixel is computed using "
 "the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel "
@@ -15143,38 +15145,38 @@ msgstr ""
 "за формулою k1*i1*i2 + k2*i1 + k3*i2 + k4, де i1 і i2 — значення пікселів "
 "першого і другого вхідних значень відповідно."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2485
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2490
 msgid "K2:"
 msgstr "K2:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2486
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2491
 msgid "K3:"
 msgstr "K3:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2487
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2492
 msgid "K4:"
 msgstr "K4:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2490
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2495
 msgid "Size:"
 msgstr "Розмір:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2490
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2495
 msgid "width of the convolve matrix"
 msgstr "ширина матриці згортки"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2490
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2495
 msgid "height of the convolve matrix"
 msgstr "висота матриці згортки"
 
 #. default x:
 #. default y:
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2491
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2496
 #: ../src/ui/dialog/object-attributes.cpp:47
 msgid "Target:"
 msgstr "Target:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2491
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2496
 msgid ""
 "X coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
@@ -15182,7 +15184,7 @@ msgstr ""
 "Координата X кінцевої точки матриці згортки. Згортка застосовується до "
 "пікселів навколо цієї точки."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2491
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2496
 msgid ""
 "Y coordinate of the target point in the convolve matrix. The convolution is "
 "applied to pixels around this point."
@@ -15191,11 +15193,11 @@ msgstr ""
 "пікселів навколо цієї точки."
 
 #. TRANSLATORS: for info on "Kernel", see http://en.wikipedia.org/wiki/Kernel_(matrix)
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2493
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2498
 msgid "Kernel:"
 msgstr "Ядро:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2493
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2498
 msgid ""
 "This matrix describes the convolve operation that is applied to the input "
 "image in order to calculate the pixel colors at the output. Different "
@@ -15210,11 +15212,11 @@ msgstr ""
 "у той час, як матриця, заповнена сталим ненульовим значенням дасть звичайний "
 "ефект розмивання."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2495
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2500
 msgid "Divisor:"
 msgstr "Дільник:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2495
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2500
 msgid ""
 "After applying the kernelMatrix to the input image to yield a number, that "
 "number is divided by divisor to yield the final destination color value. A "
@@ -15226,11 +15228,11 @@ msgstr ""
 "кольору. Дільник, що є сумою всіх значень матриці, приглушує загальну "
 "інтенсивність кольорів остаточного зображення."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2496
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2501
 msgid "Bias:"
 msgstr "Зміщення:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2496
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2501
 msgid ""
 "This value is added to each component. This is useful to define a constant "
 "value as the zero response of the filter."
@@ -15238,11 +15240,11 @@ msgstr ""
 "Це значення додається до кожного компонента. Корисно для задання сталої, як "
 "нульового відгуку фільтра."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2497
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2502
 msgid "Edge Mode:"
 msgstr "Режим країв:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2497
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2502
 msgid ""
 "Determines how to extend the input image as necessary with color values so "
 "that the matrix operations can be applied when the kernel is positioned at "
@@ -15252,31 +15254,31 @@ msgstr ""
 "щоб матричні операції могли працювати з ядром, розташованим на краю "
 "зображення або поблизу нього."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2498
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2503
 msgid "Preserve Alpha"
 msgstr "Зберігати α-канал"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2498
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2503
 msgid "If set, the alpha channel won't be altered by this filter primitive."
 msgstr "Якщо встановлено, α-канал не буде змінено цим примітивом фільтра."
 
 #. default: white
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2501
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2506
 msgid "Diffuse Color:"
 msgstr "Колір дифузії:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2501
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2534
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2506
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2539
 msgid "Defines the color of the light source"
 msgstr "Визначає колір джерела світла"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2502
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2535
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2507
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2540
 msgid "Surface Scale:"
 msgstr "Масштаб поверхні:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2502
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2535
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2507
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2540
 msgid ""
 "This value amplifies the heights of the bump map defined by the input alpha "
 "channel"
@@ -15284,59 +15286,59 @@ msgstr ""
 "Це значення визначає множник висоти карти рельєфу, що задається вхідним α-"
 "каналом"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2503
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2536
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2508
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2541
 msgid "Constant:"
 msgstr "Константа:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2503
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2536
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2508
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2541
 msgid "This constant affects the Phong lighting model."
 msgstr "Ця стала стосується моделі освітлення Фонга"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2504
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2538
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2509
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2543
 msgid "Kernel Unit Length:"
 msgstr "Одиниця довжини у ядрі:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2508
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2513
 msgid "This defines the intensity of the displacement effect."
 msgstr "Ця величина визначає інтенсивність ефекту зміщення."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2509
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2514
 msgid "X displacement:"
 msgstr "Зміщення за X:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2509
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2514
 msgid "Color component that controls the displacement in the X direction"
 msgstr "Компонент кольору, що керує зміщенням у напрямку осі X"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2510
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2515
 msgid "Y displacement:"
 msgstr "Зміщення за Y:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2510
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2515
 msgid "Color component that controls the displacement in the Y direction"
 msgstr "Компонент кольору, що керує зміщенням у напрямку осі Y"
 
 #. default: black
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2513
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2518
 msgid "Flood Color:"
 msgstr "Колір заливки:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2513
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2518
 msgid "The whole filter region will be filled with this color."
 msgstr "Всю область дії фільтра буде залито цим кольором."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2517
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2522
 msgid "Standard Deviation:"
 msgstr "Стандартне відхилення:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2517
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2522
 msgid "The standard deviation for the blur operation."
 msgstr "Стандартне відхилення під час виконання операції розмивання"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2523
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2528
 msgid ""
 "Erode: performs \"thinning\" of input image.\n"
 "Dilate: performs \"fattenning\" of input image."
@@ -15344,41 +15346,41 @@ msgstr ""
 "Ерозія: виконує «витончення» вхідного зображення\n"
 "Розтягування: «потовщує» вхідне зображення"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2527
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2532
 msgid "Source of Image:"
 msgstr "Джерело зображення:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2530
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2535
 msgid "Delta X:"
 msgstr "Крок за X:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2530
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2535
 msgid "This is how far the input image gets shifted to the right"
 msgstr "Визначає як далеко вхідне зображення зміщується праворуч"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2531
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2536
 msgid "Delta Y:"
 msgstr "Крок за Y:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2531
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2536
 msgid "This is how far the input image gets shifted downwards"
 msgstr "Визначає як далеко вхідне зображення зміщується донизу"
 
 #. default: white
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2534
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2539
 msgid "Specular Color:"
 msgstr "Колір відбиття:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2537
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2542
 #: ../share/extensions/interp.inx.h:2
 msgid "Exponent:"
 msgstr "Експонента:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2537
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2542
 msgid "Exponent for specular term, larger is more \"shiny\"."
 msgstr "Степінь відбиття: більше значення дає «яскравіше»."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2546
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2551
 msgid ""
 "Indicates whether the filter primitive should perform a noise or turbulence "
 "function."
@@ -15386,27 +15388,27 @@ msgstr ""
 "Позначає чи повинен примітив виконувати функцію створення турбулентності або "
 "шуму."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2547
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2552
 msgid "Base Frequency:"
 msgstr "Опорна частота:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2548
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2553
 msgid "Octaves:"
 msgstr "Октави:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2549
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2554
 msgid "Seed:"
 msgstr "Випадкове значення:"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2549
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2554
 msgid "The starting number for the pseudo random number generator."
 msgstr "Початкове число для генератора псевдовипадкових чисел."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2561
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2566
 msgid "Add filter primitive"
 msgstr "Додати примітив фільтра"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2578
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2583
 msgid ""
 "The <b>feBlend</b> filter primitive provides 4 image blending modes: screen, "
 "multiply, darken and lighten."
@@ -15414,7 +15416,7 @@ msgstr ""
 "Примітив фільтра <b>feBlend</b> надає можливість використовувати 4 режими "
 "змішування: просвічування, множення, темнішання та світлішання."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2582
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2587
 msgid ""
 "The <b>feColorMatrix</b> filter primitive applies a matrix transformation to "
 "color of each rendered pixel. This allows for effects like turning object to "
@@ -15424,7 +15426,7 @@ msgstr ""
 "кольору до кожної відображеної точки. Все це включає до себе перетворення "
 "об'єкта до півтонів сірого, зміну насиченості кольору і зміну відтінку."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2586
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2591
 msgid ""
 "The <b>feComponentTransfer</b> filter primitive manipulates the input's "
 "color components (red, green, blue, and alpha) according to particular "
@@ -15436,7 +15438,7 @@ msgstr ""
 "з окремими функціями переходу, роблячи можливим операції на зразок "
 "регулювання яскравості і контрасту, баланс кольорів та постеризацію."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2590
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2595
 msgid ""
 "The <b>feComposite</b> filter primitive composites two images using one of "
 "the Porter-Duff blending modes or the arithmetic mode described in SVG "
@@ -15448,7 +15450,7 @@ msgstr ""
 "описаного у стандарті SVG. Режими змішування Портера-Даффа по суті є "
 "булівськими операціями між значеннями кольорів відповідних точок зображень."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2594
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2599
 msgid ""
 "The <b>feConvolveMatrix</b> lets you specify a Convolution to be applied on "
 "the image. Common effects created using convolution matrices are blur, "
@@ -15463,7 +15465,7 @@ msgstr ""
 "за допомогою цього примітиву фільтра, особливий примітив фільтра для "
 "Гаусового розмивання є швидшим та незалежним від роздільної здатності."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2598
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2603
 msgid ""
 "The <b>feDiffuseLighting</b> and feSpecularLighting filter primitives create "
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
@@ -15475,7 +15477,7 @@ msgstr ""
 "використовується для відтворення глибини: непрозоріші області наближаються "
 "до глядача, а прозоріші — віддаляються."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2602
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2607
 msgid ""
 "The <b>feDisplacementMap</b> filter primitive displaces the pixels in the "
 "first input using the second input as a displacement map, that shows from "
@@ -15487,7 +15489,7 @@ msgstr ""
 "у якому напрямку і на яку відстань слід змістити точку. Класичними "
 "прикладами фільтра є ефекти «вихор» і «затискання»."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2606
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2611
 msgid ""
 "The <b>feFlood</b> filter primitive fills the region with a given color and "
 "opacity.  It is usually used as an input to other filters to apply color to "
@@ -15497,7 +15499,7 @@ msgstr ""
 "непрозорістю. Зазвичай, його використовують як початковий для інших "
 "фільтрів, з метою надати графіці кольору."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2610
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2615
 msgid ""
 "The <b>feGaussianBlur</b> filter primitive uniformly blurs its input.  It is "
 "commonly used together with feOffset to create a drop shadow effect."
@@ -15506,7 +15508,7 @@ msgstr ""
 "його застосовано. Зазвичай, він використовується разом з feOffset для "
 "створення ефекту відкидання тіні."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2614
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2619
 msgid ""
 "The <b>feImage</b> filter primitive fills the region with an external image "
 "or another part of the document."
@@ -15514,7 +15516,7 @@ msgstr ""
 "Примітив фільтра <b>feImage</b> заливає область зовнішнім зображенням або "
 "іншою частиною документа."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2618
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2623
 msgid ""
 "The <b>feMerge</b> filter primitive composites several temporary images "
 "inside the filter primitive to a single image. It uses normal alpha "
@@ -15527,7 +15529,7 @@ msgstr ""
 "кратне застосування примітивів feBlend у 'звичайному' режимі або кратне "
 "застосування примітивів feComposite у 'над'-режимі."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2622
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2627
 msgid ""
 "The <b>feMorphology</b> filter primitive provides erode and dilate effects. "
 "For single-color objects erode makes the object thinner and dilate makes it "
@@ -15537,7 +15539,7 @@ msgstr ""
 "ерозії та розширення. Для однокольорових об'єктів ерозія робить об'єкт "
 "меншим, а розширення — більшим."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2626
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2631
 msgid ""
 "The <b>feOffset</b> filter primitive offsets the image by an user-defined "
 "amount. For example, this is useful for drop shadows, where the shadow is in "
@@ -15547,7 +15549,7 @@ msgstr ""
 "відстань. Це, наприклад, корисно для відображення тіней, коли тінь "
 "розташовано з невеликим зсувом відносно об'єкта, що її відкидає."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2630
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2635
 msgid ""
 "The feDiffuseLighting and <b>feSpecularLighting</b> filter primitives create "
 "\"embossed\" shadings.  The input's alpha channel is used to provide depth "
@@ -15559,14 +15561,14 @@ msgstr ""
 "використовується для відтворення глибини: непрозоріші області наближаються "
 "до глядача, а прозоріші — віддаляються."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2634
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2639
 msgid ""
 "The <b>feTile</b> filter primitive tiles a region with its input graphic"
 msgstr ""
 "Примітив фільтра <b>feTile</b> заповнює область мозаїкою у формі вхідного "
 "графічного зображення"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2638
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2643
 msgid ""
 "The <b>feTurbulence</b> filter primitive renders Perlin noise. This kind of "
 "noise is useful in simulating several nature phenomena like clouds, fire and "
@@ -15576,11 +15578,11 @@ msgstr ""
 "шумів корисний для імітації деяких природних явищ на зразок хмар, полум'я та "
 "диму, та під час створення складних текстур на зразок мармуру та граніту."
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2657
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2662
 msgid "Duplicate filter primitive"
 msgstr "Дублювати примітив фільтра"
 
-#: ../src/ui/dialog/filter-effects-dialog.cpp:2710
+#: ../src/ui/dialog/filter-effects-dialog.cpp:2715
 msgid "Set filter primitive attribute"
 msgstr "Встановити атрибут примітива фільтра"
 
@@ -16498,9 +16500,9 @@ msgstr "Пересунути і/або повернути напрямну ві�
 msgid "_X:"
 msgstr "_X:"
 
-#: ../src/ui/dialog/guides.cpp:49 ../src/widgets/sp-color-icc-selector.cpp:220
-#: ../src/widgets/sp-color-icc-selector.cpp:221
-#: ../src/widgets/sp-color-scales.cpp:491
+#: ../src/ui/dialog/guides.cpp:49 ../src/widgets/sp-color-icc-selector.cpp:217
+#: ../src/widgets/sp-color-icc-selector.cpp:218
+#: ../src/widgets/sp-color-scales.cpp:488
 msgid "_Y:"
 msgstr "_Y:"
 
@@ -16524,12 +16526,12 @@ msgstr "Властивості напрямної"
 msgid "Guideline"
 msgstr "Напрямна"
 
-#: ../src/ui/dialog/guides.cpp:261
+#: ../src/ui/dialog/guides.cpp:317
 #, c-format
 msgid "Guideline ID: %s"
 msgstr "Ід. напрямної: %s"
 
-#: ../src/ui/dialog/guides.cpp:267
+#: ../src/ui/dialog/guides.cpp:323
 #, c-format
 msgid "Current: %s"
 msgstr "Поточний: %s"
@@ -16897,7 +16899,7 @@ msgstr "Стиль малювання об'єктів"
 
 #. Zoom
 #: ../src/ui/dialog/inkscape-preferences.cpp:375
-#: ../src/widgets/desktop-widget.cpp:636
+#: ../src/widgets/desktop-widget.cpp:613
 msgid "Zoom"
 msgstr "Масштаб"
 
@@ -16940,7 +16942,7 @@ msgstr ""
 
 #. Pen
 #: ../src/ui/dialog/inkscape-preferences.cpp:423
-#: ../src/ui/dialog/input.cpp:1197
+#: ../src/ui/dialog/input.cpp:1399
 msgid "Pen"
 msgstr "Перо"
 
@@ -18183,8 +18185,8 @@ msgid "Preserve K channel in CMYK -> CMYK transforms"
 msgstr "Зберігати канал K під час перетворень CMYK → CMYK"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:989
-#: ../src/widgets/sp-color-icc-selector.cpp:327
-#: ../src/widgets/sp-color-icc-selector.cpp:680
+#: ../src/widgets/sp-color-icc-selector.cpp:324
+#: ../src/widgets/sp-color-icc-selector.cpp:677
 msgid "<none>"
 msgstr "<немає>"
 
@@ -18314,7 +18316,7 @@ msgid "Color custom markers the same color as object"
 msgstr "Колір нетипових маркерів збігається з кольором об’єкта"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1089
-#: ../src/ui/dialog/inkscape-preferences.cpp:1298
+#: ../src/ui/dialog/inkscape-preferences.cpp:1300
 msgid "Update marker color when object color changes"
 msgstr "Оновлювати колір маркера у разі зміни кольора об’єкта"
 
@@ -18536,25 +18538,16 @@ msgstr ""
 "Як далеко (у точках) від краю вікна потрібно бути, щоб увімкнулась "
 "автогортання; додатні значення — за межами вікна, від'ємні — всередині вікна"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1165
-msgid "Left mouse button pans when Space is pressed"
-msgstr "Ліва кнопка миші переміщує область видимості, коли натиснуто пробіл"
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:1167
-msgid ""
-"When on, pressing and holding Space and dragging with left mouse button pans "
-"canvas (as in Adobe Illustrator); when off, Space temporarily switches to "
-"Selector tool (default)"
-msgstr ""
-"Якщо увімкнути, натискання та утримання пробілу разом з перетягуванням лівою "
-"кнопкою миші дозволить перетягувати полотно (як у Adobe Illustrator). Якщо "
-"вимкнути, пробіл перемикатиме на інструмент вибору (типово)."
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:1168
+#.
+#. _scroll_space.init ( _("Left mouse button pans when Space is pressed"), "/options/spacepans/value", false);
+#. _page_scrolling.add_line( false, "", _scroll_space, "",
+#. _("When on, pressing and holding Space and dragging with left mouse button pans canvas (as in Adobe Illustrator); when off, Space temporarily switches to Selector tool (default)"));
+#.
+#: ../src/ui/dialog/inkscape-preferences.cpp:1170
 msgid "Mouse wheel zooms by default"
 msgstr "Колесо миші типово змінює масштаб"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1170
+#: ../src/ui/dialog/inkscape-preferences.cpp:1172
 msgid ""
 "When on, mouse wheel zooms without Ctrl and scrolls canvas with Ctrl; when "
 "off, it zooms with Ctrl and scrolls without Ctrl"
@@ -18563,24 +18556,24 @@ msgstr ""
 "гортання з Ctrl; якщо зняти позначку, воно змінюватиме масштаб з Ctrl і "
 "гортатиме без Ctrl."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1171
+#: ../src/ui/dialog/inkscape-preferences.cpp:1173
 msgid "Scrolling"
 msgstr "Гортання"
 
 #. Snapping options
-#: ../src/ui/dialog/inkscape-preferences.cpp:1174
+#: ../src/ui/dialog/inkscape-preferences.cpp:1176
 msgid "Enable snap indicator"
 msgstr "Увімкнути індикатор прилипання"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1176
+#: ../src/ui/dialog/inkscape-preferences.cpp:1178
 msgid "After snapping, a symbol is drawn at the point that has snapped"
 msgstr "Після прилипання у точні прилипання буде намальовано цей символ"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1179
+#: ../src/ui/dialog/inkscape-preferences.cpp:1181
 msgid "_Delay (in ms):"
 msgstr "З_атримка (у мс):"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1180
+#: ../src/ui/dialog/inkscape-preferences.cpp:1182
 msgid ""
 "Postpone snapping as long as the mouse is moving, and then wait an "
 "additional fraction of a second. This additional delay is specified here. "
@@ -18591,20 +18584,20 @@ msgstr ""
 "встановити нульове або близьке до нульового значення, прилипання буде "
 "миттєвим."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1182
+#: ../src/ui/dialog/inkscape-preferences.cpp:1184
 msgid "Only snap the node closest to the pointer"
 msgstr "Прилипання лише до вузла, найближчого до вказівника"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1184
+#: ../src/ui/dialog/inkscape-preferences.cpp:1186
 msgid ""
 "Only try to snap the node that is initially closest to the mouse pointer"
 msgstr "Виконувати прилипання лише до вузла, найближчого до вказівника миші"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1187
+#: ../src/ui/dialog/inkscape-preferences.cpp:1189
 msgid "_Weight factor:"
 msgstr "_Ваговий коефіцієнт:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1188
+#: ../src/ui/dialog/inkscape-preferences.cpp:1190
 msgid ""
 "When multiple snap solutions are found, then Inkscape can either prefer the "
 "closest transformation (when set to 0), or prefer the node that was "
@@ -18614,11 +18607,11 @@ msgstr ""
 "найближче перетворення (якщо встановлено 0), або вибрати вузол, який "
 "спочатку був найближчим до вказівника миші (якщо встановлено 1)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1190
+#: ../src/ui/dialog/inkscape-preferences.cpp:1192
 msgid "Snap the mouse pointer when dragging a constrained knot"
 msgstr "Прилипання до вказівника миші під час перетягування обмеженого вузла"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1192
+#: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgid ""
 "When dragging a knot along a constraint line, then snap the position of the "
 "mouse pointer instead of snapping the projection of the knot onto the "
@@ -18627,16 +18620,16 @@ msgstr ""
 "Під час перетягування вузла вздовж лінії обмеження виконувати прилипання до "
 "позиції вказівника миші, а не до проекції вузла на лінію обмеження"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1194
+#: ../src/ui/dialog/inkscape-preferences.cpp:1196
 msgid "Snapping"
 msgstr "Прилипання"
 
 #. nudgedistance is limited to 1000 in select-context.cpp: use the same limit here
-#: ../src/ui/dialog/inkscape-preferences.cpp:1199
+#: ../src/ui/dialog/inkscape-preferences.cpp:1201
 msgid "_Arrow keys move by:"
 msgstr "С_трілки переміщують на:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1200
+#: ../src/ui/dialog/inkscape-preferences.cpp:1202
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance"
 msgstr ""
@@ -18644,28 +18637,28 @@ msgstr ""
 "клавіші зі стрілкою"
 
 #. defaultscale is limited to 1000 in select-context.cpp: use the same limit here
-#: ../src/ui/dialog/inkscape-preferences.cpp:1203
+#: ../src/ui/dialog/inkscape-preferences.cpp:1205
 msgid "> and < _scale by:"
 msgstr "Кр_ок зміни масштабу при > та <:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1204
+#: ../src/ui/dialog/inkscape-preferences.cpp:1206
 msgid "Pressing > or < scales selection up or down by this increment"
 msgstr ""
 "На цю величину змінюється розмір позначеного при натисканні клавіш  > чи <"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1206
+#: ../src/ui/dialog/inkscape-preferences.cpp:1208
 msgid "_Inset/Outset by:"
 msgstr "В_тягнути/розтягнути на:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1207
+#: ../src/ui/dialog/inkscape-preferences.cpp:1209
 msgid "Inset and Outset commands displace the path by this distance"
 msgstr "На цю відстань переміщують контур команди втягування та розтягування"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1208
+#: ../src/ui/dialog/inkscape-preferences.cpp:1210
 msgid "Compass-like display of angles"
 msgstr "Подібне до компасу відображення кутів"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1210
+#: ../src/ui/dialog/inkscape-preferences.cpp:1212
 msgid ""
 "When on, angles are displayed with 0 at north, 0 to 360 range, positive "
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
@@ -18676,15 +18669,15 @@ msgstr ""
 "випадку 0 вказує на схід, діапазон значень знаходиться між -180 та 180, "
 "приріст кута відбувається проти годинникової стрілки."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1216
+#: ../src/ui/dialog/inkscape-preferences.cpp:1218
 msgid "_Rotation snaps every:"
 msgstr "О_бмеження обертання:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1216
+#: ../src/ui/dialog/inkscape-preferences.cpp:1218
 msgid "degrees"
 msgstr "градусів"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1217
+#: ../src/ui/dialog/inkscape-preferences.cpp:1219
 msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
@@ -18692,11 +18685,11 @@ msgstr ""
 "Обертання з натиснутою Ctrl обмежує кут значеннями, кратними вибраному; "
 "натискання «[» чи «]» повертає на вибраний кут"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1218
+#: ../src/ui/dialog/inkscape-preferences.cpp:1220
 msgid "Relative snapping of guideline angles"
 msgstr "Відносне прилипання кутів нахилу напрямних"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1220
+#: ../src/ui/dialog/inkscape-preferences.cpp:1222
 msgid ""
 "When on, the snap angles when rotating a guideline will be relative to the "
 "original angle"
@@ -18704,11 +18697,11 @@ msgstr ""
 "Якщо позначено, кути прилипання під час обертання напрямної будуть "
 "обчислюватися відносно початкового кута"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1222
+#: ../src/ui/dialog/inkscape-preferences.cpp:1224
 msgid "_Zoom in/out by:"
 msgstr "Крок _масштабування:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1223
+#: ../src/ui/dialog/inkscape-preferences.cpp:1225
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
@@ -18716,44 +18709,44 @@ msgstr ""
 "Крок при клацанні інструментом масштабу, натисканні клавіш +/- та клацанні "
 "середньою кнопкою миші"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1224
+#: ../src/ui/dialog/inkscape-preferences.cpp:1226
 msgid "Steps"
 msgstr "Кроки"
 
 #. Clones options
-#: ../src/ui/dialog/inkscape-preferences.cpp:1227
+#: ../src/ui/dialog/inkscape-preferences.cpp:1229
 msgid "Move in parallel"
 msgstr "Переміщуються паралельно"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1229
+#: ../src/ui/dialog/inkscape-preferences.cpp:1231
 msgid "Stay unmoved"
 msgstr "Залишаються нерухомими"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1231
+#: ../src/ui/dialog/inkscape-preferences.cpp:1233
 msgid "Move according to transform"
 msgstr "Рухаються у відповідності до transform="
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1233
+#: ../src/ui/dialog/inkscape-preferences.cpp:1235
 msgid "Are unlinked"
 msgstr "Від'єднуються"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1235
+#: ../src/ui/dialog/inkscape-preferences.cpp:1237
 msgid "Are deleted"
 msgstr "Вилучаються"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1238
+#: ../src/ui/dialog/inkscape-preferences.cpp:1240
 msgid "Moving original: clones and linked offsets"
 msgstr "Пересування оригіналу: клони та прив'язані розтяжки"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1240
+#: ../src/ui/dialog/inkscape-preferences.cpp:1242
 msgid "Clones are translated by the same vector as their original"
 msgstr "Кожен клон зсувається на той самий вектор, що й оригінал"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1242
+#: ../src/ui/dialog/inkscape-preferences.cpp:1244
 msgid "Clones preserve their positions when their original is moved"
 msgstr "Клони залишаються на місці, коли рухаються їхні оригінали"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1244
+#: ../src/ui/dialog/inkscape-preferences.cpp:1246
 msgid ""
 "Each clone moves according to the value of its transform= attribute; for "
 "example, a rotated clone will move in a different direction than its original"
@@ -18762,27 +18755,27 @@ msgstr ""
 "Наприклад, повернутий клон буде переміщуватись у іншому напрямку, ніж його "
 "оригінал."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1245
+#: ../src/ui/dialog/inkscape-preferences.cpp:1247
 msgid "Deleting original: clones"
 msgstr "Вилучення оригіналу: клони"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1247
+#: ../src/ui/dialog/inkscape-preferences.cpp:1249
 msgid "Orphaned clones are converted to regular objects"
 msgstr "Осиротілі клони перетворюються у звичайні об'єкти"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1249
+#: ../src/ui/dialog/inkscape-preferences.cpp:1251
 msgid "Orphaned clones are deleted along with their original"
 msgstr "Осиротілі клони вилучаються разом з оригіналом"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1251
+#: ../src/ui/dialog/inkscape-preferences.cpp:1253
 msgid "Duplicating original+clones/linked offset"
 msgstr "Дублювання оригінал+клони/прив'язані розтяжки"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1253
+#: ../src/ui/dialog/inkscape-preferences.cpp:1255
 msgid "Relink duplicated clones"
 msgstr "Повторно пов'язувати дубльовані клони"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1255
+#: ../src/ui/dialog/inkscape-preferences.cpp:1257
 msgid ""
 "When duplicating a selection containing both a clone and its original "
 "(possibly in groups), relink the duplicated clone to the duplicated original "
@@ -18793,28 +18786,28 @@ msgstr ""
 "старим оригіналом"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
-#: ../src/ui/dialog/inkscape-preferences.cpp:1258
+#: ../src/ui/dialog/inkscape-preferences.cpp:1260
 msgid "Clones"
 msgstr "Клони"
 
 #. Clip paths and masks options
-#: ../src/ui/dialog/inkscape-preferences.cpp:1261
+#: ../src/ui/dialog/inkscape-preferences.cpp:1263
 msgid "When applying, use the topmost selected object as clippath/mask"
 msgstr ""
 "При застосуванні найвищий позначений об'єкт є контуром вирізання або маскою"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1263
+#: ../src/ui/dialog/inkscape-preferences.cpp:1265
 msgid ""
 "Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
 "Зніміть позначку щоб використовувати нижній позначений об'єкт як контур "
 "вирізання або маску"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1264
+#: ../src/ui/dialog/inkscape-preferences.cpp:1266
 msgid "Remove clippath/mask object after applying"
 msgstr "Вилучати контур вирізання або маску після застосування"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1266
+#: ../src/ui/dialog/inkscape-preferences.cpp:1268
 msgid ""
 "After applying, remove the object used as the clipping path or mask from the "
 "drawing"
@@ -18822,57 +18815,57 @@ msgstr ""
 "Після застосування вилучається об'єкт, що використовувався як контур "
 "вирізання чи маска з малюнку"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1268
+#: ../src/ui/dialog/inkscape-preferences.cpp:1270
 msgid "Before applying"
 msgstr "До застосування"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1270
+#: ../src/ui/dialog/inkscape-preferences.cpp:1272
 msgid "Do not group clipped/masked objects"
 msgstr "Не групувати обрізані/замасковані об'єкти"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1271
+#: ../src/ui/dialog/inkscape-preferences.cpp:1273
 msgid "Enclose every clipped/masked object in its own group"
 msgstr "Створювати для кожного обрізаного/замаскованого об'єкта власну групу"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1272
+#: ../src/ui/dialog/inkscape-preferences.cpp:1274
 msgid "Put all clipped/masked objects into one group"
 msgstr "Зібрати всі обрізані/замасковані об'єкти у одну групу"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1275
+#: ../src/ui/dialog/inkscape-preferences.cpp:1277
 msgid "Apply clippath/mask to every object"
 msgstr "Застосувати контур обрізання/маскування до всіх об'єктів"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1278
+#: ../src/ui/dialog/inkscape-preferences.cpp:1280
 msgid "Apply clippath/mask to groups containing single object"
 msgstr ""
 "Застосувати контур обрізання/маскування до груп, що містять окремі об'єкти"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1281
+#: ../src/ui/dialog/inkscape-preferences.cpp:1283
 msgid "Apply clippath/mask to group containing all objects"
 msgstr "Застосувати контур обрізання/маскування до групи всіх об'єктів"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1283
+#: ../src/ui/dialog/inkscape-preferences.cpp:1285
 msgid "After releasing"
 msgstr "Після відпускання"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1285
+#: ../src/ui/dialog/inkscape-preferences.cpp:1287
 msgid "Ungroup automatically created groups"
 msgstr "Розгрупувати автоматично створені групи"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1287
+#: ../src/ui/dialog/inkscape-preferences.cpp:1289
 msgid "Ungroup groups created when setting clip/mask"
 msgstr "Розгрупувати групи, створені застосування обрізання/маскування"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1289
+#: ../src/ui/dialog/inkscape-preferences.cpp:1291
 msgid "Clippaths and masks"
 msgstr "Вирізання та маскування"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1292
+#: ../src/ui/dialog/inkscape-preferences.cpp:1294
 msgid "Stroke Style Markers"
 msgstr "Маркери стилю штриха"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1294
 #: ../src/ui/dialog/inkscape-preferences.cpp:1296
+#: ../src/ui/dialog/inkscape-preferences.cpp:1298
 msgid ""
 "Stroke color same as object, fill color either object fill color or marker "
 "fill color"
@@ -18880,35 +18873,35 @@ msgstr ""
 "Колір штриха збігається з кольором об’єкта, колір заповнення є або кольором "
 "об’єкта або кольором заповнення маркера"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1300
+#: ../src/ui/dialog/inkscape-preferences.cpp:1302
 msgid "Markers"
 msgstr "Маркери"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1308
+#: ../src/ui/dialog/inkscape-preferences.cpp:1310
 msgid "Number of _Threads:"
 msgstr "Кількість _потоків:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1308
-#: ../src/ui/dialog/inkscape-preferences.cpp:1804
+#: ../src/ui/dialog/inkscape-preferences.cpp:1310
+#: ../src/ui/dialog/inkscape-preferences.cpp:1811
 msgid "(requires restart)"
 msgstr "(потребує перезапуску)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1309
+#: ../src/ui/dialog/inkscape-preferences.cpp:1311
 msgid "Configure number of processors/threads to use when rendering filters"
 msgstr ""
 "Налаштувати кількість процесорів/потоків, які слід використовувати для "
 "обробки фільтрування"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1313
+#: ../src/ui/dialog/inkscape-preferences.cpp:1315
 msgid "Rendering _cache size:"
 msgstr "Розмір _кешу обробки:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1313
+#: ../src/ui/dialog/inkscape-preferences.cpp:1315
 msgctxt "mebibyte (2^20 bytes) abbreviation"
 msgid "MiB"
 msgstr "МіБ"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1313
+#: ../src/ui/dialog/inkscape-preferences.cpp:1315
 msgid ""
 "Set the amount of memory per document which can be used to store rendered "
 "parts of the drawing for later reuse; set to zero to disable caching"
@@ -18919,37 +18912,37 @@ msgstr ""
 
 #. blur quality
 #. filter quality
-#: ../src/ui/dialog/inkscape-preferences.cpp:1316
-#: ../src/ui/dialog/inkscape-preferences.cpp:1340
+#: ../src/ui/dialog/inkscape-preferences.cpp:1318
+#: ../src/ui/dialog/inkscape-preferences.cpp:1342
 msgid "Best quality (slowest)"
 msgstr "Найвища якість (найповільніше)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1318
-#: ../src/ui/dialog/inkscape-preferences.cpp:1342
+#: ../src/ui/dialog/inkscape-preferences.cpp:1320
+#: ../src/ui/dialog/inkscape-preferences.cpp:1344
 msgid "Better quality (slower)"
 msgstr "Добра якість (повільно)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1320
-#: ../src/ui/dialog/inkscape-preferences.cpp:1344
+#: ../src/ui/dialog/inkscape-preferences.cpp:1322
+#: ../src/ui/dialog/inkscape-preferences.cpp:1346
 msgid "Average quality"
 msgstr "Посередня якість"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1322
-#: ../src/ui/dialog/inkscape-preferences.cpp:1346
+#: ../src/ui/dialog/inkscape-preferences.cpp:1324
+#: ../src/ui/dialog/inkscape-preferences.cpp:1348
 msgid "Lower quality (faster)"
 msgstr "Низька якість (швидко)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1324
-#: ../src/ui/dialog/inkscape-preferences.cpp:1348
+#: ../src/ui/dialog/inkscape-preferences.cpp:1326
+#: ../src/ui/dialog/inkscape-preferences.cpp:1350
 msgid "Lowest quality (fastest)"
 msgstr "Найнижча якість (найшвидше)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1327
+#: ../src/ui/dialog/inkscape-preferences.cpp:1329
 msgid "Gaussian blur quality for display"
 msgstr "Якість гаусового розмивання для показу"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1329
-#: ../src/ui/dialog/inkscape-preferences.cpp:1353
+#: ../src/ui/dialog/inkscape-preferences.cpp:1331
+#: ../src/ui/dialog/inkscape-preferences.cpp:1355
 msgid ""
 "Best quality, but display may be very slow at high zooms (bitmap export "
 "always uses best quality)"
@@ -18957,125 +18950,125 @@ msgstr ""
 "Найкраща якість, але відображення може бути дуже повільним за великого "
 "збільшення (експорт растрових зображень завжди використовує найвищу якість)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1331
-#: ../src/ui/dialog/inkscape-preferences.cpp:1355
+#: ../src/ui/dialog/inkscape-preferences.cpp:1333
+#: ../src/ui/dialog/inkscape-preferences.cpp:1357
 msgid "Better quality, but slower display"
 msgstr "Краща якість, але повільніше відображення"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1333
-#: ../src/ui/dialog/inkscape-preferences.cpp:1357
+#: ../src/ui/dialog/inkscape-preferences.cpp:1335
+#: ../src/ui/dialog/inkscape-preferences.cpp:1359
 msgid "Average quality, acceptable display speed"
 msgstr "Посередня якість, прийнятна швидкість відображення"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1335
-#: ../src/ui/dialog/inkscape-preferences.cpp:1359
+#: ../src/ui/dialog/inkscape-preferences.cpp:1337
+#: ../src/ui/dialog/inkscape-preferences.cpp:1361
 msgid "Lower quality (some artifacts), but display is faster"
 msgstr "Нижча якість (певні похибки), але відображення швидше"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1337
-#: ../src/ui/dialog/inkscape-preferences.cpp:1361
+#: ../src/ui/dialog/inkscape-preferences.cpp:1339
+#: ../src/ui/dialog/inkscape-preferences.cpp:1363
 msgid "Lowest quality (considerable artifacts), but display is fastest"
 msgstr "Найнижча якість (значні похибки), але відображення найшвидше"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1351
+#: ../src/ui/dialog/inkscape-preferences.cpp:1353
 msgid "Filter effects quality for display"
 msgstr "Якість ефектів фільтрування для показу"
 
 #. build custom preferences tab
-#: ../src/ui/dialog/inkscape-preferences.cpp:1363
+#: ../src/ui/dialog/inkscape-preferences.cpp:1365
 #: ../src/ui/dialog/print.cpp:224
 msgid "Rendering"
 msgstr "Тип друку"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1369
+#: ../src/ui/dialog/inkscape-preferences.cpp:1371
 msgid "2x2"
 msgstr "2x2"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1369
+#: ../src/ui/dialog/inkscape-preferences.cpp:1371
 msgid "4x4"
 msgstr "4x4"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1369
+#: ../src/ui/dialog/inkscape-preferences.cpp:1371
 msgid "8x8"
 msgstr "8x8"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1369
+#: ../src/ui/dialog/inkscape-preferences.cpp:1371
 msgid "16x16"
 msgstr "16x16"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1373
+#: ../src/ui/dialog/inkscape-preferences.cpp:1375
 msgid "Oversample bitmaps:"
 msgstr "Усереднювати растр по точках:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1376
+#: ../src/ui/dialog/inkscape-preferences.cpp:1378
 msgid "Automatically reload bitmaps"
 msgstr "Автоматично перезавантажувати растр"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1378
+#: ../src/ui/dialog/inkscape-preferences.cpp:1380
 msgid "Automatically reload linked images when file is changed on disk"
 msgstr ""
 "Автоматично перезавантажувати пов'язані зображення після зміни файла на диску"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1380
+#: ../src/ui/dialog/inkscape-preferences.cpp:1382
 msgid "_Bitmap editor:"
 msgstr "_Растровий редактор:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1382
+#: ../src/ui/dialog/inkscape-preferences.cpp:1384
 msgid "Default export _resolution:"
 msgstr "Типова роз_дільна здатність для експорту:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1383
+#: ../src/ui/dialog/inkscape-preferences.cpp:1385
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr "Типова роздільна здатність (у точках на дюйм) у вікні експорту"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1385
+#: ../src/ui/dialog/inkscape-preferences.cpp:1387
 msgid "Resolution for Create Bitmap _Copy:"
 msgstr "Роздільна здатність для створення растрової копі_ї:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1386
+#: ../src/ui/dialog/inkscape-preferences.cpp:1388
 msgid "Resolution used by the Create Bitmap Copy command"
 msgstr ""
 "Роздільна здатність, яку буде використано у команді створення растрової копії"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1388
+#: ../src/ui/dialog/inkscape-preferences.cpp:1390
 msgid "Always embed"
 msgstr "Завжди вбудовувати"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1388
+#: ../src/ui/dialog/inkscape-preferences.cpp:1390
 msgid "Always link"
 msgstr "Завжди пов'язувати"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1388
+#: ../src/ui/dialog/inkscape-preferences.cpp:1390
 msgid "Ask"
 msgstr "Питати"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1391
+#: ../src/ui/dialog/inkscape-preferences.cpp:1393
 msgid "Bitmap import:"
 msgstr "Імпортування растра:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1394
+#: ../src/ui/dialog/inkscape-preferences.cpp:1396
 msgid "Default _import resolution:"
 msgstr "Типова роздільна здатність для _імпортування:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1395
+#: ../src/ui/dialog/inkscape-preferences.cpp:1397
 msgid "Default bitmap resolution (in dots per inch) for bitmap import"
 msgstr ""
 "Типова роздільна здатність (у точках на дюйм) для імпортованих растрових "
 "зображень"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1396
+#: ../src/ui/dialog/inkscape-preferences.cpp:1398
 msgid "Override file resolution"
 msgstr "Перевизначити роздільну здатність з файла"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1398
+#: ../src/ui/dialog/inkscape-preferences.cpp:1400
 msgid "Use default bitmap resolution in favor of information from file"
 msgstr "Надавати перевагу типові роздільній здатності перед даними з файла"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1400
+#: ../src/ui/dialog/inkscape-preferences.cpp:1402
 msgid "Bitmaps"
 msgstr "Растрові зображення"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1412
+#: ../src/ui/dialog/inkscape-preferences.cpp:1414
 msgid ""
 "Select a file of predefined shortcuts to use. Any customized shortcuts you "
 "create will be added seperately to "
@@ -19083,31 +19076,31 @@ msgstr ""
 "Виберіть файл попередньо визначених скорочень, яким слід скористатися. Всі "
 "створені вами нетипові скорочення буде окремо додано до "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1415
+#: ../src/ui/dialog/inkscape-preferences.cpp:1417
 msgid "Shortcut file:"
 msgstr "Файл скорочень:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1418
+#: ../src/ui/dialog/inkscape-preferences.cpp:1420
 msgid "Search:"
 msgstr "Шукати:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1430
+#: ../src/ui/dialog/inkscape-preferences.cpp:1432
 msgid "Shortcut"
 msgstr "Скорочення"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1431
+#: ../src/ui/dialog/inkscape-preferences.cpp:1433
 #: ../src/ui/widget/page-sizer.cpp:262
 msgid "Description"
 msgstr "Опис"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1467
+#: ../src/ui/dialog/inkscape-preferences.cpp:1474
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:693
 #: ../src/ui/dialog/tracedialog.cpp:812
 #: ../src/ui/widget/preferences-widget.cpp:648
 msgid "Reset"
 msgstr "Скинути"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1467
+#: ../src/ui/dialog/inkscape-preferences.cpp:1474
 msgid ""
 "Remove all your customized keyboard shortcuts, and revert to the shortcuts "
 "in the shortcut file listed above"
@@ -19115,35 +19108,35 @@ msgstr ""
 "Вилучити всі нетипові клавіатурні скорочення і повернутися до скорочень, "
 "визначених у файлів, вказаному вище."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1471
+#: ../src/ui/dialog/inkscape-preferences.cpp:1478
 msgid "Import ..."
 msgstr "Імпорт…"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1471
+#: ../src/ui/dialog/inkscape-preferences.cpp:1478
 msgid "Import custom keyboard shortcuts from a file"
 msgstr "Імпортувати нетипові клавіатурні скорочення з файла"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1474
+#: ../src/ui/dialog/inkscape-preferences.cpp:1481
 msgid "Export ..."
 msgstr "Експортувати…"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1474
+#: ../src/ui/dialog/inkscape-preferences.cpp:1481
 msgid "Export custom keyboard shortcuts to a file"
 msgstr "Експортувати нетипові клавіатурні скорочення до файла"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1484
+#: ../src/ui/dialog/inkscape-preferences.cpp:1491
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1766
+#: ../src/ui/dialog/inkscape-preferences.cpp:1773
 msgid "Set the main spell check language"
 msgstr "Встановити основну мову перевірки правопису"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1769
+#: ../src/ui/dialog/inkscape-preferences.cpp:1776
 msgid "Second language:"
 msgstr "Друга мова:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1770
+#: ../src/ui/dialog/inkscape-preferences.cpp:1777
 msgid ""
 "Set the second spell check language; checking will only stop on words "
 "unknown in ALL chosen languages"
@@ -19151,11 +19144,11 @@ msgstr ""
 "Встановіть другу мову для перевірки правопису: перевірка зупинятиметься лише "
 "на словах, яких немає у ВСІХ вказаних мовах"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1773
+#: ../src/ui/dialog/inkscape-preferences.cpp:1780
 msgid "Third language:"
 msgstr "Третя мова:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1774
+#: ../src/ui/dialog/inkscape-preferences.cpp:1781
 msgid ""
 "Set the third spell check language; checking will only stop on words unknown "
 "in ALL chosen languages"
@@ -19163,31 +19156,31 @@ msgstr ""
 "Встановіть третю мову для перевірки правопису: перевірка зупинятиметься лише "
 "на словах, яких немає у ВСІХ вказаних мовах"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1776
+#: ../src/ui/dialog/inkscape-preferences.cpp:1783
 msgid "Ignore words with digits"
 msgstr "Ігнорувати слова з цифрами"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1778
+#: ../src/ui/dialog/inkscape-preferences.cpp:1785
 msgid "Ignore words containing digits, such as \"R2D2\""
 msgstr "Ігнорувати слова, що містять цифри, наприклад, «R2D2»"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1780
+#: ../src/ui/dialog/inkscape-preferences.cpp:1787
 msgid "Ignore words in ALL CAPITALS"
 msgstr "Ігнорувати слова ПРОПИСНИМИ"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1782
+#: ../src/ui/dialog/inkscape-preferences.cpp:1789
 msgid "Ignore words in all capitals, such as \"IUPAC\""
 msgstr "Ігнорувати слова, написані прописними літерами, наприклад, «IUPAC»"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1784
+#: ../src/ui/dialog/inkscape-preferences.cpp:1791
 msgid "Spellcheck"
 msgstr "Перевірка правопису"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1804
+#: ../src/ui/dialog/inkscape-preferences.cpp:1811
 msgid "Latency _skew:"
 msgstr "Від_хилення латентності:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1805
+#: ../src/ui/dialog/inkscape-preferences.cpp:1812
 msgid ""
 "Factor by which the event clock is skewed from the actual time (0.9766 on "
 "some systems)"
@@ -19195,11 +19188,11 @@ msgstr ""
 "Коефіцієнт, на який годинник подій відхилятиметься від справжнього часу "
 "(0,9766 на деяких системах)."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1807
+#: ../src/ui/dialog/inkscape-preferences.cpp:1814
 msgid "Pre-render named icons"
 msgstr "Іменовані піктограми, що залежать від показу"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1809
+#: ../src/ui/dialog/inkscape-preferences.cpp:1816
 msgid ""
 "When on, named icons will be rendered before displaying the ui. This is for "
 "working around bugs in GTK+ named icon notification"
@@ -19208,89 +19201,90 @@ msgstr ""
 "користувача. Це зроблено для обходу вад у сповіщенні іменованою піктограмою "
 "у GTK+"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1817
+#: ../src/ui/dialog/inkscape-preferences.cpp:1824
 msgid "System info"
 msgstr "Відомості щодо системи"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1821
+#: ../src/ui/dialog/inkscape-preferences.cpp:1828
 msgid "User config: "
 msgstr "Налаштування користувача: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1821
+#: ../src/ui/dialog/inkscape-preferences.cpp:1828
 msgid "Location of users configuration"
 msgstr "Розташування налаштувань користувача"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1825
+#: ../src/ui/dialog/inkscape-preferences.cpp:1832
 msgid "User preferences: "
 msgstr "Параметри користувача: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1825
+#: ../src/ui/dialog/inkscape-preferences.cpp:1832
 msgid "Location of the users preferences file"
 msgstr "Розташування файлів з параметрами користувачів"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1829
+#: ../src/ui/dialog/inkscape-preferences.cpp:1836
 msgid "User extensions: "
 msgstr "Додатки користувача: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1829
+#: ../src/ui/dialog/inkscape-preferences.cpp:1836
 msgid "Location of the users extensions"
 msgstr "Розташування додатків користувача"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1833
+#: ../src/ui/dialog/inkscape-preferences.cpp:1840
 msgid "User cache: "
 msgstr "Кеш користувача: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1833
+#: ../src/ui/dialog/inkscape-preferences.cpp:1840
 msgid "Location of users cache"
 msgstr "Розташування кешу даних користувача"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1841
+#: ../src/ui/dialog/inkscape-preferences.cpp:1848
 msgid "Temporary files: "
 msgstr "Тимчасові файли: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1841
+#: ../src/ui/dialog/inkscape-preferences.cpp:1848
 msgid "Location of the temporary files used for autosave"
 msgstr ""
 "Розташування тимчасових файлів, які використовуватимуться для створення "
 "автоматичних копій"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1845
+#: ../src/ui/dialog/inkscape-preferences.cpp:1852
 msgid "Inkscape data: "
 msgstr "Дані Inkscape: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1845
+#: ../src/ui/dialog/inkscape-preferences.cpp:1852
 msgid "Location of Inkscape data"
 msgstr "Розташування даних Inkscape"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1849
+#: ../src/ui/dialog/inkscape-preferences.cpp:1856
 msgid "Inkscape extensions: "
 msgstr "Додатки Inkscape: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1849
+#: ../src/ui/dialog/inkscape-preferences.cpp:1856
 msgid "Location of the Inkscape extensions"
 msgstr "Розташування додатків Inkscape"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1858
+#: ../src/ui/dialog/inkscape-preferences.cpp:1865
 msgid "System data: "
 msgstr "Системна дата: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1858
+#: ../src/ui/dialog/inkscape-preferences.cpp:1865
 msgid "Locations of system data"
 msgstr "Розташування загальносистемних даних"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1882
+#: ../src/ui/dialog/inkscape-preferences.cpp:1889
 msgid "Icon theme: "
 msgstr "Тема піктограм: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1882
+#: ../src/ui/dialog/inkscape-preferences.cpp:1889
 msgid "Locations of icon themes"
 msgstr "Розташування тем піктограм"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1884
+#: ../src/ui/dialog/inkscape-preferences.cpp:1891
 msgid "System"
 msgstr "Система"
 
-#: ../src/ui/dialog/input.cpp:352 ../src/ui/dialog/input.cpp:364
+#: ../src/ui/dialog/input.cpp:352 ../src/ui/dialog/input.cpp:373
+#: ../src/ui/dialog/input.cpp:1555
 msgid "Disabled"
 msgstr "Вимкнено"
 
@@ -19299,126 +19293,168 @@ msgctxt "Input device"
 msgid "Screen"
 msgstr "Екран"
 
-#: ../src/ui/dialog/input.cpp:354 ../src/ui/dialog/input.cpp:366
+#: ../src/ui/dialog/input.cpp:354 ../src/ui/dialog/input.cpp:375
 msgid "Window"
 msgstr "Вікно"
 
-#: ../src/ui/dialog/input.cpp:533
+#: ../src/ui/dialog/input.cpp:599
 msgid "Test Area"
 msgstr "Область перевірки"
 
-#: ../src/ui/dialog/input.cpp:588 ../share/extensions/svgcalendar.inx.h:2
+#: ../src/ui/dialog/input.cpp:600
+msgid "Axis"
+msgstr "Вісь"
+
+#: ../src/ui/dialog/input.cpp:664 ../share/extensions/svgcalendar.inx.h:2
 msgid "Configuration"
 msgstr "Налаштування"
 
-#: ../src/ui/dialog/input.cpp:589 ../src/ui/dialog/input.cpp:785
+#: ../src/ui/dialog/input.cpp:665
 msgid "Hardware"
 msgstr "Обладнання"
 
-#. Gtk::Label* lbl = Gtk::manage(new Gtk::Label(_("Name:")));
-#. devDetails.attach(*lbl, 0, 1, rowNum, rowNum+ 1,
-#. ::Gtk::FILL,
-#. ::Gtk::SHRINK);
-#. devDetails.attach(devName, 1, 2, rowNum, rowNum + 1,
-#. ::Gtk::SHRINK,
-#. ::Gtk::SHRINK);
-#.
-#. rowNum++;
-#: ../src/ui/dialog/input.cpp:607
+#: ../src/ui/dialog/input.cpp:688
 msgid "Link:"
 msgstr "Посилання:"
 
-#: ../src/ui/dialog/input.cpp:622
+#: ../src/ui/dialog/input.cpp:704
 msgid "Axes count:"
 msgstr "Кількість осей:"
 
-#: ../src/ui/dialog/input.cpp:645
+#: ../src/ui/dialog/input.cpp:728
 msgid "axis:"
 msgstr "вісь:"
 
-#: ../src/ui/dialog/input.cpp:657
+#: ../src/ui/dialog/input.cpp:742
 msgid "Button count:"
 msgstr "Кількість кнопок:"
 
-#: ../src/ui/dialog/input.cpp:823
+#: ../src/ui/dialog/input.cpp:924
 msgid "Tablet"
 msgstr "Планшет"
 
-#: ../src/ui/dialog/input.cpp:852 ../src/ui/dialog/input.cpp:1605
+#: ../src/ui/dialog/input.cpp:953 ../src/ui/dialog/input.cpp:1845
 msgid "pad"
 msgstr "панель"
 
-#: ../src/ui/dialog/input.cpp:893
+#: ../src/ui/dialog/input.cpp:995
 msgid "_Use pressure-sensitive tablet (requires restart)"
 msgstr ""
 "Ви_користовувати графічний планшет чи інший пристрій (потребує "
 "перезавантаження)"
 
-#: ../src/ui/dialog/input.cpp:894 ../src/verbs.cpp:2309
+#: ../src/ui/dialog/input.cpp:996 ../src/verbs.cpp:2309
 msgid "_Save"
 msgstr "З_берегти"
 
-#: ../src/ui/dialog/layer-properties.cpp:50
+#: ../src/ui/dialog/input.cpp:1000
+msgid "Axes"
+msgstr "Вісі"
+
+#: ../src/ui/dialog/input.cpp:1001
+msgid "Keys"
+msgstr "Клавіші"
+
+#: ../src/ui/dialog/input.cpp:1002 ../src/widgets/spray-toolbar.cpp:202
+#: ../src/widgets/tweak-toolbar.cpp:272
+msgid "Mode"
+msgstr "Режим"
+
+#: ../src/ui/dialog/input.cpp:1084
+msgid ""
+"A device can be 'Disabled', its co-ordinates mapped to the whole 'Screen', "
+"or to a single (usually focused) 'Window'"
+msgstr ""
+"Пристрій може бути «Вимкнено», його координати відображено на весь «Екран» "
+"або на окреме (зазвичай те, яке перебуває у фокусі) «Вікно»"
+
+#: ../src/ui/dialog/input.cpp:1530 ../src/ui/dialog/layers.cpp:912
+msgid "X"
+msgstr "X"
+
+#: ../src/ui/dialog/input.cpp:1530
+msgid "Y"
+msgstr "Y"
+
+#: ../src/ui/dialog/input.cpp:1530 ../src/widgets/calligraphy-toolbar.cpp:601
+#: ../src/widgets/spray-toolbar.cpp:241 ../src/widgets/tweak-toolbar.cpp:391
+msgid "Pressure"
+msgstr "Тиск"
+
+#: ../src/ui/dialog/input.cpp:1530
+msgid "X tilt"
+msgstr "Нахил за X"
+
+#: ../src/ui/dialog/input.cpp:1530
+msgid "Y tilt"
+msgstr "Нахил за Y"
+
+#: ../src/ui/dialog/input.cpp:1530
+#: ../src/widgets/sp-color-wheel-selector.cpp:58
+msgid "Wheel"
+msgstr "Колесо"
+
+#: ../src/ui/dialog/layer-properties.cpp:55
 msgid "Layer name:"
 msgstr "Назва шару:"
 
-#: ../src/ui/dialog/layer-properties.cpp:119
+#: ../src/ui/dialog/layer-properties.cpp:136
 msgid "Add layer"
 msgstr "Додавання шару"
 
-#: ../src/ui/dialog/layer-properties.cpp:157
+#: ../src/ui/dialog/layer-properties.cpp:176
 msgid "Above current"
 msgstr "Над поточним"
 
-#: ../src/ui/dialog/layer-properties.cpp:161
+#: ../src/ui/dialog/layer-properties.cpp:180
 msgid "Below current"
 msgstr "Під поточним"
 
-#: ../src/ui/dialog/layer-properties.cpp:164
+#: ../src/ui/dialog/layer-properties.cpp:183
 msgid "As sublayer of current"
 msgstr "Як підшар поточного"
 
-#: ../src/ui/dialog/layer-properties.cpp:311
+#: ../src/ui/dialog/layer-properties.cpp:352
 msgid "Rename Layer"
 msgstr "Перейменування шару"
 
 #. TODO: find an unused layer number, forming name from _("Layer ") + "%d"
-#: ../src/ui/dialog/layer-properties.cpp:313
-#: ../src/ui/dialog/layer-properties.cpp:369 ../src/verbs.cpp:193
+#: ../src/ui/dialog/layer-properties.cpp:354
+#: ../src/ui/dialog/layer-properties.cpp:410 ../src/verbs.cpp:193
 #: ../src/verbs.cpp:2240
 msgid "Layer"
 msgstr "Шар"
 
-#: ../src/ui/dialog/layer-properties.cpp:314
+#: ../src/ui/dialog/layer-properties.cpp:355
 msgid "_Rename"
 msgstr "Пере_йменувати"
 
-#: ../src/ui/dialog/layer-properties.cpp:327 ../src/ui/dialog/layers.cpp:746
+#: ../src/ui/dialog/layer-properties.cpp:368 ../src/ui/dialog/layers.cpp:746
 msgid "Rename layer"
 msgstr "Перейменувати шар"
 
 #. TRANSLATORS: This means "The layer has been renamed"
-#: ../src/ui/dialog/layer-properties.cpp:329
+#: ../src/ui/dialog/layer-properties.cpp:370
 msgid "Renamed layer"
 msgstr "Шар перейменовано"
 
-#: ../src/ui/dialog/layer-properties.cpp:333
+#: ../src/ui/dialog/layer-properties.cpp:374
 msgid "Add Layer"
 msgstr "Додавання шару"
 
-#: ../src/ui/dialog/layer-properties.cpp:339
+#: ../src/ui/dialog/layer-properties.cpp:380
 msgid "_Add"
 msgstr "_Додати"
 
-#: ../src/ui/dialog/layer-properties.cpp:363
+#: ../src/ui/dialog/layer-properties.cpp:404
 msgid "New layer created."
 msgstr "Новий шар створено."
 
-#: ../src/ui/dialog/layer-properties.cpp:367
+#: ../src/ui/dialog/layer-properties.cpp:408
 msgid "Move to Layer"
 msgstr "Пересунути до шару"
 
-#: ../src/ui/dialog/layer-properties.cpp:370
+#: ../src/ui/dialog/layer-properties.cpp:411
 #: ../src/ui/dialog/transformation.cpp:109
 msgid "_Move"
 msgstr "_Переміщення"
@@ -19475,10 +19511,6 @@ msgstr "Вг"
 msgctxt "Layers"
 msgid "Top"
 msgstr "Верх"
-
-#: ../src/ui/dialog/layers.cpp:912
-msgid "X"
-msgstr "X"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:111
 msgid "Add path effect"
@@ -19756,15 +19788,15 @@ msgstr "Пошук шаблонів…"
 msgid "Could not connect to the Open Clip Art Library"
 msgstr "Не вдалося встановити зв'язок з бібліотекою Open Clip Art"
 
-#: ../src/ui/dialog/ocaldialogs.cpp:1124
+#: ../src/ui/dialog/ocaldialogs.cpp:1130
 msgid "Could not parse search results"
 msgstr "Не вдалося обробити результати пошуку"
 
-#: ../src/ui/dialog/ocaldialogs.cpp:1158
+#: ../src/ui/dialog/ocaldialogs.cpp:1164
 msgid "No clipart named <b>%1</b> was found."
 msgstr "Не виявлено шаблонів з назвою <b>%1</b>."
 
-#: ../src/ui/dialog/ocaldialogs.cpp:1160
+#: ../src/ui/dialog/ocaldialogs.cpp:1166
 msgid ""
 "Please make sure all keywords are spelled correctly, or try again with "
 "different keywords."
@@ -19772,11 +19804,11 @@ msgstr ""
 "Будь ласка, переконайтеся, що всі вказані ключові слова написано правильно "
 "або повторіть спробу пошуку, вказавши інші ключові слова."
 
-#: ../src/ui/dialog/ocaldialogs.cpp:1200
+#: ../src/ui/dialog/ocaldialogs.cpp:1212
 msgid "Search"
 msgstr "Пошук"
 
-#: ../src/ui/dialog/ocaldialogs.cpp:1206
+#: ../src/ui/dialog/ocaldialogs.cpp:1224
 msgid "Close"
 msgstr "Закрити"
 
@@ -19990,34 +20022,34 @@ msgid "Preview Text:"
 msgstr "Перегляд тексту:"
 
 #. ******************* Symbol Sets ************************
-#: ../src/ui/dialog/symbols.cpp:102
+#: ../src/ui/dialog/symbols.cpp:110
 msgid "Symbol set: "
 msgstr "Набір символів: "
 
 #. Fill in later
-#: ../src/ui/dialog/symbols.cpp:106 ../src/ui/dialog/symbols.cpp:107
+#: ../src/ui/dialog/symbols.cpp:114 ../src/ui/dialog/symbols.cpp:115
 msgid "Current Document"
 msgstr "Поточний документ"
 
 #. ******************* Preview Scale **********************
-#: ../src/ui/dialog/symbols.cpp:143
+#: ../src/ui/dialog/symbols.cpp:151
 msgid "Preview scale: "
 msgstr "Масштаб перегляду: "
 
-#: ../src/ui/dialog/symbols.cpp:148
+#: ../src/ui/dialog/symbols.cpp:156
 msgid "Fit"
 msgstr "Вмістити"
 
-#: ../src/ui/dialog/symbols.cpp:148
+#: ../src/ui/dialog/symbols.cpp:156
 msgid "Fit to width"
 msgstr "За шириною"
 
-#: ../src/ui/dialog/symbols.cpp:148
+#: ../src/ui/dialog/symbols.cpp:156
 msgid "Fit to height"
 msgstr "За висотою"
 
 #. ******************* Preview Size ***********************
-#: ../src/ui/dialog/symbols.cpp:162
+#: ../src/ui/dialog/symbols.cpp:170
 msgid "Preview size: "
 msgstr "Розмір попереднього перегляду: "
 
@@ -21155,15 +21187,15 @@ msgstr "Кни_жкова"
 msgid "Custom size"
 msgstr "Особливий розмір"
 
-#: ../src/ui/widget/page-sizer.cpp:352
+#: ../src/ui/widget/page-sizer.cpp:374
 msgid "Resi_ze page to content..."
 msgstr "_Розмір сторінки за вмістом…"
 
-#: ../src/ui/widget/page-sizer.cpp:378
+#: ../src/ui/widget/page-sizer.cpp:426
 msgid "_Resize page to drawing or selection"
 msgstr "_Підігнати розмір за малюнком або позначеною областю"
 
-#: ../src/ui/widget/page-sizer.cpp:379
+#: ../src/ui/widget/page-sizer.cpp:427
 msgid ""
 "Resize the page to fit the current selection, or the entire drawing if there "
 "is no selection"
@@ -21171,7 +21203,7 @@ msgstr ""
 "Змінити масштаб сторінки для відповідності поточному фрагменту або всьому "
 "рисунку, якщо фрагмент не позначений"
 
-#: ../src/ui/widget/page-sizer.cpp:444
+#: ../src/ui/widget/page-sizer.cpp:492
 msgid "Set page size"
 msgstr "Встановлення розміру сторінки"
 
@@ -24445,11 +24477,6 @@ msgstr ""
 "Залишати слід освітлення на тлі залежно від ширини пера (білий — мінімальна "
 "ширина, чорний — максимальна ширина)"
 
-#: ../src/widgets/calligraphy-toolbar.cpp:601
-#: ../src/widgets/spray-toolbar.cpp:241 ../src/widgets/tweak-toolbar.cpp:391
-msgid "Pressure"
-msgstr "Тиск"
-
 #: ../src/widgets/calligraphy-toolbar.cpp:602
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr "Використовувати силу натиску пристроєм введення для зміни ширини лінії"
@@ -24589,20 +24616,20 @@ msgstr "Пунктир"
 msgid "Pattern offset"
 msgstr "Зміщення пунктиру"
 
-#: ../src/widgets/desktop-widget.cpp:466
+#: ../src/widgets/desktop-widget.cpp:446
 msgid "Zoom drawing if window size changes"
 msgstr "Змінювати масштаб при зміні розмірів вікна"
 
-#: ../src/widgets/desktop-widget.cpp:670
+#: ../src/widgets/desktop-widget.cpp:647
 msgid "Cursor coordinates"
 msgstr "Координати курсора"
 
-#: ../src/widgets/desktop-widget.cpp:696
+#: ../src/widgets/desktop-widget.cpp:673
 msgid "Z:"
 msgstr "Z:"
 
 #. display the initial welcome message in the statusbar
-#: ../src/widgets/desktop-widget.cpp:739
+#: ../src/widgets/desktop-widget.cpp:716
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
@@ -24611,69 +24638,69 @@ msgstr ""
 "малювання для створення об'єктів; для їх переміщення чи трансформації "
 "використовуйте селектор (стрілку)."
 
-#: ../src/widgets/desktop-widget.cpp:820
+#: ../src/widgets/desktop-widget.cpp:797
 msgid "grayscale"
 msgstr "сірі півтони"
 
-#: ../src/widgets/desktop-widget.cpp:821
+#: ../src/widgets/desktop-widget.cpp:798
 msgid ", grayscale"
 msgstr ", сірі півтони"
 
-#: ../src/widgets/desktop-widget.cpp:822
+#: ../src/widgets/desktop-widget.cpp:799
 msgid "print colors preview"
 msgstr "друк попереднього перегляду кольорів"
 
-#: ../src/widgets/desktop-widget.cpp:823
+#: ../src/widgets/desktop-widget.cpp:800
 msgid ", print colors preview"
 msgstr ", друк попереднього перегляду кольорів"
 
-#: ../src/widgets/desktop-widget.cpp:824
+#: ../src/widgets/desktop-widget.cpp:801
 msgid "outline"
 msgstr "обрис"
 
-#: ../src/widgets/desktop-widget.cpp:825
+#: ../src/widgets/desktop-widget.cpp:802
 msgid "no filters"
 msgstr "без фільтрування"
 
-#: ../src/widgets/desktop-widget.cpp:852
+#: ../src/widgets/desktop-widget.cpp:829
 #, c-format
 msgid "%s%s: %d (%s%s) - Inkscape"
 msgstr "%s%s: %d (%s%s) – Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:854 ../src/widgets/desktop-widget.cpp:858
+#: ../src/widgets/desktop-widget.cpp:831 ../src/widgets/desktop-widget.cpp:835
 #, c-format
 msgid "%s%s: %d (%s) - Inkscape"
 msgstr "%s%s: %d (%s) — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:860
+#: ../src/widgets/desktop-widget.cpp:837
 #, c-format
 msgid "%s%s: %d - Inkscape"
 msgstr "%s%s: %d — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:866
+#: ../src/widgets/desktop-widget.cpp:843
 #, c-format
 msgid "%s%s (%s%s) - Inkscape"
 msgstr "%s%s (%s%s) — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:868 ../src/widgets/desktop-widget.cpp:872
+#: ../src/widgets/desktop-widget.cpp:845 ../src/widgets/desktop-widget.cpp:849
 #, c-format
 msgid "%s%s (%s) - Inkscape"
 msgstr "%s%s (%s) — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:874
+#: ../src/widgets/desktop-widget.cpp:851
 #, c-format
 msgid "%s%s - Inkscape"
 msgstr "%s%s — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:1042
+#: ../src/widgets/desktop-widget.cpp:1019
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr "Показ з керуванням кольорами у цьому вікні <b>увімкнено</b>"
 
-#: ../src/widgets/desktop-widget.cpp:1044
+#: ../src/widgets/desktop-widget.cpp:1021
 msgid "Color-managed display is <b>disabled</b> in this window"
 msgstr "Показ з керуванням кольорами у цьому вікні <b>вимкнено</b>"
 
-#: ../src/widgets/desktop-widget.cpp:1099
+#: ../src/widgets/desktop-widget.cpp:1076
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -24686,12 +24713,12 @@ msgstr ""
 "\n"
 "Якщо ви закриєте документ без збереження, усі зміни будуть втрачені."
 
-#: ../src/widgets/desktop-widget.cpp:1109
-#: ../src/widgets/desktop-widget.cpp:1168
+#: ../src/widgets/desktop-widget.cpp:1086
+#: ../src/widgets/desktop-widget.cpp:1145
 msgid "Close _without saving"
 msgstr "_Не зберігати"
 
-#: ../src/widgets/desktop-widget.cpp:1158
+#: ../src/widgets/desktop-widget.cpp:1135
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -24704,11 +24731,11 @@ msgstr ""
 "\n"
 "Зберегти документ у форматі SVG Inkscape?"
 
-#: ../src/widgets/desktop-widget.cpp:1170
+#: ../src/widgets/desktop-widget.cpp:1147
 msgid "_Save as Inkscape SVG"
 msgstr "_Зберегти як SVG Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:1380
+#: ../src/widgets/desktop-widget.cpp:1357
 msgid "Note:"
 msgstr "Примітка:"
 
@@ -24794,8 +24821,8 @@ msgstr "Встановлення візерунку для заповнення"
 msgid "Set pattern on stroke"
 msgstr "Додати візерунок до штриха"
 
-#: ../src/widgets/font-selector.cpp:136 ../src/widgets/text-toolbar.cpp:1236
-#: ../src/widgets/text-toolbar.cpp:1495
+#: ../src/widgets/font-selector.cpp:136 ../src/widgets/text-toolbar.cpp:1239
+#: ../src/widgets/text-toolbar.cpp:1498
 msgid "Font size"
 msgstr "Розмір шрифту"
 
@@ -25098,7 +25125,7 @@ msgstr ""
 "Відкрити діалогове вікно геометричних побудов (для числового налаштування "
 "параметрів)"
 
-#: ../src/widgets/measure-toolbar.cpp:103 ../src/widgets/text-toolbar.cpp:1498
+#: ../src/widgets/measure-toolbar.cpp:103 ../src/widgets/text-toolbar.cpp:1501
 msgid "Font Size"
 msgstr "Розмір шрифту"
 
@@ -25904,10 +25931,6 @@ msgstr "Розкидати окремий контур"
 msgid "Spray objects in a single path"
 msgstr "Розкидати об'єкти за окремим контуром"
 
-#: ../src/widgets/spray-toolbar.cpp:202 ../src/widgets/tweak-toolbar.cpp:272
-msgid "Mode"
-msgstr "Режим"
-
 #. Population
 #: ../src/widgets/spray-toolbar.cpp:222
 msgid "(low population)"
@@ -25985,87 +26008,87 @@ msgstr "Встановити атрибут"
 msgid "CMS"
 msgstr "CMS"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:216
-#: ../src/widgets/sp-color-scales.cpp:431
+#: ../src/widgets/sp-color-icc-selector.cpp:213
+#: ../src/widgets/sp-color-scales.cpp:428
 msgid "_R:"
 msgstr "_R:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:216
-#: ../src/widgets/sp-color-icc-selector.cpp:217
-#: ../src/widgets/sp-color-scales.cpp:434
+#: ../src/widgets/sp-color-icc-selector.cpp:213
+#: ../src/widgets/sp-color-icc-selector.cpp:214
+#: ../src/widgets/sp-color-scales.cpp:431
 msgid "_G:"
 msgstr "_G:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:216
-#: ../src/widgets/sp-color-scales.cpp:437
+#: ../src/widgets/sp-color-icc-selector.cpp:213
+#: ../src/widgets/sp-color-scales.cpp:434
 msgid "_B:"
 msgstr "_B:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:218
-#: ../src/widgets/sp-color-icc-selector.cpp:219
-#: ../src/widgets/sp-color-scales.cpp:457
+#: ../src/widgets/sp-color-icc-selector.cpp:215
+#: ../src/widgets/sp-color-icc-selector.cpp:216
+#: ../src/widgets/sp-color-scales.cpp:454
 msgid "_H:"
 msgstr "_H:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:218
-#: ../src/widgets/sp-color-icc-selector.cpp:219
-#: ../src/widgets/sp-color-scales.cpp:460
+#: ../src/widgets/sp-color-icc-selector.cpp:215
+#: ../src/widgets/sp-color-icc-selector.cpp:216
+#: ../src/widgets/sp-color-scales.cpp:457
 msgid "_S:"
 msgstr "_S:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:219
-#: ../src/widgets/sp-color-scales.cpp:463
+#: ../src/widgets/sp-color-icc-selector.cpp:216
+#: ../src/widgets/sp-color-scales.cpp:460
 msgid "_L:"
 msgstr "_L:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:220
-#: ../src/widgets/sp-color-icc-selector.cpp:221
-#: ../src/widgets/sp-color-scales.cpp:485
+#: ../src/widgets/sp-color-icc-selector.cpp:217
+#: ../src/widgets/sp-color-icc-selector.cpp:218
+#: ../src/widgets/sp-color-scales.cpp:482
 msgid "_C:"
 msgstr "_C:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:220
-#: ../src/widgets/sp-color-icc-selector.cpp:221
-#: ../src/widgets/sp-color-scales.cpp:488
+#: ../src/widgets/sp-color-icc-selector.cpp:217
+#: ../src/widgets/sp-color-icc-selector.cpp:218
+#: ../src/widgets/sp-color-scales.cpp:485
 msgid "_M:"
 msgstr "_M:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:220
-#: ../src/widgets/sp-color-scales.cpp:494
+#: ../src/widgets/sp-color-icc-selector.cpp:217
+#: ../src/widgets/sp-color-scales.cpp:491
 msgid "_K:"
 msgstr "_K:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:231
+#: ../src/widgets/sp-color-icc-selector.cpp:228
 msgid "Gray"
 msgstr "Сірий"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:300
+#: ../src/widgets/sp-color-icc-selector.cpp:297
 msgid "Fix"
 msgstr "Виправити"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:303
+#: ../src/widgets/sp-color-icc-selector.cpp:300
 msgid "Fix RGB fallback to match icc-color() value."
 msgstr "Виправити колір до RGB на основі значення icc-color()"
 
 #. Label
-#: ../src/widgets/sp-color-icc-selector.cpp:441
-#: ../src/widgets/sp-color-scales.cpp:440
-#: ../src/widgets/sp-color-scales.cpp:466
-#: ../src/widgets/sp-color-scales.cpp:497
-#: ../src/widgets/sp-color-wheel-selector.cpp:183
+#: ../src/widgets/sp-color-icc-selector.cpp:438
+#: ../src/widgets/sp-color-scales.cpp:437
+#: ../src/widgets/sp-color-scales.cpp:463
+#: ../src/widgets/sp-color-scales.cpp:494
+#: ../src/widgets/sp-color-wheel-selector.cpp:180
 msgid "_A:"
 msgstr "_A:"
 
-#: ../src/widgets/sp-color-icc-selector.cpp:460
-#: ../src/widgets/sp-color-icc-selector.cpp:482
-#: ../src/widgets/sp-color-scales.cpp:441
-#: ../src/widgets/sp-color-scales.cpp:442
-#: ../src/widgets/sp-color-scales.cpp:467
-#: ../src/widgets/sp-color-scales.cpp:468
-#: ../src/widgets/sp-color-scales.cpp:498
-#: ../src/widgets/sp-color-scales.cpp:499
-#: ../src/widgets/sp-color-wheel-selector.cpp:204
-#: ../src/widgets/sp-color-wheel-selector.cpp:228
+#: ../src/widgets/sp-color-icc-selector.cpp:457
+#: ../src/widgets/sp-color-icc-selector.cpp:479
+#: ../src/widgets/sp-color-scales.cpp:438
+#: ../src/widgets/sp-color-scales.cpp:439
+#: ../src/widgets/sp-color-scales.cpp:464
+#: ../src/widgets/sp-color-scales.cpp:465
+#: ../src/widgets/sp-color-scales.cpp:495
+#: ../src/widgets/sp-color-scales.cpp:496
+#: ../src/widgets/sp-color-wheel-selector.cpp:201
+#: ../src/widgets/sp-color-wheel-selector.cpp:225
 msgid "Alpha (opacity)"
 msgstr "Альфа-канал (прозорість)"
 
@@ -26105,10 +26128,6 @@ msgstr "CMYK"
 #: ../src/widgets/sp-color-selector.cpp:64
 msgid "Unnamed"
 msgstr "Без назви"
-
-#: ../src/widgets/sp-color-wheel-selector.cpp:58
-msgid "Wheel"
-msgstr "Колесо"
 
 #: ../src/widgets/sp-xmlview-attr-list.cpp:64
 msgid "Value"
@@ -26288,11 +26307,11 @@ msgstr "Викривлено:"
 msgid "Scatter randomly the corners and angles"
 msgstr "Випадковим чином перемістити кути та повернути радіуси"
 
-#: ../src/widgets/stroke-style.cpp:151
+#: ../src/widgets/stroke-style.cpp:158
 msgid "Stroke width"
 msgstr "Товщина штриха"
 
-#: ../src/widgets/stroke-style.cpp:153
+#: ../src/widgets/stroke-style.cpp:160
 msgctxt "Stroke width"
 msgid "_Width:"
 msgstr "_Ширина:"
@@ -26300,71 +26319,71 @@ msgstr "_Ширина:"
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: ../src/widgets/stroke-style.cpp:197
+#: ../src/widgets/stroke-style.cpp:204
 msgid "Miter join"
 msgstr "Гостре"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: ../src/widgets/stroke-style.cpp:204
+#: ../src/widgets/stroke-style.cpp:211
 msgid "Round join"
 msgstr "Округлене"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: ../src/widgets/stroke-style.cpp:211
+#: ../src/widgets/stroke-style.cpp:218
 msgid "Bevel join"
 msgstr "Фасочне"
 
-#: ../src/widgets/stroke-style.cpp:236
+#: ../src/widgets/stroke-style.cpp:243
 msgid "Miter _limit:"
 msgstr "Ме_жа вістря:"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
 #. spw_label(t, _("_Cap:"), 0, i);
-#: ../src/widgets/stroke-style.cpp:252
+#: ../src/widgets/stroke-style.cpp:259
 msgid "Cap:"
 msgstr "Закінчення:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: ../src/widgets/stroke-style.cpp:260
+#: ../src/widgets/stroke-style.cpp:267
 msgid "Butt cap"
 msgstr "Плоскі"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: ../src/widgets/stroke-style.cpp:266
+#: ../src/widgets/stroke-style.cpp:273
 msgid "Round cap"
 msgstr "Округлені"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: ../src/widgets/stroke-style.cpp:272
+#: ../src/widgets/stroke-style.cpp:279
 msgid "Square cap"
 msgstr "Квадратні"
 
 #. Dash
-#: ../src/widgets/stroke-style.cpp:277
+#: ../src/widgets/stroke-style.cpp:284
 msgid "Dashes:"
 msgstr "Пунктир:"
 
-#: ../src/widgets/stroke-style.cpp:295
+#: ../src/widgets/stroke-style.cpp:311
 msgid "_Start Markers:"
 msgstr "_Початкові маркери:"
 
-#: ../src/widgets/stroke-style.cpp:296
+#: ../src/widgets/stroke-style.cpp:312
 msgid "Start Markers are drawn on the first node of a path or shape"
 msgstr "Початкові маркери малюються на першому вузлі контуру або форми"
 
-#: ../src/widgets/stroke-style.cpp:305
+#: ../src/widgets/stroke-style.cpp:330
 msgid "_Mid Markers:"
 msgstr "_Серединні маркери:"
 
-#: ../src/widgets/stroke-style.cpp:306
+#: ../src/widgets/stroke-style.cpp:331
 msgid ""
 "Mid Markers are drawn on every node of a path or shape except the first and "
 "last nodes"
@@ -26372,23 +26391,23 @@ msgstr ""
 "Серединні маркери малюються на кожному вузлі контуру або форми окрім першого "
 "і останнього вузлів"
 
-#: ../src/widgets/stroke-style.cpp:315
+#: ../src/widgets/stroke-style.cpp:349
 msgid "_End Markers:"
 msgstr "_Кінцеві маркери:"
 
-#: ../src/widgets/stroke-style.cpp:316
+#: ../src/widgets/stroke-style.cpp:350
 msgid "End Markers are drawn on the last node of a path or shape"
 msgstr "Кінцеві маркери малюються на останньому вузлі контуру або форми"
 
-#: ../src/widgets/stroke-style.cpp:438
+#: ../src/widgets/stroke-style.cpp:481
 msgid "Set markers"
 msgstr "Встановити маркери"
 
-#: ../src/widgets/stroke-style.cpp:1027 ../src/widgets/stroke-style.cpp:1120
+#: ../src/widgets/stroke-style.cpp:1070 ../src/widgets/stroke-style.cpp:1163
 msgid "Set stroke style"
 msgstr "Встановлення стилю штриха"
 
-#: ../src/widgets/stroke-style.cpp:1208
+#: ../src/widgets/stroke-style.cpp:1251
 msgid "Set marker color"
 msgstr "Встановити колір маркера"
 
@@ -26396,64 +26415,64 @@ msgstr "Встановити колір маркера"
 msgid "Change swatch color"
 msgstr "Змінити колір зразка"
 
-#: ../src/widgets/text-toolbar.cpp:371
+#: ../src/widgets/text-toolbar.cpp:374
 #, c-format
 msgid "Failed to find font matching: %s\n"
 msgstr "Не вдається знайти відповідник шрифту: %s\n"
 
-#: ../src/widgets/text-toolbar.cpp:405
+#: ../src/widgets/text-toolbar.cpp:408
 msgid "Text: Change font family"
 msgstr "Текст: Зміна сімейства шрифту"
 
-#: ../src/widgets/text-toolbar.cpp:473
+#: ../src/widgets/text-toolbar.cpp:476
 msgid "Text: Change font size"
 msgstr "Текст: Зміна розміру шрифту"
 
-#: ../src/widgets/text-toolbar.cpp:565
+#: ../src/widgets/text-toolbar.cpp:568
 msgid "Text: Change font style"
 msgstr "Текст: Зміна нарису шрифту"
 
-#: ../src/widgets/text-toolbar.cpp:645
+#: ../src/widgets/text-toolbar.cpp:648
 msgid "Text: Change superscript or subscript"
 msgstr "Текст: змінити на верхній або нижній індекс"
 
-#: ../src/widgets/text-toolbar.cpp:790
+#: ../src/widgets/text-toolbar.cpp:793
 msgid "Text: Change alignment"
 msgstr "Текст: Зміна вирівнювання"
 
-#: ../src/widgets/text-toolbar.cpp:833
+#: ../src/widgets/text-toolbar.cpp:836
 msgid "Text: Change line-height"
 msgstr "Текст: Зміна висоти рядків"
 
-#: ../src/widgets/text-toolbar.cpp:882
+#: ../src/widgets/text-toolbar.cpp:885
 msgid "Text: Change word-spacing"
 msgstr "Текст: Зміна інтервалів між словами"
 
-#: ../src/widgets/text-toolbar.cpp:923
+#: ../src/widgets/text-toolbar.cpp:926
 msgid "Text: Change letter-spacing"
 msgstr "Текст: Зміна інтервалів між літерами"
 
-#: ../src/widgets/text-toolbar.cpp:963
+#: ../src/widgets/text-toolbar.cpp:966
 msgid "Text: Change dx (kern)"
 msgstr "Текст: Зміна приросту за x (керна)"
 
-#: ../src/widgets/text-toolbar.cpp:997
+#: ../src/widgets/text-toolbar.cpp:1000
 msgid "Text: Change dy"
 msgstr "Текст: Зміна приросту за y"
 
-#: ../src/widgets/text-toolbar.cpp:1032
+#: ../src/widgets/text-toolbar.cpp:1035
 msgid "Text: Change rotate"
 msgstr "Текст: Зміна кута обертання"
 
-#: ../src/widgets/text-toolbar.cpp:1080
+#: ../src/widgets/text-toolbar.cpp:1083
 msgid "Text: Change orientation"
 msgstr "Текст: Зміна орієнтації"
 
-#: ../src/widgets/text-toolbar.cpp:1461
+#: ../src/widgets/text-toolbar.cpp:1464
 msgid "Font Family"
 msgstr "Гарнітура шрифту"
 
-#: ../src/widgets/text-toolbar.cpp:1462
+#: ../src/widgets/text-toolbar.cpp:1465
 msgid "Select Font Family (Alt-X to access)"
 msgstr "Виберіть гарнітуру шрифту (Alt-X для доступу)"
 
@@ -26462,176 +26481,176 @@ msgstr "Виберіть гарнітуру шрифту (Alt-X для дост�
 #. Cell layout
 #. Focus widget
 #. Enable entry completion
-#: ../src/widgets/text-toolbar.cpp:1470
+#: ../src/widgets/text-toolbar.cpp:1473
 msgid "Font not found on system"
 msgstr "Шрифту у системі не виявлено"
 
-#: ../src/widgets/text-toolbar.cpp:1517
+#: ../src/widgets/text-toolbar.cpp:1520
 msgid "Font Style"
 msgstr "Стиль шрифту"
 
-#: ../src/widgets/text-toolbar.cpp:1518
+#: ../src/widgets/text-toolbar.cpp:1521
 msgid "Font style"
 msgstr "Стиль шрифту"
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:1534
+#: ../src/widgets/text-toolbar.cpp:1537
 msgid "Toggle Superscript"
 msgstr "Увімкнути/Вимкнути режим верхнього індексу"
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:1535
+#: ../src/widgets/text-toolbar.cpp:1538
 msgid "Toggle superscript"
 msgstr "Увімкнути/Вимкнути режим верхнього індексу"
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:1547
+#: ../src/widgets/text-toolbar.cpp:1550
 msgid "Toggle Subscript"
 msgstr "Увімкнути/Вимкнути режим нижнього індексу"
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:1548
+#: ../src/widgets/text-toolbar.cpp:1551
 msgid "Toggle subscript"
 msgstr "Увімкнути/Вимкнути режим нижнього індексу"
 
-#: ../src/widgets/text-toolbar.cpp:1589
+#: ../src/widgets/text-toolbar.cpp:1592
 msgid "Justify"
 msgstr "Вирівняти з заповненням"
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:1596
+#: ../src/widgets/text-toolbar.cpp:1599
 msgid "Alignment"
 msgstr "Вирівнювання"
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:1597
+#: ../src/widgets/text-toolbar.cpp:1600
 msgid "Text alignment"
 msgstr "Вирівнювання тексту"
 
-#: ../src/widgets/text-toolbar.cpp:1624
+#: ../src/widgets/text-toolbar.cpp:1627
 msgid "Horizontal"
 msgstr "Горизонтально"
 
-#: ../src/widgets/text-toolbar.cpp:1631
+#: ../src/widgets/text-toolbar.cpp:1634
 msgid "Vertical"
 msgstr "Вертикально"
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:1638
+#: ../src/widgets/text-toolbar.cpp:1641
 msgid "Text orientation"
 msgstr "Орієнтація тексту"
 
 #. Drop down menu
-#: ../src/widgets/text-toolbar.cpp:1661
+#: ../src/widgets/text-toolbar.cpp:1664
 msgid "Smaller spacing"
 msgstr "Менший інтервал"
 
-#: ../src/widgets/text-toolbar.cpp:1661 ../src/widgets/text-toolbar.cpp:1692
-#: ../src/widgets/text-toolbar.cpp:1723
+#: ../src/widgets/text-toolbar.cpp:1664 ../src/widgets/text-toolbar.cpp:1695
+#: ../src/widgets/text-toolbar.cpp:1726
 msgctxt "Text tool"
 msgid "Normal"
 msgstr "Звичайний"
 
-#: ../src/widgets/text-toolbar.cpp:1661
+#: ../src/widgets/text-toolbar.cpp:1664
 msgid "Larger spacing"
 msgstr "Більший інтервал"
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:1666
+#: ../src/widgets/text-toolbar.cpp:1669
 msgid "Line Height"
 msgstr "Висота рядка"
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:1667
+#: ../src/widgets/text-toolbar.cpp:1670
 msgid "Line:"
 msgstr "Рядок:"
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:1668
+#: ../src/widgets/text-toolbar.cpp:1671
 msgid "Spacing between lines (times font size)"
 msgstr "Інтервал між рядками (у одиницях розміру шрифту)"
 
 #. Drop down menu
-#: ../src/widgets/text-toolbar.cpp:1692 ../src/widgets/text-toolbar.cpp:1723
+#: ../src/widgets/text-toolbar.cpp:1695 ../src/widgets/text-toolbar.cpp:1726
 msgid "Negative spacing"
 msgstr "Від'ємний інтервал"
 
-#: ../src/widgets/text-toolbar.cpp:1692 ../src/widgets/text-toolbar.cpp:1723
+#: ../src/widgets/text-toolbar.cpp:1695 ../src/widgets/text-toolbar.cpp:1726
 msgid "Positive spacing"
 msgstr "Додатний інтервал"
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:1697
+#: ../src/widgets/text-toolbar.cpp:1700
 msgid "Word spacing"
 msgstr "Інтервал між словами"
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:1698
+#: ../src/widgets/text-toolbar.cpp:1701
 msgid "Word:"
 msgstr "Слово:"
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:1699
+#: ../src/widgets/text-toolbar.cpp:1702
 msgid "Spacing between words (px)"
 msgstr "Інтервал між словами (у пікселях)"
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:1728
+#: ../src/widgets/text-toolbar.cpp:1731
 msgid "Letter spacing"
 msgstr "Інтервал між літерами"
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:1729
+#: ../src/widgets/text-toolbar.cpp:1732
 msgid "Letter:"
 msgstr "Літера:"
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:1730
+#: ../src/widgets/text-toolbar.cpp:1733
 msgid "Spacing between letters (px)"
 msgstr "Інтервал між літерами (у пікселях)"
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:1759
+#: ../src/widgets/text-toolbar.cpp:1762
 msgid "Kerning"
 msgstr "Кернінґ"
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:1760
+#: ../src/widgets/text-toolbar.cpp:1763
 msgid "Kern:"
 msgstr "Керн:"
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:1761
+#: ../src/widgets/text-toolbar.cpp:1764
 msgid "Horizontal kerning (px)"
 msgstr "Горизонтальний кернінґ (у пікселях)"
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:1790
+#: ../src/widgets/text-toolbar.cpp:1793
 msgid "Vertical Shift"
 msgstr "Вертикальний зсув"
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:1791
+#: ../src/widgets/text-toolbar.cpp:1794
 msgid "Vert:"
 msgstr "Верт.:"
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:1792
+#: ../src/widgets/text-toolbar.cpp:1795
 msgid "Vertical shift (px)"
 msgstr "Вертикальний зсув (у пікселях)"
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:1821
+#: ../src/widgets/text-toolbar.cpp:1824
 msgid "Letter rotation"
 msgstr "Обертання літер"
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:1822
+#: ../src/widgets/text-toolbar.cpp:1825
 msgid "Rot:"
 msgstr "Обер.:"
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:1823
+#: ../src/widgets/text-toolbar.cpp:1826
 msgid "Character rotation (degrees)"
 msgstr "Обертання символів (у градусах)"
 
@@ -27115,19 +27134,19 @@ msgstr "Зображення видобуто до: %s"
 msgid "Unable to find image data."
 msgstr "Не вдалося знайти дані зображення."
 
-#: ../share/extensions/funcplot.py:47
+#: ../share/extensions/funcplot.py:48
 msgid "x-interval cannot be zero. Please modify 'Start X' or 'End X'"
 msgstr ""
 "Інтервал за x не може бути нульовим. Будь ласка, змініть значення «Початкове "
 "значення за X» або «Кінцеве значення за X»"
 
-#: ../share/extensions/funcplot.py:59
+#: ../share/extensions/funcplot.py:60
 msgid "y-interval cannot be zero. Please modify 'Y top' or 'Y bottom'"
 msgstr ""
 "Інтервал за y не може бути нульовим. Будь ласка, змініть значення «Верх за "
 "Y» або «Низ за Y»"
 
-#: ../share/extensions/funcplot.py:300
+#: ../share/extensions/funcplot.py:315
 msgid "Please select a rectangle"
 msgstr "Будь ласка, позначте прямокутник"
 
@@ -28934,16 +28953,20 @@ msgid "First derivative:"
 msgstr "Перша похідна:"
 
 #: ../share/extensions/funcplot.inx.h:34
+msgid "Clip with rectangle"
+msgstr "Обрізання за прямокутником"
+
+#: ../share/extensions/funcplot.inx.h:35
 #: ../share/extensions/param_curves.inx.h:28
 msgid "Remove rectangle"
 msgstr "Вилучити прямокутник"
 
-#: ../share/extensions/funcplot.inx.h:35
+#: ../share/extensions/funcplot.inx.h:36
 #: ../share/extensions/param_curves.inx.h:29
 msgid "Draw Axes"
 msgstr "Малювати вісі"
 
-#: ../share/extensions/funcplot.inx.h:36
+#: ../share/extensions/funcplot.inx.h:37
 msgid "Add x-axis endpoints"
 msgstr "Додати кінцеві точки за віссю x"
 
@@ -33132,43 +33155,43 @@ msgstr "Популярний графічний формат для кліпар
 msgid "XAML Input"
 msgstr "Імпорт з XAML"
 
-#~ msgid "<b>Space+mouse move</b> to pan canvas"
-#~ msgstr "<b>Пробіл+пересування миші</b> для переміщення полотна"
+#~ msgid "_Custom"
+#~ msgstr "_Інше"
+
+#~ msgid "DXF Points"
+#~ msgstr "Точки DXF"
+
+#~ msgid "Orientation points"
+#~ msgstr "Точки орієнтації"
+
+#~ msgid "Prepare path for plasma"
+#~ msgstr "Приготувати контур для плазмового різака"
 
 #~ msgid ""
-#~ "Color of the page background. Note: transparency setting ignored while "
-#~ "editing but used when exporting to bitmap."
+#~ "All sliced images, and optionally - code, will be generated as you had "
+#~ "configured and saved to one directory."
 #~ msgstr ""
-#~ "Колір тла сторінки. Зауваження: параметр прозорості буде проігноровано "
-#~ "під час редагування, але враховано під час експортування до растра."
-
-#~ msgid "Axis"
-#~ msgstr "Вісь"
-
-#~ msgid "Axes"
-#~ msgstr "Вісі"
-
-#~ msgid "Keys"
-#~ msgstr "Клавіші"
+#~ "Всі розрізані зображення та, за бажання, код буде створено відповідно до "
+#~ "налаштувань і збережено до одного каталогу."
 
 #~ msgid ""
-#~ "A device can be 'Disabled', its co-ordinates mapped to the whole "
-#~ "'Screen', or to a single (usually focused) 'Window'"
+#~ "Color and transparency of the page background (also used for bitmap "
+#~ "export)"
 #~ msgstr ""
-#~ "Пристрій може бути «Вимкнено», його координати відображено на весь "
-#~ "«Екран» або на окреме (зазвичай те, яке перебуває у фокусі) «Вікно»"
+#~ "Колір та прозорість тла сторінки (враховується при експортуванні у растр)"
 
-#~ msgid "Y"
-#~ msgstr "Y"
+#~ msgid "Left mouse button pans when Space is pressed"
+#~ msgstr "Ліва кнопка миші переміщує область видимості, коли натиснуто пробіл"
 
-#~ msgid "X tilt"
-#~ msgstr "Нахил за X"
-
-#~ msgid "Y tilt"
-#~ msgstr "Нахил за Y"
-
-#~ msgid "Clip with rectangle"
-#~ msgstr "Обрізання за прямокутником"
+#~ msgid ""
+#~ "When on, pressing and holding Space and dragging with left mouse button "
+#~ "pans canvas (as in Adobe Illustrator); when off, Space temporarily "
+#~ "switches to Selector tool (default)"
+#~ msgstr ""
+#~ "Якщо увімкнути, натискання та утримання пробілу разом з перетягуванням "
+#~ "лівою кнопкою миші дозволить перетягувати полотно (як у Adobe "
+#~ "Illustrator). Якщо вимкнути, пробіл перемикатиме на інструмент вибору "
+#~ "(типово)."
 
 #~ msgid " and "
 #~ msgstr " і "

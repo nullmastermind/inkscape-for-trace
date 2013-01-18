@@ -16,12 +16,19 @@
 #include "nr-filter-types.h"
 
 //grayscale colormode:
-#include "nr-filter-colormatrix.h"
 #include "cairo-templates.h"
 #include "drawing-context.h"
 
 
 namespace Inkscape {
+
+// hardcoded grayscale color matrix values as default
+static const gdouble grayscale_value_matrix[20] = {
+    0.21, 0.72, 0.072, 0, 0,
+    0.21, 0.72, 0.072, 0, 0,
+    0.21, 0.72, 0.072, 0, 0,
+    0   , 0   , 0    , 1, 0
+};
 
 Drawing::Drawing(SPCanvasArena *arena)
     : _root(NULL)
@@ -34,6 +41,7 @@ Drawing::Drawing(SPCanvasArena *arena)
     , _filter_quality(Filters::FILTER_QUALITY_BEST)
     , _cache_score_threshold(50000.0)
     , _cache_budget(0)
+    , _grayscale_colormatrix(std::vector<gdouble> (grayscale_value_matrix, grayscale_value_matrix + 20 ))
     , _canvasarena(arena)
 {
 
@@ -143,6 +151,12 @@ Drawing::setCacheBudget(size_t bytes)
 }
 
 void
+Drawing::setGrayscaleMatrix(gdouble value_matrix[20]) {
+    _grayscale_colormatrix = Filters::FilterColorMatrix::ColorMatrixMatrix( 
+        std::vector<gdouble> (value_matrix, value_matrix + 20) );
+}
+
+void
 Drawing::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned flags, unsigned reset)
 {
     if (_root) {
@@ -151,17 +165,6 @@ Drawing::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned fl
     // process the updated cache scores
     _pickItemsForCaching();
 }
-
-// hardcoded grayscale color matrix values. could be turned into preference settings in future.
-static const gdouble grayscale_value_matrix[] = {
-    0.21, 0.72, 0.072, 0, 0,
-    0.21, 0.72, 0.072, 0, 0,
-    0.21, 0.72, 0.072, 0, 0,
-    0   , 0   , 0    , 1, 0
-};
-static Filters::FilterColorMatrix::ColorMatrixMatrix grayscale_colormatrix(
-    std::vector<gdouble> (grayscale_value_matrix, grayscale_value_matrix + sizeof(grayscale_value_matrix) / sizeof(grayscale_value_matrix[0]) )
-);
 
 void
 Drawing::render(DrawingContext &ct, Geom::IntRect const &area, unsigned flags)
@@ -174,7 +177,7 @@ Drawing::render(DrawingContext &ct, Geom::IntRect const &area, unsigned flags)
         // apply grayscale filter on top of everything
         cairo_surface_t *input = ct.rawTarget();
         cairo_surface_t *out = ink_cairo_surface_create_identical(input);
-        ink_cairo_surface_filter(input, out, grayscale_colormatrix);
+        ink_cairo_surface_filter(input, out, _grayscale_colormatrix);
         Geom::Point origin = ct.targetLogicalBounds().min();
         ct.setSource(out, origin[Geom::X], origin[Geom::Y]);
         ct.setOperator(CAIRO_OPERATOR_SOURCE);
