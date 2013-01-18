@@ -671,7 +671,16 @@ bool MultiPathManipulator::event(SPEventContext *event_context, GdkEvent *event)
                 // a) del preserves shape, and control is not pressed
                 // b) ctrl+del preserves shape (del_preserves_shape is false), and control is pressed
                 // Hence xor
-                deleteNodes(del_preserves_shape ^ held_control(event->key));
+                guint mode = prefs->getInt("/tools/freehand/pen/freehand-mode", 0);
+                if(mode==2){
+                    if(del_preserves_shape ^ held_control(event->key))
+                        deleteNodes(false);
+                    else
+                        deleteNodes(true);
+                }
+                else
+                //BSpline end
+                    deleteNodes(del_preserves_shape ^ held_control(event->key));
 
                 // Delete any selected gradient nodes as well
                 event_context->deleteSelectedDrag(held_control(event->key));

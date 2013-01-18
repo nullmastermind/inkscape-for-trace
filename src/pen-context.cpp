@@ -2225,7 +2225,9 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
     }
 
     pc->num_clicks = 0;
-
+    if(pc->spiro || pc->bspline){
+        saShift = false;
+    }
     pen_disable_events(pc);
 
     SPDesktop *const desktop = pc->desktop;
