@@ -324,7 +324,11 @@ bool LoadingBox::_on_expose_event(GdkEventExpose* /*event*/)
 }
 #endif
 
-bool LoadingBox::_on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+bool LoadingBox::_on_draw(const Cairo::RefPtr<Cairo::Context> &
+#if WITH_GTKMM_3_0
+cr
+#endif
+)
 {
     // Draw shadow
     int x = get_allocation().get_x();
@@ -561,6 +565,7 @@ void StatusWidget::end_process()
     clear();
 }
 
+#if !GTK_CHECK_VERSION(3,6,0)
 SearchEntry::SearchEntry() : Gtk::Entry()
 {
     signal_changed().connect(sigc::mem_fun(*this, &SearchEntry::_on_changed));
@@ -589,6 +594,8 @@ void SearchEntry::_on_changed()
         set_icon_from_stock(Gtk::Stock::CLEAR, Gtk::ENTRY_ICON_SECONDARY);
     }
 }
+#endif
+
 
 BaseBox::BaseBox() : Gtk::EventBox()
 {
@@ -1208,7 +1215,13 @@ ImportDialog::ImportDialog(Gtk::Window& parent_window, FileDialogType file_types
     BaseBox *basebox_no_search_results = new BaseBox();
     label_not_found = new Gtk::Label();
     label_description = new Gtk::Label();
+
+#if GTK_CHECK_VERSION(3,6,0)
+    entry_search = new Gtk::SearchEntry();
+#else
     entry_search = new SearchEntry();
+#endif
+
     button_search = new Gtk::Button(_("Search"));
 
 #if WITH_GTKMM_3_0

@@ -72,7 +72,7 @@ LPEBendPath::~LPEBendPath()
 }
 
 void
-LPEBendPath::doBeforeEffect (SPLPEItem *lpeitem)
+LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     // get the item bounding box
     original_bbox(lpeitem);
@@ -123,7 +123,7 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
 }
 
 void
-LPEBendPath::resetDefaults(SPItem * item)
+LPEBendPath::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

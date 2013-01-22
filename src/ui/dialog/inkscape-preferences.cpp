@@ -320,6 +320,7 @@ void InkscapePreferences::initPageTools()
 
 
     AddSelcueCheckbox(_page_selector, "/tools/select", false);
+    AddGradientCheckbox(_page_selector, "/tools/select", false);
     _page_selector.add_group_header( _("When transforming, show"));
     _t_sel_trans_obj.init ( _("Objects"), "/tools/select/show", "content", true, 0);
     _page_selector.add_line( true, "", _t_sel_trans_obj, "",
@@ -811,7 +812,7 @@ void InkscapePreferences::initPageIO()
 
     // Input devices options
     _mouse_sens.init ( "/options/cursortolerance/value", 0.0, 30.0, 1.0, 1.0, 8.0, true, false);
-    _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels"),
+    _page_mouse.add_line( false, _("_Grab sensitivity:"), _mouse_sens, _("pixels (requires restart)"),
                            _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), false);
     _mouse_thres.init ( "/options/dragtolerance/value", 0.0, 20.0, 1.0, 1.0, 4.0, true, false);
     _page_mouse.add_line( false, _("_Click/drag threshold:"), _mouse_thres, _("pixels"),
@@ -1096,6 +1097,9 @@ void InkscapePreferences::initPageBehavior()
     _sel_locked.init ( _("Ignore locked objects and layers"), "/options/kbselection/onlysensitive", true);
     _sel_layer_deselects.init ( _("Deselect upon layer change"), "/options/selection/layerdeselect", true);
 
+    _page_select.add_line( false, "", _sel_layer_deselects, "",
+                           _("Uncheck this to be able to keep the current objects selected when the current layer changes"));
+
     _page_select.add_group_header( _("Ctrl+A, Tab, Shift+Tab"));
     _page_select.add_line( true, "", _sel_all, "",
                            _("Make keyboard selection commands work on objects in all layers"));
@@ -1107,10 +1111,6 @@ void InkscapePreferences::initPageBehavior()
                            _("Uncheck this to be able to select objects that are hidden (either by themselves or by being in a hidden layer)"));
     _page_select.add_line( true, "", _sel_locked, "",
                            _("Uncheck this to be able to select objects that are locked (either by themselves or by being in a locked layer)"));
-
-    _page_select.add_line( false, "", _sel_layer_deselects, "",
-                           _("Uncheck this to be able to keep the current objects selected when the current layer changes"));
-
 
     _sel_cycle.init ( _("Wrap when cycling objects in z-order"), "/options/selection/cycleWrap", true);
 
@@ -1526,7 +1526,7 @@ void InkscapePreferences::onKBExport()
     sp_shortcut_file_export();
 }
 
-bool InkscapePreferences::onKBSearchKeyEvent(GdkEventKey *event)
+bool InkscapePreferences::onKBSearchKeyEvent(GdkEventKey * /*event*/)
 {
     _kb_filter->refilter();
     return FALSE;
@@ -1651,7 +1651,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Find this group in the tree
-        Glib::ustring group = verb->get_group() ? verb->get_group() : "Misc";
+        Glib::ustring group = verb->get_group() ? _(verb->get_group()) : _("Misc");
         Gtk::TreeStore::iterator iter_group;
         bool found = false;
         while (path) {
@@ -1679,7 +1679,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
 
         // Remove the key accelerators from the verb name
-        Glib::ustring name = verb->get_name();
+        Glib::ustring name = _(verb->get_name());
         std::string::size_type k = 0;
         while((k=name.find('_',k))!=name.npos) {
             name.erase(k, 1);
@@ -1698,9 +1698,9 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
         }
         // Add the verb to the group
         Gtk::TreeStore::iterator row = _kb_store->append(iter_group->children());
-        (*row)[_kb_columns.name] = name;
+        (*row)[_kb_columns.name] =  name;
         (*row)[_kb_columns.shortcut] = shortcut_label;
-        (*row)[_kb_columns.description] = verb->get_short_tip() ? verb->get_short_tip() : "";
+        (*row)[_kb_columns.description] = verb->get_short_tip() ? _(verb->get_short_tip()) : "";
         (*row)[_kb_columns.shortcutid] = shortcut_id;
         (*row)[_kb_columns.id] = verb->get_id();
         (*row)[_kb_columns.user_set] = sp_shortcut_is_user_set(verb);

@@ -77,7 +77,7 @@ PathParam::~PathParam()
 }
 
 std::vector<Geom::Path> const &
-PathParam::get_pathvector()
+PathParam::get_pathvector() const
 {
     return _pathvector;
 }
@@ -231,7 +231,7 @@ PathParam::param_setup_nodepath(Inkscape::NodePath::Path *)
 }
 
 void
-PathParam::addCanvasIndicators(SPLPEItem */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+PathParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     hp_vec.push_back(_pathvector);
 }

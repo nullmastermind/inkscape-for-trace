@@ -31,7 +31,7 @@ public:
                 const gchar * default_value = "M0,0 L1,1");
     virtual ~PathParam();
 
-    std::vector<Geom::Path> const & get_pathvector();
+    std::vector<Geom::Path> const & get_pathvector() const;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2();
 
     virtual Gtk::Widget * param_newWidget();
@@ -46,7 +46,7 @@ public:
 
     virtual void param_editOncanvas(SPItem * item, SPDesktop * dt);
     virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);
-    virtual void addCanvasIndicators(SPLPEItem *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
