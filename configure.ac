@@ -717,7 +717,7 @@ AC_ARG_ENABLE(wpg,
 with_libcdr=no
 
 if test "x$enable_cdr" = "xyes"; then
-	PKG_CHECK_MODULES(LIBCDR, libcdr-0.0 >= 0.0.9 libwpd-0.9 libwpd-stream-0.9 libwpg-0.2, with_libcdr=yes, with_libcdr=no)
+	PKG_CHECK_MODULES(LIBCDR, libcdr-0.0 >= 0.0.8 libwpd-0.9 libwpd-stream-0.9 libwpg-0.2, with_libcdr=yes, with_libcdr=no)
 
 	if test "x$with_libcdr" = "xyes"; then
 		AC_DEFINE(WITH_LIBCDR,1,[Build in libcdr])
