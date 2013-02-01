@@ -185,8 +185,8 @@ unsigned CdrImportDialog::getSelectedPage()
 
 void CdrImportDialog::_onPageNumberChanged()
 {
-     int page = _pageNumberSpin->get_value_as_int();
-     _current_page = CLAMP(page, 1, _vec.size());
+     unsigned page = static_cast<unsigned>(_pageNumberSpin->get_value_as_int());
+     _current_page = CLAMP(page, 1U, _vec.size());
      _setPreviewPage(_current_page);
 }
 
