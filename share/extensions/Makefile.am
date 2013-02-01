@@ -195,11 +195,11 @@ modules = \
 	addnodes.inx \
 	ai_input.inx \
 	aisvg.inx \
-	ccx_input-uniconv.inx \
-	cdr_input-uniconv.inx \
-	cdt_input-uniconv.inx \
+	ccx_input.inx \
+	cdr_input.inx \
+	cdt_input.inx \
 	cgm_input.inx \
-	cmx_input-uniconv.inx \
+	cmx_input.inx \
 	color_blackandwhite.inx\
 	color_brighter.inx\
 	color_custom.inx \
