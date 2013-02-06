@@ -706,6 +706,27 @@ AC_SUBST(LIBVISIO_LIBS)
 AC_SUBST(LIBVISIO_CFLAGS)
 AM_CONDITIONAL(WITH_LIBVISIO, test "x$with_libvisio" = "xyes")
 
+dnl ********************************
+dnl Check for libcdr for extension
+dnl ********************************
+
+AC_ARG_ENABLE(wpg,
+       [  --disable-cdr           compile without support for Microsoft Visio Diagrams],
+       enable_cdr=$enableval,enable_cdr=yes)
+
+with_libcdr=no
+
+if test "x$enable_cdr" = "xyes"; then
+	PKG_CHECK_MODULES(LIBCDR, libcdr-0.0 >= 0.0.3 libwpd-0.9 libwpd-stream-0.9 libwpg-0.2, with_libcdr=yes, with_libcdr=no)
+
+	if test "x$with_libcdr" = "xyes"; then
+		AC_DEFINE(WITH_LIBCDR,1,[Build in libcdr])
+	fi
+fi
+AC_SUBST(LIBCDR_LIBS)
+AC_SUBST(LIBCDR_CFLAGS)
+AM_CONDITIONAL(WITH_LIBCDR, test "x$with_libcdr" = "xyes")
+
 dnl ******************************
 dnl Support doing a local install
 dnl   (mostly for distcheck)
@@ -789,7 +810,7 @@ if test "x$enable_gtk3" = "xyes"; then
 		AC_DEFINE(WITH_GTKSPELL, 1, [enable gtk spelling widget])
 	fi
 
-	PKG_CHECK_MODULES(INKSCAPE, gtkmm-3.0 >= 3.2  gdkmm-3.0 >= 3.2 gtk+-3.0 >= 3.2 gdk-3.0 >= 3.2 gdl-3.0 > 3.3.4 glib-2.0 >= 2.28  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= $min_sigc_version  $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4 pango >= 1.24, with_gtkmm_3_0=yes, with_gtkmm_3_0=no)
+	PKG_CHECK_MODULES(INKSCAPE, gtkmm-3.0 >= 3.2  gdkmm-3.0 >= 3.2 gtk+-3.0 >= 3.2 gdk-3.0 >= 3.2 gdl-3.0 > 3.3.4 glib-2.0 >= 2.28  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= $min_sigc_version  $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4 pango >= 1.24 pangoft2 >= 1.24, with_gtkmm_3_0=yes, with_gtkmm_3_0=no)
 
 	if test "x$with_gtkmm_3_0" = "xyes"; then
 		AC_MSG_RESULT([Using EXPERIMENTAL Gtkmm 3 build])
@@ -808,7 +829,7 @@ else
 		AC_DEFINE(WITH_GTKSPELL, 1, [enable gtk spelling widget])
 	fi
 
-	PKG_CHECK_MODULES(INKSCAPE, glib-2.0 >= 2.28  gtk+-2.0 >= 2.24  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= $min_sigc_version  $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4  gdkmm-2.4  gtkmm-2.4 >= 2.24 pango >= 1.24)
+	PKG_CHECK_MODULES(INKSCAPE, glib-2.0 >= 2.28  gtk+-2.0 >= 2.24  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= $min_sigc_version  $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4  gdkmm-2.4  gtkmm-2.4 >= 2.24 pango >= 1.24 pangoft2 >= 1.24)
 	
 	# Disable deprecated symbols to make GTK+ 3 migration easier.
 	# This should also be applied to GTK+ 3 builds too,
@@ -1170,6 +1191,7 @@ Configuration:
         ImageMagick Magick++:     ${magick_ok}
         Libwpg:                   ${with_libwpg}
         Libvisio:                 ${with_libvisio}
+        Libcdr:                   ${with_libcdr}
         Doing Local Install:      ${with_localinstall}
         GTK+ backend target:      ${gtk_backend_target}
 "

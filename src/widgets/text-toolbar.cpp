@@ -178,6 +178,11 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
         return;
     }
 
+    // If font list, take only first font in list
+    gchar** tokens = g_strsplit( current_font, ",", 0 );
+    g_strstrip( tokens[0] );
+    current_font = tokens[0];
+
     // Get an iter to the selected font from the model data
     // We cant get it from the combo, cause it might not have been created yet
     gboolean found = false;
@@ -197,13 +202,7 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
       valid = gtk_tree_model_iter_next( model, &iter );
     }
 
-    if (!found) {
-        return;
-    }
-
-    // Get the list of styles from the selected font
-    GList *list = NULL;
-    gtk_tree_model_get (model, &iter, 1, &list, -1);
+    g_strfreev( tokens );
 
     Ink_ComboBoxEntry_Action* fontStyleAction = INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontStyleAction" ) );
 
@@ -212,7 +211,27 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
     GtkListStore *store = GTK_LIST_STORE( ink_comboboxentry_action_get_model( fontStyleAction ) );
     gtk_list_store_clear ( store );
 
-    // Add list of styles to the style combo
+    // Get the list of styles from the selected font.
+    GList *list = NULL;
+
+    if (found) {
+
+        // Use precompiled list if font-family on system.
+        gtk_tree_model_get (model, &iter, 1, &list, -1);
+
+    } else {
+
+        // Use generic list if font-family not on system.
+        static GList *glist = NULL;
+        if( glist == NULL ) {
+            glist = g_list_append (glist, (void*)"Normal");
+            glist = g_list_append (glist, (void*)"Italic");
+            glist = g_list_append (glist, (void*)"Bold");
+            glist = g_list_append (glist, (void*)"Bold Italic");
+        }
+        list = glist;
+    }
+
     for (GList *l=list; l; l = l->next)
     {
         gtk_list_store_append (store, &iter);
@@ -220,7 +239,7 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
     }
 
     // Select the style in the combo that best matches font
-    if (font) {
+    if (font && list) {
 
         unsigned int index = sp_font_selector_get_best_style(font, list);
 
@@ -519,7 +538,7 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
 
     SPCSSAttr   *css        = sp_repr_css_attr_new ();
 
-    gchar *current_style = ink_comboboxentry_action_get_active_text( act );
+    Glib::ustring current_style = ink_comboboxentry_action_get_active_text( act );
     Glib::ustring fontFamily = "";
 
     if (query->text->font_family.set) {
@@ -530,9 +549,10 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
         fontFamily = ink_comboboxentry_action_get_active_text( act );
     }
 
-    font_instance *font = (font_factory::Default())->FaceFromUIStrings (fontFamily.c_str(), current_style);
+    font_instance *font = (font_factory::Default())->FaceFromUIStrings (fontFamily.c_str(), current_style.c_str());
 
     if (font) {
+
         gchar c[256];
 
         font->Attribute( "weight", c, 256);
@@ -549,6 +569,19 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
 
         font->Unref();
         font = NULL;
+
+    } else {
+
+        // Font not found on system, blindly update style
+        // Options match choices in sp_text_fontstyle_populate
+        sp_repr_css_set_property (css, "font-weight", "normal");
+        sp_repr_css_set_property (css, "font-style",  "normal" );
+        if( current_style.find("Bold") != Glib::ustring::npos ) {
+            sp_repr_css_set_property (css, "font-weight", "bold");
+        }
+        if( current_style.find("Italic") != Glib::ustring::npos ) {
+            sp_repr_css_set_property (css, "font-style", "italic");
+        }
     }
 
     // If querying returned nothing, update default style.
@@ -1203,7 +1236,13 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
             return;
         }
 
-        g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(TRUE));
+        // To ensure the value of the combobox is properly set on start-up, only mark
+        // the prefs set if the combobox has already been constructed.
+        Ink_ComboBoxEntry_Action* fontFamilyAction =
+            INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontFamilyAction" ) );
+        if( fontFamilyAction->combobox != NULL ) {
+            g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(TRUE));
+        }
     } else {
         g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(FALSE));
     }
