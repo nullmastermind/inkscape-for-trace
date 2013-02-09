@@ -37,7 +37,7 @@ static GtkWidget* create_tool_item( GtkAction* action );
 static GtkWidget* create_menu_item( GtkAction* action );
 
 // Internal
-static gint get_active_row_from_text( Ink_ComboBoxEntry_Action* action, const gchar* target_text );
+static gint get_active_row_from_text( Ink_ComboBoxEntry_Action* action, const gchar* target_text, gboolean exclude = false );
 static Glib::ustring check_comma_separated_text( Ink_ComboBoxEntry_Action* action );
 
 // Callbacks
@@ -53,6 +53,7 @@ enum {
   PROP_ENTRY_WIDTH,
   PROP_EXTRA_WIDTH,
   PROP_CELL_DATA_FUNC,
+  PROP_SEPARATOR_FUNC,
   PROP_POPUP,
   PROP_FOCUS_WIDGET
 };
@@ -109,6 +110,10 @@ static void ink_comboboxentry_action_set_property (GObject *object, guint proper
     action->cell_data_func = g_value_get_pointer( value );
     break;
 
+  case PROP_SEPARATOR_FUNC:
+    action->separator_func = g_value_get_pointer( value );
+    break;
+
   case PROP_POPUP:
     action->popup  = g_value_get_boolean( value );
     break;
@@ -152,6 +157,10 @@ static void ink_comboboxentry_action_get_property (GObject *object, guint proper
 
   case PROP_CELL_DATA_FUNC:
     g_value_set_pointer (value, action->cell_data_func);
+    break;
+
+  case PROP_SEPARATOR_FUNC:
+    g_value_set_pointer (value, action->separator_func);
     break;
 
   case PROP_POPUP:
@@ -249,6 +258,14 @@ ink_comboboxentry_action_class_init (Ink_ComboBoxEntry_ActionClass *klass)
 
   g_object_class_install_property (
                                    gobject_class,
+                                   PROP_SEPARATOR_FUNC,
+                                   g_param_spec_pointer ("separator_func",
+                                                         "Separator Func",
+                                                         "Separator Function",
+                                                         (GParamFlags)G_PARAM_READWRITE));
+
+  g_object_class_install_property (
+                                   gobject_class,
                                    PROP_POPUP,
                                    g_param_spec_boolean ("popup",
                                                          "Entry Popup",
@@ -303,6 +320,7 @@ Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new (const gchar   *name,
                                                         gint           entry_width,
                                                         gint           extra_width,
                                                         void          *cell_data_func,
+                                                        void          *separator_func,
                                                         GtkWidget      *focusWidget)
 {
   g_return_val_if_fail (name != NULL, NULL);
@@ -316,6 +334,7 @@ Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new (const gchar   *name,
                                                   "entry_width",    entry_width,
                                                   "extra_width",    extra_width,
                                                   "cell_data_func", cell_data_func,
+                                                  "separator_func", separator_func,
                                                   "focus-widget",   focusWidget,
                                                   NULL);
 }
@@ -363,6 +382,13 @@ GtkWidget* create_tool_item( GtkAction* action )
       gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT( comboBoxEntry ), cell,
                                           GtkCellLayoutDataFunc (ink_comboboxentry_action->cell_data_func),
                                           NULL, NULL );
+    }
+
+    // Optionally add separator function...
+    if( ink_comboboxentry_action->separator_func != NULL ) {
+       gtk_combo_box_set_row_separator_func( ink_comboboxentry_action->combobox,
+					    GtkTreeViewRowSeparatorFunc (ink_comboboxentry_action->separator_func),
+      					    NULL, NULL );
     }
 
     // Optionally widen the combobox width... which widens the drop-down list in list mode.
@@ -469,7 +495,7 @@ gboolean ink_comboboxentry_action_set_active_text( Ink_ComboBoxEntry_Action* ink
     // Explicitly set text in GtkEntry box (won't be set if text not in list).
     gtk_entry_set_text( ink_comboboxentry_action->entry, text );
 
-    // Show or hide warning
+    // Show or hide warning  -- this might be better moved to text-toolbox.cpp
     bool clear = true;
     if( ink_comboboxentry_action->active == -1 && 
 	ink_comboboxentry_action->warning != NULL ) {
@@ -611,8 +637,11 @@ void     ink_comboboxentry_action_set_altx_name( Ink_ComboBoxEntry_Action* actio
 
 // Internal ---------------------------------------------------
 
-// Return row of active text or -1 if not found.
-gint get_active_row_from_text( Ink_ComboBoxEntry_Action* action, const gchar* target_text ) {
+// Return row of active text or -1 if not found. If exclude is true,
+// use 3d colunm if available to exclude row from checking (useful to
+// skip rows added for font-families included in doc and not on
+// system)
+gint get_active_row_from_text( Ink_ComboBoxEntry_Action* action, const gchar* target_text, gboolean exclude ) {
 
   // Check if text in list
   gint row = 0;
@@ -621,15 +650,24 @@ gint get_active_row_from_text( Ink_ComboBoxEntry_Action* action, const gchar* ta
   gboolean valid = gtk_tree_model_get_iter_first( action->model, &iter );
   while ( valid ) {
 
-    // Get text from list entry
-    gchar* text = 0;
-    gtk_tree_model_get( action->model, &iter, 0, &text, -1 ); // Column 0
-
-    // Check for match
-    if( strcmp( target_text, text ) == 0 ){
-      found = true;
-      break;
+    // See if we should exclude a row
+    gboolean check = true;  // If true, font-family is on system.
+    if( exclude && gtk_tree_model_get_n_columns( action->model ) > 2 ) {
+      gtk_tree_model_get( action->model, &iter, 2, &check, -1 );
     }
+
+    if( check ) {
+      // Get text from list entry
+      gchar* text = 0;
+      gtk_tree_model_get( action->model, &iter, 0, &text, -1 ); // Column 0
+
+      // Check for match
+      if( strcmp( target_text, text ) == 0 ){
+	found = true;
+	break;
+      }
+    }
+
     ++row;
     valid = gtk_tree_model_iter_next( action->model, &iter );
   }
@@ -665,7 +703,7 @@ static Glib::ustring check_comma_separated_text( Ink_ComboBoxEntry_Action* actio
     // Remove any surrounding white space.
     g_strstrip( tokens[i] );
 
-    if( get_active_row_from_text( action, tokens[i] ) == -1 ) {
+    if( get_active_row_from_text( action, tokens[i], true ) == -1 ) {
       missing += tokens[i];
       missing += ", ";
     }

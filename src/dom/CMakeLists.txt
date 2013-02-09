@@ -26,10 +26,7 @@ set(dom_SRC
 	io/stringstream.cpp
 	io/uristream.cpp
 
-	odf/odfdocument.cpp
-
 	util/digest.cpp
-	util/thread.cpp
 	util/ziptool.cpp
 
 
@@ -64,8 +61,6 @@ set(dom_SRC
 	xpathparser.h
 	xpathtoken.h
 
-	odf/odfdocument.h
-
 	io/base64stream.h
 	io/bufferstream.h
 	io/domstream.h
@@ -74,7 +69,6 @@ set(dom_SRC
 	io/uristream.h
 
 	util/digest.h
-	util/thread.h
 	util/ziptool.h
 )
 
