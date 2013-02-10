@@ -50,3 +50,4 @@ src/ui/widget/spin-scale.cpp
 src/widgets/mesh-toolbar.cpp
 src/widgets/ruler.cpp
 src/widgets/stroke-marker-selector.cpp
+
