@@ -12,7 +12,6 @@
 #include <2geom/bezier-curve.h>
 #include "helper/geom-curves.h"
 
-
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -28,13 +27,6 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
 
 LPEBSpline::~LPEBSpline()
 {
-}
-//Crea una nueva curva reseteando la original
-SPCurve * 
-LPEBSpline::reverse_then_reset(SPCurve * orig){
-    SPCurve *ret = orig->create_reverse();
-    orig->reset();
-    return ret;
 }
 
 void
@@ -106,46 +98,70 @@ LPEBSpline::doEffect(SPCurve * curve)
         cubicIn = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
         cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
         cubicEnd = dynamic_cast<Geom::CubicBezier const*>(&*curve_end);
-        //Calculamos el nodo de inicio BSpline
-        lineHelper->moveto(SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment())));
-        lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubicEnd)[2],*end->first_segment())));
-        SBasisHelper = lineHelper->first_segment()->toSBasis();
-        lineHelper->reset();
-        //Guardamos el principio de la curva
-        startNode = SBasisHelper.valueAt(0.5);
-        //Definimos el punto de inicio original de la curva resultante
-        node = startNode;
+        if (path_it->closed() && cubicIn && cubicEnd && (*cubicIn)[1] != (*cubicEnd)[2]){
+            //Calculamos el nodo de inicio BSpline
+            SBasisIn = in->first_segment()->toSBasis();
+            SBasisEnd = end->first_segment()->toSBasis();
+            lineHelper->moveto(SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment())));
+            lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubicEnd)[2],*end->first_segment())));
+            SBasisHelper = lineHelper->first_segment()->toSBasis();
+            lineHelper->reset();
+            //Guardamos el principio de la curva
+            startNode = SBasisHelper.valueAt(0.5);
+            //Definimos el punto de inicio original de la curva resultante
+            node = startNode;
+        }else{
+            startNode = in->first_segment()->initialPoint();
+            node = startNode;
+        }
         //Recorremos todos los segmentos menos el último
         while ( curve_it2 != curve_endit )
         {
-            //Damos valor a el objeto SBasis para el path de entrada y el de salida
             SBasisIn = in->first_segment()->toSBasis();
             SBasisOut = out->first_segment()->toSBasis();
             //previousPointAt3 = pointAt3;
             //Calculamos los puntos que dividirían en tres segmentos iguales el path recto de entrada y de salida
-            pointAt0 = SBasisIn.valueAt(0);
-            pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment()));
-            pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[2],*in->first_segment()));
-            pointAt3 = SBasisIn.valueAt(1);
+            if(cubicIn){
+                pointAt0 = SBasisIn.valueAt(0);
+                pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment()));
+                pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[2],*in->first_segment()));
+                pointAt3 = SBasisIn.valueAt(1);
+            }else{
+                pointAt0 = SBasisIn.valueAt(0);
+                pointAt1 = SBasisIn.valueAt(0);
+                pointAt2 = SBasisIn.valueAt(1);
+                pointAt3 = SBasisIn.valueAt(1);
+            }
             //Y hacemos lo propio con el path de salida
             //nextPointAt0 = curveOut.valueAt(0);
-            nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[1],*in->first_segment()));
-            nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[1],*out->first_segment()));
-            nextPointAt3 = SBasisOut.valueAt(1);
-            
+            if(cubicOut){
+                nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[1],*out->first_segment()));
+                nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[2],*out->first_segment()));
+                nextPointAt3 = SBasisOut.valueAt(1);
+            }else{
+                nextPointAt1 = SBasisOut.valueAt(0);
+                nextPointAt2 = SBasisOut.valueAt(1);
+                nextPointAt3 = SBasisOut.valueAt(1);
+            }
             //La curva BSpline se forma calculando el centro del segmanto de unión
             //de el punto situado en las 2/3 partes de el segmento de entrada
             //con el punto situado en la posición 1/3 del segmento de salida
             //Estos dos puntos ademas estan posicionados en el lugas correspondiente de
             //los manejadores de la curva
-            lineHelper->moveto(pointAt2);
-            lineHelper->lineto(nextPointAt1);
-            SBasisHelper = lineHelper->first_segment()->toSBasis();
-            lineHelper->reset();
-            //almacenamos el punto del anterior bucle -o el de cierre- que nos hara de principio de curva
-            previousNode = node;
-            //Y este hará de final de curva
-            node = SBasisHelper.valueAt(0.5);
+            if(nextPointAt1 != pointAt2){
+                lineHelper->moveto(pointAt2);
+                lineHelper->lineto(nextPointAt1);
+                SBasisHelper = lineHelper->first_segment()->toSBasis();
+                lineHelper->reset();
+                //almacenamos el punto del anterior bucle -o el de cierre- que nos hara de principio de curva
+                previousNode = node;
+                //Y este hará de final de curva
+                node = SBasisHelper.valueAt(0.5);
+            }else{
+                previousNode = node;
+                //Y este hará de final de curva
+                node = nextPointAt1;
+            }
             curveHelper->moveto(previousNode);
             curveHelper->curveto(pointAt1, pointAt2, node);
             //añadimos la curva generada a la curva pricipal
@@ -162,9 +178,10 @@ LPEBSpline::doEffect(SPCurve * curve)
             if(curve_it1 != curve_end){
                 out->moveto(curve_it2->initialPoint());
                 out->lineto(curve_it2->finalPoint());
+                cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
             }
             cubicIn = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
-            cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
+            
         }
         //Aberiguamos la ultima parte de la curva correspondiente al último segmento
         curveHelper->moveto(node);
@@ -198,6 +215,7 @@ LPEBSpline::doEffect(SPCurve * curve)
     //Todo: remove?
     //delete SBasisHelper;
 }
+
 }; //namespace LivePathEffect
 }; /* namespace Inkscape */
 

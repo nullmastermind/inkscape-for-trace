@@ -18,7 +18,7 @@ public:
     LPEBSpline(LivePathEffectObject *lpeobject);
     virtual ~LPEBSpline();
 
-    virtual SPCurve *reverse_then_reset(SPCurve * orig);
+    virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
 
     virtual void doEffect(SPCurve * curve);
 

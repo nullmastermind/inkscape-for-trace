@@ -65,8 +65,10 @@
 
 #include "live_effects/spiro.h"
 
+
 #define INKSCAPE_LPE_BSPLINE_C
 #include "live_effects/lpe-bspline.h"
+#include <2geom/nearest-point.h>
 
 //BSpline End
 using Inkscape::ControlManager;
@@ -1060,7 +1062,8 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
         return;
     //BSpline
     Geom::CubicBezier const * cubic;
-
+    if(!pc->bspline)
+        pc->p[1] = pc->p[0];
     //Para formar una curva necesitamos un nodo symm en el "lastpoint"
     //de esta manera modificamos el final de la "curva_verde" para que sea symm con el pricipio de la "red_curve"
     if(pc->spiro){
@@ -1081,6 +1084,77 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
             B = pc->green_curve->last_segment()->initialPoint();
             C = pc->p[0] + (Geom::Point)(pc->p[0] - pc->p[1]);
             D = pc->green_curve->last_segment()->finalPoint();
+        }
+        previous->moveto(A);
+        previous->curveto(B, C, D);
+        if( pc->green_curve->get_segment_count() == 1){
+            pc->green_curve = previous;
+        }else{
+            //we eliminate the last segment
+            pc->green_curve->backspace();
+            //and we add it again with the recreation
+            pc->green_curve->append_continuous(previous, 0.0625);
+        }
+    }
+
+//BSpline
+    //Para formar una recta necesitamos un nodo con manejador en el "lastpoint"
+    //de esta manera modificamos el final de la "curva_verde" para que tenga manejador
+    if(pc->bspline && !pc->green_curve->is_empty()){
+        Geom::Point A(0,0);
+        Geom::Point B(0,0);
+        Geom::Point C(0,0);
+        Geom::Point D(0,0);
+        using Geom::X;
+        using Geom::Y;
+        SPCurve * previous = new SPCurve();
+        //We obtain the last segment 4 points in the previous curve 
+        A = pc->green_curve->last_segment()->initialPoint();
+        B = pc->green_curve->last_segment()->initialPoint();
+        C = pc->green_curve->last_segment()->finalPoint() + (1./3)* (Geom::Point)(pc->green_curve->last_segment()->initialPoint() - pc->green_curve->last_segment()->finalPoint());
+        pc->p[1] = pc->p[0] + (1./3)*(C - pc->p[0]);
+        D = pc->green_curve->last_segment()->finalPoint();
+        previous->moveto(A);
+        previous->curveto(B, C, D);
+        if( pc->green_curve->get_segment_count() == 1){
+            pc->green_curve = previous;
+        }else{
+            //we eliminate the last segment
+            pc->green_curve->backspace();
+            //and we add it again with the recreation
+            pc->green_curve->append_continuous(previous, 0.0625);
+        }
+    }
+    //Spiro Live
+    pen_redraw_all(pc);
+}
+
+static void pen_lastpoint_toline (SPPenContext *const pc)
+{
+    //BSpline
+    //Si no es bspline
+    if (pc->npoints != 5 && !pc->bspline)
+        return;
+    Geom::CubicBezier const * cubic;
+    if(pc->spiro){
+        Geom::Point A(0,0);
+        Geom::Point B(0,0);
+        Geom::Point C(0,0);
+        Geom::Point D(0,0);
+        SPCurve * previous = new SPCurve();
+        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment() );
+        if ( cubic ) {
+            A = pc->green_curve->last_segment()->initialPoint();
+            B = (*cubic)[1];
+            C = pc->green_curve->last_segment()->finalPoint();
+            D = C;
+            pc->p[1] = pc->p[0] + (Geom::Point)( (*cubic)[3] - (*cubic)[2] );
+        } else {
+            //We obtain the last segment 4 points in the previous curve 
+            A = pc->green_curve->last_segment()->initialPoint();
+            B = A;
+            C = pc->green_curve->last_segment()->finalPoint();
+            D = C;
         }
         previous->moveto(A);
         previous->curveto(B, C, D);
@@ -1125,78 +1199,6 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
         }
         
     }
-    //Spiro Live
-    pen_redraw_all(pc);
-}
-
-static void pen_lastpoint_toline (SPPenContext *const pc)
-{
-    //BSpline
-    //Si no es bspline
-    if (pc->npoints != 5 && !pc->bspline)
-        return;
-    if(!pc->bspline)
-        pc->p[1] = pc->p[0];
-    if(pc->spiro){
-        Geom::Point A(0,0);
-        Geom::Point B(0,0);
-        Geom::Point C(0,0);
-        Geom::Point D(0,0);
-        SPCurve * previous = new SPCurve();
-        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( pc->green_curve->last_segment() );
-        if ( cubic ) {
-            A = pc->green_curve->last_segment()->initialPoint();
-            B = (*cubic)[1];
-            C = pc->green_curve->last_segment()->finalPoint();
-            D = C;
-            pc->p[1] = pc->p[0] + (Geom::Point)( (*cubic)[3] - (*cubic)[2] );
-        } else {
-            //We obtain the last segment 4 points in the previous curve 
-            A = pc->green_curve->last_segment()->initialPoint();
-            B = A;
-            C = pc->green_curve->last_segment()->finalPoint();
-            D = C;
-        }
-        previous->moveto(A);
-        previous->curveto(B, C, D);
-        if( pc->green_curve->get_segment_count() == 1){
-            pc->green_curve = previous;
-        }else{
-            //we eliminate the last segment
-            pc->green_curve->backspace();
-            //and we add it again with the recreation
-            pc->green_curve->append_continuous(previous, 0.0625);
-        }
-    }
-    //BSpline
-    //Para formar una recta necesitamos un nodo con manejador en el "lastpoint"
-    //de esta manera modificamos el final de la "curva_verde" para que tenga manejador
-    if(pc->bspline && !pc->green_curve->is_empty()){
-        Geom::Point A(0,0);
-        Geom::Point B(0,0);
-        Geom::Point C(0,0);
-        Geom::Point D(0,0);
-        using Geom::X;
-        using Geom::Y;
-        SPCurve * previous = new SPCurve();
-        //We obtain the last segment 4 points in the previous curve 
-        A = pc->green_curve->last_segment()->initialPoint();
-        B = pc->green_curve->last_segment()->initialPoint();
-        C = pc->green_curve->last_segment()->finalPoint() + (1./3)* (Geom::Point)(pc->green_curve->last_segment()->initialPoint() - pc->green_curve->last_segment()->finalPoint());
-        C = Geom::Point(C[X]+1,C[Y]+1);
-        D = pc->green_curve->last_segment()->finalPoint();
-        previous->moveto(A);
-        previous->curveto(B, C, D);
-        if( pc->green_curve->get_segment_count() == 1){
-            pc->green_curve = previous;
-        }else{
-            //we eliminate the last segment
-            pc->green_curve->backspace();
-            //and we add it again with the recreation
-            pc->green_curve->append_continuous(previous, 0.0625);
-        }
-    }
-
     pen_redraw_all(pc);
 }
 
@@ -1472,14 +1474,6 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 }
 
 
-//BSpline Set Functions
-//Creates a new curve resetting the original
-static SPCurve * reverse_then_reset(SPCurve *orig)
-{
-    SPCurve *ret = orig->create_reverse();
-    orig->reset();
-    return ret;
-}
 
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void spiro_color(SPPenContext *const pc)
@@ -1789,15 +1783,15 @@ static void bspline(SPPenContext *const pc, bool Shift)
         if(!pc->red_curve->is_empty()){
             pc->npoints = 5;
             pc->p[0] = pc->red_curve->first_segment()->initialPoint();
+            pc->p[3] = pc->red_curve->first_segment()->finalPoint();
             if(pc->green_curve->is_empty())
-                pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[1]);
+                pc->p[1] = pc->p[0] + (1./3)*(pc->p[0] - pc->p[3]);
             else
-                cubic = dynamic_cast<Geom::CubicBezier const*>(&*pc->green_curve->last_segment()
-                if(cubic && (*cubic)[2] == (*cubicIn)[3])
+                cubic = dynamic_cast<Geom::CubicBezier const*>(&*pc->green_curve->last_segment());
+                if(cubic && ((*cubic)[2] == (*cubic)[3]))
                     pc->p[1] = pc->p[0];
                 else
-                    pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[1]);
-            pc->p[3] = pc->red_curve->first_segment()->finalPoint();
+                    pc->p[1] = pc->p[0] + (1./3)*(pc->p[0] - pc->p[3]);
             pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
         }
     }else{
@@ -1950,46 +1944,70 @@ static void bspline_doEffect(SPCurve * curve)
         cubicIn = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
         cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
         cubicEnd = dynamic_cast<Geom::CubicBezier const*>(&*curve_end);
-        //Calculamos el nodo de inicio BSpline
-        lineHelper->moveto(SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment())));
-        lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubicEnd)[2],*end->first_segment())));
-        SBasisHelper = lineHelper->first_segment()->toSBasis();
-        lineHelper->reset();
-        //Guardamos el principio de la curva
-        startNode = SBasisHelper.valueAt(0.5);
-        //Definimos el punto de inicio original de la curva resultante
-        node = startNode;
+        if (path_it->closed() && cubicIn && cubicEnd && (*cubicIn)[1] != (*cubicEnd)[2]){
+            //Calculamos el nodo de inicio BSpline
+            SBasisIn = in->first_segment()->toSBasis();
+            SBasisEnd = end->first_segment()->toSBasis();
+            lineHelper->moveto(SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment())));
+            lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubicEnd)[2],*end->first_segment())));
+            SBasisHelper = lineHelper->first_segment()->toSBasis();
+            lineHelper->reset();
+            //Guardamos el principio de la curva
+            startNode = SBasisHelper.valueAt(0.5);
+            //Definimos el punto de inicio original de la curva resultante
+            node = startNode;
+        }else{
+            startNode = in->first_segment()->initialPoint();
+            node = startNode;
+        }
         //Recorremos todos los segmentos menos el último
         while ( curve_it2 != curve_endit )
         {
-            //Damos valor a el objeto SBasis para el path de entrada y el de salida
             SBasisIn = in->first_segment()->toSBasis();
             SBasisOut = out->first_segment()->toSBasis();
             //previousPointAt3 = pointAt3;
             //Calculamos los puntos que dividirían en tres segmentos iguales el path recto de entrada y de salida
-            pointAt0 = SBasisIn.valueAt(0);
-            pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment()));
-            pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[2],*in->first_segment()));
-            pointAt3 = SBasisIn.valueAt(1);
+            if(cubicIn){
+                pointAt0 = SBasisIn.valueAt(0);
+                pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[1],*in->first_segment()));
+                pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubicIn)[2],*in->first_segment()));
+                pointAt3 = SBasisIn.valueAt(1);
+            }else{
+                pointAt0 = SBasisIn.valueAt(0);
+                pointAt1 = SBasisIn.valueAt(0);
+                pointAt2 = SBasisIn.valueAt(1);
+                pointAt3 = SBasisIn.valueAt(1);
+            }
             //Y hacemos lo propio con el path de salida
             //nextPointAt0 = curveOut.valueAt(0);
-            nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[1],*in->first_segment()));
-            nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[1],*out->first_segment()));
-            nextPointAt3 = SBasisOut.valueAt(1);
-            
+            if(cubicOut){
+                nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[1],*out->first_segment()));
+                nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubicOut)[2],*out->first_segment()));
+                nextPointAt3 = SBasisOut.valueAt(1);
+            }else{
+                nextPointAt1 = SBasisOut.valueAt(0);
+                nextPointAt2 = SBasisOut.valueAt(1);
+                nextPointAt3 = SBasisOut.valueAt(1);
+            }
             //La curva BSpline se forma calculando el centro del segmanto de unión
             //de el punto situado en las 2/3 partes de el segmento de entrada
             //con el punto situado en la posición 1/3 del segmento de salida
             //Estos dos puntos ademas estan posicionados en el lugas correspondiente de
             //los manejadores de la curva
-            lineHelper->moveto(pointAt2);
-            lineHelper->lineto(nextPointAt1);
-            SBasisHelper = lineHelper->first_segment()->toSBasis();
-            lineHelper->reset();
-            //almacenamos el punto del anterior bucle -o el de cierre- que nos hara de principio de curva
-            previousNode = node;
-            //Y este hará de final de curva
-            node = SBasisHelper.valueAt(0.5);
+            if(nextPointAt1 != pointAt2){
+                lineHelper->moveto(pointAt2);
+                lineHelper->lineto(nextPointAt1);
+                SBasisHelper = lineHelper->first_segment()->toSBasis();
+                lineHelper->reset();
+                //almacenamos el punto del anterior bucle -o el de cierre- que nos hara de principio de curva
+                previousNode = node;
+                //Y este hará de final de curva
+                node = SBasisHelper.valueAt(0.5);
+            }else{
+                previousNode = node;
+                //Y este hará de final de curva
+                node = nextPointAt1;
+            }
             curveHelper->moveto(previousNode);
             curveHelper->curveto(pointAt1, pointAt2, node);
             //añadimos la curva generada a la curva pricipal
@@ -2006,9 +2024,10 @@ static void bspline_doEffect(SPCurve * curve)
             if(curve_it1 != curve_end){
                 out->moveto(curve_it2->initialPoint());
                 out->lineto(curve_it2->finalPoint());
+                cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
             }
             cubicIn = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
-            cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
+            
         }
         //Aberiguamos la ultima parte de la curva correspondiente al último segmento
         curveHelper->moveto(node);
