@@ -1,9 +1,14 @@
-/*  text_reassemble.h
-version 0.0.2 2012-12-07
-Copyright 2012, Caltech and David Mathog
+/**
+  @file text_reassemble.h  libTERE headers.
 
 See text_reassemble.c for notes
 
+File:      text_reassemble.h
+Version:   0.0.4
+Date:      24-JAN-2013
+Author:    David Mathog, Biology Division, Caltech
+email:     mathog@caltech.edu
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -22,6 +27,7 @@ extern "C" {
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+/** \cond */
 #define TEREMIN(A,B) (A < B ? A : B)
 #define TEREMAX(A,B) (A > B ? A : B)
 
@@ -31,151 +37,196 @@ extern "C" {
 #define ALLOCINFO_CHUNK 32
 #define ALLOCOUT_CHUNK  8192
 #define TRPRINT trinfo_append_out
+/** \endcond */
 
-/* text alignment types */
-#define ALILEFT    0x01
-#define ALICENTER  0x02
-#define ALIRIGHT   0x04
-#define ALIHORI    0x07
-#define ALITOP     0x08
-#define ALIBASE    0x10
-#define ALIBOT     0x20
-#define ALIVERT    0x38
-
-/* language direction types */
-#define LDIR_LR    0x00
-#define LDIR_RL    0x01
-#define LDIR_TB    0x02
-
-/* Flags */
-#define TR_EMFBOT  0x01 /* use an approximation compatible with EMF file's "BOTTOM" text orientation, which is not the "bottom" for Freetype fonts  */
-
-/* complex classification types
-   TR_TEXT    simple text object
-   TR_LINE    linear assembly of TR_TEXTS
-   TR_PARA_UJ sequential assembly of TR_LINE into a paragraph, with unknown justification properties
-   TR_PARA_LJ ..., left justified
-   TR_PARA_CJ ..., center justified
-   TR_PARA_RJ ..., right justified
+/** \defgroup text alignment types
+  Location of text's {X,Y} coordinate on bounding rectangle.
+  Values are compatible with Fontconfig.
+  @{
 */
-enum tr_classes {TR_TEXT,TR_LINE,TR_PARA_UJ,TR_PARA_LJ,TR_PARA_CJ,TR_PARA_RJ};
+#define ALILEFT    0x01     /**< text object horizontal alignment = left     */
+#define ALICENTER  0x02     /**< text object horizontal alignment = center   */
+#define ALIRIGHT   0x04     /**< text object horizontal alignment = right    */
+#define ALIHORI    0x07     /**< text object horizontal alignment mask       */
+#define ALITOP     0x08     /**< text object vertical   alignment = top      */
+#define ALIBASE    0x10     /**< text object vertical   alignment = baseline */
+#define ALIBOT     0x20     /**< text object vertical   alignment = bottom   */
+#define ALIVERT    0x38     /**< text object vertical   alignment mask       */
+/** @} */
 
-/* Fontinfo structure, values related to fonts */
+/** \defgroup language direction types
+  @{
+*/
+#define LDIR_LR    0x00     /**< left to right */ 
+#define LDIR_RL    0x01     /**< right to left */ 
+#define LDIR_TB    0x02     /**< top to bottom */ 
+/** @} */
+
+/** \defgroup special processing flags
+  @{
+*/
+#define TR_EMFBOT  0x01     /**< use an approximation compatible with EMF file's "BOTTOM" text orientation, which is not the "bottom" for Freetype fonts */ 
+/** @} */
+
+/** \enum tr_classes
+classification of complexes
+  @{
+*/
+enum tr_classes {
+      TR_TEXT,              /**< simple text object                                                   */
+      TR_LINE,              /**< linear assembly of TR_TEXTs                                          */
+      TR_PARA_UJ,           /**< sequential assembly of TR_LINEs and TR_TEXTs into a paragraph -      
+                                     unknown justification properties                                 */
+      TR_PARA_LJ,           /**< ditto, left justified                                                */
+      TR_PARA_CJ,           /**< ditto, center justified                                              */
+      TR_PARA_RJ            /**< ditto, right justified                                               */
+   };
+/** @} */
+
+/**
+   \brief Information for a font instance.
+*/
 typedef struct {
-   FT_Face     face;        /* font face structures (FT_FACE is a pointer!)                         */
-   uint8_t    *file;        /* pointers to font paths to files                                      */
-   uint8_t    *fname;       /* pointers to font names                                               */
-   FcPattern  *fpat;        /* must hang onto this or faces operations break                        */
-   double      spcadv;      /* advance equal to a space, in points                                  */
-   double      fsize;       /* face size in points                                                  */
+   FT_Face     face;        /**< font face structures (FT_FACE is a pointer!)                         */
+   uint8_t    *file;        /**< pointers to font paths to files                                      */
+   uint8_t    *fname;       /**< pointers to font names                                               */
+   FcPattern  *fpat;        /**< must hang onto this or faces operations break                        */
+   double      spcadv;      /**< advance equal to a space, in points                                  */
+   double      fsize;       /**< face size in points                                                  */
 } FNT_SPECS;
 
+/**
+   \brief Information for all font instances.
+*/
 typedef struct {
-   FT_Library  library;     /* Fontconfig handle                                                    */
-   FNT_SPECS  *fonts;       /* Array of fontinfo structures                                         */
-   int         space;       /* storage slots allocated                                              */
-   int         used;        /* storage slots in use                                                 */
+   FT_Library  library;     /**< Fontconfig handle                                                    */
+   FNT_SPECS  *fonts;       /**< Array of fontinfo structures                                         */
+   int         space;       /**< storage slots allocated                                              */
+   int         used;        /**< storage slots in use                                                 */
 } FT_INFO;
 
+/**
+   \brief Information for a single text object
+*/
 typedef struct {
-   uint8_t    *string;      /* UTF-8 text                                                           */
-   double      ori;         /* Orientation, angle of characters with respect to baseline in degrees */
-   double      fs;          /* font size of text                                                    */
-   double      x;           /* x coord relative to tri x,y, in points                               */
-   double      y;           /* y coord                                                              */
-   double      boff;        /* Y LL corner - boff finds baseline                                    */
-   double      vadvance;    /* Line spacing typically 1.25 or 1.2,  only set on the first text
-                                 element in a complex                                               */
-   uint32_t    color;       /* RGBA                                                                 */
-   int         taln;        /* text alignment with respect to x,y                                   */
-   int         ldir;        /* language diretion LDIR_*                                             */
-   int         italics;     /* italics, as in FontConfig                                            */
-   int         weight;      /* weight, as in FontConfig                                             */
-   int         condensed;   /* condensed, as in FontConfig                                          */
-   int         co;          /* condensed override, if set Font name included narrow                 */
-   int         rt_tidx;     /* index of rectangle that contains it                                  */
-   int         fi_idx;      /* index of the font it uses                                            */
+   uint8_t    *string;      /**< UTF-8 text                                                           */
+   double      ori;         /**< Orientation, angle of characters with respect to baseline in degrees */
+   double      fs;          /**< font size of text                                                    */
+   double      x;           /**< x coordinate, relative to TR_INFO x,y, in points                     */
+   double      y;           /**< y coordinate, relative to TR_INFO x,y, in points                     */
+   double      boff;        /**< Y LL corner - boff finds baseline                                    */
+   double      vadvance;    /**< Line spacing typically 1.25 or 1.2,  only set on the first text
+                                 element in a complex                                                 */
+   uint32_t    color;       /**< RGBA                                                                 */
+   int         taln;        /**< text alignment with respect to x,y                                   */
+   int         ldir;        /**< language diretion LDIR_*                                             */
+   int         italics;     /**< italics, as in FontConfig                                            */
+   int         weight;      /**< weight, as in FontConfig                                             */
+   int         condensed;   /**< condensed, as in FontConfig                                          */
+   int         co;          /**< condensed override, if set Font name included narrow                 */
+   int         rt_tidx;     /**< index of rectangle that contains it                                  */
+   int         fi_idx;      /**< index of the font it uses                                            */
 } TCHUNK_SPECS;
 
-/* Text Info/Position Info structure, values related to text properties and string geometry
+/**
+   \brief Information for all text objects.
    Coordinates here are INTERNAL, after offset/rotate using values in TR_INFO.
 */
 typedef struct {
-   TCHUNK_SPECS *chunks;     /* text chunks                                                         */
-   int         space;        /* storage slots allocated                                             */
-   int         used;         /* storage slots in use                                                */
+   TCHUNK_SPECS *chunks;     /**< text chunks                                                         */
+   int         space;        /**< storage slots allocated                                             */
+   int         used;         /**< storage slots in use                                                */
 } TP_INFO;
 
-/* Bounding Rectangle(s) structure
+/**
+   \brief Information for a single bounding rectangle.
    Coordinates here are INTERNAL, after offset/rotate using values in TR_INFO.
 */
 typedef struct {
-   double      xll;           /* x rectangle lower left corner                                      */
-   double      yll;           /* y "                                                                */
-   double      xur;           /* x upper right corner                                               */
-   double      yur;           /* y "                                                                */
-   double      xbearing;      /* x bearing of the leftmost character                                */
+   double      xll;           /**< x rectangle lower left corner                                      */
+   double      yll;           /**< y "                                                                */
+   double      xur;           /**< x upper right corner                                               */
+   double      yur;           /**< y "                                                                */
+   double      xbearing;      /**< x bearing of the leftmost character                                */
 } BRECT_SPECS;
 
+/**
+   \brief Information for all bounding rectangles.
+*/
 typedef struct {
-   BRECT_SPECS *rects;         /* bounding rectangles                                               */
-   int         space;          /* storage slots allocated                                           */
-   int         used;           /* storage slots in use                                              */
+   BRECT_SPECS *rects;         /**< bounding rectangles                                               */
+   int         space;          /**< storage slots allocated                                           */
+   int         used;           /**< storage slots in use                                              */
 } BR_INFO;
 
+/**
+   \brief List of all members of a single complex.
+*/
 typedef struct {
-   int        *members;        /* array of immediate children (for TR_PARA_* these are indicies 
-                                   for TR_TEXT or TR_LINE complexes also in cxi. For TR_TEXT
-                                   and TR_LINE these are indices to the actual text in tpi.)        */
-   int         space;          /* storage slots allocated                                           */
-   int         used;           /* storage slots in use                                              */
+   int        *members;        /**< array of immediate children (for TR_PARA_* these are indicies 
+                                    for TR_TEXT or TR_LINE complexes also in cxi. For TR_TEXT
+                                    and TR_LINE these are indices to the actual text in tpi.)         */
+   int         space;          /**< storage slots allocated                                           */
+   int         used;           /**< storage slots in use                                              */
 } CHILD_SPECS;
 
-/* Complex info structure, values related to the assembly of complex text from smaller pieces */
+/**
+   \brief Information for a single complex. 
+*/
 typedef struct {
-   int               rt_cidx;  /* index of rectangle that contains all members                      */
-   enum tr_classes   type;     /* classification of the complex                                     */
-   CHILD_SPECS       kids;     /* immediate child nodes of this complex, for type TR_TEXT the
-                                  idx refers to the tpi data. otherwise, cxi data                   */
+   int               rt_cidx;  /**< index of rectangle that contains all members                      */
+   enum tr_classes   type;     /**< classification of the complex                                     */
+   CHILD_SPECS       kids;     /**< immediate child nodes of this complex, for type TR_TEXT the
+                                    idx refers to the tpi data. otherwise, cxi data                   */
 } CX_SPECS;
 
+/**
+   \brief Information for all complexes.
+*/
 typedef struct {
-   CX_SPECS   *cx;             /* complexes                                                         */
-   int         space;          /* storage slots allocated                                           */
-   int         used;           /* storage slots in use                                              */
-   int         phase1;         /* Number of complexes (lines + text fragments) entered in phase 1   */
-   int         lines;          /* Number of lines in phase 1                                        */
-   int         paras;          /* Number of complexes (paras) entered in phase 2                    */
+   CX_SPECS   *cx;             /**< complexes                                                         */
+   int         space;          /**< storage slots allocated                                           */
+   int         used;           /**< storage slots in use                                              */
+   int         phase1;         /**< Number of complexes (lines + text fragments) entered in phase 1   */
+   int         lines;          /**< Number of lines in phase 1                                        */
+   int         paras;          /**< Number of complexes (paras) entered in phase 2                    */
 } CX_INFO;
 
-/* Text reassemble, overall structure */
+/**
+   \brief Information for the entire text reassembly system.
+*/
 typedef struct {
-   FT_INFO    *fti;            /* Font info storage                                                 */
-   TP_INFO    *tpi;            /* Text Info/Position Info storage                                   */
-   BR_INFO    *bri;            /* Bounding Rectangle Info storage                                   */
-   CX_INFO    *cxi;            /* Complex Info storage                                              */
-   uint8_t    *out;            /* buffer to hold formatted output                                   */
-   double      qe;             /* quantization error in points.                                     */
-   double      esc;            /* escapement angle in DEGREES                                       */
-   double      x;              /* coordinates of first text, in points                              */
-   double      y;
-   int         dirty;          /* 1 if text records are loaded                                      */ 
-   int         use_kern;       /* 1 if kerning is used, 0 if not                                    */
-   int         load_flags;     /* FT_LOAD_NO_SCALE or FT_LOAD_TARGET_NORMAL                         */
-   int         kern_mode;      /* FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED   */
-   int         outspace;       /* storage in output buffer  allocated                               */
-   int         outused;        /* storage in output buffer in use                                   */
+   FT_INFO    *fti;            /**< Font info storage                                                 */
+   TP_INFO    *tpi;            /**< Text Info/Position Info storage                                   */
+   BR_INFO    *bri;            /**< Bounding Rectangle Info storage                                   */
+   CX_INFO    *cxi;            /**< Complex Info storage                                              */
+   uint8_t    *out;            /**< buffer to hold formatted output                                   */
+   double      qe;             /**< quantization error in points.                                     */
+   double      esc;            /**< escapement angle in DEGREES                                       */
+   double      x;              /**< x coordinate of first text object, in points                      */
+   double      y;              /**< y coordinate of first text object, in points                      */
+   int         dirty;          /**< 1 if text records are loaded                                      */ 
+   int         use_kern;       /**< 1 if kerning is used, 0 if not                                    */
+   int         load_flags;     /**< FT_LOAD_NO_SCALE or FT_LOAD_TARGET_NORMAL                         */
+   int         kern_mode;      /**< FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED   */
+   int         outspace;       /**< storage in output buffer  allocated                               */
+   int         outused;        /**< storage in output buffer in use                                   */
 } TR_INFO;
 
 /* padding added to rectangles before overlap test */
+/**
+   \brief Information for one padding record.  (Padding is added to bounding rectangles before overlap tests.)
+*/
 typedef struct {
-   double up;                  /* to top                                                            */
-   double down;                /* to bottom                                                         */
-   double left;                /* to left                                                           */
-   double right;               /* to right                                                          */
+   double up;                  /**< to top                                                            */
+   double down;                /**< to bottom                                                         */
+   double left;                /**< to left                                                           */
+   double right;               /**< to right                                                          */
 } RT_PAD;
 
-/* iconv() has a funny cast on some older systems, on most recent ones
+/** \cond  */
+/*
+   iconv() has a funny cast on some older systems, on most recent ones
    it is just char **.  This tries to work around the issue.  If you build this
    on another funky system this code may need to be modified, or define ICONV_CAST
    on the compile line(but it may be tricky).
@@ -186,6 +237,7 @@ typedef struct {
 #if !defined(ICONV_CAST)
 #define ICONV_CAST (char **)
 #endif  //ICONV_CAST
+/** \endcond */
 
 /* Prototypes */
 int           TR_findcasesub(char *string, char *sub);
@@ -209,7 +261,6 @@ int           csp_make_insertable(CHILD_SPECS *csp);
 int           csp_insert(CHILD_SPECS *csp, int src);
 int           csp_merge(CHILD_SPECS *dst, CHILD_SPECS *src);
 void          csp_release(CHILD_SPECS *csp);
-#define       csp_clear csp_release  /* since the CHILD_SPECS area itself is not deleted, clear == reset */
 
 CX_INFO      *cxinfo_init(void);
 int           cxinfo_make_insertable(CX_INFO *cxi);

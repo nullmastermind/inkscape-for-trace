@@ -117,11 +117,10 @@ static pixel_t * pixel_at (bitmap_t * bitmap, int x, int y)
 {
     return bitmap->pixels + bitmap->width * y + x;
 }
-    
+
+
 /* Write "bitmap" to a PNG file specified by "path"; returns 0 on
    success, non-zero on error. */
-
-
 
 void
 my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
@@ -323,6 +322,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     bool new_FixPPTDashLine       = mod->get_param_bool("FixPPTDashLine");  // dashed line bug
     bool new_FixPPTGrad2Polys     = mod->get_param_bool("FixPPTGrad2Polys");  // gradient bug
     bool new_FixPPTPatternAsHatch = mod->get_param_bool("FixPPTPatternAsHatch");  // force all patterns as standard EMF hatch
+    bool new_FixImageRot          = mod->get_param_bool("FixImageRot");  // remove rotations on images
 
     TableGen(                  //possibly regenerate the unicode-convert tables
       mod->get_param_bool("TnrToSymbol"),
@@ -335,6 +335,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("FixPPTDashLine",new_FixPPTDashLine);
     ext->set_param_bool("FixPPTGrad2Polys",new_FixPPTGrad2Polys);
     ext->set_param_bool("FixPPTPatternAsHatch",new_FixPPTPatternAsHatch);
+    ext->set_param_bool("FixImageRot",new_FixImageRot);
     ext->set_param_bool("textToPath", new_val);
 
     emf_print_document_to_file(doc, filename);
@@ -374,9 +375,7 @@ typedef struct emf_device_context {
     double ScaleInX, ScaleInY;
     double ScaleOutX, ScaleOutY;
     U_COLORREF textColor;
-    bool textColorSet;
     U_COLORREF bkColor;
-    bool bkColorSet;
     uint32_t textAlign;
     U_XFORM worldTransform;
     U_POINTL cur;
@@ -423,6 +422,49 @@ typedef struct emf_callback_data {
     PEMF_OBJECT emf_obj;
 } EMF_CALLBACK_DATA, *PEMF_CALLBACK_DATA;
 
+/* given the transformation matrix from worldTranform return the scale in the matrix part.  Assumes that the
+   matrix is not used to skew, invert, or make another distorting transformation.  */
+double current_scale(PEMF_CALLBACK_DATA d){
+   double scale = d->dc[d->level].worldTransform.eM11 * d->dc[d->level].worldTransform.eM22 - 
+                  d->dc[d->level].worldTransform.eM12 * d->dc[d->level].worldTransform.eM21;
+   if(scale <= 0.0)scale=1.0;  /* something is dreadfully wrong with the matrix, but do not crash over it */
+   scale=sqrt(scale);
+   return(scale);
+}
+
+/* given the transformation matrix from worldTranform and the current x,y position in inkscape coordinates,
+   generate an SVG transform that gives the same amount of rotation, no scaling, and maps x,y back onto x,y.  This is used for
+   rotating objects when the location of at least one point in that object is known. Returns:
+   "matrix(a,b,c,d,e,f)"  (WITH the double quotes)
+*/
+static std::string current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int useoffset){
+   std::stringstream cxform;
+   double scale = current_scale(d);
+   cxform << "\"matrix(";
+   cxform << d->dc[d->level].worldTransform.eM11/scale;   cxform << ",";
+   cxform << d->dc[d->level].worldTransform.eM12/scale;   cxform << ",";
+   cxform << d->dc[d->level].worldTransform.eM21/scale;   cxform << ",";
+   cxform << d->dc[d->level].worldTransform.eM22/scale;   cxform << ",";
+   if(useoffset){
+      /* for the "new" coordinates drop the worldtransform translations, not used here */
+      double newx    = x * d->dc[d->level].worldTransform.eM11/scale + y * d->dc[d->level].worldTransform.eM21/scale;
+      double newy    = x * d->dc[d->level].worldTransform.eM12/scale + y * d->dc[d->level].worldTransform.eM22/scale;
+      cxform << x - newx;                                  cxform << ",";
+      cxform << y - newy;
+   }
+   else {
+      cxform << "0,0";
+   }
+   cxform << ")\"";
+   return(cxform.str());
+}
+
+/* given the transformation matrix from worldTranform return the rotation angle in radians.
+  counter clocwise from the x axis.  */
+double current_rotation(PEMF_CALLBACK_DATA d){
+    return -std::atan2(d->dc[d->level].worldTransform.eM12, d->dc[d->level].worldTransform.eM11);
+}
+
 /*  Add another 100 blank slots to the hatches array.
 */
 void enlarge_hatches(PEMF_CALLBACK_DATA d){
@@ -445,6 +487,7 @@ int in_hatches(PEMF_CALLBACK_DATA d, char *test){
 */
 uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchColor){
    char hatchname[64]; // big enough
+   char hrotname[64];  // big enough
    char tmpcolor[8];
    uint32_t idx;
 
@@ -457,15 +500,11 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
    switch(hatchType){
       case U_HS_SOLIDTEXTCLR:
       case U_HS_DITHEREDTEXTCLR:
-         if(d->dc[d->level].textColorSet){
-            sprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].textColor));
-         }
+         sprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].textColor));
          break;
       case U_HS_SOLIDBKCLR:
       case U_HS_DITHEREDBKCLR:
-         if(d->dc[d->level].bkColorSet){
-            sprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].bkColor));
-         }
+         sprintf(tmpcolor,"%6.6X",sethexcolor(d->dc[d->level].bkColor));
          break;
       default:
          break;
@@ -476,7 +515,8 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
    // on export the background/text might not match at the time this is written, and the colors will shift.
    if(hatchType > U_HS_SOLIDCLR)hatchType = U_HS_SOLIDCLR;
 
-   sprintf(hatchname,"EMFhatch%d_%s",hatchType,tmpcolor);
+   // pattern defines hatch when there is no rotation. Load this one first.
+   sprintf(hatchname,"EMFhatch%d_%s",hatchType,tmpcolor);    /* name of pattern BEFORE rotation*/
    idx = in_hatches(d,hatchname);
    if(!idx){  // add it if not already present
       if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
@@ -492,14 +532,12 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
             *(d->defs) += "       <path d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
             *(d->defs) += tmpcolor;
             *(d->defs) += "\" />\n";
-            *(d->defs) += "    </pattern>\n";
             break;
          case U_HS_VERTICAL:
             *(d->defs) += "       patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" x=\"0\" y=\"0\"  >\n";
             *(d->defs) += "       <path d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
             *(d->defs) += tmpcolor;
             *(d->defs) += "\" />\n";
-            *(d->defs) += "    </pattern>\n";
             break;
          case U_HS_FDIAGONAL:
             *(d->defs) += "       patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" x=\"0\" y=\"0\"  viewBox=\"0 0 6 6\" preserveAspectRatio=\"none\" >\n";
@@ -514,7 +552,6 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
             *(d->defs) += "       <use xlink:href=\"#sub";
             *(d->defs) += hatchname;
             *(d->defs) += "\" transform=\"translate(-6,0)\"/>\n";
-            *(d->defs) += "    </pattern>\n";
             break;
          case U_HS_BDIAGONAL:
             *(d->defs) += "       patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" x=\"0\" y=\"0\"  viewBox=\"0 0 6 6\" preserveAspectRatio=\"none\" >\n";
@@ -529,26 +566,23 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
             *(d->defs) += "       <use xlink:href=\"#sub";
             *(d->defs) += hatchname;
             *(d->defs) += "\" transform=\"translate(-6,0)\"/>\n";
-            *(d->defs) += "    </pattern>\n";
             break;
          case U_HS_CROSS:
             *(d->defs) += "       patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" x=\"0\" y=\"0\"  >\n";
             *(d->defs) += "       <path d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
             *(d->defs) += tmpcolor;
             *(d->defs) += "\" />\n";
-            *(d->defs) += "    </pattern>\n";
              break;
          case U_HS_DIAGCROSS:
             *(d->defs) += "       patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" x=\"0\" y=\"0\"  viewBox=\"0 0 6 6\" preserveAspectRatio=\"none\" >\n";
             *(d->defs) += "       <use xlink:href=\"#sub";
-            sprintf(hatchname,"EMFhatch%d_%6.6X",U_HS_FDIAGONAL,sethexcolor(hatchColor));
-            *(d->defs) += hatchname;
+            sprintf(hrotname,"EMFhatch%d_%6.6X",U_HS_FDIAGONAL,sethexcolor(hatchColor)); // keep hatchname intact for later, hrotname will overwrite this
+            *(d->defs) += hrotname;
             *(d->defs) += "\" transform=\"translate(0,0)\"/>\n";
             *(d->defs) += "       <use xlink:href=\"#sub";
-            sprintf(hatchname,"EMFhatch%d_%6.6X",U_HS_BDIAGONAL,sethexcolor(hatchColor));
-            *(d->defs) += hatchname;
+            sprintf(hrotname,"EMFhatch%d_%6.6X",U_HS_BDIAGONAL,sethexcolor(hatchColor));
+            *(d->defs) += hrotname;
             *(d->defs) += "\" transform=\"translate(0,0)\"/>\n";
-            *(d->defs) += "    </pattern>\n";
             break;
          case U_HS_SOLIDCLR:
          case U_HS_DITHEREDCLR:
@@ -562,11 +596,38 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
             *(d->defs) += tmpcolor;
             *(d->defs) += ";stroke:none";
             *(d->defs) += "\" />\n";
-            *(d->defs) += "    </pattern>\n";
             break;
       }
+      *(d->defs) += "    ";
+      *(d->defs) += "    </pattern>\n";
       idx = d->hatches.count;
    }
+
+
+   // pattern allows the inner pattern to be rotated nicely, load this one second only if needed
+   // hatchname retained from above 
+   sprintf(hrotname,"EMFrothatch%d_%s",hatchType,tmpcolor);  /* name of pattern AFTER  rotation*/
+   if(current_rotation(d) >= 0.00001 || current_rotation(d) <= -0.00001){ /* some rotation, allow a little rounding error around 0 degrees */
+      idx = in_hatches(d,hrotname);
+      if(!idx){
+         if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
+         d->hatches.strings[d->hatches.count++]=strdup(hrotname);
+
+         *(d->defs) += "\n";
+         *(d->defs) += "    <pattern\n";
+         *(d->defs) += "       id=\"";
+         *(d->defs) += hrotname;
+         *(d->defs) += "\"\n";
+         *(d->defs) += "       xlink:href=\"#";
+         *(d->defs) += hatchname;
+         *(d->defs) += "\"\n";
+         *(d->defs) += "       patternTransform=";
+         *(d->defs) += current_matrix(d, 0.0, 0.0, 0); //j use offset 0,0
+         *(d->defs) += " />\n";
+         idx = d->hatches.count;
+      }
+   }
+
    return(idx-1);
 }
 
@@ -597,7 +658,9 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
        
    uint32_t idx;
    char imagename[64]; // big enough
+   char imrotname[64]; // big enough
    char xywh[64]; // big enough
+   int  dibparams;
 
    MEMPNG mempng; // PNG in memory comes back in this
    mempng.buffer = NULL;
@@ -609,7 +672,7 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
    if(!cbBits || 
       !cbBmi  ||                                                                                    
       (iUsage != U_DIB_RGB_COLORS) ||                                                               
-      !get_DIB_params(  // this returns pointers and values, but allocates no memory                
+      !(dibparams = get_DIB_params(  // this returns pointers and values, but allocates no memory                
           pEmr,                                                                                     
           offBits,                                                                                  
           offBmi,                                                                                   
@@ -620,13 +683,14 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
          &height,                                                                                   
          &colortype,                                                                                
          &invert                                                                                    
-      )){                                                                                           
+       ))
+      ){                                                                                           
 
       // U_EMRCREATEMONOBRUSH uses text/bk colors instead of what is in the color map.              
       if(((PU_EMR)pEmr)->iType == U_EMR_CREATEMONOBRUSH){                                                 
          if(numCt==2){                                                                              
             ct[0] =  U_RGB2BGR(d->dc[d->level].textColor);                                          
-            ct[1] =  U_RGB2BGR(d->dc[d->level].bkColor);                                            
+            ct[1] =  U_RGB2BGR(d->dc[d->level].bkColor); 
          }                                                                                          
          else {  // createmonobrush renders on other platforms this way                             
             return(0xFFFFFFFF);                                                                     
@@ -654,7 +718,11 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
       }                                                                                             
    }
    gchar *base64String;
-   if(mempng.buffer){
+   if(dibparams == U_BI_JPEG || dibparams==U_BI_PNG){
+       base64String = g_base64_encode((guchar*) px, numCt );
+       idx = in_images(d, (char *) base64String);
+   }
+   else if(mempng.buffer){
        base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
        free(mempng.buffer);
        idx = in_images(d, (char *) base64String);
@@ -666,7 +734,7 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
        base64String = strdup("iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAAA3NCSVQICAjb4U/gAAAALElEQVQImQXBQQ2AMAAAsUJQMSWI2H8qME1yMshojwrvGB8XcHKvR1XtOTc/8HENumHCsOMAAAAASUVORK5CYII=");
        idx = in_images(d, (char *) base64String);
    }
-   if(!idx){  // add it if not already present
+   if(!idx){  // add it if not already present - we looked at the actual data for comparison
       if(d->images.count == d->images.size){  enlarge_images(d); }
       idx = d->images.count;
       d->images.strings[d->images.count++]=strdup(base64String);
@@ -680,7 +748,8 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
       *(d->defs) += "\"\n      ";
       *(d->defs) += xywh;
       *(d->defs) += "\n";
-      *(d->defs) += "       xlink:href=\"data:image/png;base64,";
+      if(dibparams == U_BI_JPEG){    *(d->defs) += "       xlink:href=\"data:image/jpeg;base64,"; }
+      else {                         *(d->defs) += "       xlink:href=\"data:image/png;base64,";  }
       *(d->defs) += base64String;
       *(d->defs) += "\"\n";
       *(d->defs) += "    />\n";
@@ -699,9 +768,46 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
       *(d->defs) += " xlink:href=\"#";
       *(d->defs) += imagename;
       *(d->defs) += "\" />\n";
+      *(d->defs) += "    ";
       *(d->defs) += "    </pattern>\n";
    }
    g_free(base64String);
+   
+   /* image allows the inner image to be rotated nicely, load this one second only if needed
+      imagename retained from above 
+      Here comes a dreadful hack.  How do we determine if this rotation of the base image has already
+      been loaded?  The image names contain no identifying information, they are just numbered sequentially.
+      So the rotated name is EMFrotimage###_XXXXXX, where ### is the number of the referred to image, and
+      XXXX is the rotation in radians x 1000000 and truncated.  That is then stored in BASE64 as the "image".
+      The corresponding SVG generated though is not for an image, but a reference to an image.
+      The name of the pattern MUST stil be EMFimage###_ref or output_style() will not be able to use it.
+   */
+   if(current_rotation(d) >= 0.00001 || current_rotation(d) <= -0.00001){ /* some rotation, allow a little rounding error around 0 degrees */
+      int tangle = round(current_rotation(d)*1000000.0);
+      sprintf(imrotname,"EMFrotimage%d_%d",idx-1,tangle);
+      base64String = g_base64_encode((guchar*) imrotname, strlen(imrotname) );
+      idx = in_images(d, (char *) base64String); // scan for this "image"
+      if(!idx){
+         if(d->images.count == d->images.size){  enlarge_images(d); }
+         idx = d->images.count;
+         d->images.strings[d->images.count++]=strdup(base64String);
+         sprintf(imrotname,"EMFimage%d",idx++);
+
+         *(d->defs) += "\n";
+         *(d->defs) += "    <pattern\n";
+         *(d->defs) += "       id=\"";
+         *(d->defs) += imrotname;
+         *(d->defs) += "_ref\"\n";
+         *(d->defs) += "       xlink:href=\"#";
+         *(d->defs) += imagename;
+         *(d->defs) += "_ref\"\n";
+         *(d->defs) += "       patternTransform=";
+         *(d->defs) += current_matrix(d, 0.0, 0.0, 0); //j use offset 0,0
+         *(d->defs) += " />\n";
+      }
+      g_free(base64String);
+   }
+   
    return(idx-1);
 }
 
@@ -936,16 +1042,20 @@ pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 }
 
 static double
-pix_to_size_point(PEMF_CALLBACK_DATA d, double px)
+pix_to_abs_size(PEMF_CALLBACK_DATA d, double px)
 {
-    double ppx = px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0) * d->D2PscaleX;
-    // double ppy = 0;
+    double  ppx = fabs(px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0) * d->D2PscaleX * current_scale(d));
+    return ppx;
+}
 
-    double dx = ppx * d->dc[d->level].worldTransform.eM11;  // + ppy * d->dc[d->level].worldTransform.eM21
-    double dy = ppx * d->dc[d->level].worldTransform.eM12;  // + ppy * d->dc[d->level].worldTransform.eM22
-
-    double tmp =  sqrt(dx * dx + dy * dy);
-    return tmp;
+/* returns "x,y" (without the quotes) in inkscape coordinates for a pair of EMF x,y coordinates
+*/
+static std::string pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y){
+   std::stringstream cxform;
+   cxform << pix_to_x_point(d,x,y);
+   cxform << ",";
+   cxform << pix_to_y_point(d,x,y);
+   return(cxform.str());
 }
 
 
@@ -1044,14 +1154,14 @@ select_pen(PEMF_CALLBACK_DATA d, int index)
     } else if (pEmr->lopn.lopnWidth.x) {
         int cur_level = d->level;
         d->level = d->emf_obj[index].level;
-        double pen_width = pix_to_size_point( d, pEmr->lopn.lopnWidth.x );
+        double pen_width = pix_to_abs_size( d, pEmr->lopn.lopnWidth.x );
         d->level = cur_level;
         d->dc[d->level].style.stroke_width.value = pen_width;
     } else { // this stroke should always be rendered as 1 pixel wide, independent of zoom level (can that be done in SVG?)
         //d->dc[d->level].style.stroke_width.value = 1.0;
         int cur_level = d->level;
         d->level = d->emf_obj[index].level;
-        double pen_width = pix_to_size_point( d, 1 );
+        double pen_width = pix_to_abs_size( d, 1 );
         d->level = cur_level;
         d->dc[d->level].style.stroke_width.value = pen_width;
     }
@@ -1088,7 +1198,7 @@ select_extpen(PEMF_CALLBACK_DATA d, int index)
                     d->level = d->emf_obj[index].level;
 //  Doing it this way typically results in a pattern that is tiny, better to assume the array
 //  is the same scale as for dot/dash below, that is, no scaling should be applied
-//                    double dash_length = pix_to_size_point( d, pEmr->elp.elpStyleEntry[i] );
+//                    double dash_length = pix_to_abs_size( d, pEmr->elp.elpStyleEntry[i] );
                     double dash_length = pEmr->elp.elpStyleEntry[i];
                     d->level = cur_level;
                     d->dc[d->level].style.stroke_dash.dash[i] = dash_length;
@@ -1196,14 +1306,14 @@ select_extpen(PEMF_CALLBACK_DATA d, int index)
        if (pEmr->elp.elpWidth) {
            int cur_level = d->level;
            d->level = d->emf_obj[index].level;
-           double pen_width = pix_to_size_point( d, pEmr->elp.elpWidth );
+           double pen_width = pix_to_abs_size( d, pEmr->elp.elpWidth );
            d->level = cur_level;
            d->dc[d->level].style.stroke_width.value = pen_width;
        } else { // this stroke should always be rendered as 1 pixel wide, independent of zoom level (can that be done in SVG?)
            //d->dc[d->level].style.stroke_width.value = 1.0;
            int cur_level = d->level;
            d->level = d->emf_obj[index].level;
-           double pen_width = pix_to_size_point( d, 1 );
+           double pen_width = pix_to_abs_size( d, 1 );
            d->level = cur_level;
            d->dc[d->level].style.stroke_width.value = pen_width;
        }
@@ -1303,7 +1413,7 @@ select_font(PEMF_CALLBACK_DATA d, int index)
     */
     int cur_level = d->level;
     d->level = d->emf_obj[index].level;
-    double font_size = pix_to_size_point( d, pEmr->elfw.elfLogFont.lfHeight );
+    double font_size = pix_to_abs_size( d, pEmr->elfw.elfLogFont.lfHeight );
     /* snap the font_size to the nearest 1/32nd of a point.
        (The size is converted from Pixels to points, snapped, and converted back.)
        See the notes where d->D2Pscale[XY] are set for the reason why.
@@ -1408,12 +1518,12 @@ uint32_t *unknown_chars(size_t count){
   \fn store SVG for an image given the pixmap and various coordinate information
   \param d
   \param pEmr
-  \param dl       (double) destination left   in inkscape pixels
-  \param dt       (double) destination top    in inkscape pixels
-  \param dr       (double) destination right  in inkscape pixels
-  \param db       (double) destination bottom in inkscape pixels
-  \param sl       (int) source left in pixels in the src image
-  \param st       (int) source top  in pixels in the src image
+  \param dx       (double) destination x      in inkscape pixels
+  \param dy       (double) destination y      in inkscape pixels
+  \param dw       (double) destination width  in inkscape pixels
+  \param dh       (double) destination height in inkscape pixels
+  \param sx       (int)    source      x      in src image pixels
+  \param sy       (int)    source      y      in src image pixels
   \param iUsage
   \param offBits
   \param cbBits
@@ -1421,89 +1531,109 @@ uint32_t *unknown_chars(size_t count){
   \param cbBmi
 */
 void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
-  double dl, double dt, double dr, double db, int sl, int st, int sw, int sh,  
-  uint32_t iUsage, uint32_t offBits, uint32_t cbBits, uint32_t offBmi, uint32_t cbBmi){
-            SVGOStringStream tmp_image;
-            tmp_image << " y=\"" << dt << "\"\n x=\"" << dl <<"\"\n ";
+       double dx, double dy, double dw, double dh, int sx, int sy, int sw, int sh,  
+       uint32_t iUsage, uint32_t offBits, uint32_t cbBits, uint32_t offBmi, uint32_t cbBmi){
 
-            // The image ID is filled in much later when tmp_image is converted
+   SVGOStringStream tmp_image;
+   int  dibparams;
 
-            tmp_image << " xlink:href=\"data:image/png;base64,";
-           
-            MEMPNG mempng; // PNG in memory comes back in this
-            mempng.buffer = NULL;
-           
-            char *rgba_px=NULL;     // RGBA pixels
-            char *sub_px=NULL;      // RGBA pixels, subarray
-            char *px=NULL;          // DIB pixels
-            uint32_t width, height, colortype, numCt, invert;
-            PU_RGBQUAD ct = NULL;
-            if(!cbBits || 
-               !cbBmi  || 
-               (iUsage != U_DIB_RGB_COLORS) || 
-               !get_DIB_params(  // this returns pointers and values, but allocates no memory
-                   pEmr,
-                   offBits,
-                   offBmi,
-                  &px,
-                  &ct,
-                  &numCt,
-                  &width,
-                  &height,
-                  &colortype,
-                  &invert
-               )){
-               if(sw == 0 || sl == 0){
-                  sw = width;
-                  sh = height;
-               }
+   tmp_image << " y=\"" << dy << "\"\n x=\"" << dx <<"\"\n ";
 
-               if(!DIB_to_RGBA(
-                     px,         // DIB pixel array
-                     ct,         // DIB color table
-                     numCt,      // DIB color table number of entries
-                     &rgba_px,   // U_RGBA pixel array (32 bits), created by this routine, caller must free.
-                     width,      // Width of pixel array
-                     height,     // Height of pixel array
-                     colortype,  // DIB BitCount Enumeration
-                     numCt,      // Color table used if not 0
-                     invert      // If DIB rows are in opposite order from RGBA rows
-                     ) && 
-                  rgba_px)
-               {
-                  sub_px = RGBA_to_RGBA(
-                     rgba_px,    // full pixel array from DIB
-                     width,      // Width of pixel array
-                     height,     // Height of pixel array
-                     sl,st,      // starting point in pixel array
-                     &sw,&sh     // columns/rows to extract from the pixel array (output array size)
-                  );
+   // The image ID is filled in much later when tmp_image is converted
 
-                  if(!sub_px)sub_px=rgba_px;
-                  toPNG(         // Get the image from the RGBA px into mempng
-                      &mempng,
-                      sw, sh,    // size of the extracted pixel array
-                      sub_px);
-                  free(sub_px);
-               }
-            }
-            if(mempng.buffer){
-                gchar *base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
-                free(mempng.buffer);
-                tmp_image << base64String ;
-                g_free(base64String);
-            }
-            else {
-              // insert a random 3x4 blotch otherwise
-              tmp_image << "iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAAA3NCSVQICAjb4U/gAAAALElEQVQImQXBQQ2AMAAAsUJQMSWI2H8qME1yMshojwrvGB8XcHKvR1XtOTc/8HENumHCsOMAAAAASUVORK5CYII=";
-            }
-               
-            tmp_image << "\"\n height=\"" << db-dt+1 << "\"\n width=\"" << dr-dl+1 << "\"\n";
+   
+   MEMPNG mempng; // PNG in memory comes back in this
+   mempng.buffer = NULL;
+   
+   char *rgba_px=NULL;     // RGBA pixels
+   char *sub_px=NULL;      // RGBA pixels, subarray
+   char *px=NULL;          // DIB pixels
+   uint32_t width, height, colortype, numCt, invert;
+   PU_RGBQUAD ct = NULL;
+   if(!cbBits || 
+      !cbBmi  || 
+      (iUsage != U_DIB_RGB_COLORS) || 
+      !(dibparams = get_DIB_params(  // this returns pointers and values, but allocates no memory
+          pEmr,
+          offBits,
+          offBmi,
+         &px,
+         &ct,
+         &numCt,
+         &width,
+         &height,
+         &colortype,
+         &invert
+      ))
+      ){
+      if(sw == 0 || sh == 0){
+         sw = width;
+         sh = height;
+      }
 
-            *(d->outsvg) += "\n\t <image\n";
-            *(d->outsvg) += tmp_image.str().c_str();
-            *(d->outsvg) += "/> \n";
-            *(d->path) = "";
+      if(!DIB_to_RGBA(
+            px,         // DIB pixel array
+            ct,         // DIB color table
+            numCt,      // DIB color table number of entries
+            &rgba_px,   // U_RGBA pixel array (32 bits), created by this routine, caller must free.
+            width,      // Width of pixel array
+            height,     // Height of pixel array
+            colortype,  // DIB BitCount Enumeration
+            numCt,      // Color table used if not 0
+            invert      // If DIB rows are in opposite order from RGBA rows
+            ) && 
+         rgba_px)
+      {
+         sub_px = RGBA_to_RGBA(
+            rgba_px,    // full pixel array from DIB
+            width,      // Width of pixel array
+            height,     // Height of pixel array
+            sx,sy,      // starting point in pixel array
+            &sw,&sh     // columns/rows to extract from the pixel array (output array size)
+         );
+
+         if(!sub_px)sub_px=rgba_px;
+         toPNG(         // Get the image from the RGBA px into mempng
+             &mempng,
+             sw, sh,    // size of the extracted pixel array
+             sub_px);
+         free(sub_px);
+      }
+   }
+   gchar *base64String;
+   if(dibparams == U_BI_JPEG){
+      tmp_image << " xlink:href=\"data:image/jpeg;base64,";
+      base64String = g_base64_encode((guchar*) px, numCt );
+      tmp_image << base64String ;
+      g_free(base64String);
+   }
+   else if(dibparams==U_BI_PNG){
+      tmp_image << " xlink:href=\"data:image/png;base64,";
+      base64String = g_base64_encode((guchar*) px, numCt );
+      tmp_image << base64String ;
+      g_free(base64String);
+   }
+   else if(mempng.buffer){
+      tmp_image << " xlink:href=\"data:image/png;base64,";
+      gchar *base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
+      free(mempng.buffer);
+      tmp_image << base64String ;
+      g_free(base64String);
+   }
+   else {
+      tmp_image << " xlink:href=\"data:image/png;base64,";
+      // insert a random 3x4 blotch otherwise
+      tmp_image << "iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAAA3NCSVQICAjb4U/gAAAALElEQVQImQXBQQ2AMAAAsUJQMSWI2H8qME1yMshojwrvGB8XcHKvR1XtOTc/8HENumHCsOMAAAAASUVORK5CYII=";
+   }
+      
+   tmp_image << "\"\n height=\"" << dh << "\"\n width=\"" << dw << "\"\n";
+
+   tmp_image << " transform=" << current_matrix(d, dx, dy, 1); // calculate appropriate offset
+   *(d->outsvg) += "\n\t <image\n";
+   *(d->outsvg) += tmp_image.str().c_str();
+   
+   *(d->outsvg) += "/> \n";
+   *(d->path) = "";
 }
 
 /**
@@ -1690,7 +1820,7 @@ std::cout << "BEFORE DRAW"
 
             // d->defs holds any defines which are read in.
 
-            tmp_outsvg << "\n</defs>\n<g>\n";                   // start of main body
+            tmp_outsvg << "\n</defs>\n\n";                   // start of main body
 
             if (pEmr->nHandles) {
                 d->n_obj = pEmr->nHandles;
@@ -1724,15 +1854,13 @@ std::cout << "BEFORE DRAW"
 
             tmp_str <<
                 "\n\tM " <<
-                pix_to_x_point( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " " <<
-                pix_to_y_point( d, pEmr->aptl[0].x, pEmr->aptl[0].y) << " ";
+                pix_to_xy( d, pEmr->aptl[0].x, pEmr->aptl[0].y) << " ";
 
             for (i=1; i<pEmr->cptl; ) {
                 tmp_str << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cptl; j++,i++) {
                     tmp_str <<
-                        pix_to_x_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " " <<
-                        pix_to_y_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                        pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
                 }
             }
 
@@ -1754,14 +1882,12 @@ std::cout << "BEFORE DRAW"
 
             tmp_str <<
                 "\n\tM " <<
-                pix_to_x_point( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " " <<
-                pix_to_y_point( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " ";
+                pix_to_xy( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " ";
 
             for (i=1; i<pEmr->cptl; i++) {
                 tmp_str <<
                     "\n\tL " <<
-                    pix_to_x_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " " <<
-                    pix_to_y_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -1783,14 +1909,12 @@ std::cout << "BEFORE DRAW"
 
             tmp_str <<
                 "\n\tM " <<
-                pix_to_x_point( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " " <<
-                pix_to_y_point( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " ";
+                pix_to_xy( d, pEmr->aptl[0].x, pEmr->aptl[0].y ) << " ";
 
             for (i=1; i<pEmr->cptl; i++) {
                 tmp_str <<
                     "\n\tL " <<
-                    pix_to_x_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " " <<
-                    pix_to_y_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -1810,8 +1934,7 @@ std::cout << "BEFORE DRAW"
                 tmp_path << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cptl; j++,i++) {
                     tmp_path <<
-                        pix_to_x_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " " <<
-                        pix_to_y_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                        pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
                 }
             }
 
@@ -1829,8 +1952,7 @@ std::cout << "BEFORE DRAW"
             for (i=0; i<pEmr->cptl;i++) {
                 tmp_path <<
                     "\n\tL " <<
-                    pix_to_x_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " " <<
-                    pix_to_y_point( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
             }
 
             break;
@@ -1855,14 +1977,12 @@ std::cout << "BEFORE DRAW"
                 SVGOStringStream poly_path;
 
                 poly_path << "\n\tM " <<
-                    pix_to_x_point( d, aptl[i].x, aptl[i].y ) << " " <<
-                    pix_to_y_point( d, aptl[i].x, aptl[i].y ) << " ";
+                    pix_to_xy( d, aptl[i].x, aptl[i].y ) << " ";
                 i++;
 
                 for (j=1; j<pEmr->aPolyCounts[n] && i<pEmr->cptl; j++) {
                     poly_path << "\n\tL " <<
-                        pix_to_x_point( d, aptl[i].x, aptl[i].y ) << " " <<
-                        pix_to_y_point( d, aptl[i].x, aptl[i].y ) << " ";
+                        pix_to_xy( d, aptl[i].x, aptl[i].y ) << " ";
                     i++;
                 }
 
@@ -1967,7 +2087,6 @@ std::cout << "BEFORE DRAW"
         {
             dbg_str << "<!-- U_EMR_EOF -->\n";
 
-            tmp_outsvg << "</g>\n";
             tmp_outsvg << "</svg>\n";
             *(d->outsvg) = *(d->outdef) + *(d->defs) + *(d->outsvg);
             OK=0;
@@ -2043,7 +2162,6 @@ std::cout << "BEFORE DRAW"
 
             PU_EMRSETTEXTCOLOR pEmr = (PU_EMRSETTEXTCOLOR) lpEMFR;
             d->dc[d->level].textColor = pEmr->crColor;
-            d->dc[d->level].textColorSet = true;
             break;
         }
         case U_EMR_SETBKCOLOR:
@@ -2052,7 +2170,6 @@ std::cout << "BEFORE DRAW"
 
             PU_EMRSETBKCOLOR pEmr = (PU_EMRSETBKCOLOR) lpEMFR;
             d->dc[d->level].bkColor = pEmr->crColor;
-            d->dc[d->level].bkColorSet = true;
             break;
         }
         case U_EMR_OFFSETCLIPRGN:        dbg_str << "<!-- U_EMR_OFFSETCLIPRGN -->\n";      break;
@@ -2068,8 +2185,7 @@ std::cout << "BEFORE DRAW"
 
             tmp_path <<
                 "\n\tM " <<
-                pix_to_x_point( d, pEmr->ptl.x, pEmr->ptl.y ) << " " <<
-                pix_to_y_point( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
+                pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
             break;
         }
         case U_EMR_SETMETARGN:           dbg_str << "<!-- U_EMR_SETMETARGN -->\n";         break;
@@ -2085,19 +2201,20 @@ std::cout << "BEFORE DRAW"
                 break;
             rc_old = rc;
 
-            double l = pix_to_x_point( d, rc.left, rc.top );
-            double t = pix_to_y_point( d, rc.left, rc.top );
-            double r = pix_to_x_point( d, rc.right, rc.bottom );
-            double b = pix_to_y_point( d, rc.right, rc.bottom );
+            double dx = pix_to_x_point( d, rc.left, rc.top );
+            double dy = pix_to_y_point( d, rc.left, rc.top );
+            double dw = pix_to_abs_size( d, rc.right  - rc.left + 1);
+            double dh = pix_to_abs_size( d, rc.bottom - rc.top  + 1);
 
             SVGOStringStream tmp_rectangle;
             tmp_rectangle << "\n<clipPath\n\tclipPathUnits=\"userSpaceOnUse\" ";
-            tmp_rectangle << "\n\tid=\"clipEmfPath" << ++(d->id) << "\" >";
+            tmp_rectangle << "\nid=\"clipEmfPath" << ++(d->id) << "\" >";
             tmp_rectangle << "\n<rect ";
-            tmp_rectangle << "\n\tx=\"" << l << "\" ";
-            tmp_rectangle << "\n\ty=\"" << t << "\" ";
-            tmp_rectangle << "\n\twidth=\"" << r-l << "\" ";
-            tmp_rectangle << "\n\theight=\"" << b-t << "\" />";
+            tmp_rectangle << "\n   x=\""      << dx << "\" ";
+            tmp_rectangle << "\n   y=\""      << dy << "\" ";
+            tmp_rectangle << "\n   width=\""  << dw << "\" ";
+            tmp_rectangle << "\n   height=\"" << dh << "\" />";
+            tmp_rectangle << "\n   transform=" << current_matrix(d, dx, dy, 1); // calculate appropriate offset
             tmp_rectangle << "\n</clipPath>";
 
             *(d->outdef) += tmp_rectangle.str().c_str();
@@ -2372,15 +2489,10 @@ std::cout << "BEFORE DRAW"
             PU_EMRELLIPSE pEmr = (PU_EMRELLIPSE) lpEMFR;
             U_RECTL rclBox = pEmr->rclBox;
 
-            double l = pix_to_x_point( d, rclBox.left,  rclBox.top );
-            double t = pix_to_y_point( d, rclBox.left,  rclBox.top );
-            double r = pix_to_x_point( d, rclBox.right, rclBox.bottom );
-            double b = pix_to_y_point( d, rclBox.right, rclBox.bottom );
-
-            double cx = (l + r) / 2.0;
-            double cy = (t + b) / 2.0;
-            double rx = fabs(l - r) / 2.0;
-            double ry = fabs(t - b) / 2.0;
+            double cx = pix_to_x_point( d, (rclBox.left + rclBox.right)/2.0, (rclBox.bottom + rclBox.top)/2.0 );
+            double cy = pix_to_y_point( d, (rclBox.left + rclBox.right)/2.0, (rclBox.bottom + rclBox.top)/2.0 );
+            double rx = pix_to_abs_size( d, fabs(rclBox.right - rclBox.left  )/2.0 );
+            double ry = pix_to_abs_size( d, fabs(rclBox.top   - rclBox.bottom)/2.0 );
 
             SVGOStringStream tmp_ellipse;
             tmp_ellipse << "cx=\"" << cx << "\" ";
@@ -2405,16 +2517,11 @@ std::cout << "BEFORE DRAW"
             PU_EMRRECTANGLE pEmr = (PU_EMRRECTANGLE) lpEMFR;
             U_RECTL rc = pEmr->rclBox;
 
-            double l = pix_to_x_point( d, rc.left, rc.top );
-            double t = pix_to_y_point( d, rc.left, rc.top );
-            double r = pix_to_x_point( d, rc.right, rc.bottom );
-            double b = pix_to_y_point( d, rc.right, rc.bottom );
-
             SVGOStringStream tmp_rectangle;
-            tmp_rectangle << "\n\tM " << l << " " << t << " ";
-            tmp_rectangle << "\n\tL " << r << " " << t << " ";
-            tmp_rectangle << "\n\tL " << r << " " << b << " ";
-            tmp_rectangle << "\n\tL " << l << " " << b << " ";
+            tmp_rectangle << "\n\tM " << pix_to_xy( d, rc.left , rc.top )     << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy( d, rc.right, rc.top )     << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
+            tmp_rectangle << "\n\tL " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
             tmp_rectangle << "\n\tz";
 
             d->mask |= emr_mask;
@@ -2430,24 +2537,54 @@ std::cout << "BEFORE DRAW"
             U_RECTL rc = pEmr->rclBox;
             U_SIZEL corner = pEmr->szlCorner;
             double f = 4.*(sqrt(2) - 1)/3;
-
-            double l = pix_to_x_point(d, rc.left, rc.top);
-            double t = pix_to_y_point(d, rc.left, rc.top);
-            double r = pix_to_x_point(d, rc.right, rc.bottom);
-            double b = pix_to_y_point(d, rc.right, rc.bottom);
-            double cnx = pix_to_size_point(d, corner.cx/2);
-            double cny = pix_to_size_point(d, corner.cy/2);
-
+            double f1 = 1.0 - f;
+            double cnx = corner.cx/2;
+            double cny = corner.cy/2;
+ 
             SVGOStringStream tmp_rectangle;
-            tmp_rectangle << "\n\tM " << l << ", " << t + cny << " ";
-            tmp_rectangle << "\n\tC " << l << ", " << t + (1-f)*cny << " " << l + (1-f)*cnx << ", " << t << " " << l + cnx << ", " << t << " ";
-            tmp_rectangle << "\n\tL " << r - cnx << ", " << t << " ";
-            tmp_rectangle << "\n\tC " << r - (1-f)*cnx << ", " << t << " " << r << ", " << t + (1-f)*cny << " " << r << ", " << t + cny << " ";
-            tmp_rectangle << "\n\tL " << r << ", " << b - cny << " ";
-            tmp_rectangle << "\n\tC " << r << ", " << b - (1-f)*cny << " " << r - (1-f)*cnx << ", " << b << " " << r - cnx << ", " << b << " ";
-            tmp_rectangle << "\n\tL " << l + cnx << ", " << b << " ";
-            tmp_rectangle << "\n\tC " << l + (1-f)*cnx << ", " << b << " " << l << ", " << b - (1-f)*cny << " " << l << ", " << b - cny << " ";
-            tmp_rectangle << "\n\tz";
+            tmp_rectangle << "\n"
+                          << "    M " 
+                          << pix_to_xy(d,    rc.left            ,        rc.top    + cny    )
+                          << "\n";
+            tmp_rectangle << "   C " 
+                          << pix_to_xy(d,    rc.left            ,        rc.top    + cny*f1 )
+                          << " " 
+                          << pix_to_xy(d,    rc.left  + cnx*f1  ,        rc.top             )
+                          << " " 
+                          << pix_to_xy(d,    rc.left  + cnx     ,        rc.top             )
+                          << "\n";
+            tmp_rectangle << "   L " 
+                          << pix_to_xy(d,    rc.right - cnx     ,        rc.top             )
+                          << "\n";
+            tmp_rectangle << "   C " 
+                          << pix_to_xy(d,    rc.right - cnx*f1  ,        rc.top             )
+                          << " " 
+                          << pix_to_xy(d,    rc.right           ,        rc.top    + cny*f1 )
+                          << " " 
+                          << pix_to_xy(d,    rc.right           ,        rc.top    + cny    )
+                          << "\n";
+            tmp_rectangle << "   L "
+                          << pix_to_xy(d,    rc.right           ,        rc.bottom - cny    )
+                          << "\n";
+            tmp_rectangle << "   C " 
+                          << pix_to_xy(d,    rc.right           ,        rc.bottom - cny*f1 )
+                          << " "
+                          << pix_to_xy(d,    rc.right - cnx*f1  ,        rc.bottom          )
+                          << " "
+                          << pix_to_xy(d,    rc.right - cnx     ,        rc.bottom          )
+                          << "\n";
+            tmp_rectangle << "   L " 
+                          << pix_to_xy(d,    rc.left  + cnx     ,        rc.bottom          )
+                          << "\n";
+            tmp_rectangle << "   C "
+                          << pix_to_xy(d,    rc.left  + cnx*f1  ,        rc.bottom          )
+                          << " "
+                          << pix_to_xy(d,    rc.left            ,        rc.bottom - cny*f1 )
+                          << " "
+                          << pix_to_xy(d,    rc.left            ,        rc.bottom - cny    )
+                          << "\n";
+            tmp_rectangle << "   z\n";
+
 
             d->mask |= emr_mask;
 
@@ -2460,13 +2597,15 @@ std::cout << "BEFORE DRAW"
             U_PAIRF center,start,end,size;
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
-            if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
-               tmp_path <<  "\n\tM " << pix_to_x_point(d, start.x, start.y)   << "," << pix_to_y_point(d, start.x, start.y);
-               tmp_path <<  " A "    << pix_to_x_point(d, size.x, size.y)/2.0     << "," << pix_to_y_point(d, size.x, size.y)/2.0 ;
-               tmp_path <<  " 0 ";
+            int stat = emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size);
+            if(!stat){
+               tmp_path <<  "\n\tM " << pix_to_xy(d, start.x, start.y);
+               tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0 ;
+               tmp_path <<  " ";
+               tmp_path <<  180.0 * current_rotation(d)/M_PI;
+               tmp_path <<  " ";
                tmp_path <<  " " << f1 << "," << f2 << " ";
-               tmp_path <<              pix_to_x_point(d, end.x, end.y)       << "," << pix_to_y_point(d, end.x, end.y)<< " ";
-
+               tmp_path <<              pix_to_xy(d, end.x, end.y) << " \n";
                d->mask |= emr_mask;
             }
             else {
@@ -2481,11 +2620,13 @@ std::cout << "BEFORE DRAW"
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
             if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
-               tmp_path <<  "\n\tM " << pix_to_x_point(d, start.x, start.y)   << "," << pix_to_y_point(d, start.x, start.y);
-               tmp_path <<  " A "    << pix_to_x_point(d, size.x, size.y)/2.0     << "," << pix_to_y_point(d, size.x, size.y)/2.0 ;
-               tmp_path <<  " 0 ";
+               tmp_path <<  "\n\tM " << pix_to_xy(d, start.x, start.y);
+               tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0 ;
+               tmp_path <<  " ";
+               tmp_path <<  180.0 * current_rotation(d)/M_PI;
+               tmp_path <<  " ";
                tmp_path <<  " " << f1 << "," << f2 << " ";
-               tmp_path <<              pix_to_x_point(d, end.x, end.y)       << "," << pix_to_y_point(d, end.x, end.y);
+               tmp_path <<              pix_to_xy(d, end.x, end.y) << " \n";
                tmp_path << " z ";
                d->mask |= emr_mask;
             }
@@ -2501,12 +2642,14 @@ std::cout << "BEFORE DRAW"
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
             if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
-               tmp_path <<  "\n\tM " << pix_to_x_point(d, center.x, center.y) << "," << pix_to_y_point(d, center.x, center.y);
-               tmp_path <<  "\n\tL " << pix_to_x_point(d, start.x, start.y)   << "," << pix_to_y_point(d, start.x, start.y);
-               tmp_path <<  " A "    << pix_to_x_point(d, size.x, size.y)/2.0     << "," << pix_to_y_point(d, size.x, size.y)/2.0;
-               tmp_path <<  " 0 ";
+               tmp_path <<  "\n\tM " << pix_to_xy(d, center.x, center.y);
+               tmp_path <<  "\n\tL " << pix_to_xy(d, start.x, start.y);
+               tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0 ;
+               tmp_path <<  " ";
+               tmp_path <<  180.0 * current_rotation(d)/M_PI;
+               tmp_path <<  " ";
                tmp_path <<  " " << f1 << "," << f2 << " ";
-               tmp_path <<              pix_to_x_point(d, end.x, end.y)       << "," << pix_to_y_point(d, end.x, end.y);
+               tmp_path <<              pix_to_xy(d, end.x, end.y) << " \n";
                tmp_path << " z ";
                d->mask |= emr_mask;
             }
@@ -2531,8 +2674,7 @@ std::cout << "BEFORE DRAW"
 
             tmp_path <<
                 "\n\tL " <<
-                pix_to_x_point( d, pEmr->ptl.x, pEmr->ptl.y ) << " " <<
-                pix_to_y_point( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
+                pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
             break;
         }
         case U_EMR_ARCTO:
@@ -2543,12 +2685,14 @@ std::cout << "BEFORE DRAW"
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
             if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
                // draw a line from current position to start
-               tmp_path <<  "\n\tL " << pix_to_x_point(d, start.x, start.y)   << "," << pix_to_y_point(d, start.x, start.y);
-               tmp_path <<  "\n\tM " << pix_to_x_point(d, start.x, start.y)   << "," << pix_to_y_point(d, start.x, start.y);
-               tmp_path <<  " A "    << pix_to_x_point(d, size.x, size.y)/2.0     << "," << pix_to_y_point(d, size.x, size.y)/2.0 ;
-               tmp_path <<  " 0 ";
+               tmp_path <<  "\n\tL " << pix_to_xy(d, start.x, start.y);
+               tmp_path <<  "\n\tM " << pix_to_xy(d, start.x, start.y);
+               tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0 ;
+               tmp_path <<  " ";
+               tmp_path <<  180.0 * current_rotation(d)/M_PI;
+               tmp_path <<  " ";
                tmp_path <<  " " << f1 << "," << f2 << " ";
-               tmp_path <<              pix_to_x_point(d, end.x, end.y)       << "," << pix_to_y_point(d, end.x, end.y)<< " ";
+               tmp_path <<              pix_to_xy(d, end.x, end.y)<< " ";
 
                d->mask |= emr_mask;
             }
@@ -2691,27 +2835,20 @@ std::cout << "BEFORE DRAW"
             dbg_str << "<!-- U_EMR_BITBLT -->\n";
 
             PU_EMRBITBLT pEmr = (PU_EMRBITBLT) lpEMFR;
-            double dl = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-            double dt = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-            double dr = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
-            double db = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
-            //source position within the bitmap, in pixels
-            int sl = pEmr->Src.x + pEmr->xformSrc.eDx;
-            int st = pEmr->Src.y + pEmr->xformSrc.eDy;
-            int sw = 0; // extract all of the image 
-            int sh = 0;
-            if(sl<0)sl=0;
-            if(st<0)st=0;
-            // Treat all nonImage bitblts as a rectangular write.  Definitely not correct, but at
+           // Treat all nonImage bitblts as a rectangular write.  Definitely not correct, but at
             // least it leaves objects where the operations should have been.
             if (!pEmr->cbBmiSrc) {
                 // should be an application of a DIBPATTERNBRUSHPT, use a solid color instead
 
+                int32_t dx = pEmr->Dest.x;
+                int32_t dy = pEmr->Dest.y;
+                int32_t dw = pEmr->cDest.x;
+                int32_t dh = pEmr->cDest.y;
                 SVGOStringStream tmp_rectangle;
-                tmp_rectangle << "\n\tM " << dl << " " << dt << " ";
-                tmp_rectangle << "\n\tL " << dr << " " << dt << " ";
-                tmp_rectangle << "\n\tL " << dr << " " << db << " ";
-                tmp_rectangle << "\n\tL " << dl << " " << db << " ";
+                tmp_rectangle << "\n\tM " << pix_to_xy( d, dx,      dy      )    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy      )    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx + dw, dy + dh )    << " ";
+                tmp_rectangle << "\n\tL " << pix_to_xy( d, dx,      dy + dh )    << " ";
                 tmp_rectangle << "\n\tz";
 
                 d->mask |= emr_mask;
@@ -2721,7 +2858,18 @@ std::cout << "BEFORE DRAW"
                 tmp_path <<   tmp_rectangle.str().c_str();
             }
             else {
-                common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
+                 double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                 double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                 double dw = pix_to_abs_size( d, pEmr->cDest.x);
+                 double dh = pix_to_abs_size( d, pEmr->cDest.y);
+                 //source position within the bitmap, in pixels
+                 int sx = pEmr->Src.x + pEmr->xformSrc.eDx;
+                 int sy = pEmr->Src.y + pEmr->xformSrc.eDy;
+                 int sw = 0; // extract all of the image 
+                 int sh = 0;
+                 if(sx<0)sx=0;
+                 if(sy<0)sy=0;
+                 common_image_extraction(d,pEmr,dx,dy,dw,dh,sx,sy,sw,sh,
                    pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
             }
             break;
@@ -2732,16 +2880,16 @@ std::cout << "BEFORE DRAW"
             PU_EMRSTRETCHBLT pEmr = (PU_EMRSTRETCHBLT) lpEMFR;
             // Always grab image, ignore modes.
             if (pEmr->cbBmiSrc) {
-                double dl = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dt = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dr = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
-                double db = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
+                double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double dw = pix_to_abs_size( d, pEmr->cDest.x);
+                double dh = pix_to_abs_size( d, pEmr->cDest.y);
                 //source position within the bitmap, in pixels
-                int sl = pEmr->Src.x + pEmr->xformSrc.eDx;
-                int st = pEmr->Src.y + pEmr->xformSrc.eDy;
+                int sx = pEmr->Src.x + pEmr->xformSrc.eDx;
+                int sy = pEmr->Src.y + pEmr->xformSrc.eDy;
                 int sw = pEmr->cSrc.x; // extract the specified amount of the image 
                 int sh = pEmr->cSrc.y;
-                common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
+                common_image_extraction(d,pEmr,dx,dy,dw,dh,sx,sy,sw,sh,
                    pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
             }
             break;
@@ -2752,15 +2900,15 @@ std::cout << "BEFORE DRAW"
             PU_EMRMASKBLT pEmr = (PU_EMRMASKBLT) lpEMFR;
             // Always grab image, ignore masks and modes.
             if (pEmr->cbBmiSrc) {
-                double dl = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dt = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
-                double dr = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
-                double db = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y);
-                int sl = pEmr->Src.x + pEmr->xformSrc.eDx;  //source position within the bitmap, in pixels
-                int st = pEmr->Src.y + pEmr->xformSrc.eDy;
+                double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y);
+                double dw = pix_to_abs_size( d, pEmr->cDest.x);
+                double dh = pix_to_abs_size( d, pEmr->cDest.y);
+                int sx = pEmr->Src.x + pEmr->xformSrc.eDx;  //source position within the bitmap, in pixels
+                int sy = pEmr->Src.y + pEmr->xformSrc.eDy;
                 int sw = 0; // extract all of the image
                 int sh = 0;
-                common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
+                common_image_extraction(d,pEmr,dx,dy,dw,dh,sx,sy,sw,sh,
                    pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
             }
             break;
@@ -2776,15 +2924,15 @@ std::cout << "BEFORE DRAW"
             // user can sort out transparency later using Gimp, if need be.
 
             PU_EMRSTRETCHDIBITS pEmr = (PU_EMRSTRETCHDIBITS) lpEMFR;
-            double dl = pix_to_x_point( d, pEmr->Dest.x,                 pEmr->Dest.y                 );
-            double dt = pix_to_y_point( d, pEmr->Dest.x,                 pEmr->Dest.y                 );
-            double dr = pix_to_x_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y );
-            double db = pix_to_y_point( d, pEmr->Dest.x + pEmr->cDest.x, pEmr->Dest.y + pEmr->cDest.y );
-            int sl = pEmr->Src.x;  //source position within the bitmap, in pixels
-            int st = pEmr->Src.y;
+            double dx = pix_to_x_point( d, pEmr->Dest.x, pEmr->Dest.y );
+            double dy = pix_to_y_point( d, pEmr->Dest.x, pEmr->Dest.y );
+            double dw = pix_to_abs_size( d, pEmr->cDest.x);
+            double dh = pix_to_abs_size( d, pEmr->cDest.y);
+            int sx = pEmr->Src.x;  //source position within the bitmap, in pixels
+            int sy = pEmr->Src.y;
             int sw = pEmr->cSrc.x; // extract the specified amount of the image 
             int sh = pEmr->cSrc.y;
-            common_image_extraction(d,pEmr,dl,dt,dr,db,sl,st,sw,sh,
+            common_image_extraction(d,pEmr,dx,dy,dw,dh,sx,sy,sw,sh,
                pEmr->iUsageSrc, pEmr->offBitsSrc, pEmr->cbBitsSrc, pEmr->offBmiSrc, pEmr->cbBmiSrc);
 
             dbg_str << "<!-- U_EMR_STRETCHDIBITS -->\n";
@@ -2919,6 +3067,7 @@ std::cout << "BEFORE DRAW"
                 tsp.ldir  = (d->dc[d->level].textAlign & U_TA_RTLREADING ? LDIR_RL : LDIR_LR);  // language direction
                 tsp.condensed = FC_WIDTH_NORMAL; // Not implemented well in libTERE (yet)
                 tsp.ori = d->dc[d->level].style.baseline_shift.value;            // For now orientation is always the same as escapement
+                tsp.ori += 180.0 * current_rotation(d)/ M_PI;                    // radians to degrees
                 tsp.string = (uint8_t *) U_strdup(escaped_text);                 // this will be free'd much later at a trinfo_clear().
                 tsp.fs = d->dc[d->level].style.font_size.computed * 0.8;         // Font size in points
                 (void) trinfo_load_fontname(d->tri, (uint8_t *)d->dc[d->level].font_name, &tsp);
@@ -2956,17 +3105,12 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= emr_mask;
 
-            tmp_str <<
-                "\n\tM " <<
-                pix_to_x_point( d, apts[0].x, apts[0].y ) << " " <<
-                pix_to_y_point( d, apts[0].x, apts[0].y ) << " ";
+            tmp_str << "\n\tM " << pix_to_xy( d, apts[0].x, apts[0].y ) << " ";
 
             for (i=1; i<pEmr->cpts; ) {
                 tmp_str << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cpts; j++,i++) {
-                    tmp_str <<
-                        pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                        pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                    tmp_str << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
                 }
             }
 
@@ -2987,14 +3131,10 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
             
             // skip the first point?
-            tmp_poly << "\n\tM " <<
-                pix_to_x_point( d, apts[first].x, apts[first].y ) << " " <<
-                pix_to_y_point( d, apts[first].x, apts[first].y ) << " ";
+            tmp_poly << "\n\tM " << pix_to_xy( d, apts[first].x, apts[first].y ) << " ";
 
             for (i=first+1; i<pEmr->cpts; i++) {
-                tmp_poly << "\n\tL " <<
-                    pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                    pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                tmp_poly << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
             }
 
             tmp_path <<  tmp_poly.str().c_str();
@@ -3016,16 +3156,10 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= emr_mask;
 
-            tmp_str <<
-                "\n\tM " <<
-                pix_to_x_point( d, apts[0].x, apts[0].y ) << " " <<
-                pix_to_y_point( d, apts[0].x, apts[0].y ) << " ";
+            tmp_str << "\n\tM " << pix_to_xy( d, apts[0].x, apts[0].y ) << " ";
 
             for (i=1; i<pEmr->cpts; i++) {
-                tmp_str <<
-                    "\n\tL " <<
-                    pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                    pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                tmp_str << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
             }
 
             tmp_path << tmp_str.str().c_str();
@@ -3045,9 +3179,7 @@ std::cout << "BEFORE DRAW"
             for (i=0; i<pEmr->cpts;) {
                 tmp_path << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cpts; j++,i++) {
-                    tmp_path <<
-                        pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                        pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                    tmp_path <<  pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
                 }
             }
 
@@ -3064,10 +3196,7 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
 
             for (i=0; i<pEmr->cpts;i++) {
-                tmp_path <<
-                    "\n\tL " <<
-                    pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                    pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                tmp_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
             }
 
             break;
@@ -3091,15 +3220,11 @@ std::cout << "BEFORE DRAW"
             for (n=0; n<pEmr->nPolys && i<pEmr->cpts; n++) {
                 SVGOStringStream poly_path;
 
-                poly_path << "\n\tM " <<
-                    pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                    pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                poly_path << "\n\tM " <<  pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
                 i++;
 
                 for (j=1; j<pEmr->aPolyCounts[n] && i<pEmr->cpts; j++) {
-                    poly_path << "\n\tL " <<
-                        pix_to_x_point( d, apts[i].x, apts[i].y ) << " " <<
-                        pix_to_y_point( d, apts[i].x, apts[i].y ) << " ";
+                    poly_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
                     i++;
                 }
 
@@ -3244,6 +3369,8 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.dc[0].worldTransform.eDx  = 0.0;
     d.dc[0].worldTransform.eDy  = 0.0;
     d.dc[0].font_name = strdup("Arial");  // Default font, EMF spec says device can pick whatever it wants
+    d.dc[0].textColor           = U_RGB(0, 0, 0);        // default foreground color (black)
+    d.dc[0].bkColor             = U_RGB(255, 255, 255);  // default background color (white)
         
     if (uri == NULL) {
         return NULL;
@@ -3349,6 +3476,7 @@ Emf::init (void)
             "<param name=\"FixPPTDashLine\" gui-text=\"" N_("Convert dashed/dotted lines to single lines") "\" type=\"boolean\">false</param>\n"
             "<param name=\"FixPPTGrad2Polys\" gui-text=\"" N_("Convert gradients to colored polygon series") "\" type=\"boolean\">false</param>\n"
             "<param name=\"FixPPTPatternAsHatch\" gui-text=\"" N_("Map all fill patterns to standard EMF hatches") "\" type=\"boolean\">false</param>\n"
+            "<param name=\"FixImageRot\" gui-text=\"" N_("Ignore image rotations") "\" type=\"boolean\">false</param>\n"
             "<output>\n"
                 "<extension>.emf</extension>\n"
                 "<mimetype>image/x-emf</mimetype>\n"

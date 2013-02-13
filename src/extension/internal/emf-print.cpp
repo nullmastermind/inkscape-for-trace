@@ -100,7 +100,7 @@ struct GRADVALUES{
 /* globals */
 static double PX2WORLD = 20.0f;
 static U_XFORM     worldTransform;
-static bool FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch;
+static bool FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch, FixImageRot;
 static FFNEXUS    *short_fflist = NULL;  //only those fonts so far encountered
 static FFNEXUS    *long_fflist  = NULL;   //all the fonts described in ...\share\extensions\fontfix.conf
 static EMFTRACK   *et           = NULL;
@@ -302,6 +302,7 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
     FixPPTDashLine = mod->get_param_bool("FixPPTDashLine");
     FixPPTGrad2Polys = mod->get_param_bool("FixPPTGrad2Polys");
     FixPPTPatternAsHatch = mod->get_param_bool("FixPPTPatternAsHatch");
+    FixImageRot = mod->get_param_bool("FixImageRot");
 
     (void) emf_start(utf8_fn, 1000000, 250000, &et);  // Initialize the et structure
     (void) htable_create(128, 128, &eht);             // Initialize the eht structure
@@ -627,7 +628,7 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
         if(style->fill.isColor()){
            fill_mode = DRAW_PAINT;
            float opacity = SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
-           if (opacity <= 0.0) return 1;  // opacity isn't used here beyond this
+           if (opacity <= 0.0)opacity = 0.0;  // basically the same as no fill
 
            sp_color_get_rgb_floatv( &style->fill.value.color, rgb );
            hatchColor = U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]);
@@ -1215,11 +1216,9 @@ unsigned int PrintEmf::fill(Inkscape::Extension::Print * /*mod*/,
     use_fill   = true;
     use_stroke = false;
 
-    // earlier versions had flush of fill here, but it never executed and was removed
-
     fill_transform = tf;
 
-    if (create_brush(style, NULL)){ 
+    if (create_brush(style, NULL)){ // only happens if the style is a gradient
        /*
           Handle gradients.  Uses modified livarot as 2geom boolops is currently broken.
           Can handle gradients with multiple stops.
@@ -1388,8 +1387,6 @@ unsigned int PrintEmf::fill(Inkscape::Extension::Print * /*mod*/,
           use_fill = false;
        }
     }
-
-
 
 // std::cout << "end fill" << std::endl;
     return 0;
@@ -1663,11 +1660,9 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
    in the past (or will be in the future?)  Not in current trunk. (4/19/2012)
    
    Limitations of this code:
-   1.  rotated images are mangled.  They stay in their original orientation and are stretched
-       along X or Y.  
-   2.  Transparency is lost on export.  (Apparently a limitation of the EMF format.)
-   3.  Probably messes up if row stride != w*4
-   4.  There is still a small memory leak somewhere, possibly in a pixbuf created in a routine
+   1.  Transparency is lost on export.  (Apparently a limitation of the EMF format.)
+   2.  Probably messes up if row stride != w*4
+   3.  There is still a small memory leak somewhere, possibly in a pixbuf created in a routine
        that calls this one and passes px, but never removes the rest of the pixbuf.  The first time
        this is called it leaked 5M (in one test) and each subsequent call leaked around 200K more.
        If this routine is reduced to 
@@ -1685,7 +1680,7 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
                            SPStyle const *style)  /** provides indirect link to image object */
 {
 // std::cout << "image " << std::endl;
-     double x1,x2,y1,y2;
+     double x1,y1,dw,dh;
      char *rec = NULL;
      Geom::Affine tf = m_tr_stack.top();
 
@@ -1694,14 +1689,12 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
         throw "Fatal programming error in PrintEmf::image at EMRHEADER";
      }
 
-     x1=     atof(style->object->getAttribute("x"));
-     y1=     atof(style->object->getAttribute("y"));
-     x2=x1 + atof(style->object->getAttribute("width"));
-     y2=y1 + atof(style->object->getAttribute("height"));
+     x1= atof(style->object->getAttribute("x"));
+     y1= atof(style->object->getAttribute("y"));
+     dw= atof(style->object->getAttribute("width"));
+     dh= atof(style->object->getAttribute("height"));
      Geom::Point pLL(x1,y1);
-     Geom::Point pUR(x2,y2);
-     Geom::Point p2LL = pLL * tf;
-     Geom::Point p2UR = pUR * tf;
+     Geom::Point pLL2 = pLL * tf;  //location of LL corner in Inkscape coordinates
 
      char                *px;
      uint32_t             cbPx;
@@ -1715,10 +1708,33 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
      Bmih = bitmapinfoheader_set(w, h, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
      Bmi = bitmapinfo_set(Bmih, ct);
 
-     U_POINTL Dest  = pointl_set(round(p2LL[Geom::X] * PX2WORLD), round(p2LL[Geom::Y] * PX2WORLD));
-     U_POINTL cDest = pointl_set(round((p2UR[Geom::X]-p2LL[Geom::X]) * PX2WORLD), round((p2UR[Geom::Y]-p2LL[Geom::Y]) * PX2WORLD));
+     U_POINTL Dest  = pointl_set(round(pLL2[Geom::X] * PX2WORLD), round(pLL2[Geom::Y] * PX2WORLD));
+     U_POINTL cDest = pointl_set(round(dw * PX2WORLD), round(dh * PX2WORLD));
      U_POINTL Src   = pointl_set(0,0);
      U_POINTL cSrc  = pointl_set(w,h);
+     if(!FixImageRot){  /* Rotate images - some programs cannot read them in correctly if they are rotated */
+        tf[4] = tf[5] = 0.0;  // get rid of the offset in the transform
+        Geom::Point pLL2prime = pLL2 * tf;
+        U_XFORM tmpTransform;
+        tmpTransform.eM11 =  tf[0];
+        tmpTransform.eM12 =  tf[1];
+        tmpTransform.eM21 =  tf[2];
+        tmpTransform.eM22 =  tf[3];
+        tmpTransform.eDx  =  (pLL2[Geom::X] - pLL2prime[Geom::X]) * PX2WORLD;  //map pLL2 (now in EMF coordinates) back onto itself after the rotation
+        tmpTransform.eDy  =  (pLL2[Geom::Y] - pLL2prime[Geom::Y]) * PX2WORLD;
+
+        rec=U_EMRSAVEDC_set();
+        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
+           throw "Fatal programming error in PrintEmf::begin at U_EMRSAVEDC_set";
+        }
+
+
+        rec = U_EMRMODIFYWORLDTRANSFORM_set(tmpTransform, U_MWT_LEFTMULTIPLY);
+        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
+           throw "Fatal programming error in PrintEmf::begin at EMRMODIFYWORLDTRANSFORM";
+        }
+
+     }
      rec = U_EMRSTRETCHDIBITS_set(
            U_RCL_DEF,           //! Bounding rectangle in device units
            Dest,                //! Destination UL corner in logical units
@@ -1737,7 +1753,14 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
      free(px);
      free(Bmi);
      if(numCt)free(ct);
-        
+     
+     if(!FixImageRot){
+        rec=U_EMRRESTOREDC_set(-1);
+        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
+           throw "Fatal programming error in PrintEmf::begin at U_EMRRESTOREDC_set";
+        }
+     }
+       
 // std::cout << "end image" << std::endl;
   return 0;
 }
@@ -1746,16 +1769,21 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
 unsigned int PrintEmf::print_pathv(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
 // std::cout << "print_pathv " << std::endl << std::flush;
-    char *rec = NULL;
+     Geom::Affine tf = transform;
+     char *rec = NULL;
 
-    simple_shape = print_simple_shape(pathv, transform);
+    simple_shape = print_simple_shape(pathv, tf);
     if (simple_shape || pathv.empty()){
        if (use_fill){    destroy_brush(); }  // these must be cleared even if nothing is drawn or hbrush,hpen fill up
        if (use_stroke){  destroy_pen();   }
        return TRUE;
     }
 
-    Geom::PathVector pv = pathv_to_linear_and_cubic_beziers( pathv * transform );
+    /* inkscape to EMF scaling is done below, but NOT the rotation/translation transform,
+       that is handled by the EMF MODIFYWORLDTRANSFORM record
+    */
+
+    Geom::PathVector pv = pathv_to_linear_and_cubic_beziers( pathv * tf );
     
     rec = U_EMRBEGINPATH_set();
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
@@ -1892,6 +1920,7 @@ unsigned int PrintEmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
     if (use_stroke){
         destroy_pen();
     }
+
 // std::cout << "end pathv" << std::endl;
 
     return TRUE;
@@ -2119,6 +2148,7 @@ void PrintEmf::init (void)
         "<param name=\"FixPPTDashLine\" type=\"boolean\">false</param>\n"
         "<param name=\"FixPPTGrad2Polys\" type=\"boolean\">false</param>\n"
         "<param name=\"FixPPTPatternAsHatch\" type=\"boolean\">false</param>\n"
+        "<param name=\"FixImageRot\" type=\"boolean\">false</param>\n"
         "<print/>\n"
         "</inkscape-extension>", new PrintEmf());
 

@@ -21,6 +21,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "uemf_endian.h"
 
 void      wchar8show(const char *src);
 void      wchar16show(const uint16_t *src);
@@ -38,6 +39,8 @@ uint16_t *U_Utf32leToUtf16le( const uint32_t *src, size_t max, size_t *len );
 char     *U_Utf32leToUtf8( const uint32_t *src, size_t max, size_t *len );
 uint32_t *U_Utf16leToUtf32le( const uint16_t *src, size_t max, size_t *len );
 char     *U_Utf16leToUtf8( const uint16_t *src, size_t max, size_t *len );
+char     *U_Utf8ToLatin1( const char *src, size_t max, size_t *len );
+char     *U_Latin1ToUtf8( const char *src, size_t max, size_t *len );
 uint16_t  U_Utf16le(const uint16_t src);
 int       U_Utf16leEdit( uint16_t *src, uint16_t find, uint16_t replace );
 char     *U_strdup(const char *s);

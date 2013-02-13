@@ -4,11 +4,11 @@
 
 /*
 File:      uemf_print.c
-Version:   0.0.9
-Date:      19-OCT-2012
+Version:   0.0.11
+Date:      22-JAN-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -17,6 +17,7 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stddef.h> /* for offsetof() macro */
 #include <string.h>
 #include "uemf.h"
 
@@ -90,8 +91,10 @@ void pointl_print(
 } 
 
 /**
-    \brief Print a U_POINT16 object
-    \param pt U_POINT16 object
+    \brief Print a pointer to a U_POINT16 object
+    \param pt pointer to a U_POINT16 object
+    Warning - WMF data may contain unaligned U_POINT16, do not call
+    this routine with a pointer to such data!
 */
 void point16_print(
        U_POINT16 pt
@@ -137,7 +140,7 @@ void trivertex_print(
 
 /**
     \brief Print a U_GRADIENT3 object.
-    \param tv U_GRADIENT3 object.
+    \param g3 U_GRADIENT3 object.
 */
 void gradient3_print(
       U_GRADIENT3 g3
@@ -147,7 +150,7 @@ void gradient3_print(
 
 /**
     \brief Print a U_GRADIENT4 object.
-    \param tv U_GRADIENT4 object.
+    \param g4 U_GRADIENT4 object.
 */
 void gradient4_print(
       U_GRADIENT4 g4
@@ -308,41 +311,55 @@ void logfont_panose_print(
 }
 
 /**
-    \brief Print a U_BITMAPINFOHEADER object.
-    \param Bmi U_BITMAPINFOHEADER object 
+    \brief Print a pointer to U_BITMAPINFOHEADER object.
+    \param Bmih pointer to a U_BITMAPINFOHEADER object
+    This may be called indirectly from WMF _print routines, where problems could occur
+    if the data was passed as the struct or a pointer to the struct, as the struct may not
+    be aligned in memory.
 */
 void bitmapinfoheader_print(
-      U_BITMAPINFOHEADER Bmi
+      char *Bmih
    ){
-   printf("biSize:%u "            ,Bmi.biSize         );
-   printf("biWidth:%d "            ,Bmi.biWidth        );
-   printf("biHeight:%d "           ,Bmi.biHeight       );
-   printf("biPlanes:%u "          ,Bmi.biPlanes       );
-   printf("biBitCount:%u "        ,Bmi.biBitCount     );
-   printf("biCompression:%u "     ,Bmi.biCompression  );
-   printf("biSizeImage:%u "       ,Bmi.biSizeImage    );
-   printf("biXPelsPerMeter:%d "    ,Bmi.biXPelsPerMeter);
-   printf("biYPelsPerMeter:%d "    ,Bmi.biYPelsPerMeter);
-   printf("biClrUsed:%u "         ,Bmi.biClrUsed      );
-   printf("biClrImportant:%u "    ,Bmi.biClrImportant );
+   uint32_t  utmp4;
+   int32_t   tmp4;
+   int16_t   tmp2;
+
+   /* DIB from a WMF may not be properly aligned on a 4 byte boundary, will be aligned on a 2 byte boundary */
+
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biSize),          4);  printf("biSize:%u "            ,utmp4 );
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biWidth),         4);  printf("biWidth:%d "           ,tmp4  );
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biHeight),        4);  printf("biHeight:%d "          ,tmp4  );
+   memcpy(&tmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biPlanes),        2);  printf("biPlanes:%u "          ,tmp2  );
+   memcpy(&tmp2,  Bmih + offsetof(U_BITMAPINFOHEADER,biBitCount),      2);  printf("biBitCount:%u "        ,tmp2  );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biCompression),   4);  printf("biCompression:%u "     ,utmp4 );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biSizeImage),     4);  printf("biSizeImage:%u "       ,utmp4 );
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biXPelsPerMeter), 4);  printf("biXPelsPerMeter:%d "   ,tmp4  );
+   memcpy(&tmp4,  Bmih + offsetof(U_BITMAPINFOHEADER,biYPelsPerMeter), 4);  printf("biYPelsPerMeter:%d "   ,tmp4  );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biClrUsed),       4);  printf("biClrUsed:%u "         ,utmp4 );
+   memcpy(&utmp4, Bmih + offsetof(U_BITMAPINFOHEADER,biClrImportant),  4);  printf("biClrImportant:%u "    ,utmp4 );
 }
 
 
 /**
     \brief Print a Pointer to a U_BITMAPINFO object.
     \param Bmi Pointer to a U_BITMAPINFO object
+    This may be called from WMF _print routines, where problems could occur
+    if the data was passed as the struct or a pointer to the struct, as the struct may not
+    be aligned in memory.
 */
 void bitmapinfo_print(
-      PU_BITMAPINFO Bmi
+      char *Bmi
    ){
-   int i;
-   PU_RGBQUAD BmiColors;
-   PU_BITMAPINFOHEADER BmiHeader = &(Bmi->bmiHeader);
-   printf("BmiHeader: ");  bitmapinfoheader_print(*BmiHeader);
-   if(BmiHeader->biClrUsed){
-     BmiColors = (PU_RGBQUAD) ((char *)Bmi + sizeof(U_BITMAPINFOHEADER));
-     for(i=0; i<BmiHeader->biClrUsed; i++){
-        printf("%d:",i); rgbquad_print(BmiColors[i]);
+   int       i,k;
+   uint32_t  biClrUsed;
+   U_RGBQUAD BmiColor;
+   printf("BmiHeader: ");  bitmapinfoheader_print(Bmi + offsetof(U_BITMAPINFO,bmiHeader));
+   memcpy(&biClrUsed, Bmi + offsetof(U_BITMAPINFO,bmiHeader) + offsetof(U_BITMAPINFOHEADER,biClrUsed), 4);
+   if(biClrUsed){
+     k= offsetof(U_BITMAPINFO,bmiColors);
+     for(i=0; i<biClrUsed; i++, k+= sizeof(U_RGBQUAD)){
+        memcpy(&BmiColor, Bmi+k, sizeof(U_RGBQUAD));
+        printf("%d:",i); rgbquad_print(BmiColor);
      }
    }
 }
@@ -445,7 +462,7 @@ void rgndataheader_print(
 
 /**
     \brief Print a pointer to a U_RGNDATA object.
-    \param rgd  pointer to a U_RGNDATA object.
+    \param rd  pointer to a U_RGNDATA object.
 */
 void rgndata_print(
       PU_RGNDATA rd
@@ -484,31 +501,7 @@ void coloradjustment_print(
 
 /**
     \brief Print a U_PIXELFORMATDESCRIPTOR object.
-    \return U_PIXELFORMATDESCRIPTOR object
-    \param dwFlags         PFD_dwFlags Enumeration
-    \param iPixelType      PFD_iPixelType Enumeration
-    \param cColorBits      RGBA: total bits per pixel
-    \param cRedBits        Red   bits per pixel
-    \param cRedShift       Red   shift to data bits
-    \param cGreenBits      Green bits per pixel
-    \param cGreenShift     Green shift to data bits
-    \param cBlueBits       Blue  bits per pixel
-    \param cBlueShift      Blue  shift to data bits
-    \param cAlphaBits      Alpha bits per pixel
-    \param cAlphaShift     Alpha shift to data bits
-    \param cAccumBits      Accumulator buffer, total bitplanes
-    \param cAccumRedBits   Red   accumulator buffer bitplanes
-    \param cAccumGreenBits Green accumulator buffer bitplanes
-    \param cAccumBlueBits  Blue  accumulator buffer bitplanes
-    \param cAccumAlphaBits Alpha accumulator buffer bitplanes
-    \param cDepthBits      Depth of Z-buffer
-    \param cStencilBits    Depth of stencil buffer
-    \param cAuxBuffers     Depth of auxilliary buffers (not supported)
-    \param iLayerType      PFD_iLayerType Enumeration, may be ignored
-    \param bReserved       Bits 0:3/4:7 are number of Overlay/Underlay planes 
-    \param dwLayerMask     may be ignored
-    \param dwVisibleMask   color or index of underlay plane
-    \param dwDamageMask    may be ignored
+    \param pfd  U_PIXELFORMATDESCRIPTOR object
 */
 void pixelformatdescriptor_print(
       U_PIXELFORMATDESCRIPTOR pfd
@@ -593,29 +586,20 @@ by end user code and to further that end prototypes are NOT provided and they ar
 
 
    These are (mostly) ordered by U_EMR_* index number.
-   
-   void core5_print(char *name, char *contents, int recnum, size_t off)
-   
+      
    The exceptions:
-   void core3_print(char *name, char *label, char *contents, int recnum, size_t off)
-   void core7_print(char *name, char *field1, char *field2, char *contents, int recnum, size_t off)
-   void core8_print(char *name, char *contents, int recnum, size_t off, int type)
+   void core3_print(char *name, char *label, char *contents)
+   void core7_print(char *name, char *field1, char *field2, char *contents)
+   void core8_print(char *name, char *contents, int type)
    
    
 *********************************************************************************************** */
 
-// all core*_print call this, U_EMRSETMARGN_print and some others all it directly
-// numbered as core5 to be consistent with uemf.c, but must appear before the others as there is no prototype
-void core5_print(char *name, char *contents, int recnum, size_t off){
-   PU_ENHMETARECORD lpEMFR = (PU_ENHMETARECORD)(contents + off);
-   printf("%-30srecord:%5d type:%3d offset:%8d size:%8d\n",name,recnum,lpEMFR->iType,(int) off,lpEMFR->nSize);
-}
 
 // Functions with the same form starting with U_EMRPOLYBEZIER_print
-void core1_print(char *name, char *contents, int recnum, size_t off){
+void core1_print(char *name, char *contents){
    int i;
-   PU_EMRPOLYLINETO pEmr = (PU_EMRPOLYLINETO) (contents + off);
-   core5_print(name, contents, recnum, off);
+   PU_EMRPOLYLINETO pEmr = (PU_EMRPOLYLINETO) (contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   cptl:           %d\n",pEmr->cptl        );
    printf("   Points:         ");
@@ -626,10 +610,9 @@ void core1_print(char *name, char *contents, int recnum, size_t off){
 }
 
 // Functions with the same form starting with U_EMRPOLYPOLYLINE_print
-void core2_print(char *name, char *contents, int recnum, size_t off){
+void core2_print(char *name, char *contents){
    int i;
-   PU_EMRPOLYPOLYGON pEmr = (PU_EMRPOLYPOLYGON) (contents + off);
-   core5_print(name, contents, recnum, off);
+   PU_EMRPOLYPOLYGON pEmr = (PU_EMRPOLYPOLYGON) (contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   nPolys:         %d\n",pEmr->nPolys        );
    printf("   cptl:           %d\n",pEmr->cptl          );
@@ -648,9 +631,8 @@ void core2_print(char *name, char *contents, int recnum, size_t off){
 
 
 // Functions with the same form starting with U_EMRSETMAPMODE_print
-void core3_print(char *name, char *label, char *contents, int recnum, size_t off){
-   PU_EMRSETMAPMODE pEmr   = (PU_EMRSETMAPMODE)(contents + off);
-   core5_print(name, contents, recnum, off);
+void core3_print(char *name, char *label, char *contents){
+   PU_EMRSETMAPMODE pEmr   = (PU_EMRSETMAPMODE)(contents);
    if(!strcmp(label,"crColor:")){
       printf("   %-15s ",label); colorref_print(*(U_COLORREF *)&(pEmr->iMode)); printf("\n");
    }
@@ -663,17 +645,15 @@ void core3_print(char *name, char *label, char *contents, int recnum, size_t off
 } 
 
 // Functions taking a single U_RECT or U_RECTL, starting with U_EMRELLIPSE_print, also U_EMRFILLPATH_print, 
-void core4_print(char *name, char *contents, int recnum, size_t off){
-   PU_EMRELLIPSE pEmr      = (PU_EMRELLIPSE)(   contents + off);
-   core5_print(name, contents, recnum, off);
+void core4_print(char *name, char *contents){
+   PU_EMRELLIPSE pEmr      = (PU_EMRELLIPSE)(   contents);
    printf("   rclBox:         ");  rectl_print(pEmr->rclBox);  printf("\n");
 } 
 
 // Functions with the same form starting with U_EMRPOLYBEZIER16_print
-void core6_print(char *name, char *contents, int recnum, size_t off){
+void core6_print(char *name, char *contents){
    int i;
-   PU_EMRPOLYBEZIER16 pEmr = (PU_EMRPOLYBEZIER16) (contents + off);
-   core5_print(name, contents, recnum, off);
+   PU_EMRPOLYBEZIER16 pEmr = (PU_EMRPOLYBEZIER16) (contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   cpts:           %d\n",pEmr->cpts        );
    printf("   Points:         ");
@@ -689,9 +669,8 @@ void core6_print(char *name, char *contents, int recnum, size_t off){
 // CAREFUL, in the _set equivalents all functions with two uint32_t values are mapped here, and member names differ, consequently
 //   print routines must supply the names of the two arguments.  These cannot be null.  If the second one is 
 //   empty the values are printed as a pair {x,y}, otherwise each is printed with its own label on a separate line.
-void core7_print(char *name, char *field1, char *field2, char *contents, int recnum, size_t off){
-   PU_EMRGENERICPAIR pEmr = (PU_EMRGENERICPAIR) (contents + off);
-   core5_print(name, contents, recnum, off);
+void core7_print(char *name, char *field1, char *field2, char *contents){
+   PU_EMRGENERICPAIR pEmr = (PU_EMRGENERICPAIR) (contents);
    if(*field2){
       printf("   %-15s %d\n",field1,pEmr->pair.x);
       printf("   %-15s %d\n",field2,pEmr->pair.y);
@@ -702,32 +681,29 @@ void core7_print(char *name, char *field1, char *field2, char *contents, int rec
 }
 
 // For U_EMREXTTEXTOUTA and U_EMREXTTEXTOUTW, type=0 for the first one
-void core8_print(char *name, char *contents, int recnum, size_t off, int type){
-   PU_EMREXTTEXTOUTA pEmr = (PU_EMREXTTEXTOUTA) (contents + off);
-   core5_print(name, contents, recnum, off);
+void core8_print(char *name, char *contents, int type){
+   PU_EMREXTTEXTOUTA pEmr = (PU_EMREXTTEXTOUTA) (contents);
    printf("   iGraphicsMode:  %u\n",pEmr->iGraphicsMode );
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);                              printf("\n");
    printf("   exScale:        %f\n",pEmr->exScale        );
    printf("   eyScale:        %f\n",pEmr->eyScale        );
    printf("   emrtext:        ");
-      emrtext_print(contents + off + sizeof(U_EMREXTTEXTOUTA) - sizeof(U_EMRTEXT),contents + off,type);
+      emrtext_print(contents + sizeof(U_EMREXTTEXTOUTA) - sizeof(U_EMRTEXT),contents,type);
       printf("\n");
 } 
 
 // Functions that take a rect and a pair of points, starting with U_EMRARC_print
-void core9_print(char *name, char *contents, int recnum, size_t off){
-   PU_EMRARC pEmr = (PU_EMRARC) (contents + off);
-   core5_print(name, contents, recnum, off);
+void core9_print(char *name, char *contents){
+   PU_EMRARC pEmr = (PU_EMRARC) (contents);
    printf("   rclBox:         ");    rectl_print(pEmr->rclBox);    printf("\n");
    printf("   ptlStart:       ");  pointl_print(pEmr->ptlStart);   printf("\n");
    printf("   ptlEnd:         ");    pointl_print(pEmr->ptlEnd);   printf("\n");
 }
 
 // Functions with the same form starting with U_EMRPOLYPOLYLINE16_print
-void core10_print(char *name, char *contents, int recnum, size_t off){
+void core10_print(char *name, char *contents){
    int i;
-   PU_EMRPOLYPOLYLINE16 pEmr = (PU_EMRPOLYPOLYLINE16) (contents + off);
-   core5_print(name, contents, recnum, off);
+   PU_EMRPOLYPOLYLINE16 pEmr = (PU_EMRPOLYPOLYLINE16) (contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   nPolys:         %d\n",pEmr->nPolys        );
    printf("   cpts:           %d\n",pEmr->cpts          );
@@ -746,10 +722,9 @@ void core10_print(char *name, char *contents, int recnum, size_t off){
 } 
 
 // Functions with the same form starting with  U_EMRINVERTRGN_print and U_EMRPAINTRGN_print,
-void core11_print(char *name, char *contents, int recnum, size_t off){
+void core11_print(char *name, char *contents){
    int i,roff;
-   PU_EMRINVERTRGN pEmr = (PU_EMRINVERTRGN) (contents + off);
-   core5_print(name, contents, recnum, off);
+   PU_EMRINVERTRGN pEmr = (PU_EMRINVERTRGN) (contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   cbRgnData:      %d\n",pEmr->cbRgnData);
    // This one is a pain since each RGNDATA may be a different size, so it isn't possible to index through them.
@@ -766,16 +741,15 @@ void core11_print(char *name, char *contents, int recnum, size_t off){
 
 
 // common code for U_EMRCREATEMONOBRUSH_print and U_EMRCREATEDIBPATTERNBRUSHPT_print,
-void core12_print(char *name, char *contents, int recnum, size_t off){
-   PU_EMRCREATEMONOBRUSH pEmr = (PU_EMRCREATEMONOBRUSH) (contents + off);
-   core5_print(name, contents, recnum, off);
+void core12_print(char *name, char *contents){
+   PU_EMRCREATEMONOBRUSH pEmr = (PU_EMRCREATEMONOBRUSH) (contents);
    printf("   ihBrush:      %u\n",pEmr->ihBrush );
    printf("   iUsage :      %u\n",pEmr->iUsage  );
    printf("   offBmi :      %u\n",pEmr->offBmi  );
    printf("   cbBmi  :      %u\n",pEmr->cbBmi   );
    if(pEmr->cbBmi){
       printf("      bitmap:");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmi));
+      bitmapinfo_print(contents + pEmr->offBmi);
       printf("\n");
    }
    printf("   offBits:      %u\n",pEmr->offBits );
@@ -783,9 +757,8 @@ void core12_print(char *name, char *contents, int recnum, size_t off){
 }
 
 // common code for U_EMRALPHABLEND_print and U_EMRTRANSPARENTBLT_print,
-void core13_print(char *name, char *contents, int recnum, size_t off){
-   PU_EMRALPHABLEND pEmr = (PU_EMRALPHABLEND) (contents + off);
-   core5_print(name, contents, recnum, off);
+void core13_print(char *name, char *contents){
+   PU_EMRALPHABLEND pEmr = (PU_EMRALPHABLEND) (contents);
    printf("   rclBounds:      ");    rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");    pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");    pointl_print(pEmr->cDest);           printf("\n");
@@ -798,7 +771,7 @@ void core13_print(char *name, char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n",pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      bitmap:");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n",pEmr->offBitsSrc  );
@@ -816,12 +789,8 @@ They are listed in order by the corresponding U_EMR_* index number.
     \brief Print a pointer to a U_EMR_whatever record which has not been implemented.
     \param name       name of this type of record
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRNOTIMPLEMENTED_print(char *name, char *contents, int recnum, size_t off){
-   PU_ENHMETARECORD lpEMFR = (PU_ENHMETARECORD)(contents + off);
-   printf("%-30srecord:%5d type:%3d offset:%8d size:%8d\n",name,recnum,lpEMFR->iType,(int) off,lpEMFR->nSize);
+void U_EMRNOTIMPLEMENTED_print(char *name, char *contents){
    printf("   Not Implemented!\n");
 }
 
@@ -829,15 +798,12 @@ void U_EMRNOTIMPLEMENTED_print(char *name, char *contents, int recnum, size_t of
 /**
     \brief Print a pointer to a U_EMR_HEADER record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRHEADER_print(char *contents, int recnum, size_t off){
+void U_EMRHEADER_print(char *contents){
    char *string;
    int  p1len;
-   core5_print("U_EMRHEADER", contents, recnum, off);
 
-   PU_EMRHEADER pEmr = (PU_EMRHEADER)(contents+off);
+   PU_EMRHEADER pEmr = (PU_EMRHEADER)(contents);
    printf("   rclBounds:      ");          rectl_print( pEmr->rclBounds);   printf("\n");
    printf("   rclFrame:       ");          rectl_print( pEmr->rclFrame);    printf("\n");
    printf("   dSignature:     0x%8.8X\n",  pEmr->dSignature    );
@@ -867,7 +833,7 @@ void U_EMRHEADER_print(char *contents, int recnum, size_t off){
       printf("   offPixelFormat: %d\n",       pEmr->offPixelFormat);
       if(pEmr->cbPixelFormat){
          printf("      PFD:");
-         pixelformatdescriptor_print( *(PU_PIXELFORMATDESCRIPTOR) (contents + off + pEmr->offPixelFormat));
+         pixelformatdescriptor_print( *(PU_PIXELFORMATDESCRIPTOR) (contents + pEmr->offPixelFormat));
          printf("\n");
       }
       printf("   bOpenGL:        %d\n",pEmr->bOpenGL       );
@@ -884,22 +850,18 @@ void U_EMRHEADER_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_POLYBEZIER record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYBEZIER_print(char *contents, int recnum, size_t off){
-   core1_print("U_EMRPOLYBEZIER", contents, recnum, off);
+void U_EMRPOLYBEZIER_print(char *contents){
+   core1_print("U_EMRPOLYBEZIER", contents);
 } 
 
 // U_EMRPOLYGON                          3
 /**
     \brief Print a pointer to a U_EMR_POLYGON record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
  */
-void U_EMRPOLYGON_print(char *contents, int recnum, size_t off){
-   core1_print("U_EMRPOLYGON", contents, recnum, off);
+void U_EMRPOLYGON_print(char *contents){
+   core1_print("U_EMRPOLYGON", contents);
 } 
 
 
@@ -907,128 +869,104 @@ void U_EMRPOLYGON_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_POLYLINE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYLINE_print(char *contents, int recnum, size_t off){
-   core1_print("U_EMRPOLYLINE", contents, recnum, off);
+void U_EMRPOLYLINE_print(char *contents){
+   core1_print("U_EMRPOLYLINE", contents);
 } 
 
 // U_EMRPOLYBEZIERTO          5
 /**
     \brief Print a pointer to a U_EMR_POLYBEZIERTO record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYBEZIERTO_print(char *contents, int recnum, size_t off){
-   core1_print("U_EMRPOLYBEZIERTO", contents, recnum, off);
+void U_EMRPOLYBEZIERTO_print(char *contents){
+   core1_print("U_EMRPOLYBEZIERTO", contents);
 } 
 
 // U_EMRPOLYLINETO            6
 /**
     \brief Print a pointer to a U_EMR_POLYLINETO record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYLINETO_print(char *contents, int recnum, size_t off){
-   core1_print("U_EMRPOLYLINETO", contents, recnum, off);
+void U_EMRPOLYLINETO_print(char *contents){
+   core1_print("U_EMRPOLYLINETO", contents);
 } 
 
 // U_EMRPOLYPOLYLINE          7
 /**
     \brief Print a pointer to a U_EMR_POLYPOLYLINE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYPOLYLINE_print(char *contents, int recnum, size_t off){
-   core2_print("U_EMRPOLYPOLYLINE", contents, recnum, off);
+void U_EMRPOLYPOLYLINE_print(char *contents){
+   core2_print("U_EMRPOLYPOLYLINE", contents);
 } 
 
 // U_EMRPOLYPOLYGON           8
 /**
     \brief Print a pointer to a U_EMR_POLYPOLYGON record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYPOLYGON_print(char *contents, int recnum, size_t off){
-   core2_print("U_EMRPOLYPOLYGON", contents, recnum, off);
+void U_EMRPOLYPOLYGON_print(char *contents){
+   core2_print("U_EMRPOLYPOLYGON", contents);
 } 
 
 // U_EMRSETWINDOWEXTEX        9
 /**
     \brief Print a pointer to a U_EMR_SETWINDOWEXTEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETWINDOWEXTEX_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRSETWINDOWEXTEX", "szlExtent:","",contents, recnum, off);
+void U_EMRSETWINDOWEXTEX_print(char *contents){
+   core7_print("U_EMRSETWINDOWEXTEX", "szlExtent:","",contents);
 } 
 
 // U_EMRSETWINDOWORGEX       10
 /**
     \brief Print a pointer to a U_EMR_SETWINDOWORGEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETWINDOWORGEX_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRSETWINDOWORGEX", "ptlOrigin:","",contents, recnum, off);
+void U_EMRSETWINDOWORGEX_print(char *contents){
+   core7_print("U_EMRSETWINDOWORGEX", "ptlOrigin:","",contents);
 } 
 
 // U_EMRSETVIEWPORTEXTEX     11
 /**
     \brief Print a pointer to a U_EMR_SETVIEWPORTEXTEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETVIEWPORTEXTEX_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRSETVIEWPORTEXTEX", "szlExtent:","",contents, recnum, off);
+void U_EMRSETVIEWPORTEXTEX_print(char *contents){
+   core7_print("U_EMRSETVIEWPORTEXTEX", "szlExtent:","",contents);
 } 
 
 // U_EMRSETVIEWPORTORGEX     12
 /**
     \brief Print a pointer to a U_EMR_SETVIEWPORTORGEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETVIEWPORTORGEX_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRSETVIEWPORTORGEX", "ptlOrigin:","",contents, recnum, off);
+void U_EMRSETVIEWPORTORGEX_print(char *contents){
+   core7_print("U_EMRSETVIEWPORTORGEX", "ptlOrigin:","",contents);
 } 
 
 // U_EMRSETBRUSHORGEX        13
 /**
     \brief Print a pointer to a U_EMR_SETBRUSHORGEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETBRUSHORGEX_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRSETBRUSHORGEX", "ptlOrigin:","",contents, recnum, off);
+void U_EMRSETBRUSHORGEX_print(char *contents){
+   core7_print("U_EMRSETBRUSHORGEX", "ptlOrigin:","",contents);
 } 
 
 // U_EMREOF                  14
 /**
     \brief Print a pointer to a U_EMR_EOF record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREOF_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMREOF", contents, recnum, off);
-
-   PU_EMREOF pEmr = (PU_EMREOF)(contents+off);
+void U_EMREOF_print(char *contents){
+   PU_EMREOF pEmr = (PU_EMREOF)(contents);
    printf("   cbPalEntries:   %u\n",      pEmr->cbPalEntries );
    printf("   offPalEntries:  %u\n",      pEmr->offPalEntries);
    if(pEmr->cbPalEntries){
      printf("      PE:");
-     logpalette_print( (PU_LOGPALETTE)(contents + off + pEmr->offPalEntries));
+     logpalette_print( (PU_LOGPALETTE)(contents + pEmr->offPalEntries));
      printf("\n");
    }
 } 
@@ -1038,12 +976,9 @@ void U_EMREOF_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETPIXELV record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETPIXELV_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSETPIXELV", contents, recnum, off);
-   PU_EMRSETPIXELV pEmr = (PU_EMRSETPIXELV)(contents+off);
+void U_EMRSETPIXELV_print(char *contents){
+   PU_EMRSETPIXELV pEmr = (PU_EMRSETPIXELV)(contents);
    printf("   ptlPixel:       ");  pointl_print(  pEmr->ptlPixel);  printf("\n");
    printf("   crColor:        ");  colorref_print(pEmr->crColor);   printf("\n");
 } 
@@ -1053,12 +988,9 @@ void U_EMRSETPIXELV_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETMAPPERFLAGS record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETMAPPERFLAGS_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSETMAPPERFLAGS", contents, recnum, off);
-   PU_EMRSETMAPPERFLAGS pEmr = (PU_EMRSETMAPPERFLAGS)(contents+off);
+void U_EMRSETMAPPERFLAGS_print(char *contents){
+   PU_EMRSETMAPPERFLAGS pEmr = (PU_EMRSETMAPPERFLAGS)(contents);
    printf("   dwFlags:        %u\n",pEmr->dwFlags);
 } 
 
@@ -1067,78 +999,63 @@ void U_EMRSETMAPPERFLAGS_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETMAPMODE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETMAPMODE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETMAPMODE", "iMode:", contents, recnum, off);
+void U_EMRSETMAPMODE_print(char *contents){
+   core3_print("U_EMRSETMAPMODE", "iMode:", contents);
 }
 
 // U_EMRSETBKMODE            18
 /**
     \brief Print a pointer to a U_EMR_SETBKMODE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETBKMODE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETBKMODE", "iMode:", contents, recnum, off);
+void U_EMRSETBKMODE_print(char *contents){
+   core3_print("U_EMRSETBKMODE", "iMode:", contents);
 }
 
 // U_EMRSETPOLYFILLMODE      19
 /**
     \brief Print a pointer to a U_EMR_SETPOLYFILLMODE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETPOLYFILLMODE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETPOLYFILLMODE", "iMode:", contents, recnum, off);
+void U_EMRSETPOLYFILLMODE_print(char *contents){
+   core3_print("U_EMRSETPOLYFILLMODE", "iMode:", contents);
 }
 
 // U_EMRSETROP2              20
 /**
     \brief Print a pointer to a U_EMR_SETROP2 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETROP2_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETROP2", "dwRop:", contents, recnum, off);
+void U_EMRSETROP2_print(char *contents){
+   core3_print("U_EMRSETROP2", "dwRop:", contents);
 }
 
 // U_EMRSETSTRETCHBLTMODE    21
 /**
     \brief Print a pointer to a U_EMR_SETSTRETCHBLTMODE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETSTRETCHBLTMODE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETSTRETCHBLTMODE", "iMode:", contents, recnum, off);
+void U_EMRSETSTRETCHBLTMODE_print(char *contents){
+   core3_print("U_EMRSETSTRETCHBLTMODE", "iMode:", contents);
 }
 
 // U_EMRSETTEXTALIGN         22
 /**
     \brief Print a pointer to a U_EMR_SETTEXTALIGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETTEXTALIGN_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETTEXTALIGN", "iMode:", contents, recnum, off);
+void U_EMRSETTEXTALIGN_print(char *contents){
+   core3_print("U_EMRSETTEXTALIGN", "iMode:", contents);
 }
 
 // U_EMRSETCOLORADJUSTMENT   23
 /**
     \brief Print a pointer to a U_EMR_SETCOLORADJUSTMENT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETCOLORADJUSTMENT_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSETCOLORADJUSTMENT", contents, recnum, off);
-   PU_EMRSETCOLORADJUSTMENT pEmr = (PU_EMRSETCOLORADJUSTMENT)(contents+off);
+void U_EMRSETCOLORADJUSTMENT_print(char *contents){
+   PU_EMRSETCOLORADJUSTMENT pEmr = (PU_EMRSETCOLORADJUSTMENT)(contents);
    printf("   ColorAdjustment:");
    coloradjustment_print(pEmr->ColorAdjustment);
    printf("\n");
@@ -1148,88 +1065,71 @@ void U_EMRSETCOLORADJUSTMENT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETTEXTCOLOR record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETTEXTCOLOR_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETTEXTCOLOR", "crColor:", contents, recnum, off);
+void U_EMRSETTEXTCOLOR_print(char *contents){
+   core3_print("U_EMRSETTEXTCOLOR", "crColor:", contents);
 }
 
 // U_EMRSETBKCOLOR           25
 /**
     \brief Print a pointer to a U_EMR_SETBKCOLOR record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETBKCOLOR_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETBKCOLOR", "crColor:", contents, recnum, off);
+void U_EMRSETBKCOLOR_print(char *contents){
+   core3_print("U_EMRSETBKCOLOR", "crColor:", contents);
 }
 
 // U_EMROFFSETCLIPRGN        26
 /**
     \brief Print a pointer to a U_EMR_OFFSETCLIPRGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMROFFSETCLIPRGN_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMROFFSETCLIPRGN", "ptl:","",contents, recnum, off);
+void U_EMROFFSETCLIPRGN_print(char *contents){
+   core7_print("U_EMROFFSETCLIPRGN", "ptl:","",contents);
 } 
 
 // U_EMRMOVETOEX             27
 /**
     \brief Print a pointer to a U_EMR_MOVETOEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRMOVETOEX_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRMOVETOEX", "ptl:","",contents, recnum, off);
+void U_EMRMOVETOEX_print(char *contents){
+   core7_print("U_EMRMOVETOEX", "ptl:","",contents);
 } 
 
 // U_EMRSETMETARGN           28
 /**
     \brief Print a pointer to a U_EMR_SETMETARGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETMETARGN_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSETMETARGN", contents, recnum, off);
+void U_EMRSETMETARGN_print(char *contents){
 }
 
 // U_EMREXCLUDECLIPRECT      29
 /**
     \brief Print a pointer to a U_EMR_EXCLUDECLIPRECT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXCLUDECLIPRECT_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMREXCLUDECLIPRECT", contents, recnum, off);
+void U_EMREXCLUDECLIPRECT_print(char *contents){
+   core4_print("U_EMREXCLUDECLIPRECT", contents);
 }
 
 // U_EMRINTERSECTCLIPRECT    30
 /**
     \brief Print a pointer to a U_EMR_INTERSECTCLIPRECT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRINTERSECTCLIPRECT_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRINTERSECTCLIPRECT", contents, recnum, off);
+void U_EMRINTERSECTCLIPRECT_print(char *contents){
+   core4_print("U_EMRINTERSECTCLIPRECT", contents);
 }
 
 // U_EMRSCALEVIEWPORTEXTEX   31
 /**
     \brief Print a pointer to a U_EMR_SCALEVIEWPORTEXTEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSCALEVIEWPORTEXTEX_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRSCALEVIEWPORTEXTEX", contents, recnum, off);
+void U_EMRSCALEVIEWPORTEXTEX_print(char *contents){
+   core4_print("U_EMRSCALEVIEWPORTEXTEX", contents);
 }
 
 
@@ -1237,45 +1137,35 @@ void U_EMRSCALEVIEWPORTEXTEX_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SCALEWINDOWEXTEX record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSCALEWINDOWEXTEX_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRSCALEWINDOWEXTEX", contents, recnum, off);
+void U_EMRSCALEWINDOWEXTEX_print(char *contents){
+   core4_print("U_EMRSCALEWINDOWEXTEX", contents);
 }
 
 // U_EMRSAVEDC               33
 /**
     \brief Print a pointer to a U_EMR_SAVEDC record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSAVEDC_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSAVEDC", contents, recnum, off);
+void U_EMRSAVEDC_print(char *contents){
 }
 
 // U_EMRRESTOREDC            34
 /**
     \brief Print a pointer to a U_EMR_RESTOREDC record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRRESTOREDC_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRRESTOREDC", "iRelative:", contents, recnum, off);
+void U_EMRRESTOREDC_print(char *contents){
+   core3_print("U_EMRRESTOREDC", "iRelative:", contents);
 }
 
 // U_EMRSETWORLDTRANSFORM    35
 /**
     \brief Print a pointer to a U_EMR_SETWORLDTRANSFORM record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETWORLDTRANSFORM_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSETWORLDTRANSFORM", contents, recnum, off);
-   PU_EMRSETWORLDTRANSFORM pEmr = (PU_EMRSETWORLDTRANSFORM)(contents+off);
+void U_EMRSETWORLDTRANSFORM_print(char *contents){
+   PU_EMRSETWORLDTRANSFORM pEmr = (PU_EMRSETWORLDTRANSFORM)(contents);
    printf("   xform:");
    xform_print(pEmr->xform);
    printf("\n");
@@ -1285,12 +1175,9 @@ void U_EMRSETWORLDTRANSFORM_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_MODIFYWORLDTRANSFORM record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRMODIFYWORLDTRANSFORM_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRMODIFYWORLDTRANSFORM", contents, recnum, off);
-   PU_EMRMODIFYWORLDTRANSFORM pEmr = (PU_EMRMODIFYWORLDTRANSFORM)(contents+off);
+void U_EMRMODIFYWORLDTRANSFORM_print(char *contents){
+   PU_EMRMODIFYWORLDTRANSFORM pEmr = (PU_EMRMODIFYWORLDTRANSFORM)(contents);
    printf("   xform:");
    xform_print(pEmr->xform);
    printf("\n");
@@ -1301,12 +1188,9 @@ void U_EMRMODIFYWORLDTRANSFORM_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SELECTOBJECT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSELECTOBJECT_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRSELECTOBJECT", contents, recnum, off);
-   PU_EMRSELECTOBJECT pEmr = (PU_EMRSELECTOBJECT)(contents+off);
+void U_EMRSELECTOBJECT_print(char *contents){
+   PU_EMRSELECTOBJECT pEmr = (PU_EMRSELECTOBJECT)(contents);
    if(pEmr->ihObject & U_STOCK_OBJECT){
      printf("   StockObject:    0x%8.8X\n",  pEmr->ihObject );
    }
@@ -1319,12 +1203,9 @@ void U_EMRSELECTOBJECT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_CREATEPEN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATEPEN_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRCREATEPEN", contents, recnum, off);
-   PU_EMRCREATEPEN pEmr = (PU_EMRCREATEPEN)(contents+off);
+void U_EMRCREATEPEN_print(char *contents){
+   PU_EMRCREATEPEN pEmr = (PU_EMRCREATEPEN)(contents);
    printf("   ihPen:          %u\n",      pEmr->ihPen );
    printf("   lopn:           ");    logpen_print(pEmr->lopn);  printf("\n");
 } 
@@ -1333,12 +1214,9 @@ void U_EMRCREATEPEN_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_CREATEBRUSHINDIRECT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATEBRUSHINDIRECT_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRCREATEBRUSHINDIRECT", contents, recnum, off);
-   PU_EMRCREATEBRUSHINDIRECT pEmr = (PU_EMRCREATEBRUSHINDIRECT)(contents+off);
+void U_EMRCREATEBRUSHINDIRECT_print(char *contents){
+   PU_EMRCREATEBRUSHINDIRECT pEmr = (PU_EMRCREATEBRUSHINDIRECT)(contents);
    printf("   ihBrush:        %u\n",      pEmr->ihBrush );
    printf("   lb:             ");         logbrush_print(pEmr->lb);  printf("\n");
 } 
@@ -1347,12 +1225,9 @@ void U_EMRCREATEBRUSHINDIRECT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_DELETEOBJECT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRDELETEOBJECT_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRDELETEOBJECT", contents, recnum, off);
-   PU_EMRDELETEOBJECT pEmr = (PU_EMRDELETEOBJECT)(contents+off);
+void U_EMRDELETEOBJECT_print(char *contents){
+   PU_EMRDELETEOBJECT pEmr = (PU_EMRDELETEOBJECT)(contents);
    printf("   ihObject:       %u\n",      pEmr->ihObject );
 } 
 
@@ -1360,12 +1235,9 @@ void U_EMRDELETEOBJECT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_ANGLEARC record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRANGLEARC_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRANGLEARC", contents, recnum, off);
-   PU_EMRANGLEARC pEmr = (PU_EMRANGLEARC)(contents+off);
+void U_EMRANGLEARC_print(char *contents){
+   PU_EMRANGLEARC pEmr = (PU_EMRANGLEARC)(contents);
    printf("   ptlCenter:      "), pointl_print(pEmr->ptlCenter ); printf("\n");
    printf("   nRadius:        %u\n",      pEmr->nRadius );
    printf("   eStartAngle:    %f\n",       pEmr->eStartAngle );
@@ -1376,34 +1248,27 @@ void U_EMRANGLEARC_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_ELLIPSE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRELLIPSE_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRELLIPSE", contents, recnum, off);
+void U_EMRELLIPSE_print(char *contents){
+   core4_print("U_EMRELLIPSE", contents);
 }
 
 // U_EMRRECTANGLE            43
 /**
     \brief Print a pointer to a U_EMR_RECTANGLE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRRECTANGLE_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRRECTANGLE", contents, recnum, off);
+void U_EMRRECTANGLE_print(char *contents){
+   core4_print("U_EMRRECTANGLE", contents);
 }
 
 // U_EMRROUNDRECT            44
 /**
     \brief Print a pointer to a U_EMR_ROUNDRECT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRROUNDRECT_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRROUNDRECT", contents, recnum, off);
-   PU_EMRROUNDRECT pEmr = (PU_EMRROUNDRECT)(contents+off);
+void U_EMRROUNDRECT_print(char *contents){
+   PU_EMRROUNDRECT pEmr = (PU_EMRROUNDRECT)(contents);
    printf("   rclBox:         "), rectl_print(pEmr->rclBox );     printf("\n");
    printf("   szlCorner:      "), sizel_print(pEmr->szlCorner );  printf("\n");
 }
@@ -1412,56 +1277,45 @@ void U_EMRROUNDRECT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_ARC record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRARC_print(char *contents, int recnum, size_t off){
-   core9_print("U_EMRARC", contents, recnum, off);
+void U_EMRARC_print(char *contents){
+   core9_print("U_EMRARC", contents);
 }
 
 // U_EMRCHORD                46
 /**
     \brief Print a pointer to a U_EMR_CHORD record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCHORD_print(char *contents, int recnum, size_t off){
-   core9_print("U_EMRCHORD", contents, recnum, off);
+void U_EMRCHORD_print(char *contents){
+   core9_print("U_EMRCHORD", contents);
 }
 
 // U_EMRPIE                  47
 /**
     \brief Print a pointer to a U_EMR_PIE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPIE_print(char *contents, int recnum, size_t off){
-   core9_print("U_EMRPIE", contents, recnum, off);
+void U_EMRPIE_print(char *contents){
+   core9_print("U_EMRPIE", contents);
 }
 
 // U_EMRSELECTPALETTE        48
 /**
     \brief Print a pointer to a U_EMR_SELECTPALETTE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSELECTPALETTE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSELECTPALETTE", "ihPal:", contents, recnum, off);
+void U_EMRSELECTPALETTE_print(char *contents){
+   core3_print("U_EMRSELECTPALETTE", "ihPal:", contents);
 }
 
 // U_EMRCREATEPALETTE        49
 /**
     \brief Print a pointer to a U_EMR_CREATEPALETTE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATEPALETTE_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRCREATEPALETTE", contents, recnum, off);
-   PU_EMRCREATEPALETTE pEmr = (PU_EMRCREATEPALETTE)(contents+off);
+void U_EMRCREATEPALETTE_print(char *contents){
+   PU_EMRCREATEPALETTE pEmr = (PU_EMRCREATEPALETTE)(contents);
    printf("   ihPal:          %u\n",pEmr->ihPal);
    printf("   lgpl:           "), logpalette_print( (PU_LOGPALETTE)&(pEmr->lgpl) );  printf("\n");
 }
@@ -1470,13 +1324,10 @@ void U_EMRCREATEPALETTE_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETPALETTEENTRIES record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETPALETTEENTRIES_print(char *contents, int recnum, size_t off){
+void U_EMRSETPALETTEENTRIES_print(char *contents){
    int i;
-   core5_print("U_EMRSETPALETTEENTRIES", contents, recnum, off);
-   PU_EMRSETPALETTEENTRIES pEmr = (PU_EMRSETPALETTEENTRIES)(contents+off);
+   PU_EMRSETPALETTEENTRIES pEmr = (PU_EMRSETPALETTEENTRIES)(contents);
    printf("   ihPal:          %u\n",pEmr->ihPal);
    printf("   iStart:         %u\n",pEmr->iStart);
    printf("   cEntries:       %u\n",pEmr->cEntries);
@@ -1494,34 +1345,26 @@ void U_EMRSETPALETTEENTRIES_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_RESIZEPALETTE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRRESIZEPALETTE_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRRESIZEPALETTE", "ihPal:","cEntries",contents, recnum, off);
+void U_EMRRESIZEPALETTE_print(char *contents){
+   core7_print("U_EMRRESIZEPALETTE", "ihPal:","cEntries",contents);
 } 
 
 // U_EMRREALIZEPALETTE       52
 /**
     \brief Print a pointer to a U_EMR_REALIZEPALETTE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRREALIZEPALETTE_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRREALIZEPALETTE", contents, recnum, off);
+void U_EMRREALIZEPALETTE_print(char *contents){
 }
 
 // U_EMREXTFLOODFILL         53
 /**
     \brief Print a pointer to a U_EMR_EXTFLOODFILL record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXTFLOODFILL_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMREXTFLOODFILL", contents, recnum, off);
-   PU_EMREXTFLOODFILL pEmr = (PU_EMREXTFLOODFILL)(contents+off);
+void U_EMREXTFLOODFILL_print(char *contents){
+   PU_EMREXTFLOODFILL pEmr = (PU_EMREXTFLOODFILL)(contents);
    printf("   ptlStart:       ");   pointl_print(pEmr->ptlStart);    printf("\n");
    printf("   crColor:        ");   colorref_print(pEmr->crColor);   printf("\n");
    printf("   iMode:          %u\n",pEmr->iMode);
@@ -1531,35 +1374,28 @@ void U_EMREXTFLOODFILL_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_LINETO record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRLINETO_print(char *contents, int recnum, size_t off){
-   core7_print("U_EMRLINETO", "ptl:","",contents, recnum, off);
+void U_EMRLINETO_print(char *contents){
+   core7_print("U_EMRLINETO", "ptl:","",contents);
 } 
 
 // U_EMRARCTO                55
 /**
     \brief Print a pointer to a U_EMR_ARCTO record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRARCTO_print(char *contents, int recnum, size_t off){
-   core9_print("U_EMRARCTO", contents, recnum, off);
+void U_EMRARCTO_print(char *contents){
+   core9_print("U_EMRARCTO", contents);
 }
 
 // U_EMRPOLYDRAW             56
 /**
     \brief Print a pointer to a U_EMR_POLYDRAW record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYDRAW_print(char *contents, int recnum, size_t off){
+void U_EMRPOLYDRAW_print(char *contents){
    int i;
-   core5_print("U_EMRPOLYDRAW", contents, recnum, off);
-   PU_EMRPOLYDRAW pEmr = (PU_EMRPOLYDRAW)(contents+off);
+   PU_EMRPOLYDRAW pEmr = (PU_EMRPOLYDRAW)(contents);
    printf("   rclBounds:      ");          rectl_print( pEmr->rclBounds);   printf("\n");
    printf("   cptl:           %d\n",pEmr->cptl        );
    printf("   Points:         ");
@@ -1579,22 +1415,18 @@ void U_EMRPOLYDRAW_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETARCDIRECTION record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETARCDIRECTION_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETARCDIRECTION","arcDirection:", contents, recnum, off);
+void U_EMRSETARCDIRECTION_print(char *contents){
+   core3_print("U_EMRSETARCDIRECTION","arcDirection:", contents);
 }
 
 // U_EMRSETMITERLIMIT        58
 /**
     \brief Print a pointer to a U_EMR_SETMITERLIMIT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETMITERLIMIT_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETMITERLIMIT", "eMiterLimit:", contents, recnum, off);
+void U_EMRSETMITERLIMIT_print(char *contents){
+   core3_print("U_EMRSETMITERLIMIT", "eMiterLimit:", contents);
 }
 
 
@@ -1602,128 +1434,99 @@ void U_EMRSETMITERLIMIT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_BEGINPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRBEGINPATH_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRBEGINPATH", contents, recnum, off);
+void U_EMRBEGINPATH_print(char *contents){
 }
 
 // U_EMRENDPATH              60
 /**
     \brief Print a pointer to a U_EMR_ENDPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRENDPATH_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRENDPATH", contents, recnum, off);
+void U_EMRENDPATH_print(char *contents){
 }
 
 // U_EMRCLOSEFIGURE          61
 /**
     \brief Print a pointer to a U_EMR_CLOSEFIGURE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCLOSEFIGURE_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRCLOSEFIGURE", contents, recnum, off);
+void U_EMRCLOSEFIGURE_print(char *contents){
 }
 
 // U_EMRFILLPATH             62
 /**
     \brief Print a pointer to a U_EMR_FILLPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRFILLPATH_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRFILLPATH", contents, recnum, off);
+void U_EMRFILLPATH_print(char *contents){
+   core4_print("U_EMRFILLPATH", contents);
 }
 
 // U_EMRSTROKEANDFILLPATH    63
 /**
     \brief Print a pointer to a U_EMR_STROKEANDFILLPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSTROKEANDFILLPATH_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRSTROKEANDFILLPATH", contents, recnum, off);
+void U_EMRSTROKEANDFILLPATH_print(char *contents){
+   core4_print("U_EMRSTROKEANDFILLPATH", contents);
 }
 
 // U_EMRSTROKEPATH           64
 /**
     \brief Print a pointer to a U_EMR_STROKEPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSTROKEPATH_print(char *contents, int recnum, size_t off){
-   core4_print("U_EMRSTROKEPATH", contents, recnum, off);
+void U_EMRSTROKEPATH_print(char *contents){
+   core4_print("U_EMRSTROKEPATH", contents);
 }
 
 // U_EMRFLATTENPATH          65
 /**
     \brief Print a pointer to a U_EMR_FLATTENPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRFLATTENPATH_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRFLATTENPATH", contents, recnum, off);
+void U_EMRFLATTENPATH_print(char *contents){
 }
 
 // U_EMRWIDENPATH            66
 /**
     \brief Print a pointer to a U_EMR_WIDENPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRWIDENPATH_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRWIDENPATH", contents, recnum, off);
+void U_EMRWIDENPATH_print(char *contents){
 }
 
 // U_EMRSELECTCLIPPATH       67
 /**
     \brief Print a pointer to a U_EMR_SELECTCLIPPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSELECTCLIPPATH_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSELECTCLIPPATH", "iMode:", contents, recnum, off);
+void U_EMRSELECTCLIPPATH_print(char *contents){
+   core3_print("U_EMRSELECTCLIPPATH", "iMode:", contents);
 }
 
 // U_EMRABORTPATH            68
 /**
     \brief Print a pointer to a U_EMR_ABORTPATH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRABORTPATH_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRABORTPATH", contents, recnum, off);
+void U_EMRABORTPATH_print(char *contents){
 }
 
 // U_EMRUNDEF69                       69
-#define U_EMRUNDEF69_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRUNDEF69",A,B,C)
+#define U_EMRUNDEF69_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRUNDEF69",A)
 
 // U_EMRCOMMENT              70  Comment (any binary data, interpretation is program specific)
 /**
     \brief Print a pointer to a U_EMR_COMMENT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCOMMENT_print(char *contents, int recnum, size_t off){
+void U_EMRCOMMENT_print(char *contents){
    char *string;
    char *src;
    uint32_t cIdent,cbData;
-   core5_print("U_EMRCOMMENT", contents, recnum, off);
-   PU_EMRCOMMENT pEmr = (PU_EMRCOMMENT)(contents+off);
+  PU_EMRCOMMENT pEmr = (PU_EMRCOMMENT)(contents);
 
    /* There are several different types of comments */
 
@@ -1770,13 +1573,10 @@ void U_EMRCOMMENT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_FILLRGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRFILLRGN_print(char *contents, int recnum, size_t off){
+void U_EMRFILLRGN_print(char *contents){
    int i,roff;
-   core5_print("U_EMRFILLRGN", contents, recnum, off);
-   PU_EMRFILLRGN pEmr = (PU_EMRFILLRGN)(contents+off);
+   PU_EMRFILLRGN pEmr = (PU_EMRFILLRGN)(contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   cbRgnData:      %u\n",pEmr->cbRgnData);
    printf("   ihBrush:        %u\n",pEmr->ihBrush);
@@ -1794,13 +1594,10 @@ void U_EMRFILLRGN_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_FRAMERGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRFRAMERGN_print(char *contents, int recnum, size_t off){
+void U_EMRFRAMERGN_print(char *contents){
    int i,roff;
-   core5_print("U_EMRFRAMERGN", contents, recnum, off);
-   PU_EMRFRAMERGN pEmr = (PU_EMRFRAMERGN)(contents+off);
+   PU_EMRFRAMERGN pEmr = (PU_EMRFRAMERGN)(contents);
    printf("   rclBounds:      ");    rectl_print(pEmr->rclBounds);    printf("\n");
    printf("   cbRgnData:      %u\n",pEmr->cbRgnData);
    printf("   ihBrush:        %u\n",pEmr->ihBrush);
@@ -1819,35 +1616,28 @@ void U_EMRFRAMERGN_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_INVERTRGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRINVERTRGN_print(char *contents, int recnum, size_t off){
-   core11_print("U_EMRINVERTRGN", contents, recnum, off);
+void U_EMRINVERTRGN_print(char *contents){
+   core11_print("U_EMRINVERTRGN", contents);
 }
 
 // U_EMRPAINTRGN             74
 /**
     \brief Print a pointer to a U_EMR_PAINTRGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPAINTRGN_print(char *contents, int recnum, size_t off){
-   core11_print("U_EMRPAINTRGN", contents, recnum, off);
+void U_EMRPAINTRGN_print(char *contents){
+   core11_print("U_EMRPAINTRGN", contents);
 }
 
 // U_EMREXTSELECTCLIPRGN     75
 /**
     \brief Print a pointer to a U_EMR_EXTSELECTCLIPRGN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXTSELECTCLIPRGN_print(char *contents, int recnum, size_t off){
+void U_EMREXTSELECTCLIPRGN_print(char *contents){
    int i,roff;
-   PU_EMREXTSELECTCLIPRGN pEmr = (PU_EMREXTSELECTCLIPRGN) (contents + off);
-   core5_print("U_EMREXTSELECTCLIPRGN", contents, recnum, off);
+   PU_EMREXTSELECTCLIPRGN pEmr = (PU_EMREXTSELECTCLIPRGN) (contents);
    printf("   cbRgnData:      %u\n",pEmr->cbRgnData);
    printf("   iMode:          %u\n",pEmr->iMode);
    // This one is a pain since each RGNDATA may be a different size, so it isn't possible to index through them.
@@ -1863,12 +1653,9 @@ void U_EMREXTSELECTCLIPRGN_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_BITBLT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRBITBLT_print(char *contents, int recnum, size_t off){
-   PU_EMRBITBLT pEmr = (PU_EMRBITBLT) (contents + off);
-   core5_print("U_EMRBITBLT", contents, recnum, off);
+void U_EMRBITBLT_print(char *contents){
+   PU_EMRBITBLT pEmr = (PU_EMRBITBLT) (contents);
    printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
@@ -1881,7 +1668,7 @@ void U_EMRBITBLT_print(char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      bitmap:      ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
@@ -1892,12 +1679,9 @@ void U_EMRBITBLT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_STRETCHBLT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSTRETCHBLT_print(char *contents, int recnum, size_t off){
-   PU_EMRSTRETCHBLT pEmr = (PU_EMRSTRETCHBLT) (contents + off);
-   core5_print("U_EMRSTRETCHBLT", contents, recnum, off);
+void U_EMRSTRETCHBLT_print(char *contents){
+   PU_EMRSTRETCHBLT pEmr = (PU_EMRSTRETCHBLT) (contents);
    printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
@@ -1910,7 +1694,7 @@ void U_EMRSTRETCHBLT_print(char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      bitmap:      ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
@@ -1922,12 +1706,9 @@ void U_EMRSTRETCHBLT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_MASKBLT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRMASKBLT_print(char *contents, int recnum, size_t off){
-   PU_EMRMASKBLT pEmr = (PU_EMRMASKBLT) (contents + off);
-   core5_print("U_EMRMASKBLT", contents, recnum, off);
+void U_EMRMASKBLT_print(char *contents){
+   PU_EMRMASKBLT pEmr = (PU_EMRMASKBLT) (contents);
    printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   cDest:          ");     pointl_print(pEmr->cDest);           printf("\n");
@@ -1940,7 +1721,7 @@ void U_EMRMASKBLT_print(char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n",  pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n",  pEmr->offBitsSrc   );
@@ -1951,7 +1732,7 @@ void U_EMRMASKBLT_print(char *contents, int recnum, size_t off){
    printf("   cbBmiMask:      %u\n",  pEmr->cbBmiMask    );
    if(pEmr->cbBmiMask){
       printf("      Mask bitmap: ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiMask));
+      bitmapinfo_print(contents + pEmr->offBmiMask);
       printf("\n");
    }
    printf("   offBitsMask:    %u\n",  pEmr->offBitsMask   );
@@ -1962,12 +1743,9 @@ void U_EMRMASKBLT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_PLGBLT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPLGBLT_print(char *contents, int recnum, size_t off){
-   PU_EMRPLGBLT pEmr = (PU_EMRPLGBLT) (contents + off);
-   core5_print("U_EMRPLGBLT", contents, recnum, off);
+void U_EMRPLGBLT_print(char *contents){
+   PU_EMRPLGBLT pEmr = (PU_EMRPLGBLT) (contents);
    printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   aptlDst(UL):    ");     pointl_print(pEmr->aptlDst[0]);      printf("\n");
    printf("   aptlDst(UR):    ");     pointl_print(pEmr->aptlDst[1]);      printf("\n");
@@ -1981,7 +1759,7 @@ void U_EMRPLGBLT_print(char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
@@ -1992,7 +1770,7 @@ void U_EMRPLGBLT_print(char *contents, int recnum, size_t off){
    printf("   cbBmiMask:      %u\n", pEmr->cbBmiMask    );
    if(pEmr->cbBmiMask){
       printf("      Mask bitmap: ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiMask));
+      bitmapinfo_print(contents + pEmr->offBmiMask);
       printf("\n");
    }
    printf("   offBitsMask:    %u\n", pEmr->offBitsMask   );
@@ -2003,12 +1781,9 @@ void U_EMRPLGBLT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMRSETDIBITSTODEVICE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETDIBITSTODEVICE_print(char *contents, int recnum, size_t off){
-   PU_EMRSETDIBITSTODEVICE pEmr = (PU_EMRSETDIBITSTODEVICE) (contents + off);
-   core5_print("U_EMRSETDIBITSTODEVICE", contents, recnum, off);
+void U_EMRSETDIBITSTODEVICE_print(char *contents){
+   PU_EMRSETDIBITSTODEVICE pEmr = (PU_EMRSETDIBITSTODEVICE) (contents);
    printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
@@ -2017,7 +1792,7 @@ void U_EMRSETDIBITSTODEVICE_print(char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
@@ -2031,12 +1806,9 @@ void U_EMRSETDIBITSTODEVICE_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_STRETCHDIBITS record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSTRETCHDIBITS_print(char *contents, int recnum, size_t off){
-   PU_EMRSTRETCHDIBITS pEmr = (PU_EMRSTRETCHDIBITS) (contents + off);
-   core5_print("U_EMRSTRETCHDIBITS", contents, recnum, off);
+void U_EMRSTRETCHDIBITS_print(char *contents){
+   PU_EMRSTRETCHDIBITS pEmr = (PU_EMRSTRETCHDIBITS) (contents);
    printf("   rclBounds:      ");     rectl_print( pEmr->rclBounds);       printf("\n");
    printf("   Dest:           ");     pointl_print(pEmr->Dest);            printf("\n");
    printf("   Src:            ");     pointl_print(pEmr->Src);             printf("\n");
@@ -2045,7 +1817,7 @@ void U_EMRSTRETCHDIBITS_print(char *contents, int recnum, size_t off){
    printf("   cbBmiSrc:       %u\n", pEmr->cbBmiSrc    );
    if(pEmr->cbBmiSrc){
       printf("      Src bitmap:  ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmiSrc));
+      bitmapinfo_print(contents + pEmr->offBmiSrc);
       printf("\n");
    }
    printf("   offBitsSrc:     %u\n", pEmr->offBitsSrc   );
@@ -2059,12 +1831,9 @@ void U_EMRSTRETCHDIBITS_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_EXTCREATEFONTINDIRECTW record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXTCREATEFONTINDIRECTW_print(char *contents, int recnum, size_t off){
-   PU_EMREXTCREATEFONTINDIRECTW pEmr = (PU_EMREXTCREATEFONTINDIRECTW) (contents + off);
-   core5_print("U_EMREXTCREATEFONTINDIRECTW", contents, recnum, off);
+void U_EMREXTCREATEFONTINDIRECTW_print(char *contents){
+   PU_EMREXTCREATEFONTINDIRECTW pEmr = (PU_EMREXTCREATEFONTINDIRECTW) (contents);
    printf("   ihFont:         %u\n",pEmr->ihFont );
    printf("   Font:           ");
    if(pEmr->emr.nSize == sizeof(U_EMREXTCREATEFONTINDIRECTW)){ // holds logfont_panose
@@ -2080,99 +1849,81 @@ void U_EMREXTCREATEFONTINDIRECTW_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_EXTTEXTOUTA record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXTTEXTOUTA_print(char *contents, int recnum, size_t off){
-   core8_print("U_EMREXTTEXTOUTA", contents, recnum, off, 0);
+void U_EMREXTTEXTOUTA_print(char *contents){
+   core8_print("U_EMREXTTEXTOUTA", contents, 0);
 }
 
 // U_EMREXTTEXTOUTW          84
 /**
     \brief Print a pointer to a U_EMR_EXTTEXTOUTW record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXTTEXTOUTW_print(char *contents, int recnum, size_t off){
-   core8_print("U_EMREXTTEXTOUTW", contents, recnum, off, 1);
+void U_EMREXTTEXTOUTW_print(char *contents){
+   core8_print("U_EMREXTTEXTOUTW", contents, 1);
 }
 
 // U_EMRPOLYBEZIER16         85
 /**
     \brief Print a pointer to a U_EMR_POLYBEZIER16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYBEZIER16_print(char *contents, int recnum, size_t off){
-   core6_print("U_EMRPOLYBEZIER16", contents, recnum, off);
+void U_EMRPOLYBEZIER16_print(char *contents){
+   core6_print("U_EMRPOLYBEZIER16", contents);
 }
 
 // U_EMRPOLYGON16            86
 /**
     \brief Print a pointer to a U_EMR_POLYGON16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYGON16_print(char *contents, int recnum, size_t off){
-   core6_print("U_EMRPOLYGON16", contents, recnum, off);
+void U_EMRPOLYGON16_print(char *contents){
+   core6_print("U_EMRPOLYGON16", contents);
 }
 
 // U_EMRPOLYLINE16           87
 /**
     \brief Print a pointer to a U_EMR_POLYLINE16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYLINE16_print(char *contents, int recnum, size_t off){
-   core6_print("U_EMRPOLYLINE16", contents, recnum, off);
+void U_EMRPOLYLINE16_print(char *contents){
+   core6_print("U_EMRPOLYLINE16", contents);
 }
 
 // U_EMRPOLYBEZIERTO16       88
 /**
     \brief Print a pointer to a U_EMR_POLYBEZIERTO16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYBEZIERTO16_print(char *contents, int recnum, size_t off){
-   core6_print("U_EMRPOLYBEZIERTO16", contents, recnum, off);
+void U_EMRPOLYBEZIERTO16_print(char *contents){
+   core6_print("U_EMRPOLYBEZIERTO16", contents);
 }
 
 // U_EMRPOLYLINETO16         89
 /**
     \brief Print a pointer to a U_EMR_POLYLINETO16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYLINETO16_print(char *contents, int recnum, size_t off){
-   core6_print("U_EMRPOLYLINETO16", contents, recnum, off);
+void U_EMRPOLYLINETO16_print(char *contents){
+   core6_print("U_EMRPOLYLINETO16", contents);
 }
 
 // U_EMRPOLYPOLYLINE16       90
 /**
     \brief Print a pointer to a U_EMR_POLYPOLYLINE16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYPOLYLINE16_print(char *contents, int recnum, size_t off){
-   core10_print("U_EMRPOLYPOLYLINE16", contents, recnum, off);
+void U_EMRPOLYPOLYLINE16_print(char *contents){
+   core10_print("U_EMRPOLYPOLYLINE16", contents);
 }
 
 // U_EMRPOLYPOLYGON16        91
 /**
     \brief Print a pointer to a U_EMR_POLYPOLYGON16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYPOLYGON16_print(char *contents, int recnum, size_t off){
-   core10_print("U_EMRPOLYPOLYGON16", contents, recnum, off);
+void U_EMRPOLYPOLYGON16_print(char *contents){
+   core10_print("U_EMRPOLYPOLYGON16", contents);
 }
 
 
@@ -2180,13 +1931,10 @@ void U_EMRPOLYPOLYGON16_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_POLYDRAW16 record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPOLYDRAW16_print(char *contents, int recnum, size_t off){
+void U_EMRPOLYDRAW16_print(char *contents){
    int i;
-   core5_print("U_EMRPOLYDRAW16", contents, recnum, off);
-   PU_EMRPOLYDRAW16 pEmr = (PU_EMRPOLYDRAW16)(contents+off);
+   PU_EMRPOLYDRAW16 pEmr = (PU_EMRPOLYDRAW16)(contents);
    printf("   rclBounds:      ");          rectl_print( pEmr->rclBounds);   printf("\n");
    printf("   cpts:           %d\n",pEmr->cpts        );
    printf("   Points:         ");
@@ -2206,22 +1954,18 @@ void U_EMRPOLYDRAW16_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_CREATEMONOBRUSH record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATEMONOBRUSH_print(char *contents, int recnum, size_t off){
-   core12_print("U_EMRCREATEMONOBRUSH", contents, recnum, off);
+void U_EMRCREATEMONOBRUSH_print(char *contents){
+   core12_print("U_EMRCREATEMONOBRUSH", contents);
 }
 
 // U_EMRCREATEDIBPATTERNBRUSHPT_print   94
 /**
     \brief Print a pointer to a U_EMR_CREATEDIBPATTERNBRUSHPT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATEDIBPATTERNBRUSHPT_print(char *contents, int recnum, size_t off){
-   core12_print("U_EMRCREATEDIBPATTERNBRUSHPT", contents, recnum, off);
+void U_EMRCREATEDIBPATTERNBRUSHPT_print(char *contents){
+   core12_print("U_EMRCREATEDIBPATTERNBRUSHPT", contents);
 }
 
 
@@ -2229,18 +1973,15 @@ void U_EMRCREATEDIBPATTERNBRUSHPT_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_EXTCREATEPEN record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMREXTCREATEPEN_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMREXTCREATEPEN", contents, recnum, off);
-   PU_EMREXTCREATEPEN pEmr = (PU_EMREXTCREATEPEN)(contents+off);
+void U_EMREXTCREATEPEN_print(char *contents){
+   PU_EMREXTCREATEPEN pEmr = (PU_EMREXTCREATEPEN)(contents);
    printf("   ihPen:          %u\n", pEmr->ihPen );
    printf("   offBmi:         %u\n", pEmr->offBmi   );
    printf("   cbBmi:          %u\n", pEmr->cbBmi    );
    if(pEmr->cbBmi){
       printf("      bitmap:      ");
-      bitmapinfo_print((PU_BITMAPINFO)(contents + off + pEmr->offBmi));
+      bitmapinfo_print(contents + pEmr->offBmi);
       printf("\n");
    }
    printf("   offBits:        %u\n", pEmr->offBits   );
@@ -2249,31 +1990,26 @@ void U_EMREXTCREATEPEN_print(char *contents, int recnum, size_t off){
 } 
 
 // U_EMRPOLYTEXTOUTA         96 NOT IMPLEMENTED, denigrated after Windows NT
-#define U_EMRPOLYTEXTOUTA_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRPOLYTEXTOUTA",A,B,C)
+#define U_EMRPOLYTEXTOUTA_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRPOLYTEXTOUTA",A)
 // U_EMRPOLYTEXTOUTW         97 NOT IMPLEMENTED, denigrated after Windows NT
-#define U_EMRPOLYTEXTOUTW_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRPOLYTEXTOUTW",A,B,C)
+#define U_EMRPOLYTEXTOUTW_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRPOLYTEXTOUTW",A)
 
 // U_EMRSETICMMODE           98
 /**
     \brief Print a pointer to a U_EMR_SETICMMODE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETICMMODE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETICMMODE", "iMode:", contents, recnum, off);
+void U_EMRSETICMMODE_print(char *contents){
+   core3_print("U_EMRSETICMMODE", "iMode:", contents);
 }
 
 // U_EMRCREATECOLORSPACE     99
 /**
     \brief Print a pointer to a U_EMR_CREATECOLORSPACE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATECOLORSPACE_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRCREATECOLORSPACE", contents, recnum, off);
-   PU_EMRCREATECOLORSPACE pEmr = (PU_EMRCREATECOLORSPACE)(contents+off);
+void U_EMRCREATECOLORSPACE_print(char *contents){
+   PU_EMRCREATECOLORSPACE pEmr = (PU_EMRCREATECOLORSPACE)(contents);
    printf("   ihCS:           %u\n", pEmr->ihCS    );
    printf("   ColorSpace:     "); logcolorspacea_print(pEmr->lcs);  printf("\n");
 }
@@ -2282,61 +2018,51 @@ void U_EMRCREATECOLORSPACE_print(char *contents, int recnum, size_t off){
 /**
     \brief Print a pointer to a U_EMR_SETCOLORSPACE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETCOLORSPACE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETCOLORSPACE", "ihCS:", contents, recnum, off);
+void U_EMRSETCOLORSPACE_print(char *contents){
+   core3_print("U_EMRSETCOLORSPACE", "ihCS:", contents);
 }
 
 // U_EMRDELETECOLORSPACE    101
 /**
     \brief Print a pointer to a U_EMR_DELETECOLORSPACE record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRDELETECOLORSPACE_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRDELETECOLORSPACE", "ihCS:", contents, recnum, off);
+void U_EMRDELETECOLORSPACE_print(char *contents){
+   core3_print("U_EMRDELETECOLORSPACE", "ihCS:", contents);
 }
 
 // U_EMRGLSRECORD           102  Not implemented
-#define U_EMRGLSRECORD_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRGLSRECORD",A,B,C)
+#define U_EMRGLSRECORD_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRGLSRECORD",A)
 // U_EMRGLSBOUNDEDRECORD    103  Not implemented
-#define U_EMRGLSBOUNDEDRECORD_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRGLSBOUNDEDRECORD",A,B,C)
+#define U_EMRGLSBOUNDEDRECORD_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRGLSBOUNDEDRECORD",A)
 
 // U_EMRPIXELFORMAT         104
 /**
     \brief Print a pointer to a U_EMR_PIXELFORMAT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRPIXELFORMAT_print(char *contents, int recnum, size_t off){
-   core5_print("U_EMRPIXELFORMAT", contents, recnum, off);
-   PU_EMRPIXELFORMAT pEmr = (PU_EMRPIXELFORMAT)(contents+off);
+void U_EMRPIXELFORMAT_print(char *contents){
+   PU_EMRPIXELFORMAT pEmr = (PU_EMRPIXELFORMAT)(contents);
    printf("   Pfd:            ");  pixelformatdescriptor_print(pEmr->pfd);  printf("\n");
 }
 
 // U_EMRDRAWESCAPE          105  Not implemented
-#define U_EMRDRAWESCAPE_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRDRAWESCAPE",A,B,C)
+#define U_EMRDRAWESCAPE_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRDRAWESCAPE",A)
 // U_EMREXTESCAPE           106  Not implemented
-#define U_EMREXTESCAPE_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMREXTESCAPE",A,B,C)
+#define U_EMREXTESCAPE_print(A) U_EMRNOTIMPLEMENTED_print("U_EMREXTESCAPE",A)
 // U_EMRUNDEF107            107  Not implemented
-#define U_EMRUNDEF107_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRUNDEF107",A,B,C)
+#define U_EMRUNDEF107_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRUNDEF107",A)
 
 // U_EMRSMALLTEXTOUT        108
 /**
     \brief Print a pointer to a U_EMR_SMALLTEXTOUT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSMALLTEXTOUT_print(char *contents, int recnum, size_t off){
+void U_EMRSMALLTEXTOUT_print(char *contents){
    int roff;
    char *string;
-   core5_print("U_EMRSMALLTEXTOUT", contents, recnum, off);
-   PU_EMRSMALLTEXTOUT pEmr = (PU_EMRSMALLTEXTOUT)(contents+off);
+   PU_EMRSMALLTEXTOUT pEmr = (PU_EMRSMALLTEXTOUT)(contents);
    printf("   Dest:           ");         pointl_print(pEmr->Dest);            printf("\n");
    printf("   cChars:         %u\n",      pEmr->cChars          );
    printf("   fuOptions:      0x%8.8X\n", pEmr->fuOptions       );
@@ -2345,99 +2071,90 @@ void U_EMRSMALLTEXTOUT_print(char *contents, int recnum, size_t off){
    printf("   eyScale:        %f\n",      pEmr->eyScale         );
    roff = sizeof(U_EMRSMALLTEXTOUT);  //offset to the start of the variable fields
    if(!(pEmr->fuOptions & U_ETO_NO_RECT)){
-      printf("   rclBounds:      ");      rectl_print( *(PU_RECTL) (contents + off + roff));       printf("\n");
+      printf("   rclBounds:      ");      rectl_print( *(PU_RECTL) (contents + roff));       printf("\n");
       roff += sizeof(U_RECTL);
    }
    if(pEmr->fuOptions & U_ETO_SMALL_CHARS){
-      printf("   Text8:          <%s>\n",contents+off+roff);
+      printf("   Text8:          <%.*s>\n",pEmr->cChars,contents+roff);  /* May not be null terminated */
    }
    else {
-      string = U_Utf16leToUtf8((uint16_t *)(contents+off+roff), pEmr->cChars, NULL);
-      printf("   Text16:         <%s>\n",contents+off+roff);
+      string = U_Utf16leToUtf8((uint16_t *)(contents+roff), pEmr->cChars, NULL);
+      printf("   Text16:         <%s>\n",contents+roff);
       free(string);
   }
 }
 
 // U_EMRFORCEUFIMAPPING     109  Not implemented
-#define U_EMRFORCEUFIMAPPING_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRFORCEUFIMAPPING",A,B,C)
+#define U_EMRFORCEUFIMAPPING_print(A)     U_EMRNOTIMPLEMENTED_print("U_EMRFORCEUFIMAPPING",A)
 // U_EMRNAMEDESCAPE         110  Not implemented
-#define U_EMRNAMEDESCAPE_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRNAMEDESCAPE",A,B,C)
+#define U_EMRNAMEDESCAPE_print(A)         U_EMRNOTIMPLEMENTED_print("U_EMRNAMEDESCAPE",A)
 // U_EMRCOLORCORRECTPALETTE 111  Not implemented
-#define U_EMRCOLORCORRECTPALETTE_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRCOLORCORRECTPALETTE",A,B,C)
+#define U_EMRCOLORCORRECTPALETTE_print(A) U_EMRNOTIMPLEMENTED_print("U_EMRCOLORCORRECTPALETTE",A)
 // U_EMRSETICMPROFILEA      112  Not implemented
-#define U_EMRSETICMPROFILEA_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRSETICMPROFILEA",A,B,C)
+#define U_EMRSETICMPROFILEA_print(A)      U_EMRNOTIMPLEMENTED_print("U_EMRSETICMPROFILEA",A)
 // U_EMRSETICMPROFILEW      113  Not implemented
-#define U_EMRSETICMPROFILEW_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRSETICMPROFILEW",A,B,C)
+#define U_EMRSETICMPROFILEW_print(A)      U_EMRNOTIMPLEMENTED_print("U_EMRSETICMPROFILEW",A)
 
 // U_EMRALPHABLEND          114
 /**
     \brief Print a pointer to a U_EMR_ALPHABLEND record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRALPHABLEND_print(char *contents, int recnum, size_t off){
-   core13_print("U_EMRALPHABLEND", contents, recnum, off);
+void U_EMRALPHABLEND_print(char *contents){
+   core13_print("U_EMRALPHABLEND", contents);
 }
 
 // U_EMRSETLAYOUT           115
 /**
     \brief Print a pointer to a U_EMR_SETLAYOUT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRSETLAYOUT_print(char *contents, int recnum, size_t off){
-   core3_print("U_EMRSETLAYOUT", "iMode:", contents, recnum, off);
+void U_EMRSETLAYOUT_print(char *contents){
+   core3_print("U_EMRSETLAYOUT", "iMode:", contents);
 }
 
 // U_EMRTRANSPARENTBLT      116
 /**
     \brief Print a pointer to a U_EMR_TRANSPARENTBLT record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRTRANSPARENTBLT_print(char *contents, int recnum, size_t off){
-   core13_print("U_EMRTRANSPARENTBLT", contents, recnum, off);
+void U_EMRTRANSPARENTBLT_print(char *contents){
+   core13_print("U_EMRTRANSPARENTBLT", contents);
 }
 
 // U_EMRUNDEF117            117  Not implemented
-#define U_EMRUNDEF117_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRUNDEF117",A,B,C)
+#define U_EMRUNDEF117_print(A)    U_EMRNOTIMPLEMENTED_print("U_EMRUNDEF117",A)
 // U_EMRGRADIENTFILL        118
 /**
     \brief Print a pointer to a U_EMR_GRADIENTFILL record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRGRADIENTFILL_print(char *contents, int recnum, size_t off){
+void U_EMRGRADIENTFILL_print(char *contents){
    int i;
-   core5_print("U_EMRGRADIENTFILL", contents, recnum, off);
-   PU_EMRGRADIENTFILL pEmr = (PU_EMRGRADIENTFILL)(contents+off);
+   PU_EMRGRADIENTFILL pEmr = (PU_EMRGRADIENTFILL)(contents);
    printf("   rclBounds:      ");      rectl_print( pEmr->rclBounds);   printf("\n");
    printf("   nTriVert:       %u\n",   pEmr->nTriVert   );
    printf("   nGradObj:       %u\n",   pEmr->nGradObj   );
    printf("   ulMode:         %u\n",   pEmr->ulMode     );
-   off += sizeof(U_EMRGRADIENTFILL);
+   contents += sizeof(U_EMRGRADIENTFILL);
    if(pEmr->nTriVert){
       printf("   TriVert:        ");
-      for(i=0; i<pEmr->nTriVert; i++, off+=sizeof(U_TRIVERTEX)){
-         trivertex_print(*(PU_TRIVERTEX)(contents + off));
+      for(i=0; i<pEmr->nTriVert; i++, contents+=sizeof(U_TRIVERTEX)){
+         trivertex_print(*(PU_TRIVERTEX)(contents));
       }
       printf("\n");
    }
    if(pEmr->nGradObj){
       printf("   GradObj:        ");
       if(     pEmr->ulMode == U_GRADIENT_FILL_TRIANGLE){
-         for(i=0; i<pEmr->nGradObj; i++, off+=sizeof(U_GRADIENT3)){
-            gradient3_print(*(PU_GRADIENT3)(contents + off));
+         for(i=0; i<pEmr->nGradObj; i++, contents+=sizeof(U_GRADIENT3)){
+            gradient3_print(*(PU_GRADIENT3)(contents));
          }
       }
       else if(pEmr->ulMode == U_GRADIENT_FILL_RECT_H || 
               pEmr->ulMode == U_GRADIENT_FILL_RECT_V){
-         for(i=0; i<pEmr->nGradObj; i++, off+=sizeof(U_GRADIENT4)){
-            gradient4_print(*(PU_GRADIENT4)(contents + off));
+         for(i=0; i<pEmr->nGradObj; i++, contents+=sizeof(U_GRADIENT4)){
+            gradient4_print(*(PU_GRADIENT4)(contents));
          }
       }
       else { printf("invalid ulMode value!"); }
@@ -2446,23 +2163,20 @@ void U_EMRGRADIENTFILL_print(char *contents, int recnum, size_t off){
 }
 
 // U_EMRSETLINKEDUFIS       119  Not implemented
-#define U_EMRSETLINKEDUFIS_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRSETLINKEDUFIS",A,B,C)
+#define U_EMRSETLINKEDUFIS_print(A)        U_EMRNOTIMPLEMENTED_print("U_EMR_SETLINKEDUFIS",A)
 // U_EMRSETTEXTJUSTIFICATION120  Not implemented (denigrated)
-#define U_EMRSETTEXTJUSTIFICATION_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRSETTEXTJUSTIFICATION",A,B,C)
+#define U_EMRSETTEXTJUSTIFICATION_print(A) U_EMRNOTIMPLEMENTED_print("U_EMR_SETTEXTJUSTIFICATION",A)
 // U_EMRCOLORMATCHTOTARGETW 121  Not implemented  
-#define U_EMRCOLORMATCHTOTARGETW_print(A,B,C) U_EMRNOTIMPLEMENTED_print("U_EMRCOLORMATCHTOTARGETW",A,B,C)
+#define U_EMRCOLORMATCHTOTARGETW_print(A)  U_EMRNOTIMPLEMENTED_print("U_EMR_COLORMATCHTOTARGETW",A)
 
 // U_EMRCREATECOLORSPACEW   122
 /**
     \brief Print a pointer to a U_EMR_CREATECOLORSPACEW record.
     \param contents   pointer to a buffer holding all EMR records
-    \param recnum     number of this record in contents
-    \param off        offset to this record in contents
 */
-void U_EMRCREATECOLORSPACEW_print(char *contents, int recnum, size_t off){
+void U_EMRCREATECOLORSPACEW_print(char *contents){
    int i;
-   core5_print("U_EMRCREATECOLORSPACEW", contents, recnum, off);
-   PU_EMRCREATECOLORSPACEW pEmr = (PU_EMRCREATECOLORSPACEW)(contents+off);
+   PU_EMRCREATECOLORSPACEW pEmr = (PU_EMRCREATECOLORSPACEW)(contents);
    printf("   ihCS:           %u\n", pEmr->ihCS     );
    printf("   ColorSpace:     "); logcolorspacew_print(pEmr->lcs);  printf("\n");
    printf("   dwFlags:        %u\n", pEmr->dwFlags  );
@@ -2478,141 +2192,153 @@ void U_EMRCREATECOLORSPACEW_print(char *contents, int recnum, size_t off){
 
 /**
     \brief Print any record in an emf
-    \returns 1 for a normal record, 0 for EMREOF
+    \returns record length for a normal record, 0 for EMREOF, -1 for a bad record
     \param contents   pointer to a buffer holding all EMR records
+    \param blimit     pointer to the byte after the last byte in the buffer holding all EMR records
     \param recnum     number of this record in contents
     \param off        offset to this record in contents
 */
-int U_emf_onerec_print(char *contents, int recnum, size_t off){
+int U_emf_onerec_print(char *contents, char *blimit, int recnum, size_t off){
     PU_ENHMETARECORD  lpEMFR  = (PU_ENHMETARECORD)(contents + off);
-    int regular=1;
+    int size;
+
+    printf("%-30srecord:%5d type:%3d offset:%8d size:%8d\n",U_emr_names(lpEMFR->iType),recnum,lpEMFR->iType,(int) off,lpEMFR->nSize);
+    size      = lpEMFR->nSize;
+    contents += off;
+    
+    /* Check that the record size is OK, abort if not.
+       Pointer math might wrap, so check both sides of the range */
+    if(size < sizeof(U_EMR)           ||
+       contents + size - 1 >= blimit  || 
+       contents + size - 1 < contents)return(-1);
+
     switch (lpEMFR->iType)
     {
-        case U_EMR_HEADER:                  U_EMRHEADER_print(contents, recnum, off);                  break;
-        case U_EMR_POLYBEZIER:              U_EMRPOLYBEZIER_print(contents, recnum, off);              break;
-        case U_EMR_POLYGON:                 U_EMRPOLYGON_print(contents, recnum, off);                 break;
-        case U_EMR_POLYLINE:                U_EMRPOLYLINE_print(contents, recnum, off);                break;
-        case U_EMR_POLYBEZIERTO:            U_EMRPOLYBEZIERTO_print(contents, recnum, off);            break;
-        case U_EMR_POLYLINETO:              U_EMRPOLYLINETO_print(contents, recnum, off);              break;
-        case U_EMR_POLYPOLYLINE:            U_EMRPOLYPOLYLINE_print(contents, recnum, off);            break;
-        case U_EMR_POLYPOLYGON:             U_EMRPOLYPOLYGON_print(contents, recnum, off);             break;
-        case U_EMR_SETWINDOWEXTEX:          U_EMRSETWINDOWEXTEX_print(contents, recnum, off);          break;
-        case U_EMR_SETWINDOWORGEX:          U_EMRSETWINDOWORGEX_print(contents, recnum, off);          break;
-        case U_EMR_SETVIEWPORTEXTEX:        U_EMRSETVIEWPORTEXTEX_print(contents, recnum, off);        break;
-        case U_EMR_SETVIEWPORTORGEX:        U_EMRSETVIEWPORTORGEX_print(contents, recnum, off);        break;
-        case U_EMR_SETBRUSHORGEX:           U_EMRSETBRUSHORGEX_print(contents, recnum, off);           break;
-        case U_EMR_EOF:                     U_EMREOF_print(contents, recnum, off);          regular=0; break;
-        case U_EMR_SETPIXELV:               U_EMRSETPIXELV_print(contents, recnum, off);               break;
-        case U_EMR_SETMAPPERFLAGS:          U_EMRSETMAPPERFLAGS_print(contents, recnum, off);          break;
-        case U_EMR_SETMAPMODE:              U_EMRSETMAPMODE_print(contents, recnum, off);              break;
-        case U_EMR_SETBKMODE:               U_EMRSETBKMODE_print(contents, recnum, off);               break;
-        case U_EMR_SETPOLYFILLMODE:         U_EMRSETPOLYFILLMODE_print(contents, recnum, off);         break;
-        case U_EMR_SETROP2:                 U_EMRSETROP2_print(contents, recnum, off);                 break;
-        case U_EMR_SETSTRETCHBLTMODE:       U_EMRSETSTRETCHBLTMODE_print(contents, recnum, off);       break;
-        case U_EMR_SETTEXTALIGN:            U_EMRSETTEXTALIGN_print(contents, recnum, off);            break;
-        case U_EMR_SETCOLORADJUSTMENT:      U_EMRSETCOLORADJUSTMENT_print(contents, recnum, off);      break;
-        case U_EMR_SETTEXTCOLOR:            U_EMRSETTEXTCOLOR_print(contents, recnum, off);            break;
-        case U_EMR_SETBKCOLOR:              U_EMRSETBKCOLOR_print(contents, recnum, off);              break;
-        case U_EMR_OFFSETCLIPRGN:           U_EMROFFSETCLIPRGN_print(contents, recnum, off);           break;
-        case U_EMR_MOVETOEX:                U_EMRMOVETOEX_print(contents, recnum, off);                break;
-        case U_EMR_SETMETARGN:              U_EMRSETMETARGN_print(contents, recnum, off);              break;
-        case U_EMR_EXCLUDECLIPRECT:         U_EMREXCLUDECLIPRECT_print(contents, recnum, off);         break;
-        case U_EMR_INTERSECTCLIPRECT:       U_EMRINTERSECTCLIPRECT_print(contents, recnum, off);       break;
-        case U_EMR_SCALEVIEWPORTEXTEX:      U_EMRSCALEVIEWPORTEXTEX_print(contents, recnum, off);      break;
-        case U_EMR_SCALEWINDOWEXTEX:        U_EMRSCALEWINDOWEXTEX_print(contents, recnum, off);        break;
-        case U_EMR_SAVEDC:                  U_EMRSAVEDC_print(contents, recnum, off);                  break;
-        case U_EMR_RESTOREDC:               U_EMRRESTOREDC_print(contents, recnum, off);               break;
-        case U_EMR_SETWORLDTRANSFORM:       U_EMRSETWORLDTRANSFORM_print(contents, recnum, off);       break;
-        case U_EMR_MODIFYWORLDTRANSFORM:    U_EMRMODIFYWORLDTRANSFORM_print(contents, recnum, off);    break;
-        case U_EMR_SELECTOBJECT:            U_EMRSELECTOBJECT_print(contents, recnum, off);            break;
-        case U_EMR_CREATEPEN:               U_EMRCREATEPEN_print(contents, recnum, off);               break;
-        case U_EMR_CREATEBRUSHINDIRECT:     U_EMRCREATEBRUSHINDIRECT_print(contents, recnum, off);     break;
-        case U_EMR_DELETEOBJECT:            U_EMRDELETEOBJECT_print(contents, recnum, off);            break;
-        case U_EMR_ANGLEARC:                U_EMRANGLEARC_print(contents, recnum, off);                break;
-        case U_EMR_ELLIPSE:                 U_EMRELLIPSE_print(contents, recnum, off);                 break;
-        case U_EMR_RECTANGLE:               U_EMRRECTANGLE_print(contents, recnum, off);               break;
-        case U_EMR_ROUNDRECT:               U_EMRROUNDRECT_print(contents, recnum, off);               break;
-        case U_EMR_ARC:                     U_EMRARC_print(contents, recnum, off);                     break;
-        case U_EMR_CHORD:                   U_EMRCHORD_print(contents, recnum, off);                   break;
-        case U_EMR_PIE:                     U_EMRPIE_print(contents, recnum, off);                     break;
-        case U_EMR_SELECTPALETTE:           U_EMRSELECTPALETTE_print(contents, recnum, off);           break;
-        case U_EMR_CREATEPALETTE:           U_EMRCREATEPALETTE_print(contents, recnum, off);           break;
-        case U_EMR_SETPALETTEENTRIES:       U_EMRSETPALETTEENTRIES_print(contents, recnum, off);       break;
-        case U_EMR_RESIZEPALETTE:           U_EMRRESIZEPALETTE_print(contents, recnum, off);           break;
-        case U_EMR_REALIZEPALETTE:          U_EMRREALIZEPALETTE_print(contents, recnum, off);          break;
-        case U_EMR_EXTFLOODFILL:            U_EMREXTFLOODFILL_print(contents, recnum, off);            break;
-        case U_EMR_LINETO:                  U_EMRLINETO_print(contents, recnum, off);                  break;
-        case U_EMR_ARCTO:                   U_EMRARCTO_print(contents, recnum, off);                   break;
-        case U_EMR_POLYDRAW:                U_EMRPOLYDRAW_print(contents, recnum, off);                break;
-        case U_EMR_SETARCDIRECTION:         U_EMRSETARCDIRECTION_print(contents, recnum, off);         break;
-        case U_EMR_SETMITERLIMIT:           U_EMRSETMITERLIMIT_print(contents, recnum, off);           break;
-        case U_EMR_BEGINPATH:               U_EMRBEGINPATH_print(contents, recnum, off);               break;
-        case U_EMR_ENDPATH:                 U_EMRENDPATH_print(contents, recnum, off);                 break;
-        case U_EMR_CLOSEFIGURE:             U_EMRCLOSEFIGURE_print(contents, recnum, off);             break;
-        case U_EMR_FILLPATH:                U_EMRFILLPATH_print(contents, recnum, off);                break;
-        case U_EMR_STROKEANDFILLPATH:       U_EMRSTROKEANDFILLPATH_print(contents, recnum, off);       break;
-        case U_EMR_STROKEPATH:              U_EMRSTROKEPATH_print(contents, recnum, off);              break;
-        case U_EMR_FLATTENPATH:             U_EMRFLATTENPATH_print(contents, recnum, off);             break;
-        case U_EMR_WIDENPATH:               U_EMRWIDENPATH_print(contents, recnum, off);               break;
-        case U_EMR_SELECTCLIPPATH:          U_EMRSELECTCLIPPATH_print(contents, recnum, off);          break;
-        case U_EMR_ABORTPATH:               U_EMRABORTPATH_print(contents, recnum, off);               break;
-        case U_EMR_UNDEF69:                 U_EMRUNDEF69_print(contents, recnum, off);                 break;
-        case U_EMR_COMMENT:                 U_EMRCOMMENT_print(contents, recnum, off);                 break;
-        case U_EMR_FILLRGN:                 U_EMRFILLRGN_print(contents, recnum, off);                 break;
-        case U_EMR_FRAMERGN:                U_EMRFRAMERGN_print(contents, recnum, off);                break;
-        case U_EMR_INVERTRGN:               U_EMRINVERTRGN_print(contents, recnum, off);               break;
-        case U_EMR_PAINTRGN:                U_EMRPAINTRGN_print(contents, recnum, off);                break;
-        case U_EMR_EXTSELECTCLIPRGN:        U_EMREXTSELECTCLIPRGN_print(contents, recnum, off);        break;
-        case U_EMR_BITBLT:                  U_EMRBITBLT_print(contents, recnum, off);                  break;
-        case U_EMR_STRETCHBLT:              U_EMRSTRETCHBLT_print(contents, recnum, off);              break;
-        case U_EMR_MASKBLT:                 U_EMRMASKBLT_print(contents, recnum, off);                 break;
-        case U_EMR_PLGBLT:                  U_EMRPLGBLT_print(contents, recnum, off);                  break;
-        case U_EMR_SETDIBITSTODEVICE:       U_EMRSETDIBITSTODEVICE_print(contents, recnum, off);       break;
-        case U_EMR_STRETCHDIBITS:           U_EMRSTRETCHDIBITS_print(contents, recnum, off);           break;
-        case U_EMR_EXTCREATEFONTINDIRECTW:  U_EMREXTCREATEFONTINDIRECTW_print(contents, recnum, off);  break;
-        case U_EMR_EXTTEXTOUTA:             U_EMREXTTEXTOUTA_print(contents, recnum, off);             break;
-        case U_EMR_EXTTEXTOUTW:             U_EMREXTTEXTOUTW_print(contents, recnum, off);             break;
-        case U_EMR_POLYBEZIER16:            U_EMRPOLYBEZIER16_print(contents, recnum, off);            break;
-        case U_EMR_POLYGON16:               U_EMRPOLYGON16_print(contents, recnum, off);               break;
-        case U_EMR_POLYLINE16:              U_EMRPOLYLINE16_print(contents, recnum, off);              break;
-        case U_EMR_POLYBEZIERTO16:          U_EMRPOLYBEZIERTO16_print(contents, recnum, off);          break;
-        case U_EMR_POLYLINETO16:            U_EMRPOLYLINETO16_print(contents, recnum, off);            break;
-        case U_EMR_POLYPOLYLINE16:          U_EMRPOLYPOLYLINE16_print(contents, recnum, off);          break;
-        case U_EMR_POLYPOLYGON16:           U_EMRPOLYPOLYGON16_print(contents, recnum, off);           break;
-        case U_EMR_POLYDRAW16:              U_EMRPOLYDRAW16_print(contents, recnum, off);              break;
-        case U_EMR_CREATEMONOBRUSH:         U_EMRCREATEMONOBRUSH_print(contents, recnum, off);         break;
-        case U_EMR_CREATEDIBPATTERNBRUSHPT: U_EMRCREATEDIBPATTERNBRUSHPT_print(contents, recnum, off); break;
-        case U_EMR_EXTCREATEPEN:            U_EMREXTCREATEPEN_print(contents, recnum, off);            break;
-        case U_EMR_POLYTEXTOUTA:            U_EMRPOLYTEXTOUTA_print(contents, recnum, off);            break;
-        case U_EMR_POLYTEXTOUTW:            U_EMRPOLYTEXTOUTW_print(contents, recnum, off);            break;
-        case U_EMR_SETICMMODE:              U_EMRSETICMMODE_print(contents, recnum, off);              break;
-        case U_EMR_CREATECOLORSPACE:        U_EMRCREATECOLORSPACE_print(contents, recnum, off);        break;
-        case U_EMR_SETCOLORSPACE:           U_EMRSETCOLORSPACE_print(contents, recnum, off);           break;
-        case U_EMR_DELETECOLORSPACE:        U_EMRDELETECOLORSPACE_print(contents, recnum, off);        break;
-        case U_EMR_GLSRECORD:               U_EMRGLSRECORD_print(contents, recnum, off);               break;
-        case U_EMR_GLSBOUNDEDRECORD:        U_EMRGLSBOUNDEDRECORD_print(contents, recnum, off);        break;
-        case U_EMR_PIXELFORMAT:             U_EMRPIXELFORMAT_print(contents, recnum, off);             break;
-        case U_EMR_DRAWESCAPE:              U_EMRDRAWESCAPE_print(contents, recnum, off);              break;
-        case U_EMR_EXTESCAPE:               U_EMREXTESCAPE_print(contents, recnum, off);               break;
-        case U_EMR_UNDEF107:                U_EMRUNDEF107_print(contents, recnum, off);                break;
-        case U_EMR_SMALLTEXTOUT:            U_EMRSMALLTEXTOUT_print(contents, recnum, off);            break;
-        case U_EMR_FORCEUFIMAPPING:         U_EMRFORCEUFIMAPPING_print(contents, recnum, off);         break;
-        case U_EMR_NAMEDESCAPE:             U_EMRNAMEDESCAPE_print(contents, recnum, off);             break;
-        case U_EMR_COLORCORRECTPALETTE:     U_EMRCOLORCORRECTPALETTE_print(contents, recnum, off);     break;
-        case U_EMR_SETICMPROFILEA:          U_EMRSETICMPROFILEA_print(contents, recnum, off);          break;
-        case U_EMR_SETICMPROFILEW:          U_EMRSETICMPROFILEW_print(contents, recnum, off);          break;
-        case U_EMR_ALPHABLEND:              U_EMRALPHABLEND_print(contents, recnum, off);              break;
-        case U_EMR_SETLAYOUT:               U_EMRSETLAYOUT_print(contents, recnum, off);               break;
-        case U_EMR_TRANSPARENTBLT:          U_EMRTRANSPARENTBLT_print(contents, recnum, off);          break;
-        case U_EMR_UNDEF117:                U_EMRUNDEF117_print(contents, recnum, off);                break;
-        case U_EMR_GRADIENTFILL:            U_EMRGRADIENTFILL_print(contents, recnum, off);            break;
-        case U_EMR_SETLINKEDUFIS:           U_EMRSETLINKEDUFIS_print(contents, recnum, off);           break;
-        case U_EMR_SETTEXTJUSTIFICATION:    U_EMRSETTEXTJUSTIFICATION_print(contents, recnum, off);    break;
-        case U_EMR_COLORMATCHTOTARGETW:     U_EMRCOLORMATCHTOTARGETW_print(contents, recnum, off);     break;
-        case U_EMR_CREATECOLORSPACEW:       U_EMRCREATECOLORSPACEW_print(contents, recnum, off);       break;
-        default:                            U_EMRNOTIMPLEMENTED_print("?",contents, recnum, off);      break;
+        case U_EMR_HEADER:                  U_EMRHEADER_print(contents);                  break;
+        case U_EMR_POLYBEZIER:              U_EMRPOLYBEZIER_print(contents);              break;
+        case U_EMR_POLYGON:                 U_EMRPOLYGON_print(contents);                 break;
+        case U_EMR_POLYLINE:                U_EMRPOLYLINE_print(contents);                break;
+        case U_EMR_POLYBEZIERTO:            U_EMRPOLYBEZIERTO_print(contents);            break;
+        case U_EMR_POLYLINETO:              U_EMRPOLYLINETO_print(contents);              break;
+        case U_EMR_POLYPOLYLINE:            U_EMRPOLYPOLYLINE_print(contents);            break;
+        case U_EMR_POLYPOLYGON:             U_EMRPOLYPOLYGON_print(contents);             break;
+        case U_EMR_SETWINDOWEXTEX:          U_EMRSETWINDOWEXTEX_print(contents);          break;
+        case U_EMR_SETWINDOWORGEX:          U_EMRSETWINDOWORGEX_print(contents);          break;
+        case U_EMR_SETVIEWPORTEXTEX:        U_EMRSETVIEWPORTEXTEX_print(contents);        break;
+        case U_EMR_SETVIEWPORTORGEX:        U_EMRSETVIEWPORTORGEX_print(contents);        break;
+        case U_EMR_SETBRUSHORGEX:           U_EMRSETBRUSHORGEX_print(contents);           break;
+        case U_EMR_EOF:                     U_EMREOF_print(contents);          size=0;    break;
+        case U_EMR_SETPIXELV:               U_EMRSETPIXELV_print(contents);               break;
+        case U_EMR_SETMAPPERFLAGS:          U_EMRSETMAPPERFLAGS_print(contents);          break;
+        case U_EMR_SETMAPMODE:              U_EMRSETMAPMODE_print(contents);              break;
+        case U_EMR_SETBKMODE:               U_EMRSETBKMODE_print(contents);               break;
+        case U_EMR_SETPOLYFILLMODE:         U_EMRSETPOLYFILLMODE_print(contents);         break;
+        case U_EMR_SETROP2:                 U_EMRSETROP2_print(contents);                 break;
+        case U_EMR_SETSTRETCHBLTMODE:       U_EMRSETSTRETCHBLTMODE_print(contents);       break;
+        case U_EMR_SETTEXTALIGN:            U_EMRSETTEXTALIGN_print(contents);            break;
+        case U_EMR_SETCOLORADJUSTMENT:      U_EMRSETCOLORADJUSTMENT_print(contents);      break;
+        case U_EMR_SETTEXTCOLOR:            U_EMRSETTEXTCOLOR_print(contents);            break;
+        case U_EMR_SETBKCOLOR:              U_EMRSETBKCOLOR_print(contents);              break;
+        case U_EMR_OFFSETCLIPRGN:           U_EMROFFSETCLIPRGN_print(contents);           break;
+        case U_EMR_MOVETOEX:                U_EMRMOVETOEX_print(contents);                break;
+        case U_EMR_SETMETARGN:              U_EMRSETMETARGN_print(contents);              break;
+        case U_EMR_EXCLUDECLIPRECT:         U_EMREXCLUDECLIPRECT_print(contents);         break;
+        case U_EMR_INTERSECTCLIPRECT:       U_EMRINTERSECTCLIPRECT_print(contents);       break;
+        case U_EMR_SCALEVIEWPORTEXTEX:      U_EMRSCALEVIEWPORTEXTEX_print(contents);      break;
+        case U_EMR_SCALEWINDOWEXTEX:        U_EMRSCALEWINDOWEXTEX_print(contents);        break;
+        case U_EMR_SAVEDC:                  U_EMRSAVEDC_print(contents);                  break;
+        case U_EMR_RESTOREDC:               U_EMRRESTOREDC_print(contents);               break;
+        case U_EMR_SETWORLDTRANSFORM:       U_EMRSETWORLDTRANSFORM_print(contents);       break;
+        case U_EMR_MODIFYWORLDTRANSFORM:    U_EMRMODIFYWORLDTRANSFORM_print(contents);    break;
+        case U_EMR_SELECTOBJECT:            U_EMRSELECTOBJECT_print(contents);            break;
+        case U_EMR_CREATEPEN:               U_EMRCREATEPEN_print(contents);               break;
+        case U_EMR_CREATEBRUSHINDIRECT:     U_EMRCREATEBRUSHINDIRECT_print(contents);     break;
+        case U_EMR_DELETEOBJECT:            U_EMRDELETEOBJECT_print(contents);            break;
+        case U_EMR_ANGLEARC:                U_EMRANGLEARC_print(contents);                break;
+        case U_EMR_ELLIPSE:                 U_EMRELLIPSE_print(contents);                 break;
+        case U_EMR_RECTANGLE:               U_EMRRECTANGLE_print(contents);               break;
+        case U_EMR_ROUNDRECT:               U_EMRROUNDRECT_print(contents);               break;
+        case U_EMR_ARC:                     U_EMRARC_print(contents);                     break;
+        case U_EMR_CHORD:                   U_EMRCHORD_print(contents);                   break;
+        case U_EMR_PIE:                     U_EMRPIE_print(contents);                     break;
+        case U_EMR_SELECTPALETTE:           U_EMRSELECTPALETTE_print(contents);           break;
+        case U_EMR_CREATEPALETTE:           U_EMRCREATEPALETTE_print(contents);           break;
+        case U_EMR_SETPALETTEENTRIES:       U_EMRSETPALETTEENTRIES_print(contents);       break;
+        case U_EMR_RESIZEPALETTE:           U_EMRRESIZEPALETTE_print(contents);           break;
+        case U_EMR_REALIZEPALETTE:          U_EMRREALIZEPALETTE_print(contents);          break;
+        case U_EMR_EXTFLOODFILL:            U_EMREXTFLOODFILL_print(contents);            break;
+        case U_EMR_LINETO:                  U_EMRLINETO_print(contents);                  break;
+        case U_EMR_ARCTO:                   U_EMRARCTO_print(contents);                   break;
+        case U_EMR_POLYDRAW:                U_EMRPOLYDRAW_print(contents);                break;
+        case U_EMR_SETARCDIRECTION:         U_EMRSETARCDIRECTION_print(contents);         break;
+        case U_EMR_SETMITERLIMIT:           U_EMRSETMITERLIMIT_print(contents);           break;
+        case U_EMR_BEGINPATH:               U_EMRBEGINPATH_print(contents);               break;
+        case U_EMR_ENDPATH:                 U_EMRENDPATH_print(contents);                 break;
+        case U_EMR_CLOSEFIGURE:             U_EMRCLOSEFIGURE_print(contents);             break;
+        case U_EMR_FILLPATH:                U_EMRFILLPATH_print(contents);                break;
+        case U_EMR_STROKEANDFILLPATH:       U_EMRSTROKEANDFILLPATH_print(contents);       break;
+        case U_EMR_STROKEPATH:              U_EMRSTROKEPATH_print(contents);              break;
+        case U_EMR_FLATTENPATH:             U_EMRFLATTENPATH_print(contents);             break;
+        case U_EMR_WIDENPATH:               U_EMRWIDENPATH_print(contents);               break;
+        case U_EMR_SELECTCLIPPATH:          U_EMRSELECTCLIPPATH_print(contents);          break;
+        case U_EMR_ABORTPATH:               U_EMRABORTPATH_print(contents);               break;
+        case U_EMR_UNDEF69:                 U_EMRUNDEF69_print(contents);                 break;
+        case U_EMR_COMMENT:                 U_EMRCOMMENT_print(contents);                 break;
+        case U_EMR_FILLRGN:                 U_EMRFILLRGN_print(contents);                 break;
+        case U_EMR_FRAMERGN:                U_EMRFRAMERGN_print(contents);                break;
+        case U_EMR_INVERTRGN:               U_EMRINVERTRGN_print(contents);               break;
+        case U_EMR_PAINTRGN:                U_EMRPAINTRGN_print(contents);                break;
+        case U_EMR_EXTSELECTCLIPRGN:        U_EMREXTSELECTCLIPRGN_print(contents);        break;
+        case U_EMR_BITBLT:                  U_EMRBITBLT_print(contents);                  break;
+        case U_EMR_STRETCHBLT:              U_EMRSTRETCHBLT_print(contents);              break;
+        case U_EMR_MASKBLT:                 U_EMRMASKBLT_print(contents);                 break;
+        case U_EMR_PLGBLT:                  U_EMRPLGBLT_print(contents);                  break;
+        case U_EMR_SETDIBITSTODEVICE:       U_EMRSETDIBITSTODEVICE_print(contents);       break;
+        case U_EMR_STRETCHDIBITS:           U_EMRSTRETCHDIBITS_print(contents);           break;
+        case U_EMR_EXTCREATEFONTINDIRECTW:  U_EMREXTCREATEFONTINDIRECTW_print(contents);  break;
+        case U_EMR_EXTTEXTOUTA:             U_EMREXTTEXTOUTA_print(contents);             break;
+        case U_EMR_EXTTEXTOUTW:             U_EMREXTTEXTOUTW_print(contents);             break;
+        case U_EMR_POLYBEZIER16:            U_EMRPOLYBEZIER16_print(contents);            break;
+        case U_EMR_POLYGON16:               U_EMRPOLYGON16_print(contents);               break;
+        case U_EMR_POLYLINE16:              U_EMRPOLYLINE16_print(contents);              break;
+        case U_EMR_POLYBEZIERTO16:          U_EMRPOLYBEZIERTO16_print(contents);          break;
+        case U_EMR_POLYLINETO16:            U_EMRPOLYLINETO16_print(contents);            break;
+        case U_EMR_POLYPOLYLINE16:          U_EMRPOLYPOLYLINE16_print(contents);          break;
+        case U_EMR_POLYPOLYGON16:           U_EMRPOLYPOLYGON16_print(contents);           break;
+        case U_EMR_POLYDRAW16:              U_EMRPOLYDRAW16_print(contents);              break;
+        case U_EMR_CREATEMONOBRUSH:         U_EMRCREATEMONOBRUSH_print(contents);         break;
+        case U_EMR_CREATEDIBPATTERNBRUSHPT: U_EMRCREATEDIBPATTERNBRUSHPT_print(contents); break;
+        case U_EMR_EXTCREATEPEN:            U_EMREXTCREATEPEN_print(contents);            break;
+        case U_EMR_POLYTEXTOUTA:            U_EMRPOLYTEXTOUTA_print(contents);            break;
+        case U_EMR_POLYTEXTOUTW:            U_EMRPOLYTEXTOUTW_print(contents);            break;
+        case U_EMR_SETICMMODE:              U_EMRSETICMMODE_print(contents);              break;
+        case U_EMR_CREATECOLORSPACE:        U_EMRCREATECOLORSPACE_print(contents);        break;
+        case U_EMR_SETCOLORSPACE:           U_EMRSETCOLORSPACE_print(contents);           break;
+        case U_EMR_DELETECOLORSPACE:        U_EMRDELETECOLORSPACE_print(contents);        break;
+        case U_EMR_GLSRECORD:               U_EMRGLSRECORD_print(contents);               break;
+        case U_EMR_GLSBOUNDEDRECORD:        U_EMRGLSBOUNDEDRECORD_print(contents);        break;
+        case U_EMR_PIXELFORMAT:             U_EMRPIXELFORMAT_print(contents);             break;
+        case U_EMR_DRAWESCAPE:              U_EMRDRAWESCAPE_print(contents);              break;
+        case U_EMR_EXTESCAPE:               U_EMREXTESCAPE_print(contents);               break;
+        case U_EMR_UNDEF107:                U_EMRUNDEF107_print(contents);                break;
+        case U_EMR_SMALLTEXTOUT:            U_EMRSMALLTEXTOUT_print(contents);            break;
+        case U_EMR_FORCEUFIMAPPING:         U_EMRFORCEUFIMAPPING_print(contents);         break;
+        case U_EMR_NAMEDESCAPE:             U_EMRNAMEDESCAPE_print(contents);             break;
+        case U_EMR_COLORCORRECTPALETTE:     U_EMRCOLORCORRECTPALETTE_print(contents);     break;
+        case U_EMR_SETICMPROFILEA:          U_EMRSETICMPROFILEA_print(contents);          break;
+        case U_EMR_SETICMPROFILEW:          U_EMRSETICMPROFILEW_print(contents);          break;
+        case U_EMR_ALPHABLEND:              U_EMRALPHABLEND_print(contents);              break;
+        case U_EMR_SETLAYOUT:               U_EMRSETLAYOUT_print(contents);               break;
+        case U_EMR_TRANSPARENTBLT:          U_EMRTRANSPARENTBLT_print(contents);          break;
+        case U_EMR_UNDEF117:                U_EMRUNDEF117_print(contents);                break;
+        case U_EMR_GRADIENTFILL:            U_EMRGRADIENTFILL_print(contents);            break;
+        case U_EMR_SETLINKEDUFIS:           U_EMRSETLINKEDUFIS_print(contents);           break;
+        case U_EMR_SETTEXTJUSTIFICATION:    U_EMRSETTEXTJUSTIFICATION_print(contents);    break;
+        case U_EMR_COLORMATCHTOTARGETW:     U_EMRCOLORMATCHTOTARGETW_print(contents);     break;
+        case U_EMR_CREATECOLORSPACEW:       U_EMRCREATECOLORSPACEW_print(contents);       break;
+        default:                            U_EMRNOTIMPLEMENTED_print("?",contents);      break;
     }  //end of switch
-    return(regular);
+    return(size);
 }
 
 

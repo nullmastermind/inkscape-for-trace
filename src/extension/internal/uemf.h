@@ -8,16 +8,16 @@
   
   If the direct link fails the document may be found
   by searching for: "[MS-EMF]: Enhanced Metafile Format"
-
+  
 */
 
 /*
 File:      uemf.h
-Version:   0.0.10
-Date:      04-DEC-2012
+Version:   0.0.12
+Date:      17-JAN-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifndef _UEMF_
@@ -49,7 +49,16 @@ extern "C" {
 //  ***********************************************************************************
 //  Value enumerations and other predefined constants, alphabetical order by group
 
-
+/** \defgroup U_MF_Qualifiers Metafile Enumeration
+  For EMFHANDLES mftype field
+  @{
+*/
+#define U_MFT_WMF        1    //!< 16 bit windows metafile
+#define U_MFT_EMF        2    //!< 32 bit enhanced windows metafile
+#define U_MFT_EMFP       3    //!< EMF plus (reserved, not implemented yet)
+#define U_MFT_MAX        3
+#define U_MFT_MIN        1
+/** @} */
 
 /** \defgroup Font_struct_widths Font name and style widths in characters
   For U_LOGFONT and U_LOGFONT_PANOSE, 
@@ -193,18 +202,19 @@ extern "C" {
 #define U_EMR_INVALID         0xFFFFFFFF //!< Not any valid U_EMF_ value
 /** @} */
 
-/** \defgroup U_DRAW_PROPERTIES
-  Used in draw_properties().  These are the bit definitions.
+/** \defgroup U_DRAW_PROPERTIES draw properties
+  Used in emr_properties() and wmr_properties.  These are the bit definitions.
   @{
 */
-#define U_DRAW_NOTEMPTY   0x01           //!< Path has at least a MOVETO in it
-#define U_DRAW_VISIBLE    0x02           //!< Path has at least a LINE in it
-#define U_DRAW_CLOSED     0x04           //!< Path has been closed
-#define U_DRAW_ONLYTO     0x08           //!< Path so far contains only *TO operations
-#define U_DRAW_FORCE      0x10           //!< Path MUST be drawn
-#define U_DRAW_ALTERS     0x20           //!< Alters draw parameters (pen, brush, coordinates...)
-#define U_DRAW_PATH       0x40           //!< An explicit path is being used (with a BEGIN and END)
-#define U_DRAW_TEXT       0x80           //!< Current record forces all pending text to be drawn first.
+#define U_DRAW_NOTEMPTY   0x001           //!< Path has at least a MOVETO in it
+#define U_DRAW_VISIBLE    0x002           //!< Path has at least a LINE in it
+#define U_DRAW_CLOSED     0x004           //!< Path has been closed
+#define U_DRAW_ONLYTO     0x008           //!< Path so far contains only *TO operations
+#define U_DRAW_FORCE      0x010           //!< Path MUST be drawn
+#define U_DRAW_ALTERS     0x020           //!< Alters draw parameters (pen, brush, coordinates...)
+#define U_DRAW_PATH       0x040           //!< An explicit path is being used (with a BEGIN and END)
+#define U_DRAW_TEXT       0x080           //!< Current record forces all pending text to be drawn first.
+#define U_DRAW_OBJECT     0x100           //!< Creates an Object (only used in WMF)
 
 /** @} */
 /** \defgroup U_EMRSETARCDIRECTION_Qualifiers  ArcDirection Enumeration
@@ -272,7 +282,7 @@ extern "C" {
 #define U_CA_LOG_FILTER        0x0002
 /** @} */
 
-/** \defgroup U_EMRCOLORMATCHTOTARGETW_dwAction_Qualifiers ColorMatchToTarget Enumeration
+/** \defgroup U_EMRCOLORMATCHTOTARGETW_dwFlags_Qualifiers ColorMatchToTarget Enumeration
   For U_EMRCOLORMATCHTOTARGETW dwFlags field
   @{
 */
@@ -311,7 +321,7 @@ extern "C" {
 #define U_DIB_PAL_COLORS   1
 /** @} */
 
-/** \defgroup U_EMRCOMMENT_* cIdent Qualifiers
+/** \defgroup U_EMRCOMMENT_TYPES Comment record types
   For U_EMRCOMMENT_* cIdent fields
   @{
 */
@@ -321,8 +331,8 @@ extern "C" {
 #define U_EMR_COMMENT_EMFPLUSRECORD     0x2B464D45
 /** @} */
 
-/** \defgroup U_EMR_COMMENT_PUBLIC, AKA  EMRComment Enumeration
-  For U_EMRCOMMENT_PUBLI pcIdent fields
+/** \defgroup U_EMR_COMMENT_PUBLIC EMRComment Enumeration
+  For U_EMRCOMMENT_PUBLIC pcIdent fields
   @{
 */
 #define U_EMR_COMMENT_WINDOWS_METAFILE  0x80000001
@@ -366,8 +376,8 @@ extern "C" {
   For U_EMREXTFLOODFILL iMode field
   @{
 */
-#define U_FLOODFILLBORDER   0x00000000
-#define U_FLOODFILLSURFACE  0x00000000
+#define U_FLOODFILLBORDER   0x00000000  /* Color specified must be the same as the border - brush fill stops at this color */
+#define U_FLOODFILLSURFACE  0x00000001  /* Color specified must be different from the border - brush fills only this color  */
 /** @} */
 
 /** \defgroup U_DESIGNVECTOR_Signature_Qualifiers Signature Enumeration
@@ -1100,10 +1110,10 @@ extern "C" {
 #define U_BGRA(r,g,b,a)        (U_RGBQUAD){b,g,r,a}             //!<  Set any BGRA color with an {r,g,b,a} quad
 #define U_WHITE                U_BGR(255,255,255)               //!<  Set BGR white.
 #define U_BLACK                U_BGR(0,0,0)                     //!<  Set BGR black.
-#define U_BGRAGetR(rgb)       ((U_RGBQUAD)rgb).Red              //!<  Color BGR Get Red Macro.
-#define U_BGRAGetG(rgb)       ((U_RGBQUAD)rgb).Green            //!<  Color BGR Get Green Macro.
-#define U_BGRAGetB(rgb)       ((U_RGBQUAD)rgb).Blue             //!<  Color BGR Get Blue Macro.
-#define U_BGRAGetA(rgb)       ((U_RGBQUAD)rgb).Reserved         //!<  Color BGR Get A/reserved Macro.
+#define U_BGRAGetR(rgb)        (rgb.Red     )                   //!<  Color BGR Get Red Macro.
+#define U_BGRAGetG(rgb)        (rgb.Green   )                   //!<  Color BGR Get Green Macro.
+#define U_BGRAGetB(rgb)        (rgb.Blue    )                   //!<  Color BGR Get Blue Macro.
+#define U_BGRAGetA(rgb)        (rgb.Reserved)                   //!<  Color BGR Get A/reserved Macro.
 
 #define U_PALETTERGB(r,g,b)    U_RGB(r,g,b,0x02))               //!<  Set any Palette RGB color.
 #define U_PALETTEINDEX(i)     ((U_COLORREF)(0x01000000 | (uint16_t)(i)))\
@@ -1147,8 +1157,11 @@ extern "C" {
 #define U_EMRTYPE(A) (((PU_EMR)A)->iType)                       //!<  Get iType from U_EMR* record
 #define U_EMRSIZE(A) (((PU_EMR)A)->nSize)                       //!<  Get nSize from U_EMR* record
 
-// Utility macro
+// Utility macros
 #define UP4(A) (4 * ((A + 3 ) / 4))                             //!< Round up to nearest multiple of 4
+
+#define U_MFT_MISMATCH(A,B) (A->mftype != B)                    //!< A is [EW]MFHANDLES and B is Metafile enumeration
+
 /** @} */
 
 typedef float      U_FLOAT;
@@ -1698,88 +1711,6 @@ typedef struct {
     U_NUM_RGBQUAD       biClrUsed;          //!< Number of bmciColors in U_BITMAPINFO/U_BITMAPCOREINFO that are used by the bitmap
     uint32_t            biClrImportant;     //!< Number of bmciColors needed (0 means all).
 } U_BITMAPINFOHEADER, *PU_BITMAPINFOHEADER;
-
-#if 0
-// Do EMF files ever use any of these???
-
-// Microsoft name: BITMAPV4HEADER Object
-typedef struct {
-    uint32_t            bV4Size;
-    int32_t             bV4Width;
-    int32_t             bV4Height;
-    uint16_t            bV4Planes;
-    uint16_t            bV4BitCount;
-    uint32_t            bV4Compression;
-    uint32_t            bV4SizeImage;
-    int32_t             bV4XPelsPerMeter;
-    int32_t             bV4YPelsPerMeter;
-    uint32_t            bV4ClrUsed;
-    uint32_t            bV4ClrImportant;
-    uint32_t            bV4RedMask;
-    uint32_t            bV4GreenMask;
-    uint32_t            bV4BlueMask;
-    uint32_t            bV4AlphaMask;
-    uint32_t            bV4CSType;
-    U_CIEXYZTRIPLE      bV4EndPoints;
-    uint32_t            bV4GammaRed;
-    uint32_t            bV4GammaGreen;
-    uint32_t            bV4GammaBlue;
-} U_BITMAPV4HEADER, *PU_BITMAPV4HEADER;  //!< For ?
-
-// Microsoft name: BITMAPV5HEADER Object
-typedef struct {
-    uint32_t            bV5Size;
-    int32_t             bV5Width;
-    int32_t             bV5Height;
-    uint16_t            bV5Planes;
-    uint16_t            bV5BitCount;
-    uint32_t            bV5Compression;
-    uint32_t            bV5SizeImage;
-    int32_t             bV5XPelsPerMeter;
-    int32_t             bV5YPelsPerMeter;
-    uint32_t            bV5ClrUsed;
-    uint32_t            bV5ClrImportant;
-    uint32_t            bV5RedMask;
-    uint32_t            bV5GreenMask;
-    uint32_t            bV5BlueMask;
-    uint32_t            bV5AlphaMask;
-    uint32_t            bV5CSType;
-    U_CIEXYZTRIPLE      bV5Endpoints;
-    uint32_t            bV5GammaRed;
-    uint32_t            bV5GammaGreen;
-    uint32_t            bV5GammaBlue;
-    uint32_t            bV5Intent;
-    uint32_t            bV5ProfileData;
-    uint32_t            bV5ProfileSize;
-    uint32_t            bV5Reserved;
-} U_BITMAPV5HEADER, *PU_BITMAPV5HEADER;  //!< For ?
-
-// Microsoft name: BITMAPCOREHEADER Object
-typedef struct {
-    uint32_t            bcSize;             //!< Structure size in bytes
-    uint16_t            bcWidth;            //!< Bitmap width in pixels
-    uint16_t            bcHeight;           //!< Bitmap height in pixels
-    uint16_t            bcPlanes;           //!< Planes (must be 1)
-    uint16_t            bcBitCount;         //!< BitCount Enumeration
-} U_BITMAPCOREHEADER, *PU_BITMAPCOREHEADER; //!< For U_BITMAPCOREINFO
-
-// Microsoft name: BITMAPCOREINFO Object
-// Description of a simple Device Independent Bitmap (DIB) - no compression or color maps
-typedef struct {
-    U_BITMAPCOREHEADER  bmciHeader;         //!< Geometry and pixel properties
-    U_RGBTRIPLE         bmciColors[1];      //!< Color table
-} U_BITMAPCOREINFO, *PU_BITMAPCOREINFO; //!< For ?
-
-// Microsoft name: RGBTRIPLE Object
-// NOTE that the color order is BGR, even though the name is RGB!
-typedef struct {
-    uint8_t             rgbtBlue;           //!< Blue  color (0-255) 
-    uint8_t             rgbtGreen;          //!< Green color (0-255)
-    uint8_t             rgbtRed;            //!< Red   color (0-255)
-} U_RGBTRIPLE, *PU_RGBTRIPLE;               //!< For U_BITMAPCOREINFO bmciColors field
-
-
-#endif // elements possibly never used by an EMF file
 
 /**
   \brief For U_EMR_* OffBmi* fields
@@ -2657,16 +2588,17 @@ typedef struct {
     uint32_t            sptr;               //!< Pointer to next available handle in the stack
     uint32_t            top;                //!< Highest slot occupied (currently)
     uint32_t            peak;               //!< Highest slot occupied (ever)
+    uint32_t            mftype;             //!< Metafile type, see Metafile Enumeration (used to block erroneous calls, wmf=>emf, for instance)
 } EMFHANDLES;
 
 /**
   2 x 2 matrix, used by xform_alt_set() function.
 */
 typedef struct {
-    double M11;
-    double M12;
-    double M21;
-    double M22;
+    double M11;                             //!< Matrix element 1,1
+    double M12;                             //!< Matrix element 1,2
+    double M21;                             //!< Matrix element 2,1
+    double M22;                             //!< Matrix element 2,2
 } U_MAT2X2, *PU_MAT2X2;
 
 // ************************************************************************************************
@@ -2680,6 +2612,7 @@ void wchartshow(const wchar_t *src);
 void dumpeht(char *string, unsigned int *handle, EMFHANDLES *eht);
 
 
+char     *U_emr_names(unsigned int idx);
 uint32_t *dx_set(int32_t height,  uint32_t weight, uint32_t members);
 uint32_t  emr_properties(uint32_t type);
 int       emr_arc_points(PU_ENHMETARECORD record, int *f1, int f2, PU_PAIRF center, PU_PAIRF start, PU_PAIRF end, PU_PAIRF size);
@@ -2706,6 +2639,7 @@ int   htable_create(uint32_t initsize, uint32_t chunksize, EMFHANDLES **eht);
 int   htable_delete(uint32_t *ih, EMFHANDLES *eht);
 int   htable_insert(uint32_t *ih, EMFHANDLES *eht);
 int   htable_free(EMFHANDLES **eht);
+int   htable_mftype(uint32_t type, EMFHANDLES *eht);
 
 U_RECTL          rectl_set(U_POINTL ul, U_POINTL lr);
 U_SIZEL          sizel_set(int32_t  x,  int32_t  y);

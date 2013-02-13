@@ -4,11 +4,11 @@
 
 /*
 File:      uemf_print.h
-Version:   0.0.3
-Date:      24-JUL-2012
+Version:   0.0.4
+Date:      13-JAN-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifndef _UEMF_PRINT_
@@ -18,7 +18,42 @@ Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
 extern "C" {
 #endif
 
-// prototypes
+/* prototypes for objects used in EMR records */
+void hexbytes_print(uint8_t *buf,unsigned int num);
+void colorref_print(U_COLORREF color);
+void rgbquad_print(U_RGBQUAD color);
+void rectl_print(U_RECTL rect);
+void sizel_print(U_SIZEL sz);
+void pointl_print(U_POINTL pt);
+void point16_print(U_POINT16 pt);
+void lcs_gamma_print(U_LCS_GAMMA lg);
+void lcs_gammargb_print(U_LCS_GAMMARGB lgr);
+void trivertex_print(U_TRIVERTEX tv);
+void gradient3_print(U_GRADIENT3 g3);
+void gradient4_print(U_GRADIENT4 g4);
+void logbrush_print(U_LOGBRUSH lb);
+void xform_print(U_XFORM xform);
+void ciexyz_print(U_CIEXYZ ciexyz);
+void ciexyztriple_print(U_CIEXYZTRIPLE cie3);
+void logcolorspacea_print(U_LOGCOLORSPACEA lcsa);
+void logcolorspacew_print(U_LOGCOLORSPACEW lcsa);
+void panose_print(U_PANOSE panose);
+void logfont_print(U_LOGFONT lf);
+void logfont_panose_print(U_LOGFONT_PANOSE lfp); 
+void bitmapinfoheader_print(char *Bmih);
+void bitmapinfo_print(char *Bmi);
+void blend_print(U_BLEND blend);
+void extlogpen_print(PU_EXTLOGPEN elp);
+void logpen_print(U_LOGPEN lp);
+void logpltntry_print(U_LOGPLTNTRY lpny);
+void logpalette_print(PU_LOGPALETTE lp);
+void rgndataheader_print(U_RGNDATAHEADER rdh);
+void rgndata_print(PU_RGNDATA rd);
+void coloradjustment_print(U_COLORADJUSTMENT ca);
+void pixelformatdescriptor_print(U_PIXELFORMATDESCRIPTOR pfd);
+void emrtext_print(char *emt, char *record, int type);
+
+/* prototypes for EMR records */
 void U_EMRNOTIMPLEMENTED_print(char *name, char *contents, int recnum, int off);
 void U_EMRHEADER_print(char *contents, int recnum, int off);
 void U_EMRPOLYBEZIER_print(char *contents, int recnum, int off);
@@ -125,7 +160,7 @@ void U_EMRSETLAYOUT_print(char *contents, int recnum, int off);
 void U_EMRTRANSPARENTBLT_print(char *contents, int recnum, int off);
 void U_EMRGRADIENTFILL_print(char *contents, int recnum, int off);
 void U_EMRCREATECOLORSPACEW_print(char *contents, int recnum, int off);
-int  U_emf_onerec_print(char *contents, int recnum, int off);
+int  U_emf_onerec_print(char *contents, char *blimit, int recnum, int off);
 
 #ifdef __cplusplus
 }

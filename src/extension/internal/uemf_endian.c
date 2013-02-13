@@ -17,11 +17,11 @@
 
 /*
 File:      uemf_endian.h
-Version:   0.0.9
-Date:      19-SEP-2012
+Version:   0.0.10
+Date:      11-JAN-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -42,37 +42,26 @@ extern "C" {
 *********************************************************************************************** */
 
 void U_swap2(void *ul, unsigned int count){
-   union  i16 {
-      uint16_t i16;
-      uint8_t  i8[2];
-   };
-   register union i16 ltmp;
-   register uint8_t   ctmp;
-   for(; count; count--,ul+=2){
-      ltmp.i16        = *(uint16_t *)ul;
-      ctmp            = ltmp.i8[0];
-      ltmp.i8[0]      = ltmp.i8[1];
-      ltmp.i8[1]      = ctmp;
-      *(uint16_t *)ul = ltmp.i16;
+   uint8_t   ctmp;
+   uint8_t  *cl = (uint8_t *) ul;
+   for(; count; count--,cl+=2){
+      ctmp            = *cl;
+      *cl             = *(cl+1);
+      *(cl+1)         = ctmp;
    }
 }
 
+/* Note: U_swap4 is also used by uwmf_endian.c, in cases where the 32 bit data is not aligned on a 4 byte boundary */
 void U_swap4(void *ul, unsigned int count){
-   union  i32 {
-      uint32_t i32;
-      uint8_t  i8[4];
-   };
-   register union i32 ltmp;
-   register uint8_t   ctmp;
-   for(;count;count--,ul+=4){
-      ltmp.i32        = *(uint32_t *)ul;
-      ctmp            = ltmp.i8[0];
-      ltmp.i8[0]      = ltmp.i8[3];
-      ltmp.i8[3]      = ctmp;
-      ctmp            = ltmp.i8[1];
-      ltmp.i8[1]      = ltmp.i8[2];
-      ltmp.i8[2]      = ctmp;
-      *(uint32_t *)ul = ltmp.i32;
+   uint8_t   ctmp;
+   uint8_t  *cl = (uint8_t *) ul;
+   for(; count; count--,cl+=4){
+      ctmp    = *(cl+0);
+      *(cl+0) = *(cl+3);
+      *(cl+3) = ctmp;
+      ctmp    = *(cl+1);
+      *(cl+1) = *(cl+2);
+      *(cl+2) = ctmp;
    }
 }
 

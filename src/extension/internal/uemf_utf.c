@@ -10,11 +10,11 @@
 
 /*
 File:      uemf_utf.c
-Version:   0.0.1
-Date:      04-DEC-2012
+Version:   0.0.3
+Date:      24-JAN-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -32,9 +32,14 @@ extern "C" {
 #include <math.h>   // for U_ROUND()
 #include "uemf_utf.h"
 
+/* Prototypes for functions used here and defined in uemf_endian.c, but which are not supposed
+to be used in end user code. */
+
+void U_swap2(void *ul, unsigned int count);
+
 /* ******************************************************************************************** */
       
-//! @cond
+/** \cond */
 /* iconv() has a funny cast on some older systems, on most recent ones
    it is just char **.  This tries to work around the issue.  If you build this
    on another funky system this code may need to be modified, or define ICONV_CAST
@@ -46,7 +51,7 @@ extern "C" {
 #if !defined(ICONV_CAST)
 #define ICONV_CAST (char **)
 #endif  //ICONV_CAST
-//! @endcond
+/** \endcond */
 
 /* **********************************************************************************************
 These functions are used for development and debugging and should be be includied in production code.
@@ -402,6 +407,69 @@ uint16_t U_Utf16le(const uint16_t src){
     U_swap2(&dst,1);
 #endif
     return(dst);
+}
+
+/**
+    \brief  Convert a UTF8 string to a Latin1 string.
+    \return pointer to new string or NULL if it fails
+    \param src Latin1 string to convert
+    \param max number of characters to convert, if 0, until terminator
+    \param len number of characters in new string, NOT including terminator
+    
+    
+    WMF uses latin1, others UTF-8, only some utf-8 can be converted to latin1.
+    
+*/
+char *U_Utf8ToLatin1(
+      const char *src,
+      size_t      max,
+      size_t     *len
+   ){
+   char *dst,*dst2;
+   size_t srclen,dstlen,status;
+   if(max){ srclen = max; }
+   else {   srclen = strlen(src)+1; }       // include terminator, length in BYTES
+   dstlen = (1 + srclen);                   // This should always work but might waste some space
+   dst2 = dst = calloc(dstlen,1);
+   if(!dst)return(NULL);
+   iconv_t conv = iconv_open("LATIN1//TRANSLIT",   "UTF-8"); // translate what can be, fill in with something close for the rest
+   if ( conv == (iconv_t) -1)return(NULL);
+   status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
+   iconv_close(conv);
+   if(status == (size_t) -1)return(NULL);
+   if(len)*len=strlen(dst2);
+   return((uint32_t *) dst2);
+}
+
+/**
+    \brief  Convert a Latin1 string to a UTF8 string.
+    \return pointer to new string or NULL if it fails
+    \param src Latin1 string to convert
+    \param max number of characters to convert, if 0, until terminator
+    \param len number of characters in new string, NOT including terminator
+    
+    
+    WMF uses latin1, others UTF-8, all Latin1 should be able to convert to utf-8.
+    
+*/
+char *U_Latin1ToUtf8(
+      const char *src,
+      size_t      max,
+      size_t     *len
+   ){
+   char *dst,*dst2;
+   size_t srclen,dstlen,status;
+   if(max){ srclen = max; }
+   else {   srclen = strlen(src)+1; }       // include terminator, will waste some space
+   dst2 = dst = calloc(dstlen,1);
+   if(!dst)return(NULL);
+   iconv_t conv = iconv_open("UTF-8", "LATIN1"); // everything should translate
+   if ( conv == (iconv_t) -1)return(NULL);
+   status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
+   iconv_close(conv);
+   if(status == (size_t) -1)return(NULL);
+   if(len)*len=strlen(dst2);
+   return((uint32_t *) dst2);
 }
 
 /**

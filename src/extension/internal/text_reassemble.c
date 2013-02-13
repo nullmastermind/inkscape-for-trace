@@ -1,61 +1,52 @@
-/*  text_reassemble.c
-version 0.0.3 2012-12-07
-Copyright 2012, Caltech and David Mathog
+/**
+  @file text_reassemble.c
 
-Reassemble formatted text from a series of text/position/font records.
-
+\verbatim
 Method:
   1.  For all ordered text objects which are sequential and share the same esc.
   2.     For the first only pull x,y,esc and save, these define origin and rotation.
   3.     Save the text object.
   4.  Phase I: For all saved text objects construct lines.
-  5.     Check for allowed overlaps on sequential saved text object bounding rectangles.  
+  5.     Check for allowed overlaps on sequential saved text object bounding rectangles.
   6      If found merge second with first, check next one.
-  7.     If not found, start a new complex (line). 
+  7.     If not found, start a new complex (line).
   8.  Phase II;  for all lines construct paragraphs.
-  9.      Check alignment and line spacing of preceding line with current line.
-  10.     if alignment is the same, and line spacing is compatible merge current line into
-             current paragraph.  Reaverage line spacing over all lines in paragraph.  Check next one.
-  11.     If alignment does not match start a new paragraph.
+  9.     Check alignment and line spacing of preceding line with current line.
+  10.    if alignment is the same, and line spacing is compatible merge current line into
+            current paragraph.  Reaverage line spacing over all lines in paragraph.  Check next one.
+  11.    If alignment does not match start a new paragraph.
       (Test program)
   12. Over all phase II paragraphs
   13. Over all phase I lines in each paragraph.
   14. Over all text objects in each line.
-         Emit SVG correspnding to this construct to a file dump.svg.
+         Emit SVG corresponding to this construct to a file dump.svg.
+         (Conversion to other file types would be modeled on this example.)
   15. Clean up.
       (General program)
-      Like for the Test program, but final represenation may not be SVG.
-  
-During the accept stage (1) it uses fontconfig/freetype data to store up font faces and to
-work out the extent of each substring.  This code assumes all text goes L->R, if it goes the other way
-the same groupings would occur, just mirror imaged.  
-
-At step 5 it calculates overlapping bounding boxes == formatted strings.  The bounding boxes are extended
-out by 1 character laterally and .49 character vertically.  If it was able to figure out justification
-that is returned along with the number of formatted strings.
-
-The caller then retrieves the x,y,xe,ye,string,format,font data and uses it to construct a formatted
-string in whatever format the caller happens to be using.  For Inskcape this would be SVG.
-
-Finally the caller cleans up, releasing all of the stored memory.  FreeType memory is always all released.
-FontConfig memory is released except for, optionally, not calling FcFini(), which would likely cause
-problems for any program that was using FontConfig elsewhere.
+      Like for the Test program, but final representation may not be SVG.
+      Text object and bounding rectangle memory would all be released.  If another set of
+      text will be processed then hang onto both Freetype and Fontconfig structures. If no
+      other text will be processed here, then also release Freetype structures.  If the caller uses
+      Fontconfig elsewhere then do not release it, otherwise, do so.
 
 NOTE ON COORDINATES:  x is positive to the right, y is positive down.  So (0,0) is the upper left corner, and the
 lower left corner of a rectangle has a LARGER Y coordinate than the upper left.  Ie,  LL=(10,10) UR=(30,5) is typical.
+\endverbatim
+*/
 
+/*
 
-Compilation of test program:
+Compilation of test program (with all debugging output, but not loop testing):
 On Windows use:
 
-   gcc -Wall -DWIN32 -DTEST \
+   gcc -Wall -DWIN32 -DTEST -DDBG_TR_PARA -DDBG_TR_INPUT \
      -I. -I/c/progs/devlibs32/include -I/c/progs/devlibs32/include/freetype2\
      -o text_reassemble text_reassemble.c uemf_utf.c \
-     -lfreetype6 -lfontconfig-1 -lm -L/c/progs/devlibs32/bin
+     -lfreetype6 -lfontconfig-1 -liconv -lm -L/c/progs/devlibs32/bin
 
 On Linux use:
 
-    gcc -Wall -DTEST -I. -I/usr/include/freetype2 -o text_reassemble text_reassemble.c uemf_utf.c -lfreetype -lfontconfig -lm
+    gcc -Wall -DTEST -DTEST -DDBG_TR_PARA -DDBG_TR_INPUT  -I. -I/usr/include/freetype2 -o text_reassemble text_reassemble.c uemf_utf.c -lfreetype -lfontconfig -lm
 
 Compilation of object file only (Windows):
 
@@ -75,6 +66,12 @@ Optional compiler switches for development:
                    memory leaks.  Ouput file is overwritten each time.
 
 
+File:      text_reassemble.c
+Version:   0.0.4
+Date:      24-JAN-2013
+Author:    David Mathog, Biology Division, Caltech
+email:     mathog@caltech.edu
+Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -84,10 +81,11 @@ extern "C" {
 #include "text_reassemble.h"
 #include "uemf_utf.h"  /* For a couple of text functions.  Exact copy from libUEMF. */
 
-/* end of functions from libUEMF */
-
-/* Utility function, find a (sub)string in a caseinvariant manner, used for locating "Narrow" in font name.
-   Returns -1 if no match, else returns the position (numbered from 0) of the first character of the match.
+/**
+    \brief Find a (sub)string in a caseinvariant manner, used for locating "Narrow" in font name
+    \return Returns -1 if no match, else returns the position (numbered from 0) of the first character of the match.
+    \param string  Text to search
+    \param sub     Text to find
 */
 int TR_findcasesub(char *string, char *sub){
   int i,j;
@@ -105,16 +103,19 @@ int TR_findcasesub(char *string, char *sub){
 }
 
 /**
-Get the advance for the 32 bit character, returned value has units of 1/64th of a Point.  
-  When load_flags == FT_LOAD_NO_SCALE is used the internal advance is in 1/64th of a point.  
-     This does NOT stop scaling on kerning values!
-  When load_flags == FT_LOAD_TARGET_NORMAL is used the internal advance also seem to be in 1/64th of a point.  The scale
+    \brief Get the advance for the 32 bit character
+    
+    \return Returns -1 on error, or advance in units of 1/64th of a Point.
+    \param fsp          Pointer to FNT_SPECS struct.
+    \param wc           Current character (32 bit int)
+    \param pc           Previous character
+    \param load_flags   Controls internal advance:
+  FT_LOAD_NO_SCALE, internal advance is in 1/64th of a point. (kerning values are still scaled)
+  FT_LOAD_TARGET_NORMAL internal advance is in 1/64th of a point.  The scale
      factor seems to be (Font Size in points)*(DPI)/(32.0 pnts)*(72 dpi). 
-kern_mode, One of FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, FT_KERNING_UNSCALED
-wc is the current character
-pc is the previous character, 0 if there was not one
-  If ymin,ymax are passed in, then if the character's limits decrease/increase that value, it is modified (for founding string bounding box)
-On error return -1.
+    \param kern_mode  FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED.  Set to match calling application.
+    \param ymin  If the pointer is defined, the value is adjusted if ymin of wc character is less than the current value.
+    \param ymax  If the pointer is defined, the value is adjusted if ymin of wc character is more than the current value. 
 */
 int TR_getadvance(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int load_flags, int kern_mode, int *ymin, int *ymax){ 
    FT_Glyph   glyph;
@@ -137,15 +138,12 @@ int TR_getadvance(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int load_flags, int 
 }
 
 /**
-Get the kerning for a pair of 32 bit characters, returned value has units of 1/64th of a Point.  
-  When load_flags == FT_LOAD_NO_SCALE is used the internal advance is in 1/64th of a point.  
-     This does NOT stop scaling on kerning values!
-  When load_flags == FT_LOAD_TARGET_NORMAL is used the internal advance also seem to be in 1/64th of a point.  The scale
-     factor seems to be (Font Size in points)*(DPI)/(32.0 pnts)*(72 dpi). 
-kern_mode, One of FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, FT_KERNING_UNSCALED
-wc is the current character
-pc is the previous character, 0 if there was not one
-Returns 0 on error or if the kerning is 0.
+    \brief Get the kerning for a pair of 32 bit characters
+    \return Returns 0 on error, or kerning value (which may be 0) for the pair in units of 1/64th of a point.
+    \param fsp          Pointer to FNT_SPECS struct.
+    \param wc           Current character (32 bit int)
+    \param pc           Previous character
+    \param kern_mode  FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED.  Set to match calling application.
 */
 int TR_getkern2(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int kern_mode){ 
    int        this_glyph_index;
@@ -166,18 +164,12 @@ int TR_getkern2(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int kern_mode){
 }
 
 /**
-Get the kerning for a pair of 32 bit characters, where one is the last charcter in the previous text block,
-and the other is the first in the current text block.
-  When load_flags == FT_LOAD_NO_SCALE is used the internal advance is in 1/64th of a point.  
-     This does NOT stop scaling on kerning values!
-  When load_flags == FT_LOAD_TARGET_NORMAL is used the internal advance also seem to be in 1/64th of a point.  The scale
-     factor seems to be (Font Size in points)*(DPI)/(32.0 pnts)*(72 dpi). 
-kern_mode, One of FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, FT_KERNING_UNSCALED
-tsp is current text object
-ptsp is the previous text object
-wc is the current character
-pc is the previous character
-Returns 0 on error or if the kerning is 0.
+    \brief Get the kerning for a pair of 32 bit characters, where one is the last charcter in the previous text block, and the other is the first in the current text block.
+    \return Returns 0 on error, or kerning value (which may be 0) for the pair in units of 1/64th of a point.
+    \param fsp  Pointer to FNT_SPECS struct.
+    \param tsp  current text object
+    \param ptsp previous text object
+    \param kern_mode  FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED.  Set to match calling application.
 */
 int TR_kern_gap(FNT_SPECS *fsp, TCHUNK_SPECS *tsp, TCHUNK_SPECS *ptsp, int kern_mode){ 
    int          kern=0;
@@ -206,14 +198,19 @@ int TR_kern_gap(FNT_SPECS *fsp, TCHUNK_SPECS *tsp, TCHUNK_SPECS *ptsp, int kern_
 
 
 
-/* If the complex is a TR_TXT or TR_LINE find its baseline.  
-   If the complex is TR_PARA+* find the baseline of the last line.
-   If AscMax or DscMax exists find the maximum Ascender/Descender size in this complex.
-   If there are multiple text elements in a TR_LINE, the baseline is that of the
-      element that uses the largest font.   This will definitely give the wrong
-      result if that line starts with a super or subscript that is full font size, but
-      they are usually smaller.
-   returns 0 if it screws up and cannot figure out the baseline.
+/**
+    \brief Find baseline on Y axis of a complex.
+       If the complex is a TR_TEXT or TR_LINE find its baseline.
+       If the complex is TR_PARA_[UCLR]J find the baseline of the last line.
+       If there are multiple text elements in a TR_LINE, the baseline is that of the
+         element that uses the largest font.   This will definitely give the wrong
+         result if that line starts with a super or subscript that is full font size, but
+         they are usually smaller.
+    \return Returns 0 if it cannot determine a baseline, else returns the baseline Y coordinate.
+    \param tri pointer to the TR_INFO structure holding all TR data
+    \param src index of the current complex
+    \param ymax  If the pointer is defined, the value is adjusted if ymax of current complex is more than the current value. 
+    \param ymin  If the pointer is defined, the value is adjusted if ymin of current complex is less than the current value.
 */
 double TR_baseline(TR_INFO *tri, int src, double *ymax, double *ymin){
    double       baseline=0;
@@ -277,16 +274,28 @@ double TR_baseline(TR_INFO *tri, int src, double *ymax, double *ymin){
    return(baseline);
 }
 
-/* check or set vadvance on growing complex dst with positions of text in 
-   potential TR_LINE/TR_TEXT src.  Vadvance is a multiplicative factor like 1.25.
-   The distance between successive baselines is vadvance * max(font_size), where the maximum
-   is over all text elements in src.
-   lines is the index of the first text block that was added, so src - lines can be used
-      to determine the weight to give to each new vadvance value as it is merged into the
-      running weighted average.  This improves the accuracy of the vertical advance, since
-      there can be some noise introduced when lines have different maximum font sizes.
-   Returns 0 on success.
-   Returns !0 on failure
+/**
+    \brief Check or set vertical advance on the growing complex relative to the current complex.
+        Vadvance is a multiplicative factor like 1.25.
+        The distance between successive baselines is vadvance * max(font_size), where the maximum
+        is over all text elements in src.
+        The growing complex is always the last one in the CX_INFO section of the TR_INFO structure.
+        If an existing vadvance does not match the one which would be required to fit the next complex
+          to add to the growing one, it terminates a growing complex.  (Ie, starts a new paragraph.)
+    Find baseline on Y axis of a complex.
+       If the complex is a TR_TEXT or TR_LINE find its baseline.  
+       If the complex is TR_PARA+* find the baseline of the last line.
+       If there are multiple text elements in a TR_LINE, the baseline is that of the
+         element that uses the largest font.   This will definitely give the wrong
+         result if that line starts with a super or subscript that is full font size, but
+         they are usually smaller.
+    \return Returns 0 on success, !0 on failure.
+    \param tri pointer to the TR_INFO structure holding all TR data
+    \param src index of the current complex, to be added to the growing complex.
+      This lets the value of "src - lines"  determine the weight to give to each new vadvance value
+      as it is merged into the running weighted average.  This improves the accuracy of the vertical advance,
+      since there can be some noise introduced when lines have different maximum font sizes.
+    \param lines index of the first text block that was added to the growing complex.
 */
 int TR_check_set_vadvance(TR_INFO *tri, int src, int lines){
    int         status = 0;
@@ -328,7 +337,10 @@ int TR_check_set_vadvance(TR_INFO *tri, int src, int lines){
 }
 
 
-/* Initialize the ftinfo system.  Sets up a freetype library to use in this context.  Returns NULL on failure. */
+/**
+    \brief Initialize an FT_INFO structure.  Sets up a freetype library to use in this context.
+    \returns a pointer to the FT_INFO structure created, or NULL on error.
+*/
 FT_INFO *ftinfo_init(void){
    FT_INFO *fti = NULL;
    if(FcInit()){
@@ -354,8 +366,11 @@ FT_INFO *ftinfo_init(void){
    return(fti);
 }
 
-/* verifies that there is space to add one more entry. 
-   0 on sucess, anything else is an error */
+/**
+    \brief Make an FT_INFO structure insertable. Adds storage as needed.
+    \param fti pointer to the FT_INFO structure
+    \returns 0 on success, !0 on error.
+*/
 int ftinfo_make_insertable(FT_INFO *fti){
    int status=0;
    if(!fti)return(2);
@@ -375,8 +390,12 @@ int ftinfo_make_insertable(FT_INFO *fti){
 }
 
 
-/* Insert an fsp into an fti 
-   0 on sucess, anything else is an error */
+/**
+    \brief Insert a copy of a FNT_SPECS structure into the FT_INFO structure.
+    \param fti pointer to the FT_INFO structure.
+    \param fsp pointer to the FNT_SPECS structure.
+    \returns 0 on success, !0 on error.
+*/
 int ftinfo_insert(FT_INFO *fti, FNT_SPECS *fsp){
    int status=1;
    if(!fti)return(2);
@@ -390,8 +409,11 @@ int ftinfo_insert(FT_INFO *fti, FNT_SPECS *fsp){
 
 
 
-/* Shut down the ftinfo system. Release all memory.  
-   call like:  fi_ptr = ftinfo_release(fi_ptr)
+/**
+    \brief  Release an FT_INFO structure. Release all associated memory.
+        Use like:  fi_ptr = ftinfo_release(fi_ptr)
+    \param fti pointer to the FT_INFO structure.
+    \returns NULL.
 */
 FT_INFO *ftinfo_release(FT_INFO *fti){
    int i;
@@ -410,9 +432,13 @@ FT_INFO *ftinfo_release(FT_INFO *fti){
    return NULL;
 }
 
-/* Clear the ftinfo system. Release all Freetype memory but do NOT shut down Fontconfig.  This would
-   be called in preference to ftinfo_release if some other part of the program needed to continue using
-   Fontconfig.:  fi_ptr = ftinfo_clear(fi_ptr)
+/**
+    \brief  Clear an FT_INFO structure. Release all Freetype memory but does not release Fontconfig.
+        This would be called in preference to ftinfo_release() if some other part of the program needed
+        to continue using Fontconfig.
+        Use like:  fi_ptr = ftinfo_clear(fi_ptr)
+    \param fti pointer to the FT_INFO structure.
+    \returns NULL.
 */
 FT_INFO *ftinfo_clear(FT_INFO *fti){
    int i;
@@ -431,8 +457,11 @@ FT_INFO *ftinfo_clear(FT_INFO *fti){
 }
 
 
-/* verifies that there is space to add one more entry. 
-   0 on sucess, anything else is an error */
+/**
+    \brief Make a CHILD_SPECS structure insertable. Adds storage as needed.
+    \param csp pointer to the CHILD_SPECS structure
+    \returns 0 on success, !0 on error.
+*/
 int csp_make_insertable(CHILD_SPECS *csp){
    int status=0;
    if(!csp)return(2);
@@ -451,7 +480,12 @@ int csp_make_insertable(CHILD_SPECS *csp){
    return(status);
 }
 
-/* Add a member (src) to a child spec.  0 on success, anything else is an error  */
+/**
+    \brief Add a member to a CHILD_SPECS structure. (Member is an index for either a text object or a complex.)
+    \param dst pointer to the CHILD_SPECS structure.
+    \param src index of the member.
+    \returns 0 on success, !0 on error.
+*/
 int csp_insert(CHILD_SPECS *dst, int src){
    int status=1;
    if(!dst)return(2);
@@ -462,8 +496,14 @@ int csp_insert(CHILD_SPECS *dst, int src){
    return(status);
 }
 
-/* Add all the members of child spec src to child spec dst.  
-0 on success, anything else is an error  */
+/**
+    \brief Append all the members of one CHILD_SPECS structure to another CHILD_SPECS structure. 
+       Member is an index for either a text object or a complex.
+       The donor is not modified.
+    \param dst pointer to the recipient CHILD_SPECS structure.
+    \param src pointer to the donor CHILD_SPECS structure.
+    \returns 0 on success, !0 on error.
+*/
 int csp_merge(CHILD_SPECS *dst, CHILD_SPECS *src){
    int i;
    int status=1;
@@ -476,8 +516,10 @@ int csp_merge(CHILD_SPECS *dst, CHILD_SPECS *src){
    return(status);
 }
 
-/* Shut down the cxinfo system. Release all memory.  
-   call like:  (void) csp_release(csp_ptr).
+/**
+    \brief  Release a CHILD_SPECS structure. Release all associated memory.
+    \param csp pointer to the CHILD_SPECS structure.
+    \returns NULL.
 */
 void csp_release(CHILD_SPECS *csp){
    if(csp){
@@ -488,7 +530,10 @@ void csp_release(CHILD_SPECS *csp){
 }
 
 
-/* Initialize the cxinfo system.  Returns NULL on failure. */
+/**
+    \brief Initialize an CX_INFO structure.  Holds complexes (multiple text objects in known positions and order.)
+    \returns a pointer to the CX_INFO structure created, or NULL on error.
+*/
 CX_INFO *cxinfo_init(void){
    CX_INFO *cxi = NULL;
    cxi = (CX_INFO *)calloc(1,sizeof(CX_INFO));
@@ -501,9 +546,11 @@ CX_INFO *cxinfo_init(void){
    return(cxi);
 }
 
-/* verifies that there is space to add one more entry.
-   Creates the structure if it is passed a null pointer. 
-   0 on sucess, anything else is an error */
+/**
+    \brief Make a CX_INFO structure insertable. Adds storage as needed.
+    \returns 0 on success, !0 on error.
+    \param cxi pointer to the CX_INFO structure
+*/
 int cxinfo_make_insertable(CX_INFO *cxi){
    int status=0;
    if(cxi->used < cxi->space){
@@ -521,10 +568,14 @@ int cxinfo_make_insertable(CX_INFO *cxi){
    return(status);
 }
 
-/* Insert a complex of "type" with one member (src) and that src's associated rectangle (by index).
-   If type is TR_TEXT src is an index for tpi->chunks[]
-   If type is TR_LINE src is an index for cxi->kids[]
-   0 on sucess, anything else is an error */
+/**
+    \brief Insert a complex into the CX_INFO structure. (Insert may be either TR_TEXT or TR_LINE.)
+    \returns 0 on success, !0 on error.
+    \param cxi pointer to the CX_INFO structure (complexes).
+    \param src index of the the complex to insert.
+    \param src_rt_tidx index of the bounding rectangle
+    \param type TR_TEXT (index is for tpi->chunks[]) or TR_LINE (index is for cxi->kids[])
+*/
 int cxinfo_insert(CX_INFO *cxi, int src, int src_rt_tidx, enum tr_classes type){
    int status=1;
    if(!cxi)return(2);
@@ -537,10 +588,13 @@ int cxinfo_insert(CX_INFO *cxi, int src, int src_rt_tidx, enum tr_classes type){
    return(status);
 }
 
-/* Append a a complex "src" of the last complex and change the complex type to "type".
-   If type is TR_LINE src is an index for tpi->chunks[]
-   If type is TR_PARA_* src is an index for cxi->kids[], and the incoming complex is a line.
-   0 on sucess, anything else is an error */
+/**
+    \brief Append a complex to the CX_INFO structure and give it a type.
+    \param cxi pointer to the CX_INFO structure (complexes).
+    \param src index of the complex to append.
+    \param type TR_LINE (src is an index for tpi->chunks[]) or TR_PARA (src is an index for cxi->kids[]).
+    \returns 0 on success, !0 on error.
+*/
 int cxinfo_append(CX_INFO *cxi, int src, enum tr_classes type){
    int status=1;
    if(!cxi)return(2);
@@ -552,8 +606,14 @@ int cxinfo_append(CX_INFO *cxi, int src, enum tr_classes type){
 }
 
 
-/* Merge a complex dst with N members (N>=1) by adding a second complex src . Change the type to "type"
-   0 on sucess, anything else is an error */
+/**
+    \brief Merge a complex dst with N members (N>=1) by adding a second complex src, and change the type.
+    \param cxi pointer to the CX_INFO structure (complexes).
+    \param dst index of the complex to expand.
+    \param src index of the donor complex (which is not modified).
+    \param type TR_LINE (src is an index for tpi->chunks[]) or TR_PARA (src is an index for cxi->kids[]).
+    \returns 0 on success, !0 on error.
+*/
 int cxinfo_merge(CX_INFO *cxi, int dst, int src, enum tr_classes type){
    int status =1;
    if(!cxi)return(2);
@@ -564,7 +624,9 @@ int cxinfo_merge(CX_INFO *cxi, int dst, int src, enum tr_classes type){
    return(status);
 }
 
-/* For debugging purposes,not used in production code.
+/**
+    \brief Dump the contents of the TR_INFO structure to stdout. For debugging purposes,not used in production code.
+    \param tri pointer to the TR_INFO structure.
 */
 void cxinfo_dump(TR_INFO *tri){
    int i,j,k;
@@ -600,8 +662,11 @@ void cxinfo_dump(TR_INFO *tri){
    return;
 }
 
-/* Shut down the cxinfo system. Release all memory.  
-   call like:  cxi_ptr = cxinfo_release(cxi_ptr)
+/**
+    \brief  Release a CX_INFO structure. Release all associated memory.
+      use like:  cxi = cxiinfo_release(cxi);
+    \param cxi pointer to the CX_INFO structure.
+    \returns NULL.
 */
 CX_INFO *cxinfo_release(CX_INFO *cxi){
    int i;
@@ -614,7 +679,10 @@ CX_INFO *cxinfo_release(CX_INFO *cxi){
 }
 
 
-/* Initialize the tpinfo system.  Returns NULL on failure. */
+/**
+    \brief Initialize an TP_INFO structure.  Holds text objects from which complexes are built.
+    \returns a pointer to the TP_INFO structure created, or NULL on error.
+*/
 TP_INFO *tpinfo_init(void){
    TP_INFO *tpi = NULL;
    tpi = (TP_INFO *)calloc(1,sizeof(TP_INFO));
@@ -628,8 +696,11 @@ TP_INFO *tpinfo_init(void){
 }
 
 
-/* verifies that there is space to add one more entry. 
-   0 on sucess, anything else is an error */
+/**
+    \brief Make a TP_INFO structure insertable. Adds storage as needed.
+    \returns 0 on success, !0 on error.
+    \param tpi pointer to the TP_INFO structure
+*/
 int tpinfo_make_insertable(TP_INFO *tpi){
    int status=0;
    if(tpi->used >= tpi->space){
@@ -644,8 +715,12 @@ int tpinfo_make_insertable(TP_INFO *tpi){
    return(status);
 }
 
-/* Insert a TCHUNK_SPEC as a tpi chunk.. 
-   0 on sucess, anything else is an error */
+/**
+    \brief Insert a copy of a  TCHUNK_SPECS structure into a TP_INFO structure. (Insert a text object.)
+    \returns 0 on success, !0 on error.
+    \param tpi pointer to the TP_INFO structure
+    \param tsp pointer to the TCHUNK_SPECS structure
+*/
 int tpinfo_insert(TP_INFO *tpi, TCHUNK_SPECS *tsp){
    int status=1;
    if(!tpi)return(2);
@@ -658,8 +733,11 @@ int tpinfo_insert(TP_INFO *tpi, TCHUNK_SPECS *tsp){
    return(status);
 }
 
-/* Shut down the tpinfo system. Release all memory.  
-   call like:  tpi_ptr = tpinfo_release(tpi_ptr)
+/**
+    \brief  Release a TP_INFO structure. Release all associated memory.
+      use like:  tpi = tpinfo_release(tpi);
+    \returns NULL.
+    \param tpi pointer to the TP_INFO structure.
 */
 TP_INFO *tpinfo_release(TP_INFO *tpi){
    int i;
@@ -672,7 +750,10 @@ TP_INFO *tpinfo_release(TP_INFO *tpi){
    return NULL;
 }
 
-/* Initialize the brinfo system.  Returns NULL on failure. */
+/**
+    \brief Initialize an BR_INFO structure.  Holds bounding rectangles, for both text objects and complexes.
+    \returns a pointer to the BR_INFO structure created, or NULL on error.
+*/
 BR_INFO *brinfo_init(void){
    BR_INFO *bri = NULL;
    bri = (BR_INFO *)calloc(1,sizeof(BR_INFO));
@@ -685,9 +766,11 @@ BR_INFO *brinfo_init(void){
    return(bri);
 }
 
-/* verifies that there is space to add one more entry. 
-   Creates rects if that pointer is NULL.
-   0 on sucess, anything else is an error */
+/**
+    \brief Make a BR_INFO structure insertable. Adds storage as needed.
+    \returns 0 on success, !0 on error.
+    \param bri pointer to the BR_INFO structure
+*/
 int brinfo_make_insertable(BR_INFO *bri){
    int status=0;
    if(!bri)return(2);
@@ -698,9 +781,12 @@ int brinfo_make_insertable(BR_INFO *bri){
    return(status);
 }
 
-/** Append a BRECT_SPEC element to brinfo.
-   Side effect - may realloc bri->rects, so element MUST NOT be a pointer into that array!
-   0 on sucess, anything else is an error */
+/**
+    \brief Insert a copy of a  BRECT_SPEC structure into a BR_INFO structure. (Insert a bounding rectangle.)
+    \returns 0 on success, !0 on error.
+    \param bri pointer to the BR_INFO structure
+    \param element pointer to the BRECT_SPECS structure
+*/
 int brinfo_insert(BR_INFO *bri, BRECT_SPECS *element){
    int status=1;
    if(!bri)return(2);
@@ -711,8 +797,13 @@ int brinfo_insert(BR_INFO *bri, BRECT_SPECS *element){
    return(status);
 }
 
-/** Merge BRECT_SPEC element src with dst.  dst becomes the merged result. 
-   0 on sucess, anything else is an error */
+/**
+    \brief Merge BRECT_SPEC element src into/with BRECT_SPEC element dst. src is unchanged.  (Merge two bounding rectangles.)
+    \returns 0 on success, !0 on error.
+    \param bri pointer to the BR_INFO structure
+    \param dst index of the destination bounding rectangle.
+    \param src index of the source bounding rectangle.
+*/
 int brinfo_merge(BR_INFO *bri, int dst, int src){
    if(!bri)return(1);
    if(dst<0 || dst>= bri->used)return(2);
@@ -735,18 +826,26 @@ printf("bri_Merge into rect:%d (LL,UR) dst:(%lf,%lf),(%lf,%lf) src:(%lf,%lf),(%l
    return(0);
 }
 
-/** Check for an allowable overlap of two rectangles.  The method works backwards, look for all reasons
-    they might not overlap, and none are found, then the rectangles do overlap.
-    An overlap here does not count just a line or a point - area must be involved.
-    dst  one retangle to test
-    src  the other rectangle to test
-    rp_src padding to apply to src, make it a little bigger, as in, allow leading or trailing spaces
-    0 on sucess, 1 on no overlap, anything else is an error */
+/**
+    \brief Check for an allowable overlap of two bounding rectangles.
+       Allowable overlap is any area overlap of src and dst bounding rectangles, after
+         they have been expanded (padded) by allowed edge expansions.  (For instance, if
+         missing spaces must be accounted for.)
+       The method works backwards: look for all reasons they might not overlap, 
+       if none are found, then the rectangles do overlap.
+       An overlap here does not count just a line or a point - area must be involved.
+    \returns 0 on success (overlap detected), 1 on no overlap, anything else is an error.
+    \param bri pointer to the BR_INFO structure
+    \param dst index of the destination bounding rectangle.
+    \param src index of the source bounding rectangle.
+    \param rp_dst Pointer to edge padding values for dst.
+    \param rp_src Pointer to edge padding values for src.
+*/
 int brinfo_overlap(BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD *rp_src){
    int status;
    BRECT_SPECS *br_dst;
    BRECT_SPECS *br_src;
-   if(!bri)return(2);
+   if(!bri || !rp_dst || !rp_src)return(2);
    if(dst<0 || dst>= bri->used)return(3);
    if(src<0 || src>= bri->used)return(4);
    br_dst=&bri->rects[dst];
@@ -759,8 +858,21 @@ int brinfo_overlap(BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD *rp_sr
       ){
       status = 1;  
    }
-   else {   /* overlap not excluded, so it must occur */
-      status = 0; 
+   else {   
+      /* overlap not excluded, so it must occur.  
+         Only accept overlaps that are mostly at one end or the other, not mostly top or bottom.
+         If the following condition is true then there is no more than a tiny bit of horizontal overlap of src 
+         within dist, which suggests that the two pieces of text may be considered part of one line. 
+         (For a vertical alphabet the same method could be used for up/down.) */
+      if(
+         (br_src->xll >= br_dst->xur - rp_dst->right) ||  /*  src overlaps just a little on the right (L->R language) */
+         (br_src->xur <= br_dst->xll + rp_dst->left)      /*  src overlaps just a little on the left  (R->L language) */
+      ){
+         status = 0;
+      }
+      else {  /* Too much overlap, reject the overlap */
+         status = 1;
+      }
    }
 /*
 printf("Overlap status:%d\nOverlap trects (LL,UR) dst:(%lf,%lf),(%lf,%lf) src:(%lf,%lf),(%lf,%lf)\n",
@@ -795,9 +907,16 @@ printf("Overlap rprect (LL,UR) dst:(%lf,%lf),(%lf,%lf) src:(%lf,%lf),(%lf,%lf)\n
    return(status);
 }
 
-/* Attempt to deduce justification of a paragraph from the bounding rectangles for two lines.  If type in not UJ
-then the alignment must match or UJ is returned. "slop" is the numeric inaccuracy which is permitted - two values
-within that range are the same as identical.*/
+/**
+    \brief Try to deduce justification of a paragraph from the bounding rectangles for two successive lines.
+    \returns one of TR_PARA_ UJ (unknown justified), LJ, CJ, or RJ (left, center, or right justified).
+    \param bri pointer to the BR_INFO structure
+    \param dst index of the destination bounding rectangle.
+    \param src index of the source bounding rectangle.
+    \param slop allowed error in edge alignment.
+    \param type Preexisting justification for dst, if any.  Justification of dst and src must match this or
+       TR_PARA_UJ is returned even if dst and src have some (other) alignment.
+*/
 enum tr_classes brinfo_pp_alignment(BR_INFO *bri, int dst, int src, double slop, enum tr_classes type){
    enum tr_classes newtype;
    BRECT_SPECS *br_dst = & bri->rects[dst];
@@ -841,8 +960,11 @@ newtype,
    return(newtype);
 }
 
-/* Shut down the tpinfo system. Release all memory.  
-   call like:  bri_ptr = brinfo_release(bri_ptr)
+/**
+    \brief  Release a BR_INFO structure. Release all associated memory.
+      use like:  bri = brinfo_release(bri);
+    \param bri pointer to the BR_INFO structure.
+    \returns NULL.
 */
 BR_INFO *brinfo_release(BR_INFO *bri){
    if(bri){
@@ -854,7 +976,10 @@ BR_INFO *brinfo_release(BR_INFO *bri){
 
 
 
-/* Initialize the trinfo system.  Returns NULL on failure. */
+/**
+    \brief Initialize an TR_INFO structure.  Holds all data for text reassembly.
+    \returns a pointer to the TR_INFO structure created, or NULL on error.
+*/
 TR_INFO *trinfo_init(TR_INFO *tri){
    if(tri)return(tri);                    /* tri is already set, double initialization is not allowed */
    if(!(tri = (TR_INFO *)calloc(1,sizeof(TR_INFO))) ||
@@ -872,7 +997,14 @@ TR_INFO *trinfo_init(TR_INFO *tri){
    return(tri);
 }
 
-/* release all memory from the trinfo system. */
+/**
+    \brief  Release a TR_INFO structure completely.
+      Release all associated memory, including FontConfig.
+      See also trinfo_clear() and trinfo_release_except_FC().
+      use like:  tri = trinfo_release(tri);
+    \param tri pointer to the TR_INFO structure.
+    \returns NULL.
+*/
 TR_INFO *trinfo_release(TR_INFO *tri){
    if(tri){
       if(tri->bri)tri->bri=brinfo_release(tri->bri);
@@ -885,8 +1017,15 @@ TR_INFO *trinfo_release(TR_INFO *tri){
    return(NULL);
 }
 
-/* release everything except Fontconfig, which may still be needed elsewhere in a program
-and there is no way to figure that out here. */
+/**
+    \brief  Release a TR_INFO structure mostly. 
+      Release all associated memory EXCEPT Fontconfig.
+      Fontconfig may still be needed elsewhere in a program and there is no way to figure that out here.
+      See also trinfo_clear() and trinfo_release().
+      use like:  tri = trinfo_release_except_FC(tri);
+    \param tri pointer to the TR_INFO structure.
+    \returns NULL.
+*/
 TR_INFO *trinfo_release_except_FC(TR_INFO *tri){
    if(tri){
       if(tri->bri)tri->bri=brinfo_release(tri->bri);
@@ -899,9 +1038,15 @@ TR_INFO *trinfo_release_except_FC(TR_INFO *tri){
    return(NULL);
 }
 
-/* clear the text and rectangle memory from the trinfo system. Leave the font
-information alone unless there is an error, in which case clear that too.  The odds
-are that at least some of the fonts will be reused, so faster to leave them in place. */
+/**
+    \brief  Clear a TR_INFO structure.
+    Releases text and rectangle information, but retains font information, both
+      Freetype information and Fontconfig information.
+      See also trinfo_release() and trinfo_release_except_FC().
+      Use like: tri = trinfo_clear(tri);
+    \param tri pointer to the TR_INFO structure.
+    \returns NULL.
+*/
 TR_INFO *trinfo_clear(TR_INFO *tri){
    if(tri){
       tri->dirty      = 0;    /* set these back to their defaults  */
@@ -927,8 +1072,12 @@ TR_INFO *trinfo_clear(TR_INFO *tri){
    return(tri);
 }
 
-/*  Load the face by fontname and font size, return the idx.  If this combination is already loaded then look it up
-    and return the idx.
+/**
+    \brief  Load a (new) font by name into a TR_INFO structure.
+    \returns index of font.    If the font was already loaded return the existing index.
+    \param tri pointer to the TR_INFO structure.
+    \param fontname UTF-8 font name
+    \param tsp pointer to the TCHUNK_SPECS structure - used to construct a font query string.
 */
 
 int trinfo_load_fontname(TR_INFO *tri, uint8_t *fontname, TCHUNK_SPECS *tsp){
@@ -1009,14 +1158,17 @@ int trinfo_load_fontname(TR_INFO *tri, uint8_t *fontname, TCHUNK_SPECS *tsp){
 }
 
 
-/* Set the quantization error value.  If coordinates have passed through an integer form limits
-   in accuracy may have been imposed.  For instance, if the X coordinate of a point in such a file
-   is 1000, and the conversion factor from those coordinates to points is .04, then eq is .04.  This
-   just says that single coordinates are only good to within .04, and two coordinates may differ by as much
-   as .08, just due to quantization error. So if some calculation shows a difference of
-   .02 it may be interpreted as this sort of error and set to 0.0.  
-   
-   Returns 0 on success, >0 on error.
+/**
+    \brief  Set the quantization error value for a TR_INFO structure.
+      If coordinates have passed through an integer form limits
+      in accuracy may have been imposed.  For instance, if the X coordinate of a point in such a file
+      is 1000, and the conversion factor from those coordinates to points is .04, then eq is .04.  This
+      just says that single coordinates are only good to within .04, and two coordinates may differ by as much
+      as .08, just due to quantization error. So if some calculation shows a difference of
+     .02 it may be interpreted as this sort of error and set to 0.0.
+    \returns 0 on success, !0 on error.
+    \param tri pointer to TR_INFO structure
+    \param qe  quantization error.
 */
 int trinfo_load_qe(TR_INFO *tri, double qe){
    if(!tri)return(1);
@@ -1025,9 +1177,16 @@ int trinfo_load_qe(TR_INFO *tri, double qe){
    return(0);
 }
 
-/* Set the FT parameters flags and kern mode and decide whether or not to to use kerning. 
-      No error checking on those values.
-      Returns 0 on success, >0 on error.
+/**
+    \brief  Set Freetype parameters and kerning mode (if any) in a TRI_INFO structure.
+    \returns 0 on success, !0 on error.
+    \param tri pointer to a TR_INFO structure
+    \param use_kern  0 if kerning is to be employed, !0 otherwise.
+    \param load_flags   Controls internal advance:
+  FT_LOAD_NO_SCALE, internal advance is in 1/64th of a point. (kerning values are still scaled)
+  FT_LOAD_TARGET_NORMAL internal advance is in 1/64th of a point.  The scale
+     factor seems to be (Font Size in points)*(DPI)/(32.0 pnts)*(72 dpi). 
+    \param kern_mode FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED.  Set to match calling application.
 */
 int trinfo_load_ft_opts(TR_INFO *tri, int use_kern, int load_flags, int kern_mode){
    if(!tri)return(1);
@@ -1037,8 +1196,11 @@ int trinfo_load_ft_opts(TR_INFO *tri, int use_kern, int load_flags, int kern_mod
    return(0);
 }
 
-/* Append text to the output buffer, expanding it if necessary.
-   returns 0 on success, -1 on failure
+/**
+    \brief  Append text to a TR_INFO struct's output buffer, expanding it if necessary.
+    \returns 0 on success, !0 on error.
+    \param tri pointer to a TR_INFO structure
+    \param src  Pointer to a text string.
 */
 int trinfo_append_out(TR_INFO *tri, char *src){
    size_t slen;
@@ -1057,20 +1219,22 @@ int trinfo_append_out(TR_INFO *tri, char *src){
 }
 
 
-/* load a text record into the system.  On success returns 0.  Any error returns !0. 
-   Escapement must match that of first record.  
-      Status of -1 indicates that an escapement change was detected. 
-   idx etc in tsp must have been set.
-   load_flags - see TR_getadvance, must match graphics model of CURRENT program.
-   kern_mode  - see TR_getadvance, must match graphics model of CURRENT program.
-   use_kern   - true if kerning is used, must match graphics model of CURRENT program 
+/**
+    \brief  Load a text object into a TR_INFO struct.
+    \returns 0 on success, !0 on error. -1 means that the escapement is different from the objects already loaded.
+    \param tri pointer to a TR_INFO structure
+    \param tsp pointer to a TCHUNK_SPECS structure (text object to load)
+    \param escapement angle in degrees of the text object.
+    \param flags special processing flags:
+       TR_EMFBOT calculate Y coordinates of ALIBOT object compatible with EMF files TA_BOTTOM alignment.
 */
 int trinfo_load_textrec(TR_INFO *tri, TCHUNK_SPECS *tsp, double escapement, int flags){
    
    int          status;
    double       x,y,xe;
-   double       asc,dsc;
+   double       asc,dsc;     /* these are the ascender/descender for the actual text */
    int          ymin,ymax;
+   double       fasc,fdsc;   /* these are the ascender/descender for the font as a whole (text independent) */
    TP_INFO     *tpi;
    FT_INFO     *fti;
    BR_INFO     *bri;
@@ -1104,8 +1268,8 @@ int trinfo_load_textrec(TR_INFO *tri, TCHUNK_SPECS *tsp, double escapement, int 
 
    tpinfo_insert(tpi,tsp);
    current=tpi->used-1;
-   ymin =  64000;
-   ymax = -64000;
+   ymin  =  64000;
+   ymax  = -64000;
 
    /* The geometry model has origin Y at the top of screen, positive Y is down, maximum positive
    Y is at the bottom of the screen.  That makes "top" (by positive Y) actually the bottom
@@ -1140,6 +1304,13 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
       else { return(6); }
       prev=*tptr;
    }
+   asc = ((double)  (ymax))/64.0;
+   dsc = ((double)  (ymin))/64.0;  /* This is negative */
+/*  This did not work very well because the ascender/descender went well beyond the actual characters, causing
+    overlaps on lines that did not actually overlap (vertically).
+   asc = ((double) (fsp->face->ascender) )/64.0;
+   dsc = ((double) (fsp->face->descender))/64.0;
+*/
 
    free(text32);
    
@@ -1149,6 +1320,10 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
       if(status>=0){ fsp->spcadv = ((double) status)/64.0; }
       else {         return(7);           }
    }
+
+   /* find the font ascender descender (general one, not specific for current text) */
+   fasc = ((double) (fsp->face->ascender) )/64.0;
+   fdsc = ((double) (fsp->face->descender))/64.0;
       
    if(tri->load_flags & FT_LOAD_NO_SCALE){ 
       xe           *= tsp->fs/32.0;
@@ -1169,29 +1344,26 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
       bsp.xur = tpi->chunks[current].x;
    }
 
-   asc = ((double) (ymax))/64.0;
-   dsc = ((double) (ymin))/64.0;  /* This is negative */
-/*  This did not work very well because the ascender/descender went well beyond the actual characters, causing
-    overlaps on lines that did not actually overlap (vertically).
-   asc = ((double) (fsp->face->ascender) )/64.0;
-   dsc = ((double) (fsp->face->descender))/64.0;
-*/
    if(tri->load_flags & FT_LOAD_NO_SCALE){ 
-      asc *= tsp->fs/32.0;
-      dsc *= tsp->fs/32.0;
+      asc  *= tsp->fs/32.0;
+      dsc  *= tsp->fs/32.0;
+      fasc *= tsp->fs/32.0;
+      fdsc *= tsp->fs/32.0;
    }
    
 
-   /* From this point forward y is on the baseline, so need to correct it in chunks */
-   if(      taln & ALIVERT & ALITOP  ){  tpi->chunks[current].y += -dsc + asc;  }
-   else if( taln & ALIVERT & ALIBASE){ }     /* no correction required */
+   /* From this point forward y is on the baseline, so need to correct it in chunks.  The asc/dsc are the general
+      ones for the font, else the text content will muck around with the baseline in BAD ways. */
+   if(      taln & ALIVERT & ALITOP  ){  tpi->chunks[current].y += fasc;           }
+   else if( taln & ALIVERT & ALIBASE){                                             } /* no correction required */
    else{ /* taln & ALIVERT & ALIBOT */
-       if(flags & TR_EMFBOT){               tpi->chunks[current].y -= 0.35 * tsp->fs; } /* compatible with EMF implementations */
-       else {                            tpi->chunks[current].y += dsc;            }
+       if(flags & TR_EMFBOT){            tpi->chunks[current].y -= 0.35 * tsp->fs; } /* compatible with EMF implementations */
+       else {                            tpi->chunks[current].y += fdsc;           }
    } 
    tpi->chunks[current].boff = -dsc;
 
-   /* since y is always on the baseline, the lower left and upper right are easy */
+   /* since y is always on the baseline, the lower left and upper right are easy.  These use asc/dsc for the particular text,
+      so that the bounding box will fit it tightly. */
    bsp.yll = tpi->chunks[current].y - dsc;
    bsp.yur = tpi->chunks[current].y - asc;
    brinfo_insert(bri,&bsp);
@@ -1200,10 +1372,14 @@ printf("Face idx:%d bbox: xMax/Min:%ld,%ld yMax/Min:%ld,%ld UpEM:%d asc/des:%d,%
   return(0);  
 }
 
-/* Font weight conversion, from fontconfig weights to SVG weights. 
-Anything not recognized becomes "normal" == 400.  There is no interpolation because a value
-that mapped to 775, for instance, most likely would not display at a weight intermediate
-between 700 and 800.
+/**
+    \brief  Fontweight conversion.  Fontconfig units to SVG units.
+         Anything not recognized becomes "normal" == 400.  
+         There is no interpolation because a value that mapped to 775, for instance, most
+         likely would not display properly because it is intermediate between 700 and 800, and
+         only those need be supported in SVG viewers.
+    \returns SVG font weight
+    \param weight Fontconfig font weight.
 */
 int TR_weight_FC_to_SVG(int weight){
   int ret=400;
@@ -1220,9 +1396,15 @@ int TR_weight_FC_to_SVG(int weight){
   return(ret);
 }
 
-/*  Set the padding that will be added to rectangles before checking for overlaps.
-    Method is set for L->R, or R->L text, not correct for vertical text.
-*/      
+/**
+    \brief  Set the padding that will be added to bounding rectangles before checking for overlaps in brinfo_overlap().
+    \returns void
+    \param rt_pad pointer to an RT_PAD structure.
+    \param up     padding for the top    of a bounding rectangle.
+    \param down   padding for the bottom of a bounding rectangle.
+    \param left   padding for the left   of a bounding rectangle.
+    \param right  padding for the right  of a bounding rectangle.
+*/
 void TR_rt_pad_set(RT_PAD *rt_pad, double up, double down, double left, double right){
    rt_pad->up    = up;  
    rt_pad->down  = down; 
@@ -1230,7 +1412,10 @@ void TR_rt_pad_set(RT_PAD *rt_pad, double up, double down, double left, double r
    rt_pad->right = right;
 }            
 
-/* Convert from analyzed complexes to SVG format, stored in the "out" buffer of the tri.
+/**
+    \brief  Convert from analyzed complexes to SVG format.
+    \returns void
+    \param tri pointer to a TR_INFO struct which will be analyzed.  Result is stored in its "out" buffer.
 */
 void TR_layout_2_svg(TR_INFO *tri){
    double        x = tri->x;
@@ -1481,15 +1666,19 @@ void TR_layout_2_svg(TR_INFO *tri){
    }        /* end of i loop */
 }
 
-/** Attempt to figure out what the text was originally.  
-   1. Group text strings by overlaps (optionally allowing up to two spaces to be added) to produce larger rectangles.
-      Larger rectangles that are more or less sequential are LINES, otherwise they are EQN.
-   2. Group sequential LINES into paragraphs (by smooth progression in position down page).
+/**
+    \brief  Attempt to figure out the original organization, in lines and paragraphs, of the text objects.
+   The method is:
+   1. Generate complexes from the text objects (strings) by overlaps (optionally allowing up to two spaces to be
+      added) to produce larger rectangles. Complexes that are more or less sequential and have 2 or more text objects
+      are TR_LINEs, therwise they are TR_TEXT.
+   2. Group sequential complexes (TR_LINE or TR_TEXT) into TR_PARA_UJ (paragraphs,by smooth progression in vertical
+      position down page).
    3. Analyze the paragraphs to classify them as Left/Center/Right justified (possibly with indentation.)  If 
-      they do not fall into any of these categories break that one back down into LINES.
-   4. Return the number of complex text objects.  Value will be >=1 and <= number of text strings.
-   
-   Values <0 are errors
+      they do not fall into any of these categories break that one back down into TR_LINE/TR_TEXT.
+   4. Return the number of complex text objects.
+    \returns Number of complexes.  (>=1, <= number of text objects.) <0 is an error.
+    \param tri    pointer to the TR_INFO structure holding the data, which will also hold the results.
 */
 int TR_layout_analyze(TR_INFO *tri){
    int             i,j;
@@ -1533,13 +1722,13 @@ int TR_layout_analyze(TR_INFO *tri){
       TR_rt_pad_set(&rt_pad_i,tri->qe, tri->qe, 0.0, tri->qe + 2.0 * fti->fonts[tpi->chunks[i].fi_idx].spcadv);
 
       for(j=i+1; j<tpi->used; j++){
-         /* Reject font size changes of greater than 50%, these almost certainly not continuous text.  These happen
+         /* Reject font size changes of greater than 50%, these are almost certainly not continuous text.  These happen
             in math formulas, for instance, where a sum or integral is much larger than the other symbols. */
          ratio = (double)(tpi->chunks[j].fs)/(double)(tpi->chunks[i].fs);
          if(ratio >2.0 || ratio <0.5)break;
 
-         /* for the trailing text: pad with one leading and no trailing spaces */
-         TR_rt_pad_set(&rt_pad_j,tri->qe, tri->qe, 1.0 * fti->fonts[tpi->chunks[j].fi_idx].spcadv, 0.0);
+         /* for the trailing text: pad with one leading and trailing spaces (so it should work L->R and R->L */
+         TR_rt_pad_set(&rt_pad_j,tri->qe, tri->qe, fti->fonts[tpi->chunks[j].fi_idx].spcadv, fti->fonts[tpi->chunks[j].fi_idx].spcadv);
          src_rt = tpi->chunks[j].rt_tidx;
          if(!brinfo_overlap(bri,
                             dst_rt,                   /* index into bri for dst */
@@ -1547,7 +1736,9 @@ int TR_layout_analyze(TR_INFO *tri){
                             &rt_pad_i,&rt_pad_j)){
              (void) cxinfo_append(cxi,j,TR_LINE);
              (void) brinfo_merge(bri,dst_rt,src_rt);
-             TR_rt_pad_set(&rt_pad_i, tri->qe, tri->qe, 0.0, tri->qe + 2.0 * fti->fonts[tpi->chunks[j].fi_idx].spcadv);
+             /* for the leading text: pad with two leading and trailing spaces (so it should work L->R and R->L */
+             TR_rt_pad_set(&rt_pad_i, tri->qe, tri->qe,
+                tri->qe + 2.0 * fti->fonts[tpi->chunks[j].fi_idx].spcadv, tri->qe + 2.0 * fti->fonts[tpi->chunks[j].fi_idx].spcadv);
          }
          else { /* either alignment ge*/
              break;
@@ -1618,6 +1809,7 @@ int TR_layout_analyze(TR_INFO *tri){
 }
 
 
+/* no doxygen documentation below this point, these pieces are for the text program, not the library. */
 
 #if TEST
 #define MAXLINE 2048  /* big enough for testing */
