@@ -1472,15 +1472,6 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 }
 
 
-//BSpline Set Functions
-//Creates a new curve resetting the original
-static SPCurve * reverse_then_reset(SPCurve *orig)
-{
-    SPCurve *ret = orig->create_reverse();
-    orig->reset();
-    return ret;
-}
-
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void spiro_color(SPPenContext *const pc)
 {

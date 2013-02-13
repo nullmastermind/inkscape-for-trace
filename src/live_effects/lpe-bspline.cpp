@@ -29,13 +29,7 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
 LPEBSpline::~LPEBSpline()
 {
 }
-//Crea una nueva curva reseteando la original
-SPCurve * 
-LPEBSpline::reverse_then_reset(SPCurve * orig){
-    SPCurve *ret = orig->create_reverse();
-    orig->reset();
-    return ret;
-}
+
 
 void
 LPEBSpline::doEffect(SPCurve * curve)
