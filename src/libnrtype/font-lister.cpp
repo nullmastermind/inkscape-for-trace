@@ -14,12 +14,19 @@
 #include "font-lister.h"
 #include "FontFactory.h"
 
+#include "sp-object.h"
+#include "sp-root.h"
+#include "document.h"
+#include "xml/repr.h"
+#include "preferences.h"
+
 namespace Inkscape
 {
     FontLister::FontLister ()
     {
         font_list_store = Gtk::ListStore::create (FontList);
-        
+        font_list_store->freeze_notify();
+
         FamilyToStylesMap familyStyleMap;
         font_factory::Default()->GetUIFamiliesAndStyles(&familyStyleMap);
        
@@ -52,10 +59,156 @@ namespace Inkscape
                 }
                 
                 (*treeModelIter)[FontList.styles] = styles;
-                
-                font_list_store_iter_map.insert(std::make_pair(familyName, Gtk::TreePath(treeModelIter)));
+                (*treeModelIter)[FontList.onSystem] = true;
             }
         }
+	font_list_store->thaw_notify();
+    }
+
+    // Example of how to use "foreach_iter"
+    // bool
+    // FontLister::print_document_font( const Gtk::TreeModel::iterator &iter ) {
+    //   Gtk::TreeModel::Row row = *iter;
+    //   if( !row[FontList.onSystem] ) {
+    // 	   std::cout << " Not on system: " << row[FontList.font] << std::endl;
+    // 	   return false;
+    //   }
+    //   return true;
+    // }
+    // font_list_store->foreach_iter( sigc::mem_fun(*this, &FontLister::print_document_font ));
+
+    void
+    FontLister::update_font_list( SPDocument* document ) {
+
+      SPObject *r = document->getRoot();
+      if( !r ) {
+	return;
+      }
+
+      font_list_store->freeze_notify();
+
+      /* Clear all old document font-family entries */
+      Gtk::TreeModel::iterator iter = font_list_store->get_iter( "0" );
+      while( iter != font_list_store->children().end() ) {
+	Gtk::TreeModel::Row row = *iter;
+	if( !row[FontList.onSystem] ) {
+	  // std::cout << " Not on system: " << row[FontList.font] << std::endl;
+	  iter = font_list_store->erase( iter );
+	} else {
+	  // std::cout << " First on system: " << row[FontList.font] << std::endl;
+	  break;
+	}
+      }
+
+      /* Create default styles for use when font-family is unknown on system. */
+      static GList *default_styles = NULL;
+      if( default_styles == NULL ) {
+        default_styles = g_list_append( default_styles, g_strdup("Normal") );
+        default_styles = g_list_append( default_styles, g_strdup("Italic") );
+        default_styles = g_list_append( default_styles, g_strdup("Bold") );
+        default_styles = g_list_append( default_styles, g_strdup("Bold Italic") );
+      }
+
+      /* Get "font-family"s used in document. */
+      std::list<Glib::ustring> fontfamilies;
+      update_font_list_recursive( r, &fontfamilies );
+
+      fontfamilies.sort();
+      fontfamilies.unique();
+      fontfamilies.reverse();
+
+      /* Insert separator */
+      if( !fontfamilies.empty() ) {
+	Gtk::TreeModel::iterator treeModelIter = font_list_store->prepend();
+	(*treeModelIter)[FontList.font] = "#";
+	(*treeModelIter)[FontList.onSystem] = false;
+      }
+
+      /* Insert font-family's in document. */
+      std::list<Glib::ustring>::iterator i;
+      for( i = fontfamilies.begin(); i != fontfamilies.end(); ++i) {
+
+	GList *styles = default_styles;
+
+        /* See if font-family (or first in fallback list) is on system. If so, get styles. */
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", *i );
+        if( !tokens[0].empty() ) {
+
+	  Gtk::TreeModel::iterator iter2 = font_list_store->get_iter( "0" );
+	  while( iter2 != font_list_store->children().end() ) {
+	    Gtk::TreeModel::Row row = *iter2;
+	    if( row[FontList.onSystem] && tokens[0].compare( row[FontList.font] ) == 0 ) {
+	      styles = row[FontList.styles];
+	      break;
+	    }
+	    ++iter2;
+	  }
+	}
+
+	Gtk::TreeModel::iterator treeModelIter = font_list_store->prepend();
+	(*treeModelIter)[FontList.font] = reinterpret_cast<const char*>(g_strdup((*i).c_str()));
+	(*treeModelIter)[FontList.styles] = styles;
+	(*treeModelIter)[FontList.onSystem] = false;
+      }
+
+      font_list_store->thaw_notify();
+    }
+
+    void
+    FontLister::update_font_list_recursive( SPObject *r, std::list<Glib::ustring> *l ) {
+
+      const gchar *style = r->getRepr()->attribute("style");
+      if( style != NULL ) {
+
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(";", style );
+        for( size_t i=0; i < tokens.size(); ++i ) {
+
+	  Glib::ustring token = tokens[i];
+	  size_t found = token.find("font-family:");
+
+	  if( found != Glib::ustring::npos ) {
+
+	    // Remove "font-family:"
+	    token.erase(found,12);
+
+	    // Remove any leading single or double quote
+	    if( token[0] == '\'' || token[0] == '"' ) {
+	      token.erase(0,1);
+	    }
+
+	    // Remove any trailing single or double quote
+	    if( token[token.length()-1] == '\'' || token[token.length()-1] == '"' ) {
+	      token.erase(token.length()-1);
+	    }
+
+	    l->push_back( token );
+	  }
+        }
+      }
+
+      for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
+        update_font_list_recursive( child, l );
+      }
+    }
+
+    Gtk::TreePath
+    FontLister::get_row_for_font (Glib::ustring family)
+    {
+      Gtk::TreePath path;
+
+      Gtk::TreeModel::iterator iter = font_list_store->get_iter( "0" );
+      while( iter != font_list_store->children().end() ) {
+
+	Gtk::TreeModel::Row row = *iter;
+
+	if( family.compare( row[FontList.font] ) == 0 ) {
+	  return font_list_store->get_path( iter );
+	}
+
+	++iter;
+      }
+
+      throw FAMILY_NOT_FOUND;
     }
 
     FontLister::~FontLister ()
@@ -69,6 +222,77 @@ namespace Inkscape
     }
 }
 
+// Helper functions
+void font_lister_cell_data_func(GtkCellLayout     */*cell_layout*/,
+				GtkCellRenderer   *cell,
+				GtkTreeModel      *model,
+				GtkTreeIter       *iter,
+				gpointer          /*data*/)
+{
+    gchar *family;
+    gboolean onSystem = false;
+    gtk_tree_model_get(model, iter, 0, &family, 2, &onSystem, -1);
+    Glib::ustring family_escaped =  g_markup_escape_text(family, -1);
+    //g_free(family);
+    Glib::ustring markup;
 
+    if( !onSystem ) {
+        markup = "<span foreground='darkblue'>";
 
+        /* See if font-family on system */
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family_escaped );
+        for( size_t i=0; i < tokens.size(); ++i ) {
 
+            Glib::ustring token = tokens[i];
+
+            GtkTreeIter iter;
+            gboolean valid;
+            gchar *family = 0;
+            gboolean onSystem = true;
+            gboolean found = false;
+            for( valid = gtk_tree_model_get_iter_first( GTK_TREE_MODEL(model), &iter );
+                 valid;
+                 valid = gtk_tree_model_iter_next( GTK_TREE_MODEL(model), &iter ) ) {
+
+                gtk_tree_model_get(model, &iter, 0, &family, 2, &onSystem, -1);
+                if( onSystem && token.compare( family ) == 0 ) {
+                    found = true;
+                    break;
+                }
+            }
+            if( found ) {
+                markup += g_markup_escape_text(token.c_str(), -1);
+                markup += ", ";
+            } else {
+                markup += "<span strikethrough=\"true\" strikethrough_color=\"red\">";
+                markup += g_markup_escape_text(token.c_str(), -1);
+                markup += "</span>";
+                markup += ", ";
+            }
+        }
+        // Remove extra comma and space from end.
+        if( markup.size() >= 2 ) {
+            markup.resize( markup.size()-2 );
+        }
+        markup += "</span>";
+        // std::cout << markup << std::endl;
+    } else {
+        markup =  family_escaped;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int show_sample = prefs->getInt("/tools/text/show_sample_in_list", 1);
+    if (show_sample) {
+
+        Glib::ustring sample = prefs->getString("/tools/text/font_sample");
+        Glib::ustring sample_escaped = g_markup_escape_text(sample.data(), -1);
+
+        markup += "  <span foreground='gray' font_family='";
+        markup += family_escaped;
+        markup += "'>";
+        markup += sample_escaped;
+        markup += "</span>";
+    }
+
+    g_object_set (G_OBJECT (cell), "markup", markup.c_str(), NULL);
+}

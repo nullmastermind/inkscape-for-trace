@@ -54,6 +54,9 @@
 #ifdef WITH_LIBVISIO
 #include "internal/vsd-input.h"
 #endif
+#ifdef WITH_LIBCDR
+#include "internal/cdr-input.h"
+#endif
 #include "preferences.h"
 #include "io/sys.h"
 #ifdef WITH_DBUS
@@ -186,6 +189,9 @@ init()
 #endif
 #ifdef WITH_LIBVISIO
     Internal::VsdInput::init();
+#endif
+#ifdef WITH_LIBCDR
+    Internal::CdrInput::init();
 #endif
 
     /* Effects */

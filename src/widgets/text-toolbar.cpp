@@ -18,7 +18,7 @@
  *
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2003 MenTaLguY
- * Copyright (C) 1999-2011 authors
+ * Copyright (C) 1999-2013 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -39,6 +39,7 @@
 #include "../desktop-handles.h"
 #include "../desktop-style.h"
 #include "document-undo.h"
+#include "../sp-root.h"
 #include "../verbs.h"
 #include "../inkscape.h"
 #include "../connection-pool.h"
@@ -105,6 +106,10 @@ static void       sp_print_font( SPStyle *query ) {
               << "    FontSpec: "
               << (query->text->font_specification.value ? query->text->font_specification.value : "No value")
               << std::endl;
+    std::cout << "    LineHeight: "    << query->line_height.computed
+              << "    WordSpacing: "   << query->word_spacing.computed
+              << "    LetterSpacing: " << query->letter_spacing.computed
+              << std::endl;
 }
 
 static void       sp_print_fontweight( SPStyle *query ) {
@@ -128,42 +133,6 @@ static void       sp_print_fontstyle( SPStyle *query ) {
 }
 #endif
 
-// Format family drop-down menu.
-static void cell_data_func(GtkCellLayout * /*cell_layout*/,
-                           GtkCellRenderer   *cell,
-                           GtkTreeModel      *tree_model,
-                           GtkTreeIter       *iter,
-                           gpointer           /*data*/)
-{
-    gchar *family;
-    gtk_tree_model_get(tree_model, iter, 0, &family, -1);
-    gchar *const family_escaped = g_markup_escape_text(family, -1);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int show_sample = prefs->getInt("/tools/text/show_sample_in_list", 1);
-    if (show_sample) {
-
-        Glib::ustring sample = prefs->getString("/tools/text/font_sample");
-        gchar *const sample_escaped = g_markup_escape_text(sample.data(), -1);
-
-        std::stringstream markup;
-        markup << family_escaped << "  <span foreground='gray' font_family='"
-               << family_escaped << "'>" << sample_escaped << "</span>";
-        g_object_set (G_OBJECT (cell), "markup", markup.str().c_str(), NULL);
-
-        g_free(sample_escaped);
-    } else {
-        g_object_set (G_OBJECT (cell), "markup", family_escaped, NULL);
-    }
-    // This doesn't work for two reasons... it set both selected and not selected backgrounds
-    // to white.. which means that white foreground text is invisible. It also only effects
-    // the text region, leaving the padding untouched.
-    // g_object_set (G_OBJECT (cell), "cell-background", "white", "cell-background-set", true, NULL);
-
-    g_free(family);
-    g_free(family_escaped);
-}
-
 /*
  * Fill the font style combobox with the available font styles for the selected font family
  * Set the selected style to that in font
@@ -177,6 +146,11 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
     if (!current_font) {
         return;
     }
+
+    // If font list, take only first font in list
+    gchar** tokens = g_strsplit( current_font, ",", 0 );
+    g_strstrip( tokens[0] );
+    current_font = tokens[0];
 
     // Get an iter to the selected font from the model data
     // We cant get it from the combo, cause it might not have been created yet
@@ -197,13 +171,7 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
       valid = gtk_tree_model_iter_next( model, &iter );
     }
 
-    if (!found) {
-        return;
-    }
-
-    // Get the list of styles from the selected font
-    GList *list = NULL;
-    gtk_tree_model_get (model, &iter, 1, &list, -1);
+    g_strfreev( tokens );
 
     Ink_ComboBoxEntry_Action* fontStyleAction = INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontStyleAction" ) );
 
@@ -212,7 +180,27 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
     GtkListStore *store = GTK_LIST_STORE( ink_comboboxentry_action_get_model( fontStyleAction ) );
     gtk_list_store_clear ( store );
 
-    // Add list of styles to the style combo
+    // Get the list of styles from the selected font.
+    GList *list = NULL;
+
+    if (found) {
+
+        // Use precompiled list if font-family on system.
+        gtk_tree_model_get (model, &iter, 1, &list, -1);
+
+    } else {
+
+        // Use generic list if font-family not on system.
+        static GList *glist = NULL;
+        if( glist == NULL ) {
+            glist = g_list_append (glist, (void*)"Normal");
+            glist = g_list_append (glist, (void*)"Italic");
+            glist = g_list_append (glist, (void*)"Bold");
+            glist = g_list_append (glist, (void*)"Bold Italic");
+        }
+        list = glist;
+    }
+
     for (GList *l=list; l; l = l->next)
     {
         gtk_list_store_append (store, &iter);
@@ -220,7 +208,7 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
     }
 
     // Select the style in the combo that best matches font
-    if (font) {
+    if (font && list) {
 
         unsigned int index = sp_font_selector_get_best_style(font, list);
 
@@ -237,7 +225,6 @@ static void sp_text_fontstyle_populate(GObject *tbl, font_instance *font=NULL)
     } else if (current_style) {
         ink_comboboxentry_action_set_active_text( fontStyleAction, current_style );
     }
-
 }
 
 // Font family
@@ -519,7 +506,7 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
 
     SPCSSAttr   *css        = sp_repr_css_attr_new ();
 
-    gchar *current_style = ink_comboboxentry_action_get_active_text( act );
+    Glib::ustring current_style = ink_comboboxentry_action_get_active_text( act );
     Glib::ustring fontFamily = "";
 
     if (query->text->font_family.set) {
@@ -530,9 +517,10 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
         fontFamily = ink_comboboxentry_action_get_active_text( act );
     }
 
-    font_instance *font = (font_factory::Default())->FaceFromUIStrings (fontFamily.c_str(), current_style);
+    font_instance *font = (font_factory::Default())->FaceFromUIStrings (fontFamily.c_str(), current_style.c_str());
 
     if (font) {
+
         gchar c[256];
 
         font->Attribute( "weight", c, 256);
@@ -549,6 +537,19 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
 
         font->Unref();
         font = NULL;
+
+    } else {
+
+        // Font not found on system, blindly update style
+        // Options match choices in sp_text_fontstyle_populate
+        sp_repr_css_set_property (css, "font-weight", "normal");
+        sp_repr_css_set_property (css, "font-style",  "normal" );
+        if( current_style.find("Bold") != Glib::ustring::npos ) {
+            sp_repr_css_set_property (css, "font-weight", "bold");
+        }
+        if( current_style.find("Italic") != Glib::ustring::npos ) {
+            sp_repr_css_set_property (css, "font-style", "italic");
+        }
     }
 
     // If querying returned nothing, update default style.
@@ -1151,6 +1152,15 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     }
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
+    // Update font list, but only if widget already created.
+    Ink_ComboBoxEntry_Action* fontFamilyAction =
+        INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontFamilyAction" ) );
+    if( fontFamilyAction->combobox != NULL ) {
+        Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
+        fontlister->update_font_list( sp_desktop_document( SP_ACTIVE_DESKTOP ));
+    }
+
+
     // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
     gboolean isFlow = false;
@@ -1203,7 +1213,11 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
             return;
         }
 
-        g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(TRUE));
+        // To ensure the value of the combobox is properly set on start-up, only mark
+        // the prefs set if the combobox has already been constructed.
+        if( fontFamilyAction->combobox != NULL ) {
+            g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(TRUE));
+        }
     } else {
         g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(FALSE));
     }
@@ -1443,6 +1457,44 @@ sp_text_toolbox_subselection_changed (gpointer /*tc*/, GObject *tbl)
     sp_text_toolbox_selection_changed (NULL, tbl);
 }
 
+
+/* Recursively extract all "font-family" attributes from a document. */
+void
+sp_text_toolbox_get_font_list_in_doc_recursive (SPObject *r, std::list<Glib::ustring> *l)
+{ 
+    if (!r) {
+        return;
+    }
+
+    const gchar *style = r->getRepr()->attribute("style");
+    if( style != NULL ) {
+        //std::cout << style << std::endl;
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(";", style );
+        for( size_t i=0; i < tokens.size(); ++i ) {
+            Glib::ustring token = tokens[i];
+            size_t found = token.find("font-family:");
+            if( found != Glib::ustring::npos ) {
+                // Remove "font-family:"
+                token.erase(found,12);
+                // Remove any leading single or double quote
+                if( token[0] == '\'' || token[0] == '"' ) {
+                    token.erase(0,1);
+                }
+                // Remove any trailing single or double quote
+                if( token[token.length()-1] == '\'' || token[token.length()-1] == '"' ) {
+                    token.erase(token.length()-1);
+                }
+                l->push_back( token );
+            }
+        }
+    }
+
+    for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
+        sp_text_toolbox_get_font_list_in_doc_recursive( child, l );
+    }
+}
+
+
 // Define all the "widgets" in the toolbar.
 void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
@@ -1457,18 +1509,22 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Font family */
     {
         // Font list
-        Glib::RefPtr<Gtk::ListStore> store = Inkscape::FontLister::get_instance()->get_font_list();
+        Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
+        fontlister->update_font_list( sp_desktop_document( SP_ACTIVE_DESKTOP ));
+        Glib::RefPtr<Gtk::ListStore> store = fontlister->get_font_list();
         GtkListStore* model = store->gobj();
 
-        Ink_ComboBoxEntry_Action* act = ink_comboboxentry_action_new( "TextFontFamilyAction",
-                                                                      _("Font Family"),
-                                                                      _("Select Font Family (Alt-X to access)"),
-                                                                      NULL,
-                                                                      GTK_TREE_MODEL(model),
-                                                                      -1,                // Entry width
-                                                                      50,                // Extra list width
-                                                                      (gpointer)cell_data_func,// Cell layout
-                                                                      GTK_WIDGET(desktop->canvas)); // Focus widget
+        Ink_ComboBoxEntry_Action* act =
+            ink_comboboxentry_action_new( "TextFontFamilyAction",
+                                          _("Font Family"),
+                                          _("Select Font Family (Alt-X to access)"),
+                                          NULL,
+                                          GTK_TREE_MODEL(model),
+                                          -1,                // Entry width
+                                          50,                // Extra list width
+                                          (gpointer)font_lister_cell_data_func, // Cell layout
+                                          (gpointer)font_lister_separator_func,
+                                          GTK_WIDGET(desktop->canvas)); // Focus widget
         ink_comboboxentry_action_popup_enable( act ); // Enable entry completion
         gchar *const warning = _("Font not found on system");
         ink_comboboxentry_action_set_warning( act, warning ); // Show icon with tooltip if missing font
@@ -1483,7 +1539,13 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "{\n"
             "    GtkComboBox::appears-as-list = 1\n"
             "}\n"
-            "widget \"*.TextFontFamilyAction_combobox\" style \"dropdown-as-list-style\"");
+            "widget \"*.TextFontFamilyAction_combobox\" style \"dropdown-as-list-style\""
+            "style \"fontfamily-separator-style\"\n"
+            "{\n"
+            "    GtkWidget::wide-separators = 1\n"
+            "    GtkWidget::separator-height = 6\n"
+            "}\n"
+            "widget \"*gtk-combobox-popup-window.GtkScrolledWindow.GtkTreeView\" style \"fontfamily-separator-style\"");
     }
 
     /* Font size */
@@ -1505,6 +1567,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                                       4,  // Width in characters
                                                                       0,      // Extra list width
                                                                       NULL,   // Cell layout
+                                                                      NULL,   // Separator
                                                                       GTK_WIDGET(desktop->canvas)); // Focus widget
 
         g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(sp_text_fontsize_value_changed), holder );
@@ -1524,6 +1587,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                                       12, // Width in characters
                                                                        0,      // Extra list width
                                                                        NULL,   // Cell layout
+                                                                       NULL,   // Separator
                                                                        GTK_WIDGET(desktop->canvas)); // Focus widget
 
         g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(sp_text_fontstyle_value_changed), holder );
