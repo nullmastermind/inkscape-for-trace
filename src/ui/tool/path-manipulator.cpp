@@ -9,7 +9,9 @@
  * Copyright (C) 2009 Authors
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+//BSpline
+#include "live_effects/lpe-bspline.h"
+//BSpline end
 #include "live_effects/lpe-powerstroke.h"
 #include <string>
 #include <sstream>
@@ -1257,9 +1259,26 @@ void PathManipulator::_updateOutline()
         sp_canvas_item_hide(_outline);
         return;
     }
-
     Geom::PathVector pv = _spcurve->get_pathvector();
     pv *= (_edit_transform * _i2d_transform);
+    //BSpline
+    if (SP_IS_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))) {
+        PathEffectList effect_list = sp_lpe_item_get_effect_list(SP_LPE_ITEM(_path));
+        LivePathEffect::LPEBSpline *lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>( effect_list.front()->lpeobject->get_lpe());
+        if (lpe_bsp) {
+           Geom::PathVector pv2;
+           for (Geom::PathVector::iterator i = pv.begin(); i != pv.end(); ++i) {
+                Geom::Path &path = *i;
+                for (Geom::Path::const_iterator j = path.begin(); j != path.end_default(); ++j) {
+                    Geom::Path pv2j(j->pointAt(0));
+                    pv2j.appendNew<Geom::LineSegment>(j->pointAt(1));
+                    pv2.push_back(pv2j);
+                }
+           }
+            pv = pv2;
+        }
+    }
+    //BSpline End
     // This SPCurve thing has to be killed with extreme prejudice
     SPCurve *_hc = new SPCurve();
     if (_show_path_direction) {

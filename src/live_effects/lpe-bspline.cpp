@@ -98,7 +98,7 @@ LPEBSpline::doEffect(SPCurve * curve)
         cubicIn = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
         cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
         cubicEnd = dynamic_cast<Geom::CubicBezier const*>(&*curve_end);
-        if (path_it->closed() && cubicIn && cubicEnd && (*cubicIn)[1] != (*cubicEnd)[2]){
+        if (path_it->closed() && cubicEnd && (*cubicEnd)[3] != (*cubicEnd)[2]){
             //Calculamos el nodo de inicio BSpline
             SBasisIn = in->first_segment()->toSBasis();
             SBasisEnd = end->first_segment()->toSBasis();
