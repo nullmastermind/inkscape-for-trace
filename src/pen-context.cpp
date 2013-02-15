@@ -1789,9 +1789,6 @@ static void bspline(SPPenContext *const pc, bool Shift)
     using Geom::Y;
     Geom::CubicBezier const *cubic;
     if(!Shift){
-        if(pc->anchor_statusbar && pc->red_curve->is_empty()){
-            saShift = false;
-        }
             //NODO CUSP formado por nodo SMOOTH
             //solo mobemos el manejador del nodo final de cada segmento
             //Es suficiente para mostrar el nodo como CUSP
@@ -1827,11 +1824,29 @@ static void bspline(SPPenContext *const pc, bool Shift)
         }
         if(pc->green_curve->is_empty() && saShift)
             pc->p[1] = pc->p[0];
+        if(pc->anchor_statusbar && pc->red_curve->is_empty())
+            saShift = false;
     }else{
         //Continuamos la curva en modo CUSP
         //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
         if(pc->anchor_statusbar && pc->red_curve->is_empty()){
             saShift = true;
+            SPCurve *previousCurve = new SPCurve();
+            if(pc->sa && !pc->sa->curve->is_empty()){
+                previousCurve = pc->sa->curve->copy();
+                if (pc->sa->start) {
+                    previousCurve = previousCurve->create_reverse();
+                }
+                cubic = dynamic_cast<Geom::CubicBezier const*>(&*previousCurve->last_segment());
+                if(cubic){
+                    SPCurve *lastSeg = new SPCurve();
+                    lastSeg->moveto((*cubic)[0]);
+                    lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+                    previousCurve->backspace();
+                    previousCurve->append_continuous(lastSeg, 0.0625);
+                    pc->sa = previousCurve;
+                }
+            }
         }
 
         if(!pc->green_curve->is_empty()){
@@ -1989,7 +2004,7 @@ static void bspline_doEffect(SPCurve * curve)
         cubicIn = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
         cubicOut = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
         cubicEnd = dynamic_cast<Geom::CubicBezier const*>(&*curve_end);
-        if (path_it->closed() && cubicEnd && (*cubicEnd)[3] != (*cubicEnd)[2]){
+        if (path_it->closed()){
             //Calculamos el nodo de inicio BSpline
             SBasisIn = in->first_segment()->toSBasis();
             SBasisEnd = end->first_segment()->toSBasis();
