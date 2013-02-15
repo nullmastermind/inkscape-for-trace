@@ -21,6 +21,7 @@
 #endif
 
 #include <interface.h>
+#include <unistd.h>
 
 #include "system.h"
 #include "preferences.h"
@@ -68,34 +69,6 @@ static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementatio
  */
 SPDocument *open(Extension *key, gchar const *filename)
 {
-    // Convert to absolute pathname to tolerate chdir().
-    bool relpath = (filename[0] != '/');
-#ifdef WIN32
-    relpath &= (filename[0] != '\\') && !(isalpha(filename[0]) && (filename[1] == ':'));
-#endif
-
-    // Do not consider an URI as a relative path.
-    if (relpath) {
-        gchar const * cp = filename;
-
-        while (isalpha(*cp) || isdigit(*cp) || *cp == '+' || *cp == '-' || *cp == '.')
-            cp++;
-
-        relpath = *cp != ':' || cp[1] != '/' || cp[2] != '/';
-    }
-
-    if (relpath) {
-        gchar * curdir = NULL;
-#ifndef WIN32
-        curdir = getcwd(NULL, 0);
-#else
-        curdir = _getcwd(NULL, 0);
-#endif
-
-        filename = g_build_filename(curdir, filename, NULL);
-        free(curdir);
-    }
-
     Input *imod = NULL;
 
     if (key == NULL) {
@@ -137,9 +110,6 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     if (!imod->prefs(filename)) {
-        if (relpath){
-            free((void *) filename);
-        }
         return NULL;
     }
 
@@ -162,9 +132,6 @@ SPDocument *open(Extension *key, gchar const *filename)
         imod->set_gui(true);
     }
 
-    if (relpath){
-        free((void *) filename);
-    }
     return doc;
 }
 
