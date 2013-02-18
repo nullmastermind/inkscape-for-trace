@@ -13,7 +13,6 @@
 #include <glib/gi18n.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/transforms.h>
-
 #include "display/sp-ctrlline.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
@@ -196,8 +195,13 @@ void Handle::move(Geom::Point const &new_pos)
         break;
     default: break;
     }
-
-    setPosition(new_pos);
+    //BSpline
+    if(_pm().isBSpline()){
+        Handle *h = this;
+        setPosition(_pm().BSplineHandleReposition(h));
+    }else
+        setPosition(new_pos);
+    //BSpline End
 }
 
 void Handle::setPosition(Geom::Point const &p)
@@ -550,10 +554,24 @@ void Node::move(Geom::Point const &new_pos)
     // move handles when the node moves.
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
+    //BSpline 
+    float pos = 0;
+    if(_pm().isBSpline()){
+        Node *n = this;
+        pos = _pm().BSplineMaxPosition(n);
+    }
+    //BSpline End
     setPosition(new_pos);
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
-
+    //BSpline
+    if(_pm().isBSpline()){
+        Handle* front = &_front;
+        Handle* back = &_back;
+        _front.setPosition(_pm().BSplineHandleRepositionFixed(front,pos));
+        _back.setPosition(_pm().BSplineHandleRepositionFixed(back,pos));
+    }
+    //BSpline End
     // if the node has a smooth handle after a line segment, it should be kept colinear
     // with the segment
     _fixNeighbors(old_pos, new_pos);
