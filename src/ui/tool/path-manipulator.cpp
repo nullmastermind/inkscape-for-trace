@@ -1102,7 +1102,6 @@ void PathManipulator::_createControlPointsFromGeometry()
         Geom::Curve const &cseg = pit->back_closed();
         bool fuse_ends = pit->closed()
             && Geom::are_near(cseg.initialPoint(), cseg.finalPoint());
-
         for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
             Geom::Point pos = cit->finalPoint();
             Node *current_node;
@@ -1169,6 +1168,56 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
+
+bool PathManipulator::isBSpline(){
+    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+    if (SP_IS_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))) {
+            PathEffectList effect_list = sp_lpe_item_get_effect_list(SP_LPE_ITEM(_path));
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>( effect_list.front()->lpeobject->get_lpe());
+    }else{
+        lpe_bsp = NULL;
+    }
+    if(lpe_bsp){
+        return true;
+    }
+    return false;
+}
+double PathManipulator::BSplineHandlePosition(Handle *h){
+    double pos = 0;
+    Node *n = h->parent();
+    Geom::D2< Geom::SBasis > SBasisInsideNodes;
+    SPCurve *lineInsideNodes = new SPCurve();
+    Node * nextNode = n->nodeToward(h);
+    if(nextNode){
+        lineInsideNodes->moveto(n->position());
+        lineInsideNodes->lineto(nextNode->position());
+        SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
+        pos = Geom::nearest_point(h->position(),*lineInsideNodes->first_segment());
+    }
+    return pos;
+}
+
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h){
+    double pos = 0;
+    pos = this->BSplineHandlePosition(h);
+    return BSplineHandleReposition(h,pos);
+}
+
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
+    Node *n = h->parent();
+    Geom::D2< Geom::SBasis > SBasisInsideNodes;
+    SPCurve *lineInsideNodes = new SPCurve();
+    Node * nextNode = n->nodeToward(h);
+    if(nextNode && pos != 0){
+        lineInsideNodes->moveto(n->position());
+        lineInsideNodes->lineto(nextNode->position());
+        SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
+    }else{
+        return n->position();
+    }
+    return SBasisInsideNodes.valueAt(pos);
+}
+
 /** Construct the geometric representation of nodes and handles, update the outline
  * and display
  * \param alert_LPE if true, first the LPE is warned what the new path is going to be before updating it
@@ -1183,15 +1232,55 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             continue;
         }
         NodeList::iterator prev = subpath->begin();
+        //BSpline
+        double pos = 0;
+        bool isBSpline = false;
+        if(this->isBSpline())
+            isBSpline = true;
+        if(isBSpline){
+            pos = BSplineHandlePosition(prev.ptr()->front());
+            prev.ptr()->front()->setPosition(BSplineHandleReposition(prev.ptr()->front(),pos));
+            if(pos == 0){
+                prev.ptr()->setPosition(prev.ptr()->front()->position());
+            }
+        }
+        //BSpline End
         builder.moveTo(prev->position());
-
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
+            //BSpline
+            if (isBSpline) {
+                pos = BSplineHandlePosition(i.ptr()->front());
+                if(pos == 0)
+                    pos = BSplineHandlePosition(i.ptr()->back());
+                i.ptr()->front()->setPosition(BSplineHandleReposition(i.ptr()->front(),pos));
+                i.ptr()->back()->setPosition(BSplineHandleReposition(i.ptr()->back(),pos));
+                if(pos == 0){
+                    i.ptr()->setPosition(i.ptr()->front()->position());
+                }
+            }
+            
+            //BSpline End
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;
         }
         if (subpath->closed()) {
             // Here we link the last and first node if the path is closed.
             // If the last segment is Bezier, we add it.
+            /*
+            //BSpline
+            if (isBSpline) {
+                pos = BSplineHandlePosition(prev.ptr()->front());
+                if(pos == 0)
+                    pos = BSplineHandlePosition(subpath->begin().ptr()->back());
+                subpath->begin().ptr()->front()->setPosition(BSplineHandleReposition(subpath->begin().ptr()->front(),pos));
+                prev.ptr()->back()->setPosition(BSplineHandleReposition(prev.ptr()->back(),pos));
+                if(pos == 0){
+                    subpath->begin().ptr()->setPosition(subpath->begin().ptr()->front()->position());
+                    prev.ptr()->setPosition(prev.ptr()->back()->position());
+                }
+            }
+            //BSpline End
+            /*/
             if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate()) {
                 build_segment(builder, prev.ptr(), subpath->begin().ptr());
             }
@@ -1200,6 +1289,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         }
         ++spi;
     }
+
     builder.finish();
     Geom::PathVector pathv = builder.peek() * (_edit_transform * _i2d_transform).inverse();
     _spcurve->set_pathvector(pathv);
@@ -1261,24 +1351,6 @@ void PathManipulator::_updateOutline()
     }
     Geom::PathVector pv = _spcurve->get_pathvector();
     pv *= (_edit_transform * _i2d_transform);
-    //BSpline
-    if (SP_IS_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))) {
-        PathEffectList effect_list = sp_lpe_item_get_effect_list(SP_LPE_ITEM(_path));
-        LivePathEffect::LPEBSpline *lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>( effect_list.front()->lpeobject->get_lpe());
-        if (lpe_bsp) {
-           Geom::PathVector pv2;
-           for (Geom::PathVector::iterator i = pv.begin(); i != pv.end(); ++i) {
-                Geom::Path &path = *i;
-                for (Geom::Path::const_iterator j = path.begin(); j != path.end_default(); ++j) {
-                    Geom::Path pv2j(j->pointAt(0));
-                    pv2j.appendNew<Geom::LineSegment>(j->pointAt(1));
-                    pv2.push_back(pv2j);
-                }
-           }
-            pv = pv2;
-        }
-    }
-    //BSpline End
     // This SPCurve thing has to be killed with extreme prejudice
     SPCurve *_hc = new SPCurve();
     if (_show_path_direction) {

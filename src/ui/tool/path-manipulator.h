@@ -104,6 +104,12 @@ private:
     typedef boost::shared_ptr<NodeList> SubpathPtr;
 
     void _createControlPointsFromGeometry();
+    //BSpline
+    bool isBSpline();
+    double BSplineHandlePosition(Handle *h);
+    Geom::Point BSplineHandleReposition(Handle *h);
+    Geom::Point BSplineHandleReposition(Handle *h,double pos);
+    //BSpline End
     void _createGeometryFromControlPoints(bool alert_LPE = false);
     unsigned _deleteStretch(NodeList::iterator first, NodeList::iterator last, bool keep_shape);
     std::string _createTypeString();

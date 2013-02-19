@@ -13,7 +13,6 @@
 #include <glib/gi18n.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/transforms.h>
-
 #include "display/sp-ctrlline.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
@@ -136,6 +135,14 @@ void Handle::move(Geom::Point const &new_pos)
     Node *node_away = _parent->nodeAwayFrom(this); // node in the opposite direction
     Handle *towards = node_towards ? node_towards->handleAwayFrom(_parent) : NULL;
     Handle *towards_second = node_towards ? node_towards->handleToward(_parent) : NULL;
+    //BSpline
+    bool isBSpline = false;
+    double pos = 0;
+    Handle *h = this;
+    if(_pm().isBSpline()){
+        isBSpline = true;
+        //BSpline End
+    }
 
     if (Geom::are_near(new_pos, _parent->position())) {
         // The handle becomes degenerate.
@@ -167,6 +174,16 @@ void Handle::move(Geom::Point const &new_pos)
             }
         }
         setPosition(new_pos);
+        //BSpline
+        if(isBSpline){
+            setPosition(_pm().BSplineHandleReposition(h));
+            pos = _pm().BSplineHandlePosition(h);
+            other->setPosition(_pm().BSplineHandleReposition(other,pos));
+            if(pos == 0){
+                _parent->setPosition(h->position());
+            }
+        }
+        //BSpline End
         return;
     }
 
@@ -196,8 +213,17 @@ void Handle::move(Geom::Point const &new_pos)
         break;
     default: break;
     }
-
     setPosition(new_pos);
+    //BSpline
+    if(isBSpline){
+        setPosition(_pm().BSplineHandleReposition(h));
+        pos = _pm().BSplineHandlePosition(h);
+        other->setPosition(_pm().BSplineHandleReposition(other,pos));
+        if(pos == 0){
+            _parent->setPosition(h->position());
+        }
+    }
+    //BSpline End
 }
 
 void Handle::setPosition(Geom::Point const &p)
@@ -550,10 +576,26 @@ void Node::move(Geom::Point const &new_pos)
     // move handles when the node moves.
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
+    //BSpline 
+    double pos = 0;
+    if(_pm().isBSpline()){
+        Node *n = this;
+        pos = _pm().BSplineHandlePosition(n->front());
+        if(pos == 0)
+            pos = _pm().BSplineHandlePosition(n->back());
+    }
+    //BSpline End
     setPosition(new_pos);
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
-
+    //BSpline
+    if(_pm().isBSpline()){
+        Handle* front = &_front;
+        Handle* back = &_back;
+        _front.setPosition(_pm().BSplineHandleReposition(front,pos));
+        _back.setPosition(_pm().BSplineHandleReposition(back,pos));
+    }
+    //BSpline End
     // if the node has a smooth handle after a line segment, it should be kept colinear
     // with the segment
     _fixNeighbors(old_pos, new_pos);
