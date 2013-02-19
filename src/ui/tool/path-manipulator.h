@@ -106,9 +106,9 @@ private:
     void _createControlPointsFromGeometry();
     //BSpline
     bool isBSpline();
-    double BSplineMaxPosition(Node *n);
+    double BSplineHandlePosition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h);
-    Geom::Point BSplineHandleRepositionFixed(Handle *h,double pos);
+    Geom::Point BSplineHandleReposition(Handle *h,double pos);
     //BSpline End
     void _createGeometryFromControlPoints(bool alert_LPE = false);
     unsigned _deleteStretch(NodeList::iterator first, NodeList::iterator last, bool keep_shape);

@@ -135,6 +135,15 @@ void Handle::move(Geom::Point const &new_pos)
     Node *node_away = _parent->nodeAwayFrom(this); // node in the opposite direction
     Handle *towards = node_towards ? node_towards->handleAwayFrom(_parent) : NULL;
     Handle *towards_second = node_towards ? node_towards->handleToward(_parent) : NULL;
+    //BSpline
+    bool isBSpline = false;
+    double pos = 0;
+    Handle *h = NULL;
+    Handle *h2 = NULL;
+    if(_pm().isBSpline()){
+        isBSpline = true;
+        //BSpline End
+    }
 
     if (Geom::are_near(new_pos, _parent->position())) {
         // The handle becomes degenerate.
@@ -165,6 +174,15 @@ void Handle::move(Geom::Point const &new_pos)
                 other->setDirection(*node_towards, *_parent);
             }
         }
+        //BSpline
+        if(isBSpline){
+            h = this;
+            setPosition(_pm().BSplineHandleReposition(h));
+            pos = _pm().BSplineHandlePosition(h);
+            h2 = this->other();
+            this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
+        }
+        //BSpline End
         setPosition(new_pos);
         return;
     }
@@ -195,12 +213,15 @@ void Handle::move(Geom::Point const &new_pos)
         break;
     default: break;
     }
+    setPosition(new_pos);
     //BSpline
-    if(_pm().isBSpline()){
-        Handle *h = this;
+    if(isBSpline){
+        h = this;
         setPosition(_pm().BSplineHandleReposition(h));
-    }else
-        setPosition(new_pos);
+        pos = _pm().BSplineHandlePosition(h);
+        h2 = this->other();
+        this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
+    }
     //BSpline End
 }
 
@@ -555,10 +576,12 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
     //BSpline 
-    float pos = 0;
+    double pos = 0;
     if(_pm().isBSpline()){
         Node *n = this;
-        pos = _pm().BSplineMaxPosition(n);
+        pos = _pm().BSplineHandlePosition(n->front());
+        if(pos == 0)
+            pos = _pm().BSplineHandlePosition(n->back());
     }
     //BSpline End
     setPosition(new_pos);
@@ -568,8 +591,8 @@ void Node::move(Geom::Point const &new_pos)
     if(_pm().isBSpline()){
         Handle* front = &_front;
         Handle* back = &_back;
-        _front.setPosition(_pm().BSplineHandleRepositionFixed(front,pos));
-        _back.setPosition(_pm().BSplineHandleRepositionFixed(back,pos));
+        _front.setPosition(_pm().BSplineHandleReposition(front,pos));
+        _back.setPosition(_pm().BSplineHandleReposition(back,pos));
     }
     //BSpline End
     // if the node has a smooth handle after a line segment, it should be kept colinear
