@@ -1185,21 +1185,18 @@ bool PathManipulator::isBSpline(){
 double PathManipulator::BSplineHandlePosition(Handle *h){
     double pos = 0;
     Node *n = h->parent();
-    Geom::D2< Geom::SBasis > SBasisInsideNodes;
     SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = n->nodeToward(h);
     if(nextNode){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
-        SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
         pos = Geom::nearest_point(h->position(),*lineInsideNodes->first_segment());
     }
     return pos;
 }
 
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h){
-    double pos = 0;
-    pos = this->BSplineHandlePosition(h);
+    double pos = this->BSplineHandlePosition(h);
     return BSplineHandleReposition(h,pos);
 }
 
@@ -1208,7 +1205,7 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     Geom::D2< Geom::SBasis > SBasisInsideNodes;
     SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = n->nodeToward(h);
-    if(nextNode && pos != 0){
+    if(nextNode){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
@@ -1233,50 +1230,37 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         }
         NodeList::iterator prev = subpath->begin();
         //BSpline
-        float pos = NULL;
+        double pos =0;
         bool isBSpline = false;
         if(this->isBSpline())
             isBSpline = true;
         if(isBSpline){
             pos = BSplineHandlePosition(prev.ptr()->front());
-            prev.ptr()->front()->setPosition(BSplineHandleReposition(prev.ptr()->front(),pos));
-            if(pos == 0){
-                prev.ptr()->setPosition(BSplineHandleReposition(i.ptr()->front(),pos));
-            }
+            prev->front()->setPosition(BSplineHandleReposition(prev->front(),pos));
         }
         //BSpline End
         builder.moveTo(prev->position());
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
             //BSpline
             if (isBSpline) {
-                pos = BSplineHandlePosition(i.ptr()->front());
-                if(pos == 0)
-                    pos = BSplineHandlePosition(i.ptr()->back());
-                i.ptr()->front()->setPosition(BSplineHandleReposition(i.ptr()->front(),pos));
-                i.ptr()->back()->setPosition(BSplineHandleReposition(i.ptr()->back(),pos));
-                if(pos == 0){
-                    i.ptr()->setPosition(BSplineHandleReposition(i.ptr()->front(),pos));
-                }
+                pos = BSplineHandlePosition(i->back());
+                i->front()->setPosition(BSplineHandleReposition(i->front(),pos));
+                i->back()->setPosition(BSplineHandleReposition(i->back(),pos));
             }
             
             //BSpline End
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;
         }
+        
         if (subpath->closed()) {
             // Here we link the last and first node if the path is closed.
             // If the last segment is Bezier, we add it.
             //BSpline
             if (isBSpline) {
-                pos = BSplineHandlePosition(prev.ptr()->front());
-                if(pos == 0)
-                    pos = BSplineHandlePosition(subpath->begin().ptr()->back());
-                subpath->begin().ptr()->front()->setPosition(BSplineHandleReposition(subpath->begin().ptr()->front(),pos));
-                prev.ptr()->back()->setPosition(BSplineHandleReposition(prev.ptr()->back(),pos));
-                if(pos == 0){
-                    subpath->begin().ptr()->setPosition(BSplineHandleReposition(subpath->begin().ptr()->front(),pos));
-                    prev.ptr()->setPosition(BSplineHandleReposition(prev.ptr()->back(),pos));
-                }
+                pos = BSplineHandlePosition(prev.next()->back());
+                subpath->begin()->front()->setPosition(BSplineHandleReposition(subpath->begin()->front(),pos));
+                prev.next()->back()->setPosition(BSplineHandleReposition(prev.next()->back(),pos));
             }
             //BSpline End
             if (!prev->front()->isDegenerate() || !subpath->begin()->back()->isDegenerate()) {

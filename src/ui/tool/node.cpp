@@ -142,6 +142,7 @@ void Handle::move(Geom::Point const &new_pos)
     Handle *h2 = NULL;
     if(_pm().isBSpline()){
         isBSpline = true;
+        _parent->_selection.insert(_parent);
         //BSpline End
     }
 
@@ -174,6 +175,7 @@ void Handle::move(Geom::Point const &new_pos)
                 other->setDirection(*node_towards, *_parent);
             }
         }
+        setPosition(new_pos);
         //BSpline
         if(isBSpline){
             h = this;
@@ -183,7 +185,6 @@ void Handle::move(Geom::Point const &new_pos)
             this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
         }
         //BSpline End
-        setPosition(new_pos);
         return;
     }
 
@@ -580,8 +581,6 @@ void Node::move(Geom::Point const &new_pos)
     if(_pm().isBSpline()){
         Node *n = this;
         pos = _pm().BSplineHandlePosition(n->front());
-        if(pos == 0)
-            pos = _pm().BSplineHandlePosition(n->back());
     }
     //BSpline End
     setPosition(new_pos);

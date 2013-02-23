@@ -53,9 +53,12 @@ bool CurveDragPoint::grabbed(GdkEventMotion */*event*/)
 
         // delta is a vector equal 1/3 of distance from first to second
         Geom::Point delta = (second->position() - first->position()) / 3.0;
-        first->front()->move(first->front()->position() + delta);
-        second->back()->move(second->back()->position() - delta);
-
+        //BSpline
+        if(!_pm.isBSpline()){
+            first->front()->move(first->front()->position() + delta);
+            second->back()->move(second->back()->position() - delta);
+        }
+        //BSpline End
         _pm.update();
     } else {
         _segment_was_degenerate = false;
@@ -87,10 +90,13 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     Geom::Point delta = new_pos - position();
     Geom::Point offset0 = ((1-weight)/(3*t*(1-t)*(1-t))) * delta;
     Geom::Point offset1 = (weight/(3*t*t*(1-t))) * delta;
-
-    first->front()->move(first->front()->position() + offset0);
-    second->back()->move(second->back()->position() + offset1);
-
+    //BSpline
+    if(!_pm.isBSpline()){
+        first->front()->move(first->front()->position() + offset0);
+        second->back()->move(second->back()->position() + offset1);
+    }else if(weight>=0.8)second->back()->move(new_pos);
+    else if(weight<=0.2)first->front()->move(new_pos);
+    //BSpline End
     _pm.update();
 }
 
