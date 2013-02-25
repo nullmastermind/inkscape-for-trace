@@ -577,13 +577,29 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
     //BSpline 
+    double prevPos = 0;
     double pos = 0;
+    double nextPos = 0;
+    Node *n = this;
+    Node * nextNode = n->nodeToward(n->front());
+    Node * prevNode = n->nodeToward(n->back());
     if(_pm().isBSpline()){
-        Node *n = this;
+        if(prevNode)
+            prevPos = _pm().BSplineHandlePosition(prevNode->front());
         pos = _pm().BSplineHandlePosition(n->front());
+        if(nextNode)
+            nextPos = _pm().BSplineHandlePosition(nextNode->back());
     }
     //BSpline End
     setPosition(new_pos);
+    //BSpline
+    if(prevNode){
+        prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevPos));
+    }
+    if(nextNode){
+        nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextPos));
+    }
+    //BSpline End
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
     //BSpline

@@ -97,6 +97,7 @@ static void sp_pen_context_set_mode(SPPenContext *const pc, guint mode);
 static void spiro_color(SPPenContext *const pc);
 //Guarda el valor si se ha pulsado la tecla SHIFT al continuar una curva
 static bool saShift = false;
+
 //Preparamos la curva roja para que se muestre según esté pulsada la tecla SHIFT
 static void spiro(SPPenContext *const pc, bool Shift);
 //Unimos todas las curvas en juego y llamamos a la función doEffect.
@@ -104,7 +105,14 @@ static void spiro_build(SPPenContext *const pc);
 //function spiro cloned from lpe-spiro.cpp
 static void spiro_doEffect(SPCurve * curve);
 //Preparamos la curva roja para que se muestre según esté pulsada la tecla SHIFT
-static void bspline(SPPenContext *const pc,bool Shift);
+static void bspline(SPPenContext *const pc,bool shift);
+static void bsplineInMotion(SPPenContext *const pc,bool shift);
+static void bsplineOn(SPPenContext *const pc);
+static void bsplineStartAnchorOn(SPPenContext *const pc);
+static void bsplineEndAnchorOn(SPPenContext *const pc);
+static void bsplineOff(SPPenContext *const pc);
+static void bsplineStartAnchorOff(SPPenContext *const pc);
+static void bsplineEndAnchorOff(SPPenContext *const pc);
 //Unimos todas las curvas en juego y llamamos a la función doEffect.
 static void bspline_build(SPPenContext *const pc);
 //function bspline cloned from lpe-bspline.cpp
@@ -528,6 +536,16 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
 
                             // Set start anchor
                             pc->sa = anchor;
+                            //BSpline
+                            if(anchor){
+                                if(pc->spiro){
+                                    spiro(pc,(bevent.state & GDK_SHIFT_MASK));
+                                }
+                                if(pc->bspline){
+                                    bspline(pc,(bevent.state & GDK_SHIFT_MASK));
+                                }
+                            }
+                            //BSpline End
                             if (anchor && !sp_pen_context_has_waiting_LPE(pc)) {
                                 // Adjust point to anchor if needed; if we have a waiting LPE, we need
                                 // a fresh path to be created so don't continue an existing one
@@ -578,12 +596,8 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
                                 spdc_pen_set_subsequent_point(pc, p, true);
                             }
                         }
-
-                        pc->state = pc->polylines_only ? SP_PEN_CONTEXT_POINT : SP_PEN_CONTEXT_CONTROL;
-                        //BSpline
-                        //Esto evita arrastrar los manejadores ya que el punto se crea
-                        //al soltar el botón del ratón.
-                        if((pc->spiro || pc->bspline) && pc->state != SP_PEN_CONTEXT_CLOSE) pc->state = SP_PEN_CONTEXT_POINT;
+                        //BSpline;
+                        pc->state = (pc->polylines_only || pc->spiro || pc->bspline )? SP_PEN_CONTEXT_POINT : SP_PEN_CONTEXT_CONTROL;
                         //BSpline End
                         ret = TRUE;
                         break;
@@ -665,7 +679,6 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
 
     // Find desktop coordinates
     Geom::Point p = dt->w2d(event_w);
-
     // Test, whether we hit any anchor
     SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
     switch (pc->mode) {
@@ -750,9 +763,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
 
                     // snap the handle
                     spdc_endpoint_snap_handle(pc, p, mevent.state);
-                    //BSpline
-                    if (!pc->polylines_only && !pc->spiro && !pc->bspline) {
-                    //BSpline End
+                    if (!pc->polylines_only) {
                         spdc_pen_set_ctrl(pc, p, mevent.state);
                     } else {
                         spdc_pen_set_ctrl(pc, pc->p[1], mevent.state);
@@ -782,7 +793,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
             spiro(pc,(mevent.state & GDK_SHIFT_MASK));
         }
         if(pc->bspline){
-            bspline(pc,(mevent.state & GDK_SHIFT_MASK));
+            bsplineInMotion(pc,(mevent.state & GDK_SHIFT_MASK));
         }
         pen_drag_origin_w = event_w;
     }
@@ -830,6 +841,14 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                                 p = anchor->dp;
                             }
                             pc->sa = anchor;
+                            //BSpline
+                            if(pc->spiro){
+                                spiro(pc,(revent.state & GDK_SHIFT_MASK));
+                            }
+                            if(pc->bspline){
+                                bspline(pc,(revent.state & GDK_SHIFT_MASK));
+                            }
+                            //BSpline End
                             spdc_pen_set_initial_point(pc, p);
                         } else {
                             // Set end anchor here
@@ -838,14 +857,6 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                                 p = anchor->dp;
                             }
                         }
-                        //BSpline
-                        if(pc->spiro){
-                            spiro(pc,(revent.state & GDK_SHIFT_MASK));
-                        }
-                        if(pc->bspline){
-                            bspline(pc,(revent.state & GDK_SHIFT_MASK));
-                        }
-                        //BSpline End
                         pc->state = SP_PEN_CONTEXT_CONTROL;
                         ret = TRUE;
                         break;
@@ -984,20 +995,8 @@ static void pen_redraw_all (SPPenContext *const pc)
 
     // handles
     //BSpline
-    SPCurve * WPower = new SPCurve();
-    Geom::D2< Geom::SBasis > SBasisWPower;
-    float WP = 0;
-    if (pc->p[0] != pc->p[1] && !pc->spiro /*&& !pc->bspline*/) {
+    if (pc->p[0] != pc->p[1] && !pc->spiro && !pc->bspline) {
     //BSpline End
-        if(pc->bspline){
-            WPower->moveto(pc->red_curve->first_segment()->initialPoint());
-            WPower->lineto(pc->red_curve->first_segment()->finalPoint());
-            SBasisWPower = WPower->first_segment()->toSBasis();
-                
-            WPower->reset();
-            pc->p[1] = SBasisWPower.valueAt(WP);
-        }
-        
         SP_CTRL(pc->c1)->moveto(pc->p[1]);
         pc->cl1->setCoords(pc->p[0], pc->p[1]);
         sp_canvas_item_show(pc->c1);
@@ -1006,23 +1005,16 @@ static void pen_redraw_all (SPPenContext *const pc)
         sp_canvas_item_hide(pc->c1);
         sp_canvas_item_hide(pc->cl1);
     }
-    Geom::Point p2;
+
     Geom::Curve const * last_seg = pc->green_curve->last_segment();
     if (last_seg) {
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( last_seg );
         //BSpline
         if ( cubic &&
-             (*cubic)[2] != pc->p[0]&& !pc->spiro /*&& !pc->bspline*/ )
+             (*cubic)[2] != pc->p[0]&& !pc->spiro && !pc->bspline )
         {
         //BSpline End
-            if(pc->bspline){
-                WPower->moveto(last_seg->finalPoint());
-                WPower->lineto(last_seg->initialPoint());
-                SBasisWPower = WPower->first_segment()->toSBasis();
-                p2 =  SBasisWPower.valueAt(WP);
-            }else{
-                p2 =  (*cubic)[2];
-            }
+            Geom::Point p2 = (*cubic)[2];
             SP_CTRL(pc->c0)->moveto(p2);
             pc->cl0->setCoords(p2, pc->p[0]);
             sp_canvas_item_show(pc->c0);
@@ -1378,12 +1370,6 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 }
             } else {
                 // Reset red curve
-                //BSpline
-                if ((pc->spiro || pc->bspline) && pc->green_curve->get_segment_count()==1) {
-                    pen_cancel (pc);
-                    ret = TRUE;
-                }
-                //BSpline End
                 pc->red_curve->reset();
                 // Destroy topmost green bpath
                 if (pc->green_bpaths) {
@@ -1415,13 +1401,11 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 spdc_pen_set_subsequent_point(pc, pt, true);
                 pen_last_paraxial_dir = !pen_last_paraxial_dir;
                 //BSpline
-                if(pc->spiro || pc->bspline){
-                    SPCanvasItem *cshape = sp_canvas_bpath_new(sp_desktop_sketch(pc->desktop), pc->green_curve);
-                    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), pc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-                    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(cshape), 0, SP_WIND_RULE_NONZERO);
-                    pc->green_bpaths = g_slist_prepend(pc->green_bpaths, cshape);
-                    pen_redraw_all(pc);
-                }
+                if((pc->spiro || pc->bspline) && ( pc->green_curve->is_empty() || pc->green_curve->last_segment() == NULL )){
+                    pen_cancel (pc);
+                    ret = TRUE;
+                } pc->blue_curve->reset();
+                if(pc->spiro || pc->bspline) bspline_build(pc);
                 //BSpline End
                 ret = TRUE;
             }
@@ -1783,12 +1767,216 @@ static void spiro_doEffect(SPCurve * curve)
 }
 
 //Unimos todas las curvas en juego y llamamos a la función doEffect.
+
+static void bspline(SPPenContext *const pc, bool shift)
+{
+    shift?bsplineOff(pc):bsplineOn(pc);
+    bspline_build(pc);
+}
+
+static void bsplineInMotion(SPPenContext *const pc, bool shift){
+    SPCurve *tmpCurve = new SPCurve();
+    if(pc->green_curve->is_empty() && !pc->sa){
+        pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
+    }else if(!pc->green_curve->is_empty()){
+        tmpCurve = pc->green_curve->copy();
+    }else{
+        tmpCurve = pc->sa->curve->copy();
+        if(pc->sa->start)
+            tmpCurve = tmpCurve->create_reverse();
+    }
+    if(!tmpCurve->is_empty() && !pc->red_curve->is_empty()){
+        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+        if(cubic){
+            SPCurve * WPower = new SPCurve();
+            Geom::D2< Geom::SBasis > SBasisWPower;
+            WPower->moveto(tmpCurve->last_segment()->finalPoint());
+            WPower->lineto(tmpCurve->last_segment()->initialPoint());
+            float WP = Geom::nearest_point((*cubic)[2],*WPower->first_segment());
+            WPower->reset();
+            WPower->moveto(pc->red_curve->last_segment()->initialPoint());
+            WPower->lineto(pc->red_curve->last_segment()->finalPoint());
+            SBasisWPower = WPower->first_segment()->toSBasis();
+            WPower->reset();
+            pc->p[1] = SBasisWPower.valueAt(WP);
+        }else{
+            pc->p[1] = pc->p[0];
+        }
+    }
+
+    if(pc->anchor_statusbar && !pc->red_curve->is_empty()){
+        if(shift)
+            bsplineEndAnchorOff(pc);
+        else
+            bsplineEndAnchorOn(pc);
+    }
+
+    bspline_build(pc);
+}
+
+static void bsplineOff(SPPenContext *const pc)
+{
+    if(!pc->red_curve->is_empty()){
+        pc->npoints = 5;
+        pc->p[0] = pc->red_curve->first_segment()->initialPoint();
+        pc->p[3] = pc->red_curve->first_segment()->finalPoint();
+        pc->p[2] = pc->p[3];
+        pc->p[4] = pc->p[3];
+    }
+    if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && pc->red_curve->is_empty())
+        bsplineStartAnchorOff(pc);
+}
+
+static void bsplineStartAnchorOff(SPPenContext *const pc)
+{
+    SPCurve *tmpCurve = new SPCurve();
+    tmpCurve = pc->sa->curve->copy();
+    if(pc->sa->start)
+        tmpCurve = tmpCurve->create_reverse();
+    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+    if(cubic){
+        SPCurve *lastSeg = new SPCurve();
+        lastSeg->moveto((*cubic)[0]);
+        lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+        tmpCurve->backspace();
+        tmpCurve->append_continuous(lastSeg, 0.0625);
+        if (pc->sa->start) {
+            tmpCurve = tmpCurve->create_reverse();
+        }
+        pc->sa->curve->reset();
+        pc->sa->curve = tmpCurve;
+    }
+
+}
+
+static void bsplineEndAnchorOff(SPPenContext *const pc)
+{
+    pc->p[2] = pc->p[3];
+    SPCurve *tmpCurve = new SPCurve();
+    SPCurve *lastSeg = new SPCurve();
+    if(!pc->sa || pc->sa->curve->is_empty()){
+        tmpCurve = pc->green_curve->create_reverse();
+        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+        if(cubic){
+            lastSeg->moveto((*cubic)[0]);
+            lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+            tmpCurve->backspace();
+            tmpCurve->append_continuous(lastSeg, 0.0625);
+            tmpCurve = tmpCurve->create_reverse();
+            pc->green_curve->reset();
+            pc->green_curve = tmpCurve;
+        }
+    }else{
+        tmpCurve = pc->sa->curve->copy();
+        if(!pc->sa->start)
+            tmpCurve = tmpCurve->create_reverse();
+        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+        if(cubic){
+            lastSeg->moveto((*cubic)[0]);
+            lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+            tmpCurve->backspace();
+            tmpCurve->append_continuous(lastSeg, 0.0625);
+            if (!pc->sa->start) {
+                tmpCurve = tmpCurve->create_reverse();
+            }
+            pc->sa->curve->reset();
+            pc->sa->curve = tmpCurve;
+        }
+    }
+}
+
+static void bsplineOn(SPPenContext *const pc){
+    if(!pc->red_curve->is_empty()){
+        pc->npoints = 5;
+        pc->p[0] = pc->red_curve->first_segment()->initialPoint();
+        pc->p[3] = pc->red_curve->first_segment()->finalPoint();
+        pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+    }
+    if(pc->anchor_statusbar && pc->sa && !pc->sa->curve->is_empty() && pc->red_curve->is_empty())
+        bsplineStartAnchorOn(pc);
+}
+
+static void bsplineStartAnchorOn(SPPenContext *const pc)
+{
+    SPCurve *tmpCurve = new SPCurve();
+    tmpCurve = pc->sa->curve->copy();
+    if(pc->sa->start)
+        tmpCurve = tmpCurve->create_reverse();
+    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+    SPCurve *lastSeg = new SPCurve();
+    Geom::Point A = tmpCurve->last_segment()->initialPoint();
+    Geom::Point D = tmpCurve->last_segment()->finalPoint();
+    Geom::Point C(0,0);
+    if(cubic){
+        C = D + (1./3)*(A - D);
+        lastSeg->moveto(A);
+        lastSeg->curveto((*cubic)[1],C,D);
+    }else{
+        lastSeg->moveto(A);
+        lastSeg->curveto(A,C,D);
+    }
+    tmpCurve->backspace();
+    tmpCurve->append_continuous(lastSeg, 0.0625);
+    if (pc->sa->start) {
+        tmpCurve = tmpCurve->create_reverse();
+    }
+    pc->sa->curve->reset();
+    pc->sa->curve = tmpCurve;
+}
+
+static void bsplineEndAnchorOn(SPPenContext *const pc)
+{
+    pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+    SPCurve *tmpCurve = new SPCurve();
+    SPCurve *lastSeg = new SPCurve();
+    Geom::Point C(0,0);
+    if(!pc->sa || pc->sa->curve->is_empty()){
+        tmpCurve = pc->green_curve->create_reverse();
+        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+        C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
+        if(cubic){
+            lastSeg->moveto((*cubic)[0]);
+            lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
+        }else{
+            lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
+            lastSeg->curveto(tmpCurve->last_segment()->initialPoint(),C,tmpCurve->last_segment()->finalPoint());
+        }
+        tmpCurve->backspace();
+        tmpCurve->append_continuous(lastSeg, 0.0625);
+        tmpCurve = tmpCurve->create_reverse();
+        pc->green_curve->reset();
+        pc->green_curve = tmpCurve;
+    }else{
+        tmpCurve = pc->sa->curve->copy();
+        if(!pc->sa->start)
+            tmpCurve = tmpCurve->create_reverse();
+        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+        C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
+        if(cubic){
+            lastSeg->moveto((*cubic)[0]);
+            lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
+        }else{
+            lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
+            lastSeg->curveto(tmpCurve->last_segment()->initialPoint(),C,tmpCurve->last_segment()->finalPoint());
+        }
+        tmpCurve->backspace();
+        tmpCurve->append_continuous(lastSeg, 0.0625);
+        if (!pc->sa->start) {
+            tmpCurve = tmpCurve->create_reverse();
+        }
+        pc->sa->curve->reset();
+        pc->sa->curve = tmpCurve;
+    }
+}
+/*
+//Unimos todas las curvas en juego y llamamos a la función doEffect.
 static void bspline(SPPenContext *const pc, bool Shift)
 {
     using Geom::X;
     using Geom::Y;
     Geom::CubicBezier const *cubic;
     if(Shift){
+
         //Continuamos la curva en modo CUSP
         //Guardamos el valor de inicio en cusp para que no se redibuje como SYMM
         if(pc->anchor_statusbar && pc->red_curve->is_empty()){
@@ -1916,7 +2104,7 @@ static void bspline(SPPenContext *const pc, bool Shift)
     bspline_build(pc);
 }
 
-
+/*/
 
 //preparates the curves for its trasformation into BSline curves.
 static void bspline_build(SPPenContext *const pc)
@@ -2272,14 +2460,12 @@ static void spdc_pen_finish_segment(SPPenContext *const pc, Geom::Point const p,
     ++pc->num_clicks;
 
     if (!pc->red_curve->is_empty()) {
-        //BSpline
         if(pc->spiro){
-            spiro(pc, (state & GDK_SHIFT_MASK));
+            spiro(pc,(state & GDK_SHIFT_MASK));
         }
         if(pc->bspline){
-            bspline(pc, (state & GDK_SHIFT_MASK));
+            bspline(pc,(state & GDK_SHIFT_MASK));
         }
-        //BSpline End
         pc->green_curve->append_continuous(pc->red_curve, 0.0625);
         SPCurve *curve = pc->red_curve->copy();
         /// \todo fixme:
@@ -2305,9 +2491,6 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
     }
 
     pc->num_clicks = 0;
-    if(pc->spiro || pc->bspline){
-        saShift = false;
-    }
     pen_disable_events(pc);
 
     SPDesktop *const desktop = pc->desktop;
