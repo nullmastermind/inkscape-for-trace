@@ -34,6 +34,8 @@ LPEBSpline::doEffect(SPCurve * curve)
 {
     if(curve->get_segment_count() < 2)
     return;
+    using Geom::X;
+    using Geom::Y;
     // Make copy of old path as it is changed during processing
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
@@ -94,13 +96,6 @@ LPEBSpline::doEffect(SPCurve * curve)
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
 
         if (path_it->closed()) {
-            // if the path is closed, maybe we have to stop a bit earlier because the closing line segment has zerolength.
-            const Geom::Curve &closingline = path_it->back_closed(); // the closing line segment is always of type Geom::LineSegment.
-            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                // closingline.isDegenerate() did not work, because it only checks for *exact* zero length, which goes wrong for relative coordinates and rounding errors...
-                // the closing line segment has zero-length. So stop before that one!
-                curve_endit = path_it->end_open();
-            }
             SBasisIn = in->first_segment()->toSBasis();
             SBasisEnd = end->first_segment()->toSBasis();
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
@@ -223,6 +218,7 @@ LPEBSpline::doEffect(SPCurve * curve)
     //Todo: remove?
     //delete SBasisHelper;
 }
+
 }; //namespace LivePathEffect
 }; /* namespace Inkscape */
 
