@@ -561,7 +561,15 @@ void spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
         dc->sa->curve->append_continuous(c, 0.0625);
         c->unref();
         dc->sa->curve->closepath_current();
-        spdc_flush_white(dc, NULL);
+        //BSpline
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+            dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
+            spdc_flush_white(dc, dc->sa->curve);
+        }else
+        //BSpline End
+            spdc_flush_white(dc, NULL);
         return;
     }
 
@@ -686,6 +694,18 @@ SPDrawAnchor *spdc_test_inside(SPDrawContext *dc, Geom::Point p)
             active = na;
         }
     }
+
+    //BSpline
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if((prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+        prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) && 
+        dc->sa && !dc->red_curve->is_empty() && !dc->green_anchor){
+        if(active){
+            active->curve = dc->sa->curve;
+            active->curve->ref();
+        }
+    }
+    //BSpline End
 
     return active;
 }
