@@ -1708,7 +1708,7 @@ static void spiroEndAnchorOn(SPPenContext *const pc)
     if(!pc->sa || pc->sa->curve->is_empty()){
         tmpCurve = pc->green_curve->create_reverse();
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
-        C = tmpCurve->last_segment()->finalPoint() + + (Geom::Point)(tmpCurve->last_segment()->finalPoint() - pc->p[2]);
+        C = tmpCurve->last_segment()->finalPoint() + (Geom::Point)(tmpCurve->last_segment()->finalPoint() - pc->p[2]);
         if(cubic){
             lastSeg->moveto((*cubic)[0]);
             lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
@@ -1732,7 +1732,7 @@ static void spiroEndAnchorOn(SPPenContext *const pc)
         if(!pc->sa->start)
             tmpCurve = tmpCurve->create_reverse();
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
-        C = tmpCurve->last_segment()->finalPoint() + + (Geom::Point)(tmpCurve->last_segment()->finalPoint() - pc->p[2]);
+        C = tmpCurve->last_segment()->finalPoint() + (Geom::Point)(tmpCurve->last_segment()->finalPoint() - pc->p[2]);
         if(cubic){
             lastSeg->moveto((*cubic)[0]);
             lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
