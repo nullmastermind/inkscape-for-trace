@@ -19,7 +19,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE([dist-zip dist-bzip2 tar-pax])
+AM_INIT_AUTOMAKE([-Wall dist-zip dist-bzip2 tar-pax])
 
 AC_ARG_ENABLE([lsb], AS_HELP_STRING([--enable-lsb], [LSB-compatible build configuration]), [
   prefix=/opt/inkscape
@@ -33,7 +33,6 @@ AC_LANG(C++)
 AC_PROG_CXX
 AC_PROG_CC
 AM_PROG_AS
-AC_PROG_RANLIB
 # Initialize libtool
 LT_PREREQ([2.2])
 LT_INIT
@@ -775,7 +774,7 @@ if test "x$enable_gtk3" = "xyes"; then
 		# Gtk+ 3.
 		CPPFLAGS="-DGTKMM_DISABLE_DEPRECATED $CPPFLAGS"
 		CPPFLAGS="-DGTK_DISABLE_DEPRECATED $CPPFLAGS"
-		CPPFLAGS="-DGDKMM_DISABLE_DEPRECATED $CPPFLAGS"
+		CPPFLAGS="-DGDK_DISABLE_DEPRECATED $CPPFLAGS"
 	fi
 else
 
@@ -794,7 +793,6 @@ else
 		# been removed in Gtk+ 3 so these checks are important.
 		CPPFLAGS="-DGTKMM_DISABLE_DEPRECATED $CPPFLAGS"
 		CPPFLAGS="-DGTK_DISABLE_DEPRECATED $CPPFLAGS"
-		CPPFLAGS="-DGDKMM_DISABLE_DEPRECATED $CPPFLAGS"
 		
 		# Allow only top-level GTK+ headers to be used.  This is mandatory
 		# for GTK+ >= 3.0 so there is no need to apply the flag in GTK+ 3
@@ -817,9 +815,11 @@ fi
 
 AM_CONDITIONAL(WITH_EXT_GDL, test "x$with_gtkmm_3_0" = "xyes")
 
-# Prevent usage of deprecated Glib and Glibmm symbols unless strict build
+# Prevent usage of deprecated library symbols unless strict build
 # checking has been disabled
 if test "x$enable_strict_build" != "xno"; then
+	CPPFLAGS="-DGDKMM_DISABLE_DEPRECATED $CPPFLAGS"
+	
 	# Ensure that no deprecated glibmm symbols are introduced.
 	# lp:inkscape builds cleanly with this option at r10957
 	CPPFLAGS="-DGLIBMM_DISABLE_DEPRECATED $CPPFLAGS"
