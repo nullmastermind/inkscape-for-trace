@@ -142,8 +142,14 @@ void Handle::move(Geom::Point const &new_pos)
     Handle *h2 = NULL;
     if(_pm().isBSpline()){
         isBSpline = true;
-        if(!_parent->selected())
-            _parent->_selection.insert(_parent);
+        typedef ControlPointSelection::Set Set;
+        Set &nodes = _parent->_selection.allPoints();
+        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+            Node *n = static_cast<Node*>(*i);
+            _parent->_selection.erase(n);
+        }        
+        //if(!_parent->selected())
+        _parent->_selection.insert(_parent);
     }
     //BSpline End
 
@@ -596,10 +602,12 @@ void Node::move(Geom::Point const &new_pos)
     //BSpline End
     setPosition(new_pos);
     //BSpline
-    if(prevNode)
-        prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevPos));
-    if(nextNode)
-        nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextPos));
+    if(_pm().isBSpline()){
+        if(prevNode)
+            prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevPos));
+        if(nextNode)
+            nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextPos));
+    }
     //BSpline End
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
