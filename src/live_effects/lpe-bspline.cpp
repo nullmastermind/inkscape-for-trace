@@ -53,7 +53,6 @@ LPEBSpline::doEffect(SPCurve * curve)
         //Esto hace que la curva BSpline no pierda su condición aunque se trasladen
         //dichos manejadores
         SPCurve *nCurve = new SPCurve();
-        Geom::Point startNode(0,0);
         Geom::Point previousNode(0,0);
         Geom::Point node(0,0);
         Geom::Point pointAt1(0,0);
@@ -65,63 +64,19 @@ LPEBSpline::doEffect(SPCurve * curve)
         Geom::D2< Geom::SBasis > SBasisOut;
         Geom::D2< Geom::SBasis > SBasisHelper;
         Geom::CubicBezier const *cubic = NULL;
+        if (path_it->closed()) {
+            // if the path is closed, maybe we have to stop a bit earlier because the closing line segment has zerolength.
+            const Geom::Curve &closingline = path_it->back_closed(); // the closing line segment is always of type Geom::LineSegment.
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                // closingline.isDegenerate() did not work, because it only checks for *exact* zero length, which goes wrong for relative coordinates and rounding errors...
+                // the closing line segment has zero-length. So stop before that one!
+                curve_endit = path_it->end_open();
+            }
+        }
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
 
-        if (path_it->closed()) {
-            //Calculamos el nodo de inicio BSpline
-            const Geom::Curve &closingline = path_it->back_closed();
-            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                curve_endit = path_it->end_open();
-            }
-
-            SPCurve * in = new SPCurve();
-            in->moveto(curve_it1->initialPoint());
-            in->lineto(curve_it1->finalPoint());
-            SBasisIn = in->first_segment()->toSBasis();
-
-            SPCurve *lineHelper = new SPCurve();
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
-            if(cubic){
-                lineHelper->moveto(SBasisIn.valueAt(Geom::nearest_point((*cubic)[1],*in->first_segment())));
-            }else{
-                lineHelper->moveto(in->first_segment()->initialPoint());
-            }
-            in->reset();
-            delete in;
-
-            SPCurve * end = new SPCurve();
-            end->moveto(curve_endit->initialPoint());
-            end->lineto(curve_endit->finalPoint());
-            Geom::D2< Geom::SBasis > SBasisEnd = end->first_segment()->toSBasis();
-            //Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const*>(&*curve_endit);
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_endit);
-            if(cubic){
-                lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubic)[2],*end->first_segment())));
-            }else{
-                lineHelper->lineto(end->first_segment()->finalPoint());
-            }
-            end->reset();
-            delete end;
-            SBasisHelper = lineHelper->first_segment()->toSBasis();
-            lineHelper->reset();
-            delete lineHelper;
-            //Guardamos el principio de la curva
-            startNode = SBasisHelper.valueAt(0.5);
-            //Definimos el punto de inicio original de la curva resultante
-            node = startNode;
-        }else{
-            //Guardamos el principio de la curva
-            SPCurve * in = new SPCurve();
-            in->moveto(curve_it1->initialPoint());
-            in->lineto(curve_it1->finalPoint());
-            startNode = in->first_segment()->initialPoint();
-            in->reset();
-            delete in;
-            //Definimos el punto de inicio original de la curva resultante
-            node = startNode;
-        }
         //Recorremos todos los segmentos menos el último
         while ( curve_it2 != curve_endit )
         {
@@ -190,13 +145,54 @@ LPEBSpline::doEffect(SPCurve * curve)
         curveHelper->moveto(node);
         //Si está cerrada la curva, la cerramos sobre  el valor guardado previamente
         //Si no finalizamos en el punto final
+        Geom::Point startNode(0,0);
         if (path_it->closed()) {
+            SPCurve * start = new SPCurve();
+            start->moveto(path_it->begin()->initialPoint());
+            start->lineto(path_it->begin()->finalPoint());
+            Geom::D2< Geom::SBasis > SBasisStart = start->first_segment()->toSBasis();
+            SPCurve *lineHelper = new SPCurve();
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*path_it->begin());
+            if(cubic){
+                lineHelper->moveto(SBasisStart.valueAt(Geom::nearest_point((*cubic)[1],*start->first_segment())));
+            }else{
+                lineHelper->moveto(start->first_segment()->initialPoint());
+            }
+            start->reset();
+            delete start;
+
+            SPCurve * end = new SPCurve();
+            end->moveto(curve_it1->initialPoint());
+            end->lineto(curve_it1->finalPoint());
+            Geom::D2< Geom::SBasis > SBasisEnd = end->first_segment()->toSBasis();
+            //Geom::BezierCurve const *bezier = dynamic_cast<Geom::BezierCurve const*>(&*curve_endit);
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
+            if(cubic){
+                lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubic)[2],*end->first_segment())));
+            }else{
+                lineHelper->lineto(end->first_segment()->finalPoint());
+            }
+            end->reset();
+            delete end;
+            SBasisHelper = lineHelper->first_segment()->toSBasis();
+            lineHelper->reset();
+            delete lineHelper;
+            //Guardamos el principio de la curva
+            startNode = SBasisHelper.valueAt(0.5);
             curveHelper->curveto(nextPointAt1, nextPointAt2, startNode);
+            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->move_endpoints(startNode,startNode);
         }else{
+            SPCurve * start = new SPCurve();
+            start->moveto(path_it->begin()->initialPoint());
+            start->lineto(path_it->begin()->finalPoint());
+            startNode = start->first_segment()->initialPoint();
+            start->reset();
+            delete start;
             curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
+            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->move_endpoints(startNode,nextPointAt3);
         }
-        //añadimos este último segmento
-        nCurve->append_continuous(curveHelper, 0.0625);
         curveHelper->reset();
         delete curveHelper;
         //y cerramos la curva
