@@ -895,6 +895,9 @@ void PathManipulator::showHandles(bool show)
 /** Set the visibility of outline. */
 void PathManipulator::showOutline(bool show)
 {
+    //BSpline
+    if(isBSpline()) show = true;
+    //BSpline
     if (show == _show_outline) return;
     _show_outline = show;
     _updateOutline();
