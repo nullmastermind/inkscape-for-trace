@@ -23,6 +23,8 @@
 #include <gtkmm/main.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
+#include <glibmm/miscutils.h>
+#include <glibmm/convert.h>
 #include <unistd.h>
 
 #include <errno.h>
@@ -852,7 +854,11 @@ void Script::checkStderr (const Glib::ustring &data,
     GtkWidget *dlg = GTK_WIDGET(warning.gobj());
     sp_transientize(dlg);
 
+#if WITH_GTKMM_3_0
+    Gtk::Box * vbox = warning.get_content_area();
+#else
     Gtk::Box * vbox = warning.get_vbox();
+#endif
 
     /* Gtk::TextView * textview = new Gtk::TextView(Gtk::TextBuffer::create()); */
     Gtk::TextView * textview = new Gtk::TextView();
@@ -956,7 +962,14 @@ int Script::execute (const std::list<std::string> &in_command,
     // assemble the rest of argv
     std::copy(in_params.begin(), in_params.end(), std::back_inserter(argv));
     if (!filein.empty()) {
-        argv.push_back(filein);
+        if(Glib::path_is_absolute(filein))
+            argv.push_back(filein);
+        else {
+            std::vector<std::string> buildargs;
+            buildargs.push_back(Glib::get_current_dir());
+            buildargs.push_back(filein);
+            argv.push_back(Glib::build_filename(buildargs));
+        }
     }
 
     int stdout_pipe, stderr_pipe;

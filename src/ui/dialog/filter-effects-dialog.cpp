@@ -20,6 +20,11 @@
 
 #include "dialog-manager.h"
 #include <gtkmm/imagemenuitem.h>
+
+#if GTK_CHECK_VERSION(3,0,0)
+# include <gdkmm/devicemanager.h>
+#endif
+
 #include "ui/widget/spinbutton.h"
 #include <glibmm/i18n.h>
 
@@ -1201,7 +1206,6 @@ void FilterEffectsDialog::FilterModifier::on_change_selection()
 {
     Inkscape::Selection *selection = sp_desktop_selection (SP_ACTIVE_DESKTOP);
     update_selection(selection);
-    update_filters(); 
 }
 
 void FilterEffectsDialog::FilterModifier::on_modified_selection( guint flags )
@@ -1785,7 +1789,15 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
         // Check mouse state
         int mx, my;
         Gdk::ModifierType mask;
+
+#if GTK_CHECK_VERSION(3,0,0)
+        Glib::RefPtr<Gdk::Display> display = get_bin_window()->get_display();
+        Glib::RefPtr<Gdk::DeviceManager> dm = display->get_device_manager();
+        Glib::RefPtr<const Gdk::Device> device = dm->get_client_pointer();
+        get_bin_window()->get_device_position(device, mx, my, mask);
+#else
         get_bin_window()->get_pointer(mx, my, mask);
+#endif
 
         // Outline the bottom of the connection area
         const int outline_x = x + fheight * (row_count - row_index);
@@ -2668,7 +2680,7 @@ void FilterEffectsDialog::update_primitive_infobox()
             break;
         case(NR_FILTER_SPECULARLIGHTING):
             _infobox_icon.set_from_icon_name("feSpecularLighting-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The feDiffuseLighting and <b>feSpecularLighting</b> filter primitives create \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
+            _infobox_desc.set_markup(_("The <b>feDiffuseLighting</b> and <b>feSpecularLighting</b> filter primitives create \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
             break;
         case(NR_FILTER_TILE):
             _infobox_icon.set_from_icon_name("feTile-icon", Gtk::ICON_SIZE_DIALOG);

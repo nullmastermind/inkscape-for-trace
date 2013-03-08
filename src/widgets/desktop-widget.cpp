@@ -82,11 +82,6 @@ using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
 using ege::AppearTimeTracker;
 
-#ifdef WITH_INKBOARD
-#endif
-
-
-
 enum {
     ACTIVATE,
     DEACTIVATE,
@@ -775,6 +770,10 @@ static void sp_desktop_widget_dispose(GObject *object)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
 
+    if (dtw == NULL) {
+        return;
+    }
+    
     UXManager::getInstance()->delTrack(dtw);
 
     if (dtw->desktop) {

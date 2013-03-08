@@ -18,6 +18,7 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 
 #include "inkscape-preferences.h"
 #include <gtkmm/main.h>
@@ -1288,7 +1289,7 @@ void InkscapePreferences::initPageBehavior()
     _page_mask.add_group_header( _("Before applying"));
     
     _mask_grouping_none.init( _("Do not group clipped/masked objects"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE, true, 0);
-    _mask_grouping_separate.init( _("Enclose every clipped/masked object in its own group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_SEPARATE, false, &_mask_grouping_none);
+    _mask_grouping_separate.init( _("Put every clipped/masked object in its own group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_SEPARATE, false, &_mask_grouping_none);
     _mask_grouping_all.init( _("Put all clipped/masked objects into one group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_ALL, false, &_mask_grouping_none);
     
     _page_mask.add_line(true, "", _mask_grouping_none, "",
@@ -1476,7 +1477,15 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     scroller->add(_kb_tree);
 
     int row = 3;
+
+#if WITH_GTKMM_3_0
+    scroller->set_hexpand();
+    scroller->set_vexpand();
+    _page_keyshortcuts.attach(*scroller, 0, row, 2, 1);
+#else
     _page_keyshortcuts.attach(*scroller, 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL);
+#endif
+
     row++;
 
 #if WITH_GTKMM_3_0
@@ -1487,7 +1496,13 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
     box_buttons->set_spacing(4);
+
+#if WITH_GTKMM_3_0
+    box_buttons->set_hexpand();
+    _page_keyshortcuts.attach(*box_buttons, 0, row, 3, 1);
+#else
     _page_keyshortcuts.attach(*box_buttons, 0, 3, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+#endif
 
     UI::Widget::Button *kb_reset = manage(new UI::Widget::Button(_("Reset"), _("Remove all your customized keyboard shortcuts, and revert to the shortcuts in the shortcut file listed above")));
     box_buttons->pack_start(*kb_reset, true, true, 6);

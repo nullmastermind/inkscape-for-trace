@@ -36,10 +36,9 @@ set(extension_SRC
 	internal/cairo-render-context.cpp
 	internal/cairo-renderer.cpp
 	internal/cairo-renderer-pdf-out.cpp
+	internal/cdr-input.cpp
 	internal/emf-inout.cpp
 	internal/emf-print.cpp
-	internal/wmf-inout.cpp
-	internal/wmf-print.cpp
 	internal/gdkpixbuf-input.cpp
 	internal/gimpgrad.cpp
 	internal/grid.cpp
@@ -54,6 +53,8 @@ set(extension_SRC
 	internal/svg.cpp
 	internal/svgz.cpp
 	internal/vsd-input.cpp
+	internal/wmf-inout.cpp
+	internal/wmf-print.cpp
 
 	internal/filter/filter-all.cpp
 	internal/filter/filter-file.cpp
@@ -102,11 +103,10 @@ set(extension_SRC
 	internal/cairo-render-context.h
 	internal/cairo-renderer-pdf-out.h
 	internal/cairo-renderer.h
+	internal/cdr-input.h
 	internal/clear-n_.h
 	internal/emf-inout.h
 	internal/emf-print.h
-	internal/wmf-inout.h
-	internal/wmf-print.h
 	internal/filter/bevels.h
 	internal/filter/blurs.h
 	internal/filter/bumps.h
@@ -138,6 +138,8 @@ set(extension_SRC
 	internal/svg.h
 	internal/svgz.h
 	internal/vsd-input.h
+	internal/wmf-inout.h
+	internal/wmf-print.h
 
 	script/InkscapeScript.h
 )

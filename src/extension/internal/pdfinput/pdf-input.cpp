@@ -124,7 +124,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
 
 #if WITH_GTKMM_3_0
     _fallbackPrecisionSlider_adj = Gtk::Adjustment::create(2, 1, 256, 1, 10, 10);
-    _fallbackPrecisionSlider = Gtk::manage(new class Gtk::HScale(_fallbackPrecisionSlider_adj));
+    _fallbackPrecisionSlider = Gtk::manage(new class Gtk::Scale(_fallbackPrecisionSlider_adj));
 #else
     _fallbackPrecisionSlider_adj = Gtk::manage(new class Gtk::Adjustment(2, 1, 256, 1, 10, 10));
     _fallbackPrecisionSlider = Gtk::manage(new class Gtk::HScale(*_fallbackPrecisionSlider_adj));
@@ -240,9 +240,17 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     vbox1->pack_start(*_importSettingsFrame, Gtk::PACK_EXPAND_PADDING, 0);
     hbox1->pack_start(*vbox1);
     hbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 4);
+
+#if WITH_GTKMM_3_0
+    get_content_area()->set_homogeneous(false);
+    get_content_area()->set_spacing(0);
+    get_content_area()->pack_start(*hbox1);
+#else
     this->get_vbox()->set_homogeneous(false);
     this->get_vbox()->set_spacing(0);
     this->get_vbox()->pack_start(*hbox1);
+#endif
+
     this->set_title(_("PDF Import Settings"));
     this->set_modal(true);
     sp_transientize(GTK_WIDGET(this->gobj()));  //Make transient

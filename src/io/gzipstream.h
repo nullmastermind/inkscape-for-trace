@@ -98,7 +98,7 @@ public:
     
     virtual void flush();
     
-    virtual void put(int ch);
+    virtual int put(gunichar ch);
 
 private:
 

@@ -37,15 +37,13 @@ noinst_LIBRARIES =	\
 all_libs =			\
 	$(noinst_LIBRARIES)	\
 	$(INKSCAPE_LIBS)	\
+	$(EXIF_LIBS)            \
 	$(GNOME_VFS_LIBS)	\
 	$(XFT_LIBS)		\
 	$(FREETYPE_LIBS)	\
 	$(kdeldadd)		\
 	$(win32ldflags)		\
 	$(CARBON_LDFLAGS)	\
-	$(PERL_LIBS)		\
-	$(PYTHON_LIBS)		\
-	$(INKBOARD_LIBS)	\
 	$(LIBWPG_LIBS)		\
 	$(LIBVISIO_LIBS)		\
 	$(LIBCDR_LIBS)		\
@@ -64,13 +62,12 @@ BUILT_SOURCES =
 # Extra files to distribute
 EXTRA_DIST =
 
-INCLUDES =	\
-	$(PERL_CFLAGS) $(PYTHON_CFLAGS)	\
+AM_CPPFLAGS =	\
+	$(EXIF_CFLAGS) \
 	$(FREETYPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)	\
 	$(GNOME_VFS_CFLAGS)	\
 	$(IMAGEMAGICK_CFLAGS) \
-	$(INKBOARD_CFLAGS) \
 	$(LIBWPG_CFLAGS) \
 	$(LIBVISIO_CFLAGS) \
 	$(LIBCDR_CFLAGS) \
@@ -86,8 +83,7 @@ INCLUDES =	\
 	$(WIN32_CFLAGS) \
 	-I$(srcdir)/bind/javainc \
 	-I$(srcdir)/bind/javainc/linux \
-	-I$(builddir)/extension/dbus \
-	$(AM_CPPFLAGS)
+	-I$(builddir)/extension/dbus 
 
 CXXTEST_TEMPLATE = $(srcdir)/cxxtest-template.tpl
 CXXTESTGENFLAGS = --root --have-eh --template=$(CXXTEST_TEMPLATE)
