@@ -67,8 +67,8 @@ Optional compiler switches for development:
 
 
 File:      text_reassemble.c
-Version:   0.0.4
-Date:      24-JAN-2013
+Version:   0.0.5
+Date:      19-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -1640,7 +1640,7 @@ void TR_layout_2_svg(TR_INFO *tri){
             if(k==0){ sprintf(obuf,"dx=\"%lf\" dy=\"%lf\" ",0.0, 0.0); }
             else {    sprintf(obuf,"dx=\"%lf\" dy=\"%lf\" ",dx, dy); }
             TRPRINT(tri, obuf);
-               sprintf(obuf,"style=\"fill:#%6.6X;",tsp->color);    
+               sprintf(obuf,"style=\"fill:#%2.2X%2.2X%2.2X;",tsp->color.Red,tsp->color.Green,tsp->color.Blue);    
             TRPRINT(tri, obuf);
                sprintf(obuf,"font-size:%lfpx;",tsp->fs*1.25);  /*IMPORTANT, if the FS is given in pt it looks like crap in browsers.  As if px != 1.25 pt, maybe 96 dpi not 90?*/
             TRPRINT(tri, obuf);
@@ -1941,6 +1941,7 @@ int main(int argc, char *argv[]){
    TR_INFO      *tri=NULL;
    int           flags=0;
    char         *infile;
+   uint32_t      utmp32;
 
    infile=malloc(strlen(argv[1])+1);
    strcpy(infile,argv[1]);
@@ -1960,7 +1961,7 @@ int main(int argc, char *argv[]){
       printf("    ITA:(Italics, 0=normal, 100=italics, 110=oblique).\n");
       printf("    WGT:(Weight, 0-215: 80=normal, 200=bold, 215=ultrablack, 0=thin)).\n");
       printf("    CND:(Condensed 50-200: 100=normal, 50=ultracondensed, 75=condensed, 200=expanded).\n");
-      printf("    CLR:(RGBA color, HEX) \n");
+      printf("    CLR:(RGB color, as 6 HEX digits, like: FF0000 (red) or 0000FF (blue)) \n");
       printf("    FLAG: Special processing options.  1 EMF compatible text alignment.\n");
       printf("    EMIT:(Process everything up to this point, then start clean for remaining input).\n");
       printf("    DONE:(no more input, process it).\n");
@@ -1989,7 +1990,10 @@ int main(int argc, char *argv[]){
    tsp.vadvance   = 0.0;  /* meaningful only when a complex contains two or more lines */
    tsp.taln       = ALILEFT + ALIBASE;
    tsp.ldir       = LDIR_LR;
-   tsp.color      = 0;    /* RGBA Black */
+   tsp.color.Red       = 0;    /* RGBA Black */
+   tsp.color.Green     = 0;    /* RGBA Black */
+   tsp.color.Blue      = 0;    /* RGBA Black */
+   tsp.color.Reserved  = 0;    /* unused */
    tsp.italics    = 0;
    tsp.weight     = 80;
    tsp.condensed  = 100;
@@ -2090,7 +2094,11 @@ int main(int argc, char *argv[]){
             if(1 != sscanf(data,"%d",&tsp.condensed) || tsp.condensed < 50 || tsp.condensed > 200)boom("Invalid CND:",lineno);
             break;
          case OPCLR:
-            if(1 != sscanf(data,"%x",&tsp.color) )boom("Invalid CLR:",lineno);
+            if(1 != sscanf(data,"%x",&utmp32) )boom("Invalid CLR:",lineno);
+            tsp.color.Red      = (utmp32 >> 4) & 0xFF;
+            tsp.color.Green    = (utmp32 >> 2) & 0xFF;
+            tsp.color.Blue     = (utmp32 >> 0) & 0xFF;
+            tsp.color.Reserved = 0;
             break;
          case OPFLAGS:
             if(1 != sscanf(data,"%d",&flags) )boom("Invalid FLAG:",lineno);

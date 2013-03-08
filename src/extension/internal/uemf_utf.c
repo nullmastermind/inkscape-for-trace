@@ -392,6 +392,34 @@ char *U_Utf16leToUtf8(
 }
 
 /**
+    \brief Convert a UTF16LE string to a LATIN1 string.
+    \return pointer to new UTF8 string or NULL if it fails
+    \param src UTF16LE string to convert
+    \param max number of characters to convert, if 0, until terminator
+    \param len number of characters in new string, NOT including terminator
+*/
+char *U_Utf16leToLatin1(
+      const uint16_t *src,
+      size_t          max,
+      size_t         *len
+   ){
+   char *dst, *dst2;
+   char *ret=NULL;
+   size_t srclen,dstlen,status;
+   if(max){ srclen = 2*max; }
+   else {   srclen = 2*(1 +wchar16len(src)); } //include terminator, length in BYTES
+   dstlen = 1 + srclen;                        // this will always work as latin1 is always 1 byte/character
+   ret = dst2 = dst = (char *) calloc(dstlen,1);
+   if(!dst)return(NULL);
+   iconv_t conv = iconv_open("LATIN1//TRANSLIT",   "UTF-16LE"); // translate what can be, fill in with something close for the rest
+   status = iconv(conv, ICONV_CAST &src, &srclen, &dst, &dstlen);
+   iconv_close(conv);
+   if(status != (size_t) -1){
+      if(len)*len=strlen(dst2);
+   }
+   return(ret);
+}
+/**
     \brief Put a single 16 bit character into UTF-16LE form.
     
     Used in conjunction with U_Utf16leEdit(), because the character
@@ -438,7 +466,7 @@ char *U_Utf8ToLatin1(
    iconv_close(conv);
    if(status == (size_t) -1)return(NULL);
    if(len)*len=strlen(dst2);
-   return((uint32_t *) dst2);
+   return((char *) dst2);
 }
 
 /**
@@ -469,7 +497,7 @@ char *U_Latin1ToUtf8(
    iconv_close(conv);
    if(status == (size_t) -1)return(NULL);
    if(len)*len=strlen(dst2);
-   return((uint32_t *) dst2);
+   return((char *) dst2);
 }
 
 /**

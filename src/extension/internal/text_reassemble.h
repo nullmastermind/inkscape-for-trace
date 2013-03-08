@@ -4,12 +4,15 @@
 See text_reassemble.c for notes
 
 File:      text_reassemble.h
-Version:   0.0.4
-Date:      24-JAN-2013
+Version:   0.0.6
+Date:      19-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
 */
+
+#ifndef _TEXT_REASSEMBLE_
+#define _TEXT_REASSEMBLE_
 
 #ifdef __cplusplus
 extern "C" {
@@ -105,6 +108,13 @@ typedef struct {
    int         used;        /**< storage slots in use                                                 */
 } FT_INFO;
 
+typedef struct {
+    uint8_t             Red;                //!< Red   color (0-255)
+    uint8_t             Green;              //!< Green color (0-255)
+    uint8_t             Blue;               //!< Blue  color (0-255) 
+    uint8_t             Reserved;           //!< Not used
+} TRCOLORREF;
+
 /**
    \brief Information for a single text object
 */
@@ -117,7 +127,7 @@ typedef struct {
    double      boff;        /**< Y LL corner - boff finds baseline                                    */
    double      vadvance;    /**< Line spacing typically 1.25 or 1.2,  only set on the first text
                                  element in a complex                                                 */
-   uint32_t    color;       /**< RGBA                                                                 */
+   TRCOLORREF  color;       /**< RGB                                                                  */
    int         taln;        /**< text alignment with respect to x,y                                   */
    int         ldir;        /**< language diretion LDIR_*                                             */
    int         italics;     /**< italics, as in FontConfig                                            */
@@ -297,3 +307,4 @@ int           trinfo_append_out(TR_INFO *tri, char *src);
 #ifdef __cplusplus
 }
 #endif
+#endif /* _TEXT_REASSEMBLE_ */

@@ -17,8 +17,8 @@
 
 /*
 File:      uemf_endian.h
-Version:   0.0.10
-Date:      11-JAN-2013
+Version:   0.0.12
+Date:      14-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -129,8 +129,8 @@ void trivertex_swap(
       unsigned int count
    ){
    for(;count; count--, tv++){
-      U_swap4(tv,2);
-      U_swap2(&(tv->Red),4);
+      U_swap4(tv,2);          /* x,y */
+      U_swap2(&(tv->Red),4);  /* Red, Green, Blue, Alpha */
    }
 }
 
@@ -155,7 +155,7 @@ void gradient4_swap(
       PU_GRADIENT4 g4,
       unsigned int count
    ){
-   U_swap4(g4,4*count);
+   U_swap4(g4,2*count); //a gradient4 object has 2 int4's, NOT 4!
 }
 
 /**
@@ -635,9 +635,10 @@ void U_EMRHEADER_swap(char *record, int torev){
    PU_EMRHEADER pEmr = (PU_EMRHEADER)(record);
    if(torev){
      nSize = pEmr->emr.nSize;
+     core5_swap(record, torev);
    }
-   core5_swap(record, torev);
-   if(!torev){
+   else {
+     core5_swap(record, torev);
      nSize = pEmr->emr.nSize;
    }
 
@@ -647,9 +648,10 @@ void U_EMRHEADER_swap(char *record, int torev){
    if(torev){
       nDesc = pEmr->nDescription;
       offDesc = pEmr->offDescription;
+      U_swap4(&(pEmr->nDescription), 3);       // nDescription offDescription nPalEntries 
    } 
-   U_swap4(&(pEmr->nDescription), 3);       // nDescription offDescription nPalEntries 
-   if(!torev){
+   else {
+      U_swap4(&(pEmr->nDescription), 3);       // nDescription offDescription nPalEntries 
       nDesc = pEmr->nDescription;
       offDesc = pEmr->offDescription;
    } 
@@ -662,9 +664,10 @@ void U_EMRHEADER_swap(char *record, int torev){
         cbPix = pEmr->cbPixelFormat;
         offPix = pEmr->offPixelFormat;
         if(cbPix)pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));
+        U_swap4(&(pEmr->cbPixelFormat), 2);      // cbPixelFormat offPixelFormat 
      }
-     U_swap4(&(pEmr->cbPixelFormat), 2);      // cbPixelFormat offPixelFormat 
-     if(!torev){
+     else {
+        U_swap4(&(pEmr->cbPixelFormat), 2);      // cbPixelFormat offPixelFormat 
         cbPix = pEmr->cbPixelFormat;
         offPix = pEmr->offPixelFormat;
         if(cbPix)pixelformatdescriptor_swap( (PU_PIXELFORMATDESCRIPTOR) (record + pEmr->offPixelFormat));

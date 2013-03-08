@@ -26,7 +26,11 @@
 # include "config.h"
 #endif
 
-#define  EMF_DRIVER
+#include <png.h>   //This must precede text_reassemble.h or it blows up in pngconf.h when compiling
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#define  EMF_DRIVER // work around for SPStyle issue
 #include "sp-root.h"
 #include "sp-path.h"
 #include "style.h"
@@ -43,15 +47,9 @@
 #include "document.h"
 #include "libunicode-convert/unicode-convert.h"
 
-#include <png.h>   //This must precede text_reassemble.h or it blows up in pngconf.h when compiling
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
 
 #include "emf-print.h"
 #include "emf-inout.h"
-#include "uemf.h"
-#include "text_reassemble.h"
 
 #define PRINT_EMF "org.inkscape.print.emf"
 
@@ -87,33 +85,11 @@ Originally here, but moved up
 #include <stdint.h>
 */
     
-/* A coloured pixel. */
-
-typedef struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-    uint8_t opacity;
-} pixel_t;
-
-/* A picture. */
-    
-typedef struct  {
-    pixel_t *pixels;
-    size_t width;
-    size_t height;
-} bitmap_t;
-    
-/* structure to store PNG image bytes */
-typedef struct {
-      char *buffer;
-      size_t size;
-} MEMPNG, *PMEMPNG;
 
 /* Given "bitmap", this returns the pixel of bitmap at the point 
    ("x", "y"). */
 
-static pixel_t * pixel_at (bitmap_t * bitmap, int x, int y)
+pixel_t * Emf::pixel_at (bitmap_t * bitmap, int x, int y)
 {
     return bitmap->pixels + bitmap->width * y + x;
 }
@@ -123,7 +99,7 @@ static pixel_t * pixel_at (bitmap_t * bitmap, int x, int y)
    success, non-zero on error. */
 
 void
-my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+Emf::my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
   PMEMPNG p=(PMEMPNG)png_get_io_ptr(png_ptr);
    
@@ -143,7 +119,7 @@ my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
   p->size += length;
 }
 
-void toPNG(PMEMPNG accum, int width, int height, char *px){
+void Emf::toPNG(PMEMPNG accum, int width, int height, char *px){
     bitmap_t bmstore;
     bitmap_t *bitmap=&bmstore;
     accum->buffer=NULL;  // PNG constructed in memory will end up here, caller must free().
@@ -230,7 +206,7 @@ void toPNG(PMEMPNG accum, int width, int height, char *px){
 /* convert an EMF RGB(A) color to 0RGB
 inverse of gethexcolor() in emf-print.cpp
 */
-uint32_t sethexcolor(U_COLORREF color){
+uint32_t Emf::sethexcolor(U_COLORREF color){
 
     uint32_t out;
     out = (U_RGBAGetR(color) << 16) + 
@@ -261,8 +237,8 @@ Emf::check (Inkscape::Extension::Extension * /*module*/)
 }
 
 
-static void
-emf_print_document_to_file(SPDocument *doc, gchar const *filename)
+void
+Emf::print_document_to_file(SPDocument *doc, gchar const *filename)
 {
     Inkscape::Extension::Print *mod;
     SPPrintContext context;
@@ -338,7 +314,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("FixImageRot",new_FixImageRot);
     ext->set_param_bool("textToPath", new_val);
 
-    emf_print_document_to_file(doc, filename);
+    print_document_to_file(doc, filename);
 
     return;
 }
@@ -346,85 +322,11 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 
 enum drawmode {DRAW_PAINT, DRAW_PATTERN, DRAW_IMAGE};  // apply to either fill or stroke
 
-typedef struct {
-    int type;
-    int level;
-    char *lpEMFR;
-} EMF_OBJECT, *PEMF_OBJECT;
 
-typedef struct {
-    int size;         // number of slots allocated in strings
-    int count;        // number of slots used in strings
-    char **strings;   // place to store strings
-} EMF_STRINGS, *PEMF_STRINGS;
-
-typedef struct emf_device_context {
-    struct SPStyle style;
-    char *font_name;
-    bool stroke_set;
-    int  stroke_mode;  // enumeration from drawmode, not used if fill_set is not True
-    int  stroke_idx;   // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
-    bool fill_set;
-    int  fill_mode;    // enumeration from drawmode, not used if fill_set is not True
-    int  fill_idx;     // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
-
-    U_SIZEL sizeWnd;
-    U_SIZEL sizeView;
-    U_POINTL winorg;
-    U_POINTL vieworg;
-    double ScaleInX, ScaleInY;
-    double ScaleOutX, ScaleOutY;
-    U_COLORREF textColor;
-    U_COLORREF bkColor;
-    uint32_t textAlign;
-    U_XFORM worldTransform;
-    U_POINTL cur;
-} EMF_DEVICE_CONTEXT, *PEMF_DEVICE_CONTEXT;
-
-#define EMF_MAX_DC 128
-
-
-typedef struct emf_callback_data {
-    Glib::ustring *outsvg;
-    Glib::ustring *path;
-    Glib::ustring *outdef;
-    Glib::ustring *defs;
-
-    EMF_DEVICE_CONTEXT dc[EMF_MAX_DC+1]; // FIXME: This should be dynamic..
-    int level;
-    
-    double E2IdirY;               // EMF Y direction relative to Inkscape Y direction.  Will be negative for MM_LOMETRIC etc.
-    double D2PscaleX,D2PscaleY;   // EMF device to Inkscape Page scale.
-    float  MM100InX, MM100InY;    // size of the drawing in hundredths of a millimeter
-    float  PixelsInX, PixelsInY;  // size of the drawing, in EMF device pixels
-    float  PixelsOutX, PixelsOutY;// size of the drawing, in Inkscape pixels
-    double ulCornerInX,ulCornerInY;     // Upper left corner, from header rclBounds, in logical units
-    double ulCornerOutX,ulCornerOutY;   // Upper left corner, in Inkscape pixels
-    uint32_t mask;                // Draw properties
-    int arcdir;                   //U_AD_COUNTERCLOCKWISE 1 or U_AD_CLOCKWISE 2
-    
-    uint32_t dwRop2;              // Binary raster operation, 0 if none (use brush/pen unmolested)
-    uint32_t dwRop3;              // Ternary raster operation, 0 if none (use brush/pen unmolested)
-
-    float MMX;
-    float MMY;
-
-    unsigned int id;
-    unsigned int drawtype;  // one of 0 or U_EMR_FILLPATH, U_EMR_STROKEPATH, U_EMR_STROKEANDFILLPATH
-    char *pDesc;
-                              // both of these end up in <defs> under the names shown here.  These structures allow duplicates to be avoided.
-    EMF_STRINGS hatches;      // hold pattern names, all like EMFhatch#_$$$$$$ where # is the EMF hatch code and $$$$$$ is the color
-    EMF_STRINGS images;       // hold images, all like Image#, where # is the slot the image lives.
-    TR_INFO    *tri;          // Text Reassembly data structure
-
-
-    int n_obj;
-    PEMF_OBJECT emf_obj;
-} EMF_CALLBACK_DATA, *PEMF_CALLBACK_DATA;
 
 /* given the transformation matrix from worldTranform return the scale in the matrix part.  Assumes that the
    matrix is not used to skew, invert, or make another distorting transformation.  */
-double current_scale(PEMF_CALLBACK_DATA d){
+double Emf::current_scale(PEMF_CALLBACK_DATA d){
    double scale = d->dc[d->level].worldTransform.eM11 * d->dc[d->level].worldTransform.eM22 - 
                   d->dc[d->level].worldTransform.eM12 * d->dc[d->level].worldTransform.eM21;
    if(scale <= 0.0)scale=1.0;  /* something is dreadfully wrong with the matrix, but do not crash over it */
@@ -437,7 +339,7 @@ double current_scale(PEMF_CALLBACK_DATA d){
    rotating objects when the location of at least one point in that object is known. Returns:
    "matrix(a,b,c,d,e,f)"  (WITH the double quotes)
 */
-static std::string current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int useoffset){
+std::string Emf::current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int useoffset){
    std::stringstream cxform;
    double scale = current_scale(d);
    cxform << "\"matrix(";
@@ -461,20 +363,20 @@ static std::string current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int 
 
 /* given the transformation matrix from worldTranform return the rotation angle in radians.
   counter clocwise from the x axis.  */
-double current_rotation(PEMF_CALLBACK_DATA d){
+double Emf::current_rotation(PEMF_CALLBACK_DATA d){
     return -std::atan2(d->dc[d->level].worldTransform.eM12, d->dc[d->level].worldTransform.eM11);
 }
 
 /*  Add another 100 blank slots to the hatches array.
 */
-void enlarge_hatches(PEMF_CALLBACK_DATA d){
+void Emf::enlarge_hatches(PEMF_CALLBACK_DATA d){
    d->hatches.size += 100;
    d->hatches.strings = (char **) realloc(d->hatches.strings,d->hatches.size + sizeof(char *));
 }
 
 /*  See if the pattern name is already in the list.  If it is return its position (1->n, not 1-n-1)
 */
-int in_hatches(PEMF_CALLBACK_DATA d, char *test){
+int Emf::in_hatches(PEMF_CALLBACK_DATA d, char *test){
    int i;
    for(i=0; i<d->hatches.count; i++){
      if(strcmp(test,d->hatches.strings[i])==0)return(i+1);
@@ -485,7 +387,7 @@ int in_hatches(PEMF_CALLBACK_DATA d, char *test){
 /*  (Conditionally) add a hatch.  If a matching hatch already exists nothing happens.  If one
     does not exist it is added to the hatches list and also entered into <defs>. 
 */
-uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchColor){
+uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchColor){
    char hatchname[64]; // big enough
    char hrotname[64];  // big enough
    char tmpcolor[8];
@@ -633,14 +535,14 @@ uint32_t add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchCol
 
 /*  Add another 100 blank slots to the images array.
 */
-void enlarge_images(PEMF_CALLBACK_DATA d){
+void Emf::enlarge_images(PEMF_CALLBACK_DATA d){
    d->images.size += 100;
    d->images.strings = (char **) realloc(d->images.strings,d->images.size + sizeof(char *));
 }
 
 /*  See if the image string is already in the list.  If it is return its position (1->n, not 1-n-1)
 */
-int in_images(PEMF_CALLBACK_DATA d, char *test){
+int Emf::in_images(PEMF_CALLBACK_DATA d, char *test){
    int i;
    for(i=0; i<d->images.count; i++){
      if(strcmp(test,d->images.strings[i])==0)return(i+1);
@@ -654,7 +556,8 @@ int in_images(PEMF_CALLBACK_DATA d, char *test){
     U_EMRCREATEMONOBRUSH records only work when the bitmap is monochrome.  If we hit one that isn't
       set idx to 2^32-1 and let the caller handle it.
 */
-uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t cbBmi, uint32_t iUsage, uint32_t offBits, uint32_t offBmi){
+uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t cbBmi, 
+   uint32_t iUsage, uint32_t offBits, uint32_t offBmi){
        
    uint32_t idx;
    char imagename[64]; // big enough
@@ -665,10 +568,11 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
    MEMPNG mempng; // PNG in memory comes back in this
    mempng.buffer = NULL;
    
-   char *rgba_px=NULL;     // RGBA pixels
-   char *px=NULL;          // DIB pixels
+   char            *rgba_px = NULL;     // RGBA pixels
+   const char      *px      = NULL;     // DIB pixels
+   const U_RGBQUAD *ct      = NULL;     // DIB color table
+   U_RGBQUAD        ct2[2];
    uint32_t width, height, colortype, numCt, invert;
-   PU_RGBQUAD ct = NULL;
    if(!cbBits || 
       !cbBmi  ||                                                                                    
       (iUsage != U_DIB_RGB_COLORS) ||                                                               
@@ -677,7 +581,7 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
           offBits,                                                                                  
           offBmi,                                                                                   
          &px,                                                                                       
-         &ct,                                                                                       
+         (const U_RGBQUAD **) &ct,                                                                                       
          &numCt,                                                                                    
          &width,                                                                                    
          &height,                                                                                   
@@ -688,9 +592,10 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
 
       // U_EMRCREATEMONOBRUSH uses text/bk colors instead of what is in the color map.              
       if(((PU_EMR)pEmr)->iType == U_EMR_CREATEMONOBRUSH){                                                 
-         if(numCt==2){                                                                              
-            ct[0] =  U_RGB2BGR(d->dc[d->level].textColor);                                          
-            ct[1] =  U_RGB2BGR(d->dc[d->level].bkColor); 
+         if(numCt==2){
+            ct2[0] =  U_RGB2BGR(d->dc[d->level].textColor);                                          
+            ct2[1] =  U_RGB2BGR(d->dc[d->level].bkColor); 
+            ct     =  &ct2[0];
          }                                                                                          
          else {  // createmonobrush renders on other platforms this way                             
             return(0xFFFFFFFF);                                                                     
@@ -812,8 +717,8 @@ uint32_t add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t 
 }
 
 
-static void
-output_style(PEMF_CALLBACK_DATA d, int iType)
+void
+Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
 {
 //    SVGOStringStream tmp_id;
     SVGOStringStream tmp_style;
@@ -1000,8 +905,8 @@ output_style(PEMF_CALLBACK_DATA d, int iType)
 }
 
 
-static double
-_pix_x_to_point(PEMF_CALLBACK_DATA d, double px)
+double
+Emf::_pix_x_to_point(PEMF_CALLBACK_DATA d, double px)
 {
     double scale = (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0);
     double tmp;
@@ -1010,8 +915,8 @@ _pix_x_to_point(PEMF_CALLBACK_DATA d, double px)
     return(tmp);
 }
 
-static double
-_pix_y_to_point(PEMF_CALLBACK_DATA d, double py)
+double
+Emf::_pix_y_to_point(PEMF_CALLBACK_DATA d, double py)
 {
     double scale = (d->dc[d->level].ScaleInY ? d->dc[d->level].ScaleInY : 1.0);
     double tmp;
@@ -1021,8 +926,8 @@ _pix_y_to_point(PEMF_CALLBACK_DATA d, double py)
 }
 
 
-static double
-pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py)
+double
+Emf::pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py)
 {
     double wpx = px * d->dc[d->level].worldTransform.eM11 + py * d->dc[d->level].worldTransform.eM21 + d->dc[d->level].worldTransform.eDx;
     double x   = _pix_x_to_point(d, wpx);
@@ -1030,8 +935,8 @@ pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py)
     return x;
 }
 
-static double
-pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
+double
+Emf::pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 {
 
     double wpy = px * d->dc[d->level].worldTransform.eM12 + py * d->dc[d->level].worldTransform.eM22 + d->dc[d->level].worldTransform.eDy;
@@ -1041,8 +946,8 @@ pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 
 }
 
-static double
-pix_to_abs_size(PEMF_CALLBACK_DATA d, double px)
+double
+Emf::pix_to_abs_size(PEMF_CALLBACK_DATA d, double px)
 {
     double  ppx = fabs(px * (d->dc[d->level].ScaleInX ? d->dc[d->level].ScaleInX : 1.0) * d->D2PscaleX * current_scale(d));
     return ppx;
@@ -1050,7 +955,7 @@ pix_to_abs_size(PEMF_CALLBACK_DATA d, double px)
 
 /* returns "x,y" (without the quotes) in inkscape coordinates for a pair of EMF x,y coordinates
 */
-static std::string pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y){
+std::string Emf::pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y){
    std::stringstream cxform;
    cxform << pix_to_x_point(d,x,y);
    cxform << ",";
@@ -1059,8 +964,8 @@ static std::string pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y){
 }
 
 
-static void
-select_pen(PEMF_CALLBACK_DATA d, int index)
+void
+Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
 {
     PU_EMRCREATEPEN pEmr = NULL;
 
@@ -1174,8 +1079,8 @@ select_pen(PEMF_CALLBACK_DATA d, int index)
 }
 
 
-static void
-select_extpen(PEMF_CALLBACK_DATA d, int index)
+void
+Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
 {
     PU_EMREXTCREATEPEN pEmr = NULL;
 
@@ -1350,8 +1255,8 @@ select_extpen(PEMF_CALLBACK_DATA d, int index)
 }
 
 
-static void
-select_brush(PEMF_CALLBACK_DATA d, int index)
+void
+Emf::select_brush(PEMF_CALLBACK_DATA d, int index)
 {
     uint32_t                          tidx;
     uint32_t                          iType;
@@ -1396,8 +1301,8 @@ select_brush(PEMF_CALLBACK_DATA d, int index)
 }
 
 
-static void
-select_font(PEMF_CALLBACK_DATA d, int index)
+void
+Emf::select_font(PEMF_CALLBACK_DATA d, int index)
 {
     PU_EMREXTCREATEFONTINDIRECTW pEmr = NULL;
 
@@ -1455,8 +1360,8 @@ select_font(PEMF_CALLBACK_DATA d, int index)
     d->dc[d->level].style.baseline_shift.value = ((pEmr->elfw.elfLogFont.lfEscapement + 3600) % 3600) / 10;   // use baseline_shift instead of text_transform to avoid overflow
 }
 
-static void
-delete_object(PEMF_CALLBACK_DATA d, int index)
+void
+Emf::delete_object(PEMF_CALLBACK_DATA d, int index)
 {
     if (index >= 0 && index < d->n_obj) {
         d->emf_obj[index].type = 0;
@@ -1471,8 +1376,8 @@ delete_object(PEMF_CALLBACK_DATA d, int index)
 }
 
 
-static void
-insert_object(PEMF_CALLBACK_DATA d, int index, int type, PU_ENHMETARECORD pObj)
+void
+Emf::insert_object(PEMF_CALLBACK_DATA d, int index, int type, PU_ENHMETARECORD pObj)
 {
     if (index >= 0 && index < d->n_obj) {
         delete_object(d, index);
@@ -1485,7 +1390,7 @@ insert_object(PEMF_CALLBACK_DATA d, int index, int type, PU_ENHMETARECORD pObj)
 /* Identify probable Adobe Illustrator produced EMF files, which do strange things with the scaling. 
    The few so far observed all had this format.
 */
-int AI_hack(PU_EMRHEADER pEmr){
+int Emf::AI_hack(PU_EMRHEADER pEmr){
   int ret=0;
   char *ptr;
   ptr = (char *)pEmr;
@@ -1506,7 +1411,7 @@ int AI_hack(PU_EMRHEADER pEmr){
   \fn create a UTF-32LE buffer and fill it with UNICODE unknown character
   \param count number of copies of the Unicode unknown character to fill with
 */
-uint32_t *unknown_chars(size_t count){
+uint32_t *Emf::unknown_chars(size_t count){
    uint32_t *res = (uint32_t *) malloc(sizeof(uint32_t) * (count + 1));
    if(!res)throw "Inkscape fatal memory allocation error - cannot continue";
    for(uint32_t i=0; i<count; i++){ res[i] = 0xFFFD; }
@@ -1530,7 +1435,7 @@ uint32_t *unknown_chars(size_t count){
   \param offBmi
   \param cbBmi
 */
-void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
+void Emf::common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
        double dx, double dy, double dw, double dh, int sx, int sy, int sw, int sh,  
        uint32_t iUsage, uint32_t offBits, uint32_t cbBits, uint32_t offBmi, uint32_t cbBmi){
 
@@ -1545,11 +1450,11 @@ void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
    MEMPNG mempng; // PNG in memory comes back in this
    mempng.buffer = NULL;
    
-   char *rgba_px=NULL;     // RGBA pixels
-   char *sub_px=NULL;      // RGBA pixels, subarray
-   char *px=NULL;          // DIB pixels
+   char             *rgba_px = NULL;     // RGBA pixels
+   char             *sub_px  = NULL;     // RGBA pixels, subarray
+   const char       *px      = NULL;     // DIB pixels
+   const U_RGBQUAD  *ct      = NULL;     // DIB color table
    uint32_t width, height, colortype, numCt, invert;
-   PU_RGBQUAD ct = NULL;
    if(!cbBits || 
       !cbBmi  || 
       (iUsage != U_DIB_RGB_COLORS) || 
@@ -1558,7 +1463,7 @@ void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
           offBits,
           offBmi,
          &px,
-         &ct,
+         (const U_RGBQUAD **) &ct,                                                                                       
          &numCt,
          &width,
          &height,
@@ -1643,7 +1548,7 @@ void common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
   \param d   Inkscape data structures returned by this call
 */
 //THis was a callback, just build it into a normal function
-int myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
+int Emf::myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
 {
     uint32_t         off=0;
     uint32_t         emr_mask;
@@ -1661,7 +1566,10 @@ int myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d)
     tsp.vadvance   = 0.0;  /* meaningful only when a complex contains two or more lines */
     tsp.taln       = ALILEFT + ALIBASE;
     tsp.ldir       = LDIR_LR;
-    tsp.color      = 0;    /* RGBA Black */
+    tsp.color.Red       = 0;    /* RGB Black */
+    tsp.color.Green     = 0;    /* RGB Black */
+    tsp.color.Blue      = 0;    /* RGB Black */
+    tsp.color.Reserved  = 0;    /* not used  */
     tsp.italics    = 0;
     tsp.weight     = 80;
     tsp.condensed  = 100;
@@ -1859,8 +1767,7 @@ std::cout << "BEFORE DRAW"
             for (i=1; i<pEmr->cptl; ) {
                 tmp_str << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cptl; j++,i++) {
-                    tmp_str <<
-                        pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y ) << " ";
+                    tmp_str << pix_to_xy( d, pEmr->aptl[i].x, pEmr->aptl[i].y) << " ";
                 }
             }
 
@@ -1976,13 +1883,11 @@ std::cout << "BEFORE DRAW"
             for (n=0; n<pEmr->nPolys && i<pEmr->cptl; n++) {
                 SVGOStringStream poly_path;
 
-                poly_path << "\n\tM " <<
-                    pix_to_xy( d, aptl[i].x, aptl[i].y ) << " ";
+                poly_path << "\n\tM " << pix_to_xy( d, aptl[i].x, aptl[i].y) << " ";
                 i++;
 
                 for (j=1; j<pEmr->aPolyCounts[n] && i<pEmr->cptl; j++) {
-                    poly_path << "\n\tL " <<
-                        pix_to_xy( d, aptl[i].x, aptl[i].y ) << " ";
+                    poly_path << "\n\tL " << pix_to_xy( d, aptl[i].x, aptl[i].y) << " ";
                     i++;
                 }
 
@@ -2184,8 +2089,7 @@ std::cout << "BEFORE DRAW"
             d->dc[d->level].cur = pEmr->ptl;
 
             tmp_path <<
-                "\n\tM " <<
-                pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
+                "\n\tM " << pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
             break;
         }
         case U_EMR_SETMETARGN:           dbg_str << "<!-- U_EMR_SETMETARGN -->\n";         break;
@@ -2673,8 +2577,7 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
 
             tmp_path <<
-                "\n\tL " <<
-                pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y ) << " ";
+                "\n\tL " << pix_to_xy( d, pEmr->ptl.x, pEmr->ptl.y) << " ";
             break;
         }
         case U_EMR_ARCTO:
@@ -3009,8 +2912,8 @@ std::cout << "BEFORE DRAW"
             msdepua(dup_wt); //convert everything in Microsoft's private use area.  For Symbol, Wingdings, Dingbats
 
             if(NonToUnicode(dup_wt, d->dc[d->level].font_name)){
-               g_free(d->dc[d->level].font_name);
-               d->dc[d->level].font_name =  g_strdup("Times New Roman");
+               free(d->dc[d->level].font_name);
+               d->dc[d->level].font_name =  strdup("Times New Roman");
             }
 
             char *ansi_text;
@@ -3028,9 +2931,12 @@ std::cout << "BEFORE DRAW"
 
                 gchar *escaped_text = g_markup_escape_text(ansi_text, -1);
 
-                tsp.x       = x*0.8;  // TERE expects sizes in points.
-                tsp.y       = y*0.8;
-                memcpy(&tsp.color, &d->dc[d->level].textColor, sizeof(uint32_t)); //It is already an RGBA binary value, but compiler is picky about types
+                tsp.x              = x*0.8;  // TERE expects sizes in points.
+                tsp.y              = y*0.8;
+                tsp.color.Red      = d->dc[d->level].textColor.Red;
+                tsp.color.Green    = d->dc[d->level].textColor.Green;
+                tsp.color.Blue     = d->dc[d->level].textColor.Blue;
+                tsp.color.Reserved = 0;
                 switch(d->dc[d->level].style.font_style.value){
                   case SP_CSS_FONT_STYLE_OBLIQUE:
                      tsp.italics = FC_SLANT_OBLIQUE; break;
@@ -3179,7 +3085,7 @@ std::cout << "BEFORE DRAW"
             for (i=0; i<pEmr->cpts;) {
                 tmp_path << "\n\tC ";
                 for (j=0; j<3 && i<pEmr->cpts; j++,i++) {
-                    tmp_path <<  pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                    tmp_path << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
                 }
             }
 
@@ -3196,7 +3102,7 @@ std::cout << "BEFORE DRAW"
             d->mask |= emr_mask;
 
             for (i=0; i<pEmr->cpts;i++) {
-                tmp_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                tmp_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
             }
 
             break;
@@ -3220,11 +3126,11 @@ std::cout << "BEFORE DRAW"
             for (n=0; n<pEmr->nPolys && i<pEmr->cpts; n++) {
                 SVGOStringStream poly_path;
 
-                poly_path << "\n\tM " <<  pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                poly_path << "\n\tM " << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
                 i++;
 
                 for (j=1; j<pEmr->aPolyCounts[n] && i<pEmr->cpts; j++) {
-                    poly_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y ) << " ";
+                    poly_path << "\n\tL " << pix_to_xy( d, apts[i].x, apts[i].y) << " ";
                     i++;
                 }
 
@@ -3344,7 +3250,7 @@ typedef struct
 } APMHEADER, *PAPMHEADER;
 #pragma pack( pop )
 
-void free_emf_strings(EMF_STRINGS name){
+void Emf::free_emf_strings(EMF_STRINGS name){
    if(name.count){
       for(int i=0; i< name.count; i++){ free(name.strings[i]); }
       free(name.strings);
@@ -3356,7 +3262,8 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 {
     EMF_CALLBACK_DATA d;
 
-    memset(&d, 0, sizeof(d));
+//    memset(&d, 0, sizeof(d));
+    memset(&d, 0, sizeof(EMF_CALLBACK_DATA));
 
     for(int i = 0; i < EMF_MAX_DC+1; i++){  // be sure all values and pointers are empty to start with
        memset(&(d.dc[i]),0,sizeof(EMF_DEVICE_CONTEXT));

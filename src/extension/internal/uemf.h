@@ -13,8 +13,8 @@
 
 /*
 File:      uemf.h
-Version:   0.0.12
-Date:      17-JAN-2013
+Version:   0.0.19
+Date:      20-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -49,16 +49,6 @@ extern "C" {
 //  ***********************************************************************************
 //  Value enumerations and other predefined constants, alphabetical order by group
 
-/** \defgroup U_MF_Qualifiers Metafile Enumeration
-  For EMFHANDLES mftype field
-  @{
-*/
-#define U_MFT_WMF        1    //!< 16 bit windows metafile
-#define U_MFT_EMF        2    //!< 32 bit enhanced windows metafile
-#define U_MFT_EMFP       3    //!< EMF plus (reserved, not implemented yet)
-#define U_MFT_MAX        3
-#define U_MFT_MIN        1
-/** @} */
 
 /** \defgroup Font_struct_widths Font name and style widths in characters
   For U_LOGFONT and U_LOGFONT_PANOSE, 
@@ -215,6 +205,7 @@ extern "C" {
 #define U_DRAW_PATH       0x040           //!< An explicit path is being used (with a BEGIN and END)
 #define U_DRAW_TEXT       0x080           //!< Current record forces all pending text to be drawn first.
 #define U_DRAW_OBJECT     0x100           //!< Creates an Object (only used in WMF)
+#define U_DRAW_NOFILL     0x200           //!< Object is not fillable (lines and arc, only used in WMF)
 
 /** @} */
 /** \defgroup U_EMRSETARCDIRECTION_Qualifiers  ArcDirection Enumeration
@@ -1159,8 +1150,6 @@ extern "C" {
 
 // Utility macros
 #define UP4(A) (4 * ((A + 3 ) / 4))                             //!< Round up to nearest multiple of 4
-
-#define U_MFT_MISMATCH(A,B) (A->mftype != B)                    //!< A is [EW]MFHANDLES and B is Metafile enumeration
 
 /** @} */
 
@@ -2571,14 +2560,14 @@ typedef struct {
 } EMFTRACK;
 
 /**
-  The various create functions need a place to put their handles, which here are stored in the table below.
+  The various create functions need a place to put their handles, these are stored in the table below.
   We don't actually do anything much with these handles, that is up to whatever program finally plays back the EMF, but
   we do need to keep track of the numbers so that they are not accidentally reused.  This structure is used for that,
   and all *_set functions that touch a handle reference it.
   
   Stock objects are not used in this limited model, so libUEMF cannot detect if a handle is still in use.  Nor can it
-  tell when a handle has been deselected, but selecting another handle for the same type of graphic object, and thus
-  made deleteable.  End user code must keep track of this for itself.
+  tell when a handle has been deselected (by selecting another handle for the same type of graphic object, and thus
+  made deleteable).  End user code must keep track of this for itself.
 */
 typedef struct {
     uint32_t           *table;              //!< Array Buffer for constructing the EMF in memory 
@@ -2588,7 +2577,6 @@ typedef struct {
     uint32_t            sptr;               //!< Pointer to next available handle in the stack
     uint32_t            top;                //!< Highest slot occupied (currently)
     uint32_t            peak;               //!< Highest slot occupied (ever)
-    uint32_t            mftype;             //!< Metafile type, see Metafile Enumeration (used to block erroneous calls, wmf=>emf, for instance)
 } EMFHANDLES;
 
 /**
@@ -2604,7 +2592,7 @@ typedef struct {
 // ************************************************************************************************
 // Prototypes
 
-int  memprobe(void *buf, size_t size);
+int  memprobe(const void *buf, size_t size);
 void wchar8show(const char *src);
 void wchar16show(const uint16_t *src);
 void wchar32show(const uint32_t *src);
@@ -2616,12 +2604,16 @@ char     *U_emr_names(unsigned int idx);
 uint32_t *dx_set(int32_t height,  uint32_t weight, uint32_t members);
 uint32_t  emr_properties(uint32_t type);
 int       emr_arc_points(PU_ENHMETARECORD record, int *f1, int f2, PU_PAIRF center, PU_PAIRF start, PU_PAIRF end, PU_PAIRF size);
-int       RGBA_to_DIB( char **px, uint32_t *cbPx, PU_RGBQUAD *ct, int *numCt, 
-               char *rgba_px, int w, int h, int stride, uint32_t colortype, int use_ct, int invert);
+int       emr_arc_points_common(PU_RECTL rclBox,  PU_POINTL ArcStart, PU_POINTL ArcEnd,
+               int *f1, int f2, PU_PAIRF center, PU_PAIRF start, PU_PAIRF end, PU_PAIRF size);
+int       get_real_color_count(const char *Bmih);
+int       get_real_color_icount(int Colors, int BitCount, int Width, int Height);
+int       RGBA_to_DIB(char **px, uint32_t *cbPx, PU_RGBQUAD *ct, int *numCt, 
+               const char *rgba_px, int w, int h, int stride, uint32_t colortype, int use_ct, int invert);
 int       get_DIB_params( void *pEmr, uint32_t offBitsSrc, uint32_t offBmiSrc, 
-               char **px, PU_RGBQUAD *ct, uint32_t *numCt, 
+               const char **px, const U_RGBQUAD **ct, uint32_t *numCt, 
                uint32_t *width, uint32_t *height, uint32_t *colortype, uint32_t *invert );
-int       DIB_to_RGBA(char *px, PU_RGBQUAD ct, int numCt,
+int       DIB_to_RGBA(const char *px, const U_RGBQUAD *ct, int numCt,
                char **rgba_px, int w, int h, uint32_t colortype, int use_ct, int invert);
 char     *RGBA_to_RGBA(char *rgba_px, int w, int h, int sl, int st, int *ew, int *eh);
 
@@ -2635,11 +2627,17 @@ int   emf_append(U_ENHMETARECORD *rec, EMFTRACK *et, int freerec);
 int   emf_readdata(const char *filename, char **contents, size_t *length);   
 FILE *emf_fopen(const char *filename, const int mode);
 
-int   htable_create(uint32_t initsize, uint32_t chunksize, EMFHANDLES **eht);
-int   htable_delete(uint32_t *ih, EMFHANDLES *eht);
-int   htable_insert(uint32_t *ih, EMFHANDLES *eht);
-int   htable_free(EMFHANDLES **eht);
-int   htable_mftype(uint32_t type, EMFHANDLES *eht);
+
+/* use these instead*/
+int   emf_htable_create(uint32_t initsize, uint32_t chunksize, EMFHANDLES **eht);
+int   emf_htable_delete(uint32_t *ih, EMFHANDLES *eht);
+int   emf_htable_insert(uint32_t *ih, EMFHANDLES *eht);
+int   emf_htable_free(EMFHANDLES **eht);
+/* Deprecated forms */
+#define   htable_create  emf_htable_create
+#define   htable_delete  emf_htable_delete
+#define   htable_insert  emf_htable_insert
+#define   htable_free    emf_htable_free
 
 U_RECTL          rectl_set(U_POINTL ul, U_POINTL lr);
 U_SIZEL          sizel_set(int32_t  x,  int32_t  y);
@@ -2699,9 +2697,9 @@ PU_POINT16   point_to_point16(PU_POINT   points, int count);
 
 U_RECT findbounds(uint32_t count, PU_POINT pts, uint32_t width);
 U_RECT findbounds16(uint32_t count, PU_POINT16 pts, uint32_t width);
-char *emr_dup(char *emr);
+char *emr_dup(const char *emr);
 
-char *textcomment_set(char *string);
+char *textcomment_set(const char *string);
 
 // These generate the handle and then call the underlying function
 char *deleteobject_set(uint32_t *ihObject, EMFHANDLES *eht); 

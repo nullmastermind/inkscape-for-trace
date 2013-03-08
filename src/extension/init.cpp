@@ -34,6 +34,8 @@
 #include "internal/svgz.h"
 # include "internal/emf-inout.h"
 # include "internal/emf-print.h"
+# include "internal/wmf-inout.h"
+# include "internal/wmf-print.h"
 #ifdef HAVE_CAIRO_PDF
 # include "internal/cairo-renderer-pdf-out.h"
 # include "internal/cairo-png-out.h"
@@ -179,6 +181,8 @@ init()
 #endif
     Internal::PrintEmf::init();
     Internal::Emf::init();
+    Internal::PrintWmf::init();
+    Internal::Wmf::init();
     Internal::PovOutput::init();
     Internal::JavaFXOutput::init();
     Internal::OdfOutput::init();

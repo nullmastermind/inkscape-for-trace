@@ -14,8 +14,8 @@
 
 /*
 File:      uemf.c
-Version:   0.0.15
-Date:      01-FEB-2013
+Version:   0.0.21
+Date:      20-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -34,6 +34,7 @@ extern "C" {
 #include <string.h>
 #include <limits.h> // for INT_MAX, INT_MIN
 #include <math.h>   // for U_ROUND()
+#include <stddef.h> /* for offsetof() macro */
 #if 0
 #include <windef.h>    //Not actually used, looking for collisions
 #include <winnt.h>    //Not actually used, looking for collisions
@@ -196,7 +197,7 @@ definitions are not needed in end user code, so they are here rather than in uem
      if(!B)return(NULL);  /* size is derived from U_BIMAPINFO, but NOT from its size field, go figure*/ \
      C = F;\
      D = UP4(C);          /*  pixel array might not be a multiples of 4 bytes*/ \
-     E    = sizeof(U_BITMAPINFOHEADER) +  4 * B->bmiHeader.biClrUsed;  /*  bmiheader + colortable*/ \
+     E    = sizeof(U_BITMAPINFOHEADER) +  4 * get_real_color_count((const char *) &(B->bmiHeader));  /*  bmiheader + colortable*/ \
    }\
    else { C = 0; D = 0; E=0; }
 
@@ -255,8 +256,8 @@ These functions are used for development and debugging and should be be includie
     \param size length in bytes of buf!
 */
 int memprobe(
-      void   *buf,
-      size_t  size
+      const void   *buf,
+      size_t        size
    ){
    int sum=0;
    char *ptr=(char *)buf;
@@ -265,10 +266,10 @@ int memprobe(
 }
 
 /**
-    \brief Dump the eht structure.  Not for use in production code.
+    \brief Dump an EMFHANDLES structure.  Not for use in production code.
     \param string  Text to output before dumping eht structure
     \param handle  Handle
-    \param eht     eht structure to dump
+    \param eht     EMFHANDLES structure to dump
 */
 void dumpeht(
      char         *string, 
@@ -474,10 +475,12 @@ uint32_t emr_properties(uint32_t type){
 }
 
 /**
-    \brief Derive from an EMF arc, chord, or pie the center, start, and end points, and the bounding rectangle.
+    \brief Derive from bounding rect, start and end radials, for arc, chord, or pie, the center, start, and end points, and the bounding rectangle.
     
     \return 0 on success, other values on errors.
-    \param record     U_EMRPIE, U_EMRCHORD, or _EMRARC record
+    \param rclBox     bounding rectangle
+    \param ArcStart   start of arc
+    \param ArcEnd     end of arc
     \param f1         1 if rotation angle >= 180, else 0
     \param f2         Rotation direction, 1 if counter clockwise, else 0
     \param center     Center coordinates
@@ -485,8 +488,10 @@ uint32_t emr_properties(uint32_t type){
     \param end        End coordinates (point on the ellipse defined by rect)
     \param size       W,H of the x,y axes of the bounding rectangle.
 */
-int emr_arc_points(
-       PU_ENHMETARECORD  record,
+int emr_arc_points_common(
+       PU_RECTL          rclBox,
+       PU_POINTL         ArcStart,
+       PU_POINTL         ArcEnd,
        int              *f1,
        int               f2,
        PU_PAIRF          center,
@@ -501,15 +506,14 @@ int emr_arc_points(
     U_PAIRF radii;      // x,y radii of ellipse 
     U_PAIRF ratio;      // intermediate value
     float scale, cross;
-    PU_EMRARC pEmr = (PU_EMRARC) (record);
-    center->x   = ((float)(pEmr->rclBox.left   + pEmr->rclBox.right ))/2.0;
-    center->y   = ((float)(pEmr->rclBox.top    + pEmr->rclBox.bottom))/2.0;
-    size->x     =  (float)(pEmr->rclBox.right  - pEmr->rclBox.left );
-    size->y     =  (float)(pEmr->rclBox.bottom - pEmr->rclBox.top  );
-    estart.x    =  (float)(pEmr->ptlStart.x);
-    estart.y    =  (float)(pEmr->ptlStart.y);
-    eend.x      =  (float)(pEmr->ptlEnd.x);
-    eend.y      =  (float)(pEmr->ptlEnd.y);
+    center->x   = ((float)(rclBox->left   + rclBox->right ))/2.0;
+    center->y   = ((float)(rclBox->top    + rclBox->bottom))/2.0;
+    size->x     =  (float)(rclBox->right  - rclBox->left );
+    size->y     =  (float)(rclBox->bottom - rclBox->top  );
+    estart.x    =  (float)(ArcStart->x);
+    estart.y    =  (float)(ArcStart->y);
+    eend.x      =  (float)(ArcEnd->x);
+    eend.y      =  (float)(ArcEnd->y);
     radii.x     =  size->x/2.0;
     radii.y     =  size->y/2.0;
 
@@ -555,18 +559,43 @@ int emr_arc_points(
     //lastly figure out if the swept angle is >180 degrees or not, based on the direction of rotation
     //and the two unit vectors.
     
-    cross = start->x * end->y - start->y * end->x;
+    cross = vec_estart.x * vec_eend.y - vec_estart.y * vec_eend.x;
     if(!f2){  // counter clockwise rotation
-      if(cross >=0){ *f1 = 0; }
-      else {         *f1 = 1; }
-    }
-    else {
       if(cross >=0){ *f1 = 1; }
       else {         *f1 = 0; }
+    }
+    else {
+      if(cross >=0){ *f1 = 0; }
+      else {         *f1 = 1; }
     }
     
     
     return(0);
+}
+
+/**
+    \brief Derive from an EMF arc, chord, or pie the center, start, and end points, and the bounding rectangle.
+    
+    \return 0 on success, other values on errors.
+    \param record     U_EMRPIE, U_EMRCHORD, or _EMRARC record
+    \param f1         1 if rotation angle >= 180, else 0
+    \param f2         Rotation direction, 1 if counter clockwise, else 0
+    \param center     Center coordinates
+    \param start      Start coordinates (point on the ellipse defined by rect)
+    \param end        End coordinates (point on the ellipse defined by rect)
+    \param size       W,H of the x,y axes of the bounding rectangle.
+*/
+int emr_arc_points(
+       PU_ENHMETARECORD  record,
+       int              *f1,
+       int               f2,
+       PU_PAIRF          center,
+       PU_PAIRF          start,
+       PU_PAIRF          end,
+       PU_PAIRF          size
+    ){
+    PU_EMRARC pEmr = (PU_EMRARC) (record);
+    return emr_arc_points_common(&(pEmr->rclBox), &(pEmr->ptlStart), &(pEmr->ptlEnd), f1, f2, center, start, end, size );
 }
 
 /**
@@ -594,7 +623,7 @@ int RGBA_to_DIB(
        uint32_t   *cbPx,
        PU_RGBQUAD *ct,
        int        *numCt,
-       char       *rgba_px,
+       const char *rgba_px,
        int         w,
        int         h,
        int         stride,
@@ -608,7 +637,7 @@ int RGBA_to_DIB(
    int          istart, iend, iinc;
    uint8_t      r,g,b,a,tmp8;
    char        *pxptr;
-   char        *rptr;
+   const char  *rptr;
    int          found;
    int          usedbytes;
    U_RGBQUAD    color;
@@ -763,6 +792,60 @@ int RGBA_to_DIB(
 }
 
 /**
+    \brief Get the actual number of colors in the color table from the BitMapInfoHeader.  
+    BitmapInfoHeader may list 0 for some types which implies the maximum value.
+    If the image is big enough, that is set by the bit count, as in 256 for an 8
+    bit image.  
+    If the image is smaller it is set by width * height.
+    Note, this may be called by WMF code, so it is not safe to assume the data is aligned.
+    
+    \return Number of entries in the color table.
+    \param Bmih  char * pointer to the U_BITMAPINFOHEADER
+*/
+int get_real_color_count(
+       const char *Bmih
+   ){
+   int Colors, BitCount, Width, Height;
+   uint32_t  utmp4;
+   uint16_t  utmp2;
+   int32_t   tmp4;
+   char     *cBmih = (char *) Bmih;
+   memcpy(&utmp4, cBmih + offsetof(U_BITMAPINFOHEADER,biClrUsed),  4);  Colors   = utmp4;   
+   memcpy(&utmp2, cBmih + offsetof(U_BITMAPINFOHEADER,biBitCount), 2);  BitCount = utmp2;   
+   memcpy(&tmp4,  cBmih + offsetof(U_BITMAPINFOHEADER,biWidth),    4);  Width    = tmp4;   
+   memcpy(&tmp4,  cBmih + offsetof(U_BITMAPINFOHEADER,biHeight),   4);  Height   = tmp4;   
+   return(get_real_color_icount(Colors, BitCount, Width, Height));
+}
+
+/**
+    \brief Get the actual number of colors in the color table from the ClrUsed, BitCount, Width, and Height.  
+    BitmapInfoHeader may list 0 for some types which implies the maximum value.
+    If the image is big enough, that is set by the bit count, as in 256 for an 8
+    bit image.  
+    If the image is smaller it is set by width * height.
+    
+    \return Number of entries in the color table.
+    \param PU_BITMAPINFOHEADER pointer to to the U_BITMAPINFOHEADER
+*/
+int get_real_color_icount(
+       int Colors,
+       int BitCount,
+       int Width,
+       int Height
+   ){
+   int area = Width * Height;
+   if(area < 0){ area = -area; } /* Height might be negative */
+   if(Colors == 0){
+         if(     BitCount == U_BCBM_MONOCHROME){ Colors = 2;   }                                                                                          
+         else if(BitCount == U_BCBM_COLOR4    ){ Colors = 16;  }                                                                                          
+         else if(BitCount == U_BCBM_COLOR8    ){ Colors = 256; } 
+         if(Colors > area){  Colors = area; }
+   }
+   return(Colors);
+}
+
+
+/**
     \brief Get the DIB parameters from the BMI of the record for use by DBI_to_RGBA()
     
     \return BI_Compression Enumeration.  For anything other than U_BI_RGB values other than px may not be valid.
@@ -778,44 +861,39 @@ int RGBA_to_DIB(
     \param invert      If DIB rows are in opposite order from RGBA rows
 */
 int get_DIB_params(
-       void         *pEmr,
-       uint32_t      offBitsSrc,
-       uint32_t      offBmiSrc,
-       char        **px,
-       PU_RGBQUAD   *ct,
-       uint32_t     *numCt,
-       uint32_t     *width,
-       uint32_t     *height,
-       uint32_t     *colortype,
-       uint32_t     *invert
+       void             *pEmr,
+       uint32_t          offBitsSrc,
+       uint32_t          offBmiSrc,
+       const char      **px,
+       const U_RGBQUAD **ct,
+       uint32_t         *numCt,
+       uint32_t         *width,
+       uint32_t         *height,
+       uint32_t         *colortype,
+       uint32_t         *invert
    ){
    uint32_t bic;
    PU_BITMAPINFO Bmi = (PU_BITMAPINFO)((char *)pEmr + offBmiSrc);
+   PU_BITMAPINFOHEADER Bmih = &(Bmi->bmiHeader);
    /* if biCompression is not U_BI_RGB some or all of the following might not hold real values */
-   bic = Bmi->bmiHeader.biCompression;
-   *width     = Bmi->bmiHeader.biWidth;
-   *colortype = Bmi->bmiHeader.biBitCount;
-   if(Bmi->bmiHeader.biHeight < 0){
-      *height = -Bmi->bmiHeader.biHeight;
+   bic        = Bmih->biCompression;
+   *width     = Bmih->biWidth;
+   *colortype = Bmih->biBitCount;
+   if(Bmih->biHeight < 0){
+      *height = -Bmih->biHeight;
       *invert = 1;
    }
    else {
-      *height = Bmi->bmiHeader.biHeight;
+      *height = Bmih->biHeight;
       *invert = 0;
    }
    if(bic == U_BI_RGB){
-      /* color table location, there may or may not actually be one there */
-      *ct = (PU_RGBQUAD) ((char *)Bmi + sizeof(U_BITMAPINFOHEADER));
-      *numCt     = Bmi->bmiHeader.biClrUsed;
-      if(*numCt==0){
-         if(     *colortype == U_BCBM_MONOCHROME){ *numCt = 2;   }                                                                                          
-         else if(*colortype == U_BCBM_COLOR4    ){ *numCt = 16;  }                                                                                          
-         else if(*colortype == U_BCBM_COLOR8    ){ *numCt = 256; } 
-      }
-      if(        *colortype >= U_BCBM_COLOR16){ *ct = NULL; }                                                                                       
+      *numCt     = get_real_color_count((const char *) Bmih);
+      if( numCt){ *ct = (PU_RGBQUAD) ((char *)Bmi + sizeof(U_BITMAPINFOHEADER)); }
+      else {      *ct = NULL;                                                    }                                                                                       
    }
    else {
-      *numCt     = Bmi->bmiHeader.biSizeImage;
+      *numCt     = Bmih->biSizeImage;
       *ct        = NULL;
    }
    *px = (char *)((char *)pEmr + offBitsSrc);
@@ -837,15 +915,15 @@ int get_DIB_params(
     \param invert     If DIB rows are in opposite order from RGBA rows
 */
 int DIB_to_RGBA(
-       char        *px,
-       PU_RGBQUAD   ct,
-       int          numCt,
-       char       **rgba_px,
-       int          w,
-       int          h,
-       uint32_t     colortype,
-       int          use_ct,
-       int          invert
+       const char      *px,
+       const U_RGBQUAD *ct,
+       int              numCt,
+       char           **rgba_px,
+       int              w,
+       int              h,
+       uint32_t         colortype,
+       int              use_ct,
+       int              invert
    ){
    uint32_t     cbRgba_px;
    int          stride;
@@ -854,7 +932,7 @@ int DIB_to_RGBA(
    int          i,j;
    int          istart, iend, iinc;
    uint8_t      r,g,b,a,tmp8;
-   char        *pxptr;
+   const char  *pxptr;
    char        *rptr;
    int          usedbytes;
    U_RGBQUAD    color;
@@ -1049,7 +1127,7 @@ writing the final data structure out to a file.
     \param emr record to duplicate
 */
 char *emr_dup(
-      char *emr
+      const char *emr
    ){
    char *dup;
    int   irecsize;
@@ -1274,7 +1352,7 @@ int  emf_append(
     \param chunksize When needed increase space by this number of handles
     \param eht EMF handle table    
 */
-int htable_create(
+int emf_htable_create(
       uint32_t     initsize,
       uint32_t     chunksize,
       EMFHANDLES **eht
@@ -1306,26 +1384,8 @@ int htable_create(
    ehtl->peak      = 1;
    ehtl->sptr      = 1;
    ehtl->top       = 0;
-   ehtl->mftype    = U_MFT_EMF; // default and for backwards compatibility, use htable_mftype to change for WMF.
    *eht            = ehtl;
    return(0);
-}
-
-/**
-    \brief Set the metafile type on a handle table.  
-    The type may be used to block accidental cross calls WMF->EMF and so forth.
-    \return 0 for success, -1 for failure.
-    \param type  Metafile Enumeration
-    \param eht EMF handle table    
-*/
-int htable_mftype(
-      uint32_t     type,
-      EMFHANDLES *eht
-   ){
-   int ret=0;
-   if((type >= U_MFT_MIN) && (type <= U_MFT_MAX)){ eht->mftype = type; }
-   else {                                          ret = -1;           }
-   return(ret);
 }
 
 /**
@@ -1335,7 +1395,7 @@ int htable_mftype(
     \param eht EMF handle table
     
 */
-int htable_delete(
+int emf_htable_delete(
       uint32_t    *ih,
       EMFHANDLES  *eht
    ){
@@ -1361,7 +1421,7 @@ int htable_delete(
     \param ih  handle
     \param eht EMF handle table
 */
-int htable_insert(
+int emf_htable_insert(
       uint32_t   *ih,
       EMFHANDLES *eht
    ){
@@ -1390,7 +1450,6 @@ int htable_insert(
    if(*ih > eht->top){        eht->top = *ih;  }
    if(eht->sptr > eht->peak){ eht->peak = eht->sptr; }
    eht->sptr++;         // next available handle
-
    return(0);
 }
 
@@ -1399,7 +1458,7 @@ int htable_insert(
     \return 0 for success, >=1 for failure.
     \param eht  EMF handle table
 */
-int htable_free(
+int emf_htable_free(
       EMFHANDLES **eht
    ){
    EMFHANDLES *ehtl;
@@ -1947,9 +2006,9 @@ PU_BITMAPINFO bitmapinfo_set(
    ){
    char *record;
    int   irecsize;
-   int   cbColors, cbColors4,off;
+   int   cbColors, cbColors4, off;
 
-   cbColors  = 4*BmiHeader.biClrUsed;
+   cbColors  = 4*get_real_color_count((char *) &BmiHeader);
    cbColors4 = UP4(cbColors);
    irecsize  = sizeof(U_BITMAPINFOHEADER) + cbColors4;
    record    = malloc(irecsize);
@@ -2331,7 +2390,7 @@ Each should be called in preference to the underlying "base" EMR function.
 
 */
 char *textcomment_set(
-      char *string
+      const char *string
    ){
    if(!string)return(NULL);
    return(U_EMRCOMMENT_set(1 + strlen(string),string));
@@ -2355,9 +2414,8 @@ char *deleteobject_set(
       uint32_t    *ihObject,
       EMFHANDLES  *eht
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
    uint32_t saveObject=*ihObject;
-   if(htable_delete(ihObject,eht))return(NULL);  // invalid handle or other problem, cannot be deleted
+   if(emf_htable_delete(ihObject,eht))return(NULL);  // invalid handle or other problem, cannot be deleted
    return(U_EMRDELETEOBJECT_set(saveObject));
 }
 
@@ -2372,9 +2430,8 @@ char *selectobject_set(
       uint32_t    ihObject,
       EMFHANDLES *eht
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
    if(!(U_STOCK_OBJECT & ihObject)){        // not a stock object, those go straight through
-     if(eht->top < ihObject)return(NULL);   // handle this high is not in the table
+     if(ihObject > eht->top)return(NULL);   // handle this high is not in the table
      if(!eht->table[ihObject])return(NULL); // handle is not in the table, so not active, so cannot be selected
    }
    return(U_EMRSELECTOBJECT_set(ihObject));
@@ -2399,8 +2456,7 @@ char *extcreatepen_set(
       char            *Px,
       PU_EXTLOGPEN     elp
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihPen, eht))return(NULL);
+   if(emf_htable_insert(ihPen, eht))return(NULL);
    return(U_EMREXTCREATEPEN_set(*ihPen, Bmi, cbPx, Px, elp ));
 }
 
@@ -2417,8 +2473,7 @@ char *createpen_set(
       EMFHANDLES *eht,
       U_LOGPEN    lopn
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihPen, eht))return(NULL);
+   if(emf_htable_insert(ihPen, eht))return(NULL);
    return(U_EMRCREATEPEN_set(*ihPen, lopn));
 }
 
@@ -2435,8 +2490,7 @@ char *createbrushindirect_set(
       EMFHANDLES  *eht,
       U_LOGBRUSH   lb
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihBrush, eht))return(NULL);
+   if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRCREATEBRUSHINDIRECT_set(*ihBrush, lb));
 }
 
@@ -2460,8 +2514,7 @@ char *createdibpatternbrushpt_set(
       const char          *Px
       
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihBrush, eht))return(NULL);
+   if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRCREATEDIBPATTERNBRUSHPT_set(*ihBrush, iUsage, Bmi, cbPx, Px));
 }
 
@@ -2485,8 +2538,7 @@ char *createmonobrush_set(
       const char          *Px
       
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihBrush, eht))return(NULL);
+   if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRCREATEMONOBRUSH_set(*ihBrush, iUsage, Bmi, cbPx, Px));
 }
 
@@ -2504,8 +2556,7 @@ char *createcolorspace_set(
       EMFHANDLES         *eht,
       U_LOGCOLORSPACEA    lcs
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihCS, eht))return(NULL);
+   if(emf_htable_insert(ihCS, eht))return(NULL);
    return(U_EMRCREATECOLORSPACE_set(*ihCS,lcs));
 }
 
@@ -2528,8 +2579,7 @@ char *createcolorspacew_set(
       U_CBDATA            cbData,
       uint8_t            *Data
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihCS, eht))return(NULL);
+   if(emf_htable_insert(ihCS, eht))return(NULL);
    return(U_EMRCREATECOLORSPACEW_set(*ihCS, lcs, dwFlags, cbData, Data));
 }
 
@@ -2548,8 +2598,7 @@ char *extcreatefontindirectw_set(
       const char *elf,
       const char *elfw
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihFont, eht))return(NULL);
+   if(emf_htable_insert(ihFont, eht))return(NULL);
    return(U_EMREXTCREATEFONTINDIRECTW_set(*ihFont, elf, elfw));
 }
 
@@ -2566,8 +2615,7 @@ char *createpalette_set(
       EMFHANDLES   *eht,
       U_LOGPALETTE  lgpl
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihPal, eht))return(NULL);
+  if(emf_htable_insert(ihPal, eht))return(NULL);
    return(U_EMRCREATEPALETTE_set(*ihPal, lgpl));
 }
 
@@ -2588,8 +2636,7 @@ char *setpaletteentries_set(
       const U_NUM_LOGPLTNTRY cEntries,
       const PU_LOGPLTNTRY    aPalEntries
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihPal, eht))return(NULL);
+   if(emf_htable_insert(ihPal, eht))return(NULL);
    return(U_EMRSETPALETTEENTRIES_set(*ihPal, iStart, cEntries, aPalEntries));
 }
 
@@ -2608,8 +2655,7 @@ char *fillrgn_set(
       const U_RECTL     rclBounds,
       const PU_RGNDATA  RgnData
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihBrush, eht))return(NULL);
+   if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRFILLRGN_set(rclBounds, *ihBrush, RgnData));
 }
 
@@ -2630,8 +2676,7 @@ char *framergn_set(
       const U_SIZEL     szlStroke,
       const PU_RGNDATA  RgnData
    ){
-   if(U_MFT_MISMATCH(eht,U_MFT_EMF))return(NULL);  // something not EMF calling EMF function
-   if(htable_insert(ihBrush, eht))return(NULL);
+   if(emf_htable_insert(ihBrush, eht))return(NULL);
    return(U_EMRFRAMERGN_set(rclBounds, *ihBrush, szlStroke, RgnData));
 }
 

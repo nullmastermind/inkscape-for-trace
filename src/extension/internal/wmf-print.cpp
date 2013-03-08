@@ -1,5 +1,5 @@
 /** @file
- * @brief Enhanced Metafile printing
+ * @brief Windows Metafile printing
  */
 /* Authors:
  *   Ulf Erikson <ulferikson@users.sf.net>
@@ -62,7 +62,7 @@
 #include "2geom/svg-path-parser.h" // to get from SVG text to Geom::Path
 #include "display/canvas-bpath.h"  // for SPWindRule
 
-#include "emf-print.h"
+#include "wmf-print.h"
 
 
 #include <string.h>
@@ -76,6 +76,7 @@ namespace Extension {
 namespace Internal {
 
 #define PXPERMETER 2835
+#define MAXDISP 2.0 // This should be set in the output dialog.  This is ok for experimenting, no more than 2 pixel deviation.  Not actually used at present
 
 
 enum drawmode {DRAW_PAINT, DRAW_PATTERN, DRAW_IMAGE, DRAW_LINEAR_GRADIENT, DRAW_RADIAL_GRADIENT};
@@ -100,16 +101,15 @@ struct GRADVALUES{
   };
 
 /* globals */
-static double PX2WORLD = 20.0f;
-static U_XFORM     worldTransform;
-static bool FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch, FixImageRot;
-static FFNEXUS    *emf_short_fflist = NULL;  //only those fonts so far encountered.  This is SHARED with wmf-print.cpp
-static FFNEXUS    *emf_long_fflist  = NULL;   //all the fonts described in ...\share\extensions\fontfix.conf
-static EMFTRACK   *et               = NULL;
-static EMFHANDLES *eht              = NULL;
+static double PX2WORLD = 1200.0/90.0;     // inkscape is 90 dpi, WMF file is 1200
+static bool FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch;
+static FFNEXUS    *wmf_short_fflist = NULL;  //only those fonts so far encountered
+static FFNEXUS    *wmf_long_fflist  = NULL;   //all the fonts described in ...\share\extensions\fontfix.conf
+static WMFTRACK   *wt               = NULL;
+static WMFHANDLES *wht              = NULL;
 static GRADVALUES  gv;
 
-void PrintEmf::read_system_fflist(void){  //this is not called by any other source files
+void PrintWmf::read_system_fflist(void){  //this is not called by any other source files
 FFNEXUS *temp=NULL;
 FFNEXUS *ptr=NULL;
 std::fstream fffile;
@@ -118,7 +118,7 @@ char fontname[128];
 double f1,f2,f3;
 std::string path_to_ffconf;
 
-  if(emf_long_fflist)return;
+  if(wmf_long_fflist)return;
   path_to_ffconf=INKSCAPE_EXTENSIONDIR;
 #ifdef WIN32
   path_to_ffconf.append("\\fontfix.conf"); //Windows path syntax
@@ -150,7 +150,7 @@ std::string path_to_ffconf;
        ptr=temp;
     }
     else {
-      emf_long_fflist=ptr=temp;
+      wmf_long_fflist=ptr=temp;
     }
   }
   fffile.close();
@@ -159,24 +159,24 @@ std::string path_to_ffconf;
 /* Looks for the fontname in the long list.  If it does not find it, it adds the default values
 to the short list with this fontname.  If it does find it, then it adds the specified values.
 */
-void PrintEmf::search_long_fflist(const char *fontname, double *f1, double *f2, double *f3){  //this is not called by any other source files
+void  PrintWmf::search_long_fflist(const char *fontname, double *f1, double *f2, double *f3){  //this is not called by any other source files
 FFNEXUS *ptr=NULL;
-FFNEXUS *tmp=emf_long_fflist;
-  if(!emf_long_fflist){
+FFNEXUS *tmp=wmf_long_fflist;
+  if(!wmf_long_fflist){
       g_message("Programming error search_long_fflist called before read_system_fflist\n");
       throw "boom";
   }
-  ptr=emf_long_fflist;
+  ptr=wmf_long_fflist;
   while(ptr){
     if(!strcmp(ptr->fontname,fontname)){ tmp=ptr; break; }
     ptr=ptr->next;
   }
-  //tmp points at either the found name, or the default, the first entry in long_fflist
-  if(!emf_short_fflist){
-    ptr=emf_short_fflist=(FFNEXUS *) malloc(sizeof(FFNEXUS));
+  //tmp points at either the found name, or the default, the first entry in wmf_long_fflist
+  if(!wmf_short_fflist){
+    ptr=wmf_short_fflist=(FFNEXUS *) malloc(sizeof(FFNEXUS));
   }
   else {
-    ptr=emf_short_fflist;
+    ptr=wmf_short_fflist;
     while(ptr->next){ ptr=ptr->next; }
     ptr->next=(FFNEXUS *) malloc(sizeof(FFNEXUS));
     ptr=ptr->next;
@@ -188,19 +188,19 @@ FFNEXUS *tmp=emf_long_fflist;
   ptr->next=NULL;
 }
 
-/* Looks for the fontname in the short list.  If it does not find it, it looks in the long_fflist.
+/* Looks for the fontname in the short list.  If it does not find it, it looks in the wmf_long_fflist.
 Either way it returns the f1, f2, f3 parameters for the font, even if these are for the default.
 */
-void PrintEmf::search_short_fflist(const char *fontname, double *f1, double *f2, double *f3){  //this is not called by any other source files
+void  PrintWmf::search_short_fflist(const char *fontname, double *f1, double *f2, double *f3){  //this is not called by any other source files
 FFNEXUS *ptr=NULL;
 static FFNEXUS *last=NULL;
-  if(!emf_long_fflist){
+  if(!wmf_long_fflist){
       g_message("Programming error search_short_fflist called before read_system_fflist\n");
       throw "boom";
   }
   // This speeds things up a lot - if the same font is called twice in a row, pull it out immediately
   if(last && !strcmp(last->fontname,fontname)){ ptr=last;         }
-  else {                                        ptr=emf_short_fflist; }  // short_fflist may still be NULL
+  else {                                        ptr=wmf_short_fflist; }  // wmf_short_fflist may still be NULL
   while(ptr){
     if(!strcmp(ptr->fontname,fontname)){ *f1=ptr->f1; *f2=ptr->f2; *f3=ptr->f3; last=ptr; return; }
     ptr=ptr->next;
@@ -209,10 +209,10 @@ static FFNEXUS *last=NULL;
   search_long_fflist(fontname, f1, f2, f3);
 }
 
-void PrintEmf::smuggle_adxky_out(const char *string, uint32_t **adx, double *ky, int *ndx, float scale){
+void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, int *ndx, float scale){
     float       fdx;
     int         i;
-    uint32_t   *ladx;
+    int16_t   *ladx;
     const char *cptr=&string[strlen(string)+1]; // this works because of the first fake terminator
 
     *adx = NULL;
@@ -220,12 +220,12 @@ void PrintEmf::smuggle_adxky_out(const char *string, uint32_t **adx, double *ky,
     sscanf(cptr,"%7d",ndx);
     if(!*ndx)return;  // this could happen with an empty string
     cptr += 7;
-    ladx = (uint32_t *) malloc(*ndx * sizeof(uint32_t) );
+    ladx = (int16_t *) malloc(*ndx * sizeof(int16_t) );
     if(!ladx)throw "Out of memory";
     *adx=ladx;
     for(i=0; i<*ndx; i++,cptr+=7, ladx++){
       sscanf(cptr,"%7f",&fdx);
-      *ladx=(uint32_t) round(fdx * scale);
+      *ladx=(int16_t) round(fdx * scale);
     }
     cptr++; // skip 2nd fake terminator
     sscanf(cptr,"%7f",&fdx);
@@ -235,7 +235,7 @@ void PrintEmf::smuggle_adxky_out(const char *string, uint32_t **adx, double *ky,
 /* convert an  0RGB color to EMF U_COLORREF.
 inverse of sethexcolor() in emf-inout.cpp
 */
-U_COLORREF  PrintEmf::gethexcolor(uint32_t color){
+U_COLORREF  PrintWmf::gethexcolor(uint32_t color){
 
     U_COLORREF out;
     out = U_RGB( 
@@ -247,9 +247,9 @@ U_COLORREF  PrintEmf::gethexcolor(uint32_t color){
 }
 
 
-/* Translate inkscape weights to EMF weights.
+/* Translate inkscape weights to WMF weights.
 */
-uint32_t PrintEmf::transweight(const unsigned int inkweight){
+uint32_t PrintWmf::transweight(const unsigned int inkweight){
     if(inkweight == SP_CSS_FONT_WEIGHT_400)return(U_FW_NORMAL);
     if(inkweight == SP_CSS_FONT_WEIGHT_100)return(U_FW_THIN);
     if(inkweight == SP_CSS_FONT_WEIGHT_200)return(U_FW_EXTRALIGHT);
@@ -263,13 +263,13 @@ uint32_t PrintEmf::transweight(const unsigned int inkweight){
     return(U_FW_NORMAL);
 }
 
-PrintEmf::PrintEmf (void)
+PrintWmf::PrintWmf (void)
 {
   // all of the class variables are initialized elsewhere, many in PrintWmf::Begin,
 }
 
 
-PrintEmf::~PrintEmf (void)
+PrintWmf::~PrintWmf (void)
 {
 
     /* restore default signal handling for SIGPIPE */
@@ -280,16 +280,15 @@ PrintEmf::~PrintEmf (void)
 }
 
 
-unsigned int PrintEmf::setup (Inkscape::Extension::Print * /*mod*/)
+unsigned int PrintWmf::setup (Inkscape::Extension::Print * /*mod*/)
 {
     return TRUE;
 }
 
 
-unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
+unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-    U_SIZEL szlDev, szlMm;
-    U_RECTL rclBounds, rclFrame;
+// std::cout << "begin " << std::endl;
     char *rec;
 
     gchar const *utf8_fn = mod->get_param_string("destination");
@@ -297,20 +296,17 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
     FixPPTDashLine = mod->get_param_bool("FixPPTDashLine");
     FixPPTGrad2Polys = mod->get_param_bool("FixPPTGrad2Polys");
     FixPPTPatternAsHatch = mod->get_param_bool("FixPPTPatternAsHatch");
-    FixImageRot = mod->get_param_bool("FixImageRot");
 
-    (void) emf_start(utf8_fn, 1000000, 250000, &et);  // Initialize the et structure
-    (void) htable_create(128, 128, &eht);             // Initialize the eht structure
+    (void) wmf_start(utf8_fn, 1000000, 250000, &wt);  // Initialize the wt structure
+    (void) wmf_htable_create(128, 128, &wht);         // Initialize the wht structure
 
-    char *ansi_uri = (char *) utf8_fn;
-
-
+    // WMF header the only things that can be set are the page size in inches (w,h) and the dpi
     // width and height in px
     _width  = doc->getWidth();
     _height = doc->getHeight();
 
     // initialize a few global variables
-    hbrush = hbrushOld = hpen = 0;
+    hbrush = hpen = 0;
     use_stroke = use_fill = simple_shape = false;
 
     Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
@@ -337,112 +333,145 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
         if (bbox) d = *bbox;
     }
 
-    d *= Geom::Scale(IN_PER_PX);
+    d *= Geom::Scale(IN_PER_PX);  // 90 dpi inside inkscape, wmf file will be 1200 dpi
 
     float dwInchesX = d.width();
     float dwInchesY = d.height();
+    int   dwPxX     = round(d.width() *1200.0);  
+    int   dwPxY     = round(d.height()*1200.0); 
 
-    // dwInchesX x dwInchesY in micrometer units, dpi=90 -> 3543.3 dpm
-    (void) drawing_size((int) ceil(dwInchesX*25.4), (int) ceil(dwInchesY*25.4), 3.543307, &rclBounds, &rclFrame);
-
-    // set up the reference device as 100 X A4 horizontal, (1200 dpi/25.4 -> dpmm).  Extra digits maintain dpi better in EMF
-    int MMX = 21600;
-    int MMY = 27900;
-    (void) device_size(MMX, MMY, 1200.0/25.4, &szlDev, &szlMm);
-    int PixelsX = szlDev.cx;
-    int PixelsY = szlDev.cy;
-
-    // set up the description:  (version string)0(file)00 
-    char buff[1024];
-    memset(buff,0, sizeof(buff));
-    char *p1 = strrchr(ansi_uri, '\\');
-    char *p2 = strrchr(ansi_uri, '/');
-    char *p = MAX(p1, p2);
-    if (p)
-        p++;
-    else
-        p = ansi_uri;
-    snprintf(buff, sizeof(buff)-1, "Inkscape %s (%s)\1%s\1", Inkscape::version_string, __DATE__,p);
-    uint16_t *Description = U_Utf8ToUtf16le(buff, 0, NULL); 
-    int cbDesc = 2 + wchar16len(Description);      // also count the final terminator
-    (void) U_Utf16leEdit(Description, '\1', '\0'); // swap the temporary \1 characters for nulls
-    
-    // construct the EMRHEADER record and append it to the EMF in memory
-    rec = U_EMRHEADER_set( rclBounds,  rclFrame,  NULL, cbDesc, Description, szlDev, szlMm, 0);
-    free(Description);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::begin at EMRHEADER";
+    PU_PAIRF ps = U_PAIRF_set(dwInchesX, dwInchesY);
+    rec = U_WMRHEADER_set(ps,1200); // Example: drawing is A4 horizontal,  1200 dpi
+    if(!rec){
+       throw "Fatal programming error in PrintWmf::begin at WMRSETMAPMODE";
     }
+    (void) wmf_header_append((PU_METARECORD)rec, wt, 1);
+    free(ps);
 
-
-    // Simplest mapping mode, supply all coordinates in pixels
-    rec = U_EMRSETMAPMODE_set(U_MM_TEXT);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::begin at EMRSETMAPMODE";
+    rec = U_WMRSETWINDOWEXT_set(point16_set( dwPxX, dwPxY));
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at WMRSETWINDOWEXT";
     }
     
-
-    //  Correct for dpi in EMF (1200) vs dpi in Inkscape (always 90).
-    //  Also correct for the scaling in PX2WORLD, which is set to 20.
-
-    worldTransform.eM11 = 1200./(90.0*PX2WORLD);
-    worldTransform.eM12 = 0.0;
-    worldTransform.eM21 = 0.0;
-    worldTransform.eM22 = 1200./(90.0*PX2WORLD);
-    worldTransform.eDx  = 0;
-    worldTransform.eDy  = 0;
-
-    rec = U_EMRMODIFYWORLDTRANSFORM_set(worldTransform, U_MWT_LEFTMULTIPLY);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::begin at EMRMODIFYWORLDTRANSFORM";
+    rec = U_WMRSETWINDOWORG_set(point16_set(0,0));
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at WMRSETWINDOWORG";
     }
 
-
-    if (1) {
-        snprintf(buff, sizeof(buff)-1, "Screen=%dx%dpx, %dx%dmm", PixelsX, PixelsY, MMX, MMY);
-        rec = textcomment_set(buff);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-           throw "Fatal programming error in PrintEmf::begin at textcomment_set 1";
-        }
-
-        snprintf(buff, sizeof(buff)-1, "Drawing=%.1lfx%.1lfpx, %.1lfx%.1lfmm", _width, _height, dwInchesX * MM_PER_IN, dwInchesY * MM_PER_IN);
-        rec = textcomment_set(buff);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-           throw "Fatal programming error in PrintEmf::begin at textcomment_set 1";
-        }
+    rec = U_WMRSETMAPMODE_set(U_MM_ANISOTROPIC);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at WMRSETMAPMODE";
     }
+    
+    // bkmode never changes
+    rec = U_WMRSETBKMODE_set(U_TRANSPARENT);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at U_WMRSETBKMODE";
+    }
+
+    hpolyfillmode=U_WINDING;
+    rec = U_WMRSETPOLYFILLMODE_set(U_WINDING);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at U_WMRSETPOLYFILLMODE";
+    }
+
+    // Text alignment never changes
+    rec = U_WMRSETTEXTALIGN_set(U_TA_BASELINE | U_TA_LEFT);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::text at U_WMRSETTEXTALIGN_set";
+    }
+
+    htextcolor_rgb[0] = htextcolor_rgb[1] = htextcolor_rgb[2] = 0.0; 
+    rec = U_WMRSETTEXTCOLOR_set(U_RGB(0,0,0));
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set";
+    }
+
+    rec = U_WMRSETROP2_set(U_R2_COPYPEN);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at U_WMRSETROP2";
+    }
+    
+    hmiterlimit=5;
+    rec = wmiterlimit_set(5);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at wmiterlimit_set";
+    }
+
+    
+    // create a pen as object 0.  We never use it (except by mistake).  Its purpose it to make all of the other object indices >=1
+    U_PEN up = U_PEN_set(U_PS_SOLID, 1, colorref_set(0,0,0));
+    uint32_t   Pen;
+    rec = wcreatepenindirect_set(&Pen, wht, up);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at wcreatepenindirect_set";
+    }
+    
+    // create a null pen.  If no specific pen is set, this is used
+    up = U_PEN_set(U_PS_NULL, 1, colorref_set(0,0,0));
+    rec = wcreatepenindirect_set(&hpen_null, wht, up);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at wcreatepenindirect_set";
+    }
+    destroy_pen(); // make this pen active
+
+    // create a null brush.  If no specific brush is set, this is used
+    U_WLOGBRUSH lb = U_WLOGBRUSH_set(U_BS_NULL, U_RGB(0, 0, 0), U_HS_HORIZONTAL);
+    rec = wcreatebrushindirect_set(&hbrush_null, wht, lb);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::begin at wcreatebrushindirect_set";
+    }
+    destroy_brush(); // make this brush active
+
+// std::cout << "end begin" << std::endl;
 
     return 0;
 }
 
 
-unsigned int PrintEmf::finish (Inkscape::Extension::Print * /*mod*/)
+unsigned int PrintWmf::finish (Inkscape::Extension::Print * /*mod*/)
 {
 // std::cout << "finish " << std::endl;
     char *rec;
-    if (!et) return 0;
+    if (!wt) return 0;
 
-    
-    // earlier versions had flush of fill here, but it never executed and was removed
-
-    rec = U_EMREOF_set(0,NULL,et);  // generate the EOF record
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::finish";
+    // get rid of null brush
+    rec = wdeleteobject_set(&hbrush_null, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+      throw "Fatal programming error in PrintWmf::finish at wdeleteobject_set null brush";
     }
-    (void) emf_finish(et, eht); // Finalize and write out the EMF
-    emf_free(&et);              // clean up
-    htable_free(&eht);          // clean up
+    
+    // get rid of null pen
+    rec = wdeleteobject_set(&hpen_null, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+      throw "Fatal programming error in PrintWmf::finish at wdeleteobject_set null pen";
+    }
+    
+    // get rid of object 0, which was a pen that was used to shift the other object indices to >=1.
+        hpen=0;
+    rec = wdeleteobject_set(&hpen, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+      throw "Fatal programming error in PrintWmf::finish at wdeleteobject_set filler object";
+    }
+
+    rec = U_WMREOF_set();  // generate the EOF record
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::finish";
+    }
+    (void) wmf_finish(wt); // Finalize and write out the WMF
+    wmf_free(&wt);              // clean up
+    wmf_htable_free(&wht);          // clean up
 
 // std::cout << "end finish" << std::endl;
     return 0;
 }
 
 
-unsigned int PrintEmf::comment (Inkscape::Extension::Print * /*module*/,
+unsigned int PrintWmf::comment (Inkscape::Extension::Print * /*module*/,
                         const char * /*comment*/)
 {
 // std::cout << "comment " << std::endl;
-    if (!et) return 0;
+    if (!wt) return 0;
 
     // earlier versions had flush of fill here, but it never executed and was removed
 
@@ -450,17 +479,17 @@ unsigned int PrintEmf::comment (Inkscape::Extension::Print * /*module*/,
     return 0;
 }
 
-// Extracth hatchType, hatchColor from a name like
-// EMFhatch<hatchType>_<hatchColor>
+// Extract hatchType, hatchColor from a name like
+// *MFhatch<hatchType>_<hatchColor>  (WMF or EMF hatches are the same)
 // Where the first one is a number and the second a color in hex.
 // hatchType and hatchColor have been set with defaults before this is called.
 //
-void PrintEmf::hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor){
+void PrintWmf::hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor){
    int val;
    uint32_t hcolor=0;
    // name should be EMFhatch or WMFhatch but *MFhatch will be accepted
    if(0!=strncmp(&name[1],"MFhatch",7)){ return; } // not anything we can parse
-   name+=8; // EMFhatch already detected
+   name+=8; // WMFhatch already detected
    val = 0;
    while(*name && isdigit(*name)){ 
       val = 10*val + *name - '0';
@@ -485,7 +514,7 @@ void PrintEmf::hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor
 //    otherwise hatchType is set to -1 and hatchColor is not defined.
 //
 
-void PrintEmf::brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor){
+void PrintWmf::brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor){
    if(depth==0){
       *epixbuf    = NULL;
       *hatchType  = -1;
@@ -527,7 +556,7 @@ void PrintEmf::brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, 
 }
 
 //swap R/B in 4 byte pixel
-void PrintEmf::swapRBinRGBA(char *px, int pixels){
+void PrintWmf::swapRBinRGBA(char *px, int pixels){
   char tmp;
   for(int i=0;i<pixels*4;px+=4,i+=4){
       tmp=px[2];
@@ -541,7 +570,7 @@ inline float opweight(float v1, float v2, float op){
   return v1*op + v2*(1.0-op);
 }
 
-U_COLORREF PrintEmf::avg_stop_color(SPGradient *gr){
+U_COLORREF PrintWmf::avg_stop_color(SPGradient *gr){
    U_COLORREF cr;
    int last = gr->vector.stops.size() -1;
    if(last>=1){
@@ -567,7 +596,7 @@ U_COLORREF PrintEmf::avg_stop_color(SPGradient *gr){
    return cr;
 }
 
-int PrintEmf::hold_gradient(void *gr, int mode){
+int PrintWmf::hold_gradient(void *gr, int mode){
    gv.mode = mode;
    gv.grad = gr;
    if(mode==DRAW_RADIAL_GRADIENT){
@@ -594,18 +623,18 @@ int PrintEmf::hold_gradient(void *gr, int mode){
       }
    }
    else {
-      throw "Fatal programming error, hold_gradient() in emf-print.cpp called with invalid draw mode";
+      throw "Fatal programming error, hold_gradient() in wmf-print.cpp called with invalid draw mode";
    }
    return 1;
 }
 
 // fcolor is defined when gradients are being expanded, it is the color of one stripe or ring.
-int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
+int PrintWmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
 {
 // std::cout << "create_brush " << std::endl;
     float         rgb[3];
     char         *rec;
-    U_LOGBRUSH    lb;
+    U_WLOGBRUSH   lb;
     uint32_t      brush, fmode;
     enum drawmode fill_mode;
     GdkPixbuf    *pixbuf;
@@ -615,7 +644,7 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
     uint32_t      width  = 0; // quiets a harmless compiler warning, initialization not otherwise required.
     uint32_t      height = 0;
 
-    if (!et) return 0;
+    if (!wt) return 0;
 
     // set a default fill in case we can't figure out a better way to do it
     fmode      = U_ALTERNATE;
@@ -695,16 +724,16 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
       // default fill
     }
 
-    lb   = logbrush_set(brushStyle, hatchColor, hatchType);
+    lb   = U_WLOGBRUSH_set(brushStyle, hatchColor, hatchType);
 
     switch(fill_mode){
        case DRAW_LINEAR_GRADIENT: // fill with average color unless gradients are converted to slices
        case DRAW_RADIAL_GRADIENT: // ditto
        case DRAW_PAINT:
        case DRAW_PATTERN:
-          rec = createbrushindirect_set(&brush, eht, lb);
-          if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-             throw "Fatal programming error in PrintEmf::create_brush at createbrushindirect_set";
+          rec = wcreatebrushindirect_set(&brush, wht, lb);
+          if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+             throw "Fatal programming error in PrintWmf::create_brush at createbrushindirect_set";
           }
           break;
        case DRAW_IMAGE:
@@ -724,171 +753,82 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
           swapRBinRGBA(px, width*height);
           Bmih = bitmapinfoheader_set(width, height, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
           Bmi = bitmapinfo_set(Bmih, ct);
-          rec = createdibpatternbrushpt_set(&brush, eht, U_DIB_RGB_COLORS, Bmi, cbPx, px);
-          if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-             throw "Fatal programming error in PrintEmf::create_brush at createdibpatternbrushpt_set";
+          rec = wcreatedibpatternbrush_srcdib_set(&brush, wht, U_DIB_RGB_COLORS, Bmi, cbPx, px);
+          if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+             throw "Fatal programming error in PrintWmf::create_brush at createdibpatternbrushpt_set";
           }
           free(px);
           free(Bmi); // ct will be NULL because of colortype
           break;
     }
     hbrush = brush;  // need this later for destroy_brush
-    rec = selectobject_set(brush, eht);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::create_brush at selectobject_set";
+    rec = wselectobject_set(brush, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::create_brush at wselectobject_set";
     }
 
-    rec = U_EMRSETPOLYFILLMODE_set(fmode); 
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::create_brush at U_EMRSETPOLYdrawmode_set";
+
+
+    if(fmode != hpolyfillmode){
+       hpolyfillmode=fmode;
+       rec = U_WMRSETPOLYFILLMODE_set(fmode); 
+       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+          throw "Fatal programming error in PrintWmf::create_brush at U_WMRSETPOLYFILLMODE_set";
+       }
     }
 // std::cout << "end create_brush " << std::endl;
     return 0;
 }
 
 
-void PrintEmf::destroy_brush()
+void PrintWmf::destroy_brush()
 {
 // std::cout << "destroy_brush " << std::endl;
     char *rec;
-    // before an object may be safely deleted it must no longer be selected
-    // select in a stock object to deselect this one, the stock object should
-    // never be used because we always select in a new one before drawing anythingrestore previous brush, necessary??? Would using a default stock object not work?
-    rec = selectobject_set(U_NULL_BRUSH, eht);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::destroy_brush at selectobject_set";
-    }
+    // WMF lets any object be deleted whenever, and the chips fall where they may...
     if (hbrush){
-       rec = deleteobject_set(&hbrush, eht);
-       if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-         throw "Fatal programming error in PrintEmf::destroy_brush";
+       rec = wdeleteobject_set(&hbrush, wht);
+       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+         throw "Fatal programming error in PrintWmf::destroy_brush";
        }
        hbrush = 0;
     }
+    
+    // (re)select the null brush
+    
+    rec = wselectobject_set(hbrush_null, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+      throw "Fatal programming error in PrintWmf::destroy_brush";
+    }
+    
 // std::cout << "end destroy_brush" << std::endl;
 }
 
 
-int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
+int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 {
-    U_EXTLOGPEN         *elp;
-    U_NUM_STYLEENTRY     n_dash    = 0;
-    U_STYLEENTRY        *dash      = NULL;
     char                *rec       = NULL;
-    int                  linestyle = U_PS_SOLID;
-    int                  linecap   = 0;
-    int                  linejoin  = 0;
     uint32_t             pen;
-    uint32_t             brushStyle;
-    GdkPixbuf           *pixbuf;
-    int                  hatchType;
-    U_COLORREF           hatchColor;
-    uint32_t             width,height;
-    char                *px=NULL;
-    char                *rgba_px;
-    uint32_t             cbPx=0;
-    uint32_t             colortype;
-    PU_RGBQUAD           ct=NULL;
-    int                  numCt=0;
-    U_BITMAPINFOHEADER   Bmih;
-    PU_BITMAPINFO        Bmi=NULL;
+    uint32_t             penstyle;
+    U_COLORREF           penColor;
+    U_PEN                up;
+    int                  modstyle;
 // std::cout << "create_pen " << std::endl;
   
-    if (!et) return 0;
+    if (!wt) return 0;
 
     // set a default stroke  in case we can't figure out a better way to do it
-    brushStyle  = U_BS_SOLID;
-    hatchColor = U_RGB(0, 0, 0);
-    hatchType  = U_HS_HORIZONTAL;
+    penstyle = U_PS_SOLID;
+    modstyle = 0;
+    penColor = U_RGB(0, 0, 0);
+    uint32_t linewidth = 1;
 
-    if (style) {
+    if (style) {  // override some or all of the preceding 
         float rgb[3];
 
-        if(SP_IS_PATTERN(SP_STYLE_STROKE_SERVER(style))){ // must be paint-server
-           SPPaintServer *paintserver = style->stroke.value.href->getObject();
-           SPPattern *pat = SP_PATTERN (paintserver);
-           double dwidth  = pattern_width(pat);
-           double dheight = pattern_height(pat);
-           width  = dwidth;
-           height = dheight;
-           brush_classify(pat,0,&pixbuf,&hatchType,&hatchColor);
-           if(pixbuf){
-              brushStyle    = U_BS_DIBPATTERN;
-              rgba_px = (char *) gdk_pixbuf_get_pixels(pixbuf); // Do NOT free this!!!
-              colortype = U_BCBM_COLOR32;
-              (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  rgba_px,  width, height, width*4, colortype, 0, 1);
-              // Not sure why the next swap is needed because the preceding does it, and the code is identical
-              // to that in stretchdibits_set, which does not need this.
-              swapRBinRGBA(px, width*height);
-              Bmih = bitmapinfoheader_set(width, height, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
-              Bmi = bitmapinfo_set(Bmih, ct);
-           }
-           else {  // pattern
-              brushStyle    = U_BS_HATCHED;
-              if(hatchType == -1){  // Not a standard hatch, so force it to something
-                 hatchType  = U_HS_CROSS;
-                 hatchColor = U_RGB(0xFF,0xC3,0xC3);
-              }
-           }
-           if(FixPPTPatternAsHatch){
-              if(hatchType == -1){  // image or unclassified 
-                 brushStyle   = U_BS_HATCHED;
-                 hatchType    = U_HS_DIAGCROSS;
-                 hatchColor   = U_RGB(0xFF,0xC3,0xC3);
-              } 
-           }
-        }
-        else if(SP_IS_GRADIENT(SP_STYLE_STROKE_SERVER(style))){ // must be a gradient
-           // currently we do not do anything with gradients, the code below has no net effect.
-
-           SPPaintServer *paintserver = style->stroke.value.href->getObject();
-           if (SP_IS_LINEARGRADIENT (paintserver)) {
-              SPLinearGradient *lg=SP_LINEARGRADIENT(paintserver);
-
-              SP_GRADIENT(lg)->ensureVector(); // when exporting from commandline, vector is not built
-
-              Geom::Point p1 (lg->x1.computed, lg->y1.computed);
-              Geom::Point p2 (lg->x2.computed, lg->y2.computed);
-
-              if (lg->gradientTransform_set) {
-                 p1 = p1 * lg->gradientTransform;
-                 p2 = p2 * lg->gradientTransform;
-              }
-              hatchColor = avg_stop_color(lg);
-           }
-           else if (SP_IS_RADIALGRADIENT (paintserver)) {
-              SPRadialGradient *rg=SP_RADIALGRADIENT(paintserver);
-
-              SP_GRADIENT(rg)->ensureVector(); // when exporting from commandline, vector is not built
-              double r = rg->r.computed;
-
-              Geom::Point c (rg->cx.computed, rg->cy.computed);
-              Geom::Point xhandle_point(r, 0);
-              Geom::Point yhandle_point(0, -r);
-              yhandle_point += c;
-              xhandle_point += c;
-              if (rg->gradientTransform_set) {
-                 c           = c           * rg->gradientTransform;
-                 yhandle_point = yhandle_point * rg->gradientTransform;
-                 xhandle_point = xhandle_point * rg->gradientTransform;
-              }
-              hatchColor = avg_stop_color(rg);
-           }
-           else {
-             // default fill
-           }
-        }
-        else if(style->stroke.isColor()){ // test last, always seems to be set, even for other types above
-           sp_color_get_rgb_floatv( &style->stroke.value.color, rgb );
-           brushStyle = U_BS_SOLID;
-           hatchColor = U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]);
-           hatchType  = U_HS_SOLIDCLR;
-        }
-        else {
-          // default fill
-        }
-
-
+        // WMF does not support hatched, bitmap, or gradient pens, just set the color.
+        sp_color_get_rgb_floatv( &style->stroke.value.color, rgb );
+        penColor = U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]);
 
         using Geom::X;
         using Geom::Y;
@@ -902,133 +842,82 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
         double scale = sqrt( (p[X]*p[X]) + (p[Y]*p[Y]) ) / sqrt(2);
 
         if(!style->stroke_width.computed){return 0;}  //if width is 0 do not (reset) the pen, it should already be NULL_PEN
-        uint32_t linewidth = MAX( 1, (uint32_t) (scale * style->stroke_width.computed * PX2WORLD) );
+        linewidth = MAX( 1, (uint32_t) (scale * style->stroke_width.computed * PX2WORLD) );
 
-        if (style->stroke_linecap.computed == 0) {
-            linecap = U_PS_ENDCAP_FLAT;
-        }
-        else if (style->stroke_linecap.computed == 1) {
-            linecap = U_PS_ENDCAP_ROUND;
-        }
-        else if (style->stroke_linecap.computed == 2) {
-            linecap = U_PS_ENDCAP_SQUARE;
-        }
+        // most WMF readers will ignore linecap and linejoin, but set them anyway.  Inkscape itself can read them back in.
+ 
+        if (style->stroke_linecap.computed == 0) {      modstyle |= U_PS_ENDCAP_FLAT;   }
+        else if (style->stroke_linecap.computed == 1) { modstyle |= U_PS_ENDCAP_ROUND;  }
+        else {                                          modstyle |= U_PS_ENDCAP_SQUARE; }
 
         if (style->stroke_linejoin.computed == 0) {
-            linejoin = U_PS_JOIN_MITER;
-        }
-        else if (style->stroke_linejoin.computed == 1) {
-            linejoin = U_PS_JOIN_ROUND;
-        }
-        else if (style->stroke_linejoin.computed == 2) {
-            linejoin = U_PS_JOIN_BEVEL;
-        }
+           float miterlimit = style->stroke_miterlimit.value;  // This is a ratio.
+           if (miterlimit < 1)miterlimit = 1;
+
+           // most WMF readers will ignore miterlimit, but set it anyway.  Inkscape itself can read it back in
+           if((uint32_t)miterlimit != hmiterlimit){
+               hmiterlimit = (uint32_t)miterlimit;
+               rec = wmiterlimit_set((uint32_t) miterlimit);
+               if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                  throw "Fatal programming error in PrintWmf::create_pen at wmiterlimit_set";
+               }
+           }
+                                                         modstyle |= U_PS_JOIN_MITER; }
+        else if (style->stroke_linejoin.computed == 1) { modstyle |= U_PS_JOIN_ROUND; }
+        else {                                           modstyle |= U_PS_JOIN_BEVEL; }
 
         if (style->stroke_dash.n_dash   &&
             style->stroke_dash.dash       )
         {
-            if(FixPPTDashLine){ // will break up line into many smaller lines.  Override gradient if that was set, cannot do both.
-               brushStyle = U_BS_SOLID;
-               hatchType  = U_HS_HORIZONTAL;
-            }
-            else {
-               int i = 0;
-               while (linestyle != U_PS_USERSTYLE &&
-                      (i < style->stroke_dash.n_dash)) {
-                   if (style->stroke_dash.dash[i] > 0.00000001)
-                       linestyle = U_PS_USERSTYLE;
-                   i++;
-               }
-
-               if (linestyle == U_PS_USERSTYLE) {
-                   n_dash = style->stroke_dash.n_dash;
-                   dash = new uint32_t[n_dash];
-                   for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                       dash[i] = (uint32_t) (style->stroke_dash.dash[i]);
-                   }
-               }
+            if(!FixPPTDashLine){ // if this is set code elsewhere will break dots/dashes into many smaller lines.
+               penstyle = U_PS_DASH;// userstyle not supported apparently, for now map all Inkscape dot/dash to just dash
             }
         }
 
-        elp = extlogpen_set(
-            U_PS_GEOMETRIC | linestyle | linecap | linejoin,
-            linewidth,
-            brushStyle,
-            hatchColor,
-            hatchType,
-            n_dash,
-            dash);
-
-    }
-    else { // if (!style)
-        linejoin=0;
-        elp = extlogpen_set(
-            linestyle,
-            1,
-            U_BS_SOLID,
-            U_RGB(0,0,0),
-            U_HS_HORIZONTAL,
-            0,
-            NULL);
     }
 
-    rec = extcreatepen_set(&pen, eht,  Bmi, cbPx, px, elp );
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        throw "Fatal programming error in PrintEmf::create_pen at extcreatepen_set";
+    up  = U_PEN_set(penstyle | modstyle, linewidth, penColor);
+    rec = wcreatepenindirect_set(&pen, wht, up);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+        throw "Fatal programming error in PrintWmf::create_pen at wcreatepenindirect_set";
     }
-    free(elp);
-    if(Bmi)free(Bmi);
-    if(px)free(px);  // ct will always be NULL
 
-    rec = selectobject_set(pen, eht);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        throw "Fatal programming error in PrintEmf::create_pen at selectobject_set";
+    rec = wselectobject_set(pen, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+        throw "Fatal programming error in PrintWmf::create_pen at wselectobject_set";
     }
     hpen = pen;  // need this later for destroy_pen
 
-    if (linejoin == U_PS_JOIN_MITER) {
-        float miterlimit = style->stroke_miterlimit.value;  // This is a ratio.
-
-        if (miterlimit < 1)miterlimit = 1;
-
-        rec = U_EMRSETMITERLIMIT_set((uint32_t) miterlimit);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-            throw "Fatal programming error in PrintEmf::create_pen at U_EMRSETMITERLIMIT_set";
-        }
-    }
-
-    if (n_dash) {
-        delete[] dash;
-    }
     return 0;
 // std::cout << "end create_pen" << std::endl;
 }
 
-// set the current pen to the stock object NULL_PEN and then delete the defined pen object, if there is one.
-void PrintEmf::destroy_pen()
+//  delete the defined pen object
+void PrintWmf::destroy_pen()
 {
 // std::cout << "destroy_pen hpen: " << hpen<< std::endl;
     char *rec = NULL;
-    // before an object may be safely deleted it must no longer be selected
-    // select in a stock object to deselect this one, the stock object should
-    // never be used because we always select in a new one before drawing anythingrestore previous brush, necessary??? Would using a default stock object not work?
-    rec = selectobject_set(U_NULL_PEN, eht);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::destroy_pen at selectobject_set";
-    }
+    // WMF lets any object be deleted whenever, and the chips fall where they may...
     if (hpen){
-       rec = deleteobject_set(&hpen, eht);
-       if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-         throw "Fatal programming error in PrintEmf::destroy_pen";
+       rec = wdeleteobject_set(&hpen, wht);
+       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+         throw "Fatal programming error in PrintWmf::destroy_pen";
        }
        hpen = 0;
+    }
+
+    // (re)select the null pen
+    
+    rec = wselectobject_set(hpen_null, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+      throw "Fatal programming error in PrintWmf::destroy_pen";
     }
 // std::cout << "end destroy_pen " << std::endl;
 }
 
 
 
-unsigned int PrintEmf::bind(Inkscape::Extension::Print * /*mod*/, Geom::Affine const &transform, float /*opacity*/)
+unsigned int PrintWmf::bind(Inkscape::Extension::Print * /*mod*/, Geom::Affine const &transform, float /*opacity*/)
 {   
 // std::cout << "bind " << std::endl;
     if (!m_tr_stack.empty()) {
@@ -1042,7 +931,7 @@ unsigned int PrintEmf::bind(Inkscape::Extension::Print * /*mod*/, Geom::Affine c
     return 1;
 }
 
-unsigned int PrintEmf::release(Inkscape::Extension::Print * /*mod*/)
+unsigned int PrintWmf::release(Inkscape::Extension::Print * /*mod*/)
 {
 // std::cout << "release " << std::endl;
     m_tr_stack.pop();
@@ -1051,7 +940,7 @@ unsigned int PrintEmf::release(Inkscape::Extension::Print * /*mod*/)
 }
 
 #define clrweight(a,b,t) ((1-t)*((double) a) + (t)*((double) b))
-inline U_COLORREF PrintEmf::weight_opacity(U_COLORREF c1){
+inline U_COLORREF PrintWmf::weight_opacity(U_COLORREF c1){
     float opa = c1.Reserved/255.0;
     U_COLORREF result = U_RGB(
         255*opweight((float)c1.Red  /255.0, gv.rgb[0], opa),
@@ -1063,7 +952,7 @@ inline U_COLORREF PrintEmf::weight_opacity(U_COLORREF c1){
 
 
 // return the color between c1 and c2, c1 for t=0, c2 for t=1.0
-U_COLORREF PrintEmf::weight_colors(U_COLORREF c1, U_COLORREF c2, double t){
+U_COLORREF PrintWmf::weight_colors(U_COLORREF c1, U_COLORREF c2, double t){
     U_COLORREF result;
     result.Red      = clrweight(c1.Red,      c2.Red,      t);
     result.Green    = clrweight(c1.Green,    c2.Green,    t);
@@ -1099,7 +988,7 @@ U_COLORREF PrintEmf::weight_colors(U_COLORREF c1, U_COLORREF c2, double t){
    F is in RADIANS, but the SVGEllipticalArc needs degrees!
 
 */
-Geom::PathVector PrintEmf::center_ellipse_as_SVG_PathV(Geom::Point ctr, double rx, double ry, double F){
+Geom::PathVector PrintWmf::center_ellipse_as_SVG_PathV(Geom::Point ctr, double rx, double ry, double F){
     using Geom::X;
     using Geom::Y;
     double x1,y1,x2,y2;
@@ -1120,7 +1009,7 @@ Geom::PathVector PrintEmf::center_ellipse_as_SVG_PathV(Geom::Point ctr, double r
 /*  rx2,ry2 must be larger than rx1,ry1!
     angle is in RADIANS
 */
-Geom::PathVector PrintEmf::center_elliptical_ring_as_SVG_PathV(Geom::Point ctr, double rx1, double ry1, double rx2, double ry2, double F){
+Geom::PathVector PrintWmf::center_elliptical_ring_as_SVG_PathV(Geom::Point ctr, double rx1, double ry1, double rx2, double ry2, double F){
     using Geom::X;
     using Geom::Y;
     double x11,y11,x12,y12;
@@ -1147,7 +1036,7 @@ Geom::PathVector PrintEmf::center_elliptical_ring_as_SVG_PathV(Geom::Point ctr, 
 }
 
 /* Elliptical hole in a large square extending from -50k to +50k */
-Geom::PathVector PrintEmf::center_elliptical_hole_as_SVG_PathV(Geom::Point ctr, double rx, double ry, double F){
+Geom::PathVector PrintWmf::center_elliptical_hole_as_SVG_PathV(Geom::Point ctr, double rx, double ry, double F){
     using Geom::X;
     using Geom::Y;
     double x1,y1,x2,y2;
@@ -1171,7 +1060,7 @@ pos    vector from center to leading edge
 neg    vector from center to trailing edge
 width  vector to side edge 
 */
-Geom::PathVector PrintEmf::rect_cutter(Geom::Point ctr, Geom::Point pos, Geom::Point neg, Geom::Point width){
+Geom::PathVector PrintWmf::rect_cutter(Geom::Point ctr, Geom::Point pos, Geom::Point neg, Geom::Point width){
     std::vector<Geom::Path> outres;
     Geom::Path cutter;
     cutter.start(                       ctr + pos - width);
@@ -1186,7 +1075,7 @@ Geom::PathVector PrintEmf::rect_cutter(Geom::Point ctr, Geom::Point pos, Geom::P
 /* Convert from SPWindRule to livarot's FillRule
    This is similar to what sp_selected_path_boolop() does
 */
-FillRule PrintEmf::SPWR_to_LVFR(SPWindRule wr){
+FillRule PrintWmf::SPWR_to_LVFR(SPWindRule wr){
     FillRule fr;
     if(wr ==  SP_WIND_RULE_EVENODD){
        fr = fill_oddEven;
@@ -1198,7 +1087,7 @@ FillRule PrintEmf::SPWR_to_LVFR(SPWindRule wr){
 }
 
 
-unsigned int PrintEmf::fill(Inkscape::Extension::Print * /*mod*/,
+unsigned int PrintWmf::fill(Inkscape::Extension::Print * /*mod*/,
                     Geom::PathVector const &pathv, Geom::Affine const & /*transform*/, SPStyle const *style,
                     Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
 {
@@ -1213,13 +1102,13 @@ unsigned int PrintEmf::fill(Inkscape::Extension::Print * /*mod*/,
 
     fill_transform = tf;
 
-    if (create_brush(style, NULL)){ // only happens if the style is a gradient
+    if (create_brush(style, NULL)){ 
        /*
           Handle gradients.  Uses modified livarot as 2geom boolops is currently broken.
           Can handle gradients with multiple stops.
 
           The overlap is needed to avoid antialiasing artifacts when edges are not strictly aligned on pixel boundaries.
-          There is an inevitable loss of accuracy saving through an EMF file because of the integer coordinate system.
+          There is an inevitable loss of accuracy saving through an WMF file because of the integer coordinate system.
           Keep the overlap quite large so that loss of accuracy does not remove an overlap.
        */
        destroy_pen();  //this sets the NULL_PEN, otherwise gradient slices may display with boundaries, see longer explanation below
@@ -1347,7 +1236,7 @@ unsigned int PrintEmf::fill(Inkscape::Extension::Print * /*mod*/,
           }
        }
        else {
-          throw "Fatal programming error in PrintEmf::fill, invalid gradient type detected";
+          throw "Fatal programming error in PrintWmf::fill, invalid gradient type detected";
        }
        use_fill = false;  // gradients handled, be sure stroke does not use stroke and fill
     }
@@ -1388,7 +1277,7 @@ unsigned int PrintEmf::fill(Inkscape::Extension::Print * /*mod*/,
 }
 
 
-unsigned int PrintEmf::stroke (Inkscape::Extension::Print * /*mod*/,
+unsigned int PrintWmf::stroke (Inkscape::Extension::Print * /*mod*/,
                        Geom::PathVector const &pathv, const Geom::Affine &/*transform*/, const SPStyle *style,
                        Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
 {
@@ -1397,8 +1286,7 @@ unsigned int PrintEmf::stroke (Inkscape::Extension::Print * /*mod*/,
     Geom::Affine tf = m_tr_stack.top();
 
     use_stroke = true;
-//  use_fill was set in ::fill, if it is needed
-
+    //  use_fill was set in ::fill, if it is needed, if not, the null brush is used, it should be already set
     if (create_pen(style, tf))return 0;
     
     if (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine  ){
@@ -1446,14 +1334,14 @@ unsigned int PrintEmf::stroke (Inkscape::Extension::Print * /*mod*/,
 }
 
 
-// Draws simple_shapes, those with closed EMR_* primitives, like polygons, rectangles and ellipses.
+// Draws simple_shapes, those with closed WMR_* primitives, like polygons, rectangles and ellipses.
 // These use whatever the current pen/brush are and need not be followed by a FILLPATH or STROKEPATH.
 // For other paths it sets a few flags and returns.
-bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Affine &transform)
+bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
 // std::cout << "print_simple_shape " << std::endl <<std::flush;
 
-    Geom::PathVector pv = pathv_to_linear_and_cubic_beziers( pathv * transform );
+    Geom::PathVector pv = pathv_to_linear( pathv * transform, MAXDISP );
     
     int nodes  = 0;
     int moves  = 0;
@@ -1483,7 +1371,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     if (!nodes)
         return false;
     
-    U_POINT *lpPoints = new U_POINT[moves + lines + curves*3];
+    U_POINT16 *lpPoints = new U_POINT16[moves + lines + curves*3];
     int i = 0;
 
     /**
@@ -1596,52 +1484,26 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     }
 
     if (polygon || ellipse) {
- 
-        if (use_fill && !use_stroke) {  // only fill
-            rec = selectobject_set(U_NULL_PEN, eht);
-            if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-                throw "Fatal programming error in PrintEmf::print_simple_shape at selectobject_set pen";
-            }
-        }
-        else if(!use_fill && use_stroke) { // only stroke
-            rec = selectobject_set(U_NULL_BRUSH, eht);
-            if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-                throw "Fatal programming error in PrintEmf::print_simple_shape at selectobject_set brush";
-            }
-        }
+        // pens and brushes already set by caller, do not touch them
 
         if (polygon) {
             if (rectangle){
-              U_RECTL rcl = rectl_set((U_POINTL) {lpPoints[0].x, lpPoints[0].y}, (U_POINTL) {lpPoints[2].x, lpPoints[2].y});
-              rec = U_EMRRECTANGLE_set(rcl);
+               U_RECT16 rcl = U_RECT16_set((U_POINT16) {lpPoints[0].x, lpPoints[0].y}, (U_POINT16) {lpPoints[2].x, lpPoints[2].y});
+               rec = U_WMRRECTANGLE_set(rcl);
             }
             else {
-               rec = U_EMRPOLYGON_set(U_RCL_DEF, nodes, lpPoints);
+               rec = U_WMRPOLYGON_set(nodes, lpPoints);
             }
         }
         else if (ellipse) {
-            U_RECTL rcl = rectl_set((U_POINTL) {lpPoints[6].x, lpPoints[3].y}, (U_POINTL) {lpPoints[0].x, lpPoints[9].y});
-            rec = U_EMRELLIPSE_set(rcl);
+            U_RECT16 rcl = U_RECT16_set((U_POINT16) {lpPoints[6].x, lpPoints[3].y}, (U_POINT16) {lpPoints[0].x, lpPoints[9].y});
+            rec = U_WMRELLIPSE_set(rcl);
         }
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-            throw "Fatal programming error in PrintEmf::print_simple_shape at retangle/ellipse/polygon";
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            throw "Fatal programming error in PrintWmf::print_simple_shape at retangle/ellipse/polygon";
         }
         
         done = true;
-
-        // replace the handle we moved above, assuming there was something set already
-        if (use_fill && !use_stroke && hpen) { // only fill
-           rec = selectobject_set(hpen, eht);
-           if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-               throw "Fatal programming error in PrintEmf::print_simple_shape at selectobject_set pen";
-           }
-        }
-        else if (!use_fill && use_stroke && hbrush){ // only stroke
-           rec = selectobject_set(hbrush, eht);
-           if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-               throw "Fatal programming error in PrintEmf::print_simple_shape at selectobject_set brush";
-           }
-        }
 
     }
 
@@ -1655,9 +1517,10 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
    in the past (or will be in the future?)  Not in current trunk. (4/19/2012)
    
    Limitations of this code:
-   1.  Transparency is lost on export.  (Apparently a limitation of the EMF format.)
-   2.  Probably messes up if row stride != w*4
-   3.  There is still a small memory leak somewhere, possibly in a pixbuf created in a routine
+   1.  Images lose their rotation, one corner stays in the same place.
+   2.  Transparency is lost on export.  (A limitation of the WMF format.)
+   3.  Probably messes up if row stride != w*4
+   4.  There is still a small memory leak somewhere, possibly in a pixbuf created in a routine
        that calls this one and passes px, but never removes the rest of the pixbuf.  The first time
        this is called it leaked 5M (in one test) and each subsequent call leaked around 200K more.
        If this routine is reduced to 
@@ -1666,7 +1529,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
        size of two bitmaps.
 */
 
-unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not used */
+unsigned int PrintWmf::image(Inkscape::Extension::Print * /* module */,  /** not used */
                            unsigned char *rgba_px,   /** array of pixel values, Gdk::Pixbuf bitmap format */
                            unsigned int w,      /** width of bitmap */
                            unsigned int h,      /** height of bitmap */
@@ -1679,9 +1542,9 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
      char *rec = NULL;
      Geom::Affine tf = m_tr_stack.top();
 
-     rec = U_EMRSETSTRETCHBLTMODE_set(U_COLORONCOLOR);
-     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        throw "Fatal programming error in PrintEmf::image at EMRHEADER";
+     rec = U_WMRSETSTRETCHBLTMODE_set(U_COLORONCOLOR);
+     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+        throw "Fatal programming error in PrintWmf::image at EMRHEADER";
      }
 
      x1= atof(style->object->getAttribute("x"));
@@ -1703,35 +1566,11 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
      Bmih = bitmapinfoheader_set(w, h, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
      Bmi = bitmapinfo_set(Bmih, ct);
 
-     U_POINTL Dest  = pointl_set(round(pLL2[Geom::X] * PX2WORLD), round(pLL2[Geom::Y] * PX2WORLD));
-     U_POINTL cDest = pointl_set(round(dw * PX2WORLD), round(dh * PX2WORLD));
-     U_POINTL Src   = pointl_set(0,0);
-     U_POINTL cSrc  = pointl_set(w,h);
-     if(!FixImageRot){  /* Rotate images - some programs cannot read them in correctly if they are rotated */
-        tf[4] = tf[5] = 0.0;  // get rid of the offset in the transform
-        Geom::Point pLL2prime = pLL2 * tf;
-        U_XFORM tmpTransform;
-        tmpTransform.eM11 =  tf[0];
-        tmpTransform.eM12 =  tf[1];
-        tmpTransform.eM21 =  tf[2];
-        tmpTransform.eM22 =  tf[3];
-        tmpTransform.eDx  =  (pLL2[Geom::X] - pLL2prime[Geom::X]) * PX2WORLD;  //map pLL2 (now in EMF coordinates) back onto itself after the rotation
-        tmpTransform.eDy  =  (pLL2[Geom::Y] - pLL2prime[Geom::Y]) * PX2WORLD;
-
-        rec=U_EMRSAVEDC_set();
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-           throw "Fatal programming error in PrintEmf::begin at U_EMRSAVEDC_set";
-        }
-
-
-        rec = U_EMRMODIFYWORLDTRANSFORM_set(tmpTransform, U_MWT_LEFTMULTIPLY);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-           throw "Fatal programming error in PrintEmf::begin at EMRMODIFYWORLDTRANSFORM";
-        }
-
-     }
-     rec = U_EMRSTRETCHDIBITS_set(
-           U_RCL_DEF,           //! Bounding rectangle in device units
+     U_POINT16 Dest  = point16_set(round(pLL2[Geom::X] * PX2WORLD), round(pLL2[Geom::Y] * PX2WORLD));
+     U_POINT16 cDest = point16_set(round(dw * PX2WORLD), round(dh * PX2WORLD));
+     U_POINT16 Src   = point16_set(0,0);
+     U_POINT16 cSrc  = point16_set(w,h);
+     rec = U_WMRSTRETCHDIB_set(
            Dest,                //! Destination UL corner in logical units
            cDest,               //! Destination W & H in logical units
            Src,                 //! Source UL corner in logical units
@@ -1742,196 +1581,151 @@ unsigned int PrintEmf::image(Inkscape::Extension::Print * /* module */,  /** not
            h*rs,                //! size in bytes of px          
            px                   //! (Optional) bitmapbuffer (U_BITMAPINFO section)
      );
-     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        throw "Fatal programming error in PrintEmf::image at U_EMRSTRETCHDIBITS_set";
+     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+        throw "Fatal programming error in PrintWmf::image at U_WMRSTRETCHDIB_set";
      }
      free(px);
      free(Bmi);
      if(numCt)free(ct);
-     
-     if(!FixImageRot){
-        rec=U_EMRRESTOREDC_set(-1);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-           throw "Fatal programming error in PrintEmf::begin at U_EMRRESTOREDC_set";
-        }
-     }
-       
+        
 // std::cout << "end image" << std::endl;
   return 0;
 }
 
 // may also be called with a simple_shape or an empty path, whereupon it just returns without doing anything
-unsigned int PrintEmf::print_pathv(Geom::PathVector const &pathv, const Geom::Affine &transform)
+unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
 // std::cout << "print_pathv " << std::endl << std::flush;
-     Geom::Affine tf = transform;
-     char *rec = NULL;
+    char       *rec = NULL;
+    PU_POINT16  pt16hold, pt16ptr;
+    uint16_t   *n16hold;
+    uint16_t   *n16ptr;
 
-    simple_shape = print_simple_shape(pathv, tf);
-    if (simple_shape || pathv.empty()){
-       if (use_fill){    destroy_brush(); }  // these must be cleared even if nothing is drawn or hbrush,hpen fill up
-       if (use_stroke){  destroy_pen();   }
-       return TRUE;
-    }
-
-    /* inkscape to EMF scaling is done below, but NOT the rotation/translation transform,
-       that is handled by the EMF MODIFYWORLDTRANSFORM record
-    */
-
-    Geom::PathVector pv = pathv_to_linear_and_cubic_beziers( pathv * tf );
-    
-    rec = U_EMRBEGINPATH_set();
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        throw "Fatal programming error in PrintEmf::print_pathv at U_EMRBEGINPATH_set";
-    }
-
-    /**
-     * For all Subpaths in the <path>
-     */
-    for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
-    {
-        using Geom::X;
-        using Geom::Y;
-
- 
-        Geom::Point p0 = pit->initialPoint();
-
-        p0[X] = (p0[X] * PX2WORLD);
-        p0[Y] = (p0[Y] * PX2WORLD);
+    simple_shape = print_simple_shape(pathv, transform);
+    if (!simple_shape && !pathv.empty()){
+       // WMF does not have beziers, need to convert to ONLY  linears with something like this:
+       Geom::PathVector pv = pathv_to_linear( pathv * transform, MAXDISP );
+       
+       /**
+        * For all Subpaths in the <path>
+        */
         
-        U_POINTL ptl = pointl_set((int32_t) round(p0[X]), (int32_t) round(p0[Y]));
-        rec = U_EMRMOVETOEX_set(ptl);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-            throw "Fatal programming error in PrintEmf::print_pathv at U_EMRMOVETOEX_set";
-        }
+       /* If the path consists entirely of closed subpaths use polypolygon, for all paths.  Otherwise use
+           polygon or polyline separately on each path.  The former allows path delimited donuts and the like, which
+           cannot be represented in WMF with polygon or polyline because there is no external way to combine paths
+           as there is in EMF or SVG */ 
+       int nPolys=0;
+       int totPoints = 0;
+       for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
+       {
+           totPoints += 1 + pit->size_default();  // big array, will hold all points, for all polygons.  Size_default ignores first point in each path.
+           if (pit->end_default() == pit->end_closed()) {  nPolys++;        }
+           else {                                          nPolys=0; break; }
+       }
 
-        /**
-         * For all segments in the subpath
-         */
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit)
-        {
-            if ( is_straight_curve(*cit) )
-            {
-                //Geom::Point p0 = cit->initialPoint();
-                Geom::Point p1 = cit->finalPoint();
+       if(nPolys){ // a single polypolygon
+          pt16hold = pt16ptr = (PU_POINT16) malloc(totPoints * sizeof(U_POINT16));
+          if(!pt16ptr)return(false);
+         
+          n16hold = n16ptr = (uint16_t *) malloc(nPolys * sizeof(uint16_t));
+          if(!n16ptr){ free(pt16hold); return(false); }
 
-                //p0[X] = (p0[X] * PX2WORLD);
-                p1[X] = (p1[X] * PX2WORLD);
-                //p0[Y] = (p0[Y] * PX2WORLD);
-                p1[Y] = (p1[Y] * PX2WORLD);
-                
-                //int32_t const x0 = (int32_t) round(p0[X]);
-                //int32_t const y0 = (int32_t) round(p0[Y]);
+          for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
+          {
+              using Geom::X;
+              using Geom::Y;
 
-                ptl = pointl_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
-                rec = U_EMRLINETO_set(ptl);
-                if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-                    throw "Fatal programming error in PrintEmf::print_pathv at U_EMRLINETO_set";
-                }
-            }
-            else if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*cit))
-            {
-                std::vector<Geom::Point> points = cubic->points();
-                //Geom::Point p0 = points[0];
-                Geom::Point p1 = points[1];
-                Geom::Point p2 = points[2];
-                Geom::Point p3 = points[3];
+    
+              *n16ptr++ = 1 + pit->size_default();  // points in the subpath
+              /**
+               * For each segment in the subpath
+               */
+              Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
 
-                //p0[X] = (p0[X] * PX2WORLD);
-                p1[X] = (p1[X] * PX2WORLD);
-                p2[X] = (p2[X] * PX2WORLD);
-                p3[X] = (p3[X] * PX2WORLD);
-                //p0[Y] = (p0[Y] * PX2WORLD);
-                p1[Y] = (p1[Y] * PX2WORLD);
-                p2[Y] = (p2[Y] * PX2WORLD);
-                p3[Y] = (p3[Y] * PX2WORLD);
-                
-                //int32_t const x0 = (int32_t) round(p0[X]);
-                //int32_t const y0 = (int32_t) round(p0[Y]);
-                int32_t const x1 = (int32_t) round(p1[X]);
-                int32_t const y1 = (int32_t) round(p1[Y]);
-                int32_t const x2 = (int32_t) round(p2[X]);
-                int32_t const y2 = (int32_t) round(p2[Y]);
-                int32_t const x3 = (int32_t) round(p3[X]);
-                int32_t const y3 = (int32_t) round(p3[Y]);
+              p1[X] = (p1[X] * PX2WORLD);
+              p1[Y] = (p1[Y] * PX2WORLD);              
+              *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
 
-                U_POINTL pt[3];
-                pt[0].x = x1;
-                pt[0].y = y1;
-                pt[1].x = x2;
-                pt[1].y = y2;
-                pt[2].x = x3;
-                pt[2].y = y3;
+              for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
+              {
+                 Geom::Point p1 = cit->finalPoint();
 
-                rec = U_EMRPOLYBEZIERTO_set(U_RCL_DEF, 3, pt);
-                if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-                    throw "Fatal programming error in PrintEmf::print_pathv at U_EMRPOLYBEZIERTO_set";
-                }
-            }
-            else
-            {
-                g_warning("logical error, because pathv_to_linear_and_cubic_beziers was used");
-            }
-        }
+                 p1[X] = (p1[X] * PX2WORLD);
+                 p1[Y] = (p1[Y] * PX2WORLD);              
+                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+              }
 
-        if (pit->end_default() == pit->end_closed()) {  // there may be multiples of this on a single path
-            rec = U_EMRCLOSEFIGURE_set();
-            if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-                throw "Fatal programming error in PrintEmf::print_pathv at U_EMRCLOSEFIGURE_set";
-            }
-        }
+          }
+          rec = U_WMRPOLYPOLYGON_set(nPolys, n16hold,pt16hold);
+          if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+             throw "Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYPOLYGON_set";
+          }
+          free(pt16hold);
+          free(n16hold);
+       }
+       else { // one or more polyline or polygons (but not all polygons, that would be the preceding case)
+          for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
+          {
+              using Geom::X;
+              using Geom::Y;
 
+              /*  Figure out how many points there are, make an array big enough to hold them, and store
+                  all the points.  This is the same for open or closed path.  Note that size_default() ignores
+                  the first point, for some reason.
+              */
+              int nPoints = 1 + pit->size_default();
+              pt16hold = pt16ptr = (PU_POINT16) malloc(nPoints * sizeof(U_POINT16));
+              if(!pt16ptr)break;
+    
+              /**
+               * For each segment in the subpath
+               */
+              Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
+
+              p1[X] = (p1[X] * PX2WORLD);
+              p1[Y] = (p1[Y] * PX2WORLD);              
+              *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+
+              for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
+              {
+                 Geom::Point p1 = cit->finalPoint();
+
+                 p1[X] = (p1[X] * PX2WORLD);
+                 p1[Y] = (p1[Y] * PX2WORLD);              
+                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+              }
+
+              if (pit->end_default() == pit->end_closed()) {  rec = U_WMRPOLYGON_set(nPoints, pt16hold);  }
+              else  {                                         rec = U_WMRPOLYLINE_set(nPoints, pt16hold); }
+              if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                 throw "Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYGON/POLYLINE_set";
+              }
+              free(pt16hold);
+          }
+       }
     }
 
-    rec = U_EMRENDPATH_set();  // there may be only be one of these on a single path
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        throw "Fatal programming error in PrintEmf::print_pathv at U_EMRENDPATH_set";
-    }
-
-    // explicit FILL/STROKE commands are needed for each sub section of the path
-    if (use_fill && !use_stroke){
-        rec = U_EMRFILLPATH_set(U_RCL_DEF);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-          throw "Fatal programming error in PrintEmf::fill at U_EMRFILLPATH_set";
-        }
-    }
-    else if (use_fill && use_stroke) {
-        rec  = U_EMRSTROKEANDFILLPATH_set(U_RCL_DEF);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){                        
-            throw "Fatal programming error in PrintEmf::stroke at U_EMRSTROKEANDFILLPATH_set"; 
-        }                                                                                     
-    }
-    else if (!use_fill && use_stroke){
-        rec  = U_EMRSTROKEPATH_set(U_RCL_DEF);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){                        
-            throw "Fatal programming error in PrintEmf::stroke at U_EMRSTROKEPATH_set"; 
-        }                                                                                     
-    }
+    // WMF has no fill or stroke commands, the draw does it with active pen/brush
 
     // clean out brush and pen, but only after all parts of the draw complete
-    if (use_fill){
-        destroy_brush();
-    }
-    if (use_stroke){
-        destroy_pen();
-    }
-
+    if (use_fill){    destroy_brush(); }
+    if (use_stroke){  destroy_pen();   }
 // std::cout << "end pathv" << std::endl;
 
     return TRUE;
 }
 
 
-bool PrintEmf::textToPath(Inkscape::Extension::Print * ext)
+bool PrintWmf::textToPath(Inkscape::Extension::Print * ext)
 {
     return ext->get_param_bool("textToPath");
 }
 
-unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *text, Geom::Point const &p,
+unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *text, Geom::Point const &p,
                     SPStyle const *const style)
 {
 // std::cout << "text "  << std::endl;
-    if (!et) return 0;
+    if (!wt) return 0;
 
     char *rec = NULL;
     int ccount,newfont;
@@ -1946,15 +1740,19 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
     // the dx array is smuggled in like: text<nul>w1 w2 w3 ...wn<nul><nul>, where the widths are floats 7 characters wide, including the space
     int ndx;
-    uint32_t *adx;
+    int16_t *adx;
     smuggle_adxky_out(text, &adx, &ky, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
     
     char *text2 = strdup(text);  // because U_Utf8ToUtf16le calls iconv which does not like a const char *
     uint16_t *unicode_text = U_Utf8ToUtf16le( text2, 0, NULL );
     free(text2);
-    //translates Unicode to NonUnicode, if possible.  If any translate, all will, and all to
+    //translates Unicode  as Utf16le to NonUnicode, if possible.  If any translate, all will, and all to
     //the same font, because of code in Layout::print
     UnicodeToNon(unicode_text, &ccount, &newfont);
+    // The preceding hopefully handled conversions to symbol, wingdings or zapf dingbats.  Now slam everything
+    // else down into latin1, which is all WMF can handle.  If the language isn't English expect terrible results.
+    char *latin1_text = U_Utf16leToLatin1( unicode_text, 0, NULL );
+    free(unicode_text);
 
     //PPT gets funky with text within +-1 degree of a multiple of 90, but only for SOME fonts.Snap those to the central value
     //Some funky ones:  Arial, Times New Roman
@@ -1986,9 +1784,9 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
       }
     }
 
-    /* Note that text font sizes are stored into the EMF as fairly small integers and that limits their precision.  
-       The EMF output files produced here have been designed so that the integer valued pt sizes
-       land right on an integer value in the EMF file, so those are exact.  However, something like 18.1 pt will be
+    /* Note that text font sizes are stored into the WMF as fairly small integers and that limits their precision.  
+       The WMF output files produced here have been designed so that the integer valued pt sizes
+       land right on an integer value in the WMF file, so those are exact.  However, something like 18.1 pt will be
        somewhat off, so that when it is read back in it becomes 18.11 pt.  (For instance.)   
     */
     int textheight = round(-style->font_size.computed * PX2WORLD * std::min(tf.expansionX(),tf.expansionY()));
@@ -1996,19 +1794,19 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
         // Get font face name.  Use changed font name if unicode mapped to one
         // of the special fonts.
-        uint16_t *wfacename;
+        char *facename;
         if(!newfont){
-           wfacename = U_Utf8ToUtf16le(style->text->font_family.value, 0, NULL);
+           facename = U_Utf8ToLatin1(style->text->font_family.value, 0, NULL);
         }
         else {
-           wfacename = U_Utf8ToUtf16le(FontName(newfont), 0, NULL);
+           facename = U_Utf8ToLatin1(FontName(newfont), 0, NULL);
         }
 
         // Scale the text to the minimum stretch. (It tends to stay within bounding rectangles even if
-        // it was streteched asymmetrically.)  Few applications support text from EMF which is scaled
+        // it was streteched asymmetrically.)  Few applications support text from WMF which is scaled
         // differently by height/width, so leave lfWidth alone.  
 
-        U_LOGFONT lf = logfont_set(
+        PU_FONT puf = U_FONT_set(
             textheight, 
             0,        
             rot,
@@ -2022,41 +1820,40 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
             U_CLIP_DEFAULT_PRECIS,
             U_DEFAULT_QUALITY,
             U_DEFAULT_PITCH | U_FF_DONTCARE,
-            wfacename);
-	free(wfacename);
+            facename);
+	free(facename);
        
-        rec  = extcreatefontindirectw_set(&hfont, eht,  (char *) &lf, NULL);
-        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-           throw "Fatal programming error in PrintEmf::text at extcreatefontindirectw_set";
+        rec  = wcreatefontindirect_set( &hfont, wht, puf); 
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+           throw "Fatal programming error in PrintWmf::text at wcreatefontindirect_set";
         }
+        free(puf);
     }
     
-    rec = selectobject_set(hfont, eht);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::text at selectobject_set";
+    rec = wselectobject_set(hfont, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::text at wselectobject_set";
     }
 
     float rgb[3];
     sp_color_get_rgb_floatv( &style->fill.value.color, rgb );
-    rec = U_EMRSETTEXTCOLOR_set(U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]));
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::text at U_EMRSETTEXTCOLOR_set";
+    // only change the text color when it needs to be changed 
+    if(memcmp(htextcolor_rgb,rgb,3*sizeof(float))){
+       memcpy(htextcolor_rgb,rgb,3*sizeof(float));
+       rec = U_WMRSETTEXTCOLOR_set(U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]));
+       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+          throw "Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set";
+       }
     }
 
+ 
     // Text alignment:
     //   - (x,y) coordinates received by this filter are those of the point where the text
     //     actually starts, and already takes into account the text object's alignment;
-    //   - for this reason, the EMF text alignment must always be TA_BASELINE|TA_LEFT.
-    rec = U_EMRSETTEXTALIGN_set(U_TA_BASELINE | U_TA_LEFT);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::text at U_EMRSETTEXTALIGN_set";
-    }
+    //   - for this reason, the WMF text alignment must always be TA_BASELINE|TA_LEFT.
+    //     this is set at the beginning of the file and never changed
 
-    // Transparent text background
-    rec = U_EMRSETBKMODE_set(U_TRANSPARENT);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::text at U_EMRSETBKMODE_set";
-    }
+    // Transparent text background, never changes, set at the beginning of the file
 
     Geom::Point p2 = p * tf;
 
@@ -2068,7 +1865,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     p2[Geom::X] += ky * std::sin( rotb );
     p2[Geom::Y] += ky * std::cos( rotb );
 
-    //Conditionally handle compensation for PPT EMF import bug (affects PPT 2003-2010, at least)
+    //Conditionally handle compensation for PPT WMF import bug (affects PPT 2003-2010, at least)
     if(FixPPTCharPos){
        if(fix90n==1){ //vertical
          dx= 0.0;
@@ -2100,42 +1897,32 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 //    This is currently being smuggled in from caller as part of text, works
 //    MUCH better than the fallback hack below
 //    uint32_t *adx = dx_set(textheight,  U_FW_NORMAL, slen);  // dx is needed, this makes one up
-    char *rec2 = emrtext_set( (U_POINTL) {xpos, ypos}, ndx, 2, unicode_text, U_ETO_NONE, U_RCL_DEF, adx);
-    free(unicode_text);
+    rec = U_WMREXTTEXTOUT_set((U_POINT16) {xpos, ypos}, ndx, U_ETO_NONE, latin1_text, adx, U_RCL16_DEF);
+    free(latin1_text);
     free(adx);
-    rec = U_EMREXTTEXTOUTW_set(U_RCL_DEF,U_GM_COMPATIBLE,1.0,1.0,(PU_EMRTEXT)rec2);
-    free(rec2);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::text at U_EMREXTTEXTOUTW_set";
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+       throw "Fatal programming error in PrintWmf::text at U_WMREXTTEXTOUTW_set";
     }
 
-    // Must deselect an object before deleting it.  Put the default font (back) in.
-    rec = selectobject_set(U_DEVICE_DEFAULT_FONT, eht);
-    if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-       throw "Fatal programming error in PrintEmf::text at selectobject_set";
-    }
-
-    if(hfont){
-       rec = deleteobject_set(&hfont, eht);
-       if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-         throw "Fatal programming error in PrintEmf::text at deleteobject_set";
-       }
+    rec = wdeleteobject_set(&hfont, wht);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+      throw "Fatal programming error in PrintWmf::text at wdeleteobject_set";
     }
     
 // std::cout << "end text" << std::endl;
     return 0;
 }
 
-void PrintEmf::init (void)
+void PrintWmf::init (void)
 {
 // std::cout << "init " << std::endl;
     read_system_fflist();
 
-    /* EMF print */
+    /* WMF print */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-        "<name>Enhanced Metafile Print</name>\n"
-        "<id>org.inkscape.print.emf</id>\n"
+        "<name>Windows Metafile Print</name>\n"
+        "<id>org.inkscape.print.wmf</id>\n"
         "<param name=\"destination\" type=\"string\"></param>\n"
         "<param name=\"textToPath\" type=\"boolean\">true</param>\n"
         "<param name=\"pageBoundingBox\" type=\"boolean\">true</param>\n"
@@ -2143,9 +1930,8 @@ void PrintEmf::init (void)
         "<param name=\"FixPPTDashLine\" type=\"boolean\">false</param>\n"
         "<param name=\"FixPPTGrad2Polys\" type=\"boolean\">false</param>\n"
         "<param name=\"FixPPTPatternAsHatch\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixImageRot\" type=\"boolean\">false</param>\n"
         "<print/>\n"
-        "</inkscape-extension>", new PrintEmf());
+        "</inkscape-extension>", new PrintWmf());
 
     return;
 }

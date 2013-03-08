@@ -39,6 +39,7 @@ uint16_t *U_Utf32leToUtf16le( const uint32_t *src, size_t max, size_t *len );
 char     *U_Utf32leToUtf8( const uint32_t *src, size_t max, size_t *len );
 uint32_t *U_Utf16leToUtf32le( const uint16_t *src, size_t max, size_t *len );
 char     *U_Utf16leToUtf8( const uint16_t *src, size_t max, size_t *len );
+char     *U_Utf16leToLatin1( const uint16_t *src, size_t max, size_t *len );
 char     *U_Utf8ToLatin1( const char *src, size_t max, size_t *len );
 char     *U_Latin1ToUtf8( const char *src, size_t max, size_t *len );
 uint16_t  U_Utf16le(const uint16_t src);
