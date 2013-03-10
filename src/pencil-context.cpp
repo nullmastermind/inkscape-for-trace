@@ -759,7 +759,9 @@ interpolate(SPPencilContext *pc)
         for (int c = 0; c < n_segs; c++) {
             //BSpline            
             if(mode == 2){
-                pc->green_curve->lineto(b[4*c+3]);
+                Geom::Point BP = b[4*c+0] + (1./3)*(b[4*c+3] - b[4*c+0]);
+                Geom::Point CP = b[4*c+3] + (1./3)*(b[4*c+0] - b[4*c+3]);
+                pc->green_curve->curveto(BP,CP,b[4*c+3]);
             }else{
                 pc->green_curve->curveto(b[4*c+1], b[4*c+2], b[4*c+3]);
             }
@@ -908,7 +910,9 @@ fit_and_split(SPPencilContext *pc)
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         if(mode == 2){
-            pc->red_curve->lineto(b[3]);
+            Geom::Point B = b[0] + (1./3)*(b[3] - b[0]);
+            Geom::Point C = b[3] + (1./3)*(b[0] - b[3]);
+            pc->red_curve->curveto(B,C,b[3]);
         }else{
             pc->red_curve->curveto(b[1], b[2], b[3]);
         }
