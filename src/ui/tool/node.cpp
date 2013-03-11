@@ -29,6 +29,9 @@
 #include "ui/tool/node.h"
 #include "ui/tool/path-manipulator.h"
 #include <gdk/gdkkeysyms.h>
+//BSpline
+#include <math.h>
+//BSpline End;
 
 namespace {
 
@@ -146,10 +149,11 @@ void Handle::move(Geom::Point const &new_pos)
         Set &nodes = _parent->_selection.allPoints();
         for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
-            _parent->_selection.erase(n);
-        }        
-        //if(!_parent->selected())
-        _parent->_selection.insert(_parent);
+            if(n != _parent)
+                _parent->_selection.erase(n);
+        }
+        if(!_parent->selected())
+            _parent->_selection.insert(_parent);
     }
     //BSpline End
 
@@ -307,11 +311,32 @@ bool Handle::_eventHandler(SPEventContext *event_context, GdkEvent *event)
             break;
         default: break;
         }
+    //BSpline
+    case GDK_2BUTTON_PRESS:
+        handle_2button_press();
+        break;
+    //BSpline End
     default: break;
     }
 
     return ControlPoint::_eventHandler(event_context, event);
 }
+
+//BSpline
+void Handle::handle_2button_press(){
+    if(_pm().isBSpline()){
+        Handle *h = NULL;
+        Handle *h2 = NULL;
+        double pos = 0;
+        h = this;
+        setPosition(_pm().BSplineHandleReposition(h,0.3334));
+        pos = _pm().BSplineHandlePosition(h);
+        h2 = this->other();
+        this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
+        _pm().update();
+    }
+}
+//BSpline End
 
 bool Handle::grabbed(GdkEventMotion *)
 {
@@ -360,6 +385,16 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - perp_pos);
         }
         new_pos = result;
+        //BSpline
+        if(_pm().isBSpline()){
+            Handle *h = NULL;
+            double pos = 0;
+            h = this;
+            setPosition(new_pos);
+            pos = ceilf(_pm().BSplineHandlePosition(h)*10)/10;
+            new_pos=_pm().BSplineHandleReposition(h,pos);
+        }
+        //BSpline End
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
@@ -728,7 +763,7 @@ void Node::updateHandles()
     _front._handleControlStyling();
     _back._handleControlStyling();
 }
-
+    
 
 void Node::setType(NodeType type, bool update_handles)
 {
@@ -737,6 +772,27 @@ void Node::setType(NodeType type, bool update_handles)
         updateState(); // The size of the control might have changed
         return;
     }
+
+    //BSpline
+    if(_pm().isBSpline()){
+        if (isEndNode()) return;
+        Handle* front = &_front;
+        Handle* back = &_back;
+        double pos = 0.3334;
+        switch (type) {
+            case NODE_CUSP:
+                if(update_handles)
+                    pos = 0;
+                else
+                    pos = _pm().BSplineHandlePosition(front);;
+            break;
+            default: break;
+        }
+        type = NODE_CUSP;
+        _front.setPosition(_pm().BSplineHandleReposition(front,pos));
+        _back.setPosition(_pm().BSplineHandleReposition(back,pos));
+    }
+    //BSpline End
 
     // if update_handles is true, adjust handle positions to match the node type
     // handle degenerate handles appropriately
@@ -821,7 +877,9 @@ void Node::setType(NodeType type, bool update_handles)
         default: break;
         }
     }
+
     _type = type;
+
     _setControlType(nodeTypeToCtrlType(_type));
     updateState();
 }

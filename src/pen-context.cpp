@@ -45,7 +45,7 @@
 #include "tools-switch.h"
 #include "ui/control-manager.h"
 //BSpline
-//Incluimos
+//Incluimos los archivos necesarios para las BSpline y Spiro
 #define INKSCAPE_LPE_SPIRO_C
 #include "live_effects/lpe-spiro.h"
 
@@ -86,23 +86,27 @@ static void spdc_pen_set_initial_point(SPPenContext *pc, Geom::Point const p);
  *BSpline
  *Added functions
 */
-
-/*
- *Sobrecarga la función "sp_pen_context_set_polyline_mode"
- *Le da valor a la nueva propiedad "pc->spiro" que como se auto define indica si estamos en modo spiro
- *En el futuro se la dará a "pc->bspline"
-*/
+//Añade los modos spiro y bspline
 static void sp_pen_context_set_mode(SPPenContext *const pc, guint mode);
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void bspline_spiro_color(SPPenContext *const pc);
+//Crea un nodo en modo bspline o spiro
 static void bspline_spiro(SPPenContext *const pc,bool shift);
+//Crea un nodo de modo spiro o bspline
 static void bspline_spiro_on(SPPenContext *const pc);
+//Crea un nodo de tipo CUSP
 static void bspline_spiro_off(SPPenContext *const pc);
+//Continua una curva existente en modo bspline o spiro
 static void bspline_spiro_start_anchor(SPPenContext *const pc,bool shift);
+//Continua una curva exsitente con el nodo de union en modo bspline o spiro
 static void bspline_spiro_start_anchor_on(SPPenContext *const pc);
+//Continua una curva existente con el nodo de union en modo CUSP
 static void bspline_spiro_start_anchor_off(SPPenContext *const pc);
+//Modifica la "red_curve" cuando se detecta movimiento
 static void bspline_spiro_motion(SPPenContext *const pc,bool shift);
+//Cierra la curva con el último nodo en modo bspline o spiro
 static void bspline_spiro_end_anchor_on(SPPenContext *const pc);
+//Cierra la curva con el último nodo en modo CUSP
 static void bspline_spiro_end_anchor_off(SPPenContext *const pc);
 //Unimos todas las curvas en juego y llamamos a la función doEffect.
 static void bspline_spiro_build(SPPenContext *const pc);
@@ -224,7 +228,7 @@ void sp_pen_context_set_polyline_mode(SPPenContext *const pc) {
     pc->polylines_only = (mode == 3 || mode == 4);
     pc->polylines_paraxial = (mode == 4);
     //BSpline
-    //we call the function which defines the Spiro modes and the B-spline in the future
+    //we call the function which defines the Spiro modes and the BSpline
     //todo: merge to one function only
     sp_pen_context_set_mode(pc, mode);
     //BSpline End
@@ -232,7 +236,7 @@ void sp_pen_context_set_polyline_mode(SPPenContext *const pc) {
 
 //BSpline
 /*
-*.Set the mode of draw now spiro, and later b-splines
+*.Set the mode of draw spiro, and bsplines
 */
 void sp_pen_context_set_mode(SPPenContext *const pc, guint mode) {
     pc->spiro = (mode == 1);
@@ -461,7 +465,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
     //Test whether we hit any anchor.
     SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
     //with this we avoid creating a new point over the existing one
-    if((pc->spiro || pc->bspline) && pc->npoints > 0 && pc->p[0] == pc->p[3]){
+    if(!bevent.button == 3 && (pc->spiro || pc->bspline) && pc->npoints > 0 && pc->p[0] == pc->p[3]){
         return FALSE;
     } 
     //BSpline end
@@ -529,9 +533,9 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
                             // Set start anchor
                             pc->sa = anchor;
                             //BSpline
+                            //Continuamos una curva existente
                             if(anchor){
-                                if(pc->bspline || pc->spiro)
-                                    bspline_spiro_start_anchor(pc,(bevent.state & GDK_SHIFT_MASK));
+                                bspline_spiro_start_anchor(pc,(bevent.state & GDK_SHIFT_MASK));
                             }
                             //BSpline End
                             if (anchor && !sp_pen_context_has_waiting_LPE(pc)) {
@@ -585,8 +589,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
                             }
                         }
                         //BSpline
-                        //Esto evita arrastrar los manejadores ya que el punto se crea
-                        //al soltar el botón del ratón.
+                        //Evitamos la creación de un punto de control para que se cree el nodo en el evento de soltar
                         pc->state = (pc->spiro || pc->bspline || pc->polylines_only) ? SP_PEN_CONTEXT_POINT : SP_PEN_CONTEXT_CONTROL;
                         //BSpline End
                         ret = TRUE;
@@ -778,6 +781,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
             break;
     }
     //BSpline
+    //Lanzamos la función "bspline_spiro_motion" al moverse el ratón o cuando se para.
     if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
         bspline_spiro_motion(pc,(mevent.state & GDK_SHIFT_MASK));
         pen_drag_origin_w = event_w;
@@ -809,6 +813,7 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
         // Test whether we hit any anchor.
         SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
         //BSpline
+        //with this we avoid creating a new point over the existing one
         if(pc->spiro || pc->bspline){
             //Si intentamos crear un nodo en el mismo sitio que el origen, paramos.
             if(pc->npoints > 0 && pc->p[0] == pc->p[3]){
@@ -827,6 +832,7 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                             }
                             pc->sa = anchor;
                             //BSpline
+                            //continuamos una curva existente
                             if (anchor) {
                                 if(pc->bspline || pc->spiro){
                                     bspline_spiro_start_anchor(pc,(revent.state & GDK_SHIFT_MASK));
@@ -982,6 +988,7 @@ static void pen_redraw_all (SPPenContext *const pc)
 
     // handles
     //BSpline
+    //Ocultamos los tiradores en modo BSpline y spiro
     if (pc->p[0] != pc->p[1] && !pc->spiro && !pc->bspline) {
     //BSpline End
         SP_CTRL(pc->c1)->moveto(pc->p[1]);
@@ -997,6 +1004,7 @@ static void pen_redraw_all (SPPenContext *const pc)
     if (last_seg) {
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( last_seg );
         //BSpline
+        //Ocultamos los tiradores en modo BSpline y spiro
         if ( cubic &&
              (*cubic)[2] != pc->p[0] && !pc->spiro && !pc->bspline )
         {
@@ -1017,6 +1025,7 @@ static void pen_redraw_all (SPPenContext *const pc)
     //sino al final de esta
 
     //BSpline
+    //Lanzamos solamente el redibujado
      bspline_spiro_build(pc);
     //BSpline End
 }
@@ -1056,8 +1065,7 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
     //BSpline
     Geom::CubicBezier const * cubic;
     pc->p[1] = pc->red_curve->last_segment()->initialPoint() + (1./3)* (Geom::Point)(pc->red_curve->last_segment()->finalPoint() - pc->red_curve->last_segment()->initialPoint());
-    //Para formar una curva necesitamos un nodo symm en el "lastpoint"
-    //de esta manera modificamos el final de la "curva_verde" para que sea symm con el pricipio de la "red_curve"
+    //Modificamos el último segmento de la curva verde para que forme el tipo de nodo que deseamos
     if(pc->spiro||pc->bspline){
         if(!pc->green_curve->is_empty()){
             Geom::Point A(0,0);
@@ -1095,6 +1103,7 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
                 pc->green_curve->append_continuous(previous, 0.0625);
             }
         }
+        //Si el último nodo es una union con otra curva
         if(pc->green_curve->is_empty() && pc->sa && !pc->sa->curve->is_empty()){
             bspline_spiro_start_anchor(pc, false); 
         }
@@ -1107,9 +1116,11 @@ static void pen_lastpoint_tocurve (SPPenContext *const pc)
 static void pen_lastpoint_toline (SPPenContext *const pc)
 {
     //BSpline
-    //Si no es bspline
+    //Evitamos que si la "red_curve" tiene solo dos puntos -recta- no se pare aqui.
     if (pc->npoints != 5 && !pc->bspline)
         return;
+
+    //Modificamos el último segmento de la curva verde para que forme el tipo de nodo que deseamos
     if(pc->spiro || pc->bspline){
         if(!pc->green_curve->is_empty()){
             Geom::Point A(0,0);
@@ -1141,6 +1152,7 @@ static void pen_lastpoint_toline (SPPenContext *const pc)
                 pc->green_curve->append_continuous(previous, 0.0625);
             }
         }
+        //Si el último nodo es una union con otra curva
         if(pc->green_curve->is_empty() && pc->sa && !pc->sa->curve->is_empty()){
             bspline_spiro_start_anchor(pc, true);
         }
@@ -1329,6 +1341,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 } else {
                     pc->p[1] = pc->p[0];
                 }
+                //Asignamos el valor a un tercio de distancia del último segmento.
                 if(pc->bspline){
                     pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
                 }
@@ -1339,6 +1352,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 
                 pc->npoints = 2;
                 //BSpline
+                //Eliminamos el último segmento de la curva verde
                 if( pc->green_curve->get_segment_count() == 1){
                     pc->npoints = 5;
                     if (pc->green_bpaths) {
@@ -1350,6 +1364,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 }else{
                     pc->green_curve->backspace();
                 }
+                //Asignamos el valor de pc->p[1] a el opuesto de el ultimo segmento de la línea verde
                 if(pc->spiro){
                     cubic = dynamic_cast<Geom::CubicBezier const *>(pc->green_curve->last_segment());
                     if ( cubic ) {
@@ -1366,6 +1381,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 spdc_pen_set_subsequent_point(pc, pt, true);
                 pen_last_paraxial_dir = !pen_last_paraxial_dir;
                 //BSpline
+                //Redibujamos
                 bspline_spiro_build(pc);
                 //BSpline End
                 ret = TRUE;

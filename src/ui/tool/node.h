@@ -107,6 +107,9 @@ protected:
     Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent);
 
     virtual bool _eventHandler(SPEventContext *event_context, GdkEvent *event);
+    //Bspline
+    virtual void handle_2button_press();
+    //BSpline End
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
     virtual void ungrabbed(GdkEventButton *event);

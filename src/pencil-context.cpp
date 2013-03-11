@@ -757,7 +757,8 @@ interpolate(SPPencilContext *pc)
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         //BSpline End
         for (int c = 0; c < n_segs; c++) {
-            //BSpline            
+            //BSpline
+            //Si el modo es BSpline modificamos para que el trazado cree los nodos adhoc
             if(mode == 2){
                 Geom::Point BP = b[4*c+0] + (1./3)*(b[4*c+3] - b[4*c+0]);
                 Geom::Point CP = b[4*c+3] + (1./3)*(b[4*c+0] - b[4*c+3]);
@@ -907,6 +908,7 @@ fit_and_split(SPPencilContext *pc)
         pc->red_curve->reset();
         pc->red_curve->moveto(b[0]);
         //BSpline
+        //Si el modo es BSpline modificamos para que el trazado cree los nodos adhoc
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         if(mode == 2){

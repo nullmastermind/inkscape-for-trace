@@ -291,6 +291,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
         //BSpline
+        //Añadimos el modo BSpline a los efectos en espera
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
@@ -562,6 +563,8 @@ void spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
         c->unref();
         dc->sa->curve->closepath_current();
         //BSpline
+        //Si la curva tiene un LPE del tipo BSpline ejecutamos spdc_flush_white
+        //pasándole la curva de inicio necesaria
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
@@ -696,6 +699,9 @@ SPDrawAnchor *spdc_test_inside(SPDrawContext *dc, Geom::Point p)
     }
 
     //BSpline
+    //Modificamos la curva del "anchor" final para que sea igual que la curva de inicio.
+    //Esta curva fue modificada al continuar la curva y necesitamos que sea igual que la curva en
+    //la que cerramos el trazado.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if((prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
         prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) && 

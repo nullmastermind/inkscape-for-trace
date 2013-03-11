@@ -296,6 +296,7 @@ void MultiPathManipulator::invertSelectionInSubpaths()
     invokeForAll(&PathManipulator::invertSelectionInSubpaths);
 }
 
+
 void MultiPathManipulator::setNodeType(NodeType type)
 {
     if (_selection.empty()) return;
@@ -307,7 +308,7 @@ void MultiPathManipulator::setNodeType(NodeType type)
         Node *node = dynamic_cast<Node*>(*i);
         if (node) {
             retract_handles &= (node->type() == NODE_CUSP);
-            node->setType(type);
+            node->setType(type,true);
         }
     }
 
@@ -323,6 +324,7 @@ void MultiPathManipulator::setNodeType(NodeType type)
 
     _done(retract_handles ? _("Retract handles") : _("Change node type"));
 }
+
 
 void MultiPathManipulator::setSegmentType(SegmentType type)
 {
