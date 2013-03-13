@@ -128,16 +128,28 @@ std::string path_to_ffconf;
   //open the input
   fffile.open(path_to_ffconf.c_str(), std::ios::in);
   if(!fffile.is_open()){
-    g_message("Unable to open file: %s\n", path_to_ffconf.c_str());
-    throw "boom";
+    g_error("Unable to open file: %s\n", path_to_ffconf.c_str());
+    // throw "boom";
   }
+  
+  char *oldlocale = g_strdup (setlocale (LC_NUMERIC, NULL));
+  setlocale (LC_NUMERIC, "C");
+  
   while (std::getline(fffile,instr)){
-    if(instr[0]=='#')continue;
+    if (instr.empty()) {
+      continue;
+    }
+    if(instr[0]=='#'){
+      continue;
+    }
     // not a comment, get the 4 values from the line
-    int elements=sscanf(instr.c_str(),"%lf %lf %lf %[^\n]",&f1,&f2,&f3, &fontname[0]);
+    int elements=sscanf(instr.c_str(),"%6lf %6lf %6lf %127[^\n]",&f1,&f2,&f3, &fontname[0]);
     if(elements!=4){
-      g_message("Expected \"f1 f2 f3 Fontname\" but did not find it in file: %s\n", path_to_ffconf.c_str());
-      throw "boom";
+      setlocale (LC_NUMERIC, oldlocale);
+      g_free (oldlocale);
+      fffile.close();
+      g_error("Expected \"f1 f2 f3 Fontname\" but did not find it in file: %s\n", path_to_ffconf.c_str());
+      // throw "boom";
     }
     temp=(FFNEXUS *) calloc(1,sizeof(FFNEXUS)); //This will never be freed
     temp->f1=f1;
@@ -153,6 +165,8 @@ std::string path_to_ffconf;
       wmf_long_fflist=ptr=temp;
     }
   }
+  setlocale (LC_NUMERIC, oldlocale);
+  g_free (oldlocale);
   fffile.close();
 }
 
