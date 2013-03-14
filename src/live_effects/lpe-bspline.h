@@ -23,6 +23,12 @@ public:
     virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
 
     virtual void doEffect(SPCurve * curve);
+    
+    virtual void doEffect(SPCurve * curve, int value);
+    
+    virtual void updateAllHandles(int value);
+    
+    virtual void updateHandles(SPItem * item , int value);
 
 private:
     ScalarParam unify_weights;
