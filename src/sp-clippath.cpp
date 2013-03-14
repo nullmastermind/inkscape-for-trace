@@ -68,7 +68,7 @@ void SPClipPathClass::sp_clippath_class_init(SPClipPathClass *klass)
 
     static_parent_class = (SPObjectGroupClass*)g_type_class_ref(SP_TYPE_OBJECTGROUP);
 
-    sp_object_class->build = SPClipPath::build;
+    //sp_object_class->build = SPClipPath::build;
     sp_object_class->release = SPClipPath::release;
     sp_object_class->set = SPClipPath::set;
     sp_object_class->child_added = SPClipPath::childAdded;

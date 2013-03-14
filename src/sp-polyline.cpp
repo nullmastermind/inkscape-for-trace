@@ -52,7 +52,7 @@ void SPPolyLineClass::sp_polyline_class_init(SPPolyLineClass *klass)
 
     static_parent_class = (SPShapeClass *)g_type_class_ref(SP_TYPE_SHAPE);
 
-    sp_object_class->build = SPPolyLine::build;
+    //sp_object_class->build = SPPolyLine::build;
     sp_object_class->set = SPPolyLine::set;
     sp_object_class->write = SPPolyLine::write;
 

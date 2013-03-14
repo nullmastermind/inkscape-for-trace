@@ -53,7 +53,7 @@ void SPLineClass::sp_line_class_init(SPLineClass *klass)
     SPLineClass::static_parent_class = (SPShapeClass *) g_type_class_ref(SP_TYPE_SHAPE);
 
     SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    sp_object_class->build = SPLine::build;
+    //sp_object_class->build = SPLine::build;
     sp_object_class->set = SPLine::set;
     sp_object_class->write = SPLine::write;
 

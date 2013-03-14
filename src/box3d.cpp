@@ -90,7 +90,7 @@ box3d_class_init(SPBox3DClass *klass)
 
     parent_class = (SPGroupClass *) g_type_class_ref(SP_TYPE_GROUP);
 
-    sp_object_class->build = box3d_build;
+    //sp_object_class->build = box3d_build;
     sp_object_class->release = box3d_release;
     sp_object_class->set = box3d_set;
     sp_object_class->write = box3d_write;

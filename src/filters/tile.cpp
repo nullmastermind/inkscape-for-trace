@@ -65,7 +65,7 @@ sp_feTile_class_init(SPFeTileClass *klass)
 
     feTile_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feTile_build;
+    //sp_object_class->build = sp_feTile_build;
     sp_object_class->release = sp_feTile_release;
     sp_object_class->write = sp_feTile_write;
     sp_object_class->set = sp_feTile_set;
@@ -86,9 +86,10 @@ sp_feTile_init(SPFeTile */*feTile*/)
 static void
 sp_feTile_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feTile_parent_class)->build) {
-        ((SPObjectClass *) feTile_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feTile_parent_class)->build) {
+//        ((SPObjectClass *) feTile_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 }

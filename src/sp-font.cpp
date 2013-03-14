@@ -70,7 +70,7 @@ static void sp_font_class_init(SPFontClass *fc)
 
     parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = sp_font_build;
+    //sp_object_class->build = sp_font_build;
     sp_object_class->release = sp_font_release;
     sp_object_class->set = sp_font_set;
     sp_object_class->write = sp_font_write;
@@ -98,9 +98,11 @@ static void sp_font_init(SPFont *font)
 
 static void sp_font_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) (parent_class))->build) {
-        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) (parent_class))->build) {
+//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
+//    }
+	// CPPIFY: todo
+
 
     object->readAttr( "horiz-origin-x" );
     object->readAttr( "horiz-origin-y" );

@@ -95,7 +95,7 @@ static void sp_guide_class_init(SPGuideClass *gc)
     gobject_class->set_property = sp_guide_set_property;
     gobject_class->get_property = sp_guide_get_property;
 
-    sp_object_class->build = sp_guide_build;
+    //sp_object_class->build = sp_guide_build;
     sp_object_class->release = sp_guide_release;
     sp_object_class->set = sp_guide_set;
 
@@ -158,9 +158,10 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
 
 static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) (parent_class))->build) {
-        (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
-    }
+//    if (((SPObjectClass *) (parent_class))->build) {
+//        (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "inkscape:label" );
     object->readAttr( "orientation" );

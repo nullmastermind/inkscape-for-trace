@@ -126,7 +126,7 @@ sp_group_class_init (SPGroupClass *klass)
     sp_object_class->set = sp_group_set;
     sp_object_class->write = sp_group_write;
     sp_object_class->release = sp_group_release;
-    sp_object_class->build = sp_group_build;
+    //sp_object_class->build = sp_group_build;
 
 //    item_class->bbox = sp_group_bbox;
 //    item_class->print = sp_group_print;

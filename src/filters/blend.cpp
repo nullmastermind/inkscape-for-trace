@@ -73,7 +73,7 @@ sp_feBlend_class_init(SPFeBlendClass *klass)
 
     feBlend_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feBlend_build;
+    //sp_object_class->build = sp_feBlend_build;
     sp_object_class->release = sp_feBlend_release;
     sp_object_class->write = sp_feBlend_write;
     sp_object_class->set = sp_feBlend_set;
@@ -98,9 +98,10 @@ sp_feBlend_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *re
 {
     SPFeBlend *blend = SP_FEBLEND(object);
 
-    if (((SPObjectClass *) feBlend_parent_class)->build) {
-        ((SPObjectClass *) feBlend_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feBlend_parent_class)->build) {
+//        ((SPObjectClass *) feBlend_parent_class)->build(object, document, repr);
+//    }
+    // CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "mode" );

@@ -83,7 +83,7 @@ static void sp_root_class_init(SPRootClass *klass)
 
     parent_class = reinterpret_cast<SPGroupClass *>(g_type_class_ref(SP_TYPE_GROUP));
 
-    sp_object_class->build = sp_root_build;
+    //sp_object_class->build = sp_root_build;
     sp_object_class->release = sp_root_release;
     sp_object_class->set = sp_root_set;
     sp_object_class->child_added = sp_root_child_added;

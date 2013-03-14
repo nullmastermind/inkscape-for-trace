@@ -65,7 +65,7 @@ static void sp_polygon_class_init(SPPolygonClass *pc)
 
     parent_class = (SPShapeClass *) g_type_class_ref(SP_TYPE_SHAPE);
 
-    sp_object_class->build = sp_polygon_build;
+    //sp_object_class->build = sp_polygon_build;
     sp_object_class->write = sp_polygon_write;
     sp_object_class->set = sp_polygon_set;
 

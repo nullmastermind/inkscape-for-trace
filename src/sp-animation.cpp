@@ -68,7 +68,7 @@ static void sp_animation_class_init(SPAnimationClass *klass)
 
     animation_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_animation_build;
+    //sp_object_class->build = sp_animation_build;
     sp_object_class->release = sp_animation_release;
     sp_object_class->set = sp_animation_set;
 }
@@ -80,8 +80,9 @@ static void sp_animation_init(SPAnimation */*animation*/)
 
 static void sp_animation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) animation_parent_class)->build)
-        ((SPObjectClass *) animation_parent_class)->build(object, document, repr);
+//    if (((SPObjectClass *) animation_parent_class)->build)
+//        ((SPObjectClass *) animation_parent_class)->build(object, document, repr);
+	// CPPIFY: todo
 
     object->readAttr( "xlink:href" );
     object->readAttr( "attributeName" );
@@ -149,7 +150,7 @@ static void sp_ianimation_class_init(SPIAnimationClass *klass)
 
     ianimation_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_ianimation_build;
+    //sp_object_class->build = sp_ianimation_build;
     sp_object_class->release = sp_ianimation_release;
     sp_object_class->set = sp_ianimation_set;
 }
@@ -161,8 +162,9 @@ static void sp_ianimation_init(SPIAnimation */*animation*/)
 
 static void sp_ianimation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) ianimation_parent_class)->build)
-        ((SPObjectClass *) ianimation_parent_class)->build(object, document, repr);
+//    if (((SPObjectClass *) ianimation_parent_class)->build)
+//        ((SPObjectClass *) ianimation_parent_class)->build(object, document, repr);
+	// CPPIFY: todo
 
     object->readAttr( "calcMode" );
     object->readAttr( "values" );
@@ -227,7 +229,7 @@ static void sp_animate_class_init(SPAnimateClass *klass)
 
     animate_parent_class = (SPIAnimationClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_animate_build;
+    //sp_object_class->build = sp_animate_build;
     sp_object_class->release = sp_animate_release;
     sp_object_class->set = sp_animate_set;
 }
@@ -239,8 +241,9 @@ static void sp_animate_init(SPAnimate */*animate*/)
 
 static void sp_animate_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) animate_parent_class)->build)
-        ((SPObjectClass *) animate_parent_class)->build(object, document, repr);
+//    if (((SPObjectClass *) animate_parent_class)->build)
+//        ((SPObjectClass *) animate_parent_class)->build(object, document, repr);
+	// CPPIFY: todo
 }
 
 static void sp_animate_release(SPObject */*object*/)

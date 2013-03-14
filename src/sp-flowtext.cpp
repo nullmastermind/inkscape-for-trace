@@ -93,7 +93,7 @@ sp_flowtext_class_init(SPFlowtextClass *klass)
     sp_object_class->update = sp_flowtext_update;
     sp_object_class->modified = sp_flowtext_modified;
     sp_object_class->write = sp_flowtext_write;
-    sp_object_class->build = sp_flowtext_build;
+    //sp_object_class->build = sp_flowtext_build;
     sp_object_class->set = sp_flowtext_set;
 
 //    item_class->bbox = sp_flowtext_bbox;

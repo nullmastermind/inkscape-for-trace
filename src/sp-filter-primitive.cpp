@@ -65,7 +65,7 @@ static void sp_filter_primitive_class_init(SPFilterPrimitiveClass *klass)
 
     filter_primitive_parent_class = static_cast<SPObjectClass *>(g_type_class_peek_parent(klass));
 
-    sp_object_class->build = sp_filter_primitive_build;
+   // sp_object_class->build = sp_filter_primitive_build;
     sp_object_class->release = sp_filter_primitive_release;
     sp_object_class->write = sp_filter_primitive_write;
     sp_object_class->set = sp_filter_primitive_set;
@@ -100,9 +100,10 @@ static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
 static void
 sp_filter_primitive_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if ((static_cast<SPObjectClass *>(filter_primitive_parent_class))->build) {
-        (static_cast<SPObjectClass *>(filter_primitive_parent_class))->build(object, document, repr);
-    }
+//    if ((static_cast<SPObjectClass *>(filter_primitive_parent_class))->build) {
+//        (static_cast<SPObjectClass *>(filter_primitive_parent_class))->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "in" );
     object->readAttr( "result" );

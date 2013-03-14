@@ -71,7 +71,7 @@ sp_fedistantlight_class_init(SPFeDistantLightClass *klass)
 
     feDistantLight_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_fedistantlight_build;
+    //sp_object_class->build = sp_fedistantlight_build;
     sp_object_class->release = sp_fedistantlight_release;
     sp_object_class->write = sp_fedistantlight_write;
     sp_object_class->set = sp_fedistantlight_set;
@@ -95,9 +95,10 @@ sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
 static void
 sp_fedistantlight_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feDistantLight_parent_class)->build) {
-        ((SPObjectClass *) feDistantLight_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feDistantLight_parent_class)->build) {
+//        ((SPObjectClass *) feDistantLight_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "azimuth" );

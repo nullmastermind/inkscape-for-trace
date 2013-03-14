@@ -110,7 +110,7 @@ sp_path_class_init(SPPathClass * klass)
 
     gobject_class->finalize = sp_path_finalize;
 
-    sp_object_class->build = sp_path_build;
+    //sp_object_class->build = sp_path_build;
     sp_object_class->release = sp_path_release;
     sp_object_class->set = sp_path_set;
     sp_object_class->write = sp_path_write;

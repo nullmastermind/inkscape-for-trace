@@ -66,7 +66,7 @@ LivePathEffectObject::livepatheffect_class_init(LivePathEffectObjectClass *klass
 
     livepatheffect_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = livepatheffect_build;
+    //sp_object_class->build = livepatheffect_build;
     sp_object_class->release = livepatheffect_release;
 
     sp_object_class->set = livepatheffect_set;
@@ -100,8 +100,9 @@ LivePathEffectObject::livepatheffect_build(SPObject *object, SPDocument *documen
     g_assert(object != NULL);
     g_assert(SP_IS_OBJECT(object));
 
-    if (((SPObjectClass *) livepatheffect_parent_class)->build)
-        (* ((SPObjectClass *) livepatheffect_parent_class)->build)(object, document, repr);
+//    if (((SPObjectClass *) livepatheffect_parent_class)->build)
+//        (* ((SPObjectClass *) livepatheffect_parent_class)->build)(object, document, repr);
+// CPPIFY: todo
 
     object->readAttr( "effect" );
 

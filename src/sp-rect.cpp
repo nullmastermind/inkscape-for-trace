@@ -80,7 +80,7 @@ sp_rect_class_init(SPRectClass *klass)
 
     parent_class = (SPShapeClass *)g_type_class_ref(SP_TYPE_SHAPE);
 
-    sp_object_class->build = sp_rect_build;
+    //sp_object_class->build = sp_rect_build;
     sp_object_class->write = sp_rect_write;
     sp_object_class->set = sp_rect_set;
     sp_object_class->update = sp_rect_update;

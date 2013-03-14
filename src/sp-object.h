@@ -920,7 +920,7 @@ class SPObjectClass {
 public:
     GObjectClass parent_class;
 
-    void (* build) (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr);
+    //void (* build) (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr);
     void (* release) (SPObject *object);
 
     /* Virtual handlers of repr signals */

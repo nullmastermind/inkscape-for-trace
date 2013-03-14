@@ -94,7 +94,7 @@ static void persp3d_class_init(Persp3DClass *klass)
 
     persp3d_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = persp3d_build;
+    //sp_object_class->build = persp3d_build;
     sp_object_class->release = persp3d_release;
     sp_object_class->set = persp3d_set;
     sp_object_class->update = persp3d_update;
@@ -115,8 +115,9 @@ persp3d_init(Persp3D *persp)
  */
 static void persp3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) persp3d_parent_class)->build)
-        (* ((SPObjectClass *) persp3d_parent_class)->build)(object, document, repr);
+//    if (((SPObjectClass *) persp3d_parent_class)->build)
+//        (* ((SPObjectClass *) persp3d_parent_class)->build)(object, document, repr);
+	// CPPIFY: todo
 
     /* calls sp_object_set for the respective attributes */
     // The transformation matrix is updated according to the values we read for the VPs

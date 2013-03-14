@@ -304,7 +304,7 @@ static void sp_fontface_class_init(SPFontFaceClass *fc)
 
     parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = sp_fontface_build;
+    //sp_object_class->build = sp_fontface_build;
     sp_object_class->release = sp_fontface_release;
     sp_object_class->set = sp_fontface_set;
     sp_object_class->write = sp_fontface_write;
@@ -369,9 +369,10 @@ static void sp_fontface_init(SPFontFace *face)
 
 static void sp_fontface_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) (parent_class))->build) {
-        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) (parent_class))->build) {
+//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "font-family" );
     object->readAttr( "font-style" );

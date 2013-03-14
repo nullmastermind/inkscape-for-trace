@@ -461,7 +461,7 @@ static void sp_ellipse_class_init(SPEllipseClass *klass)
 
     ellipse_parent_class = (SPGenericEllipseClass*) g_type_class_ref(SP_TYPE_GENERICELLIPSE);
 
-    sp_object_class->build = sp_ellipse_build;
+    //sp_object_class->build = sp_ellipse_build;
     sp_object_class->write = sp_ellipse_write;
     sp_object_class->set = sp_ellipse_set;
 
@@ -636,7 +636,7 @@ sp_circle_class_init(SPCircleClass *klass)
 
     circle_parent_class = (SPGenericEllipseClass*) g_type_class_ref(SP_TYPE_GENERICELLIPSE);
 
-    sp_object_class->build = sp_circle_build;
+    //sp_object_class->build = sp_circle_build;
     sp_object_class->write = sp_circle_write;
     sp_object_class->set = sp_circle_set;
 
@@ -788,7 +788,7 @@ sp_arc_class_init(SPArcClass *klass)
 
     arc_parent_class = (SPGenericEllipseClass*) g_type_class_ref(SP_TYPE_GENERICELLIPSE);
 
-    sp_object_class->build = sp_arc_build;
+    //sp_object_class->build = sp_arc_build;
     sp_object_class->write = sp_arc_write;
     sp_object_class->set = sp_arc_set;
     sp_object_class->modified = sp_arc_modified;

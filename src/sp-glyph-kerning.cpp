@@ -89,7 +89,7 @@ static void sp_glyph_kerning_class_init(SPGlyphKerningClass *gc)
 
     parent_class = (SPObjectClass*)g_type_class_peek_parent(gc);
 
-    sp_object_class->build = sp_glyph_kerning_build;
+    //sp_object_class->build = sp_glyph_kerning_build;
     sp_object_class->release = sp_glyph_kerning_release;
     sp_object_class->set = sp_glyph_kerning_set;
     sp_object_class->write = sp_glyph_kerning_write;
@@ -108,9 +108,10 @@ static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
 
 static void sp_glyph_kerning_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) (parent_class))->build) {
-        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) (parent_class))->build) {
+//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "u1" );
     object->readAttr( "g1" );

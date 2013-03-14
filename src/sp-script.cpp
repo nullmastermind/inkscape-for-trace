@@ -56,7 +56,7 @@ static void sp_script_class_init(SPScriptClass *sc)
     parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
     SPObjectClass *sp_object_class = (SPObjectClass *) sc;
 
-    sp_object_class->build = sp_script_build;
+    //sp_object_class->build = sp_script_build;
     sp_object_class->release = sp_script_release;
     sp_object_class->update = sp_script_update;
     sp_object_class->modified = sp_script_modified;

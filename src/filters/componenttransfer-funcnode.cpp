@@ -135,7 +135,7 @@ sp_fefuncnode_class_init(SPFeFuncNodeClass *klass)
 
     feFuncNode_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_fefuncnode_build;
+    //sp_object_class->build = sp_fefuncnode_build;
     sp_object_class->release = sp_fefuncnode_release;
     sp_object_class->write = sp_fefuncnode_write;
     sp_object_class->set = sp_fefuncnode_set;
@@ -162,9 +162,10 @@ sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
 static void
 sp_fefuncnode_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feFuncNode_parent_class)->build) {
-        ((SPObjectClass *) feFuncNode_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feFuncNode_parent_class)->build) {
+//        ((SPObjectClass *) feFuncNode_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "type" );

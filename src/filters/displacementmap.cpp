@@ -68,7 +68,7 @@ sp_feDisplacementMap_class_init(SPFeDisplacementMapClass *klass)
 
     feDisplacementMap_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feDisplacementMap_build;
+    //sp_object_class->build = sp_feDisplacementMap_build;
     sp_object_class->release = sp_feDisplacementMap_release;
     sp_object_class->write = sp_feDisplacementMap_write;
     sp_object_class->set = sp_feDisplacementMap_set;
@@ -93,9 +93,10 @@ sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
 static void
 sp_feDisplacementMap_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feDisplacementMap_parent_class)->build) {
-        ((SPObjectClass *) feDisplacementMap_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feDisplacementMap_parent_class)->build) {
+//        ((SPObjectClass *) feDisplacementMap_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "scale" );

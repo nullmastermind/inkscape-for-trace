@@ -139,7 +139,7 @@ void SPObjectClass::sp_object_class_init(SPObjectClass *klass)
 
     klass->release = SPObject::sp_object_release;
 
-    klass->build = SPObject::sp_object_build;
+    //klass->build = SPObject::sp_object_build;
 
     klass->set = SPObject::sp_object_private_set;
     klass->write = SPObject::sp_object_private_write;

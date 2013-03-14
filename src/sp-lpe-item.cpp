@@ -99,7 +99,7 @@ sp_lpe_item_class_init(SPLPEItemClass *klass)
 
     gobject_class->finalize = sp_lpe_item_finalize;
 
-    sp_object_class->build = sp_lpe_item_build;
+    //sp_object_class->build = sp_lpe_item_build;
     sp_object_class->release = sp_lpe_item_release;
     sp_object_class->set = sp_lpe_item_set;
     sp_object_class->update = sp_lpe_item_update;

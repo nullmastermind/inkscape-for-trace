@@ -68,7 +68,7 @@ static void sp_feFlood_class_init(SPFeFloodClass *klass)
 
     feFlood_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feFlood_build;
+    //sp_object_class->build = sp_feFlood_build;
     sp_object_class->release = sp_feFlood_release;
     sp_object_class->write = sp_feFlood_write;
     sp_object_class->set = sp_feFlood_set;
@@ -90,9 +90,10 @@ static void sp_feFlood_init(SPFeFlood *feFlood)
 static void
 sp_feFlood_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feFlood_parent_class)->build) {
-        ((SPObjectClass *) feFlood_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feFlood_parent_class)->build) {
+//        ((SPObjectClass *) feFlood_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "flood-opacity" );

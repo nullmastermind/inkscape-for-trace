@@ -127,7 +127,7 @@ static void sp_stop_class_init(SPStopClass *klass)
 
     stop_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = sp_stop_build;
+    //sp_object_class->build = sp_stop_build;
     sp_object_class->set = sp_stop_set;
     sp_object_class->write = sp_stop_write;
 }
@@ -409,7 +409,7 @@ static void sp_meshrow_class_init(SPMeshRowClass *klass)
 
     meshrow_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = sp_meshrow_build;
+    //sp_object_class->build = sp_meshrow_build;
     sp_object_class->set = sp_meshrow_set;
     sp_object_class->write = sp_meshrow_write;
 }
@@ -509,7 +509,7 @@ static void sp_meshpatch_class_init(SPMeshPatchClass *klass)
 
     meshpatch_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = sp_meshpatch_build;
+    //sp_object_class->build = sp_meshpatch_build;
     sp_object_class->set = sp_meshpatch_set;
     sp_object_class->write = sp_meshpatch_write;
 }
@@ -642,7 +642,7 @@ void CGradient::classInit(SPGradientClass *klass)
 
     gradient_parent_class = (SPPaintServerClass *)g_type_class_ref(SP_TYPE_PAINT_SERVER);
 
-    sp_object_class->build = spgradient_on_build;
+    //sp_object_class->build = spgradient_on_build;
     sp_object_class->release = spgradient_on_release;
     sp_object_class->set = spgradient_set;
     sp_object_class->child_added = spgradient_child_added;
@@ -1586,7 +1586,7 @@ static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
 
     lg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
 
-    sp_object_class->build = sp_lineargradient_build;
+    //sp_object_class->build = sp_lineargradient_build;
     sp_object_class->set = sp_lineargradient_set;
     sp_object_class->write = sp_lineargradient_write;
 
@@ -1776,7 +1776,7 @@ static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
 
     rg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
 
-    sp_object_class->build = sp_radialgradient_build;
+    //sp_object_class->build = sp_radialgradient_build;
     sp_object_class->set = sp_radialgradient_set;
     sp_object_class->write = sp_radialgradient_write;
 
@@ -1992,7 +1992,7 @@ static void sp_meshgradient_class_init(SPMeshGradientClass *klass)
 
     mg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
 
-    sp_object_class->build = sp_meshgradient_build;
+    //sp_object_class->build = sp_meshgradient_build;
     sp_object_class->set = sp_meshgradient_set;
     sp_object_class->write = sp_meshgradient_write;
 

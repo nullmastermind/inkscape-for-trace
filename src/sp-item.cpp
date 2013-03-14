@@ -110,7 +110,7 @@ SPItemClass::sp_item_class_init(SPItemClass *klass)
 
     static_parent_class = (SPObjectClass *)g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build = SPItem::sp_item_build;
+    //sp_object_class->build = SPItem::sp_item_build;
     sp_object_class->release = SPItem::sp_item_release;
     sp_object_class->set = SPItem::sp_item_set;
     sp_object_class->update = SPItem::sp_item_update;

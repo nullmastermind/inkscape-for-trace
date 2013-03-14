@@ -86,7 +86,7 @@ static void sp_marker_class_init(SPMarkerClass *klass)
 
     parent_class = reinterpret_cast<SPGroupClass *>(g_type_class_ref(SP_TYPE_GROUP));
 
-	sp_object_class->build = sp_marker_build;
+	//sp_object_class->build = sp_marker_build;
 	sp_object_class->release = sp_marker_release;
 	sp_object_class->set = sp_marker_set;
 	sp_object_class->update = sp_marker_update;

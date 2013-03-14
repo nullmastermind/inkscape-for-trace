@@ -94,7 +94,7 @@ void SPShapeClass::sp_shape_class_init(SPShapeClass *klass)
 
     gobject_class->finalize = SPShape::sp_shape_finalize;
 
-    sp_object_class->build = SPShape::sp_shape_build;
+    //sp_object_class->build = SPShape::sp_shape_build;
     sp_object_class->release = SPShape::sp_shape_release;
     sp_object_class->set = SPShape::sp_shape_set;
     sp_object_class->update = SPShape::sp_shape_update;

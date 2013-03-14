@@ -98,7 +98,7 @@ sp_tspan_class_init(SPTSpanClass *classname)
 
     tspan_parent_class = (SPItemClass*)g_type_class_ref(SP_TYPE_ITEM);
 
-    sp_object_class->build = sp_tspan_build;
+    //sp_object_class->build = sp_tspan_build;
     sp_object_class->release = sp_tspan_release;
     sp_object_class->set = sp_tspan_set;
     sp_object_class->update = sp_tspan_update;
@@ -395,7 +395,7 @@ static void sp_textpath_class_init(SPTextPathClass *classname)
 
     gobject_class->finalize = sp_textpath_finalize;
 
-    sp_object_class->build = sp_textpath_build;
+    //sp_object_class->build = sp_textpath_build;
     sp_object_class->release = sp_textpath_release;
     sp_object_class->set = sp_textpath_set;
     sp_object_class->update = sp_textpath_update;

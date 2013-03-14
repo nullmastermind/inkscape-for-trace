@@ -71,7 +71,7 @@ sp_feTurbulence_class_init(SPFeTurbulenceClass *klass)
 
     feTurbulence_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feTurbulence_build;
+    //sp_object_class->build = sp_feTurbulence_build;
     sp_object_class->release = sp_feTurbulence_release;
     sp_object_class->write = sp_feTurbulence_write;
     sp_object_class->set = sp_feTurbulence_set;
@@ -94,9 +94,10 @@ sp_feTurbulence_init(SPFeTurbulence *feTurbulence)
 static void
 sp_feTurbulence_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feTurbulence_parent_class)->build) {
-        ((SPObjectClass *) feTurbulence_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feTurbulence_parent_class)->build) {
+//        ((SPObjectClass *) feTurbulence_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "baseFrequency" );

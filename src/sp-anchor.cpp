@@ -68,7 +68,7 @@ static void sp_anchor_class_init(SPAnchorClass *ac)
 
     parent_class = (SPGroupClass *) g_type_class_ref(SP_TYPE_GROUP);
 
-    sp_object_class->build = sp_anchor_build;
+    //sp_object_class->build = sp_anchor_build;
     sp_object_class->release = sp_anchor_release;
     sp_object_class->set = sp_anchor_set;
     sp_object_class->write = sp_anchor_write;

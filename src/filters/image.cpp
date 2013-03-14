@@ -70,7 +70,7 @@ static void sp_feImage_class_init(SPFeImageClass *klass)
 
     feImage_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feImage_build;
+    //sp_object_class->build = sp_feImage_build;
     sp_object_class->release = sp_feImage_release;
     sp_object_class->write = sp_feImage_write;
     sp_object_class->set = sp_feImage_set;
@@ -96,9 +96,10 @@ static void sp_feImage_build(SPObject *object, SPDocument *document, Inkscape::X
     SPFeImage *feImage = SP_FEIMAGE(object);
     feImage->document = document;
 
-    if (((SPObjectClass *) feImage_parent_class)->build) {
-        ((SPObjectClass *) feImage_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feImage_parent_class)->build) {
+//        ((SPObjectClass *) feImage_parent_class)->build(object, document, repr);
+//    }
+    // CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 

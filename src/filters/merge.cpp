@@ -67,7 +67,7 @@ sp_feMerge_class_init(SPFeMergeClass *klass)
 
     feMerge_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feMerge_build;
+    //sp_object_class->build = sp_feMerge_build;
     sp_object_class->release = sp_feMerge_release;
     sp_object_class->write = sp_feMerge_write;
     sp_object_class->set = sp_feMerge_set;
@@ -89,9 +89,10 @@ sp_feMerge_init(SPFeMerge */*feMerge*/)
 static void
 sp_feMerge_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feMerge_parent_class)->build) {
-        ((SPObjectClass *) feMerge_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feMerge_parent_class)->build) {
+//        ((SPObjectClass *) feMerge_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 }

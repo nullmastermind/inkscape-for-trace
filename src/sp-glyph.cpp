@@ -63,7 +63,7 @@ static void sp_glyph_class_init(SPGlyphClass *gc)
 
     parent_class = (SPObjectClass*)g_type_class_peek_parent(gc);
 
-    sp_object_class->build = sp_glyph_build;
+    //sp_object_class->build = sp_glyph_build;
     sp_object_class->release = sp_glyph_release;
     sp_object_class->set = sp_glyph_set;
     sp_object_class->write = sp_glyph_write;
@@ -88,9 +88,10 @@ static void sp_glyph_init(SPGlyph *glyph)
 
 static void sp_glyph_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) (parent_class))->build) {
-        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) (parent_class))->build) {
+//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "unicode" );
     object->readAttr( "glyph-name" );

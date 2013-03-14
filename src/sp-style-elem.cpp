@@ -45,7 +45,7 @@ sp_style_elem_class_init(SPStyleElemClass *klass)
     parent_class = (SPObjectClass *)g_type_class_ref(SP_TYPE_OBJECT);
     /* FIXME */
 
-    klass->build = sp_style_elem_build;
+    //klass->build = sp_style_elem_build;
     klass->set = sp_style_elem_set;
     klass->read_content = sp_style_elem_read_content;
     klass->write = sp_style_elem_write;

@@ -73,7 +73,7 @@ sp_gaussianBlur_class_init(SPGaussianBlurClass *klass)
 
     gaussianBlur_parent_class = (SPFilterPrimitiveClass *)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_gaussianBlur_build;
+    //sp_object_class->build = sp_gaussianBlur_build;
     sp_object_class->release = sp_gaussianBlur_release;
     sp_object_class->write = sp_gaussianBlur_write;
     sp_object_class->set = sp_gaussianBlur_set;
@@ -95,9 +95,10 @@ sp_gaussianBlur_init(SPGaussianBlur */*gaussianBlur*/)
 static void
 sp_gaussianBlur_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) gaussianBlur_parent_class)->build) {
-        ((SPObjectClass *) gaussianBlur_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) gaussianBlur_parent_class)->build) {
+//        ((SPObjectClass *) gaussianBlur_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "stdDeviation" );
 

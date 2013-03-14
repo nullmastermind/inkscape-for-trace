@@ -82,7 +82,7 @@ sp_feDiffuseLighting_class_init(SPFeDiffuseLightingClass *klass)
     SPFilterPrimitiveClass *sp_primitive_class = (SPFilterPrimitiveClass *)klass;
     feDiffuseLighting_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feDiffuseLighting_build;
+    //sp_object_class->build = sp_feDiffuseLighting_build;
     sp_object_class->release = sp_feDiffuseLighting_release;
     sp_object_class->write = sp_feDiffuseLighting_write;
     sp_object_class->set = sp_feDiffuseLighting_set;
@@ -116,9 +116,10 @@ sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
 static void
 sp_feDiffuseLighting_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feDiffuseLighting_parent_class)->build) {
-        ((SPObjectClass *) feDiffuseLighting_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feDiffuseLighting_parent_class)->build) {
+//        ((SPObjectClass *) feDiffuseLighting_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "surfaceScale" );

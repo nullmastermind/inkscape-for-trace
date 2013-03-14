@@ -86,7 +86,7 @@ static void sp_flowdiv_class_init(SPFlowdivClass *klass)
 
     flowdiv_parent_class = reinterpret_cast<SPItemClass *>(g_type_class_ref(SP_TYPE_ITEM));
 
-    sp_object_class->build = sp_flowdiv_build;
+    //sp_object_class->build = sp_flowdiv_build;
     sp_object_class->set = sp_flowdiv_set;
     sp_object_class->release = sp_flowdiv_release;
     sp_object_class->write = sp_flowdiv_write;
@@ -297,7 +297,7 @@ static void sp_flowtspan_class_init(SPFlowtspanClass *klass)
 
     flowtspan_parent_class = reinterpret_cast<SPItemClass *>(g_type_class_ref(SP_TYPE_ITEM));
 
-    sp_object_class->build = sp_flowtspan_build;
+    //sp_object_class->build = sp_flowtspan_build;
     sp_object_class->set = sp_flowtspan_set;
     sp_object_class->release = sp_flowtspan_release;
     sp_object_class->write = sp_flowtspan_write;
@@ -508,7 +508,7 @@ static void sp_flowpara_class_init(SPFlowparaClass *klass)
 
     flowpara_parent_class = reinterpret_cast<SPItemClass *>(g_type_class_ref(SP_TYPE_ITEM));
 
-    sp_object_class->build = sp_flowpara_build;
+    //sp_object_class->build = sp_flowpara_build;
     sp_object_class->set = sp_flowpara_set;
     sp_object_class->release = sp_flowpara_release;
     sp_object_class->write = sp_flowpara_write;

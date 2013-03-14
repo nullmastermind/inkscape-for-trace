@@ -71,7 +71,7 @@ sp_feConvolveMatrix_class_init(SPFeConvolveMatrixClass *klass)
 
     feConvolveMatrix_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feConvolveMatrix_build;
+    //sp_object_class->build = sp_feConvolveMatrix_build;
     sp_object_class->release = sp_feConvolveMatrix_release;
     sp_object_class->write = sp_feConvolveMatrix_write;
     sp_object_class->set = sp_feConvolveMatrix_set;
@@ -104,9 +104,10 @@ sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
 static void
 sp_feConvolveMatrix_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feConvolveMatrix_parent_class)->build) {
-        ((SPObjectClass *) feConvolveMatrix_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->build) {
+//        ((SPObjectClass *) feConvolveMatrix_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "order" );

@@ -68,7 +68,7 @@ sp_feOffset_class_init(SPFeOffsetClass *klass)
 
     feOffset_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feOffset_build;
+    //sp_object_class->build = sp_feOffset_build;
     sp_object_class->release = sp_feOffset_release;
     sp_object_class->write = sp_feOffset_write;
     sp_object_class->set = sp_feOffset_set;
@@ -92,9 +92,10 @@ sp_feOffset_init(SPFeOffset *feOffset)
 static void
 sp_feOffset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feOffset_parent_class)->build) {
-        ((SPObjectClass *) feOffset_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feOffset_parent_class)->build) {
+//        ((SPObjectClass *) feOffset_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     object->readAttr( "dx" );
     object->readAttr( "dy" );

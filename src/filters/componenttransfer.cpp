@@ -70,7 +70,7 @@ sp_feComponentTransfer_class_init(SPFeComponentTransferClass *klass)
     SPFilterPrimitiveClass *sp_primitive_class = (SPFilterPrimitiveClass *)klass;
     feComponentTransfer_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_feComponentTransfer_build;
+    //sp_object_class->build = sp_feComponentTransfer_build;
     sp_object_class->release = sp_feComponentTransfer_release;
     sp_object_class->write = sp_feComponentTransfer_write;
     sp_object_class->set = sp_feComponentTransfer_set;
@@ -93,9 +93,10 @@ sp_feComponentTransfer_init(SPFeComponentTransfer */*feComponentTransfer*/)
 static void
 sp_feComponentTransfer_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feComponentTransfer_parent_class)->build) {
-        ((SPObjectClass *) feComponentTransfer_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feComponentTransfer_parent_class)->build) {
+//        ((SPObjectClass *) feComponentTransfer_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 

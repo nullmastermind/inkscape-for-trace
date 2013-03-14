@@ -90,7 +90,7 @@ sp_pattern_class_init (SPPatternClass *klass)
 
 	pattern_parent_class = (SPPaintServerClass*)g_type_class_ref (SP_TYPE_PAINT_SERVER);
 
-	sp_object_class->build = sp_pattern_build;
+	//sp_object_class->build = sp_pattern_build;
 	sp_object_class->release = sp_pattern_release;
 	sp_object_class->set = sp_pattern_set;
 	sp_object_class->update = sp_pattern_update;

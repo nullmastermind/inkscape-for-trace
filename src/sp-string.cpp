@@ -78,7 +78,7 @@ sp_string_class_init(SPStringClass *classname)
 
     string_parent_class = (SPObjectClass*)g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->build        = sp_string_build;
+    //sp_object_class->build        = sp_string_build;
     sp_object_class->release      = sp_string_release;
     sp_object_class->read_content = sp_string_read_content;
     sp_object_class->update       = sp_string_update;

@@ -86,7 +86,7 @@ sp_filter_class_init(SPFilterClass *klass)
 
     filter_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_filter_build;
+    //sp_object_class->build = sp_filter_build;
     sp_object_class->release = sp_filter_release;
     sp_object_class->write = sp_filter_write;
     sp_object_class->set = sp_filter_set;
@@ -130,9 +130,10 @@ sp_filter_init(SPFilter *filter)
 static void
 sp_filter_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) filter_parent_class)->build) {
-        ((SPObjectClass *) filter_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) filter_parent_class)->build) {
+//        ((SPObjectClass *) filter_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "filterUnits" );

@@ -219,7 +219,7 @@ void ColorProfile::classInit( ColorProfileClass *klass )
     cprof_parent_class = static_cast<SPObjectClass*>(g_type_class_ref(SP_TYPE_OBJECT));
 
     sp_object_class->release = ColorProfile::release;
-    sp_object_class->build = ColorProfile::build;
+    //sp_object_class->build = ColorProfile::build;
     sp_object_class->set = ColorProfile::set;
     sp_object_class->write = ColorProfile::write;
 }
@@ -312,9 +312,11 @@ void ColorProfile::build( SPObject *object, SPDocument *document, Inkscape::XML:
     g_assert(cprof->name == 0);
     g_assert(cprof->intentStr == 0);
 
-    if (cprof_parent_class->build) {
-        (* cprof_parent_class->build)(object, document, repr);
-    }
+//    if (cprof_parent_class->build) {
+//        (* cprof_parent_class->build)(object, document, repr);
+//    }
+    // CPPIFY: todo
+
     object->readAttr( "xlink:href" );
     object->readAttr( "local" );
     object->readAttr( "name" );

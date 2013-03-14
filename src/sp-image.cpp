@@ -587,7 +587,7 @@ static void sp_image_class_init( SPImageClass * klass )
 
     parent_class = reinterpret_cast<SPItemClass*>(g_type_class_ref(SPItem::getType()));
 
-    sp_object_class->build = sp_image_build;
+    //sp_object_class->build = sp_image_build;
     sp_object_class->release = sp_image_release;
     sp_object_class->set = sp_image_set;
     sp_object_class->update = sp_image_update;

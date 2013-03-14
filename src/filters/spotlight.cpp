@@ -71,7 +71,7 @@ sp_fespotlight_class_init(SPFeSpotLightClass *klass)
 
     feSpotLight_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
-    sp_object_class->build = sp_fespotlight_build;
+    //sp_object_class->build = sp_fespotlight_build;
     sp_object_class->release = sp_fespotlight_release;
     sp_object_class->write = sp_fespotlight_write;
     sp_object_class->set = sp_fespotlight_set;
@@ -108,9 +108,10 @@ sp_fespotlight_init(SPFeSpotLight *fespotlight)
 static void
 sp_fespotlight_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) feSpotLight_parent_class)->build) {
-        ((SPObjectClass *) feSpotLight_parent_class)->build(object, document, repr);
-    }
+//    if (((SPObjectClass *) feSpotLight_parent_class)->build) {
+//        ((SPObjectClass *) feSpotLight_parent_class)->build(object, document, repr);
+//    }
+	// CPPIFY: todo
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "x" );

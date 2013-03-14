@@ -71,7 +71,7 @@ static void sp_symbol_class_init(SPSymbolClass *klass)
 
     parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
 
-    sp_object_class->build = sp_symbol_build;
+    //sp_object_class->build = sp_symbol_build;
     sp_object_class->release = sp_symbol_release;
     sp_object_class->set = sp_symbol_set;
     sp_object_class->child_added = sp_symbol_child_added;
