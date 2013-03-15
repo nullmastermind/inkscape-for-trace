@@ -61,7 +61,7 @@ struct _GdkEventWindowState;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 
 namespace Inkscape {
-  class Application;
+  struct Application;
   class MessageContext;
   class Selection;
   class ObjectHierarchy;
@@ -77,7 +77,7 @@ namespace Inkscape {
       }
 
       namespace View {
-	      class EditWidgetInterface;
+	      struct EditWidgetInterface;
       }
   }
   namespace Whiteboard {

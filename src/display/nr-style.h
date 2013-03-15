@@ -16,9 +16,9 @@
 #include <2geom/rect.h>
 #include "color.h"
 
-class SPColor;
-class SPPaintServer;
-class SPStyle;
+struct SPPaintServer;
+struct SPStyle;
+
 namespace Inkscape {
 class DrawingContext;
 }

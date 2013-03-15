@@ -21,8 +21,8 @@
 #include "ui/tool/manipulator.h"
 
 struct SPCanvasItem;
-struct SPCurve;
-struct SPPath;
+class SPCurve;
+class SPPath;
 
 namespace Inkscape {
 namespace XML { class Node; }

@@ -28,9 +28,9 @@
 #include "snap-candidate.h"
 
 class SPGuideConstraint;
-struct SPClipPathReference;
-struct SPMaskReference;
-struct SPAvoidRef;
+class SPClipPathReference;
+class SPMaskReference;
+class SPAvoidRef;
 struct SPPrintContext;
 
 namespace Inkscape {

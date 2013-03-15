@@ -26,8 +26,8 @@
 #include "button.h"
 #include "preferences.h"
 
-class SPUnit;
-class SPStyle;
+struct SPUnit;
+struct SPStyle;
 class SPCSSAttr;
 
 namespace Gtk {

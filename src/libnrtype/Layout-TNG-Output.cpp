@@ -27,7 +27,6 @@ namespace Inkscape {
     namespace Extension {
         namespace Internal {
             class CairoRenderContext;
-            class CairoGlyphInfo;
         }
     }
 }

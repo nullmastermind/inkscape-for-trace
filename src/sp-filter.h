@@ -35,8 +35,8 @@ namespace Filters {
 class Filter;
 } }
 
-struct SPFilterReference;
-class SPFilterPrimitive;
+class SPFilterReference;
+struct SPFilterPrimitive;
 
 struct ltstr {
     bool operator()(const char* s1, const char* s2) const;
