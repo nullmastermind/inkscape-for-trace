@@ -21,8 +21,10 @@
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/spinbutton.h"
 
+class SPDesktop;
+
 namespace Inkscape {
-class Application;
+struct Application;
 
 namespace UI {
 namespace Widget {

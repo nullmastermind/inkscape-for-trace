@@ -3,29 +3,48 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "live_effects/lpe-bspline.h"
 
+#include "xml/repr.h"
+#include "svg/svg.h"
 #include "display/curve.h"
+#include <glib.h>
+#include <glibmm/i18n.h>
+#include "sp-path.h"
+#include "style.h"
+#include "document.h"
+#include "document-undo.h"
+#include "selection.h"
+#include "desktop.h"
+#include "verbs.h"
+#include "desktop-handles.h"
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+#include <gtkmm/checkbutton.h>
+#include <glibmm/listhandle.h>
+#include "live_effects/lpe-bspline.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
+#include "sp-lpe-item.h"
+#include "display/sp-canvas.h"
 #include <typeinfo>
-#include <2geom/pathvector.h>
-#include <2geom/affine.h>
 #include <2geom/bezier-curve.h>
 #include "helper/geom-curves.h"
-#include <glibmm/i18n.h>
+#include "ui/widget/scalar.h"
+
+
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
 #include "desktop.h"
 
+
+using Inkscape::DocumentUndo;
 namespace Inkscape {
 namespace LivePathEffect {
 
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
-    Effect(lpeobject),unify_weights(_("Unify weights:"),
-                 _("Percent of the with for all poinrs"), "unify_weights", &wr, this, 33.)
+    Effect(lpeobject),scal,noCusp
 {
-    registerParameter( dynamic_cast<Parameter *>(&unify_weights) );
-    unify_weights.param_set_range(0, 100.);
 }
 
 LPEBSpline::~LPEBSpline()
@@ -33,12 +52,15 @@ LPEBSpline::~LPEBSpline()
 }
 
 void
-LPEBSpline::doEffect(SPCurve * curve)
+LPEBSpline::doOnApply(SPLPEItem const* lpeitem)
 {
-LPEBSpline::doEffect(curve,NULL)
+    if (!SP_IS_SHAPE(lpeitem)) {
+        g_warning("LPE BSpline can only be applied to shapes (not groups).");
+    }
 }
+
 void
-LPEBSpline::doEffect(SPCurve * curve,int value)
+LPEBSpline::doEffect(SPCurve * curve)
 {
     if(curve->get_segment_count() < 2)
         return;
@@ -96,21 +118,11 @@ LPEBSpline::doEffect(SPCurve * curve,int value)
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
             if(cubic){
                 SBasisIn = in->first_segment()->toSBasis();
-                if(value){
-                    pointAt1 = SBasisIn.valueAt(value);
-                    pointAt2 = SBasisIn.valueAt(1-value);
-                }else{
-                    pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[1],*in->first_segment()));
-                    pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[2],*in->first_segment()));
-                }
+                pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[1],*in->first_segment()));
+                pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[2],*in->first_segment()));
             }else{
-                if(value){
-                    pointAt1 = SBasisIn.valueAt(value);
-                    pointAt2 = SBasisIn.valueAt(1-value);
-                }else{
-                    pointAt1 = in->first_segment()->initialPoint();
-                    pointAt2 = in->first_segment()->finalPoint();
-                }
+                pointAt1 = in->first_segment()->initialPoint();
+                pointAt2 = in->first_segment()->finalPoint();
             }
             in->reset();
             delete in;
@@ -122,22 +134,12 @@ LPEBSpline::doEffect(SPCurve * curve,int value)
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
             if(cubic){
                 SBasisOut = out->first_segment()->toSBasis();
-                if(value){
-                    nextPointAt1 = SBasisIn.valueAt(value);
-                    nextPointAt2 = SBasisIn.valueAt(1-value);
-                }else{
-                    nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1],*out->first_segment()));
-                    nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[2],*out->first_segment()));;
-                ]
+                nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1],*out->first_segment()));
+                nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[2],*out->first_segment()));;
                 nextPointAt3 = (*cubic)[3];
             }else{
-                if(value){
-                    nextPointAt1 = SBasisIn.valueAt(value);
-                    nextPointAt2 = SBasisIn.valueAt(1-value);
-                }else{
-                    nextPointAt1 = out->first_segment()->initialPoint();
-                    nextPointAt2 = out->first_segment()->finalPoint();
-                }
+                nextPointAt1 = out->first_segment()->initialPoint();
+                nextPointAt2 = out->first_segment()->finalPoint();
                 nextPointAt3 = out->first_segment()->finalPoint();
             }
             out->reset();
@@ -158,13 +160,8 @@ LPEBSpline::doEffect(SPCurve * curve,int value)
             //Y este hará de final de curva
             node = SBasisHelper.valueAt(0.5);
             SPCurve *curveHelper = new SPCurve();
-            if(value){
-                 curveHelper->moveto(*in->first_segment()->initialPoint());
-                 curveHelper->curveto(pointAt1, pointAt2, *in->first_segment()->finalPoint());
-            }else{
-                curveHelper->moveto(previousNode);
-                curveHelper->curveto(pointAt1, pointAt2, node);
-            }
+            curveHelper->moveto(previousNode);
+            curveHelper->curveto(pointAt1, pointAt2, node);
             //añadimos la curva generada a la curva pricipal
             nCurve->append_continuous(curveHelper, 0.0625);
             curveHelper->reset();
@@ -210,11 +207,7 @@ LPEBSpline::doEffect(SPCurve * curve,int value)
             SBasisHelper = lineHelper->first_segment()->toSBasis();
             lineHelper->reset();
             delete lineHelper;
-            //Guardamos el principio de la curva
-            if(value)
-                startNode = path_it->begin()->initialPoint();
-            else
-                startNode = SBasisHelper.valueAt(0.5);
+            startNode = SBasisHelper.valueAt(0.5);
             curveHelper->curveto(nextPointAt1, nextPointAt2, startNode);
             nCurve->append_continuous(curveHelper, 0.0625);
             nCurve->move_endpoints(startNode,startNode);
@@ -241,37 +234,219 @@ LPEBSpline::doEffect(SPCurve * curve,int value)
     }
 }
 
-void
-LPEBSpline::updateAllHandles(int value)
+Gtk::Widget *
+LPEBSpline::newWidget()
 {
+    Gtk::VBox * vbox = dynamic_cast<Gtk::VBox*>(Effect::newWidget());
+    vbox->set_border_width(5);
+    Glib::ustring title = Glib::ustring(_("Ignore cusp nodes"));
+    Glib::ustring tip = Glib::ustring(_("Ignore cusp nodes"));
+    Gtk::Widget *noCuspWidget = new LPEBSpline::newCheckButton(title,tip);
+    vbox->pack_start(*noCuspWidget,true,true,(guint)2);
+    title = Glib::ustring(_("Unify weights:"));
+    tip = Glib::ustring(_("Percent of the with for all poinrs"));
+    Gtk::Widget *scalWidget = new LPEBSpline::newScalar(title,tip);
+    vbox->pack_start(*scalWidget, true, true,2);
+    return dynamic_cast<Gtk::VBox *> (vbox);
+}
+
+Gtk::Widget *
+LPEBSpline::newScalar(Glib::ustring title, Glib::ustring tip)
+{
+    scal = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
+    scal->setValue(33.);
+    scal->setDigits(2);
+    scal->setIncrements(1., 5.);
+    scal->setRange(0, 100.);    
+    scal->setProgrammatically = false;
+    scal->addSlider();
+    scal->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateAllHandles));
+    return dynamic_cast<Gtk::Widget *>(scal);
+}
+
+Gtk::Widget *
+LPEBSpline::newCheckButton(Glib::ustring title, Glib::ustring tip)
+{
+    noCusp = Gtk::manage( new Gtk::CheckButton(title,tip));
+    return dynamic_cast<Gtk::Widget *>(noCusp);
+}
+
+void
+LPEBSpline::updateAllHandles()
+{
+    double value = scal->setValue(33.);
+    bool noCusp = false;
     SPDesktop *desktop = inkscape_active_desktop(); // TODO: Is there a better method to find the item's desktop?
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     for (GSList *items = (GSList *) selection->itemList();
          items != NULL;
          items = items->next) {
-        if (SP_IS_LPE_ITEM(items->data) && sp_lpe_item_has_path_effect(items->data)){
-            PathEffectList effect_list = sp_lpe_item_get_effect_list(SP_LPE_ITEM(_path));
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>( effect_list.front()->lpeobject->get_lpe());
-            if(lpe_bsp)
-                LPEBSpline::updateHandles((SPItem *) items->data,value);
+        if (SP_IS_LPE_ITEM((SPLPEItem *)items->data) && sp_lpe_item_has_path_effect((SPLPEItem *)items->data)){
+            LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM((SPLPEItem *)items->data),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
+            if(lpe_bsp){
+                SPItem *item = (SPItem *) items->data;
+                SPPath *path = SP_PATH(item);
+                SPCurve *curve = path->get_curve_for_edit();
+                LPEBSpline::doBSplineFromWidget(curve,value,noCusp);
+                gchar *str = sp_svg_write_path(curve->get_pathvector());
+                path->getRepr()->setAttribute("inkscape:original-d", str);
+                g_free(str);
+                curve->unref();
+                SPDesktop *desktop = inkscape_active_desktop();
+                desktop->clearWaitingCursor();
+                DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_LPE,
+                                     _("Modified the weight of the BSpline"));
+            }
+        }
     }
 }
-void 
-LPEBSpline::updateHandles(SPItem * item,int value){
-    
-    Inkscape::XML::Node *newitem = item->getRepr();
-    Inkscape::XML::Node *path = sp_repr_lookup_child(newitem,"svg:path", -1); //unlimited search depth
-    if ( path != NULL ){
-        gchar const *svgd = path->attribute("d");
+
+void
+LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
+{
+    if(curve->get_segment_count() < 2)
+        return;
+    // Make copy of old path as it is changed during processing
+    Geom::PathVector const original_pathv = curve->get_pathvector();
+    curve->reset();
+
+    //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
+    for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+        //Si está vacío... 
+        if (path_it->empty())
+            continue;
+        //Itreadores
+        
+        Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
+        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());         // outgoing curve
+        Geom::Path::const_iterator curve_endit = path_it->end_default(); // this determines when the loop has to stop
+        //Creamos las lineas rectas que unen todos los puntos del trazado y donde se calcularán
+        //los puntos clave para los manejadores. 
+        //Esto hace que la curva BSpline no pierda su condición aunque se trasladen
+        //dichos manejadores
+        SPCurve *nCurve = new SPCurve();
+        Geom::Point pointAt0(0,0);
+        Geom::Point pointAt1(0,0);
+        Geom::Point pointAt2(0,0);
+        Geom::Point pointAt3(0,0);
+        Geom::Point nextPointAt1(0,0);
+        Geom::Point nextPointAt2(0,0);
+        Geom::Point nextPointAt3(0,0);
+        Geom::D2< Geom::SBasis > SBasisIn;
+        Geom::D2< Geom::SBasis > SBasisOut;
+        Geom::CubicBezier const *cubic = NULL;
+        if (path_it->closed()) {
+            // if the path is closed, maybe we have to stop a bit earlier because the closing line segment has zerolength.
+            const Geom::Curve &closingline = path_it->back_closed(); // the closing line segment is always of type Geom::LineSegment.
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                // closingline.isDegenerate() did not work, because it only checks for *exact* zero length, which goes wrong for relative coordinates and rounding errors...
+                // the closing line segment has zero-length. So stop before that one!
+                curve_endit = path_it->end_open();
+            }
+        }
+        //Si la curva está cerrada calculamos el punto donde
+        //deveria estar el nodo BSpline de cierre/inicio de la curva
+        //en posible caso de que se cierre con una linea recta creando un nodo BSPline
+
+        //Recorremos todos los segmentos menos el último
+        while ( curve_it2 != curve_endit )
+        {
+            //previousPointAt3 = pointAt3;
+            //Calculamos los puntos que dividirían en tres segmentos iguales el path recto de entrada y de salida
+            SPCurve * in = new SPCurve();
+            in->moveto(curve_it1->initialPoint());
+            in->lineto(curve_it1->finalPoint());
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
+            pointAt0 = in->first_segment()->initialPoint();
+            SBasisIn = in->first_segment()->toSBasis();
+            if(cubic){                
+                if(!noCusp || (*cubic)[1] != in->first_segment()->initialPoint())
+                    pointAt1 = SBasisIn.valueAt(value);
+                else
+                    pointAt1 = in->first_segment()->initialPoint();
+                if(!noCusp || (*cubic)[2] != in->first_segment()->finalPoint())
+                    pointAt2 = SBasisIn.valueAt(1-value);
+                else
+                    pointAt2 = in->first_segment()->finalPoint();
+            }else{
+                if(!noCusp){
+                    pointAt1 = SBasisIn.valueAt(value);
+                    pointAt2 = SBasisIn.valueAt(1-value);
+                }else{
+                    pointAt1 = in->first_segment()->initialPoint();
+                    pointAt2 = in->first_segment()->finalPoint();
+                }
+            }
+            pointAt3 = in->first_segment()->finalPoint();
+            in->reset();
+            delete in;
+            //Y hacemos lo propio con el path de salida
+            //nextPointAt0 = curveOut.valueAt(0);
+            SPCurve * out = new SPCurve();
+            out->moveto(curve_it2->initialPoint());
+            out->lineto(curve_it2->finalPoint());
+            SBasisOut = out->first_segment()->toSBasis();
+            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
+            if(cubic){
+                if(!noCusp || (*cubic)[1] != out->first_segment()->initialPoint())
+                    nextPointAt1 = SBasisOut.valueAt(value);
+                else
+                    nextPointAt1 = out->first_segment()->initialPoint();
+                if(!noCusp || (*cubic)[2] != out->first_segment()->finalPoint())
+                    nextPointAt2 = SBasisOut.valueAt(1-value);
+                else
+                    nextPointAt2 = out->first_segment()->finalPoint();
+            }else{
+                if(!noCusp){
+                    nextPointAt1 = SBasisOut.valueAt(value);
+                    nextPointAt2 = SBasisOut.valueAt(1-value);
+                }else{
+                    nextPointAt1 = out->first_segment()->initialPoint();
+                    nextPointAt2 = out->first_segment()->finalPoint();
+                }
+            }
+            nextPointAt3 = out->first_segment()->finalPoint();
+            out->reset();
+            delete out;
+            //La curva BSpline se forma calculando el centro del segmanto de unión
+            //de el punto situado en las 2/3 partes de el segmento de entrada
+            //con el punto situado en la posición 1/3 del segmento de salida
+            //Estos dos puntos ademas estan posicionados en el lugas correspondiente de
+            //los manejadores de la curva
+            SPCurve *curveHelper = new SPCurve();
+            curveHelper->moveto(pointAt0);
+            curveHelper->curveto(pointAt1, pointAt2, pointAt3);
+            //añadimos la curva generada a la curva pricipal
+            nCurve->append_continuous(curveHelper, 0.0625);
+            curveHelper->reset();
+            delete curveHelper;
+            //aumentamos los valores para el siguiente paso en el bucle
+            ++curve_it1;
+            ++curve_it2;
+        }
+        //Aberiguamos la ultima parte de la curva correspondiente al último segmento
+        SPCurve *curveHelper = new SPCurve();
+        curveHelper->moveto(pointAt3);
+        if (path_it->closed()) {
+            curveHelper->curveto(nextPointAt1, nextPointAt2, path_it->begin()->initialPoint());
+            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->move_endpoints(path_it->begin()->initialPoint(),path_it->begin()->initialPoint());
+        }else{
+            curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
+            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->move_endpoints(path_it->begin()->initialPoint(),nextPointAt3);
+        }
+        curveHelper->reset();
+        delete curveHelper;
+        //y cerramos la curva
+        if (path_it->closed()) {
+            nCurve->closepath_current();
+        }
+        curve->append(nCurve,false);
+        nCurve->reset();
+        delete nCurve;
     }
-    
-    SPCurve *original = new SPCurve();
-    original = (SPPath *)item->original_curve();
-    LPEBSpline::doEffect(original,value);
-    gchar *str = sp_svg_write_path( original->get_pathvector() );
-    g_assert( str != NULL );
-    path->setAttribute ("inkscaspe:original-d", str);
-    item->updateRepr();
 }
 
 }; //namespace LivePathEffect

@@ -9,29 +9,39 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/parameter.h"
+#include "ui/widget/scalar.h"
+#include <gtkmm/checkbutton.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
+
+
 
 class LPEBSpline : public Effect {
 public:
     LPEBSpline(LivePathEffectObject *lpeobject);
     virtual ~LPEBSpline();
 
-    virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & input_path);
-
     virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
 
+    virtual void doOnApply(SPLPEItem const* lpeitem);
+
     virtual void doEffect(SPCurve * curve);
-    
-    virtual void doEffect(SPCurve * curve, int value);
-    
-    virtual void updateAllHandles(int value);
-    
-    virtual void updateHandles(SPItem * item , int value);
+
+    virtual void updateAllHandles();
+
+    virtual void newScalar(Glib::ustring title, Glib::ustring tip);
+
+    virtual void newCheckButton(Glib::ustring title, Glib::ustring tip);
+
+    virtual void doBSplineFromWidget(SPCurve * curve, double value, bool noCusp);
+
+    virtual Gtk::Widget * newWidget();
+
 
 private:
-    ScalarParam unify_weights;
+    Inkscape::UI::Widget::Scalar* scal;
+    Gtk::CheckButton* noCusp;
     LPEBSpline(const LPEBSpline&);
     LPEBSpline& operator=(const LPEBSpline&);
 };

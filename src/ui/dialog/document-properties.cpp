@@ -22,6 +22,7 @@
 # include <config.h>
 #endif
 
+#include "ui/widget/notebook-page.h"
 #include "document-properties.h"
 #include "display/canvas-grid.h"
 #include "document.h"
@@ -50,8 +51,9 @@
 #include "color-profile.h"
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-#include <gtkmm/stock.h>
 #include <gtkmm/imagemenuitem.h>
+#include <gtkmm/stock.h>
+#include <gtkmm/table.h>
 
 using std::pair;
 
@@ -90,15 +92,15 @@ DocumentProperties& DocumentProperties::getInstance()
 
 DocumentProperties::DocumentProperties()
     : UI::Widget::Panel ("", "/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
-      _page_page(1, 1, true, true),
-      _page_guides(1, 1),
-      _page_snap(1, 1),
-      _page_cms(1, 1),
-      _page_scripting(1, 1),
-      _page_external_scripts(1, 1),
-      _page_embedded_scripts(1, 1),
-      _page_metadata1(1, 1),
-      _page_metadata2(1, 1),
+      _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
+      _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_cms(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_scripting(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_external_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_embedded_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_metadata1(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+      _page_metadata2(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
     //---------------------------------------------------------------
       _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
       _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
@@ -141,14 +143,14 @@ DocumentProperties::DocumentProperties()
     _getContents()->set_spacing (4);
     _getContents()->pack_start(_notebook, true, true);
 
-    _notebook.append_page(_page_page,      _("Page"));
-    _notebook.append_page(_page_guides,    _("Guides"));
+    _notebook.append_page(*_page_page,      _("Page"));
+    _notebook.append_page(*_page_guides,    _("Guides"));
     _notebook.append_page(_grids_vbox,     _("Grids"));
-    _notebook.append_page(_page_snap,      _("Snap"));
-    _notebook.append_page(_page_cms, _("Color"));
-    _notebook.append_page(_page_scripting, _("Scripting"));
-    _notebook.append_page(_page_metadata1, _("Metadata"));
-    _notebook.append_page(_page_metadata2, _("License"));
+    _notebook.append_page(*_page_snap,      _("Snap"));
+    _notebook.append_page(*_page_cms, _("Color"));
+    _notebook.append_page(*_page_scripting, _("Scripting"));
+    _notebook.append_page(*_page_metadata1, _("Metadata"));
+    _notebook.append_page(*_page_metadata2, _("License"));
 
     _wr.setUpdating (true);
     build_page();
@@ -203,12 +205,25 @@ DocumentProperties::~DocumentProperties()
  * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
  * (non-0, non-0) means two widgets in columns 2 and 3.
  */
+#if WITH_GTKMM_3_0
+inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n, int start = 0, int docum_prop_flag = 0)
+#else
 inline void attach_all(Gtk::Table &table, Gtk::Widget *const arr[], unsigned const n, int start = 0, int docum_prop_flag = 0)
+#endif
 {
     for (unsigned i = 0, r = start; i < n; i += 2) {
         if (arr[i] && arr[i+1]) {
+#if WITH_GTKMM_3_0
+            arr[i]->set_hexpand();
+            arr[i+1]->set_hexpand();
+            arr[i]->set_valign(Gtk::ALIGN_CENTER);
+            arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
+            table.attach(*arr[i],   1, r, 1, 1);
+            table.attach(*arr[i+1], 2, r, 1, 1);
+#else
             table.attach(*arr[i],   1, 2, r, r+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
             table.attach(*arr[i+1], 2, 3, r, r+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
         } else {
             if (arr[i+1]) {
                 Gtk::AttachOptions yoptions = (Gtk::AttachOptions)0;
@@ -218,21 +233,70 @@ inline void attach_all(Gtk::Table &table, Gtk::Widget *const arr[], unsigned con
                 }
                 if (docum_prop_flag) {
                     if( i==(n-4) || i==(n-6) ) {
+#if WITH_GTKMM_3_0
+                        arr[i+1]->set_hexpand();
+                        arr[i+1]->set_margin_left(20);
+                        arr[i+1]->set_margin_right(20);
+
+                        if (yoptions & Gtk::EXPAND)
+                            arr[i+1]->set_vexpand();
+                        else
+                            arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
+
+                        table.attach(*arr[i+1], 1, r, 2, 1);
+#else
                         table.attach(*arr[i+1], 1, 3, r, r+1, Gtk::FILL|Gtk::EXPAND, yoptions, 20,0);
+#endif
                     } else {
+#if WITH_GTKMM_3_0
+                        arr[i+1]->set_hexpand();
+
+                        if (yoptions & Gtk::EXPAND)
+                            arr[i+1]->set_vexpand();
+                        else
+                            arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
+
+                        table.attach(*arr[i+1], 1, r, 2, 1);
+#else
                         table.attach(*arr[i+1], 1, 3, r, r+1, Gtk::FILL|Gtk::EXPAND, yoptions, 0,0);
+#endif
                     }
                 } else {
+#if WITH_GTKMM_3_0
+                    arr[i+1]->set_hexpand();
+                        
+                    if (yoptions & Gtk::EXPAND)
+                        arr[i+1]->set_vexpand();
+                    else
+                        arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
+
+                    table.attach(*arr[i+1], 1, r, 2, 1);
+#else
                     table.attach(*arr[i+1], 1, 3, r, r+1, Gtk::FILL|Gtk::EXPAND, yoptions, 0,0);
+#endif
                 }
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&>(*arr[i]);
                 label.set_alignment (0.0);
+
+#if WITH_GTKMM_3_0
+                label.set_hexpand();
+                label.set_valign(Gtk::ALIGN_CENTER);
+                table.attach(label, 0, r, 3, 1);
+#else
                 table.attach (label, 0, 3, r, r+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
             } else {
                 Gtk::HBox *space = manage (new Gtk::HBox);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+
+#if WITH_GTKMM_3_0
+                space->set_halign(Gtk::ALIGN_CENTER);
+                space->set_valign(Gtk::ALIGN_CENTER);
+                table.attach(*space, 0, r, 1, 1);
+#else
                 table.attach (*space, 0, 1, r, r+1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0,0,0);
+#endif
             }
         }
         ++r;
@@ -241,7 +305,7 @@ inline void attach_all(Gtk::Table &table, Gtk::Widget *const arr[], unsigned con
 
 void DocumentProperties::build_page()
 {
-    _page_page.show();
+    _page_page->show();
 
     Gtk::Label* label_gen = manage (new Gtk::Label);
     label_gen->set_markup (_("<b>General</b>"));
@@ -275,12 +339,12 @@ void DocumentProperties::build_page()
     _slaveList.push_back(&_rcb_shad);
     _rcb_canb.setSlaveWidgets(_slaveList);
 
-    attach_all(_page_page.table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
+    attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
 }
 
 void DocumentProperties::build_guides()
 {
-    _page_guides.show();
+    _page_guides->show();
 
     Gtk::Label *label_gui = manage (new Gtk::Label);
     label_gui->set_markup (_("<b>Guides</b>"));
@@ -293,12 +357,12 @@ void DocumentProperties::build_guides()
         _rcp_hgui._label, &_rcp_hgui
     };
 
-    attach_all(_page_guides.table(), widget_array, G_N_ELEMENTS(widget_array));
+    attach_all(_page_guides->table(), widget_array, G_N_ELEMENTS(widget_array));
 }
 
 void DocumentProperties::build_snap()
 {
-    _page_snap.show();
+    _page_snap->show();
 
     Gtk::Label *label_o = manage (new Gtk::Label);
     label_o->set_markup (_("<b>Snap to objects</b>"));
@@ -327,7 +391,7 @@ void DocumentProperties::build_snap()
         0,                  &_rcb_tang
     };
 
-    attach_all(_page_snap.table(), array, G_N_ELEMENTS(array));
+    attach_all(_page_snap->table(), array, G_N_ELEMENTS(array));
  }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -532,7 +596,7 @@ void DocumentProperties::removeSelectedProfile(){
 
 void DocumentProperties::build_cms()
 {
-    _page_cms.show();
+    _page_cms->show();
     Gtk::Label *label_link= manage (new Gtk::Label("", Gtk::ALIGN_START));
     label_link->set_markup (_("<b>Linked Color Profiles:</b>"));
     Gtk::Label *label_avail = manage (new Gtk::Label("", Gtk::ALIGN_START));
@@ -544,26 +608,75 @@ void DocumentProperties::build_cms()
     _unlink_btn.set_tooltip_text(_("Unlink Profile"));
     _unlink_btn.set_image(*manage(Glib::wrap(gtk_image_new_from_stock ( GTK_STOCK_REMOVE, GTK_ICON_SIZE_SMALL_TOOLBAR ) )));
 
-    _page_cms.set_spacing(4);
+    _page_cms->set_spacing(4);
     gint row = 0;
 
     label_link->set_alignment(0.0);
-    _page_cms.table().attach(*label_link, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    label_link->set_hexpand();
+    label_link->set_valign(Gtk::ALIGN_CENTER);
+    _page_cms->table().attach(*label_link, 0, row, 3, 1);
+#else
+    _page_cms->table().attach(*label_link, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
-    _page_cms.table().attach(_LinkedProfilesListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    _LinkedProfilesListScroller.set_hexpand();
+    _LinkedProfilesListScroller.set_valign(Gtk::ALIGN_CENTER);
+    _page_cms->table().attach(_LinkedProfilesListScroller, 0, row, 3, 1);
+#else
+    _page_cms->table().attach(_LinkedProfilesListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
     Gtk::HBox* spacer = Gtk::manage(new Gtk::HBox());
     spacer->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_cms.table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    spacer->set_hexpand();
+    spacer->set_valign(Gtk::ALIGN_CENTER);
+    _page_cms->table().attach(*spacer, 0, row, 3, 1);
+#else
+    _page_cms->table().attach(*spacer, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
     label_avail->set_alignment(0.0);
-    _page_cms.table().attach(*label_avail, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    label_avail->set_hexpand();
+    label_avail->set_valign(Gtk::ALIGN_CENTER);
+    _page_cms->table().attach(*label_avail, 0, row, 3, 1);
+#else
+    _page_cms->table().attach(*label_avail, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
-    _page_cms.table().attach(_combo_avail, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_cms.table().attach(_link_btn, 1, 2, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 2, 0);
-    _page_cms.table().attach(_unlink_btn, 2, 3, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    _combo_avail.set_hexpand();
+    _combo_avail.set_valign(Gtk::ALIGN_CENTER);
+    _page_cms->table().attach(_combo_avail, 0, row, 1, 1);
+
+    _link_btn.set_halign(Gtk::ALIGN_CENTER);
+    _link_btn.set_valign(Gtk::ALIGN_CENTER);
+    _link_btn.set_margin_left(2);
+    _link_btn.set_margin_right(2);
+    _page_cms->table().attach(_link_btn, 1, row, 1, 1);
+
+    _unlink_btn.set_halign(Gtk::ALIGN_CENTER);
+    _unlink_btn.set_valign(Gtk::ALIGN_CENTER);
+    _page_cms->table().attach(_unlink_btn, 2, row, 1, 1);
+#else
+    _page_cms->table().attach(_combo_avail, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_cms->table().attach(_link_btn, 1, 2, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 2, 0);
+    _page_cms->table().attach(_unlink_btn, 2, 3, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 0, 0);
+#endif
 
     populate_available_profiles();
 
@@ -601,16 +714,16 @@ void DocumentProperties::build_cms()
 
 void DocumentProperties::build_scripting()
 {
-    _page_scripting.show();
+    _page_scripting->show();
 
-    _page_scripting.set_spacing (4);
-    _page_scripting.pack_start(_scripting_notebook, true, true);
+    _page_scripting->set_spacing (4);
+    _page_scripting->pack_start(_scripting_notebook, true, true);
 
-    _scripting_notebook.append_page(_page_external_scripts, _("External scripts"));
-    _scripting_notebook.append_page(_page_embedded_scripts, _("Embedded scripts"));
+    _scripting_notebook.append_page(*_page_external_scripts, _("External scripts"));
+    _scripting_notebook.append_page(*_page_embedded_scripts, _("Embedded scripts"));
 
     //# External scripts tab
-    _page_external_scripts.show();
+    _page_external_scripts->show();
     Gtk::Label *label_external= manage (new Gtk::Label("", Gtk::ALIGN_START));
     label_external->set_markup (_("<b>External script files:</b>"));
 
@@ -621,23 +734,64 @@ void DocumentProperties::build_scripting()
     _external_remove_btn.set_image(*manage(Glib::wrap(gtk_image_new_from_stock ( GTK_STOCK_REMOVE, GTK_ICON_SIZE_SMALL_TOOLBAR ) )));
 
 
-    _page_external_scripts.set_spacing(4);
+    _page_external_scripts->set_spacing(4);
     gint row = 0;
 
     label_external->set_alignment(0.0);
-    _page_external_scripts.table().attach(*label_external, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    label_external->set_hexpand();
+    label_external->set_valign(Gtk::ALIGN_CENTER);
+    _page_external_scripts->table().attach(*label_external, 0, row, 3, 1);
+#else
+    _page_external_scripts->table().attach(*label_external, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
-    _page_external_scripts.table().attach(_ExternalScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    _ExternalScriptsListScroller.set_hexpand();
+    _ExternalScriptsListScroller.set_valign(Gtk::ALIGN_CENTER);
+    _page_external_scripts->table().attach(_ExternalScriptsListScroller, 0, row, 3, 1);
+#else
+    _page_external_scripts->table().attach(_ExternalScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
     Gtk::HBox* spacer_external = Gtk::manage(new Gtk::HBox());
     spacer_external->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_external_scripts.table().attach(*spacer_external, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    spacer_external->set_hexpand();
+    spacer_external->set_valign(Gtk::ALIGN_CENTER);
+    _page_external_scripts->table().attach(*spacer_external, 0, row, 3, 1);
+#else
+    _page_external_scripts->table().attach(*spacer_external, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
-    _page_external_scripts.table().attach(_script_entry, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    _page_external_scripts.table().attach(_external_add_btn, 1, 2, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 2, 0);
-    _page_external_scripts.table().attach(_external_remove_btn, 2, 3, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 0, 0);
+#if WITH_GTKMM_3_0
+    _script_entry.set_hexpand();
+    _script_entry.set_valign(Gtk::ALIGN_CENTER);
+    _page_external_scripts->table().attach(_script_entry, 0, row, 1, 1);
+
+    _external_add_btn.set_halign(Gtk::ALIGN_CENTER);
+    _external_add_btn.set_valign(Gtk::ALIGN_CENTER);
+    _external_add_btn.set_margin_left(2);
+    _external_add_btn.set_margin_right(2);
+    _page_external_scripts->table().attach(_external_add_btn, 1, row, 1, 1);
+
+    _external_remove_btn.set_halign(Gtk::ALIGN_CENTER);
+    _external_remove_btn.set_valign(Gtk::ALIGN_CENTER);
+    _page_external_scripts->table().attach(_external_remove_btn, 2, row, 1, 1);
+#else
+    _page_external_scripts->table().attach(_script_entry, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+    _page_external_scripts->table().attach(_external_add_btn, 1, 2, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 2, 0);
+    _page_external_scripts->table().attach(_external_remove_btn, 2, 3, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
     //# Set up the External Scripts box
@@ -649,7 +803,7 @@ void DocumentProperties::build_scripting()
 
 
     //# Embedded scripts tab
-    _page_embedded_scripts.show();
+    _page_embedded_scripts->show();
     Gtk::Label *label_embedded= manage (new Gtk::Label("", Gtk::ALIGN_START));
     label_embedded->set_markup (_("<b>Embedded script files:</b>"));
 
@@ -669,21 +823,52 @@ void DocumentProperties::build_scripting()
     _embed_button_box.add(_embed_new_btn);
     _embed_button_box.add(_embed_remove_btn);
 
-    _page_embedded_scripts.set_spacing(4);
+    _page_embedded_scripts->set_spacing(4);
     row = 0;
 
     label_embedded->set_alignment(0.0);
-    _page_embedded_scripts.table().attach(*label_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
-    row++;
-    _page_embedded_scripts.table().attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    label_embedded->set_hexpand();
+    label_embedded->set_valign(Gtk::ALIGN_CENTER);
+    _page_embedded_scripts->table().attach(*label_embedded, 0, row, 3, 1);
+#else
+    _page_embedded_scripts->table().attach(*label_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
-    _page_embedded_scripts.table().attach(_embed_button_box, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#if WITH_GTKMM_3_0
+    _EmbeddedScriptsListScroller.set_hexpand();
+    _EmbeddedScriptsListScroller.set_valign(Gtk::ALIGN_CENTER);
+    _page_embedded_scripts->table().attach(_EmbeddedScriptsListScroller, 0, row, 3, 1);
+#else
+    _page_embedded_scripts->table().attach(_EmbeddedScriptsListScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
+    row++;
+
+#if WITH_GTKMM_3_0
+    _embed_button_box.set_hexpand();
+    _embed_button_box.set_valign(Gtk::ALIGN_CENTER);
+    _page_embedded_scripts->table().attach(_embed_button_box, 0, row, 1, 1);
+#else
+    _page_embedded_scripts->table().attach(_embed_button_box, 0, 1, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
     Gtk::HBox* spacer_embedded = Gtk::manage(new Gtk::HBox());
     spacer_embedded->set_size_request(SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_embedded_scripts.table().attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    spacer_embedded->set_hexpand();
+    spacer_embedded->set_valign(Gtk::ALIGN_CENTER);
+    _page_embedded_scripts->table().attach(*spacer_embedded, 0, row, 3, 1);
+#else
+    _page_embedded_scripts->table().attach(*spacer_embedded, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
     //# Set up the Embedded Scripts box
@@ -698,10 +883,24 @@ void DocumentProperties::build_scripting()
     label_embedded_content->set_markup (_("<b>Content:</b>"));
 
     label_embedded_content->set_alignment(0.0);
-    _page_embedded_scripts.table().attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+
+#if WITH_GTKMM_3_0
+    label_embedded_content->set_hexpand();
+    label_embedded_content->set_valign(Gtk::ALIGN_CENTER);
+    _page_embedded_scripts->table().attach(*label_embedded_content, 0, row, 3, 1);
+#else
+    _page_embedded_scripts->table().attach(*label_embedded_content, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
+
     row++;
 
-    _page_embedded_scripts.table().attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#if WITH_GTKMM_3_0
+    _EmbeddedContentScroller.set_hexpand();
+    _EmbeddedContentScroller.set_valign(Gtk::ALIGN_CENTER);
+    _page_embedded_scripts->table().attach(_EmbeddedContentScroller, 0, row, 3, 1);
+#else
+    _page_embedded_scripts->table().attach(_EmbeddedContentScroller, 0, 3, row, row + 1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0, 0, 0);
+#endif
 
     _EmbeddedContentScroller.add(_EmbeddedContent);
     _EmbeddedContentScroller.set_shadow_type(Gtk::SHADOW_IN);
@@ -757,12 +956,19 @@ void DocumentProperties::build_metadata()
 {
     using Inkscape::UI::Widget::EntityEntry;
 
-    _page_metadata1.show();
+    _page_metadata1->show();
 
     Gtk::Label *label = manage (new Gtk::Label);
     label->set_markup (_("<b>Dublin Core Entities</b>"));
     label->set_alignment (0.0);
-    _page_metadata1.table().attach (*label, 0,3,0,1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+
+#if WITH_GTKMM_3_0
+    label->set_valign(Gtk::ALIGN_CENTER);
+    _page_metadata1->table().attach (*label, 0,0,3,1);
+#else
+    _page_metadata1->table().attach (*label, 0,3,0,1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+#endif
+
      /* add generic metadata entry areas */
     struct rdf_work_entity_t * entity;
     int row = 1;
@@ -772,9 +978,22 @@ void DocumentProperties::build_metadata()
             _rdflist.push_back (w);
             Gtk::HBox *space = manage (new Gtk::HBox);
             space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-            _page_metadata1.table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.table().attach (w->_label, 1,2, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-            _page_metadata1.table().attach (*w->_packable, 2,3, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+
+#if WITH_GTKMM_3_0
+            space->set_valign(Gtk::ALIGN_CENTER);
+            _page_metadata1->table().attach(*space, 0, row, 1, 1);
+
+            w->_label.set_valign(Gtk::ALIGN_CENTER);
+            _page_metadata1->table().attach(w->_label, 1, row, 1, 1);
+
+            w->_packable->set_hexpand();
+            w->_packable->set_valign(Gtk::ALIGN_CENTER);
+            _page_metadata1->table().attach(*w->_packable, 2, row, 1, 1);
+#else
+            _page_metadata1->table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+            _page_metadata1->table().attach (w->_label, 1,2, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+            _page_metadata1->table().attach (*w->_packable, 2,3, row, row+1, Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
         }
     }
 
@@ -782,30 +1001,53 @@ void DocumentProperties::build_metadata()
     button_save->set_tooltip_text(_("Save this metadata as the default metadata"));
     Gtk::Button *button_load = manage (new Gtk::Button(_("Use _default"),1));
     button_load->set_tooltip_text(_("Use the previously saved default metadata here"));
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox *box_buttons = manage (new Gtk::ButtonBox);
+#else
     Gtk::HButtonBox *box_buttons = manage (new Gtk::HButtonBox);
+#endif
+
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
     box_buttons->set_spacing(4);
     box_buttons->pack_start(*button_save, true, true, 6);
     box_buttons->pack_start(*button_load, true, true, 6);
-    _page_metadata1.pack_end(*box_buttons, false, false, 0);
+    _page_metadata1->pack_end(*box_buttons, false, false, 0);
 
     button_save->signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::save_default_metadata));
     button_load->signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::load_default_metadata));
 
-    _page_metadata2.show();
+    _page_metadata2->show();
 
     row = 0;
     Gtk::Label *llabel = manage (new Gtk::Label);
     llabel->set_markup (_("<b>License</b>"));
     llabel->set_alignment (0.0);
-    _page_metadata2.table().attach (*llabel, 0,3, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+
+#if WITH_GTKMM_3_0
+    llabel->set_valign(Gtk::ALIGN_CENTER);
+    _page_metadata2->table().attach(*llabel, 0, row, 3, 1);
+#else
+    _page_metadata2->table().attach (*llabel, 0,3, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+#endif
+
     /* add license selector pull-down and URI */
     ++row;
     _licensor.init (_wr);
     Gtk::HBox *space = manage (new Gtk::HBox);
     space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-    _page_metadata2.table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
-    _page_metadata2.table().attach (_licensor, 1,3, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+
+#if WITH_GTKMM_3_0
+    space->set_valign(Gtk::ALIGN_CENTER);
+    _page_metadata2->table().attach(*space, 0, row, 1, 1);
+
+    _licensor.set_hexpand();
+    _licensor.set_valign(Gtk::ALIGN_CENTER);
+    _page_metadata2->table().attach(_licensor, 1, row, 3, 1);
+#else
+    _page_metadata2->table().attach (*space, 0,1, row, row+1, Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+    _page_metadata2->table().attach (_licensor, 1,3, row, row+1, Gtk::EXPAND|Gtk::FILL, (Gtk::AttachOptions)0,0,0);
+#endif
 }
 
 void DocumentProperties::addExternalScript(){

@@ -5,7 +5,7 @@
  */
 
 #include <glibmm/i18n.h>
-
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
@@ -128,12 +128,6 @@ ScalarParam::param_newWidget()
 {
     Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
         param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
-    //BSpline
-    lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(param_effect->get_lpe());
-    if(lpe_bsp){
-        lpe_bsp->updateAllHandles(value/100);
-    }
-    //BSpline End
     rsu->setValue(value);
     rsu->setDigits(digits);
     rsu->setIncrements(inc_step, inc_page);
