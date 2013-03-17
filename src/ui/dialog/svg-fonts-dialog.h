@@ -34,8 +34,8 @@ class HScale;
 #endif
 }
 
-struct SPGlyph;
-struct SPGlyphKerning;
+class SPGlyph;
+class SPGlyphKerning;
 class SvgFont;
 
 class SvgFontDrawingArea : Gtk::DrawingArea{

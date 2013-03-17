@@ -77,7 +77,7 @@ namespace Inkscape {
       }
 
       namespace View {
-	      struct EditWidgetInterface;
+	      class EditWidgetInterface;
       }
   }
   namespace Whiteboard {

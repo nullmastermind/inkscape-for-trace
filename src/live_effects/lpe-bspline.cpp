@@ -39,13 +39,18 @@
 
 
 using Inkscape::DocumentUndo;
-
 namespace Inkscape {
 namespace LivePathEffect {
 
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
     Effect(lpeobject)
 {
+    Glib::ustring title = Glib::ustring(_("Ignore cusp nodes"));
+    Glib::ustring tip = Glib::ustring(_("Ignore cusp nodes"));
+    LPEBSpline::Gtk::Widget *noCusp = new LPEBSpline::newCheckButton(title,tip);
+    title = Glib::ustring(_("Unify weights:"));
+    tip = Glib::ustring(_("Percent of the with for all poinrs"));
+    LPEBSpline::Gtk::Widget *scal = new LPEBSpline::newScalar(title,tip);
 }
 
 LPEBSpline::~LPEBSpline()
@@ -239,25 +244,20 @@ Gtk::Widget *
 LPEBSpline::newWidget()
 {
     Gtk::VBox * vbox = dynamic_cast<Gtk::VBox*>(Effect::newWidget());
-    Glib::ustring title = Glib::ustring(_("Ignore cusp nodes"));
-    Glib::ustring tip = Glib::ustring(_("Ignore cusp nodes"));
-    this->setNoCuspWidget(this->newCheckButton(title));
-    title = Glib::ustring(_("Unify weights:"));
-    tip = Glib::ustring(_("Percent of the with for all poinrs"));
-    this->setScalWidget(this->newScalar(title,tip));
     vbox->set_border_width(5);
-    vbox->pack_start(*this->getNoCuspWidget(), true, true,2);
-    vbox->pack_start(*this->getScalWidget(),true,true,(guint)2);
+    vbox->pack_start(&noCusp,true,true,(guint)2);
+    vbox->pack_start(&scal, true, true,2);
     return dynamic_cast<Gtk::VBox *> (vbox);
 }
 
 Gtk::Widget *
 LPEBSpline::newScalar(Glib::ustring title, Glib::ustring tip)
 {
-    Inkscape::UI::Widget::Scalar * scal = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip, 2));
-    scal->setRange(0.01, 100.); 
-    scal->setIncrements(1., 5.);
+    scal = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
     scal->setValue(33.);
+    scal->setDigits(2);
+    scal->setIncrements(1., 5.);
+    scal->setRange(0, 100.);    
     scal->setProgrammatically = false;
     scal->addSlider();
     scal->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateAllHandles));
@@ -265,20 +265,17 @@ LPEBSpline::newScalar(Glib::ustring title, Glib::ustring tip)
 }
 
 Gtk::Widget *
-LPEBSpline::newCheckButton(Glib::ustring title)
+LPEBSpline::newCheckButton(Glib::ustring title, Glib::ustring tip)
 {
-    Gtk::CheckButton * noCusp = Gtk::manage( new Gtk::CheckButton(title,true));
-    noCusp->set_alignment(1.0,0.0);
+    noCusp = Gtk::manage( new Gtk::CheckButton(title,tip));
     return dynamic_cast<Gtk::Widget *>(noCusp);
 }
 
 void
 LPEBSpline::updateAllHandles()
 {
-    Inkscape::UI::Widget::Scalar * scal = dynamic_cast<Inkscape::UI::Widget::Scalar *>(this->getScalWidget());
-    double value = scal->getValue()/100;
-    Gtk::CheckButton * noCusp = dynamic_cast<Gtk::CheckButton *>(this->getNoCuspWidget());
-    bool noCuspValue = noCusp->get_active();
+    double value = scal->setValue(33.);
+    bool noCusp = false;
     SPDesktop *desktop = inkscape_active_desktop(); // TODO: Is there a better method to find the item's desktop?
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     for (GSList *items = (GSList *) selection->itemList();
@@ -291,7 +288,7 @@ LPEBSpline::updateAllHandles()
                 SPItem *item = (SPItem *) items->data;
                 SPPath *path = SP_PATH(item);
                 SPCurve *curve = path->get_curve_for_edit();
-                LPEBSpline::doBSplineFromWidget(curve,value,noCuspValue);
+                LPEBSpline::doBSplineFromWidget(curve,value,noCusp);
                 gchar *str = sp_svg_write_path(curve->get_pathvector());
                 path->getRepr()->setAttribute("inkscape:original-d", str);
                 g_free(str);
@@ -313,8 +310,6 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
     // Make copy of old path as it is changed during processing
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
-    using Geom::X;
-    using Geom::Y;
 
     //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el penúltimo
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
@@ -368,20 +363,16 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
             if(cubic){                
                 if(!noCusp || (*cubic)[1] != in->first_segment()->initialPoint())
                     pointAt1 = SBasisIn.valueAt(value);
-                    pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
                 else
                     pointAt1 = in->first_segment()->initialPoint();
                 if(!noCusp || (*cubic)[2] != in->first_segment()->finalPoint())
                     pointAt2 = SBasisIn.valueAt(1-value);
-                    pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                 else
                     pointAt2 = in->first_segment()->finalPoint();
             }else{
                 if(!noCusp){
                     pointAt1 = SBasisIn.valueAt(value);
-                    pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
                     pointAt2 = SBasisIn.valueAt(1-value);
-                    pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                 }else{
                     pointAt1 = in->first_segment()->initialPoint();
                     pointAt2 = in->first_segment()->finalPoint();
@@ -400,20 +391,16 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
             if(cubic){
                 if(!noCusp || (*cubic)[1] != out->first_segment()->initialPoint())
                     nextPointAt1 = SBasisOut.valueAt(value);
-                    nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
                 else
                     nextPointAt1 = out->first_segment()->initialPoint();
                 if(!noCusp || (*cubic)[2] != out->first_segment()->finalPoint())
                     nextPointAt2 = SBasisOut.valueAt(1-value);
-                    nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
                 else
                     nextPointAt2 = out->first_segment()->finalPoint();
             }else{
                 if(!noCusp){
                     nextPointAt1 = SBasisOut.valueAt(value);
-                    nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
                     nextPointAt2 = SBasisOut.valueAt(1-value);
-                    nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
                 }else{
                     nextPointAt1 = out->first_segment()->initialPoint();
                     nextPointAt2 = out->first_segment()->finalPoint();
@@ -422,7 +409,6 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
             nextPointAt3 = out->first_segment()->finalPoint();
             out->reset();
             delete out;
-
             //La curva BSpline se forma calculando el centro del segmanto de unión
             //de el punto situado en las 2/3 partes de el segmento de entrada
             //con el punto situado en la posición 1/3 del segmento de salida

@@ -30,7 +30,7 @@ struct SPKnot;
 class  SPDesktop;
 struct SPCanvasItem;
 struct SPCtrlLine;
-struct SPSelTransHandle;
+class  SPSelTransHandle;
 
 namespace Inkscape
 {

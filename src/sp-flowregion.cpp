@@ -86,13 +86,15 @@ sp_flowregion_dispose(GObject *object)
     group->computed.~vector<Shape*>();
 }
 
-static void
-sp_flowregion_child_added(SPObject            *object,
-                          Inkscape::XML::Node *child,
-                          Inkscape::XML::Node *ref)
+static void sp_flowregion_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
-    SP_OBJECT_CLASS (sp_flowregion_parent_class)->child_added (object, child, ref);
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	SP_ITEM(object);
+
+	if (((SPObjectClass *) (sp_flowregion_parent_class))->child_added) {
+		(* ((SPObjectClass *) (sp_flowregion_parent_class))->child_added) (object, child, ref);
+        }
+
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* fixme: hide (Lauris) */
@@ -162,10 +164,10 @@ void SPFlowregion::UpdateComputed(void)
     }
 }
 
-static void
-sp_flowregion_modified(SPObject *object,
-                       guint     flags)
+static void sp_flowregion_modified(SPObject *object, guint flags)
 {
+    SP_FLOWREGION(object); // ensure it is the proper type.
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -276,14 +278,15 @@ sp_flowregionexclude_dispose(GObject *object)
     }
 }
 
-static void
-sp_flowregionexclude_child_added(SPObject            *object,
-                                 Inkscape::XML::Node *child,
-                                 Inkscape::XML::Node *ref)
+static void sp_flowregionexclude_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
-    SP_OBJECT_CLASS (sp_flowregionexclude_parent_class)->child_added (object, child, ref);
+	SP_ITEM(object);
 
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	if (((SPObjectClass *) (sp_flowregionexclude_parent_class))->child_added) {
+		(* ((SPObjectClass *) (sp_flowregionexclude_parent_class))->child_added) (object, child, ref);
+        }
+
+	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* fixme: hide (Lauris) */
@@ -351,10 +354,10 @@ void SPFlowregionExclude::UpdateComputed(void)
     }
 }
 
-static void
-sp_flowregionexclude_modified(SPObject *object,
-                              guint     flags)
+static void sp_flowregionexclude_modified(SPObject *object, guint flags)
 {
+    SP_FLOWREGIONEXCLUDE(object); // Ensure it is the proper type
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }

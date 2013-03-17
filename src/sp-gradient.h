@@ -27,8 +27,8 @@
 #include <stddef.h>
 #include <sigc++/connection.h>
 
-class SPGradientReference;
-struct SPStop;
+struct SPGradientReference;
+class SPStop;
 
 #define SP_TYPE_GRADIENT (SPGradient::getType())
 #define SP_GRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_GRADIENT, SPGradient))

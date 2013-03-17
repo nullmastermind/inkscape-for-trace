@@ -22,7 +22,7 @@
 
 #include "inkscape.h"
 
-struct SPColor;
+class SPColor;
 namespace Inkscape { class Selection; }
 
 GType inkscape_get_type (void);

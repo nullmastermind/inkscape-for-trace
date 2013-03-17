@@ -38,12 +38,6 @@
 #include "sp-item.h"
 #include <glibmm/i18n.h>
 
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
-
 
 namespace Inkscape {
 namespace UI {

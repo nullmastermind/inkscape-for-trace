@@ -30,7 +30,7 @@
 #include "ui/dialog/desktop-tracker.h"
 
 class SPItem;
-struct SPFontSelector;
+class SPFontSelector;
 class font_instance;
 class SPCSSAttr;
 

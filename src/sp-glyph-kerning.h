@@ -2,6 +2,7 @@
 # include <config.h>
 #endif
 
+#ifdef ENABLE_SVG_FONTS
 #ifndef __SP_GLYPH_KERNING_H__
 #define __SP_GLYPH_KERNING_H__
 
@@ -59,3 +60,4 @@ GType sp_glyph_kerning_h_get_type (void);
 GType sp_glyph_kerning_v_get_type (void);
 
 #endif //#ifndef __SP_GLYPH_KERNING_H__
+#endif //#ifdef ENABLE_SVG_FONTS

@@ -14,7 +14,7 @@ class Node;
 }
 }
 
-struct SPLinearGradient;
+class SPLinearGradient;
 
 #define SP_TYPE_LINEARGRADIENT (sp_lineargradient_get_type())
 #define SP_LINEARGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_LINEARGRADIENT, SPLinearGradient))

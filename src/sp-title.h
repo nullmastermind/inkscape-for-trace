@@ -17,6 +17,9 @@
 #define SP_TYPE_TITLE           (sp_title_get_type ())
 #define SP_IS_TITLE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TITLE))
 
+class SPTitle;
+class SPTitleClass;
+
 struct SPTitle : public SPObject {
 };
 

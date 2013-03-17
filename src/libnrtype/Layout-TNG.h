@@ -36,7 +36,7 @@ using Inkscape::Extension::Internal::CairoRenderContext;
 
 struct SPStyle;
 class Shape;
-struct SPPrintContext;
+class SPPrintContext;
 class SVGLength;
 class Path;
 class SPCurve;

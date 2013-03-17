@@ -10,9 +10,11 @@
 #ifndef INKSCAPE_UI_WIDGET_FRAME_H
 #define INKSCAPE_UI_WIDGET_FRAME_H
 
-#include <gtkmm/alignment.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/label.h>
+#include <gtkmm.h>
+
+namespace Gtk {
+class Frame;
+}
 
 namespace Inkscape {
 namespace UI {

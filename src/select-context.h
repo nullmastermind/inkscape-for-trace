@@ -22,6 +22,8 @@
 #define SP_IS_SELECT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SELECT_CONTEXT))
 
 struct SPCanvasItem;
+class SPSelectContext;
+class SPSelectContextClass;
 
 namespace Inkscape {
   class MessageContext;

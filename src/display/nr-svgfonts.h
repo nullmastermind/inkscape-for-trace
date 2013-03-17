@@ -18,8 +18,8 @@
 
 class SvgFont;
 struct SPFont;
-struct SPGlyph;
-struct SPMissingGlyph;
+class SPGlyph;
+class SPMissingGlyph;
 
 struct _GdkEventExpose;
 typedef _GdkEventExpose GdkEventExpose;

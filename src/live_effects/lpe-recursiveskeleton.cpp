@@ -91,8 +91,7 @@ LPERecursiveSkeleton::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > co
             double scaling = (uskeleton.domain().extent() - toffset)/pattBndsX->extent();
 
             // TODO investigate why pattWidth is not being used:
-            // - Doesn't appear to have been used anywhere in bzr history (Alex V: 2013-03-16)
-            // double pattWidth = pattBndsX->extent() * scaling;
+            double pattWidth = pattBndsX->extent() * scaling;
 
             if (scaling != 1.0) {
                 x*=scaling;

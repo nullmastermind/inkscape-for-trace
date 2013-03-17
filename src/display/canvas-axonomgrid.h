@@ -12,7 +12,7 @@
 #include "line-snapper.h"
 #include "canvas-grid.h"
 
-struct SPCanvasBuf;
+class  SPCanvasBuf;
 class  SPDesktop;
 struct SPNamedView;
 

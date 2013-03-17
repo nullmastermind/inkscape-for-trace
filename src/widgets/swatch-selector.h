@@ -1,12 +1,14 @@
 #ifndef SEEN_SP_SWATCH_SELECTOR_H
 #define SEEN_SP_SWATCH_SELECTOR_H
 
+
+
 #include <gtkmm/box.h>
 
 class SPDocument;
 class SPGradient;
-struct SPColorSelector;
-struct SPGradientSelector;
+class SPColorSelector;
+class SPGradientSelector;
 
 namespace Inkscape
 {

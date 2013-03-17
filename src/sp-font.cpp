@@ -2,6 +2,8 @@
 # include <config.h>
 #endif
 
+#ifdef ENABLE_SVG_FONTS
+
 /*
  * SVG <font> element implementation
  *
@@ -248,6 +250,7 @@ static Inkscape::XML::Node *sp_font_write(SPObject *object, Inkscape::XML::Docum
 
     return repr;
 }
+#endif //#ifdef ENABLE_SVG_FONTS
 /*
   Local Variables:
   mode:c++

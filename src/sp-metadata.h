@@ -21,6 +21,9 @@
 #define SP_METADATA(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_METADATA, SPMetadata))
 #define SP_IS_METADATA(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_METADATA))
 
+class SPMetadata;
+class SPMetadataClass;
+
 struct SPMetadata : public SPObject {
 };
 

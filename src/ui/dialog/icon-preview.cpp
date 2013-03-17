@@ -20,11 +20,7 @@
 #include <gtkmm/buttonbox.h>
 #include <boost/scoped_ptr.hpp>
 #include <glib.h>
-
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
-#include <glibmm/timer.h>
-
 #include <gtkmm/alignment.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/frame.h>

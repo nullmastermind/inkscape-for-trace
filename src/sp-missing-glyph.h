@@ -2,6 +2,7 @@
 # include <config.h>
 #endif
 
+#ifdef ENABLE_SVG_FONTS
 #ifndef __SP_MISSING_GLYPH_H__
 #define __SP_MISSING_GLYPH_H__
 
@@ -39,3 +40,4 @@ struct SPMissingGlyphClass {
 GType sp_missing_glyph_get_type (void);
 
 #endif //#ifndef __SP_MISSING_GLYPH_H__
+#endif //#ifdef ENABLE_SVG_FONTS

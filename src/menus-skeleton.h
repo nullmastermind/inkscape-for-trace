@@ -252,7 +252,9 @@ static char const menus_skeleton[] =
 "   </submenu>\n"
 "   <submenu name=\"" N_("_Text") "\">\n"
 "       <verb verb-id=\"DialogText\" />\n"
+#ifdef ENABLE_SVG_FONTS
 "       <verb verb-id=\"DialogSVGFonts\" />\n"
+#endif // ENABLE_SVG_FONTS
 "       <verb verb-id=\"DialogGlyphs\" />\n"
 "       <separator/>\n"
 "       <verb verb-id=\"SelectionTextToPath\" />\n"

@@ -19,7 +19,7 @@
 #include "2geom/forward.h"
 #include "preferences.h"
 
-class  GrDrag;
+struct GrDrag;
 class  SPDesktop;
 class  SPItem;
 class  ShapeEditor;

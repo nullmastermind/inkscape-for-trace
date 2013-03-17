@@ -14,12 +14,10 @@
 
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
-
-#include <gtkmm/comboboxtext.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/progressbar.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/comboboxtext.h>
 
 #include "desktop.h"
 #include "ui/dialog/desktop-tracker.h"
@@ -27,13 +25,10 @@
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h"
 
-namespace Gtk {
-class Dialog;
-}
-
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
 
 /** What type of button is being pressed */
 enum selection_type {
@@ -43,6 +38,16 @@ enum selection_type {
     SELECTION_CUSTOM,    /**< Allows the user to set the region exported */
     SELECTION_NUMBER_OF  /**< A counter for the number of these guys */
 };
+
+/** A list of strings that is used both in the preferences, and in the
+    data fields to describe the various values of \c selection_type. */
+static const char * selection_names[SELECTION_NUMBER_OF] = {
+    "page", "drawing", "selection", "custom"};
+
+/** The names on the buttons for the various selection types. */
+static const char * selection_labels[SELECTION_NUMBER_OF] = {
+    N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")};
+
 
 /**
  * A dialog widget to export to various image formats such as bitmap and png.

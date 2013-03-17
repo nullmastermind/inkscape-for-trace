@@ -31,10 +31,10 @@ namespace Inkscape {
 #include "CharTypes.h"
 class GooString;
 class Function;
-class GfxState;
-struct GfxColor;
+struct GfxState;
+class GfxColor;
 class GfxColorSpace;
-struct GfxRGB;
+class GfxRGB;
 class GfxPath;
 class GfxPattern;
 class GfxTilingPattern;

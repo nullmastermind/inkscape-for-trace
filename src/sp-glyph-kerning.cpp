@@ -2,6 +2,7 @@
 # include <config.h>
 #endif
 
+#ifdef ENABLE_SVG_FONTS
 #define __SP_ANCHOR_C__
 
 /*
@@ -266,6 +267,7 @@ static Inkscape::XML::Node *sp_glyph_kerning_write(SPObject *object, Inkscape::X
 
     return repr;
 }
+#endif //#ifdef ENABLE_SVG_FONTS
 /*
   Local Variables:
   mode:c++

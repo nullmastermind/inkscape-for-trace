@@ -134,6 +134,8 @@ struct SPILength {
 #define SP_STYLE_FILL_SERVER(s) ((const_cast<SPStyle *> (s))->getFillPaintServer())
 #define SP_STYLE_STROKE_SERVER(s) ((const_cast<SPStyle *> (s))->getStrokePaintServer())
 
+class SVGICCColor;
+
 /// Paint type internal to SPStyle.
 struct SPIPaint {
     unsigned set : 1;
@@ -244,7 +246,7 @@ struct SPILengthOrNormal {
     float computed;
 };
 
-struct SPTextStyle;
+class SPTextStyle;
 
 /// Stroke dash details.
 class NRVpathDash {

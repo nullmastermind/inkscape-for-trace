@@ -34,6 +34,11 @@
 
 #define SP_IS_FEFUNCNODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEFUNCNODE))
 
+/* Component Transfer funcNode class */
+
+class SPFeFuncNode;
+class SPFeFuncNodeClass;
+
 struct SPFeFuncNode : public SPObject {
     Inkscape::Filters::FilterComponentTransferType type;
     std::vector<double> tableValues;
@@ -44,7 +49,6 @@ struct SPFeFuncNode : public SPObject {
     double offset;
 };
 
-/* Component Transfer funcNode class */
 struct SPFeFuncNodeClass {
     SPObjectClass parent_class;
 };

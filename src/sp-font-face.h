@@ -2,6 +2,7 @@
 # include <config.h>
 #endif
 
+#ifdef ENABLE_SVG_FONTS
 #ifndef __SP_FONTFACE_H__
 #define __SP_FONTFACE_H__
 
@@ -121,3 +122,4 @@ GType sp_fontface_get_type (void);
 G_END_DECLS
 
 #endif //#ifndef __SP_FONTFACE_H__
+#endif //#ifdef ENABLE_SVG_FONTS

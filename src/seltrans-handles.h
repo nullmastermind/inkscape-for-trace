@@ -21,7 +21,7 @@ namespace Inkscape
   class SelTrans;
 }
 
-struct SPSelTransHandle;
+class SPSelTransHandle;
 
 // request handlers
 gboolean sp_sel_trans_scale_request(Inkscape::SelTrans *seltrans,

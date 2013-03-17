@@ -8,7 +8,9 @@
  */
 
 #include "live_effects/effect.h"
-
+#include "live_effects/parameter/parameter.h"
+#include "ui/widget/scalar.h"
+#include <gtkmm/checkbutton.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -16,13 +18,6 @@ namespace LivePathEffect {
 
 
 class LPEBSpline : public Effect {
-
-private:
-    double scalWidget;
-    bool noCuspWidget;
-    LPEBSpline(const LPEBSpline&);
-    LPEBSpline& operator=(const LPEBSpline&);
-
 public:
     LPEBSpline(LivePathEffectObject *lpeobject);
     virtual ~LPEBSpline();
@@ -35,22 +30,21 @@ public:
 
     virtual void updateAllHandles();
 
-    virtual Gtk::Widget* newScalar(Glib::ustring title, Glib::ustring tip);
+    virtual void newScalar(Glib::ustring title, Glib::ustring tip);
 
-    virtual Gtk::Widget* newCheckButton(Glib::ustring title);
+    virtual void newCheckButton(Glib::ustring title, Glib::ustring tip);
+
 
     virtual void doBSplineFromWidget(SPCurve * curve, double value, bool noCusp);
 
-    virtual double getScal(){return scal;};
-    
-    virtual double setScal(double setScal){scal = setScal;};
-    
-    virtual bool getNoCusp(){return noCusp;};
-    
-    virtual bool setNoCusp(bool setNoCusp){noCusp = setNoCusp;};
-    
-    virtual Gtk::Widget* newWidget();
+    virtual Gtk::Widget * newWidget();
 
+
+private:
+    Gtk::Widget * scal;
+    Gtk::Widget * noCusp;
+    LPEBSpline(const LPEBSpline&);
+    LPEBSpline& operator=(const LPEBSpline&);
 };
 
 }; //namespace LivePathEffect

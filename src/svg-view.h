@@ -13,7 +13,7 @@
 
 #include "ui/view/view.h"
 
-struct SPCanvasGroup;
+class SPCanvasGroup;
 struct SPCanvasItem;
 
 

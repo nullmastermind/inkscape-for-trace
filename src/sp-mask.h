@@ -24,7 +24,9 @@
 #define SP_IS_MASK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_MASK))
 #define SP_IS_MASK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_MASK))
 
-struct SPMaskView;
+class SPMask;
+class SPMaskClass;
+class SPMaskView;
 
 namespace Inkscape {
 

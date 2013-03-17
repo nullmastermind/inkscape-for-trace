@@ -116,11 +116,10 @@ sp_polyline_set(SPObject *object, unsigned int key, const gchar *value)
 }
 
 static Inkscape::XML::Node*
-sp_polyline_write(SPObject                *object,
-                  Inkscape::XML::Document *xml_doc,
-                  Inkscape::XML::Node     *repr,
-                  guint                    flags)
+sp_polyline_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+    SP_POLYLINE(object);
+
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polyline");
     }
@@ -129,7 +128,9 @@ sp_polyline_write(SPObject                *object,
         repr->mergeFrom(object->getRepr(), "id");
     }
 
-    SP_OBJECT_CLASS(sp_polyline_parent_class)->write (object, xml_doc, repr, flags);
+    if (((SPObjectClass *) (sp_polyline_parent_class))->write) {
+        ((SPObjectClass *) (sp_polyline_parent_class))->write (object, xml_doc, repr, flags);
+    }
 
     return repr;
 }

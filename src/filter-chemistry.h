@@ -20,7 +20,7 @@
 
 class SPDocument;
 struct SPFilter;
-struct SPFilterPrimitive;
+class SPFilterPrimitive;
 class SPItem;
 class SPObject;
 

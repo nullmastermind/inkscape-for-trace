@@ -22,7 +22,9 @@
 #define SP_MARKER(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MARKER, SPMarker))
 #define SP_IS_MARKER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MARKER))
 
-struct SPMarkerView;
+class SPMarker;
+class SPMarkerClass;
+class SPMarkerView;
 
 #include <2geom/rect.h>
 #include <2geom/affine.h>

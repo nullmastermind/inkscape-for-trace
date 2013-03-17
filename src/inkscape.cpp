@@ -91,7 +91,7 @@ enum {
 ################################*/
 
 namespace Inkscape {
-struct ApplicationClass;
+class ApplicationClass;
 }
 
 static void inkscape_class_init (Inkscape::ApplicationClass *klass);
