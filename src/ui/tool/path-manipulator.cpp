@@ -36,6 +36,7 @@
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
 #include "sp-path.h"
+#include "sp-lpe-item.h"
 #include "helper/geom.h"
 #include "preferences.h"
 #include "style.h"
@@ -1174,9 +1175,8 @@ void PathManipulator::_createControlPointsFromGeometry()
 
 bool PathManipulator::isBSpline(){
     LivePathEffect::LPEBSpline *lpe_bsp = NULL;
-    if (SP_IS_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))) {
-            PathEffectList effect_list = sp_lpe_item_get_effect_list(SP_LPE_ITEM(_path));
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>( effect_list.front()->lpeobject->get_lpe());
+    if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
     }else{
         lpe_bsp = NULL;
     }
@@ -1186,6 +1186,16 @@ bool PathManipulator::isBSpline(){
     return false;
 }
 
+int PathManipulator::getControlBsplineSteps(){
+    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+    if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
+        if(lpe_bsp){
+            return lpe_bsp->steps;
+        }
+    }
+    return 2;
+}
 double PathManipulator::BSplineHandlePosition(Handle *h){
     using Geom::X;
     using Geom::Y;

@@ -113,6 +113,9 @@ Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node 
     _degenerate(true)
 {
     setVisible(false);
+    //BSpline
+    setControlBsplineSteps( _pm().getControlBsplineSteps());
+    //BSpline End;
 }
 
 Handle::~Handle()
@@ -391,7 +394,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             double pos = 0;
             h = this;
             setPosition(new_pos);
-            pos = ceilf(_pm().BSplineHandlePosition(h)*10)/10;
+            pos = ceilf(_pm().BSplineHandlePosition(h)*controlBsplineSteps)/controlBsplineSteps;
             new_pos=_pm().BSplineHandleReposition(h,pos);
         }
         //BSpline End

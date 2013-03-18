@@ -31,7 +31,6 @@
 #include "helper/geom-curves.h"
 #include "ui/widget/scalar.h"
 
-
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -42,15 +41,20 @@ using Inkscape::DocumentUndo;
 namespace Inkscape {
 namespace LivePathEffect {
 
+
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
     Effect(lpeobject)
 {
-    Glib::ustring title = Glib::ustring(_("Ignore cusp nodes"));
-    Glib::ustring tip = Glib::ustring(_("Ignore cusp nodes"));
-    LPEBSpline::Gtk::Widget *noCusp = new LPEBSpline::newCheckButton(title,tip);
-    title = Glib::ustring(_("Unify weights:"));
-    tip = Glib::ustring(_("Percent of the with for all poinrs"));
-    LPEBSpline::Gtk::Widget *scal = new LPEBSpline::newScalar(title,tip);
+    Glib::ustring title = Glib::ustring(_("Unify weights:"));
+    Glib::ustring tip = Glib::ustring(_("Percent of the with for all poinrs"));
+    registerScal(title,tip);
+    title = Glib::ustring(_("Ignore cusp nodes"));
+    registerNoCusp(title);
+    title = Glib::ustring(_("Reset"));
+    registerReset(title);
+    title = Glib::ustring(_("CTRL handle steps:"));
+    tip = Glib::ustring(_("CTRL handle steps"));
+    registerStepsHandles(title,tip);
 }
 
 LPEBSpline::~LPEBSpline()
@@ -243,39 +247,79 @@ LPEBSpline::doEffect(SPCurve * curve)
 Gtk::Widget *
 LPEBSpline::newWidget()
 {
-    Gtk::VBox * vbox = dynamic_cast<Gtk::VBox*>(Effect::newWidget());
+    Gtk::VBox * vbox = Gtk::manage( dynamic_cast<Gtk::VBox*>(LPEBSpline::newWidget()));
     vbox->set_border_width(5);
-    vbox->pack_start(&noCusp,true,true,(guint)2);
-    vbox->pack_start(&scal, true, true,2);
+    vbox->pack_start(*noCusp,true,true,2);
+    vbox->pack_start(*scal, true, true,2);
+    vbox->pack_start(*reset, true, true,2);
+    vbox->pack_start(*stepsHandles, true, true,2);
     return dynamic_cast<Gtk::VBox *> (vbox);
 }
 
 Gtk::Widget *
-LPEBSpline::newScalar(Glib::ustring title, Glib::ustring tip)
+LPEBSpline::newScal(Glib::ustring title, Glib::ustring tip)
 {
-    scal = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
-    scal->setValue(33.);
-    scal->setDigits(2);
-    scal->setIncrements(1., 5.);
-    scal->setRange(0, 100.);    
-    scal->setProgrammatically = false;
-    scal->addSlider();
-    scal->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateAllHandles));
-    return dynamic_cast<Gtk::Widget *>(scal);
+    Inkscape::UI::Widget::Scalar *scalIn = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
+    scalIn->setRange(0, 100.);
+    scalIn->setDigits(2);
+    scalIn->setIncrements(1., 5.);
+    scalIn->setValue(33.33);
+    scalIn->setProgrammatically = false;
+    scalIn->addSlider();
+    scalIn->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateAllHandles));
+    return dynamic_cast<Gtk::Widget *>(scalIn);
 }
 
 Gtk::Widget *
-LPEBSpline::newCheckButton(Glib::ustring title, Glib::ustring tip)
+LPEBSpline::newNoCusp(Glib::ustring title)
 {
-    noCusp = Gtk::manage( new Gtk::CheckButton(title,tip));
-    return dynamic_cast<Gtk::Widget *>(noCusp);
+    Gtk::CheckButton * noCuspIn = Gtk::manage( new Gtk::CheckButton(title,true));
+    noCuspIn->set_alignment(0.0, 0.5);
+    return dynamic_cast<Gtk::Widget *>(noCuspIn);
+}
+
+Gtk::Widget *
+LPEBSpline::newReset(Glib::ustring title)
+{
+    Gtk::Button * resetIn = Gtk::manage(new Gtk::Button(title));
+    resetIn->signal_clicked().connect(sigc::mem_fun (*this,&LPEBSpline::resetHandles));
+    resetIn->set_alignment(0.0, 0.5);
+    return dynamic_cast<Gtk::Widget *>(resetIn);
+}
+
+Gtk::Widget *
+LPEBSpline::newStepsHandles(Glib::ustring title, Glib::ustring tip)
+{
+    Inkscape::UI::Widget::Scalar *stepsIn = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
+    stepsIn->setRange(1, 10);
+    stepsIn->setDigits(0);
+    stepsIn->setIncrements(1.,1.);
+    stepsIn->setValue(2);
+    stepsIn->setProgrammatically = false;
+    stepsIn->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateSteps));
+    return dynamic_cast<Gtk::Widget *>(stepsIn);
+}
+
+void
+LPEBSpline::resetHandles(){
+    Inkscape::UI::Widget::Scalar * scalIn = dynamic_cast<Inkscape::UI::Widget::Scalar *>(scal);
+    scalIn->setValue(33.33);
+    updateAllHandles();
+}
+
+void
+LPEBSpline::updateSteps(){
+    Inkscape::UI::Widget::Scalar * stepsIn = dynamic_cast<Inkscape::UI::Widget::Scalar *>(stepsHandles);
+    updateStepsValue(stepsIn->getValue());
 }
 
 void
 LPEBSpline::updateAllHandles()
 {
-    double value = scal->setValue(33.);
-    bool noCusp = false;
+    Inkscape::UI::Widget::Scalar * scalIn = dynamic_cast<Inkscape::UI::Widget::Scalar *>(scal);
+    double value = scalIn->getValue()/100;
+    Gtk::CheckButton * noCuspIn = dynamic_cast<Gtk::CheckButton *>(noCusp);
+    bool noCusp = noCuspIn->get_active();
     SPDesktop *desktop = inkscape_active_desktop(); // TODO: Is there a better method to find the item's desktop?
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     for (GSList *items = (GSList *) selection->itemList();

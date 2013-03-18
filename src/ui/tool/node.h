@@ -109,11 +109,14 @@ protected:
     virtual bool _eventHandler(SPEventContext *event_context, GdkEvent *event);
     //Bspline
     virtual void handle_2button_press();
+    virtual void setControlBsplineSteps(int controlBsplineStepsValue){controlBsplineSteps = controlBsplineStepsValue;};
+    int controlBsplineSteps;
     //BSpline End
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
     virtual void ungrabbed(GdkEventButton *event);
     virtual bool clicked(GdkEventButton *event);
+
 
     virtual Glib::ustring _getTip(unsigned state) const;
     virtual Glib::ustring _getDragTip(GdkEventMotion *event) const;

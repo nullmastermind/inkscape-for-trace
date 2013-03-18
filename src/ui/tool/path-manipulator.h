@@ -89,6 +89,9 @@ public:
     void updateHandles();
     void setControlsTransform(Geom::Affine const &);
     void hideDragPoint();
+    //BSpline
+    int getControlBsplineSteps();
+    //BSpline End
     MultiPathManipulator &mpm() { return _multi_path_manipulator; }
 
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
