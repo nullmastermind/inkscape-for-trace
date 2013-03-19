@@ -1013,7 +1013,7 @@ void U_WMRDIBCREATEPATTERNBRUSH_print(const char *contents){
       U_BITMAP16 Bm16;
       printf("   Style:%d\n",   Style );
       printf("   cUsage:%d\n",  cUsage);
-      if(Style == U_BS_PATTERN){
+      if(TBm16){
          memcpy(&Bm16, TBm16, U_SIZE_BITMAP16);
          printf("   Src:Bitmap16:");  bitmap16_print(Bm16); printf("\n");
       }

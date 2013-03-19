@@ -22,6 +22,11 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
+#define DIRTY_NONE   0x00
+#define DIRTY_TEXT   0x01
+#define DIRTY_FILL   0x02
+#define DIRTY_STROKE 0x04
+
 typedef struct {
     int type;
     int level;
@@ -37,24 +42,27 @@ typedef struct {
 typedef struct emf_device_context {
     struct SPStyle  style;
     char           *font_name;
-    bool           stroke_set;
-    int            stroke_mode;  // enumeration from drawmode, not used if fill_set is not True
-    int            stroke_idx;   // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
-    bool           fill_set;
-    int            fill_mode;    // enumeration from drawmode, not used if fill_set is not True
-    int            fill_idx;     // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
-
-    U_SIZEL        sizeWnd;
-    U_SIZEL        sizeView;
-    U_POINTL       winorg;
-    U_POINTL       vieworg;
-    double         ScaleInX, ScaleInY;
-    double         ScaleOutX, ScaleOutY;
-    U_COLORREF     textColor;
-    U_COLORREF     bkColor;
-    uint32_t       textAlign;
-    U_XFORM        worldTransform;
-    U_POINTL       cur;
+    bool            stroke_set;
+    int             stroke_mode;  // enumeration from drawmode, not used if fill_set is not True
+    int             stroke_idx;   // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
+    int             stroke_recidx;// record used to regenerate hatch when it needs to be redone due to bkmode, textmode, etc. change
+    bool            fill_set;
+    int             fill_mode;    // enumeration from drawmode, not used if fill_set is not True
+    int             fill_idx;     // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
+    int             fill_recidx;  // record used to regenerate hatch when it needs to be redone due to bkmode, textmode, etc. change
+    int             dirty;        // holds the dirty bits for text, stroke, fill
+    U_SIZEL         sizeWnd;
+    U_SIZEL         sizeView;
+    U_POINTL        winorg;
+    U_POINTL        vieworg;
+    double          ScaleInX, ScaleInY;
+    double          ScaleOutX, ScaleOutY;
+    uint16_t        bkMode;
+    U_COLORREF      bkColor;
+    U_COLORREF      textColor;
+    uint32_t        textAlign;
+    U_XFORM         worldTransform;
+    U_POINTL        cur;
 } EMF_DEVICE_CONTEXT, *PEMF_DEVICE_CONTEXT;
 
 #define EMF_MAX_DC 128
@@ -96,18 +104,18 @@ typedef struct {
     EMF_DEVICE_CONTEXT dc[EMF_MAX_DC+1]; // FIXME: This should be dynamic..
     int level;
     
-    double E2IdirY;               // EMF Y direction relative to Inkscape Y direction.  Will be negative for MM_LOMETRIC etc.
-    double D2PscaleX,D2PscaleY;   // EMF device to Inkscape Page scale.
-    float  MM100InX, MM100InY;    // size of the drawing in hundredths of a millimeter
-    float  PixelsInX, PixelsInY;  // size of the drawing, in EMF device pixels
-    float  PixelsOutX, PixelsOutY;// size of the drawing, in Inkscape pixels
+    double E2IdirY;                     // EMF Y direction relative to Inkscape Y direction.  Will be negative for MM_LOMETRIC etc.
+    double D2PscaleX,D2PscaleY;         // EMF device to Inkscape Page scale.
+    float  MM100InX, MM100InY;          // size of the drawing in hundredths of a millimeter
+    float  PixelsInX, PixelsInY;        // size of the drawing, in EMF device pixels
+    float  PixelsOutX, PixelsOutY;      // size of the drawing, in Inkscape pixels
     double ulCornerInX,ulCornerInY;     // Upper left corner, from header rclBounds, in logical units
     double ulCornerOutX,ulCornerOutY;   // Upper left corner, in Inkscape pixels
-    uint32_t mask;                // Draw properties
-    int arcdir;                   //U_AD_COUNTERCLOCKWISE 1 or U_AD_CLOCKWISE 2
+    uint32_t mask;                      // Draw properties
+    int arcdir;                         //U_AD_COUNTERCLOCKWISE 1 or U_AD_CLOCKWISE 2
     
-    uint32_t dwRop2;              // Binary raster operation, 0 if none (use brush/pen unmolested)
-    uint32_t dwRop3;              // Ternary raster operation, 0 if none (use brush/pen unmolested)
+    uint32_t dwRop2;                    // Binary raster operation, 0 if none (use brush/pen unmolested)
+    uint32_t dwRop3;                    // Ternary raster operation, 0 if none (use brush/pen unmolested)
 
     float MMX;
     float MMY;
@@ -147,9 +155,9 @@ private:
 protected:
    static pixel_t    *pixel_at (bitmap_t * bitmap, int x, int y);
    static void        my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length);
-   static void        toPNG(PMEMPNG accum, int width, int height, char *px);
+   static void        toPNG(PMEMPNG accum, int width, int height, const char *px);
    static uint32_t    sethexcolor(U_COLORREF color);
-   static void        print_document_to_file(SPDocument *doc, gchar const *filename);
+   static void        print_document_to_file(SPDocument *doc, const gchar *filename);
    static double      current_scale(PEMF_CALLBACK_DATA d);
    static std::string current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int useoffset);
    static double      current_rotation(PEMF_CALLBACK_DATA d);

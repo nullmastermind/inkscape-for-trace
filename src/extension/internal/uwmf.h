@@ -34,8 +34,8 @@
 
 /*
 File:      uwmf.h
-Version:   0.0.7
-Date:      20-FEB-2013
+Version:   0.0.8
+Date:      27-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -854,7 +854,7 @@ typedef struct {
 /**   BitmapCoreHeader Object              WMF PDF 2.2.2.2
 */
 typedef struct {
-    uint16_t            Size_4[2];          //!<  size of U_BECOREHEADER in bytes.
+    uint16_t            Size_4[2];          //!<  size of U_BITMAPCOREHEADER in bytes.
     uint16_t            Width;              //!<  DIB width in pixels.
     uint16_t            Height;             //!<  DIB height in pixels.
     uint16_t            Planes;             //!<  must be 1

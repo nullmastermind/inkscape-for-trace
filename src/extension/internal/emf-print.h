@@ -39,6 +39,8 @@ class PrintEmf : public Inkscape::Extension::Implementation::Implementation
     U_RECTL  rc;
 
     uint32_t hbrush, hbrushOld, hpen, hpenOld;
+    uint32_t hpolyfillmode;             // used to minimize redundant records that set this
+    float    htextcolor_rgb[3];         // used to minimize redundant records that set this
 
     std::stack<Geom::Affine> m_tr_stack;
     Geom::PathVector fill_pathv;
@@ -46,6 +48,7 @@ class PrintEmf : public Inkscape::Extension::Implementation::Implementation
     bool use_stroke;
     bool use_fill;
     bool simple_shape;
+    bool usebk;
 
     unsigned int print_pathv (Geom::PathVector const &pathv, const Geom::Affine &transform);
     bool print_simple_shape (Geom::PathVector const &pathv, const Geom::Affine &transform);
@@ -99,8 +102,8 @@ protected:
     int         create_pen(SPStyle const *style, const Geom::Affine &transform);
     void        destroy_pen();
 
-    void        hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor);
-    void        brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor);
+    void        hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor, U_COLORREF *bkColor);
+    void        brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor, U_COLORREF *bkColor);
     void        swapRBinRGBA(char *px, int pixels);
 
     U_COLORREF  avg_stop_color(SPGradient *gr);

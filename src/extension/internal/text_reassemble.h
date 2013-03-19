@@ -4,8 +4,8 @@
 See text_reassemble.c for notes
 
 File:      text_reassemble.h
-Version:   0.0.6
-Date:      19-FEB-2013
+Version:   0.0.7
+Date:      12-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -41,6 +41,32 @@ extern "C" {
 #define ALLOCOUT_CHUNK  8192
 #define TRPRINT trinfo_append_out
 /** \endcond */
+
+/** \defgroup color background options
+  Text is underwritten with the background color not at all, 
+  by reassembled line, or by full assembly .
+  @{
+*/
+#define BKCLR_NONE 0x00     /**< text is not underwritten with background color (default) */
+#define BKCLR_FRAG 0x01     /**< each fragment of text is underwritten with background color  */
+#define BKCLR_LINE 0x02     /**< each line of text is underwritten with background color  */
+#define BKCLR_ALL  0x03     /**< entire assembly is underwritten with background color    */
+/** @} */
+
+/** \defgroup decoration options
+  One of these values may be present in the decoration field. 
+  Unused bits may be used by end user code.
+  SVG output can specify up to STRIKE1.
+  @{
+*/
+#define TXTDECOR_NONE     0x00  /**< text is not decorated (default) */
+#define TXTDECOR_UNDER    0x01  /**< underlined                      */
+#define TXTDECOR_OVER     0x02  /**< overlined                       */
+#define TXTDECOR_BLINK    0x04  /**< blinking text                   */
+#define TXTDECOR_STRIKE1  0x08  /**< single strike throug            */
+#define TXTDECOR_STRIKE2  0x10  /**< double strike through           */
+/** @} */
+
 
 /** \defgroup text alignment types
   Location of text's {X,Y} coordinate on bounding rectangle.
@@ -133,6 +159,7 @@ typedef struct {
    int         italics;     /**< italics, as in FontConfig                                            */
    int         weight;      /**< weight, as in FontConfig                                             */
    int         condensed;   /**< condensed, as in FontConfig                                          */
+   int         decoration;  /**< text decorations, ignored during assembly,used during output         */
    int         co;          /**< condensed override, if set Font name included narrow                 */
    int         rt_tidx;     /**< index of rectangle that contains it                                  */
    int         fi_idx;      /**< index of the font it uses                                            */
@@ -221,6 +248,8 @@ typedef struct {
    int         kern_mode;      /**< FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED   */
    int         outspace;       /**< storage in output buffer  allocated                               */
    int         outused;        /**< storage in output buffer in use                                   */
+   int         usebk;          /**< On output write the background color under the text               */
+   TRCOLORREF  bkcolor;        /**< RGB background color                                              */
 } TR_INFO;
 
 /* padding added to rectangles before overlap test */
@@ -300,8 +329,10 @@ TR_INFO      *trinfo_release_except_FC(TR_INFO *tri);
 TR_INFO      *trinfo_clear(TR_INFO *tri);
 int           trinfo_load_fontname(TR_INFO *tri, uint8_t *fontname, TCHUNK_SPECS *tsp);
 int           trinfo_load_qe(TR_INFO *tri, double qe);
+int           trinfo_load_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor);
 int           trinfo_load_ft_opts(TR_INFO *tri, int use_kern, int load_flags, int kern_mode);
 int           trinfo_load_textrec(TR_INFO *tri, TCHUNK_SPECS *tsp, double escapement, int flags);  
+int           trinfo_check_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor);
 int           trinfo_append_out(TR_INFO *tri, char *src);
 
 #ifdef __cplusplus

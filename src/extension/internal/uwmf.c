@@ -17,8 +17,8 @@
 
 /*
 File:      uwmf.c
-Version:   0.0.9
-Date:      20-FEB-2013
+Version:   0.0.10
+Date:      27-FEB-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -5960,6 +5960,17 @@ int U_WMRDIBCREATEPATTERNBRUSH_get(
    if(*Style == U_BS_PATTERN){
       *Bm16 = (contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, Src));
       *dib  = NULL;
+      /* The WMF spec says that Style == U_BS_PATTERN  _SHOULD_ be a bitmap16.  
+         However there are instances when it is actually a DIB. U_WMRDIBCREATEPATTERNBRUSH_get
+         tries to detect this by looking for bogus values when the BM16 is interpreted as such,
+         and if it finds them, then it returns a dib instead. 
+      */
+      U_BITMAP16 TmpBm16;
+      memcpy(&TmpBm16, *Bm16, U_SIZE_BITMAP16);
+      if(TmpBm16.Width  <= 0 || TmpBm16.Height <= 0 || TmpBm16.Planes != 1 || TmpBm16.BitsPixel == 0){
+         *Bm16 = NULL;
+         *dib  = (contents + offsetof(U_WMRDIBCREATEPATTERNBRUSH, Src));
+      }
    }
    else { /* from DIB */
       *Bm16 = NULL;

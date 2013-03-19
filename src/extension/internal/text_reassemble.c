@@ -46,7 +46,7 @@ On Windows use:
 
 On Linux use:
 
-    gcc -Wall -DTEST -DTEST -DDBG_TR_PARA -DDBG_TR_INPUT  -I. -I/usr/include/freetype2 -o text_reassemble text_reassemble.c uemf_utf.c -lfreetype -lfontconfig -lm
+    gcc -Wall -DTEST -DDBG_TR_PARA -DDBG_TR_INPUT  -I. -I/usr/include/freetype2 -o text_reassemble text_reassemble.c uemf_utf.c -lfreetype -lfontconfig -lm
 
 Compilation of object file only (Windows):
 
@@ -67,8 +67,8 @@ Optional compiler switches for development:
 
 
 File:      text_reassemble.c
-Version:   0.0.5
-Date:      19-FEB-2013
+Version:   0.0.6
+Date:      12-MAR-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -989,6 +989,7 @@ TR_INFO *trinfo_init(TR_INFO *tri){
       !(tri->cxi = cxinfo_init())
       ){   tri = trinfo_release(tri);  }
    tri->use_kern   = 1;
+   tri->usebk      = BKCLR_NONE;
    tri->load_flags = FT_LOAD_NO_SCALE;
    tri->kern_mode  = FT_KERNING_UNSCALED;
    tri->out        = NULL;                 /* This will allocate as needed, it might not ever be needed. */
@@ -1051,7 +1052,7 @@ TR_INFO *trinfo_clear(TR_INFO *tri){
    if(tri){
       tri->dirty      = 0;    /* set these back to their defaults  */
       tri->esc        = 0.0;
-      /* Do NOT modify use_kern, load_flags, or kern_mode */
+      /* Do NOT modify use_kern, usebk, load_flags, or kern_mode */
 
       if(tri->bri)tri->bri=brinfo_release(tri->bri);
       if(tri->tpi)tri->tpi=tpinfo_release(tri->tpi);
@@ -1175,6 +1176,42 @@ int trinfo_load_qe(TR_INFO *tri, double qe){
    if(qe<0.0)return(2);
    tri->qe=qe;
    return(0);
+}
+
+/**
+    \brief  Set the background color and whether or not to use it.
+      When background color is turned on each line of text is underwritten with a rectangle
+      of the specified color.  The rectangle is the merged bounding rectangle for that line.
+    \returns 0 on success but nothing changed, >0 on error, <0 on success and a value changed.
+    \param tri pointer to TR_INFO structure
+    \param usebk 0 for no background, anything else uses background color
+    \param bkcolor  background color to use
+*/
+int trinfo_load_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor){
+   int status=0;
+   if(!tri){ status = 1; }
+   else {
+      if((usebk < BKCLR_NONE) || (usebk > BKCLR_ALL)){ status = 2; }
+      else {
+         status = trinfo_check_bk(tri, usebk, bkcolor);
+         tri->usebk = usebk;
+         tri->bkcolor = bkcolor;
+      }
+   }
+   return(status);
+}
+
+/**
+    \brief  Are the proposed new background and background color a change?
+    \returns 0 if they are the same, -1 if either is different
+    \param tri pointer to TR_INFO structure
+    \param usebk 0 for no background, anything else uses background color
+    \param bkcolor   background color to use
+*/
+int trinfo_check_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor){
+   int status = 0;
+   if( (tri->usebk != usebk)  ||  memcmp(&tri->bkcolor,&bkcolor,sizeof(TRCOLORREF))){ status = -1; }
+   return(status);
 }
 
 /**
@@ -1436,29 +1473,28 @@ void TR_layout_2_svg(TR_INFO *tri){
    TCHUNK_SPECS *ptsp;              /* previous text object in the same line as current text object, if any */
    FNT_SPECS    *fsp;
    CX_SPECS     *csp;
+   CX_SPECS     *cline_sp;
    int           i,j,k,jdx,kdx;
    int           status;
    char          obuf[1024];        /* big enough for style and so forth   */
 
-#if defined(DBG_TR_PARA) || defined(DBG_TR_INPUT)  /* enable debugging code, writes extra information into SVG */
    char          stransform[128];
    double        newx,newy;
 
+    /* The debug section below is difficult to see if usebk is anything other than BKCLR_NONE */
+#if defined(DBG_TR_PARA) || defined(DBG_TR_INPUT)  /* enable debugging code, writes extra information into SVG */
     /* put rectangles down for each text string - debugging!!!  This will not work properly for any Narrow fonts */
+   esc = tri->esc;
+   esc  *= 2.0 * M_PI / 360.0;                            /* degrees to radians and change direction of rotation */
+   sprintf(stransform,"transform=\"matrix(%lf,%lf,%lf,%lf,%lf,%lf)\"\n",cos(esc),-sin(esc),sin(esc),cos(esc), 1.25*x,1.25*y);
    for(i=cxi->phase1; i<cxi->used;i++){                   /* over all complex members from phase2 == TR_PARA_* complexes */
       csp = &(cxi->cx[i]);
-      esc = tri->esc;
-      esc  *= 2.0 * M_PI / 360.0;                         /* degrees to radians and change direction of rotation */
       for(j=0; j<csp->kids.used; j++){                    /* over all members of these complexes, which are phase1 complexes  */
          jdx = csp->kids.members[j];                      /* index of phase1 complex (all are TR_TEXT or TR_LINE)             */
          for(k=0; k<cxi->cx[jdx].kids.used; k++){         /* over all members of the phase1 complex     */
             kdx = cxi->cx[jdx].kids.members[k];           /* index for text objects in tpi              */
             tsp = &tpi->chunks[kdx];
             if(!j && !k){
-               sprintf(stransform,"transform=\"matrix(%lf,%lf,%lf,%lf,%lf,%lf)\"\n",cos(esc),-sin(esc),sin(esc),cos(esc),
-                 1.25*x,1.25*y);
-               lastx = bri->rects[tsp->rt_tidx].xll;
-               lasty = bri->rects[tsp->rt_tidx].yll - tsp->boff;
 #ifdef DBG_TR_PARA
                TRPRINT(tri, "<rect\n");
                TRPRINT(tri, "style=\"color:#0000FF;color-interpolation:sRGB;color-interpolation-filters:linearRGB;fill:none;stroke:#000000;stroke-width:0.30000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;clip-rule:nonzero\"\n");
@@ -1515,6 +1551,71 @@ void TR_layout_2_svg(TR_INFO *tri){
 #endif /* DBG_TR_PARA and/or DBG_TR_INPUT  */
 
 
+   if(tri->usebk){
+      esc = tri->esc;
+      esc  *= 2.0 * M_PI / 360.0;                            /* degrees to radians and change direction of rotation */
+      sprintf(stransform,"transform=\"matrix(%lf,%lf,%lf,%lf,%lf,%lf)\"\n",cos(esc),-sin(esc),sin(esc),cos(esc), 1.25*x,1.25*y);
+
+      for(i=cxi->phase1; i<cxi->used;i++){                   /* over all complex members from phase2 == TR_PARA_* complexes */
+         TRPRINT(tri, "<g>\n");                              /* group backgrounds for each <text> object in the SVG */
+         csp = &(cxi->cx[i]);
+         for(j=0; j<csp->kids.used; j++){                    /* over all members of these complexes, which are phase1 complexes  */
+            jdx = csp->kids.members[j];                      /* index of phase1 complex (all are TR_TEXT or TR_LINE)             */
+            cline_sp = &(cxi->cx[jdx]);
+            if(tri->usebk == BKCLR_LINE){
+               TRPRINT(tri, "<rect\n");
+                  sprintf(obuf,"style=\"color-interpolation:sRGB;color-interpolation-filters:linearRGB;fill:#%2.2X%2.2X%2.2X;;stroke:none;;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;clip-rule:nonzero\"\n",tri->bkcolor.Red,tri->bkcolor.Green,tri->bkcolor.Blue);    
+               TRPRINT(tri, obuf);
+                  sprintf(obuf,"width=\"%lf\"\n", 1.25*(bri->rects[cline_sp->rt_cidx].xur - bri->rects[cline_sp->rt_cidx].xll));
+               TRPRINT(tri, obuf);
+                  sprintf(obuf,"height=\"%lf\"\n",1.25*(bri->rects[cline_sp->rt_cidx].yll - bri->rects[cline_sp->rt_cidx].yur));
+               TRPRINT(tri, obuf);
+                  sprintf(obuf,"x=\"%lf\" y=\"%lf\"\n",1.25*(bri->rects[cline_sp->rt_cidx].xll),1.25*(bri->rects[cline_sp->rt_cidx].yur));
+               TRPRINT(tri, obuf);
+               TRPRINT(tri, stransform);
+               TRPRINT(tri, "/>\n");
+            }
+            
+            for(k=0; k<cxi->cx[jdx].kids.used; k++){         /* over all members of the phase1 complex     */
+               kdx = cxi->cx[jdx].kids.members[k];           /* index for text objects in tpi              */
+               tsp = &tpi->chunks[kdx];
+               if(!j && !k){
+                  if(tri->usebk == BKCLR_ALL){
+                    TRPRINT(tri, "<rect\n");
+                        sprintf(obuf,"style=\"color-interpolation:sRGB;color-interpolation-filters:linearRGB;fill:#%2.2X%2.2X%2.2X;;stroke:none;;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;clip-rule:nonzero\"\n",tri->bkcolor.Red,tri->bkcolor.Green,tri->bkcolor.Blue);    
+                     TRPRINT(tri, obuf);
+                        sprintf(obuf,"width=\"%lf\"\n", 1.25*(bri->rects[csp->rt_cidx].xur - bri->rects[csp->rt_cidx].xll));
+                     TRPRINT(tri, obuf);
+                        sprintf(obuf,"height=\"%lf\"\n",1.25*(bri->rects[csp->rt_cidx].yll - bri->rects[csp->rt_cidx].yur));
+                     TRPRINT(tri, obuf);
+                        sprintf(obuf,"x=\"%lf\" y=\"%lf\"\n",1.25*(bri->rects[csp->rt_cidx].xll),1.25*(bri->rects[csp->rt_cidx].yur));
+                     TRPRINT(tri, obuf);
+                     TRPRINT(tri, stransform);
+                     TRPRINT(tri, "/>\n");
+                  }
+               }
+               if(tri->usebk == BKCLR_FRAG){
+                  newx = 1.25*(bri->rects[tsp->rt_tidx].xll);
+                  newy = 1.25*(bri->rects[tsp->rt_tidx].yur);
+                  TRPRINT(tri, "<rect\n");
+                     sprintf(obuf,"style=\"color-interpolation:sRGB;color-interpolation-filters:linearRGB;fill:#%2.2X%2.2X%2.2X;;stroke:none;;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;clip-rule:nonzero\"\n",tri->bkcolor.Red,tri->bkcolor.Green,tri->bkcolor.Blue);    
+                  TRPRINT(tri, obuf);
+                     sprintf(obuf,"width=\"%lf\"\n", 1.25*(bri->rects[tsp->rt_tidx].xur - bri->rects[tsp->rt_tidx].xll));
+                  TRPRINT(tri, obuf);
+                     sprintf(obuf,"height=\"%lf\"\n",1.25*(bri->rects[tsp->rt_tidx].yll - bri->rects[tsp->rt_tidx].yur));
+                  TRPRINT(tri, obuf);
+                     sprintf(obuf,"x=\"%lf\" y=\"%lf\"\n",newx,newy);
+                  TRPRINT(tri, obuf);
+                  TRPRINT(tri, stransform);
+                  TRPRINT(tri, "/>\n");
+               }
+            }
+         }
+         TRPRINT(tri, "</g>\n");                             /* end of grouping for backgrounds for each <text> object in the SVG */
+      }
+   }
+
+
    tsp=tpi->chunks;
    /* over all complex members from phase2.  Paragraphs == TR_PARA_*  */
    for(i=cxi->phase1; i<cxi->used;i++){
@@ -1563,55 +1664,55 @@ void TR_layout_2_svg(TR_INFO *tri){
                      break;
                }
                if(!j){
-                   TRPRINT(tri, "<text\n");
-                   TRPRINT(tri, "xml:space=\"preserve\"\n");
-                   TRPRINT(tri, "style=\"");
-                      sprintf(obuf,"font-size:%lfpx;",tsp->fs*1.25);  /*IMPORTANT, if the FS is given in pt it looks like crap in browsers.  As if px != 1.25 pt, maybe 96 dpi not 90?*/
-                   TRPRINT(tri, obuf);
-                      sprintf(obuf,"font-style:%s;",(tsp->italics ? "italic" : "normal"));
-                   TRPRINT(tri, obuf);
-                   TRPRINT(tri, "font-variant:normal;");
-                      sprintf(obuf,"font-weight:%d;",TR_weight_FC_to_SVG(tsp->weight));
-                   TRPRINT(tri, obuf);
-                      sprintf(obuf,"font-stretch:%s;",(tsp->condensed==100 ? "Normal" : "Condensed"));
-                   TRPRINT(tri, obuf);
-                   if(tsp->vadvance){ lineheight = tsp->vadvance *100.0; }
-                   else {             lineheight = 125.0;                }
-                      sprintf(obuf,"line-height:%lf%%;",lineheight);
-                   TRPRINT(tri, obuf);
-                   TRPRINT(tri, "letter-spacing:0px;");
-                   TRPRINT(tri, "word-spacing:0px;");
-                   TRPRINT(tri, "fill:#000000;");
-                   TRPRINT(tri, "fill-opacity:1;");
-                   TRPRINT(tri, "stroke:none;");
-                   cutat=strcspn((char *)fti->fonts[tsp->fi_idx].fname,":");
-                   fti->fonts[tsp->fi_idx].fname[cutat]='\0';
-                      sprintf(obuf,"font-family:%s;",fti->fonts[tsp->fi_idx].fname);
-                   TRPRINT(tri, obuf);
-                   switch(csp->type){                     /* set up the alignment, if there is one */
-                      case TR_TEXT:
-                      case TR_LINE:
-                         /* these should never occur, this section quiets a compiler warning */
-                         break;
-                      case TR_PARA_UJ:
-                         *obuf='\0';
-                         break;
-                      case TR_PARA_LJ:
-                         sprintf(obuf,"text-align:start;text-anchor:start;");
-                         break;
-                      case TR_PARA_CJ:
-                         sprintf(obuf,"text-align:center;text-anchor:middle;");
-                         break;
-                      case TR_PARA_RJ:
-                         sprintf(obuf,"text-align:end;text-anchor:end;");
-                         break;
-                   }
-                   TRPRINT(tri, obuf);
-                   TRPRINT(tri, "\"\n");  /* End of style specification */
-                      sprintf(obuf,"transform=\"matrix(%lf,%lf,%lf,%lf,%lf,%lf)\"\n",cos(esc),-sin(esc),sin(esc),cos(esc),1.25*x,1.25*y);
-                   TRPRINT(tri, obuf);
-                      sprintf(obuf,"x=\"%lf\" y=\"%lf\"\n>",1.25*(bri->rects[kdx].xll + recenter),1.25*(bri->rects[kdx].yll - tsp->boff));
-                   TRPRINT(tri, obuf);
+                  TRPRINT(tri, "<text\n");
+                  TRPRINT(tri, "xml:space=\"preserve\"\n");
+                  TRPRINT(tri, "style=\"");
+                     sprintf(obuf,"font-size:%lfpx;",tsp->fs*1.25);  /*IMPORTANT, if the FS is given in pt it looks like crap in browsers.  As if px != 1.25 pt, maybe 96 dpi not 90?*/
+                  TRPRINT(tri, obuf);
+                     sprintf(obuf,"font-style:%s;",(tsp->italics ? "italic" : "normal"));
+                  TRPRINT(tri, obuf);
+                  TRPRINT(tri, "font-variant:normal;");
+                     sprintf(obuf,"font-weight:%d;",TR_weight_FC_to_SVG(tsp->weight));
+                  TRPRINT(tri, obuf);
+                     sprintf(obuf,"font-stretch:%s;",(tsp->condensed==100 ? "Normal" : "Condensed"));
+                  TRPRINT(tri, obuf);
+                  if(tsp->vadvance){ lineheight = tsp->vadvance *100.0; }
+                  else {             lineheight = 125.0;                }
+                     sprintf(obuf,"line-height:%lf%%;",lineheight);
+                  TRPRINT(tri, obuf);
+                  TRPRINT(tri, "letter-spacing:0px;");
+                  TRPRINT(tri, "word-spacing:0px;");
+                  TRPRINT(tri, "fill:#000000;");
+                  TRPRINT(tri, "fill-opacity:1;");
+                  TRPRINT(tri, "stroke:none;");
+                  cutat=strcspn((char *)fti->fonts[tsp->fi_idx].fname,":");
+                  fti->fonts[tsp->fi_idx].fname[cutat]='\0';
+                     sprintf(obuf,"font-family:%s;",fti->fonts[tsp->fi_idx].fname);
+                  TRPRINT(tri, obuf);
+                  switch(csp->type){                     /* set up the alignment, if there is one */
+                     case TR_TEXT:
+                     case TR_LINE:
+                        /* these should never occur, this section quiets a compiler warning */
+                        break;
+                     case TR_PARA_UJ:
+                        *obuf='\0';
+                        break;
+                     case TR_PARA_LJ:
+                        sprintf(obuf,"text-align:start;text-anchor:start;");
+                        break;
+                     case TR_PARA_CJ:
+                        sprintf(obuf,"text-align:center;text-anchor:middle;");
+                        break;
+                     case TR_PARA_RJ:
+                        sprintf(obuf,"text-align:end;text-anchor:end;");
+                        break;
+                  }
+                  TRPRINT(tri, obuf);
+                  TRPRINT(tri, "\"\n");  /* End of style specification */
+                     sprintf(obuf,"transform=\"matrix(%lf,%lf,%lf,%lf,%lf,%lf)\"\n",cos(esc),-sin(esc),sin(esc),cos(esc),1.25*x,1.25*y);
+                  TRPRINT(tri, obuf);
+                     sprintf(obuf,"x=\"%lf\" y=\"%lf\"\n>",1.25*(bri->rects[kdx].xll + recenter),1.25*(bri->rects[kdx].yll - tsp->boff));
+                  TRPRINT(tri, obuf);
                }
                   sprintf(obuf,"<tspan sodipodi:role=\"line\"\nx=\"%lf\" y=\"%lf\"\n>",
                  1.25*(bri->rects[kdx].xll + recenter),1.25*(bri->rects[kdx].yll - tsp->boff));
@@ -1646,6 +1747,24 @@ void TR_layout_2_svg(TR_INFO *tri){
             TRPRINT(tri, obuf);
                sprintf(obuf,"font-style:%s;",(tsp->italics ? "italic" : "normal"));
             TRPRINT(tri, obuf);
+            switch(tsp->decoration){
+               case TXTDECOR_NONE:
+               case TXTDECOR_STRIKE2:
+               default:
+                  break;
+               case TXTDECOR_UNDER:
+                  TRPRINT(tri,"text-decoration:underline;");
+                  break;
+               case TXTDECOR_OVER:
+                  TRPRINT(tri,"text-decoration:overline;");
+                  break;
+               case TXTDECOR_BLINK:
+                  TRPRINT(tri,"text-decoration:blink;");
+                  break;
+               case TXTDECOR_STRIKE1:
+                  TRPRINT(tri,"text-decoration:line-through;");
+                  break;
+            }
             TRPRINT(tri, "font-variant:normal;");
                sprintf(obuf,"font-weight:%d;",TR_weight_FC_to_SVG(tsp->weight));
             TRPRINT(tri, obuf);
@@ -1813,7 +1932,7 @@ int TR_layout_analyze(TR_INFO *tri){
 
 #if TEST
 #define MAXLINE 2048  /* big enough for testing */
-enum OP_TYPES {OPCOM,OPOOPS,OPFONT,OPESC,OPORI,OPXY,OPFS,OPTEXT,OPALN,OPLDIR,OPMUL,OPITA,OPWGT,OPCND,OPCLR,OPFLAGS,OPEMIT,OPDONE};
+enum OP_TYPES {OPCOM,OPOOPS,OPFONT,OPESC,OPORI,OPXY,OPFS,OPTEXT,OPALN,OPLDIR,OPMUL,OPITA,OPWGT,OPDEC,OPCND,OPCLR,OPBKG,OPBCLR,OPFLAGS,OPEMIT,OPDONE};
 
 int parseit(char *buffer,char **data){
    int pre;
@@ -1833,8 +1952,11 @@ int parseit(char *buffer,char **data){
    if(0==strcmp("MUL", buffer))return(OPMUL );
    if(0==strcmp("ITA", buffer))return(OPITA );
    if(0==strcmp("WGT", buffer))return(OPWGT );
+   if(0==strcmp("DEC", buffer))return(OPDEC );
    if(0==strcmp("CND", buffer))return(OPCND );
    if(0==strcmp("CLR", buffer))return(OPCLR );
+   if(0==strcmp("BKG", buffer))return(OPBKG );
+   if(0==strcmp("BCLR",buffer))return(OPBCLR );
    if(0==strcmp("FLAG",buffer))return(OPFLAGS);
    if(0==strcmp("EMIT",buffer))return(OPEMIT);
    if(0==strcmp("DONE",buffer))return(OPDONE);
@@ -1942,6 +2064,8 @@ int main(int argc, char *argv[]){
    int           flags=0;
    char         *infile;
    uint32_t      utmp32;
+   TRCOLORREF    bkcolor;
+   int           bkmode;
 
    infile=malloc(strlen(argv[1])+1);
    strcpy(infile,argv[1]);
@@ -1960,8 +2084,11 @@ int main(int argc, char *argv[]){
       printf("    MUL:(float, multiplicative factor to convert FS,XY units to points).\n");
       printf("    ITA:(Italics, 0=normal, 100=italics, 110=oblique).\n");
       printf("    WGT:(Weight, 0-215: 80=normal, 200=bold, 215=ultrablack, 0=thin)).\n");
+      printf("    DEC:(Decorate, 00 none, 01 underline, 02 overline, 04 blink, 08 strike1, 10 strike2. SVG only supports some, and only one at a time.)\n");
       printf("    CND:(Condensed 50-200: 100=normal, 50=ultracondensed, 75=condensed, 200=expanded).\n");
-      printf("    CLR:(RGB color, as 6 HEX digits, like: FF0000 (red) or 0000FF (blue)) \n");
+      printf("    CLR:(Text RGB color, as 6 HEX digits, like: FF0000 (red) or 0000FF (blue)) \n");
+      printf("    BKG:(Background color: 0 none, 1 by input fragment, 2 by assembled line, 3 by entire assembly. Use BCLR, THEN BKG) \n");
+      printf("    BCLR:(Background RGB color, as 6 HEX digits, like: FF0000 (red) or 0000FF (blue)) \n");
       printf("    FLAG: Special processing options.  1 EMF compatible text alignment.\n");
       printf("    EMIT:(Process everything up to this point, then start clean for remaining input).\n");
       printf("    DONE:(no more input, process it).\n");
@@ -1969,7 +2096,7 @@ int main(int argc, char *argv[]){
       printf("\n");
       printf("    The output is a summary of how the pieces are to be assembled into complex text.\n");
       printf("\n");
-      printf("    egrep pattern:  '^LOAD:|^FONT:|^ESC:|^ORI:|^FS:|^XY:|^TEXT:|^ALN:|^LDIR:|^MUL:|^ITA:|^WGT:|^CND:|^CLR:|^FLAG:|^EMIT:^DONE:'\n");
+      printf("    egrep pattern:  '^LOAD:|^FONT:|^ESC:|^ORI:|^FS:|^XY:|^TEXT:|^ALN:|^LDIR:|^MUL:|^ITA:|^WGT:|^CND:|^BKG:|^BCLR:|^CLR:|^FLAG:|^EMIT:^DONE:'\n");
       exit(EXIT_FAILURE);
    }
 
@@ -2090,15 +2217,29 @@ int main(int argc, char *argv[]){
          case OPWGT:
             if(1 != sscanf(data,"%d",&tsp.weight)    || tsp.weight < 0  || tsp.weight > 215)boom("Invalid WGT:",lineno);
             break;
+         case OPDEC:
+            if(1 != sscanf(data,"%X",&tsp.decoration))boom("Invalid DEC:",lineno);
+            break;
          case OPCND:
             if(1 != sscanf(data,"%d",&tsp.condensed) || tsp.condensed < 50 || tsp.condensed > 200)boom("Invalid CND:",lineno);
             break;
          case OPCLR:
             if(1 != sscanf(data,"%x",&utmp32) )boom("Invalid CLR:",lineno);
-            tsp.color.Red      = (utmp32 >> 4) & 0xFF;
-            tsp.color.Green    = (utmp32 >> 2) & 0xFF;
+            tsp.color.Red      = (utmp32 >> 16) & 0xFF;
+            tsp.color.Green    = (utmp32 >> 8) & 0xFF;
             tsp.color.Blue     = (utmp32 >> 0) & 0xFF;
             tsp.color.Reserved = 0;
+            break;
+         case OPBKG:
+            if(1 != sscanf(data,"%d",&bkmode) )boom("Invalid BKG:",lineno);
+            (void) trinfo_load_bk(tri,bkmode,bkcolor);
+            break;
+         case OPBCLR:
+            if(1 != sscanf(data,"%x",&utmp32) )boom("Invalid BCLR:",lineno);
+            bkcolor.Red      = (utmp32 >> 16) & 0xFF;
+            bkcolor.Green    = (utmp32 >> 8) & 0xFF;
+            bkcolor.Blue     = (utmp32 >> 0) & 0xFF;
+            bkcolor.Reserved = 0;
             break;
          case OPFLAGS:
             if(1 != sscanf(data,"%d",&flags) )boom("Invalid FLAG:",lineno);

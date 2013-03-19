@@ -78,149 +78,137 @@ namespace Internal {
 #define PXPERMETER 2835
 #define MAXDISP 2.0 // This should be set in the output dialog.  This is ok for experimenting, no more than 2 pixel deviation.  Not actually used at present
 
-
 enum drawmode {DRAW_PAINT, DRAW_PATTERN, DRAW_IMAGE, DRAW_LINEAR_GRADIENT, DRAW_RADIAL_GRADIENT};
 
 struct FFNEXUS {
-   char    *fontname; //Font name
-   FFNEXUS *next;     //link to next nexus, NULL if this is the last
-   double   f1;       //Vertical (rotating) offset factor (* font height)
-   double   f2;       //Vertical (nonrotating) offset factor (* font height)
-   double   f3;       //Horizontal (nonrotating) offset factor (* font height)
-  };
+    char        *fontname;   //Font name
+    FFNEXUS     *next;       //link to next nexus, NULL if this is the last
+    double       f1;         //Vertical (rotating) offset factor (* font height)
+    double       f2;         //Vertical (nonrotating) offset factor (* font height)
+    double       f3;         //Horizontal (nonrotating) offset factor (* font height)
+};
 
 struct GRADVALUES{
-   Geom::Point p1;      // center   or start
-   Geom::Point p2;      // xhandle  or end
-   Geom::Point p3;      // yhandle  or unused
-   double       r;      // radius   or unused
-   void        *grad;   // to access the stops information
-   int          mode;   // DRAW_LINEAR_GRADIENT or DRAW_RADIAL_GRADIENT, if GRADVALUES is valid, else any value
-   U_COLORREF   bgc;    // document background color, this is as good a place as any to keep it
-   float        rgb[3]; // also background color, but as 0-1 float.
-  };
+    Geom::Point  p1;         // center   or start
+    Geom::Point  p2;         // xhandle  or end
+    Geom::Point  p3;         // yhandle  or unused
+    double       r;          // radius   or unused
+    void        *grad;       // to access the stops information
+    int          mode;       // DRAW_LINEAR_GRADIENT or DRAW_RADIAL_GRADIENT, if GRADVALUES is valid, else any value
+    U_COLORREF   bgc;        // document background color, this is as good a place as any to keep it
+    float        rgb[3];     // also background color, but as 0-1 float.
+};
 
 /* globals */
-static double PX2WORLD = 1200.0/90.0;     // inkscape is 90 dpi, WMF file is 1200
-static bool FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch;
-static FFNEXUS    *wmf_short_fflist = NULL;  //only those fonts so far encountered
-static FFNEXUS    *wmf_long_fflist  = NULL;   //all the fonts described in ...\share\extensions\fontfix.conf
-static WMFTRACK   *wt               = NULL;
-static WMFHANDLES *wht              = NULL;
-static GRADVALUES  gv;
+static double       PX2WORLD = 1200.0/90.0;     // inkscape is 90 dpi, WMF file is 1200
+static bool         FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch;
+static FFNEXUS     *wmf_short_fflist = NULL;  //only those fonts so far encountered
+static FFNEXUS     *wmf_long_fflist  = NULL;   //all the fonts described in ...\share\extensions\fontfix.conf
+static WMFTRACK    *wt               = NULL;
+static WMFHANDLES  *wht              = NULL;
+static GRADVALUES   gv;
 
 void PrintWmf::read_system_fflist(void){  //this is not called by any other source files
-FFNEXUS *temp=NULL;
-FFNEXUS *ptr=NULL;
-std::fstream fffile;
-std::string instr;
-char fontname[128];
-double f1,f2,f3;
-std::string path_to_ffconf;
+    FFNEXUS        *temp=NULL;
+    FFNEXUS        *ptr=NULL;
+    std::fstream    fffile;
+    std::string     instr;
+    char            fontname[128];
+    double          f1,f2,f3;
+    std::string     path_to_ffconf;
 
-  if(wmf_long_fflist)return;
-  path_to_ffconf=INKSCAPE_EXTENSIONDIR;
+    if(wmf_long_fflist)return;
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
+
+    path_to_ffconf=INKSCAPE_EXTENSIONDIR;
 #ifdef WIN32
-  path_to_ffconf.append("\\fontfix.conf"); //Windows path syntax
+    path_to_ffconf.append("\\fontfix.conf"); //Windows path syntax
 #else
-  path_to_ffconf.append("/fontfix.conf"); //Unix/linx path syntax
+    path_to_ffconf.append("/fontfix.conf"); //Unix/linx path syntax
 #endif
-  //open the input
-  fffile.open(path_to_ffconf.c_str(), std::ios::in);
-  if(!fffile.is_open()){
-    g_error("Unable to open file: %s\n", path_to_ffconf.c_str());
-    // throw "boom";
-  }
-  
-  char *oldlocale = g_strdup (setlocale (LC_NUMERIC, NULL));
-  setlocale (LC_NUMERIC, "C");
-  
-  while (std::getline(fffile,instr)){
-    if (instr.empty()) {
-      continue;
+    //open the input
+    fffile.open(path_to_ffconf.c_str(), std::ios::in);
+    if(!fffile.is_open()){
+        g_error("Unable to open file: %s\n", path_to_ffconf.c_str());
     }
-    if(instr[0]=='#'){
-      continue;
+    while (std::getline(fffile,instr)){
+        if(instr[0]=='#')continue;
+        // not a comment, get the 4 values from the line
+        int elements=sscanf(instr.c_str(),"%lf %lf %lf %127[^\n]",&f1,&f2,&f3, &fontname[0]);
+        if(elements!=4){
+            g_error("Expected \"f1 f2 f3 Fontname\" but did not find it in file: %s\n", path_to_ffconf.c_str());
+        }
+        temp=(FFNEXUS *) calloc(1,sizeof(FFNEXUS)); //This will never be freed
+        temp->f1=f1;
+        temp->f2=f2;
+        temp->f3=f3;
+        temp->fontname=strdup(fontname); //This will never be freed
+        temp->next=NULL;  //just to be explicit, it is already 0
+        if(ptr){
+            ptr->next=temp;
+            ptr=temp;
+        }
+        else {
+            wmf_long_fflist=ptr=temp;
+        }
     }
-    // not a comment, get the 4 values from the line
-    int elements=sscanf(instr.c_str(),"%6lf %6lf %6lf %127[^\n]",&f1,&f2,&f3, &fontname[0]);
-    if(elements!=4){
-      setlocale (LC_NUMERIC, oldlocale);
-      g_free (oldlocale);
-      fffile.close();
-      g_error("Expected \"f1 f2 f3 Fontname\" but did not find it in file: %s\n", path_to_ffconf.c_str());
-      // throw "boom";
-    }
-    temp=(FFNEXUS *) calloc(1,sizeof(FFNEXUS)); //This will never be freed
-    temp->f1=f1;
-    temp->f2=f2;
-    temp->f3=f3;
-    temp->fontname=strdup(fontname); //This will never be freed
-    temp->next=NULL;  //just to be explicit, it is already 0
-    if(ptr){
-       ptr->next=temp;
-       ptr=temp;
-    }
-    else {
-      wmf_long_fflist=ptr=temp;
-    }
-  }
-  setlocale (LC_NUMERIC, oldlocale);
-  g_free (oldlocale);
-  fffile.close();
+    fffile.close();
+
+    setlocale(LC_NUMERIC, oldlocale);
+    g_free(oldlocale);
 }
 
 /* Looks for the fontname in the long list.  If it does not find it, it adds the default values
 to the short list with this fontname.  If it does find it, then it adds the specified values.
 */
 void  PrintWmf::search_long_fflist(const char *fontname, double *f1, double *f2, double *f3){  //this is not called by any other source files
-FFNEXUS *ptr=NULL;
-FFNEXUS *tmp=wmf_long_fflist;
-  if(!wmf_long_fflist){
-      g_message("Programming error search_long_fflist called before read_system_fflist\n");
-      throw "boom";
-  }
-  ptr=wmf_long_fflist;
-  while(ptr){
-    if(!strcmp(ptr->fontname,fontname)){ tmp=ptr; break; }
-    ptr=ptr->next;
-  }
-  //tmp points at either the found name, or the default, the first entry in wmf_long_fflist
-  if(!wmf_short_fflist){
-    ptr=wmf_short_fflist=(FFNEXUS *) malloc(sizeof(FFNEXUS));
-  }
-  else {
-    ptr=wmf_short_fflist;
-    while(ptr->next){ ptr=ptr->next; }
-    ptr->next=(FFNEXUS *) malloc(sizeof(FFNEXUS));
-    ptr=ptr->next;
-  }
-  ptr->fontname=strdup(tmp->fontname);
-  *f1 = ptr->f1 = tmp->f1;
-  *f2 = ptr->f2 = tmp->f2;
-  *f3 = ptr->f3 = tmp->f3;
-  ptr->next=NULL;
+    FFNEXUS *ptr=NULL;
+    FFNEXUS *tmp=wmf_long_fflist;
+    if(!wmf_long_fflist){
+        g_error("Programming error search_long_fflist called before read_system_fflist\n");
+    }
+    ptr=wmf_long_fflist;
+    while(ptr){
+        if(!strcmp(ptr->fontname,fontname)){ tmp=ptr; break; }
+        ptr=ptr->next;
+    }
+    //tmp points at either the found name, or the default, the first entry in wmf_long_fflist
+    if(!wmf_short_fflist){
+        ptr=wmf_short_fflist=(FFNEXUS *) malloc(sizeof(FFNEXUS));
+    }
+    else {
+        ptr=wmf_short_fflist;
+        while(ptr->next){ ptr=ptr->next; }
+        ptr->next=(FFNEXUS *) malloc(sizeof(FFNEXUS));
+        ptr=ptr->next;
+    }
+    ptr->fontname=strdup(tmp->fontname);
+    *f1 = ptr->f1 = tmp->f1;
+    *f2 = ptr->f2 = tmp->f2;
+    *f3 = ptr->f3 = tmp->f3;
+    ptr->next=NULL;
 }
 
 /* Looks for the fontname in the short list.  If it does not find it, it looks in the wmf_long_fflist.
 Either way it returns the f1, f2, f3 parameters for the font, even if these are for the default.
 */
 void  PrintWmf::search_short_fflist(const char *fontname, double *f1, double *f2, double *f3){  //this is not called by any other source files
-FFNEXUS *ptr=NULL;
-static FFNEXUS *last=NULL;
-  if(!wmf_long_fflist){
-      g_message("Programming error search_short_fflist called before read_system_fflist\n");
-      throw "boom";
-  }
-  // This speeds things up a lot - if the same font is called twice in a row, pull it out immediately
-  if(last && !strcmp(last->fontname,fontname)){ ptr=last;         }
-  else {                                        ptr=wmf_short_fflist; }  // wmf_short_fflist may still be NULL
-  while(ptr){
-    if(!strcmp(ptr->fontname,fontname)){ *f1=ptr->f1; *f2=ptr->f2; *f3=ptr->f3; last=ptr; return; }
-    ptr=ptr->next;
-  }
-  //reach this point only if there is no match
-  search_long_fflist(fontname, f1, f2, f3);
+    FFNEXUS *ptr=NULL;
+    static FFNEXUS *last=NULL;
+
+    if(!wmf_long_fflist){
+        g_error("Programming error search_short_fflist called before read_system_fflist\n");
+    }
+    // This speeds things up a lot - if the same font is called twice in a row, pull it out immediately
+    if(last && !strcmp(last->fontname,fontname)){ ptr=last;         }
+    else {                                        ptr=wmf_short_fflist; }  // wmf_short_fflist may still be NULL
+    while(ptr){
+        if(!strcmp(ptr->fontname,fontname)){ *f1=ptr->f1; *f2=ptr->f2; *f3=ptr->f3; last=ptr; return; }
+        ptr=ptr->next;
+    }
+    //reach this point only if there is no match
+    search_long_fflist(fontname, f1, f2, f3);
 }
 
 void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, int *ndx, float scale){
@@ -235,11 +223,11 @@ void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, 
     if(!*ndx)return;  // this could happen with an empty string
     cptr += 7;
     ladx = (int16_t *) malloc(*ndx * sizeof(int16_t) );
-    if(!ladx)throw "Out of memory";
+    if(!ladx)g_error("Out of memory");
     *adx=ladx;
     for(i=0; i<*ndx; i++,cptr+=7, ladx++){
-      sscanf(cptr,"%7f",&fdx);
-      *ladx=(int16_t) round(fdx * scale);
+        sscanf(cptr,"%7f",&fdx);
+        *ladx=(int16_t) round(fdx * scale);
     }
     cptr++; // skip 2nd fake terminator
     sscanf(cptr,"%7f",&fdx);
@@ -247,16 +235,15 @@ void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, 
 }
 
 /* convert an  0RGB color to EMF U_COLORREF.
-inverse of sethexcolor() in emf-inout.cpp
+inverse of sethexcolor() in wmf-inout.cpp
 */
 U_COLORREF  PrintWmf::gethexcolor(uint32_t color){
-
     U_COLORREF out;
-    out = U_RGB( 
-            (color >> 16) & 0xFF,
-            (color >>  8) & 0xFF,
-            (color >>  0) & 0xFF
-          );
+    out =   U_RGB( 
+                (color >> 16) & 0xFF,
+                (color >>  8) & 0xFF,
+                (color >>  0) & 0xFF
+            );
     return(out);
 }
 
@@ -279,7 +266,7 @@ uint32_t PrintWmf::transweight(const unsigned int inkweight){
 
 PrintWmf::PrintWmf (void)
 {
-  // all of the class variables are initialized elsewhere, many in PrintWmf::Begin,
+    // all of the class variables are initialized elsewhere, many in PrintWmf::Begin,
 }
 
 
@@ -302,13 +289,12 @@ unsigned int PrintWmf::setup (Inkscape::Extension::Print * /*mod*/)
 
 unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
-// std::cout << "begin " << std::endl;
-    char *rec;
+    char           *rec;
+    gchar const    *utf8_fn = mod->get_param_string("destination");
 
-    gchar const *utf8_fn = mod->get_param_string("destination");
-    FixPPTCharPos = mod->get_param_bool("FixPPTCharPos");
-    FixPPTDashLine = mod->get_param_bool("FixPPTDashLine");
-    FixPPTGrad2Polys = mod->get_param_bool("FixPPTGrad2Polys");
+    FixPPTCharPos        = mod->get_param_bool("FixPPTCharPos");
+    FixPPTDashLine       = mod->get_param_bool("FixPPTDashLine");
+    FixPPTGrad2Polys     = mod->get_param_bool("FixPPTGrad2Polys");
     FixPPTPatternAsHatch = mod->get_param_bool("FixPPTPatternAsHatch");
 
     (void) wmf_start(utf8_fn, 1000000, 250000, &wt);  // Initialize the wt structure
@@ -321,18 +307,18 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
     // initialize a few global variables
     hbrush = hpen = 0;
-    use_stroke = use_fill = simple_shape = false;
+    use_stroke = use_fill = simple_shape = usebk = false;
 
     Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
     if(nv){
-       const char *p1 = nv->attribute("pagecolor");
-       char *p2;
-       uint32_t lc = strtoul( &p1[1], &p2, 16 );  // it looks like "#ABC123"
-       if(*p2)lc=0;
-       gv.bgc = gethexcolor(lc);
-       gv.rgb[0] = (float) U_RGBAGetR(gv.bgc)/255.0;
-       gv.rgb[1] = (float) U_RGBAGetG(gv.bgc)/255.0;
-       gv.rgb[2] = (float) U_RGBAGetB(gv.bgc)/255.0;
+        const char *p1 = nv->attribute("pagecolor");
+        char *p2;
+        uint32_t lc = strtoul( &p1[1], &p2, 16 );  // it looks like "#ABC123"
+        if(*p2)lc=0;
+        gv.bgc = gethexcolor(lc);
+        gv.rgb[0] = (float) U_RGBAGetR(gv.bgc)/255.0;
+        gv.rgb[1] = (float) U_RGBAGetG(gv.bgc)/255.0;
+        gv.rgb[2] = (float) U_RGBAGetB(gv.bgc)/255.0;
     }
 
     bool pageBoundingBox;
@@ -349,67 +335,78 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
     d *= Geom::Scale(IN_PER_PX);  // 90 dpi inside inkscape, wmf file will be 1200 dpi
 
+    /* -1/1200 in next two lines so that WMF read in will write out again at exactly the same size */
+    float dwInchesX = d.width()  - 1.0/1200.0;
+    float dwInchesY = d.height() - 1.0/1200.0;
+    int   dwPxX     = round(dwInchesX * 1200.0);  
+    int   dwPxY     = round(dwInchesY * 1200.0); 
+#if 0
     float dwInchesX = d.width();
     float dwInchesY = d.height();
-    int   dwPxX     = round(d.width() *1200.0);  
-    int   dwPxY     = round(d.height()*1200.0); 
+    int   dwPxX     = round(d.width()  * 1200.0);  
+    int   dwPxY     = round(d.height() * 1200.0); 
+#endif
 
     PU_PAIRF ps = U_PAIRF_set(dwInchesX, dwInchesY);
     rec = U_WMRHEADER_set(ps,1200); // Example: drawing is A4 horizontal,  1200 dpi
     if(!rec){
-       throw "Fatal programming error in PrintWmf::begin at WMRSETMAPMODE";
+        g_error("Fatal programming error in PrintWmf::begin at WMRSETMAPMODE");
     }
     (void) wmf_header_append((PU_METARECORD)rec, wt, 1);
     free(ps);
 
     rec = U_WMRSETWINDOWEXT_set(point16_set( dwPxX, dwPxY));
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at WMRSETWINDOWEXT";
+        g_error("Fatal programming error in PrintWmf::begin at WMRSETWINDOWEXT");
     }
     
     rec = U_WMRSETWINDOWORG_set(point16_set(0,0));
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at WMRSETWINDOWORG";
+        g_error("Fatal programming error in PrintWmf::begin at WMRSETWINDOWORG");
     }
 
     rec = U_WMRSETMAPMODE_set(U_MM_ANISOTROPIC);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at WMRSETMAPMODE";
+        g_error("Fatal programming error in PrintWmf::begin at WMRSETMAPMODE");
     }
     
-    // bkmode never changes
+    /* set some parameters, else the program that reads the WMF may default to other values */
+
     rec = U_WMRSETBKMODE_set(U_TRANSPARENT);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at U_WMRSETBKMODE";
+        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETBKMODE");
     }
 
     hpolyfillmode=U_WINDING;
     rec = U_WMRSETPOLYFILLMODE_set(U_WINDING);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at U_WMRSETPOLYFILLMODE";
+        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETPOLYFILLMODE");
     }
 
-    // Text alignment never changes
+    // Text alignment:  (Never changes)
+    //   - (x,y) coordinates received by this filter are those of the point where the text
+    //     actually starts, and already takes into account the text object's alignment;
+    //   - for this reason, the WMF text alignment must always be TA_BASELINE|TA_LEFT.
     rec = U_WMRSETTEXTALIGN_set(U_TA_BASELINE | U_TA_LEFT);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::text at U_WMRSETTEXTALIGN_set";
+        g_error("Fatal programming error in PrintWmf::text at U_WMRSETTEXTALIGN_set");
     }
 
     htextcolor_rgb[0] = htextcolor_rgb[1] = htextcolor_rgb[2] = 0.0; 
     rec = U_WMRSETTEXTCOLOR_set(U_RGB(0,0,0));
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set";
+        g_error("Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set");
     }
 
     rec = U_WMRSETROP2_set(U_R2_COPYPEN);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at U_WMRSETROP2";
+        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETROP2");
     }
     
     hmiterlimit=5;
     rec = wmiterlimit_set(5);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at wmiterlimit_set";
+        g_error("Fatal programming error in PrintWmf::begin at wmiterlimit_set");
     }
 
     
@@ -418,14 +415,14 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
     uint32_t   Pen;
     rec = wcreatepenindirect_set(&Pen, wht, up);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at wcreatepenindirect_set";
+        g_error("Fatal programming error in PrintWmf::begin at wcreatepenindirect_set");
     }
     
     // create a null pen.  If no specific pen is set, this is used
     up = U_PEN_set(U_PS_NULL, 1, colorref_set(0,0,0));
     rec = wcreatepenindirect_set(&hpen_null, wht, up);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at wcreatepenindirect_set";
+        g_error("Fatal programming error in PrintWmf::begin at wcreatepenindirect_set");
     }
     destroy_pen(); // make this pen active
 
@@ -433,11 +430,9 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
     U_WLOGBRUSH lb = U_WLOGBRUSH_set(U_BS_NULL, U_RGB(0, 0, 0), U_HS_HORIZONTAL);
     rec = wcreatebrushindirect_set(&hbrush_null, wht, lb);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::begin at wcreatebrushindirect_set";
+        g_error("Fatal programming error in PrintWmf::begin at wcreatebrushindirect_set");
     }
     destroy_brush(); // make this brush active
-
-// std::cout << "end begin" << std::endl;
 
     return 0;
 }
@@ -445,80 +440,85 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
 unsigned int PrintWmf::finish (Inkscape::Extension::Print * /*mod*/)
 {
-// std::cout << "finish " << std::endl;
     char *rec;
     if (!wt) return 0;
 
     // get rid of null brush
     rec = wdeleteobject_set(&hbrush_null, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-      throw "Fatal programming error in PrintWmf::finish at wdeleteobject_set null brush";
+        g_error("Fatal programming error in PrintWmf::finish at wdeleteobject_set null brush");
     }
     
     // get rid of null pen
     rec = wdeleteobject_set(&hpen_null, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-      throw "Fatal programming error in PrintWmf::finish at wdeleteobject_set null pen";
+        g_error("Fatal programming error in PrintWmf::finish at wdeleteobject_set null pen");
     }
     
     // get rid of object 0, which was a pen that was used to shift the other object indices to >=1.
         hpen=0;
     rec = wdeleteobject_set(&hpen, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-      throw "Fatal programming error in PrintWmf::finish at wdeleteobject_set filler object";
+        g_error("Fatal programming error in PrintWmf::finish at wdeleteobject_set filler object");
     }
 
     rec = U_WMREOF_set();  // generate the EOF record
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::finish";
+        g_error("Fatal programming error in PrintWmf::finish");
     }
     (void) wmf_finish(wt); // Finalize and write out the WMF
     wmf_free(&wt);              // clean up
     wmf_htable_free(&wht);          // clean up
 
-// std::cout << "end finish" << std::endl;
     return 0;
 }
 
 
-unsigned int PrintWmf::comment (Inkscape::Extension::Print * /*module*/,
-                        const char * /*comment*/)
+unsigned int PrintWmf::comment ( Inkscape::Extension::Print * /*module*/, const char * /*comment*/)
 {
-// std::cout << "comment " << std::endl;
     if (!wt) return 0;
 
     // earlier versions had flush of fill here, but it never executed and was removed
 
-// std::cout << "end comment" << std::endl;
     return 0;
 }
 
 // Extract hatchType, hatchColor from a name like
-// *MFhatch<hatchType>_<hatchColor>  (WMF or EMF hatches are the same)
-// Where the first one is a number and the second a color in hex.
-// hatchType and hatchColor have been set with defaults before this is called.
+// *MFhatch<hatchType>_<hatchColor>[_<bkcolor>]  (WMF or EMF hatches are the same)
+// Where the first one is a number and the second (and third) a color in hex.
+// hatchType, hatchColor, bkColor have been set with defaults before this is called.
 //
-void PrintWmf::hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor){
-   int val;
-   uint32_t hcolor=0;
-   // name should be EMFhatch or WMFhatch but *MFhatch will be accepted
-   if(0!=strncmp(&name[1],"MFhatch",7)){ return; } // not anything we can parse
-   name+=8; // WMFhatch already detected
-   val = 0;
-   while(*name && isdigit(*name)){ 
-      val = 10*val + *name - '0';
-      name++;
-   }
-   *hatchType = val;
-   if(*name != '_' || val > U_HS_DITHEREDBKCLR){ // wrong syntax, cannot classify
-      *hatchType = -1;
-   }
-   else {
-      name++;
-      if(1 != sscanf(name,"%X",&hcolor)){ *hatchType = -1; } // again wrong syntax, cannot classify
-      *hatchColor = gethexcolor(hcolor);
-   }
-   if(*hatchType > U_HS_SOLIDCLR)*hatchType = U_HS_SOLIDCLR;
+void PrintWmf::hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor, U_COLORREF *bkColor){
+    int      val;
+    uint32_t hcolor=0;
+    uint32_t bcolor=0;
+
+    // name should be EMFhatch or WMFhatch but *MFhatch will be accepted
+    if(0!=strncmp(&name[1],"MFhatch",7)){ return; } // not anything we can parse
+    name += 8; // WMFhatch already detected
+    val   = 0;
+    while(*name && isdigit(*name)){ 
+        val = 10*val + *name - '0';
+        name++;
+    }
+    *hatchType = val;
+    if(*name != '_' || val > U_HS_DITHEREDBKCLR){ // wrong syntax, cannot classify
+        *hatchType = -1;
+    }
+    else {
+        name++;
+        if(2 != sscanf(name,"%X_%X", &hcolor, &bcolor)){ // not a pattern with background
+            if(1 != sscanf(name,"%X", &hcolor)){ *hatchType = -1; } // not a pattern, cannot classify
+            *hatchColor = gethexcolor(hcolor);
+        }
+        else {
+            *hatchColor = gethexcolor(hcolor);
+            *bkColor    = gethexcolor(bcolor);
+            usebk       = true;
+        }
+    }
+    /* Everything > U_HS_SOLIDCLR is solid, just specify the color in the brush rather than messing around with background or textcolor */
+    if(*hatchType > U_HS_SOLIDCLR)*hatchType = U_HS_SOLIDCLR;
 }
 
 //
@@ -528,124 +528,124 @@ void PrintWmf::hatch_classify(char *name, int *hatchType, U_COLORREF *hatchColor
 //    otherwise hatchType is set to -1 and hatchColor is not defined.
 //
 
-void PrintWmf::brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor){
-   if(depth==0){
-      *epixbuf    = NULL;
-      *hatchType  = -1;
-      *hatchColor = U_RGB(0,0,0);
-   }
-   depth++;
-   // first look along the pattern chain, if there is one 
-   if(SP_IS_PATTERN(parent)){
-      for (SPPattern *pat_i = SP_PATTERN(parent); pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-         if(SP_IS_IMAGE(pat_i)){
-            *epixbuf = ((SPImage *)pat_i)->pixbuf;
-            return;
-         }
-         char temp[32];  // large enough
-         temp[31]='\0';
-         strncpy(temp,pat_i->getAttribute("id"),31);  // Some names may be longer than [EW]MFhatch#_###### 
-         hatch_classify(temp,hatchType,hatchColor);
-         if(*hatchType != -1)return;
+void PrintWmf::brush_classify(SPObject *parent, int depth, GdkPixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor, U_COLORREF *bkColor){
+    if(depth==0){
+        *epixbuf    = NULL;
+        *hatchType  = -1;
+        *hatchColor = U_RGB(0,0,0);
+        *bkColor    = U_RGB(255,255,255);
+    }
+    depth++;
+    // first look along the pattern chain, if there is one 
+    if(SP_IS_PATTERN(parent)){
+        for (SPPattern *pat_i = SP_PATTERN(parent); pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+            if(SP_IS_IMAGE(pat_i)){
+                *epixbuf = ((SPImage *)pat_i)->pixbuf;
+                return;
+            }
+            char temp[32];  // large enough
+            temp[31]='\0';
+            strncpy(temp,pat_i->getAttribute("id"),31);  // Some names may be longer than [EW]MFhatch#_###### 
+            hatch_classify(temp, hatchType, hatchColor, bkColor);
+            if(*hatchType != -1)return;
 
-         // still looking?  Look at this pattern's children, if there are any
-         SPObject *child = pat_i->firstChild();
-         while(child && !(*epixbuf) && (*hatchType == -1)){
-            brush_classify(child, depth, epixbuf, hatchType, hatchColor);
+            // still looking?  Look at this pattern's children, if there are any
+            SPObject *child = pat_i->firstChild();
+            while(child && !(*epixbuf) && (*hatchType == -1)){
+                brush_classify(child, depth, epixbuf, hatchType, hatchColor, bkColor);
+                child = child->getNext();
+            }
+        }
+    }
+    else if(SP_IS_IMAGE(parent)){
+        *epixbuf = ((SPImage *)parent)->pixbuf;
+        return;
+    }
+    else { // some inkscape rearrangements pass through nodes between pattern and image which are not classified as either.
+        SPObject *child = parent->firstChild();
+        while(child && !(*epixbuf) && (*hatchType == -1)){
+            brush_classify(child, depth, epixbuf, hatchType, hatchColor, bkColor);
             child = child->getNext();
-         }
-      }
-   }
-   else if(SP_IS_IMAGE(parent)){
-       *epixbuf = ((SPImage *)parent)->pixbuf;
-       return;
-   }
-   else { // some inkscape rearrangements pass through nodes between pattern and image which are not classified as either.
-       SPObject *child = parent->firstChild();
-       while(child && !(*epixbuf) && (*hatchType == -1)){
-          brush_classify(child, depth, epixbuf, hatchType, hatchColor);
-          child = child->getNext();
-       }
-   }
+        }
+    }
 }
 
 //swap R/B in 4 byte pixel
 void PrintWmf::swapRBinRGBA(char *px, int pixels){
-  char tmp;
-  for(int i=0;i<pixels*4;px+=4,i+=4){
-      tmp=px[2];
-      px[2]=px[0];
-      px[0]=tmp;
-  }
+    char tmp;
+    for(int i=0;i<pixels*4;px+=4,i+=4){
+        tmp=px[2];
+        px[2]=px[0];
+        px[0]=tmp;
+    }
 }
 
 /* opacity weighting of two colors as float.  v1 is the color, op is its opacity, v2 is the background color */
 inline float opweight(float v1, float v2, float op){
-  return v1*op + v2*(1.0-op);
+    return v1*op + v2*(1.0-op);
 }
 
 U_COLORREF PrintWmf::avg_stop_color(SPGradient *gr){
-   U_COLORREF cr;
-   int last = gr->vector.stops.size() -1;
-   if(last>=1){
-      float rgbs[3];
-      float rgbe[3];
-      float ops,ope;
+    U_COLORREF cr;
+    int last = gr->vector.stops.size() -1;
+    if(last>=1){
+        float rgbs[3];
+        float rgbe[3];
+        float ops,ope;
 
-      ops = gr->vector.stops[0   ].opacity;
-      ope = gr->vector.stops[last].opacity;
-      sp_color_get_rgb_floatv(&gr->vector.stops[0   ].color, rgbs);
-      sp_color_get_rgb_floatv(&gr->vector.stops[last].color, rgbe);
+        ops = gr->vector.stops[0   ].opacity;
+        ope = gr->vector.stops[last].opacity;
+        sp_color_get_rgb_floatv(&gr->vector.stops[0   ].color, rgbs);
+        sp_color_get_rgb_floatv(&gr->vector.stops[last].color, rgbe);
 
-      /* Replace opacity at start & stop with that fraction background color, then average those two for final color. */
-      cr = U_RGB(
-             255*(( opweight(rgbs[0],gv.rgb[0],ops)   +   opweight(rgbe[0],gv.rgb[0],ope) )/2.0),
-             255*(( opweight(rgbs[1],gv.rgb[1],ops)   +   opweight(rgbe[1],gv.rgb[1],ope) )/2.0),
-             255*(( opweight(rgbs[2],gv.rgb[2],ops)   +   opweight(rgbe[2],gv.rgb[2],ope) )/2.0)
-           );
-   }
-   else {
-      cr = U_RGB(0, 0, 0);  // The default fill
-   }
-   return cr;
+        /* Replace opacity at start & stop with that fraction background color, then average those two for final color. */
+        cr =    U_RGB(
+                    255*(( opweight(rgbs[0],gv.rgb[0],ops)   +   opweight(rgbe[0],gv.rgb[0],ope) )/2.0),
+                    255*(( opweight(rgbs[1],gv.rgb[1],ops)   +   opweight(rgbe[1],gv.rgb[1],ope) )/2.0),
+                    255*(( opweight(rgbs[2],gv.rgb[2],ops)   +   opweight(rgbe[2],gv.rgb[2],ope) )/2.0)
+                );
+    }
+    else {
+        cr = U_RGB(0, 0, 0);  // The default fill
+    }
+    return cr;
 }
 
 int PrintWmf::hold_gradient(void *gr, int mode){
-   gv.mode = mode;
-   gv.grad = gr;
-   if(mode==DRAW_RADIAL_GRADIENT){
-      SPRadialGradient *rg = (SPRadialGradient *) gr;
-      gv.r  = rg->r.computed;                                 // radius, but of what???
-      gv.p1 = Geom::Point(rg->cx.computed, rg->cy.computed);  // center
-      gv.p2 = Geom::Point(gv.r, 0) + gv.p1;                   // xhandle
-      gv.p3 = Geom::Point(0, -gv.r) + gv.p1;                  // yhandle
-      if (rg->gradientTransform_set) {
-         gv.p1 = gv.p1 * rg->gradientTransform;
-         gv.p2 = gv.p2 * rg->gradientTransform;
-         gv.p3 = gv.p3 * rg->gradientTransform;
-      }
-   }
-   else if(mode==DRAW_LINEAR_GRADIENT){
-      SPLinearGradient *lg = (SPLinearGradient *) gr;
-      gv.r = 0;                                               // unused
-      gv.p1 = Geom::Point (lg->x1.computed, lg->y1.computed); // start
-      gv.p2 = Geom::Point (lg->x2.computed, lg->y2.computed); // end
-      gv.p3 = Geom::Point (0, 0);                             // unused
-      if (lg->gradientTransform_set) {
-         gv.p1 = gv.p1 * lg->gradientTransform;
-         gv.p2 = gv.p2 * lg->gradientTransform;
-      }
-   }
-   else {
-      throw "Fatal programming error, hold_gradient() in wmf-print.cpp called with invalid draw mode";
-   }
-   return 1;
+    gv.mode = mode;
+    gv.grad = gr;
+    if(mode==DRAW_RADIAL_GRADIENT){
+        SPRadialGradient *rg = (SPRadialGradient *) gr;
+        gv.r  = rg->r.computed;                                 // radius, but of what???
+        gv.p1 = Geom::Point(rg->cx.computed, rg->cy.computed);  // center
+        gv.p2 = Geom::Point(gv.r, 0) + gv.p1;                   // xhandle
+        gv.p3 = Geom::Point(0, -gv.r) + gv.p1;                  // yhandle
+        if (rg->gradientTransform_set) {
+            gv.p1 = gv.p1 * rg->gradientTransform;
+            gv.p2 = gv.p2 * rg->gradientTransform;
+            gv.p3 = gv.p3 * rg->gradientTransform;
+        }
+    }
+    else if(mode==DRAW_LINEAR_GRADIENT){
+        SPLinearGradient *lg = (SPLinearGradient *) gr;
+        gv.r = 0;                                               // unused
+        gv.p1 = Geom::Point (lg->x1.computed, lg->y1.computed); // start
+        gv.p2 = Geom::Point (lg->x2.computed, lg->y2.computed); // end
+        gv.p3 = Geom::Point (0, 0);                             // unused
+        if (lg->gradientTransform_set) {
+            gv.p1 = gv.p1 * lg->gradientTransform;
+            gv.p2 = gv.p2 * lg->gradientTransform;
+        }
+    }
+    else {
+        g_error("Fatal programming error, hold_gradient() in wmf-print.cpp called with invalid draw mode");
+    }
+    return 1;
 }
 
 // fcolor is defined when gradients are being expanded, it is the color of one stripe or ring.
 int PrintWmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
 {
-// std::cout << "create_brush " << std::endl;
     float         rgb[3];
     char         *rec;
     U_WLOGBRUSH   lb;
@@ -655,6 +655,7 @@ int PrintWmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
     uint32_t      brushStyle;
     int           hatchType;
     U_COLORREF    hatchColor;
+    U_COLORREF    bkColor;
     uint32_t      width  = 0; // quiets a harmless compiler warning, initialization not otherwise required.
     uint32_t      height = 0;
 
@@ -665,157 +666,164 @@ int PrintWmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
     fill_mode  = DRAW_PAINT;
     brushStyle = U_BS_SOLID;
     hatchType  = U_HS_SOLIDCLR;
+    bkColor    = U_RGB(0, 0, 0);
     if(fcolor){ hatchColor = *fcolor;        }
     else {      hatchColor = U_RGB(0, 0, 0); }
 
     if (!fcolor && style) {
         if(style->fill.isColor()){
-           fill_mode = DRAW_PAINT;
-           float opacity = SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
-           if (opacity <= 0.0)opacity = 0.0;  // basically the same as no fill
+            fill_mode = DRAW_PAINT;
+            float opacity = SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
+            if (opacity <= 0.0)opacity = 0.0;  // basically the same as no fill
 
-           sp_color_get_rgb_floatv( &style->fill.value.color, rgb );
-           hatchColor = U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]);
+            sp_color_get_rgb_floatv( &style->fill.value.color, rgb );
+            hatchColor = U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]);
 
-           fmode = style->fill_rule.computed == 0 ? U_WINDING : (style->fill_rule.computed == 2 ? U_ALTERNATE : U_ALTERNATE);
+            fmode = style->fill_rule.computed == 0 ? U_WINDING : (style->fill_rule.computed == 2 ? U_ALTERNATE : U_ALTERNATE);
         }
         else if(SP_IS_PATTERN(SP_STYLE_FILL_SERVER(style))){ // must be paint-server
-           SPPaintServer *paintserver = style->fill.value.href->getObject();
-           SPPattern *pat = SP_PATTERN (paintserver);
-           double dwidth  = pattern_width(pat);
-           double dheight = pattern_height(pat);
-           width  = dwidth;
-           height = dheight;
-           brush_classify(pat,0,&pixbuf,&hatchType,&hatchColor);
-           if(pixbuf){ fill_mode = DRAW_IMAGE;  }
-           else {  // pattern
-              fill_mode = DRAW_PATTERN;
-              if(hatchType == -1){  // Not a standard hatch, so force it to something
-                 hatchType  = U_HS_CROSS;
-                 hatchColor = U_RGB(0xFF,0xC3,0xC3);
-              }
-           }
-           if(FixPPTPatternAsHatch){
-              if(hatchType == -1){  // image or unclassified 
-                 fill_mode  = DRAW_PATTERN;
-                 hatchType  = U_HS_DIAGCROSS;
-                 hatchColor = U_RGB(0xFF,0xC3,0xC3);
-              } 
-           }
-           brushStyle = U_BS_HATCHED;
+            SPPaintServer *paintserver = style->fill.value.href->getObject();
+            SPPattern *pat = SP_PATTERN (paintserver);
+            double dwidth  = pattern_width(pat);
+            double dheight = pattern_height(pat);
+            width  = dwidth;
+            height = dheight;
+            brush_classify(pat,0,&pixbuf,&hatchType,&hatchColor,&bkColor);
+            if(pixbuf){ fill_mode = DRAW_IMAGE;  }
+            else {  // pattern
+                fill_mode = DRAW_PATTERN;
+                if(hatchType == -1){  // Not a standard hatch, so force it to something
+                    hatchType  = U_HS_CROSS;
+                    hatchColor = U_RGB(0xFF,0xC3,0xC3);
+                }
+            }
+            if(FixPPTPatternAsHatch){
+                if(hatchType == -1){  // image or unclassified 
+                    fill_mode  = DRAW_PATTERN;
+                    hatchType  = U_HS_DIAGCROSS;
+                    hatchColor = U_RGB(0xFF,0xC3,0xC3);
+                } 
+            }
+            brushStyle = U_BS_HATCHED;
         }
         else if(SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style))){ // must be a gradient
-           // currently we do not do anything with gradients, the code below just sets the color to the average of the stops
-           SPPaintServer *paintserver = style->fill.value.href->getObject();
-           SPLinearGradient *lg = NULL;
-           SPRadialGradient *rg = NULL;
+            // currently we do not do anything with gradients, the code below just sets the color to the average of the stops
+            SPPaintServer *paintserver = style->fill.value.href->getObject();
+            SPLinearGradient *lg = NULL;
+            SPRadialGradient *rg = NULL;
 
-           if (SP_IS_LINEARGRADIENT (paintserver)) {
-              lg = SP_LINEARGRADIENT(paintserver);
-              SP_GRADIENT(lg)->ensureVector(); // when exporting from commandline, vector is not built
-              fill_mode = DRAW_LINEAR_GRADIENT;
-           }
-           else if (SP_IS_RADIALGRADIENT (paintserver)) {
-              rg = SP_RADIALGRADIENT(paintserver);
-              SP_GRADIENT(rg)->ensureVector(); // when exporting from commandline, vector is not built
-              fill_mode = DRAW_RADIAL_GRADIENT;
-           }
-           else {
-             // default fill
-           }
+            if (SP_IS_LINEARGRADIENT (paintserver)) {
+                lg = SP_LINEARGRADIENT(paintserver);
+                SP_GRADIENT(lg)->ensureVector(); // when exporting from commandline, vector is not built
+                fill_mode = DRAW_LINEAR_GRADIENT;
+            }
+            else if (SP_IS_RADIALGRADIENT (paintserver)) {
+                rg = SP_RADIALGRADIENT(paintserver);
+                SP_GRADIENT(rg)->ensureVector(); // when exporting from commandline, vector is not built
+                fill_mode = DRAW_RADIAL_GRADIENT;
+            }
+            else {
+                // default fill
+            }
 
-           if(rg){
-              if(FixPPTGrad2Polys){  return hold_gradient(rg, fill_mode); }
-              else {                 hatchColor = avg_stop_color(rg);  }
-           }
-           else if(lg){
-              if(FixPPTGrad2Polys){  return hold_gradient(lg, fill_mode); }
-              else {                 hatchColor = avg_stop_color(lg);   }
-           }
+            if(rg){
+                if(FixPPTGrad2Polys){  return hold_gradient(rg, fill_mode); }
+                else {                 hatchColor = avg_stop_color(rg);  }
+            }
+            else if(lg){
+                if(FixPPTGrad2Polys){  return hold_gradient(lg, fill_mode); }
+                else {                 hatchColor = avg_stop_color(lg);   }
+            }
         }
     } 
     else { // if (!style)
-      // default fill
+        // default fill
     }
-
-    lb   = U_WLOGBRUSH_set(brushStyle, hatchColor, hatchType);
 
     switch(fill_mode){
-       case DRAW_LINEAR_GRADIENT: // fill with average color unless gradients are converted to slices
-       case DRAW_RADIAL_GRADIENT: // ditto
-       case DRAW_PAINT:
-       case DRAW_PATTERN:
-          rec = wcreatebrushindirect_set(&brush, wht, lb);
-          if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-             throw "Fatal programming error in PrintWmf::create_brush at createbrushindirect_set";
-          }
-          break;
-       case DRAW_IMAGE:
-          char                *px;
-          char                *rgba_px;
-          uint32_t             cbPx;
-          uint32_t             colortype;
-          PU_RGBQUAD           ct;
-          int                  numCt;
-          U_BITMAPINFOHEADER   Bmih;
-          PU_BITMAPINFO        Bmi;
-          rgba_px = (char *) gdk_pixbuf_get_pixels(pixbuf); // Do NOT free this!!!
-          colortype = U_BCBM_COLOR32;
-          (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  rgba_px,  width, height, width*4, colortype, 0, 1);
-          // Not sure why the next swap is needed because the preceding does it, and the code is identical
-          // to that in stretchdibits_set, which does not need this.
-          swapRBinRGBA(px, width*height);
-          Bmih = bitmapinfoheader_set(width, height, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
-          Bmi = bitmapinfo_set(Bmih, ct);
-          rec = wcreatedibpatternbrush_srcdib_set(&brush, wht, U_DIB_RGB_COLORS, Bmi, cbPx, px);
-          if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-             throw "Fatal programming error in PrintWmf::create_brush at createdibpatternbrushpt_set";
-          }
-          free(px);
-          free(Bmi); // ct will be NULL because of colortype
-          break;
+        case DRAW_LINEAR_GRADIENT: // fill with average color unless gradients are converted to slices
+        case DRAW_RADIAL_GRADIENT: // ditto
+        case DRAW_PAINT:
+        case DRAW_PATTERN:
+            // SVG text has no background attribute, so OPAQUE mode ALWAYS cancels after the next draw, otherwise it would mess up future text output.
+            if(usebk){
+                rec = U_WMRSETBKCOLOR_set(bkColor);
+                if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                    g_error("Fatal programming error in PrintWmf::create_brush at U_WMRSETBKCOLOR_set");
+                }
+                rec = U_WMRSETBKMODE_set(U_OPAQUE);
+                if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                    g_error("Fatal programming error in PrintWmf::create_brush at U_WMRSETBKMODE_set");
+                }
+            }
+            lb   = U_WLOGBRUSH_set(brushStyle, hatchColor, hatchType);
+            rec = wcreatebrushindirect_set(&brush, wht, lb);
+            if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                g_error("Fatal programming error in PrintWmf::create_brush at createbrushindirect_set");
+            }
+            break;
+        case DRAW_IMAGE:
+            char                *px;
+            char                *rgba_px;
+            uint32_t             cbPx;
+            uint32_t             colortype;
+            PU_RGBQUAD           ct;
+            int                  numCt;
+            U_BITMAPINFOHEADER   Bmih;
+            PU_BITMAPINFO        Bmi;
+            rgba_px = (char *) gdk_pixbuf_get_pixels(pixbuf); // Do NOT free this!!!
+            colortype = U_BCBM_COLOR32;
+            (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  rgba_px,  width, height, width*4, colortype, 0, 1);
+            // Not sure why the next swap is needed because the preceding does it, and the code is identical
+            // to that in stretchdibits_set, which does not need this.
+            swapRBinRGBA(px, width*height);
+            Bmih = bitmapinfoheader_set(width, height, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
+            Bmi = bitmapinfo_set(Bmih, ct);
+            rec = wcreatedibpatternbrush_srcdib_set(&brush, wht, U_DIB_RGB_COLORS, Bmi, cbPx, px);
+            if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                g_error("Fatal programming error in PrintWmf::create_brush at createdibpatternbrushpt_set");
+            }
+            free(px);
+            free(Bmi); // ct will be NULL because of colortype
+            break;
     }
+
     hbrush = brush;  // need this later for destroy_brush
     rec = wselectobject_set(brush, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::create_brush at wselectobject_set";
+        g_error("Fatal programming error in PrintWmf::create_brush at wselectobject_set");
     }
-
-
 
     if(fmode != hpolyfillmode){
-       hpolyfillmode=fmode;
-       rec = U_WMRSETPOLYFILLMODE_set(fmode); 
-       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-          throw "Fatal programming error in PrintWmf::create_brush at U_WMRSETPOLYFILLMODE_set";
-       }
+        hpolyfillmode=fmode;
+        rec = U_WMRSETPOLYFILLMODE_set(fmode); 
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            g_error("Fatal programming error in PrintWmf::create_brush at U_WMRSETPOLYFILLMODE_set");
+        }
     }
-// std::cout << "end create_brush " << std::endl;
+
     return 0;
 }
 
 
 void PrintWmf::destroy_brush()
 {
-// std::cout << "destroy_brush " << std::endl;
     char *rec;
     // WMF lets any object be deleted whenever, and the chips fall where they may...
     if (hbrush){
-       rec = wdeleteobject_set(&hbrush, wht);
-       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-         throw "Fatal programming error in PrintWmf::destroy_brush";
-       }
-       hbrush = 0;
+        rec = wdeleteobject_set(&hbrush, wht);
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            g_error("Fatal programming error in PrintWmf::destroy_brush");
+        }
+        hbrush = 0;
     }
     
     // (re)select the null brush
     
     rec = wselectobject_set(hbrush_null, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-      throw "Fatal programming error in PrintWmf::destroy_brush";
-    }
-    
-// std::cout << "end destroy_brush" << std::endl;
+        g_error("Fatal programming error in PrintWmf::destroy_brush");
+    }    
 }
 
 
@@ -827,7 +835,6 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
     U_COLORREF           penColor;
     U_PEN                up;
     int                  modstyle;
-// std::cout << "create_pen " << std::endl;
   
     if (!wt) return 0;
 
@@ -860,23 +867,24 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 
         // most WMF readers will ignore linecap and linejoin, but set them anyway.  Inkscape itself can read them back in.
  
-        if (style->stroke_linecap.computed == 0) {      modstyle |= U_PS_ENDCAP_FLAT;   }
-        else if (style->stroke_linecap.computed == 1) { modstyle |= U_PS_ENDCAP_ROUND;  }
-        else {                                          modstyle |= U_PS_ENDCAP_SQUARE; }
+        if (     style->stroke_linecap.computed == 0) {  modstyle |= U_PS_ENDCAP_FLAT;   }
+        else if (style->stroke_linecap.computed == 1) {  modstyle |= U_PS_ENDCAP_ROUND;  }
+        else {                                           modstyle |= U_PS_ENDCAP_SQUARE; }
 
         if (style->stroke_linejoin.computed == 0) {
-           float miterlimit = style->stroke_miterlimit.value;  // This is a ratio.
-           if (miterlimit < 1)miterlimit = 1;
+            float miterlimit = style->stroke_miterlimit.value;  // This is a ratio.
+            if (miterlimit < 1)miterlimit = 1;
 
-           // most WMF readers will ignore miterlimit, but set it anyway.  Inkscape itself can read it back in
-           if((uint32_t)miterlimit != hmiterlimit){
-               hmiterlimit = (uint32_t)miterlimit;
-               rec = wmiterlimit_set((uint32_t) miterlimit);
-               if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-                  throw "Fatal programming error in PrintWmf::create_pen at wmiterlimit_set";
-               }
-           }
-                                                         modstyle |= U_PS_JOIN_MITER; }
+            // most WMF readers will ignore miterlimit, but set it anyway.  Inkscape itself can read it back in
+            if((uint32_t)miterlimit != hmiterlimit){
+                hmiterlimit = (uint32_t)miterlimit;
+                rec = wmiterlimit_set((uint32_t) miterlimit);
+                if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                    g_error("Fatal programming error in PrintWmf::create_pen at wmiterlimit_set");
+                }
+            }
+                                                         modstyle |= U_PS_JOIN_MITER;
+        }
         else if (style->stroke_linejoin.computed == 1) { modstyle |= U_PS_JOIN_ROUND; }
         else {                                           modstyle |= U_PS_JOIN_BEVEL; }
 
@@ -884,7 +892,7 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
             style->stroke_dash.dash       )
         {
             if(!FixPPTDashLine){ // if this is set code elsewhere will break dots/dashes into many smaller lines.
-               penstyle = U_PS_DASH;// userstyle not supported apparently, for now map all Inkscape dot/dash to just dash
+                penstyle = U_PS_DASH;// userstyle not supported apparently, for now map all Inkscape dot/dash to just dash
             }
         }
 
@@ -893,47 +901,43 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
     up  = U_PEN_set(penstyle | modstyle, linewidth, penColor);
     rec = wcreatepenindirect_set(&pen, wht, up);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-        throw "Fatal programming error in PrintWmf::create_pen at wcreatepenindirect_set";
+        g_error("Fatal programming error in PrintWmf::create_pen at wcreatepenindirect_set");
     }
 
     rec = wselectobject_set(pen, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-        throw "Fatal programming error in PrintWmf::create_pen at wselectobject_set";
+        g_error("Fatal programming error in PrintWmf::create_pen at wselectobject_set");
     }
     hpen = pen;  // need this later for destroy_pen
 
     return 0;
-// std::cout << "end create_pen" << std::endl;
 }
 
 //  delete the defined pen object
 void PrintWmf::destroy_pen()
 {
-// std::cout << "destroy_pen hpen: " << hpen<< std::endl;
     char *rec = NULL;
     // WMF lets any object be deleted whenever, and the chips fall where they may...
     if (hpen){
-       rec = wdeleteobject_set(&hpen, wht);
-       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-         throw "Fatal programming error in PrintWmf::destroy_pen";
-       }
-       hpen = 0;
+        rec = wdeleteobject_set(&hpen, wht);
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            g_error("Fatal programming error in PrintWmf::destroy_pen");
+        }
+        hpen = 0;
     }
 
     // (re)select the null pen
     
     rec = wselectobject_set(hpen_null, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-      throw "Fatal programming error in PrintWmf::destroy_pen";
+        g_error("Fatal programming error in PrintWmf::destroy_pen");
     }
-// std::cout << "end destroy_pen " << std::endl;
 }
 
 
 
 unsigned int PrintWmf::bind(Inkscape::Extension::Print * /*mod*/, Geom::Affine const &transform, float /*opacity*/)
 {   
-// std::cout << "bind " << std::endl;
     if (!m_tr_stack.empty()) {
         Geom::Affine tr_top = m_tr_stack.top();
         m_tr_stack.push(transform * tr_top);
@@ -941,15 +945,12 @@ unsigned int PrintWmf::bind(Inkscape::Extension::Print * /*mod*/, Geom::Affine c
         m_tr_stack.push(transform);
     }
 
-// std::cout << "end bind" << std::endl;
     return 1;
 }
 
 unsigned int PrintWmf::release(Inkscape::Extension::Print * /*mod*/)
 {
-// std::cout << "release " << std::endl;
     m_tr_stack.pop();
-// std::cout << "end release" << std::endl;
     return 1;
 }
 
@@ -982,24 +983,24 @@ U_COLORREF PrintWmf::weight_colors(U_COLORREF c1, U_COLORREF c2, double t){
 
 /*  convert from center ellipse to SVGEllipticalArc ellipse
    
-   From:
-   http://www.w3.org/TR/SVG/implnote.html#ArcConversionEndpointToCenter
-   A point (x,y) on the arc can be found by:
+    From:
+    http://www.w3.org/TR/SVG/implnote.html#ArcConversionEndpointToCenter
+    A point (x,y) on the arc can be found by:
    
-   {x,y} = {cx,cy} + {cosF,-sinF,sinF,cosF} x {rxcosT,rysinT}
+    {x,y} = {cx,cy} + {cosF,-sinF,sinF,cosF} x {rxcosT,rysinT}
    
-   where 
-     {cx,cy} is the center of the ellipse
-     F       is the rotation angle of the X axis of the ellipse from the true X axis
-     T       is the rotation angle around the ellipse
-     {,,,}   is the rotation matrix
-     rx,ry   are the radii of the ellipse's axes
+    where 
+        {cx,cy} is the center of the ellipse
+        F       is the rotation angle of the X axis of the ellipse from the true X axis
+        T       is the rotation angle around the ellipse
+        {,,,}   is the rotation matrix
+        rx,ry   are the radii of the ellipse's axes
 
-   For SVG parameterization need two points.  
-   Arbitrarily we can use T=0 and T=pi
-   Since the sweep is 180 the flags are always 0:
+    For SVG parameterization need two points.  
+    Arbitrarily we can use T=0 and T=pi
+    Since the sweep is 180 the flags are always 0:
 
-   F is in RADIANS, but the SVGEllipticalArc needs degrees!
+    F is in RADIANS, but the SVGEllipticalArc needs degrees!
 
 */
 Geom::PathVector PrintWmf::center_ellipse_as_SVG_PathV(Geom::Point ctr, double rx, double ry, double F){
@@ -1042,8 +1043,9 @@ Geom::PathVector PrintWmf::center_elliptical_ring_as_SVG_PathV(Geom::Point ctr, 
 
     char text[512];
     sprintf(text," M %f,%f A %f %f %f 0 1 %f %f A %f %f %f 0 1 %f %f z M %f,%f  A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
-      x11,y11,  rx1,ry1,degrot,x12,y12,   rx1,ry1,degrot,x11,y11,
-      x21,y21,  rx2,ry2,degrot,x22,y22,   rx2,ry2,degrot,x21,y21);
+        x11,y11,  rx1,ry1,degrot,x12,y12,   rx1,ry1,degrot,x11,y11,
+        x21,y21,  rx2,ry2,degrot,x22,y22,   rx2,ry2,degrot,x21,y21
+    );
     std::vector<Geom::Path> outres =  Geom::parse_svg_path(text);
 
     return outres;
@@ -1063,7 +1065,7 @@ Geom::PathVector PrintWmf::center_elliptical_hole_as_SVG_PathV(Geom::Point ctr, 
 
     char text[256];
     sprintf(text," M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z M 50000,50000 50000,-50000 -50000,-50000 -50000,50000 z",
-     x1,y1,  rx,ry,F*360./(2.*M_PI),x2,y2,   rx,ry,F*360./(2.*M_PI),x1,y1);
+        x1,y1,  rx,ry,F*360./(2.*M_PI),x2,y2,   rx,ry,F*360./(2.*M_PI),x1,y1);
     std::vector<Geom::Path> outres =  Geom::parse_svg_path(text);
     return outres;
 }
@@ -1086,26 +1088,22 @@ Geom::PathVector PrintWmf::rect_cutter(Geom::Point ctr, Geom::Point pos, Geom::P
     return outres;
 }
 
-/* Convert from SPWindRule to livarot's FillRule
-   This is similar to what sp_selected_path_boolop() does
+/*  Convert from SPWindRule to livarot's FillRule
+    This is similar to what sp_selected_path_boolop() does
 */
 FillRule PrintWmf::SPWR_to_LVFR(SPWindRule wr){
     FillRule fr;
-    if(wr ==  SP_WIND_RULE_EVENODD){
-       fr = fill_oddEven;
-    }
-    else {
-       fr = fill_nonZero;
-    }
+    if(wr ==  SP_WIND_RULE_EVENODD){ fr = fill_oddEven; }
+    else {                           fr = fill_nonZero; }
     return fr;
 }
 
 
-unsigned int PrintWmf::fill(Inkscape::Extension::Print * /*mod*/,
-                    Geom::PathVector const &pathv, Geom::Affine const & /*transform*/, SPStyle const *style,
-                    Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
+unsigned int PrintWmf::fill(
+    Inkscape::Extension::Print * /*mod*/,
+    Geom::PathVector const &pathv, Geom::Affine const & /*transform*/, SPStyle const *style,
+    Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
 {
-// std::cout << "fill " << std::endl;
     using Geom::X;
     using Geom::Y;
 
@@ -1117,233 +1115,238 @@ unsigned int PrintWmf::fill(Inkscape::Extension::Print * /*mod*/,
     fill_transform = tf;
 
     if (create_brush(style, NULL)){ 
-       /*
-          Handle gradients.  Uses modified livarot as 2geom boolops is currently broken.
-          Can handle gradients with multiple stops.
+        /*
+            Handle gradients.  Uses modified livarot as 2geom boolops is currently broken.
+            Can handle gradients with multiple stops.
 
-          The overlap is needed to avoid antialiasing artifacts when edges are not strictly aligned on pixel boundaries.
-          There is an inevitable loss of accuracy saving through an WMF file because of the integer coordinate system.
-          Keep the overlap quite large so that loss of accuracy does not remove an overlap.
-       */
-       destroy_pen();  //this sets the NULL_PEN, otherwise gradient slices may display with boundaries, see longer explanation below
-       Geom::Path cutter;
-       float      rgb[3];
-       U_COLORREF wc,c1,c2;
-       FillRule   frb = SPWR_to_LVFR( (SPWindRule) style->fill_rule.computed);
-       double     doff,doff_base,doff_range;
-       double     divisions= 128.0;
-       int        nstops;
-       int        istop =     1;
-       float      opa;                     // opacity at stop
- 
-       SPRadialGradient *tg = (SPRadialGradient *) (gv.grad);  // linear/radial are the same here
-       nstops = tg->vector.stops.size();
-       sp_color_get_rgb_floatv(&tg->vector.stops[0].color, rgb);
-       opa    = tg->vector.stops[0].opacity;
-       c1     = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
-       sp_color_get_rgb_floatv(&tg->vector.stops[nstops-1].color, rgb);
-       opa    = tg->vector.stops[nstops-1].opacity;
-       c2     = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
+            The overlap is needed to avoid antialiasing artifacts when edges are not strictly aligned on pixel boundaries.
+            There is an inevitable loss of accuracy saving through an WMF file because of the integer coordinate system.
+            Keep the overlap quite large so that loss of accuracy does not remove an overlap.
+        */
+        destroy_pen();  //this sets the NULL_PEN, otherwise gradient slices may display with boundaries, see longer explanation below
+        Geom::Path cutter;
+        float      rgb[3];
+        U_COLORREF wc,c1,c2;
+        FillRule   frb = SPWR_to_LVFR( (SPWindRule) style->fill_rule.computed);
+        double     doff,doff_base,doff_range;
+        double     divisions= 128.0;
+        int        nstops;
+        int        istop =     1;
+        float      opa;                     // opacity at stop
 
-       doff       = 0.0;
-       doff_base  = 0.0;
-       doff_range = tg->vector.stops[1].offset;              // next or last stop
+        SPRadialGradient *tg = (SPRadialGradient *) (gv.grad);  // linear/radial are the same here
+        nstops = tg->vector.stops.size();
+        sp_color_get_rgb_floatv(&tg->vector.stops[0].color, rgb);
+        opa    = tg->vector.stops[0].opacity;
+        c1     = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
+        sp_color_get_rgb_floatv(&tg->vector.stops[nstops-1].color, rgb);
+        opa    = tg->vector.stops[nstops-1].opacity;
+        c2     = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
 
-       if(gv.mode==DRAW_RADIAL_GRADIENT){
-          Geom::Point xv = gv.p2 - gv.p1;           // X'  vector
-          Geom::Point yv = gv.p3 - gv.p1;           // Y'  vector
-          Geom::Point xuv = Geom::unit_vector(xv);  // X' unit vector
-          double rx = hypot(xv[X],xv[Y]);
-          double ry = hypot(yv[X],yv[Y]);
-          double range    = fmax(rx,ry);            // length along the gradient
-          double step     = range/divisions;        // adequate approximation for gradient
-          double overlap  = step/4.0;               // overlap slices slightly
-          double start;
-          double stop;
-          Geom::PathVector pathvc, pathvr;
+        doff       = 0.0;
+        doff_base  = 0.0;
+        doff_range = tg->vector.stops[1].offset;              // next or last stop
 
-          /*  radial gradient might stop part way through the shape, fill with outer color from there to "infinity".
-              Do this first so that outer colored ring will overlay it.
-          */
-          pathvc = center_elliptical_hole_as_SVG_PathV(gv.p1, rx*(1.0 - overlap/range), ry*(1.0 - overlap/range), asin(xuv[Y]));
-          pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_oddEven, frb);
-          wc = weight_opacity(c2); 
-          (void) create_brush(style, &wc);
-          print_pathv(pathvr, fill_transform);
+        if(gv.mode==DRAW_RADIAL_GRADIENT){
+            Geom::Point xv = gv.p2 - gv.p1;           // X'  vector
+            Geom::Point yv = gv.p3 - gv.p1;           // Y'  vector
+            Geom::Point xuv = Geom::unit_vector(xv);  // X' unit vector
+            double rx = hypot(xv[X],xv[Y]);
+            double ry = hypot(yv[X],yv[Y]);
+            double range    = fmax(rx,ry);            // length along the gradient
+            double step     = range/divisions;        // adequate approximation for gradient
+            double overlap  = step/4.0;               // overlap slices slightly
+            double start;
+            double stop;
+            Geom::PathVector pathvc, pathvr;
 
-          sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
-          opa = tg->vector.stops[istop].opacity;
-          c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
-          
-          for(start = 0.0; start < range; start += step, doff += 1./divisions){
-             stop = start + step + overlap;
-             if(stop > range)stop=range;
-             wc = weight_colors(c1, c2, (doff - doff_base)/(doff_range-doff_base) );
-             (void) create_brush(style, &wc);
+            /*  radial gradient might stop part way through the shape, fill with outer color from there to "infinity".
+                Do this first so that outer colored ring will overlay it.
+            */
+            pathvc = center_elliptical_hole_as_SVG_PathV(gv.p1, rx*(1.0 - overlap/range), ry*(1.0 - overlap/range), asin(xuv[Y]));
+            pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_oddEven, frb);
+            wc = weight_opacity(c2); 
+            (void) create_brush(style, &wc);
+            print_pathv(pathvr, fill_transform);
 
-             pathvc = center_elliptical_ring_as_SVG_PathV(gv.p1, rx*start/range, ry*start/range, rx*stop/range, ry*stop/range, asin(xuv[Y]));
- 
-             pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
-             print_pathv(pathvr, fill_transform);  // show the intersection
+            sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+            opa = tg->vector.stops[istop].opacity;
+            c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
 
-             if(doff >= doff_range - doff_base){
-                istop++;
-                if(istop >= nstops)continue; // could happen on a rounding error
-                doff_base  = doff_range;
-                doff_range = tg->vector.stops[istop].offset;  // next or last stop
-                c1=c2;
-                sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
-                opa = tg->vector.stops[istop].opacity;
-                c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
-             }
-          }
- 
-       }
-       else if(gv.mode == DRAW_LINEAR_GRADIENT){
-          Geom::Point uv  = Geom::unit_vector(gv.p2 - gv.p1);  // unit vector
-          Geom::Point puv = uv.cw();                           // perp. to unit vector
-          double range    = Geom::distance(gv.p1,gv.p2);       // length along the gradient
-          double step     = range/divisions;                   // adequate approximation for gradient
-          double overlap  = step/4.0;                          // overlap slices slightly
-          double start;
-          double stop;
-          Geom::PathVector pathvc, pathvr;
+            for(start = 0.0; start < range; start += step, doff += 1./divisions){
+                stop = start + step + overlap;
+                if(stop > range)stop=range;
+                wc = weight_colors(c1, c2, (doff - doff_base)/(doff_range-doff_base) );
+                (void) create_brush(style, &wc);
 
-          /* before lower end of gradient, overlap first slice position */
-          wc = weight_opacity(c1); 
-          (void) create_brush(style, &wc);
-          pathvc = rect_cutter(gv.p1, uv*(overlap), uv*(-50000.0), puv*50000.0);
-          pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
-          print_pathv(pathvr, fill_transform);
+                pathvc = center_elliptical_ring_as_SVG_PathV(gv.p1, rx*start/range, ry*start/range, rx*stop/range, ry*stop/range, asin(xuv[Y]));
 
-          /* after high end of gradient, overlap last slice poosition */
-          wc = weight_opacity(c2); 
-          (void) create_brush(style, &wc);
-          pathvc = rect_cutter(gv.p2, uv*(-overlap), uv*(50000.0), puv*50000.0);
-          pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
-          print_pathv(pathvr, fill_transform);
-          
-          sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
-          opa = tg->vector.stops[istop].opacity;
-          c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
+                pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
+                print_pathv(pathvr, fill_transform);  // show the intersection
 
-          for(start = 0.0; start < range; start += step, doff += 1./divisions){
-             stop = start + step + overlap;
-             if(stop > range)stop=range;
-             pathvc = rect_cutter(gv.p1, uv*start, uv*stop, puv*50000.0);
+                if(doff >= doff_range - doff_base){
+                    istop++;
+                    if(istop >= nstops)continue; // could happen on a rounding error
+                    doff_base  = doff_range;
+                    doff_range = tg->vector.stops[istop].offset;  // next or last stop
+                    c1=c2;
+                    sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+                    opa = tg->vector.stops[istop].opacity;
+                    c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
+                }
+            }
+        }
+        else if(gv.mode == DRAW_LINEAR_GRADIENT){
+            Geom::Point uv  = Geom::unit_vector(gv.p2 - gv.p1);  // unit vector
+            Geom::Point puv = uv.cw();                           // perp. to unit vector
+            double range    = Geom::distance(gv.p1,gv.p2);       // length along the gradient
+            double step     = range/divisions;                   // adequate approximation for gradient
+            double overlap  = step/4.0;                          // overlap slices slightly
+            double start;
+            double stop;
+            Geom::PathVector pathvc, pathvr;
 
-             wc = weight_colors(c1, c2, (doff - doff_base)/(doff_range-doff_base) );
-             (void) create_brush(style, &wc);
-             Geom::PathVector pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
-             print_pathv(pathvr, fill_transform);  // show the intersection
-             
-             if(doff >= doff_range - doff_base){
-                istop++;
-                if(istop >= nstops)continue; // could happen on a rounding error
-                doff_base  = doff_range;
-                doff_range = tg->vector.stops[istop].offset;  // next or last stop
-                c1=c2;
-                sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
-                opa = tg->vector.stops[istop].opacity;
-                c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
-             }
-          }
-       }
-       else {
-          throw "Fatal programming error in PrintWmf::fill, invalid gradient type detected";
-       }
-       use_fill = false;  // gradients handled, be sure stroke does not use stroke and fill
+            /* before lower end of gradient, overlap first slice position */
+            wc = weight_opacity(c1); 
+            (void) create_brush(style, &wc);
+            pathvc = rect_cutter(gv.p1, uv*(overlap), uv*(-50000.0), puv*50000.0);
+            pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
+            print_pathv(pathvr, fill_transform);
+
+            /* after high end of gradient, overlap last slice poosition */
+            wc = weight_opacity(c2); 
+            (void) create_brush(style, &wc);
+            pathvc = rect_cutter(gv.p2, uv*(-overlap), uv*(50000.0), puv*50000.0);
+            pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
+            print_pathv(pathvr, fill_transform);
+
+            sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+            opa = tg->vector.stops[istop].opacity;
+            c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
+
+            for(start = 0.0; start < range; start += step, doff += 1./divisions){
+                stop = start + step + overlap;
+                if(stop > range)stop=range;
+                pathvc = rect_cutter(gv.p1, uv*start, uv*stop, puv*50000.0);
+
+                wc = weight_colors(c1, c2, (doff - doff_base)/(doff_range-doff_base) );
+                (void) create_brush(style, &wc);
+                Geom::PathVector pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
+                print_pathv(pathvr, fill_transform);  // show the intersection
+
+                if(doff >= doff_range - doff_base){
+                    istop++;
+                    if(istop >= nstops)continue; // could happen on a rounding error
+                    doff_base  = doff_range;
+                    doff_range = tg->vector.stops[istop].offset;  // next or last stop
+                    c1=c2;
+                    sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+                    opa = tg->vector.stops[istop].opacity;
+                    c2 = U_RGBA( 255*rgb[0], 255*rgb[1], 255*rgb[2], 255*opa );
+                }
+            }
+        }
+        else {
+            g_error("Fatal programming error in PrintWmf::fill, invalid gradient type detected");
+        }
+        use_fill = false;  // gradients handled, be sure stroke does not use stroke and fill
     }
     else {
-       /*
-           Inkscape was not calling create_pen for objects with no border. 
-           This was because it never called stroke() (next method).
-           PPT, and presumably others, pick whatever they want for the border if it is not specified, so no border can
-           become a visible border.
-           To avoid this force the pen to NULL_PEN if we can determine that no pen will be needed after the fill.
-       */
-       if (style->stroke.noneSet || style->stroke_width.computed == 0.0){
-          destroy_pen();  //this sets the NULL_PEN
-       }
+        /*
+            Inkscape was not calling create_pen for objects with no border. 
+            This was because it never called stroke() (next method).
+            PPT, and presumably others, pick whatever they want for the border if it is not specified, so no border can
+            become a visible border.
+            To avoid this force the pen to NULL_PEN if we can determine that no pen will be needed after the fill.
+        */
+        if (style->stroke.noneSet || style->stroke_width.computed == 0.0){
+            destroy_pen();  //this sets the NULL_PEN
+        }
 
-       /*  postpone fill in case stroke also required AND all stroke paths closed
-           Dashes converted to line segments will "open" a closed path.
-       */
-       bool all_closed = true;
-       for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit){
-           for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit){
-              if (pit->end_default() != pit->end_closed()) { all_closed=false; }
-           }
-       }
-       if (
+        /*  postpone fill in case stroke also required AND all stroke paths closed
+            Dashes converted to line segments will "open" a closed path.
+        */
+        bool all_closed = true;
+        for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit){
+            for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit){
+                if (pit->end_default() != pit->end_closed()) { all_closed=false; }
+            }
+        }
+        if (
             (style->stroke.noneSet || style->stroke_width.computed == 0.0)               ||
             (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine) ||
             !all_closed
-          )
-       {
-          print_pathv(pathv, fill_transform);  // do any fills. side effect: clears fill_pathv
-          use_fill = false;
-       }
+        ){
+            print_pathv(pathv, fill_transform);  // do any fills. side effect: clears fill_pathv
+            use_fill = false;
+        }
     }
 
-// std::cout << "end fill" << std::endl;
     return 0;
 }
 
 
-unsigned int PrintWmf::stroke (Inkscape::Extension::Print * /*mod*/,
-                       Geom::PathVector const &pathv, const Geom::Affine &/*transform*/, const SPStyle *style,
-                       Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
+unsigned int PrintWmf::stroke (
+    Inkscape::Extension::Print * /*mod*/,
+    Geom::PathVector const &pathv, const Geom::Affine &/*transform*/, const SPStyle *style,
+    Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
 {
-// std::cout << "stroke " << std::endl;
     
+    char *rec = NULL;
     Geom::Affine tf = m_tr_stack.top();
 
     use_stroke = true;
     //  use_fill was set in ::fill, if it is needed, if not, the null brush is used, it should be already set
+
     if (create_pen(style, tf))return 0;
     
     if (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine  ){
-       // convert the path, gets its complete length, and then make a new path with parameter length instead of t
-       Geom::Piecewise<Geom::D2<Geom::SBasis> > tmp_pathpw;  // pathv-> sbasis
-       Geom::Piecewise<Geom::D2<Geom::SBasis> > tmp_pathpw2; // sbasis using arc length parameter
-       Geom::Piecewise<Geom::D2<Geom::SBasis> > tmp_pathpw3; // new (discontinuous) path, composed of dots/dashes
-       Geom::Piecewise<Geom::D2<Geom::SBasis> > first_frag;  // first fragment, will be appended at end
-       int n_dash = style->stroke_dash.n_dash;
-       int i=0; //dash index
-       double tlength;                                       // length of tmp_pathpw
-       double slength=0.0;                                   // start of gragment
-       double elength;                                       // end of gragment
-       for (unsigned int i=0; i < pathv.size(); i++) {
-          tmp_pathpw.concat(pathv[i].toPwSb());
-       }
-       tlength = length(tmp_pathpw,0.1);
-       tmp_pathpw2 = arc_length_parametrization(tmp_pathpw);
+        // convert the path, gets its complete length, and then make a new path with parameter length instead of t
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > tmp_pathpw;  // pathv-> sbasis
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > tmp_pathpw2; // sbasis using arc length parameter
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > tmp_pathpw3; // new (discontinuous) path, composed of dots/dashes
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > first_frag;  // first fragment, will be appended at end
+        int n_dash = style->stroke_dash.n_dash;
+        int i=0; //dash index
+        double tlength;                                       // length of tmp_pathpw
+        double slength=0.0;                                   // start of gragment
+        double elength;                                       // end of gragment
+        for (unsigned int i=0; i < pathv.size(); i++) {
+            tmp_pathpw.concat(pathv[i].toPwSb());
+        }
+        tlength = length(tmp_pathpw,0.1);
+        tmp_pathpw2 = arc_length_parametrization(tmp_pathpw);
 
-       // go around the dash array repeatedly until the entire path is consumed (but not beyond).
-       while(slength < tlength){
-          elength = slength + style->stroke_dash.dash[i++];
-          if(elength > tlength)elength = tlength;
-          Geom::Piecewise<Geom::D2<Geom::SBasis> > fragment(portion(tmp_pathpw2, slength, elength));
-          if(slength){  tmp_pathpw3.concat(fragment); }
-          else {        first_frag = fragment;        }
-          slength = elength;
-          slength += style->stroke_dash.dash[i++];  // the gap
-          if(i>=n_dash)i=0;
-       }
-       tmp_pathpw3.concat(first_frag); // may merge line around start point
-       Geom::PathVector out_pathv = Geom::path_from_piecewise(tmp_pathpw3, 0.01); 
-       print_pathv(out_pathv, tf);
+        // go around the dash array repeatedly until the entire path is consumed (but not beyond).
+        while(slength < tlength){
+            elength = slength + style->stroke_dash.dash[i++];
+            if(elength > tlength)elength = tlength;
+            Geom::Piecewise<Geom::D2<Geom::SBasis> > fragment(portion(tmp_pathpw2, slength, elength));
+            if(slength){  tmp_pathpw3.concat(fragment); }
+            else {        first_frag = fragment;        }
+            slength = elength;
+            slength += style->stroke_dash.dash[i++];  // the gap
+            if(i>=n_dash)i=0;
+        }
+        tmp_pathpw3.concat(first_frag); // may merge line around start point
+        Geom::PathVector out_pathv = Geom::path_from_piecewise(tmp_pathpw3, 0.01); 
+        print_pathv(out_pathv, tf);
     }
     else {
-       print_pathv(pathv, tf);
+        print_pathv(pathv, tf);
     }
 
     use_stroke = false;
     use_fill   = false;
 
+    if(usebk){  // OPAQUE was set, revert to TRANSPARENT
+        usebk = false;
+        rec = U_WMRSETBKMODE_set(U_TRANSPARENT);
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            g_error("Fatal programming error in PrintWmf::stroke at U_WMRSETBKMODE_set");
+        }
+    }
 
-// std::cout << "end stroke " << std::endl;
     return 0;
 }
 
@@ -1353,7 +1356,6 @@ unsigned int PrintWmf::stroke (Inkscape::Extension::Print * /*mod*/,
 // For other paths it sets a few flags and returns.
 bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
-// std::cout << "print_simple_shape " << std::endl <<std::flush;
 
     Geom::PathVector pv = pathv_to_linear( pathv * transform, MAXDISP );
     
@@ -1388,9 +1390,8 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     U_POINT16 *lpPoints = new U_POINT16[moves + lines + curves*3];
     int i = 0;
 
-    /**
-     * For all Subpaths in the <path>
-     */
+    /**  For all Subpaths in the <path> */
+
     for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
     {
         using Geom::X;
@@ -1408,9 +1409,8 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
         lpPoints[i].y = y0;
         i = i + 1;
 
-        /**
-         * For all segments in the subpath
-         */
+        /**  For all segments in the subpath */
+
         for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit)
         {
             if ( is_straight_curve(*cit) )
@@ -1502,11 +1502,11 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
 
         if (polygon) {
             if (rectangle){
-               U_RECT16 rcl = U_RECT16_set((U_POINT16) {lpPoints[0].x, lpPoints[0].y}, (U_POINT16) {lpPoints[2].x, lpPoints[2].y});
-               rec = U_WMRRECTANGLE_set(rcl);
+                U_RECT16 rcl = U_RECT16_set((U_POINT16) {lpPoints[0].x, lpPoints[0].y}, (U_POINT16) {lpPoints[2].x, lpPoints[2].y});
+                rec = U_WMRRECTANGLE_set(rcl);
             }
             else {
-               rec = U_WMRPOLYGON_set(nodes, lpPoints);
+                rec = U_WMRPOLYGON_set(nodes, lpPoints);
             }
         }
         else if (ellipse) {
@@ -1514,7 +1514,7 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
             rec = U_WMRELLIPSE_set(rcl);
         }
         if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-            throw "Fatal programming error in PrintWmf::print_simple_shape at retangle/ellipse/polygon";
+            g_error("Fatal programming error in PrintWmf::print_simple_shape at retangle/ellipse/polygon");
         }
         
         done = true;
@@ -1523,93 +1523,89 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
 
     delete[] lpPoints;
     
-// std::cout << "end simple_shape " << std::endl;
     return done;
 }
 
 /** Some parts based on win32.cpp by Lauris Kaplinski <lauris@kaplinski.com>.  Was a part of Inkscape
-   in the past (or will be in the future?)  Not in current trunk. (4/19/2012)
+    in the past (or will be in the future?)  Not in current trunk. (4/19/2012)
    
-   Limitations of this code:
-   1.  Images lose their rotation, one corner stays in the same place.
-   2.  Transparency is lost on export.  (A limitation of the WMF format.)
-   3.  Probably messes up if row stride != w*4
-   4.  There is still a small memory leak somewhere, possibly in a pixbuf created in a routine
-       that calls this one and passes px, but never removes the rest of the pixbuf.  The first time
-       this is called it leaked 5M (in one test) and each subsequent call leaked around 200K more.
-       If this routine is reduced to 
-         if(1)return(0);
-       and called for a single 1280 x 1024 image then the program leaks 11M per call, or roughly the
-       size of two bitmaps.
+    Limitations of this code:
+    1.  Images lose their rotation, one corner stays in the same place.
+    2.  Transparency is lost on export.  (A limitation of the WMF format.)
+    3.  Probably messes up if row stride != w*4
+    4.  There is still a small memory leak somewhere, possibly in a pixbuf created in a routine
+        that calls this one and passes px, but never removes the rest of the pixbuf.  The first time
+        this is called it leaked 5M (in one test) and each subsequent call leaked around 200K more.
+        If this routine is reduced to 
+            if(1)return(0);
+        and called for a single 1280 x 1024 image then the program leaks 11M per call, or roughly the
+        size of two bitmaps.
 */
 
-unsigned int PrintWmf::image(Inkscape::Extension::Print * /* module */,  /** not used */
-                           unsigned char *rgba_px,   /** array of pixel values, Gdk::Pixbuf bitmap format */
-                           unsigned int w,      /** width of bitmap */
-                           unsigned int h,      /** height of bitmap */
-                           unsigned int rs,     /** row stride (normally w*4) */
-                           Geom::Affine const &tf_ignore,  /** WRONG affine transform, use the one from m_tr_stack */
-                           SPStyle const *style)  /** provides indirect link to image object */
+unsigned int PrintWmf::image(
+    Inkscape::Extension::Print * /* module */,  /** not used */
+    unsigned char *rgba_px,   /** array of pixel values, Gdk::Pixbuf bitmap format */
+    unsigned int w,      /** width of bitmap */
+    unsigned int h,      /** height of bitmap */
+    unsigned int rs,     /** row stride (normally w*4) */
+    Geom::Affine const &tf_ignore,  /** WRONG affine transform, use the one from m_tr_stack */
+    SPStyle const *style)  /** provides indirect link to image object */
 {
-// std::cout << "image " << std::endl;
-     double x1,y1,dw,dh;
-     char *rec = NULL;
-     Geom::Affine tf = m_tr_stack.top();
+    double x1,y1,dw,dh;
+    char *rec = NULL;
+    Geom::Affine tf = m_tr_stack.top();
 
-     rec = U_WMRSETSTRETCHBLTMODE_set(U_COLORONCOLOR);
-     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-        throw "Fatal programming error in PrintWmf::image at EMRHEADER";
-     }
+    rec = U_WMRSETSTRETCHBLTMODE_set(U_COLORONCOLOR);
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+        g_error("Fatal programming error in PrintWmf::image at EMRHEADER");
+    }
 
-     x1= atof(style->object->getAttribute("x"));
-     y1= atof(style->object->getAttribute("y"));
-     dw= atof(style->object->getAttribute("width"));
-     dh= atof(style->object->getAttribute("height"));
-     Geom::Point pLL(x1,y1);
-     Geom::Point pLL2 = pLL * tf;  //location of LL corner in Inkscape coordinates
+    x1= atof(style->object->getAttribute("x"));
+    y1= atof(style->object->getAttribute("y"));
+    dw= atof(style->object->getAttribute("width"));
+    dh= atof(style->object->getAttribute("height"));
+    Geom::Point pLL(x1,y1);
+    Geom::Point pLL2 = pLL * tf;  //location of LL corner in Inkscape coordinates
 
-     char                *px;
-     uint32_t             cbPx;
-     uint32_t             colortype;
-     PU_RGBQUAD           ct;
-     int                  numCt;
-     U_BITMAPINFOHEADER   Bmih;
-     PU_BITMAPINFO        Bmi;
-     colortype = U_BCBM_COLOR32;
-     (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  (char *) rgba_px,  w, h, w*4, colortype, 0, 1);
-     Bmih = bitmapinfoheader_set(w, h, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
-     Bmi = bitmapinfo_set(Bmih, ct);
+    char                *px;
+    uint32_t             cbPx;
+    uint32_t             colortype;
+    PU_RGBQUAD           ct;
+    int                  numCt;
+    U_BITMAPINFOHEADER   Bmih;
+    PU_BITMAPINFO        Bmi;
+    colortype = U_BCBM_COLOR32;
+    (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  (char *) rgba_px,  w, h, w*4, colortype, 0, 1);
+    Bmih = bitmapinfoheader_set(w, h, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
+    Bmi = bitmapinfo_set(Bmih, ct);
 
-     U_POINT16 Dest  = point16_set(round(pLL2[Geom::X] * PX2WORLD), round(pLL2[Geom::Y] * PX2WORLD));
-     U_POINT16 cDest = point16_set(round(dw * PX2WORLD), round(dh * PX2WORLD));
-     U_POINT16 Src   = point16_set(0,0);
-     U_POINT16 cSrc  = point16_set(w,h);
-     rec = U_WMRSTRETCHDIB_set(
-           Dest,                //! Destination UL corner in logical units
-           cDest,               //! Destination W & H in logical units
-           Src,                 //! Source UL corner in logical units
-           cSrc,                //! Source W & H in logical units
-           U_DIB_RGB_COLORS,    //! DIBColors Enumeration
-           U_SRCCOPY,           //! RasterOPeration Enumeration
-           Bmi,                 //! (Optional) bitmapbuffer (U_BITMAPINFO section)
-           h*rs,                //! size in bytes of px          
-           px                   //! (Optional) bitmapbuffer (U_BITMAPINFO section)
-     );
-     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-        throw "Fatal programming error in PrintWmf::image at U_WMRSTRETCHDIB_set";
-     }
-     free(px);
-     free(Bmi);
-     if(numCt)free(ct);
-        
-// std::cout << "end image" << std::endl;
-  return 0;
+    U_POINT16 Dest  = point16_set(round(pLL2[Geom::X] * PX2WORLD), round(pLL2[Geom::Y] * PX2WORLD));
+    U_POINT16 cDest = point16_set(round(dw * PX2WORLD), round(dh * PX2WORLD));
+    U_POINT16 Src   = point16_set(0,0);
+    U_POINT16 cSrc  = point16_set(w,h);
+    rec = U_WMRSTRETCHDIB_set(
+            Dest,                //! Destination UL corner in logical units
+            cDest,               //! Destination W & H in logical units
+            Src,                 //! Source UL corner in logical units
+            cSrc,                //! Source W & H in logical units
+            U_DIB_RGB_COLORS,    //! DIBColors Enumeration
+            U_SRCCOPY,           //! RasterOPeration Enumeration
+            Bmi,                 //! (Optional) bitmapbuffer (U_BITMAPINFO section)
+            h*rs,                //! size in bytes of px          
+            px                   //! (Optional) bitmapbuffer (U_BITMAPINFO section)
+    );
+    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+        g_error("Fatal programming error in PrintWmf::image at U_WMRSTRETCHDIB_set");
+    }
+    free(px);
+    free(Bmi);
+    if(numCt)free(ct);
+    return 0;
 }
 
 // may also be called with a simple_shape or an empty path, whereupon it just returns without doing anything
 unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
-// std::cout << "print_pathv " << std::endl << std::flush;
     char       *rec = NULL;
     PU_POINT16  pt16hold, pt16ptr;
     uint16_t   *n16hold;
@@ -1617,106 +1613,106 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
 
     simple_shape = print_simple_shape(pathv, transform);
     if (!simple_shape && !pathv.empty()){
-       // WMF does not have beziers, need to convert to ONLY  linears with something like this:
-       Geom::PathVector pv = pathv_to_linear( pathv * transform, MAXDISP );
-       
-       /**
-        * For all Subpaths in the <path>
-        */
-        
-       /* If the path consists entirely of closed subpaths use polypolygon, for all paths.  Otherwise use
-           polygon or polyline separately on each path.  The former allows path delimited donuts and the like, which
-           cannot be represented in WMF with polygon or polyline because there is no external way to combine paths
-           as there is in EMF or SVG */ 
-       int nPolys=0;
-       int totPoints = 0;
-       for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
-       {
-           totPoints += 1 + pit->size_default();  // big array, will hold all points, for all polygons.  Size_default ignores first point in each path.
-           if (pit->end_default() == pit->end_closed()) {  nPolys++;        }
-           else {                                          nPolys=0; break; }
-       }
+        // WMF does not have beziers, need to convert to ONLY  linears with something like this:
+        Geom::PathVector pv = pathv_to_linear( pathv * transform, MAXDISP );
 
-       if(nPolys){ // a single polypolygon
-          pt16hold = pt16ptr = (PU_POINT16) malloc(totPoints * sizeof(U_POINT16));
-          if(!pt16ptr)return(false);
-         
-          n16hold = n16ptr = (uint16_t *) malloc(nPolys * sizeof(uint16_t));
-          if(!n16ptr){ free(pt16hold); return(false); }
+        /**  For all Subpaths in the <path> */
 
-          for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
-          {
-              using Geom::X;
-              using Geom::Y;
+        /* If the path consists entirely of closed subpaths use polypolygon, for all paths.  Otherwise use
+            polygon or polyline separately on each path.  The former allows path delimited donuts and the like, which
+            cannot be represented in WMF with polygon or polyline because there is no external way to combine paths
+            as there is in EMF or SVG.
+            For polygons specify the last point the same as the first.  The WMF/EMF manuals say that the 
+            reading program SHOULD close the path, which allows a conforming program not to, potentially rendering
+            a closed path as an open one. */ 
+        int nPolys=0;
+        int totPoints = 0;
+        for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
+        {
+            totPoints += 1 + pit->size_default();  // big array, will hold all points, for all polygons.  Size_default ignores first point in each path.
+            if (pit->end_default() == pit->end_closed()) {  nPolys++;        }
+            else {                                          nPolys=0; break; }
+        }
 
-    
-              *n16ptr++ = 1 + pit->size_default();  // points in the subpath
-              /**
-               * For each segment in the subpath
-               */
-              Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
+        if(nPolys){ // a single polypolygon
+            pt16hold = pt16ptr = (PU_POINT16) malloc(totPoints * sizeof(U_POINT16));
+            if(!pt16ptr)return(false);
 
-              p1[X] = (p1[X] * PX2WORLD);
-              p1[Y] = (p1[Y] * PX2WORLD);              
-              *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+            n16hold = n16ptr = (uint16_t *) malloc(nPolys * sizeof(uint16_t));
+            if(!n16ptr){ free(pt16hold); return(false); }
 
-              for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
-              {
-                 Geom::Point p1 = cit->finalPoint();
+            for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
+            {
+                using Geom::X;
+                using Geom::Y;
 
-                 p1[X] = (p1[X] * PX2WORLD);
-                 p1[Y] = (p1[Y] * PX2WORLD);              
-                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
-              }
 
-          }
-          rec = U_WMRPOLYPOLYGON_set(nPolys, n16hold,pt16hold);
-          if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-             throw "Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYPOLYGON_set";
-          }
-          free(pt16hold);
-          free(n16hold);
-       }
-       else { // one or more polyline or polygons (but not all polygons, that would be the preceding case)
-          for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
-          {
-              using Geom::X;
-              using Geom::Y;
+                *n16ptr++ = 1 + pit->size_default();  // points in the subpath
 
-              /*  Figure out how many points there are, make an array big enough to hold them, and store
-                  all the points.  This is the same for open or closed path.  Note that size_default() ignores
-                  the first point, for some reason.
-              */
-              int nPoints = 1 + pit->size_default();
-              pt16hold = pt16ptr = (PU_POINT16) malloc(nPoints * sizeof(U_POINT16));
-              if(!pt16ptr)break;
-    
-              /**
-               * For each segment in the subpath
-               */
-              Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
+                /**  For each segment in the subpath */
 
-              p1[X] = (p1[X] * PX2WORLD);
-              p1[Y] = (p1[Y] * PX2WORLD);              
-              *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
 
-              for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
-              {
-                 Geom::Point p1 = cit->finalPoint();
+                p1[X] = (p1[X] * PX2WORLD);
+                p1[Y] = (p1[Y] * PX2WORLD);              
+                *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
 
-                 p1[X] = (p1[X] * PX2WORLD);
-                 p1[Y] = (p1[Y] * PX2WORLD);              
-                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
-              }
+                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
+                {
+                    Geom::Point p1 = cit->finalPoint();
 
-              if (pit->end_default() == pit->end_closed()) {  rec = U_WMRPOLYGON_set(nPoints, pt16hold);  }
-              else  {                                         rec = U_WMRPOLYLINE_set(nPoints, pt16hold); }
-              if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-                 throw "Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYGON/POLYLINE_set";
-              }
-              free(pt16hold);
-          }
-       }
+                    p1[X] = (p1[X] * PX2WORLD);
+                    p1[Y] = (p1[Y] * PX2WORLD);              
+                    *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+                }
+
+            }
+            rec = U_WMRPOLYPOLYGON_set(nPolys, n16hold,pt16hold);
+            if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYPOLYGON_set");
+            }
+            free(pt16hold);
+            free(n16hold);
+        }
+        else { // one or more polyline or polygons (but not all polygons, that would be the preceding case)
+            for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit)
+            {
+                using Geom::X;
+                using Geom::Y;
+
+                /*  Figure out how many points there are, make an array big enough to hold them, and store
+                    all the points.  This is the same for open or closed path.  Note that size_default() ignores
+                    the first point, for some reason.
+                */
+                int nPoints = 1 + pit->size_default();
+                pt16hold = pt16ptr = (PU_POINT16) malloc(nPoints * sizeof(U_POINT16));
+                if(!pt16ptr)break;
+
+                /**  For each segment in the subpath */
+
+                Geom::Point p1 = pit->initialPoint(); // This point is special, it isn't in the interator
+
+                p1[X] = (p1[X] * PX2WORLD);
+                p1[Y] = (p1[Y] * PX2WORLD);              
+                *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+
+                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
+                {
+                    Geom::Point p1 = cit->finalPoint();
+
+                    p1[X] = (p1[X] * PX2WORLD);
+                    p1[Y] = (p1[Y] * PX2WORLD);              
+                    *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+                }
+
+                if (pit->end_default() == pit->end_closed()) {  rec = U_WMRPOLYGON_set(nPoints, pt16hold);  }
+                else  {                                         rec = U_WMRPOLYLINE_set(nPoints, pt16hold); }
+                if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                    g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYGON/POLYLINE_set");
+                }
+                free(pt16hold);
+            }
+        }
     }
 
     // WMF has no fill or stroke commands, the draw does it with active pen/brush
@@ -1724,7 +1720,6 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
     // clean out brush and pen, but only after all parts of the draw complete
     if (use_fill){    destroy_brush(); }
     if (use_stroke){  destroy_pen();   }
-// std::cout << "end pathv" << std::endl;
 
     return TRUE;
 }
@@ -1738,7 +1733,6 @@ bool PrintWmf::textToPath(Inkscape::Extension::Print * ext)
 unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *text, Geom::Point const &p,
                     SPStyle const *const style)
 {
-// std::cout << "text "  << std::endl;
     if (!wt) return 0;
 
     char *rec = NULL;
@@ -1773,35 +1767,36 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     //Some not funky ones: Symbol and Verdana.
     //Without a huge table we cannot catch them all, so just the most common problem ones.
     if(FixPPTCharPos){
-      switch(newfont){
-        case CVTSYM:
-          search_short_fflist("Convert To Symbol", &f1, &f2, &f3);
-          break;
-        case CVTZDG:
-          search_short_fflist("Convert To Zapf Dingbats", &f1, &f2, &f3);
-          break;
-        case CVTWDG:
-          search_short_fflist("Convert To Wingdings", &f1, &f2, &f3);
-          break;
-        default:  //also CVTNON
-          search_short_fflist(style->text->font_family.value, &f1, &f2, &f3);
-          break;
-      }
-      if(f2 || f3){
-        int irem = ((int) round(rot)) % 900 ;
-        if(irem <=9 && irem >= -9){
-          fix90n=1; //assume vertical
-          rot  = (double) (((int) round(rot)) - irem);
-          rotb =  rot*M_PI/1800.0;
-          if( abs(rot) == 900.0 ){ fix90n = 2; }
+        switch(newfont){
+            case CVTSYM:
+                search_short_fflist("Convert To Symbol", &f1, &f2, &f3);
+                break;
+            case CVTZDG:
+                search_short_fflist("Convert To Zapf Dingbats", &f1, &f2, &f3);
+                break;
+            case CVTWDG:
+                search_short_fflist("Convert To Wingdings", &f1, &f2, &f3);
+                break;
+            default:  //also CVTNON
+                search_short_fflist(style->text->font_family.value, &f1, &f2, &f3);
+                break;
         }
-      }
+        if(f2 || f3){
+            int irem = ((int) round(rot)) % 900 ;
+            if(irem <=9 && irem >= -9){
+                fix90n=1; //assume vertical
+                rot  = (double) (((int) round(rot)) - irem);
+                rotb =  rot*M_PI/1800.0;
+                if( abs(rot) == 900.0 ){ fix90n = 2; }
+            }
+        }
     }
 
-    /* Note that text font sizes are stored into the WMF as fairly small integers and that limits their precision.  
-       The WMF output files produced here have been designed so that the integer valued pt sizes
-       land right on an integer value in the WMF file, so those are exact.  However, something like 18.1 pt will be
-       somewhat off, so that when it is read back in it becomes 18.11 pt.  (For instance.)   
+    /* 
+        Note that text font sizes are stored into the WMF as fairly small integers and that limits their precision.  
+        The WMF output files produced here have been designed so that the integer valued pt sizes
+        land right on an integer value in the WMF file, so those are exact.  However, something like 18.1 pt will be
+        somewhat off, so that when it is read back in it becomes 18.11 pt.  (For instance.)   
     */
     int textheight = round(-style->font_size.computed * PX2WORLD * std::min(tf.expansionX(),tf.expansionY()));
     if (!hfont) {
@@ -1809,12 +1804,8 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         // Get font face name.  Use changed font name if unicode mapped to one
         // of the special fonts.
         char *facename;
-        if(!newfont){
-           facename = U_Utf8ToLatin1(style->text->font_family.value, 0, NULL);
-        }
-        else {
-           facename = U_Utf8ToLatin1(FontName(newfont), 0, NULL);
-        }
+        if(!newfont){ facename = U_Utf8ToLatin1(style->text->font_family.value, 0, NULL); }
+        else {        facename = U_Utf8ToLatin1(FontName(newfont), 0, NULL);              }
 
         // Scale the text to the minimum stretch. (It tends to stay within bounding rectangles even if
         // it was streteched asymmetrically.)  Few applications support text from WMF which is scaled
@@ -1839,25 +1830,25 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
        
         rec  = wcreatefontindirect_set( &hfont, wht, puf); 
         if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-           throw "Fatal programming error in PrintWmf::text at wcreatefontindirect_set";
+            g_error("Fatal programming error in PrintWmf::text at wcreatefontindirect_set");
         }
         free(puf);
     }
     
     rec = wselectobject_set(hfont, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::text at wselectobject_set";
+        g_error("Fatal programming error in PrintWmf::text at wselectobject_set");
     }
 
     float rgb[3];
     sp_color_get_rgb_floatv( &style->fill.value.color, rgb );
     // only change the text color when it needs to be changed 
     if(memcmp(htextcolor_rgb,rgb,3*sizeof(float))){
-       memcpy(htextcolor_rgb,rgb,3*sizeof(float));
-       rec = U_WMRSETTEXTCOLOR_set(U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]));
-       if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-          throw "Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set";
-       }
+        memcpy(htextcolor_rgb,rgb,3*sizeof(float));
+        rec = U_WMRSETTEXTCOLOR_set(U_RGB(255*rgb[0], 255*rgb[1], 255*rgb[2]));
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            g_error("Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set");
+        }
     }
 
  
@@ -1881,20 +1872,20 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
     //Conditionally handle compensation for PPT WMF import bug (affects PPT 2003-2010, at least)
     if(FixPPTCharPos){
-       if(fix90n==1){ //vertical
-         dx= 0.0;
-         dy= f3 * style->font_size.computed * std::cos( rotb );
-       }
-       else if(fix90n==2){ //horizontal
-         dx= f2 * style->font_size.computed * std::sin( rotb );
-         dy= 0.0;
-       }
-       else {
-         dx= f1 * style->font_size.computed * std::sin( rotb );
-         dy= f1 * style->font_size.computed * std::cos( rotb );
-       }
-       p2[Geom::X] += dx;
-       p2[Geom::Y] += dy;
+        if(fix90n==1){ //vertical
+            dx= 0.0;
+            dy= f3 * style->font_size.computed * std::cos( rotb );
+        }
+        else if(fix90n==2){ //horizontal
+            dx= f2 * style->font_size.computed * std::sin( rotb );
+            dy= 0.0;
+        }
+        else {
+            dx= f1 * style->font_size.computed * std::sin( rotb );
+            dy= f1 * style->font_size.computed * std::cos( rotb );
+        }
+        p2[Geom::X] += dx;
+        p2[Geom::Y] += dy;
     }
 
     p2[Geom::X] = (p2[Geom::X] * PX2WORLD);
@@ -1915,21 +1906,19 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     free(latin1_text);
     free(adx);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-       throw "Fatal programming error in PrintWmf::text at U_WMREXTTEXTOUTW_set";
+        g_error("Fatal programming error in PrintWmf::text at U_WMREXTTEXTOUTW_set");
     }
 
     rec = wdeleteobject_set(&hfont, wht);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-      throw "Fatal programming error in PrintWmf::text at wdeleteobject_set";
+        g_error("Fatal programming error in PrintWmf::text at wdeleteobject_set");
     }
     
-// std::cout << "end text" << std::endl;
     return 0;
 }
 
 void PrintWmf::init (void)
 {
-// std::cout << "init " << std::endl;
     read_system_fflist();
 
     /* WMF print */

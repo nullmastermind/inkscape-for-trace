@@ -22,6 +22,11 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
+#define DIRTY_NONE   0x00
+#define DIRTY_TEXT   0x01
+#define DIRTY_FILL   0x02
+#define DIRTY_STROKE 0x04 // not used currently
+
 typedef struct {
     int type;
     int level;
@@ -40,21 +45,24 @@ typedef struct wmf_device_context {
     bool            stroke_set;
     int             stroke_mode;  // enumeration from drawmode, not used if fill_set is not True
     int             stroke_idx;   // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
+    int             stroke_recidx;// record used to regenerate hatch when it needs to be redone due to bkmode, textmode, etc. change
     bool            fill_set;
     int             fill_mode;    // enumeration from drawmode, not used if fill_set is not True
     int             fill_idx;     // used with DRAW_PATTERN and DRAW_IMAGE to return the appropriate fill
+    int             fill_recidx;  // record used to regenerate hatch when it needs to be redone due to bkmode, textmode, etc. change
+    int             dirty;        // holds the dirty bits for text, stroke, fill
     int             active_pen;   // used when the active object is deleted to set the default values, -1 is none active
     int             active_brush; // ditto
-    int             active_font;  // ditto
-
+    int             active_font;  // ditto. also used to hold object number in case font needs to be remade due to textcolor change.
     U_POINT16       sizeWnd;
     U_POINT16       sizeView;
     U_POINT16       winorg;
     U_POINT16       vieworg;
     double          ScaleInX, ScaleInY;
     double          ScaleOutX, ScaleOutY;
-    U_COLORREF      textColor;
+    uint16_t        bkMode;
     U_COLORREF      bkColor;
+    U_COLORREF      textColor;
     uint16_t        textAlign;
     U_POINT16       cur;
 } WMF_DEVICE_CONTEXT, *PWMF_DEVICE_CONTEXT;
