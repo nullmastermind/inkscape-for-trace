@@ -35,6 +35,8 @@
 
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
+
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
@@ -45,6 +47,14 @@
 class SPAttributeTable;
 class SPDesktop;
 class SPItem;
+
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
+}
 
 namespace Inkscape {
 namespace UI {

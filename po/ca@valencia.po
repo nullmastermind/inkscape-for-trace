@@ -12304,47 +12304,35 @@ msgstr "Camí a l'inrevés"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>No hi ha cap camí</b> per invertir en la selecció."
 
-#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "S'ha canceŀlat el dibuix"
 
-#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "S'està continuant el camí seleccionat"
 
-#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "S'està creant un camí nou"
 
-#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "S'està afegint al camí seleccionat"
 
-#: ../src/pen-context.cpp:790
+#: ../src/pen-context.cpp:660
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per tancar i acabar el camí."
 
-#: ../src/pen-context.cpp:792 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to close and finish the path."
-" <b>Shift</b>to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:803
+#: ../src/pen-context.cpp:670
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>Cliqueu</b> o <b>cliqueu i arrossegueu</b> per continuar el camí des "
 "d'este punt."
 
-#: ../src/pen-context.cpp:805 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-"<b>Shift</b> to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:1683
+#: ../src/pen-context.cpp:1265
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12353,7 +12341,7 @@ msgstr ""
 "<b>Segment de corba</b>: angle %3.2f&#176;, distància %s; amb <b>Ctrl</b> "
 "s'ajusta l'angle; amb <b>Retorn</b> acabeu el camí"
 
-#: ../src/pen-context.cpp:1684
+#: ../src/pen-context.cpp:1266
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12362,14 +12350,7 @@ msgstr ""
 "<b>Segment de línia</b>: angle %3.2f&#176;, distància %s; amb <b>Ctrl</b> "
 "s'ajusta l'angle; amb <b>Retorn</b> acabeu el camí"
 
-#: ../src/pen-context.cpp:1688 
-#, fuzzy, c-format 
-msgid ""
-"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
-"cusp node, <b>Enter</b> to finish the path"
-msgstr ""
-
-#: ../src/pen-context.cpp:1709
+#: ../src/pen-context.cpp:1283
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12378,7 +12359,7 @@ msgstr ""
 "<b>Nansa de corba</b>: %3.2f&#176;, longitud %s; amb <b>Ctrl</b> per ajustar "
 "l'angle"
 
-#: ../src/pen-context.cpp:1730
+#: ../src/pen-context.cpp:1305
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -12387,7 +12368,7 @@ msgstr ""
 "<b>Nansa de corba, simètrica</b>: angle %3.2f&#176;, longitud %s; amb "
 "<b>Ctrl</b> s'ajusta l'angle; amb <b>Maj</b> es mou només esta nansa"
 
-#: ../src/pen-context.cpp:1731
+#: ../src/pen-context.cpp:1306
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12396,7 +12377,7 @@ msgstr ""
 "<b>Nansa de corba</b>: angle %3.2f&#176;, longitud %s; amb <b>Ctrl</b> "
 "s'ajusta l'angle; amb <b>Maj</b> es mou només esta nansa"
 
-#: ../src/pen-context.cpp:1777
+#: ../src/pen-context.cpp:1352
 msgid "Drawing finished"
 msgstr "S'ha finalitzat el dibuix"
 

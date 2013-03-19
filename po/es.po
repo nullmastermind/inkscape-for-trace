@@ -6,7 +6,6 @@
 # Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.
 # Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
 # Lucas Vieites Fariña <lucas@codexion.com>, 2003-2013.
-#: ../share/filters/filters.svg.h:1
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.49\n"

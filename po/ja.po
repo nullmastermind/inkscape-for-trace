@@ -11602,47 +11602,35 @@ msgstr "パスの方向を逆に"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "選択された中に、向きを逆にする<b>パスがありません</b>。"
 
-#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "描画をキャンセルしました"
 
-#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "選択パスを延長"
 
-#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "新規パスを作成"
 
-#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "選択パスに追加"
 
-#: ../src/pen-context.cpp:790
+#: ../src/pen-context.cpp:660
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>クリック</b>または<b>クリック+ドラッグ</b>すると、パスを閉じて終了します。"
 
-#: ../src/pen-context.cpp:792 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to close and finish the path."
-" <b>Shift</b>to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:803
+#: ../src/pen-context.cpp:670
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>クリック</b>または<b>クリック+ドラッグ</b>すると、この点からパスを延長しま"
 "す。"
 
-#: ../src/pen-context.cpp:805 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-"<b>Shift</b> to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:1683
+#: ../src/pen-context.cpp:1265
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11651,7 +11639,7 @@ msgstr ""
 "<b>曲線セグメント</b>: 角度 %3.2f&#176;、距離 %s; <b>Ctrl</b> で角度をスナッ"
 "プ、<b>Enter</b> でパスを完了します。"
 
-#: ../src/pen-context.cpp:1684
+#: ../src/pen-context.cpp:1266
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11660,14 +11648,7 @@ msgstr ""
 "<b>直線セグメント</b>: 角度 %3.2f&#176;、距離 %s; <b>Ctrl</b> で角度をスナッ"
 "プ、<b>Enter</b> でパスを完了します。"
 
-#: ../src/pen-context.cpp:1688 
-#, fuzzy, c-format 
-msgid ""
-"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
-"cusp node, <b>Enter</b> to finish the path"
-msgstr ""
-
-#: ../src/pen-context.cpp:1709
+#: ../src/pen-context.cpp:1283
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11676,7 +11657,7 @@ msgstr ""
 "<b>曲線ハンドル</b>: 角度 %3.2f&#176;、長さ %s。<b>Ctrl</b> で角度をスナップ"
 "します。"
 
-#: ../src/pen-context.cpp:1730
+#: ../src/pen-context.cpp:1305
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -11685,7 +11666,7 @@ msgstr ""
 "<b>曲線ハンドル、対称</b>: 角度 %3.2f&#176;、長さ %s; <b>Ctrl</b> で角度をス"
 "ナップ、<b>Shift</b> でこのハンドルのみ移動します。"
 
-#: ../src/pen-context.cpp:1731
+#: ../src/pen-context.cpp:1306
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11694,7 +11675,7 @@ msgstr ""
 "<b>曲線ハンドル</b>: 角度 %3.2f&#176;、長さ %s; <b>Ctrl</b> で角度をスナッ"
 "プ、<b>Shift</b> でこのハンドルのみ移動します。"
 
-#: ../src/pen-context.cpp:1777
+#: ../src/pen-context.cpp:1352
 msgid "Drawing finished"
 msgstr "描画完了"
 

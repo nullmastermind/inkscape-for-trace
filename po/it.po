@@ -12348,48 +12348,36 @@ msgstr "Inverti tracciato"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>Nessun tracciato</b> nella selezione da invertire."
 
-#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "Disegno cancellato"
 
-#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "Continuazione del tracciato selezionato"
 
-#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "Creazione nuovo tracciato"
 
-#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "Aggiunta al tracciato selezionato"
 
-#: ../src/pen-context.cpp:790
+#: ../src/pen-context.cpp:660
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>Fare clic</b> o <b>fare clic e trascinare</b> per chiudere e terminare il "
 "tracciato."
 
-#: ../src/pen-context.cpp:792 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to close and finish the path."
-" <b>Shift</b>to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:803
+#: ../src/pen-context.cpp:670
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>Fare clic</b> o <b>fare clic e trascinare</b> per continuare il tracciato "
 "da questo punto."
 
-#: ../src/pen-context.cpp:805 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-"<b>Shift</b> to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:1683
+#: ../src/pen-context.cpp:1265
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12398,7 +12386,7 @@ msgstr ""
 "<b>Segmento di curva</b>: angolo %3.2f&#176;, distanza %s; con <b>Ctrl</b> "
 "angoli a scatti; <b>Invio</b> per terminare il tracciato"
 
-#: ../src/pen-context.cpp:1684
+#: ../src/pen-context.cpp:1266
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12407,14 +12395,7 @@ msgstr ""
 "<b>Segmento di linea</b>: angolo %3.2f&#176;, distanza %s; con <b>Ctrl</b> "
 "angoli a scatti; <b>Invio</b> per terminare il tracciato"
 
-#: ../src/pen-context.cpp:1688 
-#, fuzzy, c-format 
-msgid ""
-"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
-"cusp node, <b>Enter</b> to finish the path"
-msgstr ""
-
-#: ../src/pen-context.cpp:1709
+#: ../src/pen-context.cpp:1283
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12423,7 +12404,7 @@ msgstr ""
 "<b>Maniglia curva</b>: angolo %3.2f&#176; lunghezza %s; <b>Ctrl</b> per "
 "angoli a scatti"
 
-#: ../src/pen-context.cpp:1730
+#: ../src/pen-context.cpp:1305
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -12433,7 +12414,7 @@ msgstr ""
 "<b>Ctrl</b> per angoli a scatti, <b>Maiusc</b> per muovere solo questa "
 "maniglia"
 
-#: ../src/pen-context.cpp:1731
+#: ../src/pen-context.cpp:1306
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12442,7 +12423,7 @@ msgstr ""
 "<b>Maniglia di curva</b>: angolo %3.2f&#176;, lunghezza %s; con <b>Ctrl</b> "
 "per angoli a scatti, <b>Maiusc</b> per muovere solo questa maniglia"
 
-#: ../src/pen-context.cpp:1777
+#: ../src/pen-context.cpp:1352
 msgid "Drawing finished"
 msgstr "Disegno finito"
 

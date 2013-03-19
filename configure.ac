@@ -112,7 +112,7 @@ if test "$GCC" = "yes"; then
     CFLAGS="$ink_svd_CFLAGS"
   fi
 
-
+  
   # This Automake variable is only used to suppress warnings in our internal
   # fork of GDL.  Once we get rid of our GDL fork, we can delete this test
   AC_MSG_CHECKING([compiler support for -Wno-unused-but-set-variable])
@@ -123,6 +123,7 @@ if test "$GCC" = "yes"; then
   CFLAGS="$ink_svd_CFLAGS"
   AM_CONDITIONAL(CC_WNO_UNUSED_BUT_SET_VARIABLE_SUPPORTED, test "$ink_opt_ok" = "yes")
   
+
   ####
   # Linker flags...
 
@@ -491,7 +492,7 @@ dnl Check for libwpg for extension
 dnl ******************************
 
 AC_ARG_ENABLE(wpg,
-       [  --disable-wpg           compile without support for WordPerfect Graphics],
+       AS_HELP_STRING([--disable-wpg], [compile without support for WordPerfect Graphics]),
        enable_wpg=$enableval,enable_wpg=yes)
 
 with_libwpg=no
@@ -525,8 +526,8 @@ dnl ********************************
 dnl Check for libvisio for extension
 dnl ********************************
 
-AC_ARG_ENABLE(wpg,
-       [  --disable-visio         compile without support for Microsoft Visio Diagrams],
+AC_ARG_ENABLE(visio,
+       AS_HELP_STRING([--disable-visio], [compile without support for Microsoft Visio Diagrams]),
        enable_visio=$enableval,enable_visio=yes)
 
 with_libvisio=no
@@ -546,8 +547,8 @@ dnl ********************************
 dnl Check for libcdr for extension
 dnl ********************************
 
-AC_ARG_ENABLE(wpg,
-       [  --disable-cdr           compile without support for Microsoft Visio Diagrams],
+AC_ARG_ENABLE(cdr,
+       AS_HELP_STRING([--disable-cdr], [compile without support for Microsoft Visio Diagrams]),
        enable_cdr=$enableval,enable_cdr=yes)
 
 with_libcdr=no
@@ -576,7 +577,7 @@ dnl Check for dbus functionality
 dnl ******************************
 
 AC_ARG_ENABLE(dbusapi,
-       [  --enable-dbusapi       compile with support for DBus interface],
+       AS_HELP_STRING([--enable-dbusapi], [compile with support for DBus interface]),
        enable_dbusapi=$enableval,enable_dbusapi=no)
 
 with_dbus="no"
@@ -609,26 +610,9 @@ AM_CONDITIONAL(USE_IMAGE_MAGICK, test "x$magick_ok" = "xyes")
 AC_SUBST(IMAGEMAGICK_LIBS)
 AC_SUBST(IMAGEMAGICK_CFLAGS)
 
-dnl ***********************************************************************************************************
-dnl Check for a Cairo version that implements user-fonts feature (with a stable API, that is cairo > 1.7.6),
-dnl so that we conditionally add SVGFonts support
-dnl ***********************************************************************************************************
-
-PKG_CHECK_MODULES(CAIRO_USER_FONTS, cairo > 1.7.6, cairouserfonts=yes, cairouserfonts=no)
-if test "x$cairouserfonts" = "xyes"; then
-       AC_DEFINE(ENABLE_SVG_FONTS, 1, [SVG Fonts should be used])
-fi
-
 dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
-
-dnl sigc++-2.0 >= 2.0.12: using "visit_each" not available in 2.0.10
-if test $cc_vers_major -gt 3; then
-  min_sigc_version=2.0.12
-else
-  min_sigc_version=2.0.11
-fi
 
 dnl *********************************
 dnl   Allow experimental GTK+3 build
@@ -646,7 +630,7 @@ if test "x$enable_gtk3" = "xyes"; then
 		AC_DEFINE(WITH_GTKSPELL, 1, [enable gtk spelling widget])
 	fi
 
-	PKG_CHECK_MODULES(INKSCAPE, bdw-gc >= 7.1  gtkmm-3.0 >= 3.2  gdkmm-3.0 >= 3.2 gtk+-3.0 >= 3.2 gdk-3.0 >= 3.2 gdl-3.0 > 3.3.4 glib-2.0 >= 2.28  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= $min_sigc_version  $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4 pango >= 1.24 pangoft2 >= 1.24, with_gtkmm_3_0=yes, with_gtkmm_3_0=no)
+	PKG_CHECK_MODULES(INKSCAPE, bdw-gc >= 7.1  gtkmm-3.0 >= 3.2  gdkmm-3.0 >= 3.2 gtk+-3.0 >= 3.2 gdk-3.0 >= 3.2 gdl-3.0 > 3.3.4 glib-2.0 >= 2.28  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= 2.0.12 $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4 pango >= 1.24 pangoft2 >= 1.24, with_gtkmm_3_0=yes, with_gtkmm_3_0=no)
 
 	if test "x$with_gtkmm_3_0" = "xyes"; then
 		AC_MSG_RESULT([Using EXPERIMENTAL Gtkmm 3 build])
@@ -683,7 +667,7 @@ else
 		AC_DEFINE(WITH_GTKSPELL, 1, [enable gtk spelling widget])
 	fi
 
-	PKG_CHECK_MODULES(INKSCAPE, bdw-gc >= 7.1  glib-2.0 >= 2.28  gtk+-2.0 >= 2.24  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= $min_sigc_version  $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4  gdkmm-2.4  gtkmm-2.4 >= 2.24 pango >= 1.24 pangoft2 >= 1.24)
+	PKG_CHECK_MODULES(INKSCAPE, bdw-gc >= 7.1  glib-2.0 >= 2.28  gtk+-2.0 >= 2.24  libxml-2.0 >= 2.6.11  libxslt >= 1.0.15  cairo >= 1.10 cairomm-1.0 >= 1.9.8 sigc++-2.0 >= 2.0.12 $ink_spell_pkg  gthread-2.0 >= 2.0 libpng >= 1.2 gsl  glibmm-2.4 >= 2.28 giomm-2.4  gdkmm-2.4  gtkmm-2.4 >= 2.24 pango >= 1.24 pangoft2 >= 1.24)
 	
 	# Enable build strict options that should work on most systems unless
 	# the build has been configured explicitly not to do so
@@ -826,7 +810,7 @@ dnl Check for binary relocation support
 dnl Hongli Lai <h.lai@chello.nl>
 
 AC_ARG_ENABLE(binreloc,
-       [  --enable-binreloc       compile with binary relocation support],
+       AS_HELP_STRING([--enable-binreloc], [compile with binary relocation support]),
        enable_binreloc=$enableval,enable_binreloc=no)
 
 AC_MSG_CHECKING(whether binary relocation support should be enabled)
@@ -877,7 +861,7 @@ if test "$enable_binreloc" = "yes"; then
 fi
 
 AC_ARG_ENABLE(osxapp,
-       [  --enable-osxapp         compile with OSX .app data dir paths],
+       AS_HELP_STRING([--enable-osxapp], [compile with OSX .app data dir paths]),
        enable_osxapp=$enableval,enable_osxapp=no)
 if test "$enable_osxapp" = "yes"; then
    AC_DEFINE(ENABLE_OSX_APP_LOCATIONS,,[Build with OSX .app data dir paths?])

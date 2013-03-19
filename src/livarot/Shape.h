@@ -21,9 +21,9 @@
 class Path;
 class FloatLigne;
 
-struct SweepTree;
-struct SweepTreeList;
-struct SweepEventQueue;
+class SweepTree;
+class SweepTreeList;
+class SweepEventQueue;
 
 enum {
   tweak_mode_grow,

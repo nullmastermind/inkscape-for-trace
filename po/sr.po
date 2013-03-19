@@ -12276,46 +12276,34 @@ msgstr "Линија је преусмерена"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "У избору <b>нема линија</b> за преусмеравање."
 
-#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "Цртање је прекинуто"
 
-#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "Настављање изабране линије"
 
-#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "Прављење нове линије"
 
-#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "Додавање изабраној линији"
 
-#: ../src/pen-context.cpp:790
+#: ../src/pen-context.cpp:660
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
 "<b>Клик</b> или <b>клик и повлачење</b> за затварање и завршавање линије."
 
-#: ../src/pen-context.cpp:792 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to close and finish the path."
-" <b>Shift</b>to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:803
+#: ../src/pen-context.cpp:670
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
 "<b>Клик</b> или <b>клик и повлачење</b> за наставак линије од овог чвора."
 
-#: ../src/pen-context.cpp:805 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-"<b>Shift</b> to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:1683
+#: ../src/pen-context.cpp:1265
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12324,7 +12312,7 @@ msgstr ""
 "<b>Сегмент криве</b>: угао %3.2f&#176;, удаљеност %s; <b>Ctrl</b> лепи угао, "
 "<b>Ентер</b> затвара линију"
 
-#: ../src/pen-context.cpp:1684
+#: ../src/pen-context.cpp:1266
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -12333,21 +12321,14 @@ msgstr ""
 "<b>Сегмент дужи</b>: угао %3.2f&#176;, удаљеност %s; <b>Ctrl</b> лепи угао, "
 "<b>Ентер</b> затвара линију"
 
-#: ../src/pen-context.cpp:1688 
-#, fuzzy, c-format 
-msgid ""
-"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
-"cusp node, <b>Enter</b> to finish the path"
-msgstr ""
-
-#: ../src/pen-context.cpp:1709
+#: ../src/pen-context.cpp:1283
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr "<b>Ручка криве</b>: угао %3.2f&#176;, дужина %s; <b>Ctrl</b> лепи угао"
 
-#: ../src/pen-context.cpp:1730
+#: ../src/pen-context.cpp:1305
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -12356,7 +12337,7 @@ msgstr ""
 "<b>Симетрична ручка криве</b>: угао %3.2f&#176;, дужина %s; <b>Ctrl</b> лепи "
 "угао, <b>Shift</b> помера само ову ручку"
 
-#: ../src/pen-context.cpp:1731
+#: ../src/pen-context.cpp:1306
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -12365,7 +12346,7 @@ msgstr ""
 "<b>Ручка криве</b>: угао %3.2f&#176;, дужина %s; <b>Ctrl</b> лепи угао, "
 "<b>Shift</b> помера само ову ручку"
 
-#: ../src/pen-context.cpp:1777
+#: ../src/pen-context.cpp:1352
 msgid "Drawing finished"
 msgstr "Цртање завршено"
 

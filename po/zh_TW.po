@@ -11419,44 +11419,32 @@ msgstr "反轉路徑"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "選取區中<b>沒有路徑</b>可以反轉。"
 
-#: ../src/pen-context.cpp:298 ../src/pencil-context.cpp:561
+#: ../src/pen-context.cpp:250 ../src/pencil-context.cpp:561
 msgid "Drawing cancelled"
 msgstr "已取消繪製"
 
-#: ../src/pen-context.cpp:547 ../src/pencil-context.cpp:286
+#: ../src/pen-context.cpp:488 ../src/pencil-context.cpp:286
 msgid "Continuing selected path"
 msgstr "接續選取的路徑"
 
-#: ../src/pen-context.cpp:557 ../src/pencil-context.cpp:294
+#: ../src/pen-context.cpp:498 ../src/pencil-context.cpp:294
 msgid "Creating new path"
 msgstr "建立新路徑"
 
-#: ../src/pen-context.cpp:559 ../src/pencil-context.cpp:297
+#: ../src/pen-context.cpp:500 ../src/pencil-context.cpp:297
 msgid "Appending to selected path"
 msgstr "添加到選擇的路徑"
 
-#: ../src/pen-context.cpp:790
+#: ../src/pen-context.cpp:660
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr "<b>點擊</b>或<b>點擊拖曳</b>來閉合並結束路徑。"
 
-#: ../src/pen-context.cpp:792 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to close and finish the path."
-" <b>Shift</b>to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:803
+#: ../src/pen-context.cpp:670
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr "<b>點擊</b>或<b>點擊拖曳</b>可從此點接續路徑。"
 
-#: ../src/pen-context.cpp:805 
-msgid ""
-"<b>Click</b> or <b>click and drag</b> to continue the path from this point."
-"<b>Shift</b> to cusp node"
-msgstr ""
-
-#: ../src/pen-context.cpp:1683
+#: ../src/pen-context.cpp:1265
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11465,7 +11453,7 @@ msgstr ""
 "<b>曲線線段</b>：角度 %3.2f&#176;、距離 %s; 按著 <b>Ctrl</b> 可貼齊角度，"
 "<b>Enter</b> 可結束路徑"
 
-#: ../src/pen-context.cpp:1684
+#: ../src/pen-context.cpp:1266
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -11474,14 +11462,7 @@ msgstr ""
 "<b>直線線段</b>：角度 %3.2f&#176;、距離 %s; 按著 <b>Ctrl</b> 可貼齊角度，"
 "<b>Enter</b> 來結束路徑"
 
-#: ../src/pen-context.cpp:1688 
-#, fuzzy, c-format 
-msgid ""
-"<b>Line segment</b>: angle %3.2f#176;, distance %s; with <b>Shift</b> to "
-"cusp node, <b>Enter</b> to finish the path"
-msgstr ""
-
-#: ../src/pen-context.cpp:1709
+#: ../src/pen-context.cpp:1283
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11489,7 +11470,7 @@ msgid ""
 msgstr ""
 "<b>曲線控制點</b>：角度 %3.2f&#176;、長度 %s; 按著 <b>Ctrl</b> 可貼齊角度"
 
-#: ../src/pen-context.cpp:1730
+#: ../src/pen-context.cpp:1305
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -11498,7 +11479,7 @@ msgstr ""
 "<b>曲線控制點，對稱</b>：角度 %3.2f&#176;、長度 %s; 按著 <b>Ctrl</b> 可貼齊角"
 "度， 按著 <b>Shift</b> 可只移動此控制點"
 
-#: ../src/pen-context.cpp:1731
+#: ../src/pen-context.cpp:1306
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -11507,7 +11488,7 @@ msgstr ""
 "<b>曲線控制點</b>：角度 %3.2f&#176;、長度 %s; 按著 <b>Ctrl</b> 可貼齊角度， "
 "按著 <b>Shift</b> 可只移動這個控制點"
 
-#: ../src/pen-context.cpp:1777
+#: ../src/pen-context.cpp:1352
 msgid "Drawing finished"
 msgstr "已完成繪製"
 

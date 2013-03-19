@@ -22,14 +22,21 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
-#include <gtkmm/label.h>
-#include <gtkmm/widget.h>
-#include <gtkmm/togglebutton.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/image.h>
-#include <gtkmm/stockid.h>
+#include <gtkmm/label.h>
+#include <gtkmm/spinbutton.h>
 #include <gtkmm/stock.h>
-#include <gtkmm/table.h>
+#include <gtkmm/stockid.h>
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+#include <gtkmm/togglebutton.h>
+#include <gtkmm/widget.h>
+
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs-init.h>  // gnome_vfs_initialized
 #endif
@@ -125,6 +132,15 @@ private:
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+/** A list of strings that is used both in the preferences, and in the
+    data fields to describe the various values of \c selection_type. */
+static const char * selection_names[SELECTION_NUMBER_OF] = {
+    "page", "drawing", "selection", "custom"};
+
+/** The names on the buttons for the various selection types. */
+static const char * selection_labels[SELECTION_NUMBER_OF] = {
+    N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")};
 
 Export::Export (void) :
     UI::Widget::Panel ("", "/dialogs/export/", SP_VERB_DIALOG_EXPORT),

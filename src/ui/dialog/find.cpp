@@ -15,7 +15,10 @@
 #endif
 
 #include "find.h"
+
+#include <gtkmm/entry.h>
 #include <gtkmm/widget.h>
+
 #include "verbs.h"
 
 #include "message-stack.h"
@@ -56,6 +59,7 @@
 #include "xml/attribute-record.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 namespace Inkscape {
 namespace UI {
