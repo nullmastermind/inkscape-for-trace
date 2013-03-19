@@ -1791,7 +1791,7 @@ static void bspline_spiro_build(SPPenContext *const pc)
     //We create the base curve
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
-    if(pc->sa && !pc->sa->curve->is_empty()){
+    if(pc->sa && !pc->sa->curve->is_empty() &&1>2){
         curve = pc->sa->curve->copy();
         if (pc->sa->start) {
             curve = curve->create_reverse();

@@ -398,7 +398,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
-    if (snap) {
+    if (snap && ( (!held_control(*event) && _pm().isBSpline()) || !_pm().isBSpline())) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
