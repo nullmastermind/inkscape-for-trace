@@ -13,23 +13,20 @@
 #include "style.h"
 #include "document.h"
 #include "document-undo.h"
-#include "selection.h"
-#include "desktop.h"
-#include "verbs.h"
 #include "desktop-handles.h"
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/checkbutton.h>
-#include <glibmm/listhandle.h>
+#include "verbs.h"
 #include "live_effects/lpe-bspline.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
 #include "sp-lpe-item.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/parameter.h"
 #include "display/sp-canvas.h"
 #include <typeinfo>
 #include <2geom/bezier-curve.h>
 #include "helper/geom-curves.h"
 #include "ui/widget/scalar.h"
+#include "selection.h"
 
 // For handling un-continuous paths:
 #include "message-stack.h"
@@ -38,23 +35,29 @@
 
 
 using Inkscape::DocumentUndo;
+
 namespace Inkscape {
 namespace LivePathEffect {
 
 
+
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
-    Effect(lpeobject)
+    Effect(lpeobject),
+    // initialise your parameters here:
+    //testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this, Geom::Point(100,100)),
+    ignoreCusp(_("Ignore cusp nodes:"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
+    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, 33.33),
+    steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2)
 {
-    Glib::ustring title = Glib::ustring(_("Unify weights:"));
-    Glib::ustring tip = Glib::ustring(_("Percent of the with for all poinrs"));
-    registerScal(title,tip);
-    title = Glib::ustring(_("Ignore cusp nodes"));
-    registerNoCusp(title);
-    title = Glib::ustring(_("Reset"));
-    registerReset(title);
-    title = Glib::ustring(_("CTRL handle steps:"));
-    tip = Glib::ustring(_("CTRL handle steps"));
-    registerStepsHandles(title,tip);
+    registerParameter( dynamic_cast<Parameter *>(&ignoreCusp) );
+    registerParameter( dynamic_cast<Parameter *>(&weight) );
+    registerParameter( dynamic_cast<Parameter *>(&steps) );
+    weight.param_set_range(0.00, 100);
+    weight.param_set_increments(1., 1.);
+    weight.param_set_digits(2);
+    steps.param_set_range(1, 10);
+    steps.param_set_increments(1, 1);
+    steps.param_set_digits(0);
 }
 
 LPEBSpline::~LPEBSpline()
@@ -247,108 +250,81 @@ LPEBSpline::doEffect(SPCurve * curve)
 Gtk::Widget *
 LPEBSpline::newWidget()
 {
-    Gtk::VBox * vbox = Gtk::manage( dynamic_cast<Gtk::VBox*>(LPEBSpline::newWidget()));
+    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+
     vbox->set_border_width(5);
-    vbox->pack_start(*noCusp,true,true,2);
-    vbox->pack_start(*scal, true, true,2);
-    vbox->pack_start(*reset, true, true,2);
-    vbox->pack_start(*stepsHandles, true, true,2);
-    return dynamic_cast<Gtk::VBox *> (vbox);
-}
 
-Gtk::Widget *
-LPEBSpline::newScal(Glib::ustring title, Glib::ustring tip)
-{
-    Inkscape::UI::Widget::Scalar *scalIn = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
-    scalIn->setRange(0, 100.);
-    scalIn->setDigits(2);
-    scalIn->setIncrements(1., 5.);
-    scalIn->setValue(33.33);
-    scalIn->setProgrammatically = false;
-    scalIn->addSlider();
-    scalIn->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateAllHandles));
-    return dynamic_cast<Gtk::Widget *>(scalIn);
-}
+    Gtk::Button* defaultWeight = Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight"))));
+    defaultWeight->set_alignment(0.0, 0.5);
+    Gtk::Widget* defaultWeightWidget = dynamic_cast<Gtk::Widget *>(defaultWeight);
+    defaultWeight->signal_clicked().connect(sigc::mem_fun (*this,&LPEBSpline::toDefaultWeight));
+    vbox->pack_start(*defaultWeightWidget, true, true,2);
 
-Gtk::Widget *
-LPEBSpline::newNoCusp(Glib::ustring title)
-{
-    Gtk::CheckButton * noCuspIn = Gtk::manage( new Gtk::CheckButton(title,true));
-    noCuspIn->set_alignment(0.0, 0.5);
-    return dynamic_cast<Gtk::Widget *>(noCuspIn);
-}
-
-Gtk::Widget *
-LPEBSpline::newReset(Glib::ustring title)
-{
-    Gtk::Button * resetIn = Gtk::manage(new Gtk::Button(title));
-    resetIn->signal_clicked().connect(sigc::mem_fun (*this,&LPEBSpline::resetHandles));
-    resetIn->set_alignment(0.0, 0.5);
-    return dynamic_cast<Gtk::Widget *>(resetIn);
-}
-
-Gtk::Widget *
-LPEBSpline::newStepsHandles(Glib::ustring title, Glib::ustring tip)
-{
-    Inkscape::UI::Widget::Scalar *stepsIn = Gtk::manage( new Inkscape::UI::Widget::Scalar(title, tip));
-    stepsIn->setRange(1, 10);
-    stepsIn->setDigits(0);
-    stepsIn->setIncrements(1.,1.);
-    stepsIn->setValue(2);
-    stepsIn->setProgrammatically = false;
-    stepsIn->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::updateSteps));
-    return dynamic_cast<Gtk::Widget *>(stepsIn);
-}
-
-void
-LPEBSpline::resetHandles(){
-    Inkscape::UI::Widget::Scalar * scalIn = dynamic_cast<Inkscape::UI::Widget::Scalar *>(scal);
-    scalIn->setValue(33.33);
-    updateAllHandles();
-}
-
-void
-LPEBSpline::updateSteps(){
-    Inkscape::UI::Widget::Scalar * stepsIn = dynamic_cast<Inkscape::UI::Widget::Scalar *>(stepsHandles);
-    updateStepsValue(stepsIn->getValue());
-}
-
-void
-LPEBSpline::updateAllHandles()
-{
-    Inkscape::UI::Widget::Scalar * scalIn = dynamic_cast<Inkscape::UI::Widget::Scalar *>(scal);
-    double value = scalIn->getValue()/100;
-    Gtk::CheckButton * noCuspIn = dynamic_cast<Gtk::CheckButton *>(noCusp);
-    bool noCusp = noCuspIn->get_active();
-    SPDesktop *desktop = inkscape_active_desktop(); // TODO: Is there a better method to find the item's desktop?
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    for (GSList *items = (GSList *) selection->itemList();
-         items != NULL;
-         items = items->next) {
-        if (SP_IS_LPE_ITEM((SPLPEItem *)items->data) && sp_lpe_item_has_path_effect((SPLPEItem *)items->data)){
-            LivePathEffect::LPEBSpline *lpe_bsp = NULL;
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM((SPLPEItem *)items->data),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
-            if(lpe_bsp){
-                SPItem *item = (SPItem *) items->data;
-                SPPath *path = SP_PATH(item);
-                SPCurve *curve = path->get_curve_for_edit();
-                LPEBSpline::doBSplineFromWidget(curve,value,noCusp);
-                gchar *str = sp_svg_write_path(curve->get_pathvector());
-                path->getRepr()->setAttribute("inkscape:original-d", str);
-                g_free(str);
-                curve->unref();
-                SPDesktop *desktop = inkscape_active_desktop();
-                desktop->clearWaitingCursor();
-                DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_LPE,
-                                     _("Modified the weight of the BSpline"));
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter * param = *it;
+            Gtk::Widget * widg = param->param_newWidget();
+            if(param->param_key == "weight"){
+                Inkscape::UI::Widget::Scalar * widgRegistered = dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg);
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::toWeight));
+            }
+            Glib::ustring * tip = param->param_getTooltip();
+            if (widg) {
+                vbox->pack_start(*widg, true, true, 2);
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
+                }
             }
         }
+
+        ++it;
     }
+    return dynamic_cast<Gtk::Widget *>(vbox);
+}
+
+void 
+LPEBSpline::toDefaultWeight(){
+double weightValue = 0.3333;
+changeWeight(weightValue);
+weight.param_set_value(33.33);
+gtk_widget_draw(GTK_WIDGET(LPEBSpline::newWidget()), NULL);
+}
+
+void 
+LPEBSpline::toWeight(){
+double weightValue = weight/100;
+changeWeight(weightValue);
 }
 
 void
-LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
+LPEBSpline::changeWeight(double weightValue)
 {
+    SPDesktop *desktop = inkscape_active_desktop();
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    GSList *items = (GSList *) selection->itemList();
+    SPItem *item = (SPItem *)g_slist_nth(items,0)->data;
+    SPPath *path = SP_PATH(item);
+    SPCurve *curve = path->get_curve_for_edit();
+    LPEBSpline::doBSplineFromWidget(curve,weightValue,ignoreCusp);
+    gchar *str = sp_svg_write_path(curve->get_pathvector());
+    path->getRepr()->setAttribute("inkscape:original-d", str);
+    g_free(str);
+    curve->unref();
+    desktop->clearWaitingCursor();
+    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_LPE,
+                         _("Modified the weight of the BSpline"));
+}
+
+void
+LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue , bool ignoreCusp)
+{
+    using Geom::X;
+    using Geom::Y;
     if(curve->get_segment_count() < 2)
         return;
     // Make copy of old path as it is changed during processing
@@ -404,19 +380,25 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
             pointAt0 = in->first_segment()->initialPoint();
             SBasisIn = in->first_segment()->toSBasis();
-            if(cubic){                
-                if(!noCusp || (*cubic)[1] != in->first_segment()->initialPoint())
-                    pointAt1 = SBasisIn.valueAt(value);
-                else
+            if(cubic){
+                if(!ignoreCusp || !Geom::are_near((*cubic)[1],in->first_segment()->initialPoint())){
+                    pointAt1 = SBasisIn.valueAt(weightValue);
+                    pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
+                }else{
                     pointAt1 = in->first_segment()->initialPoint();
-                if(!noCusp || (*cubic)[2] != in->first_segment()->finalPoint())
-                    pointAt2 = SBasisIn.valueAt(1-value);
-                else
-                    pointAt2 = in->first_segment()->finalPoint();
+                }
+                if(!ignoreCusp || !Geom::are_near((*cubic)[2],in->first_segment()->finalPoint())){
+                    pointAt2 = SBasisIn.valueAt(1-weightValue);
+                    pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
             }else{
-                if(!noCusp){
-                    pointAt1 = SBasisIn.valueAt(value);
-                    pointAt2 = SBasisIn.valueAt(1-value);
+                    pointAt2 = in->first_segment()->finalPoint();
+                }
+            }else{
+                if(!ignoreCusp){
+                    pointAt1 = SBasisIn.valueAt(weightValue);
+                    pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
+                    pointAt2 = SBasisIn.valueAt(1-weightValue);
+                    pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                 }else{
                     pointAt1 = in->first_segment()->initialPoint();
                     pointAt2 = in->first_segment()->finalPoint();
@@ -433,18 +415,24 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double value , bool noCusp)
             SBasisOut = out->first_segment()->toSBasis();
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
             if(cubic){
-                if(!noCusp || (*cubic)[1] != out->first_segment()->initialPoint())
-                    nextPointAt1 = SBasisOut.valueAt(value);
-                else
+                if(!ignoreCusp || !Geom::are_near((*cubic)[1],out->first_segment()->initialPoint())){
+                    nextPointAt1 = SBasisOut.valueAt(weightValue);
+                    nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
+                }else{
                     nextPointAt1 = out->first_segment()->initialPoint();
-                if(!noCusp || (*cubic)[2] != out->first_segment()->finalPoint())
-                    nextPointAt2 = SBasisOut.valueAt(1-value);
-                else
+                }
+                if(!ignoreCusp || !Geom::are_near((*cubic)[2],out->first_segment()->finalPoint())){
+                    nextPointAt2 = SBasisOut.valueAt(1-weightValue);
+                    nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
+                }else{
                     nextPointAt2 = out->first_segment()->finalPoint();
+                }
             }else{
-                if(!noCusp){
-                    nextPointAt1 = SBasisOut.valueAt(value);
-                    nextPointAt2 = SBasisOut.valueAt(1-value);
+                if(!ignoreCusp){
+                    nextPointAt1 = SBasisOut.valueAt(weightValue);
+                    nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
+                    nextPointAt2 = SBasisOut.valueAt(1-weightValue);
+                    nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
                 }else{
                     nextPointAt1 = out->first_segment()->initialPoint();
                     nextPointAt2 = out->first_segment()->finalPoint();

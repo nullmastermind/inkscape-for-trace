@@ -89,7 +89,6 @@ public:
 
     virtual void setVisible(bool);
     virtual void move(Geom::Point const &p);
-
     virtual void setPosition(Geom::Point const &p);
     inline void setRelativePos(Geom::Point const &p);
     void setLength(double len);
@@ -109,8 +108,6 @@ protected:
     virtual bool _eventHandler(SPEventContext *event_context, GdkEvent *event);
     //Bspline
     virtual void handle_2button_press();
-    virtual void setControlBsplineSteps(int controlBsplineStepsValue){controlBsplineSteps = controlBsplineStepsValue;};
-    int controlBsplineSteps;
     //BSpline End
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
@@ -129,7 +126,7 @@ private:
     // so a naked pointer is OK and allows setting it during Node's construction
     SPCtrlLine *_handle_line;
     bool _degenerate; // True if the handle is retracted, i.e. has zero length. This is used often internally so it makes sense to cache this
-
+    int controlBsplineSteps;
     /**
      * Control point of a cubic Bezier curve in a path.
      *

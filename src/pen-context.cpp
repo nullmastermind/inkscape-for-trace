@@ -19,7 +19,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <cstring>
 #include <string>
-
 #include "pen-context.h"
 #include "sp-namedview.h"
 #include "sp-metrics.h"
@@ -69,7 +68,6 @@
 #define INKSCAPE_LPE_BSPLINE_C
 #include "live_effects/lpe-bspline.h"
 #include <2geom/nearest-point.h>
-
 //BSpline End
 using Inkscape::ControlManager;
 
@@ -1580,8 +1578,6 @@ static void bspline_spiro_start_anchor_on(SPPenContext *const pc)
     if (pc->sa->start) {
         tmpCurve = tmpCurve->create_reverse();
     }
-    pc->sa->curve->reset();
-    pc->sa->curve = tmpCurve;
 }
 
 static void bspline_spiro_start_anchor_off(SPPenContext *const pc)
@@ -1619,12 +1615,7 @@ static void bspline_spiro_motion(SPPenContext *const pc, bool shift){
     using Geom::X;
     using Geom::Y;
     SPCurve *tmpCurve = new SPCurve();
-    if(shift)
-        pc->p[2] = pc->p[3];
-    else
-        pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
-        pc->p[2] = Geom::Point(pc->p[2][X] + 0.0625,pc->p[2][Y] + 0.0625);
-
+    pc->p[2] = pc->p[3];
     if(pc->green_curve->is_empty() && !pc->sa){
         pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
     }else if(!pc->green_curve->is_empty()){
@@ -1633,6 +1624,7 @@ static void bspline_spiro_motion(SPPenContext *const pc, bool shift){
         tmpCurve = pc->sa->curve->copy();
         if(pc->sa->start)
             tmpCurve = tmpCurve->create_reverse();
+
     }
     if(!tmpCurve->is_empty() && !pc->red_curve->is_empty()){
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
@@ -1649,7 +1641,8 @@ static void bspline_spiro_motion(SPPenContext *const pc, bool shift){
                 SBasisWPower = WPower->first_segment()->toSBasis();
                 WPower->reset();
                 pc->p[1] = SBasisWPower.valueAt(WP);
-                pc->p[1] = Geom::Point(pc->p[1][X] + 0.0625,pc->p[1][Y] + 0.0625);
+                if(!Geom::are_near(pc->p[1],pc->p[0]))
+                    pc->p[1] = Geom::Point(pc->p[1][X] + 0.0625,pc->p[1][Y] + 0.0625);
             }else{
                 pc->p[1] =  (*cubic)[3] + (Geom::Point)((*cubic)[3] - (*cubic)[2] );
             }

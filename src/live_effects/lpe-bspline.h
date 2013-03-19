@@ -8,11 +8,19 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/bool.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
 
 class LPEBSpline : public Effect {
+
+private:
+    BoolParam ignoreCusp;
+    ScalarParam weight;
+
+    LPEBSpline(const LPEBSpline&);
+    LPEBSpline& operator=(const LPEBSpline&);
 
 public:
     LPEBSpline(LivePathEffectObject *lpeobject);
@@ -28,49 +36,16 @@ public:
 
     virtual Gtk::Widget * newWidget();
 
-    int steps;
+    virtual void changeWeight(double weightValue);
 
-protected:
+    virtual void toDefaultWeight();
 
-    Gtk::Widget* scal;
+    virtual void toWeight();
 
-    Gtk::Widget* noCusp;
+    ScalarParam steps;
 
-    Gtk::Widget* reset;
-
-    Gtk::Widget* stepsHandles;
-
-    virtual void registerScal(Glib::ustring title, Glib::ustring tip){scal = LPEBSpline::newScal(title,tip);};
-
-    virtual void registerNoCusp(Glib::ustring title){noCusp = LPEBSpline::newNoCusp(title);};
-
-    virtual void registerReset(Glib::ustring title){reset = LPEBSpline::newReset(title);};
-
-    virtual void registerStepsHandles(Glib::ustring title, Glib::ustring tip){stepsHandles = LPEBSpline::newStepsHandles(title,tip);};
-
-    virtual Gtk::Widget* newScal(Glib::ustring title, Glib::ustring tip);
-
-    virtual Gtk::Widget* newNoCusp(Glib::ustring title);
-
-    virtual Gtk::Widget* newReset(Glib::ustring title);
-    
-    virtual Gtk::Widget* newStepsHandles(Glib::ustring title, Glib::ustring tip);
-
-    virtual void updateAllHandles();
-
-    virtual void resetHandles();
-
-    virtual void updateSteps();
-
-    virtual void updateStepsValue(int stepsValue){steps=stepsValue;};
-
-private:
-    LPEBSpline(const LPEBSpline&);
-    LPEBSpline& operator=(const LPEBSpline&);
-    
 };
 
 }; //namespace LivePathEffect
 }; //namespace Inkscape
-
 #endif

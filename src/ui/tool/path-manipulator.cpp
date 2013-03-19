@@ -1191,7 +1191,7 @@ int PathManipulator::getControlBsplineSteps(){
     if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
             lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
         if(lpe_bsp){
-            return lpe_bsp->steps;
+            return lpe_bsp->steps+1;
         }
     }
     return 2;
