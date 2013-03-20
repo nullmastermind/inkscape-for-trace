@@ -143,7 +143,7 @@ void Handle::move(Geom::Point const &new_pos)
     double pos = 0;
     Handle *h = NULL;
     Handle *h2 = NULL;
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline){
         isBSpline = true;
         typedef ControlPointSelection::Set Set;
         Set &nodes = _parent->_selection.allPoints();
@@ -324,7 +324,7 @@ bool Handle::_eventHandler(SPEventContext *event_context, GdkEvent *event)
 
 //BSpline
 void Handle::handle_2button_press(){
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline){
         Handle *h = NULL;
         Handle *h2 = NULL;
         double pos = 0;
@@ -386,19 +386,19 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         }
         new_pos = result;
         //BSpline
-        if(_pm().isBSpline()){
+        if(_pm().isBSpline){
             Handle *h = NULL;
             double pos = 0;
             h = this;
             setPosition(new_pos);
-            pos = ceilf(_pm().BSplineHandlePosition(h)*_pm().getControlBsplineSteps())/_pm().getControlBsplineSteps();
+            pos = ceilf(_pm().BSplineHandlePosition(h)*_pm().controlBSplineSteps)/_pm().controlBSplineSteps;
             new_pos=_pm().BSplineHandleReposition(h,pos);
         }
         //BSpline End
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
-    if (snap && ( (!held_control(*event) && _pm().isBSpline()) || !_pm().isBSpline())) {
+    if (snap && ( (!held_control(*event) && _pm().isBSpline) || !_pm().isBSpline)) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
@@ -625,7 +625,7 @@ void Node::move(Geom::Point const &new_pos)
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline){
         if(prevNode)
             prevPos = _pm().BSplineHandlePosition(prevNode->front());
         pos = _pm().BSplineHandlePosition(n->front());
@@ -637,7 +637,7 @@ void Node::move(Geom::Point const &new_pos)
     //BSpline End
     setPosition(new_pos);
     //BSpline
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline){
         if(prevNode)
             prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevPos));
         if(nextNode)
@@ -651,7 +651,7 @@ void Node::move(Geom::Point const &new_pos)
     // with the segment
     _fixNeighbors(old_pos, new_pos);
     //BSpline
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline){
         Handle* front = &_front;
         Handle* back = &_back;
         _front.setPosition(_pm().BSplineHandleReposition(front,pos));
@@ -774,7 +774,7 @@ void Node::setType(NodeType type, bool update_handles)
     }
 
     //BSpline
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline){
         if (isEndNode()) return;
         Handle* front = &_front;
         Handle* back = &_back;
