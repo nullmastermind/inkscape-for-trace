@@ -113,7 +113,12 @@ Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node 
     _degenerate(true),controlBsplineSteps(2)
 {
     setVisible(false);
-    isBSpline = _pm().isBSpline;
+    std::string strPathManipulatorName = "PathManipulator";
+    if(std::string(typeid(_pm()).name()) == strPathManipulatorName)
+        isBSpline = _pm().isBSpline;
+    else
+        //Esto no es cierto realmente pero evita que casque al crear nodos
+        isBSpline = false;
 }
 
 Handle::~Handle()
@@ -580,7 +585,12 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _handles_shown(false)
 {
     // NOTE we do not set type here, because the handles are still degenerate
-    isBSpline = _pm().isBSpline;
+    std::string strPathManipulatorName = "PathManipulator";
+    if(std::string(typeid(_pm()).name()) == strPathManipulatorName)
+        isBSpline = _pm().isBSpline;
+    else
+        //Esto no es cierto realmente pero evita que casque al crear nodos
+        isBSpline = false;
 }
 
 Node const *Node::_next() const
