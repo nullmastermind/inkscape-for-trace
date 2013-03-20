@@ -15,20 +15,13 @@ namespace LivePathEffect {
 
 class LPEBSpline : public Effect {
 
-private:
-    BoolParam ignoreCusp;
-    ScalarParam weight;
-
-    LPEBSpline(const LPEBSpline&);
-    LPEBSpline& operator=(const LPEBSpline&);
-
 public:
     LPEBSpline(LivePathEffectObject *lpeobject);
     virtual ~LPEBSpline();
 
-    virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
+    virtual void createAndApply(const char* name, SPDocument *doc, SPItem *item);
 
-    virtual void doOnApply(SPLPEItem const* lpeitem);
+    virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
 
     virtual void doEffect(SPCurve * curve);
 
@@ -43,6 +36,13 @@ public:
     virtual void toWeight();
 
     ScalarParam steps;
+
+private:
+    BoolParam ignoreCusp;
+    ScalarParam weight;
+
+    LPEBSpline(const LPEBSpline&);
+    LPEBSpline& operator=(const LPEBSpline&);
 
 };
 

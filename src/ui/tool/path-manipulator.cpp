@@ -1176,7 +1176,12 @@ void PathManipulator::_createControlPointsFromGeometry()
 bool PathManipulator::isBSpline(){
     LivePathEffect::LPEBSpline *lpe_bsp = NULL;
     if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
+        Inkscape::LivePathEffect::Effect* thisEffect = sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE);
+        if(thisEffect){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
+        }else{
+            lpe_bsp = NULL;
+        }
     }else{
         lpe_bsp = NULL;
     }

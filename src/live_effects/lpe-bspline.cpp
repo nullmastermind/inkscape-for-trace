@@ -11,6 +11,7 @@
 #include <glibmm/i18n.h>
 #include "sp-path.h"
 #include "style.h"
+#include "document-private.h"
 #include "document.h"
 #include "document-undo.h"
 #include "desktop-handles.h"
@@ -45,9 +46,9 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // initialise your parameters here:
     //testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this, Geom::Point(100,100)),
+    steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2),
     ignoreCusp(_("Ignore cusp nodes:"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
-    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, 33.33),
-    steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2)
+    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, 33.33)
 {
     registerParameter( dynamic_cast<Parameter *>(&ignoreCusp) );
     registerParameter( dynamic_cast<Parameter *>(&weight) );
@@ -64,11 +65,24 @@ LPEBSpline::~LPEBSpline()
 {
 }
 
-void
-LPEBSpline::doOnApply(SPLPEItem const* lpeitem)
+void 
+LPEBSpline::createAndApply(const char* name, SPDocument *doc, SPItem *item)
 {
-    if (!SP_IS_SHAPE(lpeitem)) {
+    if (!SP_IS_SHAPE(item)) {
         g_warning("LPE BSpline can only be applied to shapes (not groups).");
+    }else{
+        // Path effect definition
+        Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+        Inkscape::XML::Node *repr = xml_doc->createElement("inkscape:path-effect");
+        repr->setAttribute("effect", name);
+
+        doc->getDefs()->getRepr()->addChild(repr, NULL); // adds to <defs> and assigns the 'id' attribute
+        const gchar * repr_id = repr->attribute("id");
+        Inkscape::GC::release(repr);
+
+        gchar *href = g_strdup_printf("#%s", repr_id);
+        sp_lpe_item_add_path_effect(SP_LPE_ITEM(item), href, true);
+        g_free(href);
     }
 }
 
@@ -289,16 +303,15 @@ LPEBSpline::newWidget()
 
 void 
 LPEBSpline::toDefaultWeight(){
-double weightValue = 0.3333;
-changeWeight(weightValue);
-weight.param_set_value(33.33);
-gtk_widget_draw(GTK_WIDGET(LPEBSpline::newWidget()), NULL);
+    double weightValue = 0.3334;
+    weight.param_set_value(33.33);
+    changeWeight(weightValue);
 }
 
 void 
 LPEBSpline::toWeight(){
-double weightValue = weight/100;
-changeWeight(weightValue);
+    double weightValue = weight/100;
+    changeWeight(weightValue);
 }
 
 void
