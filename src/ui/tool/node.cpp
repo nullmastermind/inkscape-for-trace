@@ -113,6 +113,7 @@ Handle::Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node 
     _degenerate(true),controlBsplineSteps(2)
 {
     setVisible(false);
+    isBSpline = _pm().isBSpline;
 }
 
 Handle::~Handle()
@@ -143,8 +144,7 @@ void Handle::move(Geom::Point const &new_pos)
     double pos = 0;
     Handle *h = NULL;
     Handle *h2 = NULL;
-    if(_pm().isBSpline){
-        isBSpline = true;
+    if(isBSpline){
         typedef ControlPointSelection::Set Set;
         Set &nodes = _parent->_selection.allPoints();
         for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
@@ -324,7 +324,7 @@ bool Handle::_eventHandler(SPEventContext *event_context, GdkEvent *event)
 
 //BSpline
 void Handle::handle_2button_press(){
-    if(_pm().isBSpline){
+    if(isBSpline){
         Handle *h = NULL;
         Handle *h2 = NULL;
         double pos = 0;
@@ -386,7 +386,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         }
         new_pos = result;
         //BSpline
-        if(_pm().isBSpline){
+        if(isBSpline){
             Handle *h = NULL;
             double pos = 0;
             h = this;
@@ -398,7 +398,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
-    if (snap && ( (!held_control(*event) && _pm().isBSpline) || !_pm().isBSpline)) {
+    if (snap && ( (!held_control(*event) && isBSpline) || !isBSpline)) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
@@ -580,6 +580,7 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _handles_shown(false)
 {
     // NOTE we do not set type here, because the handles are still degenerate
+    isBSpline = _pm().isBSpline;
 }
 
 Node const *Node::_next() const
@@ -625,7 +626,7 @@ void Node::move(Geom::Point const &new_pos)
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
-    if(_pm().isBSpline){
+    if(isBSpline){
         if(prevNode)
             prevPos = _pm().BSplineHandlePosition(prevNode->front());
         pos = _pm().BSplineHandlePosition(n->front());
@@ -637,7 +638,7 @@ void Node::move(Geom::Point const &new_pos)
     //BSpline End
     setPosition(new_pos);
     //BSpline
-    if(_pm().isBSpline){
+    if(isBSpline){
         if(prevNode)
             prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevPos));
         if(nextNode)
@@ -651,7 +652,7 @@ void Node::move(Geom::Point const &new_pos)
     // with the segment
     _fixNeighbors(old_pos, new_pos);
     //BSpline
-    if(_pm().isBSpline){
+    if(isBSpline){
         Handle* front = &_front;
         Handle* back = &_back;
         _front.setPosition(_pm().BSplineHandleReposition(front,pos));
@@ -773,27 +774,6 @@ void Node::setType(NodeType type, bool update_handles)
         return;
     }
 
-    //BSpline
-    if(_pm().isBSpline){
-        if (isEndNode()) return;
-        Handle* front = &_front;
-        Handle* back = &_back;
-        double pos = 0.3334;
-        switch (type) {
-            case NODE_CUSP:
-                if(update_handles)
-                    pos = 0;
-                else
-                    pos = _pm().BSplineHandlePosition(front);;
-            break;
-            default: break;
-        }
-        type = NODE_CUSP;
-        _front.setPosition(_pm().BSplineHandleReposition(front,pos));
-        _back.setPosition(_pm().BSplineHandleReposition(back,pos));
-    }
-    //BSpline End
-
     // if update_handles is true, adjust handle positions to match the node type
     // handle degenerate handles appropriately
     if (update_handles) {
@@ -882,6 +862,15 @@ void Node::setType(NodeType type, bool update_handles)
 
     _setControlType(nodeTypeToCtrlType(_type));
     updateState();
+    //BSpline
+    if(isBSpline){
+        Handle* front = &_front;
+        Handle* back = &_back;
+        double  pos = _pm().BSplineHandlePosition(front);
+        _front.setPosition(_pm().BSplineHandleReposition(front,pos));
+        _back.setPosition(_pm().BSplineHandleReposition(back,pos));
+    }
+    //BSpline End
 }
 
 void Node::pickBestType()
