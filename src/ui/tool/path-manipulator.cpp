@@ -1197,13 +1197,19 @@ double PathManipulator::BSplineHandlePosition(Handle *h){
     double pos = 0;
     Node *n = h->parent();
     SPCurve *lineInsideNodes = new SPCurve();
-    Node * nextNode = n->nodeToward(h);
-    Geom::Point positionH = h->position();
-    positionH = Geom::Point(positionH[X] - 0.0625,positionH[Y] - 0.0625);
-    if(nextNode && n->position() != h->position()){
-        lineInsideNodes->moveto(n->position());
-        lineInsideNodes->lineto(nextNode->position());
-        pos = Geom::nearest_point(positionH,*lineInsideNodes->first_segment());
+    Node * nextNode = NULL;
+    try{
+        nextNode = n->nodeToward(h);
+    }catch( char * str ) {
+    }
+    if(nextNode){
+        Geom::Point positionH = h->position();
+        positionH = Geom::Point(positionH[X] - 0.0625,positionH[Y] - 0.0625);
+        if(nextNode && n->position() != h->position()){
+            lineInsideNodes->moveto(n->position());
+            lineInsideNodes->lineto(nextNode->position());
+            pos = Geom::nearest_point(positionH,*lineInsideNodes->first_segment());
+        }
     }
     return pos;
 }
@@ -1220,7 +1226,11 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     Node *n = h->parent();
     Geom::D2< Geom::SBasis > SBasisInsideNodes;
     SPCurve *lineInsideNodes = new SPCurve();
-    Node * nextNode = n->nodeToward(h);
+    Node * nextNode = NULL;
+    try{
+        nextNode = n->nodeToward(h);
+    }catch( char * str ) {
+    }
     if(nextNode && pos != 0){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
