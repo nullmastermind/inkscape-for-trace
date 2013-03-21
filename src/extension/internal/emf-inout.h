@@ -136,6 +136,7 @@ typedef struct {
 class Emf : Inkscape::Extension::Implementation::Implementation { //This is a derived class
 
 public:
+
     Emf(); // Empty constructor
 
     virtual ~Emf();//Destructor
@@ -152,42 +153,44 @@ public:
     static void init(void);//Initialize the class
 
 private:
+
 protected:
-   static pixel_t    *pixel_at (bitmap_t * bitmap, int x, int y);
-   static void        my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length);
-   static void        toPNG(PMEMPNG accum, int width, int height, const char *px);
-   static uint32_t    sethexcolor(U_COLORREF color);
-   static void        print_document_to_file(SPDocument *doc, const gchar *filename);
-   static double      current_scale(PEMF_CALLBACK_DATA d);
-   static std::string current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int useoffset);
-   static double      current_rotation(PEMF_CALLBACK_DATA d);
-   static void        enlarge_hatches(PEMF_CALLBACK_DATA d);
-   static int         in_hatches(PEMF_CALLBACK_DATA d, char *test);
-   static uint32_t    add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchColor);
-   static void        enlarge_images(PEMF_CALLBACK_DATA d);
-   static int         in_images(PEMF_CALLBACK_DATA d, char *test);
-   static uint32_t    add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t cbBmi, 
-                         uint32_t iUsage, uint32_t offBits, uint32_t offBmi);
-   static void        output_style(PEMF_CALLBACK_DATA d, int iType);
-   static double      _pix_x_to_point(PEMF_CALLBACK_DATA d, double px);
-   static double      _pix_y_to_point(PEMF_CALLBACK_DATA d, double py);
-   static double      pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py);
-   static double      pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py);
-   static double      pix_to_abs_size(PEMF_CALLBACK_DATA d, double px);
-   static std::string pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y);
-   static void        select_pen(PEMF_CALLBACK_DATA d, int index);
-   static void        select_extpen(PEMF_CALLBACK_DATA d, int index);
-   static void        select_brush(PEMF_CALLBACK_DATA d, int index);
-   static void        select_font(PEMF_CALLBACK_DATA d, int index);
-   static void        delete_object(PEMF_CALLBACK_DATA d, int index);
-   static void        insert_object(PEMF_CALLBACK_DATA d, int index, int type, PU_ENHMETARECORD pObj);
-   static int         AI_hack(PU_EMRHEADER pEmr);
-   static uint32_t   *unknown_chars(size_t count);
-   static void        common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
-                         double dx, double dy, double dw, double dh, int sx, int sy, int sw, int sh,  
-                         uint32_t iUsage, uint32_t offBits, uint32_t cbBits, uint32_t offBmi, uint32_t cbBmi);
-   static int         myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d);
-   static void        free_emf_strings(EMF_STRINGS name);
+
+    static pixel_t    *pixel_at (bitmap_t * bitmap, int x, int y);
+    static void        my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t length);
+    static void        toPNG(PMEMPNG accum, int width, int height, const char *px);
+    static uint32_t    sethexcolor(U_COLORREF color);
+    static void        print_document_to_file(SPDocument *doc, const gchar *filename);
+    static double      current_scale(PEMF_CALLBACK_DATA d);
+    static std::string current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int useoffset);
+    static double      current_rotation(PEMF_CALLBACK_DATA d);
+    static void        enlarge_hatches(PEMF_CALLBACK_DATA d);
+    static int         in_hatches(PEMF_CALLBACK_DATA d, char *test);
+    static uint32_t    add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hatchColor);
+    static void        enlarge_images(PEMF_CALLBACK_DATA d);
+    static int         in_images(PEMF_CALLBACK_DATA d, char *test);
+    static uint32_t    add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint32_t cbBmi, 
+                            uint32_t iUsage, uint32_t offBits, uint32_t offBmi);
+    static void        output_style(PEMF_CALLBACK_DATA d, int iType);
+    static double      _pix_x_to_point(PEMF_CALLBACK_DATA d, double px);
+    static double      _pix_y_to_point(PEMF_CALLBACK_DATA d, double py);
+    static double      pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py);
+    static double      pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py);
+    static double      pix_to_abs_size(PEMF_CALLBACK_DATA d, double px);
+    static std::string pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y);
+    static void        select_pen(PEMF_CALLBACK_DATA d, int index);
+    static void        select_extpen(PEMF_CALLBACK_DATA d, int index);
+    static void        select_brush(PEMF_CALLBACK_DATA d, int index);
+    static void        select_font(PEMF_CALLBACK_DATA d, int index);
+    static void        delete_object(PEMF_CALLBACK_DATA d, int index);
+    static void        insert_object(PEMF_CALLBACK_DATA d, int index, int type, PU_ENHMETARECORD pObj);
+    static int         AI_hack(PU_EMRHEADER pEmr);
+    static uint32_t   *unknown_chars(size_t count);
+    static void        common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
+                            double dx, double dy, double dw, double dh, int sx, int sy, int sw, int sh,  
+                            uint32_t iUsage, uint32_t offBits, uint32_t cbBits, uint32_t offBmi, uint32_t cbBmi);
+    static int         myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DATA d);
+    static void        free_emf_strings(EMF_STRINGS name);
 
 };
 

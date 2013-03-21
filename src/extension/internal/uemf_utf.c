@@ -10,8 +10,8 @@
 
 /*
 File:      uemf_utf.c
-Version:   0.0.3
-Date:      24-JAN-2013
+Version:   0.0.4
+Date:      19-MAR-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -489,6 +489,7 @@ char *U_Latin1ToUtf8(
    size_t srclen,dstlen,status;
    if(max){ srclen = max; }
    else {   srclen = strlen(src)+1; }       // include terminator, will waste some space
+   dstlen = (1 + 2*srclen);                 // This should always work because all latin1 convert to 1 or 2 byte UTF8, it might waste some space
    dst2 = dst = calloc(dstlen,1);
    if(!dst)return(NULL);
    iconv_t conv = iconv_open("UTF-8", "LATIN1"); // everything should translate

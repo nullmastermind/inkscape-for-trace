@@ -61,11 +61,10 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-
-static U_RECTL rc_old;
-static bool clipset = false;
-static uint32_t ICMmode=0;  // not used yet, but code to read it from EMF implemented
-static uint32_t BLTmode=0;
+static U_RECTL  rc_old  = rectl_set(pointl_set(-1,-1),pointl_set(-1,-1));
+static bool     clipset = false;
+static uint32_t ICMmode = 0;  // not used yet, but code to read it from EMF implemented
+static uint32_t BLTmode = 0;
 
 /** Construct a PNG in memory from an RGB from the EMF file
 
@@ -291,8 +290,8 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     if (ext == NULL)
         return;
 
-    bool new_val         = mod->get_param_bool("textToPath");
-    bool new_FixPPTCharPos     = mod->get_param_bool("FixPPTCharPos");  // character position bug
+    bool new_val                  = mod->get_param_bool("textToPath");
+    bool new_FixPPTCharPos        = mod->get_param_bool("FixPPTCharPos");  // character position bug
     // reserve FixPPT2 for opacity bug.  Currently EMF does not export opacity values
     bool new_FixPPTDashLine       = mod->get_param_bool("FixPPTDashLine");  // dashed line bug
     bool new_FixPPTGrad2Polys     = mod->get_param_bool("FixPPTGrad2Polys");  // gradient bug
@@ -1415,7 +1414,7 @@ Emf::select_font(PEMF_CALLBACK_DATA d, int index)
             d->dc[d->level].font_name = strdup("Arial");  // Default font, EMF spec says device can pick whatever it wants
         }
     }
-    d->dc[d->level].style.baseline_shift.value = ((pEmr->elfw.elfLogFont.lfEscapement + 3600) % 3600) / 10;   // use baseline_shift instead of text_transform to avoid overflow
+    d->dc[d->level].style.baseline_shift.value = round((double)((pEmr->elfw.elfLogFont.lfEscapement + 3600) % 3600)) / 10.0;   // use baseline_shift instead of text_transform to avoid overflow
 }
 
 void

@@ -1289,7 +1289,7 @@ Wmf::select_font(PWMF_CALLBACK_DATA d, int index)
     else {  // Malformed WMF might specify an empty font name
         d->dc[d->level].font_name = strdup("Arial");  // Default font, WMF spec says device can pick whatever it wants
     }
-    d->dc[d->level].style.baseline_shift.value = ((font.Escapement + 3600) % 3600) / 10;   // use baseline_shift instead of text_transform to avoid overflow
+    d->dc[d->level].style.baseline_shift.value = round((double)((font.Escapement + 3600) % 3600) / 10.0);   // use baseline_shift instead of text_transform to avoid overflow
 }
 
 /*  Find the first free hole where an object may be stored.
@@ -2037,7 +2037,8 @@ std::cout << "BEFORE DRAW"
             d->mask |= wmr_mask;
 
             tmp_path << "\n\tL " << pix_to_xy( d, pt16.x, pt16.y) << " ";
-         }
+            break;
+        }
         case U_WMR_MOVETO:
         {
             dbg_str << "<!-- U_WMR_MOVETO -->\n";

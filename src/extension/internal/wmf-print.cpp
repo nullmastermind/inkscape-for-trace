@@ -863,7 +863,7 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
         double scale = sqrt( (p[X]*p[X]) + (p[Y]*p[Y]) ) / sqrt(2);
 
         if(!style->stroke_width.computed){return 0;}  //if width is 0 do not (reset) the pen, it should already be NULL_PEN
-        linewidth = MAX( 1, (uint32_t) (scale * style->stroke_width.computed * PX2WORLD) );
+        linewidth = MAX( 1, (uint32_t) round(scale * style->stroke_width.computed * PX2WORLD) );
 
         // most WMF readers will ignore linecap and linejoin, but set them anyway.  Inkscape itself can read them back in.
  
@@ -1374,13 +1374,8 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
         {
             nodes++;
             
-            if ( is_straight_curve(*cit) ) {
-                lines++;
-            }
-            else if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*cit)) {
-                cubic = cubic;
-                curves++;
-            }
+            if ( is_straight_curve(*cit) ) { lines++;  }
+            else if (&*cit) {                curves++; }
         }
     }
 
@@ -1618,8 +1613,11 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
 
         /**  For all Subpaths in the <path> */
 
-        /* If the path consists entirely of closed subpaths use polypolygon, for all paths.  Otherwise use
-            polygon or polyline separately on each path.  The former allows path delimited donuts and the like, which
+        /* If the path consists entirely of closed subpaths use one polypolygon.
+            Otherwise use a mix of  polygon or polyline separately on each path.
+            If the polyline turns out to be single line segments, use a series of MOVETO/LINETO instead,
+            because WMF has no POLYPOLYLINE.
+            The former allows path delimited donuts and the like, which
             cannot be represented in WMF with polygon or polyline because there is no external way to combine paths
             as there is in EMF or SVG.
             For polygons specify the last point the same as the first.  The WMF/EMF manuals say that the 
@@ -1634,7 +1632,7 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
             else {                                          nPolys=0; break; }
         }
 
-        if(nPolys){ // a single polypolygon
+        if(nPolys > 1){ // a single polypolygon, a single polygon falls through to the else
             pt16hold = pt16ptr = (PU_POINT16) malloc(totPoints * sizeof(U_POINT16));
             if(!pt16ptr)return(false);
 
@@ -1647,7 +1645,7 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
                 using Geom::Y;
 
 
-                *n16ptr++ = 1 + pit->size_default();  // points in the subpath
+                *n16ptr++ = pit->size_default();  // points in the subpath
 
                 /**  For each segment in the subpath */
 
@@ -1657,7 +1655,7 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
                 p1[Y] = (p1[Y] * PX2WORLD);              
                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
 
-                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
+                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit)
                 {
                     Geom::Point p1 = cit->finalPoint();
 
@@ -1679,12 +1677,16 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
             {
                 using Geom::X;
                 using Geom::Y;
-
+                
+                /* Malformatted Polylines with a sequence like M L M M L have been seen, the 2nd M does nothing 
+                   and that point must not go into the output. */
+                if(!(pit->size_default())){ continue; }
                 /*  Figure out how many points there are, make an array big enough to hold them, and store
-                    all the points.  This is the same for open or closed path.  Note that size_default() ignores
-                    the first point, for some reason.
+                    all the points.  This is the same for open or closed path.  This gives the upper bound for
+                    the number of points.  The actual number used is calculated on the fly.
                 */
                 int nPoints = 1 + pit->size_default();
+                
                 pt16hold = pt16ptr = (PU_POINT16) malloc(nPoints * sizeof(U_POINT16));
                 if(!pt16ptr)break;
 
@@ -1695,8 +1697,9 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
                 p1[X] = (p1[X] * PX2WORLD);
                 p1[Y] = (p1[Y] * PX2WORLD);              
                 *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
+                nPoints = 1;
 
-                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit)
+                for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit, nPoints++)
                 {
                     Geom::Point p1 = cit->finalPoint();
 
@@ -1705,10 +1708,27 @@ unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Af
                     *pt16ptr++ = point16_set((int32_t) round(p1[X]), (int32_t) round(p1[Y]));
                 }
 
-                if (pit->end_default() == pit->end_closed()) {  rec = U_WMRPOLYGON_set(nPoints, pt16hold);  }
-                else  {                                         rec = U_WMRPOLYLINE_set(nPoints, pt16hold); }
-                if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-                    g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYGON/POLYLINE_set");
+                if (pit->end_default() == pit->end_closed()) {
+                    rec = U_WMRPOLYGON_set(nPoints,  pt16hold); 
+                    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                        g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRPOLYGON_set");
+                    }
+                }
+                else if(nPoints>2) {
+                    rec = U_WMRPOLYLINE_set(nPoints, pt16hold);
+                    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                        g_error("Fatal programming error in PrintWmf::print_pathv at U_POLYLINE_set");
+                    }
+                }
+                else if(nPoints == 2) {
+                    rec = U_WMRMOVETO_set(pt16hold[0]);
+                    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                        g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRMOVETO_set");
+                    }
+                    rec = U_WMRLINETO_set(pt16hold[1]);
+                    if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+                        g_error("Fatal programming error in PrintWmf::print_pathv at U_WMRLINETO_set");
+                    }
                 }
                 free(pt16hold);
             }
@@ -1814,8 +1834,8 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         PU_FONT puf = U_FONT_set(
             textheight, 
             0,        
-            rot,
-            rot,
+            round(rot),
+            round(rot),
             transweight(style->font_weight.computed),
             (style->font_style.computed == SP_CSS_FONT_STYLE_ITALIC),
             style->text_decoration.underline,

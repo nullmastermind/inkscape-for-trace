@@ -972,7 +972,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
         double scale = sqrt( (p[X]*p[X]) + (p[Y]*p[Y]) ) / sqrt(2);
 
         if(!style->stroke_width.computed){return 0;}  //if width is 0 do not (reset) the pen, it should already be NULL_PEN
-        uint32_t linewidth = MAX( 1, (uint32_t) (scale * style->stroke_width.computed * PX2WORLD) );
+        uint32_t linewidth = MAX( 1, (uint32_t) round(scale * style->stroke_width.computed * PX2WORLD) );
 
         if (     style->stroke_linecap.computed == 0){   linecap = U_PS_ENDCAP_FLAT;   }
         else if (style->stroke_linecap.computed == 1){   linecap = U_PS_ENDCAP_ROUND;  }
@@ -1516,13 +1516,8 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
         {
             nodes++;
             
-            if ( is_straight_curve(*cit) ) {
-                lines++;
-            }
-            else if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const*>(&*cit)) {
-                cubic = cubic;
-                curves++;
-            }
+            if ( is_straight_curve(*cit) ) { lines++;  }
+            else if(&*cit) {                 curves++; }
         }
     }
 
@@ -2044,8 +2039,8 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         U_LOGFONT lf = logfont_set(
             textheight, 
             0,        
-            rot,
-            rot,
+            round(rot),
+            round(rot),
             transweight(style->font_weight.computed),
             (style->font_style.computed == SP_CSS_FONT_STYLE_ITALIC),
             style->text_decoration.underline,

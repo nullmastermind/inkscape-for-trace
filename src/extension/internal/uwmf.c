@@ -17,8 +17,8 @@
 
 /*
 File:      uwmf.c
-Version:   0.0.10
-Date:      27-FEB-2013
+Version:   0.0.11
+Date:      19-MAR-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -1496,8 +1496,8 @@ int  wmf_finish(
    // Set the header fields which were unknown up until this point
   
    
-   if((((PU_WMRPLACEABLE) wt->buf)->Key == 0x9AC6CDD7)){ off = U_SIZE_WMRPLACEABLE; }
-   else {                                                off = 0;                   }
+   if(((PU_WMRPLACEABLE) wt->buf)->Key == 0x9AC6CDD7){ off = U_SIZE_WMRPLACEABLE; }
+   else {                                              off = 0;                   }
    
    record = (wt->buf + off);
    tmp = (wt->used)/2;
