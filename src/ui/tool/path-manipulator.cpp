@@ -664,12 +664,6 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
 
         start.prev()->front()->setPosition(result[1]);
         end->back()->setPosition(result[2]);
-        //BSpline
-        if(isBSpline){
-            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front()));
-            end->back()->setPosition(BSplineHandleReposition(end->back()));
-        }
-        //BSpline End
     }
 
     // We can't use nl->erase(start, end), because it would break when the stretch
@@ -680,6 +674,12 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
+    //BSpline
+    if(isBSpline){
+        start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front()));
+        end->back()->setPosition(BSplineHandleReposition(end->back()));
+    }
+    //BSpline End
 
     return del_len;
 }
