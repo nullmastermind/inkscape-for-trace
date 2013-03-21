@@ -89,15 +89,14 @@ public:
     void updateHandles();
     void setControlsTransform(Geom::Affine const &);
     void hideDragPoint();
-    //BSpline
-    int getControlBsplineSteps();
-    //BSpline End
     MultiPathManipulator &mpm() { return _multi_path_manipulator; }
 
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
         bool search_unselected, bool closest);
-
+    //BSpline
+    bool isBSpline;
+    //BSpline End
     // this is necessary for Tab-selection in MultiPathManipulator
     SubpathList &subpathList() { return _subpaths; }
 
@@ -108,7 +107,7 @@ private:
 
     void _createControlPointsFromGeometry();
     //BSpline
-    bool isBSpline();
+    int controlBSplineSteps;
     double BSplineHandlePosition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h,double pos);

@@ -120,7 +120,6 @@ protected:
     virtual bool _hasDragTips() const { return true; }
 
 private:
-
     inline PathManipulator &_pm();
     Node *_parent; // the handle's lifetime does not extend beyond that of the parent node,
     // so a naked pointer is OK and allows setting it during Node's construction

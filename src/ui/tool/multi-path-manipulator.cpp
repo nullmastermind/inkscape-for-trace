@@ -307,7 +307,7 @@ void MultiPathManipulator::setNodeType(NodeType type)
         Node *node = dynamic_cast<Node*>(*i);
         if (node) {
             retract_handles &= (node->type() == NODE_CUSP);
-            node->setType(type,true);
+            node->setType(type);
         }
     }
 

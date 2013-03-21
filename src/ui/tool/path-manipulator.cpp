@@ -149,6 +149,19 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
+
+    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+    if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
+        Inkscape::LivePathEffect::Effect* thisEffect = sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE);
+        if(thisEffect){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
+        }
+    }
+    isBSpline = false;
+    if(lpe_bsp){
+        isBSpline = true;
+        controlBSplineSteps = lpe_bsp->steps+1;
+    }
 }
 
 PathManipulator::~PathManipulator()
@@ -651,6 +664,12 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
 
         start.prev()->front()->setPosition(result[1]);
         end->back()->setPosition(result[2]);
+        //BSpline
+        if(isBSpline){
+            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front()));
+            end->back()->setPosition(BSplineHandleReposition(end->back()));
+        }
+        //BSpline End
     }
 
     // We can't use nl->erase(start, end), because it would break when the stretch
@@ -897,7 +916,7 @@ void PathManipulator::showHandles(bool show)
 void PathManipulator::showOutline(bool show)
 {
     //BSpline
-    if(isBSpline()) show = true;
+    if(isBSpline) show = true;
     //BSpline
     if (show == _show_outline) return;
     _show_outline = show;
@@ -1172,35 +1191,6 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
-
-bool PathManipulator::isBSpline(){
-    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
-    if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
-        Inkscape::LivePathEffect::Effect* thisEffect = sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE);
-        if(thisEffect){
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
-        }else{
-            lpe_bsp = NULL;
-        }
-    }else{
-        lpe_bsp = NULL;
-    }
-    if(lpe_bsp){
-        return true;
-    }
-    return false;
-}
-
-int PathManipulator::getControlBsplineSteps(){
-    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
-    if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE)->getLPEObj()->get_lpe());
-        if(lpe_bsp){
-            return lpe_bsp->steps+1;
-        }
-    }
-    return 2;
-}
 double PathManipulator::BSplineHandlePosition(Handle *h){
     using Geom::X;
     using Geom::Y;
