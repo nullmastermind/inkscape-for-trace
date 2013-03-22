@@ -113,7 +113,7 @@ enum BarId {
 
 #define BAR_ID_KEY "BarIdValue"
 #define HANDLE_POS_MARK "x-inkscape-pos"
-
+#define WITH_MESH
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
 
 
