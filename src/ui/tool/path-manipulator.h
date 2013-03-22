@@ -19,6 +19,9 @@
 #include <boost/weak_ptr.hpp>
 #include "ui/tool/node.h"
 #include "ui/tool/manipulator.h"
+//BSpline
+#include "live_effects/lpe-bspline.h"
+//BSpline end
 
 struct SPCanvasItem;
 class SPCurve;
@@ -94,7 +97,10 @@ public:
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
         bool search_unselected, bool closest);
-
+    //BSpline
+    bool isBSpline;
+    int controlBSplineSteps;
+    //BSpline End
     // this is necessary for Tab-selection in MultiPathManipulator
     SubpathList &subpathList() { return _subpaths; }
 
@@ -105,8 +111,7 @@ private:
 
     void _createControlPointsFromGeometry();
     //BSpline
-    int controlBSplineSteps;
-    bool isBSpline;
+    LivePathEffect::LPEBSpline *lpe_bsp;
     double BSplineHandlePosition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h,double pos);

@@ -120,9 +120,6 @@ protected:
     virtual bool _hasDragTips() const { return true; }
 
 private:
-    //BSpline
-    bool isBSpline;
-    //BSpline End
     inline PathManipulator &_pm();
     Node *_parent; // the handle's lifetime does not extend beyond that of the parent node,
     // so a naked pointer is OK and allows setting it during Node's construction
@@ -238,9 +235,7 @@ protected:
     virtual bool _hasDragTips() const { return true; }
 
 private:
-    //BSpline
-    bool isBSpline;
-    //BSpline End
+
     Node(Node const &);
     void _fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos);
     void _updateAutoHandles();

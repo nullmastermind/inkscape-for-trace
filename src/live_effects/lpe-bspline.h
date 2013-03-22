@@ -38,6 +38,7 @@ public:
     ScalarParam steps;
 
 private:
+
     BoolParam ignoreCusp;
     ScalarParam weight;
 
