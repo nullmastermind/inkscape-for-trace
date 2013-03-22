@@ -9,9 +9,7 @@
  * Copyright (C) 2009 Authors
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-//BSpline
-#include "live_effects/lpe-bspline.h"
-//BSpline end
+
 #include "live_effects/lpe-powerstroke.h"
 #include <string>
 #include <sstream>
@@ -46,6 +44,9 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
+//BSpline
+#include "live_effects/lpe-bspline.h"
+//BSpline end
 
 namespace Inkscape {
 namespace UI {
@@ -149,8 +150,8 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
-
-    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+    //BSpline
+    lpe_bsp = NULL;
     if (SP_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))){
         Inkscape::LivePathEffect::Effect* thisEffect = sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(_path),Inkscape::LivePathEffect::BSPLINE);
         if(thisEffect){
@@ -162,6 +163,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         isBSpline = true;
         controlBSplineSteps = lpe_bsp->steps+1;
     }
+    //BSpline End
 }
 
 PathManipulator::~PathManipulator()
@@ -676,8 +678,15 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
     }
     //BSpline
     if(isBSpline){
-        start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front()));
-        end->back()->setPosition(BSplineHandleReposition(end->back()));
+        double pos = 0;
+        if(start.prev()){
+            pos = BSplineHandlePosition(start.prev()->back());
+            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),pos));
+        }
+        if(end){
+            pos = BSplineHandlePosition(end->front());
+            end->back()->setPosition(BSplineHandleReposition(end->back(),pos));
+        }
     }
     //BSpline End
 
@@ -1192,16 +1201,19 @@ void PathManipulator::_createControlPointsFromGeometry()
 }
 
 double PathManipulator::BSplineHandlePosition(Handle *h){
+    //BSpline
+    if(lpe_bsp){
+        controlBSplineSteps = lpe_bsp->steps+1;
+    }
+    //BSpline End
     using Geom::X;
     using Geom::Y;
     double pos = 0;
     Node *n = h->parent();
     SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = NULL;
-    try{
+    if(!n->isEndNode())
         nextNode = n->nodeToward(h);
-    }catch( char * str ) {
-    }
     if(nextNode){
         Geom::Point positionH = h->position();
         positionH = Geom::Point(positionH[X] - 0.0625,positionH[Y] - 0.0625);
@@ -1227,10 +1239,8 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     Geom::D2< Geom::SBasis > SBasisInsideNodes;
     SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = NULL;
-    try{
+    if(!n->isEndNode())
         nextNode = n->nodeToward(h);
-    }catch( char * str ) {
-    }
     if(nextNode && pos != 0){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
