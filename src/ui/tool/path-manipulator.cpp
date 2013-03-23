@@ -841,11 +841,6 @@ void PathManipulator::scaleHandle(Node *n, int which, int dir, bool pixel)
         relpos *= ((rellen + length_change) / rellen);
     }
     h->setRelativePos(relpos);
-
-    if(isBSpline){
-        double  pos = BSplineHandlePosition(h);
-        h->setPosition(BSplineHandleReposition(h,pos));
-    }
     update();
     gchar const *key = which < 0 ? "handle:scale:left" : "handle:scale:right";
     _commit(_("Scale handle"), key);
@@ -870,12 +865,6 @@ void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
     }
 
     h->setRelativePos(h->relativePos() * Geom::Rotate(angle));
-
-    if(isBSpline){
-        double  pos = BSplineHandlePosition(h);
-        h->setPosition(BSplineHandleReposition(h,pos));
-    }
-
     update();
 
     gchar const *key = which < 0 ? "handle:rotate:left" : "handle:rotate:right";
