@@ -389,7 +389,8 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             double pos = 0;
             h = this;
             setPosition(new_pos);
-            pos = ceilf(_pm().BSplineHandlePosition(h)*_pm().controlBSplineSteps)/_pm().controlBSplineSteps;
+            int steps = _pm().getSteps();
+            pos = ceilf(_pm().BSplineHandlePosition(h)*steps)/steps;
             new_pos=_pm().BSplineHandleReposition(h,pos);
         }
         //BSpline End
@@ -864,6 +865,7 @@ void Node::setType(NodeType type, bool update_handles)
             Handle* front = &_front;
             Handle* back = &_back;
             double  pos = _pm().BSplineHandlePosition(front);
+            if(pos !=0) pos = 0.3334;
             _front.setPosition(_pm().BSplineHandleReposition(front,pos));
             _back.setPosition(_pm().BSplineHandleReposition(back,pos));
         }

@@ -99,7 +99,7 @@ public:
         bool search_unselected, bool closest);
     //BSpline
     bool isBSpline;
-    int controlBSplineSteps;
+    int getSteps();
     //BSpline End
     // this is necessary for Tab-selection in MultiPathManipulator
     SubpathList &subpathList() { return _subpaths; }

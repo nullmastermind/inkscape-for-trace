@@ -1578,6 +1578,8 @@ static void bspline_spiro_start_anchor_on(SPPenContext *const pc)
     if (pc->sa->start) {
         tmpCurve = tmpCurve->create_reverse();
     }
+    pc->sa->curve->reset();
+    pc->sa->curve = tmpCurve;
 }
 
 static void bspline_spiro_start_anchor_off(SPPenContext *const pc)

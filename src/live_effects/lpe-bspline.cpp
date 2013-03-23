@@ -28,7 +28,7 @@
 #include "helper/geom-curves.h"
 #include "ui/widget/scalar.h"
 #include "selection.h"
-
+#include "gtkmm/checkbutton.h"
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -48,14 +48,14 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
     //testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this, Geom::Point(100,100)),
     steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2),
     ignoreCusp(_("Ignore cusp nodes:"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
-    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, 33.33)
+    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, 0.3334)
 {
     registerParameter( dynamic_cast<Parameter *>(&ignoreCusp) );
     registerParameter( dynamic_cast<Parameter *>(&weight) );
     registerParameter( dynamic_cast<Parameter *>(&steps) );
-    weight.param_set_range(0.00, 100);
-    weight.param_set_increments(1., 1.);
-    weight.param_set_digits(2);
+    weight.param_set_range(0.0000, 1);
+    weight.param_set_increments(0.1, 0.1);
+    weight.param_set_digits(4);
     steps.param_set_range(1, 10);
     steps.param_set_increments(1, 1);
     steps.param_set_digits(0);
@@ -268,21 +268,19 @@ LPEBSpline::newWidget()
     Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
 
     vbox->set_border_width(5);
-
-    Gtk::Button* defaultWeight = Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight"))));
-    defaultWeight->set_alignment(0.0, 0.5);
-    Gtk::Widget* defaultWeightWidget = dynamic_cast<Gtk::Widget *>(defaultWeight);
-    defaultWeight->signal_clicked().connect(sigc::mem_fun (*this,&LPEBSpline::toDefaultWeight));
-    vbox->pack_start(*defaultWeightWidget, true, true,2);
-
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter * param = *it;
-            Gtk::Widget * widg = param->param_newWidget();
-            if(param->param_key == "weight"){
-                Inkscape::UI::Widget::Scalar * widgRegistered = dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg);
+            Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            if(param->param_key == "weight"||param->param_key == "steps"){
+                Inkscape::UI::Widget::Scalar * widgRegistered =  Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
                 widgRegistered->signal_value_changed().connect(sigc::mem_fun (*this,&LPEBSpline::toWeight));
+                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
+            }
+            if(param->param_key == "ignoreCusp"){
+                Gtk::CheckButton * widgRegistered =  Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
+                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
             }
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {
@@ -298,20 +296,27 @@ LPEBSpline::newWidget()
 
         ++it;
     }
+    Gtk::Button* defaultWeight = Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight 0.3334"))));
+    defaultWeight->set_alignment(0.0, 0.5);
+    defaultWeight->signal_clicked().connect(sigc::mem_fun (*this,&LPEBSpline::toDefaultWeight));
+    Gtk::Widget* defaultWeightWidget = dynamic_cast<Gtk::Widget *>(defaultWeight);
+    vbox->pack_start(*defaultWeightWidget, true, true,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void 
 LPEBSpline::toDefaultWeight(){
-    double weightValue = 0.3334;
-    weight.param_set_value(33.33);
-    changeWeight(weightValue);
+    Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param_vector[2]->param_newWidget());
+    Inkscape::UI::Widget::Scalar * widgRegistered =  Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+    widgRegistered->setValue(0.3334);
+    widgRegistered->update();
+    weight.param_set_value(0.3334);
+    changeWeight(0.3334);
 }
 
 void 
 LPEBSpline::toWeight(){
-    double weightValue = weight/100;
-    changeWeight(weightValue);
+    changeWeight(weight);
 }
 
 void

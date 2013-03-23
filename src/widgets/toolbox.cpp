@@ -110,10 +110,10 @@ enum BarId {
     BAR_COMMANDS,
     BAR_SNAP,
 };
-
+#define WITH_MESH
 #define BAR_ID_KEY "BarIdValue"
 #define HANDLE_POS_MARK "x-inkscape-pos"
-#define WITH_MESH
+
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
 
 
@@ -514,9 +514,9 @@ static gchar const * ui_descr =
         "    <toolitem action='MeshRowAction' />"
         "    <toolitem action='MeshColumnAction' />"
         "    <separator />"
-        "    <toolitem action='MeshEditFillAction' />"
-        "    <toolitem action='MeshEditStrokeAction' />"
-        "    <toolitem action='MeshShowHandlesAction' />"
+//        "    <toolitem action='MeshEditFillAction' />"
+//        "    <toolitem action='MeshEditStrokeAction' />"
+//        "    <toolitem action='MeshShowHandlesAction' />"
         "    <separator />"
         "  </toolbar>"
 

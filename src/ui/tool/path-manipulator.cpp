@@ -161,7 +161,6 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     isBSpline = false;
     if(lpe_bsp){
         isBSpline = true;
-        controlBSplineSteps = lpe_bsp->steps+1;
     }
     //BSpline End
 }
@@ -842,8 +841,12 @@ void PathManipulator::scaleHandle(Node *n, int which, int dir, bool pixel)
         relpos *= ((rellen + length_change) / rellen);
     }
     h->setRelativePos(relpos);
-    update();
 
+    if(isBSpline){
+        double  pos = BSplineHandlePosition(h);
+        h->setPosition(BSplineHandleReposition(h,pos));
+    }
+    update();
     gchar const *key = which < 0 ? "handle:scale:left" : "handle:scale:right";
     _commit(_("Scale handle"), key);
 }
@@ -867,7 +870,14 @@ void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
     }
 
     h->setRelativePos(h->relativePos() * Geom::Rotate(angle));
+
+    if(isBSpline){
+        double  pos = BSplineHandlePosition(h);
+        h->setPosition(BSplineHandleReposition(h,pos));
+    }
+
     update();
+
     gchar const *key = which < 0 ? "handle:rotate:left" : "handle:rotate:right";
     _commit(_("Rotate handle"), key);
 }
@@ -1200,12 +1210,11 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
+int PathManipulator::getSteps(){
+    return lpe_bsp->steps+1;
+}
+
 double PathManipulator::BSplineHandlePosition(Handle *h){
-    //BSpline
-    if(lpe_bsp){
-        controlBSplineSteps = lpe_bsp->steps+1;
-    }
-    //BSpline End
     using Geom::X;
     using Geom::Y;
     double pos = 0;

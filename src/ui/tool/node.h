@@ -125,7 +125,6 @@ private:
     // so a naked pointer is OK and allows setting it during Node's construction
     SPCtrlLine *_handle_line;
     bool _degenerate; // True if the handle is retracted, i.e. has zero length. This is used often internally so it makes sense to cache this
-    int controlBsplineSteps;
     /**
      * Control point of a cubic Bezier curve in a path.
      *
