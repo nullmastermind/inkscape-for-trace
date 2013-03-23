@@ -399,20 +399,20 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue , bool ignor
             pointAt0 = in->first_segment()->initialPoint();
             SBasisIn = in->first_segment()->toSBasis();
             if(cubic){
-                if(!ignoreCusp || !Geom::are_near((*cubic)[1],in->first_segment()->initialPoint())){
+                if((!ignoreCusp || !Geom::are_near((*cubic)[1],in->first_segment()->initialPoint())) && weightValue !=0){
                     pointAt1 = SBasisIn.valueAt(weightValue);
                     pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
                 }else{
                     pointAt1 = in->first_segment()->initialPoint();
                 }
-                if(!ignoreCusp || !Geom::are_near((*cubic)[2],in->first_segment()->finalPoint())){
+                if((!ignoreCusp || !Geom::are_near((*cubic)[2],in->first_segment()->finalPoint())) && weightValue !=0){
                     pointAt2 = SBasisIn.valueAt(1-weightValue);
                     pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
             }else{
                     pointAt2 = in->first_segment()->finalPoint();
                 }
             }else{
-                if(!ignoreCusp){
+                if(!ignoreCusp && weightValue !=0){
                     pointAt1 = SBasisIn.valueAt(weightValue);
                     pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
                     pointAt2 = SBasisIn.valueAt(1-weightValue);
@@ -433,20 +433,20 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue , bool ignor
             SBasisOut = out->first_segment()->toSBasis();
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
             if(cubic){
-                if(!ignoreCusp || !Geom::are_near((*cubic)[1],out->first_segment()->initialPoint())){
+                if((!ignoreCusp || !Geom::are_near((*cubic)[1],out->first_segment()->initialPoint()))&& weightValue !=0){
                     nextPointAt1 = SBasisOut.valueAt(weightValue);
                     nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
                 }else{
                     nextPointAt1 = out->first_segment()->initialPoint();
                 }
-                if(!ignoreCusp || !Geom::are_near((*cubic)[2],out->first_segment()->finalPoint())){
+                if((!ignoreCusp || !Geom::are_near((*cubic)[2],out->first_segment()->finalPoint()))&& weightValue !=0){
                     nextPointAt2 = SBasisOut.valueAt(1-weightValue);
                     nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
                 }else{
                     nextPointAt2 = out->first_segment()->finalPoint();
                 }
             }else{
-                if(!ignoreCusp){
+                if(!ignoreCusp && weightValue !=0){
                     nextPointAt1 = SBasisOut.valueAt(weightValue);
                     nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
                     nextPointAt2 = SBasisOut.valueAt(1-weightValue);
