@@ -62,13 +62,13 @@ cairo_pattern_t *sp_paint_server_invoke_create_pattern(SPPaintServer *ps,
 
     cairo_pattern_t *cp = NULL;
 
-    cp = ps->cpaintserver->onCreatePattern(ct, bbox, opacity);
+    cp = ps->cpaintserver->pattern_new(ct, bbox, opacity);
 
     return cp;
 }
 
 // CPPIFY: make pure virtual
-cairo_pattern_t* CPaintServer::onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
+cairo_pattern_t* CPaintServer::pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
 	//throw;
 
 	// dummy_pattern

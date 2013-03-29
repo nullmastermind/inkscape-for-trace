@@ -64,9 +64,9 @@ public:
 	CGuide(SPGuide* guide);
 	virtual ~CGuide();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+	virtual void set(unsigned int key, const gchar* value);
 
 private:
 	SPGuide* spguide;

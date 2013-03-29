@@ -29,10 +29,10 @@ public:
 	CStyleElem(SPStyleElem* se);
 	virtual ~CStyleElem();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual void onReadContent();
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual void read_content();
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 protected:
 	SPStyleElem* spstyleelem;

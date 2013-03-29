@@ -332,8 +332,8 @@ static void sp_fontface_init(SPFontFace *face)
 }
 
 
-void CFontFace::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPFontFace* object = this->spfontface;
 
@@ -379,12 +379,12 @@ static void sp_fontface_children_modified(SPFontFace */*sp_fontface*/)
 /**
  * Callback for child_added event.
  */
-void CFontFace::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CFontFace::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPFontFace* object = this->spfontface;
 
     SPFontFace *f = SP_FONTFACE(object);
 
-    CObject::onChildAdded(child, ref);
+    CObject::child_added(child, ref);
 
     sp_fontface_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -394,22 +394,22 @@ void CFontFace::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *re
 /**
  * Callback for remove_child event.
  */
-void CFontFace::onRemoveChild(Inkscape::XML::Node *child) {
+void CFontFace::remove_child(Inkscape::XML::Node *child) {
 	SPFontFace* object = this->spfontface;
 
     SPFontFace *f = SP_FONTFACE(object);
 
-    CObject::onRemoveChild(child);
+    CObject::remove_child(child);
 
     sp_fontface_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CFontFace::onRelease() {
-	CObject::onRelease();
+void CFontFace::release() {
+	CObject::release();
 }
 
-void CFontFace::onSet(unsigned int key, const gchar *value) {
+void CFontFace::set(unsigned int key, const gchar *value) {
 	SPFontFace* object = this->spfontface;
 
     SPFontFace *face = SP_FONTFACE(object);
@@ -694,7 +694,7 @@ void CFontFace::onSet(unsigned int key, const gchar *value) {
             break;
         }
         default:
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
     }
 }
@@ -702,7 +702,7 @@ void CFontFace::onSet(unsigned int key, const gchar *value) {
 /**
  * Receives update notifications.
  */
-void CFontFace::onUpdate(SPCtx *ctx, guint flags) {
+void CFontFace::update(SPCtx *ctx, guint flags) {
 	SPFontFace* object = this->spfontface;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
@@ -741,12 +741,12 @@ void CFontFace::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "overline-thickness" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CFontFace::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFontFace::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFontFace* object = this->spfontface;
 
     SPFontFace *face = SP_FONTFACE(object);
@@ -828,7 +828,7 @@ Inkscape::XML::Node* CFontFace::onWrite(Inkscape::XML::Document *xml_doc, Inksca
         COPY_ATTR(repr, object->getRepr(), "overline-thickness");
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

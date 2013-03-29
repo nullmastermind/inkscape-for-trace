@@ -395,7 +395,7 @@ void SPItem::moveTo(SPItem *target, gboolean intoafter) {
     }
 }
 
-void CItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPItem* object = this->spitem;
 
     object->readAttr( "style" );
@@ -409,10 +409,10 @@ void CItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "inkscape:connector-avoid" );
     object->readAttr( "inkscape:connection-points" );
 
-    CObject::onBuild(document, repr);
+    CObject::build(document, repr);
 }
 
-void CItem::onRelease() {
+void CItem::release() {
 	SPItem* item = this->spitem;
 
     // Note: do this here before the clip_ref is deleted, since calling
@@ -426,7 +426,7 @@ void CItem::onRelease() {
     delete item->clip_ref;
     delete item->mask_ref;
 
-    CObject::onRelease();
+    CObject::release();
 
     while (item->display) {
         item->display = sp_item_view_list_remove(item->display, item->display);
@@ -435,7 +435,7 @@ void CItem::onRelease() {
     item->_transformed_signal.~signal();
 }
 
-void CItem::onSet(unsigned int key, gchar const* value) {
+void CItem::set(unsigned int key, gchar const* value) {
     SPItem *item = this->spitem;
     SPItem* object = item;
 
@@ -518,7 +518,7 @@ void CItem::onSet(unsigned int key, gchar const* value) {
                 sp_style_read_from_object(object->style, object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
-                CObject::onSet(key, value);
+                CObject::set(key, value);
             }
             break;
     }
@@ -574,7 +574,7 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
     }
 }
 
-void CItem::onUpdate(SPCtx *ctx, guint flags) {
+void CItem::update(SPCtx *ctx, guint flags) {
     SPItem *item = this->spitem;
     SPItem* object = item;
 
@@ -632,7 +632,7 @@ void CItem::onUpdate(SPCtx *ctx, guint flags) {
         item->avoidRef->handleSettingChange();
 }
 
-Inkscape::XML::Node* CItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPItem *item = this->spitem;
     SPItem* object = item;
 
@@ -692,13 +692,13 @@ Inkscape::XML::Node* CItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         }
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }
 
 // CPPIFY: make pure virtual
-Geom::OptRect CItem::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect CItem::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	//throw;
 	return Geom::OptRect();
 }
@@ -712,7 +712,7 @@ Geom::OptRect SPItem::geometricBounds(Geom::Affine const &transform) const
     Geom::OptRect bbox;
 
     // call the subclass method
-    bbox = this->citem->onBbox(transform, SPItem::GEOMETRIC_BBOX);
+    bbox = this->citem->bbox(transform, SPItem::GEOMETRIC_BBOX);
 
     return bbox;
 }
@@ -731,7 +731,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
 
     if ( style && style->filter.href && style->getFilter() && SP_IS_FILTER(style->getFilter())) {
         // call the subclass method
-    	bbox = this->citem->onBbox(Geom::identity(), SPItem::VISUAL_BBOX);
+    	bbox = this->citem->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
 
         SPFilter *filter = SP_FILTER(style->getFilter());
         // default filer area per the SVG spec:
@@ -775,7 +775,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         *bbox *= transform;
     } else {
         // call the subclass method
-    	bbox = this->citem->onBbox(transform, SPItem::VISUAL_BBOX);
+    	bbox = this->citem->bbox(transform, SPItem::VISUAL_BBOX);
     }
     if (clip_ref->getObject()) {
         bbox.intersectWith(SP_CLIPPATH(clip_ref->getObject())->geometricBounds(transform));
@@ -874,7 +874,7 @@ unsigned SPItem::pos_in_parent()
 }
 
 // CPPIFY: make pure virtual, see below!
-void CItem::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CItem::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	//throw;
 }
     /* This will only be called if the derived class doesn't override this.
@@ -886,7 +886,7 @@ void CItem::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
 void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
 {
     // Get the snappoints of the item
-	this->citem->onSnappoints(p, snapprefs);
+	this->citem->snappoints(p, snapprefs);
 
     // Get the snappoints at the item's center
     if (snapprefs != NULL && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
@@ -922,7 +922,7 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
 }
 
 // CPPIFY: make pure virtual
-void CItem::onPrint(SPPrintContext* ctx) {
+void CItem::print(SPPrintContext* ctx) {
 	//throw;
 }
 
@@ -931,16 +931,16 @@ void SPItem::invoke_print(SPPrintContext *ctx)
     if ( !isHidden() ) {
     	if (!transform.isIdentity() || style->opacity.value != SP_SCALE24_MAX) {
 			sp_print_bind(ctx, transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
-			this->citem->onPrint(ctx);
+			this->citem->print(ctx);
 			sp_print_release(ctx);
     	} else {
-    		this->citem->onPrint(ctx);
+    		this->citem->print(ctx);
     	}
     }
 }
 
 // CPPIFY: is it possible to combine this method with "SPItem::description()"?
-gchar* CItem::onDescription() {
+gchar* CItem::description() {
 	return g_strdup(_("Object"));
 }
 
@@ -951,7 +951,7 @@ gchar* CItem::onDescription() {
  */
 gchar *SPItem::description()
 {
-	gchar* s = this->citem->onDescription();
+	gchar* s = this->citem->description();
 	if (s && clip_ref->getObject()) {
 		gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
 		g_free (s);
@@ -1006,7 +1006,7 @@ unsigned SPItem::display_key_new(unsigned numkeys)
 }
 
 // CPPIFY: make pure virtual
-Inkscape::DrawingItem* CItem::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CItem::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	//throw;
 	return 0;
 }
@@ -1015,7 +1015,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
 {
     Inkscape::DrawingItem *ai = NULL;
 
-    ai = this->citem->onShow(drawing, key, flags);
+    ai = this->citem->show(drawing, key, flags);
 
     if (ai != NULL) {
         Geom::OptRect item_bbox = geometricBounds();
@@ -1065,13 +1065,13 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
 }
 
 // CPPIFY: make pure virtual
-void CItem::onHide(unsigned int key) {
+void CItem::hide(unsigned int key) {
 	//throw;
 }
 
 void SPItem::invoke_hide(unsigned key)
 {
-	this->citem->onHide(key);
+	this->citem->hide(key);
 
     SPItemView *ref = NULL;
     SPItemView *v = display;
@@ -1298,7 +1298,7 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
 
 // CPPIFY:: make pure virtual?
 // Not all SPItems must necessarily have a set transform method!
-Geom::Affine CItem::onSetTransform(Geom::Affine const &transform) {
+Geom::Affine CItem::set_transform(Geom::Affine const &transform) {
 //	throw;
 	return transform;
 }
@@ -1378,7 +1378,7 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
              !mask_ref->getObject() && // the object does not have a mask
              !(!transform.isTranslation() && style && style->getFilter()) // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
         ) {
-    	transform_attr = this->citem->onSetTransform(transform);
+    	transform_attr = this->citem->set_transform(transform);
 
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
@@ -1411,13 +1411,13 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
 }
 
 // CPPIFY: see below, do not make pure?
-gint CItem::onEvent(SPEvent* event) {
+gint CItem::event(SPEvent* event) {
 	return FALSE;
 }
 
 gint SPItem::emitEvent(SPEvent &event)
 {
-	return this->citem->onEvent(&event);
+	return this->citem->event(&event);
 }
 
 /**
@@ -1435,7 +1435,7 @@ void SPItem::set_item_transform(Geom::Affine const &transform_matrix)
     }
 }
 
-void CItem::onConvertToGuides() {
+void CItem::convert_to_guides() {
 	// CPPIFY: If not overridden, call SPItem::convert_to_guides(), see below!
 	this->spitem->convert_to_guides();
 }

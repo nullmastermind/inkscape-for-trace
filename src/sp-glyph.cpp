@@ -56,8 +56,8 @@ static void sp_glyph_init(SPGlyph *glyph)
     glyph->vert_adv_y = 0;
 }
 
-void CGlyph::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPGlyph* object = this->spglyph;
 
@@ -73,8 +73,8 @@ void CGlyph::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	object->readAttr( "vert-adv-y" );
 }
 
-void CGlyph::onRelease() {
-	CObject::onRelease();
+void CGlyph::release() {
+	CObject::release();
 }
 
 static glyphArabicForm sp_glyph_read_arabic_form(gchar const *value){
@@ -108,7 +108,7 @@ static glyphOrientation sp_glyph_read_orientation(gchar const *value){
     return GLYPH_ORIENTATION_BOTH;
 }
 
-void CGlyph::onSet(unsigned int key, const gchar *value) {
+void CGlyph::set(unsigned int key, const gchar *value) {
 	SPGlyph* object = this->spglyph;
 
     SPGlyph *glyph = SP_GLYPH(object);
@@ -198,7 +198,7 @@ void CGlyph::onSet(unsigned int key, const gchar *value) {
         }
         default:
         {
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
         }
     }
@@ -207,7 +207,7 @@ void CGlyph::onSet(unsigned int key, const gchar *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CGlyph::onUpdate(SPCtx *ctx, guint flags) {
+void CGlyph::update(SPCtx *ctx, guint flags) {
 	SPGlyph* object = this->spglyph;
 
     SPGlyph *glyph = SP_GLYPH(object);
@@ -227,12 +227,12 @@ void CGlyph::onUpdate(SPCtx *ctx, guint flags) {
             object->readAttr( "vert-adv-y" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CGlyph::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CGlyph::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPGlyph* object = this->spglyph;
 
 	//    SPGlyph *glyph = SP_GLYPH(object);
@@ -268,7 +268,7 @@ Inkscape::XML::Node* CGlyph::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
 	        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
 	    }
 
-	    CObject::onWrite(xml_doc, repr, flags);
+	    CObject::write(xml_doc, repr, flags);
 
 	    return repr;
 }

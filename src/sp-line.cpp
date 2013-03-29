@@ -56,10 +56,10 @@ sp_line_init(SPLine * line)
     line->y2.unset();
 }
 
-void CLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+void CLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	SPLine* object = this->spline;
 
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     object->readAttr( "x1" );
     object->readAttr( "y1" );
@@ -67,7 +67,7 @@ void CLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     object->readAttr( "y2" );
 }
 
-void CLine::onSet(unsigned int key, const gchar* value) {
+void CLine::set(unsigned int key, const gchar* value) {
 	SPLine* object = this->spline;
     SPLine * line = object;
 
@@ -91,12 +91,12 @@ void CLine::onSet(unsigned int key, const gchar* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            CShape::onSet(key, value);
+            CShape::set(key, value);
             break;
     }
 }
 
-void CLine::onUpdate(SPCtx *ctx, guint flags) {
+void CLine::update(SPCtx *ctx, guint flags) {
 	SPLine* object = this->spline;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -116,10 +116,10 @@ void CLine::onUpdate(SPCtx *ctx, guint flags) {
         ((SPShape *) object)->setShape();
     }
 
-    CShape::onUpdate(ctx, flags);
+    CShape::update(ctx, flags);
 }
 
-Inkscape::XML::Node* CLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPLine* object = this->spline;
     SPLine *line  = object;
 
@@ -136,16 +136,16 @@ Inkscape::XML::Node* CLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     sp_repr_set_svg_double(repr, "x2", line->x2.computed);
     sp_repr_set_svg_double(repr, "y2", line->y2.computed);
 
-    CShape::onWrite(xml_doc, repr, flags);
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CLine::onDescription() {
+gchar* CLine::description() {
 	return g_strdup(_("<b>Line</b>"));
 }
 
-void CLine::onConvertToGuides() {
+void CLine::convert_to_guides() {
 	SPLine* item = this->spline;
     SPLine *line = item;
 
@@ -160,7 +160,7 @@ void CLine::onConvertToGuides() {
 }
 
 
-Geom::Affine CLine::onSetTransform(Geom::Affine const &transform) {
+Geom::Affine CLine::set_transform(Geom::Affine const &transform) {
 	SPLine* item = this->spline;
     SPLine *line = item;
 
@@ -184,7 +184,7 @@ Geom::Affine CLine::onSetTransform(Geom::Affine const &transform) {
     return Geom::identity();
 }
 
-void CLine::onSetShape() {
+void CLine::set_shape() {
 	SPLine* shape = this->spline;
     SPLine *line = shape;
 

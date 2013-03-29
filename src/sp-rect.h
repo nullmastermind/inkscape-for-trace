@@ -50,19 +50,19 @@ public:
 	CRect(SPRect* sprect);
 	virtual ~CRect();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 
-	void onSet(unsigned key, gchar const *value);
-	void onUpdate(SPCtx* ctx, unsigned int flags);
+	void set(unsigned key, gchar const *value);
+	void update(SPCtx* ctx, unsigned int flags);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual gchar* onDescription();
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual gchar* description();
 
-	void onSetShape();
-	virtual Geom::Affine onSetTransform(Geom::Affine const& xform);
+	void set_shape();
+	virtual Geom::Affine set_transform(Geom::Affine const& xform);
 
-	void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-	void onConvertToGuides();
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	void convert_to_guides();
 
 protected:
 	SPRect* sprect;

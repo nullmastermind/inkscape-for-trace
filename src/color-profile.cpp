@@ -250,7 +250,7 @@ void ColorProfile::init( ColorProfile *cprof )
 /**
  * Callback: free object
  */
-void CColorProfile::onRelease() {
+void CColorProfile::release() {
 	ColorProfile* object = this->colorprofile;
 
     // Unregister ourselves
@@ -314,7 +314,7 @@ void ColorProfileImpl::_clearProfile()
 /**
  * Callback: set attributes from associated repr.
  */
-void CColorProfile::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	ColorProfile* object = this->colorprofile;
 
     ColorProfile *cprof = COLORPROFILE(object);
@@ -323,7 +323,7 @@ void CColorProfile::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     g_assert(cprof->name == 0);
     g_assert(cprof->intentStr == 0);
 
-    CObject::onBuild(document, repr);
+    CObject::build(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "local" );
@@ -340,7 +340,7 @@ void CColorProfile::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void CColorProfile::onSet(unsigned key, gchar const *value) {
+void CColorProfile::set(unsigned key, gchar const *value) {
 	ColorProfile* object = this->colorprofile;
 
     ColorProfile *cprof = COLORPROFILE(object);
@@ -451,7 +451,7 @@ void CColorProfile::onSet(unsigned key, gchar const *value) {
             break;
 
         default:
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
     }
 }
@@ -459,7 +459,7 @@ void CColorProfile::onSet(unsigned key, gchar const *value) {
 /**
  * Callback: write attributes to associated repr.
  */
-Inkscape::XML::Node* CColorProfile::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CColorProfile::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	ColorProfile* object = this->colorprofile;
 
     ColorProfile *cprof = COLORPROFILE(object);
@@ -484,7 +484,7 @@ Inkscape::XML::Node* CColorProfile::onWrite(Inkscape::XML::Document *xml_doc, In
         repr->setAttribute( "rendering-intent", cprof->intentStr );
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

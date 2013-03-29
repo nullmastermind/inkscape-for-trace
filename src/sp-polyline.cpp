@@ -46,15 +46,15 @@ void sp_polyline_init(SPPolyLine * polyline)
 	polyline->cobject = polyline->cpolyline;
 }
 
-void CPolyLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+void CPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	SPPolyLine* object = this->sppolyline;
 
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     object->readAttr( "points" );
 }
 
-void CPolyLine::onSet(unsigned int key, const gchar* value) {
+void CPolyLine::set(unsigned int key, const gchar* value) {
 	SPPolyLine* object = this->sppolyline;
     SPPolyLine *polyline = object;
 
@@ -105,12 +105,12 @@ void CPolyLine::onSet(unsigned int key, const gchar* value) {
             break;
 	}
 	default:
-            CShape::onSet(key, value);
+            CShape::set(key, value);
             break;
     }
 }
 
-Inkscape::XML::Node* CPolyLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CPolyLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPPolyLine* object = this->sppolyline;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -121,12 +121,12 @@ Inkscape::XML::Node* CPolyLine::onWrite(Inkscape::XML::Document *xml_doc, Inksca
         repr->mergeFrom(object->getRepr(), "id");
     }
 
-    CShape::onWrite(xml_doc, repr, flags);
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CPolyLine::onDescription() {
+gchar* CPolyLine::description() {
 	return g_strdup(_("<b>Polyline</b>"));
 }
 

@@ -104,10 +104,10 @@ sp_tref_finalize(GObject *obj)
     tref->_changed_connection.~connection();
 }
 
-void CTRef::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPTRef* object = this->sptref;
 
-    CItem::onBuild(document, repr);
+    CItem::build(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "x" );
@@ -117,7 +117,7 @@ void CTRef::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "rotate" );
 }
 
-void CTRef::onRelease() {
+void CTRef::release() {
 	SPTRef* object = this->sptref;
 
     SPTRef *tref = SP_TREF(object);
@@ -132,10 +132,10 @@ void CTRef::onRelease() {
 
     tref->uriOriginalRef->detach();
 
-    CItem::onRelease();
+    CItem::release();
 }
 
-void CTRef::onSet(unsigned int key, const gchar* value) {
+void CTRef::set(unsigned int key, const gchar* value) {
 	SPTRef* object = this->sptref;
 
     debug("0x%p %s(%u): '%s'",object,
@@ -175,18 +175,18 @@ void CTRef::onSet(unsigned int key, const gchar* value) {
         }
 
     } else { // default
-        CItem::onSet(key, value);
+        CItem::set(key, value);
     }
 }
 
-void CTRef::onUpdate(SPCtx *ctx, guint flags) {
+void CTRef::update(SPCtx *ctx, guint flags) {
 	SPTRef* object = this->sptref;
 
     debug("0x%p",object);
 
     SPTRef *tref = SP_TREF(object);
 
-    CItem::onUpdate(ctx, flags);
+    CItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -202,7 +202,7 @@ void CTRef::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-void CTRef::onModified(unsigned int flags) {
+void CTRef::modified(unsigned int flags) {
 	SPTRef* object = this->sptref;
 
     SPTRef *tref_obj = SP_TREF(object);
@@ -223,7 +223,7 @@ void CTRef::onModified(unsigned int flags) {
     }
 }
 
-Inkscape::XML::Node* CTRef::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPTRef* object = this->sptref;
 
     debug("0x%p",object);
@@ -243,12 +243,12 @@ Inkscape::XML::Node* CTRef::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         g_free(uri_string);
     }
 
-    CItem::onWrite(xml_doc, repr, flags);
+    CItem::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-Geom::OptRect CTRef::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect CTRef::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPTRef* item = this->sptref;
 
     Geom::OptRect bbox;
@@ -274,7 +274,7 @@ Geom::OptRect CTRef::onBbox(Geom::Affine const &transform, SPItem::BBoxType type
     return bbox;
 }
 
-gchar* CTRef::onDescription() {
+gchar* CTRef::description() {
 	SPTRef* item = this->sptref;
 
     SPTRef *tref = SP_TREF(item);

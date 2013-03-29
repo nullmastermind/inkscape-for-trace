@@ -51,10 +51,10 @@ static void sp_anchor_init(SPAnchor *anchor)
     anchor->href = NULL;
 }
 
-void CAnchor::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPAnchor* object = this->spanchor;
 
-    CGroup::onBuild(document, repr);
+    CGroup::build(document, repr);
 
     object->readAttr( "xlink:type" );
     object->readAttr( "xlink:role" );
@@ -66,7 +66,7 @@ void CAnchor::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "target" );
 }
 
-void CAnchor::onRelease() {
+void CAnchor::release() {
     SPAnchor *anchor = this->spanchor;
 
     if (anchor->href) {
@@ -74,10 +74,10 @@ void CAnchor::onRelease() {
         anchor->href = NULL;
     }
 
-    CGroup::onRelease();
+    CGroup::release();
 }
 
-void CAnchor::onSet(unsigned int key, const gchar* value) {
+void CAnchor::set(unsigned int key, const gchar* value) {
     SPAnchor *anchor = this->spanchor;
     SPAnchor* object = anchor;
 
@@ -97,7 +97,7 @@ void CAnchor::onSet(unsigned int key, const gchar* value) {
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
 	default:
-            CGroup::onSet(key, value);
+            CGroup::set(key, value);
             break;
     }
 }
@@ -105,7 +105,7 @@ void CAnchor::onSet(unsigned int key, const gchar* value) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CAnchor::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CAnchor::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPAnchor *anchor = this->spanchor;
     SPAnchor* object = anchor;
 
@@ -127,12 +127,12 @@ Inkscape::XML::Node* CAnchor::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
         COPY_ATTR(repr, object->getRepr(), "target");
     }
 
-    CGroup::onWrite(xml_doc, repr, flags);
+    CGroup::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CAnchor::onDescription() {
+gchar* CAnchor::description() {
     SPAnchor *anchor = this->spanchor;
 
     if (anchor->href) {
@@ -146,7 +146,7 @@ gchar* CAnchor::onDescription() {
 }
 
 /* fixme: We should forward event to appropriate container/view */
-gint CAnchor::onEvent(SPEvent* event) {
+gint CAnchor::event(SPEvent* event) {
     SPAnchor *anchor = this->spanchor;
 
     switch (event->type) {

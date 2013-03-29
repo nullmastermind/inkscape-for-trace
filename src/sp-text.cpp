@@ -88,17 +88,17 @@ sp_text_init (SPText *text)
     new (&text->attributes) TextTagAttributes;
 }
 
-void CText::onRelease() {
+void CText::release() {
 	SPText* object = this->sptext;
 
     SPText *text = SP_TEXT(object);
     text->attributes.~TextTagAttributes();
     text->layout.~Layout();
 
-    CItem::onRelease();
+    CItem::release();
 }
 
-void CText::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
+void CText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPText* object = this->sptext;
 
     object->readAttr( "x" );
@@ -107,12 +107,12 @@ void CText::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
     object->readAttr( "dy" );
     object->readAttr( "rotate" );
 
-    CItem::onBuild(doc, repr);
+    CItem::build(doc, repr);
 
     object->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
 }
 
-void CText::onSet(unsigned int key, const gchar* value) {
+void CText::set(unsigned int key, const gchar* value) {
 	SPText* object = this->sptext;
 
     SPText *text = SP_TEXT (object);
@@ -133,39 +133,39 @@ void CText::onSet(unsigned int key, const gchar* value) {
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;
             default:
-                CItem::onSet(key, value);
+                CItem::set(key, value);
                 break;
         }
     }
 }
 
-void CText::onChildAdded(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
+void CText::child_added(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
 	SPText* object = this->sptext;
 
     SPText *text = SP_TEXT (object);
 
-    CItem::onChildAdded(rch, ref);
+    CItem::child_added(rch, ref);
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
-void CText::onRemoveChild(Inkscape::XML::Node *rch) {
+void CText::remove_child(Inkscape::XML::Node *rch) {
 	SPText* object = this->sptext;
 
     SPText *text = SP_TEXT (object);
 
-    CItem::onRemoveChild(rch);
+    CItem::remove_child(rch);
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
 
-void CText::onUpdate(SPCtx *ctx, guint flags) {
+void CText::update(SPCtx *ctx, guint flags) {
 	SPText* object = this->sptext;
 
     SPText *text = SP_TEXT (object);
 
-    CItem::onUpdate(ctx, flags);
+    CItem::update(ctx, flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
     if (flags & SP_OBJECT_MODIFIED_FLAG) cflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -207,7 +207,7 @@ void CText::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-void CText::onModified(guint flags) {
+void CText::modified(guint flags) {
 	SPText* object = this->sptext;
 
 //	CItem::onModified(flags);
@@ -249,7 +249,7 @@ void CText::onModified(guint flags) {
     }
 }
 
-Inkscape::XML::Node *CText::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node *CText::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPText* object = this->sptext;
 
     SPText *text = SP_TEXT (object);
@@ -302,12 +302,12 @@ Inkscape::XML::Node *CText::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         text->getRepr()->setAttribute("sodipodi:linespacing", NULL);
     }
 
-    CItem::onWrite(xml_doc, repr, flags);
+    CItem::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-Geom::OptRect CText::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect CText::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPText* item = this->sptext;
 
     Geom::OptRect bbox = SP_TEXT(item)->layout.bounds(transform);
@@ -320,7 +320,7 @@ Geom::OptRect CText::onBbox(Geom::Affine const &transform, SPItem::BBoxType type
     return bbox;
 }
 
-Inkscape::DrawingItem* CText::onShow(Inkscape::Drawing &drawing, unsigned key, unsigned flags) {
+Inkscape::DrawingItem* CText::show(Inkscape::Drawing &drawing, unsigned key, unsigned flags) {
 	SPText* item = this->sptext;
 
     SPText *group = (SPText *) item;
@@ -336,12 +336,12 @@ Inkscape::DrawingItem* CText::onShow(Inkscape::Drawing &drawing, unsigned key, u
 }
 
 
-void CText::onHide(unsigned int key) {
+void CText::hide(unsigned int key) {
 //	CItem::onHide(key);
 }
 
 
-gchar* CText::onDescription() {
+gchar* CText::description() {
 	SPText* item = this->sptext;
 
     SPText *text = reinterpret_cast<SPText *>(item);
@@ -375,7 +375,7 @@ gchar* CText::onDescription() {
     return ret;
 }
 
-void CText::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPText* item = this->sptext;
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_TEXT_BASELINE)) {
@@ -391,7 +391,7 @@ void CText::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     }
 }
 
-Geom::Affine CText::onSetTransform(Geom::Affine const &xform) {
+Geom::Affine CText::set_transform(Geom::Affine const &xform) {
 	SPText* item = this->sptext;
 
     SPText *text = SP_TEXT(item);
@@ -440,7 +440,7 @@ Geom::Affine CText::onSetTransform(Geom::Affine const &xform) {
     return ret;
 }
 
-void CText::onPrint(SPPrintContext *ctx) {
+void CText::print(SPPrintContext *ctx) {
 	SPText* item = this->sptext;
 
     SPText *group = SP_TEXT (item);

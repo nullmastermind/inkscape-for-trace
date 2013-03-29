@@ -103,10 +103,10 @@ static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
     glyph->k = 0;
 }
 
-void CGlyphKerning::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPGlyphKerning* object = this->spglyphkerning;
 
-	CObject::onBuild(document, repr);
+	CObject::build(document, repr);
 
 	object->readAttr( "u1" );
 	object->readAttr( "g1" );
@@ -115,8 +115,8 @@ void CGlyphKerning::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	object->readAttr( "k" );
 }
 
-void CGlyphKerning::onRelease() {
-	CObject::onRelease();
+void CGlyphKerning::release() {
+	CObject::release();
 }
 
 GlyphNames::GlyphNames(const gchar* value){
@@ -138,7 +138,7 @@ bool GlyphNames::contains(const char* name){
     return false;
 }
 
-void CGlyphKerning::onSet(unsigned int key, const gchar *value) {
+void CGlyphKerning::set(unsigned int key, const gchar *value) {
 	SPGlyphKerning* object = this->spglyphkerning;
 
     SPGlyphKerning * glyphkern = (SPGlyphKerning*) object; //even if it is a VKern this will work. I did it this way just to avoind warnings.
@@ -191,7 +191,7 @@ void CGlyphKerning::onSet(unsigned int key, const gchar *value) {
         }
         default:
         {
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
         }
     }
@@ -200,7 +200,7 @@ void CGlyphKerning::onSet(unsigned int key, const gchar *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CGlyphKerning::onUpdate(SPCtx *ctx, guint flags) {
+void CGlyphKerning::update(SPCtx *ctx, guint flags) {
 	SPGlyphKerning* object = this->spglyphkerning;
 
     SPGlyphKerning *glyph = (SPGlyphKerning *)object;
@@ -214,12 +214,12 @@ void CGlyphKerning::onUpdate(SPCtx *ctx, guint flags) {
             object->readAttr( "k" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CGlyphKerning::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CGlyphKerning::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPGlyphKerning* object = this->spglyphkerning;
 
 	//    SPGlyphKerning *glyph = SP_GLYPH_KERNING(object);
@@ -250,7 +250,7 @@ Inkscape::XML::Node* CGlyphKerning::onWrite(Inkscape::XML::Document *xml_doc, In
 	        COPY_ATTR(repr, object->getRepr(), "k");
 	    }
 
-	    CObject::onWrite(xml_doc, repr, flags);
+	    CObject::write(xml_doc, repr, flags);
 
 	    return repr;
 }

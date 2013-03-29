@@ -58,16 +58,16 @@ public:
 	CLine(SPLine* line);
 	virtual ~CLine();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
 
-	virtual gchar* onDescription();
-	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
-	virtual void onConvertToGuides();
-	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual gchar* description();
+	virtual Geom::Affine set_transform(Geom::Affine const &transform);
+	virtual void convert_to_guides();
+	virtual void update(SPCtx* ctx, guint flags);
 
-	virtual void onSetShape();
+	virtual void set_shape();
 
 protected:
 	SPLine* spline;

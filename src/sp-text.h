@@ -82,22 +82,22 @@ public:
 	CText(SPText* text);
 	virtual ~CText();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node* child);
-	virtual void onSet(unsigned int key, const gchar* value);
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
-	virtual void onModified(unsigned int flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
+	virtual void set(unsigned int key, const gchar* value);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
-	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
-	virtual void onPrint(SPPrintContext *ctx);
-	virtual gchar* onDescription();
-	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void onHide(unsigned int key);
-	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void print(SPPrintContext *ctx);
+	virtual gchar* description();
+	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void hide(unsigned int key);
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual Geom::Affine set_transform(Geom::Affine const &transform);
 
 protected:
 	SPText* sptext;

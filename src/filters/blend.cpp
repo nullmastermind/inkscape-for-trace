@@ -62,12 +62,12 @@ sp_feBlend_init(SPFeBlend *feBlend)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeBlend::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFeBlend::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFeBlend* object = this->spfeblend;
 
     SPFeBlend *blend = SP_FEBLEND(object);
 
-    CFilterPrimitive::onBuild(document, repr);
+    CFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
     object->readAttr( "mode" );
@@ -87,8 +87,8 @@ void CFeBlend::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeBlend::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeBlend::release() {
+	CFilterPrimitive::release();
 }
 
 static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value)
@@ -125,7 +125,7 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
 /**
  * Sets a specific value in the SPFeBlend.
  */
-void CFeBlend::onSet(unsigned int key, gchar const *value) {
+void CFeBlend::set(unsigned int key, gchar const *value) {
 	SPFeBlend* object = this->spfeblend;
 
     SPFeBlend *feBlend = SP_FEBLEND(object);
@@ -150,7 +150,7 @@ void CFeBlend::onSet(unsigned int key, gchar const *value) {
             }
             break;
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -158,7 +158,7 @@ void CFeBlend::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeBlend::onUpdate(SPCtx *ctx, guint flags) {
+void CFeBlend::update(SPCtx *ctx, guint flags) {
 	SPFeBlend* object = this->spfeblend;
 
     SPFeBlend *blend = SP_FEBLEND(object);
@@ -180,13 +180,13 @@ void CFeBlend::onUpdate(SPCtx *ctx, guint flags) {
         object->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, blend->in2));
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeBlend::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeBlend* object = this->spfeblend;
 
     SPFeBlend *blend = SP_FEBLEND(object);
@@ -227,12 +227,12 @@ Inkscape::XML::Node* CFeBlend::onWrite(Inkscape::XML::Document *doc, Inkscape::X
     }
     repr->setAttribute("mode", mode);
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeBlend::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeBlend::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeBlend* primitive = this->spfeblend;
 
     g_assert(primitive != NULL);

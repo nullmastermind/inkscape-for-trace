@@ -34,7 +34,7 @@ public:
 	CTitle(SPTitle* title);
 	virtual ~CTitle();
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPTitle* sptitle;

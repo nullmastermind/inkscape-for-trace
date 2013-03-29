@@ -65,10 +65,10 @@ sp_rect_init(SPRect *rect)
     /* sp_svg_length_unset(&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0); */
 }
 
-void CRect::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPRect* object = this->sprect;
 
-    CShape::onBuild(doc, repr);
+    CShape::build(doc, repr);
 
     object->readAttr( "x" );
     object->readAttr( "y" );
@@ -78,7 +78,7 @@ void CRect::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
     object->readAttr( "ry" );
 }
 
-void CRect::onSet(unsigned key, gchar const *value) {
+void CRect::set(unsigned key, gchar const *value) {
 	SPRect* rect = this->sprect;
 	SPRect* object = rect;
 
@@ -118,12 +118,12 @@ void CRect::onSet(unsigned key, gchar const *value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            CShape::onSet(key, value);
+            CShape::set(key, value);
             break;
     }
 }
 
-void CRect::onUpdate(SPCtx* ctx, unsigned int flags) {
+void CRect::update(SPCtx* ctx, unsigned int flags) {
 	SPRect* object = this->sprect;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -144,10 +144,10 @@ void CRect::onUpdate(SPCtx* ctx, unsigned int flags) {
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
 
-    CShape::onUpdate(ctx, flags);
+    CShape::update(ctx, flags);
 }
 
-Inkscape::XML::Node * CRect::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node * CRect::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPRect* rect = this->sprect;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -161,20 +161,20 @@ Inkscape::XML::Node * CRect::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
     sp_repr_set_svg_double(repr, "x", rect->x.computed);
     sp_repr_set_svg_double(repr, "y", rect->y.computed);
 
-    this->onSetShape(); // evaluate SPCurve
-    CShape::onWrite(xml_doc, repr, flags);
+    this->set_shape(); // evaluate SPCurve
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CRect::onDescription() {
+gchar* CRect::description() {
 	g_return_val_if_fail(SP_IS_RECT(this->sprect), NULL);
 	return g_strdup(_("<b>Rectangle</b>"));
 }
 
 #define C1 0.554
 
-void CRect::onSetShape() {
+void CRect::set_shape() {
     SPRect *rect = this->sprect;
 
     if ((rect->height.computed < 1e-18) || (rect->width.computed < 1e-18)) {
@@ -277,7 +277,7 @@ sp_rect_set_ry(SPRect *rect, gboolean set, gdouble value)
     SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-Geom::Affine CRect::onSetTransform(Geom::Affine const& xform) {
+Geom::Affine CRect::set_transform(Geom::Affine const& xform) {
     SPRect *rect = this->sprect;
     SPRect* item = rect;
 
@@ -319,7 +319,7 @@ Geom::Affine CRect::onSetTransform(Geom::Affine const& xform) {
     rect->x = pos[Geom::X];
     rect->y = pos[Geom::Y];
 
-    this->onSetShape();
+    this->set_shape();
 
     // Adjust stroke width
     item->adjust_stroke(sqrt(fabs(sw * sh)));
@@ -491,7 +491,7 @@ sp_rect_get_visible_height(SPRect *rect)
         rect->transform);
 }
 
-void CRect::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
     SPRect *rect = this->sprect;
     SPRect* item = rect;
 
@@ -531,7 +531,7 @@ void CRect::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     }
 }
 
-void CRect::onConvertToGuides() {
+void CRect::convert_to_guides() {
 	SPRect* rect = this->sprect;
 	SPRect* item = rect;
 

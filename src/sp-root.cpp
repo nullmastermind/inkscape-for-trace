@@ -81,7 +81,7 @@ static void sp_root_init(SPRoot *root)
     root->defs = NULL;
 }
 
-void CRoot::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CRoot::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPRoot* object = this->sproot;
 
     SPGroup *group = (SPGroup *) object;
@@ -103,7 +103,7 @@ void CRoot::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "preserveAspectRatio" );
     object->readAttr( "onload" );
 
-    CGroup::onBuild(document, repr);
+    CGroup::build(document, repr);
 
     // Search for first <defs> node
     for (SPObject *o = group->firstChild() ; o ; o = o->getNext() ) {
@@ -117,17 +117,17 @@ void CRoot::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     SP_ITEM(object)->transform = Geom::identity();
 }
 
-void CRoot::onRelease() {
+void CRoot::release() {
 	SPRoot* object = this->sproot;
 
     SPRoot *root = (SPRoot *) object;
     root->defs = NULL;
 
-    CGroup::onRelease();
+    CGroup::release();
 }
 
 
-void CRoot::onSet(unsigned int key, const gchar* value) {
+void CRoot::set(unsigned int key, const gchar* value) {
 	SPRoot* object = this->sproot;
     SPRoot *root = object;
 
@@ -264,18 +264,18 @@ void CRoot::onSet(unsigned int key, const gchar* value) {
             break;
         default:
             /* Pass the set event to the parent */
-            CGroup::onSet(key, value);
+            CGroup::set(key, value);
             break;
     }
 }
 
-void CRoot::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CRoot::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPRoot* object = this->sproot;
 
     SPRoot *root = (SPRoot *) object;
     SPGroup *group = (SPGroup *) object;
 
-    CGroup::onChildAdded(child, ref);
+    CGroup::child_added(child, ref);
 
     SPObject *co = object->document->getObjectByRepr(child);
     g_assert (co != NULL || !strcmp("comment", child->name())); // comment repr node has no object
@@ -291,7 +291,7 @@ void CRoot::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     }
 }
 
-void CRoot::onRemoveChild(Inkscape::XML::Node* child) {
+void CRoot::remove_child(Inkscape::XML::Node* child) {
 	SPRoot* object = this->sproot;
 
     SPRoot *root = (SPRoot *) object;
@@ -311,10 +311,10 @@ void CRoot::onRemoveChild(Inkscape::XML::Node* child) {
         }
     }
 
-    CGroup::onRemoveChild(child);
+    CGroup::remove_child(child);
 }
 
-void CRoot::onUpdate(SPCtx *ctx, guint flags) {
+void CRoot::update(SPCtx *ctx, guint flags) {
 	SPRoot* object = this->sproot;
 
     SPRoot *root = SP_ROOT(object);
@@ -444,7 +444,7 @@ void CRoot::onUpdate(SPCtx *ctx, guint flags) {
     rctx.i2vp = Geom::identity();
 
     /* And invoke parent method */
-    CGroup::onUpdate((SPCtx *) &rctx, flags);
+    CGroup::update((SPCtx *) &rctx, flags);
 
     /* As last step set additional transform of drawing group */
     for (SPItemView *v = root->display; v != NULL; v = v->next) {
@@ -453,12 +453,12 @@ void CRoot::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-void CRoot::onModified(unsigned int flags) {
+void CRoot::modified(unsigned int flags) {
 	SPRoot* object = this->sproot;
 
     SPRoot *root = SP_ROOT(object);
 
-    CGroup::onModified(flags);
+    CGroup::modified(flags);
 
     /* fixme: (Lauris) */
     if (!object->parent && (flags & SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -467,7 +467,7 @@ void CRoot::onModified(unsigned int flags) {
 }
 
 
-Inkscape::XML::Node* CRoot::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPRoot* object = this->sproot;
 
     SPRoot *root = SP_ROOT(object);
@@ -504,19 +504,19 @@ Inkscape::XML::Node* CRoot::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         repr->setAttribute("viewBox", os.str().c_str());
     }
 
-    CGroup::onWrite(xml_doc, repr, flags);
+    CGroup::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-Inkscape::DrawingItem* CRoot::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CRoot::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	SPRoot* item = this->sproot;
 
     SPRoot *root = SP_ROOT(item);
 
     Inkscape::DrawingItem *ai = 0;
 
-    ai = CGroup::onShow(drawing, key, flags);
+    ai = CGroup::show(drawing, key, flags);
 
     if (ai) {
     	Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
@@ -526,14 +526,14 @@ Inkscape::DrawingItem* CRoot::onShow(Inkscape::Drawing &drawing, unsigned int ke
     return ai;
 }
 
-void CRoot::onPrint(SPPrintContext* ctx) {
+void CRoot::print(SPPrintContext* ctx) {
 	SPRoot* item = this->sproot;
 
     SPRoot *root = SP_ROOT(item);
 
     sp_print_bind(ctx, root->c2p, 1.0);
 
-    CGroup::onPrint(ctx);
+    CGroup::print(ctx);
 
     sp_print_release(ctx);
 }

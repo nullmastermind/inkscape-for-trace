@@ -75,8 +75,8 @@ sp_fespotlight_init(SPFeSpotLight *fespotlight)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeSpotLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPFeSpotLight* object = this->spfespotlight;
 
@@ -97,7 +97,7 @@ void CFeSpotLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeSpotLight::onRelease() {
+void CFeSpotLight::release() {
 	SPFeSpotLight* object = this->spfespotlight;
     //SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
 
@@ -112,7 +112,7 @@ void CFeSpotLight::onRelease() {
 /**
  * Sets a specific value in the SPFeSpotLight.
  */
-void CFeSpotLight::onSet(unsigned int key, gchar const *value) {
+void CFeSpotLight::set(unsigned int key, gchar const *value) {
 	SPFeSpotLight* object = this->spfespotlight;
 
     SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
@@ -257,7 +257,7 @@ void CFeSpotLight::onSet(unsigned int key, gchar const *value) {
         break;
     default:
         // See if any parents need this value.
-    	CObject::onSet(key, value);
+    	CObject::set(key, value);
         break;
     }
 }
@@ -265,7 +265,7 @@ void CFeSpotLight::onSet(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFeSpotLight::onUpdate(SPCtx *ctx, guint flags) {
+void CFeSpotLight::update(SPCtx *ctx, guint flags) {
 	SPFeSpotLight* object = this->spfespotlight;
 
     SPFeSpotLight *feSpotLight = SP_FESPOTLIGHT(object);
@@ -283,13 +283,13 @@ void CFeSpotLight::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "limitingConeAngle" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeSpotLight::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeSpotLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeSpotLight* object = this->spfespotlight;
     SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
 
@@ -314,7 +314,7 @@ Inkscape::XML::Node* CFeSpotLight::onWrite(Inkscape::XML::Document *doc, Inkscap
     if (fespotlight->limitingConeAngle_set)
         sp_repr_set_css_double(repr, "limitingConeAngle", fespotlight->limitingConeAngle);
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

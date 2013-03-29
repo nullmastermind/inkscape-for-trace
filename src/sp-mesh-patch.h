@@ -55,9 +55,9 @@ public:
 	CMeshPatch(SPMeshPatch* meshpatch);
 	virtual ~CMeshPatch();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onSet(unsigned int key, const gchar* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void set(unsigned int key, const gchar* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 protected:
 	SPMeshPatch* spmeshpatch;

@@ -92,7 +92,7 @@ sp_filter_init(SPFilter *filter)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFilter::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilter* object = this->spfilter;
 
     //Read values of key attributes from XML nodes into object.
@@ -106,7 +106,7 @@ void CFilter::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "filterRes" );
     object->readAttr( "xlink:href" );
 
-	CObject::onBuild(document, repr);
+	CObject::build(document, repr);
 
 //is this necessary?
     document->addResource("filter", object);
@@ -115,7 +115,7 @@ void CFilter::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFilter::onRelease() {
+void CFilter::release() {
 	SPFilter* object = this->spfilter;
     SPFilter *filter = SP_FILTER(object);
 
@@ -137,13 +137,13 @@ void CFilter::onRelease() {
     filter->modified_connection.~connection();
     delete filter->_image_name;
 
-    CObject::onRelease();
+    CObject::release();
 }
 
 /**
  * Sets a specific value in the SPFilter.
  */
-void CFilter::onSet(unsigned int key, gchar const *value) {
+void CFilter::set(unsigned int key, gchar const *value) {
 	SPFilter* object = this->spfilter;
     SPFilter *filter = SP_FILTER(object);
 
@@ -210,7 +210,7 @@ void CFilter::onSet(unsigned int key, gchar const *value) {
             break;
         default:
             // See if any parents need this value.
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
     }
 }
@@ -218,7 +218,7 @@ void CFilter::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFilter::onUpdate(SPCtx *ctx, guint flags) {
+void CFilter::update(SPCtx *ctx, guint flags) {
     //SPFilter *filter = SP_FILTER(object);
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -228,13 +228,13 @@ void CFilter::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFilter::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFilter::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFilter* object = this->spfilter;
     SPFilter *filter = SP_FILTER(object);
 
@@ -321,7 +321,7 @@ Inkscape::XML::Node* CFilter::onWrite(Inkscape::XML::Document *doc, Inkscape::XM
         g_free(uri_string);
     }
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }
@@ -354,11 +354,11 @@ static void filter_ref_modified(SPObject */*href*/, guint /*flags*/, SPFilter *f
 /**
  * Callback for child_added event.
  */
-void CFilter::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CFilter::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPFilter* object = this->spfilter;
     //SPFilter *f = SP_FILTER(object);
 
-	CObject::onChildAdded(child, ref);
+	CObject::child_added(child, ref);
 
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -366,11 +366,11 @@ void CFilter::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 /**
  * Callback for remove_child event.
  */
-void CFilter::onRemoveChild(Inkscape::XML::Node *child) {
+void CFilter::remove_child(Inkscape::XML::Node *child) {
 	SPFilter* object = this->spfilter;
 	//    SPFilter *f = SP_FILTER(object);
 
-	CObject::onRemoveChild(child);
+	CObject::remove_child(child);
 
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -410,7 +410,7 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
 //            } else {
 //                g_warning("Cannot build filter renderer: missing builder");
 //            }  // CPPIFY: => FilterPrimitive should be abstract.
-            primitive->cfilterprimitive->onBuildRenderer(nr_filter);
+            primitive->cfilterprimitive->build_renderer(nr_filter);
         }
         primitive_obj = primitive_obj->next;
     }

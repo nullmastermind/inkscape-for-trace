@@ -62,8 +62,8 @@ sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeDistantLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPFeDistantLight* object = this->spfedistantlight;
 
@@ -78,7 +78,7 @@ void CFeDistantLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeDistantLight::onRelease() {
+void CFeDistantLight::release() {
 	SPFeDistantLight* object = this->spfedistantlight;
 
     //SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
@@ -94,7 +94,7 @@ void CFeDistantLight::onRelease() {
 /**
  * Sets a specific value in the SPFeDistantLight.
  */
-void CFeDistantLight::onSet(unsigned int key, gchar const *value) {
+void CFeDistantLight::set(unsigned int key, gchar const *value) {
 	SPFeDistantLight* object = this->spfedistantlight;
     SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
     gchar *end_ptr;
@@ -137,7 +137,7 @@ void CFeDistantLight::onSet(unsigned int key, gchar const *value) {
         break;
     default:
         // See if any parents need this value.
-    	CObject::onSet(key, value);
+    	CObject::set(key, value);
         break;
     }
 }
@@ -145,7 +145,7 @@ void CFeDistantLight::onSet(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFeDistantLight::onUpdate(SPCtx *ctx, guint flags) {
+void CFeDistantLight::update(SPCtx *ctx, guint flags) {
 	SPFeDistantLight* object = this->spfedistantlight;
     SPFeDistantLight *feDistantLight = SP_FEDISTANTLIGHT(object);
     (void)feDistantLight;
@@ -156,13 +156,13 @@ void CFeDistantLight::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "elevation" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeDistantLight::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeDistantLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeDistantLight* object = this->spfedistantlight;
     SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
 
@@ -175,7 +175,7 @@ Inkscape::XML::Node* CFeDistantLight::onWrite(Inkscape::XML::Document *doc, Inks
     if (fedistantlight->elevation_set)
         sp_repr_set_css_double(repr, "elevation", fedistantlight->elevation);
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

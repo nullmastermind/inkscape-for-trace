@@ -65,8 +65,8 @@ sp_fepointlight_init(SPFePointLight *fepointlight)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFePointLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPFePointLight* object = this->spfepointlight;
 
@@ -82,7 +82,7 @@ void CFePointLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFePointLight::onRelease() {
+void CFePointLight::release() {
 	SPFePointLight* object = this->spfepointlight;
     //SPFePointLight *fepointlight = SP_FEPOINTLIGHT(object);
 
@@ -97,7 +97,7 @@ void CFePointLight::onRelease() {
 /**
  * Sets a specific value in the SPFePointLight.
  */
-void CFePointLight::onSet(unsigned int key, gchar const *value) {
+void CFePointLight::set(unsigned int key, gchar const *value) {
 	SPFePointLight* object = this->spfepointlight;
 
     SPFePointLight *fepointlight = SP_FEPOINTLIGHT(object);
@@ -159,7 +159,7 @@ void CFePointLight::onSet(unsigned int key, gchar const *value) {
         break;
     default:
         // See if any parents need this value.
-    	CObject::onSet(key, value);
+    	CObject::set(key, value);
         break;
     }
 }
@@ -167,7 +167,7 @@ void CFePointLight::onSet(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFePointLight::onUpdate(SPCtx *ctx, guint flags) {
+void CFePointLight::update(SPCtx *ctx, guint flags) {
 	SPFePointLight* object = this->spfepointlight;
 
     SPFePointLight *fePointLight = SP_FEPOINTLIGHT(object);
@@ -180,13 +180,13 @@ void CFePointLight::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "z" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFePointLight::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFePointLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFePointLight* object = this->spfepointlight;
     SPFePointLight *fepointlight = SP_FEPOINTLIGHT(object);
 
@@ -201,7 +201,7 @@ Inkscape::XML::Node* CFePointLight::onWrite(Inkscape::XML::Document *doc, Inksca
     if (fepointlight->z_set)
         sp_repr_set_css_double(repr, "z", fepointlight->z);
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

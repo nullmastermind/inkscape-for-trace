@@ -47,10 +47,10 @@ static void sp_missing_glyph_init(SPMissingGlyph *glyph)
     glyph->vert_adv_y = 0;
 }
 
-void CMissingGlyph::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPMissingGlyph* object = this->spmissingglyph;
 
-    CObject::onBuild(doc, repr);
+    CObject::build(doc, repr);
 
     object->readAttr( "d" );
     object->readAttr( "horiz-adv-x" );
@@ -59,12 +59,12 @@ void CMissingGlyph::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
     object->readAttr( "vert-adv-y" );
 }
 
-void CMissingGlyph::onRelease() {
-	CObject::onRelease();
+void CMissingGlyph::release() {
+	CObject::release();
 }
 
 
-void CMissingGlyph::onSet(unsigned int key, const gchar* value) {
+void CMissingGlyph::set(unsigned int key, const gchar* value) {
 	SPMissingGlyph* object = this->spmissingglyph;
 
     SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
@@ -117,7 +117,7 @@ void CMissingGlyph::onSet(unsigned int key, const gchar* value) {
         }
         default:
         {
-            CObject::onSet(key, value);
+            CObject::set(key, value);
             break;
         }
     }
@@ -125,7 +125,7 @@ void CMissingGlyph::onSet(unsigned int key, const gchar* value) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CMissingGlyph::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CMissingGlyph::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
 	SPMissingGlyph* object = this->spmissingglyph;
 
 	//    SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
@@ -152,7 +152,7 @@ Inkscape::XML::Node* CMissingGlyph::onWrite(Inkscape::XML::Document* xml_doc, In
 	        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
 	    }
 
-	    CObject::onWrite(xml_doc, repr, flags);
+	    CObject::write(xml_doc, repr, flags);
 
 	    return repr;
 }

@@ -37,10 +37,10 @@ static void sp_script_init(SPScript *script)
 	script->cobject = script->cscript;
 }
 
-void CScript::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPScript* object = this->spscript;
 
-    CObject::onBuild(doc, repr);
+    CObject::build(doc, repr);
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "xlink:href" );
@@ -54,7 +54,7 @@ void CScript::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 
-void CScript::onRelease() {
+void CScript::release() {
 	SPScript* object = this->spscript;
 
     if (object->document) {
@@ -62,18 +62,18 @@ void CScript::onRelease() {
         object->document->removeResource("script", object);
     }
 
-    CObject::onRelease();
+    CObject::release();
 }
 
-void CScript::onUpdate(SPCtx* ctx, unsigned int flags) {
-}
-
-
-void CScript::onModified(unsigned int flags) {
+void CScript::update(SPCtx* ctx, unsigned int flags) {
 }
 
 
-void CScript::onSet(unsigned int key, const gchar* value) {
+void CScript::modified(unsigned int flags) {
+}
+
+
+void CScript::set(unsigned int key, const gchar* value) {
 	SPScript* object = this->spscript;
 
     SPScript *scr = SP_SCRIPT(object);
@@ -85,12 +85,12 @@ void CScript::onSet(unsigned int key, const gchar* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 	default:
-            CObject::onSet(key, value);
+            CObject::set(key, value);
             break;
     }
 }
 
-Inkscape::XML::Node* CScript::onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CScript::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
 	return repr;
 }
 

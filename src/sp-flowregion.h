@@ -43,12 +43,12 @@ public:
 	CFlowregion(SPFlowregion* flowregion);
 	virtual ~CFlowregion();
 
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node *child);
-	virtual void onUpdate(SPCtx *ctx, unsigned int flags);
-	virtual void onModified(guint flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual gchar *onDescription();
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node *child);
+	virtual void update(SPCtx *ctx, unsigned int flags);
+	virtual void modified(guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual gchar *description();
 
 protected:
 	SPFlowregion* spflowregion;
@@ -74,12 +74,12 @@ public:
 	CFlowregionExclude(SPFlowregionExclude* flowregionexclude);
 	virtual ~CFlowregionExclude();
 
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node *child);
-	virtual void onUpdate(SPCtx *ctx, unsigned int flags);
-	virtual void onModified(guint flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual gchar *onDescription();
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node *child);
+	virtual void update(SPCtx *ctx, unsigned int flags);
+	virtual void modified(guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual gchar *description();
 
 protected:
 	SPFlowregionExclude* spflowregionexclude;

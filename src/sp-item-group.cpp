@@ -88,21 +88,21 @@ sp_group_init (SPGroup *group)
         new (&group->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
 }
 
-void CGroup::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CGroup::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPGroup* object = this->spgroup;
 
     object->readAttr( "inkscape:groupmode" );
 
-    CLPEItem::onBuild(document, repr);
+    CLPEItem::build(document, repr);
 }
 
-void CGroup::onRelease() {
+void CGroup::release() {
 	SPGroup* object = this->spgroup;
 
     if ( SP_GROUP(object)->_layer_mode == SPGroup::LAYER ) {
         object->document->removeResource("layer", object);
     }
-    CLPEItem::onRelease();
+    CLPEItem::release();
 }
 
 static void
@@ -111,8 +111,8 @@ sp_group_dispose(GObject *object)
     SP_GROUP(object)->_display_modes.~map();
 }
 
-void CGroup::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
-    CLPEItem::onChildAdded(child, ref);
+void CGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+    CLPEItem::child_added(child, ref);
 
     SPObject *last_child = spgroup->lastChild();
 
@@ -157,15 +157,15 @@ void CGroup::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
 
 /* fixme: hide (Lauris) */
 
-void CGroup::onRemoveChild(Inkscape::XML::Node *child) {
-    CLPEItem::onRemoveChild(child);
+void CGroup::remove_child(Inkscape::XML::Node *child) {
+    CLPEItem::remove_child(child);
 
     spgroup->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CGroup::onOrderChanged (Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
+void CGroup::order_changed (Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
 {
-	CLPEItem::onOrderChanged(child, old_ref, new_ref);
+	CLPEItem::order_changed(child, old_ref, new_ref);
 
     SPObject *ochild = spgroup->get_child_by_repr(child);
     if ( ochild && SP_IS_ITEM(ochild) ) {
@@ -180,8 +180,8 @@ void CGroup::onOrderChanged (Inkscape::XML::Node *child, Inkscape::XML::Node *ol
     spgroup->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CGroup::onUpdate(SPCtx *ctx, unsigned int flags) {
-    CLPEItem::onUpdate(ctx, flags);
+void CGroup::update(SPCtx *ctx, unsigned int flags) {
+    CLPEItem::update(ctx, flags);
 
     SPItemCtx *ictx, cctx;
 
@@ -220,8 +220,8 @@ void CGroup::onUpdate(SPCtx *ctx, unsigned int flags) {
     }
 }
 
-void CGroup::onModified(guint flags) {
-    CLPEItem::onModified(flags);
+void CGroup::modified(guint flags) {
+    CLPEItem::modified(flags);
 
     SPObject *child;
 
@@ -247,7 +247,7 @@ void CGroup::onModified(guint flags) {
     }
 }
 
-Inkscape::XML::Node* CGroup::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPGroup* object = this->spgroup;
     SPGroup *group = SP_GROUP(object);
 
@@ -296,12 +296,12 @@ Inkscape::XML::Node* CGroup::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
         repr->setAttribute("inkscape:groupmode", value);
     }
 
-    CLPEItem::onWrite(xml_doc, repr, flags);
+    CLPEItem::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-Geom::OptRect CGroup::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype)
+Geom::OptRect CGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype)
 {
     Geom::OptRect bbox;
 
@@ -318,7 +318,7 @@ Geom::OptRect CGroup::onBbox(Geom::Affine const &transform, SPItem::BBoxType bbo
     return bbox;
 }
 
-void CGroup::onPrint(SPPrintContext *ctx) {
+void CGroup::print(SPPrintContext *ctx) {
     GSList *l = g_slist_reverse(spgroup->childList(false));
     while (l) {
         SPObject *o = SP_OBJECT (l->data);
@@ -329,7 +329,7 @@ void CGroup::onPrint(SPPrintContext *ctx) {
     }
 }
 
-gchar *CGroup::onDescription() {
+gchar *CGroup::description() {
     gint len = this->spgroup->getItemCount();
     return g_strdup_printf(
             ngettext("<b>Group</b> of <b>%d</b> object",
@@ -337,7 +337,7 @@ gchar *CGroup::onDescription() {
                  len), len);
 }
 
-void CGroup::onSet(unsigned int key, gchar const* value) {
+void CGroup::set(unsigned int key, gchar const* value) {
     SPGroup *group = this->spgroup;
 
     switch (key) {
@@ -351,12 +351,12 @@ void CGroup::onSet(unsigned int key, gchar const* value) {
             }
             break;
         default: {
-            CLPEItem::onSet(key, value);
+            CLPEItem::set(key, value);
         }
     }
 }
 
-Inkscape::DrawingItem *CGroup::onShow (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem *CGroup::show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
     Inkscape::DrawingGroup *ai;
     SPObject *object = spgroup;
 
@@ -368,7 +368,7 @@ Inkscape::DrawingItem *CGroup::onShow (Inkscape::Drawing &drawing, unsigned int 
     return ai;
 }
 
-void CGroup::onHide (unsigned int key) {
+void CGroup::hide (unsigned int key) {
     SPItem * child;
 
     GSList *l = g_slist_reverse(spgroup->childList(false, SPObject::ActionShow));
@@ -385,7 +385,7 @@ void CGroup::onHide (unsigned int key) {
 }
 
 
-void CGroup::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CGroup::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPGroup* item = this->spgroup;
 
     for ( SPObject const *o = item->firstChild(); o; o = o->getNext() )
@@ -671,7 +671,7 @@ void SPGroup::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *
     }
 }
 
-void CGroup::onUpdatePatheffect(bool write) {
+void CGroup::update_patheffect(bool write) {
 	SPGroup* lpeitem = this->spgroup;
 
 #ifdef GROUP_VERBOSE
@@ -684,7 +684,7 @@ void CGroup::onUpdatePatheffect(bool write) {
     for ( GSList const *iter = item_list; iter; iter = iter->next ) {
         SPObject *subitem = static_cast<SPObject *>(iter->data);
         if (SP_IS_LPE_ITEM(subitem)) {
-        	((SPLPEItem*)subitem)->clpeitem->onUpdatePatheffect(write);
+        	((SPLPEItem*)subitem)->clpeitem->update_patheffect(write);
         }
     }
 

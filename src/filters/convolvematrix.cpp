@@ -70,8 +70,8 @@ sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeConvolveMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::onBuild(document, repr);
+void CFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::build(document, repr);
 
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
@@ -90,8 +90,8 @@ void CFeConvolveMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr)
 /**
  * Drops any allocated memory.
  */
-void CFeConvolveMatrix::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeConvolveMatrix::release() {
+	CFilterPrimitive::release();
 }
 
 static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_edgeMode(gchar const *value){
@@ -113,7 +113,7 @@ static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_
 /**
  * Sets a specific value in the SPFeConvolveMatrix.
  */
-void CFeConvolveMatrix::onSet(unsigned int key, gchar const *value) {
+void CFeConvolveMatrix::set(unsigned int key, gchar const *value) {
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
     SPFeConvolveMatrix *feConvolveMatrix = SP_FECONVOLVEMATRIX(object);
@@ -229,7 +229,7 @@ void CFeConvolveMatrix::onSet(unsigned int key, gchar const *value) {
             }
             break;
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 
@@ -238,7 +238,7 @@ void CFeConvolveMatrix::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeConvolveMatrix::onUpdate(SPCtx *ctx, guint flags) {
+void CFeConvolveMatrix::update(SPCtx *ctx, guint flags) {
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -248,13 +248,13 @@ void CFeConvolveMatrix::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeConvolveMatrix::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeConvolveMatrix::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -264,12 +264,12 @@ Inkscape::XML::Node* CFeConvolveMatrix::onWrite(Inkscape::XML::Document *doc, In
     }
 
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeConvolveMatrix::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeConvolveMatrix* primitive = this->spfeconvolvematrix;
 
     g_assert(primitive != NULL);

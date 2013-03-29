@@ -73,19 +73,19 @@ public:
 	CImage(SPImage* image);
 	virtual ~CImage();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual void onUpdate(SPCtx *ctx, guint flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onModified(unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void set(unsigned int key, gchar const* value);
+	virtual void update(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void modified(unsigned int flags);
 
-	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType type);
-	virtual void onPrint(SPPrintContext *ctx);
-	virtual gchar* onDescription();
-	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-    virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-    virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
+	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
+	virtual void print(SPPrintContext *ctx);
+	virtual gchar* description();
+	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+    virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+    virtual Geom::Affine set_transform(Geom::Affine const &transform);
 
 protected:
 	SPImage* spimage;

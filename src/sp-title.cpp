@@ -39,14 +39,14 @@ sp_title_init(SPTitle *desc)
 	desc->cobject = desc->ctitle;
 }
 
-Inkscape::XML::Node* CTitle::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPTitle* object = this->sptitle;
 
     if (!repr) {
         repr = object->getRepr()->duplicate(xml_doc);
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

@@ -68,7 +68,7 @@ CFilterPrimitive::~CFilterPrimitive() {
 }
 
 // CPPIFY: Make pure virtual.
-void CFilterPrimitive::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
 	// throw;
 }
 
@@ -98,7 +98,7 @@ static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFilterPrimitive::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive* object = this->spfilterprimitive;
 
     object->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
@@ -109,20 +109,20 @@ void CFilterPrimitive::onBuild(SPDocument *document, Inkscape::XML::Node *repr) 
 	object->readAttr( "width" );
 	object->readAttr( "height" );
 
-	CObject::onBuild(document, repr);
+	CObject::build(document, repr);
 }
 
 /**
  * Drops any allocated memory.
  */
-void CFilterPrimitive::onRelease() {
-	CObject::onRelease();
+void CFilterPrimitive::release() {
+	CObject::release();
 }
 
 /**
  * Sets a specific value in the SPFilterPrimitive.
  */
-void CFilterPrimitive::onSet(unsigned int key, gchar const *value) {
+void CFilterPrimitive::set(unsigned int key, gchar const *value) {
 	SPFilterPrimitive* object = this->spfilterprimitive;
 
     SPFilterPrimitive *filter_primitive = SP_FILTER_PRIMITIVE(object);
@@ -172,13 +172,13 @@ void CFilterPrimitive::onSet(unsigned int key, gchar const *value) {
     }
 
     /* See if any parents need this value. */
-    CObject::onSet(key, value);
+    CObject::set(key, value);
 }
 
 /**
  * Receives update notifications.
  */
-void CFilterPrimitive::onUpdate(SPCtx *ctx, guint flags) {
+void CFilterPrimitive::update(SPCtx *ctx, guint flags) {
 	SPFilterPrimitive* object = this->spfilterprimitive;
 
     //SPFilterPrimitive *filter_primitive = SP_FILTER_PRIMITIVE(object);
@@ -194,13 +194,13 @@ void CFilterPrimitive::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "height" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFilterPrimitive::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFilterPrimitive::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFilterPrimitive* object = this->spfilterprimitive;
 
     SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(object);
@@ -217,7 +217,7 @@ Inkscape::XML::Node* CFilterPrimitive::onWrite(Inkscape::XML::Document *doc, Ink
     repr->setAttribute("result", out_name);
 
     /* Do we need to add x,y,width,height? */
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

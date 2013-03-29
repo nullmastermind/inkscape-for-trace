@@ -62,10 +62,10 @@ sp_feComposite_init(SPFeComposite *feComposite)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeComposite::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFeComposite::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFeComposite* object = this->spfecomposite;
 
-	CFilterPrimitive::onBuild(document, repr);
+	CFilterPrimitive::build(document, repr);
 
 	SPFeComposite *comp = SP_FECOMPOSITE(object);
 
@@ -92,8 +92,8 @@ void CFeComposite::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeComposite::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeComposite::release() {
+	CFilterPrimitive::release();
 }
 
 static FeCompositeOperator
@@ -112,7 +112,7 @@ sp_feComposite_read_operator(gchar const *value) {
 /**
  * Sets a specific value in the SPFeComposite.
  */
-void CFeComposite::onSet(unsigned int key, gchar const *value) {
+void CFeComposite::set(unsigned int key, gchar const *value) {
 	SPFeComposite* object = this->spfecomposite;
 
     SPFeComposite *feComposite = SP_FECOMPOSITE(object);
@@ -176,7 +176,7 @@ void CFeComposite::onSet(unsigned int key, gchar const *value) {
             break;
 
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -185,7 +185,7 @@ void CFeComposite::onSet(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void
-CFeComposite::onUpdate(SPCtx *ctx, guint flags) {
+CFeComposite::update(SPCtx *ctx, guint flags) {
 	SPFeComposite* object = this->spfecomposite;
 
     SPFeComposite *comp = SP_FECOMPOSITE(object);
@@ -209,13 +209,13 @@ CFeComposite::onUpdate(SPCtx *ctx, guint flags) {
         object->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, comp->in2));
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeComposite::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeComposite::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeComposite* object = this->spfecomposite;
 
     SPFeComposite *comp = SP_FECOMPOSITE(object);
@@ -270,12 +270,12 @@ Inkscape::XML::Node* CFeComposite::onWrite(Inkscape::XML::Document *doc, Inkscap
         repr->setAttribute("k4", 0);
     }
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeComposite::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeComposite::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeComposite* primitive = this->spfecomposite;
 
     g_assert(primitive != NULL);

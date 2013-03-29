@@ -190,15 +190,15 @@ sp_object_init(SPObject *object)
 }
 
 // CPPIFY: make pure virtual
-void CObject::onReadContent() {
+void CObject::read_content() {
 	//throw;
 }
 
-void CObject::onUpdate(SPCtx* ctx, unsigned int flags) {
+void CObject::update(SPCtx* ctx, unsigned int flags) {
 	//throw;
 }
 
-void CObject::onModified(unsigned int flags) {
+void CObject::modified(unsigned int flags) {
 	//throw;
 }
 
@@ -657,7 +657,7 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
     return result;
 }
 
-void CObject::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPObject* object = this->spobject;
 
     GType type = sp_repr_type_lookup(child);
@@ -672,7 +672,7 @@ void CObject::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
     ochild->invoke_build(object->document, child, object->cloned);
 }
 
-void CObject::onRelease() {
+void CObject::release() {
 	SPObject* object = this->spobject;
 
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
@@ -681,7 +681,7 @@ void CObject::onRelease() {
     }
 }
 
-void CObject::onRemoveChild(Inkscape::XML::Node* child) {
+void CObject::remove_child(Inkscape::XML::Node* child) {
 	SPObject* object = this->spobject;
 
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
@@ -692,7 +692,7 @@ void CObject::onRemoveChild(Inkscape::XML::Node* child) {
     }
 }
 
-void CObject::onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node *new_ref) {
+void CObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node *new_ref) {
 	SPObject* object = this->spobject;
 
     SPObject *ochild = object->get_child_by_repr(child);
@@ -702,7 +702,7 @@ void CObject::onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node * o
     ochild->_position_changed_signal.emit(ochild);
 }
 
-void CObject::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject* object = this->spobject;
 
     /* Nothing specific here */
@@ -780,7 +780,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
     }
 
     /* Invoke derived methods, if any */
-    this->cobject->onBuild(document, repr);
+    this->cobject->build(document, repr);
 
     /* Signalling (should be connected AFTER processing derived methods */
     sp_repr_add_listener(repr, &object_event_vector, this);
@@ -819,7 +819,7 @@ void SPObject::releaseReferences() {
 
     this->_release_signal.emit(this);
 
-    this->cobject->onRelease();
+    this->cobject->release();
 
     /* all hrefs should be released by the "release" handlers */
     g_assert(this->hrefcount == 0);
@@ -865,24 +865,24 @@ void SPObject::repr_child_added(Inkscape::XML::Node * /*repr*/, Inkscape::XML::N
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->onChildAdded(child, ref);
+    object->cobject->child_added(child, ref);
 }
 
 void SPObject::repr_child_removed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node * /*ref*/, gpointer data)
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->onRemoveChild(child);
+    object->cobject->remove_child(child);
 }
 
 void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data)
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->onOrderChanged(child, old, newer);
+    object->cobject->order_changed(child, old, newer);
 }
 
-void CObject::onSet(unsigned int key, gchar const* value) {
+void CObject::set(unsigned int key, gchar const* value) {
     g_assert(key != SP_ATTR_INVALID);
 
     SPObject* object = this->spobject;
@@ -973,7 +973,7 @@ void SPObject::setKeyValue(unsigned int key, gchar const *value)
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
 
-	this->cobject->onSet(key, value);
+	this->cobject->set(key, value);
 }
 
 void SPObject::readAttr(gchar const *key)
@@ -1011,7 +1011,7 @@ void SPObject::repr_content_changed(Inkscape::XML::Node * /*repr*/, gchar const 
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->onReadContent();
+    object->cobject->read_content();
 }
 
 /**
@@ -1029,7 +1029,7 @@ static gchar const *sp_xml_get_space_string(unsigned int space)
     }
 }
 
-Inkscape::XML::Node* CObject::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CObject::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPObject* object = this->spobject;
 
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
@@ -1135,7 +1135,7 @@ Inkscape::XML::Node * SPObject::updateRepr(Inkscape::XML::Document *doc, Inkscap
 	if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = getRepr();
 	}
-	return this->cobject->onWrite(doc, repr, flags);
+	return this->cobject->write(doc, repr, flags);
 
 }
 
@@ -1202,7 +1202,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 
     try
     {
-    	this->cobject->onUpdate(ctx, flags);
+    	this->cobject->update(ctx, flags);
     }
     catch(...)
     {
@@ -1260,7 +1260,7 @@ void SPObject::emitModified(unsigned int flags)
 
     g_object_ref(G_OBJECT(this));
 
-    this->cobject->onModified(flags);
+    this->cobject->modified(flags);
 
     _modified_signal.emit(this, flags);
     g_object_unref(G_OBJECT(this));

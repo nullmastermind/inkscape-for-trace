@@ -35,12 +35,12 @@ public:
 	CString(SPString* str);
 	virtual ~CString();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
 
-	virtual void onReadContent();
+	virtual void read_content();
 
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void update(SPCtx* ctx, unsigned int flags);
 
 protected:
 	SPString* spstring;

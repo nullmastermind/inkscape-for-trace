@@ -540,10 +540,10 @@ static void sp_image_init( SPImage *image )
     image->lastMod = 0;
 }
 
-void CImage::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPImage* object = this->spimage;
 
-	CItem::onBuild(document, repr);
+	CItem::build(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "x" );
@@ -557,7 +557,7 @@ void CImage::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     document->addResource("image", object);
 }
 
-void CImage::onRelease() {
+void CImage::release() {
 	SPImage* object = this->spimage;
 
     SPImage *image = SP_IMAGE(object);
@@ -593,10 +593,10 @@ void CImage::onRelease() {
         image->curve = image->curve->unref();
     }
 
-    CItem::onRelease();
+    CItem::release();
 }
 
-void CImage::onSet(unsigned int key, const gchar* value) {
+void CImage::set(unsigned int key, const gchar* value) {
 	SPImage* object = this->spimage;
 
     SPImage *image = SP_IMAGE (object);
@@ -711,20 +711,20 @@ void CImage::onSet(unsigned int key, const gchar* value) {
             break;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         default:
-            CItem::onSet(key, value);
+            CItem::set(key, value);
             break;
     }
 
     sp_image_set_curve(image); //creates a curve at the image's boundary for snapping
 }
 
-void CImage::onUpdate(SPCtx *ctx, unsigned int flags) {
+void CImage::update(SPCtx *ctx, unsigned int flags) {
 	SPImage* object = this->spimage;
 
     SPImage *image = SP_IMAGE(object);
     SPDocument *doc = object->document;
 
-    CItem::onUpdate(ctx, flags);
+    CItem::update(ctx, flags);
 
     if (flags & SP_IMAGE_HREF_MODIFIED_FLAG) {
         if (image->pixbuf) {
@@ -922,7 +922,7 @@ void CImage::onUpdate(SPCtx *ctx, unsigned int flags) {
     sp_image_update_canvas_image ((SPImage *) object);
 }
 
-void CImage::onModified(unsigned int flags) {
+void CImage::modified(unsigned int flags) {
 	SPImage* object = this->spimage;
 
     SPImage *image = SP_IMAGE (object);
@@ -938,7 +938,7 @@ void CImage::onModified(unsigned int flags) {
 }
 
 
-Inkscape::XML::Node *CImage::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags ) {
+Inkscape::XML::Node *CImage::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags ) {
 	SPImage* object = this->spimage;
 
     SPImage *image = SP_IMAGE (object);
@@ -970,12 +970,12 @@ Inkscape::XML::Node *CImage::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    CItem::onWrite(xml_doc, repr, flags);
+    CItem::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-Geom::OptRect CImage::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect CImage::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPImage* item = this->spimage;
 
     SPImage const &image = *SP_IMAGE(item);
@@ -988,7 +988,7 @@ Geom::OptRect CImage::onBbox(Geom::Affine const &transform, SPItem::BBoxType typ
     return bbox;
 }
 
-void CImage::onPrint(SPPrintContext *ctx) {
+void CImage::print(SPPrintContext *ctx) {
 	SPImage* item = this->spimage;
 
     SPImage *image = SP_IMAGE(item);
@@ -1036,7 +1036,7 @@ void CImage::onPrint(SPPrintContext *ctx) {
     }
 }
 
-gchar* CImage::onDescription() {
+gchar* CImage::description() {
 	SPImage* item = this->spimage;
 
     SPImage *image = SP_IMAGE(item);
@@ -1060,7 +1060,7 @@ gchar* CImage::onDescription() {
     return ret;
 }
 
-Inkscape::DrawingItem* CImage::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CImage::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	SPImage* item = this->spimage;
 
     SPImage * image = SP_IMAGE(item);
@@ -1195,7 +1195,7 @@ static void sp_image_update_canvas_image(SPImage *image)
     }
 }
 
-void CImage::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CImage::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPImage* item = this->spimage;
 
     /* An image doesn't have any nodes to snap, but still we want to be able snap one image
@@ -1232,7 +1232,7 @@ void CImage::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  * Transform x, y, set x, y, clear translation
  */
 
-Geom::Affine CImage::onSetTransform(Geom::Affine const &xform) {
+Geom::Affine CImage::set_transform(Geom::Affine const &xform) {
 	SPImage* item = this->spimage;
 
     SPImage *image = SP_IMAGE(item);
@@ -1413,7 +1413,7 @@ static void sp_image_set_curve( SPImage *image )
             image->curve = image->curve->unref();
         }
     } else {
-        Geom::OptRect rect = image->cimage->onBbox(Geom::identity(), SPItem::VISUAL_BBOX);
+        Geom::OptRect rect = image->cimage->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
         SPCurve *c = SPCurve::new_from_rect(*rect, true);
 
         if (image->curve) {
@@ -1487,7 +1487,7 @@ void sp_image_refresh_if_outdated( SPImage* image )
             if ( st.st_mtime != image->lastMod ) {
                 SPCtx *ctx = 0;
                 unsigned int flags = SP_IMAGE_HREF_MODIFIED_FLAG;
-                image->cimage->onUpdate(ctx, flags);
+                image->cimage->update(ctx, flags);
             }
         }
     }

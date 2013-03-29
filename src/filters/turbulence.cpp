@@ -60,10 +60,10 @@ sp_feTurbulence_init(SPFeTurbulence *feTurbulence)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeTurbulence::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFeTurbulence::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFeTurbulence* object = this->spfeturbulence;
 
-	CFilterPrimitive::onBuild(document, repr);
+	CFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 	object->readAttr( "baseFrequency" );
@@ -76,8 +76,8 @@ void CFeTurbulence::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeTurbulence::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeTurbulence::release() {
+	CFilterPrimitive::release();
 }
 
 static bool sp_feTurbulence_read_stitchTiles(gchar const *value){
@@ -109,7 +109,7 @@ static Inkscape::Filters::FilterTurbulenceType sp_feTurbulence_read_type(gchar c
 /**
  * Sets a specific value in the SPFeTurbulence.
  */
-void CFeTurbulence::onSet(unsigned int key, gchar const *value) {
+void CFeTurbulence::set(unsigned int key, gchar const *value) {
 	SPFeTurbulence* object = this->spfeturbulence;
 
     SPFeTurbulence *feTurbulence = SP_FETURBULENCE(object);
@@ -164,7 +164,7 @@ void CFeTurbulence::onSet(unsigned int key, gchar const *value) {
             }
             break;
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -172,7 +172,7 @@ void CFeTurbulence::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeTurbulence::onUpdate(SPCtx *ctx, guint flags) {
+void CFeTurbulence::update(SPCtx *ctx, guint flags) {
 	SPFeTurbulence* object = this->spfeturbulence;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -182,13 +182,13 @@ void CFeTurbulence::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeTurbulence::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeTurbulence::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeTurbulence* object = this->spfeturbulence;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -197,7 +197,7 @@ Inkscape::XML::Node* CFeTurbulence::onWrite(Inkscape::XML::Document *doc, Inksca
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     /* turbulence doesn't take input */
     repr->setAttribute("in", 0);
@@ -205,7 +205,7 @@ Inkscape::XML::Node* CFeTurbulence::onWrite(Inkscape::XML::Document *doc, Inksca
     return repr;
 }
 
-void CFeTurbulence::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeTurbulence::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeTurbulence* primitive = this->spfeturbulence;
 
     g_assert(primitive != NULL);

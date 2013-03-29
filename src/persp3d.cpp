@@ -86,8 +86,8 @@ persp3d_init(Persp3D *persp)
 /**
  * Virtual build: set persp3d attributes from its associated XML node.
  */
-void CPersp3D::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CPersp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	Persp3D* object = this->persp3d;
 
@@ -104,7 +104,7 @@ void CPersp3D::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Virtual release of Persp3D members before destruction.
  */
-void CPersp3D::onRelease() {
+void CPersp3D::release() {
 	Persp3D* object = this->persp3d;
 
     Persp3D *persp = SP_PERSP3D(object);
@@ -118,7 +118,7 @@ void CPersp3D::onRelease() {
  */
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
-void CPersp3D::onSet(unsigned key, gchar const *value) {
+void CPersp3D::set(unsigned key, gchar const *value) {
 	Persp3D* object = this->persp3d;
 
     Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
@@ -153,7 +153,7 @@ void CPersp3D::onSet(unsigned key, gchar const *value) {
             }
         }
         default: {
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
         }
     }
@@ -169,14 +169,14 @@ void CPersp3D::onSet(unsigned key, gchar const *value) {
     }
 }
 
-void CPersp3D::onUpdate(SPCtx *ctx, guint flags) {
+void CPersp3D::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* TODO: Should we update anything here? */
 
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
@@ -235,7 +235,7 @@ Persp3D *persp3d_document_first_persp(SPDocument *document)
 /**
  * Virtual write: write object attributes to repr.
  */
-Inkscape::XML::Node* CPersp3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CPersp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	Persp3D* object = this->persp3d;
 
     Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
@@ -261,7 +261,7 @@ Inkscape::XML::Node* CPersp3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscap
         repr->setAttribute("inkscape:persp3d-origin", str);
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

@@ -53,7 +53,7 @@ sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeMergeNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFeMergeNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFeMergeNode* object = this->spfemergenode;
 	object->readAttr( "in" );
 }
@@ -61,14 +61,14 @@ void CFeMergeNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeMergeNode::onRelease() {
-	CObject::onRelease();
+void CFeMergeNode::release() {
+	CObject::release();
 }
 
 /**
  * Sets a specific value in the SPFeMergeNode.
  */
-void CFeMergeNode::onSet(unsigned int key, gchar const *value) {
+void CFeMergeNode::set(unsigned int key, gchar const *value) {
 	SPFeMergeNode* object = this->spfemergenode;
     SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
     SPFeMerge *parent = SP_FEMERGE(object->parent);
@@ -82,13 +82,13 @@ void CFeMergeNode::onSet(unsigned int key, gchar const *value) {
     }
 
     /* See if any parents need this value. */
-    CObject::onSet(key, value);
+    CObject::set(key, value);
 }
 
 /**
  * Receives update notifications.
  */
-void CFeMergeNode::onUpdate(SPCtx *ctx, guint flags) {
+void CFeMergeNode::update(SPCtx *ctx, guint flags) {
 	SPFeMergeNode* object = this->spfemergenode;
     //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
 
@@ -96,13 +96,13 @@ void CFeMergeNode::onUpdate(SPCtx *ctx, guint flags) {
         object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeMergeNode::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeMergeNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeMergeNode* object = this->spfemergenode;
     //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
 
@@ -116,7 +116,7 @@ Inkscape::XML::Node* CFeMergeNode::onWrite(Inkscape::XML::Document *doc, Inkscap
         }
     }
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

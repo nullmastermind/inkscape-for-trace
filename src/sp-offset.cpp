@@ -159,10 +159,10 @@ sp_offset_finalize(GObject *obj)
     offset->_transformed_connection.~connection();
 }
 
-void COffset::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void COffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPOffset* object = this->spoffset;
 
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     //XML Tree being used directly here while it shouldn't be.
     if (object->getRepr()->attribute("inkscape:radius")) {
@@ -203,7 +203,7 @@ void COffset::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* COffset::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPOffset* object = this->spoffset;
     SPOffset *offset = object;
 
@@ -226,7 +226,7 @@ Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     // Make sure the object has curve
     SPCurve *curve = SP_SHAPE (offset)->getCurve();
     if (curve == NULL) {
-        this->onSetShape();
+        this->set_shape();
     }
 
     // write that curve to "d"
@@ -234,12 +234,12 @@ Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     repr->setAttribute("d", d);
     g_free (d);
 
-    CShape::onWrite(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
+    CShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
 }
 
-void COffset::onRelease() {
+void COffset::release() {
 	SPOffset* object = this->spoffset;
     SPOffset *offset = (SPOffset *) object;
 
@@ -255,10 +255,10 @@ void COffset::onRelease() {
     offset->sourceHref = NULL;
     offset->sourceRef->detach();
 
-    CShape::onRelease();
+    CShape::release();
 }
 
-void COffset::onSet(unsigned int key, const gchar* value) {
+void COffset::set(unsigned int key, const gchar* value) {
 	SPOffset* object = this->spoffset;
     SPOffset *offset = object;
 
@@ -319,12 +319,12 @@ void COffset::onSet(unsigned int key, const gchar* value) {
             }
             break;
         default:
-            CShape::onSet(key, value);
+            CShape::set(key, value);
             break;
     }
 }
 
-void COffset::onUpdate(SPCtx *ctx, guint flags) {
+void COffset::update(SPCtx *ctx, guint flags) {
 	SPOffset* object = this->spoffset;
     SPOffset* offset = object;
 
@@ -337,10 +337,10 @@ void COffset::onUpdate(SPCtx *ctx, guint flags) {
     }
     offset->isUpdating=false;
 
-    CShape::onUpdate(ctx, flags);
+    CShape::update(ctx, flags);
 }
 
-gchar* COffset::onDescription() {
+gchar* COffset::description() {
 	SPOffset* item = this->spoffset;
     SPOffset *offset = item;
 
@@ -355,7 +355,7 @@ gchar* COffset::onDescription() {
     }
 }
 
-void COffset::onSetShape() {
+void COffset::set_shape() {
 	SPOffset* shape = this->spoffset;
     SPOffset *offset = shape;
 
@@ -637,8 +637,8 @@ void COffset::onSetShape() {
     }
 }
 
-void COffset::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
-    CShape::onSnappoints(p, snapprefs);
+void COffset::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+    CShape::snappoints(p, snapprefs);
 }
 
 
@@ -867,7 +867,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
     SPCurve *curve = SP_SHAPE (offset)->getCurve();
     if (curve == NULL)
     {
-        offset->coffset->onSetShape();
+        offset->coffset->set_shape();
         curve = SP_SHAPE (offset)->getCurve();
         if (curve == NULL)
             return;

@@ -69,10 +69,10 @@ sp_mask_init (SPMask *mask)
 	mask->display = NULL;
 }
 
-void CMask::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPMask* object = this->spmask;
 
-	CObjectGroup::onBuild(doc, repr);
+	CObjectGroup::build(doc, repr);
 
 	object->readAttr( "maskUnits" );
 	object->readAttr( "maskContentUnits" );
@@ -81,7 +81,7 @@ void CMask::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 	doc->addResource("mask", object);
 }
 
-void CMask::onRelease() {
+void CMask::release() {
 	SPMask* object = this->spmask;
 
     if (object->document) {
@@ -95,10 +95,10 @@ void CMask::onRelease() {
         cp->display = sp_mask_view_list_remove (cp->display, cp->display);
     }
 
-    CObjectGroup::onRelease();
+    CObjectGroup::release();
 }
 
-void CMask::onSet(unsigned int key, const gchar* value) {
+void CMask::set(unsigned int key, const gchar* value) {
 	SPMask* object = this->spmask;
 
 	SPMask *mask = SP_MASK (object);
@@ -131,16 +131,16 @@ void CMask::onSet(unsigned int key, const gchar* value) {
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
-		CObjectGroup::onSet(key, value);
+		CObjectGroup::set(key, value);
 		break;
 	}
 }
 
-void CMask::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+void CMask::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	SPMask* object = this->spmask;
 
 	/* Invoke SPObjectGroup implementation */
-	CObjectGroup::onChildAdded(child, ref);
+	CObjectGroup::child_added(child, ref);
 
 	/* Show new object */
 	SPObject *ochild = object->document->getObjectByRepr(child);
@@ -158,7 +158,7 @@ void CMask::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 }
 
 
-void CMask::onUpdate(SPCtx* ctx, unsigned int flags) {
+void CMask::update(SPCtx* ctx, unsigned int flags) {
 	SPMask* object = this->spmask;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -196,7 +196,7 @@ void CMask::onUpdate(SPCtx* ctx, unsigned int flags) {
     }
 }
 
-void CMask::onModified(unsigned int flags) {
+void CMask::modified(unsigned int flags) {
 	SPMask* object = this->spmask;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -222,12 +222,12 @@ void CMask::onModified(unsigned int flags) {
     }
 }
 
-Inkscape::XML::Node* CMask::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CMask::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = xml_doc->createElement("svg:mask");
 	}
 
-	CObjectGroup::onWrite(xml_doc, repr, flags);
+	CObjectGroup::write(xml_doc, repr, flags);
 
 	return repr;
 }

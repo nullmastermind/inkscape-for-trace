@@ -39,12 +39,12 @@ public:
 	CTextPath(SPTextPath* textpath);
 	virtual ~CTextPath();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, const gchar* value);
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
-	virtual void onModified(unsigned int flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+	virtual void set(unsigned int key, const gchar* value);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 protected:
 	SPTextPath* sptextpath;

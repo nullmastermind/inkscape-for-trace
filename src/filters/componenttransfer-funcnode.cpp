@@ -158,8 +158,8 @@ sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeFuncNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPFeFuncNode* object = this->spfefuncnode;
 
@@ -180,7 +180,7 @@ void CFeFuncNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeFuncNode::onRelease() {
+void CFeFuncNode::release() {
 	SPFeFuncNode* object = this->spfefuncnode;
     //SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
 
@@ -217,7 +217,7 @@ static Inkscape::Filters::FilterComponentTransferType sp_feComponenttransfer_rea
 /**
  * Sets a specific value in the SPFeFuncNode.
  */
-void CFeFuncNode::onSet(unsigned int key, gchar const *value) {
+void CFeFuncNode::set(unsigned int key, gchar const *value) {
 	SPFeFuncNode* object = this->spfefuncnode;
 
     SPFeFuncNode *feFuncNode = SP_FEFUNCNODE(object);
@@ -275,7 +275,7 @@ void CFeFuncNode::onSet(unsigned int key, gchar const *value) {
         default:
 //            if (((SPObjectClass *) feFuncNode_parent_class)->set)
 //                ((SPObjectClass *) feFuncNode_parent_class)->set(object, key, value);
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
     }
 }
@@ -283,7 +283,7 @@ void CFeFuncNode::onSet(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFeFuncNode::onUpdate(SPCtx *ctx, guint flags) {
+void CFeFuncNode::update(SPCtx *ctx, guint flags) {
 	SPFeFuncNode* object = this->spfefuncnode;
 
     SPFeFuncNode *feFuncNode = SP_FEFUNCNODE(object);
@@ -296,13 +296,13 @@ void CFeFuncNode::onUpdate(SPCtx *ctx, guint flags) {
         //object->readAttr( "elevation" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeFuncNode::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeFuncNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeFuncNode* object = this->spfefuncnode;
     SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
 
@@ -319,7 +319,7 @@ TODO: I'm not sure what to do here...
     if (fefuncnode->elevation_set)
         sp_repr_set_css_double(repr, "elevation", fefuncnode->elevation);*/
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

@@ -59,8 +59,8 @@ sp_feColorMatrix_init(SPFeColorMatrix *feColorMatrix)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeColorMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::onBuild(document, repr);
+void CFeColorMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::build(document, repr);
 
 	SPFeColorMatrix* object = this->spfecolormatrix;
 
@@ -72,8 +72,8 @@ void CFeColorMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeColorMatrix::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeColorMatrix::release() {
+	CFilterPrimitive::release();
 }
 
 static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar const *value){
@@ -98,7 +98,7 @@ static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar
 /**
  * Sets a specific value in the SPFeColorMatrix.
  */
-void CFeColorMatrix::onSet(unsigned int key, gchar const *str) {
+void CFeColorMatrix::set(unsigned int key, gchar const *str) {
 	SPFeColorMatrix* object = this->spfecolormatrix;
 
     SPFeColorMatrix *feColorMatrix = SP_FECOLORMATRIX(object);
@@ -122,7 +122,7 @@ void CFeColorMatrix::onSet(unsigned int key, gchar const *str) {
             }
             break;
         default:
-        	CFilterPrimitive::onSet(key, str);
+        	CFilterPrimitive::set(key, str);
             break;
     }
 }
@@ -130,7 +130,7 @@ void CFeColorMatrix::onSet(unsigned int key, gchar const *str) {
 /**
  * Receives update notifications.
  */
-void CFeColorMatrix::onUpdate(SPCtx *ctx, guint flags) {
+void CFeColorMatrix::update(SPCtx *ctx, guint flags) {
 	SPFeColorMatrix* object = this->spfecolormatrix;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -140,13 +140,13 @@ void CFeColorMatrix::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-	CFilterPrimitive::onUpdate(ctx, flags);
+	CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeColorMatrix::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeColorMatrix::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeColorMatrix* object = this->spfecolormatrix;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -155,12 +155,12 @@ Inkscape::XML::Node* CFeColorMatrix::onWrite(Inkscape::XML::Document *doc, Inksc
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeColorMatrix::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeColorMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeColorMatrix* primitive = this->spfecolormatrix;
 
     g_assert(primitive != NULL);

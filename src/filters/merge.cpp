@@ -54,21 +54,21 @@ sp_feMerge_init(SPFeMerge *feMerge)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeMerge::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::onBuild(document, repr);
+void CFeMerge::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::build(document, repr);
 }
 
 /**
  * Drops any allocated memory.
  */
-void CFeMerge::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeMerge::release() {
+	CFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeMerge.
  */
-void CFeMerge::onSet(unsigned int key, gchar const *value) {
+void CFeMerge::set(unsigned int key, gchar const *value) {
 	SPFeMerge* object = this->spfemerge;
 
     SPFeMerge *feMerge = SP_FEMERGE(object);
@@ -77,7 +77,7 @@ void CFeMerge::onSet(unsigned int key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -85,20 +85,20 @@ void CFeMerge::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeMerge::onUpdate(SPCtx *ctx, guint flags) {
+void CFeMerge::update(SPCtx *ctx, guint flags) {
 	SPFeMerge* object = this->spfemerge;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeMerge::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeMerge* object = this->spfemerge;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -108,12 +108,12 @@ Inkscape::XML::Node* CFeMerge::onWrite(Inkscape::XML::Document *doc, Inkscape::X
     }
 
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeMerge::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeMerge* primitive = this->spfemerge;
 
     g_assert(primitive != NULL);

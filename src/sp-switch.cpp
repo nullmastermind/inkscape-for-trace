@@ -77,7 +77,7 @@ GSList *SPSwitch::_childList(bool add_ref, SPObject::Action action) {
     return g_slist_prepend (NULL, child);
 }
 
-gchar *CSwitch::onDescription() {
+gchar *CSwitch::description() {
     gint len = this->spgroup->getItemCount();
     return g_strdup_printf(
             ngettext("<b>Conditional group</b> of <b>%d</b> object",
@@ -85,15 +85,15 @@ gchar *CSwitch::onDescription() {
                  len), len);
 }
 
-void CSwitch::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+void CSwitch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
     this->spswitch->_reevaluate(true);
 }
 
-void CSwitch::onRemoveChild(Inkscape::XML::Node *) {
+void CSwitch::remove_child(Inkscape::XML::Node *) {
 	this->spswitch->_reevaluate();
 }
 
-void CSwitch::onOrderChanged (Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *)
+void CSwitch::order_changed (Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *)
 {
 	this->spswitch->_reevaluate();
 }

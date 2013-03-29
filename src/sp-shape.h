@@ -77,23 +77,23 @@ public:
 	CShape(SPShape* shape);
 	virtual ~CShape();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onUpdate(SPCtx* ctx, guint flags);
-	virtual void onModified(unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void update(SPCtx* ctx, guint flags);
+	virtual void modified(unsigned int flags);
 
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
-	virtual void onPrint(SPPrintContext* ctx);
+	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
+	virtual void print(SPPrintContext* ctx);
 
-	virtual Inkscape::DrawingItem* onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void onHide(unsigned int key);
+	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void hide(unsigned int key);
 
-	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
-	virtual void onSetShape();
+	virtual void set_shape();
 
 protected:
 	SPShape* spshape;

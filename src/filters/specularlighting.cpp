@@ -79,10 +79,10 @@ sp_feSpecularLighting_init(SPFeSpecularLighting *feSpecularLighting)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeSpecularLighting::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CFeSpecularLighting::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
-	CFilterPrimitive::onBuild(document, repr);
+	CFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 	object->readAttr( "surfaceScale" );
@@ -95,14 +95,14 @@ void CFeSpecularLighting::onBuild(SPDocument *document, Inkscape::XML::Node *rep
 /**
  * Drops any allocated memory.
  */
-void CFeSpecularLighting::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeSpecularLighting::release() {
+	CFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeSpecularLighting.
  */
-void CFeSpecularLighting::onSet(unsigned int key, gchar const *value) {
+void CFeSpecularLighting::set(unsigned int key, gchar const *value) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
     SPFeSpecularLighting *feSpecularLighting = SP_FESPECULARLIGHTING(object);
@@ -207,7 +207,7 @@ void CFeSpecularLighting::onSet(unsigned int key, gchar const *value) {
             object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -215,7 +215,7 @@ void CFeSpecularLighting::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeSpecularLighting::onUpdate(SPCtx *ctx, guint flags) {
+void CFeSpecularLighting::update(SPCtx *ctx, guint flags) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
@@ -226,13 +226,13 @@ void CFeSpecularLighting::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "lighting-color" );
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeSpecularLighting::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeSpecularLighting::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
     SPFeSpecularLighting *fespecularlighting = SP_FESPECULARLIGHTING(object);
@@ -256,7 +256,7 @@ Inkscape::XML::Node* CFeSpecularLighting::onWrite(Inkscape::XML::Document *doc, 
         sp_svg_write_color(c, sizeof(c), fespecularlighting->lighting_color);
         repr->setAttribute("lighting-color", c);
     }
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
@@ -264,12 +264,12 @@ Inkscape::XML::Node* CFeSpecularLighting::onWrite(Inkscape::XML::Document *doc, 
 /**
  * Callback for child_added event.
  */
-void CFeSpecularLighting::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CFeSpecularLighting::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
     SPFeSpecularLighting *f = SP_FESPECULARLIGHTING(object);
 
-    CFilterPrimitive::onChildAdded(child, ref);
+    CFilterPrimitive::child_added(child, ref);
 
     sp_feSpecularLighting_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -278,22 +278,22 @@ void CFeSpecularLighting::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML
 /**
  * Callback for remove_child event.
  */
-void CFeSpecularLighting::onRemoveChild(Inkscape::XML::Node *child) {
+void CFeSpecularLighting::remove_child(Inkscape::XML::Node *child) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
     SPFeSpecularLighting *f = SP_FESPECULARLIGHTING(object);
 
-    CFilterPrimitive::onRemoveChild(child);
+    CFilterPrimitive::remove_child(child);
 
     sp_feSpecularLighting_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CFeSpecularLighting::onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
+void CFeSpecularLighting::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
 	SPFeSpecularLighting* object = this->spfespecularlighting;
 
     SPFeSpecularLighting *f = SP_FESPECULARLIGHTING(object);
-    CFilterPrimitive::onOrderChanged(child, old_ref, new_ref);
+    CFilterPrimitive::order_changed(child, old_ref, new_ref);
 
     sp_feSpecularLighting_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -318,7 +318,7 @@ static void sp_feSpecularLighting_children_modified(SPFeSpecularLighting *sp_spe
    }
 }
 
-void CFeSpecularLighting::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeSpecularLighting::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeSpecularLighting* primitive = this->spfespecularlighting;
 
     g_assert(primitive != NULL);

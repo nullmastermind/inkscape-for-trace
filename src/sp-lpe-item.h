@@ -68,20 +68,20 @@ public:
 	CLPEItem(SPLPEItem* lpeitem);
 	virtual ~CLPEItem();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
 
-	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void set(unsigned int key, gchar const* value);
 
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
-	virtual void onModified(unsigned int flags);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
 
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node* child);
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	virtual void onUpdatePatheffect(bool write);
+	virtual void update_patheffect(bool write);
 
 protected:
 	SPLPEItem* splpeitem;

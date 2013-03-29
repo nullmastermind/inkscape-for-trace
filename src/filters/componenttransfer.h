@@ -42,19 +42,19 @@ public:
 	CFeComponentTransfer(SPFeComponentTransfer* tr);
 	virtual ~CFeComponentTransfer();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
 
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node* child);
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
 
-	virtual void onSet(unsigned int key, const gchar* value);
+	virtual void set(unsigned int key, const gchar* value);
 
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+	virtual void update(SPCtx* ctx, unsigned int flags);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
-	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+	virtual void build_renderer(Inkscape::Filters::Filter* filter);
 
 private:
 	SPFeComponentTransfer* spfecomponenttransfer;

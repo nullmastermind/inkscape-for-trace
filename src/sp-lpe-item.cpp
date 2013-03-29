@@ -91,15 +91,15 @@ static void sp_lpe_item_finalize(GObject *object)
     }
 }
 
-void CLPEItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPLPEItem* object = this->splpeitem;
 
     object->readAttr( "inkscape:path-effect" );
 
-    CItem::onBuild(document, repr);
+    CItem::build(document, repr);
 }
 
-void CLPEItem::onRelease() {
+void CLPEItem::release() {
     SPLPEItem *lpeitem = this->splpeitem;
 
     // disconnect all modified listeners:
@@ -122,10 +122,10 @@ void CLPEItem::onRelease() {
     delete lpeitem->path_effect_list;
     lpeitem->path_effect_list = NULL;
 
-    CItem::onRelease();
+    CItem::release();
 }
 
-void CLPEItem::onSet(unsigned int key, gchar const* value) {
+void CLPEItem::set(unsigned int key, gchar const* value) {
     SPLPEItem *lpeitem = this->splpeitem;
     SPLPEItem* object = lpeitem;
 
@@ -187,19 +187,19 @@ void CLPEItem::onSet(unsigned int key, gchar const* value) {
             }
             break;
         default:
-            CItem::onSet(key, value);
+            CItem::set(key, value);
             break;
     }
 }
 
-void CLPEItem::onUpdate(SPCtx* ctx, unsigned int flags) {
-	CItem::onUpdate(ctx, flags);
+void CLPEItem::update(SPCtx* ctx, unsigned int flags) {
+	CItem::update(ctx, flags);
 
 	// update the helperpaths of all LPEs applied to the item
     // TODO: re-add for the new node tool
 }
 
-void CLPEItem::onModified(unsigned int flags) {
+void CLPEItem::modified(unsigned int flags) {
 	SPLPEItem *lpeitem = this->splpeitem;
     SPLPEItem* object = lpeitem;
 
@@ -210,7 +210,7 @@ void CLPEItem::onModified(unsigned int flags) {
 //    CItem::onModified(flags);
 }
 
-Inkscape::XML::Node* CLPEItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPLPEItem *lpeitem = this->splpeitem;
 
     if (flags & SP_OBJECT_WRITE_EXT) {
@@ -222,7 +222,7 @@ Inkscape::XML::Node* CLPEItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscap
         }
     }
 
-    CItem::onWrite(xml_doc, repr, flags);
+    CItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -285,7 +285,7 @@ bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve) {
 }
 
 // CPPIFY: make pure virtual
-void CLPEItem::onUpdatePatheffect(bool write) {
+void CLPEItem::update_patheffect(bool write) {
 	//throw;
 }
 
@@ -335,7 +335,7 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
         top = lpeitem;
     }
 
-    top->clpeitem->onUpdatePatheffect(write);
+    top->clpeitem->update_patheffect(write);
 }
 
 /**
@@ -602,10 +602,10 @@ void sp_lpe_item_edit_next_param_oncanvas(SPLPEItem *lpeitem, SPDesktop *dt)
     }
 }
 
-void CLPEItem::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CLPEItem::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPLPEItem* object = this->splpeitem;
 
-    CItem::onChildAdded(child, ref);
+    CItem::child_added(child, ref);
 
     if (SP_IS_LPE_ITEM(object) && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(object))) {
         SPObject *ochild = object->get_child_by_repr(child);
@@ -614,7 +614,7 @@ void CLPEItem::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref
         }
     }
 }
-void CLPEItem::onRemoveChild(Inkscape::XML::Node * child) {
+void CLPEItem::remove_child(Inkscape::XML::Node * child) {
 	SPLPEItem* object = this->splpeitem;
 
     if (SP_IS_LPE_ITEM(object) && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(object))) {
@@ -624,7 +624,7 @@ void CLPEItem::onRemoveChild(Inkscape::XML::Node * child) {
         }
     }
 
-    CItem::onRemoveChild(child);
+    CItem::remove_child(child);
 }
 
 static std::string patheffectlist_write_svg(PathEffectList const & list)

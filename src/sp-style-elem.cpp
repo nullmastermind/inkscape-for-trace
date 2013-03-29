@@ -33,7 +33,7 @@ sp_style_elem_init(SPStyleElem *style_elem)
     style_elem->is_css = false;
 }
 
-void CStyleElem::onSet(unsigned int key, const gchar* value) {
+void CStyleElem::set(unsigned int key, const gchar* value) {
 	SPStyleElem* object = this->spstyleelem;
 
     g_return_if_fail(object);
@@ -64,7 +64,7 @@ void CStyleElem::onSet(unsigned int key, const gchar* value) {
 
         /* title is ignored. */
         default: {
-            CObject::onSet(key, value);
+            CObject::set(key, value);
             break;
         }
     }
@@ -75,14 +75,14 @@ static void
 child_add_rm_cb(Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *,
                 void *const data)
 {
-    static_cast<SPObject *>(data)->cobject->onReadContent();
+    static_cast<SPObject *>(data)->cobject->read_content();
 }
 
 static void
 content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
                    void *const data)
 {
-    static_cast<SPObject *>(data)->cobject->onReadContent();
+    static_cast<SPObject *>(data)->cobject->read_content();
 }
 
 static void
@@ -90,10 +90,10 @@ child_order_changed_cb(Inkscape::XML::Node *, Inkscape::XML::Node *,
                        Inkscape::XML::Node *, Inkscape::XML::Node *,
                        void *const data)
 {
-    static_cast<SPObject *>(data)->cobject->onReadContent();
+    static_cast<SPObject *>(data)->cobject->read_content();
 }
 
-Inkscape::XML::Node* CStyleElem::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CStyleElem::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
 	SPStyleElem* object = this->spstyleelem;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -112,7 +112,7 @@ Inkscape::XML::Node* CStyleElem::onWrite(Inkscape::XML::Document* xml_doc, Inksc
     }
     /* todo: media */
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -270,7 +270,7 @@ property_cb(CRDocHandler *const a_handler,
     g_return_if_fail(append_status == CR_OK);
 }
 
-void CStyleElem::onReadContent() {
+void CStyleElem::read_content() {
 	SPStyleElem* object = this->spstyleelem;
 
     SPStyleElem &style_elem = *SP_STYLE_ELEM(object);
@@ -358,10 +358,10 @@ rec_add_listener(Inkscape::XML::Node &repr,
     }
 }
 
-void CStyleElem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPStyleElem* object = this->spstyleelem;
 
-    object->cstyleelem->onReadContent();
+    object->cstyleelem->read_content();
 
     object->readAttr( "type" );
     object->readAttr( "media" );
@@ -375,7 +375,7 @@ void CStyleElem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     };
     rec_add_listener(*repr, &nodeEventVector, object);
 
-    CObject::onBuild(document, repr);
+    CObject::build(document, repr);
 }
 
 

@@ -39,14 +39,14 @@ static void sp_desc_init(SPDesc *desc)
 	desc->cobject = desc->cdesc;
 }
 
-Inkscape::XML::Node* CDesc::onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CDesc::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
 	SPDesc* object = this->spdesc;
 
     if (!repr) {
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

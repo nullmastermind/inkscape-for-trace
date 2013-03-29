@@ -62,24 +62,24 @@ sp_string_init(SPString *string)
     new (&string->string) Glib::ustring();
 }
 
-void CString::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
+void CString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPString* object = this->spstring;
-    object->cstring->onReadContent();
+    object->cstring->read_content();
 
-    CObject::onBuild(doc, repr);
+    CObject::build(doc, repr);
 }
 
-void CString::onRelease() {
+void CString::release() {
 	SPString* object = this->spstring;
     SPString *string = SP_STRING(object);
 
     string->string.~ustring();
 
-    CObject::onRelease();
+    CObject::release();
 }
 
 
-void CString::onReadContent() {
+void CString::read_content() {
 	SPString* object = this->spstring;
 
     SPString *string = SP_STRING(object);
@@ -122,7 +122,7 @@ void CString::onReadContent() {
     object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CString::onUpdate(SPCtx *ctx, unsigned flags) {
+void CString::update(SPCtx *ctx, unsigned flags) {
 //    CObject::onUpdate(ctx, flags);
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {

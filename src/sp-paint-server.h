@@ -52,7 +52,7 @@ public:
 	CPaintServer(SPPaintServer* paintserver);
 	virtual ~CPaintServer();
 
-	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
 protected:
 	SPPaintServer* sppaintserver;

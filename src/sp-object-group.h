@@ -47,12 +47,12 @@ public:
 	CObjectGroup(SPObjectGroup* gr);
 	virtual ~CObjectGroup();
 
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node* child);
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
 
-	virtual void onOrderChanged(Inkscape::XML::Node* child, Inkscape::XML::Node* old, Inkscape::XML::Node* new_repr);
+	virtual void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old, Inkscape::XML::Node* new_repr);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPObjectGroup* spobjectgroup;

@@ -47,11 +47,11 @@ CDefs::~CDefs() {
 
 
 
-void CDefs::onRelease() {
-	CObject::onRelease();
+void CDefs::release() {
+	CObject::release();
 }
 
-void CDefs::onUpdate(SPCtx *ctx, guint flags) {
+void CDefs::update(SPCtx *ctx, guint flags) {
 	SPDefs* object = this->spdefs;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -71,7 +71,7 @@ void CDefs::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-void CDefs::onModified(unsigned int flags) {
+void CDefs::modified(unsigned int flags) {
 	SPDefs* object = this->spdefs;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -98,7 +98,7 @@ void CDefs::onModified(unsigned int flags) {
     }
 }
 
-Inkscape::XML::Node* CDefs::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPDefs* object = this->spdefs;
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
@@ -127,7 +127,7 @@ Inkscape::XML::Node* CDefs::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         }
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

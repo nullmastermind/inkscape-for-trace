@@ -58,8 +58,8 @@ static void sp_font_init(SPFont *font)
     font->vert_adv_y = FNT_UNITS_PER_EM;
 }
 
-void CFont::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPFont* object = this->spfont;
 
@@ -80,10 +80,10 @@ static void sp_font_children_modified(SPFont */*sp_font*/)
 /**
  * Callback for child_added event.
  */
-void CFont::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+void CFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPFont* object = this->spfont;
     SPFont *f = SP_FONT(object);
-    CObject::onChildAdded(child, ref);
+    CObject::child_added(child, ref);
 
     sp_font_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -93,26 +93,26 @@ void CFont::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 /**
  * Callback for remove_child event.
  */
-void CFont::onRemoveChild(Inkscape::XML::Node* child) {
+void CFont::remove_child(Inkscape::XML::Node* child) {
 	SPFont* object = this->spfont;
     SPFont *f = SP_FONT(object);
 
-    CObject::onRemoveChild(child);
+    CObject::remove_child(child);
 
     sp_font_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CFont::onRelease() {
+void CFont::release() {
     //SPFont *font = SP_FONT(object);
 	SPFont* object = this->spfont;
 
     object->document->removeResource("font", object);
 
-    CObject::onRelease();
+    CObject::release();
 }
 
-void CFont::onSet(unsigned int key, const gchar *value) {
+void CFont::set(unsigned int key, const gchar *value) {
 	SPFont* object = this->spfont;
     SPFont *font = SP_FONT(object);
 
@@ -173,7 +173,7 @@ void CFont::onSet(unsigned int key, const gchar *value) {
             break;
         }
         default:
-        	CObject::onSet(key, value);
+        	CObject::set(key, value);
             break;
     }
 }
@@ -181,7 +181,7 @@ void CFont::onSet(unsigned int key, const gchar *value) {
 /**
  * Receives update notifications.
  */
-void CFont::onUpdate(SPCtx *ctx, guint flags) {
+void CFont::update(SPCtx *ctx, guint flags) {
 	SPFont* object = this->spfont;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
@@ -193,12 +193,12 @@ void CFont::onUpdate(SPCtx *ctx, guint flags) {
         object->readAttr( "vert-adv-y" );
     }
 
-    CObject::onUpdate(ctx, flags);
+    CObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CFont::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFont::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFont* object = this->spfont;
     SPFont *font = SP_FONT(object);
 
@@ -224,7 +224,7 @@ Inkscape::XML::Node* CFont::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

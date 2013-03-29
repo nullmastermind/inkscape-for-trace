@@ -73,7 +73,7 @@ gint SPPath::nodesInPath() const
     return _curve ? _curve->nodes_in_path() : 0;
 }
 
-gchar* CPath::onDescription() {
+gchar* CPath::description() {
 	SPPath* item = this->sppath;
 
     int count = SP_PATH(item)->nodesInPath();
@@ -101,7 +101,7 @@ gchar* CPath::onDescription() {
     }
 }
 
-void CPath::onConvertToGuides() {
+void CPath::convert_to_guides() {
 	SPPath* item = this->sppath;
     SPPath *path = item;
 
@@ -159,7 +159,7 @@ sp_path_finalize(GObject *obj)
     path->connEndPair.~SPConnEndPair();
 }
 
-void CPath::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPPath* object = this->sppath;
 
     /* Are these calls actually necessary? */
@@ -170,7 +170,7 @@ void CPath::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 
     sp_conn_end_pair_build(object);
 
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     object->readAttr( "inkscape:original-d" );
     object->readAttr( "d" );
@@ -182,17 +182,17 @@ void CPath::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-void CPath::onRelease() {
+void CPath::release() {
 	SPPath* object = this->sppath;
     SPPath *path = object;
 
     path->connEndPair.release();
 
-    CShape::onRelease();
+    CShape::release();
 }
 
 
-void CPath::onSet(unsigned int key, const gchar* value) {
+void CPath::set(unsigned int key, const gchar* value) {
 	SPPath* object = this->sppath;
     SPPath *path = (SPPath *) object;
 
@@ -239,12 +239,12 @@ void CPath::onSet(unsigned int key, const gchar* value) {
             path->connEndPair.setAttr(key, value);
             break;
         default:
-            CShape::onSet(key, value);
+            CShape::set(key, value);
             break;
     }
 }
 
-Inkscape::XML::Node* CPath::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CPath::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPPath* object = this->sppath;
 	SPShape *shape = (SPShape *) object;
 
@@ -275,26 +275,26 @@ g_message("sp_path_write writes 'd' attribute");
 
     SP_PATH(shape)->connEndPair.writeRepr(repr);
 
-    CShape::onWrite(xml_doc, repr, flags);
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-void CPath::onUpdate(SPCtx *ctx, guint flags) {
+void CPath::update(SPCtx *ctx, guint flags) {
 	SPPath* object = this->sppath;
 
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 	        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
 	    }
 
-	    CShape::onUpdate(ctx, flags);
+	    CShape::update(ctx, flags);
 
 	    SPPath *path = SP_PATH(object);
 	    path->connEndPair.update();
 }
 
 
-Geom::Affine CPath::onSetTransform(Geom::Affine const &transform) {
+Geom::Affine CPath::set_transform(Geom::Affine const &transform) {
 	SPPath* item = this->sppath;
 
     if (!SP_IS_PATH(item)) {
@@ -337,7 +337,7 @@ Geom::Affine CPath::onSetTransform(Geom::Affine const &transform) {
 }
 
 
-void CPath::onUpdatePatheffect(bool write) {
+void CPath::update_patheffect(bool write) {
 	SPPath* lpeitem = this->sppath;
     SPShape * const shape = (SPShape *) lpeitem;
 

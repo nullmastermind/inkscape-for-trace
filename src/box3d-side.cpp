@@ -58,16 +58,16 @@ box3d_side_init (Box3DSide * side)
     side->front_or_rear = Box3D::FRONT;
 }
 
-void CBox3DSide::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+void CBox3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	Box3DSide* object = this->spbox3dside;
 
-    CPolygon::onBuild(document, repr);
+    CPolygon::build(document, repr);
 
     object->readAttr( "inkscape:box3dsidetype" );
 }
 
 
-Inkscape::XML::Node* CBox3DSide::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CBox3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	Box3DSide* object = this->spbox3dside;
     Box3DSide *side = object;
 
@@ -93,12 +93,12 @@ Inkscape::XML::Node* CBox3DSide::onWrite(Inkscape::XML::Document *xml_doc, Inksc
     repr->setAttribute("d", d);
     g_free (d);
 
-    CPolygon::onWrite(xml_doc, repr, flags);
+    CPolygon::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-void CBox3DSide::onSet(unsigned int key, const gchar* value) {
+void CBox3DSide::set(unsigned int key, const gchar* value) {
 	Box3DSide* object = this->spbox3dside;
     Box3DSide *side = object;
 
@@ -125,12 +125,12 @@ void CBox3DSide::onSet(unsigned int key, const gchar* value) {
             }
             break;
     default:
-        CPolygon::onSet(key, value);
+        CPolygon::set(key, value);
         break;
     }
 }
 
-void CBox3DSide::onUpdate(SPCtx* ctx, guint flags) {
+void CBox3DSide::update(SPCtx* ctx, guint flags) {
 	Box3DSide* object = this->spbox3dside;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -143,7 +143,7 @@ void CBox3DSide::onUpdate(SPCtx* ctx, guint flags) {
         static_cast<SPShape *>(object)->setShape ();
     }
 
-    CPolygon::onUpdate(ctx, flags);
+    CPolygon::update(ctx, flags);
 
 }
 
@@ -169,13 +169,13 @@ int Box3DSide::getFaceId()
 
 void
 box3d_side_position_set (Box3DSide *side) {
-	side->cbox3dside->onSetShape();
+	side->cbox3dside->set_shape();
 
     // This call is responsible for live update of the sides during the initial drag
     side->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CBox3DSide::onSetShape() {
+void CBox3DSide::set_shape() {
 	Box3DSide* shape = this->spbox3dside;
     Box3DSide *side = shape;
 

@@ -59,18 +59,18 @@ public:
 	CPath(SPPath* path);
 	~CPath();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void update(SPCtx* ctx, guint flags);
 
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	virtual gchar* onDescription();
-	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
-    virtual void onConvertToGuides();
+	virtual gchar* description();
+	virtual Geom::Affine set_transform(Geom::Affine const &transform);
+    virtual void convert_to_guides();
 
-    virtual void onUpdatePatheffect(bool write);
+    virtual void update_patheffect(bool write);
 
 protected:
 	SPPath* sppath;

@@ -89,7 +89,7 @@ sp_marker_init (SPMarker *marker)
  *
  * \see SPObject::build()
  */
-void CMarker::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPMarker* object = this->spmarker;
 
     object->readAttr( "markerUnits" );
@@ -101,10 +101,10 @@ void CMarker::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "viewBox" );
     object->readAttr( "preserveAspectRatio" );
 
-    CGroup::onBuild(document, repr);
+    CGroup::build(document, repr);
 }
 
-void CMarker::onRelease() {
+void CMarker::release() {
 	SPMarker* object = this->spmarker;
 
     SPMarker *marker = reinterpret_cast<SPMarker *>(object);
@@ -114,13 +114,13 @@ void CMarker::onRelease() {
         // Parent class ::hide method
         //reinterpret_cast<SPItemClass *>(parent_class)->hide(marker, marker->views->key);
     	// CPPIFY: correct one?
-    	CGroup::onHide(marker->views->key);
+    	CGroup::hide(marker->views->key);
 
 
         sp_marker_view_remove (marker, marker->views, TRUE);
     }
 
-    CGroup::onRelease();
+    CGroup::release();
 }
 
 /**
@@ -136,7 +136,7 @@ void CMarker::onRelease() {
  * \see SPObject::release()
  */
 
-void CMarker::onSet(unsigned int key, const gchar* value) {
+void CMarker::set(unsigned int key, const gchar* value) {
 	SPMarker* object = this->spmarker;
 
 	SPMarker *marker = SP_MARKER(object);
@@ -270,12 +270,12 @@ void CMarker::onSet(unsigned int key, const gchar* value) {
 		}
 		break;
 	default:
-		CGroup::onSet(key, value);
+		CGroup::set(key, value);
 		break;
 	}
 }
 
-void CMarker::onUpdate(SPCtx *ctx, guint flags) {
+void CMarker::update(SPCtx *ctx, guint flags) {
 	SPMarker* object = this->spmarker;
 
     SPMarker *marker = SP_MARKER(object);
@@ -385,7 +385,7 @@ void CMarker::onUpdate(SPCtx *ctx, guint flags) {
     }
 
     // And invoke parent method
-    CGroup::onUpdate((SPCtx *) &rctx, flags);
+    CGroup::update((SPCtx *) &rctx, flags);
 
     // As last step set additional transform of drawing group
     for (SPMarkerView *v = marker->views; v != NULL; v = v->next) {
@@ -398,7 +398,7 @@ void CMarker::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-Inkscape::XML::Node* CMarker::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CMarker::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPMarker* object = this->spmarker;
 
 	SPMarker *marker;
@@ -453,14 +453,14 @@ Inkscape::XML::Node* CMarker::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
 	//XML Tree being used directly here while it shouldn't be....
 	repr->setAttribute("preserveAspectRatio", object->getRepr()->attribute("preserveAspectRatio"));
 
-	CGroup::onWrite(xml_doc, repr, flags);
+	CGroup::write(xml_doc, repr, flags);
 
 	return repr;
 }
 
-Inkscape::DrawingItem* CMarker::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CMarker::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	// CPPIFY: correct?
-	return CGroup::onShow(drawing, key, flags);
+	return CGroup::show(drawing, key, flags);
 }
 
 /**
@@ -473,9 +473,9 @@ sp_marker_private_show (SPItem */*item*/, Inkscape::Drawing &/*drawing*/, unsign
     return NULL;
 }
 
-void CMarker::onHide(unsigned int key) {
+void CMarker::hide(unsigned int key) {
 	// CPPIFY: correct?
-	CGroup::onHide(key);
+	CGroup::hide(key);
 }
 
 /**
@@ -487,7 +487,7 @@ sp_marker_private_hide (SPItem */*item*/, unsigned int /*key*/)
     /* Break propagation */
 }
 
-Geom::OptRect CMarker::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect CMarker::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	return Geom::OptRect();
 }
 
@@ -501,7 +501,7 @@ sp_marker_bbox(SPItem const *, Geom::Affine const &, SPItem::BBoxType)
     return Geom::OptRect();
 }
 
-void CMarker::onPrint(SPPrintContext* ctx) {
+void CMarker::print(SPPrintContext* ctx) {
 
 }
 
@@ -539,7 +539,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
     if (view && (view->items.size() != size)) {
         /* Free old view and allocate new */
         /* Parent class ::hide method */
-    	marker->cmarker->onHide(key);
+    	marker->cmarker->hide(key);
 
         sp_marker_view_remove (marker, view, TRUE);
         view = NULL;
@@ -579,7 +579,7 @@ sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
             }
             if (!v->items[pos]) {
                 /* Parent class ::show method */
-            	v->items[pos] = marker->cmarker->onShow(parent->drawing(), key, SP_ITEM_REFERENCE_FLAGS);
+            	v->items[pos] = marker->cmarker->show(parent->drawing(), key, SP_ITEM_REFERENCE_FLAGS);
 
                 if (v->items[pos]) {
                     /* fixme: Position (Lauris) */
@@ -625,7 +625,7 @@ sp_marker_hide (SPMarker *marker, unsigned int key)
 		next = v->next;
 		if (v->key == key) {
 			/* Parent class ::hide method */
-			marker->cmarker->onHide(key);
+			marker->cmarker->hide(key);
 
 			sp_marker_view_remove (marker, v, TRUE);
 			return;

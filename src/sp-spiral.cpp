@@ -69,10 +69,10 @@ sp_spiral_init (SPSpiral * spiral)
     spiral->t0         = 0.0;
 }
 
-void CSpiral::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+void CSpiral::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	SPSpiral* object = this->spspiral;
 
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     object->readAttr( "sodipodi:cx" );
     object->readAttr( "sodipodi:cy" );
@@ -83,7 +83,7 @@ void CSpiral::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     object->readAttr( "sodipodi:t0" );
 }
 
-Inkscape::XML::Node* CSpiral::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPSpiral *spiral = this->spspiral;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -105,7 +105,7 @@ Inkscape::XML::Node* CSpiral::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     }
 
      // make sure the curve is rebuilt with all up-to-date parameters
-     this->onSetShape();
+     this->set_shape();
 
     //Nulls might be possible if this called iteratively
     if ( !spiral->_curve ) {
@@ -116,12 +116,12 @@ Inkscape::XML::Node* CSpiral::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     repr->setAttribute("d", d);
     g_free (d);
 
-    CShape::onWrite(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
+    CShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
 }
 
-void CSpiral::onSet(unsigned int key, gchar const* value) {
+void CSpiral::set(unsigned int key, gchar const* value) {
     SPSpiral *spiral = this->spspiral;
     SPSpiral* object = spiral;
 
@@ -203,26 +203,26 @@ void CSpiral::onSet(unsigned int key, gchar const* value) {
         object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     default:
-        CShape::onSet(key, value);
+        CShape::set(key, value);
         break;
     }
 }
 
-void CSpiral::onUpdate(SPCtx *ctx, guint flags) {
+void CSpiral::update(SPCtx *ctx, guint flags) {
 	SPSpiral* object = this->spspiral;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         reinterpret_cast<SPShape *>(object)->setShape();
     }
 
-    CShape::onUpdate(ctx, flags);
+    CShape::update(ctx, flags);
 }
 
 
-void CSpiral::onUpdatePatheffect(bool write) {
+void CSpiral::update_patheffect(bool write) {
 	SPSpiral* shape = this->spspiral;
 
-    this->onSetShape();
+    this->set_shape();
 
     if (write) {
         Inkscape::XML::Node *repr = shape->getRepr();
@@ -238,7 +238,7 @@ void CSpiral::onUpdatePatheffect(bool write) {
     shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-gchar* CSpiral::onDescription() {
+gchar* CSpiral::description() {
 	SPSpiral* item = this->spspiral;
 
 	// TRANSLATORS: since turn count isn't an integer, please adjust the
@@ -336,7 +336,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
     g_assert (is_unit_vector (hat2));
 }
 
-void CSpiral::onSetShape() {
+void CSpiral::set_shape() {
     SPSpiral *spiral = this->spspiral;
     SPSpiral* shape = spiral;
 
@@ -434,7 +434,7 @@ sp_spiral_position_set       (SPSpiral          *spiral,
     (static_cast<SPObject *>(spiral))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CSpiral::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPSpiral* item = this->spspiral;
 
     // We will determine the spiral's midpoint ourselves, instead of trusting on the base class
@@ -442,7 +442,7 @@ void CSpiral::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
     Inkscape::SnapPreferences local_snapprefs = *snapprefs;
     local_snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, false);
 
-    CShape::onSnappoints(p, &local_snapprefs);
+    CShape::snappoints(p, &local_snapprefs);
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         Geom::Affine const i2dt (item->i2dt_affine ());

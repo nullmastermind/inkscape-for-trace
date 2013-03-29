@@ -92,12 +92,12 @@ public:
 	CPattern(SPPattern* pattern);
 	virtual ~CPattern();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, const gchar* value);
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
-	virtual void onModified(unsigned int flags);
-	virtual cairo_pattern_t* onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+	virtual void set(unsigned int key, const gchar* value);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
+	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
 protected:
 	SPPattern* sppattern;

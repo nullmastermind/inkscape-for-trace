@@ -48,12 +48,12 @@ public:
 	CBox3DSide(Box3DSide* box3dside);
 	virtual ~CBox3DSide();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onUpdate(SPCtx *ctx, guint flags);
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void update(SPCtx *ctx, guint flags);
 
-	virtual void onSetShape();
+	virtual void set_shape();
 
 protected:
 	Box3DSide* spbox3dside;

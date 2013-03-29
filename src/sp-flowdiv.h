@@ -96,13 +96,13 @@ public:
 	CFlowdiv(SPFlowdiv* flowdiv);
 	virtual ~CFlowdiv();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onUpdate(SPCtx* ctx, guint flags);
-	virtual void onModified(unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void update(SPCtx* ctx, guint flags);
+	virtual void modified(unsigned int flags);
 
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPFlowdiv* spflowdiv;
@@ -113,13 +113,13 @@ public:
 	CFlowtspan(SPFlowtspan* flowtspan);
 	virtual ~CFlowtspan();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onUpdate(SPCtx* ctx, guint flags);
-	virtual void onModified(unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void update(SPCtx* ctx, guint flags);
+	virtual void modified(unsigned int flags);
 
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPFlowtspan* spflowtspan;
@@ -130,13 +130,13 @@ public:
 	CFlowpara(SPFlowpara* flowpara);
 	virtual ~CFlowpara();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onUpdate(SPCtx* ctx, guint flags);
-	virtual void onModified(unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void update(SPCtx* ctx, guint flags);
+	virtual void modified(unsigned int flags);
 
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPFlowpara* spflowpara;
@@ -147,10 +147,10 @@ public:
 	CFlowline(SPFlowline* flowline);
 	virtual ~CFlowline();
 
-	virtual void onRelease();
-	virtual void onModified(unsigned int flags);
+	virtual void release();
+	virtual void modified(unsigned int flags);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPFlowline* spflowline;
@@ -161,10 +161,10 @@ public:
 	CFlowregionbreak(SPFlowregionbreak* flowregionbreak);
 	virtual ~CFlowregionbreak();
 
-	virtual void onRelease();
-	virtual void onModified(unsigned int flags);
+	virtual void release();
+	virtual void modified(unsigned int flags);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPFlowregionbreak* spflowregionbreak;

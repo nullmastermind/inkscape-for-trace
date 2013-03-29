@@ -88,10 +88,10 @@ sp_pattern_init (SPPattern *pat)
 	new (&pat->modified_connection) sigc::connection();
 }
 
-void CPattern::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CPattern::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPPattern* object = this->sppattern;
 
-	CPaintServer::onBuild(doc, repr);
+	CPaintServer::build(doc, repr);
 
 	object->readAttr( "patternUnits" );
 	object->readAttr( "patternContentUnits" );
@@ -107,7 +107,7 @@ void CPattern::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 	doc->addResource("pattern", object);
 }
 
-void CPattern::onRelease() {
+void CPattern::release() {
 	SPPattern* object = this->sppattern;
 
     SPPattern *pat = reinterpret_cast<SPPattern *>(object);
@@ -126,10 +126,10 @@ void CPattern::onRelease() {
 
     pat->modified_connection.~connection();
 
-    CPaintServer::onRelease();
+    CPaintServer::release();
 }
 
-void CPattern::onSet(unsigned int key, const gchar* value) {
+void CPattern::set(unsigned int key, const gchar* value) {
 	SPPattern* object = this->sppattern;
 
 	SPPattern *pat = SP_PATTERN (object);
@@ -240,7 +240,7 @@ void CPattern::onSet(unsigned int key, const gchar* value) {
 		}
 		break;
 	default:
-		CPaintServer::onSet(key, value);
+		CPaintServer::set(key, value);
 		break;
 	}
 }
@@ -266,7 +266,7 @@ static GSList *pattern_getchildren(SPPattern *pat)
   return l;
 }
 
-void CPattern::onUpdate(SPCtx* ctx, unsigned int flags) {
+void CPattern::update(SPCtx* ctx, unsigned int flags) {
 	SPPattern* object = this->sppattern;
 
 	SPPattern *pat = SP_PATTERN (object);
@@ -288,7 +288,7 @@ void CPattern::onUpdate(SPCtx* ctx, unsigned int flags) {
 	}
 }
 
-void CPattern::onModified(unsigned int flags) {
+void CPattern::modified(unsigned int flags) {
 	SPPattern* object = this->sppattern;
 
 	SPPattern *pat = SP_PATTERN (object);
@@ -561,7 +561,7 @@ static bool pattern_hasItemChildren (SPPattern const *pat)
     return hasChildren;
 }
 
-cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
+cairo_pattern_t* CPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
 	SPPattern* ps = this->sppattern;
 
     SPPattern *pat = SP_PATTERN (ps);

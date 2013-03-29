@@ -113,14 +113,14 @@ public:
 	CNamedView(SPNamedView* view);
 	virtual ~CNamedView();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, gchar const* value);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void set(unsigned int key, gchar const* value);
 
-	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void onRemoveChild(Inkscape::XML::Node* child);
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 protected:
 	SPNamedView* spnamedview;

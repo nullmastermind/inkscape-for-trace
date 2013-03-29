@@ -108,10 +108,10 @@ sp_use_finalize(GObject *obj)
     use->_transformed_connection.~connection();
 }
 
-void CUse::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPUse* object = this->spuse;
 
-    CItem::onBuild(document, repr);
+    CItem::build(document, repr);
 
     object->readAttr( "x" );
     object->readAttr( "y" );
@@ -124,7 +124,7 @@ void CUse::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     // which will call sp_use_href_changed, and that will take care of the child
 }
 
-void CUse::onRelease() {
+void CUse::release() {
     SPUse *use = this->spuse;
     SPUse* object = use;
 
@@ -142,10 +142,10 @@ void CUse::onRelease() {
 
     use->ref->detach();
 
-    CItem::onRelease();
+    CItem::release();
 }
 
-void CUse::onSet(unsigned int key, const gchar* value) {
+void CUse::set(unsigned int key, const gchar* value) {
     SPUse *use = this->spuse;
     SPUse* object = use;
 
@@ -192,19 +192,19 @@ void CUse::onSet(unsigned int key, const gchar* value) {
         }
 
         default:
-            CItem::onSet(key, value);
+            CItem::set(key, value);
             break;
     }
 }
 
-Inkscape::XML::Node* CUse::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPUse *use = this->spuse;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:use");
     }
 
-    CItem::onWrite(xml_doc, repr, flags);
+    CItem::write(xml_doc, repr, flags);
 
     sp_repr_set_svg_double(repr, "x", use->x.computed);
     sp_repr_set_svg_double(repr, "y", use->y.computed);
@@ -220,7 +220,7 @@ Inkscape::XML::Node* CUse::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
-Geom::OptRect CUse::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
+Geom::OptRect CUse::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
     SPUse const *use = this->spuse;
 
     Geom::OptRect bbox;
@@ -236,7 +236,7 @@ Geom::OptRect CUse::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxt
     return bbox;
 }
 
-void CUse::onPrint(SPPrintContext* ctx) {
+void CUse::print(SPPrintContext* ctx) {
     SPUse *use = this->spuse;
 
     bool translated = false;
@@ -256,7 +256,7 @@ void CUse::onPrint(SPPrintContext* ctx) {
     }
 }
 
-gchar* CUse::onDescription() {
+gchar* CUse::description() {
     SPUse *use = this->spuse;
 
     char *ret;
@@ -289,7 +289,7 @@ gchar* CUse::onDescription() {
     }
 }
 
-Inkscape::DrawingItem* CUse::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CUse::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
     SPUse *use = this->spuse;
     SPUse* item = use;
 
@@ -310,7 +310,7 @@ Inkscape::DrawingItem* CUse::onShow(Inkscape::Drawing &drawing, unsigned int key
     return ai;
 }
 
-void CUse::onHide(unsigned int key) {
+void CUse::hide(unsigned int key) {
     SPUse *use = this->spuse;
 
     if (use->child) {
@@ -513,7 +513,7 @@ sp_use_delete_self(SPObject */*deleted*/, SPUse *self)
     }
 }
 
-void CUse::onUpdate(SPCtx *ctx, unsigned flags) {
+void CUse::update(SPCtx *ctx, unsigned flags) {
 	SPUse* object = this->spuse;
 
     SPItem *item = SP_ITEM(object);
@@ -521,7 +521,7 @@ void CUse::onUpdate(SPCtx *ctx, unsigned flags) {
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
-    CItem::onUpdate(ctx, flags);
+    CItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -575,7 +575,7 @@ void CUse::onUpdate(SPCtx *ctx, unsigned flags) {
     }
 }
 
-void CUse::onModified(unsigned int flags) {
+void CUse::modified(unsigned int flags) {
 	SPUse* object = this->spuse;
 
     SPUse *use_obj = SP_USE(object);
@@ -695,7 +695,7 @@ SPItem *sp_use_get_original(SPUse *use)
     return ref;
 }
 
-void CUse::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CUse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPUse* item = this->spuse;
 
     g_assert (item != NULL);
@@ -707,7 +707,7 @@ void CUse::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
     if (!root)
         return;
 
-    root->citem->onSnappoints(p, snapprefs);
+    root->citem->snappoints(p, snapprefs);
 }
 
 

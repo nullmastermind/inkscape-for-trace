@@ -67,11 +67,11 @@ sp_star_init (SPStar * star)
     star->randomized = 0.0;
 }
 
-void CStar::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
+void CStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	SPStar* object = this->spstar;
 
 	// CPPIFY: see header file
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     object->readAttr( "sodipodi:cx" );
     object->readAttr( "sodipodi:cy" );
@@ -85,7 +85,7 @@ void CStar::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     object->readAttr( "inkscape:randomized" );
 }
 
-Inkscape::XML::Node* CStar::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CStar::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPStar* object = this->spstar;
     SPStar *star = object;
 
@@ -107,18 +107,18 @@ Inkscape::XML::Node* CStar::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         sp_repr_set_svg_double(repr, "inkscape:randomized", star->randomized);
     }
 
-    this->onSetShape();
+    this->set_shape();
     char *d = sp_svg_write_path (star->_curve->get_pathvector());
     repr->setAttribute("d", d);
     g_free (d);
 
     // CPPIFY: see header file
-    CShape::onWrite(xml_doc, repr, flags);
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-void CStar::onSet(unsigned int key, const gchar* value) {
+void CStar::set(unsigned int key, const gchar* value) {
     SPStar* object = this->spstar;
     SPStar *star = object;
 
@@ -212,12 +212,12 @@ void CStar::onSet(unsigned int key, const gchar* value) {
         break;
     default:
     	// CPPIFY: see header file
-        CShape::onSet(key, value);
+        CShape::set(key, value);
         break;
     }
 }
 
-void CStar::onUpdate(SPCtx *ctx, guint flags) {
+void CStar::update(SPCtx *ctx, guint flags) {
 	SPStar* object = this->spstar;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG |
@@ -227,14 +227,14 @@ void CStar::onUpdate(SPCtx *ctx, guint flags) {
     }
 
     // CPPIFY: see header file
-    CShape::onUpdate(ctx, flags);
+    CShape::update(ctx, flags);
 }
 
-void CStar::onUpdatePatheffect(bool write) {
+void CStar::update_patheffect(bool write) {
 	SPStar* lpeitem = this->spstar;
     SPShape *shape = (SPShape *) lpeitem;
 
-    this->onSetShape();
+    this->set_shape();
 
     if (write) {
         Inkscape::XML::Node *repr = shape->getRepr();
@@ -250,7 +250,7 @@ void CStar::onUpdatePatheffect(bool write) {
     ((SPObject *)shape)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-gchar* CStar::onDescription() {
+gchar* CStar::description() {
     SPStar *star = this->spstar;
 
     // while there will never be less than 3 vertices, we still need to
@@ -375,7 +375,7 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 #define NEXT false
 #define PREV true
 
-void CStar::onSetShape() {
+void CStar::set_shape() {
 	SPStar* shape = this->spstar;
     SPStar *star = shape;
 
@@ -494,7 +494,7 @@ sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, 
     star->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CStar::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPStar* item = this->spstar;
 
     // We will determine the star's midpoint ourselves, instead of trusting on the base class
@@ -503,7 +503,7 @@ void CStar::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     local_snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, false);
 
     // CPPIFY: see header file
-    CShape::onSnappoints(p, &local_snapprefs);
+    CShape::snappoints(p, &local_snapprefs);
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         Geom::Affine const i2dt (item->i2dt_affine ());

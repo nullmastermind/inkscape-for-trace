@@ -40,13 +40,13 @@ public:
 	CAnchor(SPAnchor* anchor);
 	virtual ~CAnchor();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void set(unsigned int key, gchar const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	virtual gchar* onDescription();
-	virtual gint onEvent(SPEvent *event);
+	virtual gchar* description();
+	virtual gint event(SPEvent *event);
 
 protected:
 	SPAnchor* spanchor;

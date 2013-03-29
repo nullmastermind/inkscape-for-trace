@@ -34,7 +34,7 @@ public:
 	CDesc(SPDesc* desc);
 	virtual ~CDesc();
 
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 protected:
 	SPDesc* spdesc;

@@ -49,10 +49,10 @@ static void sp_polygon_init(SPPolygon *polygon)
 	polygon->cobject = polygon->cpolygon;
 }
 
-void CPolygon::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPPolygon* object = this->sppolygon;
 
-    CShape::onBuild(document, repr);
+    CShape::build(document, repr);
 
     object->readAttr( "points" );
 }
@@ -82,7 +82,7 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
     return g_strdup(os.str().c_str());
 }
 
-Inkscape::XML::Node* CPolygon::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPShape *shape = this->sppolygon;
 
     // Tolerable workaround: we need to update the object's curve before we set points=
@@ -98,7 +98,7 @@ Inkscape::XML::Node* CPolygon::onWrite(Inkscape::XML::Document *xml_doc, Inkscap
     repr->setAttribute("points", str);
     g_free(str);
 
-    CShape::onWrite(xml_doc, repr, flags);
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -124,7 +124,7 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
     return true;
 }
 
-void CPolygon::onSet(unsigned int key, const gchar* value) {
+void CPolygon::set(unsigned int key, const gchar* value) {
     SPPolygon *polygon = this->sppolygon;
 
     switch (key) {
@@ -181,12 +181,12 @@ void CPolygon::onSet(unsigned int key, const gchar* value) {
             break;
         }
         default:
-            CShape::onSet(key, value);
+            CShape::set(key, value);
             break;
     }
 }
 
-gchar* CPolygon::onDescription() {
+gchar* CPolygon::description() {
 	return g_strdup(_("<b>Polygon</b>"));
 }
 

@@ -66,15 +66,15 @@ public:
 	CBox3D(SPBox3D* box3d);
 	virtual ~CBox3D();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onRelease();
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual void onUpdate(SPCtx *ctx, guint flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void set(unsigned int key, gchar const* value);
+	virtual void update(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	virtual gchar *onDescription();
-	virtual Geom::Affine onSetTransform(Geom::Affine const &transform);
-    virtual void onConvertToGuides();
+	virtual gchar *description();
+	virtual Geom::Affine set_transform(Geom::Affine const &transform);
+    virtual void convert_to_guides();
 
 protected:
 	SPBox3D* spbox3d;

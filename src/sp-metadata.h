@@ -38,12 +38,12 @@ public:
 	CMetadata(SPMetadata* metadata);
 	virtual ~CMetadata();
 
-	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void onRelease();
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
 
-	virtual void onSet(unsigned int key, const gchar* value);
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	virtual void set(unsigned int key, const gchar* value);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 protected:
 	SPMetadata* spmetadata;

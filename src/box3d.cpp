@@ -71,10 +71,10 @@ box3d_init(SPBox3D *box)
     box->persp_ref = new Persp3DReference(box);
 }
 
-void CBox3D::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPBox3D* object = this->spbox3d;
 
-    CGroup::onBuild(document, repr);
+    CGroup::build(document, repr);
 
     SPBox3D *box = SP_BOX3D (object);
     box->my_counter = counter++;
@@ -96,7 +96,7 @@ void CBox3D::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-void CBox3D::onRelease() {
+void CBox3D::release() {
 	SPBox3D* object = this->spbox3d;
     SPBox3D *box = object;
 
@@ -131,10 +131,10 @@ void CBox3D::onRelease() {
         */
     }
 
-    CGroup::onRelease();
+    CGroup::release();
 }
 
-void CBox3D::onSet(unsigned int key, const gchar* value) {
+void CBox3D::set(unsigned int key, const gchar* value) {
 	SPBox3D* object = this->spbox3d;
     SPBox3D *box = object;
 
@@ -181,7 +181,7 @@ void CBox3D::onSet(unsigned int key, const gchar* value) {
             }
             break;
         default:
-            CGroup::onSet(key, value);
+            CGroup::set(key, value);
             break;
     }
 }
@@ -202,7 +202,7 @@ box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box)
     }
 }
 
-void CBox3D::onUpdate(SPCtx *ctx, guint flags) {
+void CBox3D::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* FIXME?: Perhaps the display updates of box sides should be instantiated from here, but this
@@ -212,10 +212,10 @@ void CBox3D::onUpdate(SPCtx *ctx, guint flags) {
     }
 
     // Invoke parent method
-    CGroup::onUpdate(ctx, flags);
+    CGroup::update(ctx, flags);
 }
 
-Inkscape::XML::Node* CBox3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPBox3D* object = this->spbox3d;
     SPBox3D *box = object;
 
@@ -257,12 +257,12 @@ Inkscape::XML::Node* CBox3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
         box->save_corner7 = box->orig_corner7;
     }
 
-    CGroup::onWrite(xml_doc, repr, flags);
+    CGroup::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CBox3D::onDescription() {
+gchar* CBox3D::description() {
 	SPBox3D* item = this->spbox3d;
 
 	g_return_val_if_fail(SP_IS_BOX3D(item), NULL);
@@ -280,7 +280,7 @@ void box3d_position_set(SPBox3D *box)
     }
 }
 
-Geom::Affine CBox3D::onSetTransform(Geom::Affine const &xform) {
+Geom::Affine CBox3D::set_transform(Geom::Affine const &xform) {
 	SPBox3D* item = this->spbox3d;
     SPBox3D *box = item;
 
@@ -1341,7 +1341,7 @@ box3d_push_back_corner_pair(SPBox3D *box, std::list<std::pair<Geom::Point, Geom:
                                  box3d_get_corner_screen(box, c2, false)));
 }
 
-void CBox3D::onConvertToGuides() {
+void CBox3D::convert_to_guides() {
 	SPBox3D* item = this->spbox3d;
     SPBox3D *box = item;
 

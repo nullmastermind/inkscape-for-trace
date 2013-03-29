@@ -91,16 +91,16 @@ public:
 	COffset(SPOffset* offset);
 	~COffset();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual void onUpdate(SPCtx *ctx, guint flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onRelease();
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual void update(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void release();
 
-	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-	virtual gchar* onDescription();
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual gchar* description();
 
-	virtual void onSetShape();
+	virtual void set_shape();
 
 protected:
 	SPOffset* spoffset;

@@ -52,21 +52,21 @@ sp_feTile_init(SPFeTile *feTile)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeTile::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::onBuild(document, repr);
+void CFeTile::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::build(document, repr);
 }
 
 /**
  * Drops any allocated memory.
  */
-void CFeTile::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeTile::release() {
+	CFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeTile.
  */
-void CFeTile::onSet(unsigned int key, gchar const *value) {
+void CFeTile::set(unsigned int key, gchar const *value) {
 	SPFeTile* object = this->spfetile;
 
     SPFeTile *feTile = SP_FETILE(object);
@@ -75,7 +75,7 @@ void CFeTile::onSet(unsigned int key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -83,7 +83,7 @@ void CFeTile::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeTile::onUpdate(SPCtx *ctx, guint flags) {
+void CFeTile::update(SPCtx *ctx, guint flags) {
 	SPFeTile* object = this->spfetile;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -93,13 +93,13 @@ void CFeTile::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeTile::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeTile* object = this->spfetile;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -108,12 +108,12 @@ Inkscape::XML::Node* CFeTile::onWrite(Inkscape::XML::Document *doc, Inkscape::XM
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeTile::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeTile* primitive = this->spfetile;
 
     g_assert(primitive != NULL);

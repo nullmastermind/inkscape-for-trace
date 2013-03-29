@@ -134,8 +134,8 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
     }
 }
 
-void CGuide::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::onBuild(document, repr);
+void CGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::build(document, repr);
 
 	SPGuide* object = this->spguide;
 
@@ -147,7 +147,7 @@ void CGuide::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     document->addResource("guide", object);
 }
 
-void CGuide::onRelease() {
+void CGuide::release() {
 	SPGuide* object = this->spguide;
     SPGuide *guide = (SPGuide *) object;
 
@@ -161,10 +161,10 @@ void CGuide::onRelease() {
         object->document->removeResource("guide", object);
     }
 
-    CObject::onRelease();
+    CObject::release();
 }
 
-void CGuide::onSet(unsigned int key, const gchar *value) {
+void CGuide::set(unsigned int key, const gchar *value) {
 	SPGuide* object = this->spguide;
     SPGuide *guide = SP_GUIDE(object);
 
@@ -235,7 +235,7 @@ void CGuide::onSet(unsigned int key, const gchar *value) {
         }
         break;
     default:
-    	CObject::onSet(key, value);
+    	CObject::set(key, value);
             break;
     }
 }

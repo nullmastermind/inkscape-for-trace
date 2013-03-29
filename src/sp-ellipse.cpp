@@ -100,7 +100,7 @@ sp_genericellipse_init(SPGenericEllipse *ellipse)
     ellipse->closed = TRUE;
 }
 
-void CGenericEllipse::onUpdate(SPCtx *ctx, guint flags) {
+void CGenericEllipse::update(SPCtx *ctx, guint flags) {
 	SPGenericEllipse* object = this->spgenericEllipse;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -120,12 +120,12 @@ void CGenericEllipse::onUpdate(SPCtx *ctx, guint flags) {
         static_cast<SPShape *>(object)->setShape();
     }
 
-    CShape::onUpdate(ctx, flags);
+    CShape::update(ctx, flags);
 }
 
-void CGenericEllipse::onUpdatePatheffect(bool write) {
+void CGenericEllipse::update_patheffect(bool write) {
     SPShape *shape = this->spgenericEllipse;
-    this->onSetShape();
+    this->set_shape();
 
     if (write) {
         Inkscape::XML::Node *repr = shape->getRepr();
@@ -143,7 +143,7 @@ void CGenericEllipse::onUpdatePatheffect(bool write) {
 
 /* fixme: Think (Lauris) */
 /* Can't we use arcto in this method? */
-void CGenericEllipse::onSetShape() {
+void CGenericEllipse::set_shape() {
 	SPGenericEllipse* shape = this->spgenericEllipse;
 
     if (sp_lpe_item_has_broken_path_effect(SP_LPE_ITEM(shape))) {
@@ -233,7 +233,7 @@ void CGenericEllipse::onSetShape() {
     curve->unref();
 }
 
-void CGenericEllipse::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CGenericEllipse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPGenericEllipse* item = this->spgenericEllipse;
 
     g_assert(item != NULL);
@@ -316,7 +316,7 @@ sp_genericellipse_normalize(SPGenericEllipse *ellipse)
     /* Now we keep: 0 <= start < end <= 2*PI */
 }
 
-Inkscape::XML::Node* CGenericEllipse::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CGenericEllipse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPGenericEllipse *ellipse = this->spgenericEllipse;
     SPGenericEllipse* object = ellipse;
 
@@ -334,9 +334,9 @@ Inkscape::XML::Node* CGenericEllipse::onWrite(Inkscape::XML::Document *xml_doc, 
             sp_arc_set_elliptical_path_attribute(SP_ARC(object), object->getRepr());
         }
     }
-    this->onSetShape(); // evaluate SPCurve
+    this->set_shape(); // evaluate SPCurve
 
-    CShape::onWrite(xml_doc, repr, flags);
+    CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -369,8 +369,8 @@ sp_ellipse_init(SPEllipse *ellipse)
 	ellipse->cobject = ellipse->cellipse;
 }
 
-void CEllipse::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CGenericEllipse::onBuild(document, repr);
+void CEllipse::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CGenericEllipse::build(document, repr);
 
 	SPEllipse* object = this->spellipse;
     object->readAttr( "cx" );
@@ -380,7 +380,7 @@ void CEllipse::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 
-Inkscape::XML::Node* CEllipse::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CEllipse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPGenericEllipse *ellipse = this->spellipse;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -392,13 +392,13 @@ Inkscape::XML::Node* CEllipse::onWrite(Inkscape::XML::Document *xml_doc, Inkscap
     sp_repr_set_svg_double(repr, "rx", ellipse->rx.computed);
     sp_repr_set_svg_double(repr, "ry", ellipse->ry.computed);
 
-    CGenericEllipse::onWrite(xml_doc, repr, flags);
+    CGenericEllipse::write(xml_doc, repr, flags);
 
     return repr;
 }
 
 
-void CEllipse::onSet(unsigned int key, gchar const* value) {
+void CEllipse::set(unsigned int key, gchar const* value) {
     SPEllipse *ellipse = this->spellipse;
     SPEllipse* object = (SPEllipse*)ellipse;
 
@@ -424,12 +424,12 @@ void CEllipse::onSet(unsigned int key, gchar const* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            CGenericEllipse::onSet(key, value);
+            CGenericEllipse::set(key, value);
             break;
     }
 }
 
-gchar* CEllipse::onDescription() {
+gchar* CEllipse::description() {
 	return g_strdup(_("<b>Ellipse</b>"));
 }
 
@@ -481,10 +481,10 @@ sp_circle_init(SPCircle *circle)
 	circle->cobject = circle->ccircle;
 }
 
-void CCircle::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CCircle::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPCircle* object = this->spcircle;
 
-    CGenericEllipse::onBuild(document, repr);
+    CGenericEllipse::build(document, repr);
 
     object->readAttr( "cx" );
     object->readAttr( "cy" );
@@ -492,7 +492,7 @@ void CCircle::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 
-Inkscape::XML::Node* CCircle::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CCircle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPGenericEllipse *ellipse = this->spcircle;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -503,13 +503,13 @@ Inkscape::XML::Node* CCircle::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     sp_repr_set_svg_double(repr, "cy", ellipse->cy.computed);
     sp_repr_set_svg_double(repr, "r", ellipse->rx.computed);
 
-    CGenericEllipse::onWrite(xml_doc, repr, flags);
+    CGenericEllipse::write(xml_doc, repr, flags);
 
     return repr;
 }
 
 
-void CCircle::onSet(unsigned int key, gchar const* value) {
+void CCircle::set(unsigned int key, gchar const* value) {
     SPGenericEllipse *ge = this->spcircle;
     SPCircle* object = (SPCircle*)ge;
 
@@ -530,12 +530,12 @@ void CCircle::onSet(unsigned int key, gchar const* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            CGenericEllipse::onSet(key, value);
+            CGenericEllipse::set(key, value);
             break;
     }
 }
 
-gchar* CCircle::onDescription() {
+gchar* CCircle::description() {
 	return g_strdup(_("<b>Circle</b>"));
 }
 
@@ -568,10 +568,10 @@ sp_arc_init(SPArc *arc)
 	arc->cobject = arc->carc;
 }
 
-void CArc::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CArc::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPArc* object = this->sparc;
 
-	CGenericEllipse::onBuild(document, repr);
+	CGenericEllipse::build(document, repr);
 
     object->readAttr( "sodipodi:cx" );
     object->readAttr( "sodipodi:cy" );
@@ -625,7 +625,7 @@ sp_arc_set_elliptical_path_attribute(SPArc *arc, Inkscape::XML::Node *repr)
     return true;
 }
 
-Inkscape::XML::Node* CArc::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CArc::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPArc* object = this->sparc;
     SPGenericEllipse *ge = object;
     SPArc *arc = object;
@@ -658,12 +658,12 @@ Inkscape::XML::Node* CArc::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::X
     // write d=
     sp_arc_set_elliptical_path_attribute(arc, repr);
 
-    CGenericEllipse::onWrite(xml_doc, repr, flags);
+    CGenericEllipse::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-void CArc::onSet(unsigned int key, gchar const* value) {
+void CArc::set(unsigned int key, gchar const* value) {
 	SPArc* object = this->sparc;
     SPGenericEllipse *ge = object;
 
@@ -709,23 +709,23 @@ void CArc::onSet(unsigned int key, gchar const* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            CGenericEllipse::onSet(key, value);
+            CGenericEllipse::set(key, value);
             break;
     }
 }
 
-void CArc::onModified(guint flags) {
+void CArc::modified(guint flags) {
 	SPArc* object = this->sparc;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         ((SPShape *) object)->setShape();
     }
 
-    CGenericEllipse::onModified(flags);
+    CGenericEllipse::modified(flags);
 }
 
 
-gchar* CArc::onDescription() {
+gchar* CArc::description() {
 	SPArc* item = this->sparc;
     SPGenericEllipse *ge = item;
 

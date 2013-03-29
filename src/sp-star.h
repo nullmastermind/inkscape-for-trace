@@ -56,16 +56,16 @@ public:
 	CStar(SPStar* star);
 	virtual ~CStar();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual void onUpdate(SPCtx* ctx, guint flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual void update(SPCtx* ctx, guint flags);
 
-	virtual gchar* onDescription();
-	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual gchar* description();
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
-	virtual void onUpdatePatheffect(bool write);
-	virtual void onSetShape();
+	virtual void update_patheffect(bool write);
+	virtual void set_shape();
 
 protected:
 	SPStar* spstar;

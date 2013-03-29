@@ -52,13 +52,13 @@ public:
 	CGenericEllipse(SPGenericEllipse* genericEllipse);
 	virtual ~CGenericEllipse();
 
-	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-	virtual void onSetShape();
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual void set_shape();
 
-	virtual void onUpdatePatheffect(bool write);
+	virtual void update_patheffect(bool write);
 
 protected:
 	SPGenericEllipse* spgenericEllipse;
@@ -95,10 +95,10 @@ public:
 	CEllipse(SPEllipse* ellipse);
 	virtual ~CEllipse();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual gchar* onDescription();
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual gchar* description();
 
 protected:
 	SPEllipse* spellipse;
@@ -134,10 +134,10 @@ public:
 	CCircle(SPCircle* circle);
 	virtual ~CCircle();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual gchar* onDescription();
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual gchar* description();
 
 protected:
 	SPCircle* spcircle;
@@ -171,11 +171,11 @@ public:
 	CArc(SPArc* arc);
 	virtual ~CArc();
 
-	virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual void onSet(unsigned int key, gchar const* value);
-	virtual gchar* onDescription();
-	virtual void onModified(unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void set(unsigned int key, gchar const* value);
+	virtual gchar* description();
+	virtual void modified(unsigned int flags);
 
 protected:
 	SPArc* sparc;

@@ -75,8 +75,8 @@ sp_flowtext_dispose(GObject *object)
     group->layout.~Layout();
 }
 
-void CFlowtext::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
-	CItem::onChildAdded(child, ref);
+void CFlowtext::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+	CItem::child_added(child, ref);
 
 	this->spflowtext->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -84,21 +84,21 @@ void CFlowtext::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* re
 
 /* fixme: hide (Lauris) */
 
-void CFlowtext::onRemoveChild(Inkscape::XML::Node* child) {
-	CItem::onRemoveChild(child);
+void CFlowtext::remove_child(Inkscape::XML::Node* child) {
+	CItem::remove_child(child);
 
 	this->spflowtext->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
-void CFlowtext::onUpdate(SPCtx* ctx, unsigned int flags) {
+void CFlowtext::update(SPCtx* ctx, unsigned int flags) {
 	SPFlowtext* object = this->spflowtext;
 
     SPFlowtext *group = SP_FLOWTEXT(object);
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
-    CItem::onUpdate(ctx, flags);
+    CItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     flags &= SP_OBJECT_MODIFIED_CASCADE;
@@ -137,7 +137,7 @@ void CFlowtext::onUpdate(SPCtx* ctx, unsigned int flags) {
     }
 }
 
-void CFlowtext::onModified(unsigned int flags) {
+void CFlowtext::modified(unsigned int flags) {
 	SPFlowtext* object = this->spflowtext;
     SPObject *ft = object;
     SPObject *region = NULL;
@@ -171,17 +171,17 @@ void CFlowtext::onModified(unsigned int flags) {
     }
 }
 
-void CFlowtext::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CFlowtext::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPFlowtext* object = this->spflowtext;
 
     object->_requireSVGVersion(Inkscape::Version(1, 2));
 
-    CItem::onBuild(doc, repr);
+    CItem::build(doc, repr);
 
     object->readAttr( "inkscape:layoutOptions" );     // must happen after css has been read
 }
 
-void CFlowtext::onSet(unsigned int key, const gchar* value) {
+void CFlowtext::set(unsigned int key, const gchar* value) {
 	SPFlowtext* object = this->spflowtext;
     SPFlowtext *group = (SPFlowtext *) object;
 
@@ -232,12 +232,12 @@ void CFlowtext::onSet(unsigned int key, const gchar* value) {
             break;
         }
         default:
-        	CItem::onSet(key, value);
+        	CItem::set(key, value);
             break;
     }
 }
 
-Inkscape::XML::Node* CFlowtext::onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CFlowtext::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
 	SPFlowtext* object = this->spflowtext;
 
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
@@ -267,12 +267,12 @@ Inkscape::XML::Node* CFlowtext::onWrite(Inkscape::XML::Document* doc, Inkscape::
         }
     }
 
-    CItem::onWrite(doc, repr, flags);
+    CItem::write(doc, repr, flags);
 
     return repr;
 }
 
-Geom::OptRect CFlowtext::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect CFlowtext::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPFlowtext* item = this->spflowtext;
 
     SPFlowtext *group = SP_FLOWTEXT(item);
@@ -287,7 +287,7 @@ Geom::OptRect CFlowtext::onBbox(Geom::Affine const &transform, SPItem::BBoxType 
     return bbox;
 }
 
-void CFlowtext::onPrint(SPPrintContext *ctx) {
+void CFlowtext::print(SPPrintContext *ctx) {
 	SPFlowtext* item = this->spflowtext;
 
     SPFlowtext *group = SP_FLOWTEXT(item);
@@ -301,7 +301,7 @@ void CFlowtext::onPrint(SPPrintContext *ctx) {
     group->layout.print(ctx, pbox, dbox, bbox, ctm);
 }
 
-gchar* CFlowtext::onDescription() {
+gchar* CFlowtext::description() {
 	SPFlowtext* item = this->spflowtext;
 
     Inkscape::Text::Layout const &layout = SP_FLOWTEXT(item)->layout;
@@ -316,7 +316,7 @@ gchar* CFlowtext::onDescription() {
     }
 }
 
-void CFlowtext::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CFlowtext::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPFlowtext* item = this->spflowtext;
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_TEXT_BASELINE)) {
@@ -332,7 +332,7 @@ void CFlowtext::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inksc
     }
 }
 
-Inkscape::DrawingItem* CFlowtext::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CFlowtext::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	SPFlowtext* item = this->spflowtext;
 
     SPFlowtext *group = (SPFlowtext *) item;
@@ -347,8 +347,8 @@ Inkscape::DrawingItem* CFlowtext::onShow(Inkscape::Drawing &drawing, unsigned in
     return flowed;
 }
 
-void CFlowtext::onHide(unsigned int key) {
-	CItem::onHide(key);
+void CFlowtext::hide(unsigned int key) {
+	CItem::hide(key);
 }
 
 

@@ -115,10 +115,10 @@ sp_shape_finalize(GObject *object)
     }
 }
 
-void CShape::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CShape::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPShape* object = this->spshape;
 
-    CLPEItem::onBuild(document, repr);
+    CLPEItem::build(document, repr);
 
     for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
         sp_shape_set_marker (object, i, object->style->marker[i].value);
@@ -136,7 +136,7 @@ void CShape::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
  *
  * \see SPObject::release()
  */
-void CShape::onRelease() {
+void CShape::release() {
     SPItem *item;
     SPShape *shape;
     SPItemView *v;
@@ -163,24 +163,24 @@ void CShape::onRelease() {
         shape->_curve_before_lpe = shape->_curve_before_lpe->unref();
     }
 
-    CLPEItem::onRelease();
+    CLPEItem::release();
 }
 
-void CShape::onSet(unsigned int key, const gchar* value) {
-	CLPEItem::onSet(key, value);
+void CShape::set(unsigned int key, const gchar* value) {
+	CLPEItem::set(key, value);
 }
 
 
-Inkscape::XML::Node* CShape::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	CLPEItem::onWrite(xml_doc, repr, flags);
+Inkscape::XML::Node* CShape::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	CLPEItem::write(xml_doc, repr, flags);
 	return repr;
 }
 
-void CShape::onUpdate(SPCtx* ctx, guint flags) {
+void CShape::update(SPCtx* ctx, guint flags) {
 	SPShape* shape = this->spshape;
 	SPShape* object = shape;
 
-    CLPEItem::onUpdate(ctx, flags);
+    CLPEItem::update(ctx, flags);
 
     /* This stanza checks that an object's marker style agrees with
      * the marker objects it has allocated.  sp_shape_set_marker ensures
@@ -431,10 +431,10 @@ sp_shape_update_marker_view(SPShape *shape, Inkscape::DrawingItem *ai)
     }
 }
 
-void CShape::onModified(unsigned int flags) {
+void CShape::modified(unsigned int flags) {
 	SPShape* shape = this->spshape;
 
-    CLPEItem::onModified(flags);
+    CLPEItem::modified(flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = shape->display; v != NULL; v = v->next) {
@@ -444,7 +444,7 @@ void CShape::onModified(unsigned int flags) {
     }
 }
 
-Geom::OptRect CShape::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
+Geom::OptRect CShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
 	SPShape const* shape = this->spshape;
 	SPShape const* item = shape;
     Geom::OptRect bbox;
@@ -617,7 +617,7 @@ sp_shape_print_invoke_marker_printing(SPObject *obj, Geom::Affine tr, SPStyle co
     }
 }
 
-void CShape::onPrint(SPPrintContext* ctx) {
+void CShape::print(SPPrintContext* ctx) {
     SPShape *shape = this->spshape;
     SPShape* item = shape;
 
@@ -724,7 +724,7 @@ void CShape::onPrint(SPPrintContext* ctx) {
         }
 }
 
-Inkscape::DrawingItem* CShape::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* CShape::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
     SPObject *object = this->spshape;
     SPShape *shape = this->spshape;
 
@@ -766,7 +766,7 @@ Inkscape::DrawingItem* CShape::onShow(Inkscape::Drawing &drawing, unsigned int k
 /**
  * Sets style, path, and paintbox.  Updates marker views, including dimensions.
  */
-void CShape::onHide(unsigned int key) {
+void CShape::hide(unsigned int key) {
 	SPShape *shape = this->spshape;
 	SPShape* item = shape;
 
@@ -942,7 +942,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 }
 
 // CPPIFY: make pure virtual
-void CShape::onSetShape() {
+void CShape::set_shape() {
 	throw;
 }
 
@@ -953,7 +953,7 @@ void CShape::onSetShape() {
  */
 void SPShape::setShape()
 {
-	this->cshape->onSetShape();
+	this->cshape->set_shape();
 }
 
 /**
@@ -1036,7 +1036,7 @@ void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
     }
 }
 
-void CShape::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+void CShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPShape const *shape = this->spshape;
 	SPShape const *item = shape;
 

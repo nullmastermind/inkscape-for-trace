@@ -98,13 +98,13 @@ LivePathEffectObject::livepatheffect_init(LivePathEffectObject *lpeobj)
 /**
  * Virtual build: set livepatheffect attributes from its associated XML node.
  */
-void CLivePathEffectObject::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+void CLivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	LivePathEffectObject* object = this->livepatheffectobject;
 
     g_assert(object != NULL);
     g_assert(SP_IS_OBJECT(object));
 
-    CObject::onBuild(document, repr);
+    CObject::build(document, repr);
 
     object->readAttr( "effect" );
 
@@ -119,7 +119,7 @@ void CLivePathEffectObject::onBuild(SPDocument *document, Inkscape::XML::Node *r
 /**
  * Virtual release of livepatheffect members before destruction.
  */
-void CLivePathEffectObject::onRelease() {
+void CLivePathEffectObject::release() {
 	LivePathEffectObject* object = this->livepatheffectobject;
 
     LivePathEffectObject *lpeobj = LIVEPATHEFFECT(object);
@@ -150,13 +150,13 @@ void CLivePathEffectObject::onRelease() {
     }
     lpeobj->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
 
-    CObject::onRelease();
+    CObject::release();
 }
 
 /**
  * Virtual set: set attribute to value.
  */
-void CLivePathEffectObject::onSet(unsigned key, gchar const *value) {
+void CLivePathEffectObject::set(unsigned key, gchar const *value) {
 	LivePathEffectObject* object = this->livepatheffectobject;
 
     LivePathEffectObject *lpeobj = LIVEPATHEFFECT(object);
@@ -182,13 +182,13 @@ void CLivePathEffectObject::onSet(unsigned key, gchar const *value) {
             break;
     }
 
-    CObject::onSet(key, value);
+    CObject::set(key, value);
 }
 
 /**
  * Virtual write: write object attributes to repr.
  */
-Inkscape::XML::Node* CLivePathEffectObject::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CLivePathEffectObject::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	LivePathEffectObject* object = this->livepatheffectobject;
 
     LivePathEffectObject *lpeobj = LIVEPATHEFFECT(object);
@@ -203,7 +203,7 @@ Inkscape::XML::Node* CLivePathEffectObject::onWrite(Inkscape::XML::Document *xml
         lpeobj->lpe->writeParamsToSVG();
     }
 
-    CObject::onWrite(xml_doc, repr, flags);
+    CObject::write(xml_doc, repr, flags);
 
     return repr;
 }

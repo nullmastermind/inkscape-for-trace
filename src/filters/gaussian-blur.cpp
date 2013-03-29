@@ -60,8 +60,8 @@ sp_gaussianBlur_init(SPGaussianBlur *gaussianBlur)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CGaussianBlur::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::onBuild(document, repr);
+void CGaussianBlur::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::build(document, repr);
 
 	SPGaussianBlur* object = this->spgaussianblur;
 
@@ -71,14 +71,14 @@ void CGaussianBlur::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CGaussianBlur::onRelease() {
-	CFilterPrimitive::onRelease();
+void CGaussianBlur::release() {
+	CFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPGaussianBlur.
  */
-void CGaussianBlur::onSet(unsigned int key, gchar const *value) {
+void CGaussianBlur::set(unsigned int key, gchar const *value) {
 	SPGaussianBlur* object = this->spgaussianblur;
 
     SPGaussianBlur *gaussianBlur = SP_GAUSSIANBLUR(object);
@@ -89,7 +89,7 @@ void CGaussianBlur::onSet(unsigned int key, gchar const *value) {
             object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -97,20 +97,20 @@ void CGaussianBlur::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CGaussianBlur::onUpdate(SPCtx *ctx, guint flags) {
+void CGaussianBlur::update(SPCtx *ctx, guint flags) {
 	SPGaussianBlur* object = this->spgaussianblur;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->readAttr( "stdDeviation" );
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CGaussianBlur::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CGaussianBlur::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPGaussianBlur* object = this->spgaussianblur;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -119,7 +119,7 @@ Inkscape::XML::Node* CGaussianBlur::onWrite(Inkscape::XML::Document *doc, Inksca
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
@@ -134,7 +134,7 @@ void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num, float optnum
     blur->stdDeviation.setOptNumber(optnum);
 }
 
-void CGaussianBlur::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CGaussianBlur::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPGaussianBlur* primitive = this->spgaussianblur;
 
     SPGaussianBlur *sp_blur = SP_GAUSSIANBLUR(primitive);

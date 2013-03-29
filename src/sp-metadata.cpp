@@ -74,7 +74,7 @@ void strip_ids_recursively(Inkscape::XML::Node *node) {
 }
 
 
-void CMetadata::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
+void CMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     using Inkscape::XML::NodeSiblingIterator;
 
     debug("0x%08x",(unsigned int)object);
@@ -88,25 +88,25 @@ void CMetadata::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
         }
     }
 
-    CObject::onBuild(doc, repr);
+    CObject::build(doc, repr);
 }
-void CMetadata::onRelease() {
+void CMetadata::release() {
     debug("0x%08x",(unsigned int)object);
 
     // handle ourself
 
-    CObject::onRelease();
+    CObject::release();
 }
 
-void CMetadata::onSet(unsigned int key, const gchar* value) {
+void CMetadata::set(unsigned int key, const gchar* value) {
     debug("0x%08x %s(%u): '%s'",(unsigned int)object,
           sp_attribute_name(key),key,value);
 
     // see if any parents need this value
-    CObject::onSet(key, value);
+    CObject::set(key, value);
 }
 
-void CMetadata::onUpdate(SPCtx* ctx, unsigned int flags) {
+void CMetadata::update(SPCtx* ctx, unsigned int flags) {
     debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);
 
@@ -120,7 +120,7 @@ void CMetadata::onUpdate(SPCtx* ctx, unsigned int flags) {
 //    CObject::onUpdate(ctx, flags);
 }
 
-Inkscape::XML::Node* CMetadata::onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* CMetadata::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
 	SPMetadata* object = this->spmetadata;
 
     debug("0x%08x",(unsigned int)object);
@@ -134,7 +134,7 @@ Inkscape::XML::Node* CMetadata::onWrite(Inkscape::XML::Document* doc, Inkscape::
         }
     }
 
-    CObject::onWrite(doc, repr, flags);
+    CObject::write(doc, repr, flags);
 
     return repr;
 }

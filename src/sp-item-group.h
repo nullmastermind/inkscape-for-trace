@@ -77,28 +77,28 @@ public:
     CGroup(SPGroup *group);
     virtual ~CGroup();
     
-    virtual void onBuild(SPDocument *document, Inkscape::XML::Node *repr);
-   	virtual void onRelease();
+    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+   	virtual void release();
 
-    virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-    virtual void onRemoveChild(Inkscape::XML::Node *child);
-    virtual void onOrderChanged(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref);
+    virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+    virtual void remove_child(Inkscape::XML::Node *child);
+    virtual void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref);
 
-    virtual void onUpdate(SPCtx *ctx, unsigned int flags);
-    virtual void onModified(guint flags);
-    virtual void onSet(unsigned int key, gchar const* value);
+    virtual void update(SPCtx *ctx, unsigned int flags);
+    virtual void modified(guint flags);
+    virtual void set(unsigned int key, gchar const* value);
 
-    virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-    virtual Geom::OptRect onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
-    virtual void onPrint(SPPrintContext *ctx);
-    virtual gchar *onDescription();
-    virtual Inkscape::DrawingItem *onShow (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-    virtual void onHide (unsigned int key);
+    virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
+    virtual void print(SPPrintContext *ctx);
+    virtual gchar *description();
+    virtual Inkscape::DrawingItem *show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+    virtual void hide (unsigned int key);
 
-    virtual void onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+    virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
-    virtual void onUpdatePatheffect(bool write);
+    virtual void update_patheffect(bool write);
 
 protected:
     SPGroup *spgroup;

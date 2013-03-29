@@ -58,8 +58,8 @@ static void sp_feFlood_init(SPFeFlood *feFlood)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeFlood::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::onBuild(document, repr);
+void CFeFlood::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::build(document, repr);
 
 	SPFeFlood* object = this->spfeflood;
 
@@ -71,14 +71,14 @@ void CFeFlood::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeFlood::onRelease() {
-	CFilterPrimitive::onRelease();
+void CFeFlood::release() {
+	CFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeFlood.
  */
-void CFeFlood::onSet(unsigned int key, gchar const *value) {
+void CFeFlood::set(unsigned int key, gchar const *value) {
 	SPFeFlood* object = this->spfeflood;
 
     SPFeFlood *feFlood = SP_FEFLOOD(object);
@@ -137,7 +137,7 @@ void CFeFlood::onSet(unsigned int key, gchar const *value) {
             }
             break;
         default:
-        	CFilterPrimitive::onSet(key, value);
+        	CFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -145,7 +145,7 @@ void CFeFlood::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeFlood::onUpdate(SPCtx *ctx, guint flags) {
+void CFeFlood::update(SPCtx *ctx, guint flags) {
 	SPFeFlood* object = this->spfeflood;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -155,13 +155,13 @@ void CFeFlood::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::onUpdate(ctx, flags);
+    CFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeFlood::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+Inkscape::XML::Node* CFeFlood::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeFlood* object = this->spfeflood;
 
     /* TODO: Don't just clone, but create a new repr node and write all
@@ -170,12 +170,12 @@ Inkscape::XML::Node* CFeFlood::onWrite(Inkscape::XML::Document *doc, Inkscape::X
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::onWrite(doc, repr, flags);
+    CFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeFlood::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+void CFeFlood::build_renderer(Inkscape::Filters::Filter* filter) {
 	SPFeFlood* primitive = this->spfeflood;
 
     g_assert(primitive != NULL);
