@@ -30,10 +30,15 @@ struct ColorProfileClass {
     SPObjectClass parent_class;
 };
 
+class CColorProfile;
+
 /**
  * Color Profile.
  */
-struct ColorProfile : public SPObject {
+class ColorProfile : public SPObject {
+public:
+	CColorProfile* ccolorprofile;
+
     friend cmsHPROFILE colorprofile_get_handle( SPDocument*, guint*, gchar const* );
     friend class CMSSystem;
 
@@ -69,8 +74,26 @@ private:
     static void set( SPObject *object, unsigned key, gchar const *value );
     static Inkscape::XML::Node *write( SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags );
 
+public:
     ColorProfileImpl *impl;
 };
+
+class CColorProfile : public CObject {
+public:
+	CColorProfile(ColorProfile* cp);
+	virtual ~CColorProfile();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	ColorProfile* colorprofile;
+};
+
 
 GType colorprofile_get_type();
 

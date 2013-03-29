@@ -31,8 +31,12 @@ struct LivePathEffectObjectClass {
     SPObjectClass parent_class;
 };
 
+class CLivePathEffectObject;
+
 class LivePathEffectObject : public SPObject {
 public:
+	CLivePathEffectObject* clivepatheffectobject;
+
     Inkscape::LivePathEffect::EffectType effecttype;
 
     bool effecttype_set;
@@ -43,13 +47,13 @@ public:
      * So one should always check whether the returned value is NULL or not */
     Inkscape::LivePathEffect::Effect * get_lpe() { return lpe; };
 
-private:
+//private:
     Inkscape::LivePathEffect::Effect *lpe; // this can be NULL in a valid LivePathEffectObject
 
     /* C-style class functions: */
-public:
+//public:
     static GType livepatheffect_get_type();
-private:
+//private:
     static void livepatheffect_class_init(LivePathEffectObjectClass *klass);
     static void livepatheffect_init(LivePathEffectObject *stop);
     static void livepatheffect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
@@ -58,6 +62,22 @@ private:
     static Inkscape::XML::Node *livepatheffect_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
 };
 
+
+class CLivePathEffectObject : public CObject {
+public:
+	CLivePathEffectObject(LivePathEffectObject* lpeo);
+	virtual ~CLivePathEffectObject();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	LivePathEffectObject* livepatheffectobject;
+};
 
 #endif
 

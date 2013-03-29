@@ -46,12 +46,35 @@ public:
 //    friend class Persp3D;
 };
 
-struct Persp3D : public SPObject {
+class CPersp3D;
+
+class Persp3D : public SPObject {
+public:
+	CPersp3D* cpersp3d;
+
     Persp3DImpl *perspective_impl;
 };
 
 struct Persp3DClass {
     SPItemClass parent_class;
+};
+
+class CPersp3D : public CObject {
+public:
+	CPersp3D(Persp3D* persp3d);
+	virtual ~CPersp3D();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	Persp3D* persp3d;
 };
 
 

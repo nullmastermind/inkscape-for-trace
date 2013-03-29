@@ -101,26 +101,50 @@ static void persp3d_class_init(Persp3DClass *klass)
     sp_object_class->write = persp3d_write;
 }
 
+CPersp3D::CPersp3D(Persp3D* persp3d) : CObject(persp3d) {
+	this->persp3d = persp3d;
+}
+
+CPersp3D::~CPersp3D() {
+}
+
 /**
  * Callback to initialize Persp3D object.
  */
 static void
 persp3d_init(Persp3D *persp)
 {
+	persp->cpersp3d = new CPersp3D(persp);
+	persp->cobject = persp->cpersp3d;
+
     persp->perspective_impl = new Persp3DImpl();
 }
 
 /**
  * Virtual build: set persp3d attributes from its associated XML node.
  */
-static void persp3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void persp3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) persp3d_parent_class)->build)
 //        (* ((SPObjectClass *) persp3d_parent_class)->build)(object, document, repr);
-	// CPPIFY: todo
 
-    /* calls sp_object_set for the respective attributes */
+	/* calls sp_object_set for the respective attributes */
     // The transformation matrix is updated according to the values we read for the VPs
+//    object->readAttr( "inkscape:vp_x" );
+//    object->readAttr( "inkscape:vp_y" );
+//    object->readAttr( "inkscape:vp_z" );
+//    object->readAttr( "inkscape:persp3d-origin" );
+//
+//    if (repr) {
+//        repr->addListener (&persp3d_repr_events, object);
+//    }
+//}
+
+void CPersp3D::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::onBuild(document, repr);
+
+	Persp3D* object = this->persp3d;
+
     object->readAttr( "inkscape:vp_x" );
     object->readAttr( "inkscape:vp_y" );
     object->readAttr( "inkscape:vp_z" );
@@ -135,6 +159,15 @@ static void persp3d_build(SPObject *object, SPDocument *document, Inkscape::XML:
  * Virtual release of Persp3D members before destruction.
  */
 static void persp3d_release(SPObject *object) {
+//    Persp3D *persp = SP_PERSP3D(object);
+//    delete persp->perspective_impl;
+//    object->getRepr()->removeListenerByData(object);
+	((Persp3D*)object)->cpersp3d->onRelease();
+}
+
+void CPersp3D::onRelease() {
+	Persp3D* object = this->persp3d;
+
     Persp3D *persp = SP_PERSP3D(object);
     delete persp->perspective_impl;
     object->getRepr()->removeListenerByData(object);
@@ -149,6 +182,59 @@ static void persp3d_release(SPObject *object) {
 static void
 persp3d_set(SPObject *object, unsigned key, gchar const *value)
 {
+//    Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
+//
+//    switch (key) {
+//        case SP_ATTR_INKSCAPE_PERSP3D_VP_X: {
+//            if (value) {
+//                Proj::Pt2 new_image (value);
+//                persp3d_update_with_point (persp_impl, Proj::X, new_image);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_INKSCAPE_PERSP3D_VP_Y: {
+//            if (value) {
+//                Proj::Pt2 new_image (value);
+//                persp3d_update_with_point (persp_impl, Proj::Y, new_image);
+//                break;
+//            }
+//        }
+//        case SP_ATTR_INKSCAPE_PERSP3D_VP_Z: {
+//            if (value) {
+//                Proj::Pt2 new_image (value);
+//                persp3d_update_with_point (persp_impl, Proj::Z, new_image);
+//                break;
+//            }
+//        }
+//        case SP_ATTR_INKSCAPE_PERSP3D_ORIGIN: {
+//            if (value) {
+//                Proj::Pt2 new_image (value);
+//                persp3d_update_with_point (persp_impl, Proj::W, new_image);
+//                break;
+//            }
+//        }
+//        default: {
+//            if (((SPObjectClass *) persp3d_parent_class)->set)
+//                (* ((SPObjectClass *) persp3d_parent_class)->set)(object, key, value);
+//            break;
+//        }
+//    }
+//
+//    // FIXME: Is this the right place for resetting the draggers?
+//    SPEventContext *ec = inkscape_active_event_context();
+//    if (SP_IS_BOX3D_CONTEXT(ec)) {
+//        Box3DContext *bc = SP_BOX3D_CONTEXT(ec);
+//        bc->_vpdrag->updateDraggers();
+//        bc->_vpdrag->updateLines();
+//        bc->_vpdrag->updateBoxHandles();
+//        bc->_vpdrag->updateBoxReprs();
+//    }
+	((Persp3D*)object)->cpersp3d->onSet(key, value);
+}
+
+void CPersp3D::onSet(unsigned key, gchar const *value) {
+	Persp3D* object = this->persp3d;
+
     Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
 
     switch (key) {
@@ -181,8 +267,9 @@ persp3d_set(SPObject *object, unsigned key, gchar const *value)
             }
         }
         default: {
-            if (((SPObjectClass *) persp3d_parent_class)->set)
-                (* ((SPObjectClass *) persp3d_parent_class)->set)(object, key, value);
+//            if (((SPObjectClass *) persp3d_parent_class)->set)
+//                (* ((SPObjectClass *) persp3d_parent_class)->set)(object, key, value);
+        	CObject::onSet(key, value);
             break;
         }
     }
@@ -201,14 +288,27 @@ persp3d_set(SPObject *object, unsigned key, gchar const *value)
 static void
 persp3d_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+//    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+//
+//        /* TODO: Should we update anything here? */
+//
+//    }
+//
+//    if (((SPObjectClass *) persp3d_parent_class)->update)
+//        ((SPObjectClass *) persp3d_parent_class)->update(object, ctx, flags);
+	((Persp3D*)object)->cpersp3d->onUpdate(ctx, flags);
+}
+
+void CPersp3D::onUpdate(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* TODO: Should we update anything here? */
 
     }
 
-    if (((SPObjectClass *) persp3d_parent_class)->update)
-        ((SPObjectClass *) persp3d_parent_class)->update(object, ctx, flags);
+//    if (((SPObjectClass *) persp3d_parent_class)->update)
+//        ((SPObjectClass *) persp3d_parent_class)->update(object, ctx, flags);
+    CObject::onUpdate(ctx, flags);
 }
 
 Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
@@ -270,6 +370,39 @@ Persp3D *persp3d_document_first_persp(SPDocument *document)
 static Inkscape::XML::Node *
 persp3d_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
+//
+//    if ((flags & SP_OBJECT_WRITE_BUILD & SP_OBJECT_WRITE_EXT) && !repr) {
+//        // this is where we end up when saving as plain SVG (also in other circumstances?);
+//        // hence we don't set the sodipodi:type attribute
+//        repr = xml_doc->createElement("inkscape:perspective");
+//    }
+//
+//    if (flags & SP_OBJECT_WRITE_EXT) {
+//        gchar *str = NULL; // FIXME: Should this be freed each time we set an attribute or only in the end or at all?
+//        str = persp3d_pt_to_str (persp_impl, Proj::X);
+//        repr->setAttribute("inkscape:vp_x", str);
+//
+//        str = persp3d_pt_to_str (persp_impl, Proj::Y);
+//        repr->setAttribute("inkscape:vp_y", str);
+//
+//        str = persp3d_pt_to_str (persp_impl, Proj::Z);
+//        repr->setAttribute("inkscape:vp_z", str);
+//
+//        str = persp3d_pt_to_str (persp_impl, Proj::W);
+//        repr->setAttribute("inkscape:persp3d-origin", str);
+//    }
+//
+//    if (((SPObjectClass *) persp3d_parent_class)->write)
+//        (* ((SPObjectClass *) persp3d_parent_class)->write)(object, xml_doc, repr, flags);
+//
+//    return repr;
+	return ((Persp3D*)object)->cpersp3d->onWrite(xml_doc, repr, flags);
+}
+
+Inkscape::XML::Node* CPersp3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	Persp3D* object = this->persp3d;
+
     Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
 
     if ((flags & SP_OBJECT_WRITE_BUILD & SP_OBJECT_WRITE_EXT) && !repr) {
@@ -293,8 +426,10 @@ persp3d_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML:
         repr->setAttribute("inkscape:persp3d-origin", str);
     }
 
-    if (((SPObjectClass *) persp3d_parent_class)->write)
-        (* ((SPObjectClass *) persp3d_parent_class)->write)(object, xml_doc, repr, flags);
+//    if (((SPObjectClass *) persp3d_parent_class)->write)
+//        (* ((SPObjectClass *) persp3d_parent_class)->write)(object, xml_doc, repr, flags);
+
+    CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
 }

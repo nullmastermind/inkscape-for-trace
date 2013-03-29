@@ -51,6 +51,8 @@ using Inkscape::ColorProfile;
 using Inkscape::ColorProfileClass;
 using Inkscape::ColorProfileImpl;
 
+using Inkscape::CColorProfile;
+
 namespace
 {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -224,11 +226,21 @@ void ColorProfile::classInit( ColorProfileClass *klass )
     sp_object_class->write = ColorProfile::write;
 }
 
+CColorProfile::CColorProfile(ColorProfile* cp) : CObject(cp) {
+	this->colorprofile = cp;
+}
+
+CColorProfile::~CColorProfile() {
+}
+
 /**
  * Callback for ColorProfile object initialization.
  */
 void ColorProfile::init( ColorProfile *cprof )
 {
+	cprof->ccolorprofile = new CColorProfile(cprof);
+	cprof->cobject = cprof->ccolorprofile;
+
     cprof->impl = new ColorProfileImpl();
 
     cprof->href = 0;
@@ -243,6 +255,44 @@ void ColorProfile::init( ColorProfile *cprof )
  */
 void ColorProfile::release( SPObject *object )
 {
+//    // Unregister ourselves
+//    if ( object->document ) {
+//        object->document->removeResource("iccprofile", object);
+//    }
+//
+//    ColorProfile *cprof = COLORPROFILE(object);
+//    if ( cprof->href ) {
+//        g_free( cprof->href );
+//        cprof->href = 0;
+//    }
+//
+//    if ( cprof->local ) {
+//        g_free( cprof->local );
+//        cprof->local = 0;
+//    }
+//
+//    if ( cprof->name ) {
+//        g_free( cprof->name );
+//        cprof->name = 0;
+//    }
+//
+//    if ( cprof->intentStr ) {
+//        g_free( cprof->intentStr );
+//        cprof->intentStr = 0;
+//    }
+//
+//#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+//    cprof->impl->_clearProfile();
+//#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+//
+//    delete cprof->impl;
+//    cprof->impl = 0;
+	((ColorProfile*)object)->ccolorprofile->onRelease();
+}
+
+void CColorProfile::onRelease() {
+	ColorProfile* object = this->colorprofile;
+
     // Unregister ourselves
     if ( object->document ) {
         object->document->removeResource("iccprofile", object);
@@ -306,6 +356,31 @@ void ColorProfileImpl::_clearProfile()
  */
 void ColorProfile::build( SPObject *object, SPDocument *document, Inkscape::XML::Node *repr )
 {
+//    ColorProfile *cprof = COLORPROFILE(object);
+//    g_assert(cprof->href == 0);
+//    g_assert(cprof->local == 0);
+//    g_assert(cprof->name == 0);
+//    g_assert(cprof->intentStr == 0);
+//
+////    if (cprof_parent_class->build) {
+////        (* cprof_parent_class->build)(object, document, repr);
+////    }
+//
+//    object->readAttr( "xlink:href" );
+//    object->readAttr( "local" );
+//    object->readAttr( "name" );
+//    object->readAttr( "rendering-intent" );
+//
+//    // Register
+//    if ( document ) {
+//        document->addResource( "iccprofile", object );
+//    }
+	((ColorProfile*)object)->ccolorprofile->onBuild(document, repr);
+}
+
+void CColorProfile::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	ColorProfile* object = this->colorprofile;
+
     ColorProfile *cprof = COLORPROFILE(object);
     g_assert(cprof->href == 0);
     g_assert(cprof->local == 0);
@@ -315,7 +390,7 @@ void ColorProfile::build( SPObject *object, SPDocument *document, Inkscape::XML:
 //    if (cprof_parent_class->build) {
 //        (* cprof_parent_class->build)(object, document, repr);
 //    }
-    // CPPIFY: todo
+    CObject::onBuild(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "local" );
@@ -328,11 +403,131 @@ void ColorProfile::build( SPObject *object, SPDocument *document, Inkscape::XML:
     }
 }
 
+
 /**
  * Callback: set attribute.
  */
 void ColorProfile::set( SPObject *object, unsigned key, gchar const *value )
 {
+//    ColorProfile *cprof = COLORPROFILE(object);
+//
+//    switch (key) {
+//        case SP_ATTR_XLINK_HREF:
+//            if ( cprof->href ) {
+//                g_free( cprof->href );
+//                cprof->href = 0;
+//            }
+//            if ( value ) {
+//                cprof->href = g_strdup( value );
+//                if ( *cprof->href ) {
+//#if HAVE_LIBLCMS1
+//                    cmsErrorAction( LCMS_ERROR_SHOW );
+//#endif
+//#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+//
+//                    // TODO open filename and URIs properly
+//                    //FILE* fp = fopen_utf8name( filename, "r" );
+//                    //LCMSAPI cmsHPROFILE   LCMSEXPORT cmsOpenProfileFromMem(LPVOID MemPtr, cmsUInt32Number dwSize);
+//
+//                    // Try to open relative
+//                    SPDocument *doc = object->document;
+//                    if (!doc) {
+//                        doc = SP_ACTIVE_DOCUMENT;
+//                        g_warning("object has no document.  using active");
+//                    }
+//                    //# 1.  Get complete URI of document
+//                    gchar const *docbase = doc->getURI();
+//                    if (!docbase)
+//                    {
+//                        // Normal for files that have not yet been saved.
+//                        docbase = "";
+//                    }
+//
+//                    gchar* escaped = g_uri_escape_string(cprof->href, "!*'();:@=+$,/?#[]", TRUE);
+//
+//                    //g_message("docbase:%s\n", docbase);
+//                    org::w3c::dom::URI docUri(docbase);
+//                    //# 2. Get href of icc file.  we don't care if it's rel or abs
+//                    org::w3c::dom::URI hrefUri(escaped);
+//                    //# 3.  Resolve the href according the docBase.  This follows
+//                    //      the w3c specs.  All absolute and relative issues are considered
+//                    org::w3c::dom::URI cprofUri = docUri.resolve(hrefUri);
+//                    gchar* fullname = g_uri_unescape_string(cprofUri.getNativePath().c_str(), "");
+//                    cprof->impl->_clearProfile();
+//                    cprof->impl->_profHandle = cmsOpenProfileFromFile( fullname, "r" );
+//                    if ( cprof->impl->_profHandle ) {
+//                        cprof->impl->_profileSpace = cmsGetColorSpace( cprof->impl->_profHandle );
+//                        cprof->impl->_profileClass = cmsGetDeviceClass( cprof->impl->_profHandle );
+//                    }
+//                    DEBUG_MESSAGE( lcmsOne, "cmsOpenProfileFromFile( '%s'...) = %p", fullname, (void*)cprof->impl->_profHandle );
+//                    g_free(escaped);
+//                    escaped = 0;
+//                    g_free(fullname);
+//#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+//                }
+//            }
+//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            break;
+//
+//        case SP_ATTR_LOCAL:
+//            if ( cprof->local ) {
+//                g_free( cprof->local );
+//                cprof->local = 0;
+//            }
+//            cprof->local = g_strdup( value );
+//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            break;
+//
+//        case SP_ATTR_NAME:
+//            if ( cprof->name ) {
+//                g_free( cprof->name );
+//                cprof->name = 0;
+//            }
+//            cprof->name = g_strdup( value );
+//            DEBUG_MESSAGE( lcmsTwo, "<color-profile> name set to '%s'", cprof->name );
+//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            break;
+//
+//        case SP_ATTR_RENDERING_INTENT:
+//            if ( cprof->intentStr ) {
+//                g_free( cprof->intentStr );
+//                cprof->intentStr = 0;
+//            }
+//            cprof->intentStr = g_strdup( value );
+//
+//            if ( value ) {
+//                if ( strcmp( value, "auto" ) == 0 ) {
+//                    cprof->rendering_intent = RENDERING_INTENT_AUTO;
+//                } else if ( strcmp( value, "perceptual" ) == 0 ) {
+//                    cprof->rendering_intent = RENDERING_INTENT_PERCEPTUAL;
+//                } else if ( strcmp( value, "relative-colorimetric" ) == 0 ) {
+//                    cprof->rendering_intent = RENDERING_INTENT_RELATIVE_COLORIMETRIC;
+//                } else if ( strcmp( value, "saturation" ) == 0 ) {
+//                    cprof->rendering_intent = RENDERING_INTENT_SATURATION;
+//                } else if ( strcmp( value, "absolute-colorimetric" ) == 0 ) {
+//                    cprof->rendering_intent = RENDERING_INTENT_ABSOLUTE_COLORIMETRIC;
+//                } else {
+//                    cprof->rendering_intent = RENDERING_INTENT_UNKNOWN;
+//                }
+//            } else {
+//                cprof->rendering_intent = RENDERING_INTENT_UNKNOWN;
+//            }
+//
+//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            break;
+//
+//        default:
+//            if (cprof_parent_class->set) {
+//                (* cprof_parent_class->set)(object, key, value);
+//            }
+//            break;
+//    }
+	((ColorProfile*)object)->ccolorprofile->onSet(key, value);
+}
+
+void CColorProfile::onSet(unsigned key, gchar const *value) {
+	ColorProfile* object = this->colorprofile;
+
     ColorProfile *cprof = COLORPROFILE(object);
 
     switch (key) {
@@ -441,12 +636,12 @@ void ColorProfile::set( SPObject *object, unsigned key, gchar const *value )
             break;
 
         default:
-            if (cprof_parent_class->set) {
-                (* cprof_parent_class->set)(object, key, value);
-            }
+//            if (cprof_parent_class->set) {
+//                (* cprof_parent_class->set)(object, key, value);
+//            }
+        	CObject::onSet(key, value);
             break;
     }
-
 }
 
 /**
@@ -454,6 +649,39 @@ void ColorProfile::set( SPObject *object, unsigned key, gchar const *value )
  */
 Inkscape::XML::Node* ColorProfile::write( SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags )
 {
+//    ColorProfile *cprof = COLORPROFILE(object);
+//
+//    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+//        repr = xml_doc->createElement("svg:color-profile");
+//    }
+//
+//    if ( (flags & SP_OBJECT_WRITE_ALL) || cprof->href ) {
+//        repr->setAttribute( "xlink:href", cprof->href );
+//    }
+//
+//    if ( (flags & SP_OBJECT_WRITE_ALL) || cprof->local ) {
+//        repr->setAttribute( "local", cprof->local );
+//    }
+//
+//    if ( (flags & SP_OBJECT_WRITE_ALL) || cprof->name ) {
+//        repr->setAttribute( "name", cprof->name );
+//    }
+//
+//    if ( (flags & SP_OBJECT_WRITE_ALL) || cprof->intentStr ) {
+//        repr->setAttribute( "rendering-intent", cprof->intentStr );
+//    }
+//
+//    if (cprof_parent_class->write) {
+//        (* cprof_parent_class->write)(object, xml_doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((ColorProfile*)object)->ccolorprofile->onWrite(xml_doc, repr, flags);
+}
+
+Inkscape::XML::Node* CColorProfile::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	ColorProfile* object = this->colorprofile;
+
     ColorProfile *cprof = COLORPROFILE(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -476,9 +704,10 @@ Inkscape::XML::Node* ColorProfile::write( SPObject *object, Inkscape::XML::Docum
         repr->setAttribute( "rendering-intent", cprof->intentStr );
     }
 
-    if (cprof_parent_class->write) {
-        (* cprof_parent_class->write)(object, xml_doc, repr, flags);
-    }
+//    if (cprof_parent_class->write) {
+//        (* cprof_parent_class->write)(object, xml_doc, repr, flags);
+//    }
+    CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
