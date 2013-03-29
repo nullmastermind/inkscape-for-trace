@@ -1590,7 +1590,7 @@ static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
     sp_object_class->set = sp_lineargradient_set;
     sp_object_class->write = sp_lineargradient_write;
 
-    ps_class->pattern_new = sp_lineargradient_create_pattern;
+    //ps_class->pattern_new = sp_lineargradient_create_pattern;
 }
 
 CLinearGradient::CLinearGradient(SPLinearGradient* lineargradient) : CGradient(lineargradient) {
@@ -1780,7 +1780,7 @@ static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
     sp_object_class->set = sp_radialgradient_set;
     sp_object_class->write = sp_radialgradient_write;
 
-    ps_class->pattern_new = sp_radialgradient_create_pattern;
+    //ps_class->pattern_new = sp_radialgradient_create_pattern;
 }
 
 CRadialGradient::CRadialGradient(SPRadialGradient* radialgradient) : CGradient(radialgradient) {
@@ -1996,7 +1996,7 @@ static void sp_meshgradient_class_init(SPMeshGradientClass *klass)
     sp_object_class->set = sp_meshgradient_set;
     sp_object_class->write = sp_meshgradient_write;
 
-    ps_class->pattern_new = sp_meshgradient_create_pattern;
+    //ps_class->pattern_new = sp_meshgradient_create_pattern;
 }
 
 CMeshGradient::CMeshGradient(SPMeshGradient* meshgradient) : CGradient(meshgradient) {

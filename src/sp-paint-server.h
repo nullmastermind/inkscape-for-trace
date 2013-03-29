@@ -48,7 +48,7 @@ private:
 struct SPPaintServerClass {
     SPObjectClass sp_object_class;
     /** Get SPPaint instance. */
-    cairo_pattern_t *(*pattern_new)(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+    //cairo_pattern_t *(*pattern_new)(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 };
 
 

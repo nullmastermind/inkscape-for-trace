@@ -98,7 +98,7 @@ sp_pattern_class_init (SPPatternClass *klass)
 
 	// do we need _write? seems to work without it
 
-    ps_class->pattern_new = sp_pattern_create_pattern;
+    //ps_class->pattern_new = sp_pattern_create_pattern;
 }
 
 CPattern::CPattern(SPPattern* pattern) : CPaintServer(pattern) {

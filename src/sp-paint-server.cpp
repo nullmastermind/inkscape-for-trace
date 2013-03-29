@@ -59,7 +59,7 @@ GType SPPaintServer::get_type(void)
 
 static void sp_paint_server_class_init(SPPaintServerClass *psc)
 {
-    psc->pattern_new = sp_paint_server_create_dummy_pattern;
+    //psc->pattern_new = sp_paint_server_create_dummy_pattern;
 
     parent_class = static_cast<SPObjectClass *>(g_type_class_ref(SP_TYPE_OBJECT));
 }
@@ -94,7 +94,11 @@ cairo_pattern_t *sp_paint_server_invoke_create_pattern(SPPaintServer *ps,
 
 // CPPIFY: make pure virtual
 cairo_pattern_t* CPaintServer::onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
-	throw;
+	//throw;
+
+	// dummy_pattern
+	cairo_pattern_t *cp = cairo_pattern_create_rgb(1.0, 0.0, 1.0);
+	return cp;
 }
 
 cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps,
