@@ -39,20 +39,7 @@
 #include <algorithm>
 
 /* LPEItem base class */
-
-static void sp_lpe_item_class_init(SPLPEItemClass *klass);
-static void sp_lpe_item_init(SPLPEItem *lpe_item);
 static void sp_lpe_item_finalize(GObject *object);
-
-static void sp_lpe_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_lpe_item_release(SPObject *object);
-static void sp_lpe_item_set(SPObject *object, unsigned int key, gchar const *value);
-static void sp_lpe_item_update(SPObject *object, SPCtx *ctx, guint flags);
-static void sp_lpe_item_modified (SPObject *object, unsigned int flags);
-static Inkscape::XML::Node *sp_lpe_item_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-static void sp_lpe_item_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
-static void sp_lpe_item_remove_child (SPObject * object, Inkscape::XML::Node * child);
 
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 
@@ -64,51 +51,12 @@ typedef std::list<std::string> HRefList;
 static std::string patheffectlist_write_svg(PathEffectList const & list);
 static std::string hreflist_write_svg(HRefList const & list);
 
-static SPItemClass *parent_class;
+G_DEFINE_TYPE(SPLPEItem, sp_lpe_item, SP_TYPE_ITEM);
 
-GType
-sp_lpe_item_get_type()
+static void sp_lpe_item_class_init(SPLPEItemClass *klass)
 {
-    static GType lpe_item_type = 0;
-
-    if (!lpe_item_type) {
-        GTypeInfo lpe_item_info = {
-            sizeof(SPLPEItemClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_lpe_item_class_init,
-            NULL, NULL,
-            sizeof(SPLPEItem),
-            16,
-            (GInstanceInitFunc) sp_lpe_item_init,
-            NULL,    /* value_table */
-        };
-        lpe_item_type = g_type_register_static(SP_TYPE_ITEM, "SPLPEItem", &lpe_item_info, (GTypeFlags)0);
-    }
-    return lpe_item_type;
-}
-
-static void
-sp_lpe_item_class_init(SPLPEItemClass *klass)
-{
-    GObjectClass *gobject_class;
-    SPObjectClass *sp_object_class;
-
-    gobject_class = (GObjectClass *) klass;
-    sp_object_class = (SPObjectClass *) klass;
-    parent_class = (SPItemClass *)g_type_class_peek_parent (klass);
-
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
     gobject_class->finalize = sp_lpe_item_finalize;
-
-    //sp_object_class->build = sp_lpe_item_build;
-//    sp_object_class->release = sp_lpe_item_release;
-//    sp_object_class->set = sp_lpe_item_set;
-//    sp_object_class->update = sp_lpe_item_update;
-//    sp_object_class->modified = sp_lpe_item_modified;
-//    sp_object_class->write = sp_lpe_item_write;
-//    sp_object_class->child_added = sp_lpe_item_child_added;
-//    sp_object_class->remove_child = sp_lpe_item_remove_child;
-
-    //klass->update_patheffect = NULL;
 }
 
 // CPPIFY: remove
@@ -123,6 +71,8 @@ static void
 sp_lpe_item_init(SPLPEItem *lpeitem)
 {
 	lpeitem->clpeitem = new CLPEItem(lpeitem);
+
+	delete lpeitem->citem;
 	lpeitem->citem = lpeitem->clpeitem;
 	lpeitem->cobject = lpeitem->clpeitem;
 
@@ -134,11 +84,10 @@ sp_lpe_item_init(SPLPEItem *lpeitem)
     lpeitem->lpe_modified_connection_list = new std::list<sigc::connection>();
 }
 
-static void
-sp_lpe_item_finalize(GObject *object)
+static void sp_lpe_item_finalize(GObject *object)
 {
-    if (((GObjectClass *) (parent_class))->finalize) {
-        (* ((GObjectClass *) (parent_class))->finalize)(object);
+    if (((GObjectClass *) (sp_lpe_item_parent_class))->finalize) {
+        (* ((GObjectClass *) (sp_lpe_item_parent_class))->finalize)(object);
     }
 }
 
@@ -148,18 +97,6 @@ void CLPEItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "inkscape:path-effect" );
 
     CItem::onBuild(document, repr);
-}
-
-// CPPIFY: remove
-/**
- * Reads the Inkscape::XML::Node, and initializes SPLPEItem variables.  For this to get called,
- * our name must be associated with a repr via "sp_object_type_register".  Best done through
- * sp-object-repr.cpp's repr_name_entries array.
- */
-static void
-sp_lpe_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPLPEItem*)object)->clpeitem->onBuild(document, repr);
 }
 
 void CLPEItem::onRelease() {
@@ -186,16 +123,6 @@ void CLPEItem::onRelease() {
     lpeitem->path_effect_list = NULL;
 
     CItem::onRelease();
-}
-
-// CPPIFY: remove
-/**
- * Drops any allocated memory.
- */
-static void
-sp_lpe_item_release(SPObject *object)
-{
-    ((SPLPEItem*)object)->clpeitem->onRelease();
 }
 
 void CLPEItem::onSet(unsigned int key, gchar const* value) {
@@ -265,31 +192,11 @@ void CLPEItem::onSet(unsigned int key, gchar const* value) {
     }
 }
 
-// CPPIFY: remove
-/**
- * Sets a specific value in the SPLPEItem.
- */
-static void
-sp_lpe_item_set(SPObject *object, unsigned int key, gchar const *value)
-{
-    ((SPLPEItem*)object)->clpeitem->onSet(key, value);
-}
-
 void CLPEItem::onUpdate(SPCtx* ctx, unsigned int flags) {
 	CItem::onUpdate(ctx, flags);
 
 	// update the helperpaths of all LPEs applied to the item
     // TODO: re-add for the new node tool
-}
-
-// CPPIFY: remove
-/**
- * Receives update notifications.
- */
-static void
-sp_lpe_item_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPLPEItem*)object)->clpeitem->onUpdate(ctx, flags);
 }
 
 void CLPEItem::onModified(unsigned int flags) {
@@ -300,22 +207,7 @@ void CLPEItem::onModified(unsigned int flags) {
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(object), true, true);
     }
 
-    // CPPIFY: This doesn't make no sense.
-    // CObject::onModified is pure and CItem doesn't override this method. What was the idea behind these lines?
-//    if (((SPObjectClass *) (parent_class))->modified) {
-//        (* ((SPObjectClass *) (parent_class))->modified) (object, flags);
-//    }
 //    CItem::onModified(flags);
-}
-
-// CPPIFY: remove
-/**
- * Sets modified flag for all sub-item views.
- */
-static void
-sp_lpe_item_modified (SPObject *object, unsigned int flags)
-{
-	((SPLPEItem*)object)->clpeitem->onModified(flags);
 }
 
 Inkscape::XML::Node* CLPEItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -333,16 +225,6 @@ Inkscape::XML::Node* CLPEItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscap
     CItem::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-// CPPIFY: remove
-/**
- * Writes its settings to an incoming repr object, if any.
- */
-static Inkscape::XML::Node *
-sp_lpe_item_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPLPEItem*)object)->clpeitem->onWrite(xml_doc, repr, flags);
 }
 
 /**
@@ -732,14 +614,6 @@ void CLPEItem::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref
         }
     }
 }
-
-// CPPIFY: remove
-static void
-sp_lpe_item_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPLPEItem*)object)->clpeitem->onChildAdded(child, ref);
-}
-
 void CLPEItem::onRemoveChild(Inkscape::XML::Node * child) {
 	SPLPEItem* object = this->splpeitem;
 
@@ -751,13 +625,6 @@ void CLPEItem::onRemoveChild(Inkscape::XML::Node * child) {
     }
 
     CItem::onRemoveChild(child);
-}
-
-// CPPIFY: remove
-static void
-sp_lpe_item_remove_child (SPObject * object, Inkscape::XML::Node * child)
-{
-	((SPLPEItem*)object)->clpeitem->onRemoveChild(child);
 }
 
 static std::string patheffectlist_write_svg(PathEffectList const & list)
@@ -839,8 +706,8 @@ bool sp_lpe_item_set_current_path_effect(SPLPEItem *lpeitem, Inkscape::LivePathE
  * Writes a new "inkscape:path-effect" string to xml, where the old_lpeobjects are substituted by the new ones.
  *  Note that this method messes up the item's \c PathEffectList.
  */
-void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> const old_lpeobjs,
-                                    std::vector<LivePathEffectObject const *> const new_lpeobjs )
+void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> const &old_lpeobjs,
+                                    std::vector<LivePathEffectObject const *> const &new_lpeobjs )
 {
     HRefList hreflist;
     for (PathEffectList::const_iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)

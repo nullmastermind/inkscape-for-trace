@@ -13,13 +13,13 @@
 # include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/button.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/scrolledwindow.h>
+#include <glibmm/i18n.h>
 
 #include "debug.h"
 
@@ -69,7 +69,11 @@ DebugDialogImpl::DebugDialogImpl()
     set_title(_("Messages"));
     set_size_request(300, 400);
 
+#if WITH_GTKMM_3_0
+    Gtk::Box *mainVBox = get_content_area();
+#else
     Gtk::Box *mainVBox = get_vbox();
+#endif
 
     //## Add a menu for clear()
     Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem(_("_File"), true));
@@ -126,7 +130,7 @@ void DebugDialogImpl::show()
 {
     //call super()
     Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
+    //sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     raise();
     Gtk::Dialog::present();
 }
@@ -171,10 +175,10 @@ void DebugDialog::showInstance()
 
 
 /*##### THIS IS THE IMPORTANT PART ##### */
-void dialogLoggingFunction(const gchar */*log_domain*/,
-                           GLogLevelFlags /*log_level*/,
-                           const gchar *messageText,
-                           gpointer user_data)
+static void dialogLoggingFunction(const gchar */*log_domain*/,
+                                  GLogLevelFlags /*log_level*/,
+                                  const gchar *messageText,
+                                  gpointer user_data)
 {
     DebugDialogImpl *dlg = static_cast<DebugDialogImpl *>(user_data);
     dlg->message(messageText);

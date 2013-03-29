@@ -26,6 +26,7 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 #include "sp-root.h"
+#include "sp-gradient.h"
 
 typedef enum { REF_HREF, REF_STYLE, REF_URL, REF_CLIPBOARD } ID_REF_TYPE;
 
@@ -35,9 +36,9 @@ struct IdReference {
     const char *attr;  // property or href-like attribute
 };
 
-typedef std::map<std::string, std::list<IdReference> > refmap_type;
+typedef std::map<Glib::ustring, std::list<IdReference> > refmap_type;
 
-typedef std::pair<SPObject*, std::string> id_changeitem_type;
+typedef std::pair<SPObject*, Glib::ustring> id_changeitem_type;
 typedef std::list<id_changeitem_type> id_changelist_type;
 
 const char *href_like_attributes[] = {
@@ -79,6 +80,9 @@ const char* clipboard_properties[] = {
     "fill",
     "filter",
     "stroke",
+    "marker-end",
+    "marker-mid",
+    "marker-start"
 };
 #define NUM_CLIPBOARD_PROPERTIES (sizeof(clipboard_properties) / sizeof(*clipboard_properties))
 
@@ -111,6 +115,7 @@ find_references(SPObject *elem, refmap_type *refmap)
                     g_free(uri);
                 }
             }
+
         }
         return; // nothing more to do for inkscape:clipboard elements
     }
@@ -150,6 +155,20 @@ find_references(SPObject *elem, refmap_type *refmap)
             const gchar *id = obj->getId();
             IdReference idref = { REF_STYLE, elem, "filter" };
             (*refmap)[id].push_back(idref);
+        }
+    }
+
+    /* check for url(#...) references in markers */
+    const gchar *markers[4] = { "", "marker-start", "marker-mid", "marker-end" };
+    for (unsigned i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
+        const gchar *value = style->marker[i].value;
+        if (value) {
+            gchar *uri = extract_uri(value);
+            if (uri && uri[0] == '#') {
+                IdReference idref = { REF_STYLE, elem, markers[i] };
+                (*refmap)[uri+1].push_back(idref);
+            }
+            g_free(uri);
         }
     }
 
@@ -241,9 +260,9 @@ fix_up_refs(const refmap_type *refmap, const id_changelist_type &id_changes)
                 gchar *url = g_strdup_printf("url(#%s)", obj->getId());
                 sp_repr_css_set_property(style, it->attr, url);
                 g_free(url);
-                gchar *style_string = sp_repr_css_write_string(style);
-                it->elem->getRepr()->setAttribute("style", style_string);
-                g_free(style_string);
+                Glib::ustring style_string;
+                sp_repr_css_write_string(style, style_string);
+                it->elem->getRepr()->setAttribute("style", style_string.c_str());
             } else {
                 g_assert(0); // shouldn't happen
             }
@@ -273,14 +292,46 @@ prevent_id_clashes(SPDocument *imported_doc, SPDocument *current_doc)
 }
 
 /*
+ * Change any references of svg:def from_obj into to_obj
+ */
+void
+change_def_references(SPObject *from_obj, SPObject *to_obj)
+{
+    refmap_type *refmap = new refmap_type;
+    SPDocument *current_doc = from_obj->document;
+    std::string old_id(from_obj->getId());
+
+    find_references(current_doc->getRoot(), refmap);
+
+    refmap_type::const_iterator pos = refmap->find(old_id);
+    if (pos != refmap->end()) {
+        std::list<IdReference>::const_iterator it;
+        const std::list<IdReference>::const_iterator it_end = pos->second.end();
+        for (it = pos->second.begin(); it != it_end; ++it) {
+            if (it->type == REF_STYLE) {
+                sp_style_set_property_url(it->elem, it->attr, to_obj, false);
+            }
+        }
+    }
+
+    delete refmap;
+}
+
+/*
  * Change the id of a SPObject to new_name
  * If there is an id clash then rename to something similar
  */
 void rename_id(SPObject *elem, Glib::ustring const &new_name)
 {
-    gchar *id = g_strdup(new_name.c_str());
+    if (new_name.empty()){
+        g_message("Invalid Id, will not change.");
+        return;
+    }
+    gchar *id = g_strdup(new_name.c_str()); //id is not empty here as new_name is check to be not empty
     g_strcanon (id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
-    if (!*id || !isalnum (*id)) {
+    Glib::ustring new_name2 = id; //will not fail as id can not be NULL, see length check on new_name
+    g_free (id);
+    if (!isalnum (new_name2[0])) {
         g_message("Invalid Id, will not change.");
         return;
     }
@@ -291,31 +342,27 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
     find_references(current_doc->getRoot(), refmap);
 
     std::string old_id(elem->getId());
-    std::string new_id(id);
-    if (id && current_doc->getObjectById(id)) {
+    if (current_doc->getObjectById(id)) {
         // Choose a new ID.
         // To try to preserve any meaningfulness that the original ID
         // may have had, the new ID is the old ID followed by a hyphen
         // and one or more digits.
-        new_id += '-';
+        new_name2 += '-';
         for (;;) {
-            new_id += "0123456789"[std::rand() % 10];
-            const char *str = new_id.c_str();
-            if (current_doc->getObjectById(str) == NULL)
+            new_name2 += "0123456789"[std::rand() % 10];
+            if (current_doc->getObjectById(new_name2) == NULL)
                 break;
         }
     }
 
     // Change to the new ID
-    elem->getRepr()->setAttribute("id", new_id.c_str());
+    elem->getRepr()->setAttribute("id", new_name2.c_str());
     // Make a note of this change, if we need to fix up refs to it
     if (refmap->find(old_id) != refmap->end()) {
         id_changes.push_back(id_changeitem_type(elem, old_id));
     }
 
     fix_up_refs(refmap, id_changes);
-
-    g_free (id);
     delete refmap;
 }
 

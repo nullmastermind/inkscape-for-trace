@@ -226,7 +226,11 @@ private:
     /// This mutex is used to ensure that the worker thread
     /// that calls GetOpenFileName cannot collide with the
     /// main Inkscape thread
+#if GLIB_CHECK_VERSION(2,32,0)
+    Glib::Threads::Mutex *_mutex;
+#else
     Glib::Mutex *_mutex;
+#endif
 
 
     /// The controller function for the thread which calls
@@ -342,6 +346,8 @@ public:
         { return FileDialogBaseWin32::getSelectionType(); }
 
     virtual void setSelectionType( Inkscape::Extension::Extension *key );
+
+    virtual void addFileType(Glib::ustring name, Glib::ustring pattern);
 
 private:
 	/// A handle to the title label and edit box

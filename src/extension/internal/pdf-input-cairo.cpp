@@ -95,11 +95,7 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     _cropTypeCombo = Gtk::manage(new class Gtk::ComboBoxText());
     int num_crop_choices = sizeof(crop_setting_choices) / sizeof(crop_setting_choices[0]);
     for ( int i = 0 ; i < num_crop_choices ; i++ ) {
-#if WITH_GTKMM_2_24
         _cropTypeCombo->append(_(crop_setting_choices[i]));
-#else
-        _cropTypeCombo->append_text(_(crop_setting_choices[i]));
-#endif
     }
     _cropTypeCombo->set_active_text(_(crop_setting_choices[0]));
     _cropTypeCombo->set_sensitive(false);
@@ -112,7 +108,7 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
 
 #if WITH_GTKMM_3_0
     _fallbackPrecisionSlider_adj = Gtk::Adjustment::create(2, 1, 256, 1, 10, 10);
-    _fallbackPrecisionSlider = Gtk::manage(new Gtk::HScale(_fallbackPrecisionSlider_adj));
+    _fallbackPrecisionSlider = Gtk::manage(new Gtk::Scale(_fallbackPrecisionSlider_adj));
 #else
     _fallbackPrecisionSlider_adj = Gtk::manage(new class Gtk::Adjustment(2, 1, 256, 1, 10, 10));
     _fallbackPrecisionSlider = Gtk::manage(new class Gtk::HScale(*_fallbackPrecisionSlider_adj));
@@ -124,11 +120,7 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     // Text options
     _labelText = Gtk::manage(new class Gtk::Label(_("Text handling:")));
     _textHandlingCombo = Gtk::manage(new class Gtk::ComboBoxText());
-#if WITH_GTKMM_2_24
     _textHandlingCombo->append(_("Import text as text"));
-#else
-    _textHandlingCombo->append_text(_("Import text as text"));
-#endif
     _textHandlingCombo->set_active_text(_("Import text as text"));
     _localFontsCheck = Gtk::manage(new class Gtk::CheckButton(_("Replace PDF fonts by closest-named installed fonts")));
 
@@ -232,12 +224,20 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     vbox1->pack_start(*_importSettingsFrame, Gtk::PACK_EXPAND_PADDING, 0);
     hbox1->pack_start(*vbox1);
     hbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 4);
+
+#if WITH_GTKMM_3_0
+    get_content_area()->set_homogeneous(false);
+    get_content_area()->set_spacing(0);
+    get_content_area()->pack_start(*hbox1);
+#else
     this->get_vbox()->set_homogeneous(false);
     this->get_vbox()->set_spacing(0);
     this->get_vbox()->pack_start(*hbox1);
+#endif
+
     this->set_title(_("PDF Import Settings"));
     this->set_modal(true);
-    sp_transientize((GtkWidget *)this->gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(this->gobj()));  //Make transient
     this->property_window_position().set_value(Gtk::WIN_POS_NONE);
     this->set_resizable(true);
     this->property_destroy_with_parent().set_value(false);
@@ -424,7 +424,7 @@ static void copy_cairo_surface_to_pixbuf (cairo_surface_t *surface,
         cairo_height = gdk_pixbuf_get_height (pixbuf);
     for (y = 0; y < cairo_height; y++)
     {
-        src = (unsigned int *) (cairo_data + y * cairo_rowstride);
+        src = reinterpret_cast<unsigned int *>(cairo_data + y * cairo_rowstride);
         dst = pixbuf_data + y * pixbuf_rowstride;
         for (x = 0; x < cairo_width; x++)
         {
@@ -630,8 +630,8 @@ PdfInputCairo::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 static cairo_status_t
         _write_ustring_cb(void *closure, const unsigned char *data, unsigned int length)
 {
-    Glib::ustring* stream = (Glib::ustring*)closure;
-    stream->append((const char*)data, length);
+    Glib::ustring* stream = static_cast<Glib::ustring*>(closure);
+    stream->append(reinterpret_cast<const char*>(data), length);
 
     return CAIRO_STATUS_SUCCESS;
 }

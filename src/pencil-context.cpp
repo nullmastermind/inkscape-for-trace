@@ -45,9 +45,6 @@
 #include "display/curve.h"
 #include "livarot/Path.h"
 
-
-static void sp_pencil_context_class_init(SPPencilContextClass *klass);
-static void sp_pencil_context_init(SPPencilContext *pc);
 static void sp_pencil_context_setup(SPEventContext *ec);
 static void sp_pencil_context_dispose(GObject *object);
 
@@ -66,34 +63,12 @@ static void fit_and_split(SPPencilContext *pc);
 static void interpolate(SPPencilContext *pc);
 static void sketch_interpolate(SPPencilContext *pc);
 
-static SPDrawContextClass *pencil_parent_class;
 static Geom::Point pencil_drag_origin_w(0, 0);
 static bool pencil_within_tolerance = false;
 
 static bool in_svg_plane(Geom::Point const &p) { return Geom::LInfty(p) < 1e18; }
 
-/**
- * Register SPPencilContext class with Gdk and return its type number.
- */
-GType
-sp_pencil_context_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPPencilContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_pencil_context_class_init,
-            NULL, NULL,
-            sizeof(SPPencilContext),
-            4,
-            (GInstanceInitFunc) sp_pencil_context_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_DRAW_CONTEXT, "SPPencilContext", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPPencilContext, sp_pencil_context, SP_TYPE_DRAW_CONTEXT);
 
 /**
  * Initialize SPPencilContext vtable.
@@ -106,8 +81,6 @@ sp_pencil_context_class_init(SPPencilContextClass *klass)
 
     object_class = (GObjectClass *) klass;
     event_context_class = (SPEventContextClass *) klass;
-
-    pencil_parent_class = (SPDrawContextClass*)g_type_class_peek_parent(klass);
 
     object_class->dispose = sp_pencil_context_dispose;
 
@@ -147,8 +120,8 @@ sp_pencil_context_setup(SPEventContext *ec)
         ec->enableSelectionCue();
     }
 
-    if (((SPEventContextClass *) pencil_parent_class)->setup) {
-        ((SPEventContextClass *) pencil_parent_class)->setup(ec);
+    if (((SPEventContextClass *) sp_pencil_context_parent_class)->setup) {
+        ((SPEventContextClass *) sp_pencil_context_parent_class)->setup(ec);
     }
 
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
@@ -160,7 +133,7 @@ sp_pencil_context_setup(SPEventContext *ec)
 static void
 sp_pencil_context_dispose(GObject *object)
 {
-    G_OBJECT_CLASS(pencil_parent_class)->dispose(object);
+    G_OBJECT_CLASS(sp_pencil_context_parent_class)->dispose(object);
 }
 
 /** Snaps new node relative to the previous node. */
@@ -218,7 +191,7 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
 
     if (!ret) {
         gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
-            = ((SPEventContextClass *) pencil_parent_class)->root_handler;
+            = ((SPEventContextClass *) sp_pencil_context_parent_class)->root_handler;
         if (parent_root_handler) {
             ret = parent_root_handler(ec, event);
         }
@@ -789,11 +762,13 @@ interpolate(SPPencilContext *pc)
 
         /* Set up direction of next curve. */
         {
-            Geom::CubicBezier const * last_seg = dynamic_cast<Geom::CubicBezier const *>(pc->green_curve->last_segment());
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)[2]
+            Geom::Curve const * last_seg = pc->green_curve->last_segment();
+            g_assert( last_seg );      // Relevance: validity of (*last_seg)
             pc->p[0] = last_seg->finalPoint();
             pc->npoints = 1;
-            Geom::Point const req_vec( pc->p[0] - (*last_seg)[2] );
+            Geom::Curve *last_seg_reverse = last_seg->reverse();
+            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
+            delete last_seg_reverse;
             pc->req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
                                 ? Geom::Point(0, 0)
                                 : Geom::unit_vector(req_vec) );
@@ -881,11 +856,13 @@ sketch_interpolate(SPPencilContext *pc)
 
         /* Set up direction of next curve. */
         {
-            Geom::CubicBezier const * last_seg = dynamic_cast<Geom::CubicBezier const *>(pc->green_curve->last_segment());
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)[2]
+            Geom::Curve const * last_seg = pc->green_curve->last_segment();
+            g_assert( last_seg );      // Relevance: validity of (*last_seg)
             pc->p[0] = last_seg->finalPoint();
             pc->npoints = 1;
-            Geom::Point const req_vec( pc->p[0] - (*last_seg)[2] );
+            Geom::Curve *last_seg_reverse = last_seg->reverse();
+            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
+            delete last_seg_reverse;
             pc->req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
                                 ? Geom::Point(0, 0)
                                 : Geom::unit_vector(req_vec) );
@@ -926,15 +903,18 @@ fit_and_split(SPPencilContext *pc)
 
         /* Set up direction of next curve. */
         {
-            Geom::CubicBezier const * last_seg = dynamic_cast<Geom::CubicBezier const *>(pc->red_curve->last_segment());
-            g_assert( last_seg );      // Relevance: validity of (*last_seg)[2]
+            Geom::Curve const * last_seg = pc->red_curve->last_segment();
+            g_assert( last_seg );      // Relevance: validity of (*last_seg)
             pc->p[0] = last_seg->finalPoint();
             pc->npoints = 1;
-            Geom::Point const req_vec( pc->p[0] - (*last_seg)[2] );
+            Geom::Curve *last_seg_reverse = last_seg->reverse();
+            Geom::Point const req_vec( -last_seg_reverse->unitTangentAt(0) );
+            delete last_seg_reverse;
             pc->req_tangent = ( ( Geom::is_zero(req_vec) || !in_svg_plane(req_vec) )
                                 ? Geom::Point(0, 0)
                                 : Geom::unit_vector(req_vec) );
         }
+
 
         pc->green_curve->append_continuous(pc->red_curve, 0.0625);
         SPCurve *curve = pc->red_curve->copy();

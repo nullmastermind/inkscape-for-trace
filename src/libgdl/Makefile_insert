@@ -3,7 +3,6 @@
 if WITH_EXT_GDL
 
 EXTRA_DIST += \
-        libgdl/gdl-tools.h		\
 	libgdl/gdl-dock-object.h	\
 	libgdl/gdl-dock-master.h	\
 	libgdl/gdl-dock.h		\
@@ -13,7 +12,6 @@ EXTRA_DIST += \
 	libgdl/gdl-dock-tablabel.h	\
 	libgdl/gdl-dock-placeholder.h	\
 	libgdl/gdl-dock-bar.h		\
-	libgdl/gdl-stock-icons.h	\
 	libgdl/gdl-i18n.h		\
 	libgdl/gdl-i18n.c		\
 	libgdl/gdl-dock-object.c	\
@@ -46,8 +44,17 @@ libgdl/all: libgdl/libgdl.a
 libgdl/clean:
 	rm -f libgdl/libgdl.a $(libgdl_gdl_a_OBJECTS)
 
+# Suppress some non-critical warnings for libgdl.  We will drop our forked copy
+# of GDL once we upgrade to Gtk+ 3 so it's more important to minimise the number
+# of changes we make to GDL than to fix these minor issues in trunk.
+
+if CC_WNO_UNUSED_BUT_SET_VARIABLE_SUPPORTED
+libgdl_libgdl_a_CFLAGS = -Wno-unused-parameter -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -Wno-missing-field-initializers $(AM_CFLAGS)
+else
+libgdl_libgdl_a_CFLAGS = -Wno-unused-parameter -Wno-sign-compare -Wno-unused-variable -Wno-missing-field-initializers $(AM_CFLAGS)
+endif
+
 libgdl_libgdl_a_SOURCES =	\
-	libgdl/gdl-tools.h		\
 	libgdl/gdl-dock-object.h	\
 	libgdl/gdl-dock-master.h	\
 	libgdl/gdl-dock.h		\
@@ -57,7 +64,6 @@ libgdl_libgdl_a_SOURCES =	\
 	libgdl/gdl-dock-tablabel.h	\
 	libgdl/gdl-dock-placeholder.h	\
 	libgdl/gdl-dock-bar.h		\
-	libgdl/gdl-stock-icons.h	\
 	libgdl/gdl-i18n.h		\
 	libgdl/gdl-i18n.c		\
 	libgdl/gdl-dock-object.c	\

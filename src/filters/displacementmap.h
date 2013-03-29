@@ -28,8 +28,6 @@ enum FilterDisplacementMapChannelSelector {
     DISPLACEMENTMAP_CHANNEL_ENDTYPE
 };
 
-class SPFeDisplacementMapClass;
-
 class CFeDisplacementMap;
 
 class SPFeDisplacementMap : public SPFilterPrimitive {

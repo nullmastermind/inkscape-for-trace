@@ -32,6 +32,7 @@
 #endif
 
 #include <gtkmm/alignment.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/frame.h>
@@ -111,11 +112,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _cropTypeCombo = Gtk::manage(new class Gtk::ComboBoxText());
     int num_crop_choices = sizeof(crop_setting_choices) / sizeof(crop_setting_choices[0]);
     for ( int i = 0 ; i < num_crop_choices ; i++ ) {
-#if WITH_GTKMM_2_24
         _cropTypeCombo->append(_(crop_setting_choices[i]));
-#else
-        _cropTypeCombo->append_text(_(crop_setting_choices[i]));
-#endif
     }
     _cropTypeCombo->set_active_text(_(crop_setting_choices[0]));
     _cropTypeCombo->set_sensitive(false);
@@ -128,7 +125,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
 
 #if WITH_GTKMM_3_0
     _fallbackPrecisionSlider_adj = Gtk::Adjustment::create(2, 1, 256, 1, 10, 10);
-    _fallbackPrecisionSlider = Gtk::manage(new class Gtk::HScale(_fallbackPrecisionSlider_adj));
+    _fallbackPrecisionSlider = Gtk::manage(new class Gtk::Scale(_fallbackPrecisionSlider_adj));
 #else
     _fallbackPrecisionSlider_adj = Gtk::manage(new class Gtk::Adjustment(2, 1, 256, 1, 10, 10));
     _fallbackPrecisionSlider = Gtk::manage(new class Gtk::HScale(*_fallbackPrecisionSlider_adj));
@@ -140,11 +137,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     // Text options
     _labelText = Gtk::manage(new class Gtk::Label(_("Text handling:")));
     _textHandlingCombo = Gtk::manage(new class Gtk::ComboBoxText());
-#if WITH_GTKMM_2_24
     _textHandlingCombo->append(_("Import text as text"));
-#else
-    _textHandlingCombo->append_text(_("Import text as text"));
-#endif
     _textHandlingCombo->set_active_text(_("Import text as text"));
     _localFontsCheck = Gtk::manage(new class Gtk::CheckButton(_("Replace PDF fonts by closest-named installed fonts")));
 
@@ -248,12 +241,20 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     vbox1->pack_start(*_importSettingsFrame, Gtk::PACK_EXPAND_PADDING, 0);
     hbox1->pack_start(*vbox1);
     hbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 4);
+
+#if WITH_GTKMM_3_0
+    get_content_area()->set_homogeneous(false);
+    get_content_area()->set_spacing(0);
+    get_content_area()->pack_start(*hbox1);
+#else
     this->get_vbox()->set_homogeneous(false);
     this->get_vbox()->set_spacing(0);
     this->get_vbox()->pack_start(*hbox1);
+#endif
+
     this->set_title(_("PDF Import Settings"));
     this->set_modal(true);
-    sp_transientize((GtkWidget *)this->gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(this->gobj()));  //Make transient
     this->property_window_position().set_value(Gtk::WIN_POS_NONE);
     this->set_resizable(true);
     this->property_destroy_with_parent().set_value(false);
@@ -454,7 +455,7 @@ static void copy_cairo_surface_to_pixbuf (cairo_surface_t *surface,
         cairo_height = gdk_pixbuf_get_height (pixbuf);
     for (y = 0; y < cairo_height; y++)
     {
-        src = (unsigned int *) (cairo_data + y * cairo_rowstride);
+        src = reinterpret_cast<unsigned int *>(cairo_data + y * cairo_rowstride);
         dst = pixbuf_data + y * pixbuf_rowstride;
         for (x = 0; x < cairo_width; x++)
         {
@@ -588,11 +589,18 @@ void PdfImportDialog::_setPreviewPage(int page) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+bool
+PdfInput::wasCancelled () {
+    return _cancelled;
+}
+
 /**
  * Parses the selected page of the given PDF document using PdfParser.
  */
 SPDocument *
 PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
+
+    _cancelled = false;
 
     // Initialize the globalParams variable for poppler
     if (!globalParams) {
@@ -604,7 +612,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
     PDFDoc *pdf_doc = new PDFDoc(filename_goo, NULL, NULL, NULL);   // TODO: Could ask for password
     //delete filename_goo;
 #else
-    wchar_t *wfilename = (wchar_t*)g_utf8_to_utf16 (uri, -1, NULL, NULL, NULL);
+    wchar_t *wfilename = reinterpret_cast<wchar_t*>(g_utf8_to_utf16 (uri, -1, NULL, NULL, NULL));
 
     if (wfilename == NULL) {
       return NULL;
@@ -648,6 +656,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
     if (inkscape_use_gui()) {
         dlg = new PdfImportDialog(pdf_doc, uri);
         if (!dlg->showDialog()) {
+            _cancelled = true;
             delete dlg;
             delete pdf_doc;
             return NULL;

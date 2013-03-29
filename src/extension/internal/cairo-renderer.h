@@ -28,7 +28,7 @@
 #include <cairo.h>
 
 class SPClipPath;
-class SPMask;
+struct SPMask;
 
 namespace Inkscape {
 namespace Extension {
@@ -53,7 +53,7 @@ public:
     /** Initializes the CairoRenderContext according to the specified
     SPDocument. A set*Target function can only be called on the context
     before setupDocument. */
-    bool setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, SPItem *base);
+    bool setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base);
 
     /** Traverses the object tree and invokes the render methods. */
     void renderItem(CairoRenderContext *ctx, SPItem *item);

@@ -17,6 +17,7 @@
 
 #include "file.h" //IO
 #include "document-interface.h"
+#include "application-interface.h"
 #include <string.h>
 #include <dbus/dbus-glib.h>
 #include "desktop-handles.h" //sp_desktop_document()
@@ -222,11 +223,12 @@ dbus_create_node (SPDesktop *desk, const gchar *type)
  */
 gchar *finish_create_shape (DocumentInterface *object, GError ** /*error*/, Inkscape::XML::Node *newNode, gchar *desc)
 {
-
     SPCSSAttr *style = sp_desktop_get_style(object->desk, TRUE);
     
     if (style) {
-        newNode->setAttribute("style", sp_repr_css_write_string(style), TRUE);
+        Glib::ustring str;
+        sp_repr_css_write_string(style, str);
+        newNode->setAttribute("style", str.c_str(), TRUE);
     }
     else {
         newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none", TRUE);
@@ -320,43 +322,7 @@ document_interface_new (void)
         return (DocumentInterface*)g_object_new (TYPE_DOCUMENT_INTERFACE, NULL);
 }
 
-/* 
- * Error stuff...
- *
- * To add a new error type, edit here and in the .h InkscapeError enum.
- */
-GQuark
-inkscape_error_quark (void)
-{
-  static GQuark quark = 0;
-  if (!quark)
-    quark = g_quark_from_static_string ("inkscape_error");
 
-  return quark;
-}
-
-#define ENUM_ENTRY(NAME, DESC) { NAME, "" #NAME "", DESC }
-
-GType inkscape_error_get_type(void)
-{
-    static GType etype = 0;
-
-    if (etype == 0) {
-        static const GEnumValue values[] =
-            {
-
-                ENUM_ENTRY(INKSCAPE_ERROR_SELECTION, "Incompatible_Selection"),
-                ENUM_ENTRY(INKSCAPE_ERROR_OBJECT, "Incompatible_Object"),
-                ENUM_ENTRY(INKSCAPE_ERROR_VERB, "Failed_Verb"),
-                ENUM_ENTRY(INKSCAPE_ERROR_OTHER, "Generic_Error"),
-                { 0, 0, 0 }
-            };
-
-        etype = g_enum_register_static("InkscapeError", values);
-    }
-
-    return etype;
-}
 
 /****************************************************************************
      MISC FUNCTIONS
@@ -565,7 +531,7 @@ gchar *document_interface_node(DocumentInterface *object, gchar *type, GError **
 }
 
 /****************************************************************************
-     ENVIORNMENT FUNCTIONS
+     ENVIRONMENT FUNCTIONS
 ****************************************************************************/
 gdouble
 document_interface_document_get_width (DocumentInterface *object)
@@ -582,7 +548,9 @@ document_interface_document_get_height (DocumentInterface *object)
 gchar *document_interface_document_get_css(DocumentInterface *object, GError ** /*error*/)
 {
     SPCSSAttr *current = (object->desk)->current;
-    return sp_repr_css_write_string(current);
+    Glib::ustring str;
+    sp_repr_css_write_string(current, str);
+    return (str.empty() ? NULL : g_strdup (str.c_str()));
 }
 
 gboolean document_interface_document_merge_css(DocumentInterface *object,
@@ -803,7 +771,9 @@ document_interface_modify_css (DocumentInterface *object, gchar *shape,
         
     SPCSSAttr * oldstyle = sp_repr_css_attr (node, style);
     sp_repr_css_set_property(oldstyle, cssattrb, newval);
-    node->setAttribute (style, sp_repr_css_write_string (oldstyle), TRUE);
+    Glib::ustring str;
+    sp_repr_css_write_string (oldstyle, str);
+    node->setAttribute (style, str.c_str(), TRUE);
     return TRUE;
 }
 
@@ -826,7 +796,10 @@ document_interface_merge_css (DocumentInterface *object, gchar *shape,
     SPCSSAttr * oldstyle = sp_repr_css_attr (node, style);
 
     sp_repr_css_merge(oldstyle, newstyle);
-    node->setAttribute (style, sp_repr_css_write_string (oldstyle), TRUE);
+    Glib::ustring str;
+    sp_repr_css_write_string (oldstyle, str);
+    node->setAttribute (style, str.c_str(), TRUE);
+    
     return TRUE;
 }
 

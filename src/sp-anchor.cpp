@@ -25,56 +25,10 @@
 #include "ui/view/view.h"
 #include "document.h"
 
-static void sp_anchor_class_init(SPAnchorClass *ac);
-static void sp_anchor_init(SPAnchor *anchor);
-
-static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_anchor_release(SPObject *object);
-static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value);
-static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static gchar *sp_anchor_description(SPItem *item);
-static gint sp_anchor_event(SPItem *item, SPEvent *event);
-
-static SPGroupClass *parent_class;
-
-GType sp_anchor_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPAnchorClass),
-            NULL,	/* base_init */
-            NULL,	/* base_finalize */
-            (GClassInitFunc) sp_anchor_class_init,
-            NULL,	/* class_finalize */
-            NULL,	/* class_data */
-            sizeof(SPAnchor),
-            16,	/* n_preallocs */
-            (GInstanceInitFunc) sp_anchor_init,
-            NULL,	/* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GROUP, "SPAnchor", &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE(SPAnchor, sp_anchor, SP_TYPE_GROUP);
 
 static void sp_anchor_class_init(SPAnchorClass *ac)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) ac;
-    SPItemClass *item_class = (SPItemClass *) ac;
-
-    parent_class = (SPGroupClass *) g_type_class_ref(SP_TYPE_GROUP);
-
-    //sp_object_class->build = sp_anchor_build;
-//    sp_object_class->release = sp_anchor_release;
-//    sp_object_class->set = sp_anchor_set;
-//    sp_object_class->write = sp_anchor_write;
-
-//    item_class->description = sp_anchor_description;
-//    item_class->event = sp_anchor_event;
 }
 
 CAnchor::CAnchor(SPAnchor* anchor) : CGroup(anchor) {
@@ -87,6 +41,8 @@ CAnchor::~CAnchor() {
 static void sp_anchor_init(SPAnchor *anchor)
 {
 	anchor->canchor = new CAnchor(anchor);
+
+	delete anchor->cgroup;
 	anchor->cgroup = anchor->canchor;
 	anchor->clpeitem = anchor->canchor;
 	anchor->citem = anchor->canchor;
@@ -110,12 +66,6 @@ void CAnchor::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "target" );
 }
 
-// CPPIFY: remove
-static void sp_anchor_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPAnchor*)object)->canchor->onBuild(document, repr);
-}
-
 void CAnchor::onRelease() {
     SPAnchor *anchor = this->spanchor;
 
@@ -125,12 +75,6 @@ void CAnchor::onRelease() {
     }
 
     CGroup::onRelease();
-}
-
-// CPPIFY: remove
-static void sp_anchor_release(SPObject *object)
-{
-	((SPAnchor*)object)->canchor->onRelease();
 }
 
 void CAnchor::onSet(unsigned int key, const gchar* value) {
@@ -158,11 +102,6 @@ void CAnchor::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-static void sp_anchor_set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPAnchor*)object)->canchor->onSet(key, value);
-}
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
@@ -193,12 +132,6 @@ Inkscape::XML::Node* CAnchor::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     return repr;
 }
 
-// CPPIFY: remove
-static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPAnchor*)object)->canchor->onWrite(xml_doc, repr, flags);
-}
-
 gchar* CAnchor::onDescription() {
     SPAnchor *anchor = this->spanchor;
 
@@ -212,12 +145,7 @@ gchar* CAnchor::onDescription() {
     }
 }
 
-// CPPIFY: remove
-static gchar *sp_anchor_description(SPItem *item)
-{
-	return ((SPAnchor*)item)->canchor->onDescription();
-}
-
+/* fixme: We should forward event to appropriate container/view */
 gint CAnchor::onEvent(SPEvent* event) {
     SPAnchor *anchor = this->spanchor;
 
@@ -239,14 +167,6 @@ gint CAnchor::onEvent(SPEvent* event) {
     }
 
     return FALSE;
-}
-
-/* fixme: We should forward event to appropriate container/view */
-
-// CPPIFY: remove
-static gint sp_anchor_event(SPItem *item, SPEvent *event)
-{
-	return ((SPAnchor*)item)->canchor->onEvent(event);
 }
 
 /*

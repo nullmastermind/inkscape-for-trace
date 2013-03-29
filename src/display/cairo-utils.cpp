@@ -24,7 +24,20 @@
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
 #include "color.h"
+#include "style.h"
 #include "helper/geom-curves.h"
+#include "display/cairo-templates.h"
+
+namespace {
+
+/**
+ * Key for cairo_surface_t to keep track of current color interpolation value
+ * Only the address of the structure is used, it is never initialized. See:
+ * http://www.cairographics.org/manual/cairo-Types.html#cairo-user-data-key-t
+ */
+cairo_user_data_key_t ci_key;
+
+} // namespace
 
 namespace Inkscape {
 
@@ -276,6 +289,43 @@ feed_pathvector_to_cairo (cairo_t *ct, Geom::PathVector const &pathv)
     }
 }
 
+SPColorInterpolation
+get_cairo_surface_ci(cairo_surface_t *surface) {
+    void* data = cairo_surface_get_user_data( surface, &ci_key );
+    if( data != NULL ) {
+        return (SPColorInterpolation)GPOINTER_TO_INT( data );
+    } else {
+        return SP_CSS_COLOR_INTERPOLATION_AUTO;
+    }
+}
+
+/** Set the color_interpolation_value for a Cairo surface.
+ *  Transform the surface between sRGB and linearRGB if necessary. */
+void
+set_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation ci) {
+
+    if( cairo_surface_get_content( surface ) != CAIRO_CONTENT_ALPHA ) {
+
+        SPColorInterpolation ci_in = get_cairo_surface_ci( surface );
+
+        if( ci_in == SP_CSS_COLOR_INTERPOLATION_SRGB &&
+            ci    == SP_CSS_COLOR_INTERPOLATION_LINEARRGB ) {
+            ink_cairo_surface_srgb_to_linear( surface );
+        }
+        if( ci_in == SP_CSS_COLOR_INTERPOLATION_LINEARRGB &&
+            ci    == SP_CSS_COLOR_INTERPOLATION_SRGB ) {
+            ink_cairo_surface_linear_to_srgb( surface );
+        }
+
+        cairo_surface_set_user_data(surface, &ci_key, GINT_TO_POINTER (ci), NULL);
+    }
+}
+
+void
+copy_cairo_surface_ci(cairo_surface_t *in, cairo_surface_t *out) {
+    cairo_surface_set_user_data(out, &ci_key, cairo_surface_get_user_data(in, &ci_key), NULL);
+}
+
 void
 ink_cairo_set_source_rgba32(cairo_t *ct, guint32 rgba)
 {
@@ -395,6 +445,7 @@ cairo_surface_t *
 ink_cairo_surface_create_identical(cairo_surface_t *s)
 {
     cairo_surface_t *ns = ink_cairo_surface_create_same_size(s, cairo_surface_get_content(s));
+    cairo_surface_set_user_data(ns, &ci_key, cairo_surface_get_user_data(s, &ci_key), NULL);
     return ns;
 }
 
@@ -545,6 +596,128 @@ void ink_cairo_surface_average_color_premul(cairo_surface_t *surface, double &r,
     g = CLAMP(g, 0.0, 1.0);
     b = CLAMP(b, 0.0, 1.0);
     a = CLAMP(a, 0.0, 1.0);
+}
+
+static guint32 srgb_to_linear( const guint32 c, const guint32 a ) {
+
+    const guint32 c1 = unpremul_alpha( c, a );
+
+    double cc = c1/255.0;
+
+    if( cc < 0.04045 ) {
+        cc /= 12.92;
+    } else {
+        cc = pow( (cc+0.055)/1.055, 2.4 );
+    }
+    cc *= 255.0;
+
+    const guint32 c2 = (int)cc;
+
+    return premul_alpha( c2, a );
+}
+
+static guint32 linear_to_srgb( const guint32 c, const guint32 a ) {
+
+    const guint32 c1 = unpremul_alpha( c, a );
+
+    double cc = c1/255.0;
+
+    if( cc < 0.0031308 ) {
+        cc *= 12.92;
+    } else {
+        cc = pow( cc, 1.0/2.4 )*1.055-0.055;
+    }
+    cc *= 255.0;
+
+    const guint32 c2 = (int)cc;
+
+    return premul_alpha( c2, a );
+}
+
+struct SurfaceSrgbToLinear {
+
+    guint32 operator()(guint32 in) {
+        EXTRACT_ARGB32(in, a,r,g,b)    ; // Unneeded semi-colon for indenting
+        if( a != 0 ) {
+            r = srgb_to_linear( r, a );
+            g = srgb_to_linear( g, a );
+            b = srgb_to_linear( b, a );
+        }
+        ASSEMBLE_ARGB32(out, a,r,g,b);
+        return out;
+    }
+private:
+    /* None */
+};
+
+int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface)
+{
+    cairo_surface_flush(surface);
+    int width = cairo_image_surface_get_width(surface);
+    int height = cairo_image_surface_get_height(surface);
+    // int stride = cairo_image_surface_get_stride(surface);
+    // unsigned char *data = cairo_image_surface_get_data(surface);
+
+    ink_cairo_surface_filter( surface, surface, SurfaceSrgbToLinear() );
+
+    /* TODO convert this to OpenMP somehow */
+    // for (int y = 0; y < height; ++y, data += stride) {
+    //     for (int x = 0; x < width; ++x) {
+    //         guint32 px = *reinterpret_cast<guint32*>(data + 4*x);
+    //         EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
+    //         if( a != 0 ) {
+    //             r = srgb_to_linear( r, a );
+    //             g = srgb_to_linear( g, a );
+    //             b = srgb_to_linear( b, a );
+    //         }
+    //         ASSEMBLE_ARGB32(px2, a,r,g,b);
+    //         *reinterpret_cast<guint32*>(data + 4*x) = px2;
+    //     }
+    // }
+    return width * height;
+}
+
+struct SurfaceLinearToSrgb {
+
+    guint32 operator()(guint32 in) {
+        EXTRACT_ARGB32(in, a,r,g,b)    ; // Unneeded semi-colon for indenting
+        if( a != 0 ) {
+            r = linear_to_srgb( r, a );
+            g = linear_to_srgb( g, a );
+            b = linear_to_srgb( b, a );
+        }
+        ASSEMBLE_ARGB32(out, a,r,g,b);
+        return out;
+    }
+private:
+    /* None */
+};
+
+int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
+{
+    cairo_surface_flush(surface);
+    int width = cairo_image_surface_get_width(surface);
+    int height = cairo_image_surface_get_height(surface);
+    // int stride = cairo_image_surface_get_stride(surface);
+    // unsigned char *data = cairo_image_surface_get_data(surface);
+
+    ink_cairo_surface_filter( surface, surface, SurfaceLinearToSrgb() );
+
+    // /* TODO convert this to OpenMP somehow */
+    // for (int y = 0; y < height; ++y, data += stride) {
+    //     for (int x = 0; x < width; ++x) {
+    //         guint32 px = *reinterpret_cast<guint32*>(data + 4*x);
+    //         EXTRACT_ARGB32(px, a,r,g,b)    ; // Unneeded semi-colon for indenting
+    //         if( a != 0 ) {
+    //             r = linear_to_srgb( r, a );
+    //             g = linear_to_srgb( g, a );
+    //             b = linear_to_srgb( b, a );
+    //         }
+    //         ASSEMBLE_ARGB32(px2, a,r,g,b);
+    //         *reinterpret_cast<guint32*>(data + 4*x) = px2;
+    //     }
+    // }
+    return width * height;
 }
 
 cairo_pattern_t *
@@ -715,4 +888,4 @@ guint32 argb32_from_rgba(guint32 in)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

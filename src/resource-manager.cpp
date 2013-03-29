@@ -9,12 +9,12 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <gtkmm/recentmanager.h>
 #include <glibmm/i18n.h>
 #include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/uriutils.h>
-#include <gtkmm/recentmanager.h>
 
 #include "resource-manager.h"
 
@@ -28,7 +28,7 @@
 
 namespace Inkscape {
 
-std::vector<std::string> splitPath( std::string const &path )
+static std::vector<std::string> splitPath( std::string const &path )
 {
     std::vector<std::string> parts;
 
@@ -50,7 +50,7 @@ std::vector<std::string> splitPath( std::string const &path )
     return parts;
 }
 
-std::string convertPathToRelative( std::string const &path, std::string const &docbase )
+static std::string convertPathToRelative( std::string const &path, std::string const &docbase )
 {
     std::string result = path;
 

@@ -75,8 +75,6 @@ using Inkscape::Display::ExtractARGB32;
 using Inkscape::Display::ExtractRGB32;
 using Inkscape::Display::AssembleARGB32;
 
-static void sp_flood_context_class_init(SPFloodContextClass *klass);
-static void sp_flood_context_init(SPFloodContext *flood_context);
 static void sp_flood_context_dispose(GObject *object);
 
 static void sp_flood_context_setup(SPEventContext *ec);
@@ -86,34 +84,12 @@ static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem 
 
 static void sp_flood_finish(SPFloodContext *rc);
 
-static SPEventContextClass *parent_class;
-
-
-GType sp_flood_context_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPFloodContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_flood_context_class_init,
-            NULL, NULL,
-            sizeof(SPFloodContext),
-            4,
-            (GInstanceInitFunc) sp_flood_context_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPFloodContext", &info, (GTypeFlags) 0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPFloodContext, sp_flood_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_flood_context_class_init(SPFloodContextClass *klass)
 {
     GObjectClass *object_class = (GObjectClass *) klass;
     SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    parent_class = (SPEventContextClass *) g_type_class_peek_parent(klass);
 
     object_class->dispose = sp_flood_context_dispose;
 
@@ -160,14 +136,14 @@ static void sp_flood_context_dispose(GObject *object)
         delete rc->_message_context;
     }
 
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    G_OBJECT_CLASS(sp_flood_context_parent_class)->dispose(object);
 }
 
 /**
  * Callback that processes the "changed" signal on the selection;
  * destroys old and creates new knotholder.
  */
-void sp_flood_context_selection_changed(Inkscape::Selection *selection, gpointer data)
+static void sp_flood_context_selection_changed(Inkscape::Selection *selection, gpointer data)
 {
     SPFloodContext *rc = SP_FLOOD_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(rc);
@@ -181,8 +157,8 @@ static void sp_flood_context_setup(SPEventContext *ec)
 {
     SPFloodContext *rc = SP_FLOOD_CONTEXT(ec);
 
-    if (((SPEventContextClass *) parent_class)->setup) {
-        ((SPEventContextClass *) parent_class)->setup(ec);
+    if (((SPEventContextClass *) sp_flood_context_parent_class)->setup) {
+        ((SPEventContextClass *) sp_flood_context_parent_class)->setup(ec);
     }
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
@@ -205,6 +181,10 @@ static void sp_flood_context_setup(SPEventContext *ec)
     }
 }
 
+// Changes from 0.48 -> 0.49 (Cairo)
+// 0.49: Ignores alpha in background
+// 0.48: RGBA, 0.49 ARGB
+// 0.49: premultiplied alpha
 inline static guint32 compose_onto(guint32 px, guint32 bg)
 {
     guint ap = 0, rp = 0, gp = 0, bp = 0;
@@ -212,10 +192,12 @@ inline static guint32 compose_onto(guint32 px, guint32 bg)
     ExtractARGB32(px, ap, rp, gp, bp);
     ExtractRGB32(bg, rb, gb, bb);
 
-    guint ao = 255*255 - (255-ap)*(255-bp);  ao = (ao + 127) / 255;
-    guint ro = (255-ap)*rb + rp;             ro = (ro + 127) / 255;
-    guint go = (255-ap)*gb + gp;             go = (go + 127) / 255;
-    guint bo = (255-ap)*bb + bp;             bo = (bo + 127) / 255;
+    // guint ao = 255*255 - (255-ap)*(255-bp);  ao = (ao + 127) / 255;
+    // guint ao = (255-ap)*ab + 255*ap;             ao = (ao + 127) / 255;
+    guint ao = 255; // Cairo version doesn't allow background to have alpha != 1.
+    guint ro = (255-ap)*rb + 255*rp;             ro = (ro + 127) / 255;
+    guint go = (255-ap)*gb + 255*gp;             go = (go + 127) / 255;
+    guint bo = (255-ap)*bb + 255*bp;             bo = (bo + 127) / 255;
 
     guint pxout = AssembleARGB32(ao, ro, go, bo);
     return pxout;
@@ -314,10 +296,12 @@ static bool compare_pixels(guint32 check, guint32 orig, guint32 merged_orig_pixe
             return abs(static_cast<int>(ac ? unpremul_alpha(bc, ac) : 0) - (ao ? unpremul_alpha(bo, ao) : 0)) <= threshold;
         case FLOOD_CHANNELS_RGB:
             guint32 amc, rmc, bmc, gmc;
-            amc = 255*255 - (255-ac)*(255-ad); amc = (amc + 127) / 255;
-            rmc = (255-ac)*rd + rc; rmc = (rmc + 127) / 255;
-            gmc = (255-ac)*gd + gc; gmc = (gmc + 127) / 255;
-            bmc = (255-ac)*bd + bc; bmc = (bmc + 127) / 255;
+            //amc = 255*255 - (255-ac)*(255-ad); amc = (amc + 127) / 255;
+            //amc = (255-ac)*ad + 255*ac; amc = (amc + 127) / 255;
+            amc = 255; // Why are we looking at desktop? Cairo version ignores destop alpha
+            rmc = (255-ac)*rd + 255*rc; rmc = (rmc + 127) / 255;
+            gmc = (255-ac)*gd + 255*gc; gmc = (gmc + 127) / 255;
+            bmc = (255-ac)*bd + 255*bc; bmc = (bmc + 127) / 255;
 
             diff += abs(static_cast<int>(amc ? unpremul_alpha(rmc, amc) : 0) - (amop ? unpremul_alpha(rmop, amop) : 0));
             diff += abs(static_cast<int>(amc ? unpremul_alpha(gmc, amc) : 0) - (amop ? unpremul_alpha(gmop, amop) : 0));
@@ -826,6 +810,7 @@ static void sp_flood_do_flood_fill(SPEventContext *event_context, GdkEvent *even
     guchar *px = g_new(guchar, stride * height);
     guint32 bgcolor, dtc;
 
+    // Draw image into data block px
     { // this block limits the lifetime of Drawing and DrawingContext
         /* Create DrawingItems and set transform */
         unsigned dkey = SPItem::display_key_new(1);
@@ -854,12 +839,22 @@ static void sp_flood_do_flood_fill(SPEventContext *event_context, GdkEvent *even
 
         drawing.render(ct, final_bbox);
 
+        //cairo_surface_write_to_png( s, "cairo.png" );
+
         cairo_surface_flush(s);
         cairo_surface_destroy(s);
         
         // Hide items
         document->getRoot()->invoke_hide(dkey);
     }
+
+    // {
+    //     // Dump data to png
+    //     cairo_surface_t *s = cairo_image_surface_create_for_data(
+    //         px, CAIRO_FORMAT_ARGB32, width, height, stride);
+    //     cairo_surface_write_to_png( s, "cairo2.png" );
+    //     std::cout << "  Wrote cairo2.png" << std::endl;
+    // }
 
     guchar *trace_px = g_new(guchar, width * height);
     memset(trace_px, 0x00, width * height);
@@ -1147,8 +1142,8 @@ static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem 
         break;
     }
 
-    if (((SPEventContextClass *) parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) parent_class)->item_handler(event_context, item, event);
+    if (((SPEventContextClass *) sp_flood_context_parent_class)->item_handler) {
+        ret = ((SPEventContextClass *) sp_flood_context_parent_class)->item_handler(event_context, item, event);
     }
 
     return ret;
@@ -1255,8 +1250,8 @@ static gint sp_flood_context_root_handler(SPEventContext *event_context, GdkEven
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        if (((SPEventContextClass *) sp_flood_context_parent_class)->root_handler) {
+            ret = ((SPEventContextClass *) sp_flood_context_parent_class)->root_handler(event_context, event);
         }
     }
 

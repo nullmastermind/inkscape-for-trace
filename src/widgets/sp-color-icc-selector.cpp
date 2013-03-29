@@ -1,6 +1,8 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#include "gradient-vector.h"
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
@@ -11,7 +13,6 @@
 #include "document.h"
 #include "inkscape.h"
 #include "profile-manager.h"
-#include "gradient-vector.h"
 
 #define noDEBUG_LCMS
 
@@ -104,12 +105,9 @@ sp_color_icc_selector_get_type (void)
 static void sp_color_icc_selector_class_init(SPColorICCSelectorClass *klass)
 {
     static const gchar* nameset[] = {N_("CMS"), 0};
-    GObjectClass *object_class = (GObjectClass *) klass;
-    GtkWidgetClass *widget_class;
-    SPColorSelectorClass *selector_class;
-
-    widget_class = (GtkWidgetClass *) klass;
-    selector_class = SP_COLOR_SELECTOR_CLASS (klass);
+    GObjectClass   *object_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+    SPColorSelectorClass *selector_class = SP_COLOR_SELECTOR_CLASS (klass);
 
     parent_class = SP_COLOR_SELECTOR_CLASS (g_type_class_peek_parent (klass));
 
@@ -272,13 +270,17 @@ void getThings( Inkscape::ColorProfile *prof, gchar const**& namers, gchar const
 
 void ColorICCSelector::init()
 {
-    GtkWidget *t;
     gint row = 0;
 
     _updating = FALSE;
     _dragging = FALSE;
 
-    t = gtk_table_new (5, 3, FALSE);
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *t = gtk_grid_new();
+#else
+    GtkWidget *t = gtk_table_new(5, 3, FALSE);
+#endif
+
     gtk_widget_show (t);
     gtk_box_pack_start (GTK_BOX (_csel), t, TRUE, TRUE, 4);
 
@@ -299,7 +301,16 @@ void ColorICCSelector::init()
     gtk_widget_set_tooltip_text( _fixupBtn, _("Fix RGB fallback to match icc-color() value.") );
     //gtk_misc_set_alignment( GTK_MISC (_fixupBtn), 1.0, 0.5 );
     gtk_widget_show( _fixupBtn );
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_fixupBtn, XPAD);
+    gtk_widget_set_margin_right(_fixupBtn, XPAD);
+    gtk_widget_set_margin_top(_fixupBtn, YPAD);
+    gtk_widget_set_margin_bottom(_fixupBtn, YPAD);
+    gtk_grid_attach(GTK_GRID(t), _fixupBtn, 0, row, 1, 1);
+#else
     gtk_table_attach( GTK_TABLE (t), _fixupBtn, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD );
+#endif
 
     // Combobox and store with 2 columns : label (0) and full name (1)
     GtkListStore *store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
@@ -315,7 +326,16 @@ void ColorICCSelector::init()
 
     gtk_widget_show( _profileSel );
     gtk_combo_box_set_active( GTK_COMBO_BOX(_profileSel), 0 );
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_profileSel, XPAD);
+    gtk_widget_set_margin_right(_profileSel, XPAD);
+    gtk_widget_set_margin_top(_profileSel, YPAD);
+    gtk_widget_set_margin_bottom(_profileSel, YPAD);
+    gtk_grid_attach(GTK_GRID(t), _profileSel, 1, row, 1, 1);
+#else
     gtk_table_attach( GTK_TABLE(t), _profileSel, 1, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD );
+#endif
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     _profChangedID = g_signal_connect( G_OBJECT(_profileSel), "changed", G_CALLBACK(_profileSelected), (gpointer)this );
@@ -342,7 +362,16 @@ void ColorICCSelector::init()
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         gtk_misc_set_alignment( GTK_MISC (_fooLabel[i]), 1.0, 0.5 );
         gtk_widget_show( _fooLabel[i] );
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_widget_set_margin_left(_fooLabel[i], XPAD);
+        gtk_widget_set_margin_right(_fooLabel[i], XPAD);
+        gtk_widget_set_margin_top(_fooLabel[i], YPAD);
+        gtk_widget_set_margin_bottom(_fooLabel[i], YPAD);
+        gtk_grid_attach(GTK_GRID(t), _fooLabel[i], 0, row, 1, 1);
+#else
         gtk_table_attach( GTK_TABLE (t), _fooLabel[i], 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD );
+#endif
 
         /* Adjustment */
         gdouble step = static_cast<gdouble>(_fooScales[i]) / 100.0;
@@ -358,7 +387,17 @@ void ColorICCSelector::init()
         gtk_widget_set_tooltip_text( _fooSlider[i], "." );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         gtk_widget_show( _fooSlider[i] );
-        gtk_table_attach( GTK_TABLE (t), _fooSlider[i], 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)GTK_FILL, XPAD, YPAD );
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_widget_set_margin_left(_fooSlider[i], XPAD);
+        gtk_widget_set_margin_right(_fooSlider[i], XPAD);
+        gtk_widget_set_margin_top(_fooSlider[i], YPAD);
+        gtk_widget_set_margin_bottom(_fooSlider[i], YPAD);
+        gtk_widget_set_hexpand(_fooSlider[i], TRUE);
+        gtk_grid_attach(GTK_GRID(t), _fooSlider[i], 1, row, 1, 1);
+#else
+        gtk_table_attach( GTK_TABLE (t), _fooSlider[i], 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD );
+#endif
 
         _fooBtn[i] = gtk_spin_button_new( _fooAdj[i], step, digits );
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -369,7 +408,18 @@ void ColorICCSelector::init()
         sp_dialog_defocus_on_enter( _fooBtn[i] );
         gtk_label_set_mnemonic_widget( GTK_LABEL(_fooLabel[i]), _fooBtn[i] );
         gtk_widget_show( _fooBtn[i] );
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_widget_set_margin_left(_fooBtn[i], XPAD);
+        gtk_widget_set_margin_right(_fooBtn[i], XPAD);
+        gtk_widget_set_margin_top(_fooBtn[i], YPAD);
+        gtk_widget_set_margin_bottom(_fooBtn[i], YPAD);
+        gtk_widget_set_halign(_fooBtn[i], GTK_ALIGN_CENTER);
+        gtk_widget_set_valign(_fooBtn[i], GTK_ALIGN_CENTER);
+        gtk_grid_attach(GTK_GRID(t), _fooBtn[i], 2, row, 1, 1);
+#else
         gtk_table_attach( GTK_TABLE (t), _fooBtn[i], 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD );
+#endif
 
         _fooMap[i] = g_new( guchar, 4 * 1024 );
         memset( _fooMap[i], 0x0ff, 1024 * 4 );
@@ -389,16 +439,35 @@ void ColorICCSelector::init()
     _label = gtk_label_new_with_mnemonic (_("_A:"));
     gtk_misc_set_alignment (GTK_MISC (_label), 1.0, 0.5);
     gtk_widget_show (_label);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_label, XPAD);
+    gtk_widget_set_margin_right(_label, XPAD);
+    gtk_widget_set_margin_top(_label, YPAD);
+    gtk_widget_set_margin_bottom(_label, YPAD);
+    gtk_grid_attach(GTK_GRID(t), _label, 0, row, 1, 1);
+#else
     gtk_table_attach (GTK_TABLE (t), _label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+#endif
 
     /* Adjustment */
-    _adj = (GtkAdjustment *) gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 10.0, 10.0);
+    _adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
 
     /* Slider */
     _slider = sp_color_slider_new (_adj);
     gtk_widget_set_tooltip_text (_slider, _("Alpha (opacity)"));
     gtk_widget_show (_slider);
-    gtk_table_attach (GTK_TABLE (t), _slider, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)GTK_FILL, XPAD, YPAD);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_slider, XPAD);
+    gtk_widget_set_margin_right(_slider, XPAD);
+    gtk_widget_set_margin_top(_slider, YPAD);
+    gtk_widget_set_margin_bottom(_slider, YPAD);
+    gtk_widget_set_hexpand(_slider, TRUE);
+    gtk_grid_attach(GTK_GRID(t), _slider, 1, row, 1, 1);
+#else
+    gtk_table_attach (GTK_TABLE (t), _slider, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
+#endif
 
     sp_color_slider_set_colors( SP_COLOR_SLIDER( _slider ),
                                 SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 0.0 ),
@@ -412,7 +481,18 @@ void ColorICCSelector::init()
     sp_dialog_defocus_on_enter (_sbtn);
     gtk_label_set_mnemonic_widget (GTK_LABEL(_label), _sbtn);
     gtk_widget_show (_sbtn);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_sbtn, XPAD);
+    gtk_widget_set_margin_right(_sbtn, XPAD);
+    gtk_widget_set_margin_top(_sbtn, YPAD);
+    gtk_widget_set_margin_bottom(_sbtn, YPAD);
+    gtk_widget_set_halign(_sbtn, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(_sbtn, GTK_ALIGN_CENTER);
+    gtk_grid_attach(GTK_GRID(t), _sbtn, 2, row, 1, 1);
+#else
     gtk_table_attach (GTK_TABLE (t), _sbtn, 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
+#endif
 
     /* Signals */
     g_signal_connect (G_OBJECT (_adj), "value_changed",
@@ -428,8 +508,8 @@ void ColorICCSelector::init()
 
 static void sp_color_icc_selector_dispose(GObject *object)
 {
-    if (((GObjectClass *) (parent_class))->dispose)
-        (* ((GObjectClass *) (parent_class))->dispose)(object);
+    if ((G_OBJECT_CLASS(parent_class))->dispose)
+        (* (G_OBJECT_CLASS(parent_class))->dispose)(object);
 }
 
 static void
@@ -510,9 +590,9 @@ void ColorICCSelector::_switchToProfile( gchar const* name )
                 if ( trans ) {
                     guint32 val = _color.toRGBA32(0);
                     guchar pre[4] = {
-                        SP_RGBA32_R_U(val),
-                        SP_RGBA32_G_U(val),
-                        SP_RGBA32_B_U(val),
+                        static_cast<guchar>(SP_RGBA32_R_U(val)),
+                        static_cast<guchar>(SP_RGBA32_G_U(val)),
+                        static_cast<guchar>(SP_RGBA32_B_U(val)),
                         255};
 #ifdef DEBUG_LCMS
                     g_message("Shoving in [%02x] [%02x] [%02x]", pre[0], pre[1], pre[2]);
@@ -590,7 +670,7 @@ void ColorICCSelector::_profilesChanged( std::string const & name )
 
     g_signal_handler_block( G_OBJECT(_profileSel), _profChangedID );
 
-    GtkListStore *store = (GtkListStore *)gtk_combo_box_get_model (combo);
+    GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(combo));
     gtk_list_store_clear(store);
 
     GtkTreeIter iter;
@@ -926,7 +1006,7 @@ void ColorICCSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorICC
 
 void ColorICCSelector::_sliderGrabbed( SPColorSlider */*slider*/, SPColorICCSelector */*cs*/ )
 {
-//    ColorICCSelector* iccSelector = (ColorICCSelector*)(SP_COLOR_SELECTOR(cs)->base);
+//    ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 //     if (!iccSelector->_dragging) {
 //         iccSelector->_dragging = TRUE;
 //         iccSelector->_grabbed();
@@ -936,7 +1016,7 @@ void ColorICCSelector::_sliderGrabbed( SPColorSlider */*slider*/, SPColorICCSele
 
 void ColorICCSelector::_sliderReleased( SPColorSlider */*slider*/, SPColorICCSelector */*cs*/ )
 {
-//     ColorICCSelector* iccSelector = (ColorICCSelector*)(SP_COLOR_SELECTOR(cs)->base);
+//     ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 //     if (iccSelector->_dragging) {
 //         iccSelector->_dragging = FALSE;
 //         iccSelector->_released();
@@ -953,7 +1033,7 @@ void ColorICCSelector::_sliderChanged( SPColorSlider */*slider*/, SPColorICCSele
 #ifdef DEBUG_LCMS
     g_message("Changed  %p and %p", slider, cs );
 #endif // DEBUG_LCMS
-//     ColorICCSelector* iccSelector = (ColorICCSelector*)(SP_COLOR_SELECTOR(cs)->base);
+//     ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 
 //     iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ), iccSelector->_dragging );
 }

@@ -27,9 +27,10 @@
 #include "sp-item.h"
 #include "snapped-point.h"
 
+class SPDesktop;
 class SPItem;
 class SPBox3D;
-class Persp3D;
+struct Persp3D;
 
 namespace Inkscape {
 namespace XML {
@@ -265,12 +266,6 @@ public:
      * @return Selection's snap points
      */
     std::vector<Inkscape::SnapCandidatePoint> getSnapPoints(SnapPreferences const *snapprefs) const;
-
-    /**
-     * Gets the snap points of a selection that form a convex hull.
-     * @return Selection's convex hull points
-     */
-    std::vector<Inkscape::SnapCandidatePoint> getSnapPointsConvexHull(SnapPreferences const *snapprefs) const;
 
     /**
      * Connects a slot to be notified of selection changes.

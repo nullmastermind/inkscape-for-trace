@@ -61,75 +61,11 @@
 /*#####################################################
 #  SPTEXT
 #####################################################*/
-
-static void sp_text_class_init (SPTextClass *classname);
-static void sp_text_init (SPText *text);
-static void sp_text_release (SPObject *object);
-
-static void sp_text_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_text_set (SPObject *object, unsigned key, gchar const *value);
-static void sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref);
-static void sp_text_remove_child (SPObject *object, Inkscape::XML::Node *rch);
-static void sp_text_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_text_modified (SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_text_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static Geom::OptRect sp_text_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-static Inkscape::DrawingItem *sp_text_show (SPItem *item, Inkscape::Drawing &drawing, unsigned key, unsigned flags);
-static void sp_text_hide (SPItem *item, unsigned key);
-static char *sp_text_description (SPItem *item);
-static void sp_text_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-static Geom::Affine sp_text_set_transform(SPItem *item, Geom::Affine const &xform);
-static void sp_text_print (SPItem *item, SPPrintContext *gpc);
-
-static SPItemClass *text_parent_class;
-
-GType
-sp_text_get_type ()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (SPTextClass),
-            NULL,    /* base_init */
-            NULL,    /* base_finalize */
-            (GClassInitFunc) sp_text_class_init,
-            NULL,    /* class_finalize */
-            NULL,    /* class_data */
-            sizeof (SPText),
-            16,    /* n_preallocs */
-            (GInstanceInitFunc) sp_text_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static (SP_TYPE_ITEM, "SPText", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPText, sp_text, SP_TYPE_ITEM);
 
 static void
 sp_text_class_init (SPTextClass *classname)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) classname;
-    SPItemClass *item_class = (SPItemClass *) classname;
-
-    text_parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
-
-//    sp_object_class->release = sp_text_release;
-//    //sp_object_class->build = sp_text_build;
-//    sp_object_class->set = sp_text_set;
-//    sp_object_class->child_added = sp_text_child_added;
-//    sp_object_class->remove_child = sp_text_remove_child;
-//    sp_object_class->update = sp_text_update;
-//    sp_object_class->modified = sp_text_modified;
-//    sp_object_class->write = sp_text_write;
-
-//    item_class->bbox = sp_text_bbox;
-//    item_class->show = sp_text_show;
-//    item_class->hide = sp_text_hide;
-//    item_class->description = sp_text_description;
-//    item_class->snappoints = sp_text_snappoints;
-//    item_class->set_transform = sp_text_set_transform;
-//    item_class->print = sp_text_print;
 }
 
 CText::CText(SPText* text) : CItem(text) {
@@ -143,6 +79,8 @@ static void
 sp_text_init (SPText *text)
 {
 	text->ctext = new CText(text);
+
+	delete text->citem;
 	text->citem = text->ctext;
 	text->cobject = text->ctext;
 
@@ -160,12 +98,6 @@ void CText::onRelease() {
     CItem::onRelease();
 }
 
-static void
-sp_text_release (SPObject *object)
-{
-	((SPText*)object)->ctext->onRelease();
-}
-
 void CText::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPText* object = this->sptext;
 
@@ -178,12 +110,6 @@ void CText::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
     CItem::onBuild(doc, repr);
 
     object->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
-}
-
-static void
-sp_text_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
-{
-	((SPText*)object)->ctext->onBuild(doc, repr);
 }
 
 void CText::onSet(unsigned int key, const gchar* value) {
@@ -213,12 +139,6 @@ void CText::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-static void
-sp_text_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPText*)object)->ctext->onSet(key, value);
-}
-
 void CText::onChildAdded(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
 	SPText* object = this->sptext;
 
@@ -227,12 +147,6 @@ void CText::onChildAdded(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
     CItem::onChildAdded(rch, ref);
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-}
-
-static void
-sp_text_child_added (SPObject *object, Inkscape::XML::Node *rch, Inkscape::XML::Node *ref)
-{
-	((SPText*)object)->ctext->onChildAdded(rch, ref);
 }
 
 void CText::onRemoveChild(Inkscape::XML::Node *rch) {
@@ -245,11 +159,6 @@ void CText::onRemoveChild(Inkscape::XML::Node *rch) {
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
-static void
-sp_text_remove_child (SPObject *object, Inkscape::XML::Node *rch)
-{
-	((SPText*)object)->ctext->onRemoveChild(rch);
-}
 
 void CText::onUpdate(SPCtx *ctx, guint flags) {
 	SPText* object = this->sptext;
@@ -298,19 +207,9 @@ void CText::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-static void sp_text_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPText*)object)->ctext->onUpdate(ctx, flags);
-}
-
 void CText::onModified(guint flags) {
 	SPText* object = this->sptext;
 
-	// CPPIFY: This doesn't make no sense.
-	// CObject::onModified is pure and CItem doesn't override this method. What was the idea behind these lines?
-//	if (((SPObjectClass *) text_parent_class)->modified) {
-//		((SPObjectClass *) text_parent_class)->modified (object, flags);
-//	}
 //	CItem::onModified(flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
@@ -348,11 +247,6 @@ void CText::onModified(guint flags) {
         }
         sp_object_unref(child, object);
     }
-}
-
-static void sp_text_modified(SPObject *object, guint flags)
-{
-	((SPText*)object)->ctext->onModified(flags);
 }
 
 Inkscape::XML::Node *CText::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -413,11 +307,6 @@ Inkscape::XML::Node *CText::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
-static Inkscape::XML::Node *sp_text_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPText*)object)->ctext->onWrite(xml_doc, repr, flags);
-}
-
 Geom::OptRect CText::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPText* item = this->sptext;
 
@@ -429,12 +318,6 @@ Geom::OptRect CText::onBbox(Geom::Affine const &transform, SPItem::BBoxType type
         bbox->expandBy(0.5 * item->style->stroke_width.computed * scale);
     }
     return bbox;
-}
-
-static Geom::OptRect
-sp_text_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
-{
-	return ((SPText*)item)->ctext->onBbox(transform, type);
 }
 
 Inkscape::DrawingItem* CText::onShow(Inkscape::Drawing &drawing, unsigned key, unsigned flags) {
@@ -452,25 +335,11 @@ Inkscape::DrawingItem* CText::onShow(Inkscape::Drawing &drawing, unsigned key, u
     return flowed;
 }
 
-static Inkscape::DrawingItem *
-sp_text_show(SPItem *item, Inkscape::Drawing &drawing, unsigned key, unsigned flags)
-{
-	return ((SPText*)item)->ctext->onShow(drawing, key, flags);
-}
 
 void CText::onHide(unsigned int key) {
-	// CPPIFY: This doesn't make no sense.
-	// CItem::onHide is pure and CLPEItem doesn't override it. What was the idea behind these lines?
-//    if (((SPItemClass *) text_parent_class)->hide)
-//        ((SPItemClass *) text_parent_class)->hide (item, key);
 //	CItem::onHide(key);
 }
 
-static void
-sp_text_hide(SPItem *item, unsigned key)
-{
-	((SPText*)item)->ctext->onHide(key);
-}
 
 gchar* CText::onDescription() {
 	SPText* item = this->sptext;
@@ -483,7 +352,7 @@ gchar* CText::onDescription() {
     char name_buf[256];
     char *n;
     if (tf) {
-        tf->Name(name_buf, sizeof(name_buf));
+        tf->Family(name_buf, sizeof(name_buf));
         n = xml_quote_strdup(name_buf);
         tf->Unref();
     } else {
@@ -506,11 +375,6 @@ gchar* CText::onDescription() {
     return ret;
 }
 
-static char * sp_text_description(SPItem *item)
-{
-	return ((SPText*)item)->ctext->onDescription();
-}
-
 void CText::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPText* item = this->sptext;
 
@@ -525,11 +389,6 @@ void CText::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
             }
         }
     }
-}
-
-static void sp_text_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
-	((SPText*)item)->ctext->onSnappoints(p, snapprefs);
 }
 
 Geom::Affine CText::onSetTransform(Geom::Affine const &xform) {
@@ -581,12 +440,6 @@ Geom::Affine CText::onSetTransform(Geom::Affine const &xform) {
     return ret;
 }
 
-static Geom::Affine
-sp_text_set_transform (SPItem *item, Geom::Affine const &xform)
-{
-	return ((SPText*)item)->ctext->onSetTransform(xform);
-}
-
 void CText::onPrint(SPPrintContext *ctx) {
 	SPText* item = this->sptext;
 
@@ -599,12 +452,6 @@ void CText::onPrint(SPPrintContext *ctx) {
     Geom::Affine const ctm (item->i2dt_affine());
 
     group->layout.print(ctx,pbox,dbox,bbox,ctm);
-}
-
-static void
-sp_text_print (SPItem *item, SPPrintContext *ctx)
-{
-	((SPText*)item)->ctext->onPrint(ctx);
 }
 
 /*

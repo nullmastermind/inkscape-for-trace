@@ -24,8 +24,6 @@ namespace Filters {
 class FilterComponentTransfer;
 } }
 
-class SPFeComponentTransferClass;
-
 class CFeComponentTransfer;
 
 class SPFeComponentTransfer : public SPFilterPrimitive {

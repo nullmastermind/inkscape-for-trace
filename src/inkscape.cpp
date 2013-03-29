@@ -19,6 +19,7 @@
 #include <errno.h>
 
 #include <map>
+#include <gtkmm/messagedialog.h>
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
 
@@ -35,9 +36,9 @@
 
 #include <cstring>
 #include <glib/gstdio.h>
-#include <glib.h>
 #include <glibmm/i18n.h>
-#include <gtkmm/messagedialog.h>
+#include <glibmm/miscutils.h>
+#include <glibmm/convert.h>
 #include <gtk/gtk.h>
 #include <signal.h>
 #include <string>
@@ -89,7 +90,7 @@ enum {
 ################################*/
 
 namespace Inkscape {
-class ApplicationClass;
+struct ApplicationClass;
 }
 
 static void inkscape_class_init (Inkscape::ApplicationClass *klass);
@@ -309,8 +310,24 @@ static gint inkscape_autosave(gpointer)
 
     GDir *autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, NULL);
     if( !autosave_dir_ptr ){
-        g_warning("Cannot open autosave directory!");
-        return TRUE;
+        // Try to create the autosave directory if it doesn't exist
+        if (g_mkdir(autosave_dir.c_str(), 0755)) {
+            // the creation failed
+            Glib::ustring msg = Glib::ustring::compose(
+                    _("Autosave failed! Cannot create directory %1."), Glib::filename_to_utf8(autosave_dir));
+            g_warning("%s", msg.c_str());
+            SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg.c_str());
+            return TRUE;
+        }
+        // Try to read dir again
+        autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, NULL);
+        if( !autosave_dir_ptr ){
+            Glib::ustring msg = Glib::ustring::compose(
+                    _("Autosave failed! Cannot open directory %1."), Glib::filename_to_utf8(autosave_dir));
+            g_warning("%s", msg.c_str());
+            SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg.c_str());
+            return TRUE;
+        }
     }
 
     time_t sptime = time(NULL);
@@ -1065,7 +1082,7 @@ inkscape_find_desktop_by_dkey (unsigned int dkey)
 
 
 
-unsigned int
+static unsigned int
 inkscape_maximum_dkey()
 {
     unsigned int dkey = 0;
@@ -1081,7 +1098,7 @@ inkscape_maximum_dkey()
 
 
 
-SPDesktop *
+static SPDesktop *
 inkscape_next_desktop ()
 {
     SPDesktop *d = NULL;
@@ -1112,7 +1129,7 @@ inkscape_next_desktop ()
 
 
 
-SPDesktop *
+static SPDesktop *
 inkscape_prev_desktop ()
 {
     SPDesktop *d = NULL;
@@ -1254,6 +1271,10 @@ inkscape_active_document (void)
 {
     if (SP_ACTIVE_DESKTOP) {
         return sp_desktop_document (SP_ACTIVE_DESKTOP);
+    } else if (!inkscape->document_set.empty()) {
+        // If called from the command line there will be no desktop
+        // So 'fall back' to take the first listed document in the Inkscape instance
+        return inkscape->document_set.begin()->first;
     }
 
     return NULL;

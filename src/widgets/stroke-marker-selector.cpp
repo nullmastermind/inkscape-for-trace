@@ -40,12 +40,15 @@
 
 #include <gtkmm/adjustment.h>
 #include "ui/widget/spinbutton.h"
+#include "stroke-style.h"
+#include "gradient-chemistry.h"
 
 static Inkscape::UI::Cache::SvgPreview svg_preview_cache;
 
-MarkerComboBox::MarkerComboBox(gchar const *id) :
+MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
             Gtk::ComboBox(),
             combo_id(id),
+            loc(l),
             updating(false),
             markerCount(0)
 {
@@ -54,8 +57,8 @@ MarkerComboBox::MarkerComboBox(gchar const *id) :
     set_model(marker_store);
     pack_start(image_renderer, false);
     pack_end(label_renderer, true);
-    label_renderer.set_padding(5, 0);
-    image_renderer.set_padding(5, 0);
+    label_renderer.set_padding(2, 0);
+    image_renderer.set_padding(2, 0);
     set_cell_data_func(label_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareLabelRenderer));
     set_cell_data_func(image_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareImageRenderer));
     gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, NULL, NULL);
@@ -205,20 +208,8 @@ void MarkerComboBox::set_current(SPObject *marker)
     updating = true;
 
     if (marker != NULL) {
-        bool mark_is_stock = false;
-        if (marker->getRepr()->attribute("inkscape:stockid")) {
-            mark_is_stock = true;
-        }
-
-        gchar *markname = 0;
-        if (mark_is_stock) {
-            markname = g_strdup(marker->getRepr()->attribute("inkscape:stockid"));
-        } else {
-            markname = g_strdup(marker->getRepr()->attribute("id"));
-        }
-
+        gchar *markname = g_strdup(marker->getRepr()->attribute("id"));
         set_selected(markname);
-
         g_free (markname);
     }
     else {
@@ -253,7 +244,7 @@ const gchar * MarkerComboBox::get_active_marker_uri()
         {
             markurn = g_strdup(markid);
         }
-        SPObject *mark = get_stock_item(markurn);
+        SPObject *mark = get_stock_item(markurn, stockid);
         g_free(markurn);
         if (mark) {
             Inkscape::XML::Node *repr = mark->getRepr();
@@ -266,9 +257,17 @@ const gchar * MarkerComboBox::get_active_marker_uri()
     return marker;
 }
 
-
 void MarkerComboBox::set_active_history() {
-    set_selected(get_active()->get_value(marker_columns.marker));
+
+    const gchar *markid = get_active()->get_value(marker_columns.marker);
+
+    // If forked from a stockid, add the stockid
+    SPObject const *marker = doc->getObjectById(markid);
+    if (marker && marker->getRepr()->attribute("inkscape:stockid")) {
+        markid = marker->getRepr()->attribute("inkscape:stockid");
+    }
+
+    set_selected(markid);
 }
 
 
@@ -399,10 +398,10 @@ void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gbool
     for (; marker_list != NULL; marker_list = marker_list->next) {
 
         Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(marker_list->data)->getRepr();
-        gchar const *markid = repr->attribute("id");
+        gchar const *markid = repr->attribute("inkscape:stockid") ? repr->attribute("inkscape:stockid") : repr->attribute("id");
 
         // generate preview
-        Gtk::Image *prv = create_marker_image (22, markid, source, drawing, visionkey);
+        Gtk::Image *prv = create_marker_image (22, repr->attribute("id"), source, drawing, visionkey);
         prv->show();
 
         // Add history before separator, others after
@@ -413,8 +412,10 @@ void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gbool
             row = *(marker_store->append());
 
         row[marker_columns.label] = gr_ellipsize_text(markid, 20);
+        // Non "stock" markers can also have "inkscape:stockid" (when using extension ColorMarkers),
+        // So use !is_history instead to determine is it is "stock" (ie in the markers.svg file)
         row[marker_columns.stock] = !history;
-        row[marker_columns.marker] = g_strdup(markid);
+        row[marker_columns.marker] = repr->attribute("id");
         row[marker_columns.image] = prv;
         row[marker_columns.history] = history;
         row[marker_columns.separator] = false;
@@ -424,6 +425,37 @@ void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gbool
     sandbox->getRoot()->invoke_hide(visionkey);
 }
 
+/*
+ * Remove from the cache and recreate a marker image
+ */
+void
+MarkerComboBox::update_marker_image(gchar const *mname)
+{
+    gchar *cache_name = g_strconcat(combo_id, mname, NULL);
+    Glib::ustring key = svg_preview_cache.cache_key(doc->getURI(), cache_name, 22);
+    g_free (cache_name);
+    svg_preview_cache.remove_preview_from_cache(key);
+
+    Inkscape::Drawing drawing;
+    unsigned const visionkey = SPItem::display_key_new(1);
+    drawing.setRoot(sandbox->getRoot()->invoke_show(drawing, visionkey, SP_ITEM_SHOW_DISPLAY));
+    Gtk::Image *prv = create_marker_image(22, mname, doc, drawing, visionkey);
+    if (prv) {
+        prv->show();
+    }
+    sandbox->getRoot()->invoke_hide(visionkey);
+
+    for(Gtk::TreeIter iter = marker_store->children().begin();
+        iter != marker_store->children().end(); ++iter) {
+            Gtk::TreeModel::Row row = (*iter);
+            if (row[marker_columns.marker] && row[marker_columns.history] &&
+                    !strcmp(row[marker_columns.marker], mname)) {
+                row[marker_columns.image] = prv;
+                return;
+            }
+    }
+
+}
 /**
  * Creates a copy of the marker named mname, determines its visible and renderable
  * area in the bounding box, and then renders it.  This allows us to fill in
@@ -455,6 +487,38 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     defsrepr->appendChild(mrepr);
 
     Inkscape::GC::release(mrepr);
+
+    // If the marker color is a url link to a pattern or gradient copy that too
+    SPObject *mk = source->getObjectById(mname);
+    SPCSSAttr *css_marker = sp_css_attr_from_object(mk->firstChild(), SP_STYLE_FLAG_ALWAYS);
+    //const char *mfill = sp_repr_css_property(css_marker, "fill", "none");
+    const char *mstroke = sp_repr_css_property(css_marker, "fill", "none");
+
+    if (!strncmp (mstroke, "url(", 4)) {
+        SPObject *linkObj = getMarkerObj(mstroke, source);
+        if (linkObj) {
+            Inkscape::XML::Node *grepr = linkObj->getRepr()->duplicate(xml_doc);
+            SPObject *oldmarker = sandbox->getObjectById(linkObj->getId());
+            if (oldmarker) {
+                oldmarker->deleteObject(false);
+            }
+            defsrepr->appendChild(grepr);
+            Inkscape::GC::release(grepr);
+
+            if (SP_IS_GRADIENT(linkObj)) {
+                SPGradient *vector = sp_gradient_get_forked_vector_if_necessary (SP_GRADIENT(linkObj), false);
+                if (vector) {
+                    Inkscape::XML::Node *grepr = vector->getRepr()->duplicate(xml_doc);
+                    SPObject *oldmarker = sandbox->getObjectById(vector->getId());
+                    if (oldmarker) {
+                        oldmarker->deleteObject(false);
+                    }
+                    defsrepr->appendChild(grepr);
+                    Inkscape::GC::release(grepr);
+                }
+            }
+        }
+    }
 
 // Uncomment this to get the sandbox documents saved (useful for debugging)
     //FILE *fp = fopen (g_strconcat(combo_id, mname, ".svg", NULL), "w");
@@ -498,6 +562,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
 void MarkerComboBox::prepareLabelRenderer( Gtk::TreeModel::const_iterator const &row ) {
     Glib::ustring name=(*row)[marker_columns.label];
     label_renderer.property_markup() = name.c_str();
+    label_renderer.property_scale() = 0.8;
 }
 
 void MarkerComboBox::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {

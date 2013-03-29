@@ -22,8 +22,8 @@
 
 class SPGradient;
 class SPDesktop;
-class SPPattern;
-class SPStyle;
+struct SPPattern;
+struct SPStyle;
 
 #define SP_TYPE_PAINT_SELECTOR (sp_paint_selector_get_type ())
 #define SP_PAINT_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_PAINT_SELECTOR, SPPaintSelector))

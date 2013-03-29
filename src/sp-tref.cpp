@@ -52,67 +52,18 @@ static void build_string_from_root(Inkscape::XML::Node *root, Glib::ustring *ret
 
 /* TRef base class */
 
-static void sp_tref_class_init(SPTRefClass *tref_class);
-static void sp_tref_init(SPTRef *tref);
 static void sp_tref_finalize(GObject *obj);
-
-static void sp_tref_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_tref_release(SPObject *object);
-static void sp_tref_set(SPObject *object, unsigned int key, gchar const *value);
-static void sp_tref_update(SPObject *object, SPCtx *ctx, guint flags);
-static void sp_tref_modified(SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_tref_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static Geom::OptRect sp_tref_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-static gchar *sp_tref_description(SPItem *item);
 
 static void sp_tref_href_changed(SPObject *old_ref, SPObject *ref, SPTRef *tref);
 static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 
-static SPObjectClass *tref_parent_class;
-
-GType
-sp_tref_get_type()
-{
-    static GType tref_type = 0;
-
-    if (!tref_type) {
-        GTypeInfo tref_info = {
-            sizeof(SPTRefClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_tref_class_init,
-            NULL, NULL,
-            sizeof(SPTRef),
-            16,
-            (GInstanceInitFunc) sp_tref_init,
-            NULL,    /* value_table */
-        };
-        tref_type = g_type_register_static(SP_TYPE_ITEM, "SPTRef", &tref_info, (GTypeFlags)0);
-    }
-    return tref_type;
-}
+G_DEFINE_TYPE(SPTRef, sp_tref, SP_TYPE_ITEM);
 
 static void
 sp_tref_class_init(SPTRefClass *tref_class)
 {
     GObjectClass *gobject_class = (GObjectClass *) tref_class;
-    SPObjectClass *sp_object_class = (SPObjectClass *)tref_class;
-
-    tref_parent_class = (SPObjectClass*)g_type_class_peek_parent(tref_class);
-
-    //sp_object_class->build = sp_tref_build;
-//    sp_object_class->release = sp_tref_release;
-//    sp_object_class->write = sp_tref_write;
-//    sp_object_class->set = sp_tref_set;
-//    sp_object_class->update = sp_tref_update;
-//    sp_object_class->modified = sp_tref_modified;
-
     gobject_class->finalize = sp_tref_finalize;
-
-    SPItemClass *item_class = (SPItemClass *) tref_class;
-
-//    item_class->bbox = sp_tref_bbox;
-//    item_class->description = sp_tref_description;
 }
 
 CTRef::CTRef(SPTRef* tref) : CItem(tref) {
@@ -126,6 +77,8 @@ static void
 sp_tref_init(SPTRef *tref)
 {
 	tref->ctref = new CTRef(tref);
+
+	delete tref->citem;
 	tref->citem = tref->ctref;
 	tref->cobject = tref->ctref;
 
@@ -164,15 +117,6 @@ void CTRef::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "rotate" );
 }
 
-/**
- * Reads the Inkscape::XML::Node, and initializes SPTRef variables.
- */
-static void
-sp_tref_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPTRef*)object)->ctref->onBuild(document, repr);
-}
-
 void CTRef::onRelease() {
 	SPTRef* object = this->sptref;
 
@@ -189,15 +133,6 @@ void CTRef::onRelease() {
     tref->uriOriginalRef->detach();
 
     CItem::onRelease();
-}
-
-/**
- * Drops any allocated memory.
- */
-static void
-sp_tref_release(SPObject *object)
-{
-	((SPTRef*)object)->ctref->onRelease();
 }
 
 void CTRef::onSet(unsigned int key, const gchar* value) {
@@ -244,15 +179,6 @@ void CTRef::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-/**
- * Sets a specific value in the SPTRef.
- */
-static void
-sp_tref_set(SPObject *object, unsigned int key, gchar const *value)
-{
-	((SPTRef*)object)->ctref->onSet(key, value);
-}
-
 void CTRef::onUpdate(SPCtx *ctx, guint flags) {
 	SPTRef* object = this->sptref;
 
@@ -276,15 +202,6 @@ void CTRef::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-/**
- * Receives update notifications.  Code based on sp_use_update and sp_tspan_update.
- */
-static void
-sp_tref_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPTRef*)object)->ctref->onUpdate(ctx, flags);
-}
-
 void CTRef::onModified(unsigned int flags) {
 	SPTRef* object = this->sptref;
 
@@ -304,12 +221,6 @@ void CTRef::onModified(unsigned int flags) {
         }
         g_object_unref(G_OBJECT(child));
     }
-}
-
-static void
-sp_tref_modified(SPObject *object, guint flags)
-{
-	((SPTRef*)object)->ctref->onModified(flags);
 }
 
 Inkscape::XML::Node* CTRef::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -337,15 +248,6 @@ Inkscape::XML::Node* CTRef::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
-/**
- * Writes its settings to an incoming repr object, if any.
- */
-static Inkscape::XML::Node *
-sp_tref_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPTRef*)object)->ctref->onWrite(xml_doc, repr, flags);
-}
-
 Geom::OptRect CTRef::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPTRef* item = this->sptref;
 
@@ -370,15 +272,6 @@ Geom::OptRect CTRef::onBbox(Geom::Affine const &transform, SPItem::BBoxType type
         bbox->expandBy(0.5 * item->style->stroke_width.computed * scale);
     }
     return bbox;
-}
-
-/*
- *  The code for this function is swiped from the tspan bbox code, since tref should work pretty much the same way
- */
-static Geom::OptRect
-sp_tref_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
-{
-	return ((SPTRef*)item)->ctref->onBbox(transform, type);
 }
 
 gchar* CTRef::onDescription() {
@@ -408,12 +301,6 @@ gchar* CTRef::onDescription() {
         }
     }
     return g_strdup(_("<b>Orphaned cloned character data</b>"));
-}
-
-static gchar *
-sp_tref_description(SPItem *item)
-{
-	return ((SPTRef*)item)->ctref->onDescription();
 }
 
 

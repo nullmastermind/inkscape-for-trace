@@ -16,18 +16,13 @@
 
 #include "sp-polygon.h"
 
-
-
 #define SP_TYPE_STAR            (sp_star_get_type ())
 #define SP_STAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_STAR, SPStar))
 #define SP_STAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_STAR, SPStarClass))
 #define SP_IS_STAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_STAR))
 #define SP_IS_STAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STAR))
 
-class SPStar;
-class SPStarClass;
 class CStar;
-
 typedef enum {
 	SP_STAR_POINT_KNOT1,
 	SP_STAR_POINT_KNOT2
@@ -81,7 +76,7 @@ GType sp_star_get_type (void);
 
 void sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized);
 
-Geom::Point sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, bool randomized = false);
+Geom::Point sp_star_get_xy (SPStar const *star, SPStarPoint point, gint index, bool randomized = false);
 
 
 

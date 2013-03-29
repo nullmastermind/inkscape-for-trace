@@ -33,24 +33,7 @@ import os
 import random
 import re
 import sys
-
 from math import *
-
-domain = 'inkscape'
-if sys.platform.startswith('win'):
-    import locale
-    current_locale, encoding = locale.getdefaultlocale()
-    os.environ['LANG'] = current_locale
-    try:
-        localdir = os.environ['INKSCAPE_LOCALEDIR'];
-        #sys.stderr.write(str(localdir) + "\n")
-        gettext= gettext.translation(domain, localdir, [current_locale], fallback=True)
-    except KeyError:
-        gettext= gettext.translation(domain, fallback=True)
-else:
-    gettext= gettext.translation(domain, fallback=True)
-
-_ = gettext.gettext
 
 #a dictionary of all of the xmlns prefixes in a standard inkscape doc
 NSS = {
@@ -64,6 +47,36 @@ u'inkscape' :u'http://www.inkscape.org/namespaces/inkscape',
 u'xlink'    :u'http://www.w3.org/1999/xlink',
 u'xml'      :u'http://www.w3.org/XML/1998/namespace'
 }
+
+def localize():
+    domain = 'inkscape'
+    if sys.platform.startswith('win'):
+        import locale
+        current_locale, encoding = locale.getdefaultlocale()
+        os.environ['LANG'] = current_locale
+        try:
+            localdir = os.environ['INKSCAPE_LOCALEDIR'];
+            trans = gettext.translation(domain, localdir, [current_locale], fallback=True)
+        except KeyError:
+            trans = gettext.translation(domain, fallback=True)
+    elif sys.platform.startswith('darwin'):
+        try:
+            localdir = os.environ['INKSCAPE_LOCALEDIR'];
+            trans = gettext.translation(domain, localdir, fallback=True)
+        except KeyError:
+            try:
+                localdir = os.environ['PACKAGE_LOCALE_DIR'];
+                trans = gettext.translation(domain, localdir, fallback=True)
+            except KeyError:
+                trans = gettext.translation(domain, fallback=True)
+    else:
+        try:
+            localdir = os.environ['PACKAGE_LOCALE_DIR'];
+            trans = gettext.translation(domain, localdir, fallback=True)
+        except KeyError:
+            trans = gettext.translation(domain, fallback=True)
+    #sys.stderr.write(str(localdir) + "\n")
+    trans.install()
 
 #a dictionary of unit to user unit conversion factors
 uuconv = {'in':90.0, 'pt':1.25, 'px':1, 'mm':3.5433070866, 'cm':35.433070866, 'm':3543.3070866,
@@ -89,12 +102,6 @@ def unittouu(string):
 def uutounit(val, unit):
     return val/uuconv[unit]
 
-try:
-    from lxml import etree
-except Exception, e:
-    sys.exit(_("The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore this extension. Please download and install the latest version from http://cheeseshop.python.org/pypi/lxml/, or install it through your package manager by a command like: sudo apt-get install python-lxml\n\nTechnical details:\n%s" % (e,)))
- 
-
 def debug(what):
     sys.stderr.write(str(what) + "\n")
     return what
@@ -108,16 +115,24 @@ def errormsg(msg):
       
        Note that this should always be combined with translation:
 
-         import gettext
-         _ = gettext.gettext
+         import inkex
+         inkex.localize()
          ...
          inkex.errormsg(_("This extension requires two selected paths."))
     """
     if isinstance(msg, unicode):
-        sys.stderr.write(_(msg).encode("UTF-8") + "\n")
+        sys.stderr.write(msg.encode("UTF-8") + "\n")
     else:
-        sys.stderr.write((unicode(_(msg), "utf-8", errors='replace') + "\n").encode("UTF-8"))
+        sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("UTF-8"))
 
+# third party library
+try:
+    from lxml import etree
+except Exception, e:
+    localize()
+    errormsg(_("The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore this extension. Please download and install the latest version from http://cheeseshop.python.org/pypi/lxml/, or install it through your package manager by a command like: sudo apt-get install python-lxml\n\nTechnical details:\n%s" % (e,)))
+    sys.exit()
+    
 def check_inkbool(option, opt, value):
     if str(value).capitalize() == 'True':
         return True
@@ -142,6 +157,7 @@ class Effect:
 
     def __init__(self, *args, **kwargs):
         self.document=None
+        self.original_document=None
         self.ctx=None
         self.selected={}
         self.doc_ids={}
@@ -169,6 +185,7 @@ class Effect:
         except:
             stream = sys.stdin
         self.document = etree.parse(stream)
+        self.original_document = copy.deepcopy(self.document)
         stream.close()
 
     def getposinlayer(self):
@@ -234,7 +251,10 @@ class Effect:
 
     def output(self):
         """Serialize document into XML on stdout"""
-        self.document.write(sys.stdout)
+        original = etree.tostring(self.original_document)        
+        result = etree.tostring(self.document)        
+        if original != result:
+            self.document.write(sys.stdout)
 
     def affect(self, args=sys.argv[1:], output=True):
         """Affect an SVG document with a callback effect"""

@@ -53,51 +53,17 @@ enum {
     PROP_HICOLOR
 };
 
-static void sp_guide_class_init(SPGuideClass *gc);
-static void sp_guide_init(SPGuide *guide);
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 
-static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_guide_release(SPObject *object);
-static void sp_guide_set(SPObject *object, unsigned int key, const gchar *value);
-
-static SPObjectClass *parent_class;
-
-GType sp_guide_get_type(void)
-{
-    static GType guide_type = 0;
-
-    if (!guide_type) {
-        GTypeInfo guide_info = {
-            sizeof(SPGuideClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_guide_class_init,
-            NULL, NULL,
-            sizeof(SPGuide),
-            16,
-            (GInstanceInitFunc) sp_guide_init,
-            NULL,       /* value_table */
-        };
-        guide_type = g_type_register_static(SP_TYPE_OBJECT, "SPGuide", &guide_info, (GTypeFlags) 0);
-    }
-
-    return guide_type;
-}
+G_DEFINE_TYPE(SPGuide, sp_guide, SP_TYPE_OBJECT);
 
 static void sp_guide_class_init(SPGuideClass *gc)
 {
     GObjectClass *gobject_class = (GObjectClass *) gc;
-    SPObjectClass *sp_object_class = (SPObjectClass *) gc;
-
-    parent_class = (SPObjectClass*) g_type_class_ref(SP_TYPE_OBJECT);
 
     gobject_class->set_property = sp_guide_set_property;
     gobject_class->get_property = sp_guide_get_property;
-
-    //sp_object_class->build = sp_guide_build;
-//    sp_object_class->release = sp_guide_release;
-//    sp_object_class->set = sp_guide_set;
 
     g_object_class_install_property(gobject_class,
                                     PROP_COLOR,
@@ -126,6 +92,8 @@ CGuide::~CGuide() {
 static void sp_guide_init(SPGuide *guide)
 {
 	guide->cguide = new CGuide(guide);
+
+	delete guide->cobject;
 	guide->cobject = guide->cguide;
 
     guide->normal_to_line = Geom::Point(0.,1.);
@@ -166,21 +134,6 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
     }
 }
 
-//static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-//{
-//    if (((SPObjectClass *) (parent_class))->build) {
-//        (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
-//    }
-//
-//    object->readAttr( "inkscape:label" );
-//    object->readAttr( "orientation" );
-//    object->readAttr( "position" );
-//
-//    /* Register */
-//    document->addResource("guide", object);
-//	((SPGuide*)object)->cguide->onBuild(document, repr);
-//}
-
 void CGuide::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::onBuild(document, repr);
 
@@ -192,26 +145,6 @@ void CGuide::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 
     /* Register */
     document->addResource("guide", object);
-}
-
-static void sp_guide_release(SPObject *object)
-{
-//    SPGuide *guide = (SPGuide *) object;
-//
-//    while (guide->views) {
-//        sp_guideline_delete(SP_GUIDELINE(guide->views->data));
-//        guide->views = g_slist_remove(guide->views, guide->views->data);
-//    }
-//
-//    if (object->document) {
-//        // Unregister ourselves
-//        object->document->removeResource("guide", object);
-//    }
-//
-//    if (((SPObjectClass *) parent_class)->release) {
-//        ((SPObjectClass *) parent_class)->release(object);
-//    }
-	((SPGuide*)object)->cguide->onRelease();
 }
 
 void CGuide::onRelease() {
@@ -228,89 +161,7 @@ void CGuide::onRelease() {
         object->document->removeResource("guide", object);
     }
 
-//    if (((SPObjectClass *) parent_class)->release) {
-//        ((SPObjectClass *) parent_class)->release(object);
-//    }
     CObject::onRelease();
-}
-
-static void sp_guide_set(SPObject *object, unsigned int key, const gchar *value)
-{
-//    SPGuide *guide = SP_GUIDE(object);
-//
-//    switch (key) {
-//    case SP_ATTR_INKSCAPE_LABEL:
-//        if (value) {
-//            guide->label = g_strdup(value);
-//        } else {
-//            guide->label = NULL;
-//        }
-//
-//        sp_guide_set_label(*guide, guide->label, false);
-//        break;
-//    case SP_ATTR_ORIENTATION:
-//        {
-//            if (value && !strcmp(value, "horizontal")) {
-//                /* Visual representation of a horizontal line, constrain vertically (y coordinate). */
-//                guide->normal_to_line = Geom::Point(0., 1.);
-//            } else if (value && !strcmp(value, "vertical")) {
-//                guide->normal_to_line = Geom::Point(1., 0.);
-//            } else if (value) {
-//                gchar ** strarray = g_strsplit(value, ",", 2);
-//                double newx, newy;
-//                unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
-//                success += sp_svg_number_read_d(strarray[1], &newy);
-//                g_strfreev (strarray);
-//                if (success == 2 && (fabs(newx) > 1e-6 || fabs(newy) > 1e-6)) {
-//                    Geom::Point direction(newx, newy);
-//                    direction.normalize();
-//                    guide->normal_to_line = direction;
-//                } else {
-//                    // default to vertical line for bad arguments
-//                    guide->normal_to_line = Geom::Point(1., 0.);
-//                }
-//            } else {
-//                // default to vertical line for bad arguments
-//                guide->normal_to_line = Geom::Point(1., 0.);
-//            }
-//            sp_guide_set_normal(*guide, guide->normal_to_line, false);
-//        }
-//        break;
-//    case SP_ATTR_POSITION:
-//        {
-//            if (value) {
-//                gchar ** strarray = g_strsplit(value, ",", 2);
-//                double newx, newy;
-//                unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
-//                success += sp_svg_number_read_d(strarray[1], &newy);
-//                g_strfreev (strarray);
-//                if (success == 2) {
-//                    guide->point_on_line = Geom::Point(newx, newy);
-//                } else if (success == 1) {
-//                    // before 0.46 style guideline definition.
-//                    const gchar *attr = object->getRepr()->attribute("orientation");
-//                    if (attr && !strcmp(attr, "horizontal")) {
-//                        guide->point_on_line = Geom::Point(0, newx);
-//                    } else {
-//                        guide->point_on_line = Geom::Point(newx, 0);
-//                    }
-//                }
-//            } else {
-//                // default to (0,0) for bad arguments
-//                guide->point_on_line = Geom::Point(0,0);
-//            }
-//            // update position in non-committing way
-//            // fixme: perhaps we need to add an update method instead, and request_update here
-//            sp_guide_moveto(*guide, guide->point_on_line, false);
-//        }
-//        break;
-//    default:
-//            if (((SPObjectClass *) (parent_class))->set) {
-//                ((SPObjectClass *) (parent_class))->set(object, key, value);
-//            }
-//            break;
-//    }
-	((SPGuide*)object)->cguide->onSet(key, value);
 }
 
 void CGuide::onSet(unsigned int key, const gchar *value) {
@@ -384,9 +235,6 @@ void CGuide::onSet(unsigned int key, const gchar *value) {
         }
         break;
     default:
-//            if (((SPObjectClass *) (parent_class))->set) {
-//                ((SPObjectClass *) (parent_class))->set(object, key, value);
-//            }
     	CObject::onSet(key, value);
             break;
     }
@@ -430,10 +278,10 @@ sp_guide_create_guides_around_page(SPDesktop *dt) {
     Geom::Point B(C[Geom::X], 0);
     Geom::Point D(0, C[Geom::Y]);
 
-    pts.push_back(std::make_pair<Geom::Point, Geom::Point>(A, B));
-    pts.push_back(std::make_pair<Geom::Point, Geom::Point>(B, C));
-    pts.push_back(std::make_pair<Geom::Point, Geom::Point>(C, D));
-    pts.push_back(std::make_pair<Geom::Point, Geom::Point>(D, A));
+    pts.push_back(std::pair<Geom::Point, Geom::Point>(A, B));
+    pts.push_back(std::pair<Geom::Point, Geom::Point>(B, C));
+    pts.push_back(std::pair<Geom::Point, Geom::Point>(C, D));
+    pts.push_back(std::pair<Geom::Point, Geom::Point>(D, A));
 
     sp_guide_pt_pairs_to_guides(doc, pts);
 

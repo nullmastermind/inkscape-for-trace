@@ -19,9 +19,15 @@
 #include <vector>
 #include <glibmm/ustring.h>
 #include "xml/repr.h"
+#include <sigc++/signal.h>
 
 namespace Gtk {
+#if WITH_GTKMM_3_0
+	class Grid;
+#else
 	class Table;
+#endif
+
 	class VBox;
 	class Widget;
 }
@@ -65,7 +71,7 @@ namespace Gtk {
 #define INKSCAPE_EXTENSION_NS_NC "extension"
 #define INKSCAPE_EXTENSION_NS    "extension:"
 
-struct SPDocument;
+class SPDocument;
 
 namespace Inkscape {
 namespace Extension {
@@ -284,8 +290,11 @@ public:
     Gtk::VBox *    get_help_widget(void);
     Gtk::VBox *    get_params_widget(void);
 protected:
+#if WITH_GTKMM_3_0
+    inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row);
+#else
     inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Table * table, int * row);
-
+#endif
 };
 
 

@@ -76,24 +76,7 @@
 #define MAGIC_EPSILON_TOO 1e-18
 // TODO: also check if it is correct to be using two different epsilon values
 
-static void sp_image_class_init (SPImageClass * klass);
-static void sp_image_init (SPImage * image);
-
-static void sp_image_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
-static void sp_image_release (SPObject * object);
-static void sp_image_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags);
-static void sp_image_modified (SPObject *object, unsigned int flags);
-static Inkscape::XML::Node *sp_image_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static Geom::OptRect sp_image_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-static void sp_image_print (SPItem * item, SPPrintContext *ctx);
-static gchar * sp_image_description (SPItem * item);
-static void sp_image_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-static Inkscape::DrawingItem *sp_image_show (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-static Geom::Affine sp_image_set_transform (SPItem *item, Geom::Affine const &xform);
 static void sp_image_set_curve(SPImage *image);
-
 
 static GdkPixbuf *sp_image_repr_read_image( time_t& modTime, gchar*& pixPath, const gchar *href, const gchar *absref, const gchar *base );
 static GdkPixbuf *sp_image_pixbuf_force_rgba (GdkPixbuf * pixbuf);
@@ -102,14 +85,9 @@ static void sp_image_update_canvas_image (SPImage *image);
 static GdkPixbuf * sp_image_repr_read_dataURI (const gchar * uri_data);
 static GdkPixbuf * sp_image_repr_read_b64 (const gchar * uri_data);
 
-static SPItemClass *parent_class;
-
-
 extern "C"
 {
     void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length );
-    void user_write_data( png_structp png_ptr, png_bytep data, png_size_t length );
-    void user_flush_data( png_structp png_ptr );
 }
 
 
@@ -234,7 +212,7 @@ private:
     PushPull(const PushPull& other);
 };
 
-void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
+static void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
 {
 //    g_message( "user_read_data(%d)", length );
 
@@ -253,16 +231,6 @@ void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
         }
     }
 //    g_message("things out");
-}
-
-void user_write_data( png_structp /*png_ptr*/, png_bytep /*data*/, png_size_t /*length*/ )
-{
-    //g_message( "user_write_data(%d)", length );
-}
-
-void user_flush_data( png_structp /*png_ptr*/ )
-{
-    //g_message( "user_flush_data" );
 }
 
 
@@ -424,7 +392,7 @@ static bool readPngAndHeaders( PushPull &youme, gint & dpiX, gint & dpiY )
     return good;
 }
 
-static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, gchar*& pixPath, GError **/*error*/ )
+GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, gchar*& pixPath, GError **/*error*/ )
 {
     GdkPixbuf* buf = NULL;
     PushPull youme;
@@ -433,10 +401,16 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
     modTime = 0;
     if ( pixPath ) {
         g_free(pixPath);
-        pixPath = 0;
+        pixPath = NULL;
+    }
+    
+    struct stat stdir;
+    g_stat(filename, &stdir);
+    if (stdir.st_mode & S_IFDIR){
+        //filename is not correct: it is a directory name and hence further code can not return valid results
+        return NULL;
     }
 
-    //buf = gdk_pixbuf_new_from_file( filename, error );
     dump_fopen_call( filename, "pixbuf_new_from_file" );
     FILE* fp = fopen_utf8name( filename, "r" );
     if ( fp )
@@ -479,7 +453,6 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
                         }
                     } else if ( !latter ) {
                         latter = TRUE;
-                        //g_message("  READing latter");
                     }
                     // Now clear out the buffer so we can read more.
                     // (dumping out unused)
@@ -492,23 +465,6 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
                 buf = gdk_pixbuf_loader_get_pixbuf( loader );
                 if ( buf ) {
                     g_object_ref(buf);
-
-                    if ( dpiX ) {
-                        gchar *tmp = g_strdup_printf( "%d", dpiX );
-                        if ( tmp ) {
-                            //g_message("Need to set DpiX: %s", tmp);
-                            //gdk_pixbuf_set_option( buf, "Inkscape::DpiX", tmp );
-                            g_free( tmp );
-                        }
-                    }
-                    if ( dpiY ) {
-                        gchar *tmp = g_strdup_printf( "%d", dpiY );
-                        if ( tmp ) {
-                            //g_message("Need to set DpiY: %s", tmp);
-                            //gdk_pixbuf_set_option( buf, "Inkscape::DpiY", tmp );
-                            g_free( tmp );
-                        }
-                    }
                 }
             } else {
                 // do something
@@ -524,22 +480,6 @@ static GdkPixbuf* pixbuf_new_from_file( const char *filename, time_t &modTime, g
     } else {
         g_warning ("Unable to open linked file: %s", filename);
     }
-
-/*
-    if ( buf )
-    {
-        const gchar* bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiX" );
-        if ( bloop )
-        {
-            g_message("DPI X is [%s]", bloop);
-        }
-        bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiY" );
-        if ( bloop )
-        {
-            g_message("DPI Y is [%s]", bloop);
-        }
-    }
-*/
 
     return buf;
 }
@@ -559,47 +499,10 @@ GdkPixbuf* pixbuf_new_from_file( const char *filename, GError **error )
 }
 }
 
-GType sp_image_get_type(void)
-{
-    static GType image_type = 0;
-    if (!image_type) {
-        GTypeInfo image_info = {
-            sizeof (SPImageClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) sp_image_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof (SPImage),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) sp_image_init,
-            NULL,       /* value_table */
-        };
-        image_type = g_type_register_static (SPItem::getType (), "SPImage", &image_info, (GTypeFlags)0);
-    }
-    return image_type;
-}
+G_DEFINE_TYPE(SPImage, sp_image, SP_TYPE_ITEM);
 
 static void sp_image_class_init( SPImageClass * klass )
 {
-    SPObjectClass *sp_object_class = reinterpret_cast<SPObjectClass *>(klass);
-    SPItemClass *item_class = reinterpret_cast<SPItemClass *>(klass);
-
-    parent_class = reinterpret_cast<SPItemClass*>(g_type_class_ref(SPItem::getType()));
-
-    //sp_object_class->build = sp_image_build;
-//    sp_object_class->release = sp_image_release;
-//    sp_object_class->set = sp_image_set;
-//    sp_object_class->update = sp_image_update;
-//    sp_object_class->modified = sp_image_modified;
-//    sp_object_class->write = sp_image_write;
-
-//    item_class->bbox = sp_image_bbox;
-//    item_class->print = sp_image_print;
-//    item_class->description = sp_image_description;
-//    item_class->show = sp_image_show;
-//    item_class->snappoints = sp_image_snappoints;
-//    item_class->set_transform = sp_image_set_transform;
 }
 
 CImage::CImage(SPImage* image) : CItem(image) {
@@ -612,6 +515,8 @@ CImage::~CImage() {
 static void sp_image_init( SPImage *image )
 {
 	image->cimage = new CImage(image);
+
+	delete image->citem;
 	image->citem = image->cimage;
 	image->cobject = image->cimage;
 
@@ -652,11 +557,6 @@ void CImage::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     document->addResource("image", object);
 }
 
-static void sp_image_build( SPObject *object, SPDocument *document, Inkscape::XML::Node *repr )
-{
-	((SPImage*)object)->cimage->onBuild(document, repr);
-}
-
 void CImage::onRelease() {
 	SPImage* object = this->spimage;
 
@@ -694,12 +594,6 @@ void CImage::onRelease() {
     }
 
     CItem::onRelease();
-}
-
-static void sp_image_release( SPObject *object )
-{
-	((SPImage*)object)->cimage->onRelease();
-
 }
 
 void CImage::onSet(unsigned int key, const gchar* value) {
@@ -822,11 +716,6 @@ void CImage::onSet(unsigned int key, const gchar* value) {
     }
 
     sp_image_set_curve(image); //creates a curve at the image's boundary for snapping
-}
-
-static void sp_image_set( SPObject *object, unsigned int key, const gchar *value )
-{
-	((SPImage*)object)->cimage->onSet(key, value);
 }
 
 void CImage::onUpdate(SPCtx *ctx, unsigned int flags) {
@@ -1033,21 +922,11 @@ void CImage::onUpdate(SPCtx *ctx, unsigned int flags) {
     sp_image_update_canvas_image ((SPImage *) object);
 }
 
-static void sp_image_update( SPObject *object, SPCtx *ctx, unsigned int flags )
-{
-	((SPImage*)object)->cimage->onUpdate(ctx, flags);
-}
-
 void CImage::onModified(unsigned int flags) {
 	SPImage* object = this->spimage;
 
     SPImage *image = SP_IMAGE (object);
 
-    // CPPIFY: This doesn't make no sense.
-    // CObject::onModified is pure and CItem doesn't override this method. What was the idea behind these lines?
-//  if (((SPObjectClass *) (parent_class))->modified) {
-//	  (* ((SPObjectClass *) (parent_class))->modified) (object, flags);
-//	}
 //  CItem::onModified(flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
@@ -1058,10 +937,6 @@ void CImage::onModified(unsigned int flags) {
     }
 }
 
-static void sp_image_modified( SPObject *object, unsigned int flags )
-{
-	((SPImage*)object)->cimage->onModified(flags);
-}
 
 Inkscape::XML::Node *CImage::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags ) {
 	SPImage* object = this->spimage;
@@ -1100,27 +975,17 @@ Inkscape::XML::Node *CImage::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
-static Inkscape::XML::Node *sp_image_write( SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags )
-{
-	return ((SPImage*)object)->cimage->onWrite(xml_doc, repr, flags);
-}
-
 Geom::OptRect CImage::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPImage* item = this->spimage;
 
-	SPImage const &image = *SP_IMAGE(item);
-	Geom::OptRect bbox;
+    SPImage const &image = *SP_IMAGE(item);
+    Geom::OptRect bbox;
 
-	if ((image.width.computed > 0.0) && (image.height.computed > 0.0)) {
-		bbox = Geom::Rect::from_xywh(image.x.computed, image.y.computed, image.width.computed, image.height.computed);
-		*bbox *= transform;
-	}
-	return bbox;
-}
-
-static Geom::OptRect sp_image_bbox( SPItem const *item,Geom::Affine const &transform, SPItem::BBoxType type)
-{
-    return ((SPImage*)item)->cimage->onBbox(transform, type);
+    if ((image.width.computed > 0.0) && (image.height.computed > 0.0)) {
+        bbox = Geom::Rect::from_xywh(image.x.computed, image.y.computed, image.width.computed, image.height.computed);
+        *bbox *= transform;
+    }
+    return bbox;
 }
 
 void CImage::onPrint(SPPrintContext *ctx) {
@@ -1171,11 +1036,6 @@ void CImage::onPrint(SPPrintContext *ctx) {
     }
 }
 
-static void sp_image_print( SPItem *item, SPPrintContext *ctx )
-{
-	((SPImage*)item)->cimage->onPrint(ctx);
-}
-
 gchar* CImage::onDescription() {
 	SPImage* item = this->spimage;
 
@@ -1200,11 +1060,6 @@ gchar* CImage::onDescription() {
     return ret;
 }
 
-static gchar *sp_image_description( SPItem *item )
-{
-	return ((SPImage*)item)->cimage->onDescription();
-}
-
 Inkscape::DrawingItem* CImage::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	SPImage* item = this->spimage;
 
@@ -1214,11 +1069,6 @@ Inkscape::DrawingItem* CImage::onShow(Inkscape::Drawing &drawing, unsigned int k
     sp_image_update_arenaitem(image, ai);
 
     return ai;
-}
-
-static Inkscape::DrawingItem *sp_image_show( SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags )
-{
-	return ((SPImage*)item)->cimage->onShow(drawing, key, flags);
 }
 
 /*
@@ -1377,11 +1227,6 @@ void CImage::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
     }
 }
 
-static void sp_image_snappoints( SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs )
-{
-	((SPImage*)item)->cimage->onSnappoints(p, snapprefs);
-}
-
 /*
  * Initially we'll do:
  * Transform x, y, set x, y, clear translation
@@ -1426,11 +1271,6 @@ Geom::Affine CImage::onSetTransform(Geom::Affine const &xform) {
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
     return ret;
-}
-
-static Geom::Affine sp_image_set_transform( SPItem *item, Geom::Affine const &xform )
-{
-	return ((SPImage*)item)->cimage->onSetTransform(xform);
 }
 
 static GdkPixbuf *sp_image_repr_read_dataURI( const gchar * uri_data )
@@ -1573,7 +1413,7 @@ static void sp_image_set_curve( SPImage *image )
             image->curve = image->curve->unref();
         }
     } else {
-        Geom::OptRect rect = sp_image_bbox(image, Geom::identity(), SPItem::VISUAL_BBOX);
+        Geom::OptRect rect = image->cimage->onBbox(Geom::identity(), SPItem::VISUAL_BBOX);
         SPCurve *c = SPCurve::new_from_rect(*rect, true);
 
         if (image->curve) {
@@ -1647,7 +1487,7 @@ void sp_image_refresh_if_outdated( SPImage* image )
             if ( st.st_mtime != image->lastMod ) {
                 SPCtx *ctx = 0;
                 unsigned int flags = SP_IMAGE_HREF_MODIFIED_FLAG;
-                sp_image_update(image, ctx, flags);
+                image->cimage->onUpdate(ctx, flags);
             }
         }
     }

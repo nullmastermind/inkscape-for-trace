@@ -1,6 +1,7 @@
 /* Authors:
  *   Jon A. Cruz
  *   Abhishek Sharma
+ *   Tavmjong Bah
  *
  * Copyright (C) 2010 Jon A. Cruz
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -18,7 +19,13 @@
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/table.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/widget.h>
 
@@ -335,7 +342,12 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
     instanceConns(),
     desktopConns()
 {
+#if WITH_GTKMM_3_0
+    Gtk::Grid *table = new Gtk::Grid();
+#else
     Gtk::Table *table = new Gtk::Table(3, 1, false);
+#endif
+
     _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
     guint row = 0;
 
@@ -343,13 +355,19 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
     GtkWidget *fontsel = sp_font_selector_new();
     fsel = SP_FONT_SELECTOR(fontsel);
-    sp_font_selector_set_font(fsel, sp_font_selector_get_font(fsel), 12.0);
+    sp_font_selector_set_fontspec( fsel, sp_font_selector_get_fontspec(fsel), 12.0 );
+
     gtk_widget_set_size_request (fontsel, 0, 150);
     g_signal_connect( G_OBJECT(fontsel), "font_set", G_CALLBACK(fontChangeCB), this );
 
+#if WITH_GTKMM_3_0
+    table->attach(*Gtk::manage(Glib::wrap(fontsel)), 0, row, 3, 1);
+#else
     table->attach(*Gtk::manage(Glib::wrap(fontsel)),
                   0, 3, row, row + 1,
                   Gtk::SHRINK|Gtk::FILL, Gtk::SHRINK|Gtk::FILL);
+#endif
+
     row++;
 
 
@@ -357,28 +375,35 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
     {
         Gtk::Label *label = new Gtk::Label(_("Script: "));
+
+#if WITH_GTKMM_3_0
+        table->attach( *Gtk::manage(label), 0, row, 1, 1);
+#else
         table->attach( *Gtk::manage(label),
                        0, 1, row, row + 1,
                        Gtk::SHRINK, Gtk::SHRINK);
+#endif
 
         scriptCombo = new Gtk::ComboBoxText();
         for (std::map<GUnicodeScript, Glib::ustring>::iterator it = getScriptToName().begin(); it != getScriptToName().end(); ++it)
         {
-#if WITH_GTKMM_2_24
             scriptCombo->append(it->second);
-#else
-            scriptCombo->append_text(it->second);
-#endif
         }
 
         scriptCombo->set_active_text(getScriptToName()[G_UNICODE_SCRIPT_INVALID_CODE]);
         sigc::connection conn = scriptCombo->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::rebuild));
         instanceConns.push_back(conn);
-        Gtk::Alignment *align = new Gtk::Alignment(Gtk::ALIGN_START, Gtk::ALIGN_START, 0.0, 0.0);
+        Gtk::Alignment *align = Gtk::manage(new Gtk::Alignment(Gtk::ALIGN_START, Gtk::ALIGN_START, 0.0, 0.0));
         align->add(*Gtk::manage(scriptCombo));
-        table->attach( *Gtk::manage(align),
+
+#if WITH_GTKMM_3_0
+        align->set_hexpand();
+        table->attach( *align, 1, row, 1, 1);
+#else
+        table->attach( *align,
                        1, 2, row, row + 1,
                        Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+#endif
     }
 
     row++;
@@ -387,17 +412,18 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
     {
         Gtk::Label *label = new Gtk::Label(_("Range: "));
+
+#if WITH_GTKMM_3_0
+        table->attach( *Gtk::manage(label), 0, row, 1, 1);
+#else
         table->attach( *Gtk::manage(label),
                        0, 1, row, row + 1,
                        Gtk::SHRINK, Gtk::SHRINK);
+#endif
 
         rangeCombo = new Gtk::ComboBoxText();
         for ( std::vector<NamedRange>::iterator it = getRanges().begin(); it != getRanges().end(); ++it ) {
-#if WITH_GTKMM_2_24
             rangeCombo->append(it->second);
-#else
-            rangeCombo->append_text(it->second);
-#endif
         }
 
         rangeCombo->set_active_text(getRanges()[1].second);
@@ -405,9 +431,15 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
         instanceConns.push_back(conn);
         Gtk::Alignment *align = new Gtk::Alignment(Gtk::ALIGN_START, Gtk::ALIGN_START, 0.0, 0.0);
         align->add(*Gtk::manage(rangeCombo));
+
+#if WITH_GTKMM_3_0
+        align->set_hexpand();
+        table->attach( *Gtk::manage(align), 1, row, 1, 1);
+#else
         table->attach( *Gtk::manage(align),
                        1, 2, row, row + 1,
                        Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+#endif
     }
 
     row++;
@@ -430,9 +462,17 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
     Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
     scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
     scroller->add(*Gtk::manage(iconView));
+
+#if WITH_GTKMM_3_0
+    scroller->set_hexpand();
+    scroller->set_vexpand();
+    table->attach(*Gtk::manage(scroller), 0, row, 3, 1);
+#else
     table->attach(*Gtk::manage(scroller),
                   0, 3, row, row + 1,
                   Gtk::EXPAND|Gtk::FILL, Gtk::EXPAND|Gtk::FILL);
+#endif
+
     row++;
 
 // -------------------------------
@@ -462,9 +502,15 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
     box->pack_end(*Gtk::manage(insertBtn), Gtk::PACK_SHRINK);
 
+#if WITH_GTKMM_3_0
+    box->set_hexpand();
+    table->attach( *Gtk::manage(box), 0, row, 3, 1);
+#else
     table->attach( *Gtk::manage(box),
                    0, 3, row, row + 1,
                    Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
+#endif
+
     row++;
 
 // -------------------------------
@@ -528,6 +574,7 @@ void GlyphsPanel::setTargetDesktop(SPDesktop *desktop)
     }
 }
 
+// Append selected glyphs to selected text
 void GlyphsPanel::insertText()
 {
     SPItem *textItem = 0;
@@ -619,7 +666,7 @@ void GlyphsPanel::glyphSelectionChanged()
     calcCanInsert();
 }
 
-void GlyphsPanel::fontChangeCB(SPFontSelector * /*fontsel*/, font_instance * /*font*/, GlyphsPanel *self)
+void GlyphsPanel::fontChangeCB(SPFontSelector * /*fontsel*/, Glib::ustring /*fontspec*/, GlyphsPanel *self)
 {
     if (self) {
         self->rebuild();
@@ -675,7 +722,13 @@ void GlyphsPanel::readSelection( bool updateStyle, bool /*updateContent*/ )
 
 void GlyphsPanel::rebuild()
 {
-    font_instance *font = fsel ? sp_font_selector_get_font(fsel) : 0;
+    Glib::ustring fontspec = fsel ? sp_font_selector_get_fontspec(fsel) : "";
+
+    font_instance* font = 0;
+    if( !fontspec.empty() ) {
+        font = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str() );
+    }
+
     if (font) {
         //double  sp_font_selector_get_size (SPFontSelector *fsel);
 

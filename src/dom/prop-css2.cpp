@@ -1279,7 +1279,8 @@ bool parseProperty(char *name, char *value)
 }
 
 
-bool printTable()
+/*
+static bool printTable()
 {
     for (CssProp *prop=cssProps; prop->name ; prop++)
         {
@@ -1294,7 +1295,7 @@ bool printTable()
         }
     return true;
 }
-
+*/
 
 int main(int /*argc*/, char **/*argv*/)
 {

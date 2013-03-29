@@ -61,7 +61,7 @@ struct SPGradientSelector {
     /* Tree */
     bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPGradient *vector);
     void onTreeSelection();
-    void onTreeEdited( const Glib::ustring& path_string, const Glib::ustring& new_text);
+    void onGradientRename( const Glib::ustring& path_string, const Glib::ustring& new_text);
     void onTreeNameColClick();
     void onTreeColorColClick();
     void onTreeCountColClick();
@@ -97,6 +97,7 @@ struct SPGradientSelector {
     /* Editing buttons */
     GtkWidget *edit;
     GtkWidget *add;
+    GtkWidget *del;
     GtkWidget *merge;
 
     /* Position widget */
@@ -106,6 +107,7 @@ struct SPGradientSelector {
     bool blocked;
 
     std::vector<GtkWidget*> nonsolid;
+    std::vector<GtkWidget*> swatch_widgets;
 
     void setMode(SelectorMode mode);
     void setUnits(SPGradientUnits units);

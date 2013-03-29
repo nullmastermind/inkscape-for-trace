@@ -21,9 +21,6 @@
 #define SP_IS_GAUSSIANBLUR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_GAUSSIANBLUR))
 #define SP_IS_GAUSSIANBLUR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_GAUSSIANBLUR))
 
-/* GaussianBlur base class */
-class SPGaussianBlurClass;
-
 class CGaussianBlur;
 
 class SPGaussianBlur : public SPFilterPrimitive {
@@ -34,6 +31,7 @@ public:
     NumberOptNumber stdDeviation;
 };
 
+/* GaussianBlur base class */
 struct SPGaussianBlurClass {
     SPFilterPrimitiveClass parent_class;
 };

@@ -20,43 +20,12 @@
 #include "xml/repr.h"
 #include "document.h"
 
-SPShapeClass * SPPolyLineClass::static_parent_class=0;
 
-GType SPPolyLine::sp_polyline_get_type(void)
+G_DEFINE_TYPE(SPPolyLine, sp_polyline, SP_TYPE_SHAPE);
+
+static void
+sp_polyline_class_init(SPPolyLineClass *klass)
 {
-    static GType polyline_type = 0;
-
-    if (!polyline_type) {
-        GTypeInfo polyline_info = {
-            sizeof (SPPolyLineClass),
-            NULL,   /* base_init */
-            NULL,   /* base_finalize */
-            (GClassInitFunc) SPPolyLineClass::sp_polyline_class_init,
-            NULL,   /* klass_finalize */
-            NULL,   /* klass_data */
-            sizeof (SPPolyLine),
-            16,     /* n_preallocs */
-            (GInstanceInitFunc) SPPolyLine::init,
-            NULL,   /* value_table */
-        };
-        polyline_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolyLine", &polyline_info, (GTypeFlags)0);
-    }
-    return polyline_type;
-}
-
-void SPPolyLineClass::sp_polyline_class_init(SPPolyLineClass *klass)
-{
-    //GObjectClass * gobject_class = (GObjectClass *) klass;
-    SPObjectClass * sp_object_class = (SPObjectClass *) klass;
-    SPItemClass * item_class = (SPItemClass *) klass;
-
-    static_parent_class = (SPShapeClass *)g_type_class_ref(SP_TYPE_SHAPE);
-
-    //sp_object_class->build = SPPolyLine::build;
-//    sp_object_class->set = SPPolyLine::set;
-//    sp_object_class->write = SPPolyLine::write;
-
-//    item_class->description = SPPolyLine::getDescription;
 }
 
 CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {
@@ -66,9 +35,11 @@ CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {
 CPolyLine::~CPolyLine() {
 }
 
-void SPPolyLine::init(SPPolyLine * polyline)
+void sp_polyline_init(SPPolyLine * polyline)
 {
 	polyline->cpolyline = new CPolyLine(polyline);
+
+	delete polyline->cshape;
 	polyline->cshape = polyline->cpolyline;
 	polyline->clpeitem = polyline->cpolyline;
 	polyline->citem = polyline->cpolyline;
@@ -81,12 +52,6 @@ void CPolyLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     CShape::onBuild(document, repr);
 
     object->readAttr( "points" );
-}
-
-// CPPIFY: remove
-void SPPolyLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-	((SPPolyLine*)object)->cpolyline->onBuild(document, repr);
 }
 
 void CPolyLine::onSet(unsigned int key, const gchar* value) {
@@ -145,17 +110,8 @@ void CPolyLine::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-void SPPolyLine::set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPPolyLine*)object)->cpolyline->onSet(key, value);
-}
-
 Inkscape::XML::Node* CPolyLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPPolyLine* object = this->sppolyline;
-
-	// CPPIFY: This is a simple type check?
-    //SP_POLYLINE(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polyline");
@@ -170,20 +126,8 @@ Inkscape::XML::Node* CPolyLine::onWrite(Inkscape::XML::Document *xml_doc, Inksca
     return repr;
 }
 
-// CPPIFY: remove
-Inkscape::XML::Node *SPPolyLine::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPPolyLine*)object)->cpolyline->onWrite(xml_doc, repr, flags);
-}
-
 gchar* CPolyLine::onDescription() {
 	return g_strdup(_("<b>Polyline</b>"));
-}
-
-// CPPIFY: remove
-gchar *SPPolyLine::getDescription(SPItem * item)
-{
-	return ((SPPolyLine*)item)->cpolyline->onDescription();
 }
 
 

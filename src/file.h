@@ -16,18 +16,24 @@
  */
 
 #include <glibmm/ustring.h>
-#include "ui/dialog/ocaldialogs.h"
+#include "extension/system.h"
 
-struct SPDesktop;
-struct SPDocument;
+class SPDesktop;
+class SPDocument;
 class SPObject;
 
 namespace Inkscape {
     namespace Extension {
-        struct Extension;
+        class Extension;
     }
 }
 
+namespace Gtk {
+class Window;
+}
+
+// Get the name of the default template uri
+Glib::ustring sp_file_default_template_uri();
 
 /*######################
 ## N E W

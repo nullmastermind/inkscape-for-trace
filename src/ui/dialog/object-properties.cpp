@@ -26,11 +26,8 @@
  *   Abhishek Sharma
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "object-properties.h"
+#include "widgets/sp-attribute-widget.h"
 #include "../../desktop-handles.h"
 #include "../../document.h"
 #include "../../document-undo.h"
@@ -41,6 +38,12 @@
 #include "sp-item.h"
 #include <glibmm/i18n.h>
 
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 
 namespace Inkscape {
 namespace UI {
@@ -50,38 +53,60 @@ ObjectProperties::ObjectProperties (void) :
     UI::Widget::Panel ("", "/dialogs/object/", SP_VERB_DIALOG_ITEM),
     blocked (false),
     CurrentItem(NULL),
-    TopTable (3, 4, false),
+#if WITH_GTKMM_3_0
+    TopTable(Gtk::manage(new Gtk::Grid())),
+#else
+    TopTable(Gtk::manage(new Gtk::Table(3, 4))),
+#endif
     LabelID(_("_ID:"), 1),
     LabelLabel(_("_Label:"), 1),
     LabelTitle(_("_Title:"),1),
-    LabelDescription(_("_Description"),1),
+    LabelDescription(_("_Description:"),1),
     FrameDescription("", FALSE),
     HBoxCheck(FALSE, 0),
-    CheckTable(1, 2, TRUE),
+#if WITH_GTKMM_3_0
+    CheckTable(Gtk::manage(new Gtk::Grid())),
+#else
+    CheckTable(Gtk::manage(new Gtk::Table(1, 2, true))),
+#endif
     CBHide(_("_Hide"), 1),
     CBLock(_("L_ock"), 1),
     BSet (_("_Set"), 1),
     LabelInteractivity(_("_Interactivity"), 1),
-    attrTable(),
+    attrTable(Gtk::manage(new SPAttributeTable())),
     desktop(NULL),
     deskTrack(),
     selectChangedConn(),
     subselChangedConn()
 {
     //initialize labels for the table at the bottom of the dialog
-    int_labels.push_back("onclick");
-    int_labels.push_back("onmouseover");
-    int_labels.push_back("onmouseout");
-    int_labels.push_back("onmousedown");
-    int_labels.push_back("onmouseup");
-    int_labels.push_back("onmousemove");
-    int_labels.push_back("onfocusin");
-    int_labels.push_back("onfocusout");
-    int_labels.push_back("onfocusout");
-    int_labels.push_back("onload");
+    int_attrs.push_back("onclick");
+    int_attrs.push_back("onmouseover");
+    int_attrs.push_back("onmouseout");
+    int_attrs.push_back("onmousedown");
+    int_attrs.push_back("onmouseup");
+    int_attrs.push_back("onmousemove");
+    int_attrs.push_back("onfocusin");
+    int_attrs.push_back("onfocusout");
+    int_attrs.push_back("onload");
+	
+    int_labels.push_back("onclick:");
+    int_labels.push_back("onmouseover:");
+    int_labels.push_back("onmouseout:");
+    int_labels.push_back("onmousedown:");
+    int_labels.push_back("onmouseup:");
+    int_labels.push_back("onmousemove:");
+    int_labels.push_back("onfocusin:");
+    int_labels.push_back("onfocusout:");
+    int_labels.push_back("onload:");
     
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectProperties::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
+
+#if WITH_GTKMM_3_0
+    CheckTable->set_row_homogeneous();
+    CheckTable->set_column_homogeneous(true);
+#endif
     
     MakeWidget();
 }
@@ -99,23 +124,44 @@ void ObjectProperties::MakeWidget(void)
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
     
-    TopTable.set_border_width(4);
-    TopTable.set_row_spacings(4);
-    TopTable.set_col_spacings(4);
-    contents->pack_start (TopTable, true, true, 0);
+    TopTable->set_border_width(4);
+
+#if WITH_GTKMM_3_0
+    TopTable->set_row_spacing(4);
+    TopTable->set_column_spacing(0);
+#else
+    TopTable->set_row_spacings(4);
+    TopTable->set_col_spacings(0);
+#endif
+
+    contents->pack_start (*TopTable, false, false, 0);
 
     /* Create the label for the object id */
+    LabelID.set_label (LabelID.get_label() + " ");
     LabelID.set_alignment (1, 0.5);
-    TopTable.attach (LabelID, 0, 1, 0, 1,
-                       Gtk::SHRINK | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+
+#if WITH_GTKMM_3_0
+    LabelID.set_valign(Gtk::ALIGN_CENTER);
+    TopTable->attach(LabelID, 0, 0, 1, 1);
+#else
+    TopTable->attach(LabelID, 0, 1, 0, 1,
+                      Gtk::SHRINK | Gtk::FILL,
+                      Gtk::AttachOptions(), 0, 0 );
+#endif
 
     /* Create the entry box for the object id */
     EntryID.set_tooltip_text (_("The id= attribute (only letters, digits, and the characters .-_: allowed)"));
     EntryID.set_max_length (64);
-    TopTable.attach (EntryID, 1, 2, 0, 1,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+
+#if WITH_GTKMM_3_0
+    EntryID.set_valign(Gtk::ALIGN_CENTER);
+    TopTable->attach(EntryID, 1, 0, 1, 1);
+#else
+    TopTable->attach(EntryID, 1, 2, 0, 1,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
     LabelID.set_mnemonic_widget (EntryID);
 
     // pressing enter in the id field is the same as clicking Set:
@@ -124,43 +170,72 @@ void ObjectProperties::MakeWidget(void)
     EntryID.grab_focus();
 
     /* Create the label for the object label */
+    LabelLabel.set_label (LabelLabel.get_label() + " ");
     LabelLabel.set_alignment (1, 0.5);
-    TopTable.attach (LabelLabel, 0, 1, 1, 2,
-                       Gtk::SHRINK | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+
+#if WITH_GTKMM_3_0
+    LabelLabel.set_valign(Gtk::ALIGN_CENTER);
+    TopTable->attach(LabelLabel, 0, 1, 1, 1);
+#else
+    TopTable->attach(LabelLabel, 0, 1, 1, 2,
+                     Gtk::SHRINK | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
 
     /* Create the entry box for the object label */
     EntryLabel.set_tooltip_text (_("A freeform label for the object"));
     EntryLabel.set_max_length (256);
-    TopTable.attach (EntryLabel, 1, 2, 1, 2,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+
+#if WITH_GTKMM_3_0
+    EntryLabel.set_hexpand();
+    EntryLabel.set_valign(Gtk::ALIGN_CENTER);
+    TopTable->attach(EntryLabel, 1, 1, 1, 1);
+#else
+    TopTable->attach(EntryLabel, 1, 2, 1, 2,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
     LabelLabel.set_mnemonic_widget (EntryLabel);
 
     // pressing enter in the label field is the same as clicking Set:
     EntryLabel.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::label_changed));
 
     /* Create the label for the object title */
+    LabelTitle.set_label (LabelTitle.get_label() + " ");
     LabelTitle.set_alignment (1, 0.5);
-    TopTable.attach (LabelTitle, 0, 1, 2, 3,
-                       Gtk::SHRINK | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+
+#if WITH_GTKMM_3_0
+    LabelTitle.set_valign(Gtk::ALIGN_CENTER);
+    TopTable->attach(LabelTitle, 0, 2, 1, 1);
+#else
+    TopTable->attach(LabelTitle, 0, 1, 2, 3,
+                     Gtk::SHRINK | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
 
     /* Create the entry box for the object title */
     EntryTitle.set_sensitive (FALSE);
     EntryTitle.set_max_length (256);
-    TopTable.attach (EntryTitle, 1, 3, 2, 3,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+
+#if WITH_GTKMM_3_0
+    EntryTitle.set_hexpand();
+    EntryTitle.set_valign(Gtk::ALIGN_CENTER);
+    TopTable->attach(EntryTitle, 1, 2, 1, 1);
+#else
+    TopTable->attach(EntryTitle, 1, 2, 2, 3,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
     LabelTitle.set_mnemonic_widget (EntryTitle);
+    // pressing enter in the label field is the same as clicking Set:
+    EntryTitle.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::label_changed));
 
     /* Create the frame for the object description */
     FrameDescription.set_label_widget (LabelDescription);
-    FrameDescription.set_padding (4,0,0,0);
-
-    TopTable.attach (FrameDescription, 0, 3, 3, 4,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::EXPAND | Gtk::FILL, 0, 0 );
+    FrameDescription.set_padding (0,0,0,0);
+    contents->pack_start (FrameDescription, true, true, 0);
 
     /* Create the text view box for the object description */
     FrameTextDescription.set_border_width(4);
@@ -175,27 +250,52 @@ void ObjectProperties::MakeWidget(void)
 
     /* Check boxes */
     contents->pack_start (HBoxCheck, FALSE, FALSE, 0);
-    CheckTable.set_border_width(0);
-    HBoxCheck.pack_start (CheckTable, TRUE, TRUE, 10);
+    CheckTable->set_border_width(4);
+    HBoxCheck.pack_start(*CheckTable, true, true, 0);
 
     /* Hide */
     CBHide.set_tooltip_text (_("Check to make the object invisible"));
-    CheckTable.attach (CBHide, 0, 1, 0, 1,
+
+#if WITH_GTKMM_3_0
+    CBHide.set_hexpand();
+    CBHide.set_valign(Gtk::ALIGN_CENTER);
+    CheckTable->attach(CBHide, 0, 0, 1, 1);
+#else
+    CheckTable->attach(CBHide, 0, 1, 0, 1,
                        Gtk::EXPAND | Gtk::FILL,
                        Gtk::AttachOptions(), 0, 0 );
+#endif
+
     CBHide.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::hidden_toggled));
 
     /* Lock */
     // TRANSLATORS: "Lock" is a verb here
     CBLock.set_tooltip_text (_("Check to make the object insensitive (not selectable by mouse)"));
-    CheckTable.attach (CBLock, 1, 2, 0, 1,
+
+#if WITH_GTKMM_3_0
+    CBLock.set_hexpand();
+    CBLock.set_valign(Gtk::ALIGN_CENTER);
+    CheckTable->attach(CBLock, 1, 0, 1, 1);
+#else
+    CheckTable->attach(CBLock, 1, 2, 0, 1,
                        Gtk::EXPAND | Gtk::FILL,
                        Gtk::AttachOptions(), 0, 0 );
+#endif
+
     CBLock.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::sensitivity_toggled));
 
 
     /* Button for setting the object's id, label, title and description. */
-    HBoxCheck.pack_start (BSet, TRUE, TRUE, 10);
+#if WITH_GTKMM_3_0
+    BSet.set_hexpand();
+    BSet.set_valign(Gtk::ALIGN_CENTER);
+    CheckTable->attach(BSet, 2, 0, 1, 1);
+#else
+    CheckTable->attach(BSet, 2, 3, 0, 1,
+                       Gtk::EXPAND | Gtk::FILL,
+                       Gtk::AttachOptions(), 0, 0 );
+#endif
+
     BSet.signal_clicked().connect(sigc::mem_fun(this, &ObjectProperties::label_changed));
 
     /* Create the frame for interactivity options */
@@ -224,7 +324,7 @@ void ObjectProperties::widget_setup(void)
         CurrentItem = NULL;
         //no selection anymore or multiple objects selected, means that we need
         //to close the connections to the previously selected object
-        attrTable.clear();
+        attrTable->clear();
         return;
     } else {
         contents->set_sensitive (true);
@@ -288,13 +388,13 @@ void ObjectProperties::widget_setup(void)
         
         if (CurrentItem == NULL)
         {
-            attrTable.set_object(obj, int_labels, int_labels, (GtkWidget*)EInteractivity.gobj());
+            attrTable->set_object(obj, int_labels, int_attrs, (GtkWidget*)EInteractivity.gobj());
         }
         else
         {
-            attrTable.change_object(obj);
+            attrTable->change_object(obj);
         }
-        attrTable.show_all();
+        attrTable->show_all();
     }
     CurrentItem = item;
     blocked = false;
@@ -332,7 +432,6 @@ void ObjectProperties::label_changed(void)
 
     /* Retrieve the label widget for the object's label */
     Glib::ustring label = EntryLabel.get_text();
-    g_assert(!label.empty());
 
     /* Give feedback on success of setting the drawing object's label
      * using the widget's label text

@@ -34,9 +34,10 @@
  *
  */
 
+#include <cmath>
+#include <cstdarg>
 #include <cstdio>
-#include <math.h>
-#include <stdarg.h>
+#include <cstdlib>
 
 #include "domstream.h"
 #include "dom/ucd.h"
@@ -66,7 +67,7 @@ void pipeStream(InputStream &source, OutputStream &dest)
         }
     dest.flush();
 }
-
+/*
 
 
 //#########################################################################
@@ -74,11 +75,11 @@ void pipeStream(InputStream &source, OutputStream &dest)
 //#########################################################################
 
 static char const *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
-
-static int dprintInt(Writer &outs,
-                     long arg, int base,
-                     int flag, int width, int /*precision*/)
-{
+*/
+// static int dprintInt(Writer &outs,
+                     // long arg, int base,
+                     // int flag, int width, int /*precision*/)
+/*{
 
     DOMString buf;
 
@@ -209,7 +210,7 @@ static int dprintDouble(Writer &outs, double val,
         }
     return 1;
 }
-
+*/
 
 /**
  * Output a string.  We veer from the standard a tiny bit.
@@ -217,9 +218,9 @@ static int dprintDouble(Writer &outs, double val,
  * it as an indicator that the user wants to XML-escape any
  * XML entities.
  */
-static int dprintString(Writer &outs, const DOMString &str,
-                        int flags, int /*width*/, int /*precision*/)
-{
+// static int dprintString(Writer &outs, const DOMString &str,
+                        // int flags, int /*width*/, int /*precision*/)
+/*{
     int len = str.size();
     if (flags == '#')
         {
@@ -418,18 +419,17 @@ static int dprintf(Writer &outs, const DOMString &fmt, va_list ap)
 
     return 1;
 }
-
+*/
 
 //#########################################################################
 //# B A S I C    I N P U T    S T R E A M
 //#########################################################################
 
-
 /**
  *
- */
-BasicInputStream::BasicInputStream(const InputStream &sourceStream)
-                   : source((InputStream &)sourceStream)
+ */ 
+BasicInputStream::BasicInputStream(InputStream &sourceStream)
+                   : source(sourceStream)
 {
     closed = false;
 }
@@ -438,7 +438,7 @@ BasicInputStream::BasicInputStream(const InputStream &sourceStream)
  * Returns the number of bytes that can be read (or skipped over) from
  * this input stream without blocking by the next caller of a method for
  * this input stream.
- */
+ */ 
 int BasicInputStream::available()
 {
     if (closed)
@@ -446,11 +446,11 @@ int BasicInputStream::available()
     return source.available();
 }
 
-
+    
 /**
  *  Closes this input stream and releases any system resources
  *  associated with the stream.
- */
+ */ 
 void BasicInputStream::close()
 {
     if (closed)
@@ -458,10 +458,10 @@ void BasicInputStream::close()
     source.close();
     closed = true;
 }
-
+    
 /**
  * Reads the next byte of data from the input stream.  -1 if EOF
- */
+ */ 
 int BasicInputStream::get()
 {
     if (closed)
@@ -477,9 +477,9 @@ int BasicInputStream::get()
 
 /**
  *
- */
-BasicOutputStream::BasicOutputStream(const OutputStream &destinationStream)
-                     : destination((OutputStream &)destinationStream)
+ */ 
+BasicOutputStream::BasicOutputStream(OutputStream &destinationStream)
+                     : destination(destinationStream)
 {
     closed = false;
 }
@@ -487,7 +487,7 @@ BasicOutputStream::BasicOutputStream(const OutputStream &destinationStream)
 /**
  * Closes this output stream and releases any system resources
  * associated with this stream.
- */
+ */ 
 void BasicOutputStream::close()
 {
     if (closed)
@@ -495,40 +495,33 @@ void BasicOutputStream::close()
     destination.close();
     closed = true;
 }
-
+    
 /**
  *  Flushes this output stream and forces any buffered output
  *  bytes to be written out.
- */
+ */ 
 void BasicOutputStream::flush()
 {
     if (closed)
         return;
     destination.flush();
 }
-
+    
 /**
  * Writes the specified byte to this output stream.
- */
-int BasicOutputStream::put(XMLCh ch)
+ */ 
+int BasicOutputStream::put(gunichar ch)
 {
     if (closed)
         return -1;
-    if (destination.put(ch) < 0)
-        return -1;
+    destination.put(ch);
     return 1;
 }
-
 
 
 //#########################################################################
 //# B A S I C    R E A D E R
 //#########################################################################
-
-
-/**
- *
- */
 BasicReader::BasicReader(Reader &sourceReader)
 {
     source = &sourceReader;
@@ -538,7 +531,7 @@ BasicReader::BasicReader(Reader &sourceReader)
  * Returns the number of bytes that can be read (or skipped over) from
  * this reader without blocking by the next caller of a method for
  * this reader.
- */
+ */ 
 int BasicReader::available()
 {
     if (source)
@@ -547,69 +540,65 @@ int BasicReader::available()
         return 0;
 }
 
-
+    
 /**
  *  Closes this reader and releases any system resources
  *  associated with the reader.
- */
+ */ 
 void BasicReader::close()
 {
     if (source)
         source->close();
 }
-
+    
 /**
  * Reads the next byte of data from the reader.
- */
-int BasicReader::get()
+ */ 
+gunichar BasicReader::get()
 {
     if (source)
         return source->get();
     else
-        return -1;
+        return (gunichar)-1;
 }
-
-
-
-
-
+   
 
 /**
  * Reads a line of data from the reader.
- */
-DOMString BasicReader::readLine()
+ */ 
+Glib::ustring BasicReader::readLine()
 {
-    DOMString str;
+    Glib::ustring str;
     while (available() > 0)
         {
-        XMLCh ch = get();
+        gunichar ch = get();
         if (ch == '\n')
             break;
         str.push_back(ch);
         }
     return str;
 }
-
+   
 /**
  * Reads a line of data from the reader.
- */
-DOMString BasicReader::readWord()
+ */ 
+Glib::ustring BasicReader::readWord()
 {
-    DOMString str;
+    Glib::ustring str;
     while (available() > 0)
         {
-        XMLCh ch = get();
-        if (uni_is_space(ch))
+        gunichar ch = get();
+        if (!g_unichar_isprint(ch))
             break;
         str.push_back(ch);
         }
     return str;
 }
+   
 
-
-static bool getLong(DOMString &str, long *val)
+static bool getLong(Glib::ustring &str, long *val)
 {
-    const char *begin = str.c_str();
+    const char *begin = str.raw().c_str();
     char *end;
     long ival = strtol(begin, &end, 10);
     if (str == end)
@@ -618,25 +607,23 @@ static bool getLong(DOMString &str, long *val)
     return true;
 }
 
-static bool getULong(const DOMString &str, unsigned long *val)
+static bool getULong(Glib::ustring &str, unsigned long *val)
 {
-    DOMString tmp = str;
-    char *begin = (char *)tmp.c_str();
+    const char *begin = str.raw().c_str();
     char *end;
     unsigned long ival = strtoul(begin, &end, 10);
-    if (begin == end)
+    if (str == end)
         return false;
     *val = ival;
     return true;
 }
 
-static bool getDouble(const DOMString &str, double *val)
+static bool getDouble(Glib::ustring &str, double *val)
 {
-    DOMString tmp = str;
-    const char *begin = tmp.c_str();
+    const char *begin = str.raw().c_str();
     char *end;
     double ival = strtod(begin, &end);
-    if (begin == end)
+    if (str == end)
         return false;
     *val = ival;
     return true;
@@ -644,13 +631,9 @@ static bool getDouble(const DOMString &str, double *val)
 
 
 
-
-/**
- *
- */
-Reader &BasicReader::readBool (bool& val )
+const Reader &BasicReader::readBool (bool& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     if (buf == "true")
         val = true;
     else
@@ -658,96 +641,72 @@ Reader &BasicReader::readBool (bool& val )
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readShort (short& val )
+const Reader &BasicReader::readShort (short& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     long ival;
     if (getLong(buf, &ival))
         val = (short) ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readUnsignedShort (unsigned short& val )
+const Reader &BasicReader::readUnsignedShort (unsigned short& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     unsigned long ival;
     if (getULong(buf, &ival))
         val = (unsigned short) ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readInt (int& val )
+const Reader &BasicReader::readInt (int& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     long ival;
     if (getLong(buf, &ival))
         val = (int) ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readUnsignedInt (unsigned int& val )
+const Reader &BasicReader::readUnsignedInt (unsigned int& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     unsigned long ival;
     if (getULong(buf, &ival))
         val = (unsigned int) ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readLong (long& val )
+const Reader &BasicReader::readLong (long& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     long ival;
     if (getLong(buf, &ival))
         val = ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readUnsignedLong (unsigned long& val )
+const Reader &BasicReader::readUnsignedLong (unsigned long& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     unsigned long ival;
     if (getULong(buf, &ival))
         val = ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readFloat (float& val )
+const Reader &BasicReader::readFloat (float& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     double ival;
     if (getDouble(buf, &ival))
         val = (float)ival;
     return *this;
 }
 
-/**
- *
- */
-Reader &BasicReader::readDouble (double& val )
+const Reader &BasicReader::readDouble (double& val )
 {
-    DOMString buf = readWord();
+    Glib::ustring buf = readWord();
     double ival;
     if (getDouble(buf, &ival))
         val = ival;
@@ -761,12 +720,12 @@ Reader &BasicReader::readDouble (double& val )
 //#########################################################################
 
 
-InputStreamReader::InputStreamReader(const InputStream &inputStreamSource)
-                     : inputStream((InputStream &)inputStreamSource)
+InputStreamReader::InputStreamReader(InputStream &inputStreamSource)
+                     : inputStream(inputStreamSource)
 {
 }
 
-
+    
 
 /**
  *  Close the underlying OutputStream
@@ -775,7 +734,7 @@ void InputStreamReader::close()
 {
     inputStream.close();
 }
-
+    
 /**
  *  Flush the underlying OutputStream
  */
@@ -783,15 +742,15 @@ int InputStreamReader::available()
 {
     return inputStream.available();
 }
-
+    
 /**
  *  Overloaded to receive its bytes from an InputStream
  *  rather than a Reader
  */
-int InputStreamReader::get()
+gunichar InputStreamReader::get()
 {
     //Do we need conversions here?
-    int ch = (XMLCh)inputStream.get();
+    gunichar ch = (gunichar)inputStream.get();
     return ch;
 }
 
@@ -818,7 +777,7 @@ StdReader::~StdReader()
     delete inputStream;
 }
 
-
+    
 
 /**
  *  Close the underlying OutputStream
@@ -827,7 +786,7 @@ void StdReader::close()
 {
     inputStream->close();
 }
-
+    
 /**
  *  Flush the underlying OutputStream
  */
@@ -835,18 +794,17 @@ int StdReader::available()
 {
     return inputStream->available();
 }
-
+    
 /**
  *  Overloaded to receive its bytes from an InputStream
  *  rather than a Reader
  */
-int StdReader::get()
+gunichar StdReader::get()
 {
     //Do we need conversions here?
-    XMLCh ch = (XMLCh)inputStream->get();
+    gunichar ch = (gunichar)inputStream->get();
     return ch;
 }
-
 
 
 
@@ -854,39 +812,38 @@ int StdReader::get()
 //#########################################################################
 //# B A S I C    W R I T E R
 //#########################################################################
-
 /**
  *
- */
+ */ 
 BasicWriter::BasicWriter(const Writer &destinationWriter)
 {
-    destination = (Writer *)&destinationWriter;
+    destination = (Writer*) &destinationWriter;
 }
 
 /**
  * Closes this writer and releases any system resources
  * associated with this writer.
- */
+ */ 
 void BasicWriter::close()
 {
     if (destination)
         destination->close();
 }
-
+    
 /**
  *  Flushes this output stream and forces any buffered output
  *  bytes to be written out.
- */
+ */ 
 void BasicWriter::flush()
 {
     if (destination)
         destination->flush();
 }
-
+    
 /**
  * Writes the specified byte to this output writer.
- */
-int BasicWriter::put(XMLCh ch)
+ */ 
+int BasicWriter::put(gunichar ch)
 {
     if (destination && destination->put(ch)>=0)
         return 1;
@@ -895,49 +852,65 @@ int BasicWriter::put(XMLCh ch)
 
 /**
  * Provide printf()-like formatting
- */
-/*
+ */ 
 Writer &BasicWriter::printf(char const *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
-    //replace this wish vsnprintf()
-    vsnprintf(formatBuf, 2047, fmt, args);
+    gchar *buf = g_strdup_vprintf(fmt, args);
     va_end(args);
-    writeString(formatBuf);
-
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
     return *this;
 }
-*/
-Writer &BasicWriter::printf(const DOMString &fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-    dprintf(*this, fmt, args);
-    return *this;
-}
-
-
 /**
  * Writes the specified character to this output writer.
- */
+ */ 
 Writer &BasicWriter::writeChar(char ch)
 {
-    XMLCh uch = ch;
+    gunichar uch = ch;
     put(uch);
     return *this;
 }
 
 
 /**
- * Writes the specified standard string to this output writer.
- */
-Writer &BasicWriter::writeString(const DOMString &str)
+ * Writes the specified unicode string to this output writer.
+ */ 
+Writer &BasicWriter::writeUString(Glib::ustring &str)
 {
     for (int i=0; i< (int)str.size(); i++)
         put(str[i]);
     return *this;
 }
+
+/**
+ * Writes the specified standard string to this output writer.
+ */ 
+Writer &BasicWriter::writeStdString(std::string &str)
+{
+    Glib::ustring tmp(str);
+    writeUString(tmp);
+    return *this;
+}
+
+/**
+ * Writes the specified character string to this output writer.
+ */ 
+Writer &BasicWriter::writeString(const char *str)
+{
+    Glib::ustring tmp;
+    if (str)
+        tmp = str;
+    else
+        tmp = "null";
+    writeUString(tmp);
+    return *this;
+}
+
+
 
 
 /**
@@ -958,10 +931,12 @@ Writer &BasicWriter::writeBool (bool val )
  */
 Writer &BasicWriter::writeShort (short val )
 {
-    char buf[32];
-    snprintf(buf, 31, "%d", val);
-    writeString(buf);
-    return *this;
+    gchar *buf = g_strdup_printf("%d", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
+  return *this;
 }
 
 
@@ -971,9 +946,11 @@ Writer &BasicWriter::writeShort (short val )
  */
 Writer &BasicWriter::writeUnsignedShort (unsigned short val )
 {
-    char buf[32];
-    snprintf(buf, 31, "%u", val);
-    writeString(buf);
+    gchar *buf = g_strdup_printf("%u", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
     return *this;
 }
 
@@ -982,9 +959,11 @@ Writer &BasicWriter::writeUnsignedShort (unsigned short val )
  */
 Writer &BasicWriter::writeInt (int val)
 {
-    char buf[32];
-    snprintf(buf, 31, "%d", val);
-    writeString(buf);
+    gchar *buf = g_strdup_printf("%d", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
     return *this;
 }
 
@@ -993,9 +972,11 @@ Writer &BasicWriter::writeInt (int val)
  */
 Writer &BasicWriter::writeUnsignedInt (unsigned int val)
 {
-    char buf[32];
-    snprintf(buf, 31, "%u", val);
-    writeString(buf);
+    gchar *buf = g_strdup_printf("%u", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
     return *this;
 }
 
@@ -1004,9 +985,11 @@ Writer &BasicWriter::writeUnsignedInt (unsigned int val)
  */
 Writer &BasicWriter::writeLong (long val)
 {
-    char buf[32];
-    snprintf(buf, 31, "%ld", val);
-    writeString(buf);
+    gchar *buf = g_strdup_printf("%ld", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
     return *this;
 }
 
@@ -1015,9 +998,11 @@ Writer &BasicWriter::writeLong (long val)
  */
 Writer &BasicWriter::writeUnsignedLong(unsigned long val)
 {
-    char buf[32];
-    snprintf(buf, 31, "%lu", val);
-    writeString(buf);
+    gchar *buf = g_strdup_printf("%lu", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
     return *this;
 }
 
@@ -1026,9 +1011,16 @@ Writer &BasicWriter::writeUnsignedLong(unsigned long val)
  */
 Writer &BasicWriter::writeFloat(float val)
 {
-    char buf[32];
-    snprintf(buf, 31, "%8.3f", val);
-    writeString(buf);
+#if 1
+    gchar *buf = g_strdup_printf("%8.3f", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
+#else
+    std::string tmp = ftos(val, 'g', 8, 3, 0);
+    writeStdString(tmp);
+#endif
     return *this;
 }
 
@@ -1037,9 +1029,16 @@ Writer &BasicWriter::writeFloat(float val)
  */
 Writer &BasicWriter::writeDouble(double val)
 {
-    char buf[32];
-    snprintf(buf, 31, "%8.3f", val);
-    writeString(buf);
+#if 1
+    gchar *buf = g_strdup_printf("%8.3f", val);
+    if (buf) {
+        writeString(buf);
+        g_free(buf);
+    }
+#else
+    std::string tmp = ftos(val, 'g', 8, 3, 0);
+    writeStdString(tmp);
+#endif
     return *this;
 }
 
@@ -1056,7 +1055,7 @@ OutputStreamWriter::OutputStreamWriter(OutputStream &outputStreamDest)
 {
 }
 
-
+    
 
 /**
  *  Close the underlying OutputStream
@@ -1066,7 +1065,7 @@ void OutputStreamWriter::close()
     flush();
     outputStream.close();
 }
-
+    
 /**
  *  Flush the underlying OutputStream
  */
@@ -1074,18 +1073,16 @@ void OutputStreamWriter::flush()
 {
       outputStream.flush();
 }
-
+    
 /**
  *  Overloaded to redirect the output chars from the next Writer
  *  in the chain to an OutputStream instead.
  */
-int OutputStreamWriter::put(XMLCh ch)
+int OutputStreamWriter::put(gunichar ch)
 {
-    //Do we need conversions here?
-    int intCh = (int) ch;
-    if (outputStream.put(intCh) < 0)
-        return -1;
-    return 1;
+    if (outputStream.put(ch)>=0)
+        return 1;
+    return -1;
 }
 
 //#########################################################################
@@ -1094,23 +1091,20 @@ int OutputStreamWriter::put(XMLCh ch)
 
 
 /**
- *
+ *  
  */
 StdWriter::StdWriter()
 {
     outputStream = new StdOutputStream();
 }
-
-
+    
 /**
- *
+ *  
  */
 StdWriter::~StdWriter()
 {
     delete outputStream;
 }
-
-
 
 /**
  *  Close the underlying OutputStream
@@ -1120,7 +1114,7 @@ void StdWriter::close()
     flush();
     outputStream->close();
 }
-
+    
 /**
  *  Flush the underlying OutputStream
  */
@@ -1128,28 +1122,17 @@ void StdWriter::flush()
 {
       outputStream->flush();
 }
-
+    
 /**
  *  Overloaded to redirect the output chars from the next Writer
  *  in the chain to an OutputStream instead.
  */
-int StdWriter::put(XMLCh ch)
+int StdWriter::put(gunichar ch)
 {
-    //Do we need conversions here?
-    int intCh = (int) ch;
-    if (outputStream->put(intCh) < 0)
-        return -1;
-    return 1;
+    if (outputStream && (outputStream->put(ch)>=0))
+        return 1;
+    return -1;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1166,40 +1149,45 @@ int StdWriter::put(XMLCh ch)
 
 
 
-Reader& operator>> (Reader &reader, bool& val )
+const Reader& operator>> (Reader &reader, bool& val )
         { return reader.readBool(val); }
 
-Reader& operator>> (Reader &reader, short &val)
+const Reader& operator>> (Reader &reader, short &val)
         { return reader.readShort(val); }
 
-Reader& operator>> (Reader &reader, unsigned short &val)
+const Reader& operator>> (Reader &reader, unsigned short &val)
         { return reader.readUnsignedShort(val); }
 
-Reader& operator>> (Reader &reader, int &val)
+const Reader& operator>> (Reader &reader, int &val)
         { return reader.readInt(val); }
 
-Reader& operator>> (Reader &reader, unsigned int &val)
+const Reader& operator>> (Reader &reader, unsigned int &val)
         { return reader.readUnsignedInt(val); }
 
-Reader& operator>> (Reader &reader, long &val)
+const Reader& operator>> (Reader &reader, long &val)
         { return reader.readLong(val); }
 
-Reader& operator>> (Reader &reader, unsigned long &val)
+const Reader& operator>> (Reader &reader, unsigned long &val)
         { return reader.readUnsignedLong(val); }
 
-Reader& operator>> (Reader &reader, float &val)
+const Reader& operator>> (Reader &reader, float &val)
         { return reader.readFloat(val); }
 
-Reader& operator>> (Reader &reader, double &val)
+const Reader& operator>> (Reader &reader, double &val)
         { return reader.readDouble(val); }
-
 
 
 
 Writer& operator<< (Writer &writer, char val)
     { return writer.writeChar(val); }
 
-Writer& operator<< (Writer &writer, const DOMString &val)
+Writer& operator<< (Writer &writer, Glib::ustring &val)
+    { return writer.writeUString(val); }
+
+Writer& operator<< (Writer &writer, std::string &val)
+    { return writer.writeStdString(val); }
+
+Writer& operator<< (Writer &writer, char const *val)
     { return writer.writeString(val); }
 
 Writer& operator<< (Writer &writer, bool val)
@@ -1228,8 +1216,6 @@ Writer& operator<< (Writer &writer, float val)
 
 Writer& operator<< (Writer &writer, double val)
     { return writer.writeDouble(val); }
-
-
 
 }  //namespace io
 }  //namespace dom

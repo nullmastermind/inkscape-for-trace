@@ -46,12 +46,12 @@ class KnotHolderEntityCrossingSwitcher : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityCrossingSwitcher(LPEKnot *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     virtual void knot_click(guint state);
 };
 
 
-Geom::Path::size_type size_nondegenerate(Geom::Path const &path) {
+static Geom::Path::size_type size_nondegenerate(Geom::Path const &path) {
     Geom::Path::size_type retval = path.size_open();
 
     // if path is closed and closing segment is not degenerate
@@ -283,7 +283,7 @@ CrossingPoints::get(unsigned const i, unsigned const ni)
     return CrossingPoint();
 }
 
-unsigned
+static unsigned
 idx_of_nearest(CrossingPoints const &cpts, Geom::Point const &p)
 {
     double dist=-1;
@@ -500,7 +500,8 @@ LPEKnot::doEffect_path (std::vector<Geom::Path> const &path_in)
 
 
 //recursively collect gpaths and stroke widths (stolen from "sp-lpe_item.cpp").
-void collectPathsAndWidths (SPLPEItem const *lpeitem, std::vector<Geom::Path> &paths, std::vector<double> &stroke_widths){
+static void
+collectPathsAndWidths (SPLPEItem const *lpeitem, std::vector<Geom::Path> &paths, std::vector<double> &stroke_widths){
     if (SP_IS_GROUP(lpeitem)) {
         GSList const *item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
         for ( GSList const *iter = item_list; iter; iter = iter->next ) {
@@ -530,7 +531,7 @@ void collectPathsAndWidths (SPLPEItem const *lpeitem, std::vector<Geom::Path> &p
 
 
 void
-LPEKnot::doBeforeEffect (SPLPEItem *lpeitem)
+LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
@@ -630,10 +631,10 @@ KnotHolderEntityCrossingSwitcher::knot_set(Geom::Point const &p, Geom::Point con
 }
 
 Geom::Point
-KnotHolderEntityCrossingSwitcher::knot_get()
+KnotHolderEntityCrossingSwitcher::knot_get() const
 {
-    LPEKnot* lpe = dynamic_cast<LPEKnot *>(_effect);
-    return snap_knot_position(lpe->switcher);
+    LPEKnot const *lpe = dynamic_cast<LPEKnot const*>(_effect);
+    return lpe->switcher;
 }
 
 void

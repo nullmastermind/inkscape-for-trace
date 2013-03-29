@@ -19,8 +19,8 @@
 #include "display/nr-filter-types.h"
 
 class SPDocument;
-class SPFilter;
-class SPFilterPrimitive;
+struct SPFilter;
+struct SPFilterPrimitive;
 class SPItem;
 class SPObject;
 

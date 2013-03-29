@@ -32,14 +32,14 @@ class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityLeftEnd(LPEParallel *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 class KnotHolderEntityRightEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityRightEnd(LPEParallel *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 } // namespace Pl
@@ -48,8 +48,8 @@ LPEParallel::LPEParallel(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // initialise your parameters here:
     offset_pt(_("Offset"), _("Adjust the offset"), "offset_pt", &wr, this),
-    length_left(_("Length left"), _("Specifies the left end of the parallel"), "length-left", &wr, this, 150),
-    length_right(_("Length right"), _("Specifies the right end of the parallel"), "length-right", &wr, this, 150)
+    length_left(_("Length left:"), _("Specifies the left end of the parallel"), "length-left", &wr, this, 150),
+    length_right(_("Length right:"), _("Specifies the right end of the parallel"), "length-right", &wr, this, 150)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
@@ -65,7 +65,7 @@ LPEParallel::~LPEParallel()
 }
 
 void
-LPEParallel::doOnApply (SPLPEItem *lpeitem)
+LPEParallel::doOnApply (SPLPEItem const* lpeitem)
 {
     SPCurve const *curve = SP_SHAPE(lpeitem)->_curve;
 
@@ -113,13 +113,13 @@ void LPEParallel::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *deskt
 namespace Pl {
 
 void
-KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     using namespace Geom;
 
     LPEParallel *lpe = dynamic_cast<LPEParallel *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = L2(s - lpe->offset_pt) * sgn(dot(s - lpe->offset_pt, lpe->dir));
     lpe->length_left.param_set_value(-lambda);
@@ -128,13 +128,13 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
 }
 
 void
-KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     using namespace Geom;
 
     LPEParallel *lpe = dynamic_cast<LPEParallel *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = L2(s - lpe->offset_pt) * sgn(dot(s - lpe->offset_pt, lpe->dir));
     lpe->length_right.param_set_value(lambda);
@@ -143,16 +143,16 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
 }
 
 Geom::Point
-KnotHolderEntityLeftEnd::knot_get()
+KnotHolderEntityLeftEnd::knot_get() const
 {
-    LPEParallel *lpe = dynamic_cast<LPEParallel *>(_effect);
+    LPEParallel const *lpe = dynamic_cast<LPEParallel const*>(_effect);
     return lpe->C;
 }
 
 Geom::Point
-KnotHolderEntityRightEnd::knot_get()
+KnotHolderEntityRightEnd::knot_get() const
 {
-    LPEParallel *lpe = dynamic_cast<LPEParallel *>(_effect);
+    LPEParallel const *lpe = dynamic_cast<LPEParallel const*>(_effect);
     return lpe->D;
 }
 

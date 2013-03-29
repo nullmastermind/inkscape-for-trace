@@ -7,13 +7,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#include "device-manager.h"
 #include <map>
 #include <set>
 
-#include "device-manager.h"
 #include "preferences.h"
 #include <gtk/gtk.h>
+#include <glibmm/regex.h>
 
 #define noDEBUG_VERBOSE 1
 
@@ -42,12 +42,7 @@ static bool isValidDevice(GdkDevice *device)
 	gboolean source_matches = (gdk_device_get_source (device) == fakeout[i].source);
 	gboolean mode_matches = (gdk_device_get_mode (device) == fakeout[i].mode);
 	gboolean num_axes_matches = (gdk_device_get_n_axes (device) == fakeout[i].num_axes);
-
-#if GTK_CHECK_VERSION (2, 24, 0)
 	gboolean num_keys_matches = (gdk_device_get_n_keys (device) == fakeout[i].num_keys);
-#else
-	gboolean num_keys_matches = (device->num_keys == fakeout[i].num_keys);
-#endif
 
 	if (name_matches && source_matches && mode_matches 
 			&& num_axes_matches && num_keys_matches)
@@ -113,7 +108,7 @@ static std::map<Glib::ustring, Gdk::AxisUse> &getStringToAxis()
     return mapping;
 }
 
-std::map<Gdk::AxisUse, Glib::ustring> &getAxisToString()
+static std::map<Gdk::AxisUse, Glib::ustring> &getAxisToString()
 {
     static bool init = false;
     static std::map<Gdk::AxisUse, Glib::ustring> mapping;
@@ -139,7 +134,7 @@ static std::map<Glib::ustring, Gdk::InputMode> &getStringToMode()
     return mapping;
 }
 
-std::map<Gdk::InputMode, Glib::ustring> &getModeToString()
+static std::map<Gdk::InputMode, Glib::ustring> &getModeToString()
 {
     static bool init = false;
     static std::map<Gdk::InputMode, Glib::ustring> mapping;
@@ -173,14 +168,7 @@ public:
     virtual bool hasCursor() const {return gdk_device_get_has_cursor (device);}
 
     virtual gint getNumKeys() const {
-// Backward-compatibility: The GSEAL-compliant
-// gdk_device_get_n_keys function was only introduced
-// with GTK 2.24
-#if GTK_CHECK_VERSION(2, 24, 0)
-	    return gdk_device_get_n_keys (device);
-#else
-	    return device->num_keys;
-#endif // GTK_CHECK_VERSION
+        return gdk_device_get_n_keys (device);
     }
     virtual Glib::ustring getLink() const {return link;}
     virtual void setLink( Glib::ustring const& link ) {this->link = link;}
@@ -690,11 +678,7 @@ static void createFakeList() {
             fakeout[4].mode = gdk_device_get_mode (device);
             fakeout[4].has_cursor = gdk_device_get_has_cursor (device);
             fakeout[4].num_axes = gdk_device_get_n_axes (device);
-#if GTK_CHECK_VERSION (2, 24, 0)
             fakeout[4].num_keys = gdk_device_get_n_keys (device);
-#else
-            fakeout[4].num_keys = device->num_keys;
-#endif
         } else {
             fakeout[4].name = g_strdup("Core Pointer");
             fakeout[4].source = GDK_SOURCE_MOUSE;

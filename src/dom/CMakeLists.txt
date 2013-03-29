@@ -14,22 +14,13 @@ set(dom_SRC
 	ucd.cpp
 	uri.cpp
 	xmlreader.cpp
-	# xmlwriter.cpp
 	xpathimpl.cpp
 	xpathparser.cpp
 	xpathtoken.cpp
-
-	io/base64stream.cpp
-	io/bufferstream.cpp
+	
 	io/domstream.cpp
-	io/gzipstream.cpp
-	io/stringstream.cpp
-	io/uristream.cpp
-
-	odf/odfdocument.cpp
-
+	
 	util/digest.cpp
-	util/thread.cpp
 	util/ziptool.cpp
 
 
@@ -64,17 +55,9 @@ set(dom_SRC
 	xpathparser.h
 	xpathtoken.h
 
-	odf/odfdocument.h
-
-	io/base64stream.h
-	io/bufferstream.h
 	io/domstream.h
-	io/gzipstream.h
-	io/stringstream.h
-	io/uristream.h
 
 	util/digest.h
-	util/thread.h
 	util/ziptool.h
 )
 

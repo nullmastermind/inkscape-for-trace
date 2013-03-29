@@ -28,7 +28,6 @@
 #define SP_IS_TREF(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_TREF))
 #define SP_IS_TREF_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TREF))
 
-class SPTRef;
 class CTRef;
 
 class SPTRef : public SPItem {

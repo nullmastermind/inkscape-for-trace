@@ -37,6 +37,8 @@
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 
+#include <glibmm/regex.h>
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -207,7 +209,7 @@ GSList * FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *
 
     // Check if any document styles are not in the actual layout
     std::map<SPItem *, Glib::ustring>::const_iterator mapIter;
-    for (mapIter = mapFontStyles.begin(); mapIter != mapFontStyles.end(); mapIter++) {
+    for (mapIter = mapFontStyles.begin(); mapIter != mapFontStyles.end(); ++mapIter) {
         SPItem *item = mapIter->first;
         Glib::ustring fonts = mapIter->second;
 
@@ -241,7 +243,7 @@ GSList * FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *
     }
 
     std::set<Glib::ustring>::const_iterator setIter;
-    for (setIter = setErrors.begin(); setIter != setErrors.end(); setIter++) {
+    for (setIter = setErrors.begin(); setIter != setErrors.end(); ++setIter) {
         Glib::ustring err = (*setIter);
         out->append(err + "\n");
         g_warning("%s", err.c_str());
@@ -260,7 +262,7 @@ Glib::ustring FontSubstitution::getSubstituteFontName (Glib::ustring font)
     font_instance *res = (font_factory::Default())->Face(descr);
     if (res->pFont) {
         PangoFontDescription *nFaceDesc = pango_font_describe(res->pFont);
-        out = pango_font_description_get_family(nFaceDesc);
+        out = sp_font_description_get_family(nFaceDesc);
     }
     pango_font_description_free(descr);
 

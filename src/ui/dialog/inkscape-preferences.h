@@ -18,15 +18,19 @@
 #include <iostream>
 #include <vector>
 #include "ui/widget/preferences-widget.h"
+#include "ui/widget/button.h"
+#include <stddef.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/notebook.h>
-#include <stddef.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/treemodelfilter.h>
 
 #include "ui/widget/panel.h"
 
@@ -60,6 +64,7 @@ enum {
     PREFS_PAGE_UI,
     PREFS_PAGE_UI_WINDOWS,
     PREFS_PAGE_UI_GRIDS,
+    PREFS_PAGE_UI_KEYBOARD_SHORTCUTS,
     PREFS_PAGE_BEHAVIOR,
     PREFS_PAGE_BEHAVIOR_SELECTING,
     PREFS_PAGE_BEHAVIOR_TRANSFORMS,
@@ -68,6 +73,7 @@ enum {
     PREFS_PAGE_BEHAVIOR_STEPS,
     PREFS_PAGE_BEHAVIOR_CLONES,
     PREFS_PAGE_BEHAVIOR_MASKS,
+    PREFS_PAGE_BEHAVIOR_MARKERS,
     PREFS_PAGE_IO,
     PREFS_PAGE_IO_MOUSE,
     PREFS_PAGE_IO_SVGOUTPUT,
@@ -78,7 +84,16 @@ enum {
     PREFS_PAGE_BITMAPS,
     PREFS_PAGE_RENDERING,
     PREFS_PAGE_SPELLCHECK
+
 };
+
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Scale;
+#else
+class HScale;
+#endif
+}
 
 namespace Inkscape {
 namespace UI {
@@ -151,6 +166,7 @@ protected:
     UI::Widget::DialogPage _page_steps;
     UI::Widget::DialogPage _page_clones;
     UI::Widget::DialogPage _page_mask;
+    UI::Widget::DialogPage _page_markers;
 
     UI::Widget::DialogPage _page_io;
     UI::Widget::DialogPage _page_mouse;
@@ -163,6 +179,8 @@ protected:
     UI::Widget::DialogPage _page_system;
     UI::Widget::DialogPage _page_bitmaps;
     UI::Widget::DialogPage _page_spellcheck;
+
+    UI::Widget::DialogPage _page_keyshortcuts;
 
     UI::Widget::PrefSpinButton _mouse_sens;
     UI::Widget::PrefSpinButton _mouse_thres;
@@ -178,7 +196,12 @@ protected:
     UI::Widget::PrefCheckButton _scroll_space;
     UI::Widget::PrefCheckButton _wheel_zoom;
 
+#if WITH_GTKMM_3_0
+    Gtk::Scale      *_slider_snapping_delay;
+#else
     Gtk::HScale     *_slider_snapping_delay;
+#endif
+
     UI::Widget::PrefCheckButton _snap_indicator;
     UI::Widget::PrefCheckButton _snap_closest_only;
     UI::Widget::PrefCheckButton _snap_mouse_pointer;
@@ -225,6 +248,7 @@ protected:
     UI::Widget::PrefRadioButton _win_save_geom;
     UI::Widget::PrefRadioButton _win_save_geom_prefs;
     UI::Widget::PrefCheckButton _win_hide_task;
+    UI::Widget::PrefCheckButton _win_save_viewport;
     UI::Widget::PrefCheckButton _win_zoom_resize;
     UI::Widget::PrefCheckButton _win_show_close;
     UI::Widget::PrefSpinButton _win_trans_focus; /**< The dialog transparency setting for when the dialog is focused. */
@@ -263,6 +287,8 @@ protected:
     UI::Widget::PrefRadioButton _filter_quality_worse;
     UI::Widget::PrefRadioButton _filter_quality_worst;
     UI::Widget::PrefCheckButton _show_filters_info_box;
+    UI::Widget::PrefCombo       _dockbar_style;
+    UI::Widget::PrefCombo       _switcher_style;
     UI::Widget::PrefSpinButton  _rendering_cache_size;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
 
@@ -281,17 +307,24 @@ protected:
     UI::Widget::PrefCheckButton _sel_layer_deselects;
     UI::Widget::PrefCheckButton _sel_cycle;
 
+    UI::Widget::PrefCheckButton _markers_color_stock;
+    UI::Widget::PrefCheckButton _markers_color_custom;
+    UI::Widget::PrefCheckButton _markers_color_update;
+
     UI::Widget::PrefSpinButton  _importexport_export_res;
     UI::Widget::PrefSpinButton  _importexport_import_res;
+    UI::Widget::PrefCheckButton _importexport_import_res_override;
     UI::Widget::PrefSlider      _snap_delay;
     UI::Widget::PrefSlider      _snap_weight;
     UI::Widget::PrefCheckButton _font_dialog;
     UI::Widget::PrefCombo       _font_unit_type;
+    UI::Widget::PrefCheckButton _font_output_px;
 
     UI::Widget::PrefCheckButton _misc_comment;
     UI::Widget::PrefCheckButton _misc_default_metadata;
     UI::Widget::PrefCheckButton _misc_forkvectors;
     UI::Widget::PrefCheckButton _misc_gradienteditor;
+    UI::Widget::PrefSpinButton  _misc_gradientangle;
     UI::Widget::PrefCheckButton _misc_scripts;
     UI::Widget::PrefCheckButton _misc_namedicon_delay;
 
@@ -327,11 +360,15 @@ protected:
     UI::Widget::PrefCheckButton _spell_ignorenumbers;
     UI::Widget::PrefCheckButton _spell_ignoreallcaps;
 
+
     UI::Widget::PrefCombo       _misc_overs_bitmap;
     UI::Widget::PrefEntryFileButtonHBox       _misc_bitmap_editor;
     UI::Widget::PrefCheckButton _misc_bitmap_autoreload;
     UI::Widget::PrefSpinButton  _bitmap_copy_res;
     UI::Widget::PrefCombo       _bitmap_import;
+
+    UI::Widget::PrefEntry       _kb_search;
+    UI::Widget::PrefCombo       _kb_filelist;
 
     UI::Widget::PrefCheckButton _save_use_current_dir;
     UI::Widget::PrefCheckButton _save_autosave_enable;
@@ -401,6 +438,37 @@ protected:
     UI::Widget::PrefEntry       _importexport_ocal_username;
     UI::Widget::PrefEntry       _importexport_ocal_password;
 
+    /*
+     * Keyboard shortcut members
+     */
+    class ModelColumns: public Gtk::TreeModel::ColumnRecord {
+    public:
+        ModelColumns() {
+            add(name);
+            add(id);
+            add(shortcut);
+            add(description);
+            add(shortcutid);
+            add(user_set);
+        }
+        virtual ~ModelColumns() {
+        }
+
+        Gtk::TreeModelColumn<Glib::ustring> name;
+        Gtk::TreeModelColumn<Glib::ustring> id;
+        Gtk::TreeModelColumn<Glib::ustring> shortcut;
+        Gtk::TreeModelColumn<Glib::ustring> description;
+        Gtk::TreeModelColumn<unsigned int> shortcutid;
+        Gtk::TreeModelColumn<unsigned int> user_set;
+    };
+    ModelColumns _kb_columns;
+    static ModelColumns &onKBGetCols();
+    Glib::RefPtr<Gtk::TreeStore> _kb_store;
+    Gtk::TreeView _kb_tree;
+    Gtk::CellRendererAccel _kb_shortcut_renderer;
+    Glib::RefPtr<Gtk::TreeModelFilter> _kb_filter;
+    gboolean _kb_shortcuts_loaded;
+
     int _max_dialog_width;
     int _max_dialog_height;
     int _sb_width;
@@ -431,8 +499,25 @@ protected:
     void initPageBitmaps();
     void initPageSystem();
     void initPageI18n(); // Do we still need it?
+    void initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui);
 
     void _presentPages();
+
+    /*
+     * Functions for the Keyboard shortcut editor panel
+     */
+    void onKBReset();
+    void onKBImport();
+    void onKBExport();
+    void onKBList();
+    void onKBRealize();
+    void onKBListKeyboardShortcuts();
+    void onKBTreeEdited (const Glib::ustring& path, guint accel_key, Gdk::ModifierType accel_mods, guint hardware_keycode);
+    void onKBTreeCleared(const Glib::ustring& path_string);
+    bool onKBSearchKeyEvent(GdkEventKey *event);
+    bool onKBSearchFilter(const Gtk::TreeModel::const_iterator& iter);
+    static void onKBShortcutRenderer(Gtk::CellRenderer *rndr, Gtk::TreeIter const &iter);
+
 
 private:
     InkscapePreferences();

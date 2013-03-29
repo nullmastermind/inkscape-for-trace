@@ -40,65 +40,14 @@
 /*
  * Pattern
  */
-
-static void sp_pattern_class_init (SPPatternClass *klass);
-static void sp_pattern_init (SPPattern *gr);
-
-static void sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_pattern_release (SPObject *object);
-static void sp_pattern_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags);
-static void sp_pattern_modified (SPObject *object, unsigned int flags);
-
 static void pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat);
 static void pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern);
 
-static cairo_pattern_t *sp_pattern_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-static SPPaintServerClass * pattern_parent_class;
-
-GType
-sp_pattern_get_type (void)
-{
-	static GType pattern_type = 0;
-	if (!pattern_type) {
-		GTypeInfo pattern_info = {
-			sizeof (SPPatternClass),
-			NULL,	/* base_init */
-			NULL,	/* base_finalize */
-			(GClassInitFunc) sp_pattern_class_init,
-			NULL,	/* class_finalize */
-			NULL,	/* class_data */
-			sizeof (SPPattern),
-			16,	/* n_preallocs */
-			(GInstanceInitFunc) sp_pattern_init,
-			NULL,	/* value_table */
-		};
-		pattern_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPPattern", &pattern_info, (GTypeFlags)0);
-	}
-	return pattern_type;
-}
+G_DEFINE_TYPE(SPPattern, sp_pattern, SP_TYPE_PAINT_SERVER);
 
 static void
 sp_pattern_class_init (SPPatternClass *klass)
 {
-	SPObjectClass *sp_object_class;
-	SPPaintServerClass *ps_class;
-
-	sp_object_class = (SPObjectClass *) klass;
-	ps_class = (SPPaintServerClass *) klass;
-
-	pattern_parent_class = (SPPaintServerClass*)g_type_class_ref (SP_TYPE_PAINT_SERVER);
-
-	//sp_object_class->build = sp_pattern_build;
-//	sp_object_class->release = sp_pattern_release;
-//	sp_object_class->set = sp_pattern_set;
-//	sp_object_class->update = sp_pattern_update;
-//	sp_object_class->modified = sp_pattern_modified;
-
-	// do we need _write? seems to work without it
-
-    //ps_class->pattern_new = sp_pattern_create_pattern;
 }
 
 CPattern::CPattern(SPPattern* pattern) : CPaintServer(pattern) {
@@ -112,6 +61,8 @@ static void
 sp_pattern_init (SPPattern *pat)
 {
 	pat->cpattern = new CPattern(pat);
+
+	delete pat->cpaintserver;
 	pat->cpaintserver = pat->cpattern;
 	pat->cobject = pat->cpattern;
 
@@ -156,12 +107,6 @@ void CPattern::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 	doc->addResource("pattern", object);
 }
 
-static void
-sp_pattern_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPPattern*)object)->cpattern->onBuild(document, repr);
-}
-
 void CPattern::onRelease() {
 	SPPattern* object = this->sppattern;
 
@@ -182,11 +127,6 @@ void CPattern::onRelease() {
     pat->modified_connection.~connection();
 
     CPaintServer::onRelease();
-}
-
-static void sp_pattern_release(SPObject *object)
-{
-	((SPPattern*)object)->cpattern->onRelease();
 }
 
 void CPattern::onSet(unsigned int key, const gchar* value) {
@@ -305,17 +245,12 @@ void CPattern::onSet(unsigned int key, const gchar* value) {
 	}
 }
 
-static void
-sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPPattern*)object)->cpattern->onSet(key, value);
-}
 
 /* TODO: do we need a ::remove_child handler? */
 
 /* fixme: We need ::order_changed handler too (Lauris) */
 
-GSList *pattern_getchildren(SPPattern *pat)
+static GSList *pattern_getchildren(SPPattern *pat)
 {
     GSList *l = NULL;
 
@@ -353,12 +288,6 @@ void CPattern::onUpdate(SPCtx* ctx, unsigned int flags) {
 	}
 }
 
-static void
-sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	((SPPattern*)object)->cpattern->onUpdate(ctx, flags);
-}
-
 void CPattern::onModified(unsigned int flags) {
 	SPPattern* object = this->sppattern;
 
@@ -379,12 +308,6 @@ void CPattern::onModified(unsigned int flags) {
 		}
 		sp_object_unref (child, NULL);
 	}
-}
-
-static void
-sp_pattern_modified (SPObject *object, guint flags)
-{
-	((SPPattern*)object)->cpattern->onModified(flags);
 }
 
 /**
@@ -418,7 +341,7 @@ static void pattern_ref_modified (SPObject */*ref*/, guint /*flags*/, SPPattern 
 /**
 Count how many times pat is used by the styles of o and its descendants
 */
-guint
+static guint
 count_pattern_hrefs(SPObject *o, SPPattern *pat)
 {
     if (!o)
@@ -552,73 +475,73 @@ SPPattern *pattern_getroot(SPPattern *pat)
 // Access functions that look up fields up the chain of referenced patterns and return the first one which is set
 // FIXME: all of them must use chase_hrefs the same as in SPGradient, to avoid lockup on circular refs
 
-guint pattern_patternUnits (SPPattern *pat)
+guint pattern_patternUnits (SPPattern const *pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->patternUnits_set)
-			return pat_i->patternUnits;
-	}
-	return pat->patternUnits;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->patternUnits_set)
+            return pat_i->patternUnits;
+    }
+    return pat->patternUnits;
 }
 
-guint pattern_patternContentUnits (SPPattern *pat)
+guint pattern_patternContentUnits (SPPattern const *pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->patternContentUnits_set)
-			return pat_i->patternContentUnits;
-	}
-	return pat->patternContentUnits;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->patternContentUnits_set)
+            return pat_i->patternContentUnits;
+    }
+    return pat->patternContentUnits;
 }
 
 Geom::Affine const &pattern_patternTransform(SPPattern const *pat)
 {
-	for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->patternTransform_set)
-			return pat_i->patternTransform;
-	}
-	return pat->patternTransform;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->patternTransform_set)
+            return pat_i->patternTransform;
+    }
+    return pat->patternTransform;
 }
 
-gdouble pattern_x (SPPattern *pat)
+gdouble pattern_x (SPPattern const *pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->x._set)
-			return pat_i->x.computed;
-	}
-	return 0;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->x._set)
+            return pat_i->x.computed;
+    }
+    return 0;
 }
 
-gdouble pattern_y (SPPattern *pat)
+gdouble pattern_y (SPPattern const *pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->y._set)
-			return pat_i->y.computed;
-	}
-	return 0;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->y._set)
+            return pat_i->y.computed;
+    }
+    return 0;
 }
 
-gdouble pattern_width (SPPattern *pat)
+gdouble pattern_width (SPPattern const* pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->width._set)
-			return pat_i->width.computed;
-	}
-	return 0;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->width._set)
+            return pat_i->width.computed;
+    }
+    return 0;
 }
 
-gdouble pattern_height (SPPattern *pat)
+gdouble pattern_height (SPPattern const *pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		if (pat_i->height._set)
-			return pat_i->height.computed;
-	}
-	return 0;
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        if (pat_i->height._set)
+            return pat_i->height.computed;
+    }
+    return 0;
 }
 
-Geom::OptRect pattern_viewBox (SPPattern *pat)
+Geom::OptRect pattern_viewBox (SPPattern const *pat)
 {
     Geom::OptRect viewbox;
-    for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->viewBox_set) {
             viewbox = pat_i->viewBox;
             break;
@@ -627,10 +550,10 @@ Geom::OptRect pattern_viewBox (SPPattern *pat)
     return viewbox;
 }
 
-bool pattern_hasItemChildren (SPPattern *pat)
+static bool pattern_hasItemChildren (SPPattern const *pat)
 {
     bool hasChildren = false;
-    for (SPObject *child = pat->firstChild() ; child && !hasChildren ; child = child->getNext() ) {
+    for (SPObject const *child = pat->firstChild() ; child && !hasChildren ; child = child->getNext() ) {
         if (SP_IS_ITEM(child)) {
             hasChildren = true;
         }
@@ -642,8 +565,7 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
 	SPPattern* ps = this->sppattern;
 
     SPPattern *pat = SP_PATTERN (ps);
-    Geom::Affine ps2user;
-    Geom::Affine vb2ps = Geom::identity();
+
     bool needs_opacity = (1.0 - opacity) >= 1e-3;
     bool visible = opacity >= 1e-3;
 
@@ -680,6 +602,8 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
         }
     }
 
+    // viewBox to pattern server
+    Geom::Affine vb2ps = Geom::identity();
     if (pat->viewBox_set) {
         Geom::Rect vb = *pattern_viewBox(pat);
         gdouble tmp_x = pattern_width (pat) / vb.width();
@@ -689,6 +613,11 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
         vb2ps = Geom::Affine(tmp_x, 0.0, 0.0, tmp_y, pattern_x(pat) - vb.left() * tmp_x, pattern_y(pat) - vb.top() * tmp_y);
     }
 
+    // We must determine the size and scaling of the pattern at the time it is displayed and render
+    // the pattern onto a surface with that size and at that resolution.
+
+    // Pattern server to user
+    Geom::Affine ps2user;
     ps2user = pattern_patternTransform(pat);
     if (!pat->viewBox_set && pattern_patternContentUnits (pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
         /* BBox to user coordinate system */
@@ -697,6 +626,7 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
     }
     ps2user = Geom::Translate (pattern_x (pat), pattern_y (pat)) * ps2user;
 
+    // Pattern size in pattern space
     Geom::Rect pattern_tile = Geom::Rect::from_xywh(pattern_x(pat), pattern_y(pat),
         pattern_width(pat), pattern_height(pat));
 
@@ -706,22 +636,34 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
         pattern_tile = pattern_tile * bbox2user;
     }
 
+    // Transform of object with pattern (includes screen scaling)
     cairo_matrix_t cm;
     cairo_get_matrix(base_ct, &cm);
     Geom::Affine full(cm.xx, cm.yx, cm.xy, cm.yy, 0, 0);
+
+    // The DrawingSurface class is suppose to handle the mapping from "logical space"
+    // (coordinates in the rendering) to "physical space" (surface pixels).
+    // An oversampling is done as the pattern may not pixel align with the final surface.
+    // The cairo surface is created when the DrawingContext is declared.
 
     // oversample the pattern slightly
     // TODO: find optimum value
     // TODO: this is lame. instead of using descrim(), we should extract
     //       the scaling component from the complete matrix and use it
     //       to find the optimum tile size for rendering
+    // c is number of pixels in buffer x and y.
     Geom::Point c(pattern_tile.dimensions()*vb2ps.descrim()*ps2user.descrim()*full.descrim()*1.1);
+
     c[Geom::X] = ceil(c[Geom::X]);
     c[Geom::Y] = ceil(c[Geom::Y]);
-    
+
+    // Create drawing surface with size of pattern tile (in tile space) but with number of pixels
+    // based on required resolution (c).
+    Inkscape::DrawingSurface pattern_surface(pattern_tile, c.ceil());
+    Inkscape::DrawingContext ct(pattern_surface);
+
+    pattern_tile *= pattern_surface.drawingTransform();
     Geom::IntRect one_tile = pattern_tile.roundOutwards();
-    Inkscape::DrawingSurface temp(pattern_tile, c.ceil());
-    Inkscape::DrawingContext ct(temp);
 
     // render pattern.
     if (needs_opacity) {
@@ -729,9 +671,13 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
     }
 
     // TODO: make sure there are no leaks.
-    Inkscape::UpdateContext ctx;
-    ctx.ctm = vb2ps;
+    Inkscape::UpdateContext ctx;  // UpdateContext is structure with only ctm!
+    ctx.ctm = vb2ps * pattern_surface.drawingTransform();
+    ct.transform( pattern_surface.drawingTransform().inverse() );
     drawing.update(Geom::IntRect::infinite(), ctx);
+
+    // Render drawing to pattern_surface via drawing context, this calls root->render
+    // which is really DrawingItem->render().
     drawing.render(ct, one_tile);
     for (SPObject *child = shown->firstChild() ; child != NULL; child = child->getNext() ) {
         if (SP_IS_ITEM (child)) {
@@ -739,27 +685,26 @@ cairo_pattern_t* CPattern::onCreatePattern(cairo_t *base_ct, Geom::OptRect const
         }
     }
 
+    // Uncomment to debug
+    // cairo_surface_t* raw = pattern_surface.raw();
+    // std::cout << "  cairo_surface (sp-pattern): "
+    //           << " width: "  << cairo_image_surface_get_width( raw )
+    //           << " height: " << cairo_image_surface_get_height( raw )
+    //           << std::endl;
+    // cairo_surface_write_to_png( pattern_surface.raw(), "sp-pattern.png" );
+
     if (needs_opacity) {
         ct.popGroupToSource(); // pop raw pattern
         ct.paint(opacity); // apply opacity
     }
 
-    cairo_pattern_t *cp = cairo_pattern_create_for_surface(temp.raw());
-
+    cairo_pattern_t *cp = cairo_pattern_create_for_surface(pattern_surface.raw());
     // Apply transformation to user space. Also compensate for oversampling.
-    ink_cairo_pattern_set_matrix(cp, ps2user.inverse() * temp.drawingTransform());
+    ink_cairo_pattern_set_matrix(cp, ps2user.inverse() * pattern_surface.drawingTransform());
+
     cairo_pattern_set_extend(cp, CAIRO_EXTEND_REPEAT);
 
     return cp;
-}
-
-static cairo_pattern_t *
-sp_pattern_create_pattern(SPPaintServer *ps,
-                          cairo_t *base_ct,
-                          Geom::OptRect const &bbox,
-                          double opacity)
-{
-	return ((SPPattern*)ps)->cpattern->onCreatePattern(base_ct, bbox, opacity);
 }
 
 /*

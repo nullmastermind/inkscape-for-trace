@@ -19,9 +19,10 @@
 #include "display/nr-filter-slot.h"
 #include "display/nr-filter-units.h"
 
-class SPFeDistantLight;
-class SPFePointLight;
-class SPFeSpotLight;
+struct SPFeDistantLight;
+struct SPFePointLight;
+struct SPFeSpotLight;
+struct SVGICCColor;
 
 namespace Inkscape {
 namespace Filters {
@@ -32,6 +33,7 @@ public:
     static FilterPrimitive *create();
     virtual ~FilterDiffuseLighting();
     virtual void render_cairo(FilterSlot &slot);
+    virtual void set_icc(SVGICCColor *icc_color);
     virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
     virtual double complexity(Geom::Affine const &ctm);
 
@@ -46,6 +48,7 @@ public:
     guint32 lighting_color;
 
 private:
+    SVGICCColor *icc;
 };
 
 } /* namespace Filters */

@@ -32,13 +32,13 @@ namespace Extension {
 
 
 /** \brief  Creates a new preference dialog for extension preferences
-    \param  name  Name of the Extension who's dialog this is
+    \param  name  Name of the Extension whose dialog this is
     \param  help  The help string for the extension (NULL if none)
     \param  controls  The extension specific widgets in the dialog
 
     This function initializes the dialog with the name of the extension
     in the title.  It adds a few buttons and sets up handlers for
-    them.  It also places the passed in widgets into the dialog.
+    them.  It also places the passed-in widgets into the dialog.
 */
 PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * controls, Effect * effect) :
 #if WITH_GTKMM_3_0
@@ -67,7 +67,12 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
 
     hbox->pack_start(*controls, true, true, 6);
     hbox->show();
+
+#if WITH_GTKMM_3_0
+    this->get_content_area()->pack_start(*hbox, true, true, 6);
+#else
     this->get_vbox()->pack_start(*hbox, true, true, 6);
+#endif
 
     /*
     Gtk::Button * help_button = add_button(Gtk::Stock::HELP, Gtk::RESPONSE_HELP);
@@ -88,30 +93,48 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
             _param_preview = Parameter::make(doc->root(), _effect);
         }
 
+#if WITH_GTKMM_3_0
+        Gtk::Separator * sep = Gtk::manage(new Gtk::Separator());
+#else
         Gtk::HSeparator * sep = Gtk::manage(new Gtk::HSeparator());
+#endif
+
         sep->show();
+
+#if WITH_GTKMM_3_0
+        this->get_content_area()->pack_start(*sep, true, true, 4);
+#else
         this->get_vbox()->pack_start(*sep, true, true, 4);
+#endif
 
         hbox = Gtk::manage(new Gtk::HBox());
         _button_preview = _param_preview->get_widget(NULL, NULL, &_signal_preview);
         _button_preview->show();
         hbox->pack_start(*_button_preview, true, true,6);
         hbox->show();
+
+#if WITH_GTKMM_3_0
+        this->get_content_area()->pack_start(*hbox, true, true, 6);
+#else
         this->get_vbox()->pack_start(*hbox, true, true, 6);
+#endif
 
         Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
         if (hbox != NULL) {
 #if WITH_GTKMM_3_0
-            Gtk::Widget * back = hbox->get_children().back();
+            _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->get_children().front());
 #else
-            Gtk::Widget * back = hbox->children().back().get_widget();
+            _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->children().back().get_widget());
 #endif
-            Gtk::CheckButton * cb = dynamic_cast<Gtk::CheckButton *>(back);
-            _checkbox_preview = cb;
         }
 
         preview_toggle();
         _signal_preview.connect(sigc::mem_fun(this, &PrefDialog::preview_toggle));
+    }
+
+    // Set window modality for effects that don't use live preview
+    if (_effect != NULL && _effect->no_live_preview) {
+        set_modal(false);
     }
 
     GtkWidget *dlg = GTK_WIDGET(gobj());

@@ -11,14 +11,10 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+#include "style-swatch.h"
 
 #include <cstring>
 #include <string>
-
-#include "style-swatch.h"
 
 #include "widgets/spw-utilities.h"
 #include "ui/widget/color-preview.h"
@@ -28,6 +24,7 @@
 #include "sp-radial-gradient-fns.h"
 #include "sp-pattern.h"
 #include "xml/repr.h"
+#include "xml/sp-css-attr.h"
 #include "widgets/widget-sizes.h"
 #include "helper/units.h"
 #include "helper/action.h"
@@ -35,6 +32,12 @@
 #include "inkscape.h"
 #include "verbs.h"
 #include <glibmm/i18n.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
 
 enum {
     SS_FILL,
@@ -113,7 +116,11 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
       _css(NULL),
       _tool_obs(NULL),
       _style_obs(NULL),
-      _table(2, 6),
+#if WITH_GTKMM_3_0
+      _table(Gtk::manage(new Gtk::Grid())),
+#else
+      _table(Gtk::manage(new Gtk::Table(2, 6))),
+#endif
       _sw_unit(NULL)
 {
     _label[SS_FILL].set_markup(_("Fill:"));
@@ -129,23 +136,35 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     _opacity_value.set_alignment(0.0, 0.5);
     _opacity_value.set_padding(0, 0);
 
-    _table.set_col_spacings (2);
-    _table.set_row_spacings (0);
+#if WITH_GTKMM_3_0
+    _table->set_column_spacing(2);
+    _table->set_row_spacing(0);
+#else
+    _table->set_col_spacings(2);
+    _table->set_row_spacings(0);
+#endif
 
     _stroke.pack_start(_place[SS_STROKE]);
     _stroke_width_place.add(_stroke_width);
     _stroke.pack_start(_stroke_width_place, Gtk::PACK_SHRINK);
-
-    _table.attach(_label[SS_FILL], 0,1, 0,1, Gtk::FILL, Gtk::SHRINK);
-    _table.attach(_label[SS_STROKE], 0,1, 1,2, Gtk::FILL, Gtk::SHRINK);
-
-    _table.attach(_place[SS_FILL], 1,2, 0,1);
-    _table.attach(_stroke, 1,2, 1,2);
-
+    
     _opacity_place.add(_opacity_value);
-    _table.attach(_opacity_place, 2,3, 0,2, Gtk::SHRINK, Gtk::SHRINK);
 
-    _swatch.add(_table);
+#if WITH_GTKMM_3_0
+    _table->attach(_label[SS_FILL],   0, 0, 1, 1);
+    _table->attach(_label[SS_STROKE], 0, 1, 1, 1);
+    _table->attach(_place[SS_FILL],   1, 0, 1, 1);
+    _table->attach(_stroke,           1, 1, 1, 1);
+    _table->attach(_opacity_place,    2, 0, 1, 2);
+#else
+    _table->attach(_label[SS_FILL], 0,1, 0,1, Gtk::FILL, Gtk::SHRINK);
+    _table->attach(_label[SS_STROKE], 0,1, 1,2, Gtk::FILL, Gtk::SHRINK);
+    _table->attach(_place[SS_FILL], 1,2, 0,1);
+    _table->attach(_stroke, 1,2, 1,2);
+    _table->attach(_opacity_place, 2,3, 0,2, Gtk::SHRINK, Gtk::SHRINK);
+#endif
+
+    _swatch.add(*_table);
     pack_start(_swatch, true, true, 0);
 
     set_size_request (STYLE_SWATCH_WIDTH, -1);
@@ -227,8 +246,7 @@ StyleSwatch::setWatchedTool(const char *path, bool synthesize)
 }
 
 
-void
-StyleSwatch::setStyle(SPCSSAttr *css)
+void StyleSwatch::setStyle(SPCSSAttr *css)
 {
     if (_css)
         sp_repr_css_attr_unref (_css);
@@ -239,18 +257,18 @@ StyleSwatch::setStyle(SPCSSAttr *css)
     _css = sp_repr_css_attr_new();
     sp_repr_css_merge(_css, css);
 
-    gchar const *css_string = sp_repr_css_write_string (_css);
+    Glib::ustring css_string;
+    sp_repr_css_write_string (_css, css_string);
     SPStyle *temp_spstyle = sp_style_new(SP_ACTIVE_DOCUMENT);
-    if (css_string)
-        sp_style_merge_from_style_string (temp_spstyle, css_string);
-
+    if (~css_string.empty()) {
+        sp_style_merge_from_style_string (temp_spstyle, css_string.c_str());
+    }
+    
     setStyle (temp_spstyle);
-
     sp_style_unref (temp_spstyle);
 }
 
-void
-StyleSwatch::setStyle(SPStyle *query)
+void StyleSwatch::setStyle(SPStyle *query)
 {
     _place[SS_FILL].remove();
     _place[SS_STROKE].remove();
@@ -341,15 +359,12 @@ StyleSwatch::setStyle(SPStyle *query)
     if (op != 1) {
         {
             gchar *str;
-            if (op == 0)
-                str = g_strdup_printf(_("O:%.3g"), op);
-            else
-                str = g_strdup_printf(_("O:.%d"), (int) (op*10));
+            str = g_strdup_printf(_("O: %2.0f"), (op*100.0));
             _opacity_value.set_markup (str);
             g_free (str);
         }
         {
-            gchar *str = g_strdup_printf(_("Opacity: %.3g"), op);
+            gchar *str = g_strdup_printf(_("Opacity: %2.1f %%"), (op*100.0));
             _opacity_place.set_tooltip_text(str);
             g_free (str);
         }

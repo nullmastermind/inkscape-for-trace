@@ -81,43 +81,19 @@ using Inkscape::DocumentUndo;
 
 #define DYNA_MIN_WIDTH 1.0e-6
 
-static void sp_tweak_context_class_init(SPTweakContextClass *klass);
-static void sp_tweak_context_init(SPTweakContext *ddc);
 static void sp_tweak_context_dispose(GObject *object);
 
 static void sp_tweak_context_setup(SPEventContext *ec);
 static void sp_tweak_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
 static gint sp_tweak_context_root_handler(SPEventContext *ec, GdkEvent *event);
 
-static SPEventContextClass *parent_class;
-
-GType
-sp_tweak_context_get_type(void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPTweakContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_tweak_context_class_init,
-            NULL, NULL,
-            sizeof(SPTweakContext),
-            4,
-            (GInstanceInitFunc) sp_tweak_context_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPTweakContext", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPTweakContext, sp_tweak_context, SP_TYPE_EVENT_CONTEXT);
 
 static void
 sp_tweak_context_class_init(SPTweakContextClass *klass)
 {
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    parent_class = (SPEventContextClass*)g_type_class_peek_parent(klass);
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
 
     object_class->dispose = sp_tweak_context_dispose;
 
@@ -173,10 +149,10 @@ sp_tweak_context_dispose(GObject *object)
         delete tc->_message_context;
     }
 
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    G_OBJECT_CLASS(sp_tweak_context_parent_class)->dispose(object);
 }
 
-bool is_transform_mode (gint mode)
+static bool is_transform_mode (gint mode)
 {
     return (mode == TWEAK_MODE_MOVE || 
             mode == TWEAK_MODE_MOVE_IN_OUT || 
@@ -186,12 +162,12 @@ bool is_transform_mode (gint mode)
             mode == TWEAK_MODE_MORELESS);
 }
 
-bool is_color_mode (gint mode)
+static bool is_color_mode (gint mode)
 {
     return (mode == TWEAK_MODE_COLORPAINT || mode == TWEAK_MODE_COLORJITTER || mode == TWEAK_MODE_BLUR);
 }
 
-void
+static void
 sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
 {
     SPEventContext *event_context = SP_EVENT_CONTEXT(tc);
@@ -200,7 +176,7 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
     guint num = 0;
     gchar *sel_message = NULL;
     if (!desktop->selection->isEmpty()) {
-        num = g_slist_length((GSList *) desktop->selection->itemList());
+        num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf(_("<b>Nothing</b> selected"));
@@ -277,7 +253,7 @@ sp_tweak_context_style_set(SPCSSAttr const *css, SPTweakContext *tc)
 {
     if (tc->mode == TWEAK_MODE_COLORPAINT) { // intercept color setting only in this mode
         // we cannot store properties with uris
-        css = sp_css_attr_unset_uris ((SPCSSAttr *) css);
+        css = sp_css_attr_unset_uris (const_cast<SPCSSAttr *>(css));
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setStyle("/tools/tweak/style", const_cast<SPCSSAttr*>(css));
         return true;
@@ -290,8 +266,8 @@ sp_tweak_context_setup(SPEventContext *ec)
 {
     SPTweakContext *tc = SP_TWEAK_CONTEXT(ec);
 
-    if (((SPEventContextClass *) parent_class)->setup) {
-        ((SPEventContextClass *) parent_class)->setup(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup) {
+        (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup(ec);
     }
 
     {
@@ -376,14 +352,14 @@ sp_tweak_extinput(SPTweakContext *tc, GdkEvent *event)
     }
 }
 
-double
+static double
 get_dilate_radius (SPTweakContext *tc)
 {
     // 10 times the pen width:
     return 500 * tc->width/SP_EVENT_CONTEXT(tc)->desktop->current_zoom();
 }
 
-double
+static double
 get_path_force (SPTweakContext *tc)
 {
     double force = 8 * (tc->usepressure? tc->pressure : TC_DEFAULT_PRESSURE)
@@ -394,14 +370,14 @@ get_path_force (SPTweakContext *tc)
     return force * tc->force;
 }
 
-double
+static double
 get_move_force (SPTweakContext *tc)
 {
     double force = (tc->usepressure? tc->pressure : TC_DEFAULT_PRESSURE);
     return force * tc->force;
 }
 
-bool
+static bool
 sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::Point p, Geom::Point vector, gint mode, double radius, double force, double fidelity, bool reverse)
 {
     bool did = false;
@@ -419,9 +395,9 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
         SPDocument *doc = item->document;
         sp_item_list_to_curves (items, &selected, &to_select);
         g_slist_free (items);
-        SPObject* newObj = doc->getObjectByRepr((Inkscape::XML::Node *) to_select->data);
+        SPObject* newObj = doc->getObjectByRepr(static_cast<Inkscape::XML::Node *>(to_select->data));
         g_slist_free (to_select);
-        item = (SPItem *) newObj;
+        item = SP_ITEM(newObj);
         selection->add(item);
     }
 
@@ -697,7 +673,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
     return did;
 }
 
-void
+static void
 tweak_colorpaint (float *color, guint32 goal, double force, bool do_h, bool do_s, bool do_l)
 {
     float rgb_g[3];
@@ -729,7 +705,7 @@ tweak_colorpaint (float *color, guint32 goal, double force, bool do_h, bool do_s
     }
 }
 
-void
+static void
 tweak_colorjitter (float *color, double force, bool do_h, bool do_s, bool do_l)
 {
     float hsl_c[3];
@@ -754,7 +730,7 @@ tweak_colorjitter (float *color, double force, bool do_h, bool do_s, bool do_l)
     sp_color_hsl_to_rgb_floatv (color, hsl_c[0], hsl_c[1], hsl_c[2]);
 }
 
-void
+static void
 tweak_color (guint mode, float *color, guint32 goal, double force, bool do_h, bool do_s, bool do_l)
 {
     if (mode == TWEAK_MODE_COLORPAINT) {
@@ -764,7 +740,7 @@ tweak_color (guint mode, float *color, guint32 goal, double force, bool do_h, bo
     }
 }
 
-void
+static void
 tweak_opacity (guint mode, SPIScale24 *style_opacity, double opacity_goal, double force)
 {
     double opacity = SP_SCALE24_TO_FLOAT (style_opacity->value);
@@ -780,7 +756,7 @@ tweak_opacity (guint mode, SPIScale24 *style_opacity, double opacity_goal, doubl
 }
 
 
-double
+static double
 tweak_profile (double dist, double radius)
 {
     if (radius == 0) {
@@ -797,9 +773,9 @@ tweak_profile (double dist, double radius)
     }
 }
 
-void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or_stroke,
-                              guint32 const rgb_goal, Geom::Point p_w, double radius, double force, guint mode,
-                              bool do_h, bool do_s, bool do_l, bool /*do_o*/)
+static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or_stroke,
+                                     guint32 const rgb_goal, Geom::Point p_w, double radius, double force, guint mode,
+                                     bool do_h, bool do_s, bool do_l, bool /*do_o*/)
 {
     SPGradient *gradient = getGradient(item, fill_or_stroke);
 
@@ -917,7 +893,7 @@ void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or_stroke
     }
 }
 
-bool
+static bool
 sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                           guint32 fill_goal, bool do_fill,
                           guint32 stroke_goal, bool do_stroke,
@@ -1051,7 +1027,7 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
 }
 
 
-bool
+static bool
 sp_tweak_dilate (SPTweakContext *tc, Geom::Point event_p, Geom::Point p, Geom::Point vector, bool reverse)
 {
     Inkscape::Selection *selection = sp_desktop_selection(SP_EVENT_CONTEXT(tc)->desktop);
@@ -1110,11 +1086,11 @@ sp_tweak_dilate (SPTweakContext *tc, Geom::Point event_p, Geom::Point p, Geom::P
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
+    for (GSList *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
          items != NULL;
          items = items->next) {
 
-        SPItem *item = (SPItem *) items->data;
+        SPItem *item = SP_ITEM(items->data);
 
         if (is_color_mode (tc->mode)) {
             if (do_fill || do_stroke || do_opacity) {
@@ -1141,7 +1117,7 @@ sp_tweak_dilate (SPTweakContext *tc, Geom::Point event_p, Geom::Point p, Geom::P
     return did;
 }
 
-void
+static void
 sp_tweak_update_area (SPTweakContext *tc)
 {
         double radius = get_dilate_radius(tc);
@@ -1150,7 +1126,7 @@ sp_tweak_update_area (SPTweakContext *tc)
         sp_canvas_item_show(tc->dilate_area);
 }
 
-void
+static void
 sp_tweak_switch_mode (SPTweakContext *tc, gint mode, bool with_shift)
 {
     SP_EVENT_CONTEXT(tc)->desktop->setToolboxSelectOneValue ("tweak_tool_mode", mode);
@@ -1159,7 +1135,7 @@ sp_tweak_switch_mode (SPTweakContext *tc, gint mode, bool with_shift)
     sp_tweak_update_cursor (tc, with_shift);
 }
 
-void
+static void
 sp_tweak_switch_mode_temporarily (SPTweakContext *tc, gint mode, bool with_shift)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1227,7 +1203,7 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
 
                 guint num = 0;
                 if (!desktop->selection->isEmpty()) {
-                    num = g_slist_length((GSList *) desktop->selection->itemList());
+                    num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
                 }
                 if (num == 0) {
                     tc->_message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));
@@ -1502,6 +1478,12 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                 case GDK_KEY_Control_R:
                     sp_tweak_switch_mode_temporarily(tc, TWEAK_MODE_SHRINK_GROW, MOD__SHIFT);
                     break;
+                case GDK_KEY_Delete:
+                case GDK_KEY_KP_Delete:
+                case GDK_KEY_BackSpace:
+                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    break;
+
                 default:
                     break;
             }
@@ -1529,8 +1511,8 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler) {
+            ret = (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler(event_context, event);
         }
     }
 

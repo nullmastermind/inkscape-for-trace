@@ -12,7 +12,6 @@ set(sp_SRC
 	attribute-rel-svg.cpp
 	attribute-rel-util.cpp
 	sp-anchor.cpp
-	# sp-animation.cpp
 	sp-clippath.cpp
 	sp-conn-end-pair.cpp
 	sp-conn-end.cpp
@@ -88,7 +87,6 @@ set(sp_SRC
 	attribute-rel-svg.h
 	attribute-rel-util.h
 	sp-anchor.h
-	sp-animation.h
 	sp-clippath.h
 	sp-conn-end-pair.h
 	sp-conn-end.h
@@ -190,7 +188,6 @@ set(inkscape_SRC
 	composite-undo-stack-observer.cpp
 	conditions.cpp
 	conn-avoid-ref.cpp
-	connection-points.cpp
 	connector-context.cpp
 	console-output-undo-observer.cpp
 	context-fns.cpp
@@ -334,7 +331,6 @@ set(inkscape_SRC
 	composite-undo-stack-observer.h
 	conditions.h
 	conn-avoid-ref.h
-	connection-points.h
 	connection-pool.h
 	connector-context.h
 	console-output-undo-observer.h

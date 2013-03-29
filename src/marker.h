@@ -22,9 +22,7 @@
 #define SP_MARKER(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MARKER, SPMarker))
 #define SP_IS_MARKER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MARKER))
 
-class SPMarker;
-class SPMarkerClass;
-class SPMarkerView;
+struct SPMarkerView;
 class CMarker;
 
 #include <2geom/rect.h>
@@ -118,6 +116,6 @@ Inkscape::DrawingItem *sp_marker_show_instance (SPMarker *marker, Inkscape::Draw
 				      Geom::Affine const &base, float linewidth);
 void sp_marker_hide (SPMarker *marker, unsigned int key);
 const gchar *generate_marker (GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
-
+SPObject *sp_marker_fork_if_necessary(SPObject *marker);
 
 #endif

@@ -19,7 +19,7 @@
 #include "2geom/forward.h"
 #include "preferences.h"
 
-struct GrDrag;
+class  GrDrag;
 class  SPDesktop;
 class  SPItem;
 class  ShapeEditor;
@@ -36,6 +36,7 @@ namespace Inkscape {
 
 #define SP_TYPE_EVENT_CONTEXT (sp_event_context_get_type())
 #define SP_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_EVENT_CONTEXT, SPEventContext))
+#define SP_EVENT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_EVENT_CONTEXT, SPEventContextClass))
 #define SP_IS_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_EVENT_CONTEXT))
 
 GType sp_event_context_get_type();
@@ -106,6 +107,7 @@ void sp_event_context_snap_delay_handler(SPEventContext *ec, gpointer const dse_
 struct SPEventContext : public GObject {
     void enableSelectionCue (bool enable=true);
     void enableGrDrag (bool enable=true);
+    bool deleteSelectedDrag(bool just_one);
 
     /// Desktop eventcontext stack
     SPEventContext *next;
@@ -187,6 +189,8 @@ guint get_group0_keyval(GdkEventKey *event);
 
 SPItem *sp_event_context_find_item (SPDesktop *desktop, Geom::Point const &p, bool select_under, bool into_groups);
 SPItem *sp_event_context_over_item (SPDesktop *desktop, SPItem *item, Geom::Point const &p);
+
+void sp_toggle_dropper(SPDesktop *dt);
 
 ShapeEditor *sp_event_context_get_shape_editor (SPEventContext *ec);
 bool sp_event_context_knot_mouseover(SPEventContext *ec);

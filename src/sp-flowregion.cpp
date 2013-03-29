@@ -24,81 +24,23 @@
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
-static void sp_flowregion_class_init (SPFlowregionClass *klass);
 static void sp_flowregion_init (SPFlowregion *group);
 static void sp_flowregion_dispose (GObject *object);
 
-static void sp_flowregion_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
-static void sp_flowregion_remove_child (SPObject * object, Inkscape::XML::Node * child);
-static void sp_flowregion_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_flowregion_modified (SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_flowregion_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
+G_DEFINE_TYPE(SPFlowregion, sp_flowregion, SP_TYPE_ITEM);
 
-static gchar * sp_flowregion_description (SPItem * item);
-
-static SPItemClass * flowregion_parent_class;
-
-static void sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass);
 static void sp_flowregionexclude_init (SPFlowregionExclude *group);
 static void sp_flowregionexclude_dispose (GObject *object);
 
-static void sp_flowregionexclude_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
-static void sp_flowregionexclude_remove_child (SPObject * object, Inkscape::XML::Node * child);
-static void sp_flowregionexclude_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_flowregionexclude_modified (SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_flowregionexclude_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static gchar * sp_flowregionexclude_description (SPItem * item);
-
-static SPItemClass * flowregionexclude_parent_class;
-
 
 static void         GetDest(SPObject* child,Shape **computed);
-
-GType
-sp_flowregion_get_type (void)
-{
-	static GType group_type = 0;
-	if (!group_type) {
-		GTypeInfo group_info = {
-			sizeof (SPFlowregionClass),
-			NULL,	/* base_init */
-			NULL,	/* base_finalize */
-			(GClassInitFunc) sp_flowregion_class_init,
-			NULL,	/* class_finalize */
-			NULL,	/* class_data */
-			sizeof (SPFlowregion),
-			16,	/* n_preallocs */
-			(GInstanceInitFunc) sp_flowregion_init,
-			NULL,	/* value_table */
-		};
-		group_type = g_type_register_static (SP_TYPE_ITEM, "SPFlowregion", &group_info, (GTypeFlags)0);
-	}
-	return group_type;
-}
 
 static void
 sp_flowregion_class_init (SPFlowregionClass *klass)
 {
 	GObjectClass * object_class;
-	SPObjectClass * sp_object_class;
-	SPItemClass * item_class;
-
 	object_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
-
-	flowregion_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
-
 	object_class->dispose = sp_flowregion_dispose;
-
-//	sp_object_class->child_added = sp_flowregion_child_added;
-//	sp_object_class->remove_child = sp_flowregion_remove_child;
-//	sp_object_class->update = sp_flowregion_update;
-//	sp_object_class->modified = sp_flowregion_modified;
-//	sp_object_class->write = sp_flowregion_write;
-
-//	item_class->description = sp_flowregion_description;
 }
 
 CFlowregion::CFlowregion(SPFlowregion* flowregion) : CItem(flowregion) {
@@ -112,6 +54,8 @@ static void
 sp_flowregion_init (SPFlowregion *group)
 {
 	group->cflowregion = new CFlowregion(group);
+
+	delete group->citem;
 	group->citem = group->cflowregion;
 	group->cobject = group->cflowregion;
 
@@ -135,11 +79,6 @@ void CFlowregion::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void sp_flowregion_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPFlowregion*)object)->cflowregion->onChildAdded(child, ref);
-}
-
 /* fixme: hide (Lauris) */
 
 void CFlowregion::onRemoveChild(Inkscape::XML::Node * child) {
@@ -150,11 +89,6 @@ void CFlowregion::onRemoveChild(Inkscape::XML::Node * child) {
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_flowregion_remove_child (SPObject * object, Inkscape::XML::Node * child)
-{
-	((SPFlowregion*)object)->cflowregion->onRemoveChild(child);
-}
 
 void CFlowregion::onUpdate(SPCtx *ctx, unsigned int flags) {
 	SPFlowregion* object = this->spflowregion;
@@ -196,11 +130,6 @@ void CFlowregion::onUpdate(SPCtx *ctx, unsigned int flags) {
     group->UpdateComputed();
 }
 
-static void sp_flowregion_update(SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	((SPFlowregion*)object)->cflowregion->onUpdate(ctx, flags);
-}
-
 void SPFlowregion::UpdateComputed(void)
 {
     for (std::vector<Shape*>::iterator it = computed.begin() ; it != computed.end() ; ++it) {
@@ -237,11 +166,6 @@ void CFlowregion::onModified(guint flags) {
         }
         g_object_unref( G_OBJECT(child) );
     }
-}
-
-static void sp_flowregion_modified(SPObject *object, guint flags)
-{
-    ((SPFlowregion*)object)->cflowregion->onModified(flags);
 }
 
 Inkscape::XML::Node *CFlowregion::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -281,69 +205,23 @@ Inkscape::XML::Node *CFlowregion::onWrite(Inkscape::XML::Document *xml_doc, Inks
     return repr;
 }
 
-static Inkscape::XML::Node *sp_flowregion_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPFlowregion*)object)->cflowregion->onWrite(xml_doc, repr, flags);
-}
-
 gchar* CFlowregion::onDescription() {
 	// TRANSLATORS: "Flow region" is an area where text is allowed to flow
 	return g_strdup_printf(_("Flow region"));
-}
-
-static gchar *sp_flowregion_description(SPItem *item)
-{
-	return ((SPFlowregion*)item)->cflowregion->onDescription();
 }
 
 /*
  *
  */
 
-GType
-sp_flowregionexclude_get_type (void)
-{
-	static GType group_type = 0;
-	if (!group_type) {
-		GTypeInfo group_info = {
-			sizeof (SPFlowregionExcludeClass),
-			NULL,	/* base_init */
-			NULL,	/* base_finalize */
-			(GClassInitFunc) sp_flowregionexclude_class_init,
-			NULL,	/* class_finalize */
-			NULL,	/* class_data */
-			sizeof (SPFlowregionExclude),
-			16,	/* n_preallocs */
-			(GInstanceInitFunc) sp_flowregionexclude_init,
-			NULL,	/* value_table */
-		};
-		group_type = g_type_register_static (SP_TYPE_ITEM, "SPFlowregionExclude", &group_info, (GTypeFlags)0);
-	}
-	return group_type;
-}
+G_DEFINE_TYPE(SPFlowregionExclude, sp_flowregionexclude, SP_TYPE_ITEM);
 
 static void
 sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass)
 {
 	GObjectClass * object_class;
-	SPObjectClass * sp_object_class;
-	SPItemClass * item_class;
-
 	object_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
-
-	flowregionexclude_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
-
 	object_class->dispose = sp_flowregionexclude_dispose;
-
-//	sp_object_class->child_added = sp_flowregionexclude_child_added;
-//	sp_object_class->remove_child = sp_flowregionexclude_remove_child;
-//	sp_object_class->update = sp_flowregionexclude_update;
-//	sp_object_class->modified = sp_flowregionexclude_modified;
-//	sp_object_class->write = sp_flowregionexclude_write;
-
-//	item_class->description = sp_flowregionexclude_description;
 }
 
 CFlowregionExclude::CFlowregionExclude(SPFlowregionExclude* flowregionexclude) : CItem(flowregionexclude) {
@@ -357,6 +235,8 @@ static void
 sp_flowregionexclude_init (SPFlowregionExclude *group)
 {
 	group->cflowregionexclude = new CFlowregionExclude(group);
+
+	delete group->citem;
 	group->citem = group->cflowregionexclude;
 	group->cobject = group->cflowregionexclude;
 
@@ -381,11 +261,6 @@ void CFlowregionExclude::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML:
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void sp_flowregionexclude_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPFlowregionExclude*)object)->cflowregionexclude->onChildAdded(child, ref);
-}
-
 /* fixme: hide (Lauris) */
 
 void CFlowregionExclude::onRemoveChild(Inkscape::XML::Node * child) {
@@ -396,11 +271,6 @@ void CFlowregionExclude::onRemoveChild(Inkscape::XML::Node * child) {
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_flowregionexclude_remove_child (SPObject * object, Inkscape::XML::Node * child)
-{
-	((SPFlowregionExclude*)object)->cflowregionexclude->onRemoveChild(child);
-}
 
 void CFlowregionExclude::onUpdate(SPCtx *ctx, unsigned int flags) {
 	SPFlowregionExclude* object = this->spflowregionexclude;
@@ -442,10 +312,6 @@ void CFlowregionExclude::onUpdate(SPCtx *ctx, unsigned int flags) {
     group->UpdateComputed();
 }
 
-static void sp_flowregionexclude_update(SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	((SPFlowregionExclude*)object)->cflowregionexclude->onUpdate(ctx, flags);
-}
 
 void SPFlowregionExclude::UpdateComputed(void)
 {
@@ -483,11 +349,6 @@ void CFlowregionExclude::onModified(guint flags) {
     }
 }
 
-static void sp_flowregionexclude_modified(SPObject *object, guint flags)
-{
-	((SPFlowregionExclude*)object)->cflowregionexclude->onModified(flags);
-}
-
 Inkscape::XML::Node *CFlowregionExclude::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFlowregionExclude* object = this->spflowregionexclude;
 
@@ -521,22 +382,12 @@ Inkscape::XML::Node *CFlowregionExclude::onWrite(Inkscape::XML::Document *xml_do
     return repr;
 }
 
-static Inkscape::XML::Node *sp_flowregionexclude_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPFlowregionExclude*)object)->cflowregionexclude->onWrite(xml_doc, repr, flags);
-}
-
 gchar* CFlowregionExclude::onDescription() {
 	/* TRANSLATORS: A region "cut out of" a flow region; text is not allowed to flow inside the
 	 * flow excluded region.  flowRegionExclude in SVG 1.2: see
 	 * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
 	 * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem. */
 	return g_strdup_printf(_("Flow excluded region"));
-}
-
-static gchar *sp_flowregionexclude_description(SPItem *item)
-{
-	return ((SPFlowregionExclude*)item)->cflowregionexclude->onDescription();
 }
 
 /*

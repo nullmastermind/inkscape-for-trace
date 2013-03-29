@@ -17,12 +17,13 @@
 #endif
 #include <map>
 #include <string>
+#include "ui/dialog/guides.h"
 #include <2geom/line.h>
 #include <2geom/angle.h>
 #include <glibmm/i18n.h>
 
-#include "ui/dialog/guides.h"
 #include "desktop.h"
+#include "desktop-events.h"
 #include "desktop-handles.h"
 #include "dialogs/dialog-events.h"
 #include "display/canvas-axonomgrid.h"
@@ -195,7 +196,6 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 sp_guideline_set_position(SP_GUIDELINE(guide), event_dt);
 
                 desktop->set_coordinate_status(event_dt);
-                desktop->setPosition(event_dt);
             }
             break;
     case GDK_BUTTON_RELEASE:
@@ -394,7 +394,6 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 }
                 moved = true;
                 desktop->set_coordinate_status(motion_dt);
-                desktop->setPosition(motion_dt);
 
                 ret = TRUE;
             }
@@ -482,7 +481,6 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     }
                     moved = false;
                     desktop->set_coordinate_status(event_dt);
-                    desktop->setPosition (event_dt);
                 }
                 drag_type = SP_DRAG_NONE;
                 sp_canvas_item_ungrab(item, event->button.time);
@@ -501,7 +499,16 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
                 gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
-        g_object_unref(guide_cursor);
+                g_object_unref(guide_cursor);
+#else
+                gdk_cursor_unref(guide_cursor);
+#endif
+            } else {
+                GdkCursor *guide_cursor;
+                guide_cursor = gdk_cursor_new (GDK_HAND1);
+                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+#if GTK_CHECK_VERSION(3,0,0)
+                g_object_unref(guide_cursor);
 #else
                 gdk_cursor_unref(guide_cursor);
 #endif

@@ -20,7 +20,7 @@ namespace Gtk {
 	class VBox;
 }
 
-struct SPDocument;
+class SPDocument;
 
 namespace Inkscape {
 
@@ -67,7 +67,7 @@ class Effect : public Extension {
                        gchar const * image,
                        Effect *      effect,
                        bool          showPrefs) :
-                    Verb(id, _(name), _(tip), image), 
+                    Verb(id, _(name), _(tip), image, _("Extensions")),
                     _effect(effect), 
                     _showPrefs(showPrefs),
                     _elip_name(NULL) {

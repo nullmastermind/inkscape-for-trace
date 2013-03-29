@@ -62,13 +62,16 @@
 #include "ui/view/view-widget.h"
 #include "uri.h"
 #include "xml/rebase-hrefs.h"
+#include "xml/sp-css-attr.h"
 #include "verbs.h"
 #include "event-log.h"
 #include "ui/dialog/font-substitution.h"
 
 #include <gtk/gtk.h>
-#include <glib.h>
+
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 
 using Inkscape::DocumentUndo;
 
@@ -79,10 +82,6 @@ using Inkscape::DocumentUndo;
 #ifdef WITH_DBUS
 #include "extension/dbus/dbus-init.h"
 #endif
-
-//#ifdef WITH_INKBOARD
-//#include "jabber_whiteboard/session-manager.h"
-//#endif
 
 #ifdef WIN32
 #include <windows.h>
@@ -145,7 +144,7 @@ SPDesktop *sp_file_new(const Glib::ustring &templ)
     return dt;
 }
 
-SPDesktop* sp_file_new_default()
+Glib::ustring sp_file_default_template_uri()
 {
     std::list<gchar *> sources;
     sources.push_back( profile_path("templates") ); // first try user's local dir
@@ -181,12 +180,22 @@ SPDesktop* sp_file_new_default()
         g_free(*it);
     }
 
-    SPDesktop* desk = sp_file_new(foundTemplate ? foundTemplate : "");
+    Glib::ustring templateUri = foundTemplate ? foundTemplate : "";
+
     if (foundTemplate) {
         g_free(foundTemplate);
         foundTemplate = 0;
     }
+
+    return templateUri;
+}
+
+SPDesktop* sp_file_new_default()
+{
+    Glib::ustring templateUri = sp_file_default_template_uri();
+    SPDesktop* desk = sp_file_new(sp_file_default_template_uri());
     rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
+
     return desk;
 }
 
@@ -225,12 +234,16 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     SPDocument *doc = NULL;
+    bool cancelled = false;
     try {
         doc = Inkscape::Extension::open(key, uri.c_str());
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
         doc = NULL;
     } catch (Inkscape::Extension::Input::open_failed &e) {
         doc = NULL;
+    } catch (Inkscape::Extension::Input::open_cancelled &e) {
+        doc = NULL;
+        cancelled = true;
     }
 
     if (desktop) {
@@ -277,7 +290,7 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         return TRUE;
-    } else {
+    } else if (!cancelled) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), safeUri);
         sp_ui_error_dialog(text);
@@ -285,6 +298,8 @@ bool sp_file_open(const Glib::ustring &uri,
         g_free(safeUri);
         return FALSE;
     }
+
+    return FALSE;
 }
 
 /**
@@ -659,7 +674,13 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
     }
 
     SP_ACTIVE_DESKTOP->event_log->rememberFileSave();
-    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Document saved."));
+    Glib::ustring msg;
+    if (doc->getURI() == NULL) {
+        msg = Glib::ustring::format(_("Document saved."));
+    } else {
+        msg = Glib::ustring::format(_("Document saved."), " ", doc->getURI());
+    }
+    SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg.c_str());
     return true;
 }
 
@@ -935,7 +956,14 @@ sp_file_save_document(Gtk::Window &parentWindow, SPDocument *doc)
             }
         }
     } else {
-        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No changes need to be saved."));
+        Glib::ustring msg;
+        if ( doc->getURI() == NULL )
+        {
+            msg = Glib::ustring::format(_("No changes need to be saved."));
+        } else {
+            msg = Glib::ustring::format(_("No changes need to be saved."), " ", doc->getURI());
+        }
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, msg.c_str());
         success = TRUE;
     }
 
@@ -1098,9 +1126,6 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         prevent_id_clashes(doc, in_doc);
 
-        SPObject *in_defs = in_doc->getDefs();
-        Inkscape::XML::Node *last_def = in_defs->getRepr()->lastChild();
-
         SPCSSAttr *style = sp_css_attr_from_object(doc->getRoot());
 
         // Count the number of top-level items in the imported document.
@@ -1130,6 +1155,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             place_to_insert = in_doc->getRoot();
         }
 
+        in_doc->importDefs(doc);
+
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = NULL;
@@ -1150,12 +1177,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             // don't lose top-level defs or style elements
             else if (child->getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
                 const gchar *tag = child->getRepr()->name();
-                if (!strcmp(tag, "svg:defs")) {
-                    for ( SPObject *x = child->firstChild(); x; x = x->getNext() ) {
-                        in_defs->getRepr()->addChild(x->getRepr()->duplicate(xml_in_doc), last_def);
-                    }
-                }
-                else if (!strcmp(tag, "svg:style")) {
+                if (!strcmp(tag, "svg:style")) {
                     in_doc->getRoot()->appendChildRepr(child->getRepr()->duplicate(xml_in_doc));
                 }
             }

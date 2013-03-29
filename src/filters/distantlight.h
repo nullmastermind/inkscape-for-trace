@@ -25,10 +25,6 @@
 
 /* Distant light class */
 
-
-class SPFeDistantLight;
-class SPFeDistantLightClass;
-
 class CFeDistantLight;
 
 class SPFeDistantLight : public SPObject {

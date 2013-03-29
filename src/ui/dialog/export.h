@@ -14,22 +14,26 @@
 
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
+
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/progressbar.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/comboboxtext.h>
 
 #include "desktop.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h"
-#include "widgets/sp-attribute-widget.h"
+
+namespace Gtk {
+class Dialog;
+}
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
-
 
 /** What type of button is being pressed */
 enum selection_type {
@@ -39,16 +43,6 @@ enum selection_type {
     SELECTION_CUSTOM,    /**< Allows the user to set the region exported */
     SELECTION_NUMBER_OF  /**< A counter for the number of these guys */
 };
-
-/** A list of strings that is used both in the preferences, and in the
-    data fields to describe the various values of \c selection_type. */
-static const char * selection_names[SELECTION_NUMBER_OF] = {
-    "page", "drawing", "selection", "custom"};
-
-/** The names on the buttons for the various selection types. */
-static const char * selection_labels[SELECTION_NUMBER_OF] = {
-    N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")};
-
 
 /**
  * A dialog widget to export to various image formats such as bitmap and png.
@@ -127,7 +121,7 @@ private:
 #if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> createSpinbutton( gchar const *key, float val, float min, float max,
                                           float step, float page, GtkWidget *us,
-                                          Gtk::Table *t, int x, int y,
+                                          Gtk::Grid *t, int x, int y,
                                           const Glib::ustring ll, const Glib::ustring lr,
                                           int digits, unsigned int sensitive,
                                           void (Export::*cb)() );
@@ -176,6 +170,11 @@ private:
 #else
     void areaYChange ( Gtk::Adjustment *adj);
 #endif
+
+    /**
+     * Hide except selected callback
+     */
+    void onHideExceptSelected ();
 
     /**
      * Area width value changed callback
@@ -349,7 +348,7 @@ private:
     Inkscape::UI::Widget::CheckButton closeWhenDone;
 
     /* Export Button widgets */
-    Gtk::HButtonBox button_box;
+    Gtk::HBox button_box;
     Gtk::Button export_button;
     Gtk::Label export_label;
     Gtk::Image export_image;

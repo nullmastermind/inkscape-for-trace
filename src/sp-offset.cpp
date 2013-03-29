@@ -68,22 +68,7 @@ class SPDocument;
  * radius (look in object-edit).
  */
 
-static void sp_offset_class_init (SPOffsetClass * klass);
-static void sp_offset_init (SPOffset * offset);
 static void sp_offset_finalize(GObject *obj);
-
-static void sp_offset_build (SPObject * object, SPDocument * document,
-                             Inkscape::XML::Node * repr);
-static Inkscape::XML::Node *sp_offset_write (SPObject * object, Inkscape::XML::Document *doc, Inkscape::XML::Node * repr,
-                                guint flags);
-static void sp_offset_set (SPObject * object, unsigned int key,
-                           const gchar * value);
-static void sp_offset_update (SPObject * object, SPCtx * ctx, guint flags);
-static void sp_offset_release (SPObject * object);
-
-static gchar *sp_offset_description (SPItem * item);
-static void sp_offset_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-static void sp_offset_set_shape (SPShape * shape);
 
 static void refresh_offset_source(SPOffset* offset);
 
@@ -102,38 +87,7 @@ static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *i
 // reappearing in offset when the radius becomes too large
 static bool   use_slow_but_correct_offset_method=false;
 
-
-// nothing special here, same for every class in sodipodi/inkscape
-static SPShapeClass *parent_class;
-
-/**
- * Register SPOffset class and return its type number.
- */
-GType
-sp_offset_get_type (void)
-{
-    static GType offset_type = 0;
-
-    if (!offset_type)
-    {
-        GTypeInfo offset_info = {
-            sizeof (SPOffsetClass),
-            NULL,			/* base_init */
-            NULL,			/* base_finalize */
-            (GClassInitFunc) sp_offset_class_init,
-            NULL,			/* class_finalize */
-            NULL,			/* class_data */
-            sizeof (SPOffset),
-            16,			/* n_preallocs */
-            (GInstanceInitFunc) sp_offset_init,
-            NULL,			/* value_table */
-        };
-        offset_type =
-            g_type_register_static (SP_TYPE_SHAPE, "SPOffset", &offset_info,
-                                    (GTypeFlags) 0);
-    }
-    return offset_type;
-}
+G_DEFINE_TYPE(SPOffset, sp_offset, SP_TYPE_SHAPE);
 
 /**
  * SPOffset vtable initialization.
@@ -142,24 +96,7 @@ static void
 sp_offset_class_init(SPOffsetClass *klass)
 {
     GObjectClass  *gobject_class = (GObjectClass *) klass;
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPItemClass   *item_class = (SPItemClass *) klass;
-    SPShapeClass  *shape_class = (SPShapeClass *) klass;
-
-    parent_class = (SPShapeClass *) g_type_class_ref (SP_TYPE_SHAPE);
-
     gobject_class->finalize = sp_offset_finalize;
-
-    //sp_object_class->build = sp_offset_build;
-//    sp_object_class->write = sp_offset_write;
-//    sp_object_class->set = sp_offset_set;
-//    sp_object_class->update = sp_offset_update;
-//    sp_object_class->release = sp_offset_release;
-
-//    item_class->description = sp_offset_description;
-//    item_class->snappoints = sp_offset_snappoints;
-
-    //shape_class->set_shape = sp_offset_set_shape;
 }
 
 COffset::COffset(SPOffset* offset) : CShape(offset) {
@@ -176,6 +113,8 @@ static void
 sp_offset_init(SPOffset *offset)
 {
 	offset->coffset = new COffset(offset);
+
+	delete offset->cshape;
 	offset->cshape = offset->coffset;
 	offset->clpeitem = offset->coffset;
 	offset->citem = offset->coffset;
@@ -264,16 +203,6 @@ void COffset::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-// CPPIFY: remove
-/**
- * Virtual build: set offset attributes from corresponding repr.
- */
-static void
-sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPOffset*)object)->coffset->onBuild(document, repr);
-}
-
 Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPOffset* object = this->spoffset;
     SPOffset *offset = object;
@@ -297,7 +226,7 @@ Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     // Make sure the object has curve
     SPCurve *curve = SP_SHAPE (offset)->getCurve();
     if (curve == NULL) {
-        sp_offset_set_shape (SP_SHAPE (offset));
+        this->onSetShape();
     }
 
     // write that curve to "d"
@@ -308,16 +237,6 @@ Inkscape::XML::Node* COffset::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     CShape::onWrite(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
-}
-
-// CPPIFY: remove
-/**
- * Virtual write: write offset attributes to corresponding repr.
- */
-static Inkscape::XML::Node *
-sp_offset_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPOffset*)object)->coffset->onWrite(xml_doc, repr, flags);
 }
 
 void COffset::onRelease() {
@@ -337,16 +256,6 @@ void COffset::onRelease() {
     offset->sourceRef->detach();
 
     CShape::onRelease();
-}
-
-// CPPIFY: remove
-/**
- * Virtual release callback.
- */
-static void
-sp_offset_release(SPObject *object)
-{
-	((SPOffset*)object)->coffset->onRelease();
 }
 
 void COffset::onSet(unsigned int key, const gchar* value) {
@@ -415,17 +324,6 @@ void COffset::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-/**
- * Set callback: the function that is called whenever a change is made to
- * the description of the object.
- */
-static void
-sp_offset_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPOffset*)object)->coffset->onSet(key, value);
-}
-
 void COffset::onUpdate(SPCtx *ctx, guint flags) {
 	SPOffset* object = this->spoffset;
     SPOffset* offset = object;
@@ -442,16 +340,6 @@ void COffset::onUpdate(SPCtx *ctx, guint flags) {
     CShape::onUpdate(ctx, flags);
 }
 
-// CPPIFY: remove
-/**
- * Update callback: the object has changed, recompute its shape.
- */
-static void
-sp_offset_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    ((SPOffset*)object)->coffset->onUpdate(ctx, flags);
-}
-
 gchar* COffset::onDescription() {
 	SPOffset* item = this->spoffset;
     SPOffset *offset = item;
@@ -465,16 +353,6 @@ gchar* COffset::onDescription() {
         return g_strdup_printf(_("<b>Dynamic offset</b>, %s by %f pt"),
                                (offset->rad >= 0)? _("outset") : _("inset"), fabs (offset->rad));
     }
-}
-
-// CPPIFY: remove
-/**
- * Returns a textual description of object.
- */
-static gchar *
-sp_offset_description(SPItem *item)
-{
-	return ((SPOffset*)item)->coffset->onDescription();
 }
 
 void COffset::onSetShape() {
@@ -759,27 +637,8 @@ void COffset::onSetShape() {
     }
 }
 
-// CPPIFY: remove
-/**
- * Compute and set shape's offset.
- */
-static void
-sp_offset_set_shape(SPShape *shape)
-{
-	((SPOffset*)shape)->coffset->onSetShape();
-}
-
 void COffset::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
     CShape::onSnappoints(p, snapprefs);
-}
-
-// CPPIFY: remove
-/**
- * Virtual snappoints function.
- */
-static void sp_offset_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
-	((SPOffset*)item)->coffset->onSnappoints(p, snapprefs);
 }
 
 
@@ -802,7 +661,7 @@ static void sp_offset_snappoints(SPItem const *item, std::vector<Inkscape::SnapC
  *  dot(A, rot90(B))*dot(C, rot90(B)) == -1.
  *    -- njh
  */
-bool
+static bool
 vectors_are_clockwise (Geom::Point A, Geom::Point B, Geom::Point C)
 {
     using Geom::rot90;
@@ -993,7 +852,7 @@ sp_offset_distance_to_original (SPOffset * offset, Geom::Point px)
  * \return the topmost point on the offset.
  */
 void
-sp_offset_top_point (SPOffset * offset, Geom::Point *px)
+sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 {
     (*px) = Geom::Point(0, 0);
     if (offset == NULL)
@@ -1008,7 +867,7 @@ sp_offset_top_point (SPOffset * offset, Geom::Point *px)
     SPCurve *curve = SP_SHAPE (offset)->getCurve();
     if (curve == NULL)
     {
-        sp_offset_set_shape (SP_SHAPE (offset));
+        offset->coffset->onSetShape();
         curve = SP_SHAPE (offset)->getCurve();
         if (curve == NULL)
             return;

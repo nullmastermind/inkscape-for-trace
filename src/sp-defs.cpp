@@ -20,40 +20,22 @@
 #include "xml/repr.h"
 #include "document.h"
 
-SPObjectClass * SPDefsClass::static_parent_class = 0;
 
-GType SPDefs::sp_defs_get_type(void)
+G_DEFINE_TYPE(SPDefs, sp_defs, SP_TYPE_OBJECT);
+
+static void
+sp_defs_class_init(SPDefsClass *dc)
 {
-    static GType defs_type = 0;
-
-    if (!defs_type) {
-        GTypeInfo defs_info = {
-            sizeof(SPDefsClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) SPDefsClass::sp_defs_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof(SPDefs),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) init,
-            NULL,       /* value_table */
-        };
-        defs_type = g_type_register_static(SP_TYPE_OBJECT, "SPDefs", &defs_info, (GTypeFlags) 0);
-    }
-
-    return defs_type;
-}
-
-void SPDefsClass::sp_defs_class_init(SPDefsClass *dc)
-{
-    static_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
     SPObjectClass *sp_object_class = (SPObjectClass *) dc;
 
-//    sp_object_class->release = SPDefs::release;
-//    sp_object_class->update = SPDefs::update;
-//    sp_object_class->modified = SPDefs::modified;
-//    sp_object_class->write = SPDefs::write;
+}
+static void
+sp_defs_init(SPDefs* defs)
+{
+	defs->cdefs = new CDefs(defs);
+
+	delete defs->cobject;
+	defs->cobject = defs->cdefs;
 }
 
 CDefs::CDefs(SPDefs* defs) : CObject(defs) {
@@ -64,19 +46,9 @@ CDefs::~CDefs() {
 }
 
 
-void SPDefs::init(SPDefs *defs)
-{
-	defs->cdefs = new CDefs(defs);
-	defs->cobject = defs->cdefs;
-}
 
 void CDefs::onRelease() {
 	CObject::onRelease();
-}
-
-void SPDefs::release(SPObject *object)
-{
-	((SPDefs*)object)->cdefs->onRelease();
 }
 
 void CDefs::onUpdate(SPCtx *ctx, guint flags) {
@@ -97,11 +69,6 @@ void CDefs::onUpdate(SPCtx *ctx, guint flags) {
         }
         g_object_unref (G_OBJECT (child));
     }
-}
-
-void SPDefs::update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPDefs*)object)->cdefs->onUpdate(ctx, flags);
 }
 
 void CDefs::onModified(unsigned int flags) {
@@ -129,11 +96,6 @@ void CDefs::onModified(unsigned int flags) {
         }
         g_object_unref( G_OBJECT(child) );
     }
-}
-
-void SPDefs::modified(SPObject *object, guint flags)
-{
-	((SPDefs*)object)->cdefs->onModified(flags);
 }
 
 Inkscape::XML::Node* CDefs::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -168,11 +130,6 @@ Inkscape::XML::Node* CDefs::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPDefs*)object)->cdefs->onWrite(xml_doc, repr, flags);
 }
 
 /*

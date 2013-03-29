@@ -15,6 +15,10 @@
 #ifndef SEEN_UI_DIALOG_TILE_H
 #define SEEN_UI_DIALOG_TILE_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/checkbutton.h>
@@ -26,6 +30,12 @@
 
 namespace Gtk {
 class Button;
+
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
 }
 
 namespace Inkscape {
@@ -129,8 +139,15 @@ private:
     Gtk::RadioButton      HorizRightRadioButton;
     double HorizAlign;
 
+    Inkscape::UI::Widget::UnitMenu      PaddingUnitMenu;
     Inkscape::UI::Widget::ScalarUnit    XPadding;
     Inkscape::UI::Widget::ScalarUnit    YPadding;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid                          *PaddingTable;
+#else
+    Gtk::Table                         *PaddingTable;
+#endif
 
     // BBox or manual spacing
     Gtk::VBox             SpacingVBox;

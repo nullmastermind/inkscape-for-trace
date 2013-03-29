@@ -28,9 +28,8 @@
 # include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
-
 #include "ui/widget/spinbutton.h"
+#include <glibmm/i18n.h>
 #include "toolbox.h"
 #include "pencil-toolbar.h"
 
@@ -91,7 +90,7 @@ using Inkscape::UI::PrefPusher;
 /* This is used in generic functions below to share large portions of code between pen and pencil tool */
 static Glib::ustring const freehand_tool_name(GObject *dataKludge)
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data(dataKludge, "desktop");
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(dataKludge, "desktop"));
     return ( tools_isactive(desktop, TOOLS_FREEHAND_PEN)
              ? "/tools/freehand/pen"
              : "/tools/freehand/pencil" );
@@ -104,7 +103,7 @@ static void freehand_mode_changed(EgeSelectOneAction* act, GObject* tbl)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt(freehand_tool_name(tbl) + "/freehand-mode", mode);
 
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data(tbl, "desktop");
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(tbl, "desktop"));
 
     // in pen tool we have more options than in pencil tool; if one of them was chosen, we do any
     // preparatory work here
@@ -242,7 +241,7 @@ static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
     // fixme: make settable
     gdouble tolerance = 4;
 
-    adj = (GtkAdjustment*)g_object_get_data(obj, "tolerance");
+    adj = GTK_ADJUSTMENT(g_object_get_data(obj, "tolerance"));
     gtk_adjustment_set_value(adj, tolerance);
     gtk_adjustment_value_changed(adj);
 
@@ -282,7 +281,7 @@ public:
         }
         g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
-        GtkAdjustment * adj = (GtkAdjustment*)g_object_get_data(tbl, "tolerance");
+        GtkAdjustment * adj = GTK_ADJUSTMENT(g_object_get_data(tbl, "tolerance"));
 
         double v = val.getDouble(adj->value);
         gtk_adjustment_set_value(adj, v);

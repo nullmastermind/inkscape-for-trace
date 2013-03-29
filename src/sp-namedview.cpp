@@ -49,58 +49,16 @@ using Inkscape::DocumentUndo;
 #define DEFAULTBORDERCOLOR 0x000000ff
 #define DEFAULTPAGECOLOR 0xffffff00
 
-static void sp_namedview_class_init(SPNamedViewClass *klass);
-static void sp_namedview_init(SPNamedView *namedview);
-
-static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_namedview_release(SPObject *object);
-static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value);
-static void sp_namedview_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-static void sp_namedview_remove_child(SPObject *object, Inkscape::XML::Node *child);
-static Inkscape::XML::Node *sp_namedview_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
 static void sp_namedview_setup_guides(SPNamedView * nv);
 static void sp_namedview_show_single_guide(SPGuide* guide, bool show);
 
 static gboolean sp_str_to_bool(const gchar *str);
 static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
 
-static SPObjectGroupClass * parent_class;
-
-GType
-sp_namedview_get_type()
-{
-    static GType namedview_type = 0;
-    if (!namedview_type) {
-        GTypeInfo namedview_info = {
-            sizeof(SPNamedViewClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) sp_namedview_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof(SPNamedView),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) sp_namedview_init,
-            NULL,       /* value_table */
-        };
-        namedview_type = g_type_register_static(SP_TYPE_OBJECTGROUP, "SPNamedView", &namedview_info, (GTypeFlags)0);
-    }
-    return namedview_type;
-}
+G_DEFINE_TYPE(SPNamedView, sp_namedview, SP_TYPE_OBJECTGROUP);
 
 static void sp_namedview_class_init(SPNamedViewClass * klass)
 {
-    SPObjectClass *sp_object_class = reinterpret_cast<SPObjectClass *>(klass);
-
-    parent_class = reinterpret_cast<SPObjectGroupClass *>(g_type_class_ref(SP_TYPE_OBJECTGROUP));
-
-    //sp_object_class->build = sp_namedview_build;
-//    sp_object_class->release = sp_namedview_release;
-//    sp_object_class->set = sp_namedview_set;
-//    sp_object_class->child_added = sp_namedview_child_added;
-//    sp_object_class->remove_child = sp_namedview_remove_child;
-//    sp_object_class->write = sp_namedview_write;
 }
 
 CNamedView::CNamedView(SPNamedView* view) : CObjectGroup(view) {
@@ -113,6 +71,8 @@ CNamedView::~CNamedView() {
 static void sp_namedview_init(SPNamedView *nv)
 {
 	nv->cnamedview = new CNamedView(nv);
+
+	delete nv->cobjectgroup;
 	nv->cobjectgroup = nv->cnamedview;
 	nv->cobject = nv->cnamedview;
 
@@ -297,11 +257,6 @@ void CNamedView::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     sp_namedview_generate_old_grid(nv, document, repr);
 }
 
-static void sp_namedview_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPNamedView*)object)->cnamedview->onBuild(document, repr);
-}
-
 void CNamedView::onRelease() {
 	SPNamedView* object = this->spnamedview;
     SPNamedView *namedview = (SPNamedView *) object;
@@ -318,17 +273,9 @@ void CNamedView::onRelease() {
         namedview->grids = g_slist_remove_link(namedview->grids, namedview->grids); // deletes first entry
     }
 
-//    if (((SPObjectClass *) parent_class)->release) {
-//        ((SPObjectClass *) parent_class)->release(object);
-//    }
     CObjectGroup::onRelease();
 
     namedview->snap_manager.~SnapManager();
-}
-
-static void sp_namedview_release(SPObject *object)
-{
-	((SPNamedView*)object)->cnamedview->onRelease();
 }
 
 void CNamedView::onSet(unsigned int key, const gchar* value) {
@@ -651,11 +598,6 @@ void CNamedView::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPNamedView*)object)->cnamedview->onSet(key, value);
-}
-
 /**
 * add a grid item from SVG-repr. Check if this namedview already has a gridobject for this one! If desktop=null, add grid-canvasitem to all desktops of this namedview,
 * otherwise only add it to the specified desktop.
@@ -728,11 +670,6 @@ void CNamedView::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *r
     }
 }
 
-static void sp_namedview_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPNamedView*)object)->cnamedview->onChildAdded(child, ref);
-}
-
 void CNamedView::onRemoveChild(Inkscape::XML::Node *child) {
 	SPNamedView* object = this->spnamedview;
     SPNamedView *nv = (SPNamedView *) object;
@@ -762,11 +699,6 @@ void CNamedView::onRemoveChild(Inkscape::XML::Node *child) {
     CObjectGroup::onRemoveChild(child);
 }
 
-static void sp_namedview_remove_child(SPObject *object, Inkscape::XML::Node *child)
-{
-	((SPNamedView*)object)->cnamedview->onRemoveChild(child);
-}
-
 Inkscape::XML::Node* CNamedView::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPNamedView* object = this->spnamedview;
 
@@ -781,11 +713,6 @@ Inkscape::XML::Node* CNamedView::onWrite(Inkscape::XML::Document *xml_doc, Inksc
     }
 
     return repr;
-}
-
-static Inkscape::XML::Node *sp_namedview_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPNamedView*)object)->cnamedview->onWrite(doc, repr, flags);
 }
 
 void SPNamedView::show(SPDesktop *desktop)
@@ -828,7 +755,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 {
     SPNamedView *nv = desktop->namedview;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool geometry_from_file = prefs->getBool("/options/savewindowgeometry/value");
+    bool geometry_from_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
     bool show_dialogs = TRUE;
 
     // restore window size and position stored with the document
@@ -926,7 +853,8 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
 void sp_namedview_document_from_window(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool save_geometry_in_file = prefs->getBool("/options/savewindowgeometry/value", 0);
+    bool save_geometry_in_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
+    bool save_viewport_in_file = prefs->getBool("/options/savedocviewport/value", true);
     Inkscape::XML::Node *view = desktop->namedview->getRepr();
     Geom::Rect const r = desktop->get_display_area();
 
@@ -934,9 +862,11 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
     bool saved = DocumentUndo::getUndoSensitive(sp_desktop_document(desktop));
     DocumentUndo::setUndoSensitive(sp_desktop_document(desktop), false);
 
-    sp_repr_set_svg_double(view, "inkscape:zoom", desktop->current_zoom());
-    sp_repr_set_svg_double(view, "inkscape:cx", r.midpoint()[Geom::X]);
-    sp_repr_set_svg_double(view, "inkscape:cy", r.midpoint()[Geom::Y]);
+    if (save_viewport_in_file) {
+        sp_repr_set_svg_double(view, "inkscape:zoom", desktop->current_zoom());
+        sp_repr_set_svg_double(view, "inkscape:cx", r.midpoint()[Geom::X]);
+        sp_repr_set_svg_double(view, "inkscape:cy", r.midpoint()[Geom::Y]);
+    }
 
     if (save_geometry_in_file) {
         gint w, h, x, y;

@@ -32,8 +32,6 @@ enum FeCompositeOperator {
     COMPOSITE_ENDOPERATOR
 };
 
-class SPFeCompositeClass;
-
 class CFeComposite;
 
 class SPFeComposite : public SPFilterPrimitive {

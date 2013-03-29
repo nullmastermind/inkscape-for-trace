@@ -102,15 +102,16 @@ static inline Tt clip_round_cast(Ts const v) {
     Ts const minval = std::numeric_limits<Tt>::min();
     Ts const maxval = std::numeric_limits<Tt>::max();
     Tt const minval_rounded = std::numeric_limits<Tt>::min();
-    Ts const maxval_rounded = std::numeric_limits<Tt>::max();
+    Tt const maxval_rounded = std::numeric_limits<Tt>::max();
     if ( v < minval ) return minval_rounded;
     if ( v > maxval ) return maxval_rounded;
     return round_cast<Tt>(v);
 }
 
 template<typename Tt, typename Ts>
-static inline Tt clip_round_cast_varmax(Ts const v, Ts const maxval, Tt const maxval_rounded) {
+static inline Tt clip_round_cast_varmax(Ts const v, Tt const maxval_rounded) {
     Ts const minval = std::numeric_limits<Tt>::min();
+    Tt const maxval = maxval_rounded;
     Tt const minval_rounded = std::numeric_limits<Tt>::min();
     if ( v < minval ) return minval_rounded;
     if ( v > maxval ) return maxval_rounded;
@@ -145,6 +146,7 @@ static void
 _make_kernel(FIRValue *const kernel, double const deviation)
 {
     int const scr_len = _effect_area_scr(deviation);
+    g_assert(scr_len >= 0);
     double const d_sq = sqr(deviation) * 2;
     double k[scr_len+1]; // This is only called for small kernel sizes (above approximately 10 coefficients the IIR filter is used)
 
@@ -338,7 +340,7 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
         dstimg -= dstr1;
         if ( PREMULTIPLIED_ALPHA ) {
             dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
-            PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], v[0][alpha_PC], dstimg[alpha_PC]);
+            PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
         } else {
             for(unsigned int c=0; c<PC; c++) dstimg[c] = clip_round_cast<PT>(v[0][c]);
         }
@@ -353,7 +355,7 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
             dstimg -= dstr1;
             if ( PREMULTIPLIED_ALPHA ) {
                 dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
-                PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], v[0][alpha_PC], dstimg[alpha_PC]);
+                PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
             } else {
                 for(unsigned int c=0; c<PC; c++) dstimg[c] = clip_round_cast<PT>(v[0][c]);
             }
@@ -551,6 +553,15 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     cairo_surface_t *in = slot.getcairo(_input);
     if (!in) return;
 
+    // We may need to transform input surface to correct color interpolation space. The input surface
+    // might be used as input to another primitive but it is likely that all the primitives in a given
+    // filter use the same color interpolation space so we don't copy the input before converting.
+    SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
+    if( _style ) {
+        ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
+    }
+    set_cairo_surface_ci( in, ci_fp );
+
     // zero deviation = no change in output
     if (_deviation_x <= 0 && _deviation_y <= 0) {
         cairo_surface_t *cp = ink_cairo_surface_copy(in);
@@ -658,10 +669,14 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
         cairo_paint(ct);
         cairo_destroy(ct);
 
+        set_cairo_surface_ci( upsampled, ci_fp );
+
         slot.set(_output, upsampled);
         cairo_surface_destroy(upsampled);
         cairo_surface_destroy(downsampled);
     } else {
+        set_cairo_surface_ci( downsampled, ci_fp );
+
         slot.set(_output, downsampled);
         cairo_surface_destroy(downsampled);
     }

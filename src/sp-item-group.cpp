@@ -53,89 +53,18 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_group_class_init (SPGroupClass *klass);
-static void sp_group_init (SPGroup *group);
-static void sp_group_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_group_release(SPObject *object);
 static void sp_group_dispose(GObject *object);
 
-static void sp_group_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
-static void sp_group_remove_child (SPObject * object, Inkscape::XML::Node * child);
-static void sp_group_order_changed (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node * new_ref);
-static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_group_modified (SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_group_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void sp_group_set(SPObject *object, unsigned key, char const *value);
-
-static Geom::OptRect sp_group_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-static void sp_group_print (SPItem * item, SPPrintContext *ctx);
-static gchar * sp_group_description (SPItem * item);
-static Inkscape::DrawingItem *sp_group_show (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-static void sp_group_hide (SPItem * item, unsigned int key);
-static void sp_group_snappoints (SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-
-static void sp_group_update_patheffect(SPLPEItem *lpeitem, bool write);
 static void sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write);
 
-static SPLPEItemClass * parent_class;
-
-GType
-sp_group_get_type (void)
-{
-    static GType group_type = 0;
-    if (!group_type) {
-        GTypeInfo group_info = {
-            sizeof (SPGroupClass),
-            NULL,	/* base_init */
-            NULL,	/* base_finalize */
-            (GClassInitFunc) sp_group_class_init,
-            NULL,	/* class_finalize */
-            NULL,	/* class_data */
-            sizeof (SPGroup),
-            16,	/* n_preallocs */
-            (GInstanceInitFunc) sp_group_init,
-            NULL,	/* value_table */
-        };
-        group_type = g_type_register_static (SP_TYPE_LPE_ITEM, "SPGroup", &group_info, (GTypeFlags)0);
-    }
-    return group_type;
-}
+G_DEFINE_TYPE(SPGroup, sp_group, SP_TYPE_LPE_ITEM);
 
 static void
 sp_group_class_init (SPGroupClass *klass)
 {
     GObjectClass * object_class;
-    SPObjectClass * sp_object_class;
-    SPItemClass * item_class;
-    SPLPEItemClass * lpe_item_class;
-
     object_class = (GObjectClass *) klass;
-    sp_object_class = (SPObjectClass *) klass;
-    item_class = (SPItemClass *) klass;
-    lpe_item_class = (SPLPEItemClass *) klass;
-
-    parent_class = (SPLPEItemClass *)g_type_class_ref (SP_TYPE_LPE_ITEM);
-
     object_class->dispose = sp_group_dispose;
-
-//    sp_object_class->child_added = sp_group_child_added;
-//    sp_object_class->remove_child = sp_group_remove_child;
-//    sp_object_class->order_changed = sp_group_order_changed;
-//    sp_object_class->update = sp_group_update;
-//    sp_object_class->modified = sp_group_modified;
-//    sp_object_class->set = sp_group_set;
-//    sp_object_class->write = sp_group_write;
-//    sp_object_class->release = sp_group_release;
-    //sp_object_class->build = sp_group_build;
-
-//    item_class->bbox = sp_group_bbox;
-//    item_class->print = sp_group_print;
-//    item_class->description = sp_group_description;
-//    item_class->show = sp_group_show;
-//    item_class->hide = sp_group_hide;
-//    item_class->snappoints = sp_group_snappoints;
-
-    //lpe_item_class->update_patheffect = sp_group_update_patheffect;
 }
 
 CGroup::CGroup(SPGroup *group) : CLPEItem(group) {
@@ -149,6 +78,8 @@ static void
 sp_group_init (SPGroup *group)
 {
 	group->cgroup = new CGroup(group);
+
+	delete group->clpeitem;
 	group->clpeitem = group->cgroup;
 	group->citem = group->cgroup;
 	group->cobject = group->cgroup;
@@ -165,25 +96,13 @@ void CGroup::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     CLPEItem::onBuild(document, repr);
 }
 
-// CPPIFY: remove
-static void sp_group_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPGroup*)object)->cgroup->onBuild(document, repr);
-}
-
 void CGroup::onRelease() {
 	SPGroup* object = this->spgroup;
 
     if ( SP_GROUP(object)->_layer_mode == SPGroup::LAYER ) {
         object->document->removeResource("layer", object);
     }
-
     CLPEItem::onRelease();
-}
-
-// CPPIFY: remove
-static void sp_group_release(SPObject *object) {
-	((SPGroup*)object)->cgroup->onRelease();
 }
 
 static void
@@ -236,25 +155,12 @@ void CGroup::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
     spgroup->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-// CPPIFY: remove
-static void sp_group_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPGroup*)object)->cgroup->onChildAdded(child, ref);
-}
-
 /* fixme: hide (Lauris) */
 
 void CGroup::onRemoveChild(Inkscape::XML::Node *child) {
     CLPEItem::onRemoveChild(child);
 
     spgroup->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-// CPPIFY: remove
-static void
-sp_group_remove_child (SPObject * object, Inkscape::XML::Node * child)
-{
-    ((SPGroup*)object)->cgroup->onRemoveChild(child);
 }
 
 void CGroup::onOrderChanged (Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
@@ -272,13 +178,6 @@ void CGroup::onOrderChanged (Inkscape::XML::Node *child, Inkscape::XML::Node *ol
     }
 
     spgroup->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-// CPPIFY: remove
-static void
-sp_group_order_changed (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref)
-{
-    ((SPGroup*)object)->cgroup->onOrderChanged(child, old_ref, new_ref);
 }
 
 void CGroup::onUpdate(SPCtx *ctx, unsigned int flags) {
@@ -321,13 +220,6 @@ void CGroup::onUpdate(SPCtx *ctx, unsigned int flags) {
     }
 }
 
-// CPPIFY: remove
-static void
-sp_group_update (SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-    ((SPGroup*)object)->cgroup->onUpdate(ctx, flags);
-}
-
 void CGroup::onModified(guint flags) {
     CLPEItem::onModified(flags);
 
@@ -353,13 +245,6 @@ void CGroup::onModified(guint flags) {
         }
         g_object_unref (G_OBJECT (child));
     }
-}
-
-// CPPIFY: remove
-static void
-sp_group_modified (SPObject *object, guint flags)
-{
-    ((SPGroup*)object)->cgroup->onModified(flags);
 }
 
 Inkscape::XML::Node* CGroup::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -416,17 +301,11 @@ Inkscape::XML::Node* CGroup::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
-// CPPIFY: remove
-static Inkscape::XML::Node * sp_group_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPGroup*)object)->cgroup->onWrite(xml_doc, repr, flags);
-}
-
 Geom::OptRect CGroup::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype)
 {
     Geom::OptRect bbox;
 
-    GSList *l = spgroup->childList(false, SPObject::ActionBBox);
+    GSList *l = this->spgroup->childList(false, SPObject::ActionBBox);
     while (l) {
         SPObject *o = SP_OBJECT (l->data);
         if (SP_IS_ITEM(o) && !SP_ITEM(o)->isHidden()) {
@@ -437,13 +316,6 @@ Geom::OptRect CGroup::onBbox(Geom::Affine const &transform, SPItem::BBoxType bbo
         l = g_slist_remove (l, o);
     }
     return bbox;
-}
-
-// CPPIFY: remove
-static Geom::OptRect
-sp_group_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
-{
-    return ((SPGroup*)item)->cgroup->onBbox(transform, type);
 }
 
 void CGroup::onPrint(SPPrintContext *ctx) {
@@ -457,25 +329,12 @@ void CGroup::onPrint(SPPrintContext *ctx) {
     }
 }
 
-// CPPIFY: remove
-static void
-sp_group_print (SPItem * item, SPPrintContext *ctx)
-{
-    ((SPGroup*)item)->cgroup->onPrint(ctx);
-}
-
 gchar *CGroup::onDescription() {
     gint len = this->spgroup->getItemCount();
     return g_strdup_printf(
             ngettext("<b>Group</b> of <b>%d</b> object",
                  "<b>Group</b> of <b>%d</b> objects",
                  len), len);
-}
-
-// CPPIFY: remove
-static gchar * sp_group_description (SPItem * item)
-{
-    return ((SPGroup*)item)->cgroup->onDescription();
 }
 
 void CGroup::onSet(unsigned int key, gchar const* value) {
@@ -497,11 +356,6 @@ void CGroup::onSet(unsigned int key, gchar const* value) {
     }
 }
 
-// CPPIFY: remove
-static void sp_group_set(SPObject *object, unsigned key, char const *value) {
-	((SPGroup*)object)->cgroup->onSet(key, value);
-}
-
 Inkscape::DrawingItem *CGroup::onShow (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
     Inkscape::DrawingGroup *ai;
     SPObject *object = spgroup;
@@ -512,13 +366,6 @@ Inkscape::DrawingItem *CGroup::onShow (Inkscape::Drawing &drawing, unsigned int 
 
     this->spgroup->_showChildren(drawing, ai, key, flags);
     return ai;
-}
-
-// CPPIFY: remove
-static Inkscape::DrawingItem *
-sp_group_show (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
-{
-    return ((SPGroup*)item)->cgroup->onShow(drawing, key, flags);
 }
 
 void CGroup::onHide (unsigned int key) {
@@ -534,19 +381,9 @@ void CGroup::onHide (unsigned int key) {
         l = g_slist_remove (l, o);
     }
 
-    // CPPIFY: This doesn't make no sense.
-    // CItem::onHide is pure and CLPEItem doesn't override it. What was the idea behind these lines?
-//    if (((SPItemClass *) parent_class)->hide)
-//        ((SPItemClass *) parent_class)->hide (spgroup, key);
 //    CLPEItem::onHide(key);
 }
 
-// CPPIFY: remove
-static void
-sp_group_hide (SPItem *item, unsigned int key)
-{
-    ((SPGroup*)item)->cgroup->onHide(key);
-}
 
 void CGroup::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	SPGroup* item = this->spgroup;
@@ -557,12 +394,6 @@ void CGroup::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
             SP_ITEM(o)->getSnappoints(p, snapprefs);
         }
     }
-}
-
-// CPPIFY: remove
-static void sp_group_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
-	((SPGroup*)item)->cgroup->onSnappoints(p, snapprefs);
 }
 
 
@@ -832,7 +663,9 @@ void SPGroup::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *
         if (SP_IS_ITEM (o)) {
             child = SP_ITEM (o);
             ac = child->invoke_show (drawing, key, flags);
-            ai->appendChild(ac);
+            if (ac) {
+                ai->appendChild(ac);
+            }
         }
         l = g_slist_remove (l, o);
     }
@@ -851,9 +684,6 @@ void CGroup::onUpdatePatheffect(bool write) {
     for ( GSList const *iter = item_list; iter; iter = iter->next ) {
         SPObject *subitem = static_cast<SPObject *>(iter->data);
         if (SP_IS_LPE_ITEM(subitem)) {
-            //if (SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (subitem))->update_patheffect) {
-            //    SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (subitem))->update_patheffect (SP_LPE_ITEM(subitem), write);
-            //}
         	((SPLPEItem*)subitem)->clpeitem->onUpdatePatheffect(write);
         }
     }
@@ -869,13 +699,6 @@ void CGroup::onUpdatePatheffect(bool write) {
 
         sp_group_perform_patheffect(SP_GROUP(lpeitem), SP_GROUP(lpeitem), write);
     }
-}
-
-// CPPIFY: remove
-static void
-sp_group_update_patheffect (SPLPEItem *lpeitem, bool write)
-{
-	((SPGroup*)lpeitem)->cgroup->onUpdatePatheffect(write);
 }
 
 static void

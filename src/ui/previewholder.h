@@ -12,10 +12,21 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/bin.h>
-#include <gtkmm/table.h>
+
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
+}
+
 #include "previewfillable.h"
 #include "../widgets/eek-preview.h"
 #include "enums.h"
@@ -33,18 +44,20 @@ public:
     virtual void addPreview( Previewable* preview );
     virtual void freezeUpdates();
     virtual void thawUpdates();
-    virtual void setStyle( ::PreviewSize size, ViewType view, guint ratio );
+    virtual void setStyle( ::PreviewSize size, ViewType view, guint ratio, ::BorderStyle border );
     virtual void setOrientation(SPAnchorType how);
     virtual int getColumnPref() const { return _prefCols; }
     virtual void setColumnPref( int cols );
     virtual ::PreviewSize getPreviewSize() const { return _baseSize; }
     virtual ViewType getPreviewType() const { return _view; }
     virtual guint getPreviewRatio() const { return _ratio; }
+    virtual ::BorderStyle getPreviewBorder() const { return _border; }
     virtual void setWrap( bool b );
     virtual bool getWrap() const { return _wrap; }
 
 protected:
     virtual void on_size_allocate( Gtk::Allocation& allocation );
+    virtual bool on_scroll_event(GdkEventScroll*);
 //    virtual void on_size_request( Gtk::Requisition* requisition );
 
 
@@ -54,7 +67,13 @@ private:
 
     std::vector<Previewable*> items;
     Gtk::Bin *_scroller;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid *_insides;
+#else
     Gtk::Table *_insides;
+#endif
+
     int _prefCols;
     bool _updatesFrozen;
     SPAnchorType _anchor;
@@ -62,6 +81,7 @@ private:
     guint _ratio;
     ViewType _view;
     bool _wrap;
+    ::BorderStyle _border;
 };
 
 } //namespace UI

@@ -24,48 +24,12 @@
 #include "document.h"
 #include "inkscape.h"
 
-SPShapeClass * SPLineClass::static_parent_class = 0;
 
-GType SPLine::sp_line_get_type(void)
+G_DEFINE_TYPE(SPLine, sp_line, SP_TYPE_SHAPE);
+
+static void
+sp_line_class_init(SPLineClass *klass)
 {
-    static GType line_type = 0;
-
-    if (!line_type) {
-        GTypeInfo line_info = {
-            sizeof(SPLineClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) SPLineClass::sp_line_class_init,
-            NULL,       /* klass_finalize */
-            NULL,       /* klass_data */
-            sizeof(SPLine),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) init,
-            NULL,       /* value_table */
-        };
-        line_type = g_type_register_static(SP_TYPE_SHAPE, "SPLine", &line_info,(GTypeFlags)0);
-    }
-    return line_type;
-}
-
-void SPLineClass::sp_line_class_init(SPLineClass *klass)
-{
-    SPLineClass::static_parent_class = (SPShapeClass *) g_type_class_ref(SP_TYPE_SHAPE);
-
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    //sp_object_class->build = SPLine::build;
-//    sp_object_class->set = SPLine::set;
-//    sp_object_class->write = SPLine::write;
-
-    SPItemClass *item_class = (SPItemClass *) klass;
-//    item_class->description = SPLine::getDescription;
-//    item_class->set_transform = SPLine::setTransform;
-//    item_class->convert_to_guides = SPLine::convertToGuides;
-
-//    sp_object_class->update = SPLine::update;
-
-    SPShapeClass *shape_class = (SPShapeClass *) klass;
-    //shape_class->set_shape = SPLine::setShape;
 }
 
 CLine::CLine(SPLine* line) : CShape(line) {
@@ -75,9 +39,12 @@ CLine::CLine(SPLine* line) : CShape(line) {
 CLine::~CLine() {
 }
 
-void SPLine::init(SPLine * line)
+static void
+sp_line_init(SPLine * line)
 {
 	line->cline = new CLine(line);
+
+	delete line->cshape;
 	line->cshape = line->cline;
 	line->clpeitem = line->cline;
 	line->citem = line->cline;
@@ -98,12 +65,6 @@ void CLine::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     object->readAttr( "y1" );
     object->readAttr( "x2" );
     object->readAttr( "y2" );
-}
-
-// CPPIFY: remove
-void SPLine::build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-	((SPLine*)object)->cline->onBuild(document, repr);
 }
 
 void CLine::onSet(unsigned int key, const gchar* value) {
@@ -135,12 +96,6 @@ void CLine::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-void SPLine::set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPLine*)object)->cline->onSet(key, value);
-}
-
 void CLine::onUpdate(SPCtx *ctx, guint flags) {
 	SPLine* object = this->spline;
 
@@ -162,12 +117,6 @@ void CLine::onUpdate(SPCtx *ctx, guint flags) {
     }
 
     CShape::onUpdate(ctx, flags);
-}
-
-// CPPIFY: remove
-void SPLine::update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPLine*)object)->cline->onUpdate(ctx, flags);
 }
 
 Inkscape::XML::Node* CLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -192,20 +141,8 @@ Inkscape::XML::Node* CLine::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
-// CPPIFY: remove
-Inkscape::XML::Node * SPLine::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPLine*)object)->cline->onWrite(xml_doc, repr, flags);
-}
-
 gchar* CLine::onDescription() {
 	return g_strdup(_("<b>Line</b>"));
-}
-
-// CPPIFY: remove
-gchar * SPLine::getDescription(SPItem *item)
-{
-    return ((SPLine*)item)->cline->onDescription();
 }
 
 void CLine::onConvertToGuides() {
@@ -222,11 +159,6 @@ void CLine::onConvertToGuides() {
     SPGuide::createSPGuide(item->document, points[0], points[1]);
 }
 
-// CPPIFY: remove
-void SPLine::convertToGuides(SPItem *item)
-{
-	((SPLine*)item)->cline->onConvertToGuides();
-}
 
 Geom::Affine CLine::onSetTransform(Geom::Affine const &transform) {
 	SPLine* item = this->spline;
@@ -252,12 +184,6 @@ Geom::Affine CLine::onSetTransform(Geom::Affine const &transform) {
     return Geom::identity();
 }
 
-// CPPIFY: remove
-Geom::Affine SPLine::setTransform(SPItem *item, Geom::Affine const &xform)
-{
-	return ((SPLine*)item)->cline->onSetTransform(xform);
-}
-
 void CLine::onSetShape() {
 	SPLine* shape = this->spline;
     SPLine *line = shape;
@@ -273,12 +199,6 @@ void CLine::onSetShape() {
     // LPE's cannot be applied to lines. (the result can (generally) not be represented as SPLine)
 
     c->unref();
-}
-
-// CPPIFY: remove
-void SPLine::setShape(SPShape *shape)
-{
-	((SPLine*)shape)->cline->onSetShape();
 }
 
 /*

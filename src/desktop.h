@@ -61,7 +61,7 @@ struct _GdkEventWindowState;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 
 namespace Inkscape {
-  class Application;
+  struct Application;
   class MessageContext;
   class Selection;
   class ObjectHierarchy;
@@ -77,7 +77,7 @@ namespace Inkscape {
       }
 
       namespace View {
-	      class EditWidgetInterface;
+	      struct EditWidgetInterface;
       }
   }
   namespace Whiteboard {
@@ -214,16 +214,6 @@ public:
         return _layer_changed_signal.connect(slot);
     }
 
-    // Whiteboard changes
-
-#ifdef WITH_INKBOARD
-    Inkscape::Whiteboard::SessionManager* whiteboard_session_manager() {
-        return _whiteboard_session_manager;
-    }
-
-    Inkscape::Whiteboard::SessionManager* _whiteboard_session_manager;
-#endif
-
     /**
      * Return new desktop object.
      * \pre namedview != NULL.
@@ -280,7 +270,9 @@ public:
 
     void setCurrentLayer(SPObject *object);
     void toggleLayerSolo(SPObject *object);
-    void toggleAllLayers(bool hidden);
+    void toggleHideAllLayers(bool hide);
+    void toggleLockAllLayers(bool lock);
+    void toggleLockOtherLayers(SPObject *object);
     SPObject *layerForObject(SPObject *object);
     bool isLayer(SPObject *object) const;
     bool isWithinViewport(SPItem *item) const;
@@ -364,6 +356,7 @@ public:
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
+    void toggleToolbar(gchar const *toolbar_name);
 
     bool is_iconified();
     bool is_maximized();
@@ -428,7 +421,6 @@ private:
     sigc::connection _commit_connection;
     sigc::connection _modified_connection;
 
-    virtual void onPositionSet (double, double);
     virtual void onResized (double, double);
     virtual void onRedrawRequested();
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message);

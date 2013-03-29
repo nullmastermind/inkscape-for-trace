@@ -7,8 +7,9 @@
  *   Johan Engelen <goejendaagh@zonnet.nl>
  *   John Smith
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Tavmjong Bah
  *
- * Copyright (C) 1999-2012 Authors
+ * Copyright (C) 1999-2013 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -29,7 +30,7 @@
 #include "ui/dialog/desktop-tracker.h"
 
 class SPItem;
-class SPFontSelector;
+struct SPFontSelector;
 class font_instance;
 class SPCSSAttr;
 
@@ -100,10 +101,10 @@ protected:
      * onFontChange updates the dialog UI. The subfunction setPreviewText updates the preview label.
      *
      * @param fontsel pointer to SPFontSelector (currently not used).
-     * @param font pointer to the font instance for the text to be previewed
+     * @param fontspec for the text to be previewed.
      * @param self pointer to the current instance of the dialog.
      */
-    static void onFontChange (SPFontSelector *fontsel, font_instance *font, TextEdit *self);
+    static void onFontChange (SPFontSelector *fontsel, gchar* fontspec, TextEdit *self);
 
     /**
      * Get the selected text off the main canvas.
@@ -118,15 +119,15 @@ protected:
     unsigned getSelectedTextCount (void);
 
     /**
-     * Helper function to create markup from a font definition and display in the preview label.
+     * Helper function to create markup from a fontspec and display in the preview label.
      * 
-     * @param font pointer to the font instance for the text to be previewed
+     * @param fontspec for the text to be previewed
      * @param phrase text to be shown
      */
-    void setPreviewText (font_instance *font, Glib::ustring phrase);
+    void setPreviewText (Glib::ustring font_spec, Glib::ustring phrase);
 
     void updateObjectText ( SPItem *text );
-    SPCSSAttr *getTextStyle ();
+    SPCSSAttr *fillTextStyle ();
 
     /**
      * Helper function to style radio buttons with icons, tooltips.
@@ -172,10 +173,22 @@ private:
     Gtk::RadioButton align_center;
     Gtk::RadioButton align_right;
     Gtk::RadioButton align_justify;
+
+#if WITH_GTKMM_3_0
+    Gtk::Separator  align_sep;
+#else
     Gtk::VSeparator align_sep;
+#endif
+
     Gtk::RadioButton text_vertical;
     Gtk::RadioButton text_horizontal;
+
+#if WITH_GTKMM_3_0
+    Gtk::Separator  text_sep;
+#else
     Gtk::VSeparator text_sep;
+#endif
+
     GtkWidget *spacing_combo;
 
     Gtk::Label preview_label;

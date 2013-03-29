@@ -45,8 +45,8 @@ namespace Dialogs {
 GuidelinePropertiesDialog::GuidelinePropertiesDialog(SPGuide *guide, SPDesktop *desktop)
 : _desktop(desktop), _guide(guide),
   _relative_toggle(_("Rela_tive change"), _("Move and/or rotate the guide relative to current settings")),
-  _spin_button_x(_("_X:"), "", UNIT_TYPE_LINEAR, "", "", &_unit_menu),
-  _spin_button_y(_("_Y:"), "", UNIT_TYPE_LINEAR, "", "", &_unit_menu),
+  _spin_button_x(C_("Guides", "_X:"), "", UNIT_TYPE_LINEAR, "", "", &_unit_menu),
+  _spin_button_y(C_("Guides", "_Y:"), "", UNIT_TYPE_LINEAR, "", "", &_unit_menu),
   _label_entry(_("_Label:"), _("Optionally give this guideline a name")),
   _spin_angle(_("_Angle:"), "", UNIT_TYPE_RADIAL),
   _mode(true), _oldpos(0.,0.), _oldangle(0.0)
@@ -70,9 +70,15 @@ void GuidelinePropertiesDialog::showDialog(SPGuide *guide, SPDesktop *desktop) {
 
 void GuidelinePropertiesDialog::_colorChanged()
 {
+#if WITH_GTKMM_3_0
+    const Gdk::RGBA c = _color.get_rgba();
+    unsigned r = c.get_red_u()/257, g = c.get_green_u()/257, b = c.get_blue_u()/257;
+#else
     const Gdk::Color c = _color.get_color();
     unsigned r = c.get_red()/257, g = c.get_green()/257, b = c.get_blue()/257;
+#endif
     //TODO: why 257? verify this!
+
     sp_guide_set_color(*_guide, r, g, b, true);
 }
 
@@ -166,32 +172,56 @@ void GuidelinePropertiesDialog::_setup() {
     add_button(Gtk::Stock::DELETE, -12);
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 
+#if WITH_GTKMM_3_0
+    Gtk::Box *mainVBox = get_content_area();
+    _layout_table.set_row_spacing(4);
+    _layout_table.set_column_spacing(4);
+#else
     Gtk::Box *mainVBox = get_vbox();
-
     _layout_table.set_spacings(4);
     _layout_table.resize (3, 4);
+#endif
 
     mainVBox->pack_start(_layout_table, false, false, 0);
 
     _label_name.set_label("foo0");
-    _layout_table.attach(_label_name,
-                         0, 3, 0, 1, Gtk::FILL, Gtk::FILL);
     _label_name.set_alignment(0, 0.5);
 
     _label_descr.set_label("foo1");
+    _label_descr.set_alignment(0, 0.5);
+    
+#if WITH_GTKMM_3_0
+    _label_name.set_halign(Gtk::ALIGN_FILL);
+    _label_name.set_valign(Gtk::ALIGN_FILL);
+    _layout_table.attach(_label_name, 0, 0, 3, 1);
+
+    _label_descr.set_halign(Gtk::ALIGN_FILL);
+    _label_descr.set_valign(Gtk::ALIGN_FILL);
+    _layout_table.attach(_label_descr, 0, 1, 3, 1);
+
+    _label_entry.set_halign(Gtk::ALIGN_FILL);
+    _label_entry.set_valign(Gtk::ALIGN_FILL);
+    _label_entry.set_hexpand();
+    _layout_table.attach(_label_entry, 1, 2, 2, 1);
+
+    _color.set_halign(Gtk::ALIGN_FILL);
+    _color.set_valign(Gtk::ALIGN_FILL);
+    _color.set_hexpand();
+    _layout_table.attach(_color, 1, 3, 2, 1);
+#else
+    _layout_table.attach(_label_name,
+                         0, 3, 0, 1, Gtk::FILL, Gtk::FILL);
+
     _layout_table.attach(_label_descr,
                          0, 3, 1, 2, Gtk::FILL, Gtk::FILL);
-    _label_descr.set_alignment(0, 0.5);
-
-    // indent
-//    _layout_table.attach(*manage(new Gtk::Label(" ")),
-//                         0, 1, 2, 3, Gtk::FILL, Gtk::FILL, 10);
 
     _layout_table.attach(_label_entry,
                          1, 3, 2, 3, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
 
     _layout_table.attach(_color,
                          1, 3, 3, 4, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
+#endif
+
     _color.signal_color_set().connect(sigc::mem_fun(*this, &GuidelinePropertiesDialog::_colorChanged));
 
 
@@ -211,6 +241,22 @@ void GuidelinePropertiesDialog::_setup() {
     _spin_button_y.setDigits(3);
     _spin_button_y.setIncrements(1.0, 10.0);
     _spin_button_y.setRange(-1e6, 1e6);
+
+#if WITH_GTKMM_3_0
+    _spin_button_x.set_halign(Gtk::ALIGN_FILL);
+    _spin_button_x.set_valign(Gtk::ALIGN_FILL);
+    _spin_button_x.set_hexpand();
+    _layout_table.attach(_spin_button_x, 1, 4, 1, 1);
+    
+    _spin_button_y.set_halign(Gtk::ALIGN_FILL);
+    _spin_button_y.set_valign(Gtk::ALIGN_FILL);
+    _spin_button_y.set_hexpand();
+    _layout_table.attach(_spin_button_y, 1, 5, 1, 1);
+
+    _unit_menu.set_halign(Gtk::ALIGN_FILL);
+    _unit_menu.set_valign(Gtk::ALIGN_FILL);
+    _layout_table.attach(_unit_menu, 2, 4, 1, 1);
+#else
     _layout_table.attach(_spin_button_x,
                          1, 2, 4, 5, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
     _layout_table.attach(_spin_button_y,
@@ -218,17 +264,33 @@ void GuidelinePropertiesDialog::_setup() {
 
     _layout_table.attach(_unit_menu,
                          2, 3, 4, 5, Gtk::FILL, Gtk::FILL);
+#endif
 
     // angle spinbutton
     _spin_angle.setDigits(3);
     _spin_angle.setIncrements(1.0, 10.0);
     _spin_angle.setRange(-3600., 3600.);
+
+#if WITH_GTKMM_3_0
+    _spin_angle.set_halign(Gtk::ALIGN_FILL);
+    _spin_angle.set_valign(Gtk::ALIGN_FILL);
+    _spin_angle.set_hexpand();
+    _layout_table.attach(_spin_angle, 1, 6, 2, 1);
+
+    // mode radio button
+    _relative_toggle.set_halign(Gtk::ALIGN_FILL);
+    _relative_toggle.set_valign(Gtk::ALIGN_FILL);
+    _relative_toggle.set_hexpand();
+    _layout_table.attach(_relative_toggle, 1, 7, 2, 1);
+#else
     _layout_table.attach(_spin_angle,
                          1, 3, 6, 7, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
 
     // mode radio button
     _layout_table.attach(_relative_toggle,
                          1, 3, 7, 8, Gtk::EXPAND | Gtk::FILL, Gtk::FILL);
+#endif
+
     _relative_toggle.signal_toggled().connect(sigc::mem_fun(*this, &GuidelinePropertiesDialog::_modeChanged));
     _relative_toggle.set_active(_relative_toggle_status);
 
@@ -272,9 +334,16 @@ void GuidelinePropertiesDialog::_setup() {
 
     // init name entry
     _label_entry.getEntry()->set_text(_guide->label ? _guide->label : "");
+
+#if WITH_GTKMM_3_0
+    Gdk::RGBA c;
+    c.set_rgba(((_guide->color>>24)&0xff) / 255.0, ((_guide->color>>16)&0xff) / 255.0, ((_guide->color>>8)&0xff) / 255.0);
+    _color.set_rgba(c);
+#else
     Gdk::Color c;
     c.set_rgb_p(((_guide->color>>24)&0xff) / 255.0, ((_guide->color>>16)&0xff) / 255.0, ((_guide->color>>8)&0xff) / 255.0);
     _color.set_color(c);
+#endif
 
     _modeChanged(); // sets values of spinboxes.
 

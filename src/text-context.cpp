@@ -57,8 +57,6 @@
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
 
-static void sp_text_context_class_init(SPTextContextClass *klass);
-static void sp_text_context_init(SPTextContext *text_context);
 static void sp_text_context_dispose(GObject *obj);
 
 static void sp_text_context_setup(SPEventContext *ec);
@@ -81,33 +79,12 @@ static gint sptc_focus_in(GtkWidget *widget, GdkEventFocus *event, SPTextContext
 static gint sptc_focus_out(GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static void sptc_commit(GtkIMContext *imc, gchar *string, SPTextContext *tc);
 
-static SPEventContextClass *parent_class;
-
-GType sp_text_context_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPTextContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_text_context_class_init,
-            NULL, NULL,
-            sizeof(SPTextContext),
-            4,
-            (GInstanceInitFunc) sp_text_context_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPTextContext", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPTextContext, sp_text_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_text_context_class_init(SPTextContextClass *klass)
 {
-    GObjectClass *object_class=(GObjectClass *)klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    parent_class = (SPEventContextClass*)g_type_class_peek_parent(klass);
+    GObjectClass *object_class=G_OBJECT_CLASS(klass);
+    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
 
     object_class->dispose = sp_text_context_dispose;
 
@@ -173,8 +150,8 @@ static void sp_text_context_dispose(GObject *obj)
     tc->text_sel_end.~iterator();
     tc->text_sel_start.~iterator();
     tc->text_selection_quads.~vector();
-    if (G_OBJECT_CLASS(parent_class)->dispose) {
-        G_OBJECT_CLASS(parent_class)->dispose(obj);
+    if (G_OBJECT_CLASS(sp_text_context_parent_class)->dispose) {
+        G_OBJECT_CLASS(sp_text_context_parent_class)->dispose(obj);
     }
     if (tc->grabbed) {
         sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
@@ -236,8 +213,8 @@ static void sp_text_context_setup(SPEventContext *ec)
         }
     }
 
-    if (((SPEventContextClass *) parent_class)->setup)
-        ((SPEventContextClass *) parent_class)->setup(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup)
+        (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup(ec);
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -455,8 +432,8 @@ static gint sp_text_context_item_handler(SPEventContext *event_context, SPItem *
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->item_handler)
-            ret = ((SPEventContextClass *) parent_class)->item_handler(event_context, item, event);
+        if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler)
+            ret = (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler(event_context, item, event);
     }
 
     return ret;
@@ -1324,8 +1301,8 @@ static gint sp_text_context_root_handler(SPEventContext *const event_context, Gd
     }
 
     // if nobody consumed it so far
-    if (((SPEventContextClass *) parent_class)->root_handler) { // and there's a handler in parent context,
-        return ((SPEventContextClass *) parent_class)->root_handler(event_context, event); // send event to parent
+    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->root_handler) { // and there's a handler in parent context,
+        return (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->root_handler(event_context, event); // send event to parent
     } else {
         return FALSE; // return "I did nothing" value so that global shortcuts can be activated
     }
@@ -1428,7 +1405,7 @@ SPCSSAttr *sp_text_get_style_at_cursor(SPEventContext const *ec)
 
     SPObject const *obj = sp_te_object_at_position(tc->text, tc->text_sel_end);
     if (obj)
-        return take_style_from_item((SPItem *) obj);
+        return take_style_from_item(SP_ITEM(obj));
     return NULL;
 }
 

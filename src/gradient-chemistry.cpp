@@ -18,12 +18,24 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "widgets/gradient-vector.h"
+
 #include <2geom/transforms.h>
 #include <2geom/bezier-curve.h>
+#include <2geom/crossing.h>
+#include <2geom/line.h>
+#include <2geom/angle.h>
 
 #include "style.h"
 #include "document-private.h"
+#include "document-undo.h"
+#include "desktop.h"
 #include "desktop-style.h"
+#include "desktop-handles.h"
+#include "event-context.h"
+#include "selection.h"
+#include "verbs.h"
+#include <glibmm/i18n.h>
 
 #include "sp-gradient-reference.h"
 #include "sp-gradient-vector.h"
@@ -31,8 +43,8 @@
 #include "sp-radial-gradient.h"
 #include "sp-mesh-gradient.h"
 #include "sp-stop.h"
-#include "widgets/gradient-vector.h"
 #include "gradient-drag.h"
+#include "gradient-chemistry.h"
 
 #include "sp-text.h"
 #include "sp-tspan.h"
@@ -44,6 +56,7 @@
 
 #define noSP_GR_VERBOSE
 
+using Inkscape::DocumentUndo;
 
 namespace {
 
@@ -163,7 +176,7 @@ static SPGradient *sp_gradient_get_private_normalized(SPDocument *document, SPGr
 /**
 Count how many times gr is used by the styles of o and its descendants
 */
-guint count_gradient_hrefs(SPObject *o, SPGradient *gr)
+static guint count_gradient_hrefs(SPObject *o, SPGradient *gr)
 {
     if (!o)
         return 1;
@@ -197,8 +210,8 @@ guint count_gradient_hrefs(SPObject *o, SPGradient *gr)
 /**
  * If gr has other users, create a new private; also check if gr links to vector, relink if not
  */
-SPGradient *sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
-                                                  SPGradientType type, SPObject *o)
+static SPGradient *sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
+                                                         SPGradientType type, SPObject *o)
 {
 #ifdef SP_GR_VERBOSE
     g_message("sp_gradient_fork_private_if_necessary(%p, %p, %d, %p)", gr, vector, type, o);
@@ -355,10 +368,45 @@ SPGradient *sp_gradient_reset_to_userspace(SPGradient *gr, SPItem *item)
             g_free(c);
         }
     } else if (SP_IS_LINEARGRADIENT(gr)) {
-        sp_repr_set_svg_double(repr, "x1", (center - Geom::Point(width/2, 0))[Geom::X]);
-        sp_repr_set_svg_double(repr, "y1", (center - Geom::Point(width/2, 0))[Geom::Y]);
-        sp_repr_set_svg_double(repr, "x2", (center + Geom::Point(width/2, 0))[Geom::X]);
-        sp_repr_set_svg_double(repr, "y2", (center + Geom::Point(width/2, 0))[Geom::Y]);
+
+        // Assume horizontal gradient by default (as per SVG 1.1)
+        Geom::Point pStart = center - Geom::Point(width/2, 0);
+        Geom::Point pEnd = center + Geom::Point(width/2, 0);
+
+        // Get the preferred gradient angle from prefs
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        double angle = prefs->getDouble("/dialogs/gradienteditor/angle", 0.0);
+
+        if (angle != 0.0) {
+
+            Geom::Line grl(center, Geom::deg_to_rad(angle));
+            Geom::LineSegment bbl1(bbox->corner(0), bbox->corner(1));
+            Geom::LineSegment bbl2(bbox->corner(1), bbox->corner(2));
+            Geom::LineSegment bbl3(bbox->corner(2), bbox->corner(3));
+            Geom::LineSegment bbl4(bbox->corner(3), bbox->corner(0));
+
+            // Find where our gradient line intersects the bounding box.
+            if (intersection(bbl1, grl)) {
+                pStart = bbl1.pointAt((*intersection(bbl1, grl)).ta);
+                pEnd = bbl3.pointAt((*intersection(bbl3, grl)).ta);
+                if (intersection(bbl1, grl.ray(grl.angle()))) {
+                    std::swap(pStart, pEnd);
+                }
+            } else if (intersection(bbl2, grl)) {
+                pStart = bbl2.pointAt((*intersection(bbl2, grl)).ta);
+                pEnd = bbl4.pointAt((*intersection(bbl4, grl)).ta);
+                if (intersection(bbl2, grl.ray(grl.angle()))) {
+                    std::swap(pStart, pEnd);
+                }
+            }
+
+        }
+
+        sp_repr_set_svg_double(repr, "x1", pStart[Geom::X]);
+        sp_repr_set_svg_double(repr, "y1", pStart[Geom::Y]);
+        sp_repr_set_svg_double(repr, "x2", pEnd[Geom::X]);
+        sp_repr_set_svg_double(repr, "y2", pEnd[Geom::Y]);
+
     } else {
         // Mesh
         // THIS IS BEING CALLED TWICE WHENEVER A NEW GRADIENT IS CREATED, WRITING HERE CAUSES PROBLEMS
@@ -914,6 +962,44 @@ void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or
     g_slist_free (child_objects);
 }
 
+void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fill_or_stroke)
+{
+#ifdef SP_GR_VERBOSE
+    g_message("sp_item_gradient_invert_vector_color(%p, %d)", item, fill_or_stroke);
+#endif
+    SPGradient *gradient = getGradient(item, fill_or_stroke);
+    if (!gradient || !SP_IS_GRADIENT(gradient))
+        return;
+
+    SPGradient *vector = gradient->getVector();
+    if (!vector) // orphan!
+        return;
+
+    vector = sp_gradient_fork_vector_if_necessary (vector);
+    if ( gradient != vector && gradient->ref->getObject() != vector ) {
+        sp_gradient_repr_set_link(gradient->getRepr(), vector);
+    }
+
+    for ( SPObject *child = vector->firstChild(); child; child = child->getNext()) {
+        if (SP_IS_STOP(child)) {
+            guint32 color =  sp_stop_get_rgba32(SP_STOP(child));
+            //g_message("Stop color %d", color);
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c),
+                SP_RGBA32_U_COMPOSE(
+                        (255 - SP_RGBA32_R_U(color)),
+                        (255 - SP_RGBA32_G_U(color)),
+                        (255 - SP_RGBA32_B_U(color)),
+                        SP_RGBA32_A_U(color)
+                )
+            );
+            SPCSSAttr *css = sp_repr_css_attr_new ();
+            sp_repr_css_set_property (css, "stop-color", c);
+            sp_repr_css_change(child->getRepr(), css, "style");
+            sp_repr_css_attr_unref (css);
+        }
+    }
+}
 
 /**
 Set the position of point point_type of the gradient applied to item (either fill_or_stroke) to
@@ -1469,7 +1555,62 @@ SPGradient *sp_gradient_vector_for_object( SPDocument *const doc, SPDesktop *con
     return sp_document_default_gradient_vector( doc, color, singleStop );
 }
 
+void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTarget fill_or_stroke)
+{
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
 
+    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+        sp_item_gradient_invert_vector_color(SP_ITEM(i->data), fill_or_stroke);
+    }
+
+    // we did an undoable action
+    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_GRADIENT,
+                       _("Invert gradient colors"));
+}
+
+void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
+{
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    SPEventContext *ev = sp_desktop_event_context(desktop);
+
+    if (!ev) {
+        return;
+    }
+
+    GrDrag *drag = ev->get_drag();
+
+    // First try selected dragger
+    if (drag && drag->selected) {
+        drag->selected_reverse_vector();
+    } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
+        for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+            sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_FILL);
+            sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_STROKE);
+        }
+    }
+
+    // we did an undoable action
+    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_GRADIENT,
+                       _("Reverse gradient"));
+}
+
+void sp_gradient_unset_swatch(SPDesktop *desktop, std::string id)
+{
+    SPDocument *doc = desktop ? desktop->doc() : 0;
+
+    if (doc) {
+        const GSList *gradients = doc->getResourceList("gradient");
+        for (const GSList *item = gradients; item; item = item->next) {
+            SPGradient* grad = SP_GRADIENT(item->data);
+            if ( id == grad->getId() ) {
+                grad->setSwatch(false);
+                DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT,
+                                   _("Delete swatch"));
+                break;
+            }
+        }
+    }
+}
 /*
   Local Variables:
   mode:c++

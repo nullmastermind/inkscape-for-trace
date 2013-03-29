@@ -15,7 +15,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include <gtkmm/liststore.h>
 
 #include <stddef.h>
@@ -33,7 +32,7 @@
 class SPDocument;
 class SPObject;
 class SPGradient;
-class SPStop;
+struct SPStop;
 
 struct SPGradientVectorSelector {
     GtkVBox vbox;

@@ -26,63 +26,10 @@
 #include "sp-symbol.h"
 #include "document.h"
 
-static void sp_symbol_class_init (SPSymbolClass *klass);
-static void sp_symbol_init (SPSymbol *symbol);
-
-static void sp_symbol_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_symbol_release (SPObject *object);
-static void sp_symbol_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_symbol_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-static void sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_symbol_modified (SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_symbol_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static Inkscape::DrawingItem *sp_symbol_show (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-static void sp_symbol_hide (SPItem *item, unsigned int key);
-static Geom::OptRect sp_symbol_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-static void sp_symbol_print (SPItem *item, SPPrintContext *ctx);
-
-static SPGroupClass *parent_class;
-
-GType
-sp_symbol_get_type (void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (SPSymbolClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_symbol_class_init,
-            NULL, NULL,
-            sizeof (SPSymbol),
-            16,
-            (GInstanceInitFunc) sp_symbol_init,
-            NULL,	/* value_table */
-        };
-        type = g_type_register_static (SP_TYPE_GROUP, "SPSymbol", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPSymbol, sp_symbol, SP_TYPE_GROUP);
 
 static void sp_symbol_class_init(SPSymbolClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPItemClass *sp_item_class = (SPItemClass *) klass;
-
-    parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
-
-    //sp_object_class->build = sp_symbol_build;
-//    sp_object_class->release = sp_symbol_release;
-//    sp_object_class->set = sp_symbol_set;
-//    sp_object_class->child_added = sp_symbol_child_added;
-//    sp_object_class->update = sp_symbol_update;
-//    sp_object_class->modified = sp_symbol_modified;
-//    sp_object_class->write = sp_symbol_write;
-
-//    sp_item_class->show = sp_symbol_show;
-//    sp_item_class->hide = sp_symbol_hide;
-//    sp_item_class->bbox = sp_symbol_bbox;
-//    sp_item_class->print = sp_symbol_print;
 }
 
 CSymbol::CSymbol(SPSymbol* symbol) : CGroup(symbol) {
@@ -95,6 +42,8 @@ CSymbol::~CSymbol() {
 static void sp_symbol_init(SPSymbol *symbol)
 {
 	symbol->csymbol = new CSymbol(symbol);
+
+	delete symbol->cgroup;
 	symbol->cgroup = symbol->csymbol;
 	symbol->clpeitem = symbol->csymbol;
 	symbol->citem = symbol->csymbol;
@@ -113,20 +62,8 @@ void CSymbol::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     CGroup::onBuild(document, repr);
 }
 
-// CPPIFY: remove
-static void sp_symbol_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPSymbol*)object)->csymbol->onBuild(document, repr);
-}
-
 void CSymbol::onRelease() {
 	CGroup::onRelease();
-}
-
-// CPPIFY: remove
-static void sp_symbol_release(SPObject *object)
-{
-	((SPSymbol*)object)->csymbol->onRelease();
 }
 
 void CSymbol::onSet(unsigned int key, const gchar* value) {
@@ -228,21 +165,10 @@ void CSymbol::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-static void sp_symbol_set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPSymbol*)object)->csymbol->onSet(key, value);
-}
-
 void CSymbol::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	CGroup::onChildAdded(child, ref);
 }
 
-// CPPIFY: remove
-static void sp_symbol_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPSymbol*)object)->csymbol->onChildAdded(child, ref);
-}
 
 void CSymbol::onUpdate(SPCtx *ctx, guint flags) {
 	SPSymbol* object = this->spsymbol;
@@ -358,21 +284,10 @@ void CSymbol::onUpdate(SPCtx *ctx, guint flags) {
     }
 }
 
-// CPPIFY: remove
-static void sp_symbol_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPSymbol*)object)->csymbol->onUpdate(ctx, flags);
-}
-
 void CSymbol::onModified(unsigned int flags) {
 	CGroup::onModified(flags);
 }
 
-// CPPIFY: remove
-static void sp_symbol_modified(SPObject *object, guint flags)
-{
-	((SPSymbol*)object)->csymbol->onModified(flags);
-}
 
 Inkscape::XML::Node* CSymbol::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPSymbol* object = this->spsymbol;
@@ -390,12 +305,6 @@ Inkscape::XML::Node* CSymbol::onWrite(Inkscape::XML::Document *xml_doc, Inkscape
     CGroup::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-// CPPIFY: remove
-static Inkscape::XML::Node *sp_symbol_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPSymbol*)object)->csymbol->onWrite(xml_doc, repr, flags);
 }
 
 Inkscape::DrawingItem* CSymbol::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
@@ -416,12 +325,6 @@ Inkscape::DrawingItem* CSymbol::onShow(Inkscape::Drawing &drawing, unsigned int 
     return ai;
 }
 
-// CPPIFY: remove
-static Inkscape::DrawingItem *sp_symbol_show(SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
-{
-	return ((SPSymbol*)item)->csymbol->onShow(drawing, key, flags);
-}
-
 void CSymbol::onHide(unsigned int key) {
 	SPSymbol* item = this->spsymbol;
 
@@ -433,11 +336,6 @@ void CSymbol::onHide(unsigned int key) {
     }
 }
 
-// CPPIFY: remove
-static void sp_symbol_hide(SPItem *item, unsigned int key)
-{
-	((SPSymbol*)item)->csymbol->onHide(key);
-}
 
 Geom::OptRect CSymbol::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	SPSymbol* item = this->spsymbol;
@@ -449,15 +347,8 @@ Geom::OptRect CSymbol::onBbox(Geom::Affine const &transform, SPItem::BBoxType ty
         // Cloned <symbol> is actually renderable
     	Geom::Affine const a( symbol->c2p * transform );
     	bbox = CGroup::onBbox(a, type);
-
     }
     return bbox;
-}
-
-// CPPIFY: remove
-static Geom::OptRect sp_symbol_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
-{
-	return ((SPSymbol*)item)->csymbol->onBbox(transform, type);
 }
 
 void CSymbol::onPrint(SPPrintContext* ctx) {
@@ -475,8 +366,13 @@ void CSymbol::onPrint(SPPrintContext* ctx) {
     }
 }
 
-// CPPIFY: remove
-static void sp_symbol_print(SPItem *item, SPPrintContext *ctx)
-{
-	((SPSymbol*)item)->csymbol->onPrint(ctx);
-}
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

@@ -29,55 +29,11 @@
 #include "display/nr-filter-convolve-matrix.h"
 
 /* FeConvolveMatrix base class */
-
-static void sp_feConvolveMatrix_class_init(SPFeConvolveMatrixClass *klass);
-static void sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix);
-
-static void sp_feConvolveMatrix_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_feConvolveMatrix_release(SPObject *object);
-static void sp_feConvolveMatrix_set(SPObject *object, unsigned int key, gchar const *value);
-static void sp_feConvolveMatrix_update(SPObject *object, SPCtx *ctx, guint flags);
-static Inkscape::XML::Node *sp_feConvolveMatrix_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void sp_feConvolveMatrix_build_renderer(SPFilterPrimitive *primitive, Inkscape::Filters::Filter *filter);
-
-static SPFilterPrimitiveClass *feConvolveMatrix_parent_class;
-
-GType
-sp_feConvolveMatrix_get_type()
-{
-    static GType feConvolveMatrix_type = 0;
-
-    if (!feConvolveMatrix_type) {
-        GTypeInfo feConvolveMatrix_info = {
-            sizeof(SPFeConvolveMatrixClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_feConvolveMatrix_class_init,
-            NULL, NULL,
-            sizeof(SPFeConvolveMatrix),
-            16,
-            (GInstanceInitFunc) sp_feConvolveMatrix_init,
-            NULL,    /* value_table */
-        };
-        feConvolveMatrix_type = g_type_register_static(SP_TYPE_FILTER_PRIMITIVE, "SPFeConvolveMatrix", &feConvolveMatrix_info, (GTypeFlags)0);
-    }
-    return feConvolveMatrix_type;
-}
+G_DEFINE_TYPE(SPFeConvolveMatrix, sp_feConvolveMatrix, SP_TYPE_FILTER_PRIMITIVE);
 
 static void
 sp_feConvolveMatrix_class_init(SPFeConvolveMatrixClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *)klass;
-    SPFilterPrimitiveClass *sp_primitive_class = (SPFilterPrimitiveClass *)klass;
-
-    feConvolveMatrix_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
-
-    //sp_object_class->build = sp_feConvolveMatrix_build;
-//    sp_object_class->release = sp_feConvolveMatrix_release;
-//    sp_object_class->write = sp_feConvolveMatrix_write;
-//    sp_object_class->set = sp_feConvolveMatrix_set;
-//    sp_object_class->update = sp_feConvolveMatrix_update;
-
-    //sp_primitive_class->build_renderer = sp_feConvolveMatrix_build_renderer;
 }
 
 CFeConvolveMatrix::CFeConvolveMatrix(SPFeConvolveMatrix* matrix) : CFilterPrimitive(matrix) {
@@ -91,6 +47,8 @@ static void
 sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
 {
 	feConvolveMatrix->cfeconvolvematrix = new CFeConvolveMatrix(feConvolveMatrix);
+
+	delete feConvolveMatrix->cfilterprimitive;
 	feConvolveMatrix->cfilterprimitive = feConvolveMatrix->cfeconvolvematrix;
 	feConvolveMatrix->cobject = feConvolveMatrix->cfeconvolvematrix;
 
@@ -112,30 +70,7 @@ sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-//static void
-//sp_feConvolveMatrix_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-//{
-////    if (((SPObjectClass *) feConvolveMatrix_parent_class)->build) {
-////        ((SPObjectClass *) feConvolveMatrix_parent_class)->build(object, document, repr);
-////    }
-//	// CPPIFY: todo
-//
-//    /*LOAD ATTRIBUTES FROM REPR HERE*/
-//    object->readAttr( "order" );
-//    object->readAttr( "kernelMatrix" );
-//    object->readAttr( "divisor" );
-//    object->readAttr( "bias" );
-//    object->readAttr( "targetX" );
-//    object->readAttr( "targetY" );
-//    object->readAttr( "edgeMode" );
-//    object->readAttr( "kernelUnitLength" );
-//    object->readAttr( "preserveAlpha" );
-//}
-
 void CFeConvolveMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
-	//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->build) {
-	//        ((SPObjectClass *) feConvolveMatrix_parent_class)->build(object, document, repr);
-	//    }
 	CFilterPrimitive::onBuild(document, repr);
 
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
@@ -155,14 +90,6 @@ void CFeConvolveMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr)
 /**
  * Drops any allocated memory.
  */
-static void
-sp_feConvolveMatrix_release(SPObject *object)
-{
-//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->release)
-//        ((SPObjectClass *) feConvolveMatrix_parent_class)->release(object);
-	((SPFeConvolveMatrix*)object)->cfeconvolvematrix->onRelease();
-}
-
 void CFeConvolveMatrix::onRelease() {
 	CFilterPrimitive::onRelease();
 }
@@ -186,130 +113,6 @@ static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_
 /**
  * Sets a specific value in the SPFeConvolveMatrix.
  */
-static void
-sp_feConvolveMatrix_set(SPObject *object, unsigned int key, gchar const *value)
-{
-//    SPFeConvolveMatrix *feConvolveMatrix = SP_FECONVOLVEMATRIX(object);
-//    (void)feConvolveMatrix;
-//    double read_num;
-//    int read_int;
-//    bool read_bool;
-//    Inkscape::Filters::FilterConvolveMatrixEdgeMode read_mode;
-//
-//    switch(key) {
-//	/*DEAL WITH SETTING ATTRIBUTES HERE*/
-//        case SP_ATTR_ORDER:
-//            feConvolveMatrix->order.set(value);
-//            //From SVG spec: If <orderY> is not provided, it defaults to <orderX>.
-//            if (feConvolveMatrix->order.optNumIsSet() == false)
-//                feConvolveMatrix->order.setOptNumber(feConvolveMatrix->order.getNumber());
-//            if (feConvolveMatrix->targetXIsSet == false) feConvolveMatrix->targetX = (int) floor(feConvolveMatrix->order.getNumber()/2);
-//            if (feConvolveMatrix->targetYIsSet == false) feConvolveMatrix->targetY = (int) floor(feConvolveMatrix->order.getOptNumber()/2);
-//            object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            break;
-//        case SP_ATTR_KERNELMATRIX:
-//            if (value){
-//                feConvolveMatrix->kernelMatrixIsSet = true;
-//                feConvolveMatrix->kernelMatrix = helperfns_read_vector(value);
-//                if (! feConvolveMatrix->divisorIsSet) {
-//                    feConvolveMatrix->divisor = 0;
-//                    for (unsigned int i = 0; i< feConvolveMatrix->kernelMatrix.size(); i++)
-//                        feConvolveMatrix->divisor += feConvolveMatrix->kernelMatrix[i];
-//                    if (feConvolveMatrix->divisor == 0) feConvolveMatrix->divisor = 1;
-//                }
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            } else {
-//                g_warning("For feConvolveMatrix you MUST pass a kernelMatrix parameter!");
-//            }
-//            break;
-//        case SP_ATTR_DIVISOR:
-//            if (value) {
-//                read_num = helperfns_read_number(value);
-//                if (read_num == 0) {
-//                    // This should actually be an error, but given our UI it is more useful to simply set divisor to the default.
-//                    if (feConvolveMatrix->kernelMatrixIsSet) {
-//                        for (unsigned int i = 0; i< feConvolveMatrix->kernelMatrix.size(); i++)
-//                            read_num += feConvolveMatrix->kernelMatrix[i];
-//                    }
-//                    if (read_num == 0) read_num = 1;
-//                    if (feConvolveMatrix->divisorIsSet || feConvolveMatrix->divisor!=read_num) {
-//                        feConvolveMatrix->divisorIsSet = false;
-//                        feConvolveMatrix->divisor = read_num;
-//                        object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//                    }
-//                } else if (!feConvolveMatrix->divisorIsSet || feConvolveMatrix->divisor!=read_num) {
-//                    feConvolveMatrix->divisorIsSet = true;
-//                    feConvolveMatrix->divisor = read_num;
-//                    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//                }
-//            }
-//            break;
-//        case SP_ATTR_BIAS:
-//            read_num = 0;
-//            if (value) read_num = helperfns_read_number(value);
-//            if (read_num != feConvolveMatrix->bias){
-//                feConvolveMatrix->bias = read_num;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_TARGETX:
-//            if (value) {
-//                read_int = (int) helperfns_read_number(value);
-//                if (read_int < 0 || read_int > feConvolveMatrix->order.getNumber()){
-//                    g_warning("targetX must be a value between 0 and orderX! Assuming floor(orderX/2) as default value.");
-//                    read_int = (int) floor(feConvolveMatrix->order.getNumber()/2.0);
-//                }
-//                feConvolveMatrix->targetXIsSet = true;
-//                if (read_int != feConvolveMatrix->targetX){
-//                    feConvolveMatrix->targetX = read_int;
-//                    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//                }
-//            }
-//            break;
-//        case SP_ATTR_TARGETY:
-//            if (value) {
-//                read_int = (int) helperfns_read_number(value);
-//                if (read_int < 0 || read_int > feConvolveMatrix->order.getOptNumber()){
-//                    g_warning("targetY must be a value between 0 and orderY! Assuming floor(orderY/2) as default value.");
-//                    read_int = (int) floor(feConvolveMatrix->order.getOptNumber()/2.0);
-//                }
-//                feConvolveMatrix->targetYIsSet = true;
-//                if (read_int != feConvolveMatrix->targetY){
-//                    feConvolveMatrix->targetY = read_int;
-//                    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//                }
-//            }
-//            break;
-//        case SP_ATTR_EDGEMODE:
-//            read_mode = sp_feConvolveMatrix_read_edgeMode(value);
-//            if (read_mode != feConvolveMatrix->edgeMode){
-//                feConvolveMatrix->edgeMode = read_mode;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_KERNELUNITLENGTH:
-//            feConvolveMatrix->kernelUnitLength.set(value);
-//            //From SVG spec: If the <dy> value is not specified, it defaults to the same value as <dx>.
-//            if (feConvolveMatrix->kernelUnitLength.optNumIsSet() == false)
-//                feConvolveMatrix->kernelUnitLength.setOptNumber(feConvolveMatrix->kernelUnitLength.getNumber());
-//            object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            break;
-//        case SP_ATTR_PRESERVEALPHA:
-//            read_bool = helperfns_read_bool(value, false);
-//            if (read_bool != feConvolveMatrix->preserveAlpha){
-//                feConvolveMatrix->preserveAlpha = read_bool;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        default:
-//            if (((SPObjectClass *) feConvolveMatrix_parent_class)->set)
-//                ((SPObjectClass *) feConvolveMatrix_parent_class)->set(object, key, value);
-//            break;
-//    }
-
-	((SPFeConvolveMatrix*)object)->cfeconvolvematrix->onSet(key, value);
-}
-
 void CFeConvolveMatrix::onSet(unsigned int key, gchar const *value) {
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
@@ -426,8 +229,6 @@ void CFeConvolveMatrix::onSet(unsigned int key, gchar const *value) {
             }
             break;
         default:
-//            if (((SPObjectClass *) feConvolveMatrix_parent_class)->set)
-//                ((SPObjectClass *) feConvolveMatrix_parent_class)->set(object, key, value);
         	CFilterPrimitive::onSet(key, value);
             break;
     }
@@ -437,22 +238,6 @@ void CFeConvolveMatrix::onSet(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-static void
-sp_feConvolveMatrix_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-//    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
-//                 SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-//
-//        /* do something to trigger redisplay, updates? */
-//
-//    }
-//
-//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->update) {
-//        ((SPObjectClass *) feConvolveMatrix_parent_class)->update(object, ctx, flags);
-//    }
-	((SPFeConvolveMatrix*)object)->cfeconvolvematrix->onUpdate(ctx, flags);
-}
-
 void CFeConvolveMatrix::onUpdate(SPCtx *ctx, guint flags) {
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
@@ -463,33 +248,12 @@ void CFeConvolveMatrix::onUpdate(SPCtx *ctx, guint flags) {
 
     }
 
-//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->update) {
-//        ((SPObjectClass *) feConvolveMatrix_parent_class)->update(object, ctx, flags);
-//    }
     CFilterPrimitive::onUpdate(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-static Inkscape::XML::Node *
-sp_feConvolveMatrix_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
-{
-//    /* TODO: Don't just clone, but create a new repr node and write all
-//     * relevant values into it */
-//    if (!repr) {
-//        repr = object->getRepr()->duplicate(doc);
-//    }
-//
-//
-//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->write) {
-//        ((SPObjectClass *) feConvolveMatrix_parent_class)->write(object, doc, repr, flags);
-//    }
-//
-//    return repr;
-	return ((SPFeConvolveMatrix*)object)->cfeconvolvematrix->onWrite(doc, repr, flags);
-}
-
 Inkscape::XML::Node* CFeConvolveMatrix::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
 
@@ -500,36 +264,9 @@ Inkscape::XML::Node* CFeConvolveMatrix::onWrite(Inkscape::XML::Document *doc, In
     }
 
 
-//    if (((SPObjectClass *) feConvolveMatrix_parent_class)->write) {
-//        ((SPObjectClass *) feConvolveMatrix_parent_class)->write(object, doc, repr, flags);
-//    }
     CFilterPrimitive::onWrite(doc, repr, flags);
 
     return repr;
-}
-
-static void sp_feConvolveMatrix_build_renderer(SPFilterPrimitive *primitive, Inkscape::Filters::Filter *filter) {
-//    g_assert(primitive != NULL);
-//    g_assert(filter != NULL);
-//
-//    SPFeConvolveMatrix *sp_convolve = SP_FECONVOLVEMATRIX(primitive);
-//
-//    int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_CONVOLVEMATRIX);
-//    Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
-//    Inkscape::Filters::FilterConvolveMatrix *nr_convolve = dynamic_cast<Inkscape::Filters::FilterConvolveMatrix*>(nr_primitive);
-//    g_assert(nr_convolve != NULL);
-//
-//    sp_filter_primitive_renderer_common(primitive, nr_primitive);
-//
-//    nr_convolve->set_targetX(sp_convolve->targetX);
-//    nr_convolve->set_targetY(sp_convolve->targetY);
-//    nr_convolve->set_orderX( (int)sp_convolve->order.getNumber() );
-//    nr_convolve->set_orderY( (int)sp_convolve->order.getOptNumber() );
-//    nr_convolve->set_kernelMatrix(sp_convolve->kernelMatrix);
-//    nr_convolve->set_divisor(sp_convolve->divisor);
-//    nr_convolve->set_bias(sp_convolve->bias);
-//    nr_convolve->set_preserveAlpha(sp_convolve->preserveAlpha);
-	((SPFeConvolveMatrix*)primitive)->cfeconvolvematrix->onBuildRenderer(filter);
 }
 
 void CFeConvolveMatrix::onBuildRenderer(Inkscape::Filters::Filter* filter) {

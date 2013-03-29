@@ -26,54 +26,12 @@
 
 struct SPPathClass;
 
-static void box3d_side_class_init (Box3DSideClass *klass);
-static void box3d_side_init (Box3DSide *side);
-
-static void box3d_side_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static Inkscape::XML::Node *box3d_side_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void box3d_side_set (SPObject *object, unsigned int key, const gchar *value);
-static void box3d_side_update (SPObject *object, SPCtx *ctx, guint flags);
-//
-//static void box3d_side_set_shape (SPShape *shape);
-
 static void box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]);
 
-static SPShapeClass *parent_class;
-
-GType
-box3d_side_get_type (void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (Box3DSideClass),
-            NULL, NULL,
-            (GClassInitFunc) box3d_side_class_init,
-            NULL, NULL,
-            sizeof (Box3DSide),
-            16,
-            (GInstanceInitFunc) box3d_side_init,
-            NULL,	/* value_table */
-        };
-        type = g_type_register_static (SP_TYPE_SHAPE, "Box3DSide", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(Box3DSide, box3d_side, SP_TYPE_SHAPE);
 
 static void box3d_side_class_init(Box3DSideClass *klass)
 {
-    SPObjectClass *sp_object_class = reinterpret_cast<SPObjectClass *>(klass);
-//    SPShapeClass *shape_class = reinterpret_cast<SPShapeClass *>(klass);
-
-    parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
-
-    //sp_object_class->build = box3d_side_build;
-//    sp_object_class->write = box3d_side_write;
-//    sp_object_class->set = box3d_side_set;
-//    sp_object_class->update = box3d_side_update;
-
-    //shape_class->set_shape = box3d_side_set_shape;
 }
 
 CBox3DSide::CBox3DSide(Box3DSide* box3dside) : CPolygon(box3dside) {
@@ -87,6 +45,8 @@ static void
 box3d_side_init (Box3DSide * side)
 {
 	side->cbox3dside = new CBox3DSide(side);
+
+	delete side->cpolygon;
 	side->cpolygon = side->cbox3dside;
 	side->cshape = side->cbox3dside;
 	side->clpeitem = side->cbox3dside;
@@ -106,11 +66,6 @@ void CBox3DSide::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     object->readAttr( "inkscape:box3dsidetype" );
 }
 
-// CPPIFY: remove
-static void box3d_side_build(SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-	((Box3DSide*)object)->cbox3dside->onBuild(document, repr);
-}
 
 Inkscape::XML::Node* CBox3DSide::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	Box3DSide* object = this->spbox3dside;
@@ -129,7 +84,7 @@ Inkscape::XML::Node* CBox3DSide::onWrite(Inkscape::XML::Document *xml_doc, Inksc
     static_cast<SPShape *>(object)->setShape();
 
     /* Duplicate the path */
-    SPCurve const *curve = ((SPShape *) object)->_curve;
+    SPCurve const *curve = (SP_SHAPE(object))->_curve;
     //Nulls might be possible if this called iteratively
     if ( !curve ) {
         return NULL;
@@ -141,13 +96,6 @@ Inkscape::XML::Node* CBox3DSide::onWrite(Inkscape::XML::Document *xml_doc, Inksc
     CPolygon::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-// CPPIFY: remove
-static Inkscape::XML::Node *
-box3d_side_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((Box3DSide*)object)->cbox3dside->onWrite(xml_doc, repr, flags);
 }
 
 void CBox3DSide::onSet(unsigned int key, const gchar* value) {
@@ -182,13 +130,6 @@ void CBox3DSide::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-static void
-box3d_side_set (SPObject *object, unsigned int key, const gchar *value)
-{
-	((Box3DSide*)object)->cbox3dside->onSet(key, value);
-}
-
 void CBox3DSide::onUpdate(SPCtx* ctx, guint flags) {
 	Box3DSide* object = this->spbox3dside;
 
@@ -203,13 +144,7 @@ void CBox3DSide::onUpdate(SPCtx* ctx, guint flags) {
     }
 
     CPolygon::onUpdate(ctx, flags);
-}
 
-// CPPIFY: remove
-static void
-box3d_side_update (SPObject *object, SPCtx *ctx, guint flags)
-{
-	((Box3DSide*)object)->cbox3dside->onUpdate(ctx, flags);
 }
 
 /* Create a new Box3DSide and append it to the parent box */
@@ -234,7 +169,6 @@ int Box3DSide::getFaceId()
 
 void
 box3d_side_position_set (Box3DSide *side) {
-    //box3d_side_set_shape (SP_SHAPE (side));
 	side->cbox3dside->onSetShape();
 
     // This call is responsible for live update of the sides during the initial drag
@@ -301,13 +235,6 @@ void CBox3DSide::onSetShape() {
     }
     c->unref();
 }
-
-// CPPIFY: remove
-//void
-//box3d_side_set_shape (SPShape *shape)
-//{
-//	((Box3DSide*)shape)->cbox3dside->onSetShape();
-//}
 
 gchar *box3d_side_axes_string(Box3DSide *side)
 {

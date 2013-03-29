@@ -2,7 +2,7 @@
  * Authors:
  *    Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
  *
- * Copyright (C) 2006-2011 Authors
+ * Copyright (C) 2006-2012 Authors
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
@@ -13,45 +13,44 @@
   * to the right). The x-axis will always have an angle between 0 and 90 degrees.
   */
 
- /*
-  * TODO:
-  * THIS FILE AND THE HEADER FILE NEED CLEANING UP. PLEASE DO NOT HESISTATE TO DO SO.
-  */
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
 
 #include <glibmm/i18n.h>
 
-#include "ui/widget/registered-widget.h"
 #include "display/canvas-axonomgrid.h"
-#include "2geom/line.h"
+
+#include "ui/widget/registered-widget.h"
 #include "desktop.h"
-#include "canvas-grid.h"
 #include "desktop-handles.h"
 #include "display/cairo-utils.h"
 #include "display/canvas-grid.h"
 #include "display/sp-canvas-util.h"
+#include "display/sp-canvas.h"
 #include "document.h"
-#include "helper/units.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "sp-namedview.h"
 #include "sp-object.h"
 #include "svg/svg-color.h"
+#include "2geom/line.h"
+#include "2geom/angle.h"
 #include "util/mathfns.h"
-#include "xml/node-event-vector.h"
 #include "round.h"
-#include "display/sp-canvas.h"
+#include "helper/units.h"
 
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/table.h>
 
 enum Dim3 { X=0, Y, Z };
-
-#ifndef M_PI
-# define M_PI 3.14159265358979323846
-#endif
-
-static double deg_to_rad(double deg) { return deg*M_PI/180.0;}
 
 /**
  * This function calls Cairo to render a line on a particular canvas buffer.
@@ -93,28 +92,60 @@ namespace Inkscape {
 #define SPACE_SIZE_X 15
 #define SPACE_SIZE_Y 10
 static inline void
+#if WITH_GTKMM_3_0
+attach_all(Gtk::Grid &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
+#else
 attach_all(Gtk::Table &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
+#endif
 {
     for (unsigned i=0, r=start; i<size/sizeof(Gtk::Widget*); i+=2) {
         if (arr[i] && arr[i+1]) {
+#if WITH_GTKMM_3_0
+            (const_cast<Gtk::Widget&>(*arr[i])).set_hexpand();
+            (const_cast<Gtk::Widget&>(*arr[i])).set_valign(Gtk::ALIGN_CENTER);
+            table.attach(const_cast<Gtk::Widget&>(*arr[i]),   1, r, 1, 1);
+
+            (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
+            (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
+            table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 2, r, 1, 1);
+#else
             table.attach (const_cast<Gtk::Widget&>(*arr[i]),   1, 2, r, r+1,
                           Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
             table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 2, 3, r, r+1,
                           Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
         } else {
             if (arr[i+1]) {
+#if WITH_GTKMM_3_0
+                (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
+                (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
+                table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 1, r, 2, 1);
+#else
                 table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 3, r, r+1,
                               Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
                 label.set_alignment (0.0);
+#if WITH_GTKMM_3_0
+                label.set_hexpand();
+                label.set_valign(Gtk::ALIGN_CENTER);
+                table.attach(label, 0, r, 3, 1);
+#else
                 table.attach (label, 0, 3, r, r+1,
                               Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
             } else {
                 Gtk::HBox *space = manage (new Gtk::HBox);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+#if WITH_GTKMM_3_0
+                space->set_halign(Gtk::ALIGN_CENTER);
+                space->set_valign(Gtk::ALIGN_CENTER);
+                table.attach(*space, 0, r, 1, 1);
+#else
                 table.attach (*space, 0, 1, r, r+1,
                               (Gtk::AttachOptions)0, (Gtk::AttachOptions)0,0,0);
+#endif
             }
         }
         ++r;
@@ -138,9 +169,9 @@ CanvasAxonomGrid::CanvasAxonomGrid (SPNamedView * nv, Inkscape::XML::Node * in_r
     angle_deg[Z] = prefs->getDouble("/options/grids/axonom/angle_z", 30.0);
     angle_deg[Y] = 0;
 
-    angle_rad[X] = deg_to_rad(angle_deg[X]);
+    angle_rad[X] = Geom::deg_to_rad(angle_deg[X]);
     tan_angle[X] = tan(angle_rad[X]);
-    angle_rad[Z] = deg_to_rad(angle_deg[Z]);
+    angle_rad[Z] = Geom::deg_to_rad(angle_deg[Z]);
     tan_angle[Z] = tan(angle_rad[Z]);
 
     snapper = new CanvasAxonomGridSnapper(this, &namedview->snap_manager, 0);
@@ -251,17 +282,17 @@ CanvasAxonomGrid::readRepr()
 
     if ( (value = repr->attribute("gridanglex")) ) {
         angle_deg[X] = g_ascii_strtod(value, NULL);
-        if (angle_deg[X] < 1.0) angle_deg[X] = 1.0;
+        if (angle_deg[X] < 0.) angle_deg[X] = 0.;
         if (angle_deg[X] > 89.0) angle_deg[X] = 89.0;
-        angle_rad[X] = deg_to_rad(angle_deg[X]);
+        angle_rad[X] = Geom::deg_to_rad(angle_deg[X]);
         tan_angle[X] = tan(angle_rad[X]);
     }
 
     if ( (value = repr->attribute("gridanglez")) ) {
         angle_deg[Z] = g_ascii_strtod(value, NULL);
-        if (angle_deg[Z] < 1.0) angle_deg[Z] = 1.0;
+        if (angle_deg[Z] < 0.) angle_deg[Z] = 0.;
         if (angle_deg[Z] > 89.0) angle_deg[Z] = 89.0;
-        angle_rad[Z] = deg_to_rad(angle_deg[Z]);
+        angle_rad[Z] = Geom::deg_to_rad(angle_deg[Z]);
         tan_angle[Z] = tan(angle_rad[Z]);
     }
 
@@ -316,14 +347,17 @@ CanvasAxonomGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const *
         updateWidgets();
 }
 
-
-
-
 Gtk::Widget *
 CanvasAxonomGrid::newSpecificWidget()
 {
+#if WITH_GTKMM_3_0
+    Gtk::Grid *table = Gtk::manage(new Gtk::Grid());
+    table->set_row_spacing(2);
+    table->set_column_spacing(2);
+#else
     Gtk::Table * table = Gtk::manage( new Gtk::Table(1,1) );
     table->set_spacings(2);
+#endif
 
 _wr.setUpdating (true);
 
@@ -477,8 +511,8 @@ CanvasAxonomGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 
     spacing_ylines = sw[Geom::X] /(tan_angle[X] + tan_angle[Z]);
     lyw            = sw[Geom::Y];
-    lxw_x          = sw[Geom::X] / tan_angle[X];
-    lxw_z          = sw[Geom::X] / tan_angle[Z];
+    lxw_x          = Geom::are_near(tan_angle[X],0.) ? Geom::infinity() : sw[Geom::X] / tan_angle[X];
+    lxw_z          = Geom::are_near(tan_angle[Z],0.) ? Geom::infinity() : sw[Geom::X] / tan_angle[Z];
 
     if (empspacing == 0) {
         scaled = true;
@@ -526,8 +560,12 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
     for (gdouble y = xstart_y_sc; y < buf->rect.bottom(); y += lyw, xlinenum++) {
         gint const x0 = buf->rect.left();
         gint const y0 = round(y);
-        gint const x1 = x0 + round( (buf->rect.bottom() - y) / tan_angle[X] );
-        gint const y1 = buf->rect.bottom();
+        gint x1 = x0 + round( (buf->rect.bottom() - y) / tan_angle[X] );
+        gint y1 = buf->rect.bottom();
+        if ( Geom::are_near(tan_angle[X],0.) ) {
+            x1 = buf->rect.right();
+            y1 = y0;
+        }
 
         if (!scaled && (xlinenum % empspacing) != 0) {
             sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
@@ -536,18 +574,21 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
         }
     }
     // lines starting from top side
-    gdouble const xstart_x_sc = buf->rect.left() + (lxw_x - (xstart_y_sc - buf->rect.top()) / tan_angle[X]) ;
-    xlinenum = xlinestart-1;
-    for (gdouble x = xstart_x_sc; x < buf->rect.right(); x += lxw_x, xlinenum--) {
-        gint const y0 = buf->rect.top();
-        gint const y1 = buf->rect.bottom();
-        gint const x0 = round(x);
-        gint const x1 = x0 + round( (y1 - y0) / tan_angle[X] );
+    if (!Geom::are_near(tan_angle[X],0.))
+    {
+        gdouble const xstart_x_sc = buf->rect.left() + (lxw_x - (xstart_y_sc - buf->rect.top()) / tan_angle[X]) ;
+        xlinenum = xlinestart-1;
+        for (gdouble x = xstart_x_sc; x < buf->rect.right(); x += lxw_x, xlinenum--) {
+            gint const y0 = buf->rect.top();
+            gint const y1 = buf->rect.bottom();
+            gint const x0 = round(x);
+            gint const x1 = x0 + round( (y1 - y0) / tan_angle[X] );
 
-        if (!scaled && (xlinenum % empspacing) != 0) {
-            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
-        } else {
-            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
+            if (!scaled && (xlinenum % empspacing) != 0) {
+                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
+            } else {
+                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
+            }
         }
     }
 
@@ -575,8 +616,12 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
     for (gdouble y = zstart_y_sc; y < buf->rect.bottom(); y += lyw, zlinenum++, next_y = y) {
         gint const x0 = buf->rect.left();
         gint const y0 = round(y);
-        gint const x1 = x0 + round( (y - buf->rect.top() ) / tan_angle[Z] );
-        gint const y1 = buf->rect.top();
+        gint x1 = x0 + round( (y - buf->rect.top() ) / tan_angle[Z] );
+        gint y1 = buf->rect.top();
+        if ( Geom::are_near(tan_angle[Z],0.) ) {
+            x1 = buf->rect.right();
+            y1 = y0;
+        }
 
         if (!scaled && (zlinenum % empspacing) != 0) {
             sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
@@ -585,17 +630,20 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
         }
     }
     // draw lines from bottom-up
-    gdouble const zstart_x_sc = buf->rect.left() + (next_y - buf->rect.bottom()) / tan_angle[Z] ;
-    for (gdouble x = zstart_x_sc; x < buf->rect.right(); x += lxw_z, zlinenum++) {
-        gint const y0 = buf->rect.bottom();
-        gint const y1 = buf->rect.top();
-        gint const x0 = round(x);
-        gint const x1 = x0 + round(buf->rect.height() / tan_angle[Z] );
+    if (!Geom::are_near(tan_angle[Z],0.))
+    {
+        gdouble const zstart_x_sc = buf->rect.left() + (next_y - buf->rect.bottom()) / tan_angle[Z] ;
+        for (gdouble x = zstart_x_sc; x < buf->rect.right(); x += lxw_z, zlinenum++) {
+            gint const y0 = buf->rect.bottom();
+            gint const y1 = buf->rect.top();
+            gint const x0 = round(x);
+            gint const x1 = x0 + round(buf->rect.height() / tan_angle[Z] );
 
-        if (!scaled && (zlinenum % empspacing) != 0) {
-            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
-        } else {
-            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
+            if (!scaled && (zlinenum % empspacing) != 0) {
+                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
+            } else {
+                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
+            }
         }
     }
 

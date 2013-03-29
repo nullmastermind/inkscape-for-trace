@@ -36,7 +36,7 @@ class KnotHolderEntityOffset : public LPEKnotHolderEntity
 public:
     KnotHolderEntityOffset(LPEPerspectivePath *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 } // namespace PP
@@ -71,7 +71,7 @@ LPEPerspectivePath::~LPEPerspectivePath()
 }
 
 void
-LPEPerspectivePath::doBeforeEffect (SPLPEItem *lpeitem)
+LPEPerspectivePath::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem, true);
 }
@@ -149,13 +149,13 @@ void LPEPerspectivePath::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop
 namespace PP {
 
 void
-KnotHolderEntityOffset::knot_set(Geom::Point const &p, Geom::Point const &origin, guint /*state*/)
+KnotHolderEntityOffset::knot_set(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     using namespace Geom;
  
     LPEPerspectivePath* lpe = dynamic_cast<LPEPerspectivePath *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     lpe->offsetx.param_set_value((s - origin)[Geom::X]);
     lpe->offsety.param_set_value(-(s - origin)[Geom::Y]); // additional minus sign is due to coordinate system flipping
@@ -165,9 +165,9 @@ KnotHolderEntityOffset::knot_set(Geom::Point const &p, Geom::Point const &origin
 }
 
 Geom::Point
-KnotHolderEntityOffset::knot_get()
+KnotHolderEntityOffset::knot_get() const
 {
-    LPEPerspectivePath* lpe = dynamic_cast<LPEPerspectivePath *>(_effect);
+    LPEPerspectivePath const *lpe = dynamic_cast<LPEPerspectivePath const*>(_effect);
     return lpe->orig + Geom::Point(lpe->offsetx, -lpe->offsety);
 }
 

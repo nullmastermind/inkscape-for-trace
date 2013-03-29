@@ -27,10 +27,9 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 #include "ucd.h"
 #include "xpathparser.h"
-
+#include <cstdlib>
 
 namespace org
 {
@@ -131,7 +130,7 @@ void XPathParser::lexicalTokenDump()
     printf("####### LEXICAL TOKENS #######\n");
     for (unsigned int i=0 ; i<lexicalTokens.size() ; i++)
         {
-        printf("%d : ", i);
+        printf("%u : ", i);
         lexicalTokens[i].print();
         }
     printf("##### END LEXICAL TOKENS #####\n\n");

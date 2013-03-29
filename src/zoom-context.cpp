@@ -22,50 +22,26 @@
 #include "pixmaps/cursor-zoom.xpm"
 #include "pixmaps/cursor-zoom-out.xpm"
 #include "preferences.h"
+#include "selection-chemistry.h"
 
 #include "zoom-context.h"
 
-static void sp_zoom_context_class_init(SPZoomContextClass *klass);
-static void sp_zoom_context_init(SPZoomContext *zoom_context);
 static void sp_zoom_context_setup(SPEventContext *ec);
 static void sp_zoom_context_finish (SPEventContext *ec);
 
 static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_zoom_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
-static SPEventContextClass *parent_class;
-
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
 static bool within_tolerance = false;
 static bool escaped;
 
-GType sp_zoom_context_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPZoomContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_zoom_context_class_init,
-            NULL, NULL,
-            sizeof(SPZoomContext),
-            4,
-            (GInstanceInitFunc) sp_zoom_context_init,
-            NULL,	/* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPZoomContext", &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE(SPZoomContext, sp_zoom_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_zoom_context_class_init(SPZoomContextClass *klass)
 {
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    parent_class = (SPEventContextClass*) g_type_class_peek_parent(klass);
+    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
 
     event_context_class->setup = sp_zoom_context_setup;
     event_context_class->finish = sp_zoom_context_finish;
@@ -106,8 +82,8 @@ static void sp_zoom_context_setup(SPEventContext *ec)
         ec->enableGrDrag();
     }
 
-    if (((SPEventContextClass *) parent_class)->setup) {
-        ((SPEventContextClass *) parent_class)->setup(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->setup) {
+        (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->setup(ec);
     }
 }
 
@@ -115,8 +91,8 @@ static gint sp_zoom_context_item_handler(SPEventContext *event_context, SPItem *
 {
     gint ret = FALSE;
 
-    if (((SPEventContextClass *) parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) parent_class)->item_handler (event_context, item, event);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->item_handler) {
+        ret = (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->item_handler (event_context, item, event);
     }
 
     return ret;
@@ -216,6 +192,9 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
         case GDK_KEY_PRESS:
             switch (get_group0_keyval (&event->key)) {
                 case GDK_KEY_Escape:
+                    if (!Inkscape::Rubberband::get(desktop)->is_started()) {
+                        Inkscape::SelectionHelper::selectNone(desktop);
+                    }
                     Inkscape::Rubberband::get(desktop)->stop();
                     xp = yp = 0;
                     escaped = true;
@@ -234,6 +213,12 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                     event_context->cursor_shape = cursor_zoom_out_xpm;
                     sp_event_context_update_cursor(event_context);
                     break;
+                case GDK_KEY_Delete:
+                case GDK_KEY_KP_Delete:
+                case GDK_KEY_BackSpace:
+                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    break;
+
                 default:
 			break;
 		}
@@ -254,8 +239,8 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->root_handler) {
+            ret = (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->root_handler(event_context, event);
         }
     }
 

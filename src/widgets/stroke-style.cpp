@@ -18,6 +18,10 @@
 #define noSP_SS_VERBOSE
 
 #include "stroke-style.h"
+#include "../gradient-chemistry.h"
+#include "sp-gradient.h"
+#include "sp-stop.h"
+#include "svg/svg-color.h"
 
 using Inkscape::DocumentUndo;
 
@@ -45,7 +49,70 @@ void sp_stroke_style_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop)
     }
 }
 
+
+/**
+ * Extract the actual name of the link
+ * e.g. get mTriangle from url(#mTriangle).
+ * \return Buffer containing the actual name, allocated from GLib;
+ * the caller should free the buffer when they no longer need it.
+ */
+SPObject* getMarkerObj(gchar const *n, SPDocument *doc)
+{
+    gchar const *p = n;
+    while (*p != '\0' && *p != '#') {
+        p++;
+    }
+
+    if (*p == '\0' || p[1] == '\0') {
+        return NULL;
+    }
+
+    p++;
+    int c = 0;
+    while (p[c] != '\0' && p[c] != ')') {
+        c++;
+    }
+
+    if (p[c] == '\0') {
+        return NULL;
+    }
+
+    gchar* b = g_strdup(p);
+    b[c] = '\0';
+
+    // FIXME: get the document from the object and let the caller pass it in
+    SPObject *marker = doc->getObjectById(b);
+    return marker;
+}
+
 namespace Inkscape {
+
+
+/**
+ * Construct a stroke-style radio button with a given icon
+ *
+ * \param[in] grp          The Gtk::RadioButtonGroup to which to add the new button
+ * \param[in] icon         The icon to use for the button
+ * \param[in] button_type  The type of stroke-style radio button (join/cap)
+ * \param[in] stroke_style The style attribute to associate with the button
+ */
+StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::RadioButtonGroup &grp,
+                                                  char const            *icon,
+                                                  StrokeStyleButtonType  button_type,
+                                                  gchar const           *stroke_style)
+    : 
+        Gtk::RadioButton(grp),
+        button_type(button_type),
+        stroke_style(stroke_style)
+{
+    show();
+    set_mode(false);
+        
+    Gtk::Widget *px = manage(Glib::wrap(sp_icon_new(Inkscape::ICON_SIZE_LARGE_TOOLBAR, icon)));
+    g_assert(px != NULL);
+    px->show();
+    add(*px);
+}
 
 /**
  * Create the fill or stroke style widget, and hook up all the signals.
@@ -82,10 +149,17 @@ StrokeStyle::StrokeStyle() :
     f->show();
     add(*f);
 
+#if WITH_GTKMM_3_0
+    table = new Gtk::Grid();
+    table->set_border_width(4);
+    table->set_row_spacing(4);
+#else
     table = new Gtk::Table(3, 6, false);
-    table->show();
     table->set_border_width(4);
     table->set_row_spacings(4);
+#endif
+    
+    table->show();
     f->add(*table);
 
     gint i = 0;
@@ -147,24 +221,27 @@ StrokeStyle::StrokeStyle() :
 
     hb = spw_hbox(table, 3, 1, i);
 
-    //tb = NULL;
+    Gtk::RadioButtonGroup joinGrp;
 
-    joinMiter = makeRadioButton(NULL, INKSCAPE_ICON("stroke-join-miter"),
-                                hb, "join", "miter");
+    joinMiter = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-miter"),
+                                hb, STROKE_STYLE_BUTTON_JOIN, "miter");
+
     // TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     joinMiter->set_tooltip_text(_("Miter join"));
 
-    joinRound = makeRadioButton(joinMiter, INKSCAPE_ICON("stroke-join-round"),
-                                hb, "join", "round");
+    joinRound = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-round"),
+                                hb, STROKE_STYLE_BUTTON_JOIN, "round");
+
     // TRANSLATORS: Round join: joining lines with a rounded corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     joinRound->set_tooltip_text(_("Round join"));
 
-    joinBevel = makeRadioButton(joinMiter, INKSCAPE_ICON("stroke-join-bevel"),
-                                hb, "join", "bevel");
+    joinBevel = makeRadioButton(joinGrp, INKSCAPE_ICON("stroke-join-bevel"),
+                                hb, STROKE_STYLE_BUTTON_JOIN, "bevel");
+
     // TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
@@ -213,20 +290,25 @@ StrokeStyle::StrokeStyle() :
 
     hb = spw_hbox(table, 3, 1, i);
 
-    capButt = makeRadioButton(capButt, INKSCAPE_ICON("stroke-cap-butt"),
-                                hb, "cap", "butt");
+    Gtk::RadioButtonGroup capGrp;
+
+    capButt = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-butt"),
+                                hb, STROKE_STYLE_BUTTON_CAP, "butt");
+
     // TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
     //  of the line; the ends of the line are square
     capButt->set_tooltip_text(_("Butt cap"));
 
-    capRound = makeRadioButton(capButt, INKSCAPE_ICON("stroke-cap-round"),
-                                hb, "cap", "round");
+    capRound = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-round"),
+                                hb, STROKE_STYLE_BUTTON_CAP, "round");
+
     // TRANSLATORS: Round cap: the line shape extends beyond the end point of the
     //  line; the ends of the line are rounded
     capRound->set_tooltip_text(_("Round cap"));
 
-    capSquare = makeRadioButton(capButt, INKSCAPE_ICON("stroke-cap-square"),
-                                hb, "cap", "square");
+    capSquare = makeRadioButton(capGrp, INKSCAPE_ICON("stroke-cap-square"),
+                                hb, STROKE_STYLE_BUTTON_CAP, "square");
+
     // TRANSLATORS: Square cap: the line shape extends beyond the end point of the
     //  line; the ends of the line are square
     capSquare->set_tooltip_text(_("Square cap"));
@@ -242,7 +324,16 @@ StrokeStyle::StrokeStyle() :
     dashSelector = manage(new SPDashSelector);
 
     dashSelector->show();
+
+#if WITH_GTKMM_3_0
+    dashSelector->set_hexpand();
+    dashSelector->set_halign(Gtk::ALIGN_FILL);
+    dashSelector->set_valign(Gtk::ALIGN_CENTER);
+    table->attach(*dashSelector, 1, i, 3, 1);
+#else
     table->attach(*dashSelector, 1, 4, i, i+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 0, 0);
+#endif
+
     dashSelector->changed_signal.connect(sigc::mem_fun(*this, &StrokeStyle::lineDashChangedCB));
 
     i++;
@@ -251,34 +342,61 @@ StrokeStyle::StrokeStyle() :
     // TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
     // (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
 
-    startMarkerCombo = manage(new MarkerComboBox("marker-start"));
+    startMarkerCombo = manage(new MarkerComboBox("marker-start", SP_MARKER_LOC_START));
     spw_label(table, _("_Start Markers:"), 0, i, startMarkerCombo);
     startMarkerCombo->set_tooltip_text(_("Start Markers are drawn on the first node of a path or shape"));
     startMarkerConn = startMarkerCombo->signal_changed().connect(
             sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
                 sigc::ptr_fun(&StrokeStyle::markerSelectCB), startMarkerCombo, this, SP_MARKER_LOC_START));
     startMarkerCombo->show();
+
+#if WITH_GTKMM_3_0
+    startMarkerCombo->set_hexpand();
+    startMarkerCombo->set_halign(Gtk::ALIGN_FILL);
+    startMarkerCombo->set_valign(Gtk::ALIGN_CENTER);
+    table->attach(*startMarkerCombo, 1, i, 3, 1);
+#else
     table->attach(*startMarkerCombo, 1, 4, i, i+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 0, 0);
+#endif
+
     i++;
 
-    midMarkerCombo =  manage(new MarkerComboBox("marker-mid"));
+    midMarkerCombo =  manage(new MarkerComboBox("marker-mid", SP_MARKER_LOC_MID));
     spw_label(table, _("_Mid Markers:"), 0, i, midMarkerCombo);
     midMarkerCombo->set_tooltip_text(_("Mid Markers are drawn on every node of a path or shape except the first and last nodes"));
     midMarkerConn = midMarkerCombo->signal_changed().connect(
         sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
             sigc::ptr_fun(&StrokeStyle::markerSelectCB), midMarkerCombo, this, SP_MARKER_LOC_MID));
     midMarkerCombo->show();
+
+#if WITH_GTKMM_3_0
+    midMarkerCombo->set_hexpand();
+    midMarkerCombo->set_halign(Gtk::ALIGN_FILL);
+    midMarkerCombo->set_valign(Gtk::ALIGN_CENTER);
+    table->attach(*midMarkerCombo, 1, i, 3, 1);
+#else
     table->attach(*midMarkerCombo, 1, 4, i, i+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 0, 0);
+#endif
+
     i++;
 
-    endMarkerCombo = manage(new MarkerComboBox("marker-end"));
+    endMarkerCombo = manage(new MarkerComboBox("marker-end", SP_MARKER_LOC_END));
     spw_label(table, _("_End Markers:"), 0, i, endMarkerCombo);
     endMarkerCombo->set_tooltip_text(_("End Markers are drawn on the last node of a path or shape"));
     endMarkerConn = endMarkerCombo->signal_changed().connect(
         sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
             sigc::ptr_fun(&StrokeStyle::markerSelectCB), endMarkerCombo, this, SP_MARKER_LOC_END));
     endMarkerCombo->show();
+
+#if WITH_GTKMM_3_0
+    endMarkerCombo->set_hexpand();
+    endMarkerCombo->set_halign(Gtk::ALIGN_FILL);
+    endMarkerCombo->set_valign(Gtk::ALIGN_CENTER);
+    table->attach(*endMarkerCombo, 1, i, 3, 1);
+#else
     table->attach(*endMarkerCombo, 1, 4, i, i+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 0, 0);
+#endif
+
     i++;
 
     setDesktop(desktop);
@@ -311,40 +429,36 @@ void StrokeStyle::setDesktop(SPDesktop *desktop)
 
 
 /**
- * Helper function for creating radio buttons.  This should probably be re-thought out
- * when reimplementing this with Gtkmm.
+ * Helper function for creating stroke-style radio buttons.
+ *
+ * \param[in] grp           The Gtk::RadioButtonGroup in which to add the button
+ * \param[in] icon          The icon for the button
+ * \param[in] hb            The Gtk::Box container in which to add the button
+ * \param[in] button_type   The type (join/cap) for the button
+ * \param[in] stroke_style  The style attribute to associate with the button
+ *
+ * \details After instantiating the button, it is added to a container box and
+ *          a handler for the toggle event is connected.
  */
-Gtk::RadioButton *
-StrokeStyle::makeRadioButton(Gtk::RadioButton *tb, char const *icon,
-                       Gtk::HBox *hb, gchar const *key, gchar const *data)
+StrokeStyle::StrokeStyleButton *
+StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
+                             char const            *icon,
+                             Gtk::HBox             *hb,
+                             StrokeStyleButtonType  button_type,
+                             gchar const           *stroke_style)
 {
     g_assert(icon != NULL);
     g_assert(hb  != NULL);
 
-    if (tb == NULL) {
-        tb = new Gtk::RadioButton();
-    } else {
-        Gtk::RadioButtonGroup grp = tb->get_group();
-        tb = new Gtk::RadioButton(grp);
-    }
+    StrokeStyleButton *tb = new StrokeStyleButton(grp, icon, button_type, stroke_style);
 
-    tb->show();
-    tb->set_mode(false);
     hb->pack_start(*tb, false, false, 0);
-    // TODO
     set_data(icon, tb);
-    tb->set_data(key, (gpointer*)data);
 
-    tb->signal_toggled().connect(sigc::bind<Gtk::RadioButton *, StrokeStyle *>(
+    tb->signal_toggled().connect(sigc::bind<StrokeStyleButton *, StrokeStyle *>(
                                      sigc::ptr_fun(&StrokeStyle::buttonToggledCB), tb, this));
 
-    Gtk::Widget *px = manage(Glib::wrap(sp_icon_new(Inkscape::ICON_SIZE_LARGE_TOOLBAR, icon)));
-    g_assert(px != NULL);
-    px->show();
-    tb->add(*px);
-
     return tb;
-
 }
 
 /**
@@ -352,12 +466,13 @@ StrokeStyle::makeRadioButton(Gtk::RadioButton *tb, char const *icon,
  * Gets the marker uri string and applies it to all selected
  * items in the current desktop.
  */
-void
-StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const which)
+void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const /*which*/)
 {
     if (spw->update) {
         return;
     }
+
+    spw->update = true;
 
     SPDocument *document = sp_desktop_document(spw->desktop);
     if (!document) {
@@ -367,6 +482,7 @@ StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMa
     /* Get Marker */
     gchar const *marker = marker_combo->get_active_marker_uri();
 
+
     SPCSSAttr *css = sp_repr_css_attr_new();
     gchar const *combo_id = marker_combo->get_id();
     sp_repr_css_set_property(css, combo_id, marker);
@@ -374,7 +490,7 @@ StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMa
     // Also update the marker combobox, so the document's markers
     // show up at the top of the combobox
 //    sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? sp_desktop_selection(desktop) : NULL);
-    spw->updateMarkerHist(which);
+    //spw->updateMarkerHist(which);
 
     Inkscape::Selection *selection = sp_desktop_selection(spw->desktop);
     GSList const *items = selection->itemList();
@@ -386,22 +502,24 @@ StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMa
         Inkscape::XML::Node *selrepr = item->getRepr();
         if (selrepr) {
             sp_repr_css_change_recursive(selrepr, css, "style");
+            SPObject *markerObj = getMarkerObj(marker, document);
+            spw->setMarkerColor(markerObj, marker_combo->get_loc(), item);
         }
+
         item->requestModified(SP_OBJECT_MODIFIED_FLAG);
         item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+        DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE, _("Set markers"));
     }
 
     sp_repr_css_attr_unref(css);
     css = 0;
 
-    DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
-                       _("Set markers"));
-
+    spw->update = false;
 };
 
-void
-StrokeStyle::updateMarkerHist(SPMarkerLoc const which) {
-
+void StrokeStyle::updateMarkerHist(SPMarkerLoc const which)
+{
     switch (which) {
         case SP_MARKER_LOC_START:
             startMarkerConn.block();
@@ -463,8 +581,9 @@ gboolean StrokeStyle::setStrokeWidthUnit(SPUnitSelector *,
 
         gdouble average = stroke_average_width (objects);
 
-        if (average == Geom::infinity() || average == 0)
+        if ((average == Geom::infinity()) || (average < 1e-8)){ //less than 1e-8: to campare against zero, while taking numeric accuracy into account
             return FALSE;
+        }
 
 #if WITH_GTKMM_3_0
         (*spw->widthAdj)->set_value(100.0 * w / average);
@@ -518,6 +637,166 @@ StrokeStyle::selectionChangedCB()
     updateLine();
 }
 
+/*
+ * Fork marker if necessary and set the referencing items url to the new marker
+ * Return the new marker
+ */
+SPObject *
+StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
+{
+    if (!item || !marker) {
+        return NULL;
+    }
+
+    gchar const *marker_id = SPMarkerNames[loc].key;
+
+    /*
+     * Optimization when all the references to this marker are from this item
+     * then we can reuse it and dont need to fork
+     */
+    Glib::ustring urlId = Glib::ustring::format("url(#", marker->getRepr()->attribute("id"), ")");
+    unsigned int refs = 0;
+    for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
+        if (item->style->marker[i].set && !strcmp(urlId.c_str(), item->style->marker[i].value)) {
+            refs++;
+        }
+    }
+    if (marker->hrefcount <= refs) {
+        return marker;
+    }
+
+    marker = sp_marker_fork_if_necessary(marker);
+
+    // Update the items url to new marker
+    Inkscape::XML::Node *mark_repr = marker->getRepr();
+    SPCSSAttr *css_item = sp_repr_css_attr_new();
+    sp_repr_css_set_property(css_item, marker_id, g_strconcat("url(#", mark_repr->attribute("id"), ")", NULL));
+    sp_repr_css_change_recursive(item->getRepr(), css_item, "style");
+
+    sp_repr_css_attr_unref(css_item);
+    css_item = 0;
+
+    return marker;
+}
+
+/**
+ * Change the color of the marker to match the color of the item.
+ * Marker stroke color is set to item stroke color.
+ * Fill color :
+ * 1. If the item has fill, use that for the marker fill,
+ * 2. If the marker has same fill and stroke assume its solid, use item stroke for both fill and stroke the line stroke
+ * 3. If the marker has fill color, use the marker fill color
+ *
+ */
+void
+StrokeStyle::setMarkerColor(SPObject *marker, int loc, SPItem *item)
+{
+
+    if (!item || !marker) {
+        return;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean colorStock = prefs->getBool("/options/markers/colorStockMarkers", true);
+    gboolean colorCustom = prefs->getBool("/options/markers/colorCustomMarkers", false);
+    const gchar *stock = marker->getRepr()->attribute("inkscape:isstock");
+    gboolean isStock = (stock && !strcmp(stock,"true"));
+
+    if (isStock ? !colorStock : !colorCustom) {
+        return;
+    }
+
+    // Check if we need to fork this marker
+    marker = forkMarker(marker, loc, item);
+
+    Inkscape::XML::Node *repr = marker->getRepr()->firstChild();
+    if (!repr) {
+        return;
+    };
+
+    // Current line style
+    SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
+    const char *lstroke = getItemColorForMarker(item, FOR_STROKE, loc);
+    const char *lstroke_opacity = sp_repr_css_property(css_item, "stroke-opacity", "1");
+    const char *lfill = getItemColorForMarker(item, FOR_FILL, loc);
+    const char *lfill_opacity = sp_repr_css_property(css_item, "fill-opacity", "1");
+
+    // Current marker style
+    SPCSSAttr *css_marker = sp_css_attr_from_object(marker->firstChild(), SP_STYLE_FLAG_ALWAYS);
+    const char *mfill = sp_repr_css_property(css_marker, "fill", "none");
+    const char *mstroke = sp_repr_css_property(css_marker, "fill", "none");
+
+    // Create new marker style with the lines stroke
+    SPCSSAttr *css = sp_repr_css_attr_new();
+
+    sp_repr_css_set_property(css, "stroke", lstroke);
+    sp_repr_css_set_property(css, "stroke-opacity", lstroke_opacity);
+
+    if (strcmp(lfill, "none") ) {
+        // 1. If the line has fill, use that for the marker fill
+        sp_repr_css_set_property(css, "fill", lfill);
+        sp_repr_css_set_property(css, "fill-opacity", lfill_opacity);
+    }
+    else if (mfill && mstroke && !strcmp(mfill, mstroke) && mfill[0] == '#' && strcmp(mfill, "#ffffff")) {
+        // 2. If the marker has same fill and stroke assume its solid. use line stroke for both fill and stroke the line stroke
+        sp_repr_css_set_property(css, "fill", lstroke);
+        sp_repr_css_set_property(css, "fill-opacity", lstroke_opacity);
+    }
+    else if (mfill && mfill[0] == '#' && strcmp(mfill, "#000000")) {
+        // 3. If the marker has fill color, use the marker fill color
+        sp_repr_css_set_property(css, "fill", mfill);
+        //sp_repr_css_set_property(css, "fill-opacity", mfill_opacity);
+    }
+
+    sp_repr_css_change_recursive(marker->firstChild()->getRepr(), css, "style");
+
+    // Tell the combos to update its image cache of this marker
+    gchar const *mid = marker->getRepr()->attribute("id");
+    startMarkerCombo->update_marker_image(mid);
+    midMarkerCombo->update_marker_image(mid);
+    endMarkerCombo->update_marker_image(mid);
+
+    sp_repr_css_attr_unref(css);
+    css = 0;
+
+
+}
+
+/*
+ * Get the fill or stroke color of the item
+ * If its a gradient, then return first or last stop color
+ */
+const char *
+StrokeStyle::getItemColorForMarker(SPItem *item, Inkscape::PaintTarget fill_or_stroke, int loc)
+{
+    SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
+    const char *color;
+    if (fill_or_stroke == FOR_FILL)
+        color = sp_repr_css_property(css_item, "fill", "none");
+    else
+        color = sp_repr_css_property(css_item, "stroke", "none");
+
+    if (!strncmp (color, "url(", 4)) {
+        // If the item has a gradient use the first stop color for the marker
+
+        SPGradient *grad = getGradient(item, fill_or_stroke);
+        if (grad) {
+            SPGradient *vector = grad->getVector(FALSE);
+            SPStop *stop = vector->getFirstStop();
+            if (loc == SP_MARKER_LOC_END) {
+                stop = sp_last_stop(vector);
+            }
+            if (stop) {
+                guint32 const c1 = sp_stop_get_rgba32(stop);
+                gchar c[64];
+                sp_svg_write_color(c, sizeof(c), c1);
+                color = g_strdup(c);
+                //lstroke_opacity = Glib::ustring::format(stop->opacity).c_str();
+            }
+        }
+    }
+    return color;
+}
 /**
  * Sets selector widgets' dash style from an SPStyle object.
  */
@@ -602,7 +881,6 @@ StrokeStyle::updateLine()
 
     Inkscape::Selection *sel = desktop ? sp_desktop_selection(desktop) : NULL;
 
-    // TODO
     FillOrStroke kind = GPOINTER_TO_INT(get_data("kind")) ? FILL : STROKE;
 
     // create temporary style
@@ -874,39 +1152,30 @@ StrokeStyle::lineDashChangedCB()
  * calls the respective routines to update css properties, etc.
  *
  */
-void StrokeStyle::buttonToggledCB(Gtk::ToggleButton *tb, StrokeStyle *spw)
+void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
 {
     if (spw->update) {
         return;
     }
 
     if (tb->get_active()) {
-
-        // TODO
-        gchar const *join
-            = static_cast<gchar const *>(tb->get_data("join"));
-        gchar const *cap
-            = static_cast<gchar const *>(tb->get_data("cap"));
-
-        if (join) {
-            spw->miterLimitSpin->set_sensitive(!strcmp(join, "miter"));
+        if (tb->get_button_type() == STROKE_STYLE_BUTTON_JOIN) {
+            spw->miterLimitSpin->set_sensitive(!strcmp(tb->get_stroke_style(), "miter"));
         }
 
         /* TODO: Create some standardized method */
         SPCSSAttr *css = sp_repr_css_attr_new();
 
-        if (join) {
-            sp_repr_css_set_property(css, "stroke-linejoin", join);
-
-            sp_desktop_set_style (spw->desktop, css);
-
-            spw->setJoinButtons(tb);
-        } else if (cap) {
-            sp_repr_css_set_property(css, "stroke-linecap", cap);
-
-            sp_desktop_set_style (spw->desktop, css);
-
-            spw->setCapButtons(tb);
+        switch (tb->get_button_type()) {
+            case STROKE_STYLE_BUTTON_JOIN: 
+                sp_repr_css_set_property(css, "stroke-linejoin", tb->get_stroke_style());
+                sp_desktop_set_style (spw->desktop, css);
+                spw->setJoinButtons(tb);
+                break;
+            case STROKE_STYLE_BUTTON_CAP:
+                sp_repr_css_set_property(css, "stroke-linecap", tb->get_stroke_style());
+                sp_desktop_set_style (spw->desktop, css);
+                spw->setCapButtons(tb);
         }
 
         sp_repr_css_attr_unref(css);
@@ -988,9 +1257,21 @@ StrokeStyle::updateAllMarkers(GSList const *objects)
             // If the object has this type of markers,
 
             // Extract the name of the marker that the object uses
-            SPObject *marker = getMarkerName(object->style->marker[keyloc[i].loc].value, object->document);
+            SPObject *marker = getMarkerObj(object->style->marker[keyloc[i].loc].value, object->document);
             // Scroll the combobox to that marker
             combo->set_current(marker);
+
+            // Set the marker color
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            gboolean update = prefs->getBool("/options/markers/colorUpdateMarkers", true);
+
+            if (update) {
+                setMarkerColor(marker, combo->get_loc(), SP_ITEM(object));
+
+                SPDocument *document = sp_desktop_document(desktop);
+                DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
+                                   _("Set marker color"));
+            }
 
         } else {
             combo->set_current(NULL);
@@ -1000,41 +1281,6 @@ StrokeStyle::updateAllMarkers(GSList const *objects)
 }
 
 
-/**
- * Extract the actual name of the link
- * e.g. get mTriangle from url(#mTriangle).
- * \return Buffer containing the actual name, allocated from GLib;
- * the caller should free the buffer when they no longer need it.
- */
-SPObject*
-StrokeStyle::getMarkerName(gchar const *n, SPDocument *doc)
-{
-    gchar const *p = n;
-    while (*p != '\0' && *p != '#') {
-        p++;
-    }
-
-    if (*p == '\0' || p[1] == '\0') {
-        return NULL;
-    }
-
-    p++;
-    int c = 0;
-    while (p[c] != '\0' && p[c] != ')') {
-        c++;
-    }
-
-    if (p[c] == '\0') {
-        return NULL;
-    }
-
-    gchar* b = g_strdup(p);
-    b[c] = '\0';
-
-    // FIXME: get the document from the object and let the caller pass it in
-    SPObject *marker = doc->getObjectById(b);
-    return marker;
-}
 
 } // namespace Inkscape
 

@@ -97,7 +97,12 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
     tabs->append_page(*manage(
         make_scrolled_text(license_text)), _("_License"), true);
 
+#if WITH_GTKMM_3_0
+    get_content_area()->pack_end(*manage(tabs), true, true);
+#else
     get_vbox()->pack_end(*manage(tabs), true, true);
+#endif
+
     tabs->show_all();
 
     add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
@@ -114,7 +119,11 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
     label->set_selectable(true);
     label->show();
 
+#if WITH_GTKMM_3_0
+    get_content_area()->pack_start(*manage(label), false, false);
+#else
     get_vbox()->pack_start(*manage(label), false, false);
+#endif
 
     Gtk::Requisition requisition;
 #if GTK_CHECK_VERSION(3,0,0)
@@ -243,6 +252,7 @@ void AboutBox::initStrings() {
 "Arpad Biro\n"
 "Nicholas Bishop\n"
 "Joshua L. Blocher\n"
+"Hanno Böck\n"
 "Henrik Bohre\n"
 "Boldewyn\n"
 "Daniel Borgmann\n"
@@ -437,7 +447,7 @@ void AboutBox::initStrings() {
 "Aleksandar Urošević <urke@users.sourceforge.net>, 2004-2006.\n"
 "Alessio Frusciante <algol@firenze.linux.it>, 2002, 2003.\n"
 "Alexander Shopov <ash@contact.bg>, 2006.\n"
-"Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2005, 2010-2011.\n"
+"Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2005, 2010-2013.\n"
 "Alexey Remizov <alexey@remizov.pp.ru>, 2004.\n"
 "Ali Ghanavatian <ghanvatian.ali@gmail.com>, 2010.\n"
 "Álvaro Lopes <alvieboy@alvie.com>, 2001, 2002.\n"
@@ -458,14 +468,14 @@ void AboutBox::initStrings() {
 "Christian Meyer <chrisime@gnome.org>, 2000-2002.\n"
 "Christian Neumair <chris@gnome-de.org>, 2002, 2003.\n"
 "Christian Rose <menthos@menthos.com>, 2000-2003.\n"
-"Cristian Secară <cristi@secarica.ro>, 2010.\n"
+"Cristian Secară <cristi@secarica.ro>, 2010-2013.\n"
 "Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.\n"
 "Clytie Siddall <clytie@riverland.net.au>, 2004-2008.\n"
 "Colin Marquardt <colin@marquardt-home.de>, 2004-2006.\n"
 "Cédric Gemy <radar.map35@free.fr>, 2006.\n"
 "Daniel Díaz <yosoy@danieldiaz.org>, 2004.\n"
 "Didier Conchaudron <conchaudron@free.fr>, 2003.\n"
-"Dimitris Spingos <dmtrs32@gmail.com>, 2011.\n"
+"Dimitris Spingos <dmtrs32@gmail.com>, 2011-2013.\n"
 "Dorji Tashi <dorjee_doss@hotmail.com>, 2006.\n"
 "Duarte Loreto <happyguy_pt@hotmail.com> 2002, 2003 (Maintainer).\n"
 "Elias Norberg <elno0959 at student.su.se>, 2009.\n"
@@ -483,6 +493,7 @@ void AboutBox::initStrings() {
 "Ilia Penev <lichopicho@gmail.com>, 2006.\n"
 "Ivan Masár <helix84@centrum.sk>, 2006-2010. \n"
 "Iñaki Larrañaga <dooteo@euskalgnu.org>, 2006.\n"
+"Jānis Eisaks <jancs@dv.lv>, 2012, 2013.\n"
 "Jeffrey Steve Borbón Sanabria <jeff_kerokid@yahoo.com>, 2005.\n"
 "Jesper Öqvist <jesper@llbit.se>, 2010, 2011.\n"
 "Joaquim Perez i Noguer <noguer@gmail.com>, 2008-2009.\n"
@@ -504,16 +515,16 @@ void AboutBox::initStrings() {
 "Kingsley Turner <kingsley@maddogsbreakfast.com.au>, 2006.\n"
 "Kitae <bluetux@gmail.com>, 2006.\n"
 "Kjartan Maraas <kmaraas@gnome.org>, 2000-2002.\n"
-"Kris De Gussem <kris.DeGussem@gmail.com>, 2008-2011.\n"
+"Kris De Gussem <Kris.DeGussem@gmail.com>, 2008-2013.\n"
 "Lauris Kaplinski <lauris@ariman.ee>, 2000.\n"
 "Leandro Regueiro <leandro.regueiro@gmail.com>, 2006-2008, 2010.\n"
 "Liu Xiaoqin <liuxqsmile@gmail.com>, 2008.\n"
 "Luca Bruno <luca.br@uno.it>, 2005.\n"
-"Lucas Vieites Fariña<lucas@codexion.com>, 2003-2010.\n"
+"Lucas Vieites Fariña<lucas@codexion.com>, 2003-2013.\n"
 "Mahesh subedi <submanesh@hotmail.com>, 2006.\n"
 "Martin Srebotnjak, <miles@filmsi.net>, 2005, 2010.\n"
 "Masatake YAMATO <jet@gyve.org>, 2002.\n"
-"Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2009-2011.\n"
+"Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2009-2012.\n"
 "Matiphas <matiphas _a_ free _point_ fr>, 2004-2006.\n"
 "Mattias Hultgren <mattias_hultgren@tele2.se>, 2005, 2006.\n"
 "Maxim Dziumanenko <mvd@mylinux.com.ua>, 2004.\n"
@@ -524,7 +535,7 @@ void AboutBox::initStrings() {
 "Muhammad Bashir Al-Noimi <mhdbnoimi@gmail.com>, 2008.\n"
 "Myckel Habets <myckel@sdf.lonestar.org>, 2008.\n"
 "Nguyen Dinh Trung <nguyendinhtrung141@gmail.com>, 2007, 2008.\n"
-"Nicolas Dufour <nicoduf@yahoo.fr>, 2008-2011.\n"
+"Nicolas Dufour <nicoduf@yahoo.fr>, 2008-2013.\n"
 "Pawan Chitrakar <pchitrakar@gmail.com>, 2006.\n"
 "Przemysław Loesch <p_loesch@poczta.onet.pl>, 2005.\n"
 "Quico Llach <quico@softcatala.org>, 2000. Traducció sodipodi.\n"
@@ -545,7 +556,7 @@ void AboutBox::initStrings() {
 "Thiago Pimentel <thiago.merces@gmail.com>, 2006.\n"
 "Toshifumi Sato <sato@centrosystem.com>, 2005.\n"
 "Jon South <striker@lunar-linux.org>, 2006. \n"
-"Uwe Schöler <oss@oss-marketplace.com>, 2006-2011.\n"
+"Uwe Schöler <oss@oss-marketplace.com>, 2006-2013.\n"
 "Valek Filippov <frob@df.ru>, 2000, 2003.\n"
 "Victor Dachev <vdachev@gmail.com>, 2006.\n"
 "Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.\n"
@@ -560,7 +571,7 @@ void AboutBox::initStrings() {
 "Yaron Shahrabani <sh.yaron@gmail.com>, 2009.\n"
 "Yukihiro Nakai <nakai@gnome.gr.jp>, 2000, 2003.\n"
 "Yuri Beznos <zhiz0id@gmail.com>, 2006.\n"
-"Yuri Chornoivan <yurchor@ukr.net>, 2007-2011.\n"
+"Yuri Chornoivan <yurchor@ukr.net>, 2007-2013.\n"
 "Yuri Syrota <rasta@renome.rovno.ua>, 2000.\n"
 "Yves Guillou <yvesguillou@users.sourceforge.net>, 2004.\n"
 "Zdenko Podobný <zdpo@mailbox.sk>, 2003, 2004."

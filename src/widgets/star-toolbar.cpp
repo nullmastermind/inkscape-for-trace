@@ -28,9 +28,8 @@
 # include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
-
 #include "ui/widget/spinbutton.h"
+#include <glibmm/i18n.h>
 #include "toolbox.h"
 #include "star-toolbar.h"
 
@@ -74,7 +73,7 @@ using Inkscape::UI::PrefPusher;
 
 static void sp_stb_magnitude_value_changed( GtkAdjustment *adj, GObject *dataKludge )
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data( dataKludge, "desktop" );
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( dataKludge, "desktop" ));
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         // do not remember prefs if this call is initiated by an undo change, because undoing object
@@ -120,7 +119,7 @@ static void sp_stb_magnitude_value_changed( GtkAdjustment *adj, GObject *dataKlu
 
 static void sp_stb_proportion_value_changed( GtkAdjustment *adj, GObject *dataKludge )
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data( dataKludge, "desktop" );
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( dataKludge, "desktop" ));
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         if (!IS_NAN(gtk_adjustment_get_value(adj))) {
@@ -173,7 +172,7 @@ static void sp_stb_proportion_value_changed( GtkAdjustment *adj, GObject *dataKl
 
 static void sp_stb_sides_flat_state_changed( EgeSelectOneAction *act, GObject *dataKludge )
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data( dataKludge, "desktop" );
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( dataKludge, "desktop" ));
     bool flat = ege_select_one_action_get_active( act ) == 0;
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
@@ -218,7 +217,7 @@ static void sp_stb_sides_flat_state_changed( EgeSelectOneAction *act, GObject *d
 
 static void sp_stb_rounded_value_changed( GtkAdjustment *adj, GObject *dataKludge )
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data( dataKludge, "desktop" );
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( dataKludge, "desktop" ));
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -257,7 +256,7 @@ static void sp_stb_rounded_value_changed( GtkAdjustment *adj, GObject *dataKludg
 
 static void sp_stb_randomized_value_changed( GtkAdjustment *adj, GObject *dataKludge )
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data( dataKludge, "desktop" );
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( dataKludge, "desktop" ));
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -337,7 +336,7 @@ static void star_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *n
             gtk_action_set_sensitive( prop_action, FALSE );
         }
     } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided) ) {
-        adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(tbl), "proportion");
+        adj = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(tbl), "proportion"));
         gdouble r1 = 1.0;
         gdouble r2 = 1.0;
         sp_repr_get_double(repr, "sodipodi:r1", &r1);
@@ -348,7 +347,7 @@ static void star_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *n
             gtk_adjustment_set_value(adj, r1/r2);
         }
     } else if (!strcmp(name, "sodipodi:sides")) {
-        adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(tbl), "magnitude");
+        adj = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(tbl), "magnitude"));
         int sides = 0;
         sp_repr_get_int(repr, "sodipodi:sides", &sides);
         gtk_adjustment_set_value(adj, sides);
@@ -584,7 +583,7 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     }
 
     sigc::connection *connection = new sigc::connection(
-        sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_star_toolbox_selection_changed), (GObject *)holder))
+        sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_star_toolbox_selection_changed), holder))
         );
     g_signal_connect( holder, "destroy", G_CALLBACK(delete_connection), connection );
     g_signal_connect( holder, "destroy", G_CALLBACK(purge_repr_listener), holder );

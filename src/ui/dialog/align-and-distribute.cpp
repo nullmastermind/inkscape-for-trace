@@ -57,227 +57,201 @@ namespace Dialog {
 
 /////////helper classes//////////////////////////////////
 
-class Action {
-public :
-    Action(const Glib::ustring &id,
-           const Glib::ustring &tiptext,
-           guint row, guint column,
+Action::Action(const Glib::ustring &id,
+       const Glib::ustring &tiptext,
+       guint row, guint column,
 #if WITH_GTKMM_3_0
-	   Gtk::Grid &parent,
+   Gtk::Grid &parent,
 #else
-	   Gtk::Table &parent,
+   Gtk::Table &parent,
 #endif
-           AlignAndDistribute &dialog):
-        _dialog(dialog),
-        _id(id),
-        _parent(parent)
+       AlignAndDistribute &dialog):
+    _dialog(dialog),
+    _id(id),
+    _parent(parent)
+{
+    Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon( _id, Inkscape::ICON_SIZE_LARGE_TOOLBAR) );
+    Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
+    pButton->set_relief(Gtk::RELIEF_NONE);
+    pIcon->show();
+    pButton->add(*pIcon);
+    pButton->show();
+
+    pButton->signal_clicked()
+        .connect(sigc::mem_fun(*this, &Action::on_button_click));
+    pButton->set_tooltip_text(tiptext);
+#if WITH_GTKMM_3_0
+    parent.attach(*pButton, column, row, 1, 1);
+#else
+    parent.attach(*pButton, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
+#endif
+}
+
+
+void ActionAlign::do_action(SPDesktop *desktop, int index) {
+
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    if (!selection) return;
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
+    int prefs_bbox = prefs->getBool("/tools/bounding_box");
+
+    using Inkscape::Util::GSListConstIterator;
+    std::list<SPItem *> selected;
+    selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
+    if (selected.empty()) return;
+
+    Geom::Point mp; //Anchor point
+    AlignAndDistribute::AlignTarget target = AlignAndDistribute::getAlignTarget();
+    const Coeffs &a= _allCoeffs[index];
+    switch (target)
     {
-        Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon( _id, Inkscape::ICON_SIZE_LARGE_TOOLBAR) );
-        Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
-        pButton->set_relief(Gtk::RELIEF_NONE);
-        pIcon->show();
-        pButton->add(*pIcon);
-        pButton->show();
-
-        pButton->signal_clicked()
-            .connect(sigc::mem_fun(*this, &Action::on_button_click));
-        pButton->set_tooltip_text(tiptext);
-#if WITH_GTKMM_3_0
-        parent.attach(*pButton, column, row, 1, 1);
-#else
-        parent.attach(*pButton, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
-#endif
+    case AlignAndDistribute::LAST:
+    case AlignAndDistribute::FIRST:
+    case AlignAndDistribute::BIGGEST:
+    case AlignAndDistribute::SMALLEST:
+    {
+        //Check 2 or more selected objects
+        std::list<SPItem *>::iterator second(selected.begin());
+        ++second;
+        if (second == selected.end())
+            return;
+        //Find the master (anchor on which the other objects are aligned)
+        std::list<SPItem *>::iterator master(
+                AlignAndDistribute::find_master (
+                selected,
+                (a.mx0 != 0.0) ||
+                (a.mx1 != 0.0) )
+            );
+        //remove the master from the selection
+        SPItem * thing = *master;
+        // TODO: either uncomment or remove the following commented lines, depending on which
+        //       behaviour of moving objects makes most sense; also cf. discussion at
+        //       https://bugs.launchpad.net/inkscape/+bug/255933
+        /*if (!sel_as_group) { */
+            selected.erase(master);
+        /*}*/
+        //Compute the anchor point
+        Geom::OptRect b = !prefs_bbox ? thing->desktopVisualBounds() : thing->desktopGeometricBounds();
+        if (b) {
+            mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
+                           a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
+        } else {
+            return;
+        }
+        break;
     }
-    virtual ~Action(){}
 
-    AlignAndDistribute &_dialog;
+    case AlignAndDistribute::PAGE:
+        mp = Geom::Point(a.mx1 * sp_desktop_document(desktop)->getWidth(),
+                       a.my1 * sp_desktop_document(desktop)->getHeight());
+        break;
 
-private :
-    virtual void on_button_click(){}
-
-    Glib::ustring _id;
-
-#if WITH_GTKMM_3_0
-    Gtk::Grid &_parent;
-#else
-    Gtk::Table &_parent;
-#endif
-};
-
-
-class ActionAlign : public Action {
-public :
-    struct Coeffs {
-       double mx0, mx1, my0, my1;
-       double sx0, sx1, sy0, sy1;
-    };
-    ActionAlign(const Glib::ustring &id,
-                const Glib::ustring &tiptext,
-                guint row, guint column,
-                AlignAndDistribute &dialog,
-                guint coeffIndex):
-        Action(id, tiptext, row, column,
-               dialog.align_table(), dialog),
-        _index(coeffIndex),
-        _dialog(dialog)
-    {}
-
-private :
-
-    virtual void on_button_click() {
-        //Retreive selected objects
-        SPDesktop *desktop = _dialog.getDesktop();
-        if (!desktop) return;
-
-        Inkscape::Selection *selection = sp_desktop_selection(desktop);
-        if (!selection) return;
-
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
-        int prefs_bbox = prefs->getBool("/tools/bounding_box");
-
-        using Inkscape::Util::GSListConstIterator;
-        std::list<SPItem *> selected;
-        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
-        if (selected.empty()) return;
-
-        Geom::Point mp; //Anchor point
-        AlignAndDistribute::AlignTarget target = _dialog.getAlignTarget();
-        const Coeffs &a= _allCoeffs[_index];
-        switch (target)
-        {
-        case AlignAndDistribute::LAST:
-        case AlignAndDistribute::FIRST:
-        case AlignAndDistribute::BIGGEST:
-        case AlignAndDistribute::SMALLEST:
-        {
-            //Check 2 or more selected objects
-            std::list<SPItem *>::iterator second(selected.begin());
-            ++second;
-            if (second == selected.end())
-                return;
-            //Find the master (anchor on which the other objects are aligned)
-            std::list<SPItem *>::iterator master(
-                _dialog.find_master (
-                    selected,
-                    (a.mx0 != 0.0) ||
-                    (a.mx1 != 0.0) )
-                );
-            //remove the master from the selection
-            SPItem * thing = *master;
-            // TODO: either uncomment or remove the following commented lines, depending on which
-            //       behaviour of moving objects makes most sense; also cf. discussion at
-            //       https://bugs.launchpad.net/inkscape/+bug/255933
-            /*if (!sel_as_group) { */
-                selected.erase(master);
-            /*}*/
-            //Compute the anchor point
-            Geom::OptRect b = !prefs_bbox ? thing->desktopVisualBounds() : thing->desktopGeometricBounds();
-            if (b) {
-                mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
-                               a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
-            } else {
-                return;
-            }
-            break;
+    case AlignAndDistribute::DRAWING:
+    {
+        Geom::OptRect b = !prefs_bbox ? sp_desktop_document(desktop)->getRoot()->desktopVisualBounds()
+                                      : sp_desktop_document(desktop)->getRoot()->desktopGeometricBounds();
+        if (b) {
+            mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
+                           a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
+        } else {
+            return;
         }
-
-        case AlignAndDistribute::PAGE:
-            mp = Geom::Point(a.mx1 * sp_desktop_document(desktop)->getWidth(),
-                           a.my1 * sp_desktop_document(desktop)->getHeight());
-            break;
-
-        case AlignAndDistribute::DRAWING:
-        {
-            Geom::OptRect b = !prefs_bbox ? sp_desktop_document(desktop)->getRoot()->desktopVisualBounds()
-                                          : sp_desktop_document(desktop)->getRoot()->desktopGeometricBounds();
-            if (b) {
-                mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
-                               a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
-            } else {
-                return;
-            }
-            break;
-        }
-
-        case AlignAndDistribute::SELECTION:
-        {
-            Geom::OptRect b = !prefs_bbox ? selection->visualBounds() : selection->geometricBounds();
-            if (b) {
-                mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
-                               a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
-            } else {
-                return;
-            }
-            break;
-        }
-
-        default:
-            g_assert_not_reached ();
-            break;
-        };  // end of switch
-
-        // Top hack: temporarily set clone compensation to unmoved, so that we can align/distribute
-        // clones with their original (and the move of the original does not disturb the
-        // clones). The only problem with this is that if there are outside-of-selection clones of
-        // a selected original, they will be unmoved too, possibly contrary to user's
-        // expecation. However this is a minor point compared to making align/distribute always
-        // work as expected, and "unmoved" is the default option anyway.
-        int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-        prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-
-        bool changed = false;
-        Geom::OptRect b;
-        if (sel_as_group)
-            b = !prefs_bbox ? selection->visualBounds() : selection->geometricBounds();
-
-        //Move each item in the selected list separately
-        for (std::list<SPItem *>::iterator it(selected.begin());
-             it != selected.end();
-             it++)
-        {
-            sp_desktop_document (desktop)->ensureUpToDate();
-            if (!sel_as_group)
-                b = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
-            if (b) {
-                Geom::Point const sp(a.sx0 * b->min()[Geom::X] + a.sx1 * b->max()[Geom::X],
-                                     a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
-                Geom::Point const mp_rel( mp - sp );
-                if (LInfty(mp_rel) > 1e-9) {
-                    sp_item_move_rel(*it, Geom::Translate(mp_rel));
-                    changed = true;
-                }
-            }
-        }
-
-        // restore compensation setting
-        prefs->setInt("/options/clonecompensation/value", saved_compensation);
-
-        if (changed) {
-            DocumentUndo::done( sp_desktop_document(desktop) , SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-                                _("Align"));
-        }
-
-
+        break;
     }
-    guint _index;
-    AlignAndDistribute &_dialog;
 
-    static const Coeffs _allCoeffs[10];
+    case AlignAndDistribute::SELECTION:
+    {
+        Geom::OptRect b = !prefs_bbox ? selection->visualBounds() : selection->geometricBounds();
+        if (b) {
+            mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
+                           a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
+        } else {
+            return;
+        }
+        break;
+    }
 
+    default:
+        g_assert_not_reached ();
+        break;
+    };  // end of switch
+
+    // Top hack: temporarily set clone compensation to unmoved, so that we can align/distribute
+    // clones with their original (and the move of the original does not disturb the
+    // clones). The only problem with this is that if there are outside-of-selection clones of
+    // a selected original, they will be unmoved too, possibly contrary to user's
+    // expecation. However this is a minor point compared to making align/distribute always
+    // work as expected, and "unmoved" is the default option anyway.
+    int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+    prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+
+    bool changed = false;
+    Geom::OptRect b;
+    if (sel_as_group)
+        b = !prefs_bbox ? selection->visualBounds() : selection->geometricBounds();
+
+    //Move each item in the selected list separately
+    for (std::list<SPItem *>::iterator it(selected.begin());
+         it != selected.end();
+         it++)
+    {
+        sp_desktop_document (desktop)->ensureUpToDate();
+        if (!sel_as_group)
+            b = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
+        if (b) {
+            Geom::Point const sp(a.sx0 * b->min()[Geom::X] + a.sx1 * b->max()[Geom::X],
+                                 a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
+            Geom::Point const mp_rel( mp - sp );
+            if (LInfty(mp_rel) > 1e-9) {
+                sp_item_move_rel(*it, Geom::Translate(mp_rel));
+                changed = true;
+            }
+        }
+    }
+
+    // restore compensation setting
+    prefs->setInt("/options/clonecompensation/value", saved_compensation);
+
+    if (changed) {
+        DocumentUndo::done( sp_desktop_document(desktop) , SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
+                            _("Align"));
+    }
+
+
+}
+
+
+ActionAlign::Coeffs const ActionAlign::_allCoeffs[11] = {
+    {1., 0., 0., 0., 0., 1., 0., 0., SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR},
+    {1., 0., 0., 0., 1., 0., 0., 0., SP_VERB_ALIGN_HORIZONTAL_LEFT},
+    {.5, .5, 0., 0., .5, .5, 0., 0., SP_VERB_ALIGN_HORIZONTAL_CENTER},
+    {0., 1., 0., 0., 0., 1., 0., 0., SP_VERB_ALIGN_HORIZONTAL_RIGHT},
+    {0., 1., 0., 0., 1., 0., 0., 0., SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR},
+    {0., 0., 0., 1., 0., 0., 1., 0., SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR},
+    {0., 0., 0., 1., 0., 0., 0., 1., SP_VERB_ALIGN_VERTICAL_TOP},
+    {0., 0., .5, .5, 0., 0., .5, .5, SP_VERB_ALIGN_VERTICAL_CENTER},
+    {0., 0., 1., 0., 0., 0., 1., 0., SP_VERB_ALIGN_VERTICAL_BOTTOM},
+    {0., 0., 1., 0., 0., 0., 0., 1., SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR},
+    {.5, .5, .5, .5, .5, .5, .5, .5, SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER}
 };
-ActionAlign::Coeffs const ActionAlign::_allCoeffs[10] = {
-    {1., 0., 0., 0., 0., 1., 0., 0.},
-    {1., 0., 0., 0., 1., 0., 0., 0.},
-    {.5, .5, 0., 0., .5, .5, 0., 0.},
-    {0., 1., 0., 0., 0., 1., 0., 0.},
-    {0., 1., 0., 0., 1., 0., 0., 0.},
-    {0., 0., 0., 1., 0., 0., 1., 0.},
-    {0., 0., 0., 1., 0., 0., 0., 1.},
-    {0., 0., .5, .5, 0., 0., .5, .5},
-    {0., 0., 1., 0., 0., 0., 1., 0.},
-    {0., 0., 1., 0., 0., 0., 0., 1.}
-};
+
+void ActionAlign::do_verb_action(SPDesktop *desktop, int verb)
+{
+    do_action(desktop, verb_to_coeff(verb));
+}
+
+int ActionAlign::verb_to_coeff(int verb) {
+
+    for(guint i = 0; i < G_N_ELEMENTS(_allCoeffs); i++) {
+        if (_allCoeffs[i].verb_id == verb) {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 BBoxSort::BBoxSort(SPItem *pItem, Geom::Rect const &bounds, Geom::Dim2 orientation, double kBegin, double kEnd) :
         item(pItem),
@@ -781,7 +755,7 @@ struct Baselines
     {}
 };
 
-bool operator< (const Baselines &a, const Baselines &b)
+static bool operator< (const Baselines &a, const Baselines &b)
 {
     return (a._base[a._orientation] < b._base[b._orientation]);
 }
@@ -899,14 +873,14 @@ private :
 
 
 
-void on_tool_changed(Inkscape::Application */*inkscape*/, SPEventContext */*context*/, AlignAndDistribute *daad)
+static void on_tool_changed(Inkscape::Application */*inkscape*/, SPEventContext */*context*/, AlignAndDistribute *daad)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && sp_desktop_event_context(desktop))
         daad->setMode(tools_active(desktop) == TOOLS_NODES);
 }
 
-void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
+static void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
 {
     daad->randomize_bbox = Geom::OptRect();
 }
@@ -1066,7 +1040,6 @@ AlignAndDistribute::AlignAndDistribute()
 
     //Rest of the widgetry
 
-#if WITH_GTKMM_2_24
     _combo.append(_("Last selected"));
     _combo.append(_("First selected"));
     _combo.append(_("Biggest object"));
@@ -1074,36 +1047,34 @@ AlignAndDistribute::AlignAndDistribute()
     _combo.append(_("Page"));
     _combo.append(_("Drawing"));
     _combo.append(_("Selection"));
-#else
-    _combo.append_text(_("Last selected"));
-    _combo.append_text(_("First selected"));
-    _combo.append_text(_("Biggest object"));
-    _combo.append_text(_("Smallest object"));
-    _combo.append_text(_("Page"));
-    _combo.append_text(_("Drawing"));
-    _combo.append_text(_("Selection"));
-#endif
     _combo.set_active(prefs->getInt("/dialogs/align/align-to", 6));
     _combo.signal_changed().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_ref_change));
 
-    _anchorBox.pack_start(_anchorLabel);
-    _anchorBox.pack_start(_combo);
+    _anchorBox.pack_end(_combo, false, false);
+    _anchorBox.pack_end(_anchorLabel, false, false);
 
     _selgrpLabel.set_mnemonic_widget(_selgrp);
-    _selgrpBox.pack_start(_selgrpLabel);
-    _selgrpBox.pack_start(_selgrp);
+    _selgrpBox.pack_end(_selgrp, false, false);
+    _selgrpBox.pack_end(_selgrpLabel, false, false);
     _selgrp.set_active(prefs->getBool("/dialogs/align/sel-as-groups"));
     _selgrp.signal_toggled().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_selgrp_toggled));
 
+    // Right align the buttons
+    _alignTableBox.pack_end(_alignTable, false, false);
+    _distributeTableBox.pack_end(_distributeTable, false, false);
+    _rearrangeTableBox.pack_end(_rearrangeTable, false, false);
+    _removeOverlapTableBox.pack_end(_removeOverlapTable, false, false);
+    _nodesTableBox.pack_end(_nodesTable, false, false);
+
     _alignBox.pack_start(_anchorBox);
     _alignBox.pack_start(_selgrpBox);
-    _alignBox.pack_start(_alignTable);
+    _alignBox.pack_start(_alignTableBox);
 
     _alignFrame.add(_alignBox);
-    _distributeFrame.add(_distributeTable);
-    _rearrangeFrame.add(_rearrangeTable);
-    _removeOverlapFrame.add(_removeOverlapTable);
-    _nodesFrame.add(_nodesTable);
+    _distributeFrame.add(_distributeTableBox);
+    _rearrangeFrame.add(_rearrangeTableBox);
+    _removeOverlapFrame.add(_removeOverlapTableBox);
+    _nodesFrame.add(_nodesTableBox);
 
     Gtk::Box *contents = _getContents();
     contents->set_spacing(4);
@@ -1123,6 +1094,9 @@ AlignAndDistribute::AlignAndDistribute()
     g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
     randomize_bbox = Geom::OptRect();
 
+    _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &AlignAndDistribute::setDesktop) );
+    _deskTrack.connect(GTK_WIDGET(gobj()));
+
     show_all_children();
 
     on_tool_changed (NULL, NULL, this); // set current mode
@@ -1133,10 +1107,22 @@ AlignAndDistribute::~AlignAndDistribute()
     sp_signal_disconnect_by_data (G_OBJECT (INKSCAPE), this);
 
     for (std::list<Action *>::iterator it = _actionList.begin();
-         it != _actionList.end();
-         ++it)
+         it != _actionList.end();  ++it) {
         delete *it;
+    }
+
+    _desktopChangeConn.disconnect();
+    _deskTrack.disconnect();
 }
+
+void AlignAndDistribute::setTargetDesktop(SPDesktop *desktop)
+{
+    if (_desktop != desktop) {
+        _desktop = desktop;
+        on_tool_changed (NULL, NULL, this);
+    }
+}
+
 
 void AlignAndDistribute::on_ref_change(){
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1158,21 +1144,12 @@ void AlignAndDistribute::on_selgrp_toggled(){
 void AlignAndDistribute::setMode(bool nodeEdit)
 {
     //Act on widgets used in node mode
-#if WITH_GTKMM_2_24
     void ( Gtk::Widget::*mNode) ()  = nodeEdit ?
         &Gtk::Widget::show_all : &Gtk::Widget::hide;
 
     //Act on widgets used in selection mode
   void ( Gtk::Widget::*mSel) ()  = nodeEdit ?
       &Gtk::Widget::hide : &Gtk::Widget::show_all;
-#else
-    void ( Gtk::Widget::*mNode) ()  = nodeEdit ?
-        &Gtk::Widget::show_all : &Gtk::Widget::hide_all;
-
-    //Act on widgets used in selection mode
-  void ( Gtk::Widget::*mSel) ()  = nodeEdit ?
-      &Gtk::Widget::hide_all : &Gtk::Widget::show_all;
-#endif
 
     ((_alignFrame).*(mSel))();
     ((_distributeFrame).*(mSel))();
@@ -1318,7 +1295,6 @@ std::list<SPItem *>::iterator AlignAndDistribute::find_master( std::list<SPItem 
             }
         }
         return master;
-        break;
     }
 
     case SMALLEST:
@@ -1335,7 +1311,6 @@ std::list<SPItem *>::iterator AlignAndDistribute::find_master( std::list<SPItem 
             }
         }
         return master;
-        break;
     }
 
     default:
@@ -1346,8 +1321,9 @@ std::list<SPItem *>::iterator AlignAndDistribute::find_master( std::list<SPItem 
     return master;
 }
 
-AlignAndDistribute::AlignTarget AlignAndDistribute::getAlignTarget()const {
-    return AlignTarget(_combo.get_active_row_number());
+AlignAndDistribute::AlignTarget AlignAndDistribute::getAlignTarget() {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    return AlignTarget(prefs->getInt("/dialogs/align/align-to", 6));
 }
 
 

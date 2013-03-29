@@ -22,8 +22,6 @@
 #define SP_IS_OFFSET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OFFSET))
 #define SP_IS_OFFSET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_OFFSET))
 
-class SPOffset;
-class SPOffsetClass;
 class COffset;
 class SPUseReference;
 
@@ -113,7 +111,7 @@ protected:
 GType sp_offset_get_type (void);
 
 double sp_offset_distance_to_original (SPOffset * offset, Geom::Point px);
-void sp_offset_top_point (SPOffset * offset, Geom::Point *px);
+void sp_offset_top_point (SPOffset const *offset, Geom::Point *px);
 
 SPItem *sp_offset_get_source (SPOffset *offset);
 

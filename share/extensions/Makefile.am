@@ -26,6 +26,7 @@ extensions = \
 	color_desaturate.py\
 	coloreffect.py\
 	color_grayscale.py\
+	color_HSL_adjust.py\
 	color_lesshue.py\
 	color_lesslight.py\
 	color_lesssaturation.py\
@@ -78,6 +79,7 @@ extensions = \
 	ink2canvas.py \
 	inkex.py \
 	Inkscape.pm \
+	inkscape_follow_link.py \
 	inkwebeffect.py \
 	interp.py \
 	interp_att_g.py \
@@ -194,7 +196,7 @@ modules = \
 	ai_input.inx \
 	aisvg.inx \
 	ccx_input.inx \
-	cdr_input.inx\
+	cdr_input.inx \
 	cdt_input.inx \
 	cgm_input.inx \
 	cmx_input.inx \
@@ -204,6 +206,7 @@ modules = \
 	color_darker.inx\
 	color_desaturate.inx\
 	color_grayscale.inx\
+	color_HSL_adjust.inx\
 	color_lesshue.inx\
 	color_lesslight.inx\
 	color_lesssaturation.inx\
@@ -228,7 +231,7 @@ modules = \
 	dxf_output.inx \
 	edge3d.inx \
 	embedimage.inx \
-    embedselectedimages.inx \
+	embedselectedimages.inx \
 	eps_input.inx \
 	eqtexsvg.inx \
 	export_gimp_palette.inx \
@@ -261,6 +264,7 @@ modules = \
 	handles.inx \
 	hpgl_output.inx \
 	ink2canvas.inx \
+	inkscape_follow_link.inx \
 	inkscape_help_askaquestion.inx \
 	inkscape_help_commandline.inx \
 	inkscape_help_faq.inx\

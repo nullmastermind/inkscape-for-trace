@@ -15,6 +15,13 @@
 #include "display/nr-filter-types.h"
 #include "svg/svg-length.h"
 
+#include "inkscape.h"
+#include "desktop.h"
+#include "desktop-handles.h"
+#include "document.h"
+#include "sp-root.h"
+#include "style.h"
+
 namespace Inkscape {
 namespace Filters {
 
@@ -39,11 +46,14 @@ FilterPrimitive::FilterPrimitive()
     _subregion_y.unset(SVGLength::PERCENT, 0, 0);
     _subregion_width.unset(SVGLength::PERCENT, 1, 0);
     _subregion_height.unset(SVGLength::PERCENT, 1, 0);
+
+    _style = NULL;
 }
 
 FilterPrimitive::~FilterPrimitive()
 {
-    // Nothing to do here
+    if(_style)
+        sp_style_unref(_style);
 }
 
 void FilterPrimitive::render_cairo(FilterSlot &slot)
@@ -103,6 +113,18 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
     Geom::OptRect bb = units.get_item_bbox();
     Geom::OptRect fa = units.get_filter_area();
 
+    // This is definitely a hack... but what else to do?
+    // Current viewport might not be document viewport... but how to find?
+    SPDocument* document = inkscape_active_document();
+    SPRoot*     root = document->getRoot();
+    Geom::Rect  viewport;
+    if( root->viewBox_set ) {
+        viewport = root->viewBox;
+    } else {
+        // Pick some random values
+        viewport = Geom::Rect::from_xywh(0,0,480,360);
+    }
+
     /* Update computed values for ex, em, %. For %, assumes primitive unit is objectBoundingBox. */
     /* TODO: fetch somehow the object ex and em lengths; 12, 6 are just dummy values. */
     double len_x = bb->width();
@@ -144,11 +166,11 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
         if( _subregion_y._set      && _subregion_y.unit      != SVGLength::PERCENT )      y = _subregion_y.computed;
         if( _subregion_width._set  && _subregion_width.unit  != SVGLength::PERCENT )  width = _subregion_width.computed;
         if( _subregion_height._set && _subregion_height.unit != SVGLength::PERCENT ) height = _subregion_height.computed;
-        // TODO: add percent of viewport   TEMPORARY HACK FOR TESTING... 
-        if( _subregion_x._set      && _subregion_x.unit      == SVGLength::PERCENT )      x = _subregion_x.value * 480; // viewport_x
-        if( _subregion_y._set      && _subregion_y.unit      == SVGLength::PERCENT )      y = _subregion_y.value * 360;
-        if( _subregion_width._set  && _subregion_width.unit  == SVGLength::PERCENT )  width = _subregion_width.value * 480;
-        if( _subregion_height._set && _subregion_height.unit == SVGLength::PERCENT ) height = _subregion_height.value * 360;
+        // Percent of viewport
+        if( _subregion_x._set      && _subregion_x.unit      == SVGLength::PERCENT )      x = _subregion_x.value      * viewport.width();
+        if( _subregion_y._set      && _subregion_y.unit      == SVGLength::PERCENT )      y = _subregion_y.value      * viewport.height();
+        if( _subregion_width._set  && _subregion_width.unit  == SVGLength::PERCENT )  width = _subregion_width.value  * viewport.width();
+        if( _subregion_height._set && _subregion_height.unit == SVGLength::PERCENT ) height = _subregion_height.value * viewport.height();
     }
 
     Geom::Point minp, maxp;
@@ -160,6 +182,14 @@ Geom::Rect FilterPrimitive::filter_primitive_area(FilterUnits const &units)
     Geom::Rect area(minp, maxp);
     return area;
 }
+
+void FilterPrimitive::setStyle(SPStyle *style)
+{
+    if (style) sp_style_ref(style);
+    if (_style) sp_style_unref(_style);
+    _style = style;
+}
+
 
 } /* namespace Filters */
 } /* namespace Inkscape */

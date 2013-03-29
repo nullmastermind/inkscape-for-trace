@@ -550,10 +550,12 @@ DrawingItem::render(DrawingContext &ct, Geom::IntRect const &area, unsigned flag
     // for overlapping clip children. To fix this we use the SOURCE operator
     // instead of the default OVER.
     ict.setOperator(CAIRO_OPERATOR_SOURCE);
+    ict.paint();
     if (_clip) {
+        ict.pushGroup();
         _clip->clip(ict, *carea); // fixme: carea or area?
-    } else {
-        // if there is no clipping path, fill the entire surface with alpha = opacity.
+        ict.popGroupToSource();
+        ict.setOperator(CAIRO_OPERATOR_IN);
         ict.paint();
     }
     ict.setOperator(CAIRO_OPERATOR_OVER); // reset back to default
@@ -667,29 +669,24 @@ DrawingItem::clip(Inkscape::DrawingContext &ct, Geom::IntRect const &area)
     if (!_visible) return;
     if (!area.intersects(_bbox)) return;
 
-    // The item used as the clipping path itself has a clipping path.
-    // Render this item's clipping path onto a temporary surface, then composite it
-    // with the item using the IN operator
-    if (_clip) {
-        ct.pushAlphaGroup();
-        {   Inkscape::DrawingContext::Save save(ct);
-            ct.setSource(0,0,0,1);
-            _clip->clip(ct, area);
-        }
-        ct.pushAlphaGroup();
-    }
-
+    ct.setSource(0,0,0,1);
+    ct.pushGroup();
     // rasterize the clipping path
     _clipItem(ct, area);
-    
     if (_clip) {
+        // The item used as the clipping path itself has a clipping path.
+        // Render this item's clipping path onto a temporary surface, then composite it
+        // with the item using the IN operator
+        ct.pushGroup();
+        _clip->clip(ct, area);
         ct.popGroupToSource();
         ct.setOperator(CAIRO_OPERATOR_IN);
         ct.paint();
-        ct.popGroupToSource();
-        ct.setOperator(CAIRO_OPERATOR_SOURCE);
-        ct.paint();
     }
+    ct.popGroupToSource();
+    ct.setOperator(CAIRO_OPERATOR_OVER);
+    ct.paint();
+    ct.setSource(0,0,0,0);
 }
 
 /**

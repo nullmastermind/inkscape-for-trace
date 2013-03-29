@@ -16,9 +16,6 @@ bin_PROGRAMS = inkscape inkview
 # Libraries which should be compiled by "make" but not installed.
 # Use this only for libraries that are really standalone, rather than for
 # source tree subdirectories.
-#if WITH_INKBOARD
-#libpedro = pedro/libpedro.a
-#endif
 
 if !WITH_EXT_GDL
 internal_GDL = libgdl/libgdl.a
@@ -35,25 +32,25 @@ noinst_LIBRARIES =	\
 	libvpsc/libvpsc.a	\
 	livarot/libvarot.a	\
 	2geom/lib2geom.a	\
-	$(libpedro)		\
 	libinkversion.a
 
 all_libs =			\
 	$(noinst_LIBRARIES)	\
 	$(INKSCAPE_LIBS)	\
+	$(EXIF_LIBS)            \
 	$(GNOME_VFS_LIBS)	\
 	$(XFT_LIBS)		\
 	$(FREETYPE_LIBS)	\
 	$(kdeldadd)		\
 	$(win32ldflags)		\
 	$(CARBON_LDFLAGS)	\
-	$(PERL_LIBS)		\
-	$(PYTHON_LIBS)		\
-	$(INKBOARD_LIBS)	\
 	$(LIBWPG_LIBS)		\
+	$(LIBVISIO_LIBS)		\
+	$(LIBCDR_LIBS)		\
 	$(DBUS_LIBS)		\
 	$(GDL_LIBS)             \
-	$(IMAGEMAGICK_LIBS)
+	$(IMAGEMAGICK_LIBS)     \
+	$(X11_LIBS)
 
 # Add sources common for Inkscape and Inkview to this variable.
 ink_common_sources =
@@ -66,14 +63,15 @@ BUILT_SOURCES =
 # Extra files to distribute
 EXTRA_DIST =
 
-INCLUDES =	\
-	$(PERL_CFLAGS) $(PYTHON_CFLAGS)	\
+AM_CPPFLAGS =	\
+	$(EXIF_CFLAGS) \
 	$(FREETYPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)	\
 	$(GNOME_VFS_CFLAGS)	\
 	$(IMAGEMAGICK_CFLAGS) \
-	$(INKBOARD_CFLAGS) \
 	$(LIBWPG_CFLAGS) \
+	$(LIBVISIO_CFLAGS) \
+	$(LIBCDR_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(GDL_CFLAGS)  \
 	$(XFT_CFLAGS)	\
@@ -86,8 +84,8 @@ INCLUDES =	\
 	$(WIN32_CFLAGS) \
 	-I$(srcdir)/bind/javainc \
 	-I$(srcdir)/bind/javainc/linux \
-	-I$(builddir)/extension/dbus \
-	$(AM_CPPFLAGS)
+	-I$(builddir)/extension/dbus   \
+	$(X11_CFLAGS)
 
 CXXTEST_TEMPLATE = $(srcdir)/cxxtest-template.tpl
 CXXTESTGENFLAGS = --root --have-eh --template=$(CXXTEST_TEMPLATE)
@@ -106,11 +104,6 @@ win32_sources = winmain.cpp registrytool.cpp registrytool.h
 win32ldflags = -lcomdlg32 -lmscms
 mwindows = -mwindows
 endif 
-
-if INKJAR
-inkjar_dir = inkjar
-inkjar_libs = inkjar/libinkjar.a
-endif
 
 # Include all partial makefiles from subdirectories
 include Makefile_insert
@@ -154,7 +147,6 @@ EXTRA_DIST +=	\
 	$(top_srcdir)/Doxyfile	\
 	sp-skeleton.cpp sp-skeleton.h	\
 	util/makefile.in	\
-	application/makefile.in	\
 	bind/makefile.in	\
 	debug/makefile.in	\
 	dialogs/makefile.in	\
@@ -169,11 +161,8 @@ EXTRA_DIST +=	\
 	io/makefile.in	\
 	io/crystalegg.xml	\
 	io/doc2html.xsl 	\
-	pedro/makefile.in	\
-	jabber_whiteboard/makefile.in	\
 	libgdl/makefile.in	\
 	libcroco/makefile.in	\
-	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	libavoid/makefile.in	\
 	livarot/makefile.in	\
@@ -197,7 +186,6 @@ EXTRA_DIST +=	\
 	helper/sp-marshal.list	\
 	show-preview.bmp \
 	winconsole.cpp \
-	$(jabber_whiteboard_SOURCES) \
 	$(CXXTEST_TEMPLATE)
 
 # Extra files to remove when doing "make distclean"

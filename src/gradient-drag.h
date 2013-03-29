@@ -33,12 +33,12 @@ struct SPKnot;
 
 class SPDesktop;
 class SPCSSAttr;
-class SPLinearGradient;
-class SPMeshGradient;
+struct SPLinearGradient;
+struct SPMeshGradient;
 class SPItem;
 class SPObject;
-class SPRadialGradient;
-class SPStop;
+struct SPRadialGradient;
+struct SPStop;
 
 namespace Inkscape {
 class Selection;
@@ -134,8 +134,13 @@ public: // FIXME: make more of this private!
     bool hasSelection() {return (selected != NULL);}
     guint numSelected() {return (selected? g_list_length(selected) : 0);}
     guint numDraggers() {return (draggers? g_list_length(draggers) : 0);}
-    guint singleSelectedDraggerNumDraggables() {return (selected? g_slist_length(((GrDragger *) selected->data)->draggables) : 0);}
-    guint singleSelectedDraggerSingleDraggableType() {return (selected? ((GrDraggable *) ((GrDragger *) selected->data)->draggables->data)->point_type : 0);}
+
+    guint singleSelectedDraggerNumDraggables() {
+        return (selected? g_slist_length(( static_cast<GrDragger *>(selected->data))->draggables) : 0);
+    }
+
+    guint singleSelectedDraggerSingleDraggableType() {
+        return (selected? (static_cast<GrDraggable*>((static_cast<GrDragger*>(selected->data))->draggables->data))->point_type : 0);}
 
     // especially the selection must be private, fix gradient-context to remove direct access to it
     GList *selected; // list of GrDragger*
@@ -144,7 +149,7 @@ public: // FIXME: make more of this private!
     void deselectAll();
     void selectAll();
     void selectByCoords(std::vector<Geom::Point> coords);
-    void selectByStop(SPStop *stop);
+    void selectByStop(SPStop *stop,  bool add_to_selection = true, bool override = true);
     void selectRect(Geom::Rect const &r);
 
     bool dropColor(SPItem *item, gchar const *c, Geom::Point p);

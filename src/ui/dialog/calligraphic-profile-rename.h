@@ -11,10 +11,22 @@
 #ifndef INKSCAPE_DIALOG_CALLIGRAPHIC_PROFILE_H
 #define INKSCAPE_DIALOG_CALLIGRAPHIC_PROFILE_H
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
-#include <gtkmm/table.h>
+
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
+}
+
 class SPDesktop;
 
 namespace Inkscape {
@@ -29,9 +41,12 @@ public:
         return "CalligraphicProfileRename";
     }
     
-    static void show(SPDesktop *desktop);
+    static void show(SPDesktop *desktop, const Glib::ustring profile_name);
     static bool applied() {
         return instance()._applied;
+    }
+    static bool deleted() {
+        return instance()._deleted;
     }
     static Glib::ustring getProfileName() {
         return instance()._profile_name;
@@ -40,14 +55,23 @@ public:
 protected:
     void _close();
     void _apply();
+    void _delete();
 
     Gtk::Label        _profile_name_label;
     Gtk::Entry        _profile_name_entry;
-    Gtk::Table        _layout_table;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid*        _layout_table;
+#else
+    Gtk::Table*       _layout_table;
+#endif
+
     Gtk::Button       _close_button;
+    Gtk::Button       _delete_button;
     Gtk::Button       _apply_button;
     Glib::ustring _profile_name;
     bool _applied;
+    bool _deleted;
 private:
     static CalligraphicProfileRename &instance() {
         static CalligraphicProfileRename instance_;

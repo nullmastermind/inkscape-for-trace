@@ -49,9 +49,6 @@ enum {
     CHANGED = 0,
     LAST_SIGNAL};
 
-
-static void ege_select_one_action_class_init( EgeSelectOneActionClass* klass );
-static void ege_select_one_action_init( EgeSelectOneAction* action );
 static void ege_select_one_action_finalize( GObject* action );
 static void ege_select_one_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
 static void ege_select_one_action_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec );
@@ -73,7 +70,6 @@ static void disconnect_proxy( GtkAction *action, GtkWidget *proxy );
 
 static int scan_max_width( GtkTreeModel *model, gint labelColumn );
 
-static GtkActionClass* gParentClass = 0;
 static guint signals[LAST_SIGNAL] = {0};
 static GQuark gDataName = 0;
 
@@ -126,28 +122,7 @@ enum {
     PROP_SELECTION
 };
 
-GType ege_select_one_action_get_type( void )
-{
-    static GType myType = 0;
-    if ( !myType ) {
-        static const GTypeInfo myInfo = {
-            sizeof( EgeSelectOneActionClass ),
-            NULL, /* base_init */
-            NULL, /* base_finalize */
-            (GClassInitFunc)ege_select_one_action_class_init,
-            NULL, /* class_finalize */
-            NULL, /* class_data */
-            sizeof( EgeSelectOneAction ),
-            0, /* n_preallocs */
-            (GInstanceInitFunc)ege_select_one_action_init,
-            NULL
-        };
-
-        myType = g_type_register_static( GTK_TYPE_ACTION, "EgeSelectOneAction", &myInfo, (GTypeFlags)0 );
-    }
-
-    return myType;
-}
+G_DEFINE_TYPE(EgeSelectOneAction, ege_select_one_action, GTK_TYPE_ACTION);
 
 GtkTreeModel *ege_select_one_action_get_model(EgeSelectOneAction* action ){
     return GTK_TREE_MODEL(action->private_data->model);
@@ -155,7 +130,6 @@ GtkTreeModel *ege_select_one_action_get_model(EgeSelectOneAction* action ){
 void ege_select_one_action_class_init( EgeSelectOneActionClass* klass )
 {
     if ( klass ) {
-        gParentClass = GTK_ACTION_CLASS( g_type_class_peek_parent( klass ) );
         GObjectClass* objClass = G_OBJECT_CLASS( klass );
 
         gDataName = g_quark_from_string("ege-select1-action");
@@ -292,8 +266,8 @@ void ege_select_one_action_finalize( GObject* object )
     g_free( action->private_data->appearance );
     g_free( action->private_data->selection );
 
-    if ( G_OBJECT_CLASS(gParentClass)->finalize ) {
-        (*G_OBJECT_CLASS(gParentClass)->finalize)(object);
+    if ( G_OBJECT_CLASS(ege_select_one_action_parent_class)->finalize ) {
+        (*G_OBJECT_CLASS(ege_select_one_action_parent_class)->finalize)(object);
     }
 }
 
@@ -593,7 +567,6 @@ GtkWidget* create_menu_item( GtkAction* action )
     if ( IS_EGE_SELECT_ONE_ACTION(action) ) {
         EgeSelectOneAction* act = EGE_SELECT_ONE_ACTION( action );
         gchar*  sss = 0;
-        gboolean valid = FALSE;
         gint index = 0;
         GtkTreeIter iter;
         GSList* group = 0;
@@ -603,7 +576,7 @@ GtkWidget* create_menu_item( GtkAction* action )
 
         item = gtk_menu_item_new_with_label( sss );
 
-        valid = gtk_tree_model_get_iter_first( act->private_data->model, &iter );
+        gboolean valid = gtk_tree_model_get_iter_first( act->private_data->model, &iter );
         while ( valid ) {
             gchar* str = 0;
             gtk_tree_model_get( act->private_data->model, &iter,
@@ -631,7 +604,7 @@ GtkWidget* create_menu_item( GtkAction* action )
 
         g_free(sss);
     } else {
-        item = gParentClass->create_menu_item( action );
+        item = GTK_ACTION_CLASS(ege_select_one_action_parent_class)->create_menu_item( action );
     }
 
     return item;
@@ -772,8 +745,6 @@ GtkWidget* create_tool_item( GtkAction* action )
 
             gtk_container_add( GTK_CONTAINER(item), holder );
         } else {
-            GtkCellRenderer * renderer = 0;
-
 #if GTK_CHECK_VERSION(3,0,0)
             GtkWidget* holder = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4);
             gtk_box_set_homogeneous(GTK_BOX(holder), FALSE);
@@ -785,15 +756,8 @@ GtkWidget* create_tool_item( GtkAction* action )
             GtkWidget *normal;
 
             if (act->private_data->selectionMode == SELECTION_OPEN) {
-
-// Backward-compatibility: GtkComboBoxEntry is deprecated in GTK+ >= 2.24
-// and gtk_combo_box_set_entry_text_column is unavailable in earlier versions.
-#if GTK_CHECK_VERSION (2, 24, 0)
-		normal = gtk_combo_box_new_with_model_and_entry (act->private_data->model);
-		gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (normal), act->private_data->labelColumn);
-#else
-                normal = gtk_combo_box_entry_new_with_model (act->private_data->model, act->private_data->labelColumn);
-#endif
+	            normal = gtk_combo_box_new_with_model_and_entry (act->private_data->model);
+	            gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (normal), act->private_data->labelColumn);
 
                 GtkWidget *child = gtk_bin_get_child( GTK_BIN(normal) );
                 if (GTK_IS_ENTRY(child)) {
@@ -816,6 +780,7 @@ GtkWidget* create_tool_item( GtkAction* action )
                 }
             } 
 	    else {
+                GtkCellRenderer * renderer = NULL;
                 normal = gtk_combo_box_new_with_model( act->private_data->model );
                 if ( act->private_data->iconColumn >= 0 ) {
                     renderer = gtk_cell_renderer_pixbuf_new();
@@ -862,7 +827,7 @@ GtkWidget* create_tool_item( GtkAction* action )
 
         gtk_widget_show_all( item );
     } else {
-        item = gParentClass->create_tool_item( action );
+        item = GTK_ACTION_CLASS(ege_select_one_action_parent_class)->create_tool_item( action );
     }
 
     return item;
@@ -871,12 +836,12 @@ GtkWidget* create_tool_item( GtkAction* action )
 
 void connect_proxy( GtkAction *action, GtkWidget *proxy )
 {
-    gParentClass->connect_proxy( action, proxy );
+    GTK_ACTION_CLASS(ege_select_one_action_parent_class)->connect_proxy( action, proxy );
 }
 
 void disconnect_proxy( GtkAction *action, GtkWidget *proxy )
 {
-    gParentClass->disconnect_proxy( action, proxy );
+    GTK_ACTION_CLASS(ege_select_one_action_parent_class)->disconnect_proxy( action, proxy );
 }
 
 
@@ -897,13 +862,7 @@ void resync_active( EgeSelectOneAction* act, gint active, gboolean override )
                     }
                     if ( GTK_IS_COMBO_BOX(combodata) ) {
                         GtkComboBox* combo = GTK_COMBO_BOX(combodata);
-// Backward-compatibility: GtkComboBoxEntry is deprecated in GTK+ >= 2.24
-// gtk_combo_box_get_has_entry is unavailable in earlier versions
-#if GTK_CHECK_VERSION (2, 24, 0)
                         if ((active == -1) && (gtk_combo_box_get_has_entry(combo))) {
-#else
-                        if ((active == -1) && (GTK_IS_COMBO_BOX_ENTRY(combo))) {
-#endif
                             gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo))), act->private_data->activeText);
                         } else if ( gtk_combo_box_get_active(combo) != active ) {
                             gtk_combo_box_set_active( combo, active );
@@ -1019,10 +978,6 @@ void combo_changed_cb( GtkComboBox* widget, gpointer user_data )
     GtkComboBox        *cb = GTK_COMBO_BOX (widget);
     gint                newActive = gtk_combo_box_get_active(widget);
 
-// Backward-compatibility: gtk_combo_box_get_active_text is deprecated in
-// GTK+ >= 2.24.  gtk_combo_box_get_has_entry is unavailable in earlier
-// versions.
-#if GTK_CHECK_VERSION (2, 24, 0)
     if (gtk_combo_box_get_has_entry (cb)) {
 	    GtkBin   *bin = GTK_BIN (cb);
 	    GtkEntry *entry = GTK_ENTRY (gtk_bin_get_child (bin));
@@ -1038,9 +993,6 @@ void combo_changed_cb( GtkComboBox* widget, gpointer user_data )
 		    gtk_tree_model_get (model, &iter, 0, &text, -1);
 	    }
     }
-#else
-    text = gtk_combo_box_get_active_text (cb);
-#endif
 
     if (!text) {
         /* User probably deleted the data in the model */

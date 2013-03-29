@@ -72,12 +72,6 @@
 
 enum { ROW, COL };
 
-void swap_p( Geom::Point *p1, Geom::Point *p2 ) {
-    Geom::Point temp = *p1;
-    *p1 = *p2;
-    *p2 = temp;
-};
-
 SPMeshPatchI::SPMeshPatchI( std::vector<std::vector< SPMeshNode* > > * n, int r, int c ) {
 
     nodes = n;
@@ -323,21 +317,26 @@ Geom::Point SPMeshPatchI::getTensorPoint( guint k ) {
 
     assert( k < 4 );
 
-    guint i, j;
+    guint i = 0;
+    guint j = 0;
     
 
     switch ( k ) {
         case 0:
-            i = 1; j = 1;
+            i = 1;
+            j = 1;
             break;
         case 1:
-            i = 1; j = 2;
+            i = 1;
+            j = 2;
             break;
         case 2:
-            i = 2; j = 2;
+            i = 2;
+            j = 2;
             break;
         case 3:
-            i = 2; j = 1;
+            i = 2;
+            j = 1;
             break;
     }
 
@@ -348,7 +347,6 @@ Geom::Point SPMeshPatchI::getTensorPoint( guint k ) {
         p = coonsTensorPoint( k );
     }
     return p;
-
 }
 
 /**
@@ -528,7 +526,7 @@ gdouble SPMeshPatchI::getOpacity( guint i ) {
 
     assert( i < 4 );
 
-    gdouble opacity;
+    gdouble opacity = 0.0;
     switch ( i ) {
         case 0:
             opacity = (*nodes)[ row   ][ col   ]->opacity;
@@ -957,7 +955,7 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
    Find default color based on color of first stop in "vector" gradient.
    This should be rewritten if dependence on "vector" is removed.
 */
-SPColor default_color( SPItem *item ) {
+static SPColor default_color( SPItem *item ) {
 
     // Set initial color to the color of the object before adding the mesh.
     // This is a bit tricky as at the moment, a "vector" gradient is created

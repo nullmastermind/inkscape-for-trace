@@ -53,63 +53,20 @@
 
 #define noSHAPE_VERBOSE
 
-void sp_shape_print (SPItem * item, SPPrintContext * ctx);
+static void sp_shape_finalize (GObject *object);
+static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *ai);
 
-SPLPEItemClass * SPShapeClass::parent_class = 0;
-
-/**
- * Registers the SPShape class with Gdk and returns its type number.
- */
-GType SPShape::getType(void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (SPShapeClass),
-            NULL, NULL,
-            (GClassInitFunc) SPShapeClass::sp_shape_class_init,
-            NULL, NULL,
-            sizeof (SPShape),
-            16,
-            (GInstanceInitFunc) sp_shape_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static (SP_TYPE_LPE_ITEM, "SPShape", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPShape, sp_shape, SP_TYPE_LPE_ITEM);
 
 /**
  * Initializes a SPShapeClass object.  Establishes the function pointers to the class'
  * member routines in the class vtable, and sets pointers to parent classes.
  */
-void SPShapeClass::sp_shape_class_init(SPShapeClass *klass)
+static void
+sp_shape_class_init(SPShapeClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
-    SPObjectClass *sp_object_class = SP_OBJECT_CLASS(klass);
-    SPItemClass * item_class = SP_ITEM_CLASS(klass);
-    SPLPEItemClass * lpe_item_class = SP_LPE_ITEM_CLASS(klass);
-
-    parent_class = (SPLPEItemClass *)g_type_class_peek_parent (klass);
-
-    gobject_class->finalize = SPShape::sp_shape_finalize;
-
-    //sp_object_class->build = SPShape::sp_shape_build;
-//    sp_object_class->release = SPShape::sp_shape_release;
-//    sp_object_class->set = SPShape::sp_shape_set;
-//    sp_object_class->update = SPShape::sp_shape_update;
-//    sp_object_class->modified = SPShape::sp_shape_modified;
-//    sp_object_class->write = SPShape::sp_shape_write;
-
-//    item_class->bbox = SPShape::sp_shape_bbox;
-//    item_class->print = sp_shape_print;
-//    item_class->show = SPShape::sp_shape_show;
-//    item_class->hide = SPShape::sp_shape_hide;
-//    item_class->snappoints = SPShape::sp_shape_snappoints;
-
-    //lpe_item_class->update_patheffect = NULL;
-
-    //klass->set_shape = NULL;
+    gobject_class->finalize = sp_shape_finalize;
 }
 
 CShape::CShape(SPShape* shape) : CLPEItem(shape) {
@@ -122,9 +79,12 @@ CShape::~CShape() {
 /**
  * Initializes an SPShape object.
  */
-void SPShape::sp_shape_init(SPShape *shape)
+static void
+sp_shape_init(SPShape *shape)
 {
 	shape->cshape = new CShape(shape);
+
+	delete shape->clpeitem;
 	shape->clpeitem = shape->cshape;
 	shape->citem = shape->cshape;
 	shape->cobject = shape->cshape;
@@ -138,7 +98,8 @@ void SPShape::sp_shape_init(SPShape *shape)
     shape->_curve_before_lpe = NULL;
 }
 
-void SPShape::sp_shape_finalize(GObject *object)
+static void
+sp_shape_finalize(GObject *object)
 {
     SPShape *shape=(SPShape *)object;
 
@@ -149,8 +110,8 @@ void SPShape::sp_shape_finalize(GObject *object)
         shape->_modified_connect[i].~connection();
     }
 
-    if (((GObjectClass *) (SPShapeClass::parent_class))->finalize) {
-        (* ((GObjectClass *) (SPShapeClass::parent_class))->finalize)(object);
+    if (((GObjectClass *) (sp_shape_parent_class))->finalize) {
+        (* ((GObjectClass *) (sp_shape_parent_class))->finalize)(object);
     }
 }
 
@@ -164,19 +125,17 @@ void CShape::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-// CPPIFY: remove
-/**
- * Virtual build callback for SPMarker.
- *
- * This is to be invoked immediately after creation of an SPShape.
- *
- * \see sp_object_build()
- */
-void SPShape::sp_shape_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPShape*)object)->cshape->onBuild(document, repr);
-}
 
+/**
+ * Removes, releases and unrefs all children of object
+ *
+ * This is the inverse of sp_shape_build().  It must be invoked as soon
+ * as the shape is removed from the tree, even if it is still referenced
+ * by other objects.  This routine also disconnects/unrefs markers and
+ * curves attached to it.
+ *
+ * \see SPObject::release()
+ */
 void CShape::onRelease() {
     SPItem *item;
     SPShape *shape;
@@ -207,41 +166,14 @@ void CShape::onRelease() {
     CLPEItem::onRelease();
 }
 
-// CPPIFY: remove
-/**
- * Removes, releases and unrefs all children of object
- *
- * This is the inverse of sp_shape_build().  It must be invoked as soon
- * as the shape is removed from the tree, even if it is still referenced
- * by other objects.  This routine also disconnects/unrefs markers and
- * curves attached to it.
- *
- * \see sp_object_release()
- */
-void SPShape::sp_shape_release(SPObject *object)
-{
-	((SPShape*)object)->cshape->onRelease();
-}
-
 void CShape::onSet(unsigned int key, const gchar* value) {
 	CLPEItem::onSet(key, value);
 }
 
-// CPPIFY: remove
-void SPShape::sp_shape_set(SPObject *object, unsigned int key, gchar const *value)
-{
-    ((SPShape*)object)->cshape->onSet(key, value);
-}
 
 Inkscape::XML::Node* CShape::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	CLPEItem::onWrite(xml_doc, repr, flags);
 	return repr;
-}
-
-// CPPIFY: remove
-Inkscape::XML::Node * SPShape::sp_shape_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPShape*)object)->cshape->onWrite(doc, repr, flags);
 }
 
 void CShape::onUpdate(SPCtx* ctx, guint flags) {
@@ -300,19 +232,9 @@ void CShape::onUpdate(SPCtx* ctx, guint flags) {
 
         /* Update marker views */
         for (SPItemView *v = shape->display; v != NULL; v = v->next) {
-            SPShape::sp_shape_update_marker_view (shape, v->arenaitem);
+            sp_shape_update_marker_view (shape, v->arenaitem);
         }
     }
-}
-
-// CPPIFY: remove
-/**
- * Updates the shape when its attributes have changed.  Also establishes
- * marker objects to match the style settings.
- */
-void SPShape::sp_shape_update(SPObject *object, SPCtx *ctx, unsigned int flags)
-{
-	((SPShape*)object)->cshape->onUpdate(ctx, flags);
 }
 
 /**
@@ -401,7 +323,8 @@ Geom::Affine sp_shape_marker_get_transform_at_end(Geom::Curve const & c)
  *
  * @todo figure out what to do when both 'marker' and for instance 'marker-end' are set.
  */
-void SPShape::sp_shape_update_marker_view(SPShape *shape, Inkscape::DrawingItem *ai)
+static void
+sp_shape_update_marker_view(SPShape *shape, Inkscape::DrawingItem *ai)
 {
     SPStyle *style = ((SPObject *) shape)->style;
 
@@ -521,15 +444,6 @@ void CShape::onModified(unsigned int flags) {
     }
 }
 
-// CPPIFY: remove
-/**
- * Sets modified flag for all sub-item views.
- */
-void SPShape::sp_shape_modified(SPObject *object, unsigned int flags)
-{
-	((SPShape*)object)->cshape->onModified(flags);
-}
-
 Geom::OptRect CShape::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
 	SPShape const* shape = this->spshape;
 	SPShape const* item = shape;
@@ -642,7 +556,7 @@ Geom::OptRect CShape::onBbox(Geom::Affine const &transform, SPItem::BBoxType bbo
                             tr = Geom::Scale(style->stroke_width.computed) * tr;
                         }
                         tr = marker_item->transform * marker->c2p * tr * transform;
-                        bbox |= marker_item->visualBounds();
+                        bbox |= marker_item->visualBounds(tr);
                     }
                 }
             }
@@ -682,16 +596,6 @@ Geom::OptRect CShape::onBbox(Geom::Affine const &transform, SPItem::BBoxType bbo
         }
     }
     return bbox;
-}
-
-// CPPIFY: remove
-/**
- * Calculates the bounding box for item, storing it into bbox.
- * This also includes the bounding boxes of any markers included in the shape.
- */
-Geom::OptRect SPShape::sp_shape_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType bboxtype)
-{
-    return ((SPShape*)item)->cshape->onBbox(transform, bboxtype);
 }
 
 static void
@@ -812,25 +716,12 @@ void CShape::onPrint(SPPrintContext* ctx) {
         }
     }
 
-	if (add_comments) {
-		gchar * comment = g_strdup_printf("end '%s'",
-										  item->defaultLabel());
-		sp_print_comment(ctx, comment);
-		g_free(comment);
-	}
-}
-
-// CPPIFY: remove
-/**
- * Prepares shape for printing.  Handles printing of comments for printing
- * debugging, sizes the item to fit into the document width/height,
- * applies print fill/stroke, sets transforms for markers, and adds
- * comment labels.
- */
-void
-sp_shape_print (SPItem *item, SPPrintContext *ctx)
-{
-	((SPShape*)item)->cshape->onPrint(ctx);
+        if (add_comments) {
+            gchar * comment = g_strdup_printf("end '%s'",
+                                              item->defaultLabel());
+            sp_print_comment(ctx, comment);
+            g_free(comment);
+        }
 }
 
 Inkscape::DrawingItem* CShape::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
@@ -866,7 +757,7 @@ Inkscape::DrawingItem* CShape::onShow(Inkscape::Drawing &drawing, unsigned int k
         }
 
         /* Update marker views */
-        SPShape::sp_shape_update_marker_view (shape, s);
+        sp_shape_update_marker_view (shape, s);
     }
 
     return s;
@@ -875,11 +766,6 @@ Inkscape::DrawingItem* CShape::onShow(Inkscape::Drawing &drawing, unsigned int k
 /**
  * Sets style, path, and paintbox.  Updates marker views, including dimensions.
  */
-Inkscape::DrawingItem * SPShape::sp_shape_show(SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
-{
-	return ((SPShape*)item)->cshape->onShow(drawing, key, flags);
-}
-
 void CShape::onHide(unsigned int key) {
 	SPShape *shape = this->spshape;
 	SPShape* item = shape;
@@ -898,21 +784,7 @@ void CShape::onHide(unsigned int key) {
       }
     }
 
-    // CPPIFY: This doesn't make no sense.
-    // CItem::onHide is pure and CLPEItem doesn't override it. What was the idea behind these lines?
-//    if (((SPItemClass *) SPShapeClass::parent_class)->hide) {
-//      ((SPItemClass *) SPShapeClass::parent_class)->hide (item, key);
-//    }
 //    CLPEItem::onHide(key);
-}
-
-// CPPIFY: remove
-/**
- * Hides/removes marker views from the shape.
- */
-void SPShape::sp_shape_hide(SPItem *item, unsigned int key)
-{
-	((SPShape*)item)->cshape->onHide(key);
 }
 
 /**
@@ -1248,10 +1120,10 @@ void CShape::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
 
         // Find the internal intersections of each path and consider these for snapping
         // (using "Method 1" as described in Inkscape::ObjectSnapper::_collectNodes())
-        if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_PATH_INTERSECTION)) {
+        if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_PATH_INTERSECTION) || snapprefs->isSourceSnappable(Inkscape::SNAPSOURCE_PATH_INTERSECTION)) {
             Geom::Crossings cs;
             try {
-                cs = self_crossings(*path_it);
+                cs = self_crossings(*path_it); // This can be slow!
                 if (!cs.empty()) { // There might be multiple intersections...
                     for (Geom::Crossings::const_iterator i = cs.begin(); i != cs.end(); ++i) {
                         Geom::Point p_ix = (*path_it).pointAt((*i).ta);
@@ -1265,15 +1137,6 @@ void CShape::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
 
         }
     }
-}
-
-// CPPIFY: remove
-/**
- * Return all nodes in a path that are to be considered for snapping
- */
-void SPShape::sp_shape_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
-	((SPShape*)item)->cshape->onSnappoints(p, snapprefs);
 }
 
 /*

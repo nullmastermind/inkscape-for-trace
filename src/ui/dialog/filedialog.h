@@ -16,11 +16,12 @@
 #ifndef __FILE_DIALOG_H__
 #define __FILE_DIALOG_H__
 
-#include <glibmm.h>
 #include <vector>
 #include <set>
 
 #include "extension/system.h"
+
+#include <glibmm/ustring.h>
 
 class SPDocument;
 
@@ -207,6 +208,8 @@ public:
     Glib::ustring getDocTitle ();
 
     virtual Glib::ustring getCurrentDirectory() = 0;
+
+    virtual void addFileType(Glib::ustring name, Glib::ustring pattern) = 0;
 
 protected:
 

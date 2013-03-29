@@ -28,22 +28,22 @@ class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityLeftEnd(LPEAngleBisector* effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 class KnotHolderEntityRightEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityRightEnd(LPEAngleBisector* effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 } // namespace TtC
 
 LPEAngleBisector::LPEAngleBisector(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    length_left(_("Length left"), _("Specifies the left end of the bisector"), "length-left", &wr, this, 0),
-    length_right(_("Length right"), _("Specifies the right end of the bisector"), "length-right", &wr, this, 250)
+    length_left(_("Length left:"), _("Specifies the left end of the bisector"), "length-left", &wr, this, 0),
+    length_right(_("Length right:"), _("Specifies the right end of the bisector"), "length-right", &wr, this, 250)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
@@ -60,8 +60,6 @@ std::vector<Geom::Path>
 LPEAngleBisector::doEffect_path (std::vector<Geom::Path> const & path_in)
 {
     using namespace Geom;
-
-    std::vector<Geom::Path> path_out;
 
     // we assume that the path has >= 3 nodes
     ptA = path_in[0].pointAt(1);
@@ -99,11 +97,11 @@ LPEAngleBisector::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *deskt
 namespace AB {
 
 void
-KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     LPEAngleBisector *lpe = dynamic_cast<LPEAngleBisector *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_point(s, lpe->ptA, lpe->dir);
     lpe->length_left.param_set_value(-lambda);
@@ -112,11 +110,11 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
 }
 
 void
-KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     LPEAngleBisector *lpe = dynamic_cast<LPEAngleBisector *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_point(s, lpe->ptA, lpe->dir);
     lpe->length_right.param_set_value(lambda);
@@ -125,16 +123,16 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
 }
 
 Geom::Point
-KnotHolderEntityLeftEnd::knot_get()
+KnotHolderEntityLeftEnd::knot_get() const
 {
-    LPEAngleBisector *lpe = dynamic_cast<LPEAngleBisector *>(_effect);
+    LPEAngleBisector const* lpe = dynamic_cast<LPEAngleBisector const*>(_effect);
     return lpe->ptA - lpe->dir * lpe->length_left;
 }
 
 Geom::Point
-KnotHolderEntityRightEnd::knot_get()
+KnotHolderEntityRightEnd::knot_get() const
 {
-    LPEAngleBisector *lpe = dynamic_cast<LPEAngleBisector *>(_effect);
+    LPEAngleBisector const* lpe = dynamic_cast<LPEAngleBisector const*>(_effect);
     return lpe->ptA + lpe->dir * lpe->length_right;
 }
 

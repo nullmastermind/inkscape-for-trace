@@ -11,6 +11,7 @@
  *   Martin Sucha <martin.sucha-inkscape@jts-sro.sk>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Tavmjong Bah <tavmjong@free.fr> (Symbol additions)
  *
  * Copyright (C) 1999-2010,2012 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
@@ -22,14 +23,13 @@
 # include "config.h"
 #endif
 
+#include <gtkmm/clipboard.h>
+
 #include "file.h"
 #include "selection-chemistry.h"
 
 // TOOD fixme: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
-
-
-#include <gtkmm/clipboard.h>
 
 #include "svg/svg.h"
 #include "desktop.h"
@@ -71,6 +71,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient-fns.h"
 #include "sp-pattern.h"
+#include "sp-symbol.h"
 #include "sp-radial-gradient-fns.h"
 #include "gradient-context.h"
 #include "sp-namedview.h"
@@ -150,11 +151,18 @@ void SelectionHelper::selectAllInAll(SPDesktop *dt)
 
 void SelectionHelper::selectNone(SPDesktop *dt)
 {
+    InkNodeTool *nt = NULL;
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        nt = static_cast<InkNodeTool*>(dt->event_context);
+    }
+
+    if (nt && !nt->_selected_nodes->empty()) {
         nt->_selected_nodes->clear();
-    } else {
+    } else if (!sp_desktop_selection(dt)->isEmpty()) {
         sp_desktop_selection(dt)->clear();
+    } else {
+        // If nothing selected switch to selection tool
+        tools_switch(dt, TOOLS_SELECT);
     }
 }
 
@@ -249,7 +257,7 @@ void SelectionHelper::selectPrev(SPDesktop *dt)
  * Copies repr and its inherited css style elements, along with the accumulated transform 'full_t',
  * then prepends the copy to 'clip'.
  */
-void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t, GSList **clip, Inkscape::XML::Document* xml_doc)
+static void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t, GSList **clip, Inkscape::XML::Document* xml_doc)
 {
     Inkscape::XML::Node *copy = repr->duplicate(xml_doc);
 
@@ -268,7 +276,7 @@ void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t, GSLis
     *clip = g_slist_prepend(*clip, copy);
 }
 
-void sp_selection_copy_impl(GSList const *items, GSList **clip, Inkscape::XML::Document* xml_doc)
+static void sp_selection_copy_impl(GSList const *items, GSList **clip, Inkscape::XML::Document* xml_doc)
 {
     // Sort items:
     GSList *sorted_items = g_slist_copy(const_cast<GSList *>(items));
@@ -283,7 +291,7 @@ void sp_selection_copy_impl(GSList const *items, GSList **clip, Inkscape::XML::D
     g_slist_free(static_cast<GSList *>(sorted_items));
 }
 
-GSList *sp_selection_paste_impl(SPDocument *doc, SPObject *parent, GSList **clip)
+static GSList *sp_selection_paste_impl(SPDocument *doc, SPObject *parent, GSList **clip)
 {
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
@@ -314,7 +322,7 @@ GSList *sp_selection_paste_impl(SPDocument *doc, SPObject *parent, GSList **clip
     return copied;
 }
 
-void sp_selection_delete_impl(GSList const *items, bool propagate = true, bool propagate_descendants = true)
+static void sp_selection_delete_impl(GSList const *items, bool propagate = true, bool propagate_descendants = true)
 {
     for (GSList const *i = items ; i ; i = i->next ) {
         sp_object_ref((SPObject *)i->data, NULL);
@@ -365,7 +373,7 @@ void sp_selection_delete(SPDesktop *desktop)
                        _("Delete"));
 }
 
-void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
+static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
 {
     if (obj) {
         ids.push_back(obj->getId());
@@ -533,7 +541,7 @@ GSList *get_all_items(GSList *list, SPObject *from, SPDesktop *desktop, bool onl
     return list;
 }
 
-void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool invert)
+static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool invert)
 {
     if (!dt)
         return;
@@ -619,7 +627,7 @@ void sp_edit_invert_in_all_layers(SPDesktop *desktop)
     sp_edit_select_all_full(desktop, true, true);
 }
 
-void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc) {
+static void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc) {
 
     p = g_slist_sort(p, (GCompareFunc) sp_repr_compare_position);
 
@@ -838,7 +846,7 @@ enclose_items(GSList const *items)
 }
 
 // TODO determine if this is intentionally different from SPObject::getPrev()
-SPObject *prev_sibling(SPObject *child)
+static SPObject *prev_sibling(SPObject *child)
 {
     SPObject *prev = 0;
     if ( child && SP_IS_GROUP(child->parent) ) {
@@ -1146,7 +1154,7 @@ void sp_selection_paste_livepatheffect(SPDesktop *desktop)
 }
 
 
-void sp_selection_remove_livepatheffect_impl(SPItem *item)
+static void sp_selection_remove_livepatheffect_impl(SPItem *item)
 {
     if ( item && SP_IS_LPE_ITEM(item) &&
          sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
@@ -1307,7 +1315,37 @@ void sp_selection_to_prev_layer(SPDesktop *dt, bool suppressDone)
     g_slist_free(const_cast<GSList *>(items));
 }
 
-bool
+void sp_selection_to_layer(SPDesktop *dt, SPObject *moveto, bool suppressDone)
+{
+    Inkscape::Selection *selection = sp_desktop_selection(dt);
+
+    // check if something is selected
+    if (selection->isEmpty()) {
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move."));
+        return;
+    }
+
+    GSList const *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+
+    if (moveto) {
+        GSList *temp_clip = NULL;
+        sp_selection_copy_impl(items, &temp_clip, dt->doc()->getReprDoc()); // we're in the same doc, so no need to copy defs
+        sp_selection_delete_impl(items, false, false);
+        GSList *copied = sp_selection_paste_impl(sp_desktop_document(dt), moveto, &temp_clip);
+        selection->setReprList((GSList const *) copied);
+        g_slist_free(copied);
+        if (temp_clip) g_slist_free(temp_clip);
+        if (moveto) dt->setCurrentLayer(moveto);
+        if ( !suppressDone ) {
+            DocumentUndo::done(sp_desktop_document(dt), SP_VERB_LAYER_MOVE_TO,
+                               _("Move selection to layer"));
+        }
+    }
+
+    g_slist_free(const_cast<GSList *>(items));
+}
+
+static bool
 selection_contains_original(SPItem *item, Inkscape::Selection *selection)
 {
     bool contains_original = false;
@@ -1334,7 +1372,7 @@ selection_contains_original(SPItem *item, Inkscape::Selection *selection)
 }
 
 
-bool
+static bool
 selection_contains_both_clone_and_original(Inkscape::Selection *selection)
 {
     bool clone_with_original = false;
@@ -1845,7 +1883,7 @@ GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrok
     return matches;
 }
 
-bool item_type_match (SPItem *i, SPItem *j)
+static bool item_type_match (SPItem *i, SPItem *j)
 {
     if ( SP_IS_RECT(i)) {
         return ( SP_IS_RECT(j) );
@@ -2816,7 +2854,7 @@ static void sp_selection_to_guides_recursive(SPItem *item, bool deleteitem, bool
             sp_selection_to_guides_recursive(SP_ITEM(i->data), deleteitem, wholegroups);
         }
     } else {
-        item->convert_item_to_guides();
+        item->citem->onConvertToGuides();
 
         if (deleteitem) {
             item->deleteObject(true);
@@ -2848,6 +2886,162 @@ void sp_selection_to_guides(SPDesktop *desktop)
     }
 
     DocumentUndo::done(doc, SP_VERB_EDIT_SELECTION_2_GUIDES, _("Objects to guides"));
+}
+
+/*
+ * Convert <g> to <symbol>, leaving all <use> elements referencing group unchanged.
+ */
+void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
+{
+
+    if (desktop == NULL) {
+        return;
+    }
+
+    SPDocument *doc = sp_desktop_document(desktop);
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    // Check if something is selected.
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select one <b>group</b> to convert to symbol."));
+        return;
+    }
+
+    SPObject* group = selection->single();
+
+    // Make sure we have only one object in selection.
+    if( group == NULL ) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>group</b> to convert to symbol."));
+        return;
+    }
+
+    // Make sure we convert the original.
+    if( SP_IS_USE( group ) ) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select original (<b>Shift+D</b>) to convert to symbol."));
+        return;
+    }
+
+    // Require that we really have a group.
+    if( !SP_IS_GROUP( group ) ) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Group selection first to convert to symbol."));
+        return;
+    }
+
+    doc->ensureUpToDate();
+
+    Inkscape::XML::Node *symbol = xml_doc->createElement("svg:symbol");
+    symbol->setAttribute("style",     group->getAttribute("style"));
+    symbol->setAttribute("title",     group->getAttribute("title"));
+    symbol->setAttribute("transform", group->getAttribute("transform"));
+
+    Glib::ustring id = group->getAttribute("id");
+
+    // Now we need to copy all children of group
+    GSList* children = group->childList(false);
+    children = g_slist_reverse(children);
+    for (GSList* i = children; i != NULL; i = i->next ) {
+        SPObject* child = SP_OBJECT(i->data);
+        Inkscape::XML::Node *dup = child->getRepr()->duplicate(xml_doc);
+        symbol->appendChild(dup);
+        child->deleteObject(true);
+    }
+
+    // Need to delete <g>; all <use> elements that referenced <g> should
+    // auto-magically reference <symbol>.
+    doc->getDefs()->getRepr()->appendChild(symbol);
+    symbol->setAttribute("id",id.c_str()); // After we delete group with same id.
+    // Mysterious, must set symbol ID before deleting group or all <use>
+    // refering to symbol get turned into groups. (Linked to unlinking clones?)
+    group->deleteObject(true);
+
+    Inkscape::GC::release(symbol);
+    selection->clear();
+    // Group just disappears, nothing to select.
+
+    // Need to signal Symbol dialog to update
+
+    g_slist_free(children);
+
+    DocumentUndo::done(doc, SP_VERB_EDIT_SYMBOL, _("Group to symbol"));
+}
+
+/*
+ * Convert <symbol> to <g>. All <use> elements referencing symbol remain unchanged.
+ */
+void sp_selection_unsymbol(SPDesktop *desktop)
+{
+
+    if (desktop == NULL) {
+        return;
+    }
+
+    SPDocument *doc = sp_desktop_document(desktop);
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    // Check if something is selected.
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>symbol</b> to extract objects from."));
+        return;
+    }
+
+    SPObject* use = selection->single();
+ 
+    // Make sure we have only one object in selection.
+   if( use == NULL ) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>symbol</b> to convert to group."));
+        return;
+    }
+
+    // Require that we really have a <use> that references a <symbol>.
+    if( !SP_IS_USE( use ) && !SP_IS_SYMBOL( use->firstChild() ) ) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>symbol</b> to convert to group."));
+        return;
+    }
+
+    doc->ensureUpToDate();
+
+    SPObject* symbol = use->firstChild();
+
+    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
+    group->setAttribute("style",     symbol->getAttribute("style"));
+    group->setAttribute("title",     symbol->getAttribute("title"));
+    group->setAttribute("transform", symbol->getAttribute("transform"));
+
+    Glib::ustring id = symbol->getAttribute("id");
+
+    // Now we need to copy all children of symbol
+    GSList* children = symbol->childList(false);
+    children = g_slist_reverse(children);
+    for (GSList* i = children; i != NULL; i = i->next ) {
+        SPObject* child = SP_OBJECT(i->data);
+        Inkscape::XML::Node *dup = child->getRepr()->duplicate(xml_doc);
+        group->appendChild(dup);
+        child->deleteObject(true);
+    }
+
+    SPObject* parent = use->parent; // So we insert <g> next to <use> (easier to find)
+
+    // Need to delete <symbol>; all other <use> elements that referenced <symbol> should
+    // auto-magically reference <g>.
+    symbol->deleteObject(true);
+    group->setAttribute("id",id.c_str()); // After we delete symbol with same id.
+    parent->getRepr()->appendChild(group);
+    //use->deleteObject(true);
+
+    SPItem *group_item = static_cast<SPItem *>(sp_desktop_document(desktop)->getObjectByRepr(group));
+    Inkscape::GC::release(group);
+    selection->clear();
+    selection->set(group_item);
+
+    // Need to signal Symbol dialog to update
+
+    g_slist_free(children);
+
+    DocumentUndo::done(doc, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
 }
 
 void
@@ -3255,7 +3449,10 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
     // Run filter, if any
     if (run) {
         g_print("Running external filter: %s\n", run);
-        system(run);
+        int result = system(run);
+
+        if(result == -1)
+            g_warning("Could not run external filter: %s\n", run);
     }
 
     // Import the image back

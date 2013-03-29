@@ -25,7 +25,7 @@
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
 class SPDesktop;
-class SPDesktopWidget;
+struct SPDesktopWidget;
 class SPObject;
 
 
@@ -105,7 +105,11 @@ struct SPDesktopWidget {
 
     unsigned int _interaction_disabled_counter;
 
-    SPCanvas *canvas;
+    SPCanvas  *canvas;
+
+    /** A table for displaying the canvas, rulers etc */
+    GtkWidget *canvas_tbl;
+
     Geom::Point ruler_origin;
     double dt2r;
 
@@ -168,8 +172,6 @@ struct SPDesktopWidget {
             { sp_dtw_desktop_activate (_dtw); }
         virtual void deactivateDesktop()
             { sp_dtw_desktop_deactivate (_dtw); }
-        virtual void viewSetPosition (Geom::Point p)
-            { _dtw->viewSetPosition (p); }
         virtual void updateRulers()
             { sp_desktop_widget_update_rulers (_dtw); }
         virtual void updateScrollbars (double scale)

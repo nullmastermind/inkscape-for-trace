@@ -47,11 +47,10 @@
 #include "rubberband.h"
 #include "document-undo.h"
 #include "verbs.h"
+#include "selection-chemistry.h"
 
 using Inkscape::DocumentUndo;
 
-static void sp_gradient_context_class_init(SPGradientContextClass *klass);
-static void sp_gradient_context_init(SPGradientContext *gr_context);
 static void sp_gradient_context_dispose(GObject *object);
 
 static void sp_gradient_context_setup(SPEventContext *ec);
@@ -60,34 +59,12 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
 
 static void sp_gradient_drag(SPGradientContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
-static SPEventContextClass *parent_class;
-
-
-GType sp_gradient_context_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPGradientContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_gradient_context_class_init,
-            NULL, NULL,
-            sizeof(SPGradientContext),
-            4,
-            (GInstanceInitFunc) sp_gradient_context_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPGradientContext", &info, (GTypeFlags) 0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPGradientContext, sp_gradient_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_gradient_context_class_init(SPGradientContextClass *klass)
 {
     GObjectClass *object_class = (GObjectClass *) klass;
     SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    parent_class = (SPEventContextClass *) g_type_class_peek_parent(klass);
 
     object_class->dispose = sp_gradient_context_dispose;
 
@@ -126,7 +103,7 @@ static void sp_gradient_context_dispose(GObject *object)
     rc->subselcon->disconnect();
     delete rc->subselcon;
 
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    G_OBJECT_CLASS(sp_gradient_context_parent_class)->dispose(object);
 }
 
 const gchar *gr_handle_descr [] = {
@@ -203,8 +180,8 @@ static void sp_gradient_context_setup(SPEventContext *ec)
 {
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(ec);
 
-    if (((SPEventContextClass *) parent_class)->setup) {
-        ((SPEventContextClass *) parent_class)->setup(ec);
+    if (((SPEventContextClass *) sp_gradient_context_parent_class)->setup) {
+        ((SPEventContextClass *) sp_gradient_context_parent_class)->setup(ec);
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -265,7 +242,7 @@ sp_gradient_context_is_over_line (SPGradientContext *rc, SPItem *item, Geom::Poi
     return close;
 }
 
-std::vector<Geom::Point>
+static std::vector<Geom::Point>
 sp_gradient_context_get_stop_intervals (GrDrag *drag, GSList **these_stops, GSList **next_stops)
 {
     std::vector<Geom::Point> coords;
@@ -418,7 +395,7 @@ sp_gradient_context_add_stops_between_selected_stops (SPGradientContext *rc)
     g_slist_free (new_stops);
 }
 
-double sqr(double x) {return x*x;}
+static double sqr(double x) {return x*x;}
 
 static void
 sp_gradient_simplify(SPGradientContext *rc, double tolerance)
@@ -759,7 +736,7 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             if (drag->selected) {
                 drag->deselectAll();
             } else {
-                selection->clear();
+                Inkscape::SelectionHelper::selectNone(desktop);
             }
             ret = TRUE;
             //TODO: make dragging escapable by Esc
@@ -836,18 +813,7 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
         case GDK_KEY_r:
         case GDK_KEY_R:
             if (MOD__SHIFT_ONLY) {
-                // First try selected dragger
-                if (drag && drag->selected) {
-                    drag->selected_reverse_vector();
-                } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
-                    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-                        sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_FILL);
-                        sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_STROKE);
-                    }
-                }
-                // we did an undoable action
-                DocumentUndo::done(sp_desktop_document (desktop), SP_VERB_CONTEXT_GRADIENT,
-                                   _("Invert gradient"));
+                sp_gradient_reverse_selected_gradients(desktop);
                 ret = TRUE;
             }
             break;
@@ -862,10 +828,7 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            if ( drag->selected ) {
-                drag->deleteSelected(MOD__CTRL_ONLY);
-                ret = TRUE;
-            }
+            ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
             break;
         default:
             break;
@@ -892,8 +855,8 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        if (((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler) {
+            ret = ((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler(event_context, event);
         }
     }
 

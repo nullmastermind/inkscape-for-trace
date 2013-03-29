@@ -21,6 +21,8 @@
 #endif
 
 #include <interface.h>
+#include <unistd.h>
+#include <glibmm/miscutils.h>
 
 #include "system.h"
 #include "preferences.h"
@@ -68,34 +70,6 @@ static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementatio
  */
 SPDocument *open(Extension *key, gchar const *filename)
 {
-    // Convert to absolute pathname to tolerate chdir().
-    bool relpath = (filename[0] != '/');
-#ifdef WIN32
-    relpath &= (filename[0] != '\\') && !(isalpha(filename[0]) && (filename[1] == ':'));
-#endif
-
-    // Do not consider an URI as a relative path.
-    if (relpath) {
-        gchar const * cp = filename;
-
-        while (isalpha(*cp) || isdigit(*cp) || *cp == '+' || *cp == '-' || *cp == '.')
-            cp++;
-
-        relpath = *cp != ':' || cp[1] != '/' || cp[2] != '/';
-    }
-
-    if (relpath) {
-        gchar * curdir = NULL;
-#ifndef WIN32
-        curdir = getcwd(NULL, 0);
-#else
-        curdir = _getcwd(NULL, 0);
-#endif
-
-        filename = g_build_filename(curdir, filename, NULL);
-        free(curdir);
-    }
-
     Input *imod = NULL;
 
     if (key == NULL) {
@@ -137,13 +111,11 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     if (!imod->prefs(filename)) {
-        if (relpath){
-            free((void *) filename);
-        }
         return NULL;
     }
 
     SPDocument *doc = imod->open(filename);
+
     if (!doc) {
         throw Input::open_failed();
     }
@@ -161,9 +133,6 @@ SPDocument *open(Extension *key, gchar const *filename)
         imod->set_gui(true);
     }
 
-    if (relpath){
-        free((void *) filename);
-    }
     return doc;
 }
 
@@ -311,10 +280,9 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 
     // remember attributes in case this is an unofficial save and/or overwrite fails
     gchar *saved_uri = g_strdup(doc->getURI());
-    bool saved_modified = false;
     gchar *saved_output_extension = NULL;
     gchar *saved_dataloss = NULL;
-    saved_modified = doc->isModifiedSinceSave();
+    bool saved_modified = doc->isModifiedSinceSave();
     saved_output_extension = g_strdup(get_file_save_extension(save_method).c_str());
     saved_dataloss = g_strdup(repr->attribute("inkscape:dataloss"));
     if (official) {

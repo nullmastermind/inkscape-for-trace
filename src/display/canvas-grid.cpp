@@ -13,6 +13,19 @@
  * Don't be shy to correct things.
  */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 #include <glibmm/i18n.h>
 
 #include "ui/widget/registered-widget.h"
@@ -36,10 +49,6 @@
 #include "xml/node-event-vector.h"
 #include "verbs.h"
 #include "display/sp-canvas.h"
-
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/table.h>
 
 using Inkscape::DocumentUndo;
 
@@ -184,19 +193,19 @@ CanvasGrid::~CanvasGrid()
 }
 
 const char *
-CanvasGrid::getName()
+CanvasGrid::getName() const
 {
     return _(grid_name[gridtype]);
 }
 
 const char *
-CanvasGrid::getSVGName()
+CanvasGrid::getSVGName() const
 {
     return grid_svgname[gridtype];
 }
 
 GridType
-CanvasGrid::getGridType()
+CanvasGrid::getGridType() const
 {
     return gridtype;
 }
@@ -275,9 +284,9 @@ CanvasGrid::NewGrid(SPNamedView * nv, Inkscape::XML::Node * repr, SPDocument * d
 
     switch (gridtype) {
         case GRID_RECTANGULAR:
-            return (CanvasGrid*) new CanvasXYGrid(nv, repr, doc);
+            return dynamic_cast<CanvasGrid*>(new CanvasXYGrid(nv, repr, doc));
         case GRID_AXONOMETRIC:
-            return (CanvasGrid*) new CanvasAxonomGrid(nv, repr, doc);
+            return dynamic_cast<CanvasGrid*>(new CanvasAxonomGrid(nv, repr, doc));
     }
 
     return NULL;
@@ -351,12 +360,13 @@ CanvasGrid::newWidget()
     _rcb_enabled->setSlaveWidgets(slaves);
 
     // set widget values
+    _wr.setUpdating (true);
     _rcb_visible->setActive(visible);
     if (snapper != NULL) {
         _rcb_enabled->setActive(snapper->getEnabled());
         _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
-
+    _wr.setUpdating (false);
     return dynamic_cast<Gtk::Widget *> (vbox);
 }
 
@@ -366,10 +376,10 @@ CanvasGrid::on_repr_attr_changed(Inkscape::XML::Node *repr, gchar const *key, gc
     if (!data)
         return;
 
-    ((CanvasGrid*) data)->onReprAttrChanged(repr, key, oldval, newval, is_interactive);
+    (static_cast<CanvasGrid*>(data))->onReprAttrChanged(repr, key, oldval, newval, is_interactive);
 }
 
-bool CanvasGrid::isEnabled()
+bool CanvasGrid::isEnabled() const
 {
     if (snapper == NULL) {
        return false;
@@ -410,29 +420,60 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
 **/
 #define SPACE_SIZE_X 15
 #define SPACE_SIZE_Y 10
-static inline void
-attach_all(Gtk::Table &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
+#if WITH_GTKMM_3_0
+static inline void attach_all(Gtk::Grid &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
+#else
+static inline void attach_all(Gtk::Table &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
+#endif
 {
     for (unsigned i=0, r=start; i<size/sizeof(Gtk::Widget*); i+=2) {
         if (arr[i] && arr[i+1]) {
+#if WITH_GTKMM_3_0
+            (const_cast<Gtk::Widget&>(*arr[i])).set_hexpand();
+            (const_cast<Gtk::Widget&>(*arr[i])).set_valign(Gtk::ALIGN_CENTER);
+            table.attach(const_cast<Gtk::Widget&>(*arr[i]),   1, r, 1, 1);
+
+            (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
+            (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
+            table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 2, r, 1, 1);
+#else
             table.attach (const_cast<Gtk::Widget&>(*arr[i]),   1, 2, r, r+1,
                           Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
             table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 2, 3, r, r+1,
                           Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
         } else {
             if (arr[i+1]) {
+#if WITH_GTKMM_3_0
+                (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
+                (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
+                table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 1, r, 2, 1);
+#else
                 table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 3, r, r+1,
                               Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
                 label.set_alignment (0.0);
+#if WITH_GTKMM_3_0
+                label.set_hexpand();
+                label.set_valign(Gtk::ALIGN_CENTER);
+                table.attach(label, 0, r, 3, 1);
+#else
                 table.attach (label, 0, 3, r, r+1,
                               Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
+#endif
             } else {
                 Gtk::HBox *space = manage (new Gtk::HBox);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
+#if WITH_GTKMM_3_0
+                space->set_halign(Gtk::ALIGN_CENTER);
+                space->set_valign(Gtk::ALIGN_CENTER);
+                table.attach(*space, 0, r, 1, 1);
+#else
                 table.attach (*space, 0, 1, r, r+1,
                               (Gtk::AttachOptions)0, (Gtk::AttachOptions)0,0,0);
+#endif
             }
         }
         ++r;
@@ -688,7 +729,14 @@ CanvasXYGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const */*ke
 Gtk::Widget *
 CanvasXYGrid::newSpecificWidget()
 {
+#if WITH_GTKMM_3_0
+    Gtk::Grid * table = Gtk::manage( new Gtk::Grid() );
+    table->set_row_spacing(2);
+    table->set_column_spacing(2);
+#else
     Gtk::Table * table = Gtk::manage( new Gtk::Table(1,1) );
+    table->set_spacings(2);
+#endif
 
     Inkscape::UI::Widget::RegisteredUnitMenu *_rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
@@ -715,9 +763,7 @@ CanvasXYGrid::newSpecificWidget()
     Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
             _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc) );
 
-    table->set_spacings(2);
-
-_wr.setUpdating (true);
+    _wr.setUpdating (true);
 
     _rsu_ox->setDigits(5);
     _rsu_ox->setIncrements(0.1, 1.0);
@@ -735,7 +781,6 @@ _wr.setUpdating (true);
                 new Inkscape::UI::Widget::RegisteredCheckButton( _("_Show dots instead of lines"),
                        _("If set, displays dots at gridpoints instead of gridlines"),
                         "dotted", _wr, false, repr, doc) );
-_wr.setUpdating (false);
 
     Gtk::Widget const *const widget_array[] = {
         0,                  _rumg,
@@ -775,10 +820,12 @@ _wr.setUpdating (false);
 
     _rcb_dotted->setActive(render_dotted);
 
+    _wr.setUpdating (false);
+
     _rsu_ox->setProgrammatically = false;
     _rsu_oy->setProgrammatically = false;
     _rsu_sx->setProgrammatically = false;
-    _rsu_sx->setProgrammatically = false;
+    _rsu_sy->setProgrammatically = false;
 
     return table;
 }

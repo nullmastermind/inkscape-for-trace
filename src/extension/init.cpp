@@ -26,8 +26,10 @@
 #include "path-prefix.h"
 
 #include "inkscape.h"
-#include <glibmm/ustring.h>
+
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <glibmm/ustring.h>
 
 #include "system.h"
 #include "db.h"
@@ -52,6 +54,12 @@
 #include "internal/grid.h"
 #ifdef WITH_LIBWPG
 #include "internal/wpg-input.h"
+#endif
+#ifdef WITH_LIBVISIO
+#include "internal/vsd-input.h"
+#endif
+#ifdef WITH_LIBCDR
+#include "internal/cdr-input.h"
 #endif
 #include "preferences.h"
 #include "io/sys.h"
@@ -98,6 +106,8 @@
 #endif /* WITH_IMAGE_MAGICK */
 
 #include "internal/filter/filter.h"
+
+#include "init.h"
 
 extern gboolean inkscape_app_use_gui( Inkscape::Application const *app );
 
@@ -182,6 +192,12 @@ init()
     Internal::LatexOutput::init();
 #ifdef WITH_LIBWPG
     Internal::WpgInput::init();
+#endif
+#ifdef WITH_LIBVISIO
+    Internal::VsdInput::init();
+#endif
+#ifdef WITH_LIBCDR
+    Internal::CdrInput::init();
 #endif
 
     /* Effects */

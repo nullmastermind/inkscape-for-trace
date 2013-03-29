@@ -24,6 +24,7 @@
 #include <gtkmm/image.h>
 #include <gdkmm/pixbuf.h>
 #include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 #include <2geom/transforms.h>
 
 #include "path-prefix.h"
@@ -40,19 +41,7 @@
 
 #include "icon.h"
 
-// Bring in work-around for Glib versions missing GStatBuf
-#if !GLIB_CHECK_VERSION(2,25,0)
-#if defined (_MSC_VER) && !defined(_WIN64)
-typedef struct _stat32 GStatBuf;
-#else //defined (_MSC_VER) && !defined(_WIN64)
-typedef struct stat GStatBuf;
-#endif //defined (_MSC_VER) && !defined(_WIN64)
-#endif //!GLIB_CHECK_VERSION(2,25,0)
-
 struct IconImpl {
-    static void classInit(SPIconClass *klass);
-    static void init(SPIcon *icon);
-
     static GtkWidget *newFull( Inkscape::IconSize lsize, gchar const *name );
 
     static void dispose(GObject *object);
@@ -113,12 +102,10 @@ struct IconImpl {
 
 private:
     static const std::string magicNumber;
-    static GtkWidgetClass *parent_class;
     static std::map<Glib::ustring, Glib::ustring> legacyNames;
 };
 
 const std::string IconImpl::magicNumber = "1.0";
-GtkWidgetClass *IconImpl::parent_class = 0;
 std::map<Glib::ustring, Glib::ustring> IconImpl::legacyNames;
 
 
@@ -150,36 +137,13 @@ public:
 static std::map<Glib::ustring, std::vector<IconCacheItem> > iconSetCache;
 static std::set<Glib::ustring> internalNames;
 
-GType SPIcon::getType()
+G_DEFINE_TYPE(SPIcon, sp_icon, GTK_TYPE_WIDGET);
+
+static void
+sp_icon_class_init(SPIconClass *klass)
 {
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPIconClass),
-            NULL,
-            NULL,
-            reinterpret_cast<GClassInitFunc>(IconImpl::classInit),
-            NULL,
-            NULL,
-            sizeof(SPIcon),
-            0,
-            reinterpret_cast<GInstanceInitFunc>(IconImpl::init),
-            NULL
-        };
-        type = g_type_register_static(GTK_TYPE_WIDGET, "SPIcon", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-void IconImpl::classInit(SPIconClass *klass)
-{
-    GObjectClass *object_class;
-    GtkWidgetClass *widget_class;
-
-    object_class = (GObjectClass *) klass;
-    widget_class = (GtkWidgetClass *) klass;
-
-    parent_class = (GtkWidgetClass*)g_type_class_peek_parent(klass);
+    GObjectClass   *object_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->dispose = IconImpl::dispose;
 
@@ -196,7 +160,8 @@ void IconImpl::classInit(SPIconClass *klass)
     widget_class->style_set = IconImpl::styleSet;
 }
 
-void IconImpl::init(SPIcon *icon)
+static void
+sp_icon_init(SPIcon *icon)
 {
     gtk_widget_set_has_window (GTK_WIDGET (icon), FALSE);
     icon->lsize = Inkscape::ICON_SIZE_BUTTON;
@@ -214,7 +179,7 @@ void IconImpl::dispose(GObject *object)
         icon->name = 0;
     }
 
-    ((GObjectClass *) (parent_class))->dispose(object);
+    (G_OBJECT_CLASS(sp_icon_parent_class))->dispose(object);
 }
 
 void IconImpl::reset( SPIcon *icon )
@@ -321,7 +286,7 @@ gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
 }
 
 #if !GTK_CHECK_VERSION(3,0,0)
-gboolean IconImpl::expose(GtkWidget *widget, GdkEventExpose *event)
+gboolean IconImpl::expose(GtkWidget *widget, GdkEventExpose * /*event*/)
 {
     gboolean result = TRUE;
 
@@ -387,8 +352,8 @@ GdkPixbuf* IconImpl::renderup( gchar const* name, Inkscape::IconSize lsize, unsi
 
 void IconImpl::screenChanged( GtkWidget *widget, GdkScreen *previous_screen )
 {
-    if ( GTK_WIDGET_CLASS( parent_class )->screen_changed ) {
-        GTK_WIDGET_CLASS( parent_class )->screen_changed( widget, previous_screen );
+    if ( GTK_WIDGET_CLASS( sp_icon_parent_class )->screen_changed ) {
+        GTK_WIDGET_CLASS( sp_icon_parent_class )->screen_changed( widget, previous_screen );
     }
     SPIcon *icon = SP_ICON(widget);
     themeChanged(icon);
@@ -396,8 +361,8 @@ void IconImpl::screenChanged( GtkWidget *widget, GdkScreen *previous_screen )
 
 void IconImpl::styleSet( GtkWidget *widget, GtkStyle *previous_style )
 {
-    if ( GTK_WIDGET_CLASS( parent_class )->style_set ) {
-        GTK_WIDGET_CLASS( parent_class )->style_set( widget, previous_style );
+    if ( GTK_WIDGET_CLASS( sp_icon_parent_class )->style_set ) {
+        GTK_WIDGET_CLASS( sp_icon_parent_class )->style_set( widget, previous_style );
     }
     SPIcon *icon = SP_ICON(widget);
     themeChanged(icon);
@@ -874,14 +839,14 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
             if ( dump ) {
                 g_message( "skipped gtk '%s' %d  (not GTK_IMAGE_STOCK)", name, lsize );
             }
-            //g_object_unref( (GObject *)img );
+            //g_object_unref(G_OBJECT(img));
             img = 0;
         }
     }
 
     if ( !widget ) {
         //g_message("Creating an SPIcon instance for %s:%d", name, (int)lsize);
-        SPIcon *icon = (SPIcon *)g_object_new(SP_TYPE_ICON, NULL);
+        SPIcon *icon = SP_ICON(g_object_new(SP_TYPE_ICON, NULL));
         icon->lsize = lsize;
         icon->name = g_strdup(name);
         icon->psize = getPhysSize(lsize);
@@ -1031,7 +996,7 @@ int IconImpl::getPhysSize(int size)
             "inkscape-decoration"
         };
 
-        GtkWidget *icon = (GtkWidget *)g_object_new(SP_TYPE_ICON, NULL);
+        GtkWidget *icon = GTK_WIDGET(g_object_new(SP_TYPE_ICON, NULL));
 
         for (unsigned i = 0; i < G_N_ELEMENTS(gtkSizes); ++i) {
             guint const val_ix = (gtkSizes[i] <= GTK_ICON_SIZE_DIALOG) ? (guint)gtkSizes[i] : (guint)Inkscape::ICON_SIZE_DECORATION;
@@ -1084,7 +1049,7 @@ int IconImpl::getPhysSize(int size)
 
 GdkPixbuf *IconImpl::loadPixmap(gchar const *name, unsigned /*lsize*/, unsigned psize)
 {
-    gchar *path = (gchar *) g_strdup_printf("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
+    gchar *path = g_strdup_printf("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
     // TODO: bulia, please look over
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
@@ -1098,7 +1063,7 @@ GdkPixbuf *IconImpl::loadPixmap(gchar const *name, unsigned /*lsize*/, unsigned 
     g_free(localFilename);
     g_free(path);
     if (!pb) {
-        path = (gchar *) g_strdup_printf("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
+        path = g_strdup_printf("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
         // TODO: bulia, please look over
         gsize bytesRead = 0;
         gsize bytesWritten = 0;

@@ -13,14 +13,19 @@
 #ifndef __OCAL_DIALOG_H__
 #define __OCAL_DIALOG_H__
 
-#include <cairomm/refptr.h>
-
 //Gtk includes
 #include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/listviewtext.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/window.h>
+
+#include <cairomm/refptr.h>
+
+#if GTK_CHECK_VERSION(3,6,0)
+# include <gtkmm/searchentry.h>
+#endif
+
 #include <giomm/file.h>
 
 //Inkscape includes
@@ -64,7 +69,7 @@ public:
     FileDialogBase(const Glib::ustring &title, Gtk::Window& /*parent*/) : Gtk::Window(Gtk::WINDOW_TOPLEVEL)
     {
         set_title(title);
-        sp_transientize((GtkWidget*) gobj());
+        sp_transientize(GTK_WIDGET(gobj()));
         
         // Allow shrinking of window so labels wrap correctly
         set_resizable(true);
@@ -328,6 +333,7 @@ public:
     Gtk::Label* label;
 };
 
+#if !GTK_CHECK_VERSION(3,6,0)
 /**
  * A Gtk::Entry with search & clear icons
  */
@@ -340,6 +346,7 @@ private:
     void _on_icon_pressed(Gtk::EntryIconPosition icon_position, const GdkEventButton* event);
     void _on_changed();
 };
+#endif
 
 /**
  * A box which paints an overlay of the OCAL logo
@@ -449,7 +456,13 @@ protected:
 private:
     Glib::ustring filename_image;
     Glib::ustring filename_thumbnail;
+
+#if GTK_CHECK_VERSION(3,6,0)
+    Gtk::SearchEntry *entry_search;
+#else
     SearchEntry *entry_search;
+#endif
+
     LogoArea *drawingarea_logo;
     SearchResultList *list_results;
     PreviewWidget *preview_files;

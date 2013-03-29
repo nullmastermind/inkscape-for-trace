@@ -14,12 +14,11 @@
 
 #include "event-context.h"
 
+G_BEGIN_DECLS
+
 #define SP_TYPE_DROPPER_CONTEXT (sp_dropper_context_get_type ())
 #define SP_DROPPER_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_DROPPER_CONTEXT, SPDropperContext))
 #define SP_IS_DROPPER_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_DROPPER_CONTEXT))
-
-class SPDropperContext;
-class SPDropperContextClass;
 
 enum {
       SP_DROPPER_PICK_VISIBLE,
@@ -28,17 +27,6 @@ enum {
 
 struct SPDropperContext {
     SPEventContext event_context;
-
-    unsigned int dragging : 1;
-
-	SPCanvasItem *grabbed;
-    SPCanvasItem *area;
-    Geom::Point centre;
-
-    double R;
-    double G;
-    double B;
-    double alpha;
 };
 
 struct SPDropperContextClass {
@@ -48,6 +36,8 @@ struct SPDropperContextClass {
 GType sp_dropper_context_get_type (void);
 
 guint32 sp_dropper_context_get_color(SPEventContext *ec);
+
+G_END_DECLS
 
 #endif
 

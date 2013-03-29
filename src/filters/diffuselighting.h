@@ -15,23 +15,18 @@
 #include "sp-filter-primitive.h"
 #include "number-opt-number.h"
 
-namespace Inkscape {
-namespace Filters {
-class FilterDiffuseLighting;
-} }
-
 #define SP_TYPE_FEDIFFUSELIGHTING (sp_feDiffuseLighting_get_type())
 #define SP_FEDIFFUSELIGHTING(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEDIFFUSELIGHTING, SPFeDiffuseLighting))
 #define SP_FEDIFFUSELIGHTING_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEDIFFUSELIGHTING, SPFeDiffuseLightingClass))
 #define SP_IS_FEDIFFUSELIGHTING(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEDIFFUSELIGHTING))
 #define SP_IS_FEDIFFUSELIGHTING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEDIFFUSELIGHTING))
 
+struct SVGICCColor;
+
 namespace Inkscape {
 namespace Filters {
 class FilterDiffuseLighting;
 } }
-
-class SPFeDiffuseLightingClass;
 
 class CFeDiffuseLighting;
 
@@ -47,6 +42,7 @@ public:
     guint32 lighting_color;
     guint lighting_color_set : 1;
     Inkscape::Filters::FilterDiffuseLighting *renderer;
+    SVGICCColor *icc;
 };
 
 struct SPFeDiffuseLightingClass {

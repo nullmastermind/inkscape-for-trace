@@ -11,9 +11,8 @@
  */
 
 #include <boost/shared_ptr.hpp>
-#include <glib.h>
-#include <glibmm/i18n.h>
 #include "node.h"
+#include <glibmm/i18n.h>
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
@@ -65,7 +64,6 @@ typedef std::pair<double, IterPair> DistanceMapItem;
 void find_join_iterators(ControlPointSelection &sel, IterPairList &pairs)
 {
     IterSet join_iters;
-    DistanceMap dists;
 
     // find all endnodes in selection
     for (ControlPointSelection::iterator i = sel.begin(); i != sel.end(); ++i) {
@@ -672,6 +670,9 @@ bool MultiPathManipulator::event(SPEventContext *event_context, GdkEvent *event)
                 // b) ctrl+del preserves shape (del_preserves_shape is false), and control is pressed
                 // Hence xor
                 deleteNodes(del_preserves_shape ^ held_control(event->key));
+
+                // Delete any selected gradient nodes as well
+                event_context->deleteSelectedDrag(held_control(event->key));
             }
             return true;
         case GDK_KEY_c:

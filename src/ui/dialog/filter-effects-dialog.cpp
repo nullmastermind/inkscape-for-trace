@@ -20,8 +20,17 @@
 
 #include "dialog-manager.h"
 #include <gtkmm/imagemenuitem.h>
+
+#if GTK_CHECK_VERSION(3,0,0)
+# include <gdkmm/devicemanager.h>
+#endif
+
 #include "ui/widget/spinbutton.h"
+
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/stringutils.h>
 
 #include "desktop.h"
 #include "desktop-handles.h"
@@ -62,6 +71,7 @@
 
 #include "io/sys.h"
 #include <iostream>
+#include "selection-chemistry.h"
 
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/colorbutton.h>
@@ -78,12 +88,12 @@ namespace Dialog {
 
 using Inkscape::UI::Widget::AttrWidget;
 using Inkscape::UI::Widget::ComboBoxEnum;
-using Inkscape::UI::Widget::DualSpinSlider;
-using Inkscape::UI::Widget::SpinSlider;
+using Inkscape::UI::Widget::DualSpinScale;
+using Inkscape::UI::Widget::SpinScale;
 
 
 // Returns the number of inputs available for the filter primitive type
-int input_count(const SPFilterPrimitive* prim)
+static int input_count(const SPFilterPrimitive* prim)
 {
     if(!prim)
         return 0;
@@ -307,9 +317,15 @@ public:
             set_tooltip_text(tip_text);
         }
 
+#if WITH_GTKMM_3_0
+        Gdk::RGBA col;
+        col.set_rgba_u(65535, 65535, 65535);
+        set_rgba(col);
+#else
         Gdk::Color col;
         col.set_rgb(65535, 65535, 65535);
         set_color(col);
+#endif
     }
 
     // Returns the color in 'rgb(r,g,b)' form.
@@ -317,8 +333,14 @@ public:
     {
         // no doubles here, so we can use the standard string stream.
         std::ostringstream os;
+
+#if WITH_GTKMM_3_0
+        const Gdk::RGBA c = get_rgba();
+        const int r = c.get_red_u() / 257, g = c.get_green_u() / 257, b = c.get_blue_u() / 257;//TO-DO: verify this. This sounds a lot strange! shouldn't it be 256?
+#else
         const Gdk::Color c = get_color();
         const int r = c.get_red() / 257, g = c.get_green() / 257, b = c.get_blue() / 257;//TO-DO: verify this. This sounds a lot strange! shouldn't it be 256?
+#endif
         os << "rgb(" << r << "," << g << "," << b << ")";
         return os.str();
     }
@@ -334,9 +356,16 @@ public:
             i = (guint32) get_default()->as_uint();
         }
         const int r = SP_RGBA32_R_U(i), g = SP_RGBA32_G_U(i), b = SP_RGBA32_B_U(i);
+
+#if WITH_GTKMM_3_0
+        Gdk::RGBA col;
+        col.set_rgba_u(r * 256, g * 256, b * 256);
+        set_rgba(col);
+#else
         Gdk::Color col;
         col.set_rgb(r * 256, g * 256, b * 256);
         set_color(col);
+#endif
     }
 };
 
@@ -484,8 +513,8 @@ public:
         : AttrWidget(SP_ATTR_VALUES),
           // TRANSLATORS: this dialog is accessible via menu Filters - Filter editor
           _matrix(SP_ATTR_VALUES, _("This matrix determines a linear transform on color space. Each line affects one of the color components. Each column determines how much of each color component from the input is passed to the output. The last column does not depend on input colors, so can be used to adjust a constant component value.")),
-          _saturation(0, 0, 1, 0.1, 0.01, 2, SP_ATTR_VALUES),
-          _angle(0, 0, 360, 0.1, 0.01, 1, SP_ATTR_VALUES),
+          _saturation("", 0, 0, 1, 0.1, 0.01, 2, SP_ATTR_VALUES),
+          _angle("", 0, 0, 360, 0.1, 0.01, 1, SP_ATTR_VALUES),
           _label(_("None"), Gtk::ALIGN_START),
           _use_stored(false),
           _saturation_store(0),
@@ -567,8 +596,8 @@ private:
     }
 
     MatrixAttr _matrix;
-    SpinSlider _saturation;
-    SpinSlider _angle;
+    SpinScale _saturation;
+    SpinScale _angle;
     Gtk::Label _label;
 
     // Store separate values for the different color modes
@@ -808,22 +837,22 @@ public:
         return cmv;
     }
 
-    // SpinSlider
-    SpinSlider* add_spinslider(double def, const SPAttributeEnum attr, const Glib::ustring& label,
+    // SpinScale
+    SpinScale* add_spinscale(double def, const SPAttributeEnum attr, const Glib::ustring& label,
                          const double lo, const double hi, const double step_inc, const double climb, const int digits, char* tip_text = NULL)
     {
-        SpinSlider* spinslider = new SpinSlider(def, lo, hi, step_inc, climb, digits, attr, tip_text);
+        SpinScale* spinslider = new SpinScale("", def, lo, hi, step_inc, climb, digits, attr, tip_text);
         add_widget(spinslider, label);
         add_attr_widget(spinslider);
         return spinslider;
     }
 
-    // DualSpinSlider
-    DualSpinSlider* add_dualspinslider(const SPAttributeEnum attr, const Glib::ustring& label,
+    // DualSpinScale
+    DualSpinScale* add_dualspinscale(const SPAttributeEnum attr, const Glib::ustring& label,
                                        const double lo, const double hi, const double step_inc,
                                        const double climb, const int digits, char* tip_text1 = NULL, char* tip_text2 = NULL)
     {
-        DualSpinSlider* dss = new DualSpinSlider(lo, lo, hi, step_inc, climb, digits, attr, tip_text1, tip_text2);
+        DualSpinScale* dss = new DualSpinScale("", "", lo, lo, hi, step_inc, climb, digits, attr, tip_text1, tip_text2);
         add_widget(dss, label);
         add_attr_widget(dss);
         return dss;
@@ -920,13 +949,11 @@ private:
        and all widgets within the setting group are aligned automatically. */
     void add_widget(Gtk::Widget* w, const Glib::ustring& label)
     {
-        Gtk::Label *lbl = 0;
         Gtk::HBox *hb = Gtk::manage(new Gtk::HBox);
         hb->set_spacing(12);
 
         if(label != "") {
-            //lbl = Gtk::manage(new Gtk::Label(label + (label == "" ? "" : ":"), Gtk::ALIGN_LEFT)); colon now in label (LP #358921)
-            lbl = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
+            Gtk::Label *lbl = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
             hb->pack_start(*lbl, false, false);
             _size_group->add_widget(*lbl);
             lbl->show();
@@ -971,8 +998,8 @@ public:
         // FIXME: these range values are complete crap
 
         _settings.type(LIGHT_DISTANT);
-        _settings.add_spinslider(0, SP_ATTR_AZIMUTH, _("Azimuth"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the XY plane, in degrees"));
-        _settings.add_spinslider(0, SP_ATTR_ELEVATION, _("Elevation"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the YZ plane, in degrees"));
+        _settings.add_spinscale(0, SP_ATTR_AZIMUTH, _("Azimuth"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the XY plane, in degrees"));
+        _settings.add_spinscale(0, SP_ATTR_ELEVATION, _("Elevation"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the YZ plane, in degrees"));
 
         _settings.type(LIGHT_POINT);
         _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SP_ATTR_X, SP_ATTR_Y, SP_ATTR_Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
@@ -982,9 +1009,9 @@ public:
         _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0,
                                       SP_ATTR_POINTSATX, SP_ATTR_POINTSATY, SP_ATTR_POINTSATZ,
                                       _("Points At"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
-        _settings.add_spinslider(1, SP_ATTR_SPECULAREXPONENT, _("Specular Exponent"), 1, 100, 1, 1, 0, _("Exponent value controlling the focus for the light source"));
+        _settings.add_spinscale(1, SP_ATTR_SPECULAREXPONENT, _("Specular Exponent"), 1, 100, 1, 1, 0, _("Exponent value controlling the focus for the light source"));
         //TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
-        _settings.add_spinslider(100, SP_ATTR_LIMITINGCONEANGLE, _("Cone Angle"), 1, 100, 1, 1, 0, _("This is the angle between the spot light axis (i.e. the axis between the light source and the point to which it is pointing at) and the spot light cone. No light is projected outside this cone."));
+        _settings.add_spinscale(100, SP_ATTR_LIMITINGCONEANGLE, _("Cone Angle"), 1, 100, 1, 1, 0, _("This is the angle between the spot light axis (i.e. the axis between the light source and the point to which it is pointing at) and the spot light cone. No light is projected outside this cone."));
     }
 
     Gtk::VBox& get_box()
@@ -1057,11 +1084,7 @@ private:
 
     void update()
     {
-#if WITH_GTKMM_2_24
-	    _box.hide();
-#else
-    	    _box.hide_all();
-#endif
+        _box.hide();
         _box.show();
         _light_box.show_all();
 
@@ -1087,8 +1110,8 @@ FilterEffectsDialog::LightSourceControl* FilterEffectsDialog::Settings::add_ligh
     return ls;
 }
 
-Glib::RefPtr<Gtk::Menu> create_popup_menu(Gtk::Widget& parent, sigc::slot<void> dup,
-                                          sigc::slot<void> rem)
+static Glib::RefPtr<Gtk::Menu> create_popup_menu(Gtk::Widget& parent, sigc::slot<void> dup,
+                                                 sigc::slot<void> rem)
 {
     Glib::RefPtr<Gtk::Menu> menu(new Gtk::Menu);
 
@@ -1127,15 +1150,12 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     if(col)
        col->add_attribute(_cell_toggle.property_active(), _columns.sel);
     _list.append_column_editable(_("_Filter"), _columns.label);
-#if WITH_GTKMM_2_24
     ((Gtk::CellRendererText*)_list.get_column(1)->get_first_cell())->
         signal_edited().connect(sigc::mem_fun(*this, &FilterEffectsDialog::FilterModifier::on_name_edited));
-#else
-    ((Gtk::CellRendererText*)_list.get_column(1)->get_first_cell_renderer())->
-        signal_edited().connect(sigc::mem_fun(*this, &FilterEffectsDialog::FilterModifier::on_name_edited));
-#endif
 
-    sw->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    sw->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _list.get_column(1)->set_resizable(true);
+    
     sw->set_shadow_type(Gtk::SHADOW_IN);
     show_all_children();
     _add.signal_clicked().connect(sigc::mem_fun(*this, &FilterModifier::add_filter));
@@ -1191,6 +1211,17 @@ void FilterEffectsDialog::FilterModifier::setTargetDesktop(SPDesktop *desktop)
             update_filters();
         }
     }
+}
+
+// When the document changes, update connection to resources
+void FilterEffectsDialog::FilterModifier::on_document_replaced(SPDesktop * /*desktop*/, SPDocument *document)
+{
+    if (_resource_changed) {
+        _resource_changed.disconnect();
+    }
+    _resource_changed = document->connectResourcesChanged("filter",sigc::mem_fun(*this, &FilterModifier::update_filters));
+
+    update_filters();
 }
 
 // When the selection changes, show the active filter(s) in the dialog
@@ -1316,7 +1347,7 @@ void FilterEffectsDialog::FilterModifier::update_filters()
 
     for(const GSList *l = filters; l; l = l->next) {
         Gtk::TreeModel::Row row = *_model->append();
-        SPFilter* f = (SPFilter*)l->data;
+        SPFilter* f = SP_FILTER(l->data);
         row[_columns.filter] = f;
         const gchar* lbl = f->label();
         const gchar* id = f->getId();
@@ -1387,6 +1418,29 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
     if(filter) {
         SPDocument* doc = filter->document;
 
+        // Delete all references to this filter
+        GSList *all = get_all_items(NULL, _desktop->currentRoot(), _desktop, false, false, true, NULL);
+        for (GSList *i = all; i != NULL; i = i->next) {
+            if (!SP_IS_ITEM(i->data)) {
+                continue;
+            }
+            SPItem *item = SP_ITEM(i->data);
+            if (!item->style) {
+                continue;
+            }
+
+            const SPIFilter *ifilter = &(item->style->filter);
+            if (ifilter && ifilter->href) {
+                const SPObject *obj = ifilter->href->getObject();
+                if (obj && obj == (SPObject *)filter) {
+                    ::remove_filter(item, false);
+                }
+            }
+        }
+        if (all) {
+            g_slist_free(all);
+        }
+
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(filter->getRepr());
 
@@ -1428,6 +1482,41 @@ Glib::PropertyProxy<void*> FilterEffectsDialog::CellRendererConnection::property
     return _primitive.get_proxy();
 }
 
+#if WITH_GTKMM_3_0
+void FilterEffectsDialog::CellRendererConnection::get_preferred_width_vfunc(Gtk::Widget& widget,
+                                                                            int& minimum_width,
+                                                                            int& natural_width) const
+{
+    PrimitiveList& primlist = dynamic_cast<PrimitiveList&>(widget);
+    minimum_width = natural_width = size * primlist.primitive_count() + primlist.get_input_type_width() * 6;
+}
+
+void FilterEffectsDialog::CellRendererConnection::get_preferred_width_for_height_vfunc(Gtk::Widget& widget,
+                                                                                       int /* height */,
+                                                                                       int& minimum_width,
+                                                                                       int& natural_width) const
+{
+    get_preferred_width(widget, minimum_width, natural_width);
+}
+
+void FilterEffectsDialog::CellRendererConnection::get_preferred_height_vfunc(Gtk::Widget& widget,
+                                                                             int& minimum_height,
+                                                                             int& natural_height) const
+{
+    // Scale the height depending on the number of inputs, unless it's
+    // the first primitive, in which case there are no connections
+    SPFilterPrimitive* prim = SP_FILTER_PRIMITIVE(_primitive.get_value());
+    minimum_height = natural_height = size * input_count(prim);
+}
+
+void FilterEffectsDialog::CellRendererConnection::get_preferred_height_for_width_vfunc(Gtk::Widget& widget,
+                                                                                       int /* width */,
+                                                                                       int& minimum_height,
+                                                                                       int& natural_height) const
+{
+    get_preferred_height(widget, minimum_height, natural_height);
+}
+#else
 void FilterEffectsDialog::CellRendererConnection::get_size_vfunc(
     Gtk::Widget& widget, const Gdk::Rectangle* /*cell_area*/,
     int* x_offset, int* y_offset, int* width, int* height) const
@@ -1443,10 +1532,11 @@ void FilterEffectsDialog::CellRendererConnection::get_size_vfunc(
     if(height) {
         // Scale the height depending on the number of inputs, unless it's
         // the first primitive, in which case there are no connections
-        SPFilterPrimitive* prim = (SPFilterPrimitive*)_primitive.get_value();
+        SPFilterPrimitive* prim = SP_FILTER_PRIMITIVE(_primitive.get_value());
         (*height) = size * input_count(prim);
     }
 }
+#endif
 
 /*** PrimitiveList ***/
 FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
@@ -1455,8 +1545,8 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
       _observer(new Inkscape::XML::SignalObserver)
 {
 #if WITH_GTKMM_3_0
-    d.signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw));
-    signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw));
+    d.signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
+    signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
 #else
     d.signal_expose_event().connect(sigc::mem_fun(*this, &PrimitiveList::on_expose_signal));
     signal_expose_event().connect(sigc::mem_fun(*this, &PrimitiveList::on_expose_signal));
@@ -1470,6 +1560,8 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
 
     set_model(_model);
     append_column(_("_Effect"), _columns.type);
+    get_column(0)->set_resizable(true);
+    set_headers_visible();
 
     _observer->signal_changed().connect(signal_primitive_changed().make_slot());
     get_selection()->signal_changed().connect(sigc::mem_fun(*this, &PrimitiveList::on_primitive_selection_changed));
@@ -1525,11 +1617,10 @@ void FilterEffectsDialog::PrimitiveList::update()
 {
     SPFilter* f = _dialog._filter_modifier.get_selected_filter();
     const SPFilterPrimitive* active_prim = get_selected();
-    bool active_found = false;
-
     _model->clear();
 
     if(f) {
+        bool active_found = false;
         _dialog._primitive_box.set_sensitive(true);
         _dialog.update_filter_general_settings_view();
         for(SPObject *prim_obj = f->children;
@@ -1623,20 +1714,52 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
 }
 
 #if !WITH_GTKMM_3_0
-bool FilterEffectsDialog::PrimitiveList::on_expose_signal(GdkEventExpose* /*e*/)
+bool FilterEffectsDialog::PrimitiveList::on_expose_signal(GdkEventExpose * /*evt*/)
 {
-    Glib::RefPtr<Gdk::Window> win = get_bin_window();
-    Cairo::RefPtr<Cairo::Context> cr = win->create_cairo_context();
-    return on_draw(cr);
+    bool result = false;
+
+    if (get_is_drawable())
+    {
+        Cairo::RefPtr<Cairo::Context> cr = get_bin_window()->create_cairo_context();
+        result = on_draw_signal(cr);
+    }
+
+    return result;
 }
 #endif
 
-bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
+bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cairo::Context> & cr)
 {
     cr->set_line_width(1.0);
+#if GTK_CHECK_VERSION(3,0,0)
+    // In GTK+ 3, the draw function receives the widget window, not the
+    // bin_window (i.e., just the area under the column headers).  We 
+    // therefore translate the origin of our coordinate system to account for this
+    int x_origin, y_origin;
+    convert_bin_window_to_widget_coords(0,0,x_origin,y_origin);
+    cr->translate(x_origin, y_origin);
+    
+    GtkStyleContext *sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
+    GdkRGBA bg_color, fg_color;
+    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
+    gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
 
-    // TODO: Use Gtk::StyleContext instead
+    GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
+                         (bg_color.green + fg_color.green)/2.0,
+                         (bg_color.blue + fg_color.blue)/2.0,
+                         (bg_color.alpha + fg_color.alpha)/2.0};
+    
+    GdkRGBA bg_color_active, fg_color_active;
+    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_ACTIVE, &bg_color_active);
+    gtk_style_context_get_color(sc, GTK_STATE_FLAG_ACTIVE, &fg_color_active);
+
+    GdkRGBA mid_color_active = {(bg_color_active.red + fg_color_active.red)/2.0,
+                                (bg_color_active.green + fg_color_active.green)/2.0,
+                                (bg_color_active.blue + fg_color_active.blue)/2.0,
+                                (bg_color_active.alpha + fg_color_active.alpha)/2.0};
+#else
     GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(gobj()));
+#endif
 
     SPFilterPrimitive* prim = get_selected();
     int row_count = get_model()->children().size();
@@ -1655,13 +1778,25 @@ bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Cont
             const int x = text_start_x + get_input_type_width() * i;
 	    cr->save();
 	    cr->rectangle(x, 0, get_input_type_width(), vis.get_height());
+#if GTK_CHECK_VERSION(3,0,0)
+	    gdk_cairo_set_source_rgba(cr->cobj(), &bg_color);
+	    cr->fill_preserve();
+
+	    gdk_cairo_set_source_rgba(cr->cobj(), &fg_color);
+#else
 	    gdk_cairo_set_source_color(cr->cobj(), &(style->bg[GTK_STATE_NORMAL]));
 	    cr->fill_preserve();
 	    gdk_cairo_set_source_color(cr->cobj(), &(style->text[GTK_STATE_NORMAL]));
+#endif
 	    cr->move_to(x+get_input_type_width(), 0);
 	    cr->rotate_degrees(90);
 	    _vertical_layout->show_in_cairo_context(cr);
+            
+#if GTK_CHECK_VERSION(3,0,0)
+            gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
+#else
 	    gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
+#endif
 	    cr->move_to(x, 0);
 	    cr->line_to(x, vis.get_height());
 	    cr->stroke();
@@ -1677,12 +1812,26 @@ bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Cont
         // Check mouse state
         int mx, my;
         Gdk::ModifierType mask;
+
+#if GTK_CHECK_VERSION(3,0,0)
+        Glib::RefPtr<Gdk::Display> display = get_bin_window()->get_display();
+        Glib::RefPtr<Gdk::DeviceManager> dm = display->get_device_manager();
+        Glib::RefPtr<const Gdk::Device> device = dm->get_client_pointer();
+        get_bin_window()->get_device_position(device, mx, my, mask);
+#else
         get_bin_window()->get_pointer(mx, my, mask);
+#endif
 
         // Outline the bottom of the connection area
         const int outline_x = x + fheight * (row_count - row_index);
 	cr->save();
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
+#else
 	gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
+#endif
+
 	cr->move_to(x, y + h);
 	cr->line_to(outline_x, y + h);
         // Side outline
@@ -1693,6 +1842,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Cont
 
         std::vector<Gdk::Point> con_poly;
         int con_drag_y = 0;
+        int con_drag_x = 0;
         bool inside;
         const SPFilterPrimitive* row_prim = (*row)[_columns.primitive];
         const int inputs = input_count(row_prim);
@@ -1703,33 +1853,53 @@ bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Cont
 
 		cr->save();
 
+#if GTK_CHECK_VERSION(3,0,0)
+                gdk_cairo_set_source_rgba(cr->cobj(),
+                                          inside && mask & GDK_BUTTON1_MASK ?
+                                          &mid_color : 
+                                          &mid_color_active);
+#else
 		gdk_cairo_set_source_color(cr->cobj(),
                                            inside && mask & GDK_BUTTON1_MASK ?
                                            &(style->dark[GTK_STATE_NORMAL]) : 
                                            &(style->dark[GTK_STATE_ACTIVE]));
+#endif
 
 		draw_connection_node(cr, con_poly, inside);
 
 		cr->restore();
 
                 if(_in_drag == (i + 1))
+		    {
                     con_drag_y = con_poly[2].get_y();
+                    con_drag_x = con_poly[2].get_x(); 
+		    }
 
                 if(_in_drag != (i + 1) || row_prim != prim)
+		    {
                     draw_connection(cr, row, i, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+		    }
             }
         }
         else {
             // Draw "in" shape
             inside = do_connection_node(row, 0, con_poly, mx, my);
             con_drag_y = con_poly[2].get_y();
+            con_drag_x = con_poly[2].get_x(); 
             
 	    cr->save();
 		
+#if GTK_CHECK_VERSION(3,0,0)
+            gdk_cairo_set_source_rgba(cr->cobj(),
+                                      inside && mask & GDK_BUTTON1_MASK ?
+                                      &mid_color : 
+                                      &mid_color_active);
+#else
 	    gdk_cairo_set_source_color(cr->cobj(),
                                        inside && mask & GDK_BUTTON1_MASK ?
                                        &(style->dark[GTK_STATE_NORMAL]) : 
                                        &(style->dark[GTK_STATE_ACTIVE]));
+#endif
 
             draw_connection_node(cr, con_poly, inside);
 
@@ -1737,20 +1907,32 @@ bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Cont
 
             // Draw "in" connection
             if(_in_drag != 1 || row_prim != prim)
+		{
                 draw_connection(cr, row, SP_ATTR_IN, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+		}
 
             if(inputs == 2) {
                 // Draw "in2" shape
                 inside = do_connection_node(row, 1, con_poly, mx, my);
                 if(_in_drag == 2)
+		    {
                     con_drag_y = con_poly[2].get_y();
+                    con_drag_x = con_poly[2].get_x(); 
+		    }
 		
 		cr->save();
 
+#if GTK_CHECK_VERSION(3,0,0)
+                gdk_cairo_set_source_rgba(cr->cobj(),
+                                          inside && mask & GDK_BUTTON1_MASK ?
+                                          &mid_color : 
+                                          &mid_color_active);
+#else
 	        gdk_cairo_set_source_color(cr->cobj(),
                                            inside && mask & GDK_BUTTON1_MASK ?
                                            &(style->dark[GTK_STATE_NORMAL]) : 
                                            &(style->dark[GTK_STATE_ACTIVE]));
+#endif
 
                 draw_connection_node(cr, con_poly, inside);
   
@@ -1758,16 +1940,18 @@ bool FilterEffectsDialog::PrimitiveList::on_draw(const Cairo::RefPtr<Cairo::Cont
 
                 // Draw "in2" connection
                 if(_in_drag != 2 || row_prim != prim)
+		    {
                     draw_connection(cr, row, SP_ATTR_IN2, text_start_x, outline_x, con_poly[2].get_y(), row_count);
+		    }
             }
         }
 
         // Draw drag connection
         if(row_prim == prim && _in_drag) {
 		cr->save();
-		gdk_cairo_set_source_color(cr->cobj(), &(style->black));
-		cr->move_to(outline_x, con_drag_y);
-		cr->line_to(mx, con_drag_y);
+                cr->set_source_rgb(0.0, 0.0, 0.0);
+		cr->move_to(con_drag_x, con_drag_y);
+		cr->line_to(mx, con_drag_y);  
 		cr->line_to(mx, my);
 		cr->stroke();
 		cr->restore();
@@ -1784,8 +1968,20 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
 {
     cr->save();
 
-    // TODO: Use Gtk::StyleContext instead
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkStyleContext *sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
+    
+    GdkRGBA bg_color, fg_color;
+    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
+    gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
+
+    GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
+                         (bg_color.green + fg_color.green)/2.0,
+                         (bg_color.blue + fg_color.blue)/2.0,
+                         (bg_color.alpha + fg_color.alpha)/2.0};
+#else
     GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(gobj()));
+#endif
 
     int src_id = 0;
     Gtk::TreeIter res = find_result(input, attr, src_id);
@@ -1801,9 +1997,13 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
         gint end_x = text_start_x + tw * src_id + (int)(tw * 0.5f) + 1;
 
 	if(use_default && is_first)
-		gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
+#if GTK_CHECK_VERSION(3,0,0)
+            gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
+#else
+            gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
+#endif
 	else
-		gdk_cairo_set_source_color(cr->cobj(), &(style->black));
+            cr->set_source_rgb(0.0, 0.0, 0.0);
 	
 	cr->rectangle(end_x-2, y1-2, 5, 5);
 	cr->fill_preserve();
@@ -1831,7 +2031,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
             const int y2 = rct.get_y() + rct.get_height();
 
             // Draw a bevelled 'L'-shaped connection
-	    gdk_cairo_set_source_color(cr->cobj(), &(style->black));
+	    cr->set_source_rgb(0.0, 0.0, 0.0);
 	    cr->move_to(x1, y1);
 	    cr->line_to(x2-fheight/4, y1);
 	    cr->line_to(x2, y1-fheight/4);
@@ -1973,7 +2173,8 @@ bool FilterEffectsDialog::PrimitiveList::on_button_press_event(GdkEventButton* e
 
     if(_in_drag) {
         _scroll_connection = Glib::signal_timeout().connect(sigc::mem_fun(*this, &PrimitiveList::on_scroll_timeout), 150);
-        _autoscroll = 0;
+        _autoscroll_x = 0;  
+        _autoscroll_y = 0; 
         get_selection()->select(path);
         return true;
     }
@@ -1989,22 +2190,43 @@ bool FilterEffectsDialog::PrimitiveList::on_motion_notify_event(GdkEventMotion* 
     Gdk::Rectangle vis;
     get_visible_rect(vis);
     int vis_x, vis_y;
+    
+    int vis_x2, vis_y2;  // NOTE:  insaner added -- necessary to get the scrolling while dragging to work
+    convert_widget_to_tree_coords(vis.get_x(), vis.get_y(), vis_x2, vis_y2);
+    
     convert_tree_to_widget_coords(vis.get_x(), vis.get_y(), vis_x, vis_y);
     const int top = vis_y + vis.get_height();
+    const int right_edge = vis_x + vis.get_width();
 
     // When autoscrolling during a connection drag, set the speed based on
     // where the mouse is in relation to the edges.
     if(e->y < vis_y)
-        _autoscroll = -(int)(speed + (vis_y - e->y) / 5);
+        _autoscroll_y = -(int)(speed + (vis_y - e->y) / 5);
     else if(e->y < vis_y + limit)
-        _autoscroll = -speed;
+        _autoscroll_y = -speed;
     else if(e->y > top)
-        _autoscroll = (int)(speed + (e->y - top) / 5);
+        _autoscroll_y = (int)(speed + (e->y - top) / 5);
     else if(e->y > top - limit)
-        _autoscroll = speed;
+        _autoscroll_y = speed;
     else
-        _autoscroll = 0;
+        _autoscroll_y = 0;
 
+	    // NOTE:  insaner added -- necessary to get the scrolling while dragging to work
+    double e2 = ( e->x - vis_x2/2);
+    // horizontal scrolling 
+    if(e2 < vis_x)
+        _autoscroll_x = -(int)(speed + (vis_x - e2) / 5);
+    else if(e2 < vis_x + limit)
+        _autoscroll_x = -speed;
+    else if(e2 > right_edge)
+        _autoscroll_x = (int)(speed + (e2 - right_edge) / 5);
+    else if(e2 > right_edge - limit)
+        _autoscroll_x = speed;
+    else
+        _autoscroll_x = 0;
+    
+	  
+ 
     queue_draw();
 
     return Gtk::TreeView::on_motion_notify_event(e);
@@ -2123,7 +2345,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
 }
 
 // Checks all of prim's inputs, removes any that use result
-void check_single_connection(SPFilterPrimitive* prim, const int result)
+static void check_single_connection(SPFilterPrimitive* prim, const int result)
 {
     if (prim && (result >= 0)) {
         if (prim->image_in == result) {
@@ -2199,10 +2421,10 @@ void FilterEffectsDialog::PrimitiveList::on_drag_end(const Glib::RefPtr<Gdk::Dra
 // If a connection is dragged towards the top or bottom of the list, the list should scroll to follow.
 bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 {
-    if(_autoscroll) {
+    if(_autoscroll_y) {
 #if WITH_GTKMM_3_0
         Glib::RefPtr<Gtk::Adjustment> a = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
-        double v = a->get_value() + _autoscroll;
+        double v = a->get_value() + _autoscroll_y;
         
 	if(v < 0)
             v = 0;
@@ -2212,7 +2434,7 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
         a->set_value(v);
 #else
         Gtk::Adjustment& a = *dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
-        double v = a.get_value() + _autoscroll;
+        double v = a.get_value() + _autoscroll_y;
         
 	if(v < 0)
             v = 0;
@@ -2225,6 +2447,34 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
         queue_draw();
     }
 
+	   
+    if(_autoscroll_x) {
+#if WITH_GTKMM_3_0
+        Glib::RefPtr<Gtk::Adjustment> a_h = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
+        double h = a_h->get_value() + _autoscroll_x;
+        
+	if(h < 0)
+            h = 0;
+        if(h > a_h->get_upper() - a_h->get_page_size())
+            h = a_h->get_upper() - a_h->get_page_size();
+
+        a_h->set_value(h);
+#else
+        Gtk::Adjustment& a_h = *dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
+        double h = a_h.get_value() + _autoscroll_x;
+        
+	if(h < 0)
+            h = 0;
+        if(h > a_h.get_upper() - a_h.get_page_size())
+            h = a_h.get_upper() - a_h.get_page_size();
+
+        a_h.set_value(h);
+	
+#endif
+
+        queue_draw();
+    }
+	   
     return true;
 }
 
@@ -2265,8 +2515,14 @@ FilterEffectsDialog::FilterEffectsDialog()
     _add_primitive_type.remove_row(NR_FILTER_COMPONENTTRANSFER);
 
     // Initialize widget hierarchy
+#if WITH_GTKMM_3_0
+    Gtk::Paned* hpaned = Gtk::manage(new Gtk::Paned);
+#else
     Gtk::HPaned* hpaned = Gtk::manage(new Gtk::HPaned);
+#endif
+
     Gtk::ScrolledWindow* sw_prims = Gtk::manage(new Gtk::ScrolledWindow);
+    Gtk::ScrolledWindow* sw_infobox = Gtk::manage(new Gtk::ScrolledWindow);
     Gtk::HBox* infobox = Gtk::manage(new Gtk::HBox(/*homogeneous:*/false, /*spacing:*/4));
     Gtk::HBox* hb_prims = Gtk::manage(new Gtk::HBox);
 
@@ -2275,12 +2531,14 @@ FilterEffectsDialog::FilterEffectsDialog()
     hpaned->pack2(_primitive_box);
     _primitive_box.pack_start(*sw_prims);
     _primitive_box.pack_start(*hb_prims, false, false);
-    _primitive_box.pack_start(*infobox,false, false);
+    _primitive_box.pack_start(*sw_infobox, false, false);
     sw_prims->add(_primitive_list);
+    sw_infobox->add(*infobox);
     infobox->pack_start(_infobox_icon, false, false);
     infobox->pack_start(_infobox_desc, false, false);
     _infobox_desc.set_line_wrap(true);
     _infobox_desc.set_size_request(200, -1);
+
 
     hb_prims->pack_start(_add_primitive, false, false);
     hb_prims->pack_start(_add_primitive_type, false, false);
@@ -2296,8 +2554,10 @@ FilterEffectsDialog::FilterEffectsDialog()
     _add_primitive_type.signal_changed().connect(
         sigc::mem_fun(*this, &FilterEffectsDialog::update_primitive_infobox));
 
-    sw_prims->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    sw_prims->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);  /* NOTE: insaner -- SCROLL the connections panel thing!!! */
     sw_prims->set_shadow_type(Gtk::SHADOW_IN);
+    sw_infobox->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER);
+    
 //    al_settings->set_padding(0, 0, 12, 0);
 //    fr_settings->set_shadow_type(Gtk::SHADOW_NONE);
 //    ((Gtk::Label*)fr_settings->get_label_widget())->set_use_markup();
@@ -2331,7 +2591,7 @@ void FilterEffectsDialog::show_all_vfunc()
 
 void FilterEffectsDialog::init_settings_widgets()
 {
-    // TODO: Find better range/climb-rate/digits values for the SpinSliders,
+    // TODO: Find better range/climb-rate/digits values for the SpinScales,
     //       most of the current values are complete guesses!
 
     _empty_settings.set_sensitive(false);
@@ -2358,18 +2618,18 @@ void FilterEffectsDialog::init_settings_widgets()
     /*
     //TRANSLATORS: for info on "Slope" and "Intercept", see http://id.mind.net/~zona/mmts/functionInstitute/linearFunctions/lsif.html
     _settings->add_combo(COMPONENTTRANSFER_TYPE_IDENTITY, SP_ATTR_TYPE, _("Type"), ComponentTransferTypeConverter);
-    _ct_slope = _settings->add_spinslider(1, SP_ATTR_SLOPE, _("Slope"), -10, 10, 0.1, 0.01, 2);
-    _ct_intercept = _settings->add_spinslider(0, SP_ATTR_INTERCEPT, _("Intercept"), -10, 10, 0.1, 0.01, 2);
-    _ct_amplitude = _settings->add_spinslider(1, SP_ATTR_AMPLITUDE, _("Amplitude"), 0, 10, 0.1, 0.01, 2);
-    _ct_exponent = _settings->add_spinslider(1, SP_ATTR_EXPONENT, _("Exponent"), 0, 10, 0.1, 0.01, 2);
-    _ct_offset = _settings->add_spinslider(0, SP_ATTR_OFFSET, _("Offset"), -10, 10, 0.1, 0.01, 2);*/
+    _ct_slope = _settings->add_spinscale(1, SP_ATTR_SLOPE, _("Slope"), -10, 10, 0.1, 0.01, 2);
+    _ct_intercept = _settings->add_spinscale(0, SP_ATTR_INTERCEPT, _("Intercept"), -10, 10, 0.1, 0.01, 2);
+    _ct_amplitude = _settings->add_spinscale(1, SP_ATTR_AMPLITUDE, _("Amplitude"), 0, 10, 0.1, 0.01, 2);
+    _ct_exponent = _settings->add_spinscale(1, SP_ATTR_EXPONENT, _("Exponent"), 0, 10, 0.1, 0.01, 2);
+    _ct_offset = _settings->add_spinscale(0, SP_ATTR_OFFSET, _("Offset"), -10, 10, 0.1, 0.01, 2);*/
 
     _settings->type(NR_FILTER_COMPOSITE);
     _settings->add_combo(COMPOSITE_OVER, SP_ATTR_OPERATOR, _("Operator:"), CompositeOperatorConverter);
-    _k1 = _settings->add_spinslider(0, SP_ATTR_K1, _("K1:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
-    _k2 = _settings->add_spinslider(0, SP_ATTR_K2, _("K2:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
-    _k3 = _settings->add_spinslider(0, SP_ATTR_K3, _("K3:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
-    _k4 = _settings->add_spinslider(0, SP_ATTR_K4, _("K4:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k1 = _settings->add_spinscale(0, SP_ATTR_K1, _("K1:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k2 = _settings->add_spinscale(0, SP_ATTR_K2, _("K2:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k3 = _settings->add_spinscale(0, SP_ATTR_K3, _("K3:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
+    _k4 = _settings->add_spinscale(0, SP_ATTR_K4, _("K4:"), -10, 10, 0.1, 0.01, 2, _("If the arithmetic operation is chosen, each result pixel is computed using the formula k1*i1*i2 + k2*i1 + k3*i2 + k4 where i1 and i2 are the pixel values of the first and second inputs respectively."));
 
     _settings->type(NR_FILTER_CONVOLVEMATRIX);
     _convolve_order = _settings->add_dualspinbutton((char*)"3", SP_ATTR_ORDER, _("Size:"), 1, 5, 1, 1, 0, _("width of the convolve matrix"), _("height of the convolve matrix"));
@@ -2377,50 +2637,50 @@ void FilterEffectsDialog::init_settings_widgets()
     //TRANSLATORS: for info on "Kernel", see http://en.wikipedia.org/wiki/Kernel_(matrix)
     _convolve_matrix = _settings->add_matrix(SP_ATTR_KERNELMATRIX, _("Kernel:"), _("This matrix describes the convolve operation that is applied to the input image in order to calculate the pixel colors at the output. Different arrangements of values in this matrix result in various possible visual effects. An identity matrix would lead to a motion blur effect (parallel to the matrix diagonal) while a matrix filled with a constant non-zero value would lead to a common blur effect."));
     _convolve_order->signal_attr_changed().connect(sigc::mem_fun(*this, &FilterEffectsDialog::convolve_order_changed));
-    _settings->add_spinslider(0, SP_ATTR_DIVISOR, _("Divisor:"), 0, 1000, 1, 0.1, 2, _("After applying the kernelMatrix to the input image to yield a number, that number is divided by divisor to yield the final destination color value. A divisor that is the sum of all the matrix values tends to have an evening effect on the overall color intensity of the result."));
-    _settings->add_spinslider(0, SP_ATTR_BIAS, _("Bias:"), -10, 10, 1, 0.01, 1, _("This value is added to each component. This is useful to define a constant value as the zero response of the filter."));
+    _settings->add_spinscale(0, SP_ATTR_DIVISOR, _("Divisor:"), 0, 1000, 1, 0.1, 2, _("After applying the kernelMatrix to the input image to yield a number, that number is divided by divisor to yield the final destination color value. A divisor that is the sum of all the matrix values tends to have an evening effect on the overall color intensity of the result."));
+    _settings->add_spinscale(0, SP_ATTR_BIAS, _("Bias:"), -10, 10, 1, 0.01, 1, _("This value is added to each component. This is useful to define a constant value as the zero response of the filter."));
     _settings->add_combo(CONVOLVEMATRIX_EDGEMODE_DUPLICATE, SP_ATTR_EDGEMODE, _("Edge Mode:"), ConvolveMatrixEdgeModeConverter, _("Determines how to extend the input image as necessary with color values so that the matrix operations can be applied when the kernel is positioned at or near the edge of the input image."));
     _settings->add_checkbutton(false, SP_ATTR_PRESERVEALPHA, _("Preserve Alpha"), "true", "false", _("If set, the alpha channel won't be altered by this filter primitive."));
 
     _settings->type(NR_FILTER_DIFFUSELIGHTING);
     _settings->add_color(/*default: white*/ 0xffffffff, SP_PROP_LIGHTING_COLOR, _("Diffuse Color:"), _("Defines the color of the light source"));
-    _settings->add_spinslider(1, SP_ATTR_SURFACESCALE, _("Surface Scale:"), -5, 5, 0.01, 0.001, 3, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
-    _settings->add_spinslider(1, SP_ATTR_DIFFUSECONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
-    _settings->add_dualspinslider(SP_ATTR_KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
+    _settings->add_spinscale(1, SP_ATTR_SURFACESCALE, _("Surface Scale:"), -5, 5, 0.01, 0.001, 3, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
+    _settings->add_spinscale(1, SP_ATTR_DIFFUSECONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
+    _settings->add_dualspinscale(SP_ATTR_KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
     _settings->add_lightsource();
 
     _settings->type(NR_FILTER_DISPLACEMENTMAP);
-    _settings->add_spinslider(0, SP_ATTR_SCALE, _("Scale:"), 0, 100, 1, 0.01, 1, _("This defines the intensity of the displacement effect."));
+    _settings->add_spinscale(0, SP_ATTR_SCALE, _("Scale:"), 0, 100, 1, 0.01, 1, _("This defines the intensity of the displacement effect."));
     _settings->add_combo(DISPLACEMENTMAP_CHANNEL_ALPHA, SP_ATTR_XCHANNELSELECTOR, _("X displacement:"), DisplacementMapChannelConverter, _("Color component that controls the displacement in the X direction"));
     _settings->add_combo(DISPLACEMENTMAP_CHANNEL_ALPHA, SP_ATTR_YCHANNELSELECTOR, _("Y displacement:"), DisplacementMapChannelConverter, _("Color component that controls the displacement in the Y direction"));
 
     _settings->type(NR_FILTER_FLOOD);
     _settings->add_color(/*default: black*/ 0, SP_PROP_FLOOD_COLOR, _("Flood Color:"), _("The whole filter region will be filled with this color."));
-    _settings->add_spinslider(1, SP_PROP_FLOOD_OPACITY, _("Opacity:"), 0, 1, 0.1, 0.01, 2);
+    _settings->add_spinscale(1, SP_PROP_FLOOD_OPACITY, _("Opacity:"), 0, 1, 0.1, 0.01, 2);
 
     _settings->type(NR_FILTER_GAUSSIANBLUR);
-    _settings->add_dualspinslider(SP_ATTR_STDDEVIATION, _("Standard Deviation:"), 0.01, 100, 1, 0.01, 1, _("The standard deviation for the blur operation."));
+    _settings->add_dualspinscale(SP_ATTR_STDDEVIATION, _("Standard Deviation:"), 0.01, 100, 1, 0.01, 1, _("The standard deviation for the blur operation."));
 
     _settings->type(NR_FILTER_MERGE);
     _settings->add_no_params();
 
     _settings->type(NR_FILTER_MORPHOLOGY);
     _settings->add_combo(MORPHOLOGY_OPERATOR_ERODE, SP_ATTR_OPERATOR, _("Operator:"), MorphologyOperatorConverter, _("Erode: performs \"thinning\" of input image.\nDilate: performs \"fattenning\" of input image."));
-    _settings->add_dualspinslider(SP_ATTR_RADIUS, _("Radius:"), 0, 100, 1, 0.01, 1);
+    _settings->add_dualspinscale(SP_ATTR_RADIUS, _("Radius:"), 0, 100, 1, 0.01, 1);
 
     _settings->type(NR_FILTER_IMAGE);
     _settings->add_fileorelement(SP_ATTR_XLINK_HREF, _("Source of Image:"));
 
     _settings->type(NR_FILTER_OFFSET);
-    _settings->add_spinslider(0, SP_ATTR_DX, _("Delta X:"), -100, 100, 1, 0.01, 1, _("This is how far the input image gets shifted to the right"));
-    _settings->add_spinslider(0, SP_ATTR_DY, _("Delta Y:"), -100, 100, 1, 0.01, 1, _("This is how far the input image gets shifted downwards"));
+    _settings->add_spinscale(0, SP_ATTR_DX, _("Delta X:"), -100, 100, 1, 0.01, 1, _("This is how far the input image gets shifted to the right"));
+    _settings->add_spinscale(0, SP_ATTR_DY, _("Delta Y:"), -100, 100, 1, 0.01, 1, _("This is how far the input image gets shifted downwards"));
 
     _settings->type(NR_FILTER_SPECULARLIGHTING);
     _settings->add_color(/*default: white*/ 0xffffffff, SP_PROP_LIGHTING_COLOR, _("Specular Color:"), _("Defines the color of the light source"));
-    _settings->add_spinslider(1, SP_ATTR_SURFACESCALE, _("Surface Scale:"), -5, 5, 0.1, 0.01, 2, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
-    _settings->add_spinslider(1, SP_ATTR_SPECULARCONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
-    _settings->add_spinslider(1, SP_ATTR_SPECULAREXPONENT, _("Exponent:"), 1, 50, 1, 0.01, 1, _("Exponent for specular term, larger is more \"shiny\"."));
-    _settings->add_dualspinslider(SP_ATTR_KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
+    _settings->add_spinscale(1, SP_ATTR_SURFACESCALE, _("Surface Scale:"), -5, 5, 0.1, 0.01, 2, _("This value amplifies the heights of the bump map defined by the input alpha channel"));
+    _settings->add_spinscale(1, SP_ATTR_SPECULARCONSTANT, _("Constant:"), 0, 5, 0.1, 0.01, 2, _("This constant affects the Phong lighting model."));
+    _settings->add_spinscale(1, SP_ATTR_SPECULAREXPONENT, _("Exponent:"), 1, 50, 1, 0.01, 1, _("Exponent for specular term, larger is more \"shiny\"."));
+    _settings->add_dualspinscale(SP_ATTR_KERNELUNITLENGTH, _("Kernel Unit Length:"), 0.01, 10, 1, 0.01, 1);
     _settings->add_lightsource();
 
     _settings->type(NR_FILTER_TILE);
@@ -2429,9 +2689,9 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->type(NR_FILTER_TURBULENCE);
 //    _settings->add_checkbutton(false, SP_ATTR_STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
     _settings->add_combo(TURBULENCE_TURBULENCE, SP_ATTR_TYPE, _("Type:"), TurbulenceTypeConverter, _("Indicates whether the filter primitive should perform a noise or turbulence function."));
-    _settings->add_dualspinslider(SP_ATTR_BASEFREQUENCY, _("Base Frequency:"), 0, 1, 0.001, 0.01, 3);
-    _settings->add_spinslider(1, SP_ATTR_NUMOCTAVES, _("Octaves:"), 1, 10, 1, 1, 0);
-    _settings->add_spinslider(0, SP_ATTR_SEED, _("Seed:"), 0, 1000, 1, 1, 0, _("The starting number for the pseudo random number generator."));
+    _settings->add_dualspinscale(SP_ATTR_BASEFREQUENCY, _("Base Frequency:"), 0, 1, 0.001, 0.01, 3);
+    _settings->add_spinscale(1, SP_ATTR_NUMOCTAVES, _("Octaves:"), 1, 10, 1, 1, 0);
+    _settings->add_spinscale(0, SP_ATTR_SEED, _("Seed:"), 0, 1000, 1, 1, 0, _("The starting number for the pseudo random number generator."));
 }
 
 void FilterEffectsDialog::add_primitive()
@@ -2512,7 +2772,7 @@ void FilterEffectsDialog::update_primitive_infobox()
             break;
         case(NR_FILTER_SPECULARLIGHTING):
             _infobox_icon.set_from_icon_name("feSpecularLighting-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The feDiffuseLighting and <b>feSpecularLighting</b> filter primitives create \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
+            _infobox_desc.set_markup(_("The <b>feDiffuseLighting</b> and <b>feSpecularLighting</b> filter primitives create \"embossed\" shadings.  The input's alpha channel is used to provide depth information: higher opacity areas are raised toward the viewer and lower opacity areas recede away from the viewer."));
             break;
         case(NR_FILTER_TILE):
             _infobox_icon.set_from_icon_name("feTile-icon", Gtk::ICON_SIZE_DIALOG);
@@ -2614,11 +2874,7 @@ void FilterEffectsDialog::update_filter_general_settings_view()
         }
         else {
             std::vector<Gtk::Widget*> vect = _settings_tab2.get_children();
-#if WITH_GTKMM_2_24
             vect[0]->hide();
-#else
-            vect[0]->hide_all();
-#endif
             _no_filter_selected.show();
         }
 
@@ -2637,11 +2893,7 @@ void FilterEffectsDialog::update_settings_view()
 
     std::vector<Gtk::Widget*> vect1 = _settings_tab1.get_children();
     for(unsigned int i=0; i<vect1.size(); i++) 
-#if WITH_GTKMM_2_24
 	    vect1[i]->hide();
-#else
-	    vect1[i]->hide_all();
-#endif
     _empty_settings.show();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -2665,11 +2917,7 @@ void FilterEffectsDialog::update_settings_view()
 //Second Tab
 
     std::vector<Gtk::Widget*> vect2 = _settings_tab2.get_children();
-#if WITH_GTKMM_2_24
     vect2[0]->hide();
-#else
-    vect2[0]->hide_all();
-#endif
     _no_filter_selected.show();
 
     SPFilter* filter = _filter_modifier.get_selected_filter();

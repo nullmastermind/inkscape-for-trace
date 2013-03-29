@@ -25,51 +25,10 @@
 #include "xml/repr.h"
 #include "document.h"
 
-static void sp_polygon_class_init(SPPolygonClass *pc);
-static void sp_polygon_init(SPPolygon *polygon);
-
-static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static gchar *sp_polygon_description(SPItem *item);
-
-static SPShapeClass *parent_class;
-
-GType sp_polygon_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPPolygonClass),
-            0, // base_init
-            0, // base_finalize
-            (GClassInitFunc)sp_polygon_class_init,
-            0, // class_finalize
-            0, // class_data
-            sizeof(SPPolygon),
-            0, // n_preallocs
-            (GInstanceInitFunc)sp_polygon_init,
-            0 // value_table
-        };
-        type = g_type_register_static(SP_TYPE_SHAPE, "SPPolygon", &info, static_cast<GTypeFlags>(0));
-    }
-
-    return type;
-}
+G_DEFINE_TYPE(SPPolygon, sp_polygon, SP_TYPE_SHAPE);
 
 static void sp_polygon_class_init(SPPolygonClass *pc)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) pc;
-    SPItemClass *item_class = (SPItemClass *) pc;
-
-    parent_class = (SPShapeClass *) g_type_class_ref(SP_TYPE_SHAPE);
-
-    //sp_object_class->build = sp_polygon_build;
-//    sp_object_class->write = sp_polygon_write;
-//    sp_object_class->set = sp_polygon_set;
-
-//    item_class->description = sp_polygon_description;
 }
 
 CPolygon::CPolygon(SPPolygon* polygon) : CShape(polygon) {
@@ -82,6 +41,8 @@ CPolygon::~CPolygon() {
 static void sp_polygon_init(SPPolygon *polygon)
 {
 	polygon->cpolygon = new CPolygon(polygon);
+
+	delete polygon->cshape;
 	polygon->cshape = polygon->cpolygon;
 	polygon->clpeitem = polygon->cpolygon;
 	polygon->citem = polygon->cpolygon;
@@ -96,11 +57,6 @@ void CPolygon::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "points" );
 }
 
-// CPPIFY: remove
-static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPPolygon*)object)->cpolygon->onBuild(document, repr);
-}
 
 
 /*
@@ -145,12 +101,6 @@ Inkscape::XML::Node* CPolygon::onWrite(Inkscape::XML::Document *xml_doc, Inkscap
     CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-// CPPIFY: remove
-static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPPolygon*)object)->cpolygon->onWrite(xml_doc, repr, flags);
 }
 
 
@@ -236,20 +186,8 @@ void CPolygon::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPPolygon*)object)->cpolygon->onSet(key, value);
-}
-
 gchar* CPolygon::onDescription() {
 	return g_strdup(_("<b>Polygon</b>"));
-}
-
-// CPPIFY: remove
-static gchar *sp_polygon_description(SPItem *item)
-{
-    return ((SPPolygon*)item)->cpolygon->onDescription();
 }
 
 /*

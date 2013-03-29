@@ -629,7 +629,6 @@ gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_
         if ( pattern->getType() == 2 ) {  // Shading pattern
             GfxShadingPattern *shading_pattern = static_cast<GfxShadingPattern *>(pattern);
             double *ptm;
-            double ittm[6];	// invert ttm
             double m[6] = {1, 0, 0, 1, 0, 0};
             double det;
 
@@ -638,6 +637,7 @@ gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_
             ptm = shading_pattern->getMatrix();
             det = ttm[0] * ttm[3] - ttm[1] * ttm[2];
             if (det) {
+                double ittm[6];	// invert ttm
                 ittm[0] =  ttm[3] / det;
                 ittm[1] = -ttm[1] / det;
                 ittm[2] = -ttm[2] / det;
@@ -1208,7 +1208,7 @@ void SvgBuilder::updateTextMatrix(GfxState *state) {
  */
 void SvgBuilder::_flushText() {
     // Ignore empty strings
-    if ( _glyphs.size() < 1 ) {
+    if ( _glyphs.empty()) {
         _glyphs.clear();
         return;
     }
@@ -1300,7 +1300,8 @@ void SvgBuilder::_flushText() {
                 sp_repr_css_set_property(glyph.style, "-inkscape-font-specification", properFontSpec.c_str());
 
                 // Set style and unref SPCSSAttr if it won't be needed anymore
-                sp_repr_css_change(tspan_node, glyph.style, "style");
+                // assume all <tspan> nodes in a <text> node share the same style
+                sp_repr_css_change(text_node, glyph.style, "style");
                 if ( glyph.style_changed && i != _glyphs.begin() ) {    // Free previous style
                     sp_repr_css_attr_unref((*prev_iterator).style);
                 }

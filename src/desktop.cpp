@@ -26,13 +26,12 @@
 # include "config.h"
 #endif
 
+#include "ui/dialog/dialog-manager.h"
 #include <glibmm/i18n.h>
 #include <sigc++/functors/mem_fun.h>
 
 #include <2geom/transforms.h>
 #include <2geom/rect.h>
-
-#include "ui/dialog/dialog-manager.h"
 
 #include "box3d-context.h"
 #include "color.h"
@@ -55,6 +54,7 @@
 #include "document.h"
 #include "event-log.h"
 #include "helper/units.h"
+#include "interface.h"
 #include "inkscape-private.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
@@ -432,6 +432,20 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     _widget->setTitle( sp_desktop_document(this)->getName() );
 }
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
+    // reload grayscale matrix from prefs
+    if (mode == Inkscape::COLORMODE_GRAYSCALE) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        gdouble r = prefs->getDoubleLimited("/options/rendering/grayscale/red-factor",0.21,0.,1.);
+        gdouble g = prefs->getDoubleLimited("/options/rendering/grayscale/green-factor",0.72,0.,1.);
+        gdouble b = prefs->getDoubleLimited("/options/rendering/grayscale/blue-factor",0.072,0.,1.);
+        gdouble grayscale_value_matrix[20] = { r, g, b, 0, 0,
+                                               r, g, b, 0, 0,
+                                               r, g, b, 0, 0,
+                                               0, 0, 0, 1, 0 };
+        g_message("%g",grayscale_value_matrix[0]);
+        SP_CANVAS_ARENA (drawing)->drawing.setGrayscaleMatrix(grayscale_value_matrix);
+    }
+
     SP_CANVAS_ARENA (drawing)->drawing.setColorMode(mode);
     canvas->colorrendermode = mode;
     _display_color_mode = mode;
@@ -496,12 +510,50 @@ void SPDesktop::setCurrentLayer(SPObject *object) {
     _layer_hierarchy->setBottom(object);
 }
 
-void SPDesktop::toggleAllLayers(bool hide) {
+void SPDesktop::toggleHideAllLayers(bool hide) {
 
-    for ( SPObject* obj = currentRoot(); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
         SP_ITEM(obj)->setHidden(hide);
     }
 }
+
+void SPDesktop::toggleLockAllLayers(bool lock) {
+
+    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), currentRoot()); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+        SP_ITEM(obj)->setLocked(lock);
+    }
+}
+
+void SPDesktop::toggleLockOtherLayers(SPObject *object) {
+    g_return_if_fail(SP_IS_GROUP(object));
+    g_return_if_fail( currentRoot() == object || (currentRoot() && currentRoot()->isAncestorOf(object)) );
+
+    bool othersLocked = false;
+    std::vector<SPObject*> layers;
+    for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
+        // Dont lock any ancestors, since that would in turn lock the layer as well
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersLocked |= !SP_ITEM(obj)->isLocked();
+        }
+    }
+    for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersLocked |= !SP_ITEM(obj)->isLocked();
+        }
+    }
+
+    SPItem *item = SP_ITEM(object);
+    if ( item->isLocked() ) {
+        item->setLocked(false);
+    }
+
+    for ( std::vector<SPObject*>::iterator it = layers.begin(); it != layers.end(); ++it ) {
+        SP_ITEM(*it)->setLocked(othersLocked);
+    }
+}
+
 
 void SPDesktop::toggleLayerSolo(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
@@ -510,12 +562,17 @@ void SPDesktop::toggleLayerSolo(SPObject *object) {
     bool othersShowing = false;
     std::vector<SPObject*> layers;
     for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
-        layers.push_back(obj);
-        othersShowing |= !SP_ITEM(obj)->isHidden();
+        // Don't hide ancestors, since that would in turn hide the layer as well
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersShowing |= !SP_ITEM(obj)->isHidden();
+        }
     }
     for ( SPObject* obj = Inkscape::previous_layer(currentRoot(), object); obj; obj = Inkscape::previous_layer(currentRoot(), obj) ) {
-        layers.push_back(obj);
-        othersShowing |= !SP_ITEM(obj)->isHidden();
+        if (!obj->isAncestorOf(object)) {
+            layers.push_back(obj);
+            othersShowing |= !SP_ITEM(obj)->isHidden();
+        }
     }
 
 
@@ -754,7 +811,7 @@ SPDesktop::push_current_zoom (std::list<Geom::Rect> &history)
 {
     Geom::Rect area = get_display_area();
 
-    if (history.empty() || history.front() == area) {
+    if (history.empty() || history.front() != area) {
         history.push_front(area);
     }
 }
@@ -1095,6 +1152,7 @@ SPDesktop::zoom_drawing()
     SPItem *docitem = doc()->getRoot();
     g_return_if_fail (docitem != NULL);
 
+    docitem->bbox_valid = FALSE;
     Geom::OptRect d = docitem->desktopVisualBounds();
 
     /* Note that the second condition here indicates that
@@ -1309,6 +1367,17 @@ SPDesktop::toggleScrollbars()
     _widget->toggleScrollbars();
 }
 
+
+void SPDesktop::toggleToolbar(gchar const *toolbar_name)
+{
+    Glib::ustring pref_path = getLayoutPrefPath(this) + toolbar_name + "/state";
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean visible = prefs->getBool(pref_path, true);
+    prefs->setBool(pref_path, !visible);
+
+    layoutWidget();
+}
+
 void
 SPDesktop::layoutWidget()
 {
@@ -1465,15 +1534,8 @@ void SPDesktop::toggleSnapGlobal()
     namedview->setSnapGlobal(!v);
 }
 
-
 //----------------------------------------------------------------------
 // Callback implementations. The virtual ones are connected by the view.
-
-void
-SPDesktop::onPositionSet (double x, double y)
-{
-    _widget->viewSetPosition (Geom::Point(x,y));
-}
 
 void
 SPDesktop::onResized (double /*x*/, double /*y*/)
@@ -1518,6 +1580,13 @@ SPDesktop::setDocument (SPDocument *doc)
     _layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
     _layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
     _layer_hierarchy->setTop(doc->getRoot());
+
+	// remove old EventLog if it exists (see also: bug #1071082)
+	if (event_log) {
+		doc->removeUndoObserver(*event_log);
+		delete event_log;
+		event_log = 0;
+	}
 
     /* setup EventLog */
     event_log = new Inkscape::EventLog(doc);
@@ -1849,6 +1918,7 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_CLONETILER, "/dialogs/clonetiler") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_ITEM, "/dialogs/object") );
     mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SPELLCHECK, "/dialogs/spellcheck") );
+    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SYMBOLS, "/dialogs/symbols") );
 
     for (iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); iter++) {
         int verbId = iter->first;

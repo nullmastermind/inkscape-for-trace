@@ -34,17 +34,6 @@ class Node;
 
 class SPCSSAttr;
 
-class SPIFloat;
-class SPIScale24;
-class SPIInt;
-class SPIShort;
-class SPIEnum;
-class SPIString;
-class SPILength;
-class SPIPaint;
-class SPIFontSize;
-class SPIBaselineShift;
-
 /// Float type internal to SPStyle.
 struct SPIFloat {
     unsigned set : 1;
@@ -144,8 +133,6 @@ struct SPILength {
 
 #define SP_STYLE_FILL_SERVER(s) ((const_cast<SPStyle *> (s))->getFillPaintServer())
 #define SP_STYLE_STROKE_SERVER(s) ((const_cast<SPStyle *> (s))->getStrokePaintServer())
-
-class SVGICCColor;
 
 /// Paint type internal to SPStyle.
 struct SPIPaint {
@@ -257,7 +244,7 @@ struct SPILengthOrNormal {
     float computed;
 };
 
-class SPTextStyle;
+struct SPTextStyle;
 
 /// Stroke dash details.
 class NRVpathDash {
@@ -442,7 +429,8 @@ gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to);
 void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const gchar *uri);
 
 gchar const *sp_style_get_css_unit_string(int unit);
-double sp_style_get_css_font_size_units(double size, int unit);
+double sp_style_css_size_px_to_units(double size, int unit);
+double sp_style_css_size_units_to_px(double size, int unit);
 
 /* SPTextStyle */
 
@@ -616,7 +604,7 @@ void sp_style_unset_property_attrs(SPObject *o);
 void sp_style_set_property_url (SPObject *item, gchar const *property, SPObject *linked, bool recursive);
 
 gchar *attribute_unquote(gchar const *val);
-gchar *css2_escape_quote(gchar const *val);
+Glib::ustring css2_escape_quote(gchar const *val);
 
 #endif // SEEN_SP_STYLE_H
 

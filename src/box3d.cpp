@@ -39,66 +39,14 @@
 #include "desktop-handles.h"
 #include "macros.h"
 
-static void box3d_class_init(SPBox3DClass *klass);
-static void box3d_init(SPBox3D *box3d);
-
-static void box3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void box3d_release(SPObject *object);
-static void box3d_set(SPObject *object, unsigned int key, const gchar *value);
-static void box3d_update(SPObject *object, SPCtx *ctx, guint flags);
-static Inkscape::XML::Node *box3d_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static gchar *box3d_description(SPItem *item);
-static Geom::Affine box3d_set_transform(SPItem *item, Geom::Affine const &xform);
-static void box3d_convert_to_guides(SPItem *item);
-
 static void box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box);
-
-static SPGroupClass *parent_class;
 
 static gint counter = 0;
 
-GType
-box3d_get_type(void)
+G_DEFINE_TYPE(SPBox3D, box3d, SP_TYPE_GROUP);
+
+static void box3d_class_init(SPBox3DClass *klass)
 {
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPBox3DClass),
-            NULL,   /* base_init */
-            NULL,   /* base_finalize */
-            (GClassInitFunc) box3d_class_init,
-            NULL,   /* class_finalize */
-            NULL,   /* class_data */
-            sizeof(SPBox3D),
-            16,     /* n_preallocs */
-            (GInstanceInitFunc) box3d_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GROUP, "SPBox3D", &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
-
-static void
-box3d_class_init(SPBox3DClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPItemClass *item_class = (SPItemClass *) klass;
-
-    parent_class = (SPGroupClass *) g_type_class_ref(SP_TYPE_GROUP);
-
-    //sp_object_class->build = box3d_build;
-//    sp_object_class->release = box3d_release;
-//    sp_object_class->set = box3d_set;
-//    sp_object_class->write = box3d_write;
-//    sp_object_class->update = box3d_update;
-
-//    item_class->description = box3d_description;
-//    item_class->set_transform = box3d_set_transform;
-//    item_class->convert_to_guides = box3d_convert_to_guides;
 }
 
 CBox3D::CBox3D(SPBox3D* box) : CGroup(box) {
@@ -112,6 +60,8 @@ static void
 box3d_init(SPBox3D *box)
 {
 	box->cbox3d = new CBox3D(box);
+
+	delete box->cgroup;
 	box->cgroup = box->cbox3d;
 	box->clpeitem = box->cbox3d;
 	box->citem = box->cbox3d;
@@ -144,12 +94,6 @@ void CBox3D::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
         object->readAttr( "inkscape:corner0" );
         object->readAttr( "inkscape:corner7" );
     }
-}
-
-// CPPIFY: remove
-static void box3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPBox3D*)object)->cbox3d->onBuild(document, repr);
 }
 
 void CBox3D::onRelease() {
@@ -188,16 +132,6 @@ void CBox3D::onRelease() {
     }
 
     CGroup::onRelease();
-}
-
-// CPPIFY: remove
-/**
- * Virtual release of SPBox3D members before destruction.
- */
-static void
-box3d_release(SPObject *object)
-{
-	((SPBox3D*)object)->cbox3d->onRelease();
 }
 
 void CBox3D::onSet(unsigned int key, const gchar* value) {
@@ -252,13 +186,6 @@ void CBox3D::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-static void
-box3d_set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPBox3D*)object)->cbox3d->onSet(key, value);
-}
-
 /**
  * Gets called when (re)attached to another perspective.
  */
@@ -286,13 +213,6 @@ void CBox3D::onUpdate(SPCtx *ctx, guint flags) {
 
     // Invoke parent method
     CGroup::onUpdate(ctx, flags);
-}
-
-// CPPIFY: remove
-static void
-box3d_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPBox3D*)object)->cbox3d->onUpdate(ctx, flags);
 }
 
 Inkscape::XML::Node* CBox3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -342,24 +262,11 @@ Inkscape::XML::Node* CBox3D::onWrite(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
-// CPPIFY: remove
-static Inkscape::XML::Node * box3d_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPBox3D*)object)->cbox3d->onWrite(xml_doc, repr, flags);
-}
-
 gchar* CBox3D::onDescription() {
 	SPBox3D* item = this->spbox3d;
 
 	g_return_val_if_fail(SP_IS_BOX3D(item), NULL);
 	return g_strdup(_("<b>3D Box</b>"));
-}
-
-// CPPIFY: remove
-static gchar *
-box3d_description(SPItem *item)
-{
-	return ((SPBox3D*)item)->cbox3d->onDescription();
 }
 
 void box3d_position_set(SPBox3D *box)
@@ -405,14 +312,7 @@ Geom::Affine CBox3D::onSetTransform(Geom::Affine const &xform) {
     return Geom::identity();
 }
 
-// CPPIFY: remove
-static Geom::Affine
-box3d_set_transform(SPItem *item, Geom::Affine const &xform)
-{
-	return ((SPBox3D*)item)->cbox3d->onSetTransform(xform);
-}
-
-Proj::Pt3
+static Proj::Pt3
 box3d_get_proj_corner (guint id, Proj::Pt3 const &c0, Proj::Pt3 const &c7) {
     return Proj::Pt3 ((id & Box3D::X) ? c7[Proj::X] : c0[Proj::X],
                       (id & Box3D::Y) ? c7[Proj::Y] : c0[Proj::Y],
@@ -730,7 +630,7 @@ box3d_half_line_crosses_joining_line (Geom::Point const &A, Geom::Point const &B
     {
         inters = Geom::intersection(lineAB, lineCD);
     }
-    catch (Geom::InfiniteSolutions e)
+    catch (Geom::InfiniteSolutions& e)
     {
         // We're probably dealing with parallel lines, so they don't really cross
         return false;
@@ -1124,6 +1024,8 @@ box3d_recompute_z_orders (SPBox3D *box) {
             central_axis = Box3D::Z;
         }
 
+        // FIXME: At present, this is not used.  Why is it calculated?
+        /*
         unsigned int central_corner = 3 ^ central_axis;
         if (central_axis == Box3D::Z) {
             central_corner = central_corner ^ Box3D::XYZ;
@@ -1131,6 +1033,7 @@ box3d_recompute_z_orders (SPBox3D *box) {
         if (box3d_XY_axes_are_swapped(box)) {
             central_corner = central_corner ^ Box3D::XYZ;
         }
+        */
 
         Geom::Point c1(box3d_get_corner_screen(box, 1, false));
         Geom::Point c2(box3d_get_corner_screen(box, 2, false));
@@ -1470,12 +1373,6 @@ void CBox3D::onConvertToGuides() {
     box3d_push_back_corner_pair(box, pts, 3, 7);
 
     sp_guide_pt_pairs_to_guides(item->document, pts);
-}
-
-// CPPIFY: remove
-void
-box3d_convert_to_guides(SPItem *item) {
-	((SPBox3D*)item)->cbox3d->onConvertToGuides();
 }
 
 /*

@@ -59,14 +59,14 @@ public:
     /* the get/set/click handlers are virtual functions; each handler class for a knot
        should be derived from KnotHolderEntity and override these functions */
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) = 0;
-    virtual Geom::Point knot_get() = 0;
+    virtual Geom::Point knot_get() const = 0;
     virtual void knot_click(guint /*state*/) {}
 
     void update_knot();
 
 //private:
-    Geom::Point snap_knot_position(Geom::Point const &p);
-    Geom::Point snap_knot_position_constrained(Geom::Point const &p, Inkscape::Snapper::SnapConstraint const &constraint);
+    Geom::Point snap_knot_position(Geom::Point const &p, guint state);
+    Geom::Point snap_knot_position_constrained(Geom::Point const &p, Inkscape::Snapper::SnapConstraint const &constraint, guint state);
 
     SPKnot *knot;
     SPItem *item;
@@ -101,19 +101,19 @@ protected:
 
 class PatternKnotHolderEntityXY : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
 };
 
 class PatternKnotHolderEntityAngle : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
 };
 
 class PatternKnotHolderEntityScale : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
 };
 

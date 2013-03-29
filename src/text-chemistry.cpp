@@ -40,19 +40,7 @@
 
 using Inkscape::DocumentUndo;
 
-SPItem *
-text_in_selection(Inkscape::Selection *selection)
-{
-    for (GSList *items = (GSList *) selection->itemList();
-         items != NULL;
-         items = items->next) {
-        if (SP_IS_TEXT(items->data))
-            return ((SPItem *) items->data);
-    }
-    return NULL;
-}
-
-SPItem *
+static SPItem *
 flowtext_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
@@ -64,7 +52,7 @@ flowtext_in_selection(Inkscape::Selection *selection)
     return NULL;
 }
 
-SPItem *
+static SPItem *
 text_or_flowtext_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
@@ -76,7 +64,7 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
     return NULL;
 }
 
-SPItem *
+static SPItem *
 shape_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
@@ -233,7 +221,7 @@ text_remove_from_path()
     }
 }
 
-void
+static void
 text_remove_all_kerns_recursively(SPObject *o)
 {
     o->getRepr()->setAttribute("dx", NULL);

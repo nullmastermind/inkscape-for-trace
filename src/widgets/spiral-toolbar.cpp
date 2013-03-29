@@ -28,9 +28,8 @@
 # include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
-
 #include "ui/widget/spinbutton.h"
+#include <glibmm/i18n.h>
 #include "toolbox.h"
 #include "spiral-toolbar.h"
 
@@ -39,8 +38,6 @@
 #include "document-undo.h"
 #include "../verbs.h"
 #include "../inkscape.h"
-//#include "../interface.h"
-//#include "../connection-pool.h"
 #include "../selection-chemistry.h"
 #include "../selection.h"
 #include "../ege-adjustment-action.h"
@@ -78,7 +75,7 @@ using Inkscape::UI::PrefPusher;
 
 static void sp_spl_tb_value_changed(GtkAdjustment *adj, GObject *tbl, Glib::ustring const &value_name)
 {
-    SPDesktop *desktop = (SPDesktop *) g_object_get_data( tbl, "desktop" );
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -147,15 +144,15 @@ static void sp_spl_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
     gdouble exp = 1.0;
     gdouble t0 = 0.0;
 
-    adj = (GtkAdjustment*)g_object_get_data(obj, "revolution");
+    adj = GTK_ADJUSTMENT(g_object_get_data(obj, "revolution"));
     gtk_adjustment_set_value(adj, rev);
     gtk_adjustment_value_changed(adj);
 
-    adj = (GtkAdjustment*)g_object_get_data(obj, "expansion");
+    adj = GTK_ADJUSTMENT(g_object_get_data(obj, "expansion"));
     gtk_adjustment_set_value(adj, exp);
     gtk_adjustment_value_changed(adj);
 
-    adj = (GtkAdjustment*)g_object_get_data(obj, "t0");
+    adj = GTK_ADJUSTMENT(g_object_get_data(obj, "t0"));
     gtk_adjustment_set_value(adj, t0);
     gtk_adjustment_value_changed(adj);
 
@@ -181,17 +178,17 @@ static void spiral_tb_event_attr_changed(Inkscape::XML::Node *repr,
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(TRUE));
 
     GtkAdjustment *adj;
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(tbl), "revolution");
+    adj = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(tbl), "revolution"));
     double revolution = 3.0;
     sp_repr_get_double(repr, "sodipodi:revolution", &revolution);
     gtk_adjustment_set_value(adj, revolution);
 
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(tbl), "expansion");
+    adj = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(tbl), "expansion"));
     double expansion = 1.0;
     sp_repr_get_double(repr, "sodipodi:expansion", &expansion);
     gtk_adjustment_set_value(adj, expansion);
 
-    adj = (GtkAdjustment*)g_object_get_data(G_OBJECT(tbl), "t0");
+    adj = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(tbl), "t0"));
     double t0 = 0.0;
     sp_repr_get_double(repr, "sodipodi:t0", &t0);
     gtk_adjustment_set_value(adj, t0);
@@ -314,7 +311,7 @@ void sp_spiral_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 
 
     sigc::connection *connection = new sigc::connection(
-        sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_spiral_toolbox_selection_changed), (GObject *)holder))
+        sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_spiral_toolbox_selection_changed), holder))
         );
     g_signal_connect( holder, "destroy", G_CALLBACK(delete_connection), connection );
     g_signal_connect( holder, "destroy", G_CALLBACK(purge_repr_listener), holder );

@@ -2,7 +2,6 @@
 # include <config.h>
 #endif
 
-#ifdef ENABLE_SVG_FONTS
 #define __SP_ANCHOR_C__
 
 /*
@@ -28,12 +27,6 @@
 
 static void sp_glyph_kerning_class_init(SPGlyphKerningClass *gc);
 static void sp_glyph_kerning_init(SPGlyphKerning *glyph);
-
-static void sp_glyph_kerning_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_glyph_kerning_release(SPObject *object);
-static void sp_glyph_kerning_set(SPObject *object, unsigned int key, const gchar *value);
-static Inkscape::XML::Node *sp_glyph_kerning_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void sp_glyph_kerning_update(SPObject *object, SPCtx *ctx, guint flags);
 
 static SPObjectClass *parent_class;
 
@@ -85,15 +78,7 @@ GType sp_glyph_kerning_v_get_type(void)
 
 static void sp_glyph_kerning_class_init(SPGlyphKerningClass *gc)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) gc;
-
     parent_class = (SPObjectClass*)g_type_class_peek_parent(gc);
-
-    //sp_object_class->build = sp_glyph_kerning_build;
-//    sp_object_class->release = sp_glyph_kerning_release;
-//    sp_object_class->set = sp_glyph_kerning_set;
-//    sp_object_class->write = sp_glyph_kerning_write;
-//    sp_object_class->update = sp_glyph_kerning_update;
 }
 
 CGlyphKerning::CGlyphKerning(SPGlyphKerning* kerning) : CObject(kerning) {
@@ -106,6 +91,8 @@ CGlyphKerning::~CGlyphKerning() {
 static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
 {
 	glyph->cglyphkerning = new CGlyphKerning(glyph);
+
+	delete glyph->cobject;
 	glyph->cobject = glyph->cglyphkerning;
 
 //TODO: correct these values:
@@ -116,25 +103,9 @@ static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
     glyph->k = 0;
 }
 
-//static void sp_glyph_kerning_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-//{
-////    if (((SPObjectClass *) (parent_class))->build) {
-////        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-////    }
-//
-//    object->readAttr( "u1" );
-//    object->readAttr( "g1" );
-//    object->readAttr( "u2" );
-//    object->readAttr( "g2" );
-//    object->readAttr( "k" );
-//}
-
 void CGlyphKerning::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPGlyphKerning* object = this->spglyphkerning;
 
-	//    if (((SPObjectClass *) (parent_class))->build) {
-	//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-	//    }
 	CObject::onBuild(document, repr);
 
 	object->readAttr( "u1" );
@@ -142,16 +113,6 @@ void CGlyphKerning::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	object->readAttr( "u2" );
 	object->readAttr( "g2" );
 	object->readAttr( "k" );
-}
-
-static void sp_glyph_kerning_release(SPObject *object)
-{
-    //SPGlyphKerning *glyph = SP_GLYPH_KERNING(object);
-
-//    if (((SPObjectClass *) parent_class)->release) {
-//        ((SPObjectClass *) parent_class)->release(object);
-//    }
-	((SPGlyphKerning*)object)->cglyphkerning->onRelease();
 }
 
 void CGlyphKerning::onRelease() {
@@ -175,67 +136,6 @@ bool GlyphNames::contains(const char* name){
         if (str == s) return true;
     }
     return false;
-}
-
-static void sp_glyph_kerning_set(SPObject *object, unsigned int key, const gchar *value)
-{
-//    SPGlyphKerning * glyphkern = (SPGlyphKerning*) object; //even if it is a VKern this will work. I did it this way just to avoind warnings.
-//
-//    switch (key) {
-//        case SP_ATTR_U1:
-//        {
-//            if (glyphkern->u1) {
-//                delete glyphkern->u1;
-//            }
-//            glyphkern->u1 = new UnicodeRange(value);
-//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            break;
-//        }
-//        case SP_ATTR_U2:
-//        {
-//            if (glyphkern->u2) {
-//                delete glyphkern->u2;
-//            }
-//            glyphkern->u2 = new UnicodeRange(value);
-//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            break;
-//        }
-//        case SP_ATTR_G1:
-//        {
-//            if (glyphkern->g1) {
-//                delete glyphkern->g1;
-//            }
-//            glyphkern->g1 = new GlyphNames(value);
-//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            break;
-//        }
-//        case SP_ATTR_G2:
-//        {
-//            if (glyphkern->g2) {
-//                delete glyphkern->g2;
-//            }
-//            glyphkern->g2 = new GlyphNames(value);
-//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//             break;
-//        }
-//        case SP_ATTR_K:
-//        {
-//            double number = value ? g_ascii_strtod(value, 0) : 0;
-//            if (number != glyphkern->k){
-//                glyphkern->k = number;
-//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        }
-//        default:
-//        {
-//            if (((SPObjectClass *) (parent_class))->set) {
-//                ((SPObjectClass *) (parent_class))->set(object, key, value);
-//            }
-//            break;
-//        }
-//    }
-	((SPGlyphKerning*)object)->cglyphkerning->onSet(key, value);
 }
 
 void CGlyphKerning::onSet(unsigned int key, const gchar *value) {
@@ -291,9 +191,6 @@ void CGlyphKerning::onSet(unsigned int key, const gchar *value) {
         }
         default:
         {
-//            if (((SPObjectClass *) (parent_class))->set) {
-//                ((SPObjectClass *) (parent_class))->set(object, key, value);
-//            }
         	CObject::onSet(key, value);
             break;
         }
@@ -303,26 +200,6 @@ void CGlyphKerning::onSet(unsigned int key, const gchar *value) {
 /**
  *  * Receives update notifications.
  *   */
-static void
-sp_glyph_kerning_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-//    SPGlyphKerning *glyph = (SPGlyphKerning *)object;
-//    (void)glyph;
-//
-//    if (flags & SP_OBJECT_MODIFIED_FLAG) {
-//        /* do something to trigger redisplay, updates? */
-//            object->readAttr( "u1" );
-//            object->readAttr( "u2" );
-//            object->readAttr( "g2" );
-//            object->readAttr( "k" );
-//    }
-//
-//    if (((SPObjectClass *) parent_class)->update) {
-//        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
-//    }
-	((SPGlyphKerning*)object)->cglyphkerning->onUpdate(ctx, flags);
-}
-
 void CGlyphKerning::onUpdate(SPCtx *ctx, guint flags) {
 	SPGlyphKerning* object = this->spglyphkerning;
 
@@ -337,52 +214,10 @@ void CGlyphKerning::onUpdate(SPCtx *ctx, guint flags) {
             object->readAttr( "k" );
     }
 
-//    if (((SPObjectClass *) parent_class)->update) {
-//        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
-//    }
     CObject::onUpdate(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
-
-static Inkscape::XML::Node *sp_glyph_kerning_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-////    SPGlyphKerning *glyph = SP_GLYPH_KERNING(object);
-//
-//    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-//        repr = xml_doc->createElement("svg:glyphkerning");//fix this!
-//    }
-//
-///* I am commenting out this part because I am not certain how does it work. I will have to study it later. Juca
-//    repr->setAttribute("unicode", glyph->unicode);
-//    repr->setAttribute("glyph-name", glyph->glyph_name);
-//    repr->setAttribute("d", glyph->d);
-//    sp_repr_set_svg_double(repr, "orientation", (double) glyph->orientation);
-//    sp_repr_set_svg_double(repr, "arabic-form", (double) glyph->arabic_form);
-//    repr->setAttribute("lang", glyph->lang);
-//    sp_repr_set_svg_double(repr, "horiz-adv-x", glyph->horiz_adv_x);
-//    sp_repr_set_svg_double(repr, "vert-origin-x", glyph->vert_origin_x);
-//    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
-//    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
-//*/
-//    if (repr != object->getRepr()) {
-//        // All the COPY_ATTR functions below use
-//        //   XML Tree directly, while they shouldn't.
-//        COPY_ATTR(repr, object->getRepr(), "u1");
-//        COPY_ATTR(repr, object->getRepr(), "g1");
-//        COPY_ATTR(repr, object->getRepr(), "u2");
-//        COPY_ATTR(repr, object->getRepr(), "g2");
-//        COPY_ATTR(repr, object->getRepr(), "k");
-//    }
-//
-//    if (((SPObjectClass *) (parent_class))->write) {
-//        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
-//    }
-//
-//    return repr;
-
-	return ((SPGlyphKerning*)object)->cglyphkerning->onWrite(xml_doc, repr, flags);
-}
 
 Inkscape::XML::Node* CGlyphKerning::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPGlyphKerning* object = this->spglyphkerning;
@@ -415,14 +250,10 @@ Inkscape::XML::Node* CGlyphKerning::onWrite(Inkscape::XML::Document *xml_doc, In
 	        COPY_ATTR(repr, object->getRepr(), "k");
 	    }
 
-//	    if (((SPObjectClass *) (parent_class))->write) {
-//	        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
-//	    }
 	    CObject::onWrite(xml_doc, repr, flags);
 
 	    return repr;
 }
-#endif //#ifdef ENABLE_SVG_FONTS
 /*
   Local Variables:
   mode:c++

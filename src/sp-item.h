@@ -28,9 +28,9 @@
 #include "snap-candidate.h"
 
 class SPGuideConstraint;
-struct SPClipPathReference;
-struct SPMaskReference;
-struct SPAvoidRef;
+class SPClipPathReference;
+class SPMaskReference;
+class SPAvoidRef;
 struct SPPrintContext;
 
 namespace Inkscape {
@@ -87,9 +87,8 @@ public:
 #define SP_ITEM_REFERENCE_FLAGS (1 << 1)
 
 /// Contains transformations to document/viewport and the viewport size.
-class SPItemCtx {
+class SPItemCtx : public SPCtx {
 public:
-    SPCtx ctx;
     /** Item to document transformation */
     Geom::Affine i2doc;
     /** Viewport size */
@@ -102,16 +101,16 @@ class SPItem;
 class SPItemClass;
 class CItem;
 
-#define SP_TYPE_ITEM (SPItem::getType ())
+#define SP_TYPE_ITEM (sp_item_get_type ())
 #define SP_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_ITEM, SPItem))
 #define SP_ITEM_CLASS(clazz) (G_TYPE_CHECK_CLASS_CAST((clazz), SP_TYPE_ITEM, SPItemClass))
 #define SP_IS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ITEM))
 
+GType sp_item_get_type() G_GNUC_CONST;
 
 /** Abstract base class for all visible shapes. */
 class SPItem : public SPObject {
 public:
-    static GType getType();
     enum BBoxType {
         // legacy behavior: includes crude stroke, markers; excludes long miters, blur margin; is known to be wrong for caps
         APPROXIMATE_BBOX,
@@ -230,19 +229,7 @@ private:
     mutable bool _is_evaluated;
     mutable EvaluatedStatus _evaluated_status;
 
-    static void sp_item_init(SPItem *item);
-
-    //static void sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-    static void sp_item_release(SPObject *object);
-    static void sp_item_set(SPObject *object, unsigned key, gchar const *value);
-    static void sp_item_update(SPObject *object, SPCtx *ctx, guint flags);
-    static Inkscape::XML::Node *sp_item_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-//    static gchar *sp_item_private_description(SPItem *item);
-//    static void sp_item_private_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-
     static SPItemView *sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, Inkscape::DrawingItem *arenaitem);
-    static SPItemView *sp_item_view_list_remove(SPItemView *list, SPItemView *view);
     static void clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
     static void mask_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
@@ -255,37 +242,7 @@ class SPItemClass {
 public:
     SPObjectClass parent_class;
 
-//    /** BBox union in given coordinate system */
-//    Geom::OptRect (* bbox) (SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-//
-//    /** Printing method. Assumes ctm is set to item affine matrix */
-//    /* \todo Think about it, and maybe implement generic export method instead (Lauris) */
-//    void (* print) (SPItem *item, SPPrintContext *ctx);
-//
-//    /** Give short description of item (for status display) */
-//    gchar * (* description) (SPItem * item);
-//
-//    Inkscape::DrawingItem * (* show) (SPItem *item, Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-//    void (* hide) (SPItem *item, unsigned int key);
-//
-//    /** Write to an iterator the points that should be considered for snapping
-//     * as the item's `nodes'.
-//     */
-//    void (* snappoints) (SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-//
-//    /** Apply the transform optimally, and return any residual transformation */
-//    Geom::Affine (* set_transform)(SPItem *item, Geom::Affine const &transform);
-//
-//    /** Convert the item to guidelines */
-//    void (* convert_to_guides)(SPItem *item);
-//
-//    /** Emit event, if applicable */
-//    gint (* event) (SPItem *item, SPEvent *event);
-
 	private:
-	static SPObjectClass *static_parent_class;
-	static void sp_item_class_init(SPItemClass *klass);
-
 	friend class SPItem;
 	friend class CItem;
 };

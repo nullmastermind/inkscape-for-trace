@@ -61,75 +61,20 @@
 //#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
 
 // SPStop
-static void sp_stop_class_init(SPStopClass *klass);
-static void sp_stop_init(SPStop *stop);
-
-static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_stop_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_stop_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static SPObjectClass *stop_parent_class;
-
+G_DEFINE_TYPE(SPStop, sp_stop, SP_TYPE_OBJECT);
 
 // SPMeshRow
-static void sp_meshrow_class_init(SPMeshRowClass *klass);
-static void sp_meshrow_init(SPMeshRow *meshrow);
-
-static void sp_meshrow_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_meshrow_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_meshrow_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static SPObjectClass *meshrow_parent_class;
-
+G_DEFINE_TYPE(SPMeshRow, sp_meshrow, SP_TYPE_OBJECT);
 
 // SPMeshPatch
-static void sp_meshpatch_class_init(SPMeshPatchClass *klass);
-static void sp_meshpatch_init(SPMeshPatch *meshpatch);
+G_DEFINE_TYPE(SPMeshPatch, sp_meshpatch, SP_TYPE_OBJECT);
 
-static void sp_meshpatch_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_meshpatch_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_meshpatch_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static SPObjectClass *meshpatch_parent_class;
-
-
-
-
-/**
- * Registers SPStop class and returns its type.
- */
-GType
-sp_stop_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPStopClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_stop_class_init,
-            NULL, NULL,
-            sizeof(SPStop),
-            16,
-            (GInstanceInitFunc) sp_stop_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPStop", &info, (GTypeFlags)0);
-    }
-    return type;
-}
 
 /**
  * Callback to initialize SPStop vtable.
  */
 static void sp_stop_class_init(SPStopClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
-    stop_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-
-    //sp_object_class->build = sp_stop_build;
-//    sp_object_class->set = sp_stop_set;
-//    sp_object_class->write = sp_stop_write;
 }
 
 CStop::CStop(SPStop* stop) : CObject(stop) {
@@ -146,6 +91,8 @@ static void
 sp_stop_init(SPStop *stop)
 {
 	stop->cstop = new CStop(stop);
+
+	delete stop->cobject;
 	stop->cobject = stop->cstop;
 
     stop->offset = 0.0;
@@ -169,10 +116,6 @@ void CStop::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 /**
  * Virtual build: set stop attributes from its associated XML node.
  */
-static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPStop*)object)->cstop->onBuild(document, repr);
-}
 
 void CStop::onSet(unsigned int key, const gchar* value) {
 	SPStop* object = this->spstop;
@@ -256,11 +199,6 @@ void CStop::onSet(unsigned int key, const gchar* value) {
 /**
  * Virtual set: set attribute to value.
  */
-static void
-sp_stop_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPStop*)object)->cstop->onSet(key, value);
-}
 
 Inkscape::XML::Node* CStop::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
 	SPStop* object = this->spstop;
@@ -301,12 +239,6 @@ Inkscape::XML::Node* CStop::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::
 /**
  * Virtual write: write object attributes to repr.
  */
-static Inkscape::XML::Node *
-sp_stop_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPStop*)object)->cstop->onWrite(xml_doc, repr, flags);
-}
-
 
 bool SPGradient::hasStops() const
 {
@@ -349,6 +281,41 @@ void SPGradient::setSwatch( bool swatch )
     }
 }
 
+
+/**
+ * return true if this gradient is "equivalent" to that gradient.
+ * Equivalent meaning they have the same stop count, same stop colors and same stop opacity
+ * @param that - A gradient to compare this to
+ */
+gboolean SPGradient::isEquivalent(SPGradient *that)
+{
+    //TODO Make this work for mesh gradients
+
+    if (this->getStopCount() != that->getStopCount())
+        return FALSE;
+
+    if (this->hasStops() != that->hasStops())
+        return FALSE;
+
+    if (!this->getVector() || !that->getVector())
+        return FALSE;
+
+    SPStop *as = this->getVector()->getFirstStop();
+    SPStop *bs = that->getVector()->getFirstStop();
+
+    while (as && bs) {
+        if (!as->getEffectiveColor().isClose(bs->getEffectiveColor(), 0.001) ||
+                as->offset != bs->offset) {
+            return FALSE;
+        }
+        as = as->getNextStop();
+        bs = bs->getNextStop();
+    }
+
+    return TRUE;
+}
+
+
 /**
  * Return stop's color as 32bit value.
  */
@@ -378,40 +345,10 @@ sp_stop_get_rgba32(SPStop const *const stop)
  */
 
 /**
- * Registers SPMeshRow class and returns its type.
- */
-GType
-sp_meshrow_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPMeshRowClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_meshrow_class_init,
-            NULL, NULL,
-            sizeof(SPMeshRow),
-            16,
-            (GInstanceInitFunc) sp_meshrow_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPMeshRow", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-/**
  * Callback to initialize SPMeshRow vtable.
  */
 static void sp_meshrow_class_init(SPMeshRowClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
-    meshrow_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-
-    //sp_object_class->build = sp_meshrow_build;
-//    sp_object_class->set = sp_meshrow_set;
-//    sp_object_class->write = sp_meshrow_write;
 }
 
 CMeshRow::CMeshRow(SPMeshRow* meshrow) : CObject(meshrow) {
@@ -427,6 +364,8 @@ CMeshRow::~CMeshRow() {
 static void sp_meshrow_init(SPMeshRow * meshrow)
 {
     meshrow->cmeshrow = new CMeshRow(meshrow);
+
+    delete meshrow->cobject;
     meshrow->cobject = meshrow->cmeshrow;
 }
 
@@ -437,22 +376,13 @@ void CMeshRow::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 /**
  * Virtual build: set meshrow attributes from its associated XML node.
  */
-static void sp_meshrow_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPMeshRow*)object)->cmeshrow->onBuild(document, repr);
-}
 
 void CMeshRow::onSet(unsigned int key, const gchar* value) {
-
 }
 
 /**
  * Virtual set: set attribute to value.
  */
-static void sp_meshrow_set(SPObject * /*object*/, unsigned /*key*/, gchar const * /*value*/)
-{
-    // Do nothing
-}
 
 Inkscape::XML::Node* CMeshRow::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -467,51 +397,16 @@ Inkscape::XML::Node* CMeshRow::onWrite(Inkscape::XML::Document* xml_doc, Inkscap
 /**
  * Virtual write: write object attributes to repr.
  */
-static Inkscape::XML::Node *
-sp_meshrow_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPMeshRow*)object)->cmeshrow->onWrite(xml_doc, repr, flags);
-}
 
 /*
  * Mesh Patch
  */
 
 /**
- * Registers SPMeshPatch class and returns its type.
- */
-GType
-sp_meshpatch_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPMeshPatchClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_meshpatch_class_init,
-            NULL, NULL,
-            sizeof(SPMeshPatch),
-            16,
-            (GInstanceInitFunc) sp_meshpatch_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPMeshPatch", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-/**
  * Callback to initialize SPMeshPatch vtable.
  */
 static void sp_meshpatch_class_init(SPMeshPatchClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
-    meshpatch_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-
-    //sp_object_class->build = sp_meshpatch_build;
-//    sp_object_class->set = sp_meshpatch_set;
-//    sp_object_class->write = sp_meshpatch_write;
 }
 
 CMeshPatch::CMeshPatch(SPMeshPatch* meshpatch) : CObject(meshpatch) {
@@ -527,6 +422,8 @@ CMeshPatch::~CMeshPatch() {
 static void sp_meshpatch_init(SPMeshPatch * meshpatch)
 {
     meshpatch->cmeshpatch = new CMeshPatch(meshpatch);
+
+    delete meshpatch->cobject;
     meshpatch->cobject = meshpatch->cmeshpatch;
 }
 
@@ -541,10 +438,6 @@ void CMeshPatch::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 /**
  * Virtual build: set meshpatch attributes from its associated XML node.
  */
-static void sp_meshpatch_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPMeshPatch*)object)->cmeshpatch->onBuild(document, repr);
-}
 
 void CMeshPatch::onSet(unsigned int key, const gchar* value) {
 	SPMeshPatch* object = this->spmeshpatch;
@@ -568,11 +461,6 @@ void CMeshPatch::onSet(unsigned int key, const gchar* value) {
 /**
  * Virtual set: set attribute to value.
  */
-static void
-sp_meshpatch_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPMeshPatch*)object)->cmeshpatch->onSet(key, value);
-}
 
 Inkscape::XML::Node* CMeshPatch::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -587,17 +475,11 @@ Inkscape::XML::Node* CMeshPatch::onWrite(Inkscape::XML::Document* xml_doc, Inksc
 /**
  * Virtual write: write object attributes to repr.
  */
-static Inkscape::XML::Node *
-sp_meshpatch_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPMeshPatch*)object)->cmeshpatch->onWrite(xml_doc, repr, flags);
-}
 
 
 /*
  * Gradient
  */
-
 static SPPaintServerClass *gradient_parent_class;
 
 /**
@@ -624,31 +506,12 @@ GType SPGradient::getType()
     return gradient_type;
 }
 
-void spgradient_on_build(SPObject* object, SPDocument *document, Inkscape::XML::Node *repr);
-void spgradient_on_release(SPObject* object);
-void spgradient_set(SPObject* object, unsigned int key, const gchar* value);
-void spgradient_child_added(SPObject* object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-void spgradient_remove_child(SPObject* object, Inkscape::XML::Node *child);
-void spgradient_modified(SPObject* object, guint flags);
-Inkscape::XML::Node* spgradient_write(SPObject* object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-
 /**
  * SPGradient vtable initialization.
  */
 void CGradient::classInit(SPGradientClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
     gradient_parent_class = (SPPaintServerClass *)g_type_class_ref(SP_TYPE_PAINT_SERVER);
-
-    //sp_object_class->build = spgradient_on_build;
-//    sp_object_class->release = spgradient_on_release;
-//    sp_object_class->set = spgradient_set;
-//    sp_object_class->child_added = spgradient_child_added;
-//    sp_object_class->remove_child = spgradient_remove_child;
-//    sp_object_class->modified = spgradient_modified;
-//    sp_object_class->write = spgradient_write;
 }
 
 CGradient::CGradient(SPGradient* gradient) : CPaintServer(gradient) {
@@ -664,6 +527,8 @@ CGradient::~CGradient() {
 void CGradient::init(SPGradient *gr)
 {
 	gr->cgradient = new CGradient(gr);
+
+	delete gr->cpaintserver;
 	gr->cpaintserver = gr->cgradient;
 	gr->cobject = gr->cgradient;
 
@@ -725,10 +590,6 @@ void CGradient::onBuild(SPDocument *document, Inkscape::XML::Node *repr)
     document->addResource("gradient", object);
 }
 
-void spgradient_on_build(SPObject* object, SPDocument *document, Inkscape::XML::Node *repr) {
-	((SPGradient*)object)->cgradient->onBuild(document, repr);
-}
-
 /**
  * Virtual release of SPGradient members before destruction.
  */
@@ -756,10 +617,6 @@ void CGradient::onRelease()
     gradient->modified_connection.~connection();
 
     CPaintServer::onRelease();
-}
-
-void spgradient_on_release(SPObject* object) {
-	((SPGradient*)object)->cgradient->onRelease();
 }
 
 /**
@@ -851,10 +708,6 @@ void CGradient::onSet(unsigned key, gchar const *value)
     }
 }
 
-void spgradient_set(SPObject* object, unsigned int key, const gchar* value) {
-	((SPGradient*)object)->cgradient->onSet(key, value);
-}
-
 /**
  * Gets called when the gradient is (re)attached to another gradient.
  */
@@ -911,10 +764,6 @@ void CGradient::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *re
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void spgradient_child_added(SPObject* object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	((SPGradient*)object)->cgradient->onChildAdded(child, ref);
-}
-
 /**
  * Callback for remove_child event.
  */
@@ -944,10 +793,6 @@ void CGradient::onRemoveChild(Inkscape::XML::Node *child)
 
     /* Fixme: should we schedule "modified" here? */
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-void spgradient_remove_child(SPObject* object, Inkscape::XML::Node *child) {
-	((SPGradient*)object)->cgradient->onRemoveChild(child);
 }
 
 /**
@@ -992,10 +837,6 @@ void CGradient::onModified(guint flags)
         }
         g_object_unref(G_OBJECT(child));
     }
-}
-
-void spgradient_modified(SPObject* object, guint flags) {
-	((SPGradient*)object)->cgradient->onModified(flags);
 }
 
 SPStop* SPGradient::getFirstStop()
@@ -1096,10 +937,6 @@ Inkscape::XML::Node *CGradient::onWrite(Inkscape::XML::Document *xml_doc, Inksca
     }
 
     return repr;
-}
-
-Inkscape::XML::Node* spgradient_write(SPObject* object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	return ((SPGradient*)object)->cgradient->onWrite(xml_doc, repr, flags);
 }
 
 /**
@@ -1539,58 +1376,13 @@ sp_gradient_set_gs2d_matrix(SPGradient *gr, Geom::Affine const &ctm,
 /*
  * Linear Gradient
  */
-
-static void sp_lineargradient_class_init(SPLinearGradientClass *klass);
-static void sp_lineargradient_init(SPLinearGradient *lg);
-
-static void sp_lineargradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr);
-static void sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_lineargradient_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr,
-                                                    guint flags);
-static cairo_pattern_t *sp_lineargradient_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-static SPGradientClass *lg_parent_class;
-
-/**
- * Register SPLinearGradient class and return its type.
- */
-GType
-sp_lineargradient_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPLinearGradientClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_lineargradient_class_init,
-            NULL, NULL,
-            sizeof(SPLinearGradient),
-            16,
-            (GInstanceInitFunc) sp_lineargradient_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GRADIENT, "SPLinearGradient", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPLinearGradient, sp_lineargradient, SP_TYPE_GRADIENT);
 
 /**
  * SPLinearGradient vtable initialization.
  */
 static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
-
-    lg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
-
-    //sp_object_class->build = sp_lineargradient_build;
-//    sp_object_class->set = sp_lineargradient_set;
-//    sp_object_class->write = sp_lineargradient_write;
-
-    //ps_class->pattern_new = sp_lineargradient_create_pattern;
 }
 
 CLinearGradient::CLinearGradient(SPLinearGradient* lineargradient) : CGradient(lineargradient) {
@@ -1606,6 +1398,8 @@ CLinearGradient::~CLinearGradient() {
 static void sp_lineargradient_init(SPLinearGradient *lg)
 {
 	lg->clineargradient = new CLinearGradient(lg);
+
+	delete lg->cgradient;
 	lg->cgradient = lg->clineargradient;
 	lg->cpaintserver = lg->clineargradient;
 	lg->cobject = lg->clineargradient;
@@ -1628,15 +1422,8 @@ void CLinearGradient::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 /**
- * Callback: set attributes from associated repr.
+ * Callback: set attribute.
  */
-static void sp_lineargradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr)
-{
-	((SPLinearGradient*)object)->clineargradient->onBuild(document, repr);
-}
-
 void CLinearGradient::onSet(unsigned int key, const gchar* value) {
 	SPLinearGradient* object = this->splineargradient;
 
@@ -1666,14 +1453,8 @@ void CLinearGradient::onSet(unsigned int key, const gchar* value) {
 }
 
 /**
- * Callback: set attribute.
+ * Callback: write attributes to associated repr.
  */
-static void
-sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPLinearGradient*)object)->clineargradient->onSet(key, value);
-}
-
 Inkscape::XML::Node* CLinearGradient::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPLinearGradient* object = this->splineargradient;
 
@@ -1697,14 +1478,6 @@ Inkscape::XML::Node* CLinearGradient::onWrite(Inkscape::XML::Document *xml_doc, 
     return repr;
 }
 
-/**
- * Callback: write attributes to associated repr.
- */
-static Inkscape::XML::Node *
-sp_lineargradient_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPLinearGradient*)object)->clineargradient->onWrite(xml_doc, repr, flags);
-}
 
 /**
  * Directly set properties of linear gradient and request modified.
@@ -1729,58 +1502,13 @@ sp_lineargradient_set_position(SPLinearGradient *lg,
 /*
  * Radial Gradient
  */
-
-static void sp_radialgradient_class_init(SPRadialGradientClass *klass);
-static void sp_radialgradient_init(SPRadialGradient *rg);
-
-static void sp_radialgradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr);
-static void sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_radialgradient_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr,
-                                                    guint flags);
-static cairo_pattern_t *sp_radialgradient_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-static SPGradientClass *rg_parent_class;
-
-/**
- * Register SPRadialGradient class and return its type.
- */
-GType
-sp_radialgradient_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPRadialGradientClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_radialgradient_class_init,
-            NULL, NULL,
-            sizeof(SPRadialGradient),
-            16,
-            (GInstanceInitFunc) sp_radialgradient_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GRADIENT, "SPRadialGradient", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPRadialGradient, sp_radialgradient, SP_TYPE_GRADIENT);
 
 /**
  * SPRadialGradient vtable initialization.
  */
 static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
-
-    rg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
-
-    //sp_object_class->build = sp_radialgradient_build;
-//    sp_object_class->set = sp_radialgradient_set;
-//    sp_object_class->write = sp_radialgradient_write;
-
-    //ps_class->pattern_new = sp_radialgradient_create_pattern;
 }
 
 CRadialGradient::CRadialGradient(SPRadialGradient* radialgradient) : CGradient(radialgradient) {
@@ -1797,6 +1525,8 @@ static void
 sp_radialgradient_init(SPRadialGradient *rg)
 {
 	rg->cradialgradient = new CRadialGradient(rg);
+
+	delete rg->cgradient;
 	rg->cgradient = rg->cradialgradient;
 	rg->cpaintserver = rg->cradialgradient;
 	rg->cobject = rg->cradialgradient;
@@ -1808,6 +1538,9 @@ sp_radialgradient_init(SPRadialGradient *rg)
     rg->fy.unset(SVGLength::PERCENT, 0.5, 0.5);
 }
 
+/**
+ * Set radial gradient attributes from associated repr.
+ */
 void CRadialGradient::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPRadialGradient* object = this->spradialgradient;
 
@@ -1821,14 +1554,8 @@ void CRadialGradient::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 /**
- * Set radial gradient attributes from associated repr.
+ * Set radial gradient attribute.
  */
-static void
-sp_radialgradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPRadialGradient*)object)->cradialgradient->onBuild(document, repr);
-}
-
 void CRadialGradient::onSet(unsigned key, gchar const *value) {
 	SPRadialGradient* object = this->spradialgradient;
 
@@ -1880,14 +1607,8 @@ void CRadialGradient::onSet(unsigned key, gchar const *value) {
 }
 
 /**
- * Set radial gradient attribute.
+ * Write radial gradient attributes to associated repr.
  */
-static void
-sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPRadialGradient*)object)->cradialgradient->onSet(key, value);
-}
-
 Inkscape::XML::Node* CRadialGradient::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPRadialGradient* object = this->spradialgradient;
 
@@ -1906,15 +1627,6 @@ Inkscape::XML::Node* CRadialGradient::onWrite(Inkscape::XML::Document *xml_doc, 
     CGradient::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-/**
- * Write radial gradient attributes to associated repr.
- */
-static Inkscape::XML::Node *
-sp_radialgradient_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPRadialGradient*)object)->cradialgradient->onWrite(xml_doc, repr, flags);
 }
 
 /**
@@ -1943,41 +1655,7 @@ sp_radialgradient_set_position(SPRadialGradient *rg,
 
 //#define MESH_DEBUG
 
-static void sp_meshgradient_class_init(SPMeshGradientClass *klass);
-static void sp_meshgradient_init(SPMeshGradient *mg);
-
-static void sp_meshgradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr);
-static void sp_meshgradient_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_meshgradient_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr,
-                                                    guint flags);
-static cairo_pattern_t *sp_meshgradient_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-static SPGradientClass *mg_parent_class;
-
-/**
- * Register SPMeshGradient class and return its type.
- */
-GType
-sp_meshgradient_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPMeshGradientClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_meshgradient_class_init,
-            NULL, NULL,
-            sizeof(SPMeshGradient),
-            16,
-            (GInstanceInitFunc) sp_meshgradient_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GRADIENT, "SPMeshGradient", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPMeshGradient, sp_meshgradient, SP_TYPE_GRADIENT);
 
 /**
  * SPMeshGradient vtable initialization.
@@ -1987,16 +1665,6 @@ static void sp_meshgradient_class_init(SPMeshGradientClass *klass)
 #ifdef MESH_DEBUG
     std::cout << "sp_meshgradient_class_init()" << std::endl;
 #endif
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
-
-    mg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
-
-    //sp_object_class->build = sp_meshgradient_build;
-//    sp_object_class->set = sp_meshgradient_set;
-//    sp_object_class->write = sp_meshgradient_write;
-
-    //ps_class->pattern_new = sp_meshgradient_create_pattern;
 }
 
 CMeshGradient::CMeshGradient(SPMeshGradient* meshgradient) : CGradient(meshgradient) {
@@ -2013,6 +1681,8 @@ static void
 sp_meshgradient_init(SPMeshGradient *mg)
 {
 	mg->cmeshgradient = new CMeshGradient(mg);
+
+	delete mg->cgradient;
 	mg->cgradient = mg->cmeshgradient;
 	mg->cpaintserver = mg->cmeshgradient;
 	mg->cobject = mg->cmeshgradient;
@@ -2032,14 +1702,6 @@ void CMeshGradient::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "y" );
 }
 
-/**
- * Set mesh gradient attributes from associated repr.
- */
-static void
-sp_meshgradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPMeshGradient*)object)->cmeshgradient->onBuild(document, repr);
-}
 
 void CMeshGradient::onSet(unsigned key, gchar const *value) {
 	SPMeshGradient* object = this->spmeshgradient;
@@ -2066,14 +1728,8 @@ void CMeshGradient::onSet(unsigned key, gchar const *value) {
 }
 
 /**
- * Set mesh gradient attribute.
+ * Write mesh gradient attributes to associated repr.
  */
-static void
-sp_meshgradient_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPMeshGradient*)object)->cmeshgradient->onSet(key, value);
-}
-
 Inkscape::XML::Node* CMeshGradient::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPMeshGradient* object = this->spmeshgradient;
 
@@ -2092,15 +1748,6 @@ Inkscape::XML::Node* CMeshGradient::onWrite(Inkscape::XML::Document *xml_doc, In
     CGradient::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-/**
- * Write mesh gradient attributes to associated repr.
- */
-static Inkscape::XML::Node *
-sp_meshgradient_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPMeshGradient*)object)->cmeshgradient->onWrite(xml_doc, repr, flags);
 }
 
 /**
@@ -2173,13 +1820,32 @@ cairo_pattern_t* CRadialGradient::onCreatePattern(cairo_t *ct, Geom::OptRect con
     double scale = 1.0;
     double tolerance = cairo_get_tolerance(ct);
 
+    // NOTE: SVG2 will allow the use of a focus circle which can
+    // have its center outside the first circle.
+
     // code below suggested by Cairo devs to overcome tolerance problems
     // more: https://bugs.freedesktop.org/show_bug.cgi?id=40918
-    Geom::Point d = focus - center;
-    if (d.length() + tolerance > radius) {
-        scale = radius / d.length();
 
-        double dx = d.x(), dy = d.y();
+    // Corrected for
+    // https://bugs.launchpad.net/inkscape/+bug/970355
+
+    Geom::Affine gs2user = gr->gradientTransform;
+    Geom::Scale  gs2user_scale;
+
+    if (gr->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX && bbox) {
+        Geom::Affine bbox2user(bbox->width(), 0, 0, bbox->height(), bbox->left(), bbox->top());
+        gs2user *= bbox2user;
+        gs2user_scale = Geom::Scale( gs2user[0], gs2user[3] );
+    }
+
+    Geom::Point d = focus - center;
+    Geom::Point d_user = d * gs2user_scale;
+    Geom::Point r_user( radius, 0 );
+    r_user *= gs2user_scale;
+
+    if (d_user.length() + tolerance > r_user.length()) {
+        scale = r_user.length() / d_user.length();
+        double dx = d_user.x(), dy = d_user.y();
         cairo_user_to_device_distance(ct, &dx, &dy);
         if (!Geom::are_near(dx, 0, tolerance) ||
             !Geom::are_near(dy, 0, tolerance))
@@ -2196,17 +1862,6 @@ cairo_pattern_t* CRadialGradient::onCreatePattern(cairo_t *ct, Geom::OptRect con
 
     return cp;
 }
-
-static cairo_pattern_t *
-sp_radialgradient_create_pattern(SPPaintServer *ps,
-                                 cairo_t *ct,
-                                 Geom::OptRect const &bbox,
-                                 double opacity)
-{
-	return ((SPRadialGradient*)ps)->cradialgradient->onCreatePattern(ct, bbox, opacity);
-}
-
-
 
 cairo_pattern_t* CMeshGradient::onCreatePattern(cairo_t *ct,
 #if defined(MESH_DEBUG) || (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 4))
@@ -2238,15 +1893,15 @@ cairo_pattern_t* CMeshGradient::onCreatePattern(cairo_t *ct,
 
     cp = cairo_pattern_create_mesh();
 
-    for( uint i = 0; i < array->patch_rows(); ++i ) {
-        for( uint j = 0; j < array->patch_columns(); ++j ) {
+    for( unsigned int i = 0; i < array->patch_rows(); ++i ) {
+        for( unsigned int j = 0; j < array->patch_columns(); ++j ) {
 
             SPMeshPatchI patch( &(array->nodes), i, j );
 
             cairo_mesh_pattern_begin_patch( cp );
             cairo_mesh_pattern_move_to( cp, patch.getPoint( 0, 0 )[X], patch.getPoint( 0, 0 )[Y] ); 
 
-            for( uint k = 0; k < 4; ++k ) {
+            for( unsigned int k = 0; k < 4; ++k ) {
 #ifdef DEBUG_MESH
                 std::cout << i << " " << j << " "
                           << patch.getPathType( k ) << "  (";
@@ -2332,10 +1987,6 @@ cairo_pattern_t* CMeshGradient::onCreatePattern(cairo_t *ct,
     return cp;
 }
 
-static cairo_pattern_t *sp_meshgradient_create_pattern(SPPaintServer *ps, cairo_t * ct, Geom::OptRect const &bbox, double opacity) {
-	return ((SPMeshGradient*)ps)->cmeshgradient->onCreatePattern(ct, bbox, opacity);
-}
-
 cairo_pattern_t* CLinearGradient::onCreatePattern(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
 	SPLinearGradient* ps = this->splineargradient;
 
@@ -2351,15 +2002,6 @@ cairo_pattern_t* CLinearGradient::onCreatePattern(cairo_t *ct, Geom::OptRect con
     sp_gradient_pattern_common_setup(cp, gr, bbox, opacity);
 
     return cp;
-}
-
-static cairo_pattern_t *
-sp_lineargradient_create_pattern(SPPaintServer *ps,
-                                 cairo_t *ct,
-                                 Geom::OptRect const &bbox,
-                                 double opacity)
-{
-	return ((SPLinearGradient*)ps)->clineargradient->onCreatePattern(ct, bbox, opacity);
 }
 
 cairo_pattern_t *

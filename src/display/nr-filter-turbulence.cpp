@@ -283,7 +283,12 @@ private:
     // other constants
     static int const BSize = 0x100;
     static int const BMask = 0xff;
+
+#if __cplusplus < 201103L
     static double const PerlinOffset = 4096.0;
+#else
+    static double constexpr PerlinOffset = 4096.0;
+#endif
 
     Geom::Rect _tile;
     Geom::Point _baseFreq;
@@ -374,6 +379,11 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
 {
     cairo_surface_t *input = slot.getcairo(_input);
     cairo_surface_t *out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_COLOR_ALPHA);
+
+    // color_interpolation_filter is determined by CSS value (see spec. Turbulence).
+    if( _style ) {
+        set_cairo_surface_ci(out, (SPColorInterpolation)_style->color_interpolation_filters.computed );
+    }
 
     if (!gen->ready()) {
         Geom::Point ta(fTileX, fTileY);

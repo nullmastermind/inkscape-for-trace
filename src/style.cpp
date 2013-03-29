@@ -63,7 +63,7 @@ using std::vector;
 
 #define SP_CSS_FONT_SIZE_DEFAULT 12.0;
 
-class SPStyleEnum;
+struct SPStyleEnum;
 
 /*#########################
 ## FORWARD DECLARATIONS
@@ -677,9 +677,9 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         }
     }
     /* color interpolation */
-    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation, repr, "color_interpolation", enum_color_interpolation, true);
+    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation, repr, "color-interpolation", enum_color_interpolation, true);
     /* color interpolation filters*/
-    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation_filters, repr, "color_interpolation_filters", enum_color_interpolation, true);
+    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation_filters, repr, "color-interpolation-filters", enum_color_interpolation, true);
     /* fill */
     if (!style->fill.set) {
         val = repr->attribute("fill");
@@ -1234,11 +1234,7 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             }
             break;
         case SP_PROP_COLOR_INTERPOLATION_FILTERS:
-            // We read it but issue warning
             SPS_READ_IENUM_IF_UNSET(&style->color_interpolation_filters, val, enum_color_interpolation, true);
-            if( style->color_interpolation_filters.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
-                g_warning("Inkscape currently only supports color-interpolation-filters = sRGB");
-            }
             break;
         case SP_PROP_COLOR_PROFILE:
             g_warning("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
@@ -2470,7 +2466,7 @@ sp_style_get_css_unit_string(int unit)
  * Convert a size in pixels into another CSS unit size
  */
 double
-sp_style_get_css_font_size_units(double size, int unit)
+sp_style_css_size_px_to_units(double size, int unit)
 {
     double unit_size = size;
     switch (unit) {
@@ -2492,6 +2488,19 @@ sp_style_get_css_font_size_units(double size, int unit)
     }
 
     return unit_size;
+}
+
+/*
+ * Convert a size in a CSS unit size to pixels
+ */
+double
+sp_style_css_size_units_to_px(double size, int unit)
+{
+    if (unit == SP_CSS_UNIT_PX) {
+        return size;
+    }
+    //g_message("sp_style_css_size_units_to_px %f %d = %f px", size, unit, out);
+    return size * (size / sp_style_css_size_px_to_units(size, unit));;
 }
 /**
  *
@@ -3868,22 +3877,22 @@ static gint
 sp_style_write_istring(gchar *p, gint const len, gchar const *const key,
                        SPIString const *const val, SPIString const *const base, guint const flags)
 {
+    gint res = 0;
     if ((flags & SP_STYLE_FLAG_ALWAYS)
         || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
         || ((flags & SP_STYLE_FLAG_IFDIFF) && val->set
             && (!base->set || strcmp(val->value, base->value))))
     {
         if (val->inherit) {
-            return g_snprintf(p, len, "%s:inherit;", key);
+            res = g_snprintf(p, len, "%s:inherit;", key);
         } else {
-            gchar *val_quoted = css2_escape_quote(val->value);
-            if (val_quoted) {
-                return g_snprintf(p, len, "%s:%s;", key, val_quoted);
-                g_free (val_quoted);
+            Glib::ustring val_quoted = css2_escape_quote(val->value);
+            if (~val_quoted.empty()) {
+                res = g_snprintf(p, len, "%s:%s;", key, val_quoted.c_str());
             }
         }
     }
-    return 0;
+    return res;
 }
 
 
@@ -4220,7 +4229,10 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
             Inkscape::CSSOStringStream os;
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-            os << key << ":" << sp_style_get_css_font_size_units(val->computed, unit) << sp_style_get_css_unit_string(unit) << ";";
+            if (prefs->getBool("/options/font/textOutputPx", true)) {
+                unit = SP_CSS_UNIT_PX;
+            }
+            os << key << ":" << sp_style_css_size_px_to_units(val->computed, unit) << sp_style_get_css_unit_string(unit) << ";";
             return g_strlcpy(p, os.str().c_str(), len);
         } else if (val->type == SP_FONT_SIZE_PERCENTAGE) {
             Inkscape::CSSOStringStream os;
@@ -4551,7 +4563,7 @@ sp_css_attr_unset_text(SPCSSAttr *css)
     return css;
 }
 
-bool
+static bool
 is_url(char const *p)
 {
     if (p == NULL)
@@ -4591,7 +4603,7 @@ sp_css_attr_unset_uris(SPCSSAttr *css)
 /**
  * Scale a single-value property.
  */
-void
+static void
 sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
                                   double ex, bool only_with_units = false)
 {
@@ -4615,7 +4627,7 @@ sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
 /**
  * Scale a list-of-values property.
  */
-void
+static void
 sp_css_attr_scale_property_list(SPCSSAttr *css, gchar const *property, double ex)
 {
     gchar const *string = sp_repr_css_property(css, property, NULL);
@@ -4693,8 +4705,7 @@ attribute_unquote(gchar const *val)
 /**
  * Quote and/or escape string for writing to CSS (style=). Returned value must be g_free'd.
  */
-gchar *
-css2_escape_quote(gchar const *val) {
+Glib::ustring css2_escape_quote(gchar const *val) {
 
     Glib::ustring t;
     bool quote = false;
@@ -4738,7 +4749,7 @@ css2_escape_quote(gchar const *val) {
         t.push_back('\'');
     }
 
-    return (t.empty() ? NULL : g_strdup (t.c_str()));
+    return t;
 }
 
 /*

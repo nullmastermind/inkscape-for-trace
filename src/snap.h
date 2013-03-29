@@ -31,7 +31,7 @@ enum SPGuideDragType { // used both here and in desktop-events.cpp
 };
 
 class SPGuide;
-class SPNamedView;
+struct SPNamedView;
 
 /**
  * Class to coordinate snapping operations.
@@ -93,7 +93,7 @@ public:
      *
      * @return true if one of the snappers will try to snap to something.
      */
-    bool someSnapperMightSnap() const;
+    bool someSnapperMightSnap(bool immediately = true) const;
 
     /**
      * @return true if one of the grids might be snapped to.

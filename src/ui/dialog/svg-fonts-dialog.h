@@ -20,15 +20,22 @@
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/scale.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 
 #include "attributes.h"
 #include "xml/helper-observer.h"
 
-class SPGlyph;
-class SPGlyphKerning;
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Scale;
+#else
+class HScale;
+#endif
+}
+
+struct SPGlyph;
+struct SPGlyphKerning;
 class SvgFont;
 
 class SvgFontDrawingArea : Gtk::DrawingArea{
@@ -210,7 +217,12 @@ private:
     GlyphComboBox first_glyph, second_glyph;
     SPGlyphKerning* kerning_pair;
     Inkscape::UI::Widget::SpinButton setwidth_spin;
-    Gtk::HScale kerning_slider;
+
+#if WITH_GTKMM_3_0
+    Gtk::Scale* kerning_slider;
+#else
+    Gtk::HScale* kerning_slider;
+#endif
 
     class EntryWidget : public Gtk::HBox
         {

@@ -17,6 +17,8 @@
 #include "svg/svg-length.h"
 #include "sp-shape.h"
 
+G_BEGIN_DECLS
+
 /* Common parent class */
 
 #define SP_TYPE_GENERICELLIPSE (sp_genericellipse_get_type ())
@@ -25,8 +27,6 @@
 #define SP_IS_GENERICELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GENERICELLIPSE))
 #define SP_IS_GENERICELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GENERICELLIPSE))
 
-class SPGenericEllipse;
-class SPGenericEllipseClass;
 class CGenericEllipse;
 
 class SPGenericEllipse : public SPShape {
@@ -185,5 +185,7 @@ protected:
 GType sp_arc_get_type (void);
 void sp_arc_position_set (SPArc * arc, gdouble x, gdouble y, gdouble rx, gdouble ry);
 Geom::Point sp_arc_get_xy (SPArc *ge, gdouble arg);
+
+G_END_DECLS
 
 #endif

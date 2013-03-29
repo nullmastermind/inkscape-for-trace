@@ -34,55 +34,14 @@ struct SPMaskView {
 	Geom::OptRect bbox;
 };
 
-static void sp_mask_class_init (SPMaskClass *klass);
-static void sp_mask_init (SPMask *mask);
-
-static void sp_mask_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_mask_release (SPObject * object);
-static void sp_mask_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_mask_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-static void sp_mask_update (SPObject *object, SPCtx *ctx, guint flags);
-static void sp_mask_modified (SPObject *object, guint flags);
-static Inkscape::XML::Node *sp_mask_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
 SPMaskView *sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 SPMaskView *sp_mask_view_list_remove (SPMaskView *list, SPMaskView *view);
 
-static SPObjectGroupClass *parent_class;
-
-GType
-sp_mask_get_type (void)
-{
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPMaskClass),
-			NULL, NULL,
-			(GClassInitFunc) sp_mask_class_init,
-			NULL, NULL,
-			sizeof (SPMask),
-			16,
-			(GInstanceInitFunc) sp_mask_init,
-			NULL,	/* value_table */
-		};
-		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPMask", &info, (GTypeFlags)0);
-	}
-	return type;
-}
+G_DEFINE_TYPE(SPMask, sp_mask, SP_TYPE_OBJECTGROUP);
 
 static void
 sp_mask_class_init (SPMaskClass *klass)
 {
-	parent_class = (SPObjectGroupClass*) g_type_class_ref (SP_TYPE_OBJECTGROUP);
-
-	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-	//sp_object_class->build = sp_mask_build;
-//	sp_object_class->release = sp_mask_release;
-//	sp_object_class->set = sp_mask_set;
-//	sp_object_class->child_added = sp_mask_child_added;
-//	sp_object_class->update = sp_mask_update;
-//	sp_object_class->modified = sp_mask_modified;
-//	sp_object_class->write = sp_mask_write;
 }
 
 CMask::CMask(SPMask* mask) : CObjectGroup(mask) {
@@ -96,6 +55,8 @@ static void
 sp_mask_init (SPMask *mask)
 {
 	mask->cmask = new CMask(mask);
+
+	delete mask->cobjectgroup;
 	mask->cobjectgroup = mask->cmask;
 	mask->cobject = mask->cmask;
 
@@ -120,12 +81,6 @@ void CMask::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
 	doc->addResource("mask", object);
 }
 
-static void
-sp_mask_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPMask*)object)->cmask->onBuild(document, repr);
-}
-
 void CMask::onRelease() {
 	SPMask* object = this->spmask;
 
@@ -141,11 +96,6 @@ void CMask::onRelease() {
     }
 
     CObjectGroup::onRelease();
-}
-
-static void sp_mask_release (SPObject * object)
-{
-	((SPMask*)object)->cmask->onRelease();
 }
 
 void CMask::onSet(unsigned int key, const gchar* value) {
@@ -186,12 +136,6 @@ void CMask::onSet(unsigned int key, const gchar* value) {
 	}
 }
 
-static void
-sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPMask*)object)->cmask->onSet(key, value);
-}
-
 void CMask::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	SPMask* object = this->spmask;
 
@@ -203,7 +147,7 @@ void CMask::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	if (SP_IS_ITEM (ochild)) {
 		SPMask *cp = SP_MASK (object);
 		for (SPMaskView *v = cp->display; v != NULL; v = v->next) {
-			Inkscape::DrawingItem *ac = SP_ITEM (ochild)->invoke_show (v->arenaitem->drawing(),
+			Inkscape::DrawingItem *ac = SP_ITEM (ochild)->invoke_show (							       v->arenaitem->drawing(),
 							       v->key,
 							       SP_ITEM_REFERENCE_FLAGS);
 			if (ac) {
@@ -213,11 +157,6 @@ void CMask::onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	}
 }
 
-static void
-sp_mask_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-	((SPMask*)object)->cmask->onChildAdded(child, ref);
-}
 
 void CMask::onUpdate(SPCtx* ctx, unsigned int flags) {
 	SPMask* object = this->spmask;
@@ -257,11 +196,6 @@ void CMask::onUpdate(SPCtx* ctx, unsigned int flags) {
     }
 }
 
-static void sp_mask_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPMask*)object)->cmask->onUpdate(ctx, flags);
-}
-
 void CMask::onModified(unsigned int flags) {
 	SPMask* object = this->spmask;
 
@@ -288,11 +222,6 @@ void CMask::onModified(unsigned int flags) {
     }
 }
 
-static void sp_mask_modified(SPObject *object, guint flags)
-{
-	((SPMask*)object)->cmask->onModified(flags);
-}
-
 Inkscape::XML::Node* CMask::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = xml_doc->createElement("svg:mask");
@@ -301,12 +230,6 @@ Inkscape::XML::Node* CMask::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::
 	CObjectGroup::onWrite(xml_doc, repr, flags);
 
 	return repr;
-}
-
-static Inkscape::XML::Node *
-sp_mask_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPMask*)object)->cmask->onWrite(xml_doc, repr, flags);
 }
 
 // Create a mask element (using passed elements), add it to <defs>
@@ -340,9 +263,6 @@ sp_mask_create (GSList *reprs, SPDocument *document, Geom::Affine const* applyTr
     Inkscape::GC::release(repr);
     return mask_id;
 }
-
-
-// CPPIFY: These methods are virtual in SPItem. So wouldn't it be better to derive SPMask from SPItem?
 
 Inkscape::DrawingItem *sp_mask_show(SPMask *mask, Inkscape::Drawing &drawing, unsigned int key)
 {

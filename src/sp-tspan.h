@@ -9,13 +9,13 @@
 #include "sp-item.h"
 #include "text-tag-attributes.h"
 
+G_BEGIN_DECLS
 
 #define SP_TYPE_TSPAN (sp_tspan_get_type())
 #define SP_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_TSPAN, SPTSpan))
 #define SP_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_TSPAN, SPTSpanClass))
 #define SP_IS_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_TSPAN))
 #define SP_IS_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TSPAN))
-
 
 enum {
     SP_TSPAN_ROLE_UNSPECIFIED,
@@ -37,6 +37,7 @@ struct SPTSpanClass {
     SPItemClass parent_class;
 };
 
+GType sp_tspan_get_type() G_GNUC_CONST;
 
 class CTSpan : public CItem {
 public:
@@ -57,9 +58,7 @@ protected:
 	SPTSpan* sptspan;
 };
 
-
-GType sp_tspan_get_type();
-
+G_END_DECLS
 
 #endif /* !INKSCAPE_SP_TSPAN_H */
 

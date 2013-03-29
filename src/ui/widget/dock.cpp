@@ -54,6 +54,17 @@ Dock::Dock(Gtk::Orientation orientation)
 {
     gdl_dock_bar_set_orientation(_gdl_dock_bar, static_cast<GtkOrientation>(orientation));
 
+#if WITH_GTKMM_3_0
+    switch(orientation) {
+        case Gtk::ORIENTATION_VERTICAL:
+            _dock_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+            break;
+        case Gtk::ORIENTATION_HORIZONTAL:
+            _dock_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    }
+    
+    _paned = Gtk::manage(new Gtk::Paned(orientation));
+#else
     switch (orientation) {
         case Gtk::ORIENTATION_VERTICAL:
             _dock_box = Gtk::manage(new Gtk::HBox());
@@ -63,6 +74,7 @@ Dock::Dock(Gtk::Orientation orientation)
             _dock_box = Gtk::manage(new Gtk::VBox());
             _paned = Gtk::manage(new Gtk::HPaned());
     }
+#endif
 
     _scrolled_window->add(*_dock_box);
     _scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
@@ -81,9 +93,15 @@ Dock::Dock(Gtk::Orientation orientation)
         static_cast<GdlSwitcherStyle>(prefs->getIntLimited("/options/dock/switcherstyle",
                                                                       GDL_SWITCHER_STYLE_BOTH, 0, 4));
 
-    g_object_set (GDL_DOCK_OBJECT(_gdl_dock)->master,
-                  "switcher-style", gdl_switcher_style,
-                  NULL);
+    GdlDockMaster* master = NULL;
+    
+    g_object_get(GDL_DOCK_OBJECT(_gdl_dock),
+            "master", &master,
+            NULL);
+    
+    g_object_set(master,
+            "switcher-style", gdl_switcher_style,
+            NULL);
 
     GdlDockBarStyle gdl_dock_bar_style =
         static_cast<GdlDockBarStyle>(prefs->getIntLimited("/options/dock/dockbarstyle",

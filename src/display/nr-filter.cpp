@@ -38,6 +38,7 @@
 #include "display/nr-filter-tile.h"
 #include "display/nr-filter-turbulence.h"
 
+#include "display/cairo-utils.h"
 #include "display/drawing.h"
 #include "display/drawing-item.h"
 #include "display/drawing-context.h"
@@ -159,6 +160,10 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
 
     Geom::Point origin = graphic.targetLogicalBounds().min();
     cairo_surface_t *result = slot.get_result(_output_slot);
+
+    // Assume for the moment that we paint the filter in sRGB
+    set_cairo_surface_ci( result, SP_CSS_COLOR_INTERPOLATION_SRGB );
+
     graphic.setSource(result, origin[Geom::X], origin[Geom::Y]);
     graphic.setOperator(CAIRO_OPERATOR_SOURCE);
     graphic.paint();

@@ -13,6 +13,7 @@
 #include <cstring>
 #include <sstream>
 #include <glibmm/fileutils.h>
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -489,21 +490,32 @@ void Preferences::setString(Glib::ustring const &pref_path, Glib::ustring const 
 
 void Preferences::setStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
 {
-    gchar *css_str = sp_repr_css_write_string(style);
-    _setRawValue(pref_path, css_str);
-    g_free(css_str);
+    Glib::ustring css_str;
+    sp_repr_css_write_string(style, css_str);
+    _setRawValue(pref_path, css_str.c_str());
 }
 
 void Preferences::mergeStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
 {
     SPCSSAttr *current = getStyle(pref_path);
     sp_repr_css_merge(current, style);
-    gchar *css_str = sp_repr_css_write_string(current);
-    _setRawValue(pref_path, css_str);
-    g_free(css_str);
+    Glib::ustring css_str;
+    sp_repr_css_write_string(current, css_str);
+    _setRawValue(pref_path, css_str.c_str());
     sp_repr_css_attr_unref(current);
 }
 
+/**
+ *  Remove an entry
+ *  Make sure observers have been removed before calling
+ */
+void Preferences::remove(Glib::ustring const &pref_path)
+{
+    Inkscape::XML::Node *node = _getNode(pref_path, false);
+    if (node && node->parent()) {
+        node->parent()->removeChild(node);
+    }
+}
 
 /**
  * Class that holds additional information for registered Observers.

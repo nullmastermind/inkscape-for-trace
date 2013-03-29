@@ -407,6 +407,7 @@ static gchar const * ui_descr =
         "  <toolbar name='CalligraphyToolbar'>"
         "    <separator />"
         "    <toolitem action='SetProfileAction'/>"
+        "    <toolitem action='ProfileEditAction'/>"
         "    <separator />"
         "    <toolitem action='CalligraphyWidthAction' />"
         "    <toolitem action='PressureAction' />"
@@ -526,7 +527,6 @@ static gchar const * ui_descr =
         "  </toolbar>"
 
         "  <toolbar name='ConnectorToolbar'>"
-//        "    <toolitem action='ConnectorEditModeAction' />"
         "    <toolitem action='ConnectorAvoidAction' />"
         "    <toolitem action='ConnectorIgnoreAction' />"
         "    <toolitem action='ConnectorOrthogonalAction' />"
@@ -536,8 +536,6 @@ static gchar const * ui_descr =
         "    <toolitem action='ConnectorLengthAction' />"
         "    <toolitem action='ConnectorDirectedAction' />"
         "    <toolitem action='ConnectorOverlapAction' />"
-//        "    <toolitem action='ConnectorNewConnPointAction' />"
-//        "    <toolitem action='ConnectorRemoveConnPointAction' />"
         "  </toolbar>"
 
         "</ui>"
@@ -938,47 +936,19 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
 }
 
 
-static void handlebox_detached(GtkHandleBox* /*handlebox*/, GtkWidget* widget, gpointer /*userData*/)
-{
-	GtkAllocation alloc;
-	gtk_widget_get_allocation(widget, &alloc);
-    gtk_widget_set_size_request( widget,
-                                 alloc.width,
-                                 alloc.height );
-}
-
-static void handlebox_attached(GtkHandleBox* /*handlebox*/, GtkWidget* widget, gpointer /*userData*/)
-{
-    gtk_widget_set_size_request( widget, -1, -1 );
-}
-
-static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType handlePos )
+static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType /*handlePos*/ )
 {
     g_object_set_data(G_OBJECT(tb), "desktop", NULL);
 
     gtk_widget_set_sensitive(tb, FALSE);
 
-    GtkWidget *hb = 0;
-    gboolean forceFloatAllowed = Inkscape::Preferences::get()->getBool("/options/workarounds/floatallowed", false);
-    if ( UXManager::getInstance()->isFloatWindowProblem() && !forceFloatAllowed ) {
-        hb = gtk_event_box_new(); // A simple, neutral container.
-    } else {
-        hb = gtk_handle_box_new();
-        gtk_handle_box_set_handle_position(GTK_HANDLE_BOX(hb), handlePos);
-        gtk_handle_box_set_shadow_type(GTK_HANDLE_BOX(hb), GTK_SHADOW_OUT);
-        gtk_handle_box_set_snap_edge(GTK_HANDLE_BOX(hb), GTK_POS_LEFT);
-    }
+    GtkWidget *hb = gtk_event_box_new(); // A simple, neutral container.
 
     gtk_container_add(GTK_CONTAINER(hb), tb);
     gtk_widget_show(GTK_WIDGET(tb));
 
     sigc::connection* conn = new sigc::connection;
     g_object_set_data(G_OBJECT(hb), "event_context_connection", conn);
-
-    if ( GTK_IS_HANDLE_BOX(hb) ) {
-        g_signal_connect(G_OBJECT(hb), "child_detached", G_CALLBACK(handlebox_detached), static_cast<gpointer>(0));
-        g_signal_connect(G_OBJECT(hb), "child_attached", G_CALLBACK(handlebox_attached), static_cast<gpointer>(0));
-    }
 
     gpointer val = GINT_TO_POINTER(id);
     g_object_set_data(G_OBJECT(hb), BAR_ID_KEY, val);
@@ -1195,14 +1165,8 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     Inkscape::IconSize toolboxSize = ToolboxFactory::prefToSize(sizePref);
     gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
 
-    if (GTK_IS_HANDLE_BOX(toolbox)) {
-        // g_message("GRABBING ORIENTATION   [%s]", toolbarName);
-        GtkPositionType pos = gtk_handle_box_get_handle_position(GTK_HANDLE_BOX(toolbox));
-        orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    } else {
-        GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
-        orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    }
+    GtkPositionType pos = static_cast<GtkPositionType>(GPOINTER_TO_INT(g_object_get_data( G_OBJECT(toolbox), HANDLE_POS_MARK )));
+    orientation = ((pos == GTK_POS_LEFT) || (pos == GTK_POS_RIGHT)) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
     gtk_orientable_set_orientation (GTK_ORIENTABLE(toolBar), orientation);
     gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolBar), TRUE);
 
@@ -1228,7 +1192,6 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
 #endif
 
     GtkPositionType pos = (orientation == GTK_ORIENTATION_HORIZONTAL) ? GTK_POS_LEFT : GTK_POS_TOP;
-    GtkHandleBox* handleBox = 0;
 
     if (GTK_IS_BIN(toolbox)) {
 #if DUMP_DETAILS
@@ -1277,9 +1240,6 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
                         if (GTK_IS_TOOLBAR(child2)) {
                             GtkToolbar* childBar = GTK_TOOLBAR(child2);
                             gtk_orientable_set_orientation(GTK_ORIENTABLE(childBar), orientation);
-                            if (GTK_IS_HANDLE_BOX(toolbox)) {
-                                handleBox = GTK_HANDLE_BOX(toolbox);
-                            }
                         } else {
                             g_message("need to add dynamic switch");
                         }
@@ -1287,24 +1247,13 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
                     g_list_free(children);
                 } else {
                     // The call is being made before the toolbox proper has been setup.
-                    if (GTK_IS_HANDLE_BOX(toolbox)) {
-                        handleBox = GTK_HANDLE_BOX(toolbox);
-                    } else {
-                        g_object_set_data(G_OBJECT(toolbox), HANDLE_POS_MARK, GINT_TO_POINTER(pos));
-                    }
+                    g_object_set_data(G_OBJECT(toolbox), HANDLE_POS_MARK, GINT_TO_POINTER(pos));
                 }
             } else if (GTK_IS_TOOLBAR(child)) {
                 GtkToolbar* toolbar = GTK_TOOLBAR(child);
                 gtk_orientable_set_orientation( GTK_ORIENTABLE(toolbar), orientation );
-                if (GTK_IS_HANDLE_BOX(toolbox)) {
-                    handleBox = GTK_HANDLE_BOX(toolbox);
-                }
             }
         }
-    }
-
-    if (handleBox) {
-        gtk_handle_box_set_handle_position(handleBox, pos);
     }
 }
 
@@ -1423,8 +1372,13 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
             GtkWidget* kludge = dataHolders[aux_toolboxes[i].type_name];
 
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget* holder = gtk_grid_new();
+            gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
+#else
             GtkWidget* holder = gtk_table_new( 1, 3, FALSE );
             gtk_table_attach( GTK_TABLE(holder), kludge, 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0 );
+#endif
 
             gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
             GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );
@@ -1438,7 +1392,12 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             Inkscape::IconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
             gtk_toolbar_set_icon_size( GTK_TOOLBAR(toolBar), static_cast<GtkIconSize>(toolboxSize) );
 
+#if GTK_CHECK_VERSION(3,0,0)
+            gtk_widget_set_hexpand(toolBar, TRUE);
+            gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
+#else
             gtk_table_attach( GTK_TABLE(holder), toolBar, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0 );
+#endif
 
             if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
                 Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( NULL, _(aux_toolboxes[i].swatch_tip) );
@@ -1446,7 +1405,16 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
                 swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
                 GtkWidget *swatch_ = GTK_WIDGET( swatch->gobj() );
-                gtk_table_attach( GTK_TABLE(holder), swatch_, 1, 2, 0, 1, (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), AUX_BETWEEN_BUTTON_GROUPS, 0 );
+
+#if GTK_CHECK_VERSION(3,0,0)
+                gtk_widget_set_margin_left(swatch_, AUX_BETWEEN_BUTTON_GROUPS);
+                gtk_widget_set_margin_right(swatch_, AUX_BETWEEN_BUTTON_GROUPS);
+                gtk_widget_set_margin_top(swatch_, AUX_SPACING);
+                gtk_widget_set_margin_bottom(swatch_, AUX_SPACING);
+                gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
+#else
+                gtk_table_attach( GTK_TABLE(holder), swatch_, 1, 2, 0, 1, (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), AUX_BETWEEN_BUTTON_GROUPS, AUX_SPACING );
+#endif
             }
 
             gtk_widget_show_all( holder );

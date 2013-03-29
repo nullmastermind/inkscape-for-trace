@@ -35,12 +35,6 @@
 static void sp_fefuncnode_class_init(SPFeFuncNodeClass *klass);
 static void sp_fefuncnode_init(SPFeFuncNode *fefuncnode);
 
-static void sp_fefuncnode_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_fefuncnode_release(SPObject *object);
-static void sp_fefuncnode_set(SPObject *object, unsigned int key, gchar const *value);
-static void sp_fefuncnode_update(SPObject *object, SPCtx *ctx, guint flags);
-static Inkscape::XML::Node *sp_fefuncnode_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
 static SPObjectClass *feFuncNode_parent_class;
 
 GType
@@ -130,16 +124,9 @@ sp_fefuncA_get_type()
 static void
 sp_fefuncnode_class_init(SPFeFuncNodeClass *klass)
 {
-
     SPObjectClass *sp_object_class = (SPObjectClass *)klass;
 
     feFuncNode_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
-
-    //sp_object_class->build = sp_fefuncnode_build;
-//    sp_object_class->release = sp_fefuncnode_release;
-//    sp_object_class->write = sp_fefuncnode_write;
-//    sp_object_class->set = sp_fefuncnode_set;
-//    sp_object_class->update = sp_fefuncnode_update;
 }
 
 CFeFuncNode::CFeFuncNode(SPFeFuncNode* funcnode) : CObject(funcnode) {
@@ -153,6 +140,8 @@ static void
 sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
 {
 	fefuncnode->cfefuncnode = new CFeFuncNode(fefuncnode);
+
+	delete fefuncnode->cobject;
 	fefuncnode->cobject = fefuncnode->cfefuncnode;
 
     fefuncnode->type = Inkscape::Filters::COMPONENTTRANSFER_TYPE_IDENTITY;
@@ -169,26 +158,6 @@ sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-//static void
-//sp_fefuncnode_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-//{
-//    if (((SPObjectClass *) feFuncNode_parent_class)->build) {
-//        ((SPObjectClass *) feFuncNode_parent_class)->build(object, document, repr);
-//    }
-//    //Read values of key attributes from XML nodes into object.
-//    object->readAttr( "type" );
-//    object->readAttr( "tableValues" );
-//    object->readAttr( "slope" );
-//    object->readAttr( "intercept" );
-//    object->readAttr( "amplitude" );
-//    object->readAttr( "exponent" );
-//    object->readAttr( "offset" );
-//
-//
-////is this necessary?
-//    document->addResource("fefuncnode", object); //maybe feFuncR, fefuncG, feFuncB and fefuncA ?
-//}
-
 void CFeFuncNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::onBuild(document, repr);
 
@@ -211,19 +180,6 @@ void CFeFuncNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-static void sp_fefuncnode_release(SPObject *object)
-{
-//    //SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
-//
-//    if ( object->document ) {
-//        // Unregister ourselves
-//        object->document->removeResource("fefuncnode", object);
-//    }
-//
-////TODO: release resources here
-	((SPFeFuncNode*)object)->cfefuncnode->onRelease();
-}
-
 void CFeFuncNode::onRelease() {
 	SPFeFuncNode* object = this->spfefuncnode;
     //SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
@@ -261,69 +217,6 @@ static Inkscape::Filters::FilterComponentTransferType sp_feComponenttransfer_rea
 /**
  * Sets a specific value in the SPFeFuncNode.
  */
-static void
-sp_fefuncnode_set(SPObject *object, unsigned int key, gchar const *value)
-{
-//    SPFeFuncNode *feFuncNode = SP_FEFUNCNODE(object);
-//    Inkscape::Filters::FilterComponentTransferType type;
-//    double read_num;
-//    switch(key) {
-//        case SP_ATTR_TYPE:
-//            type = sp_feComponenttransfer_read_type(value);
-//            if(type != feFuncNode->type) {
-//                feFuncNode->type = type;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_TABLEVALUES:
-//            if (value){
-//                feFuncNode->tableValues = helperfns_read_vector(value);
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_SLOPE:
-//            read_num = value ? helperfns_read_number(value) : 1;
-//            if (read_num != feFuncNode->slope) {
-//                feFuncNode->slope = read_num;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_INTERCEPT:
-//            read_num = value ? helperfns_read_number(value) : 0;
-//            if (read_num != feFuncNode->intercept) {
-//                feFuncNode->intercept = read_num;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_AMPLITUDE:
-//            read_num = value ? helperfns_read_number(value) : 1;
-//            if (read_num != feFuncNode->amplitude) {
-//                feFuncNode->amplitude = read_num;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_EXPONENT:
-//            read_num = value ? helperfns_read_number(value) : 1;
-//            if (read_num != feFuncNode->exponent) {
-//                feFuncNode->exponent = read_num;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        case SP_ATTR_OFFSET:
-//            read_num = value ? helperfns_read_number(value) : 0;
-//            if (read_num != feFuncNode->offset) {
-//                feFuncNode->offset = read_num;
-//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
-//            }
-//            break;
-//        default:
-//            if (((SPObjectClass *) feFuncNode_parent_class)->set)
-//                ((SPObjectClass *) feFuncNode_parent_class)->set(object, key, value);
-//            break;
-//    }
-	((SPFeFuncNode*)object)->cfefuncnode->onSet(key, value);
-}
-
 void CFeFuncNode::onSet(unsigned int key, gchar const *value) {
 	SPFeFuncNode* object = this->spfefuncnode;
 
@@ -390,25 +283,6 @@ void CFeFuncNode::onSet(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-static void
-sp_fefuncnode_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-//    SPFeFuncNode *feFuncNode = SP_FEFUNCNODE(object);
-//    (void)feFuncNode;
-//
-//    if (flags & SP_OBJECT_MODIFIED_FLAG) {
-//        /* do something to trigger redisplay, updates? */
-//        //TODO
-//        //object->readAttr( "azimuth" );
-//        //object->readAttr( "elevation" );
-//    }
-//
-//    if (((SPObjectClass *) feFuncNode_parent_class)->update) {
-//        ((SPObjectClass *) feFuncNode_parent_class)->update(object, ctx, flags);
-//    }
-	((SPFeFuncNode*)object)->cfefuncnode->onUpdate(ctx, flags);
-}
-
 void CFeFuncNode::onUpdate(SPCtx *ctx, guint flags) {
 	SPFeFuncNode* object = this->spfefuncnode;
 
@@ -422,41 +296,12 @@ void CFeFuncNode::onUpdate(SPCtx *ctx, guint flags) {
         //object->readAttr( "elevation" );
     }
 
-//    if (((SPObjectClass *) feFuncNode_parent_class)->update) {
-//        ((SPObjectClass *) feFuncNode_parent_class)->update(object, ctx, flags);
-//    }
     CObject::onUpdate(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-static Inkscape::XML::Node *
-sp_fefuncnode_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
-{
-//    SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
-//
-//    if (!repr) {
-//        repr = object->getRepr()->duplicate(doc);
-//    }
-//
-//    (void)fefuncnode;
-//    /*
-//TODO: I'm not sure what to do here...
-//
-//    if (fefuncnode->azimuth_set)
-//        sp_repr_set_css_double(repr, "azimuth", fefuncnode->azimuth);
-//    if (fefuncnode->elevation_set)
-//        sp_repr_set_css_double(repr, "elevation", fefuncnode->elevation);*/
-//
-//    if (((SPObjectClass *) feFuncNode_parent_class)->write) {
-//        ((SPObjectClass *) feFuncNode_parent_class)->write(object, doc, repr, flags);
-//    }
-//
-//    return repr;
-	return ((SPFeFuncNode*)object)->cfefuncnode->onWrite(doc, repr, flags);
-}
-
 Inkscape::XML::Node* CFeFuncNode::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
 	SPFeFuncNode* object = this->spfefuncnode;
     SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
@@ -474,9 +319,6 @@ TODO: I'm not sure what to do here...
     if (fefuncnode->elevation_set)
         sp_repr_set_css_double(repr, "elevation", fefuncnode->elevation);*/
 
-//    if (((SPObjectClass *) feFuncNode_parent_class)->write) {
-//        ((SPObjectClass *) feFuncNode_parent_class)->write(object, doc, repr, flags);
-//    }
     CObject::onWrite(doc, repr, flags);
 
     return repr;

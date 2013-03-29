@@ -52,6 +52,7 @@
 #include "ink-action.h"
 #include <2geom/rect.h>
 #include "ui/icon-names.h"
+#include "select-toolbar.h"
 
 using Inkscape::UnitTracker;
 using Inkscape::DocumentUndo;
@@ -87,13 +88,13 @@ sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
             if (unit.base == SP_UNIT_DIMENSIONLESS) {
                 double const val = 1. / unit.unittobase;
                 for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
-                    GtkAdjustment *a = (GtkAdjustment *) g_object_get_data(G_OBJECT(spw), keyval[i].key);
+                    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
                     gtk_adjustment_set_value(a, val);
                     tracker->setFullVal( a, keyval[i].val );
                 }
             } else {
                 for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
-                    GtkAdjustment *a = (GtkAdjustment *) g_object_get_data(G_OBJECT(spw), keyval[i].key);
+                    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
                     gtk_adjustment_set_value(a, sp_pixels_get_units(keyval[i].val, unit));
                 }
             }
@@ -497,7 +498,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     // four spinbuttons
 
     eact = create_adjustment_action( "XAction", C_("Select toolbar", "X position"), C_("Select toolbar", "X:"), "X",
-                                     -1e6, GTK_WIDGET(desktop->canvas), tracker, spw,
+                                    -1e6, GTK_WIDGET(desktop->canvas), tracker, spw,
                                      _("Horizontal coordinate of selection"), TRUE );
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );
@@ -509,7 +510,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     contextActions->push_back( GTK_ACTION(eact) );
 
     eact = create_adjustment_action( "WidthAction", C_("Select toolbar", "Width"), C_("Select toolbar", "W:"), "width",
-                                     1e-3, GTK_WIDGET(desktop->canvas), tracker, spw,
+                                     0.0, GTK_WIDGET(desktop->canvas), tracker, spw,
                                      _("Width of selection"), FALSE );
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );
@@ -528,7 +529,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     }
 
     eact = create_adjustment_action( "HeightAction", C_("Select toolbar", "Height"), C_("Select toolbar", "H:"), "height",
-                                     1e-3, GTK_WIDGET(desktop->canvas), tracker, spw,
+                                     0.0, GTK_WIDGET(desktop->canvas), tracker, spw,
                                      _("Height of selection"), FALSE );
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );

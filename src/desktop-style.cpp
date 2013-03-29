@@ -39,6 +39,7 @@
 #include "sp-tref.h"
 #include "sp-tspan.h"
 #include "xml/repr.h"
+#include "xml/sp-css-attr.h"
 #include "libnrtype/font-style-to-pos.h"
 #include "sp-path.h"
 #include "event-context.h"
@@ -445,9 +446,9 @@ stroke_average_width (GSList const *objects)
 
 static bool vectorsClose( std::vector<double> const &lhs, std::vector<double> const &rhs )
 {
-    static double epsilon = 1e-6;
     bool isClose = false;
     if ( lhs.size() == rhs.size() ) {
+        static double epsilon = 1e-6;
         isClose = true;
         for ( size_t i = 0; (i < lhs.size()) && isClose; ++i ) {
             isClose = fabs(lhs[i] - rhs[i]) < epsilon;
@@ -1117,7 +1118,7 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
 /**
  * Write to style_res the baseline numbers.
  */
-int
+static int
 objects_query_baselines (GSList *objects, SPStyle *style_res)
 {
     bool different = false;
@@ -1273,7 +1274,7 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
     }
 }
 
-int
+static int
 objects_query_fontspecification (GSList *objects, SPStyle *style_res)
 {
     bool different = false;
@@ -1335,7 +1336,7 @@ objects_query_fontspecification (GSList *objects, SPStyle *style_res)
     }
 }
 
-int
+static int
 objects_query_blend (GSList *objects, SPStyle *style_res)
 {
     const int empty_prev = -2;

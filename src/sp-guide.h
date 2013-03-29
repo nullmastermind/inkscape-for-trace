@@ -21,6 +21,9 @@
 
 struct SPCanvas;
 struct SPCanvasGroup;
+class SPDesktop;
+
+G_BEGIN_DECLS
 
 #define SP_TYPE_GUIDE            (sp_guide_get_type())
 #define SP_GUIDE(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_GUIDE, SPGuide))
@@ -89,6 +92,7 @@ void sp_guide_remove(SPGuide *guide);
 
 char *sp_guide_description(SPGuide const *guide, const bool verbose = true);
 
+G_END_DECLS
 
 #endif // SEEN_SP_GUIDE_H
 

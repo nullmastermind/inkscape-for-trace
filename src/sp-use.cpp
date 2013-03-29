@@ -38,79 +38,22 @@
 
 /* fixme: */
 
-static void sp_use_class_init(SPUseClass *classname);
-static void sp_use_init(SPUse *use);
 static void sp_use_finalize(GObject *obj);
-
-static void sp_use_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_use_release(SPObject *object);
-static void sp_use_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_use_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void sp_use_update(SPObject *object, SPCtx *ctx, guint flags);
-static void sp_use_modified(SPObject *object, guint flags);
-
-static Geom::OptRect sp_use_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type);
-static void sp_use_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-static void sp_use_print(SPItem *item, SPPrintContext *ctx);
-static gchar *sp_use_description(SPItem *item);
-static Inkscape::DrawingItem *sp_use_show(SPItem *item, Inkscape::Drawing &drawing, unsigned key, unsigned flags);
-static void sp_use_hide(SPItem *item, unsigned key);
 
 static void sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use);
 
 static void sp_use_delete_self(SPObject *deleted, SPUse *self);
 
-static SPItemClass *parent_class;
-
 //void m_print(gchar *say, Geom::Affine m)
 //{ g_print("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
-GType
-sp_use_get_type(void)
-{
-    static GType use_type = 0;
-    if (!use_type) {
-        GTypeInfo use_info = {
-            sizeof(SPUseClass),
-            NULL,   /* base_init */
-            NULL,   /* base_finalize */
-            (GClassInitFunc) sp_use_class_init,
-            NULL,   /* class_finalize */
-            NULL,   /* class_data */
-            sizeof(SPUse),
-            16,     /* n_preallocs */
-            (GInstanceInitFunc) sp_use_init,
-            NULL,   /* value_table */
-        };
-        use_type = g_type_register_static(SP_TYPE_ITEM, "SPUse", &use_info, (GTypeFlags)0);
-    }
-    return use_type;
-}
+G_DEFINE_TYPE(SPUse, sp_use, SP_TYPE_ITEM);
 
 static void
 sp_use_class_init(SPUseClass *classname)
 {
     GObjectClass *gobject_class = (GObjectClass *) classname;
-    SPObjectClass *sp_object_class = (SPObjectClass *) classname;
-    SPItemClass *item_class = (SPItemClass *) classname;
-
-    parent_class = (SPItemClass*) g_type_class_ref(SP_TYPE_ITEM);
-
     gobject_class->finalize = sp_use_finalize;
-
-    //sp_object_class->build = sp_use_build;
-//    sp_object_class->release = sp_use_release;
-//    sp_object_class->set = sp_use_set;
-//    sp_object_class->write = sp_use_write;
-//    sp_object_class->update = sp_use_update;
-//    sp_object_class->modified = sp_use_modified;
-
-//    item_class->bbox = sp_use_bbox;
-//    item_class->description = sp_use_description;
-//    item_class->print = sp_use_print;
-//    item_class->show = sp_use_show;
-//    item_class->hide = sp_use_hide;
-//    item_class->snappoints = sp_use_snappoints;
 }
 
 CUse::CUse(SPUse* use) : CItem(use) {
@@ -124,6 +67,8 @@ static void
 sp_use_init(SPUse *use)
 {
 	use->cuse = new CUse(use);
+
+	delete use->citem;
 	use->citem = use->cuse;
 	use->cobject = use->cuse;
 
@@ -179,12 +124,6 @@ void CUse::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     // which will call sp_use_href_changed, and that will take care of the child
 }
 
-static void
-sp_use_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPUse*)object)->cuse->onBuild(document, repr);
-}
-
 void CUse::onRelease() {
     SPUse *use = this->spuse;
     SPUse* object = use;
@@ -204,12 +143,6 @@ void CUse::onRelease() {
     use->ref->detach();
 
     CItem::onRelease();
-}
-
-static void
-sp_use_release(SPObject *object)
-{
-	((SPUse*)object)->cuse->onRelease();
 }
 
 void CUse::onSet(unsigned int key, const gchar* value) {
@@ -264,12 +197,6 @@ void CUse::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-static void
-sp_use_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPUse*)object)->cuse->onSet(key, value);
-}
-
 Inkscape::XML::Node* CUse::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     SPUse *use = this->spuse;
 
@@ -293,12 +220,6 @@ Inkscape::XML::Node* CUse::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
-static Inkscape::XML::Node *
-sp_use_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPUse*)object)->cuse->onWrite(xml_doc, repr, flags);
-}
-
 Geom::OptRect CUse::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
     SPUse const *use = this->spuse;
 
@@ -313,12 +234,6 @@ Geom::OptRect CUse::onBbox(Geom::Affine const &transform, SPItem::BBoxType bboxt
         bbox = child->bounds(bboxtype, ct);
     }
     return bbox;
-}
-
-static Geom::OptRect
-sp_use_bbox(SPItem const *item, Geom::Affine const &transform, SPItem::BBoxType type)
-{
-	return ((SPUse*)item)->cuse->onBbox(transform, type);
 }
 
 void CUse::onPrint(SPPrintContext* ctx) {
@@ -341,17 +256,19 @@ void CUse::onPrint(SPPrintContext* ctx) {
     }
 }
 
-static void
-sp_use_print(SPItem *item, SPPrintContext *ctx)
-{
-	((SPUse*)item)->cuse->onPrint(ctx);
-}
-
 gchar* CUse::onDescription() {
     SPUse *use = this->spuse;
 
     char *ret;
     if (use->child) {
+
+        if( SP_IS_SYMBOL( use->child ) ) {
+            //char *symbol_desc = SP_ITEM(use->child)->description();
+            //g_free(symbol_desc);
+            return g_strdup(_("<b>Clone of Symbol</b>"));
+            //return g_strdup_printf(_("<b>Clone of Symbol</b>: %s"), symbol_desc );
+        }
+
         static unsigned recursion_depth = 0;
         if (recursion_depth >= 4) {
             /* TRANSLATORS: Used for statusbar description for long <use> chains:
@@ -370,12 +287,6 @@ gchar* CUse::onDescription() {
     } else {
         return g_strdup(_("<b>Orphaned clone</b>"));
     }
-}
-
-static gchar *
-sp_use_description(SPItem *item)
-{
-	return ((SPUse*)item)->cuse->onDescription();
 }
 
 Inkscape::DrawingItem* CUse::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
@@ -399,12 +310,6 @@ Inkscape::DrawingItem* CUse::onShow(Inkscape::Drawing &drawing, unsigned int key
     return ai;
 }
 
-static Inkscape::DrawingItem *
-sp_use_show(SPItem *item, Inkscape::Drawing &drawing, unsigned key, unsigned flags)
-{
-	return ((SPUse*)item)->cuse->onShow(drawing, key, flags);
-}
-
 void CUse::onHide(unsigned int key) {
     SPUse *use = this->spuse;
 
@@ -412,19 +317,9 @@ void CUse::onHide(unsigned int key) {
         SP_ITEM(use->child)->invoke_hide(key);
     }
 
-    // CPPIFY: This doesn't make no sense.
-    // CItem::onHide is pure. What was the idea behind these lines?
-//	if (((SPItemClass *) parent_class)->hide) {
-//		((SPItemClass *) parent_class)->hide(item, key);
-//	}
 //  CItem::onHide(key);
 }
 
-static void
-sp_use_hide(SPItem *item, unsigned key)
-{
-	((SPUse*)item)->cuse->onHide(key);
-}
 
 /**
  * Returns the ultimate original of a SPUse (i.e. the first object in the chain of its originals
@@ -680,12 +575,6 @@ void CUse::onUpdate(SPCtx *ctx, unsigned flags) {
     }
 }
 
-static void
-sp_use_update(SPObject *object, SPCtx *ctx, unsigned flags)
-{
-	((SPUse*)object)->cuse->onUpdate(ctx, flags);
-}
-
 void CUse::onModified(unsigned int flags) {
 	SPUse* object = this->spuse;
 
@@ -711,12 +600,6 @@ void CUse::onModified(unsigned int flags) {
         }
         g_object_unref(G_OBJECT(child));
     }
-}
-
-static void
-sp_use_modified(SPObject *object, guint flags)
-{
-	return ((SPUse*)object)->cuse->onModified(flags);
 }
 
 SPItem *sp_use_unlink(SPUse *use)
@@ -824,17 +707,7 @@ void CUse::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
     if (!root)
         return;
 
-//    SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(root);
-//    if (item_class.snappoints) {
-//        item_class.snappoints(root, p, snapprefs);
-//    }
     root->citem->onSnappoints(p, snapprefs);
-}
-
-static void
-sp_use_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
-	((SPUse*)item)->cuse->onSnappoints(p, snapprefs);
 }
 
 

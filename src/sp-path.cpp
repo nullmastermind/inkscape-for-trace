@@ -51,47 +51,9 @@
 
 #define noPATH_VERBOSE
 
-static void sp_path_class_init(SPPathClass *klass);
-static void sp_path_init(SPPath *path);
 static void sp_path_finalize(GObject *obj);
-static void sp_path_release(SPObject *object);
 
-static void sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_path_set(SPObject *object, unsigned key, gchar const *value);
-
-static Inkscape::XML::Node *sp_path_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static Geom::Affine sp_path_set_transform(SPItem *item, Geom::Affine const &xform);
-static gchar * sp_path_description(SPItem *item);
-static void sp_path_convert_to_guides(SPItem *item);
-
-static void sp_path_update(SPObject *object, SPCtx *ctx, guint flags);
-static void sp_path_update_patheffect(SPLPEItem *lpeitem, bool write);
-
-static SPShapeClass *parent_class;
-
-/**
- * Gets the GType object for SPPathClass
- */
-GType
-sp_path_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPPathClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_path_class_init,
-            NULL, NULL,
-            sizeof(SPPath),
-            16,
-            (GInstanceInitFunc) sp_path_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_SHAPE, "SPPath", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPPath, sp_path, SP_TYPE_SHAPE);
 
 /**
  *  Does the object-oriented work of initializing the class structure
@@ -102,25 +64,7 @@ static void
 sp_path_class_init(SPPathClass * klass)
 {
     GObjectClass *gobject_class = (GObjectClass *) klass;
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPItemClass *item_class = (SPItemClass *) klass;
-    SPLPEItemClass *lpe_item_class = (SPLPEItemClass *) klass;
-
-    parent_class = (SPShapeClass *)g_type_class_peek_parent(klass);
-
     gobject_class->finalize = sp_path_finalize;
-
-    //sp_object_class->build = sp_path_build;
-//    sp_object_class->release = sp_path_release;
-//    sp_object_class->set = sp_path_set;
-//    sp_object_class->write = sp_path_write;
-//    sp_object_class->update = sp_path_update;
-
-//    item_class->description = sp_path_description;
-//    item_class->set_transform = sp_path_set_transform;
-//    item_class->convert_to_guides = sp_path_convert_to_guides;
-
-    //lpe_item_class->update_patheffect = sp_path_update_patheffect;
 }
 
 
@@ -157,13 +101,6 @@ gchar* CPath::onDescription() {
     }
 }
 
-// CPPIFY: remove
-static gchar *
-sp_path_description(SPItem * item)
-{
-	return ((SPPath*)item)->cpath->onDescription();
-}
-
 void CPath::onConvertToGuides() {
 	SPPath* item = this->sppath;
     SPPath *path = item;
@@ -190,13 +127,6 @@ void CPath::onConvertToGuides() {
     sp_guide_pt_pairs_to_guides(item->document, pts);
 }
 
-// CPPIFY: remove
-static void
-sp_path_convert_to_guides(SPItem *item)
-{
-	((SPPath*)item)->cpath->onConvertToGuides();
-}
-
 CPath::CPath(SPPath* path) : CShape(path) {
 	this->sppath = path;
 }
@@ -211,6 +141,8 @@ static void
 sp_path_init(SPPath *path)
 {
 	path->cpath = new CPath(path);
+
+	delete path->cshape;
 	path->cshape = path->cpath;
 	path->clpeitem = path->cpath;
 	path->citem = path->cpath;
@@ -250,17 +182,6 @@ void CPath::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-// CPPIFY: remove
-/**
- *  Given a repr, this sets the data items in the path object such as
- *  fill & style attributes, markers, and CSS properties.
- */
-static void
-sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPPath*)object)->cpath->onBuild(document, repr);
-}
-
 void CPath::onRelease() {
 	SPPath* object = this->sppath;
     SPPath *path = object;
@@ -270,12 +191,6 @@ void CPath::onRelease() {
     CShape::onRelease();
 }
 
-// CPPIFY: remove
-static void
-sp_path_release(SPObject *object)
-{
-	((SPPath*)object)->cpath->onRelease();
-}
 
 void CPath::onSet(unsigned int key, const gchar* value) {
 	SPPath* object = this->sppath;
@@ -329,17 +244,6 @@ void CPath::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-/**
- *  Sets a value in the path object given by 'key', to 'value'.  This is used
- *  for setting attributes and markers on a path object.
- */
-static void
-sp_path_set(SPObject *object, unsigned int key, gchar const *value)
-{
-	((SPPath*)object)->cpath->onSet(key, value);
-}
-
 Inkscape::XML::Node* CPath::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPPath* object = this->sppath;
 	SPShape *shape = (SPShape *) object;
@@ -376,17 +280,6 @@ g_message("sp_path_write writes 'd' attribute");
     return repr;
 }
 
-// CPPIFY: remove
-/**
- *
- * Writes the path object into a Inkscape::XML::Node
- */
-static Inkscape::XML::Node *
-sp_path_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPPath*)object)->cpath->onWrite(xml_doc, repr, flags);
-}
-
 void CPath::onUpdate(SPCtx *ctx, guint flags) {
 	SPPath* object = this->sppath;
 
@@ -400,12 +293,6 @@ void CPath::onUpdate(SPCtx *ctx, guint flags) {
 	    path->connEndPair.update();
 }
 
-// CPPIFY: remove
-static void
-sp_path_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPPath*)object)->cpath->onUpdate(ctx, flags);
-}
 
 Geom::Affine CPath::onSetTransform(Geom::Affine const &transform) {
 	SPPath* item = this->sppath;
@@ -449,15 +336,6 @@ Geom::Affine CPath::onSetTransform(Geom::Affine const &transform) {
     return Geom::identity();
 }
 
-// CPPIFY: remove
-/**
- * Writes the given transform into the repr for the given item.
- */
-static Geom::Affine
-sp_path_set_transform(SPItem *item, Geom::Affine const &xform)
-{
-	return ((SPPath*)item)->cpath->onSetTransform(xform);
-}
 
 void CPath::onUpdatePatheffect(bool write) {
 	SPPath* lpeitem = this->sppath;
@@ -502,13 +380,6 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
         shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         curve->unref();
     }
-}
-
-// CPPIFY: remove
-static void
-sp_path_update_patheffect(SPLPEItem *lpeitem, bool write)
-{
-	((SPPath*)lpeitem)->cpath->onUpdatePatheffect(write);
 }
 
 

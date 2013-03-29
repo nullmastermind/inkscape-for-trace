@@ -19,7 +19,7 @@
 class SPDocument;
 namespace Inkscape {
     namespace XML {
-        class Document;
+        struct Document;
         class Node;
     }
 }
@@ -31,10 +31,10 @@ namespace Inkscape {
 #include "CharTypes.h"
 class GooString;
 class Function;
-struct GfxState;
-class GfxColor;
+class GfxState;
+struct GfxColor;
 class GfxColorSpace;
-class GfxRGB;
+struct GfxRGB;
 class GfxPath;
 class GfxPattern;
 class GfxTilingPattern;

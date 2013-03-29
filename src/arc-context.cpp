@@ -49,8 +49,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_arc_context_class_init(SPArcContextClass *klass);
-static void sp_arc_context_init(SPArcContext *arc_context);
 static void sp_arc_context_dispose(GObject *object);
 
 static void sp_arc_context_setup(SPEventContext *ec);
@@ -62,34 +60,12 @@ static void sp_arc_drag(SPArcContext *ec, Geom::Point pt, guint state);
 static void sp_arc_finish(SPArcContext *ec);
 static void sp_arc_cancel(SPArcContext *ec);
 
-static SPEventContextClass *parent_class;
-
-GType sp_arc_context_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPArcContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_arc_context_class_init,
-            NULL, NULL,
-            sizeof(SPArcContext),
-            4,
-            (GInstanceInitFunc) sp_arc_context_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPArcContext", &info, (GTypeFlags) 0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPArcContext, sp_arc_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_arc_context_class_init(SPArcContextClass *klass)
 {
-
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    parent_class = (SPEventContextClass*) g_type_class_peek_parent(klass);
+    GObjectClass *object_class = G_OBJECT_CLASS(klass);
+    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
 
     object_class->dispose = sp_arc_context_dispose;
 
@@ -127,8 +103,8 @@ static void sp_arc_context_finish(SPEventContext *ec)
     sp_arc_finish(ac);
     ac->sel_changed_connection.disconnect();
 
-    if (((SPEventContextClass *) parent_class)->finish) {
-        ((SPEventContextClass *) parent_class)->finish(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish) {
+        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish(ec);
     }
 }
 
@@ -152,14 +128,14 @@ static void sp_arc_context_dispose(GObject *object)
 
     delete ac->_message_context;
 
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    G_OBJECT_CLASS(sp_arc_context_parent_class)->dispose(object);
 }
 
 /**
  * Callback that processes the "changed" signal on the selection;
  * destroys old and creates new knotholder.
  */
-void sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer data)
+static void sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer data)
 {
     SPArcContext *ac = SP_ARC_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(ac);
@@ -174,8 +150,8 @@ static void sp_arc_context_setup(SPEventContext *ec)
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
     Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
 
-    if (((SPEventContextClass *) parent_class)->setup) {
-        ((SPEventContextClass *) parent_class)->setup(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup) {
+        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup(ec);
     }
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
@@ -219,8 +195,8 @@ static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *i
             break;
     }
 
-    if (((SPEventContextClass *) parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) parent_class)->item_handler(event_context, item, event);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler) {
+        ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler(event_context, item, event);
     }
 
     return ret;
@@ -370,6 +346,11 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                         // do not return true, so that space would work switching to selector
                     }
                     break;
+                case GDK_KEY_Delete:
+                case GDK_KEY_KP_Delete:
+                case GDK_KEY_BackSpace:
+                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    break;
 
                 default:
                     break;
@@ -396,8 +377,8 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler) {
+            ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler(event_context, event);
         }
     }
 

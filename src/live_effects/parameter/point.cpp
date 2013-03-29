@@ -4,8 +4,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
-
 #include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/effect.h"
@@ -16,6 +14,7 @@
 #include "inkscape.h"
 #include "verbs.h"
 #include "knotholder.h"
+#include <glibmm/i18n.h>
 
 // needed for on-canvas editting:
 #include "desktop.h"
@@ -133,7 +132,7 @@ public:
     virtual ~PointParamKnotHolderEntity() {}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     virtual void knot_click(guint state);
 
 private:
@@ -141,15 +140,15 @@ private:
 };
 
 void
-PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
     pparam->param_setValue(s);
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
 
 Geom::Point
-PointParamKnotHolderEntity::knot_get()
+PointParamKnotHolderEntity::knot_get() const
 {
     return *pparam;
 }

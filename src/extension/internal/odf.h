@@ -24,12 +24,10 @@
 #define EXTENSION_INTERNAL_ODG_OUT_H
 
 #include <dom/dom.h>
-#include <dom/io/stringstream.h>
+#include <io/stringstream.h>
 #include <dom/uri.h>
 
-#include <glibmm.h>
 #include "extension/implementation/implementation.h"
-
 
 #include <xml/repr.h>
 
@@ -37,8 +35,9 @@
 #include <map>
 
 #include <dom/util/ziptool.h>
-#include <dom/io/domstream.h>
 #include "sp-item.h"
+
+#include <glibmm/ustring.h>
 
 namespace Inkscape
 {
@@ -48,8 +47,7 @@ namespace Internal
 {
 
 typedef org::w3c::dom::URI URI;
-typedef org::w3c::dom::io::Writer Writer;
-
+typedef Inkscape::IO::Writer Writer;
 
 class StyleInfo
 {

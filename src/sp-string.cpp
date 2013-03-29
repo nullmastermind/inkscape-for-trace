@@ -37,51 +37,11 @@
 #  SPSTRING
 #####################################################*/
 
-static void sp_string_class_init(SPStringClass *classname);
-static void sp_string_init(SPString *string);
-
-static void sp_string_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_string_release(SPObject *object);
-static void sp_string_read_content(SPObject *object);
-static void sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags);
-
-static SPObjectClass *string_parent_class;
-
-GType
-sp_string_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPStringClass),
-            NULL,    /* base_init */
-            NULL,    /* base_finalize */
-            (GClassInitFunc) sp_string_class_init,
-            NULL,    /* class_finalize */
-            NULL,    /* class_data */
-            sizeof(SPString),
-            16,    /* n_preallocs */
-            (GInstanceInitFunc) sp_string_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPString", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPString, sp_string, SP_TYPE_OBJECT);
 
 static void
 sp_string_class_init(SPStringClass *classname)
 {
-    SPObjectClass *sp_object_class;
-
-    sp_object_class = (SPObjectClass *) classname;
-
-    string_parent_class = (SPObjectClass*)g_type_class_ref(SP_TYPE_OBJECT);
-
-    //sp_object_class->build        = sp_string_build;
-//    sp_object_class->release      = sp_string_release;
-//    sp_object_class->read_content = sp_string_read_content;
-//    sp_object_class->update       = sp_string_update;
 }
 
 CString::CString(SPString* str) : CObject(str) {
@@ -95,6 +55,8 @@ static void
 sp_string_init(SPString *string)
 {
 	string->cstring = new CString(string);
+
+	delete string->cobject;
 	string->cobject = string->cstring;
 
     new (&string->string) Glib::ustring();
@@ -102,15 +64,9 @@ sp_string_init(SPString *string)
 
 void CString::onBuild(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPString* object = this->spstring;
-    sp_string_read_content(object);
+    object->cstring->onReadContent();
 
     CObject::onBuild(doc, repr);
-}
-
-static void
-sp_string_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
-{
-	((SPString*)object)->cstring->onBuild(doc, repr);
 }
 
 void CString::onRelease() {
@@ -122,11 +78,6 @@ void CString::onRelease() {
     CObject::onRelease();
 }
 
-static void
-sp_string_release(SPObject *object)
-{
-	((SPString*)object)->cstring->onRelease();
-}
 
 void CString::onReadContent() {
 	SPString* object = this->spstring;
@@ -171,29 +122,13 @@ void CString::onReadContent() {
     object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_string_read_content(SPObject *object)
-{
-	((SPString*)object)->cstring->onReadContent();
-}
-
 void CString::onUpdate(SPCtx *ctx, unsigned flags) {
-	// CPPIFY: This doesn't make no sense.
-	// CObject::onUpdate is pure. What was the idea behind these lines?
-//	if (((SPObjectClass *) string_parent_class)->update)
-//	        ((SPObjectClass *) string_parent_class)->update(object, ctx, flags);
 //    CObject::onUpdate(ctx, flags);
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
         /* Parent style or we ourselves changed, so recalculate */
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
     }
-}
-
-static void
-sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags)
-{
-	((SPString*)object)->cstring->onUpdate(ctx, flags);
 }
 
 

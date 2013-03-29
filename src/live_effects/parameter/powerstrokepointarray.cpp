@@ -124,11 +124,11 @@ public:
     virtual ~PowerStrokePointArrayParamKnotHolderEntity() {}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     virtual void knot_click(guint state);
 
     /** Checks whether the index falls within the size of the parameter's vector */
-    bool valid_index(unsigned int index) {
+    bool valid_index(unsigned int index) const {
         return (_pparam->_vector.size() > index);
     };
 
@@ -144,7 +144,7 @@ PowerStrokePointArrayParamKnotHolderEntity::PowerStrokePointArrayParamKnotHolder
 }
 
 void
-PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     using namespace Geom;
 
@@ -156,7 +156,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     Piecewise<D2<SBasis> > const & pwd2 = _pparam->get_pwd2();
     Piecewise<D2<SBasis> > const & n = _pparam->get_pwd2_normal();
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
     double t = nearest_point(s, pwd2);
     double offset = dot(s - pwd2.valueAt(t), n.valueAt(t));
     _pparam->_vector.at(_index) = Geom::Point(t, offset);
@@ -164,7 +164,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
 }
 
 Geom::Point
-PowerStrokePointArrayParamKnotHolderEntity::knot_get()
+PowerStrokePointArrayParamKnotHolderEntity::knot_get() const
 {
     using namespace Geom;
 

@@ -2,8 +2,6 @@
 # include <config.h>
 #endif
 
-#ifdef ENABLE_SVG_FONTS
-
 /*
  * SVG <missing-glyph> element implementation
  *
@@ -21,49 +19,10 @@
 #include "sp-missing-glyph.h"
 #include "document.h"
 
-static void sp_missing_glyph_class_init(SPMissingGlyphClass *gc);
-static void sp_missing_glyph_init(SPMissingGlyph *glyph);
-
-static void sp_missing_glyph_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_missing_glyph_release(SPObject *object);
-static void sp_missing_glyph_set(SPObject *object, unsigned int key, const gchar *value);
-static Inkscape::XML::Node *sp_missing_glyph_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static SPObjectClass *parent_class;
-
-GType sp_missing_glyph_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPMissingGlyphClass),
-            NULL,	/* base_init */
-            NULL,	/* base_finalize */
-            (GClassInitFunc) sp_missing_glyph_class_init,
-            NULL,	/* class_finalize */
-            NULL,	/* class_data */
-            sizeof(SPMissingGlyph),
-            16,	/* n_preallocs */
-            (GInstanceInitFunc) sp_missing_glyph_init,
-            NULL,	/* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPMissingGlyph", &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE(SPMissingGlyph, sp_missing_glyph, SP_TYPE_OBJECT);
 
 static void sp_missing_glyph_class_init(SPMissingGlyphClass *gc)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) gc;
-
-    parent_class = (SPObjectClass*)g_type_class_peek_parent(gc);
-
-    //sp_object_class->build = sp_missing_glyph_build;
-//    sp_object_class->release = sp_missing_glyph_release;
-//    sp_object_class->set = sp_missing_glyph_set;
-//    sp_object_class->write = sp_missing_glyph_write;
 }
 
 CMissingGlyph::CMissingGlyph(SPMissingGlyph* mg) : CObject(mg) {
@@ -76,6 +35,8 @@ CMissingGlyph::~CMissingGlyph() {
 static void sp_missing_glyph_init(SPMissingGlyph *glyph)
 {
 	glyph->cmissingglyph = new CMissingGlyph(glyph);
+
+	delete glyph->cobject;
 	glyph->cobject = glyph->cmissingglyph;
 
 //TODO: correct these values:
@@ -98,19 +59,10 @@ void CMissingGlyph::onBuild(SPDocument* doc, Inkscape::XML::Node* repr) {
     object->readAttr( "vert-adv-y" );
 }
 
-static void sp_missing_glyph_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-	((SPMissingGlyph*)object)->cmissingglyph->onBuild(document, repr);
-}
-
 void CMissingGlyph::onRelease() {
 	CObject::onRelease();
 }
 
-static void sp_missing_glyph_release(SPObject *object)
-{
-	((SPMissingGlyph*)object)->cmissingglyph->onRelease();
-}
 
 void CMissingGlyph::onSet(unsigned int key, const gchar* value) {
 	SPMissingGlyph* object = this->spmissingglyph;
@@ -171,11 +123,6 @@ void CMissingGlyph::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-static void sp_missing_glyph_set(SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPMissingGlyph*)object)->cmissingglyph->onSet(key, value);
-}
-
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
 Inkscape::XML::Node* CMissingGlyph::onWrite(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
@@ -210,11 +157,6 @@ Inkscape::XML::Node* CMissingGlyph::onWrite(Inkscape::XML::Document* xml_doc, In
 	    return repr;
 }
 
-static Inkscape::XML::Node *sp_missing_glyph_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPMissingGlyph*)object)->cmissingglyph->onWrite(xml_doc, repr, flags);
-}
-#endif //#ifdef ENABLE_SVG_FONTS
 /*
   Local Variables:
   mode:c++

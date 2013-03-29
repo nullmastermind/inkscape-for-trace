@@ -75,49 +75,17 @@
 
 #define noSP_ITEM_DEBUG_IDLE
 
-SPObjectClass * SPItemClass::static_parent_class=0;
 
-/**
- * Registers SPItem class and returns its type number.
- */
-GType
-SPItem::getType(void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPItemClass),
-            NULL, NULL,
-            (GClassInitFunc) SPItemClass::sp_item_class_init,
-            NULL, NULL,
-            sizeof(SPItem),
-            16,
-            (GInstanceInitFunc) sp_item_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPItem", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+static SPItemView*          sp_item_view_list_remove(SPItemView     *list,
+                                                     SPItemView     *view);
+G_DEFINE_TYPE(SPItem, sp_item, SP_TYPE_OBJECT);
 
 /**
  * SPItem vtable initialization.
  */
-void
-SPItemClass::sp_item_class_init(SPItemClass *klass)
+static void
+sp_item_class_init(SPItemClass *klass)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
-    static_parent_class = (SPObjectClass *)g_type_class_ref(SP_TYPE_OBJECT);
-
-    //sp_object_class->build = SPItem::sp_item_build;
-//    sp_object_class->release = SPItem::sp_item_release;
-//    sp_object_class->set = SPItem::sp_item_set;
-//    sp_object_class->update = SPItem::sp_item_update;
-//    sp_object_class->write = SPItem::sp_item_write;
-
-//    klass->description = SPItem::sp_item_private_description;
-//    klass->snappoints = SPItem::sp_item_private_snappoints;
 }
 
 // CPPIFY: remove
@@ -131,9 +99,12 @@ CItem::~CItem() {
 /**
  * Callback for SPItem object initialization.
  */
-void SPItem::sp_item_init(SPItem *item)
+static void
+sp_item_init(SPItem *item)
 {
 	item->citem = new CItem(item);
+
+	delete item->cobject;
 	item->cobject = item->citem;
 
     item->init();
@@ -441,12 +412,6 @@ void CItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
     CObject::onBuild(document, repr);
 }
 
-// CPPIFY: remove
-//void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-//{
-//    ((SPItem*)object)->citem->onBuild(document, repr);
-//}
-
 void CItem::onRelease() {
 	SPItem* item = this->spitem;
 
@@ -464,17 +429,10 @@ void CItem::onRelease() {
     CObject::onRelease();
 
     while (item->display) {
-        item->display = SPItem::sp_item_view_list_remove(item->display, item->display);
+        item->display = sp_item_view_list_remove(item->display, item->display);
     }
 
     item->_transformed_signal.~signal();
-
-}
-
-// CPPIFY: remove
-void SPItem::sp_item_release(SPObject *object)
-{
-    ((SPItem*)object)->citem->onRelease();
 }
 
 void CItem::onSet(unsigned int key, gchar const* value) {
@@ -532,9 +490,6 @@ void CItem::onSet(unsigned int key, gchar const* value) {
         case SP_ATTR_CONNECTOR_AVOID:
             item->avoidRef->setAvoid(value);
             break;
-        case SP_ATTR_CONNECTION_POINTS:
-            item->avoidRef->setConnectionPoints(value);
-            break;
         case SP_ATTR_TRANSFORM_CENTER_X:
             if (value) {
                 item->transform_center_x = g_strtod(value, NULL);
@@ -569,14 +524,9 @@ void CItem::onSet(unsigned int key, gchar const* value) {
     }
 }
 
-// CPPIFY: remove
-void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
-{
-	((SPItem*)object)->citem->onSet(key, value);
-}
-
 void SPItem::clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
 {
+    item->bbox_valid = FALSE; // force a re-evaluation
     if (old_clip) {
         SPItemView *v;
         /* Hide clippath */
@@ -628,11 +578,6 @@ void CItem::onUpdate(SPCtx *ctx, guint flags) {
     SPItem *item = this->spitem;
     SPItem* object = item;
 
-    // CPPIFY: As CItem is derived directly from CObject, this doesn't make no sense.
-    // CObject::onUpdate is pure. What was the idea behind these lines?
-//    if (((SPObjectClass *) (SPItemClass::static_parent_class))->update) {
-//        (* ((SPObjectClass *) (SPItemClass::static_parent_class))->update)(object, ctx, flags);
-//    }
 //    CObject::onUpdate(ctx, flags);
 
     // any of the modifications defined in sp-object.h might change bbox,
@@ -685,12 +630,6 @@ void CItem::onUpdate(SPCtx *ctx, guint flags) {
     // Update libavoid with item geometry (for connector routing).
     if (item->avoidRef)
         item->avoidRef->handleSettingChange();
-}
-
-// CPPIFY: remove
-void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    ((SPItem*)object)->citem->onUpdate(ctx, flags);
 }
 
 Inkscape::XML::Node* CItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -758,18 +697,11 @@ Inkscape::XML::Node* CItem::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
-// CPPIFY: remove
-Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    return ((SPItem*)object)->citem->onWrite(xml_doc, repr, flags);
-}
-
 // CPPIFY: make pure virtual
 Geom::OptRect CItem::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	//throw;
 	return Geom::OptRect();
 }
-
 /**
  * Get item's geometric bounding box in this item's coordinate system.
  *
@@ -945,16 +877,11 @@ unsigned SPItem::pos_in_parent()
 void CItem::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
 	//throw;
 }
-
-// CPPIFY: remove
-//void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Inkscape::SnapCandidatePoint> &/*p*/, Inkscape::SnapPreferences const * /*snapprefs*/)
-//{
     /* This will only be called if the derived class doesn't override this.
      * see for example sp_genericellipse_snappoints in sp-ellipse.cpp
      * We don't know what shape we could be dealing with here, so we'll just
      * do nothing
      */
-//}
 
 void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
 {
@@ -1017,12 +944,6 @@ gchar* CItem::onDescription() {
 	return g_strdup(_("Object"));
 }
 
-// CPPIFY: remove
-//gchar *SPItem::sp_item_private_description(SPItem *item)
-//{
-//    return item->citem->onDescription();
-//}
-
 /**
  * Returns a string suitable for status bar, formatted in pango markup language.
  *
@@ -1062,7 +983,6 @@ gchar *SPItem::description()
 int SPItem::ifilt()
 {
     int retval=0;
-
     if ( style && style->filter.href && style->filter.href->getObject() ) {
 		retval=1;
 	}
@@ -1257,7 +1177,7 @@ void SPItem::adjust_stroke( gdouble ex )
 /**
  * Find out the inverse of previous transform of an item (from its repr)
  */
-Geom::Affine sp_item_transform_repr (SPItem *item)
+static Geom::Affine sp_item_transform_repr (SPItem *item)
 {
     Geom::Affine t_old(Geom::identity());
     gchar const *t_attr = item->getRepr()->attribute("transform");
@@ -1306,7 +1226,7 @@ void SPItem::freeze_stroke_width_recursive(bool freeze)
 /**
  * Recursively adjust rx and ry of rects.
  */
-void
+static void
 sp_item_adjust_rects_recursive(SPItem *item, Geom::Affine advertized_transform)
 {
     if (SP_IS_RECT (item)) {
@@ -1458,7 +1378,6 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
              !mask_ref->getObject() && // the object does not have a mask
              !(!transform.isTranslation() && style && style->getFilter()) // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
         ) {
-
     	transform_attr = this->citem->onSetTransform(transform);
 
         if (freeze_stroke_width) {
@@ -1521,19 +1440,6 @@ void CItem::onConvertToGuides() {
 	this->spitem->convert_to_guides();
 }
 
-// CPPIFY: remove
-void SPItem::convert_item_to_guides() {
-//    // Use derived method if present ...
-//    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides) {
-//        (*((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides)(this);
-//    } else {
-//        // .. otherwise simply place the guides around the item's bounding box
-//
-//        convert_to_guides();
-//    }
-	this->citem->onConvertToGuides();
-}
-
 
 /**
  * \pre \a ancestor really is an ancestor (\>=) of \a object, or NULL.
@@ -1590,8 +1496,6 @@ Geom::Affine SPItem::i2dt_affine() const
         ret = i2doc_affine()
             * Geom::Scale(1, -1)
             * Geom::Translate(0, document->getHeight());
-
-        g_return_val_if_fail(desktop != NULL, ret);
     }
     return ret;
 }
@@ -1638,7 +1542,8 @@ SPItemView *SPItem::sp_item_view_new_prepend(SPItemView *list, SPItem *item, uns
     return new_view;
 }
 
-SPItemView *SPItem::sp_item_view_list_remove(SPItemView *list, SPItemView *view)
+static SPItemView*
+sp_item_view_list_remove(SPItemView *list, SPItemView *view)
 {
     SPItemView *ret = list;
     if (view == list) {

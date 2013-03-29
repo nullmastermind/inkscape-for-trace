@@ -79,7 +79,11 @@ XmlTree::XmlTree (void) :
     xml_attribute_delete_button (_("Delete attribute")),
     text_container (),
     attr_container (),
-    attr_subpaned_container (),
+#if WITH_GTKMM_3_0
+    attr_subpaned_container(Gtk::ORIENTATION_VERTICAL),
+#else
+    attr_subpaned_container(),
+#endif
     set_attr (_("Set")),
     new_window(NULL)
 {
@@ -840,6 +844,10 @@ gboolean XmlTree::quit_on_esc (GtkWidget *w, GdkEventKey *event, GObject */*tbl*
 {
     switch (get_group0_keyval (event)) {
         case GDK_KEY_Escape: // defocus
+            gtk_widget_destroy(w);
+            return TRUE;
+        case GDK_KEY_Return: // create
+        case GDK_KEY_KP_Enter:
             gtk_widget_destroy(w);
             return TRUE;
     }

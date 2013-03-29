@@ -24,9 +24,10 @@
 #define SP_IS_LPE_ITEM(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_LPE_ITEM))
 #define SP_IS_LPE_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_LPE_ITEM))
 
-struct LivePathEffectObject;
-struct SPCurve;
 class CLPEItem;
+class LivePathEffectObject;
+class SPCurve;
+class SPDesktop;
 
 namespace Inkscape{ 
 namespace Display {
@@ -52,14 +53,13 @@ public:
     Inkscape::LivePathEffect::LPEObjectReference* current_path_effect;
     std::vector<Inkscape::Display::TemporaryItem*> lpe_helperpaths;
 
-    void replacePathEffects( std::vector<LivePathEffectObject const *> const old_lpeobjs,
-                             std::vector<LivePathEffectObject const *> const new_lpeobjs );
+    void replacePathEffects( std::vector<LivePathEffectObject const *> const &old_lpeobjs,
+                             std::vector<LivePathEffectObject const *> const &new_lpeobjs );
 };
 
 struct SPLPEItemClass {
     SPItemClass parent_class;
 
-    //void (* update_patheffect) (SPLPEItem *lpeitem, bool write);
 };
 
 

@@ -32,63 +32,10 @@
 
 #include "sp-star.h"
 
-static void sp_star_class_init (SPStarClass *klass);
-static void sp_star_init (SPStar *star);
-
-static void sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
-static Inkscape::XML::Node *sp_star_write (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void sp_star_set (SPObject *object, unsigned int key, const gchar *value);
-static void sp_star_update (SPObject *object, SPCtx *ctx, guint flags);
-
-static gchar * sp_star_description (SPItem * item);
-static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-
-static void sp_star_set_shape (SPShape *shape);
-static void sp_star_update_patheffect (SPLPEItem *lpeitem, bool write);
-
-static SPShapeClass *parent_class;
-
-GType
-sp_star_get_type (void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (SPStarClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_star_class_init,
-            NULL, NULL,
-            sizeof (SPStar),
-            16,
-            (GInstanceInitFunc) sp_star_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static (SP_TYPE_SHAPE, "SPStar", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPStar, sp_star, SP_TYPE_SHAPE);
 
 static void sp_star_class_init(SPStarClass *klass)
 {
-    SPObjectClass *sp_object_class = reinterpret_cast<SPObjectClass *>(klass);
-    SPItemClass *item_class = reinterpret_cast<SPItemClass *>(klass);
-    SPLPEItemClass *lpe_item_class = reinterpret_cast<SPLPEItemClass *>(klass);
-    SPShapeClass *shape_class = reinterpret_cast<SPShapeClass *>(klass);
-
-    parent_class = reinterpret_cast<SPShapeClass *>(g_type_class_ref(SP_TYPE_SHAPE));
-
-    //sp_object_class->build = sp_star_build;
-//    sp_object_class->write = sp_star_write;
-//    sp_object_class->set = sp_star_set;
-//    sp_object_class->update = sp_star_update;
-
-//    item_class->description = sp_star_description;
-//    item_class->snappoints = sp_star_snappoints;
-
-    //lpe_item_class->update_patheffect = sp_star_update_patheffect;
-
-    //shape_class->set_shape = sp_star_set_shape;
 }
 
 CStar::CStar(SPStar* star) : CPolygon(star) {
@@ -102,6 +49,8 @@ static void
 sp_star_init (SPStar * star)
 {
 	star->cstar = new CStar(star);
+
+	delete star->cpolygon;
 	star->cpolygon = star->cstar;
 	star->cshape = star->cstar;
 	star->clpeitem = star->cstar;
@@ -136,13 +85,6 @@ void CStar::onBuild(SPDocument * document, Inkscape::XML::Node * repr) {
     object->readAttr( "inkscape:randomized" );
 }
 
-// CPPIFY: remove
-static void
-sp_star_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
-{
-	((SPStar*)object)->cstar->onBuild(document, repr);
-}
-
 Inkscape::XML::Node* CStar::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPStar* object = this->spstar;
     SPStar *star = object;
@@ -165,7 +107,7 @@ Inkscape::XML::Node* CStar::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
         sp_repr_set_svg_double(repr, "inkscape:randomized", star->randomized);
     }
 
-    sp_star_set_shape ((SPShape *) star);
+    this->onSetShape();
     char *d = sp_svg_write_path (star->_curve->get_pathvector());
     repr->setAttribute("d", d);
     g_free (d);
@@ -174,13 +116,6 @@ Inkscape::XML::Node* CStar::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::
     CShape::onWrite(xml_doc, repr, flags);
 
     return repr;
-}
-
-// CPPIFY: remove
-static Inkscape::XML::Node *
-sp_star_write (SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	return ((SPStar*)object)->cstar->onWrite(xml_doc, repr, flags);
 }
 
 void CStar::onSet(unsigned int key, const gchar* value) {
@@ -282,13 +217,6 @@ void CStar::onSet(unsigned int key, const gchar* value) {
     }
 }
 
-// CPPIFY: remove
-static void
-sp_star_set (SPObject *object, unsigned int key, const gchar *value)
-{
-	((SPStar*)object)->cstar->onSet(key, value);
-}
-
 void CStar::onUpdate(SPCtx *ctx, guint flags) {
 	SPStar* object = this->spstar;
 
@@ -302,18 +230,11 @@ void CStar::onUpdate(SPCtx *ctx, guint flags) {
     CShape::onUpdate(ctx, flags);
 }
 
-// CPPIFY: remove
-static void
-sp_star_update (SPObject *object, SPCtx *ctx, guint flags)
-{
-	((SPStar*)object)->cstar->onUpdate(ctx, flags);
-}
-
 void CStar::onUpdatePatheffect(bool write) {
 	SPStar* lpeitem = this->spstar;
     SPShape *shape = (SPShape *) lpeitem;
 
-    sp_star_set_shape(shape);
+    this->onSetShape();
 
     if (write) {
         Inkscape::XML::Node *repr = shape->getRepr();
@@ -327,13 +248,6 @@ void CStar::onUpdatePatheffect(bool write) {
     }
 
     ((SPObject *)shape)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-}
-
-// CPPIFY: remove
-static void
-sp_star_update_patheffect(SPLPEItem *lpeitem, bool write)
-{
-	((SPStar*)lpeitem)->cstar->onUpdatePatheffect(write);
 }
 
 gchar* CStar::onDescription() {
@@ -350,13 +264,6 @@ gchar* CStar::onDescription() {
         return g_strdup_printf (ngettext("<b>Polygon</b> with %d vertex",
                          "<b>Polygon</b> with %d vertices",
                      star->sides), star->sides);
-}
-
-// CPPIFY: remove
-static gchar *
-sp_star_description (SPItem *item)
-{
-	return ((SPStar*)item)->cstar->onDescription();
 }
 
 /**
@@ -565,13 +472,6 @@ void CStar::onSetShape() {
     c->unref();
 }
 
-// CPPIFY: remove
-static void
-sp_star_set_shape (SPShape *shape)
-{
-	((SPStar*)shape)->cstar->onSetShape();
-}
-
 void
 sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized)
 {
@@ -611,12 +511,6 @@ void CStar::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     }
 }
 
-// CPPIFY: remove
-static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs)
-{
-	((SPStar const*)item)->cstar->onSnappoints(p, snapprefs);
-}
-
 /**
  * sp_star_get_xy: Get X-Y value as item coordinate system
  * @star: star item
@@ -629,7 +523,7 @@ static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCan
  */
 
 Geom::Point
-sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, bool randomized)
+sp_star_get_xy (SPStar const *star, SPStarPoint point, gint index, bool randomized)
 {
     gdouble darg = 2.0 * M_PI / (double) star->sides;
 

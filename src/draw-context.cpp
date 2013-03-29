@@ -44,13 +44,12 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
+#include "draw-context.h"
 
 #include <gdk/gdkkeysyms.h>
 
 using Inkscape::DocumentUndo;
 
-static void sp_draw_context_class_init(SPDrawContextClass *klass);
-static void sp_draw_context_init(SPDrawContext *dc);
 static void sp_draw_context_dispose(GObject *object);
 
 static void sp_draw_context_setup(SPEventContext *ec);
@@ -75,27 +74,7 @@ static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc);
 static void spdc_reset_white(SPDrawContext *dc);
 static void spdc_free_colors(SPDrawContext *dc);
 
-
-static SPEventContextClass *draw_parent_class;
-
-GType sp_draw_context_get_type(void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPDrawContextClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_draw_context_class_init,
-            NULL, NULL,
-            sizeof(SPDrawContext),
-            4,
-            (GInstanceInitFunc) sp_draw_context_init,
-            NULL,   // value_table
-        };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPDrawContext", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPDrawContext, sp_draw_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_draw_context_class_init(SPDrawContextClass *klass)
 {
@@ -103,9 +82,7 @@ static void sp_draw_context_class_init(SPDrawContextClass *klass)
     SPEventContextClass *ec_class;
 
     object_class = (GObjectClass *)klass;
-    ec_class = (SPEventContextClass *) klass;
-
-    draw_parent_class = (SPEventContextClass*)g_type_class_peek_parent(klass);
+    ec_class = SP_EVENT_CONTEXT_CLASS(klass);
 
     object_class->dispose = sp_draw_context_dispose;
 
@@ -166,7 +143,7 @@ static void sp_draw_context_dispose(GObject *object)
 
     spdc_free_colors(dc);
 
-    G_OBJECT_CLASS(draw_parent_class)->dispose(object);
+    G_OBJECT_CLASS(sp_draw_context_parent_class)->dispose(object);
 }
 
 static void sp_draw_context_setup(SPEventContext *ec)
@@ -174,8 +151,8 @@ static void sp_draw_context_setup(SPEventContext *ec)
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
     SPDesktop *dt = ec->desktop;
 
-    if (((SPEventContextClass *) draw_parent_class)->setup) {
-        ((SPEventContextClass *) draw_parent_class)->setup(ec);
+    if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup) {
+        (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup(ec);
     }
 
     dc->selection = sp_desktop_selection(dt);
@@ -260,8 +237,8 @@ gint sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) draw_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) draw_parent_class)->root_handler(ec, event);
+        if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler) {
+            ret = (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler(ec, event);
         }
     }
 
@@ -304,7 +281,7 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
 }
 
-void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item, SPCurve *curve)
+static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item, SPCurve *curve)
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -699,7 +676,7 @@ SPDrawAnchor *spdc_test_inside(SPDrawContext *dc, Geom::Point p)
     }
 
     for (GSList *l = dc->white_anchors; l != NULL; l = l->next) {
-        SPDrawAnchor *na = sp_draw_anchor_test((SPDrawAnchor *) l->data, p, !active);
+        SPDrawAnchor *na = sp_draw_anchor_test(static_cast<SPDrawAnchor*>(l->data), p, !active);
         if ( !active && na ) {
             active = na;
         }
@@ -719,7 +696,7 @@ static void spdc_reset_white(SPDrawContext *dc)
         dc->white_curves = g_slist_remove(dc->white_curves, dc->white_curves->data);
     }
     while (dc->white_anchors) {
-        sp_draw_anchor_destroy((SPDrawAnchor *) dc->white_anchors->data);
+        sp_draw_anchor_destroy(static_cast<SPDrawAnchor*>(dc->white_anchors->data));
         dc->white_anchors = g_slist_remove(dc->white_anchors, dc->white_anchors->data);
     }
 }
@@ -766,7 +743,7 @@ static void spdc_free_colors(SPDrawContext *dc)
         dc->white_curves = g_slist_remove(dc->white_curves, dc->white_curves->data);
     }
     while (dc->white_anchors) {
-        sp_draw_anchor_destroy((SPDrawAnchor *) dc->white_anchors->data);
+        sp_draw_anchor_destroy(static_cast<SPDrawAnchor *>(dc->white_anchors->data));
         dc->white_anchors = g_slist_remove(dc->white_anchors, dc->white_anchors->data);
     }
 }
@@ -808,7 +785,7 @@ void spdc_create_single_dot(SPEventContext *ec, Geom::Point const &pt, char cons
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Geom::Affine const i2d (item->i2dt_affine ());
-    Geom::Point pp = pt;
+    Geom::Point pp = pt * i2d.inverse();
     double rad = 0.5 * prefs->getDouble(tool_path + "/dot-size", 3.0);
     if (event_state & GDK_MOD1_MASK) {
         // TODO: We vary the dot size between 0.5*rad and 1.5*rad, where rad is the dot size
@@ -827,7 +804,6 @@ void spdc_create_single_dot(SPEventContext *ec, Geom::Point const &pt, char cons
     sp_repr_set_svg_double (repr, "sodipodi:rx", rad * stroke_width);
     sp_repr_set_svg_double (repr, "sodipodi:ry", rad * stroke_width);
     item->updateRepr();
-    item->set_item_transform(i2d.inverse());
 
     sp_desktop_selection(desktop)->set(item);
 

@@ -15,6 +15,7 @@
 #include <glib.h>
 #include <cairomm/cairomm.h>
 #include <2geom/forward.h>
+#include "style.h"
 
 struct SPColor;
 struct _GdkPixbuf;
@@ -81,6 +82,11 @@ public:
 
 } // namespace Inkscape
 
+SPColorInterpolation get_cairo_surface_ci(cairo_surface_t *surface);
+void set_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation cif);
+void copy_cairo_surface_ci(cairo_surface_t *in, cairo_surface_t *out);
+void convert_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation cif);
+
 void ink_cairo_set_source_color(cairo_t *ct, SPColor const &color, double opacity);
 void ink_cairo_set_source_rgba32(cairo_t *ct, guint32 rgba);
 void ink_cairo_transform(cairo_t *ct, Geom::Affine const &m);
@@ -102,6 +108,10 @@ guint32 ink_cairo_surface_average_color(cairo_surface_t *surface);
 void ink_cairo_surface_average_color(cairo_surface_t *surface, double &r, double &g, double &b, double &a);
 void ink_cairo_surface_average_color_premul(cairo_surface_t *surface, double &r, double &g, double &b, double &a);
 
+double srgb_to_linear( const double c );
+int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface);
+int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface);
+
 cairo_pattern_t *ink_cairo_pattern_create_checkerboard();
 
 void convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int rs);
@@ -118,13 +128,13 @@ G_GNUC_CONST guint32 argb32_from_rgba(guint32 in);
 
 
 G_GNUC_CONST inline guint32
-premul_alpha(guint32 color, guint32 alpha)
+premul_alpha(const guint32 color, const guint32 alpha)
 {
-    guint32 temp = alpha * color + 128;
+    const guint32 temp = alpha * color + 128;
     return (temp + (temp >> 8)) >> 8;
 }
 G_GNUC_CONST inline guint32
-unpremul_alpha(guint32 color, guint32 alpha)
+unpremul_alpha(const guint32 color, const guint32 alpha)
 {
     // NOTE: you must check for alpha != 0 yourself.
     return (255 * color + alpha/2) / alpha;
@@ -143,6 +153,15 @@ void feed_pathvector_to_cairo (cairo_t *ct, Geom::PathVector const &pathv);
 
 #define ASSEMBLE_ARGB32(px,a,r,g,b) \
     guint32 px = (a << 24) | (r << 16) | (g << 8) | b;
+
+inline double srgb_to_linear( const double c ) {
+    if( c < 0.04045 ) {
+        return c / 12.92;
+    } else {
+        return pow( (c+0.055)/1.055, 2.4 );
+    }
+}
+
 
 namespace Inkscape {
 

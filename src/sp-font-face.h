@@ -2,9 +2,10 @@
 # include <config.h>
 #endif
 
-#ifdef ENABLE_SVG_FONTS
 #ifndef __SP_FONTFACE_H__
 #define __SP_FONTFACE_H__
+
+#include <vector>
 
 /*
  * SVG <font-face> element implementation
@@ -22,6 +23,8 @@
  */
 
 #include "sp-object.h"
+
+G_BEGIN_DECLS
 
 #define SP_TYPE_FONTFACE (sp_fontface_get_type ())
 #define SP_FONTFACE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FONTFACE, SPFontFace))
@@ -141,5 +144,6 @@ struct SPFontFaceClass {
 
 GType sp_fontface_get_type (void);
 
+G_END_DECLS
+
 #endif //#ifndef __SP_FONTFACE_H__
-#endif //#ifdef ENABLE_SVG_FONTS

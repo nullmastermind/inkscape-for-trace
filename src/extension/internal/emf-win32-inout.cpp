@@ -61,6 +61,8 @@ namespace Extension {
 namespace Internal {
 
 static float device_scale = DEVICESCALE;
+static float device_x;
+static float device_y;
 static RECTL rc_old;
 static bool clipset = false;
 
@@ -322,11 +324,11 @@ _pix_y_to_point(PEMF_CALLBACK_DATA d, double px)
 static double
 pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py)
 {
-    double ppx = _pix_x_to_point(d, px);
-    double ppy = _pix_y_to_point(d, py);
+    double ppx = px * d->dc[d->level].worldTransform.eM11 + py * d->dc[d->level].worldTransform.eM21 + d->dc[d->level].worldTransform.eDx;
+    double x = _pix_x_to_point(d, ppx);
 
-    double x = ppx * d->dc[d->level].worldTransform.eM11 + ppy * d->dc[d->level].worldTransform.eM21 + d->dc[d->level].worldTransform.eDx;
     x *= device_scale;
+    x -= device_x;
     
     return x;
 }
@@ -334,11 +336,11 @@ pix_to_x_point(PEMF_CALLBACK_DATA d, double px, double py)
 static double
 pix_to_y_point(PEMF_CALLBACK_DATA d, double px, double py)
 {
-    double ppx = _pix_x_to_point(d, px);
-    double ppy = _pix_y_to_point(d, py);
+    double ppy = px * d->dc[d->level].worldTransform.eM12 + py * d->dc[d->level].worldTransform.eM22 + d->dc[d->level].worldTransform.eDy;
+    double y = _pix_y_to_point(d, ppy);
 
-    double y = ppx * d->dc[d->level].worldTransform.eM12 + ppy * d->dc[d->level].worldTransform.eM22 + d->dc[d->level].worldTransform.eDy;
     y *= device_scale;
+    y -= device_y;
     
     return y;
 }
@@ -773,8 +775,10 @@ myEnhMetaFileProc(HDC /*hDC*/, HANDLETABLE * /*lpHTable*/, ENHMETARECORD const *
             d->xDPI = 2540;
             d->yDPI = 2540;
 
-            d->dc[d->level].PixelsInX = pEmr->rclFrame.right;  // - pEmr->rclFrame.left;
-            d->dc[d->level].PixelsInY = pEmr->rclFrame.bottom; // - pEmr->rclFrame.top;
+            d->dc[d->level].PixelsInX = pEmr->rclFrame.right - pEmr->rclFrame.left;
+            d->dc[d->level].PixelsInY = pEmr->rclFrame.bottom - pEmr->rclFrame.top;
+            device_x = pEmr->rclFrame.left/100.0*PX_PER_MM;
+            device_y = pEmr->rclFrame.top/100.0*PX_PER_MM;
 
             d->MMX = d->dc[d->level].PixelsInX / 100.0;
             d->MMY = d->dc[d->level].PixelsInY / 100.0;
@@ -1603,8 +1607,51 @@ myEnhMetaFileProc(HDC /*hDC*/, HANDLETABLE * /*lpHTable*/, ENHMETARECORD const *
             dbg_str << "<!-- EMR_CHORD -->\n";
             break;
         case EMR_PIE:
+        {
             dbg_str << "<!-- EMR_PIE -->\n";
+
+            PEMRPIE pEmr = (PEMRPIE) lpEMFR;
+            RECTL rc = pEmr->rclBox;
+
+            double l  = pix_to_x_point( d, rc.left, rc.top );
+            double t  = pix_to_y_point( d, rc.left, rc.top );
+            double r  = pix_to_x_point( d, rc.right, rc.bottom );
+            double b  = pix_to_y_point( d, rc.right, rc.bottom );
+            double x1 = pix_to_x_point( d, pEmr->ptlStart.x, pEmr->ptlStart.y );
+            double y1 = pix_to_y_point( d, pEmr->ptlStart.x, pEmr->ptlStart.y );
+            double x2 = pix_to_x_point( d, pEmr->ptlEnd.x, pEmr->ptlEnd.y );
+            double y2 = pix_to_y_point( d, pEmr->ptlEnd.x, pEmr->ptlEnd.y );
+
+            SVGOStringStream tmp_pie;
+            tmp_pie << "d=\"" <<
+                "\n\tM " << x1 << " " << y1 << " ";
+
+            double angle1 = -atan2(y1 - (t + b) / 2.0, x1 - (l + r) / 2.0);
+            double angle2 = -atan2(y2 - (t + b) / 2.0, x2 - (l + r) / 2.0);
+            double angle  = angle2 - angle1;
+            if (angle < 0) angle += 2*M_PI;
+
+            bool large_arc_flag = false;
+            if (angle > M_PI) large_arc_flag = true;
+
+            tmp_pie << "\n\tA " <<
+                fabs(l - r) / 2.0 << " " <<
+                fabs(t - b) / 2.0 << " " <<
+                "0 " << large_arc_flag << " 0 " <<
+                x2 << " " << y2 << " " <<
+                "\n\tL " << (l + r) / 2.0 << " " << (t + b) / 2.0 << " " <<
+                "\n\tz";
+
+            assert_empty_path(d, "EMR_PIE");
+
+            *(d->outsvg) += "    <path ";
+            output_style(d, lpEMFR->iType);
+            *(d->outsvg) += "\n\t";
+            *(d->outsvg) += tmp_pie.str().c_str();
+            *(d->outsvg) += " \" /> \n";
+            *(d->path) = "";
             break;
+        }
         case EMR_SELECTPALETTE:
             dbg_str << "<!-- EMR_SELECTPALETTE -->\n";
             break;
@@ -1772,7 +1819,7 @@ myEnhMetaFileProc(HDC /*hDC*/, HANDLETABLE * /*lpHTable*/, ENHMETARECORD const *
             dbg_str << "<!-- EMR_BITBLT -->\n";
 
             PEMRBITBLT pEmr = (PEMRBITBLT) lpEMFR;
-            if (pEmr->dwRop == DPA) {
+            if ((pEmr->dwRop == PATCOPY) || (pEmr->dwRop == DPA)) {
                 // should be an application of a DIBPATTERNBRUSHPT, use a solid color instead
                 double l = pix_to_x_point( d, pEmr->xDest, pEmr->yDest);
                 double t = pix_to_y_point( d, pEmr->xDest, pEmr->yDest);
@@ -1862,6 +1909,10 @@ myEnhMetaFileProc(HDC /*hDC*/, HANDLETABLE * /*lpHTable*/, ENHMETARECORD const *
                 (gchar *) g_utf16_to_utf8( (gunichar2 *) wide_text, pEmr->emrtext.nChars, NULL, NULL, NULL );
 
             if (ansi_text) {
+                if ((wide_text[0] < 32) && (strlen(ansi_text) == 1)) {
+                    g_free(ansi_text);  // filter out isolated control characters
+                    ansi_text = g_strdup("");
+                }
 //                gchar *p = ansi_text;
 //                while (*p) {
 //                    if (*p < 32 || *p >= 127) {
@@ -2417,9 +2468,10 @@ EmfWin32::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
         DWORD dwNeeded = GetEnhMetaFileDescriptionA( hemf, 0, NULL );
         if ( dwNeeded > 0 ) {
             d.pDesc = (CHAR *) malloc( dwNeeded + 1 );
+            d.pDesc[dwNeeded] = 0;
             if ( GetEnhMetaFileDescription( hemf, dwNeeded, d.pDesc ) == 0 )
                 lstrcpy( d.pDesc, "" );
-            if ( lstrlen( d.pDesc ) > 1 )
+            if ((lstrlen(d.pDesc) > 1) && (lstrlen(d.pDesc) < dwNeeded))
                 d.pDesc[lstrlen(d.pDesc)] = '#';
         }
 

@@ -34,6 +34,7 @@
 #include "widgets/icon.h"
 #include "widgets/shrink-wrap-button.h"
 #include "xml/node-event-vector.h"
+#include "widgets/gradient-vector.h"
 
 namespace Inkscape {
 namespace Widgets {
@@ -162,17 +163,6 @@ LayerSelector::~LayerSelector() {
     _selection_changed_connection.disconnect();
 }
 
-namespace {
-
-/** Helper function - detaches desktop from selector
- */
-bool detach(LayerSelector *selector) {
-    selector->setDesktop(NULL);
-    return FALSE;
-}
-
-}
-
 /** Sets the desktop for the widget.  First disconnects signals
  *  for the current desktop, then stores the pointer to the
  *  given \a desktop, and attaches its signals to this one.
@@ -185,7 +175,10 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
 
     if (_desktop) {
 //        _desktop_shutdown_connection.disconnect();
-        _layer_changed_connection.disconnect();
+        if (_current_layer_changed_connection)
+            _current_layer_changed_connection.disconnect();
+        if (_layers_changed_connection)
+            _layers_changed_connection.disconnect();
 //        g_signal_handlers_disconnect_by_func(_desktop, (gpointer)&detach, this);
     }
     _desktop = desktop;
@@ -195,9 +188,13 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
 //          sigc::bind (sigc::ptr_fun (detach), this));
 //        g_signal_connect_after(_desktop, "shutdown", GCallback(detach), this);
 
-        _layer_changed_connection = _desktop->connectCurrentLayerChanged(
-            sigc::mem_fun(*this, &LayerSelector::_selectLayer)
-        );
+        LayerManager *mgr = _desktop->layer_manager;
+        if ( mgr ) {
+            _current_layer_changed_connection = mgr->connectCurrentLayerChanged( sigc::mem_fun(*this, &LayerSelector::_selectLayer) );
+            //_layerUpdatedConnection = mgr->connectLayerDetailsChanged( sigc::mem_fun(*this, &LayerSelector::_updateLayer) );
+            _layers_changed_connection = mgr->connectChanged( sigc::mem_fun(*this, &LayerSelector::_layersChanged) );
+        }
+
         _selectLayer(_desktop->currentLayer());
     }
 }
@@ -228,6 +225,17 @@ private:
     SPObject &_object;
 };
 
+}
+
+void LayerSelector::_layersChanged()
+{
+    if (_desktop) {
+        /*
+         * This code fixes #166691 but causes issues #1066543 and #1080378.
+         * Comment out until solution found.
+         */
+        //_selectLayer(_desktop->currentLayer());
+    }
 }
 
 /** Selects the given layer in the dropdown selector.
@@ -300,11 +308,13 @@ void LayerSelector::_setDesktopLayer() {
     Gtk::ListStore::iterator selected(_selector.get_active());
     SPObject *layer=_selector.get_active()->get_value(_model_columns.object);
     if ( _desktop && layer ) {
-        _layer_changed_connection.block();
+        _current_layer_changed_connection.block();
+        _layers_changed_connection.block();
 
         _desktop->layer_manager->setCurrentLayer(layer);
 
-        _layer_changed_connection.unblock();
+        _current_layer_changed_connection.unblock();
+        _layers_changed_connection.unblock();
 
         _selectLayer(_desktop->currentLayer());
     }
@@ -565,7 +575,7 @@ void LayerSelector::_prepareLabelRenderer(
         gchar const *label;
         if ( object != root ) {
             label = object->label();
-            if (!label) {
+            if (!object->label()) {
                 label = object->defaultLabel();
                 label_defaulted = true;
             }
@@ -573,7 +583,7 @@ void LayerSelector::_prepareLabelRenderer(
             label = _("(root)");
         }
 
-        gchar *text = g_markup_printf_escaped(format, label);
+        gchar *text = g_markup_printf_escaped(format, gr_ellipsize_text (label, 50).c_str());
         _label_renderer.property_markup() = text;
         g_free(text);
         g_free(format);
@@ -585,6 +595,7 @@ void LayerSelector::_prepareLabelRenderer(
     _label_renderer.property_style() = ( label_defaulted ?
                                          Pango::STYLE_ITALIC :
                                          Pango::STYLE_NORMAL );
+
 }
 
 void LayerSelector::_lockLayer(bool lock) {

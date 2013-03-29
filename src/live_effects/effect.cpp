@@ -7,14 +7,13 @@
 
 //#define LPE_ENABLE_TEST_EFFECTS
 
-#include "live_effects/effect.h"
-
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
 // include effects:
 #include "live_effects/lpe-patternalongpath.h"
+#include "live_effects/effect.h"
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-sketch.h"
 #include "live_effects/lpe-vonkoch.h"
@@ -120,9 +119,9 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
     {SKETCH,                N_("Sketch"),                  "sketch"},
     {RULER,                 N_("Ruler"),                   "ruler"},
-/* 0.49 ?*/
-    {POWERSTROKE,           N_("[Unstable!] Power stroke"), "powerstroke"},
-    {CLONE_ORIGINAL,        N_("[Unstable!] Clone original path"), "clone_original"},
+/* 0.49 */
+    {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
+    {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -300,7 +299,7 @@ Effect::~Effect()
 }
 
 Glib::ustring
-Effect::getName()
+Effect::getName() const
 {
     if (lpeobj->effecttype_set && LPETypeConverter.is_valid_id(lpeobj->effecttype) )
         return Glib::ustring( _(LPETypeConverter.get_label(lpeobj->effecttype).c_str()) );
@@ -309,7 +308,7 @@ Effect::getName()
 }
 
 EffectType
-Effect::effectType() {
+Effect::effectType() const {
     return lpeobj->effecttype;
 }
 
@@ -317,7 +316,7 @@ Effect::effectType() {
  * Is performed a single time when the effect is freshly applied to a path
  */
 void
-Effect::doOnApply (SPLPEItem */*lpeitem*/)
+Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 {
 }
 
@@ -325,7 +324,7 @@ Effect::doOnApply (SPLPEItem */*lpeitem*/)
  * Is performed each time before the effect is updated.
  */
 void
-Effect::doBeforeEffect (SPLPEItem */*lpeitem*/)
+Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //Do nothing for simple effects
 }
@@ -370,7 +369,7 @@ Effect::writeParamsToSVG() {
  * your LPE. But don't forget to call the parent method so that is_ready is set to true!
  */
 void
-Effect::acceptParamPath (SPPath */*param_path*/) {
+Effect::acceptParamPath (SPPath const*/*param_path*/) {
     setReady();
 }
 
@@ -424,7 +423,7 @@ Effect::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
 }
 
 void
-Effect::readallParameters(Inkscape::XML::Node * repr)
+Effect::readallParameters(Inkscape::XML::Node const* repr)
 {
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
@@ -491,7 +490,7 @@ Effect::addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
  * This is the function called by external code like SPLPEItem.
  */
 std::vector<Geom::PathVector>
-Effect::getHelperPaths(SPLPEItem *lpeitem)
+Effect::getHelperPaths(SPLPEItem const* lpeitem)
 {
     std::vector<Geom::PathVector> hp_vec;
 
@@ -524,7 +523,7 @@ Effect::getHelperPaths(SPLPEItem *lpeitem)
  * This function should be overwritten by derived effects if they want to provide their own helperpaths.
  */
 void
-Effect::addCanvasIndicators(SPLPEItem */*lpeitem*/, std::vector<Geom::PathVector> &/*hp_vec*/)
+Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &/*hp_vec*/)
 {
 }
 
@@ -643,7 +642,7 @@ Effect::editNextParamOncanvas(SPItem * item, SPDesktop * desktop)
 * The nice thing about this is that this function can use knowledge of the original path and set things accordingly for example to the size or origin of the original path!
 */
 void
-Effect::resetDefaults(SPItem * /*item*/)
+Effect::resetDefaults(SPItem const* /*item*/)
 {
     std::vector<Inkscape::LivePathEffect::Parameter *>::iterator p;
     for (p = param_vector.begin(); p != param_vector.end(); ++p) {
@@ -663,7 +662,7 @@ Effect::transform_multiply(Geom::Affine const& postmul, bool set)
 }
 
 bool
-Effect::providesKnotholder()
+Effect::providesKnotholder() const
 {
     // does the effect actively provide any knotholder entities of its own?
     if (_provides_knotholder_entities) {
@@ -671,7 +670,7 @@ Effect::providesKnotholder()
     }
 
     // otherwise: are there any parameters that have knotholderentities?
-    for (std::vector<Parameter *>::iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
+    for (std::vector<Parameter *>::const_iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
         if ((*p)->providesKnotHolderEntities()) {
             return true;
         }

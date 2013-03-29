@@ -24,6 +24,7 @@
 #include "sp-offset.h"
 #include "sp-flowtext.h"
 #include "sp-use.h"
+#include "sp-symbol.h"
 #include "sp-rect.h"
 #include "box3d.h"
 #include "sp-ellipse.h"
@@ -36,7 +37,7 @@
 #include "sp-polyline.h"
 #include "sp-spiral.h"
 
-const gchar *
+static const gchar *
 type2term(GType type)
 {
     if (type == SP_TYPE_ANCHOR)
@@ -80,7 +81,7 @@ type2term(GType type)
     return NULL;
 }
 
-GSList *collect_terms (GSList *items)
+static GSList *collect_terms (GSList *items)
 {
     GSList *r = NULL;
     for (GSList *i = items; i != NULL; i = i->next) {
@@ -92,7 +93,7 @@ GSList *collect_terms (GSList *items)
 }
 
 // Returns the number of filtered items in the list
-int count_filtered (GSList *items)
+static int count_filtered (GSList *items)
 {
     int count=0;
     SPItem *item=NULL;
@@ -192,7 +193,11 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
 
         if (!items->next) { // one item
             char *item_desc = item->description();
-            if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref)) {
+            if (SP_IS_USE(item) && SP_IS_SYMBOL(item->firstChild())) {
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
+                              item_desc, in_phrase,
+                              _("Convert symbol to group to edit"), _when_selected);
+            } else if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref)) {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
                               item_desc, in_phrase,
                               _("Use <b>Shift+D</b> to look up original"), _when_selected);

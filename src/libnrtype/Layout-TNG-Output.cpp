@@ -21,18 +21,11 @@
 #include "display/curve.h"
 #include <2geom/pathvector.h>
 
-#if !PANGO_VERSION_CHECK(1,24,0)
-#define PANGO_WEIGHT_THIN       static_cast<PangoWeight>(100)
-#define PANGO_WEIGHT_BOOK       static_cast<PangoWeight>(380)
-#define PANGO_WEIGHT_MEDIUM     static_cast<PangoWeight>(500)
-#define PANGO_WEIGHT_ULTRAHEAVY static_cast<PangoWeight>(1000)
-#endif
 
 namespace Inkscape {
     namespace Extension {
         namespace Internal {
             class CairoRenderContext;
-            class CairoGlyphInfo;
         }
     }
 }
@@ -346,7 +339,7 @@ Glib::ustring Layout::getFontFamily(unsigned span_index) const
         return "";
 
     if (_spans[span_index].font) {
-        return pango_font_description_get_family(_spans[span_index].font->descr);
+        return sp_font_description_get_family(_spans[span_index].font->descr);
     }
 
     return "";
@@ -374,7 +367,7 @@ Glib::ustring Layout::dumpAsText() const
         snprintf(line, sizeof(line), "  in chunk %d (x=%f, baselineshift=%f)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _spans[span_index].baseline_shift);
         result += line;
         if (_spans[span_index].font) {
-            snprintf(line, sizeof(line), "    font '%s' %f %s %s\n", pango_font_description_get_family(_spans[span_index].font->descr), _spans[span_index].font_size, style_to_text(pango_font_description_get_style(_spans[span_index].font->descr)), weight_to_text(pango_font_description_get_weight(_spans[span_index].font->descr)));
+            snprintf(line, sizeof(line), "    font '%s' %f %s %s\n", sp_font_description_get_family(_spans[span_index].font->descr), _spans[span_index].font_size, style_to_text(pango_font_description_get_style(_spans[span_index].font->descr)), weight_to_text(pango_font_description_get_weight(_spans[span_index].font->descr)));
             result += line;
         }
         snprintf(line, sizeof(line), "    x_start = %f, x_end = %f\n", _spans[span_index].x_start, _spans[span_index].x_end);

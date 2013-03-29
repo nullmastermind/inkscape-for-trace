@@ -261,10 +261,13 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
 
             theShapeB->ConvertToShape(theShape, origWind[curOrig]);
 
-            // les elements arrivent en ordre inverse dans la liste
-            theShape->Booleen(theShapeB, theShapeA, bop);
-
-            {
+            if (theShapeA->numberOfEdges() == 0) {
+                Shape *swap = theShapeB;
+                theShapeB = theShapeA;
+                theShapeA = swap;
+            } else if (theShapeB->numberOfEdges() > 0) {
+                // les elements arrivent en ordre inverse dans la liste
+                theShape->Booleen(theShapeB, theShapeA, bop);
                 Shape *swap = theShape;
                 theShape = theShapeA;
                 theShapeA = swap;
@@ -307,7 +310,10 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
 
         originaux[1]->ConvertWithBackData(1.0);
 
-        originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
+        if ((originaux[1]->pts.size() == 2) && originaux[1]->pts[0].isMoveTo && !originaux[1]->pts[1].isMoveTo)
+            originaux[1]->Fill(theShape, 1,false,true,false); // see LP Bug 177956
+        else
+            originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
 
         theShapeB->ConvertToShape(theShape, fill_justDont); // fill_justDont doesn't computes winding numbers
 
@@ -716,8 +722,8 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
     ButtType o_butt;
     {
         o_width = i_style->stroke_width.computed;
-        if (o_width < 0.1) {
-            o_width = 0.1;
+        if (o_width < 0.01) {
+            o_width = 0.01;
         }
         o_miter = i_style->stroke_miterlimit.value * o_width;
 
@@ -1002,8 +1008,8 @@ sp_selected_path_outline(SPDesktop *desktop)
                     break;
             }
 
-            if (o_width < 0.1)
-                o_width = 0.1;
+            if (o_width < 0.032)
+                o_width = 0.032;
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
@@ -1363,48 +1369,18 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     Inkscape::XML::Node *parent = item->getRepr()->parent();
 
     float o_width = 0;
-    JoinType o_join = join_straight;
-    ButtType o_butt = butt_straight;
-    float o_miter = 0;
     {
         SPStyle *i_style = item->style;
-        int jointype = i_style->stroke_linejoin.value;
-        int captype = i_style->stroke_linecap.value;
 
         o_width = i_style->stroke_width.computed;
-        if (jointype == SP_STROKE_LINEJOIN_MITER)
-        {
-            o_join = join_pointy;
-        }
-        else if (jointype == SP_STROKE_LINEJOIN_ROUND)
-        {
-            o_join = join_round;
-        }
-        else
-        {
-            o_join = join_straight;
-        }
-        if (captype == SP_STROKE_LINECAP_SQUARE)
-        {
-            o_butt = butt_square;
-        }
-        else if (captype == SP_STROKE_LINECAP_ROUND)
-        {
-            o_butt = butt_round;
-        }
-        else
-        {
-            o_butt = butt_straight;
-        }
-
         {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
         }
 
-        if (o_width < 0.01)
+        if (o_width < 0.01){
             o_width = 0.01;
-        o_miter = i_style->stroke_miterlimit.value * o_width;
+        }
     }
 
     Path *orig = Path_for_item(item, true, false);
@@ -1502,7 +1478,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         // move to the saved position
         repr->setPosition(pos > 0 ? pos : 0);
 
-        SPItem *nitem = (SPItem *) sp_desktop_document(desktop)->getObjectByRepr(repr);
+        SPItem *nitem = reinterpret_cast<SPItem *>(sp_desktop_document(desktop)->getObjectByRepr(repr));
 
         if ( !updating ) {
             // delete original, apply the transform to the offset
@@ -1778,7 +1754,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
 
 
 //return true if we changed something, else false
-bool
+static bool
 sp_selected_path_simplify_item(SPDesktop *desktop,
                  Inkscape::Selection *selection, SPItem *item,
                  float threshold,  bool justCoalesce,
@@ -1982,7 +1958,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
     return didSomething;
 }
 
-void
+static void
 sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool justCoalesce,
                                     float angleLimit, bool breakableAngles)
 {

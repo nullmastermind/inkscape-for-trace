@@ -21,10 +21,9 @@
 #include <sigc++/sigc++.h>
 #include "enums.h"
 #include <gtk/gtk.h>
+#include "sp-item.h"
 
 class SPDesktop;
-class SPKnot;
-class SPKnotClass;
 struct SPCanvasItem;
 
 #define SP_TYPE_KNOT            (sp_knot_get_type())
@@ -43,6 +42,7 @@ struct SPCanvasItem;
 struct SPKnot : GObject {
     SPDesktop *desktop;   /**< Desktop we are on. */
     SPCanvasItem *item;   /**< Our CanvasItem. */
+    SPItem *owner;        /**< Optional Owner Item */
     guint flags;
 
     guint size;      /**< Always square. */

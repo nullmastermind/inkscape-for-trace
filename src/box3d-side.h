@@ -23,10 +23,8 @@
 #define SP_IS_BOX3D_SIDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_BOX3D_SIDE))
 
 class SPBox3D;
-class Box3DSide;
-class Box3DSideClass;
+struct Persp3D;
 class CBox3DSide;
-class Persp3D;
 
 // FIXME: Would it be better to inherit from SPPath instead?
 class Box3DSide : public SPPolygon {

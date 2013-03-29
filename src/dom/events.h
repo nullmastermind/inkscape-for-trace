@@ -66,7 +66,6 @@ typedef dom::NodePtr  NodePtr ;
 
 
 //forward declarations
-class Event;
 class EventTarget;
 class EventListener;
 class DocumentEvent;
@@ -643,8 +642,8 @@ public:
      *
      */
     EventTarget(const EventTarget &other)
+        : listeners (other.listeners)
         {
-        listeners = other.listeners;
         }
 
     /**
@@ -704,7 +703,9 @@ public:
     /**
      *
      */
-    DocumentEvent() {}
+    DocumentEvent()
+        : dispatchable(false)
+        {}
 
     /**
      *
@@ -791,7 +792,10 @@ public:
     /**
      *
      */
-    CustomEvent() {}
+    CustomEvent()
+        : propagationStopped(false),
+          immediatePropagationStopped(false)
+        {}
 
     /**
      *
@@ -884,15 +888,19 @@ public:
     /**
      *
      */
-    UIEvent() {}
+    UIEvent()
+        : view(),
+          detail(0)
+        {}
 
     /**
      *
      */
-    UIEvent(const UIEvent &other) : Event(other)
+    UIEvent(const UIEvent &other)
+        : Event(other),
+          view(other.view),
+          detail(other.detail)
         {
-        view   = other.view;
-        detail = other.detail;
         }
 
     /**
@@ -1152,7 +1160,18 @@ public:
     /**
      *
      */
-    MouseEvent() {}
+    MouseEvent()
+        : screenX(0),
+          screenY(0),
+          clientX(0),
+          clientY(0),
+          ctrlKey(false),
+          shiftKey(false),
+          altKey(false),
+          metaKey(false),
+          button(0),
+          relatedTarget(NULL)
+        {}
 
     /**
      *
@@ -1322,7 +1341,14 @@ public:
     /**
      *
      */
-    KeyboardEvent() {}
+    KeyboardEvent()
+        : keyIdentifier(),
+          keyLocation(0),
+          ctrlKey(false),
+          shiftKey(false),
+          altKey(false),
+          metaKey(false)
+        {}
 
     /**
      *
@@ -1472,8 +1498,9 @@ public:
      *
      */
     MutationEvent()
+          : relatedNodePtr (NULL),
+            attrChange(0)
         {
-        relatedNodePtr  = NULL;
         }
 
     /**

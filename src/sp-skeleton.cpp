@@ -39,48 +39,26 @@
 #endif
 
 /* Skeleton base class */
-
-static void sp_skeleton_class_init(SPSkeletonClass *klass);
-static void sp_skeleton_init(SPSkeleton *skeleton);
-
 static void sp_skeleton_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_skeleton_release(SPObject *object);
 static void sp_skeleton_set(SPObject *object, unsigned int key, gchar const *value);
 static void sp_skeleton_update(SPObject *object, SPCtx *ctx, guint flags);
 static Inkscape::XML::Node *sp_skeleton_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
 
-static SPObjectClass *skeleton_parent_class;
-
-GType
-sp_skeleton_get_type()
-{
-    static GType skeleton_type = 0;
-
-    if (!skeleton_type) {
-        GTypeInfo skeleton_info = {
-            sizeof(SPSkeletonClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_skeleton_class_init,
-            NULL, NULL,
-            sizeof(SPSkeleton),
-            16,
-            (GInstanceInitFunc) sp_skeleton_init,
-            NULL,    /* value_table */
-        };
-        skeleton_type = g_type_register_static(SP_TYPE_OBJECT, "SPSkeleton", &skeleton_info, (GTypeFlags)0);
-    }
-    return skeleton_type;
-}
+G_DEFINE_TYPE(SPSkeleton, sp_skeleton, SP_TYPE_OBJECT);
 
 static void
 sp_skeleton_class_init(SPSkeletonClass *klass)
 {
-    //GObjectClass *gobject_class = (GObjectClass *)klass;
     SPObjectClass *sp_object_class = (SPObjectClass *)klass;
 
+<<<<<<< TREE
+    sp_object_class->build = sp_skeleton_build;
+=======
     skeleton_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_skeleton_build;
+>>>>>>> MERGE-SOURCE
     sp_object_class->release = sp_skeleton_release;
     sp_object_class->write = sp_skeleton_write;
     sp_object_class->set = sp_skeleton_set;
@@ -102,9 +80,15 @@ static void
 sp_skeleton_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     debug("0x%p",object);
+<<<<<<< TREE
+    if (((SPObjectClass *) sp_skeleton_parent_class)->build) {
+        ((SPObjectClass *) sp_skeleton_parent_class)->build(object, document, repr);
+    }
+=======
 //    if (((SPObjectClass *) skeleton_parent_class)->build) {
 //        ((SPObjectClass *) skeleton_parent_class)->build(object, document, repr);
 //    }
+>>>>>>> MERGE-SOURCE
 
     /*
        Pay attention to certain settings here
@@ -134,8 +118,8 @@ sp_skeleton_release(SPObject *object)
 
     /* deal with our children and our selves here */
 
-    if (((SPObjectClass *) skeleton_parent_class)->release)
-        ((SPObjectClass *) skeleton_parent_class)->release(object);
+    if (((SPObjectClass *) sp_skeleton_parent_class)->release)
+        ((SPObjectClass *) sp_skeleton_parent_class)->release(object);
 }
 
 /**
@@ -149,8 +133,8 @@ sp_skeleton_set(SPObject *object, unsigned int key, gchar const *value)
     //SPSkeleton *skeleton = SP_SKELETON(object);
 
     /* See if any parents need this value. */
-    if (((SPObjectClass *) skeleton_parent_class)->set) {
-        ((SPObjectClass *) skeleton_parent_class)->set(object, key, value);
+    if (((SPObjectClass *) sp_skeleton_parent_class)->set) {
+        ((SPObjectClass *) sp_skeleton_parent_class)->set(object, key, value);
     }
 }
 
@@ -170,8 +154,8 @@ sp_skeleton_update(SPObject *object, SPCtx *ctx, guint flags)
 
     }
 
-    if (((SPObjectClass *) skeleton_parent_class)->update) {
-        ((SPObjectClass *) skeleton_parent_class)->update(object, ctx, flags);
+    if (((SPObjectClass *) sp_skeleton_parent_class)->update) {
+        ((SPObjectClass *) sp_skeleton_parent_class)->update(object, ctx, flags);
     }
 }
 
@@ -194,8 +178,8 @@ sp_skeleton_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML:
         }
     }
 
-    if (((SPObjectClass *) skeleton_parent_class)->write) {
-        ((SPObjectClass *) skeleton_parent_class)->write(object, doc, repr, flags);
+    if (((SPObjectClass *) sp_skeleton_parent_class)->write) {
+        ((SPObjectClass *) sp_skeleton_parent_class)->write(object, doc, repr, flags);
     }
 
     return repr;
