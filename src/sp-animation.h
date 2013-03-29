@@ -25,11 +25,29 @@
 class SPAnimation;
 class SPAnimationClass;
 
-struct SPAnimation : public SPObject {
+class CAnimation;
+
+class SPAnimation : public SPObject {
+public:
+	CAnimation* canimation;
 };
 
 struct SPAnimationClass {
 	SPObjectClass parent_class;
+};
+
+class CAnimation : public CObject {
+public:
+	CAnimation(SPAnimation* animation);
+	virtual ~CAnimation();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+private:
+	SPAnimation* spanimation;
 };
 
 GType sp_animation_get_type (void);
@@ -43,11 +61,29 @@ GType sp_animation_get_type (void);
 class SPIAnimation;
 class SPIAnimationClass;
 
-struct SPIAnimation : public SPAnimation {
+class CIAnimation;
+
+class SPIAnimation : public SPAnimation {
+public:
+	CIAnimation* cianimation;
 };
 
 struct SPIAnimationClass {
 	SPAnimationClass parent_class;
+};
+
+class CIAnimation : public CAnimation {
+public:
+	CIAnimation(SPIAnimation* animation);
+	virtual ~CIAnimation();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+private:
+	SPIAnimation* spianimation;
 };
 
 GType sp_ianimation_get_type (void);
@@ -61,11 +97,29 @@ GType sp_ianimation_get_type (void);
 class SPAnimate;
 class SPAnimateClass;
 
-struct SPAnimate : public SPIAnimation {
+class CAnimate;
+
+class SPAnimate : public SPIAnimation {
+public:
+	CAnimate* canimate;
 };
 
 struct SPAnimateClass {
 	SPIAnimationClass parent_class;
+};
+
+class CAnimate : public CIAnimation {
+public:
+	CAnimate(SPAnimate* animate);
+	virtual ~CAnimate();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+private:
+	SPAnimate* spanimate;
 };
 
 GType sp_animate_get_type (void);

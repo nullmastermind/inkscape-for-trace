@@ -35,7 +35,7 @@ static void log_set_attr(char const *const classname, unsigned int const key, ch
 static void sp_animation_class_init(SPAnimationClass *klass);
 static void sp_animation_init(SPAnimation *animation);
 
-static void sp_animation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+//static void sp_animation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_animation_release(SPObject *object);
 static void sp_animation_set(SPObject *object, unsigned int key, gchar const *value);
 
@@ -73,16 +73,43 @@ static void sp_animation_class_init(SPAnimationClass *klass)
     sp_object_class->set = sp_animation_set;
 }
 
-static void sp_animation_init(SPAnimation */*animation*/)
+CAnimation::CAnimation(SPAnimation* animation) : CObject(animation) {
+	this->spanimation = animation;
+}
+
+CAnimation::~CAnimation() {
+}
+
+static void sp_animation_init(SPAnimation *animation)
 {
+	animation->canimation = new CAnimation(animation);
+	animation->cobject = animation->canimation;
 }
 
 
-static void sp_animation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void sp_animation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) animation_parent_class)->build)
 //        ((SPObjectClass *) animation_parent_class)->build(object, document, repr);
-	// CPPIFY: todo
+//
+//    object->readAttr( "xlink:href" );
+//    object->readAttr( "attributeName" );
+//    object->readAttr( "attributeType" );
+//    object->readAttr( "begin" );
+//    object->readAttr( "dur" );
+//    object->readAttr( "end" );
+//    object->readAttr( "min" );
+//    object->readAttr( "max" );
+//    object->readAttr( "restart" );
+//    object->readAttr( "repeatCount" );
+//    object->readAttr( "repeatDur" );
+//    object->readAttr( "fill" );
+//}
+
+void CAnimation::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPAnimation* object = this->spanimation;
+
+	CObject::onBuild(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "attributeName" );
@@ -98,26 +125,36 @@ static void sp_animation_build(SPObject *object, SPDocument *document, Inkscape:
     object->readAttr( "fill" );
 }
 
-static void sp_animation_release(SPObject */*object*/)
+static void sp_animation_release(SPObject *object)
 {
+	((SPAnimation*)object)->canimation->onRelease();
+}
+
+void CAnimation::onRelease() {
 }
 
 static void sp_animation_set(SPObject *object, unsigned int key, gchar const *value)
 {
     //SPAnimation *animation = SP_ANIMATION(object);
-
-    log_set_attr("SPAnimation", key, value);
-
-    if (((SPObjectClass *) animation_parent_class)->set)
-        ((SPObjectClass *) animation_parent_class)->set(object, key, value);
+//
+//    log_set_attr("SPAnimation", key, value);
+//
+//    if (((SPObjectClass *) animation_parent_class)->set)
+//        ((SPObjectClass *) animation_parent_class)->set(object, key, value);
+	((SPAnimation*)object)->canimation->onSet(key, value);
 }
+
+void CAnimation::onSet(unsigned int key, gchar const *value) {
+	CObject::onSet(key, value);
+}
+
 
 /* Interpolated animation base class */
 
 static void sp_ianimation_class_init(SPIAnimationClass *klass);
 static void sp_ianimation_init(SPIAnimation *animation);
 
-static void sp_ianimation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+//static void sp_ianimation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_ianimation_release(SPObject *object);
 static void sp_ianimation_set(SPObject *object, unsigned int key, gchar const *value);
 
@@ -155,16 +192,38 @@ static void sp_ianimation_class_init(SPIAnimationClass *klass)
     sp_object_class->set = sp_ianimation_set;
 }
 
-static void sp_ianimation_init(SPIAnimation */*animation*/)
+CIAnimation::CIAnimation(SPIAnimation* animation) : CAnimation(animation) {
+	this->spianimation = animation;
+}
+
+static void sp_ianimation_init(SPIAnimation *animation)
 {
+	animation->cianimation = new CIAnimation(animation);
+	animation->canimation = animation->cianimation;
+	animation->cobject = animation->cianimation;
 }
 
 
-static void sp_ianimation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void sp_ianimation_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) ianimation_parent_class)->build)
 //        ((SPObjectClass *) ianimation_parent_class)->build(object, document, repr);
-	// CPPIFY: todo
+//
+//    object->readAttr( "calcMode" );
+//    object->readAttr( "values" );
+//    object->readAttr( "keyTimes" );
+//    object->readAttr( "keySplines" );
+//    object->readAttr( "from" );
+//    object->readAttr( "to" );
+//    object->readAttr( "by" );
+//    object->readAttr( "additive" );
+//    object->readAttr( "accumulate" );
+//}
+
+void CIAnimation::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPIAnimation* object = this->spianimation;
+
+	CAnimation::onBuild(document, repr);
 
     object->readAttr( "calcMode" );
     object->readAttr( "values" );
@@ -177,18 +236,28 @@ static void sp_ianimation_build(SPObject *object, SPDocument *document, Inkscape
     object->readAttr( "accumulate" );
 }
 
-static void sp_ianimation_release(SPObject */*object*/)
+static void sp_ianimation_release(SPObject *object)
 {
+	((SPIAnimation*)object)->cianimation->onRelease();
+}
+
+void CIAnimation::onRelease() {
+
 }
 
 static void sp_ianimation_set(SPObject *object, unsigned int key, gchar const *value)
 {
     //SPIAnimation *ianimation = SP_IANIMATION(object);
 
-    log_set_attr("SPIAnimation", key, value);
+//    log_set_attr("SPIAnimation", key, value);
+//
+//    if (((SPObjectClass *) ianimation_parent_class)->set)
+//        ((SPObjectClass *) ianimation_parent_class)->set(object, key, value);
+	((SPIAnimation*)object)->cianimation->onSet(key, value);
+}
 
-    if (((SPObjectClass *) ianimation_parent_class)->set)
-        ((SPObjectClass *) ianimation_parent_class)->set(object, key, value);
+void CIAnimation::onSet(unsigned int key, gchar const *value) {
+	CAnimation::onSet(key, value);
 }
 
 /* SVG <animate> */
@@ -196,7 +265,7 @@ static void sp_ianimation_set(SPObject *object, unsigned int key, gchar const *v
 static void sp_animate_class_init(SPAnimateClass *klass);
 static void sp_animate_init(SPAnimate *animate);
 
-static void sp_animate_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+//static void sp_animate_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_animate_release(SPObject *object);
 static void sp_animate_set(SPObject *object, unsigned int key, gchar const *value);
 
@@ -234,32 +303,51 @@ static void sp_animate_class_init(SPAnimateClass *klass)
     sp_object_class->set = sp_animate_set;
 }
 
-static void sp_animate_init(SPAnimate */*animate*/)
+CAnimate::CAnimate(SPAnimate* animate) : CIAnimation(animate) {
+	this->spanimate = animate;
+}
+
+static void sp_animate_init(SPAnimate *animate)
 {
+	animate->canimate = new CAnimate(animate);
+	animate->cianimation = animate->canimate;
+	animate->canimation = animate->canimate;
+	animate->cobject = animate->canimate;
 }
 
 
-static void sp_animate_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void sp_animate_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) animate_parent_class)->build)
 //        ((SPObjectClass *) animate_parent_class)->build(object, document, repr);
-	// CPPIFY: todo
+//}
+
+void CAnimate::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	CIAnimation::onBuild(document, repr);
 }
 
-static void sp_animate_release(SPObject */*object*/)
+static void sp_animate_release(SPObject *object)
 {
+	((SPAnimate*)object)->canimate->onRelease();
+}
+
+void CAnimate::onRelease() {
 }
 
 static void sp_animate_set(SPObject *object, unsigned int key, gchar const *value)
 {
     //SPAnimate *animate = SP_ANIMATE(object);
 
-    log_set_attr("SPAnimate", key, value);
-
-    if (((SPObjectClass *) animate_parent_class)->set)
-        ((SPObjectClass *) animate_parent_class)->set(object, key, value);
+//    log_set_attr("SPAnimate", key, value);
+//
+//    if (((SPObjectClass *) animate_parent_class)->set)
+//        ((SPObjectClass *) animate_parent_class)->set(object, key, value);
+	((SPAnimate*)object)->canimate->onSet(key, value);
 }
 
+void CAnimate::onSet(unsigned int key, gchar const *value) {
+	CIAnimation::onSet(key, value);
+}
 
 /*
   Local Variables:

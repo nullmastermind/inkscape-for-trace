@@ -192,6 +192,8 @@ sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
 void CFeFuncNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::onBuild(document, repr);
 
+	SPFeFuncNode* object = this->spfefuncnode;
+
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "type" );
     object->readAttr( "tableValues" );
