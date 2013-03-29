@@ -24,13 +24,39 @@
 #define SP_IS_FONT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FONT))
 #define SP_IS_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FONT))
 
-struct SPFont : public SPObject {
+class CFont;
+
+class SPFont : public SPObject {
+public:
+	CFont* cfont;
+
     double horiz_origin_x;
     double horiz_origin_y;
     double horiz_adv_x;
     double vert_origin_x;
     double vert_origin_y;
     double vert_adv_y;
+};
+
+class CFont : public CObject {
+public:
+	CFont(SPFont* font);
+	virtual ~CFont();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFont* spfont;
 };
 
 struct SPFontClass {

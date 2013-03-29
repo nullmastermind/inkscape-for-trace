@@ -232,7 +232,7 @@ private:
 
     static void sp_item_init(SPItem *item);
 
-    static void sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
+    //static void sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
     static void sp_item_release(SPObject *object);
     static void sp_item_set(SPObject *object, unsigned key, gchar const *value);
     static void sp_item_update(SPObject *object, SPCtx *ctx, guint flags);

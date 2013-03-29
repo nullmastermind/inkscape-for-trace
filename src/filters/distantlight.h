@@ -29,7 +29,11 @@
 class SPFeDistantLight;
 class SPFeDistantLightClass;
 
-struct SPFeDistantLight : public SPObject {
+class CFeDistantLight;
+
+class SPFeDistantLight : public SPObject {
+public:
+	CFeDistantLight* cfedistantlight;
 
     /** azimuth attribute */
     gfloat azimuth;
@@ -37,6 +41,24 @@ struct SPFeDistantLight : public SPObject {
     /** elevation attribute */
     gfloat elevation;
     guint elevation_set : 1;
+};
+
+class CFeDistantLight : public CObject {
+public:
+	CFeDistantLight(SPFeDistantLight* distantlight);
+	virtual ~CFeDistantLight();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFeDistantLight* spfedistantlight;
 };
 
 struct SPFeDistantLightClass {

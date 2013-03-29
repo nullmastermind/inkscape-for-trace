@@ -29,7 +29,11 @@
 class SPFeSpotLight;
 class SPFeSpotLightClass;
 
-struct SPFeSpotLight : public SPObject {
+class CFeSpotLight;
+
+class SPFeSpotLight : public SPObject {
+public:
+	CFeSpotLight* cfespotlight;
 
     /** x coordinate of the light source */
     gfloat x; 
@@ -56,6 +60,24 @@ struct SPFeSpotLight : public SPObject {
     gfloat limitingConeAngle;
     guint limitingConeAngle_set : 1;
     //other fields
+};
+
+class CFeSpotLight : public CObject {
+public:
+	CFeSpotLight(SPFeSpotLight* spotlight);
+	virtual ~CFeSpotLight();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFeSpotLight* spfespotlight;
 };
 
 struct SPFeSpotLightClass {

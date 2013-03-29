@@ -116,8 +116,18 @@ static void sp_guide_class_init(SPGuideClass *gc)
                                                       (GParamFlags) G_PARAM_READWRITE));
 }
 
+CGuide::CGuide(SPGuide* guide) : CObject(guide) {
+	this->spguide = guide;
+}
+
+CGuide::~CGuide() {
+}
+
 static void sp_guide_init(SPGuide *guide)
 {
+	guide->cguide = new CGuide(guide);
+	guide->cobject = guide->cguide;
+
     guide->normal_to_line = Geom::Point(0.,1.);
     guide->point_on_line = Geom::Point(0.,0.);
     guide->color = 0x0000ff7f;
@@ -156,12 +166,25 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
     }
 }
 
-static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) (parent_class))->build) {
 //        (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
 //    }
-	// CPPIFY: todo
+//
+//    object->readAttr( "inkscape:label" );
+//    object->readAttr( "orientation" );
+//    object->readAttr( "position" );
+//
+//    /* Register */
+//    document->addResource("guide", object);
+//	((SPGuide*)object)->cguide->onBuild(document, repr);
+//}
+
+void CGuide::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::onBuild(document, repr);
+
+	SPGuide* object = this->spguide;
 
     object->readAttr( "inkscape:label" );
     object->readAttr( "orientation" );
@@ -173,6 +196,26 @@ static void sp_guide_build(SPObject *object, SPDocument *document, Inkscape::XML
 
 static void sp_guide_release(SPObject *object)
 {
+//    SPGuide *guide = (SPGuide *) object;
+//
+//    while (guide->views) {
+//        sp_guideline_delete(SP_GUIDELINE(guide->views->data));
+//        guide->views = g_slist_remove(guide->views, guide->views->data);
+//    }
+//
+//    if (object->document) {
+//        // Unregister ourselves
+//        object->document->removeResource("guide", object);
+//    }
+//
+//    if (((SPObjectClass *) parent_class)->release) {
+//        ((SPObjectClass *) parent_class)->release(object);
+//    }
+	((SPGuide*)object)->cguide->onRelease();
+}
+
+void CGuide::onRelease() {
+	SPGuide* object = this->spguide;
     SPGuide *guide = (SPGuide *) object;
 
     while (guide->views) {
@@ -185,13 +228,93 @@ static void sp_guide_release(SPObject *object)
         object->document->removeResource("guide", object);
     }
 
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+//    if (((SPObjectClass *) parent_class)->release) {
+//        ((SPObjectClass *) parent_class)->release(object);
+//    }
+    CObject::onRelease();
 }
 
 static void sp_guide_set(SPObject *object, unsigned int key, const gchar *value)
 {
+//    SPGuide *guide = SP_GUIDE(object);
+//
+//    switch (key) {
+//    case SP_ATTR_INKSCAPE_LABEL:
+//        if (value) {
+//            guide->label = g_strdup(value);
+//        } else {
+//            guide->label = NULL;
+//        }
+//
+//        sp_guide_set_label(*guide, guide->label, false);
+//        break;
+//    case SP_ATTR_ORIENTATION:
+//        {
+//            if (value && !strcmp(value, "horizontal")) {
+//                /* Visual representation of a horizontal line, constrain vertically (y coordinate). */
+//                guide->normal_to_line = Geom::Point(0., 1.);
+//            } else if (value && !strcmp(value, "vertical")) {
+//                guide->normal_to_line = Geom::Point(1., 0.);
+//            } else if (value) {
+//                gchar ** strarray = g_strsplit(value, ",", 2);
+//                double newx, newy;
+//                unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+//                success += sp_svg_number_read_d(strarray[1], &newy);
+//                g_strfreev (strarray);
+//                if (success == 2 && (fabs(newx) > 1e-6 || fabs(newy) > 1e-6)) {
+//                    Geom::Point direction(newx, newy);
+//                    direction.normalize();
+//                    guide->normal_to_line = direction;
+//                } else {
+//                    // default to vertical line for bad arguments
+//                    guide->normal_to_line = Geom::Point(1., 0.);
+//                }
+//            } else {
+//                // default to vertical line for bad arguments
+//                guide->normal_to_line = Geom::Point(1., 0.);
+//            }
+//            sp_guide_set_normal(*guide, guide->normal_to_line, false);
+//        }
+//        break;
+//    case SP_ATTR_POSITION:
+//        {
+//            if (value) {
+//                gchar ** strarray = g_strsplit(value, ",", 2);
+//                double newx, newy;
+//                unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+//                success += sp_svg_number_read_d(strarray[1], &newy);
+//                g_strfreev (strarray);
+//                if (success == 2) {
+//                    guide->point_on_line = Geom::Point(newx, newy);
+//                } else if (success == 1) {
+//                    // before 0.46 style guideline definition.
+//                    const gchar *attr = object->getRepr()->attribute("orientation");
+//                    if (attr && !strcmp(attr, "horizontal")) {
+//                        guide->point_on_line = Geom::Point(0, newx);
+//                    } else {
+//                        guide->point_on_line = Geom::Point(newx, 0);
+//                    }
+//                }
+//            } else {
+//                // default to (0,0) for bad arguments
+//                guide->point_on_line = Geom::Point(0,0);
+//            }
+//            // update position in non-committing way
+//            // fixme: perhaps we need to add an update method instead, and request_update here
+//            sp_guide_moveto(*guide, guide->point_on_line, false);
+//        }
+//        break;
+//    default:
+//            if (((SPObjectClass *) (parent_class))->set) {
+//                ((SPObjectClass *) (parent_class))->set(object, key, value);
+//            }
+//            break;
+//    }
+	((SPGuide*)object)->cguide->onSet(key, value);
+}
+
+void CGuide::onSet(unsigned int key, const gchar *value) {
+	SPGuide* object = this->spguide;
     SPGuide *guide = SP_GUIDE(object);
 
     switch (key) {
@@ -261,9 +384,10 @@ static void sp_guide_set(SPObject *object, unsigned int key, const gchar *value)
         }
         break;
     default:
-            if (((SPObjectClass *) (parent_class))->set) {
-                ((SPObjectClass *) (parent_class))->set(object, key, value);
-            }
+//            if (((SPObjectClass *) (parent_class))->set) {
+//                ((SPObjectClass *) (parent_class))->set(object, key, value);
+//            }
+    	CObject::onSet(key, value);
             break;
     }
 }

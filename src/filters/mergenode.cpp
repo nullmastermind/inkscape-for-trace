@@ -70,9 +70,19 @@ sp_feMergeNode_class_init(SPFeMergeNodeClass *klass)
     sp_object_class->update = sp_feMergeNode_update;
 }
 
+CFeMergeNode::CFeMergeNode(SPFeMergeNode* mergenode) : CObject(mergenode) {
+	this->spfemergenode = mergenode;
+}
+
+CFeMergeNode::~CFeMergeNode() {
+}
+
 static void
 sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
 {
+	feMergeNode->cfemergenode = new CFeMergeNode(feMergeNode);
+	feMergeNode->cobject = feMergeNode->cfemergenode;
+
     feMergeNode->input = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
@@ -81,10 +91,15 @@ sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-static void
-sp_feMergeNode_build(SPObject *object, SPDocument */*document*/, Inkscape::XML::Node */*repr*/)
-{
-    object->readAttr( "in" );
+//static void
+//sp_feMergeNode_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
+//    object->readAttr( "in" );
+//}
+
+void CFeMergeNode::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFeMergeNode* object = this->spfemergenode;
+	object->readAttr( "in" );
 }
 
 /**
@@ -93,10 +108,15 @@ sp_feMergeNode_build(SPObject *object, SPDocument */*document*/, Inkscape::XML::
 static void
 sp_feMergeNode_release(SPObject *object)
 {
-    /* deal with our children and our selves here */
+//    /* deal with our children and our selves here */
+//
+//    if (((SPObjectClass *) feMergeNode_parent_class)->release)
+//        ((SPObjectClass *) feMergeNode_parent_class)->release(object);
+	((SPFeMergeNode*)object)->cfemergenode->onRelease();
+}
 
-    if (((SPObjectClass *) feMergeNode_parent_class)->release)
-        ((SPObjectClass *) feMergeNode_parent_class)->release(object);
+void CFeMergeNode::onRelease() {
+	CObject::onRelease();
 }
 
 /**
@@ -105,6 +125,26 @@ sp_feMergeNode_release(SPObject *object)
 static void
 sp_feMergeNode_set(SPObject *object, unsigned int key, gchar const *value)
 {
+//    SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
+//    SPFeMerge *parent = SP_FEMERGE(object->parent);
+//
+//    if (key == SP_ATTR_IN) {
+//        int input = sp_filter_primitive_read_in(parent, value);
+//        if (input != feMergeNode->input) {
+//            feMergeNode->input = input;
+//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//        }
+//    }
+//
+//    /* See if any parents need this value. */
+//    if (((SPObjectClass *) feMergeNode_parent_class)->set) {
+//        ((SPObjectClass *) feMergeNode_parent_class)->set(object, key, value);
+//    }
+	((SPFeMergeNode*)object)->cfemergenode->onSet(key, value);
+}
+
+void CFeMergeNode::onSet(unsigned int key, gchar const *value) {
+	SPFeMergeNode* object = this->spfemergenode;
     SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
     SPFeMerge *parent = SP_FEMERGE(object->parent);
 
@@ -117,9 +157,10 @@ sp_feMergeNode_set(SPObject *object, unsigned int key, gchar const *value)
     }
 
     /* See if any parents need this value. */
-    if (((SPObjectClass *) feMergeNode_parent_class)->set) {
-        ((SPObjectClass *) feMergeNode_parent_class)->set(object, key, value);
-    }
+//    if (((SPObjectClass *) feMergeNode_parent_class)->set) {
+//        ((SPObjectClass *) feMergeNode_parent_class)->set(object, key, value);
+//    }
+    CObject::onSet(key, value);
 }
 
 /**
@@ -128,15 +169,30 @@ sp_feMergeNode_set(SPObject *object, unsigned int key, gchar const *value)
 static void
 sp_feMergeNode_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+//    //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
+//
+//    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+//        object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//    }
+//
+//    if (((SPObjectClass *) feMergeNode_parent_class)->update) {
+//        ((SPObjectClass *) feMergeNode_parent_class)->update(object, ctx, flags);
+//    }
+	((SPFeMergeNode*)object)->cfemergenode->onUpdate(ctx, flags);
+}
+
+void CFeMergeNode::onUpdate(SPCtx *ctx, guint flags) {
+	SPFeMergeNode* object = this->spfemergenode;
     //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
-    if (((SPObjectClass *) feMergeNode_parent_class)->update) {
-        ((SPObjectClass *) feMergeNode_parent_class)->update(object, ctx, flags);
-    }
+//    if (((SPObjectClass *) feMergeNode_parent_class)->update) {
+//        ((SPObjectClass *) feMergeNode_parent_class)->update(object, ctx, flags);
+//    }
+    CObject::onUpdate(ctx, flags);
 }
 
 /**
@@ -145,6 +201,28 @@ sp_feMergeNode_update(SPObject *object, SPCtx *ctx, guint flags)
 static Inkscape::XML::Node *
 sp_feMergeNode_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
+//
+//    // Inkscape-only object, not copied during an "plain SVG" dump:
+//    if (flags & SP_OBJECT_WRITE_EXT) {
+//        if (repr) {
+//            // is this sane?
+//            //repr->mergeFrom(object->getRepr(), "id");
+//        } else {
+//            repr = object->getRepr()->duplicate(doc);
+//        }
+//    }
+//
+//    if (((SPObjectClass *) feMergeNode_parent_class)->write) {
+//        ((SPObjectClass *) feMergeNode_parent_class)->write(object, doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((SPFeMergeNode*)object)->cfemergenode->onWrite(doc, repr, flags);
+}
+
+Inkscape::XML::Node* CFeMergeNode::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeMergeNode* object = this->spfemergenode;
     //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
 
     // Inkscape-only object, not copied during an "plain SVG" dump:
@@ -157,9 +235,10 @@ sp_feMergeNode_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::X
         }
     }
 
-    if (((SPObjectClass *) feMergeNode_parent_class)->write) {
-        ((SPObjectClass *) feMergeNode_parent_class)->write(object, doc, repr, flags);
-    }
+//    if (((SPObjectClass *) feMergeNode_parent_class)->write) {
+//        ((SPObjectClass *) feMergeNode_parent_class)->write(object, doc, repr, flags);
+//    }
+    CObject::onWrite(doc, repr, flags);
 
     return repr;
 }

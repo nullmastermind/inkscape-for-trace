@@ -318,9 +318,9 @@ void CNamedView::onRelease() {
         namedview->grids = g_slist_remove_link(namedview->grids, namedview->grids); // deletes first entry
     }
 
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+//    if (((SPObjectClass *) parent_class)->release) {
+//        ((SPObjectClass *) parent_class)->release(object);
+//    }
     CObjectGroup::onRelease();
 
     namedview->snap_manager.~SnapManager();

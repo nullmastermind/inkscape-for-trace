@@ -42,7 +42,12 @@ struct ltstr {
     bool operator()(const char* s1, const char* s2) const;
 };
 
-struct SPFilter : public SPObject {
+
+class CFilter;
+
+class SPFilter : public SPObject {
+public:
+	CFilter* cfilter;
 
     SPFilterUnits filterUnits;
     guint filterUnits_set : 1;
@@ -60,6 +65,27 @@ struct SPFilter : public SPObject {
 
     std::map<gchar *, int, ltstr>* _image_name;
     int _image_number_next;
+};
+
+class CFilter : public CObject {
+public:
+	CFilter(SPFilter* filter);
+	virtual ~CFilter();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFilter* spfilter;
 };
 
 struct SPFilterClass {

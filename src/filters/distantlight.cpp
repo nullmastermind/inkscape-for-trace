@@ -78,9 +78,19 @@ sp_fedistantlight_class_init(SPFeDistantLightClass *klass)
     sp_object_class->update = sp_fedistantlight_update;
 }
 
+CFeDistantLight::CFeDistantLight(SPFeDistantLight* distantlight) : CObject(distantlight) {
+	this->spfedistantlight = distantlight;
+}
+
+CFeDistantLight::~CFeDistantLight() {
+}
+
 static void
 sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
 {
+	fedistantlight->cfedistantlight = new CFeDistantLight(fedistantlight);
+	fedistantlight->cobject = fedistantlight->cfedistantlight;
+
     fedistantlight->azimuth = 0;
     fedistantlight->elevation = 0;
     fedistantlight->azimuth_set = FALSE;
@@ -92,13 +102,24 @@ sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-static void
-sp_fedistantlight_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void
+//sp_fedistantlight_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) feDistantLight_parent_class)->build) {
 //        ((SPObjectClass *) feDistantLight_parent_class)->build(object, document, repr);
 //    }
-	// CPPIFY: todo
+//    //Read values of key attributes from XML nodes into object.
+//    object->readAttr( "azimuth" );
+//    object->readAttr( "elevation" );
+//
+////is this necessary?
+//    document->addResource("fedistantlight", object);
+//}
+
+void CFeDistantLight::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	CObject::onBuild(document, repr);
+
+	SPFeDistantLight* object = this->spfedistantlight;
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "azimuth" );
@@ -114,6 +135,20 @@ sp_fedistantlight_build(SPObject *object, SPDocument *document, Inkscape::XML::N
 static void
 sp_fedistantlight_release(SPObject *object)
 {
+//    //SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
+//
+//    if ( object->document ) {
+//        // Unregister ourselves
+//        object->document->removeResource("fedistantlight", object);
+//    }
+//
+////TODO: release resources here
+	((SPFeDistantLight*)object)->cfedistantlight->onRelease();
+}
+
+void CFeDistantLight::onRelease() {
+	SPFeDistantLight* object = this->spfedistantlight;
+
     //SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
 
     if ( object->document ) {
@@ -130,6 +165,57 @@ sp_fedistantlight_release(SPObject *object)
 static void
 sp_fedistantlight_set(SPObject *object, unsigned int key, gchar const *value)
 {
+//    SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
+//    gchar *end_ptr;
+//    switch (key) {
+//    case SP_ATTR_AZIMUTH:
+//        end_ptr =NULL;
+//        if (value) {
+//            fedistantlight->azimuth = g_ascii_strtod(value, &end_ptr);
+//            if (end_ptr) {
+//                fedistantlight->azimuth_set = TRUE;
+//            }
+//        }
+//        if (!value || !end_ptr) {
+//                fedistantlight->azimuth_set = FALSE;
+//                fedistantlight->azimuth = 0;
+//        }
+//        if (object->parent &&
+//                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
+//                 SP_IS_FESPECULARLIGHTING(object->parent))) {
+//            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//        }
+//        break;
+//    case SP_ATTR_ELEVATION:
+//        end_ptr =NULL;
+//        if (value) {
+//            fedistantlight->elevation = g_ascii_strtod(value, &end_ptr);
+//            if (end_ptr) {
+//                fedistantlight->elevation_set = TRUE;
+//            }
+//        }
+//        if (!value || !end_ptr) {
+//                fedistantlight->elevation_set = FALSE;
+//                fedistantlight->elevation = 0;
+//        }
+//        if (object->parent &&
+//                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
+//                 SP_IS_FESPECULARLIGHTING(object->parent))) {
+//            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//        }
+//        break;
+//    default:
+//        // See if any parents need this value.
+//        if (((SPObjectClass *) feDistantLight_parent_class)->set) {
+//            ((SPObjectClass *) feDistantLight_parent_class)->set(object, key, value);
+//        }
+//        break;
+//    }
+	((SPFeDistantLight*)object)->cfedistantlight->onSet(key, value);
+}
+
+void CFeDistantLight::onSet(unsigned int key, gchar const *value) {
+	SPFeDistantLight* object = this->spfedistantlight;
     SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
     gchar *end_ptr;
     switch (key) {
@@ -171,9 +257,10 @@ sp_fedistantlight_set(SPObject *object, unsigned int key, gchar const *value)
         break;
     default:
         // See if any parents need this value.
-        if (((SPObjectClass *) feDistantLight_parent_class)->set) {
-            ((SPObjectClass *) feDistantLight_parent_class)->set(object, key, value);
-        }
+//        if (((SPObjectClass *) feDistantLight_parent_class)->set) {
+//            ((SPObjectClass *) feDistantLight_parent_class)->set(object, key, value);
+//        }
+    	CObject::onSet(key, value);
         break;
     }
 }
@@ -184,6 +271,23 @@ sp_fedistantlight_set(SPObject *object, unsigned int key, gchar const *value)
 static void
 sp_fedistantlight_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+//    SPFeDistantLight *feDistantLight = SP_FEDISTANTLIGHT(object);
+//    (void)feDistantLight;
+//
+//    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+//        /* do something to trigger redisplay, updates? */
+//        object->readAttr( "azimuth" );
+//        object->readAttr( "elevation" );
+//    }
+//
+//    if (((SPObjectClass *) feDistantLight_parent_class)->update) {
+//        ((SPObjectClass *) feDistantLight_parent_class)->update(object, ctx, flags);
+//    }
+	((SPFeDistantLight*)object)->cfedistantlight->onUpdate(ctx, flags);
+}
+
+void CFeDistantLight::onUpdate(SPCtx *ctx, guint flags) {
+	SPFeDistantLight* object = this->spfedistantlight;
     SPFeDistantLight *feDistantLight = SP_FEDISTANTLIGHT(object);
     (void)feDistantLight;
 
@@ -193,9 +297,10 @@ sp_fedistantlight_update(SPObject *object, SPCtx *ctx, guint flags)
         object->readAttr( "elevation" );
     }
 
-    if (((SPObjectClass *) feDistantLight_parent_class)->update) {
-        ((SPObjectClass *) feDistantLight_parent_class)->update(object, ctx, flags);
-    }
+//    if (((SPObjectClass *) feDistantLight_parent_class)->update) {
+//        ((SPObjectClass *) feDistantLight_parent_class)->update(object, ctx, flags);
+//    }
+    CObject::onUpdate(ctx, flags);
 }
 
 /**
@@ -204,6 +309,27 @@ sp_fedistantlight_update(SPObject *object, SPCtx *ctx, guint flags)
 static Inkscape::XML::Node *
 sp_fedistantlight_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
+//
+//    if (!repr) {
+//        repr = object->getRepr()->duplicate(doc);
+//    }
+//
+//    if (fedistantlight->azimuth_set)
+//        sp_repr_set_css_double(repr, "azimuth", fedistantlight->azimuth);
+//    if (fedistantlight->elevation_set)
+//        sp_repr_set_css_double(repr, "elevation", fedistantlight->elevation);
+//
+//    if (((SPObjectClass *) feDistantLight_parent_class)->write) {
+//        ((SPObjectClass *) feDistantLight_parent_class)->write(object, doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((SPFeDistantLight*)object)->cfedistantlight->onWrite(doc, repr, flags);
+}
+
+Inkscape::XML::Node* CFeDistantLight::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeDistantLight* object = this->spfedistantlight;
     SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
 
     if (!repr) {
@@ -215,9 +341,10 @@ sp_fedistantlight_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape
     if (fedistantlight->elevation_set)
         sp_repr_set_css_double(repr, "elevation", fedistantlight->elevation);
 
-    if (((SPObjectClass *) feDistantLight_parent_class)->write) {
-        ((SPObjectClass *) feDistantLight_parent_class)->write(object, doc, repr, flags);
-    }
+//    if (((SPObjectClass *) feDistantLight_parent_class)->write) {
+//        ((SPObjectClass *) feDistantLight_parent_class)->write(object, doc, repr, flags);
+//    }
+    CObject::onWrite(doc, repr, flags);
 
     return repr;
 }

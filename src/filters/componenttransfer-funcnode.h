@@ -39,7 +39,12 @@
 class SPFeFuncNode;
 class SPFeFuncNodeClass;
 
-struct SPFeFuncNode : public SPObject {
+class CFeFuncNode;
+
+class SPFeFuncNode : public SPObject {
+public:
+	CFeFuncNode* cfefuncnode;
+
     Inkscape::Filters::FilterComponentTransferType type;
     std::vector<double> tableValues;
     double slope;
@@ -47,6 +52,24 @@ struct SPFeFuncNode : public SPObject {
     double amplitude;
     double exponent;
     double offset;
+};
+
+class CFeFuncNode : public CObject {
+public:
+	CFeFuncNode(SPFeFuncNode* funcnode);
+	virtual ~CFeFuncNode();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFeFuncNode* spfefuncnode;
 };
 
 struct SPFeFuncNodeClass {

@@ -442,10 +442,10 @@ void CItem::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 // CPPIFY: remove
-void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    ((SPItem*)object)->citem->onBuild(document, repr);
-}
+//void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
+//    ((SPItem*)object)->citem->onBuild(document, repr);
+//}
 
 void CItem::onRelease() {
 	SPItem* item = this->spitem;
@@ -766,7 +766,8 @@ Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML
 
 // CPPIFY: make pure virtual
 Geom::OptRect CItem::onBbox(Geom::Affine const &transform, SPItem::BBoxType type) {
-	throw;
+	//throw;
+	return Geom::OptRect();
 }
 
 /**
@@ -942,7 +943,7 @@ unsigned SPItem::pos_in_parent()
 
 // CPPIFY: make pure virtual, see below!
 void CItem::onSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
-	throw;
+	//throw;
 }
 
 // CPPIFY: remove
@@ -995,7 +996,7 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
 
 // CPPIFY: make pure virtual
 void CItem::onPrint(SPPrintContext* ctx) {
-	throw;
+	//throw;
 }
 
 void SPItem::invoke_print(SPPrintContext *ctx)
@@ -1086,7 +1087,8 @@ unsigned SPItem::display_key_new(unsigned numkeys)
 
 // CPPIFY: make pure virtual
 Inkscape::DrawingItem* CItem::onShow(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
-	throw;
+	//throw;
+	return 0;
 }
 
 Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned key, unsigned flags)
@@ -1144,7 +1146,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
 
 // CPPIFY: make pure virtual
 void CItem::onHide(unsigned int key) {
-	throw;
+	//throw;
 }
 
 void SPItem::invoke_hide(unsigned key)

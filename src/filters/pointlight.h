@@ -29,7 +29,11 @@
 class SPFePointLight;
 class SPFePointLightClass;
 
-struct SPFePointLight : public SPObject {
+class CFePointLight;
+
+class SPFePointLight : public SPObject {
+public:
+	CFePointLight* cfepointlight;
 
     /** x coordinate of the light source */
     gfloat x; 
@@ -42,6 +46,24 @@ struct SPFePointLight : public SPObject {
     guint z_set : 1;
 
     //other fields
+};
+
+class CFePointLight : public CObject {
+public:
+	CFePointLight(SPFePointLight* pointlight);
+	virtual ~CFePointLight();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFePointLight* spfepointlight;
 };
 
 struct SPFePointLightClass {

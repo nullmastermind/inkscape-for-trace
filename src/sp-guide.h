@@ -28,9 +28,14 @@ struct SPCanvasGroup;
 #define SP_IS_GUIDE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_GUIDE))
 #define SP_IS_GUIDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_GUIDE))
 
+
+class CGuide;
+
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
 class SPGuide : public SPObject {
 public:
+	CGuide* cguide;
+
     char* label;
     Geom::Point normal_to_line;
     Geom::Point point_on_line;
@@ -50,6 +55,20 @@ public:
     Geom::Point getPositionFrom(Geom::Point const &pt) const;
     double getDistanceFrom(Geom::Point const &pt) const;
 };
+
+class CGuide : public CObject {
+public:
+	CGuide(SPGuide* guide);
+	virtual ~CGuide();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+	virtual void onSet(unsigned int key, const gchar* value);
+
+private:
+	SPGuide* spguide;
+};
+
 
 class SPGuideClass {
 public:

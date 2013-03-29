@@ -24,8 +24,31 @@
 class SPFeMergeNode;
 class SPFeMergeNodeClass;
 
-struct SPFeMergeNode : public SPObject {
+class CFeMergeNode;
+
+class SPFeMergeNode : public SPObject {
+public:
+	CFeMergeNode* cfemergenode;
+
     int input;
+};
+
+class CFeMergeNode : public CObject {
+public:
+	CFeMergeNode(SPFeMergeNode* mergenode);
+	virtual ~CFeMergeNode();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFeMergeNode* spfemergenode;
 };
 
 struct SPFeMergeNodeClass {
