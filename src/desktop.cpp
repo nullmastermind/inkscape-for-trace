@@ -26,13 +26,12 @@
 # include "config.h"
 #endif
 
+#include "ui/dialog/dialog-manager.h"
 #include <glibmm/i18n.h>
 #include <sigc++/functors/mem_fun.h>
 
 #include <2geom/transforms.h>
 #include <2geom/rect.h>
-
-#include "ui/dialog/dialog-manager.h"
 
 #include "box3d-context.h"
 #include "color.h"
@@ -812,7 +811,7 @@ SPDesktop::push_current_zoom (std::list<Geom::Rect> &history)
 {
     Geom::Rect area = get_display_area();
 
-    if (history.empty() || history.front() == area) {
+    if (history.empty() || history.front() != area) {
         history.push_front(area);
     }
 }

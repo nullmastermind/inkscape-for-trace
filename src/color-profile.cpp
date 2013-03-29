@@ -4,9 +4,9 @@
 
 #define noDEBUG_LCMS
 
+#include <gdkmm/color.h>
 #include <glib/gstdio.h>
 #include <fcntl.h>
-#include <gdkmm/color.h>
 #include <glib/gi18n.h>
 
 #ifdef DEBUG_LCMS
@@ -46,6 +46,8 @@
 #ifdef WIN32
 #include <icm.h>
 #endif // WIN32
+
+#include <glibmm/convert.h>
 
 using Inkscape::ColorProfile;
 using Inkscape::ColorProfileClass;

@@ -23,9 +23,9 @@
 # include "config.h"
 #endif
 
-#include "file.h"
-#include <glib.h>
+#include "ui/dialog/dialog-manager.h"
 #include <gtkmm/icontheme.h>
+#include "file.h"
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
@@ -75,15 +75,12 @@
 #include "sp-image.h"
 #include "sp-item.h"
 #include "sp-mask.h"
-// #include "verbs.h"
 #include "message-stack.h"
-// #include "inkscape.h"
-#include "ui/dialog/dialog-manager.h"
-// #include "../xml/repr.h"
 #include "ui/dialog/layer-properties.h"
 
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
+
+#include <glibmm/miscutils.h>
 
 using Inkscape::DocumentUndo;
 
