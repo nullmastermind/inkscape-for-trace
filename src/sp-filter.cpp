@@ -760,11 +760,13 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
         if (SP_IS_FILTER_PRIMITIVE(primitive_obj)) {
             SPFilterPrimitive *primitive = SP_FILTER_PRIMITIVE(primitive_obj);
             g_assert(primitive != NULL);
-            if (((SPFilterPrimitiveClass*) G_OBJECT_GET_CLASS(primitive))->build_renderer) {
-                ((SPFilterPrimitiveClass *) G_OBJECT_GET_CLASS(primitive))->build_renderer(primitive, nr_filter);
-            } else {
-                g_warning("Cannot build filter renderer: missing builder");
-            }
+
+//            if (((SPFilterPrimitiveClass*) G_OBJECT_GET_CLASS(primitive))->build_renderer) {
+//                ((SPFilterPrimitiveClass *) G_OBJECT_GET_CLASS(primitive))->build_renderer(primitive, nr_filter);
+//            } else {
+//                g_warning("Cannot build filter renderer: missing builder");
+//            }  // CPPIFY: => FilterPrimitive should be abstract.
+            primitive->cfilterprimitive->onBuildRenderer(nr_filter);
         }
         primitive_obj = primitive_obj->next;
     }

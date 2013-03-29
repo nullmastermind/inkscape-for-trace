@@ -77,7 +77,7 @@ sp_feColorMatrix_class_init(SPFeColorMatrixClass *klass)
     sp_object_class->write = sp_feColorMatrix_write;
     sp_object_class->set = sp_feColorMatrix_set;
     sp_object_class->update = sp_feColorMatrix_update;
-    sp_primitive_class->build_renderer = sp_feColorMatrix_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feColorMatrix_build_renderer;
 }
 
 CFeColorMatrix::CFeColorMatrix(SPFeColorMatrix* matrix) : CFilterPrimitive(matrix) {

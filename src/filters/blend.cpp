@@ -79,7 +79,7 @@ sp_feBlend_class_init(SPFeBlendClass *klass)
     sp_object_class->set = sp_feBlend_set;
     sp_object_class->update = sp_feBlend_update;
 
-    sp_primitive_class->build_renderer = sp_feBlend_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feBlend_build_renderer;
 }
 
 CFeBlend::CFeBlend(SPFeBlend* blend) : CFilterPrimitive(blend) {

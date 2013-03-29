@@ -77,7 +77,7 @@ sp_feConvolveMatrix_class_init(SPFeConvolveMatrixClass *klass)
     sp_object_class->set = sp_feConvolveMatrix_set;
     sp_object_class->update = sp_feConvolveMatrix_update;
 
-    sp_primitive_class->build_renderer = sp_feConvolveMatrix_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feConvolveMatrix_build_renderer;
 }
 
 CFeConvolveMatrix::CFeConvolveMatrix(SPFeConvolveMatrix* matrix) : CFilterPrimitive(matrix) {

@@ -76,7 +76,7 @@ static void sp_feImage_class_init(SPFeImageClass *klass)
     sp_object_class->set = sp_feImage_set;
     sp_object_class->update = sp_feImage_update;
 
-    sp_primitive_class->build_renderer = sp_feImage_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feImage_build_renderer;
 }
 
 CFeImage::CFeImage(SPFeImage* image) : CFilterPrimitive(image) {

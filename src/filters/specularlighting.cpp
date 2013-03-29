@@ -91,7 +91,7 @@ sp_feSpecularLighting_class_init(SPFeSpecularLightingClass *klass)
     sp_object_class->remove_child = sp_feSpecularLighting_remove_child;
     sp_object_class->order_changed = sp_feSpecularLighting_order_changed;
 
-    sp_primitive_class->build_renderer = sp_feSpecularLighting_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feSpecularLighting_build_renderer;
 }
 
 CFeSpecularLighting::CFeSpecularLighting(SPFeSpecularLighting* lighting) : CFilterPrimitive(lighting) {

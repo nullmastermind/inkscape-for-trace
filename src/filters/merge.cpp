@@ -73,7 +73,7 @@ sp_feMerge_class_init(SPFeMergeClass *klass)
     sp_object_class->set = sp_feMerge_set;
     sp_object_class->update = sp_feMerge_update;
 
-    sp_primitive_class->build_renderer = sp_feMerge_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feMerge_build_renderer;
 }
 
 CFeMerge::CFeMerge(SPFeMerge* merge) : CFilterPrimitive(merge) {

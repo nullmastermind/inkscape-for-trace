@@ -74,7 +74,7 @@ sp_feComposite_class_init(SPFeCompositeClass *klass)
     sp_object_class->set = sp_feComposite_set;
     sp_object_class->update = sp_feComposite_update;
 
-    sp_primitive_class->build_renderer = sp_feComposite_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feComposite_build_renderer;
 }
 
 CFeComposite::CFeComposite(SPFeComposite* comp) : CFilterPrimitive(comp) {

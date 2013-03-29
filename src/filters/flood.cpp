@@ -73,7 +73,7 @@ static void sp_feFlood_class_init(SPFeFloodClass *klass)
     sp_object_class->write = sp_feFlood_write;
     sp_object_class->set = sp_feFlood_set;
     sp_object_class->update = sp_feFlood_update;
-    sp_primitive_class->build_renderer = sp_feFlood_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feFlood_build_renderer;
 }
 
 CFeFlood::CFeFlood(SPFeFlood* flood) : CFilterPrimitive(flood) {

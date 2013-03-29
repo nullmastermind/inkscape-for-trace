@@ -45,7 +45,7 @@ public:
 
 struct SPFilterPrimitiveClass {
     SPObjectClass sp_object_class;
-    void (* build_renderer)(SPFilterPrimitive*, Inkscape::Filters::Filter*);
+    //void (* build_renderer)(SPFilterPrimitive*, Inkscape::Filters::Filter*);
 };
 
 class CFilterPrimitive : public CObject {

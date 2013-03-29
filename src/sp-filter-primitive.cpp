@@ -73,7 +73,7 @@ static void sp_filter_primitive_class_init(SPFilterPrimitiveClass *klass)
     
     /* This should never be called on this base class, but only on derived
      * classes. */
-    klass->build_renderer = NULL;
+    //klass->build_renderer = NULL;
 }
 
 CFilterPrimitive::CFilterPrimitive(SPFilterPrimitive* fp) : CObject(fp) {

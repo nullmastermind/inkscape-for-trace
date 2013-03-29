@@ -70,7 +70,7 @@ sp_feTile_class_init(SPFeTileClass *klass)
     sp_object_class->write = sp_feTile_write;
     sp_object_class->set = sp_feTile_set;
     sp_object_class->update = sp_feTile_update;
-    sp_primitive_class->build_renderer = sp_feTile_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feTile_build_renderer;
 }
 
 CFeTile::CFeTile(SPFeTile* tile) : CFilterPrimitive(tile) {

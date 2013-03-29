@@ -91,7 +91,7 @@ sp_feDiffuseLighting_class_init(SPFeDiffuseLightingClass *klass)
     sp_object_class->remove_child = sp_feDiffuseLighting_remove_child;
     sp_object_class->order_changed = sp_feDiffuseLighting_order_changed;
 
-    sp_primitive_class->build_renderer = sp_feDiffuseLighting_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feDiffuseLighting_build_renderer;
 }
 
 CFeDiffuseLighting::CFeDiffuseLighting(SPFeDiffuseLighting* dl) : CFilterPrimitive(dl) {

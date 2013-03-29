@@ -77,7 +77,7 @@ sp_feTurbulence_class_init(SPFeTurbulenceClass *klass)
     sp_object_class->set = sp_feTurbulence_set;
     sp_object_class->update = sp_feTurbulence_update;
 
-    sp_primitive_class->build_renderer = sp_feTurbulence_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feTurbulence_build_renderer;
 }
 
 CFeTurbulence::CFeTurbulence(SPFeTurbulence* turb) : CFilterPrimitive(turb) {

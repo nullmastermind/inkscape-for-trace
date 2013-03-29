@@ -74,7 +74,7 @@ sp_feOffset_class_init(SPFeOffsetClass *klass)
     sp_object_class->set = sp_feOffset_set;
     sp_object_class->update = sp_feOffset_update;
 
-    sp_primitive_class->build_renderer = sp_feOffset_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feOffset_build_renderer;
 }
 
 CFeOffset::CFeOffset(SPFeOffset* offset) : CFilterPrimitive(offset) {

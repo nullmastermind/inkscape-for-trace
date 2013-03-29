@@ -78,7 +78,7 @@ sp_feComponentTransfer_class_init(SPFeComponentTransferClass *klass)
     sp_object_class->child_added = sp_feComponentTransfer_child_added;
     sp_object_class->remove_child = sp_feComponentTransfer_remove_child;
 
-    sp_primitive_class->build_renderer = sp_feComponentTransfer_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feComponentTransfer_build_renderer;
 }
 
 CFeComponentTransfer::CFeComponentTransfer(SPFeComponentTransfer* tr) : CFilterPrimitive(tr) {

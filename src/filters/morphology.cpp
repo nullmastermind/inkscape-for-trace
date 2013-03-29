@@ -74,7 +74,7 @@ sp_feMorphology_class_init(SPFeMorphologyClass *klass)
     sp_object_class->write = sp_feMorphology_write;
     sp_object_class->set = sp_feMorphology_set;
     sp_object_class->update = sp_feMorphology_update;
-    sp_primitive_class->build_renderer = sp_feMorphology_build_renderer;
+    //sp_primitive_class->build_renderer = sp_feMorphology_build_renderer;
 }
 
 CFeMorphology::CFeMorphology(SPFeMorphology* morph) : CFilterPrimitive(morph) {
