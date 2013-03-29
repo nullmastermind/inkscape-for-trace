@@ -305,16 +305,26 @@ static void sp_fontface_class_init(SPFontFaceClass *fc)
     parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
     //sp_object_class->build = sp_fontface_build;
-    sp_object_class->release = sp_fontface_release;
-    sp_object_class->set = sp_fontface_set;
-    sp_object_class->write = sp_fontface_write;
-    sp_object_class->child_added = sp_fontface_child_added;
-    sp_object_class->remove_child = sp_fontface_remove_child;
-    sp_object_class->update = sp_fontface_update;
+//    sp_object_class->release = sp_fontface_release;
+//    sp_object_class->set = sp_fontface_set;
+//    sp_object_class->write = sp_fontface_write;
+//    sp_object_class->child_added = sp_fontface_child_added;
+//    sp_object_class->remove_child = sp_fontface_remove_child;
+//    sp_object_class->update = sp_fontface_update;
+}
+
+CFontFace::CFontFace(SPFontFace* face) : CObject(face) {
+	this->spfontface = face;
+}
+
+CFontFace::~CFontFace() {
 }
 
 static void sp_fontface_init(SPFontFace *face)
 {
+	face->cfontface = new CFontFace(face);
+	face->cobject = face->cfontface;
+
     std::vector<FontFaceStyleType> style;
     style.push_back(SP_FONTFACE_STYLE_ALL);
     face->font_style = style;
@@ -367,46 +377,88 @@ static void sp_fontface_init(SPFontFace *face)
 */
 }
 
-static void sp_fontface_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-//    if (((SPObjectClass *) (parent_class))->build) {
-//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
-//    }
-	// CPPIFY: todo
+//static void sp_fontface_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
+////    if (((SPObjectClass *) (parent_class))->build) {
+////        ((SPObjectClass *) (parent_class))->build(object, document, repr);
+////    }
+//
+//    object->readAttr( "font-family" );
+//    object->readAttr( "font-style" );
+//    object->readAttr( "font-variant" );
+//    object->readAttr( "font-weight" );
+//    object->readAttr( "font-stretch" );
+//    object->readAttr( "font-size" );
+//    object->readAttr( "unicode-range" );
+//    object->readAttr( "units-per-em" );
+//    object->readAttr( "panose-1" );
+//    object->readAttr( "stem-v" );
+//    object->readAttr( "stem-h" );
+//    object->readAttr( "slope" );
+//    object->readAttr( "cap-height" );
+//    object->readAttr( "x-height" );
+//    object->readAttr( "accent-height" );
+//    object->readAttr( "ascent" );
+//    object->readAttr( "descent" );
+//    object->readAttr( "widths" );
+//    object->readAttr( "bbox" );
+//    object->readAttr( "ideographic" );
+//    object->readAttr( "alphabetic" );
+//    object->readAttr( "mathematical" );
+//    object->readAttr( "ranging" );
+//    object->readAttr( "v-ideogaphic" );
+//    object->readAttr( "v-alphabetic" );
+//    object->readAttr( "v-mathematical" );
+//    object->readAttr( "v-hanging" );
+//    object->readAttr( "underline-position" );
+//    object->readAttr( "underline-thickness" );
+//    object->readAttr( "strikethrough-position" );
+//    object->readAttr( "strikethrough-thickness" );
+//    object->readAttr( "overline-position" );
+//    object->readAttr( "overline-thickness" );
+//}
 
-    object->readAttr( "font-family" );
-    object->readAttr( "font-style" );
-    object->readAttr( "font-variant" );
-    object->readAttr( "font-weight" );
-    object->readAttr( "font-stretch" );
-    object->readAttr( "font-size" );
-    object->readAttr( "unicode-range" );
-    object->readAttr( "units-per-em" );
-    object->readAttr( "panose-1" );
-    object->readAttr( "stem-v" );
-    object->readAttr( "stem-h" );
-    object->readAttr( "slope" );
-    object->readAttr( "cap-height" );
-    object->readAttr( "x-height" );
-    object->readAttr( "accent-height" );
-    object->readAttr( "ascent" );
-    object->readAttr( "descent" );
-    object->readAttr( "widths" );
-    object->readAttr( "bbox" );
-    object->readAttr( "ideographic" );
-    object->readAttr( "alphabetic" );
-    object->readAttr( "mathematical" );
-    object->readAttr( "ranging" );
-    object->readAttr( "v-ideogaphic" );
-    object->readAttr( "v-alphabetic" );
-    object->readAttr( "v-mathematical" );
-    object->readAttr( "v-hanging" );
-    object->readAttr( "underline-position" );
-    object->readAttr( "underline-thickness" );
-    object->readAttr( "strikethrough-position" );
-    object->readAttr( "strikethrough-thickness" );
-    object->readAttr( "overline-position" );
-    object->readAttr( "overline-thickness" );
+void CFontFace::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	//    if (((SPObjectClass *) (parent_class))->build) {
+	//        ((SPObjectClass *) (parent_class))->build(object, document, repr);
+	//    }
+	CObject::onBuild(document, repr);
+
+	SPFontFace* object = this->spfontface;
+
+	object->readAttr( "font-family" );
+	object->readAttr( "font-style" );
+	object->readAttr( "font-variant" );
+	object->readAttr( "font-weight" );
+	object->readAttr( "font-stretch" );
+	object->readAttr( "font-size" );
+	object->readAttr( "unicode-range" );
+	object->readAttr( "units-per-em" );
+	object->readAttr( "panose-1" );
+	object->readAttr( "stem-v" );
+	object->readAttr( "stem-h" );
+	object->readAttr( "slope" );
+	object->readAttr( "cap-height" );
+	object->readAttr( "x-height" );
+	object->readAttr( "accent-height" );
+	object->readAttr( "ascent" );
+	object->readAttr( "descent" );
+	object->readAttr( "widths" );
+	object->readAttr( "bbox" );
+	object->readAttr( "ideographic" );
+	object->readAttr( "alphabetic" );
+	object->readAttr( "mathematical" );
+	object->readAttr( "ranging" );
+	object->readAttr( "v-ideogaphic" );
+	object->readAttr( "v-alphabetic" );
+	object->readAttr( "v-mathematical" );
+	object->readAttr( "v-hanging" );
+	object->readAttr( "underline-position" );
+	object->readAttr( "underline-thickness" );
+	object->readAttr( "strikethrough-position" );
+	object->readAttr( "strikethrough-thickness" );
+	object->readAttr( "overline-position" );
+	object->readAttr( "overline-thickness" );
 }
 
 static void sp_fontface_children_modified(SPFontFace */*sp_fontface*/)
@@ -419,10 +471,24 @@ static void sp_fontface_children_modified(SPFontFace */*sp_fontface*/)
 static void
 sp_fontface_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
+//    SPFontFace *f = SP_FONTFACE(object);
+//
+//    if (((SPObjectClass *) parent_class)->child_added)
+//        (* ((SPObjectClass *) parent_class)->child_added)(object, child, ref);
+//
+//    sp_fontface_children_modified(f);
+//    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	((SPFontFace*)object)->cfontface->onChildAdded(child, ref);
+}
+
+void CFontFace::onChildAdded(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPFontFace* object = this->spfontface;
+
     SPFontFace *f = SP_FONTFACE(object);
 
-    if (((SPObjectClass *) parent_class)->child_added)
-        (* ((SPObjectClass *) parent_class)->child_added)(object, child, ref);
+//    if (((SPObjectClass *) parent_class)->child_added)
+//        (* ((SPObjectClass *) parent_class)->child_added)(object, child, ref);
+    CObject::onChildAdded(child, ref);
 
     sp_fontface_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -435,10 +501,24 @@ sp_fontface_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::
 static void
 sp_fontface_remove_child(SPObject *object, Inkscape::XML::Node *child)
 {
+//    SPFontFace *f = SP_FONTFACE(object);
+//
+//    if (((SPObjectClass *) parent_class)->remove_child)
+//        (* ((SPObjectClass *) parent_class)->remove_child)(object, child);
+//
+//    sp_fontface_children_modified(f);
+//    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	((SPFontFace*)object)->cfontface->onRemoveChild(child);
+}
+
+void CFontFace::onRemoveChild(Inkscape::XML::Node *child) {
+	SPFontFace* object = this->spfontface;
+
     SPFontFace *f = SP_FONTFACE(object);
 
-    if (((SPObjectClass *) parent_class)->remove_child)
-        (* ((SPObjectClass *) parent_class)->remove_child)(object, child);
+//    if (((SPObjectClass *) parent_class)->remove_child)
+//        (* ((SPObjectClass *) parent_class)->remove_child)(object, child);
+    CObject::onRemoveChild(child);
 
     sp_fontface_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -448,13 +528,311 @@ static void sp_fontface_release(SPObject *object)
 {
     //SPFontFace *font = SP_FONTFACE(object);
 
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+//    if (((SPObjectClass *) parent_class)->release) {
+//        ((SPObjectClass *) parent_class)->release(object);
+//    }
+	((SPFontFace*)object)->cfontface->onRelease();
+}
+
+void CFontFace::onRelease() {
+	CObject::onRelease();
 }
 
 static void sp_fontface_set(SPObject *object, unsigned int key, const gchar *value)
 {
+//    SPFontFace *face = SP_FONTFACE(object);
+//    std::vector<FontFaceStyleType> style;
+//    std::vector<FontFaceVariantType> variant;
+//    std::vector<FontFaceWeightType> weight;
+//    std::vector<FontFaceStretchType> stretch;
+//
+//    switch (key) {
+//        case SP_PROP_FONT_FAMILY:
+//            if (face->font_family) {
+//                g_free(face->font_family);
+//            }
+//            face->font_family = g_strdup(value);
+//            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            break;
+//        case SP_PROP_FONT_STYLE:
+//            style = sp_read_fontFaceStyleType(value);
+//            if (face->font_style.size() != style.size()){
+//                face->font_style = style;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            } else {
+//                for (unsigned int i=0;i<style.size();i++){
+//                    if (style[i] != face->font_style[i]){
+//                        face->font_style = style;
+//                        object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//                        break;
+//                    }
+//                }
+//            }
+//            break;
+//        case SP_PROP_FONT_VARIANT:
+//            variant = sp_read_fontFaceVariantType(value);
+//            if (face->font_variant.size() != variant.size()){
+//                face->font_variant = variant;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            } else {
+//                for (unsigned int i=0;i<variant.size();i++){
+//                    if (variant[i] != face->font_variant[i]){
+//                        face->font_variant = variant;
+//                        object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//                        break;
+//                    }
+//                }
+//            }
+//            break;
+//        case SP_PROP_FONT_WEIGHT:
+//            weight = sp_read_fontFaceWeightType(value);
+//            if (face->font_weight.size() != weight.size()){
+//                face->font_weight = weight;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            } else {
+//                for (unsigned int i=0;i<weight.size();i++){
+//                    if (weight[i] != face->font_weight[i]){
+//                        face->font_weight = weight;
+//                        object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//                        break;
+//                    }
+//                }
+//            }
+//            break;
+//        case SP_PROP_FONT_STRETCH:
+//            stretch = sp_read_fontFaceStretchType(value);
+//            if (face->font_stretch.size() != stretch.size()){
+//                face->font_stretch = stretch;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            } else {
+//                for (unsigned int i=0;i<stretch.size();i++){
+//                    if (stretch[i] != face->font_stretch[i]){
+//                        face->font_stretch = stretch;
+//                        object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//                        break;
+//                    }
+//                }
+//            }
+//            break;
+//        case SP_ATTR_UNITS_PER_EM:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->units_per_em){
+//                face->units_per_em = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_STEMV:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->stemv){
+//                face->stemv = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_STEMH:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->stemh){
+//                face->stemh = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_SLOPE:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->slope){
+//                face->slope = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_CAP_HEIGHT:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->cap_height){
+//                face->cap_height = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_X_HEIGHT:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->x_height){
+//                face->x_height = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_ACCENT_HEIGHT:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->accent_height){
+//                face->accent_height = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_ASCENT:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->ascent){
+//                face->ascent = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_DESCENT:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->descent){
+//                face->descent = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_IDEOGRAPHIC:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->ideographic){
+//                face->ideographic = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_ALPHABETIC:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->alphabetic){
+//                face->alphabetic = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_MATHEMATICAL:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->mathematical){
+//                face->mathematical = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_HANGING:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->hanging){
+//                face->hanging = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_V_IDEOGRAPHIC:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->v_ideographic){
+//                face->v_ideographic = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_V_ALPHABETIC:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->v_alphabetic){
+//                face->v_alphabetic = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_V_MATHEMATICAL:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->v_mathematical){
+//                face->v_mathematical = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_V_HANGING:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->v_hanging){
+//                face->v_hanging = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_UNDERLINE_POSITION:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->underline_position){
+//                face->underline_position = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_UNDERLINE_THICKNESS:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->underline_thickness){
+//                face->underline_thickness = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_STRIKETHROUGH_POSITION:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->strikethrough_position){
+//                face->strikethrough_position = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_STRIKETHROUGH_THICKNESS:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->strikethrough_thickness){
+//                face->strikethrough_thickness = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_OVERLINE_POSITION:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->overline_position){
+//                face->overline_position = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        case SP_ATTR_OVERLINE_THICKNESS:
+//        {
+//            double number = value ? g_ascii_strtod(value, 0) : 0;
+//            if (number != face->overline_thickness){
+//                face->overline_thickness = number;
+//                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        }
+//        default:
+//            if (((SPObjectClass *) (parent_class))->set) {
+//                ((SPObjectClass *) (parent_class))->set(object, key, value);
+//            }
+//            break;
+//    }
+	((SPFontFace*)object)->cfontface->onSet(key, value);
+}
+
+void CFontFace::onSet(unsigned int key, const gchar *value) {
+	SPFontFace* object = this->spfontface;
+
     SPFontFace *face = SP_FONTFACE(object);
     std::vector<FontFaceStyleType> style;
     std::vector<FontFaceVariantType> variant;
@@ -737,9 +1115,10 @@ static void sp_fontface_set(SPObject *object, unsigned int key, const gchar *val
             break;
         }
         default:
-            if (((SPObjectClass *) (parent_class))->set) {
-                ((SPObjectClass *) (parent_class))->set(object, key, value);
-            }
+//            if (((SPObjectClass *) (parent_class))->set) {
+//                ((SPObjectClass *) (parent_class))->set(object, key, value);
+//            }
+        	CObject::onSet(key, value);
             break;
     }
 }
@@ -750,6 +1129,51 @@ static void sp_fontface_set(SPObject *object, unsigned int key, const gchar *val
 static void
 sp_fontface_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+//    if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
+//        object->readAttr( "font-family" );
+//        object->readAttr( "font-style" );
+//        object->readAttr( "font-variant" );
+//        object->readAttr( "font-weight" );
+//        object->readAttr( "font-stretch" );
+//        object->readAttr( "font-size" );
+//        object->readAttr( "unicode-range" );
+//        object->readAttr( "units-per-em" );
+//        object->readAttr( "panose-1" );
+//        object->readAttr( "stemv" );
+//        object->readAttr( "stemh" );
+//        object->readAttr( "slope" );
+//        object->readAttr( "cap-height" );
+//        object->readAttr( "x-height" );
+//        object->readAttr( "accent-height" );
+//        object->readAttr( "ascent" );
+//        object->readAttr( "descent" );
+//        object->readAttr( "widths" );
+//        object->readAttr( "bbox" );
+//        object->readAttr( "ideographic" );
+//        object->readAttr( "alphabetic" );
+//        object->readAttr( "mathematical" );
+//        object->readAttr( "hanging" );
+//        object->readAttr( "v-ideographic" );
+//        object->readAttr( "v-alphabetic" );
+//        object->readAttr( "v-mathematical" );
+//        object->readAttr( "v-hanging" );
+//        object->readAttr( "underline-position" );
+//        object->readAttr( "underline-thickness" );
+//        object->readAttr( "strikethrough-position" );
+//        object->readAttr( "strikethrough-thickness" );
+//        object->readAttr( "overline-position" );
+//        object->readAttr( "overline-thickness" );
+//    }
+//
+//    if (((SPObjectClass *) parent_class)->update) {
+//        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
+//    }
+	((SPFontFace*)object)->cfontface->onUpdate(ctx, flags);
+}
+
+void CFontFace::onUpdate(SPCtx *ctx, guint flags) {
+	SPFontFace* object = this->spfontface;
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
         object->readAttr( "font-family" );
         object->readAttr( "font-style" );
@@ -786,15 +1210,106 @@ sp_fontface_update(SPObject *object, SPCtx *ctx, guint flags)
         object->readAttr( "overline-thickness" );
     }
 
-    if (((SPObjectClass *) parent_class)->update) {
-        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
-    }
+//    if (((SPObjectClass *) parent_class)->update) {
+//        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
+//    }
+    CObject::onUpdate(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
 static Inkscape::XML::Node *sp_fontface_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    SPFontFace *face = SP_FONTFACE(object);
+//
+//    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+//        repr = xml_doc->createElement("svg:font-face");
+//    }
+//
+//    //TODO:
+//    //sp_repr_set_svg_double(repr, "font-family", face->font_family);
+//    //sp_repr_set_svg_double(repr, "font-style", face->font_style);
+//    //sp_repr_set_svg_double(repr, "font-variant", face->font_variant);
+//    //sp_repr_set_svg_double(repr, "font-weight", face->font_weight);
+//    //sp_repr_set_svg_double(repr, "font-stretch", face->font_stretch);
+//    //sp_repr_set_svg_double(repr, "font-size", face->font_size);
+//    //sp_repr_set_svg_double(repr, "unicode-range", face->unicode_range);
+//    sp_repr_set_svg_double(repr, "units-per-em", face->units_per_em);
+//    //sp_repr_set_svg_double(repr, "panose-1", face->panose_1);
+//    sp_repr_set_svg_double(repr, "stemv", face->stemv);
+//    sp_repr_set_svg_double(repr, "stemh", face->stemh);
+//    sp_repr_set_svg_double(repr, "slope", face->slope);
+//    sp_repr_set_svg_double(repr, "cap-height", face->cap_height);
+//    sp_repr_set_svg_double(repr, "x-height", face->x_height);
+//    sp_repr_set_svg_double(repr, "accent-height", face->accent_height);
+//    sp_repr_set_svg_double(repr, "ascent", face->ascent);
+//    sp_repr_set_svg_double(repr, "descent", face->descent);
+//    //sp_repr_set_svg_double(repr, "widths", face->widths);
+//    //sp_repr_set_svg_double(repr, "bbox", face->bbox);
+//    sp_repr_set_svg_double(repr, "ideographic", face->ideographic);
+//    sp_repr_set_svg_double(repr, "alphabetic", face->alphabetic);
+//    sp_repr_set_svg_double(repr, "mathematical", face->mathematical);
+//    sp_repr_set_svg_double(repr, "hanging", face->hanging);
+//    sp_repr_set_svg_double(repr, "v-ideographic", face->v_ideographic);
+//    sp_repr_set_svg_double(repr, "v-alphabetic", face->v_alphabetic);
+//    sp_repr_set_svg_double(repr, "v-mathematical", face->v_mathematical);
+//    sp_repr_set_svg_double(repr, "v-hanging", face->v_hanging);
+//    sp_repr_set_svg_double(repr, "underline-position", face->underline_position);
+//    sp_repr_set_svg_double(repr, "underline-thickness", face->underline_thickness);
+//    sp_repr_set_svg_double(repr, "strikethrough-position", face->strikethrough_position);
+//    sp_repr_set_svg_double(repr, "strikethrough-thickness", face->strikethrough_thickness);
+//    sp_repr_set_svg_double(repr, "overline-position", face->overline_position);
+//    sp_repr_set_svg_double(repr, "overline-thickness", face->overline_thickness);
+//
+//    if (repr != object->getRepr()) {
+//        // In all COPY_ATTR given below the XML tree is
+//        //  being used directly while it shouldn't be.
+//        COPY_ATTR(repr, object->getRepr(), "font-family");
+//        COPY_ATTR(repr, object->getRepr(), "font-style");
+//        COPY_ATTR(repr, object->getRepr(), "font-variant");
+//        COPY_ATTR(repr, object->getRepr(), "font-weight");
+//        COPY_ATTR(repr, object->getRepr(), "font-stretch");
+//        COPY_ATTR(repr, object->getRepr(), "font-size");
+//        COPY_ATTR(repr, object->getRepr(), "unicode-range");
+//        COPY_ATTR(repr, object->getRepr(), "units-per-em");
+//        COPY_ATTR(repr, object->getRepr(), "panose-1");
+//        COPY_ATTR(repr, object->getRepr(), "stemv");
+//        COPY_ATTR(repr, object->getRepr(), "stemh");
+//        COPY_ATTR(repr, object->getRepr(), "slope");
+//        COPY_ATTR(repr, object->getRepr(), "cap-height");
+//        COPY_ATTR(repr, object->getRepr(), "x-height");
+//        COPY_ATTR(repr, object->getRepr(), "accent-height");
+//        COPY_ATTR(repr, object->getRepr(), "ascent");
+//        COPY_ATTR(repr, object->getRepr(), "descent");
+//        COPY_ATTR(repr, object->getRepr(), "widths");
+//        COPY_ATTR(repr, object->getRepr(), "bbox");
+//        COPY_ATTR(repr, object->getRepr(), "ideographic");
+//        COPY_ATTR(repr, object->getRepr(), "alphabetic");
+//        COPY_ATTR(repr, object->getRepr(), "mathematical");
+//        COPY_ATTR(repr, object->getRepr(), "hanging");
+//        COPY_ATTR(repr, object->getRepr(), "v-ideographic");
+//        COPY_ATTR(repr, object->getRepr(), "v-alphabetic");
+//        COPY_ATTR(repr, object->getRepr(), "v-mathematical");
+//        COPY_ATTR(repr, object->getRepr(), "v-hanging");
+//        COPY_ATTR(repr, object->getRepr(), "underline-position");
+//        COPY_ATTR(repr, object->getRepr(), "underline-thickness");
+//        COPY_ATTR(repr, object->getRepr(), "strikethrough-position");
+//        COPY_ATTR(repr, object->getRepr(), "strikethrough-thickness");
+//        COPY_ATTR(repr, object->getRepr(), "overline-position");
+//        COPY_ATTR(repr, object->getRepr(), "overline-thickness");
+//    }
+//
+//    if (((SPObjectClass *) (parent_class))->write) {
+//        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((SPFontFace*)object)->cfontface->onWrite(xml_doc, repr, flags);
+}
+
+Inkscape::XML::Node* CFontFace::onWrite(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFontFace* object = this->spfontface;
+
     SPFontFace *face = SP_FONTFACE(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -874,12 +1389,14 @@ static Inkscape::XML::Node *sp_fontface_write(SPObject *object, Inkscape::XML::D
         COPY_ATTR(repr, object->getRepr(), "overline-thickness");
     }
 
-    if (((SPObjectClass *) (parent_class))->write) {
-        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
-    }
+//    if (((SPObjectClass *) (parent_class))->write) {
+//        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
+//    }
+    CObject::onWrite(xml_doc, repr, flags);
 
     return repr;
 }
+
 #endif //#ifdef ENABLE_SVG_FONTS
 /*
   Local Variables:

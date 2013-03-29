@@ -68,10 +68,10 @@ sp_feMerge_class_init(SPFeMergeClass *klass)
     feMerge_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feMerge_build;
-    sp_object_class->release = sp_feMerge_release;
-    sp_object_class->write = sp_feMerge_write;
-    sp_object_class->set = sp_feMerge_set;
-    sp_object_class->update = sp_feMerge_update;
+//    sp_object_class->release = sp_feMerge_release;
+//    sp_object_class->write = sp_feMerge_write;
+//    sp_object_class->set = sp_feMerge_set;
+//    sp_object_class->update = sp_feMerge_update;
 
     //sp_primitive_class->build_renderer = sp_feMerge_build_renderer;
 }

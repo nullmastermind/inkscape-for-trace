@@ -83,13 +83,13 @@ sp_feSpecularLighting_class_init(SPFeSpecularLightingClass *klass)
     feSpecularLighting_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feSpecularLighting_build;
-    sp_object_class->release = sp_feSpecularLighting_release;
-    sp_object_class->write = sp_feSpecularLighting_write;
-    sp_object_class->set = sp_feSpecularLighting_set;
-    sp_object_class->update = sp_feSpecularLighting_update;
-    sp_object_class->child_added = sp_feSpecularLighting_child_added;
-    sp_object_class->remove_child = sp_feSpecularLighting_remove_child;
-    sp_object_class->order_changed = sp_feSpecularLighting_order_changed;
+//    sp_object_class->release = sp_feSpecularLighting_release;
+//    sp_object_class->write = sp_feSpecularLighting_write;
+//    sp_object_class->set = sp_feSpecularLighting_set;
+//    sp_object_class->update = sp_feSpecularLighting_update;
+//    sp_object_class->child_added = sp_feSpecularLighting_child_added;
+//    sp_object_class->remove_child = sp_feSpecularLighting_remove_child;
+//    sp_object_class->order_changed = sp_feSpecularLighting_order_changed;
 
     //sp_primitive_class->build_renderer = sp_feSpecularLighting_build_renderer;
 }

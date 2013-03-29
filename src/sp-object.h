@@ -921,24 +921,24 @@ public:
     GObjectClass parent_class;
 
     //void (* build) (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr);
-    void (* release) (SPObject *object);
-
-    /* Virtual handlers of repr signals */
-    void (* child_added) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-    void (* remove_child) (SPObject *object, Inkscape::XML::Node *child);
-
-    void (* order_changed) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *new_repr);
-
-    void (* set) (SPObject *object, unsigned int key, gchar const *value);
-
-    void (* read_content) (SPObject *object);
-
-    /* Update handler */
-    void (* update) (SPObject *object, SPCtx *ctx, unsigned int flags);
-    /* Modification handler */
-    void (* modified) (SPObject *object, unsigned int flags);
-
-    Inkscape::XML::Node * (* write) (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, unsigned int flags);
+//    void (* release) (SPObject *object);
+//
+//    /* Virtual handlers of repr signals */
+//    void (* child_added) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+//    void (* remove_child) (SPObject *object, Inkscape::XML::Node *child);
+//
+//    void (* order_changed) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *new_repr);
+//
+//    void (* set) (SPObject *object, unsigned int key, gchar const *value);
+//
+//    void (* read_content) (SPObject *object);
+//
+//    /* Update handler */
+//    void (* update) (SPObject *object, SPCtx *ctx, unsigned int flags);
+//    /* Modification handler */
+//    void (* modified) (SPObject *object, unsigned int flags);
+//
+//    Inkscape::XML::Node * (* write) (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, unsigned int flags);
 
 private:
     static GObjectClass *static_parent_class;

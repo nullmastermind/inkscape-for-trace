@@ -72,10 +72,10 @@ sp_feTurbulence_class_init(SPFeTurbulenceClass *klass)
     feTurbulence_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feTurbulence_build;
-    sp_object_class->release = sp_feTurbulence_release;
-    sp_object_class->write = sp_feTurbulence_write;
-    sp_object_class->set = sp_feTurbulence_set;
-    sp_object_class->update = sp_feTurbulence_update;
+//    sp_object_class->release = sp_feTurbulence_release;
+//    sp_object_class->write = sp_feTurbulence_write;
+//    sp_object_class->set = sp_feTurbulence_set;
+//    sp_object_class->update = sp_feTurbulence_update;
 
     //sp_primitive_class->build_renderer = sp_feTurbulence_build_renderer;
 }

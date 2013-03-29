@@ -114,14 +114,14 @@ sp_text_class_init (SPTextClass *classname)
 
     text_parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
 
-    sp_object_class->release = sp_text_release;
-    //sp_object_class->build = sp_text_build;
-    sp_object_class->set = sp_text_set;
-    sp_object_class->child_added = sp_text_child_added;
-    sp_object_class->remove_child = sp_text_remove_child;
-    sp_object_class->update = sp_text_update;
-    sp_object_class->modified = sp_text_modified;
-    sp_object_class->write = sp_text_write;
+//    sp_object_class->release = sp_text_release;
+//    //sp_object_class->build = sp_text_build;
+//    sp_object_class->set = sp_text_set;
+//    sp_object_class->child_added = sp_text_child_added;
+//    sp_object_class->remove_child = sp_text_remove_child;
+//    sp_object_class->update = sp_text_update;
+//    sp_object_class->modified = sp_text_modified;
+//    sp_object_class->write = sp_text_write;
 
 //    item_class->bbox = sp_text_bbox;
 //    item_class->show = sp_text_show;

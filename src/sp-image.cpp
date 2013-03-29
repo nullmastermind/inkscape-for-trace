@@ -588,11 +588,11 @@ static void sp_image_class_init( SPImageClass * klass )
     parent_class = reinterpret_cast<SPItemClass*>(g_type_class_ref(SPItem::getType()));
 
     //sp_object_class->build = sp_image_build;
-    sp_object_class->release = sp_image_release;
-    sp_object_class->set = sp_image_set;
-    sp_object_class->update = sp_image_update;
-    sp_object_class->modified = sp_image_modified;
-    sp_object_class->write = sp_image_write;
+//    sp_object_class->release = sp_image_release;
+//    sp_object_class->set = sp_image_set;
+//    sp_object_class->update = sp_image_update;
+//    sp_object_class->modified = sp_image_modified;
+//    sp_object_class->write = sp_image_write;
 
 //    item_class->bbox = sp_image_bbox;
 //    item_class->print = sp_image_print;

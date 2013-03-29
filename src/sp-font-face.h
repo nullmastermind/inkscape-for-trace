@@ -73,7 +73,12 @@ enum FontFaceUnicodeRangeType{
 	FONTFACE_UNICODERANGE_FIXME_HERE,
 };
 
-struct SPFontFace : public SPObject {
+class CFontFace;
+
+class SPFontFace : public SPObject {
+public:
+	CFontFace* cfontface;
+
     char* font_family;
     std::vector<FontFaceStyleType> font_style;
     std::vector<FontFaceVariantType> font_variant;
@@ -107,6 +112,27 @@ struct SPFontFace : public SPObject {
     double strikethrough_thickness;
     double overline_position;
     double overline_thickness;
+};
+
+class CFontFace : public CObject {
+public:
+	CFontFace(SPFontFace* face);
+	virtual ~CFontFace();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPFontFace* spfontface;
 };
 
 struct SPFontFaceClass {

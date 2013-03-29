@@ -74,10 +74,10 @@ sp_gaussianBlur_class_init(SPGaussianBlurClass *klass)
     gaussianBlur_parent_class = (SPFilterPrimitiveClass *)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_gaussianBlur_build;
-    sp_object_class->release = sp_gaussianBlur_release;
-    sp_object_class->write = sp_gaussianBlur_write;
-    sp_object_class->set = sp_gaussianBlur_set;
-    sp_object_class->update = sp_gaussianBlur_update;
+//    sp_object_class->release = sp_gaussianBlur_release;
+//    sp_object_class->write = sp_gaussianBlur_write;
+//    sp_object_class->set = sp_gaussianBlur_set;
+//    sp_object_class->update = sp_gaussianBlur_update;
 
     //sp_primitive_class->build_renderer = sp_gaussianBlur_build_renderer;
 }

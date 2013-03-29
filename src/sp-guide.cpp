@@ -96,8 +96,8 @@ static void sp_guide_class_init(SPGuideClass *gc)
     gobject_class->get_property = sp_guide_get_property;
 
     //sp_object_class->build = sp_guide_build;
-    sp_object_class->release = sp_guide_release;
-    sp_object_class->set = sp_guide_set;
+//    sp_object_class->release = sp_guide_release;
+//    sp_object_class->set = sp_guide_set;
 
     g_object_class_install_property(gobject_class,
                                     PROP_COLOR,

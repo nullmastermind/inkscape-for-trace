@@ -69,9 +69,9 @@ static void box3d_side_class_init(Box3DSideClass *klass)
     parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
     //sp_object_class->build = box3d_side_build;
-    sp_object_class->write = box3d_side_write;
-    sp_object_class->set = box3d_side_set;
-    sp_object_class->update = box3d_side_update;
+//    sp_object_class->write = box3d_side_write;
+//    sp_object_class->set = box3d_side_set;
+//    sp_object_class->update = box3d_side_update;
 
     //shape_class->set_shape = box3d_side_set_shape;
 }

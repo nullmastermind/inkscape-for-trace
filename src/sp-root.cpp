@@ -84,13 +84,13 @@ static void sp_root_class_init(SPRootClass *klass)
     parent_class = reinterpret_cast<SPGroupClass *>(g_type_class_ref(SP_TYPE_GROUP));
 
     //sp_object_class->build = sp_root_build;
-    sp_object_class->release = sp_root_release;
-    sp_object_class->set = sp_root_set;
-    sp_object_class->child_added = sp_root_child_added;
-    sp_object_class->remove_child = sp_root_remove_child;
-    sp_object_class->update = sp_root_update;
-    sp_object_class->modified = sp_root_modified;
-    sp_object_class->write = sp_root_write;
+//    sp_object_class->release = sp_root_release;
+//    sp_object_class->set = sp_root_set;
+//    sp_object_class->child_added = sp_root_child_added;
+//    sp_object_class->remove_child = sp_root_remove_child;
+//    sp_object_class->update = sp_root_update;
+//    sp_object_class->modified = sp_root_modified;
+//    sp_object_class->write = sp_root_write;
 
 //    sp_item_class->show = sp_root_show;
 //    sp_item_class->print = sp_root_print;

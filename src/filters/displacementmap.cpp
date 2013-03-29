@@ -69,10 +69,10 @@ sp_feDisplacementMap_class_init(SPFeDisplacementMapClass *klass)
     feDisplacementMap_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feDisplacementMap_build;
-    sp_object_class->release = sp_feDisplacementMap_release;
-    sp_object_class->write = sp_feDisplacementMap_write;
-    sp_object_class->set = sp_feDisplacementMap_set;
-    sp_object_class->update = sp_feDisplacementMap_update;
+//    sp_object_class->release = sp_feDisplacementMap_release;
+//    sp_object_class->write = sp_feDisplacementMap_write;
+//    sp_object_class->set = sp_feDisplacementMap_set;
+//    sp_object_class->update = sp_feDisplacementMap_update;
     //sp_primitive_class->build_renderer = sp_feDisplacementMap_build_renderer;
 }
 

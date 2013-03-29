@@ -66,10 +66,10 @@ static void sp_filter_primitive_class_init(SPFilterPrimitiveClass *klass)
     filter_primitive_parent_class = static_cast<SPObjectClass *>(g_type_class_peek_parent(klass));
 
    // sp_object_class->build = sp_filter_primitive_build;
-    sp_object_class->release = sp_filter_primitive_release;
-    sp_object_class->write = sp_filter_primitive_write;
-    sp_object_class->set = sp_filter_primitive_set;
-    sp_object_class->update = sp_filter_primitive_update;
+//    sp_object_class->release = sp_filter_primitive_release;
+//    sp_object_class->write = sp_filter_primitive_write;
+//    sp_object_class->set = sp_filter_primitive_set;
+//    sp_object_class->update = sp_filter_primitive_update;
     
     /* This should never be called on this base class, but only on derived
      * classes. */

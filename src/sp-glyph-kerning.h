@@ -41,7 +41,13 @@ private:
 gchar* names;
 };
 
-struct SPGlyphKerning : public SPObject {
+
+class CGlyphKerning;
+
+class SPGlyphKerning : public SPObject {
+public:
+	CGlyphKerning* cglyphkerning;
+
     UnicodeRange* u1;
     GlyphNames* g1;
     UnicodeRange* u2;
@@ -49,8 +55,31 @@ struct SPGlyphKerning : public SPObject {
     double k;
 };
 
-struct SPHkern : public SPGlyphKerning {};
-struct SPVkern : public SPGlyphKerning {};
+class CGlyphKerning : public CObject {
+public:
+	CGlyphKerning(SPGlyphKerning* kerning);
+	virtual ~CGlyphKerning();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPGlyphKerning* spglyphkerning;
+};
+
+class SPHkern : public SPGlyphKerning {
+
+};
+
+class SPVkern : public SPGlyphKerning {
+
+};
 
 struct SPGlyphKerningClass {
 	SPObjectClass parent_class;

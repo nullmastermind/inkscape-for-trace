@@ -88,13 +88,13 @@ sp_flowtext_class_init(SPFlowtextClass *klass)
 
     object_class->dispose = sp_flowtext_dispose;
 
-    sp_object_class->child_added = sp_flowtext_child_added;
-    sp_object_class->remove_child = sp_flowtext_remove_child;
-    sp_object_class->update = sp_flowtext_update;
-    sp_object_class->modified = sp_flowtext_modified;
-    sp_object_class->write = sp_flowtext_write;
-    //sp_object_class->build = sp_flowtext_build;
-    sp_object_class->set = sp_flowtext_set;
+//    sp_object_class->child_added = sp_flowtext_child_added;
+//    sp_object_class->remove_child = sp_flowtext_remove_child;
+//    sp_object_class->update = sp_flowtext_update;
+//    sp_object_class->modified = sp_flowtext_modified;
+//    sp_object_class->write = sp_flowtext_write;
+//    //sp_object_class->build = sp_flowtext_build;
+//    sp_object_class->set = sp_flowtext_set;
 
 //    item_class->bbox = sp_flowtext_bbox;
 //    item_class->print = sp_flowtext_print;

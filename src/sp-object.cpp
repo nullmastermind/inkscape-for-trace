@@ -133,16 +133,16 @@ void SPObjectClass::sp_object_class_init(SPObjectClass *klass)
 
     object_class->finalize = SPObject::sp_object_finalize;
 
-    klass->child_added = SPObject::sp_object_child_added;
-    klass->remove_child = SPObject::sp_object_remove_child;
-    klass->order_changed = SPObject::sp_object_order_changed;
-
-    klass->release = SPObject::sp_object_release;
-
-    //klass->build = SPObject::sp_object_build;
-
-    klass->set = SPObject::sp_object_private_set;
-    klass->write = SPObject::sp_object_private_write;
+//    klass->child_added = SPObject::sp_object_child_added;
+//    klass->remove_child = SPObject::sp_object_remove_child;
+//    klass->order_changed = SPObject::sp_object_order_changed;
+//
+//    klass->release = SPObject::sp_object_release;
+//
+//    //klass->build = SPObject::sp_object_build;
+//
+//    klass->set = SPObject::sp_object_private_set;
+//    klass->write = SPObject::sp_object_private_write;
 }
 
 

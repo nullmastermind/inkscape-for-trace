@@ -69,10 +69,10 @@ static void sp_feFlood_class_init(SPFeFloodClass *klass)
     feFlood_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feFlood_build;
-    sp_object_class->release = sp_feFlood_release;
-    sp_object_class->write = sp_feFlood_write;
-    sp_object_class->set = sp_feFlood_set;
-    sp_object_class->update = sp_feFlood_update;
+//    sp_object_class->release = sp_feFlood_release;
+//    sp_object_class->write = sp_feFlood_write;
+//    sp_object_class->set = sp_feFlood_set;
+//    sp_object_class->update = sp_feFlood_update;
     //sp_primitive_class->build_renderer = sp_feFlood_build_renderer;
 }
 

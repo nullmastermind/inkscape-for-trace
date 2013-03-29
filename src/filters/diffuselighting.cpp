@@ -83,13 +83,13 @@ sp_feDiffuseLighting_class_init(SPFeDiffuseLightingClass *klass)
     feDiffuseLighting_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feDiffuseLighting_build;
-    sp_object_class->release = sp_feDiffuseLighting_release;
-    sp_object_class->write = sp_feDiffuseLighting_write;
-    sp_object_class->set = sp_feDiffuseLighting_set;
-    sp_object_class->update = sp_feDiffuseLighting_update;
-    sp_object_class->child_added = sp_feDiffuseLighting_child_added;
-    sp_object_class->remove_child = sp_feDiffuseLighting_remove_child;
-    sp_object_class->order_changed = sp_feDiffuseLighting_order_changed;
+//    sp_object_class->release = sp_feDiffuseLighting_release;
+//    sp_object_class->write = sp_feDiffuseLighting_write;
+//    sp_object_class->set = sp_feDiffuseLighting_set;
+//    sp_object_class->update = sp_feDiffuseLighting_update;
+//    sp_object_class->child_added = sp_feDiffuseLighting_child_added;
+//    sp_object_class->remove_child = sp_feDiffuseLighting_remove_child;
+//    sp_object_class->order_changed = sp_feDiffuseLighting_order_changed;
 
     //sp_primitive_class->build_renderer = sp_feDiffuseLighting_build_renderer;
 }

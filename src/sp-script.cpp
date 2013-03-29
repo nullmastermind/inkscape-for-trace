@@ -57,11 +57,11 @@ static void sp_script_class_init(SPScriptClass *sc)
     SPObjectClass *sp_object_class = (SPObjectClass *) sc;
 
     //sp_object_class->build = sp_script_build;
-    sp_object_class->release = sp_script_release;
-    sp_object_class->update = sp_script_update;
-    sp_object_class->modified = sp_script_modified;
-    sp_object_class->write = sp_script_write;
-    sp_object_class->set = sp_script_set;
+//    sp_object_class->release = sp_script_release;
+//    sp_object_class->update = sp_script_update;
+//    sp_object_class->modified = sp_script_modified;
+//    sp_object_class->write = sp_script_write;
+//    sp_object_class->set = sp_script_set;
 }
 
 CScript::CScript(SPScript* script) : CObject(script) {

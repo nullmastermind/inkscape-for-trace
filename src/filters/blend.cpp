@@ -74,10 +74,10 @@ sp_feBlend_class_init(SPFeBlendClass *klass)
     feBlend_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feBlend_build;
-    sp_object_class->release = sp_feBlend_release;
-    sp_object_class->write = sp_feBlend_write;
-    sp_object_class->set = sp_feBlend_set;
-    sp_object_class->update = sp_feBlend_update;
+//    sp_object_class->release = sp_feBlend_release;
+//    sp_object_class->write = sp_feBlend_write;
+//    sp_object_class->set = sp_feBlend_set;
+//    sp_object_class->update = sp_feBlend_update;
 
     //sp_primitive_class->build_renderer = sp_feBlend_build_renderer;
 }

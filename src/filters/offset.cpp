@@ -69,10 +69,10 @@ sp_feOffset_class_init(SPFeOffsetClass *klass)
     feOffset_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feOffset_build;
-    sp_object_class->release = sp_feOffset_release;
-    sp_object_class->write = sp_feOffset_write;
-    sp_object_class->set = sp_feOffset_set;
-    sp_object_class->update = sp_feOffset_update;
+//    sp_object_class->release = sp_feOffset_release;
+//    sp_object_class->write = sp_feOffset_write;
+//    sp_object_class->set = sp_feOffset_set;
+//    sp_object_class->update = sp_feOffset_update;
 
     //sp_primitive_class->build_renderer = sp_feOffset_build_renderer;
 }

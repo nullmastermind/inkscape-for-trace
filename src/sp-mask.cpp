@@ -77,12 +77,12 @@ sp_mask_class_init (SPMaskClass *klass)
 
 	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 	//sp_object_class->build = sp_mask_build;
-	sp_object_class->release = sp_mask_release;
-	sp_object_class->set = sp_mask_set;
-	sp_object_class->child_added = sp_mask_child_added;
-	sp_object_class->update = sp_mask_update;
-	sp_object_class->modified = sp_mask_modified;
-	sp_object_class->write = sp_mask_write;
+//	sp_object_class->release = sp_mask_release;
+//	sp_object_class->set = sp_mask_set;
+//	sp_object_class->child_added = sp_mask_child_added;
+//	sp_object_class->update = sp_mask_update;
+//	sp_object_class->modified = sp_mask_modified;
+//	sp_object_class->write = sp_mask_write;
 }
 
 CMask::CMask(SPMask* mask) : CObjectGroup(mask) {

@@ -99,11 +99,11 @@ sp_use_class_init(SPUseClass *classname)
     gobject_class->finalize = sp_use_finalize;
 
     //sp_object_class->build = sp_use_build;
-    sp_object_class->release = sp_use_release;
-    sp_object_class->set = sp_use_set;
-    sp_object_class->write = sp_use_write;
-    sp_object_class->update = sp_use_update;
-    sp_object_class->modified = sp_use_modified;
+//    sp_object_class->release = sp_use_release;
+//    sp_object_class->set = sp_use_set;
+//    sp_object_class->write = sp_use_write;
+//    sp_object_class->update = sp_use_update;
+//    sp_object_class->modified = sp_use_modified;
 
 //    item_class->bbox = sp_use_bbox;
 //    item_class->description = sp_use_description;

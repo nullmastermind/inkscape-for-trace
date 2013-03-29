@@ -50,10 +50,10 @@ void SPDefsClass::sp_defs_class_init(SPDefsClass *dc)
     static_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
     SPObjectClass *sp_object_class = (SPObjectClass *) dc;
 
-    sp_object_class->release = SPDefs::release;
-    sp_object_class->update = SPDefs::update;
-    sp_object_class->modified = SPDefs::modified;
-    sp_object_class->write = SPDefs::write;
+//    sp_object_class->release = SPDefs::release;
+//    sp_object_class->update = SPDefs::update;
+//    sp_object_class->modified = SPDefs::modified;
+//    sp_object_class->write = SPDefs::write;
 }
 
 CDefs::CDefs(SPDefs* defs) : CObject(defs) {

@@ -100,13 +100,13 @@ sp_lpe_item_class_init(SPLPEItemClass *klass)
     gobject_class->finalize = sp_lpe_item_finalize;
 
     //sp_object_class->build = sp_lpe_item_build;
-    sp_object_class->release = sp_lpe_item_release;
-    sp_object_class->set = sp_lpe_item_set;
-    sp_object_class->update = sp_lpe_item_update;
-    sp_object_class->modified = sp_lpe_item_modified;
-    sp_object_class->write = sp_lpe_item_write;
-    sp_object_class->child_added = sp_lpe_item_child_added;
-    sp_object_class->remove_child = sp_lpe_item_remove_child;
+//    sp_object_class->release = sp_lpe_item_release;
+//    sp_object_class->set = sp_lpe_item_set;
+//    sp_object_class->update = sp_lpe_item_update;
+//    sp_object_class->modified = sp_lpe_item_modified;
+//    sp_object_class->write = sp_lpe_item_write;
+//    sp_object_class->child_added = sp_lpe_item_child_added;
+//    sp_object_class->remove_child = sp_lpe_item_remove_child;
 
     //klass->update_patheffect = NULL;
 }

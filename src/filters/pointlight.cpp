@@ -72,10 +72,10 @@ sp_fepointlight_class_init(SPFePointLightClass *klass)
     fePointLight_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_fepointlight_build;
-    sp_object_class->release = sp_fepointlight_release;
-    sp_object_class->write = sp_fepointlight_write;
-    sp_object_class->set = sp_fepointlight_set;
-    sp_object_class->update = sp_fepointlight_update;
+//    sp_object_class->release = sp_fepointlight_release;
+//    sp_object_class->write = sp_fepointlight_write;
+//    sp_object_class->set = sp_fepointlight_set;
+//    sp_object_class->update = sp_fepointlight_update;
 }
 
 CFePointLight::CFePointLight(SPFePointLight* pointlight) : CObject(pointlight) {

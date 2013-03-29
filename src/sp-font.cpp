@@ -71,12 +71,12 @@ static void sp_font_class_init(SPFontClass *fc)
     parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
     //sp_object_class->build = sp_font_build;
-    sp_object_class->release = sp_font_release;
-    sp_object_class->set = sp_font_set;
-    sp_object_class->write = sp_font_write;
-    sp_object_class->child_added = sp_font_child_added;
-    sp_object_class->remove_child = sp_font_remove_child;
-    sp_object_class->update = sp_font_update;
+//    sp_object_class->release = sp_font_release;
+//    sp_object_class->set = sp_font_set;
+//    sp_object_class->write = sp_font_write;
+//    sp_object_class->child_added = sp_font_child_added;
+//    sp_object_class->remove_child = sp_font_remove_child;
+//    sp_object_class->update = sp_font_update;
 }
 
 //I think we should have extra stuff here and in the set method in order to set default value as specified at http://www.w3.org/TR/SVG/fonts.html

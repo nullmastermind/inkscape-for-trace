@@ -72,10 +72,10 @@ sp_fespotlight_class_init(SPFeSpotLightClass *klass)
     feSpotLight_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_fespotlight_build;
-    sp_object_class->release = sp_fespotlight_release;
-    sp_object_class->write = sp_fespotlight_write;
-    sp_object_class->set = sp_fespotlight_set;
-    sp_object_class->update = sp_fespotlight_update;
+//    sp_object_class->release = sp_fespotlight_release;
+//    sp_object_class->write = sp_fespotlight_write;
+//    sp_object_class->set = sp_fespotlight_set;
+//    sp_object_class->update = sp_fespotlight_update;
 }
 
 CFeSpotLight::CFeSpotLight(SPFeSpotLight* spotlight) : CObject(spotlight) {

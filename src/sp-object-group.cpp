@@ -46,10 +46,10 @@ void SPObjectGroupClass::sp_objectgroup_class_init(SPObjectGroupClass *klass)
 
     static_parent_class = (SPObjectClass *)g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->child_added = SPObjectGroup::childAdded;
-    sp_object_class->remove_child = SPObjectGroup::removeChild;
-    sp_object_class->order_changed = SPObjectGroup::orderChanged;
-    sp_object_class->write = SPObjectGroup::write;
+//    sp_object_class->child_added = SPObjectGroup::childAdded;
+//    sp_object_class->remove_child = SPObjectGroup::removeChild;
+//    sp_object_class->order_changed = SPObjectGroup::orderChanged;
+//    sp_object_class->write = SPObjectGroup::write;
 }
 
 CObjectGroup::CObjectGroup(SPObjectGroup* gr) : CObject(gr) {

@@ -47,7 +47,7 @@ static void sp_desc_class_init(SPDescClass *klass)
     SPObjectClass *sp_object_class = (SPObjectClass *)(klass);
     desc_parent_class = (SPObjectClass *)(g_type_class_ref(SP_TYPE_OBJECT));
 
-    sp_object_class->write = sp_desc_write;
+//    sp_object_class->write = sp_desc_write;
 }
 
 CDesc::CDesc(SPDesc* desc) : CObject(desc) {

@@ -128,8 +128,8 @@ static void sp_stop_class_init(SPStopClass *klass)
     stop_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
     //sp_object_class->build = sp_stop_build;
-    sp_object_class->set = sp_stop_set;
-    sp_object_class->write = sp_stop_write;
+//    sp_object_class->set = sp_stop_set;
+//    sp_object_class->write = sp_stop_write;
 }
 
 CStop::CStop(SPStop* stop) : CObject(stop) {
@@ -410,8 +410,8 @@ static void sp_meshrow_class_init(SPMeshRowClass *klass)
     meshrow_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
     //sp_object_class->build = sp_meshrow_build;
-    sp_object_class->set = sp_meshrow_set;
-    sp_object_class->write = sp_meshrow_write;
+//    sp_object_class->set = sp_meshrow_set;
+//    sp_object_class->write = sp_meshrow_write;
 }
 
 CMeshRow::CMeshRow(SPMeshRow* meshrow) : CObject(meshrow) {
@@ -510,8 +510,8 @@ static void sp_meshpatch_class_init(SPMeshPatchClass *klass)
     meshpatch_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
     //sp_object_class->build = sp_meshpatch_build;
-    sp_object_class->set = sp_meshpatch_set;
-    sp_object_class->write = sp_meshpatch_write;
+//    sp_object_class->set = sp_meshpatch_set;
+//    sp_object_class->write = sp_meshpatch_write;
 }
 
 CMeshPatch::CMeshPatch(SPMeshPatch* meshpatch) : CObject(meshpatch) {
@@ -643,12 +643,12 @@ void CGradient::classInit(SPGradientClass *klass)
     gradient_parent_class = (SPPaintServerClass *)g_type_class_ref(SP_TYPE_PAINT_SERVER);
 
     //sp_object_class->build = spgradient_on_build;
-    sp_object_class->release = spgradient_on_release;
-    sp_object_class->set = spgradient_set;
-    sp_object_class->child_added = spgradient_child_added;
-    sp_object_class->remove_child = spgradient_remove_child;
-    sp_object_class->modified = spgradient_modified;
-    sp_object_class->write = spgradient_write;
+//    sp_object_class->release = spgradient_on_release;
+//    sp_object_class->set = spgradient_set;
+//    sp_object_class->child_added = spgradient_child_added;
+//    sp_object_class->remove_child = spgradient_remove_child;
+//    sp_object_class->modified = spgradient_modified;
+//    sp_object_class->write = spgradient_write;
 }
 
 CGradient::CGradient(SPGradient* gradient) : CPaintServer(gradient) {
@@ -1587,8 +1587,8 @@ static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
     lg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
 
     //sp_object_class->build = sp_lineargradient_build;
-    sp_object_class->set = sp_lineargradient_set;
-    sp_object_class->write = sp_lineargradient_write;
+//    sp_object_class->set = sp_lineargradient_set;
+//    sp_object_class->write = sp_lineargradient_write;
 
     //ps_class->pattern_new = sp_lineargradient_create_pattern;
 }
@@ -1777,8 +1777,8 @@ static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
     rg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
 
     //sp_object_class->build = sp_radialgradient_build;
-    sp_object_class->set = sp_radialgradient_set;
-    sp_object_class->write = sp_radialgradient_write;
+//    sp_object_class->set = sp_radialgradient_set;
+//    sp_object_class->write = sp_radialgradient_write;
 
     //ps_class->pattern_new = sp_radialgradient_create_pattern;
 }
@@ -1993,8 +1993,8 @@ static void sp_meshgradient_class_init(SPMeshGradientClass *klass)
     mg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
 
     //sp_object_class->build = sp_meshgradient_build;
-    sp_object_class->set = sp_meshgradient_set;
-    sp_object_class->write = sp_meshgradient_write;
+//    sp_object_class->set = sp_meshgradient_set;
+//    sp_object_class->write = sp_meshgradient_write;
 
     //ps_class->pattern_new = sp_meshgradient_create_pattern;
 }

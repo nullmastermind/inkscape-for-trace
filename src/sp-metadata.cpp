@@ -74,10 +74,10 @@ sp_metadata_class_init (SPMetadataClass *klass)
     metadata_parent_class = (SPObjectClass*)g_type_class_peek_parent (klass);
 
     //sp_object_class->build = sp_metadata_build;
-    sp_object_class->release = sp_metadata_release;
-    sp_object_class->write = sp_metadata_write;
-    sp_object_class->set = sp_metadata_set;
-    sp_object_class->update = sp_metadata_update;
+//    sp_object_class->release = sp_metadata_release;
+//    sp_object_class->write = sp_metadata_write;
+//    sp_object_class->set = sp_metadata_set;
+//    sp_object_class->update = sp_metadata_update;
 }
 
 CMetadata::CMetadata(SPMetadata* metadata) : CObject(metadata) {

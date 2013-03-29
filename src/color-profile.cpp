@@ -220,10 +220,10 @@ void ColorProfile::classInit( ColorProfileClass *klass )
 
     cprof_parent_class = static_cast<SPObjectClass*>(g_type_class_ref(SP_TYPE_OBJECT));
 
-    sp_object_class->release = ColorProfile::release;
-    //sp_object_class->build = ColorProfile::build;
-    sp_object_class->set = ColorProfile::set;
-    sp_object_class->write = ColorProfile::write;
+//    sp_object_class->release = ColorProfile::release;
+//    //sp_object_class->build = ColorProfile::build;
+//    sp_object_class->set = ColorProfile::set;
+//    sp_object_class->write = ColorProfile::write;
 }
 
 CColorProfile::CColorProfile(ColorProfile* cp) : CObject(cp) {

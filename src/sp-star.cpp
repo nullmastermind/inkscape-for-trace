@@ -79,9 +79,9 @@ static void sp_star_class_init(SPStarClass *klass)
     parent_class = reinterpret_cast<SPShapeClass *>(g_type_class_ref(SP_TYPE_SHAPE));
 
     //sp_object_class->build = sp_star_build;
-    sp_object_class->write = sp_star_write;
-    sp_object_class->set = sp_star_set;
-    sp_object_class->update = sp_star_update;
+//    sp_object_class->write = sp_star_write;
+//    sp_object_class->set = sp_star_set;
+//    sp_object_class->update = sp_star_update;
 
 //    item_class->description = sp_star_description;
 //    item_class->snappoints = sp_star_snappoints;

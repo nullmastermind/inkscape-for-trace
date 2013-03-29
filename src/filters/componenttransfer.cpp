@@ -71,12 +71,12 @@ sp_feComponentTransfer_class_init(SPFeComponentTransferClass *klass)
     feComponentTransfer_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feComponentTransfer_build;
-    sp_object_class->release = sp_feComponentTransfer_release;
-    sp_object_class->write = sp_feComponentTransfer_write;
-    sp_object_class->set = sp_feComponentTransfer_set;
-    sp_object_class->update = sp_feComponentTransfer_update;
-    sp_object_class->child_added = sp_feComponentTransfer_child_added;
-    sp_object_class->remove_child = sp_feComponentTransfer_remove_child;
+//    sp_object_class->release = sp_feComponentTransfer_release;
+//    sp_object_class->write = sp_feComponentTransfer_write;
+//    sp_object_class->set = sp_feComponentTransfer_set;
+//    sp_object_class->update = sp_feComponentTransfer_update;
+//    sp_object_class->child_added = sp_feComponentTransfer_child_added;
+//    sp_object_class->remove_child = sp_feComponentTransfer_remove_child;
 
     //sp_primitive_class->build_renderer = sp_feComponentTransfer_build_renderer;
 }

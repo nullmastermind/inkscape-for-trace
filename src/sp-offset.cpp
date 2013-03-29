@@ -151,10 +151,10 @@ sp_offset_class_init(SPOffsetClass *klass)
     gobject_class->finalize = sp_offset_finalize;
 
     //sp_object_class->build = sp_offset_build;
-    sp_object_class->write = sp_offset_write;
-    sp_object_class->set = sp_offset_set;
-    sp_object_class->update = sp_offset_update;
-    sp_object_class->release = sp_offset_release;
+//    sp_object_class->write = sp_offset_write;
+//    sp_object_class->set = sp_offset_set;
+//    sp_object_class->update = sp_offset_update;
+//    sp_object_class->release = sp_offset_release;
 
 //    item_class->description = sp_offset_description;
 //    item_class->snappoints = sp_offset_snappoints;

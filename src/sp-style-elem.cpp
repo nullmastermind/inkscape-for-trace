@@ -46,9 +46,9 @@ sp_style_elem_class_init(SPStyleElemClass *klass)
     /* FIXME */
 
     //klass->build = sp_style_elem_build;
-    klass->set = sp_style_elem_set;
-    klass->read_content = sp_style_elem_read_content;
-    klass->write = sp_style_elem_write;
+//    klass->set = sp_style_elem_set;
+//    klass->read_content = sp_style_elem_read_content;
+//    klass->write = sp_style_elem_write;
 }
 
 CStyleElem::CStyleElem(SPStyleElem* se) : CObject(se) {

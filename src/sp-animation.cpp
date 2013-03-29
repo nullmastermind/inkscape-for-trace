@@ -69,8 +69,8 @@ static void sp_animation_class_init(SPAnimationClass *klass)
     animation_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_animation_build;
-    sp_object_class->release = sp_animation_release;
-    sp_object_class->set = sp_animation_set;
+//    sp_object_class->release = sp_animation_release;
+//    sp_object_class->set = sp_animation_set;
 }
 
 CAnimation::CAnimation(SPAnimation* animation) : CObject(animation) {
@@ -188,8 +188,8 @@ static void sp_ianimation_class_init(SPIAnimationClass *klass)
     ianimation_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_ianimation_build;
-    sp_object_class->release = sp_ianimation_release;
-    sp_object_class->set = sp_ianimation_set;
+//    sp_object_class->release = sp_ianimation_release;
+//    sp_object_class->set = sp_ianimation_set;
 }
 
 CIAnimation::CIAnimation(SPIAnimation* animation) : CAnimation(animation) {
@@ -299,8 +299,8 @@ static void sp_animate_class_init(SPAnimateClass *klass)
     animate_parent_class = (SPIAnimationClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_animate_build;
-    sp_object_class->release = sp_animate_release;
-    sp_object_class->set = sp_animate_set;
+//    sp_object_class->release = sp_animate_release;
+//    sp_object_class->set = sp_animate_set;
 }
 
 CAnimate::CAnimate(SPAnimate* animate) : CIAnimation(animate) {

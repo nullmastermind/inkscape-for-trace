@@ -64,10 +64,10 @@ sp_feMergeNode_class_init(SPFeMergeNodeClass *klass)
     feMergeNode_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feMergeNode_build;
-    sp_object_class->release = sp_feMergeNode_release;
-    sp_object_class->write = sp_feMergeNode_write;
-    sp_object_class->set = sp_feMergeNode_set;
-    sp_object_class->update = sp_feMergeNode_update;
+//    sp_object_class->release = sp_feMergeNode_release;
+//    sp_object_class->write = sp_feMergeNode_write;
+//    sp_object_class->set = sp_feMergeNode_set;
+//    sp_object_class->update = sp_feMergeNode_update;
 }
 
 CFeMergeNode::CFeMergeNode(SPFeMergeNode* mergenode) : CObject(mergenode) {

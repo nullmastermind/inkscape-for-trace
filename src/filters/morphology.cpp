@@ -70,10 +70,10 @@ sp_feMorphology_class_init(SPFeMorphologyClass *klass)
     feMorphology_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feMorphology_build;
-    sp_object_class->release = sp_feMorphology_release;
-    sp_object_class->write = sp_feMorphology_write;
-    sp_object_class->set = sp_feMorphology_set;
-    sp_object_class->update = sp_feMorphology_update;
+//    sp_object_class->release = sp_feMorphology_release;
+//    sp_object_class->write = sp_feMorphology_write;
+//    sp_object_class->set = sp_feMorphology_set;
+//    sp_object_class->update = sp_feMorphology_update;
     //sp_primitive_class->build_renderer = sp_feMorphology_build_renderer;
 }
 

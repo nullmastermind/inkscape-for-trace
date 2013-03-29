@@ -87,12 +87,12 @@ sp_filter_class_init(SPFilterClass *klass)
     filter_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_filter_build;
-    sp_object_class->release = sp_filter_release;
-    sp_object_class->write = sp_filter_write;
-    sp_object_class->set = sp_filter_set;
-    sp_object_class->update = sp_filter_update;
-    sp_object_class->child_added = sp_filter_child_added;
-    sp_object_class->remove_child = sp_filter_remove_child;
+//    sp_object_class->release = sp_filter_release;
+//    sp_object_class->write = sp_filter_write;
+//    sp_object_class->set = sp_filter_set;
+//    sp_object_class->update = sp_filter_update;
+//    sp_object_class->child_added = sp_filter_child_added;
+//    sp_object_class->remove_child = sp_filter_remove_child;
 }
 
 CFilter::CFilter(SPFilter* filter) : CObject(filter) {

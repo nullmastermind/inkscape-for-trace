@@ -95,10 +95,10 @@ static void persp3d_class_init(Persp3DClass *klass)
     persp3d_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
     //sp_object_class->build = persp3d_build;
-    sp_object_class->release = persp3d_release;
-    sp_object_class->set = persp3d_set;
-    sp_object_class->update = persp3d_update;
-    sp_object_class->write = persp3d_write;
+//    sp_object_class->release = persp3d_release;
+//    sp_object_class->set = persp3d_set;
+//    sp_object_class->update = persp3d_update;
+//    sp_object_class->write = persp3d_write;
 }
 
 CPersp3D::CPersp3D(Persp3D* persp3d) : CObject(persp3d) {

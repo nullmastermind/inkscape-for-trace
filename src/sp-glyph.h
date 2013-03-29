@@ -38,7 +38,12 @@ enum glyphOrientation {
     GLYPH_ORIENTATION_BOTH
 };
 
-struct SPGlyph : public SPObject {
+class CGlyph;
+
+class SPGlyph : public SPObject {
+public:
+	CGlyph* cglyph;
+
     Glib::ustring unicode;
     Glib::ustring glyph_name;
     char* d;
@@ -49,6 +54,24 @@ struct SPGlyph : public SPObject {
     double vert_origin_x;
     double vert_origin_y;
     double vert_adv_y;
+};
+
+class CGlyph : public CObject {
+public:
+	CGlyph(SPGlyph* glyph);
+	virtual ~CGlyph();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+	SPGlyph* spglyph;
 };
 
 struct SPGlyphClass {

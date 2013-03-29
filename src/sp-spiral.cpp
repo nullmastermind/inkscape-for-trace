@@ -85,9 +85,9 @@ static void sp_spiral_class_init(SPSpiralClass *klass)
     parent_class = reinterpret_cast<SPShapeClass *>(g_type_class_ref(SP_TYPE_SHAPE));
 
     //sp_object_class->build = sp_spiral_build;
-    sp_object_class->write = sp_spiral_write;
-    sp_object_class->set = sp_spiral_set;
-    sp_object_class->update = sp_spiral_update;
+//    sp_object_class->write = sp_spiral_write;
+//    sp_object_class->set = sp_spiral_set;
+//    sp_object_class->update = sp_spiral_update;
 
 //    item_class->description = sp_spiral_description;
 //    item_class->snappoints = sp_spiral_snappoints;

@@ -72,12 +72,12 @@ static void sp_symbol_class_init(SPSymbolClass *klass)
     parent_class = (SPGroupClass *)g_type_class_ref (SP_TYPE_GROUP);
 
     //sp_object_class->build = sp_symbol_build;
-    sp_object_class->release = sp_symbol_release;
-    sp_object_class->set = sp_symbol_set;
-    sp_object_class->child_added = sp_symbol_child_added;
-    sp_object_class->update = sp_symbol_update;
-    sp_object_class->modified = sp_symbol_modified;
-    sp_object_class->write = sp_symbol_write;
+//    sp_object_class->release = sp_symbol_release;
+//    sp_object_class->set = sp_symbol_set;
+//    sp_object_class->child_added = sp_symbol_child_added;
+//    sp_object_class->update = sp_symbol_update;
+//    sp_object_class->modified = sp_symbol_modified;
+//    sp_object_class->write = sp_symbol_write;
 
 //    sp_item_class->show = sp_symbol_show;
 //    sp_item_class->hide = sp_symbol_hide;

@@ -73,10 +73,10 @@ sp_feColorMatrix_class_init(SPFeColorMatrixClass *klass)
     feColorMatrix_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feColorMatrix_build;
-    sp_object_class->release = sp_feColorMatrix_release;
-    sp_object_class->write = sp_feColorMatrix_write;
-    sp_object_class->set = sp_feColorMatrix_set;
-    sp_object_class->update = sp_feColorMatrix_update;
+//    sp_object_class->release = sp_feColorMatrix_release;
+//    sp_object_class->write = sp_feColorMatrix_write;
+//    sp_object_class->set = sp_feColorMatrix_set;
+//    sp_object_class->update = sp_feColorMatrix_update;
     //sp_primitive_class->build_renderer = sp_feColorMatrix_build_renderer;
 }
 

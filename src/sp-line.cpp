@@ -54,15 +54,15 @@ void SPLineClass::sp_line_class_init(SPLineClass *klass)
 
     SPObjectClass *sp_object_class = (SPObjectClass *) klass;
     //sp_object_class->build = SPLine::build;
-    sp_object_class->set = SPLine::set;
-    sp_object_class->write = SPLine::write;
+//    sp_object_class->set = SPLine::set;
+//    sp_object_class->write = SPLine::write;
 
     SPItemClass *item_class = (SPItemClass *) klass;
 //    item_class->description = SPLine::getDescription;
 //    item_class->set_transform = SPLine::setTransform;
 //    item_class->convert_to_guides = SPLine::convertToGuides;
 
-    sp_object_class->update = SPLine::update;
+//    sp_object_class->update = SPLine::update;
 
     SPShapeClass *shape_class = (SPShapeClass *) klass;
     //shape_class->set_shape = SPLine::setShape;

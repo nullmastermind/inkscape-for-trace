@@ -96,11 +96,11 @@ static void sp_namedview_class_init(SPNamedViewClass * klass)
     parent_class = reinterpret_cast<SPObjectGroupClass *>(g_type_class_ref(SP_TYPE_OBJECTGROUP));
 
     //sp_object_class->build = sp_namedview_build;
-    sp_object_class->release = sp_namedview_release;
-    sp_object_class->set = sp_namedview_set;
-    sp_object_class->child_added = sp_namedview_child_added;
-    sp_object_class->remove_child = sp_namedview_remove_child;
-    sp_object_class->write = sp_namedview_write;
+//    sp_object_class->release = sp_namedview_release;
+//    sp_object_class->set = sp_namedview_set;
+//    sp_object_class->child_added = sp_namedview_child_added;
+//    sp_object_class->remove_child = sp_namedview_remove_child;
+//    sp_object_class->write = sp_namedview_write;
 }
 
 CNamedView::CNamedView(SPNamedView* view) : CObjectGroup(view) {

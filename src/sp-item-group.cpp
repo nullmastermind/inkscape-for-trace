@@ -118,14 +118,14 @@ sp_group_class_init (SPGroupClass *klass)
 
     object_class->dispose = sp_group_dispose;
 
-    sp_object_class->child_added = sp_group_child_added;
-    sp_object_class->remove_child = sp_group_remove_child;
-    sp_object_class->order_changed = sp_group_order_changed;
-    sp_object_class->update = sp_group_update;
-    sp_object_class->modified = sp_group_modified;
-    sp_object_class->set = sp_group_set;
-    sp_object_class->write = sp_group_write;
-    sp_object_class->release = sp_group_release;
+//    sp_object_class->child_added = sp_group_child_added;
+//    sp_object_class->remove_child = sp_group_remove_child;
+//    sp_object_class->order_changed = sp_group_order_changed;
+//    sp_object_class->update = sp_group_update;
+//    sp_object_class->modified = sp_group_modified;
+//    sp_object_class->set = sp_group_set;
+//    sp_object_class->write = sp_group_write;
+//    sp_object_class->release = sp_group_release;
     //sp_object_class->build = sp_group_build;
 
 //    item_class->bbox = sp_group_bbox;

@@ -49,7 +49,7 @@ sp_title_class_init(SPTitleClass *klass)
     SPObjectClass *sp_object_class = (SPObjectClass *) klass;
     title_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
 
-    sp_object_class->write = sp_title_write;
+//    sp_object_class->write = sp_title_write;
 }
 
 CTitle::CTitle(SPTitle* title) : CObject(title) {

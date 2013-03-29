@@ -95,11 +95,11 @@ void SPShapeClass::sp_shape_class_init(SPShapeClass *klass)
     gobject_class->finalize = SPShape::sp_shape_finalize;
 
     //sp_object_class->build = SPShape::sp_shape_build;
-    sp_object_class->release = SPShape::sp_shape_release;
-    sp_object_class->set = SPShape::sp_shape_set;
-    sp_object_class->update = SPShape::sp_shape_update;
-    sp_object_class->modified = SPShape::sp_shape_modified;
-    sp_object_class->write = SPShape::sp_shape_write;
+//    sp_object_class->release = SPShape::sp_shape_release;
+//    sp_object_class->set = SPShape::sp_shape_set;
+//    sp_object_class->update = SPShape::sp_shape_update;
+//    sp_object_class->modified = SPShape::sp_shape_modified;
+//    sp_object_class->write = SPShape::sp_shape_write;
 
 //    item_class->bbox = SPShape::sp_shape_bbox;
 //    item_class->print = sp_shape_print;

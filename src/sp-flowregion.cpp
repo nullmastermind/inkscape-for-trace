@@ -92,11 +92,11 @@ sp_flowregion_class_init (SPFlowregionClass *klass)
 
 	object_class->dispose = sp_flowregion_dispose;
 
-	sp_object_class->child_added = sp_flowregion_child_added;
-	sp_object_class->remove_child = sp_flowregion_remove_child;
-	sp_object_class->update = sp_flowregion_update;
-	sp_object_class->modified = sp_flowregion_modified;
-	sp_object_class->write = sp_flowregion_write;
+//	sp_object_class->child_added = sp_flowregion_child_added;
+//	sp_object_class->remove_child = sp_flowregion_remove_child;
+//	sp_object_class->update = sp_flowregion_update;
+//	sp_object_class->modified = sp_flowregion_modified;
+//	sp_object_class->write = sp_flowregion_write;
 
 //	item_class->description = sp_flowregion_description;
 }
@@ -337,11 +337,11 @@ sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass)
 
 	object_class->dispose = sp_flowregionexclude_dispose;
 
-	sp_object_class->child_added = sp_flowregionexclude_child_added;
-	sp_object_class->remove_child = sp_flowregionexclude_remove_child;
-	sp_object_class->update = sp_flowregionexclude_update;
-	sp_object_class->modified = sp_flowregionexclude_modified;
-	sp_object_class->write = sp_flowregionexclude_write;
+//	sp_object_class->child_added = sp_flowregionexclude_child_added;
+//	sp_object_class->remove_child = sp_flowregionexclude_remove_child;
+//	sp_object_class->update = sp_flowregionexclude_update;
+//	sp_object_class->modified = sp_flowregionexclude_modified;
+//	sp_object_class->write = sp_flowregionexclude_write;
 
 //	item_class->description = sp_flowregionexclude_description;
 }

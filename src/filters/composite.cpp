@@ -69,10 +69,10 @@ sp_feComposite_class_init(SPFeCompositeClass *klass)
     feComposite_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
 
     //sp_object_class->build = sp_feComposite_build;
-    sp_object_class->release = sp_feComposite_release;
-    sp_object_class->write = sp_feComposite_write;
-    sp_object_class->set = sp_feComposite_set;
-    sp_object_class->update = sp_feComposite_update;
+//    sp_object_class->release = sp_feComposite_release;
+//    sp_object_class->write = sp_feComposite_write;
+//    sp_object_class->set = sp_feComposite_set;
+//    sp_object_class->update = sp_feComposite_update;
 
     //sp_primitive_class->build_renderer = sp_feComposite_build_renderer;
 }

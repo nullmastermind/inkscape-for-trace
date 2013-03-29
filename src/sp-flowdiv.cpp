@@ -87,11 +87,11 @@ static void sp_flowdiv_class_init(SPFlowdivClass *klass)
     flowdiv_parent_class = reinterpret_cast<SPItemClass *>(g_type_class_ref(SP_TYPE_ITEM));
 
     //sp_object_class->build = sp_flowdiv_build;
-    sp_object_class->set = sp_flowdiv_set;
-    sp_object_class->release = sp_flowdiv_release;
-    sp_object_class->write = sp_flowdiv_write;
-    sp_object_class->update = sp_flowdiv_update;
-    sp_object_class->modified = sp_flowdiv_modified;
+//    sp_object_class->set = sp_flowdiv_set;
+//    sp_object_class->release = sp_flowdiv_release;
+//    sp_object_class->write = sp_flowdiv_write;
+//    sp_object_class->update = sp_flowdiv_update;
+//    sp_object_class->modified = sp_flowdiv_modified;
 }
 
 CFlowdiv::CFlowdiv(SPFlowdiv* flowdiv) : CItem(flowdiv) {
@@ -298,11 +298,11 @@ static void sp_flowtspan_class_init(SPFlowtspanClass *klass)
     flowtspan_parent_class = reinterpret_cast<SPItemClass *>(g_type_class_ref(SP_TYPE_ITEM));
 
     //sp_object_class->build = sp_flowtspan_build;
-    sp_object_class->set = sp_flowtspan_set;
-    sp_object_class->release = sp_flowtspan_release;
-    sp_object_class->write = sp_flowtspan_write;
-    sp_object_class->update = sp_flowtspan_update;
-    sp_object_class->modified = sp_flowtspan_modified;
+//    sp_object_class->set = sp_flowtspan_set;
+//    sp_object_class->release = sp_flowtspan_release;
+//    sp_object_class->write = sp_flowtspan_write;
+//    sp_object_class->update = sp_flowtspan_update;
+//    sp_object_class->modified = sp_flowtspan_modified;
 }
 
 CFlowtspan::CFlowtspan(SPFlowtspan* flowtspan) : CItem(flowtspan) {
@@ -509,11 +509,11 @@ static void sp_flowpara_class_init(SPFlowparaClass *klass)
     flowpara_parent_class = reinterpret_cast<SPItemClass *>(g_type_class_ref(SP_TYPE_ITEM));
 
     //sp_object_class->build = sp_flowpara_build;
-    sp_object_class->set = sp_flowpara_set;
-    sp_object_class->release = sp_flowpara_release;
-    sp_object_class->write = sp_flowpara_write;
-    sp_object_class->update = sp_flowpara_update;
-    sp_object_class->modified = sp_flowpara_modified;
+//    sp_object_class->set = sp_flowpara_set;
+//    sp_object_class->release = sp_flowpara_release;
+//    sp_object_class->write = sp_flowpara_write;
+//    sp_object_class->update = sp_flowpara_update;
+//    sp_object_class->modified = sp_flowpara_modified;
 }
 
 CFlowpara::CFlowpara(SPFlowpara* flowpara) : CItem(flowpara) {
@@ -715,9 +715,9 @@ static void sp_flowline_class_init(SPFlowlineClass *klass)
 
     flowline_parent_class = reinterpret_cast<SPObjectClass *>(g_type_class_ref(SP_TYPE_OBJECT));
 
-    sp_object_class->release = sp_flowline_release;
-    sp_object_class->write = sp_flowline_write;
-    sp_object_class->modified = sp_flowline_modified;
+//    sp_object_class->release = sp_flowline_release;
+//    sp_object_class->write = sp_flowline_write;
+//    sp_object_class->modified = sp_flowline_modified;
 }
 
 CFlowline::CFlowline(SPFlowline* flowline) : CObject(flowline) {
@@ -809,9 +809,9 @@ static void sp_flowregionbreak_class_init(SPFlowregionbreakClass *klass)
 
     flowregionbreak_parent_class = reinterpret_cast<SPObjectClass *>(g_type_class_ref(SP_TYPE_OBJECT));
 
-    sp_object_class->release = sp_flowregionbreak_release;
-    sp_object_class->write = sp_flowregionbreak_write;
-    sp_object_class->modified = sp_flowregionbreak_modified;
+//    sp_object_class->release = sp_flowregionbreak_release;
+//    sp_object_class->write = sp_flowregionbreak_write;
+//    sp_object_class->modified = sp_flowregionbreak_modified;
 }
 
 CFlowregionbreak::CFlowregionbreak(SPFlowregionbreak* flowregionbreak) : CObject(flowregionbreak) {
