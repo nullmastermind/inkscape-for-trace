@@ -31,7 +31,12 @@ class FilterSpecularLighting;
 
 class SPFeSpecularLightingClass;
 
-struct SPFeSpecularLighting : public SPFilterPrimitive {
+class CFeSpecularLighting;
+
+class SPFeSpecularLighting : public SPFilterPrimitive {
+public:
+	CFeSpecularLighting* cfespecularlighting;
+
     gfloat surfaceScale;
     guint surfaceScale_set : 1;
     gfloat specularConstant;
@@ -47,6 +52,31 @@ struct SPFeSpecularLighting : public SPFilterPrimitive {
 
 struct SPFeSpecularLightingClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeSpecularLighting : public CFilterPrimitive {
+public:
+	CFeSpecularLighting(SPFeSpecularLighting* lighting);
+	virtual ~CFeSpecularLighting();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual void onOrderChanged(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr);
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeSpecularLighting* spfespecularlighting;
 };
 
 GType sp_feSpecularLighting_get_type();

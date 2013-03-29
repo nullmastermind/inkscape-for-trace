@@ -22,12 +22,37 @@
 
 class SPFeOffsetClass;
 
-struct SPFeOffset : public SPFilterPrimitive {
+class CFeOffset;
+
+class SPFeOffset : public SPFilterPrimitive {
+public:
+	CFeOffset* cfeoffset;
+
     double dx, dy;
 };
 
 struct SPFeOffsetClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeOffset : public CFilterPrimitive {
+public:
+	CFeOffset(SPFeOffset* offset);
+	virtual ~CFeOffset();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeOffset* spfeoffset;
 };
 
 GType sp_feOffset_get_type();

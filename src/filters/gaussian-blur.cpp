@@ -82,9 +82,19 @@ sp_gaussianBlur_class_init(SPGaussianBlurClass *klass)
     sp_primitive_class->build_renderer = sp_gaussianBlur_build_renderer;
 }
 
+CGaussianBlur::CGaussianBlur(SPGaussianBlur* gb) : CFilterPrimitive(gb) {
+	this->spgaussianblur = gb;
+}
+
+CGaussianBlur::~CGaussianBlur() {
+}
+
 static void
-sp_gaussianBlur_init(SPGaussianBlur */*gaussianBlur*/)
+sp_gaussianBlur_init(SPGaussianBlur *gaussianBlur)
 {
+	gaussianBlur->cgaussianblur = new CGaussianBlur(gaussianBlur);
+	gaussianBlur->cfilterprimitive = gaussianBlur->cgaussianblur;
+	gaussianBlur->cobject = gaussianBlur->cgaussianblur;
 }
 
 /**
@@ -92,16 +102,23 @@ sp_gaussianBlur_init(SPGaussianBlur */*gaussianBlur*/)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-static void
-sp_gaussianBlur_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+//static void
+//sp_gaussianBlur_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
 //    if (((SPObjectClass *) gaussianBlur_parent_class)->build) {
 //        ((SPObjectClass *) gaussianBlur_parent_class)->build(object, document, repr);
 //    }
-	// CPPIFY: todo
+
+//    object->readAttr( "stdDeviation" );
+
+//}
+
+void CGaussianBlur::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	CFilterPrimitive::onBuild(document, repr);
+
+	SPGaussianBlur* object = this->spgaussianblur;
 
     object->readAttr( "stdDeviation" );
-
 }
 
 /**
@@ -111,8 +128,13 @@ static void
 sp_gaussianBlur_release(SPObject *object)
 {
 
-    if (((SPObjectClass *) gaussianBlur_parent_class)->release)
-        ((SPObjectClass *) gaussianBlur_parent_class)->release(object);
+//    if (((SPObjectClass *) gaussianBlur_parent_class)->release)
+//        ((SPObjectClass *) gaussianBlur_parent_class)->release(object);
+	((SPGaussianBlur*)object)->cgaussianblur->onRelease();
+}
+
+void CGaussianBlur::onRelease() {
+	CFilterPrimitive::onRelease();
 }
 
 /**
@@ -121,6 +143,25 @@ sp_gaussianBlur_release(SPObject *object)
 static void
 sp_gaussianBlur_set(SPObject *object, unsigned int key, gchar const *value)
 {
+//    SPGaussianBlur *gaussianBlur = SP_GAUSSIANBLUR(object);
+//
+//    switch(key) {
+//        case SP_ATTR_STDDEVIATION:
+//            gaussianBlur->stdDeviation.set(value);
+//            object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            break;
+//        default:
+//            if (((SPObjectClass *) gaussianBlur_parent_class)->set)
+//                ((SPObjectClass *) gaussianBlur_parent_class)->set(object, key, value);
+//            break;
+//    }
+
+	((SPGaussianBlur*)object)->cgaussianblur->onSet(key, value);
+}
+
+void CGaussianBlur::onSet(unsigned int key, gchar const *value) {
+	SPGaussianBlur* object = this->spgaussianblur;
+
     SPGaussianBlur *gaussianBlur = SP_GAUSSIANBLUR(object);
 
     switch(key) {
@@ -129,11 +170,11 @@ sp_gaussianBlur_set(SPObject *object, unsigned int key, gchar const *value)
             object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-            if (((SPObjectClass *) gaussianBlur_parent_class)->set)
-                ((SPObjectClass *) gaussianBlur_parent_class)->set(object, key, value);
+//            if (((SPObjectClass *) gaussianBlur_parent_class)->set)
+//                ((SPObjectClass *) gaussianBlur_parent_class)->set(object, key, value);
+        	CFilterPrimitive::onSet(key, value);
             break;
     }
-
 }
 
 /**
@@ -142,13 +183,27 @@ sp_gaussianBlur_set(SPObject *object, unsigned int key, gchar const *value)
 static void
 sp_gaussianBlur_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+//    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+//        object->readAttr( "stdDeviation" );
+//    }
+//
+//    if (((SPObjectClass *) gaussianBlur_parent_class)->update) {
+//        ((SPObjectClass *) gaussianBlur_parent_class)->update(object, ctx, flags);
+//    }
+	((SPGaussianBlur*)object)->cgaussianblur->onUpdate(ctx, flags);
+}
+
+void CGaussianBlur::onUpdate(SPCtx *ctx, guint flags) {
+	SPGaussianBlur* object = this->spgaussianblur;
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->readAttr( "stdDeviation" );
     }
 
-    if (((SPObjectClass *) gaussianBlur_parent_class)->update) {
-        ((SPObjectClass *) gaussianBlur_parent_class)->update(object, ctx, flags);
-    }
+//    if (((SPObjectClass *) gaussianBlur_parent_class)->update) {
+//        ((SPObjectClass *) gaussianBlur_parent_class)->update(object, ctx, flags);
+//    }
+    CFilterPrimitive::onUpdate(ctx, flags);
 }
 
 /**
@@ -157,19 +212,36 @@ sp_gaussianBlur_update(SPObject *object, SPCtx *ctx, guint flags)
 static Inkscape::XML::Node *
 sp_gaussianBlur_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    /* TODO: Don't just clone, but create a new repr node and write all
+//     * relevant values into it */
+//    if (!repr) {
+//        repr = object->getRepr()->duplicate(doc);
+//    }
+//
+//    if (((SPObjectClass *) gaussianBlur_parent_class)->write) {
+//        ((SPObjectClass *) gaussianBlur_parent_class)->write(object, doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((SPGaussianBlur*)object)->cgaussianblur->onWrite(doc, repr, flags);
+}
+
+Inkscape::XML::Node* CGaussianBlur::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPGaussianBlur* object = this->spgaussianblur;
+
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
         repr = object->getRepr()->duplicate(doc);
     }
 
-    if (((SPObjectClass *) gaussianBlur_parent_class)->write) {
-        ((SPObjectClass *) gaussianBlur_parent_class)->write(object, doc, repr, flags);
-    }
+//    if (((SPObjectClass *) gaussianBlur_parent_class)->write) {
+//        ((SPObjectClass *) gaussianBlur_parent_class)->write(object, doc, repr, flags);
+//    }
+    CFilterPrimitive::onWrite(doc, repr, flags);
 
     return repr;
 }
-
 
 void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num)
 {
@@ -182,6 +254,28 @@ void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num, float optnum
 }
 
 static void sp_gaussianBlur_build_renderer(SPFilterPrimitive *primitive, Inkscape::Filters::Filter *filter) {
+//    SPGaussianBlur *sp_blur = SP_GAUSSIANBLUR(primitive);
+//
+//    int handle = filter->add_primitive(Inkscape::Filters::NR_FILTER_GAUSSIANBLUR);
+//    Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(handle);
+//    Inkscape::Filters::FilterGaussian *nr_blur = dynamic_cast<Inkscape::Filters::FilterGaussian*>(nr_primitive);
+//
+//    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+//
+//    gfloat num = sp_blur->stdDeviation.getNumber();
+//    if (num >= 0.0) {
+//        gfloat optnum = sp_blur->stdDeviation.getOptNumber();
+//        if(optnum >= 0.0)
+//            nr_blur->set_deviation((double) num, (double) optnum);
+//        else
+//            nr_blur->set_deviation((double) num);
+//    }
+	((SPGaussianBlur*)primitive)->cgaussianblur->onBuildRenderer(filter);
+}
+
+void CGaussianBlur::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+	SPGaussianBlur* primitive = this->spgaussianblur;
+
     SPGaussianBlur *sp_blur = SP_GAUSSIANBLUR(primitive);
 
     int handle = filter->add_primitive(Inkscape::Filters::NR_FILTER_GAUSSIANBLUR);

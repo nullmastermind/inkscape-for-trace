@@ -23,12 +23,35 @@
 /* FeTile base class */
 class SPFeTileClass;
 
-struct SPFeTile : public SPFilterPrimitive {
-    
+class CFeTile;
+
+class SPFeTile : public SPFilterPrimitive {
+public:
+    CFeTile* cfetile;
 };
 
 struct SPFeTileClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeTile : public CFilterPrimitive {
+public:
+	CFeTile(SPFeTile* tile);
+	virtual ~CFeTile();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeTile* spfetile;
 };
 
 GType sp_feTile_get_type();

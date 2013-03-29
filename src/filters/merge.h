@@ -20,12 +20,35 @@
 
 class SPFeMergeClass;
 
-struct SPFeMerge : public SPFilterPrimitive {
-    
+class CFeMerge;
+
+class SPFeMerge : public SPFilterPrimitive {
+public:
+    CFeMerge* cfemerge;
 };
 
 struct SPFeMergeClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeMerge : public CFilterPrimitive {
+public:
+	CFeMerge(SPFeMerge* merge);
+	virtual ~CFeMerge();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeMerge* spfemerge;
 };
 
 GType sp_feMerge_get_type();

@@ -34,7 +34,12 @@ enum FeCompositeOperator {
 
 class SPFeCompositeClass;
 
-struct SPFeComposite : public SPFilterPrimitive {
+class CFeComposite;
+
+class SPFeComposite : public SPFilterPrimitive {
+public:
+	CFeComposite* cfecomposite;
+
     FeCompositeOperator composite_operator;
     double k1, k2, k3, k4;
     int in2;
@@ -42,6 +47,26 @@ struct SPFeComposite : public SPFilterPrimitive {
 
 struct SPFeCompositeClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeComposite : public CFilterPrimitive {
+public:
+	CFeComposite(SPFeComposite* comp);
+	virtual ~CFeComposite();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeComposite* spfecomposite;
 };
 
 GType sp_feComposite_get_type();

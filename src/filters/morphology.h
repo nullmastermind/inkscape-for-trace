@@ -24,13 +24,38 @@
 
 class SPFeMorphologyClass;
 
-struct SPFeMorphology : public SPFilterPrimitive {
+class CFeMorphology;
+
+class SPFeMorphology : public SPFilterPrimitive {
+public:
+	CFeMorphology* cfemorphology;
+
     Inkscape::Filters::FilterMorphologyOperator Operator;
     NumberOptNumber radius;
 };
 
 struct SPFeMorphologyClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeMorphology : public CFilterPrimitive {
+public:
+	CFeMorphology(SPFeMorphology* morph);
+	virtual ~CFeMorphology();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeMorphology* spfemorphology;
 };
 
 GType sp_feMorphology_get_type();

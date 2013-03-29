@@ -26,7 +26,12 @@
 /* FeTurbulence base class */
 class SPFeTurbulenceClass;
 
-struct SPFeTurbulence : public SPFilterPrimitive {
+class CFeTurbulence;
+
+class SPFeTurbulence : public SPFilterPrimitive {
+public:
+	CFeTurbulence* cfeturbulence;
+
     /** TURBULENCE ATTRIBUTES HERE */
     NumberOptNumber baseFrequency;
     int numOctaves;
@@ -39,6 +44,26 @@ struct SPFeTurbulence : public SPFilterPrimitive {
 
 struct SPFeTurbulenceClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeTurbulence : public CFilterPrimitive {
+public:
+	CFeTurbulence(SPFeTurbulence* turb);
+	virtual ~CFeTurbulence();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeTurbulence* spfeturbulence;
 };
 
 GType sp_feTurbulence_get_type();

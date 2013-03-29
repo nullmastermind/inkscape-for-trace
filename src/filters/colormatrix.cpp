@@ -80,9 +80,19 @@ sp_feColorMatrix_class_init(SPFeColorMatrixClass *klass)
     sp_primitive_class->build_renderer = sp_feColorMatrix_build_renderer;
 }
 
+CFeColorMatrix::CFeColorMatrix(SPFeColorMatrix* matrix) : CFilterPrimitive(matrix) {
+	this->spfecolormatrix = matrix;
+}
+
+CFeColorMatrix::~CFeColorMatrix() {
+}
+
 static void
-sp_feColorMatrix_init(SPFeColorMatrix */*feColorMatrix*/)
+sp_feColorMatrix_init(SPFeColorMatrix *feColorMatrix)
 {
+	feColorMatrix->cfecolormatrix = new CFeColorMatrix(feColorMatrix);
+	feColorMatrix->cfilterprimitive = feColorMatrix->cfecolormatrix;
+	feColorMatrix->cobject = feColorMatrix->cfecolormatrix;
 }
 
 /**
@@ -90,17 +100,29 @@ sp_feColorMatrix_init(SPFeColorMatrix */*feColorMatrix*/)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-static void
-sp_feColorMatrix_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-//    if (((SPObjectClass *) feColorMatrix_parent_class)->build) {
-//        ((SPObjectClass *) feColorMatrix_parent_class)->build(object, document, repr);
-//    }
-	// CPPIFY: todo
+//static void
+//sp_feColorMatrix_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
+////    if (((SPObjectClass *) feColorMatrix_parent_class)->build) {
+////        ((SPObjectClass *) feColorMatrix_parent_class)->build(object, document, repr);
+////    }
+//
+//    /*LOAD ATTRIBUTES FROM REPR HERE*/
+//    object->readAttr( "type" );
+//    object->readAttr( "values" );
+//}
 
-    /*LOAD ATTRIBUTES FROM REPR HERE*/
-    object->readAttr( "type" );
-    object->readAttr( "values" );
+void CFeColorMatrix::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	//    if (((SPObjectClass *) feColorMatrix_parent_class)->build) {
+	//        ((SPObjectClass *) feColorMatrix_parent_class)->build(object, document, repr);
+	//    }
+	CFilterPrimitive::onBuild(document, repr);
+
+	SPFeColorMatrix* object = this->spfecolormatrix;
+
+	/*LOAD ATTRIBUTES FROM REPR HERE*/
+	object->readAttr( "type" );
+	object->readAttr( "values" );
 }
 
 /**
@@ -109,8 +131,13 @@ sp_feColorMatrix_build(SPObject *object, SPDocument *document, Inkscape::XML::No
 static void
 sp_feColorMatrix_release(SPObject *object)
 {
-    if (((SPObjectClass *) feColorMatrix_parent_class)->release)
-        ((SPObjectClass *) feColorMatrix_parent_class)->release(object);
+//    if (((SPObjectClass *) feColorMatrix_parent_class)->release)
+//        ((SPObjectClass *) feColorMatrix_parent_class)->release(object);
+	((SPFeColorMatrix*)object)->cfecolormatrix->onRelease();
+}
+
+void CFeColorMatrix::onRelease() {
+	CFilterPrimitive::onRelease();
 }
 
 static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar const *value){
@@ -138,6 +165,37 @@ static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar
 static void
 sp_feColorMatrix_set(SPObject *object, unsigned int key, gchar const *str)
 {
+//    SPFeColorMatrix *feColorMatrix = SP_FECOLORMATRIX(object);
+//    (void)feColorMatrix;
+//
+//    Inkscape::Filters::FilterColorMatrixType read_type;
+//	/*DEAL WITH SETTING ATTRIBUTES HERE*/
+//    switch(key) {
+//        case SP_ATTR_TYPE:
+//            read_type = sp_feColorMatrix_read_type(str);
+//            if (feColorMatrix->type != read_type){
+//                feColorMatrix->type = read_type;
+//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        case SP_ATTR_VALUES:
+//            if (str){
+//                feColorMatrix->values = helperfns_read_vector(str);
+//                feColorMatrix->value = helperfns_read_number(str, HELPERFNS_NO_WARNING);
+//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        default:
+//            if (((SPObjectClass *) feColorMatrix_parent_class)->set)
+//                ((SPObjectClass *) feColorMatrix_parent_class)->set(object, key, str);
+//            break;
+//    }
+	((SPFeColorMatrix*)object)->cfecolormatrix->onSet(key, str);
+}
+
+void CFeColorMatrix::onSet(unsigned int key, gchar const *str) {
+	SPFeColorMatrix* object = this->spfecolormatrix;
+
     SPFeColorMatrix *feColorMatrix = SP_FECOLORMATRIX(object);
     (void)feColorMatrix;
 
@@ -159,8 +217,9 @@ sp_feColorMatrix_set(SPObject *object, unsigned int key, gchar const *str)
             }
             break;
         default:
-            if (((SPObjectClass *) feColorMatrix_parent_class)->set)
-                ((SPObjectClass *) feColorMatrix_parent_class)->set(object, key, str);
+//            if (((SPObjectClass *) feColorMatrix_parent_class)->set)
+//                ((SPObjectClass *) feColorMatrix_parent_class)->set(object, key, str);
+        	CFilterPrimitive::onSet(key, str);
             break;
     }
 }
@@ -171,16 +230,33 @@ sp_feColorMatrix_set(SPObject *object, unsigned int key, gchar const *str)
 static void
 sp_feColorMatrix_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+//    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
+//                 SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+//
+//        /* do something to trigger redisplay, updates? */
+//
+//    }
+//
+//    if (((SPObjectClass *) feColorMatrix_parent_class)->update) {
+//        ((SPObjectClass *) feColorMatrix_parent_class)->update(object, ctx, flags);
+//    }
+	((SPFeColorMatrix*)object)->cfecolormatrix->onUpdate(ctx, flags);
+}
+
+void CFeColorMatrix::onUpdate(SPCtx *ctx, guint flags) {
+	SPFeColorMatrix* object = this->spfecolormatrix;
+
+	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* do something to trigger redisplay, updates? */
 
     }
 
-    if (((SPObjectClass *) feColorMatrix_parent_class)->update) {
-        ((SPObjectClass *) feColorMatrix_parent_class)->update(object, ctx, flags);
-    }
+//    if (((SPObjectClass *) feColorMatrix_parent_class)->update) {
+//        ((SPObjectClass *) feColorMatrix_parent_class)->update(object, ctx, flags);
+//    }
+	CFilterPrimitive::onUpdate(ctx, flags);
 }
 
 /**
@@ -189,20 +265,58 @@ sp_feColorMatrix_update(SPObject *object, SPCtx *ctx, guint flags)
 static Inkscape::XML::Node *
 sp_feColorMatrix_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    /* TODO: Don't just clone, but create a new repr node and write all
+//     * relevant values into it */
+//    if (!repr) {
+//        repr = object->getRepr()->duplicate(doc);
+//    }
+//
+//    if (((SPObjectClass *) feColorMatrix_parent_class)->write) {
+//        ((SPObjectClass *) feColorMatrix_parent_class)->write(object, doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((SPFeColorMatrix*)object)->cfecolormatrix->onWrite(doc, repr, flags);
+}
+
+Inkscape::XML::Node* CFeColorMatrix::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeColorMatrix* object = this->spfecolormatrix;
+
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
         repr = object->getRepr()->duplicate(doc);
     }
 
-    if (((SPObjectClass *) feColorMatrix_parent_class)->write) {
-        ((SPObjectClass *) feColorMatrix_parent_class)->write(object, doc, repr, flags);
-    }
+//    if (((SPObjectClass *) feColorMatrix_parent_class)->write) {
+//        ((SPObjectClass *) feColorMatrix_parent_class)->write(object, doc, repr, flags);
+//    }
+    CFilterPrimitive::onWrite(doc, repr, flags);
 
     return repr;
 }
 
 static void sp_feColorMatrix_build_renderer(SPFilterPrimitive *primitive, Inkscape::Filters::Filter *filter) {
+//    g_assert(primitive != NULL);
+//    g_assert(filter != NULL);
+//
+//    SPFeColorMatrix *sp_colormatrix = SP_FECOLORMATRIX(primitive);
+//
+//    int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_COLORMATRIX);
+//    Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
+//    Inkscape::Filters::FilterColorMatrix *nr_colormatrix = dynamic_cast<Inkscape::Filters::FilterColorMatrix*>(nr_primitive);
+//    g_assert(nr_colormatrix != NULL);
+//
+//    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+//    nr_colormatrix->set_type(sp_colormatrix->type);
+//    nr_colormatrix->set_value(sp_colormatrix->value);
+//    nr_colormatrix->set_values(sp_colormatrix->values);
+	((SPFeColorMatrix*)primitive)->cfecolormatrix->onBuildRenderer(filter);
+}
+
+void CFeColorMatrix::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+	SPFeColorMatrix* primitive = this->spfecolormatrix;
+
     g_assert(primitive != NULL);
     g_assert(filter != NULL);
 

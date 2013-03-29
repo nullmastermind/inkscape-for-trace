@@ -77,9 +77,20 @@ sp_feOffset_class_init(SPFeOffsetClass *klass)
     sp_primitive_class->build_renderer = sp_feOffset_build_renderer;
 }
 
+CFeOffset::CFeOffset(SPFeOffset* offset) : CFilterPrimitive(offset) {
+	this->spfeoffset = offset;
+}
+
+CFeOffset::~CFeOffset() {
+}
+
 static void
 sp_feOffset_init(SPFeOffset *feOffset)
 {
+	feOffset->cfeoffset = new CFeOffset(feOffset);
+	feOffset->cfilterprimitive = feOffset->cfeoffset;
+	feOffset->cobject = feOffset->cfeoffset;
+
     feOffset->dx = 0;
     feOffset->dy = 0;
 }
@@ -89,16 +100,27 @@ sp_feOffset_init(SPFeOffset *feOffset)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-static void
-sp_feOffset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-//    if (((SPObjectClass *) feOffset_parent_class)->build) {
-//        ((SPObjectClass *) feOffset_parent_class)->build(object, document, repr);
-//    }
-	// CPPIFY: todo
+//static void
+//sp_feOffset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+//{
+////    if (((SPObjectClass *) feOffset_parent_class)->build) {
+////        ((SPObjectClass *) feOffset_parent_class)->build(object, document, repr);
+////    }
+//
+//    object->readAttr( "dx" );
+//    object->readAttr( "dy" );
+//}
 
-    object->readAttr( "dx" );
-    object->readAttr( "dy" );
+void CFeOffset::onBuild(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFeOffset* object = this->spfeoffset;
+
+	//    if (((SPObjectClass *) feOffset_parent_class)->build) {
+	//        ((SPObjectClass *) feOffset_parent_class)->build(object, document, repr);
+	//    }
+	CFilterPrimitive::onBuild(document, repr);
+
+	object->readAttr( "dx" );
+	object->readAttr( "dy" );
 }
 
 /**
@@ -107,8 +129,13 @@ sp_feOffset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *r
 static void
 sp_feOffset_release(SPObject *object)
 {
-    if (((SPObjectClass *) feOffset_parent_class)->release)
-        ((SPObjectClass *) feOffset_parent_class)->release(object);
+//    if (((SPObjectClass *) feOffset_parent_class)->release)
+//        ((SPObjectClass *) feOffset_parent_class)->release(object);
+	((SPFeOffset*)object)->cfeoffset->onRelease();
+}
+
+void CFeOffset::onRelease() {
+	CFilterPrimitive::onRelease();
 }
 
 /**
@@ -117,6 +144,37 @@ sp_feOffset_release(SPObject *object)
 static void
 sp_feOffset_set(SPObject *object, unsigned int key, gchar const *value)
 {
+//    SPFeOffset *feOffset = SP_FEOFFSET(object);
+//
+//    double read_num;
+//    switch(key) {
+//        case SP_ATTR_DX:
+//            read_num = value ? helperfns_read_number(value) : 0;
+//            if (read_num != feOffset->dx) {
+//                feOffset->dx = read_num;
+//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//        case SP_ATTR_DY:
+//            read_num = value ? helperfns_read_number(value) : 0;
+//            if (read_num != feOffset->dy) {
+//                feOffset->dy = read_num;
+//                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+//            }
+//            break;
+//
+//	/*DEAL WITH SETTING ATTRIBUTES HERE*/
+//        default:
+//            if (((SPObjectClass *) feOffset_parent_class)->set)
+//                ((SPObjectClass *) feOffset_parent_class)->set(object, key, value);
+//            break;
+//    }
+	((SPFeOffset*)object)->cfeoffset->onSet(key, value);
+}
+
+void CFeOffset::onSet(unsigned int key, gchar const *value) {
+	SPFeOffset* object = this->spfeoffset;
+
     SPFeOffset *feOffset = SP_FEOFFSET(object);
 
     double read_num;
@@ -138,11 +196,11 @@ sp_feOffset_set(SPObject *object, unsigned int key, gchar const *value)
             
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-            if (((SPObjectClass *) feOffset_parent_class)->set)
-                ((SPObjectClass *) feOffset_parent_class)->set(object, key, value);
+//            if (((SPObjectClass *) feOffset_parent_class)->set)
+//                ((SPObjectClass *) feOffset_parent_class)->set(object, key, value);
+        	CFilterPrimitive::onSet(key, value);
             break;
     }
-
 }
 
 /**
@@ -151,14 +209,29 @@ sp_feOffset_set(SPObject *object, unsigned int key, gchar const *value)
 static void
 sp_feOffset_update(SPObject *object, SPCtx *ctx, guint flags)
 {
+//    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+//        object->readAttr( "dx" );
+//        object->readAttr( "dy" );
+//    }
+//
+//    if (((SPObjectClass *) feOffset_parent_class)->update) {
+//        ((SPObjectClass *) feOffset_parent_class)->update(object, ctx, flags);
+//    }
+	((SPFeOffset*)object)->cfeoffset->onUpdate(ctx, flags);
+}
+
+void CFeOffset::onUpdate(SPCtx *ctx, guint flags) {
+	SPFeOffset* object = this->spfeoffset;
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->readAttr( "dx" );
         object->readAttr( "dy" );
     }
 
-    if (((SPObjectClass *) feOffset_parent_class)->update) {
-        ((SPObjectClass *) feOffset_parent_class)->update(object, ctx, flags);
-    }
+//    if (((SPObjectClass *) feOffset_parent_class)->update) {
+//        ((SPObjectClass *) feOffset_parent_class)->update(object, ctx, flags);
+//    }
+    CFilterPrimitive::onUpdate(ctx, flags);
 }
 
 /**
@@ -167,20 +240,58 @@ sp_feOffset_update(SPObject *object, SPCtx *ctx, guint flags)
 static Inkscape::XML::Node *
 sp_feOffset_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
 {
+//    /* TODO: Don't just clone, but create a new repr node and write all
+//     * relevant values into it */
+//    if (!repr) {
+//        repr = object->getRepr()->duplicate(doc);
+//    }
+//
+//    if (((SPObjectClass *) feOffset_parent_class)->write) {
+//        ((SPObjectClass *) feOffset_parent_class)->write(object, doc, repr, flags);
+//    }
+//
+//    return repr;
+	return ((SPFeOffset*)object)->cfeoffset->onWrite(doc, repr, flags);
+}
+
+Inkscape::XML::Node* CFeOffset::onWrite(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeOffset* object = this->spfeoffset;
+
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
         repr = object->getRepr()->duplicate(doc);
     }
 
-    if (((SPObjectClass *) feOffset_parent_class)->write) {
-        ((SPObjectClass *) feOffset_parent_class)->write(object, doc, repr, flags);
-    }
+//    if (((SPObjectClass *) feOffset_parent_class)->write) {
+//        ((SPObjectClass *) feOffset_parent_class)->write(object, doc, repr, flags);
+//    }
+    CFilterPrimitive::onWrite(doc, repr, flags);
 
     return repr;
 }
 
 static void sp_feOffset_build_renderer(SPFilterPrimitive *primitive, Inkscape::Filters::Filter *filter) {
+//    g_assert(primitive != NULL);
+//    g_assert(filter != NULL);
+//
+//    SPFeOffset *sp_offset = SP_FEOFFSET(primitive);
+//
+//    int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_OFFSET);
+//    Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
+//    Inkscape::Filters::FilterOffset *nr_offset = dynamic_cast<Inkscape::Filters::FilterOffset*>(nr_primitive);
+//    g_assert(nr_offset != NULL);
+//
+//    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+//
+//    nr_offset->set_dx(sp_offset->dx);
+//    nr_offset->set_dy(sp_offset->dy);
+	((SPFeOffset*)primitive)->cfeoffset->onBuildRenderer(filter);
+}
+
+void CFeOffset::onBuildRenderer(Inkscape::Filters::Filter* filter) {
+	SPFeOffset* primitive = this->spfeoffset;
+
     g_assert(primitive != NULL);
     g_assert(filter != NULL);
 

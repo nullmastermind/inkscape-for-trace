@@ -30,7 +30,12 @@ enum FilterDisplacementMapChannelSelector {
 
 class SPFeDisplacementMapClass;
 
-struct SPFeDisplacementMap : public SPFilterPrimitive {
+class CFeDisplacementMap;
+
+class SPFeDisplacementMap : public SPFilterPrimitive {
+public:
+	CFeDisplacementMap* cfedisplacementmap;
+
     int in2; 
     double scale;
     FilterDisplacementMapChannelSelector xChannelSelector;
@@ -39,6 +44,26 @@ struct SPFeDisplacementMap : public SPFilterPrimitive {
 
 struct SPFeDisplacementMapClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeDisplacementMap : public CFilterPrimitive {
+public:
+	CFeDisplacementMap(SPFeDisplacementMap* map);
+	virtual ~CFeDisplacementMap();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeDisplacementMap* spfedisplacementmap;
 };
 
 GType sp_feDisplacementMap_get_type();

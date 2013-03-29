@@ -24,13 +24,38 @@
 /* GaussianBlur base class */
 class SPGaussianBlurClass;
 
-struct SPGaussianBlur : public SPFilterPrimitive {
+class CGaussianBlur;
+
+class SPGaussianBlur : public SPFilterPrimitive {
+public:
+	CGaussianBlur* cgaussianblur;
+
     /** stdDeviation attribute */
     NumberOptNumber stdDeviation;
 };
 
 struct SPGaussianBlurClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CGaussianBlur : public CFilterPrimitive {
+public:
+	CGaussianBlur(SPGaussianBlur* gb);
+	virtual ~CGaussianBlur();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPGaussianBlur* spgaussianblur;
 };
 
 GType sp_gaussianBlur_get_type();

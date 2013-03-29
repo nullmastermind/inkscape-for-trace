@@ -26,7 +26,12 @@
 
 class SPFeImageClass;
 
-struct SPFeImage : public SPFilterPrimitive {
+class CFeImage;
+
+class SPFeImage : public SPFilterPrimitive {
+public:
+	CFeImage* cfeimage;
+
     gchar *href;
 
     /* preserveAspectRatio */
@@ -43,6 +48,26 @@ struct SPFeImage : public SPFilterPrimitive {
 
 struct SPFeImageClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeImage : public CFilterPrimitive {
+public:
+	CFeImage(SPFeImage* image);
+	virtual ~CFeImage();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeImage* spfeimage;
 };
 
 GType sp_feImage_get_type();

@@ -23,7 +23,12 @@
 
 class SPFeFloodClass;
 
-struct SPFeFlood : public SPFilterPrimitive {
+class CFeFlood;
+
+class SPFeFlood : public SPFilterPrimitive {
+public:
+	CFeFlood* cfeflood;
+
     guint32 color;
     SVGICCColor *icc;
     double opacity;
@@ -31,6 +36,26 @@ struct SPFeFlood : public SPFilterPrimitive {
 
 struct SPFeFloodClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeFlood : public CFilterPrimitive {
+public:
+	CFeFlood(SPFeFlood* flood);
+	virtual ~CFeFlood();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeFlood* spfeflood;
 };
 
 GType sp_feFlood_get_type();

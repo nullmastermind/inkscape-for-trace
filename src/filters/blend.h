@@ -24,7 +24,12 @@
 
 class SPFeBlendClass;
 
-struct SPFeBlend : public SPFilterPrimitive {
+class CFeBlend;
+
+class SPFeBlend : public SPFilterPrimitive {
+public:
+	CFeBlend* cfeblend;
+
     Inkscape::Filters::FilterBlendMode blend_mode;
     int in2;
 };
@@ -32,6 +37,27 @@ struct SPFeBlend : public SPFilterPrimitive {
 struct SPFeBlendClass {
     SPFilterPrimitiveClass parent_class;
 };
+
+class CFeBlend : public CFilterPrimitive {
+public:
+	CFeBlend(SPFeBlend* blend);
+	virtual ~CFeBlend();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeBlend* spfeblend;
+};
+
 
 GType sp_feBlend_get_type();
 

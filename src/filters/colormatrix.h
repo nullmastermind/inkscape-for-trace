@@ -23,7 +23,12 @@
 
 class SPFeColorMatrixClass;
 
-struct SPFeColorMatrix : public SPFilterPrimitive {
+class CFeColorMatrix;
+
+class SPFeColorMatrix : public SPFilterPrimitive {
+public:
+	CFeColorMatrix* cfecolormatrix;
+
     Inkscape::Filters::FilterColorMatrixType type;
     gdouble value;
     std::vector<gdouble> values;
@@ -31,6 +36,26 @@ struct SPFeColorMatrix : public SPFilterPrimitive {
 
 struct SPFeColorMatrixClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeColorMatrix : public CFilterPrimitive {
+public:
+	CFeColorMatrix(SPFeColorMatrix* matrix);
+	virtual ~CFeColorMatrix();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeColorMatrix* spfecolormatrix;
 };
 
 GType sp_feColorMatrix_get_type();

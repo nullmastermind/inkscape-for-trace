@@ -31,8 +31,12 @@ class Filter;
 class FilterPrimitive;
 } }
 
+class CFilterPrimitive;
 
-struct SPFilterPrimitive : public SPObject {
+class SPFilterPrimitive : public SPObject {
+public:
+	CFilterPrimitive* cfilterprimitive;
+
     int image_in, image_out;
 
     /* filter primitive subregion */
@@ -43,6 +47,27 @@ struct SPFilterPrimitiveClass {
     SPObjectClass sp_object_class;
     void (* build_renderer)(SPFilterPrimitive*, Inkscape::Filters::Filter*);
 };
+
+class CFilterPrimitive : public CObject {
+public:
+	CFilterPrimitive(SPFilterPrimitive* fp);
+	virtual ~CFilterPrimitive();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFilterPrimitive* spfilterprimitive;
+};
+
 
 GType sp_filter_primitive_get_type (void);
 

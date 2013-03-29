@@ -26,7 +26,12 @@
 
 class SPFeConvolveMatrixClass;
 
-struct SPFeConvolveMatrix : public SPFilterPrimitive {
+class CFeConvolveMatrix;
+
+class SPFeConvolveMatrix : public SPFilterPrimitive {
+public:
+	CFeConvolveMatrix* cfeconvolvematrix;
+
     NumberOptNumber order;
     std::vector<gdouble> kernelMatrix;
     double divisor, bias;
@@ -43,6 +48,26 @@ struct SPFeConvolveMatrix : public SPFilterPrimitive {
 
 struct SPFeConvolveMatrixClass {
     SPFilterPrimitiveClass parent_class;
+};
+
+class CFeConvolveMatrix : public CFilterPrimitive {
+public:
+	CFeConvolveMatrix(SPFeConvolveMatrix* matrix);
+	virtual ~CFeConvolveMatrix();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeConvolveMatrix* spfeconvolvematrix;
 };
 
 GType sp_feConvolveMatrix_get_type();

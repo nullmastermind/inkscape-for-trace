@@ -26,13 +26,42 @@ class FilterComponentTransfer;
 
 class SPFeComponentTransferClass;
 
-struct SPFeComponentTransfer : public SPFilterPrimitive {
+class CFeComponentTransfer;
+
+class SPFeComponentTransfer : public SPFilterPrimitive {
+public:
+	CFeComponentTransfer* cfecomponenttransfer;
+
     Inkscape::Filters::FilterComponentTransfer *renderer;
 };
 
 struct SPFeComponentTransferClass {
     SPFilterPrimitiveClass parent_class;
 };
+
+class CFeComponentTransfer : public CFilterPrimitive {
+public:
+	CFeComponentTransfer(SPFeComponentTransfer* tr);
+	virtual ~CFeComponentTransfer();
+
+	virtual void onBuild(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void onRelease();
+
+	virtual void onChildAdded(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void onRemoveChild(Inkscape::XML::Node* child);
+
+	virtual void onSet(unsigned int key, const gchar* value);
+
+	virtual void onUpdate(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* onWrite(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual void onBuildRenderer(Inkscape::Filters::Filter* filter);
+
+private:
+	SPFeComponentTransfer* spfecomponenttransfer;
+};
+
 
 GType sp_feComponentTransfer_get_type();
 
