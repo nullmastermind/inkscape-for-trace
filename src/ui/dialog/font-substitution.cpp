@@ -10,6 +10,10 @@
 # include <config.h>
 #endif
 
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
+
 #include <set>
 #include "font-substitution.h"
 
@@ -24,7 +28,9 @@
 #include "preferences.h"
 
 #include "xml/repr.h"
+
 #include "sp-defs.h"
+#include "sp-root.h"
 #include "sp-text.h"
 #include "sp-textpath.h"
 #include "sp-flowtext.h"
@@ -37,6 +43,7 @@
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 
+#include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
 namespace Inkscape {
@@ -228,7 +235,11 @@ GSList * FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *
             std::set<Glib::ustring>::const_iterator iter = setFontSpans.find(font);
             if (iter != setFontSpans.end() ||
                     font == Glib::ustring("sans-serif") ||
-                    font == Glib::ustring("Sans")) {
+                    font == Glib::ustring("Sans") ||
+                    font == Glib::ustring("serif") ||
+                    font == Glib::ustring("Serif") ||
+                    font == Glib::ustring("monospace") ||
+                    font == Glib::ustring("Monospace")) {
                 fontFound = true;
                 break;
             }
@@ -236,7 +247,7 @@ GSList * FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *
         if (fontFound == false) {
             Glib::ustring subName = getSubstituteFontName(fonts);
             Glib::ustring err = Glib::ustring::compose(
-                    "Font '%1' substituted with '%2'", fonts.c_str(), subName.c_str());
+                    _("Font '%1' substituted with '%2'"), fonts.c_str(), subName.c_str());
             setErrors.insert(err);
             outList = g_slist_prepend (outList, item);
         }

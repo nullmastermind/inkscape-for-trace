@@ -106,13 +106,13 @@ void CRect::set(unsigned key, gchar const *value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_RX:
-            if (!rect->rx.read(value) || rect->rx.value < 0.0) {
+            if (!rect->rx.read(value) || rect->rx.value <= 0.0) {
                 rect->rx.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_RY:
-            if (!rect->ry.read(value) || rect->ry.value < 0.0) {
+            if (!rect->ry.read(value) || rect->ry.value <= 0.0) {
                 rect->ry.unset();
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
