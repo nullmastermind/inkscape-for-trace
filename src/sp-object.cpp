@@ -101,33 +101,7 @@ public:
     }
 };
 
-static void sp_object_child_added(SPObject            *object,
-                                  Inkscape::XML::Node *child,
-                                  Inkscape::XML::Node *ref);
-
 static void sp_object_finalize(GObject *object);
-
-static void sp_object_remove_child(SPObject            *object,
-                                   Inkscape::XML::Node *child);
-
-static void sp_object_order_changed(SPObject            *object,
-                                    Inkscape::XML::Node *child,
-                                    Inkscape::XML::Node *old_ref,
-                                    Inkscape::XML::Node *new_ref);
-
-static void sp_object_release(SPObject *object);
-static void sp_object_build(SPObject            *object,
-                            SPDocument          *document,
-                            Inkscape::XML::Node *repr);
-
-static void sp_object_private_set(SPObject     *object,
-                                  unsigned int  key,
-                                  gchar const  *value);
-
-static Inkscape::XML::Node *sp_object_private_write(SPObject                *object,
-                                                    Inkscape::XML::Document *doc,
-                                                    Inkscape::XML::Node     *repr,
-                                                    guint                    flags);
 
 static gchar *sp_object_get_unique_id(SPObject    *object,
                                       gchar const *defid);
@@ -141,9 +115,7 @@ static void
 sp_object_class_init(SPObjectClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    
     object_class->finalize = sp_object_finalize;
-
 }
 
 /**
@@ -151,10 +123,6 @@ sp_object_class_init(SPObjectClass *klass)
  */
 static void
 sp_object_init(SPObject *object)
-
-
-
-
 {
     debug("id=%x, typename=%s",object, g_type_name_from_instance((GTypeInstance*)object));
 
