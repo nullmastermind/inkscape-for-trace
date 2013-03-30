@@ -649,7 +649,7 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     Geom::Coord const w  = x1 - x0;
     Geom::Coord const h  = y1 - y0;
 
-    sp_rect_position_set(rect, x0, y0, w, h);
+    rect->setPosition(x0, y0, w, h);
     rect->updateRepr();
 
     Inkscape::XML::Node *para_repr = xml_doc->createElement("svg:flowPara");

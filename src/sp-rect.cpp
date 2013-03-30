@@ -239,42 +239,33 @@ void CRect::set_shape() {
 
 /* fixme: Think (Lauris) */
 
-void
-sp_rect_position_set(SPRect *rect, gdouble x, gdouble y, gdouble width, gdouble height)
-{
-    g_return_if_fail(rect != NULL);
-    g_return_if_fail(SP_IS_RECT(rect));
+void SPRect::setPosition(gdouble x, gdouble y, gdouble width, gdouble height) {
+    this->x.computed = x;
+    this->y.computed = y;
+    this->width.computed = width;
+    this->height.computed = height;
 
-    rect->x.computed = x;
-    rect->y.computed = y;
-    rect->width.computed = width;
-    rect->height.computed = height;
-
-    SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void
-sp_rect_set_rx(SPRect *rect, gboolean set, gdouble value)
-{
-    g_return_if_fail(rect != NULL);
-    g_return_if_fail(SP_IS_RECT(rect));
+void SPRect::setRx(bool set, gdouble value) {
+	this->rx._set = set;
 
-    rect->rx._set = set;
-    if (set) rect->rx.computed = value;
+    if (set) {
+    	this->rx.computed = value;
+    }
 
-    SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void
-sp_rect_set_ry(SPRect *rect, gboolean set, gdouble value)
-{
-    g_return_if_fail(rect != NULL);
-    g_return_if_fail(SP_IS_RECT(rect));
+void SPRect::setRy(bool set, gdouble value) {
+	this->ry._set = set;
 
-    rect->ry._set = set;
-    if (set) rect->ry.computed = value;
+    if (set) {
+    	this->ry.computed = value;
+    }
 
-    SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 Geom::Affine CRect::set_transform(Geom::Affine const& xform) {
@@ -339,156 +330,147 @@ Geom::Affine CRect::set_transform(Geom::Affine const& xform) {
 /**
 Returns the ratio in which the vector from p0 to p1 is stretched by transform
  */
-static gdouble
-vector_stretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform)
-{
-    if (p0 == p1)
+gdouble SPRect::vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform) {
+    if (p0 == p1) {
         return 0;
+    }
+
     return (Geom::distance(p0 * xform, p1 * xform) / Geom::distance(p0, p1));
 }
 
-void
-sp_rect_set_visible_rx(SPRect *rect, gdouble rx)
-{
+void SPRect::setVisibleRx(gdouble rx) {
     if (rx == 0) {
-        rect->rx.computed = 0;
-        rect->rx._set = false;
+        this->rx.computed = 0;
+        this->rx._set = false;
     } else {
-        rect->rx.computed = rx / vector_stretch(
-            Geom::Point(rect->x.computed + 1, rect->y.computed),
-            Geom::Point(rect->x.computed, rect->y.computed),
-            rect->transform);
-        rect->rx._set = true;
+    	this->rx.computed = rx / SPRect::vectorStretch(
+            Geom::Point(this->x.computed + 1, this->y.computed),
+            Geom::Point(this->x.computed, this->y.computed),
+            this->transform);
+    	this->rx._set = true;
     }
-    SP_OBJECT(rect)->updateRepr();
+
+    this->updateRepr();
 }
 
-void
-sp_rect_set_visible_ry(SPRect *rect, gdouble ry)
-{
+void SPRect::setVisibleRy(gdouble ry) {
     if (ry == 0) {
-        rect->ry.computed = 0;
-        rect->ry._set = false;
+    	this->ry.computed = 0;
+    	this->ry._set = false;
     } else {
-        rect->ry.computed = ry / vector_stretch(
-            Geom::Point(rect->x.computed, rect->y.computed + 1),
-            Geom::Point(rect->x.computed, rect->y.computed),
-            rect->transform);
-        rect->ry._set = true;
+    	this->ry.computed = ry / SPRect::vectorStretch(
+            Geom::Point(this->x.computed, this->y.computed + 1),
+            Geom::Point(this->x.computed, this->y.computed),
+            this->transform);
+    	this->ry._set = true;
     }
-    SP_OBJECT(rect)->updateRepr();
+    this->updateRepr();
 }
 
-gdouble
-sp_rect_get_visible_rx(SPRect *rect)
-{
-    if (!rect->rx._set)
+gdouble SPRect::getVisibleRx() const {
+    if (!this->rx._set) {
         return 0;
-    return rect->rx.computed * vector_stretch(
-        Geom::Point(rect->x.computed + 1, rect->y.computed),
-        Geom::Point(rect->x.computed, rect->y.computed),
-        rect->transform);
+    }
+
+    return this->rx.computed * SPRect::vectorStretch(
+        Geom::Point(this->x.computed + 1, this->y.computed),
+        Geom::Point(this->x.computed, this->y.computed),
+        this->transform);
 }
 
-gdouble
-sp_rect_get_visible_ry(SPRect *rect)
-{
-    if (!rect->ry._set)
+gdouble SPRect::getVisibleRy() const {
+    if (!this->ry._set) {
         return 0;
-    return rect->ry.computed * vector_stretch(
-        Geom::Point(rect->x.computed, rect->y.computed + 1),
-        Geom::Point(rect->x.computed, rect->y.computed),
-        rect->transform);
+    }
+
+    return this->ry.computed * SPRect::vectorStretch(
+        Geom::Point(this->x.computed, this->y.computed + 1),
+        Geom::Point(this->x.computed, this->y.computed),
+        this->transform);
 }
 
-Geom::Rect
-sp_rect_get_rect (SPRect *rect)
-{
-    Geom::Point p0 = Geom::Point(rect->x.computed, rect->y.computed);
-    Geom::Point p2 = Geom::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed);
+Geom::Rect SPRect::getRect() const {
+    Geom::Point p0 = Geom::Point(this->x.computed, this->y.computed);
+    Geom::Point p2 = Geom::Point(this->x.computed + this->width.computed, this->y.computed + this->height.computed);
+
     return Geom::Rect(p0, p2);
 }
 
-void
-sp_rect_compensate_rxry(SPRect *rect, Geom::Affine xform)
-{
-    if (rect->rx.computed == 0 && rect->ry.computed == 0)
+void SPRect::compensateRxRy(Geom::Affine xform) {
+    if (this->rx.computed == 0 && this->ry.computed == 0) {
         return; // nothing to compensate
+    }
 
     // test unit vectors to find out compensation:
-    Geom::Point c(rect->x.computed, rect->y.computed);
+    Geom::Point c(this->x.computed, this->y.computed);
     Geom::Point cx = c + Geom::Point(1, 0);
     Geom::Point cy = c + Geom::Point(0, 1);
 
     // apply previous transform if any
-    c *= rect->transform;
-    cx *= rect->transform;
-    cy *= rect->transform;
+    c *= this->transform;
+    cx *= this->transform;
+    cy *= this->transform;
 
     // find out stretches that we need to compensate
-    gdouble eX = vector_stretch(cx, c, xform);
-    gdouble eY = vector_stretch(cy, c, xform);
+    gdouble eX = SPRect::vectorStretch(cx, c, xform);
+    gdouble eY = SPRect::vectorStretch(cy, c, xform);
 
     // If only one of the radii is set, set both radii so they have the same visible length
     // This is needed because if we just set them the same length in SVG, they might end up unequal because of transform
-    if ((rect->rx._set && !rect->ry._set) || (rect->ry._set && !rect->rx._set)) {
-        gdouble r = MAX(rect->rx.computed, rect->ry.computed);
-        rect->rx.computed = r / eX;
-        rect->ry.computed = r / eY;
+    if ((this->rx._set && !this->ry._set) || (this->ry._set && !this->rx._set)) {
+        gdouble r = MAX(this->rx.computed, this->ry.computed);
+        this->rx.computed = r / eX;
+        this->ry.computed = r / eY;
     } else {
-        rect->rx.computed = rect->rx.computed / eX;
-        rect->ry.computed = rect->ry.computed / eY;
+    	this->rx.computed = this->rx.computed / eX;
+    	this->ry.computed = this->ry.computed / eY;
     }
 
     // Note that a radius may end up larger than half-side if the rect is scaled down;
     // that's ok because this preserves the intended radii in case the rect is enlarged again,
     // and set_shape will take care of trimming too large radii when generating d=
 
-    rect->rx._set = rect->ry._set = true;
+    this->rx._set = this->ry._set = true;
 }
 
-void
-sp_rect_set_visible_width(SPRect *rect, gdouble width)
-{
-    rect->width.computed = width / vector_stretch(
-        Geom::Point(rect->x.computed + 1, rect->y.computed),
-        Geom::Point(rect->x.computed, rect->y.computed),
-        rect->transform);
-    rect->width._set = true;
-    SP_OBJECT(rect)->updateRepr();
+void SPRect::setVisibleWidth(gdouble width) {
+	this->width.computed = width / SPRect::vectorStretch(
+        Geom::Point(this->x.computed + 1, this->y.computed),
+        Geom::Point(this->x.computed, this->y.computed),
+        this->transform);
+	this->width._set = true;
+	this->updateRepr();
 }
 
-void
-sp_rect_set_visible_height(SPRect *rect, gdouble height)
-{
-    rect->height.computed = height / vector_stretch(
-        Geom::Point(rect->x.computed, rect->y.computed + 1),
-        Geom::Point(rect->x.computed, rect->y.computed),
-        rect->transform);
-    rect->height._set = true;
-    SP_OBJECT(rect)->updateRepr();
+void SPRect::setVisibleHeight(gdouble height) {
+	this->height.computed = height / SPRect::vectorStretch(
+        Geom::Point(this->x.computed, this->y.computed + 1),
+        Geom::Point(this->x.computed, this->y.computed),
+        this->transform);
+	this->height._set = true;
+	this->updateRepr();
 }
 
-gdouble
-sp_rect_get_visible_width(SPRect *rect)
-{
-    if (!rect->width._set)
+gdouble SPRect::getVisibleWidth() const {
+    if (!this->width._set) {
         return 0;
-    return rect->width.computed * vector_stretch(
-        Geom::Point(rect->x.computed + 1, rect->y.computed),
-        Geom::Point(rect->x.computed, rect->y.computed),
-        rect->transform);
+    }
+
+    return this->width.computed * SPRect::vectorStretch(
+        Geom::Point(this->x.computed + 1, this->y.computed),
+        Geom::Point(this->x.computed, this->y.computed),
+        this->transform);
 }
 
-gdouble
-sp_rect_get_visible_height(SPRect *rect)
-{
-    if (!rect->height._set)
+gdouble SPRect::getVisibleHeight() const {
+    if (!this->height._set) {
         return 0;
-    return rect->height.computed * vector_stretch(
-        Geom::Point(rect->x.computed, rect->y.computed + 1),
-        Geom::Point(rect->x.computed, rect->y.computed),
-        rect->transform);
+    }
+
+    return this->height.computed * SPRect::vectorStretch(
+        Geom::Point(this->x.computed, this->y.computed + 1),
+        Geom::Point(this->x.computed, this->y.computed),
+        this->transform);
 }
 
 void CRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {

@@ -38,6 +38,28 @@ public:
 	SVGLength height;
 	SVGLength rx;
 	SVGLength ry;
+
+	void setPosition(gdouble x, gdouble y, gdouble width, gdouble height);
+
+	/* If SET if FALSE, VALUE is just ignored */
+	void setRx(bool set, gdouble value);
+	void setRy(bool set, gdouble value);
+
+	void setVisibleRx(gdouble rx);
+	void setVisibleRy(gdouble ry);
+	gdouble getVisibleRx() const;
+	gdouble getVisibleRy() const;
+	Geom::Rect getRect() const;
+
+	void setVisibleWidth(gdouble rx);
+	void setVisibleHeight(gdouble ry);
+	gdouble getVisibleWidth() const;
+	gdouble getVisibleHeight() const;
+
+	void compensateRxRy(Geom::Affine xform);
+
+private:
+	static gdouble vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
 };
 
 struct SPRectClass {
@@ -71,25 +93,6 @@ protected:
 
 /* Standard GType function */
 GType sp_rect_get_type (void) G_GNUC_CONST;
-
-void sp_rect_position_set (SPRect * rect, gdouble x, gdouble y, gdouble width, gdouble height);
-
-/* If SET if FALSE, VALUE is just ignored */
-void sp_rect_set_rx(SPRect * rect, gboolean set, gdouble value);
-void sp_rect_set_ry(SPRect * rect, gboolean set, gdouble value);
-
-void sp_rect_set_visible_rx (SPRect *rect, gdouble rx);
-void sp_rect_set_visible_ry (SPRect *rect, gdouble ry);
-gdouble sp_rect_get_visible_rx (SPRect *rect);
-gdouble sp_rect_get_visible_ry (SPRect *rect);
-Geom::Rect sp_rect_get_rect (SPRect *rect);
-
-void sp_rect_set_visible_width (SPRect *rect, gdouble rx);
-void sp_rect_set_visible_height (SPRect *rect, gdouble ry);
-gdouble sp_rect_get_visible_width (SPRect *rect);
-gdouble sp_rect_get_visible_height (SPRect *rect);
-
-void sp_rect_compensate_rxry (SPRect *rect, Geom::Affine xform);
 
 G_END_DECLS
 

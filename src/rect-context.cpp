@@ -469,15 +469,17 @@ static void sp_rect_drag(SPRectContext &rc, Geom::Point const pt, guint state)
 
     Geom::Rect const r = Inkscape::snap_rectangular_box(desktop, rc.item, pt, rc.center, state);
 
-    sp_rect_position_set(SP_RECT(rc.item), r.min()[Geom::X], r.min()[Geom::Y], r.dimensions()[Geom::X], r.dimensions()[Geom::Y]);
+    SP_RECT(rc.item)->setPosition(r.min()[Geom::X], r.min()[Geom::Y], r.dimensions()[Geom::X], r.dimensions()[Geom::Y]);
+
     if ( rc.rx != 0.0 ) {
-        sp_rect_set_rx (SP_RECT(rc.item), TRUE, rc.rx);
+    	SP_RECT(rc.item)->setRx(true, rc.rx);
     }
+
     if ( rc.ry != 0.0 ) {
         if (rc.rx == 0.0)
-            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, MIN(r.dimensions()[Geom::X], r.dimensions()[Geom::Y])/2));
+        	SP_RECT(rc.item)->setRy(true, CLAMP(rc.ry, 0, MIN(r.dimensions()[Geom::X], r.dimensions()[Geom::Y])/2));
         else
-            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, r.dimensions()[Geom::Y]));
+        	SP_RECT(rc.item)->setRy(true, CLAMP(rc.ry, 0, r.dimensions()[Geom::Y]));
     }
 
     // status text

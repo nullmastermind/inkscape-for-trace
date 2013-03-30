@@ -1230,7 +1230,7 @@ static void
 sp_item_adjust_rects_recursive(SPItem *item, Geom::Affine advertized_transform)
 {
     if (SP_IS_RECT (item)) {
-        sp_rect_compensate_rxry (SP_RECT(item), advertized_transform);
+    	SP_RECT(item)->compensateRxRy(advertized_transform);
     }
 
     for (SPObject *o = item->children; o != NULL; o = o->next) {
