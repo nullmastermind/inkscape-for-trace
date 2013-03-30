@@ -28,8 +28,6 @@
 
 #include "sp-spiral.h"
 
-static Geom::Point sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t);
-
 G_DEFINE_TYPE(SPSpiral, sp_spiral, SP_TYPE_SHAPE);
 
 /**
@@ -253,15 +251,7 @@ gchar* CSpiral::description() {
  * \pre is_unit_vector(*hat1).
  * \post is_unit_vector(*hat2).
  **/
-static void
-sp_spiral_fit_and_draw (SPSpiral const *spiral,
-            SPCurve     *c,
-            double dstep,
-            Geom::Point darray[],
-            Geom::Point const &hat1,
-            Geom::Point &hat2,
-            double *t)
-{
+void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const {
 #define BEZIER_SIZE   4
 #define FITTING_MAX_BEZIERS 4
 #define BEZIER_LENGTH (BEZIER_SIZE * FITTING_MAX_BEZIERS)
@@ -273,7 +263,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
     int depth, i;
 
     for (d = *t, i = 0; i <= SAMPLE_SIZE; d += dstep, i++) {
-        darray[i] = sp_spiral_get_xy(spiral, d);
+        darray[i] = this->getXY(d);
 
         /* Avoid useless adjacent dups.  (Otherwise we can have all of darray filled with
            the same value, which upsets chord_length_parameterize.) */
@@ -304,7 +294,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
     double const next_t = d - 2 * dstep;
     /* == t + (SAMPLE_SIZE - 1) * dstep, in absence of dups. */
 
-    hat2 = -sp_spiral_get_tangent (spiral, next_t);
+    hat2 = -this->getTangent(next_t);
 
     /** \todo
          * We should use better algorithm to specify maximum error.
@@ -372,21 +362,20 @@ void CSpiral::set_shape() {
 #endif
 
     /* Initial moveto. */
-    c->moveto(sp_spiral_get_xy(spiral, spiral->t0));
+    c->moveto(spiral->getXY(spiral->t0));
 
     double const tstep = SAMPLE_STEP / spiral->revo;
     double const dstep = tstep / (SAMPLE_SIZE - 1);
 
-    Geom::Point hat1 = sp_spiral_get_tangent (spiral, spiral->t0);
+    Geom::Point hat1 = spiral->getTangent(spiral->t0);
     Geom::Point hat2;
     for (t = spiral->t0; t < (1.0 - tstep);) {
-        sp_spiral_fit_and_draw (spiral, c, dstep, darray, hat1, hat2, &t);
+        spiral->fitAndDraw(c, dstep, darray, hat1, hat2, &t);
 
         hat1 = -hat2;
     }
     if ((1.0 - t) > SP_EPSILON)
-        sp_spiral_fit_and_draw (spiral, c, (1.0 - t)/(SAMPLE_SIZE - 1.0),
-                    darray, hat1, hat2, &t);
+        spiral->fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
 
     /* Reset the shape'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
@@ -406,32 +395,20 @@ void CSpiral::set_shape() {
 /**
  * Set spiral properties and update display.
  */
-void
-sp_spiral_position_set       (SPSpiral          *spiral,
-             gdouble            cx,
-             gdouble            cy,
-             gdouble            exp,
-             gdouble            revo,
-             gdouble            rad,
-             gdouble            arg,
-             gdouble            t0)
-{
-    g_return_if_fail (spiral != NULL);
-    g_return_if_fail (SP_IS_SPIRAL (spiral));
-
+void SPSpiral::setPosition(gdouble cx, gdouble cy, gdouble exp, gdouble revo, gdouble rad, gdouble arg, gdouble t0) {
     /** \todo
          * Consider applying CLAMP or adding in-bounds assertions for
          * some of these parameters.
          */
-    spiral->cx         = cx;
-    spiral->cy         = cy;
-    spiral->exp        = exp;
-    spiral->revo       = revo;
-    spiral->rad        = MAX (rad, 0.0);
-    spiral->arg        = arg;
-    spiral->t0         = CLAMP(t0, 0.0, 0.999);
+	this->cx         = cx;
+	this->cy         = cy;
+	this->exp        = exp;
+    this->revo       = revo;
+    this->rad        = MAX (rad, 0.0);
+    this->arg        = arg;
+    this->t0         = CLAMP(t0, 0.0, 0.999);
 
-    (static_cast<SPObject *>(spiral))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void CSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
@@ -461,22 +438,18 @@ void CSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
  * than 1.0, though some callers go slightly beyond 1.0 for curve-fitting
  * purposes.)
  */
-Geom::Point sp_spiral_get_xy (SPSpiral const *spiral, gdouble t)
-{
-    g_assert (spiral != NULL);
-    g_assert (SP_IS_SPIRAL(spiral));
-    g_assert (spiral->exp >= 0.0);
+Geom::Point SPSpiral::getXY(gdouble t) const {
+    g_assert (this->exp >= 0.0);
     /* Otherwise we get NaN for t==0. */
-    g_assert (spiral->exp <= 1000.0);
+    g_assert (this->exp <= 1000.0);
     /* Anything much more results in infinities.  Even allowing 1000 is somewhat overkill. */
     g_assert (t >= 0.0);
     /* Any callers passing -ve t will have a bug for non-integral values of exp. */
 
-    double const rad = spiral->rad * pow(t, (double) spiral->exp);
-    double const arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
+    double const rad = this->rad * pow(t, (double)this->exp);
+    double const arg = 2.0 * M_PI * this->revo * t + this->arg;
 
-    return Geom::Point(rad * cos (arg) + spiral->cx,
-                           rad * sin (arg) + spiral->cy);
+    return Geom::Point(rad * cos(arg) + this->cx, rad * sin(arg) + this->cy);
 }
 
 
@@ -489,28 +462,24 @@ Geom::Point sp_spiral_get_xy (SPSpiral const *spiral, gdouble t)
  *  \pre p != NULL.
  *  \post is_unit_vector(*p).
  */
-static Geom::Point
-sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t)
-{
+Geom::Point SPSpiral::getTangent(gdouble t) const {
     Geom::Point ret(1.0, 0.0);
-    g_return_val_if_fail (( ( spiral != NULL )
-                && SP_IS_SPIRAL(spiral) ),
-                  ret);
+
     g_assert (t >= 0.0);
-    g_assert (spiral->exp >= 0.0);
+    g_assert (this->exp >= 0.0);
     /* See above for comments on these assertions. */
 
-    double const t_scaled = 2.0 * M_PI * spiral->revo * t;
-    double const arg = t_scaled + spiral->arg;
-    double const s = sin (arg);
-    double const c = cos (arg);
+    double const t_scaled = 2.0 * M_PI * this->revo * t;
+    double const arg = t_scaled + this->arg;
+    double const s = sin(arg);
+    double const c = cos(arg);
 
-    if (spiral->exp == 0.0) {
+    if (this->exp == 0.0) {
         ret = Geom::Point(-s, c);
     } else if (t_scaled == 0.0) {
         ret = Geom::Point(c, s);
     } else {
-        Geom::Point unrotated(spiral->exp, t_scaled);
+        Geom::Point unrotated(this->exp, t_scaled);
         double const s_len = L2 (unrotated);
         g_assert (s_len != 0);
         /** \todo
@@ -542,43 +511,43 @@ sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t)
         /* Proof that ret length is non-zero: see above.  (Should be near 1.) */
     }
 
-    g_assert (is_unit_vector (ret));
+    g_assert (is_unit_vector(ret));
     return ret;
 }
 
 /**
  * Compute rad and/or arg for point on spiral.
  */
-void
-sp_spiral_get_polar (SPSpiral const *spiral, gdouble t, gdouble *rad, gdouble *arg)
-{
-    g_return_if_fail (spiral != NULL);
-    g_return_if_fail (SP_IS_SPIRAL(spiral));
+void SPSpiral::getPolar(gdouble t, gdouble* rad, gdouble* arg) const {
+    if (rad) {
+        *rad = this->rad * pow(t, (double)this->exp);
+    }
 
-    if (rad)
-        *rad = spiral->rad * pow(t, (double) spiral->exp);
-    if (arg)
-        *arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
+    if (arg) {
+        *arg = 2.0 * M_PI * this->revo * t + this->arg;
+    }
 }
 
 /**
  * Return true if spiral has properties that make it invalid.
  */
-bool
-sp_spiral_is_invalid (SPSpiral const *spiral)
-{
+bool SPSpiral::isInvalid() const {
     gdouble rad;
 
-    sp_spiral_get_polar (spiral, 0.0, &rad, NULL);
+    this->getPolar(0.0, &rad, NULL);
+
     if (rad < 0.0 || rad > SP_HUGE) {
-        g_print ("rad(t=0)=%g\n", rad);
+        g_print("rad(t=0)=%g\n", rad);
         return TRUE;
     }
-    sp_spiral_get_polar (spiral, 1.0, &rad, NULL);
+
+    this->getPolar(1.0, &rad, NULL);
+
     if (rad < 0.0 || rad > SP_HUGE) {
-        g_print ("rad(t=1)=%g\n", rad);
+        g_print("rad(t=1)=%g\n", rad);
         return TRUE;
     }
+
     return FALSE;
 }
 

@@ -52,6 +52,20 @@ public:
 	float rad;  ///< Spiral radius
 	float arg;  ///< Spiral argument
 	float t0;
+
+	/* Lowlevel interface */
+	void setPosition(gdouble cx, gdouble cy, gdouble exp, gdouble revo, gdouble rad, gdouble arg, gdouble t0);
+
+	Geom::Point getXY(gdouble t) const;
+
+	void getPolar(gdouble t, gdouble* rad, gdouble* arg) const;
+
+	bool isInvalid() const;
+
+//private:
+	Geom::Point getTangent(gdouble t) const;
+
+	void fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const;
 };
 
 /// The SPSpiral vtable.
@@ -83,28 +97,5 @@ protected:
 
 /* Standard Gtk function */
 GType sp_spiral_get_type  (void);
-
-/* Lowlevel interface */
-void    sp_spiral_position_set		(SPSpiral      *spiral,
-				 gdouble	cx,
-				 gdouble	cy,
-				 gdouble	exp,
-				 gdouble	revo,
-				 gdouble	rad,
-				 gdouble	arg,
-				 gdouble	t0);
-
-Geom::Point    sp_spiral_get_xy	(SPSpiral const *spiral,
-				 gdouble	t);
-
-void    sp_spiral_get_polar	(SPSpiral const *spiral,
-				 gdouble	t,
-				 gdouble       *rad,
-				 gdouble       *arg);
-
-bool sp_spiral_is_invalid   (SPSpiral const *spiral);
-
-
-
 
 #endif // SEEN_SP_SPIRAL_H

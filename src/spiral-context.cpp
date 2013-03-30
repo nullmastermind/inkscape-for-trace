@@ -430,7 +430,7 @@ static void sp_spiral_drag(SPSpiralContext *sc, Geom::Point const &p, guint stat
     }
 
     /* Fixme: these parameters should be got from dialog box */
-    sp_spiral_position_set(spiral, p0[Geom::X], p0[Geom::Y],
+    spiral->setPosition(p0[Geom::X], p0[Geom::Y],
                            /*expansion*/ sc->exp,
                            /*revolution*/ sc->revo,
                            rad, arg,
