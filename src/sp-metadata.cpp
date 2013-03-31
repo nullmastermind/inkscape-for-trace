@@ -51,6 +51,7 @@ static void
 sp_metadata_init (SPMetadata *metadata)
 {
 	metadata->cmetadata = new CMetadata(metadata);
+	metadata->typeHierarchy.insert(typeid(SPMetadata));
 
 	delete metadata->cobject;
 	metadata->cobject = metadata->cmetadata;

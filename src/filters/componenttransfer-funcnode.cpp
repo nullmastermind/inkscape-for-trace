@@ -140,6 +140,7 @@ static void
 sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
 {
 	fefuncnode->cfefuncnode = new CFeFuncNode(fefuncnode);
+	fefuncnode->typeHierarchy.insert(typeid(SPFeFuncNode));
 
 	delete fefuncnode->cobject;
 	fefuncnode->cobject = fefuncnode->cfefuncnode;

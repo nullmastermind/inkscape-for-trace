@@ -83,6 +83,7 @@ static void
 sp_shape_init(SPShape *shape)
 {
 	shape->cshape = new CShape(shape);
+	shape->typeHierarchy.insert(typeid(SPShape));
 
 	delete shape->clpeitem;
 	shape->clpeitem = shape->cshape;

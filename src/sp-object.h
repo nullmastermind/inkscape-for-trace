@@ -49,6 +49,9 @@ class SPObjectClass;
 #define SP_OBJECT_WRITE_EXT (1 << 1)
 #define SP_OBJECT_WRITE_ALL (1 << 2)
 
+#include <set>
+#include "type-info.h"
+
 #include <glib-object.h>
 #include <stddef.h>
 #include <sigc++/connection.h>
@@ -196,6 +199,7 @@ public:
     };
 
     CObject* cobject;
+    std::set<TypeInfo> typeHierarchy;
 
     unsigned int cloned : 1;
     unsigned int uflags : 8;

@@ -51,6 +51,7 @@ static void
 sp_spiral_init (SPSpiral * spiral)
 {
 	spiral->cspiral = new CSpiral(spiral);
+	spiral->typeHierarchy.insert(typeid(SPSpiral));
 
 	delete spiral->cshape;
 	spiral->cshape = spiral->cspiral;

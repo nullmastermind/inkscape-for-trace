@@ -55,6 +55,7 @@ static void
 sp_string_init(SPString *string)
 {
 	string->cstring = new CString(string);
+	string->typeHierarchy.insert(typeid(SPString));
 
 	delete string->cobject;
 	string->cobject = string->cstring;

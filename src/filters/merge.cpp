@@ -43,6 +43,7 @@ static void
 sp_feMerge_init(SPFeMerge *feMerge)
 {
 	feMerge->cfemerge = new CFeMerge(feMerge);
+	feMerge->typeHierarchy.insert(typeid(SPFeMerge));
 
 	delete feMerge->cfilterprimitive;
 	feMerge->cfilterprimitive = feMerge->cfemerge;

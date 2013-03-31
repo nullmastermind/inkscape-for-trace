@@ -78,6 +78,7 @@ static void
 sp_group_init (SPGroup *group)
 {
 	group->cgroup = new CGroup(group);
+	group->typeHierarchy.insert(typeid(SPGroup));
 
 	delete group->clpeitem;
 	group->clpeitem = group->cgroup;

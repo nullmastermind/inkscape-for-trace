@@ -42,6 +42,7 @@ CSymbol::~CSymbol() {
 static void sp_symbol_init(SPSymbol *symbol)
 {
 	symbol->csymbol = new CSymbol(symbol);
+	symbol->typeHierarchy.insert(typeid(SPSymbol));
 
 	delete symbol->cgroup;
 	symbol->cgroup = symbol->csymbol;

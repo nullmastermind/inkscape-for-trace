@@ -91,6 +91,7 @@ static void
 sp_stop_init(SPStop *stop)
 {
 	stop->cstop = new CStop(stop);
+	stop->typeHierarchy.insert(typeid(SPStop));
 
 	delete stop->cobject;
 	stop->cobject = stop->cstop;
@@ -364,6 +365,7 @@ CMeshRow::~CMeshRow() {
 static void sp_meshrow_init(SPMeshRow * meshrow)
 {
     meshrow->cmeshrow = new CMeshRow(meshrow);
+    meshrow->typeHierarchy.insert(typeid(SPMeshRow));
 
     delete meshrow->cobject;
     meshrow->cobject = meshrow->cmeshrow;
@@ -422,6 +424,7 @@ CMeshPatch::~CMeshPatch() {
 static void sp_meshpatch_init(SPMeshPatch * meshpatch)
 {
     meshpatch->cmeshpatch = new CMeshPatch(meshpatch);
+    meshpatch->typeHierarchy.insert(typeid(SPMeshPatch));
 
     delete meshpatch->cobject;
     meshpatch->cobject = meshpatch->cmeshpatch;
@@ -527,6 +530,7 @@ CGradient::~CGradient() {
 void CGradient::init(SPGradient *gr)
 {
 	gr->cgradient = new CGradient(gr);
+	gr->typeHierarchy.insert(typeid(SPGradient));
 
 	delete gr->cpaintserver;
 	gr->cpaintserver = gr->cgradient;
@@ -1398,6 +1402,7 @@ CLinearGradient::~CLinearGradient() {
 static void sp_lineargradient_init(SPLinearGradient *lg)
 {
 	lg->clineargradient = new CLinearGradient(lg);
+	lg->typeHierarchy.insert(typeid(SPLinearGradient));
 
 	delete lg->cgradient;
 	lg->cgradient = lg->clineargradient;
@@ -1525,6 +1530,7 @@ static void
 sp_radialgradient_init(SPRadialGradient *rg)
 {
 	rg->cradialgradient = new CRadialGradient(rg);
+	rg->typeHierarchy.insert(typeid(SPRadialGradient));
 
 	delete rg->cgradient;
 	rg->cgradient = rg->cradialgradient;
@@ -1681,6 +1687,7 @@ static void
 sp_meshgradient_init(SPMeshGradient *mg)
 {
 	mg->cmeshgradient = new CMeshGradient(mg);
+	mg->typeHierarchy.insert(typeid(SPMeshGradient));
 
 	delete mg->cgradient;
 	mg->cgradient = mg->cmeshgradient;

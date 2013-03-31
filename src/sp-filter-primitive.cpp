@@ -75,6 +75,7 @@ void CFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
 static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
 {
 	filter_primitive->cfilterprimitive = new CFilterPrimitive(filter_primitive);
+	filter_primitive->typeHierarchy.insert(typeid(SPFilterPrimitive));
 
 	delete filter_primitive->cobject;
 	filter_primitive->cobject = filter_primitive->cfilterprimitive;

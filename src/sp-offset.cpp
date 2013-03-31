@@ -113,6 +113,7 @@ static void
 sp_offset_init(SPOffset *offset)
 {
 	offset->coffset = new COffset(offset);
+	offset->typeHierarchy.insert(typeid(SPOffset));
 
 	delete offset->cshape;
 	offset->cshape = offset->coffset;

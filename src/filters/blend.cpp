@@ -49,6 +49,7 @@ static void
 sp_feBlend_init(SPFeBlend *feBlend)
 {
 	feBlend->cfeblend = new CFeBlend(feBlend);
+	feBlend->typeHierarchy.insert(typeid(SPFeBlend));
 
 	delete feBlend->cfilterprimitive;
 	feBlend->cfilterprimitive = feBlend->cfeblend;

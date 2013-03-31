@@ -71,6 +71,7 @@ static void
 sp_lpe_item_init(SPLPEItem *lpeitem)
 {
 	lpeitem->clpeitem = new CLPEItem(lpeitem);
+	lpeitem->typeHierarchy.insert(typeid(SPLPEItem));
 
 	delete lpeitem->citem;
 	lpeitem->citem = lpeitem->clpeitem;

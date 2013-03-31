@@ -128,6 +128,9 @@ sp_object_init(SPObject *object)
 
     object->cobject = new CObject(object);
 
+    new (&object->typeHierarchy) std::set<TypeInfo>();
+    object->typeHierarchy.insert(typeid(SPObject));
+
     object->hrefcount = 0;
     object->_total_hrefcount = 0;
     object->document = NULL;
@@ -179,6 +182,7 @@ sp_object_finalize(GObject *object)
 {
     SPObject *spobject = (SPObject *)object;
 
+    spobject->typeHierarchy.~set();
     delete spobject->cobject;
 
     g_free(spobject->_label);

@@ -33,6 +33,7 @@ static void
 sp_defs_init(SPDefs* defs)
 {
 	defs->cdefs = new CDefs(defs);
+	defs->typeHierarchy.insert(typeid(SPDefs));
 
 	delete defs->cobject;
 	defs->cobject = defs->cdefs;

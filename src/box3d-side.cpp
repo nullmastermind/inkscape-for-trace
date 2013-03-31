@@ -45,6 +45,7 @@ static void
 box3d_side_init (Box3DSide * side)
 {
 	side->cbox3dside = new CBox3DSide(side);
+	side->typeHierarchy.insert(typeid(Box3DSide));
 
 	delete side->cpolygon;
 	side->cpolygon = side->cbox3dside;

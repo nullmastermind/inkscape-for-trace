@@ -44,6 +44,7 @@ static void
 sp_feComposite_init(SPFeComposite *feComposite)
 {
 	feComposite->cfecomposite = new CFeComposite(feComposite);
+	feComposite->typeHierarchy.insert(typeid(SPFeComposite));
 
 	delete feComposite->cfilterprimitive;
 	feComposite->cfilterprimitive = feComposite->cfecomposite;

@@ -515,6 +515,7 @@ CImage::~CImage() {
 static void sp_image_init( SPImage *image )
 {
 	image->cimage = new CImage(image);
+	image->typeHierarchy.insert(typeid(SPImage));
 
 	delete image->citem;
 	image->citem = image->cimage;

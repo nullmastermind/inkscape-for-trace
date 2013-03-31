@@ -46,6 +46,7 @@ CFont::~CFont() {
 static void sp_font_init(SPFont *font)
 {
 	font->cfont = new CFont(font);
+	font->typeHierarchy.insert(typeid(SPFont));
 
 	delete font->cobject;
 	font->cobject = font->cfont;

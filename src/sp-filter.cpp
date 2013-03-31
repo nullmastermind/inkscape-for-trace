@@ -59,6 +59,7 @@ static void
 sp_filter_init(SPFilter *filter)
 {
 	filter->cfilter = new CFilter(filter);
+	filter->typeHierarchy.insert(typeid(SPFilter));
 
 	delete filter->cobject;
 	filter->cobject = filter->cfilter;

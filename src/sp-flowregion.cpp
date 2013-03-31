@@ -54,6 +54,7 @@ static void
 sp_flowregion_init (SPFlowregion *group)
 {
 	group->cflowregion = new CFlowregion(group);
+	group->typeHierarchy.insert(typeid(SPFlowregion));
 
 	delete group->citem;
 	group->citem = group->cflowregion;
@@ -235,6 +236,7 @@ static void
 sp_flowregionexclude_init (SPFlowregionExclude *group)
 {
 	group->cflowregionexclude = new CFlowregionExclude(group);
+	group->typeHierarchy.insert(typeid(SPFlowregionExclude));
 
 	delete group->citem;
 	group->citem = group->cflowregionexclude;

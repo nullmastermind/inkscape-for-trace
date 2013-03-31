@@ -103,6 +103,7 @@ static void
 sp_item_init(SPItem *item)
 {
 	item->citem = new CItem(item);
+	item->typeHierarchy.insert(typeid(SPItem));
 
 	delete item->cobject;
 	item->cobject = item->citem;

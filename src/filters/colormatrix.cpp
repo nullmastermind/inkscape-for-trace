@@ -48,6 +48,7 @@ static void
 sp_feColorMatrix_init(SPFeColorMatrix *feColorMatrix)
 {
 	feColorMatrix->cfecolormatrix = new CFeColorMatrix(feColorMatrix);
+	feColorMatrix->typeHierarchy.insert(typeid(SPFeColorMatrix));
 
 	delete feColorMatrix->cfilterprimitive;
 	feColorMatrix->cfilterprimitive = feColorMatrix->cfecolormatrix;

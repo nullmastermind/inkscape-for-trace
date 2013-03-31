@@ -43,6 +43,7 @@ static void
 sp_line_init(SPLine * line)
 {
 	line->cline = new CLine(line);
+	line->typeHierarchy.insert(typeid(SPLine));
 
 	delete line->cshape;
 	line->cshape = line->cline;

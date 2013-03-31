@@ -38,6 +38,7 @@ CGlyph::~CGlyph() {
 static void sp_glyph_init(SPGlyph *glyph)
 {
 	glyph->cglyph = new CGlyph(glyph);
+	glyph->typeHierarchy.insert(typeid(SPGlyph));
 
 	delete glyph->cobject;
 	glyph->cobject = glyph->cglyph;

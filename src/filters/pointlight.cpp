@@ -47,6 +47,7 @@ static void
 sp_fepointlight_init(SPFePointLight *fepointlight)
 {
 	fepointlight->cfepointlight = new CFePointLight(fepointlight);
+	fepointlight->typeHierarchy.insert(typeid(SPFePointLight));
 
 	delete fepointlight->cobject;
 	fepointlight->cobject = fepointlight->cfepointlight;

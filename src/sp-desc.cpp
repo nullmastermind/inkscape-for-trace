@@ -34,6 +34,7 @@ CDesc::~CDesc() {
 static void sp_desc_init(SPDesc *desc)
 {
 	desc->cdesc = new CDesc(desc);
+	desc->typeHierarchy.insert(typeid(SPDesc));
 
 	delete desc->cobject;
 	desc->cobject = desc->cdesc;

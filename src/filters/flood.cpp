@@ -44,6 +44,7 @@ CFeFlood::~CFeFlood() {
 static void sp_feFlood_init(SPFeFlood *feFlood)
 {
 	feFlood->cfeflood = new CFeFlood(feFlood);
+	feFlood->typeHierarchy.insert(typeid(SPFeFlood));
 
 	delete feFlood->cfilterprimitive;
 	feFlood->cfilterprimitive = feFlood->cfeflood;

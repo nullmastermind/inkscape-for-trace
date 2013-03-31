@@ -65,6 +65,7 @@ static void
 sp_tspan_init(SPTSpan *tspan)
 {
 	tspan->ctspan = new CTSpan(tspan);
+	tspan->typeHierarchy.insert(typeid(SPTSpan));
 
 	delete tspan->citem;
 	tspan->citem = tspan->ctspan;
@@ -267,6 +268,7 @@ static void
 sp_textpath_init(SPTextPath *textpath)
 {
 	textpath->ctextpath = new CTextPath(textpath);
+	textpath->typeHierarchy.insert(typeid(SPTextPath));
 
 	delete textpath->citem;
 	textpath->citem = textpath->ctextpath;

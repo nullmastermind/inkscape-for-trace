@@ -44,6 +44,7 @@ static void
 sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
 {
 	feDisplacementMap->cfedisplacementmap = new CFeDisplacementMap(feDisplacementMap);
+	feDisplacementMap->typeHierarchy.insert(typeid(SPFeDisplacementMap));
 
 	delete feDisplacementMap->cfilterprimitive;
 	feDisplacementMap->cfilterprimitive = feDisplacementMap->cfedisplacementmap;

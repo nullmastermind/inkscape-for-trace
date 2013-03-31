@@ -234,6 +234,7 @@ CColorProfile::~CColorProfile() {
 void ColorProfile::init( ColorProfile *cprof )
 {
 	cprof->ccolorprofile = new CColorProfile(cprof);
+	cprof->typeHierarchy.insert(typeid(ColorProfile));
 
 	delete cprof->cobject;
 	cprof->cobject = cprof->ccolorprofile;

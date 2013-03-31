@@ -44,6 +44,7 @@ static void
 sp_feOffset_init(SPFeOffset *feOffset)
 {
 	feOffset->cfeoffset = new CFeOffset(feOffset);
+	feOffset->typeHierarchy.insert(typeid(SPFeOffset));
 
 	delete feOffset->cfilterprimitive;
 	feOffset->cfilterprimitive = feOffset->cfeoffset;

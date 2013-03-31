@@ -54,6 +54,7 @@ CRoot::~CRoot() {
 static void sp_root_init(SPRoot *root)
 {
 	root->croot = new CRoot(root);
+	root->typeHierarchy.insert(typeid(SPRoot));
 
 	delete root->cgroup;
 	root->cgroup = root->croot;

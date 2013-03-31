@@ -54,6 +54,7 @@ static void
 sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
 {
 	feDiffuseLighting->cfediffuselighting = new CFeDiffuseLighting(feDiffuseLighting);
+	feDiffuseLighting->typeHierarchy.insert(typeid(SPFeDiffuseLighting));
 
 	delete feDiffuseLighting->cfilterprimitive;
 	feDiffuseLighting->cfilterprimitive = feDiffuseLighting->cfediffuselighting;

@@ -32,6 +32,7 @@ CScript::~CScript() {
 static void sp_script_init(SPScript *script)
 {
 	script->cscript = new CScript(script);
+	script->typeHierarchy.insert(typeid(SPScript));
 
 	delete script->cobject;
 	script->cobject = script->cscript;

@@ -67,6 +67,7 @@ static void
 sp_marker_init (SPMarker *marker)
 {
 	marker->cmarker = new CMarker(marker);
+	marker->typeHierarchy.insert(typeid(SPMarker));
 
 	delete marker->cgroup;
 	marker->cgroup = marker->cmarker;

@@ -42,6 +42,7 @@ CSwitch::~CSwitch() {
 static void sp_switch_init (SPSwitch *sw)
 {
     sw->cswitch = new CSwitch(sw);
+    sw->typeHierarchy.insert(typeid(SPSwitch));
 
     delete sw->cgroup;
     sw->cgroup = sw->cswitch;

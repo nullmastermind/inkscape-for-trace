@@ -46,6 +46,7 @@ CFeImage::~CFeImage() {
 static void sp_feImage_init(SPFeImage *feImage)
 {
 	feImage->cfeimage = new CFeImage(feImage);
+	feImage->typeHierarchy.insert(typeid(SPFeImage));
 
 	delete feImage->cfilterprimitive;
 	feImage->cfilterprimitive = feImage->cfeimage;

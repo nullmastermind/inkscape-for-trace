@@ -41,6 +41,7 @@ static void
 sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
 {
 	feMergeNode->cfemergenode = new CFeMergeNode(feMergeNode);
+	feMergeNode->typeHierarchy.insert(typeid(SPFeMergeNode));
 
 	delete feMergeNode->cobject;
 	feMergeNode->cobject = feMergeNode->cfemergenode;

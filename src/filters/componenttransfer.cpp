@@ -46,6 +46,7 @@ static void
 sp_feComponentTransfer_init(SPFeComponentTransfer *feComponentTransfer)
 {
 	feComponentTransfer->cfecomponenttransfer = new CFeComponentTransfer(feComponentTransfer);
+	feComponentTransfer->typeHierarchy.insert(typeid(SPFeComponentTransfer));
 
 	delete feComponentTransfer->cfilterprimitive;
 	feComponentTransfer->cfilterprimitive = feComponentTransfer->cfecomponenttransfer;

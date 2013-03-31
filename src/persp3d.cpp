@@ -76,6 +76,7 @@ static void
 persp3d_init(Persp3D *persp)
 {
 	persp->cpersp3d = new CPersp3D(persp);
+	persp->typeHierarchy.insert(typeid(Persp3D));
 
 	delete persp->cobject;
 	persp->cobject = persp->cpersp3d;

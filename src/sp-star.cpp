@@ -49,6 +49,7 @@ static void
 sp_star_init (SPStar * star)
 {
 	star->cstar = new CStar(star);
+	star->typeHierarchy.insert(typeid(SPStar));
 
 	delete star->cpolygon;
 	star->cpolygon = star->cstar;

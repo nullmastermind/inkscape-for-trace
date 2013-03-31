@@ -41,6 +41,7 @@ static void
 sp_feTile_init(SPFeTile *feTile)
 {
 	feTile->cfetile = new CFeTile(feTile);
+	feTile->typeHierarchy.insert(typeid(SPFeTile));
 
 	delete feTile->cfilterprimitive;
 	feTile->cfilterprimitive = feTile->cfetile;

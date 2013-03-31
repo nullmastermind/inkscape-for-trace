@@ -45,6 +45,7 @@ static void
 sp_feMorphology_init(SPFeMorphology *feMorphology)
 {
 	feMorphology->cfemorphology = new CFeMorphology(feMorphology);
+	feMorphology->typeHierarchy.insert(typeid(SPFeMorphology));
 
 	delete feMorphology->cfilterprimitive;
 	feMorphology->cfilterprimitive = feMorphology->cfemorphology;

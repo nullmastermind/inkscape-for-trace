@@ -25,6 +25,7 @@ static void
 sp_style_elem_init(SPStyleElem *style_elem)
 {
 	style_elem->cstyleelem = new CStyleElem(style_elem);
+	style_elem->typeHierarchy.insert(typeid(SPStyleElem));
 
 	delete style_elem->cobject;
 	style_elem->cobject = style_elem->cstyleelem;

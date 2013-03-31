@@ -38,6 +38,7 @@ CPolyLine::~CPolyLine() {
 void sp_polyline_init(SPPolyLine * polyline)
 {
 	polyline->cpolyline = new CPolyLine(polyline);
+	polyline->typeHierarchy.insert(typeid(SPPolyLine));
 
 	delete polyline->cshape;
 	polyline->cshape = polyline->cpolyline;

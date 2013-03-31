@@ -58,6 +58,7 @@ static void
 sp_clippath_init(SPClipPath *cp)
 {
 	cp->cclippath = new CClipPath(cp);
+	cp->typeHierarchy.insert(typeid(SPClipPath));
 
 	delete cp->cobjectgroup;
 	cp->cobjectgroup = cp->cclippath;

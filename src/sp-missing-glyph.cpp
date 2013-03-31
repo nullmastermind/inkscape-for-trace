@@ -35,6 +35,7 @@ CMissingGlyph::~CMissingGlyph() {
 static void sp_missing_glyph_init(SPMissingGlyph *glyph)
 {
 	glyph->cmissingglyph = new CMissingGlyph(glyph);
+	glyph->typeHierarchy.insert(typeid(SPMissingGlyph));
 
 	delete glyph->cobject;
 	glyph->cobject = glyph->cmissingglyph;

@@ -60,6 +60,7 @@ static void
 box3d_init(SPBox3D *box)
 {
 	box->cbox3d = new CBox3D(box);
+	box->typeHierarchy.insert(typeid(SPBox3D));
 
 	delete box->cgroup;
 	box->cgroup = box->cbox3d;

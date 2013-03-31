@@ -79,6 +79,7 @@ static void
 sp_text_init (SPText *text)
 {
 	text->ctext = new CText(text);
+	text->typeHierarchy.insert(typeid(SPText));
 
 	delete text->citem;
 	text->citem = text->ctext;

@@ -47,6 +47,7 @@ static void
 sp_paint_server_init(SPPaintServer *ps)
 {
 	ps->cpaintserver = new CPaintServer(ps);
+	ps->typeHierarchy.insert(typeid(SPPaintServer));
 
 	delete ps->cobject;
 	ps->cobject = ps->cpaintserver;

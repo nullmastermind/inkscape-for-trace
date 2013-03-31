@@ -47,6 +47,7 @@ static void
 sp_feTurbulence_init(SPFeTurbulence *feTurbulence)
 {
 	feTurbulence->cfeturbulence = new CFeTurbulence(feTurbulence);
+	feTurbulence->typeHierarchy.insert(typeid(SPFeTurbulence));
 
 	delete feTurbulence->cfilterprimitive;
 	feTurbulence->cfilterprimitive = feTurbulence->cfeturbulence;

@@ -141,6 +141,7 @@ static void
 sp_path_init(SPPath *path)
 {
 	path->cpath = new CPath(path);
+	path->typeHierarchy.insert(typeid(SPPath));
 
 	delete path->cshape;
 	path->cshape = path->cpath;

@@ -92,6 +92,7 @@ CGuide::~CGuide() {
 static void sp_guide_init(SPGuide *guide)
 {
 	guide->cguide = new CGuide(guide);
+	guide->typeHierarchy.insert(typeid(SPGuide));
 
 	delete guide->cobject;
 	guide->cobject = guide->cguide;

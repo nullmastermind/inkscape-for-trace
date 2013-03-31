@@ -275,6 +275,7 @@ CFontFace::~CFontFace() {
 static void sp_fontface_init(SPFontFace *face)
 {
 	face->cfontface = new CFontFace(face);
+	face->typeHierarchy.insert(typeid(SPFontFace));
 
 	delete face->cobject;
 	face->cobject = face->cfontface;

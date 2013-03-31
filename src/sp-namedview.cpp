@@ -71,6 +71,7 @@ CNamedView::~CNamedView() {
 static void sp_namedview_init(SPNamedView *nv)
 {
 	nv->cnamedview = new CNamedView(nv);
+	nv->typeHierarchy.insert(typeid(SPNamedView));
 
 	delete nv->cobjectgroup;
 	nv->cobjectgroup = nv->cnamedview;

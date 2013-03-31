@@ -54,6 +54,7 @@ static void
 sp_feSpecularLighting_init(SPFeSpecularLighting *feSpecularLighting)
 {
 	feSpecularLighting->cfespecularlighting = new CFeSpecularLighting(feSpecularLighting);
+	feSpecularLighting->typeHierarchy.insert(typeid(SPFeSpecularLighting));
 
 	delete feSpecularLighting->cfilterprimitive;
 	feSpecularLighting->cfilterprimitive = feSpecularLighting->cfespecularlighting;

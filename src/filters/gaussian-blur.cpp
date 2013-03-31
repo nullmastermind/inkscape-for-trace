@@ -49,6 +49,7 @@ static void
 sp_gaussianBlur_init(SPGaussianBlur *gaussianBlur)
 {
 	gaussianBlur->cgaussianblur = new CGaussianBlur(gaussianBlur);
+	gaussianBlur->typeHierarchy.insert(typeid(SPGaussianBlur));
 
 	delete gaussianBlur->cfilterprimitive;
 	gaussianBlur->cfilterprimitive = gaussianBlur->cgaussianblur;

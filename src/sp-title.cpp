@@ -34,6 +34,7 @@ static void
 sp_title_init(SPTitle *desc)
 {
 	desc->ctitle = new CTitle(desc);
+	desc->typeHierarchy.insert(typeid(SPTitle));
 
 	delete desc->cobject;
 	desc->cobject = desc->ctitle;

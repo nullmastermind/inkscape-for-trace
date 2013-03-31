@@ -77,6 +77,7 @@ static void
 sp_tref_init(SPTRef *tref)
 {
 	tref->ctref = new CTRef(tref);
+	tref->typeHierarchy.insert(typeid(SPTRef));
 
 	delete tref->citem;
 	tref->citem = tref->ctref;

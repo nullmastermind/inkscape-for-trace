@@ -47,6 +47,7 @@ static void
 sp_fespotlight_init(SPFeSpotLight *fespotlight)
 {
 	fespotlight->cfespotlight = new CFeSpotLight(fespotlight);
+	fespotlight->typeHierarchy.insert(typeid(SPFeSpotLight));
 
 	delete fespotlight->cobject;
 	fespotlight->cobject = fespotlight->cfespotlight;

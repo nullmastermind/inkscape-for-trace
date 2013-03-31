@@ -83,6 +83,7 @@ static void
 sp_genericellipse_init(SPGenericEllipse *ellipse)
 {
 	ellipse->cgenericEllipse = new CGenericEllipse(ellipse);
+	ellipse->typeHierarchy.insert(typeid(SPGenericEllipse));
 
 	delete ellipse->cshape;
 	ellipse->cshape = ellipse->cgenericEllipse;
@@ -360,6 +361,7 @@ static void
 sp_ellipse_init(SPEllipse *ellipse)
 {
 	ellipse->cellipse = new CEllipse(ellipse);
+	ellipse->typeHierarchy.insert(typeid(SPEllipse));
 
 	delete ellipse->cgenericEllipse;
 	ellipse->cgenericEllipse = ellipse->cellipse;
@@ -472,6 +474,7 @@ static void
 sp_circle_init(SPCircle *circle)
 {
 	circle->ccircle = new CCircle(circle);
+	circle->typeHierarchy.insert(typeid(SPCircle));
 
 	delete circle->cgenericEllipse;
 	circle->cgenericEllipse = circle->ccircle;
@@ -559,6 +562,7 @@ static void
 sp_arc_init(SPArc *arc)
 {
 	arc->carc = new CArc(arc);
+	arc->typeHierarchy.insert(typeid(SPArc));
 
 	delete arc->cgenericEllipse;
 	arc->cgenericEllipse = arc->carc;

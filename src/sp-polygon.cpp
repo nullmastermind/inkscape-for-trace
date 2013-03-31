@@ -41,6 +41,7 @@ CPolygon::~CPolygon() {
 static void sp_polygon_init(SPPolygon *polygon)
 {
 	polygon->cpolygon = new CPolygon(polygon);
+	polygon->typeHierarchy.insert(typeid(SPPolygon));
 
 	delete polygon->cshape;
 	polygon->cshape = polygon->cpolygon;

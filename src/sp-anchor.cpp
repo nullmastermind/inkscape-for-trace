@@ -41,6 +41,7 @@ CAnchor::~CAnchor() {
 static void sp_anchor_init(SPAnchor *anchor)
 {
 	anchor->canchor = new CAnchor(anchor);
+	anchor->typeHierarchy.insert(typeid(SPAnchor));
 
 	delete anchor->cgroup;
 	anchor->cgroup = anchor->canchor;

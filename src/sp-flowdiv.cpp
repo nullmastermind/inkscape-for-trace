@@ -36,6 +36,7 @@ CFlowdiv::~CFlowdiv() {
 static void sp_flowdiv_init(SPFlowdiv *group)
 {
 	group->cflowdiv = new CFlowdiv(group);
+	group->typeHierarchy.insert(typeid(SPFlowdiv));
 
 	delete group->citem;
 	group->citem = group->cflowdiv;
@@ -185,6 +186,7 @@ CFlowtspan::~CFlowtspan() {
 static void sp_flowtspan_init(SPFlowtspan *group)
 {
 	group->cflowtspan = new CFlowtspan(group);
+	group->typeHierarchy.insert(typeid(SPFlowtspan));
 
 	delete group->citem;
 	group->citem = group->cflowtspan;
@@ -333,6 +335,7 @@ CFlowpara::~CFlowpara() {
 static void sp_flowpara_init (SPFlowpara *group)
 {
 	group->cflowpara = new CFlowpara(group);
+	group->typeHierarchy.insert(typeid(SPFlowpara));
 
 	delete group->citem;
 	group->citem = group->cflowpara;
@@ -479,6 +482,7 @@ CFlowline::~CFlowline() {
 static void sp_flowline_init(SPFlowline *group)
 {
 	group->cflowline = new CFlowline(group);
+	group->typeHierarchy.insert(typeid(SPFlowline));
 
 	delete group->cobject;
 	group->cobject = group->cflowline;
@@ -532,6 +536,7 @@ CFlowregionbreak::~CFlowregionbreak() {
 static void sp_flowregionbreak_init(SPFlowregionbreak *group)
 {
 	group->cflowregionbreak = new CFlowregionbreak(group);
+	group->typeHierarchy.insert(typeid(SPFlowregionbreak));
 
 	delete group->cobject;
 	group->cobject = group->cflowregionbreak;

@@ -67,6 +67,7 @@ static void
 sp_use_init(SPUse *use)
 {
 	use->cuse = new CUse(use);
+	use->typeHierarchy.insert(typeid(SPUse));
 
 	delete use->citem;
 	use->citem = use->cuse;

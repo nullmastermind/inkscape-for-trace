@@ -85,6 +85,7 @@ LivePathEffectObject::livepatheffect_init(LivePathEffectObject *lpeobj)
 #endif
 
     lpeobj->clivepatheffectobject = new CLivePathEffectObject(lpeobj);
+    lpeobj->typeHierarchy.insert(typeid(LivePathEffectObject));
 
     delete lpeobj->cobject;
     lpeobj->cobject = lpeobj->clivepatheffectobject;

@@ -61,6 +61,7 @@ static void
 sp_pattern_init (SPPattern *pat)
 {
 	pat->cpattern = new CPattern(pat);
+	pat->typeHierarchy.insert(typeid(SPPattern));
 
 	delete pat->cpaintserver;
 	pat->cpaintserver = pat->cpattern;

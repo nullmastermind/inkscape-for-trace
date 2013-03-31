@@ -55,6 +55,7 @@ static void
 sp_mask_init (SPMask *mask)
 {
 	mask->cmask = new CMask(mask);
+	mask->typeHierarchy.insert(typeid(SPMask));
 
 	delete mask->cobjectgroup;
 	mask->cobjectgroup = mask->cmask;

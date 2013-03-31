@@ -28,6 +28,7 @@ static void
 sp_objectgroup_init(SPObjectGroup * objectgroup)
 {
 	objectgroup->cobjectgroup = new CObjectGroup(objectgroup);
+	objectgroup->typeHierarchy.insert(typeid(SPObjectGroup));
 
 	delete objectgroup->cobject;
 	objectgroup->cobject = objectgroup->cobjectgroup;

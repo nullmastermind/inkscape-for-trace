@@ -49,6 +49,7 @@ static void
 sp_rect_init(SPRect *rect)
 {
 	rect->crect = new CRect(rect);
+	rect->typeHierarchy.insert(typeid(SPRect));
 
 	delete rect->cshape;
 	rect->cshape = rect->crect;

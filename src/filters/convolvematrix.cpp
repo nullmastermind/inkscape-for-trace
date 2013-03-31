@@ -47,6 +47,7 @@ static void
 sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
 {
 	feConvolveMatrix->cfeconvolvematrix = new CFeConvolveMatrix(feConvolveMatrix);
+	feConvolveMatrix->typeHierarchy.insert(typeid(SPFeConvolveMatrix));
 
 	delete feConvolveMatrix->cfilterprimitive;
 	feConvolveMatrix->cfilterprimitive = feConvolveMatrix->cfeconvolvematrix;

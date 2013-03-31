@@ -58,6 +58,7 @@ static void
 sp_flowtext_init(SPFlowtext *group)
 {
 	group->cflowtext = new CFlowtext(group);
+	group->typeHierarchy.insert(typeid(SPFlowtext));
 
 	delete group->citem;
 	group->citem = group->cflowtext;

@@ -47,6 +47,7 @@ static void
 sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
 {
 	fedistantlight->cfedistantlight = new CFeDistantLight(fedistantlight);
+	fedistantlight->typeHierarchy.insert(typeid(SPFeDistantLight));
 
 	delete fedistantlight->cobject;
 	fedistantlight->cobject = fedistantlight->cfedistantlight;

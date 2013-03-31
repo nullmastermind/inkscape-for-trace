@@ -91,6 +91,7 @@ CGlyphKerning::~CGlyphKerning() {
 static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
 {
 	glyph->cglyphkerning = new CGlyphKerning(glyph);
+	glyph->typeHierarchy.insert(typeid(SPGlyphKerning));
 
 	delete glyph->cobject;
 	glyph->cobject = glyph->cglyphkerning;
