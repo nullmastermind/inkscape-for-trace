@@ -862,7 +862,6 @@ void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
         int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
         angle = M_PI * dir / snaps;
     }
-
     h->setRelativePos(h->relativePos() * Geom::Rotate(angle));
     update();
 
@@ -1211,14 +1210,12 @@ double PathManipulator::BSplineHandlePosition(Handle *h){
     Node * nextNode = NULL;
     if(!n->isEndNode())
         nextNode = n->nodeToward(h);
-    if(nextNode){
-        Geom::Point positionH = h->position();
-        positionH = Geom::Point(positionH[X] - 0.0625,positionH[Y] - 0.0625);
-        if(nextNode && n->position() != h->position()){
-            lineInsideNodes->moveto(n->position());
-            lineInsideNodes->lineto(nextNode->position());
-            pos = Geom::nearest_point(positionH,*lineInsideNodes->first_segment());
-        }
+    Geom::Point positionH = h->position();
+    positionH = Geom::Point(positionH[X] - 0.0625,positionH[Y] - 0.0625);
+    if(nextNode && n->position() != h->position()){
+        lineInsideNodes->moveto(n->position());
+        lineInsideNodes->lineto(nextNode->position());
+        pos = Geom::nearest_point(positionH,*lineInsideNodes->first_segment());
     }
     return pos;
 }
@@ -1250,6 +1247,11 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     return ret;
 }
 
+void PathManipulator::BSplineNodeHandlesReposition(Node *n){
+    n->front()->setPosition(BSplineHandleReposition(n->front(),n->bsplineWeight));
+    n->back()->setPosition(BSplineHandleReposition(n->back(),n->bsplineWeight));
+}
+
 /** Construct the geometric representation of nodes and handles, update the outline
  * and display
  * \param alert_LPE if true, first the LPE is warned what the new path is going to be before updating it
@@ -1264,8 +1266,14 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             continue;
         }
         NodeList::iterator prev = subpath->begin();
+        if(isBSpline){
+            BSplineNodeHandlesReposition(prev.ptr());
+        }
         builder.moveTo(prev->position());
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
+            if(isBSpline){
+                BSplineNodeHandlesReposition(i.ptr());
+            }
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;
         }

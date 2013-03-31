@@ -180,7 +180,7 @@ public:
     bool isEndNode() const;
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
-
+    double bsplineWeight;
     /**
      * Gets the handle that faces the given adjacent node.
      * Will abort with error if the given node is not adjacent.

@@ -139,7 +139,6 @@ void Handle::move(Geom::Point const &new_pos)
     Handle *towards = node_towards ? node_towards->handleAwayFrom(_parent) : NULL;
     Handle *towards_second = node_towards ? node_towards->handleToward(_parent) : NULL;
     //BSpline
-    double pos = 0;
     Handle *h = NULL;
     Handle *h2 = NULL;
     if(_pm().isBSpline){
@@ -189,9 +188,9 @@ void Handle::move(Geom::Point const &new_pos)
         if(_pm().isBSpline){
             h = this;
             setPosition(_pm().BSplineHandleReposition(h));
-            pos = _pm().BSplineHandlePosition(h);
+            _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
             h2 = this->other();
-            this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
+            this->other()->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
         }
         //BSpline End
         return;
@@ -228,9 +227,9 @@ void Handle::move(Geom::Point const &new_pos)
     if(_pm().isBSpline){
         h = this;
         setPosition(_pm().BSplineHandleReposition(h));
-        pos = _pm().BSplineHandlePosition(h);
+        _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
         h2 = this->other();
-        this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
+        this->other()->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
     }
     //BSpline End
 }
@@ -325,12 +324,12 @@ void Handle::handle_2button_press(){
     if(_pm().isBSpline){
         Handle *h = NULL;
         Handle *h2 = NULL;
-        double pos = 0;
+        _parent->bsplineWeight = 0;
         h = this;
         setPosition(_pm().BSplineHandleReposition(h,0.3334));
-        pos = _pm().BSplineHandlePosition(h);
+        _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
         h2 = this->other();
-        this->other()->setPosition(_pm().BSplineHandleReposition(h2,pos));
+        this->other()->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
         _pm().update();
     }
 }
@@ -386,12 +385,12 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         //BSpline
         if(_pm().isBSpline){
             Handle *h = NULL;
-            double pos = 0;
+            _parent->bsplineWeight = 0;
             h = this;
             setPosition(new_pos);
             int steps = _pm().getSteps();
-            pos = ceilf(_pm().BSplineHandlePosition(h)*steps)/steps;
-            new_pos=_pm().BSplineHandleReposition(h,pos);
+            _parent->bsplineWeight = ceilf(_pm().BSplineHandlePosition(h)*steps)/steps;
+            new_pos=_pm().BSplineHandleReposition(h,_parent->bsplineWeight);
         }
         //BSpline End
     }
@@ -579,6 +578,7 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _handles_shown(false)
 {
     // NOTE we do not set type here, because the handles are still degenerate
+    this->bsplineWeight = 0.3334;
 }
 
 Node const *Node::_next() const
@@ -619,7 +619,6 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point delta = new_pos - position();
     //BSpline 
     double prevPos = 0;
-    double pos = 0;
     double nextPos = 0;
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
@@ -627,9 +626,9 @@ void Node::move(Geom::Point const &new_pos)
     if(_pm().isBSpline){
         if(prevNode)
             prevPos = _pm().BSplineHandlePosition(prevNode->front());
-        pos = _pm().BSplineHandlePosition(n->front());
-        if(pos == 0)
-            pos = _pm().BSplineHandlePosition(n->back());
+        n->bsplineWeight = _pm().BSplineHandlePosition(n->front());
+        if(n->bsplineWeight == 0)
+            n->bsplineWeight = _pm().BSplineHandlePosition(n->back());
         if(nextNode)
             nextPos = _pm().BSplineHandlePosition(nextNode->back());
     }
@@ -653,8 +652,8 @@ void Node::move(Geom::Point const &new_pos)
     if(_pm().isBSpline){
         Handle* front = &_front;
         Handle* back = &_back;
-        _front.setPosition(_pm().BSplineHandleReposition(front,pos));
-        _back.setPosition(_pm().BSplineHandleReposition(back,pos));
+        _front.setPosition(_pm().BSplineHandleReposition(front,n->bsplineWeight));
+        _back.setPosition(_pm().BSplineHandleReposition(back,n->bsplineWeight));
     }
 }
 
@@ -864,10 +863,10 @@ void Node::setType(NodeType type, bool update_handles)
         if(isBSpline){
             Handle* front = &_front;
             Handle* back = &_back;
-            double  pos = _pm().BSplineHandlePosition(front);
-            if(pos !=0) pos = 0.3334;
-            _front.setPosition(_pm().BSplineHandleReposition(front,pos));
-            _back.setPosition(_pm().BSplineHandleReposition(back,pos));
+            this->bsplineWeight = _pm().BSplineHandlePosition(front);
+            if(this->bsplineWeight !=0) this->bsplineWeight = 0.3334;
+            _front.setPosition(_pm().BSplineHandleReposition(front,this->bsplineWeight));
+            _back.setPosition(_pm().BSplineHandleReposition(back,this->bsplineWeight));
         }
         //BSpline End
     }

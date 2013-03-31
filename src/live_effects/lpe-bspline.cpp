@@ -29,6 +29,7 @@
 #include "ui/widget/scalar.h"
 #include "selection.h"
 #include "gtkmm/checkbutton.h"
+#include "ui/tool/node.h"
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -337,15 +338,34 @@ LPEBSpline::changeWeight(double weightValue)
     DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_LPE,
                          _("Modified the weight of the BSpline"));
 }
-
+//bool
+//LPEBspline::selectedPoint(Geom::Point p){
+//    for (SubpathList::iterator i = NodeIterator.begin(); i != NodeIterator.end(); ++i) {
+//        if (i->selected() && i.ptr()->getPosition() == p) {
+//            return true;
+//        }
+//    }
+//    return false;
+//}
+//bool
+//LPEBspline::hasNodesSelected(){
+//    for (SubpathList::iterator i = NodeIterator.begin(); i != NodeIterator.end(); ++i) {
+//        if (i->selected() && i.ptr()->getPosition() == p) {
+//            return true;
+//        }
+//    }
+//    return false;
+//}
 void
 LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue , bool ignoreCusp)
 {
     using Geom::X;
     using Geom::Y;
+    //bool hasNodesSelected = LPEBspline::hasNodesSelected();
     if(curve->get_segment_count() < 2)
         return;
     // Make copy of old path as it is changed during processing
+    
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
 
