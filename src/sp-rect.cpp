@@ -31,7 +31,7 @@
 
 #define noRECT_VERBOSE
 
-G_DEFINE_TYPE(SPRect, sp_rect, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPRect, sp_rect, G_TYPE_OBJECT);
 
 static void
 sp_rect_class_init(SPRectClass *klass)
@@ -45,9 +45,9 @@ CRect::CRect(SPRect* rect) : CShape(rect) {
 CRect::~CRect() {
 }
 
-static void
-sp_rect_init(SPRect *rect)
-{
+SPRect::SPRect() : SPShape() {
+	SPRect* rect = this;
+
 	rect->crect = new CRect(rect);
 	rect->typeHierarchy.insert(typeid(SPRect));
 
@@ -64,6 +64,12 @@ sp_rect_init(SPRect *rect)
     /* sp_svg_length_unset(&rect->height, SP_SVG_UNIT_NONE, 0.0, 0.0); */
     /* sp_svg_length_unset(&rect->rx, SP_SVG_UNIT_NONE, 0.0, 0.0); */
     /* sp_svg_length_unset(&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0); */
+}
+
+static void
+sp_rect_init(SPRect *rect)
+{
+	new (rect) SPRect();
 }
 
 void CRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {

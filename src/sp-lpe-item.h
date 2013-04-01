@@ -41,6 +41,7 @@ typedef std::list<Inkscape::LivePathEffect::LPEObjectReference *> PathEffectList
 
 class SPLPEItem : public SPItem {
 public:
+	SPLPEItem();
 	CLPEItem* clpeitem;
 
     int path_effects_enabled;

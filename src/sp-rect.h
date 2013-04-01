@@ -28,6 +28,8 @@ class CRect;
 
 class SPRect : public SPShape {
 public:
+	SPRect();
+
 	CRect* crect;
 
 	SVGLength x;

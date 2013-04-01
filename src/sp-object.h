@@ -197,6 +197,7 @@ public:
         ALWAYS_COLLECT
     };
 
+    SPObject();
     CObject* cobject;
     std::set<TypeInfo> typeHierarchy;
 

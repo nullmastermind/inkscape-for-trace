@@ -38,7 +38,9 @@ class CShape;
  */
 class SPShape : public SPLPEItem {
 public:
+	SPShape();
 	CShape* cshape;
+
     void setShape ();
     SPCurve * getCurve () const;
     SPCurve * getCurveBeforeLPE () const;

@@ -51,7 +51,7 @@ typedef std::list<std::string> HRefList;
 static std::string patheffectlist_write_svg(PathEffectList const & list);
 static std::string hreflist_write_svg(HRefList const & list);
 
-G_DEFINE_TYPE(SPLPEItem, sp_lpe_item, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPLPEItem, sp_lpe_item, G_TYPE_OBJECT);
 
 static void sp_lpe_item_class_init(SPLPEItemClass *klass)
 {
@@ -67,9 +67,9 @@ CLPEItem::CLPEItem(SPLPEItem* lpeitem) : CItem(lpeitem) {
 CLPEItem::~CLPEItem() {
 }
 
-static void
-sp_lpe_item_init(SPLPEItem *lpeitem)
-{
+SPLPEItem::SPLPEItem() : SPItem() {
+	SPLPEItem* lpeitem = this;
+
 	lpeitem->clpeitem = new CLPEItem(lpeitem);
 	lpeitem->typeHierarchy.insert(typeid(SPLPEItem));
 
@@ -83,6 +83,12 @@ sp_lpe_item_init(SPLPEItem *lpeitem)
     lpeitem->current_path_effect = NULL;
 
     lpeitem->lpe_modified_connection_list = new std::list<sigc::connection>();
+}
+
+static void
+sp_lpe_item_init(SPLPEItem *lpeitem)
+{
+	new (lpeitem) SPLPEItem();
 }
 
 static void sp_lpe_item_finalize(GObject *object)

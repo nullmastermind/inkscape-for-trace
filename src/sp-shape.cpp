@@ -56,7 +56,7 @@
 static void sp_shape_finalize (GObject *object);
 static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *ai);
 
-G_DEFINE_TYPE(SPShape, sp_shape, SP_TYPE_LPE_ITEM);
+G_DEFINE_TYPE(SPShape, sp_shape, G_TYPE_OBJECT);
 
 /**
  * Initializes a SPShapeClass object.  Establishes the function pointers to the class'
@@ -76,12 +76,10 @@ CShape::CShape(SPShape* shape) : CLPEItem(shape) {
 CShape::~CShape() {
 }
 
-/**
- * Initializes an SPShape object.
- */
-static void
-sp_shape_init(SPShape *shape)
-{
+
+SPShape::SPShape() : SPLPEItem() {
+	SPShape* shape = this;
+
 	shape->cshape = new CShape(shape);
 	shape->typeHierarchy.insert(typeid(SPShape));
 
@@ -97,6 +95,15 @@ sp_shape_init(SPShape *shape)
     }
     shape->_curve = NULL;
     shape->_curve_before_lpe = NULL;
+}
+
+/**
+ * Initializes an SPShape object.
+ */
+static void
+sp_shape_init(SPShape *shape)
+{
+	new (shape) SPShape();
 }
 
 static void

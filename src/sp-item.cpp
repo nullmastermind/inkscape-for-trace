@@ -78,7 +78,7 @@
 
 static SPItemView*          sp_item_view_list_remove(SPItemView     *list,
                                                      SPItemView     *view);
-G_DEFINE_TYPE(SPItem, sp_item, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPItem, sp_item, G_TYPE_OBJECT);
 
 /**
  * SPItem vtable initialization.
@@ -96,19 +96,38 @@ CItem::CItem(SPItem* item) : CObject(item) {
 CItem::~CItem() {
 }
 
-/**
- * Callback for SPItem object initialization.
- */
-static void
-sp_item_init(SPItem *item)
-{
+SPItem::SPItem() : SPObject() {
+	SPItem* item = this;
+
 	item->citem = new CItem(item);
 	item->typeHierarchy.insert(typeid(SPItem));
 
 	delete item->cobject;
 	item->cobject = item->citem;
 
+	item->sensitive = 0;
+	item->clip_ref = NULL;
+	item->avoidRef = NULL;
+	item->_is_evaluated = false;
+	item->stop_paint = 0;
+	item->_evaluated_status = 0;
+	item->bbox_valid = 0;
+	item->freeze_stroke_width = false;
+	item->transform_center_x = 0;
+	item->transform_center_y = 0;
+	item->display = NULL;
+	item->mask_ref = NULL;
+
     item->init();
+}
+
+/**
+ * Callback for SPItem object initialization.
+ */
+static void
+sp_item_init(SPItem *item)
+{
+	new (item) SPItem();
 }
 
 void SPItem::init() {

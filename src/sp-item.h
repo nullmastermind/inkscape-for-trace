@@ -27,7 +27,9 @@
 #include "snap-preferences.h"
 #include "snap-candidate.h"
 
-class SPGuideConstraint;
+//class SPGuideConstraint;
+#include "sp-guide-constraint.h"
+
 class SPClipPathReference;
 class SPMaskReference;
 class SPAvoidRef;
@@ -119,6 +121,7 @@ public:
         VISUAL_BBOX
     };
 
+    SPItem();
     CItem* citem;
 
     unsigned int sensitive : 1;

@@ -118,18 +118,21 @@ sp_object_class_init(SPObjectClass *klass)
     object_class->finalize = sp_object_finalize;
 }
 
-/**
- * Callback to initialize the SPObject object.
- */
-static void
-sp_object_init(SPObject *object)
-{
+SPObject::SPObject() {
+	SPObject* object = this;
+
     debug("id=%x, typename=%s",object, g_type_name_from_instance((GTypeInstance*)object));
 
     object->cobject = new CObject(object);
 
     new (&object->typeHierarchy) std::set<TypeInfo>();
     object->typeHierarchy.insert(typeid(SPObject));
+
+    object->repr = NULL;
+    object->mflags = 0;
+    object->id = NULL;
+    object->cloned = 0;
+    object->uflags = 0;
 
     object->hrefcount = 0;
     object->_total_hrefcount = 0;
@@ -158,6 +161,15 @@ sp_object_init(SPObject *object)
 
     object->_label = NULL;
     object->_default_label = NULL;
+}
+
+/**
+ * Callback to initialize the SPObject object.
+ */
+static void
+sp_object_init(SPObject *object)
+{
+	new (object) SPObject();
 }
 
 // CPPIFY: make pure virtual
