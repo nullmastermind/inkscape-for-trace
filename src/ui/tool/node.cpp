@@ -1118,6 +1118,12 @@ void Node::_setState(State state)
         case STATE_CLICKED:
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
+            //BSpline
+            if(_pm().isBSpline){
+                this->bsplineWeight = _pm().BSplineHandlePosition(this->back());
+                _pm().BSplineNodeHandlesReposition(this);
+            }
+            //BSpline End
             break;
     }
     SelectableControlPoint::_setState(state);
