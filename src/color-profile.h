@@ -95,10 +95,8 @@ GType colorprofile_get_type();
 } // namespace Inkscape
 
 #define COLORPROFILE_TYPE (Inkscape::colorprofile_get_type())
-#define COLORPROFILE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), COLORPROFILE_TYPE, Inkscape::ColorProfile))
-#define COLORPROFILE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), COLORPROFILE_TYPE, Inkscape::ColorProfileClass))
-#define IS_COLORPROFILE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), COLORPROFILE_TYPE))
-#define IS_COLORPROFILE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), COLORPROFILE_TYPE))
+#define COLORPROFILE(obj) ((Inkscape::ColorProfile*)obj)
+#define IS_COLORPROFILE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Inkscape::ColorProfile)))
 
 #endif // !SEEN_COLOR_PROFILE_H
 

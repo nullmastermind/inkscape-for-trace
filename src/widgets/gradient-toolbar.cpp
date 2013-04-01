@@ -91,7 +91,8 @@ void gr_apply_gradient_to_item( SPItem *item, SPGradient *gr, SPGradientType ini
     bool isFill = (mode == Inkscape::FOR_FILL);
     if (style
         && (isFill ? style->fill.isPaintserver() : style->stroke.isPaintserver())
-        && SP_IS_GRADIENT(isFill ? style->getFillPaintServer() : style->getStrokePaintServer()) ) {
+        //&& SP_IS_GRADIENT(isFill ? style->getFillPaintServer() : style->getStrokePaintServer()) ) {
+        && (isFill ? SP_IS_GRADIENT(style->getFillPaintServer()) : SP_IS_GRADIENT(style->getStrokePaintServer())) ) {
         SPPaintServer *server = isFill ? style->getFillPaintServer() : style->getStrokePaintServer();
         if ( SP_IS_LINEARGRADIENT(server) ) {
             sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, mode);

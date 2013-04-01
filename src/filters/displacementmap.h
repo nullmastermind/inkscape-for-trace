@@ -15,10 +15,8 @@
 #include "sp-filter-primitive.h"
 
 #define SP_TYPE_FEDISPLACEMENTMAP (sp_feDisplacementMap_get_type())
-#define SP_FEDISPLACEMENTMAP(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEDISPLACEMENTMAP, SPFeDisplacementMap))
-#define SP_FEDISPLACEMENTMAP_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEDISPLACEMENTMAP, SPFeDisplacementMapClass))
-#define SP_IS_FEDISPLACEMENTMAP(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEDISPLACEMENTMAP))
-#define SP_IS_FEDISPLACEMENTMAP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEDISPLACEMENTMAP))
+#define SP_FEDISPLACEMENTMAP(obj) ((SPFeDisplacementMap*)obj)
+#define SP_IS_FEDISPLACEMENTMAP(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeDisplacementMap)))
 
 enum FilterDisplacementMapChannelSelector {
     DISPLACEMENTMAP_CHANNEL_RED,

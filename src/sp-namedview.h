@@ -15,10 +15,8 @@
  */
 
 #define SP_TYPE_NAMEDVIEW (sp_namedview_get_type())
-#define SP_NAMEDVIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_NAMEDVIEW, SPNamedView))
-#define SP_NAMEDVIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_NAMEDVIEW, SPNamedViewClass))
-#define SP_IS_NAMEDVIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_NAMEDVIEW))
-#define SP_IS_NAMEDVIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_NAMEDVIEW))
+#define SP_NAMEDVIEW(obj) ((SPNamedView*)obj)
+#define SP_IS_NAMEDVIEW(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPNamedView)))
 
 #include "sp-object-group.h"
 #include "sp-metric.h"

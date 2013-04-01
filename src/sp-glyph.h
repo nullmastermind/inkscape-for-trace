@@ -19,10 +19,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_GLYPH (sp_glyph_get_type ())
-#define SP_GLYPH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_GLYPH, SPGlyph))
-#define SP_GLYPH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_GLYPH, SPGlyphClass))
-#define SP_IS_GLYPH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GLYPH))
-#define SP_IS_GLYPH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GLYPH))
+#define SP_GLYPH(obj) ((SPGlyph*)obj)
+#define SP_IS_GLYPH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGlyph)))
 
 enum glyphArabicForm {
     GLYPH_ARABIC_FORM_INITIAL,

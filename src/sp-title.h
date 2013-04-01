@@ -15,7 +15,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_TITLE           (sp_title_get_type ())
-#define SP_IS_TITLE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TITLE))
+#define SP_TITLE(obj) ((SPTitle*)obj)
+#define SP_IS_TITLE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPTitle)))
 
 class CTitle;
 

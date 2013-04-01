@@ -19,10 +19,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_FONT (sp_font_get_type ())
-#define SP_FONT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FONT, SPFont))
-#define SP_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FONT, SPFontClass))
-#define SP_IS_FONT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FONT))
-#define SP_IS_FONT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FONT))
+#define SP_FONT(obj) ((SPFont*)obj)
+#define SP_IS_FONT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFont)))
 
 class CFont;
 

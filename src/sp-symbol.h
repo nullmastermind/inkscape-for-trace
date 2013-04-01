@@ -18,8 +18,8 @@
  */
 
 #define SP_TYPE_SYMBOL (sp_symbol_get_type ())
-#define SP_SYMBOL(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_SYMBOL, SPSymbol))
-#define SP_IS_SYMBOL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_SYMBOL))
+#define SP_SYMBOL(obj) ((SPSymbol*)obj)
+#define SP_IS_SYMBOL(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPSymbol)))
 
 class CSymbol;
 

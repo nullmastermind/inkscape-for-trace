@@ -15,10 +15,8 @@
 #include "sp-filter-primitive.h"
 
 #define SP_TYPE_FETILE (sp_feTile_get_type())
-#define SP_FETILE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FETILE, SPFeTile))
-#define SP_FETILE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FETILE, SPFeTileClass))
-#define SP_IS_FETILE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FETILE))
-#define SP_IS_FETILE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FETILE))
+#define SP_FETILE(obj) ((SPFeTile*)obj)
+#define SP_IS_FETILE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeTile)))
 
 /* FeTile base class */
 class CFeTile;

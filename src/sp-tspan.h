@@ -12,10 +12,8 @@
 G_BEGIN_DECLS
 
 #define SP_TYPE_TSPAN (sp_tspan_get_type())
-#define SP_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_TSPAN, SPTSpan))
-#define SP_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_TSPAN, SPTSpanClass))
-#define SP_IS_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_TSPAN))
-#define SP_IS_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TSPAN))
+#define SP_TSPAN(obj) ((SPTSpan*)obj)
+#define SP_IS_TSPAN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPTSpan)))
 
 enum {
     SP_TSPAN_ROLE_UNSPECIFIED,

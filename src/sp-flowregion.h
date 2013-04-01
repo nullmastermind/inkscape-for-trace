@@ -7,16 +7,12 @@
 #include "sp-item.h"
 
 #define SP_TYPE_FLOWREGION            (sp_flowregion_get_type ())
-#define SP_FLOWREGION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWREGION, SPFlowregion))
-#define SP_FLOWREGION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWREGION, SPFlowregionClass))
-#define SP_IS_FLOWREGION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGION))
-#define SP_IS_FLOWREGION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWREGION))
+#define SP_FLOWREGION(obj) ((SPFlowregion*)obj)
+#define SP_IS_FLOWREGION(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowregion)))
 
 #define SP_TYPE_FLOWREGIONEXCLUDE            (sp_flowregionexclude_get_type ())
-#define SP_FLOWREGIONEXCLUDE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWREGIONEXCLUDE, SPFlowregionExclude))
-#define SP_FLOWREGIONEXCLUDE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWREGIONEXCLUDE, SPFlowregionExcludeClass))
-#define SP_IS_FLOWREGIONEXCLUDE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGIONEXCLUDE))
-#define SP_IS_FLOWREGIONEXCLUDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWREGIONEXCLUDE))
+#define SP_FLOWREGIONEXCLUDE(obj) ((SPFlowregionExclude*)obj)
+#define SP_IS_FLOWREGIONEXCLUDE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowregionExclude)))
 
 class Path;
 class Shape;

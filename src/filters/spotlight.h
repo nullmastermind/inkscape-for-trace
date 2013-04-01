@@ -18,10 +18,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_FESPOTLIGHT (sp_fespotlight_get_type())
-#define SP_FESPOTLIGHT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FESPOTLIGHT, SPFeSpotLight))
-#define SP_FESPOTLIGHT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FESPOTLIGHT, SPFeSpotLightClass))
-#define SP_IS_FESPOTLIGHT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FESPOTLIGHT))
-#define SP_IS_FESPOTLIGHT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FESPOTLIGHT))
+#define SP_FESPOTLIGHT(obj) ((SPFeSpotLight*)obj)
+#define SP_IS_FESPOTLIGHT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeSpotLight)))
 
 class CFeSpotLight;
 

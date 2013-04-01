@@ -20,10 +20,8 @@
 #include "sp-item-group.h"
 
 #define SP_TYPE_ROOT (sp_root_get_type())
-#define SP_ROOT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_ROOT, SPRoot))
-#define SP_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_ROOT, SPRootClass))
-#define SP_IS_ROOT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_ROOT))
-#define SP_IS_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_ROOT))
+#define SP_ROOT(obj) ((SPRoot*)obj)
+#define SP_IS_ROOT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPRoot)))
 
 class SPDefs;
 class CRoot;

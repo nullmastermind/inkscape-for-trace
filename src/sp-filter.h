@@ -22,10 +22,8 @@
 #include <glibmm/ustring.h>
 
 #define SP_TYPE_FILTER (sp_filter_get_type())
-#define SP_FILTER(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FILTER, SPFilter))
-#define SP_FILTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FILTER, SPFilterClass))
-#define SP_IS_FILTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FILTER))
-#define SP_IS_FILTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FILTER))
+#define SP_FILTER(obj) ((SPFilter*)obj)
+#define SP_IS_FILTER(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFilter)))
 
 #define SP_FILTER_FILTER_UNITS(f) (SP_FILTER(f)->filterUnits)
 #define SP_FILTER_PRIMITIVE_UNITS(f) (SP_FILTER(f)->primitiveUnits)

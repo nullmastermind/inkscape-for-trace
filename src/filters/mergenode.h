@@ -18,8 +18,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_FEMERGENODE (sp_feMergeNode_get_type())
-#define SP_FEMERGENODE(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_FEMERGENODE, SPFeMergeNode))
-#define SP_IS_FEMERGENODE(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_FEMERGENODE))
+#define SP_FEMERGENODE(obj) ((SPFeMergeNode*)obj)
+#define SP_IS_FEMERGENODE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeMergeNode)))
 
 class CFeMergeNode;
 

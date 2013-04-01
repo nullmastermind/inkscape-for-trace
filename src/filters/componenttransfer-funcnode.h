@@ -23,16 +23,18 @@
 #define SP_TYPE_FEFUNCB (sp_fefuncB_get_type())
 #define SP_TYPE_FEFUNCA (sp_fefuncA_get_type())
 
-#define SP_IS_FEFUNCR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCR))
-#define SP_IS_FEFUNCG(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCG))
-#define SP_IS_FEFUNCB(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCB))
-#define SP_IS_FEFUNCA(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCA))
+// CPPIFY: Casting macros buggy, as these aren't classes.
+//#define SP_IS_FEFUNCR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCR))
+//#define SP_IS_FEFUNCG(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCG))
+//#define SP_IS_FEFUNCB(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCB))
+//#define SP_IS_FEFUNCA(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCA))
 
-#define SP_FEFUNCNODE(obj) (SP_IS_FEFUNCR(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCR, SPFeFuncNode) : (SP_IS_FEFUNCG(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCG, SPFeFuncNode) : (SP_IS_FEFUNCB(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCB, SPFeFuncNode):(SP_IS_FEFUNCA(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCA, SPFeFuncNode): NULL))))
+#define SP_FEFUNCNODE(obj) ((SPFeFuncNode*)obj)
 
-#define SP_FEFUNCNODE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEFUNCNODE, SPFeFuncNodeClass))
-
-#define SP_IS_FEFUNCNODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEFUNCNODE))
+#define SP_IS_FEFUNCR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+#define SP_IS_FEFUNCG(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+#define SP_IS_FEFUNCB(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+#define SP_IS_FEFUNCA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
 
 class CFeFuncNode;
 

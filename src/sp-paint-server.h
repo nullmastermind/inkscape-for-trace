@@ -21,10 +21,8 @@
 #include "uri-references.h"
 
 #define SP_TYPE_PAINT_SERVER (sp_paint_server_get_type())
-#define SP_PAINT_SERVER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PAINT_SERVER, SPPaintServer))
-#define SP_PAINT_SERVER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_PAINT_SERVER, SPPaintServerClass))
-#define SP_IS_PAINT_SERVER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PAINT_SERVER))
-#define SP_IS_PAINT_SERVER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_PAINT_SERVER))
+#define SP_PAINT_SERVER(obj) ((SPPaintServer*)obj)
+#define SP_IS_PAINT_SERVER(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPaintServer)))
 
 GType sp_paint_server_get_type(void) G_GNUC_CONST;
 

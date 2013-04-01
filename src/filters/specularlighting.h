@@ -18,10 +18,8 @@
 #include "number-opt-number.h"
 
 #define SP_TYPE_FESPECULARLIGHTING (sp_feSpecularLighting_get_type())
-#define SP_FESPECULARLIGHTING(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FESPECULARLIGHTING, SPFeSpecularLighting))
-#define SP_FESPECULARLIGHTING_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FESPECULARLIGHTING, SPFeSpecularLightingClass))
-#define SP_IS_FESPECULARLIGHTING(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FESPECULARLIGHTING))
-#define SP_IS_FESPECULARLIGHTING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FESPECULARLIGHTING))
+#define SP_FESPECULARLIGHTING(obj) ((SPFeSpecularLighting*)obj)
+#define SP_IS_FESPECULARLIGHTING(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeSpecularLighting)))
 
 struct SVGICCColor;
 

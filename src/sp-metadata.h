@@ -18,8 +18,8 @@
 /* Metadata base class */
 
 #define SP_TYPE_METADATA (sp_metadata_get_type ())
-#define SP_METADATA(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_METADATA, SPMetadata))
-#define SP_IS_METADATA(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_METADATA))
+#define SP_METADATA(obj) ((SPMetadata*)obj)
+#define SP_IS_METADATA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMetadata)))
 
 class CMetadata;
 

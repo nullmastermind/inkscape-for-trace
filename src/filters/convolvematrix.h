@@ -19,10 +19,8 @@
 #include "display/nr-filter-convolve-matrix.h"
 
 #define SP_TYPE_FECONVOLVEMATRIX (sp_feConvolveMatrix_get_type())
-#define SP_FECONVOLVEMATRIX(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FECONVOLVEMATRIX, SPFeConvolveMatrix))
-#define SP_FECONVOLVEMATRIX_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FECONVOLVEMATRIX, SPFeConvolveMatrixClass))
-#define SP_IS_FECONVOLVEMATRIX(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FECONVOLVEMATRIX))
-#define SP_IS_FECONVOLVEMATRIX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FECONVOLVEMATRIX))
+#define SP_FECONVOLVEMATRIX(obj) ((SPFeConvolveMatrix*)obj)
+#define SP_IS_FECONVOLVEMATRIX(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeConvolveMatrix)))
 
 class CFeConvolveMatrix;
 

@@ -5,10 +5,8 @@
 #include "media.h"
 
 #define SP_TYPE_STYLE_ELEM (sp_style_elem_get_type())
-#define SP_STYLE_ELEM(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_STYLE_ELEM, SPStyleElem))
-#define SP_STYLE_ELEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_STYLE_ELEM, SPStyleElemClass))
-#define SP_IS_STYLE_ELEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_STYLE_ELEM))
-#define SP_IS_STYLE_ELEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_STYLE_ELEM))
+#define SP_STYLE_ELEM(obj) ((SPStyleElem*)obj)
+#define SP_IS_STYLE_ELEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPStyleElem)))
 
 class CStyleElem;
 

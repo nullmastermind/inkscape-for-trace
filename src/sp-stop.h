@@ -17,10 +17,8 @@ class ustring;
 }
 
 #define SP_TYPE_STOP (sp_stop_get_type())
-#define SP_STOP(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_STOP, SPStop))
-#define SP_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_STOP, SPStopClass))
-#define SP_IS_STOP(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_STOP))
-#define SP_IS_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_STOP))
+#define SP_STOP(obj) ((SPStop*)obj)
+#define SP_IS_STOP(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPStop)))
 
 GType sp_stop_get_type();
 

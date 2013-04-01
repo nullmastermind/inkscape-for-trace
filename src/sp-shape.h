@@ -23,10 +23,8 @@
 #include <sigc++/connection.h>
 
 #define SP_TYPE_SHAPE (sp_shape_get_type ())
-#define SP_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SHAPE, SPShape))
-#define SP_SHAPE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SHAPE, SPShapeClass))
-#define SP_IS_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SHAPE))
-#define SP_IS_SHAPE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SHAPE))
+#define SP_SHAPE(obj) ((SPShape*)obj)
+#define SP_IS_SHAPE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPShape)))
 
 #define SP_SHAPE_WRITE_PATH (1 << 2)
 

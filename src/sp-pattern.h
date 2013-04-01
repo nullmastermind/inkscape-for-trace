@@ -17,14 +17,12 @@
 
 #include "sp-item.h"
 #define SP_TYPE_PATTERN (sp_pattern_get_type ())
-#define SP_PATTERN(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_PATTERN, SPPattern))
-#define SP_PATTERN_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_PATTERN, SPPatternClass))
-#define SP_IS_PATTERN(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_PATTERN))
-#define SP_IS_PATTERN_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_PATTERN))
+#define SP_PATTERN(obj) ((SPPattern*)obj)
+#define SP_IS_PATTERN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPattern)))
 
 GType sp_pattern_get_type (void);
 
-struct SPPattern;
+struct SPPatternReference;
 
 #include "svg/svg-length.h"
 #include "sp-paint-server.h"
@@ -33,24 +31,6 @@ struct SPPattern;
 #include <stddef.h>
 #include <sigc++/connection.h>
 
-
-class SPPatternReference : public Inkscape::URIReference {
-public:
-    SPPatternReference (SPObject *obj) : URIReference(obj) {}
-    SPPattern *getObject() const {
-        return reinterpret_cast<SPPattern *>(URIReference::getObject());
-    }
-
-protected:
-    virtual bool _acceptObject(SPObject *obj) const {
-        return SP_IS_PATTERN (obj);
-    }
-};
-
-enum {
-    SP_PATTERN_UNITS_USERSPACEONUSE,
-    SP_PATTERN_UNITS_OBJECTBOUNDINGBOX
-};
 
 class CPattern;
 
@@ -103,6 +83,24 @@ protected:
 	SPPattern* sppattern;
 };
 
+
+class SPPatternReference : public Inkscape::URIReference {
+public:
+    SPPatternReference (SPObject *obj) : URIReference(obj) {}
+    SPPattern *getObject() const {
+        return reinterpret_cast<SPPattern *>(URIReference::getObject());
+    }
+
+protected:
+    virtual bool _acceptObject(SPObject *obj) const {
+        return SP_IS_PATTERN (obj);
+    }
+};
+
+enum {
+    SP_PATTERN_UNITS_USERSPACEONUSE,
+    SP_PATTERN_UNITS_OBJECTBOUNDINGBOX
+};
 
 guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);

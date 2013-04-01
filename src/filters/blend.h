@@ -17,10 +17,8 @@
 #include "display/nr-filter-blend.h"
 
 #define SP_TYPE_FEBLEND (sp_feBlend_get_type())
-#define SP_FEBLEND(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEBLEND, SPFeBlend))
-#define SP_FEBLEND_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEBLEND, SPFeBlendClass))
-#define SP_IS_FEBLEND(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEBLEND))
-#define SP_IS_FEBLEND_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEBLEND))
+#define SP_FEBLEND(obj) ((SPFeBlend*)obj)
+#define SP_IS_FEBLEND(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeBlend)))
 
 class CFeBlend;
 

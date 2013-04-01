@@ -15,7 +15,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_DESC            (sp_desc_get_type ())
-#define SP_IS_DESC(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_DESC))
+#define SP_DESC(obj) ((SPDesc*)obj)
+#define SP_IS_DESC(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPDesc)))
 
 class CDesc;
 

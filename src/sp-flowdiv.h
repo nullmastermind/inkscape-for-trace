@@ -8,34 +8,24 @@
 #include "sp-item.h"
 
 #define SP_TYPE_FLOWDIV            (sp_flowdiv_get_type ())
-#define SP_FLOWDIV(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWDIV, SPFlowdiv))
-#define SP_FLOWDIV_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWDIV, SPFlowdivClass))
-#define SP_IS_FLOWDIV(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWDIV))
-#define SP_IS_FLOWDIV_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWDIV))
+#define SP_FLOWDIV(obj) ((SPFlowdiv*)obj)
+#define SP_IS_FLOWDIV(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowdiv)))
 
 #define SP_TYPE_FLOWTSPAN            (sp_flowtspan_get_type ())
-#define SP_FLOWTSPAN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWTSPAN, SPFlowtspan))
-#define SP_FLOWTSPAN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWTSPAN, SPFlowtspanClass))
-#define SP_IS_FLOWTSPAN(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWTSPAN))
-#define SP_IS_FLOWTSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWTSPAN))
+#define SP_FLOWTSPAN(obj) ((SPFlowtspan*)obj)
+#define SP_IS_FLOWTSPAN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowtspan)))
 
 #define SP_TYPE_FLOWPARA            (sp_flowpara_get_type ())
-#define SP_FLOWPARA(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWPARA, SPFlowpara))
-#define SP_FLOWPARA_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWPARA, SPFlowparaClass))
-#define SP_IS_FLOWPARA(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWPARA))
-#define SP_IS_FLOWPARA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWPARA))
+#define SP_FLOWPARA(obj) ((SPFlowpara*)obj)
+#define SP_IS_FLOWPARA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowpara)))
 
 #define SP_TYPE_FLOWLINE            (sp_flowline_get_type ())
-#define SP_FLOWLINE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWLINE, SPFlowline))
-#define SP_FLOWLINE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWLINE, SPFlowlineClass))
-#define SP_IS_FLOWLINE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWLINE))
-#define SP_IS_FLOWLINE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWLINE))
+#define SP_FLOWLINE(obj) ((SPFlowline*)obj)
+#define SP_IS_FLOWLINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowline)))
 
 #define SP_TYPE_FLOWREGIONBREAK            (sp_flowregionbreak_get_type ())
-#define SP_FLOWREGIONBREAK(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWREGIONBREAK, SPFlowregionbreak))
-#define SP_FLOWREGIONBREAK_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWREGIONBREAK, SPFlowregionbreakClass))
-#define SP_IS_FLOWREGIONBREAK(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGIONBREAK))
-#define SP_IS_FLOWREGIONBREAK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWREGIONBREAK))
+#define SP_FLOWREGIONBREAK(obj) ((SPFlowregionbreak*)obj)
+#define SP_IS_FLOWREGIONBREAK(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowregionbreak)))
 
 class CFlowdiv;
 class CFlowtspan;

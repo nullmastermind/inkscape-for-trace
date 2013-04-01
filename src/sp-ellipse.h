@@ -22,10 +22,8 @@ G_BEGIN_DECLS
 /* Common parent class */
 
 #define SP_TYPE_GENERICELLIPSE (sp_genericellipse_get_type ())
-#define SP_GENERICELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_GENERICELLIPSE, SPGenericEllipse))
-#define SP_GENERICELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_GENERICELLIPSE, SPGenericEllipseClass))
-#define SP_IS_GENERICELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GENERICELLIPSE))
-#define SP_IS_GENERICELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GENERICELLIPSE))
+#define SP_GENERICELLIPSE(obj) ((SPGenericEllipse*)obj)
+#define SP_IS_GENERICELLIPSE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGenericEllipse)))
 
 class CGenericEllipse;
 
@@ -73,10 +71,8 @@ void sp_genericellipse_normalize (SPGenericEllipse *ellipse);
 /* SVG <ellipse> element */
 
 #define SP_TYPE_ELLIPSE (sp_ellipse_get_type ())
-#define SP_ELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_ELLIPSE, SPEllipse))
-#define SP_ELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_ELLIPSE, SPEllipseClass))
-#define SP_IS_ELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ELLIPSE))
-#define SP_IS_ELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ELLIPSE))
+#define SP_ELLIPSE(obj) ((SPEllipse*)obj)
+#define SP_IS_ELLIPSE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPEllipse)))
 
 class CEllipse;
 
@@ -112,10 +108,8 @@ void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble
 /* SVG <circle> element */
 
 #define SP_TYPE_CIRCLE (sp_circle_get_type ())
-#define SP_CIRCLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_CIRCLE, SPCircle))
-#define SP_CIRCLE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_CIRCLE, SPCircleClass))
-#define SP_IS_CIRCLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CIRCLE))
-#define SP_IS_CIRCLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_CIRCLE))
+#define SP_CIRCLE(obj) ((SPCircle*)obj)
+#define SP_IS_CIRCLE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPCircle)))
 
 class CCircle;
 
@@ -149,10 +143,8 @@ GType sp_circle_get_type (void);
 /* <path sodipodi:type="arc"> element */
 
 #define SP_TYPE_ARC (sp_arc_get_type ())
-#define SP_ARC(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_ARC, SPArc))
-#define SP_ARC_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_ARC, SPArcClass))
-#define SP_IS_ARC(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ARC))
-#define SP_IS_ARC_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ARC))
+#define SP_ARC(obj) ((SPArc*)obj)
+#define SP_IS_ARC(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPArc)))
 
 class CArc;
 

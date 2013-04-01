@@ -19,8 +19,8 @@
  */
 
 #define SP_TYPE_MARKER (sp_marker_get_type ())
-#define SP_MARKER(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MARKER, SPMarker))
-#define SP_IS_MARKER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MARKER))
+#define SP_MARKER(obj) ((SPMarker*)obj)
+#define SP_IS_MARKER(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMarker)))
 
 struct SPMarkerView;
 class CMarker;

@@ -18,10 +18,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_FEDISTANTLIGHT (sp_fedistantlight_get_type())
-#define SP_FEDISTANTLIGHT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEDISTANTLIGHT, SPFeDistantLight))
-#define SP_FEDISTANTLIGHT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEDISTANTLIGHT, SPFeDistantLightClass))
-#define SP_IS_FEDISTANTLIGHT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEDISTANTLIGHT))
-#define SP_IS_FEDISTANTLIGHT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEDISTANTLIGHT))
+#define SP_FEDISTANTLIGHT(obj) ((SPFeDistantLight*)obj)
+#define SP_IS_FEDISTANTLIGHT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeDistantLight)))
 
 /* Distant light class */
 

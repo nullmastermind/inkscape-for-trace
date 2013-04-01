@@ -19,10 +19,8 @@
 #include <list>
 
 #define SP_TYPE_LPE_ITEM (sp_lpe_item_get_type())
-#define SP_LPE_ITEM(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_LPE_ITEM, SPLPEItem))
-#define SP_LPE_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_LPE_ITEM, SPLPEItemClass))
-#define SP_IS_LPE_ITEM(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_LPE_ITEM))
-#define SP_IS_LPE_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_LPE_ITEM))
+#define SP_LPE_ITEM(obj) ((SPLPEItem*)obj)
+#define SP_IS_LPE_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLPEItem)))
 
 class CLPEItem;
 class LivePathEffectObject;

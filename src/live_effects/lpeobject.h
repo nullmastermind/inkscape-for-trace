@@ -23,8 +23,8 @@ namespace Inkscape {
 }
 
 #define TYPE_LIVEPATHEFFECT  (LivePathEffectObject::livepatheffect_get_type())
-#define LIVEPATHEFFECT(o)    (G_TYPE_CHECK_INSTANCE_CAST((o), TYPE_LIVEPATHEFFECT, LivePathEffectObject))
-#define IS_LIVEPATHEFFECT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), TYPE_LIVEPATHEFFECT))
+#define LIVEPATHEFFECT(obj) ((LivePathEffectObject*)obj)
+#define IS_LIVEPATHEFFECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(LivePathEffectObject)))
 
 /// The LivePathEffect vtable.
 struct LivePathEffectObjectClass {

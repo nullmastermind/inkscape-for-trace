@@ -16,10 +16,8 @@
 #include "number-opt-number.h"
 
 #define SP_TYPE_FEDIFFUSELIGHTING (sp_feDiffuseLighting_get_type())
-#define SP_FEDIFFUSELIGHTING(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEDIFFUSELIGHTING, SPFeDiffuseLighting))
-#define SP_FEDIFFUSELIGHTING_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEDIFFUSELIGHTING, SPFeDiffuseLightingClass))
-#define SP_IS_FEDIFFUSELIGHTING(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEDIFFUSELIGHTING))
-#define SP_IS_FEDIFFUSELIGHTING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEDIFFUSELIGHTING))
+#define SP_FEDIFFUSELIGHTING(obj) ((SPFeDiffuseLighting*)obj)
+#define SP_IS_FEDIFFUSELIGHTING(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeDiffuseLighting)))
 
 struct SVGICCColor;
 

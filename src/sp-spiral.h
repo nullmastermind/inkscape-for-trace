@@ -24,10 +24,8 @@
 #define SAMPLE_SIZE      8         ///< sample size per one bezier 
 
 #define SP_TYPE_SPIRAL            (sp_spiral_get_type ())
-#define SP_SPIRAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL, SPSpiral))
-#define SP_SPIRAL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SPIRAL, SPSpiralClass))
-#define SP_IS_SPIRAL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SPIRAL))
-#define SP_IS_SPIRAL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL))
+#define SP_SPIRAL(obj) ((SPSpiral*)obj)
+#define SP_IS_SPIRAL(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPSpiral)))
 
 class CSpiral;
 /**

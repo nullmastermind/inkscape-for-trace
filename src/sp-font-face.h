@@ -27,10 +27,8 @@
 G_BEGIN_DECLS
 
 #define SP_TYPE_FONTFACE (sp_fontface_get_type ())
-#define SP_FONTFACE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FONTFACE, SPFontFace))
-#define SP_FONTFACE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FONTFACE, SPFontFaceClass))
-#define SP_IS_FONTFACE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FONTFACE))
-#define SP_IS_FONTFACE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FONTFACE))
+#define SP_FONTFACE(obj) ((SPFontFace*)obj)
+#define SP_IS_FONTFACE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFontFace)))
 
 enum FontFaceStyleType{
 	SP_FONTFACE_STYLE_ALL,

@@ -20,16 +20,24 @@
 #include "unicoderange.h"
 
 #define SP_TYPE_HKERN (sp_glyph_kerning_h_get_type ())
-#define SP_HKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_HKERN, SPHkern))
-#define SP_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_HKERN, SPGlyphKerningClass))
-#define SP_IS_HKERN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_HKERN))
-#define SP_IS_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_HKERN))
+//#define SP_HKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_HKERN, SPHkern))
+//#define SP_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_HKERN, SPGlyphKerningClass))
+//#define SP_IS_HKERN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_HKERN))
+//#define SP_IS_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_HKERN))
+
+#define SP_HKERN(obj) ((SPHkern*)obj)
+#define SP_IS_HKERN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPHkern)))
 
 #define SP_TYPE_VKERN (sp_glyph_kerning_v_get_type ())
-#define SP_VKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_VKERN, SPVkern))
-#define SP_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_VKERN, SPGlyphKerningClass))
-#define SP_IS_VKERN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_VKERN))
-#define SP_IS_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_VKERN))
+//#define SP_VKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_VKERN, SPVkern))
+//#define SP_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_VKERN, SPGlyphKerningClass))
+//#define SP_IS_VKERN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_VKERN))
+//#define SP_IS_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_VKERN))
+
+#define SP_VKERN(obj) ((SPVkern*)obj)
+#define SP_IS_VKERN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPVkern)))
+
+// CPPIFY: These casting macros are buggy, as Vkern and Hkern aren't "real" classes.
 
 class GlyphNames{
 public: 

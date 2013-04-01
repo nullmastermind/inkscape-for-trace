@@ -16,10 +16,8 @@
 #include "display/nr-filter-colormatrix.h"
 
 #define SP_TYPE_FECOLORMATRIX (sp_feColorMatrix_get_type())
-#define SP_FECOLORMATRIX(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FECOLORMATRIX, SPFeColorMatrix))
-#define SP_FECOLORMATRIX_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FECOLORMATRIX, SPFeColorMatrixClass))
-#define SP_IS_FECOLORMATRIX(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FECOLORMATRIX))
-#define SP_IS_FECOLORMATRIX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FECOLORMATRIX))
+#define SP_FECOLORMATRIX(obj) ((SPFeColorMatrix*)obj)
+#define SP_IS_FECOLORMATRIX(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeColorMatrix)))
 
 class CFeColorMatrix;
 

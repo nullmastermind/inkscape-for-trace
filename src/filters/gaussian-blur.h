@@ -16,10 +16,8 @@
 #include "number-opt-number.h"
 
 #define SP_TYPE_GAUSSIANBLUR (sp_gaussianBlur_get_type())
-#define SP_GAUSSIANBLUR(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_GAUSSIANBLUR, SPGaussianBlur))
-#define SP_GAUSSIANBLUR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_GAUSSIANBLUR, SPGaussianBlurClass))
-#define SP_IS_GAUSSIANBLUR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_GAUSSIANBLUR))
-#define SP_IS_GAUSSIANBLUR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_GAUSSIANBLUR))
+#define SP_GAUSSIANBLUR(obj) ((SPGaussianBlur*)obj)
+#define SP_IS_GAUSSIANBLUR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGaussianBlur)))
 
 class CGaussianBlur;
 

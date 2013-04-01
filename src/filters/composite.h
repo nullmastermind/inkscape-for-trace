@@ -14,10 +14,8 @@
 #include "sp-filter-primitive.h"
 
 #define SP_TYPE_FECOMPOSITE (sp_feComposite_get_type())
-#define SP_FECOMPOSITE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FECOMPOSITE, SPFeComposite))
-#define SP_FECOMPOSITE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FECOMPOSITE, SPFeCompositeClass))
-#define SP_IS_FECOMPOSITE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FECOMPOSITE))
-#define SP_IS_FECOMPOSITE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FECOMPOSITE))
+#define SP_FECOMPOSITE(obj) ((SPFeComposite*)obj)
+#define SP_IS_FECOMPOSITE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeComposite)))
 
 enum FeCompositeOperator {
     // Default value is 'over', but let's distinquish specifying the

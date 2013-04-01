@@ -13,10 +13,8 @@
  */
 
 #define SP_TYPE_PERSP3D         (persp3d_get_type ())
-#define SP_PERSP3D(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PERSP3D, Persp3D))
-#define SP_PERSP3D_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_PERSP3D, Persp3DClass))
-#define SP_IS_PERSP3D(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PERSP3D))
-#define SP_IS_PERSP3D_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_PERSP3D))
+#define SP_PERSP3D(obj) ((Persp3D*)obj)
+#define SP_IS_PERSP3D(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Persp3D)))
 
 #include <list>
 #include <vector>

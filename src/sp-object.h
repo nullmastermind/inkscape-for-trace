@@ -19,9 +19,8 @@ class SPObject;
 class SPObjectClass;
 
 #define SP_TYPE_OBJECT (sp_object_get_type())
-#define SP_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_OBJECT, SPObject))
-#define SP_OBJECT_CLASS(clazz) (G_TYPE_CHECK_CLASS_CAST((clazz), SP_TYPE_OBJECT, SPObjectClass))
-#define SP_IS_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OBJECT))
+#define SP_OBJECT(obj) ((SPObject*)obj)
+#define SP_IS_OBJECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPObject)))
 
 /* Async modification flags */
 #define SP_OBJECT_MODIFIED_FLAG (1 << 0)

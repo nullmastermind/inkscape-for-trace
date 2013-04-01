@@ -23,10 +23,8 @@
 /* tref base class */
 
 #define SP_TYPE_TREF (sp_tref_get_type())
-#define SP_TREF(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_TREF, SPTRef))
-#define SP_TREF_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_TREF, SPTSpanClass))
-#define SP_IS_TREF(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_TREF))
-#define SP_IS_TREF_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TREF))
+#define SP_TREF(obj) ((SPTRef*)obj)
+#define SP_IS_TREF(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPTRef)))
 
 class CTRef;
 

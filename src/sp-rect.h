@@ -21,10 +21,8 @@
 G_BEGIN_DECLS
 
 #define SP_TYPE_RECT            (sp_rect_get_type ())
-#define SP_RECT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_RECT, SPRect))
-#define SP_RECT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_RECT, SPRectClass))
-#define SP_IS_RECT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_RECT))
-#define SP_IS_RECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_RECT))
+#define SP_RECT(obj) ((SPRect*)obj)
+#define SP_IS_RECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPRect)))
 
 class CRect;
 

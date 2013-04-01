@@ -15,10 +15,8 @@
 #include "sp-filter-primitive.h"
 
 #define SP_TYPE_FEOFFSET (sp_feOffset_get_type())
-#define SP_FEOFFSET(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEOFFSET, SPFeOffset))
-#define SP_FEOFFSET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEOFFSET, SPFeOffsetClass))
-#define SP_IS_FEOFFSET(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEOFFSET))
-#define SP_IS_FEOFFSET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEOFFSET))
+#define SP_FEOFFSET(obj) ((SPFeOffset*)obj)
+#define SP_IS_FEOFFSET(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeOffset)))
 
 class CFeOffset;
 

@@ -19,10 +19,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_MISSING_GLYPH (sp_missing_glyph_get_type ())
-#define SP_MISSING_GLYPH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_MISSING_GLYPH, SPMissingGlyph))
-#define SP_MISSING_GLYPH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_MISSING_GLYPH, SPMissingGlyphClass))
-#define SP_IS_MISSING_GLYPH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_MISSING_GLYPH))
-#define SP_IS_MISSING_GLYPH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_MISSING_GLYPH))
+#define SP_MISSING_GLYPH(obj) ((SPMissingGlyph*)obj)
+#define SP_IS_MISSING_GLYPH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMissingGlyph)))
 
 class CMissingGlyph;
 

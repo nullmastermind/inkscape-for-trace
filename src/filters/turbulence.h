@@ -18,10 +18,8 @@
 #include "display/nr-filter-turbulence.h"
 
 #define SP_TYPE_FETURBULENCE (sp_feTurbulence_get_type())
-#define SP_FETURBULENCE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FETURBULENCE, SPFeTurbulence))
-#define SP_FETURBULENCE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FETURBULENCE, SPFeTurbulenceClass))
-#define SP_IS_FETURBULENCE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FETURBULENCE))
-#define SP_IS_FETURBULENCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FETURBULENCE))
+#define SP_FETURBULENCE(obj) ((SPFeTurbulence*)obj)
+#define SP_IS_FETURBULENCE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeTurbulence)))
 
 /* FeTurbulence base class */
 

@@ -23,10 +23,8 @@ struct SPMeshPatch;
 struct SPMeshPatchClass;
 
 #define SP_TYPE_MESHPATCH (sp_meshpatch_get_type())
-#define SP_MESHPATCH(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_MESHPATCH, SPMeshPatch))
-#define SP_MESHPATCH_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_MESHPATCH, SPMeshPatchClass))
-#define SP_IS_MESHPATCH(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_MESHPATCH))
-#define SP_IS_MESHPATCH_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_MESHPATCH))
+#define SP_MESHPATCH(obj) ((SPMeshPatch*)obj)
+#define SP_IS_MESHPATCH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMeshPatch)))
 
 GType sp_meshpatch_get_type();
 

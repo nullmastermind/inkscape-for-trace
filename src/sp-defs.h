@@ -16,10 +16,8 @@
 #include "sp-object.h"
 
 #define SP_TYPE_DEFS            (sp_defs_get_type())
-#define SP_DEFS(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_DEFS, SPDefs))
-#define SP_DEFS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_DEFS, SPDefsClass))
-#define SP_IS_DEFS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_DEFS))
-#define SP_IS_DEFS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_DEFS))
+#define SP_DEFS(obj) ((SPDefs*)obj)
+#define SP_IS_DEFS(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPDefs)))
 
 GType sp_defs_get_type(void) G_GNUC_CONST;
 

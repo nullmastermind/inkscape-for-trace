@@ -20,10 +20,8 @@ struct SPMeshRow;
 struct SPMeshRowClass;
 
 #define SP_TYPE_MESHROW (sp_meshrow_get_type())
-#define SP_MESHROW(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_MESHROW, SPMeshRow))
-#define SP_MESHROW_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_MESHROW, SPMeshRowClass))
-#define SP_IS_MESHROW(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_MESHROW))
-#define SP_IS_MESHROW_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_MESHROW))
+#define SP_MESHROW(obj) ((SPMeshRow*)obj)
+#define SP_IS_MESHROW(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMeshRow)))
 
 GType sp_meshrow_get_type();
 
