@@ -171,7 +171,7 @@ void CMask::update(SPCtx* ctx, unsigned int flags) {
     SPObjectGroup *og = SP_OBJECTGROUP(object);
     GSList *l = NULL;
     for (SPObject *child = og->firstChild(); child; child = child->getNext()) {
-        g_object_ref(G_OBJECT (child));
+        sp_object_ref(child);
         l = g_slist_prepend (l, child);
     }
     l = g_slist_reverse (l);
@@ -181,7 +181,7 @@ void CMask::update(SPCtx* ctx, unsigned int flags) {
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
-        g_object_unref(G_OBJECT(child));
+        sp_object_unref(child);
     }
 
     SPMask *mask = SP_MASK(object);
@@ -209,7 +209,7 @@ void CMask::modified(unsigned int flags) {
     SPObjectGroup *og = SP_OBJECTGROUP(object);
     GSList *l = NULL;
     for (SPObject *child = og->firstChild(); child; child = child->getNext()) {
-        g_object_ref(G_OBJECT(child));
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse(l);
@@ -219,7 +219,7 @@ void CMask::modified(unsigned int flags) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref(G_OBJECT(child));
+        sp_object_unref(child);
     }
 }
 

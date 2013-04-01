@@ -62,7 +62,7 @@ void CFlowdiv::update(SPCtx *ctx, unsigned int flags) {
 
     GSList* l = NULL;
     for (SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref( G_OBJECT(child) );
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse(l);
@@ -79,7 +79,7 @@ void CFlowdiv::update(SPCtx *ctx, unsigned int flags) {
                 child->updateDisplay(ctx, flags);
             }
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 
@@ -95,7 +95,7 @@ void CFlowdiv::modified(unsigned int flags) {
 
     GSList *l = NULL;
     for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref( G_OBJECT(child) );
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse (l);
@@ -105,7 +105,7 @@ void CFlowdiv::modified(unsigned int flags) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 
@@ -212,7 +212,7 @@ void CFlowtspan::update(SPCtx *ctx, unsigned int flags) {
 
     GSList* l = NULL;
     for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref( G_OBJECT(child) );
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse (l);
@@ -229,7 +229,7 @@ void CFlowtspan::update(SPCtx *ctx, unsigned int flags) {
                 child->updateDisplay(ctx, flags);
             }
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 
@@ -245,7 +245,7 @@ void CFlowtspan::modified(unsigned int flags) {
 
     GSList *l = NULL;
     for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref( G_OBJECT(child) );
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse (l);
@@ -255,7 +255,7 @@ void CFlowtspan::modified(unsigned int flags) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 
@@ -363,7 +363,7 @@ void CFlowpara::update(SPCtx *ctx, unsigned int flags)
 
     GSList* l = NULL;
     for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref( G_OBJECT(child) );
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse (l);
@@ -380,7 +380,7 @@ void CFlowpara::update(SPCtx *ctx, unsigned int flags)
                 child->updateDisplay(ctx, flags);
             }
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 
@@ -396,7 +396,7 @@ void CFlowpara::modified(unsigned int flags) {
 
     GSList *l = NULL;
     for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref( G_OBJECT(child) );
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse (l);
@@ -406,7 +406,7 @@ void CFlowpara::modified(unsigned int flags) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 

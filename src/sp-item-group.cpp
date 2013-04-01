@@ -217,7 +217,7 @@ void CGroup::update(SPCtx *ctx, unsigned int flags) {
                 child->updateDisplay(ctx, flags);
             }
         }
-        g_object_unref (G_OBJECT (child));
+        sp_object_unref(child);
     }
 }
 
@@ -244,7 +244,7 @@ void CGroup::modified(guint flags) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref (G_OBJECT (child));
+        sp_object_unref(child);
     }
 }
 

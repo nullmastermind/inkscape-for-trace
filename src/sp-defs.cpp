@@ -68,7 +68,7 @@ void CDefs::update(SPCtx *ctx, guint flags) {
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
-        g_object_unref (G_OBJECT (child));
+        sp_object_unref(child);
     }
 }
 
@@ -83,7 +83,7 @@ void CDefs::modified(unsigned int flags) {
 
     GSList *l = NULL;
     for ( SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
-        g_object_ref(G_OBJECT(child));
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
 
@@ -95,7 +95,7 @@ void CDefs::modified(unsigned int flags) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 

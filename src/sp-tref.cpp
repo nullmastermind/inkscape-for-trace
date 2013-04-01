@@ -216,11 +216,11 @@ void CTRef::modified(unsigned int flags) {
 
     SPObject *child = tref_obj->stringChild;
     if (child) {
-        g_object_ref(G_OBJECT(child));
+        sp_object_ref(child);
         if (flags || (child->mflags & SP_OBJECT_MODIFIED_FLAG)) {
             child->emitModified(flags);
         }
-        g_object_unref(G_OBJECT(child));
+        sp_object_unref(child);
     }
 }
 

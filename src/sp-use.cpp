@@ -554,7 +554,7 @@ void CUse::update(SPCtx *ctx, unsigned flags) {
     flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
     if (use->child) {
-        g_object_ref(G_OBJECT(use->child));
+        sp_object_ref(use->child);
         if (flags || (use->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             if (SP_IS_ITEM(use->child)) {
                 SPItem const &chi = *SP_ITEM(use->child);
@@ -565,7 +565,7 @@ void CUse::update(SPCtx *ctx, unsigned flags) {
                 use->child->updateDisplay(ctx, flags);
             }
         }
-        g_object_unref(G_OBJECT(use->child));
+        sp_object_unref(use->child);
     }
 
     /* As last step set additional transform of arena group */
@@ -595,11 +595,11 @@ void CUse::modified(unsigned int flags) {
 
     SPObject *child = use_obj->child;
     if (child) {
-        g_object_ref(G_OBJECT(child));
+        sp_object_ref(child);
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref(G_OBJECT(child));
+        sp_object_unref(child);
     }
 }
 

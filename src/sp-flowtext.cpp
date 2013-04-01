@@ -106,7 +106,7 @@ void CFlowtext::update(SPCtx* ctx, unsigned int flags) {
 
     GSList *l = NULL;
     for (SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
-        g_object_ref(G_OBJECT(child));
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
     l = g_slist_reverse(l);
@@ -123,7 +123,7 @@ void CFlowtext::update(SPCtx* ctx, unsigned int flags) {
                 child->updateDisplay(ctx, flags);
             }
         }
-        g_object_unref(G_OBJECT(child));
+        sp_object_unref(child);
     }
 
     group->rebuildLayout();

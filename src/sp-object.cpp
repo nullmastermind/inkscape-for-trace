@@ -416,7 +416,7 @@ GSList *SPObject::childList(bool add_ref, Action) {
     GSList *l = NULL;
     for ( SPObject *child = firstChild() ; child; child = child->getNext() ) {
         if (add_ref) {
-            g_object_ref (G_OBJECT (child));
+            sp_object_ref (child);
         }
 
         l = g_slist_prepend (l, child);
@@ -1230,12 +1230,12 @@ void SPObject::emitModified(unsigned int flags)
      * themselves. */
     this->mflags = 0;
 
-    g_object_ref(G_OBJECT(this));
+    sp_object_ref(this);
 
     this->cobject->modified(flags);
 
     _modified_signal.emit(this, flags);
-    g_object_unref(G_OBJECT(this));
+    sp_object_unref(this);
 }
 
 gchar const *SPObject::getTagName(SPException *ex) const
