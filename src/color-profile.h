@@ -37,6 +37,7 @@ class CColorProfile;
  */
 class ColorProfile : public SPObject {
 public:
+	ColorProfile();
 	CColorProfile* ccolorprofile;
 
     friend cmsHPROFILE colorprofile_get_handle( SPDocument*, guint*, gchar const* );

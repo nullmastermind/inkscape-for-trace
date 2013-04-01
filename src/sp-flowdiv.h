@@ -36,27 +36,32 @@ class CFlowregionbreak;
 // these 3 are derivatives of SPItem to get the automatic style handling
 class SPFlowdiv : public SPItem {
 public:
+	SPFlowdiv();
 	CFlowdiv* cflowdiv;
 };
 
 class SPFlowtspan : public SPItem {
 public:
+	SPFlowtspan();
 	CFlowtspan* cflowtspan;
 };
 
 class SPFlowpara : public SPItem {
 public:
+	SPFlowpara();
 	CFlowpara* cflowpara;
 };
 
 // these do not need any style
 class SPFlowline : public SPObject {
 public:
+	SPFlowline();
 	CFlowline* cflowline;
 };
 
 class SPFlowregionbreak : public SPObject {
 public:
+	SPFlowregionbreak();
 	CFlowregionbreak* cflowregionbreak;
 };
 

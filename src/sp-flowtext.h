@@ -24,6 +24,7 @@ class CFlowtext;
 
 class SPFlowtext : public SPItem {
 public:
+	SPFlowtext();
 	CFlowtext* cflowtext;
 
     /** Completely recalculates the layout. */

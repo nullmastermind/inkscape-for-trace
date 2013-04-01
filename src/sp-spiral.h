@@ -42,6 +42,7 @@ class CSpiral;
  */
 class SPSpiral : public SPShape {
 public:
+	SPSpiral();
 	CSpiral* cspiral;
 
 	float cx, cy;

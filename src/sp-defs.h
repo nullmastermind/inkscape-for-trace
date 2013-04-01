@@ -25,6 +25,7 @@ class CDefs;
 
 class SPDefs : public SPObject {
 public:
+	SPDefs();
 	CDefs* cdefs;
 
 private:

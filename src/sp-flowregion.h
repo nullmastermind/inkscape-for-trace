@@ -23,6 +23,7 @@ class CFlowregionExclude;
 
 class SPFlowregion : public SPItem {
 public:
+	SPFlowregion();
 	CFlowregion* cflowregion;
 
 	std::vector<Shape*>     computed;
@@ -54,6 +55,7 @@ GType sp_flowregion_get_type (void);
 
 class SPFlowregionExclude : public SPItem {
 public:
+	SPFlowregionExclude();
 	CFlowregionExclude* cflowregionexclude;
 
 	Shape            *computed;

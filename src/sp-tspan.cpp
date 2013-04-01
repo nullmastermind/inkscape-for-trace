@@ -47,7 +47,7 @@
 /*#####################################################
 #  SPTSPAN
 #####################################################*/
-G_DEFINE_TYPE(SPTSpan, sp_tspan, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPTSpan, sp_tspan, G_TYPE_OBJECT);
 
 static void
 sp_tspan_class_init(SPTSpanClass *classname)
@@ -61,9 +61,9 @@ CTSpan::CTSpan(SPTSpan* span) : CItem(span) {
 CTSpan::~CTSpan() {
 }
 
-static void
-sp_tspan_init(SPTSpan *tspan)
-{
+SPTSpan::SPTSpan() : SPItem() {
+	SPTSpan* tspan = this;
+
 	tspan->ctspan = new CTSpan(tspan);
 	tspan->typeHierarchy.insert(typeid(SPTSpan));
 
@@ -73,6 +73,12 @@ sp_tspan_init(SPTSpan *tspan)
 
     tspan->role = SP_TSPAN_ROLE_UNSPECIFIED;
     new (&tspan->attributes) TextTagAttributes;
+}
+
+static void
+sp_tspan_init(SPTSpan *tspan)
+{
+	new (tspan) SPTSpan();
 }
 
 void CTSpan::release() {
@@ -247,7 +253,7 @@ static void sp_textpath_finalize(GObject *obj);
 
 void   refresh_textpath_source(SPTextPath* offset);
 
-G_DEFINE_TYPE(SPTextPath, sp_textpath, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPTextPath, sp_textpath, G_TYPE_OBJECT);
 
 static void
 sp_textpath_class_init(SPTextPathClass *classname)
@@ -264,9 +270,9 @@ CTextPath::CTextPath(SPTextPath* textpath) : CItem(textpath) {
 CTextPath::~CTextPath() {
 }
 
-static void
-sp_textpath_init(SPTextPath *textpath)
-{
+SPTextPath::SPTextPath() : SPItem() {
+	SPTextPath* textpath = this;
+
 	textpath->ctextpath = new CTextPath(textpath);
 	textpath->typeHierarchy.insert(typeid(SPTextPath));
 
@@ -282,6 +288,12 @@ sp_textpath_init(SPTextPath *textpath)
     // set up the uri reference
     textpath->sourcePath = new SPUsePath(textpath);
     textpath->sourcePath->user_unlink = sp_textpath_to_text;
+}
+
+static void
+sp_textpath_init(SPTextPath *textpath)
+{
+	new (textpath) SPTextPath();
 }
 
 static void

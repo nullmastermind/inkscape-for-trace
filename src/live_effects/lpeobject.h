@@ -35,6 +35,7 @@ class CLivePathEffectObject;
 
 class LivePathEffectObject : public SPObject {
 public:
+	LivePathEffectObject();
 	CLivePathEffectObject* clivepatheffectobject;
 
     Inkscape::LivePathEffect::EffectType effecttype;

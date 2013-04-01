@@ -23,6 +23,7 @@ class CGaussianBlur;
 
 class SPGaussianBlur : public SPFilterPrimitive {
 public:
+	SPGaussianBlur();
 	CGaussianBlur* cgaussianblur;
 
     /** stdDeviation attribute */

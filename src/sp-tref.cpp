@@ -57,7 +57,7 @@ static void sp_tref_finalize(GObject *obj);
 static void sp_tref_href_changed(SPObject *old_ref, SPObject *ref, SPTRef *tref);
 static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 
-G_DEFINE_TYPE(SPTRef, sp_tref, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPTRef, sp_tref, G_TYPE_OBJECT);
 
 static void
 sp_tref_class_init(SPTRefClass *tref_class)
@@ -73,15 +73,17 @@ CTRef::CTRef(SPTRef* tref) : CItem(tref) {
 CTRef::~CTRef() {
 }
 
-static void
-sp_tref_init(SPTRef *tref)
-{
+SPTRef::SPTRef() : SPItem() {
+	SPTRef* tref = this;
+
 	tref->ctref = new CTRef(tref);
 	tref->typeHierarchy.insert(typeid(SPTRef));
 
 	delete tref->citem;
 	tref->citem = tref->ctref;
 	tref->cobject = tref->ctref;
+
+	tref->stringChild = NULL;
 
     new (&tref->attributes) TextTagAttributes;
 
@@ -92,6 +94,12 @@ sp_tref_init(SPTRef *tref)
 
     tref->_changed_connection =
         tref->uriOriginalRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_tref_href_changed), tref));
+}
+
+static void
+sp_tref_init(SPTRef *tref)
+{
+	new (tref) SPTRef();
 }
 
 static void

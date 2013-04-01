@@ -30,6 +30,7 @@ class CPaintServer;
 
 class SPPaintServer : public SPObject {
 public:
+	SPPaintServer();
 	CPaintServer* cpaintserver;
 
 protected:

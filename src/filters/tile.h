@@ -23,6 +23,7 @@ class CFeTile;
 
 class SPFeTile : public SPFilterPrimitive {
 public:
+	SPFeTile();
     CFeTile* cfetile;
 };
 

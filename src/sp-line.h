@@ -31,6 +31,7 @@ GType sp_line_get_type(void) G_GNUC_CONST;
 
 class SPLine : public SPShape {
 public:
+	SPLine();
 	CLine* cline;
 
     SVGLength x1;

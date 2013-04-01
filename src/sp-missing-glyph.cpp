@@ -19,7 +19,7 @@
 #include "sp-missing-glyph.h"
 #include "document.h"
 
-G_DEFINE_TYPE(SPMissingGlyph, sp_missing_glyph, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPMissingGlyph, sp_missing_glyph, G_TYPE_OBJECT);
 
 static void sp_missing_glyph_class_init(SPMissingGlyphClass *gc)
 {
@@ -32,8 +32,9 @@ CMissingGlyph::CMissingGlyph(SPMissingGlyph* mg) : CObject(mg) {
 CMissingGlyph::~CMissingGlyph() {
 }
 
-static void sp_missing_glyph_init(SPMissingGlyph *glyph)
-{
+SPMissingGlyph::SPMissingGlyph() : SPObject() {
+	SPMissingGlyph* glyph = this;
+
 	glyph->cmissingglyph = new CMissingGlyph(glyph);
 	glyph->typeHierarchy.insert(typeid(SPMissingGlyph));
 
@@ -46,6 +47,11 @@ static void sp_missing_glyph_init(SPMissingGlyph *glyph)
     glyph->vert_origin_x = 0;
     glyph->vert_origin_y = 0;
     glyph->vert_adv_y = 0;
+}
+
+static void sp_missing_glyph_init(SPMissingGlyph *glyph)
+{
+	new (glyph) SPMissingGlyph();
 }
 
 void CMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {

@@ -37,7 +37,7 @@
 #  SPSTRING
 #####################################################*/
 
-G_DEFINE_TYPE(SPString, sp_string, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPString, sp_string, G_TYPE_OBJECT);
 
 static void
 sp_string_class_init(SPStringClass *classname)
@@ -51,9 +51,9 @@ CString::CString(SPString* str) : CObject(str) {
 CString::~CString() {
 }
 
-static void
-sp_string_init(SPString *string)
-{
+SPString::SPString() : SPObject() {
+	SPString* string = this;
+
 	string->cstring = new CString(string);
 	string->typeHierarchy.insert(typeid(SPString));
 
@@ -61,6 +61,12 @@ sp_string_init(SPString *string)
 	string->cobject = string->cstring;
 
     new (&string->string) Glib::ustring();
+}
+
+static void
+sp_string_init(SPString *string)
+{
+	new (string) SPString();
 }
 
 void CString::build(SPDocument *doc, Inkscape::XML::Node *repr) {

@@ -36,6 +36,7 @@ class CPattern;
 
 class SPPattern : public SPPaintServer {
 public:
+	SPPattern();
 	CPattern* cpattern;
 
     /* Reference (href) */

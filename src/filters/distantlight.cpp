@@ -29,7 +29,7 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-G_DEFINE_TYPE(SPFeDistantLight, sp_fedistantlight, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFeDistantLight, sp_fedistantlight, G_TYPE_OBJECT);
 
 static void
 sp_fedistantlight_class_init(SPFeDistantLightClass *klass)
@@ -43,9 +43,9 @@ CFeDistantLight::CFeDistantLight(SPFeDistantLight* distantlight) : CObject(dista
 CFeDistantLight::~CFeDistantLight() {
 }
 
-static void
-sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
-{
+SPFeDistantLight::SPFeDistantLight() : SPObject() {
+	SPFeDistantLight* fedistantlight = this;
+
 	fedistantlight->cfedistantlight = new CFeDistantLight(fedistantlight);
 	fedistantlight->typeHierarchy.insert(typeid(SPFeDistantLight));
 
@@ -56,6 +56,12 @@ sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
     fedistantlight->elevation = 0;
     fedistantlight->azimuth_set = FALSE;
     fedistantlight->elevation_set = FALSE;
+}
+
+static void
+sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
+{
+	new (fedistantlight) SPFeDistantLight();
 }
 
 /**

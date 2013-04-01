@@ -23,6 +23,7 @@ class CAnchor;
 
 class SPAnchor : public SPGroup {
 public:
+	SPAnchor();
 	CAnchor* canchor;
 
 	gchar *href;

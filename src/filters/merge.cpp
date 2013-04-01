@@ -25,7 +25,7 @@
 #include "display/nr-filter-merge.h"
 
 /* FeMerge base class */
-G_DEFINE_TYPE(SPFeMerge, sp_feMerge, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeMerge, sp_feMerge, G_TYPE_OBJECT);
 
 static void
 sp_feMerge_class_init(SPFeMergeClass *klass)
@@ -39,15 +39,21 @@ CFeMerge::CFeMerge(SPFeMerge* merge) : CFilterPrimitive(merge) {
 CFeMerge::~CFeMerge() {
 }
 
-static void
-sp_feMerge_init(SPFeMerge *feMerge)
-{
+SPFeMerge::SPFeMerge() : SPFilterPrimitive() {
+	SPFeMerge* feMerge = this;
+
 	feMerge->cfemerge = new CFeMerge(feMerge);
 	feMerge->typeHierarchy.insert(typeid(SPFeMerge));
 
 	delete feMerge->cfilterprimitive;
 	feMerge->cfilterprimitive = feMerge->cfemerge;
 	feMerge->cobject = feMerge->cfemerge;
+}
+
+static void
+sp_feMerge_init(SPFeMerge *feMerge)
+{
+	new (feMerge) SPFeMerge();
 }
 
 /**

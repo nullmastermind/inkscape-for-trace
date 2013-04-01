@@ -31,13 +31,19 @@ CDesc::CDesc(SPDesc* desc) : CObject(desc) {
 CDesc::~CDesc() {
 }
 
-static void sp_desc_init(SPDesc *desc)
-{
+SPDesc::SPDesc() : SPObject() {
+	SPDesc* desc = this;
+
 	desc->cdesc = new CDesc(desc);
 	desc->typeHierarchy.insert(typeid(SPDesc));
 
 	delete desc->cobject;
 	desc->cobject = desc->cdesc;
+}
+
+static void sp_desc_init(SPDesc *desc)
+{
+	new (desc) SPDesc();
 }
 
 Inkscape::XML::Node* CDesc::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {

@@ -28,6 +28,7 @@ class CSwitch;
 
 class SPSwitch : public SPGroup {
 public:
+	SPSwitch();
 	CSwitch* cswitch;
 
 	static GType getType();

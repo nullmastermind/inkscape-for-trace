@@ -23,6 +23,7 @@ class CFeColorMatrix;
 
 class SPFeColorMatrix : public SPFilterPrimitive {
 public:
+	SPFeColorMatrix();
 	CFeColorMatrix* cfecolormatrix;
 
     Inkscape::Filters::FilterColorMatrixType type;

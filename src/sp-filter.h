@@ -45,6 +45,7 @@ class CFilter;
 
 class SPFilter : public SPObject {
 public:
+	SPFilter();
 	CFilter* cfilter;
 
     SPFilterUnits filterUnits;

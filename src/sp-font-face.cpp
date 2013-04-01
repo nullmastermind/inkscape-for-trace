@@ -259,7 +259,7 @@ static std::vector<FontFaceStretchType> sp_read_fontFaceStretchType(gchar const 
     return v;
 }
 
-G_DEFINE_TYPE(SPFontFace, sp_fontface, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFontFace, sp_fontface, G_TYPE_OBJECT);
 
 static void sp_fontface_class_init(SPFontFaceClass *fc)
 {
@@ -272,8 +272,9 @@ CFontFace::CFontFace(SPFontFace* face) : CObject(face) {
 CFontFace::~CFontFace() {
 }
 
-static void sp_fontface_init(SPFontFace *face)
-{
+SPFontFace::SPFontFace() : SPObject() {
+	SPFontFace* face = this;
+
 	face->cfontface = new CFontFace(face);
 	face->typeHierarchy.insert(typeid(SPFontFace));
 
@@ -296,7 +297,7 @@ static void sp_fontface_init(SPFontFace *face)
     stretch.push_back(SP_FONTFACE_STRETCH_NORMAL);
     face->font_stretch = stretch;
     face->font_family = NULL;
-    /*
+
     //face->font_style = ;
     //face->font_variant = ;
     //face->font_weight = ;
@@ -305,31 +306,36 @@ static void sp_fontface_init(SPFontFace *face)
     //face->unicode_range = ;
     face->units_per_em = 1000;
     //face->panose_1 = ;
-    face->stem_v = ;
-    face->stem_h = ;
+    face->stemv = 0;
+    face->stemh = 0;
     face->slope = 0;
-    face->cap_height = ;
-    face->x_height = ;
-    face->accent_height = ;
-    face->ascent = ;
-    face->descent = ;
+    face->cap_height = 0;
+    face->x_height = 0;
+    face->accent_height = 0;
+    face->ascent = 0;
+    face->descent = 0;
     face->widths = NULL;
     face->bbox = NULL;
-    face->ideographic = ;
-    face->alphabetic = ;
-    face->mathematical = ;
-    face->hanging = ;
-    face->v_ideographic = ;
-    face->v_alphabetic = ;
-    face->v_mathematical = ;
-    face->v_hanging = ;
-    face->underline_position = ;
-    face->underline_thickness = ;
-    face->strikethrough_position = ;
-    face->strikethrough_thickness = ;
-    face->overline_position = ;
-    face->overline_thickness = ;
-*/
+    face->ideographic = 0;
+    face->alphabetic = 0;
+    face->mathematical = 0;
+    face->hanging = 0;
+    face->v_ideographic = 0;
+    face->v_alphabetic = 0;
+    face->v_mathematical = 0;
+    face->v_hanging = 0;
+    face->underline_position = 0;
+    face->underline_thickness = 0;
+    face->strikethrough_position = 0;
+    face->strikethrough_thickness = 0;
+    face->overline_position = 0;
+    face->overline_thickness = 0;
+
+}
+
+static void sp_fontface_init(SPFontFace *face)
+{
+	new (face) SPFontFace();
 }
 
 

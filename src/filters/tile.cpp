@@ -23,7 +23,7 @@
 #include "display/nr-filter-tile.h"
 
 /* FeTile base class */
-G_DEFINE_TYPE(SPFeTile, sp_feTile, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeTile, sp_feTile, G_TYPE_OBJECT);
 
 static void
 sp_feTile_class_init(SPFeTileClass *klass)
@@ -37,15 +37,21 @@ CFeTile::CFeTile(SPFeTile* tile) : CFilterPrimitive(tile) {
 CFeTile::~CFeTile() {
 }
 
-static void
-sp_feTile_init(SPFeTile *feTile)
-{
+SPFeTile::SPFeTile() : SPFilterPrimitive() {
+	SPFeTile* feTile = this;
+
 	feTile->cfetile = new CFeTile(feTile);
 	feTile->typeHierarchy.insert(typeid(SPFeTile));
 
 	delete feTile->cfilterprimitive;
 	feTile->cfilterprimitive = feTile->cfetile;
 	feTile->cobject = feTile->cfetile;
+}
+
+static void
+sp_feTile_init(SPFeTile *feTile)
+{
+	new (feTile) SPFeTile();
 }
 
 /**

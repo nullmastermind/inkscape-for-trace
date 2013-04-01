@@ -23,7 +23,7 @@
 
 #include "display/nr-svgfonts.h"
 
-G_DEFINE_TYPE(SPFont, sp_font, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFont, sp_font, G_TYPE_OBJECT);
 
 static void sp_font_class_init(SPFontClass *fc)
 {
@@ -43,8 +43,9 @@ CFont::CFont(SPFont* font) : CObject(font) {
 CFont::~CFont() {
 }
 
-static void sp_font_init(SPFont *font)
-{
+SPFont::SPFont() : SPObject() {
+	SPFont* font = this;
+
 	font->cfont = new CFont(font);
 	font->typeHierarchy.insert(typeid(SPFont));
 
@@ -57,6 +58,11 @@ static void sp_font_init(SPFont *font)
     font->vert_origin_x = FNT_DEFAULT_ADV / 2.0;
     font->vert_origin_y = FNT_DEFAULT_ASCENT;
     font->vert_adv_y = FNT_UNITS_PER_EM;
+}
+
+static void sp_font_init(SPFont *font)
+{
+	new (font) SPFont();
 }
 
 void CFont::build(SPDocument *document, Inkscape::XML::Node *repr) {

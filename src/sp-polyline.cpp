@@ -21,7 +21,7 @@
 #include "document.h"
 
 
-G_DEFINE_TYPE(SPPolyLine, sp_polyline, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPPolyLine, sp_polyline, G_TYPE_OBJECT);
 
 static void
 sp_polyline_class_init(SPPolyLineClass *klass)
@@ -35,8 +35,9 @@ CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {
 CPolyLine::~CPolyLine() {
 }
 
-void sp_polyline_init(SPPolyLine * polyline)
-{
+SPPolyLine::SPPolyLine() : SPShape() {
+	SPPolyLine* polyline = this;
+
 	polyline->cpolyline = new CPolyLine(polyline);
 	polyline->typeHierarchy.insert(typeid(SPPolyLine));
 
@@ -45,6 +46,11 @@ void sp_polyline_init(SPPolyLine * polyline)
 	polyline->clpeitem = polyline->cpolyline;
 	polyline->citem = polyline->cpolyline;
 	polyline->cobject = polyline->cpolyline;
+}
+
+void sp_polyline_init(SPPolyLine * polyline)
+{
+	new (polyline) SPPolyLine();
 }
 
 void CPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {

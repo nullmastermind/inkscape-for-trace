@@ -27,6 +27,7 @@ class CFeTurbulence;
 
 class SPFeTurbulence : public SPFilterPrimitive {
 public:
+	SPFeTurbulence();
 	CFeTurbulence* cfeturbulence;
 
     /** TURBULENCE ATTRIBUTES HERE */

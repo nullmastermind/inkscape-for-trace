@@ -25,6 +25,7 @@ class CObjectGroup;
 
 class SPObjectGroup : public SPObject {
 public:
+	SPObjectGroup();
 	CObjectGroup* cobjectgroup;
 
 private:

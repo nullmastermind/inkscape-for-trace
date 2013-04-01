@@ -27,7 +27,7 @@
 #include "display/nr-filter-morphology.h"
 
 /* FeMorphology base class */
-G_DEFINE_TYPE(SPFeMorphology, sp_feMorphology, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeMorphology, sp_feMorphology, G_TYPE_OBJECT);
 
 static void
 sp_feMorphology_class_init(SPFeMorphologyClass *klass)
@@ -41,9 +41,9 @@ CFeMorphology::CFeMorphology(SPFeMorphology* morph) : CFilterPrimitive(morph) {
 CFeMorphology::~CFeMorphology() {
 }
 
-static void
-sp_feMorphology_init(SPFeMorphology *feMorphology)
-{
+SPFeMorphology::SPFeMorphology() : SPFilterPrimitive() {
+	SPFeMorphology* feMorphology = this;
+
 	feMorphology->cfemorphology = new CFeMorphology(feMorphology);
 	feMorphology->typeHierarchy.insert(typeid(SPFeMorphology));
 
@@ -51,8 +51,16 @@ sp_feMorphology_init(SPFeMorphology *feMorphology)
 	feMorphology->cfilterprimitive = feMorphology->cfemorphology;
 	feMorphology->cobject = feMorphology->cfemorphology;
 
+	feMorphology->Operator = Inkscape::Filters::MORPHOLOGY_OPERATOR_ERODE;
+
     //Setting default values:
     feMorphology->radius.set("0");
+}
+
+static void
+sp_feMorphology_init(SPFeMorphology *feMorphology)
+{
+	new (feMorphology) SPFeMorphology();
 }
 
 /**

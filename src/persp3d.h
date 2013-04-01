@@ -48,6 +48,7 @@ class CPersp3D;
 
 class Persp3D : public SPObject {
 public:
+	Persp3D();
 	CPersp3D* cpersp3d;
 
     Persp3DImpl *perspective_impl;

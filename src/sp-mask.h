@@ -36,6 +36,7 @@ class DrawingItem;
 
 class SPMask : public SPObjectGroup {
 public:
+	SPMask();
 	CMask* cmask;
 
 	unsigned int maskUnits_set : 1;

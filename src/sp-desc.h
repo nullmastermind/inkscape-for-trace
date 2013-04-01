@@ -22,6 +22,7 @@ class CDesc;
 
 class SPDesc : public SPObject {
 public:
+	SPDesc();
 	CDesc* cdesc;
 };
 

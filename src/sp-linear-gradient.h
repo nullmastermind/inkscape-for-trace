@@ -14,6 +14,7 @@ class CLinearGradient;
 /** Linear gradient. */
 class SPLinearGradient : public SPGradient {
 public:
+	SPLinearGradient();
 	CLinearGradient* clineargradient;
 
     SVGLength x1;

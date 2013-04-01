@@ -30,6 +30,7 @@ class CMeshRow;
 /** Gradient MeshRow. */
 class SPMeshRow : public SPObject {
 public:
+	SPMeshRow();
 	CMeshRow* cmeshrow;
 
     SPMeshRow* getNextMeshRow();

@@ -30,6 +30,7 @@ class CSymbol;
 
 class SPSymbol : public SPGroup {
 public:
+	SPSymbol();
 	CSymbol* csymbol;
 
 	/* viewBox; */

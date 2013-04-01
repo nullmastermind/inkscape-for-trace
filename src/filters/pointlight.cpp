@@ -29,7 +29,7 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-G_DEFINE_TYPE(SPFePointLight, sp_fepointlight, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFePointLight, sp_fepointlight, G_TYPE_OBJECT);
 
 static void
 sp_fepointlight_class_init(SPFePointLightClass *klass)
@@ -43,9 +43,9 @@ CFePointLight::CFePointLight(SPFePointLight* pointlight) : CObject(pointlight) {
 CFePointLight::~CFePointLight() {
 }
 
-static void
-sp_fepointlight_init(SPFePointLight *fepointlight)
-{
+SPFePointLight::SPFePointLight() : SPObject() {
+	SPFePointLight* fepointlight = this;
+
 	fepointlight->cfepointlight = new CFePointLight(fepointlight);
 	fepointlight->typeHierarchy.insert(typeid(SPFePointLight));
 
@@ -59,6 +59,12 @@ sp_fepointlight_init(SPFePointLight *fepointlight)
     fepointlight->x_set = FALSE;
     fepointlight->y_set = FALSE;
     fepointlight->z_set = FALSE;
+}
+
+static void
+sp_fepointlight_init(SPFePointLight *fepointlight)
+{
+	new (fepointlight) SPFePointLight();
 }
 
 /**

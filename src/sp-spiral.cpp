@@ -28,7 +28,7 @@
 
 #include "sp-spiral.h"
 
-G_DEFINE_TYPE(SPSpiral, sp_spiral, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPSpiral, sp_spiral, G_TYPE_OBJECT);
 
 /**
  * SPSpiral vtable initialization.
@@ -44,12 +44,9 @@ CSpiral::CSpiral(SPSpiral* spiral) : CShape(spiral) {
 CSpiral::~CSpiral() {
 }
 
-/**
- * Callback for SPSpiral object initialization.
- */
-static void
-sp_spiral_init (SPSpiral * spiral)
-{
+SPSpiral::SPSpiral() : SPShape() {
+	SPSpiral* spiral = this;
+
 	spiral->cspiral = new CSpiral(spiral);
 	spiral->typeHierarchy.insert(typeid(SPSpiral));
 
@@ -66,6 +63,15 @@ sp_spiral_init (SPSpiral * spiral)
     spiral->rad        = 1.0;
     spiral->arg        = 0.0;
     spiral->t0         = 0.0;
+}
+
+/**
+ * Callback for SPSpiral object initialization.
+ */
+static void
+sp_spiral_init (SPSpiral * spiral)
+{
+	new (spiral) SPSpiral();
 }
 
 void CSpiral::build(SPDocument * document, Inkscape::XML::Node * repr) {

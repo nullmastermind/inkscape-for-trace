@@ -26,7 +26,7 @@
 #include "sp-filter.h"
 
 /* FeComposite base class */
-G_DEFINE_TYPE(SPFeComposite, sp_feComposite, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeComposite, sp_feComposite, G_TYPE_OBJECT);
 
 static void
 sp_feComposite_class_init(SPFeCompositeClass *klass)
@@ -40,9 +40,9 @@ CFeComposite::CFeComposite(SPFeComposite* comp) : CFilterPrimitive(comp) {
 CFeComposite::~CFeComposite() {
 }
 
-static void
-sp_feComposite_init(SPFeComposite *feComposite)
-{
+SPFeComposite::SPFeComposite() : SPFilterPrimitive() {
+	SPFeComposite* feComposite = this;
+
 	feComposite->cfecomposite = new CFeComposite(feComposite);
 	feComposite->typeHierarchy.insert(typeid(SPFeComposite));
 
@@ -56,6 +56,12 @@ sp_feComposite_init(SPFeComposite *feComposite)
     feComposite->k3 = 0;
     feComposite->k4 = 0;
     feComposite->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+}
+
+static void
+sp_feComposite_init(SPFeComposite *feComposite)
+{
+	new (feComposite) SPFeComposite();
 }
 
 /**

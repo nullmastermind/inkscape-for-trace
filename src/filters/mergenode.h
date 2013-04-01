@@ -25,6 +25,7 @@ class CFeMergeNode;
 
 class SPFeMergeNode : public SPObject {
 public:
+	SPFeMergeNode();
 	CFeMergeNode* cfemergenode;
 
     int input;

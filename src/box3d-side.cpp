@@ -28,7 +28,7 @@ struct SPPathClass;
 
 static void box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]);
 
-G_DEFINE_TYPE(Box3DSide, box3d_side, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(Box3DSide, box3d_side, G_TYPE_OBJECT);
 
 static void box3d_side_class_init(Box3DSideClass *klass)
 {
@@ -41,9 +41,9 @@ CBox3DSide::CBox3DSide(Box3DSide* box3dside) : CPolygon(box3dside) {
 CBox3DSide::~CBox3DSide() {
 }
 
-static void
-box3d_side_init (Box3DSide * side)
-{
+Box3DSide::Box3DSide() : SPPolygon() {
+	Box3DSide* side = this;
+
 	side->cbox3dside = new CBox3DSide(side);
 	side->typeHierarchy.insert(typeid(Box3DSide));
 
@@ -57,6 +57,12 @@ box3d_side_init (Box3DSide * side)
     side->dir1 = Box3D::NONE;
     side->dir2 = Box3D::NONE;
     side->front_or_rear = Box3D::FRONT;
+}
+
+static void
+box3d_side_init (Box3DSide * side)
+{
+	new (side) Box3DSide();
 }
 
 void CBox3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {

@@ -26,6 +26,7 @@ class CFeConvolveMatrix;
 
 class SPFeConvolveMatrix : public SPFilterPrimitive {
 public:
+	SPFeConvolveMatrix();
 	CFeConvolveMatrix* cfeconvolvematrix;
 
     NumberOptNumber order;

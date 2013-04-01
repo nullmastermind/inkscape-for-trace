@@ -47,7 +47,7 @@ static void sp_use_delete_self(SPObject *deleted, SPUse *self);
 //void m_print(gchar *say, Geom::Affine m)
 //{ g_print("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
-G_DEFINE_TYPE(SPUse, sp_use, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPUse, sp_use, G_TYPE_OBJECT);
 
 static void
 sp_use_class_init(SPUseClass *classname)
@@ -63,15 +63,17 @@ CUse::CUse(SPUse* use) : CItem(use) {
 CUse::~CUse() {
 }
 
-static void
-sp_use_init(SPUse *use)
-{
+SPUse::SPUse() : SPItem() {
+	SPUse* use = this;
+
 	use->cuse = new CUse(use);
 	use->typeHierarchy.insert(typeid(SPUse));
 
 	delete use->citem;
 	use->citem = use->cuse;
 	use->cobject = use->cuse;
+
+	use->child = NULL;
 
     use->x.unset();
     use->y.unset();
@@ -87,6 +89,12 @@ sp_use_init(SPUse *use)
     use->ref = new SPUseReference(use);
 
     use->_changed_connection = use->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_use_href_changed), use));
+}
+
+static void
+sp_use_init(SPUse *use)
+{
+	new (use) SPUse();
 }
 
 static void

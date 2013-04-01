@@ -29,6 +29,7 @@ class CGenericEllipse;
 
 class SPGenericEllipse : public SPShape {
 public:
+	SPGenericEllipse();
 	CGenericEllipse* cgenericEllipse;
 
 	SVGLength cx;
@@ -78,6 +79,7 @@ class CEllipse;
 
 class SPEllipse : public SPGenericEllipse {
 public:
+	SPEllipse();
 	CEllipse* cellipse;
 };
 
@@ -115,6 +117,7 @@ class CCircle;
 
 class SPCircle : public SPGenericEllipse {
 public:
+	SPCircle();
 	CCircle* ccircle;
 };
 
@@ -150,6 +153,7 @@ class CArc;
 
 class SPArc : public SPGenericEllipse {
 public:
+	SPArc();
 	CArc* carc;
 };
 

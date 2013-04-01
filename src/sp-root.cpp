@@ -31,7 +31,7 @@
 #include "svg/svg.h"
 #include "xml/repr.h"
 
-G_DEFINE_TYPE(SPRoot, sp_root, SP_TYPE_GROUP);
+G_DEFINE_TYPE(SPRoot, sp_root, G_TYPE_OBJECT);
 
 /**
  * Initializes an SPRootClass object by setting its class and parent class objects, and registering
@@ -48,11 +48,9 @@ CRoot::CRoot(SPRoot* root) : CGroup(root) {
 CRoot::~CRoot() {
 }
 
-/**
- * Initializes an SPRoot object by setting its default parameter values.
- */
-static void sp_root_init(SPRoot *root)
-{
+SPRoot::SPRoot() : SPGroup() {
+	SPRoot* root = this;
+
 	root->croot = new CRoot(root);
 	root->typeHierarchy.insert(typeid(SPRoot));
 
@@ -61,6 +59,11 @@ static void sp_root_init(SPRoot *root)
 	root->clpeitem = root->croot;
 	root->citem = root->croot;
 	root->cobject = root->croot;
+
+	root->aspect_set = 0;
+	root->aspect_align = 0;
+	root->onload = NULL;
+	root->aspect_clip = 0;
 
     static Inkscape::Version const zero_version(0, 0);
 
@@ -80,6 +83,14 @@ static void sp_root_init(SPRoot *root)
     root->c2p.setIdentity();
 
     root->defs = NULL;
+}
+
+/**
+ * Initializes an SPRoot object by setting its default parameter values.
+ */
+static void sp_root_init(SPRoot *root)
+{
+	new (root) SPRoot();
 }
 
 void CRoot::build(SPDocument *document, Inkscape::XML::Node *repr) {

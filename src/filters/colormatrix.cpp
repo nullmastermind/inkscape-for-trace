@@ -30,7 +30,7 @@
 #include "display/nr-filter-colormatrix.h"
 
 /* FeColorMatrix base class */
-G_DEFINE_TYPE(SPFeColorMatrix, sp_feColorMatrix, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeColorMatrix, sp_feColorMatrix, G_TYPE_OBJECT);
 
 static void
 sp_feColorMatrix_class_init(SPFeColorMatrixClass *klass)
@@ -44,15 +44,24 @@ CFeColorMatrix::CFeColorMatrix(SPFeColorMatrix* matrix) : CFilterPrimitive(matri
 CFeColorMatrix::~CFeColorMatrix() {
 }
 
-static void
-sp_feColorMatrix_init(SPFeColorMatrix *feColorMatrix)
-{
+SPFeColorMatrix::SPFeColorMatrix() : SPFilterPrimitive() {
+	SPFeColorMatrix* feColorMatrix = this;
+
 	feColorMatrix->cfecolormatrix = new CFeColorMatrix(feColorMatrix);
 	feColorMatrix->typeHierarchy.insert(typeid(SPFeColorMatrix));
 
 	delete feColorMatrix->cfilterprimitive;
 	feColorMatrix->cfilterprimitive = feColorMatrix->cfecolormatrix;
 	feColorMatrix->cobject = feColorMatrix->cfecolormatrix;
+
+	feColorMatrix->value = 0;
+	feColorMatrix->type = Inkscape::Filters::COLORMATRIX_MATRIX;
+}
+
+static void
+sp_feColorMatrix_init(SPFeColorMatrix *feColorMatrix)
+{
+	new (feColorMatrix) SPFeColorMatrix();
 }
 
 /**

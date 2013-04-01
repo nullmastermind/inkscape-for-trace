@@ -18,6 +18,7 @@ class CString;
 
 class SPString : public SPObject {
 public:
+	SPString();
 	CString* cstring;
 
     Glib::ustring  string;

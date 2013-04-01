@@ -30,7 +30,7 @@
 #include "display/nr-filter.h"
 
 /* FeImage base class */
-G_DEFINE_TYPE(SPFeImage, sp_feImage, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeImage, sp_feImage, G_TYPE_OBJECT);
 
 static void sp_feImage_class_init(SPFeImageClass *klass)
 {
@@ -43,8 +43,9 @@ CFeImage::CFeImage(SPFeImage* image) : CFilterPrimitive(image) {
 CFeImage::~CFeImage() {
 }
 
-static void sp_feImage_init(SPFeImage *feImage)
-{
+SPFeImage::SPFeImage() : SPFilterPrimitive() {
+	SPFeImage* feImage = this;
+
 	feImage->cfeimage = new CFeImage(feImage);
 	feImage->typeHierarchy.insert(typeid(SPFeImage));
 
@@ -52,8 +53,19 @@ static void sp_feImage_init(SPFeImage *feImage)
 	feImage->cfilterprimitive = feImage->cfeimage;
 	feImage->cobject = feImage->cfeimage;
 
+	feImage->document = NULL;
+	feImage->href = NULL;
+	feImage->from_element = 0;
+	feImage->SVGElemRef = NULL;
+	feImage->SVGElem = NULL;
+
     feImage->aspect_align = SP_ASPECT_XMID_YMID; // Default
     feImage->aspect_clip = SP_ASPECT_MEET; // Default
+}
+
+static void sp_feImage_init(SPFeImage *feImage)
+{
+	new (feImage) SPFeImage();
 }
 
 /**

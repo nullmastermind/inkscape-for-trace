@@ -53,6 +53,7 @@ class SPUseReference;
  */
 class SPOffset : public SPShape {
 public:
+	SPOffset();
 	COffset* coffset;
 
     void *originalPath; ///< will be a livarot Path, just don't declare it here to please the gcc linker

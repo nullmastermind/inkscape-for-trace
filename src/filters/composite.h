@@ -34,6 +34,7 @@ class CFeComposite;
 
 class SPFeComposite : public SPFilterPrimitive {
 public:
+	SPFeComposite();
 	CFeComposite* cfecomposite;
 
     FeCompositeOperator composite_operator;

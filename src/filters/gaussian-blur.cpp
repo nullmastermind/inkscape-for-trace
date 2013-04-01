@@ -31,7 +31,7 @@
 //#include "macros.h"
 
 /* GaussianBlur base class */
-G_DEFINE_TYPE(SPGaussianBlur, sp_gaussianBlur, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPGaussianBlur, sp_gaussianBlur, G_TYPE_OBJECT);
 
 static void
 sp_gaussianBlur_class_init(SPGaussianBlurClass *klass)
@@ -45,15 +45,21 @@ CGaussianBlur::CGaussianBlur(SPGaussianBlur* gb) : CFilterPrimitive(gb) {
 CGaussianBlur::~CGaussianBlur() {
 }
 
-static void
-sp_gaussianBlur_init(SPGaussianBlur *gaussianBlur)
-{
+SPGaussianBlur::SPGaussianBlur() : SPFilterPrimitive() {
+	SPGaussianBlur* gaussianBlur = this;
+
 	gaussianBlur->cgaussianblur = new CGaussianBlur(gaussianBlur);
 	gaussianBlur->typeHierarchy.insert(typeid(SPGaussianBlur));
 
 	delete gaussianBlur->cfilterprimitive;
 	gaussianBlur->cfilterprimitive = gaussianBlur->cgaussianblur;
 	gaussianBlur->cobject = gaussianBlur->cgaussianblur;
+}
+
+static void
+sp_gaussianBlur_init(SPGaussianBlur *gaussianBlur)
+{
+	new (gaussianBlur) SPGaussianBlur();
 }
 
 /**

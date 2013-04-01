@@ -17,6 +17,7 @@ class CTextPath;
 
 class SPTextPath : public SPItem {
 public:
+	SPTextPath();
 	CTextPath* ctextpath;
 
     TextTagAttributes attributes;

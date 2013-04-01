@@ -56,7 +56,7 @@ enum {
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 
-G_DEFINE_TYPE(SPGuide, sp_guide, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPGuide, sp_guide, G_TYPE_OBJECT);
 
 static void sp_guide_class_init(SPGuideClass *gc)
 {
@@ -89,18 +89,27 @@ CGuide::CGuide(SPGuide* guide) : CObject(guide) {
 CGuide::~CGuide() {
 }
 
-static void sp_guide_init(SPGuide *guide)
-{
+SPGuide::SPGuide() : SPObject() {
+	SPGuide* guide = this;
+
 	guide->cguide = new CGuide(guide);
 	guide->typeHierarchy.insert(typeid(SPGuide));
 
 	delete guide->cobject;
 	guide->cobject = guide->cguide;
 
+	guide->label = NULL;
+	guide->views = NULL;
+
     guide->normal_to_line = Geom::Point(0.,1.);
     guide->point_on_line = Geom::Point(0.,0.);
     guide->color = 0x0000ff7f;
     guide->hicolor = 0xff00007f;
+}
+
+static void sp_guide_init(SPGuide *guide)
+{
+	new (guide) SPGuide();
 }
 
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec */*pspec*/)

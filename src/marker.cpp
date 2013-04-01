@@ -42,7 +42,7 @@ static void sp_marker_print (SPItem *item, SPPrintContext *ctx);
 
 static void sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destroyitems);
 
-G_DEFINE_TYPE(SPMarker, sp_marker, SP_TYPE_GROUP);
+G_DEFINE_TYPE(SPMarker, sp_marker, G_TYPE_OBJECT);
 
 /**
  * Initializes a SPMarkerClass object.  Establishes the function pointers to the class'
@@ -59,13 +59,9 @@ CMarker::CMarker(SPMarker* marker) : CGroup(marker) {
 CMarker::~CMarker() {
 }
 
-/**
- * Initializes an SPMarker object.  This notes the marker's viewBox is
- * not set and initializes the marker's c2p identity matrix.
- */
-static void
-sp_marker_init (SPMarker *marker)
-{
+SPMarker::SPMarker() : SPGroup() {
+	SPMarker* marker = this;
+
 	marker->cmarker = new CMarker(marker);
 	marker->typeHierarchy.insert(typeid(SPMarker));
 
@@ -75,9 +71,28 @@ sp_marker_init (SPMarker *marker)
 	marker->citem = marker->cmarker;
 	marker->cobject = marker->cmarker;
 
+	marker->aspect_clip = 0;
+	marker->aspect_align = 0;
+	marker->aspect_set = 0;
+	marker->markerUnits = 0;
+	marker->orient_auto = 0;
+	marker->markerUnits_set = 0;
+	marker->orient_set = 0;
+	marker->orient = 0;
+
     marker->viewBox = Geom::OptRect();
     marker->c2p.setIdentity();
     marker->views = NULL;
+}
+
+/**
+ * Initializes an SPMarker object.  This notes the marker's viewBox is
+ * not set and initializes the marker's c2p identity matrix.
+ */
+static void
+sp_marker_init (SPMarker *marker)
+{
+	new (marker) SPMarker();
 }
 
 /**

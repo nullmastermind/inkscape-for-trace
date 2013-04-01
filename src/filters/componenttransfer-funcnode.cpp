@@ -46,14 +46,14 @@ sp_fefuncR_get_type()
         GTypeInfo fefuncnode_info = {
             sizeof(SPFeFuncNodeClass),
             NULL, NULL,
-            (GClassInitFunc) sp_fefuncnode_class_init,
+            0,//(GClassInitFunc) sp_fefuncnode_class_init,
             NULL, NULL,
             sizeof(SPFeFuncNode),
             16,
             (GInstanceInitFunc) sp_fefuncnode_init,
             NULL,    /* value_table */
         };
-        fefuncnode_type = g_type_register_static(SP_TYPE_OBJECT, "SPFeFuncR", &fefuncnode_info, (GTypeFlags)0);
+        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncR", &fefuncnode_info, (GTypeFlags)0);
     }
     return fefuncnode_type;
 }
@@ -67,14 +67,14 @@ sp_fefuncG_get_type()
         GTypeInfo fefuncnode_info = {
             sizeof(SPFeFuncNodeClass),
             NULL, NULL,
-            (GClassInitFunc) sp_fefuncnode_class_init,
+            0,//(GClassInitFunc) sp_fefuncnode_class_init,
             NULL, NULL,
             sizeof(SPFeFuncNode),
             16,
             (GInstanceInitFunc) sp_fefuncnode_init,
             NULL,    /* value_table */
         };
-        fefuncnode_type = g_type_register_static(SP_TYPE_OBJECT, "SPFeFuncG", &fefuncnode_info, (GTypeFlags)0);
+        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncG", &fefuncnode_info, (GTypeFlags)0);
     }
     return fefuncnode_type;
 }
@@ -88,14 +88,14 @@ sp_fefuncB_get_type()
         GTypeInfo fefuncnode_info = {
             sizeof(SPFeFuncNodeClass),
             NULL, NULL,
-            (GClassInitFunc) sp_fefuncnode_class_init,
+            0,//(GClassInitFunc) sp_fefuncnode_class_init,
             NULL, NULL,
             sizeof(SPFeFuncNode),
             16,
             (GInstanceInitFunc) sp_fefuncnode_init,
             NULL,    /* value_table */
         };
-        fefuncnode_type = g_type_register_static(SP_TYPE_OBJECT, "SPFeFuncB", &fefuncnode_info, (GTypeFlags)0);
+        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncB", &fefuncnode_info, (GTypeFlags)0);
     }
     return fefuncnode_type;
 }
@@ -109,14 +109,14 @@ sp_fefuncA_get_type()
         GTypeInfo fefuncnode_info = {
             sizeof(SPFeFuncNodeClass),
             NULL, NULL,
-            (GClassInitFunc) sp_fefuncnode_class_init,
+            0,//(GClassInitFunc) sp_fefuncnode_class_init,
             NULL, NULL,
             sizeof(SPFeFuncNode),
             16,
             (GInstanceInitFunc) sp_fefuncnode_init,
             NULL,    /* value_table */
         };
-        fefuncnode_type = g_type_register_static(SP_TYPE_OBJECT, "SPFeFuncA", &fefuncnode_info, (GTypeFlags)0);
+        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncA", &fefuncnode_info, (GTypeFlags)0);
     }
     return fefuncnode_type;
 }
@@ -136,9 +136,9 @@ CFeFuncNode::CFeFuncNode(SPFeFuncNode* funcnode) : CObject(funcnode) {
 CFeFuncNode::~CFeFuncNode() {
 }
 
-static void
-sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
-{
+SPFeFuncNode::SPFeFuncNode() : SPObject() {
+	SPFeFuncNode* fefuncnode = this;
+
 	fefuncnode->cfefuncnode = new CFeFuncNode(fefuncnode);
 	fefuncnode->typeHierarchy.insert(typeid(SPFeFuncNode));
 
@@ -152,6 +152,12 @@ sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
     fefuncnode->amplitude = 1;
     fefuncnode->exponent = 1;
     fefuncnode->offset = 0;
+}
+
+static void
+sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
+{
+	new (fefuncnode) SPFeFuncNode();
 }
 
 /**

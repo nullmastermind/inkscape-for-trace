@@ -39,7 +39,7 @@ GType sp_glyph_kerning_h_get_type(void)
             sizeof(SPGlyphKerningClass),
             NULL,       /* base_init */
             NULL,       /* base_finalize */
-            (GClassInitFunc) sp_glyph_kerning_class_init,
+            0, //(GClassInitFunc) sp_glyph_kerning_class_init,
             NULL,       /* class_finalize */
             NULL,       /* class_data */
             sizeof(SPHkern),
@@ -47,7 +47,7 @@ GType sp_glyph_kerning_h_get_type(void)
             (GInstanceInitFunc) sp_glyph_kerning_init,
             NULL,       /* value_table */
         };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPHkern", &info, (GTypeFlags) 0);
+        type = g_type_register_static(G_TYPE_OBJECT, "SPHkern", &info, (GTypeFlags) 0);
     }
 
     return type;
@@ -62,7 +62,7 @@ GType sp_glyph_kerning_v_get_type(void)
             sizeof(SPGlyphKerningClass),
             NULL,       /* base_init */
             NULL,       /* base_finalize */
-            (GClassInitFunc) sp_glyph_kerning_class_init,
+            0, //(GClassInitFunc) sp_glyph_kerning_class_init,
             NULL,       /* class_finalize */
             NULL,       /* class_data */
             sizeof(SPVkern),
@@ -70,7 +70,7 @@ GType sp_glyph_kerning_v_get_type(void)
             (GInstanceInitFunc) sp_glyph_kerning_init,
             NULL,       /* value_table */
         };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPVkern", &info, (GTypeFlags) 0);
+        type = g_type_register_static(G_TYPE_OBJECT, "SPVkern", &info, (GTypeFlags) 0);
     }
 
     return type;
@@ -88,8 +88,9 @@ CGlyphKerning::CGlyphKerning(SPGlyphKerning* kerning) : CObject(kerning) {
 CGlyphKerning::~CGlyphKerning() {
 }
 
-static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
-{
+SPGlyphKerning::SPGlyphKerning() : SPObject() {
+	SPGlyphKerning* glyph = this;
+
 	glyph->cglyphkerning = new CGlyphKerning(glyph);
 	glyph->typeHierarchy.insert(typeid(SPGlyphKerning));
 
@@ -102,6 +103,11 @@ static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
     glyph->u2 = NULL;
     glyph->g2 = NULL;
     glyph->k = 0;
+}
+
+static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
+{
+	new (glyph) SPGlyphKerning();
 }
 
 void CGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {

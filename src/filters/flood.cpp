@@ -28,7 +28,7 @@
 #include "display/nr-filter-flood.h"
 
 /* FeFlood base class */
-G_DEFINE_TYPE(SPFeFlood, sp_feFlood, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeFlood, sp_feFlood, G_TYPE_OBJECT);
 
 static void sp_feFlood_class_init(SPFeFloodClass *klass)
 {
@@ -41,8 +41,9 @@ CFeFlood::CFeFlood(SPFeFlood* flood) : CFilterPrimitive(flood) {
 CFeFlood::~CFeFlood() {
 }
 
-static void sp_feFlood_init(SPFeFlood *feFlood)
-{
+SPFeFlood::SPFeFlood() : SPFilterPrimitive() {
+	SPFeFlood* feFlood = this;
+
 	feFlood->cfeflood = new CFeFlood(feFlood);
 	feFlood->typeHierarchy.insert(typeid(SPFeFlood));
 
@@ -50,8 +51,15 @@ static void sp_feFlood_init(SPFeFlood *feFlood)
 	feFlood->cfilterprimitive = feFlood->cfeflood;
 	feFlood->cobject = feFlood->cfeflood;
 
+	feFlood->color = 0;
+
     feFlood->opacity = 1;
     feFlood->icc = NULL;
+}
+
+static void sp_feFlood_init(SPFeFlood *feFlood)
+{
+	new (feFlood) SPFeFlood();
 }
 
 /**

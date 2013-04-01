@@ -27,6 +27,7 @@ class CBox3DSide;
 // FIXME: Would it be better to inherit from SPPath instead?
 class Box3DSide : public SPPolygon {
 public:
+	Box3DSide();
 	CBox3DSide* cbox3dside;
 
     Box3D::Axis dir1;

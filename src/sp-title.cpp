@@ -16,7 +16,7 @@
 #include "sp-title.h"
 #include "xml/repr.h"
 
-G_DEFINE_TYPE(SPTitle, sp_title, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPTitle, sp_title, G_TYPE_OBJECT);
 
 static void
 sp_title_class_init(SPTitleClass *klass)
@@ -30,14 +30,20 @@ CTitle::CTitle(SPTitle* title) : CObject(title) {
 CTitle::~CTitle() {
 }
 
-static void
-sp_title_init(SPTitle *desc)
-{
+SPTitle::SPTitle() : SPObject() {
+	SPTitle* desc = this;
+
 	desc->ctitle = new CTitle(desc);
 	desc->typeHierarchy.insert(typeid(SPTitle));
 
 	delete desc->cobject;
 	desc->cobject = desc->ctitle;
+}
+
+static void
+sp_title_init(SPTitle *desc)
+{
+	new (desc) SPTitle();
 }
 
 Inkscape::XML::Node* CTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

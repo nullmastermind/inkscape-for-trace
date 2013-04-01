@@ -28,6 +28,7 @@ typedef enum {
 
 class SPStar : public SPPolygon {
 public:
+	SPStar();
 	CStar* cstar;
 
 	gint sides;

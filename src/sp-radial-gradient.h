@@ -15,6 +15,7 @@ class CRadialGradient;
 /** Radial gradient. */
 class SPRadialGradient : public SPGradient {
 public:
+	SPRadialGradient();
 	CRadialGradient* cradialgradient;
 
     SVGLength cx;

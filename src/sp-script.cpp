@@ -16,7 +16,7 @@
 #include <cstring>
 #include "document.h"
 
-G_DEFINE_TYPE(SPScript, sp_script, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPScript, sp_script, G_TYPE_OBJECT);
 
 static void sp_script_class_init(SPScriptClass *sc)
 {
@@ -29,13 +29,21 @@ CScript::CScript(SPScript* script) : CObject(script) {
 CScript::~CScript() {
 }
 
-static void sp_script_init(SPScript *script)
-{
+SPScript::SPScript() : SPObject() {
+	SPScript* script = this;
+
 	script->cscript = new CScript(script);
 	script->typeHierarchy.insert(typeid(SPScript));
 
 	delete script->cobject;
 	script->cobject = script->cscript;
+
+	script->xlinkhref = NULL;
+}
+
+static void sp_script_init(SPScript *script)
+{
+	new (script) SPScript();
 }
 
 void CScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {

@@ -22,6 +22,7 @@ class CTitle;
 
 class SPTitle : public SPObject {
 public:
+	SPTitle();
 	CTitle* ctitle;
 };
 

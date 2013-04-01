@@ -25,7 +25,7 @@
 #include "inkscape.h"
 
 
-G_DEFINE_TYPE(SPLine, sp_line, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPLine, sp_line, G_TYPE_OBJECT);
 
 static void
 sp_line_class_init(SPLineClass *klass)
@@ -39,9 +39,9 @@ CLine::CLine(SPLine* line) : CShape(line) {
 CLine::~CLine() {
 }
 
-static void
-sp_line_init(SPLine * line)
-{
+SPLine::SPLine() : SPShape() {
+	SPLine* line = this;
+
 	line->cline = new CLine(line);
 	line->typeHierarchy.insert(typeid(SPLine));
 
@@ -55,6 +55,12 @@ sp_line_init(SPLine * line)
     line->y1.unset();
     line->x2.unset();
     line->y2.unset();
+}
+
+static void
+sp_line_init(SPLine * line)
+{
+	new (line) SPLine();
 }
 
 void CLine::build(SPDocument * document, Inkscape::XML::Node * repr) {

@@ -199,14 +199,14 @@ GType ColorProfile::getType()
         GTypeInfo info = {
             sizeof(ColorProfileClass),
             NULL, NULL,
-            (GClassInitFunc) ColorProfile::classInit,
+            0, //(GClassInitFunc) ColorProfile::classInit,
             NULL, NULL,
             sizeof(ColorProfile),
             16,
             (GInstanceInitFunc) ColorProfile::init,
             NULL,   /* value_table */
         };
-        type = g_type_register_static( SP_TYPE_OBJECT, "ColorProfile", &info, static_cast<GTypeFlags>(0) );
+        type = g_type_register_static( G_TYPE_OBJECT, "ColorProfile", &info, static_cast<GTypeFlags>(0) );
     }
     return type;
 }
@@ -228,11 +228,9 @@ CColorProfile::CColorProfile(ColorProfile* cp) : CObject(cp) {
 CColorProfile::~CColorProfile() {
 }
 
-/**
- * Callback for ColorProfile object initialization.
- */
-void ColorProfile::init( ColorProfile *cprof )
-{
+ColorProfile::ColorProfile() : SPObject() {
+	ColorProfile* cprof = this;
+
 	cprof->ccolorprofile = new CColorProfile(cprof);
 	cprof->typeHierarchy.insert(typeid(ColorProfile));
 
@@ -246,6 +244,14 @@ void ColorProfile::init( ColorProfile *cprof )
     cprof->name = 0;
     cprof->intentStr = 0;
     cprof->rendering_intent = Inkscape::RENDERING_INTENT_UNKNOWN;
+}
+
+/**
+ * Callback for ColorProfile object initialization.
+ */
+void ColorProfile::init( ColorProfile *cprof )
+{
+	new (cprof) ColorProfile();
 }
 
 /**

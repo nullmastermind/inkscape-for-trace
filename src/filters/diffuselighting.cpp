@@ -36,7 +36,7 @@
 /* FeDiffuseLighting base class */
 static void sp_feDiffuseLighting_children_modified(SPFeDiffuseLighting *sp_diffuselighting);
 
-G_DEFINE_TYPE(SPFeDiffuseLighting, sp_feDiffuseLighting, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeDiffuseLighting, sp_feDiffuseLighting, G_TYPE_OBJECT);
 
 static void
 sp_feDiffuseLighting_class_init(SPFeDiffuseLightingClass *klass)
@@ -50,9 +50,9 @@ CFeDiffuseLighting::CFeDiffuseLighting(SPFeDiffuseLighting* dl) : CFilterPrimiti
 CFeDiffuseLighting::~CFeDiffuseLighting() {
 }
 
-static void
-sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
-{
+SPFeDiffuseLighting::SPFeDiffuseLighting() : SPFilterPrimitive() {
+	SPFeDiffuseLighting* feDiffuseLighting = this;
+
 	feDiffuseLighting->cfediffuselighting = new CFeDiffuseLighting(feDiffuseLighting);
 	feDiffuseLighting->typeHierarchy.insert(typeid(SPFeDiffuseLighting));
 
@@ -71,6 +71,12 @@ sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
     feDiffuseLighting->surfaceScale_set = FALSE;
     feDiffuseLighting->diffuseConstant_set = FALSE;
     feDiffuseLighting->lighting_color_set = FALSE;
+}
+
+static void
+sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
+{
+	new (feDiffuseLighting) SPFeDiffuseLighting();
 }
 
 /**

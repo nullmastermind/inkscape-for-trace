@@ -35,6 +35,7 @@ class CMarker;
 
 class SPMarker : public SPGroup {
 public:
+	SPMarker();
 	CMarker* cmarker;
 
 	/* units */

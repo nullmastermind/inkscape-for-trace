@@ -61,7 +61,7 @@
 /*#####################################################
 #  SPTEXT
 #####################################################*/
-G_DEFINE_TYPE(SPText, sp_text, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPText, sp_text, G_TYPE_OBJECT);
 
 static void
 sp_text_class_init (SPTextClass *classname)
@@ -75,9 +75,9 @@ CText::CText(SPText* text) : CItem(text) {
 CText::~CText() {
 }
 
-static void
-sp_text_init (SPText *text)
-{
+SPText::SPText() : SPItem() {
+	SPText* text = this;
+
 	text->ctext = new CText(text);
 	text->typeHierarchy.insert(typeid(SPText));
 
@@ -87,6 +87,12 @@ sp_text_init (SPText *text)
 
     new (&text->layout) Inkscape::Text::Layout;
     new (&text->attributes) TextTagAttributes;
+}
+
+static void
+sp_text_init (SPText *text)
+{
+	new (text) SPText();
 }
 
 void CText::release() {

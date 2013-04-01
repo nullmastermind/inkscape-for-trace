@@ -23,7 +23,7 @@
 #include "filters/merge.h"
 #include "display/nr-filter-types.h"
 
-G_DEFINE_TYPE(SPFeMergeNode, sp_feMergeNode, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFeMergeNode, sp_feMergeNode, G_TYPE_OBJECT);
 
 static void
 sp_feMergeNode_class_init(SPFeMergeNodeClass *klass)
@@ -37,9 +37,9 @@ CFeMergeNode::CFeMergeNode(SPFeMergeNode* mergenode) : CObject(mergenode) {
 CFeMergeNode::~CFeMergeNode() {
 }
 
-static void
-sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
-{
+SPFeMergeNode::SPFeMergeNode() : SPObject() {
+	SPFeMergeNode* feMergeNode = this;
+
 	feMergeNode->cfemergenode = new CFeMergeNode(feMergeNode);
 	feMergeNode->typeHierarchy.insert(typeid(SPFeMergeNode));
 
@@ -47,6 +47,12 @@ sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
 	feMergeNode->cobject = feMergeNode->cfemergenode;
 
     feMergeNode->input = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+}
+
+static void
+sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
+{
+	new (feMergeNode) SPFeMergeNode();
 }
 
 /**

@@ -30,6 +30,7 @@ class CFeDiffuseLighting;
 
 class SPFeDiffuseLighting : public SPFilterPrimitive {
 public:
+	SPFeDiffuseLighting();
 	CFeDiffuseLighting* cfediffuselighting;
 
     gfloat surfaceScale;

@@ -78,6 +78,7 @@ class CFontFace;
 
 class SPFontFace : public SPObject {
 public:
+	SPFontFace();
 	CFontFace* cfontface;
 
     char* font_family;

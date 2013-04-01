@@ -26,7 +26,7 @@
 #include "sp-symbol.h"
 #include "document.h"
 
-G_DEFINE_TYPE(SPSymbol, sp_symbol, SP_TYPE_GROUP);
+G_DEFINE_TYPE(SPSymbol, sp_symbol, G_TYPE_OBJECT);
 
 static void sp_symbol_class_init(SPSymbolClass *klass)
 {
@@ -39,8 +39,9 @@ CSymbol::CSymbol(SPSymbol* symbol) : CGroup(symbol) {
 CSymbol::~CSymbol() {
 }
 
-static void sp_symbol_init(SPSymbol *symbol)
-{
+SPSymbol::SPSymbol() : SPGroup() {
+	SPSymbol* symbol = this;
+
 	symbol->csymbol = new CSymbol(symbol);
 	symbol->typeHierarchy.insert(typeid(SPSymbol));
 
@@ -50,8 +51,17 @@ static void sp_symbol_init(SPSymbol *symbol)
 	symbol->citem = symbol->csymbol;
 	symbol->cobject = symbol->csymbol;
 
+	symbol->aspect_align = 0;
+	symbol->aspect_clip = 0;
+	symbol->aspect_set = 0;
+
     symbol->viewBox_set = FALSE;
     symbol->c2p = Geom::identity();
+}
+
+static void sp_symbol_init(SPSymbol *symbol)
+{
+	new (symbol) SPSymbol();
 }
 
 void CSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {

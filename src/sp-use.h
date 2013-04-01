@@ -28,6 +28,7 @@ class CUse;
 
 class SPUse : public SPItem {
 public:
+	SPUse();
 	CUse* cuse;
 
     // item built from the original's repr (the visible clone)

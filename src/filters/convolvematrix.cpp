@@ -29,7 +29,7 @@
 #include "display/nr-filter-convolve-matrix.h"
 
 /* FeConvolveMatrix base class */
-G_DEFINE_TYPE(SPFeConvolveMatrix, sp_feConvolveMatrix, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeConvolveMatrix, sp_feConvolveMatrix, G_TYPE_OBJECT);
 
 static void
 sp_feConvolveMatrix_class_init(SPFeConvolveMatrixClass *klass)
@@ -43,15 +43,19 @@ CFeConvolveMatrix::CFeConvolveMatrix(SPFeConvolveMatrix* matrix) : CFilterPrimit
 CFeConvolveMatrix::~CFeConvolveMatrix() {
 }
 
-static void
-sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
-{
+SPFeConvolveMatrix::SPFeConvolveMatrix() : SPFilterPrimitive() {
+	SPFeConvolveMatrix* feConvolveMatrix = this;
+
 	feConvolveMatrix->cfeconvolvematrix = new CFeConvolveMatrix(feConvolveMatrix);
 	feConvolveMatrix->typeHierarchy.insert(typeid(SPFeConvolveMatrix));
 
 	delete feConvolveMatrix->cfilterprimitive;
 	feConvolveMatrix->cfilterprimitive = feConvolveMatrix->cfeconvolvematrix;
 	feConvolveMatrix->cobject = feConvolveMatrix->cfeconvolvematrix;
+
+	feConvolveMatrix->bias = 0;
+	feConvolveMatrix->divisorIsSet = 0;
+	feConvolveMatrix->divisor = 0;
 
     //Setting default values:
     feConvolveMatrix->order.set("3 3");
@@ -64,6 +68,12 @@ sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
     feConvolveMatrix->targetXIsSet = false;
     feConvolveMatrix->targetYIsSet = false;
     feConvolveMatrix->kernelMatrixIsSet = false;
+}
+
+static void
+sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
+{
+	new (feConvolveMatrix) SPFeConvolveMatrix();
 }
 
 /**

@@ -33,7 +33,7 @@
 
 /* Metadata base class */
 
-G_DEFINE_TYPE(SPMetadata, sp_metadata, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPMetadata, sp_metadata, G_TYPE_OBJECT);
 
 static void
 sp_metadata_class_init (SPMetadataClass *klass)
@@ -47,9 +47,9 @@ CMetadata::CMetadata(SPMetadata* metadata) : CObject(metadata) {
 CMetadata::~CMetadata() {
 }
 
-static void
-sp_metadata_init (SPMetadata *metadata)
-{
+SPMetadata::SPMetadata() : SPObject() {
+	SPMetadata* metadata = this;
+
 	metadata->cmetadata = new CMetadata(metadata);
 	metadata->typeHierarchy.insert(typeid(SPMetadata));
 
@@ -58,6 +58,12 @@ sp_metadata_init (SPMetadata *metadata)
 
     (void)metadata;
     debug("0x%08x",(unsigned int)metadata);
+}
+
+static void
+sp_metadata_init (SPMetadata *metadata)
+{
+	new (metadata) SPMetadata();
 }
 
 namespace {

@@ -25,7 +25,7 @@
 #include "xml/repr.h"
 #include "document.h"
 
-G_DEFINE_TYPE(SPPolygon, sp_polygon, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPPolygon, sp_polygon, G_TYPE_OBJECT);
 
 static void sp_polygon_class_init(SPPolygonClass *pc)
 {
@@ -38,8 +38,9 @@ CPolygon::CPolygon(SPPolygon* polygon) : CShape(polygon) {
 CPolygon::~CPolygon() {
 }
 
-static void sp_polygon_init(SPPolygon *polygon)
-{
+SPPolygon::SPPolygon() : SPShape() {
+	SPPolygon* polygon = this;
+
 	polygon->cpolygon = new CPolygon(polygon);
 	polygon->typeHierarchy.insert(typeid(SPPolygon));
 
@@ -48,6 +49,11 @@ static void sp_polygon_init(SPPolygon *polygon)
 	polygon->clpeitem = polygon->cpolygon;
 	polygon->citem = polygon->cpolygon;
 	polygon->cobject = polygon->cpolygon;
+}
+
+static void sp_polygon_init(SPPolygon *polygon)
+{
+	new (polygon) SPPolygon();
 }
 
 void CPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {

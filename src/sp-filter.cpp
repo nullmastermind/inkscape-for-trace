@@ -41,7 +41,7 @@ using std::pair;
 static void filter_ref_changed(SPObject *old_ref, SPObject *ref, SPFilter *filter);
 static void filter_ref_modified(SPObject *href, guint flags, SPFilter *filter);
 
-G_DEFINE_TYPE(SPFilter, sp_filter, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFilter, sp_filter, G_TYPE_OBJECT);
 
 static void
 sp_filter_class_init(SPFilterClass *klass)
@@ -55,9 +55,9 @@ CFilter::CFilter(SPFilter* filter) : CObject(filter) {
 CFilter::~CFilter() {
 }
 
-static void
-sp_filter_init(SPFilter *filter)
-{
+SPFilter::SPFilter() : SPObject() {
+	SPFilter* filter = this;
+
 	filter->cfilter = new CFilter(filter);
 	filter->typeHierarchy.insert(typeid(SPFilter));
 
@@ -86,6 +86,12 @@ sp_filter_init(SPFilter *filter)
     filter->filterRes = NumberOptNumber();
 
     new (&filter->modified_connection) sigc::connection();
+}
+
+static void
+sp_filter_init(SPFilter *filter)
+{
+	new (filter) SPFilter();
 }
 
 /**

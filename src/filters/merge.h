@@ -20,6 +20,7 @@ class CFeMerge;
 
 class SPFeMerge : public SPFilterPrimitive {
 public:
+	SPFeMerge();
     CFeMerge* cfemerge;
 };
 

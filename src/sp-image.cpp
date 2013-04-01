@@ -499,7 +499,7 @@ GdkPixbuf* pixbuf_new_from_file( const char *filename, GError **error )
 }
 }
 
-G_DEFINE_TYPE(SPImage, sp_image, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPImage, sp_image, G_TYPE_OBJECT);
 
 static void sp_image_class_init( SPImageClass * klass )
 {
@@ -512,14 +512,17 @@ CImage::CImage(SPImage* image) : CItem(image) {
 CImage::~CImage() {
 }
 
-static void sp_image_init( SPImage *image )
-{
+SPImage::SPImage() : SPItem() {
+	SPImage* image = this;
+
 	image->cimage = new CImage(image);
 	image->typeHierarchy.insert(typeid(SPImage));
 
 	delete image->citem;
 	image->citem = image->cimage;
 	image->cobject = image->cimage;
+
+	image->aspect_clip = 0;
 
     image->x.unset();
     image->y.unset();
@@ -539,6 +542,11 @@ static void sp_image_init( SPImage *image )
     image->pixbuf = 0;
     image->pixPath = 0;
     image->lastMod = 0;
+}
+
+static void sp_image_init( SPImage *image )
+{
+	new (image) SPImage();
 }
 
 void CImage::build(SPDocument *document, Inkscape::XML::Node *repr) {

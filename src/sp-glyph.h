@@ -39,6 +39,7 @@ class CGlyph;
 
 class SPGlyph : public SPObject {
 public:
+	SPGlyph();
 	CGlyph* cglyph;
 
     Glib::ustring unicode;

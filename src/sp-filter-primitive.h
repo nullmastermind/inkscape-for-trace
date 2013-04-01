@@ -31,6 +31,7 @@ class CFilterPrimitive;
 
 class SPFilterPrimitive : public SPObject {
 public:
+	SPFilterPrimitive();
 	CFilterPrimitive* cfilterprimitive;
 
     int image_in, image_out;

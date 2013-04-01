@@ -20,7 +20,7 @@ static void sp_flowpara_init (SPFlowpara *group);
 static void sp_flowline_init (SPFlowline *group);
 static void sp_flowregionbreak_init (SPFlowregionbreak *group);
 
-G_DEFINE_TYPE(SPFlowdiv, sp_flowdiv, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPFlowdiv, sp_flowdiv, G_TYPE_OBJECT);
 
 static void sp_flowdiv_class_init(SPFlowdivClass *klass)
 {
@@ -33,14 +33,20 @@ CFlowdiv::CFlowdiv(SPFlowdiv* flowdiv) : CItem(flowdiv) {
 CFlowdiv::~CFlowdiv() {
 }
 
-static void sp_flowdiv_init(SPFlowdiv *group)
-{
+SPFlowdiv::SPFlowdiv() : SPItem() {
+	SPFlowdiv* group = this;
+
 	group->cflowdiv = new CFlowdiv(group);
 	group->typeHierarchy.insert(typeid(SPFlowdiv));
 
 	delete group->citem;
 	group->citem = group->cflowdiv;
 	group->cobject = group->cflowdiv;
+}
+
+static void sp_flowdiv_init(SPFlowdiv *group)
+{
+	new (group) SPFlowdiv();
 }
 
 void CFlowdiv::release() {
@@ -170,7 +176,7 @@ Inkscape::XML::Node* CFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape:
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowtspan, sp_flowtspan, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPFlowtspan, sp_flowtspan, G_TYPE_OBJECT);
 
 static void sp_flowtspan_class_init(SPFlowtspanClass *klass)
 {
@@ -183,14 +189,20 @@ CFlowtspan::CFlowtspan(SPFlowtspan* flowtspan) : CItem(flowtspan) {
 CFlowtspan::~CFlowtspan() {
 }
 
-static void sp_flowtspan_init(SPFlowtspan *group)
-{
+SPFlowtspan::SPFlowtspan() : SPItem() {
+	SPFlowtspan* group = this;
+
 	group->cflowtspan = new CFlowtspan(group);
 	group->typeHierarchy.insert(typeid(SPFlowtspan));
 
 	delete group->citem;
 	group->citem = group->cflowtspan;
 	group->cobject = group->cflowtspan;
+}
+
+static void sp_flowtspan_init(SPFlowtspan *group)
+{
+	new (group) SPFlowtspan();
 }
 
 void CFlowtspan::release() {
@@ -319,7 +331,7 @@ Inkscape::XML::Node *CFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscap
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowpara, sp_flowpara, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPFlowpara, sp_flowpara, G_TYPE_OBJECT);
 
 static void sp_flowpara_class_init(SPFlowparaClass *klass)
 {
@@ -332,14 +344,20 @@ CFlowpara::CFlowpara(SPFlowpara* flowpara) : CItem(flowpara) {
 CFlowpara::~CFlowpara() {
 }
 
-static void sp_flowpara_init (SPFlowpara *group)
-{
+SPFlowpara::SPFlowpara() : SPItem() {
+	SPFlowpara* group = this;
+
 	group->cflowpara = new CFlowpara(group);
 	group->typeHierarchy.insert(typeid(SPFlowpara));
 
 	delete group->citem;
 	group->citem = group->cflowpara;
 	group->cobject = group->cflowpara;
+}
+
+static void sp_flowpara_init (SPFlowpara *group)
+{
+	new (group) SPFlowpara();
 }
 
 void CFlowpara::release() {
@@ -466,7 +484,7 @@ Inkscape::XML::Node *CFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowline, sp_flowline, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFlowline, sp_flowline, G_TYPE_OBJECT);
 
 static void sp_flowline_class_init(SPFlowlineClass *klass)
 {
@@ -479,13 +497,19 @@ CFlowline::CFlowline(SPFlowline* flowline) : CObject(flowline) {
 CFlowline::~CFlowline() {
 }
 
-static void sp_flowline_init(SPFlowline *group)
-{
+SPFlowline::SPFlowline() : SPObject() {
+	SPFlowline* group = this;
+
 	group->cflowline = new CFlowline(group);
 	group->typeHierarchy.insert(typeid(SPFlowline));
 
 	delete group->cobject;
 	group->cobject = group->cflowline;
+}
+
+static void sp_flowline_init(SPFlowline *group)
+{
+	new (group) SPFlowline();
 }
 
 void CFlowline::release() {
@@ -520,7 +544,7 @@ Inkscape::XML::Node *CFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowregionbreak, sp_flowregionbreak, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFlowregionbreak, sp_flowregionbreak, G_TYPE_OBJECT);
 
 static void sp_flowregionbreak_class_init(SPFlowregionbreakClass *klass)
 {
@@ -533,13 +557,19 @@ CFlowregionbreak::CFlowregionbreak(SPFlowregionbreak* flowregionbreak) : CObject
 CFlowregionbreak::~CFlowregionbreak() {
 }
 
-static void sp_flowregionbreak_init(SPFlowregionbreak *group)
-{
+SPFlowregionbreak::SPFlowregionbreak() : SPObject() {
+	SPFlowregionbreak* group = this;
+
 	group->cflowregionbreak = new CFlowregionbreak(group);
 	group->typeHierarchy.insert(typeid(SPFlowregionbreak));
 
 	delete group->cobject;
 	group->cobject = group->cflowregionbreak;
+}
+
+static void sp_flowregionbreak_init(SPFlowregionbreak *group)
+{
+	new (group) SPFlowregionbreak();
 }
 
 void CFlowregionbreak::release() {

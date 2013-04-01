@@ -34,6 +34,7 @@ class CGuide;
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
 class SPGuide : public SPObject {
 public:
+	SPGuide();
 	CGuide* cguide;
 
     char* label;

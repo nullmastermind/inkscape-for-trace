@@ -25,6 +25,7 @@ class CFeSpotLight;
 
 class SPFeSpotLight : public SPObject {
 public:
+	SPFeSpotLight();
 	CFeSpotLight* cfespotlight;
 
     /** x coordinate of the light source */

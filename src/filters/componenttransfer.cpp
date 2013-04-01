@@ -28,7 +28,7 @@
 #include "display/nr-filter-component-transfer.h"
 
 /* FeComponentTransfer base class */
-G_DEFINE_TYPE(SPFeComponentTransfer, sp_feComponentTransfer, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeComponentTransfer, sp_feComponentTransfer, G_TYPE_OBJECT);
 
 static void
 sp_feComponentTransfer_class_init(SPFeComponentTransferClass *klass)
@@ -42,15 +42,23 @@ CFeComponentTransfer::CFeComponentTransfer(SPFeComponentTransfer* tr) : CFilterP
 CFeComponentTransfer::~CFeComponentTransfer() {
 }
 
-static void
-sp_feComponentTransfer_init(SPFeComponentTransfer *feComponentTransfer)
-{
+SPFeComponentTransfer::SPFeComponentTransfer() : SPFilterPrimitive() {
+	SPFeComponentTransfer* feComponentTransfer = this;
+
 	feComponentTransfer->cfecomponenttransfer = new CFeComponentTransfer(feComponentTransfer);
 	feComponentTransfer->typeHierarchy.insert(typeid(SPFeComponentTransfer));
 
 	delete feComponentTransfer->cfilterprimitive;
 	feComponentTransfer->cfilterprimitive = feComponentTransfer->cfecomponenttransfer;
 	feComponentTransfer->cobject = feComponentTransfer->cfecomponenttransfer;
+
+	feComponentTransfer->renderer = NULL;
+}
+
+static void
+sp_feComponentTransfer_init(SPFeComponentTransfer *feComponentTransfer)
+{
+	new (feComponentTransfer) SPFeComponentTransfer();
 }
 
 /**

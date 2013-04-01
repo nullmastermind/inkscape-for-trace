@@ -29,7 +29,7 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-G_DEFINE_TYPE(SPFeSpotLight, sp_fespotlight, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPFeSpotLight, sp_fespotlight, G_TYPE_OBJECT);
 
 static void
 sp_fespotlight_class_init(SPFeSpotLightClass *klass)
@@ -43,9 +43,9 @@ CFeSpotLight::CFeSpotLight(SPFeSpotLight* spotlight) : CObject(spotlight) {
 CFeSpotLight::~CFeSpotLight() {
 }
 
-static void
-sp_fespotlight_init(SPFeSpotLight *fespotlight)
-{
+SPFeSpotLight::SPFeSpotLight() : SPObject() {
+	SPFeSpotLight* fespotlight = this;
+
 	fespotlight->cfespotlight = new CFeSpotLight(fespotlight);
 	fespotlight->typeHierarchy.insert(typeid(SPFeSpotLight));
 
@@ -69,6 +69,12 @@ sp_fespotlight_init(SPFeSpotLight *fespotlight)
     fespotlight->pointsAtZ_set = FALSE;
     fespotlight->specularExponent_set = FALSE;
     fespotlight->limitingConeAngle_set = FALSE;
+}
+
+static void
+sp_fespotlight_init(SPFeSpotLight *fespotlight)
+{
+	new (fespotlight) SPFeSpotLight();
 }
 
 /**

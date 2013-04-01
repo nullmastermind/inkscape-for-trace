@@ -17,6 +17,8 @@ GType sp_polyline_get_type (void) G_GNUC_CONST;
 
 class SPPolyLine : public SPShape {
 public:
+	SPPolyLine();
+
 	CPolyLine* cpolyline;
 
 private:

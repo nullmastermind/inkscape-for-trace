@@ -24,6 +24,7 @@ class CScript;
 
 class SPScript : public SPObject {
 public:
+	SPScript();
 	CScript* cscript;
 
 	gchar *xlinkhref;

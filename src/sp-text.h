@@ -36,6 +36,7 @@ class CText;
 
 class SPText : public SPItem {
 public:
+	SPText();
 	CText* ctext;
 
     /** Converts the text object to its component curves */

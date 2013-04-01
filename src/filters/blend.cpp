@@ -31,7 +31,7 @@
 #include "display/nr-filter-types.h"
 
 /* FeBlend base class */
-G_DEFINE_TYPE(SPFeBlend, sp_feBlend, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeBlend, sp_feBlend, G_TYPE_OBJECT);
 
 static void
 sp_feBlend_class_init(SPFeBlendClass *klass)
@@ -45,9 +45,9 @@ CFeBlend::CFeBlend(SPFeBlend* blend) : CFilterPrimitive(blend) {
 CFeBlend::~CFeBlend() {
 }
 
-static void
-sp_feBlend_init(SPFeBlend *feBlend)
-{
+SPFeBlend::SPFeBlend() : SPFilterPrimitive() {
+	SPFeBlend* feBlend = this;
+
 	feBlend->cfeblend = new CFeBlend(feBlend);
 	feBlend->typeHierarchy.insert(typeid(SPFeBlend));
 
@@ -55,7 +55,15 @@ sp_feBlend_init(SPFeBlend *feBlend)
 	feBlend->cfilterprimitive = feBlend->cfeblend;
 	feBlend->cobject = feBlend->cfeblend;
 
+	feBlend->blend_mode = Inkscape::Filters::BLEND_NORMAL;
+
     feBlend->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+}
+
+static void
+sp_feBlend_init(SPFeBlend *feBlend)
+{
+	new (feBlend) SPFeBlend();
 }
 
 /**

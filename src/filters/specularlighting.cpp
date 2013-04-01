@@ -36,7 +36,7 @@
 /* FeSpecularLighting base class */
 static void sp_feSpecularLighting_children_modified(SPFeSpecularLighting *sp_specularlighting);
 
-G_DEFINE_TYPE(SPFeSpecularLighting, sp_feSpecularLighting, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeSpecularLighting, sp_feSpecularLighting, G_TYPE_OBJECT);
 
 static void
 sp_feSpecularLighting_class_init(SPFeSpecularLightingClass *klass)
@@ -50,9 +50,9 @@ CFeSpecularLighting::CFeSpecularLighting(SPFeSpecularLighting* lighting) : CFilt
 CFeSpecularLighting::~CFeSpecularLighting() {
 }
 
-static void
-sp_feSpecularLighting_init(SPFeSpecularLighting *feSpecularLighting)
-{
+SPFeSpecularLighting::SPFeSpecularLighting() : SPFilterPrimitive() {
+	SPFeSpecularLighting* feSpecularLighting = this;
+
 	feSpecularLighting->cfespecularlighting = new CFeSpecularLighting(feSpecularLighting);
 	feSpecularLighting->typeHierarchy.insert(typeid(SPFeSpecularLighting));
 
@@ -73,6 +73,12 @@ sp_feSpecularLighting_init(SPFeSpecularLighting *feSpecularLighting)
     feSpecularLighting->specularConstant_set = FALSE;
     feSpecularLighting->specularExponent_set = FALSE;
     feSpecularLighting->lighting_color_set = FALSE;
+}
+
+static void
+sp_feSpecularLighting_init(SPFeSpecularLighting *feSpecularLighting)
+{
+	new (feSpecularLighting) SPFeSpecularLighting();
 }
 
 /**

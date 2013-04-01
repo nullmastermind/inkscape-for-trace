@@ -27,7 +27,7 @@
 static void sp_flowregion_init (SPFlowregion *group);
 static void sp_flowregion_dispose (GObject *object);
 
-G_DEFINE_TYPE(SPFlowregion, sp_flowregion, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPFlowregion, sp_flowregion, G_TYPE_OBJECT);
 
 static void sp_flowregionexclude_init (SPFlowregionExclude *group);
 static void sp_flowregionexclude_dispose (GObject *object);
@@ -50,9 +50,9 @@ CFlowregion::CFlowregion(SPFlowregion* flowregion) : CItem(flowregion) {
 CFlowregion::~CFlowregion() {
 }
 
-static void
-sp_flowregion_init (SPFlowregion *group)
-{
+SPFlowregion::SPFlowregion() : SPItem() {
+	SPFlowregion* group = this;
+
 	group->cflowregion = new CFlowregion(group);
 	group->typeHierarchy.insert(typeid(SPFlowregion));
 
@@ -61,6 +61,12 @@ sp_flowregion_init (SPFlowregion *group)
 	group->cobject = group->cflowregion;
 
 	new (&group->computed) std::vector<Shape*>;
+}
+
+static void
+sp_flowregion_init (SPFlowregion *group)
+{
+	new (group) SPFlowregion();
 }
 
 static void
@@ -215,7 +221,7 @@ gchar* CFlowregion::description() {
  *
  */
 
-G_DEFINE_TYPE(SPFlowregionExclude, sp_flowregionexclude, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPFlowregionExclude, sp_flowregionexclude, G_TYPE_OBJECT);
 
 static void
 sp_flowregionexclude_class_init (SPFlowregionExcludeClass *klass)
@@ -232,9 +238,9 @@ CFlowregionExclude::CFlowregionExclude(SPFlowregionExclude* flowregionexclude) :
 CFlowregionExclude::~CFlowregionExclude() {
 }
 
-static void
-sp_flowregionexclude_init (SPFlowregionExclude *group)
-{
+SPFlowregionExclude::SPFlowregionExclude() : SPItem() {
+	SPFlowregionExclude* group = this;
+
 	group->cflowregionexclude = new CFlowregionExclude(group);
 	group->typeHierarchy.insert(typeid(SPFlowregionExclude));
 
@@ -243,6 +249,12 @@ sp_flowregionexclude_init (SPFlowregionExclude *group)
 	group->cobject = group->cflowregionexclude;
 
 	group->computed = NULL;
+}
+
+static void
+sp_flowregionexclude_init (SPFlowregionExclude *group)
+{
+	new (group) SPFlowregionExclude();
 }
 
 static void

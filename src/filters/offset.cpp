@@ -26,7 +26,7 @@
 #include "display/nr-filter-offset.h"
 
 /* FeOffset base class */
-G_DEFINE_TYPE(SPFeOffset, sp_feOffset, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeOffset, sp_feOffset, G_TYPE_OBJECT);
 
 static void
 sp_feOffset_class_init(SPFeOffsetClass *klass)
@@ -40,9 +40,9 @@ CFeOffset::CFeOffset(SPFeOffset* offset) : CFilterPrimitive(offset) {
 CFeOffset::~CFeOffset() {
 }
 
-static void
-sp_feOffset_init(SPFeOffset *feOffset)
-{
+SPFeOffset::SPFeOffset() : SPFilterPrimitive() {
+	SPFeOffset* feOffset = this;
+
 	feOffset->cfeoffset = new CFeOffset(feOffset);
 	feOffset->typeHierarchy.insert(typeid(SPFeOffset));
 
@@ -52,6 +52,12 @@ sp_feOffset_init(SPFeOffset *feOffset)
 
     feOffset->dx = 0;
     feOffset->dy = 0;
+}
+
+static void
+sp_feOffset_init(SPFeOffset *feOffset)
+{
+	new (feOffset) SPFeOffset();
 }
 
 /**

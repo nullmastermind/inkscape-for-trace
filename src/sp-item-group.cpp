@@ -57,7 +57,7 @@ static void sp_group_dispose(GObject *object);
 
 static void sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write);
 
-G_DEFINE_TYPE(SPGroup, sp_group, SP_TYPE_LPE_ITEM);
+G_DEFINE_TYPE(SPGroup, sp_group, G_TYPE_OBJECT);
 
 static void
 sp_group_class_init (SPGroupClass *klass)
@@ -74,9 +74,9 @@ CGroup::CGroup(SPGroup *group) : CLPEItem(group) {
 CGroup::~CGroup() {
 }
 
-static void
-sp_group_init (SPGroup *group)
-{
+SPGroup::SPGroup() : SPLPEItem() {
+	SPGroup* group = this;
+
 	group->cgroup = new CGroup(group);
 	group->typeHierarchy.insert(typeid(SPGroup));
 
@@ -87,6 +87,12 @@ sp_group_init (SPGroup *group)
 
     group->_layer_mode = SPGroup::GROUP;
         new (&group->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
+}
+
+static void
+sp_group_init (SPGroup *group)
+{
+	new (group) SPGroup();
 }
 
 void CGroup::build(SPDocument *document, Inkscape::XML::Node *repr) {

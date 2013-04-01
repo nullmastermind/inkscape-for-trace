@@ -23,6 +23,7 @@ class CPolygon;
 
 class SPPolygon : public SPShape {
 public:
+	SPPolygon();
 	CPolygon* cpolygon;
 };
 

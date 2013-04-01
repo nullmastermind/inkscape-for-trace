@@ -43,7 +43,7 @@
 static void pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat);
 static void pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern);
 
-G_DEFINE_TYPE(SPPattern, sp_pattern, SP_TYPE_PAINT_SERVER);
+G_DEFINE_TYPE(SPPattern, sp_pattern, G_TYPE_OBJECT);
 
 static void
 sp_pattern_class_init (SPPatternClass *klass)
@@ -57,15 +57,17 @@ CPattern::CPattern(SPPattern* pattern) : CPaintServer(pattern) {
 CPattern::~CPattern() {
 }
 
-static void
-sp_pattern_init (SPPattern *pat)
-{
+SPPattern::SPPattern() : SPPaintServer() {
+	SPPattern* pat = this;
+
 	pat->cpattern = new CPattern(pat);
 	pat->typeHierarchy.insert(typeid(SPPattern));
 
 	delete pat->cpaintserver;
 	pat->cpaintserver = pat->cpattern;
 	pat->cobject = pat->cpattern;
+
+	pat->href = NULL;
 
 	pat->ref = new SPPatternReference(pat);
 	pat->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), pat));
@@ -87,6 +89,12 @@ sp_pattern_init (SPPattern *pat)
 	pat->viewBox_set = FALSE;
 
 	new (&pat->modified_connection) sigc::connection();
+}
+
+static void
+sp_pattern_init (SPPattern *pat)
+{
+	new (pat) SPPattern();
 }
 
 void CPattern::build(SPDocument* doc, Inkscape::XML::Node* repr) {

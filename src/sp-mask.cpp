@@ -37,7 +37,7 @@ struct SPMaskView {
 SPMaskView *sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 SPMaskView *sp_mask_view_list_remove (SPMaskView *list, SPMaskView *view);
 
-G_DEFINE_TYPE(SPMask, sp_mask, SP_TYPE_OBJECTGROUP);
+G_DEFINE_TYPE(SPMask, sp_mask, G_TYPE_OBJECT);
 
 static void
 sp_mask_class_init (SPMaskClass *klass)
@@ -51,9 +51,9 @@ CMask::CMask(SPMask* mask) : CObjectGroup(mask) {
 CMask::~CMask() {
 }
 
-static void
-sp_mask_init (SPMask *mask)
-{
+SPMask::SPMask() : SPObjectGroup() {
+	SPMask* mask = this;
+
 	mask->cmask = new CMask(mask);
 	mask->typeHierarchy.insert(typeid(SPMask));
 
@@ -68,6 +68,12 @@ sp_mask_init (SPMask *mask)
 	mask->maskContentUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 
 	mask->display = NULL;
+}
+
+static void
+sp_mask_init (SPMask *mask)
+{
+	new (mask) SPMask();
 }
 
 void CMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {

@@ -24,6 +24,7 @@ class CFeBlend;
 
 class SPFeBlend : public SPFilterPrimitive {
 public:
+	SPFeBlend();
 	CFeBlend* cfeblend;
 
     Inkscape::Filters::FilterBlendMode blend_mode;

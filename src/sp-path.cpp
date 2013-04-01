@@ -53,7 +53,7 @@
 
 static void sp_path_finalize(GObject *obj);
 
-G_DEFINE_TYPE(SPPath, sp_path, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPPath, sp_path, G_TYPE_OBJECT);
 
 /**
  *  Does the object-oriented work of initializing the class structure
@@ -134,12 +134,9 @@ CPath::CPath(SPPath* path) : CShape(path) {
 CPath::~CPath() {
 }
 
-/**
- * Initializes an SPPath.
- */
-static void
-sp_path_init(SPPath *path)
-{
+SPPath::SPPath() : SPShape(), connEndPair(this) {
+	SPPath* path = this;
+
 	path->cpath = new CPath(path);
 	path->typeHierarchy.insert(typeid(SPPath));
 
@@ -149,7 +146,16 @@ sp_path_init(SPPath *path)
 	path->citem = path->cpath;
 	path->cobject = path->cpath;
 
-    new (&path->connEndPair) SPConnEndPair(path);
+    //new (&path->connEndPair) SPConnEndPair(path);
+}
+
+/**
+ * Initializes an SPPath.
+ */
+static void
+sp_path_init(SPPath *path)
+{
+	new (path) SPPath();
 }
 
 static void

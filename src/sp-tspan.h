@@ -25,6 +25,7 @@ class CTSpan;
 
 class SPTSpan : public SPItem {
 public:
+	SPTSpan();
 	CTSpan* ctspan;
 
     guint role : 2;

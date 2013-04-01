@@ -25,6 +25,7 @@ class CFeFlood;
 
 class SPFeFlood : public SPFilterPrimitive {
 public:
+	SPFeFlood();
 	CFeFlood* cfeflood;
 
     guint32 color;

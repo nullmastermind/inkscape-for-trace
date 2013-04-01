@@ -53,6 +53,7 @@ class CGlyphKerning;
 
 class SPGlyphKerning : public SPObject {
 public:
+	SPGlyphKerning();
 	CGlyphKerning* cglyphkerning;
 
     UnicodeRange* u1;

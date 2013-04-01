@@ -17,21 +17,27 @@
 #include "document.h"
 
 
-G_DEFINE_TYPE(SPObjectGroup, sp_objectgroup, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPObjectGroup, sp_objectgroup, G_TYPE_OBJECT);
 
 static void
 sp_objectgroup_class_init(SPObjectGroupClass *klass)
 {
 }
 
-static void
-sp_objectgroup_init(SPObjectGroup * objectgroup)
-{
+SPObjectGroup::SPObjectGroup() : SPObject() {
+	SPObjectGroup* objectgroup = this;
+
 	objectgroup->cobjectgroup = new CObjectGroup(objectgroup);
 	objectgroup->typeHierarchy.insert(typeid(SPObjectGroup));
 
 	delete objectgroup->cobject;
 	objectgroup->cobject = objectgroup->cobjectgroup;
+}
+
+static void
+sp_objectgroup_init(SPObjectGroup * objectgroup)
+{
+	new (objectgroup) SPObjectGroup();
 }
 
 CObjectGroup::CObjectGroup(SPObjectGroup* gr) : CObject(gr) {

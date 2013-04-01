@@ -38,6 +38,7 @@ class CClipPath;
 
 class SPClipPath : public SPObjectGroup {
 public:
+	SPClipPath();
 	CClipPath* cclippath;
 
     class Reference;

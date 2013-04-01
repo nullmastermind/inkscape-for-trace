@@ -7,7 +7,7 @@
 #include "style.h"
 using Inkscape::XML::TEXT_NODE;
 
-G_DEFINE_TYPE(SPStyleElem, sp_style_elem, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPStyleElem, sp_style_elem, G_TYPE_OBJECT);
 
 static void
 sp_style_elem_class_init(SPStyleElemClass *klass)
@@ -21,9 +21,9 @@ CStyleElem::CStyleElem(SPStyleElem* se) : CObject(se) {
 CStyleElem::~CStyleElem() {
 }
 
-static void
-sp_style_elem_init(SPStyleElem *style_elem)
-{
+SPStyleElem::SPStyleElem() : SPObject() {
+	SPStyleElem* style_elem = this;
+
 	style_elem->cstyleelem = new CStyleElem(style_elem);
 	style_elem->typeHierarchy.insert(typeid(SPStyleElem));
 
@@ -32,6 +32,12 @@ sp_style_elem_init(SPStyleElem *style_elem)
 
     media_set_all(style_elem->media);
     style_elem->is_css = false;
+}
+
+static void
+sp_style_elem_init(SPStyleElem *style_elem)
+{
+	new (style_elem) SPStyleElem();
 }
 
 void CStyleElem::set(unsigned int key, const gchar* value) {

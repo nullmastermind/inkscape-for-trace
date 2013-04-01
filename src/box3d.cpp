@@ -43,7 +43,7 @@ static void box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box);
 
 static gint counter = 0;
 
-G_DEFINE_TYPE(SPBox3D, box3d, SP_TYPE_GROUP);
+G_DEFINE_TYPE(SPBox3D, box3d, G_TYPE_OBJECT);
 
 static void box3d_class_init(SPBox3DClass *klass)
 {
@@ -56,9 +56,9 @@ CBox3D::CBox3D(SPBox3D* box) : CGroup(box) {
 CBox3D::~CBox3D() {
 }
 
-static void
-box3d_init(SPBox3D *box)
-{
+SPBox3D::SPBox3D() : SPGroup() {
+	SPBox3D* box = this;
+
 	box->cbox3d = new CBox3D(box);
 	box->typeHierarchy.insert(typeid(SPBox3D));
 
@@ -68,8 +68,17 @@ box3d_init(SPBox3D *box)
 	box->citem = box->cbox3d;
 	box->cobject = box->cbox3d;
 
+	box->my_counter = 0;
+	box->swapped = Box3D::NONE;
+
     box->persp_href = NULL;
     box->persp_ref = new Persp3DReference(box);
+}
+
+static void
+box3d_init(SPBox3D *box)
+{
+	new (box) SPBox3D();
 }
 
 void CBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {

@@ -43,7 +43,7 @@ Persp3DImpl::Persp3DImpl() {
     my_counter = global_counter++;
 }
 
-G_DEFINE_TYPE(Persp3D, persp3d, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(Persp3D, persp3d, G_TYPE_OBJECT);
 
 static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
     NULL, /* child_added */
@@ -69,12 +69,9 @@ CPersp3D::CPersp3D(Persp3D* persp3d) : CObject(persp3d) {
 CPersp3D::~CPersp3D() {
 }
 
-/**
- * Callback to initialize Persp3D object.
- */
-static void
-persp3d_init(Persp3D *persp)
-{
+Persp3D::Persp3D() : SPObject() {
+	Persp3D* persp = this;
+
 	persp->cpersp3d = new CPersp3D(persp);
 	persp->typeHierarchy.insert(typeid(Persp3D));
 
@@ -82,6 +79,15 @@ persp3d_init(Persp3D *persp)
 	persp->cobject = persp->cpersp3d;
 
     persp->perspective_impl = new Persp3DImpl();
+}
+
+/**
+ * Callback to initialize Persp3D object.
+ */
+static void
+persp3d_init(Persp3D *persp)
+{
+	new (persp) Persp3D();
 }
 
 /**

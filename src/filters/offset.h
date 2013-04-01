@@ -22,6 +22,7 @@ class CFeOffset;
 
 class SPFeOffset : public SPFilterPrimitive {
 public:
+	SPFeOffset();
 	CFeOffset* cfeoffset;
 
     double dx, dy;

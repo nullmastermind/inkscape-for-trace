@@ -61,13 +61,13 @@
 //#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
 
 // SPStop
-G_DEFINE_TYPE(SPStop, sp_stop, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPStop, sp_stop, G_TYPE_OBJECT);
 
 // SPMeshRow
-G_DEFINE_TYPE(SPMeshRow, sp_meshrow, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPMeshRow, sp_meshrow, G_TYPE_OBJECT);
 
 // SPMeshPatch
-G_DEFINE_TYPE(SPMeshPatch, sp_meshpatch, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPMeshPatch, sp_meshpatch, G_TYPE_OBJECT);
 
 
 /**
@@ -84,22 +84,30 @@ CStop::CStop(SPStop* stop) : CObject(stop) {
 CStop::~CStop() {
 }
 
-/**
- * Callback to initialize SPStop object.
- */
-static void
-sp_stop_init(SPStop *stop)
-{
+SPStop::SPStop() : SPObject() {
+	SPStop* stop = this;
+
 	stop->cstop = new CStop(stop);
 	stop->typeHierarchy.insert(typeid(SPStop));
 
 	delete stop->cobject;
 	stop->cobject = stop->cstop;
 
+	stop->path_string = NULL;
+
     stop->offset = 0.0;
     stop->currentColor = false;
     stop->specified_color.set( 0x000000ff );
     stop->opacity = 1.0;
+}
+
+/**
+ * Callback to initialize SPStop object.
+ */
+static void
+sp_stop_init(SPStop *stop)
+{
+	new (stop) SPStop();
 }
 
 void CStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
@@ -359,16 +367,22 @@ CMeshRow::CMeshRow(SPMeshRow* meshrow) : CObject(meshrow) {
 CMeshRow::~CMeshRow() {
 }
 
-/**
- * Callback to initialize SPMeshRow object.
- */
-static void sp_meshrow_init(SPMeshRow * meshrow)
-{
+SPMeshRow::SPMeshRow() : SPObject() {
+	SPMeshRow* meshrow = this;
+
     meshrow->cmeshrow = new CMeshRow(meshrow);
     meshrow->typeHierarchy.insert(typeid(SPMeshRow));
 
     delete meshrow->cobject;
     meshrow->cobject = meshrow->cmeshrow;
+}
+
+/**
+ * Callback to initialize SPMeshRow object.
+ */
+static void sp_meshrow_init(SPMeshRow * meshrow)
+{
+	new (meshrow) SPMeshRow();
 }
 
 void CMeshRow::build(SPDocument* doc, Inkscape::XML::Node* repr) {
@@ -418,16 +432,24 @@ CMeshPatch::CMeshPatch(SPMeshPatch* meshpatch) : CObject(meshpatch) {
 CMeshPatch::~CMeshPatch() {
 }
 
-/**
- * Callback to initialize SPMeshPatch object.
- */
-static void sp_meshpatch_init(SPMeshPatch * meshpatch)
-{
+SPMeshPatch::SPMeshPatch() : SPObject() {
+	SPMeshPatch* meshpatch = this;
+
     meshpatch->cmeshpatch = new CMeshPatch(meshpatch);
     meshpatch->typeHierarchy.insert(typeid(SPMeshPatch));
 
     delete meshpatch->cobject;
     meshpatch->cobject = meshpatch->cmeshpatch;
+
+    meshpatch->tensor_string = NULL;
+}
+
+/**
+ * Callback to initialize SPMeshPatch object.
+ */
+static void sp_meshpatch_init(SPMeshPatch * meshpatch)
+{
+	new (meshpatch) SPMeshPatch();
 }
 
 void CMeshPatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
@@ -496,14 +518,14 @@ GType SPGradient::getType()
         GTypeInfo gradient_info = {
             sizeof(SPGradientClass),
             NULL, NULL,
-            (GClassInitFunc) CGradient::classInit,
+            0, //(GClassInitFunc) CGradient::classInit,
             NULL, NULL,
             sizeof(SPGradient),
             16,
             (GInstanceInitFunc) CGradient::init,
             NULL,   /* value_table */
         };
-        gradient_type = g_type_register_static(SP_TYPE_PAINT_SERVER, "SPGradient",
+        gradient_type = g_type_register_static(G_TYPE_OBJECT, "SPGradient",
                                                &gradient_info, (GTypeFlags)0);
     }
     return gradient_type;
@@ -524,17 +546,23 @@ CGradient::CGradient(SPGradient* gradient) : CPaintServer(gradient) {
 CGradient::~CGradient() {
 }
 
-/**
- * Callback for SPGradient object initialization.
- */
-void CGradient::init(SPGradient *gr)
-{
+SPGradient::SPGradient() : SPPaintServer(),         units(),
+        spread(),
+        ref(NULL),
+        state(2),
+        vector() {
+
+
+	SPGradient* gr = this;
+
 	gr->cgradient = new CGradient(gr);
 	gr->typeHierarchy.insert(typeid(SPGradient));
 
 	delete gr->cpaintserver;
 	gr->cpaintserver = gr->cgradient;
 	gr->cobject = gr->cgradient;
+
+	gr->has_patches = 0;
 
     gr->ref = new SPGradientReference(gr);
     gr->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(CGradient::gradientRefChanged), gr));
@@ -560,6 +588,14 @@ void CGradient::init(SPGradient *gr)
     gr->vector.stops.clear();
 
     new (&gr->modified_connection) sigc::connection();
+}
+
+/**
+ * Callback for SPGradient object initialization.
+ */
+void CGradient::init(SPGradient *gr)
+{
+	new (gr) SPGradient();
 }
 
 /**
@@ -1380,7 +1416,7 @@ sp_gradient_set_gs2d_matrix(SPGradient *gr, Geom::Affine const &ctm,
 /*
  * Linear Gradient
  */
-G_DEFINE_TYPE(SPLinearGradient, sp_lineargradient, SP_TYPE_GRADIENT);
+G_DEFINE_TYPE(SPLinearGradient, sp_lineargradient, G_TYPE_OBJECT);
 
 /**
  * SPLinearGradient vtable initialization.
@@ -1396,11 +1432,9 @@ CLinearGradient::CLinearGradient(SPLinearGradient* lineargradient) : CGradient(l
 CLinearGradient::~CLinearGradient() {
 }
 
-/**
- * Callback for SPLinearGradient object initialization.
- */
-static void sp_lineargradient_init(SPLinearGradient *lg)
-{
+SPLinearGradient::SPLinearGradient() : SPGradient() {
+	SPLinearGradient* lg = this;
+
 	lg->clineargradient = new CLinearGradient(lg);
 	lg->typeHierarchy.insert(typeid(SPLinearGradient));
 
@@ -1413,6 +1447,14 @@ static void sp_lineargradient_init(SPLinearGradient *lg)
     lg->y1.unset(SVGLength::PERCENT, 0.0, 0.0);
     lg->x2.unset(SVGLength::PERCENT, 1.0, 1.0);
     lg->y2.unset(SVGLength::PERCENT, 0.0, 0.0);
+}
+
+/**
+ * Callback for SPLinearGradient object initialization.
+ */
+static void sp_lineargradient_init(SPLinearGradient *lg)
+{
+	new (lg) SPLinearGradient();
 }
 
 void CLinearGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
@@ -1507,7 +1549,7 @@ sp_lineargradient_set_position(SPLinearGradient *lg,
 /*
  * Radial Gradient
  */
-G_DEFINE_TYPE(SPRadialGradient, sp_radialgradient, SP_TYPE_GRADIENT);
+G_DEFINE_TYPE(SPRadialGradient, sp_radialgradient, G_TYPE_OBJECT);
 
 /**
  * SPRadialGradient vtable initialization.
@@ -1523,12 +1565,9 @@ CRadialGradient::CRadialGradient(SPRadialGradient* radialgradient) : CGradient(r
 CRadialGradient::~CRadialGradient() {
 }
 
-/**
- * Callback for SPRadialGradient object initialization.
- */
-static void
-sp_radialgradient_init(SPRadialGradient *rg)
-{
+SPRadialGradient::SPRadialGradient() : SPGradient() {
+	SPRadialGradient* rg = this;
+
 	rg->cradialgradient = new CRadialGradient(rg);
 	rg->typeHierarchy.insert(typeid(SPRadialGradient));
 
@@ -1542,6 +1581,15 @@ sp_radialgradient_init(SPRadialGradient *rg)
     rg->r.unset(SVGLength::PERCENT, 0.5, 0.5);
     rg->fx.unset(SVGLength::PERCENT, 0.5, 0.5);
     rg->fy.unset(SVGLength::PERCENT, 0.5, 0.5);
+}
+
+/**
+ * Callback for SPRadialGradient object initialization.
+ */
+static void
+sp_radialgradient_init(SPRadialGradient *rg)
+{
+	new (rg) SPRadialGradient();
 }
 
 /**
@@ -1661,7 +1709,7 @@ sp_radialgradient_set_position(SPRadialGradient *rg,
 
 //#define MESH_DEBUG
 
-G_DEFINE_TYPE(SPMeshGradient, sp_meshgradient, SP_TYPE_GRADIENT);
+G_DEFINE_TYPE(SPMeshGradient, sp_meshgradient, G_TYPE_OBJECT);
 
 /**
  * SPMeshGradient vtable initialization.
@@ -1680,12 +1728,9 @@ CMeshGradient::CMeshGradient(SPMeshGradient* meshgradient) : CGradient(meshgradi
 CMeshGradient::~CMeshGradient() {
 }
 
-/**
- * Callback for SPMeshGradient object initialization.
- */
-static void
-sp_meshgradient_init(SPMeshGradient *mg)
-{
+SPMeshGradient::SPMeshGradient() : SPGradient() {
+	SPMeshGradient* mg = this;
+
 	mg->cmeshgradient = new CMeshGradient(mg);
 	mg->typeHierarchy.insert(typeid(SPMeshGradient));
 
@@ -1697,6 +1742,15 @@ sp_meshgradient_init(SPMeshGradient *mg)
     // Start coordinate of mesh
     mg->x.unset(SVGLength::NONE, 0.0, 0.0);
     mg->y.unset(SVGLength::NONE, 0.0, 0.0);
+}
+
+/**
+ * Callback for SPMeshGradient object initialization.
+ */
+static void
+sp_meshgradient_init(SPMeshGradient *mg)
+{
+	new (mg) SPMeshGradient();
 }
 
 void CMeshGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {

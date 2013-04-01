@@ -26,6 +26,7 @@ class CMissingGlyph;
 
 class SPMissingGlyph : public SPObject {
 public:
+	SPMissingGlyph();
 	CMissingGlyph* cmissingglyph;
 
     char* d;

@@ -29,6 +29,7 @@ class CRoot;
 /** \<svg\> element */
 class SPRoot : public SPGroup {
 public:
+	SPRoot();
 	CRoot* croot;
 
     struct {

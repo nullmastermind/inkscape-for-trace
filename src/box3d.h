@@ -30,6 +30,7 @@ class CBox3D;
 
 class SPBox3D : public SPGroup {
 public:
+	SPBox3D();
 	CBox3D* cbox3d;
 
     gint z_orders[6]; // z_orders[i] holds the ID of the face at position #i in the group (from top to bottom)

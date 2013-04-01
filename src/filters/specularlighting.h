@@ -33,6 +33,7 @@ class CFeSpecularLighting;
 
 class SPFeSpecularLighting : public SPFilterPrimitive {
 public:
+	SPFeSpecularLighting();
 	CFeSpecularLighting* cfespecularlighting;
 
     gfloat surfaceScale;

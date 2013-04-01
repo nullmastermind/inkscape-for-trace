@@ -21,7 +21,7 @@
 #include "document.h"
 
 
-G_DEFINE_TYPE(SPDefs, sp_defs, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPDefs, sp_defs, G_TYPE_OBJECT);
 
 static void
 sp_defs_class_init(SPDefsClass *dc)
@@ -29,14 +29,21 @@ sp_defs_class_init(SPDefsClass *dc)
     SPObjectClass *sp_object_class = (SPObjectClass *) dc;
 
 }
-static void
-sp_defs_init(SPDefs* defs)
-{
+
+SPDefs::SPDefs() : SPObject() {
+	SPDefs* defs = this;
+
 	defs->cdefs = new CDefs(defs);
 	defs->typeHierarchy.insert(typeid(SPDefs));
 
 	delete defs->cobject;
 	defs->cobject = defs->cdefs;
+}
+
+static void
+sp_defs_init(SPDefs* defs)
+{
+	new (defs) SPDefs();
 }
 
 CDefs::CDefs(SPDefs* defs) : CObject(defs) {

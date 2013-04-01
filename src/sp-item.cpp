@@ -110,7 +110,7 @@ SPItem::SPItem() : SPObject() {
 	item->avoidRef = NULL;
 	item->_is_evaluated = false;
 	item->stop_paint = 0;
-	item->_evaluated_status = 0;
+	item->_evaluated_status = StatusUnknown;
 	item->bbox_valid = 0;
 	item->freeze_stroke_width = false;
 	item->transform_center_x = 0;

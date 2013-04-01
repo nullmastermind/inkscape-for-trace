@@ -40,6 +40,7 @@ class CFeFuncNode;
 
 class SPFeFuncNode : public SPObject {
 public:
+	SPFeFuncNode();
 	CFeFuncNode* cfefuncnode;
 
     Inkscape::Filters::FilterComponentTransferType type;

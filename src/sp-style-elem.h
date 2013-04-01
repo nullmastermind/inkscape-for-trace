@@ -12,6 +12,7 @@ class CStyleElem;
 
 class SPStyleElem : public SPObject {
 public:
+	SPStyleElem();
 	CStyleElem* cstyleelem;
 
     Media media;

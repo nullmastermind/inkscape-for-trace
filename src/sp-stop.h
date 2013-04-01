@@ -27,6 +27,7 @@ class CStop;
 /** Gradient stop. */
 class SPStop : public SPObject {
 public:
+	SPStop();
 	CStop* cstop;
 
     /// \todo fixme: Should be SPSVGPercentage

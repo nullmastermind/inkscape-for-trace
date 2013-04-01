@@ -14,6 +14,7 @@ class CMeshGradient;
 /** Mesh gradient. */
 class SPMeshGradient : public SPGradient {
 public:
+	SPMeshGradient();
 	CMeshGradient* cmeshgradient;
 
     SVGLength x;  // Upper left corner of mesh

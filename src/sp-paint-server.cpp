@@ -30,7 +30,7 @@ bool SPPaintServerReference::_acceptObject(SPObject *obj) const
     return SP_IS_PAINT_SERVER(obj);
 }
 
-G_DEFINE_TYPE(SPPaintServer, sp_paint_server, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPPaintServer, sp_paint_server, G_TYPE_OBJECT);
 
 static void sp_paint_server_class_init(SPPaintServerClass *psc)
 {
@@ -43,14 +43,22 @@ CPaintServer::CPaintServer(SPPaintServer* paintserver) : CObject(paintserver) {
 CPaintServer::~CPaintServer() {
 }
 
-static void
-sp_paint_server_init(SPPaintServer *ps)
-{
+SPPaintServer::SPPaintServer() : SPObject() {
+	SPPaintServer* ps = this;
+
 	ps->cpaintserver = new CPaintServer(ps);
 	ps->typeHierarchy.insert(typeid(SPPaintServer));
 
 	delete ps->cobject;
 	ps->cobject = ps->cpaintserver;
+
+	ps->swatch = 0;
+}
+
+static void
+sp_paint_server_init(SPPaintServer *ps)
+{
+	new (ps) SPPaintServer();
 }
 
 cairo_pattern_t *sp_paint_server_invoke_create_pattern(SPPaintServer *ps,

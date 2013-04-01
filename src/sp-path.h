@@ -31,6 +31,7 @@ class CPath;
  */
 class SPPath : public SPShape {
 public:
+	SPPath();
 	CPath* cpath;
 
     gint nodesInPath() const;

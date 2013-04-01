@@ -29,7 +29,7 @@
 #include "display/nr-filter-turbulence.h"
 
 /* FeTurbulence base class */
-G_DEFINE_TYPE(SPFeTurbulence, sp_feTurbulence, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeTurbulence, sp_feTurbulence, G_TYPE_OBJECT);
 
 static void
 sp_feTurbulence_class_init(SPFeTurbulenceClass *klass)
@@ -43,9 +43,9 @@ CFeTurbulence::CFeTurbulence(SPFeTurbulence* turb) : CFilterPrimitive(turb) {
 CFeTurbulence::~CFeTurbulence() {
 }
 
-static void
-sp_feTurbulence_init(SPFeTurbulence *feTurbulence)
-{
+SPFeTurbulence::SPFeTurbulence() : SPFilterPrimitive() {
+	SPFeTurbulence* feTurbulence = this;
+
 	feTurbulence->cfeturbulence = new CFeTurbulence(feTurbulence);
 	feTurbulence->typeHierarchy.insert(typeid(SPFeTurbulence));
 
@@ -53,7 +53,18 @@ sp_feTurbulence_init(SPFeTurbulence *feTurbulence)
 	feTurbulence->cfilterprimitive = feTurbulence->cfeturbulence;
 	feTurbulence->cobject = feTurbulence->cfeturbulence;
 
+	feTurbulence->stitchTiles = 0;
+	feTurbulence->seed = 0;
+	feTurbulence->numOctaves = 0;
+	feTurbulence->type = Inkscape::Filters::TURBULENCE_FRACTALNOISE;
+
     feTurbulence->updated=false;
+}
+
+static void
+sp_feTurbulence_init(SPFeTurbulence *feTurbulence)
+{
+	new (feTurbulence) SPFeTurbulence();
 }
 
 /**

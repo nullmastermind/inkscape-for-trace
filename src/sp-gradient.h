@@ -95,6 +95,7 @@ class CGradient;
  */
 class SPGradient : public SPPaintServer {
 public:
+	SPGradient();
 	CGradient* cgradient;
 
 private:
@@ -119,14 +120,6 @@ private:
     guint has_patches : 1;
 
 public:
-    SPGradient() :
-        units(),
-        spread(),
-        ref(NULL),
-        state(2),
-        vector()
-        {}
-    
     /** Reference (href) */
     SPGradientReference *ref;
 

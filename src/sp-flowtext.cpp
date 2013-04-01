@@ -37,7 +37,7 @@
 static void sp_flowtext_init(SPFlowtext *group);
 static void sp_flowtext_dispose(GObject *object);
 
-G_DEFINE_TYPE(SPFlowtext, sp_flowtext, SP_TYPE_ITEM);
+G_DEFINE_TYPE(SPFlowtext, sp_flowtext, G_TYPE_OBJECT);
 
 static void
 sp_flowtext_class_init(SPFlowtextClass *klass)
@@ -54,9 +54,9 @@ CFlowtext::CFlowtext(SPFlowtext* flowtext) : CItem(flowtext) {
 CFlowtext::~CFlowtext() {
 }
 
-static void
-sp_flowtext_init(SPFlowtext *group)
-{
+SPFlowtext::SPFlowtext() : SPItem() {
+	SPFlowtext* group = this;
+
 	group->cflowtext = new CFlowtext(group);
 	group->typeHierarchy.insert(typeid(SPFlowtext));
 
@@ -66,6 +66,12 @@ sp_flowtext_init(SPFlowtext *group)
 
     group->par_indent = 0;
     new (&group->layout) Inkscape::Text::Layout();
+}
+
+static void
+sp_flowtext_init(SPFlowtext *group)
+{
+	new (group) SPFlowtext();
 }
 
 static void

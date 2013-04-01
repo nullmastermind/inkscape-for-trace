@@ -42,14 +42,14 @@ GType sp_filter_primitive_get_type()
         GTypeInfo filter_primitive_info = {
             sizeof(SPFilterPrimitiveClass),
             NULL, NULL,
-            (GClassInitFunc) sp_filter_primitive_class_init,
+            0,//(GClassInitFunc) sp_filter_primitive_class_init,
             NULL, NULL,
             sizeof(SPFilterPrimitive),
             16,
             (GInstanceInitFunc) sp_filter_primitive_init,
             NULL,    /* value_table */
         };
-        filter_primitive_type = g_type_register_static(SP_TYPE_OBJECT, "SPFilterPrimitive", &filter_primitive_info, (GTypeFlags)0);
+        filter_primitive_type = g_type_register_static(G_TYPE_OBJECT, "SPFilterPrimitive", &filter_primitive_info, (GTypeFlags)0);
     }
     return filter_primitive_type;
 }
@@ -72,8 +72,9 @@ void CFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
 	// throw;
 }
 
-static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
-{
+SPFilterPrimitive::SPFilterPrimitive() : SPObject() {
+	SPFilterPrimitive* filter_primitive = this;
+
 	filter_primitive->cfilterprimitive = new CFilterPrimitive(filter_primitive);
 	filter_primitive->typeHierarchy.insert(typeid(SPFilterPrimitive));
 
@@ -92,6 +93,11 @@ static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
     filter_primitive->y.unset(SVGLength::PERCENT, 0, 0);
     filter_primitive->width.unset(SVGLength::PERCENT, 1, 0);
     filter_primitive->height.unset(SVGLength::PERCENT, 1, 0);
+}
+
+static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
+{
+	new (filter_primitive) SPFilterPrimitive();
 }
 
 /**

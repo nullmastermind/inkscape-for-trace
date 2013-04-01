@@ -87,7 +87,7 @@ static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *i
 // reappearing in offset when the radius becomes too large
 static bool   use_slow_but_correct_offset_method=false;
 
-G_DEFINE_TYPE(SPOffset, sp_offset, SP_TYPE_SHAPE);
+G_DEFINE_TYPE(SPOffset, sp_offset, G_TYPE_OBJECT);
 
 /**
  * SPOffset vtable initialization.
@@ -106,12 +106,9 @@ COffset::COffset(SPOffset* offset) : CShape(offset) {
 COffset::~COffset() {
 }
 
-/**
- * Callback for SPOffset object initialization.
- */
-static void
-sp_offset_init(SPOffset *offset)
-{
+SPOffset::SPOffset() : SPShape() {
+	SPOffset* offset = this;
+
 	offset->coffset = new COffset(offset);
 	offset->typeHierarchy.insert(typeid(SPOffset));
 
@@ -138,6 +135,15 @@ sp_offset_init(SPOffset *offset)
     // set up the uri reference
     offset->sourceRef = new SPUseReference(offset);
     offset->_changed_connection = offset->sourceRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_offset_href_changed), offset));
+}
+
+/**
+ * Callback for SPOffset object initialization.
+ */
+static void
+sp_offset_init(SPOffset *offset)
+{
+	new (offset) SPOffset();
 }
 
 /**

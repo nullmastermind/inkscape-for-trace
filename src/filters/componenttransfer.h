@@ -26,6 +26,7 @@ class CFeComponentTransfer;
 
 class SPFeComponentTransfer : public SPFilterPrimitive {
 public:
+	SPFeComponentTransfer();
 	CFeComponentTransfer* cfecomponenttransfer;
 
     Inkscape::Filters::FilterComponentTransfer *renderer;

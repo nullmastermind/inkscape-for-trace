@@ -26,6 +26,7 @@ class CFont;
 
 class SPFont : public SPObject {
 public:
+	SPFont();
 	CFont* cfont;
 
     double horiz_origin_x;

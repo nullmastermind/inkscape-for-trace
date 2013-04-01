@@ -26,7 +26,7 @@
 #include "display/nr-filter-displacement-map.h"
 
 /* FeDisplacementMap base class */
-G_DEFINE_TYPE(SPFeDisplacementMap, sp_feDisplacementMap, SP_TYPE_FILTER_PRIMITIVE);
+G_DEFINE_TYPE(SPFeDisplacementMap, sp_feDisplacementMap, G_TYPE_OBJECT);
 
 static void
 sp_feDisplacementMap_class_init(SPFeDisplacementMapClass *klass)
@@ -40,9 +40,9 @@ CFeDisplacementMap::CFeDisplacementMap(SPFeDisplacementMap* map) : CFilterPrimit
 CFeDisplacementMap::~CFeDisplacementMap() {
 }
 
-static void
-sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
-{
+SPFeDisplacementMap::SPFeDisplacementMap() : SPFilterPrimitive() {
+	SPFeDisplacementMap* feDisplacementMap = this;
+
 	feDisplacementMap->cfedisplacementmap = new CFeDisplacementMap(feDisplacementMap);
 	feDisplacementMap->typeHierarchy.insert(typeid(SPFeDisplacementMap));
 
@@ -54,6 +54,12 @@ sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
     feDisplacementMap->xChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
     feDisplacementMap->yChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
     feDisplacementMap->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+}
+
+static void
+sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
+{
+	new (feDisplacementMap) SPFeDisplacementMap();
 }
 
 /**

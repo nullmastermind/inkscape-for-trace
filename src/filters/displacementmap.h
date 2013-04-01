@@ -30,6 +30,7 @@ class CFeDisplacementMap;
 
 class SPFeDisplacementMap : public SPFilterPrimitive {
 public:
+	SPFeDisplacementMap();
 	CFeDisplacementMap* cfedisplacementmap;
 
     int in2; 

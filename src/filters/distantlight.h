@@ -27,6 +27,7 @@ class CFeDistantLight;
 
 class SPFeDistantLight : public SPObject {
 public:
+	SPFeDistantLight();
 	CFeDistantLight* cfedistantlight;
 
     /** azimuth attribute */

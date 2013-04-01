@@ -35,14 +35,14 @@ LivePathEffectObject::livepatheffect_get_type ()
         GTypeInfo livepatheffect_info = {
             sizeof (LivePathEffectObjectClass),
             NULL, NULL,
-            (GClassInitFunc) LivePathEffectObject::livepatheffect_class_init,
+            0,//(GClassInitFunc) LivePathEffectObject::livepatheffect_class_init,
             NULL, NULL,
             sizeof (LivePathEffectObject),
             16,
             (GInstanceInitFunc) LivePathEffectObject::livepatheffect_init,
             NULL,
         };
-        livepatheffect_type = g_type_register_static (SP_TYPE_OBJECT, "LivePathEffectObject", &livepatheffect_info, (GTypeFlags)0);
+        livepatheffect_type = g_type_register_static (G_TYPE_OBJECT, "LivePathEffectObject", &livepatheffect_info, (GTypeFlags)0);
     }
     return livepatheffect_type;
 }
@@ -74,12 +74,9 @@ CLivePathEffectObject::CLivePathEffectObject(LivePathEffectObject* lpeo) : CObje
 CLivePathEffectObject::~CLivePathEffectObject() {
 }
 
-/**
- * Callback to initialize livepatheffect object.
- */
-void
-LivePathEffectObject::livepatheffect_init(LivePathEffectObject *lpeobj)
-{
+LivePathEffectObject::LivePathEffectObject() : SPObject() {
+	LivePathEffectObject* lpeobj = this;
+
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_message("Init livepatheffectobject");
 #endif
@@ -94,6 +91,15 @@ LivePathEffectObject::livepatheffect_init(LivePathEffectObject *lpeobj)
     lpeobj->lpe = NULL;
 
     lpeobj->effecttype_set = false;
+}
+
+/**
+ * Callback to initialize livepatheffect object.
+ */
+void
+LivePathEffectObject::livepatheffect_init(LivePathEffectObject *lpeobj)
+{
+	new (lpeobj) LivePathEffectObject();
 }
 
 /**

@@ -31,6 +31,7 @@ class CImage;
 
 class SPImage : public SPItem {
 public:
+	SPImage();
 	CImage* cimage;
 
     SVGLength x;

@@ -33,6 +33,7 @@ class DrawingItem;
 
 class SPGroup : public SPLPEItem {
 public:
+	SPGroup();
     CGroup *cgroup;
 
     enum LayerMode { GROUP, LAYER, MASK_HELPER };

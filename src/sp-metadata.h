@@ -25,6 +25,7 @@ class CMetadata;
 
 class SPMetadata : public SPObject {
 public:
+	SPMetadata();
 	CMetadata* cmetadata;
 };
 

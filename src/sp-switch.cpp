@@ -25,7 +25,7 @@
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
-G_DEFINE_TYPE(SPSwitch, sp_switch, SP_TYPE_GROUP);
+G_DEFINE_TYPE(SPSwitch, sp_switch, G_TYPE_OBJECT);
 
 static void
 sp_switch_class_init (SPSwitchClass *) 
@@ -39,8 +39,9 @@ CSwitch::CSwitch(SPSwitch* sw) : CGroup(sw) {
 CSwitch::~CSwitch() {
 }
 
-static void sp_switch_init (SPSwitch *sw)
-{
+SPSwitch::SPSwitch() : SPGroup() {
+	SPSwitch* sw = this;
+
     sw->cswitch = new CSwitch(sw);
     sw->typeHierarchy.insert(typeid(SPSwitch));
 
@@ -51,6 +52,11 @@ static void sp_switch_init (SPSwitch *sw)
     sw->cobject = sw->cswitch;
 
     sw->_cached_item = 0;
+}
+
+static void sp_switch_init (SPSwitch *sw)
+{
+	new (sw) SPSwitch();
 }
 
 SPObject *SPSwitch::_evaluateFirst() {

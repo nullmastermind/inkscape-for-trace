@@ -30,6 +30,7 @@ class CTRef;
 
 class SPTRef : public SPItem {
 public:
+	SPTRef();
 	CTRef* ctref;
 
     // Attributes that are used in the same way they would be in a tspan

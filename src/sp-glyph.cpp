@@ -22,7 +22,7 @@
 #include "document.h"
 #include <cstring>
 
-G_DEFINE_TYPE(SPGlyph, sp_glyph, SP_TYPE_OBJECT);
+G_DEFINE_TYPE(SPGlyph, sp_glyph, G_TYPE_OBJECT);
 
 static void sp_glyph_class_init(SPGlyphClass *gc)
 {
@@ -35,8 +35,9 @@ CGlyph::CGlyph(SPGlyph* glyph) : CObject(glyph) {
 CGlyph::~CGlyph() {
 }
 
-static void sp_glyph_init(SPGlyph *glyph)
-{
+SPGlyph::SPGlyph() : SPObject() {
+	SPGlyph* glyph = this;
+
 	glyph->cglyph = new CGlyph(glyph);
 	glyph->typeHierarchy.insert(typeid(SPGlyph));
 
@@ -55,6 +56,11 @@ static void sp_glyph_init(SPGlyph *glyph)
     glyph->vert_origin_x = 0;
     glyph->vert_origin_y = 0;
     glyph->vert_adv_y = 0;
+}
+
+static void sp_glyph_init(SPGlyph *glyph)
+{
+	new (glyph) SPGlyph();
 }
 
 void CGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {

@@ -40,6 +40,7 @@ class CNamedView;
 
 class SPNamedView : public SPObjectGroup {
 public:
+	SPNamedView();
 	CNamedView* cnamedview;
 
     unsigned int editable : 1;

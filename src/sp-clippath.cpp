@@ -40,7 +40,7 @@ struct SPClipPathView {
 static SPClipPathView*      sp_clippath_view_new_prepend(SPClipPathView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 static SPClipPathView*      sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view);
 
-G_DEFINE_TYPE(SPClipPath, sp_clippath, SP_TYPE_OBJECTGROUP);
+G_DEFINE_TYPE(SPClipPath, sp_clippath, G_TYPE_OBJECT);
 
 static void
 sp_clippath_class_init(SPClipPathClass *klass)
@@ -54,9 +54,9 @@ CClipPath::CClipPath(SPClipPath* clippath) : CObjectGroup(clippath) {
 CClipPath::~CClipPath() {
 }
 
-static void 
-sp_clippath_init(SPClipPath *cp)
-{
+SPClipPath::SPClipPath() : SPObjectGroup() {
+	SPClipPath* cp = this;
+
 	cp->cclippath = new CClipPath(cp);
 	cp->typeHierarchy.insert(typeid(SPClipPath));
 
@@ -68,6 +68,12 @@ sp_clippath_init(SPClipPath *cp)
     cp->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 
     cp->display = NULL;
+}
+
+static void
+sp_clippath_init(SPClipPath *cp)
+{
+	new (cp) SPClipPath();
 }
 
 void CClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {

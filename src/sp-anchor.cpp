@@ -25,7 +25,7 @@
 #include "ui/view/view.h"
 #include "document.h"
 
-G_DEFINE_TYPE(SPAnchor, sp_anchor, SP_TYPE_GROUP);
+G_DEFINE_TYPE(SPAnchor, sp_anchor, G_TYPE_OBJECT);
 
 static void sp_anchor_class_init(SPAnchorClass *ac)
 {
@@ -38,8 +38,9 @@ CAnchor::CAnchor(SPAnchor* anchor) : CGroup(anchor) {
 CAnchor::~CAnchor() {
 }
 
-static void sp_anchor_init(SPAnchor *anchor)
-{
+SPAnchor::SPAnchor() : SPGroup() {
+	SPAnchor* anchor = this;
+
 	anchor->canchor = new CAnchor(anchor);
 	anchor->typeHierarchy.insert(typeid(SPAnchor));
 
@@ -50,6 +51,11 @@ static void sp_anchor_init(SPAnchor *anchor)
 	anchor->cobject = anchor->canchor;
 
     anchor->href = NULL;
+}
+
+static void sp_anchor_init(SPAnchor *anchor)
+{
+	new (anchor) SPAnchor();
 }
 
 void CAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {

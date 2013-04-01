@@ -24,6 +24,7 @@ class CFeMorphology;
 
 class SPFeMorphology : public SPFilterPrimitive {
 public:
+	SPFeMorphology();
 	CFeMorphology* cfemorphology;
 
     Inkscape::Filters::FilterMorphologyOperator Operator;

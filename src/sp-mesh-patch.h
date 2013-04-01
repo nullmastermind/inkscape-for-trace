@@ -33,6 +33,7 @@ class CMeshPatch;
 /** Gradient MeshPatch. */
 class SPMeshPatch : public SPObject {
 public:
+	SPMeshPatch();
 	CMeshPatch* cmeshpatch;
 
     SPMeshPatch* getNextMeshPatch();

@@ -26,6 +26,7 @@ class CFeImage;
 
 class SPFeImage : public SPFilterPrimitive {
 public:
+	SPFeImage();
 	CFeImage* cfeimage;
 
     gchar *href;

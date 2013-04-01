@@ -55,7 +55,7 @@ static void sp_namedview_show_single_guide(SPGuide* guide, bool show);
 static gboolean sp_str_to_bool(const gchar *str);
 static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
 
-G_DEFINE_TYPE(SPNamedView, sp_namedview, SP_TYPE_OBJECTGROUP);
+G_DEFINE_TYPE(SPNamedView, sp_namedview, G_TYPE_OBJECT);
 
 static void sp_namedview_class_init(SPNamedViewClass * klass)
 {
@@ -68,14 +68,33 @@ CNamedView::CNamedView(SPNamedView* view) : CObjectGroup(view) {
 CNamedView::~CNamedView() {
 }
 
-static void sp_namedview_init(SPNamedView *nv)
-{
+SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
+	SPNamedView* nv = this;
+
 	nv->cnamedview = new CNamedView(nv);
 	nv->typeHierarchy.insert(typeid(SPNamedView));
 
 	delete nv->cobjectgroup;
 	nv->cobjectgroup = nv->cnamedview;
 	nv->cobject = nv->cnamedview;
+
+	nv->zoom = 0;
+	nv->guidecolor = 0;
+	nv->guidehicolor = 0;
+	nv->views = NULL;
+	nv->borderlayer = 0;
+	nv->units = NULL;
+	nv->window_x = 0;
+	nv->cy = 0;
+	nv->window_y = 0;
+	nv->doc_units = NULL;
+	nv->pagecolor = 0;
+	nv->cx = 0;
+	nv->pageshadow = 0;
+	nv->window_width = 0;
+	nv->window_height = 0;
+	nv->window_maximized = 0;
+	nv->bordercolor = 0;
 
     nv->editable = TRUE;
     nv->showguides = TRUE;
@@ -91,7 +110,12 @@ static void sp_namedview_init(SPNamedView *nv)
 
     nv->connector_spacing = defaultConnSpacing;
 
-    new (&nv->snap_manager) SnapManager(nv);
+    //new (&nv->snap_manager) SnapManager(nv);
+}
+
+static void sp_namedview_init(SPNamedView *nv)
+{
+	new (nv) SPNamedView();
 }
 
 static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *document, Inkscape::XML::Node *repr) {
