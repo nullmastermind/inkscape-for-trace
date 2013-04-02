@@ -8,6 +8,8 @@
 #include <glib-object.h>
 #include <glib.h>
 
+#include "sp-linear-gradient.h"
+
 namespace Inkscape {
 namespace XML {
 class Node;
@@ -17,10 +19,8 @@ class Node;
 struct SPLinearGradient;
 
 #define SP_TYPE_LINEARGRADIENT (sp_lineargradient_get_type())
-#define SP_LINEARGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_LINEARGRADIENT, SPLinearGradient))
-#define SP_LINEARGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_LINEARGRADIENT, SPLinearGradientClass))
-#define SP_IS_LINEARGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_LINEARGRADIENT))
-#define SP_IS_LINEARGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_LINEARGRADIENT))
+#define SP_LINEARGRADIENT(obj) ((SPLinearGradient*)obj)
+#define SP_IS_LINEARGRADIENT(obj) (dynamic_cast<const SPLinearGradient*>((SPObject*)obj))
 
 GType sp_lineargradient_get_type();
 

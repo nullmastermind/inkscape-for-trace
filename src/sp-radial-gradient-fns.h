@@ -7,6 +7,8 @@
 
 #include <glib-object.h>
 
+#include "sp-radial-gradient.h"
+
 namespace Inkscape {
 namespace XML {
 class Node;
@@ -16,11 +18,8 @@ class Node;
 struct SPRadialGradient;
 
 #define SP_TYPE_RADIALGRADIENT (sp_radialgradient_get_type())
-#define SP_RADIALGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_RADIALGRADIENT, SPRadialGradient))
-#define SP_RADIALGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_RADIALGRADIENT, SPRadialGradientClass))
-#define SP_IS_RADIALGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_RADIALGRADIENT))
-#define SP_IS_RADIALGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_RADIALGRADIENT))
-
+#define SP_RADIALGRADIENT(obj) ((SPRadialGradient*)obj)
+#define SP_IS_RADIALGRADIENT(obj) (dynamic_cast<const SPRadialGradient*>((SPObject*)obj))
 
 GType sp_radialgradient_get_type();
 

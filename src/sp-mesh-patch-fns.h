@@ -16,11 +16,8 @@ class Node;
 class SPMeshPatch;
 
 #define SP_TYPE_MESHPATCH (sp_meshpatch_get_type())
-#define SP_MESHPATCH(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_MESHPATCH, SPMeshPatch))
-#define SP_MESHPATCH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_MESHPATCH, SPMeshPatchClass))
-#define SP_IS_MESHPATCH(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MESHPATCH))
-#define SP_IS_MESHPATCH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_MESHPATCH))
-
+#define SP_MESHPATCH(obj) ((SPMeshPatch*)obj)
+#define SP_IS_MESHPATCH(obj) (dynamic_cast<const SPMeshPatch*>((SPObject*)obj))
 
 GType sp_meshpatch_get_type();
 

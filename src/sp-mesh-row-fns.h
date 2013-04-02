@@ -16,11 +16,8 @@ class Node;
 class SPMeshRow;
 
 #define SP_TYPE_MESHROW (sp_meshrow_get_type())
-#define SP_MESHROW(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_MESHROW, SPMeshRow))
-#define SP_MESHROW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_MESHROW, SPMeshRowClass))
-#define SP_IS_MESHROW(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MESHROW))
-#define SP_IS_MESHROW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_MESHROW))
-
+#define SP_MESHROW(obj) ((SPMeshRow*)obj)
+#define SP_IS_MESHROW(obj) (dynamic_cast<const SPMeshRow*>((SPObject*)obj))
 
 GType sp_meshrow_get_type();
 
