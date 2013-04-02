@@ -60,6 +60,42 @@
 /// Has to be power of 2   Seems to be unused.
 //#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createStop() {
+		return new SPStop();
+	}
+
+	SPObject* createMeshRow() {
+		return new SPMeshRow();
+	}
+
+	SPObject* createMeshPatch() {
+		return new SPMeshPatch();
+	}
+
+	SPObject* createLinearGradient() {
+		return new SPLinearGradient();
+	}
+
+	SPObject* createRadialGradient() {
+		return new SPRadialGradient();
+	}
+
+	SPObject* createMeshGradient() {
+		return new SPMeshGradient();
+	}
+
+	bool stopRegistered = SPFactory::instance().registerObject("svg:stop", createStop);
+	bool meshRowRegistered = SPFactory::instance().registerObject("svg:meshRow", createMeshRow);
+	bool meshPatchRegistered = SPFactory::instance().registerObject("svg:meshPatch", createMeshPatch);
+	bool linearGradientRegistered = SPFactory::instance().registerObject("svg:linearGradient", createLinearGradient);
+	bool radialGradientRegistered = SPFactory::instance().registerObject("svg:radialGradient", createRadialGradient);
+	bool meshGradientRegistered = SPFactory::instance().registerObject("svg:meshGradient", createMeshGradient);
+}
+
+
 // SPStop
 G_DEFINE_TYPE(SPStop, sp_stop, G_TYPE_OBJECT);
 

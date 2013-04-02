@@ -26,6 +26,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-morphology.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createMorphology() {
+		return new SPFeMorphology();
+	}
+
+	bool morphologyRegistered = SPFactory::instance().registerObject("svg:feMorphology", createMorphology);
+}
+
 /* FeMorphology base class */
 G_DEFINE_TYPE(SPFeMorphology, sp_feMorphology, G_TYPE_OBJECT);
 

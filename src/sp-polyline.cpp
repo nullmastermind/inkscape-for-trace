@@ -20,6 +20,15 @@
 #include "xml/repr.h"
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createPolyLine() {
+		return new SPPolyLine();
+	}
+
+	bool polyLineRegistered = SPFactory::instance().registerObject("svg:polyline", createPolyLine);
+}
 
 G_DEFINE_TYPE(SPPolyLine, sp_polyline, G_TYPE_OBJECT);
 

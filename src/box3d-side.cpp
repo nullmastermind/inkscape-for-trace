@@ -28,6 +28,16 @@ struct SPPathClass;
 
 static void box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createBox3DSide() {
+		return new Box3DSide();
+	}
+
+	bool box3DSideRegistered = SPFactory::instance().registerObject("inkscape:box3dside", createBox3DSide);
+}
+
 G_DEFINE_TYPE(Box3DSide, box3d_side, G_TYPE_OBJECT);
 
 static void box3d_side_class_init(Box3DSideClass *klass)

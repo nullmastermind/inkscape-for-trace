@@ -32,6 +32,16 @@
 
 #include "sp-star.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createStar() {
+		return new SPStar();
+	}
+
+	bool starRegistered = SPFactory::instance().registerObject("star", createStar);
+}
+
 G_DEFINE_TYPE(SPStar, sp_star, G_TYPE_OBJECT);
 
 static void sp_star_class_init(SPStarClass *klass)

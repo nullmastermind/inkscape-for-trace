@@ -35,6 +35,15 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createTRef() {
+		return new SPTRef();
+	}
+
+	bool trefRegistered = SPFactory::instance().registerObject("svg:tref", createTRef);
+}
 
 //#define DEBUG_TREF
 #ifdef DEBUG_TREF

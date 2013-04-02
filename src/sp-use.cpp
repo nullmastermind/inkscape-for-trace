@@ -47,6 +47,16 @@ static void sp_use_delete_self(SPObject *deleted, SPUse *self);
 //void m_print(gchar *say, Geom::Affine m)
 //{ g_print("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createUse() {
+		return new SPUse();
+	}
+
+	bool useRegistered = SPFactory::instance().registerObject("svg:use", createUse);
+}
+
 G_DEFINE_TYPE(SPUse, sp_use, G_TYPE_OBJECT);
 
 static void

@@ -28,6 +28,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-convolve-matrix.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createConvolveMatrix() {
+		return new SPFeConvolveMatrix();
+	}
+
+	bool convolveMatrixRegistered = SPFactory::instance().registerObject("svg:feConvolveMatrix", createConvolveMatrix);
+}
+
 /* FeConvolveMatrix base class */
 G_DEFINE_TYPE(SPFeConvolveMatrix, sp_feConvolveMatrix, G_TYPE_OBJECT);
 

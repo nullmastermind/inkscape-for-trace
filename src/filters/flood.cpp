@@ -27,6 +27,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-flood.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFlood() {
+		return new SPFeFlood();
+	}
+
+	bool floodRegistered = SPFactory::instance().registerObject("svg:feFlood", createFlood);
+}
+
 /* FeFlood base class */
 G_DEFINE_TYPE(SPFeFlood, sp_feFlood, G_TYPE_OBJECT);
 

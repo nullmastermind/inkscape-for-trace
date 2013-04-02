@@ -25,6 +25,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-offset.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createOffset() {
+		return new SPFeOffset();
+	}
+
+	bool offsetRegistered = SPFactory::instance().registerObject("svg:feOffset", createOffset);
+}
+
 /* FeOffset base class */
 G_DEFINE_TYPE(SPFeOffset, sp_feOffset, G_TYPE_OBJECT);
 

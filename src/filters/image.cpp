@@ -29,6 +29,16 @@
 
 #include "display/nr-filter.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createImage() {
+		return new SPFeImage();
+	}
+
+	bool imageRegistered = SPFactory::instance().registerObject("svg:feImage", createImage);
+}
+
 /* FeImage base class */
 G_DEFINE_TYPE(SPFeImage, sp_feImage, G_TYPE_OBJECT);
 

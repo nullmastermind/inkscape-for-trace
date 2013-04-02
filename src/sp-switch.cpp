@@ -25,6 +25,16 @@
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createSwitch() {
+		return new SPSwitch();
+	}
+
+	bool switchRegistered = SPFactory::instance().registerObject("svg:switch", createSwitch);
+}
+
 G_DEFINE_TYPE(SPSwitch, sp_switch, G_TYPE_OBJECT);
 
 static void

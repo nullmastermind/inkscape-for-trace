@@ -16,6 +16,16 @@
 #include <cstring>
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createScript() {
+		return new SPScript();
+	}
+
+	bool scriptRegistered = SPFactory::instance().registerObject("svg:script", createScript);
+}
+
 G_DEFINE_TYPE(SPScript, sp_script, G_TYPE_OBJECT);
 
 static void sp_script_class_init(SPScriptClass *sc)

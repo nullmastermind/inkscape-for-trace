@@ -28,6 +28,18 @@
 
 #include "sp-spiral.h"
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createSpiral() {
+		return new SPSpiral();
+	}
+
+	bool spiralRegistered = SPFactory::instance().registerObject("spiral", createSpiral);
+}
+
+
 G_DEFINE_TYPE(SPSpiral, sp_spiral, G_TYPE_OBJECT);
 
 /**

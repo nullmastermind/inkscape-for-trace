@@ -22,6 +22,16 @@
 #include "document.h"
 #include <cstring>
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createGlyph() {
+		return new SPGlyph();
+	}
+
+	bool glyphRegistered = SPFactory::instance().registerObject("svg:glyph", createGlyph);
+}
+
 G_DEFINE_TYPE(SPGlyph, sp_glyph, G_TYPE_OBJECT);
 
 static void sp_glyph_class_init(SPGlyphClass *gc)

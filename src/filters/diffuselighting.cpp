@@ -36,6 +36,16 @@
 /* FeDiffuseLighting base class */
 static void sp_feDiffuseLighting_children_modified(SPFeDiffuseLighting *sp_diffuselighting);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createDiffuseLighting() {
+		return new SPFeDiffuseLighting();
+	}
+
+	bool diffuseLightingRegistered = SPFactory::instance().registerObject("svg:feDiffuseLighting", createDiffuseLighting);
+}
+
 G_DEFINE_TYPE(SPFeDiffuseLighting, sp_feDiffuseLighting, G_TYPE_OBJECT);
 
 static void

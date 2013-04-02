@@ -27,6 +27,21 @@
 static void sp_flowregion_init (SPFlowregion *group);
 static void sp_flowregion_dispose (GObject *object);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFlowregion() {
+		return new SPFlowregion();
+	}
+
+	SPObject* createFlowregionExclude() {
+		return new SPFlowregionExclude();
+	}
+
+	bool flowregionRegistered = SPFactory::instance().registerObject("svg:flowRegion", createFlowregion);
+	bool flowregionExcludeRegistered = SPFactory::instance().registerObject("svg:flowRegionExclude", createFlowregionExclude);
+}
+
 G_DEFINE_TYPE(SPFlowregion, sp_flowregion, G_TYPE_OBJECT);
 
 static void sp_flowregionexclude_init (SPFlowregionExclude *group);

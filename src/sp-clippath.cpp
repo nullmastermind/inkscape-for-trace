@@ -40,6 +40,16 @@ struct SPClipPathView {
 static SPClipPathView*      sp_clippath_view_new_prepend(SPClipPathView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 static SPClipPathView*      sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createClipPath() {
+		return new SPClipPath();
+	}
+
+	bool clipPathRegistered = SPFactory::instance().registerObject("svg:clipPath", createClipPath);
+}
+
 G_DEFINE_TYPE(SPClipPath, sp_clippath, G_TYPE_OBJECT);
 
 static void

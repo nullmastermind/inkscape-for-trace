@@ -22,6 +22,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-tile.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createTile() {
+		return new SPFeTile();
+	}
+
+	bool tileRegistered = SPFactory::instance().registerObject("svg:feTile", createTile);
+}
+
 /* FeTile base class */
 G_DEFINE_TYPE(SPFeTile, sp_feTile, G_TYPE_OBJECT);
 

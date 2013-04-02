@@ -43,6 +43,20 @@
 #include "xml/repr.h"
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createTSpan() {
+		return new SPTSpan();
+	}
+
+	SPObject* createTextPath() {
+		return new SPTextPath();
+	}
+
+	bool tspanRegistered = SPFactory::instance().registerObject("svg:tspan", createTSpan);
+	bool textPathRegistered = SPFactory::instance().registerObject("svg:textPath", createTextPath);
+}
 
 /*#####################################################
 #  SPTSPAN

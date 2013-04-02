@@ -16,6 +16,16 @@
 #include "sp-title.h"
 #include "xml/repr.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createTitle() {
+		return new SPTitle();
+	}
+
+	bool titleRegistered = SPFactory::instance().registerObject("svg:title", createTitle);
+}
+
 G_DEFINE_TYPE(SPTitle, sp_title, G_TYPE_OBJECT);
 
 static void

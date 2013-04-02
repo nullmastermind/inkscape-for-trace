@@ -27,6 +27,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-component-transfer.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createComponentTransfer() {
+		return new SPFeComponentTransfer();
+	}
+
+	bool componentTransferRegistered = SPFactory::instance().registerObject("svg:feComponentTransfer", createComponentTransfer);
+}
+
 /* FeComponentTransfer base class */
 G_DEFINE_TYPE(SPFeComponentTransfer, sp_feComponentTransfer, G_TYPE_OBJECT);
 

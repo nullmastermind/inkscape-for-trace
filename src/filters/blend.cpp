@@ -30,6 +30,16 @@
 #include "display/nr-filter-blend.h"
 #include "display/nr-filter-types.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createBlend() {
+		return new SPFeBlend();
+	}
+
+	bool blendRegistered = SPFactory::instance().registerObject("svg:feBlend", createBlend);
+}
+
 /* FeBlend base class */
 G_DEFINE_TYPE(SPFeBlend, sp_feBlend, G_TYPE_OBJECT);
 

@@ -30,6 +30,16 @@
 //#define SP_MACROS_SILENT
 //#include "macros.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createGaussianBlur() {
+		return new SPGaussianBlur();
+	}
+
+	bool gaussianBlurRegistered = SPFactory::instance().registerObject("svg:feGaussianBlur", createGaussianBlur);
+}
+
 /* GaussianBlur base class */
 G_DEFINE_TYPE(SPGaussianBlur, sp_gaussianBlur, G_TYPE_OBJECT);
 

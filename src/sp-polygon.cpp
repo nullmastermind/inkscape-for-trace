@@ -25,6 +25,16 @@
 #include "xml/repr.h"
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createPolygon() {
+		return new SPPolygon();
+	}
+
+	bool polygonRegistered = SPFactory::instance().registerObject("svg:polygon", createPolygon);
+}
+
 G_DEFINE_TYPE(SPPolygon, sp_polygon, G_TYPE_OBJECT);
 
 static void sp_polygon_class_init(SPPolygonClass *pc)

@@ -499,6 +499,17 @@ GdkPixbuf* pixbuf_new_from_file( const char *filename, GError **error )
 }
 }
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createImage() {
+		return new SPImage();
+	}
+
+	bool imageRegistered = SPFactory::instance().registerObject("svg:image", createImage);
+}
+
 G_DEFINE_TYPE(SPImage, sp_image, G_TYPE_OBJECT);
 
 static void sp_image_class_init( SPImageClass * klass )

@@ -51,6 +51,17 @@
 
 #define noPATH_VERBOSE
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createPath() {
+		return new SPPath();
+	}
+
+	bool pathRegistered = SPFactory::instance().registerObject("svg:path", createPath);
+}
+
+
 static void sp_path_finalize(GObject *obj);
 
 G_DEFINE_TYPE(SPPath, sp_path, G_TYPE_OBJECT);

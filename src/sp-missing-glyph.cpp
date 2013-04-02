@@ -19,6 +19,16 @@
 #include "sp-missing-glyph.h"
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createMissingGlyph() {
+		return new SPMissingGlyph();
+	}
+
+	bool missingGlyphRegistered = SPFactory::instance().registerObject("svg:missing-glyph", createMissingGlyph);
+}
+
 G_DEFINE_TYPE(SPMissingGlyph, sp_missing_glyph, G_TYPE_OBJECT);
 
 static void sp_missing_glyph_class_init(SPMissingGlyphClass *gc)

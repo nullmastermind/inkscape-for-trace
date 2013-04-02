@@ -41,6 +41,16 @@ using std::pair;
 static void filter_ref_changed(SPObject *old_ref, SPObject *ref, SPFilter *filter);
 static void filter_ref_modified(SPObject *href, guint flags, SPFilter *filter);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFilter() {
+		return new SPFilter();
+	}
+
+	bool filterRegistered = SPFactory::instance().registerObject("svg:filter", createFilter);
+}
+
 G_DEFINE_TYPE(SPFilter, sp_filter, G_TYPE_OBJECT);
 
 static void

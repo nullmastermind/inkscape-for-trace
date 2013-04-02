@@ -57,6 +57,16 @@ static void sp_group_dispose(GObject *object);
 
 static void sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createGroup() {
+		return new SPGroup();
+	}
+
+	bool groupRegistered = SPFactory::instance().registerObject("svg:g", createGroup);
+}
+
 G_DEFINE_TYPE(SPGroup, sp_group, G_TYPE_OBJECT);
 
 static void

@@ -36,6 +36,16 @@
 /* FeSpecularLighting base class */
 static void sp_feSpecularLighting_children_modified(SPFeSpecularLighting *sp_specularlighting);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createSpecularLighting() {
+		return new SPFeSpecularLighting();
+	}
+
+	bool specularLightingRegistered = SPFactory::instance().registerObject("svg:feSpecularLighting", createSpecularLighting);
+}
+
 G_DEFINE_TYPE(SPFeSpecularLighting, sp_feSpecularLighting, G_TYPE_OBJECT);
 
 static void

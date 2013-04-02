@@ -20,6 +20,36 @@ static void sp_flowpara_init (SPFlowpara *group);
 static void sp_flowline_init (SPFlowline *group);
 static void sp_flowregionbreak_init (SPFlowregionbreak *group);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFlowdiv() {
+		return new SPFlowdiv();
+	}
+
+	SPObject* createFlowtspan() {
+		return new SPFlowtspan();
+	}
+
+	SPObject* createFlowpara() {
+		return new SPFlowpara();
+	}
+
+	SPObject* createFlowline() {
+		return new SPFlowline();
+	}
+
+	SPObject* createFlowregionbreak() {
+		return new SPFlowregionbreak();
+	}
+
+	bool flowdivRegistered = SPFactory::instance().registerObject("svg:flowDiv", createFlowdiv);
+	bool flowtspanRegistered = SPFactory::instance().registerObject("svg:flowSpan", createFlowtspan);
+	bool flowparaRegistered = SPFactory::instance().registerObject("svg:flowPara", createFlowpara);
+	bool flowlineRegistered = SPFactory::instance().registerObject("svg:flowLine", createFlowline);
+	bool flowregionbreakRegistered = SPFactory::instance().registerObject("svg:flowRegionBreak", createFlowregionbreak);
+}
+
 G_DEFINE_TYPE(SPFlowdiv, sp_flowdiv, G_TYPE_OBJECT);
 
 static void sp_flowdiv_class_init(SPFlowdivClass *klass)

@@ -29,6 +29,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-colormatrix.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createColorMatrix() {
+		return new SPFeColorMatrix();
+	}
+
+	bool colorMatrixRegistered = SPFactory::instance().registerObject("svg:feColorMatrix", createColorMatrix);
+}
+
 /* FeColorMatrix base class */
 G_DEFINE_TYPE(SPFeColorMatrix, sp_feColorMatrix, G_TYPE_OBJECT);
 

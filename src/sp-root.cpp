@@ -31,6 +31,16 @@
 #include "svg/svg.h"
 #include "xml/repr.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createRoot() {
+		return new SPRoot();
+	}
+
+	bool rootRegistered = SPFactory::instance().registerObject("svg:svg", createRoot);
+}
+
 G_DEFINE_TYPE(SPRoot, sp_root, G_TYPE_OBJECT);
 
 /**

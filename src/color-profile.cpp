@@ -184,6 +184,18 @@ cmsHPROFILE ColorProfileImpl::getNULLProfile() {
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createColorProfile() {
+		return new Inkscape::ColorProfile();
+	}
+
+	bool rectRegistered = SPFactory::instance().registerObject("svg:color-profile", createColorProfile);
+}
+
+
 /**
  * Register ColorProfile class and return its type.
  */

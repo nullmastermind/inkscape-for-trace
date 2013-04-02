@@ -25,6 +25,16 @@
 #include "ui/view/view.h"
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createAnchor() {
+		return new SPAnchor();
+	}
+
+	bool anchorRegistered = SPFactory::instance().registerObject("svg:a", createAnchor);
+}
+
 G_DEFINE_TYPE(SPAnchor, sp_anchor, G_TYPE_OBJECT);
 
 static void sp_anchor_class_init(SPAnchorClass *ac)

@@ -29,6 +29,16 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createSpotLight() {
+		return new SPFeSpotLight();
+	}
+
+	bool spotLightRegistered = SPFactory::instance().registerObject("svg:feSpotLight", createSpotLight);
+}
+
 G_DEFINE_TYPE(SPFeSpotLight, sp_fespotlight, G_TYPE_OBJECT);
 
 static void

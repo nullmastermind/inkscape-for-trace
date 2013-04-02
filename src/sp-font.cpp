@@ -23,6 +23,16 @@
 
 #include "display/nr-svgfonts.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFont() {
+		return new SPFont();
+	}
+
+	bool fontRegistered = SPFactory::instance().registerObject("svg:font", createFont);
+}
+
 G_DEFINE_TYPE(SPFont, sp_font, G_TYPE_OBJECT);
 
 static void sp_font_class_init(SPFontClass *fc)

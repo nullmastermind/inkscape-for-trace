@@ -20,6 +20,15 @@
 #include "xml/repr.h"
 #include "document.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createDefs() {
+		return new SPDefs();
+	}
+
+	bool defsRegistered = SPFactory::instance().registerObject("svg:defs", createDefs);
+}
 
 G_DEFINE_TYPE(SPDefs, sp_defs, G_TYPE_OBJECT);
 

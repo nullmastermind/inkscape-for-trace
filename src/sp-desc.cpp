@@ -16,6 +16,16 @@
 #include "sp-desc.h"
 #include "xml/repr.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createDesc() {
+		return new SPDesc();
+	}
+
+	bool descRegistered = SPFactory::instance().registerObject("svg:desc", createDesc);
+}
+
 G_DEFINE_TYPE(SPDesc, sp_desc, SP_TYPE_OBJECT);
 
 static void sp_desc_class_init(SPDescClass *klass)

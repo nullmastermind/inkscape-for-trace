@@ -37,6 +37,16 @@
 static void sp_flowtext_init(SPFlowtext *group);
 static void sp_flowtext_dispose(GObject *object);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFlowtext() {
+		return new SPFlowtext();
+	}
+
+	bool flowtextRegistered = SPFactory::instance().registerObject("svg:flowRoot", createFlowtext);
+}
+
 G_DEFINE_TYPE(SPFlowtext, sp_flowtext, G_TYPE_OBJECT);
 
 static void

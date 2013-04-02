@@ -37,6 +37,16 @@ struct SPMaskView {
 SPMaskView *sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 SPMaskView *sp_mask_view_list_remove (SPMaskView *list, SPMaskView *view);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createMask() {
+		return new SPMask();
+	}
+
+	bool maskRegistered = SPFactory::instance().registerObject("svg:mask", createMask);
+}
+
 G_DEFINE_TYPE(SPMask, sp_mask, G_TYPE_OBJECT);
 
 static void

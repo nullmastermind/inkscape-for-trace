@@ -58,6 +58,16 @@
 #include "text-editing.h"
 #include "unit-constants.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createText() {
+		return new SPText();
+	}
+
+	bool textRegistered = SPFactory::instance().registerObject("svg:text", createText);
+}
+
 /*#####################################################
 #  SPTEXT
 #####################################################*/

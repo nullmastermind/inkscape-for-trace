@@ -28,6 +28,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-turbulence.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createTurbulence() {
+		return new SPFeTurbulence();
+	}
+
+	bool turbulenceRegistered = SPFactory::instance().registerObject("svg:feTurbulence", createTurbulence);
+}
+
 /* FeTurbulence base class */
 G_DEFINE_TYPE(SPFeTurbulence, sp_feTurbulence, G_TYPE_OBJECT);
 

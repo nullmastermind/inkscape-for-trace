@@ -25,6 +25,16 @@
 #include "display/nr-filter-composite.h"
 #include "sp-filter.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createComposite() {
+		return new SPFeComposite();
+	}
+
+	bool compositeRegistered = SPFactory::instance().registerObject("svg:feComposite", createComposite);
+}
+
 /* FeComposite base class */
 G_DEFINE_TYPE(SPFeComposite, sp_feComposite, G_TYPE_OBJECT);
 

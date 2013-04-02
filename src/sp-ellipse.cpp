@@ -35,6 +35,28 @@
 
 #define noELLIPSE_VERBOSE
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createEllipse() {
+		return new SPEllipse();
+	}
+
+	SPObject* createCircle() {
+		return new SPCircle();
+	}
+
+	SPObject* createArc() {
+		return new SPArc();
+	}
+
+	bool ellipseRegistered = SPFactory::instance().registerObject("svg:ellipse", createEllipse);
+	bool circleRegistered = SPFactory::instance().registerObject("svg:circle", createCircle);
+	bool arcRegistered = SPFactory::instance().registerObject("arc", createArc);
+}
+
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif

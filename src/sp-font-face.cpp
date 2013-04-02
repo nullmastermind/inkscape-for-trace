@@ -259,6 +259,16 @@ static std::vector<FontFaceStretchType> sp_read_fontFaceStretchType(gchar const 
     return v;
 }
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createFontFace() {
+		return new SPFontFace();
+	}
+
+	bool fontFaceRegistered = SPFactory::instance().registerObject("svg:font-face", createFontFace);
+}
+
 G_DEFINE_TYPE(SPFontFace, sp_fontface, G_TYPE_OBJECT);
 
 static void sp_fontface_class_init(SPFontFaceClass *fc)

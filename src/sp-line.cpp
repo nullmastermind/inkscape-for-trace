@@ -24,6 +24,15 @@
 #include "document.h"
 #include "inkscape.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createLine() {
+		return new SPLine();
+	}
+
+	bool lineRegistered = SPFactory::instance().registerObject("svg:line", createLine);
+}
 
 G_DEFINE_TYPE(SPLine, sp_line, G_TYPE_OBJECT);
 

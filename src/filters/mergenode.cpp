@@ -23,6 +23,16 @@
 #include "filters/merge.h"
 #include "display/nr-filter-types.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createMergeNode() {
+		return new SPFeMergeNode();
+	}
+
+	bool mergeNodeRegistered = SPFactory::instance().registerObject("svg:feMergeNode", createMergeNode);
+}
+
 G_DEFINE_TYPE(SPFeMergeNode, sp_feMergeNode, G_TYPE_OBJECT);
 
 static void

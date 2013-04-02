@@ -7,6 +7,16 @@
 #include "style.h"
 using Inkscape::XML::TEXT_NODE;
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createStyle() {
+		return new SPStyleElem();
+	}
+
+	bool styleRegistered = SPFactory::instance().registerObject("svg:style", createStyle);
+}
+
 G_DEFINE_TYPE(SPStyleElem, sp_style_elem, G_TYPE_OBJECT);
 
 static void

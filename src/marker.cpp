@@ -42,6 +42,16 @@ static void sp_marker_print (SPItem *item, SPPrintContext *ctx);
 
 static void sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destroyitems);
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createMarker() {
+		return new SPMarker();
+	}
+
+	bool markerRegistered = SPFactory::instance().registerObject("svg:marker", createMarker);
+}
+
 G_DEFINE_TYPE(SPMarker, sp_marker, G_TYPE_OBJECT);
 
 /**

@@ -25,6 +25,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-displacement-map.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createDisplacementMap() {
+		return new SPFeDisplacementMap();
+	}
+
+	bool displacementMapRegistered = SPFactory::instance().registerObject("svg:feDisplacementMap", createDisplacementMap);
+}
+
 /* FeDisplacementMap base class */
 G_DEFINE_TYPE(SPFeDisplacementMap, sp_feDisplacementMap, G_TYPE_OBJECT);
 

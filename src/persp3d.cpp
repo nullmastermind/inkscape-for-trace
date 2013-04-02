@@ -34,6 +34,16 @@ static gchar * persp3d_pt_to_str (Persp3DImpl *persp_impl, Proj::Axis const axis
 
 static int global_counter = 0;
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createPersp3D() {
+		return new Persp3D();
+	}
+
+	bool persp3DRegistered = SPFactory::instance().registerObject("inkscape:persp3d", createPersp3D);
+}
+
 /* Constructor/destructor for the internal class */
 
 Persp3DImpl::Persp3DImpl() {

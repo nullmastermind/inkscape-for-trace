@@ -24,6 +24,16 @@
 #include "display/nr-filter.h"
 #include "display/nr-filter-merge.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createMerge() {
+		return new SPFeMerge();
+	}
+
+	bool mergeRegistered = SPFactory::instance().registerObject("svg:feMerge", createMerge);
+}
+
 /* FeMerge base class */
 G_DEFINE_TYPE(SPFeMerge, sp_feMerge, G_TYPE_OBJECT);
 

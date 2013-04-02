@@ -43,6 +43,16 @@ static void box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box);
 
 static gint counter = 0;
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createBox3D() {
+		return new SPBox3D();
+	}
+
+	bool box3DRegistered = SPFactory::instance().registerObject("inkscape:box3d", createBox3D);
+}
+
 G_DEFINE_TYPE(SPBox3D, box3d, G_TYPE_OBJECT);
 
 static void box3d_class_init(SPBox3DClass *klass)
