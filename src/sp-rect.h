@@ -22,13 +22,10 @@
 #define SP_RECT(obj) ((SPRect*)obj)
 #define SP_IS_RECT(obj) (dynamic_cast<const SPRect*>((SPObject*)obj))
 
-class CRect;
-
-class SPRect : public SPShape {
+class SPRect : public SPShape, public CShape {
 public:
 	SPRect();
-
-	CRect* crect;
+	virtual ~SPRect();
 
 	SVGLength x;
 	SVGLength y;
@@ -58,13 +55,8 @@ public:
 
 private:
 	static gdouble vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
-};
 
-class CRect : public CShape {
 public:
-	CRect(SPRect* sprect);
-	virtual ~CRect();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 
 	void set(unsigned key, gchar const *value);
@@ -78,9 +70,6 @@ public:
 
 	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 	void convert_to_guides();
-
-protected:
-	SPRect* sprect;
 };
 
 #endif // SEEN_SP_RECT_H

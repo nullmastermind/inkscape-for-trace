@@ -38,129 +38,123 @@ namespace {
 }
 
 
-CRect::CRect(SPRect* rect) : CShape(rect) {
-	this->sprect = rect;
+SPRect::SPRect() : SPShape(), CShape(this) {
+	delete this->cshape;
+	this->cshape = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 }
 
-CRect::~CRect() {
+SPRect::~SPRect() {
 }
 
-SPRect::SPRect() : SPShape() {
-	SPRect* rect = this;
-
-	rect->crect = new CRect(rect);
-	rect->typeHierarchy.insert(typeid(SPRect));
-
-	delete rect->cshape;
-	rect->cshape = rect->crect;
-	rect->clpeitem = rect->crect;
-	rect->citem = rect->crect;
-	rect->cobject = rect->crect;
-
-    /* Initializing to zero is automatic */
-    /* sp_svg_length_unset(&rect->x, SP_SVG_UNIT_NONE, 0.0, 0.0); */
-    /* sp_svg_length_unset(&rect->y, SP_SVG_UNIT_NONE, 0.0, 0.0); */
-    /* sp_svg_length_unset(&rect->width, SP_SVG_UNIT_NONE, 0.0, 0.0); */
-    /* sp_svg_length_unset(&rect->height, SP_SVG_UNIT_NONE, 0.0, 0.0); */
-    /* sp_svg_length_unset(&rect->rx, SP_SVG_UNIT_NONE, 0.0, 0.0); */
-    /* sp_svg_length_unset(&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0); */
-}
-
-void CRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPRect* object = this->sprect;
-
+void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     CShape::build(doc, repr);
 
-    object->readAttr( "x" );
-    object->readAttr( "y" );
-    object->readAttr( "width" );
-    object->readAttr( "height" );
-    object->readAttr( "rx" );
-    object->readAttr( "ry" );
+    this->readAttr("x");
+    this->readAttr("y");
+    this->readAttr("width");
+    this->readAttr("height");
+    this->readAttr("rx");
+    this->readAttr("ry");
 }
 
-void CRect::set(unsigned key, gchar const *value) {
-	SPRect* rect = this->sprect;
-	SPRect* object = rect;
-
+void SPRect::set(unsigned key, gchar const *value) {
     /* fixme: We need real error processing some time */
 
     switch (key) {
         case SP_ATTR_X:
-            rect->x.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        	this->x.readOrUnset(value);
+        	this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_Y:
-            rect->y.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        	this->y.readOrUnset(value);
+        	this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_WIDTH:
-            if (!rect->width.read(value) || rect->width.value < 0.0) {
-                rect->width.unset();
+            if (!this->width.read(value) || this->width.value < 0.0) {
+            	this->width.unset();
             }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_HEIGHT:
-            if (!rect->height.read(value) || rect->height.value < 0.0) {
-                rect->height.unset();
+            if (!this->height.read(value) || this->height.value < 0.0) {
+            	this->height.unset();
             }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_RX:
-            if (!rect->rx.read(value) || rect->rx.value <= 0.0) {
-                rect->rx.unset();
+            if (!this->rx.read(value) || this->rx.value <= 0.0) {
+            	this->rx.unset();
             }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_RY:
-            if (!rect->ry.read(value) || rect->ry.value <= 0.0) {
-                rect->ry.unset();
+            if (!this->ry.read(value) || this->ry.value <= 0.0) {
+            	this->ry.unset();
             }
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         default:
             CShape::set(key, value);
             break;
     }
 }
 
-void CRect::update(SPCtx* ctx, unsigned int flags) {
-	SPRect* object = this->sprect;
-
+void SPRect::update(SPCtx* ctx, unsigned int flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        SPRect *rect = (SPRect *) object;
-        SPStyle *style = object->style;
+        SPStyle *style = this->style;
+
         SPItemCtx const *ictx = (SPItemCtx const *) ctx;
+
         double const w = ictx->viewport.width();
         double const h = ictx->viewport.height();
         double const em = style->font_size.computed;
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
-        rect->x.update(em, ex, w);
-        rect->y.update(em, ex, h);
-        rect->width.update(em, ex, w);
-        rect->height.update(em, ex, h);
-        rect->rx.update(em, ex, w);
-        rect->ry.update(em, ex, h);
-        ((SPShape *) object)->setShape();
+
+        this->x.update(em, ex, w);
+        this->y.update(em, ex, h);
+        this->width.update(em, ex, w);
+        this->height.update(em, ex, h);
+        this->rx.update(em, ex, w);
+        this->ry.update(em, ex, h);
+        this->set_shape();
+
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
 
     CShape::update(ctx, flags);
 }
 
-Inkscape::XML::Node * CRect::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPRect* rect = this->sprect;
-
+Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:rect");
     }
 
-    sp_repr_set_svg_double(repr, "width", rect->width.computed);
-    sp_repr_set_svg_double(repr, "height", rect->height.computed);
-    if (rect->rx._set) sp_repr_set_svg_double(repr, "rx", rect->rx.computed);
-    if (rect->ry._set) sp_repr_set_svg_double(repr, "ry", rect->ry.computed);
-    sp_repr_set_svg_double(repr, "x", rect->x.computed);
-    sp_repr_set_svg_double(repr, "y", rect->y.computed);
+    sp_repr_set_svg_double(repr, "width", this->width.computed);
+    sp_repr_set_svg_double(repr, "height", this->height.computed);
+
+    if (this->rx._set) {
+    	sp_repr_set_svg_double(repr, "rx", this->rx.computed);
+    }
+
+    if (this->ry._set) {
+    	sp_repr_set_svg_double(repr, "ry", this->ry.computed);
+    }
+
+    sp_repr_set_svg_double(repr, "x", this->x.computed);
+    sp_repr_set_svg_double(repr, "y", this->y.computed);
 
     this->set_shape(); // evaluate SPCurve
     CShape::write(xml_doc, repr, flags);
@@ -168,42 +162,39 @@ Inkscape::XML::Node * CRect::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
-gchar* CRect::description() {
-	g_return_val_if_fail(SP_IS_RECT(this->sprect), NULL);
+gchar* SPRect::description() {
 	return g_strdup(_("<b>Rectangle</b>"));
 }
 
 #define C1 0.554
 
-void CRect::set_shape() {
-    SPRect *rect = this->sprect;
-
-    if ((rect->height.computed < 1e-18) || (rect->width.computed < 1e-18)) {
-        SP_SHAPE(rect)->setCurveInsync( NULL, TRUE);
-        SP_SHAPE(rect)->setCurveBeforeLPE( NULL );
+void SPRect::set_shape() {
+    if ((this->height.computed < 1e-18) || (this->width.computed < 1e-18)) {
+    	this->setCurveInsync( NULL, TRUE);
+    	this->setCurveBeforeLPE( NULL );
         return;
     }
 
     SPCurve *c = new SPCurve();
 
-    double const x = rect->x.computed;
-    double const y = rect->y.computed;
-    double const w = rect->width.computed;
-    double const h = rect->height.computed;
+    double const x = this->x.computed;
+    double const y = this->y.computed;
+    double const w = this->width.computed;
+    double const h = this->height.computed;
     double const w2 = w / 2;
     double const h2 = h / 2;
-    double const rx = std::min(( rect->rx._set
-                                 ? rect->rx.computed
-                                 : ( rect->ry._set
-                                     ? rect->ry.computed
+    double const rx = std::min(( this->rx._set
+                                 ? this->rx.computed
+                                 : ( this->ry._set
+                                     ? this->ry.computed
                                      : 0.0 ) ),
-                               .5 * rect->width.computed);
-    double const ry = std::min(( rect->ry._set
-                                 ? rect->ry.computed
-                                 : ( rect->rx._set
-                                     ? rect->rx.computed
+                               .5 * this->width.computed);
+    double const ry = std::min(( this->ry._set
+                                 ? this->ry.computed
+                                 : ( this->rx._set
+                                     ? this->rx.computed
                                      : 0.0 ) ),
-                               .5 * rect->height.computed);
+                               .5 * this->height.computed);
     /* TODO: Handle negative rx or ry as per
      * http://www.w3.org/TR/SVG11/shapes.html#RectElementRXAttribute once Inkscape has proper error
      * handling (see http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing).
@@ -230,8 +221,8 @@ void CRect::set_shape() {
     }
 
     c->closepath();
-    SP_SHAPE(rect)->setCurveInsync( c, TRUE);
-    SP_SHAPE(rect)->setCurveBeforeLPE( c );
+    this->setCurveInsync( c, TRUE);
+    this->setCurveBeforeLPE( c );
 
     // LPE is not applied because result can generally not be represented as SPRect
 
@@ -269,18 +260,16 @@ void SPRect::setRy(bool set, gdouble value) {
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-Geom::Affine CRect::set_transform(Geom::Affine const& xform) {
-    SPRect *rect = this->sprect;
-    SPRect* item = rect;
-
+Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {
     /* Calculate rect start in parent coords. */
-    Geom::Point pos( Geom::Point(rect->x.computed, rect->y.computed) * xform );
+    Geom::Point pos(Geom::Point(this->x.computed, this->y.computed) * xform);
 
     /* This function takes care of translation and scaling, we return whatever parts we can't
        handle. */
     Geom::Affine ret(Geom::Affine(xform).withoutTranslation());
     gdouble const sw = hypot(ret[0], ret[1]);
     gdouble const sh = hypot(ret[2], ret[3]);
+
     if (sw > 1e-9) {
         ret[0] /= sw;
         ret[1] /= sw;
@@ -288,6 +277,7 @@ Geom::Affine CRect::set_transform(Geom::Affine const& xform) {
         ret[0] = 1.0;
         ret[1] = 0.0;
     }
+
     if (sh > 1e-9) {
         ret[2] /= sh;
         ret[3] /= sh;
@@ -297,32 +287,34 @@ Geom::Affine CRect::set_transform(Geom::Affine const& xform) {
     }
 
     /* fixme: Would be nice to preserve units here */
-    rect->width = rect->width.computed * sw;
-    rect->height = rect->height.computed * sh;
-    if (rect->rx._set) {
-        rect->rx = rect->rx.computed * sw;
+    this->width = this->width.computed * sw;
+    this->height = this->height.computed * sh;
+
+    if (this->rx._set) {
+    	this->rx = this->rx.computed * sw;
     }
-    if (rect->ry._set) {
-        rect->ry = rect->ry.computed * sh;
+
+    if (this->ry._set) {
+    	this->ry = this->ry.computed * sh;
     }
 
     /* Find start in item coords */
     pos = pos * ret.inverse();
-    rect->x = pos[Geom::X];
-    rect->y = pos[Geom::Y];
+    this->x = pos[Geom::X];
+    this->y = pos[Geom::Y];
 
     this->set_shape();
 
     // Adjust stroke width
-    item->adjust_stroke(sqrt(fabs(sw * sh)));
+    this->adjust_stroke(sqrt(fabs(sw * sh)));
 
     // Adjust pattern fill
-    item->adjust_pattern(xform * ret.inverse());
+    this->adjust_pattern(xform * ret.inverse());
 
     // Adjust gradient fill
-    item->adjust_gradient(xform * ret.inverse());
+    this->adjust_gradient(xform * ret.inverse());
 
-    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
     return ret;
 }
@@ -348,6 +340,7 @@ void SPRect::setVisibleRx(gdouble rx) {
             Geom::Point(this->x.computed + 1, this->y.computed),
             Geom::Point(this->x.computed, this->y.computed),
             this->transform);
+
     	this->rx._set = true;
     }
 
@@ -363,8 +356,10 @@ void SPRect::setVisibleRy(gdouble ry) {
             Geom::Point(this->x.computed, this->y.computed + 1),
             Geom::Point(this->x.computed, this->y.computed),
             this->transform);
+
     	this->ry._set = true;
     }
+
     this->updateRepr();
 }
 
@@ -439,6 +434,7 @@ void SPRect::setVisibleWidth(gdouble width) {
         Geom::Point(this->x.computed + 1, this->y.computed),
         Geom::Point(this->x.computed, this->y.computed),
         this->transform);
+
 	this->width._set = true;
 	this->updateRepr();
 }
@@ -448,6 +444,7 @@ void SPRect::setVisibleHeight(gdouble height) {
         Geom::Point(this->x.computed, this->y.computed + 1),
         Geom::Point(this->x.computed, this->y.computed),
         this->transform);
+
 	this->height._set = true;
 	this->updateRepr();
 }
@@ -474,10 +471,7 @@ gdouble SPRect::getVisibleHeight() const {
         this->transform);
 }
 
-void CRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
-    SPRect *rect = this->sprect;
-    SPRect* item = rect;
-
+void SPRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
     /* This method overrides sp_shape_snappoints, which is the default for any shape. The default method
     returns all eight points along the path of a rounded rectangle, but not the real corners. Snapping
     the startpoint and endpoint of each rounded corner is not very useful and really confusing. Instead
@@ -485,15 +479,12 @@ void CRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::S
     but it should be noted that this might be confusing in some cases with relatively large radii. With
     small radii though the user will easily understand which point is snapping. */
 
-    g_assert(item != NULL);
-    g_assert(SP_IS_RECT(item));
+    Geom::Affine const i2dt (this->i2dt_affine ());
 
-    Geom::Affine const i2dt (item->i2dt_affine ());
-
-    Geom::Point p0 = Geom::Point(rect->x.computed, rect->y.computed) * i2dt;
-    Geom::Point p1 = Geom::Point(rect->x.computed, rect->y.computed + rect->height.computed) * i2dt;
-    Geom::Point p2 = Geom::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed) * i2dt;
-    Geom::Point p3 = Geom::Point(rect->x.computed + rect->width.computed, rect->y.computed) * i2dt;
+    Geom::Point p0 = Geom::Point(this->x.computed, this->y.computed) * i2dt;
+    Geom::Point p1 = Geom::Point(this->x.computed, this->y.computed + this->height.computed) * i2dt;
+    Geom::Point p2 = Geom::Point(this->x.computed + this->width.computed, this->y.computed + this->height.computed) * i2dt;
+    Geom::Point p3 = Geom::Point(this->x.computed + this->width.computed, this->y.computed) * i2dt;
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_RECT_CORNER)) {
         p.push_back(Inkscape::SnapCandidatePoint(p0, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER));
@@ -514,31 +505,29 @@ void CRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::S
     }
 }
 
-void CRect::convert_to_guides() {
-	SPRect* rect = this->sprect;
-	SPRect* item = rect;
-
+void SPRect::convert_to_guides() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     if (!prefs->getBool("/tools/shapes/rect/convertguides", true)) {
-        rect->convert_to_guides();
+    	this->convert_to_guides();
         return;
     }
 
     std::list<std::pair<Geom::Point, Geom::Point> > pts;
 
-    Geom::Affine const i2dt(rect->i2dt_affine());
+    Geom::Affine const i2dt(this->i2dt_affine());
 
-    Geom::Point A1(Geom::Point(rect->x.computed, rect->y.computed) * i2dt);
-    Geom::Point A2(Geom::Point(rect->x.computed, rect->y.computed + rect->height.computed) * i2dt);
-    Geom::Point A3(Geom::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed) * i2dt);
-    Geom::Point A4(Geom::Point(rect->x.computed + rect->width.computed, rect->y.computed) * i2dt);
+    Geom::Point A1(Geom::Point(this->x.computed, this->y.computed) * i2dt);
+    Geom::Point A2(Geom::Point(this->x.computed, this->y.computed + this->height.computed) * i2dt);
+    Geom::Point A3(Geom::Point(this->x.computed + this->width.computed, this->y.computed + this->height.computed) * i2dt);
+    Geom::Point A4(Geom::Point(this->x.computed + this->width.computed, this->y.computed) * i2dt);
 
     pts.push_back(std::make_pair(A1, A2));
     pts.push_back(std::make_pair(A2, A3));
     pts.push_back(std::make_pair(A3, A4));
     pts.push_back(std::make_pair(A4, A1));
 
-    sp_guide_pt_pairs_to_guides(item->document, pts);
+    sp_guide_pt_pairs_to_guides(this->document, pts);
 }
 
 /*
