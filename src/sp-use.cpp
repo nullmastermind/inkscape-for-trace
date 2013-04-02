@@ -36,6 +36,8 @@
 #include "sp-use.h"
 #include "sp-use-reference.h"
 
+#include "sp-factory.h"
+
 /* fixme: */
 
 static void sp_use_finalize(GObject *obj);
@@ -489,11 +491,29 @@ sp_use_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPUse *use)
         SPItem *refobj = use->ref->getObject();
         if (refobj) {
             Inkscape::XML::Node *childrepr = refobj->getRepr();
-            GType type = sp_repr_type_lookup(childrepr);
-            g_return_if_fail(type > G_TYPE_NONE);
-            if (g_type_is_a(type, SP_TYPE_ITEM)) {
-                use->child = (SPObject*) g_object_new(type, 0);
-                use->attach(use->child, use->lastChild());
+
+//            GType type = sp_repr_type_lookup(childrepr);
+//            g_return_if_fail(type > G_TYPE_NONE);
+//            if (g_type_is_a(type, SP_TYPE_ITEM)) {
+//                use->child = (SPObject*) g_object_new(type, 0);
+//                use->attach(use->child, use->lastChild());
+//                sp_object_unref(use->child, use);
+//                (use->child)->invoke_build(use->document, childrepr, TRUE);
+//
+//                for (SPItemView *v = item->display; v != NULL; v = v->next) {
+//                    Inkscape::DrawingItem *ai;
+//                    ai = SP_ITEM(use->child)->invoke_show(v->arenaitem->drawing(), v->key, v->flags);
+//                    if (ai) {
+//                        v->arenaitem->prependChild(ai);
+//                    }
+//                }
+//            }
+
+            SPObject* obj = SPFactory::instance().createObject(*childrepr);
+            if (SP_IS_ITEM(obj)) {
+            	use->child = obj;
+
+            	use->attach(use->child, use->lastChild());
                 sp_object_unref(use->child, use);
                 (use->child)->invoke_build(use->document, childrepr, TRUE);
 
@@ -504,8 +524,10 @@ sp_use_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPUse *use)
                         v->arenaitem->prependChild(ai);
                     }
                 }
-
+            } else {
+            	delete obj;
             }
+
             use->_delete_connection = refobj->connectDelete(sigc::bind(sigc::ptr_fun(&sp_use_delete_self), use));
             use->_transformed_connection = SP_ITEM(refobj)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_use_move_compensate), use));
         }

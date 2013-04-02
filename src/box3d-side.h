@@ -18,7 +18,8 @@
 
 #define SP_TYPE_BOX3D_SIDE            (box3d_side_get_type ())
 #define SP_BOX3D_SIDE(obj) ((Box3DSide*)obj)
-#define SP_IS_BOX3D_SIDE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Box3DSide)))
+//#define SP_IS_BOX3D_SIDE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Box3DSide)))
+#define SP_IS_BOX3D_SIDE(obj) (dynamic_cast<const Box3DSide*>((SPObject*)obj))
 
 class SPBox3D;
 struct Persp3D;

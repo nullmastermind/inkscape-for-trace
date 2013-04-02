@@ -23,7 +23,9 @@ G_BEGIN_DECLS
 
 #define SP_TYPE_GENERICELLIPSE (sp_genericellipse_get_type ())
 #define SP_GENERICELLIPSE(obj) ((SPGenericEllipse*)obj)
-#define SP_IS_GENERICELLIPSE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGenericEllipse)))
+//#define SP_IS_GENERICELLIPSE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGenericEllipse)))
+
+#define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj))
 
 class CGenericEllipse;
 
@@ -73,7 +75,8 @@ void sp_genericellipse_normalize (SPGenericEllipse *ellipse);
 
 #define SP_TYPE_ELLIPSE (sp_ellipse_get_type ())
 #define SP_ELLIPSE(obj) ((SPEllipse*)obj)
-#define SP_IS_ELLIPSE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPEllipse)))
+//#define SP_IS_ELLIPSE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPEllipse)))
+#define SP_IS_ELLIPSE(obj) (dynamic_cast<const SPEllipse*>((SPObject*)obj))
 
 class CEllipse;
 
@@ -111,7 +114,8 @@ void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble
 
 #define SP_TYPE_CIRCLE (sp_circle_get_type ())
 #define SP_CIRCLE(obj) ((SPCircle*)obj)
-#define SP_IS_CIRCLE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPCircle)))
+//#define SP_IS_CIRCLE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPCircle)))
+#define SP_IS_CIRCLE(obj) (dynamic_cast<const SPCircle*>((SPObject*)obj))
 
 class CCircle;
 
@@ -147,7 +151,8 @@ GType sp_circle_get_type (void);
 
 #define SP_TYPE_ARC (sp_arc_get_type ())
 #define SP_ARC(obj) ((SPArc*)obj)
-#define SP_IS_ARC(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPArc)))
+//#define SP_IS_ARC(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPArc)))
+#define SP_IS_ARC(obj) (dynamic_cast<const SPArc*>((SPObject*)obj))
 
 class CArc;
 

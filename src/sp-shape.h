@@ -24,7 +24,8 @@
 
 #define SP_TYPE_SHAPE (sp_shape_get_type ())
 #define SP_SHAPE(obj) ((SPShape*)obj)
-#define SP_IS_SHAPE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPShape)))
+//#define SP_IS_SHAPE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPShape)))
+#define SP_IS_SHAPE(obj) (dynamic_cast<const SPShape*>((SPObject*)obj))
 
 #define SP_SHAPE_WRITE_PATH (1 << 2)
 

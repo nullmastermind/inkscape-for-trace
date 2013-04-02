@@ -18,7 +18,8 @@
 
 #define SP_TYPE_STAR            (sp_star_get_type ())
 #define SP_STAR(obj) ((SPStar*)obj)
-#define SP_IS_STAR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPStar)))
+//#define SP_IS_STAR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPStar)))
+#define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj))
 
 class CStar;
 typedef enum {

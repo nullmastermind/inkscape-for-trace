@@ -32,7 +32,7 @@
 #include "sp-factory.h"
 
 namespace {
-	SPObject* createpPointLight() {
+	SPObject* createPointLight() {
 		return new SPFePointLight();
 	}
 

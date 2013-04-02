@@ -20,7 +20,8 @@ class SPObjectClass;
 
 #define SP_TYPE_OBJECT (sp_object_get_type())
 #define SP_OBJECT(obj) ((SPObject*)obj)
-#define SP_IS_OBJECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPObject)))
+//#define SP_IS_OBJECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPObject)))
+#define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>((SPObject*)obj))
 
 /* Async modification flags */
 #define SP_OBJECT_MODIFIED_FLAG (1 << 0)
@@ -190,7 +191,7 @@ class CObject;
  * provides document level functionality such as the undo stack,
  * dictionary and so on. Source: doc/architecture.txt
  */
-class SPObject : public GObject {
+class SPObject { // : public GObject {
 public:
     enum CollectionPolicy {
         COLLECT_WITH_PARENT,
@@ -198,6 +199,8 @@ public:
     };
 
     SPObject();
+    virtual ~SPObject();
+
     CObject* cobject;
     std::set<TypeInfo> typeHierarchy;
 

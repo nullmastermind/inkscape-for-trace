@@ -24,7 +24,8 @@ class CPath;
 
 #define SP_TYPE_PATH (sp_path_get_type ())
 #define SP_PATH(obj) ((SPPath*)obj)
-#define SP_IS_PATH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPath)))
+//#define SP_IS_PATH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPath)))
+#define SP_IS_PATH(obj) (dynamic_cast<const SPPath*>((SPObject*)obj))
 
 /**
  * SVG <path> implementation

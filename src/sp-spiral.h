@@ -25,7 +25,9 @@
 
 #define SP_TYPE_SPIRAL            (sp_spiral_get_type ())
 #define SP_SPIRAL(obj) ((SPSpiral*)obj)
-#define SP_IS_SPIRAL(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPSpiral)))
+//#define SP_IS_SPIRAL(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPSpiral)))
+
+#define SP_IS_SPIRAL(obj) (dynamic_cast<const SPSpiral*>((SPObject*)obj))
 
 class CSpiral;
 /**

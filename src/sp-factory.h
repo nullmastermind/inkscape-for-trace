@@ -5,6 +5,12 @@
 
 class SPObject;
 
+namespace Inkscape {
+	namespace XML {
+		class Node;
+	}
+}
+
 /**
  * Factory for creating objects from the SPObject tree.
  */
@@ -15,7 +21,7 @@ public:
 	typedef SPObject* CreateObjectMethod();
 	bool registerObject(std::string id, CreateObjectMethod* createFunction);
 
-	SPObject* createObject(std::string id) const;
+	SPObject* createObject(const Inkscape::XML::Node& id) const;
 
 private:
 	std::map<std::string, CreateObjectMethod*> objectMap;

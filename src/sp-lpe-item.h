@@ -20,7 +20,8 @@
 
 #define SP_TYPE_LPE_ITEM (sp_lpe_item_get_type())
 #define SP_LPE_ITEM(obj) ((SPLPEItem*)obj)
-#define SP_IS_LPE_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLPEItem)))
+//#define SP_IS_LPE_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLPEItem)))
+#define SP_IS_LPE_ITEM(obj) (dynamic_cast<const SPLPEItem*>((SPObject*)obj))
 
 class CLPEItem;
 class LivePathEffectObject;

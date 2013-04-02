@@ -32,6 +32,15 @@
 #include "sp-string.h"
 #include "xml/repr.h"
 
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createString() {
+		return new SPString();
+	}
+
+	bool stringRegistered = SPFactory::instance().registerObject("string", createString);
+}
 
 /*#####################################################
 #  SPSTRING

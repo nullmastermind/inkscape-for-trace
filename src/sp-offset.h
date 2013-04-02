@@ -18,7 +18,8 @@
 
 #define SP_TYPE_OFFSET            (sp_offset_get_type ())
 #define SP_OFFSET(obj) ((SPOffset*)obj)
-#define SP_IS_OFFSET(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPOffset)))
+//#define SP_IS_OFFSET(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPOffset)))
+#define SP_IS_OFFSET(obj) (dynamic_cast<const SPOffset*>((SPObject*)obj))
 
 class COffset;
 class SPUseReference;

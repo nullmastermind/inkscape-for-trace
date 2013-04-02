@@ -17,7 +17,8 @@
 
 #define SP_TYPE_POLYGON (sp_polygon_get_type ())
 #define SP_POLYGON(obj) ((SPPolygon*)obj)
-#define SP_IS_POLYGON(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPolygon)))
+//#define SP_IS_POLYGON(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPolygon)))
+#define SP_IS_POLYGON(obj) (dynamic_cast<const SPPolygon*>((SPObject*)obj))
 
 class CPolygon;
 

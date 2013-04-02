@@ -7,7 +7,8 @@
 
 #define SP_TYPE_POLYLINE            (sp_polyline_get_type ())
 #define SP_POLYLINE(obj) ((SPPolyLine*)obj)
-#define SP_IS_POLYLINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPolyLine)))
+//#define SP_IS_POLYLINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPolyLine)))
+#define SP_IS_POLYLINE(obj) (dynamic_cast<const SPPolyLine*>((SPObject*)obj))
 
 class SPPolyLine;
 class SPPolyLineClass;

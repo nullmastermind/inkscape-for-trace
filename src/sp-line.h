@@ -21,7 +21,8 @@
 
 #define SP_TYPE_LINE            (sp_line_get_type())
 #define SP_LINE(obj) ((SPLine*)obj)
-#define SP_IS_LINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLine)))
+//#define SP_IS_LINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLine)))
+#define SP_IS_LINE(obj) (dynamic_cast<const SPLine*>((SPObject*)obj))
 
 class SPLine;
 class SPLineClass;

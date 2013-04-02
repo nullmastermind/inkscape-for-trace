@@ -105,7 +105,8 @@ class CItem;
 
 #define SP_TYPE_ITEM (sp_item_get_type ())
 #define SP_ITEM(obj) ((SPItem*)obj)
-#define SP_IS_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPItem)))
+//#define SP_IS_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPItem)))
+#define SP_IS_ITEM(obj) (dynamic_cast<const SPItem*>((SPObject*)obj))
 
 GType sp_item_get_type() G_GNUC_CONST;
 

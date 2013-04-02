@@ -951,7 +951,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 
 // CPPIFY: make pure virtual
 void CShape::set_shape() {
-	throw;
+	//throw;
 }
 
 /* Shape section */

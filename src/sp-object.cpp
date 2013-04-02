@@ -41,6 +41,8 @@
 #include "util/format.h"
 #include "util/longest-common-suffix.h"
 
+#include "sp-factory.h"
+
 using std::memcpy;
 using std::strchr;
 using std::strcmp;
@@ -163,6 +165,10 @@ SPObject::SPObject() {
     object->_default_label = NULL;
 }
 
+SPObject::~SPObject() {
+
+}
+
 /**
  * Callback to initialize the SPObject object.
  */
@@ -281,7 +287,7 @@ SPObject *sp_object_ref(SPObject *object, SPObject *owner)
     g_return_val_if_fail(!owner || SP_IS_OBJECT(owner), NULL);
 
     Inkscape::Debug::EventTracker<RefEvent> tracker(object);
-    g_object_ref(G_OBJECT(object));
+    //g_object_ref(G_OBJECT(object));
     return object;
 }
 
@@ -292,7 +298,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
     g_return_val_if_fail(!owner || SP_IS_OBJECT(owner), NULL);
 
     Inkscape::Debug::EventTracker<UnrefEvent> tracker(object);
-    g_object_unref(G_OBJECT(object));
+    //g_object_unref(G_OBJECT(object));
     return NULL;
 }
 
@@ -644,11 +650,17 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
 void CObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPObject* object = this->spobject;
 
-    GType type = sp_repr_type_lookup(child);
-    if (!type) {
-        return;
-    }
-    SPObject *ochild = SP_OBJECT(g_object_new(type, 0));
+//    GType type = sp_repr_type_lookup(child);
+//    if (!type) {
+//        return;
+//    }
+//    SPObject *ochild = SP_OBJECT(g_object_new(type, 0));
+
+	SPObject* ochild = SPFactory::instance().createObject(*child);
+	if (!ochild) {
+		return;
+	}
+
     SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
     object->attach(ochild, prev);
     sp_object_unref(ochild, NULL);
@@ -697,11 +709,17 @@ void CObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr("inkscape:collect");
 
     for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
-        GType type = sp_repr_type_lookup(rchild);
-        if (!type) {
-            continue;
-        }
-        SPObject *child = SP_OBJECT(g_object_new(type, 0));
+//        GType type = sp_repr_type_lookup(rchild);
+//        if (!type) {
+//            continue;
+//        }
+//        SPObject *child = SP_OBJECT(g_object_new(type, 0));
+
+    	SPObject* child = SPFactory::instance().createObject(*rchild);
+    	if (!child) {
+    		continue;
+    	}
+
         object->attach(child, object->lastChild());
         sp_object_unref(child, NULL);
         child->invoke_build(document, rchild, object->cloned);
