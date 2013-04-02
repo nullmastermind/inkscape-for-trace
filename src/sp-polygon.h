@@ -15,9 +15,8 @@
 
 #include "sp-shape.h"
 
-#define SP_TYPE_POLYGON (sp_polygon_get_type ())
+
 #define SP_POLYGON(obj) ((SPPolygon*)obj)
-//#define SP_IS_POLYGON(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPolygon)))
 #define SP_IS_POLYGON(obj) (dynamic_cast<const SPPolygon*>((SPObject*)obj))
 
 class CPolygon;
@@ -27,11 +26,6 @@ public:
 	SPPolygon();
 	CPolygon* cpolygon;
 };
-
-struct SPPolygonClass {
-	SPShapeClass parent_class;
-};
-
 
 class CPolygon : public CShape {
 public:
@@ -46,9 +40,6 @@ public:
 protected:
 	SPPolygon* sppolygon;
 };
-
-
-GType sp_polygon_get_type (void);
 
 // made 'public' so that SPCurve can set it as friend:
 void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value);

@@ -10,86 +10,86 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-defs.h"
-#include "sp-symbol.h"
-#include "marker.h"
-#include "sp-use.h"
+//#include "sp-defs.h"
+//#include "sp-symbol.h"
+//#include "marker.h"
+//#include "sp-use.h"
 #include "sp-root.h"
-#include "sp-image.h"
-#include "sp-linear-gradient-fns.h"
-#include "sp-mesh-gradient-fns.h"
-#include "sp-mesh-row-fns.h"
-#include "sp-mesh-patch-fns.h"
-#include "sp-object-repr.h"
-#include "sp-path.h"
-#include "sp-radial-gradient-fns.h"
-#include "sp-rect.h"
-#include "box3d.h"
-#include "box3d-side.h"
-#include "persp3d.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-stop.h"
-#include "sp-spiral.h"
-#include "sp-offset.h"
-#include "sp-line.h"
-#include "sp-metadata.h"
-#include "sp-polyline.h"
-#include "sp-textpath.h"
-#include "sp-tref.h"
-#include "sp-tspan.h"
-#include "sp-pattern.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "sp-anchor.h"
-#include "sp-flowdiv.h"
-#include "sp-flowregion.h"
-#include "sp-flowtext.h"
-#include "sp-script.h"
+//#include "sp-image.h"
+//#include "sp-linear-gradient-fns.h"
+//#include "sp-mesh-gradient-fns.h"
+//#include "sp-mesh-row-fns.h"
+//#include "sp-mesh-patch-fns.h"
+//#include "sp-object-repr.h"
+//#include "sp-path.h"
+//#include "sp-radial-gradient-fns.h"
+//#include "sp-rect.h"
+//#include "box3d.h"
+//#include "box3d-side.h"
+//#include "persp3d.h"
+//#include "sp-ellipse.h"
+//#include "sp-star.h"
+//#include "sp-stop.h"
+//#include "sp-spiral.h"
+//#include "sp-offset.h"
+//#include "sp-line.h"
+//#include "sp-metadata.h"
+//#include "sp-polyline.h"
+//#include "sp-textpath.h"
+//#include "sp-tref.h"
+//#include "sp-tspan.h"
+//#include "sp-pattern.h"
+//#include "sp-clippath.h"
+//#include "sp-mask.h"
+//#include "sp-anchor.h"
+//#include "sp-flowdiv.h"
+//#include "sp-flowregion.h"
+//#include "sp-flowtext.h"
+//#include "sp-script.h"
 #include "config.h"
 
-#include "sp-font.h"
-#include "sp-font-face.h"
-#include "sp-glyph.h"
-#include "sp-missing-glyph.h"
-#include "sp-glyph-kerning.h"
-
-#include "sp-style-elem.h"
-#include "sp-switch.h"
-#include "color-profile.h"
+//#include "sp-font.h"
+//#include "sp-font-face.h"
+//#include "sp-glyph.h"
+//#include "sp-missing-glyph.h"
+//#include "sp-glyph-kerning.h"
+//
+//#include "sp-style-elem.h"
+//#include "sp-switch.h"
+//#include "color-profile.h"
 #include "xml/repr.h"
-#include "sp-filter.h"
-#include "filters/blend.h"
-#include "filters/colormatrix.h"
-#include "filters/componenttransfer.h"
-#include "filters/componenttransfer-funcnode.h"
-#include "filters/composite.h"
-#include "filters/convolvematrix.h"
-#include "filters/diffuselighting.h"
-#include "filters/distantlight.h"
-#include "filters/displacementmap.h"
-#include "filters/flood.h"
-#include "filters/gaussian-blur.h"
-#include "filters/image.h"
-#include "filters/merge.h"
-#include "filters/morphology.h"
-#include "filters/offset.h"
-#include "filters/pointlight.h"
-#include "filters/specularlighting.h"
-#include "filters/spotlight.h"
-#include "filters/tile.h"
-#include "filters/turbulence.h"
-#include "filters/mergenode.h"
-#include "live_effects/lpeobject.h"
-#include "sp-title.h"
-#include "sp-desc.h"
+//#include "sp-filter.h"
+//#include "filters/blend.h"
+//#include "filters/colormatrix.h"
+//#include "filters/componenttransfer.h"
+//#include "filters/componenttransfer-funcnode.h"
+//#include "filters/composite.h"
+//#include "filters/convolvematrix.h"
+//#include "filters/diffuselighting.h"
+//#include "filters/distantlight.h"
+//#include "filters/displacementmap.h"
+//#include "filters/flood.h"
+//#include "filters/gaussian-blur.h"
+//#include "filters/image.h"
+//#include "filters/merge.h"
+//#include "filters/morphology.h"
+//#include "filters/offset.h"
+//#include "filters/pointlight.h"
+//#include "filters/specularlighting.h"
+//#include "filters/spotlight.h"
+//#include "filters/tile.h"
+//#include "filters/turbulence.h"
+//#include "filters/mergenode.h"
+//#include "live_effects/lpeobject.h"
+//#include "sp-title.h"
+//#include "sp-desc.h"
 
 #include "sp-factory.h"
 
-enum NameType { REPR_NAME, SODIPODI_TYPE };
-static unsigned const N_NAME_TYPES = SODIPODI_TYPE + 1;
-
-static GType name_to_gtype(NameType name_type, gchar const *name);
+//enum NameType { REPR_NAME, SODIPODI_TYPE };
+//static unsigned const N_NAME_TYPES = SODIPODI_TYPE + 1;
+//
+//static GType name_to_gtype(NameType name_type, gchar const *name);
 
 SPRoot *sp_object_repr_build_tree(SPDocument *document, Inkscape::XML::Node *repr)
 {
@@ -113,28 +113,28 @@ SPRoot *sp_object_repr_build_tree(SPDocument *document, Inkscape::XML::Node *rep
     return SP_ROOT(object);
 }
 
-GType
-sp_repr_type_lookup(Inkscape::XML::Node *repr)
-{
-    if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
-        return SP_TYPE_STRING;
-    } else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
-        gchar const * const type_name = repr->attribute("sodipodi:type");
-        return ( type_name
-                 ? name_to_gtype(SODIPODI_TYPE, type_name)
-                 : name_to_gtype(REPR_NAME, repr->name()) );
-    } else {
-        return 0;
-    }
-}
-
-static GHashTable *t2dtable[N_NAME_TYPES] = {NULL};
-
-static void
-populate_dtables()
-{
-    struct NameTypeEntry { char const *const name; GType const type_id; };
-    NameTypeEntry const repr_name_entries[] = {
+//GType
+//sp_repr_type_lookup(Inkscape::XML::Node *repr)
+//{
+//    if ( repr->type() == Inkscape::XML::TEXT_NODE ) {
+//        return SP_TYPE_STRING;
+//    } else if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+//        gchar const * const type_name = repr->attribute("sodipodi:type");
+//        return ( type_name
+//                 ? name_to_gtype(SODIPODI_TYPE, type_name)
+//                 : name_to_gtype(REPR_NAME, repr->name()) );
+//    } else {
+//        return 0;
+//    }
+//}
+//
+//static GHashTable *t2dtable[N_NAME_TYPES] = {NULL};
+//
+//static void
+//populate_dtables()
+//{
+//    struct NameTypeEntry { char const *const name; GType const type_id; };
+//    NameTypeEntry const repr_name_entries[] = {
 //        { "svg:a", SP_TYPE_ANCHOR },
 //        //{ "svg:animate", SP_TYPE_ANIMATE },
 //        { "svg:circle", SP_TYPE_CIRCLE },
@@ -213,75 +213,75 @@ populate_dtables()
 //        { "svg:tspan", SP_TYPE_TSPAN },
 //        { "svg:use", SP_TYPE_USE },
 //        { "inkscape:path-effect", TYPE_LIVEPATHEFFECT }
-    };
-    NameTypeEntry const sodipodi_name_entries[] = {
-        { "arc", SP_TYPE_ARC },
-        { "inkscape:offset", SP_TYPE_OFFSET },
-        { "spiral", SP_TYPE_SPIRAL },
-        { "star", SP_TYPE_STAR },
-        { "inkscape:box3d", SP_TYPE_BOX3D },
-        { "inkscape:box3dside", SP_TYPE_BOX3D_SIDE },
-        { "inkscape:persp3d", SP_TYPE_PERSP3D }
-    };
+//    };
+//    NameTypeEntry const sodipodi_name_entries[] = {
+//        { "arc", SP_TYPE_ARC },
+//        { "inkscape:offset", SP_TYPE_OFFSET },
+//        { "spiral", SP_TYPE_SPIRAL },
+//        { "star", SP_TYPE_STAR },
+//        { "inkscape:box3d", SP_TYPE_BOX3D },
+//        { "inkscape:box3dside", SP_TYPE_BOX3D_SIDE },
+//        { "inkscape:persp3d", SP_TYPE_PERSP3D }
+//    };
+//
+//    NameTypeEntry const *const t2entries[] = {
+//        repr_name_entries,
+//        sodipodi_name_entries
+//    };
+//    unsigned const t2n_entries[] = {
+//        G_N_ELEMENTS(repr_name_entries),
+//        G_N_ELEMENTS(sodipodi_name_entries)
+//    };
+//
+//    for (unsigned nt = 0; nt < N_NAME_TYPES; ++nt) {
+//        NameTypeEntry const *const entries = t2entries[nt];
+//        unsigned const n_entries = t2n_entries[nt];
+//        GHashTable *&dtable = t2dtable[nt];
+//
+//        dtable = g_hash_table_new(g_str_hash, g_str_equal);
+//        for (unsigned i = 0; i < n_entries; ++i) {
+//            g_hash_table_insert(dtable,
+//                                (void *)entries[i].name,
+//                                (gpointer) entries[i].type_id);
+//        }
+//    }
+//}
 
-    NameTypeEntry const *const t2entries[] = {
-        repr_name_entries,
-        sodipodi_name_entries
-    };
-    unsigned const t2n_entries[] = {
-        G_N_ELEMENTS(repr_name_entries),
-        G_N_ELEMENTS(sodipodi_name_entries)
-    };
+//static inline void
+//ensure_dtables_populated()
+//{
+//    if (!*t2dtable) {
+//        populate_dtables();
+//    }
+//}
 
-    for (unsigned nt = 0; nt < N_NAME_TYPES; ++nt) {
-        NameTypeEntry const *const entries = t2entries[nt];
-        unsigned const n_entries = t2n_entries[nt];
-        GHashTable *&dtable = t2dtable[nt];
-
-        dtable = g_hash_table_new(g_str_hash, g_str_equal);
-        for (unsigned i = 0; i < n_entries; ++i) {
-            g_hash_table_insert(dtable,
-                                (void *)entries[i].name,
-                                (gpointer) entries[i].type_id);
-        }
-    }
-}
-
-static inline void
-ensure_dtables_populated()
-{
-    if (!*t2dtable) {
-        populate_dtables();
-    }
-}
-
-static GType
-name_to_gtype(NameType const name_type, gchar const *name)
-{
-    ensure_dtables_populated();
-
-    gpointer const data = g_hash_table_lookup(t2dtable[name_type], name);
-    return ( ( data == NULL )
-             ? SP_TYPE_OBJECT
-             : (GType) data );
-}
-
-void
-sp_object_type_register(gchar const *name, GType const gtype)
-{
-    GType const current = name_to_gtype(REPR_NAME, name);
-    if (current == SP_TYPE_OBJECT) {
-        g_hash_table_insert(t2dtable[REPR_NAME],
-                            const_cast<gchar *>(name),
-                            (gpointer) gtype);
-    } else {
-        /* Already registered. */
-        if (current != gtype) {
-            g_warning("repr type `%s' already registered as type #%lu, ignoring attempt to re-register as #%lu.",
-                      name, current, gtype);
-        }
-    }
-}
+//static GType
+//name_to_gtype(NameType const name_type, gchar const *name)
+//{
+//    ensure_dtables_populated();
+//
+//    gpointer const data = g_hash_table_lookup(t2dtable[name_type], name);
+//    return ( ( data == NULL )
+//             ? SP_TYPE_OBJECT
+//             : (GType) data );
+//}
+//
+//void
+//sp_object_type_register(gchar const *name, GType const gtype)
+//{
+//    GType const current = name_to_gtype(REPR_NAME, name);
+//    if (current == SP_TYPE_OBJECT) {
+//        g_hash_table_insert(t2dtable[REPR_NAME],
+//                            const_cast<gchar *>(name),
+//                            (gpointer) gtype);
+//    } else {
+//        /* Already registered. */
+//        if (current != gtype) {
+//            g_warning("repr type `%s' already registered as type #%lu, ignoring attempt to re-register as #%lu.",
+//                      name, current, gtype);
+//        }
+//    }
+//}
 
 /*
   Local Variables:

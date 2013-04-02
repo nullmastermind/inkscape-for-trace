@@ -3,37 +3,18 @@
 
 #include "sp-shape.h"
 
-
-
-#define SP_TYPE_POLYLINE            (sp_polyline_get_type ())
 #define SP_POLYLINE(obj) ((SPPolyLine*)obj)
-//#define SP_IS_POLYLINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPolyLine)))
 #define SP_IS_POLYLINE(obj) (dynamic_cast<const SPPolyLine*>((SPObject*)obj))
 
 class SPPolyLine;
-class SPPolyLineClass;
 class CPolyLine;
-
-GType sp_polyline_get_type (void) G_GNUC_CONST;
 
 class SPPolyLine : public SPShape {
 public:
 	SPPolyLine();
 
 	CPolyLine* cpolyline;
-
-private:
-    friend class SPPolyLineClass;
 };
-
-class SPPolyLineClass {
-public:
-    SPShapeClass parent_class;
-
-private:
-    friend class SPPolyLine;	
-};
-
 
 class CPolyLine : public CShape {
 public:
@@ -49,7 +30,6 @@ public:
 protected:
 	SPPolyLine* sppolyline;
 };
-
 
 #endif // SEEN_SP_POLYLINE_H
 

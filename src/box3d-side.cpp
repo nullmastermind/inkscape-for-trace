@@ -24,8 +24,6 @@
 #include "desktop-style.h"
 #include "box3d.h"
 
-struct SPPathClass;
-
 static void box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]);
 
 #include "sp-factory.h"
@@ -36,12 +34,6 @@ namespace {
 	}
 
 	bool box3DSideRegistered = SPFactory::instance().registerObject("inkscape:box3dside", createBox3DSide);
-}
-
-G_DEFINE_TYPE(Box3DSide, box3d_side, G_TYPE_OBJECT);
-
-static void box3d_side_class_init(Box3DSideClass *klass)
-{
 }
 
 CBox3DSide::CBox3DSide(Box3DSide* box3dside) : CPolygon(box3dside) {
@@ -67,12 +59,6 @@ Box3DSide::Box3DSide() : SPPolygon() {
     side->dir1 = Box3D::NONE;
     side->dir2 = Box3D::NONE;
     side->front_or_rear = Box3D::FRONT;
-}
-
-static void
-box3d_side_init (Box3DSide * side)
-{
-	new (side) Box3DSide();
 }
 
 void CBox3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {

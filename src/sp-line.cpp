@@ -34,13 +34,6 @@ namespace {
 	bool lineRegistered = SPFactory::instance().registerObject("svg:line", createLine);
 }
 
-G_DEFINE_TYPE(SPLine, sp_line, G_TYPE_OBJECT);
-
-static void
-sp_line_class_init(SPLineClass *klass)
-{
-}
-
 CLine::CLine(SPLine* line) : CShape(line) {
 	this->spline = line;
 }
@@ -64,12 +57,6 @@ SPLine::SPLine() : SPShape() {
     line->y1.unset();
     line->x2.unset();
     line->y2.unset();
-}
-
-static void
-sp_line_init(SPLine * line)
-{
-	new (line) SPLine();
 }
 
 void CLine::build(SPDocument * document, Inkscape::XML::Node * repr) {

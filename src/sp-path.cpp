@@ -61,24 +61,6 @@ namespace {
 	bool pathRegistered = SPFactory::instance().registerObject("svg:path", createPath);
 }
 
-
-static void sp_path_finalize(GObject *obj);
-
-G_DEFINE_TYPE(SPPath, sp_path, G_TYPE_OBJECT);
-
-/**
- *  Does the object-oriented work of initializing the class structure
- *  including parent class, and registers function pointers for
- *  the functions build, set, write, and set_transform.
- */
-static void
-sp_path_class_init(SPPathClass * klass)
-{
-    GObjectClass *gobject_class = (GObjectClass *) klass;
-    gobject_class->finalize = sp_path_finalize;
-}
-
-
 gint SPPath::nodesInPath() const
 {
     return _curve ? _curve->nodes_in_path() : 0;
@@ -156,25 +138,9 @@ SPPath::SPPath() : SPShape(), connEndPair(this) {
 	path->clpeitem = path->cpath;
 	path->citem = path->cpath;
 	path->cobject = path->cpath;
-
-    //new (&path->connEndPair) SPConnEndPair(path);
 }
 
-/**
- * Initializes an SPPath.
- */
-static void
-sp_path_init(SPPath *path)
-{
-	new (path) SPPath();
-}
-
-static void
-sp_path_finalize(GObject *obj)
-{
-    SPPath *path = (SPPath *) obj;
-
-    path->connEndPair.~SPConnEndPair();
+SPPath::~SPPath() {
 }
 
 void CPath::build(SPDocument *document, Inkscape::XML::Node *repr) {

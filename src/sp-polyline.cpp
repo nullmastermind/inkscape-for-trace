@@ -30,13 +30,6 @@ namespace {
 	bool polyLineRegistered = SPFactory::instance().registerObject("svg:polyline", createPolyLine);
 }
 
-G_DEFINE_TYPE(SPPolyLine, sp_polyline, G_TYPE_OBJECT);
-
-static void
-sp_polyline_class_init(SPPolyLineClass *klass)
-{
-}
-
 CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {
 	this->sppolyline = polyline;
 }
@@ -55,11 +48,6 @@ SPPolyLine::SPPolyLine() : SPShape() {
 	polyline->clpeitem = polyline->cpolyline;
 	polyline->citem = polyline->cpolyline;
 	polyline->cobject = polyline->cpolyline;
-}
-
-void sp_polyline_init(SPPolyLine * polyline)
-{
-	new (polyline) SPPolyLine();
 }
 
 void CPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {

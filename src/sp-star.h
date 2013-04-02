@@ -16,9 +16,8 @@
 
 #include "sp-polygon.h"
 
-#define SP_TYPE_STAR            (sp_star_get_type ())
+
 #define SP_STAR(obj) ((SPStar*)obj)
-//#define SP_IS_STAR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPStar)))
 #define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj))
 
 class CStar;
@@ -41,10 +40,6 @@ public:
 
 	double rounded;
 	double randomized;
-};
-
-struct SPStarClass {
-	SPPolygonClass parent_class;
 };
 
 // CPPIFY: This derivation is a bit weird.
@@ -70,9 +65,6 @@ public:
 protected:
 	SPStar* spstar;
 };
-
-
-GType sp_star_get_type (void);
 
 void sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized);
 

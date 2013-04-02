@@ -22,9 +22,7 @@
 class SPCurve;
 class CPath;
 
-#define SP_TYPE_PATH (sp_path_get_type ())
 #define SP_PATH(obj) ((SPPath*)obj)
-//#define SP_IS_PATH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPath)))
 #define SP_IS_PATH(obj) (dynamic_cast<const SPPath*>((SPObject*)obj))
 
 /**
@@ -33,6 +31,8 @@ class CPath;
 class SPPath : public SPShape {
 public:
 	SPPath();
+	virtual ~SPPath();
+
 	CPath* cpath;
 
     gint nodesInPath() const;
@@ -50,11 +50,6 @@ public: // should be made protected
 public:
     SPConnEndPair connEndPair;
 };
-
-struct SPPathClass {
-    SPShapeClass shape_class;
-};
-
 
 class CPath : public CShape {
 public:
@@ -77,9 +72,6 @@ public:
 protected:
 	SPPath* sppath;
 };
-
-
-GType sp_path_get_type (void);
 
 #endif // SEEN_SP_PATH_H
 

@@ -55,6 +55,8 @@ class SPUseReference;
 class SPOffset : public SPShape {
 public:
 	SPOffset();
+	virtual ~SPOffset();
+
 	COffset* coffset;
 
     void *originalPath; ///< will be a livarot Path, just don't declare it here to please the gcc linker
@@ -79,13 +81,6 @@ public:
     sigc::connection _transformed_connection;
 };
 
-/// The SPOffset vtable.
-struct SPOffsetClass
-{
-  SPShapeClass parent_class;
-};
-
-
 class COffset : public CShape {
 public:
 	COffset(SPOffset* offset);
@@ -105,10 +100,6 @@ public:
 protected:
 	SPOffset* spoffset;
 };
-
-
-/* Standard Gtk function */
-GType sp_offset_get_type (void);
 
 double sp_offset_distance_to_original (SPOffset * offset, Geom::Point px);
 void sp_offset_top_point (SPOffset const *offset, Geom::Point *px);

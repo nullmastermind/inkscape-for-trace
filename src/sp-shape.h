@@ -22,16 +22,15 @@
 #include <stddef.h>
 #include <sigc++/connection.h>
 
-#define SP_TYPE_SHAPE (sp_shape_get_type ())
 #define SP_SHAPE(obj) ((SPShape*)obj)
-//#define SP_IS_SHAPE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPShape)))
 #define SP_IS_SHAPE(obj) (dynamic_cast<const SPShape*>((SPObject*)obj))
 
 #define SP_SHAPE_WRITE_PATH (1 << 2)
 
 class SPDesktop;
 namespace Inkscape { class DrawingItem; }
-GType sp_shape_get_type (void) G_GNUC_CONST;
+
+
 class CShape;
 
 /**
@@ -40,6 +39,8 @@ class CShape;
 class SPShape : public SPLPEItem {
 public:
 	SPShape();
+	virtual ~SPShape();
+
 	CShape* cshape;
 
     void setShape ();
@@ -59,19 +60,7 @@ public:
     SPObject *_marker[SP_MARKER_LOC_QTY];
     sigc::connection _release_connect [SP_MARKER_LOC_QTY];
     sigc::connection _modified_connect [SP_MARKER_LOC_QTY];
-
-private:
-    friend class SPShapeClass;	
 };
-
-class SPShapeClass {
-public:
-    SPLPEItemClass item_class;
-
-private:
-    friend class SPShape;
-};
-
 
 class CShape : public CLPEItem {
 public:

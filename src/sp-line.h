@@ -17,18 +17,11 @@
 #include "svg/svg-length.h"
 #include "sp-shape.h"
 
-
-
-#define SP_TYPE_LINE            (sp_line_get_type())
 #define SP_LINE(obj) ((SPLine*)obj)
-//#define SP_IS_LINE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLine)))
 #define SP_IS_LINE(obj) (dynamic_cast<const SPLine*>((SPObject*)obj))
 
 class SPLine;
-class SPLineClass;
 class CLine;
-
-GType sp_line_get_type(void) G_GNUC_CONST;
 
 class SPLine : public SPShape {
 public:
@@ -39,19 +32,7 @@ public:
     SVGLength y1;
     SVGLength x2;
     SVGLength y2;
-
-private:
-    friend class SPLineClass;
 };
-
-class SPLineClass {
-public:
-    SPShapeClass parent_class;
-
-private:
-    friend class SPLine;
-};
-
 
 class CLine : public CShape {
 public:
@@ -72,7 +53,6 @@ public:
 protected:
 	SPLine* spline;
 };
-
 
 #endif // SEEN_SP_LINE_H
 /*

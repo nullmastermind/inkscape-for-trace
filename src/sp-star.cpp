@@ -42,12 +42,6 @@ namespace {
 	bool starRegistered = SPFactory::instance().registerObject("star", createStar);
 }
 
-G_DEFINE_TYPE(SPStar, sp_star, G_TYPE_OBJECT);
-
-static void sp_star_class_init(SPStarClass *klass)
-{
-}
-
 CStar::CStar(SPStar* star) : CPolygon(star) {
 	this->spstar = star;
 }
@@ -76,12 +70,6 @@ SPStar::SPStar() : SPPolygon() {
     star->flatsided = 0;
     star->rounded = 0.0;
     star->randomized = 0.0;
-}
-
-static void
-sp_star_init (SPStar * star)
-{
-	new (star) SPStar();
 }
 
 void CStar::build(SPDocument * document, Inkscape::XML::Node * repr) {

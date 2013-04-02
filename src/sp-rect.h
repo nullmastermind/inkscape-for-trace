@@ -18,11 +18,8 @@
 #include "sp-shape.h"
 #include <2geom/forward.h>
 
-G_BEGIN_DECLS
 
-#define SP_TYPE_RECT            (sp_rect_get_type ())
 #define SP_RECT(obj) ((SPRect*)obj)
-//#define SP_IS_RECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPRect)))
 #define SP_IS_RECT(obj) (dynamic_cast<const SPRect*>((SPObject*)obj))
 
 class CRect;
@@ -63,11 +60,6 @@ private:
 	static gdouble vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
 };
 
-struct SPRectClass {
-	SPShapeClass parent_class;
-};
-
-
 class CRect : public CShape {
 public:
 	CRect(SPRect* sprect);
@@ -90,12 +82,6 @@ public:
 protected:
 	SPRect* sprect;
 };
-
-
-/* Standard GType function */
-GType sp_rect_get_type (void) G_GNUC_CONST;
-
-G_END_DECLS
 
 #endif // SEEN_SP_RECT_H
 

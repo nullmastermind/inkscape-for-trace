@@ -23,10 +23,8 @@
 #define SAMPLE_STEP      (1.0/4.0) ///< step per 2PI 
 #define SAMPLE_SIZE      8         ///< sample size per one bezier 
 
-#define SP_TYPE_SPIRAL            (sp_spiral_get_type ())
-#define SP_SPIRAL(obj) ((SPSpiral*)obj)
-//#define SP_IS_SPIRAL(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPSpiral)))
 
+#define SP_SPIRAL(obj) ((SPSpiral*)obj)
 #define SP_IS_SPIRAL(obj) (dynamic_cast<const SPSpiral*>((SPObject*)obj))
 
 class CSpiral;
@@ -69,12 +67,6 @@ public:
 	void fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const;
 };
 
-/// The SPSpiral vtable.
-struct SPSpiralClass {
-	SPShapeClass parent_class;
-};
-
-
 class CSpiral : public CShape {
 public:
 	CSpiral(SPSpiral* spiral);
@@ -94,9 +86,5 @@ public:
 protected:
 	SPSpiral* spspiral;
 };
-
-
-/* Standard Gtk function */
-GType sp_spiral_get_type  (void);
 
 #endif // SEEN_SP_SPIRAL_H

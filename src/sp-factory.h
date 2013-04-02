@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <map>
 #include <string>
 
@@ -18,11 +19,10 @@ class SPFactory {
 public:
 	static SPFactory& instance();
 
-	typedef SPObject* CreateObjectMethod();
-	bool registerObject(std::string id, CreateObjectMethod* createFunction);
+	bool registerObject(std::string id, std::function<SPObject*()> createFunction);
 
 	SPObject* createObject(const Inkscape::XML::Node& id) const;
 
 private:
-	std::map<std::string, CreateObjectMethod*> objectMap;
+	std::map<std::string, std::function<SPObject*()>> objectMap;
 };

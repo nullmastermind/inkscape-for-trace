@@ -88,11 +88,6 @@ static double sp_round(double x, double y)
 
 static gboolean sp_arc_set_elliptical_path_attribute(SPArc *arc, Inkscape::XML::Node *repr);
 
-G_DEFINE_TYPE(SPGenericEllipse, sp_genericellipse, G_TYPE_OBJECT);
-
-static void sp_genericellipse_class_init(SPGenericEllipseClass *klass)
-{
-}
 
 CGenericEllipse::CGenericEllipse(SPGenericEllipse* genericEllipse) : CShape(genericEllipse) {
 	this->spgenericEllipse = genericEllipse;
@@ -121,12 +116,6 @@ SPGenericEllipse::SPGenericEllipse() : SPShape() {
     ellipse->start = 0.0;
     ellipse->end = SP_2PI;
     ellipse->closed = TRUE;
-}
-
-static void
-sp_genericellipse_init(SPGenericEllipse *ellipse)
-{
-	new (ellipse) SPGenericEllipse();
 }
 
 void CGenericEllipse::update(SPCtx *ctx, guint flags) {
@@ -372,12 +361,6 @@ Inkscape::XML::Node* CGenericEllipse::write(Inkscape::XML::Document *xml_doc, In
 
 /* SVG <ellipse> element */
 
-G_DEFINE_TYPE(SPEllipse, sp_ellipse, G_TYPE_OBJECT);
-
-static void sp_ellipse_class_init(SPEllipseClass *klass)
-{
-}
-
 CEllipse::CEllipse(SPEllipse* ellipse) : CGenericEllipse(ellipse) {
 	this->spellipse = ellipse;
 }
@@ -397,12 +380,6 @@ SPEllipse::SPEllipse() : SPGenericEllipse() {
 	ellipse->clpeitem = ellipse->cellipse;
 	ellipse->citem = ellipse->cellipse;
 	ellipse->cobject = ellipse->cellipse;
-}
-
-static void
-sp_ellipse_init(SPEllipse *ellipse)
-{
-	new (ellipse) SPEllipse();
 }
 
 void CEllipse::build(SPDocument *document, Inkscape::XML::Node *repr) {
@@ -490,13 +467,6 @@ sp_ellipse_position_set(SPEllipse *ellipse, gdouble x, gdouble y, gdouble rx, gd
 
 /* SVG <circle> element */
 
-G_DEFINE_TYPE(SPCircle, sp_circle, G_TYPE_OBJECT);
-
-static void
-sp_circle_class_init(SPCircleClass *klass)
-{
-}
-
 CCircle::CCircle(SPCircle* circle) : CGenericEllipse(circle) {
 	this->spcircle = circle;
 }
@@ -516,12 +486,6 @@ SPCircle::SPCircle() : SPGenericEllipse() {
 	circle->clpeitem = circle->ccircle;
 	circle->citem = circle->ccircle;
 	circle->cobject = circle->ccircle;
-}
-
-static void
-sp_circle_init(SPCircle *circle)
-{
-	new (circle) SPCircle();
 }
 
 void CCircle::build(SPDocument *document, Inkscape::XML::Node *repr) {
@@ -550,7 +514,6 @@ Inkscape::XML::Node* CCircle::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     return repr;
 }
-
 
 void CCircle::set(unsigned int key, gchar const* value) {
     SPGenericEllipse *ge = this->spcircle;
@@ -584,13 +547,6 @@ gchar* CCircle::description() {
 
 /* <path sodipodi:type="arc"> element */
 
-G_DEFINE_TYPE(SPArc, sp_arc, G_TYPE_OBJECT);
-
-static void
-sp_arc_class_init(SPArcClass *klass)
-{
-}
-
 CArc::CArc(SPArc* arc) : CGenericEllipse(arc) {
 	this->sparc = arc;
 }
@@ -610,12 +566,6 @@ SPArc::SPArc() : SPGenericEllipse() {
 	arc->clpeitem = arc->carc;
 	arc->citem = arc->carc;
 	arc->cobject = arc->carc;
-}
-
-static void
-sp_arc_init(SPArc *arc)
-{
-	new (arc) SPArc();
 }
 
 void CArc::build(SPDocument *document, Inkscape::XML::Node *repr) {

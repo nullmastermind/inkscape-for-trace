@@ -35,12 +35,6 @@ namespace {
 	bool polygonRegistered = SPFactory::instance().registerObject("svg:polygon", createPolygon);
 }
 
-G_DEFINE_TYPE(SPPolygon, sp_polygon, G_TYPE_OBJECT);
-
-static void sp_polygon_class_init(SPPolygonClass *pc)
-{
-}
-
 CPolygon::CPolygon(SPPolygon* polygon) : CShape(polygon) {
 	this->sppolygon = polygon;
 }
@@ -61,11 +55,6 @@ SPPolygon::SPPolygon() : SPShape() {
 	polygon->cobject = polygon->cpolygon;
 }
 
-static void sp_polygon_init(SPPolygon *polygon)
-{
-	new (polygon) SPPolygon();
-}
-
 void CPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPPolygon* object = this->sppolygon;
 
@@ -73,8 +62,6 @@ void CPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     object->readAttr( "points" );
 }
-
-
 
 /*
  * sp_svg_write_polygon: Write points attribute for polygon tag.

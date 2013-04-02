@@ -16,9 +16,8 @@
 #include "sp-polygon.h"
 #include "axis-manip.h"
 
-#define SP_TYPE_BOX3D_SIDE            (box3d_side_get_type ())
+
 #define SP_BOX3D_SIDE(obj) ((Box3DSide*)obj)
-//#define SP_IS_BOX3D_SIDE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Box3DSide)))
 #define SP_IS_BOX3D_SIDE(obj) (dynamic_cast<const Box3DSide*>((SPObject*)obj))
 
 class SPBox3D;
@@ -38,11 +37,6 @@ public:
     static Box3DSide * createBox3DSide(SPBox3D *box);
 };
 
-struct Box3DSideClass {
-    SPPolygonClass parent_class;
-};
-
-
 class CBox3DSide : public CPolygon {
 public:
 	CBox3DSide(Box3DSide* box3dside);
@@ -58,9 +52,6 @@ public:
 protected:
 	Box3DSide* spbox3dside;
 };
-
-
-GType box3d_side_get_type (void);
 
 void box3d_side_position_set (Box3DSide *side); // FIXME: Replace this by box3d_side_set_shape??
 

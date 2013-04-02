@@ -78,8 +78,6 @@ namespace {
  * radius (look in object-edit).
  */
 
-static void sp_offset_finalize(GObject *obj);
-
 static void refresh_offset_source(SPOffset* offset);
 
 static void sp_offset_start_listening(SPOffset *offset,SPObject* to);
@@ -96,18 +94,6 @@ static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *i
 // cubic bezier patch is not trivial; in particular, there are problems with holes
 // reappearing in offset when the radius becomes too large
 static bool   use_slow_but_correct_offset_method=false;
-
-G_DEFINE_TYPE(SPOffset, sp_offset, G_TYPE_OBJECT);
-
-/**
- * SPOffset vtable initialization.
- */
-static void
-sp_offset_class_init(SPOffsetClass *klass)
-{
-    GObjectClass  *gobject_class = (GObjectClass *) klass;
-    gobject_class->finalize = sp_offset_finalize;
-}
 
 COffset::COffset(SPOffset* offset) : CShape(offset) {
 	this->spoffset = offset;
@@ -147,33 +133,13 @@ SPOffset::SPOffset() : SPShape() {
     offset->_changed_connection = offset->sourceRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_offset_href_changed), offset));
 }
 
-/**
- * Callback for SPOffset object initialization.
- */
-static void
-sp_offset_init(SPOffset *offset)
-{
-	new (offset) SPOffset();
-}
+SPOffset::~SPOffset() {
+    delete this->sourceRef;
 
-/**
- * Callback for SPOffset finalization.
- */
-static void
-sp_offset_finalize(GObject *obj)
-{
-    SPOffset *offset = (SPOffset *) obj;
-
-    delete offset->sourceRef;
-
-    offset->_modified_connection.disconnect();
-    offset->_modified_connection.~connection();
-    offset->_delete_connection.disconnect();
-    offset->_delete_connection.~connection();
-    offset->_changed_connection.disconnect();
-    offset->_changed_connection.~connection();
-    offset->_transformed_connection.disconnect();
-    offset->_transformed_connection.~connection();
+    this->_modified_connection.disconnect();
+    this->_delete_connection.disconnect();
+    this->_changed_connection.disconnect();
+    this->_transformed_connection.disconnect();
 }
 
 void COffset::build(SPDocument *document, Inkscape::XML::Node *repr) {

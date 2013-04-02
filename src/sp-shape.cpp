@@ -56,18 +56,6 @@
 static void sp_shape_finalize (GObject *object);
 static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *ai);
 
-G_DEFINE_TYPE(SPShape, sp_shape, G_TYPE_OBJECT);
-
-/**
- * Initializes a SPShapeClass object.  Establishes the function pointers to the class'
- * member routines in the class vtable, and sets pointers to parent classes.
- */
-static void
-sp_shape_class_init(SPShapeClass *klass)
-{
-    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
-    gobject_class->finalize = sp_shape_finalize;
-}
 
 CShape::CShape(SPShape* shape) : CLPEItem(shape) {
 	this->spshape = shape;
@@ -75,7 +63,6 @@ CShape::CShape(SPShape* shape) : CLPEItem(shape) {
 
 CShape::~CShape() {
 }
-
 
 SPShape::SPShape() : SPLPEItem() {
 	SPShape* shape = this;
@@ -97,29 +84,10 @@ SPShape::SPShape() : SPLPEItem() {
     shape->_curve_before_lpe = NULL;
 }
 
-/**
- * Initializes an SPShape object.
- */
-static void
-sp_shape_init(SPShape *shape)
-{
-	new (shape) SPShape();
-}
-
-static void
-sp_shape_finalize(GObject *object)
-{
-    SPShape *shape=(SPShape *)object;
-
+SPShape::~SPShape() {
     for ( int i = 0 ; i < SP_MARKER_LOC_QTY ; i++ ) {
-        shape->_release_connect[i].disconnect();
-        shape->_release_connect[i].~connection();
-        shape->_modified_connect[i].disconnect();
-        shape->_modified_connect[i].~connection();
-    }
-
-    if (((GObjectClass *) (sp_shape_parent_class))->finalize) {
-        (* ((GObjectClass *) (sp_shape_parent_class))->finalize)(object);
+        this->_release_connect[i].disconnect();
+        this->_modified_connect[i].disconnect();
     }
 }
 
