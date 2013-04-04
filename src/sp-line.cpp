@@ -34,170 +34,144 @@ namespace {
 	bool lineRegistered = SPFactory::instance().registerObject("svg:line", createLine);
 }
 
-CLine::CLine(SPLine* line) : CShape(line) {
-	this->spline = line;
+SPLine::SPLine() : SPShape(), CShape(this) {
+	delete this->cshape;
+	this->cshape = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
+
+    this->x1.unset();
+    this->y1.unset();
+    this->x2.unset();
+    this->y2.unset();
 }
 
-CLine::~CLine() {
+SPLine::~SPLine() {
 }
 
-SPLine::SPLine() : SPShape() {
-	SPLine* line = this;
-
-	line->cline = new CLine(line);
-	line->typeHierarchy.insert(typeid(SPLine));
-
-	delete line->cshape;
-	line->cshape = line->cline;
-	line->clpeitem = line->cline;
-	line->citem = line->cline;
-	line->cobject = line->cline;
-
-    line->x1.unset();
-    line->y1.unset();
-    line->x2.unset();
-    line->y2.unset();
-}
-
-void CLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
-	SPLine* object = this->spline;
-
+void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     CShape::build(document, repr);
 
-    object->readAttr( "x1" );
-    object->readAttr( "y1" );
-    object->readAttr( "x2" );
-    object->readAttr( "y2" );
+    this->readAttr( "x1" );
+    this->readAttr( "y1" );
+    this->readAttr( "x2" );
+    this->readAttr( "y2" );
 }
 
-void CLine::set(unsigned int key, const gchar* value) {
-	SPLine* object = this->spline;
-    SPLine * line = object;
-
+void SPLine::set(unsigned int key, const gchar* value) {
     /* fixme: we should really collect updates */
 
     switch (key) {
         case SP_ATTR_X1:
-            line->x1.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->x1.readOrUnset(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_Y1:
-            line->y1.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->y1.readOrUnset(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_X2:
-            line->x2.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->x2.readOrUnset(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_Y2:
-            line->y2.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->y2.readOrUnset(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         default:
             CShape::set(key, value);
             break;
     }
 }
 
-void CLine::update(SPCtx *ctx, guint flags) {
-	SPLine* object = this->spline;
-
+void SPLine::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        SPLine *line = SP_LINE(object);
-
-        SPStyle const *style = object->style;
+        SPStyle const *style = this->style;
         SPItemCtx const *ictx = (SPItemCtx const *) ctx;
         double const w = ictx->viewport.width();
         double const h = ictx->viewport.height();
         double const em = style->font_size.computed;
         double const ex = em * 0.5;  // fixme: get from pango or libnrtype.
-        line->x1.update(em, ex, w);
-        line->x2.update(em, ex, w);
-        line->y1.update(em, ex, h);
-        line->y2.update(em, ex, h);
 
-        ((SPShape *) object)->setShape();
+        this->x1.update(em, ex, w);
+        this->x2.update(em, ex, w);
+        this->y1.update(em, ex, h);
+        this->y2.update(em, ex, h);
+
+        this->setShape();
     }
 
     CShape::update(ctx, flags);
 }
 
-Inkscape::XML::Node* CLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPLine* object = this->spline;
-    SPLine *line  = object;
-
+Inkscape::XML::Node* SPLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:line");
     }
 
-    if (repr != object->getRepr()) {
-        repr->mergeFrom(object->getRepr(), "id");
+    if (repr != this->getRepr()) {
+        repr->mergeFrom(this->getRepr(), "id");
     }
 
-    sp_repr_set_svg_double(repr, "x1", line->x1.computed);
-    sp_repr_set_svg_double(repr, "y1", line->y1.computed);
-    sp_repr_set_svg_double(repr, "x2", line->x2.computed);
-    sp_repr_set_svg_double(repr, "y2", line->y2.computed);
+    sp_repr_set_svg_double(repr, "x1", this->x1.computed);
+    sp_repr_set_svg_double(repr, "y1", this->y1.computed);
+    sp_repr_set_svg_double(repr, "x2", this->x2.computed);
+    sp_repr_set_svg_double(repr, "y2", this->y2.computed);
 
     CShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CLine::description() {
+gchar* SPLine::description() {
 	return g_strdup(_("<b>Line</b>"));
 }
 
-void CLine::convert_to_guides() {
-	SPLine* item = this->spline;
-    SPLine *line = item;
-
+void SPLine::convert_to_guides() {
     Geom::Point points[2];
+    Geom::Affine const i2dt(this->i2dt_affine());
 
-    Geom::Affine const i2dt(item->i2dt_affine());
+    points[0] = Geom::Point(this->x1.computed, this->y1.computed)*i2dt;
+    points[1] = Geom::Point(this->x2.computed, this->y2.computed)*i2dt;
 
-    points[0] = Geom::Point(line->x1.computed, line->y1.computed)*i2dt;
-    points[1] = Geom::Point(line->x2.computed, line->y2.computed)*i2dt;
-
-    SPGuide::createSPGuide(item->document, points[0], points[1]);
+    SPGuide::createSPGuide(this->document, points[0], points[1]);
 }
 
 
-Geom::Affine CLine::set_transform(Geom::Affine const &transform) {
-	SPLine* item = this->spline;
-    SPLine *line = item;
-
+Geom::Affine SPLine::set_transform(Geom::Affine const &transform) {
     Geom::Point points[2];
 
-    points[0] = Geom::Point(line->x1.computed, line->y1.computed);
-    points[1] = Geom::Point(line->x2.computed, line->y2.computed);
+    points[0] = Geom::Point(this->x1.computed, this->y1.computed);
+    points[1] = Geom::Point(this->x2.computed, this->y2.computed);
 
     points[0] *= transform;
     points[1] *= transform;
 
-    line->x1.computed = points[0][Geom::X];
-    line->y1.computed = points[0][Geom::Y];
-    line->x2.computed = points[1][Geom::X];
-    line->y2.computed = points[1][Geom::Y];
+    this->x1.computed = points[0][Geom::X];
+    this->y1.computed = points[0][Geom::Y];
+    this->x2.computed = points[1][Geom::X];
+    this->y2.computed = points[1][Geom::Y];
 
-    item->adjust_stroke(transform.descrim());
+    this->adjust_stroke(transform.descrim());
 
-    SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
     return Geom::identity();
 }
 
-void CLine::set_shape() {
-	SPLine* shape = this->spline;
-    SPLine *line = shape;
-
+void SPLine::set_shape() {
     SPCurve *c = new SPCurve();
 
-    c->moveto(line->x1.computed, line->y1.computed);
-    c->lineto(line->x2.computed, line->y2.computed);
+    c->moveto(this->x1.computed, this->y1.computed);
+    c->lineto(this->x2.computed, this->y2.computed);
 
-    shape->setCurveInsync(c, TRUE); // *_insync does not call update, avoiding infinite recursion when set_shape is called by update
-    shape->setCurveBeforeLPE(c);
+    this->setCurveInsync(c, TRUE); // *_insync does not call update, avoiding infinite recursion when set_shape is called by update
+    this->setCurveBeforeLPE(c);
 
     // LPE's cannot be applied to lines. (the result can (generally) not be represented as SPLine)
 

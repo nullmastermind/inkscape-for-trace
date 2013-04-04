@@ -36,44 +36,28 @@ namespace {
 	bool box3DSideRegistered = SPFactory::instance().registerObject("inkscape:box3dside", createBox3DSide);
 }
 
-CBox3DSide::CBox3DSide(Box3DSide* box3dside) : CPolygon(box3dside) {
-	this->spbox3dside = box3dside;
-}
-
-CBox3DSide::~CBox3DSide() {
-}
-
 Box3DSide::Box3DSide() : SPPolygon() {
-	Box3DSide* side = this;
+	this->cshape = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 
-	side->cbox3dside = new CBox3DSide(side);
-	side->typeHierarchy.insert(typeid(Box3DSide));
-
-	delete side->cpolygon;
-	side->cpolygon = side->cbox3dside;
-	side->cshape = side->cbox3dside;
-	side->clpeitem = side->cbox3dside;
-	side->citem = side->cbox3dside;
-	side->cobject = side->cbox3dside;
-
-    side->dir1 = Box3D::NONE;
-    side->dir2 = Box3D::NONE;
-    side->front_or_rear = Box3D::FRONT;
+    this->dir1 = Box3D::NONE;
+    this->dir2 = Box3D::NONE;
+    this->front_or_rear = Box3D::FRONT;
 }
 
-void CBox3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
-	Box3DSide* object = this->spbox3dside;
+Box3DSide::~Box3DSide() {
+}
 
-    CPolygon::build(document, repr);
+void Box3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
+    SPPolygon::build(document, repr);
 
-    object->readAttr( "inkscape:box3dsidetype" );
+    this->readAttr( "inkscape:box3dsidetype" );
 }
 
 
-Inkscape::XML::Node* CBox3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	Box3DSide* object = this->spbox3dside;
-    Box3DSide *side = object;
-
+Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         // this is where we end up when saving as plain SVG (also in other circumstances?)
         // thus we don' set "sodipodi:type" so that the box is only saved as an ordinary svg:path
@@ -81,30 +65,29 @@ Inkscape::XML::Node* CBox3DSide::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        sp_repr_set_int(repr, "inkscape:box3dsidetype", side->dir1 ^ side->dir2 ^ side->front_or_rear);
+        sp_repr_set_int(repr, "inkscape:box3dsidetype", this->dir1 ^ this->dir2 ^ this->front_or_rear);
     }
 
-    static_cast<SPShape *>(object)->setShape();
+    this->setShape();
 
     /* Duplicate the path */
-    SPCurve const *curve = (SP_SHAPE(object))->_curve;
+    SPCurve const *curve = this->_curve;
+
     //Nulls might be possible if this called iteratively
     if ( !curve ) {
         return NULL;
     }
+
     char *d = sp_svg_write_path ( curve->get_pathvector() );
     repr->setAttribute("d", d);
     g_free (d);
 
-    CPolygon::write(xml_doc, repr, flags);
+    SPPolygon::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-void CBox3DSide::set(unsigned int key, const gchar* value) {
-	Box3DSide* object = this->spbox3dside;
-    Box3DSide *side = object;
-
+void Box3DSide::set(unsigned int key, const gchar* value) {
     // TODO: In case the box was recreated (by undo, e.g.) we need to recreate the path
     //       (along with other info?) from the parent box.
 
@@ -117,25 +100,25 @@ void CBox3DSide::set(unsigned int key, const gchar* value) {
                 if (!Box3D::is_face_id(desc)) {
                     g_print ("desc is not a face id: =%s=\n", value);
                 }
+
                 g_return_if_fail (Box3D::is_face_id (desc));
+
                 Box3D::Axis plane = (Box3D::Axis) (desc & 0x7);
                 plane = (Box3D::is_plane(plane) ? plane : Box3D::orth_plane_or_axis(plane));
-                side->dir1 = Box3D::extract_first_axis_direction(plane);
-                side->dir2 = Box3D::extract_second_axis_direction(plane);
-                side->front_or_rear = (Box3D::FrontOrRear) (desc & 0x8);
+                this->dir1 = Box3D::extract_first_axis_direction(plane);
+                this->dir2 = Box3D::extract_second_axis_direction(plane);
+                this->front_or_rear = (Box3D::FrontOrRear) (desc & 0x8);
 
-                object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
     default:
-        CPolygon::set(key, value);
+        SPPolygon::set(key, value);
         break;
     }
 }
 
-void CBox3DSide::update(SPCtx* ctx, guint flags) {
-	Box3DSide* object = this->spbox3dside;
-
+void Box3DSide::update(SPCtx* ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
@@ -143,11 +126,11 @@ void CBox3DSide::update(SPCtx* ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG |
                  SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        static_cast<SPShape *>(object)->setShape ();
+
+        this->setShape();
     }
 
-    CPolygon::update(ctx, flags);
-
+    SPPolygon::update(ctx, flags);
 }
 
 /* Create a new Box3DSide and append it to the parent box */
@@ -172,30 +155,30 @@ int Box3DSide::getFaceId()
 
 void
 box3d_side_position_set (Box3DSide *side) {
-	side->cbox3dside->set_shape();
+	side->set_shape();
 
     // This call is responsible for live update of the sides during the initial drag
     side->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CBox3DSide::set_shape() {
-	Box3DSide* shape = this->spbox3dside;
-    Box3DSide *side = shape;
-
-    if (!side->document->getRoot()) {
+void Box3DSide::set_shape() {
+    if (!this->document->getRoot()) {
         // avoid a warning caused by sp_document_height() (which is called from sp_item_i2d_affine() below)
         // when reading a file containing 3D boxes
         return;
     }
 
-    SPObject *parent = side->parent;
+    SPObject *parent = this->parent;
+
     if (!SP_IS_BOX3D(parent)) {
-        g_warning ("Parent of 3D box side is not a 3D box.\n");
+        g_warning("Parent of 3D box side is not a 3D box.\n");
         return;
     }
+
     SPBox3D *box = SP_BOX3D(parent);
 
-    Persp3D *persp = box3d_side_perspective(side);
+    Persp3D *persp = box3d_side_perspective(this);
+
     if (!persp) {
         return;
     }
@@ -206,7 +189,7 @@ void CBox3DSide::set_shape() {
     //       resulting path.
 
     unsigned int corners[4];
-    box3d_side_compute_corner_ids(side, corners);
+    box3d_side_compute_corner_ids(this, corners);
 
     SPCurve *c = new SPCurve();
 
@@ -225,17 +208,21 @@ void CBox3DSide::set_shape() {
     c->lineto(box3d_get_corner_screen(box, corners[3]));
     c->closepath();
 
-    /* Reset the shape'scurve to the "original_curve"
+    /* Reset the this'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    shape->setCurveInsync( c, TRUE);
-    if (sp_lpe_item_has_path_effect(SP_LPE_ITEM(shape)) && sp_lpe_item_path_effects_enabled(SP_LPE_ITEM(shape))) {
+    this->setCurveInsync( c, TRUE);
+
+    if (sp_lpe_item_has_path_effect(this) && sp_lpe_item_path_effects_enabled(this)) {
         SPCurve *c_lpe = c->copy();
-        bool success = sp_lpe_item_perform_path_effect(SP_LPE_ITEM (shape), c_lpe);
+        bool success = sp_lpe_item_perform_path_effect(this, c_lpe);
+
         if (success) {
-            shape->setCurveInsync( c_lpe, TRUE);
+            this->setCurveInsync(c_lpe, TRUE);
         }
+
         c_lpe->unref();
     }
+
     c->unref();
 }
 
@@ -243,19 +230,24 @@ gchar *box3d_side_axes_string(Box3DSide *side)
 {
     GString *pstring = g_string_new("");
     g_string_printf (pstring, "%s", Box3D::string_from_axes ((Box3D::Axis) (side->dir1 ^ side->dir2)));
+
     switch ((Box3D::Axis) (side->dir1 ^ side->dir2)) {
         case Box3D::XY:
             g_string_append_printf (pstring, (side->front_or_rear == Box3D::FRONT) ? "front" : "rear");
             break;
+
         case Box3D::XZ:
             g_string_append_printf (pstring, (side->front_or_rear == Box3D::FRONT) ? "top" : "bottom");
             break;
+
         case Box3D::YZ:
             g_string_append_printf (pstring, (side->front_or_rear == Box3D::FRONT) ? "right" : "left");
             break;
+
         default:
             break;
     }
+
     return pstring->str;
 }
 

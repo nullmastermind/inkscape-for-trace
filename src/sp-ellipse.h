@@ -21,12 +21,10 @@
 #define SP_GENERICELLIPSE(obj) ((SPGenericEllipse*)obj)
 #define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj))
 
-class CGenericEllipse;
-
-class SPGenericEllipse : public SPShape {
+class SPGenericEllipse : public SPShape, public CShape {
 public:
 	SPGenericEllipse();
-	CGenericEllipse* cgenericEllipse;
+	virtual ~SPGenericEllipse();
 
 	SVGLength cx;
 	SVGLength cy;
@@ -35,12 +33,6 @@ public:
 
 	unsigned int closed : 1;
 	double start, end;
-};
-
-class CGenericEllipse : public CShape {
-public:
-	CGenericEllipse(SPGenericEllipse* genericEllipse);
-	virtual ~CGenericEllipse();
 
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
@@ -49,9 +41,6 @@ public:
 	virtual void set_shape();
 
 	virtual void update_patheffect(bool write);
-
-protected:
-	SPGenericEllipse* spgenericEllipse;
 };
 
 /* This is technically priate by we need this in object edit (Lauris) */
@@ -61,26 +50,15 @@ void sp_genericellipse_normalize (SPGenericEllipse *ellipse);
 #define SP_ELLIPSE(obj) ((SPEllipse*)obj)
 #define SP_IS_ELLIPSE(obj) (dynamic_cast<const SPEllipse*>((SPObject*)obj))
 
-class CEllipse;
-
 class SPEllipse : public SPGenericEllipse {
 public:
 	SPEllipse();
-	CEllipse* cellipse;
-};
-
-class CEllipse : public CGenericEllipse {
-public:
-	CEllipse(SPEllipse* ellipse);
-	virtual ~CEllipse();
+	virtual ~SPEllipse();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
 	virtual gchar* description();
-
-protected:
-	SPEllipse* spellipse;
 };
 
 void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble rx, gdouble ry);
@@ -89,53 +67,31 @@ void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble
 #define SP_CIRCLE(obj) ((SPCircle*)obj)
 #define SP_IS_CIRCLE(obj) (dynamic_cast<const SPCircle*>((SPObject*)obj))
 
-class CCircle;
-
 class SPCircle : public SPGenericEllipse {
 public:
 	SPCircle();
-	CCircle* ccircle;
-};
-
-class CCircle : public CGenericEllipse {
-public:
-	CCircle(SPCircle* circle);
-	virtual ~CCircle();
+	virtual ~SPCircle();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
 	virtual gchar* description();
-
-protected:
-	SPCircle* spcircle;
 };
 
 /* <path sodipodi:type="arc"> element */
 #define SP_ARC(obj) ((SPArc*)obj)
 #define SP_IS_ARC(obj) (dynamic_cast<const SPArc*>((SPObject*)obj))
 
-class CArc;
-
 class SPArc : public SPGenericEllipse {
 public:
 	SPArc();
-	CArc* carc;
-};
-
-class CArc : public CGenericEllipse {
-public:
-	CArc(SPArc* arc);
-	virtual ~CArc();
+	virtual ~SPArc();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
 	virtual gchar* description();
 	virtual void modified(unsigned int flags);
-
-protected:
-	SPArc* sparc;
 };
 
 void sp_arc_position_set (SPArc * arc, gdouble x, gdouble y, gdouble rx, gdouble ry);

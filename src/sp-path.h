@@ -20,7 +20,6 @@
 #include "sp-conn-end-pair.h"
 
 class SPCurve;
-class CPath;
 
 #define SP_PATH(obj) ((SPPath*)obj)
 #define SP_IS_PATH(obj) (dynamic_cast<const SPPath*>((SPObject*)obj))
@@ -28,12 +27,10 @@ class CPath;
 /**
  * SVG <path> implementation
  */
-class SPPath : public SPShape {
+class SPPath : public SPShape, public CShape {
 public:
 	SPPath();
 	virtual ~SPPath();
-
-	CPath* cpath;
 
     gint nodesInPath() const;
 
@@ -49,12 +46,6 @@ public: // should be made protected
 
 public:
     SPConnEndPair connEndPair;
-};
-
-class CPath : public CShape {
-public:
-	CPath(SPPath* path);
-	~CPath();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -68,9 +59,6 @@ public:
     virtual void convert_to_guides();
 
     virtual void update_patheffect(bool write);
-
-protected:
-	SPPath* sppath;
 };
 
 #endif // SEEN_SP_PATH_H

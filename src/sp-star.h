@@ -20,7 +20,6 @@
 #define SP_STAR(obj) ((SPStar*)obj)
 #define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj))
 
-class CStar;
 typedef enum {
 	SP_STAR_POINT_KNOT1,
 	SP_STAR_POINT_KNOT2
@@ -29,7 +28,7 @@ typedef enum {
 class SPStar : public SPPolygon {
 public:
 	SPStar();
-	CStar* cstar;
+	virtual ~SPStar();
 
 	gint sides;
 
@@ -40,16 +39,11 @@ public:
 
 	double rounded;
 	double randomized;
-};
 
 // CPPIFY: This derivation is a bit weird.
 // parent_class = reinterpret_cast<SPShapeClass *>(g_type_class_ref(SP_TYPE_SHAPE));
 // So shouldn't star be derived from shape instead of polygon?
 // What does polygon have that shape doesn't?
-class CStar : public CPolygon {
-public:
-	CStar(SPStar* star);
-	virtual ~CStar();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
@@ -61,9 +55,6 @@ public:
 
 	virtual void update_patheffect(bool write);
 	virtual void set_shape();
-
-protected:
-	SPStar* spstar;
 };
 
 void sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized);

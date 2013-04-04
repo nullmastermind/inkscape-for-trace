@@ -35,28 +35,19 @@ namespace {
 	bool polygonRegistered = SPFactory::instance().registerObject("svg:polygon", createPolygon);
 }
 
-CPolygon::CPolygon(SPPolygon* polygon) : CShape(polygon) {
-	this->sppolygon = polygon;
+SPPolygon::SPPolygon() : SPShape(), CShape(this) {
+	delete this->cshape;
+	this->cshape = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 }
 
-CPolygon::~CPolygon() {
+SPPolygon::~SPPolygon() {
 }
 
-SPPolygon::SPPolygon() : SPShape() {
-	SPPolygon* polygon = this;
-
-	polygon->cpolygon = new CPolygon(polygon);
-	polygon->typeHierarchy.insert(typeid(SPPolygon));
-
-	delete polygon->cshape;
-	polygon->cshape = polygon->cpolygon;
-	polygon->clpeitem = polygon->cpolygon;
-	polygon->citem = polygon->cpolygon;
-	polygon->cobject = polygon->cpolygon;
-}
-
-void CPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPPolygon* object = this->sppolygon;
+void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPPolygon* object = this;
 
     CShape::build(document, repr);
 
@@ -86,19 +77,17 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
     return g_strdup(os.str().c_str());
 }
 
-Inkscape::XML::Node* CPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    SPShape *shape = this->sppolygon;
-
+Inkscape::XML::Node* SPPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     // Tolerable workaround: we need to update the object's curve before we set points=
     // because it's out of sync when e.g. some extension attrs of the polygon or star are changed in XML editor
-    shape->setShape();
+	this->setShape();
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polygon");
     }
 
     /* We can safely write points here, because all subclasses require it too (Lauris) */
-    gchar *str = sp_svg_write_polygon(shape->_curve->get_pathvector());
+    gchar *str = sp_svg_write_polygon(this->_curve->get_pathvector());
     repr->setAttribute("points", str);
     g_free(str);
 
@@ -120,17 +109,17 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
 
     gchar *e = NULL;
     *v = g_ascii_strtod(*p, &e);
+
     if (e == *p) {
         return false;
     }
 
     *p = e;
+
     return true;
 }
 
-void CPolygon::set(unsigned int key, const gchar* value) {
-    SPPolygon *polygon = this->sppolygon;
-
+void SPPolygon::set(unsigned int key, const gchar* value) {
     switch (key) {
         case SP_ATTR_POINTS: {
             if (!value) {
@@ -138,6 +127,7 @@ void CPolygon::set(unsigned int key, const gchar* value) {
                  * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing. */
                 break;
             }
+
             SPCurve *curve = new SPCurve();
             gboolean hascpt = FALSE;
 
@@ -146,11 +136,13 @@ void CPolygon::set(unsigned int key, const gchar* value) {
 
             while (TRUE) {
                 gdouble x;
+
                 if (!polygon_get_value(&cptr, &x)) {
                     break;
                 }
 
                 gdouble y;
+
                 if (!polygon_get_value(&cptr, &y)) {
                     /* fixme: It is an error for an odd number of points to be specified.  We
                      * should display the points up to now (as we currently do, though perhaps
@@ -180,7 +172,8 @@ void CPolygon::set(unsigned int key, const gchar* value) {
                  * a single-point polygon in SPCurve. TODO: add a testcase with only one coordinate pair */
                 curve->closepath();
             }
-            (SP_SHAPE(polygon))->setCurve(curve, TRUE);
+
+            this->setCurve(curve, TRUE);
             curve->unref();
             break;
         }
@@ -190,7 +183,7 @@ void CPolygon::set(unsigned int key, const gchar* value) {
     }
 }
 
-gchar* CPolygon::description() {
+gchar* SPPolygon::description() {
 	return g_strdup(_("<b>Polygon</b>"));
 }
 

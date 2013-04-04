@@ -19,26 +19,15 @@
 #define SP_POLYGON(obj) ((SPPolygon*)obj)
 #define SP_IS_POLYGON(obj) (dynamic_cast<const SPPolygon*>((SPObject*)obj))
 
-class CPolygon;
-
-class SPPolygon : public SPShape {
+class SPPolygon : public SPShape, public CShape {
 public:
 	SPPolygon();
-	CPolygon* cpolygon;
-};
-
-class CPolygon : public CShape {
-public:
-	CPolygon(SPPolygon* polygon);
-	virtual ~CPolygon();
+	virtual ~SPPolygon();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
 	virtual gchar* description();
-
-protected:
-	SPPolygon* sppolygon;
 };
 
 // made 'public' so that SPCurve can set it as friend:

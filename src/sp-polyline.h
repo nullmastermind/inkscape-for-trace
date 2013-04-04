@@ -6,29 +6,16 @@
 #define SP_POLYLINE(obj) ((SPPolyLine*)obj)
 #define SP_IS_POLYLINE(obj) (dynamic_cast<const SPPolyLine*>((SPObject*)obj))
 
-class SPPolyLine;
-class CPolyLine;
-
-class SPPolyLine : public SPShape {
+class SPPolyLine : public SPShape, public CShape {
 public:
 	SPPolyLine();
-
-	CPolyLine* cpolyline;
-};
-
-class CPolyLine : public CShape {
-public:
-	CPolyLine(SPPolyLine* polyline);
-	virtual ~CPolyLine();
+	virtual ~SPPolyLine();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, gchar const* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 	virtual gchar* description();
-
-protected:
-	SPPolyLine* sppolyline;
 };
 
 #endif // SEEN_SP_POLYLINE_H

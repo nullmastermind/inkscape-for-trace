@@ -20,24 +20,15 @@
 #define SP_LINE(obj) ((SPLine*)obj)
 #define SP_IS_LINE(obj) (dynamic_cast<const SPLine*>((SPObject*)obj))
 
-class SPLine;
-class CLine;
-
-class SPLine : public SPShape {
+class SPLine : public SPShape, CShape {
 public:
 	SPLine();
-	CLine* cline;
+	virtual ~SPLine();
 
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
     SVGLength y2;
-};
-
-class CLine : public CShape {
-public:
-	CLine(SPLine* line);
-	virtual ~CLine();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
@@ -49,9 +40,6 @@ public:
 	virtual void update(SPCtx* ctx, guint flags);
 
 	virtual void set_shape();
-
-protected:
-	SPLine* spline;
 };
 
 #endif // SEEN_SP_LINE_H

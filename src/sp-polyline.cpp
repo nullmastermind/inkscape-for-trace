@@ -30,38 +30,24 @@ namespace {
 	bool polyLineRegistered = SPFactory::instance().registerObject("svg:polyline", createPolyLine);
 }
 
-CPolyLine::CPolyLine(SPPolyLine* polyline) : CShape(polyline) {
-	this->sppolyline = polyline;
+SPPolyLine::SPPolyLine() : SPShape(), CShape(this) {
+	delete this->cshape;
+	this->cshape = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 }
 
-CPolyLine::~CPolyLine() {
+SPPolyLine::~SPPolyLine() {
 }
 
-SPPolyLine::SPPolyLine() : SPShape() {
-	SPPolyLine* polyline = this;
-
-	polyline->cpolyline = new CPolyLine(polyline);
-	polyline->typeHierarchy.insert(typeid(SPPolyLine));
-
-	delete polyline->cshape;
-	polyline->cshape = polyline->cpolyline;
-	polyline->clpeitem = polyline->cpolyline;
-	polyline->citem = polyline->cpolyline;
-	polyline->cobject = polyline->cpolyline;
-}
-
-void CPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
-	SPPolyLine* object = this->sppolyline;
-
+void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     CShape::build(document, repr);
 
-    object->readAttr( "points" );
+    this->readAttr("points");
 }
 
-void CPolyLine::set(unsigned int key, const gchar* value) {
-	SPPolyLine* object = this->sppolyline;
-    SPPolyLine *polyline = object;
-
+void SPPolyLine::set(unsigned int key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_POINTS: {
             SPCurve * curve;
@@ -69,7 +55,10 @@ void CPolyLine::set(unsigned int key, const gchar* value) {
             char * eptr;
             gboolean hascpt;
 
-            if (!value) break;
+            if (!value) {
+            	break;
+            }
+
             curve = new SPCurve ();
             hascpt = FALSE;
 
@@ -82,20 +71,35 @@ void CPolyLine::set(unsigned int key, const gchar* value) {
                 while (*cptr != '\0' && (*cptr == ',' || *cptr == '\x20' || *cptr == '\x9' || *cptr == '\xD' || *cptr == '\xA')) {
                     cptr++;
                 }
-                if (!*cptr) break;
+
+                if (!*cptr) {
+                	break;
+                }
 
                 x = g_ascii_strtod (cptr, &eptr);
-                if (eptr == cptr) break;
+
+                if (eptr == cptr) {
+                	break;
+                }
+
                 cptr = eptr;
 
                 while (*cptr != '\0' && (*cptr == ',' || *cptr == '\x20' || *cptr == '\x9' || *cptr == '\xD' || *cptr == '\xA')) {
                     cptr++;
                 }
-                if (!*cptr) break;
+
+                if (!*cptr) {
+                	break;
+                }
 
                 y = g_ascii_strtod (cptr, &eptr);
-                if (eptr == cptr) break;
+
+                if (eptr == cptr) {
+                	break;
+                }
+
                 cptr = eptr;
+
                 if (hascpt) {
                     curve->lineto(x, y);
                 } else {
@@ -104,7 +108,7 @@ void CPolyLine::set(unsigned int key, const gchar* value) {
                 }
             }
 		
-            (SP_SHAPE (polyline))->setCurve (curve, TRUE);
+            this->setCurve(curve, TRUE);
             curve->unref();
             break;
 	}
@@ -114,15 +118,13 @@ void CPolyLine::set(unsigned int key, const gchar* value) {
     }
 }
 
-Inkscape::XML::Node* CPolyLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPPolyLine* object = this->sppolyline;
-
+Inkscape::XML::Node* SPPolyLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polyline");
     }
 
-    if (repr != object->getRepr()) {
-        repr->mergeFrom(object->getRepr(), "id");
+    if (repr != this->getRepr()) {
+        repr->mergeFrom(this->getRepr(), "id");
     }
 
     CShape::write(xml_doc, repr, flags);
@@ -130,7 +132,7 @@ Inkscape::XML::Node* CPolyLine::write(Inkscape::XML::Document *xml_doc, Inkscape
     return repr;
 }
 
-gchar* CPolyLine::description() {
+gchar* SPPolyLine::description() {
 	return g_strdup(_("<b>Polyline</b>"));
 }
 

@@ -22,25 +22,18 @@
 
 class SPBox3D;
 struct Persp3D;
-class CBox3DSide;
 
 // FIXME: Would it be better to inherit from SPPath instead?
 class Box3DSide : public SPPolygon {
 public:
 	Box3DSide();
-	CBox3DSide* cbox3dside;
+	virtual ~Box3DSide();
 
     Box3D::Axis dir1;
     Box3D::Axis dir2;
     Box3D::FrontOrRear front_or_rear;
     int getFaceId();
     static Box3DSide * createBox3DSide(SPBox3D *box);
-};
-
-class CBox3DSide : public CPolygon {
-public:
-	CBox3DSide(Box3DSide* box3dside);
-	virtual ~CBox3DSide();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, gchar const* value);
@@ -48,9 +41,6 @@ public:
 	virtual void update(SPCtx *ctx, guint flags);
 
 	virtual void set_shape();
-
-protected:
-	Box3DSide* spbox3dside;
 };
 
 void box3d_side_position_set (Box3DSide *side); // FIXME: Replace this by box3d_side_set_shape??

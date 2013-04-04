@@ -16,12 +16,9 @@
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 
-#define SP_TYPE_OFFSET            (sp_offset_get_type ())
 #define SP_OFFSET(obj) ((SPOffset*)obj)
-//#define SP_IS_OFFSET(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPOffset)))
 #define SP_IS_OFFSET(obj) (dynamic_cast<const SPOffset*>((SPObject*)obj))
 
-class COffset;
 class SPUseReference;
 
 /**
@@ -52,12 +49,10 @@ class SPUseReference;
  * points, or more precisely one control point, that's enough to define the
  * radius (look in object-edit).
  */
-class SPOffset : public SPShape {
+class SPOffset : public SPShape, CShape {
 public:
 	SPOffset();
 	virtual ~SPOffset();
-
-	COffset* coffset;
 
     void *originalPath; ///< will be a livarot Path, just don't declare it here to please the gcc linker
     char *original;     ///< SVG description of the source path
@@ -79,12 +74,6 @@ public:
     sigc::connection _delete_connection;
     sigc::connection _changed_connection;
     sigc::connection _transformed_connection;
-};
-
-class COffset : public CShape {
-public:
-	COffset(SPOffset* offset);
-	~COffset();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void set(unsigned int key, gchar const* value);
@@ -96,9 +85,6 @@ public:
 	virtual gchar* description();
 
 	virtual void set_shape();
-
-protected:
-	SPOffset* spoffset;
 };
 
 double sp_offset_distance_to_original (SPOffset * offset, Geom::Point px);
