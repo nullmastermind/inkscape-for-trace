@@ -9,6 +9,8 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/bool.h"
+#include <vector>
+
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -25,7 +27,9 @@ public:
 
     virtual void doEffect(SPCurve * curve);
 
-    virtual void doBSplineFromWidget(SPCurve * curve, double value, bool noCusp);
+    virtual void doBSplineFromWidget(SPCurve * curve, double value);
+
+    virtual bool nodeIsSelected(Geom::Point nodePoint, int index);
 
     virtual Gtk::Widget * newWidget();
 
@@ -38,8 +42,9 @@ public:
     ScalarParam steps;
 
 private:
-
+    std::vector<Geom::Point> points;
     BoolParam ignoreCusp;
+    BoolParam onlySelected;
     ScalarParam weight;
 
     LPEBSpline(const LPEBSpline&);
