@@ -27,7 +27,6 @@
 #define SP_SPIRAL(obj) ((SPSpiral*)obj)
 #define SP_IS_SPIRAL(obj) (dynamic_cast<const SPSpiral*>((SPObject*)obj))
 
-class CSpiral;
 /**
  * A spiral Shape.
  *
@@ -40,10 +39,10 @@ class CSpiral;
  *
  * \todo Should I remove these attributes?
  */
-class SPSpiral : public SPShape {
+class SPSpiral : public SPShape, public CShape {
 public:
 	SPSpiral();
-	CSpiral* cspiral;
+	virtual ~SPSpiral();
 
 	float cx, cy;
 	float exp;  ///< Spiral expansion factor
@@ -65,12 +64,6 @@ public:
 	Geom::Point getTangent(gdouble t) const;
 
 	void fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::Point const& hat1, Geom::Point& hat2, double* t) const;
-};
-
-class CSpiral : public CShape {
-public:
-	CSpiral(SPSpiral* spiral);
-	virtual ~CSpiral();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
@@ -82,9 +75,6 @@ public:
 
 	virtual void set_shape();
 	virtual void update_patheffect(bool write);
-
-protected:
-	SPSpiral* spspiral;
 };
 
 #endif // SEEN_SP_SPIRAL_H
