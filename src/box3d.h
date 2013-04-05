@@ -22,16 +22,15 @@
 
 #define SP_TYPE_BOX3D            (box3d_get_type ())
 #define SP_BOX3D(obj) ((SPBox3D*)obj)
-#define SP_IS_BOX3D(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPBox3D)))
+#define SP_IS_BOX3D(obj) (dynamic_cast<const SPBox3D*>((SPObject*)obj))
 
 struct Persp3D;
 class Persp3DReference;
-class CBox3D;
 
 class SPBox3D : public SPGroup {
 public:
 	SPBox3D();
-	CBox3D* cbox3d;
+	virtual ~SPBox3D();
 
     gint z_orders[6]; // z_orders[i] holds the ID of the face at position #i in the group (from top to bottom)
 
@@ -52,18 +51,6 @@ public:
      * Create a SPBox3D and append it to the parent.
      */
     static SPBox3D * createBox3D(SPItem * parent);
-};
-
-class SPBox3DClass {
-public:
-    SPGroupClass parent_class;
-};
-
-
-class CBox3D : public CGroup {
-public:
-	CBox3D(SPBox3D* box3d);
-	virtual ~CBox3D();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -74,13 +61,7 @@ public:
 	virtual gchar *description();
 	virtual Geom::Affine set_transform(Geom::Affine const &transform);
     virtual void convert_to_guides();
-
-protected:
-	SPBox3D* spbox3d;
 };
-
-
-GType box3d_get_type (void);
 
 void box3d_position_set (SPBox3D *box);
 Proj::Pt3 box3d_get_proj_corner (SPBox3D const *box, guint id);

@@ -35,47 +35,26 @@ namespace {
 	bool switchRegistered = SPFactory::instance().registerObject("svg:switch", createSwitch);
 }
 
-G_DEFINE_TYPE(SPSwitch, sp_switch, G_TYPE_OBJECT);
-
-static void
-sp_switch_class_init (SPSwitchClass *) 
-{
-}
-
-CSwitch::CSwitch(SPSwitch* sw) : CGroup(sw) {
-	this->spswitch = sw;
-}
-
-CSwitch::~CSwitch() {
-}
-
 SPSwitch::SPSwitch() : SPGroup() {
-	SPSwitch* sw = this;
+    this->clpeitem = this;
+    this->citem = this;
+    this->cobject = this;
 
-    sw->cswitch = new CSwitch(sw);
-    sw->typeHierarchy.insert(typeid(SPSwitch));
-
-    delete sw->cgroup;
-    sw->cgroup = sw->cswitch;
-    sw->clpeitem = sw->cswitch;
-    sw->citem = sw->cswitch;
-    sw->cobject = sw->cswitch;
-
-    sw->_cached_item = 0;
+    this->_cached_item = 0;
 }
 
-static void sp_switch_init (SPSwitch *sw)
-{
-	new (sw) SPSwitch();
+SPSwitch::~SPSwitch() {
 }
 
 SPObject *SPSwitch::_evaluateFirst() {
     SPObject *first = 0;
+
     for (SPObject *child = this->firstChild() ; child && !first ; child = child->getNext() ) {
         if (SP_IS_ITEM(child) && sp_item_evaluate(SP_ITEM(child))) {
-	    first = child;
-	}
+        	first = child;
+        }
     }
+
     return first;
 }
 
@@ -94,25 +73,25 @@ GSList *SPSwitch::_childList(bool add_ref, SPObject::Action action) {
     return g_slist_prepend (NULL, child);
 }
 
-gchar *CSwitch::description() {
-    gint len = this->spgroup->getItemCount();
+gchar *SPSwitch::description() {
+    gint len = this->getItemCount();
     return g_strdup_printf(
             ngettext("<b>Conditional group</b> of <b>%d</b> object",
                  "<b>Conditional group</b> of <b>%d</b> objects",
                  len), len);
 }
 
-void CSwitch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
-    this->spswitch->_reevaluate(true);
+void SPSwitch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+    this->_reevaluate(true);
 }
 
-void CSwitch::remove_child(Inkscape::XML::Node *) {
-	this->spswitch->_reevaluate();
+void SPSwitch::remove_child(Inkscape::XML::Node *) {
+	this->_reevaluate();
 }
 
-void CSwitch::order_changed (Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *)
+void SPSwitch::order_changed (Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *)
 {
-	this->spswitch->_reevaluate();
+	this->_reevaluate();
 }
 
 void SPSwitch::_reevaluate(bool /*add_to_drawing*/) {
@@ -159,16 +138,20 @@ void SPSwitch::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem 
     SPObject *evaluated_child = this->_evaluateFirst();
 
     GSList *l = this->_childList(false, SPObject::ActionShow);
+
     while (l) {
         SPObject *o = SP_OBJECT (l->data);
+
         if (SP_IS_ITEM (o)) {
             SPItem * child = SP_ITEM(o);
             child->setEvaluated(o == evaluated_child);
             Inkscape::DrawingItem *ac = child->invoke_show (drawing, key, flags);
+
             if (ac) {
                 ai->appendChild(ac);
             }
         }
+
         l = g_slist_remove (l, o);
     }
 }

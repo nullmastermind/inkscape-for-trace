@@ -16,13 +16,10 @@
 #include <map>
 #include "sp-lpe-item.h"
 
-#define SP_TYPE_GROUP            (sp_group_get_type ())
 #define SP_GROUP(obj) ((SPGroup*)obj)
-#define SP_IS_GROUP(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGroup)))
+#define SP_IS_GROUP(obj) (dynamic_cast<const SPGroup*>((SPObject*)obj))
 
 #define SP_IS_LAYER(obj)         (SP_IS_GROUP(obj) && SP_GROUP(obj)->layerMode() == SPGroup::LAYER)
-
-class CGroup;
 
 namespace Inkscape {
 
@@ -31,10 +28,10 @@ class DrawingItem;
 
 } // namespace Inkscape
 
-class SPGroup : public SPLPEItem {
+class SPGroup : public SPLPEItem, public CLPEItem {
 public:
 	SPGroup();
-    CGroup *cgroup;
+	virtual ~SPGroup();
 
     enum LayerMode { GROUP, LAYER, MASK_HELPER };
 
@@ -61,21 +58,8 @@ public:
 
 private:
     void _updateLayerMode(unsigned int display_key=0);
-};
 
-struct SPGroupClass {
-    SPLPEItemClass parent_class;
-};
-
-
-/*
- * Virtual methods of SPGroup
- */
-class CGroup : public CLPEItem {
 public:
-    CGroup(SPGroup *group);
-    virtual ~CGroup();
-    
     virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
    	virtual void release();
 
@@ -98,13 +82,7 @@ public:
     virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
     virtual void update_patheffect(bool write);
-
-protected:
-    SPGroup *spgroup;
 };
-
-
-GType sp_group_get_type (void);
 
 void sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done = true);
 

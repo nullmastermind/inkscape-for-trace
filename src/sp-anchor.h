@@ -15,29 +15,15 @@
 
 #include "sp-item-group.h"
 
-#define SP_TYPE_ANCHOR (sp_anchor_get_type ())
 #define SP_ANCHOR(obj) ((SPAnchor*)obj)
-#define SP_IS_ANCHOR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPAnchor)))
-
-class CAnchor;
+#define SP_IS_ANCHOR(obj) (dynamic_cast<const SPAnchor*>((SPObject*)obj))
 
 class SPAnchor : public SPGroup {
 public:
 	SPAnchor();
-	CAnchor* canchor;
+	virtual ~SPAnchor();
 
 	gchar *href;
-};
-
-struct SPAnchorClass {
-	SPGroupClass parent_class;
-};
-
-
-class CAnchor : public CGroup {
-public:
-	CAnchor(SPAnchor* anchor);
-	virtual ~CAnchor();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -46,12 +32,6 @@ public:
 
 	virtual gchar* description();
 	virtual gint event(SPEvent *event);
-
-protected:
-	SPAnchor* spanchor;
 };
-
-
-GType sp_anchor_get_type (void);
 
 #endif

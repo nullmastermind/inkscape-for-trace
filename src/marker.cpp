@@ -52,57 +52,31 @@ namespace {
 	bool markerRegistered = SPFactory::instance().registerObject("svg:marker", createMarker);
 }
 
-G_DEFINE_TYPE(SPMarker, sp_marker, G_TYPE_OBJECT);
-
-/**
- * Initializes a SPMarkerClass object.  Establishes the function pointers to the class'
- * member routines in the class vtable, and sets pointers to parent classes.
- */
-static void sp_marker_class_init(SPMarkerClass *klass)
-{
-}
-
-CMarker::CMarker(SPMarker* marker) : CGroup(marker) {
-	this->spmarker = marker;
-}
-
-CMarker::~CMarker() {
-}
-
 SPMarker::SPMarker() : SPGroup() {
-	SPMarker* marker = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 
-	marker->cmarker = new CMarker(marker);
-	marker->typeHierarchy.insert(typeid(SPMarker));
+	this->aspect_clip = 0;
+	this->aspect_align = 0;
+	this->aspect_set = 0;
+	this->markerUnits = 0;
+	this->orient_auto = 0;
+	this->markerUnits_set = 0;
+	this->orient_set = 0;
+	this->orient = 0;
 
-	delete marker->cgroup;
-	marker->cgroup = marker->cmarker;
-	marker->clpeitem = marker->cmarker;
-	marker->citem = marker->cmarker;
-	marker->cobject = marker->cmarker;
-
-	marker->aspect_clip = 0;
-	marker->aspect_align = 0;
-	marker->aspect_set = 0;
-	marker->markerUnits = 0;
-	marker->orient_auto = 0;
-	marker->markerUnits_set = 0;
-	marker->orient_set = 0;
-	marker->orient = 0;
-
-    marker->viewBox = Geom::OptRect();
-    marker->c2p.setIdentity();
-    marker->views = NULL;
+    this->viewBox = Geom::OptRect();
+    this->c2p.setIdentity();
+    this->views = NULL;
 }
 
 /**
  * Initializes an SPMarker object.  This notes the marker's viewBox is
  * not set and initializes the marker's c2p identity matrix.
  */
-static void
-sp_marker_init (SPMarker *marker)
-{
-	new (marker) SPMarker();
+
+SPMarker::~SPMarker() {
 }
 
 /**
@@ -115,38 +89,32 @@ sp_marker_init (SPMarker *marker)
  *
  * \see SPObject::build()
  */
-void CMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPMarker* object = this->spmarker;
+void SPMarker::build(SPDocument *document, Inkscape::XML::Node *repr) {
+    this->readAttr( "markerUnits" );
+    this->readAttr( "refX" );
+    this->readAttr( "refY" );
+    this->readAttr( "markerWidth" );
+    this->readAttr( "markerHeight" );
+    this->readAttr( "orient" );
+    this->readAttr( "viewBox" );
+    this->readAttr( "preserveAspectRatio" );
 
-    object->readAttr( "markerUnits" );
-    object->readAttr( "refX" );
-    object->readAttr( "refY" );
-    object->readAttr( "markerWidth" );
-    object->readAttr( "markerHeight" );
-    object->readAttr( "orient" );
-    object->readAttr( "viewBox" );
-    object->readAttr( "preserveAspectRatio" );
-
-    CGroup::build(document, repr);
+    SPGroup::build(document, repr);
 }
 
-void CMarker::release() {
-	SPMarker* object = this->spmarker;
-
-    SPMarker *marker = reinterpret_cast<SPMarker *>(object);
-
-    while (marker->views) {
+void SPMarker::release() {
+    while (this->views) {
         // Destroy all DrawingItems etc.
         // Parent class ::hide method
         //reinterpret_cast<SPItemClass *>(parent_class)->hide(marker, marker->views->key);
     	// CPPIFY: correct one?
-    	CGroup::hide(marker->views->key);
+    	SPGroup::hide(this->views->key);
 
 
-        sp_marker_view_remove (marker, marker->views, TRUE);
+        sp_marker_view_remove (this, this->views, TRUE);
     }
 
-    CGroup::release();
+    SPGroup::release();
 }
 
 /**
@@ -162,99 +130,143 @@ void CMarker::release() {
  * \see SPObject::release()
  */
 
-void CMarker::set(unsigned int key, const gchar* value) {
-	SPMarker* object = this->spmarker;
-
-	SPMarker *marker = SP_MARKER(object);
-
+void SPMarker::set(unsigned int key, const gchar* value) {
 	switch (key) {
 	case SP_ATTR_MARKERUNITS:
-		marker->markerUnits_set = FALSE;
-		marker->markerUnits = SP_MARKER_UNITS_STROKEWIDTH;
+		this->markerUnits_set = FALSE;
+		this->markerUnits = SP_MARKER_UNITS_STROKEWIDTH;
+
 		if (value) {
 			if (!strcmp (value, "strokeWidth")) {
-				marker->markerUnits_set = TRUE;
+				this->markerUnits_set = TRUE;
 			} else if (!strcmp (value, "userSpaceOnUse")) {
-				marker->markerUnits = SP_MARKER_UNITS_USERSPACEONUSE;
-				marker->markerUnits_set = TRUE;
+				this->markerUnits = SP_MARKER_UNITS_USERSPACEONUSE;
+				this->markerUnits_set = TRUE;
 			}
 		}
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_REFX:
-	        marker->refX.readOrUnset(value);
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	    this->refX.readOrUnset(value);
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_REFY:
-	        marker->refY.readOrUnset(value);
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	    this->refY.readOrUnset(value);
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_MARKERWIDTH:
-	        marker->markerWidth.readOrUnset(value, SVGLength::NONE, 3.0, 3.0);
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	    this->markerWidth.readOrUnset(value, SVGLength::NONE, 3.0, 3.0);
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_MARKERHEIGHT:
-	        marker->markerHeight.readOrUnset(value, SVGLength::NONE, 3.0, 3.0);
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	    this->markerHeight.readOrUnset(value, SVGLength::NONE, 3.0, 3.0);
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_ORIENT:
-		marker->orient_set = FALSE;
-		marker->orient_auto = FALSE;
-		marker->orient = 0.0;
+		this->orient_set = FALSE;
+		this->orient_auto = FALSE;
+		this->orient = 0.0;
+
 		if (value) {
 			if (!strcmp (value, "auto")) {
-				marker->orient_auto = TRUE;
-				marker->orient_set = TRUE;
-			} else if (sp_svg_number_read_f (value, &marker->orient)) {
-				marker->orient_set = TRUE;
+				this->orient_auto = TRUE;
+				this->orient_set = TRUE;
+			} else if (sp_svg_number_read_f (value, &this->orient)) {
+				this->orient_set = TRUE;
 			}
 		}
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_VIEWBOX:
-        marker->viewBox = Geom::OptRect();
+        this->viewBox = Geom::OptRect();
+
 		if (value) {
 			double x, y, width, height;
 			char *eptr;
+
 			/* fixme: We have to take original item affine into account */
 			/* fixme: Think (Lauris) */
 			eptr = (gchar *) value;
 			x = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			y = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			width = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			height = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			if ((width > 0) && (height > 0)) {
 				/* Set viewbox */
-                marker->viewBox = Geom::Rect( Geom::Point(x,y),
-                                              Geom::Point(x + width, y + height) );
+                this->viewBox = Geom::Rect(Geom::Point(x, y), Geom::Point(x + width, y + height));
 			}
 		}
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_PRESERVEASPECTRATIO:
 		/* Do setup before, so we can use break to escape */
-		marker->aspect_set = FALSE;
-		marker->aspect_align = SP_ASPECT_NONE;
-		marker->aspect_clip = SP_ASPECT_MEET;
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		this->aspect_set = FALSE;
+		this->aspect_align = SP_ASPECT_NONE;
+		this->aspect_clip = SP_ASPECT_MEET;
+
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+
 		if (value) {
 			int len;
 			gchar c[256];
 			const gchar *p, *e;
 			unsigned int align, clip;
 			p = value;
-			while (*p && *p == 32) p += 1;
-			if (!*p) break;
+
+			while (*p && *p == 32) {
+				p += 1;
+			}
+
+			if (!*p) {
+				break;
+			}
+
 			e = p;
-			while (*e && *e != 32) e += 1;
+
+			while (*e && *e != 32) {
+				e += 1;
+			}
+
 			len = e - p;
-			if (len > 8) break;
+
+			if (len > 8) {
+				break;
+			}
+
 			memcpy (c, value, len);
+
 			c[len] = 0;
+
 			/* Now the actual part */
 			if (!strcmp (c, "none")) {
 				align = SP_ASPECT_NONE;
@@ -279,8 +291,13 @@ void CMarker::set(unsigned int key, const gchar* value) {
 			} else {
 				break;
 			}
+
 			clip = SP_ASPECT_MEET;
-			while (*e && *e == 32) e += 1;
+
+			while (*e && *e == 32) {
+				e += 1;
+			}
+
 			if (*e) {
 				if (!strcmp (e, "meet")) {
 					clip = SP_ASPECT_MEET;
@@ -290,21 +307,20 @@ void CMarker::set(unsigned int key, const gchar* value) {
 					break;
 				}
 			}
-			marker->aspect_set = TRUE;
-			marker->aspect_align = align;
-			marker->aspect_clip = clip;
+
+			this->aspect_set = TRUE;
+			this->aspect_align = align;
+			this->aspect_clip = clip;
 		}
 		break;
+
 	default:
-		CGroup::set(key, value);
+		SPGroup::set(key, value);
 		break;
 	}
 }
 
-void CMarker::update(SPCtx *ctx, guint flags) {
-	SPMarker* object = this->spmarker;
-
-    SPMarker *marker = SP_MARKER(object);
+void SPMarker::update(SPCtx *ctx, guint flags) {
     SPItemCtx rctx;
 
     // fixme: We have to set up clip here too
@@ -317,15 +333,15 @@ void CMarker::update(SPCtx *ctx, guint flags) {
     rctx.i2vp = Geom::identity();
 
     // Set up viewport
-    rctx.viewport = Geom::Rect::from_xywh(0, 0, marker->markerWidth.computed, marker->markerHeight.computed);
+    rctx.viewport = Geom::Rect::from_xywh(0, 0, this->markerWidth.computed, this->markerHeight.computed);
 
     // Start with identity transform
-    marker->c2p.setIdentity();
+    this->c2p.setIdentity();
 
     // Viewbox is always present, either implicitly or explicitly
     Geom::Rect vb;
-    if (marker->viewBox) {
-        vb = *marker->viewBox;
+    if (this->viewBox) {
+        vb = *this->viewBox;
     } else {
         vb = rctx.viewport;
     }
@@ -337,7 +353,8 @@ void CMarker::update(SPCtx *ctx, guint flags) {
     // double y = 0;
     double width = 0;
     double height = 0;
-    if (marker->aspect_align == SP_ASPECT_NONE) {
+
+    if (this->aspect_align == SP_ASPECT_NONE) {
         // x = 0.0;
         // y = 0.0;
         width = rctx.viewport.width();
@@ -347,7 +364,7 @@ void CMarker::update(SPCtx *ctx, guint flags) {
         // Things are getting interesting
         scalex = rctx.viewport.width() / (vb.width());
         scaley = rctx.viewport.height() / (vb.height());
-        scale = (marker->aspect_clip == SP_ASPECT_MEET) ? MIN (scalex, scaley) : MAX (scalex, scaley);
+        scale = (this->aspect_clip == SP_ASPECT_MEET) ? MIN (scalex, scaley) : MAX (scalex, scaley);
         width = (vb.width()) * scale;
         height = (vb.height()) * scale;
 
@@ -395,48 +412,43 @@ void CMarker::update(SPCtx *ctx, guint flags) {
                 break;
         }*/
     }
+
     // TODO fixme: all that work is done to figure out x and y, which are just ignored. Check why.
 
     // viewbox transformation and reference translation
-    marker->c2p = Geom::Translate(-marker->refX.computed, -marker->refY.computed) *
+    this->c2p = Geom::Translate(-this->refX.computed, -this->refY.computed) *
         Geom::Scale(width / vb.width(), height / vb.height());
 
-    rctx.i2doc = marker->c2p * rctx.i2doc;
+    rctx.i2doc = this->c2p * rctx.i2doc;
 
     // If viewBox is set reinitialize child viewport
     // Otherwise it already correct
-    if (marker->viewBox) {
-        rctx.viewport = *marker->viewBox;
+    if (this->viewBox) {
+        rctx.viewport = *this->viewBox;
         rctx.i2vp = Geom::identity();
     }
 
     // And invoke parent method
-    CGroup::update((SPCtx *) &rctx, flags);
+    SPGroup::update((SPCtx *) &rctx, flags);
 
     // As last step set additional transform of drawing group
-    for (SPMarkerView *v = marker->views; v != NULL; v = v->next) {
+    for (SPMarkerView *v = this->views; v != NULL; v = v->next) {
         for (unsigned i = 0 ; i < v->items.size() ; i++) {
             if (v->items[i]) {
                 Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->items[i]);
-                g->setChildTransform(marker->c2p);
+                g->setChildTransform(this->c2p);
             }
         }
     }
 }
 
-Inkscape::XML::Node* CMarker::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPMarker* object = this->spmarker;
-
-	SPMarker *marker;
-
-	marker = SP_MARKER (object);
-
+Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = xml_doc->createElement("svg:marker");
 	}
 
-	if (marker->markerUnits_set) {
-		if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
+	if (this->markerUnits_set) {
+		if (this->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
 			repr->setAttribute("markerUnits", "strokeWidth");
 		} else {
 			repr->setAttribute("markerUnits", "userSpaceOnUse");
@@ -444,49 +456,55 @@ Inkscape::XML::Node* CMarker::write(Inkscape::XML::Document *xml_doc, Inkscape::
 	} else {
 		repr->setAttribute("markerUnits", NULL);
 	}
-	if (marker->refX._set) {
-		sp_repr_set_svg_double(repr, "refX", marker->refX.computed);
+
+	if (this->refX._set) {
+		sp_repr_set_svg_double(repr, "refX", this->refX.computed);
 	} else {
 		repr->setAttribute("refX", NULL);
 	}
-	if (marker->refY._set) {
-		sp_repr_set_svg_double (repr, "refY", marker->refY.computed);
+
+	if (this->refY._set) {
+		sp_repr_set_svg_double (repr, "refY", this->refY.computed);
 	} else {
 		repr->setAttribute("refY", NULL);
 	}
-	if (marker->markerWidth._set) {
-		sp_repr_set_svg_double (repr, "markerWidth", marker->markerWidth.computed);
+
+	if (this->markerWidth._set) {
+		sp_repr_set_svg_double (repr, "markerWidth", this->markerWidth.computed);
 	} else {
 		repr->setAttribute("markerWidth", NULL);
 	}
-	if (marker->markerHeight._set) {
-		sp_repr_set_svg_double (repr, "markerHeight", marker->markerHeight.computed);
+
+	if (this->markerHeight._set) {
+		sp_repr_set_svg_double (repr, "markerHeight", this->markerHeight.computed);
 	} else {
 		repr->setAttribute("markerHeight", NULL);
 	}
-	if (marker->orient_set) {
-		if (marker->orient_auto) {
+
+	if (this->orient_set) {
+		if (this->orient_auto) {
 			repr->setAttribute("orient", "auto");
 		} else {
-			sp_repr_set_css_double(repr, "orient", marker->orient);
+			sp_repr_set_css_double(repr, "orient", this->orient);
 		}
 	} else {
 		repr->setAttribute("orient", NULL);
 	}
+
 	/* fixme: */
 	//XML Tree being used directly here while it shouldn't be....
-	repr->setAttribute("viewBox", object->getRepr()->attribute("viewBox"));
+	repr->setAttribute("viewBox", this->getRepr()->attribute("viewBox"));
 	//XML Tree being used directly here while it shouldn't be....
-	repr->setAttribute("preserveAspectRatio", object->getRepr()->attribute("preserveAspectRatio"));
+	repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
 
-	CGroup::write(xml_doc, repr, flags);
+	SPGroup::write(xml_doc, repr, flags);
 
 	return repr;
 }
 
-Inkscape::DrawingItem* CMarker::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+Inkscape::DrawingItem* SPMarker::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
 	// CPPIFY: correct?
-	return CGroup::show(drawing, key, flags);
+	return SPGroup::show(drawing, key, flags);
 }
 
 /**
@@ -499,9 +517,9 @@ sp_marker_private_show (SPItem */*item*/, Inkscape::Drawing &/*drawing*/, unsign
     return NULL;
 }
 
-void CMarker::hide(unsigned int key) {
+void SPMarker::hide(unsigned int key) {
 	// CPPIFY: correct?
-	CGroup::hide(key);
+	SPGroup::hide(key);
 }
 
 /**
@@ -513,7 +531,7 @@ sp_marker_private_hide (SPItem */*item*/, unsigned int /*key*/)
     /* Break propagation */
 }
 
-Geom::OptRect CMarker::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
+Geom::OptRect SPMarker::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
 	return Geom::OptRect();
 }
 
@@ -527,7 +545,7 @@ sp_marker_bbox(SPItem const *, Geom::Affine const &, SPItem::BBoxType)
     return Geom::OptRect();
 }
 
-void CMarker::print(SPPrintContext* ctx) {
+void SPMarker::print(SPPrintContext* ctx) {
 
 }
 
@@ -565,7 +583,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
     if (view && (view->items.size() != size)) {
         /* Free old view and allocate new */
         /* Parent class ::hide method */
-    	marker->cmarker->hide(key);
+    	marker->hide(key);
 
         sp_marker_view_remove (marker, view, TRUE);
         view = NULL;
@@ -605,7 +623,7 @@ sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
             }
             if (!v->items[pos]) {
                 /* Parent class ::show method */
-            	v->items[pos] = marker->cmarker->show(parent->drawing(), key, SP_ITEM_REFERENCE_FLAGS);
+            	v->items[pos] = marker->show(parent->drawing(), key, SP_ITEM_REFERENCE_FLAGS);
 
                 if (v->items[pos]) {
                     /* fixme: Position (Lauris) */
@@ -651,7 +669,7 @@ sp_marker_hide (SPMarker *marker, unsigned int key)
 		next = v->next;
 		if (v->key == key) {
 			/* Parent class ::hide method */
-			marker->cmarker->hide(key);
+			marker->hide(key);
 
 			sp_marker_view_remove (marker, v, TRUE);
 			return;

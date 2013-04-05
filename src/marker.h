@@ -20,10 +20,9 @@
 
 #define SP_TYPE_MARKER (sp_marker_get_type ())
 #define SP_MARKER(obj) ((SPMarker*)obj)
-#define SP_IS_MARKER(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMarker)))
+#define SP_IS_MARKER(obj) (dynamic_cast<const SPMarker*>((SPObject*)obj))
 
 struct SPMarkerView;
-class CMarker;
 
 #include <2geom/rect.h>
 #include <2geom/affine.h>
@@ -36,7 +35,7 @@ class CMarker;
 class SPMarker : public SPGroup {
 public:
 	SPMarker();
-	CMarker* cmarker;
+	virtual ~SPMarker();
 
 	/* units */
 	unsigned int markerUnits_set : 1;
@@ -68,17 +67,6 @@ public:
 
 	/* Private views */
 	SPMarkerView *views;
-};
-
-struct SPMarkerClass {
-	SPGroupClass parent_class;
-};
-
-
-class CMarker : public CGroup {
-public:
-	CMarker(SPMarker* marker);
-	virtual ~CMarker();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -91,14 +79,7 @@ public:
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
 	virtual void print(SPPrintContext *ctx);
-
-protected:
-	SPMarker* spmarker;
 };
-
-
-
-GType sp_marker_get_type (void);
 
 class SPMarkerReference : public Inkscape::URIReference {
 	SPMarkerReference(SPObject *obj) : URIReference(obj) {}

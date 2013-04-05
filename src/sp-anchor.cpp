@@ -35,75 +35,47 @@ namespace {
 	bool anchorRegistered = SPFactory::instance().registerObject("svg:a", createAnchor);
 }
 
-G_DEFINE_TYPE(SPAnchor, sp_anchor, G_TYPE_OBJECT);
-
-static void sp_anchor_class_init(SPAnchorClass *ac)
-{
-}
-
-CAnchor::CAnchor(SPAnchor* anchor) : CGroup(anchor) {
-	this->spanchor = anchor;
-}
-
-CAnchor::~CAnchor() {
-}
-
 SPAnchor::SPAnchor() : SPGroup() {
-	SPAnchor* anchor = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 
-	anchor->canchor = new CAnchor(anchor);
-	anchor->typeHierarchy.insert(typeid(SPAnchor));
-
-	delete anchor->cgroup;
-	anchor->cgroup = anchor->canchor;
-	anchor->clpeitem = anchor->canchor;
-	anchor->citem = anchor->canchor;
-	anchor->cobject = anchor->canchor;
-
-    anchor->href = NULL;
+    this->href = NULL;
 }
 
-static void sp_anchor_init(SPAnchor *anchor)
-{
-	new (anchor) SPAnchor();
+SPAnchor::~SPAnchor() {
 }
 
-void CAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPAnchor* object = this->spanchor;
+void SPAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
+    SPGroup::build(document, repr);
 
-    CGroup::build(document, repr);
-
-    object->readAttr( "xlink:type" );
-    object->readAttr( "xlink:role" );
-    object->readAttr( "xlink:arcrole" );
-    object->readAttr( "xlink:title" );
-    object->readAttr( "xlink:show" );
-    object->readAttr( "xlink:actuate" );
-    object->readAttr( "xlink:href" );
-    object->readAttr( "target" );
+    this->readAttr( "xlink:type" );
+    this->readAttr( "xlink:role" );
+    this->readAttr( "xlink:arcrole" );
+    this->readAttr( "xlink:title" );
+    this->readAttr( "xlink:show" );
+    this->readAttr( "xlink:actuate" );
+    this->readAttr( "xlink:href" );
+    this->readAttr( "target" );
 }
 
-void CAnchor::release() {
-    SPAnchor *anchor = this->spanchor;
-
-    if (anchor->href) {
-        g_free(anchor->href);
-        anchor->href = NULL;
+void SPAnchor::release() {
+    if (this->href) {
+        g_free(this->href);
+        this->href = NULL;
     }
 
-    CGroup::release();
+    SPGroup::release();
 }
 
-void CAnchor::set(unsigned int key, const gchar* value) {
-    SPAnchor *anchor = this->spanchor;
-    SPAnchor* object = anchor;
-
+void SPAnchor::set(unsigned int key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_XLINK_HREF:
-            g_free(anchor->href);
-            anchor->href = g_strdup(value);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            g_free(this->href);
+            this->href = g_strdup(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+
 	case SP_ATTR_XLINK_TYPE:
 	case SP_ATTR_XLINK_ROLE:
 	case SP_ATTR_XLINK_ARCROLE:
@@ -111,10 +83,11 @@ void CAnchor::set(unsigned int key, const gchar* value) {
 	case SP_ATTR_XLINK_SHOW:
 	case SP_ATTR_XLINK_ACTUATE:
 	case SP_ATTR_TARGET:
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+
 	default:
-            CGroup::set(key, value);
+            SPGroup::set(key, value);
             break;
     }
 }
@@ -122,38 +95,33 @@ void CAnchor::set(unsigned int key, const gchar* value) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CAnchor::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    SPAnchor *anchor = this->spanchor;
-    SPAnchor* object = anchor;
-
+Inkscape::XML::Node* SPAnchor::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:a");
     }
 
-    repr->setAttribute("xlink:href", anchor->href);
+    repr->setAttribute("xlink:href", this->href);
 
-    if (repr != object->getRepr()) {
+    if (repr != this->getRepr()) {
         // XML Tree being directly used while it shouldn't be in the
         //  below COPY_ATTR lines
-        COPY_ATTR(repr, object->getRepr(), "xlink:type");
-        COPY_ATTR(repr, object->getRepr(), "xlink:role");
-        COPY_ATTR(repr, object->getRepr(), "xlink:arcrole");
-        COPY_ATTR(repr, object->getRepr(), "xlink:title");
-        COPY_ATTR(repr, object->getRepr(), "xlink:show");
-        COPY_ATTR(repr, object->getRepr(), "xlink:actuate");
-        COPY_ATTR(repr, object->getRepr(), "target");
+        COPY_ATTR(repr, this->getRepr(), "xlink:type");
+        COPY_ATTR(repr, this->getRepr(), "xlink:role");
+        COPY_ATTR(repr, this->getRepr(), "xlink:arcrole");
+        COPY_ATTR(repr, this->getRepr(), "xlink:title");
+        COPY_ATTR(repr, this->getRepr(), "xlink:show");
+        COPY_ATTR(repr, this->getRepr(), "xlink:actuate");
+        COPY_ATTR(repr, this->getRepr(), "target");
     }
 
-    CGroup::write(xml_doc, repr, flags);
+    SPGroup::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CAnchor::description() {
-    SPAnchor *anchor = this->spanchor;
-
-    if (anchor->href) {
-        char *quoted_href = xml_quote_strdup(anchor->href);
+gchar* SPAnchor::description() {
+    if (this->href) {
+        char *quoted_href = xml_quote_strdup(this->href);
         char *ret = g_strdup_printf(_("<b>Link</b> to %s"), quoted_href);
         g_free(quoted_href);
         return ret;
@@ -163,22 +131,23 @@ gchar* CAnchor::description() {
 }
 
 /* fixme: We should forward event to appropriate container/view */
-gint CAnchor::event(SPEvent* event) {
-    SPAnchor *anchor = this->spanchor;
-
+gint SPAnchor::event(SPEvent* event) {
     switch (event->type) {
 	case SP_EVENT_ACTIVATE:
-            if (anchor->href) {
-                g_print("Activated xlink:href=\"%s\"\n", anchor->href);
+            if (this->href) {
+                g_print("Activated xlink:href=\"%s\"\n", this->href);
                 return TRUE;
             }
             break;
+
 	case SP_EVENT_MOUSEOVER:
             (static_cast<Inkscape::UI::View::View*>(event->data))->mouseover();
             break;
+
 	case SP_EVENT_MOUSEOUT:
             (static_cast<Inkscape::UI::View::View*>(event->data))->mouseout();
             break;
+
 	default:
             break;
     }

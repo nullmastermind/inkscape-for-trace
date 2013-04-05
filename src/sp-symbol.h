@@ -19,9 +19,7 @@
 
 #define SP_TYPE_SYMBOL (sp_symbol_get_type ())
 #define SP_SYMBOL(obj) ((SPSymbol*)obj)
-#define SP_IS_SYMBOL(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPSymbol)))
-
-class CSymbol;
+#define SP_IS_SYMBOL(obj) (dynamic_cast<const SPSymbol*>((SPObject*)obj))
 
 #include <2geom/affine.h>
 #include "svg/svg-length.h"
@@ -31,7 +29,7 @@ class CSymbol;
 class SPSymbol : public SPGroup {
 public:
 	SPSymbol();
-	CSymbol* csymbol;
+	virtual ~SPSymbol();
 
 	/* viewBox; */
 	unsigned int viewBox_set : 1;
@@ -44,17 +42,6 @@ public:
 
 	/* Child to parent additional transform */
 	Geom::Affine c2p;
-};
-
-struct SPSymbolClass {
-	SPGroupClass parent_class;
-};
-
-
-class CSymbol : public CGroup {
-public:
-	CSymbol(SPSymbol* symbol);
-	virtual ~CSymbol();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -69,12 +56,6 @@ public:
 	virtual void print(SPPrintContext *ctx);
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
 	virtual void hide (unsigned int key);
-
-protected:
-	SPSymbol* spsymbol;
 };
-
-
-GType sp_symbol_get_type (void);
 
 #endif

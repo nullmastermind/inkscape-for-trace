@@ -19,18 +19,16 @@
 #include "enums.h"
 #include "sp-item-group.h"
 
-#define SP_TYPE_ROOT (sp_root_get_type())
 #define SP_ROOT(obj) ((SPRoot*)obj)
-#define SP_IS_ROOT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPRoot)))
+#define SP_IS_ROOT(obj) (dynamic_cast<const SPRoot*>((SPObject*)obj))
 
 class SPDefs;
-class CRoot;
 
 /** \<svg\> element */
 class SPRoot : public SPGroup {
 public:
 	SPRoot();
-	CRoot* croot;
+	virtual ~SPRoot();
 
     struct {
         Inkscape::Version svg;
@@ -63,17 +61,6 @@ public:
      * this \<svg\> element: see writers of this member in sp-root.cpp.
      */
     SPDefs *defs;
-};
-
-struct SPRootClass {
-    SPGroupClass parent_class;
-};
-
-
-class CRoot : public CGroup {
-public:
-	CRoot(SPRoot* root);
-	virtual ~CRoot();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -87,14 +74,7 @@ public:
 
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
 	virtual void print(SPPrintContext *ctx);
-
-protected:
-	SPRoot* sproot;
 };
-
-
-GType sp_root_get_type();
-
 
 #endif /* !SP_ROOT_H_SEEN */
 

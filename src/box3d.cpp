@@ -53,48 +53,25 @@ namespace {
 	bool box3DRegistered = SPFactory::instance().registerObject("inkscape:box3d", createBox3D);
 }
 
-G_DEFINE_TYPE(SPBox3D, box3d, G_TYPE_OBJECT);
-
-static void box3d_class_init(SPBox3DClass *klass)
-{
-}
-
-CBox3D::CBox3D(SPBox3D* box) : CGroup(box) {
-	this->spbox3d = box;
-}
-
-CBox3D::~CBox3D() {
-}
-
 SPBox3D::SPBox3D() : SPGroup() {
-	SPBox3D* box = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 
-	box->cbox3d = new CBox3D(box);
-	box->typeHierarchy.insert(typeid(SPBox3D));
+	this->my_counter = 0;
+	this->swapped = Box3D::NONE;
 
-	delete box->cgroup;
-	box->cgroup = box->cbox3d;
-	box->clpeitem = box->cbox3d;
-	box->citem = box->cbox3d;
-	box->cobject = box->cbox3d;
-
-	box->my_counter = 0;
-	box->swapped = Box3D::NONE;
-
-    box->persp_href = NULL;
-    box->persp_ref = new Persp3DReference(box);
+    this->persp_href = NULL;
+    this->persp_ref = new Persp3DReference(this);
 }
 
-static void
-box3d_init(SPBox3D *box)
-{
-	new (box) SPBox3D();
+SPBox3D::~SPBox3D() {
 }
 
-void CBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPBox3D* object = this->spbox3d;
+void SPBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPBox3D* object = this;
 
-    CGroup::build(document, repr);
+    SPGroup::build(document, repr);
 
     SPBox3D *box = SP_BOX3D (object);
     box->my_counter = counter++;
@@ -116,8 +93,8 @@ void CBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
     }
 }
 
-void CBox3D::release() {
-	SPBox3D* object = this->spbox3d;
+void SPBox3D::release() {
+	SPBox3D* object = this;
     SPBox3D *box = object;
 
     if (box->persp_href) {
@@ -151,11 +128,11 @@ void CBox3D::release() {
         */
     }
 
-    CGroup::release();
+    SPGroup::release();
 }
 
-void CBox3D::set(unsigned int key, const gchar* value) {
-	SPBox3D* object = this->spbox3d;
+void SPBox3D::set(unsigned int key, const gchar* value) {
+	SPBox3D* object = this;
     SPBox3D *box = object;
 
     switch (key) {
@@ -201,7 +178,7 @@ void CBox3D::set(unsigned int key, const gchar* value) {
             }
             break;
         default:
-            CGroup::set(key, value);
+            SPGroup::set(key, value);
             break;
     }
 }
@@ -222,7 +199,7 @@ box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box)
     }
 }
 
-void CBox3D::update(SPCtx *ctx, guint flags) {
+void SPBox3D::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* FIXME?: Perhaps the display updates of box sides should be instantiated from here, but this
@@ -232,11 +209,11 @@ void CBox3D::update(SPCtx *ctx, guint flags) {
     }
 
     // Invoke parent method
-    CGroup::update(ctx, flags);
+    SPGroup::update(ctx, flags);
 }
 
-Inkscape::XML::Node* CBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPBox3D* object = this->spbox3d;
+Inkscape::XML::Node* SPBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPBox3D* object = this;
     SPBox3D *box = object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -277,13 +254,13 @@ Inkscape::XML::Node* CBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         box->save_corner7 = box->orig_corner7;
     }
 
-    CGroup::write(xml_doc, repr, flags);
+    SPGroup::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-gchar* CBox3D::description() {
-	SPBox3D* item = this->spbox3d;
+gchar* SPBox3D::description() {
+	SPBox3D* item = this;
 
 	g_return_val_if_fail(SP_IS_BOX3D(item), NULL);
 	return g_strdup(_("<b>3D Box</b>"));
@@ -300,8 +277,8 @@ void box3d_position_set(SPBox3D *box)
     }
 }
 
-Geom::Affine CBox3D::set_transform(Geom::Affine const &xform) {
-	SPBox3D* item = this->spbox3d;
+Geom::Affine SPBox3D::set_transform(Geom::Affine const &xform) {
+	SPBox3D* item = this;
     SPBox3D *box = item;
 
     // We don't apply the transform to the box directly but instead to its perspective (which is
@@ -1361,8 +1338,8 @@ box3d_push_back_corner_pair(SPBox3D *box, std::list<std::pair<Geom::Point, Geom:
                                  box3d_get_corner_screen(box, c2, false)));
 }
 
-void CBox3D::convert_to_guides() {
-	SPBox3D* item = this->spbox3d;
+void SPBox3D::convert_to_guides() {
+	SPBox3D* item = this;
     SPBox3D *box = item;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

@@ -36,110 +36,119 @@ namespace {
 	bool symbolRegistered = SPFactory::instance().registerObject("svg:symbol", createSymbol);
 }
 
-G_DEFINE_TYPE(SPSymbol, sp_symbol, G_TYPE_OBJECT);
-
-static void sp_symbol_class_init(SPSymbolClass *klass)
-{
-}
-
-CSymbol::CSymbol(SPSymbol* symbol) : CGroup(symbol) {
-	this->spsymbol = symbol;
-}
-
-CSymbol::~CSymbol() {
-}
-
 SPSymbol::SPSymbol() : SPGroup() {
-	SPSymbol* symbol = this;
+	this->clpeitem = this;
+	this->citem = this;
+	this->cobject = this;
 
-	symbol->csymbol = new CSymbol(symbol);
-	symbol->typeHierarchy.insert(typeid(SPSymbol));
+	this->aspect_align = 0;
+	this->aspect_clip = 0;
+	this->aspect_set = 0;
 
-	delete symbol->cgroup;
-	symbol->cgroup = symbol->csymbol;
-	symbol->clpeitem = symbol->csymbol;
-	symbol->citem = symbol->csymbol;
-	symbol->cobject = symbol->csymbol;
-
-	symbol->aspect_align = 0;
-	symbol->aspect_clip = 0;
-	symbol->aspect_set = 0;
-
-    symbol->viewBox_set = FALSE;
-    symbol->c2p = Geom::identity();
+    this->viewBox_set = FALSE;
+    this->c2p = Geom::identity();
 }
 
-static void sp_symbol_init(SPSymbol *symbol)
-{
-	new (symbol) SPSymbol();
+SPSymbol::~SPSymbol() {
 }
 
-void CSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPSymbol* object = this->spsymbol;
+void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
+    this->readAttr( "viewBox" );
+    this->readAttr( "preserveAspectRatio" );
 
-    object->readAttr( "viewBox" );
-    object->readAttr( "preserveAspectRatio" );
-
-    CGroup::build(document, repr);
+    SPGroup::build(document, repr);
 }
 
-void CSymbol::release() {
-	CGroup::release();
+void SPSymbol::release() {
+	SPGroup::release();
 }
 
-void CSymbol::set(unsigned int key, const gchar* value) {
-	SPSymbol* object = this->spsymbol;
-
-    SPSymbol *symbol = SP_SYMBOL(object);
-
+void SPSymbol::set(unsigned int key, const gchar* value) {
     switch (key) {
     case SP_ATTR_VIEWBOX:
         if (value) {
             double x, y, width, height;
             char *eptr;
+
             /* fixme: We have to take original item affine into account */
             /* fixme: Think (Lauris) */
             eptr = (gchar *) value;
             x = g_ascii_strtod (eptr, &eptr);
-            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+            	eptr++;
+            }
+
             y = g_ascii_strtod (eptr, &eptr);
-            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+            	eptr++;
+            }
+
             width = g_ascii_strtod (eptr, &eptr);
-            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+            	eptr++;
+            }
+
             height = g_ascii_strtod (eptr, &eptr);
-            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+            while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+            	eptr++;
+            }
+
             if ((width > 0) && (height > 0)) {
                 /* Set viewbox */
-                symbol->viewBox = Geom::Rect::from_xywh(x, y, width, height);
-                symbol->viewBox_set = TRUE;
+                this->viewBox = Geom::Rect::from_xywh(x, y, width, height);
+                this->viewBox_set = TRUE;
             } else {
-                symbol->viewBox_set = FALSE;
+                this->viewBox_set = FALSE;
             }
         } else {
-            symbol->viewBox_set = FALSE;
+            this->viewBox_set = FALSE;
         }
-        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
         break;
+
     case SP_ATTR_PRESERVEASPECTRATIO:
         /* Do setup before, so we can use break to escape */
-        symbol->aspect_set = FALSE;
-        symbol->aspect_align = SP_ASPECT_NONE;
-        symbol->aspect_clip = SP_ASPECT_MEET;
-        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+        this->aspect_set = FALSE;
+        this->aspect_align = SP_ASPECT_NONE;
+        this->aspect_clip = SP_ASPECT_MEET;
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+
         if (value) {
             int len;
             gchar c[256];
             const gchar *p, *e;
             unsigned int align, clip;
             p = value;
-            while (*p && *p == 32) p += 1;
-            if (!*p) break;
+
+            while (*p && *p == 32) {
+            	p += 1;
+            }
+
+            if (!*p) {
+            	break;
+            }
+
             e = p;
-            while (*e && *e != 32) e += 1;
+
+            while (*e && *e != 32) {
+            	e += 1;
+            }
+
             len = e - p;
-            if (len > 8) break;
+
+            if (len > 8) {
+            	break;
+            }
+
             memcpy (c, value, len);
+
             c[len] = 0;
+
             /* Now the actual part */
             if (!strcmp (c, "none")) {
                 align = SP_ASPECT_NONE;
@@ -164,8 +173,13 @@ void CSymbol::set(unsigned int key, const gchar* value) {
             } else {
                 break;
             }
+
             clip = SP_ASPECT_MEET;
-            while (*e && *e == 32) e += 1;
+
+            while (*e && *e == 32) {
+            	e += 1;
+            }
+
             if (*e) {
                 if (!strcmp (e, "meet")) {
                     clip = SP_ASPECT_MEET;
@@ -175,30 +189,29 @@ void CSymbol::set(unsigned int key, const gchar* value) {
                     break;
                 }
             }
-            symbol->aspect_set = TRUE;
-            symbol->aspect_align = align;
-            symbol->aspect_clip = clip;
+
+            this->aspect_set = TRUE;
+            this->aspect_align = align;
+            this->aspect_clip = clip;
         }
         break;
+
     default:
-        CGroup::set(key, value);
+        SPGroup::set(key, value);
         break;
     }
 }
 
-void CSymbol::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	CGroup::child_added(child, ref);
+void SPSymbol::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPGroup::child_added(child, ref);
 }
 
 
-void CSymbol::update(SPCtx *ctx, guint flags) {
-	SPSymbol* object = this->spsymbol;
-    SPSymbol *symbol = object;
-
+void SPSymbol::update(SPCtx *ctx, guint flags) {
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx rctx;
 
-    if (object->cloned) {
+    if (this->cloned) {
         /* Cloned <symbol> is actually renderable */
 
         /* fixme: We have to set up clip here too */
@@ -208,12 +221,13 @@ void CSymbol::update(SPCtx *ctx, guint flags) {
 
         /* Calculate child to parent transformation */
         /* Apply parent <use> translation (set up as vewport) */
-        symbol->c2p = Geom::Translate(rctx.viewport.min());
+        this->c2p = Geom::Translate(rctx.viewport.min());
 
-        if (symbol->viewBox_set) {
+        if (this->viewBox_set) {
             double x, y, width, height;
+
             /* Determine actual viewbox in viewport coordinates */
-            if (symbol->aspect_align == SP_ASPECT_NONE) {
+            if (this->aspect_align == SP_ASPECT_NONE) {
                 x = 0.0;
                 y = 0.0;
                 width = rctx.viewport.width();
@@ -221,13 +235,14 @@ void CSymbol::update(SPCtx *ctx, guint flags) {
             } else {
                 double scalex, scaley, scale;
                 /* Things are getting interesting */
-                scalex = rctx.viewport.width() / symbol->viewBox.width();
-                scaley = rctx.viewport.height() / symbol->viewBox.height();
-                scale = (symbol->aspect_clip == SP_ASPECT_MEET) ? MIN (scalex, scaley) : MAX (scalex, scaley);
-                width = symbol->viewBox.width() * scale;
-                height = symbol->viewBox.height() * scale;
+                scalex = rctx.viewport.width() / this->viewBox.width();
+                scaley = rctx.viewport.height() / this->viewBox.height();
+                scale = (this->aspect_clip == SP_ASPECT_MEET) ? MIN (scalex, scaley) : MAX (scalex, scaley);
+                width = this->viewBox.width() * scale;
+                height = this->viewBox.height() * scale;
+
                 /* Now place viewbox to requested position */
-                switch (symbol->aspect_align) {
+                switch (this->aspect_align) {
                 case SP_ASPECT_XMIN_YMIN:
                     x = 0.0;
                     y = 0.0;
@@ -270,118 +285,107 @@ void CSymbol::update(SPCtx *ctx, guint flags) {
                     break;
                 }
             }
+
             /* Compose additional transformation from scale and position */
             Geom::Affine q;
-            q[0] = width / symbol->viewBox.width();
+            q[0] = width / this->viewBox.width();
             q[1] = 0.0;
             q[2] = 0.0;
-            q[3] = height / symbol->viewBox.height();
-            q[4] = -symbol->viewBox.left() * q[0] + x;
-            q[5] = -symbol->viewBox.top() * q[3] + y;
+            q[3] = height / this->viewBox.height();
+            q[4] = -this->viewBox.left() * q[0] + x;
+            q[5] = -this->viewBox.top() * q[3] + y;
+
             /* Append viewbox transformation */
-            symbol->c2p = q * symbol->c2p;
+            this->c2p = q * this->c2p;
         }
 
-        rctx.i2doc = symbol->c2p * (Geom::Affine)rctx.i2doc;
+        rctx.i2doc = this->c2p * (Geom::Affine)rctx.i2doc;
 
         /* If viewBox is set initialize child viewport */
         /* Otherwise <use> has set it up already */
-        if (symbol->viewBox_set) {
-            rctx.viewport = symbol->viewBox;
+        if (this->viewBox_set) {
+            rctx.viewport = this->viewBox;
             rctx.i2vp = Geom::identity();
         }
 
         // And invoke parent method
-        CGroup::update((SPCtx *) &rctx, flags);
+        SPGroup::update((SPCtx *) &rctx, flags);
 
         // As last step set additional transform of drawing group
-        for (SPItemView *v = symbol->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != NULL; v = v->next) {
         	Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        	g->setChildTransform(symbol->c2p);
+        	g->setChildTransform(this->c2p);
         }
     } else {
         // No-op
-        CGroup::update(ctx, flags);
+        SPGroup::update(ctx, flags);
     }
 }
 
-void CSymbol::modified(unsigned int flags) {
-	CGroup::modified(flags);
+void SPSymbol::modified(unsigned int flags) {
+	SPGroup::modified(flags);
 }
 
 
-Inkscape::XML::Node* CSymbol::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPSymbol* object = this->spsymbol;
-
+Inkscape::XML::Node* SPSymbol::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:symbol");
     }
 
     //XML Tree being used directly here while it shouldn't be.
-    repr->setAttribute("viewBox", object->getRepr()->attribute("viewBox"));
+    repr->setAttribute("viewBox", this->getRepr()->attribute("viewBox"));
 	
     //XML Tree being used directly here while it shouldn't be.
-    repr->setAttribute("preserveAspectRatio", object->getRepr()->attribute("preserveAspectRatio"));
+    repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
 
-    CGroup::write(xml_doc, repr, flags);
+    SPGroup::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-Inkscape::DrawingItem* CSymbol::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
-	SPSymbol* item = this->spsymbol;
-
-    SPSymbol *symbol = SP_SYMBOL(item);
+Inkscape::DrawingItem* SPSymbol::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
     Inkscape::DrawingItem *ai = 0;
 
-    if (symbol->cloned) {
+    if (this->cloned) {
         // Cloned <symbol> is actually renderable
-        ai = CGroup::show(drawing, key, flags);
+        ai = SPGroup::show(drawing, key, flags);
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
+
 		if (g) {
-			g->setChildTransform(symbol->c2p);
+			g->setChildTransform(this->c2p);
 		}
     }
 
     return ai;
 }
 
-void CSymbol::hide(unsigned int key) {
-	SPSymbol* item = this->spsymbol;
-
-    SPSymbol *symbol = SP_SYMBOL(item);
-
-    if (symbol->cloned) {
+void SPSymbol::hide(unsigned int key) {
+    if (this->cloned) {
         /* Cloned <symbol> is actually renderable */
-        CGroup::hide(key);
+        SPGroup::hide(key);
     }
 }
 
 
-Geom::OptRect CSymbol::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
-	SPSymbol* item = this->spsymbol;
-
-    SPSymbol const *symbol = SP_SYMBOL(item);
+Geom::OptRect SPSymbol::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
     Geom::OptRect bbox;
 
-    if (symbol->cloned) {
+    if (this->cloned) {
         // Cloned <symbol> is actually renderable
-    	Geom::Affine const a( symbol->c2p * transform );
-    	bbox = CGroup::bbox(a, type);
+    	Geom::Affine const a( this->c2p * transform );
+    	bbox = SPGroup::bbox(a, type);
     }
+
     return bbox;
 }
 
-void CSymbol::print(SPPrintContext* ctx) {
-	SPSymbol* item = this->spsymbol;
-
-    SPSymbol *symbol = SP_SYMBOL(item);
-    if (symbol->cloned) {
+void SPSymbol::print(SPPrintContext* ctx) {
+    if (this->cloned) {
         // Cloned <symbol> is actually renderable
 
-        sp_print_bind(ctx, symbol->c2p, 1.0);
+        sp_print_bind(ctx, this->c2p, 1.0);
 
-        CGroup::print(ctx);
+        SPGroup::print(ctx);
 
         sp_print_release (ctx);
     }
