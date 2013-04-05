@@ -35,7 +35,6 @@ namespace {
 }
 
 SPLine::SPLine() : SPShape() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

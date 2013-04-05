@@ -60,149 +60,99 @@ namespace {
 static void build_string_from_root(Inkscape::XML::Node *root, Glib::ustring *retString);
 
 /* TRef base class */
-
-static void sp_tref_finalize(GObject *obj);
-
 static void sp_tref_href_changed(SPObject *old_ref, SPObject *ref, SPTRef *tref);
 static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 
-G_DEFINE_TYPE(SPTRef, sp_tref, G_TYPE_OBJECT);
+SPTRef::SPTRef() : SPItem(), CItem(this) {
+	delete this->citem;
+	this->citem = this;
+	this->cobject = this;
 
-static void
-sp_tref_class_init(SPTRefClass *tref_class)
-{
-    GObjectClass *gobject_class = (GObjectClass *) tref_class;
-    gobject_class->finalize = sp_tref_finalize;
+	this->stringChild = NULL;
+
+    new (&this->attributes) TextTagAttributes;
+
+    this->href = NULL;
+    this->uriOriginalRef = new SPTRefReference(this);
+    new (&this->_delete_connection) sigc::connection();
+    new (&this->_changed_connection) sigc::connection();
+
+    this->_changed_connection =
+        this->uriOriginalRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_tref_href_changed), this));
 }
 
-CTRef::CTRef(SPTRef* tref) : CItem(tref) {
-	this->sptref = tref;
+SPTRef::~SPTRef() {
+	delete this->uriOriginalRef;
+
+	this->_delete_connection.~connection();
+	this->_changed_connection.~connection();
 }
 
-CTRef::~CTRef() {
-}
-
-SPTRef::SPTRef() : SPItem() {
-	SPTRef* tref = this;
-
-	tref->ctref = new CTRef(tref);
-	tref->typeHierarchy.insert(typeid(SPTRef));
-
-	delete tref->citem;
-	tref->citem = tref->ctref;
-	tref->cobject = tref->ctref;
-
-	tref->stringChild = NULL;
-
-    new (&tref->attributes) TextTagAttributes;
-
-    tref->href = NULL;
-    tref->uriOriginalRef = new SPTRefReference(tref);
-    new (&tref->_delete_connection) sigc::connection();
-    new (&tref->_changed_connection) sigc::connection();
-
-    tref->_changed_connection =
-        tref->uriOriginalRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_tref_href_changed), tref));
-}
-
-static void
-sp_tref_init(SPTRef *tref)
-{
-	new (tref) SPTRef();
-}
-
-static void
-sp_tref_finalize(GObject *obj)
-{
-    SPTRef *tref = (SPTRef *) obj;
-
-    delete tref->uriOriginalRef;
-
-    tref->_delete_connection.~connection();
-    tref->_changed_connection.~connection();
-}
-
-void CTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPTRef* object = this->sptref;
-
+void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
     CItem::build(document, repr);
 
-    object->readAttr( "xlink:href" );
-    object->readAttr( "x" );
-    object->readAttr( "y" );
-    object->readAttr( "dx" );
-    object->readAttr( "dy" );
-    object->readAttr( "rotate" );
+    this->readAttr( "xlink:href" );
+    this->readAttr( "x" );
+    this->readAttr( "y" );
+    this->readAttr( "dx" );
+    this->readAttr( "dy" );
+    this->readAttr( "rotate" );
 }
 
-void CTRef::release() {
-	SPTRef* object = this->sptref;
+void SPTRef::release() {
+    this->attributes.~TextTagAttributes();
 
-    SPTRef *tref = SP_TREF(object);
+    this->_delete_connection.disconnect();
+    this->_changed_connection.disconnect();
 
-    tref->attributes.~TextTagAttributes();
+    g_free(this->href);
+    this->href = NULL;
 
-    tref->_delete_connection.disconnect();
-    tref->_changed_connection.disconnect();
-
-    g_free(tref->href);
-    tref->href = NULL;
-
-    tref->uriOriginalRef->detach();
+    this->uriOriginalRef->detach();
 
     CItem::release();
 }
 
-void CTRef::set(unsigned int key, const gchar* value) {
-	SPTRef* object = this->sptref;
-
-    debug("0x%p %s(%u): '%s'",object,
+void SPTRef::set(unsigned int key, const gchar* value) {
+    debug("0x%p %s(%u): '%s'",this,
             sp_attribute_name(key),key,value ? value : "<no value>");
 
-    SPTRef *tref = SP_TREF(object);
-
-    if (tref->attributes.readSingleAttribute(key, value)) { // x, y, dx, dy, rotate
-        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    if (this->attributes.readSingleAttribute(key, value)) { // x, y, dx, dy, rotate
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else if (key == SP_ATTR_XLINK_HREF) { // xlink:href
         if ( !value ) {
             // No value
-            g_free(tref->href);
-            tref->href = NULL;
-            tref->uriOriginalRef->detach();
-        } else if ((tref->href && strcmp(value, tref->href) != 0) || (!tref->href)) {
-
+            g_free(this->href);
+            this->href = NULL;
+            this->uriOriginalRef->detach();
+        } else if ((this->href && strcmp(value, this->href) != 0) || (!this->href)) {
             // Value has changed
 
-            if ( tref->href ) {
-                g_free(tref->href);
-                tref->href = NULL;
+            if ( this->href ) {
+                g_free(this->href);
+                this->href = NULL;
             }
 
-            tref->href = g_strdup(value);
+            this->href = g_strdup(value);
 
             try {
-                tref->uriOriginalRef->attach(Inkscape::URI(value));
-                tref->uriOriginalRef->updateObserver();
+                this->uriOriginalRef->attach(Inkscape::URI(value));
+                this->uriOriginalRef->updateObserver();
             } catch ( Inkscape::BadURIException &e ) {
                 g_warning("%s", e.what());
-                tref->uriOriginalRef->detach();
+                this->uriOriginalRef->detach();
             }
 
             // No matter what happened, an update should be in order
-            tref->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
-
     } else { // default
         CItem::set(key, value);
     }
 }
 
-void CTRef::update(SPCtx *ctx, guint flags) {
-	SPTRef* object = this->sptref;
-
-    debug("0x%p",object);
-
-    SPTRef *tref = SP_TREF(object);
+void SPTRef::update(SPCtx *ctx, guint flags) {
+    debug("0x%p",this);
 
     CItem::update(ctx, flags);
 
@@ -212,7 +162,8 @@ void CTRef::update(SPCtx *ctx, guint flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    SPObject *child = tref->stringChild;
+    SPObject *child = this->stringChild;
+    
     if (child) {
         if ( flags || ( child->uflags & SP_OBJECT_MODIFIED_FLAG )) {
             child->updateDisplay(ctx, flags);
@@ -220,42 +171,37 @@ void CTRef::update(SPCtx *ctx, guint flags) {
     }
 }
 
-void CTRef::modified(unsigned int flags) {
-	SPTRef* object = this->sptref;
-
-    SPTRef *tref_obj = SP_TREF(object);
-
+void SPTRef::modified(unsigned int flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    SPObject *child = tref_obj->stringChild;
+    SPObject *child = this->stringChild;
+    
     if (child) {
         sp_object_ref(child);
+        
         if (flags || (child->mflags & SP_OBJECT_MODIFIED_FLAG)) {
             child->emitModified(flags);
         }
+        
         sp_object_unref(child);
     }
 }
 
-Inkscape::XML::Node* CTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPTRef* object = this->sptref;
-
-    debug("0x%p",object);
-
-    SPTRef *tref = SP_TREF(object);
+Inkscape::XML::Node* SPTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    debug("0x%p",this);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:tref");
     }
 
-    tref->attributes.writeTo(repr);
+    this->attributes.writeTo(repr);
 
-    if (tref->uriOriginalRef->getURI()) {
-        gchar *uri_string = tref->uriOriginalRef->getURI()->toString();
+    if (this->uriOriginalRef->getURI()) {
+        gchar *uri_string = this->uriOriginalRef->getURI()->toString();
         debug("uri_string=%s", uri_string);
         repr->setAttribute("xlink:href", uri_string);
         g_free(uri_string);
@@ -266,58 +212,54 @@ Inkscape::XML::Node* CTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
     return repr;
 }
 
-Geom::OptRect CTRef::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
-	SPTRef* item = this->sptref;
-
+Geom::OptRect SPTRef::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
     Geom::OptRect bbox;
     // find out the ancestor text which holds our layout
-    SPObject const *parent_text = item;
+    SPObject const *parent_text = this;
+
     while ( parent_text && !SP_IS_TEXT(parent_text) ) {
         parent_text = parent_text->parent;
     }
+
     if (parent_text == NULL) {
         return bbox;
     }
 
     // get the bbox of our portion of the layout
     bbox = SP_TEXT(parent_text)->layout.bounds(transform,
-        sp_text_get_length_upto(parent_text, item), sp_text_get_length_upto(item, NULL) - 1);
+        sp_text_get_length_upto(parent_text, this), sp_text_get_length_upto(this, NULL) - 1);
 
     // Add stroke width
     // FIXME this code is incorrect
-    if (bbox && type == SPItem::VISUAL_BBOX && !item->style->stroke.isNone()) {
+    if (bbox && type == SPItem::VISUAL_BBOX && !this->style->stroke.isNone()) {
         double scale = transform.descrim();
-        bbox->expandBy(0.5 * item->style->stroke_width.computed * scale);
+        bbox->expandBy(0.5 * this->style->stroke_width.computed * scale);
     }
+
     return bbox;
 }
 
-gchar* CTRef::description() {
-	SPTRef* item = this->sptref;
+gchar* SPTRef::description() {
+	SPObject *referred = this->getObjectReferredTo();
 
-    SPTRef *tref = SP_TREF(item);
-    
-    if (tref)
-    {
-        SPObject *referred = tref->getObjectReferredTo();
-        
-        if (tref->getObjectReferredTo()) {
-            char *child_desc;
-            
-            if (SP_IS_ITEM(referred)) {
-                child_desc = SP_ITEM(referred)->description();
-            } else {
-                child_desc = g_strdup("");
-            }
-            
-            char *ret = g_strdup_printf(
-                    _("<b>Cloned character data</b>%s%s"),
-                    (SP_IS_ITEM(referred) ? _(" from ") : ""),
-                    child_desc);
-            g_free(child_desc);
-            return ret;
-        }
-    }
+	if (this->getObjectReferredTo()) {
+		char *child_desc;
+
+		if (SP_IS_ITEM(referred)) {
+			child_desc = SP_ITEM(referred)->description();
+		} else {
+			child_desc = g_strdup("");
+		}
+
+		char *ret = g_strdup_printf(
+				_("<b>Cloned character data</b>%s%s"),
+				(SP_IS_ITEM(referred) ? _(" from ") : ""),
+				child_desc);
+		g_free(child_desc);
+
+		return ret;
+	}
+
     return g_strdup(_("<b>Orphaned cloned character data</b>"));
 }
 

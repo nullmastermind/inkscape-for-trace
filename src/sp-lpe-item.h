@@ -18,9 +18,7 @@
 
 #include <list>
 
-#define SP_TYPE_LPE_ITEM (sp_lpe_item_get_type())
 #define SP_LPE_ITEM(obj) ((SPLPEItem*)obj)
-//#define SP_IS_LPE_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPLPEItem)))
 #define SP_IS_LPE_ITEM(obj) (dynamic_cast<const SPLPEItem*>((SPObject*)obj))
 
 class CLPEItem;
@@ -40,10 +38,10 @@ namespace LivePathEffect{
 
 typedef std::list<Inkscape::LivePathEffect::LPEObjectReference *> PathEffectList;
 
-class SPLPEItem : public SPItem {
+class SPLPEItem : public SPItem, public CItem {
 public:
 	SPLPEItem();
-	CLPEItem* clpeitem;
+	virtual ~SPLPEItem();
 
     int path_effects_enabled;
 
@@ -55,18 +53,7 @@ public:
 
     void replacePathEffects( std::vector<LivePathEffectObject const *> const &old_lpeobjs,
                              std::vector<LivePathEffectObject const *> const &new_lpeobjs );
-};
 
-struct SPLPEItemClass {
-    SPItemClass parent_class;
-
-};
-
-
-class CLPEItem : public CItem {
-public:
-	CLPEItem(SPLPEItem* lpeitem);
-	virtual ~CLPEItem();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -82,13 +69,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 	virtual void update_patheffect(bool write);
-
-protected:
-	SPLPEItem* splpeitem;
 };
-
-
-GType sp_lpe_item_get_type();
 
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write);
 bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve);

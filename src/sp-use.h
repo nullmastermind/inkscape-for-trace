@@ -18,18 +18,15 @@
 #include "svg/svg-length.h"
 #include "sp-item.h"
 
-
-#define SP_TYPE_USE            (sp_use_get_type ())
 #define SP_USE(obj) ((SPUse*)obj)
-#define SP_IS_USE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPUse)))
+#define SP_IS_USE(obj) (dynamic_cast<const SPUse*>((SPObject*)obj))
 
 class SPUseReference;
-class CUse;
 
-class SPUse : public SPItem {
+class SPUse : public SPItem, public CItem {
 public:
 	SPUse();
-	CUse* cuse;
+	virtual ~SPUse();
 
     // item built from the original's repr (the visible clone)
     // relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
@@ -51,17 +48,6 @@ public:
 
     // a sigc connection for transformed signal, used to do move compensation
     sigc::connection _transformed_connection;
-};
-
-struct SPUseClass {
-    SPItemClass parent_class;
-};
-
-
-class CUse : public CItem {
-public:
-	CUse(SPUse* use);
-	virtual ~CUse();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -76,13 +62,7 @@ public:
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
 	virtual void hide(unsigned int key);
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-
-protected:
-	SPUse* spuse;
 };
-
-
-GType sp_use_get_type (void);
 
 SPItem *sp_use_unlink (SPUse *use);
 SPItem *sp_use_get_original (SPUse *use);

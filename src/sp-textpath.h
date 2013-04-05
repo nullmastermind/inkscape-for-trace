@@ -9,16 +9,13 @@ class SPUsePath;
 class Path;
 
 
-#define SP_TYPE_TEXTPATH (sp_textpath_get_type())
 #define SP_TEXTPATH(obj) ((SPTextPath*)obj)
-#define SP_IS_TEXTPATH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPTextPath)))
+#define SP_IS_TEXTPATH(obj) (dynamic_cast<const SPTextPath*>((SPObject*)obj))
 
-class CTextPath;
-
-class SPTextPath : public SPItem {
+class SPTextPath : public SPItem, public CItem {
 public:
 	SPTextPath();
-	CTextPath* ctextpath;
+	virtual ~SPTextPath();
 
     TextTagAttributes attributes;
     SVGLength startOffset;
@@ -26,17 +23,6 @@ public:
     Path *originalPath;
     bool isUpdating;
     SPUsePath *sourcePath;
-};
-
-struct SPTextPathClass {
-    SPItemClass parent_class;
-};
-
-
-class CTextPath : public CItem {
-public:
-	CTextPath(SPTextPath* textpath);
-	virtual ~CTextPath();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -44,13 +30,7 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPTextPath* sptextpath;
 };
-
-
-GType sp_textpath_get_type();
 
 #define SP_IS_TEXT_TEXTPATH(obj) (SP_IS_TEXT(obj) && obj->firstChild() && SP_IS_TEXTPATH(obj->firstChild()))
 

@@ -36,7 +36,6 @@ namespace {
 }
 
 SPSwitch::SPSwitch() : SPGroup() {
-    this->clpeitem = this;
     this->citem = this;
     this->cobject = this;
 

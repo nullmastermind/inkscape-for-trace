@@ -36,7 +36,6 @@ namespace {
 }
 
 SPAnchor::SPAnchor() : SPGroup() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

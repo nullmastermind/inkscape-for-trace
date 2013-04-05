@@ -37,7 +37,6 @@ namespace {
 }
 
 SPSymbol::SPSymbol() : SPGroup() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

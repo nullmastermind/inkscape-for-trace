@@ -37,7 +37,6 @@ namespace {
 }
 
 Box3DSide::Box3DSide() : SPPolygon() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

@@ -53,7 +53,6 @@ namespace {
 }
 
 SPMarker::SPMarker() : SPGroup() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

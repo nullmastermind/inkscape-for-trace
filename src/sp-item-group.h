@@ -28,7 +28,7 @@ class DrawingItem;
 
 } // namespace Inkscape
 
-class SPGroup : public SPLPEItem, public CLPEItem {
+class SPGroup : public SPLPEItem {
 public:
 	SPGroup();
 	virtual ~SPGroup();

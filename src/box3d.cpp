@@ -54,7 +54,6 @@ namespace {
 }
 
 SPBox3D::SPBox3D() : SPGroup() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

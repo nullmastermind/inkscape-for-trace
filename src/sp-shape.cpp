@@ -55,9 +55,7 @@
 
 static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *ai);
 
-SPShape::SPShape() : SPLPEItem(), CLPEItem(this) {
-	delete this->clpeitem;
-	this->clpeitem = this;
+SPShape::SPShape() : SPLPEItem() {
 	this->citem = this;
 	this->cobject = this;
 
@@ -79,7 +77,7 @@ SPShape::~SPShape() {
 }
 
 void SPShape::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    CLPEItem::build(document, repr);
+    SPLPEItem::build(document, repr);
 
     for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
         sp_shape_set_marker (this, i, this->style->marker[i].value);
@@ -122,21 +120,21 @@ void SPShape::release() {
         this->_curve_before_lpe = this->_curve_before_lpe->unref();
     }
 
-    CLPEItem::release();
+    SPLPEItem::release();
 }
 
 void SPShape::set(unsigned int key, const gchar* value) {
-	CLPEItem::set(key, value);
+	SPLPEItem::set(key, value);
 }
 
 
 Inkscape::XML::Node* SPShape::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	CLPEItem::write(xml_doc, repr, flags);
+	SPLPEItem::write(xml_doc, repr, flags);
 	return repr;
 }
 
 void SPShape::update(SPCtx* ctx, guint flags) {
-    CLPEItem::update(ctx, flags);
+    SPLPEItem::update(ctx, flags);
 
     /* This stanza checks that an object's marker style agrees with
      * the marker objects it has allocated.  sp_shape_set_marker ensures
@@ -392,7 +390,7 @@ sp_shape_update_marker_view(SPShape *shape, Inkscape::DrawingItem *ai)
 }
 
 void SPShape::modified(unsigned int flags) {
-    CLPEItem::modified(flags);
+    SPLPEItem::modified(flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = this->display; v != NULL; v = v->next) {
@@ -775,7 +773,7 @@ void SPShape::hide(unsigned int key) {
 		}
 	}
 
-	//CLPEItem::onHide(key);
+	//SPLPEItem::onHide(key);
 }
 
 /**

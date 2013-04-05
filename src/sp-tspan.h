@@ -9,11 +9,8 @@
 #include "sp-item.h"
 #include "text-tag-attributes.h"
 
-G_BEGIN_DECLS
-
-#define SP_TYPE_TSPAN (sp_tspan_get_type())
 #define SP_TSPAN(obj) ((SPTSpan*)obj)
-#define SP_IS_TSPAN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPTSpan)))
+#define SP_IS_TSPAN(obj) (dynamic_cast<const SPTSpan*>((SPObject*)obj))
 
 enum {
     SP_TSPAN_ROLE_UNSPECIFIED,
@@ -21,27 +18,13 @@ enum {
     SP_TSPAN_ROLE_LINE
 };
 
-class CTSpan;
-
-class SPTSpan : public SPItem {
+class SPTSpan : public SPItem, public CItem {
 public:
 	SPTSpan();
-	CTSpan* ctspan;
+	virtual ~SPTSpan();
 
     guint role : 2;
     TextTagAttributes attributes;
-};
-
-struct SPTSpanClass {
-    SPItemClass parent_class;
-};
-
-GType sp_tspan_get_type() G_GNUC_CONST;
-
-class CTSpan : public CItem {
-public:
-	CTSpan(SPTSpan* span);
-	virtual ~CTSpan();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -52,12 +35,7 @@ public:
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
 	virtual gchar* description();
-
-protected:
-	SPTSpan* sptspan;
 };
-
-G_END_DECLS
 
 #endif /* !INKSCAPE_SP_TSPAN_H */
 

@@ -39,7 +39,6 @@ namespace {
 
 
 SPRect::SPRect() : SPShape() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 }

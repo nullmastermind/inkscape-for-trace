@@ -39,15 +39,8 @@
 #include "sp-factory.h"
 
 /* fixme: */
-
-static void sp_use_finalize(GObject *obj);
-
 static void sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use);
-
 static void sp_use_delete_self(SPObject *deleted, SPUse *self);
-
-//void m_print(gchar *say, Geom::Affine m)
-//{ g_print("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
 #include "sp-factory.h"
 
@@ -59,154 +52,119 @@ namespace {
 	bool useRegistered = SPFactory::instance().registerObject("svg:use", createUse);
 }
 
-G_DEFINE_TYPE(SPUse, sp_use, G_TYPE_OBJECT);
+SPUse::SPUse() : SPItem(), CItem(this) {
+	delete this->citem;
+	this->citem = this;
+	this->cobject = this;
 
-static void
-sp_use_class_init(SPUseClass *classname)
-{
-    GObjectClass *gobject_class = (GObjectClass *) classname;
-    gobject_class->finalize = sp_use_finalize;
+	this->child = NULL;
+
+    this->x.unset();
+    this->y.unset();
+    this->width.unset(SVGLength::PERCENT, 1.0, 1.0);
+    this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
+    this->href = NULL;
+
+    new (&this->_delete_connection) sigc::connection();
+    new (&this->_changed_connection) sigc::connection();
+
+    new (&this->_transformed_connection) sigc::connection();
+
+    this->ref = new SPUseReference(this);
+
+    this->_changed_connection = this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_use_href_changed), this));
 }
 
-CUse::CUse(SPUse* use) : CItem(use) {
-	this->spuse = use;
-}
-
-CUse::~CUse() {
-}
-
-SPUse::SPUse() : SPItem() {
-	SPUse* use = this;
-
-	use->cuse = new CUse(use);
-	use->typeHierarchy.insert(typeid(SPUse));
-
-	delete use->citem;
-	use->citem = use->cuse;
-	use->cobject = use->cuse;
-
-	use->child = NULL;
-
-    use->x.unset();
-    use->y.unset();
-    use->width.unset(SVGLength::PERCENT, 1.0, 1.0);
-    use->height.unset(SVGLength::PERCENT, 1.0, 1.0);
-    use->href = NULL;
-
-    new (&use->_delete_connection) sigc::connection();
-    new (&use->_changed_connection) sigc::connection();
-
-    new (&use->_transformed_connection) sigc::connection();
-
-    use->ref = new SPUseReference(use);
-
-    use->_changed_connection = use->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_use_href_changed), use));
-}
-
-static void
-sp_use_init(SPUse *use)
-{
-	new (use) SPUse();
-}
-
-static void
-sp_use_finalize(GObject *obj)
-{
-    SPUse *use = reinterpret_cast<SPUse *>(obj);
-
-    if (use->child) {
-        use->detach(use->child);
-        use->child = NULL;
+SPUse::~SPUse() {
+    if (this->child) {
+        this->detach(this->child);
+        this->child = NULL;
     }
 
-    use->ref->detach();
-    delete use->ref;
-    use->ref = 0;
+    this->ref->detach();
+    delete this->ref;
+    this->ref = 0;
 
-    use->_delete_connection.~connection();
-    use->_changed_connection.~connection();
+    this->_delete_connection.~connection();
+    this->_changed_connection.~connection();
 
-    use->_transformed_connection.~connection();
+    this->_transformed_connection.~connection();
 }
 
-void CUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPUse* object = this->spuse;
-
+void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
     CItem::build(document, repr);
 
-    object->readAttr( "x" );
-    object->readAttr( "y" );
-    object->readAttr( "width" );
-    object->readAttr( "height" );
-    object->readAttr( "xlink:href" );
+    this->readAttr( "x" );
+    this->readAttr( "y" );
+    this->readAttr( "width" );
+    this->readAttr( "height" );
+    this->readAttr( "xlink:href" );
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
     // which will call sp_use_href_changed, and that will take care of the child
 }
 
-void CUse::release() {
-    SPUse *use = this->spuse;
-    SPUse* object = use;
-
-    if (use->child) {
-        object->detach(use->child);
-        use->child = NULL;
+void SPUse::release() {
+    if (this->child) {
+    	this->detach(this->child);
+        this->child = NULL;
     }
 
-    use->_delete_connection.disconnect();
-    use->_changed_connection.disconnect();
-    use->_transformed_connection.disconnect();
+    this->_delete_connection.disconnect();
+    this->_changed_connection.disconnect();
+    this->_transformed_connection.disconnect();
 
-    g_free(use->href);
-    use->href = NULL;
+    g_free(this->href);
+    this->href = NULL;
 
-    use->ref->detach();
+    this->ref->detach();
 
     CItem::release();
 }
 
-void CUse::set(unsigned int key, const gchar* value) {
-    SPUse *use = this->spuse;
-    SPUse* object = use;
-
+void SPUse::set(unsigned int key, const gchar* value) {
     switch (key) {
         case SP_ATTR_X:
-            use->x.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->x.readOrUnset(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_Y:
-            use->y.readOrUnset(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->y.readOrUnset(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_WIDTH:
-            use->width.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->width.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_HEIGHT:
-            use->height.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->height.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
         case SP_ATTR_XLINK_HREF: {
-            if ( value && use->href && ( strcmp(value, use->href) == 0 ) ) {
+            if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
                 /* No change, do nothing. */
             } else {
-                g_free(use->href);
-                use->href = NULL;
+                g_free(this->href);
+                this->href = NULL;
+
                 if (value) {
                     // First, set the href field, because sp_use_href_changed will need it.
-                    use->href = g_strdup(value);
+                    this->href = g_strdup(value);
 
                     // Now do the attaching, which emits the changed signal.
                     try {
-                        use->ref->attach(Inkscape::URI(value));
+                        this->ref->attach(Inkscape::URI(value));
                     } catch (Inkscape::BadURIException &e) {
                         g_warning("%s", e.what());
-                        use->ref->detach();
+                        this->ref->detach();
                     }
                 } else {
-                    use->ref->detach();
+                    this->ref->detach();
                 }
             }
             break;
@@ -218,22 +176,20 @@ void CUse::set(unsigned int key, const gchar* value) {
     }
 }
 
-Inkscape::XML::Node* CUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-    SPUse *use = this->spuse;
-
+Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:use");
     }
 
     CItem::write(xml_doc, repr, flags);
 
-    sp_repr_set_svg_double(repr, "x", use->x.computed);
-    sp_repr_set_svg_double(repr, "y", use->y.computed);
-    sp_repr_set_svg_double(repr, "width", use->width.computed);
-    sp_repr_set_svg_double(repr, "height", use->height.computed);
+    sp_repr_set_svg_double(repr, "x", this->x.computed);
+    sp_repr_set_svg_double(repr, "y", this->y.computed);
+    sp_repr_set_svg_double(repr, "width", this->width.computed);
+    sp_repr_set_svg_double(repr, "height", this->height.computed);
 
-    if (use->ref->getURI()) {
-        gchar *uri_string = use->ref->getURI()->toString();
+    if (this->ref->getURI()) {
+        gchar *uri_string = this->ref->getURI()->toString();
         repr->setAttribute("xlink:href", uri_string);
         g_free(uri_string);
     }
@@ -241,35 +197,33 @@ Inkscape::XML::Node* CUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML
     return repr;
 }
 
-Geom::OptRect CUse::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
-    SPUse const *use = this->spuse;
-
+Geom::OptRect SPUse::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) {
     Geom::OptRect bbox;
 
-    if (use->child && SP_IS_ITEM(use->child)) {
-        SPItem *child = SP_ITEM(use->child);
+    if (this->child && SP_IS_ITEM(this->child)) {
+        SPItem *child = SP_ITEM(this->child);
         Geom::Affine const ct( child->transform
-                             * Geom::Translate(use->x.computed,
-                                               use->y.computed)
+                             * Geom::Translate(this->x.computed,
+                                               this->y.computed)
                              * transform );
+
         bbox = child->bounds(bboxtype, ct);
     }
+
     return bbox;
 }
 
-void CUse::print(SPPrintContext* ctx) {
-    SPUse *use = this->spuse;
-
+void SPUse::print(SPPrintContext* ctx) {
     bool translated = false;
 
-    if ((use->x._set && use->x.computed != 0) || (use->y._set && use->y.computed != 0)) {
-        Geom::Affine tp(Geom::Translate(use->x.computed, use->y.computed));
+    if ((this->x._set && this->x.computed != 0) || (this->y._set && this->y.computed != 0)) {
+        Geom::Affine tp(Geom::Translate(this->x.computed, this->y.computed));
         sp_print_bind(ctx, tp, 1.0);
         translated = true;
     }
 
-    if (use->child && SP_IS_ITEM(use->child)) {
-        SP_ITEM(use->child)->invoke_print(ctx);
+    if (this->child && SP_IS_ITEM(this->child)) {
+        SP_ITEM(this->child)->invoke_print(ctx);
     }
 
     if (translated) {
@@ -277,20 +231,19 @@ void CUse::print(SPPrintContext* ctx) {
     }
 }
 
-gchar* CUse::description() {
-    SPUse *use = this->spuse;
-
+gchar* SPUse::description() {
     char *ret;
-    if (use->child) {
 
-        if( SP_IS_SYMBOL( use->child ) ) {
-            //char *symbol_desc = SP_ITEM(use->child)->description();
+    if (this->child) {
+        if( SP_IS_SYMBOL( this->child ) ) {
+            //char *symbol_desc = SP_ITEM(this->child)->description();
             //g_free(symbol_desc);
             return g_strdup(_("<b>Clone of Symbol</b>"));
             //return g_strdup_printf(_("<b>Clone of Symbol</b>: %s"), symbol_desc );
         }
 
         static unsigned recursion_depth = 0;
+
         if (recursion_depth >= 4) {
             /* TRANSLATORS: Used for statusbar description for long <use> chains:
              * "Clone of: Clone of: ... in Layer 1". */
@@ -298,44 +251,41 @@ gchar* CUse::description() {
             /* We could do better, e.g. chasing the href chain until we reach something other than
              * a <use>, and giving its description. */
         }
+
         ++recursion_depth;
-        char *child_desc = SP_ITEM(use->child)->description();
+        char *child_desc = SP_ITEM(this->child)->description();
         --recursion_depth;
 
         ret = g_strdup_printf(_("<b>Clone</b> of: %s"), child_desc);
         g_free(child_desc);
+
         return ret;
     } else {
         return g_strdup(_("<b>Orphaned clone</b>"));
     }
 }
 
-Inkscape::DrawingItem* CUse::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
-    SPUse *use = this->spuse;
-    SPUse* item = use;
-
+Inkscape::DrawingItem* SPUse::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
     Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
     ai->setPickChildren(false);
-    ai->setStyle(item->style);
+    ai->setStyle(this->style);
 
-    if (use->child) {
-        Inkscape::DrawingItem *ac = SP_ITEM(use->child)->invoke_show(drawing, key, flags);
+    if (this->child) {
+        Inkscape::DrawingItem *ac = SP_ITEM(this->child)->invoke_show(drawing, key, flags);
         if (ac) {
             ai->prependChild(ac);
         }
-        Geom::Translate t(use->x.computed,
-                        use->y.computed);
+
+        Geom::Translate t(this->x.computed, this->y.computed);
         ai->setChildTransform(t);
     }
 
     return ai;
 }
 
-void CUse::hide(unsigned int key) {
-    SPUse *use = this->spuse;
-
-    if (use->child) {
-        SP_ITEM(use->child)->invoke_hide(key);
+void SPUse::hide(unsigned int key) {
+    if (this->child) {
+        SP_ITEM(this->child)->invoke_hide(key);
     }
 
 //  CItem::onHide(key);
@@ -554,11 +504,7 @@ sp_use_delete_self(SPObject */*deleted*/, SPUse *self)
     }
 }
 
-void CUse::update(SPCtx *ctx, unsigned flags) {
-	SPUse* object = this->spuse;
-
-    SPItem *item = SP_ITEM(object);
-    SPUse *use = SP_USE(object);
+void SPUse::update(SPCtx *ctx, unsigned flags) {
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
@@ -567,78 +513,85 @@ void CUse::update(SPCtx *ctx, unsigned flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-      for (SPItemView *v = SP_ITEM(object)->display; v != NULL; v = v->next) {
+      for (SPItemView *v = SP_ITEM(this)->display; v != NULL; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        g->setStyle(object->style);
+        g->setStyle(this->style);
       }
     }
 
     /* Set up child viewport */
-    if (use->x.unit == SVGLength::PERCENT) {
-        use->x.computed = use->x.value * ictx->viewport.width();
+    if (this->x.unit == SVGLength::PERCENT) {
+        this->x.computed = this->x.value * ictx->viewport.width();
     }
-    if (use->y.unit == SVGLength::PERCENT) {
-        use->y.computed = use->y.value * ictx->viewport.height();
+
+    if (this->y.unit == SVGLength::PERCENT) {
+    	this->y.computed = this->y.value * ictx->viewport.height();
     }
-    if (use->width.unit == SVGLength::PERCENT) {
-        use->width.computed = use->width.value * ictx->viewport.width();
+
+    if (this->width.unit == SVGLength::PERCENT) {
+        this->width.computed = this->width.value * ictx->viewport.width();
     }
-    if (use->height.unit == SVGLength::PERCENT) {
-        use->height.computed = use->height.value * ictx->viewport.height();
+
+    if (this->height.unit == SVGLength::PERCENT) {
+        this->height.computed = this->height.value * ictx->viewport.height();
     }
-    cctx.viewport = Geom::Rect::from_xywh(0, 0, use->width.computed, use->height.computed);
+
+    cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
     cctx.i2vp = Geom::identity();
     flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
-    if (use->child) {
-        sp_object_ref(use->child);
-        if (flags || (use->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-            if (SP_IS_ITEM(use->child)) {
-                SPItem const &chi = *SP_ITEM(use->child);
+    if (this->child) {
+        sp_object_ref(this->child);
+
+        if (flags || (this->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+            if (SP_IS_ITEM(this->child)) {
+                SPItem const &chi = *SP_ITEM(this->child);
                 cctx.i2doc = chi.transform * ictx->i2doc;
                 cctx.i2vp = chi.transform * ictx->i2vp;
-                use->child->updateDisplay((SPCtx *)&cctx, flags);
+                this->child->updateDisplay((SPCtx *)&cctx, flags);
             } else {
-                use->child->updateDisplay(ctx, flags);
+                this->child->updateDisplay(ctx, flags);
             }
         }
-        sp_object_unref(use->child);
+
+        sp_object_unref(this->child);
     }
 
     /* As last step set additional transform of arena group */
-    for (SPItemView *v = item->display; v != NULL; v = v->next) {
+    for (SPItemView *v = this->display; v != NULL; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        Geom::Affine t(Geom::Translate(use->x.computed, use->y.computed));
+        Geom::Affine t(Geom::Translate(this->x.computed, this->y.computed));
         g->setChildTransform(t);
     }
 }
 
-void CUse::modified(unsigned int flags) {
-	SPUse* object = this->spuse;
-
-    SPUse *use_obj = SP_USE(object);
-
+void SPUse::modified(unsigned int flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-      for (SPItemView *v = SP_ITEM(object)->display; v != NULL; v = v->next) {
+      for (SPItemView *v = SP_ITEM(this)->display; v != NULL; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        g->setStyle(object->style);
+        g->setStyle(this->style);
       }
     }
 
-    SPObject *child = use_obj->child;
+    SPObject *child = this->child;
+
     if (child) {
         sp_object_ref(child);
+
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
+
         sp_object_unref(child);
     }
 }
@@ -660,6 +613,7 @@ SPItem *sp_use_unlink(SPUse *use)
 
     // Track the ultimate source of a chain of uses.
     SPItem *orig = sp_use_root(use);
+
     if (!orig) {
         return NULL;
     }
@@ -668,8 +622,10 @@ SPItem *sp_use_unlink(SPUse *use)
     Geom::Affine t = sp_use_get_root_transform(use);
 
     Inkscape::XML::Node *copy = NULL;
+
     if (SP_IS_SYMBOL(orig)) { // make a group, copy children
         copy = xml_doc->createElement("svg:g");
+
         for (Inkscape::XML::Node *child = orig->getRepr()->firstChild() ; child != NULL; child = child->next()) {
                 Inkscape::XML::Node *newchild = child->duplicate(xml_doc);
                 copy->appendChild(newchild);
@@ -722,31 +678,29 @@ SPItem *sp_use_unlink(SPUse *use)
         // Advertise ourselves as not moving.
         item->doWriteTransform(item->getRepr(), t, &nomove);
     }
+
     return item;
 }
 
 SPItem *sp_use_get_original(SPUse *use)
 {
     SPItem *ref = NULL;
-    if (use){
+
+    if (use) {
         if (use->ref){
             ref = use->ref->getObject();
         }
     }
+
     return ref;
 }
 
-void CUse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
-	SPUse* item = this->spuse;
+void SPUse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
+    SPItem *root = sp_use_root(this);
 
-    g_assert (item != NULL);
-    g_assert (SP_IS_ITEM(item));
-    g_assert (SP_IS_USE(item));
-
-    SPUse *use = SP_USE(item);
-    SPItem *root = sp_use_root(use);
-    if (!root)
+    if (!root) {
         return;
+    }
 
     root->citem->snappoints(p, snapprefs);
 }

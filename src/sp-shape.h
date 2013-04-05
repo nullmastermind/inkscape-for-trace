@@ -33,7 +33,7 @@ namespace Inkscape { class DrawingItem; }
 /**
  * Base class for shapes, including <path> element
  */
-class SPShape : public SPLPEItem, public CLPEItem {
+class SPShape : public SPLPEItem {
 public:
 	SPShape();
 	virtual ~SPShape();

@@ -42,7 +42,6 @@ namespace {
 }
 
 SPRoot::SPRoot() : SPGroup() {
-	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
 

@@ -21,23 +21,19 @@
 #include "text-tag-attributes.h"
 #include "libnrtype/Layout-TNG.h"
 
-
-#define SP_TYPE_TEXT (sp_text_get_type())
 #define SP_TEXT(obj) ((SPText*)obj)
-#define SP_IS_TEXT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPText)))
+#define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj))
 
 /* Text specific flags */
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 #define SP_TEXT_LAYOUT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-class CText;
 
 /* SPText */
-
-class SPText : public SPItem {
+class SPText : public SPItem, public CItem {
 public:
 	SPText();
-	CText* ctext;
+	virtual ~SPText();
 
     /** Converts the text object to its component curves */
     SPCurve *getNormalizedBpath() const
@@ -69,18 +65,8 @@ private:
     breaks and makes sure both that they are assigned the correct SPObject and
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
-};
 
-struct SPTextClass {
-    SPItemClass parent_class;
-};
-
-
-class CText : public CItem {
 public:
-	CText(SPText* text);
-	virtual ~CText();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
@@ -97,13 +83,7 @@ public:
 	virtual void hide(unsigned int key);
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 	virtual Geom::Affine set_transform(Geom::Affine const &transform);
-
-protected:
-	SPText* sptext;
 };
-
-
-GType sp_text_get_type();
 
 #endif
 

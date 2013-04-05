@@ -22,16 +22,13 @@
 
 /* tref base class */
 
-#define SP_TYPE_TREF (sp_tref_get_type())
 #define SP_TREF(obj) ((SPTRef*)obj)
-#define SP_IS_TREF(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPTRef)))
+#define SP_IS_TREF(obj) (dynamic_cast<const SPTRef*>((SPObject*)obj))
 
-class CTRef;
-
-class SPTRef : public SPItem {
+class SPTRef : public SPItem, public CItem {
 public:
 	SPTRef();
-	CTRef* ctref;
+	virtual ~SPTRef();
 
     // Attributes that are used in the same way they would be in a tspan
     TextTagAttributes attributes;
@@ -52,17 +49,6 @@ public:
     sigc::connection _changed_connection;
     
     SPObject * getObjectReferredTo();
-};
-
-struct SPTRefClass {
-    SPItemClass parent_class;
-};
-
-
-class CTRef : public CItem {
-public:
-	CTRef(SPTRef* tref);
-	virtual ~CTRef();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -73,13 +59,7 @@ public:
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
 	virtual gchar* description();
-
-protected:
-	SPTRef* sptref;
 };
-
-
-GType sp_tref_get_type();
 
 void sp_tref_update_text(SPTRef *tref);
 bool sp_tref_reference_allowed(SPTRef *tref, SPObject *possible_ref);
