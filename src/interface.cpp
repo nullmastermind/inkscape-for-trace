@@ -47,7 +47,6 @@
 #include "widgets/desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-text.h"
-#include "sp-gradient-fns.h"
 #include "sp-gradient.h"
 #include "sp-flowtext.h"
 #include "sp-namedview.h"

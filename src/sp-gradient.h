@@ -27,12 +27,22 @@
 #include <stddef.h>
 #include <sigc++/connection.h>
 
+
+
+//#include <glib.h>
+//#include <glib-object.h>
+//#include <2geom/forward.h>
+//#include "sp-gradient-spread.h"
+//#include "sp-gradient-units.h"
+//
+//class SPGradient;
+//struct SPMeshGradient;
+
 class SPGradientReference;
 struct SPStop;
 
-#define SP_TYPE_GRADIENT (SPGradient::getType())
 #define SP_GRADIENT(obj) ((SPGradient*)obj)
-#define SP_IS_GRADIENT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGradient)))
+#define SP_IS_GRADIENT(obj) (dynamic_cast<const SPGradient*>((SPObject*)obj))
 
 enum SPGradientType {
     SP_GRADIENT_TYPE_UNKNOWN,
@@ -85,8 +95,6 @@ std::vector<PaintTarget> const &allPaintTargets();
 
 } // namespace Inkscape
 
-class CGradient;
-
 /**
  * Gradient
  *
@@ -96,7 +104,7 @@ class CGradient;
 class SPGradient : public SPPaintServer {
 public:
 	SPGradient();
-	CGradient* cgradient;
+	virtual ~SPGradient();
 
 private:
     /** gradientUnits attribute */
@@ -193,32 +201,11 @@ private:
     void rebuildVector();
     void rebuildArray();
 
-    friend class CGradient;
-//    friend class SPLGPainter;
-//    friend class SPRGPainter;
-};
-
-/**
- * The SPGradient vtable.
- */
-struct SPGradientClass {
-    SPPaintServerClass parent_class;
-};
-
-
-class CGradient : public CPaintServer {
 public:
-	CGradient(SPGradient* gradient);
-	virtual ~CGradient();
-
-    static void classInit(SPGradientClass *klass);
-    static void init(SPGradient *gr);
-
     virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
     virtual void release();
     virtual void modified(guint flags);
     virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
 
     static void gradientRefModified(SPObject *href, guint flags, SPGradient *gradient);
     static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
@@ -227,13 +214,30 @@ public:
     virtual void remove_child(Inkscape::XML::Node *child);
 
     virtual void set(unsigned key, gchar const *value);
-
-protected:
-    SPGradient* spgradient;
 };
 
+void
+sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
+                                 SPGradient *gr,
+                                 Geom::OptRect const &bbox,
+                                 double opacity);
 
-#include "sp-gradient-fns.h"
+/* Gradient repr methods */
+void sp_gradient_repr_write_vector(SPGradient *gr);
+void sp_gradient_repr_clear_vector(SPGradient *gr);
+
+void sp_meshgradient_repr_write(SPMeshGradient *mg);
+
+cairo_pattern_t *sp_gradient_create_preview_pattern(SPGradient *gradient, double width);
+
+/** Transforms to/from gradient position space in given environment */
+Geom::Affine sp_gradient_get_g2d_matrix(SPGradient const *gr, Geom::Affine const &ctm,
+                                      Geom::Rect const &bbox);
+Geom::Affine sp_gradient_get_gs2d_matrix(SPGradient const *gr, Geom::Affine const &ctm,
+                                       Geom::Rect const &bbox);
+void sp_gradient_set_gs2d_matrix(SPGradient *gr, Geom::Affine const &ctm, Geom::Rect const &bbox,
+                                 Geom::Affine const &gs2d);
+
 
 #endif // SEEN_SP_GRADIENT_H
 

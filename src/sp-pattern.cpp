@@ -53,161 +53,139 @@ namespace {
 	bool patternRegistered = SPFactory::instance().registerObject("svg:pattern", createPattern);
 }
 
-G_DEFINE_TYPE(SPPattern, sp_pattern, G_TYPE_OBJECT);
-
-static void
-sp_pattern_class_init (SPPatternClass *klass)
-{
-}
-
-CPattern::CPattern(SPPattern* pattern) : CPaintServer(pattern) {
-	this->sppattern = pattern;
-}
-
-CPattern::~CPattern() {
-}
-
 SPPattern::SPPattern() : SPPaintServer() {
-	SPPattern* pat = this;
+	this->cobject = this;
 
-	pat->cpattern = new CPattern(pat);
-	pat->typeHierarchy.insert(typeid(SPPattern));
+	this->href = NULL;
 
-	delete pat->cpaintserver;
-	pat->cpaintserver = pat->cpattern;
-	pat->cobject = pat->cpattern;
+	this->ref = new SPPatternReference(this);
+	this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), this));
 
-	pat->href = NULL;
+	this->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
+	this->patternUnits_set = FALSE;
 
-	pat->ref = new SPPatternReference(pat);
-	pat->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), pat));
+	this->patternContentUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
+	this->patternContentUnits_set = FALSE;
 
-	pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
-	pat->patternUnits_set = FALSE;
+	this->patternTransform = Geom::identity();
+	this->patternTransform_set = FALSE;
 
-	pat->patternContentUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
-	pat->patternContentUnits_set = FALSE;
+	this->x.unset();
+	this->y.unset();
+	this->width.unset();
+	this->height.unset();
 
-	pat->patternTransform = Geom::identity();
-	pat->patternTransform_set = FALSE;
+	this->viewBox_set = FALSE;
 
-	pat->x.unset();
-	pat->y.unset();
-	pat->width.unset();
-	pat->height.unset();
-
-	pat->viewBox_set = FALSE;
-
-	new (&pat->modified_connection) sigc::connection();
+	new (&this->modified_connection) sigc::connection();
 }
 
-static void
-sp_pattern_init (SPPattern *pat)
-{
-	new (pat) SPPattern();
+SPPattern::~SPPattern() {
 }
 
-void CPattern::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPPattern* object = this->sppattern;
+void SPPattern::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPPaintServer::build(doc, repr);
 
-	CPaintServer::build(doc, repr);
-
-	object->readAttr( "patternUnits" );
-	object->readAttr( "patternContentUnits" );
-	object->readAttr( "patternTransform" );
-	object->readAttr( "x" );
-	object->readAttr( "y" );
-	object->readAttr( "width" );
-	object->readAttr( "height" );
-	object->readAttr( "viewBox" );
-	object->readAttr( "xlink:href" );
+	this->readAttr( "patternUnits" );
+	this->readAttr( "patternContentUnits" );
+	this->readAttr( "patternTransform" );
+	this->readAttr( "x" );
+	this->readAttr( "y" );
+	this->readAttr( "width" );
+	this->readAttr( "height" );
+	this->readAttr( "viewBox" );
+	this->readAttr( "xlink:href" );
 
 	/* Register ourselves */
-	doc->addResource("pattern", object);
+	doc->addResource("pattern", this);
 }
 
-void CPattern::release() {
-	SPPattern* object = this->sppattern;
-
-    SPPattern *pat = reinterpret_cast<SPPattern *>(object);
-
-    if (object->document) {
+void SPPattern::release() {
+    if (this->document) {
         // Unregister ourselves
-        object->document->removeResource("pattern", object);
+        this->document->removeResource("pattern", this);
     }
 
-    if (pat->ref) {
-        pat->modified_connection.disconnect();
-        pat->ref->detach();
-        delete pat->ref;
-        pat->ref = NULL;
+    if (this->ref) {
+        this->modified_connection.disconnect();
+        this->ref->detach();
+        delete this->ref;
+        this->ref = NULL;
     }
 
-    pat->modified_connection.~connection();
+    this->modified_connection.~connection();
 
-    CPaintServer::release();
+    SPPaintServer::release();
 }
 
-void CPattern::set(unsigned int key, const gchar* value) {
-	SPPattern* object = this->sppattern;
-
-	SPPattern *pat = SP_PATTERN (object);
-
+void SPPattern::set(unsigned int key, const gchar* value) {
 	switch (key) {
 	case SP_ATTR_PATTERNUNITS:
 		if (value) {
 			if (!strcmp (value, "userSpaceOnUse")) {
-				pat->patternUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
+				this->patternUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
 			} else {
-				pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
+				this->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
 			}
-			pat->patternUnits_set = TRUE;
+
+			this->patternUnits_set = TRUE;
 		} else {
-			pat->patternUnits_set = FALSE;
+			this->patternUnits_set = FALSE;
 		}
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_PATTERNCONTENTUNITS:
 		if (value) {
 			if (!strcmp (value, "userSpaceOnUse")) {
-				pat->patternContentUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
+				this->patternContentUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
 			} else {
-				pat->patternContentUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
+				this->patternContentUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
 			}
-			pat->patternContentUnits_set = TRUE;
+
+			this->patternContentUnits_set = TRUE;
 		} else {
-			pat->patternContentUnits_set = FALSE;
+			this->patternContentUnits_set = FALSE;
 		}
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_PATTERNTRANSFORM: {
 		Geom::Affine t;
+
 		if (value && sp_svg_transform_read (value, &t)) {
-			pat->patternTransform = t;
-			pat->patternTransform_set = TRUE;
+			this->patternTransform = t;
+			this->patternTransform_set = TRUE;
 		} else {
-			pat->patternTransform = Geom::identity();
-			pat->patternTransform_set = FALSE;
+			this->patternTransform = Geom::identity();
+			this->patternTransform_set = FALSE;
 		}
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_ATTR_X:
-	        pat->x.readOrUnset(value);
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	    this->x.readOrUnset(value);
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_Y:
-	        pat->y.readOrUnset(value);
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	    this->y.readOrUnset(value);
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_WIDTH:
-	        pat->width.readOrUnset(value);
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	    this->width.readOrUnset(value);
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_HEIGHT:
-	        pat->height.readOrUnset(value);
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	    this->height.readOrUnset(value);
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+
 	case SP_ATTR_VIEWBOX: {
 		/* fixme: Think (Lauris) */
 		double x, y, width, height;
@@ -216,50 +194,69 @@ void CPattern::set(unsigned int key, const gchar* value) {
 		if (value) {
 			eptr = (gchar *) value;
 			x = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			y = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			width = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			height = g_ascii_strtod (eptr, &eptr);
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
+
+			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
+				eptr++;
+			}
+
 			if ((width > 0) && (height > 0)) {
-			    pat->viewBox = Geom::Rect::from_xywh(x, y, width, height);
-			    pat->viewBox_set = TRUE;
+			    this->viewBox = Geom::Rect::from_xywh(x, y, width, height);
+			    this->viewBox_set = TRUE;
 			} else {
-				pat->viewBox_set = FALSE;
+				this->viewBox_set = FALSE;
 			}
 		} else {
-			pat->viewBox_set = FALSE;
+			this->viewBox_set = FALSE;
 		}
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+
+		this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_ATTR_XLINK_HREF:
-		if ( value && pat->href && ( strcmp(value, pat->href) == 0 ) ) {
+		if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
 			/* Href unchanged, do nothing. */
 		} else {
-			g_free(pat->href);
-			pat->href = NULL;
+			g_free(this->href);
+			this->href = NULL;
+
 			if (value) {
 				// First, set the href field; it's only used in the "unchanged" check above.
-				pat->href = g_strdup(value);
+				this->href = g_strdup(value);
 				// Now do the attaching, which emits the changed signal.
 				if (value) {
 					try {
-						pat->ref->attach(Inkscape::URI(value));
+						this->ref->attach(Inkscape::URI(value));
 					} catch (Inkscape::BadURIException &e) {
 						g_warning("%s", e.what());
-						pat->ref->detach();
+						this->ref->detach();
 					}
 				} else {
-					pat->ref->detach();
+					this->ref->detach();
 				}
 			}
 		}
 		break;
+
 	default:
-		CPaintServer::set(key, value);
+		SPPaintServer::set(key, value);
 		break;
 	}
 }
@@ -275,56 +272,60 @@ static GSList *pattern_getchildren(SPPattern *pat)
 
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->firstChild()) { // find the first one with children
-	    for (SPObject *child = pat->firstChild() ; child ; child = child->getNext() ) {
-	        l = g_slist_prepend (l, child);
-	    }
-	    break; // do not go further up the chain if children are found
-	}
+			for (SPObject *child = pat->firstChild() ; child ; child = child->getNext() ) {
+				l = g_slist_prepend (l, child);
+			}
+			break; // do not go further up the chain if children are found
+        }
     }
 
-  return l;
+    return l;
 }
 
-void CPattern::update(SPCtx* ctx, unsigned int flags) {
-	SPPattern* object = this->sppattern;
+void SPPattern::update(SPCtx* ctx, unsigned int flags) {
+	if (flags & SP_OBJECT_MODIFIED_FLAG) {
+		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	}
 
-	SPPattern *pat = SP_PATTERN (object);
-
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	GSList *l = pattern_getchildren (pat);
+	GSList *l = pattern_getchildren (this);
 	l = g_slist_reverse (l);
 
 	while (l) {
 		SPObject *child = SP_OBJECT (l->data);
+
 		sp_object_ref (child, NULL);
 		l = g_slist_remove (l, child);
+
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			child->updateDisplay(ctx, flags);
 		}
+
 		sp_object_unref (child, NULL);
 	}
 }
 
-void CPattern::modified(unsigned int flags) {
-	SPPattern* object = this->sppattern;
+void SPPattern::modified(unsigned int flags) {
+	if (flags & SP_OBJECT_MODIFIED_FLAG) {
+		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	}
 
-	SPPattern *pat = SP_PATTERN (object);
-
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	GSList *l = pattern_getchildren (pat);
+	GSList *l = pattern_getchildren (this);
 	l = g_slist_reverse (l);
 
 	while (l) {
 		SPObject *child = SP_OBJECT (l->data);
+
 		sp_object_ref (child, NULL);
 		l = g_slist_remove (l, child);
+
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			child->emitModified(flags);
 		}
+
 		sp_object_unref (child, NULL);
 	}
 }
@@ -338,6 +339,7 @@ pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat)
 	if (old_ref) {
 		pat->modified_connection.disconnect();
 	}
+
 	if (SP_IS_PATTERN (ref)) {
 		pat->modified_connection = ref->connectModified(sigc::bind<2>(sigc::ptr_fun(&pattern_ref_modified), pat));
 	}
@@ -580,20 +582,18 @@ static bool pattern_hasItemChildren (SPPattern const *pat)
     return hasChildren;
 }
 
-cairo_pattern_t* CPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
-	SPPattern* ps = this->sppattern;
-
-    SPPattern *pat = SP_PATTERN (ps);
-
+cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
     bool needs_opacity = (1.0 - opacity) >= 1e-3;
     bool visible = opacity >= 1e-3;
 
-    if (!visible)
+    if (!visible) {
         return NULL;
+    }
 
     /* Show items */
     SPPattern *shown = NULL;
-    for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+
+    for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         // find the first one with item children
         if (pat_i && SP_IS_OBJECT (pat_i) && pattern_hasItemChildren(pat_i)) {
             shown = pat_i;
@@ -623,13 +623,13 @@ cairo_pattern_t* CPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bb
 
     // viewBox to pattern server
     Geom::Affine vb2ps = Geom::identity();
-    if (pat->viewBox_set) {
-        Geom::Rect vb = *pattern_viewBox(pat);
-        gdouble tmp_x = pattern_width (pat) / vb.width();
-        gdouble tmp_y = pattern_height (pat) / vb.height();
+    if (this->viewBox_set) {
+        Geom::Rect vb = *pattern_viewBox(this);
+        gdouble tmp_x = pattern_width (this) / vb.width();
+        gdouble tmp_y = pattern_height (this) / vb.height();
 
         // FIXME: preserveAspectRatio must be taken into account here too!
-        vb2ps = Geom::Affine(tmp_x, 0.0, 0.0, tmp_y, pattern_x(pat) - vb.left() * tmp_x, pattern_y(pat) - vb.top() * tmp_y);
+        vb2ps = Geom::Affine(tmp_x, 0.0, 0.0, tmp_y, pattern_x(this) - vb.left() * tmp_x, pattern_y(this) - vb.top() * tmp_y);
     }
 
     // We must determine the size and scaling of the pattern at the time it is displayed and render
@@ -637,19 +637,19 @@ cairo_pattern_t* CPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bb
 
     // Pattern server to user
     Geom::Affine ps2user;
-    ps2user = pattern_patternTransform(pat);
-    if (!pat->viewBox_set && pattern_patternContentUnits (pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+    ps2user = pattern_patternTransform(this);
+    if (!this->viewBox_set && pattern_patternContentUnits (this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
         /* BBox to user coordinate system */
         Geom::Affine bbox2user (bbox->width(), 0.0, 0.0, bbox->height(), bbox->left(), bbox->top());
         ps2user *= bbox2user;
     }
-    ps2user = Geom::Translate (pattern_x (pat), pattern_y (pat)) * ps2user;
+    ps2user = Geom::Translate (pattern_x (this), pattern_y (this)) * ps2user;
 
     // Pattern size in pattern space
-    Geom::Rect pattern_tile = Geom::Rect::from_xywh(pattern_x(pat), pattern_y(pat),
-        pattern_width(pat), pattern_height(pat));
+    Geom::Rect pattern_tile = Geom::Rect::from_xywh(pattern_x(this), pattern_y(this),
+        pattern_width(this), pattern_height(this));
 
-    if (pattern_patternUnits(pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+    if (pattern_patternUnits(this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
         // interpret x, y, width, height in relation to bbox
         Geom::Affine bbox2user(bbox->width(), 0.0, 0.0, bbox->height(), bbox->left(), bbox->top());
         pattern_tile = pattern_tile * bbox2user;

@@ -16,19 +16,14 @@ namespace Glib {
 class ustring;
 }
 
-#define SP_TYPE_STOP (sp_stop_get_type())
 #define SP_STOP(obj) ((SPStop*)obj)
-#define SP_IS_STOP(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPStop)))
-
-GType sp_stop_get_type();
-
-class CStop;
+#define SP_IS_STOP(obj) (dynamic_cast<const SPStop*>((SPObject*)obj))
 
 /** Gradient stop. */
-class SPStop : public SPObject {
+class SPStop : public SPObject, public CObject {
 public:
 	SPStop();
-	CStop* cstop;
+	virtual ~SPStop();
 
     /// \todo fixme: Should be SPSVGPercentage
     gfloat offset;
@@ -54,25 +49,9 @@ public:
 
     SPColor getEffectiveColor() const;
 
-};
-
-/// The SPStop vtable.
-struct SPStopClass {
-    SPObjectClass parent_class;
-};
-
-
-class CStop : public CObject {
-public:
-	CStop(SPStop* stop);
-	virtual ~CStop();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPStop* spstop;
 };
 
 

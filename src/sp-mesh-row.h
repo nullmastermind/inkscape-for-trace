@@ -16,46 +16,22 @@
 
 class SPObjectClass;
 
-struct SPMeshRow;
-struct SPMeshRowClass;
-
-#define SP_TYPE_MESHROW (sp_meshrow_get_type())
 #define SP_MESHROW(obj) ((SPMeshRow*)obj)
-#define SP_IS_MESHROW(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMeshRow)))
-
-GType sp_meshrow_get_type();
-
-class CMeshRow;
+#define SP_IS_MESHROW(obj) (dynamic_cast<const SPMeshRow*>((SPObject*)obj))
 
 /** Gradient MeshRow. */
-class SPMeshRow : public SPObject {
+class SPMeshRow : public SPObject, public CObject {
 public:
 	SPMeshRow();
-	CMeshRow* cmeshrow;
+	virtual ~SPMeshRow();
 
     SPMeshRow* getNextMeshRow();
     SPMeshRow* getPrevMeshRow();
-};
-
-/// The SPMeshRow vtable.
-struct SPMeshRowClass {
-    SPObjectClass parent_class;
-};
-
-
-class CMeshRow : public CObject {
-public:
-	CMeshRow(SPMeshRow* meshrow);
-	virtual ~CMeshRow();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPMeshRow* spmeshrow;
 };
-
 
 #endif /* !SEEN_SP_MESHROW_H */
 

@@ -7,42 +7,27 @@
 
 #include "sp-gradient.h"
 #include "svg/svg-length.h"
-#include "sp-linear-gradient-fns.h"
 
-class CLinearGradient;
+#define SP_LINEARGRADIENT(obj) ((SPLinearGradient*)obj)
+#define SP_IS_LINEARGRADIENT(obj) (dynamic_cast<const SPLinearGradient*>((SPObject*)obj))
 
 /** Linear gradient. */
 class SPLinearGradient : public SPGradient {
 public:
 	SPLinearGradient();
-	CLinearGradient* clineargradient;
+	virtual ~SPLinearGradient();
 
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
     SVGLength y2;
-};
 
-/// The SPLinearGradient vtable.
-struct SPLinearGradientClass {
-    SPGradientClass parent_class;
-};
-
-
-class CLinearGradient : public CGradient {
 public:
-	CLinearGradient(SPLinearGradient* lineargradient);
-	virtual ~CLinearGradient();
-
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void set(unsigned key, gchar const *value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-protected:
-	SPLinearGradient* splineargradient;
 };
-
 
 #endif /* !SP_LINEAR_GRADIENT_H */
 

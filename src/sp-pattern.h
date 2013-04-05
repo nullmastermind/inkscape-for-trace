@@ -16,11 +16,9 @@
 #include <gtk/gtk.h>
 
 #include "sp-item.h"
-#define SP_TYPE_PATTERN (sp_pattern_get_type ())
-#define SP_PATTERN(obj) ((SPPattern*)obj)
-#define SP_IS_PATTERN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPPattern)))
 
-GType sp_pattern_get_type (void);
+#define SP_PATTERN(obj) ((SPPattern*)obj)
+#define SP_IS_PATTERN(obj) (dynamic_cast<const SPPattern*>((SPObject*)obj))
 
 struct SPPatternReference;
 
@@ -32,12 +30,10 @@ struct SPPatternReference;
 #include <sigc++/connection.h>
 
 
-class CPattern;
-
 class SPPattern : public SPPaintServer {
 public:
 	SPPattern();
-	CPattern* cpattern;
+	virtual ~SPPattern();
 
     /* Reference (href) */
     gchar *href;
@@ -61,17 +57,6 @@ public:
     guint viewBox_set : 1;
 
     sigc::connection modified_connection;
-};
-
-struct SPPatternClass {
-    SPPaintServerClass parent_class;
-};
-
-
-class CPattern : public CPaintServer {
-public:
-	CPattern(SPPattern* pattern);
-	virtual ~CPattern();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -79,9 +64,6 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-protected:
-	SPPattern* sppattern;
 };
 
 

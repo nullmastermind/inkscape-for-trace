@@ -19,49 +19,25 @@
 
 class SPObjectClass;
 
-struct SPMeshPatch;
-struct SPMeshPatchClass;
-
-#define SP_TYPE_MESHPATCH (sp_meshpatch_get_type())
 #define SP_MESHPATCH(obj) ((SPMeshPatch*)obj)
-#define SP_IS_MESHPATCH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMeshPatch)))
-
-GType sp_meshpatch_get_type();
-
-class CMeshPatch;
+#define SP_IS_MESHPATCH(obj) (dynamic_cast<const SPMeshPatch*>((SPObject*)obj))
 
 /** Gradient MeshPatch. */
-class SPMeshPatch : public SPObject {
+class SPMeshPatch : public SPObject, public CObject {
 public:
 	SPMeshPatch();
-	CMeshPatch* cmeshpatch;
+	virtual ~SPMeshPatch();
 
     SPMeshPatch* getNextMeshPatch();
     SPMeshPatch* getPrevMeshPatch();
     Glib::ustring * tensor_string;
     //SVGLength tx[4];  // Tensor points
     //SVGLength ty[4];  // Tensor points
-};
-
-/// The SPMeshPatch vtable.
-struct SPMeshPatchClass {
-    SPObjectClass parent_class;
-};
-
-
-class CMeshPatch : public CObject {
-public:
-	CMeshPatch(SPMeshPatch* meshpatch);
-	virtual ~CMeshPatch();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPMeshPatch* spmeshpatch;
 };
-
 
 #endif /* !SEEN_SP_MESHPATCH_H */
 
