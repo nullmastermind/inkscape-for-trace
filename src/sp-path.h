@@ -27,7 +27,7 @@ class SPCurve;
 /**
  * SVG <path> implementation
  */
-class SPPath : public SPShape, public CShape {
+class SPPath : public SPShape {
 public:
 	SPPath();
 	virtual ~SPPath();

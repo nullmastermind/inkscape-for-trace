@@ -128,7 +128,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     }
 
     if (SP_IS_SHAPE(saved_item)) {
-        SP_SHAPE(saved_item)->setShape();
+        SP_SHAPE(saved_item)->set_shape();
     }
 
     knot_holder->update_knots();
@@ -177,7 +177,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
     }
 
     if (SP_IS_SHAPE (item)) {
-        SP_SHAPE (item)->setShape();
+        SP_SHAPE (item)->set_shape();
     }
 
     this->update_knots();

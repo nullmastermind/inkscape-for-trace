@@ -19,7 +19,7 @@
 #define SP_POLYGON(obj) ((SPPolygon*)obj)
 #define SP_IS_POLYGON(obj) (dynamic_cast<const SPPolygon*>((SPObject*)obj))
 
-class SPPolygon : public SPShape, public CShape {
+class SPPolygon : public SPShape {
 public:
 	SPPolygon();
 	virtual ~SPPolygon();

@@ -39,9 +39,7 @@ namespace {
 	bool spiralRegistered = SPFactory::instance().registerObject("spiral", createSpiral);
 }
 
-SPSpiral::SPSpiral() : SPShape(), CShape(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPSpiral::SPSpiral() : SPShape() {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -59,7 +57,7 @@ SPSpiral::~SPSpiral() {
 }
 
 void SPSpiral::build(SPDocument * document, Inkscape::XML::Node * repr) {
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     this->readAttr("sodipodi:cx");
     this->readAttr("sodipodi:cy");
@@ -101,7 +99,7 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
     repr->setAttribute("d", d);
     g_free(d);
 
-    CShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
+    SPShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
 }
@@ -199,7 +197,7 @@ void SPSpiral::set(unsigned int key, gchar const* value) {
         break;
 
     default:
-        CShape::set(key, value);
+        SPShape::set(key, value);
         break;
     }
 }
@@ -208,10 +206,10 @@ void SPSpiral::update(SPCtx *ctx, guint flags) {
 	SPSpiral* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        reinterpret_cast<SPShape *>(object)->setShape();
+        reinterpret_cast<SPShape *>(object)->set_shape();
     }
 
-    CShape::update(ctx, flags);
+    SPShape::update(ctx, flags);
 }
 
 void SPSpiral::update_patheffect(bool write) {
@@ -427,7 +425,7 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
     Inkscape::SnapPreferences local_snapprefs = *snapprefs;
     local_snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, false);
 
-    CShape::snappoints(p, &local_snapprefs);
+    SPShape::snappoints(p, &local_snapprefs);
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         Geom::Affine const i2dt (this->i2dt_affine ());

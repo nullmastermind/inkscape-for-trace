@@ -38,9 +38,7 @@ namespace {
 }
 
 
-SPRect::SPRect() : SPShape(), CShape(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPRect::SPRect() : SPShape() {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -50,7 +48,7 @@ SPRect::~SPRect() {
 }
 
 void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-    CShape::build(doc, repr);
+    SPShape::build(doc, repr);
 
     this->readAttr("x");
     this->readAttr("y");
@@ -107,7 +105,7 @@ void SPRect::set(unsigned key, gchar const *value) {
             break;
 
         default:
-            CShape::set(key, value);
+            SPShape::set(key, value);
             break;
     }
 }
@@ -134,7 +132,7 @@ void SPRect::update(SPCtx* ctx, unsigned int flags) {
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
 
-    CShape::update(ctx, flags);
+    SPShape::update(ctx, flags);
 }
 
 Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -157,7 +155,7 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
     sp_repr_set_svg_double(repr, "y", this->y.computed);
 
     this->set_shape(); // evaluate SPCurve
-    CShape::write(xml_doc, repr, flags);
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }

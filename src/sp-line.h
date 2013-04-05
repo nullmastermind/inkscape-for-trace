@@ -20,7 +20,7 @@
 #define SP_LINE(obj) ((SPLine*)obj)
 #define SP_IS_LINE(obj) (dynamic_cast<const SPLine*>((SPObject*)obj))
 
-class SPLine : public SPShape, CShape {
+class SPLine : public SPShape {
 public:
 	SPLine();
 	virtual ~SPLine();

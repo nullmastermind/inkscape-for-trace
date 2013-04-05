@@ -43,7 +43,6 @@ namespace {
 }
 
 SPStar::SPStar() : SPPolygon() {
-	this->cshape = this;
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -63,7 +62,7 @@ SPStar::~SPStar() {
 
 void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	// CPPIFY: see header file
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     this->readAttr( "sodipodi:cx" );
     this->readAttr( "sodipodi:cy" );
@@ -103,7 +102,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     g_free(d);
 
     // CPPIFY: see header file
-    CShape::write(xml_doc, repr, flags);
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -221,7 +220,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
 
     default:
     	// CPPIFY: see header file
-        CShape::set(key, value);
+        SPShape::set(key, value);
         break;
     }
 }
@@ -231,11 +230,11 @@ void SPStar::update(SPCtx *ctx, guint flags) {
              SP_OBJECT_STYLE_MODIFIED_FLAG |
              SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
-        this->setShape();
+        this->set_shape();
     }
 
     // CPPIFY: see header file
-    CShape::update(ctx, flags);
+    SPShape::update(ctx, flags);
 }
 
 void SPStar::update_patheffect(bool write) {
@@ -512,7 +511,7 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
     local_snapprefs.setTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT, false);
 
     // CPPIFY: see header file
-    CShape::snappoints(p, &local_snapprefs);
+    SPShape::snappoints(p, &local_snapprefs);
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
         Geom::Affine const i2dt (this->i2dt_affine ());

@@ -30,9 +30,7 @@ namespace {
 	bool polyLineRegistered = SPFactory::instance().registerObject("svg:polyline", createPolyLine);
 }
 
-SPPolyLine::SPPolyLine() : SPShape(), CShape(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPPolyLine::SPPolyLine() : SPShape() {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -42,7 +40,7 @@ SPPolyLine::~SPPolyLine() {
 }
 
 void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     this->readAttr("points");
 }
@@ -113,7 +111,7 @@ void SPPolyLine::set(unsigned int key, const gchar* value) {
             break;
 	}
 	default:
-            CShape::set(key, value);
+            SPShape::set(key, value);
             break;
     }
 }
@@ -127,7 +125,7 @@ Inkscape::XML::Node* SPPolyLine::write(Inkscape::XML::Document *xml_doc, Inkscap
         repr->mergeFrom(this->getRepr(), "id");
     }
 
-    CShape::write(xml_doc, repr, flags);
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }

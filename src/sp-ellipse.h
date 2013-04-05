@@ -21,7 +21,7 @@
 #define SP_GENERICELLIPSE(obj) ((SPGenericEllipse*)obj)
 #define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj))
 
-class SPGenericEllipse : public SPShape, public CShape {
+class SPGenericEllipse : public SPShape {
 public:
 	SPGenericEllipse();
 	virtual ~SPGenericEllipse();

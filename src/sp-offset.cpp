@@ -95,9 +95,7 @@ static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *i
 // reappearing in offset when the radius becomes too large
 static bool   use_slow_but_correct_offset_method=false;
 
-SPOffset::SPOffset() : SPShape(), CShape(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPOffset::SPOffset() : SPShape() {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -133,7 +131,7 @@ SPOffset::~SPOffset() {
 }
 
 void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     //XML Tree being used directly here while it shouldn't be.
     if (this->getRepr()->attribute("inkscape:radius")) {
@@ -212,7 +210,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
     repr->setAttribute("d", d);
     g_free (d);
 
-    CShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
+    SPShape::write(xml_doc, repr, flags | SP_SHAPE_WRITE_PATH);
 
     return repr;
 }
@@ -238,7 +236,7 @@ void SPOffset::release() {
     this->sourceHref = NULL;
     this->sourceRef->detach();
 
-    CShape::release();
+    SPShape::release();
 }
 
 void SPOffset::set(unsigned int key, const gchar* value) {
@@ -321,7 +319,7 @@ void SPOffset::set(unsigned int key, const gchar* value) {
             break;
             
         default:
-            CShape::set(key, value);
+            SPShape::set(key, value);
             break;
     }
 }
@@ -337,12 +335,12 @@ void SPOffset::update(SPCtx *ctx, guint flags) {
         (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
          SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
     	
-        this->setShape ();
+        this->set_shape();
     }
     
     this->isUpdating=false;
 
-    CShape::update(ctx, flags);
+    SPShape::update(ctx, flags);
 }
 
 gchar* SPOffset::description() {
@@ -697,7 +695,7 @@ void SPOffset::set_shape() {
 }
 
 void SPOffset::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
-    CShape::snappoints(p, snapprefs);
+    SPShape::snappoints(p, snapprefs);
 }
 
 

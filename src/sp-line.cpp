@@ -34,9 +34,7 @@ namespace {
 	bool lineRegistered = SPFactory::instance().registerObject("svg:line", createLine);
 }
 
-SPLine::SPLine() : SPShape(), CShape(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPLine::SPLine() : SPShape() {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -51,7 +49,7 @@ SPLine::~SPLine() {
 }
 
 void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     this->readAttr( "x1" );
     this->readAttr( "y1" );
@@ -84,7 +82,7 @@ void SPLine::set(unsigned int key, const gchar* value) {
             break;
 
         default:
-            CShape::set(key, value);
+            SPShape::set(key, value);
             break;
     }
 }
@@ -103,10 +101,10 @@ void SPLine::update(SPCtx *ctx, guint flags) {
         this->y1.update(em, ex, h);
         this->y2.update(em, ex, h);
 
-        this->setShape();
+        this->set_shape();
     }
 
-    CShape::update(ctx, flags);
+    SPShape::update(ctx, flags);
 }
 
 Inkscape::XML::Node* SPLine::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -123,7 +121,7 @@ Inkscape::XML::Node* SPLine::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     sp_repr_set_svg_double(repr, "x2", this->x2.computed);
     sp_repr_set_svg_double(repr, "y2", this->y2.computed);
 
-    CShape::write(xml_doc, repr, flags);
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }

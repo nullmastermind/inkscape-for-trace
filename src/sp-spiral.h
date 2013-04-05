@@ -39,7 +39,7 @@
  *
  * \todo Should I remove these attributes?
  */
-class SPSpiral : public SPShape, public CShape {
+class SPSpiral : public SPShape {
 public:
 	SPSpiral();
 	virtual ~SPSpiral();

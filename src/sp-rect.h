@@ -22,7 +22,7 @@
 #define SP_RECT(obj) ((SPRect*)obj)
 #define SP_IS_RECT(obj) (dynamic_cast<const SPRect*>((SPObject*)obj))
 
-class SPRect : public SPShape, public CShape {
+class SPRect : public SPShape {
 public:
 	SPRect();
 	virtual ~SPRect();

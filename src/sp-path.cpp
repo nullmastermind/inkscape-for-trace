@@ -119,9 +119,7 @@ void SPPath::convert_to_guides() {
     sp_guide_pt_pairs_to_guides(this->document, pts);
 }
 
-SPPath::SPPath() : SPShape(), CShape(this), connEndPair(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPPath::SPPath() : SPShape(), connEndPair(this) {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -139,7 +137,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     sp_conn_end_pair_build(this);
 
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     this->readAttr( "inkscape:original-d" );
     this->readAttr( "d" );
@@ -155,7 +153,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 void SPPath::release() {
     this->connEndPair.release();
 
-    CShape::release();
+    SPShape::release();
 }
 
 void SPPath::set(unsigned int key, const gchar* value) {
@@ -210,7 +208,7 @@ void SPPath::set(unsigned int key, const gchar* value) {
             break;
 
         default:
-            CShape::set(key, value);
+            SPShape::set(key, value);
             break;
     }
 }
@@ -244,7 +242,7 @@ g_message("sp_path_write writes 'd' attribute");
 
     this->connEndPair.writeRepr(repr);
 
-    CShape::write(xml_doc, repr, flags);
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -254,7 +252,7 @@ void SPPath::update(SPCtx *ctx, guint flags) {
 		flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
 	}
 
-	CShape::update(ctx, flags);
+	SPShape::update(ctx, flags);
 
 	this->connEndPair.update();
 }

@@ -30,20 +30,14 @@
 class SPDesktop;
 namespace Inkscape { class DrawingItem; }
 
-
-class CShape;
-
 /**
  * Base class for shapes, including <path> element
  */
-class SPShape : public SPLPEItem {
+class SPShape : public SPLPEItem, public CLPEItem {
 public:
 	SPShape();
 	virtual ~SPShape();
 
-	CShape* cshape;
-
-    void setShape ();
     SPCurve * getCurve () const;
     SPCurve * getCurveBeforeLPE () const;
     void setCurve (SPCurve *curve, unsigned int owner);
@@ -60,12 +54,6 @@ public:
     SPObject *_marker[SP_MARKER_LOC_QTY];
     sigc::connection _release_connect [SP_MARKER_LOC_QTY];
     sigc::connection _modified_connect [SP_MARKER_LOC_QTY];
-};
-
-class CShape : public CLPEItem {
-public:
-	CShape(SPShape* shape);
-	virtual ~CShape();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -84,9 +72,6 @@ public:
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
 	virtual void set_shape();
-
-protected:
-	SPShape* spshape;
 };
 
 

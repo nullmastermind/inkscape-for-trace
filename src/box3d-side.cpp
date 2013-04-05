@@ -37,7 +37,6 @@ namespace {
 }
 
 Box3DSide::Box3DSide() : SPPolygon() {
-	this->cshape = this;
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -68,7 +67,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
         sp_repr_set_int(repr, "inkscape:box3dsidetype", this->dir1 ^ this->dir2 ^ this->front_or_rear);
     }
 
-    this->setShape();
+    this->set_shape();
 
     /* Duplicate the path */
     SPCurve const *curve = this->_curve;
@@ -127,7 +126,7 @@ void Box3DSide::update(SPCtx* ctx, guint flags) {
                  SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
-        this->setShape();
+        this->set_shape();
     }
 
     SPPolygon::update(ctx, flags);

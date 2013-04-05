@@ -35,9 +35,7 @@ namespace {
 	bool polygonRegistered = SPFactory::instance().registerObject("svg:polygon", createPolygon);
 }
 
-SPPolygon::SPPolygon() : SPShape(), CShape(this) {
-	delete this->cshape;
-	this->cshape = this;
+SPPolygon::SPPolygon() : SPShape() {
 	this->clpeitem = this;
 	this->citem = this;
 	this->cobject = this;
@@ -49,7 +47,7 @@ SPPolygon::~SPPolygon() {
 void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPPolygon* object = this;
 
-    CShape::build(document, repr);
+    SPShape::build(document, repr);
 
     object->readAttr( "points" );
 }
@@ -80,7 +78,7 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
 Inkscape::XML::Node* SPPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     // Tolerable workaround: we need to update the object's curve before we set points=
     // because it's out of sync when e.g. some extension attrs of the polygon or star are changed in XML editor
-	this->setShape();
+	this->set_shape();
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polygon");
@@ -91,7 +89,7 @@ Inkscape::XML::Node* SPPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape
     repr->setAttribute("points", str);
     g_free(str);
 
-    CShape::write(xml_doc, repr, flags);
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -178,7 +176,7 @@ void SPPolygon::set(unsigned int key, const gchar* value) {
             break;
         }
         default:
-            CShape::set(key, value);
+            SPShape::set(key, value);
             break;
     }
 }

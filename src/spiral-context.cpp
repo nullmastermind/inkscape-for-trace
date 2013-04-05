@@ -458,7 +458,7 @@ sp_spiral_finish(SPSpiralContext *sc)
 
     	SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
 
-        SP_SHAPE(spiral)->setShape();
+        SP_SHAPE(spiral)->set_shape();
         SP_OBJECT(spiral)->updateRepr(SP_OBJECT_WRITE_EXT);
 
         desktop->canvas->endForcedFullRedraws();

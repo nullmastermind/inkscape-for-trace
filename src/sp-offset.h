@@ -49,7 +49,7 @@ class SPUseReference;
  * points, or more precisely one control point, that's enough to define the
  * radius (look in object-edit).
  */
-class SPOffset : public SPShape, CShape {
+class SPOffset : public SPShape {
 public:
 	SPOffset();
 	virtual ~SPOffset();

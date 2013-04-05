@@ -6,7 +6,7 @@
 #define SP_POLYLINE(obj) ((SPPolyLine*)obj)
 #define SP_IS_POLYLINE(obj) (dynamic_cast<const SPPolyLine*>((SPObject*)obj))
 
-class SPPolyLine : public SPShape, public CShape {
+class SPPolyLine : public SPShape {
 public:
 	SPPolyLine();
 	virtual ~SPPolyLine();
