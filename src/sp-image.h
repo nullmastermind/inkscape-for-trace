@@ -14,11 +14,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_TYPE_IMAGE (sp_image_get_type ())
 #define SP_IMAGE(obj) ((SPImage*)obj)
-#define SP_IS_IMAGE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPImage)))
-
-class CImage;
+#define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj))
 
 /* SPImage */
 
@@ -29,10 +26,10 @@ class CImage;
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-class SPImage : public SPItem {
+class SPImage : public SPItem, public CItem {
 public:
 	SPImage();
-	CImage* cimage;
+	virtual ~SPImage();
 
     SVGLength x;
     SVGLength y;
@@ -60,17 +57,6 @@ public:
     GdkPixbuf *pixbuf;
     gchar *pixPath;
     time_t lastMod;
-};
-
-struct SPImageClass {
-    SPItemClass parent_class;
-};
-
-
-class CImage : public CItem {
-public:
-	CImage(SPImage* image);
-	virtual ~CImage();
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
@@ -85,13 +71,7 @@ public:
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
     virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
     virtual Geom::Affine set_transform(Geom::Affine const &transform);
-
-protected:
-	SPImage* spimage;
 };
-
-
-GType sp_image_get_type (void);
 
 /* Return duplicate of curve or NULL */
 SPCurve *sp_image_get_curve (SPImage *image);

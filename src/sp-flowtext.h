@@ -9,9 +9,8 @@
 #include <2geom/forward.h>
 #include "libnrtype/Layout-TNG.h"
 
-#define SP_TYPE_FLOWTEXT            (sp_flowtext_get_type ())
 #define SP_FLOWTEXT(obj) ((SPFlowtext*)obj)
-#define SP_IS_FLOWTEXT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowtext)))
+#define SP_IS_FLOWTEXT(obj) (dynamic_cast<const SPFlowtext*>((SPObject*)obj))
 
 
 namespace Inkscape {
@@ -20,12 +19,10 @@ class DrawingGroup;
 
 } // namespace Inkscape
 
-class CFlowtext;
-
-class SPFlowtext : public SPItem {
+class SPFlowtext : public SPItem, public CItem {
 public:
 	SPFlowtext();
-	CFlowtext* cflowtext;
+	virtual ~SPFlowtext();
 
     /** Completely recalculates the layout. */
     void rebuildLayout();
@@ -54,17 +51,7 @@ private:
     of this flowroot. */
     Shape* _buildExclusionShape() const;
 
-};
-
-struct SPFlowtextClass {
-    SPItemClass parent_class;
-};
-
-class CFlowtext : public CItem {
 public:
-	CFlowtext(SPFlowtext* flowtext);
-	virtual ~CFlowtext();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 
 	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
@@ -83,12 +70,7 @@ public:
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
 	virtual void hide(unsigned int key);
     virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-protected:
-	SPFlowtext* spflowtext;
 };
-
-
-GType sp_flowtext_get_type (void);
 
 SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p1, Geom::Point p2);
 

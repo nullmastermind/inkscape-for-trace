@@ -14,12 +14,6 @@
 #include "sp-string.h"
 #include "document.h"
 
-static void sp_flowdiv_init (SPFlowdiv *group);
-static void sp_flowtspan_init (SPFlowtspan *group);
-static void sp_flowpara_init (SPFlowpara *group);
-static void sp_flowline_init (SPFlowline *group);
-static void sp_flowregionbreak_init (SPFlowregionbreak *group);
-
 #include "sp-factory.h"
 
 namespace {
@@ -50,42 +44,21 @@ namespace {
 	bool flowregionbreakRegistered = SPFactory::instance().registerObject("svg:flowRegionBreak", createFlowregionbreak);
 }
 
-G_DEFINE_TYPE(SPFlowdiv, sp_flowdiv, G_TYPE_OBJECT);
-
-static void sp_flowdiv_class_init(SPFlowdivClass *klass)
-{
+SPFlowdiv::SPFlowdiv() : SPItem(), CItem(this) {
+	delete this->citem;
+	this->citem = this;
+	this->cobject = this;
 }
 
-CFlowdiv::CFlowdiv(SPFlowdiv* flowdiv) : CItem(flowdiv) {
-	this->spflowdiv = flowdiv;
+SPFlowdiv::~SPFlowdiv() {
 }
 
-CFlowdiv::~CFlowdiv() {
-}
-
-SPFlowdiv::SPFlowdiv() : SPItem() {
-	SPFlowdiv* group = this;
-
-	group->cflowdiv = new CFlowdiv(group);
-	group->typeHierarchy.insert(typeid(SPFlowdiv));
-
-	delete group->citem;
-	group->citem = group->cflowdiv;
-	group->cobject = group->cflowdiv;
-}
-
-static void sp_flowdiv_init(SPFlowdiv *group)
-{
-	new (group) SPFlowdiv();
-}
-
-void CFlowdiv::release() {
+void SPFlowdiv::release() {
 	CItem::release();
 }
 
-
-void CFlowdiv::update(SPCtx *ctx, unsigned int flags) {
-	SPFlowdiv* object = this->spflowdiv;
+void SPFlowdiv::update(SPCtx *ctx, unsigned int flags) {
+	SPFlowdiv* object = this;
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
 
@@ -119,8 +92,8 @@ void CFlowdiv::update(SPCtx *ctx, unsigned int flags) {
     }
 }
 
-void CFlowdiv::modified(unsigned int flags) {
-	SPFlowdiv* object = this->spflowdiv;
+void SPFlowdiv::modified(unsigned int flags) {
+	SPFlowdiv* object = this;
 
     CItem::modified(flags);
 
@@ -146,21 +119,21 @@ void CFlowdiv::modified(unsigned int flags) {
 }
 
 
-void CFlowdiv::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-	SPFlowdiv* object = this->spflowdiv;
+void SPFlowdiv::build(SPDocument *doc, Inkscape::XML::Node *repr) {
+	SPFlowdiv* object = this;
 
 	object->_requireSVGVersion(Inkscape::Version(1, 2));
 
 	CItem::build(doc, repr);
 }
 
-void CFlowdiv::set(unsigned int key, const gchar* value) {
+void SPFlowdiv::set(unsigned int key, const gchar* value) {
 	CItem::set(key, value);
 }
 
 
-Inkscape::XML::Node* CFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFlowdiv* object = this->spflowdiv;
+Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFlowdiv* object = this;
 
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
@@ -206,41 +179,22 @@ Inkscape::XML::Node* CFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape:
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowtspan, sp_flowtspan, G_TYPE_OBJECT);
 
-static void sp_flowtspan_class_init(SPFlowtspanClass *klass)
-{
+SPFlowtspan::SPFlowtspan() : SPItem(), CItem(this) {
+	delete this->citem;
+	this->citem = this;
+	this->cobject = this;
 }
 
-CFlowtspan::CFlowtspan(SPFlowtspan* flowtspan) : CItem(flowtspan) {
-	this->spflowtspan = flowtspan;
+SPFlowtspan::~SPFlowtspan() {
 }
 
-CFlowtspan::~CFlowtspan() {
-}
-
-SPFlowtspan::SPFlowtspan() : SPItem() {
-	SPFlowtspan* group = this;
-
-	group->cflowtspan = new CFlowtspan(group);
-	group->typeHierarchy.insert(typeid(SPFlowtspan));
-
-	delete group->citem;
-	group->citem = group->cflowtspan;
-	group->cobject = group->cflowtspan;
-}
-
-static void sp_flowtspan_init(SPFlowtspan *group)
-{
-	new (group) SPFlowtspan();
-}
-
-void CFlowtspan::release() {
+void SPFlowtspan::release() {
 	CItem::release();
 }
 
-void CFlowtspan::update(SPCtx *ctx, unsigned int flags) {
-	SPFlowtspan* object = this->spflowtspan;
+void SPFlowtspan::update(SPCtx *ctx, unsigned int flags) {
+	SPFlowtspan* object = this;
 
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
@@ -275,8 +229,8 @@ void CFlowtspan::update(SPCtx *ctx, unsigned int flags) {
     }
 }
 
-void CFlowtspan::modified(unsigned int flags) {
-	SPFlowtspan* object = this->spflowtspan;
+void SPFlowtspan::modified(unsigned int flags) {
+	SPFlowtspan* object = this;
 
     CItem::modified(flags);
 
@@ -302,18 +256,18 @@ void CFlowtspan::modified(unsigned int flags) {
 }
 
 
-void CFlowtspan::build(SPDocument *doc, Inkscape::XML::Node *repr)
+void SPFlowtspan::build(SPDocument *doc, Inkscape::XML::Node *repr)
 {
 	CItem::build(doc, repr);
 }
 
-void CFlowtspan::set(unsigned int key, const gchar* value) {
+void SPFlowtspan::set(unsigned int key, const gchar* value) {
 	CItem::set(key, value);
 }
 
-Inkscape::XML::Node *CFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-	SPFlowtspan* object = this->spflowtspan;
+	SPFlowtspan* object = this;
 
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
@@ -361,43 +315,22 @@ Inkscape::XML::Node *CFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscap
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowpara, sp_flowpara, G_TYPE_OBJECT);
-
-static void sp_flowpara_class_init(SPFlowparaClass *klass)
-{
+SPFlowpara::SPFlowpara() : SPItem(), CItem(this) {
+	delete this->citem;
+	this->citem = this;
+	this->cobject = this;
 }
 
-CFlowpara::CFlowpara(SPFlowpara* flowpara) : CItem(flowpara) {
-	this->spflowpara = flowpara;
+SPFlowpara::~SPFlowpara() {
 }
 
-CFlowpara::~CFlowpara() {
-}
-
-SPFlowpara::SPFlowpara() : SPItem() {
-	SPFlowpara* group = this;
-
-	group->cflowpara = new CFlowpara(group);
-	group->typeHierarchy.insert(typeid(SPFlowpara));
-
-	delete group->citem;
-	group->citem = group->cflowpara;
-	group->cobject = group->cflowpara;
-}
-
-static void sp_flowpara_init (SPFlowpara *group)
-{
-	new (group) SPFlowpara();
-}
-
-void CFlowpara::release() {
+void SPFlowpara::release() {
 	CItem::release();
 }
 
-
-void CFlowpara::update(SPCtx *ctx, unsigned int flags)
+void SPFlowpara::update(SPCtx *ctx, unsigned int flags)
 {
-	SPFlowpara* object = this->spflowpara;
+	SPFlowpara* object = this;
 
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
@@ -432,8 +365,8 @@ void CFlowpara::update(SPCtx *ctx, unsigned int flags)
     }
 }
 
-void CFlowpara::modified(unsigned int flags) {
-	SPFlowpara* object = this->spflowpara;
+void SPFlowpara::modified(unsigned int flags) {
+	SPFlowpara* object = this;
 
     CItem::modified(flags);
 
@@ -459,18 +392,18 @@ void CFlowpara::modified(unsigned int flags) {
 }
 
 
-void CFlowpara::build(SPDocument *doc, Inkscape::XML::Node *repr)
+void SPFlowpara::build(SPDocument *doc, Inkscape::XML::Node *repr)
 {
 	CItem::build(doc, repr);
 }
 
-void CFlowpara::set(unsigned int key, const gchar* value) {
+void SPFlowpara::set(unsigned int key, const gchar* value) {
 	CItem::set(key, value);
 }
 
-Inkscape::XML::Node *CFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-	SPFlowpara* object = this->spflowpara;
+	SPFlowpara* object = this;
 
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) repr = xml_doc->createElement("svg:flowPara");
@@ -514,40 +447,20 @@ Inkscape::XML::Node *CFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowline, sp_flowline, G_TYPE_OBJECT);
 
-static void sp_flowline_class_init(SPFlowlineClass *klass)
-{
+SPFlowline::SPFlowline() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 }
 
-CFlowline::CFlowline(SPFlowline* flowline) : CObject(flowline) {
-	this->spflowline = flowline;
+SPFlowline::~SPFlowline() {
 }
 
-CFlowline::~CFlowline() {
-}
-
-SPFlowline::SPFlowline() : SPObject() {
-	SPFlowline* group = this;
-
-	group->cflowline = new CFlowline(group);
-	group->typeHierarchy.insert(typeid(SPFlowline));
-
-	delete group->cobject;
-	group->cobject = group->cflowline;
-}
-
-static void sp_flowline_init(SPFlowline *group)
-{
-	new (group) SPFlowline();
-}
-
-void CFlowline::release() {
+void SPFlowline::release() {
 	CObject::release();
 }
 
-
-void CFlowline::modified(unsigned int flags) {
+void SPFlowline::modified(unsigned int flags) {
 	CObject::modified(flags);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -556,7 +469,7 @@ void CFlowline::modified(unsigned int flags) {
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 }
 
-Inkscape::XML::Node *CFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
@@ -574,39 +487,20 @@ Inkscape::XML::Node *CFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape
 /*
  *
  */
-G_DEFINE_TYPE(SPFlowregionbreak, sp_flowregionbreak, G_TYPE_OBJECT);
 
-static void sp_flowregionbreak_class_init(SPFlowregionbreakClass *klass)
-{
+SPFlowregionbreak::SPFlowregionbreak() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 }
 
-CFlowregionbreak::CFlowregionbreak(SPFlowregionbreak* flowregionbreak) : CObject(flowregionbreak) {
-	this->spflowregionbreak = flowregionbreak;
+SPFlowregionbreak::~SPFlowregionbreak() {
 }
 
-CFlowregionbreak::~CFlowregionbreak() {
-}
-
-SPFlowregionbreak::SPFlowregionbreak() : SPObject() {
-	SPFlowregionbreak* group = this;
-
-	group->cflowregionbreak = new CFlowregionbreak(group);
-	group->typeHierarchy.insert(typeid(SPFlowregionbreak));
-
-	delete group->cobject;
-	group->cobject = group->cflowregionbreak;
-}
-
-static void sp_flowregionbreak_init(SPFlowregionbreak *group)
-{
-	new (group) SPFlowregionbreak();
-}
-
-void CFlowregionbreak::release() {
+void SPFlowregionbreak::release() {
 	CObject::release();
 }
 
-void CFlowregionbreak::modified(unsigned int flags) {
+void SPFlowregionbreak::modified(unsigned int flags) {
 	CObject::modified(flags);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -615,7 +509,7 @@ void CFlowregionbreak::modified(unsigned int flags) {
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 }
 
-Inkscape::XML::Node *CFlowregionbreak::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+Inkscape::XML::Node *SPFlowregionbreak::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {

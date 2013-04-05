@@ -6,39 +6,25 @@
 
 #include "sp-item.h"
 
-#define SP_TYPE_FLOWREGION            (sp_flowregion_get_type ())
 #define SP_FLOWREGION(obj) ((SPFlowregion*)obj)
-#define SP_IS_FLOWREGION(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowregion)))
+#define SP_IS_FLOWREGION(obj) (dynamic_cast<const SPFlowregion*>((SPObject*)obj))
 
-#define SP_TYPE_FLOWREGIONEXCLUDE            (sp_flowregionexclude_get_type ())
 #define SP_FLOWREGIONEXCLUDE(obj) ((SPFlowregionExclude*)obj)
-#define SP_IS_FLOWREGIONEXCLUDE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFlowregionExclude)))
+#define SP_IS_FLOWREGIONEXCLUDE(obj) (dynamic_cast<const SPFlowregionExclude*>((SPObject*)obj))
 
 class Path;
 class Shape;
 class flow_dest;
 class FloatLigne;
-class CFlowregion;
-class CFlowregionExclude;
 
-class SPFlowregion : public SPItem {
+class SPFlowregion : public SPItem, public CItem {
 public:
 	SPFlowregion();
-	CFlowregion* cflowregion;
+	virtual ~SPFlowregion();
 
 	std::vector<Shape*>     computed;
 	
 	void             UpdateComputed(void);
-};
-
-struct SPFlowregionClass {
-	SPItemClass parent_class;
-};
-
-class CFlowregion : public CItem {
-public:
-	CFlowregion(SPFlowregion* flowregion);
-	virtual ~CFlowregion();
 
 	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
 	virtual void remove_child(Inkscape::XML::Node *child);
@@ -46,31 +32,16 @@ public:
 	virtual void modified(guint flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual gchar *description();
-
-protected:
-	SPFlowregion* spflowregion;
 };
 
-GType sp_flowregion_get_type (void);
-
-class SPFlowregionExclude : public SPItem {
+class SPFlowregionExclude : public SPItem, public CItem {
 public:
 	SPFlowregionExclude();
-	CFlowregionExclude* cflowregionexclude;
+	virtual ~SPFlowregionExclude();
 
 	Shape            *computed;
 	
 	void             UpdateComputed(void);
-};
-
-struct SPFlowregionExcludeClass {
-	SPItemClass parent_class;
-};
-
-class CFlowregionExclude : public CItem {
-public:
-	CFlowregionExclude(SPFlowregionExclude* flowregionexclude);
-	virtual ~CFlowregionExclude();
 
 	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
 	virtual void remove_child(Inkscape::XML::Node *child);
@@ -78,11 +49,6 @@ public:
 	virtual void modified(guint flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual gchar *description();
-
-protected:
-	SPFlowregionExclude* spflowregionexclude;
 };
-
-GType sp_flowregionexclude_get_type (void);
 
 #endif

@@ -56,6 +56,16 @@ enum {
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
 static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 
+#include "sp-factory.h"
+
+namespace {
+	SPGuide* createGuide() {
+		return new SPGuide();
+	}
+
+	bool guideRegistered = SPFactory::instance().registerObject("sodipodi:guide", createGuide);
+}
+
 G_DEFINE_TYPE(SPGuide, sp_guide, G_TYPE_OBJECT);
 
 static void sp_guide_class_init(SPGuideClass *gc)
