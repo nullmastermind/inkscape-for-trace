@@ -36,7 +36,6 @@ namespace {
 }
 
 SPPolygon::SPPolygon() : SPShape() {
-	this->citem = this;
 	this->cobject = this;
 }
 

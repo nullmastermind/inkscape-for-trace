@@ -35,7 +35,6 @@ namespace {
 }
 
 SPLine::SPLine() : SPShape() {
-	this->citem = this;
 	this->cobject = this;
 
     this->x1.unset();

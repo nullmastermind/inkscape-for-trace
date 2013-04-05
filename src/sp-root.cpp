@@ -42,7 +42,6 @@ namespace {
 }
 
 SPRoot::SPRoot() : SPGroup() {
-	this->citem = this;
 	this->cobject = this;
 
 	this->aspect_set = 0;

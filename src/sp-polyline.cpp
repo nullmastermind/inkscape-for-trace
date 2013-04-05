@@ -31,7 +31,6 @@ namespace {
 }
 
 SPPolyLine::SPPolyLine() : SPShape() {
-	this->citem = this;
 	this->cobject = this;
 }
 

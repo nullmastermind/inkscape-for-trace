@@ -36,7 +36,6 @@ namespace {
 }
 
 SPAnchor::SPAnchor() : SPGroup() {
-	this->citem = this;
 	this->cobject = this;
 
     this->href = NULL;

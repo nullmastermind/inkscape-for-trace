@@ -55,7 +55,7 @@ public:
 };
 
 struct Persp3DClass {
-    SPItemClass parent_class;
+//    SPItemClass parent_class;
 };
 
 class CPersp3D : public CObject {

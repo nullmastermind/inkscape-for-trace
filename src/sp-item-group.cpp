@@ -66,7 +66,6 @@ namespace {
 }
 
 SPGroup::SPGroup() : SPLPEItem() {
-	this->citem = this;
 	this->cobject = this;
 
     this->_layer_mode = SPGroup::GROUP;

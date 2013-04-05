@@ -40,7 +40,6 @@ namespace {
 }
 
 SPSpiral::SPSpiral() : SPShape() {
-	this->citem = this;
 	this->cobject = this;
 
 	this->cx         = 0.0;

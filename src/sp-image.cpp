@@ -514,9 +514,7 @@ namespace {
 	bool imageRegistered = SPFactory::instance().registerObject("svg:image", createImage);
 }
 
-SPImage::SPImage() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPImage::SPImage() : SPItem() {
 	this->cobject = this;
 
 	this->aspect_clip = 0;
@@ -545,7 +543,7 @@ SPImage::~SPImage() {
 }
 
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CItem::build(document, repr);
+	SPItem::build(document, repr);
 
     this->readAttr( "xlink:href" );
     this->readAttr( "x" );
@@ -591,7 +589,7 @@ void SPImage::release() {
         this->curve = this->curve->unref();
     }
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPImage::set(unsigned int key, const gchar* value) {
@@ -722,7 +720,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         default:
-            CItem::set(key, value);
+            SPItem::set(key, value);
             break;
     }
 
@@ -732,7 +730,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
 void SPImage::update(SPCtx *ctx, unsigned int flags) {
     SPDocument *doc = this->document;
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_IMAGE_HREF_MODIFIED_FLAG) {
         if (this->pixbuf) {
@@ -938,7 +936,7 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
 }
 
 void SPImage::modified(unsigned int flags) {
-//  CItem::onModified(flags);
+//  SPItem::onModified(flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = this->display; v != NULL; v = v->next) {
@@ -981,7 +979,7 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }

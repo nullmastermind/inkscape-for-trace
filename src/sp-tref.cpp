@@ -63,9 +63,7 @@ static void build_string_from_root(Inkscape::XML::Node *root, Glib::ustring *ret
 static void sp_tref_href_changed(SPObject *old_ref, SPObject *ref, SPTRef *tref);
 static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 
-SPTRef::SPTRef() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPTRef::SPTRef() : SPItem() {
 	this->cobject = this;
 
 	this->stringChild = NULL;
@@ -89,7 +87,7 @@ SPTRef::~SPTRef() {
 }
 
 void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    CItem::build(document, repr);
+    SPItem::build(document, repr);
 
     this->readAttr( "xlink:href" );
     this->readAttr( "x" );
@@ -110,7 +108,7 @@ void SPTRef::release() {
 
     this->uriOriginalRef->detach();
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPTRef::set(unsigned int key, const gchar* value) {
@@ -147,14 +145,14 @@ void SPTRef::set(unsigned int key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     } else { // default
-        CItem::set(key, value);
+        SPItem::set(key, value);
     }
 }
 
 void SPTRef::update(SPCtx *ctx, guint flags) {
     debug("0x%p",this);
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -207,7 +205,7 @@ Inkscape::XML::Node* SPTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         g_free(uri_string);
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -246,7 +244,7 @@ gchar* SPTRef::description() {
 		char *child_desc;
 
 		if (SP_IS_ITEM(referred)) {
-			child_desc = SP_ITEM(referred)->description();
+			child_desc = SP_ITEM(referred)->getDetailedDescription();
 		} else {
 			child_desc = g_strdup("");
 		}

@@ -236,7 +236,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         g_free (parent_name);
 
         if (!items->next) { // one item
-            char *item_desc = item->description();
+            char *item_desc = item->getDetailedDescription();
             if (SP_IS_USE(item) && SP_IS_SYMBOL(item->firstChild())) {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
                               item_desc, in_phrase,

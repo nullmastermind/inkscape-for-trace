@@ -53,7 +53,6 @@ namespace {
 }
 
 SPMarker::SPMarker() : SPGroup() {
-	this->citem = this;
 	this->cobject = this;
 
 	this->aspect_clip = 0;

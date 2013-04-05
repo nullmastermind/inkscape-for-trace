@@ -12,7 +12,7 @@ class Path;
 #define SP_TEXTPATH(obj) ((SPTextPath*)obj)
 #define SP_IS_TEXTPATH(obj) (dynamic_cast<const SPTextPath*>((SPObject*)obj))
 
-class SPTextPath : public SPItem, public CItem {
+class SPTextPath : public SPItem {
 public:
 	SPTextPath();
 	virtual ~SPTextPath();

@@ -37,7 +37,6 @@ namespace {
 }
 
 SPSymbol::SPSymbol() : SPGroup() {
-	this->citem = this;
 	this->cobject = this;
 
 	this->aspect_align = 0;

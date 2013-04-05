@@ -25,7 +25,7 @@
 #define SP_TREF(obj) ((SPTRef*)obj)
 #define SP_IS_TREF(obj) (dynamic_cast<const SPTRef*>((SPObject*)obj))
 
-class SPTRef : public SPItem, public CItem {
+class SPTRef : public SPItem {
 public:
 	SPTRef();
 	virtual ~SPTRef();

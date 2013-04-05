@@ -2854,7 +2854,7 @@ static void sp_selection_to_guides_recursive(SPItem *item, bool deleteitem, bool
             sp_selection_to_guides_recursive(SP_ITEM(i->data), deleteitem, wholegroups);
         }
     } else {
-        item->citem->convert_to_guides();
+        item->convert_to_guides();
 
         if (deleteitem) {
             item->deleteObject(true);

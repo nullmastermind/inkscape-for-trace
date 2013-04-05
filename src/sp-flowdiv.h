@@ -23,7 +23,7 @@
 #define SP_IS_FLOWREGIONBREAK(obj) (dynamic_cast<const SPFlowregionbreak*>((SPObject*)obj))
 
 // these 3 are derivatives of SPItem to get the automatic style handling
-class SPFlowdiv : public SPItem, public CItem {
+class SPFlowdiv : public SPItem {
 public:
 	SPFlowdiv();
 	virtual ~SPFlowdiv();
@@ -37,7 +37,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 };
 
-class SPFlowtspan : public SPItem, public CItem {
+class SPFlowtspan : public SPItem {
 public:
 	SPFlowtspan();
 	virtual ~SPFlowtspan();
@@ -51,7 +51,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 };
 
-class SPFlowpara : public SPItem, public CItem {
+class SPFlowpara : public SPItem {
 public:
 	SPFlowpara();
 	virtual ~SPFlowpara();

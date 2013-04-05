@@ -71,9 +71,7 @@ namespace {
 /*#####################################################
 #  SPTEXT
 #####################################################*/
-SPText::SPText() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPText::SPText() : SPItem() {
 	this->cobject = this;
 
     new (&this->layout) Inkscape::Text::Layout;
@@ -90,7 +88,7 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "dy" );
     this->readAttr( "rotate" );
 
-    CItem::build(doc, repr);
+    SPItem::build(doc, repr);
 
     this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
 }
@@ -99,7 +97,7 @@ void SPText::release() {
     this->attributes.~TextTagAttributes();
     this->layout.~Layout();
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPText::set(unsigned int key, const gchar* value) {
@@ -121,27 +119,27 @@ void SPText::set(unsigned int key, const gchar* value) {
                 break;
 
             default:
-                CItem::set(key, value);
+                SPItem::set(key, value);
                 break;
         }
     }
 }
 
 void SPText::child_added(Inkscape::XML::Node *rch, Inkscape::XML::Node *ref) {
-    CItem::child_added(rch, ref);
+    SPItem::child_added(rch, ref);
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
 void SPText::remove_child(Inkscape::XML::Node *rch) {
-    CItem::remove_child(rch);
+    SPItem::remove_child(rch);
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
 
 void SPText::update(SPCtx *ctx, guint flags) {
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
 
@@ -193,7 +191,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
 }
 
 void SPText::modified(guint flags) {
-//	CItem::onModified(flags);
+//	SPItem::onModified(flags);
 
     guint cflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
 
@@ -294,7 +292,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         this->getRepr()->setAttribute("sodipodi:linespacing", NULL);
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -324,7 +322,7 @@ Inkscape::DrawingItem* SPText::show(Inkscape::Drawing &drawing, unsigned key, un
 
 
 void SPText::hide(unsigned int key) {
-//	CItem::onHide(key);
+//	SPItem::onHide(key);
 }
 
 

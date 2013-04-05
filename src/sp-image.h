@@ -26,7 +26,7 @@
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-class SPImage : public SPItem, public CItem {
+class SPImage : public SPItem {
 public:
 	SPImage();
 	virtual ~SPImage();

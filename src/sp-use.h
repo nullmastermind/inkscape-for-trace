@@ -23,7 +23,7 @@
 
 class SPUseReference;
 
-class SPUse : public SPItem, public CItem {
+class SPUse : public SPItem {
 public:
 	SPUse();
 	virtual ~SPUse();

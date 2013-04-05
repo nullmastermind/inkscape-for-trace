@@ -43,7 +43,6 @@ namespace {
 }
 
 SPStar::SPStar() : SPPolygon() {
-	this->citem = this;
 	this->cobject = this;
 
 	this->sides = 5;

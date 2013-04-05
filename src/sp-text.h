@@ -30,7 +30,7 @@
 
 
 /* SPText */
-class SPText : public SPItem, public CItem {
+class SPText : public SPItem {
 public:
 	SPText();
 	virtual ~SPText();

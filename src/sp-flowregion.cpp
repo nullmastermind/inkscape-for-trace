@@ -41,9 +41,7 @@ namespace {
 static void         GetDest(SPObject* child,Shape **computed);
 
 
-SPFlowregion::SPFlowregion() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPFlowregion::SPFlowregion() : SPItem() {
 	this->cobject = this;
 
 	new (&this->computed) std::vector<Shape*>;
@@ -58,7 +56,7 @@ SPFlowregion::~SPFlowregion() {
 }
 
 void SPFlowregion::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	CItem::child_added(child, ref);
+	SPItem::child_added(child, ref);
 
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -66,7 +64,7 @@ void SPFlowregion::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *
 /* fixme: hide (Lauris) */
 
 void SPFlowregion::remove_child(Inkscape::XML::Node * child) {
-	CItem::remove_child(child);
+	SPItem::remove_child(child);
 
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -76,7 +74,7 @@ void SPFlowregion::update(SPCtx *ctx, unsigned int flags) {
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -187,7 +185,7 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
         }
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -200,9 +198,7 @@ gchar* SPFlowregion::description() {
 /*
  *
  */
-SPFlowregionExclude::SPFlowregionExclude() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPFlowregionExclude::SPFlowregionExclude() : SPItem() {
 	this->cobject = this;
 
 	this->computed = NULL;
@@ -216,7 +212,7 @@ SPFlowregionExclude::~SPFlowregionExclude() {
 }
 
 void SPFlowregionExclude::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	CItem::child_added(child, ref);
+	SPItem::child_added(child, ref);
 
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -224,7 +220,7 @@ void SPFlowregionExclude::child_added(Inkscape::XML::Node *child, Inkscape::XML:
 /* fixme: hide (Lauris) */
 
 void SPFlowregionExclude::remove_child(Inkscape::XML::Node * child) {
-	CItem::remove_child(child);
+	SPItem::remove_child(child);
 
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -234,7 +230,7 @@ void SPFlowregionExclude::update(SPCtx *ctx, unsigned int flags) {
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -341,7 +337,7 @@ Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc
         }
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }

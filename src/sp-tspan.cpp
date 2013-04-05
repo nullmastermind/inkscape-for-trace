@@ -61,9 +61,7 @@ namespace {
 /*#####################################################
 #  SPTSPAN
 #####################################################*/
-SPTSpan::SPTSpan() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPTSpan::SPTSpan() : SPItem() {
 	this->cobject = this;
 
     this->role = SP_TSPAN_ROLE_UNSPECIFIED;
@@ -81,13 +79,13 @@ void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "rotate" );
     this->readAttr( "sodipodi:role" );
 
-    CItem::build(doc, repr);
+    SPItem::build(doc, repr);
 }
 
 void SPTSpan::release() {
     this->attributes.~TextTagAttributes();
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPTSpan::set(unsigned int key, const gchar* value) {
@@ -104,14 +102,14 @@ void SPTSpan::set(unsigned int key, const gchar* value) {
                 break;
                 
             default:
-                CItem::set(key, value);
+                SPItem::set(key, value);
                 break;
         }
     }
 }
 
 void SPTSpan::update(SPCtx *ctx, guint flags) {
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -127,7 +125,7 @@ void SPTSpan::update(SPCtx *ctx, guint flags) {
 }
 
 void SPTSpan::modified(unsigned int flags) {
-//    CItem::onModified(flags);
+//    SPItem::onModified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -215,7 +213,7 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
         }
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -230,9 +228,7 @@ gchar* SPTSpan::description() {
 #####################################################*/
 void   refresh_textpath_source(SPTextPath* offset);
 
-SPTextPath::SPTextPath() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPTextPath::SPTextPath() : SPItem() {
 	this->cobject = this;
 
     new (&this->attributes) TextTagAttributes;
@@ -275,7 +271,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
         repr->addChild(rch, NULL);
     }
 
-    CItem::build(doc, repr);
+    SPItem::build(doc, repr);
 }
 
 void SPTextPath::release() {
@@ -287,7 +283,7 @@ void SPTextPath::release() {
 
     this->originalPath = NULL;
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPTextPath::set(unsigned int key, const gchar* value) {
@@ -303,7 +299,7 @@ void SPTextPath::set(unsigned int key, const gchar* value) {
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 break;
             default:
-                CItem::set(key, value);
+                SPItem::set(key, value);
                 break;
         }
     }
@@ -318,7 +314,7 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
 
     this->isUpdating = false;
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -358,7 +354,7 @@ void   refresh_textpath_source(SPTextPath* tp)
 }
 
 void SPTextPath::modified(unsigned int flags) {
-//    CItem::onModified(flags);
+//    SPItem::onModified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -431,7 +427,7 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
         }
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }

@@ -19,7 +19,7 @@ class DrawingGroup;
 
 } // namespace Inkscape
 
-class SPFlowtext : public SPItem, public CItem {
+class SPFlowtext : public SPItem {
 public:
 	SPFlowtext();
 	virtual ~SPFlowtext();

@@ -56,7 +56,6 @@
 static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *ai);
 
 SPShape::SPShape() : SPLPEItem() {
-	this->citem = this;
 	this->cobject = this;
 
     for ( int i = 0 ; i < SP_MARKER_LOC_QTY ; i++ ) {

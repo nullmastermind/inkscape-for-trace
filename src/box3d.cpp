@@ -54,7 +54,6 @@ namespace {
 }
 
 SPBox3D::SPBox3D() : SPGroup() {
-	this->citem = this;
 	this->cobject = this;
 
 	this->my_counter = 0;

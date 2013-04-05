@@ -17,7 +17,7 @@ class Shape;
 class flow_dest;
 class FloatLigne;
 
-class SPFlowregion : public SPItem, public CItem {
+class SPFlowregion : public SPItem {
 public:
 	SPFlowregion();
 	virtual ~SPFlowregion();
@@ -34,7 +34,7 @@ public:
 	virtual gchar *description();
 };
 
-class SPFlowregionExclude : public SPItem, public CItem {
+class SPFlowregionExclude : public SPItem {
 public:
 	SPFlowregionExclude();
 	virtual ~SPFlowregionExclude();

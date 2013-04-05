@@ -36,7 +36,6 @@ namespace {
 }
 
 SPSwitch::SPSwitch() : SPGroup() {
-    this->citem = this;
     this->cobject = this;
 
     this->_cached_item = 0;

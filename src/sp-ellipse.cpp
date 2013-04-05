@@ -89,7 +89,6 @@ static double sp_round(double x, double y)
 static gboolean sp_arc_set_elliptical_path_attribute(SPArc *arc, Inkscape::XML::Node *repr);
 
 SPGenericEllipse::SPGenericEllipse() : SPShape() {
-	this->citem = this;
 	this->cobject = this;
 
     this->cx.unset();
@@ -365,7 +364,6 @@ Inkscape::XML::Node* SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
 
 /* SVG <ellipse> element */
 SPEllipse::SPEllipse() : SPGenericEllipse() {
-	this->citem = this;
 	this->cobject = this;
 }
 
@@ -457,7 +455,6 @@ sp_ellipse_position_set(SPEllipse *ellipse, gdouble x, gdouble y, gdouble rx, gd
 
 /* SVG <circle> element */
 SPCircle::SPCircle() : SPGenericEllipse() {
-	this->citem = this;
 	this->cobject = this;
 }
 
@@ -520,7 +517,6 @@ gchar* SPCircle::description() {
 
 /* <path sodipodi:type="arc"> element */
 SPArc::SPArc() : SPGenericEllipse() {
-	this->citem = this;
 	this->cobject = this;
 }
 

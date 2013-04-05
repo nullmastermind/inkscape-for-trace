@@ -18,7 +18,7 @@ enum {
     SP_TSPAN_ROLE_LINE
 };
 
-class SPTSpan : public SPItem, public CItem {
+class SPTSpan : public SPItem {
 public:
 	SPTSpan();
 	virtual ~SPTSpan();

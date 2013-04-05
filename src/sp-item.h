@@ -99,19 +99,11 @@ public:
     Geom::Affine i2vp;
 };
 
-class SPItem;
-class SPItemClass;
-class CItem;
-
-#define SP_TYPE_ITEM (sp_item_get_type ())
 #define SP_ITEM(obj) ((SPItem*)obj)
-//#define SP_IS_ITEM(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPItem)))
 #define SP_IS_ITEM(obj) (dynamic_cast<const SPItem*>((SPObject*)obj))
 
-GType sp_item_get_type() G_GNUC_CONST;
-
 /** Abstract base class for all visible shapes. */
-class SPItem : public SPObject {
+class SPItem : public SPObject, public CObject {
 public:
     enum BBoxType {
         // legacy behavior: includes crude stroke, markers; excludes long miters, blur margin; is known to be wrong for caps
@@ -123,7 +115,7 @@ public:
     };
 
     SPItem();
-    CItem* citem;
+    virtual ~SPItem();
 
     unsigned int sensitive : 1;
     unsigned int stop_paint: 1;
@@ -147,7 +139,6 @@ public:
 
     sigc::signal<void, Geom::Affine const *, SPItem *> _transformed_signal;
 
-    void init();
     bool isLocked() const;
     void setLocked(bool lock);
 
@@ -197,7 +188,7 @@ public:
     Geom::OptRect desktopBounds(BBoxType type) const;
 
     unsigned pos_in_parent();
-    gchar *description();
+    gchar *getDetailedDescription();
     int ifilt();
     void invoke_print(SPPrintContext *ctx);
     static unsigned int display_key_new(unsigned int numkeys);
@@ -221,7 +212,7 @@ public:
     Geom::Affine i2dt_affine() const;
     void set_i2d_affine(Geom::Affine const &transform);
     Geom::Affine dt2i_affine() const;
-    void convert_to_guides();
+    //void convert_to_guides();
 
 private:
     enum EvaluatedStatus
@@ -236,26 +227,7 @@ private:
     static void clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
     static void mask_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
-    friend class SPItemClass;
-    friend class CItem;
-};
-
-/// The SPItem vtable.
-class SPItemClass {
 public:
-    SPObjectClass parent_class;
-
-	private:
-	friend class SPItem;
-	friend class CItem;
-};
-
-
-class CItem : public CObject {
-public:
-	CItem(SPItem* item);
-	virtual ~CItem();
-
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void set(unsigned int key, gchar const* value);
@@ -271,9 +243,6 @@ public:
     virtual Geom::Affine set_transform(Geom::Affine const &transform);
     virtual void convert_to_guides();
     virtual gint event(SPEvent *event);
-
-protected:
-	SPItem* spitem;
 };
 
 

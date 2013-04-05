@@ -38,7 +38,7 @@ namespace LivePathEffect{
 
 typedef std::list<Inkscape::LivePathEffect::LPEObjectReference *> PathEffectList;
 
-class SPLPEItem : public SPItem, public CItem {
+class SPLPEItem : public SPItem {
 public:
 	SPLPEItem();
 	virtual ~SPLPEItem();

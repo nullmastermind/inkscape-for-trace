@@ -49,9 +49,7 @@ typedef std::list<std::string> HRefList;
 static std::string patheffectlist_write_svg(PathEffectList const & list);
 static std::string hreflist_write_svg(HRefList const & list);
 
-SPLPEItem::SPLPEItem() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPLPEItem::SPLPEItem() : SPItem() {
 	this->cobject = this;
 
     this->path_effects_enabled = 1;
@@ -68,7 +66,7 @@ SPLPEItem::~SPLPEItem() {
 void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	this->readAttr( "inkscape:path-effect" );
 
-    CItem::build(document, repr);
+    SPItem::build(document, repr);
 }
 
 void SPLPEItem::release() {
@@ -95,7 +93,7 @@ void SPLPEItem::release() {
     delete this->path_effect_list;
     this->path_effect_list = NULL;
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPLPEItem::set(unsigned int key, gchar const* value) {
@@ -163,13 +161,13 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
             break;
 
         default:
-            CItem::set(key, value);
+            SPItem::set(key, value);
             break;
     }
 }
 
 void SPLPEItem::update(SPCtx* ctx, unsigned int flags) {
-	CItem::update(ctx, flags);
+	SPItem::update(ctx, flags);
 
 	// update the helperpaths of all LPEs applied to the item
     // TODO: re-add for the new node tool
@@ -180,7 +178,7 @@ void SPLPEItem::modified(unsigned int flags) {
         sp_lpe_item_update_patheffect(this, true, true);
     }
 
-//    CItem::onModified(flags);
+//    SPItem::onModified(flags);
 }
 
 Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -193,7 +191,7 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
         }
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -579,7 +577,7 @@ void sp_lpe_item_edit_next_param_oncanvas(SPLPEItem *lpeitem, SPDesktop *dt)
 }
 
 void SPLPEItem::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-    CItem::child_added(child, ref);
+    SPItem::child_added(child, ref);
 
     if (sp_lpe_item_has_path_effect_recursive(this)) {
         SPObject *ochild = this->get_child_by_repr(child);
@@ -598,7 +596,7 @@ void SPLPEItem::remove_child(Inkscape::XML::Node * child) {
         }
     }
 
-    CItem::remove_child(child);
+    SPItem::remove_child(child);
 }
 
 static std::string patheffectlist_write_svg(PathEffectList const & list)

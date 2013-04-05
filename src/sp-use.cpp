@@ -52,9 +52,7 @@ namespace {
 	bool useRegistered = SPFactory::instance().registerObject("svg:use", createUse);
 }
 
-SPUse::SPUse() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPUse::SPUse() : SPItem() {
 	this->cobject = this;
 
 	this->child = NULL;
@@ -92,7 +90,7 @@ SPUse::~SPUse() {
 }
 
 void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    CItem::build(document, repr);
+    SPItem::build(document, repr);
 
     this->readAttr( "x" );
     this->readAttr( "y" );
@@ -120,7 +118,7 @@ void SPUse::release() {
 
     this->ref->detach();
 
-    CItem::release();
+    SPItem::release();
 }
 
 void SPUse::set(unsigned int key, const gchar* value) {
@@ -171,7 +169,7 @@ void SPUse::set(unsigned int key, const gchar* value) {
         }
 
         default:
-            CItem::set(key, value);
+            SPItem::set(key, value);
             break;
     }
 }
@@ -181,7 +179,7 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
         repr = xml_doc->createElement("svg:use");
     }
 
-    CItem::write(xml_doc, repr, flags);
+    SPItem::write(xml_doc, repr, flags);
 
     sp_repr_set_svg_double(repr, "x", this->x.computed);
     sp_repr_set_svg_double(repr, "y", this->y.computed);
@@ -253,7 +251,7 @@ gchar* SPUse::description() {
         }
 
         ++recursion_depth;
-        char *child_desc = SP_ITEM(this->child)->description();
+        char *child_desc = SP_ITEM(this->child)->getDetailedDescription();
         --recursion_depth;
 
         ret = g_strdup_printf(_("<b>Clone</b> of: %s"), child_desc);
@@ -288,7 +286,7 @@ void SPUse::hide(unsigned int key) {
         SP_ITEM(this->child)->invoke_hide(key);
     }
 
-//  CItem::onHide(key);
+//  SPItem::onHide(key);
 }
 
 
@@ -508,7 +506,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -702,7 +700,7 @@ void SPUse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::S
         return;
     }
 
-    root->citem->snappoints(p, snapprefs);
+    root->snappoints(p, snapprefs);
 }
 
 

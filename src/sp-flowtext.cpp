@@ -43,9 +43,7 @@ namespace {
 	bool flowtextRegistered = SPFactory::instance().registerObject("svg:flowRoot", createFlowtext);
 }
 
-SPFlowtext::SPFlowtext() : SPItem(), CItem(this) {
-	delete this->citem;
-	this->citem = this;
+SPFlowtext::SPFlowtext() : SPItem() {
 	this->cobject = this;
 
     this->par_indent = 0;
@@ -57,7 +55,7 @@ SPFlowtext::~SPFlowtext() {
 }
 
 void SPFlowtext::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
-	CItem::child_added(child, ref);
+	SPItem::child_added(child, ref);
 
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -66,7 +64,7 @@ void SPFlowtext::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* re
 /* fixme: hide (Lauris) */
 
 void SPFlowtext::remove_child(Inkscape::XML::Node* child) {
-	CItem::remove_child(child);
+	SPItem::remove_child(child);
 
 	this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -75,7 +73,7 @@ void SPFlowtext::update(SPCtx* ctx, unsigned int flags) {
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
-    CItem::update(ctx, flags);
+    SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     flags &= SP_OBJECT_MODIFIED_CASCADE;
@@ -159,7 +157,7 @@ void SPFlowtext::modified(unsigned int flags) {
 void SPFlowtext::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     this->_requireSVGVersion(Inkscape::Version(1, 2));
 
-    CItem::build(doc, repr);
+    SPItem::build(doc, repr);
 
     this->readAttr( "inkscape:layoutOptions" );     // must happen after css has been read
 }
@@ -217,7 +215,7 @@ void SPFlowtext::set(unsigned int key, const gchar* value) {
         }
 
         default:
-        	CItem::set(key, value);
+        	SPItem::set(key, value);
             break;
     }
 }
@@ -255,7 +253,7 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
         }
     }
 
-    CItem::write(doc, repr, flags);
+    SPItem::write(doc, repr, flags);
 
     return repr;
 }
@@ -326,7 +324,7 @@ Inkscape::DrawingItem* SPFlowtext::show(Inkscape::Drawing &drawing, unsigned int
 }
 
 void SPFlowtext::hide(unsigned int key) {
-	CItem::hide(key);
+	SPItem::hide(key);
 }
 
 
