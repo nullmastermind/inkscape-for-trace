@@ -33,12 +33,6 @@ namespace {
 	bool fontRegistered = SPFactory::instance().registerObject("svg:font", createFont);
 }
 
-G_DEFINE_TYPE(SPFont, sp_font, G_TYPE_OBJECT);
-
-static void sp_font_class_init(SPFontClass *fc)
-{
-}
-
 //I think we should have extra stuff here and in the set method in order to set default value as specified at http://www.w3.org/TR/SVG/fonts.html
 
 // TODO determine better values and/or make these dynamic:
@@ -46,39 +40,25 @@ double FNT_DEFAULT_ADV = 90; // TODO determine proper default
 double FNT_DEFAULT_ASCENT = 90; // TODO determine proper default
 double FNT_UNITS_PER_EM = 90; // TODO determine proper default
 
-CFont::CFont(SPFont* font) : CObject(font) {
-	this->spfont = font;
+SPFont::SPFont() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
+
+    this->horiz_origin_x = 0;
+    this->horiz_origin_y = 0;
+    this->horiz_adv_x = FNT_DEFAULT_ADV;
+    this->vert_origin_x = FNT_DEFAULT_ADV / 2.0;
+    this->vert_origin_y = FNT_DEFAULT_ASCENT;
+    this->vert_adv_y = FNT_UNITS_PER_EM;
 }
 
-CFont::~CFont() {
+SPFont::~SPFont() {
 }
 
-SPFont::SPFont() : SPObject() {
-	SPFont* font = this;
-
-	font->cfont = new CFont(font);
-	font->typeHierarchy.insert(typeid(SPFont));
-
-	delete font->cobject;
-	font->cobject = font->cfont;
-
-    font->horiz_origin_x = 0;
-    font->horiz_origin_y = 0;
-    font->horiz_adv_x = FNT_DEFAULT_ADV;
-    font->vert_origin_x = FNT_DEFAULT_ADV / 2.0;
-    font->vert_origin_y = FNT_DEFAULT_ASCENT;
-    font->vert_adv_y = FNT_UNITS_PER_EM;
-}
-
-static void sp_font_init(SPFont *font)
-{
-	new (font) SPFont();
-}
-
-void CFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPFont* object = this->spfont;
+	SPFont* object = this;
 
 	object->readAttr( "horiz-origin-x" );
 	object->readAttr( "horiz-origin-y" );
@@ -97,8 +77,8 @@ static void sp_font_children_modified(SPFont */*sp_font*/)
 /**
  * Callback for child_added event.
  */
-void CFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFont* object = this->spfont;
+void SPFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPFont* object = this;
     SPFont *f = SP_FONT(object);
     CObject::child_added(child, ref);
 
@@ -110,8 +90,8 @@ void CFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 /**
  * Callback for remove_child event.
  */
-void CFont::remove_child(Inkscape::XML::Node* child) {
-	SPFont* object = this->spfont;
+void SPFont::remove_child(Inkscape::XML::Node* child) {
+	SPFont* object = this;
     SPFont *f = SP_FONT(object);
 
     CObject::remove_child(child);
@@ -120,17 +100,17 @@ void CFont::remove_child(Inkscape::XML::Node* child) {
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CFont::release() {
+void SPFont::release() {
     //SPFont *font = SP_FONT(object);
-	SPFont* object = this->spfont;
+	SPFont* object = this;
 
     object->document->removeResource("font", object);
 
     CObject::release();
 }
 
-void CFont::set(unsigned int key, const gchar *value) {
-	SPFont* object = this->spfont;
+void SPFont::set(unsigned int key, const gchar *value) {
+	SPFont* object = this;
     SPFont *font = SP_FONT(object);
 
     // TODO these are floating point, so some epsilon comparison would be good
@@ -198,8 +178,8 @@ void CFont::set(unsigned int key, const gchar *value) {
 /**
  * Receives update notifications.
  */
-void CFont::update(SPCtx *ctx, guint flags) {
-	SPFont* object = this->spfont;
+void SPFont::update(SPCtx *ctx, guint flags) {
+	SPFont* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
         object->readAttr( "horiz-origin-x" );
@@ -215,8 +195,8 @@ void CFont::update(SPCtx *ctx, guint flags) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CFont::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFont* object = this->spfont;
+Inkscape::XML::Node* SPFont::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFont* object = this;
     SPFont *font = SP_FONT(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {

@@ -26,38 +26,16 @@ namespace {
 	bool descRegistered = SPFactory::instance().registerObject("svg:desc", createDesc);
 }
 
-G_DEFINE_TYPE(SPDesc, sp_desc, SP_TYPE_OBJECT);
-
-static void sp_desc_class_init(SPDescClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *)(klass);
-
+SPDesc::SPDesc() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 }
 
-CDesc::CDesc(SPDesc* desc) : CObject(desc) {
-	this->spdesc = desc;
+SPDesc::~SPDesc() {
 }
 
-CDesc::~CDesc() {
-}
-
-SPDesc::SPDesc() : SPObject() {
-	SPDesc* desc = this;
-
-	desc->cdesc = new CDesc(desc);
-	desc->typeHierarchy.insert(typeid(SPDesc));
-
-	delete desc->cobject;
-	desc->cobject = desc->cdesc;
-}
-
-static void sp_desc_init(SPDesc *desc)
-{
-	new (desc) SPDesc();
-}
-
-Inkscape::XML::Node* CDesc::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
-	SPDesc* object = this->spdesc;
+Inkscape::XML::Node* SPDesc::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+	SPDesc* object = this;
 
     if (!repr) {
         repr = object->getRepr()->duplicate(doc);

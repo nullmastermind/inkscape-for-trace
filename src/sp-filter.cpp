@@ -51,66 +51,45 @@ namespace {
 	bool filterRegistered = SPFactory::instance().registerObject("svg:filter", createFilter);
 }
 
-G_DEFINE_TYPE(SPFilter, sp_filter, G_TYPE_OBJECT);
+SPFilter::SPFilter() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_filter_class_init(SPFilterClass *klass)
-{
+    this->href = new SPFilterReference(this);
+    this->href->changedSignal().connect(sigc::bind(sigc::ptr_fun(filter_ref_changed), this));
+
+    this->x = 0;
+    this->y = 0;
+    this->width = 0;
+    this->height = 0;
+
+    this->filterUnits = SP_FILTER_UNITS_OBJECTBOUNDINGBOX;
+    this->primitiveUnits = SP_FILTER_UNITS_USERSPACEONUSE;
+    this->filterUnits_set = FALSE;
+    this->primitiveUnits_set = FALSE;
+
+    this->_renderer = NULL;
+
+    this->_image_name = new std::map<gchar *, int, ltstr>;
+    this->_image_name->clear();
+    this->_image_number_next = 0;
+
+    this->filterRes = NumberOptNumber();
+
+    new (&this->modified_connection) sigc::connection();
 }
 
-CFilter::CFilter(SPFilter* filter) : CObject(filter) {
-	this->spfilter = filter;
+SPFilter::~SPFilter() {
 }
 
-CFilter::~CFilter() {
-}
-
-SPFilter::SPFilter() : SPObject() {
-	SPFilter* filter = this;
-
-	filter->cfilter = new CFilter(filter);
-	filter->typeHierarchy.insert(typeid(SPFilter));
-
-	delete filter->cobject;
-	filter->cobject = filter->cfilter;
-
-    filter->href = new SPFilterReference(filter);
-    filter->href->changedSignal().connect(sigc::bind(sigc::ptr_fun(filter_ref_changed), filter));
-
-    filter->x = 0;
-    filter->y = 0;
-    filter->width = 0;
-    filter->height = 0;
-
-    filter->filterUnits = SP_FILTER_UNITS_OBJECTBOUNDINGBOX;
-    filter->primitiveUnits = SP_FILTER_UNITS_USERSPACEONUSE;
-    filter->filterUnits_set = FALSE;
-    filter->primitiveUnits_set = FALSE;
-
-    filter->_renderer = NULL;
-
-    filter->_image_name = new std::map<gchar *, int, ltstr>;
-    filter->_image_name->clear();
-    filter->_image_number_next = 0;
-
-    filter->filterRes = NumberOptNumber();
-
-    new (&filter->modified_connection) sigc::connection();
-}
-
-static void
-sp_filter_init(SPFilter *filter)
-{
-	new (filter) SPFilter();
-}
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFilter variables.  For this to get called,
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFilter* object = this->spfilter;
+void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilter* object = this;
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
@@ -132,8 +111,8 @@ void CFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFilter::release() {
-	SPFilter* object = this->spfilter;
+void SPFilter::release() {
+	SPFilter* object = this;
     SPFilter *filter = SP_FILTER(object);
 
     if (object->document) {
@@ -160,8 +139,8 @@ void CFilter::release() {
 /**
  * Sets a specific value in the SPFilter.
  */
-void CFilter::set(unsigned int key, gchar const *value) {
-	SPFilter* object = this->spfilter;
+void SPFilter::set(unsigned int key, gchar const *value) {
+	SPFilter* object = this;
     SPFilter *filter = SP_FILTER(object);
 
     switch (key) {
@@ -235,7 +214,7 @@ void CFilter::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFilter::update(SPCtx *ctx, guint flags) {
+void SPFilter::update(SPCtx *ctx, guint flags) {
     //SPFilter *filter = SP_FILTER(object);
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -251,8 +230,8 @@ void CFilter::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFilter::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFilter* object = this->spfilter;
+Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFilter* object = this;
     SPFilter *filter = SP_FILTER(object);
 
     // Original from sp-item-group.cpp
@@ -371,8 +350,8 @@ static void filter_ref_modified(SPObject */*href*/, guint /*flags*/, SPFilter *f
 /**
  * Callback for child_added event.
  */
-void CFilter::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFilter* object = this->spfilter;
+void SPFilter::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPFilter* object = this;
     //SPFilter *f = SP_FILTER(object);
 
 	CObject::child_added(child, ref);
@@ -383,8 +362,8 @@ void CFilter::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) 
 /**
  * Callback for remove_child event.
  */
-void CFilter::remove_child(Inkscape::XML::Node *child) {
-	SPFilter* object = this->spfilter;
+void SPFilter::remove_child(Inkscape::XML::Node *child) {
+	SPFilter* object = this;
 	//    SPFilter *f = SP_FILTER(object);
 
 	CObject::remove_child(child);

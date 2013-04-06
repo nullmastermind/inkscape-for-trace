@@ -66,60 +66,45 @@ namespace {
 	bool guideRegistered = SPFactory::instance().registerObject("sodipodi:guide", createGuide);
 }
 
-G_DEFINE_TYPE(SPGuide, sp_guide, G_TYPE_OBJECT);
+//static void sp_guide_class_init(SPGuideClass *gc)
+//{
+//    GObjectClass *gobject_class = (GObjectClass *) gc;
+//
+//    gobject_class->set_property = sp_guide_set_property;
+//    gobject_class->get_property = sp_guide_get_property;
+//
+//    g_object_class_install_property(gobject_class,
+//                                    PROP_COLOR,
+//                                    g_param_spec_uint("color", "Color", "Color",
+//                                                      0,
+//                                                      0xffffffff,
+//                                                      0xff000000,
+//                                                      (GParamFlags) G_PARAM_READWRITE));
+//
+//    g_object_class_install_property(gobject_class,
+//                                    PROP_HICOLOR,
+//                                    g_param_spec_uint("hicolor", "HiColor", "HiColor",
+//                                                      0,
+//                                                      0xffffffff,
+//                                                      0xff000000,
+//                                                      (GParamFlags) G_PARAM_READWRITE));
+//}
+// CPPIFY: properties!
 
-static void sp_guide_class_init(SPGuideClass *gc)
-{
-    GObjectClass *gobject_class = (GObjectClass *) gc;
+SPGuide::SPGuide() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-    gobject_class->set_property = sp_guide_set_property;
-    gobject_class->get_property = sp_guide_get_property;
+	this->label = NULL;
+	this->views = NULL;
 
-    g_object_class_install_property(gobject_class,
-                                    PROP_COLOR,
-                                    g_param_spec_uint("color", "Color", "Color",
-                                                      0,
-                                                      0xffffffff,
-                                                      0xff000000,
-                                                      (GParamFlags) G_PARAM_READWRITE));
-
-    g_object_class_install_property(gobject_class,
-                                    PROP_HICOLOR,
-                                    g_param_spec_uint("hicolor", "HiColor", "HiColor",
-                                                      0,
-                                                      0xffffffff,
-                                                      0xff000000,
-                                                      (GParamFlags) G_PARAM_READWRITE));
+    this->normal_to_line = Geom::Point(0.,1.);
+    this->point_on_line = Geom::Point(0.,0.);
+    this->color = 0x0000ff7f;
+    this->hicolor = 0xff00007f;
 }
 
-CGuide::CGuide(SPGuide* guide) : CObject(guide) {
-	this->spguide = guide;
-}
-
-CGuide::~CGuide() {
-}
-
-SPGuide::SPGuide() : SPObject() {
-	SPGuide* guide = this;
-
-	guide->cguide = new CGuide(guide);
-	guide->typeHierarchy.insert(typeid(SPGuide));
-
-	delete guide->cobject;
-	guide->cobject = guide->cguide;
-
-	guide->label = NULL;
-	guide->views = NULL;
-
-    guide->normal_to_line = Geom::Point(0.,1.);
-    guide->point_on_line = Geom::Point(0.,0.);
-    guide->color = 0x0000ff7f;
-    guide->hicolor = 0xff00007f;
-}
-
-static void sp_guide_init(SPGuide *guide)
-{
-	new (guide) SPGuide();
+SPGuide::~SPGuide() {
 }
 
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec */*pspec*/)
@@ -154,10 +139,10 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
     }
 }
 
-void CGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPGuide* object = this->spguide;
+	SPGuide* object = this;
 
     object->readAttr( "inkscape:label" );
     object->readAttr( "orientation" );
@@ -167,8 +152,8 @@ void CGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
     document->addResource("guide", object);
 }
 
-void CGuide::release() {
-	SPGuide* object = this->spguide;
+void SPGuide::release() {
+	SPGuide* object = this;
     SPGuide *guide = (SPGuide *) object;
 
     while (guide->views) {
@@ -184,8 +169,8 @@ void CGuide::release() {
     CObject::release();
 }
 
-void CGuide::set(unsigned int key, const gchar *value) {
-	SPGuide* object = this->spguide;
+void SPGuide::set(unsigned int key, const gchar *value) {
+	SPGuide* object = this;
     SPGuide *guide = SP_GUIDE(object);
 
     switch (key) {

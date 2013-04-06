@@ -29,43 +29,23 @@ namespace {
 	bool missingGlyphRegistered = SPFactory::instance().registerObject("svg:missing-glyph", createMissingGlyph);
 }
 
-G_DEFINE_TYPE(SPMissingGlyph, sp_missing_glyph, G_TYPE_OBJECT);
-
-static void sp_missing_glyph_class_init(SPMissingGlyphClass *gc)
-{
-}
-
-CMissingGlyph::CMissingGlyph(SPMissingGlyph* mg) : CObject(mg) {
-	this->spmissingglyph = mg;
-}
-
-CMissingGlyph::~CMissingGlyph() {
-}
-
-SPMissingGlyph::SPMissingGlyph() : SPObject() {
-	SPMissingGlyph* glyph = this;
-
-	glyph->cmissingglyph = new CMissingGlyph(glyph);
-	glyph->typeHierarchy.insert(typeid(SPMissingGlyph));
-
-	delete glyph->cobject;
-	glyph->cobject = glyph->cmissingglyph;
+SPMissingGlyph::SPMissingGlyph() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
 //TODO: correct these values:
-    glyph->d = NULL;
-    glyph->horiz_adv_x = 0;
-    glyph->vert_origin_x = 0;
-    glyph->vert_origin_y = 0;
-    glyph->vert_adv_y = 0;
+    this->d = NULL;
+    this->horiz_adv_x = 0;
+    this->vert_origin_x = 0;
+    this->vert_origin_y = 0;
+    this->vert_adv_y = 0;
 }
 
-static void sp_missing_glyph_init(SPMissingGlyph *glyph)
-{
-	new (glyph) SPMissingGlyph();
+SPMissingGlyph::~SPMissingGlyph() {
 }
 
-void CMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPMissingGlyph* object = this->spmissingglyph;
+void SPMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPMissingGlyph* object = this;
 
     CObject::build(doc, repr);
 
@@ -76,13 +56,13 @@ void CMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     object->readAttr( "vert-adv-y" );
 }
 
-void CMissingGlyph::release() {
+void SPMissingGlyph::release() {
 	CObject::release();
 }
 
 
-void CMissingGlyph::set(unsigned int key, const gchar* value) {
-	SPMissingGlyph* object = this->spmissingglyph;
+void SPMissingGlyph::set(unsigned int key, const gchar* value) {
+	SPMissingGlyph* object = this;
 
     SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
 
@@ -142,8 +122,8 @@ void CMissingGlyph::set(unsigned int key, const gchar* value) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CMissingGlyph::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
-	SPMissingGlyph* object = this->spmissingglyph;
+Inkscape::XML::Node* SPMissingGlyph::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+	SPMissingGlyph* object = this;
 
 	//    SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
 

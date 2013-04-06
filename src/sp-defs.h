@@ -15,46 +15,19 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_DEFS            (sp_defs_get_type())
 #define SP_DEFS(obj) ((SPDefs*)obj)
-#define SP_IS_DEFS(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPDefs)))
+#define SP_IS_DEFS(obj) (dynamic_cast<const SPDefs*>((SPObject*)obj))
 
-GType sp_defs_get_type(void) G_GNUC_CONST;
-
-class CDefs;
-
-class SPDefs : public SPObject {
+class SPDefs : public SPObject, public CObject {
 public:
 	SPDefs();
-	CDefs* cdefs;
-
-private:
-    friend class SPDefsClass;	
-};
-
-class SPDefsClass {
-public:
-    SPObjectClass parent_class;
-
-private:
-    friend class SPDefs;	
-};
-
-
-class CDefs : public CObject {
-public:
-	CDefs(SPDefs* defs);
-	virtual ~CDefs();
+	virtual ~SPDefs();
 
 	virtual void release();
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-protected:
-	SPDefs* spdefs;
 };
-
 
 #endif // !SEEN_SP_DEFS_H
 

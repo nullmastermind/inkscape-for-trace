@@ -24,27 +24,15 @@ class ColorProfileImpl;
 
 
 /**
- * The SPColorProfile vtable.
- */
-struct ColorProfileClass {
-    SPObjectClass parent_class;
-};
-
-class CColorProfile;
-
-/**
  * Color Profile.
  */
-class ColorProfile : public SPObject {
+class ColorProfile : public SPObject, public CObject {
 public:
 	ColorProfile();
-	CColorProfile* ccolorprofile;
+	virtual ~ColorProfile();
 
     friend cmsHPROFILE colorprofile_get_handle( SPDocument*, guint*, gchar const* );
     friend class CMSSystem;
-
-    static GType getType();
-    static void classInit( ColorProfileClass *klass );
 
     static std::vector<Glib::ustring> getBaseProfileDirs();
     static std::vector<Glib::ustring> getProfileFiles();
@@ -67,17 +55,8 @@ public:
     gchar* intentStr;
     guint rendering_intent;
 
-private:
-    static void init( ColorProfile *cprof );
-
 public:
     ColorProfileImpl *impl;
-};
-
-class CColorProfile : public CObject {
-public:
-	CColorProfile(ColorProfile* cp);
-	virtual ~CColorProfile();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -85,13 +64,7 @@ public:
 	virtual void set(unsigned int key, const gchar* value);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	ColorProfile* colorprofile;
 };
-
-
-GType colorprofile_get_type();
 
 } // namespace Inkscape
 

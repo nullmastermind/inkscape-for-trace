@@ -22,21 +22,13 @@ namespace Inkscape {
     }
 }
 
-#define TYPE_LIVEPATHEFFECT  (LivePathEffectObject::livepatheffect_get_type())
 #define LIVEPATHEFFECT(obj) ((LivePathEffectObject*)obj)
-#define IS_LIVEPATHEFFECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(LivePathEffectObject)))
+#define IS_LIVEPATHEFFECT(obj) (dynamic_cast<const LivePathEffectObject*>((SPObject*)obj))
 
-/// The LivePathEffect vtable.
-struct LivePathEffectObjectClass {
-    SPObjectClass parent_class;
-};
-
-class CLivePathEffectObject;
-
-class LivePathEffectObject : public SPObject {
+class LivePathEffectObject : public SPObject, public CObject {
 public:
 	LivePathEffectObject();
-	CLivePathEffectObject* clivepatheffectobject;
+	virtual ~LivePathEffectObject();
 
     Inkscape::LivePathEffect::EffectType effecttype;
 
@@ -51,29 +43,12 @@ public:
 //private:
     Inkscape::LivePathEffect::Effect *lpe; // this can be NULL in a valid LivePathEffectObject
 
-    /* C-style class functions: */
-//public:
-    static GType livepatheffect_get_type();
-//private:
-    static void livepatheffect_class_init(LivePathEffectObjectClass *klass);
-    static void livepatheffect_init(LivePathEffectObject *stop);
-};
-
-
-class CLivePathEffectObject : public CObject {
-public:
-	CLivePathEffectObject(LivePathEffectObject* lpeo);
-	virtual ~CLivePathEffectObject();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
 	virtual void set(unsigned int key, const gchar* value);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	LivePathEffectObject* livepatheffectobject;
 };
 
 #endif

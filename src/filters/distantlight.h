@@ -17,18 +17,14 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_FEDISTANTLIGHT (sp_fedistantlight_get_type())
 #define SP_FEDISTANTLIGHT(obj) ((SPFeDistantLight*)obj)
-#define SP_IS_FEDISTANTLIGHT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeDistantLight)))
+#define SP_IS_FEDISTANTLIGHT(obj) (dynamic_cast<const SPFeDistantLight*>((SPObject*)obj))
 
 /* Distant light class */
-
-class CFeDistantLight;
-
-class SPFeDistantLight : public SPObject {
+class SPFeDistantLight : public SPObject, public CObject {
 public:
 	SPFeDistantLight();
-	CFeDistantLight* cfedistantlight;
+	virtual ~SPFeDistantLight();
 
     /** azimuth attribute */
     gfloat azimuth;
@@ -36,12 +32,6 @@ public:
     /** elevation attribute */
     gfloat elevation;
     guint elevation_set : 1;
-};
-
-class CFeDistantLight : public CObject {
-public:
-	CFeDistantLight(SPFeDistantLight* distantlight);
-	virtual ~CFeDistantLight();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -51,17 +41,8 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFeDistantLight* spfedistantlight;
 };
 
-struct SPFeDistantLightClass {
-    SPObjectClass parent_class;
-};
-
-GType
-sp_fedistantlight_get_type();
 #endif /* !SP_FEDISTANTLIGHT_H_SEEN */
 
 /*

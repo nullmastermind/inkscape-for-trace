@@ -269,90 +269,68 @@ namespace {
 	bool fontFaceRegistered = SPFactory::instance().registerObject("svg:font-face", createFontFace);
 }
 
-G_DEFINE_TYPE(SPFontFace, sp_fontface, G_TYPE_OBJECT);
-
-static void sp_fontface_class_init(SPFontFaceClass *fc)
-{
-}
-
-CFontFace::CFontFace(SPFontFace* face) : CObject(face) {
-	this->spfontface = face;
-}
-
-CFontFace::~CFontFace() {
-}
-
-SPFontFace::SPFontFace() : SPObject() {
-	SPFontFace* face = this;
-
-	face->cfontface = new CFontFace(face);
-	face->typeHierarchy.insert(typeid(SPFontFace));
-
-	delete face->cobject;
-	face->cobject = face->cfontface;
+SPFontFace::SPFontFace() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
     std::vector<FontFaceStyleType> style;
     style.push_back(SP_FONTFACE_STYLE_ALL);
-    face->font_style = style;
+    this->font_style = style;
 
     std::vector<FontFaceVariantType> variant;
     variant.push_back(SP_FONTFACE_VARIANT_NORMAL);
-    face->font_variant = variant;
+    this->font_variant = variant;
 
     std::vector<FontFaceWeightType> weight;
     weight.push_back(SP_FONTFACE_WEIGHT_ALL);
-    face->font_weight = weight;
+    this->font_weight = weight;
 
     std::vector<FontFaceStretchType> stretch;
     stretch.push_back(SP_FONTFACE_STRETCH_NORMAL);
-    face->font_stretch = stretch;
-    face->font_family = NULL;
+    this->font_stretch = stretch;
+    this->font_family = NULL;
 
-    //face->font_style = ;
-    //face->font_variant = ;
-    //face->font_weight = ;
-    //face->font_stretch = ;
-    face->font_size = NULL;
-    //face->unicode_range = ;
-    face->units_per_em = 1000;
-    //face->panose_1 = ;
-    face->stemv = 0;
-    face->stemh = 0;
-    face->slope = 0;
-    face->cap_height = 0;
-    face->x_height = 0;
-    face->accent_height = 0;
-    face->ascent = 0;
-    face->descent = 0;
-    face->widths = NULL;
-    face->bbox = NULL;
-    face->ideographic = 0;
-    face->alphabetic = 0;
-    face->mathematical = 0;
-    face->hanging = 0;
-    face->v_ideographic = 0;
-    face->v_alphabetic = 0;
-    face->v_mathematical = 0;
-    face->v_hanging = 0;
-    face->underline_position = 0;
-    face->underline_thickness = 0;
-    face->strikethrough_position = 0;
-    face->strikethrough_thickness = 0;
-    face->overline_position = 0;
-    face->overline_thickness = 0;
-
+    //this->font_style = ;
+    //this->font_variant = ;
+    //this->font_weight = ;
+    //this->font_stretch = ;
+    this->font_size = NULL;
+    //this->unicode_range = ;
+    this->units_per_em = 1000;
+    //this->panose_1 = ;
+    this->stemv = 0;
+    this->stemh = 0;
+    this->slope = 0;
+    this->cap_height = 0;
+    this->x_height = 0;
+    this->accent_height = 0;
+    this->ascent = 0;
+    this->descent = 0;
+    this->widths = NULL;
+    this->bbox = NULL;
+    this->ideographic = 0;
+    this->alphabetic = 0;
+    this->mathematical = 0;
+    this->hanging = 0;
+    this->v_ideographic = 0;
+    this->v_alphabetic = 0;
+    this->v_mathematical = 0;
+    this->v_hanging = 0;
+    this->underline_position = 0;
+    this->underline_thickness = 0;
+    this->strikethrough_position = 0;
+    this->strikethrough_thickness = 0;
+    this->overline_position = 0;
+    this->overline_thickness = 0;
 }
 
-static void sp_fontface_init(SPFontFace *face)
-{
-	new (face) SPFontFace();
+SPFontFace::~SPFontFace() {
 }
 
-
-void CFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPFontFace* object = this->spfontface;
+	SPFontFace* object = this;
 
 	object->readAttr( "font-family" );
 	object->readAttr( "font-style" );
@@ -396,8 +374,8 @@ static void sp_fontface_children_modified(SPFontFace */*sp_fontface*/)
 /**
  * Callback for child_added event.
  */
-void CFontFace::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFontFace* object = this->spfontface;
+void SPFontFace::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPFontFace* object = this;
 
     SPFontFace *f = SP_FONTFACE(object);
 
@@ -411,8 +389,8 @@ void CFontFace::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref
 /**
  * Callback for remove_child event.
  */
-void CFontFace::remove_child(Inkscape::XML::Node *child) {
-	SPFontFace* object = this->spfontface;
+void SPFontFace::remove_child(Inkscape::XML::Node *child) {
+	SPFontFace* object = this;
 
     SPFontFace *f = SP_FONTFACE(object);
 
@@ -422,12 +400,12 @@ void CFontFace::remove_child(Inkscape::XML::Node *child) {
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CFontFace::release() {
+void SPFontFace::release() {
 	CObject::release();
 }
 
-void CFontFace::set(unsigned int key, const gchar *value) {
-	SPFontFace* object = this->spfontface;
+void SPFontFace::set(unsigned int key, const gchar *value) {
+	SPFontFace* object = this;
 
     SPFontFace *face = SP_FONTFACE(object);
     std::vector<FontFaceStyleType> style;
@@ -719,8 +697,8 @@ void CFontFace::set(unsigned int key, const gchar *value) {
 /**
  * Receives update notifications.
  */
-void CFontFace::update(SPCtx *ctx, guint flags) {
-	SPFontFace* object = this->spfontface;
+void SPFontFace::update(SPCtx *ctx, guint flags) {
+	SPFontFace* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
         object->readAttr( "font-family" );
@@ -763,8 +741,8 @@ void CFontFace::update(SPCtx *ctx, guint flags) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CFontFace::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFontFace* object = this->spfontface;
+Inkscape::XML::Node* SPFontFace::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFontFace* object = this;
 
     SPFontFace *face = SP_FONTFACE(object);
 

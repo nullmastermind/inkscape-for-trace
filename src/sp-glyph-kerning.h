@@ -19,23 +19,21 @@
 #include "sp-object.h"
 #include "unicoderange.h"
 
-#define SP_TYPE_HKERN (sp_glyph_kerning_h_get_type ())
 //#define SP_HKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_HKERN, SPHkern))
 //#define SP_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_HKERN, SPGlyphKerningClass))
 //#define SP_IS_HKERN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_HKERN))
 //#define SP_IS_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_HKERN))
 
 #define SP_HKERN(obj) ((SPHkern*)obj)
-#define SP_IS_HKERN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPHkern)))
+#define SP_IS_HKERN(obj) (dynamic_cast<const SPHkern*>((SPObject*)obj))
 
-#define SP_TYPE_VKERN (sp_glyph_kerning_v_get_type ())
 //#define SP_VKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_VKERN, SPVkern))
 //#define SP_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_VKERN, SPGlyphKerningClass))
 //#define SP_IS_VKERN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_VKERN))
 //#define SP_IS_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_VKERN))
 
 #define SP_VKERN(obj) ((SPVkern*)obj)
-#define SP_IS_VKERN(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPVkern)))
+#define SP_IS_VKERN(obj) (dynamic_cast<const SPVkern*>((SPObject*)obj))
 
 // CPPIFY: These casting macros are buggy, as Vkern and Hkern aren't "real" classes.
 
@@ -48,25 +46,16 @@ private:
 gchar* names;
 };
 
-
-class CGlyphKerning;
-
-class SPGlyphKerning : public SPObject {
+class SPGlyphKerning : public SPObject, public CObject {
 public:
 	SPGlyphKerning();
-	CGlyphKerning* cglyphkerning;
+	virtual ~SPGlyphKerning();
 
     UnicodeRange* u1;
     GlyphNames* g1;
     UnicodeRange* u2;
     GlyphNames* g2;
     double k;
-};
-
-class CGlyphKerning : public CObject {
-public:
-	CGlyphKerning(SPGlyphKerning* kerning);
-	virtual ~CGlyphKerning();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -76,9 +65,6 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPGlyphKerning* spglyphkerning;
 };
 
 class SPHkern : public SPGlyphKerning {
@@ -88,12 +74,5 @@ class SPHkern : public SPGlyphKerning {
 class SPVkern : public SPGlyphKerning {
 
 };
-
-struct SPGlyphKerningClass {
-	SPObjectClass parent_class;
-};
-
-GType sp_glyph_kerning_h_get_type (void);
-GType sp_glyph_kerning_v_get_type (void);
 
 #endif //#ifndef __SP_GLYPH_KERNING_H__

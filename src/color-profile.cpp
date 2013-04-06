@@ -50,10 +50,7 @@
 #include <glibmm/convert.h>
 
 using Inkscape::ColorProfile;
-using Inkscape::ColorProfileClass;
 using Inkscape::ColorProfileImpl;
-
-using Inkscape::CColorProfile;
 
 namespace
 {
@@ -104,8 +101,6 @@ extern guint update_in_progress;
 #define DEBUG_MESSAGE_SCISLAC(key, ...)
 #define DEBUG_MESSAGE(key, ...)
 #endif // DEBUG_LCMS
-
-static SPObjectClass *cprof_parent_class;
 
 namespace Inkscape {
 
@@ -195,82 +190,27 @@ namespace {
 	bool rectRegistered = SPFactory::instance().registerObject("svg:color-profile", createColorProfile);
 }
 
+ColorProfile::ColorProfile() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-/**
- * Register ColorProfile class and return its type.
- */
-GType Inkscape::colorprofile_get_type()
-{
-    return ColorProfile::getType();
+    this->impl = new ColorProfileImpl();
+
+    this->href = 0;
+    this->local = 0;
+    this->name = 0;
+    this->intentStr = 0;
+    this->rendering_intent = Inkscape::RENDERING_INTENT_UNKNOWN;
 }
 
-GType ColorProfile::getType()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(ColorProfileClass),
-            NULL, NULL,
-            0, //(GClassInitFunc) ColorProfile::classInit,
-            NULL, NULL,
-            sizeof(ColorProfile),
-            16,
-            (GInstanceInitFunc) ColorProfile::init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static( G_TYPE_OBJECT, "ColorProfile", &info, static_cast<GTypeFlags>(0) );
-    }
-    return type;
-}
-
-/**
- * ColorProfile vtable initialization.
- */
-void ColorProfile::classInit( ColorProfileClass *klass )
-{
-    SPObjectClass *sp_object_class = reinterpret_cast<SPObjectClass *>(klass);
-
-    cprof_parent_class = static_cast<SPObjectClass*>(g_type_class_ref(SP_TYPE_OBJECT));
-}
-
-CColorProfile::CColorProfile(ColorProfile* cp) : CObject(cp) {
-	this->colorprofile = cp;
-}
-
-CColorProfile::~CColorProfile() {
-}
-
-ColorProfile::ColorProfile() : SPObject() {
-	ColorProfile* cprof = this;
-
-	cprof->ccolorprofile = new CColorProfile(cprof);
-	cprof->typeHierarchy.insert(typeid(ColorProfile));
-
-	delete cprof->cobject;
-	cprof->cobject = cprof->ccolorprofile;
-
-    cprof->impl = new ColorProfileImpl();
-
-    cprof->href = 0;
-    cprof->local = 0;
-    cprof->name = 0;
-    cprof->intentStr = 0;
-    cprof->rendering_intent = Inkscape::RENDERING_INTENT_UNKNOWN;
-}
-
-/**
- * Callback for ColorProfile object initialization.
- */
-void ColorProfile::init( ColorProfile *cprof )
-{
-	new (cprof) ColorProfile();
+ColorProfile::~ColorProfile() {
 }
 
 /**
  * Callback: free object
  */
-void CColorProfile::release() {
-	ColorProfile* object = this->colorprofile;
+void ColorProfile::release() {
+	ColorProfile* object = this;
 
     // Unregister ourselves
     if ( object->document ) {
@@ -333,8 +273,8 @@ void ColorProfileImpl::_clearProfile()
 /**
  * Callback: set attributes from associated repr.
  */
-void CColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	ColorProfile* object = this->colorprofile;
+void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	ColorProfile* object = this;
 
     ColorProfile *cprof = COLORPROFILE(object);
     g_assert(cprof->href == 0);
@@ -359,8 +299,8 @@ void CColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void CColorProfile::set(unsigned key, gchar const *value) {
-	ColorProfile* object = this->colorprofile;
+void ColorProfile::set(unsigned key, gchar const *value) {
+	ColorProfile* object = this;
 
     ColorProfile *cprof = COLORPROFILE(object);
 
@@ -478,8 +418,8 @@ void CColorProfile::set(unsigned key, gchar const *value) {
 /**
  * Callback: write attributes to associated repr.
  */
-Inkscape::XML::Node* CColorProfile::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	ColorProfile* object = this->colorprofile;
+Inkscape::XML::Node* ColorProfile::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	ColorProfile* object = this;
 
     ColorProfile *cprof = COLORPROFILE(object);
 

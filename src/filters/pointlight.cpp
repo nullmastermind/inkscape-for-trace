@@ -39,53 +39,32 @@ namespace {
 	bool pointLightRegistered = SPFactory::instance().registerObject("svg:fePointLight", createPointLight);
 }
 
-G_DEFINE_TYPE(SPFePointLight, sp_fepointlight, G_TYPE_OBJECT);
+SPFePointLight::SPFePointLight() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_fepointlight_class_init(SPFePointLightClass *klass)
-{
+    this->x = 0;
+    this->y = 0;
+    this->z = 0;
+
+    this->x_set = FALSE;
+    this->y_set = FALSE;
+    this->z_set = FALSE;
 }
 
-CFePointLight::CFePointLight(SPFePointLight* pointlight) : CObject(pointlight) {
-	this->spfepointlight = pointlight;
+SPFePointLight::~SPFePointLight() {
 }
 
-CFePointLight::~CFePointLight() {
-}
-
-SPFePointLight::SPFePointLight() : SPObject() {
-	SPFePointLight* fepointlight = this;
-
-	fepointlight->cfepointlight = new CFePointLight(fepointlight);
-	fepointlight->typeHierarchy.insert(typeid(SPFePointLight));
-
-	delete fepointlight->cobject;
-	fepointlight->cobject = fepointlight->cfepointlight;
-
-    fepointlight->x = 0;
-    fepointlight->y = 0;
-    fepointlight->z = 0;
-
-    fepointlight->x_set = FALSE;
-    fepointlight->y_set = FALSE;
-    fepointlight->z_set = FALSE;
-}
-
-static void
-sp_fepointlight_init(SPFePointLight *fepointlight)
-{
-	new (fepointlight) SPFePointLight();
-}
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPPointLight variables.  For this to get called,
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPFePointLight* object = this->spfepointlight;
+	SPFePointLight* object = this;
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "x" );
@@ -99,8 +78,8 @@ void CFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFePointLight::release() {
-	SPFePointLight* object = this->spfepointlight;
+void SPFePointLight::release() {
+	SPFePointLight* object = this;
     //SPFePointLight *fepointlight = SP_FEPOINTLIGHT(object);
 
     if ( object->document ) {
@@ -114,8 +93,8 @@ void CFePointLight::release() {
 /**
  * Sets a specific value in the SPFePointLight.
  */
-void CFePointLight::set(unsigned int key, gchar const *value) {
-	SPFePointLight* object = this->spfepointlight;
+void SPFePointLight::set(unsigned int key, gchar const *value) {
+	SPFePointLight* object = this;
 
     SPFePointLight *fepointlight = SP_FEPOINTLIGHT(object);
     gchar *end_ptr;
@@ -184,8 +163,8 @@ void CFePointLight::set(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFePointLight::update(SPCtx *ctx, guint flags) {
-	SPFePointLight* object = this->spfepointlight;
+void SPFePointLight::update(SPCtx *ctx, guint flags) {
+	SPFePointLight* object = this;
 
     SPFePointLight *fePointLight = SP_FEPOINTLIGHT(object);
     (void)fePointLight;
@@ -203,8 +182,8 @@ void CFePointLight::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFePointLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFePointLight* object = this->spfepointlight;
+Inkscape::XML::Node* SPFePointLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFePointLight* object = this;
     SPFePointLight *fepointlight = SP_FEPOINTLIGHT(object);
 
     if (!repr) {

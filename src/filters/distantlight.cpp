@@ -29,39 +29,17 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-G_DEFINE_TYPE(SPFeDistantLight, sp_fedistantlight, G_TYPE_OBJECT);
+SPFeDistantLight::SPFeDistantLight() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_fedistantlight_class_init(SPFeDistantLightClass *klass)
-{
+    this->azimuth = 0;
+    this->elevation = 0;
+    this->azimuth_set = FALSE;
+    this->elevation_set = FALSE;
 }
 
-CFeDistantLight::CFeDistantLight(SPFeDistantLight* distantlight) : CObject(distantlight) {
-	this->spfedistantlight = distantlight;
-}
-
-CFeDistantLight::~CFeDistantLight() {
-}
-
-SPFeDistantLight::SPFeDistantLight() : SPObject() {
-	SPFeDistantLight* fedistantlight = this;
-
-	fedistantlight->cfedistantlight = new CFeDistantLight(fedistantlight);
-	fedistantlight->typeHierarchy.insert(typeid(SPFeDistantLight));
-
-	delete fedistantlight->cobject;
-	fedistantlight->cobject = fedistantlight->cfedistantlight;
-
-    fedistantlight->azimuth = 0;
-    fedistantlight->elevation = 0;
-    fedistantlight->azimuth_set = FALSE;
-    fedistantlight->elevation_set = FALSE;
-}
-
-static void
-sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
-{
-	new (fedistantlight) SPFeDistantLight();
+SPFeDistantLight::~SPFeDistantLight() {
 }
 
 /**
@@ -69,10 +47,10 @@ sp_fedistantlight_init(SPFeDistantLight *fedistantlight)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPFeDistantLight* object = this->spfedistantlight;
+	SPFeDistantLight* object = this;
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "azimuth" );
@@ -85,8 +63,8 @@ void CFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeDistantLight::release() {
-	SPFeDistantLight* object = this->spfedistantlight;
+void SPFeDistantLight::release() {
+	SPFeDistantLight* object = this;
 
     //SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
 
@@ -101,8 +79,8 @@ void CFeDistantLight::release() {
 /**
  * Sets a specific value in the SPFeDistantLight.
  */
-void CFeDistantLight::set(unsigned int key, gchar const *value) {
-	SPFeDistantLight* object = this->spfedistantlight;
+void SPFeDistantLight::set(unsigned int key, gchar const *value) {
+	SPFeDistantLight* object = this;
     SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
     gchar *end_ptr;
     switch (key) {
@@ -152,8 +130,8 @@ void CFeDistantLight::set(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFeDistantLight::update(SPCtx *ctx, guint flags) {
-	SPFeDistantLight* object = this->spfedistantlight;
+void SPFeDistantLight::update(SPCtx *ctx, guint flags) {
+	SPFeDistantLight* object = this;
     SPFeDistantLight *feDistantLight = SP_FEDISTANTLIGHT(object);
     (void)feDistantLight;
 
@@ -169,8 +147,8 @@ void CFeDistantLight::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeDistantLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeDistantLight* object = this->spfedistantlight;
+Inkscape::XML::Node* SPFeDistantLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeDistantLight* object = this;
     SPFeDistantLight *fedistantlight = SP_FEDISTANTLIGHT(object);
 
     if (!repr) {

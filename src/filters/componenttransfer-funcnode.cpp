@@ -31,133 +31,20 @@
 #include "macros.h"
 
 /* FeFuncNode class */
+SPFeFuncNode::SPFeFuncNode() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void sp_fefuncnode_class_init(SPFeFuncNodeClass *klass);
-static void sp_fefuncnode_init(SPFeFuncNode *fefuncnode);
-
-static SPObjectClass *feFuncNode_parent_class;
-
-GType
-sp_fefuncR_get_type()
-{
-    static GType fefuncnode_type = 0;
-
-    if (!fefuncnode_type) {
-        GTypeInfo fefuncnode_info = {
-            sizeof(SPFeFuncNodeClass),
-            NULL, NULL,
-            0,//(GClassInitFunc) sp_fefuncnode_class_init,
-            NULL, NULL,
-            sizeof(SPFeFuncNode),
-            16,
-            (GInstanceInitFunc) sp_fefuncnode_init,
-            NULL,    /* value_table */
-        };
-        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncR", &fefuncnode_info, (GTypeFlags)0);
-    }
-    return fefuncnode_type;
+    this->type = Inkscape::Filters::COMPONENTTRANSFER_TYPE_IDENTITY;
+    //this->tableValues = NULL;
+    this->slope = 1;
+    this->intercept = 0;
+    this->amplitude = 1;
+    this->exponent = 1;
+    this->offset = 0;
 }
 
-GType
-sp_fefuncG_get_type()
-{
-    static GType fefuncnode_type = 0;
-
-    if (!fefuncnode_type) {
-        GTypeInfo fefuncnode_info = {
-            sizeof(SPFeFuncNodeClass),
-            NULL, NULL,
-            0,//(GClassInitFunc) sp_fefuncnode_class_init,
-            NULL, NULL,
-            sizeof(SPFeFuncNode),
-            16,
-            (GInstanceInitFunc) sp_fefuncnode_init,
-            NULL,    /* value_table */
-        };
-        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncG", &fefuncnode_info, (GTypeFlags)0);
-    }
-    return fefuncnode_type;
-}
-
-GType
-sp_fefuncB_get_type()
-{
-    static GType fefuncnode_type = 0;
-
-    if (!fefuncnode_type) {
-        GTypeInfo fefuncnode_info = {
-            sizeof(SPFeFuncNodeClass),
-            NULL, NULL,
-            0,//(GClassInitFunc) sp_fefuncnode_class_init,
-            NULL, NULL,
-            sizeof(SPFeFuncNode),
-            16,
-            (GInstanceInitFunc) sp_fefuncnode_init,
-            NULL,    /* value_table */
-        };
-        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncB", &fefuncnode_info, (GTypeFlags)0);
-    }
-    return fefuncnode_type;
-}
-
-GType
-sp_fefuncA_get_type()
-{
-    static GType fefuncnode_type = 0;
-
-    if (!fefuncnode_type) {
-        GTypeInfo fefuncnode_info = {
-            sizeof(SPFeFuncNodeClass),
-            NULL, NULL,
-            0,//(GClassInitFunc) sp_fefuncnode_class_init,
-            NULL, NULL,
-            sizeof(SPFeFuncNode),
-            16,
-            (GInstanceInitFunc) sp_fefuncnode_init,
-            NULL,    /* value_table */
-        };
-        fefuncnode_type = g_type_register_static(G_TYPE_OBJECT, "SPFeFuncA", &fefuncnode_info, (GTypeFlags)0);
-    }
-    return fefuncnode_type;
-}
-
-static void
-sp_fefuncnode_class_init(SPFeFuncNodeClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *)klass;
-
-    feFuncNode_parent_class = (SPObjectClass*)g_type_class_peek_parent(klass);
-}
-
-CFeFuncNode::CFeFuncNode(SPFeFuncNode* funcnode) : CObject(funcnode) {
-	this->spfefuncnode = funcnode;
-}
-
-CFeFuncNode::~CFeFuncNode() {
-}
-
-SPFeFuncNode::SPFeFuncNode() : SPObject() {
-	SPFeFuncNode* fefuncnode = this;
-
-	fefuncnode->cfefuncnode = new CFeFuncNode(fefuncnode);
-	fefuncnode->typeHierarchy.insert(typeid(SPFeFuncNode));
-
-	delete fefuncnode->cobject;
-	fefuncnode->cobject = fefuncnode->cfefuncnode;
-
-    fefuncnode->type = Inkscape::Filters::COMPONENTTRANSFER_TYPE_IDENTITY;
-    //fefuncnode->tableValues = NULL;
-    fefuncnode->slope = 1;
-    fefuncnode->intercept = 0;
-    fefuncnode->amplitude = 1;
-    fefuncnode->exponent = 1;
-    fefuncnode->offset = 0;
-}
-
-static void
-sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
-{
-	new (fefuncnode) SPFeFuncNode();
+SPFeFuncNode::~SPFeFuncNode() {
 }
 
 /**
@@ -165,10 +52,10 @@ sp_fefuncnode_init(SPFeFuncNode *fefuncnode)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPFeFuncNode* object = this->spfefuncnode;
+	SPFeFuncNode* object = this;
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "type" );
@@ -187,8 +74,8 @@ void CFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeFuncNode::release() {
-	SPFeFuncNode* object = this->spfefuncnode;
+void SPFeFuncNode::release() {
+	SPFeFuncNode* object = this;
     //SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
 
     if ( object->document ) {
@@ -224,8 +111,8 @@ static Inkscape::Filters::FilterComponentTransferType sp_feComponenttransfer_rea
 /**
  * Sets a specific value in the SPFeFuncNode.
  */
-void CFeFuncNode::set(unsigned int key, gchar const *value) {
-	SPFeFuncNode* object = this->spfefuncnode;
+void SPFeFuncNode::set(unsigned int key, gchar const *value) {
+	SPFeFuncNode* object = this;
 
     SPFeFuncNode *feFuncNode = SP_FEFUNCNODE(object);
     Inkscape::Filters::FilterComponentTransferType type;
@@ -290,8 +177,8 @@ void CFeFuncNode::set(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFeFuncNode::update(SPCtx *ctx, guint flags) {
-	SPFeFuncNode* object = this->spfefuncnode;
+void SPFeFuncNode::update(SPCtx *ctx, guint flags) {
+	SPFeFuncNode* object = this;
 
     SPFeFuncNode *feFuncNode = SP_FEFUNCNODE(object);
     (void)feFuncNode;
@@ -309,8 +196,8 @@ void CFeFuncNode::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeFuncNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeFuncNode* object = this->spfefuncnode;
+Inkscape::XML::Node* SPFeFuncNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeFuncNode* object = this;
     SPFeFuncNode *fefuncnode = SP_FEFUNCNODE(object);
 
     if (!repr) {

@@ -18,16 +18,13 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_FONT (sp_font_get_type ())
 #define SP_FONT(obj) ((SPFont*)obj)
-#define SP_IS_FONT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFont)))
+#define SP_IS_FONT(obj) (dynamic_cast<const SPFont*>((SPObject*)obj))
 
-class CFont;
-
-class SPFont : public SPObject {
+class SPFont : public SPObject, public CObject {
 public:
 	SPFont();
-	CFont* cfont;
+	virtual ~SPFont();
 
     double horiz_origin_x;
     double horiz_origin_y;
@@ -35,12 +32,6 @@ public:
     double vert_origin_x;
     double vert_origin_y;
     double vert_adv_y;
-};
-
-class CFont : public CObject {
-public:
-	CFont(SPFont* font);
-	virtual ~CFont();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -53,15 +44,6 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFont* spfont;
 };
-
-struct SPFontClass {
-    SPObjectClass parent_class;
-};
-
-GType sp_font_get_type (void);
 
 #endif //#ifndef SP_FONT_H_SEEN

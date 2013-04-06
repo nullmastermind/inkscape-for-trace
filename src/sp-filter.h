@@ -21,9 +21,8 @@
 
 #include <glibmm/ustring.h>
 
-#define SP_TYPE_FILTER (sp_filter_get_type())
 #define SP_FILTER(obj) ((SPFilter*)obj)
-#define SP_IS_FILTER(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFilter)))
+#define SP_IS_FILTER(obj) (dynamic_cast<const SPFilter*>((SPObject*)obj))
 
 #define SP_FILTER_FILTER_UNITS(f) (SP_FILTER(f)->filterUnits)
 #define SP_FILTER_PRIMITIVE_UNITS(f) (SP_FILTER(f)->primitiveUnits)
@@ -40,13 +39,10 @@ struct ltstr {
     bool operator()(const char* s1, const char* s2) const;
 };
 
-
-class CFilter;
-
-class SPFilter : public SPObject {
+class SPFilter : public SPObject, public CObject {
 public:
 	SPFilter();
-	CFilter* cfilter;
+	virtual ~SPFilter();
 
     SPFilterUnits filterUnits;
     guint filterUnits_set : 1;
@@ -64,12 +60,6 @@ public:
 
     std::map<gchar *, int, ltstr>* _image_name;
     int _image_number_next;
-};
-
-class CFilter : public CObject {
-public:
-	CFilter(SPFilter* filter);
-	virtual ~CFilter();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -82,16 +72,7 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFilter* spfilter;
 };
-
-struct SPFilterClass {
-    SPObjectClass parent_class;
-};
-
-GType sp_filter_get_type();
 
 void sp_filter_set_filter_units(SPFilter *filter, SPFilterUnits filterUnits);
 void sp_filter_set_primitive_units(SPFilter *filter, SPFilterUnits filterUnits);

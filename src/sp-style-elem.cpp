@@ -17,41 +17,19 @@ namespace {
 	bool styleRegistered = SPFactory::instance().registerObject("svg:style", createStyle);
 }
 
-G_DEFINE_TYPE(SPStyleElem, sp_style_elem, G_TYPE_OBJECT);
+SPStyleElem::SPStyleElem() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_style_elem_class_init(SPStyleElemClass *klass)
-{
+    media_set_all(this->media);
+    this->is_css = false;
 }
 
-CStyleElem::CStyleElem(SPStyleElem* se) : CObject(se) {
-	this->spstyleelem = se;
+SPStyleElem::~SPStyleElem() {
 }
 
-CStyleElem::~CStyleElem() {
-}
-
-SPStyleElem::SPStyleElem() : SPObject() {
-	SPStyleElem* style_elem = this;
-
-	style_elem->cstyleelem = new CStyleElem(style_elem);
-	style_elem->typeHierarchy.insert(typeid(SPStyleElem));
-
-	delete style_elem->cobject;
-	style_elem->cobject = style_elem->cstyleelem;
-
-    media_set_all(style_elem->media);
-    style_elem->is_css = false;
-}
-
-static void
-sp_style_elem_init(SPStyleElem *style_elem)
-{
-	new (style_elem) SPStyleElem();
-}
-
-void CStyleElem::set(unsigned int key, const gchar* value) {
-	SPStyleElem* object = this->spstyleelem;
+void SPStyleElem::set(unsigned int key, const gchar* value) {
+	SPStyleElem* object = this;
 
     g_return_if_fail(object);
     SPStyleElem &style_elem = *SP_STYLE_ELEM(object);
@@ -110,8 +88,8 @@ child_order_changed_cb(Inkscape::XML::Node *, Inkscape::XML::Node *,
     static_cast<SPObject *>(data)->cobject->read_content();
 }
 
-Inkscape::XML::Node* CStyleElem::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
-	SPStyleElem* object = this->spstyleelem;
+Inkscape::XML::Node* SPStyleElem::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+	SPStyleElem* object = this;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:style");
@@ -287,8 +265,8 @@ property_cb(CRDocHandler *const a_handler,
     g_return_if_fail(append_status == CR_OK);
 }
 
-void CStyleElem::read_content() {
-	SPStyleElem* object = this->spstyleelem;
+void SPStyleElem::read_content() {
+	SPStyleElem* object = this;
 
     SPStyleElem &style_elem = *SP_STYLE_ELEM(object);
 
@@ -375,10 +353,10 @@ rec_add_listener(Inkscape::XML::Node &repr,
     }
 }
 
-void CStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPStyleElem* object = this->spstyleelem;
+void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPStyleElem* object = this;
 
-    object->cstyleelem->read_content();
+    object->read_content();
 
     object->readAttr( "type" );
     object->readAttr( "media" );

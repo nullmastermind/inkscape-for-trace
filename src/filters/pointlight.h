@@ -17,16 +17,13 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_FEPOINTLIGHT (sp_fepointlight_get_type())
 #define SP_FEPOINTLIGHT(obj) ((SPFePointLight*)obj)
-#define SP_IS_FEPOINTLIGHT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFePointLight)))
+#define SP_IS_FEPOINTLIGHT(obj) (dynamic_cast<const SPFePointLight*>((SPObject*)obj))
 
-class CFePointLight;
-
-class SPFePointLight : public SPObject {
+class SPFePointLight : public SPObject, public CObject {
 public:
 	SPFePointLight();
-	CFePointLight* cfepointlight;
+	virtual ~SPFePointLight();
 
     /** x coordinate of the light source */
     gfloat x; 
@@ -38,14 +35,6 @@ public:
     gfloat z; 
     guint z_set : 1;
 
-    //other fields
-};
-
-class CFePointLight : public CObject {
-public:
-	CFePointLight(SPFePointLight* pointlight);
-	virtual ~CFePointLight();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
@@ -54,17 +43,8 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFePointLight* spfepointlight;
 };
 
-struct SPFePointLightClass {
-    SPObjectClass parent_class;
-};
-
-GType
-sp_fepointlight_get_type();
 #endif /* !SP_FEPOINTLIGHT_H_SEEN */
 
 /*

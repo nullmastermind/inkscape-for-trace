@@ -53,8 +53,6 @@ Persp3DImpl::Persp3DImpl() {
     my_counter = global_counter++;
 }
 
-G_DEFINE_TYPE(Persp3D, persp3d, G_TYPE_OBJECT);
-
 static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
@@ -63,50 +61,25 @@ static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
     NULL  /* order_changed */
 };
 
-/**
- * Callback to initialize Persp3D vtable.
- */
-static void persp3d_class_init(Persp3DClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
+Persp3D::Persp3D() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
+
+    this->perspective_impl = new Persp3DImpl();
 }
 
-CPersp3D::CPersp3D(Persp3D* persp3d) : CObject(persp3d) {
-	this->persp3d = persp3d;
+Persp3D::~Persp3D() {
 }
 
-CPersp3D::~CPersp3D() {
-}
-
-Persp3D::Persp3D() : SPObject() {
-	Persp3D* persp = this;
-
-	persp->cpersp3d = new CPersp3D(persp);
-	persp->typeHierarchy.insert(typeid(Persp3D));
-
-	delete persp->cobject;
-	persp->cobject = persp->cpersp3d;
-
-    persp->perspective_impl = new Persp3DImpl();
-}
-
-/**
- * Callback to initialize Persp3D object.
- */
-static void
-persp3d_init(Persp3D *persp)
-{
-	new (persp) Persp3D();
-}
 
 /**
  * Virtual build: set persp3d attributes from its associated XML node.
  */
-void CPersp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	Persp3D* object = this->persp3d;
+	Persp3D* object = this;
 
     object->readAttr( "inkscape:vp_x" );
     object->readAttr( "inkscape:vp_y" );
@@ -121,8 +94,8 @@ void CPersp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Virtual release of Persp3D members before destruction.
  */
-void CPersp3D::release() {
-	Persp3D* object = this->persp3d;
+void Persp3D::release() {
+	Persp3D* object = this;
 
     Persp3D *persp = SP_PERSP3D(object);
     delete persp->perspective_impl;
@@ -135,8 +108,8 @@ void CPersp3D::release() {
  */
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
-void CPersp3D::set(unsigned key, gchar const *value) {
-	Persp3D* object = this->persp3d;
+void Persp3D::set(unsigned key, gchar const *value) {
+	Persp3D* object = this;
 
     Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
 
@@ -186,7 +159,7 @@ void CPersp3D::set(unsigned key, gchar const *value) {
     }
 }
 
-void CPersp3D::update(SPCtx *ctx, guint flags) {
+void Persp3D::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* TODO: Should we update anything here? */
@@ -252,8 +225,8 @@ Persp3D *persp3d_document_first_persp(SPDocument *document)
 /**
  * Virtual write: write object attributes to repr.
  */
-Inkscape::XML::Node* CPersp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	Persp3D* object = this->persp3d;
+Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	Persp3D* object = this;
 
     Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
 

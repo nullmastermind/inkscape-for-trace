@@ -39,63 +39,42 @@ namespace {
 	bool spotLightRegistered = SPFactory::instance().registerObject("svg:feSpotLight", createSpotLight);
 }
 
-G_DEFINE_TYPE(SPFeSpotLight, sp_fespotlight, G_TYPE_OBJECT);
+SPFeSpotLight::SPFeSpotLight() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_fespotlight_class_init(SPFeSpotLightClass *klass)
-{
+    this->x = 0;
+    this->y = 0;
+    this->z = 0;
+    this->pointsAtX = 0;
+    this->pointsAtY = 0;
+    this->pointsAtZ = 0;
+    this->specularExponent = 1;
+    this->limitingConeAngle = 90;
+
+    this->x_set = FALSE;
+    this->y_set = FALSE;
+    this->z_set = FALSE;
+    this->pointsAtX_set = FALSE;
+    this->pointsAtY_set = FALSE;
+    this->pointsAtZ_set = FALSE;
+    this->specularExponent_set = FALSE;
+    this->limitingConeAngle_set = FALSE;
 }
 
-CFeSpotLight::CFeSpotLight(SPFeSpotLight* spotlight) : CObject(spotlight) {
-	this->spfespotlight = spotlight;
+SPFeSpotLight::~SPFeSpotLight() {
 }
 
-CFeSpotLight::~CFeSpotLight() {
-}
-
-SPFeSpotLight::SPFeSpotLight() : SPObject() {
-	SPFeSpotLight* fespotlight = this;
-
-	fespotlight->cfespotlight = new CFeSpotLight(fespotlight);
-	fespotlight->typeHierarchy.insert(typeid(SPFeSpotLight));
-
-	delete fespotlight->cobject;
-	fespotlight->cobject = fespotlight->cfespotlight;
-
-    fespotlight->x = 0;
-    fespotlight->y = 0;
-    fespotlight->z = 0;
-    fespotlight->pointsAtX = 0;
-    fespotlight->pointsAtY = 0;
-    fespotlight->pointsAtZ = 0;
-    fespotlight->specularExponent = 1;
-    fespotlight->limitingConeAngle = 90;
-
-    fespotlight->x_set = FALSE;
-    fespotlight->y_set = FALSE;
-    fespotlight->z_set = FALSE;
-    fespotlight->pointsAtX_set = FALSE;
-    fespotlight->pointsAtY_set = FALSE;
-    fespotlight->pointsAtZ_set = FALSE;
-    fespotlight->specularExponent_set = FALSE;
-    fespotlight->limitingConeAngle_set = FALSE;
-}
-
-static void
-sp_fespotlight_init(SPFeSpotLight *fespotlight)
-{
-	new (fespotlight) SPFeSpotLight();
-}
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPPointLight variables.  For this to get called,
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPFeSpotLight* object = this->spfespotlight;
+	SPFeSpotLight* object = this;
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "x" );
@@ -114,8 +93,8 @@ void CFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeSpotLight::release() {
-	SPFeSpotLight* object = this->spfespotlight;
+void SPFeSpotLight::release() {
+	SPFeSpotLight* object = this;
     //SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
 
     if ( object->document ) {
@@ -129,8 +108,8 @@ void CFeSpotLight::release() {
 /**
  * Sets a specific value in the SPFeSpotLight.
  */
-void CFeSpotLight::set(unsigned int key, gchar const *value) {
-	SPFeSpotLight* object = this->spfespotlight;
+void SPFeSpotLight::set(unsigned int key, gchar const *value) {
+	SPFeSpotLight* object = this;
 
     SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
     gchar *end_ptr;
@@ -282,8 +261,8 @@ void CFeSpotLight::set(unsigned int key, gchar const *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CFeSpotLight::update(SPCtx *ctx, guint flags) {
-	SPFeSpotLight* object = this->spfespotlight;
+void SPFeSpotLight::update(SPCtx *ctx, guint flags) {
+	SPFeSpotLight* object = this;
 
     SPFeSpotLight *feSpotLight = SP_FESPOTLIGHT(object);
     (void)feSpotLight;
@@ -306,8 +285,8 @@ void CFeSpotLight::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeSpotLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeSpotLight* object = this->spfespotlight;
+Inkscape::XML::Node* SPFeSpotLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeSpotLight* object = this;
     SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
 
     if (!repr) {

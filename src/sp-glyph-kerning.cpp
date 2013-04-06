@@ -25,93 +25,24 @@
 #include <string>
 #include <cstring>
 
-static void sp_glyph_kerning_class_init(SPGlyphKerningClass *gc);
-static void sp_glyph_kerning_init(SPGlyphKerning *glyph);
 
-static SPObjectClass *parent_class;
-
-GType sp_glyph_kerning_h_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPGlyphKerningClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            0, //(GClassInitFunc) sp_glyph_kerning_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof(SPHkern),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) sp_glyph_kerning_init,
-            NULL,       /* value_table */
-        };
-        type = g_type_register_static(G_TYPE_OBJECT, "SPHkern", &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
-
-GType sp_glyph_kerning_v_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPGlyphKerningClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            0, //(GClassInitFunc) sp_glyph_kerning_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof(SPVkern),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) sp_glyph_kerning_init,
-            NULL,       /* value_table */
-        };
-        type = g_type_register_static(G_TYPE_OBJECT, "SPVkern", &info, (GTypeFlags) 0);
-    }
-
-    return type;
-}
-
-static void sp_glyph_kerning_class_init(SPGlyphKerningClass *gc)
-{
-    parent_class = (SPObjectClass*)g_type_class_peek_parent(gc);
-}
-
-CGlyphKerning::CGlyphKerning(SPGlyphKerning* kerning) : CObject(kerning) {
-	this->spglyphkerning = kerning;
-}
-
-CGlyphKerning::~CGlyphKerning() {
-}
-
-SPGlyphKerning::SPGlyphKerning() : SPObject() {
-	SPGlyphKerning* glyph = this;
-
-	glyph->cglyphkerning = new CGlyphKerning(glyph);
-	glyph->typeHierarchy.insert(typeid(SPGlyphKerning));
-
-	delete glyph->cobject;
-	glyph->cobject = glyph->cglyphkerning;
+SPGlyphKerning::SPGlyphKerning() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
 //TODO: correct these values:
-    glyph->u1 = NULL;
-    glyph->g1 = NULL;
-    glyph->u2 = NULL;
-    glyph->g2 = NULL;
-    glyph->k = 0;
+    this->u1 = NULL;
+    this->g1 = NULL;
+    this->u2 = NULL;
+    this->g2 = NULL;
+    this->k = 0;
 }
 
-static void sp_glyph_kerning_init(SPGlyphKerning *glyph)
-{
-	new (glyph) SPGlyphKerning();
+SPGlyphKerning::~SPGlyphKerning() {
 }
 
-void CGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPGlyphKerning* object = this->spglyphkerning;
+void SPGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPGlyphKerning* object = this;
 
 	CObject::build(document, repr);
 
@@ -122,7 +53,7 @@ void CGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	object->readAttr( "k" );
 }
 
-void CGlyphKerning::release() {
+void SPGlyphKerning::release() {
 	CObject::release();
 }
 
@@ -145,8 +76,8 @@ bool GlyphNames::contains(const char* name){
     return false;
 }
 
-void CGlyphKerning::set(unsigned int key, const gchar *value) {
-	SPGlyphKerning* object = this->spglyphkerning;
+void SPGlyphKerning::set(unsigned int key, const gchar *value) {
+	SPGlyphKerning* object = this;
 
     SPGlyphKerning * glyphkern = (SPGlyphKerning*) object; //even if it is a VKern this will work. I did it this way just to avoind warnings.
 
@@ -207,8 +138,8 @@ void CGlyphKerning::set(unsigned int key, const gchar *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CGlyphKerning::update(SPCtx *ctx, guint flags) {
-	SPGlyphKerning* object = this->spglyphkerning;
+void SPGlyphKerning::update(SPCtx *ctx, guint flags) {
+	SPGlyphKerning* object = this;
 
     SPGlyphKerning *glyph = (SPGlyphKerning *)object;
     (void)glyph;
@@ -226,8 +157,8 @@ void CGlyphKerning::update(SPCtx *ctx, guint flags) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CGlyphKerning::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPGlyphKerning* object = this->spglyphkerning;
+Inkscape::XML::Node* SPGlyphKerning::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPGlyphKerning* object = this;
 
 	//    SPGlyphKerning *glyph = SP_GLYPH_KERNING(object);
 

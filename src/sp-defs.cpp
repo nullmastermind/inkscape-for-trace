@@ -30,46 +30,20 @@ namespace {
 	bool defsRegistered = SPFactory::instance().registerObject("svg:defs", createDefs);
 }
 
-G_DEFINE_TYPE(SPDefs, sp_defs, G_TYPE_OBJECT);
-
-static void
-sp_defs_class_init(SPDefsClass *dc)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) dc;
-
+SPDefs::SPDefs() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 }
 
-SPDefs::SPDefs() : SPObject() {
-	SPDefs* defs = this;
-
-	defs->cdefs = new CDefs(defs);
-	defs->typeHierarchy.insert(typeid(SPDefs));
-
-	delete defs->cobject;
-	defs->cobject = defs->cdefs;
+SPDefs::~SPDefs() {
 }
 
-static void
-sp_defs_init(SPDefs* defs)
-{
-	new (defs) SPDefs();
-}
-
-CDefs::CDefs(SPDefs* defs) : CObject(defs) {
-	this->spdefs = defs;
-}
-
-CDefs::~CDefs() {
-}
-
-
-
-void CDefs::release() {
+void SPDefs::release() {
 	CObject::release();
 }
 
-void CDefs::update(SPCtx *ctx, guint flags) {
-	SPDefs* object = this->spdefs;
+void SPDefs::update(SPCtx *ctx, guint flags) {
+	SPDefs* object = this;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -88,8 +62,8 @@ void CDefs::update(SPCtx *ctx, guint flags) {
     }
 }
 
-void CDefs::modified(unsigned int flags) {
-	SPDefs* object = this->spdefs;
+void SPDefs::modified(unsigned int flags) {
+	SPDefs* object = this;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -115,8 +89,8 @@ void CDefs::modified(unsigned int flags) {
     }
 }
 
-Inkscape::XML::Node* CDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPDefs* object = this->spdefs;
+Inkscape::XML::Node* SPDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPDefs* object = this;
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
 

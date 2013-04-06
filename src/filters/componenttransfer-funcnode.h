@@ -18,10 +18,10 @@
 #include "sp-object.h"
 #include "display/nr-filter-component-transfer.h"
 
-#define SP_TYPE_FEFUNCR (sp_fefuncR_get_type())
-#define SP_TYPE_FEFUNCG (sp_fefuncG_get_type())
-#define SP_TYPE_FEFUNCB (sp_fefuncB_get_type())
-#define SP_TYPE_FEFUNCA (sp_fefuncA_get_type())
+//#define SP_TYPE_FEFUNCR (sp_fefuncR_get_type())
+//#define SP_TYPE_FEFUNCG (sp_fefuncG_get_type())
+//#define SP_TYPE_FEFUNCB (sp_fefuncB_get_type())
+//#define SP_TYPE_FEFUNCA (sp_fefuncA_get_type())
 
 // CPPIFY: Casting macros buggy, as these aren't classes.
 //#define SP_IS_FEFUNCR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCR))
@@ -31,17 +31,20 @@
 
 #define SP_FEFUNCNODE(obj) ((SPFeFuncNode*)obj)
 
-#define SP_IS_FEFUNCR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
-#define SP_IS_FEFUNCG(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
-#define SP_IS_FEFUNCB(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
-#define SP_IS_FEFUNCA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+//#define SP_IS_FEFUNCR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+//#define SP_IS_FEFUNCG(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+//#define SP_IS_FEFUNCB(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
+//#define SP_IS_FEFUNCA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
 
-class CFeFuncNode;
+#define SP_IS_FEFUNCR(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
+#define SP_IS_FEFUNCG(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
+#define SP_IS_FEFUNCB(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
+#define SP_IS_FEFUNCA(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
 
-class SPFeFuncNode : public SPObject {
+class SPFeFuncNode : public SPObject, public CObject {
 public:
 	SPFeFuncNode();
-	CFeFuncNode* cfefuncnode;
+	virtual ~SPFeFuncNode();
 
     Inkscape::Filters::FilterComponentTransferType type;
     std::vector<double> tableValues;
@@ -50,12 +53,6 @@ public:
     double amplitude;
     double exponent;
     double offset;
-};
-
-class CFeFuncNode : public CObject {
-public:
-	CFeFuncNode(SPFeFuncNode* funcnode);
-	virtual ~CFeFuncNode();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -65,19 +62,7 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFeFuncNode* spfefuncnode;
 };
-
-struct SPFeFuncNodeClass {
-    SPObjectClass parent_class;
-};
-
-GType sp_fefuncR_get_type();
-GType sp_fefuncG_get_type();
-GType sp_fefuncB_get_type();
-GType sp_fefuncA_get_type();
 
 #endif /* !SP_FECOMPONENTTRANSFER_FUNCNODE_H_SEEN */
 

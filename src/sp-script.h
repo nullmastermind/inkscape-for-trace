@@ -14,31 +14,16 @@
 
 #include "sp-item.h"
 
-#define SP_TYPE_SCRIPT (sp_script_get_type())
 #define SP_SCRIPT(obj) ((SPScript*)obj)
-#define SP_IS_SCRIPT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPScript)))
+#define SP_IS_SCRIPT(obj) (dynamic_cast<const SPScript*>((SPObject*)obj))
 
 /* SPScript */
-
-class CScript;
-
-class SPScript : public SPObject {
+class SPScript : public SPObject, public CObject {
 public:
 	SPScript();
-	CScript* cscript;
+	virtual ~SPScript();
 
 	gchar *xlinkhref;
-};
-
-struct SPScriptClass {
-    SPObjectClass parent_class;
-};
-
-
-class CScript : public CObject {
-public:
-	CScript(SPScript* script);
-	virtual ~CScript();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -46,13 +31,7 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPScript* spscript;
 };
-
-
-GType sp_script_get_type();
 
 #endif
 

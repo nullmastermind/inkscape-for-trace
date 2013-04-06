@@ -43,37 +43,15 @@ namespace {
 	bool metadataRegistered = SPFactory::instance().registerObject("svg:metadata", createMetadata);
 }
 
-G_DEFINE_TYPE(SPMetadata, sp_metadata, G_TYPE_OBJECT);
+SPMetadata::SPMetadata() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_metadata_class_init (SPMetadataClass *klass)
-{
+    (void)this;
+    debug("0x%08x",(unsigned int)this);
 }
 
-CMetadata::CMetadata(SPMetadata* metadata) : CObject(metadata) {
-	this->spmetadata = metadata;
-}
-
-CMetadata::~CMetadata() {
-}
-
-SPMetadata::SPMetadata() : SPObject() {
-	SPMetadata* metadata = this;
-
-	metadata->cmetadata = new CMetadata(metadata);
-	metadata->typeHierarchy.insert(typeid(SPMetadata));
-
-	delete metadata->cobject;
-	metadata->cobject = metadata->cmetadata;
-
-    (void)metadata;
-    debug("0x%08x",(unsigned int)metadata);
-}
-
-static void
-sp_metadata_init (SPMetadata *metadata)
-{
-	new (metadata) SPMetadata();
+SPMetadata::~SPMetadata() {
 }
 
 namespace {
@@ -91,7 +69,7 @@ void strip_ids_recursively(Inkscape::XML::Node *node) {
 }
 
 
-void CMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+void SPMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     using Inkscape::XML::NodeSiblingIterator;
 
     debug("0x%08x",(unsigned int)object);
@@ -107,7 +85,8 @@ void CMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
     CObject::build(doc, repr);
 }
-void CMetadata::release() {
+
+void SPMetadata::release() {
     debug("0x%08x",(unsigned int)object);
 
     // handle ourself
@@ -115,7 +94,7 @@ void CMetadata::release() {
     CObject::release();
 }
 
-void CMetadata::set(unsigned int key, const gchar* value) {
+void SPMetadata::set(unsigned int key, const gchar* value) {
     debug("0x%08x %s(%u): '%s'",(unsigned int)object,
           sp_attribute_name(key),key,value);
 
@@ -123,7 +102,7 @@ void CMetadata::set(unsigned int key, const gchar* value) {
     CObject::set(key, value);
 }
 
-void CMetadata::update(SPCtx* ctx, unsigned int flags) {
+void SPMetadata::update(SPCtx* ctx, unsigned int flags) {
     debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);
 
@@ -137,8 +116,8 @@ void CMetadata::update(SPCtx* ctx, unsigned int flags) {
 //    CObject::onUpdate(ctx, flags);
 }
 
-Inkscape::XML::Node* CMetadata::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
-	SPMetadata* object = this->spmetadata;
+Inkscape::XML::Node* SPMetadata::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+	SPMetadata* object = this;
 
     debug("0x%08x",(unsigned int)object);
     //SPMetadata *metadata = SP_METADATA(object);

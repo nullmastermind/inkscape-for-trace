@@ -24,11 +24,8 @@
 
 #include "sp-object.h"
 
-G_BEGIN_DECLS
-
-#define SP_TYPE_FONTFACE (sp_fontface_get_type ())
 #define SP_FONTFACE(obj) ((SPFontFace*)obj)
-#define SP_IS_FONTFACE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFontFace)))
+#define SP_IS_FONTFACE(obj) (dynamic_cast<const SPFontFace*>((SPObject*)obj))
 
 enum FontFaceStyleType{
 	SP_FONTFACE_STYLE_ALL,
@@ -74,12 +71,10 @@ enum FontFaceUnicodeRangeType{
 	FONTFACE_UNICODERANGE_FIXME_HERE,
 };
 
-class CFontFace;
-
-class SPFontFace : public SPObject {
+class SPFontFace : public SPObject, public CObject {
 public:
 	SPFontFace();
-	CFontFace* cfontface;
+	virtual ~SPFontFace();
 
     char* font_family;
     std::vector<FontFaceStyleType> font_style;
@@ -114,12 +109,6 @@ public:
     double strikethrough_thickness;
     double overline_position;
     double overline_thickness;
-};
-
-class CFontFace : public CObject {
-public:
-	CFontFace(SPFontFace* face);
-	virtual ~CFontFace();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -132,17 +121,6 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFontFace* spfontface;
 };
-
-struct SPFontFaceClass {
-	SPObjectClass parent_class;
-};
-
-GType sp_fontface_get_type (void);
-
-G_END_DECLS
 
 #endif //#ifndef __SP_FONTFACE_H__

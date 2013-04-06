@@ -26,38 +26,16 @@ namespace {
 	bool titleRegistered = SPFactory::instance().registerObject("svg:title", createTitle);
 }
 
-G_DEFINE_TYPE(SPTitle, sp_title, G_TYPE_OBJECT);
-
-static void
-sp_title_class_init(SPTitleClass *klass)
-{
+SPTitle::SPTitle() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 }
 
-CTitle::CTitle(SPTitle* title) : CObject(title) {
-	this->sptitle = title;
+SPTitle::~SPTitle() {
 }
 
-CTitle::~CTitle() {
-}
-
-SPTitle::SPTitle() : SPObject() {
-	SPTitle* desc = this;
-
-	desc->ctitle = new CTitle(desc);
-	desc->typeHierarchy.insert(typeid(SPTitle));
-
-	delete desc->cobject;
-	desc->cobject = desc->ctitle;
-}
-
-static void
-sp_title_init(SPTitle *desc)
-{
-	new (desc) SPTitle();
-}
-
-Inkscape::XML::Node* CTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPTitle* object = this->sptitle;
+Inkscape::XML::Node* SPTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPTitle* object = this;
 
     if (!repr) {
         repr = object->getRepr()->duplicate(xml_doc);

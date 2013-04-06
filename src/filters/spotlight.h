@@ -17,16 +17,13 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_FESPOTLIGHT (sp_fespotlight_get_type())
 #define SP_FESPOTLIGHT(obj) ((SPFeSpotLight*)obj)
-#define SP_IS_FESPOTLIGHT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeSpotLight)))
+#define SP_IS_FESPOTLIGHT(obj) (dynamic_cast<const SPFeSpotLight*>((SPObject*)obj))
 
-class CFeSpotLight;
-
-class SPFeSpotLight : public SPObject {
+class SPFeSpotLight : public SPObject, public CObject {
 public:
 	SPFeSpotLight();
-	CFeSpotLight* cfespotlight;
+	virtual ~SPFeSpotLight();
 
     /** x coordinate of the light source */
     gfloat x; 
@@ -53,12 +50,6 @@ public:
     gfloat limitingConeAngle;
     guint limitingConeAngle_set : 1;
     //other fields
-};
-
-class CFeSpotLight : public CObject {
-public:
-	CFeSpotLight(SPFeSpotLight* spotlight);
-	virtual ~CFeSpotLight();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -68,17 +59,8 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFeSpotLight* spfespotlight;
 };
 
-struct SPFeSpotLightClass {
-    SPObjectClass parent_class;
-};
-
-GType
-sp_fespotlight_get_type();
 #endif /* !SP_FESPOTLIGHT_H_SEEN */
 
 /*

@@ -23,19 +23,14 @@ struct SPCanvas;
 struct SPCanvasGroup;
 class SPDesktop;
 
-G_BEGIN_DECLS
-
-#define SP_TYPE_GUIDE            (sp_guide_get_type())
 #define SP_GUIDE(obj) ((SPGuide*)obj)
-#define SP_IS_GUIDE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGuide)))
-
-class CGuide;
+#define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj))
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
-class SPGuide : public SPObject {
+class SPGuide : public SPObject, public CObject {
 public:
 	SPGuide();
-	CGuide* cguide;
+	virtual ~SPGuide();
 
     char* label;
     Geom::Point normal_to_line;
@@ -55,28 +50,11 @@ public:
     void sensitize(SPCanvas *canvas, gboolean sensitive);
     Geom::Point getPositionFrom(Geom::Point const &pt) const;
     double getDistanceFrom(Geom::Point const &pt) const;
-};
-
-class CGuide : public CObject {
-public:
-	CGuide(SPGuide* guide);
-	virtual ~CGuide();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 	virtual void set(unsigned int key, const gchar* value);
-
-private:
-	SPGuide* spguide;
 };
-
-
-class SPGuideClass {
-public:
-    SPObjectClass parent_class;
-};
-
-GType sp_guide_get_type();
 
 void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts);
 void sp_guide_create_guides_around_page(SPDesktop *dt);
@@ -89,8 +67,6 @@ void sp_guide_set_color(SPGuide &guide, const unsigned r, const unsigned g, cons
 void sp_guide_remove(SPGuide *guide);
 
 char *sp_guide_description(SPGuide const *guide, const bool verbose = true);
-
-G_END_DECLS
 
 #endif // SEEN_SP_GUIDE_H
 

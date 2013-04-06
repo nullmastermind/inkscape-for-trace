@@ -26,38 +26,18 @@ namespace {
 	bool scriptRegistered = SPFactory::instance().registerObject("svg:script", createScript);
 }
 
-G_DEFINE_TYPE(SPScript, sp_script, G_TYPE_OBJECT);
+SPScript::SPScript() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void sp_script_class_init(SPScriptClass *sc)
-{
+	this->xlinkhref = NULL;
 }
 
-CScript::CScript(SPScript* script) : CObject(script) {
-	this->spscript = script;
+SPScript::~SPScript() {
 }
 
-CScript::~CScript() {
-}
-
-SPScript::SPScript() : SPObject() {
-	SPScript* script = this;
-
-	script->cscript = new CScript(script);
-	script->typeHierarchy.insert(typeid(SPScript));
-
-	delete script->cobject;
-	script->cobject = script->cscript;
-
-	script->xlinkhref = NULL;
-}
-
-static void sp_script_init(SPScript *script)
-{
-	new (script) SPScript();
-}
-
-void CScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPScript* object = this->spscript;
+void SPScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPScript* object = this;
 
     CObject::build(doc, repr);
 
@@ -73,8 +53,8 @@ void CScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 
-void CScript::release() {
-	SPScript* object = this->spscript;
+void SPScript::release() {
+	SPScript* object = this;
 
     if (object->document) {
         // Unregister ourselves
@@ -84,16 +64,16 @@ void CScript::release() {
     CObject::release();
 }
 
-void CScript::update(SPCtx* ctx, unsigned int flags) {
+void SPScript::update(SPCtx* ctx, unsigned int flags) {
 }
 
 
-void CScript::modified(unsigned int flags) {
+void SPScript::modified(unsigned int flags) {
 }
 
 
-void CScript::set(unsigned int key, const gchar* value) {
-	SPScript* object = this->spscript;
+void SPScript::set(unsigned int key, const gchar* value) {
+	SPScript* object = this;
 
     SPScript *scr = SP_SCRIPT(object);
 
@@ -109,7 +89,7 @@ void CScript::set(unsigned int key, const gchar* value) {
     }
 }
 
-Inkscape::XML::Node* CScript::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* SPScript::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
 	return repr;
 }
 

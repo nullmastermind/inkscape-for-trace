@@ -17,27 +17,13 @@
 
 /* Metadata base class */
 
-#define SP_TYPE_METADATA (sp_metadata_get_type ())
 #define SP_METADATA(obj) ((SPMetadata*)obj)
-#define SP_IS_METADATA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMetadata)))
+#define SP_IS_METADATA(obj) (dynamic_cast<const SPMetadata*>((SPObject*)obj))
 
-class CMetadata;
-
-class SPMetadata : public SPObject {
+class SPMetadata : public SPObject, public CObject {
 public:
 	SPMetadata();
-	CMetadata* cmetadata;
-};
-
-struct SPMetadataClass {
-	SPObjectClass parent_class;
-};
-
-
-class CMetadata : public CObject {
-public:
-	CMetadata(SPMetadata* metadata);
-	virtual ~CMetadata();
+	virtual ~SPMetadata();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -45,13 +31,7 @@ public:
 	virtual void set(unsigned int key, const gchar* value);
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPMetadata* spmetadata;
 };
-
-
-GType sp_metadata_get_type (void);
 
 SPMetadata * sp_document_metadata (SPDocument *document);
 

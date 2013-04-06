@@ -32,51 +32,31 @@ namespace {
 	bool glyphRegistered = SPFactory::instance().registerObject("svg:glyph", createGlyph);
 }
 
-G_DEFINE_TYPE(SPGlyph, sp_glyph, G_TYPE_OBJECT);
-
-static void sp_glyph_class_init(SPGlyphClass *gc)
-{
-}
-
-CGlyph::CGlyph(SPGlyph* glyph) : CObject(glyph) {
-	this->spglyph = glyph;
-}
-
-CGlyph::~CGlyph() {
-}
-
-SPGlyph::SPGlyph() : SPObject() {
-	SPGlyph* glyph = this;
-
-	glyph->cglyph = new CGlyph(glyph);
-	glyph->typeHierarchy.insert(typeid(SPGlyph));
-
-	delete glyph->cobject;
-	glyph->cobject = glyph->cglyph;
+SPGlyph::SPGlyph() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
 //TODO: correct these values:
 
-    new (&glyph->unicode) Glib::ustring();
-    new (&glyph->glyph_name) Glib::ustring();
-    glyph->d = NULL;
-    glyph->orientation = GLYPH_ORIENTATION_BOTH;
-    glyph->arabic_form = GLYPH_ARABIC_FORM_INITIAL;
-    glyph->lang = NULL;
-    glyph->horiz_adv_x = 0;
-    glyph->vert_origin_x = 0;
-    glyph->vert_origin_y = 0;
-    glyph->vert_adv_y = 0;
+    new (&this->unicode) Glib::ustring();
+    new (&this->glyph_name) Glib::ustring();
+    this->d = NULL;
+    this->orientation = GLYPH_ORIENTATION_BOTH;
+    this->arabic_form = GLYPH_ARABIC_FORM_INITIAL;
+    this->lang = NULL;
+    this->horiz_adv_x = 0;
+    this->vert_origin_x = 0;
+    this->vert_origin_y = 0;
+    this->vert_adv_y = 0;
 }
 
-static void sp_glyph_init(SPGlyph *glyph)
-{
-	new (glyph) SPGlyph();
+SPGlyph::~SPGlyph() {
 }
 
-void CGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {
+void SPGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	CObject::build(document, repr);
 
-	SPGlyph* object = this->spglyph;
+	SPGlyph* object = this;
 
 	object->readAttr( "unicode" );
 	object->readAttr( "glyph-name" );
@@ -90,7 +70,7 @@ void CGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	object->readAttr( "vert-adv-y" );
 }
 
-void CGlyph::release() {
+void SPGlyph::release() {
 	CObject::release();
 }
 
@@ -125,8 +105,8 @@ static glyphOrientation sp_glyph_read_orientation(gchar const *value){
     return GLYPH_ORIENTATION_BOTH;
 }
 
-void CGlyph::set(unsigned int key, const gchar *value) {
-	SPGlyph* object = this->spglyph;
+void SPGlyph::set(unsigned int key, const gchar *value) {
+	SPGlyph* object = this;
 
     SPGlyph *glyph = SP_GLYPH(object);
 
@@ -224,8 +204,8 @@ void CGlyph::set(unsigned int key, const gchar *value) {
 /**
  *  * Receives update notifications.
  *   */
-void CGlyph::update(SPCtx *ctx, guint flags) {
-	SPGlyph* object = this->spglyph;
+void SPGlyph::update(SPCtx *ctx, guint flags) {
+	SPGlyph* object = this;
 
     SPGlyph *glyph = SP_GLYPH(object);
     (void)glyph;
@@ -249,8 +229,8 @@ void CGlyph::update(SPCtx *ctx, guint flags) {
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
-Inkscape::XML::Node* CGlyph::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPGlyph* object = this->spglyph;
+Inkscape::XML::Node* SPGlyph::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPGlyph* object = this;
 
 	//    SPGlyph *glyph = SP_GLYPH(object);
 

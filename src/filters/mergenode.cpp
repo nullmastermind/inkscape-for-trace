@@ -33,36 +33,14 @@ namespace {
 	bool mergeNodeRegistered = SPFactory::instance().registerObject("svg:feMergeNode", createMergeNode);
 }
 
-G_DEFINE_TYPE(SPFeMergeNode, sp_feMergeNode, G_TYPE_OBJECT);
+SPFeMergeNode::SPFeMergeNode() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_feMergeNode_class_init(SPFeMergeNodeClass *klass)
-{
+    this->input = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
-CFeMergeNode::CFeMergeNode(SPFeMergeNode* mergenode) : CObject(mergenode) {
-	this->spfemergenode = mergenode;
-}
-
-CFeMergeNode::~CFeMergeNode() {
-}
-
-SPFeMergeNode::SPFeMergeNode() : SPObject() {
-	SPFeMergeNode* feMergeNode = this;
-
-	feMergeNode->cfemergenode = new CFeMergeNode(feMergeNode);
-	feMergeNode->typeHierarchy.insert(typeid(SPFeMergeNode));
-
-	delete feMergeNode->cobject;
-	feMergeNode->cobject = feMergeNode->cfemergenode;
-
-    feMergeNode->input = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
-}
-
-static void
-sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
-{
-	new (feMergeNode) SPFeMergeNode();
+SPFeMergeNode::~SPFeMergeNode() {
 }
 
 /**
@@ -70,23 +48,23 @@ sp_feMergeNode_init(SPFeMergeNode *feMergeNode)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeMergeNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeMergeNode* object = this->spfemergenode;
+void SPFeMergeNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFeMergeNode* object = this;
 	object->readAttr( "in" );
 }
 
 /**
  * Drops any allocated memory.
  */
-void CFeMergeNode::release() {
+void SPFeMergeNode::release() {
 	CObject::release();
 }
 
 /**
  * Sets a specific value in the SPFeMergeNode.
  */
-void CFeMergeNode::set(unsigned int key, gchar const *value) {
-	SPFeMergeNode* object = this->spfemergenode;
+void SPFeMergeNode::set(unsigned int key, gchar const *value) {
+	SPFeMergeNode* object = this;
     SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
     SPFeMerge *parent = SP_FEMERGE(object->parent);
 
@@ -105,8 +83,8 @@ void CFeMergeNode::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeMergeNode::update(SPCtx *ctx, guint flags) {
-	SPFeMergeNode* object = this->spfemergenode;
+void SPFeMergeNode::update(SPCtx *ctx, guint flags) {
+	SPFeMergeNode* object = this;
     //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -119,8 +97,8 @@ void CFeMergeNode::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeMergeNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeMergeNode* object = this->spfemergenode;
+Inkscape::XML::Node* SPFeMergeNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeMergeNode* object = this;
     //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
 
     // Inkscape-only object, not copied during an "plain SVG" dump:

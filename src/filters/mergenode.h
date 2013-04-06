@@ -17,24 +17,15 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_FEMERGENODE (sp_feMergeNode_get_type())
 #define SP_FEMERGENODE(obj) ((SPFeMergeNode*)obj)
-#define SP_IS_FEMERGENODE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeMergeNode)))
+#define SP_IS_FEMERGENODE(obj) (dynamic_cast<const SPFeMergeNode*>((SPObject*)obj))
 
-class CFeMergeNode;
-
-class SPFeMergeNode : public SPObject {
+class SPFeMergeNode : public SPObject, public CObject {
 public:
 	SPFeMergeNode();
-	CFeMergeNode* cfemergenode;
+	virtual ~SPFeMergeNode();
 
     int input;
-};
-
-class CFeMergeNode : public CObject {
-public:
-	CFeMergeNode(SPFeMergeNode* mergenode);
-	virtual ~CFeMergeNode();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -44,17 +35,7 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPFeMergeNode* spfemergenode;
 };
-
-struct SPFeMergeNodeClass {
-    SPObjectClass parent_class;
-};
-
-GType sp_feMergeNode_get_type();
-
 
 #endif /* !SP_FEMERGENODE_H_SEEN */
 

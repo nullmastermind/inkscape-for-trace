@@ -12,9 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_TYPE_PERSP3D         (persp3d_get_type ())
 #define SP_PERSP3D(obj) ((Persp3D*)obj)
-#define SP_IS_PERSP3D(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Persp3D)))
+#define SP_IS_PERSP3D(obj) (dynamic_cast<const Persp3D*>((SPObject*)obj))
 
 #include <list>
 #include <vector>
@@ -44,24 +43,12 @@ public:
 //    friend class Persp3D;
 };
 
-class CPersp3D;
-
-class Persp3D : public SPObject {
+class Persp3D : public SPObject, public CObject {
 public:
 	Persp3D();
-	CPersp3D* cpersp3d;
+	virtual ~Persp3D();
 
     Persp3DImpl *perspective_impl;
-};
-
-struct Persp3DClass {
-//    SPItemClass parent_class;
-};
-
-class CPersp3D : public CObject {
-public:
-	CPersp3D(Persp3D* persp3d);
-	virtual ~CPersp3D();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -71,14 +58,8 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	Persp3D* persp3d;
 };
 
-
-/* Standard GType function */
-GType persp3d_get_type (void);
 
 // FIXME: Make more of these inline!
 inline Persp3D * persp3d_get_from_repr (Inkscape::XML::Node *repr) {

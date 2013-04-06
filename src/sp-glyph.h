@@ -18,9 +18,8 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_GLYPH (sp_glyph_get_type ())
 #define SP_GLYPH(obj) ((SPGlyph*)obj)
-#define SP_IS_GLYPH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGlyph)))
+#define SP_IS_GLYPH(obj) (dynamic_cast<const SPGlyph*>((SPObject*)obj))
 
 enum glyphArabicForm {
     GLYPH_ARABIC_FORM_INITIAL,
@@ -35,12 +34,10 @@ enum glyphOrientation {
     GLYPH_ORIENTATION_BOTH
 };
 
-class CGlyph;
-
-class SPGlyph : public SPObject {
+class SPGlyph : public SPObject, public CObject {
 public:
 	SPGlyph();
-	CGlyph* cglyph;
+	virtual ~SPGlyph();
 
     Glib::ustring unicode;
     Glib::ustring glyph_name;
@@ -52,12 +49,6 @@ public:
     double vert_origin_x;
     double vert_origin_y;
     double vert_adv_y;
-};
-
-class CGlyph : public CObject {
-public:
-	CGlyph(SPGlyph* glyph);
-	virtual ~CGlyph();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -67,15 +58,6 @@ public:
 	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-private:
-	SPGlyph* spglyph;
 };
-
-struct SPGlyphClass {
-	SPObjectClass parent_class;
-};
-
-GType sp_glyph_get_type (void);
 
 #endif //#ifndef __SP_GLYPH_H__

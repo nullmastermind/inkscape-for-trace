@@ -46,47 +46,25 @@ namespace {
 #  SPSTRING
 #####################################################*/
 
-G_DEFINE_TYPE(SPString, sp_string, G_TYPE_OBJECT);
+SPString::SPString() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-static void
-sp_string_class_init(SPStringClass *classname)
-{
+    new (&this->string) Glib::ustring();
 }
 
-CString::CString(SPString* str) : CObject(str) {
-	this->spstring = str;
+SPString::~SPString() {
 }
 
-CString::~CString() {
-}
-
-SPString::SPString() : SPObject() {
-	SPString* string = this;
-
-	string->cstring = new CString(string);
-	string->typeHierarchy.insert(typeid(SPString));
-
-	delete string->cobject;
-	string->cobject = string->cstring;
-
-    new (&string->string) Glib::ustring();
-}
-
-static void
-sp_string_init(SPString *string)
-{
-	new (string) SPString();
-}
-
-void CString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-	SPString* object = this->spstring;
-    object->cstring->read_content();
+void SPString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
+	SPString* object = this;
+    object->read_content();
 
     CObject::build(doc, repr);
 }
 
-void CString::release() {
-	SPString* object = this->spstring;
+void SPString::release() {
+	SPString* object = this;
     SPString *string = SP_STRING(object);
 
     string->string.~ustring();
@@ -95,8 +73,8 @@ void CString::release() {
 }
 
 
-void CString::read_content() {
-	SPString* object = this->spstring;
+void SPString::read_content() {
+	SPString* object = this;
 
     SPString *string = SP_STRING(object);
 
@@ -138,7 +116,7 @@ void CString::read_content() {
     object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CString::update(SPCtx *ctx, unsigned flags) {
+void SPString::update(SPCtx *ctx, unsigned flags) {
 //    CObject::onUpdate(ctx, flags);
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
