@@ -14,16 +14,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_TYPE_NAMEDVIEW (sp_namedview_get_type())
 #define SP_NAMEDVIEW(obj) ((SPNamedView*)obj)
-#define SP_IS_NAMEDVIEW(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPNamedView)))
+#define SP_IS_NAMEDVIEW(obj) (dynamic_cast<const SPNamedView*>((SPObject*)obj))
 
 #include "sp-object-group.h"
 #include "sp-metric.h"
 #include "snap.h"
 #include "document.h"
-
-G_BEGIN_DECLS
 
 struct SPUnit;
 
@@ -36,12 +33,10 @@ enum {
     SP_BORDER_LAYER_TOP
 };
 
-class CNamedView;
-
 class SPNamedView : public SPObjectGroup {
 public:
 	SPNamedView();
-	CNamedView* cnamedview;
+	virtual ~SPNamedView();
 
     unsigned int editable : 1;
     unsigned int showguides : 1;
@@ -100,18 +95,8 @@ public:
 private:
     double getMarginLength(gchar const * const key,SPUnit const * const margin_units,SPUnit const * const return_units,double const width,double const height,bool const use_width);
     friend class SPDocument;
-};
 
-struct SPNamedViewClass {
-    SPObjectGroupClass parent_class;
-};
-
-
-class CNamedView : public CObjectGroup {
 public:
-	CNamedView(SPNamedView* view);
-	virtual ~CNamedView();
-
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void set(unsigned int key, gchar const* value);
@@ -120,13 +105,8 @@ public:
 	virtual void remove_child(Inkscape::XML::Node* child);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-protected:
-	SPNamedView* spnamedview;
 };
 
-
-GType sp_namedview_get_type();
 
 SPNamedView *sp_document_namedview(SPDocument *document, gchar const *name);
 
@@ -138,7 +118,6 @@ void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr);
 void sp_namedview_show_grids(SPNamedView *namedview, bool show, bool dirty_document);
 Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedview);
 
-G_END_DECLS
 
 #endif /* !INKSCAPE_SP_NAMEDVIEW_H */
 

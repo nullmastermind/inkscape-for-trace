@@ -50,46 +50,22 @@ namespace {
 	bool clipPathRegistered = SPFactory::instance().registerObject("svg:clipPath", createClipPath);
 }
 
-G_DEFINE_TYPE(SPClipPath, sp_clippath, G_TYPE_OBJECT);
-
-static void
-sp_clippath_class_init(SPClipPathClass *klass)
-{
-}
-
-CClipPath::CClipPath(SPClipPath* clippath) : CObjectGroup(clippath) {
-	this->spclippath = clippath;
-}
-
-CClipPath::~CClipPath() {
-}
-
 SPClipPath::SPClipPath() : SPObjectGroup() {
-	SPClipPath* cp = this;
+	this->cobject = this;
 
-	cp->cclippath = new CClipPath(cp);
-	cp->typeHierarchy.insert(typeid(SPClipPath));
+    this->clipPathUnits_set = FALSE;
+    this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 
-	delete cp->cobjectgroup;
-	cp->cobjectgroup = cp->cclippath;
-	cp->cobject = cp->cclippath;
-
-    cp->clipPathUnits_set = FALSE;
-    cp->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
-
-    cp->display = NULL;
+    this->display = NULL;
 }
 
-static void
-sp_clippath_init(SPClipPath *cp)
-{
-	new (cp) SPClipPath();
+SPClipPath::~SPClipPath() {
 }
 
-void CClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPClipPath* object = this->spclippath;
+void SPClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+	SPClipPath* object = this;
 
-    CObjectGroup::build(doc, repr);
+    SPObjectGroup::build(doc, repr);
 
     object->readAttr( "style" );
     object->readAttr( "clipPathUnits" );
@@ -98,8 +74,8 @@ void CClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     doc->addResource("clipPath", object);
 }
 
-void CClipPath::release() {
-	SPClipPath* object = this->spclippath;
+void SPClipPath::release() {
+	SPClipPath* object = this;
 
     if (object->document) {
         // Unregister ourselves
@@ -112,11 +88,11 @@ void CClipPath::release() {
         cp->display = sp_clippath_view_list_remove(cp->display, cp->display);
     }
 
-    CObjectGroup::release();
+    SPObjectGroup::release();
 }
 
-void CClipPath::set(unsigned int key, const gchar* value) {
-	SPClipPath* object = this->spclippath;
+void SPClipPath::set(unsigned int key, const gchar* value) {
+	SPClipPath* object = this;
 
     SPClipPath *cp = SP_CLIPPATH(object);
 
@@ -139,17 +115,17 @@ void CClipPath::set(unsigned int key, const gchar* value) {
                 sp_style_read_from_object(object->style, object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
-                CObjectGroup::set(key, value);
+                SPObjectGroup::set(key, value);
             }
             break;
     }
 }
 
-void CClipPath::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
-	SPClipPath* object = this->spclippath;
+void SPClipPath::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
+	SPClipPath* object = this;
 
     /* Invoke SPObjectGroup implementation */
-	CObjectGroup::child_added(child, ref);
+	SPObjectGroup::child_added(child, ref);
 
     /* Show new object */
     SPObject *ochild = object->document->getObjectByRepr(child);
@@ -166,8 +142,8 @@ void CClipPath::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref
     }
 }
 
-void CClipPath::update(SPCtx* ctx, unsigned int flags) {
-	SPClipPath* object = this->spclippath;
+void SPClipPath::update(SPCtx* ctx, unsigned int flags) {
+	SPClipPath* object = this;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -204,8 +180,8 @@ void CClipPath::update(SPCtx* ctx, unsigned int flags) {
     }
 }
 
-void CClipPath::modified(unsigned int flags) {
-	SPClipPath* object = this->spclippath;
+void SPClipPath::modified(unsigned int flags) {
+	SPClipPath* object = this;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -230,12 +206,12 @@ void CClipPath::modified(unsigned int flags) {
     }
 }
 
-Inkscape::XML::Node* CClipPath::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
+Inkscape::XML::Node* SPClipPath::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:clipPath");
     }
 
-    CObjectGroup::write(xml_doc, repr, flags);
+    SPObjectGroup::write(xml_doc, repr, flags);
 
     return repr;
 }

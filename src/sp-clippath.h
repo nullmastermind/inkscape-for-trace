@@ -15,17 +15,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_TYPE_CLIPPATH (sp_clippath_get_type())
 #define SP_CLIPPATH(obj) ((SPClipPath*)obj)
-#define SP_IS_CLIPPATH(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPClipPath)))
+#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj))
 
 struct SPClipPathView;
 
 #include "sp-object-group.h"
 #include "uri-references.h"
 #include "xml/node.h"
-
-GType sp_clippath_get_type() G_GNUC_CONST;
 
 namespace Inkscape {
 
@@ -34,12 +31,10 @@ class DrawingItem;
 
 } // namespace Inkscape
 
-class CClipPath;
-
 class SPClipPath : public SPObjectGroup {
 public:
 	SPClipPath();
-	CClipPath* cclippath;
+	virtual ~SPClipPath();
 
     class Reference;
 
@@ -56,25 +51,7 @@ public:
     void setBBox(unsigned int key, Geom::OptRect const &bbox);
     Geom::OptRect geometricBounds(Geom::Affine const &transform);
 
-private:
-    friend class SPClipPathClass;
-};
-
-class SPClipPathClass {
-public:
-    SPObjectGroupClass parent_class;
-
-private:
-    friend class SPClipPath;
-};
-
-
-class CClipPath : public CObjectGroup {
-public:
-	CClipPath(SPClipPath* clippath);
-	virtual ~CClipPath();
-
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
 	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
@@ -85,9 +62,6 @@ public:
 	virtual void modified(unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPClipPath* spclippath;
 };
 
 

@@ -18,13 +18,10 @@
 #include "uri-references.h"
 #include "xml/node.h"
 
-#define SP_TYPE_MASK (sp_mask_get_type ())
 #define SP_MASK(obj) ((SPMask*)obj)
-#define SP_IS_MASK(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPMask)))
+#define SP_IS_MASK(obj) (dynamic_cast<const SPMask*>((SPObject*)obj))
 
 struct SPMaskView;
-
-class CMask;
 
 namespace Inkscape {
 
@@ -37,7 +34,7 @@ class DrawingItem;
 class SPMask : public SPObjectGroup {
 public:
 	SPMask();
-	CMask* cmask;
+	virtual ~SPMask();
 
 	unsigned int maskUnits_set : 1;
 	unsigned int maskUnits : 1;
@@ -46,16 +43,6 @@ public:
 	unsigned int maskContentUnits : 1;
 
 	SPMaskView *display;
-};
-
-struct SPMaskClass {
-	SPObjectGroupClass parent_class;
-};
-
-class CMask : public CObjectGroup {
-public:
-	CMask(SPMask* mask);
-	virtual ~CMask();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -68,12 +55,7 @@ public:
 	virtual void modified(unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPMask* spmask;
 };
-
-GType sp_mask_get_type (void);
 
 class SPMaskReference : public Inkscape::URIReference {
 public:

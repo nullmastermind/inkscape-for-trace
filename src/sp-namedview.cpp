@@ -65,68 +65,45 @@ namespace {
 	bool namedViewRegistered = SPFactory::instance().registerObject("sodipodi:namedview", createNamedView);
 }
 
-
-G_DEFINE_TYPE(SPNamedView, sp_namedview, G_TYPE_OBJECT);
-
-static void sp_namedview_class_init(SPNamedViewClass * klass)
-{
-}
-
-CNamedView::CNamedView(SPNamedView* view) : CObjectGroup(view) {
-	this->spnamedview = view;
-}
-
-CNamedView::~CNamedView() {
-}
-
 SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
-	SPNamedView* nv = this;
+	this->cobject = this;
 
-	nv->cnamedview = new CNamedView(nv);
-	nv->typeHierarchy.insert(typeid(SPNamedView));
+	this->zoom = 0;
+	this->guidecolor = 0;
+	this->guidehicolor = 0;
+	this->views = NULL;
+	this->borderlayer = 0;
+	this->units = NULL;
+	this->window_x = 0;
+	this->cy = 0;
+	this->window_y = 0;
+	this->doc_units = NULL;
+	this->pagecolor = 0;
+	this->cx = 0;
+	this->pageshadow = 0;
+	this->window_width = 0;
+	this->window_height = 0;
+	this->window_maximized = 0;
+	this->bordercolor = 0;
 
-	delete nv->cobjectgroup;
-	nv->cobjectgroup = nv->cnamedview;
-	nv->cobject = nv->cnamedview;
+    this->editable = TRUE;
+    this->showguides = TRUE;
+    this->grids_visible = false;
+    this->showborder = TRUE;
+    this->showpageshadow = TRUE;
 
-	nv->zoom = 0;
-	nv->guidecolor = 0;
-	nv->guidehicolor = 0;
-	nv->views = NULL;
-	nv->borderlayer = 0;
-	nv->units = NULL;
-	nv->window_x = 0;
-	nv->cy = 0;
-	nv->window_y = 0;
-	nv->doc_units = NULL;
-	nv->pagecolor = 0;
-	nv->cx = 0;
-	nv->pageshadow = 0;
-	nv->window_width = 0;
-	nv->window_height = 0;
-	nv->window_maximized = 0;
-	nv->bordercolor = 0;
+    this->guides = NULL;
+    this->viewcount = 0;
+    this->grids = NULL;
 
-    nv->editable = TRUE;
-    nv->showguides = TRUE;
-    nv->grids_visible = false;
-    nv->showborder = TRUE;
-    nv->showpageshadow = TRUE;
+    this->default_layer_id = 0;
 
-    nv->guides = NULL;
-    nv->viewcount = 0;
-    nv->grids = NULL;
+    this->connector_spacing = defaultConnSpacing;
 
-    nv->default_layer_id = 0;
-
-    nv->connector_spacing = defaultConnSpacing;
-
-    //new (&nv->snap_manager) SnapManager(nv);
+    //new (&this->snap_manager) SnapManager(this);
 }
 
-static void sp_namedview_init(SPNamedView *nv)
-{
-	new (nv) SPNamedView();
+SPNamedView::~SPNamedView() {
 }
 
 static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *document, Inkscape::XML::Node *repr) {
@@ -217,13 +194,13 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
     }
 }
 
-void CNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPNamedView* object = this->spnamedview;
+void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPNamedView* object = this;
 
     SPNamedView *nv = (SPNamedView *) object;
     SPObjectGroup *og = (SPObjectGroup *) object;
 
-    CObjectGroup::build(document, repr);
+    SPObjectGroup::build(document, repr);
 
     object->readAttr( "inkscape:document-units" );
     object->readAttr( "units" );
@@ -293,8 +270,8 @@ void CNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     sp_namedview_generate_old_grid(nv, document, repr);
 }
 
-void CNamedView::release() {
-	SPNamedView* object = this->spnamedview;
+void SPNamedView::release() {
+	SPNamedView* object = this;
     SPNamedView *namedview = (SPNamedView *) object;
 
     if (namedview->guides) {
@@ -309,13 +286,13 @@ void CNamedView::release() {
         namedview->grids = g_slist_remove_link(namedview->grids, namedview->grids); // deletes first entry
     }
 
-    CObjectGroup::release();
+    SPObjectGroup::release();
 
     namedview->snap_manager.~SnapManager();
 }
 
-void CNamedView::set(unsigned int key, const gchar* value) {
-	SPNamedView* object = this->spnamedview;
+void SPNamedView::set(unsigned int key, const gchar* value) {
+	SPNamedView* object = this;
 
     SPNamedView *nv = SP_NAMEDVIEW(object);
 
@@ -629,7 +606,7 @@ void CNamedView::set(unsigned int key, const gchar* value) {
             break;
     }
     default:
-            CObjectGroup::set(key, value);
+            SPObjectGroup::set(key, value);
             break;
     }
 }
@@ -675,12 +652,12 @@ sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *des
     return grid;
 }
 
-void CNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPNamedView* object = this->spnamedview;
+void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPNamedView* object = this;
 
     SPNamedView *nv = (SPNamedView *) object;
 
-    CObjectGroup::child_added(child, ref);
+    SPObjectGroup::child_added(child, ref);
 
     if (!strcmp(child->name(), "inkscape:grid")) {
         sp_namedview_add_grid(nv, child, NULL);
@@ -706,8 +683,8 @@ void CNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
     }
 }
 
-void CNamedView::remove_child(Inkscape::XML::Node *child) {
-	SPNamedView* object = this->spnamedview;
+void SPNamedView::remove_child(Inkscape::XML::Node *child) {
+	SPNamedView* object = this;
     SPNamedView *nv = (SPNamedView *) object;
 
     if (!strcmp(child->name(), "inkscape:grid")) {
@@ -732,11 +709,11 @@ void CNamedView::remove_child(Inkscape::XML::Node *child) {
         }
     }
 
-    CObjectGroup::remove_child(child);
+    SPObjectGroup::remove_child(child);
 }
 
-Inkscape::XML::Node* CNamedView::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPNamedView* object = this->spnamedview;
+Inkscape::XML::Node* SPNamedView::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPNamedView* object = this;
 
     if ( ( flags & SP_OBJECT_WRITE_EXT ) &&
          repr != object->getRepr() )

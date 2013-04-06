@@ -16,40 +16,16 @@
 #include "xml/repr.h"
 #include "document.h"
 
-
-G_DEFINE_TYPE(SPObjectGroup, sp_objectgroup, G_TYPE_OBJECT);
-
-static void
-sp_objectgroup_class_init(SPObjectGroupClass *klass)
-{
+SPObjectGroup::SPObjectGroup() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 }
 
-SPObjectGroup::SPObjectGroup() : SPObject() {
-	SPObjectGroup* objectgroup = this;
-
-	objectgroup->cobjectgroup = new CObjectGroup(objectgroup);
-	objectgroup->typeHierarchy.insert(typeid(SPObjectGroup));
-
-	delete objectgroup->cobject;
-	objectgroup->cobject = objectgroup->cobjectgroup;
+SPObjectGroup::~SPObjectGroup() {
 }
 
-static void
-sp_objectgroup_init(SPObjectGroup * objectgroup)
-{
-	new (objectgroup) SPObjectGroup();
-}
-
-CObjectGroup::CObjectGroup(SPObjectGroup* gr) : CObject(gr) {
-	this->spobjectgroup = gr;
-}
-
-CObjectGroup::~CObjectGroup() {
-}
-
-
-void CObjectGroup::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPObjectGroup* object = this->spobjectgroup;
+void SPObjectGroup::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPObjectGroup* object = this;
 
 	CObject::child_added(child, ref);
 
@@ -57,8 +33,8 @@ void CObjectGroup::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *
 }
 
 
-void CObjectGroup::remove_child(Inkscape::XML::Node *child) {
-	SPObjectGroup* object = this->spobjectgroup;
+void SPObjectGroup::remove_child(Inkscape::XML::Node *child) {
+	SPObjectGroup* object = this;
 
 	CObject::remove_child(child);
 
@@ -66,8 +42,8 @@ void CObjectGroup::remove_child(Inkscape::XML::Node *child) {
 }
 
 
-void CObjectGroup::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
-	SPObjectGroup* object = this->spobjectgroup;
+void SPObjectGroup::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
+	SPObjectGroup* object = this;
 
 	CObject::order_changed(child, old_ref, new_ref);
 
@@ -75,8 +51,8 @@ void CObjectGroup::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node
 }
 
 
-Inkscape::XML::Node *CObjectGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPObjectGroup* object = this->spobjectgroup;
+Inkscape::XML::Node *SPObjectGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPObjectGroup* object = this;
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr) {
