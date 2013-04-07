@@ -20,7 +20,7 @@
 #define SP_FEMERGENODE(obj) ((SPFeMergeNode*)obj)
 #define SP_IS_FEMERGENODE(obj) (dynamic_cast<const SPFeMergeNode*>((SPObject*)obj))
 
-class SPFeMergeNode : public SPObject, public CObject {
+class SPFeMergeNode : public SPObject {
 public:
 	SPFeMergeNode();
 	virtual ~SPFeMergeNode();

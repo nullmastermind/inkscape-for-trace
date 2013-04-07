@@ -38,8 +38,6 @@ namespace {
 }
 
 SPFeComponentTransfer::SPFeComponentTransfer() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->renderer = NULL;
 }
 

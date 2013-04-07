@@ -39,7 +39,7 @@ struct ltstr {
     bool operator()(const char* s1, const char* s2) const;
 };
 
-class SPFilter : public SPObject, public CObject {
+class SPFilter : public SPObject {
 public:
 	SPFilter();
 	virtual ~SPFilter();

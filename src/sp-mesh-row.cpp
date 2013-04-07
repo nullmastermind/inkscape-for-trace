@@ -67,16 +67,14 @@ SPMeshRow* SPMeshRow::getPrevMeshRow()
 /*
  * Mesh Row
  */
-SPMeshRow::SPMeshRow() : SPObject(), CObject(this) {
-    delete this->cobject;
-    this->cobject = this;
+SPMeshRow::SPMeshRow() : SPObject() {
 }
 
 SPMeshRow::~SPMeshRow() {
 }
 
 void SPMeshRow::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	CObject::build(doc, repr);
+	SPObject::build(doc, repr);
 }
 
 /**
@@ -95,7 +93,7 @@ Inkscape::XML::Node* SPMeshRow::write(Inkscape::XML::Document* xml_doc, Inkscape
         repr = xml_doc->createElement("svg:meshRow");
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

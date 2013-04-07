@@ -13,7 +13,7 @@
 #define SP_STRING(obj) ((SPString*)obj)
 #define SP_IS_STRING(obj) (dynamic_cast<const SPString*>((SPObject*)obj))
 
-class SPString : public SPObject, public CObject {
+class SPString : public SPObject {
 public:
 	SPString();
 	virtual ~SPString();

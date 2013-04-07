@@ -20,7 +20,7 @@
 #define SP_METADATA(obj) ((SPMetadata*)obj)
 #define SP_IS_METADATA(obj) (dynamic_cast<const SPMetadata*>((SPObject*)obj))
 
-class SPMetadata : public SPObject, public CObject {
+class SPMetadata : public SPObject {
 public:
 	SPMetadata();
 	virtual ~SPMetadata();

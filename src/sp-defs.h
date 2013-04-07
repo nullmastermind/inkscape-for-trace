@@ -18,7 +18,7 @@
 #define SP_DEFS(obj) ((SPDefs*)obj)
 #define SP_IS_DEFS(obj) (dynamic_cast<const SPDefs*>((SPObject*)obj))
 
-class SPDefs : public SPObject, public CObject {
+class SPDefs : public SPObject {
 public:
 	SPDefs();
 	virtual ~SPDefs();

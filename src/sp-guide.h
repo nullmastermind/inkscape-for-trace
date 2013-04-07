@@ -27,7 +27,7 @@ class SPDesktop;
 #define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj))
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
-class SPGuide : public SPObject, public CObject {
+class SPGuide : public SPObject {
 public:
 	SPGuide();
 	virtual ~SPGuide();

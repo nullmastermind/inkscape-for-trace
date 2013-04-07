@@ -43,8 +43,6 @@ namespace {
 }
 
 SPStar::SPStar() : SPPolygon() {
-	this->cobject = this;
-
 	this->sides = 5;
 	this->center = Geom::Point(0, 0);
 	this->r[0] = 1.0;

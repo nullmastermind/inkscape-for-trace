@@ -20,8 +20,6 @@ namespace {
  */
 //#define MESH_DEBUG
 SPMeshGradient::SPMeshGradient() : SPGradient() {
-	this->cobject = this;
-
     // Start coordinate of mesh
     this->x.unset(SVGLength::NONE, 0.0, 0.0);
     this->y.unset(SVGLength::NONE, 0.0, 0.0);

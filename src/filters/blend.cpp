@@ -41,8 +41,6 @@ namespace {
 }
 
 SPFeBlend::SPFeBlend() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->blend_mode = Inkscape::Filters::BLEND_NORMAL;
 
     this->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;

@@ -30,16 +30,14 @@ namespace {
 	bool defsRegistered = SPFactory::instance().registerObject("svg:defs", createDefs);
 }
 
-SPDefs::SPDefs() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
+SPDefs::SPDefs() : SPObject() {
 }
 
 SPDefs::~SPDefs() {
 }
 
 void SPDefs::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 void SPDefs::update(SPCtx *ctx, guint flags) {
@@ -118,7 +116,7 @@ Inkscape::XML::Node* SPDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         }
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

@@ -33,10 +33,7 @@ void SPFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
 	// throw;
 }
 
-SPFilterPrimitive::SPFilterPrimitive() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFilterPrimitive::SPFilterPrimitive() : SPObject() {
     this->image_in = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
     this->image_out = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 
@@ -70,14 +67,14 @@ void SPFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	object->readAttr( "width" );
 	object->readAttr( "height" );
 
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 }
 
 /**
  * Drops any allocated memory.
  */
 void SPFilterPrimitive::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 /**
@@ -133,7 +130,7 @@ void SPFilterPrimitive::set(unsigned int key, gchar const *value) {
     }
 
     /* See if any parents need this value. */
-    CObject::set(key, value);
+    SPObject::set(key, value);
 }
 
 /**
@@ -155,7 +152,7 @@ void SPFilterPrimitive::update(SPCtx *ctx, guint flags) {
         object->readAttr( "height" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -178,7 +175,7 @@ Inkscape::XML::Node* SPFilterPrimitive::write(Inkscape::XML::Document *doc, Inks
     repr->setAttribute("result", out_name);
 
     /* Do we need to add x,y,width,height? */
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

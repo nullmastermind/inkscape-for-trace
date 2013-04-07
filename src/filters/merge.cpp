@@ -35,7 +35,6 @@ namespace {
 }
 
 SPFeMerge::SPFeMerge() : SPFilterPrimitive() {
-	this->cobject = this;
 }
 
 SPFeMerge::~SPFeMerge() {

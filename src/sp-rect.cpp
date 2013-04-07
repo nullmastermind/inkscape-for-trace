@@ -39,7 +39,6 @@ namespace {
 
 
 SPRect::SPRect() : SPShape() {
-	this->cobject = this;
 }
 
 SPRect::~SPRect() {

@@ -40,10 +40,7 @@ double FNT_DEFAULT_ADV = 90; // TODO determine proper default
 double FNT_DEFAULT_ASCENT = 90; // TODO determine proper default
 double FNT_UNITS_PER_EM = 90; // TODO determine proper default
 
-SPFont::SPFont() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFont::SPFont() : SPObject() {
     this->horiz_origin_x = 0;
     this->horiz_origin_y = 0;
     this->horiz_adv_x = FNT_DEFAULT_ADV;
@@ -56,7 +53,7 @@ SPFont::~SPFont() {
 }
 
 void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPFont* object = this;
 
@@ -80,7 +77,7 @@ static void sp_font_children_modified(SPFont */*sp_font*/)
 void SPFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPFont* object = this;
     SPFont *f = SP_FONT(object);
-    CObject::child_added(child, ref);
+    SPObject::child_added(child, ref);
 
     sp_font_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -94,7 +91,7 @@ void SPFont::remove_child(Inkscape::XML::Node* child) {
 	SPFont* object = this;
     SPFont *f = SP_FONT(object);
 
-    CObject::remove_child(child);
+    SPObject::remove_child(child);
 
     sp_font_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -106,7 +103,7 @@ void SPFont::release() {
 
     object->document->removeResource("font", object);
 
-    CObject::release();
+    SPObject::release();
 }
 
 void SPFont::set(unsigned int key, const gchar *value) {
@@ -170,7 +167,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
             break;
         }
         default:
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
     }
 }
@@ -190,7 +187,7 @@ void SPFont::update(SPCtx *ctx, guint flags) {
         object->readAttr( "vert-adv-y" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
@@ -221,7 +218,7 @@ Inkscape::XML::Node* SPFont::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

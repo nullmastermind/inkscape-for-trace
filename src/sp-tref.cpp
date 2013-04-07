@@ -64,8 +64,6 @@ static void sp_tref_href_changed(SPObject *old_ref, SPObject *ref, SPTRef *tref)
 static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 
 SPTRef::SPTRef() : SPItem() {
-	this->cobject = this;
-
 	this->stringChild = NULL;
 
     new (&this->attributes) TextTagAttributes;

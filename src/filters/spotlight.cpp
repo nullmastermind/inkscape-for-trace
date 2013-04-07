@@ -39,10 +39,7 @@ namespace {
 	bool spotLightRegistered = SPFactory::instance().registerObject("svg:feSpotLight", createSpotLight);
 }
 
-SPFeSpotLight::SPFeSpotLight() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFeSpotLight::SPFeSpotLight() : SPObject() {
     this->x = 0;
     this->y = 0;
     this->z = 0;
@@ -72,7 +69,7 @@ SPFeSpotLight::~SPFeSpotLight() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPFeSpotLight* object = this;
 
@@ -253,7 +250,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         break;
     default:
         // See if any parents need this value.
-    	CObject::set(key, value);
+    	SPObject::set(key, value);
         break;
     }
 }
@@ -279,7 +276,7 @@ void SPFeSpotLight::update(SPCtx *ctx, guint flags) {
         object->readAttr( "limitingConeAngle" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -310,7 +307,7 @@ Inkscape::XML::Node* SPFeSpotLight::write(Inkscape::XML::Document *doc, Inkscape
     if (fespotlight->limitingConeAngle_set)
         sp_repr_set_css_double(repr, "limitingConeAngle", fespotlight->limitingConeAngle);
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

@@ -66,7 +66,7 @@ public:
 };
 
 // these do not need any style
-class SPFlowline : public SPObject, public CObject {
+class SPFlowline : public SPObject {
 public:
 	SPFlowline();
 	virtual ~SPFlowline();
@@ -77,7 +77,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 };
 
-class SPFlowregionbreak : public SPObject, public CObject {
+class SPFlowregionbreak : public SPObject {
 public:
 	SPFlowregionbreak();
 	virtual ~SPFlowregionbreak();

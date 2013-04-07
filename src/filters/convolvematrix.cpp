@@ -39,8 +39,6 @@ namespace {
 }
 
 SPFeConvolveMatrix::SPFeConvolveMatrix() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->bias = 0;
 	this->divisorIsSet = 0;
 	this->divisor = 0;

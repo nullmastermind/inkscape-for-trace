@@ -37,8 +37,6 @@ namespace {
 }
 
 SPFeMorphology::SPFeMorphology() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->Operator = Inkscape::Filters::MORPHOLOGY_OPERATOR_ERODE;
 
     //Setting default values:

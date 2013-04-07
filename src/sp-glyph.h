@@ -34,7 +34,7 @@ enum glyphOrientation {
     GLYPH_ORIENTATION_BOTH
 };
 
-class SPGlyph : public SPObject, public CObject {
+class SPGlyph : public SPObject {
 public:
 	SPGlyph();
 	virtual ~SPGlyph();

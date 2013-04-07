@@ -21,7 +21,7 @@
 #define SP_MISSING_GLYPH(obj) ((SPMissingGlyph*)obj)
 #define SP_IS_MISSING_GLYPH(obj) (dynamic_cast<const SPMissingGlyph*>((SPObject*)obj))
 
-class SPMissingGlyph : public SPObject, public CObject {
+class SPMissingGlyph : public SPObject {
 public:
 	SPMissingGlyph();
 	virtual ~SPMissingGlyph();

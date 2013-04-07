@@ -39,8 +39,6 @@ namespace {
 }
 
 SPFeTurbulence::SPFeTurbulence() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->stitchTiles = 0;
 	this->seed = 0;
 	this->numOctaves = 0;

@@ -66,8 +66,6 @@ namespace {
 }
 
 SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
-	this->cobject = this;
-
 	this->zoom = 0;
 	this->guidecolor = 0;
 	this->guidehicolor = 0;

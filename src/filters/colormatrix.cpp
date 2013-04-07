@@ -40,8 +40,6 @@ namespace {
 }
 
 SPFeColorMatrix::SPFeColorMatrix() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->value = 0;
 	this->type = Inkscape::Filters::COLORMATRIX_MATRIX;
 }

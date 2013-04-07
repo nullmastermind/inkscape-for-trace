@@ -46,10 +46,7 @@ namespace {
 #  SPSTRING
 #####################################################*/
 
-SPString::SPString() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPString::SPString() : SPObject() {
     new (&this->string) Glib::ustring();
 }
 
@@ -60,7 +57,7 @@ void SPString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPString* object = this;
     object->read_content();
 
-    CObject::build(doc, repr);
+    SPObject::build(doc, repr);
 }
 
 void SPString::release() {
@@ -69,7 +66,7 @@ void SPString::release() {
 
     string->string.~ustring();
 
-    CObject::release();
+    SPObject::release();
 }
 
 
@@ -117,7 +114,7 @@ void SPString::read_content() {
 }
 
 void SPString::update(SPCtx *ctx, unsigned flags) {
-//    CObject::onUpdate(ctx, flags);
+//    SPObject::onUpdate(ctx, flags);
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
         /* Parent style or we ourselves changed, so recalculate */

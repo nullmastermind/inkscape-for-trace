@@ -42,8 +42,6 @@ static void         GetDest(SPObject* child,Shape **computed);
 
 
 SPFlowregion::SPFlowregion() : SPItem() {
-	this->cobject = this;
-
 	new (&this->computed) std::vector<Shape*>;
 }
 
@@ -199,8 +197,6 @@ gchar* SPFlowregion::description() {
  *
  */
 SPFlowregionExclude::SPFlowregionExclude() : SPItem() {
-	this->cobject = this;
-
 	this->computed = NULL;
 }
 

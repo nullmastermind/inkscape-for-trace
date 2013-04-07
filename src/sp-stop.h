@@ -20,7 +20,7 @@ class ustring;
 #define SP_IS_STOP(obj) (dynamic_cast<const SPStop*>((SPObject*)obj))
 
 /** Gradient stop. */
-class SPStop : public SPObject, public CObject {
+class SPStop : public SPObject {
 public:
 	SPStop();
 	virtual ~SPStop();

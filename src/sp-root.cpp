@@ -42,8 +42,6 @@ namespace {
 }
 
 SPRoot::SPRoot() : SPGroup() {
-	this->cobject = this;
-
 	this->aspect_set = 0;
 	this->aspect_align = 0;
 	this->onload = NULL;

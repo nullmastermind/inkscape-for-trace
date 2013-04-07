@@ -45,7 +45,6 @@ namespace {
 }
 
 SPFlowdiv::SPFlowdiv() : SPItem() {
-	this->cobject = this;
 }
 
 SPFlowdiv::~SPFlowdiv() {
@@ -179,7 +178,6 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
  */
 
 SPFlowtspan::SPFlowtspan() : SPItem() {
-	this->cobject = this;
 }
 
 SPFlowtspan::~SPFlowtspan() {
@@ -312,7 +310,6 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
  *
  */
 SPFlowpara::SPFlowpara() : SPItem() {
-	this->cobject = this;
 }
 
 SPFlowpara::~SPFlowpara() {
@@ -442,20 +439,18 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
  *
  */
 
-SPFlowline::SPFlowline() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
+SPFlowline::SPFlowline() : SPObject() {
 }
 
 SPFlowline::~SPFlowline() {
 }
 
 void SPFlowline::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 void SPFlowline::modified(unsigned int flags) {
-	CObject::modified(flags);
+	SPObject::modified(flags);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -472,7 +467,7 @@ Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscap
     } else {
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -482,20 +477,18 @@ Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscap
  *
  */
 
-SPFlowregionbreak::SPFlowregionbreak() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
+SPFlowregionbreak::SPFlowregionbreak() : SPObject() {
 }
 
 SPFlowregionbreak::~SPFlowregionbreak() {
 }
 
 void SPFlowregionbreak::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 void SPFlowregionbreak::modified(unsigned int flags) {
-	CObject::modified(flags);
+	SPObject::modified(flags);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -512,7 +505,7 @@ Inkscape::XML::Node *SPFlowregionbreak::write(Inkscape::XML::Document *xml_doc, 
     } else {
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

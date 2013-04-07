@@ -26,7 +26,7 @@ class ColorProfileImpl;
 /**
  * Color Profile.
  */
-class ColorProfile : public SPObject, public CObject {
+class ColorProfile : public SPObject {
 public:
 	ColorProfile();
 	virtual ~ColorProfile();
@@ -70,7 +70,7 @@ public:
 
 #define COLORPROFILE_TYPE (Inkscape::colorprofile_get_type())
 #define COLORPROFILE(obj) ((Inkscape::ColorProfile*)obj)
-#define IS_COLORPROFILE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(Inkscape::ColorProfile)))
+#define IS_COLORPROFILE(obj) (dynamic_cast<const Inkscape::ColorProfile*>((SPObject*)obj))
 
 #endif // !SEEN_COLOR_PROFILE_H
 

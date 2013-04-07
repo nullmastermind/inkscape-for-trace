@@ -38,8 +38,6 @@ namespace {
 }
 
 SPFeFlood::SPFeFlood() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->color = 0;
 
     this->opacity = 1;

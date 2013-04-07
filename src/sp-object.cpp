@@ -103,135 +103,77 @@ public:
     }
 };
 
-static void sp_object_finalize(GObject *object);
-
 static gchar *sp_object_get_unique_id(SPObject    *object,
                                       gchar const *defid);
 
-G_DEFINE_TYPE(SPObject, sp_object, G_TYPE_OBJECT);
-
-/**
- * Initializes the SPObject vtable.
- */
-static void
-sp_object_class_init(SPObjectClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    object_class->finalize = sp_object_finalize;
-}
-
 SPObject::SPObject() {
-	SPObject* object = this;
+    debug("id=%x, typename=%s",this, g_type_name_from_instance((GTypeInstance*)object));
 
-    debug("id=%x, typename=%s",object, g_type_name_from_instance((GTypeInstance*)object));
+    this->repr = NULL;
+    this->mflags = 0;
+    this->id = NULL;
+    this->cloned = 0;
+    this->uflags = 0;
 
-    object->cobject = new CObject(object);
-
-    new (&object->typeHierarchy) std::set<TypeInfo>();
-    object->typeHierarchy.insert(typeid(SPObject));
-
-    object->repr = NULL;
-    object->mflags = 0;
-    object->id = NULL;
-    object->cloned = 0;
-    object->uflags = 0;
-
-    object->hrefcount = 0;
-    object->_total_hrefcount = 0;
-    object->document = NULL;
-    object->children = object->_last_child = NULL;
-    object->parent = object->next = NULL;
+    this->hrefcount = 0;
+    this->_total_hrefcount = 0;
+    this->document = NULL;
+    this->children = this->_last_child = NULL;
+    this->parent = this->next = NULL;
 
     //used XML Tree here.
-    object->getRepr(); // TODO check why this call is made
+    this->getRepr(); // TODO check why this call is made
 
-    SPObjectImpl::setIdNull(object);
+    SPObjectImpl::setIdNull(this);
 
-    object->_collection_policy = SPObject::COLLECT_WITH_PARENT;
+    this->_collection_policy = SPObject::COLLECT_WITH_PARENT;
 
-    new (&object->_release_signal) sigc::signal<void, SPObject *>();
-    new (&object->_modified_signal) sigc::signal<void, SPObject *, unsigned int>();
-    new (&object->_delete_signal) sigc::signal<void, SPObject *>();
-    new (&object->_position_changed_signal) sigc::signal<void, SPObject *>();
-    object->_successor = NULL;
+    new (&this->_release_signal) sigc::signal<void, SPObject *>();
+    new (&this->_modified_signal) sigc::signal<void, SPObject *, unsigned int>();
+    new (&this->_delete_signal) sigc::signal<void, SPObject *>();
+    new (&this->_position_changed_signal) sigc::signal<void, SPObject *>();
+    this->_successor = NULL;
 
     // FIXME: now we create style for all objects, but per SVG, only the following can have style attribute:
     // vg, g, defs, desc, title, symbol, use, image, switch, path, rect, circle, ellipse, line, polyline,
     // polygon, text, tspan, tref, textPath, altGlyph, glyphRef, marker, linearGradient, radialGradient,
     // stop, pattern, clipPath, mask, filter, feImage, a, font, glyph, missing-glyph, foreignObject
-    object->style = sp_style_new_from_object(object);
+    this->style = sp_style_new_from_object(this);
 
-    object->_label = NULL;
-    object->_default_label = NULL;
+    this->_label = NULL;
+    this->_default_label = NULL;
 }
 
 SPObject::~SPObject() {
+    g_free(this->_label);
+    g_free(this->_default_label);
 
-}
+    this->_label = NULL;
+    this->_default_label = NULL;
 
-/**
- * Callback to initialize the SPObject object.
- */
-static void
-sp_object_init(SPObject *object)
-{
-	new (object) SPObject();
+    if (this->_successor) {
+        sp_object_unref(this->_successor, NULL);
+        this->_successor = NULL;
+    }
+
+    this->_release_signal.~signal();
+    this->_modified_signal.~signal();
+    this->_delete_signal.~signal();
+    this->_position_changed_signal.~signal();
 }
 
 // CPPIFY: make pure virtual
-void CObject::read_content() {
+void SPObject::read_content() {
 	//throw;
 }
 
-void CObject::update(SPCtx* ctx, unsigned int flags) {
+void SPObject::update(SPCtx* ctx, unsigned int flags) {
 	//throw;
 }
 
-void CObject::modified(unsigned int flags) {
+void SPObject::modified(unsigned int flags) {
 	//throw;
 }
-
-
-/**
- * Callback to destroy all members and connections of object and itself.
- */
-static void
-sp_object_finalize(GObject *object)
-{
-    SPObject *spobject = (SPObject *)object;
-
-    spobject->typeHierarchy.~set();
-    delete spobject->cobject;
-
-    g_free(spobject->_label);
-    g_free(spobject->_default_label);
-    spobject->_label = NULL;
-    spobject->_default_label = NULL;
-
-    if (spobject->_successor) {
-        sp_object_unref(spobject->_successor, NULL);
-        spobject->_successor = NULL;
-    }
-
-    spobject->_release_signal.~signal();
-    spobject->_modified_signal.~signal();
-    spobject->_delete_signal.~signal();
-    spobject->_position_changed_signal.~signal();
-
-    if (((GObjectClass *) (sp_object_parent_class))->finalize) {
-        (* ((GObjectClass *) (sp_object_parent_class))->finalize)(object);
-    }
-}
-
-
-// CPPIFY: remove
-CObject::CObject(SPObject* object) {
-	this->spobject = object;
-}
-
-CObject::~CObject() {
-}
-
 
 namespace {
 
@@ -647,8 +589,8 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
     return result;
 }
 
-void CObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPObject* object = this->spobject;
+void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPObject* object = this;
 
 //    GType type = sp_repr_type_lookup(child);
 //    if (!type) {
@@ -668,8 +610,8 @@ void CObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) 
     ochild->invoke_build(object->document, child, object->cloned);
 }
 
-void CObject::release() {
-	SPObject* object = this->spobject;
+void SPObject::release() {
+	SPObject* object = this;
 
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
     while (object->children) {
@@ -677,8 +619,8 @@ void CObject::release() {
     }
 }
 
-void CObject::remove_child(Inkscape::XML::Node* child) {
-	SPObject* object = this->spobject;
+void SPObject::remove_child(Inkscape::XML::Node* child) {
+	SPObject* object = this;
 
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
     SPObject *ochild = object->get_child_by_repr(child);
@@ -688,8 +630,8 @@ void CObject::remove_child(Inkscape::XML::Node* child) {
     }
 }
 
-void CObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node *new_ref) {
-	SPObject* object = this->spobject;
+void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node *new_ref) {
+	SPObject* object = this;
 
     SPObject *ochild = object->get_child_by_repr(child);
     g_return_if_fail(ochild != NULL);
@@ -698,8 +640,8 @@ void CObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * ol
     ochild->_position_changed_signal.emit(ochild);
 }
 
-void CObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPObject* object = this->spobject;
+void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPObject* object = this;
 
     /* Nothing specific here */
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
@@ -782,7 +724,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
     }
 
     /* Invoke derived methods, if any */
-    this->cobject->build(document, repr);
+    this->build(document, repr);
 
     /* Signalling (should be connected AFTER processing derived methods */
     sp_repr_add_listener(repr, &object_event_vector, this);
@@ -821,7 +763,7 @@ void SPObject::releaseReferences() {
 
     this->_release_signal.emit(this);
 
-    this->cobject->release();
+    this->release();
 
     /* all hrefs should be released by the "release" handlers */
     g_assert(this->hrefcount == 0);
@@ -867,27 +809,27 @@ void SPObject::repr_child_added(Inkscape::XML::Node * /*repr*/, Inkscape::XML::N
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->child_added(child, ref);
+    object->child_added(child, ref);
 }
 
 void SPObject::repr_child_removed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node * /*ref*/, gpointer data)
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->remove_child(child);
+    object->remove_child(child);
 }
 
 void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data)
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->order_changed(child, old, newer);
+    object->order_changed(child, old, newer);
 }
 
-void CObject::set(unsigned int key, gchar const* value) {
+void SPObject::set(unsigned int key, gchar const* value) {
     g_assert(key != SP_ATTR_INVALID);
 
-    SPObject* object = this->spobject;
+    SPObject* object = this;
 
     switch (key) {
         case SP_ATTR_ID:
@@ -975,7 +917,7 @@ void SPObject::setKeyValue(unsigned int key, gchar const *value)
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
 
-	this->cobject->set(key, value);
+	this->set(key, value);
 }
 
 void SPObject::readAttr(gchar const *key)
@@ -1013,7 +955,7 @@ void SPObject::repr_content_changed(Inkscape::XML::Node * /*repr*/, gchar const 
 {
     SPObject *object = SP_OBJECT(data);
 
-    object->cobject->read_content();
+    object->read_content();
 }
 
 /**
@@ -1031,8 +973,8 @@ static gchar const *sp_xml_get_space_string(unsigned int space)
     }
 }
 
-Inkscape::XML::Node* CObject::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPObject* object = this->spobject;
+Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPObject* object = this;
 
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
         repr = object->getRepr()->duplicate(doc);
@@ -1137,7 +1079,7 @@ Inkscape::XML::Node * SPObject::updateRepr(Inkscape::XML::Document *doc, Inkscap
 	if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = getRepr();
 	}
-	return this->cobject->write(doc, repr, flags);
+	return this->write(doc, repr, flags);
 
 }
 
@@ -1204,7 +1146,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 
     try
     {
-    	this->cobject->update(ctx, flags);
+    	this->update(ctx, flags);
     }
     catch(...)
     {
@@ -1262,7 +1204,7 @@ void SPObject::emitModified(unsigned int flags)
 
     sp_object_ref(this);
 
-    this->cobject->modified(flags);
+    this->modified(flags);
 
     _modified_signal.emit(this, flags);
     sp_object_unref(this);

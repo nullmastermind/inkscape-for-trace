@@ -47,8 +47,6 @@ namespace {
 }
 
 SPFeDiffuseLighting::SPFeDiffuseLighting() : SPFilterPrimitive() {
-	this->cobject = this;
-
     this->surfaceScale = 1;
     this->diffuseConstant = 1;
     this->lighting_color = 0xffffffff;

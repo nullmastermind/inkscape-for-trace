@@ -36,8 +36,6 @@ namespace {
 }
 
 SPFeOffset::SPFeOffset() : SPFilterPrimitive() {
-	this->cobject = this;
-
     this->dx = 0;
     this->dy = 0;
 }

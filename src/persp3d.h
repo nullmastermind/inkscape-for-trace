@@ -43,7 +43,7 @@ public:
 //    friend class Persp3D;
 };
 
-class Persp3D : public SPObject, public CObject {
+class Persp3D : public SPObject {
 public:
 	Persp3D();
 	virtual ~Persp3D();

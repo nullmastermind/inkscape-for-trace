@@ -20,7 +20,7 @@ class SPObjectClass;
 #define SP_IS_MESHROW(obj) (dynamic_cast<const SPMeshRow*>((SPObject*)obj))
 
 /** Gradient MeshRow. */
-class SPMeshRow : public SPObject, public CObject {
+class SPMeshRow : public SPObject {
 public:
 	SPMeshRow();
 	virtual ~SPMeshRow();

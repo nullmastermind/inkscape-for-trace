@@ -51,8 +51,6 @@ namespace {
 }
 
 SPClipPath::SPClipPath() : SPObjectGroup() {
-	this->cobject = this;
-
     this->clipPathUnits_set = FALSE;
     this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 

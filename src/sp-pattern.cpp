@@ -54,8 +54,6 @@ namespace {
 }
 
 SPPattern::SPPattern() : SPPaintServer() {
-	this->cobject = this;
-
 	this->href = NULL;
 
 	this->ref = new SPPatternReference(this);

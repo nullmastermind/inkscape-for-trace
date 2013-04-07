@@ -71,7 +71,7 @@ enum FontFaceUnicodeRangeType{
 	FONTFACE_UNICODERANGE_FIXME_HERE,
 };
 
-class SPFontFace : public SPObject, public CObject {
+class SPFontFace : public SPObject {
 public:
 	SPFontFace();
 	virtual ~SPFontFace();

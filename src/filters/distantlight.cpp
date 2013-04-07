@@ -29,10 +29,7 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-SPFeDistantLight::SPFeDistantLight() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFeDistantLight::SPFeDistantLight() : SPObject() {
     this->azimuth = 0;
     this->elevation = 0;
     this->azimuth_set = FALSE;
@@ -48,7 +45,7 @@ SPFeDistantLight::~SPFeDistantLight() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeDistantLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPFeDistantLight* object = this;
 
@@ -122,7 +119,7 @@ void SPFeDistantLight::set(unsigned int key, gchar const *value) {
         break;
     default:
         // See if any parents need this value.
-    	CObject::set(key, value);
+    	SPObject::set(key, value);
         break;
     }
 }
@@ -141,7 +138,7 @@ void SPFeDistantLight::update(SPCtx *ctx, guint flags) {
         object->readAttr( "elevation" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -160,7 +157,7 @@ Inkscape::XML::Node* SPFeDistantLight::write(Inkscape::XML::Document *doc, Inksc
     if (fedistantlight->elevation_set)
         sp_repr_set_css_double(repr, "elevation", fedistantlight->elevation);
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

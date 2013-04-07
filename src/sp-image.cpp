@@ -515,8 +515,6 @@ namespace {
 }
 
 SPImage::SPImage() : SPItem() {
-	this->cobject = this;
-
 	this->aspect_clip = 0;
 
     this->x.unset();

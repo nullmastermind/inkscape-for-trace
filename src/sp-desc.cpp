@@ -26,9 +26,7 @@ namespace {
 	bool descRegistered = SPFactory::instance().registerObject("svg:desc", createDesc);
 }
 
-SPDesc::SPDesc() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
+SPDesc::SPDesc() : SPObject() {
 }
 
 SPDesc::~SPDesc() {
@@ -41,7 +39,7 @@ Inkscape::XML::Node* SPDesc::write(Inkscape::XML::Document* doc, Inkscape::XML::
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

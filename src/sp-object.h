@@ -16,11 +16,8 @@
 /* SPObject flags */
 
 class SPObject;
-class SPObjectClass;
 
-#define SP_TYPE_OBJECT (sp_object_get_type())
 #define SP_OBJECT(obj) ((SPObject*)obj)
-//#define SP_IS_OBJECT(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPObject)))
 #define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>((SPObject*)obj))
 
 /* Async modification flags */
@@ -48,9 +45,6 @@ class SPObjectClass;
 #define SP_OBJECT_WRITE_BUILD (1 << 0)
 #define SP_OBJECT_WRITE_EXT (1 << 1)
 #define SP_OBJECT_WRITE_ALL (1 << 2)
-
-#include <set>
-#include "type-info.h"
 
 #include <glib-object.h>
 #include <stddef.h>
@@ -117,8 +111,6 @@ struct SPIXmlSpace {
     guint value : 1;
 };
 
-GType sp_object_get_type() G_GNUC_CONST;
-
 /*
  * Refcounting
  *
@@ -172,8 +164,6 @@ SPObject *sp_object_href(SPObject *object, gpointer owner);
  */
 SPObject *sp_object_hunref(SPObject *object, gpointer owner);
 
-class CObject;
-
 /**
  * SPObject is an abstract base class of all of the document nodes at the
  * SVG document level. Each SPObject subclass implements a certain SVG
@@ -200,9 +190,6 @@ public:
 
     SPObject();
     virtual ~SPObject();
-
-    CObject* cobject;
-    std::set<TypeInfo> typeHierarchy;
 
     unsigned int cloned : 1;
     unsigned int uflags : 8;
@@ -801,9 +788,6 @@ private:
     /* Real handlers of repr signals */
 
 public:
-
-    static GType get_type() {return sp_object_get_type();}
-
     /**
      * Callback for attr_changed node event.
      */
@@ -832,26 +816,9 @@ public:
     static void repr_order_changed(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data);
 
 
-    friend class SPObjectClass;
     friend class SPObjectImpl;
-    friend class CObject;
-};
 
-/// The SPObject vtable.
-class SPObjectClass {
 public:
-    GObjectClass parent_class;
-
-private:
-    friend class SPObject;
-};
-
-
-class CObject {
-public:
-	CObject(SPObject* object);
-	virtual ~CObject();
-
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
@@ -868,9 +835,6 @@ public:
 	virtual void modified(unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-
-protected:
-	SPObject* spobject;
 };
 
 

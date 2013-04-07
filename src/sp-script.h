@@ -18,7 +18,7 @@
 #define SP_IS_SCRIPT(obj) (dynamic_cast<const SPScript*>((SPObject*)obj))
 
 /* SPScript */
-class SPScript : public SPObject, public CObject {
+class SPScript : public SPObject {
 public:
 	SPScript();
 	virtual ~SPScript();

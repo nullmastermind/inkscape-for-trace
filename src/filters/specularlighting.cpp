@@ -47,8 +47,6 @@ namespace {
 }
 
 SPFeSpecularLighting::SPFeSpecularLighting() : SPFilterPrimitive() {
-	this->cobject = this;
-
     this->surfaceScale = 1;
     this->specularConstant = 1;
     this->specularExponent = 1;

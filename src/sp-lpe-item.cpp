@@ -50,8 +50,6 @@ static std::string patheffectlist_write_svg(PathEffectList const & list);
 static std::string hreflist_write_svg(HRefList const & list);
 
 SPLPEItem::SPLPEItem() : SPItem() {
-	this->cobject = this;
-
     this->path_effects_enabled = 1;
 
     this->path_effect_list = new PathEffectList();

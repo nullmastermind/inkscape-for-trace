@@ -41,7 +41,6 @@ namespace {
 }
 
 SPGaussianBlur::SPGaussianBlur() : SPFilterPrimitive() {
-	this->cobject = this;
 }
 
 SPGaussianBlur::~SPGaussianBlur() {

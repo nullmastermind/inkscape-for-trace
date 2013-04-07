@@ -33,10 +33,7 @@ namespace {
 	bool mergeNodeRegistered = SPFactory::instance().registerObject("svg:feMergeNode", createMergeNode);
 }
 
-SPFeMergeNode::SPFeMergeNode() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFeMergeNode::SPFeMergeNode() : SPObject() {
     this->input = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
@@ -57,7 +54,7 @@ void SPFeMergeNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
  * Drops any allocated memory.
  */
 void SPFeMergeNode::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 /**
@@ -77,7 +74,7 @@ void SPFeMergeNode::set(unsigned int key, gchar const *value) {
     }
 
     /* See if any parents need this value. */
-    CObject::set(key, value);
+    SPObject::set(key, value);
 }
 
 /**
@@ -91,7 +88,7 @@ void SPFeMergeNode::update(SPCtx *ctx, guint flags) {
         object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -111,7 +108,7 @@ Inkscape::XML::Node* SPFeMergeNode::write(Inkscape::XML::Document *doc, Inkscape
         }
     }
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

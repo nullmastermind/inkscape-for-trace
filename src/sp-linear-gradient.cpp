@@ -18,8 +18,6 @@ namespace {
  * Linear Gradient
  */
 SPLinearGradient::SPLinearGradient() : SPGradient() {
-	this->cobject = this;
-
     this->x1.unset(SVGLength::PERCENT, 0.0, 0.0);
     this->y1.unset(SVGLength::PERCENT, 0.0, 0.0);
     this->x2.unset(SVGLength::PERCENT, 1.0, 1.0);

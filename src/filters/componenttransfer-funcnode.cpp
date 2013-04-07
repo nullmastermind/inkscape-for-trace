@@ -31,10 +31,7 @@
 #include "macros.h"
 
 /* FeFuncNode class */
-SPFeFuncNode::SPFeFuncNode() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFeFuncNode::SPFeFuncNode() : SPObject() {
     this->type = Inkscape::Filters::COMPONENTTRANSFER_TYPE_IDENTITY;
     //this->tableValues = NULL;
     this->slope = 1;
@@ -53,7 +50,7 @@ SPFeFuncNode::~SPFeFuncNode() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeFuncNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPFeFuncNode* object = this;
 
@@ -169,7 +166,7 @@ void SPFeFuncNode::set(unsigned int key, gchar const *value) {
         default:
 //            if (((SPObjectClass *) feFuncNode_parent_class)->set)
 //                ((SPObjectClass *) feFuncNode_parent_class)->set(object, key, value);
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
     }
 }
@@ -190,7 +187,7 @@ void SPFeFuncNode::update(SPCtx *ctx, guint flags) {
         //object->readAttr( "elevation" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -213,7 +210,7 @@ TODO: I'm not sure what to do here...
     if (fefuncnode->elevation_set)
         sp_repr_set_css_double(repr, "elevation", fefuncnode->elevation);*/
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

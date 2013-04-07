@@ -17,10 +17,7 @@ namespace {
 	bool styleRegistered = SPFactory::instance().registerObject("svg:style", createStyle);
 }
 
-SPStyleElem::SPStyleElem() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPStyleElem::SPStyleElem() : SPObject() {
     media_set_all(this->media);
     this->is_css = false;
 }
@@ -59,7 +56,7 @@ void SPStyleElem::set(unsigned int key, const gchar* value) {
 
         /* title is ignored. */
         default: {
-            CObject::set(key, value);
+            SPObject::set(key, value);
             break;
         }
     }
@@ -70,14 +67,14 @@ static void
 child_add_rm_cb(Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *,
                 void *const data)
 {
-    static_cast<SPObject *>(data)->cobject->read_content();
+    static_cast<SPObject *>(data)->read_content();
 }
 
 static void
 content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
                    void *const data)
 {
-    static_cast<SPObject *>(data)->cobject->read_content();
+    static_cast<SPObject *>(data)->read_content();
 }
 
 static void
@@ -85,7 +82,7 @@ child_order_changed_cb(Inkscape::XML::Node *, Inkscape::XML::Node *,
                        Inkscape::XML::Node *, Inkscape::XML::Node *,
                        void *const data)
 {
-    static_cast<SPObject *>(data)->cobject->read_content();
+    static_cast<SPObject *>(data)->read_content();
 }
 
 Inkscape::XML::Node* SPStyleElem::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
@@ -107,7 +104,7 @@ Inkscape::XML::Node* SPStyleElem::write(Inkscape::XML::Document* xml_doc, Inksca
     }
     /* todo: media */
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -370,7 +367,7 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     };
     rec_add_listener(*repr, &nodeEventVector, object);
 
-    CObject::build(document, repr);
+    SPObject::build(document, repr);
 }
 
 

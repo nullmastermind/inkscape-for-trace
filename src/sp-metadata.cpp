@@ -43,10 +43,7 @@ namespace {
 	bool metadataRegistered = SPFactory::instance().registerObject("svg:metadata", createMetadata);
 }
 
-SPMetadata::SPMetadata() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPMetadata::SPMetadata() : SPObject() {
     (void)this;
     debug("0x%08x",(unsigned int)this);
 }
@@ -83,7 +80,7 @@ void SPMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
         }
     }
 
-    CObject::build(doc, repr);
+    SPObject::build(doc, repr);
 }
 
 void SPMetadata::release() {
@@ -91,7 +88,7 @@ void SPMetadata::release() {
 
     // handle ourself
 
-    CObject::release();
+    SPObject::release();
 }
 
 void SPMetadata::set(unsigned int key, const gchar* value) {
@@ -99,7 +96,7 @@ void SPMetadata::set(unsigned int key, const gchar* value) {
           sp_attribute_name(key),key,value);
 
     // see if any parents need this value
-    CObject::set(key, value);
+    SPObject::set(key, value);
 }
 
 void SPMetadata::update(SPCtx* ctx, unsigned int flags) {
@@ -113,7 +110,7 @@ void SPMetadata::update(SPCtx* ctx, unsigned int flags) {
 
     }
 
-//    CObject::onUpdate(ctx, flags);
+//    SPObject::onUpdate(ctx, flags);
 }
 
 Inkscape::XML::Node* SPMetadata::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
@@ -130,7 +127,7 @@ Inkscape::XML::Node* SPMetadata::write(Inkscape::XML::Document* doc, Inkscape::X
         }
     }
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

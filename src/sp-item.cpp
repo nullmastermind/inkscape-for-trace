@@ -80,10 +80,7 @@ static SPItemView*          sp_item_view_list_remove(SPItemView     *list,
                                                      SPItemView     *view);
 
 
-SPItem::SPItem() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPItem::SPItem() : SPObject() {
 	this->sensitive = 0;
 	this->clip_ref = NULL;
 	this->avoidRef = NULL;
@@ -398,7 +395,7 @@ void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "inkscape:connector-avoid" );
     object->readAttr( "inkscape:connection-points" );
 
-    CObject::build(document, repr);
+    SPObject::build(document, repr);
 }
 
 void SPItem::release() {
@@ -415,7 +412,7 @@ void SPItem::release() {
     delete item->clip_ref;
     delete item->mask_ref;
 
-    CObject::release();
+    SPObject::release();
 
     while (item->display) {
         item->display = sp_item_view_list_remove(item->display, item->display);
@@ -507,7 +504,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
                 sp_style_read_from_object(object->style, object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
-                CObject::set(key, value);
+                SPObject::set(key, value);
             }
             break;
     }
@@ -567,7 +564,7 @@ void SPItem::update(SPCtx *ctx, guint flags) {
     SPItem *item = this;
     SPItem* object = item;
 
-//    CObject::onUpdate(ctx, flags);
+//    SPObject::onUpdate(ctx, flags);
 
     // any of the modifications defined in sp-object.h might change bbox,
     // so we invalidate it unconditionally
@@ -681,7 +678,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         }
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

@@ -54,8 +54,6 @@ namespace {
 }
 
 SPBox3D::SPBox3D() : SPGroup() {
-	this->cobject = this;
-
 	this->my_counter = 0;
 	this->swapped = Box3D::NONE;
 

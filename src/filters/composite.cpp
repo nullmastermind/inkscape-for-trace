@@ -36,8 +36,6 @@ namespace {
 }
 
 SPFeComposite::SPFeComposite() : SPFilterPrimitive() {
-	this->cobject = this;
-
     this->composite_operator = COMPOSITE_DEFAULT;
     this->k1 = 0;
     this->k2 = 0;

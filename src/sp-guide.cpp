@@ -91,10 +91,7 @@ namespace {
 //}
 // CPPIFY: properties!
 
-SPGuide::SPGuide() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPGuide::SPGuide() : SPObject() {
 	this->label = NULL;
 	this->views = NULL;
 
@@ -140,7 +137,7 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
 }
 
 void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPGuide* object = this;
 
@@ -166,7 +163,7 @@ void SPGuide::release() {
         object->document->removeResource("guide", object);
     }
 
-    CObject::release();
+    SPObject::release();
 }
 
 void SPGuide::set(unsigned int key, const gchar *value) {
@@ -240,7 +237,7 @@ void SPGuide::set(unsigned int key, const gchar *value) {
         }
         break;
     default:
-    	CObject::set(key, value);
+    	SPObject::set(key, value);
             break;
     }
 }

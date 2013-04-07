@@ -190,10 +190,7 @@ namespace {
 	bool rectRegistered = SPFactory::instance().registerObject("svg:color-profile", createColorProfile);
 }
 
-ColorProfile::ColorProfile() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+ColorProfile::ColorProfile() : SPObject() {
     this->impl = new ColorProfileImpl();
 
     this->href = 0;
@@ -282,7 +279,7 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
     g_assert(cprof->name == 0);
     g_assert(cprof->intentStr == 0);
 
-    CObject::build(document, repr);
+    SPObject::build(document, repr);
 
     object->readAttr( "xlink:href" );
     object->readAttr( "local" );
@@ -410,7 +407,7 @@ void ColorProfile::set(unsigned key, gchar const *value) {
             break;
 
         default:
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
     }
 }
@@ -443,7 +440,7 @@ Inkscape::XML::Node* ColorProfile::write(Inkscape::XML::Document *xml_doc, Inksc
         repr->setAttribute( "rendering-intent", cprof->intentStr );
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

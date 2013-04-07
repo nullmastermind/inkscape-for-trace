@@ -69,10 +69,7 @@ SPMeshPatch* SPMeshPatch::getPrevMeshPatch()
  * Mesh Patch
  */
 
-SPMeshPatch::SPMeshPatch() : SPObject(), CObject(this) {
-    delete this->cobject;
-    this->cobject = this;
-
+SPMeshPatch::SPMeshPatch() : SPObject() {
     this->tensor_string = NULL;
 }
 
@@ -82,7 +79,7 @@ SPMeshPatch::~SPMeshPatch() {
 void SPMeshPatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPMeshPatch* object = this;
 
-	CObject::build(doc, repr);
+	SPObject::build(doc, repr);
 
 	object->readAttr( "tensor" );
 }
@@ -119,7 +116,7 @@ Inkscape::XML::Node* SPMeshPatch::write(Inkscape::XML::Document* xml_doc, Inksca
         repr = xml_doc->createElement("svg:meshPatch");
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

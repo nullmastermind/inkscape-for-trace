@@ -31,10 +31,7 @@ bool SPPaintServerReference::_acceptObject(SPObject *obj) const
 }
 
 
-SPPaintServer::SPPaintServer() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPPaintServer::SPPaintServer() : SPObject() {
 	this->swatch = 0;
 }
 

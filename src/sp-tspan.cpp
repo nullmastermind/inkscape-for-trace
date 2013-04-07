@@ -62,8 +62,6 @@ namespace {
 #  SPTSPAN
 #####################################################*/
 SPTSpan::SPTSpan() : SPItem() {
-	this->cobject = this;
-
     this->role = SP_TSPAN_ROLE_UNSPECIFIED;
     new (&this->attributes) TextTagAttributes;
 }
@@ -229,8 +227,6 @@ gchar* SPTSpan::description() {
 void   refresh_textpath_source(SPTextPath* offset);
 
 SPTextPath::SPTextPath() : SPItem() {
-	this->cobject = this;
-
     new (&this->attributes) TextTagAttributes;
 
     this->startOffset._set = false;

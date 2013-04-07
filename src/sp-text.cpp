@@ -72,8 +72,6 @@ namespace {
 #  SPTEXT
 #####################################################*/
 SPText::SPText() : SPItem() {
-	this->cobject = this;
-
     new (&this->layout) Inkscape::Text::Layout;
     new (&this->attributes) TextTagAttributes;
 }

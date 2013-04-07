@@ -26,9 +26,7 @@ namespace {
 	bool titleRegistered = SPFactory::instance().registerObject("svg:title", createTitle);
 }
 
-SPTitle::SPTitle() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
+SPTitle::SPTitle() : SPObject() {
 }
 
 SPTitle::~SPTitle() {
@@ -41,7 +39,7 @@ Inkscape::XML::Node* SPTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::
         repr = object->getRepr()->duplicate(xml_doc);
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

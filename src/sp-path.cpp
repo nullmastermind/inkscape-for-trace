@@ -120,7 +120,6 @@ void SPPath::convert_to_guides() {
 }
 
 SPPath::SPPath() : SPShape(), connEndPair(this) {
-	this->cobject = this;
 }
 
 SPPath::~SPPath() {

@@ -23,7 +23,7 @@
 #define SP_PAINT_SERVER(obj) ((SPPaintServer*)obj)
 #define SP_IS_PAINT_SERVER(obj) (dynamic_cast<const SPPaintServer*>((SPObject*)obj))
 
-class SPPaintServer : public SPObject, public CObject {
+class SPPaintServer : public SPObject {
 public:
 	SPPaintServer();
 	virtual ~SPPaintServer();

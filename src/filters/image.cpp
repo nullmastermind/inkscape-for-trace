@@ -40,8 +40,6 @@ namespace {
 }
 
 SPFeImage::SPFeImage() : SPFilterPrimitive() {
-	this->cobject = this;
-
 	this->document = NULL;
 	this->href = NULL;
 	this->from_element = 0;

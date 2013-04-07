@@ -37,8 +37,6 @@ namespace {
 }
 
 SPSymbol::SPSymbol() : SPGroup() {
-	this->cobject = this;
-
 	this->aspect_align = 0;
 	this->aspect_clip = 0;
 	this->aspect_set = 0;

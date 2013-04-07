@@ -21,7 +21,7 @@
 #define SP_IS_FEDISTANTLIGHT(obj) (dynamic_cast<const SPFeDistantLight*>((SPObject*)obj))
 
 /* Distant light class */
-class SPFeDistantLight : public SPObject, public CObject {
+class SPFeDistantLight : public SPObject {
 public:
 	SPFeDistantLight();
 	virtual ~SPFeDistantLight();

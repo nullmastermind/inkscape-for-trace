@@ -48,8 +48,6 @@ namespace {
 }
 
 SPMask::SPMask() : SPObjectGroup() {
-	this->cobject = this;
-
 	this->maskUnits_set = FALSE;
 	this->maskUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
 

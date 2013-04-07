@@ -34,10 +34,7 @@ namespace {
 	bool stopRegistered = SPFactory::instance().registerObject("svg:stop", createStop);
 }
 
-SPStop::SPStop() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPStop::SPStop() : SPObject() {
 	this->path_string = NULL;
 
     this->offset = 0.0;
@@ -52,7 +49,7 @@ SPStop::~SPStop() {
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPStop* object = this;
 
-    CObject::build(doc, repr);
+    SPObject::build(doc, repr);
 
     object->readAttr( "offset" );
     object->readAttr( "stop-color" );
@@ -138,7 +135,7 @@ void SPStop::set(unsigned int key, const gchar* value) {
             break;
         }
         default: {
-            CObject::set(key, value);
+            SPObject::set(key, value);
             break;
         }
     }
@@ -160,7 +157,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
     Glib::ustring colorStr = stop->specified_color.toString();
     gfloat opacity = stop->opacity;
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     // Since we do a hackish style setting here (because SPStyle does not support stop-color and
     // stop-opacity), we must do it AFTER calling the parent write method; otherwise

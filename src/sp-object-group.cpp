@@ -16,9 +16,7 @@
 #include "xml/repr.h"
 #include "document.h"
 
-SPObjectGroup::SPObjectGroup() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
+SPObjectGroup::SPObjectGroup() : SPObject() {
 }
 
 SPObjectGroup::~SPObjectGroup() {
@@ -27,7 +25,7 @@ SPObjectGroup::~SPObjectGroup() {
 void SPObjectGroup::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPObjectGroup* object = this;
 
-	CObject::child_added(child, ref);
+	SPObject::child_added(child, ref);
 
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -36,7 +34,7 @@ void SPObjectGroup::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node 
 void SPObjectGroup::remove_child(Inkscape::XML::Node *child) {
 	SPObjectGroup* object = this;
 
-	CObject::remove_child(child);
+	SPObject::remove_child(child);
 
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -45,7 +43,7 @@ void SPObjectGroup::remove_child(Inkscape::XML::Node *child) {
 void SPObjectGroup::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
 	SPObjectGroup* object = this;
 
-	CObject::order_changed(child, old_ref, new_ref);
+	SPObject::order_changed(child, old_ref, new_ref);
 
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -76,7 +74,7 @@ Inkscape::XML::Node *SPObjectGroup::write(Inkscape::XML::Document *xml_doc, Inks
         }
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

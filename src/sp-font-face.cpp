@@ -269,10 +269,7 @@ namespace {
 	bool fontFaceRegistered = SPFactory::instance().registerObject("svg:font-face", createFontFace);
 }
 
-SPFontFace::SPFontFace() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFontFace::SPFontFace() : SPObject() {
     std::vector<FontFaceStyleType> style;
     style.push_back(SP_FONTFACE_STYLE_ALL);
     this->font_style = style;
@@ -328,7 +325,7 @@ SPFontFace::~SPFontFace() {
 }
 
 void SPFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPFontFace* object = this;
 
@@ -379,7 +376,7 @@ void SPFontFace::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
 
     SPFontFace *f = SP_FONTFACE(object);
 
-    CObject::child_added(child, ref);
+    SPObject::child_added(child, ref);
 
     sp_fontface_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -394,14 +391,14 @@ void SPFontFace::remove_child(Inkscape::XML::Node *child) {
 
     SPFontFace *f = SP_FONTFACE(object);
 
-    CObject::remove_child(child);
+    SPObject::remove_child(child);
 
     sp_fontface_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPFontFace::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 void SPFontFace::set(unsigned int key, const gchar *value) {
@@ -689,7 +686,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
             break;
         }
         default:
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
     }
 }
@@ -736,7 +733,7 @@ void SPFontFace::update(SPCtx *ctx, guint flags) {
         object->readAttr( "overline-thickness" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
@@ -823,7 +820,7 @@ Inkscape::XML::Node* SPFontFace::write(Inkscape::XML::Document *xml_doc, Inkscap
         COPY_ATTR(repr, object->getRepr(), "overline-thickness");
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

@@ -26,10 +26,7 @@
 #include <cstring>
 
 
-SPGlyphKerning::SPGlyphKerning() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPGlyphKerning::SPGlyphKerning() : SPObject() {
 //TODO: correct these values:
     this->u1 = NULL;
     this->g1 = NULL;
@@ -44,7 +41,7 @@ SPGlyphKerning::~SPGlyphKerning() {
 void SPGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPGlyphKerning* object = this;
 
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	object->readAttr( "u1" );
 	object->readAttr( "g1" );
@@ -54,7 +51,7 @@ void SPGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 void SPGlyphKerning::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 GlyphNames::GlyphNames(const gchar* value){
@@ -129,7 +126,7 @@ void SPGlyphKerning::set(unsigned int key, const gchar *value) {
         }
         default:
         {
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
         }
     }
@@ -152,7 +149,7 @@ void SPGlyphKerning::update(SPCtx *ctx, guint flags) {
             object->readAttr( "k" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
@@ -188,7 +185,7 @@ Inkscape::XML::Node* SPGlyphKerning::write(Inkscape::XML::Document *xml_doc, Ink
 	        COPY_ATTR(repr, object->getRepr(), "k");
 	    }
 
-	    CObject::write(xml_doc, repr, flags);
+	    SPObject::write(xml_doc, repr, flags);
 
 	    return repr;
 }

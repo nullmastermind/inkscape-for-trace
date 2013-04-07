@@ -33,7 +33,6 @@ namespace {
 }
 
 SPFeTile::SPFeTile() : SPFilterPrimitive() {
-	this->cobject = this;
 }
 
 SPFeTile::~SPFeTile() {

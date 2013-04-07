@@ -62,10 +62,7 @@ static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
 };
 
 
-Persp3D::Persp3D() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+Persp3D::Persp3D() : SPObject() {
     this->perspective_impl = new Persp3DImpl();
 }
 
@@ -77,7 +74,7 @@ Persp3D::~Persp3D() {
  * Virtual build: set persp3d attributes from its associated XML node.
  */
 void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	Persp3D* object = this;
 
@@ -143,7 +140,7 @@ void Persp3D::set(unsigned key, gchar const *value) {
             }
         }
         default: {
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
         }
     }
@@ -166,7 +163,7 @@ void Persp3D::update(SPCtx *ctx, guint flags) {
 
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
@@ -251,7 +248,7 @@ Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
         repr->setAttribute("inkscape:persp3d-origin", str);
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

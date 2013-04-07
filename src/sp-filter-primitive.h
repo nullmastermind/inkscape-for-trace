@@ -26,7 +26,7 @@ class Filter;
 class FilterPrimitive;
 } }
 
-class SPFilterPrimitive : public SPObject, public CObject {
+class SPFilterPrimitive : public SPObject {
 public:
 	SPFilterPrimitive();
 	virtual ~SPFilterPrimitive();

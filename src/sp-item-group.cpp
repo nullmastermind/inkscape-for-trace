@@ -66,8 +66,6 @@ namespace {
 }
 
 SPGroup::SPGroup() : SPLPEItem() {
-	this->cobject = this;
-
     this->_layer_mode = SPGroup::GROUP;
     new (&this->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
 }

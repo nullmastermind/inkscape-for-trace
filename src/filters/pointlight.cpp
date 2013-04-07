@@ -39,10 +39,7 @@ namespace {
 	bool pointLightRegistered = SPFactory::instance().registerObject("svg:fePointLight", createPointLight);
 }
 
-SPFePointLight::SPFePointLight() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFePointLight::SPFePointLight() : SPObject() {
     this->x = 0;
     this->y = 0;
     this->z = 0;
@@ -62,7 +59,7 @@ SPFePointLight::~SPFePointLight() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFePointLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPFePointLight* object = this;
 
@@ -155,7 +152,7 @@ void SPFePointLight::set(unsigned int key, gchar const *value) {
         break;
     default:
         // See if any parents need this value.
-    	CObject::set(key, value);
+    	SPObject::set(key, value);
         break;
     }
 }
@@ -176,7 +173,7 @@ void SPFePointLight::update(SPCtx *ctx, guint flags) {
         object->readAttr( "z" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -197,7 +194,7 @@ Inkscape::XML::Node* SPFePointLight::write(Inkscape::XML::Document *doc, Inkscap
     if (fepointlight->z_set)
         sp_repr_set_css_double(repr, "z", fepointlight->z);
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }

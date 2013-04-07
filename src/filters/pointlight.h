@@ -20,7 +20,7 @@
 #define SP_FEPOINTLIGHT(obj) ((SPFePointLight*)obj)
 #define SP_IS_FEPOINTLIGHT(obj) (dynamic_cast<const SPFePointLight*>((SPObject*)obj))
 
-class SPFePointLight : public SPObject, public CObject {
+class SPFePointLight : public SPObject {
 public:
 	SPFePointLight();
 	virtual ~SPFePointLight();

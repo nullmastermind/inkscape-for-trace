@@ -96,8 +96,6 @@ static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *i
 static bool   use_slow_but_correct_offset_method=false;
 
 SPOffset::SPOffset() : SPShape() {
-	this->cobject = this;
-
     this->rad = 1.0;
     this->original = NULL;
     this->originalPath = NULL;

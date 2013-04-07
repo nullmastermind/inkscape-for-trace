@@ -41,7 +41,7 @@
 #define SP_IS_FEFUNCB(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
 #define SP_IS_FEFUNCA(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
 
-class SPFeFuncNode : public SPObject, public CObject {
+class SPFeFuncNode : public SPObject {
 public:
 	SPFeFuncNode();
 	virtual ~SPFeFuncNode();

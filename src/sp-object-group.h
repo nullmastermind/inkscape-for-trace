@@ -19,7 +19,7 @@
 #define SP_OBJECTGROUP(obj) ((SPObjectGroup*)obj)
 #define SP_IS_OBJECTGROUP(obj) (dynamic_cast<const SPObjectGroup*>((SPObject*)obj))
 
-class SPObjectGroup : public SPObject, public CObject {
+class SPObjectGroup : public SPObject {
 public:
 	SPObjectGroup();
 	virtual ~SPObjectGroup();

@@ -53,8 +53,6 @@ namespace {
 }
 
 SPMarker::SPMarker() : SPGroup() {
-	this->cobject = this;
-
 	this->aspect_clip = 0;
 	this->aspect_align = 0;
 	this->aspect_set = 0;

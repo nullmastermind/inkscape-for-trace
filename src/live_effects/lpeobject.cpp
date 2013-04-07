@@ -41,13 +41,10 @@ static Inkscape::XML::NodeEventVector const livepatheffect_repr_events = {
 };
 
 
-LivePathEffectObject::LivePathEffectObject() : SPObject(), CObject(this) {
+LivePathEffectObject::LivePathEffectObject() : SPObject() {
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_message("Init livepatheffectobject");
 #endif
-
-    delete this->cobject;
-    this->cobject = this;
 
     this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
     this->lpe = NULL;
@@ -67,7 +64,7 @@ void LivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr
     g_assert(object != NULL);
     g_assert(SP_IS_OBJECT(object));
 
-    CObject::build(document, repr);
+    SPObject::build(document, repr);
 
     object->readAttr( "effect" );
 
@@ -113,7 +110,7 @@ void LivePathEffectObject::release() {
     }
     lpeobj->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
 
-    CObject::release();
+    SPObject::release();
 }
 
 /**
@@ -145,7 +142,7 @@ void LivePathEffectObject::set(unsigned key, gchar const *value) {
             break;
     }
 
-    CObject::set(key, value);
+    SPObject::set(key, value);
 }
 
 /**
@@ -166,7 +163,7 @@ Inkscape::XML::Node* LivePathEffectObject::write(Inkscape::XML::Document *xml_do
         lpeobj->lpe->writeParamsToSVG();
     }
 
-    CObject::write(xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

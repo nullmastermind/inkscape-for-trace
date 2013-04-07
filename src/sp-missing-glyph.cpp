@@ -29,10 +29,7 @@ namespace {
 	bool missingGlyphRegistered = SPFactory::instance().registerObject("svg:missing-glyph", createMissingGlyph);
 }
 
-SPMissingGlyph::SPMissingGlyph() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPMissingGlyph::SPMissingGlyph() : SPObject() {
 //TODO: correct these values:
     this->d = NULL;
     this->horiz_adv_x = 0;
@@ -47,7 +44,7 @@ SPMissingGlyph::~SPMissingGlyph() {
 void SPMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPMissingGlyph* object = this;
 
-    CObject::build(doc, repr);
+    SPObject::build(doc, repr);
 
     object->readAttr( "d" );
     object->readAttr( "horiz-adv-x" );
@@ -57,7 +54,7 @@ void SPMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 }
 
 void SPMissingGlyph::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 
@@ -114,7 +111,7 @@ void SPMissingGlyph::set(unsigned int key, const gchar* value) {
         }
         default:
         {
-            CObject::set(key, value);
+            SPObject::set(key, value);
             break;
         }
     }
@@ -149,7 +146,7 @@ Inkscape::XML::Node* SPMissingGlyph::write(Inkscape::XML::Document* xml_doc, Ink
 	        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
 	    }
 
-	    CObject::write(xml_doc, repr, flags);
+	    SPObject::write(xml_doc, repr, flags);
 
 	    return repr;
 }

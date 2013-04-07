@@ -53,8 +53,6 @@ namespace {
 }
 
 SPUse::SPUse() : SPItem() {
-	this->cobject = this;
-
 	this->child = NULL;
 
     this->x.unset();

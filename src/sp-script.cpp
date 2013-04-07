@@ -26,10 +26,7 @@ namespace {
 	bool scriptRegistered = SPFactory::instance().registerObject("svg:script", createScript);
 }
 
-SPScript::SPScript() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPScript::SPScript() : SPObject() {
 	this->xlinkhref = NULL;
 }
 
@@ -39,7 +36,7 @@ SPScript::~SPScript() {
 void SPScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPScript* object = this;
 
-    CObject::build(doc, repr);
+    SPObject::build(doc, repr);
 
     //Read values of key attributes from XML nodes into object.
     object->readAttr( "xlink:href" );
@@ -61,7 +58,7 @@ void SPScript::release() {
         object->document->removeResource("script", object);
     }
 
-    CObject::release();
+    SPObject::release();
 }
 
 void SPScript::update(SPCtx* ctx, unsigned int flags) {
@@ -84,7 +81,7 @@ void SPScript::set(unsigned int key, const gchar* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 	default:
-            CObject::set(key, value);
+            SPObject::set(key, value);
             break;
     }
 }

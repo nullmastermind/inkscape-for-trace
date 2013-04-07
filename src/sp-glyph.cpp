@@ -32,10 +32,7 @@ namespace {
 	bool glyphRegistered = SPFactory::instance().registerObject("svg:glyph", createGlyph);
 }
 
-SPGlyph::SPGlyph() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPGlyph::SPGlyph() : SPObject() {
 //TODO: correct these values:
 
     new (&this->unicode) Glib::ustring();
@@ -54,7 +51,7 @@ SPGlyph::~SPGlyph() {
 }
 
 void SPGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 	SPGlyph* object = this;
 
@@ -71,7 +68,7 @@ void SPGlyph::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 void SPGlyph::release() {
-	CObject::release();
+	SPObject::release();
 }
 
 static glyphArabicForm sp_glyph_read_arabic_form(gchar const *value){
@@ -195,7 +192,7 @@ void SPGlyph::set(unsigned int key, const gchar *value) {
         }
         default:
         {
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
         }
     }
@@ -224,7 +221,7 @@ void SPGlyph::update(SPCtx *ctx, guint flags) {
             object->readAttr( "vert-adv-y" );
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
@@ -265,7 +262,7 @@ Inkscape::XML::Node* SPGlyph::write(Inkscape::XML::Document *xml_doc, Inkscape::
 	        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
 	    }
 
-	    CObject::write(xml_doc, repr, flags);
+	    SPObject::write(xml_doc, repr, flags);
 
 	    return repr;
 }

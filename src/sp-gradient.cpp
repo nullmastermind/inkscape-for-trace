@@ -145,9 +145,6 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
         state(2),
         vector() {
 
-
-	this->cobject = this;
-
 	this->has_patches = 0;
 
     this->ref = new SPGradientReference(this);
@@ -421,7 +418,9 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
 void SPGradient::modified(guint flags)
 {
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
-        if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
+    	// CPPIFY
+        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
+    	if (!SP_IS_MESHGRADIENT(this)) {
             this->invalidateVector();
         } else {
             this->invalidateArray();
@@ -429,7 +428,9 @@ void SPGradient::modified(guint flags)
     }
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
+    	// CPPIFY
+        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
+    	if (!SP_IS_MESHGRADIENT(this)) {
             this->ensureVector();
         } else {
             this->ensureArray();
@@ -1043,8 +1044,9 @@ sp_gradient_create_preview_pattern(SPGradient *gr, double width)
 {
     cairo_pattern_t *pat = NULL;
 
-    if( gr->get_type() != SP_GRADIENT_TYPE_MESH ) { 
-
+    // CPPIFY
+    //if( gr->get_type() != SP_GRADIENT_TYPE_MESH ) {
+    if (!SP_IS_MESHGRADIENT(gr)) {
         gr->ensureVector();
 
         pat = cairo_pattern_create_linear(0, 0, width, 0);

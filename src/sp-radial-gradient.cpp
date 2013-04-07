@@ -19,8 +19,6 @@ namespace {
  * Radial Gradient
  */
 SPRadialGradient::SPRadialGradient() : SPGradient() {
-	this->cobject = this;
-
     this->cx.unset(SVGLength::PERCENT, 0.5, 0.5);
     this->cy.unset(SVGLength::PERCENT, 0.5, 0.5);
     this->r.unset(SVGLength::PERCENT, 0.5, 0.5);

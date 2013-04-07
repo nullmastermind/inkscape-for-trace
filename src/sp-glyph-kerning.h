@@ -46,7 +46,7 @@ private:
 gchar* names;
 };
 
-class SPGlyphKerning : public SPObject, public CObject {
+class SPGlyphKerning : public SPObject {
 public:
 	SPGlyphKerning();
 	virtual ~SPGlyphKerning();

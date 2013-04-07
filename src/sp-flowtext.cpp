@@ -44,8 +44,6 @@ namespace {
 }
 
 SPFlowtext::SPFlowtext() : SPItem() {
-	this->cobject = this;
-
     this->par_indent = 0;
     new (&this->layout) Inkscape::Text::Layout();
 }

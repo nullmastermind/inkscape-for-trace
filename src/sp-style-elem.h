@@ -7,7 +7,7 @@
 #define SP_STYLE_ELEM(obj) ((SPStyleElem*)obj)
 #define SP_IS_STYLE_ELEM(obj) (dynamic_cast<const SPStyleElem*>((SPObject*)obj))
 
-class SPStyleElem : public SPObject, public CObject {
+class SPStyleElem : public SPObject {
 public:
 	SPStyleElem();
 	virtual ~SPStyleElem();

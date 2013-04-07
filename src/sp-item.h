@@ -103,7 +103,7 @@ public:
 #define SP_IS_ITEM(obj) (dynamic_cast<const SPItem*>((SPObject*)obj))
 
 /** Abstract base class for all visible shapes. */
-class SPItem : public SPObject, public CObject {
+class SPItem : public SPObject {
 public:
     enum BBoxType {
         // legacy behavior: includes crude stroke, markers; excludes long miters, blur margin; is known to be wrong for caps

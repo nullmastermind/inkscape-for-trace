@@ -51,10 +51,7 @@ namespace {
 	bool filterRegistered = SPFactory::instance().registerObject("svg:filter", createFilter);
 }
 
-SPFilter::SPFilter() : SPObject(), CObject(this) {
-	delete this->cobject;
-	this->cobject = this;
-
+SPFilter::SPFilter() : SPObject() {
     this->href = new SPFilterReference(this);
     this->href->changedSignal().connect(sigc::bind(sigc::ptr_fun(filter_ref_changed), this));
 
@@ -102,7 +99,7 @@ void SPFilter::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "filterRes" );
     object->readAttr( "xlink:href" );
 
-	CObject::build(document, repr);
+	SPObject::build(document, repr);
 
 //is this necessary?
     document->addResource("filter", object);
@@ -133,7 +130,7 @@ void SPFilter::release() {
     filter->modified_connection.~connection();
     delete filter->_image_name;
 
-    CObject::release();
+    SPObject::release();
 }
 
 /**
@@ -206,7 +203,7 @@ void SPFilter::set(unsigned int key, gchar const *value) {
             break;
         default:
             // See if any parents need this value.
-        	CObject::set(key, value);
+        	SPObject::set(key, value);
             break;
     }
 }
@@ -224,7 +221,7 @@ void SPFilter::update(SPCtx *ctx, guint flags) {
 
     }
 
-    CObject::update(ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 /**
@@ -317,7 +314,7 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
         g_free(uri_string);
     }
 
-    CObject::write(doc, repr, flags);
+    SPObject::write(doc, repr, flags);
 
     return repr;
 }
@@ -354,7 +351,7 @@ void SPFilter::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 	SPFilter* object = this;
     //SPFilter *f = SP_FILTER(object);
 
-	CObject::child_added(child, ref);
+	SPObject::child_added(child, ref);
 
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -366,7 +363,7 @@ void SPFilter::remove_child(Inkscape::XML::Node *child) {
 	SPFilter* object = this;
 	//    SPFilter *f = SP_FILTER(object);
 
-	CObject::remove_child(child);
+	SPObject::remove_child(child);
 
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }

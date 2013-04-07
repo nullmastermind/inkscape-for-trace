@@ -17,13 +17,11 @@
 //#include "svg/svg-length.h"
 #include "sp-object.h"
 
-class SPObjectClass;
-
 #define SP_MESHPATCH(obj) ((SPMeshPatch*)obj)
 #define SP_IS_MESHPATCH(obj) (dynamic_cast<const SPMeshPatch*>((SPObject*)obj))
 
 /** Gradient MeshPatch. */
-class SPMeshPatch : public SPObject, public CObject {
+class SPMeshPatch : public SPObject {
 public:
 	SPMeshPatch();
 	virtual ~SPMeshPatch();

@@ -21,7 +21,7 @@
 #define SP_FONT(obj) ((SPFont*)obj)
 #define SP_IS_FONT(obj) (dynamic_cast<const SPFont*>((SPObject*)obj))
 
-class SPFont : public SPObject, public CObject {
+class SPFont : public SPObject {
 public:
 	SPFont();
 	virtual ~SPFont();

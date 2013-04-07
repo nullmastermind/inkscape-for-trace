@@ -36,8 +36,6 @@ namespace {
 }
 
 SPFeDisplacementMap::SPFeDisplacementMap() : SPFilterPrimitive() {
-	this->cobject = this;
-
     this->scale=0;
     this->xChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
     this->yChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
