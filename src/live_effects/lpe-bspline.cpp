@@ -10,6 +10,7 @@
 #include <glibmm/i18n.h>
 #include "display/curve.h"
 #include <2geom/bezier-curve.h>
+#include <2geom/point.h>
 #include "helper/geom-curves.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpeobject.h"
@@ -341,6 +342,10 @@ LPEBSpline::changeWeight(double weightValue)
     LPEBSpline::doBSplineFromWidget(curve,weightValue);
     gchar *str = sp_svg_write_path(curve->get_pathvector());
     path->getRepr()->setAttribute("inkscape:original-d", str);
+    if(INK_IS_NODE_TOOL(desktop->event_context)){
+        InkNodeTool *nt = INK_NODE_TOOL(desktop->event_context);
+        nt->desktop->updateNow();
+    }
     g_free(str);
     curve->unref();
     desktop->clearWaitingCursor();
@@ -350,12 +355,8 @@ LPEBSpline::changeWeight(double weightValue)
 
 bool
 LPEBSpline::nodeIsSelected(Geom::Point nodePoint, int index){
-    volatile int index2 = index;
-    volatile Geom::Point aa = nodePoint;
-    volatile std::vector<Geom::Point>  x2 = points;
     if(points.size() > 0){
-        volatile double dist = Geom::distance(points[index], nodePoint);
-        if(dist == 0 ){
+        if(Geom::are_near(points[index], nodePoint)){
             return true;
         }
     }
@@ -373,9 +374,12 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
         Inkscape::UI::ControlPointSelection::Set &selection = nt->_selected_nodes->allPoints();
         points.clear();
         for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection.begin(); i != selection.end(); ++i){
-            if ((*i)->selected()) {
-                Inkscape::UI::Node *n = static_cast<Inkscape::UI::Node*>(*i);
-                points.push_back(n->position());
+            if(onlySelected){
+                if ((*i)->selected()) {
+                    Inkscape::UI::Node *n = static_cast<Inkscape::UI::Node*>(*i);
+                    n->bsplineWeight = weightValue;
+                    points.insert(points.begin(),desktop->doc2dt(n->position()));
+                }
             }
         }
     }
@@ -469,31 +473,30 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
                         if(nodeIsSelected(pointAt0,i)){
                             pointAt1 = SBasisIn.valueAt(weightValue);
                             pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
+                            i++;
                         }else{
                             pointAt1 = (*cubic)[1];
                         }
                     }else{
                         if(nodeIsSelected(pointAt0,i)){
                             pointAt1 = in->first_segment()->initialPoint();
+                            i++;
                         }else{
                             pointAt1 = (*cubic)[1];
                         }
                     }
-                    i++;
                     if((!ignoreCusp || !Geom::are_near((*cubic)[2],in->first_segment()->finalPoint())) && weightValue !=0){
                         if(nodeIsSelected(pointAt3,i)){
                             pointAt2 = SBasisIn.valueAt(1-weightValue);
                             pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                         }else{
                             pointAt2 = (*cubic)[2];
-                            i--;
                         }
                     }else{
                         if(nodeIsSelected(pointAt3,i)){
                             pointAt2 = in->first_segment()->finalPoint();
                         }else{
                             pointAt2 = (*cubic)[2];
-                            i--;
                         }
                     }
                 }else{
@@ -501,20 +504,22 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
                         if(nodeIsSelected(pointAt0,i)){
                             pointAt1 = SBasisIn.valueAt(weightValue);
                             pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
+                            i++;
                         }else{
                             pointAt1 = in->first_segment()->initialPoint();
                         }
-                        i++;
                         if(nodeIsSelected(pointAt3,i)){
                             pointAt2 = SBasisIn.valueAt(weightValue);
                             pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                         }else{
                             pointAt2 = in->first_segment()->finalPoint();
-                            i--;
                         }
                     }else{
                         pointAt1 = in->first_segment()->initialPoint();
                         pointAt2 = in->first_segment()->finalPoint();
+                        if(nodeIsSelected(pointAt0,i)){
+                            i++;
+                        }
                     }
                 }
             }
@@ -560,51 +565,50 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
                         if(nodeIsSelected(nextPointAt0,i)){
                             nextPointAt1 = SBasisOut.valueAt(weightValue);
                             nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
+                            if (path_it->closed()) i++;
                         }else{
                             nextPointAt1 = (*cubic)[1];
                         }
                     }else{
                         if(nodeIsSelected(nextPointAt0,i)){
-                             nextPointAt1 = out->first_segment()->initialPoint();
+                            nextPointAt1 = out->first_segment()->initialPoint();
+                            if (path_it->closed()) i++;
                         }else{
                             nextPointAt1 = (*cubic)[1];
                         }
                     }
-                    i++;
                     if((!ignoreCusp || !Geom::are_near((*cubic)[2],out->first_segment()->finalPoint())) && weightValue !=0){
                         if(nodeIsSelected(nextPointAt3,i)){
                             nextPointAt2 = SBasisOut.valueAt(1-weightValue);
                             nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
                         }else{
                             nextPointAt2 = (*cubic)[2];
-                            i--;
-                        }
+                         }
                     }else{
                         if(nodeIsSelected(nextPointAt3,i)){
                             nextPointAt2 = out->first_segment()->finalPoint();
                         }else{
                             nextPointAt2 = (*cubic)[2];
-                            i--;
-                        }
+                         }
                     }
                 }else{
                     if(!ignoreCusp && weightValue !=0){
                         if(nodeIsSelected(nextPointAt0,i)){
                             nextPointAt1 = SBasisOut.valueAt(weightValue);
                             nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
+                            if (path_it->closed()) i++;
                         }else{
                             nextPointAt1 = out->first_segment()->initialPoint();
                         }
-                        i++;
                         if(nodeIsSelected(nextPointAt3,i)){
                             nextPointAt2 = SBasisOut.valueAt(weightValue);
                             nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
                         }else{
                             nextPointAt2 = out->first_segment()->finalPoint();
-                            i--;
                         }
                     }else{
                         nextPointAt1 = out->first_segment()->initialPoint();
+                        if (path_it->closed()&&nodeIsSelected(nextPointAt0,i)) i++;
                         nextPointAt2 = out->first_segment()->finalPoint();
                     }
                 }

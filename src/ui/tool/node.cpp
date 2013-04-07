@@ -577,8 +577,8 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _type(NODE_CUSP),
     _handles_shown(false)
 {
-    // NOTE we do not set type here, because the handles are still degenerate
     this->bsplineWeight = 0.3334;
+    // NOTE we do not set type here, because the handles are still degenerate
 }
 
 Node const *Node::_next() const
