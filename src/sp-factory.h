@@ -1,5 +1,6 @@
 #pragma once
 
+#include <exception>
 #include <functional>
 #include <map>
 #include <string>
@@ -17,12 +18,20 @@ namespace Inkscape {
  */
 class SPFactory {
 public:
+	class TypeNotRegistered : public std::exception {
+	public:
+		TypeNotRegistered(const std::string& type);
+		const char* what() const noexcept;
+
+	private:
+		const std::string type;
+	};
+
 	static SPFactory& instance();
 
-	bool registerObject(std::string id, std::function<SPObject*()> createFunction);
-
+	bool registerObject(const std::string& id, std::function<SPObject* ()> createFunction);
 	SPObject* createObject(const Inkscape::XML::Node& id) const;
 
 private:
-	std::map<std::string, std::function<SPObject*()>> objectMap;
+	std::map<const std::string, std::function<SPObject* ()>> objectMap;
 };

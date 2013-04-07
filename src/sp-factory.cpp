@@ -5,43 +5,53 @@
 #include "sp-object.h"
 #include "xml/node.h"
 
+
+SPFactory::TypeNotRegistered::TypeNotRegistered(const std::string& type)
+	: std::exception(), type(type) {
+}
+
+const char* SPFactory::TypeNotRegistered::what() const noexcept {
+	return type.c_str();
+}
+
 SPFactory& SPFactory::instance() {
 	static SPFactory factory;
 	return factory;
 }
 
-bool SPFactory::registerObject(std::string id, std::function<SPObject*()> createFunction) {
+bool SPFactory::registerObject(const std::string& id, std::function<SPObject* ()> createFunction) {
 	return this->objectMap.insert(std::make_pair(id, createFunction)).second;
+
+	// replace when gcc supports this
+	//return this->objectMap.emplace(id, createFunction).second;
 }
 
 SPObject* SPFactory::createObject(const Inkscape::XML::Node& id) const {
-	std::map<std::string, std::function<SPObject*()>>::const_iterator entry;
+	std::string name;
 
 	switch (id.type()) {
 		case Inkscape::XML::TEXT_NODE:
-			entry = this->objectMap.find("string");
+			name = "string";
 			break;
 
 		case Inkscape::XML::ELEMENT_NODE: {
-			gchar const* const type_name = id.attribute("sodipodi:type");
+			gchar const* const sptype = id.attribute("sodipodi:type");
 
-			if (type_name) {
-				entry = this->objectMap.find(type_name);
+			if (sptype) {
+				name = sptype;
 			} else {
-				entry = this->objectMap.find(id.name());
+				name = id.name();
 			}
-
 			break;
 		}
 		default:
-			entry = this->objectMap.end();
+			break;
 	}
 
-	if (entry == this->objectMap.end()) {
-		g_warning("Factory: Type \"%s\" not registered!", id.name());
-
-		return 0;
+	try {
+		std::function<SPObject* ()> createFunction = this->objectMap.at(name);
+		return createFunction();
+	} catch (const std::out_of_range& ex) {
+		std::throw_with_nested(TypeNotRegistered(name));
 	}
-
-	return (entry->second)();
 }

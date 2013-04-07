@@ -209,6 +209,34 @@ public:
 
 }
 
+
+
+
+
+
+#include <stdexcept>
+#include <exception>
+
+void log_exception(std::exception_ptr exception) {
+	try {
+		std::rethrow_exception(exception);
+	} catch (const std::exception& e) {
+		std::cerr << "Caught Exception of type " << std::string(typeid(e).name()) << '\n';
+		std::cerr << "Message: " << std::string(e.what()) << '\n';
+
+		try {
+			std::rethrow_if_nested(e);
+		} catch (...) {
+			std::cerr << "Inner Exception: \n";
+			log_exception(std::current_exception());
+		}
+	}
+}
+
+
+
+
+
 gchar const* SPObject::getId() const {
     return id;
 }
@@ -592,22 +620,17 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
 void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPObject* object = this;
 
-//    GType type = sp_repr_type_lookup(child);
-//    if (!type) {
-//        return;
-//    }
-//    SPObject *ochild = SP_OBJECT(g_object_new(type, 0));
+	try {
+		SPObject* ochild = SPFactory::instance().createObject(*child);
 
-	SPObject* ochild = SPFactory::instance().createObject(*child);
-	if (!ochild) {
-		return;
+		SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
+		object->attach(ochild, prev);
+		sp_object_unref(ochild, NULL);
+
+		ochild->invoke_build(object->document, child, object->cloned);
+	} catch (const SPFactory::TypeNotRegistered& e) {
+		log_exception(std::current_exception());
 	}
-
-    SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
-    object->attach(ochild, prev);
-    sp_object_unref(ochild, NULL);
-
-    ochild->invoke_build(object->document, child, object->cloned);
 }
 
 void SPObject::release() {
@@ -657,14 +680,20 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 //        }
 //        SPObject *child = SP_OBJECT(g_object_new(type, 0));
 
-    	SPObject* child = SPFactory::instance().createObject(*rchild);
-    	if (!child) {
-    		continue;
-    	}
+//    	SPObject* child = SPFactory::instance().createObject(*rchild);
+//    	if (!child) {
+//    		continue;
+//    	}
 
-        object->attach(child, object->lastChild());
-        sp_object_unref(child, NULL);
-        child->invoke_build(document, rchild, object->cloned);
+    	try {
+    		SPObject* child = SPFactory::instance().createObject(*rchild);
+
+    		object->attach(child, object->lastChild());
+			sp_object_unref(child, NULL);
+			child->invoke_build(document, rchild, object->cloned);
+    	} catch (const SPFactory::TypeNotRegistered& e) {
+    		log_exception(std::current_exception());
+    	}
     }
 }
 
