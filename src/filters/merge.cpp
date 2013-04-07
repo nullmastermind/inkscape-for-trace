@@ -34,36 +34,11 @@ namespace {
 	bool mergeRegistered = SPFactory::instance().registerObject("svg:feMerge", createMerge);
 }
 
-/* FeMerge base class */
-G_DEFINE_TYPE(SPFeMerge, sp_feMerge, G_TYPE_OBJECT);
-
-static void
-sp_feMerge_class_init(SPFeMergeClass *klass)
-{
-}
-
-CFeMerge::CFeMerge(SPFeMerge* merge) : CFilterPrimitive(merge) {
-	this->spfemerge = merge;
-}
-
-CFeMerge::~CFeMerge() {
-}
-
 SPFeMerge::SPFeMerge() : SPFilterPrimitive() {
-	SPFeMerge* feMerge = this;
-
-	feMerge->cfemerge = new CFeMerge(feMerge);
-	feMerge->typeHierarchy.insert(typeid(SPFeMerge));
-
-	delete feMerge->cfilterprimitive;
-	feMerge->cfilterprimitive = feMerge->cfemerge;
-	feMerge->cobject = feMerge->cfemerge;
+	this->cobject = this;
 }
 
-static void
-sp_feMerge_init(SPFeMerge *feMerge)
-{
-	new (feMerge) SPFeMerge();
+SPFeMerge::~SPFeMerge() {
 }
 
 /**
@@ -71,22 +46,22 @@ sp_feMerge_init(SPFeMerge *feMerge)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeMerge::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::build(document, repr);
+void SPFeMerge::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive::build(document, repr);
 }
 
 /**
  * Drops any allocated memory.
  */
-void CFeMerge::release() {
-	CFilterPrimitive::release();
+void SPFeMerge::release() {
+	SPFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeMerge.
  */
-void CFeMerge::set(unsigned int key, gchar const *value) {
-	SPFeMerge* object = this->spfemerge;
+void SPFeMerge::set(unsigned int key, gchar const *value) {
+	SPFeMerge* object = this;
 
     SPFeMerge *feMerge = SP_FEMERGE(object);
     (void)feMerge;
@@ -94,7 +69,7 @@ void CFeMerge::set(unsigned int key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -102,21 +77,21 @@ void CFeMerge::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeMerge::update(SPCtx *ctx, guint flags) {
-	SPFeMerge* object = this->spfemerge;
+void SPFeMerge::update(SPCtx *ctx, guint flags) {
+	SPFeMerge* object = this;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeMerge* object = this->spfemerge;
+Inkscape::XML::Node* SPFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeMerge* object = this;
 
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it. And child nodes, too! */
@@ -125,13 +100,13 @@ Inkscape::XML::Node* CFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XML
     }
 
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeMerge* primitive = this->spfemerge;
+void SPFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeMerge* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

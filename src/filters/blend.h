@@ -16,29 +16,16 @@
 #include "sp-filter-primitive.h"
 #include "display/nr-filter-blend.h"
 
-#define SP_TYPE_FEBLEND (sp_feBlend_get_type())
 #define SP_FEBLEND(obj) ((SPFeBlend*)obj)
-#define SP_IS_FEBLEND(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeBlend)))
-
-class CFeBlend;
+#define SP_IS_FEBLEND(obj) (dynamic_cast<const SPFeBlend*>((SPObject*)obj))
 
 class SPFeBlend : public SPFilterPrimitive {
 public:
 	SPFeBlend();
-	CFeBlend* cfeblend;
+	virtual ~SPFeBlend();
 
     Inkscape::Filters::FilterBlendMode blend_mode;
     int in2;
-};
-
-struct SPFeBlendClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeBlend : public CFilterPrimitive {
-public:
-	CFeBlend(SPFeBlend* blend);
-	virtual ~CFeBlend();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -50,14 +37,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeBlend* spfeblend;
 };
-
-
-GType sp_feBlend_get_type();
-
 
 #endif /* !SP_FEBLEND_H_SEEN */
 

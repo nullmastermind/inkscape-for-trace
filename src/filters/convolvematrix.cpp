@@ -38,52 +38,27 @@ namespace {
 	bool convolveMatrixRegistered = SPFactory::instance().registerObject("svg:feConvolveMatrix", createConvolveMatrix);
 }
 
-/* FeConvolveMatrix base class */
-G_DEFINE_TYPE(SPFeConvolveMatrix, sp_feConvolveMatrix, G_TYPE_OBJECT);
-
-static void
-sp_feConvolveMatrix_class_init(SPFeConvolveMatrixClass *klass)
-{
-}
-
-CFeConvolveMatrix::CFeConvolveMatrix(SPFeConvolveMatrix* matrix) : CFilterPrimitive(matrix) {
-	this->spfeconvolvematrix = matrix;
-}
-
-CFeConvolveMatrix::~CFeConvolveMatrix() {
-}
-
 SPFeConvolveMatrix::SPFeConvolveMatrix() : SPFilterPrimitive() {
-	SPFeConvolveMatrix* feConvolveMatrix = this;
+	this->cobject = this;
 
-	feConvolveMatrix->cfeconvolvematrix = new CFeConvolveMatrix(feConvolveMatrix);
-	feConvolveMatrix->typeHierarchy.insert(typeid(SPFeConvolveMatrix));
-
-	delete feConvolveMatrix->cfilterprimitive;
-	feConvolveMatrix->cfilterprimitive = feConvolveMatrix->cfeconvolvematrix;
-	feConvolveMatrix->cobject = feConvolveMatrix->cfeconvolvematrix;
-
-	feConvolveMatrix->bias = 0;
-	feConvolveMatrix->divisorIsSet = 0;
-	feConvolveMatrix->divisor = 0;
+	this->bias = 0;
+	this->divisorIsSet = 0;
+	this->divisor = 0;
 
     //Setting default values:
-    feConvolveMatrix->order.set("3 3");
-    feConvolveMatrix->targetX = 1;
-    feConvolveMatrix->targetY = 1;
-    feConvolveMatrix->edgeMode = Inkscape::Filters::CONVOLVEMATRIX_EDGEMODE_DUPLICATE;
-    feConvolveMatrix->preserveAlpha = false;
+    this->order.set("3 3");
+    this->targetX = 1;
+    this->targetY = 1;
+    this->edgeMode = Inkscape::Filters::CONVOLVEMATRIX_EDGEMODE_DUPLICATE;
+    this->preserveAlpha = false;
 
     //some helper variables:
-    feConvolveMatrix->targetXIsSet = false;
-    feConvolveMatrix->targetYIsSet = false;
-    feConvolveMatrix->kernelMatrixIsSet = false;
+    this->targetXIsSet = false;
+    this->targetYIsSet = false;
+    this->kernelMatrixIsSet = false;
 }
 
-static void
-sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
-{
-	new (feConvolveMatrix) SPFeConvolveMatrix();
+SPFeConvolveMatrix::~SPFeConvolveMatrix() {
 }
 
 /**
@@ -91,10 +66,10 @@ sp_feConvolveMatrix_init(SPFeConvolveMatrix *feConvolveMatrix)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::build(document, repr);
+void SPFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive::build(document, repr);
 
-	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
+	SPFeConvolveMatrix* object = this;
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 	object->readAttr( "order" );
@@ -111,8 +86,8 @@ void CFeConvolveMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeConvolveMatrix::release() {
-	CFilterPrimitive::release();
+void SPFeConvolveMatrix::release() {
+	SPFilterPrimitive::release();
 }
 
 static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_edgeMode(gchar const *value){
@@ -134,8 +109,8 @@ static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_
 /**
  * Sets a specific value in the SPFeConvolveMatrix.
  */
-void CFeConvolveMatrix::set(unsigned int key, gchar const *value) {
-	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
+void SPFeConvolveMatrix::set(unsigned int key, gchar const *value) {
+	SPFeConvolveMatrix* object = this;
 
     SPFeConvolveMatrix *feConvolveMatrix = SP_FECONVOLVEMATRIX(object);
     (void)feConvolveMatrix;
@@ -250,7 +225,7 @@ void CFeConvolveMatrix::set(unsigned int key, gchar const *value) {
             }
             break;
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 
@@ -259,8 +234,8 @@ void CFeConvolveMatrix::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeConvolveMatrix::update(SPCtx *ctx, guint flags) {
-	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
+void SPFeConvolveMatrix::update(SPCtx *ctx, guint flags) {
+	SPFeConvolveMatrix* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -269,14 +244,14 @@ void CFeConvolveMatrix::update(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeConvolveMatrix::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeConvolveMatrix* object = this->spfeconvolvematrix;
+Inkscape::XML::Node* SPFeConvolveMatrix::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeConvolveMatrix* object = this;
 
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
@@ -285,13 +260,13 @@ Inkscape::XML::Node* CFeConvolveMatrix::write(Inkscape::XML::Document *doc, Inks
     }
 
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeConvolveMatrix* primitive = this->spfeconvolvematrix;
+void SPFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeConvolveMatrix* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

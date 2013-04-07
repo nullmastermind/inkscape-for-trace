@@ -13,33 +13,20 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_TYPE_FECOMPONENTTRANSFER (sp_feComponentTransfer_get_type())
 #define SP_FECOMPONENTTRANSFER(obj) ((SPFeComponentTransfer*)obj)
-#define SP_IS_FECOMPONENTTRANSFER(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeComponentTransfer)))
+#define SP_IS_FECOMPONENTTRANSFER(obj) (dynamic_cast<const SPFeComponentTransfer*>((SPObject*)obj))
 
 namespace Inkscape {
 namespace Filters {
 class FilterComponentTransfer;
 } }
 
-class CFeComponentTransfer;
-
 class SPFeComponentTransfer : public SPFilterPrimitive {
 public:
 	SPFeComponentTransfer();
-	CFeComponentTransfer* cfecomponenttransfer;
+	virtual ~SPFeComponentTransfer();
 
     Inkscape::Filters::FilterComponentTransfer *renderer;
-};
-
-struct SPFeComponentTransferClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeComponentTransfer : public CFilterPrimitive {
-public:
-	CFeComponentTransfer(SPFeComponentTransfer* tr);
-	virtual ~CFeComponentTransfer();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -54,14 +41,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeComponentTransfer* spfecomponenttransfer;
 };
-
-
-GType sp_feComponentTransfer_get_type();
-
 
 #endif /* !SP_FECOMPONENTTRANSFER_H_SEEN */
 

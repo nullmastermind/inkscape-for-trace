@@ -14,28 +14,15 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_TYPE_FEOFFSET (sp_feOffset_get_type())
 #define SP_FEOFFSET(obj) ((SPFeOffset*)obj)
-#define SP_IS_FEOFFSET(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeOffset)))
-
-class CFeOffset;
+#define SP_IS_FEOFFSET(obj) (dynamic_cast<const SPFeOffset*>((SPObject*)obj))
 
 class SPFeOffset : public SPFilterPrimitive {
 public:
 	SPFeOffset();
-	CFeOffset* cfeoffset;
+	virtual ~SPFeOffset();
 
     double dx, dy;
-};
-
-struct SPFeOffsetClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeOffset : public CFilterPrimitive {
-public:
-	CFeOffset(SPFeOffset* offset);
-	virtual ~CFeOffset();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -47,13 +34,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeOffset* spfeoffset;
 };
-
-GType sp_feOffset_get_type();
-
 
 #endif /* !SP_FEOFFSET_H_SEEN */
 

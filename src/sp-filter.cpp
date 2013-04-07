@@ -406,7 +406,7 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
 //            } else {
 //                g_warning("Cannot build filter renderer: missing builder");
 //            }  // CPPIFY: => FilterPrimitive should be abstract.
-            primitive->cfilterprimitive->build_renderer(nr_filter);
+            primitive->build_renderer(nr_filter);
         }
         primitive_obj = primitive_obj->next;
     }

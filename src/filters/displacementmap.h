@@ -14,9 +14,8 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_TYPE_FEDISPLACEMENTMAP (sp_feDisplacementMap_get_type())
 #define SP_FEDISPLACEMENTMAP(obj) ((SPFeDisplacementMap*)obj)
-#define SP_IS_FEDISPLACEMENTMAP(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeDisplacementMap)))
+#define SP_IS_FEDISPLACEMENTMAP(obj) (dynamic_cast<const SPFeDisplacementMap*>((SPObject*)obj))
 
 enum FilterDisplacementMapChannelSelector {
     DISPLACEMENTMAP_CHANNEL_RED,
@@ -26,27 +25,15 @@ enum FilterDisplacementMapChannelSelector {
     DISPLACEMENTMAP_CHANNEL_ENDTYPE
 };
 
-class CFeDisplacementMap;
-
 class SPFeDisplacementMap : public SPFilterPrimitive {
 public:
 	SPFeDisplacementMap();
-	CFeDisplacementMap* cfedisplacementmap;
+	virtual ~SPFeDisplacementMap();
 
     int in2; 
     double scale;
     FilterDisplacementMapChannelSelector xChannelSelector;
     FilterDisplacementMapChannelSelector yChannelSelector;
-};
-
-struct SPFeDisplacementMapClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeDisplacementMap : public CFilterPrimitive {
-public:
-	CFeDisplacementMap(SPFeDisplacementMap* map);
-	virtual ~CFeDisplacementMap();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -58,12 +45,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeDisplacementMap* spfedisplacementmap;
 };
-
-GType sp_feDisplacementMap_get_type();
 
 #endif /* !SP_FEDISPLACEMENTMAP_H_SEEN */
 

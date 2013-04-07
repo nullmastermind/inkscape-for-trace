@@ -17,9 +17,8 @@
 #include "sp-filter-primitive.h"
 #include "number-opt-number.h"
 
-#define SP_TYPE_FESPECULARLIGHTING (sp_feSpecularLighting_get_type())
 #define SP_FESPECULARLIGHTING(obj) ((SPFeSpecularLighting*)obj)
-#define SP_IS_FESPECULARLIGHTING(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeSpecularLighting)))
+#define SP_IS_FESPECULARLIGHTING(obj) (dynamic_cast<const SPFeSpecularLighting*>((SPObject*)obj))
 
 struct SVGICCColor;
 
@@ -29,12 +28,10 @@ class FilterSpecularLighting;
 }
 }
 
-class CFeSpecularLighting;
-
 class SPFeSpecularLighting : public SPFilterPrimitive {
 public:
 	SPFeSpecularLighting();
-	CFeSpecularLighting* cfespecularlighting;
+	virtual ~SPFeSpecularLighting();
 
     gfloat surfaceScale;
     guint surfaceScale_set : 1;
@@ -48,16 +45,6 @@ public:
     SVGICCColor *icc;
 
     Inkscape::Filters::FilterSpecularLighting *renderer;
-};
-
-struct SPFeSpecularLightingClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeSpecularLighting : public CFilterPrimitive {
-public:
-	CFeSpecularLighting(SPFeSpecularLighting* lighting);
-	virtual ~CFeSpecularLighting();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -74,13 +61,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeSpecularLighting* spfespecularlighting;
 };
-
-GType sp_feSpecularLighting_get_type();
-
 
 #endif /* !SP_FESPECULARLIGHTING_H_SEEN */
 

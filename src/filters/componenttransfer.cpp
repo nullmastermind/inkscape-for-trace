@@ -37,38 +37,13 @@ namespace {
 	bool componentTransferRegistered = SPFactory::instance().registerObject("svg:feComponentTransfer", createComponentTransfer);
 }
 
-/* FeComponentTransfer base class */
-G_DEFINE_TYPE(SPFeComponentTransfer, sp_feComponentTransfer, G_TYPE_OBJECT);
-
-static void
-sp_feComponentTransfer_class_init(SPFeComponentTransferClass *klass)
-{
-}
-
-CFeComponentTransfer::CFeComponentTransfer(SPFeComponentTransfer* tr) : CFilterPrimitive(tr) {
-	this->spfecomponenttransfer = tr;
-}
-
-CFeComponentTransfer::~CFeComponentTransfer() {
-}
-
 SPFeComponentTransfer::SPFeComponentTransfer() : SPFilterPrimitive() {
-	SPFeComponentTransfer* feComponentTransfer = this;
+	this->cobject = this;
 
-	feComponentTransfer->cfecomponenttransfer = new CFeComponentTransfer(feComponentTransfer);
-	feComponentTransfer->typeHierarchy.insert(typeid(SPFeComponentTransfer));
-
-	delete feComponentTransfer->cfilterprimitive;
-	feComponentTransfer->cfilterprimitive = feComponentTransfer->cfecomponenttransfer;
-	feComponentTransfer->cobject = feComponentTransfer->cfecomponenttransfer;
-
-	feComponentTransfer->renderer = NULL;
+	this->renderer = NULL;
 }
 
-static void
-sp_feComponentTransfer_init(SPFeComponentTransfer *feComponentTransfer)
-{
-	new (feComponentTransfer) SPFeComponentTransfer();
+SPFeComponentTransfer::~SPFeComponentTransfer() {
 }
 
 /**
@@ -76,8 +51,8 @@ sp_feComponentTransfer_init(SPFeComponentTransfer *feComponentTransfer)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeComponentTransfer::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::build(document, repr);
+void SPFeComponentTransfer::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 
@@ -121,12 +96,12 @@ static void sp_feComponentTransfer_children_modified(SPFeComponentTransfer *sp_c
 /**
  * Callback for child_added event.
  */
-void CFeComponentTransfer::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFeComponentTransfer* object = this->spfecomponenttransfer;
+void SPFeComponentTransfer::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPFeComponentTransfer* object = this;
 
     SPFeComponentTransfer *f = SP_FECOMPONENTTRANSFER(object);
 
-    CFilterPrimitive::child_added(child, ref);
+    SPFilterPrimitive::child_added(child, ref);
 
     sp_feComponentTransfer_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -135,12 +110,12 @@ void CFeComponentTransfer::child_added(Inkscape::XML::Node *child, Inkscape::XML
 /**
  * Callback for remove_child event.
  */
-void CFeComponentTransfer::remove_child(Inkscape::XML::Node *child) {
-	SPFeComponentTransfer* object = this->spfecomponenttransfer;
+void SPFeComponentTransfer::remove_child(Inkscape::XML::Node *child) {
+	SPFeComponentTransfer* object = this;
 
     SPFeComponentTransfer *f = SP_FECOMPONENTTRANSFER(object);
 
-    CFilterPrimitive::remove_child(child);
+    SPFilterPrimitive::remove_child(child);
 
     sp_feComponentTransfer_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -149,15 +124,15 @@ void CFeComponentTransfer::remove_child(Inkscape::XML::Node *child) {
 /**
  * Drops any allocated memory.
  */
-void CFeComponentTransfer::release() {
-	CFilterPrimitive::release();
+void SPFeComponentTransfer::release() {
+	SPFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeComponentTransfer.
  */
-void CFeComponentTransfer::set(unsigned int key, gchar const *value) {
-	SPFeComponentTransfer* object = this->spfecomponenttransfer;
+void SPFeComponentTransfer::set(unsigned int key, gchar const *value) {
+	SPFeComponentTransfer* object = this;
 
     SPFeComponentTransfer *feComponentTransfer = SP_FECOMPONENTTRANSFER(object);
     (void)feComponentTransfer;
@@ -165,7 +140,7 @@ void CFeComponentTransfer::set(unsigned int key, gchar const *value) {
     switch(key) {
         /*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -173,8 +148,8 @@ void CFeComponentTransfer::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeComponentTransfer::update(SPCtx *ctx, guint flags) {
-	SPFeComponentTransfer* object = this->spfecomponenttransfer;
+void SPFeComponentTransfer::update(SPCtx *ctx, guint flags) {
+	SPFeComponentTransfer* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -183,14 +158,14 @@ void CFeComponentTransfer::update(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeComponentTransfer::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeComponentTransfer* object = this->spfecomponenttransfer;
+Inkscape::XML::Node* SPFeComponentTransfer::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeComponentTransfer* object = this;
 
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
@@ -198,13 +173,13 @@ Inkscape::XML::Node* CFeComponentTransfer::write(Inkscape::XML::Document *doc, I
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeComponentTransfer* primitive = this->spfecomponenttransfer;
+void SPFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeComponentTransfer* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

@@ -18,16 +18,13 @@
 #include "number-opt-number.h"
 #include "display/nr-filter-convolve-matrix.h"
 
-#define SP_TYPE_FECONVOLVEMATRIX (sp_feConvolveMatrix_get_type())
 #define SP_FECONVOLVEMATRIX(obj) ((SPFeConvolveMatrix*)obj)
-#define SP_IS_FECONVOLVEMATRIX(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeConvolveMatrix)))
-
-class CFeConvolveMatrix;
+#define SP_IS_FECONVOLVEMATRIX(obj) (dynamic_cast<const SPFeConvolveMatrix*>((SPObject*)obj))
 
 class SPFeConvolveMatrix : public SPFilterPrimitive {
 public:
 	SPFeConvolveMatrix();
-	CFeConvolveMatrix* cfeconvolvematrix;
+	virtual ~SPFeConvolveMatrix();
 
     NumberOptNumber order;
     std::vector<gdouble> kernelMatrix;
@@ -41,16 +38,6 @@ public:
     bool targetYIsSet;
     bool divisorIsSet;
     bool kernelMatrixIsSet;
-};
-
-struct SPFeConvolveMatrixClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeConvolveMatrix : public CFilterPrimitive {
-public:
-	CFeConvolveMatrix(SPFeConvolveMatrix* matrix);
-	virtual ~CFeConvolveMatrix();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -62,12 +49,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeConvolveMatrix* spfeconvolvematrix;
 };
-
-GType sp_feConvolveMatrix_get_type();
 
 #endif /* !SP_FECONVOLVEMATRIX_H_SEEN */
 

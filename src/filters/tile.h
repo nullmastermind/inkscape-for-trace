@@ -14,27 +14,14 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_TYPE_FETILE (sp_feTile_get_type())
 #define SP_FETILE(obj) ((SPFeTile*)obj)
-#define SP_IS_FETILE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeTile)))
+#define SP_IS_FETILE(obj) (dynamic_cast<const SPFeTile*>((SPObject*)obj))
 
 /* FeTile base class */
-class CFeTile;
-
 class SPFeTile : public SPFilterPrimitive {
 public:
 	SPFeTile();
-    CFeTile* cfetile;
-};
-
-struct SPFeTileClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeTile : public CFilterPrimitive {
-public:
-	CFeTile(SPFeTile* tile);
-	virtual ~CFeTile();
+    virtual ~SPFeTile();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -46,12 +33,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeTile* spfetile;
 };
-
-GType sp_feTile_get_type();
 
 #endif /* !SP_FETILE_H_SEEN */
 

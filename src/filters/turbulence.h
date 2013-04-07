@@ -17,18 +17,15 @@
 #include "number-opt-number.h"
 #include "display/nr-filter-turbulence.h"
 
-#define SP_TYPE_FETURBULENCE (sp_feTurbulence_get_type())
 #define SP_FETURBULENCE(obj) ((SPFeTurbulence*)obj)
-#define SP_IS_FETURBULENCE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeTurbulence)))
+#define SP_IS_FETURBULENCE(obj) (dynamic_cast<const SPFeTurbulence*>((SPObject*)obj))
 
 /* FeTurbulence base class */
-
-class CFeTurbulence;
 
 class SPFeTurbulence : public SPFilterPrimitive {
 public:
 	SPFeTurbulence();
-	CFeTurbulence* cfeturbulence;
+	virtual ~SPFeTurbulence();
 
     /** TURBULENCE ATTRIBUTES HERE */
     NumberOptNumber baseFrequency;
@@ -38,16 +35,6 @@ public:
     Inkscape::Filters::FilterTurbulenceType type;
     SVGLength x, y, height, width;
     bool updated;
-};
-
-struct SPFeTurbulenceClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeTurbulence : public CFilterPrimitive {
-public:
-	CFeTurbulence(SPFeTurbulence* turb);
-	virtual ~CFeTurbulence();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -59,13 +46,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeTurbulence* spfeturbulence;
 };
-
-GType sp_feTurbulence_get_type();
-
 
 #endif /* !SP_FETURBULENCE_H_SEEN */
 

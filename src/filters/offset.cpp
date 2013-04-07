@@ -35,39 +35,14 @@ namespace {
 	bool offsetRegistered = SPFactory::instance().registerObject("svg:feOffset", createOffset);
 }
 
-/* FeOffset base class */
-G_DEFINE_TYPE(SPFeOffset, sp_feOffset, G_TYPE_OBJECT);
-
-static void
-sp_feOffset_class_init(SPFeOffsetClass *klass)
-{
-}
-
-CFeOffset::CFeOffset(SPFeOffset* offset) : CFilterPrimitive(offset) {
-	this->spfeoffset = offset;
-}
-
-CFeOffset::~CFeOffset() {
-}
-
 SPFeOffset::SPFeOffset() : SPFilterPrimitive() {
-	SPFeOffset* feOffset = this;
+	this->cobject = this;
 
-	feOffset->cfeoffset = new CFeOffset(feOffset);
-	feOffset->typeHierarchy.insert(typeid(SPFeOffset));
-
-	delete feOffset->cfilterprimitive;
-	feOffset->cfilterprimitive = feOffset->cfeoffset;
-	feOffset->cobject = feOffset->cfeoffset;
-
-    feOffset->dx = 0;
-    feOffset->dy = 0;
+    this->dx = 0;
+    this->dy = 0;
 }
 
-static void
-sp_feOffset_init(SPFeOffset *feOffset)
-{
-	new (feOffset) SPFeOffset();
+SPFeOffset::~SPFeOffset() {
 }
 
 /**
@@ -75,10 +50,10 @@ sp_feOffset_init(SPFeOffset *feOffset)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeOffset* object = this->spfeoffset;
+void SPFeOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFeOffset* object = this;
 
-	CFilterPrimitive::build(document, repr);
+	SPFilterPrimitive::build(document, repr);
 
 	object->readAttr( "dx" );
 	object->readAttr( "dy" );
@@ -87,15 +62,15 @@ void CFeOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeOffset::release() {
-	CFilterPrimitive::release();
+void SPFeOffset::release() {
+	SPFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeOffset.
  */
-void CFeOffset::set(unsigned int key, gchar const *value) {
-	SPFeOffset* object = this->spfeoffset;
+void SPFeOffset::set(unsigned int key, gchar const *value) {
+	SPFeOffset* object = this;
 
     SPFeOffset *feOffset = SP_FEOFFSET(object);
 
@@ -118,7 +93,7 @@ void CFeOffset::set(unsigned int key, gchar const *value) {
             
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -126,22 +101,22 @@ void CFeOffset::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeOffset::update(SPCtx *ctx, guint flags) {
-	SPFeOffset* object = this->spfeoffset;
+void SPFeOffset::update(SPCtx *ctx, guint flags) {
+	SPFeOffset* object = this;
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         object->readAttr( "dx" );
         object->readAttr( "dy" );
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeOffset::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeOffset* object = this->spfeoffset;
+Inkscape::XML::Node* SPFeOffset::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeOffset* object = this;
 
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
@@ -149,13 +124,13 @@ Inkscape::XML::Node* CFeOffset::write(Inkscape::XML::Document *doc, Inkscape::XM
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeOffset* primitive = this->spfeoffset;
+void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeOffset* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

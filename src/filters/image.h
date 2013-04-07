@@ -18,16 +18,13 @@
 #include "sp-item.h"
 #include "uri-references.h"
 
-#define SP_TYPE_FEIMAGE (sp_feImage_get_type())
 #define SP_FEIMAGE(obj) ((SPFeImage*)obj)
-#define SP_IS_FEIMAGE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeImage)))
-
-class CFeImage;
+#define SP_IS_FEIMAGE(obj) (dynamic_cast<const SPFeImage*>((SPObject*)obj))
 
 class SPFeImage : public SPFilterPrimitive {
 public:
 	SPFeImage();
-	CFeImage* cfeimage;
+	virtual ~SPFeImage();
 
     gchar *href;
 
@@ -41,16 +38,6 @@ public:
     Inkscape::URIReference* SVGElemRef;
     sigc::connection _image_modified_connection;
     sigc::connection _href_modified_connection;
-};
-
-struct SPFeImageClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeImage : public CFilterPrimitive {
-public:
-	CFeImage(SPFeImage* image);
-	virtual ~CFeImage();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -62,12 +49,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeImage* spfeimage;
 };
-
-GType sp_feImage_get_type();
 
 #endif /* !SP_FEIMAGE_H_SEEN */
 

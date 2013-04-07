@@ -12,26 +12,13 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_TYPE_FEMERGE (sp_feMerge_get_type())
 #define SP_FEMERGE(obj) ((SPFeMerge*)obj)
-#define SP_IS_FEMERGE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeMerge)))
-
-class CFeMerge;
+#define SP_IS_FEMERGE(obj) (dynamic_cast<const SPFeMerge*>((SPObject*)obj))
 
 class SPFeMerge : public SPFilterPrimitive {
 public:
 	SPFeMerge();
-    CFeMerge* cfemerge;
-};
-
-struct SPFeMergeClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeMerge : public CFilterPrimitive {
-public:
-	CFeMerge(SPFeMerge* merge);
-	virtual ~CFeMerge();
+    virtual ~SPFeMerge();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -43,13 +30,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeMerge* spfemerge;
 };
-
-GType sp_feMerge_get_type();
-
 
 #endif /* !SP_FEMERGE_H_SEEN */
 

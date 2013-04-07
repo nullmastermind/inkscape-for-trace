@@ -39,43 +39,20 @@ namespace {
 	bool imageRegistered = SPFactory::instance().registerObject("svg:feImage", createImage);
 }
 
-/* FeImage base class */
-G_DEFINE_TYPE(SPFeImage, sp_feImage, G_TYPE_OBJECT);
-
-static void sp_feImage_class_init(SPFeImageClass *klass)
-{
-}
-
-CFeImage::CFeImage(SPFeImage* image) : CFilterPrimitive(image) {
-	this->spfeimage = image;
-}
-
-CFeImage::~CFeImage() {
-}
-
 SPFeImage::SPFeImage() : SPFilterPrimitive() {
-	SPFeImage* feImage = this;
+	this->cobject = this;
 
-	feImage->cfeimage = new CFeImage(feImage);
-	feImage->typeHierarchy.insert(typeid(SPFeImage));
+	this->document = NULL;
+	this->href = NULL;
+	this->from_element = 0;
+	this->SVGElemRef = NULL;
+	this->SVGElem = NULL;
 
-	delete feImage->cfilterprimitive;
-	feImage->cfilterprimitive = feImage->cfeimage;
-	feImage->cobject = feImage->cfeimage;
-
-	feImage->document = NULL;
-	feImage->href = NULL;
-	feImage->from_element = 0;
-	feImage->SVGElemRef = NULL;
-	feImage->SVGElem = NULL;
-
-    feImage->aspect_align = SP_ASPECT_XMID_YMID; // Default
-    feImage->aspect_clip = SP_ASPECT_MEET; // Default
+    this->aspect_align = SP_ASPECT_XMID_YMID; // Default
+    this->aspect_clip = SP_ASPECT_MEET; // Default
 }
 
-static void sp_feImage_init(SPFeImage *feImage)
-{
-	new (feImage) SPFeImage();
+SPFeImage::~SPFeImage() {
 }
 
 /**
@@ -83,14 +60,14 @@ static void sp_feImage_init(SPFeImage *feImage)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeImage* object = this->spfeimage;
+void SPFeImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFeImage* object = this;
 
     // Save document reference so we can load images with relative paths.
     SPFeImage *feImage = SP_FEIMAGE(object);
     feImage->document = document;
 
-    CFilterPrimitive::build(document, repr);
+    SPFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 
@@ -101,15 +78,15 @@ void CFeImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeImage::release() {
-	SPFeImage* object = this->spfeimage;
+void SPFeImage::release() {
+	SPFeImage* object = this;
 
     SPFeImage *feImage = SP_FEIMAGE(object);
     feImage->_image_modified_connection.disconnect();
     feImage->_href_modified_connection.disconnect();
     if (feImage->SVGElemRef) delete feImage->SVGElemRef;
 
-    CFilterPrimitive::release();
+    SPFilterPrimitive::release();
 }
 
 static void sp_feImage_elem_modified(SPObject* /*href*/, guint /*flags*/, SPObject* obj)
@@ -134,8 +111,8 @@ static void sp_feImage_href_modified(SPObject* /*old_elem*/, SPObject* new_elem,
 /**
  * Sets a specific value in the SPFeImage.
  */
-void CFeImage::set(unsigned int key, gchar const *value) {
-	SPFeImage* object = this->spfeimage;
+void SPFeImage::set(unsigned int key, gchar const *value) {
+	SPFeImage* object = this;
 
     SPFeImage *feImage = SP_FEIMAGE(object);
     (void)feImage;
@@ -239,7 +216,7 @@ void CFeImage::set(unsigned int key, gchar const *value) {
             break;
 
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -247,8 +224,8 @@ void CFeImage::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeImage::update(SPCtx *ctx, guint flags) {
-	SPFeImage* object = this->spfeimage;
+void SPFeImage::update(SPCtx *ctx, guint flags) {
+	SPFeImage* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -256,14 +233,14 @@ void CFeImage::update(SPCtx *ctx, guint flags) {
         /* do something to trigger redisplay, updates? */
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeImage::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeImage* object = this->spfeimage;
+Inkscape::XML::Node* SPFeImage::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeImage* object = this;
 
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
@@ -271,13 +248,13 @@ Inkscape::XML::Node* CFeImage::write(Inkscape::XML::Document *doc, Inkscape::XML
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeImage* primitive = this->spfeimage;
+void SPFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeImage* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

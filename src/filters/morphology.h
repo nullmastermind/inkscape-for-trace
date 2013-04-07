@@ -16,29 +16,16 @@
 #include "number-opt-number.h"
 #include "display/nr-filter-morphology.h"
 
-#define SP_TYPE_FEMORPHOLOGY (sp_feMorphology_get_type())
 #define SP_FEMORPHOLOGY(obj) ((SPFeMorphology*)obj)
-#define SP_IS_FEMORPHOLOGY(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeMorphology)))
-
-class CFeMorphology;
+#define SP_IS_FEMORPHOLOGY(obj) (dynamic_cast<const SPFeMorphology*>((SPObject*)obj))
 
 class SPFeMorphology : public SPFilterPrimitive {
 public:
 	SPFeMorphology();
-	CFeMorphology* cfemorphology;
+	virtual ~SPFeMorphology();
 
     Inkscape::Filters::FilterMorphologyOperator Operator;
     NumberOptNumber radius;
-};
-
-struct SPFeMorphologyClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeMorphology : public CFilterPrimitive {
-public:
-	CFeMorphology(SPFeMorphology* morph);
-	virtual ~CFeMorphology();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -50,13 +37,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeMorphology* spfemorphology;
 };
-
-GType sp_feMorphology_get_type();
-
 
 #endif /* !SP_FEMORPHOLOGY_H_SEEN */
 

@@ -35,41 +35,16 @@ namespace {
 	bool displacementMapRegistered = SPFactory::instance().registerObject("svg:feDisplacementMap", createDisplacementMap);
 }
 
-/* FeDisplacementMap base class */
-G_DEFINE_TYPE(SPFeDisplacementMap, sp_feDisplacementMap, G_TYPE_OBJECT);
-
-static void
-sp_feDisplacementMap_class_init(SPFeDisplacementMapClass *klass)
-{
-}
-
-CFeDisplacementMap::CFeDisplacementMap(SPFeDisplacementMap* map) : CFilterPrimitive(map) {
-	this->spfedisplacementmap = map;
-}
-
-CFeDisplacementMap::~CFeDisplacementMap() {
-}
-
 SPFeDisplacementMap::SPFeDisplacementMap() : SPFilterPrimitive() {
-	SPFeDisplacementMap* feDisplacementMap = this;
+	this->cobject = this;
 
-	feDisplacementMap->cfedisplacementmap = new CFeDisplacementMap(feDisplacementMap);
-	feDisplacementMap->typeHierarchy.insert(typeid(SPFeDisplacementMap));
-
-	delete feDisplacementMap->cfilterprimitive;
-	feDisplacementMap->cfilterprimitive = feDisplacementMap->cfedisplacementmap;
-	feDisplacementMap->cobject = feDisplacementMap->cfedisplacementmap;
-
-    feDisplacementMap->scale=0;
-    feDisplacementMap->xChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
-    feDisplacementMap->yChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
-    feDisplacementMap->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+    this->scale=0;
+    this->xChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
+    this->yChannelSelector = DISPLACEMENTMAP_CHANNEL_ALPHA;
+    this->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
-static void
-sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
-{
-	new (feDisplacementMap) SPFeDisplacementMap();
+SPFeDisplacementMap::~SPFeDisplacementMap() {
 }
 
 /**
@@ -77,10 +52,10 @@ sp_feDisplacementMap_init(SPFeDisplacementMap *feDisplacementMap)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeDisplacementMap::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeDisplacementMap* object = this->spfedisplacementmap;
+void SPFeDisplacementMap::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFeDisplacementMap* object = this;
 
-	CFilterPrimitive::build(document, repr);
+	SPFilterPrimitive::build(document, repr);
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 	object->readAttr( "scale" );
@@ -103,8 +78,8 @@ void CFeDisplacementMap::build(SPDocument *document, Inkscape::XML::Node *repr) 
 /**
  * Drops any allocated memory.
  */
-void CFeDisplacementMap::release() {
-	CFilterPrimitive::release();
+void SPFeDisplacementMap::release() {
+	SPFilterPrimitive::release();
 }
 
 static FilterDisplacementMapChannelSelector sp_feDisplacementMap_readChannelSelector(gchar const *value)
@@ -134,8 +109,8 @@ static FilterDisplacementMapChannelSelector sp_feDisplacementMap_readChannelSele
 /**
  * Sets a specific value in the SPFeDisplacementMap.
  */
-void CFeDisplacementMap::set(unsigned int key, gchar const *value) {
-	SPFeDisplacementMap* object = this->spfedisplacementmap;
+void SPFeDisplacementMap::set(unsigned int key, gchar const *value) {
+	SPFeDisplacementMap* object = this;
 
     SPFeDisplacementMap *feDisplacementMap = SP_FEDISPLACEMENTMAP(object);
     (void)feDisplacementMap;
@@ -173,7 +148,7 @@ void CFeDisplacementMap::set(unsigned int key, gchar const *value) {
             }
             break;
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -181,8 +156,8 @@ void CFeDisplacementMap::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeDisplacementMap::update(SPCtx *ctx, guint flags) {
-	SPFeDisplacementMap* object = this->spfedisplacementmap;
+void SPFeDisplacementMap::update(SPCtx *ctx, guint flags) {
+	SPFeDisplacementMap* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -204,7 +179,7 @@ void CFeDisplacementMap::update(SPCtx *ctx, guint flags) {
         object->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, disp->in2));
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 static char const * get_channelselector_name(FilterDisplacementMapChannelSelector selector) {
@@ -225,8 +200,8 @@ static char const * get_channelselector_name(FilterDisplacementMapChannelSelecto
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeDisplacementMap::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeDisplacementMap* object = this->spfedisplacementmap;
+Inkscape::XML::Node* SPFeDisplacementMap::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeDisplacementMap* object = this;
 
     SPFeDisplacementMap *disp = SP_FEDISPLACEMENTMAP(object);
     SPFilter *parent = SP_FILTER(object->parent);
@@ -255,13 +230,13 @@ Inkscape::XML::Node* CFeDisplacementMap::write(Inkscape::XML::Document *doc, Ink
     repr->setAttribute("yChannelSelector",
                        get_channelselector_name(disp->yChannelSelector));
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeDisplacementMap::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeDisplacementMap* primitive = this->spfedisplacementmap;
+void SPFeDisplacementMap::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeDisplacementMap* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

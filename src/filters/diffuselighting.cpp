@@ -46,47 +46,23 @@ namespace {
 	bool diffuseLightingRegistered = SPFactory::instance().registerObject("svg:feDiffuseLighting", createDiffuseLighting);
 }
 
-G_DEFINE_TYPE(SPFeDiffuseLighting, sp_feDiffuseLighting, G_TYPE_OBJECT);
-
-static void
-sp_feDiffuseLighting_class_init(SPFeDiffuseLightingClass *klass)
-{
-}
-
-CFeDiffuseLighting::CFeDiffuseLighting(SPFeDiffuseLighting* dl) : CFilterPrimitive(dl) {
-	this->spfediffuselighting = dl;
-}
-
-CFeDiffuseLighting::~CFeDiffuseLighting() {
-}
-
 SPFeDiffuseLighting::SPFeDiffuseLighting() : SPFilterPrimitive() {
-	SPFeDiffuseLighting* feDiffuseLighting = this;
+	this->cobject = this;
 
-	feDiffuseLighting->cfediffuselighting = new CFeDiffuseLighting(feDiffuseLighting);
-	feDiffuseLighting->typeHierarchy.insert(typeid(SPFeDiffuseLighting));
-
-	delete feDiffuseLighting->cfilterprimitive;
-	feDiffuseLighting->cfilterprimitive = feDiffuseLighting->cfediffuselighting;
-	feDiffuseLighting->cobject = feDiffuseLighting->cfediffuselighting;
-
-    feDiffuseLighting->surfaceScale = 1;
-    feDiffuseLighting->diffuseConstant = 1;
-    feDiffuseLighting->lighting_color = 0xffffffff;
-    feDiffuseLighting->icc = NULL;
+    this->surfaceScale = 1;
+    this->diffuseConstant = 1;
+    this->lighting_color = 0xffffffff;
+    this->icc = NULL;
 
     //TODO kernelUnit
-    feDiffuseLighting->renderer = NULL;
+    this->renderer = NULL;
 
-    feDiffuseLighting->surfaceScale_set = FALSE;
-    feDiffuseLighting->diffuseConstant_set = FALSE;
-    feDiffuseLighting->lighting_color_set = FALSE;
+    this->surfaceScale_set = FALSE;
+    this->diffuseConstant_set = FALSE;
+    this->lighting_color_set = FALSE;
 }
 
-static void
-sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
-{
-	new (feDiffuseLighting) SPFeDiffuseLighting();
+SPFeDiffuseLighting::~SPFeDiffuseLighting() {
 }
 
 /**
@@ -94,10 +70,10 @@ sp_feDiffuseLighting_init(SPFeDiffuseLighting *feDiffuseLighting)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeDiffuseLighting::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::build(document, repr);
+void SPFeDiffuseLighting::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive::build(document, repr);
 
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+	SPFeDiffuseLighting* object = this;
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 	object->readAttr( "surfaceScale" );
@@ -109,15 +85,15 @@ void CFeDiffuseLighting::build(SPDocument *document, Inkscape::XML::Node *repr) 
 /**
  * Drops any allocated memory.
  */
-void CFeDiffuseLighting::release() {
-	CFilterPrimitive::release();
+void SPFeDiffuseLighting::release() {
+	SPFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeDiffuseLighting.
  */
-void CFeDiffuseLighting::set(unsigned int key, gchar const *value) {
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
+	SPFeDiffuseLighting* object = this;
 
     SPFeDiffuseLighting *feDiffuseLighting = SP_FEDIFFUSELIGHTING(object);
     gchar const *cend_ptr = NULL;
@@ -198,7 +174,7 @@ void CFeDiffuseLighting::set(unsigned int key, gchar const *value) {
             object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -206,8 +182,8 @@ void CFeDiffuseLighting::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeDiffuseLighting::update(SPCtx *ctx, guint flags) {
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+void SPFeDiffuseLighting::update(SPCtx *ctx, guint flags) {
+	SPFeDiffuseLighting* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
         object->readAttr( "surfaceScale" );
@@ -216,14 +192,14 @@ void CFeDiffuseLighting::update(SPCtx *ctx, guint flags) {
         object->readAttr( "lighting-color" );
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeDiffuseLighting::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+Inkscape::XML::Node* SPFeDiffuseLighting::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeDiffuseLighting* object = this;
 
     SPFeDiffuseLighting *fediffuselighting = SP_FEDIFFUSELIGHTING(object);
     
@@ -250,7 +226,7 @@ Inkscape::XML::Node* CFeDiffuseLighting::write(Inkscape::XML::Document *doc, Ink
     } else
         repr->setAttribute("lighting-color", NULL);
         
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
@@ -258,12 +234,12 @@ Inkscape::XML::Node* CFeDiffuseLighting::write(Inkscape::XML::Document *doc, Ink
 /**
  * Callback for child_added event.
  */
-void CFeDiffuseLighting::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+void SPFeDiffuseLighting::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+	SPFeDiffuseLighting* object = this;
 
     SPFeDiffuseLighting *f = SP_FEDIFFUSELIGHTING(object);
 
-    CFilterPrimitive::child_added(child, ref);
+    SPFilterPrimitive::child_added(child, ref);
 
     sp_feDiffuseLighting_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -272,22 +248,22 @@ void CFeDiffuseLighting::child_added(Inkscape::XML::Node *child, Inkscape::XML::
 /**
  * Callback for remove_child event.
  */
-void CFeDiffuseLighting::remove_child(Inkscape::XML::Node *child) {
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+void SPFeDiffuseLighting::remove_child(Inkscape::XML::Node *child) {
+	SPFeDiffuseLighting* object = this;
 
 	SPFeDiffuseLighting *f = SP_FEDIFFUSELIGHTING(object);
 
-	CFilterPrimitive::remove_child(child);
+	SPFilterPrimitive::remove_child(child);
 
 	sp_feDiffuseLighting_children_modified(f);
 	object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-void CFeDiffuseLighting::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
-	SPFeDiffuseLighting* object = this->spfediffuselighting;
+void SPFeDiffuseLighting::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) {
+	SPFeDiffuseLighting* object = this;
 
     SPFeDiffuseLighting *f = SP_FEDIFFUSELIGHTING(object);
-    CFilterPrimitive::order_changed(child, old_ref, new_ref);
+    SPFilterPrimitive::order_changed(child, old_ref, new_ref);
 
     sp_feDiffuseLighting_children_modified(f);
     object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -312,8 +288,8 @@ static void sp_feDiffuseLighting_children_modified(SPFeDiffuseLighting *sp_diffu
    }
 }
 
-void CFeDiffuseLighting::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeDiffuseLighting* primitive = this->spfediffuselighting;
+void SPFeDiffuseLighting::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeDiffuseLighting* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

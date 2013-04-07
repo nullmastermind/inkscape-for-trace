@@ -27,77 +27,31 @@
 #include "display/nr-filter-primitive.h"
 #include "display/nr-filter-types.h"
 
-/* FilterPrimitive base class */
-
-static void sp_filter_primitive_class_init(SPFilterPrimitiveClass *klass);
-static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive);
-
-static SPObjectClass *filter_primitive_parent_class;
-
-GType sp_filter_primitive_get_type()
-{
-    static GType filter_primitive_type = 0;
-
-    if (!filter_primitive_type) {
-        GTypeInfo filter_primitive_info = {
-            sizeof(SPFilterPrimitiveClass),
-            NULL, NULL,
-            0,//(GClassInitFunc) sp_filter_primitive_class_init,
-            NULL, NULL,
-            sizeof(SPFilterPrimitive),
-            16,
-            (GInstanceInitFunc) sp_filter_primitive_init,
-            NULL,    /* value_table */
-        };
-        filter_primitive_type = g_type_register_static(G_TYPE_OBJECT, "SPFilterPrimitive", &filter_primitive_info, (GTypeFlags)0);
-    }
-    return filter_primitive_type;
-}
-
-static void sp_filter_primitive_class_init(SPFilterPrimitiveClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *)(klass);
-    filter_primitive_parent_class = static_cast<SPObjectClass *>(g_type_class_peek_parent(klass));
-}
-
-CFilterPrimitive::CFilterPrimitive(SPFilterPrimitive* fp) : CObject(fp) {
-	this->spfilterprimitive = fp;
-}
-
-CFilterPrimitive::~CFilterPrimitive() {
-}
 
 // CPPIFY: Make pure virtual.
-void CFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
+void SPFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
 	// throw;
 }
 
-SPFilterPrimitive::SPFilterPrimitive() : SPObject() {
-	SPFilterPrimitive* filter_primitive = this;
+SPFilterPrimitive::SPFilterPrimitive() : SPObject(), CObject(this) {
+	delete this->cobject;
+	this->cobject = this;
 
-	filter_primitive->cfilterprimitive = new CFilterPrimitive(filter_primitive);
-	filter_primitive->typeHierarchy.insert(typeid(SPFilterPrimitive));
-
-	delete filter_primitive->cobject;
-	filter_primitive->cobject = filter_primitive->cfilterprimitive;
-
-    filter_primitive->image_in = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
-    filter_primitive->image_out = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+    this->image_in = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+    this->image_out = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 
     // We must keep track if a value is set or not, if not set then the region defaults to 0%, 0%,
     // 100%, 100% ("x", "y", "width", "height") of the -> filter <- region.  If set then
     // percentages are in terms of bounding box or viewbox, depending on value of "primitiveUnits"
 
     // NB: SVGLength.set takes prescaled percent values: 1 means 100%
-    filter_primitive->x.unset(SVGLength::PERCENT, 0, 0);
-    filter_primitive->y.unset(SVGLength::PERCENT, 0, 0);
-    filter_primitive->width.unset(SVGLength::PERCENT, 1, 0);
-    filter_primitive->height.unset(SVGLength::PERCENT, 1, 0);
+    this->x.unset(SVGLength::PERCENT, 0, 0);
+    this->y.unset(SVGLength::PERCENT, 0, 0);
+    this->width.unset(SVGLength::PERCENT, 1, 0);
+    this->height.unset(SVGLength::PERCENT, 1, 0);
 }
 
-static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
-{
-	new (filter_primitive) SPFilterPrimitive();
+SPFilterPrimitive::~SPFilterPrimitive() {
 }
 
 /**
@@ -105,8 +59,8 @@ static void sp_filter_primitive_init(SPFilterPrimitive *filter_primitive)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFilterPrimitive* object = this->spfilterprimitive;
+void SPFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive* object = this;
 
     object->readAttr( "style" ); // struct not derived from SPItem, we need to do this ourselves.
 	object->readAttr( "in" );
@@ -122,15 +76,15 @@ void CFilterPrimitive::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFilterPrimitive::release() {
+void SPFilterPrimitive::release() {
 	CObject::release();
 }
 
 /**
  * Sets a specific value in the SPFilterPrimitive.
  */
-void CFilterPrimitive::set(unsigned int key, gchar const *value) {
-	SPFilterPrimitive* object = this->spfilterprimitive;
+void SPFilterPrimitive::set(unsigned int key, gchar const *value) {
+	SPFilterPrimitive* object = this;
 
     SPFilterPrimitive *filter_primitive = SP_FILTER_PRIMITIVE(object);
     (void)filter_primitive;
@@ -185,8 +139,8 @@ void CFilterPrimitive::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFilterPrimitive::update(SPCtx *ctx, guint flags) {
-	SPFilterPrimitive* object = this->spfilterprimitive;
+void SPFilterPrimitive::update(SPCtx *ctx, guint flags) {
+	SPFilterPrimitive* object = this;
 
     //SPFilterPrimitive *filter_primitive = SP_FILTER_PRIMITIVE(object);
 
@@ -207,8 +161,8 @@ void CFilterPrimitive::update(SPCtx *ctx, guint flags) {
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFilterPrimitive::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFilterPrimitive* object = this->spfilterprimitive;
+Inkscape::XML::Node* SPFilterPrimitive::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFilterPrimitive* object = this;
 
     SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(object);
     SPFilter *parent = SP_FILTER(object->parent);

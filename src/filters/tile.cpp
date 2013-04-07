@@ -32,36 +32,11 @@ namespace {
 	bool tileRegistered = SPFactory::instance().registerObject("svg:feTile", createTile);
 }
 
-/* FeTile base class */
-G_DEFINE_TYPE(SPFeTile, sp_feTile, G_TYPE_OBJECT);
-
-static void
-sp_feTile_class_init(SPFeTileClass *klass)
-{
-}
-
-CFeTile::CFeTile(SPFeTile* tile) : CFilterPrimitive(tile) {
-	this->spfetile = tile;
-}
-
-CFeTile::~CFeTile() {
-}
-
 SPFeTile::SPFeTile() : SPFilterPrimitive() {
-	SPFeTile* feTile = this;
-
-	feTile->cfetile = new CFeTile(feTile);
-	feTile->typeHierarchy.insert(typeid(SPFeTile));
-
-	delete feTile->cfilterprimitive;
-	feTile->cfilterprimitive = feTile->cfetile;
-	feTile->cobject = feTile->cfetile;
+	this->cobject = this;
 }
 
-static void
-sp_feTile_init(SPFeTile *feTile)
-{
-	new (feTile) SPFeTile();
+SPFeTile::~SPFeTile() {
 }
 
 /**
@@ -69,22 +44,22 @@ sp_feTile_init(SPFeTile *feTile)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeTile::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::build(document, repr);
+void SPFeTile::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive::build(document, repr);
 }
 
 /**
  * Drops any allocated memory.
  */
-void CFeTile::release() {
-	CFilterPrimitive::release();
+void SPFeTile::release() {
+	SPFilterPrimitive::release();
 }
 
 /**
  * Sets a specific value in the SPFeTile.
  */
-void CFeTile::set(unsigned int key, gchar const *value) {
-	SPFeTile* object = this->spfetile;
+void SPFeTile::set(unsigned int key, gchar const *value) {
+	SPFeTile* object = this;
 
     SPFeTile *feTile = SP_FETILE(object);
     (void)feTile;
@@ -92,7 +67,7 @@ void CFeTile::set(unsigned int key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 }
@@ -100,8 +75,8 @@ void CFeTile::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeTile::update(SPCtx *ctx, guint flags) {
-	SPFeTile* object = this->spfetile;
+void SPFeTile::update(SPCtx *ctx, guint flags) {
+	SPFeTile* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -110,14 +85,14 @@ void CFeTile::update(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeTile* object = this->spfetile;
+Inkscape::XML::Node* SPFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeTile* object = this;
 
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
@@ -125,13 +100,13 @@ Inkscape::XML::Node* CFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML:
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeTile* primitive = this->spfetile;
+void SPFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeTile* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

@@ -17,9 +17,8 @@
 #include "sp-object.h"
 #include "svg/svg-length.h"
 
-#define SP_TYPE_FILTER_PRIMITIVE (sp_filter_primitive_get_type ())
 #define SP_FILTER_PRIMITIVE(obj) ((SPFilterPrimitive*)obj)
-#define SP_IS_FILTER_PRIMITIVE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFilterPrimitive)))
+#define SP_IS_FILTER_PRIMITIVE(obj) (dynamic_cast<const SPFilterPrimitive*>((SPObject*)obj))
 
 namespace Inkscape {
 namespace Filters {
@@ -27,27 +26,15 @@ class Filter;
 class FilterPrimitive;
 } }
 
-class CFilterPrimitive;
-
-class SPFilterPrimitive : public SPObject {
+class SPFilterPrimitive : public SPObject, public CObject {
 public:
 	SPFilterPrimitive();
-	CFilterPrimitive* cfilterprimitive;
+	virtual ~SPFilterPrimitive();
 
     int image_in, image_out;
 
     /* filter primitive subregion */
     SVGLength x, y, height, width;
-};
-
-struct SPFilterPrimitiveClass {
-    SPObjectClass sp_object_class;
-};
-
-class CFilterPrimitive : public CObject {
-public:
-	CFilterPrimitive(SPFilterPrimitive* fp);
-	virtual ~CFilterPrimitive();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -59,13 +46,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFilterPrimitive* spfilterprimitive;
 };
-
-
-GType sp_filter_primitive_get_type (void);
 
 /* Common initialization for filter primitives */
 void sp_filter_primitive_renderer_common(SPFilterPrimitive *sp_prim, Inkscape::Filters::FilterPrimitive *nr_prim);

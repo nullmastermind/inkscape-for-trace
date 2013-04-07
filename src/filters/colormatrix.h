@@ -15,30 +15,17 @@
 #include "sp-filter-primitive.h"
 #include "display/nr-filter-colormatrix.h"
 
-#define SP_TYPE_FECOLORMATRIX (sp_feColorMatrix_get_type())
 #define SP_FECOLORMATRIX(obj) ((SPFeColorMatrix*)obj)
-#define SP_IS_FECOLORMATRIX(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeColorMatrix)))
-
-class CFeColorMatrix;
+#define SP_IS_FECOLORMATRIX(obj) (dynamic_cast<const SPFeColorMatrix*>((SPObject*)obj))
 
 class SPFeColorMatrix : public SPFilterPrimitive {
 public:
 	SPFeColorMatrix();
-	CFeColorMatrix* cfecolormatrix;
+	virtual ~SPFeColorMatrix();
 
     Inkscape::Filters::FilterColorMatrixType type;
     gdouble value;
     std::vector<gdouble> values;
-};
-
-struct SPFeColorMatrixClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeColorMatrix : public CFilterPrimitive {
-public:
-	CFeColorMatrix(SPFeColorMatrix* matrix);
-	virtual ~CFeColorMatrix();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -50,12 +37,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeColorMatrix* spfecolormatrix;
 };
-
-GType sp_feColorMatrix_get_type();
 
 #endif /* !SP_FECOLORMATRIX_H_SEEN */
 

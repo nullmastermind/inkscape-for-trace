@@ -15,9 +15,8 @@
 #include "sp-filter-primitive.h"
 #include "number-opt-number.h"
 
-#define SP_TYPE_FEDIFFUSELIGHTING (sp_feDiffuseLighting_get_type())
 #define SP_FEDIFFUSELIGHTING(obj) ((SPFeDiffuseLighting*)obj)
-#define SP_IS_FEDIFFUSELIGHTING(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeDiffuseLighting)))
+#define SP_IS_FEDIFFUSELIGHTING(obj) (dynamic_cast<const SPFeDiffuseLighting*>((SPObject*)obj))
 
 struct SVGICCColor;
 
@@ -26,12 +25,10 @@ namespace Filters {
 class FilterDiffuseLighting;
 } }
 
-class CFeDiffuseLighting;
-
 class SPFeDiffuseLighting : public SPFilterPrimitive {
 public:
 	SPFeDiffuseLighting();
-	CFeDiffuseLighting* cfediffuselighting;
+	virtual ~SPFeDiffuseLighting();
 
     gfloat surfaceScale;
     guint surfaceScale_set : 1;
@@ -42,16 +39,6 @@ public:
     guint lighting_color_set : 1;
     Inkscape::Filters::FilterDiffuseLighting *renderer;
     SVGICCColor *icc;
-};
-
-struct SPFeDiffuseLightingClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeDiffuseLighting : public CFilterPrimitive {
-public:
-	CFeDiffuseLighting(SPFeDiffuseLighting* dl);
-	virtual ~CFeDiffuseLighting();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -68,12 +55,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeDiffuseLighting* spfediffuselighting;
 };
-
-GType sp_feDiffuseLighting_get_type();
 
 #endif /* !SP_FEDIFFUSELIGHTING_H_SEEN */
 

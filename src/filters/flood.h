@@ -15,35 +15,17 @@
 #include "sp-filter-primitive.h"
 #include "svg/svg-icc-color.h"
 
-G_BEGIN_DECLS
-
-#define SP_TYPE_FEFLOOD            (sp_feFlood_get_type())
 #define SP_FEFLOOD(obj) ((SPFeFlood*)obj)
-#define SP_IS_FEFLOOD(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFlood)))
-
-class CFeFlood;
+#define SP_IS_FEFLOOD(obj) (dynamic_cast<const SPFeFlood*>((SPObject*)obj))
 
 class SPFeFlood : public SPFilterPrimitive {
 public:
 	SPFeFlood();
-	CFeFlood* cfeflood;
+	virtual ~SPFeFlood();
 
     guint32 color;
     SVGICCColor *icc;
     double opacity;
-};
-
-struct SPFeFloodClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-GType sp_feFlood_get_type() G_GNUC_CONST;
-
-G_END_DECLS
-class CFeFlood : public CFilterPrimitive {
-public:
-	CFeFlood(SPFeFlood* flood);
-	virtual ~CFeFlood();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -55,12 +37,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeFlood* spfeflood;
 };
-
-GType sp_feFlood_get_type();
 
 #endif /* !SP_FEFLOOD_H_SEEN */
 

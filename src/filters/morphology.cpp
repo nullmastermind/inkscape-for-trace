@@ -36,41 +36,16 @@ namespace {
 	bool morphologyRegistered = SPFactory::instance().registerObject("svg:feMorphology", createMorphology);
 }
 
-/* FeMorphology base class */
-G_DEFINE_TYPE(SPFeMorphology, sp_feMorphology, G_TYPE_OBJECT);
-
-static void
-sp_feMorphology_class_init(SPFeMorphologyClass *klass)
-{
-}
-
-CFeMorphology::CFeMorphology(SPFeMorphology* morph) : CFilterPrimitive(morph) {
-	this->spfemorphology = morph;
-}
-
-CFeMorphology::~CFeMorphology() {
-}
-
 SPFeMorphology::SPFeMorphology() : SPFilterPrimitive() {
-	SPFeMorphology* feMorphology = this;
+	this->cobject = this;
 
-	feMorphology->cfemorphology = new CFeMorphology(feMorphology);
-	feMorphology->typeHierarchy.insert(typeid(SPFeMorphology));
-
-	delete feMorphology->cfilterprimitive;
-	feMorphology->cfilterprimitive = feMorphology->cfemorphology;
-	feMorphology->cobject = feMorphology->cfemorphology;
-
-	feMorphology->Operator = Inkscape::Filters::MORPHOLOGY_OPERATOR_ERODE;
+	this->Operator = Inkscape::Filters::MORPHOLOGY_OPERATOR_ERODE;
 
     //Setting default values:
-    feMorphology->radius.set("0");
+    this->radius.set("0");
 }
 
-static void
-sp_feMorphology_init(SPFeMorphology *feMorphology)
-{
-	new (feMorphology) SPFeMorphology();
+SPFeMorphology::~SPFeMorphology() {
 }
 
 /**
@@ -78,10 +53,10 @@ sp_feMorphology_init(SPFeMorphology *feMorphology)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-void CFeMorphology::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	CFilterPrimitive::build(document, repr);
+void SPFeMorphology::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPFilterPrimitive::build(document, repr);
 
-	SPFeMorphology* object = this->spfemorphology;
+	SPFeMorphology* object = this;
 
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
 	object->readAttr( "operator" );
@@ -91,8 +66,8 @@ void CFeMorphology::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Drops any allocated memory.
  */
-void CFeMorphology::release() {
-	CFilterPrimitive::release();
+void SPFeMorphology::release() {
+	SPFilterPrimitive::release();
 }
 
 static Inkscape::Filters::FilterMorphologyOperator sp_feMorphology_read_operator(gchar const *value){
@@ -111,8 +86,8 @@ static Inkscape::Filters::FilterMorphologyOperator sp_feMorphology_read_operator
 /**
  * Sets a specific value in the SPFeMorphology.
  */
-void CFeMorphology::set(unsigned int key, gchar const *value) {
-	SPFeMorphology* object = this->spfemorphology;
+void SPFeMorphology::set(unsigned int key, gchar const *value) {
+	SPFeMorphology* object = this;
 
     SPFeMorphology *feMorphology = SP_FEMORPHOLOGY(object);
     (void)feMorphology;
@@ -135,7 +110,7 @@ void CFeMorphology::set(unsigned int key, gchar const *value) {
             object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
-        	CFilterPrimitive::set(key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
 
@@ -144,8 +119,8 @@ void CFeMorphology::set(unsigned int key, gchar const *value) {
 /**
  * Receives update notifications.
  */
-void CFeMorphology::update(SPCtx *ctx, guint flags) {
-	SPFeMorphology* object = this->spfemorphology;
+void SPFeMorphology::update(SPCtx *ctx, guint flags) {
+	SPFeMorphology* object = this;
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
@@ -154,14 +129,14 @@ void CFeMorphology::update(SPCtx *ctx, guint flags) {
 
     }
 
-    CFilterPrimitive::update(ctx, flags);
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-Inkscape::XML::Node* CFeMorphology::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeMorphology* object = this->spfemorphology;
+Inkscape::XML::Node* SPFeMorphology::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+	SPFeMorphology* object = this;
 
 	/* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
@@ -169,13 +144,13 @@ Inkscape::XML::Node* CFeMorphology::write(Inkscape::XML::Document *doc, Inkscape
         repr = object->getRepr()->duplicate(doc);
     }
 
-    CFilterPrimitive::write(doc, repr, flags);
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-void CFeMorphology::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeMorphology* primitive = this->spfemorphology;
+void SPFeMorphology::build_renderer(Inkscape::Filters::Filter* filter) {
+	SPFeMorphology* primitive = this;
 
     g_assert(primitive != NULL);
     g_assert(filter != NULL);

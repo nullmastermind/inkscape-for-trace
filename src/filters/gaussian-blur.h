@@ -15,30 +15,16 @@
 #include "sp-filter-primitive.h"
 #include "number-opt-number.h"
 
-#define SP_TYPE_GAUSSIANBLUR (sp_gaussianBlur_get_type())
 #define SP_GAUSSIANBLUR(obj) ((SPGaussianBlur*)obj)
-#define SP_IS_GAUSSIANBLUR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPGaussianBlur)))
-
-class CGaussianBlur;
+#define SP_IS_GAUSSIANBLUR(obj) (dynamic_cast<const SPGaussianBlur*>((SPObject*)obj))
 
 class SPGaussianBlur : public SPFilterPrimitive {
 public:
 	SPGaussianBlur();
-	CGaussianBlur* cgaussianblur;
+	virtual ~SPGaussianBlur();
 
     /** stdDeviation attribute */
     NumberOptNumber stdDeviation;
-};
-
-/* GaussianBlur base class */
-struct SPGaussianBlurClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CGaussianBlur : public CFilterPrimitive {
-public:
-	CGaussianBlur(SPGaussianBlur* gb);
-	virtual ~CGaussianBlur();
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
@@ -50,12 +36,8 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPGaussianBlur* spgaussianblur;
 };
 
-GType sp_gaussianBlur_get_type();
 void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num);
 void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num, float optnum);
 

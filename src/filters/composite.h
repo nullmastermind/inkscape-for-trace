@@ -13,9 +13,8 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_TYPE_FECOMPOSITE (sp_feComposite_get_type())
 #define SP_FECOMPOSITE(obj) ((SPFeComposite*)obj)
-#define SP_IS_FECOMPOSITE(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeComposite)))
+#define SP_IS_FECOMPOSITE(obj) (dynamic_cast<const SPFeComposite*>((SPObject*)obj))
 
 enum FeCompositeOperator {
     // Default value is 'over', but let's distinquish specifying the
@@ -30,28 +29,16 @@ enum FeCompositeOperator {
     COMPOSITE_ENDOPERATOR
 };
 
-class CFeComposite;
-
 class SPFeComposite : public SPFilterPrimitive {
 public:
 	SPFeComposite();
-	CFeComposite* cfecomposite;
+	virtual ~SPFeComposite();
 
     FeCompositeOperator composite_operator;
     double k1, k2, k3, k4;
     int in2;
-};
 
-struct SPFeCompositeClass {
-    SPFilterPrimitiveClass parent_class;
-};
-
-class CFeComposite : public CFilterPrimitive {
-public:
-	CFeComposite(SPFeComposite* comp);
-	virtual ~CFeComposite();
-
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
 	virtual void set(unsigned int key, const gchar* value);
@@ -61,12 +48,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
 	virtual void build_renderer(Inkscape::Filters::Filter* filter);
-
-private:
-	SPFeComposite* spfecomposite;
 };
-
-GType sp_feComposite_get_type();
 
 #endif /* !SP_FECOMPOSITE_H_SEEN */
 
