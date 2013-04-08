@@ -45,7 +45,12 @@ enum {
 
 typedef std::map<SPKnot *, int>  SPKnotList;
 
-struct SPConnectorContext : public SPEventContext {
+class CConnectorContext;
+
+class SPConnectorContext : public SPEventContext {
+public:
+	CConnectorContext* cconnectorcontext;
+
     Inkscape::Selection *selection;
     Geom::Point p[5];
 
@@ -95,6 +100,20 @@ struct SPConnectorContext : public SPEventContext {
 };
 
 struct SPConnectorContextClass : public SPEventContextClass { };
+
+class CConnectorContext : public CEventContext {
+public:
+	CConnectorContext(SPConnectorContext* connectorcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPConnectorContext* spconnectorcontext;
+};
 
 GType sp_connector_context_get_type();
 

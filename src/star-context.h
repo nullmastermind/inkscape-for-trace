@@ -25,7 +25,12 @@
 #define SP_IS_STAR_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_STAR_CONTEXT))
 #define SP_IS_STAR_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STAR_CONTEXT))
 
-struct SPStarContext : public SPEventContext {
+class CStarContext;
+
+class SPStarContext : public SPEventContext {
+public:
+	CStarContext* cstarcontext;
+
     SPItem *item;
     Geom::Point center;
 
@@ -47,6 +52,19 @@ struct SPStarContext : public SPEventContext {
 
 struct SPStarContextClass {
     SPEventContextClass parent_class;
+};
+
+class CStarContext : public CEventContext {
+public:
+	CStarContext(SPStarContext* starcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPStarContext* spstarcontext;
 };
 
 GType sp_star_context_get_type (void);

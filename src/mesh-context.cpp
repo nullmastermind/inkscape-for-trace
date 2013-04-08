@@ -74,8 +74,16 @@ static void sp_mesh_context_class_init(SPMeshContextClass *klass)
     event_context_class->root_handler  = sp_mesh_context_root_handler;
 }
 
+CMeshContext::CMeshContext(SPMeshContext* meshcontext) : CEventContext(meshcontext) {
+	this->spmeshcontext = meshcontext;
+}
+
 static void sp_mesh_context_init(SPMeshContext *gr_context)
 {
+	gr_context->cmeshcontext = new CMeshContext(gr_context);
+	delete gr_context->ceventcontext;
+	gr_context->ceventcontext = gr_context->cmeshcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(gr_context);
 
     gr_context->cursor_addnode = false;
@@ -244,11 +252,18 @@ mesh_subselection_changed (gpointer, gpointer data)
 
 static void sp_mesh_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CMeshContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPMeshContext *rc = SP_MESH_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_mesh_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_mesh_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_mesh_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_mesh_context_parent_class)->setup(ec);
+//    }
+    CEventContext::setup();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/mesh/selcue", true)) {
@@ -455,6 +470,12 @@ Handles all keyboard and mouse input for meshs.
 static gint
 sp_mesh_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CMeshContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     // static int count = 0;
     // std::cout << "sp_mesh_context_root_handler: " << count++ << std::endl;
     static bool dragging;
@@ -924,13 +945,15 @@ sp_mesh_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_mesh_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_mesh_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (((SPEventContextClass *) sp_mesh_context_parent_class)->root_handler) {
+//            ret = ((SPEventContextClass *) sp_mesh_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;
 }
+
 
 
 static void sp_mesh_drag(SPMeshContext &rc, Geom::Point const /*pt*/, guint /*state*/, guint32 /*etime*/)

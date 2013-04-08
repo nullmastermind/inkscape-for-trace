@@ -29,7 +29,12 @@ namespace Inkscape {
   class SelectionDescriber;
 }
 
-struct SPSelectContext : public SPEventContext {
+class CSelectContext;
+
+class SPSelectContext : public SPEventContext {
+public:
+	CSelectContext* cselectcontext;
+
 	guint dragging : 1;
 	guint moved : 1;
 	bool button_press_shift;
@@ -50,6 +55,19 @@ struct SPSelectContext : public SPEventContext {
 
 struct SPSelectContextClass {
 	SPEventContextClass parent_class;
+};
+
+class CSelectContext : public CEventContext {
+public:
+	CSelectContext(SPSelectContext* selectcontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPSelectContext* spselectcontext;
 };
 
 /* Standard Gtk function */

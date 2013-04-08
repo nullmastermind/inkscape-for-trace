@@ -77,9 +77,17 @@ sp_star_context_class_init (SPStarContextClass * klass)
     event_context_class->root_handler = sp_star_context_root_handler;
 }
 
+CStarContext::CStarContext(SPStarContext* starcontext) : CEventContext(starcontext) {
+	this->spstarcontext = starcontext;
+}
+
 static void
 sp_star_context_init (SPStarContext * star_context)
 {
+	star_context->cstarcontext = new CStarContext(star_context);
+	delete star_context->ceventcontext;
+	star_context->ceventcontext = star_context->cstarcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT (star_context);
 
     event_context->cursor_shape = cursor_star_xpm;
@@ -103,6 +111,12 @@ sp_star_context_init (SPStarContext * star_context)
 
 static void sp_star_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CStarContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPStarContext *sc = SP_STAR_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
@@ -110,9 +124,10 @@ static void sp_star_context_finish(SPEventContext *ec)
     sp_star_finish(sc);
     sc->sel_changed_connection.disconnect();
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish) {
-        (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish(ec);
+//    }
+    CEventContext::finish();
 }
 
 
@@ -161,43 +176,56 @@ static void sp_star_context_selection_changed (Inkscape::Selection * selection, 
 static void
 sp_star_context_setup (SPEventContext *ec)
 {
-   SPStarContext *sc = SP_STAR_CONTEXT (ec);
+	ec->ceventcontext->setup();
+}
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup)
-        (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup (ec);
+void CStarContext::setup() {
+	SPEventContext* ec = this->speventcontext;
 
-    sp_event_context_read (ec, "magnitude");
-    sp_event_context_read (ec, "proportion");
-    sp_event_context_read (ec, "isflatsided");
-    sp_event_context_read (ec, "rounded");
-    sp_event_context_read (ec, "randomized");
+	SPStarContext *sc = SP_STAR_CONTEXT (ec);
 
-    ec->shape_editor = new ShapeEditor(ec->desktop);
+//	if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup)
+//		(SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup (ec);
+	CEventContext::setup();
 
-    SPItem *item = sp_desktop_selection(ec->desktop)->singleItem();
-    if (item) {
-        ec->shape_editor->set_item(item, SH_KNOTHOLDER);
-    }
+	sp_event_context_read (ec, "magnitude");
+	sp_event_context_read (ec, "proportion");
+	sp_event_context_read (ec, "isflatsided");
+	sp_event_context_read (ec, "rounded");
+	sp_event_context_read (ec, "randomized");
 
-    Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
-    sc->sel_changed_connection.disconnect();
-    sc->sel_changed_connection = selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_star_context_selection_changed), (gpointer)sc));
+	ec->shape_editor = new ShapeEditor(ec->desktop);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/shapes/selcue")) {
-        ec->enableSelectionCue();
-    }
+	SPItem *item = sp_desktop_selection(ec->desktop)->singleItem();
+	if (item) {
+		ec->shape_editor->set_item(item, SH_KNOTHOLDER);
+	}
 
-    if (prefs->getBool("/tools/shapes/gradientdrag")) {
-        ec->enableGrDrag();
-    }
+	Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
+	sc->sel_changed_connection.disconnect();
+	sc->sel_changed_connection = selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_star_context_selection_changed), (gpointer)sc));
 
-    sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
+	Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+	if (prefs->getBool("/tools/shapes/selcue")) {
+		ec->enableSelectionCue();
+	}
+
+	if (prefs->getBool("/tools/shapes/gradientdrag")) {
+		ec->enableGrDrag();
+	}
+
+	sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 static void
 sp_star_context_set (SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CStarContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPStarContext *sc = SP_STAR_CONTEXT (ec);
     Glib::ustring path = val->getEntryName();
 
@@ -216,6 +244,12 @@ sp_star_context_set (SPEventContext *ec, Inkscape::Preferences::Entry *val)
 
 static gint sp_star_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CStarContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static gboolean dragging;
 
     SPDesktop *desktop = event_context->desktop;
@@ -389,8 +423,9 @@ static gint sp_star_context_root_handler(SPEventContext *event_context, GdkEvent
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler)
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler (event_context, event);
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler)
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler (event_context, event);
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

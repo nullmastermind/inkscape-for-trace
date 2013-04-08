@@ -37,10 +37,27 @@ G_BEGIN_DECLS
 #define ERC_MAX_TILT          1.0
 #define ERC_DEFAULT_TILT      0.0
 
-struct SPEraserContext : public SPCommonContext {
+class CEraserContext;
+
+class SPEraserContext : public SPCommonContext {
+public:
+	CEraserContext* cerasercontext;
 };
 
 struct SPEraserContextClass : public SPEventContextClass{};
+
+class CEraserContext : public CCommonContext {
+public:
+	CEraserContext(SPEraserContext* erasercontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPEraserContext* sperasercontext;
+};
+
 
 GType sp_eraser_context_get_type(void);
 

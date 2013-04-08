@@ -94,8 +94,16 @@ static void sp_text_context_class_init(SPTextContextClass *klass)
     event_context_class->item_handler = sp_text_context_item_handler;
 }
 
+CTextContext::CTextContext(SPTextContext* textcontext) : CEventContext(textcontext) {
+	this->sptextcontext = textcontext;
+}
+
 static void sp_text_context_init(SPTextContext *tc)
 {
+	tc->ctextcontext = new CTextContext(tc);
+	delete tc->ceventcontext;
+	tc->ceventcontext = tc->ctextcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(tc);
 
     event_context->cursor_shape = cursor_text_xpm;
@@ -163,6 +171,12 @@ static void sp_text_context_dispose(GObject *obj)
 
 static void sp_text_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CTextContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPTextContext *tc = SP_TEXT_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
     GtkSettings* settings = gtk_settings_get_default();
@@ -213,8 +227,9 @@ static void sp_text_context_setup(SPEventContext *ec)
         }
     }
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup)
-        (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup(ec);
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup)
+//        (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup(ec);
+    CEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -249,6 +264,12 @@ static void sp_text_context_setup(SPEventContext *ec)
 
 static void sp_text_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CTextContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPTextContext *tc = SP_TEXT_CONTEXT(ec);
 
     if (ec->desktop) {
@@ -297,9 +318,14 @@ static void sp_text_context_finish(SPEventContext *ec)
     tc->text_selection_quads.clear();
 }
 
-
 static gint sp_text_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CTextContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPTextContext *tc = SP_TEXT_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
     SPItem *item_ungrouped;
@@ -432,8 +458,9 @@ static gint sp_text_context_item_handler(SPEventContext *event_context, SPItem *
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler)
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler(event_context, item, event);
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler)
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler(event_context, item, event);
+    	ret = CEventContext::item_handler(item, event);
     }
 
     return ret;
@@ -556,6 +583,12 @@ static void show_curr_uni_char(SPTextContext *const tc)
 
 static gint sp_text_context_root_handler(SPEventContext *const event_context, GdkEvent *const event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CTextContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPTextContext *const tc = SP_TEXT_CONTEXT(event_context);
 
     SPDesktop *desktop = event_context->desktop;
@@ -1301,11 +1334,13 @@ static gint sp_text_context_root_handler(SPEventContext *const event_context, Gd
     }
 
     // if nobody consumed it so far
-    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->root_handler) { // and there's a handler in parent context,
-        return (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->root_handler(event_context, event); // send event to parent
-    } else {
-        return FALSE; // return "I did nothing" value so that global shortcuts can be activated
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->root_handler) { // and there's a handler in parent context,
+//        return (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->root_handler(event_context, event); // send event to parent
+//    } else {
+//        return FALSE; // return "I did nothing" value so that global shortcuts can be activated
+//    }
+    return CEventContext::root_handler(event);
+
 }
 
 /**

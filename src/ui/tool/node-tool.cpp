@@ -104,7 +104,7 @@
 
 using Inkscape::ControlManager;
 
-namespace {
+//namespace {
 
 SPCanvasGroup *create_control_group(SPDesktop *d);
 void ink_node_tool_dispose(GObject *object);
@@ -122,7 +122,7 @@ void ink_node_tool_mouseover_changed(InkNodeTool *nt, Inkscape::UI::ControlPoint
 
 void handleControlUiStyleChange(InkNodeTool *nt);
 
-} // anonymous namespace
+//} // anonymous namespace
 
 G_DEFINE_TYPE(InkNodeTool, ink_node_tool, SP_TYPE_EVENT_CONTEXT);
 
@@ -140,9 +140,17 @@ ink_node_tool_class_init(InkNodeToolClass *klass)
     event_context_class->item_handler = ink_node_tool_item_handler;
 }
 
+CInkNodeTool::CInkNodeTool(InkNodeTool* inknodetool) : CEventContext(inknodetool) {
+	this->inknodetool = inknodetool;
+}
+
 static void
 ink_node_tool_init(InkNodeTool *nt)
 {
+	nt->cinknodetool = new CInkNodeTool(nt);
+	delete nt->ceventcontext;
+	nt->ceventcontext = nt->cinknodetool;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(nt);
 
     event_context->cursor_shape = cursor_node_xpm;
@@ -161,7 +169,7 @@ ink_node_tool_init(InkNodeTool *nt)
     new (&nt->_shape_editors) ShapeEditors();
 }
 
-namespace {
+//namespace {
 
 SPCanvasGroup *create_control_group(SPDesktop *d)
 {
@@ -216,10 +224,17 @@ void ink_node_tool_dispose(GObject *object)
 
 void ink_node_tool_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CInkNodeTool::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     InkNodeTool *nt = INK_NODE_TOOL(ec);
 
-    if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->setup)
-        SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->setup(ec);
+//    if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->setup)
+//        SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->setup(ec);
+    CEventContext::setup();
 
     nt->_node_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 
@@ -322,6 +337,12 @@ void ink_node_tool_setup(SPEventContext *ec)
 
 void ink_node_tool_set(SPEventContext *ec, Inkscape::Preferences::Entry *value)
 {
+	ec->ceventcontext->set(value);
+}
+
+void CInkNodeTool::set(Inkscape::Preferences::Entry* value) {
+	SPEventContext* ec = this->speventcontext;
+
     InkNodeTool *nt = INK_NODE_TOOL(ec);
     Glib::ustring entry_name = value->getEntryName();
 
@@ -355,8 +376,9 @@ void ink_node_tool_set(SPEventContext *ec, Inkscape::Preferences::Entry *value)
         nt->edit_masks = value->getBool();
         ink_node_tool_selection_changed(nt, nt->desktop->selection);
     } else {
-        if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->set)
-            SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->set(ec, value);
+//        if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->set)
+//            SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->set(ec, value);
+    	CEventContext::set(value);
     }
 }
 
@@ -444,6 +466,12 @@ void ink_node_tool_selection_changed(InkNodeTool *nt, Inkscape::Selection *sel)
 
 gint ink_node_tool_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CInkNodeTool::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     /* things to handle here:
      * 1. selection of items
      * 2. passing events to manipulators
@@ -537,8 +565,9 @@ gint ink_node_tool_root_handler(SPEventContext *event_context, GdkEvent *event)
     default: break;
     }
     
-    if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->root_handler)
-        return SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->root_handler(event_context, event);
+//    if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->root_handler)
+//        return SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->root_handler(event_context, event);
+    CEventContext::root_handler(event);
 
     return FALSE;
 }
@@ -603,8 +632,15 @@ void ink_node_tool_update_tip(InkNodeTool *nt, GdkEvent *event)
 
 gint ink_node_tool_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
-    if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->item_handler)
-        return SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->item_handler(event_context, item, event);
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CInkNodeTool::item_handler(SPItem* item, GdkEvent* event) {
+
+
+//    if (SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->item_handler)
+//        return SP_EVENT_CONTEXT_CLASS(ink_node_tool_parent_class)->item_handler(event_context, item, event);
+	CEventContext::item_handler(item, event);
 
     return FALSE;
 }
@@ -679,7 +715,7 @@ void handleControlUiStyleChange(InkNodeTool *nt)
     nt->_multipath->updateHandles();
 }
 
-} // anonymous namespace
+//} // anonymous namespace
 
 /*
   Local Variables:

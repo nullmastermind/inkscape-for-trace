@@ -27,7 +27,12 @@
 #define SP_IS_SPIRAL_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SPIRAL_CONTEXT))
 #define SP_IS_SPIRAL_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL_CONTEXT))
 
-struct SPSpiralContext : public SPEventContext {
+class CSpiralContext;
+
+class SPSpiralContext : public SPEventContext {
+public:
+	CSpiralContext* cspiralcontext;
+
 	SPItem * item;
 	Geom::Point center;
 	gdouble revo;
@@ -41,6 +46,19 @@ struct SPSpiralContext : public SPEventContext {
 
 struct SPSpiralContextClass {
 	SPEventContextClass parent_class;
+};
+
+class CSpiralContext : public CEventContext {
+public:
+	CSpiralContext(SPSpiralContext* spiralcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPSpiralContext* spspiralcontext;
 };
 
 /* Standard Gtk function */

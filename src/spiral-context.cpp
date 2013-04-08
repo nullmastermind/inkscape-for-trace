@@ -73,9 +73,17 @@ sp_spiral_context_class_init(SPSpiralContextClass *klass)
     event_context_class->root_handler = sp_spiral_context_root_handler;
 }
 
+CSpiralContext::CSpiralContext(SPSpiralContext* spiralcontext) : CEventContext(spiralcontext) {
+	this->spspiralcontext = spiralcontext;
+}
+
 static void
 sp_spiral_context_init(SPSpiralContext *spiral_context)
 {
+	spiral_context->cspiralcontext = new CSpiralContext(spiral_context);
+	delete spiral_context->ceventcontext;
+	spiral_context->ceventcontext = spiral_context->cspiralcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(spiral_context);
 
     event_context->cursor_shape = cursor_spiral_xpm;
@@ -98,6 +106,12 @@ sp_spiral_context_init(SPSpiralContext *spiral_context)
 
 static void sp_spiral_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CSpiralContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
@@ -105,9 +119,10 @@ static void sp_spiral_context_finish(SPEventContext *ec)
     sp_spiral_finish(sc);
     sc->sel_changed_connection.disconnect();
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->finish) {
-        (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->finish(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->finish) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->finish(ec);
+//    }
+    CEventContext::finish();
 }
 
 static void
@@ -151,10 +166,17 @@ static void sp_spiral_context_selection_changed(Inkscape::Selection *selection, 
 static void
 sp_spiral_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CSpiralContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(ec);
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->setup)
-        (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->setup(ec);
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->setup)
+//        (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->setup(ec);
+    CEventContext::setup();
 
     sp_event_context_read(ec, "expansion");
     sp_event_context_read(ec, "revolution");
@@ -185,6 +207,12 @@ sp_spiral_context_setup(SPEventContext *ec)
 static void
 sp_spiral_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CSpiralContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(ec);
     Glib::ustring name = val->getEntryName();
 
@@ -200,6 +228,12 @@ sp_spiral_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 static gint
 sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CSpiralContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static gboolean dragging;
 
     SPDesktop *desktop = event_context->desktop;
@@ -374,8 +408,9 @@ sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->root_handler)
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->root_handler(event_context, event);
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->root_handler)
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->root_handler(event_context, event);
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

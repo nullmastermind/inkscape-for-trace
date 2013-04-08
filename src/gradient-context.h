@@ -25,7 +25,11 @@
 #define SP_IS_GRADIENT_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_GRADIENT_CONTEXT))
 #define SP_IS_GRADIENT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_GRADIENT_CONTEXT))
 
-struct SPGradientContext : public SPEventContext {
+class CGradientContext;
+
+class SPGradientContext : public SPEventContext {
+public:
+	CGradientContext* cgradientcontext;
 
     Geom::Point origin;
 
@@ -43,6 +47,17 @@ struct SPGradientContext : public SPEventContext {
 
 struct SPGradientContextClass {
     SPEventContextClass parent_class;
+};
+
+class CGradientContext : public CEventContext {
+public:
+	CGradientContext(SPGradientContext* gradientcontext);
+
+	virtual void setup();
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPGradientContext* spgradientcontext;
 };
 
 /* Standard Gtk function */

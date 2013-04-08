@@ -31,7 +31,12 @@
 
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
-struct SPCommonContext : public SPEventContext {
+class CCommonContext;
+
+class SPCommonContext : public SPEventContext {
+public:
+	CCommonContext* ccommoncontext;
+
     /** accumulated shape which ultimately goes in svg:path */
     SPCurve *accumulated;
 
@@ -97,6 +102,18 @@ struct SPCommonContext : public SPEventContext {
 };
 
 struct SPCommonContextClass : public SPEventContextClass{};
+
+class CCommonContext : public CEventContext {
+public:
+	CCommonContext(SPCommonContext* commoncontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPCommonContext* spcommoncontext;
+};
 
 GType sp_common_context_get_type(void);
 

@@ -27,7 +27,12 @@
 #define SP_IS_ARC_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_ARC_CONTEXT))
 #define SP_IS_ARC_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_ARC_CONTEXT))
 
-struct SPArcContext : public SPEventContext {
+class CArcContext;
+
+class SPArcContext : public SPEventContext {
+public:
+	CArcContext* carccontext;
+
     SPItem *item;
     Geom::Point center;
 
@@ -38,6 +43,19 @@ struct SPArcContext : public SPEventContext {
 
 struct SPArcContextClass {
     SPEventContextClass parent_class;
+};
+
+class CArcContext : public CEventContext {
+public:
+	CArcContext(SPArcContext* arccontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPArcContext* sparccontext;
 };
 
 /* Standard Gtk function */

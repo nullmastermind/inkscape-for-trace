@@ -75,8 +75,16 @@ static void sp_arc_context_class_init(SPArcContextClass *klass)
     event_context_class->item_handler = sp_arc_context_item_handler;
 }
 
+CArcContext::CArcContext(SPArcContext* arccontext) : CEventContext(arccontext) {
+	this->sparccontext = arccontext;
+}
+
 static void sp_arc_context_init(SPArcContext *arc_context)
 {
+	arc_context->carccontext = new CArcContext(arc_context);
+	delete arc_context->ceventcontext;
+	arc_context->ceventcontext = arc_context->carccontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(arc_context);
 
     event_context->cursor_shape = cursor_ellipse_xpm;
@@ -96,6 +104,12 @@ static void sp_arc_context_init(SPArcContext *arc_context)
 
 static void sp_arc_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CArcContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
@@ -103,9 +117,10 @@ static void sp_arc_context_finish(SPEventContext *ec)
     sp_arc_finish(ac);
     ac->sel_changed_connection.disconnect();
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish) {
-        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish(ec);
+//    }
+    CEventContext::finish();
 }
 
 static void sp_arc_context_dispose(GObject *object)
@@ -147,12 +162,19 @@ static void sp_arc_context_selection_changed(Inkscape::Selection * selection, gp
 
 static void sp_arc_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CArcContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
     Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup) {
-        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup(ec);
+//    }
+    CEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -180,6 +202,12 @@ static void sp_arc_context_setup(SPEventContext *ec)
 
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CArcContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPDesktop *desktop = event_context->desktop;
     gint ret = FALSE;
 
@@ -195,15 +223,23 @@ static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *i
             break;
     }
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler) {
-        ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler(event_context, item, event);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler) {
+//        ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler(event_context, item, event);
+//    }
+    // CPPIFY: ret is overwritten...
+    ret = CEventContext::item_handler(item, event);
 
     return ret;
 }
 
 static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CArcContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
@@ -377,9 +413,10 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler(event_context, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

@@ -35,7 +35,12 @@
 #define DDC_MAX_TILT          1.0
 #define DDC_DEFAULT_TILT      0.0
 
-struct SPDynaDrawContext : public SPCommonContext {
+class CDynaDrawContext;
+
+class SPDynaDrawContext : public SPCommonContext {
+public:
+	CDynaDrawContext* cdynadrawcontext;
+
     /** newly created object remain selected */
     bool keep_selected;
 
@@ -55,6 +60,18 @@ struct SPDynaDrawContext : public SPCommonContext {
 };
 
 struct SPDynaDrawContextClass : public SPEventContextClass{};
+
+class CDynaDrawContext : public CCommonContext {
+public:
+	CDynaDrawContext(SPDynaDrawContext* dynadrawcontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPDynaDrawContext* spdynadrawcontext;
+};
 
 GType sp_dyna_draw_context_get_type(void);
 

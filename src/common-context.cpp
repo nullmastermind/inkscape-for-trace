@@ -40,8 +40,16 @@ static void sp_common_context_class_init(SPCommonContextClass *klass)
     event_context_class->root_handler = sp_common_context_root_handler;
 }
 
+CCommonContext::CCommonContext(SPCommonContext* commoncontext) : CEventContext(commoncontext) {
+	this->spcommoncontext = commoncontext;
+}
+
 static void sp_common_context_init(SPCommonContext *ctx)
 {
+	ctx->ccommoncontext = new CCommonContext(ctx);
+	delete ctx->ceventcontext;
+	ctx->ceventcontext = ctx->ccommoncontext;
+
 //     ctx->cursor_shape = cursor_eraser_xpm;
 //     ctx->hot_x = 4;
 //     ctx->hot_y = 4;
@@ -123,13 +131,24 @@ static void sp_common_context_dispose(GObject *object)
 
 static void sp_common_context_setup(SPEventContext *ec)
 {
-    if ( SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->setup ) {
-        SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->setup(ec);
-    }
+	ec->ceventcontext->setup();
+}
+
+void CCommonContext::setup() {
+//    if ( SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->setup ) {
+//        SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->setup(ec);
+//    }
+	CEventContext::setup();
 }
 
 static void sp_common_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *value)
 {
+	ec->ceventcontext->set(value);
+}
+
+void CCommonContext::set(Inkscape::Preferences::Entry* value) {
+	SPEventContext* ec = this->speventcontext;
+
     SPCommonContext *ctx = SP_COMMON_CONTEXT(ec);
     Glib::ustring path = value->getEntryName();
     
@@ -166,15 +185,22 @@ static void sp_common_context_set(SPEventContext *ec, Inkscape::Preferences::Ent
 
 static gint sp_common_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CCommonContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     gint ret = FALSE;
 
     // TODO add common hanlding
 
 
     if ( !ret ) {
-        if ( SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->root_handler ) {
-            ret = SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->root_handler(event_context, event);
-        }
+//        if ( SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->root_handler ) {
+//            ret = SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

@@ -188,10 +188,17 @@ sp_connector_context_class_init(SPConnectorContextClass *klass)
     event_context_class->item_handler = sp_connector_context_item_handler;
 }
 
+CConnectorContext::CConnectorContext(SPConnectorContext* connectorcontext) : CEventContext(connectorcontext) {
+	this->spconnectorcontext = connectorcontext;
+}
 
 static void
 sp_connector_context_init(SPConnectorContext *cc)
 {
+	cc->cconnectorcontext = new CConnectorContext(cc);
+	delete cc->ceventcontext;
+	cc->ceventcontext = cc->cconnectorcontext;
+
     SPEventContext *ec = SP_EVENT_CONTEXT(cc);
 
     ec->cursor_shape = cursor_connector_xpm;
@@ -265,6 +272,12 @@ sp_connector_context_dispose(GObject *object)
 static void
 sp_connector_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CConnectorContext::setup() {
+	SPConnectorContext* ec = this->spconnectorcontext;
+
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
     SPDesktop *dt = ec->desktop;
 
@@ -312,6 +325,12 @@ sp_connector_context_setup(SPEventContext *ec)
 static void
 sp_connector_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CConnectorContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->spconnectorcontext;
+
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
 
     /* fixme: Proper error handling for non-numeric data.  Use a locale-independent function like
@@ -328,6 +347,12 @@ sp_connector_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 static void
 sp_connector_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CConnectorContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
 
     spcc_connector_finish(cc);
@@ -347,7 +372,6 @@ sp_connector_context_finish(SPEventContext *ec)
     SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(ec);
     desktop->canvas->gen_all_enter_events = false;
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -448,6 +472,12 @@ cc_deselect_handle(SPKnot* knot)
 static gint
 sp_connector_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     gint ret = FALSE;
 
     SPDesktop *desktop = event_context->desktop;
@@ -509,6 +539,12 @@ sp_connector_context_item_handler(SPEventContext *event_context, SPItem *item, G
 gint
 sp_connector_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
+	return ec->ceventcontext->root_handler(event);
+}
+
+gint CConnectorContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this->speventcontext;
+
     SPConnectorContext *const cc = SP_CONNECTOR_CONTEXT(ec);
 
     gint ret = FALSE;
@@ -534,11 +570,12 @@ sp_connector_context_root_handler(SPEventContext *ec, GdkEvent *event)
     }
 
     if (!ret) {
-        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
-            = (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->root_handler;
-        if (parent_root_handler) {
-            ret = parent_root_handler(ec, event);
-        }
+//        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
+//            = (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->root_handler;
+//        if (parent_root_handler) {
+//            ret = parent_root_handler(ec, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

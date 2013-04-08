@@ -79,8 +79,16 @@ static void sp_box3d_context_class_init(Box3DContextClass *klass)
     event_context_class->item_handler  = sp_box3d_context_item_handler;
 }
 
+CBox3DContext::CBox3DContext(Box3DContext* box3dcontext) : CEventContext(box3dcontext) {
+	this->box3dcontext = box3dcontext;
+}
+
 static void sp_box3d_context_init(Box3DContext *box3d_context)
 {
+	box3d_context->cbox3dcontext = new CBox3DContext(box3d_context);
+	delete box3d_context->ceventcontext;
+	box3d_context->ceventcontext = box3d_context->cbox3dcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(box3d_context);
 
     event_context->cursor_shape = cursor_3dbox_xpm;
@@ -104,6 +112,12 @@ static void sp_box3d_context_init(Box3DContext *box3d_context)
 
 static void sp_box3d_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CBox3DContext::finish() {
+	SPEventContext* ec = this->box3dcontext;
+
     Box3DContext *bc = SP_BOX3D_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
@@ -112,9 +126,10 @@ static void sp_box3d_context_finish(SPEventContext *ec)
     bc->sel_changed_connection.disconnect();
 //    sp_repr_remove_listener_by_data(cc->active_shape_repr, cc);
 
-    if (((SPEventContextClass *) sp_box3d_context_parent_class)->finish) {
-        ((SPEventContextClass *) sp_box3d_context_parent_class)->finish(ec);
-    }
+//    if (((SPEventContextClass *) sp_box3d_context_parent_class)->finish) {
+//        ((SPEventContextClass *) sp_box3d_context_parent_class)->finish(ec);
+//    }
+    CEventContext::finish();
 }
 
 
@@ -186,11 +201,18 @@ static void sp_box3d_context_ensure_persp_in_defs(SPDocument *document) {
 
 static void sp_box3d_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CBox3DContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     Box3DContext *bc = SP_BOX3D_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_box3d_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_box3d_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_box3d_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_box3d_context_parent_class)->setup(ec);
+//    }
+    CEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -220,6 +242,12 @@ static void sp_box3d_context_setup(SPEventContext *ec)
 
 static gint sp_box3d_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CBox3DContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPDesktop *desktop = event_context->desktop;
 
     gint ret = FALSE;
@@ -236,15 +264,23 @@ static gint sp_box3d_context_item_handler(SPEventContext *event_context, SPItem 
         break;
     }
 
-    if (((SPEventContextClass *) sp_box3d_context_parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) sp_box3d_context_parent_class)->item_handler(event_context, item, event);
-    }
+//    if (((SPEventContextClass *) sp_box3d_context_parent_class)->item_handler) {
+//        ret = ((SPEventContextClass *) sp_box3d_context_parent_class)->item_handler(event_context, item, event);
+//    }
+    // CPPIFY: ret is always overwritten...
+    ret = CEventContext::item_handler(item, event);
 
     return ret;
 }
 
 static gint sp_box3d_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CBox3DContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
@@ -549,9 +585,10 @@ static gint sp_box3d_context_root_handler(SPEventContext *event_context, GdkEven
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_box3d_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_box3d_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (((SPEventContextClass *) sp_box3d_context_parent_class)->root_handler) {
+//            ret = ((SPEventContextClass *) sp_box3d_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

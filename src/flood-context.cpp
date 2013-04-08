@@ -98,8 +98,16 @@ static void sp_flood_context_class_init(SPFloodContextClass *klass)
     event_context_class->item_handler  = sp_flood_context_item_handler;
 }
 
+CFloodContext::CFloodContext(SPFloodContext* floodcontext) : CEventContext(floodcontext) {
+	this->spfloodcontext = floodcontext;
+}
+
 static void sp_flood_context_init(SPFloodContext *flood_context)
 {
+	flood_context->cfloodcontext = new CFloodContext(flood_context);
+	delete flood_context->ceventcontext;
+	flood_context->ceventcontext = flood_context->cfloodcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(flood_context);
 
     event_context->cursor_shape = cursor_paintbucket_xpm;
@@ -155,11 +163,18 @@ static void sp_flood_context_selection_changed(Inkscape::Selection *selection, g
 
 static void sp_flood_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CFloodContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPFloodContext *rc = SP_FLOOD_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_flood_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_flood_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_flood_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_flood_context_parent_class)->setup(ec);
+//    }
+    CEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -180,6 +195,7 @@ static void sp_flood_context_setup(SPEventContext *ec)
         rc->enableSelectionCue();
     }
 }
+
 
 // Changes from 0.48 -> 0.49 (Cairo)
 // 0.49: Ignores alpha in background
@@ -1120,6 +1136,12 @@ static void sp_flood_do_flood_fill(SPEventContext *event_context, GdkEvent *even
 
 static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CFloodContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     gint ret = FALSE;
 
     SPDesktop *desktop = event_context->desktop;
@@ -1142,15 +1164,23 @@ static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem 
         break;
     }
 
-    if (((SPEventContextClass *) sp_flood_context_parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) sp_flood_context_parent_class)->item_handler(event_context, item, event);
-    }
+//    if (((SPEventContextClass *) sp_flood_context_parent_class)->item_handler) {
+//        ret = ((SPEventContextClass *) sp_flood_context_parent_class)->item_handler(event_context, item, event);
+//    }
+    // CPPIFY: ret is overwritten...
+    ret = CEventContext::item_handler(item, event);
 
     return ret;
 }
 
 static gint sp_flood_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CFloodContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static bool dragging;
     
     gint ret = FALSE;
@@ -1250,9 +1280,10 @@ static gint sp_flood_context_root_handler(SPEventContext *event_context, GdkEven
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_flood_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_flood_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (((SPEventContextClass *) sp_flood_context_parent_class)->root_handler) {
+//            ret = ((SPEventContextClass *) sp_flood_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

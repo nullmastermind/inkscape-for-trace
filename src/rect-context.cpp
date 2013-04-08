@@ -78,9 +78,17 @@ static void sp_rect_context_class_init(SPRectContextClass *klass)
     event_context_class->item_handler  = sp_rect_context_item_handler;
 }
 
+CRectContext::CRectContext(SPRectContext* rectcontext) : CEventContext(rectcontext) {
+	this->sprectcontext = rectcontext;
+}
+
 static void sp_rect_context_init(SPRectContext *rect_context)
 {
     SPEventContext *event_context = SP_EVENT_CONTEXT(rect_context);
+
+    rect_context->crectcontext = new CRectContext(rect_context);
+    delete rect_context->ceventcontext;
+    rect_context->ceventcontext = rect_context->crectcontext;
 
     event_context->cursor_shape = cursor_rect_xpm;
     event_context->hot_x = 4;
@@ -102,6 +110,12 @@ static void sp_rect_context_init(SPRectContext *rect_context)
 
 static void sp_rect_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CRectContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPRectContext *rc = SP_RECT_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
@@ -109,11 +123,11 @@ static void sp_rect_context_finish(SPEventContext *ec)
     sp_rect_finish(rc);
     rc->sel_changed_connection.disconnect();
 
-    if (((SPEventContextClass *) sp_rect_context_parent_class)->finish) {
-        ((SPEventContextClass *) sp_rect_context_parent_class)->finish(ec);
-    }
+//    if (((SPEventContextClass *) sp_rect_context_parent_class)->finish) {
+//        ((SPEventContextClass *) sp_rect_context_parent_class)->finish(ec);
+//    }
+    CEventContext::finish();
 }
-
 
 static void sp_rect_context_dispose(GObject *object)
 {
@@ -156,11 +170,18 @@ static void sp_rect_context_selection_changed(Inkscape::Selection *selection, gp
 
 static void sp_rect_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CRectContext::setup() {
+	SPRectContext* ec = this->sprectcontext;
+
     SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_rect_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_rect_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_rect_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_rect_context_parent_class)->setup(ec);
+//    }
+    CEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -191,6 +212,12 @@ static void sp_rect_context_setup(SPEventContext *ec)
 
 static void sp_rect_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CRectContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
     /* fixme: Proper error handling for non-numeric data.  Use a locale-independent function like
@@ -205,6 +232,12 @@ static void sp_rect_context_set(SPEventContext *ec, Inkscape::Preferences::Entry
 
 static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CRectContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPDesktop *desktop = event_context->desktop;
 
     gint ret = FALSE;
@@ -221,15 +254,23 @@ static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *
         break;
     }
 
-    if (((SPEventContextClass *) sp_rect_context_parent_class)->item_handler) {
-        ret = ((SPEventContextClass *) sp_rect_context_parent_class)->item_handler(event_context, item, event);
-    }
+//    if (((SPEventContextClass *) sp_rect_context_parent_class)->item_handler) {
+//        ret = ((SPEventContextClass *) sp_rect_context_parent_class)->item_handler(event_context, item, event);
+//    }
+    // CPPIFY: ret is always overwritten...
+    ret = CEventContext::item_handler(item, event);
 
     return ret;
 }
 
 static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CRectContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
@@ -434,9 +475,10 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_rect_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_rect_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (((SPEventContextClass *) sp_rect_context_parent_class)->root_handler) {
+//            ret = ((SPEventContextClass *) sp_rect_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

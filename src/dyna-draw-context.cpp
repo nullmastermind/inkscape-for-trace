@@ -114,9 +114,18 @@ sp_dyna_draw_context_class_init(SPDynaDrawContextClass *klass)
     event_context_class->root_handler = sp_dyna_draw_context_root_handler;
 }
 
+CDynaDrawContext::CDynaDrawContext(SPDynaDrawContext* dynadrawcontext) : CCommonContext(dynadrawcontext) {
+	this->spdynadrawcontext = dynadrawcontext;
+}
+
 static void
 sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
 {
+	ddc->cdynadrawcontext = new CDynaDrawContext(ddc);
+	delete ddc->ccommoncontext;
+	ddc->ccommoncontext = ddc->cdynadrawcontext;
+	ddc->ceventcontext = ddc->cdynadrawcontext;
+
     ddc->cursor_shape = cursor_calligraphy_xpm;
     ddc->hot_x = 4;
     ddc->hot_y = 4;
@@ -167,10 +176,17 @@ sp_dyna_draw_context_dispose(GObject *object)
 static void
 sp_dyna_draw_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CDynaDrawContext::setup() {
+	SPEventContext* ec = this->spdynadrawcontext;
+
     SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->setup)
-        (SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->setup(ec);
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->setup)
+//        (SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->setup(ec);
+    CCommonContext::setup();
 
     ddc->accumulated = new SPCurve();
     ddc->currentcurve = new SPCurve();
@@ -227,6 +243,12 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
 static void
 sp_dyna_draw_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CDynaDrawContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
 
@@ -236,9 +258,10 @@ sp_dyna_draw_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
         ddc->keep_selected = val->getBool();
     } else {
         //pass on up to parent class to handle common attributes.
-        if ( SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set ) {
-            SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set(ec, val);
-        }
+//        if ( SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set ) {
+//            SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set(ec, val);
+//        }
+    	CCommonContext::set(val);
     }
 
     //g_print("DDC: %g %g %g %g\n", ddc->mass, ddc->drag, ddc->angle, ddc->width);
@@ -505,6 +528,12 @@ gint
 sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                                   GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CDynaDrawContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPDynaDrawContext *dc = SP_DYNA_DRAW_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
 
@@ -948,9 +977,10 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->root_handler(event_context, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->root_handler(event_context, event);
+//        }
+    	ret = CCommonContext::root_handler(event);
     }
 
     return ret;

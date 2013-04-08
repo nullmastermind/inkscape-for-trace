@@ -28,10 +28,15 @@ enum {
 
 struct SPCtrlLine;
 
+class CPenContext;
+
 /**
  * SPPenContext: a context for pen tool events.
  */
-struct SPPenContext : public SPDrawContext {
+class SPPenContext : public SPDrawContext {
+public:
+	CPenContext* cpencontext;
+
     Geom::Point p[5];
 
     /** \invar npoints in {0, 2, 5}. */
@@ -60,6 +65,20 @@ struct SPPenContext : public SPDrawContext {
 
 /// The SPPenContext vtable (empty).
 struct SPPenContextClass : public SPEventContextClass { };
+
+class CPenContext : public CDrawContext {
+public:
+	CPenContext(SPPenContext* pencontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPPenContext* sppencontext;
+};
 
 GType sp_pen_context_get_type();
 

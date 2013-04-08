@@ -27,7 +27,11 @@
 #define SP_IS_MESH_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MESH_CONTEXT))
 #define SP_IS_MESH_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_MESH_CONTEXT))
 
-struct SPMeshContext : public SPEventContext {
+class CMeshContext;
+
+class SPMeshContext : public SPEventContext {
+public:
+	CMeshContext* cmeshcontext;
 
     Geom::Point origin;
 
@@ -45,6 +49,17 @@ struct SPMeshContext : public SPEventContext {
 
 struct SPMeshContextClass {
     SPEventContextClass parent_class;
+};
+
+class CMeshContext : public CEventContext {
+public:
+	CMeshContext(SPMeshContext* meshcontext);
+
+	virtual void setup();
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPMeshContext* spmeshcontext;
 };
 
 // Standard Gtk function

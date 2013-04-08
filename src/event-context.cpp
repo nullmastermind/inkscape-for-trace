@@ -96,10 +96,31 @@ static void sp_event_context_class_init(SPEventContextClass *klass) {
     klass->item_handler = sp_event_context_private_item_handler;
 }
 
+CEventContext::CEventContext(SPEventContext* eventcontext) {
+	this->speventcontext = eventcontext;
+}
+
+CEventContext::~CEventContext() {
+}
+
+void CEventContext::set(Inkscape::Preferences::Entry* val) {
+}
+
+void CEventContext::activate() {
+}
+
+void CEventContext::deactivate() {
+}
+
+void CEventContext::finish() {
+}
+
 /**
  * Clears all SPEventContext object members.
  */
 static void sp_event_context_init(SPEventContext *event_context) {
+	event_context->ceventcontext = new CEventContext(event_context);
+
     event_context->desktop = NULL;
     event_context->cursor = NULL;
     event_context->_message_context = NULL;
@@ -233,7 +254,12 @@ void sp_event_context_update_cursor(SPEventContext *ec) {
  * Redraws mouse cursor, at the moment.
  */
 static void sp_event_context_private_setup(SPEventContext *ec) {
-    sp_event_context_update_cursor(ec);
+    //sp_event_context_update_cursor(ec);
+	ec->ceventcontext->setup();
+}
+
+void CEventContext::setup() {
+	sp_event_context_update_cursor(this->speventcontext);
 }
 
 /**
@@ -356,6 +382,13 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
  */
 static gint sp_event_context_private_root_handler(
         SPEventContext *event_context, GdkEvent *event) {
+
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CEventContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static Geom::Point button_w;
     static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
@@ -811,6 +844,13 @@ static gint sp_event_context_private_root_handler(
  */
 gint sp_event_context_private_item_handler(SPEventContext *ec, SPItem *item,
         GdkEvent *event) {
+
+	return ec->ceventcontext->item_handler(item, event);
+}
+
+gint CEventContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* ec = this->speventcontext;
+
     int ret = FALSE;
 
     switch (event->type) {

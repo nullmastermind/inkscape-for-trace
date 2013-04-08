@@ -92,8 +92,16 @@ static void sp_draw_context_class_init(SPDrawContextClass *klass)
     ec_class->root_handler = sp_draw_context_root_handler;
 }
 
+CDrawContext::CDrawContext(SPDrawContext* drawcontext) : CEventContext(drawcontext) {
+	this->spdrawcontext = drawcontext;
+}
+
 static void sp_draw_context_init(SPDrawContext *dc)
 {
+	dc->cdrawcontext = new CDrawContext(dc);
+	delete dc->ceventcontext;
+	dc->ceventcontext = dc->cdrawcontext;
+
     dc->attach = FALSE;
 
     dc->red_color = 0xff00007f;
@@ -148,12 +156,19 @@ static void sp_draw_context_dispose(GObject *object)
 
 static void sp_draw_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CDrawContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
     SPDesktop *dt = ec->desktop;
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup) {
-        (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup(ec);
+//    }
+    CEventContext::setup();
 
     dc->selection = sp_desktop_selection(dt);
 
@@ -192,6 +207,12 @@ static void sp_draw_context_setup(SPEventContext *ec)
 
 static void sp_draw_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CDrawContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
 
     dc->sel_changed_connection.disconnect();
@@ -212,8 +233,17 @@ static void sp_draw_context_set(SPEventContext */*ec*/, Inkscape::Preferences::E
 {
 }
 
+void CDrawContext::set(Inkscape::Preferences::Entry* value) {
+}
+
 gint sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
+	return ec->ceventcontext->root_handler(event);
+}
+
+gint CDrawContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this->speventcontext;
+
     gint ret = FALSE;
 
     switch (event->type) {
@@ -237,9 +267,10 @@ gint sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler(ec, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler(ec, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

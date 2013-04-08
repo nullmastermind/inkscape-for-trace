@@ -21,10 +21,15 @@ enum PencilState {
     SP_PENCIL_CONTEXT_SKETCH
 };
 
+class CPencilContext;
+
 /**
  * SPPencilContext: a context for pencil tool events
  */
-struct SPPencilContext : public SPDrawContext {
+class SPPencilContext : public SPDrawContext {
+public:
+	CPencilContext* cpencilcontext;
+
     Geom::Point p[16];
     gint npoints;
     PencilState state;
@@ -40,6 +45,17 @@ struct SPPencilContext : public SPDrawContext {
 
 /// The SPPencilContext vtable (empty).
 struct SPPencilContextClass : public SPEventContextClass { };
+
+class CPencilContext : public CDrawContext {
+public:
+	CPencilContext(SPPencilContext* pencilcontext);
+
+	virtual void setup();
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPPencilContext* sppencilcontext;
+};
 
 GType sp_pencil_context_get_type();
 

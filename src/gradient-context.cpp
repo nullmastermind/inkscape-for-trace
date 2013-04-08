@@ -72,8 +72,16 @@ static void sp_gradient_context_class_init(SPGradientContextClass *klass)
     event_context_class->root_handler  = sp_gradient_context_root_handler;
 }
 
+CGradientContext::CGradientContext(SPGradientContext* gradientcontext) : CEventContext(gradientcontext) {
+	this->spgradientcontext = gradientcontext;
+}
+
 static void sp_gradient_context_init(SPGradientContext *gr_context)
 {
+	gr_context->cgradientcontext = new CGradientContext(gr_context);
+	delete gr_context->ceventcontext;
+	gr_context->ceventcontext = gr_context->cgradientcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(gr_context);
 
     gr_context->cursor_addnode = false;
@@ -178,11 +186,18 @@ gradient_subselection_changed (gpointer, gpointer data)
 
 static void sp_gradient_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CGradientContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_gradient_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_gradient_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_gradient_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_gradient_context_parent_class)->setup(ec);
+//    }
+    CEventContext::setup();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/gradient/selcue", true)) {
@@ -487,6 +502,12 @@ sp_gradient_context_add_stop_near_point (SPGradientContext *rc, SPItem *item,  G
 static gint
 sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CGradientContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
@@ -855,9 +876,10 @@ sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler) {
+//            ret = ((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

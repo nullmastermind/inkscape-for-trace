@@ -88,12 +88,21 @@ sp_pencil_context_class_init(SPPencilContextClass *klass)
     event_context_class->root_handler = sp_pencil_context_root_handler;
 }
 
+CPencilContext::CPencilContext(SPPencilContext* pencilcontext) : CDrawContext(pencilcontext) {
+	this->sppencilcontext = pencilcontext;
+}
+
 /**
  * Callback to initialize SPPencilContext object.
  */
 static void
 sp_pencil_context_init(SPPencilContext *pc)
 {
+	pc->cpencilcontext = new CPencilContext(pc);
+	delete pc->cdrawcontext;
+	pc->cdrawcontext = pc->cpencilcontext;
+	pc->ceventcontext = pc->cpencilcontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
 
     event_context->cursor_shape = cursor_pencil_xpm;
@@ -115,14 +124,21 @@ sp_pencil_context_init(SPPencilContext *pc)
 static void
 sp_pencil_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CPencilContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/freehand/pencil/selcue")) {
         ec->enableSelectionCue();
     }
 
-    if (((SPEventContextClass *) sp_pencil_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_pencil_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_pencil_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_pencil_context_parent_class)->setup(ec);
+//    }
+    CDrawContext::setup();
 
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
     pc->is_drawing = false;
@@ -160,6 +176,12 @@ spdc_endpoint_snap(SPPencilContext const *pc, Geom::Point &p, guint const state)
 gint
 sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
 {
+	return ec->ceventcontext->root_handler(event);
+}
+
+gint CPencilContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this->speventcontext;
+
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
 
     gint ret = FALSE;
@@ -190,11 +212,12 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
     }
 
     if (!ret) {
-        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
-            = ((SPEventContextClass *) sp_pencil_context_parent_class)->root_handler;
-        if (parent_root_handler) {
-            ret = parent_root_handler(ec, event);
-        }
+//        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
+//            = ((SPEventContextClass *) sp_pencil_context_parent_class)->root_handler;
+//        if (parent_root_handler) {
+//            ret = parent_root_handler(ec, event);
+//        }
+    	ret = CDrawContext::root_handler(event);
     }
 
     return ret;

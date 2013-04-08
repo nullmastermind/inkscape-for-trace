@@ -91,6 +91,8 @@ private:
 void sp_event_context_snap_delay_handler(SPEventContext *ec, gpointer const dse_item, gpointer const dse_item2, GdkEventMotion *event, DelayedSnapEvent::DelayedSnapEventOrigin origin);
 
 
+class CEventContext;
+
 /**
  * Base class for Event processors.
  *
@@ -104,10 +106,13 @@ void sp_event_context_snap_delay_handler(SPEventContext *ec, gpointer const dse_
  * plus few abstract base classes. Writing a new tool involves
  * subclassing SPEventContext.
  */
-struct SPEventContext : public GObject {
+class SPEventContext : public GObject {
+public:
     void enableSelectionCue (bool enable=true);
     void enableGrDrag (bool enable=true);
     bool deleteSelectedDrag(bool just_one);
+
+    CEventContext* ceventcontext;
 
     /// Desktop eventcontext stack
     SPEventContext *next;
@@ -157,6 +162,23 @@ struct SPEventContextClass : public GObjectClass {
     void (* deactivate)(SPEventContext *ec);
     gint (* root_handler)(SPEventContext *ec, GdkEvent *event);
     gint (* item_handler)(SPEventContext *ec, SPItem *item, GdkEvent *event);
+};
+
+class CEventContext {
+public:
+	CEventContext(SPEventContext* eventcontext);
+	virtual ~CEventContext();
+
+	virtual void setup();
+	virtual void finish();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual void activate();
+	virtual void deactivate();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+protected:
+	SPEventContext* speventcontext;
 };
 
 #define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT(e)->desktop)

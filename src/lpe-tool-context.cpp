@@ -80,9 +80,19 @@ sp_lpetool_context_class_init(SPLPEToolContextClass *klass)
     event_context_class->item_handler = sp_lpetool_context_item_handler;
 }
 
+CLPEToolContext::CLPEToolContext(SPLPEToolContext* lpetoolcontext) : CPenContext(lpetoolcontext) {
+	this->splpetoolcontext = lpetoolcontext;
+}
+
 static void
 sp_lpetool_context_init(SPLPEToolContext *lc)
 {
+	lc->clpetoolcontext = new CLPEToolContext(lc);
+	delete lc->cpencontext;
+	lc->cpencontext = lc->clpetoolcontext;
+	lc->cdrawcontext = lc->clpetoolcontext;
+	lc->ceventcontext = lc->clpetoolcontext;
+
     lc->cursor_shape = cursor_crosshairs_xpm;
     lc->hot_x = 7;
     lc->hot_y = 7;
@@ -121,10 +131,17 @@ sp_lpetool_context_dispose(GObject *object)
 static void
 sp_lpetool_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CLPEToolContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_lpetool_context_parent_class)->setup)
-        ((SPEventContextClass *) sp_lpetool_context_parent_class)->setup(ec);
+//    if (((SPEventContextClass *) sp_lpetool_context_parent_class)->setup)
+//        ((SPEventContextClass *) sp_lpetool_context_parent_class)->setup(ec);
+    CPenContext::setup();
 
     Inkscape::Selection *selection = sp_desktop_selection (ec->desktop);
     SPItem *item = selection->singleItem();
@@ -172,6 +189,12 @@ void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpoint
 static void
 sp_lpetool_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CLPEToolContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     if (val->getEntryName() == "mode") {
         Inkscape::Preferences::get()->setString("/tools/geometric/mode", "drag");
         SP_PEN_CONTEXT(ec)->mode = SP_PEN_CONTEXT_MODE_DRAG;
@@ -188,6 +211,12 @@ sp_lpetool_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 static gint 
 sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
 {
+	return ec->ceventcontext->item_handler(item, event);
+}
+
+gint CLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* ec = this->spdrawcontext;
+
     gint ret = FALSE;
 
     switch (event->type) {
@@ -209,8 +238,9 @@ sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *even
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler)
-            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler(ec, item, event);
+//        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler)
+//            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler(ec, item, event);
+    	ret = CPenContext::item_handler(item, event);
     }
 
     return ret;
@@ -219,6 +249,12 @@ sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *even
 gint
 sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CLPEToolContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
@@ -295,9 +331,10 @@ sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler) {
+//            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CPenContext::root_handler(event);
     }
 
     return ret;

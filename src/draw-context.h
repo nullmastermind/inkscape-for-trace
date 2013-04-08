@@ -35,7 +35,12 @@ namespace Inkscape
   class Selection;
 }
 
-struct SPDrawContext : public SPEventContext{
+class CDrawContext;
+
+class SPDrawContext : public SPEventContext{
+public:
+	CDrawContext* cdrawcontext;
+
     Inkscape::Selection *selection;
     SPCanvasItem *grab;
 
@@ -82,6 +87,19 @@ struct SPDrawContext : public SPEventContext{
 };
 
 struct SPDrawContextClass : public SPEventContextClass{};
+
+class CDrawContext : public CEventContext {
+public:
+	CDrawContext(SPDrawContext* drawcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+protected:
+	SPDrawContext* spdrawcontext;
+};
 
 GType sp_draw_context_get_type(void) G_GNUC_CONST;
 

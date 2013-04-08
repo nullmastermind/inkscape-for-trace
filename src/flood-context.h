@@ -29,7 +29,12 @@
 #define FLOOD_COLOR_CHANNEL_B 4
 #define FLOOD_COLOR_CHANNEL_A 8
 
-struct SPFloodContext : public SPEventContext {
+class CFloodContext;
+
+class SPFloodContext : public SPEventContext {
+public:
+	CFloodContext* cfloodcontext;
+
 	SPItem *item;
 
 	sigc::connection sel_changed_connection;
@@ -39,6 +44,18 @@ struct SPFloodContext : public SPEventContext {
 
 struct SPFloodContextClass {
 	SPEventContextClass parent_class;
+};
+
+class CFloodContext : public CEventContext {
+public:
+	CFloodContext(SPFloodContext* floodcontext);
+
+	virtual void setup();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPFloodContext* spfloodcontext;
 };
 
 /* Standard Gtk function */

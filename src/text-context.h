@@ -31,7 +31,11 @@
 
 struct SPCtrlLine;
 
-struct SPTextContext : public SPEventContext {
+class CTextContext;
+
+class SPTextContext : public SPEventContext {
+public:
+	CTextContext* ctextcontext;
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
@@ -75,6 +79,19 @@ struct SPTextContext : public SPEventContext {
 
 struct SPTextContextClass {
     SPEventContextClass parent_class;
+};
+
+class CTextContext : public CEventContext {
+public:
+	CTextContext(SPTextContext* textcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPTextContext* sptextcontext;
 };
 
 /* Standard Gtk function */

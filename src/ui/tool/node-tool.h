@@ -41,8 +41,13 @@ typedef std::auto_ptr<Inkscape::UI::Selector> SelectorPtr;
 typedef std::auto_ptr<Inkscape::UI::PathSharedData> PathSharedDataPtr;
 typedef boost::ptr_map<SPItem*, ShapeEditor> ShapeEditors;
 
-struct InkNodeTool : public SPEventContext
+class CInkNodeTool;
+
+class InkNodeTool : public SPEventContext
 {
+public:
+	CInkNodeTool* cinknodetool;
+
     sigc::connection _selection_changed_connection;
     sigc::connection _mouseover_changed_connection;
     sigc::connection _selection_modified_connection;
@@ -72,6 +77,19 @@ struct InkNodeTool : public SPEventContext
 
 struct InkNodeToolClass {
     SPEventContextClass parent_class;
+};
+
+class CInkNodeTool : public CEventContext {
+public:
+	CInkNodeTool(InkNodeTool* inknodetool);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	InkNodeTool* inknodetool;
 };
 
 GType ink_node_tool_get_type (void);

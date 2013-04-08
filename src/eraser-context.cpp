@@ -116,9 +116,18 @@ sp_eraser_context_class_init(SPEraserContextClass *klass)
     event_context_class->root_handler = sp_eraser_context_root_handler;
 }
 
+CEraserContext::CEraserContext(SPEraserContext* erasercontext) : CCommonContext(erasercontext) {
+	this->sperasercontext = erasercontext;
+}
+
 static void
 sp_eraser_context_init(SPEraserContext *erc)
 {
+	erc->cerasercontext = new CEraserContext(erc);
+	delete erc->ccommoncontext;
+	erc->ccommoncontext = erc->cerasercontext;
+	erc->ceventcontext = erc->cerasercontext;
+
     erc->cursor_shape = cursor_eraser_xpm;
     erc->hot_x = 4;
     erc->hot_y = 4;
@@ -133,11 +142,18 @@ sp_eraser_context_dispose(GObject *object)
 static void
 sp_eraser_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CEraserContext::setup() {
+	SPEventContext* ec = this->sperasercontext;
+
     SPEraserContext *erc = SP_ERASER_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup)
-        (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup(ec);
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup)
+//        (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup(ec);
+    CCommonContext::setup();
 
     erc->accumulated = new SPCurve();
     erc->currentcurve = new SPCurve();
@@ -192,10 +208,17 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
 static void
 sp_eraser_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CEraserContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->sperasercontext;
+
     //pass on up to parent class to handle common attributes.
-    if (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class)->set ) {
-        SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class)->set(ec, val);
-    }
+//    if (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class)->set ) {
+//        SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class)->set(ec, val);
+//    }
+	CCommonContext::set(val);
 }
 
 static double
@@ -445,6 +468,12 @@ gint
 sp_eraser_context_root_handler(SPEventContext *event_context,
                                   GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CEraserContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->sperasercontext;
+
     SPEraserContext *dc = SP_ERASER_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
 
@@ -660,14 +689,14 @@ sp_eraser_context_root_handler(SPEventContext *event_context,
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler(event_context, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler(event_context, event);
+//        }
+    	ret = CCommonContext::root_handler(event);
     }
 
     return ret;
 }
-
 
 static void
 clear_current(SPEraserContext *dc)

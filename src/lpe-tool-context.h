@@ -45,7 +45,12 @@ class Selection;
 
 class ShapeEditor;
 
-struct SPLPEToolContext : public SPPenContext {
+class CLPEToolContext;
+
+class SPLPEToolContext : public SPPenContext {
+public:
+	CLPEToolContext* clpetoolcontext;
+
     ShapeEditor* shape_editor;
     SPCanvasItem *canvas_bbox;
     Inkscape::LivePathEffect::EffectType mode;
@@ -59,6 +64,19 @@ struct SPLPEToolContext : public SPPenContext {
 };
 
 struct SPLPEToolContextClass : public SPEventContextClass{};
+
+class CLPEToolContext : public CPenContext {
+public:
+	CLPEToolContext(SPLPEToolContext* lpetoolcontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPLPEToolContext* splpetoolcontext;
+};
 
 int lpetool_mode_to_index(Inkscape::LivePathEffect::EffectType const type);
 int lpetool_item_has_construction(SPLPEToolContext *lc, SPItem *item);

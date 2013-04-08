@@ -27,7 +27,12 @@
 #define SP_IS_BOX3D_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_BOX3D_CONTEXT))
 #define SP_IS_BOX3D_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_BOX3D_CONTEXT))
 
-struct Box3DContext : public SPEventContext {
+class CBox3DContext;
+
+class Box3DContext : public SPEventContext {
+public:
+	CBox3DContext* cbox3dcontext;
+
     SPItem *item;
     Geom::Point center;
 
@@ -59,6 +64,19 @@ struct Box3DContext : public SPEventContext {
 
 struct Box3DContextClass {
     SPEventContextClass parent_class;
+};
+
+class CBox3DContext : public CEventContext {
+public:
+	CBox3DContext(Box3DContext* box3dcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	Box3DContext* box3dcontext;
 };
 
 /* Standard Gtk function */

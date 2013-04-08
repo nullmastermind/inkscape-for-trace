@@ -102,11 +102,20 @@ static void sp_pen_context_class_init(SPPenContextClass *klass)
     event_context_class->item_handler = sp_pen_context_item_handler;
 }
 
+CPenContext::CPenContext(SPPenContext* pencontext) : CDrawContext(pencontext) {
+	this->sppencontext = pencontext;
+}
+
 /**
  * Callback to initialize SPPenContext object.
  */
 static void sp_pen_context_init(SPPenContext *pc)
 {
+	pc->cpencontext = new CPenContext(pc);
+	delete pc->cdrawcontext;
+	pc->cdrawcontext = pc->cpencontext;
+	pc->ceventcontext = pc->cpencontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
 
     event_context->cursor_shape = cursor_pen_xpm;
@@ -173,11 +182,18 @@ void sp_pen_context_set_polyline_mode(SPPenContext *const pc) {
  */
 static void sp_pen_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CPenContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
 
-    if (((SPEventContextClass *) sp_pen_context_parent_class)->setup) {
-        ((SPEventContextClass *) sp_pen_context_parent_class)->setup(ec);
-    }
+//    if (((SPEventContextClass *) sp_pen_context_parent_class)->setup) {
+//        ((SPEventContextClass *) sp_pen_context_parent_class)->setup(ec);
+//    }
+    CDrawContext::setup();
 
     ControlManager &mgr = ControlManager::getManager();
 
@@ -229,6 +245,12 @@ static void pen_cancel (SPPenContext *const pc)
  */
 static void sp_pen_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CPenContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
 
     sp_event_context_discard_delayed_snap_event(ec);
@@ -237,9 +259,10 @@ static void sp_pen_context_finish(SPEventContext *ec)
         pen_cancel (pc);
     }
 
-    if (((SPEventContextClass *) sp_pen_context_parent_class)->finish) {
-        ((SPEventContextClass *) sp_pen_context_parent_class)->finish(ec);
-    }
+//    if (((SPEventContextClass *) sp_pen_context_parent_class)->finish) {
+//        ((SPEventContextClass *) sp_pen_context_parent_class)->finish(ec);
+//    }
+    CDrawContext::finish();
 }
 
 /**
@@ -247,6 +270,12 @@ static void sp_pen_context_finish(SPEventContext *ec)
  */
 static void sp_pen_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CPenContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
     Glib::ustring name = val->getEntryName();
 
@@ -303,6 +332,12 @@ static void spdc_endpoint_snap_handle(SPPenContext const *const pc, Geom::Point 
 
 static gint sp_pen_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
 {
+	return ec->ceventcontext->item_handler(item, event);
+}
+
+gint CPenContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* ec = this->speventcontext;
+
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
 
     gint ret = FALSE;
@@ -319,8 +354,9 @@ static gint sp_pen_context_item_handler(SPEventContext *ec, SPItem *item, GdkEve
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_pen_context_parent_class)->item_handler)
-            ret = ((SPEventContextClass *) sp_pen_context_parent_class)->item_handler(ec, item, event);
+//        if (((SPEventContextClass *) sp_pen_context_parent_class)->item_handler)
+//            ret = ((SPEventContextClass *) sp_pen_context_parent_class)->item_handler(ec, item, event);
+    	ret = CDrawContext::item_handler(item, event);
     }
 
     return ret;
@@ -331,6 +367,12 @@ static gint sp_pen_context_item_handler(SPEventContext *ec, SPItem *item, GdkEve
  */
 static gint sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
+	return ec->ceventcontext->root_handler(event);
+}
+
+gint CPenContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this->speventcontext;
+
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
 
     gint ret = FALSE;
@@ -361,11 +403,12 @@ static gint sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
     }
 
     if (!ret) {
-        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
-            = ((SPEventContextClass *) sp_pen_context_parent_class)->root_handler;
-        if (parent_root_handler) {
-            ret = parent_root_handler(ec, event);
-        }
+//        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
+//            = ((SPEventContextClass *) sp_pen_context_parent_class)->root_handler;
+//        if (parent_root_handler) {
+//            ret = parent_root_handler(ec, event);
+//        }
+    	ret = CDrawContext::root_handler(event);
     }
 
     return ret;
