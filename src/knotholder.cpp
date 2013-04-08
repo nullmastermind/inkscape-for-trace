@@ -63,13 +63,16 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
         g_print ("Error! Throw an exception, please!\n");
     }
 
-    g_object_ref(G_OBJECT(item)); // TODO: is this still needed after C++-ification?
+    //g_object_ref(G_OBJECT(item)); // TODO: is this still needed after C++-ification?
+    sp_object_ref(item);
 
     sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &KnotHolder::updateControlSizes));
 }
 
 KnotHolder::~KnotHolder() {
-    g_object_unref(G_OBJECT(item));
+    //g_object_unref(G_OBJECT(item));
+	sp_object_unref(item);
+
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
     {
         delete (*i);

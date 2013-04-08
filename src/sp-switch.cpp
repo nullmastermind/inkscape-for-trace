@@ -63,8 +63,10 @@ GSList *SPSwitch::_childList(bool add_ref, SPObject::Action action) {
     if (NULL == child)
         return NULL;
 
-    if (add_ref)
-        g_object_ref (G_OBJECT (child));
+    if (add_ref) {
+        //g_object_ref (G_OBJECT (child));
+    	sp_object_ref(child);
+    }
 
     return g_slist_prepend (NULL, child);
 }

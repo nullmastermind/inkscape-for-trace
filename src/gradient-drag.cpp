@@ -709,12 +709,14 @@ GrDraggable::GrDraggable(SPItem *item, GrPointType point_type, guint point_i, In
     point_i(point_i),
     fill_or_stroke(fill_or_stroke)
 {
-    g_object_ref(G_OBJECT(item));
+    //g_object_ref(G_OBJECT(item));
+	sp_object_ref(item);
 }
 
 GrDraggable::~GrDraggable()
 {
-    g_object_unref (G_OBJECT (this->item));
+    //g_object_unref (G_OBJECT (this->item));
+	sp_object_unref(this->item);
 }
 
 

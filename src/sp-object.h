@@ -207,6 +207,7 @@ private:
     gchar *id; /* Our very own unique id */
     Inkscape::XML::Node *repr; /* Our xml representation */
 public:
+    int refCount;
 
     /**
      * Returns the objects current ID string.

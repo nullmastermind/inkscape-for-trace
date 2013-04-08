@@ -109,6 +109,8 @@ static gchar *sp_object_get_unique_id(SPObject    *object,
 SPObject::SPObject() {
     debug("id=%x, typename=%s",this, g_type_name_from_instance((GTypeInstance*)object));
 
+    this->refCount = 1;
+
     this->repr = NULL;
     this->mflags = 0;
     this->id = NULL;
@@ -258,6 +260,7 @@ SPObject *sp_object_ref(SPObject *object, SPObject *owner)
 
     Inkscape::Debug::EventTracker<RefEvent> tracker(object);
     //g_object_ref(G_OBJECT(object));
+    object->refCount++;
     return object;
 }
 
@@ -269,6 +272,12 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
 
     Inkscape::Debug::EventTracker<UnrefEvent> tracker(object);
     //g_object_unref(G_OBJECT(object));
+    object->refCount--;
+
+    if (object->refCount < 0) {
+    	delete object;
+    }
+
     return NULL;
 }
 
