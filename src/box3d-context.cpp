@@ -73,21 +73,24 @@ static void sp_box3d_context_class_init(Box3DContextClass *klass)
 
     object_class->dispose = sp_box3d_context_dispose;
 
-    event_context_class->setup = sp_box3d_context_setup;
-    event_context_class->finish = sp_box3d_context_finish;
-    event_context_class->root_handler  = sp_box3d_context_root_handler;
-    event_context_class->item_handler  = sp_box3d_context_item_handler;
+//    event_context_class->setup = sp_box3d_context_setup;
+//    event_context_class->finish = sp_box3d_context_finish;
+//    event_context_class->root_handler  = sp_box3d_context_root_handler;
+//    event_context_class->item_handler  = sp_box3d_context_item_handler;
 }
 
 CBox3DContext::CBox3DContext(Box3DContext* box3dcontext) : CEventContext(box3dcontext) {
 	this->box3dcontext = box3dcontext;
 }
 
-static void sp_box3d_context_init(Box3DContext *box3d_context)
-{
+Box3DContext::Box3DContext() : SPEventContext() {
+	Box3DContext* box3d_context = this;
+
 	box3d_context->cbox3dcontext = new CBox3DContext(box3d_context);
 	delete box3d_context->ceventcontext;
 	box3d_context->ceventcontext = box3d_context->cbox3dcontext;
+
+	box3d_context->_message_context = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(box3d_context);
 
@@ -108,6 +111,11 @@ static void sp_box3d_context_init(Box3DContext *box3d_context)
     box3d_context->_vpdrag = NULL;
 
     new (&box3d_context->sel_changed_connection) sigc::connection();
+}
+
+static void sp_box3d_context_init(Box3DContext *box3d_context)
+{
+	new (box3d_context) Box3DContext();
 }
 
 static void sp_box3d_context_finish(SPEventContext *ec)

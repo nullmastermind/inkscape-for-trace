@@ -35,20 +35,29 @@ static void sp_common_context_class_init(SPCommonContextClass *klass)
 
     object_class->dispose = sp_common_context_dispose;
 
-    event_context_class->setup = sp_common_context_setup;
-    event_context_class->set = sp_common_context_set;
-    event_context_class->root_handler = sp_common_context_root_handler;
+//    event_context_class->setup = sp_common_context_setup;
+//    event_context_class->set = sp_common_context_set;
+//    event_context_class->root_handler = sp_common_context_root_handler;
 }
 
 CCommonContext::CCommonContext(SPCommonContext* commoncontext) : CEventContext(commoncontext) {
 	this->spcommoncontext = commoncontext;
 }
 
-static void sp_common_context_init(SPCommonContext *ctx)
-{
+SPCommonContext::SPCommonContext() : SPEventContext() {
+	SPCommonContext* ctx = this;
+
 	ctx->ccommoncontext = new CCommonContext(ctx);
 	delete ctx->ceventcontext;
 	ctx->ceventcontext = ctx->ccommoncontext;
+
+	ctx->_message_context = 0;
+	ctx->tremor = 0;
+	ctx->usetilt = 0;
+	ctx->is_drawing = false;
+	ctx->xtilt = 0;
+	ctx->ytilt = 0;
+	ctx->usepressure = 0;
 
 //     ctx->cursor_shape = cursor_eraser_xpm;
 //     ctx->hot_x = 4;
@@ -86,6 +95,11 @@ static void sp_common_context_init(SPCommonContext *ctx)
     ctx->cap_rounding = 0.0;
 
     ctx->abs_width = false;
+}
+
+static void sp_common_context_init(SPCommonContext *ctx)
+{
+	new (ctx) SPCommonContext();
 }
 
 static void sp_common_context_dispose(GObject *object)

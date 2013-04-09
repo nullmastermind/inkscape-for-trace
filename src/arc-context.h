@@ -31,6 +31,7 @@ class CArcContext;
 
 class SPArcContext : public SPEventContext {
 public:
+	SPArcContext();
 	CArcContext* carccontext;
 
     SPItem *item;

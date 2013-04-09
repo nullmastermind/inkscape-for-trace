@@ -43,9 +43,15 @@ enum {
     TWEAK_MODE_BLUR
 };
 
-struct SPTweakContext
+class CTweakContext;
+
+class SPTweakContext : public SPEventContext
 {
-    SPEventContext event_context;
+public:
+	SPTweakContext();
+	CTweakContext* ctweakcontext;
+
+    //SPEventContext event_context;
 
     /* extended input data */
     gdouble pressure;
@@ -81,6 +87,18 @@ struct SPTweakContext
 struct SPTweakContextClass
 {
     SPEventContextClass parent_class;
+};
+
+class CTweakContext : public CEventContext {
+public:
+	CTweakContext(SPTweakContext* tweakcontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPTweakContext* sptweakcontext;
 };
 
 GType sp_tweak_context_get_type(void);

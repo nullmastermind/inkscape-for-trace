@@ -95,26 +95,28 @@ static void sp_pen_context_class_init(SPPenContextClass *klass)
 
     object_class->dispose = sp_pen_context_dispose;
 
-    event_context_class->setup = sp_pen_context_setup;
-    event_context_class->finish = sp_pen_context_finish;
-    event_context_class->set = sp_pen_context_set;
-    event_context_class->root_handler = sp_pen_context_root_handler;
-    event_context_class->item_handler = sp_pen_context_item_handler;
+//    event_context_class->setup = sp_pen_context_setup;
+//    event_context_class->finish = sp_pen_context_finish;
+//    event_context_class->set = sp_pen_context_set;
+//    event_context_class->root_handler = sp_pen_context_root_handler;
+//    event_context_class->item_handler = sp_pen_context_item_handler;
 }
 
 CPenContext::CPenContext(SPPenContext* pencontext) : CDrawContext(pencontext) {
 	this->sppencontext = pencontext;
 }
 
-/**
- * Callback to initialize SPPenContext object.
- */
-static void sp_pen_context_init(SPPenContext *pc)
-{
+SPPenContext::SPPenContext() : SPDrawContext() {
+	SPPenContext* pc = this;
+
 	pc->cpencontext = new CPenContext(pc);
 	delete pc->cdrawcontext;
 	pc->cdrawcontext = pc->cpencontext;
 	pc->ceventcontext = pc->cpencontext;
+
+	pc->polylines_only = false;
+	pc->polylines_paraxial = false;
+	pc->expecting_clicks_for_LPE = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
 
@@ -136,6 +138,14 @@ static void sp_pen_context_init(SPPenContext *pc)
     pc->num_clicks = 0;
     pc->waiting_LPE = NULL;
     pc->waiting_item = NULL;
+}
+
+/**
+ * Callback to initialize SPPenContext object.
+ */
+static void sp_pen_context_init(SPPenContext *pc)
+{
+	new (pc) SPPenContext();
 }
 
 /**

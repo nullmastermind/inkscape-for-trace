@@ -35,6 +35,7 @@ class CCommonContext;
 
 class SPCommonContext : public SPEventContext {
 public:
+	SPCommonContext();
 	CCommonContext* ccommoncontext;
 
     /** accumulated shape which ultimately goes in svg:path */

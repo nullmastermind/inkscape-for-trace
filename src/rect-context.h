@@ -29,6 +29,7 @@ class CRectContext;
 
 class SPRectContext : public SPEventContext {
 public:
+	SPRectContext();
 	CRectContext* crectcontext;
 
 	SPItem *item;

@@ -33,6 +33,7 @@ class CFloodContext;
 
 class SPFloodContext : public SPEventContext {
 public:
+	SPFloodContext();
 	CFloodContext* cfloodcontext;
 
 	SPItem *item;

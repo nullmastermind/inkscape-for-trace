@@ -46,6 +46,7 @@ class CInkNodeTool;
 class InkNodeTool : public SPEventContext
 {
 public:
+	InkNodeTool();
 	CInkNodeTool* cinknodetool;
 
     sigc::connection _selection_changed_connection;

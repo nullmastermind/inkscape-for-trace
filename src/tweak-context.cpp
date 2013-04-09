@@ -97,14 +97,30 @@ sp_tweak_context_class_init(SPTweakContextClass *klass)
 
     object_class->dispose = sp_tweak_context_dispose;
 
-    event_context_class->setup = sp_tweak_context_setup;
-    event_context_class->set = sp_tweak_context_set;
-    event_context_class->root_handler = sp_tweak_context_root_handler;
+//    event_context_class->setup = sp_tweak_context_setup;
+//    event_context_class->set = sp_tweak_context_set;
+//    event_context_class->root_handler = sp_tweak_context_root_handler;
 }
 
-static void
-sp_tweak_context_init(SPTweakContext *tc)
-{
+CTweakContext::CTweakContext(SPTweakContext* tweakcontext) : CEventContext(tweakcontext) {
+	this->sptweakcontext = tweakcontext;
+}
+
+SPTweakContext::SPTweakContext() : SPEventContext() {
+	SPTweakContext* tc = this;
+
+	tc->ctweakcontext = new CTweakContext(tc);
+	delete tc->ceventcontext;
+	tc->ceventcontext = tc->ctweakcontext;
+
+	tc->_message_context = 0;
+	tc->mode = 0;
+	tc->dilate_area = 0;
+	tc->usetilt = 0;
+	tc->usepressure = 0;
+	tc->is_drawing = false;
+	tc->fidelity = 0;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(tc);
 
     event_context->cursor_shape = cursor_push_xpm;
@@ -127,6 +143,12 @@ sp_tweak_context_init(SPTweakContext *tc)
     tc->do_o = false;
 
     new (&tc->style_set_connection) sigc::connection();
+}
+
+static void
+sp_tweak_context_init(SPTweakContext *tc)
+{
+	new (tc) SPTweakContext();
 }
 
 static void
@@ -264,11 +286,18 @@ sp_tweak_context_style_set(SPCSSAttr const *css, SPTweakContext *tc)
 static void
 sp_tweak_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CTweakContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPTweakContext *tc = SP_TWEAK_CONTEXT(ec);
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup) {
-        (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup(ec);
+//    }
+    CEventContext::setup();
 
     {
         /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
@@ -317,6 +346,12 @@ sp_tweak_context_setup(SPEventContext *ec)
 static void
 sp_tweak_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CTweakContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPTweakContext *tc = SP_TWEAK_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
 
@@ -1153,6 +1188,12 @@ gint
 sp_tweak_context_root_handler(SPEventContext *event_context,
                                   GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CTweakContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPTweakContext *tc = SP_TWEAK_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
 
@@ -1511,9 +1552,10 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler(event_context, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

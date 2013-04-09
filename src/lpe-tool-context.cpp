@@ -74,24 +74,28 @@ sp_lpetool_context_class_init(SPLPEToolContextClass *klass)
 
     object_class->dispose = sp_lpetool_context_dispose;
 
-    event_context_class->setup = sp_lpetool_context_setup;
-    event_context_class->set = sp_lpetool_context_set;
-    event_context_class->root_handler = sp_lpetool_context_root_handler;
-    event_context_class->item_handler = sp_lpetool_context_item_handler;
+//    event_context_class->setup = sp_lpetool_context_setup;
+//    event_context_class->set = sp_lpetool_context_set;
+//    event_context_class->root_handler = sp_lpetool_context_root_handler;
+//    event_context_class->item_handler = sp_lpetool_context_item_handler;
 }
 
 CLPEToolContext::CLPEToolContext(SPLPEToolContext* lpetoolcontext) : CPenContext(lpetoolcontext) {
 	this->splpetoolcontext = lpetoolcontext;
 }
 
-static void
-sp_lpetool_context_init(SPLPEToolContext *lc)
-{
+SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
+	SPLPEToolContext* lc = this;
+
 	lc->clpetoolcontext = new CLPEToolContext(lc);
 	delete lc->cpencontext;
 	lc->cpencontext = lc->clpetoolcontext;
 	lc->cdrawcontext = lc->clpetoolcontext;
 	lc->ceventcontext = lc->clpetoolcontext;
+
+	lc->mode = Inkscape::LivePathEffect::BEND_PATH;
+	lc->shape_editor = 0;
+	lc->_lpetool_message_context = 0;
 
     lc->cursor_shape = cursor_crosshairs_xpm;
     lc->hot_x = 7;
@@ -101,6 +105,12 @@ sp_lpetool_context_init(SPLPEToolContext *lc)
     lc->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
 
     new (&lc->sel_changed_connection) sigc::connection();
+}
+
+static void
+sp_lpetool_context_init(SPLPEToolContext *lc)
+{
+	new (lc) SPLPEToolContext();
 }
 
 static void
@@ -263,7 +273,8 @@ gint CLPEToolContext::root_handler(GdkEvent* event) {
 
     if (sp_pen_context_has_waiting_LPE(lc)) {
         // quit when we are waiting for a LPE to be applied
-        ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+        //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+    	ret = event_context->ceventcontext->root_handler(event);
         return ret;
     }
 
@@ -295,7 +306,8 @@ gint CLPEToolContext::root_handler(GdkEvent* event) {
                 sp_pen_context_wait_for_LPE_mouse_clicks(lc, type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
 
                 // we pass the mouse click on to pen tool as the first click which it should collect
-                ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+                //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+                ret = event_context->ceventcontext->root_handler(event);
             }
             break;
 

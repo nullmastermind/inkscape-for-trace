@@ -69,21 +69,24 @@ static void sp_arc_context_class_init(SPArcContextClass *klass)
 
     object_class->dispose = sp_arc_context_dispose;
 
-    event_context_class->setup = sp_arc_context_setup;
-    event_context_class->finish = sp_arc_context_finish;
-    event_context_class->root_handler = sp_arc_context_root_handler;
-    event_context_class->item_handler = sp_arc_context_item_handler;
+//    event_context_class->setup = sp_arc_context_setup;
+//    event_context_class->finish = sp_arc_context_finish;
+//    event_context_class->root_handler = sp_arc_context_root_handler;
+//    event_context_class->item_handler = sp_arc_context_item_handler;
 }
 
 CArcContext::CArcContext(SPArcContext* arccontext) : CEventContext(arccontext) {
 	this->sparccontext = arccontext;
 }
 
-static void sp_arc_context_init(SPArcContext *arc_context)
-{
+SPArcContext::SPArcContext() : SPEventContext() {
+	SPArcContext* arc_context = this;
+
 	arc_context->carccontext = new CArcContext(arc_context);
 	delete arc_context->ceventcontext;
 	arc_context->ceventcontext = arc_context->carccontext;
+
+	arc_context->_message_context = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(arc_context);
 
@@ -100,6 +103,11 @@ static void sp_arc_context_init(SPArcContext *arc_context)
     arc_context->item = NULL;
 
     new (&arc_context->sel_changed_connection) sigc::connection();
+}
+
+static void sp_arc_context_init(SPArcContext *arc_context)
+{
+	new (arc_context) SPArcContext();
 }
 
 static void sp_arc_context_finish(SPEventContext *ec)

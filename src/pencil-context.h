@@ -28,6 +28,7 @@ class CPencilContext;
  */
 class SPPencilContext : public SPDrawContext {
 public:
+	SPPencilContext();
 	CPencilContext* cpencilcontext;
 
     Geom::Point p[16];

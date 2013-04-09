@@ -104,9 +104,9 @@ static void sp_spray_context_class_init(SPSprayContextClass *klass)
 
     object_class->dispose = sp_spray_context_dispose;
 
-    event_context_class->setup = sp_spray_context_setup;
-    event_context_class->set = sp_spray_context_set;
-    event_context_class->root_handler = sp_spray_context_root_handler;
+//    event_context_class->setup = sp_spray_context_setup;
+//    event_context_class->set = sp_spray_context_set;
+//    event_context_class->root_handler = sp_spray_context_root_handler;
 }
 
 /* Method to rotate items */
@@ -133,8 +133,26 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
     item->doWriteTransform(item->getRepr(), item->transform);
 }
 
-static void sp_spray_context_init(SPSprayContext *tc)
-{
+CSprayContext::CSprayContext(SPSprayContext* spraycontext) : CEventContext(spraycontext) {
+	this->spspraycontext = spraycontext;
+}
+
+SPSprayContext::SPSprayContext() : SPEventContext() {
+	SPSprayContext* tc = this;
+
+	tc->cspraycontext = new CSprayContext(tc);
+	delete tc->ceventcontext;
+	tc->ceventcontext = tc->cspraycontext;
+
+	tc->usetilt = 0;
+	tc->_message_context = 0;
+	tc->dilate_area = 0;
+	tc->usetext = false;
+	tc->population = 0;
+	tc->is_drawing = false;
+	tc->mode = 0;
+	tc->usepressure = 0;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(tc);
 
     event_context->cursor_shape = cursor_spray_xpm;
@@ -159,6 +177,11 @@ static void sp_spray_context_init(SPSprayContext *tc)
     tc->has_dilated = false;
 
     new (&tc->style_set_connection) sigc::connection();
+}
+
+static void sp_spray_context_init(SPSprayContext *tc)
+{
+	new (tc) SPSprayContext();
 }
 
 static void sp_spray_context_dispose(GObject *object)
@@ -225,11 +248,18 @@ static void sp_spray_update_cursor(SPSprayContext *tc, bool /*with_shift*/)
 
 static void sp_spray_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CSprayContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPSprayContext *tc = SP_SPRAY_CONTEXT(ec);
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->setup) {
-        (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->setup(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->setup) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->setup(ec);
+//    }
+    CEventContext::setup();
 
     {
         /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
@@ -277,6 +307,12 @@ static void sp_spray_context_setup(SPEventContext *ec)
 
 static void sp_spray_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
 {
+	ec->ceventcontext->set(val);
+}
+
+void CSprayContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this->speventcontext;
+
     SPSprayContext *tc = SP_SPRAY_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
 
@@ -612,6 +648,12 @@ static void sp_spray_switch_mode(SPSprayContext *tc, gint mode, bool with_shift)
 
 gint sp_spray_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CSprayContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPSprayContext *tc = SP_SPRAY_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
 
@@ -889,9 +931,10 @@ gint sp_spray_context_root_handler(SPEventContext *event_context, GdkEvent *even
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler(event_context, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

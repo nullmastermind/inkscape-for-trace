@@ -84,24 +84,23 @@ sp_pencil_context_class_init(SPPencilContextClass *klass)
 
     object_class->dispose = sp_pencil_context_dispose;
 
-    event_context_class->setup = sp_pencil_context_setup;
-    event_context_class->root_handler = sp_pencil_context_root_handler;
+//    event_context_class->setup = sp_pencil_context_setup;
+//    event_context_class->root_handler = sp_pencil_context_root_handler;
 }
 
 CPencilContext::CPencilContext(SPPencilContext* pencilcontext) : CDrawContext(pencilcontext) {
 	this->sppencilcontext = pencilcontext;
 }
 
-/**
- * Callback to initialize SPPencilContext object.
- */
-static void
-sp_pencil_context_init(SPPencilContext *pc)
-{
+SPPencilContext::SPPencilContext() : SPDrawContext() {
+	SPPencilContext* pc = this;
+
 	pc->cpencilcontext = new CPencilContext(pc);
 	delete pc->cdrawcontext;
 	pc->cdrawcontext = pc->cpencilcontext;
 	pc->ceventcontext = pc->cpencilcontext;
+
+	pc->is_drawing = false;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
 
@@ -116,6 +115,15 @@ sp_pencil_context_init(SPPencilContext *pc)
     // since SPPencilContext is not properly constructed...
     pc->sketch_interpolation = Geom::Piecewise<Geom::D2<Geom::SBasis> >();
     pc->sketch_n = 0;
+}
+
+/**
+ * Callback to initialize SPPencilContext object.
+ */
+static void
+sp_pencil_context_init(SPPencilContext *pc)
+{
+	new (pc) SPPencilContext();
 }
 
 /**

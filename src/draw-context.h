@@ -39,6 +39,7 @@ class CDrawContext;
 
 class SPDrawContext : public SPEventContext{
 public:
+	SPDrawContext();
 	CDrawContext* cdrawcontext;
 
     Inkscape::Selection *selection;

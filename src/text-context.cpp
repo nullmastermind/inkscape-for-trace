@@ -88,21 +88,25 @@ static void sp_text_context_class_init(SPTextContextClass *klass)
 
     object_class->dispose = sp_text_context_dispose;
 
-    event_context_class->setup = sp_text_context_setup;
-    event_context_class->finish = sp_text_context_finish;
-    event_context_class->root_handler = sp_text_context_root_handler;
-    event_context_class->item_handler = sp_text_context_item_handler;
+//    event_context_class->setup = sp_text_context_setup;
+//    event_context_class->finish = sp_text_context_finish;
+//    event_context_class->root_handler = sp_text_context_root_handler;
+//    event_context_class->item_handler = sp_text_context_item_handler;
 }
 
 CTextContext::CTextContext(SPTextContext* textcontext) : CEventContext(textcontext) {
 	this->sptextcontext = textcontext;
 }
 
-static void sp_text_context_init(SPTextContext *tc)
-{
+SPTextContext::SPTextContext() : SPEventContext() {
+	SPTextContext* tc = this;
+
 	tc->ctextcontext = new CTextContext(tc);
 	delete tc->ceventcontext;
 	tc->ceventcontext = tc->ctextcontext;
+
+	tc->preedit_string = 0;
+	tc->unipos = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(tc);
 
@@ -141,6 +145,11 @@ static void sp_text_context_init(SPTextContext *tc)
     new (&tc->sel_modified_connection) sigc::connection();
     new (&tc->style_set_connection) sigc::connection();
     new (&tc->style_query_connection) sigc::connection();
+}
+
+static void sp_text_context_init(SPTextContext *tc)
+{
+	new (tc) SPTextContext();
 }
 
 static void sp_text_context_dispose(GObject *obj)

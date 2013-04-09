@@ -29,6 +29,7 @@ class CGradientContext;
 
 class SPGradientContext : public SPEventContext {
 public:
+	SPGradientContext();
 	CGradientContext* cgradientcontext;
 
     Geom::Point origin;

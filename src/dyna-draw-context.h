@@ -39,6 +39,7 @@ class CDynaDrawContext;
 
 class SPDynaDrawContext : public SPCommonContext {
 public:
+	SPDynaDrawContext();
 	CDynaDrawContext* cdynadrawcontext;
 
     /** newly created object remain selected */

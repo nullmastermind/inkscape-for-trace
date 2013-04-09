@@ -49,6 +49,7 @@ class CConnectorContext;
 
 class SPConnectorContext : public SPEventContext {
 public:
+	SPConnectorContext();
 	CConnectorContext* cconnectorcontext;
 
     Inkscape::Selection *selection;

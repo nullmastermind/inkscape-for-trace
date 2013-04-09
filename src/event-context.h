@@ -112,6 +112,7 @@ public:
     void enableGrDrag (bool enable=true);
     bool deleteSelectedDrag(bool just_one);
 
+    SPEventContext();
     CEventContext* ceventcontext;
 
     /// Desktop eventcontext stack
@@ -155,13 +156,13 @@ public:
  * The SPEvent vtable.
  */
 struct SPEventContextClass : public GObjectClass {
-    void (* setup)(SPEventContext *ec);
-    void (* finish)(SPEventContext *ec);
-    void (* set)(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-    void (* activate)(SPEventContext *ec);
-    void (* deactivate)(SPEventContext *ec);
-    gint (* root_handler)(SPEventContext *ec, GdkEvent *event);
-    gint (* item_handler)(SPEventContext *ec, SPItem *item, GdkEvent *event);
+//    void (* setup)(SPEventContext *ec);
+//    void (* finish)(SPEventContext *ec);
+//    void (* set)(SPEventContext *ec, Inkscape::Preferences::Entry *val);
+//    void (* activate)(SPEventContext *ec);
+//    void (* deactivate)(SPEventContext *ec);
+//    gint (* root_handler)(SPEventContext *ec, GdkEvent *event);
+//    gint (* item_handler)(SPEventContext *ec, SPItem *item, GdkEvent *event);
 };
 
 class CEventContext {

@@ -25,12 +25,30 @@ enum {
       SP_DROPPER_PICK_ACTUAL  
 };
 
-struct SPDropperContext {
+class CDropperContext;
+
+class SPDropperContext : public SPEventContext {
+public:
+	SPDropperContext();
+	CDropperContext* cdroppercontext;
+
     SPEventContext event_context;
 };
 
 struct SPDropperContextClass {
     SPEventContextClass parent_class;
+};
+
+class CDropperContext : public CEventContext {
+public:
+	CDropperContext(SPDropperContext* droppercontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPDropperContext* spdroppercontext;
 };
 
 GType sp_dropper_context_get_type (void);

@@ -93,20 +93,23 @@ static void sp_flood_context_class_init(SPFloodContextClass *klass)
 
     object_class->dispose = sp_flood_context_dispose;
 
-    event_context_class->setup = sp_flood_context_setup;
-    event_context_class->root_handler  = sp_flood_context_root_handler;
-    event_context_class->item_handler  = sp_flood_context_item_handler;
+//    event_context_class->setup = sp_flood_context_setup;
+//    event_context_class->root_handler  = sp_flood_context_root_handler;
+//    event_context_class->item_handler  = sp_flood_context_item_handler;
 }
 
 CFloodContext::CFloodContext(SPFloodContext* floodcontext) : CEventContext(floodcontext) {
 	this->spfloodcontext = floodcontext;
 }
 
-static void sp_flood_context_init(SPFloodContext *flood_context)
-{
+SPFloodContext::SPFloodContext() : SPEventContext() {
+	SPFloodContext* flood_context = this;
+
 	flood_context->cfloodcontext = new CFloodContext(flood_context);
 	delete flood_context->ceventcontext;
 	flood_context->ceventcontext = flood_context->cfloodcontext;
+
+	flood_context->_message_context = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(flood_context);
 
@@ -122,6 +125,11 @@ static void sp_flood_context_init(SPFloodContext *flood_context)
     flood_context->item = NULL;
 
     new (&flood_context->sel_changed_connection) sigc::connection();
+}
+
+static void sp_flood_context_init(SPFloodContext *flood_context)
+{
+	new (flood_context) SPFloodContext();
 }
 
 static void sp_flood_context_dispose(GObject *object)

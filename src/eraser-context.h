@@ -41,6 +41,7 @@ class CEraserContext;
 
 class SPEraserContext : public SPCommonContext {
 public:
+	SPEraserContext();
 	CEraserContext* cerasercontext;
 };
 

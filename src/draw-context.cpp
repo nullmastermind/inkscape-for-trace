@@ -86,21 +86,26 @@ static void sp_draw_context_class_init(SPDrawContextClass *klass)
 
     object_class->dispose = sp_draw_context_dispose;
 
-    ec_class->setup = sp_draw_context_setup;
-    ec_class->set = sp_draw_context_set;
-    ec_class->finish = sp_draw_context_finish;
-    ec_class->root_handler = sp_draw_context_root_handler;
+//    ec_class->setup = sp_draw_context_setup;
+//    ec_class->set = sp_draw_context_set;
+//    ec_class->finish = sp_draw_context_finish;
+//    ec_class->root_handler = sp_draw_context_root_handler;
 }
 
 CDrawContext::CDrawContext(SPDrawContext* drawcontext) : CEventContext(drawcontext) {
 	this->spdrawcontext = drawcontext;
 }
 
-static void sp_draw_context_init(SPDrawContext *dc)
-{
+SPDrawContext::SPDrawContext() : SPEventContext() {
+	SPDrawContext* dc = this;
+
 	dc->cdrawcontext = new CDrawContext(dc);
 	delete dc->ceventcontext;
 	dc->ceventcontext = dc->cdrawcontext;
+
+	dc->selection = 0;
+	dc->grab = 0;
+	dc->anchor_statusbar = false;
 
     dc->attach = FALSE;
 
@@ -131,6 +136,11 @@ static void sp_draw_context_init(SPDrawContext *dc)
 
     new (&dc->sel_changed_connection) sigc::connection();
     new (&dc->sel_modified_connection) sigc::connection();
+}
+
+static void sp_draw_context_init(SPDrawContext *dc)
+{
+	new (dc) SPDrawContext();
 }
 
 static void sp_draw_context_dispose(GObject *object)

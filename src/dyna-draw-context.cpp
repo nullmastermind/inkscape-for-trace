@@ -109,18 +109,18 @@ sp_dyna_draw_context_class_init(SPDynaDrawContextClass *klass)
 
     object_class->dispose = sp_dyna_draw_context_dispose;
 
-    event_context_class->setup = sp_dyna_draw_context_setup;
-    event_context_class->set = sp_dyna_draw_context_set;
-    event_context_class->root_handler = sp_dyna_draw_context_root_handler;
+//    event_context_class->setup = sp_dyna_draw_context_setup;
+//    event_context_class->set = sp_dyna_draw_context_set;
+//    event_context_class->root_handler = sp_dyna_draw_context_root_handler;
 }
 
 CDynaDrawContext::CDynaDrawContext(SPDynaDrawContext* dynadrawcontext) : CCommonContext(dynadrawcontext) {
 	this->spdynadrawcontext = dynadrawcontext;
 }
 
-static void
-sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
-{
+SPDynaDrawContext::SPDynaDrawContext() : SPCommonContext() {
+	SPDynaDrawContext* ddc = this;
+
 	ddc->cdynadrawcontext = new CDynaDrawContext(ddc);
 	delete ddc->ccommoncontext;
 	ddc->ccommoncontext = ddc->cdynadrawcontext;
@@ -152,6 +152,12 @@ sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
 
     ddc->trace_bg = false;
     ddc->just_started_drawing = false;
+}
+
+static void
+sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
+{
+	new (ddc) SPDynaDrawContext();
 }
 
 static void

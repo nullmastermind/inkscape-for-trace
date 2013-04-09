@@ -49,9 +49,15 @@ enum {
     SPRAY_OPTION,
 };
 
-struct SPSprayContext
+class CSprayContext;
+
+class SPSprayContext : public SPEventContext
 {
-    SPEventContext event_context;
+public:
+	SPSprayContext();
+	CSprayContext* cspraycontext;
+
+    //SPEventContext event_context;
     //Inkscape::UI::Dialog::Dialog *dialog_option;//Attribut de type SprayOptionClass, localisé dans scr/ui/dialog    
     /* extended input data */
     gdouble pressure;
@@ -92,6 +98,18 @@ struct SPSprayContext
 struct SPSprayContextClass
 {
     SPEventContextClass parent_class;
+};
+
+class CSprayContext : public CEventContext {
+public:
+	CSprayContext(SPSprayContext* spraycontext);
+
+	virtual void setup();
+	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual gint root_handler(GdkEvent* event);
+
+private:
+	SPSprayContext* spspraycontext;
 };
 
 GType sp_spray_context_get_type(void);

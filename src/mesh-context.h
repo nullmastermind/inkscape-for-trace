@@ -31,6 +31,7 @@ class CMeshContext;
 
 class SPMeshContext : public SPEventContext {
 public:
+	SPMeshContext();
 	CMeshContext* cmeshcontext;
 
     Geom::Point origin;

@@ -67,22 +67,24 @@ sp_spiral_context_class_init(SPSpiralContextClass *klass)
 
     object_class->dispose = sp_spiral_context_dispose;
 
-    event_context_class->setup = sp_spiral_context_setup;
-    event_context_class->finish = sp_spiral_context_finish;
-    event_context_class->set = sp_spiral_context_set;
-    event_context_class->root_handler = sp_spiral_context_root_handler;
+//    event_context_class->setup = sp_spiral_context_setup;
+//    event_context_class->finish = sp_spiral_context_finish;
+//    event_context_class->set = sp_spiral_context_set;
+//    event_context_class->root_handler = sp_spiral_context_root_handler;
 }
 
 CSpiralContext::CSpiralContext(SPSpiralContext* spiralcontext) : CEventContext(spiralcontext) {
 	this->spspiralcontext = spiralcontext;
 }
 
-static void
-sp_spiral_context_init(SPSpiralContext *spiral_context)
-{
+SPSpiralContext::SPSpiralContext() : SPEventContext() {
+	SPSpiralContext* spiral_context = this;
+
 	spiral_context->cspiralcontext = new CSpiralContext(spiral_context);
 	delete spiral_context->ceventcontext;
 	spiral_context->ceventcontext = spiral_context->cspiralcontext;
+
+	spiral_context->_message_context = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(spiral_context);
 
@@ -102,6 +104,12 @@ sp_spiral_context_init(SPSpiralContext *spiral_context)
     spiral_context->t0 = 0.0;
 
     new (&spiral_context->sel_changed_connection) sigc::connection();
+}
+
+static void
+sp_spiral_context_init(SPSpiralContext *spiral_context)
+{
+	new (spiral_context) SPSpiralContext();
 }
 
 static void sp_spiral_context_finish(SPEventContext *ec)

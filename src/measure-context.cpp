@@ -235,15 +235,26 @@ static void sp_measure_context_class_init(SPMeasureContextClass *klass)
 {
     SPEventContextClass *event_context_class = reinterpret_cast<SPEventContextClass *>(klass);
 
-    event_context_class->setup = sp_measure_context_setup;
-    event_context_class->finish = sp_measure_context_finish;
-
-    event_context_class->root_handler = sp_measure_context_root_handler;
-    event_context_class->item_handler = sp_measure_context_item_handler;
+//    event_context_class->setup = sp_measure_context_setup;
+//    event_context_class->finish = sp_measure_context_finish;
+//
+//    event_context_class->root_handler = sp_measure_context_root_handler;
+//    event_context_class->item_handler = sp_measure_context_item_handler;
 }
 
-static void sp_measure_context_init(SPMeasureContext *measure_context)
-{
+CMeasureContext::CMeasureContext(SPMeasureContext* measurecontext) : CEventContext(measurecontext) {
+	this->spmeasurecontext = measurecontext;
+}
+
+SPMeasureContext::SPMeasureContext() : SPEventContext() {
+	SPMeasureContext* measure_context = this;
+
+	measure_context->cmeasurecontext = new CMeasureContext(measure_context);
+	delete measure_context->ceventcontext;
+	measure_context->ceventcontext = measure_context->cmeasurecontext;
+
+	measure_context->grabbed = 0;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(measure_context);
 
     event_context->cursor_shape = cursor_measure_xpm;
@@ -251,8 +262,19 @@ static void sp_measure_context_init(SPMeasureContext *measure_context)
     event_context->hot_y = 4;
 }
 
+static void sp_measure_context_init(SPMeasureContext *measure_context)
+{
+	new (measure_context) SPMeasureContext();
+}
+
 static void sp_measure_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CMeasureContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPMeasureContext *mc = SP_MEASURE_CONTEXT(ec);
 
     ec->enableGrDrag(false);
@@ -265,18 +287,32 @@ static void sp_measure_context_finish(SPEventContext *ec)
 
 static void sp_measure_context_setup(SPEventContext *ec)
 {
-    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup) {
-        SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup(ec);
-    }
+	ec->ceventcontext->setup();
+}
+
+void CMeasureContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
+//    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup) {
+//        SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup(ec);
+//    }
+	CEventContext::setup();
 }
 
 static gint sp_measure_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
+	return event_context->ceventcontext->item_handler(item, event);
+}
+
+gint CMeasureContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     gint ret = FALSE;
 
-    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler) {
-        ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler(event_context, item, event);
-    }
+//    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler) {
+//        ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler(event_context, item, event);
+//    }
+    ret = CEventContext::item_handler(item, event);
 
     return ret;
 }
@@ -318,6 +354,12 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
 
 static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CMeasureContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPDesktop *desktop = event_context->desktop;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
@@ -764,9 +806,10 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
     }
 
     if (!ret) {
-        if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->root_handler) {
-            ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->root_handler(event_context, event);
-        }
+//        if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->root_handler) {
+//            ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

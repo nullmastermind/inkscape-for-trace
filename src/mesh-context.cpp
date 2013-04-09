@@ -70,19 +70,25 @@ static void sp_mesh_context_class_init(SPMeshContextClass *klass)
 
     object_class->dispose = sp_mesh_context_dispose;
 
-    event_context_class->setup = sp_mesh_context_setup;
-    event_context_class->root_handler  = sp_mesh_context_root_handler;
+//    event_context_class->setup = sp_mesh_context_setup;
+//    event_context_class->root_handler  = sp_mesh_context_root_handler;
 }
 
 CMeshContext::CMeshContext(SPMeshContext* meshcontext) : CEventContext(meshcontext) {
 	this->spmeshcontext = meshcontext;
 }
 
-static void sp_mesh_context_init(SPMeshContext *gr_context)
-{
+SPMeshContext::SPMeshContext() : SPEventContext() {
+	SPMeshContext* gr_context = this;
+
 	gr_context->cmeshcontext = new CMeshContext(gr_context);
 	delete gr_context->ceventcontext;
 	gr_context->ceventcontext = gr_context->cmeshcontext;
+
+	gr_context->selcon = 0;
+	gr_context->_message_context = 0;
+	gr_context->node_added = false;
+	gr_context->subselcon = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(gr_context);
 
@@ -95,6 +101,11 @@ static void sp_mesh_context_init(SPMeshContext *gr_context)
     event_context->tolerance = 6;
     event_context->within_tolerance = false;
     event_context->item_to_select = NULL;
+}
+
+static void sp_mesh_context_init(SPMeshContext *gr_context)
+{
+	new (gr_context) SPMeshContext();
 }
 
 static void sp_mesh_context_dispose(GObject *object)

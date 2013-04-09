@@ -111,18 +111,18 @@ sp_eraser_context_class_init(SPEraserContextClass *klass)
 
     object_class->dispose = sp_eraser_context_dispose;
 
-    event_context_class->setup = sp_eraser_context_setup;
-    event_context_class->set = sp_eraser_context_set;
-    event_context_class->root_handler = sp_eraser_context_root_handler;
+//    event_context_class->setup = sp_eraser_context_setup;
+//    event_context_class->set = sp_eraser_context_set;
+//    event_context_class->root_handler = sp_eraser_context_root_handler;
 }
 
 CEraserContext::CEraserContext(SPEraserContext* erasercontext) : CCommonContext(erasercontext) {
 	this->sperasercontext = erasercontext;
 }
 
-static void
-sp_eraser_context_init(SPEraserContext *erc)
-{
+SPEraserContext::SPEraserContext() : SPCommonContext() {
+	SPEraserContext* erc = this;
+
 	erc->cerasercontext = new CEraserContext(erc);
 	delete erc->ccommoncontext;
 	erc->ccommoncontext = erc->cerasercontext;
@@ -131,6 +131,12 @@ sp_eraser_context_init(SPEraserContext *erc)
     erc->cursor_shape = cursor_eraser_xpm;
     erc->hot_x = 4;
     erc->hot_y = 4;
+}
+
+static void
+sp_eraser_context_init(SPEraserContext *erc)
+{
+	new (erc) SPEraserContext();
 }
 
 static void

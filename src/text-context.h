@@ -35,6 +35,7 @@ class CTextContext;
 
 class SPTextContext : public SPEventContext {
 public:
+	SPTextContext();
 	CTextContext* ctextcontext;
 
     sigc::connection sel_changed_connection;

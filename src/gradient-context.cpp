@@ -68,19 +68,25 @@ static void sp_gradient_context_class_init(SPGradientContextClass *klass)
 
     object_class->dispose = sp_gradient_context_dispose;
 
-    event_context_class->setup = sp_gradient_context_setup;
-    event_context_class->root_handler  = sp_gradient_context_root_handler;
+//    event_context_class->setup = sp_gradient_context_setup;
+//    event_context_class->root_handler  = sp_gradient_context_root_handler;
 }
 
 CGradientContext::CGradientContext(SPGradientContext* gradientcontext) : CEventContext(gradientcontext) {
 	this->spgradientcontext = gradientcontext;
 }
 
-static void sp_gradient_context_init(SPGradientContext *gr_context)
-{
+SPGradientContext::SPGradientContext() : SPEventContext() {
+	SPGradientContext* gr_context = this;
+
 	gr_context->cgradientcontext = new CGradientContext(gr_context);
 	delete gr_context->ceventcontext;
 	gr_context->ceventcontext = gr_context->cgradientcontext;
+
+	gr_context->node_added = false;
+	gr_context->subselcon = 0;
+	gr_context->_message_context = 0;
+	gr_context->selcon = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(gr_context);
 
@@ -93,6 +99,11 @@ static void sp_gradient_context_init(SPGradientContext *gr_context)
     event_context->tolerance = 6;
     event_context->within_tolerance = false;
     event_context->item_to_select = NULL;
+}
+
+static void sp_gradient_context_init(SPGradientContext *gr_context)
+{
+	new (gr_context) SPGradientContext();
 }
 
 static void sp_gradient_context_dispose(GObject *object)

@@ -134,22 +134,38 @@ ink_node_tool_class_init(InkNodeToolClass *klass)
 
     object_class->dispose = ink_node_tool_dispose;
 
-    event_context_class->setup = ink_node_tool_setup;
-    event_context_class->set = ink_node_tool_set;
-    event_context_class->root_handler = ink_node_tool_root_handler;
-    event_context_class->item_handler = ink_node_tool_item_handler;
+//    event_context_class->setup = ink_node_tool_setup;
+//    event_context_class->set = ink_node_tool_set;
+//    event_context_class->root_handler = ink_node_tool_root_handler;
+//    event_context_class->item_handler = ink_node_tool_item_handler;
 }
 
 CInkNodeTool::CInkNodeTool(InkNodeTool* inknodetool) : CEventContext(inknodetool) {
 	this->inknodetool = inknodetool;
 }
 
-static void
-ink_node_tool_init(InkNodeTool *nt)
-{
+InkNodeTool::InkNodeTool() : SPEventContext() {
+	InkNodeTool* nt = this;
+
 	nt->cinknodetool = new CInkNodeTool(nt);
 	delete nt->ceventcontext;
 	nt->ceventcontext = nt->cinknodetool;
+
+	nt->show_handles = 0;
+	nt->single_node_transform_handles = 0;
+	nt->show_transform_handles = 0;
+	nt->cursor_drag = 0;
+	nt->_node_message_context = 0;
+	nt->live_objects = 0;
+	nt->edit_clipping_paths = 0;
+	nt->live_outline = 0;
+	nt->flashed_item = 0;
+	nt->_transform_handle_group = 0;
+	nt->show_path_direction = 0;
+	nt->_last_over = 0;
+	nt->edit_masks = 0;
+	nt->show_outline = 0;
+	nt->flash_tempitem = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(nt);
 
@@ -167,6 +183,12 @@ ink_node_tool_init(InkNodeTool *nt)
     new (&nt->_selector) SelectorPtr();
     new (&nt->_path_data) PathSharedDataPtr();
     new (&nt->_shape_editors) ShapeEditors();
+}
+
+static void
+ink_node_tool_init(InkNodeTool *nt)
+{
+	new (nt) InkNodeTool();
 }
 
 //namespace {

@@ -31,6 +31,7 @@ class CSpiralContext;
 
 class SPSpiralContext : public SPEventContext {
 public:
+	SPSpiralContext();
 	CSpiralContext* cspiralcontext;
 
 	SPItem * item;

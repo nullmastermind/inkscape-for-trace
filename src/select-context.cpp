@@ -79,22 +79,25 @@ sp_select_context_class_init(SPSelectContextClass *klass)
 
     object_class->dispose = sp_select_context_dispose;
 
-    event_context_class->setup = sp_select_context_setup;
-    event_context_class->set = sp_select_context_set;
-    event_context_class->root_handler = sp_select_context_root_handler;
-    event_context_class->item_handler = sp_select_context_item_handler;
+//    event_context_class->setup = sp_select_context_setup;
+//    event_context_class->set = sp_select_context_set;
+//    event_context_class->root_handler = sp_select_context_root_handler;
+//    event_context_class->item_handler = sp_select_context_item_handler;
 }
 
 CSelectContext::CSelectContext(SPSelectContext* selectcontext) : CEventContext(selectcontext) {
 	this->spselectcontext = selectcontext;
 }
 
-static void
-sp_select_context_init(SPSelectContext *sc)
-{
+SPSelectContext::SPSelectContext() : SPEventContext() {
+	SPSelectContext* sc = this;
+
 	sc->cselectcontext = new CSelectContext(sc);
 	delete sc->ceventcontext;
 	sc->ceventcontext = sc->cselectcontext;
+
+	sc->grabbed = 0;
+	sc->item = 0;
 
     sc->dragging = FALSE;
     sc->moved = FALSE;
@@ -126,6 +129,12 @@ sp_select_context_init(SPSelectContext *sc)
     handles[10] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_sw_xpm);
     handles[11] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_w_xpm);
     handles[12] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_center_xpm);
+}
+
+static void
+sp_select_context_init(SPSelectContext *sc)
+{
+	new (sc) SPSelectContext();
 }
 
 static void

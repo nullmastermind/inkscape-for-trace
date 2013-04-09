@@ -181,23 +181,33 @@ sp_connector_context_class_init(SPConnectorContextClass *klass)
 
     object_class->dispose = sp_connector_context_dispose;
 
-    event_context_class->setup = sp_connector_context_setup;
-    event_context_class->set = sp_connector_context_set;
-    event_context_class->finish = sp_connector_context_finish;
-    event_context_class->root_handler = sp_connector_context_root_handler;
-    event_context_class->item_handler = sp_connector_context_item_handler;
+//    event_context_class->setup = sp_connector_context_setup;
+//    event_context_class->set = sp_connector_context_set;
+//    event_context_class->finish = sp_connector_context_finish;
+//    event_context_class->root_handler = sp_connector_context_root_handler;
+//    event_context_class->item_handler = sp_connector_context_item_handler;
 }
 
 CConnectorContext::CConnectorContext(SPConnectorContext* connectorcontext) : CEventContext(connectorcontext) {
 	this->spconnectorcontext = connectorcontext;
 }
 
-static void
-sp_connector_context_init(SPConnectorContext *cc)
-{
+SPConnectorContext::SPConnectorContext() : SPEventContext() {
+	SPConnectorContext* cc = this;
+
 	cc->cconnectorcontext = new CConnectorContext(cc);
 	delete cc->ceventcontext;
 	cc->ceventcontext = cc->cconnectorcontext;
+
+	cc->red_curve = 0;
+	cc->isOrthogonal = false;
+	cc->c1 = 0;
+	cc->red_bpath = 0;
+	cc->green_curve = 0;
+	cc->selection = 0;
+	cc->cl0 = 0;
+	cc->cl1 = 0;
+	cc->c0 = 0;
 
     SPEventContext *ec = SP_EVENT_CONTEXT(cc);
 
@@ -241,6 +251,12 @@ sp_connector_context_init(SPConnectorContext *cc)
     cc->state = SP_CONNECTOR_CONTEXT_IDLE;
 }
 
+static void
+sp_connector_context_init(SPConnectorContext *cc)
+{
+	new (cc) SPConnectorContext();
+}
+
 
 static void
 sp_connector_context_dispose(GObject *object)
@@ -281,9 +297,10 @@ void CConnectorContext::setup() {
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
     SPDesktop *dt = ec->desktop;
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->setup) {
-        (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->setup(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->setup) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->setup(ec);
+//    }
+    CEventContext::setup();
 
     cc->selection = sp_desktop_selection(dt);
 
@@ -358,9 +375,10 @@ void CConnectorContext::finish() {
     spcc_connector_finish(cc);
     cc->state = SP_CONNECTOR_CONTEXT_IDLE;
 
-    if ((SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->finish) {
-        (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->finish(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->finish) {
+//        (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->finish(ec);
+//    }
+    CEventContext::finish();
 
     if (cc->selection) {
         cc->selection = NULL;

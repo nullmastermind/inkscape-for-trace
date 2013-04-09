@@ -88,15 +88,24 @@ sp_dropper_context_class_init(SPDropperContextClass *klass)
 
     parent_class = SP_EVENT_CONTEXT_CLASS(g_type_class_peek_parent(klass));
 
-    ec_class->setup = sp_dropper_context_setup;
-    ec_class->finish = sp_dropper_context_finish;
-    ec_class->root_handler = sp_dropper_context_root_handler;
+//    ec_class->setup = sp_dropper_context_setup;
+//    ec_class->finish = sp_dropper_context_finish;
+//    ec_class->root_handler = sp_dropper_context_root_handler;
     
     g_type_class_add_private(object_class, sizeof(SPDropperContext));
 }
 
-static void sp_dropper_context_init(SPDropperContext *dc)
-{
+CDropperContext::CDropperContext(SPDropperContext* droppercontext) : CEventContext(droppercontext) {
+	this->spdroppercontext = droppercontext;
+}
+
+SPDropperContext::SPDropperContext() : SPEventContext() {
+	SPDropperContext* dc = this;
+
+	dc->cdroppercontext = new CDropperContext(dc);
+	delete dc->ceventcontext;
+	dc->ceventcontext = dc->cdroppercontext;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(dc);
     event_context->cursor_shape = cursor_dropper_f_xpm;
     event_context->hot_x = 7;
@@ -104,18 +113,29 @@ static void sp_dropper_context_init(SPDropperContext *dc)
 
     cursor_dropper_fill = sp_cursor_new_from_xpm(cursor_dropper_f_xpm , 7, 7);
     cursor_dropper_stroke = sp_cursor_new_from_xpm(cursor_dropper_s_xpm , 7, 7);
+}
 
+static void sp_dropper_context_init(SPDropperContext *dc)
+{
+	new (dc) SPDropperContext();
 }
 
 static void
 sp_dropper_context_setup(SPEventContext *ec)
 {
+	ec->ceventcontext->setup();
+}
+
+void CDropperContext::setup() {
+	SPEventContext* ec = this->speventcontext;
+
     SPDropperContext        *dc   = SP_DROPPER_CONTEXT(ec);
     SPDropperContextPrivate *priv = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
 
-    if ((SP_EVENT_CONTEXT_CLASS(parent_class))->setup) {
-        (SP_EVENT_CONTEXT_CLASS(parent_class))->setup(ec);
-    }
+//    if ((SP_EVENT_CONTEXT_CLASS(parent_class))->setup) {
+//        (SP_EVENT_CONTEXT_CLASS(parent_class))->setup(ec);
+//    }
+    CEventContext::setup();
 
     /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
     SPCurve *c = new SPCurve();
@@ -145,6 +165,12 @@ sp_dropper_context_setup(SPEventContext *ec)
 static void
 sp_dropper_context_finish(SPEventContext *ec)
 {
+	ec->ceventcontext->finish();
+}
+
+void CDropperContext::finish() {
+	SPEventContext* ec = this->speventcontext;
+
     SPDropperContext        *dc   = SP_DROPPER_CONTEXT(ec);
     SPDropperContextPrivate *priv = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
 
@@ -208,6 +234,12 @@ static gint
 sp_dropper_context_root_handler(SPEventContext *event_context,
                                 GdkEvent       *event)
 {
+	return event_context->ceventcontext->root_handler(event);
+}
+
+gint CDropperContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this->speventcontext;
+
     SPDropperContext        *dc      = SP_DROPPER_CONTEXT(event_context);
     SPDropperContextPrivate *priv    = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
     SPDesktop               *desktop = event_context->desktop;
@@ -427,9 +459,10 @@ sp_dropper_context_root_handler(SPEventContext *event_context,
     }
 
     if (!ret) {
-        if ((SP_EVENT_CONTEXT_CLASS(parent_class))->root_handler) {
-            ret = (SP_EVENT_CONTEXT_CLASS(parent_class))->root_handler(event_context, event);
-        }
+//        if ((SP_EVENT_CONTEXT_CLASS(parent_class))->root_handler) {
+//            ret = (SP_EVENT_CONTEXT_CLASS(parent_class))->root_handler(event_context, event);
+//        }
+    	ret = CEventContext::root_handler(event);
     }
 
     return ret;

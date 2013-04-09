@@ -49,6 +49,7 @@ class CLPEToolContext;
 
 class SPLPEToolContext : public SPPenContext {
 public:
+	SPLPEToolContext();
 	CLPEToolContext* clpetoolcontext;
 
     ShapeEditor* shape_editor;

@@ -71,22 +71,26 @@ sp_star_context_class_init (SPStarContextClass * klass)
 
     object_class->dispose = sp_star_context_dispose;
 
-    event_context_class->setup = sp_star_context_setup;
-    event_context_class->finish = sp_star_context_finish;
-    event_context_class->set = sp_star_context_set;
-    event_context_class->root_handler = sp_star_context_root_handler;
+//    event_context_class->setup = sp_star_context_setup;
+//    event_context_class->finish = sp_star_context_finish;
+//    event_context_class->set = sp_star_context_set;
+//    event_context_class->root_handler = sp_star_context_root_handler;
 }
 
 CStarContext::CStarContext(SPStarContext* starcontext) : CEventContext(starcontext) {
 	this->spstarcontext = starcontext;
 }
 
-static void
-sp_star_context_init (SPStarContext * star_context)
-{
+SPStarContext::SPStarContext() : SPEventContext() {
+	SPStarContext* star_context = this;
+
 	star_context->cstarcontext = new CStarContext(star_context);
 	delete star_context->ceventcontext;
 	star_context->ceventcontext = star_context->cstarcontext;
+
+	star_context->randomized = 0;
+	star_context->_message_context = 0;
+	star_context->rounded = 0;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT (star_context);
 
@@ -107,6 +111,12 @@ sp_star_context_init (SPStarContext * star_context)
     star_context->isflatsided = false;
 
     new (&star_context->sel_changed_connection) sigc::connection();
+}
+
+static void
+sp_star_context_init (SPStarContext * star_context)
+{
+	new (star_context) SPStarContext();
 }
 
 static void sp_star_context_finish(SPEventContext *ec)

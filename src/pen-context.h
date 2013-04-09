@@ -35,6 +35,7 @@ class CPenContext;
  */
 class SPPenContext : public SPDrawContext {
 public:
+	SPPenContext();
 	CPenContext* cpencontext;
 
     Geom::Point p[5];

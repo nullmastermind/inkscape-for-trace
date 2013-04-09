@@ -19,13 +19,32 @@
 #define SP_ZOOM_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_ZOOM_CONTEXT, SPZoomContext))
 #define SP_IS_ZOOM_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ZOOM_CONTEXT))
 
-struct SPZoomContext {
-	SPEventContext event_context;
+class CZoomContext;
+
+class SPZoomContext : public SPEventContext {
+public:
+	SPZoomContext();
+	CZoomContext* czoomcontext;
+
+	//SPEventContext event_context;
 	SPCanvasItem *grabbed;
 };
 
 struct SPZoomContextClass {
 	SPEventContextClass parent_class;
+};
+
+class CZoomContext : public CEventContext {
+public:
+	CZoomContext(SPZoomContext* zoomcontext);
+
+	virtual void setup();
+	virtual void finish();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+private:
+	SPZoomContext* spzoomcontext;
 };
 
 GType sp_zoom_context_get_type (void);

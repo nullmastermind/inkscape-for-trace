@@ -71,24 +71,27 @@ static void sp_rect_context_class_init(SPRectContextClass *klass)
 
     object_class->dispose = sp_rect_context_dispose;
 
-    event_context_class->setup = sp_rect_context_setup;
-    event_context_class->finish = sp_rect_context_finish;
-    event_context_class->set = sp_rect_context_set;
-    event_context_class->root_handler  = sp_rect_context_root_handler;
-    event_context_class->item_handler  = sp_rect_context_item_handler;
+//    event_context_class->setup = sp_rect_context_setup;
+//    event_context_class->finish = sp_rect_context_finish;
+//    event_context_class->set = sp_rect_context_set;
+//    event_context_class->root_handler  = sp_rect_context_root_handler;
+//    event_context_class->item_handler  = sp_rect_context_item_handler;
 }
 
 CRectContext::CRectContext(SPRectContext* rectcontext) : CEventContext(rectcontext) {
 	this->sprectcontext = rectcontext;
 }
 
-static void sp_rect_context_init(SPRectContext *rect_context)
-{
+SPRectContext::SPRectContext() : SPEventContext() {
+	SPRectContext* rect_context = this;
+
     SPEventContext *event_context = SP_EVENT_CONTEXT(rect_context);
 
     rect_context->crectcontext = new CRectContext(rect_context);
     delete rect_context->ceventcontext;
     rect_context->ceventcontext = rect_context->crectcontext;
+
+    rect_context->_message_context = 0;
 
     event_context->cursor_shape = cursor_rect_xpm;
     event_context->hot_x = 4;
@@ -106,6 +109,11 @@ static void sp_rect_context_init(SPRectContext *rect_context)
     rect_context->ry = 0.0;
 
     new (&rect_context->sel_changed_connection) sigc::connection();
+}
+
+static void sp_rect_context_init(SPRectContext *rect_context)
+{
+	new (rect_context) SPRectContext();
 }
 
 static void sp_rect_context_finish(SPEventContext *ec)

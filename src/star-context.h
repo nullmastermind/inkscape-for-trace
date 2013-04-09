@@ -29,6 +29,7 @@ class CStarContext;
 
 class SPStarContext : public SPEventContext {
 public:
+	SPStarContext();
 	CStarContext* cstarcontext;
 
     SPItem *item;

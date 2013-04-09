@@ -31,6 +31,7 @@ class CBox3DContext;
 
 class Box3DContext : public SPEventContext {
 public:
+	Box3DContext();
 	CBox3DContext* cbox3dcontext;
 
     SPItem *item;
