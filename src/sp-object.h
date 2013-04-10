@@ -204,6 +204,9 @@ public:
     SPObject *next; /* Next object in linked list */
 
 private:
+    SPObject(const SPObject&);
+    SPObject& operator=(const SPObject&);
+
     gchar *id; /* Our very own unique id */
     Inkscape::XML::Node *repr; /* Our xml representation */
 public:

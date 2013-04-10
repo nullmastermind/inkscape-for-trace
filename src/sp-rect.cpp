@@ -34,7 +34,11 @@
 #include "sp-factory.h"
 
 namespace {
-	bool rectRegistered = SPFactory::instance().registerObject("svg:rect", []() { return new SPRect(); });
+	SPRect* createRect() {
+		return new SPRect();
+	}
+
+	bool rectRegistered = SPFactory::instance().registerObject("svg:rect", createRect);
 }
 
 
@@ -200,14 +204,30 @@ void SPRect::set_shape() {
      */
     if ((rx > 1e-18) && (ry > 1e-18)) {
         c->moveto(x + rx, y);
-        if (rx < w2) c->lineto(x + w - rx, y);
-        c->curveto(x + w - rx * (1 - C1), y,     x + w, y + ry * (1 - C1),       x + w, y + ry);
-        if (ry < h2) c->lineto(x + w, y + h - ry);
-        c->curveto(x + w, y + h - ry * (1 - C1),     x + w - rx * (1 - C1), y + h,       x + w - rx, y + h);
-        if (rx < w2) c->lineto(x + rx, y + h);
-        c->curveto(x + rx * (1 - C1), y + h,     x, y + h - ry * (1 - C1),       x, y + h - ry);
-        if (ry < h2) c->lineto(x, y + ry);
-        c->curveto(x, y + ry * (1 - C1),     x + rx * (1 - C1), y,       x + rx, y);
+
+        if (rx < w2) {
+        	c->lineto(x + w - rx, y);
+        }
+
+        c->curveto(x + w - rx * (1 - C1), y, x + w, y + ry * (1 - C1), x + w, y + ry);
+
+        if (ry < h2) {
+        	c->lineto(x + w, y + h - ry);
+        }
+
+        c->curveto(x + w, y + h - ry * (1 - C1), x + w - rx * (1 - C1), y + h, x + w - rx, y + h);
+
+        if (rx < w2) {
+        	c->lineto(x + rx, y + h);
+        }
+
+        c->curveto(x + rx * (1 - C1), y + h, x, y + h - ry * (1 - C1), x, y + h - ry);
+
+        if (ry < h2) {
+        	c->lineto(x, y + ry);
+        }
+
+        c->curveto(x, y + ry * (1 - C1), x + rx * (1 - C1), y, x + rx, y);
     } else {
         c->moveto(x + 0.0, y + 0.0);
         c->lineto(x + w, y + 0.0);
@@ -216,8 +236,8 @@ void SPRect::set_shape() {
     }
 
     c->closepath();
-    this->setCurveInsync( c, TRUE);
-    this->setCurveBeforeLPE( c );
+    this->setCurveInsync(c, true);
+    this->setCurveBeforeLPE(c);
 
     // LPE is not applied because result can generally not be represented as SPRect
 
@@ -504,7 +524,8 @@ void SPRect::convert_to_guides() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (!prefs->getBool("/tools/shapes/rect/convertguides", true)) {
-    	this->convert_to_guides();
+    	// Use bounding box instead of edges
+    	SPShape::convert_to_guides();
         return;
     }
 

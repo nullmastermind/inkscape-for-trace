@@ -27,36 +27,28 @@ public:
 	SPRect();
 	virtual ~SPRect();
 
-	SVGLength x;
-	SVGLength y;
-	SVGLength width;
-	SVGLength height;
-	SVGLength rx;
-	SVGLength ry;
-
 	void setPosition(gdouble x, gdouble y, gdouble width, gdouble height);
 
 	/* If SET if FALSE, VALUE is just ignored */
 	void setRx(bool set, gdouble value);
 	void setRy(bool set, gdouble value);
 
-	void setVisibleRx(gdouble rx);
-	void setVisibleRy(gdouble ry);
 	gdouble getVisibleRx() const;
+	void setVisibleRx(gdouble rx);
+
 	gdouble getVisibleRy() const;
+	void setVisibleRy(gdouble ry);
+
 	Geom::Rect getRect() const;
 
-	void setVisibleWidth(gdouble rx);
-	void setVisibleHeight(gdouble ry);
 	gdouble getVisibleWidth() const;
+	void setVisibleWidth(gdouble rx);
+
 	gdouble getVisibleHeight() const;
+	void setVisibleHeight(gdouble ry);
 
 	void compensateRxRy(Geom::Affine xform);
 
-private:
-	static gdouble vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
-
-public:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 
 	void set(unsigned key, gchar const *value);
@@ -70,6 +62,16 @@ public:
 
 	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 	void convert_to_guides();
+
+	SVGLength x;
+	SVGLength y;
+	SVGLength width;
+	SVGLength height;
+	SVGLength rx;
+	SVGLength ry;
+
+private:
+	static gdouble vectorStretch(Geom::Point p0, Geom::Point p1, Geom::Affine xform);
 };
 
 #endif // SEEN_SP_RECT_H
