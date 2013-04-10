@@ -373,10 +373,12 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
         InkNodeTool *nt = INK_NODE_TOOL(desktop->event_context);
         Inkscape::UI::ControlPointSelection::Set &selection = nt->_selected_nodes->allPoints();
         points.clear();
+        std::vector<Geom::Point>::iterator pbegin;
         for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection.begin(); i != selection.end(); ++i){
                 if ((*i)->selected()) {
                     Inkscape::UI::Node *n = static_cast<Inkscape::UI::Node*>(*i);
-                    points.insert(points.begin(),desktop->doc2dt(n->position()));
+                    pbegin = points.begin();
+                    points.insert(pbegin,desktop->doc2dt(n->position()));
                 }
         }
     }
