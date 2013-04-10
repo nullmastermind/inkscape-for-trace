@@ -140,7 +140,7 @@ LPEBSpline::doEffect(SPCurve * curve)
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
-
+        nCurve->moveto(curve_it1->initialPoint());
         //Recorremos todos los segmentos menos el último
         while ( curve_it2 != curve_endit )
         {
@@ -193,20 +193,11 @@ LPEBSpline::doEffect(SPCurve * curve)
             previousNode = node;
             //Y este hará de final de curva
             node = SBasisHelper.valueAt(0.5);
-            SPCurve *curveHelper = new SPCurve();
-            curveHelper->moveto(previousNode);
-            curveHelper->curveto(pointAt1, pointAt2, node);
-            //añadimos la curva generada a la curva pricipal
-            nCurve->append_continuous(curveHelper, 0.0625);
-            curveHelper->reset();
-            delete curveHelper;
+            nCurve->curveto(pointAt1, pointAt2, node);
             //aumentamos los valores para el siguiente paso en el bucle
             ++curve_it1;
             ++curve_it2;
         }
-        //Aberiguamos la ultima parte de la curva correspondiente al último segmento
-        SPCurve *curveHelper = new SPCurve();
-        curveHelper->moveto(node);
         //Si está cerrada la curva, la cerramos sobre  el valor guardado previamente
         //Si no finalizamos en el punto final
         Geom::Point startNode(0,0);
@@ -242,8 +233,7 @@ LPEBSpline::doEffect(SPCurve * curve)
             lineHelper->reset();
             delete lineHelper;
             startNode = SBasisHelper.valueAt(0.5);
-            curveHelper->curveto(nextPointAt1, nextPointAt2, startNode);
-            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->curveto(nextPointAt1, nextPointAt2, startNode);
             nCurve->move_endpoints(startNode,startNode);
         }else{
             SPCurve * start = new SPCurve();
@@ -252,12 +242,9 @@ LPEBSpline::doEffect(SPCurve * curve)
             startNode = start->first_segment()->initialPoint();
             start->reset();
             delete start;
-            curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
-            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
             nCurve->move_endpoints(startNode,nextPointAt3);
         }
-        curveHelper->reset();
-        delete curveHelper;
         //y cerramos la curva
         if (path_it->closed()) {
             nCurve->closepath_current();
@@ -354,10 +341,15 @@ LPEBSpline::changeWeight(double weightValue)
 }
 
 bool
-LPEBSpline::nodeIsSelected(Geom::Point nodePoint, int index){
+LPEBSpline::nodeIsSelected(Geom::Point nodePoint){
     if(points.size() > 0){
-        if(Geom::are_near(points[index], nodePoint)){
-            return true;
+        for(std::vector<Geom::Point>::iterator i = points.begin(); i != points.end();){
+            Geom::Point p = static_cast<Geom::Point>(*i);
+            if(Geom::are_near(p, nodePoint)){
+                return true;
+                points.erase(i);
+            }
+            i++;
         }
     }
     return false;
@@ -415,7 +407,6 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
         Geom::D2< Geom::SBasis > SBasisIn;
         Geom::D2< Geom::SBasis > SBasisOut;
         Geom::CubicBezier const *cubic = NULL;
-        int j = 0;
         if (path_it->closed()) {
             // if the path is closed, maybe we have to stop a bit earlier because the closing line segment has zerolength.
             const Geom::Curve &closingline = path_it->back_closed(); // the closing line segment is always of type Geom::LineSegment.
@@ -428,7 +419,7 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
         //Si la curva está cerrada calculamos el punto donde
         //deveria estar el nodo BSpline de cierre/inicio de la curva
         //en posible caso de que se cierre con una linea recta creando un nodo BSPline
-
+        nCurve->moveto(curve_it1->initialPoint());
         //Recorremos todos los segmentos menos el último
         while ( curve_it2 != curve_endit )
         {
@@ -443,7 +434,7 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
             SBasisIn = in->first_segment()->toSBasis();
             if(!onlySelected){
                 if(cubic){
-                    if((!ignoreCusp || !Geom::are_near((*cubic)[1],in->first_segment()->initialPoint())) && weightValue !=0){
+                    if(!ignoreCusp || (!Geom::are_near((*cubic)[1],in->first_segment()->initialPoint()) && weightValue !=0)){
                         pointAt1 = SBasisIn.valueAt(weightValue);
                         pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
                     }else{
@@ -468,46 +459,35 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
                 }
             }else{
                 if(cubic){
-                    if((!ignoreCusp || !Geom::are_near((*cubic)[1],in->first_segment()->initialPoint())) && weightValue !=0){
-                        if(nodeIsSelected(pointAt0,j)){
+                    if(!ignoreCusp || (!Geom::are_near((*cubic)[1],in->first_segment()->initialPoint())&& weightValue !=0)){
+                        if(nodeIsSelected(pointAt0)){
                             pointAt1 = SBasisIn.valueAt(weightValue);
                             pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
-                            j++;
                         }else{
                             pointAt1 = (*cubic)[1];
                         }
                     }else{
-                        if(nodeIsSelected(pointAt0,j)){
                             pointAt1 = in->first_segment()->initialPoint();
-                            j++;
-                        }else{
-                            pointAt1 = (*cubic)[1];
-                        }
                     }
-                    if((!ignoreCusp || !Geom::are_near((*cubic)[2],in->first_segment()->finalPoint())) && weightValue !=0){
-                        if(nodeIsSelected(pointAt3,j)){
+                    if(!ignoreCusp || (!Geom::are_near((*cubic)[2],in->first_segment()->finalPoint()) && weightValue !=0)){
+                        if(nodeIsSelected(pointAt3)){
                             pointAt2 = SBasisIn.valueAt(1-weightValue);
                             pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                         }else{
                             pointAt2 = (*cubic)[2];
                         }
                     }else{
-                        if(nodeIsSelected(pointAt3,j)){
                             pointAt2 = in->first_segment()->finalPoint();
-                        }else{
-                            pointAt2 = (*cubic)[2];
-                        }
                     }
                 }else{
                     if(!ignoreCusp && weightValue !=0){
-                        if(nodeIsSelected(pointAt0,j)){
+                        if(nodeIsSelected(pointAt0)){
                             pointAt1 = SBasisIn.valueAt(weightValue);
                             pointAt1 = Geom::Point(pointAt1[X] + 0.0625,pointAt1[Y] + 0.0625);
-                            j++;
                         }else{
                             pointAt1 = in->first_segment()->initialPoint();
                         }
-                        if(nodeIsSelected(pointAt3,j)){
+                        if(nodeIsSelected(pointAt3)){
                             pointAt2 = SBasisIn.valueAt(weightValue);
                             pointAt2 = Geom::Point(pointAt2[X] + 0.0625,pointAt2[Y] + 0.0625);
                         }else{
@@ -516,34 +496,21 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
                     }else{
                         pointAt1 = in->first_segment()->initialPoint();
                         pointAt2 = in->first_segment()->finalPoint();
-                        if(nodeIsSelected(pointAt0,j)){
-                            j++;
-                        }
                     }
                 }
             }
             in->reset();
             delete in;
-            
             //La curva BSpline se forma calculando el centro del segmanto de unión
             //de el punto situado en las 2/3 partes de el segmento de entrada
             //con el punto situado en la posición 1/3 del segmento de salida
             //Estos dos puntos ademas estan posicionados en el lugas correspondiente de
             //los manejadores de la curva
-            SPCurve *curveHelper = new SPCurve();
-            curveHelper->moveto(pointAt0);
-            curveHelper->curveto(pointAt1, pointAt2, pointAt3);
-            //añadimos la curva generada a la curva pricipal
-            nCurve->append_continuous(curveHelper, 0.0625);
-            curveHelper->reset();
-            delete curveHelper;
+            nCurve->curveto(pointAt1, pointAt2, pointAt3);
             //aumentamos los valores para el siguiente paso en el bucle
             ++curve_it1;
             ++curve_it2;
         }
-        //Aberiguamos la ultima parte de la curva correspondiente al último segmento
-        //Y hacemos lo propio con el path de salida
-        //nextPointAt0 = curveOut.valueAt(0);
         SPCurve * out = new SPCurve();
         out->moveto(curve_it1->initialPoint());
         out->lineto(curve_it1->finalPoint());
@@ -576,75 +543,60 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
                         nextPointAt2 = out->first_segment()->finalPoint();
                     }
                 }
-            }else{
-                if(cubic){
-                    if((!ignoreCusp || !Geom::are_near((*cubic)[1],out->first_segment()->initialPoint())) && weightValue !=0){
-                        if(nodeIsSelected(nextPointAt0,j)){
-                            nextPointAt1 = SBasisOut.valueAt(weightValue);
-                            nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
-                            j++;
-                        }else{
-                            nextPointAt1 = (*cubic)[1];
-                        }
+        }else{
+            if(cubic){
+                if(!ignoreCusp || (!Geom::are_near((*cubic)[1],out->first_segment()->initialPoint()) && weightValue !=0)){
+                    if(nodeIsSelected(nextPointAt0)){
+                        nextPointAt1 = SBasisOut.valueAt(weightValue);
+                        nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
                     }else{
-                        if(nodeIsSelected(nextPointAt0,j)){
-                            nextPointAt1 = out->first_segment()->initialPoint();
-                            j++;
-                        }else{
-                            nextPointAt1 = (*cubic)[1];
-                        }
-                    }
-                    if((!ignoreCusp || !Geom::are_near((*cubic)[2],out->first_segment()->finalPoint())) && weightValue !=0){
-                        if(nodeIsSelected(nextPointAt3,j)){
-                            nextPointAt2 = SBasisOut.valueAt(1-weightValue);
-                            nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
-                        }else{
-                            nextPointAt2 = (*cubic)[2];
-                         }
-                    }else{
-                        if(nodeIsSelected(nextPointAt3,j)){
-                            nextPointAt2 = out->first_segment()->finalPoint();
-                        }else{
-                            nextPointAt2 = (*cubic)[2];
-                         }
+                        nextPointAt1 = (*cubic)[1];
                     }
                 }else{
-                    if(!ignoreCusp && weightValue !=0){
-                        if(nodeIsSelected(nextPointAt0,j)){
-                            nextPointAt1 = SBasisOut.valueAt(weightValue);
-                            nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
-                            j++;
-                        }else{
-                            nextPointAt1 = out->first_segment()->initialPoint();
-                        }
-                        if(nodeIsSelected(nextPointAt3,j)){
-                            nextPointAt2 = SBasisOut.valueAt(weightValue);
-                            nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
-                        }else{
-                            nextPointAt2 = out->first_segment()->finalPoint();
-                        }
+                    nextPointAt1 = out->first_segment()->initialPoint();
+                }
+                if(!ignoreCusp || (!Geom::are_near((*cubic)[2],out->first_segment()->finalPoint()) && weightValue !=0)){
+                    if(nodeIsSelected(nextPointAt3)){
+                        nextPointAt2 = SBasisOut.valueAt(1-weightValue);
+                        nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
+                    }else{
+                        nextPointAt2 = (*cubic)[2];
+                     }
+                }else{
+                     nextPointAt2 = out->first_segment()->finalPoint();
+                }
+            }else{
+                if(!ignoreCusp && weightValue !=0){
+                    if(nodeIsSelected(nextPointAt0)){
+                        nextPointAt1 = SBasisOut.valueAt(weightValue);
+                        nextPointAt1 = Geom::Point(nextPointAt1[X] + 0.0625,nextPointAt1[Y] + 0.0625);
                     }else{
                         nextPointAt1 = out->first_segment()->initialPoint();
-                        if(nodeIsSelected(nextPointAt0,j)) j++;
+                    }
+                    if(nodeIsSelected(nextPointAt3)){
+                        nextPointAt2 = SBasisOut.valueAt(weightValue);
+                        nextPointAt2 = Geom::Point(nextPointAt2[X] + 0.0625,nextPointAt2[Y] + 0.0625);
+                    }else{
                         nextPointAt2 = out->first_segment()->finalPoint();
                     }
+                }else{
+                    nextPointAt1 = out->first_segment()->initialPoint();
+                    nextPointAt2 = out->first_segment()->finalPoint();
                 }
             }
-            out->reset();
-            delete out;
-        SPCurve *curveHelper = new SPCurve();
-        curveHelper->moveto(pointAt3);
+        }
+        out->reset();
+        delete out;
+        //Aberiguamos la ultima parte de la curva correspondiente al último segmento
+        //Y hacemos lo propio con el path de salida
+        //nextPointAt0 = curveOut.valueAt(0);
         if (path_it->closed()) {
-            curveHelper->curveto(nextPointAt1, nextPointAt2, path_it->begin()->initialPoint());
-            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->curveto(nextPointAt1, nextPointAt2, path_it->begin()->initialPoint());
             nCurve->move_endpoints(path_it->begin()->initialPoint(),path_it->begin()->initialPoint());
         }else{
-            curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
-            nCurve->append_continuous(curveHelper, 0.0625);
+            nCurve->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
             nCurve->move_endpoints(path_it->begin()->initialPoint(),nextPointAt3);
         }
-        curveHelper->reset();
-        delete curveHelper;
         //y cerramos la curva
         if (path_it->closed()) {
             nCurve->closepath_current();

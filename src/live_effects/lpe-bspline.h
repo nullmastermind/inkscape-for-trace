@@ -29,7 +29,7 @@ public:
 
     virtual void doBSplineFromWidget(SPCurve * curve, double value);
 
-    virtual bool nodeIsSelected(Geom::Point nodePoint, int index);
+    virtual bool nodeIsSelected(Geom::Point nodePoint);
 
     virtual Gtk::Widget * newWidget();
 
