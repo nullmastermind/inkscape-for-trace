@@ -77,7 +77,6 @@
 
 #include "sp-namedview.h"
 #include "sp-guide.h"
-#include "sp-object-repr.h"
 #include "xml/repr.h"
 
 #include "io/sys.h"

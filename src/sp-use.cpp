@@ -25,7 +25,7 @@
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document.h"
-#include "sp-object-repr.h"
+#include "sp-factory.h"
 #include "sp-flowregion.h"
 #include "uri.h"
 #include "print.h"
@@ -35,8 +35,6 @@
 #include "sp-symbol.h"
 #include "sp-use.h"
 #include "sp-use-reference.h"
-
-#include "sp-factory.h"
 
 /* fixme: */
 static void sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use);

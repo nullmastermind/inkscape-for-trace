@@ -25,7 +25,7 @@
 #include "document.h"
 #include "preferences.h"
 #include "style.h"
-#include "sp-object-repr.h"
+#include "sp-factory.h"
 #include "sp-paint-server.h"
 #include "sp-root.h"
 #include "sp-style-elem.h"
@@ -40,8 +40,6 @@
 #include "util/share.h"
 #include "util/format.h"
 #include "util/longest-common-suffix.h"
-
-#include "sp-factory.h"
 
 using std::memcpy;
 using std::strchr;

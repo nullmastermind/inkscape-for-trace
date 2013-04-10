@@ -58,9 +58,9 @@
 #include "preferences.h"
 #include "profile-manager.h"
 #include "rdf.h"
+#include "sp-factory.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
-#include "sp-object-repr.h"
 #include "sp-symbol.h"
 #include "transf_mat_3x4.h"
 #include "unit-constants.h"
@@ -348,7 +348,20 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     }
     document->name = g_strdup(name);
 
-    document->root = sp_object_repr_build_tree(document, rroot);
+    // Create SPRoot element
+    SPObject* rootObj = SPFactory::instance().createObject(*rroot);
+    document->root = dynamic_cast<SPRoot*>(rootObj);
+
+    if (document->root == nullptr) {
+    	// Node is not a valid root element
+    	delete rootObj;
+
+    	// fixme: what to do here?
+    	throw;
+    }
+
+    // Recursively build object tree
+    document->root->invoke_build(document, rroot, false);
 
     /* fixme: Not sure about this, but lets assume ::build updates */
     rroot->setAttribute("inkscape:version", Inkscape::version_string);

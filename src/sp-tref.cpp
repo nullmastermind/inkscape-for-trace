@@ -24,7 +24,7 @@
 
 #include "attributes.h"
 #include "document.h"
-#include "sp-object-repr.h"
+#include "sp-factory.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
 #include "sp-tref.h"
@@ -34,8 +34,6 @@
 
 #include "xml/node.h"
 #include "xml/repr.h"
-
-#include "sp-factory.h"
 
 namespace {
 	SPObject* createTRef() {
