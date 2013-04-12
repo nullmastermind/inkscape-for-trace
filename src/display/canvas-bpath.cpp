@@ -145,7 +145,7 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     bool dostroke = ((cbp->stroke_rgba & 0xff) != 0);
 
     cairo_set_tolerance(buf->ct, 0.5);
-    cairo_new_path(buf->ct);
+    //cairo_new_path(buf->ct);
 
     feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
         /* optimized_stroke = */ !dofill, 1);
@@ -164,7 +164,13 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
         if (cbp->dashes[0] != 0 && cbp->dashes[1] != 0) {
             cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
         }
+        //cairo_t buf2 = cairo_reference(buf->ct);
         cairo_stroke(buf->ct);
+        //cairo_set_source_rgba(buf2,1,1,1,0.2);
+        //cairo_set_line_width(buf2, 3);
+        //cairo_stroke(buf2);
+        
+
     } else {
         cairo_new_path(buf->ct);
     }

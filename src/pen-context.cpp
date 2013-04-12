@@ -1456,34 +1456,26 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void bspline_spiro_color(SPPenContext *const pc)
 {
-    bool remake_green_bpaths = false;
     if(pc->spiro){
-        //If the colour is not defined as trasparent, por example when changing
-        //from drawing to spiro mode or when selecting the pen tool
-        if(pc->green_color != 0x00ff000){
-            //We change the green and red colours to transparent, so this lines are not necessary
-            //to the drawing with spiro
-            pc->red_color = 0xff00000;
-            pc->green_color = 0x00ff000;
-            remake_green_bpaths = true;
-        }
+        pc->red_color = 0xae901f00;
+        pc->green_color = 0xae901f00;
+        pc->blue_color = 0x3dc29bb1;
+    }else if (pc->bspline){
+        pc->red_color = 0xae901fce;
+        pc->green_color = 0xae901fce;
+        pc->blue_color = 0x3dc29bb1;
     }else{
-        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
-        if(pc->green_color != 0x00ff007f){
-            //since we are not im spiro mode, we assign the original colours
-            //to the red and the green curve, removing their transparency 
-            pc->red_color = 0xff00007f;
-            pc->green_color = 0x00ff007f;
-            remake_green_bpaths = true;
-        }
+        pc->red_color = 0xff000098;
+        pc->green_color = 0x00ff0098;
+        pc->blue_color = 0x0000ff98;
+    }
         //we hide the spiro/bspline rests
-        if(!pc->bspline){
-            sp_canvas_item_hide(pc->blue_bpath);
-        }
+    if(!pc->bspline){
+        sp_canvas_item_hide(pc->blue_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
-    if (pc->green_bpaths && remake_green_bpaths) {
+    if (pc->green_bpaths) {
         // remove old piecewise green canvasitems
         while (pc->green_bpaths) {
             sp_canvas_item_destroy(SP_CANVAS_ITEM(pc->green_bpaths->data));
