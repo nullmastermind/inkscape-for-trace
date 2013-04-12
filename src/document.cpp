@@ -349,10 +349,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     document->name = g_strdup(name);
 
     // Create SPRoot element
-    SPObject* rootObj = SPFactory::instance().createObject(*rroot);
+    const std::string typeString = NodeTraits::getTypeString(*rroot);
+    SPObject* rootObj = SPFactory::instance().createObject(typeString);
     document->root = dynamic_cast<SPRoot*>(rootObj);
 
-    if (document->root == nullptr) {
+    if (document->root == 0) {
     	// Node is not a valid root element
     	delete rootObj;
 

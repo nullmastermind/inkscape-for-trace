@@ -79,6 +79,8 @@ static gint sptc_focus_in(GtkWidget *widget, GdkEventFocus *event, SPTextContext
 static gint sptc_focus_out(GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static void sptc_commit(GtkIMContext *imc, gchar *string, SPTextContext *tc);
 
+const std::string SPTextContext::prefsPath = "/tools/text";
+
 G_DEFINE_TYPE(SPTextContext, sp_text_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_text_context_class_init(SPTextContextClass *klass)

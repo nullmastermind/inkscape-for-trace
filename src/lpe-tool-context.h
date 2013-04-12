@@ -62,6 +62,8 @@ public:
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
+
+	static const std::string prefsPath;
 };
 
 struct SPLPEToolContextClass : public SPEventContextClass{};

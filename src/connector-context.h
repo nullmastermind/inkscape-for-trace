@@ -98,6 +98,8 @@ public:
     gchar *shref;
     gchar *ehref;
     SPCanvasItem *c0, *c1, *cl0, *cl1;
+
+	static const std::string prefsPath;
 };
 
 struct SPConnectorContextClass : public SPEventContextClass { };

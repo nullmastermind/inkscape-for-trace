@@ -227,7 +227,8 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
      * call "set" instead of "push".  Can we assume that there is only one
      * context ever?
      */
-    push_event_context (SP_TYPE_SELECT_CONTEXT, "/tools/select", SP_EVENT_CONTEXT_STATIC);
+    //push_event_context (SP_TYPE_SELECT_CONTEXT, "/tools/select", SP_EVENT_CONTEXT_STATIC);
+    set_event_context(SP_TYPE_SELECT_CONTEXT, "/tools/select");
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
 
@@ -351,12 +352,14 @@ void SPDesktop::destroy()
     g_signal_handlers_disconnect_by_func(G_OBJECT (main), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
     g_signal_handlers_disconnect_by_func(G_OBJECT (drawing), (gpointer) G_CALLBACK(_arena_handler), this);
 
-    while (event_context) {
-        SPEventContext *ec = event_context;
-        event_context = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-    }
+//    while (event_context) {
+//        SPEventContext *ec = event_context;
+//        event_context = ec->next;
+//        sp_event_context_finish (ec);
+//        g_object_unref (G_OBJECT (ec));
+//    }
+    sp_event_context_finish(event_context);
+    g_object_unref(G_OBJECT(event_context));
 
     if (_layer_hierarchy) {
         delete _layer_hierarchy;
@@ -688,16 +691,16 @@ void
 SPDesktop::set_event_context (GType type, const gchar *config)
 {
     SPEventContext *ec;
-    while (event_context) {
+    //while (event_context) {
         ec = event_context;
         sp_event_context_deactivate (ec);
         // we have to keep event_context valid during destruction - otherwise writing
         // destructors is next to impossible
-        SPEventContext *next = ec->next;
+      //  SPEventContext *next = ec->next;
         sp_event_context_finish (ec);
         g_object_unref (G_OBJECT (ec));
-        event_context = next;
-    }
+      //  event_context = next;
+    //}
 
     // The event_context will be null. This means that it will be impossible
     // to process any event invoked by the lines below. See for example bug
@@ -705,7 +708,7 @@ SPDesktop::set_event_context (GType type, const gchar *config)
     // context to the node tool. In this bug the line bellow invokes GDK_LEAVE_NOTIFY
     // events which cannot be handled and must be discarded.
     ec = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
-    ec->next = event_context;
+  //  ec->next = event_context;
     event_context = ec;
     // Now the event_context has been set again and we can process all events again
     sp_event_context_activate (ec);
@@ -718,24 +721,24 @@ SPDesktop::set_event_context (GType type, const gchar *config)
 void
 SPDesktop::push_event_context (GType type, const gchar *config, unsigned int key)
 {
-    SPEventContext *ref, *ec;
-
-    if (event_context && event_context->key == key) return;
-    ref = event_context;
-    while (ref && ref->next && ref->next->key != key) ref = ref->next;
-    if (ref && ref->next) {
-        ec = ref->next;
-        ref->next = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-    }
-
-    if (event_context) sp_event_context_deactivate (event_context);
-    ec = sp_event_context_new (type, this, config, key);
-    ec->next = event_context;
-    event_context = ec;
-    sp_event_context_activate (ec);
-    _event_context_changed_signal.emit (this, ec);
+//    SPEventContext *ref, *ec;
+//
+//    if (event_context && event_context->key == key) return;
+//    ref = event_context;
+//    while (ref && ref->next && ref->next->key != key) ref = ref->next;
+//    if (ref && ref->next) {
+//        ec = ref->next;
+//        ref->next = ec->next;
+//        sp_event_context_finish (ec);
+//        g_object_unref (G_OBJECT (ec));
+//    }
+//
+//    if (event_context) sp_event_context_deactivate (event_context);
+//    ec = sp_event_context_new (type, this, config, key);
+//    ec->next = event_context;
+//    event_context = ec;
+//    sp_event_context_activate (ec);
+//    _event_context_changed_signal.emit (this, ec);
 }
 
 /**

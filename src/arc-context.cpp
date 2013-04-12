@@ -60,6 +60,8 @@ static void sp_arc_drag(SPArcContext *ec, Geom::Point pt, guint state);
 static void sp_arc_finish(SPArcContext *ec);
 static void sp_arc_cancel(SPArcContext *ec);
 
+const std::string SPArcContext::prefsPath = "/tools/shapes/arc";
+
 G_DEFINE_TYPE(SPArcContext, sp_arc_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_arc_context_class_init(SPArcContextClass *klass)

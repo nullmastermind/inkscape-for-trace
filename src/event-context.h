@@ -116,7 +116,7 @@ public:
     CEventContext* ceventcontext;
 
     /// Desktop eventcontext stack
-    SPEventContext *next;
+    //SPEventContext *next;
     unsigned key;
     SPDesktop *desktop;
     Inkscape::Preferences::Observer *pref_observer;

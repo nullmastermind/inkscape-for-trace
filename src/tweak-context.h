@@ -82,6 +82,8 @@ public:
     bool do_o;
 
   	sigc::connection style_set_connection;
+
+	static const std::string prefsPath;
 };
 
 struct SPTweakContextClass

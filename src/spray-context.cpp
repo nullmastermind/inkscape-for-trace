@@ -84,6 +84,8 @@ static void sp_spray_context_setup(SPEventContext *ec);
 static void sp_spray_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
 static gint sp_spray_context_root_handler(SPEventContext *ec, GdkEvent *event);
 
+const std::string SPSprayContext::prefsPath = "/tools/spray";
+
 G_DEFINE_TYPE(SPSprayContext, sp_spray_context, SP_TYPE_EVENT_CONTEXT);
 
 /**

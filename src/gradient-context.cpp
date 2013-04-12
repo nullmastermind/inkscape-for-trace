@@ -59,6 +59,8 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
 
 static void sp_gradient_drag(SPGradientContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
+const std::string SPGradientContext::prefsPath = "/tools/gradient";
+
 G_DEFINE_TYPE(SPGradientContext, sp_gradient_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_gradient_context_class_init(SPGradientContextClass *klass)

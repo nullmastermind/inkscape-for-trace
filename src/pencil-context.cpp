@@ -68,6 +68,8 @@ static bool pencil_within_tolerance = false;
 
 static bool in_svg_plane(Geom::Point const &p) { return Geom::LInfty(p) < 1e18; }
 
+const std::string SPPencilContext::prefsPath = "/tools/freehand/pencil";
+
 G_DEFINE_TYPE(SPPencilContext, sp_pencil_context, SP_TYPE_DRAW_CONTEXT);
 
 /**

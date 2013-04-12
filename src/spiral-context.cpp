@@ -57,6 +57,8 @@ static void sp_spiral_drag(SPSpiralContext *sc, Geom::Point const &p, guint stat
 static void sp_spiral_finish(SPSpiralContext *sc);
 static void sp_spiral_cancel(SPSpiralContext *sc);
 
+const std::string SPSpiralContext::prefsPath = "/tools/shapes/spiral";
+
 G_DEFINE_TYPE(SPSpiralContext, sp_spiral_context, SP_TYPE_EVENT_CONTEXT);
 
 static void

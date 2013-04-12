@@ -33,6 +33,8 @@ public:
 	CDropperContext* cdroppercontext;
 
     SPEventContext event_context;
+
+	static const std::string prefsPath;
 };
 
 struct SPDropperContextClass {

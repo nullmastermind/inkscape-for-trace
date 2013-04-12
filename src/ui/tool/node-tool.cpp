@@ -124,6 +124,8 @@ void handleControlUiStyleChange(InkNodeTool *nt);
 
 //} // anonymous namespace
 
+const std::string InkNodeTool::prefsPath = "/tools/nodes";
+
 G_DEFINE_TYPE(InkNodeTool, ink_node_tool, SP_TYPE_EVENT_CONTEXT);
 
 static void

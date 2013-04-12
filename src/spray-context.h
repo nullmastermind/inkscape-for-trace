@@ -93,6 +93,8 @@ public:
     SPCanvasItem *dilate_area;
 
     sigc::connection style_set_connection;
+
+	static const std::string prefsPath;
 };
 
 struct SPSprayContextClass

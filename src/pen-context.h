@@ -62,6 +62,8 @@ public:
     SPCtrlLine *cl1;
     
     unsigned int events_disabled : 1;
+
+	static const std::string prefsPath;
 };
 
 /// The SPPenContext vtable (empty).

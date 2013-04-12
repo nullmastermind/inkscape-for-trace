@@ -171,6 +171,8 @@ static Inkscape::XML::NodeEventVector layer_repr_events = {
     NULL  /* order_changed */
 };
 
+const std::string SPConnectorContext::prefsPath = "/tools/connector";
+
 G_DEFINE_TYPE(SPConnectorContext, sp_connector_context, SP_TYPE_EVENT_CONTEXT);
 
 static void

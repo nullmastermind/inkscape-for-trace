@@ -80,6 +80,8 @@ static void pen_set_to_nearest_horiz_vert(const SPPenContext *const pc, Geom::Po
 
 static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
 
+const std::string SPPenContext::prefsPath = "/tools/freehand/pen";
+
 G_DEFINE_TYPE(SPPenContext, sp_pen_context, SP_TYPE_DRAW_CONTEXT);
 
 /**

@@ -43,6 +43,8 @@ class SPEraserContext : public SPCommonContext {
 public:
 	SPEraserContext();
 	CEraserContext* cerasercontext;
+
+	static const std::string prefsPath;
 };
 
 struct SPEraserContextClass : public SPEventContextClass{};

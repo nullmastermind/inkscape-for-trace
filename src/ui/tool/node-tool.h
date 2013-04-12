@@ -74,6 +74,8 @@ public:
     unsigned single_node_transform_handles : 1;
     unsigned edit_clipping_paths : 1;
     unsigned edit_masks : 1;
+
+	static const std::string prefsPath;
 };
 
 struct InkNodeToolClass {

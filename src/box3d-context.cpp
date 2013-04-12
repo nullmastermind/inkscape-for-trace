@@ -64,6 +64,8 @@ static gint sp_box3d_context_item_handler(SPEventContext *event_context, SPItem 
 static void sp_box3d_drag(Box3DContext &bc, guint state);
 static void sp_box3d_finish(Box3DContext *bc);
 
+const std::string Box3DContext::prefsPath = "/tools/shapes/3dbox";
+
 G_DEFINE_TYPE(Box3DContext, sp_box3d_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_box3d_context_class_init(Box3DContextClass *klass)

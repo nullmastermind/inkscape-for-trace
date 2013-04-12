@@ -59,7 +59,7 @@ static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value,
 #include "sp-factory.h"
 
 namespace {
-	SPGuide* createGuide() {
+	SPObject* createGuide() {
 		return new SPGuide();
 	}
 

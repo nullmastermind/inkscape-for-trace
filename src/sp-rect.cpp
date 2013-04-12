@@ -34,7 +34,7 @@
 #include "sp-factory.h"
 
 namespace {
-	SPRect* createRect() {
+	SPObject* createRect() {
 		return new SPRect();
 	}
 

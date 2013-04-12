@@ -37,6 +37,8 @@ static gint tolerance = 0;
 static bool within_tolerance = false;
 static bool escaped;
 
+const std::string SPZoomContext::prefsPath = "/tools/zoom";
+
 G_DEFINE_TYPE(SPZoomContext, sp_zoom_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_zoom_context_class_init(SPZoomContextClass *klass)

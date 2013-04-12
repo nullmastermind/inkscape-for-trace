@@ -76,6 +76,8 @@ public:
 
     /* Preedit String */
     gchar* preedit_string;
+
+	static const std::string prefsPath;
 };
 
 struct SPTextContextClass {

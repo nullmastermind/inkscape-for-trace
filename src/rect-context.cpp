@@ -62,6 +62,9 @@ static void sp_rect_drag(SPRectContext &rc, Geom::Point const pt, guint state);
 static void sp_rect_finish(SPRectContext *rc);
 static void sp_rect_cancel(SPRectContext *rc);
 
+
+const std::string SPRectContext::prefsPath = "/tools/shapes/rect";
+
 G_DEFINE_TYPE(SPRectContext, sp_rect_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_rect_context_class_init(SPRectContextClass *klass)

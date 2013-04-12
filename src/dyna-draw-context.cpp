@@ -99,6 +99,8 @@ static Geom::Point sp_dyna_draw_get_npoint(SPDynaDrawContext const *ddc, Geom::P
 static Geom::Point sp_dyna_draw_get_vpoint(SPDynaDrawContext const *ddc, Geom::Point n);
 static void draw_temporary_box(SPDynaDrawContext *dc);
 
+const std::string SPDynaDrawContext::prefsPath = "/tools/calligraphic";
+
 G_DEFINE_TYPE(SPDynaDrawContext, sp_dyna_draw_context, SP_TYPE_COMMON_CONTEXT);
 
 static void

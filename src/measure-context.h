@@ -27,6 +27,8 @@ public:
 
 	//SPEventContext event_context;
 	SPCanvasItem *grabbed;
+
+	static const std::string prefsPath;
 };
 
 struct SPMeasureContextClass {

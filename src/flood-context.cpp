@@ -84,6 +84,8 @@ static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem 
 
 static void sp_flood_finish(SPFloodContext *rc);
 
+const std::string SPFloodContext::prefsPath = "/tools/paintbucket";
+
 G_DEFINE_TYPE(SPFloodContext, sp_flood_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_flood_context_class_init(SPFloodContextClass *klass)

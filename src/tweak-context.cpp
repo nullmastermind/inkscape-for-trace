@@ -87,6 +87,8 @@ static void sp_tweak_context_setup(SPEventContext *ec);
 static void sp_tweak_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
 static gint sp_tweak_context_root_handler(SPEventContext *ec, GdkEvent *event);
 
+const std::string SPTweakContext::prefsPath = "/tools/tweak";
+
 G_DEFINE_TYPE(SPTweakContext, sp_tweak_context, SP_TYPE_EVENT_CONTEXT);
 
 static void

@@ -101,6 +101,8 @@ static Geom::Point sp_eraser_get_npoint(SPEraserContext const *erc, Geom::Point 
 static Geom::Point sp_eraser_get_vpoint(SPEraserContext const *erc, Geom::Point n);
 static void draw_temporary_box(SPEraserContext *dc);
 
+const std::string SPEraserContext::prefsPath = "/tools/eraser";
+
 G_DEFINE_TYPE(SPEraserContext, sp_eraser_context, SP_TYPE_COMMON_CONTEXT);
 
 static void

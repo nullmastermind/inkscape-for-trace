@@ -64,6 +64,8 @@ boost::optional<Geom::Point> lastEnd;
 
 std::vector<Inkscape::Display::TemporaryItem*> measure_tmp_items;
 
+const std::string SPMeasureContext::prefsPath = "/tools/measure";
+
 G_DEFINE_TYPE(SPMeasureContext, sp_measure_context, SP_TYPE_EVENT_CONTEXT);
 
 namespace

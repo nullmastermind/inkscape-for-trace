@@ -78,6 +78,8 @@ static SPEventContextClass *parent_class;
 static GdkCursor *cursor_dropper_fill = NULL;
 static GdkCursor *cursor_dropper_stroke = NULL;
 
+const std::string SPDropperContext::prefsPath = "/tools/dropper";
+
 G_DEFINE_TYPE(SPDropperContext, sp_dropper_context, SP_TYPE_EVENT_CONTEXT);
 
 static void

@@ -44,6 +44,8 @@ public:
 
     sigc::connection *selcon;
     sigc::connection *subselcon;
+
+	static const std::string prefsPath;
 };
 
 struct SPGradientContextClass {

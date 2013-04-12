@@ -214,24 +214,24 @@ public:
 
 
 
-#include <stdexcept>
-#include <exception>
-
-void log_exception(std::exception_ptr exception) {
-	try {
-		std::rethrow_exception(exception);
-	} catch (const std::exception& e) {
-		std::cerr << "Caught Exception of type " << std::string(typeid(e).name()) << '\n';
-		std::cerr << "Message: " << std::string(e.what()) << '\n';
-
-		try {
-			std::rethrow_if_nested(e);
-		} catch (...) {
-			std::cerr << "Inner Exception: \n";
-			log_exception(std::current_exception());
-		}
-	}
-}
+//#include <stdexcept>
+//#include <exception>
+//
+//void log_exception(std::exception_ptr exception) {
+//	try {
+//		std::rethrow_exception(exception);
+//	} catch (const std::exception& e) {
+//		std::cerr << "Caught Exception of type " << std::string(typeid(e).name()) << '\n';
+//		std::cerr << "Message: " << std::string(e.what()) << '\n';
+//
+//		try {
+//			std::rethrow_if_nested(e);
+//		} catch (...) {
+//			std::cerr << "Inner Exception: \n";
+//			log_exception(std::current_exception());
+//		}
+//	}
+//}
 
 
 
@@ -628,7 +628,9 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 	SPObject* object = this;
 
 	try {
-		SPObject* ochild = SPFactory::instance().createObject(*child);
+		const std::string typeString = NodeTraits::getTypeString(*child);
+
+		SPObject* ochild = SPFactory::instance().createObject(typeString);
 
 		SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
 		object->attach(ochild, prev);
@@ -636,7 +638,8 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 
 		ochild->invoke_build(object->document, child, object->cloned);
 	} catch (const SPFactory::TypeNotRegistered& e) {
-		log_exception(std::current_exception());
+		//log_exception(std::current_exception());
+		g_warning("TypeNotRegistered exception: %s", e.what());
 	}
 }
 
@@ -693,13 +696,16 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 //    	}
 
     	try {
-    		SPObject* child = SPFactory::instance().createObject(*rchild);
+    		const std::string typeString = NodeTraits::getTypeString(*rchild);
+
+    		SPObject* child = SPFactory::instance().createObject(typeString);
 
     		object->attach(child, object->lastChild());
 			sp_object_unref(child, NULL);
 			child->invoke_build(document, rchild, object->cloned);
     	} catch (const SPFactory::TypeNotRegistered& e) {
-    		log_exception(std::current_exception());
+    		//log_exception(std::current_exception());
+    		g_warning("TypeNotRegistered exception: %s", e.what());
     	}
     }
 }

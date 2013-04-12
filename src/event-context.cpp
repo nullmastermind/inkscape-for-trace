@@ -127,7 +127,7 @@ SPEventContext::SPEventContext() {
 	event_context->hot_x = 0;
 	event_context->yp = 0;
 	event_context->within_tolerance = false;
-	event_context->next = 0;
+	//event_context->next = 0;
 	event_context->tolerance = 0;
 	event_context->key = 0;
 	event_context->item_to_select = 0;
@@ -958,9 +958,9 @@ void sp_event_context_finish(SPEventContext *ec) {
 
     ec->enableSelectionCue(false);
 
-    if (ec->next) {
-        g_warning("Finishing event context with active link\n");
-    }
+//    if (ec->next) {
+//        g_warning("Finishing event context with active link\n");
+//    }
 
 //    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish)
 //        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish(ec);

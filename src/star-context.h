@@ -49,6 +49,8 @@ public:
     sigc::connection sel_changed_connection;
 
     Inkscape::MessageContext *_message_context;
+
+	static const std::string prefsPath;
 };
 
 struct SPStarContextClass {

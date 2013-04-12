@@ -61,6 +61,8 @@ static void sp_star_drag (SPStarContext * sc, Geom::Point p, guint state);
 static void sp_star_finish (SPStarContext * sc);
 static void sp_star_cancel(SPStarContext * sc);
 
+const std::string SPStarContext::prefsPath = "/tools/shapes/star";
+
 G_DEFINE_TYPE(SPStarContext, sp_star_context, SP_TYPE_EVENT_CONTEXT);
 
 static void

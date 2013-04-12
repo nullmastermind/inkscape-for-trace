@@ -42,6 +42,8 @@ public:
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
+
+	static const std::string prefsPath;
 };
 
 /// The SPPencilContext vtable (empty).

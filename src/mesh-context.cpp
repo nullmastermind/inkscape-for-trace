@@ -61,6 +61,8 @@ static gint sp_mesh_context_root_handler(SPEventContext *event_context, GdkEvent
 
 static void sp_mesh_drag(SPMeshContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
+const std::string SPMeshContext::prefsPath = "/tools/mesh";
+
 G_DEFINE_TYPE(SPMeshContext, sp_mesh_context, SP_TYPE_EVENT_CONTEXT);
 
 static void sp_mesh_context_class_init(SPMeshContextClass *klass)

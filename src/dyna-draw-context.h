@@ -58,6 +58,8 @@ public:
     SPCanvasItem *hatch_area;
     bool just_started_drawing;
     bool trace_bg;
+
+	static const std::string prefsPath;
 };
 
 struct SPDynaDrawContextClass : public SPEventContextClass{};

@@ -52,6 +52,8 @@ public:
 	SPCanvasItem *grabbed;
 	Inkscape::SelTrans *_seltrans;
 	Inkscape::SelectionDescriber *_describer;
+
+	static const std::string prefsPath;
 };
 
 struct SPSelectContextClass {
