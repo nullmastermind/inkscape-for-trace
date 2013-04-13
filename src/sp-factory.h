@@ -4,38 +4,66 @@
 #include <map>
 #include <string>
 
-class SPObject;
-
-namespace Inkscape {
-	namespace XML {
-		class Node;
+/**
+ * A simple singleton implementation.
+ */
+template<class T>
+struct Singleton {
+	static T& instance() {
+		static T i;
+		return i;
 	}
-}
+};
 
 /**
- * Factory for creating objects from the SPObject tree.
+ * A Factory for creating objects which can be identified by strings.
  */
-class SPFactory {
+template<class BaseObject>
+class Factory : public Singleton< Factory<BaseObject> > {
 public:
 	class TypeNotRegistered : public std::exception {
 	public:
-		TypeNotRegistered(const std::string& type);
-		const char* what() const throw();
+		TypeNotRegistered(const std::string& typeString) : std::exception(), typeString(typeString) {
+		}
+
+		virtual ~TypeNotRegistered() throw() {
+		}
+
+		const char* what() const throw() {
+			return typeString.c_str();
+		}
 
 	private:
-		const std::string type;
+		const std::string typeString;
 	};
 
-	static SPFactory& instance();
+	typedef BaseObject* CreateFunction();
 
-	typedef SPObject* CreateFunction();
+	bool registerObject(const std::string& id, CreateFunction* createFunction) {
+		return this->objectMap.insert(std::make_pair(id, createFunction)).second;
+	}
 
-	bool registerObject(const std::string& id, CreateFunction* createFunction);
-	SPObject* createObject(const std::string& id) const;
+	BaseObject* createObject(const std::string& id) const {
+		typename std::map<const std::string, CreateFunction*>::const_iterator it = this->objectMap.find(id);
+
+		if (it == this->objectMap.end()) {
+			throw TypeNotRegistered(id);
+		}
+
+		return it->second();
+	}
 
 private:
 	std::map<const std::string, CreateFunction*> objectMap;
 };
+
+
+class SPObject;
+typedef Factory<SPObject> SPFactory;
+
+class SPEventContext;
+typedef Factory<SPEventContext> ToolFactory;
+
 
 
 #include "xml/node.h"
