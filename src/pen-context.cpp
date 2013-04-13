@@ -1,4 +1,4 @@
-/** \file
+        /** \file
  * Pen event context implementation.
  */
 
@@ -1457,17 +1457,17 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 static void bspline_spiro_color(SPPenContext *const pc)
 {
     if(pc->spiro){
-        pc->red_color = 0xae901f00;
-        pc->green_color = 0xae901f00;
-        pc->blue_color = 0x3dc29bb1;
+        pc->red_color = 0xc80000c8;
+        pc->green_color = 0xc80000c8;
+        pc->blue_color = 0x323296c8;
     }else if (pc->bspline){
-        pc->red_color = 0xae901fce;
-        pc->green_color = 0xae901fce;
-        pc->blue_color = 0x3dc29bb1;
+        pc->red_color = 0x963232c8;
+        pc->green_color = 0x963232c8;
+        pc->blue_color = 0x323296c8;
     }else{
-        pc->red_color = 0xff000098;
-        pc->green_color = 0x00ff0098;
-        pc->blue_color = 0x0000ff98;
+        pc->red_color = 0xff0000c8;
+        pc->green_color = 0x00ff00c8;
+        pc->blue_color = 0x0000ffc8;
     }
         //we hide the spiro/bspline rests
     if(!pc->bspline){
