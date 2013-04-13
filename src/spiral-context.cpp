@@ -47,15 +47,24 @@
 using Inkscape::DocumentUndo;
 
 static void sp_spiral_context_dispose(GObject *object);
-static void sp_spiral_context_setup(SPEventContext *ec);
-static void sp_spiral_context_finish(SPEventContext *ec);
-static void sp_spiral_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-
-static gint sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 
 static void sp_spiral_drag(SPSpiralContext *sc, Geom::Point const &p, guint state);
 static void sp_spiral_finish(SPSpiralContext *sc);
 static void sp_spiral_cancel(SPSpiralContext *sc);
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createSpiralContext() {
+		return new SPSpiralContext();
+	}
+
+	bool spiralContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/spiral", createSpiralContext);
+}
+
+const std::string& CSpiralContext::getPrefsPath() {
+	return SPSpiralContext::prefsPath;
+}
 
 const std::string SPSpiralContext::prefsPath = "/tools/shapes/spiral";
 
@@ -85,6 +94,7 @@ SPSpiralContext::SPSpiralContext() : SPEventContext() {
 	spiral_context->cspiralcontext = new CSpiralContext(spiral_context);
 	delete spiral_context->ceventcontext;
 	spiral_context->ceventcontext = spiral_context->cspiralcontext;
+	types.insert(typeid(SPSpiralContext));
 
 	spiral_context->_message_context = 0;
 
@@ -112,11 +122,6 @@ static void
 sp_spiral_context_init(SPSpiralContext *spiral_context)
 {
 	new (spiral_context) SPSpiralContext();
-}
-
-static void sp_spiral_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
 }
 
 void CSpiralContext::finish() {
@@ -173,12 +178,6 @@ static void sp_spiral_context_selection_changed(Inkscape::Selection *selection, 
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void
-sp_spiral_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
 void CSpiralContext::setup() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -214,12 +213,6 @@ void CSpiralContext::setup() {
     sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
-static void
-sp_spiral_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
 void CSpiralContext::set(Inkscape::Preferences::Entry* val) {
 	SPEventContext* ec = this->speventcontext;
 
@@ -233,12 +226,6 @@ void CSpiralContext::set(Inkscape::Preferences::Entry* val) {
     } else if (name == "t0") {
         sc->t0 = CLAMP(val->getDouble(), 0.0, 0.999);
     }
-}
-
-static gint
-sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
 }
 
 gint CSpiralContext::root_handler(GdkEvent* event) {

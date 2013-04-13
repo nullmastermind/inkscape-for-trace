@@ -84,6 +84,20 @@ static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem 
 
 static void sp_flood_finish(SPFloodContext *rc);
 
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createPaintbucketContext() {
+		return new SPFloodContext();
+	}
+
+	bool paintbucketContextRegistered = ToolFactory::instance().registerObject("/tools/paintbucket", createPaintbucketContext);
+}
+
+const std::string& CFloodContext::getPrefsPath() {
+	return SPFloodContext::prefsPath;
+}
+
 const std::string SPFloodContext::prefsPath = "/tools/paintbucket";
 
 G_DEFINE_TYPE(SPFloodContext, sp_flood_context, SP_TYPE_EVENT_CONTEXT);
@@ -110,6 +124,7 @@ SPFloodContext::SPFloodContext() : SPEventContext() {
 	flood_context->cfloodcontext = new CFloodContext(flood_context);
 	delete flood_context->ceventcontext;
 	flood_context->ceventcontext = flood_context->cfloodcontext;
+	types.insert(typeid(SPFloodContext));
 
 	flood_context->_message_context = 0;
 

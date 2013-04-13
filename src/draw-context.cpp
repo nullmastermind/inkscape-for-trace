@@ -99,9 +99,11 @@ CDrawContext::CDrawContext(SPDrawContext* drawcontext) : CEventContext(drawconte
 SPDrawContext::SPDrawContext() : SPEventContext() {
 	SPDrawContext* dc = this;
 
-	dc->cdrawcontext = new CDrawContext(dc);
-	delete dc->ceventcontext;
-	dc->ceventcontext = dc->cdrawcontext;
+	//dc->cdrawcontext = new CDrawContext(dc);
+	//delete dc->ceventcontext;
+	//dc->ceventcontext = dc->cdrawcontext;
+	dc->cdrawcontext = 0;
+	types.insert(typeid(SPDrawContext));
 
 	dc->selection = 0;
 	dc->grab = 0;

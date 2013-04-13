@@ -24,10 +24,12 @@ G_BEGIN_DECLS
 /* Freehand context */
 
 #define SP_TYPE_DRAW_CONTEXT (sp_draw_context_get_type())
-#define SP_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_DRAW_CONTEXT, SPDrawContext))
+//#define SP_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_DRAW_CONTEXT, SPDrawContext))
 #define SP_DRAW_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_DRAW_CONTEXT, SPDrawContextClass))
-#define SP_IS_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_DRAW_CONTEXT))
+//#define SP_IS_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_DRAW_CONTEXT))
 #define SP_IS_DRAW_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_DRAW_CONTEXT))
+#define SP_DRAW_CONTEXT(obj) ((SPDrawContext*)obj)
+#define SP_IS_DRAW_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPDrawContext)))
 
 struct SPDrawAnchor;
 namespace Inkscape

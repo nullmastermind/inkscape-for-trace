@@ -15,12 +15,8 @@ struct Singleton {
 	}
 };
 
-/**
- * A Factory for creating objects which can be identified by strings.
- */
-template<class BaseObject>
-class Factory : public Singleton< Factory<BaseObject> > {
-public:
+
+namespace FactoryExceptions {
 	class TypeNotRegistered : public std::exception {
 	public:
 		TypeNotRegistered(const std::string& typeString) : std::exception(), typeString(typeString) {
@@ -36,18 +32,25 @@ public:
 	private:
 		const std::string typeString;
 	};
+}
 
+/**
+ * A Factory for creating objects which can be identified by strings.
+ */
+template<class BaseObject>
+class Factory {
+public:
 	typedef BaseObject* CreateFunction();
 
 	bool registerObject(const std::string& id, CreateFunction* createFunction) {
 		return this->objectMap.insert(std::make_pair(id, createFunction)).second;
 	}
 
-	BaseObject* createObject(const std::string& id) const {
+	BaseObject* createObject(const std::string& id) const throw(FactoryExceptions::TypeNotRegistered) {
 		typename std::map<const std::string, CreateFunction*>::const_iterator it = this->objectMap.find(id);
 
 		if (it == this->objectMap.end()) {
-			throw TypeNotRegistered(id);
+			throw FactoryExceptions::TypeNotRegistered(id);
 		}
 
 		return it->second();
@@ -59,10 +62,10 @@ private:
 
 
 class SPObject;
-typedef Factory<SPObject> SPFactory;
+typedef Singleton< Factory<SPObject> > SPFactory;
 
 class SPEventContext;
-typedef Factory<SPEventContext> ToolFactory;
+typedef Singleton< Factory<SPEventContext> > ToolFactory;
 
 
 

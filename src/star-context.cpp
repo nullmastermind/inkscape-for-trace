@@ -52,14 +52,23 @@ using Inkscape::DocumentUndo;
 
 static void sp_star_context_dispose (GObject *object);
 
-static void sp_star_context_setup (SPEventContext *ec);
-static void sp_star_context_finish(SPEventContext *ec);
-static void sp_star_context_set (SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static gint sp_star_context_root_handler (SPEventContext *ec, GdkEvent *event);
-
 static void sp_star_drag (SPStarContext * sc, Geom::Point p, guint state);
 static void sp_star_finish (SPStarContext * sc);
 static void sp_star_cancel(SPStarContext * sc);
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createStarContext() {
+		return new SPStarContext();
+	}
+
+	bool starContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/star", createStarContext);
+}
+
+const std::string& CStarContext::getPrefsPath() {
+	return SPStarContext::prefsPath;
+}
 
 const std::string SPStarContext::prefsPath = "/tools/shapes/star";
 
@@ -89,6 +98,7 @@ SPStarContext::SPStarContext() : SPEventContext() {
 	star_context->cstarcontext = new CStarContext(star_context);
 	delete star_context->ceventcontext;
 	star_context->ceventcontext = star_context->cstarcontext;
+	types.insert(typeid(SPStarContext));
 
 	star_context->randomized = 0;
 	star_context->_message_context = 0;
@@ -119,11 +129,6 @@ static void
 sp_star_context_init (SPStarContext * star_context)
 {
 	new (star_context) SPStarContext();
-}
-
-static void sp_star_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
 }
 
 void CStarContext::finish() {
@@ -185,12 +190,6 @@ static void sp_star_context_selection_changed (Inkscape::Selection * selection, 
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void
-sp_star_context_setup (SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
 void CStarContext::setup() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -229,12 +228,6 @@ void CStarContext::setup() {
 	sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
-static void
-sp_star_context_set (SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
 void CStarContext::set(Inkscape::Preferences::Entry* val) {
 	SPEventContext* ec = this->speventcontext;
 
@@ -252,11 +245,6 @@ void CStarContext::set(Inkscape::Preferences::Entry* val) {
     } else if (path == "randomized") {
         sc->randomized = val->getDouble();
     }
-}
-
-static gint sp_star_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
 }
 
 gint CStarContext::root_handler(GdkEvent* event) {

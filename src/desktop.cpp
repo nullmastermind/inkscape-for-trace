@@ -690,15 +690,15 @@ SPDesktop::change_document (SPDocument *theDocument)
 void
 SPDesktop::set_event_context (GType type, const gchar *config)
 {
-    SPEventContext *ec;
+    //SPEventContext *ec;
     //while (event_context) {
-        ec = event_context;
-        sp_event_context_deactivate (ec);
+        //ec = event_context;
+        sp_event_context_deactivate (event_context);
         // we have to keep event_context valid during destruction - otherwise writing
         // destructors is next to impossible
       //  SPEventContext *next = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
+        sp_event_context_finish (event_context);
+        g_object_unref (G_OBJECT (event_context));
       //  event_context = next;
     //}
 
@@ -707,20 +707,20 @@ SPDesktop::set_event_context (GType type, const gchar *config)
     // LP #622350. Cutting and undoing again in the node tool resets the event
     // context to the node tool. In this bug the line bellow invokes GDK_LEAVE_NOTIFY
     // events which cannot be handled and must be discarded.
-    ec = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
+    event_context = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
   //  ec->next = event_context;
-    event_context = ec;
+    //event_context = ec;
     // Now the event_context has been set again and we can process all events again
-    sp_event_context_activate (ec);
-    _event_context_changed_signal.emit (this, ec);
+    sp_event_context_activate (event_context);
+    _event_context_changed_signal.emit (this, event_context);
 }
 
 /**
  * Push event context onto desktop's context stack.
  */
-void
-SPDesktop::push_event_context (GType type, const gchar *config, unsigned int key)
-{
+//void
+//SPDesktop::push_event_context (GType type, const gchar *config, unsigned int key)
+//{
 //    SPEventContext *ref, *ec;
 //
 //    if (event_context && event_context->key == key) return;
@@ -739,7 +739,7 @@ SPDesktop::push_event_context (GType type, const gchar *config, unsigned int key
 //    event_context = ec;
 //    sp_event_context_activate (ec);
 //    _event_context_changed_signal.emit (this, ec);
-}
+//}
 
 /**
  * Sets the coordinate status to a given point

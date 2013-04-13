@@ -59,6 +59,21 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
 
 static void sp_gradient_drag(SPGradientContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createGradientContext() {
+		return new SPGradientContext();
+	}
+
+	bool gradientContextRegistered = ToolFactory::instance().registerObject("/tools/gradient", createGradientContext);
+}
+
+const std::string& CGradientContext::getPrefsPath() {
+	return SPGradientContext::prefsPath;
+}
+
 const std::string SPGradientContext::prefsPath = "/tools/gradient";
 
 G_DEFINE_TYPE(SPGradientContext, sp_gradient_context, SP_TYPE_EVENT_CONTEXT);
@@ -84,6 +99,7 @@ SPGradientContext::SPGradientContext() : SPEventContext() {
 	gr_context->cgradientcontext = new CGradientContext(gr_context);
 	delete gr_context->ceventcontext;
 	gr_context->ceventcontext = gr_context->cgradientcontext;
+	types.insert(typeid(SPGradientContext));
 
 	gr_context->node_added = false;
 	gr_context->subselcon = 0;

@@ -22,10 +22,13 @@
 #include "splivarot.h"
 
 #define SP_TYPE_DYNA_DRAW_CONTEXT (sp_dyna_draw_context_get_type())
-#define SP_DYNA_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContext))
+//#define SP_DYNA_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContext))
 #define SP_DYNA_DRAW_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContextClass))
-#define SP_IS_DYNA_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_DYNA_DRAW_CONTEXT))
+//#define SP_IS_DYNA_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_DYNA_DRAW_CONTEXT))
 #define SP_IS_DYNA_DRAW_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_DYNA_DRAW_CONTEXT))
+#define SP_DYNA_DRAW_CONTEXT(obj) ((SPDynaDrawContext*)obj)
+#define SP_IS_DYNA_DRAW_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPDynaDrawContext)))
+
 
 #define DDC_MIN_PRESSURE      0.0
 #define DDC_MAX_PRESSURE      1.0
@@ -71,6 +74,8 @@ public:
 	virtual void setup();
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
 
 private:
 	SPDynaDrawContext* spdynadrawcontext;

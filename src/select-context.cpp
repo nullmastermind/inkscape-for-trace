@@ -69,6 +69,21 @@ static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
 static bool within_tolerance = false;
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createSelectContext() {
+		return new SPSelectContext();
+	}
+
+	bool selectContextRegistered = ToolFactory::instance().registerObject("/tools/select", createSelectContext);
+}
+
+const std::string& CSelectContext::getPrefsPath() {
+	return SPSelectContext::prefsPath;
+}
+
 const std::string SPSelectContext::prefsPath = "/tools/select";
 
 G_DEFINE_TYPE(SPSelectContext, sp_select_context, SP_TYPE_EVENT_CONTEXT);
@@ -97,6 +112,7 @@ SPSelectContext::SPSelectContext() : SPEventContext() {
 	sc->cselectcontext = new CSelectContext(sc);
 	delete sc->ceventcontext;
 	sc->ceventcontext = sc->cselectcontext;
+	types.insert(typeid(SPSelectContext));
 
 	sc->grabbed = 0;
 	sc->item = 0;

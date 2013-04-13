@@ -64,6 +64,21 @@ static gint sp_box3d_context_item_handler(SPEventContext *event_context, SPItem 
 static void sp_box3d_drag(Box3DContext &bc, guint state);
 static void sp_box3d_finish(Box3DContext *bc);
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createBox3dContext() {
+		return new Box3DContext();
+	}
+
+	bool box3dContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/3dbox", createBox3dContext);
+}
+
+const std::string& CBox3DContext::getPrefsPath() {
+	return Box3DContext::prefsPath;
+}
+
 const std::string Box3DContext::prefsPath = "/tools/shapes/3dbox";
 
 G_DEFINE_TYPE(Box3DContext, sp_box3d_context, SP_TYPE_EVENT_CONTEXT);
@@ -91,6 +106,7 @@ Box3DContext::Box3DContext() : SPEventContext() {
 	box3d_context->cbox3dcontext = new CBox3DContext(box3d_context);
 	delete box3d_context->ceventcontext;
 	box3d_context->ceventcontext = box3d_context->cbox3dcontext;
+	types.insert(typeid(Box3DContext));
 
 	box3d_context->_message_context = 0;
 

@@ -171,6 +171,21 @@ static Inkscape::XML::NodeEventVector layer_repr_events = {
     NULL  /* order_changed */
 };
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createConnectorContext() {
+		return new SPConnectorContext();
+	}
+
+	bool connectorContextRegistered = ToolFactory::instance().registerObject("/tools/connector", createConnectorContext);
+}
+
+const std::string& CConnectorContext::getPrefsPath() {
+	return SPConnectorContext::prefsPath;
+}
+
 const std::string SPConnectorContext::prefsPath = "/tools/connector";
 
 G_DEFINE_TYPE(SPConnectorContext, sp_connector_context, SP_TYPE_EVENT_CONTEXT);
@@ -200,6 +215,7 @@ SPConnectorContext::SPConnectorContext() : SPEventContext() {
 	cc->cconnectorcontext = new CConnectorContext(cc);
 	delete cc->ceventcontext;
 	cc->ceventcontext = cc->cconnectorcontext;
+	types.insert(typeid(SPConnectorContext));
 
 	cc->red_curve = 0;
 	cc->isOrthogonal = false;

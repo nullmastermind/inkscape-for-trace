@@ -21,10 +21,12 @@
 #include <glibmm/i18n.h>
 
 #define SP_TYPE_CONNECTOR_CONTEXT (sp_connector_context_get_type())
-#define SP_CONNECTOR_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_CONNECTOR_CONTEXT, SPConnectorContext))
+//#define SP_CONNECTOR_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_CONNECTOR_CONTEXT, SPConnectorContext))
 #define SP_CONNECTOR_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_CONNECTOR_CONTEXT, SPConnectorContextClass))
-#define SP_IS_CONNECTOR_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_CONNECTOR_CONTEXT))
+//#define SP_IS_CONNECTOR_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_CONNECTOR_CONTEXT))
 #define SP_IS_CONNECTOR_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_CONNECTOR_CONTEXT))
+#define SP_CONNECTOR_CONTEXT(obj) ((SPConnectorContext*)obj)
+#define SP_IS_CONNECTOR_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPConnectorContext)))
 
 struct SPKnot;
 class SPCurve;
@@ -113,6 +115,8 @@ public:
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
 
 private:
 	SPConnectorContext* spconnectorcontext;

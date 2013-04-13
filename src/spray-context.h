@@ -22,10 +22,12 @@
 #include "event-context.h"
 
 #define SP_TYPE_SPRAY_CONTEXT (sp_spray_context_get_type())
-#define SP_SPRAY_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_SPRAY_CONTEXT, SPSprayContext))
+//#define SP_SPRAY_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_SPRAY_CONTEXT, SPSprayContext))
 #define SP_SPRAY_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_SPRAY_CONTEXT, SPSprayContextClass))
-#define SP_IS_SPRAY_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_SPRAY_CONTEXT))
+//#define SP_IS_SPRAY_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_SPRAY_CONTEXT))
 #define SP_IS_SPRAY_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_SPRAY_CONTEXT))
+#define SP_SPRAY_CONTEXT(obj) ((SPSprayContext*)obj)
+#define SP_IS_SPRAY_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPSprayContext)))
 
 namespace Inkscape {
   namespace UI {
@@ -110,6 +112,7 @@ public:
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
+	virtual const std::string& getPrefsPath();
 private:
 	SPSprayContext* spspraycontext;
 };

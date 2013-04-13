@@ -17,8 +17,11 @@
 G_BEGIN_DECLS
 
 #define SP_TYPE_DROPPER_CONTEXT (sp_dropper_context_get_type ())
-#define SP_DROPPER_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_DROPPER_CONTEXT, SPDropperContext))
-#define SP_IS_DROPPER_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_DROPPER_CONTEXT))
+//#define SP_DROPPER_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_DROPPER_CONTEXT, SPDropperContext))
+//#define SP_IS_DROPPER_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_DROPPER_CONTEXT))
+#define SP_DROPPER_CONTEXT(obj) ((SPDropperContext*)obj)
+#define SP_IS_DROPPER_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPDropperContext)))
+
 
 enum {
       SP_DROPPER_PICK_VISIBLE,
@@ -48,6 +51,8 @@ public:
 	virtual void setup();
 	virtual void finish();
 	virtual gint root_handler(GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
 
 private:
 	SPDropperContext* spdroppercontext;

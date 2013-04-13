@@ -59,11 +59,6 @@ using Inkscape::DocumentUndo;
 
 static void sp_text_context_dispose(GObject *obj);
 
-static void sp_text_context_setup(SPEventContext *ec);
-static void sp_text_context_finish(SPEventContext *ec);
-static gint sp_text_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_text_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static void sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext *tc);
 static void sp_text_context_selection_modified(Inkscape::Selection *selection, guint flags, SPTextContext *tc);
 static bool sp_text_context_style_set(SPCSSAttr const *css, SPTextContext *tc);
@@ -78,6 +73,21 @@ static void sp_text_context_forget_text(SPTextContext *tc);
 static gint sptc_focus_in(GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static gint sptc_focus_out(GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static void sptc_commit(GtkIMContext *imc, gchar *string, SPTextContext *tc);
+
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createTextContext() {
+		return new SPTextContext();
+	}
+
+	bool textContextRegistered = ToolFactory::instance().registerObject("/tools/text", createTextContext);
+}
+
+const std::string& CTextContext::getPrefsPath() {
+	return SPTextContext::prefsPath;
+}
 
 const std::string SPTextContext::prefsPath = "/tools/text";
 
@@ -106,6 +116,7 @@ SPTextContext::SPTextContext() : SPEventContext() {
 	tc->ctextcontext = new CTextContext(tc);
 	delete tc->ceventcontext;
 	tc->ceventcontext = tc->ctextcontext;
+	types.insert(typeid(SPTextContext));
 
 	tc->preedit_string = 0;
 	tc->unipos = 0;
@@ -178,11 +189,6 @@ static void sp_text_context_dispose(GObject *obj)
     }
 
     Inkscape::Rubberband::get(ec->desktop)->stop();
-}
-
-static void sp_text_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
 }
 
 void CTextContext::setup() {
@@ -273,11 +279,6 @@ void CTextContext::setup() {
     }
 }
 
-static void sp_text_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
 void CTextContext::finish() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -327,11 +328,6 @@ void CTextContext::finish() {
         sp_canvas_item_destroy(*it);
     }
     tc->text_selection_quads.clear();
-}
-
-static gint sp_text_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
 }
 
 gint CTextContext::item_handler(SPItem* item, GdkEvent* event) {
@@ -399,7 +395,7 @@ gint CTextContext::item_handler(SPItem* item, GdkEvent* event) {
             }
             break;
         case GDK_MOTION_NOTIFY:
-            if (event->motion.state & GDK_BUTTON1_MASK && tc->dragging && !event_context->space_panning) {
+            if ((event->motion.state & GDK_BUTTON1_MASK) && tc->dragging && !event_context->space_panning) {
                 Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
                 if (!layout) break;
                 // find out click point in document coordinates
@@ -592,11 +588,6 @@ static void show_curr_uni_char(SPTextContext *const tc)
     }
 }
 
-static gint sp_text_context_root_handler(SPEventContext *const event_context, GdkEvent *const event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
 gint CTextContext::root_handler(GdkEvent* event) {
 	SPEventContext* event_context = this->speventcontext;
 
@@ -655,7 +646,7 @@ gint CTextContext::root_handler(GdkEvent* event) {
                 desktop->event_context->defaultMessageContext()->clear();
             }
 
-            if (tc->creating && event->motion.state & GDK_BUTTON1_MASK && !event_context->space_panning) {
+            if (tc->creating && (event->motion.state & GDK_BUTTON1_MASK) && !event_context->space_panning) {
                 if ( event_context->within_tolerance
                      && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
                      && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {

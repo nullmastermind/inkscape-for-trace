@@ -83,9 +83,20 @@ using Inkscape::DocumentUndo;
 
 static void sp_tweak_context_dispose(GObject *object);
 
-static void sp_tweak_context_setup(SPEventContext *ec);
-static void sp_tweak_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static gint sp_tweak_context_root_handler(SPEventContext *ec, GdkEvent *event);
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createTweakContext() {
+		return new SPTweakContext();
+	}
+
+	bool tweakContextRegistered = ToolFactory::instance().registerObject("/tools/tweak", createTweakContext);
+}
+
+const std::string& CTweakContext::getPrefsPath() {
+	return SPTweakContext::prefsPath;
+}
 
 const std::string SPTweakContext::prefsPath = "/tools/tweak";
 
@@ -114,6 +125,7 @@ SPTweakContext::SPTweakContext() : SPEventContext() {
 	tc->ctweakcontext = new CTweakContext(tc);
 	delete tc->ceventcontext;
 	tc->ceventcontext = tc->ctweakcontext;
+	types.insert(typeid(SPTweakContext));
 
 	tc->_message_context = 0;
 	tc->mode = 0;
@@ -285,12 +297,6 @@ sp_tweak_context_style_set(SPCSSAttr const *css, SPTweakContext *tc)
     return false;
 }
 
-static void
-sp_tweak_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
 void CTweakContext::setup() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -343,12 +349,6 @@ void CTweakContext::setup() {
     if (prefs->getBool("/tools/tweak/gradientdrag")) {
         ec->enableGrDrag();
     }
-}
-
-static void
-sp_tweak_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
 }
 
 void CTweakContext::set(Inkscape::Preferences::Entry* val) {
@@ -1184,13 +1184,6 @@ sp_tweak_switch_mode_temporarily (SPTweakContext *tc, gint mode, bool with_shift
    // changing prefs changed tc->mode, restore back :)
    tc->mode = mode;
    sp_tweak_update_cursor (tc, with_shift);
-}
-
-gint
-sp_tweak_context_root_handler(SPEventContext *event_context,
-                                  GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
 }
 
 gint CTweakContext::root_handler(GdkEvent* event) {

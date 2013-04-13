@@ -35,9 +35,12 @@ namespace Inkscape {
 
 
 #define SP_TYPE_EVENT_CONTEXT (sp_event_context_get_type())
-#define SP_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_EVENT_CONTEXT, SPEventContext))
+//#define SP_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_EVENT_CONTEXT, SPEventContext))
 #define SP_EVENT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_EVENT_CONTEXT, SPEventContextClass))
-#define SP_IS_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_EVENT_CONTEXT))
+//#define SP_IS_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_EVENT_CONTEXT))
+#define SP_EVENT_CONTEXT(obj) ((SPEventContext*)obj)
+#define SP_IS_EVENT_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPEventContext)))
+
 
 GType sp_event_context_get_type();
 
@@ -92,6 +95,8 @@ void sp_event_context_snap_delay_handler(SPEventContext *ec, gpointer const dse_
 
 
 class CEventContext;
+#include <set>
+#include "type-info.h"
 
 /**
  * Base class for Event processors.
@@ -114,6 +119,7 @@ public:
 
     SPEventContext();
     CEventContext* ceventcontext;
+    std::set<TypeInfo> types;
 
     /// Desktop eventcontext stack
     //SPEventContext *next;
@@ -178,6 +184,7 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
+	virtual const std::string& getPrefsPath() = 0;
 protected:
 	SPEventContext* speventcontext;
 };

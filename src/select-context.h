@@ -16,10 +16,12 @@
 #include <gtk/gtk.h>
 
 #define SP_TYPE_SELECT_CONTEXT            (sp_select_context_get_type ())
-#define SP_SELECT_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SELECT_CONTEXT, SPSelectContext))
+//#define SP_SELECT_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SELECT_CONTEXT, SPSelectContext))
 #define SP_SELECT_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SELECT_CONTEXT, SPSelectContextClass))
-#define SP_IS_SELECT_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SELECT_CONTEXT))
+//#define SP_IS_SELECT_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SELECT_CONTEXT))
 #define SP_IS_SELECT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SELECT_CONTEXT))
+#define SP_SELECT_CONTEXT(obj) ((SPSelectContext*)obj)
+#define SP_IS_SELECT_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPSelectContext)))
 
 struct SPCanvasItem;
 
@@ -69,6 +71,7 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
+	virtual const std::string& getPrefsPath();
 private:
 	SPSelectContext* spselectcontext;
 };

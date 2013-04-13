@@ -64,6 +64,21 @@ SubtoolEntry lpesubtools[] = {
     {Inkscape::LivePathEffect::MIRROR_SYMMETRY, "draw-geometry-mirror"}
 };
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createLPEToolContext() {
+		return new SPLPEToolContext();
+	}
+
+	bool lpetoolContextRegistered = ToolFactory::instance().registerObject("/tools/lpetool", createLPEToolContext);
+}
+
+const std::string& CLPEToolContext::getPrefsPath() {
+	return SPLPEToolContext::prefsPath;
+}
+
 const std::string SPLPEToolContext::prefsPath = "/tools/lpetool";
 
 G_DEFINE_TYPE(SPLPEToolContext, sp_lpetool_context, SP_TYPE_PEN_CONTEXT);
@@ -94,6 +109,7 @@ SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
 	lc->cpencontext = lc->clpetoolcontext;
 	lc->cdrawcontext = lc->clpetoolcontext;
 	lc->ceventcontext = lc->clpetoolcontext;
+	types.insert(typeid(SPLPEToolContext));
 
 	lc->mode = Inkscape::LivePathEffect::BEND_PATH;
 	lc->shape_editor = 0;

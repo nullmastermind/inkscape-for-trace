@@ -99,6 +99,22 @@ static Geom::Point sp_dyna_draw_get_npoint(SPDynaDrawContext const *ddc, Geom::P
 static Geom::Point sp_dyna_draw_get_vpoint(SPDynaDrawContext const *ddc, Geom::Point n);
 static void draw_temporary_box(SPDynaDrawContext *dc);
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createCalligraphicContext() {
+		return new SPDynaDrawContext();
+	}
+
+	bool calligraphicContextRegistered = ToolFactory::instance().registerObject("/tools/calligraphic", createCalligraphicContext);
+}
+
+const std::string& CDynaDrawContext::getPrefsPath() {
+	return SPDynaDrawContext::prefsPath;
+}
+
+
 const std::string SPDynaDrawContext::prefsPath = "/tools/calligraphic";
 
 G_DEFINE_TYPE(SPDynaDrawContext, sp_dyna_draw_context, SP_TYPE_COMMON_CONTEXT);
@@ -127,6 +143,7 @@ SPDynaDrawContext::SPDynaDrawContext() : SPCommonContext() {
 	delete ddc->ccommoncontext;
 	ddc->ccommoncontext = ddc->cdynadrawcontext;
 	ddc->ceventcontext = ddc->cdynadrawcontext;
+	types.insert(typeid(SPDynaDrawContext));
 
     ddc->cursor_shape = cursor_calligraphy_xpm;
     ddc->hot_x = 4;

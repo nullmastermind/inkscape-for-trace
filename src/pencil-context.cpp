@@ -68,6 +68,20 @@ static bool pencil_within_tolerance = false;
 
 static bool in_svg_plane(Geom::Point const &p) { return Geom::LInfty(p) < 1e18; }
 
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createPencilContext() {
+		return new SPPencilContext();
+	}
+
+	bool pencilContextRegistered = ToolFactory::instance().registerObject("/tools/freehand/pencil", createPencilContext);
+}
+
+const std::string& CPencilContext::getPrefsPath() {
+	return SPPencilContext::prefsPath;
+}
+
 const std::string SPPencilContext::prefsPath = "/tools/freehand/pencil";
 
 G_DEFINE_TYPE(SPPencilContext, sp_pencil_context, SP_TYPE_DRAW_CONTEXT);
@@ -101,6 +115,7 @@ SPPencilContext::SPPencilContext() : SPDrawContext() {
 	delete pc->cdrawcontext;
 	pc->cdrawcontext = pc->cpencilcontext;
 	pc->ceventcontext = pc->cpencilcontext;
+	types.insert(typeid(SPPencilContext));
 
 	pc->is_drawing = false;
 

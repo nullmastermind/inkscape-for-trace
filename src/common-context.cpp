@@ -47,9 +47,11 @@ CCommonContext::CCommonContext(SPCommonContext* commoncontext) : CEventContext(c
 SPCommonContext::SPCommonContext() : SPEventContext() {
 	SPCommonContext* ctx = this;
 
-	ctx->ccommoncontext = new CCommonContext(ctx);
-	delete ctx->ceventcontext;
-	ctx->ceventcontext = ctx->ccommoncontext;
+	//ctx->ccommoncontext = new CCommonContext(ctx);
+	//delete ctx->ceventcontext;
+	//ctx->ceventcontext = ctx->ccommoncontext;
+	ctx->ccommoncontext = 0;
+	types.insert(typeid(SPCommonContext));
 
 	ctx->_message_context = 0;
 	ctx->tremor = 0;

@@ -56,12 +56,6 @@
 
 static void sp_event_context_dispose(GObject *object);
 
-static void sp_event_context_private_setup(SPEventContext *ec);
-static gint sp_event_context_private_root_handler(
-        SPEventContext *event_context, GdkEvent *event);
-static gint sp_event_context_private_item_handler(
-        SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static void set_event_location(SPDesktop * desktop, GdkEvent * event);
 
 // globals for temporary switching to selector by space
@@ -118,7 +112,10 @@ void CEventContext::finish() {
 SPEventContext::SPEventContext() {
 	SPEventContext* event_context = this;
 
-	event_context->ceventcontext = new CEventContext(event_context);
+	event_context->ceventcontext = 0;
+	//event_context->ceventcontext = new CEventContext(event_context);
+	new (&types) std::set<TypeInfo>();
+	types.insert(typeid(SPEventContext));
 
 	event_context->hot_y = 0;
 	event_context->xp = 0;

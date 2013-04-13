@@ -78,6 +78,20 @@ static SPEventContextClass *parent_class;
 static GdkCursor *cursor_dropper_fill = NULL;
 static GdkCursor *cursor_dropper_stroke = NULL;
 
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createDropperContext() {
+		return new SPDropperContext();
+	}
+
+	bool dropperContextRegistered = ToolFactory::instance().registerObject("/tools/dropper", createDropperContext);
+}
+
+const std::string& CDropperContext::getPrefsPath() {
+	return SPDropperContext::prefsPath;
+}
+
 const std::string SPDropperContext::prefsPath = "/tools/dropper";
 
 G_DEFINE_TYPE(SPDropperContext, sp_dropper_context, SP_TYPE_EVENT_CONTEXT);
@@ -107,6 +121,7 @@ SPDropperContext::SPDropperContext() : SPEventContext() {
 	dc->cdroppercontext = new CDropperContext(dc);
 	delete dc->ceventcontext;
 	dc->ceventcontext = dc->cdroppercontext;
+	types.insert(typeid(SPDropperContext));
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(dc);
     event_context->cursor_shape = cursor_dropper_f_xpm;

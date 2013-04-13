@@ -64,6 +64,21 @@ boost::optional<Geom::Point> lastEnd;
 
 std::vector<Inkscape::Display::TemporaryItem*> measure_tmp_items;
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createMeasureContext() {
+		return new SPMeasureContext();
+	}
+
+	bool measureContextRegistered = ToolFactory::instance().registerObject("/tools/measure", createMeasureContext);
+}
+
+const std::string& CMeasureContext::getPrefsPath() {
+	return SPMeasureContext::prefsPath;
+}
+
 const std::string SPMeasureContext::prefsPath = "/tools/measure";
 
 G_DEFINE_TYPE(SPMeasureContext, sp_measure_context, SP_TYPE_EVENT_CONTEXT);
@@ -254,6 +269,7 @@ SPMeasureContext::SPMeasureContext() : SPEventContext() {
 	measure_context->cmeasurecontext = new CMeasureContext(measure_context);
 	delete measure_context->ceventcontext;
 	measure_context->ceventcontext = measure_context->cmeasurecontext;
+	types.insert(typeid(SPMeasureContext));
 
 	measure_context->grabbed = 0;
 

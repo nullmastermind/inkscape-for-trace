@@ -16,10 +16,12 @@
 #include <2geom/point.h>
 
 #define SP_TYPE_TWEAK_CONTEXT (sp_tweak_context_get_type())
-#define SP_TWEAK_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_TWEAK_CONTEXT, SPTweakContext))
+//#define SP_TWEAK_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_TWEAK_CONTEXT, SPTweakContext))
 #define SP_TWEAK_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_TWEAK_CONTEXT, SPTweakContextClass))
-#define SP_IS_TWEAK_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_TWEAK_CONTEXT))
+//#define SP_IS_TWEAK_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_TWEAK_CONTEXT))
 #define SP_IS_TWEAK_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_TWEAK_CONTEXT))
+#define SP_TWEAK_CONTEXT(obj) ((SPTweakContext*)obj)
+#define SP_IS_TWEAK_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPTweakContext)))
 
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
@@ -99,6 +101,7 @@ public:
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
+	virtual const std::string& getPrefsPath();
 private:
 	SPTweakContext* sptweakcontext;
 };

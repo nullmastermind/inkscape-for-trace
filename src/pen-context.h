@@ -9,10 +9,12 @@
 #include "live_effects/effect.h"
 
 #define SP_TYPE_PEN_CONTEXT (sp_pen_context_get_type())
-#define SP_PEN_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_PEN_CONTEXT, SPPenContext))
+//#define SP_PEN_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_PEN_CONTEXT, SPPenContext))
 #define SP_PEN_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_PEN_CONTEXT, SPPenContextClass))
-#define SP_IS_PEN_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_PEN_CONTEXT))
+//#define SP_IS_PEN_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_PEN_CONTEXT))
 #define SP_IS_PEN_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_PEN_CONTEXT))
+#define SP_PEN_CONTEXT(obj) ((SPPenContext*)obj)
+#define SP_IS_PEN_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPPenContext)))
 
 enum {
     SP_PEN_CONTEXT_POINT,
@@ -78,6 +80,8 @@ public:
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
 
 private:
 	SPPenContext* sppencontext;

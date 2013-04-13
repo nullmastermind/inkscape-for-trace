@@ -19,10 +19,12 @@
 #include "helper/units.h"
 
 #define SP_TYPE_LPETOOL_CONTEXT (sp_lpetool_context_get_type())
-#define SP_LPETOOL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_LPETOOL_CONTEXT, SPLPEToolContext))
+//#define SP_LPETOOL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_LPETOOL_CONTEXT, SPLPEToolContext))
 #define SP_LPETOOL_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_LPETOOL_CONTEXT, SPLPEToolContextClass))
-#define SP_IS_LPETOOL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_LPETOOL_CONTEXT))
+//#define SP_IS_LPETOOL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_LPETOOL_CONTEXT))
 #define SP_IS_LPETOOL_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_LPETOOL_CONTEXT))
+#define SP_LPETOOL_CONTEXT(obj) ((SPLPEToolContext*)obj)
+#define SP_IS_LPETOOL_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPLPEToolContext)))
 
 /* This is the list of subtools from which the toolbar of the LPETool is built automatically */
 extern const int num_subtools;
@@ -77,6 +79,7 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
+	virtual const std::string& getPrefsPath();
 private:
 	SPLPEToolContext* splpetoolcontext;
 };

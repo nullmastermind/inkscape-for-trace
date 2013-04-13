@@ -61,6 +61,21 @@ static gint sp_mesh_context_root_handler(SPEventContext *event_context, GdkEvent
 
 static void sp_mesh_drag(SPMeshContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createMeshContext() {
+		return new SPMeshContext();
+	}
+
+	bool meshContextRegistered = ToolFactory::instance().registerObject("/tools/mesh", createMeshContext);
+}
+
+const std::string& CMeshContext::getPrefsPath() {
+	return SPMeshContext::prefsPath;
+}
+
 const std::string SPMeshContext::prefsPath = "/tools/mesh";
 
 G_DEFINE_TYPE(SPMeshContext, sp_mesh_context, SP_TYPE_EVENT_CONTEXT);
@@ -86,6 +101,7 @@ SPMeshContext::SPMeshContext() : SPEventContext() {
 	gr_context->cmeshcontext = new CMeshContext(gr_context);
 	delete gr_context->ceventcontext;
 	gr_context->ceventcontext = gr_context->cmeshcontext;
+	types.insert(typeid(SPMeshContext));
 
 	gr_context->selcon = 0;
 	gr_context->_message_context = 0;

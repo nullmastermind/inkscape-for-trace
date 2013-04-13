@@ -26,16 +26,24 @@
 
 #include "zoom-context.h"
 
-static void sp_zoom_context_setup(SPEventContext *ec);
-static void sp_zoom_context_finish (SPEventContext *ec);
-
-static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_zoom_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
 static bool within_tolerance = false;
 static bool escaped;
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createZoomContext() {
+		return new SPZoomContext();
+	}
+
+	bool zoomContextRegistered = ToolFactory::instance().registerObject("/tools/zoom", createZoomContext);
+}
+
+const std::string& CZoomContext::getPrefsPath() {
+	return SPZoomContext::prefsPath;
+}
 
 const std::string SPZoomContext::prefsPath = "/tools/zoom";
 
@@ -62,6 +70,7 @@ SPZoomContext::SPZoomContext() : SPEventContext() {
 	zoom_context->czoomcontext = new CZoomContext(zoom_context);
 	delete zoom_context->ceventcontext;
 	zoom_context->ceventcontext = zoom_context->czoomcontext;
+	types.insert(typeid(SPZoomContext));
 
 	zoom_context->grabbed = 0;
 
@@ -77,12 +86,6 @@ static void sp_zoom_context_init (SPZoomContext *zoom_context)
 	new (zoom_context) SPZoomContext();
 }
 
-static void
-sp_zoom_context_finish (SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
 void CZoomContext::finish() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -94,11 +97,6 @@ void CZoomContext::finish() {
         sp_canvas_item_ungrab(zc->grabbed, GDK_CURRENT_TIME);
         zc->grabbed = NULL;
     }
-}
-
-static void sp_zoom_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
 }
 
 void CZoomContext::setup() {
@@ -118,11 +116,6 @@ void CZoomContext::setup() {
     CEventContext::setup();
 }
 
-static gint sp_zoom_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
 gint CZoomContext::item_handler(SPItem* item, GdkEvent* event) {
 	SPEventContext* event_context = this->speventcontext;
 
@@ -134,11 +127,6 @@ gint CZoomContext::item_handler(SPItem* item, GdkEvent* event) {
     ret = CEventContext::item_handler(item, event);
 
     return ret;
-}
-
-static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
 }
 
 gint CZoomContext::root_handler(GdkEvent* event) {
@@ -186,7 +174,7 @@ gint CZoomContext::root_handler(GdkEvent* event) {
         }
 
 	case GDK_MOTION_NOTIFY:
-            if (event->motion.state & GDK_BUTTON1_MASK && !event_context->space_panning) {
+            if ((event->motion.state & GDK_BUTTON1_MASK) && !event_context->space_panning) {
                 ret = TRUE;
 
                 if ( within_tolerance

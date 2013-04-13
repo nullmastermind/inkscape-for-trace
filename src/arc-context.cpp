@@ -60,6 +60,21 @@ static void sp_arc_drag(SPArcContext *ec, Geom::Point pt, guint state);
 static void sp_arc_finish(SPArcContext *ec);
 static void sp_arc_cancel(SPArcContext *ec);
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createArcContext() {
+		return new SPArcContext();
+	}
+
+	bool arcContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/arc", createArcContext);
+}
+
+const std::string& CArcContext::getPrefsPath() {
+	return SPArcContext::prefsPath;
+}
+
 const std::string SPArcContext::prefsPath = "/tools/shapes/arc";
 
 G_DEFINE_TYPE(SPArcContext, sp_arc_context, SP_TYPE_EVENT_CONTEXT);
@@ -87,6 +102,7 @@ SPArcContext::SPArcContext() : SPEventContext() {
 	arc_context->carccontext = new CArcContext(arc_context);
 	delete arc_context->ceventcontext;
 	arc_context->ceventcontext = arc_context->carccontext;
+	types.insert(typeid(SPArcContext));
 
 	arc_context->_message_context = 0;
 

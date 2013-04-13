@@ -80,9 +80,19 @@ using namespace std;
 
 static void sp_spray_context_dispose(GObject *object);
 
-static void sp_spray_context_setup(SPEventContext *ec);
-static void sp_spray_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static gint sp_spray_context_root_handler(SPEventContext *ec, GdkEvent *event);
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createSprayContext() {
+		return new SPSprayContext();
+	}
+
+	bool sprayContextRegistered = ToolFactory::instance().registerObject("/tools/spray", createSprayContext);
+}
+
+const std::string& CSprayContext::getPrefsPath() {
+	return SPSprayContext::prefsPath;
+}
 
 const std::string SPSprayContext::prefsPath = "/tools/spray";
 
@@ -145,6 +155,7 @@ SPSprayContext::SPSprayContext() : SPEventContext() {
 	tc->cspraycontext = new CSprayContext(tc);
 	delete tc->ceventcontext;
 	tc->ceventcontext = tc->cspraycontext;
+	types.insert(typeid(SPSprayContext));
 
 	tc->usetilt = 0;
 	tc->_message_context = 0;
@@ -248,11 +259,6 @@ static void sp_spray_update_cursor(SPSprayContext *tc, bool /*with_shift*/)
    g_free(sel_message);
 }
 
-static void sp_spray_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
 void CSprayContext::setup() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -305,11 +311,6 @@ void CSprayContext::setup() {
     if (prefs->getBool("/tools/spray/gradientdrag")) {
         ec->enableGrDrag();
     }
-}
-
-static void sp_spray_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
 }
 
 void CSprayContext::set(Inkscape::Preferences::Entry* val) {
@@ -646,11 +647,6 @@ static void sp_spray_switch_mode(SPSprayContext *tc, gint mode, bool with_shift)
     // need to set explicitly, because the prefs may not have changed by the previous
     tc->mode = mode;
     sp_spray_update_cursor(tc, with_shift);
-}
-
-gint sp_spray_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
 }
 
 gint CSprayContext::root_handler(GdkEvent* event) {

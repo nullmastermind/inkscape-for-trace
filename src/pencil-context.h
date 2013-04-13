@@ -9,10 +9,12 @@
 
 
 #define SP_TYPE_PENCIL_CONTEXT (sp_pencil_context_get_type())
-#define SP_PENCIL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_PENCIL_CONTEXT, SPPencilContext))
+//#define SP_PENCIL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_PENCIL_CONTEXT, SPPencilContext))
 #define SP_PENCIL_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_PENCIL_CONTEXT, SPPencilContextClass))
-#define SP_IS_PENCIL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_PENCIL_CONTEXT))
+//#define SP_IS_PENCIL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_PENCIL_CONTEXT))
 #define SP_IS_PENCIL_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_PENCIL_CONTEXT))
+#define SP_PENCIL_CONTEXT(obj) ((SPPencilContext*)obj)
+#define SP_IS_PENCIL_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPPencilContext)))
 
 enum PencilState {
     SP_PENCIL_CONTEXT_IDLE,
@@ -55,6 +57,8 @@ public:
 
 	virtual void setup();
 	virtual gint root_handler(GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
 
 private:
 	SPPencilContext* sppencilcontext;

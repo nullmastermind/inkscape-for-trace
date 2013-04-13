@@ -22,10 +22,12 @@
 #include "event-context.h"
 
 #define SP_TYPE_SPIRAL_CONTEXT            (sp_spiral_context_get_type ())
-#define SP_SPIRAL_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContext))
+//#define SP_SPIRAL_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContext))
 #define SP_SPIRAL_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContextClass))
-#define SP_IS_SPIRAL_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SPIRAL_CONTEXT))
+//#define SP_IS_SPIRAL_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SPIRAL_CONTEXT))
 #define SP_IS_SPIRAL_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL_CONTEXT))
+#define SP_SPIRAL_CONTEXT(obj) ((SPSpiralContext*)obj)
+#define SP_IS_SPIRAL_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPSpiralContext)))
 
 class CSpiralContext;
 
@@ -60,6 +62,7 @@ public:
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
+	virtual const std::string& getPrefsPath();
 private:
 	SPSpiralContext* spspiralcontext;
 };

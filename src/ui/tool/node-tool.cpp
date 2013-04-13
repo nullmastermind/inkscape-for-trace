@@ -124,6 +124,21 @@ void handleControlUiStyleChange(InkNodeTool *nt);
 
 //} // anonymous namespace
 
+
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createNodesContext() {
+		return new InkNodeTool();
+	}
+
+	bool nodesContextRegistered = ToolFactory::instance().registerObject("/tools/nodes", createNodesContext);
+}
+
+const std::string& CInkNodeTool::getPrefsPath() {
+	return InkNodeTool::prefsPath;
+}
+
 const std::string InkNodeTool::prefsPath = "/tools/nodes";
 
 G_DEFINE_TYPE(InkNodeTool, ink_node_tool, SP_TYPE_EVENT_CONTEXT);
@@ -152,6 +167,7 @@ InkNodeTool::InkNodeTool() : SPEventContext() {
 	nt->cinknodetool = new CInkNodeTool(nt);
 	delete nt->ceventcontext;
 	nt->ceventcontext = nt->cinknodetool;
+	types.insert(typeid(InkNodeTool));
 
 	nt->show_handles = 0;
 	nt->single_node_transform_handles = 0;

@@ -47,6 +47,20 @@
 
 using Inkscape::DocumentUndo;
 
+#include "sp-factory.h"
+
+namespace {
+	SPEventContext* createRectContext() {
+		return new SPRectContext();
+	}
+
+	bool rectContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/rect", createRectContext);
+}
+
+const std::string& CRectContext::getPrefsPath() {
+	return SPRectContext::prefsPath;
+}
+
 //static const double goldenratio = 1.61803398874989484820; // golden ratio
 
 static void sp_rect_context_dispose(GObject *object);
@@ -93,6 +107,7 @@ SPRectContext::SPRectContext() : SPEventContext() {
     rect_context->crectcontext = new CRectContext(rect_context);
     delete rect_context->ceventcontext;
     rect_context->ceventcontext = rect_context->crectcontext;
+    types.insert(typeid(SPRectContext));
 
     rect_context->_message_context = 0;
 

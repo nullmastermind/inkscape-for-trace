@@ -19,10 +19,13 @@
 #include "helper/units.h"
 
 #define SP_TYPE_FLOOD_CONTEXT            (sp_flood_context_get_type ())
-#define SP_FLOOD_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOOD_CONTEXT, SPFloodContext))
+//#define SP_FLOOD_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOOD_CONTEXT, SPFloodContext))
 #define SP_FLOOD_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOOD_CONTEXT, SPFloodContextClass))
-#define SP_IS_FLOOD_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOOD_CONTEXT))
+//#define SP_IS_FLOOD_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOOD_CONTEXT))
 #define SP_IS_FLOOD_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOOD_CONTEXT))
+#define SP_FLOOD_CONTEXT(obj) ((SPFloodContext*)obj)
+#define SP_IS_FLOOD_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPFloodContext)))
+
 
 #define FLOOD_COLOR_CHANNEL_R 1
 #define FLOOD_COLOR_CHANNEL_G 2
@@ -57,6 +60,7 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
+	virtual const std::string& getPrefsPath();
 private:
 	SPFloodContext* spfloodcontext;
 };

@@ -22,10 +22,12 @@
 #include "event-context.h"
 
 #define SP_TYPE_MESH_CONTEXT            (sp_mesh_context_get_type())
-#define SP_MESH_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_MESH_CONTEXT, SPMeshContext))
+//#define SP_MESH_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_MESH_CONTEXT, SPMeshContext))
 #define SP_MESH_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_MESH_CONTEXT, SPMeshContextClass))
-#define SP_IS_MESH_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MESH_CONTEXT))
+//#define SP_IS_MESH_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MESH_CONTEXT))
 #define SP_IS_MESH_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_MESH_CONTEXT))
+#define SP_MESH_CONTEXT(obj) ((SPMeshContext*)obj)
+#define SP_IS_MESH_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPMeshContext)))
 
 class CMeshContext;
 
@@ -60,6 +62,8 @@ public:
 
 	virtual void setup();
 	virtual gint root_handler(GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
 
 private:
 	SPMeshContext* spmeshcontext;
