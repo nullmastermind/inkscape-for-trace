@@ -99,6 +99,7 @@ static void sp_draw_context_init(SPDrawContext *dc)
     dc->red_color = 0xff00007f;
     dc->blue_color = 0x0000ff7f;
     dc->green_color = 0x00ff007f;
+    dc->halo_color = 0xffffff10;
     dc->red_curve_is_valid = false;
 
     dc->red_bpath = NULL;
@@ -106,6 +107,8 @@ static void sp_draw_context_init(SPDrawContext *dc)
 
     dc->blue_bpath = NULL;
     dc->blue_curve = NULL;
+
+    dc->halo_bpath = NULL;
 
     dc->green_bpaths = NULL;
     dc->green_curve = NULL;
@@ -175,6 +178,10 @@ static void sp_draw_context_setup(SPEventContext *ec)
     // Create blue bpath
     dc->blue_bpath = sp_canvas_bpath_new(sp_desktop_sketch(ec->desktop), NULL);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(dc->blue_bpath), dc->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+
+    // Create halo bpath
+    dc->halo_bpath = sp_canvas_bpath_new(sp_desktop_sketch(ec->desktop), NULL);
+    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(dc->halo_bpath), dc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
     // Create blue curve
     dc->blue_curve = new SPCurve();
@@ -532,6 +539,8 @@ void spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
     dc->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
 
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->halo_bpath), NULL);
+
     if (c->is_empty()) {
         c->unref();
         return;
@@ -750,6 +759,12 @@ static void spdc_free_colors(SPDrawContext *dc)
     }
     if (dc->blue_curve) {
         dc->blue_curve = dc->blue_curve->unref();
+    }
+
+    // Halo
+    if (dc->halo_bpath) {
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->halo_bpath));
+        dc->halo_bpath = NULL;
     }
 
     // Green

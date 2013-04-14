@@ -146,10 +146,9 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     cairo_set_tolerance(buf->ct, 0.5);
     cairo_new_path(buf->ct);
-
     feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
         /* optimized_stroke = */ !dofill, 1);
-    cairo_save(buf->ct);
+
 
     if (dofill) {
         // RGB / BGR
@@ -161,17 +160,14 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     if (dostroke) {
         ink_cairo_set_source_rgba32(buf->ct, cbp->stroke_rgba);
-        cairo_set_line_width(buf->ct, 1);
+        if(cbp->stroke_rgba == 0xffffff10){
+            cairo_set_line_width(buf->ct, 3);
+        }else{
+            cairo_set_line_width(buf->ct, 1);
+        }
         if (cbp->dashes[0] != 0 && cbp->dashes[1] != 0) {
             cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
         }
-        cairo_stroke(buf->ct);
-        cairo_restore(buf->ct);
-        //feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
-        ///* optimized_stroke = */ !dofill, 1);
-        ink_cairo_set_source_rgba32(buf->ct, 0xffffff20);
-        cairo_set_line_width(buf->ct, 7);
-        cairo_set_line_cap(buf->ct,CAIRO_LINE_CAP_ROUND);
         cairo_stroke(buf->ct);
     } else {
         cairo_new_path(buf->ct);

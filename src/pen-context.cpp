@@ -964,6 +964,16 @@ static gint pen_handle_2button_press(SPPenContext *const pc, GdkEventButton cons
 
 static void pen_redraw_all (SPPenContext *const pc)
 {
+    //halo
+    SPCurve *halo = new SPCurve();
+    if(!pc->bspline && !pc->spiro){
+        if(!pc->green_curve->is_empty())
+            halo->append_continuous(pc->green_curve, 0.0625);
+        if(!pc->red_curve->is_empty())
+            halo->append_continuous(pc->red_curve, 0.0625);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    }
     // green
     if (pc->green_bpaths) {
         // remove old piecewise green canvasitems
@@ -1400,6 +1410,8 @@ static void spdc_reset_colors(SPPenContext *pc)
     // Blue
     pc->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->blue_bpath), NULL);
+
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), NULL);
     // Green
     while (pc->green_bpaths) {
         sp_canvas_item_destroy(SP_CANVAS_ITEM(pc->green_bpaths->data));
@@ -1424,6 +1436,7 @@ static void spdc_pen_set_initial_point(SPPenContext *const pc, Geom::Point const
     pc->p[1] = p;
     pc->npoints = 2;
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), NULL);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), NULL);
 
     pc->desktop->canvas->forceFullRedrawAfterInterruptions(5);
 }
@@ -1457,13 +1470,13 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 static void bspline_spiro_color(SPPenContext *const pc)
 {
     if(pc->spiro){
-        pc->red_color = 0xc80000c8;
-        pc->green_color = 0xc80000c8;
-        pc->blue_color = 0x323296c8;
+        pc->red_color = 0xc8000000;
+        pc->green_color = 0xc8000000;
+        pc->blue_color = 0x963232c8;
     }else if (pc->bspline){
-        pc->red_color = 0x963232c8;
-        pc->green_color = 0x963232c8;
-        pc->blue_color = 0x323296c8;
+        pc->red_color = 0x323296c8;
+        pc->green_color = 0x323296c8;
+        pc->blue_color = 0x963232c8;
     }else{
         pc->red_color = 0xff0000c8;
         pc->green_color = 0x00ff00c8;
@@ -1779,8 +1792,16 @@ static void bspline_spiro_end_anchor_off(SPPenContext *const pc)
 //preparates the curves for its trasformation into BSline curves.
 static void bspline_spiro_build(SPPenContext *const pc)
 {
-    if(!pc->spiro && !pc->bspline)
+    if(!pc->spiro && !pc->bspline){
+        SPCurve *halo = new SPCurve();
+        if(!pc->green_curve->is_empty())
+            halo->append_continuous(pc->green_curve, 0.0625);
+        if(!pc->red_curve->is_empty())
+            halo->append_continuous(pc->red_curve, 0.0625);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
         return;
+    }
 
     //We create the base curve
     SPCurve *curve = new SPCurve();
@@ -1815,13 +1836,24 @@ static void bspline_spiro_build(SPPenContext *const pc)
         //LivePathEffectObject *lpeobj = static_cast<LivePathEffectObject*> (curve);
         //Effect *spr = static_cast<Effect*> ( new LPEbspline(lpeobj) );
         //spr->doEffect(curve);
-        if(pc->bspline)
+        SPCurve *halo = new SPCurve();
+        if(pc->bspline){
             bspline_doEffect(curve);
-        else
+            if(!pc->green_curve->is_empty())
+                halo->append_continuous(pc->green_curve, 0.0625);
+            if(!pc->red_curve->is_empty())
+                halo->append_continuous(pc->red_curve, 0.0625);
+            halo->append(curve->copy(),false);
+        }else{
             spiro_doEffect(curve);
+            halo = curve->copy();
+        }
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->blue_bpath), curve);   
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->blue_bpath), pc->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_show(pc->blue_bpath); 
+        sp_canvas_item_show(pc->halo_bpath); 
+        sp_canvas_item_show(pc->blue_bpath);
         curve->unref();
         pc->blue_curve->reset();
         //We hide the holders that doesn't contribute anything
@@ -1836,6 +1868,7 @@ static void bspline_spiro_build(SPPenContext *const pc)
     }else{
         //if the curve is empty
         sp_canvas_item_hide(pc->blue_bpath);
+        sp_canvas_item_hide(pc->halo_bpath);
     }
 }
 
@@ -2163,7 +2196,17 @@ static void spdc_pen_set_subsequent_point(SPPenContext *const pc, Geom::Point co
             is_curve = false;
         }
     }
+    SPCurve *halo = new SPCurve();
+    if(!pc->bspline && !pc->spiro){
+        if(!pc->green_curve->is_empty())
+            halo->append_continuous(pc->green_curve, 0.0625);
+        if(!pc->red_curve->is_empty())
+            halo->append_continuous(pc->red_curve, 0.0625);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    }
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
+
     if (statusbar) {
         gchar *message = is_curve ?
             _("<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, <b>Enter</b> to finish the path" ):
@@ -2204,6 +2247,15 @@ static void spdc_pen_set_ctrl(SPPenContext *const pc, Geom::Point const p, guint
             pc->red_curve->reset();
             pc->red_curve->moveto(pc->p[0]);
             pc->red_curve->curveto(pc->p[1], pc->p[2], pc->p[3]);
+            SPCurve *halo = new SPCurve();
+            if(!pc->bspline && !pc->spiro){
+                if(!pc->green_curve->is_empty())
+                    halo->append_continuous(pc->green_curve, 0.0625);
+                if(!pc->red_curve->is_empty())
+                    halo->append_continuous(pc->red_curve, 0.0625);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
+                sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+            }
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
         }
         SP_CTRL(pc->c0)->moveto(pc->p[2]);
