@@ -44,7 +44,6 @@ struct SPDrawContext : public SPEventContext{
     guint32 red_color;
     guint32 blue_color;
     guint32 green_color;
-    guint32 halo_color;
 
     // Red
     SPCanvasItem *red_bpath;
@@ -54,8 +53,6 @@ struct SPDrawContext : public SPEventContext{
     SPCanvasItem *blue_bpath;
     SPCurve *blue_curve;
 
-    // Halo
-    SPCanvasItem *halo_bpath;
 
     // Green
     GSList *green_bpaths;
