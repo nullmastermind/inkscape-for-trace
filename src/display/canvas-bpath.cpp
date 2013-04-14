@@ -16,8 +16,9 @@
 #endif
 #include <sstream>
 #include <string.h>
-#include "desktop.h"
+#include "document.h"
 
+#include <2geom/pathvector.h>
 #include "color.h"
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas-util.h"
@@ -146,10 +147,6 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     cairo_set_tolerance(buf->ct, 0.5);
     cairo_new_path(buf->ct);
-    feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
-        /* optimized_stroke = */ !dofill, 1);
-
-
     if (dofill) {
         // RGB / BGR
         ink_cairo_set_source_rgba32(buf->ct, cbp->fill_rgba);
@@ -159,16 +156,37 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     if (dostroke) {
-        ink_cairo_set_source_rgba32(buf->ct, cbp->stroke_rgba);
-        if(cbp->stroke_rgba == 0xffffff10){
-            cairo_set_line_width(buf->ct, 3);
-        }else{
+        SPCurve* orig = new SPCurve(cbp->curve->get_pathvector());
+        Geom::Point origPoint(orig->first_path()->initialPoint());
+        if(cbp->stroke_rgba == 0x12345678){
+            cairo_save(buf->ct);
+            orig->moveto(origPoint[Geom::X]+1,origPoint[Geom::Y]+1);
+            feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
+            /* optimized_stroke = */ !dofill, 1);
+            ink_cairo_set_source_rgba32(buf->ct, 0x00000020);
             cairo_set_line_width(buf->ct, 1);
+            cairo_move_to(buf->ct, origPoint[Geom::X] + 1, origPoint[Geom::Y] + 1);
+            cairo_stroke_preserve(buf->ct);
+            cairo_restore(buf->ct);
+            cairo_save(buf->ct);
+            feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
+            /* optimized_stroke = */ !dofill, 1);
+            ink_cairo_set_source_rgba32(buf->ct, 0xffffff20);
+            cairo_set_line_width(buf->ct, 1);
+            cairo_move_to(buf->ct, origPoint[Geom::X] - 1, origPoint[Geom::Y] - 1);
+            cairo_stroke_preserve(buf->ct);
+            cairo_restore(buf->ct);
+        }else{
+            feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
+            /* optimized_stroke = */ !dofill, 1);
+            ink_cairo_set_source_rgba32(buf->ct, cbp->stroke_rgba);
+            cairo_set_line_width(buf->ct, 1);
+                        cairo_move_to(buf->ct, origPoint[Geom::X], origPoint[Geom::Y]);
+            if (cbp->dashes[0] != 0 && cbp->dashes[1] != 0) {
+                cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
+            }
+            cairo_stroke(buf->ct);
         }
-        if (cbp->dashes[0] != 0 && cbp->dashes[1] != 0) {
-            cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
-        }
-        cairo_stroke(buf->ct);
     } else {
         cairo_new_path(buf->ct);
     }

@@ -99,7 +99,7 @@ static void sp_draw_context_init(SPDrawContext *dc)
     dc->red_color = 0xff00007f;
     dc->blue_color = 0x0000ff7f;
     dc->green_color = 0x00ff007f;
-    dc->halo_color = 0xffffff10;
+    dc->halo_color = 0x12345678;
     dc->red_curve_is_valid = false;
 
     dc->red_bpath = NULL;
@@ -867,3 +867,4 @@ void spdc_create_single_dot(SPEventContext *ec, Geom::Point const &pt, char cons
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+

@@ -48,7 +48,7 @@
 #define INKSCAPE_LPE_SPIRO_C
 #include "live_effects/lpe-spiro.h"
 
-#include "display/curve.h"
+
 #include <typeinfo>
 #include <2geom/pathvector.h>
 #include <2geom/affine.h>
@@ -964,16 +964,6 @@ static gint pen_handle_2button_press(SPPenContext *const pc, GdkEventButton cons
 
 static void pen_redraw_all (SPPenContext *const pc)
 {
-    //halo
-    SPCurve *halo = new SPCurve();
-    if(!pc->bspline && !pc->spiro){
-        if(!pc->green_curve->is_empty())
-            halo->append_continuous(pc->green_curve, 0.0625);
-        if(!pc->red_curve->is_empty())
-            halo->append_continuous(pc->red_curve, 0.0625);
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-    }
     // green
     if (pc->green_bpaths) {
         // remove old piecewise green canvasitems
@@ -1470,17 +1460,17 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 static void bspline_spiro_color(SPPenContext *const pc)
 {
     if(pc->spiro){
-        pc->red_color = 0xc8000000;
-        pc->green_color = 0xc8000000;
-        pc->blue_color = 0x963232c8;
+        pc->red_color = 0xdf202000;
+        pc->green_color = 0x21df2100;
+        pc->blue_color = 0x2020dfe6;
     }else if (pc->bspline){
-        pc->red_color = 0x323296c8;
-        pc->green_color = 0x323296c8;
-        pc->blue_color = 0x963232c8;
+        pc->red_color = 0xdf2020e6;
+        pc->green_color = 0xdf2020e6;
+        pc->blue_color = 0x2020dfe6;
     }else{
-        pc->red_color = 0xff0000c8;
-        pc->green_color = 0x00ff00c8;
-        pc->blue_color = 0x0000ffc8;
+        pc->red_color = 0xdf2020e6;
+        pc->green_color = 0x21df21e6;
+        pc->blue_color = 0x0000ffe6;
     }
         //we hide the spiro/bspline rests
     if(!pc->bspline){
@@ -1792,16 +1782,8 @@ static void bspline_spiro_end_anchor_off(SPPenContext *const pc)
 //preparates the curves for its trasformation into BSline curves.
 static void bspline_spiro_build(SPPenContext *const pc)
 {
-    if(!pc->spiro && !pc->bspline){
-        SPCurve *halo = new SPCurve();
-        if(!pc->green_curve->is_empty())
-            halo->append_continuous(pc->green_curve, 0.0625);
-        if(!pc->red_curve->is_empty())
-            halo->append_continuous(pc->red_curve, 0.0625);
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    if(!pc->spiro && !pc->bspline)
         return;
-    }
 
     //We create the base curve
     SPCurve *curve = new SPCurve();
@@ -1839,21 +1821,23 @@ static void bspline_spiro_build(SPPenContext *const pc)
         SPCurve *halo = new SPCurve();
         if(pc->bspline){
             bspline_doEffect(curve);
+            halo = curve->copy()->create_reverse();
             if(!pc->green_curve->is_empty())
                 halo->append_continuous(pc->green_curve, 0.0625);
             if(!pc->red_curve->is_empty())
                 halo->append_continuous(pc->red_curve, 0.0625);
-            halo->append(curve->copy(),false);
+            if(Geom::are_near(halo->first_path()->initialPoint(), halo->last_path()->finalPoint())){
+                halo->closepath_current();
+            }
         }else{
             spiro_doEffect(curve);
             halo = curve->copy();
         }
+        sp_canvas_item_show(pc->blue_bpath);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->blue_bpath), curve);   
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->blue_bpath), pc->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_show(pc->halo_bpath); 
-        sp_canvas_item_show(pc->blue_bpath);
         curve->unref();
         pc->blue_curve->reset();
         //We hide the holders that doesn't contribute anything
@@ -1868,7 +1852,7 @@ static void bspline_spiro_build(SPPenContext *const pc)
     }else{
         //if the curve is empty
         sp_canvas_item_hide(pc->blue_bpath);
-        sp_canvas_item_hide(pc->halo_bpath);
+
     }
 }
 
@@ -2196,15 +2180,7 @@ static void spdc_pen_set_subsequent_point(SPPenContext *const pc, Geom::Point co
             is_curve = false;
         }
     }
-    SPCurve *halo = new SPCurve();
-    if(!pc->bspline && !pc->spiro){
-        if(!pc->green_curve->is_empty())
-            halo->append_continuous(pc->green_curve, 0.0625);
-        if(!pc->red_curve->is_empty())
-            halo->append_continuous(pc->red_curve, 0.0625);
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-    }
+
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
 
     if (statusbar) {
@@ -2247,15 +2223,6 @@ static void spdc_pen_set_ctrl(SPPenContext *const pc, Geom::Point const p, guint
             pc->red_curve->reset();
             pc->red_curve->moveto(pc->p[0]);
             pc->red_curve->curveto(pc->p[1], pc->p[2], pc->p[3]);
-            SPCurve *halo = new SPCurve();
-            if(!pc->bspline && !pc->spiro){
-                if(!pc->green_curve->is_empty())
-                    halo->append_continuous(pc->green_curve, 0.0625);
-                if(!pc->red_curve->is_empty())
-                    halo->append_continuous(pc->red_curve, 0.0625);
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->halo_bpath), halo);
-                sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->halo_bpath), pc->halo_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            }
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
         }
         SP_CTRL(pc->c0)->moveto(pc->p[2]);
@@ -2429,4 +2396,5 @@ void pen_set_to_nearest_horiz_vert(const SPPenContext *const pc, Geom::Point &pt
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+
 
