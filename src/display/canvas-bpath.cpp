@@ -133,7 +133,9 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (item);
 
     Geom::Rect area = buf->rect;
-
+    double width = 0.5;
+    Geom::Rect viewbox = item->canvas->getViewbox();
+    viewbox.expandBy (width);
     if ( !cbp->curve  || 
          ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0 ) || 
          cbp->curve->get_segment_count() < 1)
@@ -144,7 +146,14 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     bool dofill = ((cbp->fill_rgba & 0xff) != 0);
     bool dostroke = ((cbp->stroke_rgba & 0xff) != 0);
-
+    
+    if (dostroke) {
+        const cairo_rectangle_int_t *rectangle = new cairo_rectangle_int_t {viewbox.left(),viewbox.top(),viewbox.width(),viewbox.height()};
+        cairo_region_create_rectangle(rectangle);
+        cairo_paint(buf->ct);
+        cairo_set_operator(buf->ct,CAIRO_OPERATOR_OVERLAY);
+    }
+    
     cairo_set_tolerance(buf->ct, 0.5);
     cairo_new_path(buf->ct);
 
@@ -165,6 +174,7 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
             cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
         }
         cairo_stroke(buf->ct);
+        cairo_destroy(buf->ct);
     } else {
         cairo_new_path(buf->ct);
     }
