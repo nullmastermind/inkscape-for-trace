@@ -1458,17 +1458,17 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 static void bspline_spiro_color(SPPenContext *const pc)
 {
     if(pc->spiro){
-        pc->red_color = 0xdf202000;
-        pc->green_color = 0x21df2100;
-        pc->blue_color = 0x2020dfe6;
+        pc->red_color = 0xffffff00;
+        pc->green_color = 0xffffff00;
+        pc->blue_color = 0x23abcdff;
     }else if (pc->bspline){
-        pc->red_color = 0xdf2020e6;
-        pc->green_color = 0xdf2020e6;
-        pc->blue_color = 0x2020dfe6;
+        pc->red_color = 0xe68024ff;
+        pc->green_color = 0xe68024ff;
+        pc->blue_color = 0x23abcdff;
     }else{
-        pc->red_color = 0xdf2020e6;
-        pc->green_color = 0x21df21e6;
-        pc->blue_color = 0x0000ffe6;
+        pc->red_color = 0xe68024ff;
+        pc->green_color = 0xf372ebff;
+        pc->blue_color = 0x23abcdff;
     }
         //we hide the spiro/bspline rests
     if(!pc->bspline){

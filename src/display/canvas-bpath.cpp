@@ -18,7 +18,6 @@
 #include <string.h>
 #include "document.h"
 
-#include <2geom/pathvector.h>
 #include "color.h"
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas-util.h"
@@ -133,9 +132,6 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (item);
 
     Geom::Rect area = buf->rect;
-    double width = 0.5;
-    Geom::Rect viewbox = item->canvas->getViewbox();
-    viewbox.expandBy (width);
     if ( !cbp->curve  || 
          ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0 ) || 
          cbp->curve->get_segment_count() < 1)
@@ -146,16 +142,11 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     bool dofill = ((cbp->fill_rgba & 0xff) != 0);
     bool dostroke = ((cbp->stroke_rgba & 0xff) != 0);
-    
-    if (dostroke) {
-        const cairo_rectangle_int_t *rectangle = new cairo_rectangle_int_t {viewbox.left(),viewbox.top(),viewbox.width(),viewbox.height()};
-        cairo_region_create_rectangle(rectangle);
-        cairo_paint(buf->ct);
-        cairo_set_operator(buf->ct,CAIRO_OPERATOR_OVERLAY);
-    }
-    
+
     cairo_set_tolerance(buf->ct, 0.5);
     cairo_new_path(buf->ct);
+
+    cairo_save(buf->ct);
 
     feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
             /* optimized_stroke = */ !dofill, 1);
@@ -168,13 +159,20 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     if (dostroke) {
+        ink_cairo_set_source_rgba32(buf->ct, 0xffffff4c);
+        cairo_set_line_width(buf->ct, 3);
+        cairo_stroke_preserve(buf->ct);
+        cairo_restore(buf->ct);
+        feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
+            /* optimized_stroke = */ !dofill, 1);
         ink_cairo_set_source_rgba32(buf->ct, cbp->stroke_rgba);
         cairo_set_line_width(buf->ct, 1);
         if (cbp->dashes[0] != 0 && cbp->dashes[1] != 0) {
             cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
         }
         cairo_stroke(buf->ct);
-        cairo_destroy(buf->ct);
+
+        
     } else {
         cairo_new_path(buf->ct);
     }

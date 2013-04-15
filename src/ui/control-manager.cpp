@@ -59,9 +59,9 @@ ControlFlags& operator ^=(ControlFlags &lhs, ControlFlags rhs)
 #define FILL_COLOR_MOUSEOVER 0xff0000ff
 
 // Default color for line:
-#define LINE_COLOR_PRIMARY 0x0000ff7f
-#define LINE_COLOR_SECONDARY 0xff00007f
-#define LINE_COLOR_TERTIARY 0xffff007f
+#define LINE_COLOR_PRIMARY 0x23abcdff
+#define LINE_COLOR_SECONDARY 0xf372ebff
+#define LINE_COLOR_TERTIARY 0xe68024ff
 
 namespace Inkscape {
 
