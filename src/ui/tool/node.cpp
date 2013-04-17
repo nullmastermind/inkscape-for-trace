@@ -146,10 +146,8 @@ void Handle::move(Geom::Point const &new_pos)
         Set &nodes = _parent->_selection.allPoints();
         for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
-            if(n != _parent)
-                _parent->_selection.erase(n);
+            _parent->_selection.erase(n);
         }
-        if(!_parent->selected())
             _parent->_selection.insert(_parent);
     }
     //BSpline End
@@ -187,8 +185,8 @@ void Handle::move(Geom::Point const &new_pos)
         //BSpline
         if(_pm().isBSpline){
             h = this;
-            setPosition(_pm().BSplineHandleReposition(h));
             _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
+            setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
             h2 = this->other();
             this->other()->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
         }
@@ -422,6 +420,16 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             sm.freeSnapReturnByRef(new_pos, SNAPSOURCE_NODE_HANDLE);
         }
         sm.unSetup();
+        //BSpline
+        if(_pm().isBSpline){
+            Handle *h = NULL;
+            _parent->bsplineWeight = 0;
+            h = this;
+            setPosition(new_pos);
+            _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
+            new_pos=_pm().BSplineHandleReposition(h,_parent->bsplineWeight);
+        }
+        //BSpline End
     }
 
 
@@ -452,6 +460,7 @@ void Handle::ungrabbed(GdkEventButton *event)
         Geom::Point dist = _desktop->d2w(_parent->position()) - _desktop->d2w(position());
         if (dist.length() <= drag_tolerance) {
             move(_parent->position());
+            _parent->bsplineWeight = 0;
         }
     }
 

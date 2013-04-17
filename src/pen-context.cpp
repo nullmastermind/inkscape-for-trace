@@ -656,7 +656,6 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint const tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     //"spiro_color" lo ejecutamos siempre sea o no spiro
-    bspline_spiro_color(pc);
     if (pen_within_tolerance) {
         if ( Geom::LInfty( event_w - pen_drag_origin_w ) < tolerance) {
             return FALSE;   // Do not drag if we're within tolerance from origin.
@@ -781,6 +780,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
     //BSpline
     //Lanzamos la función "bspline_spiro_motion" al moverse el ratón o cuando se para.
     if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
+        bspline_spiro_color(pc);
         bspline_spiro_motion(pc,(mevent.state & GDK_SHIFT_MASK));
         pen_drag_origin_w = event_w;
     }
@@ -1452,31 +1452,48 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
     g_string_free(dist, FALSE);
 }
 
-
-
 //Esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
 static void bspline_spiro_color(SPPenContext *const pc)
 {
+    bool remake_green_bpaths = false;
     if(pc->spiro){
-        pc->red_color = 0xffffff00;
-        pc->green_color = 0xffffff00;
-        pc->blue_color = 0x23abcdff;
-    }else if (pc->bspline){
-        pc->red_color = 0xe68024ff;
-        pc->green_color = 0xe68024ff;
-        pc->blue_color = 0x23abcdff;
-    }else{
-        pc->red_color = 0xe68024ff;
-        pc->green_color = 0xf372ebff;
-        pc->blue_color = 0x23abcdff;
-    }
+        //If the colour is not defined as trasparent, por example when changing
+        //from drawing to spiro mode or when selecting the pen tool
+        if(pc->green_color != 0x00ff000){
+            //We change the green and red colours to transparent, so this lines are not necessary
+            //to the drawing with spiro
+            pc->red_color = 0x00ff000;
+            pc->green_color = 0x00ff000;
+            pc->blue_color = 0x23abcdff;
+            remake_green_bpaths = true;
+        }
+    }else if(pc->bspline){
+        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
+        if(pc->green_color != 0xe68024ff){
+            //since we are not im spiro mode, we assign the original colours
+            //to the red and the green curve, removing their transparency 
+            pc->red_color = 0xe68024ff;
+            pc->green_color = 0xe68024ff;
+            pc->blue_color = 0x23abcdff;
+            remake_green_bpaths = true;
+        }
         //we hide the spiro/bspline rests
+    }else{
+        if(pc->green_color != 0xf372ebff){
+            //since we are not im spiro mode, we assign the original colours
+            //to the red and the green curve, removing their transparency 
+            pc->red_color = 0xe68024ff;
+            pc->green_color = 0xf372ebff;
+            pc->blue_color = 0x23abcdff;
+            remake_green_bpaths = true;
+        }
+    }    
     if(!pc->bspline){
         sp_canvas_item_hide(pc->blue_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
-    if (pc->green_bpaths) {
+    if (pc->green_bpaths && remake_green_bpaths) {
         // remove old piecewise green canvasitems
         while (pc->green_bpaths) {
             sp_canvas_item_destroy(SP_CANVAS_ITEM(pc->green_bpaths->data));
@@ -1490,6 +1507,7 @@ static void bspline_spiro_color(SPPenContext *const pc)
     }
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(pc->red_bpath), pc->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 }
+
 
 static void bspline_spiro(SPPenContext *const pc, bool shift)
 {
@@ -1511,7 +1529,7 @@ static void bspline_spiro_on(SPPenContext *const pc)
         pc->p[0] = pc->red_curve->first_segment()->initialPoint();
         pc->p[3] = pc->red_curve->first_segment()->finalPoint();
         pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
-        pc->p[2] = Geom::Point(pc->p[2][X] + 0.0625,pc->p[2][Y] + 0.0625);
+        pc->p[2] = Geom::Point(pc->p[2][X] + 0.0001,pc->p[2][Y] + 0.0001);
     }
 }
 
@@ -1552,7 +1570,7 @@ static void bspline_spiro_start_anchor_on(SPPenContext *const pc)
     Geom::Point A = tmpCurve->last_segment()->initialPoint();
     Geom::Point D = tmpCurve->last_segment()->finalPoint();
     Geom::Point C = D + (1./3)*(A - D);
-    C = Geom::Point(C[X] + 0.0625,C[Y] + 0.0625);
+    C = Geom::Point(C[X] + 0.0001,C[Y] + 0.0001);
     if(cubic){
         lastSeg->moveto(A);
         lastSeg->curveto((*cubic)[1],C,D);
@@ -1637,7 +1655,7 @@ static void bspline_spiro_motion(SPPenContext *const pc, bool shift){
                 WPower->reset();
                 pc->p[1] = SBasisWPower.valueAt(WP);
                 if(!Geom::are_near(pc->p[1],pc->p[0]))
-                    pc->p[1] = Geom::Point(pc->p[1][X] + 0.0625,pc->p[1][Y] + 0.0625);
+                    pc->p[1] = Geom::Point(pc->p[1][X] + 0.0001,pc->p[1][Y] + 0.0001);
             }else{
                 pc->p[1] =  (*cubic)[3] + (Geom::Point)((*cubic)[3] - (*cubic)[2] );
             }
@@ -1662,7 +1680,7 @@ static void bspline_spiro_end_anchor_on(SPPenContext *const pc)
     using Geom::X;
     using Geom::Y;
     pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
-    pc->p[2] = Geom::Point(pc->p[2][X] + 0.0625,pc->p[2][Y] + 0.0625);
+    pc->p[2] = Geom::Point(pc->p[2][X] + 0.0001,pc->p[2][Y] + 0.0001);
     SPCurve *tmpCurve = new SPCurve();
     SPCurve *lastSeg = new SPCurve();
     Geom::Point C(0,0);
@@ -1671,7 +1689,7 @@ static void bspline_spiro_end_anchor_on(SPPenContext *const pc)
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(pc->bspline){
             C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-            C = Geom::Point(C[X] + 0.0625,C[Y] + 0.0625);
+            C = Geom::Point(C[X] + 0.0001,C[Y] + 0.0001);
         }else{
             C =  pc->p[3] + (Geom::Point)(pc->p[3] - pc->p[2] );
         }
@@ -1700,7 +1718,7 @@ static void bspline_spiro_end_anchor_on(SPPenContext *const pc)
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(pc->bspline){
             C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-            C = Geom::Point(C[X] + 0.0625,C[Y] + 0.0625);
+            C = Geom::Point(C[X] + 0.0001,C[Y] + 0.0001);
         }else{
             C =  pc->p[3] + (Geom::Point)(pc->p[3] - pc->p[2] );
         }

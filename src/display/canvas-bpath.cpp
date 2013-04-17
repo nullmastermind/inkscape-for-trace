@@ -159,7 +159,7 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     if (dostroke) {
-        ink_cairo_set_source_rgba32(buf->ct, 0xffffff4c);
+        ink_cairo_set_source_rgba32(buf->ct, 0xffffff42);
         cairo_set_line_width(buf->ct, 3);
         cairo_stroke_preserve(buf->ct);
         cairo_restore(buf->ct);

@@ -37,6 +37,8 @@ public:
 
     virtual void toDefaultWeight();
 
+    virtual void toMakeCusp();
+
     virtual void toWeight();
 
     ScalarParam steps;
