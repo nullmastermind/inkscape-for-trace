@@ -16,7 +16,7 @@
 #endif
 #include <sstream>
 #include <string.h>
-#include "document.h"
+#include "desktop.h"
 
 #include "color.h"
 #include "display/sp-canvas-group.h"
