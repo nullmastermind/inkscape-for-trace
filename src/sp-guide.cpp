@@ -95,8 +95,8 @@ static void sp_guide_init(SPGuide *guide)
 {
     guide->normal_to_line = Geom::Point(0.,1.);
     guide->point_on_line = Geom::Point(0.,0.);
-    guide->color = 0x23abcd7f;
-    guide->hicolor = 0xf372eb7f;
+    guide->color = 0x0000ff7f;
+    guide->hicolor = 0xff00007f;
 }
 
 static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec */*pspec*/)

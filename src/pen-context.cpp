@@ -1462,34 +1462,23 @@ static void bspline_spiro_color(SPPenContext *const pc)
         if(pc->green_color != 0x00ff000){
             //We change the green and red colours to transparent, so this lines are not necessary
             //to the drawing with spiro
-            pc->red_color = 0x00ff000;
+            pc->red_color = 0xff00000;
             pc->green_color = 0x00ff000;
-            pc->blue_color = 0x23abcdff;
             remake_green_bpaths = true;
         }
-    }else if(pc->bspline){
+    }else{
         //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
-        if(pc->green_color != 0xe68024ff){
+        if(pc->green_color != 0x00ff007f){
             //since we are not im spiro mode, we assign the original colours
             //to the red and the green curve, removing their transparency 
-            pc->red_color = 0xe68024ff;
-            pc->green_color = 0xe68024ff;
-            pc->blue_color = 0x23abcdff;
+            pc->red_color = 0xff00007f;
+            pc->green_color = 0x00ff007f;
             remake_green_bpaths = true;
         }
         //we hide the spiro/bspline rests
-    }else{
-        if(pc->green_color != 0xf372ebff){
-            //since we are not im spiro mode, we assign the original colours
-            //to the red and the green curve, removing their transparency 
-            pc->red_color = 0xe68024ff;
-            pc->green_color = 0xf372ebff;
-            pc->blue_color = 0x23abcdff;
-            remake_green_bpaths = true;
+        if(!pc->bspline){
+            sp_canvas_item_hide(pc->blue_bpath);
         }
-    }    
-    if(!pc->bspline){
-        sp_canvas_item_hide(pc->blue_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
