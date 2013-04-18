@@ -132,6 +132,7 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     SPCanvasBPath *cbp = SP_CANVAS_BPATH (item);
 
     Geom::Rect area = buf->rect;
+
     if ( !cbp->curve  || 
          ((cbp->stroke_rgba & 0xff) == 0 && (cbp->fill_rgba & 0xff) == 0 ) || 
          cbp->curve->get_segment_count() < 1)
@@ -146,10 +147,9 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     cairo_set_tolerance(buf->ct, 0.5);
     cairo_new_path(buf->ct);
 
-    cairo_save(buf->ct);
-
     feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
-            /* optimized_stroke = */ !dofill, 1);
+        /* optimized_stroke = */ !dofill, 1);
+
     if (dofill) {
         // RGB / BGR
         ink_cairo_set_source_rgba32(buf->ct, cbp->fill_rgba);
@@ -159,20 +159,12 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     if (dostroke) {
-        ink_cairo_set_source_rgba32(buf->ct, 0xffffff42);
-        cairo_set_line_width(buf->ct, 3);
-        cairo_stroke_preserve(buf->ct);
-        cairo_restore(buf->ct);
-        feed_pathvector_to_cairo (buf->ct, cbp->curve->get_pathvector(), cbp->affine, area,
-            /* optimized_stroke = */ !dofill, 1);
         ink_cairo_set_source_rgba32(buf->ct, cbp->stroke_rgba);
         cairo_set_line_width(buf->ct, 1);
         if (cbp->dashes[0] != 0 && cbp->dashes[1] != 0) {
             cairo_set_dash (buf->ct, cbp->dashes, 2, 0);
         }
         cairo_stroke(buf->ct);
-
-        
     } else {
         cairo_new_path(buf->ct);
     }
