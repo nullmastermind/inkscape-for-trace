@@ -5630,9 +5630,9 @@
      inkscape:window-x="0"
      inkscape:window-height="901"
      inkscape:window-width="1280"
-     inkscape:cy="477.6024"
-     inkscape:cx="940.66887"
-     inkscape:zoom="21.59375"
+     inkscape:cy="473.2422"
+     inkscape:cx="936.13246"
+     inkscape:zoom="5.3984375"
      gridtolerance="6"
      snaptogrid="false"
      showgrid="false"
@@ -5671,8 +5671,7 @@
        empspacing="2"
        visible="true"
        enabled="true"
-       snapvisiblegridlinesonly="true"
-       dotted="false" />
+       snapvisiblegridlinesonly="true" />
     <sodipodi:guide
        orientation="0,1"
        position="630.08101,968.02815"
