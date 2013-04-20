@@ -21,20 +21,13 @@
 #include <sigc++/sigc++.h>
 #include "event-context.h"
 
-#define SP_TYPE_MESH_CONTEXT            (sp_mesh_context_get_type())
-//#define SP_MESH_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_MESH_CONTEXT, SPMeshContext))
-#define SP_MESH_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_MESH_CONTEXT, SPMeshContextClass))
-//#define SP_IS_MESH_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MESH_CONTEXT))
-#define SP_IS_MESH_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_MESH_CONTEXT))
 #define SP_MESH_CONTEXT(obj) ((SPMeshContext*)obj)
-#define SP_IS_MESH_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPMeshContext)))
-
-class CMeshContext;
+#define SP_IS_MESH_CONTEXT(obj) (dynamic_cast<const SPMeshContext*>((const SPEventContext*)obj))
 
 class SPMeshContext : public SPEventContext {
 public:
 	SPMeshContext();
-	CMeshContext* cmeshcontext;
+	virtual ~SPMeshContext();
 
     Geom::Point origin;
 
@@ -50,27 +43,12 @@ public:
     sigc::connection *subselcon;
 
 	static const std::string prefsPath;
-};
-
-struct SPMeshContextClass {
-    SPEventContextClass parent_class;
-};
-
-class CMeshContext : public CEventContext {
-public:
-	CMeshContext(SPMeshContext* meshcontext);
 
 	virtual void setup();
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-
-private:
-	SPMeshContext* spmeshcontext;
 };
-
-// Standard Gtk function
-GType sp_mesh_context_get_type();
 
 void sp_mesh_context_select_next(SPEventContext *event_context);
 void sp_mesh_context_select_prev(SPEventContext *event_context);

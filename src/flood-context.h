@@ -18,13 +18,8 @@
 #include "helper/unit-menu.h"
 #include "helper/units.h"
 
-#define SP_TYPE_FLOOD_CONTEXT            (sp_flood_context_get_type ())
-//#define SP_FLOOD_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOOD_CONTEXT, SPFloodContext))
-#define SP_FLOOD_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOOD_CONTEXT, SPFloodContextClass))
-//#define SP_IS_FLOOD_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOOD_CONTEXT))
-#define SP_IS_FLOOD_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOOD_CONTEXT))
 #define SP_FLOOD_CONTEXT(obj) ((SPFloodContext*)obj)
-#define SP_IS_FLOOD_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPFloodContext)))
+#define SP_IS_FLOOD_CONTEXT(obj) (dynamic_cast<const SPFloodContext*>((const SPEventContext*)obj))
 
 
 #define FLOOD_COLOR_CHANNEL_R 1
@@ -32,12 +27,10 @@
 #define FLOOD_COLOR_CHANNEL_B 4
 #define FLOOD_COLOR_CHANNEL_A 8
 
-class CFloodContext;
-
 class SPFloodContext : public SPEventContext {
 public:
 	SPFloodContext();
-	CFloodContext* cfloodcontext;
+	virtual ~SPFloodContext();
 
 	SPItem *item;
 
@@ -46,28 +39,13 @@ public:
 	Inkscape::MessageContext *_message_context;
 
 	static const std::string prefsPath;
-};
-
-struct SPFloodContextClass {
-	SPEventContextClass parent_class;
-};
-
-class CFloodContext : public CEventContext {
-public:
-	CFloodContext(SPFloodContext* floodcontext);
 
 	virtual void setup();
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	SPFloodContext* spfloodcontext;
 };
-
-/* Standard Gtk function */
-
-GType sp_flood_context_get_type (void);
 
 GList* flood_channels_dropdown_items_list (void);
 GList* flood_autogap_dropdown_items_list (void);

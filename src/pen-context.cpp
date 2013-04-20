@@ -47,14 +47,6 @@
 
 using Inkscape::ControlManager;
 
-static void sp_pen_context_dispose(GObject *object);
-
-static void sp_pen_context_setup(SPEventContext *ec);
-static void sp_pen_context_finish(SPEventContext *ec);
-static void sp_pen_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static gint sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event);
-static gint sp_pen_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static void spdc_pen_set_initial_point(SPPenContext *pc, Geom::Point const p);
 static void spdc_pen_set_subsequent_point(SPPenContext *const pc, Geom::Point const p, bool statusbar, guint status = 0);
 static void spdc_pen_set_ctrl(SPPenContext *pc, Geom::Point const p, guint state);
@@ -91,46 +83,14 @@ namespace {
 	bool penContextRegistered = ToolFactory::instance().registerObject("/tools/freehand/pen", createPenContext);
 }
 
-const std::string& CPenContext::getPrefsPath() {
+const std::string& SPPenContext::getPrefsPath() {
 	return SPPenContext::prefsPath;
 }
 
 const std::string SPPenContext::prefsPath = "/tools/freehand/pen";
 
-G_DEFINE_TYPE(SPPenContext, sp_pen_context, SP_TYPE_DRAW_CONTEXT);
-
-/**
- * Initialize the SPPenContext vtable.
- */
-static void sp_pen_context_class_init(SPPenContextClass *klass)
-{
-    GObjectClass *object_class;
-    SPEventContextClass *event_context_class;
-
-    object_class = (GObjectClass *) klass;
-    event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_pen_context_dispose;
-
-//    event_context_class->setup = sp_pen_context_setup;
-//    event_context_class->finish = sp_pen_context_finish;
-//    event_context_class->set = sp_pen_context_set;
-//    event_context_class->root_handler = sp_pen_context_root_handler;
-//    event_context_class->item_handler = sp_pen_context_item_handler;
-}
-
-CPenContext::CPenContext(SPPenContext* pencontext) : CDrawContext(pencontext) {
-	this->sppencontext = pencontext;
-}
-
 SPPenContext::SPPenContext() : SPDrawContext() {
 	SPPenContext* pc = this;
-
-	pc->cpencontext = new CPenContext(pc);
-	delete pc->cdrawcontext;
-	pc->cdrawcontext = pc->cpencontext;
-	pc->ceventcontext = pc->cpencontext;
-	types.insert(typeid(SPPenContext));
 
 	pc->polylines_only = false;
 	pc->polylines_paraxial = false;
@@ -158,20 +118,8 @@ SPPenContext::SPPenContext() : SPDrawContext() {
     pc->waiting_item = NULL;
 }
 
-/**
- * Callback to initialize SPPenContext object.
- */
-static void sp_pen_context_init(SPPenContext *pc)
-{
-	new (pc) SPPenContext();
-}
-
-/**
- * Callback to destroy the SPPenContext object's members and itself.
- */
-static void sp_pen_context_dispose(GObject *object)
-{
-    SPPenContext *pc = SP_PEN_CONTEXT(object);
+SPPenContext::~SPPenContext() {
+    SPPenContext *pc = SP_PEN_CONTEXT(this);
 
     if (pc->c0) {
         sp_canvas_item_destroy(pc->c0);
@@ -190,7 +138,7 @@ static void sp_pen_context_dispose(GObject *object)
         pc->cl1 = NULL;
     }
 
-    G_OBJECT_CLASS(sp_pen_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_pen_context_parent_class)->dispose(object);
 
     if (pc->expecting_clicks_for_LPE > 0) {
         // we received too few clicks to sanely set the parameter path so we remove the LPE from the item
@@ -208,20 +156,15 @@ void sp_pen_context_set_polyline_mode(SPPenContext *const pc) {
 /**
  * Callback to initialize SPPenContext object.
  */
-static void sp_pen_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CPenContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPPenContext::setup() {
+	SPEventContext* ec = this;
 
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
 
 //    if (((SPEventContextClass *) sp_pen_context_parent_class)->setup) {
 //        ((SPEventContextClass *) sp_pen_context_parent_class)->setup(ec);
 //    }
-    CDrawContext::setup();
+    SPDrawContext::setup();
 
     ControlManager &mgr = ControlManager::getManager();
 
@@ -271,13 +214,8 @@ static void pen_cancel (SPPenContext *const pc)
 /**
  * Finalization callback.
  */
-static void sp_pen_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CPenContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPPenContext::finish() {
+	SPEventContext* ec = this;
 
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
 
@@ -290,19 +228,14 @@ void CPenContext::finish() {
 //    if (((SPEventContextClass *) sp_pen_context_parent_class)->finish) {
 //        ((SPEventContextClass *) sp_pen_context_parent_class)->finish(ec);
 //    }
-    CDrawContext::finish();
+    SPDrawContext::finish();
 }
 
 /**
  * Callback that sets key to value in pen context.
  */
-static void sp_pen_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CPenContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPPenContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
     Glib::ustring name = val->getEntryName();
@@ -358,13 +291,8 @@ static void spdc_endpoint_snap_handle(SPPenContext const *const pc, Geom::Point 
     }
 }
 
-static gint sp_pen_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
-{
-	return ec->ceventcontext->item_handler(item, event);
-}
-
-gint CPenContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* ec = this->speventcontext;
+gint SPPenContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* ec = this;
 
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
 
@@ -384,7 +312,7 @@ gint CPenContext::item_handler(SPItem* item, GdkEvent* event) {
     if (!ret) {
 //        if (((SPEventContextClass *) sp_pen_context_parent_class)->item_handler)
 //            ret = ((SPEventContextClass *) sp_pen_context_parent_class)->item_handler(ec, item, event);
-    	ret = CDrawContext::item_handler(item, event);
+    	ret = SPDrawContext::item_handler(item, event);
     }
 
     return ret;
@@ -393,13 +321,8 @@ gint CPenContext::item_handler(SPItem* item, GdkEvent* event) {
 /**
  * Callback to handle all pen events.
  */
-static gint sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
-{
-	return ec->ceventcontext->root_handler(event);
-}
-
-gint CPenContext::root_handler(GdkEvent* event) {
-	SPEventContext* ec = this->speventcontext;
+gint SPPenContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this;
 
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
 
@@ -436,7 +359,7 @@ gint CPenContext::root_handler(GdkEvent* event) {
 //        if (parent_root_handler) {
 //            ret = parent_root_handler(ec, event);
 //        }
-    	ret = CDrawContext::root_handler(event);
+    	ret = SPDrawContext::root_handler(event);
     }
 
     return ret;

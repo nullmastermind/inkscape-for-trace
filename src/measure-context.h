@@ -14,33 +14,18 @@
 
 #include "event-context.h"
 
-#define SP_TYPE_MEASURE_CONTEXT (sp_measure_context_get_type())
-//#define SP_MEASURE_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_MEASURE_CONTEXT, SPMeasureContext))
-//#define SP_IS_MEASURE_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_MEASURE_CONTEXT))
 #define SP_MEASURE_CONTEXT(obj) ((SPMeasureContext*)obj)
-#define SP_IS_MEASURE_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPMeasureContext)))
-
-
-class CMeasureContext;
+#define SP_IS_MEASURE_CONTEXT(obj) (dynamic_cast<const SPMeasureContext*>((const SPEventContext*)obj))
 
 class SPMeasureContext : public SPEventContext {
 public:
 	SPMeasureContext();
-	CMeasureContext* cmeasurecontext;
+	virtual ~SPMeasureContext();
 
 	//SPEventContext event_context;
 	SPCanvasItem *grabbed;
 
 	static const std::string prefsPath;
-};
-
-struct SPMeasureContextClass {
-	SPEventContextClass parent_class;
-};
-
-class CMeasureContext : public CEventContext {
-public:
-	CMeasureContext(SPMeasureContext* measurecontext);
 
 	virtual void setup();
 	virtual void finish();
@@ -48,10 +33,6 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	SPMeasureContext* spmeasurecontext;
 };
-
-GType sp_measure_context_get_type(void);
 
 #endif // SEEN_SP_MEASURING_CONTEXT_H

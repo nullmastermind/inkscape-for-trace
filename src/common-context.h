@@ -23,22 +23,15 @@
 #include "display/curve.h"
 #include <2geom/point.h>
 
-#define SP_TYPE_COMMON_CONTEXT (sp_common_context_get_type())
-//#define SP_COMMON_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_COMMON_CONTEXT, SPCommonContext))
-#define SP_COMMON_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_COMMON_CONTEXT, SPCommonContextClass))
-//#define SP_IS_COMMON_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_COMMON_CONTEXT))
-#define SP_IS_COMMON_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_COMMON_CONTEXT))
 #define SP_COMMON_CONTEXT(obj) ((SPCommonContext*)obj)
-#define SP_IS_COMMON_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPCommonContext)))
+#define SP_IS_COMMON_CONTEXT(obj) (dynamic_cast<const SPCommonContext*>((const SPEventContext*)obj))
 
 #define SAMPLING_SIZE 8        /* fixme: ?? */
-
-class CCommonContext;
 
 class SPCommonContext : public SPEventContext {
 public:
 	SPCommonContext();
-	CCommonContext* ccommoncontext;
+	virtual ~SPCommonContext();
 
     /** accumulated shape which ultimately goes in svg:path */
     SPCurve *accumulated;
@@ -102,23 +95,9 @@ public:
 
     /** uses absolute width independent of zoom */
     bool abs_width;
-};
 
-struct SPCommonContextClass : public SPEventContextClass{};
-
-class CCommonContext : public CEventContext {
-public:
-	CCommonContext(SPCommonContext* commoncontext);
-
-	virtual void setup();
 	virtual void set(Inkscape::Preferences::Entry* val);
-	virtual gint root_handler(GdkEvent* event);
-
-private:
-	SPCommonContext* spcommoncontext;
 };
-
-GType sp_common_context_get_type(void);
 
 #endif // COMMON_CONTEXT_H_SEEN
 

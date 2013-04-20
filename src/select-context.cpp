@@ -51,13 +51,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_select_context_dispose(GObject *object);
-
-static void sp_select_context_setup(SPEventContext *ec);
-static void sp_select_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static gint sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static GdkCursor *CursorSelectMouseover = NULL;
 static GdkCursor *CursorSelectDragging = NULL;
 GdkPixbuf *handles[13];
@@ -80,39 +73,14 @@ namespace {
 	bool selectContextRegistered = ToolFactory::instance().registerObject("/tools/select", createSelectContext);
 }
 
-const std::string& CSelectContext::getPrefsPath() {
+const std::string& SPSelectContext::getPrefsPath() {
 	return SPSelectContext::prefsPath;
 }
 
 const std::string SPSelectContext::prefsPath = "/tools/select";
 
-G_DEFINE_TYPE(SPSelectContext, sp_select_context, SP_TYPE_EVENT_CONTEXT);
-
-static void
-sp_select_context_class_init(SPSelectContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_select_context_dispose;
-
-//    event_context_class->setup = sp_select_context_setup;
-//    event_context_class->set = sp_select_context_set;
-//    event_context_class->root_handler = sp_select_context_root_handler;
-//    event_context_class->item_handler = sp_select_context_item_handler;
-}
-
-CSelectContext::CSelectContext(SPSelectContext* selectcontext) : CEventContext(selectcontext) {
-	this->spselectcontext = selectcontext;
-}
-
 SPSelectContext::SPSelectContext() : SPEventContext() {
 	SPSelectContext* sc = this;
-
-	sc->cselectcontext = new CSelectContext(sc);
-	delete sc->ceventcontext;
-	sc->ceventcontext = sc->cselectcontext;
-	types.insert(typeid(SPSelectContext));
 
 	sc->grabbed = 0;
 	sc->item = 0;
@@ -147,12 +115,6 @@ SPSelectContext::SPSelectContext() : SPEventContext() {
     handles[10] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_sw_xpm);
     handles[11] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_w_xpm);
     handles[12] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_center_xpm);
-}
-
-static void
-sp_select_context_init(SPSelectContext *sc)
-{
-	new (sc) SPSelectContext();
 }
 
 SPSelectContext::~SPSelectContext() {
@@ -191,59 +153,15 @@ SPSelectContext::~SPSelectContext() {
     //G_OBJECT_CLASS(sp_select_context_parent_class)->dispose(object);
 }
 
-static void
-sp_select_context_dispose(GObject *object)
-{
-    SPSelectContext *sc = SP_SELECT_CONTEXT(object);
-    SPEventContext * ec = SP_EVENT_CONTEXT (object);
-
-    ec->enableGrDrag(false);
-
-    if (sc->grabbed) {
-        sp_canvas_item_ungrab(sc->grabbed, GDK_CURRENT_TIME);
-        sc->grabbed = NULL;
-    }
-
-    delete sc->_seltrans;
-    sc->_seltrans = NULL;
-    delete sc->_describer;
-    sc->_describer = NULL;
-
-    if (CursorSelectDragging) {
-#if GTK_CHECK_VERSION(3,0,0)
-        g_object_unref(CursorSelectDragging);
-#else
-        gdk_cursor_unref (CursorSelectDragging);
-#endif
-        CursorSelectDragging = NULL;
-    }
-    if (CursorSelectMouseover) {
-#if GTK_CHECK_VERSION(3,0,0)
-        g_object_unref(CursorSelectMouseover);
-#else
-        gdk_cursor_unref (CursorSelectMouseover);
-#endif
-        CursorSelectMouseover = NULL;
-    }
-
-    G_OBJECT_CLASS(sp_select_context_parent_class)->dispose(object);
-}
-
-static void
-sp_select_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CSelectContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPSelectContext::setup() {
+	SPEventContext* ec = this;
 
     SPSelectContext *select_context = SP_SELECT_CONTEXT(ec);
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_select_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_select_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     SPDesktop *desktop = ec->desktop;
 
@@ -265,14 +183,8 @@ void CSelectContext::setup() {
     }
 }
 
-static void
-sp_select_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CSelectContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPSelectContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPSelectContext *sc = SP_SELECT_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
@@ -373,14 +285,8 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
     }
 }
 
-static gint
-sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
-gint CSelectContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     gint ret = FALSE;
 
@@ -499,7 +405,7 @@ gint CSelectContext::item_handler(SPItem* item, GdkEvent* event) {
     if (!ret) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_select_context_parent_class))->item_handler)
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_select_context_parent_class))->item_handler(event_context, item, event);
-    	ret = CEventContext::item_handler(item, event);
+    	ret = SPEventContext::item_handler(item, event);
     }
 
     return ret;
@@ -544,14 +450,8 @@ sp_select_context_cycle_through_items(SPSelectContext *sc, Inkscape::Selection *
         selection->set(item);
 }
 
-static gint
-sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CSelectContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPSelectContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPItem *item = NULL;
     SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
@@ -1224,7 +1124,7 @@ gint CSelectContext::root_handler(GdkEvent* event) {
     if (!ret) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_select_context_parent_class))->root_handler)
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_select_context_parent_class))->root_handler(event_context, event);
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

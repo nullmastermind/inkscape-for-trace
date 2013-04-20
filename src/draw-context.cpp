@@ -50,14 +50,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_draw_context_dispose(GObject *object);
-
-static void sp_draw_context_setup(SPEventContext *ec);
-static void sp_draw_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static void sp_draw_context_finish(SPEventContext *ec);
-
-static gint sp_draw_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-
 static void spdc_selection_changed(Inkscape::Selection *sel, SPDrawContext *dc);
 static void spdc_selection_modified(Inkscape::Selection *sel, guint flags, SPDrawContext *dc);
 
@@ -74,36 +66,8 @@ static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc);
 static void spdc_reset_white(SPDrawContext *dc);
 static void spdc_free_colors(SPDrawContext *dc);
 
-G_DEFINE_TYPE(SPDrawContext, sp_draw_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_draw_context_class_init(SPDrawContextClass *klass)
-{
-    GObjectClass *object_class;
-    SPEventContextClass *ec_class;
-
-    object_class = (GObjectClass *)klass;
-    ec_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_draw_context_dispose;
-
-//    ec_class->setup = sp_draw_context_setup;
-//    ec_class->set = sp_draw_context_set;
-//    ec_class->finish = sp_draw_context_finish;
-//    ec_class->root_handler = sp_draw_context_root_handler;
-}
-
-CDrawContext::CDrawContext(SPDrawContext* drawcontext) : CEventContext(drawcontext) {
-	this->spdrawcontext = drawcontext;
-}
-
 SPDrawContext::SPDrawContext() : SPEventContext() {
 	SPDrawContext* dc = this;
-
-	//dc->cdrawcontext = new CDrawContext(dc);
-	//delete dc->ceventcontext;
-	//dc->ceventcontext = dc->cdrawcontext;
-	dc->cdrawcontext = 0;
-	types.insert(typeid(SPDrawContext));
 
 	dc->selection = 0;
 	dc->grab = 0;
@@ -136,21 +100,15 @@ SPDrawContext::SPDrawContext() : SPEventContext() {
 
     dc->waiting_LPE_type = Inkscape::LivePathEffect::INVALID_LPE;
 
-    new (&dc->sel_changed_connection) sigc::connection();
-    new (&dc->sel_modified_connection) sigc::connection();
+    //new (&dc->sel_changed_connection) sigc::connection();
+    //new (&dc->sel_modified_connection) sigc::connection();
 }
 
-static void sp_draw_context_init(SPDrawContext *dc)
-{
-	new (dc) SPDrawContext();
-}
+SPDrawContext::~SPDrawContext() {
+    SPDrawContext *dc = SP_DRAW_CONTEXT(this);
 
-static void sp_draw_context_dispose(GObject *object)
-{
-    SPDrawContext *dc = SP_DRAW_CONTEXT(object);
-
-    dc->sel_changed_connection.~connection();
-    dc->sel_modified_connection.~connection();
+    //dc->sel_changed_connection.~connection();
+    //dc->sel_modified_connection.~connection();
 
     if (dc->grab) {
         sp_canvas_item_ungrab(dc->grab, GDK_CURRENT_TIME);
@@ -163,16 +121,11 @@ static void sp_draw_context_dispose(GObject *object)
 
     spdc_free_colors(dc);
 
-    G_OBJECT_CLASS(sp_draw_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_draw_context_parent_class)->dispose(object);
 }
 
-static void sp_draw_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CDrawContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPDrawContext::setup() {
+	SPEventContext* ec = this;
 
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
     SPDesktop *dt = ec->desktop;
@@ -180,7 +133,7 @@ void CDrawContext::setup() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     dc->selection = sp_desktop_selection(dt);
 
@@ -217,13 +170,8 @@ void CDrawContext::setup() {
     spdc_attach_selection(dc, dc->selection);
 }
 
-static void sp_draw_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CDrawContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPDrawContext::finish() {
+	SPEventContext* ec = this;
 
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
 
@@ -241,20 +189,11 @@ void CDrawContext::finish() {
     spdc_free_colors(dc);
 }
 
-static void sp_draw_context_set(SPEventContext */*ec*/, Inkscape::Preferences::Entry */*val*/)
-{
+void SPDrawContext::set(Inkscape::Preferences::Entry* value) {
 }
 
-void CDrawContext::set(Inkscape::Preferences::Entry* value) {
-}
-
-gint sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
-{
-	return ec->ceventcontext->root_handler(event);
-}
-
-gint CDrawContext::root_handler(GdkEvent* event) {
-	SPEventContext* ec = this->speventcontext;
+gint SPDrawContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this;
 
     gint ret = FALSE;
 
@@ -282,7 +221,7 @@ gint CDrawContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_draw_context_parent_class))->root_handler(ec, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

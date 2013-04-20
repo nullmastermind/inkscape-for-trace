@@ -8,13 +8,8 @@
 #include "draw-context.h"
 #include "live_effects/effect.h"
 
-#define SP_TYPE_PEN_CONTEXT (sp_pen_context_get_type())
-//#define SP_PEN_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_PEN_CONTEXT, SPPenContext))
-#define SP_PEN_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_PEN_CONTEXT, SPPenContextClass))
-//#define SP_IS_PEN_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_PEN_CONTEXT))
-#define SP_IS_PEN_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_PEN_CONTEXT))
 #define SP_PEN_CONTEXT(obj) ((SPPenContext*)obj)
-#define SP_IS_PEN_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPPenContext)))
+#define SP_IS_PEN_CONTEXT(obj) (dynamic_cast<const SPPenContext*>((const SPEventContext*)obj))
 
 enum {
     SP_PEN_CONTEXT_POINT,
@@ -30,15 +25,13 @@ enum {
 
 struct SPCtrlLine;
 
-class CPenContext;
-
 /**
  * SPPenContext: a context for pen tool events.
  */
 class SPPenContext : public SPDrawContext {
 public:
 	SPPenContext();
-	CPenContext* cpencontext;
+	virtual ~SPPenContext();
 
     Geom::Point p[5];
 
@@ -66,14 +59,6 @@ public:
     unsigned int events_disabled : 1;
 
 	static const std::string prefsPath;
-};
-
-/// The SPPenContext vtable (empty).
-struct SPPenContextClass : public SPEventContextClass { };
-
-class CPenContext : public CDrawContext {
-public:
-	CPenContext(SPPenContext* pencontext);
 
 	virtual void setup();
 	virtual void finish();
@@ -82,12 +67,7 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-
-private:
-	SPPenContext* sppencontext;
 };
-
-GType sp_pen_context_get_type();
 
 inline bool sp_pen_context_has_waiting_LPE(SPPenContext *pc) {
     // note: waiting_LPE_type is defined in SPDrawContext

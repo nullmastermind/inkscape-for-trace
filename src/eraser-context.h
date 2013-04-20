@@ -21,15 +21,8 @@
 
 #include "common-context.h"
 
-G_BEGIN_DECLS
-
-#define SP_TYPE_ERASER_CONTEXT (sp_eraser_context_get_type())
-//#define SP_ERASER_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_ERASER_CONTEXT, SPEraserContext))
-#define SP_ERASER_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_ERASER_CONTEXT, SPEraserContextClass))
-//#define SP_IS_ERASER_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_ERASER_CONTEXT))
-#define SP_IS_ERASER_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_ERASER_CONTEXT))
 #define SP_ERASER_CONTEXT(obj) ((SPEraserContext*)obj)
-#define SP_IS_ERASER_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPEraserContext)))
+#define SP_IS_ERASER_CONTEXT(obj) (dynamic_cast<const SPEraserContext*>((const SPEventContext*)obj))
 
 #define ERC_MIN_PRESSURE      0.0
 #define ERC_MAX_PRESSURE      1.0
@@ -39,36 +32,18 @@ G_BEGIN_DECLS
 #define ERC_MAX_TILT          1.0
 #define ERC_DEFAULT_TILT      0.0
 
-class CEraserContext;
-
 class SPEraserContext : public SPCommonContext {
 public:
 	SPEraserContext();
-	CEraserContext* cerasercontext;
+	virtual ~SPEraserContext();
 
 	static const std::string prefsPath;
-};
-
-struct SPEraserContextClass : public SPEventContextClass{};
-
-class CEraserContext : public CCommonContext {
-public:
-	CEraserContext(SPEraserContext* erasercontext);
 
 	virtual void setup();
-	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-
-private:
-	SPEraserContext* sperasercontext;
 };
-
-
-GType sp_eraser_context_get_type(void);
-
-G_END_DECLS
 
 #endif // SP_ERASER_CONTEXT_H_SEEN
 

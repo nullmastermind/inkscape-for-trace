@@ -78,8 +78,6 @@ using namespace std;
 #define DDC_RED_RGBA 0xff0000ff
 #define DYNA_MIN_WIDTH 1.0e-6
 
-static void sp_spray_context_dispose(GObject *object);
-
 #include "sp-factory.h"
 
 namespace {
@@ -90,13 +88,11 @@ namespace {
 	bool sprayContextRegistered = ToolFactory::instance().registerObject("/tools/spray", createSprayContext);
 }
 
-const std::string& CSprayContext::getPrefsPath() {
+const std::string& SPSprayContext::getPrefsPath() {
 	return SPSprayContext::prefsPath;
 }
 
 const std::string SPSprayContext::prefsPath = "/tools/spray";
-
-G_DEFINE_TYPE(SPSprayContext, sp_spray_context, SP_TYPE_EVENT_CONTEXT);
 
 /**
  * This function returns pseudo-random numbers from a normal distribution
@@ -107,18 +103,6 @@ inline double NormalDistribution(double mu, double sigma)
 {
   // use Box Muller's algorithm
   return mu + sigma * sqrt( -2.0 * log(g_random_double_range(0, 1)) ) * cos( 2.0*M_PI*g_random_double_range(0, 1) );
-}
-
-static void sp_spray_context_class_init(SPSprayContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_spray_context_dispose;
-
-//    event_context_class->setup = sp_spray_context_setup;
-//    event_context_class->set = sp_spray_context_set;
-//    event_context_class->root_handler = sp_spray_context_root_handler;
 }
 
 /* Method to rotate items */
@@ -145,17 +129,8 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
     item->doWriteTransform(item->getRepr(), item->transform);
 }
 
-CSprayContext::CSprayContext(SPSprayContext* spraycontext) : CEventContext(spraycontext) {
-	this->spspraycontext = spraycontext;
-}
-
 SPSprayContext::SPSprayContext() : SPEventContext() {
 	SPSprayContext* tc = this;
-
-	tc->cspraycontext = new CSprayContext(tc);
-	delete tc->ceventcontext;
-	tc->ceventcontext = tc->cspraycontext;
-	types.insert(typeid(SPSprayContext));
 
 	tc->usetilt = 0;
 	tc->_message_context = 0;
@@ -189,23 +164,17 @@ SPSprayContext::SPSprayContext() : SPEventContext() {
     tc->is_dilating = false;
     tc->has_dilated = false;
 
-    new (&tc->style_set_connection) sigc::connection();
+    //new (&tc->style_set_connection) sigc::connection();
 }
 
-static void sp_spray_context_init(SPSprayContext *tc)
-{
-	new (tc) SPSprayContext();
-}
-
-static void sp_spray_context_dispose(GObject *object)
-{
-    SPSprayContext *tc = SP_SPRAY_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
+SPSprayContext::~SPSprayContext() {
+    SPSprayContext *tc = SP_SPRAY_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
 
     ec->enableGrDrag(false);
 
     tc->style_set_connection.disconnect();
-    tc->style_set_connection.~connection();
+    //tc->style_set_connection.~connection();
 
     if (tc->dilate_area) {
         sp_canvas_item_destroy(tc->dilate_area);
@@ -216,7 +185,7 @@ static void sp_spray_context_dispose(GObject *object)
         delete tc->_message_context;
     }
 
-    G_OBJECT_CLASS(sp_spray_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_spray_context_parent_class)->dispose(object);
 }
 
 static bool is_transform_modes(gint mode)
@@ -259,15 +228,15 @@ static void sp_spray_update_cursor(SPSprayContext *tc, bool /*with_shift*/)
    g_free(sel_message);
 }
 
-void CSprayContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPSprayContext::setup() {
+	SPEventContext* ec = this;
 
     SPSprayContext *tc = SP_SPRAY_CONTEXT(ec);
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     {
         /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
@@ -313,8 +282,8 @@ void CSprayContext::setup() {
     }
 }
 
-void CSprayContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPSprayContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPSprayContext *tc = SP_SPRAY_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
@@ -649,8 +618,8 @@ static void sp_spray_switch_mode(SPSprayContext *tc, gint mode, bool with_shift)
     sp_spray_update_cursor(tc, with_shift);
 }
 
-gint CSprayContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPSprayContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPSprayContext *tc = SP_SPRAY_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
@@ -932,7 +901,7 @@ gint CSprayContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

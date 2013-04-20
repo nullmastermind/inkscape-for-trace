@@ -109,14 +109,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_connector_context_dispose(GObject *object);
-
-static void sp_connector_context_setup(SPEventContext *ec);
-static void sp_connector_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static void sp_connector_context_finish(SPEventContext *ec);
-static gint sp_connector_context_root_handler(SPEventContext *ec, GdkEvent *event);
-static gint sp_connector_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 // Stuff borrowed from DrawContext
 static void spcc_connector_set_initial_point(SPConnectorContext *cc, Geom::Point const p);
 static void spcc_connector_set_subsequent_point(SPConnectorContext *cc, Geom::Point const p);
@@ -182,40 +174,14 @@ namespace {
 	bool connectorContextRegistered = ToolFactory::instance().registerObject("/tools/connector", createConnectorContext);
 }
 
-const std::string& CConnectorContext::getPrefsPath() {
+const std::string& SPConnectorContext::getPrefsPath() {
 	return SPConnectorContext::prefsPath;
 }
 
 const std::string SPConnectorContext::prefsPath = "/tools/connector";
 
-G_DEFINE_TYPE(SPConnectorContext, sp_connector_context, SP_TYPE_EVENT_CONTEXT);
-
-static void
-sp_connector_context_class_init(SPConnectorContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_connector_context_dispose;
-
-//    event_context_class->setup = sp_connector_context_setup;
-//    event_context_class->set = sp_connector_context_set;
-//    event_context_class->finish = sp_connector_context_finish;
-//    event_context_class->root_handler = sp_connector_context_root_handler;
-//    event_context_class->item_handler = sp_connector_context_item_handler;
-}
-
-CConnectorContext::CConnectorContext(SPConnectorContext* connectorcontext) : CEventContext(connectorcontext) {
-	this->spconnectorcontext = connectorcontext;
-}
-
 SPConnectorContext::SPConnectorContext() : SPEventContext() {
 	SPConnectorContext* cc = this;
-
-	cc->cconnectorcontext = new CConnectorContext(cc);
-	delete cc->ceventcontext;
-	cc->ceventcontext = cc->cconnectorcontext;
-	types.insert(typeid(SPConnectorContext));
 
 	cc->red_curve = 0;
 	cc->isOrthogonal = false;
@@ -257,7 +223,7 @@ SPConnectorContext::SPConnectorContext() : SPEventContext() {
     cc->clickeditem = NULL;
     cc->clickedhandle = NULL;
 
-    new (&cc->knots) SPKnotList();
+    //new (&cc->knots) SPKnotList();
 
     for (int i = 0; i < 2; ++i) {
         cc->endpt_handle[i] = NULL;
@@ -269,17 +235,8 @@ SPConnectorContext::SPConnectorContext() : SPEventContext() {
     cc->state = SP_CONNECTOR_CONTEXT_IDLE;
 }
 
-static void
-sp_connector_context_init(SPConnectorContext *cc)
-{
-	new (cc) SPConnectorContext();
-}
-
-
-static void
-sp_connector_context_dispose(GObject *object)
-{
-    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(object);
+SPConnectorContext::~SPConnectorContext() {
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(this);
 
     cc->sel_changed_connection.disconnect();
 
@@ -299,18 +256,11 @@ sp_connector_context_dispose(GObject *object)
     }
     g_assert( cc->newConnRef == NULL );
 
-    G_OBJECT_CLASS(sp_connector_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_connector_context_parent_class)->dispose(object);
 }
 
-
-static void
-sp_connector_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CConnectorContext::setup() {
-	SPConnectorContext* ec = this->spconnectorcontext;
+void SPConnectorContext::setup() {
+	SPConnectorContext* ec = this;
 
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
     SPDesktop *dt = ec->desktop;
@@ -318,7 +268,7 @@ void CConnectorContext::setup() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     cc->selection = sp_desktop_selection(dt);
 
@@ -356,15 +306,8 @@ void CConnectorContext::setup() {
     dt->canvas->gen_all_enter_events = true;
 }
 
-
-static void
-sp_connector_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CConnectorContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->spconnectorcontext;
+void SPConnectorContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
 
@@ -379,14 +322,8 @@ void CConnectorContext::set(Inkscape::Preferences::Entry* val) {
     }
 }
 
-static void
-sp_connector_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CConnectorContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPConnectorContext::finish() {
+	SPEventContext* ec = this;
 
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
 
@@ -396,7 +333,7 @@ void CConnectorContext::finish() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->finish) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_connector_context_parent_class))->finish(ec);
 //    }
-    CEventContext::finish();
+    SPEventContext::finish();
 
     if (cc->selection) {
         cc->selection = NULL;
@@ -505,14 +442,8 @@ cc_deselect_handle(SPKnot* knot)
     sp_knot_update_ctrl(knot);
 }
 
-static gint
-sp_connector_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
-gint CConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     gint ret = FALSE;
 
@@ -571,15 +502,8 @@ gint CConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-
-gint
-sp_connector_context_root_handler(SPEventContext *ec, GdkEvent *event)
-{
-	return ec->ceventcontext->root_handler(event);
-}
-
-gint CConnectorContext::root_handler(GdkEvent* event) {
-	SPEventContext* ec = this->speventcontext;
+gint SPConnectorContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this;
 
     SPConnectorContext *const cc = SP_CONNECTOR_CONTEXT(ec);
 
@@ -611,7 +535,7 @@ gint CConnectorContext::root_handler(GdkEvent* event) {
 //        if (parent_root_handler) {
 //            ret = parent_root_handler(ec, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

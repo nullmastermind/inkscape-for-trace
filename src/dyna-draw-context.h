@@ -21,13 +21,8 @@
 #include "common-context.h"
 #include "splivarot.h"
 
-#define SP_TYPE_DYNA_DRAW_CONTEXT (sp_dyna_draw_context_get_type())
-//#define SP_DYNA_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContext))
-#define SP_DYNA_DRAW_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_DYNA_DRAW_CONTEXT, SPDynaDrawContextClass))
-//#define SP_IS_DYNA_DRAW_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_DYNA_DRAW_CONTEXT))
-#define SP_IS_DYNA_DRAW_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_DYNA_DRAW_CONTEXT))
 #define SP_DYNA_DRAW_CONTEXT(obj) ((SPDynaDrawContext*)obj)
-#define SP_IS_DYNA_DRAW_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPDynaDrawContext)))
+#define SP_IS_DYNA_DRAW_CONTEXT(obj) (dynamic_cast<const SPDynaDrawContext*>((const SPEventContext*)obj))
 
 
 #define DDC_MIN_PRESSURE      0.0
@@ -38,12 +33,10 @@
 #define DDC_MAX_TILT          1.0
 #define DDC_DEFAULT_TILT      0.0
 
-class CDynaDrawContext;
-
 class SPDynaDrawContext : public SPCommonContext {
 public:
 	SPDynaDrawContext();
-	CDynaDrawContext* cdynadrawcontext;
+	virtual ~SPDynaDrawContext();
 
     /** newly created object remain selected */
     bool keep_selected;
@@ -63,25 +56,13 @@ public:
     bool trace_bg;
 
 	static const std::string prefsPath;
-};
-
-struct SPDynaDrawContextClass : public SPEventContextClass{};
-
-class CDynaDrawContext : public CCommonContext {
-public:
-	CDynaDrawContext(SPDynaDrawContext* dynadrawcontext);
 
 	virtual void setup();
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-
-private:
-	SPDynaDrawContext* spdynadrawcontext;
 };
-
-GType sp_dyna_draw_context_get_type(void);
 
 #endif // SP_DYNA_DRAW_CONTEXT_H_SEEN
 

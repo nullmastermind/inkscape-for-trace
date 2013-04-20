@@ -19,20 +19,13 @@
 #include <2geom/point.h>
 #include "event-context.h"
 
-#define SP_TYPE_STAR_CONTEXT (sp_star_context_get_type ())
-//#define SP_STAR_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_STAR_CONTEXT, SPStarContext))
-#define SP_STAR_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_STAR_CONTEXT, SPStarContextClass))
-//#define SP_IS_STAR_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_STAR_CONTEXT))
-#define SP_IS_STAR_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STAR_CONTEXT))
 #define SP_STAR_CONTEXT(obj) ((SPStarContext*)obj)
-#define SP_IS_STAR_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPStarContext)))
-
-class CStarContext;
+#define SP_IS_STAR_CONTEXT(obj) (dynamic_cast<const SPStarContext*>((const SPEventContext*)obj))
 
 class SPStarContext : public SPEventContext {
 public:
 	SPStarContext();
-	CStarContext* cstarcontext;
+	virtual ~SPStarContext();
 
     SPItem *item;
     Geom::Point center;
@@ -53,15 +46,6 @@ public:
     Inkscape::MessageContext *_message_context;
 
 	static const std::string prefsPath;
-};
-
-struct SPStarContextClass {
-    SPEventContextClass parent_class;
-};
-
-class CStarContext : public CEventContext {
-public:
-	CStarContext(SPStarContext* starcontext);
 
 	virtual void setup();
 	virtual void finish();
@@ -69,11 +53,6 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-
-private:
-	SPStarContext* spstarcontext;
 };
-
-GType sp_star_context_get_type (void);
 
 #endif

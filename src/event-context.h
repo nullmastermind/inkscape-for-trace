@@ -33,15 +33,8 @@ namespace Inkscape {
     }
 }
 
-#define SP_TYPE_EVENT_CONTEXT (sp_event_context_get_type())
-//#define SP_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_EVENT_CONTEXT, SPEventContext))
-#define SP_EVENT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_EVENT_CONTEXT, SPEventContextClass))
-//#define SP_IS_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_EVENT_CONTEXT))
 #define SP_EVENT_CONTEXT(obj) ((SPEventContext*)obj)
-#define SP_IS_EVENT_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPEventContext)))
-
-
-GType sp_event_context_get_type();
+#define SP_IS_EVENT_CONTEXT(obj) (dynamic_cast<const SPEventContext*>((const SPEventContext*)obj))
 
 gboolean sp_event_context_snap_watchdog_callback(gpointer data);
 void sp_event_context_discard_delayed_snap_event(SPEventContext *ec);
@@ -93,10 +86,6 @@ private:
 void sp_event_context_snap_delay_handler(SPEventContext *ec, gpointer const dse_item, gpointer const dse_item2, GdkEventMotion *event, DelayedSnapEvent::DelayedSnapEventOrigin origin);
 
 
-class CEventContext;
-#include <set>
-#include "type-info.h"
-
 /**
  * Base class for Event processors.
  *
@@ -110,7 +99,7 @@ class CEventContext;
  * plus few abstract base classes. Writing a new tool involves
  * subclassing SPEventContext.
  */
-class SPEventContext { //: public GObject {
+class SPEventContext {
 public:
     void enableSelectionCue (bool enable=true);
     void enableGrDrag (bool enable=true);
@@ -118,8 +107,6 @@ public:
 
     SPEventContext();
     virtual ~SPEventContext();
-    CEventContext* ceventcontext;
-    std::set<TypeInfo> types;
 
     /// Desktop eventcontext stack
     //SPEventContext *next;
@@ -156,25 +143,6 @@ public:
     bool _dse_callback_in_process;
 
     char const * tool_url; ///< the (preferences) url for the tool (if a subclass corresponding to a tool is used)
-};
-
-/**
- * The SPEvent vtable.
- */
-struct SPEventContextClass : public GObjectClass {
-//    void (* setup)(SPEventContext *ec);
-//    void (* finish)(SPEventContext *ec);
-//    void (* set)(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-//    void (* activate)(SPEventContext *ec);
-//    void (* deactivate)(SPEventContext *ec);
-//    gint (* root_handler)(SPEventContext *ec, GdkEvent *event);
-//    gint (* item_handler)(SPEventContext *ec, SPItem *item, GdkEvent *event);
-};
-
-class CEventContext {
-public:
-	CEventContext(SPEventContext* eventcontext);
-	virtual ~CEventContext();
 
 	virtual void setup();
 	virtual void finish();
@@ -185,8 +153,6 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath() = 0;
-protected:
-	SPEventContext* speventcontext;
 };
 
 #define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT(e)->desktop)
@@ -245,7 +211,7 @@ public:
 //            (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set(_ec,
 //                    const_cast<Inkscape::Preferences::Entry*> (&val));
 //        }
-    	_ec->ceventcontext->set(const_cast<Inkscape::Preferences::Entry*>(&val));
+    	_ec->set(const_cast<Inkscape::Preferences::Entry*>(&val));
     }
 private:
     SPEventContext * const _ec;

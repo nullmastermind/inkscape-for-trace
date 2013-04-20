@@ -53,12 +53,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_mesh_context_dispose(GObject *object);
-
-static void sp_mesh_context_setup(SPEventContext *ec);
-
-static gint sp_mesh_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-
 static void sp_mesh_drag(SPMeshContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
 
@@ -72,36 +66,14 @@ namespace {
 	bool meshContextRegistered = ToolFactory::instance().registerObject("/tools/mesh", createMeshContext);
 }
 
-const std::string& CMeshContext::getPrefsPath() {
+const std::string& SPMeshContext::getPrefsPath() {
 	return SPMeshContext::prefsPath;
 }
 
 const std::string SPMeshContext::prefsPath = "/tools/mesh";
 
-G_DEFINE_TYPE(SPMeshContext, sp_mesh_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_mesh_context_class_init(SPMeshContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_mesh_context_dispose;
-
-//    event_context_class->setup = sp_mesh_context_setup;
-//    event_context_class->root_handler  = sp_mesh_context_root_handler;
-}
-
-CMeshContext::CMeshContext(SPMeshContext* meshcontext) : CEventContext(meshcontext) {
-	this->spmeshcontext = meshcontext;
-}
-
 SPMeshContext::SPMeshContext() : SPEventContext() {
 	SPMeshContext* gr_context = this;
-
-	gr_context->cmeshcontext = new CMeshContext(gr_context);
-	delete gr_context->ceventcontext;
-	gr_context->ceventcontext = gr_context->cmeshcontext;
-	types.insert(typeid(SPMeshContext));
 
 	gr_context->selcon = 0;
 	gr_context->_message_context = 0;
@@ -121,15 +93,9 @@ SPMeshContext::SPMeshContext() : SPEventContext() {
     event_context->item_to_select = NULL;
 }
 
-static void sp_mesh_context_init(SPMeshContext *gr_context)
-{
-	new (gr_context) SPMeshContext();
-}
-
-static void sp_mesh_context_dispose(GObject *object)
-{
-    SPMeshContext *rc = SP_MESH_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
+SPMeshContext::~SPMeshContext() {
+    SPMeshContext *rc = SP_MESH_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
 
     ec->enableGrDrag(false);
 
@@ -142,7 +108,7 @@ static void sp_mesh_context_dispose(GObject *object)
     rc->subselcon->disconnect();
     delete rc->subselcon;
 
-    G_OBJECT_CLASS(sp_mesh_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_mesh_context_parent_class)->dispose(object);
 }
 
 const gchar *ms_handle_descr [] = {
@@ -278,21 +244,15 @@ mesh_subselection_changed (gpointer, gpointer data)
     mesh_selection_changed (NULL, data);
 }
 
-
-static void sp_mesh_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CMeshContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPMeshContext::setup() {
+	SPEventContext* ec = this;
 
     SPMeshContext *rc = SP_MESH_CONTEXT(ec);
 
 //    if (((SPEventContextClass *) sp_mesh_context_parent_class)->setup) {
 //        ((SPEventContextClass *) sp_mesh_context_parent_class)->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/mesh/selcue", true)) {
@@ -496,14 +456,8 @@ sp_mesh_context_corner_operation (SPMeshContext *rc, MeshCornerOperation operati
 /**
 Handles all keyboard and mouse input for meshs.
 */
-static gint
-sp_mesh_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CMeshContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPMeshContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     // static int count = 0;
     // std::cout << "sp_mesh_context_root_handler: " << count++ << std::endl;
@@ -977,7 +931,7 @@ gint CMeshContext::root_handler(GdkEvent* event) {
 //        if (((SPEventContextClass *) sp_mesh_context_parent_class)->root_handler) {
 //            ret = ((SPEventContextClass *) sp_mesh_context_parent_class)->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

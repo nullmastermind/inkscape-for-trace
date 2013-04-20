@@ -48,32 +48,22 @@
 
 using Inkscape::DocumentUndo;
 
-typedef struct
-{
-    double        R;
-    double        G;
-    double        B;
-    double        alpha;
-
-    unsigned int  dragging : 1;
-    
-    SPCanvasItem *grabbed;
-    SPCanvasItem *area;
-    Geom::Point   centre;
-} SPDropperContextPrivate;
-
-#define SP_DROPPER_CONTEXT_GET_PRIVATE(dc) \
-    G_TYPE_INSTANCE_GET_PRIVATE(dc, SP_TYPE_DROPPER_CONTEXT, SPDropperContextPrivate)
-
-static void sp_dropper_context_class_init(SPDropperContextClass *klass);
-static void sp_dropper_context_init(SPDropperContext *dc);
-
-static void sp_dropper_context_setup(SPEventContext *ec);
-static void sp_dropper_context_finish(SPEventContext *ec);
-
-static gint sp_dropper_context_root_handler(SPEventContext *ec, GdkEvent * event);
-
-static SPEventContextClass *parent_class;
+//typedef struct
+//{
+//    double        R;
+//    double        G;
+//    double        B;
+//    double        alpha;
+//
+//    unsigned int  dragging : 1;
+//
+//    SPCanvasItem *grabbed;
+//    SPCanvasItem *area;
+//    Geom::Point   centre;
+//} SPDropperContextPrivate;
+//
+//#define SP_DROPPER_CONTEXT_GET_PRIVATE(dc) \
+//    G_TYPE_INSTANCE_GET_PRIVATE(dc, SP_TYPE_DROPPER_CONTEXT, SPDropperContextPrivate)
 
 static GdkCursor *cursor_dropper_fill = NULL;
 static GdkCursor *cursor_dropper_stroke = NULL;
@@ -88,40 +78,24 @@ namespace {
 	bool dropperContextRegistered = ToolFactory::instance().registerObject("/tools/dropper", createDropperContext);
 }
 
-const std::string& CDropperContext::getPrefsPath() {
+const std::string& SPDropperContext::getPrefsPath() {
 	return SPDropperContext::prefsPath;
 }
 
 const std::string SPDropperContext::prefsPath = "/tools/dropper";
 
-G_DEFINE_TYPE(SPDropperContext, sp_dropper_context, SP_TYPE_EVENT_CONTEXT);
-
-static void
-sp_dropper_context_class_init(SPDropperContextClass *klass)
-{
-    GObjectClass        *object_class = G_OBJECT_CLASS (klass);
-    SPEventContextClass *ec_class     = SP_EVENT_CONTEXT_CLASS(klass);
-
-    parent_class = SP_EVENT_CONTEXT_CLASS(g_type_class_peek_parent(klass));
-
-//    ec_class->setup = sp_dropper_context_setup;
-//    ec_class->finish = sp_dropper_context_finish;
-//    ec_class->root_handler = sp_dropper_context_root_handler;
-    
-    g_type_class_add_private(object_class, sizeof(SPDropperContext));
-}
-
-CDropperContext::CDropperContext(SPDropperContext* droppercontext) : CEventContext(droppercontext) {
-	this->spdroppercontext = droppercontext;
-}
-
 SPDropperContext::SPDropperContext() : SPEventContext() {
 	SPDropperContext* dc = this;
 
-	dc->cdroppercontext = new CDropperContext(dc);
-	delete dc->ceventcontext;
-	dc->ceventcontext = dc->cdroppercontext;
-	types.insert(typeid(SPDropperContext));
+	dc->R = 0;
+	dc->G = 0;
+	dc->B = 0;
+	dc->alpha = 0;
+	dc->dragging = 0;
+
+	dc->grabbed = 0;
+	dc->area = 0;
+	dc->centre = Geom::Point(0, 0);
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(dc);
     event_context->cursor_shape = cursor_dropper_f_xpm;
@@ -132,27 +106,19 @@ SPDropperContext::SPDropperContext() : SPEventContext() {
     cursor_dropper_stroke = sp_cursor_new_from_xpm(cursor_dropper_s_xpm , 7, 7);
 }
 
-static void sp_dropper_context_init(SPDropperContext *dc)
-{
-	new (dc) SPDropperContext();
+SPDropperContext::~SPDropperContext() {
 }
 
-static void
-sp_dropper_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CDropperContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPDropperContext::setup() {
+	SPEventContext* ec = this;
 
     SPDropperContext        *dc   = SP_DROPPER_CONTEXT(ec);
-    SPDropperContextPrivate *priv = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
+    SPDropperContext *priv = (dc);
 
 //    if ((SP_EVENT_CONTEXT_CLASS(parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
     SPCurve *c = new SPCurve();
@@ -179,17 +145,11 @@ void CDropperContext::setup() {
     }
 }
 
-static void
-sp_dropper_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CDropperContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPDropperContext::finish() {
+	SPEventContext* ec = this;
 
     SPDropperContext        *dc   = SP_DROPPER_CONTEXT(ec);
-    SPDropperContextPrivate *priv = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
+    SPDropperContext *priv = (dc);
 
     ec->enableGrDrag(false);
 	
@@ -232,7 +192,7 @@ guint32
 sp_dropper_context_get_color(SPEventContext *ec)
 {
     SPDropperContext        *dc    = SP_DROPPER_CONTEXT(ec);
-    SPDropperContextPrivate *priv  = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
+    SPDropperContext *priv  = (dc);
     Inkscape::Preferences   *prefs = Inkscape::Preferences::get();
 
     int pick = prefs->getInt("/tools/dropper/pick",
@@ -247,18 +207,11 @@ sp_dropper_context_get_color(SPEventContext *ec)
                                                                               : 1.0);
 }
 
-static gint
-sp_dropper_context_root_handler(SPEventContext *event_context,
-                                GdkEvent       *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CDropperContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPDropperContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPDropperContext        *dc      = SP_DROPPER_CONTEXT(event_context);
-    SPDropperContextPrivate *priv    = SP_DROPPER_CONTEXT_GET_PRIVATE(dc);
+    SPDropperContext *priv    = (dc);
     SPDesktop               *desktop = event_context->desktop;
     Inkscape::Preferences   *prefs   = Inkscape::Preferences::get();
 
@@ -479,7 +432,7 @@ gint CDropperContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

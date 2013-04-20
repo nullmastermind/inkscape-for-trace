@@ -16,13 +16,8 @@
 #include <glib.h>
 #include "event-context.h"
 
-#define INK_TYPE_NODE_TOOL            (ink_node_tool_get_type ())
-//#define INK_NODE_TOOL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), INK_TYPE_NODE_TOOL, InkNodeTool))
-#define INK_NODE_TOOL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), INK_TYPE_NODE_TOOL, InkNodeToolClass))
-//#define INK_IS_NODE_TOOL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), INK_TYPE_NODE_TOOL))
-#define INK_IS_NODE_TOOL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), INK_TYPE_NODE_TOOL))
 #define INK_NODE_TOOL(obj) ((InkNodeTool*)obj)
-#define INK_IS_NODE_TOOL(obj) (((SPEventContext*)obj)->types.count(typeid(InkNodeTool)))
+#define INK_IS_NODE_TOOL(obj) (dynamic_cast<const InkNodeTool*>((const SPEventContext*)obj))
 
 namespace Inkscape {
 
@@ -50,16 +45,13 @@ typedef Inkscape::UI::PathSharedData* PathSharedDataPtr;
 
 typedef boost::ptr_map<SPItem*, ShapeEditor> ShapeEditors;
 
-class CInkNodeTool;
 
-class InkNodeTool : public SPEventContext
-{
+class InkNodeTool : public SPEventContext {
 public:
 	InkNodeTool();
 	virtual ~InkNodeTool();
-	CInkNodeTool* cinknodetool;
 
-    sigc::connection _selection_changed_connection;
+	sigc::connection _selection_changed_connection;
     sigc::connection _mouseover_changed_connection;
     sigc::connection _selection_modified_connection;
     sigc::connection _sizeUpdatedConn;
@@ -86,15 +78,6 @@ public:
     unsigned edit_masks : 1;
 
 	static const std::string prefsPath;
-};
-
-struct InkNodeToolClass {
-    SPEventContextClass parent_class;
-};
-
-class CInkNodeTool : public CEventContext {
-public:
-	CInkNodeTool(InkNodeTool* inknodetool);
 
 	virtual void setup();
 	virtual void set(Inkscape::Preferences::Entry* val);
@@ -102,11 +85,7 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	InkNodeTool* inknodetool;
 };
-
-GType ink_node_tool_get_type (void);
 
 #endif
 

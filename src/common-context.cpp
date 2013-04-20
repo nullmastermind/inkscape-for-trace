@@ -18,40 +18,8 @@
 #define DRAG_DEFAULT 1.0
 #define DRAG_MAX 1.0
 
-
-static void sp_common_context_dispose(GObject *object);
-
-static void sp_common_context_setup(SPEventContext *ec);
-static void sp_common_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-
-static gint sp_common_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-
-G_DEFINE_TYPE(SPCommonContext, sp_common_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_common_context_class_init(SPCommonContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_common_context_dispose;
-
-//    event_context_class->setup = sp_common_context_setup;
-//    event_context_class->set = sp_common_context_set;
-//    event_context_class->root_handler = sp_common_context_root_handler;
-}
-
-CCommonContext::CCommonContext(SPCommonContext* commoncontext) : CEventContext(commoncontext) {
-	this->spcommoncontext = commoncontext;
-}
-
 SPCommonContext::SPCommonContext() : SPEventContext() {
 	SPCommonContext* ctx = this;
-
-	//ctx->ccommoncontext = new CCommonContext(ctx);
-	//delete ctx->ceventcontext;
-	//ctx->ceventcontext = ctx->ccommoncontext;
-	ctx->ccommoncontext = 0;
-	types.insert(typeid(SPCommonContext));
 
 	ctx->_message_context = 0;
 	ctx->tremor = 0;
@@ -99,14 +67,8 @@ SPCommonContext::SPCommonContext() : SPEventContext() {
     ctx->abs_width = false;
 }
 
-static void sp_common_context_init(SPCommonContext *ctx)
-{
-	new (ctx) SPCommonContext();
-}
-
-static void sp_common_context_dispose(GObject *object)
-{
-    SPCommonContext *ctx = SP_COMMON_CONTEXT(object);
+SPCommonContext::~SPCommonContext() {
+    SPCommonContext *ctx = SP_COMMON_CONTEXT(this);
 
     if (ctx->accumulated) {
         ctx->accumulated = ctx->accumulated->unref();
@@ -141,29 +103,11 @@ static void sp_common_context_dispose(GObject *object)
         ctx->_message_context = 0;
     }
 
-    G_OBJECT_CLASS(sp_common_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_common_context_parent_class)->dispose(object);
 }
 
-
-static void sp_common_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CCommonContext::setup() {
-//    if ( SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->setup ) {
-//        SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->setup(ec);
-//    }
-	CEventContext::setup();
-}
-
-static void sp_common_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *value)
-{
-	ec->ceventcontext->set(value);
-}
-
-void CCommonContext::set(Inkscape::Preferences::Entry* value) {
-	SPEventContext* ec = this->speventcontext;
+void SPCommonContext::set(Inkscape::Preferences::Entry* value) {
+	SPEventContext* ec = this;
 
     SPCommonContext *ctx = SP_COMMON_CONTEXT(ec);
     Glib::ustring path = value->getEntryName();
@@ -197,29 +141,6 @@ void CCommonContext::set(Inkscape::Preferences::Entry* value) {
     } else if (path == "cap_rounding") {
         ctx->cap_rounding = value->getDouble();
     }
-}
-
-static gint sp_common_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CCommonContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
-
-    gint ret = FALSE;
-
-    // TODO add common hanlding
-
-
-    if ( !ret ) {
-//        if ( SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->root_handler ) {
-//            ret = SP_EVENT_CONTEXT_CLASS(sp_common_context_parent_class)->root_handler(event_context, event);
-//        }
-    	ret = CEventContext::root_handler(event);
-    }
-
-    return ret;
 }
 
 /*

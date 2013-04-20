@@ -51,12 +51,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_gradient_context_dispose(GObject *object);
-
-static void sp_gradient_context_setup(SPEventContext *ec);
-
-static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-
 static void sp_gradient_drag(SPGradientContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
 
@@ -70,36 +64,15 @@ namespace {
 	bool gradientContextRegistered = ToolFactory::instance().registerObject("/tools/gradient", createGradientContext);
 }
 
-const std::string& CGradientContext::getPrefsPath() {
+const std::string& SPGradientContext::getPrefsPath() {
 	return SPGradientContext::prefsPath;
 }
 
 const std::string SPGradientContext::prefsPath = "/tools/gradient";
 
-G_DEFINE_TYPE(SPGradientContext, sp_gradient_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_gradient_context_class_init(SPGradientContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_gradient_context_dispose;
-
-//    event_context_class->setup = sp_gradient_context_setup;
-//    event_context_class->root_handler  = sp_gradient_context_root_handler;
-}
-
-CGradientContext::CGradientContext(SPGradientContext* gradientcontext) : CEventContext(gradientcontext) {
-	this->spgradientcontext = gradientcontext;
-}
 
 SPGradientContext::SPGradientContext() : SPEventContext() {
 	SPGradientContext* gr_context = this;
-
-	gr_context->cgradientcontext = new CGradientContext(gr_context);
-	delete gr_context->ceventcontext;
-	gr_context->ceventcontext = gr_context->cgradientcontext;
-	types.insert(typeid(SPGradientContext));
 
 	gr_context->node_added = false;
 	gr_context->subselcon = 0;
@@ -119,15 +92,9 @@ SPGradientContext::SPGradientContext() : SPEventContext() {
     event_context->item_to_select = NULL;
 }
 
-static void sp_gradient_context_init(SPGradientContext *gr_context)
-{
-	new (gr_context) SPGradientContext();
-}
-
-static void sp_gradient_context_dispose(GObject *object)
-{
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
+SPGradientContext::~SPGradientContext() {
+    SPGradientContext *rc = SP_GRADIENT_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
 
     ec->enableGrDrag(false);
 
@@ -140,7 +107,7 @@ static void sp_gradient_context_dispose(GObject *object)
     rc->subselcon->disconnect();
     delete rc->subselcon;
 
-    G_OBJECT_CLASS(sp_gradient_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_gradient_context_parent_class)->dispose(object);
 }
 
 const gchar *gr_handle_descr [] = {
@@ -212,21 +179,15 @@ gradient_subselection_changed (gpointer, gpointer data)
     gradient_selection_changed (NULL, data);
 }
 
-
-static void sp_gradient_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CGradientContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPGradientContext::setup() {
+	SPEventContext* ec = this;
 
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(ec);
 
 //    if (((SPEventContextClass *) sp_gradient_context_parent_class)->setup) {
 //        ((SPEventContextClass *) sp_gradient_context_parent_class)->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/gradient/selcue", true)) {
@@ -527,15 +488,8 @@ sp_gradient_context_add_stop_near_point (SPGradientContext *rc, SPItem *item,  G
     ec->get_drag()->selectByStop(newstop);
 }
 
-
-static gint
-sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CGradientContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPGradientContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static bool dragging;
 
@@ -908,7 +862,7 @@ gint CGradientContext::root_handler(GdkEvent* event) {
 //        if (((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler) {
 //            ret = ((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

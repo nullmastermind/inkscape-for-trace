@@ -57,8 +57,6 @@
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
 
-static void sp_text_context_dispose(GObject *obj);
-
 static void sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext *tc);
 static void sp_text_context_selection_modified(Inkscape::Selection *selection, guint flags, SPTextContext *tc);
 static bool sp_text_context_style_set(SPCSSAttr const *css, SPTextContext *tc);
@@ -85,38 +83,15 @@ namespace {
 	bool textContextRegistered = ToolFactory::instance().registerObject("/tools/text", createTextContext);
 }
 
-const std::string& CTextContext::getPrefsPath() {
+const std::string& SPTextContext::getPrefsPath() {
 	return SPTextContext::prefsPath;
 }
 
 const std::string SPTextContext::prefsPath = "/tools/text";
 
-G_DEFINE_TYPE(SPTextContext, sp_text_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_text_context_class_init(SPTextContextClass *klass)
-{
-    GObjectClass *object_class=G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_text_context_dispose;
-
-//    event_context_class->setup = sp_text_context_setup;
-//    event_context_class->finish = sp_text_context_finish;
-//    event_context_class->root_handler = sp_text_context_root_handler;
-//    event_context_class->item_handler = sp_text_context_item_handler;
-}
-
-CTextContext::CTextContext(SPTextContext* textcontext) : CEventContext(textcontext) {
-	this->sptextcontext = textcontext;
-}
 
 SPTextContext::SPTextContext() : SPEventContext() {
 	SPTextContext* tc = this;
-
-	tc->ctextcontext = new CTextContext(tc);
-	delete tc->ceventcontext;
-	tc->ceventcontext = tc->ctextcontext;
-	types.insert(typeid(SPTextContext));
 
 	tc->preedit_string = 0;
 	tc->unipos = 0;
@@ -136,9 +111,9 @@ SPTextContext::SPTextContext() : SPEventContext() {
 
     tc->text = NULL;
     tc->pdoc = Geom::Point(0, 0);
-    new (&tc->text_sel_start) Inkscape::Text::Layout::iterator();
-    new (&tc->text_sel_end) Inkscape::Text::Layout::iterator();
-    new (&tc->text_selection_quads) std::vector<SPCanvasItem*>();
+    //new (&tc->text_sel_start) Inkscape::Text::Layout::iterator();
+    //new (&tc->text_sel_end) Inkscape::Text::Layout::iterator();
+    //new (&tc->text_selection_quads) std::vector<SPCanvasItem*>();
 
     tc->unimode = false;
 
@@ -154,35 +129,29 @@ SPTextContext::SPTextContext() : SPEventContext() {
     tc->dragging = 0;
     tc->creating = 0;
 
-    new (&tc->sel_changed_connection) sigc::connection();
-    new (&tc->sel_modified_connection) sigc::connection();
-    new (&tc->style_set_connection) sigc::connection();
-    new (&tc->style_query_connection) sigc::connection();
+    //new (&tc->sel_changed_connection) sigc::connection();
+    //new (&tc->sel_modified_connection) sigc::connection();
+    //new (&tc->style_set_connection) sigc::connection();
+    //new (&tc->style_query_connection) sigc::connection();
 }
 
-static void sp_text_context_init(SPTextContext *tc)
-{
-	new (tc) SPTextContext();
-}
-
-static void sp_text_context_dispose(GObject *obj)
-{
-    SPTextContext *tc = SP_TEXT_CONTEXT(obj);
+SPTextContext::~SPTextContext() {
+    SPTextContext *tc = SP_TEXT_CONTEXT(this);
     SPEventContext *ec = SP_EVENT_CONTEXT(tc);
-    tc->style_query_connection.~connection();
-    tc->style_set_connection.~connection();
-    tc->sel_changed_connection.~connection();
-    tc->sel_modified_connection.~connection();
+//    tc->style_query_connection.~connection();
+//    tc->style_set_connection.~connection();
+//    tc->sel_changed_connection.~connection();
+//    tc->sel_modified_connection.~connection();
 
     delete ec->shape_editor;
     ec->shape_editor = NULL;
 
-    tc->text_sel_end.~iterator();
-    tc->text_sel_start.~iterator();
-    tc->text_selection_quads.~vector();
-    if (G_OBJECT_CLASS(sp_text_context_parent_class)->dispose) {
-        G_OBJECT_CLASS(sp_text_context_parent_class)->dispose(obj);
-    }
+//    tc->text_sel_end.~iterator();
+//    tc->text_sel_start.~iterator();
+//    tc->text_selection_quads.~vector();
+//    //if (G_OBJECT_CLASS(sp_text_context_parent_class)->dispose) {
+    //    G_OBJECT_CLASS(sp_text_context_parent_class)->dispose(obj);
+    //}
     if (tc->grabbed) {
         sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
         tc->grabbed = NULL;
@@ -191,8 +160,8 @@ static void sp_text_context_dispose(GObject *obj)
     Inkscape::Rubberband::get(ec->desktop)->stop();
 }
 
-void CTextContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPTextContext::setup() {
+	SPEventContext* ec = this;
 
     SPTextContext *tc = SP_TEXT_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
@@ -246,7 +215,7 @@ void CTextContext::setup() {
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup)
 //        (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->setup(ec);
-    CEventContext::setup();
+    SPEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -279,8 +248,8 @@ void CTextContext::setup() {
     }
 }
 
-void CTextContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPTextContext::finish() {
+	SPEventContext* ec = this;
 
     SPTextContext *tc = SP_TEXT_CONTEXT(ec);
 
@@ -330,8 +299,8 @@ void CTextContext::finish() {
     tc->text_selection_quads.clear();
 }
 
-gint CTextContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPTextContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPTextContext *tc = SP_TEXT_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
@@ -467,7 +436,7 @@ gint CTextContext::item_handler(SPItem* item, GdkEvent* event) {
     if (!ret) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler)
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_text_context_parent_class))->item_handler(event_context, item, event);
-    	ret = CEventContext::item_handler(item, event);
+    	ret = SPEventContext::item_handler(item, event);
     }
 
     return ret;
@@ -588,8 +557,8 @@ static void show_curr_uni_char(SPTextContext *const tc)
     }
 }
 
-gint CTextContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPTextContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPTextContext *const tc = SP_TEXT_CONTEXT(event_context);
 
@@ -1341,7 +1310,7 @@ gint CTextContext::root_handler(GdkEvent* event) {
 //    } else {
 //        return FALSE; // return "I did nothing" value so that global shortcuts can be activated
 //    }
-    return CEventContext::root_handler(event);
+    return SPEventContext::root_handler(event);
 
 }
 

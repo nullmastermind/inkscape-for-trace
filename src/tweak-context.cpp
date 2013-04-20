@@ -81,9 +81,6 @@ using Inkscape::DocumentUndo;
 
 #define DYNA_MIN_WIDTH 1.0e-6
 
-static void sp_tweak_context_dispose(GObject *object);
-
-
 #include "sp-factory.h"
 
 namespace {
@@ -94,38 +91,14 @@ namespace {
 	bool tweakContextRegistered = ToolFactory::instance().registerObject("/tools/tweak", createTweakContext);
 }
 
-const std::string& CTweakContext::getPrefsPath() {
+const std::string& SPTweakContext::getPrefsPath() {
 	return SPTweakContext::prefsPath;
 }
 
 const std::string SPTweakContext::prefsPath = "/tools/tweak";
 
-G_DEFINE_TYPE(SPTweakContext, sp_tweak_context, SP_TYPE_EVENT_CONTEXT);
-
-static void
-sp_tweak_context_class_init(SPTweakContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_tweak_context_dispose;
-
-//    event_context_class->setup = sp_tweak_context_setup;
-//    event_context_class->set = sp_tweak_context_set;
-//    event_context_class->root_handler = sp_tweak_context_root_handler;
-}
-
-CTweakContext::CTweakContext(SPTweakContext* tweakcontext) : CEventContext(tweakcontext) {
-	this->sptweakcontext = tweakcontext;
-}
-
 SPTweakContext::SPTweakContext() : SPEventContext() {
 	SPTweakContext* tc = this;
-
-	tc->ctweakcontext = new CTweakContext(tc);
-	delete tc->ceventcontext;
-	tc->ceventcontext = tc->ctweakcontext;
-	types.insert(typeid(SPTweakContext));
 
 	tc->_message_context = 0;
 	tc->mode = 0;
@@ -156,25 +129,17 @@ SPTweakContext::SPTweakContext() : SPEventContext() {
     tc->do_l = true;
     tc->do_o = false;
 
-    new (&tc->style_set_connection) sigc::connection();
+    //new (&tc->style_set_connection) sigc::connection();
 }
 
-static void
-sp_tweak_context_init(SPTweakContext *tc)
-{
-	new (tc) SPTweakContext();
-}
-
-static void
-sp_tweak_context_dispose(GObject *object)
-{
-    SPTweakContext *tc = SP_TWEAK_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
+SPTweakContext::~SPTweakContext() {
+    SPTweakContext *tc = SP_TWEAK_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
 
     ec->enableGrDrag(false);
     
     tc->style_set_connection.disconnect();
-    tc->style_set_connection.~connection();
+    //tc->style_set_connection.~connection();
 
     if (tc->dilate_area) {
         sp_canvas_item_destroy(tc->dilate_area);
@@ -185,7 +150,7 @@ sp_tweak_context_dispose(GObject *object)
         delete tc->_message_context;
     }
 
-    G_OBJECT_CLASS(sp_tweak_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_tweak_context_parent_class)->dispose(object);
 }
 
 static bool is_transform_mode (gint mode)
@@ -297,15 +262,15 @@ sp_tweak_context_style_set(SPCSSAttr const *css, SPTweakContext *tc)
     return false;
 }
 
-void CTweakContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPTweakContext::setup() {
+	SPEventContext* ec = this;
 
     SPTweakContext *tc = SP_TWEAK_CONTEXT(ec);
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     {
         /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
@@ -351,8 +316,8 @@ void CTweakContext::setup() {
     }
 }
 
-void CTweakContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPTweakContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPTweakContext *tc = SP_TWEAK_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
@@ -1186,8 +1151,8 @@ sp_tweak_switch_mode_temporarily (SPTweakContext *tc, gint mode, bool with_shift
    sp_tweak_update_cursor (tc, with_shift);
 }
 
-gint CTweakContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPTweakContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPTweakContext *tc = SP_TWEAK_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
@@ -1550,7 +1515,7 @@ gint CTweakContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_tweak_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

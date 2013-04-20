@@ -45,10 +45,6 @@
 #include "display/curve.h"
 #include "livarot/Path.h"
 
-static void sp_pencil_context_setup(SPEventContext *ec);
-static void sp_pencil_context_dispose(GObject *object);
-
-static gint sp_pencil_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &bevent);
 static gint pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mevent);
 static gint pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &revent);
@@ -78,44 +74,14 @@ namespace {
 	bool pencilContextRegistered = ToolFactory::instance().registerObject("/tools/freehand/pencil", createPencilContext);
 }
 
-const std::string& CPencilContext::getPrefsPath() {
+const std::string& SPPencilContext::getPrefsPath() {
 	return SPPencilContext::prefsPath;
 }
 
 const std::string SPPencilContext::prefsPath = "/tools/freehand/pencil";
 
-G_DEFINE_TYPE(SPPencilContext, sp_pencil_context, SP_TYPE_DRAW_CONTEXT);
-
-/**
- * Initialize SPPencilContext vtable.
- */
-static void
-sp_pencil_context_class_init(SPPencilContextClass *klass)
-{
-    GObjectClass *object_class;
-    SPEventContextClass *event_context_class;
-
-    object_class = (GObjectClass *) klass;
-    event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_pencil_context_dispose;
-
-//    event_context_class->setup = sp_pencil_context_setup;
-//    event_context_class->root_handler = sp_pencil_context_root_handler;
-}
-
-CPencilContext::CPencilContext(SPPencilContext* pencilcontext) : CDrawContext(pencilcontext) {
-	this->sppencilcontext = pencilcontext;
-}
-
 SPPencilContext::SPPencilContext() : SPDrawContext() {
 	SPPencilContext* pc = this;
-
-	pc->cpencilcontext = new CPencilContext(pc);
-	delete pc->cdrawcontext;
-	pc->cdrawcontext = pc->cpencilcontext;
-	pc->ceventcontext = pc->cpencilcontext;
-	types.insert(typeid(SPPencilContext));
 
 	pc->is_drawing = false;
 
@@ -134,26 +100,8 @@ SPPencilContext::SPPencilContext() : SPDrawContext() {
     pc->sketch_n = 0;
 }
 
-/**
- * Callback to initialize SPPencilContext object.
- */
-static void
-sp_pencil_context_init(SPPencilContext *pc)
-{
-	new (pc) SPPencilContext();
-}
-
-/**
- * Callback to setup SPPencilContext object.
- */
-static void
-sp_pencil_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CPencilContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPPencilContext::setup() {
+	SPEventContext* ec = this;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/freehand/pencil/selcue")) {
@@ -163,7 +111,7 @@ void CPencilContext::setup() {
 //    if (((SPEventContextClass *) sp_pencil_context_parent_class)->setup) {
 //        ((SPEventContextClass *) sp_pencil_context_parent_class)->setup(ec);
 //    }
-    CDrawContext::setup();
+    SPDrawContext::setup();
 
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
     pc->is_drawing = false;
@@ -171,10 +119,7 @@ void CPencilContext::setup() {
     pc->anchor_statusbar = false;
 }
 
-static void
-sp_pencil_context_dispose(GObject *object)
-{
-    G_OBJECT_CLASS(sp_pencil_context_parent_class)->dispose(object);
+SPPencilContext::~SPPencilContext() {
 }
 
 /** Snaps new node relative to the previous node. */
@@ -198,14 +143,8 @@ spdc_endpoint_snap(SPPencilContext const *pc, Geom::Point &p, guint const state)
 /**
  * Callback for handling all pencil context events.
  */
-gint
-sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
-{
-	return ec->ceventcontext->root_handler(event);
-}
-
-gint CPencilContext::root_handler(GdkEvent* event) {
-	SPEventContext* ec = this->speventcontext;
+gint SPPencilContext::root_handler(GdkEvent* event) {
+	SPEventContext* ec = this;
 
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
 
@@ -242,7 +181,7 @@ gint CPencilContext::root_handler(GdkEvent* event) {
 //        if (parent_root_handler) {
 //            ret = parent_root_handler(ec, event);
 //        }
-    	ret = CDrawContext::root_handler(event);
+    	ret = SPDrawContext::root_handler(event);
     }
 
     return ret;

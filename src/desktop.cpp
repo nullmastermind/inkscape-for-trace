@@ -715,7 +715,7 @@ void SPDesktop::set_event_context2(const std::string& toolName) {
         prefs->addObserver(*(ec->pref_observer));
     //}
 
-    ec->ceventcontext->setup();
+    ec->setup();
 
 
 	sp_event_context_activate(event_context);

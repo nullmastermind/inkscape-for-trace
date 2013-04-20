@@ -57,20 +57,11 @@ namespace {
 	bool rectContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/rect", createRectContext);
 }
 
-const std::string& CRectContext::getPrefsPath() {
+const std::string& SPRectContext::getPrefsPath() {
 	return SPRectContext::prefsPath;
 }
 
 //static const double goldenratio = 1.61803398874989484820; // golden ratio
-
-static void sp_rect_context_dispose(GObject *object);
-
-static void sp_rect_context_setup(SPEventContext *ec);
-static void sp_rect_context_finish(SPEventContext *ec);
-static void sp_rect_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-
-static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
 static void sp_rect_drag(SPRectContext &rc, Geom::Point const pt, guint state);
 static void sp_rect_finish(SPRectContext *rc);
@@ -79,35 +70,10 @@ static void sp_rect_cancel(SPRectContext *rc);
 
 const std::string SPRectContext::prefsPath = "/tools/shapes/rect";
 
-G_DEFINE_TYPE(SPRectContext, sp_rect_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_rect_context_class_init(SPRectContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_rect_context_dispose;
-
-//    event_context_class->setup = sp_rect_context_setup;
-//    event_context_class->finish = sp_rect_context_finish;
-//    event_context_class->set = sp_rect_context_set;
-//    event_context_class->root_handler  = sp_rect_context_root_handler;
-//    event_context_class->item_handler  = sp_rect_context_item_handler;
-}
-
-CRectContext::CRectContext(SPRectContext* rectcontext) : CEventContext(rectcontext) {
-	this->sprectcontext = rectcontext;
-}
-
 SPRectContext::SPRectContext() : SPEventContext() {
 	SPRectContext* rect_context = this;
 
     SPEventContext *event_context = SP_EVENT_CONTEXT(rect_context);
-
-    rect_context->crectcontext = new CRectContext(rect_context);
-    delete rect_context->ceventcontext;
-    rect_context->ceventcontext = rect_context->crectcontext;
-    types.insert(typeid(SPRectContext));
 
     rect_context->_message_context = 0;
 
@@ -126,21 +92,11 @@ SPRectContext::SPRectContext() : SPEventContext() {
     rect_context->rx = 0.0;
     rect_context->ry = 0.0;
 
-    new (&rect_context->sel_changed_connection) sigc::connection();
+    //new (&rect_context->sel_changed_connection) sigc::connection();
 }
 
-static void sp_rect_context_init(SPRectContext *rect_context)
-{
-	new (rect_context) SPRectContext();
-}
-
-static void sp_rect_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CRectContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPRectContext::finish() {
+	SPEventContext* ec = this;
 
     SPRectContext *rc = SP_RECT_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
@@ -152,9 +108,8 @@ void CRectContext::finish() {
 //    if (((SPEventContextClass *) sp_rect_context_parent_class)->finish) {
 //        ((SPEventContextClass *) sp_rect_context_parent_class)->finish(ec);
 //    }
-    CEventContext::finish();
+    SPEventContext::finish();
 }
-
 
 SPRectContext::~SPRectContext() {
     SPRectContext *rc = SP_RECT_CONTEXT(this);
@@ -163,7 +118,7 @@ SPRectContext::~SPRectContext() {
     ec->enableGrDrag(false);
 
     rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection.~connection();
+    //rc->sel_changed_connection.~connection();
 
     delete ec->shape_editor;
     ec->shape_editor = NULL;
@@ -180,31 +135,6 @@ SPRectContext::~SPRectContext() {
     //G_OBJECT_CLASS(sp_rect_context_parent_class)->dispose(object);
 }
 
-static void sp_rect_context_dispose(GObject *object)
-{
-    SPRectContext *rc = SP_RECT_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
-
-    ec->enableGrDrag(false);
-
-    rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection.~connection();
-
-    delete ec->shape_editor;
-    ec->shape_editor = NULL;
-
-    /* fixme: This is necessary because we do not grab */
-    if (rc->item) {
-        sp_rect_finish(rc);
-    }
-
-    if (rc->_message_context) {
-        delete rc->_message_context;
-    }
-
-    G_OBJECT_CLASS(sp_rect_context_parent_class)->dispose(object);
-}
-
 /**
  * Callback that processes the "changed" signal on the selection;
  * destroys old and creates new knotholder.
@@ -219,20 +149,15 @@ static void sp_rect_context_selection_changed(Inkscape::Selection *selection, gp
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void sp_rect_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CRectContext::setup() {
-	SPRectContext* ec = this->sprectcontext;
+void SPRectContext::setup() {
+	SPRectContext* ec = this;
 
     SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
 //    if (((SPEventContextClass *) sp_rect_context_parent_class)->setup) {
 //        ((SPEventContextClass *) sp_rect_context_parent_class)->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -261,13 +186,8 @@ void CRectContext::setup() {
     rc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
-static void sp_rect_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CRectContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPRectContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPRectContext *rc = SP_RECT_CONTEXT(ec);
 
@@ -281,13 +201,8 @@ void CRectContext::set(Inkscape::Preferences::Entry* val) {
     }
 }
 
-static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
-gint CRectContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPDesktop *desktop = event_context->desktop;
 
@@ -309,18 +224,13 @@ gint CRectContext::item_handler(SPItem* item, GdkEvent* event) {
 //        ret = ((SPEventContextClass *) sp_rect_context_parent_class)->item_handler(event_context, item, event);
 //    }
     // CPPIFY: ret is always overwritten...
-    ret = CEventContext::item_handler(item, event);
+    ret = SPEventContext::item_handler(item, event);
 
     return ret;
 }
 
-static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CRectContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPRectContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static bool dragging;
 
@@ -529,7 +439,7 @@ gint CRectContext::root_handler(GdkEvent* event) {
 //        if (((SPEventContextClass *) sp_rect_context_parent_class)->root_handler) {
 //            ret = ((SPEventContextClass *) sp_rect_context_parent_class)->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

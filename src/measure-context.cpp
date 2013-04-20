@@ -47,12 +47,6 @@
 using Inkscape::ControlManager;
 using Inkscape::CTLINE_SECONDARY;
 
-static void sp_measure_context_setup(SPEventContext *ec);
-static void sp_measure_context_finish(SPEventContext *ec);
-
-static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_measure_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static gint xp = 0; // where drag started
 static gint yp = 0;
 static gint tolerance = 0;
@@ -75,13 +69,11 @@ namespace {
 	bool measureContextRegistered = ToolFactory::instance().registerObject("/tools/measure", createMeasureContext);
 }
 
-const std::string& CMeasureContext::getPrefsPath() {
+const std::string& SPMeasureContext::getPrefsPath() {
 	return SPMeasureContext::prefsPath;
 }
 
 const std::string SPMeasureContext::prefsPath = "/tools/measure";
-
-G_DEFINE_TYPE(SPMeasureContext, sp_measure_context, SP_TYPE_EVENT_CONTEXT);
 
 namespace
 {
@@ -248,28 +240,9 @@ void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom
 
 } // namespace
 
-static void sp_measure_context_class_init(SPMeasureContextClass *klass)
-{
-    SPEventContextClass *event_context_class = reinterpret_cast<SPEventContextClass *>(klass);
-
-//    event_context_class->setup = sp_measure_context_setup;
-//    event_context_class->finish = sp_measure_context_finish;
-//
-//    event_context_class->root_handler = sp_measure_context_root_handler;
-//    event_context_class->item_handler = sp_measure_context_item_handler;
-}
-
-CMeasureContext::CMeasureContext(SPMeasureContext* measurecontext) : CEventContext(measurecontext) {
-	this->spmeasurecontext = measurecontext;
-}
 
 SPMeasureContext::SPMeasureContext() : SPEventContext() {
 	SPMeasureContext* measure_context = this;
-
-	measure_context->cmeasurecontext = new CMeasureContext(measure_context);
-	delete measure_context->ceventcontext;
-	measure_context->ceventcontext = measure_context->cmeasurecontext;
-	types.insert(typeid(SPMeasureContext));
 
 	measure_context->grabbed = 0;
 
@@ -280,18 +253,11 @@ SPMeasureContext::SPMeasureContext() : SPEventContext() {
     event_context->hot_y = 4;
 }
 
-static void sp_measure_context_init(SPMeasureContext *measure_context)
-{
-	new (measure_context) SPMeasureContext();
+SPMeasureContext::~SPMeasureContext() {
 }
 
-static void sp_measure_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CMeasureContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPMeasureContext::finish() {
+	SPEventContext* ec = this;
 
     SPMeasureContext *mc = SP_MEASURE_CONTEXT(ec);
 
@@ -303,34 +269,24 @@ void CMeasureContext::finish() {
     }
 }
 
-static void sp_measure_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CMeasureContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPMeasureContext::setup() {
+	SPEventContext* ec = this;
 
 //    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup) {
 //        SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup(ec);
 //    }
-	CEventContext::setup();
+	SPEventContext::setup();
 }
 
-static gint sp_measure_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
-gint CMeasureContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPMeasureContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     gint ret = FALSE;
 
 //    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler) {
 //        ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler(event_context, item, event);
 //    }
-    ret = CEventContext::item_handler(item, event);
+    ret = SPEventContext::item_handler(item, event);
 
     return ret;
 }
@@ -370,13 +326,8 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
     }
 }
 
-static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CMeasureContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPMeasureContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPDesktop *desktop = event_context->desktop;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -827,7 +778,7 @@ gint CMeasureContext::root_handler(GdkEvent* event) {
 //        if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->root_handler) {
 //            ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

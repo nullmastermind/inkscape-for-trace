@@ -50,8 +50,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_star_context_dispose (GObject *object);
-
 static void sp_star_drag (SPStarContext * sc, Geom::Point p, guint state);
 static void sp_star_finish (SPStarContext * sc);
 static void sp_star_cancel(SPStarContext * sc);
@@ -66,39 +64,14 @@ namespace {
 	bool starContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/star", createStarContext);
 }
 
-const std::string& CStarContext::getPrefsPath() {
+const std::string& SPStarContext::getPrefsPath() {
 	return SPStarContext::prefsPath;
 }
 
 const std::string SPStarContext::prefsPath = "/tools/shapes/star";
 
-G_DEFINE_TYPE(SPStarContext, sp_star_context, SP_TYPE_EVENT_CONTEXT);
-
-static void
-sp_star_context_class_init (SPStarContextClass * klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_star_context_dispose;
-
-//    event_context_class->setup = sp_star_context_setup;
-//    event_context_class->finish = sp_star_context_finish;
-//    event_context_class->set = sp_star_context_set;
-//    event_context_class->root_handler = sp_star_context_root_handler;
-}
-
-CStarContext::CStarContext(SPStarContext* starcontext) : CEventContext(starcontext) {
-	this->spstarcontext = starcontext;
-}
-
 SPStarContext::SPStarContext() : SPEventContext() {
 	SPStarContext* star_context = this;
-
-	star_context->cstarcontext = new CStarContext(star_context);
-	delete star_context->ceventcontext;
-	star_context->ceventcontext = star_context->cstarcontext;
-	types.insert(typeid(SPStarContext));
 
 	star_context->randomized = 0;
 	star_context->_message_context = 0;
@@ -122,17 +95,11 @@ SPStarContext::SPStarContext() : SPEventContext() {
     star_context->proportion = 0.5;
     star_context->isflatsided = false;
 
-    new (&star_context->sel_changed_connection) sigc::connection();
+    //new (&star_context->sel_changed_connection) sigc::connection();
 }
 
-static void
-sp_star_context_init (SPStarContext * star_context)
-{
-	new (star_context) SPStarContext();
-}
-
-void CStarContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPStarContext::finish() {
+	SPEventContext* ec = this;
 
     SPStarContext *sc = SP_STAR_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
@@ -144,20 +111,17 @@ void CStarContext::finish() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish(ec);
 //    }
-    CEventContext::finish();
+    SPEventContext::finish();
 }
 
-
-static void
-sp_star_context_dispose (GObject *object)
-{
-    SPEventContext *ec = SP_EVENT_CONTEXT (object);
-    SPStarContext *sc = SP_STAR_CONTEXT (object);
+SPStarContext::~SPStarContext() {
+    SPEventContext *ec = SP_EVENT_CONTEXT (this);
+    SPStarContext *sc = SP_STAR_CONTEXT (this);
 
     ec->enableGrDrag(false);
 
     sc->sel_changed_connection.disconnect();
-    sc->sel_changed_connection.~connection();
+    //sc->sel_changed_connection.~connection();
 
     delete ec->shape_editor;
     ec->shape_editor = NULL;
@@ -169,7 +133,7 @@ sp_star_context_dispose (GObject *object)
         delete sc->_message_context;
     }
 
-    G_OBJECT_CLASS (sp_star_context_parent_class)->dispose (object);
+    //G_OBJECT_CLASS (sp_star_context_parent_class)->dispose (object);
 }
 
 /**
@@ -190,14 +154,14 @@ static void sp_star_context_selection_changed (Inkscape::Selection * selection, 
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-void CStarContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPStarContext::setup() {
+	SPEventContext* ec = this;
 
 	SPStarContext *sc = SP_STAR_CONTEXT (ec);
 
 //	if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup)
 //		(SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup (ec);
-	CEventContext::setup();
+	SPEventContext::setup();
 
 	sp_event_context_read (ec, "magnitude");
 	sp_event_context_read (ec, "proportion");
@@ -228,8 +192,8 @@ void CStarContext::setup() {
 	sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
-void CStarContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPStarContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPStarContext *sc = SP_STAR_CONTEXT (ec);
     Glib::ustring path = val->getEntryName();
@@ -247,8 +211,8 @@ void CStarContext::set(Inkscape::Preferences::Entry* val) {
     }
 }
 
-gint CStarContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPStarContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static gboolean dragging;
 
@@ -425,7 +389,7 @@ gint CStarContext::root_handler(GdkEvent* event) {
     if (!ret) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler)
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler (event_context, event);
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

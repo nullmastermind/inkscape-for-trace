@@ -41,36 +41,14 @@ namespace {
 	bool zoomContextRegistered = ToolFactory::instance().registerObject("/tools/zoom", createZoomContext);
 }
 
-const std::string& CZoomContext::getPrefsPath() {
+const std::string& SPZoomContext::getPrefsPath() {
 	return SPZoomContext::prefsPath;
 }
 
 const std::string SPZoomContext::prefsPath = "/tools/zoom";
 
-G_DEFINE_TYPE(SPZoomContext, sp_zoom_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_zoom_context_class_init(SPZoomContextClass *klass)
-{
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-//    event_context_class->setup = sp_zoom_context_setup;
-//    event_context_class->finish = sp_zoom_context_finish;
-//
-//    event_context_class->root_handler = sp_zoom_context_root_handler;
-//    event_context_class->item_handler = sp_zoom_context_item_handler;
-}
-
-CZoomContext::CZoomContext(SPZoomContext* zoomcontext) : CEventContext(zoomcontext) {
-	this->spzoomcontext = zoomcontext;
-}
-
 SPZoomContext::SPZoomContext() : SPEventContext() {
 	SPZoomContext* zoom_context = this;
-
-	zoom_context->czoomcontext = new CZoomContext(zoom_context);
-	delete zoom_context->ceventcontext;
-	zoom_context->ceventcontext = zoom_context->czoomcontext;
-	types.insert(typeid(SPZoomContext));
 
 	zoom_context->grabbed = 0;
 
@@ -81,13 +59,11 @@ SPZoomContext::SPZoomContext() : SPEventContext() {
     event_context->hot_y = 6;
 }
 
-static void sp_zoom_context_init (SPZoomContext *zoom_context)
-{
-	new (zoom_context) SPZoomContext();
+SPZoomContext::~SPZoomContext() {
 }
 
-void CZoomContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPZoomContext::finish() {
+	SPEventContext* ec = this;
 
 	SPZoomContext *zc = SP_ZOOM_CONTEXT(ec);
 	
@@ -99,8 +75,8 @@ void CZoomContext::finish() {
     }
 }
 
-void CZoomContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPZoomContext::setup() {
+	SPEventContext* ec = this;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/zoom/selcue")) {
@@ -113,24 +89,24 @@ void CZoomContext::setup() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 }
 
-gint CZoomContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPZoomContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     gint ret = FALSE;
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->item_handler) {
 //        ret = (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->item_handler (event_context, item, event);
 //    }
-    ret = CEventContext::item_handler(item, event);
+    ret = SPEventContext::item_handler(item, event);
 
     return ret;
 }
 
-gint CZoomContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPZoomContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPDesktop *desktop = event_context->desktop;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -274,7 +250,7 @@ gint CZoomContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

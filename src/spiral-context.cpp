@@ -60,23 +60,14 @@ namespace {
 	bool spiralContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/spiral", createSpiralContext);
 }
 
-const std::string& CSpiralContext::getPrefsPath() {
+const std::string& SPSpiralContext::getPrefsPath() {
 	return SPSpiralContext::prefsPath;
 }
 
 const std::string SPSpiralContext::prefsPath = "/tools/shapes/spiral";
 
-CSpiralContext::CSpiralContext(SPSpiralContext* spiralcontext) : CEventContext(spiralcontext) {
-	this->spspiralcontext = spiralcontext;
-}
-
 SPSpiralContext::SPSpiralContext() : SPEventContext() {
 	SPSpiralContext* spiral_context = this;
-
-	spiral_context->cspiralcontext = new CSpiralContext(spiral_context);
-	delete spiral_context->ceventcontext;
-	spiral_context->ceventcontext = spiral_context->cspiralcontext;
-	types.insert(typeid(SPSpiralContext));
 
 	spiral_context->_message_context = 0;
 
@@ -97,11 +88,11 @@ SPSpiralContext::SPSpiralContext() : SPEventContext() {
     spiral_context->exp = 1.0;
     spiral_context->t0 = 0.0;
 
-    new (&spiral_context->sel_changed_connection) sigc::connection();
+    //new (&spiral_context->sel_changed_connection) sigc::connection();
 }
 
-void CSpiralContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPSpiralContext::finish() {
+	SPEventContext* ec = this;
 
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
@@ -113,7 +104,7 @@ void CSpiralContext::finish() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->finish) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->finish(ec);
 //    }
-    CEventContext::finish();
+    SPEventContext::finish();
 }
 
 SPSpiralContext::~SPSpiralContext() {
@@ -123,7 +114,7 @@ SPSpiralContext::~SPSpiralContext() {
     ec->enableGrDrag(false);
 
     sc->sel_changed_connection.disconnect();
-    sc->sel_changed_connection.~connection();
+    //sc->sel_changed_connection.~connection();
 
     delete ec->shape_editor;
     ec->shape_editor = NULL;
@@ -152,14 +143,14 @@ static void sp_spiral_context_selection_changed(Inkscape::Selection *selection, 
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-void CSpiralContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPSpiralContext::setup() {
+	SPEventContext* ec = this;
 
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(ec);
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->setup)
 //        (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->setup(ec);
-    CEventContext::setup();
+    SPEventContext::setup();
 
     sp_event_context_read(ec, "expansion");
     sp_event_context_read(ec, "revolution");
@@ -187,8 +178,8 @@ void CSpiralContext::setup() {
     sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
-void CSpiralContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPSpiralContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(ec);
     Glib::ustring name = val->getEntryName();
@@ -202,8 +193,8 @@ void CSpiralContext::set(Inkscape::Preferences::Entry* val) {
     }
 }
 
-gint CSpiralContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPSpiralContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static gboolean dragging;
 
@@ -381,7 +372,7 @@ gint CSpiralContext::root_handler(GdkEvent* event) {
     if (!ret) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->root_handler)
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_spiral_context_parent_class))->root_handler(event_context, event);
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

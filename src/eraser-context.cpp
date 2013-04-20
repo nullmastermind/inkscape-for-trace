@@ -83,12 +83,6 @@ using Inkscape::DocumentUndo;
 #define DRAG_DEFAULT 1.0
 #define DRAG_MAX 1.0
 
-static void sp_eraser_context_dispose(GObject *object);
-
-static void sp_eraser_context_setup(SPEventContext *ec);
-static void sp_eraser_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val);
-static gint sp_eraser_context_root_handler(SPEventContext *ec, GdkEvent *event);
-
 static void clear_current(SPEraserContext *dc);
 static void set_to_accumulated(SPEraserContext *dc);
 static void add_cap(SPCurve *curve, Geom::Point const &pre, Geom::Point const &from, Geom::Point const &to, Geom::Point const &post, double rounding);
@@ -111,72 +105,32 @@ namespace {
 	bool eraserContextRegistered = ToolFactory::instance().registerObject("/tools/eraser", createEraserContext);
 }
 
-const std::string& CEraserContext::getPrefsPath() {
+const std::string& SPEraserContext::getPrefsPath() {
 	return SPEraserContext::prefsPath;
 }
 
 const std::string SPEraserContext::prefsPath = "/tools/eraser";
 
-G_DEFINE_TYPE(SPEraserContext, sp_eraser_context, SP_TYPE_COMMON_CONTEXT);
-
-static void
-sp_eraser_context_class_init(SPEraserContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_eraser_context_dispose;
-
-//    event_context_class->setup = sp_eraser_context_setup;
-//    event_context_class->set = sp_eraser_context_set;
-//    event_context_class->root_handler = sp_eraser_context_root_handler;
-}
-
-CEraserContext::CEraserContext(SPEraserContext* erasercontext) : CCommonContext(erasercontext) {
-	this->sperasercontext = erasercontext;
-}
-
 SPEraserContext::SPEraserContext() : SPCommonContext() {
 	SPEraserContext* erc = this;
-
-	erc->cerasercontext = new CEraserContext(erc);
-	delete erc->ccommoncontext;
-	erc->ccommoncontext = erc->cerasercontext;
-	erc->ceventcontext = erc->cerasercontext;
-	types.insert(typeid(SPEraserContext));
 
     erc->cursor_shape = cursor_eraser_xpm;
     erc->hot_x = 4;
     erc->hot_y = 4;
 }
 
-static void
-sp_eraser_context_init(SPEraserContext *erc)
-{
-	new (erc) SPEraserContext();
+SPEraserContext::~SPEraserContext() {
 }
 
-static void
-sp_eraser_context_dispose(GObject *object)
-{
-    G_OBJECT_CLASS(sp_eraser_context_parent_class)->dispose(object);
-}
-
-static void
-sp_eraser_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CEraserContext::setup() {
-	SPEventContext* ec = this->sperasercontext;
+void SPEraserContext::setup() {
+	SPEventContext* ec = this;
 
     SPEraserContext *erc = SP_ERASER_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup)
 //        (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup(ec);
-    CCommonContext::setup();
+    SPCommonContext::setup();
 
     erc->accumulated = new SPCurve();
     erc->currentcurve = new SPCurve();
@@ -226,22 +180,6 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
 // TODO temp force:
     ec->enableSelectionCue();
 
-}
-
-static void
-sp_eraser_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CEraserContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->sperasercontext;
-
-    //pass on up to parent class to handle common attributes.
-//    if (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class)->set ) {
-//        SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class)->set(ec, val);
-//    }
-	CCommonContext::set(val);
 }
 
 static double
@@ -486,16 +424,8 @@ eraser_cancel(SPEraserContext *dc)
             }
 }
 
-
-gint
-sp_eraser_context_root_handler(SPEventContext *event_context,
-                                  GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CEraserContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->sperasercontext;
+gint SPEraserContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPEraserContext *dc = SP_ERASER_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
@@ -715,7 +645,7 @@ gint CEraserContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CCommonContext::root_handler(event);
+    	ret = SPCommonContext::root_handler(event);
     }
 
     return ret;

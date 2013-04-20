@@ -21,20 +21,13 @@
 #include "proj_pt.h"
 #include "vanishing-point.h"
 
-#define SP_TYPE_BOX3D_CONTEXT            (sp_box3d_context_get_type ())
-//#define SP_BOX3D_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_BOX3D_CONTEXT, Box3DContext))
-#define SP_BOX3D_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_BOX3D_CONTEXT, Box3DContextClass))
-//#define SP_IS_BOX3D_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_BOX3D_CONTEXT))
-#define SP_IS_BOX3D_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_BOX3D_CONTEXT))
 #define SP_BOX3D_CONTEXT(obj) ((Box3DContext*)obj)
-#define SP_IS_BOX3D_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(Box3DContext)))
-
-class CBox3DContext;
+#define SP_IS_BOX3D_CONTEXT(obj) (dynamic_cast<const Box3DContext*>((const SPEventContext*)obj))
 
 class Box3DContext : public SPEventContext {
 public:
 	Box3DContext();
-	CBox3DContext* cbox3dcontext;
+	virtual ~Box3DContext();
 
     SPItem *item;
     Geom::Point center;
@@ -65,15 +58,6 @@ public:
     Inkscape::MessageContext *_message_context;
 
 	static const std::string prefsPath;
-};
-
-struct Box3DContextClass {
-    SPEventContextClass parent_class;
-};
-
-class CBox3DContext : public CEventContext {
-public:
-	CBox3DContext(Box3DContext* box3dcontext);
 
 	virtual void setup();
 	virtual void finish();
@@ -81,13 +65,7 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	Box3DContext* box3dcontext;
 };
-
-/* Standard Gtk function */
-
-GType sp_box3d_context_get_type (void);
 
 void sp_box3d_context_update_lines(SPEventContext *ec);
 

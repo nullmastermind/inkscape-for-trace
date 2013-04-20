@@ -49,13 +49,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_arc_context_dispose(GObject *object);
-
-static void sp_arc_context_setup(SPEventContext *ec);
-static void sp_arc_context_finish(SPEventContext *ec);
-static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static void sp_arc_drag(SPArcContext *ec, Geom::Point pt, guint state);
 static void sp_arc_finish(SPArcContext *ec);
 static void sp_arc_cancel(SPArcContext *ec);
@@ -71,38 +64,15 @@ namespace {
 	bool arcContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/arc", createArcContext);
 }
 
-const std::string& CArcContext::getPrefsPath() {
+const std::string& SPArcContext::getPrefsPath() {
 	return SPArcContext::prefsPath;
 }
 
 const std::string SPArcContext::prefsPath = "/tools/shapes/arc";
 
-G_DEFINE_TYPE(SPArcContext, sp_arc_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_arc_context_class_init(SPArcContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_arc_context_dispose;
-
-//    event_context_class->setup = sp_arc_context_setup;
-//    event_context_class->finish = sp_arc_context_finish;
-//    event_context_class->root_handler = sp_arc_context_root_handler;
-//    event_context_class->item_handler = sp_arc_context_item_handler;
-}
-
-CArcContext::CArcContext(SPArcContext* arccontext) : CEventContext(arccontext) {
-	this->sparccontext = arccontext;
-}
 
 SPArcContext::SPArcContext() : SPEventContext() {
 	SPArcContext* arc_context = this;
-
-	arc_context->carccontext = new CArcContext(arc_context);
-	delete arc_context->ceventcontext;
-	arc_context->ceventcontext = arc_context->carccontext;
-	types.insert(typeid(SPArcContext));
 
 	arc_context->_message_context = 0;
 
@@ -120,21 +90,11 @@ SPArcContext::SPArcContext() : SPEventContext() {
 
     arc_context->item = NULL;
 
-    new (&arc_context->sel_changed_connection) sigc::connection();
+    //new (&arc_context->sel_changed_connection) sigc::connection();
 }
 
-static void sp_arc_context_init(SPArcContext *arc_context)
-{
-	new (arc_context) SPArcContext();
-}
-
-static void sp_arc_context_finish(SPEventContext *ec)
-{
-	ec->ceventcontext->finish();
-}
-
-void CArcContext::finish() {
-	SPEventContext* ec = this->speventcontext;
+void SPArcContext::finish() {
+	SPEventContext* ec = this;
 
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
@@ -146,7 +106,7 @@ void CArcContext::finish() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->finish(ec);
 //    }
-    CEventContext::finish();
+    SPEventContext::finish();
 }
 
 SPArcContext::~SPArcContext() {
@@ -156,7 +116,7 @@ SPArcContext::~SPArcContext() {
     ec->enableGrDrag(false);
 
     ac->sel_changed_connection.disconnect();
-    ac->sel_changed_connection.~connection();
+    //ac->sel_changed_connection.~connection();
 
     delete ec->shape_editor;
     ec->shape_editor = NULL;
@@ -169,29 +129,6 @@ SPArcContext::~SPArcContext() {
     delete ac->_message_context;
 
     //G_OBJECT_CLASS(sp_arc_context_parent_class)->dispose(object);
-}
-
-static void sp_arc_context_dispose(GObject *object)
-{
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
-    SPArcContext *ac = SP_ARC_CONTEXT(object);
-
-    ec->enableGrDrag(false);
-
-    ac->sel_changed_connection.disconnect();
-    ac->sel_changed_connection.~connection();
-
-    delete ec->shape_editor;
-    ec->shape_editor = NULL;
-
-    /* fixme: This is necessary because we do not grab */
-    if (ac->item) {
-        sp_arc_finish(ac);
-    }
-
-    delete ac->_message_context;
-
-    G_OBJECT_CLASS(sp_arc_context_parent_class)->dispose(object);
 }
 
 /**
@@ -208,13 +145,8 @@ static void sp_arc_context_selection_changed(Inkscape::Selection * selection, gp
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void sp_arc_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CArcContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPArcContext::setup() {
+	SPEventContext* ec = this;
 
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
     Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
@@ -222,7 +154,7 @@ void CArcContext::setup() {
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup) {
 //        (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -248,13 +180,8 @@ void CArcContext::setup() {
     ac->_message_context = new Inkscape::MessageContext(ec->desktop->messageStack());
 }
 
-static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
-gint CArcContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPArcContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPDesktop *desktop = event_context->desktop;
     gint ret = FALSE;
@@ -275,18 +202,13 @@ gint CArcContext::item_handler(SPItem* item, GdkEvent* event) {
 //        ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->item_handler(event_context, item, event);
 //    }
     // CPPIFY: ret is overwritten...
-    ret = CEventContext::item_handler(item, event);
+    ret = SPEventContext::item_handler(item, event);
 
     return ret;
 }
 
-static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CArcContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPArcContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static bool dragging;
 
@@ -464,7 +386,7 @@ gint CArcContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_arc_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;

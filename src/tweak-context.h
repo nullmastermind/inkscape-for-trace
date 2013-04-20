@@ -15,13 +15,8 @@
 #include "event-context.h"
 #include <2geom/point.h>
 
-#define SP_TYPE_TWEAK_CONTEXT (sp_tweak_context_get_type())
-//#define SP_TWEAK_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_TWEAK_CONTEXT, SPTweakContext))
-#define SP_TWEAK_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_TWEAK_CONTEXT, SPTweakContextClass))
-//#define SP_IS_TWEAK_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_TWEAK_CONTEXT))
-#define SP_IS_TWEAK_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_TWEAK_CONTEXT))
 #define SP_TWEAK_CONTEXT(obj) ((SPTweakContext*)obj)
-#define SP_IS_TWEAK_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPTweakContext)))
+#define SP_IS_TWEAK_CONTEXT(obj) (dynamic_cast<const SPTweakContext*>((const SPEventContext*)obj))
 
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
@@ -45,13 +40,10 @@ enum {
     TWEAK_MODE_BLUR
 };
 
-class CTweakContext;
-
-class SPTweakContext : public SPEventContext
-{
+class SPTweakContext : public SPEventContext {
 public:
 	SPTweakContext();
-	CTweakContext* ctweakcontext;
+	virtual ~SPTweakContext();
 
     //SPEventContext event_context;
 
@@ -86,27 +78,13 @@ public:
   	sigc::connection style_set_connection;
 
 	static const std::string prefsPath;
-};
-
-struct SPTweakContextClass
-{
-    SPEventContextClass parent_class;
-};
-
-class CTweakContext : public CEventContext {
-public:
-	CTweakContext(SPTweakContext* tweakcontext);
 
 	virtual void setup();
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	SPTweakContext* sptweakcontext;
 };
-
-GType sp_tweak_context_get_type(void);
 
 #endif
 

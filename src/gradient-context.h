@@ -19,20 +19,13 @@
 #include <sigc++/sigc++.h>
 #include "event-context.h"
 
-#define SP_TYPE_GRADIENT_CONTEXT            (sp_gradient_context_get_type())
-//#define SP_GRADIENT_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_GRADIENT_CONTEXT, SPGradientContext))
-#define SP_GRADIENT_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_GRADIENT_CONTEXT, SPGradientContextClass))
-//#define SP_IS_GRADIENT_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_GRADIENT_CONTEXT))
-#define SP_IS_GRADIENT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_GRADIENT_CONTEXT))
 #define SP_GRADIENT_CONTEXT(obj) ((SPGradientContext*)obj)
-#define SP_IS_GRADIENT_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPGradientContext)))
-
-class CGradientContext;
+#define SP_IS_GRADIENT_CONTEXT(obj) (dynamic_cast<const SPGradientContext*>((const SPEventContext*)obj))
 
 class SPGradientContext : public SPEventContext {
 public:
 	SPGradientContext();
-	CGradientContext* cgradientcontext;
+	virtual ~SPGradientContext();
 
     Geom::Point origin;
 
@@ -48,26 +41,12 @@ public:
     sigc::connection *subselcon;
 
 	static const std::string prefsPath;
-};
-
-struct SPGradientContextClass {
-    SPEventContextClass parent_class;
-};
-
-class CGradientContext : public CEventContext {
-public:
-	CGradientContext(SPGradientContext* gradientcontext);
 
 	virtual void setup();
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	SPGradientContext* spgradientcontext;
 };
-
-/* Standard Gtk function */
-GType sp_gradient_context_get_type();
 
 void sp_gradient_context_select_next (SPEventContext *event_context);
 void sp_gradient_context_select_prev (SPEventContext *event_context);

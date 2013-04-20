@@ -23,22 +23,15 @@
 #include <2geom/point.h>
 #include "libnrtype/Layout-TNG.h"
 
-#define SP_TYPE_TEXT_CONTEXT (sp_text_context_get_type ())
-//#define SP_TEXT_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TEXT_CONTEXT, SPTextContext))
-#define SP_TEXT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_TEXT_CONTEXT, SPTextContextClass))
-//#define SP_IS_TEXT_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TEXT_CONTEXT))
-#define SP_IS_TEXT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXT_CONTEXT))
 #define SP_TEXT_CONTEXT(obj) ((SPTextContext*)obj)
-#define SP_IS_TEXT_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPTextContext)))
+#define SP_IS_TEXT_CONTEXT(obj) (dynamic_cast<const SPTextContext*>((const SPEventContext*)obj))
 
 struct SPCtrlLine;
-
-class CTextContext;
 
 class SPTextContext : public SPEventContext {
 public:
 	SPTextContext();
-	CTextContext* ctextcontext;
+	virtual ~SPTextContext();
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
@@ -80,15 +73,6 @@ public:
     gchar* preedit_string;
 
 	static const std::string prefsPath;
-};
-
-struct SPTextContextClass {
-    SPEventContextClass parent_class;
-};
-
-class CTextContext : public CEventContext {
-public:
-	CTextContext(SPTextContext* textcontext);
 
 	virtual void setup();
 	virtual void finish();
@@ -96,12 +80,7 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	SPTextContext* sptextcontext;
 };
-
-/* Standard Gtk function */
-GType sp_text_context_get_type (void);
 
 bool sp_text_paste_inline(SPEventContext *ec);
 Glib::ustring sp_text_get_selected_text(SPEventContext const *ec);

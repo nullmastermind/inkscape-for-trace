@@ -54,8 +54,6 @@
 #include "sp-guide.h"
 #include "color.h"
 
-static void sp_event_context_dispose(GObject *object);
-
 static void set_event_location(SPDesktop * desktop, GdkEvent * event);
 
 // globals for temporary switching to selector by space
@@ -75,47 +73,20 @@ static guint32 scroll_event_time = 0;
 static gdouble scroll_multiply = 1;
 static guint scroll_keyval = 0;
 
-G_DEFINE_TYPE(SPEventContext, sp_event_context, G_TYPE_OBJECT);
-
-/**
- * Callback to set up the SPEventContext vtable.
- */
-static void sp_event_context_class_init(SPEventContextClass *klass) {
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    object_class->dispose = sp_event_context_dispose;
-
-//    klass->setup = sp_event_context_private_setup;
-//    klass->root_handler = sp_event_context_private_root_handler;
-//    klass->item_handler = sp_event_context_private_item_handler;
+void SPEventContext::set(Inkscape::Preferences::Entry* val) {
 }
 
-CEventContext::CEventContext(SPEventContext* eventcontext) {
-	this->speventcontext = eventcontext;
+void SPEventContext::activate() {
 }
 
-CEventContext::~CEventContext() {
+void SPEventContext::deactivate() {
 }
 
-void CEventContext::set(Inkscape::Preferences::Entry* val) {
-}
-
-void CEventContext::activate() {
-}
-
-void CEventContext::deactivate() {
-}
-
-void CEventContext::finish() {
+void SPEventContext::finish() {
 }
 
 SPEventContext::SPEventContext() {
 	SPEventContext* event_context = this;
-
-	event_context->ceventcontext = 0;
-	//event_context->ceventcontext = new CEventContext(event_context);
-	new (&types) std::set<TypeInfo>();
-	types.insert(typeid(SPEventContext));
 
 	event_context->hot_y = 0;
 	event_context->xp = 0;
@@ -139,13 +110,6 @@ SPEventContext::SPEventContext() {
     event_context->_delayed_snap_event = NULL;
     event_context->_dse_callback_in_process = false;
     event_context->tool_url = NULL;
-}
-
-/**
- * Clears all SPEventContext object members.
- */
-static void sp_event_context_init(SPEventContext *event_context) {
-	new (event_context) SPEventContext();
 }
 
 SPEventContext::~SPEventContext() {
@@ -181,41 +145,6 @@ SPEventContext::~SPEventContext() {
     //G_OBJECT_CLASS(sp_event_context_parent_class)->dispose(object);
 }
 
-/**
- * Callback to free and null member variables of SPEventContext object.
- */
-static void sp_event_context_dispose(GObject *object) {
-    SPEventContext *ec;
-
-    ec = SP_EVENT_CONTEXT(object);
-
-    if (ec->_message_context) {
-        delete ec->_message_context;
-    }
-
-    if (ec->cursor != NULL) {
-#if GTK_CHECK_VERSION(3,0,0)
-        g_object_unref(ec->cursor);
-#else
-        gdk_cursor_unref(ec->cursor);
-#endif
-        ec->cursor = NULL;
-    }
-
-    if (ec->desktop) {
-        ec->desktop = NULL;
-    }
-
-    if (ec->pref_observer) {
-        delete ec->pref_observer;
-    }
-
-    if (ec->_delayed_snap_event) {
-        delete ec->_delayed_snap_event;
-    }
-
-    G_OBJECT_CLASS(sp_event_context_parent_class)->dispose(object);
-}
 
 /**
  * Set the cursor to a standard GDK cursor
@@ -306,8 +235,8 @@ void sp_event_context_update_cursor(SPEventContext *ec) {
 //	ec->ceventcontext->setup();
 //}
 
-void CEventContext::setup() {
-	sp_event_context_update_cursor(this->speventcontext);
+void SPEventContext::setup() {
+	sp_event_context_update_cursor(this);
 }
 
 /**
@@ -434,8 +363,8 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
 //	return event_context->ceventcontext->root_handler(event);
 //}
 
-gint CEventContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPEventContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static Geom::Point button_w;
     static unsigned int panning = 0;
@@ -896,8 +825,8 @@ gint CEventContext::root_handler(GdkEvent* event) {
 //	return ec->ceventcontext->item_handler(item, event);
 //}
 
-gint CEventContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* ec = this->speventcontext;
+gint SPEventContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* ec = this;
 
     int ret = FALSE;
 
@@ -975,7 +904,7 @@ void sp_event_context_finish(SPEventContext *ec) {
 
 //    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish)
 //        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish(ec);
-    ec->ceventcontext->finish();
+    ec->finish();
 }
 
 //-------------------------------member functions
@@ -1040,7 +969,7 @@ void sp_event_context_read(SPEventContext *ec, gchar const *key) {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Inkscape::Preferences::Entry val = prefs->getEntry(ec->pref_observer->observed_path + '/' + key);
-    ec->ceventcontext->set(&val);
+    ec->set(&val);
 }
 
 /**
@@ -1057,7 +986,7 @@ void sp_event_context_activate(SPEventContext *ec) {
 
 //    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->activate)
 //        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->activate(ec);
-    ec->ceventcontext->activate();
+    ec->activate();
 }
 
 /**
@@ -1069,7 +998,7 @@ void sp_event_context_deactivate(SPEventContext *ec) {
 
 //    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate)
 //        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate(ec);
-    ec->ceventcontext->deactivate();
+    ec->deactivate();
 }
 
 /**
@@ -1111,7 +1040,7 @@ gint sp_event_context_virtual_root_handler(SPEventContext * event_context, GdkEv
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
         //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->root_handler(event_context, event);
-    	ret = event_context->ceventcontext->root_handler(event);
+    	ret = event_context->root_handler(event);
 
         set_event_location(event_context->desktop, event);
     }
@@ -1152,7 +1081,7 @@ gint sp_event_context_virtual_item_handler(SPEventContext * event_context, SPIte
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
         //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
-    	ret = event_context->ceventcontext->item_handler(item, event);
+    	ret = event_context->item_handler(item, event);
 
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);

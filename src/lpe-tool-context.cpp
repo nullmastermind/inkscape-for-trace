@@ -41,13 +41,6 @@
 
 #include "lpe-tool-context.h"
 
-static void sp_lpetool_context_dispose(GObject *object);
-
-static void sp_lpetool_context_setup(SPEventContext *ec);
-static void sp_lpetool_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *);
-static gint sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event);
-static gint sp_lpetool_context_root_handler(SPEventContext *ec, GdkEvent *event);
-
 void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpointer data);
 
 const int num_subtools = 8;
@@ -75,41 +68,14 @@ namespace {
 	bool lpetoolContextRegistered = ToolFactory::instance().registerObject("/tools/lpetool", createLPEToolContext);
 }
 
-const std::string& CLPEToolContext::getPrefsPath() {
+const std::string& SPLPEToolContext::getPrefsPath() {
 	return SPLPEToolContext::prefsPath;
 }
 
 const std::string SPLPEToolContext::prefsPath = "/tools/lpetool";
 
-G_DEFINE_TYPE(SPLPEToolContext, sp_lpetool_context, SP_TYPE_PEN_CONTEXT);
-
-static void
-sp_lpetool_context_class_init(SPLPEToolContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_lpetool_context_dispose;
-
-//    event_context_class->setup = sp_lpetool_context_setup;
-//    event_context_class->set = sp_lpetool_context_set;
-//    event_context_class->root_handler = sp_lpetool_context_root_handler;
-//    event_context_class->item_handler = sp_lpetool_context_item_handler;
-}
-
-CLPEToolContext::CLPEToolContext(SPLPEToolContext* lpetoolcontext) : CPenContext(lpetoolcontext) {
-	this->splpetoolcontext = lpetoolcontext;
-}
-
 SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
 	SPLPEToolContext* lc = this;
-
-	lc->clpetoolcontext = new CLPEToolContext(lc);
-	delete lc->cpencontext;
-	lc->cpencontext = lc->clpetoolcontext;
-	lc->cdrawcontext = lc->clpetoolcontext;
-	lc->ceventcontext = lc->clpetoolcontext;
-	types.insert(typeid(SPLPEToolContext));
 
 	lc->mode = Inkscape::LivePathEffect::BEND_PATH;
 	lc->shape_editor = 0;
@@ -122,19 +88,11 @@ SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
     lc->canvas_bbox = NULL;
     lc->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
 
-    new (&lc->sel_changed_connection) sigc::connection();
+    //new (&lc->sel_changed_connection) sigc::connection();
 }
 
-static void
-sp_lpetool_context_init(SPLPEToolContext *lc)
-{
-	new (lc) SPLPEToolContext();
-}
-
-static void
-sp_lpetool_context_dispose(GObject *object)
-{
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(object);
+SPLPEToolContext::~SPLPEToolContext() {
+    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(this);
     delete lc->shape_editor;
 
     if (lc->canvas_bbox) {
@@ -147,29 +105,23 @@ sp_lpetool_context_dispose(GObject *object)
     lc->measuring_items = NULL;
 
     lc->sel_changed_connection.disconnect();
-    lc->sel_changed_connection.~connection();
+    //lc->sel_changed_connection.~connection();
 
     if (lc->_lpetool_message_context) {
         delete lc->_lpetool_message_context;
     }
 
-    G_OBJECT_CLASS(sp_lpetool_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_lpetool_context_parent_class)->dispose(object);
 }
 
-static void
-sp_lpetool_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CLPEToolContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPLPEToolContext::setup() {
+	SPEventContext* ec = this;
 
     SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(ec);
 
 //    if (((SPEventContextClass *) sp_lpetool_context_parent_class)->setup)
 //        ((SPEventContextClass *) sp_lpetool_context_parent_class)->setup(ec);
-    CPenContext::setup();
+    SPPenContext::setup();
 
     Inkscape::Selection *selection = sp_desktop_selection (ec->desktop);
     SPItem *item = selection->singleItem();
@@ -214,14 +166,8 @@ void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpoint
     lc->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void
-sp_lpetool_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CLPEToolContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPLPEToolContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     if (val->getEntryName() == "mode") {
         Inkscape::Preferences::get()->setString("/tools/geometric/mode", "drag");
@@ -236,14 +182,8 @@ void CLPEToolContext::set(Inkscape::Preferences::Entry* val) {
     */
 }
 
-static gint 
-sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
-{
-	return ec->ceventcontext->item_handler(item, event);
-}
-
-gint CLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* ec = this->spdrawcontext;
+gint SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* ec = this;
 
     gint ret = FALSE;
 
@@ -268,20 +208,14 @@ gint CLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
     if (!ret) {
 //        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler)
 //            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler(ec, item, event);
-    	ret = CPenContext::item_handler(item, event);
+    	ret = SPPenContext::item_handler(item, event);
     }
 
     return ret;
 }
 
-gint
-sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CLPEToolContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPLPEToolContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
@@ -292,7 +226,7 @@ gint CLPEToolContext::root_handler(GdkEvent* event) {
     if (sp_pen_context_has_waiting_LPE(lc)) {
         // quit when we are waiting for a LPE to be applied
         //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-    	ret = event_context->ceventcontext->root_handler(event);
+    	ret = event_context->root_handler(event);
         return ret;
     }
 
@@ -325,7 +259,7 @@ gint CLPEToolContext::root_handler(GdkEvent* event) {
 
                 // we pass the mouse click on to pen tool as the first click which it should collect
                 //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-                ret = event_context->ceventcontext->root_handler(event);
+                ret = event_context->root_handler(event);
             }
             break;
 
@@ -364,7 +298,7 @@ gint CLPEToolContext::root_handler(GdkEvent* event) {
 //        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler) {
 //            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
 //        }
-    	ret = CPenContext::root_handler(event);
+    	ret = SPPenContext::root_handler(event);
     }
 
     return ret;

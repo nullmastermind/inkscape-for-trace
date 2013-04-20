@@ -81,12 +81,6 @@ using Inkscape::DocumentUndo;
 
 #define DYNA_MIN_WIDTH 1.0e-6
 
-static void sp_dyna_draw_context_dispose(GObject *object);
-
-static void sp_dyna_draw_context_setup(SPEventContext *ec);
-static void sp_dyna_draw_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *value);
-static gint sp_dyna_draw_context_root_handler(SPEventContext *ec, GdkEvent *event);
-
 static void clear_current(SPDynaDrawContext *dc);
 static void set_to_accumulated(SPDynaDrawContext *dc, bool unionize, bool subtract);
 static void add_cap(SPCurve *curve, Geom::Point const &from, Geom::Point const &to, double rounding);
@@ -110,40 +104,15 @@ namespace {
 	bool calligraphicContextRegistered = ToolFactory::instance().registerObject("/tools/calligraphic", createCalligraphicContext);
 }
 
-const std::string& CDynaDrawContext::getPrefsPath() {
+const std::string& SPDynaDrawContext::getPrefsPath() {
 	return SPDynaDrawContext::prefsPath;
 }
 
 
 const std::string SPDynaDrawContext::prefsPath = "/tools/calligraphic";
 
-G_DEFINE_TYPE(SPDynaDrawContext, sp_dyna_draw_context, SP_TYPE_COMMON_CONTEXT);
-
-static void
-sp_dyna_draw_context_class_init(SPDynaDrawContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_dyna_draw_context_dispose;
-
-//    event_context_class->setup = sp_dyna_draw_context_setup;
-//    event_context_class->set = sp_dyna_draw_context_set;
-//    event_context_class->root_handler = sp_dyna_draw_context_root_handler;
-}
-
-CDynaDrawContext::CDynaDrawContext(SPDynaDrawContext* dynadrawcontext) : CCommonContext(dynadrawcontext) {
-	this->spdynadrawcontext = dynadrawcontext;
-}
-
 SPDynaDrawContext::SPDynaDrawContext() : SPCommonContext() {
 	SPDynaDrawContext* ddc = this;
-
-	ddc->cdynadrawcontext = new CDynaDrawContext(ddc);
-	delete ddc->ccommoncontext;
-	ddc->ccommoncontext = ddc->cdynadrawcontext;
-	ddc->ceventcontext = ddc->cdynadrawcontext;
-	types.insert(typeid(SPDynaDrawContext));
 
     ddc->cursor_shape = cursor_calligraphy_xpm;
     ddc->hot_x = 4;
@@ -158,10 +127,12 @@ SPDynaDrawContext::SPDynaDrawContext() : SPCommonContext() {
 
     ddc->hatch_spacing = 0;
     ddc->hatch_spacing_step = 0;
-    new (&ddc->hatch_pointer_past) std::list<double>();
-    new (&ddc->hatch_nearest_past) std::list<double>();
-    new (&ddc->inertia_vectors) std::list<Geom::Point>();
-    new (&ddc->hatch_vectors) std::list<Geom::Point>();
+
+//    new (&ddc->hatch_pointer_past) std::list<double>();
+//    new (&ddc->hatch_nearest_past) std::list<double>();
+//    new (&ddc->inertia_vectors) std::list<Geom::Point>();
+//    new (&ddc->hatch_vectors) std::list<Geom::Point>();
+
     ddc->hatch_last_nearest = Geom::Point(0,0);
     ddc->hatch_last_pointer = Geom::Point(0,0);
     ddc->hatch_escaped = false;
@@ -173,16 +144,8 @@ SPDynaDrawContext::SPDynaDrawContext() : SPCommonContext() {
     ddc->just_started_drawing = false;
 }
 
-static void
-sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
-{
-	new (ddc) SPDynaDrawContext();
-}
-
-static void
-sp_dyna_draw_context_dispose(GObject *object)
-{
-    SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(object);
+SPDynaDrawContext::~SPDynaDrawContext() {
+    SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(this);
 
     if (ddc->hatch_area) {
         sp_canvas_item_destroy(ddc->hatch_area);
@@ -190,28 +153,22 @@ sp_dyna_draw_context_dispose(GObject *object)
     }
 
 
-    G_OBJECT_CLASS(sp_dyna_draw_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_dyna_draw_context_parent_class)->dispose(object);
 
-    ddc->hatch_pointer_past.~list();
-    ddc->hatch_nearest_past.~list();
-    ddc->inertia_vectors.~list();
-    ddc->hatch_vectors.~list();
+//    ddc->hatch_pointer_past.~list();
+//    ddc->hatch_nearest_past.~list();
+//    ddc->inertia_vectors.~list();
+//    ddc->hatch_vectors.~list();
 }
 
-static void
-sp_dyna_draw_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CDynaDrawContext::setup() {
-	SPEventContext* ec = this->spdynadrawcontext;
+void SPDynaDrawContext::setup() {
+	SPEventContext* ec = this;
 
     SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
 
 //    if ((SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->setup)
 //        (SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->setup(ec);
-    CCommonContext::setup();
+    SPCommonContext::setup();
 
     ddc->accumulated = new SPCurve();
     ddc->currentcurve = new SPCurve();
@@ -265,14 +222,8 @@ void CDynaDrawContext::setup() {
     }
 }
 
-static void
-sp_dyna_draw_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-	ec->ceventcontext->set(val);
-}
-
-void CDynaDrawContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this->speventcontext;
+void SPDynaDrawContext::set(Inkscape::Preferences::Entry* val) {
+	SPEventContext* ec = this;
 
     SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
     Glib::ustring path = val->getEntryName();
@@ -286,7 +237,7 @@ void CDynaDrawContext::set(Inkscape::Preferences::Entry* val) {
 //        if ( SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set ) {
 //            SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set(ec, val);
 //        }
-    	CCommonContext::set(val);
+    	SPCommonContext::set(val);
     }
 
     //g_print("DDC: %g %g %g %g\n", ddc->mass, ddc->drag, ddc->angle, ddc->width);
@@ -548,16 +499,8 @@ calligraphic_cancel(SPDynaDrawContext *dc)
             }
 }
 
-
-gint
-sp_dyna_draw_context_root_handler(SPEventContext *event_context,
-                                  GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CDynaDrawContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPDynaDrawContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     SPDynaDrawContext *dc = SP_DYNA_DRAW_CONTEXT(event_context);
     SPDesktop *desktop = event_context->desktop;
@@ -1005,7 +948,7 @@ gint CDynaDrawContext::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_dyna_draw_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = CCommonContext::root_handler(event);
+    	ret = SPCommonContext::root_handler(event);
     }
 
     return ret;

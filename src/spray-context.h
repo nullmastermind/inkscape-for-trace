@@ -21,13 +21,8 @@
 #include <2geom/point.h>
 #include "event-context.h"
 
-#define SP_TYPE_SPRAY_CONTEXT (sp_spray_context_get_type())
-//#define SP_SPRAY_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_SPRAY_CONTEXT, SPSprayContext))
-#define SP_SPRAY_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_SPRAY_CONTEXT, SPSprayContextClass))
-//#define SP_IS_SPRAY_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_SPRAY_CONTEXT))
-#define SP_IS_SPRAY_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_SPRAY_CONTEXT))
 #define SP_SPRAY_CONTEXT(obj) ((SPSprayContext*)obj)
-#define SP_IS_SPRAY_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPSprayContext)))
+#define SP_IS_SPRAY_CONTEXT(obj) (dynamic_cast<const SPSprayContext*>((const SPEventContext*)obj))
 
 namespace Inkscape {
   namespace UI {
@@ -51,13 +46,10 @@ enum {
     SPRAY_OPTION,
 };
 
-class CSprayContext;
-
-class SPSprayContext : public SPEventContext
-{
+class SPSprayContext : public SPEventContext {
 public:
 	SPSprayContext();
-	CSprayContext* cspraycontext;
+	virtual ~SPSprayContext();
 
     //SPEventContext event_context;
     //Inkscape::UI::Dialog::Dialog *dialog_option;//Attribut de type SprayOptionClass, localisé dans scr/ui/dialog    
@@ -97,28 +89,13 @@ public:
     sigc::connection style_set_connection;
 
 	static const std::string prefsPath;
-};
-
-struct SPSprayContextClass
-{
-    SPEventContextClass parent_class;
-};
-
-class CSprayContext : public CEventContext {
-public:
-	CSprayContext(SPSprayContext* spraycontext);
 
 	virtual void setup();
 	virtual void set(Inkscape::Preferences::Entry* val);
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
-private:
-	SPSprayContext* spspraycontext;
 };
-
-GType sp_spray_context_get_type(void);
-
 
 #endif
 

@@ -75,13 +75,6 @@ using Inkscape::Display::ExtractARGB32;
 using Inkscape::Display::ExtractRGB32;
 using Inkscape::Display::AssembleARGB32;
 
-static void sp_flood_context_dispose(GObject *object);
-
-static void sp_flood_context_setup(SPEventContext *ec);
-
-static gint sp_flood_context_root_handler(SPEventContext *event_context, GdkEvent *event);
-static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
-
 static void sp_flood_finish(SPFloodContext *rc);
 
 #include "sp-factory.h"
@@ -94,37 +87,14 @@ namespace {
 	bool paintbucketContextRegistered = ToolFactory::instance().registerObject("/tools/paintbucket", createPaintbucketContext);
 }
 
-const std::string& CFloodContext::getPrefsPath() {
+const std::string& SPFloodContext::getPrefsPath() {
 	return SPFloodContext::prefsPath;
 }
 
 const std::string SPFloodContext::prefsPath = "/tools/paintbucket";
 
-G_DEFINE_TYPE(SPFloodContext, sp_flood_context, SP_TYPE_EVENT_CONTEXT);
-
-static void sp_flood_context_class_init(SPFloodContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
-
-    object_class->dispose = sp_flood_context_dispose;
-
-//    event_context_class->setup = sp_flood_context_setup;
-//    event_context_class->root_handler  = sp_flood_context_root_handler;
-//    event_context_class->item_handler  = sp_flood_context_item_handler;
-}
-
-CFloodContext::CFloodContext(SPFloodContext* floodcontext) : CEventContext(floodcontext) {
-	this->spfloodcontext = floodcontext;
-}
-
 SPFloodContext::SPFloodContext() : SPEventContext() {
 	SPFloodContext* flood_context = this;
-
-	flood_context->cfloodcontext = new CFloodContext(flood_context);
-	delete flood_context->ceventcontext;
-	flood_context->ceventcontext = flood_context->cfloodcontext;
-	types.insert(typeid(SPFloodContext));
 
 	flood_context->_message_context = 0;
 
@@ -141,21 +111,15 @@ SPFloodContext::SPFloodContext() : SPEventContext() {
 
     flood_context->item = NULL;
 
-    new (&flood_context->sel_changed_connection) sigc::connection();
+    //new (&flood_context->sel_changed_connection) sigc::connection();
 }
 
-static void sp_flood_context_init(SPFloodContext *flood_context)
-{
-	new (flood_context) SPFloodContext();
-}
-
-static void sp_flood_context_dispose(GObject *object)
-{
-    SPFloodContext *rc = SP_FLOOD_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
+SPFloodContext::~SPFloodContext() {
+    SPFloodContext *rc = SP_FLOOD_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
 
     rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection.~connection();
+    //rc->sel_changed_connection.~connection();
 
     delete ec->shape_editor;
     ec->shape_editor = NULL;
@@ -169,7 +133,7 @@ static void sp_flood_context_dispose(GObject *object)
         delete rc->_message_context;
     }
 
-    G_OBJECT_CLASS(sp_flood_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_flood_context_parent_class)->dispose(object);
 }
 
 /**
@@ -186,20 +150,15 @@ static void sp_flood_context_selection_changed(Inkscape::Selection *selection, g
     ec->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void sp_flood_context_setup(SPEventContext *ec)
-{
-	ec->ceventcontext->setup();
-}
-
-void CFloodContext::setup() {
-	SPEventContext* ec = this->speventcontext;
+void SPFloodContext::setup() {
+	SPEventContext* ec = this;
 
     SPFloodContext *rc = SP_FLOOD_CONTEXT(ec);
 
 //    if (((SPEventContextClass *) sp_flood_context_parent_class)->setup) {
 //        ((SPEventContextClass *) sp_flood_context_parent_class)->setup(ec);
 //    }
-    CEventContext::setup();
+    SPEventContext::setup();
 
     ec->shape_editor = new ShapeEditor(ec->desktop);
 
@@ -1159,13 +1118,8 @@ static void sp_flood_do_flood_fill(SPEventContext *event_context, GdkEvent *even
     DocumentUndo::done(document, SP_VERB_CONTEXT_PAINTBUCKET, _("Fill bounded area"));
 }
 
-static gint sp_flood_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
-{
-	return event_context->ceventcontext->item_handler(item, event);
-}
-
-gint CFloodContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPFloodContext::item_handler(SPItem* item, GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     gint ret = FALSE;
 
@@ -1193,18 +1147,13 @@ gint CFloodContext::item_handler(SPItem* item, GdkEvent* event) {
 //        ret = ((SPEventContextClass *) sp_flood_context_parent_class)->item_handler(event_context, item, event);
 //    }
     // CPPIFY: ret is overwritten...
-    ret = CEventContext::item_handler(item, event);
+    ret = SPEventContext::item_handler(item, event);
 
     return ret;
 }
 
-static gint sp_flood_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-	return event_context->ceventcontext->root_handler(event);
-}
-
-gint CFloodContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this->speventcontext;
+gint SPFloodContext::root_handler(GdkEvent* event) {
+	SPEventContext* event_context = this;
 
     static bool dragging;
     
@@ -1308,12 +1257,11 @@ gint CFloodContext::root_handler(GdkEvent* event) {
 //        if (((SPEventContextClass *) sp_flood_context_parent_class)->root_handler) {
 //            ret = ((SPEventContextClass *) sp_flood_context_parent_class)->root_handler(event_context, event);
 //        }
-    	ret = CEventContext::root_handler(event);
+    	ret = SPEventContext::root_handler(event);
     }
 
     return ret;
 }
-
 
 static void sp_flood_finish(SPFloodContext *rc)
 {
