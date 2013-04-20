@@ -50,10 +50,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_star_drag (SPStarContext * sc, Geom::Point p, guint state);
-static void sp_star_finish (SPStarContext * sc);
-static void sp_star_cancel(SPStarContext * sc);
-
 #include "tool-factory.h"
 
 namespace {
@@ -89,51 +85,39 @@ SPStarContext::SPStarContext() : SPEventContext() {
     event_context->item_to_select = NULL;
     event_context->tool_url = "/tools/shapes/star";
 
-    star_context->item = NULL;
+    star_context->star = NULL;
 
     star_context->magnitude = 5;
     star_context->proportion = 0.5;
     star_context->isflatsided = false;
-
-    //new (&star_context->sel_changed_connection) sigc::connection();
 }
 
 void SPStarContext::finish() {
-	SPEventContext* ec = this;
-
-    SPStarContext *sc = SP_STAR_CONTEXT(ec);
-    SPDesktop *desktop = ec->desktop;
+    SPDesktop *desktop = this->desktop;
 
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), GDK_CURRENT_TIME);
-    sp_star_finish(sc);
-    sc->sel_changed_connection.disconnect();
+    this->finishItem();
+    this->sel_changed_connection.disconnect();
 
-//    if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish) {
-//        (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->finish(ec);
-//    }
     SPEventContext::finish();
 }
 
 SPStarContext::~SPStarContext() {
-    SPEventContext *ec = SP_EVENT_CONTEXT (this);
-    SPStarContext *sc = SP_STAR_CONTEXT (this);
+    this->enableGrDrag(false);
 
-    ec->enableGrDrag(false);
+    this->sel_changed_connection.disconnect();
 
-    sc->sel_changed_connection.disconnect();
-    //sc->sel_changed_connection.~connection();
-
-    delete ec->shape_editor;
-    ec->shape_editor = NULL;
+    delete this->shape_editor;
+    this->shape_editor = NULL;
 
     /* fixme: This is necessary because we do not grab */
-    if (sc->item) sp_star_finish (sc);
-
-    if (sc->_message_context) {
-        delete sc->_message_context;
+    if (this->star) {
+    	this->finishItem();
     }
 
-    //G_OBJECT_CLASS (sp_star_context_parent_class)->dispose (object);
+    if (this->_message_context) {
+        delete this->_message_context;
+    }
 }
 
 /**
@@ -142,103 +126,87 @@ SPStarContext::~SPStarContext() {
  *
  * @param  selection Should not be NULL.
  */
-static void sp_star_context_selection_changed (Inkscape::Selection * selection, gpointer data)
-{
+void SPStarContext::selection_changed(Inkscape::Selection* selection) {
     g_assert (selection != NULL);
 
-    SPStarContext *sc = SP_STAR_CONTEXT (data);
-    SPEventContext *ec = SP_EVENT_CONTEXT (sc);
-
-    ec->shape_editor->unset_item(SH_KNOTHOLDER);
-    SPItem *item = selection->singleItem();
-    ec->shape_editor->set_item(item, SH_KNOTHOLDER);
+    this->shape_editor->unset_item(SH_KNOTHOLDER);
+    this->shape_editor->set_item(selection->singleItem(), SH_KNOTHOLDER);
 }
 
 void SPStarContext::setup() {
-	SPEventContext* ec = this;
-
-	SPStarContext *sc = SP_STAR_CONTEXT (ec);
-
-//	if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup)
-//		(SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->setup (ec);
 	SPEventContext::setup();
 
-	sp_event_context_read (ec, "magnitude");
-	sp_event_context_read (ec, "proportion");
-	sp_event_context_read (ec, "isflatsided");
-	sp_event_context_read (ec, "rounded");
-	sp_event_context_read (ec, "randomized");
+	sp_event_context_read(this, "magnitude");
+	sp_event_context_read(this, "proportion");
+	sp_event_context_read(this, "isflatsided");
+	sp_event_context_read(this, "rounded");
+	sp_event_context_read(this, "randomized");
 
-	ec->shape_editor = new ShapeEditor(ec->desktop);
+	this->shape_editor = new ShapeEditor(this->desktop);
 
-	SPItem *item = sp_desktop_selection(ec->desktop)->singleItem();
+	SPItem *item = sp_desktop_selection(this->desktop)->singleItem();
 	if (item) {
-		ec->shape_editor->set_item(item, SH_KNOTHOLDER);
+		this->shape_editor->set_item(item, SH_KNOTHOLDER);
 	}
 
-	Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
-	sc->sel_changed_connection.disconnect();
-	sc->sel_changed_connection = selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_star_context_selection_changed), (gpointer)sc));
+	Inkscape::Selection *selection = sp_desktop_selection(this->desktop);
+	
+	this->sel_changed_connection.disconnect();
+
+	this->sel_changed_connection = selection->connectChanged(sigc::mem_fun(this, &SPStarContext::selection_changed));
 
 	Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 	if (prefs->getBool("/tools/shapes/selcue")) {
-		ec->enableSelectionCue();
+		this->enableSelectionCue();
 	}
 
 	if (prefs->getBool("/tools/shapes/gradientdrag")) {
-		ec->enableGrDrag();
+		this->enableGrDrag();
 	}
 
-	sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
+	this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 void SPStarContext::set(Inkscape::Preferences::Entry* val) {
-	SPEventContext* ec = this;
-
-    SPStarContext *sc = SP_STAR_CONTEXT (ec);
     Glib::ustring path = val->getEntryName();
 
     if (path == "magnitude") {
-        sc->magnitude = CLAMP(val->getInt(5), 3, 1024);
+        this->magnitude = CLAMP(val->getInt(5), 3, 1024);
     } else if (path == "proportion") {
-        sc->proportion = CLAMP(val->getDouble(0.5), 0.01, 2.0);
+        this->proportion = CLAMP(val->getDouble(0.5), 0.01, 2.0);
     } else if (path == "isflatsided") {
-        sc->isflatsided = val->getBool();
+        this->isflatsided = val->getBool();
     } else if (path == "rounded") {
-        sc->rounded = val->getDouble();
+        this->rounded = val->getDouble();
     } else if (path == "randomized") {
-        sc->randomized = val->getDouble();
+        this->randomized = val->getDouble();
     }
 }
 
 gint SPStarContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
+    static bool dragging;
 
-    static gboolean dragging;
-
-    SPDesktop *desktop = event_context->desktop;
+    SPDesktop *desktop = this->desktop;
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    SPStarContext *sc = SP_STAR_CONTEXT (event_context);
-
-    event_context->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+    this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
     gint ret = FALSE;
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if (event->button.button == 1 && !event_context->space_panning) {
+        if (event->button.button == 1 && !this->space_panning) {
+            dragging = true;
 
-            dragging = TRUE;
-
-            sc->center = Inkscape::setup_for_drag_start(desktop, event_context, event);
+            this->center = Inkscape::setup_for_drag_start(desktop, this, event);
 
             /* Snap center */
             SnapManager &m = desktop->namedview->snap_manager;
             m.setup(desktop, true);
-            m.freeSnapReturnByRef(sc->center, Inkscape::SNAPSOURCE_NODE_HANDLE);
+            m.freeSnapReturnByRef(this->center, Inkscape::SNAPSOURCE_NODE_HANDLE);
             m.unSetup();
+
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                                 GDK_POINTER_MOTION_MASK |
@@ -248,28 +216,28 @@ gint SPStarContext::root_handler(GdkEvent* event) {
             ret = TRUE;
         }
         break;
-    case GDK_MOTION_NOTIFY:
-        if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !event_context->space_panning) {
 
-            if ( event_context->within_tolerance
-                 && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
-                 && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {
+    case GDK_MOTION_NOTIFY:
+        if (dragging && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+            if ( this->within_tolerance
+                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
+                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
                 break; // do not drag if we're within tolerance from origin
             }
             // Once the user has moved farther than tolerance from the original location
             // (indicating they intend to draw, not click), then always process the
             // motion notify coordinates as given (no snapping back to origin)
-            event_context->within_tolerance = false;
+            this->within_tolerance = false;
 
             Geom::Point const motion_w(event->motion.x, event->motion.y);
             Geom::Point motion_dt(desktop->w2d(motion_w));
 
-            sp_star_drag (sc, motion_dt, event->motion.state);
+            this->drag(motion_dt, event->motion.state);
 
             gobble_motion_events(GDK_BUTTON1_MASK);
 
             ret = TRUE;
-        } else if (!sp_event_context_knot_mouseover(event_context)) {
+        } else if (!sp_event_context_knot_mouseover(this)) {
             SnapManager &m = desktop->namedview->snap_manager;
             m.setup(desktop);
 
@@ -281,30 +249,34 @@ gint SPStarContext::root_handler(GdkEvent* event) {
         }
         break;
     case GDK_BUTTON_RELEASE:
-        event_context->xp = event_context->yp = 0;
-        if (event->button.button == 1 && !event_context->space_panning) {
-            dragging = FALSE;
-            sp_event_context_discard_delayed_snap_event(event_context);
-            if (!event_context->within_tolerance) {
+        this->xp = this->yp = 0;
+
+        if (event->button.button == 1 && !this->space_panning) {
+            dragging = false;
+
+            sp_event_context_discard_delayed_snap_event(this);
+
+            if (!this->within_tolerance) {
                 // we've been dragging, finish the star
-                sp_star_finish (sc);
-            } else if (event_context->item_to_select) {
+                this->finishItem();
+            } else if (this->item_to_select) {
                 // no dragging, select clicked item if any
                 if (event->button.state & GDK_SHIFT_MASK) {
-                    selection->toggle(event_context->item_to_select);
+                    selection->toggle(this->item_to_select);
                 } else {
-                    selection->set(event_context->item_to_select);
+                    selection->set(this->item_to_select);
                 }
             } else {
                 // click in an empty space
                 selection->clear();
             }
 
-            event_context->item_to_select = NULL;
+            this->item_to_select = NULL;
             ret = TRUE;
             sp_canvas_item_ungrab(SP_CANVAS_ITEM (desktop->acetate), event->button.time);
         }
         break;
+
     case GDK_KEY_PRESS:
         switch (get_group0_keyval(&event->key)) {
         case GDK_KEY_Alt_R:
@@ -314,11 +286,12 @@ gint SPStarContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Shift_R:
         case GDK_KEY_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
         case GDK_KEY_Meta_R:
-            sp_event_show_modifier_tip(event_context->defaultMessageContext(), event,
+            sp_event_show_modifier_tip(this->defaultMessageContext(), event,
                                        _("<b>Ctrl</b>: snap angle; keep rays radial"),
                                        NULL,
                                        NULL);
             break;
+
         case GDK_KEY_Up:
         case GDK_KEY_Down:
         case GDK_KEY_KP_Up:
@@ -327,6 +300,7 @@ gint SPStarContext::root_handler(GdkEvent* event) {
             if (!MOD__CTRL_ONLY)
                 ret = TRUE;
             break;
+
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY) {
@@ -334,38 +308,44 @@ gint SPStarContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Escape:
         	if (dragging) {
         		dragging = false;
-        		sp_event_context_discard_delayed_snap_event(event_context);
+        		sp_event_context_discard_delayed_snap_event(this);
         		// if drawing, cancel, otherwise pass it up for deselecting
-        		sp_star_cancel(sc);
+        		this->cancel();
         		ret = TRUE;
         	}
         	break;
+
         case GDK_KEY_space:
             if (dragging) {
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                                      event->button.time);
+                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+
                 dragging = false;
-                sp_event_context_discard_delayed_snap_event(event_context);
-                if (!event_context->within_tolerance) {
+
+                sp_event_context_discard_delayed_snap_event(this);
+
+                if (!this->within_tolerance) {
                     // we've been dragging, finish the star
-                    sp_star_finish(sc);
+                    this->finishItem();
                 }
                 // do not return true, so that space would work switching to selector
             }
             break;
+
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+            ret = this->deleteSelectedDrag(MOD__CTRL_ONLY);
             break;
 
         default:
             break;
         }
         break;
+
     case GDK_KEY_RELEASE:
         switch (get_group0_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
@@ -376,66 +356,66 @@ gint SPStarContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Shift_R:
         case GDK_KEY_Meta_L:  // Meta is when you press Shift+Alt
         case GDK_KEY_Meta_R:
-            event_context->defaultMessageContext()->clear();
+            this->defaultMessageContext()->clear();
             break;
+
         default:
             break;
         }
         break;
+
     default:
         break;
     }
 
     if (!ret) {
-//        if ((SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler)
-//            ret = (SP_EVENT_CONTEXT_CLASS(sp_star_context_parent_class))->root_handler (event_context, event);
     	ret = SPEventContext::root_handler(event);
     }
 
     return ret;
 }
 
-static void sp_star_drag(SPStarContext *sc, Geom::Point p, guint state)
+void SPStarContext::drag(Geom::Point p, guint state)
 {
-    SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
+    SPDesktop *desktop = this->desktop;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
-    if (!sc->item) {
-
-        if (Inkscape::have_viable_layer(desktop, sc->_message_context) == false) {
+    if (!this->star) {
+        if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
             return;
         }
 
         // Create object
-        Inkscape::XML::Document *xml_doc = SP_EVENT_CONTEXT_DOCUMENT(sc)->getReprDoc();
+        Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
         repr->setAttribute("sodipodi:type", "star");
 
         // Set style
         sp_desktop_apply_style_tool(desktop, repr, "/tools/shapes/star", false);
 
-        sc->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+        this->star = SP_STAR(desktop->currentLayer()->appendChildRepr(repr));
+
         Inkscape::GC::release(repr);
-        sc->item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-        sc->item->updateRepr();
+        this->star->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        this->star->updateRepr();
 
         desktop->canvas->forceFullRedrawAfterInterruptions(5);
     }
 
     /* Snap corner point with no constraints */
     SnapManager &m = desktop->namedview->snap_manager;
-    m.setup(desktop, true, sc->item);
+
+    m.setup(desktop, true, this->star);
     Geom::Point pt2g = p;
     m.freeSnapReturnByRef(pt2g, Inkscape::SNAPSOURCE_NODE_HANDLE);
     m.unSetup();
-    Geom::Point const p0 = desktop->dt2doc(sc->center);
+
+    Geom::Point const p0 = desktop->dt2doc(this->center);
     Geom::Point const p1 = desktop->dt2doc(pt2g);
 
-    SPStar *star = SP_STAR(sc->item);
-
-    double const sides = (gdouble) sc->magnitude;
+    double const sides = (gdouble) this->magnitude;
     Geom::Point const d = p1 - p0;
     Geom::Coord const r1 = Geom::L2(d);
     double arg1 = atan2(d);
@@ -445,13 +425,13 @@ static void sp_star_drag(SPStarContext *sc, Geom::Point p, guint state)
         arg1 = sp_round(arg1, M_PI / snaps);
     }
 
-    sp_star_position_set(star, sc->magnitude, p0, r1, r1 * sc->proportion,
-                         arg1, arg1 + M_PI / sides, sc->isflatsided, sc->rounded, sc->randomized);
+    sp_star_position_set(this->star, this->magnitude, p0, r1, r1 * this->proportion,
+                         arg1, arg1 + M_PI / sides, this->isflatsided, this->rounded, this->randomized);
 
     /* status text */
     GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->namedview->getDefaultMetric());
-    sc->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
-                               ( sc->isflatsided?
+    this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+                               ( this->isflatsided?
                                  _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
                                  : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
                                rads->str, sp_round((arg1) * 180 / M_PI, 0.0001));
@@ -459,55 +439,46 @@ static void sp_star_drag(SPStarContext *sc, Geom::Point p, guint state)
     g_string_free(rads, FALSE);
 }
 
-static void
-sp_star_finish (SPStarContext * sc)
-{
-    sc->_message_context->clear();
+void SPStarContext::finishItem() {
+    this->_message_context->clear();
 
-    if (sc->item != NULL) {
-        SPStar *star = SP_STAR(sc->item);
-        if (star->r[1] == 0) {
-            sp_star_cancel(sc); // Don't allow the creating of zero sized arc, for example when the start and and point snap to the snap grid point
+    if (this->star != NULL) {
+        if (this->star->r[1] == 0) {
+        	// Don't allow the creating of zero sized arc, for example
+        	// when the start and and point snap to the snap grid point
+            this->cancel();
             return;
         }
 
         // Set transform center, so that odd stars rotate correctly
         // LP #462157
-        sc->item->setCenter(sc->center);
-
-        SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
-        SPObject *object = SP_OBJECT(sc->item);
-
-        (SP_SHAPE(sc->item))->set_shape();
-
-        object->updateRepr(SP_OBJECT_WRITE_EXT);
+        this->star->setCenter(this->center);
+        this->star->set_shape();
+        this->star->updateRepr(SP_OBJECT_WRITE_EXT);
 
         desktop->canvas->endForcedFullRedraws();
 
-        sp_desktop_selection(desktop)->set(sc->item);
+        sp_desktop_selection(desktop)->set(this->star);
         DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_STAR,
                            _("Create star"));
 
-        sc->item = NULL;
+        this->star = NULL;
     }
 }
 
-static void sp_star_cancel(SPStarContext *sc)
-{
-    SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
-
+void SPStarContext::cancel() {
     sp_desktop_selection(desktop)->clear();
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
 
-    if (sc->item != NULL) {
-        SP_OBJECT(sc->item)->deleteObject();
-        sc->item = NULL;
+    if (this->star != NULL) {
+        this->star->deleteObject();
+        this->star = NULL;
     }
 
-    sc->within_tolerance = false;
-    sc->xp = 0;
-    sc->yp = 0;
-    sc->item_to_select = NULL;
+    this->within_tolerance = false;
+    this->xp = 0;
+    this->yp = 0;
+    this->item_to_select = NULL;
 
     desktop->canvas->endForcedFullRedraws();
 

@@ -360,7 +360,11 @@ void SPDesktop::destroy()
 //        g_object_unref (G_OBJECT (ec));
 //    }
     sp_event_context_finish(event_context);
-    g_object_unref(G_OBJECT(event_context));
+    //g_object_unref(G_OBJECT(event_context));
+    if (event_context) {
+    	delete event_context;
+    	event_context = 0;
+    }
 
     if (_layer_hierarchy) {
         delete _layer_hierarchy;

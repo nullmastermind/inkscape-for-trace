@@ -19,6 +19,8 @@
 #include <2geom/point.h>
 #include "event-context.h"
 
+#include "sp-rect.h"
+
 #define SP_RECT_CONTEXT(obj) ((SPRectContext*)obj)
 #define SP_IS_RECT_CONTEXT(obj) (dynamic_cast<const SPRectContext*>((const SPEventContext*)obj))
 
@@ -26,16 +28,6 @@ class SPRectContext : public SPEventContext {
 public:
 	SPRectContext();
 	virtual ~SPRectContext();
-
-	SPItem *item;
-	Geom::Point center;
-
-  	gdouble rx;	/* roundness radius (x direction) */
-  	gdouble ry;	/* roundness radius (y direction) */
-
-	sigc::connection sel_changed_connection;
-
-	Inkscape::MessageContext *_message_context;
 
 	static const std::string prefsPath;
 
@@ -46,6 +38,22 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	SPRect *rect;
+	Geom::Point center;
+
+  	gdouble rx;	/* roundness radius (x direction) */
+  	gdouble ry;	/* roundness radius (y direction) */
+
+	sigc::connection sel_changed_connection;
+
+	Inkscape::MessageContext *_message_context;
+
+	void drag(Geom::Point const pt, guint state);
+	void finishItem();
+	void cancel();
+	void selection_changed(Inkscape::Selection* selection);
 };
 
 #endif
