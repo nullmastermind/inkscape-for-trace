@@ -36,6 +36,7 @@ class CSelectContext;
 class SPSelectContext : public SPEventContext {
 public:
 	SPSelectContext();
+	virtual ~SPSelectContext();
 	CSelectContext* cselectcontext;
 
 	guint dragging : 1;

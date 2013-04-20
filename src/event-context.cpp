@@ -148,6 +148,39 @@ static void sp_event_context_init(SPEventContext *event_context) {
 	new (event_context) SPEventContext();
 }
 
+SPEventContext::~SPEventContext() {
+    SPEventContext *ec;
+
+    ec = SP_EVENT_CONTEXT(this);
+
+    if (ec->_message_context) {
+        delete ec->_message_context;
+    }
+
+    if (ec->cursor != NULL) {
+#if GTK_CHECK_VERSION(3,0,0)
+        g_object_unref(ec->cursor);
+#else
+        gdk_cursor_unref(ec->cursor);
+#endif
+        ec->cursor = NULL;
+    }
+
+    if (ec->desktop) {
+        ec->desktop = NULL;
+    }
+
+    if (ec->pref_observer) {
+        delete ec->pref_observer;
+    }
+
+    if (ec->_delayed_snap_event) {
+        delete ec->_delayed_snap_event;
+    }
+
+    //G_OBJECT_CLASS(sp_event_context_parent_class)->dispose(object);
+}
+
 /**
  * Callback to free and null member variables of SPEventContext object.
  */
@@ -896,55 +929,36 @@ bool sp_event_context_knot_mouseover(SPEventContext *ec)
 }
 
 /**
- * An observer that relays pref changes to the derived classes.
- */
-class ToolPrefObserver: public Inkscape::Preferences::Observer {
-public:
-    ToolPrefObserver(Glib::ustring const &path, SPEventContext *ec) :
-        Inkscape::Preferences::Observer(path), _ec(ec) {
-    }
-    virtual void notify(Inkscape::Preferences::Entry const &val) {
-//        if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set) {
-//            (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set(_ec,
-//                    const_cast<Inkscape::Preferences::Entry*> (&val));
-//        }
-    	_ec->ceventcontext->set(const_cast<Inkscape::Preferences::Entry*>(&val));
-    }
-private:
-    SPEventContext * const _ec;
-};
-
-/**
  * Creates new SPEventContext object and calls its virtual setup() function.
  * @todo This is bogus. pref_path should be a private property of the inheriting objects.
  */
-SPEventContext *
-sp_event_context_new(GType type, SPDesktop *desktop, gchar const *pref_path,
-        unsigned int key) {
-    g_return_val_if_fail(g_type_is_a(type, SP_TYPE_EVENT_CONTEXT), NULL);
-    g_return_val_if_fail(desktop != NULL, NULL);
-
-    SPEventContext * const ec = static_cast<SPEventContext*>(g_object_new(type, NULL));
-
-    ec->desktop = desktop;
-    ec->_message_context
-            = new Inkscape::MessageContext(desktop->messageStack());
-    ec->key = key;
-    ec->pref_observer = NULL;
-
-    if (pref_path) {
-        ec->pref_observer = new ToolPrefObserver(pref_path, ec);
-
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->addObserver(*(ec->pref_observer));
-    }
-
-//    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->setup)
-//        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->setup(ec);
-    ec->ceventcontext->setup();
-
-    return ec;
-}
+//SPEventContext *
+//sp_event_context_new(GType type, SPDesktop *desktop, gchar const *pref_path,
+//        unsigned int key) {
+//    g_return_val_if_fail(g_type_is_a(type, SP_TYPE_EVENT_CONTEXT), NULL);
+//    g_return_val_if_fail(desktop != NULL, NULL);
+//
+//    SPEventContext * const ec = static_cast<SPEventContext*>(g_object_new(type, NULL));
+//
+//    ec->desktop = desktop;
+//    ec->_message_context
+//            = new Inkscape::MessageContext(desktop->messageStack());
+//    ec->key = key;
+//    ec->pref_observer = NULL;
+//
+//    if (pref_path) {
+//        ec->pref_observer = new ToolPrefObserver(pref_path, ec);
+//
+//        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+//        prefs->addObserver(*(ec->pref_observer));
+//    }
+//
+////    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->setup)
+////        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->setup(ec);
+//    ec->ceventcontext->setup();
+//
+//    return ec;
+//}
 
 /**
  * Finishes SPEventContext.

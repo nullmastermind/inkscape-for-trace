@@ -129,7 +129,8 @@ bool TransformHandle::grabbed(GdkEventMotion *)
 
     // Collect the snap-candidates, one for each selected node. These will be stored in the _snap_points vector.
     InkNodeTool *nt = INK_NODE_TOOL(_th._desktop->event_context);
-    ControlPointSelection *selection = nt->_selected_nodes.get();
+    //ControlPointSelection *selection = nt->_selected_nodes.get();
+    ControlPointSelection* selection = nt->_selected_nodes;
 
     selection->setOriginalPoints();
     selection->getOriginalPoints(_snap_points);

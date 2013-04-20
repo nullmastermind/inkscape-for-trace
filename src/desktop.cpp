@@ -228,7 +228,8 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
      * context ever?
      */
     //push_event_context (SP_TYPE_SELECT_CONTEXT, "/tools/select", SP_EVENT_CONTEXT_STATIC);
-    set_event_context(SP_TYPE_SELECT_CONTEXT, "/tools/select");
+    //set_event_context(SP_TYPE_SELECT_CONTEXT, "/tools/select");
+    set_event_context2("/tools/select");
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
 
@@ -684,36 +685,73 @@ SPDesktop::change_document (SPDocument *theDocument)
     _document_replaced_signal.emit (this, theDocument);
 }
 
+
+#include "sp-factory.h"
+
+void SPDesktop::set_event_context2(const std::string& toolName) {
+	if (event_context) {
+		sp_event_context_deactivate(event_context);
+		sp_event_context_finish(event_context);
+		//g_object_unref(G_OBJECT(event_context));
+		delete event_context;
+	}
+
+	event_context = ToolFactory::instance().createObject(toolName);
+	SPEventContext* ec = event_context;
+	SPDesktop* desktop = this;
+
+	ec->desktop = desktop;
+    ec->_message_context
+            = new Inkscape::MessageContext(desktop->messageStack());
+    //ec->key = key;
+    ec->key = 0;
+    ec->pref_observer = NULL;
+
+    const std::string& pref_path = toolName;
+    //if (pref_path) {
+        ec->pref_observer = new ToolPrefObserver(pref_path, ec);
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->addObserver(*(ec->pref_observer));
+    //}
+
+    ec->ceventcontext->setup();
+
+
+	sp_event_context_activate(event_context);
+	_event_context_changed_signal.emit(this, event_context);
+}
+
 /**
  * Make desktop switch event contexts.
  */
-void
-SPDesktop::set_event_context (GType type, const gchar *config)
-{
-    //SPEventContext *ec;
-    //while (event_context) {
-        //ec = event_context;
-        sp_event_context_deactivate (event_context);
-        // we have to keep event_context valid during destruction - otherwise writing
-        // destructors is next to impossible
-      //  SPEventContext *next = ec->next;
-        sp_event_context_finish (event_context);
-        g_object_unref (G_OBJECT (event_context));
-      //  event_context = next;
-    //}
-
-    // The event_context will be null. This means that it will be impossible
-    // to process any event invoked by the lines below. See for example bug
-    // LP #622350. Cutting and undoing again in the node tool resets the event
-    // context to the node tool. In this bug the line bellow invokes GDK_LEAVE_NOTIFY
-    // events which cannot be handled and must be discarded.
-    event_context = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
-  //  ec->next = event_context;
-    //event_context = ec;
-    // Now the event_context has been set again and we can process all events again
-    sp_event_context_activate (event_context);
-    _event_context_changed_signal.emit (this, event_context);
-}
+//void
+//SPDesktop::set_event_context (GType type, const gchar *config)
+//{
+//    //SPEventContext *ec;
+//    //while (event_context) {
+//        //ec = event_context;
+//        sp_event_context_deactivate (event_context);
+//        // we have to keep event_context valid during destruction - otherwise writing
+//        // destructors is next to impossible
+//      //  SPEventContext *next = ec->next;
+//        sp_event_context_finish (event_context);
+//        g_object_unref (G_OBJECT (event_context));
+//      //  event_context = next;
+//    //}
+//
+//    // The event_context will be null. This means that it will be impossible
+//    // to process any event invoked by the lines below. See for example bug
+//    // LP #622350. Cutting and undoing again in the node tool resets the event
+//    // context to the node tool. In this bug the line bellow invokes GDK_LEAVE_NOTIFY
+//    // events which cannot be handled and must be discarded.
+//    event_context = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
+//  //  ec->next = event_context;
+//    //event_context = ec;
+//    // Now the event_context has been set again and we can process all events again
+//    sp_event_context_activate (event_context);
+//    _event_context_changed_signal.emit (this, event_context);
+//}
 
 /**
  * Push event context onto desktop's context stack.

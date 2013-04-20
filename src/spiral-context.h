@@ -21,19 +21,21 @@
 #include <2geom/point.h>
 #include "event-context.h"
 
-#define SP_TYPE_SPIRAL_CONTEXT            (sp_spiral_context_get_type ())
+//#define SP_TYPE_SPIRAL_CONTEXT            (sp_spiral_context_get_type ())
 //#define SP_SPIRAL_CONTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContext))
-#define SP_SPIRAL_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContextClass))
+//#define SP_SPIRAL_CONTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContextClass))
 //#define SP_IS_SPIRAL_CONTEXT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SPIRAL_CONTEXT))
-#define SP_IS_SPIRAL_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL_CONTEXT))
+//#define SP_IS_SPIRAL_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL_CONTEXT))
 #define SP_SPIRAL_CONTEXT(obj) ((SPSpiralContext*)obj)
-#define SP_IS_SPIRAL_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPSpiralContext)))
+//#define SP_IS_SPIRAL_CONTEXT(obj) (((SPEventContext*)obj)->types.count(typeid(SPSpiralContext)))
+#define SP_IS_SPIRAL_CONTEXT(obj) (dynamic_cast<const SPSpiralContext*>((const SPEventContext*)obj))
 
 class CSpiralContext;
 
 class SPSpiralContext : public SPEventContext {
 public:
 	SPSpiralContext();
+	virtual ~SPSpiralContext();
 	CSpiralContext* cspiralcontext;
 
 	SPItem * item;

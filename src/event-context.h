@@ -33,7 +33,6 @@ namespace Inkscape {
     }
 }
 
-
 #define SP_TYPE_EVENT_CONTEXT (sp_event_context_get_type())
 //#define SP_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_EVENT_CONTEXT, SPEventContext))
 #define SP_EVENT_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_EVENT_CONTEXT, SPEventContextClass))
@@ -111,13 +110,14 @@ class CEventContext;
  * plus few abstract base classes. Writing a new tool involves
  * subclassing SPEventContext.
  */
-class SPEventContext : public GObject {
+class SPEventContext { //: public GObject {
 public:
     void enableSelectionCue (bool enable=true);
     void enableGrDrag (bool enable=true);
     bool deleteSelectedDrag(bool just_one);
 
     SPEventContext();
+    virtual ~SPEventContext();
     CEventContext* ceventcontext;
     std::set<TypeInfo> types;
 
@@ -194,7 +194,7 @@ protected:
 
 #define SP_EVENT_CONTEXT_STATIC 0
 
-SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, gchar const *pref_path, unsigned key);
+//SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, gchar const *pref_path, unsigned key);
 void sp_event_context_finish(SPEventContext *ec);
 void sp_event_context_read(SPEventContext *ec, gchar const *key);
 void sp_event_context_activate(SPEventContext *ec);
@@ -230,6 +230,28 @@ void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
                                  bool const is_interactive, gpointer const data);
 
 void event_context_print_event_info(GdkEvent *event, bool print_return = true);
+
+
+/**
+ * An observer that relays pref changes to the derived classes.
+ */
+class ToolPrefObserver: public Inkscape::Preferences::Observer {
+public:
+    ToolPrefObserver(Glib::ustring const &path, SPEventContext *ec) :
+        Inkscape::Preferences::Observer(path), _ec(ec) {
+    }
+    virtual void notify(Inkscape::Preferences::Entry const &val) {
+//        if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set) {
+//            (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set(_ec,
+//                    const_cast<Inkscape::Preferences::Entry*> (&val));
+//        }
+    	_ec->ceventcontext->set(const_cast<Inkscape::Preferences::Entry*>(&val));
+    }
+private:
+    SPEventContext * const _ec;
+};
+
+
 
 #endif // SEEN_SP_EVENT_CONTEXT_H
 

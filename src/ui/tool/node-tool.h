@@ -37,10 +37,17 @@ struct PathSharedData;
 } // namespace UI
 } // namespace Inkscape
 
-typedef std::auto_ptr<Inkscape::UI::MultiPathManipulator> MultiPathPtr;
-typedef std::auto_ptr<Inkscape::UI::ControlPointSelection> CSelPtr;
-typedef std::auto_ptr<Inkscape::UI::Selector> SelectorPtr;
-typedef std::auto_ptr<Inkscape::UI::PathSharedData> PathSharedDataPtr;
+//typedef std::auto_ptr<Inkscape::UI::MultiPathManipulator> MultiPathPtr;
+//typedef std::auto_ptr<Inkscape::UI::ControlPointSelection> CSelPtr;
+//typedef std::auto_ptr<Inkscape::UI::Selector> SelectorPtr;
+//typedef std::auto_ptr<Inkscape::UI::PathSharedData> PathSharedDataPtr;
+
+
+typedef Inkscape::UI::MultiPathManipulator* MultiPathPtr;
+typedef Inkscape::UI::ControlPointSelection* CSelPtr;
+typedef Inkscape::UI::Selector* SelectorPtr;
+typedef Inkscape::UI::PathSharedData* PathSharedDataPtr;
+
 typedef boost::ptr_map<SPItem*, ShapeEditor> ShapeEditors;
 
 class CInkNodeTool;
@@ -49,6 +56,7 @@ class InkNodeTool : public SPEventContext
 {
 public:
 	InkNodeTool();
+	virtual ~InkNodeTool();
 	CInkNodeTool* cinknodetool;
 
     sigc::connection _selection_changed_connection;

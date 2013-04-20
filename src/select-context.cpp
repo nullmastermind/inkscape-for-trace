@@ -155,6 +155,42 @@ sp_select_context_init(SPSelectContext *sc)
 	new (sc) SPSelectContext();
 }
 
+SPSelectContext::~SPSelectContext() {
+    SPSelectContext *sc = SP_SELECT_CONTEXT(this);
+    SPEventContext * ec = SP_EVENT_CONTEXT (this);
+
+    ec->enableGrDrag(false);
+
+    if (sc->grabbed) {
+        sp_canvas_item_ungrab(sc->grabbed, GDK_CURRENT_TIME);
+        sc->grabbed = NULL;
+    }
+
+    delete sc->_seltrans;
+    sc->_seltrans = NULL;
+    delete sc->_describer;
+    sc->_describer = NULL;
+
+    if (CursorSelectDragging) {
+#if GTK_CHECK_VERSION(3,0,0)
+        g_object_unref(CursorSelectDragging);
+#else
+        gdk_cursor_unref (CursorSelectDragging);
+#endif
+        CursorSelectDragging = NULL;
+    }
+    if (CursorSelectMouseover) {
+#if GTK_CHECK_VERSION(3,0,0)
+        g_object_unref(CursorSelectMouseover);
+#else
+        gdk_cursor_unref (CursorSelectMouseover);
+#endif
+        CursorSelectMouseover = NULL;
+    }
+
+    //G_OBJECT_CLASS(sp_select_context_parent_class)->dispose(object);
+}
+
 static void
 sp_select_context_dispose(GObject *object)
 {

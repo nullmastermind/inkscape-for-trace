@@ -191,16 +191,22 @@ InkNodeTool::InkNodeTool() : SPEventContext() {
     event_context->hot_x = 1;
     event_context->hot_y = 1;
 
-    new (&nt->_selection_changed_connection) sigc::connection();
-    new (&nt->_selection_modified_connection) sigc::connection();
-    new (&nt->_mouseover_changed_connection) sigc::connection();
-    new (&nt->_sizeUpdatedConn) sigc::connection();
-    //new (&nt->_mgroup) Inkscape::UI::ManipulatorGroup(nt->desktop);
-    new (&nt->_selected_nodes) CSelPtr();
-    new (&nt->_multipath) MultiPathPtr();
-    new (&nt->_selector) SelectorPtr();
-    new (&nt->_path_data) PathSharedDataPtr();
-    new (&nt->_shape_editors) ShapeEditors();
+//    new (&nt->_selection_changed_connection) sigc::connection();
+//    new (&nt->_selection_modified_connection) sigc::connection();
+//    new (&nt->_mouseover_changed_connection) sigc::connection();
+//    new (&nt->_sizeUpdatedConn) sigc::connection();
+//    //new (&nt->_mgroup) Inkscape::UI::ManipulatorGroup(nt->desktop);
+//    new (&nt->_selected_nodes) CSelPtr();
+//    new (&nt->_multipath) MultiPathPtr();
+//    new (&nt->_selector) SelectorPtr();
+//    new (&nt->_path_data) PathSharedDataPtr();
+//    new (&nt->_shape_editors) ShapeEditors();
+
+    nt->_selected_nodes = 0;
+    nt->_multipath = 0;
+    nt->_selector = 0;
+    nt->_path_data = 0;
+    //nt->_shape_editors = 0;
 }
 
 static void
@@ -220,6 +226,50 @@ SPCanvasGroup *create_control_group(SPDesktop *d)
 void destroy_group(SPCanvasGroup *g)
 {
     sp_canvas_item_destroy(SP_CANVAS_ITEM(g));
+}
+
+InkNodeTool::~InkNodeTool() {
+    InkNodeTool *nt = INK_NODE_TOOL(this);
+
+    nt->enableGrDrag(false);
+
+    if (nt->flash_tempitem) {
+        nt->desktop->remove_temporary_canvasitem(nt->flash_tempitem);
+    }
+
+    nt->_selection_changed_connection.disconnect();
+    nt->_selection_modified_connection.disconnect();
+    nt->_mouseover_changed_connection.disconnect();
+    nt->_sizeUpdatedConn.disconnect();
+
+//    nt->_multipath.~MultiPathPtr();
+//    nt->_selected_nodes.~CSelPtr();
+//    nt->_selector.~SelectorPtr();
+//    nt->_shape_editors.~ShapeEditors();
+
+    delete nt->_multipath;
+    delete nt->_selected_nodes;
+    delete nt->_selector;
+
+    Inkscape::UI::PathSharedData &data = *nt->_path_data;
+    destroy_group(data.node_data.node_group);
+    destroy_group(data.node_data.handle_group);
+    destroy_group(data.node_data.handle_line_group);
+    destroy_group(data.outline_group);
+    destroy_group(data.dragpoint_group);
+    destroy_group(nt->_transform_handle_group);
+
+//    nt->_path_data.~PathSharedDataPtr();
+//    nt->_selection_changed_connection.~connection();
+//    nt->_selection_modified_connection.~connection();
+//    nt->_mouseover_changed_connection.~connection();
+//    nt->_sizeUpdatedConn.~connection();
+
+    if (nt->_node_message_context) {
+        delete nt->_node_message_context;
+    }
+
+    //G_OBJECT_CLASS(ink_node_tool_parent_class)->dispose(object);
 }
 
 void ink_node_tool_dispose(GObject *object)
@@ -278,12 +328,14 @@ void CInkNodeTool::setup() {
 
     nt->_node_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 
-    nt->_path_data.reset(new Inkscape::UI::PathSharedData());
+    //nt->_path_data.reset(new Inkscape::UI::PathSharedData());
+    nt->_path_data = new Inkscape::UI::PathSharedData();
     Inkscape::UI::PathSharedData &data = *nt->_path_data;
     data.node_data.desktop = nt->desktop;
 
     // selector has to be created here, so that its hidden control point is on the bottom
-    nt->_selector.reset(new Inkscape::UI::Selector(nt->desktop));
+    //nt->_selector.reset(new Inkscape::UI::Selector(nt->desktop));
+    nt->_selector = new Inkscape::UI::Selector(nt->desktop);
 
     // Prepare canvas groups for controls. This guarantees correct z-order, so that
     // for example a dragpoint won't obscure a node
@@ -316,11 +368,16 @@ void CInkNodeTool::setup() {
 
     nt->_sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::bind(sigc::ptr_fun(&handleControlUiStyleChange), nt));
     
-    nt->_selected_nodes.reset(
-        new Inkscape::UI::ControlPointSelection(nt->desktop, nt->_transform_handle_group));
-    data.node_data.selection = nt->_selected_nodes.get();
-    nt->_multipath.reset(new Inkscape::UI::MultiPathManipulator(data,
-        nt->_selection_changed_connection));
+//    nt->_selected_nodes.reset(
+//        new Inkscape::UI::ControlPointSelection(nt->desktop, nt->_transform_handle_group));
+    nt->_selected_nodes = new Inkscape::UI::ControlPointSelection(nt->desktop, nt->_transform_handle_group);
+
+    //data.node_data.selection = nt->_selected_nodes.get();
+    data.node_data.selection = nt->_selected_nodes;
+
+    //nt->_multipath.reset(new Inkscape::UI::MultiPathManipulator(data,
+    //    nt->_selection_changed_connection));
+    nt->_multipath = new Inkscape::UI::MultiPathManipulator(data, nt->_selection_changed_connection);
 
     nt->_selector->signal_point.connect(
         sigc::bind<0>(

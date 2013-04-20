@@ -149,6 +149,28 @@ void CArcContext::finish() {
     CEventContext::finish();
 }
 
+SPArcContext::~SPArcContext() {
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
+    SPArcContext *ac = SP_ARC_CONTEXT(this);
+
+    ec->enableGrDrag(false);
+
+    ac->sel_changed_connection.disconnect();
+    ac->sel_changed_connection.~connection();
+
+    delete ec->shape_editor;
+    ec->shape_editor = NULL;
+
+    /* fixme: This is necessary because we do not grab */
+    if (ac->item) {
+        sp_arc_finish(ac);
+    }
+
+    delete ac->_message_context;
+
+    //G_OBJECT_CLASS(sp_arc_context_parent_class)->dispose(object);
+}
+
 static void sp_arc_context_dispose(GObject *object)
 {
     SPEventContext *ec = SP_EVENT_CONTEXT(object);

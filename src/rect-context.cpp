@@ -155,6 +155,31 @@ void CRectContext::finish() {
     CEventContext::finish();
 }
 
+
+SPRectContext::~SPRectContext() {
+    SPRectContext *rc = SP_RECT_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
+
+    ec->enableGrDrag(false);
+
+    rc->sel_changed_connection.disconnect();
+    rc->sel_changed_connection.~connection();
+
+    delete ec->shape_editor;
+    ec->shape_editor = NULL;
+
+    /* fixme: This is necessary because we do not grab */
+    if (rc->item) {
+        sp_rect_finish(rc);
+    }
+
+    if (rc->_message_context) {
+        delete rc->_message_context;
+    }
+
+    //G_OBJECT_CLASS(sp_rect_context_parent_class)->dispose(object);
+}
+
 static void sp_rect_context_dispose(GObject *object)
 {
     SPRectContext *rc = SP_RECT_CONTEXT(object);

@@ -46,8 +46,6 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_spiral_context_dispose(GObject *object);
-
 static void sp_spiral_drag(SPSpiralContext *sc, Geom::Point const &p, guint state);
 static void sp_spiral_finish(SPSpiralContext *sc);
 static void sp_spiral_cancel(SPSpiralContext *sc);
@@ -67,22 +65,6 @@ const std::string& CSpiralContext::getPrefsPath() {
 }
 
 const std::string SPSpiralContext::prefsPath = "/tools/shapes/spiral";
-
-G_DEFINE_TYPE(SPSpiralContext, sp_spiral_context, SP_TYPE_EVENT_CONTEXT);
-
-static void
-sp_spiral_context_class_init(SPSpiralContextClass *klass)
-{
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    SPEventContextClass *event_context_class = SP_EVENT_CONTEXT_CLASS(klass);
-
-    object_class->dispose = sp_spiral_context_dispose;
-
-//    event_context_class->setup = sp_spiral_context_setup;
-//    event_context_class->finish = sp_spiral_context_finish;
-//    event_context_class->set = sp_spiral_context_set;
-//    event_context_class->root_handler = sp_spiral_context_root_handler;
-}
 
 CSpiralContext::CSpiralContext(SPSpiralContext* spiralcontext) : CEventContext(spiralcontext) {
 	this->spspiralcontext = spiralcontext;
@@ -118,12 +100,6 @@ SPSpiralContext::SPSpiralContext() : SPEventContext() {
     new (&spiral_context->sel_changed_connection) sigc::connection();
 }
 
-static void
-sp_spiral_context_init(SPSpiralContext *spiral_context)
-{
-	new (spiral_context) SPSpiralContext();
-}
-
 void CSpiralContext::finish() {
 	SPEventContext* ec = this->speventcontext;
 
@@ -140,11 +116,9 @@ void CSpiralContext::finish() {
     CEventContext::finish();
 }
 
-static void
-sp_spiral_context_dispose(GObject *object)
-{
-    SPSpiralContext *sc = SP_SPIRAL_CONTEXT(object);
-    SPEventContext *ec = SP_EVENT_CONTEXT(object);
+SPSpiralContext::~SPSpiralContext() {
+    SPSpiralContext *sc = SP_SPIRAL_CONTEXT(this);
+    SPEventContext *ec = SP_EVENT_CONTEXT(this);
 
     ec->enableGrDrag(false);
 
@@ -161,7 +135,7 @@ sp_spiral_context_dispose(GObject *object)
         delete sc->_message_context;
     }
 
-    G_OBJECT_CLASS(sp_spiral_context_parent_class)->dispose(object);
+    //G_OBJECT_CLASS(sp_spiral_context_parent_class)->dispose(object);
 }
 
 /**
