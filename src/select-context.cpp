@@ -985,7 +985,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     } else if (MOD__CTRL) {
                         sp_selection_rotate(selection, 90);
                     } else if (snaps) {
-                        sp_selection_rotate(selection, 180/snaps);
+                        sp_selection_rotate(selection, 180.0/snaps);
                     }
                     ret = TRUE;
                     break;
@@ -997,7 +997,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     } else if (MOD__CTRL) {
                         sp_selection_rotate(selection, -90);
                     } else if (snaps) {
-                        sp_selection_rotate(selection, -180/snaps);
+                        sp_selection_rotate(selection, -180.0/snaps);
                     }
                     ret = TRUE;
                     break;
