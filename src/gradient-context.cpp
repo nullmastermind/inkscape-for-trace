@@ -54,7 +54,7 @@ using Inkscape::DocumentUndo;
 static void sp_gradient_drag(SPGradientContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createGradientContext() {

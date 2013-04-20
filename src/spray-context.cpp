@@ -78,7 +78,7 @@ using namespace std;
 #define DDC_RED_RGBA 0xff0000ff
 #define DYNA_MIN_WIDTH 1.0e-6
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createSprayContext() {

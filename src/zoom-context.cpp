@@ -31,7 +31,7 @@ static gint tolerance = 0;
 static bool within_tolerance = false;
 static bool escaped;
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createZoomContext() {

@@ -57,7 +57,7 @@ static void sp_box3d_drag(Box3DContext &bc, guint state);
 static void sp_box3d_finish(Box3DContext *bc);
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createBox3dContext() {

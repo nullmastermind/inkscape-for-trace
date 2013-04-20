@@ -73,7 +73,7 @@ static void pen_set_to_nearest_horiz_vert(const SPPenContext *const pc, Geom::Po
 static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createPenContext() {

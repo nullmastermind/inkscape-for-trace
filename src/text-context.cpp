@@ -73,7 +73,7 @@ static gint sptc_focus_out(GtkWidget *widget, GdkEventFocus *event, SPTextContex
 static void sptc_commit(GtkIMContext *imc, gchar *string, SPTextContext *tc);
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createTextContext() {

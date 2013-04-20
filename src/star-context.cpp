@@ -54,7 +54,7 @@ static void sp_star_drag (SPStarContext * sc, Geom::Point p, guint state);
 static void sp_star_finish (SPStarContext * sc);
 static void sp_star_cancel(SPStarContext * sc);
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createStarContext() {

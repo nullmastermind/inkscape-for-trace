@@ -686,7 +686,7 @@ SPDesktop::change_document (SPDocument *theDocument)
 }
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 void SPDesktop::set_event_context2(const std::string& toolName) {
 	if (event_context) {

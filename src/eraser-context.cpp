@@ -95,7 +95,7 @@ static Geom::Point sp_eraser_get_npoint(SPEraserContext const *erc, Geom::Point 
 static Geom::Point sp_eraser_get_vpoint(SPEraserContext const *erc, Geom::Point n);
 static void draw_temporary_box(SPEraserContext *dc);
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createEraserContext() {

@@ -47,7 +47,7 @@
 
 using Inkscape::DocumentUndo;
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createRectContext() {

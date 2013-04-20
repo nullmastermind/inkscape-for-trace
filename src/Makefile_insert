@@ -54,6 +54,7 @@ ink_common_sources +=	\
 	event-context.cpp event-context.h				\
 	event-log.cpp event-log.h event.h				\
 	extract-uri.cpp extract-uri.h					\
+	factory.h							\
 	file.cpp file.h							\
 	fill-or-stroke.h						\
 	filter-chemistry.cpp filter-chemistry.h				\
@@ -140,8 +141,9 @@ ink_common_sources +=	\
 	seltrans-handles.cpp seltrans-handles.h				\
 	shape-editor.cpp shape-editor.h					\
 	shortcuts.cpp shortcuts.h					\
+	singleton.h							\
 	snap.cpp snap.h							\
-	snap-enums.h snap-candidate.h \
+	snap-enums.h snap-candidate.h					\
 	snapped-curve.cpp snapped-curve.h				\
 	snapped-line.cpp snapped-line.h					\
 	snapped-point.cpp snapped-point.h				\
@@ -155,7 +157,7 @@ ink_common_sources +=	\
 	sp-defs.cpp sp-defs.h						\
 	sp-desc.cpp sp-desc.h						\
 	sp-ellipse.cpp sp-ellipse.h					\
-	sp-factory.cpp sp-factory.h					\
+	sp-factory.h							\
 	sp-filter.cpp sp-filter.h number-opt-number.h			\
 	sp-filter-primitive.cpp	sp-filter-primitive.h			\
 	sp-filter-reference.cpp	sp-filter-reference.h			\
@@ -240,6 +242,7 @@ ink_common_sources +=	\
 	text-context.cpp text-context.h		\
 	text-editing.cpp text-editing.h		\
 	text-tag-attributes.h			\
+	tool-factory.h				\
 	tools-switch.cpp tools-switch.h		\
 	transf_mat_3x4.cpp transf_mat_3x4.h	\
 	tweak-context.h tweak-context.cpp	\

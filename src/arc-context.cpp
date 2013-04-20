@@ -54,7 +54,7 @@ static void sp_arc_finish(SPArcContext *ec);
 static void sp_arc_cancel(SPArcContext *ec);
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createArcContext() {

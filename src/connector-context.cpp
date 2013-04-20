@@ -164,7 +164,7 @@ static Inkscape::XML::NodeEventVector layer_repr_events = {
 };
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createConnectorContext() {

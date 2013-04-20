@@ -94,7 +94,7 @@ static Geom::Point sp_dyna_draw_get_vpoint(SPDynaDrawContext const *ddc, Geom::P
 static void draw_temporary_box(SPDynaDrawContext *dc);
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createCalligraphicContext() {

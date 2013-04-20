@@ -59,7 +59,7 @@ boost::optional<Geom::Point> lastEnd;
 std::vector<Inkscape::Display::TemporaryItem*> measure_tmp_items;
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createMeasureContext() {

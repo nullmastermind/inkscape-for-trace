@@ -63,7 +63,7 @@ static gint tolerance = 0;
 static bool within_tolerance = false;
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createSelectContext() {

@@ -119,7 +119,7 @@ void handleControlUiStyleChange(InkNodeTool *nt);
 //} // anonymous namespace
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createNodesContext() {

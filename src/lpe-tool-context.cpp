@@ -58,7 +58,7 @@ SubtoolEntry lpesubtools[] = {
 };
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createLPEToolContext() {

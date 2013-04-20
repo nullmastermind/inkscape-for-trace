@@ -56,7 +56,7 @@ using Inkscape::DocumentUndo;
 static void sp_mesh_drag(SPMeshContext &rc, Geom::Point const pt, guint state, guint32 etime);
 
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createMeshContext() {

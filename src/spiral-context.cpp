@@ -50,7 +50,7 @@ static void sp_spiral_drag(SPSpiralContext *sc, Geom::Point const &p, guint stat
 static void sp_spiral_finish(SPSpiralContext *sc);
 static void sp_spiral_cancel(SPSpiralContext *sc);
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createSpiralContext() {

@@ -77,7 +77,7 @@ using Inkscape::Display::AssembleARGB32;
 
 static void sp_flood_finish(SPFloodContext *rc);
 
-#include "sp-factory.h"
+#include "tool-factory.h"
 
 namespace {
 	SPEventContext* createPaintbucketContext() {
