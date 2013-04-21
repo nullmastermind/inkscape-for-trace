@@ -238,7 +238,8 @@ void ClipboardManagerImpl::copy(SPDesktop *desktop)
 
     // Special case for when the color picker ("dropper") is active - copies color under cursor
     if (tools_isactive(desktop, TOOLS_DROPPER)) {
-        _setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
+        //_setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
+    	_setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color());
         _discardInternalClipboard();
         return;
     }

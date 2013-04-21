@@ -359,7 +359,8 @@ void SPDesktop::destroy()
 //        sp_event_context_finish (ec);
 //        g_object_unref (G_OBJECT (ec));
 //    }
-    sp_event_context_finish(event_context);
+    //sp_event_context_finish(event_context);
+    event_context->finish();
     //g_object_unref(G_OBJECT(event_context));
     if (event_context) {
     	delete event_context;
@@ -694,8 +695,10 @@ SPDesktop::change_document (SPDocument *theDocument)
 
 void SPDesktop::set_event_context2(const std::string& toolName) {
 	if (event_context) {
-		sp_event_context_deactivate(event_context);
-		sp_event_context_finish(event_context);
+		//sp_event_context_deactivate(event_context);
+		event_context->deactivate();
+		//sp_event_context_finish(event_context);
+		event_context->finish();
 		//g_object_unref(G_OBJECT(event_context));
 		delete event_context;
 	}

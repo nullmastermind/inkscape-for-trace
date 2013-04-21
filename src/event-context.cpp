@@ -64,9 +64,9 @@ static int switch_selector_to = 0;
 static bool dropper_toggled = FALSE;
 static int switch_dropper_to = 0;
 
-static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
-static bool within_tolerance = false;
+//static gint xp = 0, yp = 0; // where drag started
+//static gint tolerance = 0;
+//static bool within_tolerance = false;
 
 // globals for keeping track of keyboard scroll events in order to accelerate
 static guint32 scroll_event_time = 0;
@@ -83,66 +83,58 @@ void SPEventContext::deactivate() {
 }
 
 void SPEventContext::finish() {
+	this->enableSelectionCue(false);
 }
 
 SPEventContext::SPEventContext() {
-	SPEventContext* event_context = this;
+	this->hot_y = 0;
+	this->xp = 0;
+	this->cursor_shape = 0;
+	this->pref_observer = 0;
+	this->hot_x = 0;
+	this->yp = 0;
+	this->within_tolerance = false;
+	this->tolerance = 0;
+	this->key = 0;
+	this->item_to_select = 0;
 
-	event_context->hot_y = 0;
-	event_context->xp = 0;
-	event_context->cursor_shape = 0;
-	event_context->pref_observer = 0;
-	event_context->hot_x = 0;
-	event_context->yp = 0;
-	event_context->within_tolerance = false;
-	//event_context->next = 0;
-	event_context->tolerance = 0;
-	event_context->key = 0;
-	event_context->item_to_select = 0;
-
-    event_context->desktop = NULL;
-    event_context->cursor = NULL;
-    event_context->_message_context = NULL;
-    event_context->_selcue = NULL;
-    event_context->_grdrag = NULL;
-    event_context->space_panning = false;
-    event_context->shape_editor = NULL;
-    event_context->_delayed_snap_event = NULL;
-    event_context->_dse_callback_in_process = false;
-    event_context->tool_url = NULL;
+    this->desktop = NULL;
+    this->cursor = NULL;
+    this->_message_context = NULL;
+    this->_selcue = NULL;
+    this->_grdrag = NULL;
+    this->space_panning = false;
+    this->shape_editor = NULL;
+    this->_delayed_snap_event = NULL;
+    this->_dse_callback_in_process = false;
+    this->tool_url = NULL;
 }
 
 SPEventContext::~SPEventContext() {
-    SPEventContext *ec;
-
-    ec = SP_EVENT_CONTEXT(this);
-
-    if (ec->_message_context) {
-        delete ec->_message_context;
+    if (this->_message_context) {
+        delete this->_message_context;
     }
 
-    if (ec->cursor != NULL) {
+    if (this->cursor != NULL) {
 #if GTK_CHECK_VERSION(3,0,0)
-        g_object_unref(ec->cursor);
+        g_object_unref(this->cursor);
 #else
-        gdk_cursor_unref(ec->cursor);
+        gdk_cursor_unref(this->cursor);
 #endif
-        ec->cursor = NULL;
+        this->cursor = NULL;
     }
 
-    if (ec->desktop) {
-        ec->desktop = NULL;
+    if (this->desktop) {
+        this->desktop = NULL;
     }
 
-    if (ec->pref_observer) {
-        delete ec->pref_observer;
+    if (this->pref_observer) {
+        delete this->pref_observer;
     }
 
-    if (ec->_delayed_snap_event) {
-        delete ec->_delayed_snap_event;
+    if (this->_delayed_snap_event) {
+        delete this->_delayed_snap_event;
     }
-
-    //G_OBJECT_CLASS(sp_event_context_parent_class)->dispose(object);
 }
 
 
@@ -204,7 +196,7 @@ void sp_event_context_update_cursor(SPEventContext *ec) {
                     g_object_unref(pixbuf);
                 }
             } else {
-        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)ec->cursor_shape);
+            	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)ec->cursor_shape);
 
                 if (pixbuf) {
                     if (ec->cursor) {
@@ -364,14 +356,11 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
 //}
 
 gint SPEventContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
-
     static Geom::Point button_w;
     static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
     static unsigned int zoom_rb = 0;
 
-    SPDesktop *desktop = event_context->desktop;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     /// @todo REmove redundant /value in preference keys
@@ -383,15 +372,14 @@ gint SPEventContext::root_handler(GdkEvent* event) {
     case GDK_2BUTTON_PRESS:
         if (panning) {
             panning = 0;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                    event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
             ret = TRUE;
         } else {
             /* sp_desktop_dialog(); */
         }
         break;
-    case GDK_BUTTON_PRESS:
 
+    case GDK_BUTTON_PRESS:
         // save drag origin
         xp = (gint) event->button.x;
         yp = (gint) event->button.y;
@@ -401,54 +389,61 @@ gint SPEventContext::root_handler(GdkEvent* event) {
 
         switch (event->button.button) {
         case 1:
-            if (event_context->space_panning) {
-
+            if (this->space_panning) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                sp_event_context_discard_delayed_snap_event(event_context);
+                sp_event_context_discard_delayed_snap_event(this);
                 panning = 1;
+
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
                                 | GDK_POINTER_MOTION_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->button.time - 1);
+
                 ret = TRUE;
             }
             break;
+
         case 2:
             if (event->button.state & GDK_SHIFT_MASK) {
                 zoom_rb = 2;
             } else {
-
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                sp_event_context_discard_delayed_snap_event(event_context);
+                sp_event_context_discard_delayed_snap_event(this);
                 panning = 2;
+
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->button.time - 1);
 
             }
+
             ret = TRUE;
             break;
+
         case 3:
-            if (event->button.state & GDK_SHIFT_MASK || event->button.state
-                    & GDK_CONTROL_MASK) {
+            if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                sp_event_context_discard_delayed_snap_event(event_context);
+                sp_event_context_discard_delayed_snap_event(this);
                 panning = 3;
+
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->button.time);
+
                 ret = TRUE;
             } else {
                 sp_event_root_menu_popup(desktop, NULL, event);
             }
             break;
+
         default:
             break;
         }
         break;
+
     case GDK_MOTION_NOTIFY:
         if (panning) {
             if (panning == 4 && !xp && !yp ) {
@@ -462,16 +457,14 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                                 | GDK_POINTER_MOTION_MASK
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->motion.time - 1);
-
-
             }
+
             if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
                     || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
                     || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
                 /* Gdk seems to lose button release for us sometimes :-( */
                 panning = 0;
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                        event->button.time);
+                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
                 ret = TRUE;
             } else {
                 if (within_tolerance && (abs((gint) event->motion.x - xp)
@@ -480,6 +473,7 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                     // do not drag if we're within tolerance from origin
                     break;
                 }
+
                 // Once the user has moved farther than tolerance from
                 // the original location (indicating they intend to move
                 // the object, not click), then always process the motion
@@ -493,12 +487,12 @@ gint SPEventContext::root_handler(GdkEvent* event) {
 
                 if (panning_cursor == 0) {
                     panning_cursor = 1;
-                    sp_event_context_set_cursor(event_context, GDK_FLEUR);
+                    sp_event_context_set_cursor(this, GDK_FLEUR);
                 }
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
                 Geom::Point const moved_w(motion_w - button_w);
-                event_context->desktop->scroll_world(moved_w, true); // we're still scrolling, do not redraw
+                this->desktop->scroll_world(moved_w, true); // we're still scrolling, do not redraw
                 ret = TRUE;
             }
         } else if (zoom_rb) {
@@ -510,6 +504,7 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                     < tolerance)) {
                 break; // do not drag if we're within tolerance from origin
             }
+
             // Once the user has moved farther than tolerance from the original location
             // (indicating they intend to move the object, not click), then always process the
             // motion notify coordinates as given (no snapping back to origin)
@@ -520,30 +515,40 @@ gint SPEventContext::root_handler(GdkEvent* event) {
             } else {
                 Inkscape::Rubberband::get(desktop)->start(desktop, motion_dt);
             }
-            if (zoom_rb == 2)
+
+            if (zoom_rb == 2) {
                 gobble_motion_events(GDK_BUTTON2_MASK);
+            }
         }
         break;
+
     case GDK_BUTTON_RELEASE:
         xp = yp = 0;
+
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
-            gdk_window_set_cursor(gtk_widget_get_window (w), event_context->cursor);
+            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(this->desktop));
+            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
         }
+
         if (within_tolerance && (panning || zoom_rb)) {
             zoom_rb = 0;
+
             if (panning) {
                 panning = 0;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
                         event->button.time);
             }
+
             Geom::Point const event_w(event->button.x, event->button.y);
             Geom::Point const event_dt(desktop->w2d(event_w));
+
             double const zoom_inc = prefs->getDoubleLimited(
                     "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
+
             desktop->zoom_relative_keep_point(event_dt, (event->button.state
                     & GDK_SHIFT_MASK) ? 1 / zoom_inc : zoom_inc);
+
             desktop->updateNow();
             ret = TRUE;
         } else if (panning == event->button.button) {
@@ -557,24 +562,28 @@ gint SPEventContext::root_handler(GdkEvent* event) {
             // even if few intermediate steps were visible)
             Geom::Point const motion_w(event->button.x, event->button.y);
             Geom::Point const moved_w(motion_w - button_w);
-            event_context->desktop->scroll_world(moved_w);
+
+            this->desktop->scroll_world(moved_w);
             desktop->updateNow();
             ret = TRUE;
         } else if (zoom_rb == event->button.button) {
             zoom_rb = 0;
-            Geom::OptRect const b =
-                    Inkscape::Rubberband::get(desktop)->getRectangle();
+
+            Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
             Inkscape::Rubberband::get(desktop)->stop();
+
             if (b && !within_tolerance) {
                 desktop->set_display_area(*b, 10);
             }
+
             ret = TRUE;
         }
-
         break;
+
     case GDK_KEY_PRESS: {
         double const acceleration = prefs->getDoubleLimited(
                 "/options/scrollingacceleration/value", 0, 0, 6);
+
         int const key_scroll = prefs->getIntLimited("/options/keyscroll/value",
                 10, 0, 1000);
 
@@ -587,12 +596,19 @@ gint SPEventContext::root_handler(GdkEvent* event) {
         case GDK_KEY_ISO_Left_Tab:
         case GDK_KEY_F1:
             shortcut = get_group0_keyval(&event->key);
-            if (event->key.state & GDK_SHIFT_MASK)
+
+            if (event->key.state & GDK_SHIFT_MASK) {
                 shortcut |= SP_SHORTCUT_SHIFT_MASK;
-            if (event->key.state & GDK_CONTROL_MASK)
+            }
+
+            if (event->key.state & GDK_CONTROL_MASK) {
                 shortcut |= SP_SHORTCUT_CONTROL_MASK;
-            if (event->key.state & GDK_MOD1_MASK)
+            }
+
+            if (event->key.state & GDK_MOD1_MASK) {
                 shortcut |= SP_SHORTCUT_ALT_MASK;
+            }
+
             ret = sp_shortcut_invoke(shortcut, desktop);
             break;
 
@@ -603,16 +619,19 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Q:
         case GDK_KEY_q:
             if (desktop->quick_zoomed()) {
                 ret = TRUE;
             }
+
             if (!MOD__SHIFT && !MOD__CTRL && !MOD__ALT) {
                 desktop->zoom_quick(true);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_W:
         case GDK_KEY_w:
         case GDK_KEY_F4:
@@ -622,65 +641,78 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Left: // Ctrl Left
         case GDK_KEY_KP_Left:
         case GDK_KEY_KP_4:
             if (MOD__CTRL_ONLY) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, sp_desktop_canvas(desktop)));
+
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                event_context->desktop->scroll_world(i, 0);
+                this->desktop->scroll_world(i, 0);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Up: // Ctrl Up
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
             if (MOD__CTRL_ONLY) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, sp_desktop_canvas(desktop)));
+
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                event_context->desktop->scroll_world(0, i);
+                this->desktop->scroll_world(0, i);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Right: // Ctrl Right
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
             if (MOD__CTRL_ONLY) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, sp_desktop_canvas(desktop)));
+
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                event_context->desktop->scroll_world(-i, 0);
+                this->desktop->scroll_world(-i, 0);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Down: // Ctrl Down
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
             if (MOD__CTRL_ONLY) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, sp_desktop_canvas(desktop)));
+
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                event_context->desktop->scroll_world(0, -i);
+                this->desktop->scroll_world(0, -i);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_F10:
             if (MOD__SHIFT_ONLY) {
                 sp_event_root_menu_popup(desktop, NULL, event);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_space:
             xp = yp = 0;
             within_tolerance = true;
             panning = 4;
-            event_context->space_panning = true;
-            event_context->_message_context->set(Inkscape::INFORMATION_MESSAGE,
+
+            this->space_panning = true;
+            this->_message_context->set(Inkscape::INFORMATION_MESSAGE,
                     _("<b>Space+mouse move</b> to pan canvas"));
+
             ret = TRUE;
             break;
+
         case GDK_KEY_z:
         case GDK_KEY_Z:
             if (MOD__ALT_ONLY) {
@@ -688,31 +720,34 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             break;
+
         default:
             break;
             }
         }
         break;
-    case GDK_KEY_RELEASE:
 
+    case GDK_KEY_RELEASE:
         // Stop panning on any key release
-        if (event_context->space_panning) {
-            event_context->space_panning = false;
-            event_context->_message_context->clear();
+        if (this->space_panning) {
+            this->space_panning = false;
+            this->_message_context->clear();
         }
 
         if (panning) {
             panning = 0;
             xp = yp = 0;
+
             sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
                     event->key.time);
+
             desktop->updateNow();
         }
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
-            gdk_window_set_cursor(gtk_widget_get_window (w), event_context->cursor);
+            GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(this->desktop));
+            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
         }
 
         switch (get_group0_keyval(&event->key)) {
@@ -722,8 +757,10 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                 sp_toggle_selector(desktop);
                 ret = TRUE;
             }
+
             within_tolerance = false;
             break;
+
         case GDK_KEY_Q:
         case GDK_KEY_q:
             if (desktop->quick_zoomed()) {
@@ -731,13 +768,16 @@ gint SPEventContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             break;
+
         default:
             break;
         }
         break;
+
     case GDK_SCROLL: {
         bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
         bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
+
         int const wheel_scroll = prefs->getIntLimited(
                 "/options/wheelscroll/value", 40, 0, 1000);
 
@@ -753,9 +793,11 @@ gint SPEventContext::root_handler(GdkEvent* event) {
             case GDK_SCROLL_UP:
                 desktop->scroll_world(wheel_scroll, 0);
                 break;
+
             case GDK_SCROLL_DOWN:
                 desktop->scroll_world(-wheel_scroll, 0);
                 break;
+
             default:
                 break;
             }
@@ -765,17 +807,21 @@ gint SPEventContext::root_handler(GdkEvent* event) {
             double rel_zoom;
             double const zoom_inc = prefs->getDoubleLimited(
                     "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
+
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
                 rel_zoom = zoom_inc;
                 break;
+
             case GDK_SCROLL_DOWN:
                 rel_zoom = 1 / zoom_inc;
                 break;
+
             default:
                 rel_zoom = 0.0;
                 break;
             }
+
             if (rel_zoom != 0.0) {
                 Geom::Point const scroll_dt = desktop->point();
                 desktop->zoom_relative_keep_point(scroll_dt, rel_zoom);
@@ -787,15 +833,19 @@ gint SPEventContext::root_handler(GdkEvent* event) {
             case GDK_SCROLL_UP:
                 desktop->scroll_world(0, wheel_scroll);
                 break;
+
             case GDK_SCROLL_DOWN:
                 desktop->scroll_world(0, -wheel_scroll);
                 break;
+
             case GDK_SCROLL_LEFT:
                 desktop->scroll_world(wheel_scroll, 0);
                 break;
+
             case GDK_SCROLL_RIGHT:
                 desktop->scroll_world(-wheel_scroll, 0);
                 break;
+
 #if GTK_CHECK_VERSION(3,0,0)
             case GDK_SCROLL_SMOOTH:
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
@@ -826,18 +876,16 @@ gint SPEventContext::root_handler(GdkEvent* event) {
 //}
 
 gint SPEventContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* ec = this;
-
     int ret = FALSE;
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ((event->button.button == 3) && !(event->button.state
-                & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
-            sp_event_root_menu_popup(ec->desktop, item, event);
+        if ((event->button.button == 3) && !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
+            sp_event_root_menu_popup(this->desktop, item, event);
             ret = TRUE;
         }
         break;
+
     default:
         break;
     }
@@ -892,20 +940,20 @@ bool sp_event_context_knot_mouseover(SPEventContext *ec)
 /**
  * Finishes SPEventContext.
  */
-void sp_event_context_finish(SPEventContext *ec) {
-    g_return_if_fail(ec != NULL);
-    g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
-
-    ec->enableSelectionCue(false);
-
-//    if (ec->next) {
-//        g_warning("Finishing event context with active link\n");
-//    }
-
-//    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish)
-//        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish(ec);
-    ec->finish();
-}
+//void sp_event_context_finish(SPEventContext *ec) {
+//    g_return_if_fail(ec != NULL);
+//    g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
+//
+//    ec->enableSelectionCue(false);
+//
+////    if (ec->next) {
+////        g_warning("Finishing event context with active link\n");
+////    }
+//
+////    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish)
+////        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->finish(ec);
+//    ec->finish();
+//}
 
 //-------------------------------member functions
 
@@ -992,14 +1040,14 @@ void sp_event_context_activate(SPEventContext *ec) {
 /**
  * Calls virtual deactivate() function of SPEventContext.
  */
-void sp_event_context_deactivate(SPEventContext *ec) {
-    g_return_if_fail(ec != NULL);
-    g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
-
-//    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate)
-//        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate(ec);
-    ec->deactivate();
-}
+//void sp_event_context_deactivate(SPEventContext *ec) {
+//    g_return_if_fail(ec != NULL);
+//    g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
+//
+////    if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate)
+////        (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(ec)))->deactivate(ec);
+//    ec->deactivate();
+//}
 
 /**
  * Calls virtual root_handler(), the main event handling function.
@@ -1173,10 +1221,12 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
  */
 guint get_group0_keyval(GdkEventKey *event) {
     guint keyval = 0;
+
     gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
             gdk_display_get_default()), event->hardware_keycode,
             (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
             NULL, NULL, NULL);
+
     return keyval;
 }
 

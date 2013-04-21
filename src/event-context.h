@@ -161,10 +161,10 @@ public:
 #define SP_EVENT_CONTEXT_STATIC 0
 
 //SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, gchar const *pref_path, unsigned key);
-void sp_event_context_finish(SPEventContext *ec);
+//void sp_event_context_finish(SPEventContext *ec);
 void sp_event_context_read(SPEventContext *ec, gchar const *key);
 void sp_event_context_activate(SPEventContext *ec);
-void sp_event_context_deactivate(SPEventContext *ec);
+//void sp_event_context_deactivate(SPEventContext *ec);
 
 gint sp_event_context_root_handler(SPEventContext *ec, GdkEvent *event);
 gint sp_event_context_virtual_root_handler(SPEventContext *ec, GdkEvent *event);
@@ -204,20 +204,16 @@ void event_context_print_event_info(GdkEvent *event, bool print_return = true);
 class ToolPrefObserver: public Inkscape::Preferences::Observer {
 public:
     ToolPrefObserver(Glib::ustring const &path, SPEventContext *ec) :
-        Inkscape::Preferences::Observer(path), _ec(ec) {
+        Inkscape::Preferences::Observer(path), ec(ec) {
     }
+
     virtual void notify(Inkscape::Preferences::Entry const &val) {
-//        if ((SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set) {
-//            (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(_ec)))->set(_ec,
-//                    const_cast<Inkscape::Preferences::Entry*> (&val));
-//        }
-    	_ec->set(const_cast<Inkscape::Preferences::Entry*>(&val));
+    	ec->set(const_cast<Inkscape::Preferences::Entry*>(&val));
     }
+
 private:
-    SPEventContext * const _ec;
+    SPEventContext * const ec;
 };
-
-
 
 #endif // SEEN_SP_EVENT_CONTEXT_H
 

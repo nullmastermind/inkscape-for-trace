@@ -45,8 +45,6 @@ public:
 	SPTweakContext();
 	virtual ~SPTweakContext();
 
-    //SPEventContext event_context;
-
     /* extended input data */
     gdouble pressure;
 
@@ -84,6 +82,9 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	bool set_style(const SPCSSAttr* css);
 };
 
 #endif

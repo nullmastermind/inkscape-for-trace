@@ -22,17 +22,15 @@ public:
 	SPMeasureContext();
 	virtual ~SPMeasureContext();
 
-	//SPEventContext event_context;
-	SPCanvasItem *grabbed;
-
 	static const std::string prefsPath;
 
-	virtual void setup();
 	virtual void finish();
 	virtual gint root_handler(GdkEvent* event);
-	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	SPCanvasItem* grabbed;
 };
 
 #endif // SEEN_SP_MEASURING_CONTEXT_H

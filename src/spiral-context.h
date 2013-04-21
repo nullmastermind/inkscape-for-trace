@@ -21,6 +21,8 @@
 #include <2geom/point.h>
 #include "event-context.h"
 
+#include "sp-spiral.h"
+
 #define SP_SPIRAL_CONTEXT(obj) ((SPSpiralContext*)obj)
 #define SP_IS_SPIRAL_CONTEXT(obj) (dynamic_cast<const SPSpiralContext*>((const SPEventContext*)obj))
 
@@ -28,16 +30,6 @@ class SPSpiralContext : public SPEventContext {
 public:
 	SPSpiralContext();
 	virtual ~SPSpiralContext();
-
-	SPItem * item;
-	Geom::Point center;
-	gdouble revo;
-	gdouble exp;
-	gdouble t0;
-
-    sigc::connection sel_changed_connection;
-
-    Inkscape::MessageContext *_message_context;
 
 	static const std::string prefsPath;
 
@@ -47,6 +39,22 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	SPSpiral * spiral;
+	Geom::Point center;
+	gdouble revo;
+	gdouble exp;
+	gdouble t0;
+
+    sigc::connection sel_changed_connection;
+
+    Inkscape::MessageContext *_message_context;
+
+	void drag(Geom::Point const &p, guint state);
+	void finishItem();
+	void cancel();
+	void selection_changed(Inkscape::Selection *selection);
 };
 
 #endif

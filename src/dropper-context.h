@@ -27,8 +27,6 @@ public:
 	SPDropperContext();
 	virtual ~SPDropperContext();
 
-    //SPEventContext event_context;
-
 	static const std::string prefsPath;
 
 	virtual void setup();
@@ -37,20 +35,20 @@ public:
 
 	virtual const std::string& getPrefsPath();
 
-//private:
+	guint32 get_color();
+
+private:
     double        R;
     double        G;
     double        B;
     double        alpha;
 
-    unsigned int  dragging : 1;
+    bool dragging;
 
-    SPCanvasItem *grabbed;
-    SPCanvasItem *area;
-    Geom::Point   centre;
+    SPCanvasItem* grabbed;
+    SPCanvasItem* area;
+    Geom::Point centre;
 };
-
-guint32 sp_dropper_context_get_color(SPEventContext *ec);
 
 #endif
 

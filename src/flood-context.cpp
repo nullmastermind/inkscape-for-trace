@@ -75,8 +75,6 @@ using Inkscape::Display::ExtractARGB32;
 using Inkscape::Display::ExtractRGB32;
 using Inkscape::Display::AssembleARGB32;
 
-static void sp_flood_finish(SPFloodContext *rc);
-
 #include "tool-factory.h"
 
 namespace {
@@ -94,89 +92,65 @@ const std::string& SPFloodContext::getPrefsPath() {
 const std::string SPFloodContext::prefsPath = "/tools/paintbucket";
 
 SPFloodContext::SPFloodContext() : SPEventContext() {
-	SPFloodContext* flood_context = this;
+	this->_message_context = 0;
+    this->cursor_shape = cursor_paintbucket_xpm;
+    this->hot_x = 11;
+    this->hot_y = 30;
+    this->xp = 0;
+    this->yp = 0;
+    this->tolerance = 4;
+    this->within_tolerance = false;
+    this->item_to_select = NULL;
 
-	flood_context->_message_context = 0;
-
-    SPEventContext *event_context = SP_EVENT_CONTEXT(flood_context);
-
-    event_context->cursor_shape = cursor_paintbucket_xpm;
-    event_context->hot_x = 11;
-    event_context->hot_y = 30;
-    event_context->xp = 0;
-    event_context->yp = 0;
-    event_context->tolerance = 4;
-    event_context->within_tolerance = false;
-    event_context->item_to_select = NULL;
-
-    flood_context->item = NULL;
-
-    //new (&flood_context->sel_changed_connection) sigc::connection();
+    this->item = NULL;
 }
 
 SPFloodContext::~SPFloodContext() {
-    SPFloodContext *rc = SP_FLOOD_CONTEXT(this);
-    SPEventContext *ec = SP_EVENT_CONTEXT(this);
+    this->sel_changed_connection.disconnect();
 
-    rc->sel_changed_connection.disconnect();
-    //rc->sel_changed_connection.~connection();
-
-    delete ec->shape_editor;
-    ec->shape_editor = NULL;
+    delete this->shape_editor;
+    this->shape_editor = NULL;
 
     /* fixme: This is necessary because we do not grab */
-    if (rc->item) {
-        sp_flood_finish(rc);
+    if (this->item) {
+        this->finishItem();
     }
 
-    if (rc->_message_context) {
-        delete rc->_message_context;
+    if (this->_message_context) {
+        delete this->_message_context;
     }
-
-    //G_OBJECT_CLASS(sp_flood_context_parent_class)->dispose(object);
 }
 
 /**
  * Callback that processes the "changed" signal on the selection;
  * destroys old and creates new knotholder.
  */
-static void sp_flood_context_selection_changed(Inkscape::Selection *selection, gpointer data)
-{
-    SPFloodContext *rc = SP_FLOOD_CONTEXT(data);
-    SPEventContext *ec = SP_EVENT_CONTEXT(rc);
-
-    ec->shape_editor->unset_item(SH_KNOTHOLDER);
-    SPItem *item = selection->singleItem(); 
-    ec->shape_editor->set_item(item, SH_KNOTHOLDER);
+void SPFloodContext::selection_changed(Inkscape::Selection* selection) {
+    this->shape_editor->unset_item(SH_KNOTHOLDER);
+    this->shape_editor->set_item(selection->singleItem(), SH_KNOTHOLDER);
 }
 
 void SPFloodContext::setup() {
-	SPEventContext* ec = this;
-
-    SPFloodContext *rc = SP_FLOOD_CONTEXT(ec);
-
-//    if (((SPEventContextClass *) sp_flood_context_parent_class)->setup) {
-//        ((SPEventContextClass *) sp_flood_context_parent_class)->setup(ec);
-//    }
     SPEventContext::setup();
 
-    ec->shape_editor = new ShapeEditor(ec->desktop);
+    this->shape_editor = new ShapeEditor(this->desktop);
 
-    SPItem *item = sp_desktop_selection(ec->desktop)->singleItem();
+    SPItem *item = sp_desktop_selection(this->desktop)->singleItem();
     if (item) {
-        ec->shape_editor->set_item(item, SH_KNOTHOLDER);
+        this->shape_editor->set_item(item, SH_KNOTHOLDER);
     }
 
-    rc->sel_changed_connection.disconnect();
-    rc->sel_changed_connection = sp_desktop_selection(ec->desktop)->connectChanged(
-        sigc::bind(sigc::ptr_fun(&sp_flood_context_selection_changed), (gpointer)rc)
+    this->sel_changed_connection.disconnect();
+    this->sel_changed_connection = sp_desktop_selection(this->desktop)->connectChanged(
+    	sigc::mem_fun(this, &SPFloodContext::selection_changed)
     );
 
-    rc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
+    this->_message_context = new Inkscape::MessageContext((this->desktop)->messageStack());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     if (prefs->getBool("/tools/paintbucket/selcue")) {
-        rc->enableSelectionCue();
+        this->enableSelectionCue();
     }
 }
 
@@ -1119,26 +1093,24 @@ static void sp_flood_do_flood_fill(SPEventContext *event_context, GdkEvent *even
 }
 
 gint SPFloodContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this;
-
     gint ret = FALSE;
-
-    SPDesktop *desktop = event_context->desktop;
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ((event->button.state & GDK_CONTROL_MASK) && event->button.button == 1 && !event_context->space_panning) {
-            Geom::Point const button_w(event->button.x,
-                                       event->button.y);
+        if ((event->button.state & GDK_CONTROL_MASK) && event->button.button == 1 && !this->space_panning) {
+            Geom::Point const button_w(event->button.x, event->button.y);
             
             SPItem *item = sp_event_context_find_item (desktop, button_w, TRUE, TRUE);
             
             // Set style
             desktop->applyCurrentOrToolStyle(item, "/tools/paintbucket", false);
+
             DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_PAINTBUCKET, _("Set style on object"));
+
             ret = TRUE;
         }
         break;
+
     default:
         break;
     }
@@ -1153,25 +1125,21 @@ gint SPFloodContext::item_handler(SPItem* item, GdkEvent* event) {
 }
 
 gint SPFloodContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
-
     static bool dragging;
     
     gint ret = FALSE;
-    SPDesktop *desktop = event_context->desktop;
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if (event->button.button == 1 && !event_context->space_panning) {
+        if (event->button.button == 1 && !this->space_panning) {
             if (!(event->button.state & GDK_CONTROL_MASK)) {
-                Geom::Point const button_w(event->button.x,
-                                           event->button.y);
+                Geom::Point const button_w(event->button.x, event->button.y);
     
-                if (Inkscape::have_viable_layer(desktop, event_context->defaultMessageContext())) {
+                if (Inkscape::have_viable_layer(desktop, this->defaultMessageContext())) {
                     // save drag origin
-                    event_context->xp = (gint) button_w[Geom::X];
-                    event_context->yp = (gint) button_w[Geom::Y];
-                    event_context->within_tolerance = true;
+                    this->xp = (gint) button_w[Geom::X];
+                    this->yp = (gint) button_w[Geom::Y];
+                    this->within_tolerance = true;
                       
                     dragging = true;
                     
@@ -1181,44 +1149,45 @@ gint SPFloodContext::root_handler(GdkEvent* event) {
                 }
             }
         }
+
     case GDK_MOTION_NOTIFY:
-        if ( dragging
-             && ( event->motion.state & GDK_BUTTON1_MASK ) && !event_context->space_panning)
-        {
-            if ( event_context->within_tolerance
-                 && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
-                 && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {
+        if ( dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning) {
+            if ( this->within_tolerance
+                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
+                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
                 break; // do not drag if we're within tolerance from origin
             }
             
-            event_context->within_tolerance = false;
+            this->within_tolerance = false;
             
             Geom::Point const motion_pt(event->motion.x, event->motion.y);
             Geom::Point const p(desktop->w2d(motion_pt));
+
             if (Inkscape::Rubberband::get(desktop)->is_started()) {
                 Inkscape::Rubberband::get(desktop)->move(p);
-                event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw over</b> areas to add to fill, hold <b>Alt</b> for touch fill"));
+                this->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw over</b> areas to add to fill, hold <b>Alt</b> for touch fill"));
                 gobble_motion_events(GDK_BUTTON1_MASK);
             }
         }
         break;
 
     case GDK_BUTTON_RELEASE:
-        if (event->button.button == 1 && !event_context->space_panning) {
+        if (event->button.button == 1 && !this->space_panning) {
             Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
+
             if (r->is_started()) {
                 // set "busy" cursor
                 desktop->setWaitingCursor();
 
-                if (SP_IS_EVENT_CONTEXT(event_context)) { 
+                if (SP_IS_EVENT_CONTEXT(this)) { 
                     // Since setWaitingCursor runs main loop iterations, we may have already left this tool!
                     // So check if the tool is valid before doing anything
                     dragging = false;
 
-                    bool is_point_fill = event_context->within_tolerance;
+                    bool is_point_fill = this->within_tolerance;
                     bool is_touch_fill = event->button.state & GDK_MOD1_MASK;
                     
-                    sp_flood_do_flood_fill(event_context, event, event->button.state & GDK_SHIFT_MASK, is_point_fill, is_touch_fill);
+                    sp_flood_do_flood_fill(this, event, event->button.state & GDK_SHIFT_MASK, is_point_fill, is_touch_fill);
                     
                     desktop->clearWaitingCursor();
                     // restore cursor when done; note that it may already be different if e.g. user 
@@ -1229,9 +1198,9 @@ gint SPFloodContext::root_handler(GdkEvent* event) {
 
                 r->stop();
 
-                if (SP_IS_EVENT_CONTEXT(event_context)) {
-                    event_context->defaultMessageContext()->clear();
-                }
+                //if (SP_IS_EVENT_CONTEXT(this)) {
+                this->defaultMessageContext()->clear();
+                //}
             }
         }
         break;
@@ -1249,43 +1218,35 @@ gint SPFloodContext::root_handler(GdkEvent* event) {
             break;
         }
         break;
+
     default:
         break;
     }
 
     if (!ret) {
-//        if (((SPEventContextClass *) sp_flood_context_parent_class)->root_handler) {
-//            ret = ((SPEventContextClass *) sp_flood_context_parent_class)->root_handler(event_context, event);
-//        }
     	ret = SPEventContext::root_handler(event);
     }
 
     return ret;
 }
 
-static void sp_flood_finish(SPFloodContext *rc)
-{
-    rc->_message_context->clear();
+void SPFloodContext::finishItem() {
+    this->_message_context->clear();
 
-    if ( rc->item != NULL ) {
-        SPDesktop * desktop;
-
-        desktop = SP_EVENT_CONTEXT_DESKTOP(rc);
-
-        SP_OBJECT(rc->item)->updateRepr();
+    if (this->item != NULL) {
+        this->item->updateRepr();
 
         desktop->canvas->endForcedFullRedraws();
 
-        sp_desktop_selection(desktop)->set(rc->item);
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_PAINTBUCKET,
-                        _("Fill bounded area"));
+        sp_desktop_selection(desktop)->set(this->item);
 
-        rc->item = NULL;
+        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_PAINTBUCKET, _("Fill bounded area"));
+
+        this->item = NULL;
     }
 }
 
-void flood_channels_set_channels( gint channels )
-{
+void SPFloodContext::set_channels(gint channels) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/paintbucket/channels", channels);
 }

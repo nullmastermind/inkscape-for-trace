@@ -72,42 +72,34 @@ const std::string SPGradientContext::prefsPath = "/tools/gradient";
 
 
 SPGradientContext::SPGradientContext() : SPEventContext() {
-	SPGradientContext* gr_context = this;
+	this->node_added = false;
+	this->subselcon = 0;
+	this->_message_context = 0;
+	this->selcon = 0;
 
-	gr_context->node_added = false;
-	gr_context->subselcon = 0;
-	gr_context->_message_context = 0;
-	gr_context->selcon = 0;
-
-    SPEventContext *event_context = SP_EVENT_CONTEXT(gr_context);
-
-    gr_context->cursor_addnode = false;
-    event_context->cursor_shape = cursor_gradient_xpm;
-    event_context->hot_x = 4;
-    event_context->hot_y = 4;
-    event_context->xp = 0;
-    event_context->yp = 0;
-    event_context->tolerance = 6;
-    event_context->within_tolerance = false;
-    event_context->item_to_select = NULL;
+    this->cursor_addnode = false;
+    this->cursor_shape = cursor_gradient_xpm;
+    this->hot_x = 4;
+    this->hot_y = 4;
+    this->xp = 0;
+    this->yp = 0;
+    this->tolerance = 6;
+    this->within_tolerance = false;
+    this->item_to_select = NULL;
 }
 
 SPGradientContext::~SPGradientContext() {
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(this);
-    SPEventContext *ec = SP_EVENT_CONTEXT(this);
+    this->enableGrDrag(false);
 
-    ec->enableGrDrag(false);
-
-    if (rc->_message_context) {
-        delete rc->_message_context;
+    if (this->_message_context) {
+        delete this->_message_context;
     }
 
-    rc->selcon->disconnect();
-    delete rc->selcon;
-    rc->subselcon->disconnect();
-    delete rc->subselcon;
+    this->selcon->disconnect();
+    delete this->selcon;
 
-    //G_OBJECT_CLASS(sp_gradient_context_parent_class)->dispose(object);
+    this->subselcon->disconnect();
+    delete this->subselcon;
 }
 
 const gchar *gr_handle_descr [] = {
@@ -122,10 +114,8 @@ const gchar *gr_handle_descr [] = {
     N_("Radial gradient <b>mid stop</b>")
 };
 
-static void
-gradient_selection_changed (Inkscape::Selection *, gpointer data)
-{
-    SPGradientContext *rc = (SPGradientContext *) data;
+void SPGradientContext::selection_changed(Inkscape::Selection*) {
+    SPGradientContext *rc = (SPGradientContext *) this;
 
     GrDrag *drag = rc->_grdrag;
     Inkscape::Selection *selection = sp_desktop_selection(SP_EVENT_CONTEXT(rc)->desktop);
@@ -173,35 +163,32 @@ gradient_selection_changed (Inkscape::Selection *, gpointer data)
     }
 }
 
-static void
-gradient_subselection_changed (gpointer, gpointer data)
-{
-    gradient_selection_changed (NULL, data);
-}
-
 void SPGradientContext::setup() {
-	SPEventContext* ec = this;
-
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(ec);
-
-//    if (((SPEventContextClass *) sp_gradient_context_parent_class)->setup) {
-//        ((SPEventContextClass *) sp_gradient_context_parent_class)->setup(ec);
-//    }
     SPEventContext::setup();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    
     if (prefs->getBool("/tools/gradient/selcue", true)) {
-        ec->enableSelectionCue();
+        this->enableSelectionCue();
     }
 
-    ec->enableGrDrag();
-    Inkscape::Selection *selection = sp_desktop_selection(ec->desktop);
+    this->enableGrDrag();
+    Inkscape::Selection *selection = sp_desktop_selection(this->desktop);
 
-    rc->_message_context = new Inkscape::MessageContext(sp_desktop_message_stack(ec->desktop));
+    this->_message_context = new Inkscape::MessageContext(sp_desktop_message_stack(this->desktop));
 
-    rc->selcon = new sigc::connection (selection->connectChanged( sigc::bind (sigc::ptr_fun(&gradient_selection_changed), rc)));
-    rc->subselcon = new sigc::connection (ec->desktop->connectToolSubselectionChanged(sigc::bind (sigc::ptr_fun(&gradient_subselection_changed), rc)));
-    gradient_selection_changed(selection, rc);
+    this->selcon = new sigc::connection(selection->connectChanged(
+    	sigc::mem_fun(this, &SPGradientContext::selection_changed)
+    ));
+
+    this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChanged(
+    	sigc::hide(sigc::bind(
+    		sigc::mem_fun(this, &SPGradientContext::selection_changed),
+    		(Inkscape::Selection*)NULL
+    	))
+    ));
+
+    this->selection_changed(selection);
 }
 
 void
@@ -489,38 +476,36 @@ sp_gradient_context_add_stop_near_point (SPGradientContext *rc, SPItem *item,  G
 }
 
 gint SPGradientContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
-
     static bool dragging;
 
-    SPDesktop *desktop = event_context->desktop;
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(event_context);
-
-    event_context->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+    this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     double const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
 
-    GrDrag *drag = event_context->_grdrag;
+    GrDrag *drag = this->_grdrag;
     g_assert (drag);
 
     gint ret = FALSE;
+
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if ( event->button.button == 1 ) {
             bool over_line = false;
             SPCtrlLine *line = NULL;
+
             if (drag->lines) {
                 for (GSList *l = drag->lines; (l != NULL) && (!over_line); l = l->next) {
                     line = (SPCtrlLine*) l->data;
-                    over_line |= sp_gradient_context_is_over_line (rc, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
+                    over_line |= sp_gradient_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
                 }
             }
+
             if (over_line) {
                 // we take the first item in selection, because with doubleclick, the first click
                 // always resets selection to the single object under cursor
-                sp_gradient_context_add_stop_near_point(rc, SP_ITEM(selection->itemList()->data), rc->mousepoint_doc, event->button.time);
+                sp_gradient_context_add_stop_near_point(this, SP_ITEM(selection->itemList()->data), this->mousepoint_doc, event->button.time);
             } else {
                 for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
                     SPItem *item = SP_ITEM(i->data);
@@ -539,14 +524,15 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
             ret = TRUE;
         }
         break;
+
     case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 && !event_context->space_panning ) {
+        if ( event->button.button == 1 && !this->space_panning ) {
             Geom::Point button_w(event->button.x, event->button.y);
 
             // save drag origin
-            event_context->xp = (gint) button_w[Geom::X];
-            event_context->yp = (gint) button_w[Geom::Y];
-            event_context->within_tolerance = true;
+            this->xp = (gint) button_w[Geom::X];
+            this->yp = (gint) button_w[Geom::Y];
+            this->within_tolerance = true;
 
             dragging = true;
 
@@ -556,8 +542,9 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
             } else {
                 // remember clicked item, disregarding groups, honoring Alt; do nothing with Crtl to
                 // enable Ctrl+doubleclick of exactly the selected item(s)
-                if (!(event->button.state & GDK_CONTROL_MASK))
-                    event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
+                if (!(event->button.state & GDK_CONTROL_MASK)) {
+                    this->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
+                }
 
                 if (!selection->isEmpty()) {
                     SnapManager &m = desktop->namedview->snap_manager;
@@ -565,36 +552,37 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
                     m.freeSnapReturnByRef(button_dt, Inkscape::SNAPSOURCE_NODE_HANDLE);
                     m.unSetup();
                 }
-                rc->origin = button_dt;
+
+                this->origin = button_dt;
             }
 
             ret = TRUE;
         }
         break;
+
     case GDK_MOTION_NOTIFY:
-        if ( dragging
-             && ( event->motion.state & GDK_BUTTON1_MASK ) && !event_context->space_panning )
-        {
-            if ( event_context->within_tolerance
-                 && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
-                 && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {
+        if (dragging && ( event->motion.state & GDK_BUTTON1_MASK ) && !this->space_panning) {
+            if ( this->within_tolerance
+                 && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
+                 && ( abs( (gint) event->motion.y - this->yp ) < this->tolerance ) ) {
                 break; // do not drag if we're within tolerance from origin
             }
             // Once the user has moved farther than tolerance from the original location
             // (indicating they intend to draw, not click), then always process the
             // motion notify coordinates as given (no snapping back to origin)
-            event_context->within_tolerance = false;
+            this->within_tolerance = false;
 
             Geom::Point const motion_w(event->motion.x,
                                      event->motion.y);
-            Geom::Point const motion_dt = event_context->desktop->w2d(motion_w);
+            Geom::Point const motion_dt = this->desktop->w2d(motion_w);
 
             if (Inkscape::Rubberband::get(desktop)->is_started()) {
                 Inkscape::Rubberband::get(desktop)->move(motion_dt);
-                event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw around</b> handles to select them"));
+                this->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw around</b> handles to select them"));
             } else {
-                sp_gradient_drag(*rc, motion_dt, event->motion.state, event->motion.time);
+                sp_gradient_drag(*this, motion_dt, event->motion.state, event->motion.time);
             }
+
             gobble_motion_events(GDK_BUTTON1_MASK);
 
             ret = TRUE;
@@ -604,46 +592,51 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
                 m.setup(desktop);
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
-                Geom::Point const motion_dt = event_context->desktop->w2d(motion_w);
+                Geom::Point const motion_dt = this->desktop->w2d(motion_w);
 
                 m.preSnap(Inkscape::SnapCandidatePoint(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE));
                 m.unSetup();
             }
 
             bool over_line = false;
+
             if (drag->lines) {
                 for (GSList *l = drag->lines; l != NULL; l = l->next) {
-                    over_line |= sp_gradient_context_is_over_line (rc, (SPItem*) l->data, Geom::Point(event->motion.x, event->motion.y));
+                    over_line |= sp_gradient_context_is_over_line (this, (SPItem*) l->data, Geom::Point(event->motion.x, event->motion.y));
                 }
             }
 
-            if (rc->cursor_addnode && !over_line) {
-                event_context->cursor_shape = cursor_gradient_xpm;
-                sp_event_context_update_cursor(event_context);
-                rc->cursor_addnode = false;
-            } else if (!rc->cursor_addnode && over_line) {
-                event_context->cursor_shape = cursor_gradient_add_xpm;
-                sp_event_context_update_cursor(event_context);
-                rc->cursor_addnode = true;
+            if (this->cursor_addnode && !over_line) {
+                this->cursor_shape = cursor_gradient_xpm;
+                sp_event_context_update_cursor(this);
+                this->cursor_addnode = false;
+            } else if (!this->cursor_addnode && over_line) {
+                this->cursor_shape = cursor_gradient_add_xpm;
+                sp_event_context_update_cursor(this);
+                this->cursor_addnode = true;
             }
         }
         break;
+
     case GDK_BUTTON_RELEASE:
-        event_context->xp = event_context->yp = 0;
-        if ( event->button.button == 1 && !event_context->space_panning ) {
+        this->xp = this->yp = 0;
+
+        if ( event->button.button == 1 && !this->space_panning ) {
             bool over_line = false;
             SPCtrlLine *line = NULL;
+
             if (drag->lines) {
                 for (GSList *l = drag->lines; (l != NULL) && (!over_line); l = l->next) {
                     line = (SPCtrlLine*) l->data;
-                    over_line = sp_gradient_context_is_over_line (rc, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
+                    over_line = sp_gradient_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
                     if (over_line)
                         break;
                 }
             }
+
             if ( (event->button.state & GDK_CONTROL_MASK) && (event->button.state & GDK_MOD1_MASK ) ) {
                 if (over_line && line) {
-                    sp_gradient_context_add_stop_near_point(rc, line->item, rc->mousepoint_doc, 0);
+                    sp_gradient_context_add_stop_near_point(this, line->item, this->mousepoint_doc, 0);
                     ret = TRUE;
                 }
             } else {
@@ -655,30 +648,29 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
                     break;
                 }
 
-                if (!event_context->within_tolerance) {
+                if (!this->within_tolerance) {
                     // we've been dragging, either do nothing (grdrag handles that),
                     // or rubberband-select if we have rubberband
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
-                    if (r->is_started() && !event_context->within_tolerance) {
+
+                    if (r->is_started() && !this->within_tolerance) {
                         // this was a rubberband drag
                         if (r->getMode() == RUBBERBAND_MODE_RECT) {
                             Geom::OptRect const b = r->getRectangle();
                             drag->selectRect(*b);
                         }
                     }
-
-                } else if (event_context->item_to_select) {
+                } else if (this->item_to_select) {
                     if (over_line && line) {
                         // Clicked on an existing gradient line, dont change selection. This stops
                         // possible change in selection during a double click with overlapping objects
-                    }
-                    else {
+                    } else {
                         // no dragging, select clicked item if any
                         if (event->button.state & GDK_SHIFT_MASK) {
-                            selection->toggle(event_context->item_to_select);
+                            selection->toggle(this->item_to_select);
                         } else {
                             drag->deselectAll();
-                            selection->set(event_context->item_to_select);
+                            selection->set(this->item_to_select);
                         }
                     }
                 } else {
@@ -690,12 +682,14 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
                     }
                 }
 
-                event_context->item_to_select = NULL;
+                this->item_to_select = NULL;
                 ret = TRUE;
             }
+
             Inkscape::Rubberband::get(desktop)->stop();
         }
         break;
+
     case GDK_KEY_PRESS:
         switch (get_group0_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
@@ -706,7 +700,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Shift_R:
         case GDK_KEY_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
         case GDK_KEY_Meta_R:
-            sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
+            sp_event_show_modifier_tip (this->defaultMessageContext(), event,
                                         _("<b>Ctrl</b>: snap gradient angle"),
                                         _("<b>Shift</b>: draw gradient around the starting point"),
                                         NULL);
@@ -731,7 +725,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_L:
         case GDK_KEY_l:
             if (MOD__CTRL_ONLY && drag->isNonEmpty() && drag->hasSelection()) {
-                sp_gradient_simplify(rc, 1e-4);
+                sp_gradient_simplify(this, 1e-4);
                 ret = TRUE;
             }
             break;
@@ -753,67 +747,98 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
                 if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) drag->selected_move_screen(mul*-10, 0); // shift
-                    else drag->selected_move_screen(mul*-1, 0); // no shift
+                    if (MOD__SHIFT) {
+                    	drag->selected_move_screen(mul*-10, 0); // shift
+                    } else {
+                    	drag->selected_move_screen(mul*-1, 0); // no shift
+                    }
+                } else { // no alt
+                    if (MOD__SHIFT) {
+                    	drag->selected_move(mul*-10*nudge, 0); // shift
+                    } else {
+                    	drag->selected_move(mul*-nudge, 0); // no shift
+                    }
                 }
-                else { // no alt
-                    if (MOD__SHIFT) drag->selected_move(mul*-10*nudge, 0); // shift
-                    else drag->selected_move(mul*-nudge, 0); // no shift
-                }
+
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Up: // move handle up
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
             if (!MOD__CTRL) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
+
                 if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) drag->selected_move_screen(0, mul*10); // shift
-                    else drag->selected_move_screen(0, mul*1); // no shift
+                    if (MOD__SHIFT) {
+                    	drag->selected_move_screen(0, mul*10); // shift
+                    } else {
+                    	drag->selected_move_screen(0, mul*1); // no shift
+                    }
+                } else { // no alt
+                    if (MOD__SHIFT) {
+                    	drag->selected_move(0, mul*10*nudge); // shift
+                    } else {
+                    	drag->selected_move(0, mul*nudge); // no shift
+                    }
                 }
-                else { // no alt
-                    if (MOD__SHIFT) drag->selected_move(0, mul*10*nudge); // shift
-                    else drag->selected_move(0, mul*nudge); // no shift
-                }
+
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Right: // move handle right
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
             if (!MOD__CTRL) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
+
                 if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) drag->selected_move_screen(mul*10, 0); // shift
-                    else drag->selected_move_screen(mul*1, 0); // no shift
+                    if (MOD__SHIFT) {
+                    	drag->selected_move_screen(mul*10, 0); // shift
+                    } else {
+                    	drag->selected_move_screen(mul*1, 0); // no shift
+                    }
+                } else { // no alt
+                    if (MOD__SHIFT) {
+                    	drag->selected_move(mul*10*nudge, 0); // shift
+                    } else {
+                    	drag->selected_move(mul*nudge, 0); // no shift
+                    }
                 }
-                else { // no alt
-                    if (MOD__SHIFT) drag->selected_move(mul*10*nudge, 0); // shift
-                    else drag->selected_move(mul*nudge, 0); // no shift
-                }
+
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Down: // move handle down
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
             if (!MOD__CTRL) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
+
                 if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) drag->selected_move_screen(0, mul*-10); // shift
-                    else drag->selected_move_screen(0, mul*-1); // no shift
+                    if (MOD__SHIFT) {
+                    	drag->selected_move_screen(0, mul*-10); // shift
+                    } else {
+                    	drag->selected_move_screen(0, mul*-1); // no shift
+                    }
+                } else { // no alt
+                    if (MOD__SHIFT) {
+                    	drag->selected_move(0, mul*-10*nudge); // shift
+                    } else {
+                    	drag->selected_move(0, mul*-nudge); // no shift
+                    }
                 }
-                else { // no alt
-                    if (MOD__SHIFT) drag->selected_move(0, mul*-10*nudge); // shift
-                    else drag->selected_move(0, mul*-nudge); // no shift
-                }
+
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_r:
         case GDK_KEY_R:
             if (MOD__SHIFT_ONLY) {
@@ -825,19 +850,21 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Insert:
         case GDK_KEY_KP_Insert:
             // with any modifiers:
-            sp_gradient_context_add_stops_between_selected_stops (rc);
+            sp_gradient_context_add_stops_between_selected_stops (this);
             ret = TRUE;
             break;
 
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+            ret = this->deleteSelectedDrag(MOD__CTRL_ONLY);
             break;
+
         default:
             break;
         }
         break;
+
     case GDK_KEY_RELEASE:
         switch (get_group0_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
@@ -848,20 +875,19 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Shift_R:
         case GDK_KEY_Meta_L:  // Meta is when you press Shift+Alt
         case GDK_KEY_Meta_R:
-            event_context->defaultMessageContext()->clear();
+            this->defaultMessageContext()->clear();
             break;
+
         default:
             break;
         }
         break;
+
     default:
         break;
     }
 
     if (!ret) {
-//        if (((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler) {
-//            ret = ((SPEventContextClass *) sp_gradient_context_parent_class)->root_handler(event_context, event);
-//        }
     	ret = SPEventContext::root_handler(event);
     }
 

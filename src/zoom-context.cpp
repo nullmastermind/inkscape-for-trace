@@ -26,9 +26,9 @@
 
 #include "zoom-context.h"
 
-static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
-static bool within_tolerance = false;
+//static gint xp = 0, yp = 0; // where drag started
+//static gint tolerance = 0;
+//static bool within_tolerance = false;
 static bool escaped;
 
 #include "tool-factory.h"
@@ -48,70 +48,49 @@ const std::string& SPZoomContext::getPrefsPath() {
 const std::string SPZoomContext::prefsPath = "/tools/zoom";
 
 SPZoomContext::SPZoomContext() : SPEventContext() {
-	SPZoomContext* zoom_context = this;
-
-	zoom_context->grabbed = 0;
-
-    SPEventContext *event_context = SP_EVENT_CONTEXT(zoom_context);
-
-    event_context->cursor_shape = cursor_zoom_xpm;
-    event_context->hot_x = 6;
-    event_context->hot_y = 6;
+	this->grabbed = 0;
+    this->cursor_shape = cursor_zoom_xpm;
+    this->hot_x = 6;
+    this->hot_y = 6;
 }
 
 SPZoomContext::~SPZoomContext() {
 }
 
 void SPZoomContext::finish() {
-	SPEventContext* ec = this;
-
-	SPZoomContext *zc = SP_ZOOM_CONTEXT(ec);
+	this->enableGrDrag(false);
 	
-	ec->enableGrDrag(false);
-	
-    if (zc->grabbed) {
-        sp_canvas_item_ungrab(zc->grabbed, GDK_CURRENT_TIME);
-        zc->grabbed = NULL;
+    if (this->grabbed) {
+        sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+        this->grabbed = NULL;
     }
 }
 
 void SPZoomContext::setup() {
-	SPEventContext* ec = this;
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     if (prefs->getBool("/tools/zoom/selcue")) {
-        ec->enableSelectionCue();
-    }
-    if (prefs->getBool("/tools/zoom/gradientdrag")) {
-        ec->enableGrDrag();
+        this->enableSelectionCue();
     }
 
-//    if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->setup) {
-//        (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->setup(ec);
-//    }
+    if (prefs->getBool("/tools/zoom/gradientdrag")) {
+        this->enableGrDrag();
+    }
+
     SPEventContext::setup();
 }
 
-gint SPZoomContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* event_context = this;
-
-    gint ret = FALSE;
-
-//    if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->item_handler) {
-//        ret = (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->item_handler (event_context, item, event);
-//    }
-    ret = SPEventContext::item_handler(item, event);
-
-    return ret;
-}
+//gint SPZoomContext::item_handler(SPItem* item, GdkEvent* event) {
+//    gint ret = FALSE;
+//
+//    ret = SPEventContext::item_handler(item, event);
+//
+//    return ret;
+//}
 
 gint SPZoomContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
-
-    SPDesktop *desktop = event_context->desktop;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 	
-	SPZoomContext *zc = SP_ZOOM_CONTEXT(event_context);
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     double const zoom_inc = prefs->getDoubleLimited("/options/zoomincrement/value", M_SQRT2, 1.01, 10);
 
@@ -122,7 +101,8 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
         {
             Geom::Point const button_w(event->button.x, event->button.y);
             Geom::Point const button_dt(desktop->w2d(button_w));
-            if (event->button.button == 1 && !event_context->space_panning) {
+
+            if (event->button.button == 1 && !this->space_panning) {
                 // save drag origin
                 xp = (gint) event->button.x;
                 yp = (gint) event->button.y;
@@ -137,6 +117,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                 double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
                                        ? zoom_inc
                                        : 1 / zoom_inc );
+
                 desktop->zoom_relative_keep_point(button_dt, zoom_rel);
                 ret = TRUE;
             }
@@ -144,13 +125,13 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
 			sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
 								GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
 								NULL, event->button.time);
-			zc->grabbed = SP_CANVAS_ITEM(desktop->acetate);
-				
+
+			this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
             break;
         }
 
 	case GDK_MOTION_NOTIFY:
-            if ((event->motion.state & GDK_BUTTON1_MASK) && !event_context->space_panning) {
+            if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 ret = TRUE;
 
                 if ( within_tolerance
@@ -174,23 +155,28 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
         {
             Geom::Point const button_w(event->button.x, event->button.y);
             Geom::Point const button_dt(desktop->w2d(button_w));
-            if ( event->button.button == 1  && !event_context->space_panning) {
+
+            if ( event->button.button == 1  && !this->space_panning) {
                 Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
+
                 if (b && !within_tolerance) {
                     desktop->set_display_area(*b, 10);
                 } else if (!escaped) {
                     double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
                                            ? 1 / zoom_inc
                                            : zoom_inc );
+
                     desktop->zoom_relative_keep_point(button_dt, zoom_rel);
                 }
+
                 ret = TRUE;
-            } 
+            }
+
             Inkscape::Rubberband::get(desktop)->stop();
 			
-			if (zc->grabbed) {
-				sp_canvas_item_ungrab(zc->grabbed, event->button.time);
-				zc->grabbed = NULL;
+			if (this->grabbed) {
+				sp_canvas_item_ungrab(this->grabbed, event->button.time);
+				this->grabbed = NULL;
 			}
 			
             xp = yp = 0;
@@ -203,11 +189,13 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                     if (!Inkscape::Rubberband::get(desktop)->is_started()) {
                         Inkscape::SelectionHelper::selectNone(desktop);
                     }
+
                     Inkscape::Rubberband::get(desktop)->stop();
                     xp = yp = 0;
                     escaped = true;
                     ret = TRUE;
                     break;
+
                 case GDK_KEY_Up:
                 case GDK_KEY_Down:
                 case GDK_KEY_KP_Up:
@@ -216,15 +204,17 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                     if (!MOD__CTRL_ONLY)
                         ret = TRUE;
                     break;
+
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
-                    event_context->cursor_shape = cursor_zoom_out_xpm;
-                    sp_event_context_update_cursor(event_context);
+                    this->cursor_shape = cursor_zoom_out_xpm;
+                    sp_event_context_update_cursor(this);
                     break;
+
                 case GDK_KEY_Delete:
                 case GDK_KEY_KP_Delete:
                 case GDK_KEY_BackSpace:
-                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    ret = this->deleteSelectedDrag(MOD__CTRL_ONLY);
                     break;
 
                 default:
@@ -233,23 +223,20 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
 		break;
 	case GDK_KEY_RELEASE:
             switch (get_group0_keyval (&event->key)) {
-		case GDK_KEY_Shift_L:
-		case GDK_KEY_Shift_R:
-                    event_context->cursor_shape = cursor_zoom_xpm;
-                    sp_event_context_update_cursor(event_context);
+            	case GDK_KEY_Shift_L:
+            	case GDK_KEY_Shift_R:
+                    this->cursor_shape = cursor_zoom_xpm;
+                    sp_event_context_update_cursor(this);
                     break;
-		default:
+            	default:
                     break;
-		}
+            }
             break;
 	default:
             break;
     }
 
     if (!ret) {
-//        if ((SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->root_handler) {
-//            ret = (SP_EVENT_CONTEXT_CLASS(sp_zoom_context_parent_class))->root_handler(event_context, event);
-//        }
     	ret = SPEventContext::root_handler(event);
     }
 

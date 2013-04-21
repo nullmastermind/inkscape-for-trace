@@ -11,7 +11,6 @@
 #ifndef SEEN_UI_TOOL_NODE_TOOL_H
 #define SEEN_UI_TOOL_NODE_TOOL_H
 
-#include <memory>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <glib.h>
 #include "event-context.h"
@@ -29,53 +28,20 @@ class MultiPathManipulator;
 class ControlPointSelection;
 class Selector;
 struct PathSharedData;
+class ControlPoint;
 } // namespace UI
 } // namespace Inkscape
-
-//typedef std::auto_ptr<Inkscape::UI::MultiPathManipulator> MultiPathPtr;
-//typedef std::auto_ptr<Inkscape::UI::ControlPointSelection> CSelPtr;
-//typedef std::auto_ptr<Inkscape::UI::Selector> SelectorPtr;
-//typedef std::auto_ptr<Inkscape::UI::PathSharedData> PathSharedDataPtr;
-
-
-typedef Inkscape::UI::MultiPathManipulator* MultiPathPtr;
-typedef Inkscape::UI::ControlPointSelection* CSelPtr;
-typedef Inkscape::UI::Selector* SelectorPtr;
-typedef Inkscape::UI::PathSharedData* PathSharedDataPtr;
-
-typedef boost::ptr_map<SPItem*, ShapeEditor> ShapeEditors;
-
 
 class InkNodeTool : public SPEventContext {
 public:
 	InkNodeTool();
 	virtual ~InkNodeTool();
 
-	sigc::connection _selection_changed_connection;
-    sigc::connection _mouseover_changed_connection;
-    sigc::connection _selection_modified_connection;
-    sigc::connection _sizeUpdatedConn;
-    Inkscape::MessageContext *_node_message_context;
-    SPItem *flashed_item;
-    Inkscape::Display::TemporaryItem *flash_tempitem;
-    CSelPtr _selected_nodes;
-    MultiPathPtr _multipath;
-    SelectorPtr _selector;
-    PathSharedDataPtr _path_data;
-    SPCanvasGroup *_transform_handle_group;
-    SPItem *_last_over;
-    ShapeEditors _shape_editors;
+	Inkscape::UI::ControlPointSelection* _selected_nodes;
+    Inkscape::UI::MultiPathManipulator* _multipath;
 
-    unsigned cursor_drag : 1;
-    unsigned show_handles : 1;
-    unsigned show_outline : 1;
-    unsigned live_outline : 1;
-    unsigned live_objects : 1;
-    unsigned show_path_direction : 1;
-    unsigned show_transform_handles : 1;
-    unsigned single_node_transform_handles : 1;
-    unsigned edit_clipping_paths : 1;
-    unsigned edit_masks : 1;
+    bool edit_clipping_paths;
+    bool edit_masks;
 
 	static const std::string prefsPath;
 
@@ -85,6 +51,37 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	sigc::connection _selection_changed_connection;
+    sigc::connection _mouseover_changed_connection;
+    sigc::connection _sizeUpdatedConn;
+
+    Inkscape::MessageContext *_node_message_context;
+    SPItem *flashed_item;
+    Inkscape::Display::TemporaryItem *flash_tempitem;
+    Inkscape::UI::Selector* _selector;
+    Inkscape::UI::PathSharedData* _path_data;
+    SPCanvasGroup *_transform_handle_group;
+    SPItem *_last_over;
+    boost::ptr_map<SPItem*, ShapeEditor> _shape_editors;
+
+    bool cursor_drag;
+    bool show_handles;
+    bool show_outline;
+    bool live_outline;
+    bool live_objects;
+    bool show_path_direction;
+    bool show_transform_handles;
+    bool single_node_transform_handles;
+
+	void selection_changed(Inkscape::Selection *sel);
+
+	void select_area(Geom::Rect const &sel, GdkEventButton *event);
+	void select_point(Geom::Point const &sel, GdkEventButton *event);
+	void mouseover_changed(Inkscape::UI::ControlPoint *p);
+	void update_tip(GdkEvent *event);
+	void handleControlUiStyleChange();
 };
 
 #endif

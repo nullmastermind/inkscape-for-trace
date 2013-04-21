@@ -46,6 +46,9 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	void selection_changed(Inkscape::Selection*);
 };
 
 void sp_gradient_context_select_next (SPEventContext *event_context);

@@ -45,11 +45,16 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+	static void set_channels(gint channels);
+
+private:
+	void selection_changed(Inkscape::Selection* selection);
+	void finishItem();
 };
 
 GList* flood_channels_dropdown_items_list (void);
 GList* flood_autogap_dropdown_items_list (void);
-void flood_channels_set_channels( gint channels );
 
 enum PaintBucketChannels {
     FLOOD_CHANNELS_RGB,

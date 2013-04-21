@@ -21,6 +21,8 @@
 #include <2geom/point.h>
 #include "event-context.h"
 
+#include "sp-ellipse.h"
+
 #define SP_ARC_CONTEXT(obj) ((SPArcContext*)obj)
 #define SP_IS_ARC_CONTEXT(obj) (dynamic_cast<const SPArcContext*>(const SPEventContext*(obj)))
 
@@ -28,13 +30,6 @@ class SPArcContext : public SPEventContext {
 public:
 	SPArcContext();
 	virtual ~SPArcContext();
-
-    SPItem *item;
-    Geom::Point center;
-
-    sigc::connection sel_changed_connection;
-
-    Inkscape::MessageContext *_message_context;
 
 	static const std::string prefsPath;
 
@@ -44,6 +39,21 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	SPArc *arc;
+
+    Geom::Point center;
+
+    sigc::connection sel_changed_connection;
+
+    Inkscape::MessageContext *_message_context;
+
+	void selection_changed(Inkscape::Selection* selection);
+
+	void drag(Geom::Point pt, guint state);
+	void finishItem();
+	void cancel();
 };
 
 #endif /* !SEEN_ARC_CONTEXT_H */
