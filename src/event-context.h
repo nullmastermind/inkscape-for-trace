@@ -108,9 +108,6 @@ public:
     SPEventContext();
     virtual ~SPEventContext();
 
-    /// Desktop eventcontext stack
-    //SPEventContext *next;
-    //unsigned key;
     SPDesktop *desktop;
     Inkscape::Preferences::Observer *pref_observer;
     gchar const *const *cursor_shape;
@@ -142,13 +139,11 @@ public:
     DelayedSnapEvent *_delayed_snap_event;
     bool _dse_callback_in_process;
 
-    //char const * tool_url; ///< the (preferences) url for the tool (if a subclass corresponding to a tool is used)
-
 	virtual void setup();
 	virtual void finish();
 
 	// Is called by our pref_observer if a preference has been changed.
-	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual void set(const Inkscape::Preferences::Entry& val);
 
 	virtual void activate();
 	virtual void deactivate();
@@ -157,6 +152,23 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath() = 0;
+
+	/**
+	 * An observer that relays pref changes to the derived classes.
+	 */
+	class ToolPrefObserver: public Inkscape::Preferences::Observer {
+	public:
+	    ToolPrefObserver(Glib::ustring const &path, SPEventContext *ec) :
+	        Inkscape::Preferences::Observer(path), ec(ec) {
+	    }
+
+	    virtual void notify(Inkscape::Preferences::Entry const &val) {
+	    	ec->set(val);
+	    }
+
+	private:
+	    SPEventContext * const ec;
+	};
 
 private:
 	SPEventContext(const SPEventContext&);
@@ -204,24 +216,6 @@ void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
                                  bool const is_interactive, gpointer const data);
 
 void event_context_print_event_info(GdkEvent *event, bool print_return = true);
-
-
-/**
- * An observer that relays pref changes to the derived classes.
- */
-class ToolPrefObserver: public Inkscape::Preferences::Observer {
-public:
-    ToolPrefObserver(Glib::ustring const &path, SPEventContext *ec) :
-        Inkscape::Preferences::Observer(path), ec(ec) {
-    }
-
-    virtual void notify(Inkscape::Preferences::Entry const &val) {
-    	ec->set(const_cast<Inkscape::Preferences::Entry*>(&val));
-    }
-
-private:
-    SPEventContext * const ec;
-};
 
 #endif // SEEN_SP_EVENT_CONTEXT_H
 

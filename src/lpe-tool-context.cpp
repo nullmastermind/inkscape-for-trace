@@ -166,10 +166,10 @@ void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpoint
     lc->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-void SPLPEToolContext::set(Inkscape::Preferences::Entry* val) {
+void SPLPEToolContext::set(const Inkscape::Preferences::Entry& val) {
 	SPEventContext* ec = this;
 
-    if (val->getEntryName() == "mode") {
+    if (val.getEntryName() == "mode") {
         Inkscape::Preferences::get()->setString("/tools/geometric/mode", "drag");
         SP_PEN_CONTEXT(ec)->mode = SP_PEN_CONTEXT_MODE_DRAG;
     }

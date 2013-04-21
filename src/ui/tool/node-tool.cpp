@@ -285,37 +285,37 @@ void InkNodeTool::setup() {
     this->desktop->emitToolSubselectionChanged(NULL); // sets the coord entry fields to inactive
 }
 
-void InkNodeTool::set(Inkscape::Preferences::Entry* value) {
-    Glib::ustring entry_name = value->getEntryName();
+void InkNodeTool::set(const Inkscape::Preferences::Entry& value) {
+    Glib::ustring entry_name = value.getEntryName();
 
     if (entry_name == "show_handles") {
-        this->show_handles = value->getBool(true);
+        this->show_handles = value.getBool(true);
         this->_multipath->showHandles(this->show_handles);
     } else if (entry_name == "show_outline") {
-        this->show_outline = value->getBool();
+        this->show_outline = value.getBool();
         this->_multipath->showOutline(this->show_outline);
     } else if (entry_name == "live_outline") {
-        this->live_outline = value->getBool();
+        this->live_outline = value.getBool();
         this->_multipath->setLiveOutline(this->live_outline);
     } else if (entry_name == "live_objects") {
-        this->live_objects = value->getBool();
+        this->live_objects = value.getBool();
         this->_multipath->setLiveObjects(this->live_objects);
     } else if (entry_name == "show_path_direction") {
-        this->show_path_direction = value->getBool();
+        this->show_path_direction = value.getBool();
         this->_multipath->showPathDirection(this->show_path_direction);
     } else if (entry_name == "show_transform_handles") {
-        this->show_transform_handles = value->getBool(true);
+        this->show_transform_handles = value.getBool(true);
         this->_selected_nodes->showTransformHandles(
             this->show_transform_handles, this->single_node_transform_handles);
     } else if (entry_name == "single_node_transform_handles") {
-        this->single_node_transform_handles = value->getBool();
+        this->single_node_transform_handles = value.getBool();
         this->_selected_nodes->showTransformHandles(
             this->show_transform_handles, this->single_node_transform_handles);
     } else if (entry_name == "edit_clipping_paths") {
-        this->edit_clipping_paths = value->getBool();
+        this->edit_clipping_paths = value.getBool();
         this->selection_changed(this->desktop->selection);
     } else if (entry_name == "edit_masks") {
-        this->edit_masks = value->getBool();
+        this->edit_masks = value.getBool();
         this->selection_changed(this->desktop->selection);
     } else {
     	SPEventContext::set(value);

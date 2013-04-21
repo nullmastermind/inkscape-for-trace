@@ -112,37 +112,30 @@ const std::string& SPEraserContext::getPrefsPath() {
 const std::string SPEraserContext::prefsPath = "/tools/eraser";
 
 SPEraserContext::SPEraserContext() : SPCommonContext() {
-	SPEraserContext* erc = this;
-
-    erc->cursor_shape = cursor_eraser_xpm;
-    erc->hot_x = 4;
-    erc->hot_y = 4;
+    this->cursor_shape = cursor_eraser_xpm;
+    this->hot_x = 4;
+    this->hot_y = 4;
 }
 
 SPEraserContext::~SPEraserContext() {
 }
 
 void SPEraserContext::setup() {
-	SPEventContext* ec = this;
-
-    SPEraserContext *erc = SP_ERASER_CONTEXT(ec);
-    SPDesktop *desktop = ec->desktop;
-
-//    if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup)
-//        (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->setup(ec);
     SPCommonContext::setup();
 
-    erc->accumulated = new SPCurve();
-    erc->currentcurve = new SPCurve();
+    this->accumulated = new SPCurve();
+    this->currentcurve = new SPCurve();
 
-    erc->cal1 = new SPCurve();
-    erc->cal2 = new SPCurve();
+    this->cal1 = new SPCurve();
+    this->cal2 = new SPCurve();
 
-    erc->currentshape = sp_canvas_item_new(sp_desktop_sketch(desktop), SP_TYPE_CANVAS_BPATH, NULL);
-    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(erc->currentshape), ERC_RED_RGBA, SP_WIND_RULE_EVENODD);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(erc->currentshape), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    this->currentshape = sp_canvas_item_new(sp_desktop_sketch(desktop), SP_TYPE_CANVAS_BPATH, NULL);
+
+    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->currentshape), ERC_RED_RGBA, SP_WIND_RULE_EVENODD);
+    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->currentshape), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+
     /* fixme: Cannot we cascade it to root more clearly? */
-    g_signal_connect(G_OBJECT(erc->currentshape), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+    g_signal_connect(G_OBJECT(this->currentshape), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
 
 /*
 static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
@@ -156,30 +149,30 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
 };
 */
 
-    sp_event_context_read(ec, "mass");
-    sp_event_context_read(ec, "wiggle");
-    sp_event_context_read(ec, "angle");
-    sp_event_context_read(ec, "width");
-    sp_event_context_read(ec, "thinning");
-    sp_event_context_read(ec, "tremor");
-    sp_event_context_read(ec, "flatness");
-    sp_event_context_read(ec, "tracebackground");
-    sp_event_context_read(ec, "usepressure");
-    sp_event_context_read(ec, "usetilt");
-    sp_event_context_read(ec, "abs_width");
-    sp_event_context_read(ec, "cap_rounding");
+    sp_event_context_read(this, "mass");
+    sp_event_context_read(this, "wiggle");
+    sp_event_context_read(this, "angle");
+    sp_event_context_read(this, "width");
+    sp_event_context_read(this, "thinning");
+    sp_event_context_read(this, "tremor");
+    sp_event_context_read(this, "flatness");
+    sp_event_context_read(this, "tracebackground");
+    sp_event_context_read(this, "usepressure");
+    sp_event_context_read(this, "usetilt");
+    sp_event_context_read(this, "abs_width");
+    sp_event_context_read(this, "cap_rounding");
 
-    erc->is_drawing = false;
+    this->is_drawing = false;
 
-    erc->_message_context = new Inkscape::MessageContext(desktop->messageStack());
+    this->_message_context = new Inkscape::MessageContext(desktop->messageStack());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/eraser/selcue", 0) != 0) {
-        ec->enableSelectionCue();
+    	this->enableSelectionCue();
     }
-// TODO temp force:
-    ec->enableSelectionCue();
 
+    // TODO temp force:
+    this->enableSelectionCue();
 }
 
 static double
@@ -425,37 +418,33 @@ eraser_cancel(SPEraserContext *dc)
 }
 
 gint SPEraserContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
-
-    SPEraserContext *dc = SP_ERASER_CONTEXT(event_context);
-    SPDesktop *desktop = event_context->desktop;
-
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !event_context->space_panning) {
-
-                if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
+            if (event->button.button == 1 && !this->space_panning) {
+                if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
                     return TRUE;
                 }
 
-                Geom::Point const button_w(event->button.x,
-                                         event->button.y);
+                Geom::Point const button_w(event->button.x, event->button.y);
                 Geom::Point const button_dt(desktop->w2d(button_w));
-                sp_eraser_reset(dc, button_dt);
-                sp_eraser_extinput(dc, event);
-                sp_eraser_apply(dc, button_dt);
-                dc->accumulated->reset();
-                if (dc->repr) {
-                    dc->repr = NULL;
+
+                sp_eraser_reset(this, button_dt);
+                sp_eraser_extinput(this, event);
+                sp_eraser_apply(this, button_dt);
+
+                this->accumulated->reset();
+
+                if (this->repr) {
+                    this->repr = NULL;
                 }
 
                 Inkscape::Rubberband::get(desktop)->start(desktop, button_dt);
                 Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
 
                 /* initialize first point */
-                dc->npoints = 0;
+                this->npoints = 0;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     ( GDK_KEY_PRESS_MASK |
@@ -468,76 +457,77 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
 
                 desktop->canvas->forceFullRedrawAfterInterruptions(3);
-                dc->is_drawing = true;
+                this->is_drawing = true;
             }
             break;
-        case GDK_MOTION_NOTIFY:
-        {
-            Geom::Point const motion_w(event->motion.x,
-                                     event->motion.y);
-            Geom::Point motion_dt(desktop->w2d(motion_w));
-            sp_eraser_extinput(dc, event);
 
-            dc->_message_context->clear();
+        case GDK_MOTION_NOTIFY: {
+            Geom::Point const motion_w(event->motion.x, event->motion.y);
+            Geom::Point motion_dt(desktop->w2d(motion_w)
+            		);
+            sp_eraser_extinput(this, event);
 
-            if ( dc->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !event_context->space_panning) {
-                dc->dragging = TRUE;
+            this->_message_context->clear();
 
-                dc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
+            if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
+                this->dragging = TRUE;
 
-                if (!sp_eraser_apply(dc, motion_dt)) {
+                this->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
+
+                if (!sp_eraser_apply(this, motion_dt)) {
                     ret = TRUE;
                     break;
                 }
 
-                if ( dc->cur != dc->last ) {
-                    sp_eraser_brush(dc);
-                    g_assert( dc->npoints > 0 );
-                    fit_and_split(dc, FALSE);
+                if ( this->cur != this->last ) {
+                    sp_eraser_brush(this);
+                    g_assert( this->npoints > 0 );
+                    fit_and_split(this, FALSE);
                 }
+
                 ret = TRUE;
             }
+
             Inkscape::Rubberband::get(desktop)->move(motion_dt);
         }
         break;
 
-
-    case GDK_BUTTON_RELEASE:
-    {
+    case GDK_BUTTON_RELEASE: {
         Geom::Point const motion_w(event->button.x, event->button.y);
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
         sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
         desktop->canvas->endForcedFullRedraws();
-        dc->is_drawing = false;
+        this->is_drawing = false;
 
-        if (dc->dragging && event->button.button == 1 && !event_context->space_panning) {
-            dc->dragging = FALSE;
+        if (this->dragging && event->button.button == 1 && !this->space_panning) {
+            this->dragging = FALSE;
 
-            sp_eraser_apply(dc, motion_dt);
+            sp_eraser_apply(this, motion_dt);
 
             /* Remove all temporary line segments */
-            while (dc->segments) {
-                sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->segments->data));
-                dc->segments = g_slist_remove(dc->segments, dc->segments->data);
+            while (this->segments) {
+                sp_canvas_item_destroy(SP_CANVAS_ITEM(this->segments->data));
+                this->segments = g_slist_remove(this->segments, this->segments->data);
             }
 
             /* Create object */
-            fit_and_split(dc, TRUE);
-            accumulate_eraser(dc);
-            set_to_accumulated(dc); // performs document_done
+            fit_and_split(this, TRUE);
+            accumulate_eraser(this);
+            set_to_accumulated(this); // performs document_done
 
             /* reset accumulated curve */
-            dc->accumulated->reset();
+            this->accumulated->reset();
 
-            clear_current(dc);
-            if (dc->repr) {
-                dc->repr = NULL;
+            clear_current(this);
+            if (this->repr) {
+                this->repr = NULL;
             }
 
-            dc->_message_context->clear();
+            this->_message_context->clear();
             ret = TRUE;
         }
+
         if (Inkscape::Rubberband::get(desktop)->is_started()) {
             Inkscape::Rubberband::get(desktop)->stop();
         }
@@ -550,55 +540,73 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
             if (!MOD__CTRL_ONLY) {
-                dc->angle += 5.0;
-                if (dc->angle > 90.0)
-                    dc->angle = 90.0;
-                sp_erc_update_toolbox (desktop, "eraser-angle", dc->angle);
+                this->angle += 5.0;
+
+                if (this->angle > 90.0) {
+                    this->angle = 90.0;
+                }
+
+                sp_erc_update_toolbox (desktop, "eraser-angle", this->angle);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
             if (!MOD__CTRL_ONLY) {
-                dc->angle -= 5.0;
-                if (dc->angle < -90.0)
-                    dc->angle = -90.0;
-                sp_erc_update_toolbox (desktop, "eraser-angle", dc->angle);
+                this->angle -= 5.0;
+
+                if (this->angle < -90.0) {
+                    this->angle = -90.0;
+                }
+
+                sp_erc_update_toolbox (desktop, "eraser-angle", this->angle);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
             if (!MOD__CTRL_ONLY) {
-                dc->width += 0.01;
-                if (dc->width > 1.0)
-                    dc->width = 1.0;
-                sp_erc_update_toolbox (desktop, "altx-eraser", dc->width * 100); // the same spinbutton is for alt+x
+                this->width += 0.01;
+
+                if (this->width > 1.0) {
+                    this->width = 1.0;
+                }
+
+                sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100); // the same spinbutton is for alt+x
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Left:
         case GDK_KEY_KP_Left:
             if (!MOD__CTRL_ONLY) {
-                dc->width -= 0.01;
-                if (dc->width < 0.01)
-                    dc->width = 0.01;
-                sp_erc_update_toolbox (desktop, "altx-eraser", dc->width * 100);
+                this->width -= 0.01;
+
+                if (this->width < 0.01) {
+                    this->width = 0.01;
+                }
+
+                sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Home:
         case GDK_KEY_KP_Home:
-            dc->width = 0.01;
-            sp_erc_update_toolbox (desktop, "altx-eraser", dc->width * 100);
+            this->width = 0.01;
+            sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100);
             ret = TRUE;
             break;
+
         case GDK_KEY_End:
         case GDK_KEY_KP_End:
-            dc->width = 1.0;
-            sp_erc_update_toolbox (desktop, "altx-eraser", dc->width * 100);
+            this->width = 1.0;
+            sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100);
             ret = TRUE;
             break;
+
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY) {
@@ -606,22 +614,26 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_Escape:
             Inkscape::Rubberband::get(desktop)->stop();
-            if (dc->is_drawing) {
+
+            if (this->is_drawing) {
                 // if drawing, cancel, otherwise pass it up for deselecting
-                eraser_cancel (dc);
+                eraser_cancel (this);
                 ret = TRUE;
             }
             break;
+
         case GDK_KEY_z:
         case GDK_KEY_Z:
-            if (MOD__CTRL_ONLY && dc->is_drawing) {
+            if (MOD__CTRL_ONLY && this->is_drawing) {
                 // if drawing, cancel, otherwise pass it up for undo
-                eraser_cancel (dc);
+                eraser_cancel (this);
                 ret = TRUE;
             }
             break;
+
         default:
             break;
         }
@@ -631,20 +643,19 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
         switch (get_group0_keyval(&event->key)) {
             case GDK_KEY_Control_L:
             case GDK_KEY_Control_R:
-                dc->_message_context->clear();
+                this->_message_context->clear();
                 break;
+
             default:
                 break;
         }
+        break;
 
     default:
         break;
     }
 
     if (!ret) {
-//        if ((SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler) {
-//            ret = (SP_EVENT_CONTEXT_CLASS(sp_eraser_context_parent_class))->root_handler(event_context, event);
-//        }
     	ret = SPCommonContext::root_handler(event);
     }
 
@@ -685,9 +696,11 @@ set_to_accumulated(SPEraserContext *dc)
 
             SPItem *item=SP_ITEM(desktop->currentLayer()->appendChildRepr(dc->repr));
             Inkscape::GC::release(dc->repr);
+
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
         }
+
         Geom::PathVector pathv = dc->accumulated->get_pathvector() * desktop->dt2doc();
         gchar *str = sp_svg_write_path(pathv);
         g_assert( str != NULL );
@@ -707,6 +720,7 @@ set_to_accumulated(SPEraserContext *dc)
             Geom::Rect bounds = (*eraserBbox) * desktop->doc2dt();
             std::vector<SPItem*> remainingItems;
             GSList* toWorkOn = 0;
+
             if (selection->isEmpty()) {
                 if ( eraserMode ) {
                     toWorkOn = sp_desktop_document(desktop)->getItemsPartiallyInBox(desktop->dkey, bounds);
@@ -714,6 +728,7 @@ set_to_accumulated(SPEraserContext *dc)
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
                     toWorkOn = sp_desktop_document(desktop)->getItemsAtPoints(desktop->dkey, r->getPoints());
                 }
+
                 toWorkOn = g_slist_remove( toWorkOn, acid );
             } else {
                 toWorkOn = g_slist_copy(const_cast<GSList*>(selection->itemList()));
@@ -724,8 +739,10 @@ set_to_accumulated(SPEraserContext *dc)
                 if ( eraserMode ) {
                     for (GSList *i = toWorkOn ; i ; i = i->next ) {
                         SPItem *item = SP_ITEM(i->data);
+
                         if ( eraserMode ) {
                             Geom::OptRect bbox = item->visualBounds();
+
                             if (bbox && bbox->intersects(*eraserBbox)) {
                                 Inkscape::XML::Node* dup = dc->repr->duplicate(xml_doc);
                                 dc->repr->parent()->appendChild(dup);
@@ -735,12 +752,15 @@ set_to_accumulated(SPEraserContext *dc)
                                 selection->add(dup);
                                 sp_selected_path_diff_skip_undo(desktop);
                                 workDone = true; // TODO set this only if something was cut.
+
                                 if ( !selection->isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
                                     GSList *nowSel = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+
                                     for (GSList const *i2 = nowSel ; i2 ; i2 = i2->next ) {
                                         remainingItems.push_back(SP_ITEM(i2->data));
                                     }
+
                                     g_slist_free(nowSel);
                                 }
                             } else {
@@ -752,6 +772,7 @@ set_to_accumulated(SPEraserContext *dc)
                     for (GSList *i = toWorkOn ; i ; i = i->next ) {
                         sp_object_ref( SP_ITEM(i->data), 0 );
                     }
+
                     for (GSList *i = toWorkOn ; i ; i = i->next ) {
                         SPItem *item = SP_ITEM(i->data);
                         item->deleteObject(true);
@@ -768,6 +789,7 @@ set_to_accumulated(SPEraserContext *dc)
                 }
 
                 selection->clear();
+
                 if ( wasSelection ) {
                     if ( !remainingItems.empty() ) {
                         selection->add(remainingItems.begin(), remainingItems.end());
@@ -788,8 +810,7 @@ set_to_accumulated(SPEraserContext *dc)
 
 
     if ( workDone ) {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_ERASER, 
-                           _("Draw eraser stroke"));
+        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
     } else {
         DocumentUndo::cancel(sp_desktop_document(desktop));
     }
@@ -806,6 +827,7 @@ add_cap(SPCurve *curve,
 
     Geom::Point v_in = from - pre;
     double mag_in = Geom::L2(v_in);
+
     if ( mag_in > ERASER_EPSILON ) {
         v_in = mag * v_in / mag_in;
     } else {
@@ -814,6 +836,7 @@ add_cap(SPCurve *curve,
 
     Geom::Point v_out = to - post;
     double mag_out = Geom::L2(v_out);
+
     if ( mag_out > ERASER_EPSILON ) {
         v_out = mag * v_out / mag_out;
     } else {
@@ -841,6 +864,7 @@ accumulate_eraser(SPEraserContext *dc)
         Geom::CubicBezier const * rev_cal2_firstseg = dynamic_cast<Geom::CubicBezier const *>( rev_cal2->first_segment() );
         Geom::CubicBezier const * dc_cal1_lastseg   = dynamic_cast<Geom::CubicBezier const *>( dc->cal1->last_segment() );
         Geom::CubicBezier const * rev_cal2_lastseg  = dynamic_cast<Geom::CubicBezier const *>( rev_cal2->last_segment() );
+
         g_assert( dc_cal1_firstseg );
         g_assert( rev_cal2_firstseg );
         g_assert( dc_cal1_lastseg );
@@ -904,13 +928,11 @@ fit_and_split(SPEraserContext *dc, gboolean release)
         }
 
         Geom::Point b1[BEZIER_MAX_LENGTH];
-        gint const nb1 = Geom::bezier_fit_cubic_r(b1, dc->point1, dc->npoints,
-                                               tolerance_sq, BEZIER_MAX_BEZIERS);
+        gint const nb1 = Geom::bezier_fit_cubic_r(b1, dc->point1, dc->npoints, tolerance_sq, BEZIER_MAX_BEZIERS);
         g_assert( nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)) );
 
         Geom::Point b2[BEZIER_MAX_LENGTH];
-        gint const nb2 = Geom::bezier_fit_cubic_r(b2, dc->point2, dc->npoints,
-                                               tolerance_sq, BEZIER_MAX_BEZIERS);
+        gint const nb2 = Geom::bezier_fit_cubic_r(b2, dc->point2, dc->npoints, tolerance_sq, BEZIER_MAX_BEZIERS);
         g_assert( nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)) );
 
         if ( nb1 != -1 && nb2 != -1 ) {
@@ -918,22 +940,27 @@ fit_and_split(SPEraserContext *dc, gboolean release)
 #ifdef ERASER_VERBOSE
             g_print("nb1:%d nb2:%d\n", nb1, nb2);
 #endif
+
             /* CanvasShape */
             if (! release) {
                 dc->currentcurve->reset();
                 dc->currentcurve->moveto(b1[0]);
+
                 for (Geom::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
-                    dc->currentcurve->curveto(bp1[1],
-                                     bp1[2], bp1[3]);
+                    dc->currentcurve->curveto(bp1[1], bp1[2], bp1[3]);
                 }
+
                 dc->currentcurve->lineto(b2[BEZIER_SIZE*(nb2-1) + 3]);
+
                 for (Geom::Point *bp2 = b2 + BEZIER_SIZE * ( nb2 - 1 ); bp2 >= b2; bp2 -= BEZIER_SIZE) {
                     dc->currentcurve->curveto(bp2[2], bp2[1], bp2[0]);
                 }
+
                 // FIXME: dc->segments is always NULL at this point??
                 if (!dc->segments) { // first segment
                     add_cap(dc->currentcurve, b2[1], b2[0], b1[0], b1[1], dc->cap_rounding);
                 }
+
                 dc->currentcurve->closepath();
                 sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->currentshape), dc->currentcurve);
             }
@@ -942,6 +969,7 @@ fit_and_split(SPEraserContext *dc, gboolean release)
             for (Geom::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
                 dc->cal1->curveto(bp1[1], bp1[2], bp1[3]);
             }
+
             for (Geom::Point *bp2 = b2; bp2 < b2 + BEZIER_SIZE * nb2; bp2 += BEZIER_SIZE) {
                 dc->cal2->curveto(bp2[1], bp2[2], bp2[3]);
             }
@@ -955,6 +983,7 @@ fit_and_split(SPEraserContext *dc, gboolean release)
             for (gint i = 1; i < dc->npoints; i++) {
                 dc->cal1->lineto(dc->point1[i]);
             }
+
             for (gint i = 1; i < dc->npoints; i++) {
                 dc->cal2->lineto(dc->point2[i]);
             }
@@ -969,9 +998,7 @@ fit_and_split(SPEraserContext *dc, gboolean release)
             gint eraserMode = prefs->getBool("/tools/eraser/mode") ? 1 : 0;
             g_assert(!dc->currentcurve->is_empty());
 
-            SPCanvasItem *cbp = sp_canvas_item_new(sp_desktop_sketch(desktop),
-                                                   SP_TYPE_CANVAS_BPATH,
-                                                   NULL);
+            SPCanvasItem *cbp = sp_canvas_item_new(sp_desktop_sketch(desktop), SP_TYPE_CANVAS_BPATH, NULL);
             SPCurve *curve = dc->currentcurve->copy();
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve);
             curve->unref();
@@ -1010,12 +1037,15 @@ draw_temporary_box(SPEraserContext *dc)
     dc->currentcurve->reset();
 
     dc->currentcurve->moveto(dc->point1[dc->npoints-1]);
+
     for (gint i = dc->npoints-2; i >= 0; i--) {
         dc->currentcurve->lineto(dc->point1[i]);
     }
+
     for (gint i = 0; i < dc->npoints; i++) {
         dc->currentcurve->lineto(dc->point2[i]);
     }
+
     if (dc->npoints >= 2) {
         add_cap(dc->currentcurve, dc->point2[dc->npoints-2], dc->point2[dc->npoints-1], dc->point1[dc->npoints-1], dc->point1[dc->npoints-2], dc->cap_rounding);
     }

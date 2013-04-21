@@ -73,7 +73,7 @@ static guint32 scroll_event_time = 0;
 static gdouble scroll_multiply = 1;
 static guint scroll_keyval = 0;
 
-void SPEventContext::set(Inkscape::Preferences::Entry* val) {
+void SPEventContext::set(const Inkscape::Preferences::Entry& val) {
 }
 
 void SPEventContext::activate() {
@@ -1019,7 +1019,7 @@ void sp_event_context_read(SPEventContext *ec, gchar const *key) {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Inkscape::Preferences::Entry val = prefs->getEntry(ec->pref_observer->observed_path + '/' + key);
-    ec->set(&val);
+    ec->set(val);
 }
 
 /**

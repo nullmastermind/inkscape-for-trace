@@ -150,15 +150,15 @@ void SPRectContext::setup() {
     this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
-void SPRectContext::set(Inkscape::Preferences::Entry* val) {
+void SPRectContext::set(const Inkscape::Preferences::Entry& val) {
     /* fixme: Proper error handling for non-numeric data.  Use a locale-independent function like
      * g_ascii_strtod (or a thin wrapper that does the right thing for invalid values inf/nan). */
-    Glib::ustring name = val->getEntryName();
+    Glib::ustring name = val.getEntryName();
     
     if ( name == "rx" ) {
-        this->rx = val->getDoubleLimited(); // prevents NaN and +/-Inf from messing up
+        this->rx = val.getDoubleLimited(); // prevents NaN and +/-Inf from messing up
     } else if ( name == "ry" ) {
-        this->ry = val->getDoubleLimited();
+        this->ry = val.getDoubleLimited();
     }
 }
 

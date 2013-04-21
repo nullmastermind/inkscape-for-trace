@@ -21,6 +21,8 @@
 #include "proj_pt.h"
 #include "vanishing-point.h"
 
+#include "box3d.h"
+
 #define SP_BOX3D_CONTEXT(obj) ((Box3DContext*)obj)
 #define SP_IS_BOX3D_CONTEXT(obj) (dynamic_cast<const Box3DContext*>((const SPEventContext*)obj))
 
@@ -29,7 +31,19 @@ public:
 	Box3DContext();
 	virtual ~Box3DContext();
 
-    SPItem *item;
+	Box3D::VPDrag * _vpdrag;
+
+	static const std::string prefsPath;
+
+	virtual void setup();
+	virtual void finish();
+	virtual gint root_handler(GdkEvent* event);
+	virtual gint item_handler(SPItem* item, GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
+
+private:
+    SPBox3D* box3d;
     Geom::Point center;
 
     /**
@@ -51,23 +65,15 @@ public:
     bool ctrl_dragged; /* whether we are ctrl-dragging */
     bool extruded; /* whether shift-dragging already occured (i.e. the box is already extruded) */
 
-    Box3D::VPDrag * _vpdrag;
-
     sigc::connection sel_changed_connection;
 
     Inkscape::MessageContext *_message_context;
 
-	static const std::string prefsPath;
+	void selection_changed(Inkscape::Selection* selection);
 
-	virtual void setup();
-	virtual void finish();
-	virtual gint root_handler(GdkEvent* event);
-	virtual gint item_handler(SPItem* item, GdkEvent* event);
-
-	virtual const std::string& getPrefsPath();
+	void drag(guint state);
+	void finishItem();
 };
-
-void sp_box3d_context_update_lines(SPEventContext *ec);
 
 #endif /* __SP_BOX3D_CONTEXT_H__ */
 

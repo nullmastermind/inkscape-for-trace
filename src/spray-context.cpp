@@ -282,38 +282,38 @@ void SPSprayContext::setup() {
     }
 }
 
-void SPSprayContext::set(Inkscape::Preferences::Entry* val) {
+void SPSprayContext::set(const Inkscape::Preferences::Entry& val) {
 	SPEventContext* ec = this;
 
     SPSprayContext *tc = SP_SPRAY_CONTEXT(ec);
-    Glib::ustring path = val->getEntryName();
+    Glib::ustring path = val.getEntryName();
 
     if (path == "mode") {
-        tc->mode = val->getInt();
+        tc->mode = val.getInt();
         sp_spray_update_cursor(tc, false);
     } else if (path == "width") {
-        tc->width = 0.01 * CLAMP(val->getInt(10), 1, 100);
+        tc->width = 0.01 * CLAMP(val.getInt(10), 1, 100);
     } else if (path == "usepressure") {
-        tc->usepressure = val->getBool();
+        tc->usepressure = val.getBool();
     } else if (path == "population") {
-        tc->population = 0.01 * CLAMP(val->getInt(10), 1, 100);
+        tc->population = 0.01 * CLAMP(val.getInt(10), 1, 100);
     } else if (path == "rotation_variation") {
-        tc->rotation_variation = CLAMP(val->getDouble(0.0), 0, 100.0);
+        tc->rotation_variation = CLAMP(val.getDouble(0.0), 0, 100.0);
     } else if (path == "scale_variation") {
-        tc->scale_variation = CLAMP(val->getDouble(1.0), 0, 100.0);
+        tc->scale_variation = CLAMP(val.getDouble(1.0), 0, 100.0);
     } else if (path == "standard_deviation") {
-        tc->standard_deviation = 0.01 * CLAMP(val->getInt(10), 1, 100);
+        tc->standard_deviation = 0.01 * CLAMP(val.getInt(10), 1, 100);
     } else if (path == "mean") {
-        tc->mean = 0.01 * CLAMP(val->getInt(10), 1, 100);
+        tc->mean = 0.01 * CLAMP(val.getInt(10), 1, 100);
 // Not implemented in the toolbar and preferences yet
     } else if (path == "distribution") {
-        tc->distrib = val->getInt(1);
+        tc->distrib = val.getInt(1);
     } else if (path == "tilt") {
-        tc->tilt = CLAMP(val->getDouble(0.1), 0, 1000.0);
+        tc->tilt = CLAMP(val.getDouble(0.1), 0, 1000.0);
     } else if (path == "ratio") {
-        tc->ratio = CLAMP(val->getDouble(), 0.0, 0.9);
+        tc->ratio = CLAMP(val.getDouble(), 0.0, 0.9);
     } else if (path == "force") {
-        tc->force = CLAMP(val->getDouble(1.0), 0, 1.0);
+        tc->force = CLAMP(val.getDouble(1.0), 0, 1.0);
     } 
 }
 

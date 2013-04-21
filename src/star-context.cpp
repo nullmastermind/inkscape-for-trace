@@ -167,19 +167,19 @@ void SPStarContext::setup() {
 	this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
-void SPStarContext::set(Inkscape::Preferences::Entry* val) {
-    Glib::ustring path = val->getEntryName();
+void SPStarContext::set(const Inkscape::Preferences::Entry& val) {
+    Glib::ustring path = val.getEntryName();
 
     if (path == "magnitude") {
-        this->magnitude = CLAMP(val->getInt(5), 3, 1024);
+        this->magnitude = CLAMP(val.getInt(5), 3, 1024);
     } else if (path == "proportion") {
-        this->proportion = CLAMP(val->getDouble(0.5), 0.01, 2.0);
+        this->proportion = CLAMP(val.getDouble(0.5), 0.01, 2.0);
     } else if (path == "isflatsided") {
-        this->isflatsided = val->getBool();
+        this->isflatsided = val.getBool();
     } else if (path == "rounded") {
-        this->rounded = val->getDouble();
+        this->rounded = val.getDouble();
     } else if (path == "randomized") {
-        this->randomized = val->getDouble();
+        this->randomized = val.getDouble();
     }
 }
 

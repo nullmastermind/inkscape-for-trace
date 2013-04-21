@@ -297,28 +297,28 @@ void SPTweakContext::setup() {
     }
 }
 
-void SPTweakContext::set(Inkscape::Preferences::Entry* val) {
-    Glib::ustring path = val->getEntryName();
+void SPTweakContext::set(const Inkscape::Preferences::Entry& val) {
+    Glib::ustring path = val.getEntryName();
 
     if (path == "width") {
-        this->width = CLAMP(val->getDouble(0.1), -1000.0, 1000.0);
+        this->width = CLAMP(val.getDouble(0.1), -1000.0, 1000.0);
     } else if (path == "mode") {
-        this->mode = val->getInt();
+        this->mode = val.getInt();
         sp_tweak_update_cursor(this, false);
     } else if (path == "fidelity") {
-        this->fidelity = CLAMP(val->getDouble(), 0.0, 1.0);
+        this->fidelity = CLAMP(val.getDouble(), 0.0, 1.0);
     } else if (path == "force") {
-        this->force = CLAMP(val->getDouble(1.0), 0, 1.0);
+        this->force = CLAMP(val.getDouble(1.0), 0, 1.0);
     } else if (path == "usepressure") {
-        this->usepressure = val->getBool();
+        this->usepressure = val.getBool();
     } else if (path == "doh") {
-        this->do_h = val->getBool();
+        this->do_h = val.getBool();
     } else if (path == "dos") {
-        this->do_s = val->getBool();
+        this->do_s = val.getBool();
     } else if (path == "dol") {
-        this->do_l = val->getBool();
+        this->do_l = val.getBool();
     } else if (path == "doo") {
-        this->do_o = val->getBool();
+        this->do_o = val.getBool();
     }
 }
 

@@ -106,40 +106,40 @@ SPCommonContext::~SPCommonContext() {
     //G_OBJECT_CLASS(sp_common_context_parent_class)->dispose(object);
 }
 
-void SPCommonContext::set(Inkscape::Preferences::Entry* value) {
+void SPCommonContext::set(const Inkscape::Preferences::Entry& value) {
 	SPEventContext* ec = this;
 
     SPCommonContext *ctx = SP_COMMON_CONTEXT(ec);
-    Glib::ustring path = value->getEntryName();
+    Glib::ustring path = value.getEntryName();
     
     // ignore preset modifications
     static Glib::ustring const presets_path = ec->pref_observer->observed_path + "/preset";
-    Glib::ustring const &full_path = value->getPath();
+    Glib::ustring const &full_path = value.getPath();
     if (full_path.compare(0, presets_path.size(), presets_path) == 0) return;
 
     if (path == "mass") {
-        ctx->mass = 0.01 * CLAMP(value->getInt(10), 0, 100);
+        ctx->mass = 0.01 * CLAMP(value.getInt(10), 0, 100);
     } else if (path == "wiggle") {
-        ctx->drag = CLAMP((1 - 0.01 * value->getInt()),
+        ctx->drag = CLAMP((1 - 0.01 * value.getInt()),
             DRAG_MIN, DRAG_MAX); // drag is inverse to wiggle
     } else if (path == "angle") {
-        ctx->angle = CLAMP(value->getDouble(), -90, 90);
+        ctx->angle = CLAMP(value.getDouble(), -90, 90);
     } else if (path == "width") {
-        ctx->width = 0.01 * CLAMP(value->getInt(10), 1, 100);
+        ctx->width = 0.01 * CLAMP(value.getInt(10), 1, 100);
     } else if (path == "thinning") {
-        ctx->vel_thin = 0.01 * CLAMP(value->getInt(10), -100, 100);
+        ctx->vel_thin = 0.01 * CLAMP(value.getInt(10), -100, 100);
     } else if (path == "tremor") {
-        ctx->tremor = 0.01 * CLAMP(value->getInt(), 0, 100);
+        ctx->tremor = 0.01 * CLAMP(value.getInt(), 0, 100);
     } else if (path == "flatness") {
-        ctx->flatness = 0.01 * CLAMP(value->getInt(), 0, 100);
+        ctx->flatness = 0.01 * CLAMP(value.getInt(), 0, 100);
     } else if (path == "usepressure") {
-        ctx->usepressure = value->getBool();
+        ctx->usepressure = value.getBool();
     } else if (path == "usetilt") {
-        ctx->usetilt = value->getBool();
+        ctx->usetilt = value.getBool();
     } else if (path == "abs_width") {
-        ctx->abs_width = value->getBool();
+        ctx->abs_width = value.getBool();
     } else if (path == "cap_rounding") {
-        ctx->cap_rounding = value->getDouble();
+        ctx->cap_rounding = value.getDouble();
     }
 }
 

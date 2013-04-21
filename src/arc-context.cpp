@@ -453,8 +453,6 @@ void SPArcContext::finishItem() {
             return;
         }
 
-        SPDesktop *desktop = SP_EVENT_CONTEXT(this)->desktop;
-
         this->arc->updateRepr();
 
         desktop->canvas->endForcedFullRedraws();

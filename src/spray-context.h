@@ -91,7 +91,7 @@ public:
 	static const std::string prefsPath;
 
 	virtual void setup();
-	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual void set(const Inkscape::Preferences::Entry& val);
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();

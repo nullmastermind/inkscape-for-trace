@@ -306,19 +306,19 @@ void SPConnectorContext::setup() {
     dt->canvas->gen_all_enter_events = true;
 }
 
-void SPConnectorContext::set(Inkscape::Preferences::Entry* val) {
+void SPConnectorContext::set(const Inkscape::Preferences::Entry& val) {
 	SPEventContext* ec = this;
 
     SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
 
     /* fixme: Proper error handling for non-numeric data.  Use a locale-independent function like
      * g_ascii_strtod (or a thin wrapper that does the right thing for invalid values inf/nan). */
-    Glib::ustring name = val->getEntryName();
+    Glib::ustring name = val.getEntryName();
     if ( name == "curvature" ) {
-        cc->curvature = val->getDoubleLimited(); // prevents NaN and +/-Inf from messing up
+        cc->curvature = val.getDoubleLimited(); // prevents NaN and +/-Inf from messing up
     }
     else if ( name == "orthogonal" ) {
-        cc->isOrthogonal = val->getBool();
+        cc->isOrthogonal = val.getBool();
     }
 }
 

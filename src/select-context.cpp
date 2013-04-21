@@ -171,11 +171,11 @@ void SPSelectContext::setup() {
     }
 }
 
-void SPSelectContext::set(Inkscape::Preferences::Entry* val) {
-    Glib::ustring path = val->getEntryName();
+void SPSelectContext::set(const Inkscape::Preferences::Entry& val) {
+    Glib::ustring path = val.getEntryName();
 
     if (path == "show") {
-        if (val->getString() == "outline") {
+        if (val.getString() == "outline") {
             this->_seltrans->setShow(Inkscape::SelTrans::SHOW_OUTLINE);
         } else {
             this->_seltrans->setShow(Inkscape::SelTrans::SHOW_CONTENT);

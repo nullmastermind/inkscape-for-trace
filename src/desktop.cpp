@@ -897,7 +897,10 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
     canvas->scrollTo(x0 * newscale - border, y1 * -newscale - border, clear);
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    sp_box3d_context_update_lines(event_context);
+    //sp_box3d_context_update_lines(event_context);
+    if (SP_IS_BOX3D_CONTEXT(event_context)) {
+    	SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
+    }
 
     _widget->updateRulers();
     _widget->updateScrollbars(_d2w.descrim());
@@ -1218,7 +1221,10 @@ SPDesktop::scroll_world (double dx, double dy, bool is_scrolling)
     canvas->scrollTo(viewbox.min()[Geom::X] - dx, viewbox.min()[Geom::Y] - dy, FALSE, is_scrolling);
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    sp_box3d_context_update_lines(event_context);
+    //sp_box3d_context_update_lines(event_context);
+    if (SP_IS_BOX3D_CONTEXT(event_context)) {
+		SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
+	}
 
     _widget->updateRulers();
     _widget->updateScrollbars(_d2w.descrim());

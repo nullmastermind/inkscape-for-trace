@@ -234,14 +234,14 @@ void SPPenContext::finish() {
 /**
  * Callback that sets key to value in pen context.
  */
-void SPPenContext::set(Inkscape::Preferences::Entry* val) {
+void SPPenContext::set(const Inkscape::Preferences::Entry& val) {
 	SPEventContext* ec = this;
 
     SPPenContext *pc = SP_PEN_CONTEXT(ec);
-    Glib::ustring name = val->getEntryName();
+    Glib::ustring name = val.getEntryName();
 
     if (name == "mode") {
-        if ( val->getString() == "drag" ) {
+        if ( val.getString() == "drag" ) {
             pc->mode = SP_PEN_CONTEXT_MODE_DRAG;
         } else {
             pc->mode = SP_PEN_CONTEXT_MODE_CLICK;

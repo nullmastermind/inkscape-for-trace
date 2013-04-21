@@ -96,7 +96,7 @@ public:
     /** uses absolute width independent of zoom */
     bool abs_width;
 
-	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual void set(const Inkscape::Preferences::Entry& val);
 };
 
 #endif // COMMON_CONTEXT_H_SEEN

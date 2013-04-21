@@ -151,15 +151,15 @@ void SPSpiralContext::setup() {
     this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
-void SPSpiralContext::set(Inkscape::Preferences::Entry* val) {
-    Glib::ustring name = val->getEntryName();
+void SPSpiralContext::set(const Inkscape::Preferences::Entry& val) {
+    Glib::ustring name = val.getEntryName();
 
     if (name == "expansion") {
-        this->exp = CLAMP(val->getDouble(), 0.0, 1000.0);
+        this->exp = CLAMP(val.getDouble(), 0.0, 1000.0);
     } else if (name == "revolution") {
-        this->revo = CLAMP(val->getDouble(3.0), 0.05, 40.0);
+        this->revo = CLAMP(val.getDouble(3.0), 0.05, 40.0);
     } else if (name == "t0") {
-        this->t0 = CLAMP(val->getDouble(), 0.0, 0.999);
+        this->t0 = CLAMP(val.getDouble(), 0.0, 0.999);
     }
 }
 
@@ -390,19 +390,17 @@ void SPSpiralContext::drag(Geom::Point const &p, guint state) {
     Geom::Point const p0 = desktop->dt2doc(this->center);
     Geom::Point const p1 = desktop->dt2doc(pt2g);
 
-    SPSpiral *spiral = SP_SPIRAL(this->spiral);
-
     Geom::Point const delta = p1 - p0;
     gdouble const rad = Geom::L2(delta);
 
-    gdouble arg = Geom::atan2(delta) - 2.0*M_PI*spiral->revo;
+    gdouble arg = Geom::atan2(delta) - 2.0*M_PI*this->spiral->revo;
 
     if (state & GDK_CONTROL_MASK) {
         arg = sp_round(arg, M_PI/snaps);
     }
 
     /* Fixme: these parameters should be got from dialog box */
-    spiral->setPosition(p0[Geom::X], p0[Geom::Y],
+    this->spiral->setPosition(p0[Geom::X], p0[Geom::Y],
                            /*expansion*/ this->exp,
                            /*revolution*/ this->revo,
                            rad, arg,
@@ -412,7 +410,7 @@ void SPSpiralContext::drag(Geom::Point const &p, guint state) {
     GString *rads = SP_PX_TO_METRIC_STRING(rad, desktop->namedview->getDefaultMetric());
     this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
-                               rads->str, sp_round((arg + 2.0*M_PI*spiral->revo)*180/M_PI, 0.0001));
+                               rads->str, sp_round((arg + 2.0*M_PI*this->spiral->revo)*180/M_PI, 0.0001));
     g_string_free(rads, FALSE);
 }
 

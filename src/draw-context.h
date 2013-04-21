@@ -82,7 +82,7 @@ public:
 
 	virtual void setup();
 	virtual void finish();
-	virtual void set(Inkscape::Preferences::Entry* val);
+	virtual void set(const Inkscape::Preferences::Entry& val);
 	virtual gint root_handler(GdkEvent* event);
 };
 

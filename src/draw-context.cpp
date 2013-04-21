@@ -189,7 +189,7 @@ void SPDrawContext::finish() {
     spdc_free_colors(dc);
 }
 
-void SPDrawContext::set(Inkscape::Preferences::Entry* value) {
+void SPDrawContext::set(const Inkscape::Preferences::Entry& value) {
 }
 
 gint SPDrawContext::root_handler(GdkEvent* event) {

@@ -222,16 +222,16 @@ void SPDynaDrawContext::setup() {
     }
 }
 
-void SPDynaDrawContext::set(Inkscape::Preferences::Entry* val) {
+void SPDynaDrawContext::set(const Inkscape::Preferences::Entry& val) {
 	SPEventContext* ec = this;
 
     SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT(ec);
-    Glib::ustring path = val->getEntryName();
+    Glib::ustring path = val.getEntryName();
 
     if (path == "tracebackground") {
-        ddc->trace_bg = val->getBool();
+        ddc->trace_bg = val.getBool();
     } else if (path == "keep_selected") {
-        ddc->keep_selected = val->getBool();
+        ddc->keep_selected = val.getBool();
     } else {
         //pass on up to parent class to handle common attributes.
 //        if ( SP_COMMON_CONTEXT_CLASS(sp_dyna_draw_context_parent_class)->set ) {
