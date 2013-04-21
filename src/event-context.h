@@ -110,7 +110,7 @@ public:
 
     /// Desktop eventcontext stack
     //SPEventContext *next;
-    unsigned key;
+    //unsigned key;
     SPDesktop *desktop;
     Inkscape::Preferences::Observer *pref_observer;
     gchar const *const *cursor_shape;
@@ -142,17 +142,25 @@ public:
     DelayedSnapEvent *_delayed_snap_event;
     bool _dse_callback_in_process;
 
-    char const * tool_url; ///< the (preferences) url for the tool (if a subclass corresponding to a tool is used)
+    //char const * tool_url; ///< the (preferences) url for the tool (if a subclass corresponding to a tool is used)
 
 	virtual void setup();
 	virtual void finish();
+
+	// Is called by our pref_observer if a preference has been changed.
 	virtual void set(Inkscape::Preferences::Entry* val);
+
 	virtual void activate();
 	virtual void deactivate();
+
 	virtual gint root_handler(GdkEvent* event);
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath() = 0;
+
+private:
+	SPEventContext(const SPEventContext&);
+	SPEventContext& operator=(const SPEventContext&);
 };
 
 #define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT(e)->desktop)

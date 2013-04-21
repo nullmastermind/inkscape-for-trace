@@ -95,7 +95,7 @@ SPEventContext::SPEventContext() {
 	this->yp = 0;
 	this->within_tolerance = false;
 	this->tolerance = 0;
-	this->key = 0;
+	//this->key = 0;
 	this->item_to_select = 0;
 
     this->desktop = NULL;
@@ -107,7 +107,7 @@ SPEventContext::SPEventContext() {
     this->shape_editor = NULL;
     this->_delayed_snap_event = NULL;
     this->_dse_callback_in_process = false;
-    this->tool_url = NULL;
+    //this->tool_url = NULL;
 }
 
 SPEventContext::~SPEventContext() {
@@ -171,12 +171,12 @@ void sp_event_context_update_cursor(SPEventContext *ec) {
         /* fixme: */
         if (ec->cursor_shape) {
             GdkDisplay *display = gdk_display_get_default();
-            if (ec->tool_url && gdk_display_supports_cursor_alpha(display) && gdk_display_supports_cursor_color(display)) {
+            if (gdk_display_supports_cursor_alpha(display) && gdk_display_supports_cursor_color(display)) {
                 bool fillHasColor=false, strokeHasColor=false;
-                guint32 fillColor = sp_desktop_get_color_tool(ec->desktop, ec->tool_url, true, &fillHasColor);
-                guint32 strokeColor = sp_desktop_get_color_tool(ec->desktop, ec->tool_url, false, &strokeHasColor);
-                double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(ec->desktop, ec->tool_url, true) : 0;
-                double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(ec->desktop, ec->tool_url, false) : 0;
+                guint32 fillColor = sp_desktop_get_color_tool(ec->desktop, ec->getPrefsPath(), true, &fillHasColor);
+                guint32 strokeColor = sp_desktop_get_color_tool(ec->desktop, ec->getPrefsPath(), false, &strokeHasColor);
+                double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(ec->desktop, ec->getPrefsPath(), true) : 0;
+                double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(ec->desktop, ec->getPrefsPath(), false) : 0;
 
                 GdkPixbuf *pixbuf = sp_cursor_pixbuf_from_xpm(
                     ec->cursor_shape,
@@ -222,12 +222,14 @@ void sp_event_context_update_cursor(SPEventContext *ec) {
  * Callback that gets called on initialization of SPEventContext object.
  * Redraws mouse cursor, at the moment.
  */
-//static void sp_event_context_private_setup(SPEventContext *ec) {
-//    //sp_event_context_update_cursor(ec);
-//	ec->ceventcontext->setup();
-//}
 
+/**
+ * When you override it, call this method first.
+ */
 void SPEventContext::setup() {
+    this->pref_observer = new ToolPrefObserver(this->getPrefsPath(), this);
+    Inkscape::Preferences::get()->addObserver(*(this->pref_observer));
+
 	sp_event_context_update_cursor(this);
 }
 

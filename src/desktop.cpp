@@ -695,35 +695,17 @@ SPDesktop::change_document (SPDocument *theDocument)
 
 void SPDesktop::set_event_context2(const std::string& toolName) {
 	if (event_context) {
-		//sp_event_context_deactivate(event_context);
 		event_context->deactivate();
-		//sp_event_context_finish(event_context);
 		event_context->finish();
-		//g_object_unref(G_OBJECT(event_context));
 		delete event_context;
 	}
 
 	event_context = ToolFactory::instance().createObject(toolName);
-	SPEventContext* ec = event_context;
-	SPDesktop* desktop = this;
 
-	ec->desktop = desktop;
-    ec->_message_context
-            = new Inkscape::MessageContext(desktop->messageStack());
-    //ec->key = key;
-    ec->key = 0;
-    ec->pref_observer = NULL;
+	event_context->desktop = this;
+    event_context->_message_context = new Inkscape::MessageContext(this->messageStack());
 
-    const std::string& pref_path = toolName;
-    //if (pref_path) {
-        ec->pref_observer = new ToolPrefObserver(pref_path, ec);
-
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->addObserver(*(ec->pref_observer));
-    //}
-
-    ec->setup();
-
+    event_context->setup();
 
 	sp_event_context_activate(event_context);
 	_event_context_changed_signal.emit(this, event_context);

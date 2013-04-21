@@ -83,7 +83,7 @@ SPStarContext::SPStarContext() : SPEventContext() {
     event_context->tolerance = 0;
     event_context->within_tolerance = false;
     event_context->item_to_select = NULL;
-    event_context->tool_url = "/tools/shapes/star";
+    //event_context->tool_url = "/tools/shapes/star";
 
     star_context->star = NULL;
 

@@ -76,7 +76,7 @@ SPArcContext::SPArcContext() : SPEventContext() {
     this->tolerance = 0;
     this->within_tolerance = false;
     this->item_to_select = NULL;
-    this->tool_url = "/tools/shapes/arc";
+    //this->tool_url = "/tools/shapes/arc";
 
     this->arc = NULL;
 }
