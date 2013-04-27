@@ -1,5 +1,8 @@
 
 symbolsdir = $(datadir)/inkscape/symbols
 
-EXTRA_DIST = $(wildcard *.svg)
+# Adding srcdir allows out-of-src builds to work
+symbols_DATA = $(wildcard $(srcdir)/*.svg)
+
+EXTRA_DIST = $(symbols_DATA)
 

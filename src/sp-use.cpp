@@ -30,6 +30,7 @@
 #include "uri.h"
 #include "print.h"
 #include "xml/repr.h"
+#include "svg/svg.h"
 #include "preferences.h"
 #include "style.h"
 #include "sp-symbol.h"
@@ -179,8 +180,8 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
 
     sp_repr_set_svg_double(repr, "x", this->x.computed);
     sp_repr_set_svg_double(repr, "y", this->y.computed);
-    sp_repr_set_svg_double(repr, "width", this->width.computed);
-    sp_repr_set_svg_double(repr, "height", this->height.computed);
+    repr->setAttribute("width", sp_svg_length_write_with_units(this->width).c_str());
+    repr->setAttribute("height", sp_svg_length_write_with_units(this->height).c_str());
 
     if (this->ref->getURI()) {
         gchar *uri_string = this->ref->getURI()->toString();
@@ -230,10 +231,9 @@ gchar* SPUse::description() {
 
     if (this->child) {
         if( SP_IS_SYMBOL( this->child ) ) {
-            //char *symbol_desc = SP_ITEM(this->child)->description();
-            //g_free(symbol_desc);
-            return g_strdup(_("<b>Clone of Symbol</b>"));
-            //return g_strdup_printf(_("<b>Clone of Symbol</b>: %s"), symbol_desc );
+            char *symbol_desc = SP_ITEM(this->child)->title();
+            return g_strdup_printf(_("<b>'%s' Symbol</b>"), symbol_desc );
+            g_free(symbol_desc);
         }
 
         static unsigned recursion_depth = 0;
