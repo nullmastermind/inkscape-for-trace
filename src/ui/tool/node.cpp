@@ -141,17 +141,7 @@ void Handle::move(Geom::Point const &new_pos)
     //BSpline
     Handle *h = NULL;
     Handle *h2 = NULL;
-    if(_pm().isBSpline){
-        typedef ControlPointSelection::Set Set;
-        Set &nodes = _parent->_selection.allPoints();
-        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            Node *n = static_cast<Node*>(*i);
-            _parent->_selection.erase(n);
-        }
-            _parent->_selection.insert(_parent);
-    }
     //BSpline End
-
     if (Geom::are_near(new_pos, _parent->position())) {
         // The handle becomes degenerate.
         // Adjust node type as necessary.
@@ -322,7 +312,7 @@ void Handle::handle_2button_press(){
     if(_pm().isBSpline){
         Handle *h = NULL;
         Handle *h2 = NULL;
-        _parent->bsplineWeight = 0;
+        _parent->bsplineWeight = 0.0000;
         h = this;
         setPosition(_pm().BSplineHandleReposition(h,0.3334));
         _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
@@ -343,6 +333,7 @@ bool Handle::grabbed(GdkEventMotion *)
 
 void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 {
+
     Geom::Point parent_pos = _parent->position();
     Geom::Point origin = _last_drag_origin();
     SnapManager &sm = _desktop->namedview->snap_manager;
@@ -383,7 +374,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         //BSpline
         if(_pm().isBSpline){
             Handle *h = NULL;
-            _parent->bsplineWeight = 0;
+            _parent->bsplineWeight = 0.0000;
             h = this;
             setPosition(new_pos);
             int steps = _pm().getSteps();
@@ -423,7 +414,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         //BSpline
         if(_pm().isBSpline){
             Handle *h = NULL;
-            _parent->bsplineWeight = 0;
+            _parent->bsplineWeight = 0.0000;
             h = this;
             setPosition(new_pos);
             _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
@@ -460,7 +451,7 @@ void Handle::ungrabbed(GdkEventButton *event)
         Geom::Point dist = _desktop->d2w(_parent->position()) - _desktop->d2w(position());
         if (dist.length() <= drag_tolerance) {
             move(_parent->position());
-            _parent->bsplineWeight = 0;
+            _parent->bsplineWeight = 0.0000;
         }
     }
 
@@ -472,11 +463,33 @@ void Handle::ungrabbed(GdkEventButton *event)
     _drag_out = false;
 
     _pm()._handleUngrabbed();
+    //BSpline
+    if(_pm().isBSpline){
+        typedef ControlPointSelection::Set Set;
+        Set &nodes = _parent->_selection.allPoints();
+        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+            Node *n = static_cast<Node*>(*i);
+                _parent->_selection.erase(n);
+        }
+        _parent->_selection.insert(_parent);
+    }
+    //BSpline End
 }
 
 bool Handle::clicked(GdkEventButton *event)
 {
     _pm()._handleClicked(this, event);
+    //BSpline
+    if(_pm().isBSpline){
+        typedef ControlPointSelection::Set Set;
+        Set &nodes = _parent->_selection.allPoints();
+        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+            Node *n = static_cast<Node*>(*i);
+                _parent->_selection.erase(n);
+        }
+        _parent->_selection.insert(_parent);
+    }
+    //BSpline End
     return true;
 }
 
@@ -627,8 +640,8 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
     //BSpline 
-    double prevPos = 0;
-    double nextPos = 0;
+    double prevPos = 0.0000;
+    double nextPos = 0.0000;
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
@@ -636,7 +649,7 @@ void Node::move(Geom::Point const &new_pos)
         if(prevNode)
             prevPos = _pm().BSplineHandlePosition(prevNode->front());
         n->bsplineWeight = _pm().BSplineHandlePosition(n->front());
-        if(n->bsplineWeight == 0)
+        if(n->bsplineWeight == 0.0000)
             n->bsplineWeight = _pm().BSplineHandlePosition(n->back());
         if(nextNode)
             nextPos = _pm().BSplineHandlePosition(nextNode->back());
@@ -770,7 +783,7 @@ void Node::updateHandles()
     _front._handleControlStyling();
     _back._handleControlStyling();
 }
-    
+
 
 void Node::setType(NodeType type, bool update_handles)
 {
@@ -779,7 +792,14 @@ void Node::setType(NodeType type, bool update_handles)
         updateState(); // The size of the control might have changed
         return;
     }
-
+    //BSpline
+    bool isBSpline = false;
+    try {
+        isBSpline = nodeList().subpathList().pm().isBSpline;
+    }
+    catch( char * str ) {
+    }
+    //BSpline End
     // if update_handles is true, adjust handle positions to match the node type
     // handle degenerate handles appropriately
     if (update_handles) {
@@ -863,28 +883,19 @@ void Node::setType(NodeType type, bool update_handles)
         default: break;
         }
         //BSpline
-        bool isBSpline = false;
-        try {
-          isBSpline = nodeList().subpathList().pm().isBSpline;
-        }
-        catch( char * str ) {
-        }
         if(isBSpline){
             Handle* front = &_front;
             Handle* back = &_back;
             this->bsplineWeight = _pm().BSplineHandlePosition(front);
-            if(this->bsplineWeight !=0) this->bsplineWeight = 0.3334;
+            if(this->bsplineWeight !=0.0000) this->bsplineWeight = 0.3334;
             _front.setPosition(_pm().BSplineHandleReposition(front,this->bsplineWeight));
             _back.setPosition(_pm().BSplineHandleReposition(back,this->bsplineWeight));
         }
         //BSpline End
     }
-
     _type = type;
-
     _setControlType(nodeTypeToCtrlType(_type));
     updateState();
-
 }
 
 void Node::pickBestType()

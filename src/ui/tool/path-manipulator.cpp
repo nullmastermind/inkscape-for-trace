@@ -1239,9 +1239,11 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
+        n->bsplineWeight = pos;
         ret = SBasisInsideNodes.valueAt(pos);
         ret = Geom::Point(ret[X] + 0.0001,ret[Y] + 0.0001);
     }else{
+        n->bsplineWeight = 0.0000;
         ret = n->position();
     }
     return ret;
@@ -1257,8 +1259,8 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
             prevPos = BSplineHandlePosition(prevNode->front());
         if(nextNode)
             nextPos = BSplineHandlePosition(nextNode->back());
-        n->front()->setPosition(BSplineHandleReposition(n->front(),n->bsplineWeight));
-        n->back()->setPosition(BSplineHandleReposition(n->back(),n->bsplineWeight));
+        n->front()->setPosition(BSplineHandleReposition(n->front()));
+        n->back()->setPosition(BSplineHandleReposition(n->back()));
         if(prevNode)
             prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevPos));
         if(nextNode)
