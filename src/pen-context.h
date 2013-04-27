@@ -11,18 +11,6 @@
 #define SP_PEN_CONTEXT(obj) ((SPPenContext*)obj)
 #define SP_IS_PEN_CONTEXT(obj) (dynamic_cast<const SPPenContext*>((const SPEventContext*)obj))
 
-enum {
-    SP_PEN_CONTEXT_POINT,
-    SP_PEN_CONTEXT_CONTROL,
-    SP_PEN_CONTEXT_CLOSE,
-    SP_PEN_CONTEXT_STOP
-};
-
-enum {
-    SP_PEN_CONTEXT_MODE_CLICK,
-    SP_PEN_CONTEXT_MODE_DRAG
-};
-
 struct SPCtrlLine;
 
 /**
@@ -33,14 +21,26 @@ public:
 	SPPenContext();
 	virtual ~SPPenContext();
 
+	enum Mode {
+	    MODE_CLICK,
+	    MODE_DRAG
+	};
+
+	enum State {
+	    POINT,
+	    CONTROL,
+	    CLOSE,
+	    STOP
+	};
+
     Geom::Point p[5];
 
     /** \invar npoints in {0, 2, 5}. */
     // npoints somehow determines the type of the node (what does it mean, exactly? the number of Bezier handles?)
     gint npoints;
 
-    unsigned int mode : 1;
-    unsigned int state : 2;
+    Mode mode;
+    State state;
 
     bool polylines_only;
     bool polylines_paraxial;

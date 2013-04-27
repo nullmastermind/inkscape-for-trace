@@ -74,7 +74,6 @@ SPRectContext::SPRectContext() : SPEventContext() {
     this->tolerance = 0;
     this->within_tolerance = false;
     this->item_to_select = NULL;
-    //this->tool_url = "/tools/shapes/rect";
 
     this->rect = NULL;
 
@@ -83,9 +82,7 @@ SPRectContext::SPRectContext() : SPEventContext() {
 }
 
 void SPRectContext::finish() {
-    SPDesktop *desktop = this->desktop;
-
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), GDK_CURRENT_TIME);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(this->desktop->acetate), GDK_CURRENT_TIME);
     
     this->finishItem();
     this->sel_changed_connection.disconnect();
@@ -163,8 +160,6 @@ void SPRectContext::set(const Inkscape::Preferences::Entry& val) {
 }
 
 gint SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
-    SPDesktop *desktop = this->desktop;
-
     gint ret = FALSE;
 
     switch (event->type) {
@@ -179,11 +174,9 @@ gint SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
         break;
     }
 
-//    if (((SPEventContextClass *) sp_rect_context_parent_class)->item_handler) {
-//        ret = ((SPEventContextClass *) sp_rect_context_parent_class)->item_handler(event_context, item, event);
-//    }
-    // CPPIFY: ret is always overwritten...
-    ret = SPEventContext::item_handler(item, event);
+    if (!ret) {
+    	ret = SPEventContext::item_handler(item, event);
+    }
 
     return ret;
 }

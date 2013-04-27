@@ -171,7 +171,7 @@ void SPLPEToolContext::set(const Inkscape::Preferences::Entry& val) {
 
     if (val.getEntryName() == "mode") {
         Inkscape::Preferences::get()->setString("/tools/geometric/mode", "drag");
-        SP_PEN_CONTEXT(ec)->mode = SP_PEN_CONTEXT_MODE_DRAG;
+        SP_PEN_CONTEXT(ec)->mode = SPPenContext::MODE_DRAG;
     }
 
     /*

@@ -113,8 +113,6 @@ void SPRect::set(unsigned key, gchar const *value) {
 
 void SPRect::update(SPCtx* ctx, unsigned int flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        SPStyle *style = this->style;
-
         SPItemCtx const *ictx = (SPItemCtx const *) ctx;
 
         double const w = ictx->viewport.width();

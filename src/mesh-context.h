@@ -48,6 +48,9 @@ public:
 	virtual gint root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	void selection_changed(Inkscape::Selection* sel);
 };
 
 void sp_mesh_context_select_next(SPEventContext *event_context);

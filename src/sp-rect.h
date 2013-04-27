@@ -51,17 +51,17 @@ public:
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 
-	void set(unsigned key, gchar const *value);
-	void update(SPCtx* ctx, unsigned int flags);
+	virtual void set(unsigned key, gchar const *value);
+	virtual void update(SPCtx* ctx, unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual gchar* description();
 
-	void set_shape();
+	virtual void set_shape();
 	virtual Geom::Affine set_transform(Geom::Affine const& xform);
 
-	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
-	void convert_to_guides();
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+	virtual void convert_to_guides();
 
 	SVGLength x;
 	SVGLength y;

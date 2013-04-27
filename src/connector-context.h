@@ -103,6 +103,9 @@ public:
 	virtual gint item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	void selection_changed(Inkscape::Selection *selection);
 };
 
 void cc_selection_set_avoid(bool const set_ignore);

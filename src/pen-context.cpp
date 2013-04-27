@@ -103,8 +103,8 @@ SPPenContext::SPPenContext() : SPDrawContext() {
     event_context->hot_y = 4;
 
     pc->npoints = 0;
-    pc->mode = SP_PEN_CONTEXT_MODE_CLICK;
-    pc->state = SP_PEN_CONTEXT_POINT;
+    pc->mode = MODE_CLICK;
+    pc->state = POINT;
 
     pc->c0 = NULL;
     pc->c1 = NULL;
@@ -199,7 +199,7 @@ void SPPenContext::setup() {
 static void pen_cancel (SPPenContext *const pc)
 {
     pc->num_clicks = 0;
-    pc->state = SP_PEN_CONTEXT_STOP;
+    pc->state = SPPenContext::STOP;
     spdc_reset_colors(pc);
     sp_canvas_item_hide(pc->c0);
     sp_canvas_item_hide(pc->c1);
@@ -242,9 +242,9 @@ void SPPenContext::set(const Inkscape::Preferences::Entry& val) {
 
     if (name == "mode") {
         if ( val.getString() == "drag" ) {
-            pc->mode = SP_PEN_CONTEXT_MODE_DRAG;
+            pc->mode = MODE_DRAG;
         } else {
-            pc->mode = SP_PEN_CONTEXT_MODE_CLICK;
+            pc->mode = MODE_CLICK;
         }
     }
 }
@@ -406,26 +406,26 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
         SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
 
         switch (pc->mode) {
-            case SP_PEN_CONTEXT_MODE_CLICK:
+            case SPPenContext::MODE_CLICK:
                 // In click mode we add point on release
                 switch (pc->state) {
-                    case SP_PEN_CONTEXT_POINT:
-                    case SP_PEN_CONTEXT_CONTROL:
-                    case SP_PEN_CONTEXT_CLOSE:
+                    case SPPenContext::POINT:
+                    case SPPenContext::CONTROL:
+                    case SPPenContext::CLOSE:
                         break;
-                    case SP_PEN_CONTEXT_STOP:
+                    case SPPenContext::STOP:
                         // This is allowed, if we just canceled curve
-                        pc->state = SP_PEN_CONTEXT_POINT;
+                        pc->state = SPPenContext::POINT;
                         break;
                     default:
                         break;
                 }
                 break;
-            case SP_PEN_CONTEXT_MODE_DRAG:
+            case SPPenContext::MODE_DRAG:
                 switch (pc->state) {
-                    case SP_PEN_CONTEXT_STOP:
+                    case SPPenContext::STOP:
                         // This is allowed, if we just canceled curve
-                    case SP_PEN_CONTEXT_POINT:
+                    case SPPenContext::POINT:
                         if (pc->npoints == 0) {
 
                             Geom::Point p;
@@ -481,7 +481,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
                                 p = anchor->dp;
                                 // we hit an anchor, will finish the curve (either with or without closing)
                                 // in release handler
-                                pc->state = SP_PEN_CONTEXT_CLOSE;
+                                pc->state = SPPenContext::CLOSE;
 
                                 if (pc->green_anchor && pc->green_anchor->active) {
                                     // we clicked on the current curve start, so close it even if
@@ -498,13 +498,13 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
                             }
                         }
 
-                        pc->state = pc->polylines_only ? SP_PEN_CONTEXT_POINT : SP_PEN_CONTEXT_CONTROL;
+                        pc->state = pc->polylines_only ? SPPenContext::POINT : SPPenContext::CONTROL;
                         ret = TRUE;
                         break;
-                    case SP_PEN_CONTEXT_CONTROL:
+                    case SPPenContext::CONTROL:
                         g_warning("Button down in CONTROL state");
                         break;
-                    case SP_PEN_CONTEXT_CLOSE:
+                    case SPPenContext::CLOSE:
                         g_warning("Button down in CLOSE state");
                         break;
                     default:
@@ -580,9 +580,9 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
     SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
 
     switch (pc->mode) {
-        case SP_PEN_CONTEXT_MODE_CLICK:
+        case SPPenContext::MODE_CLICK:
             switch (pc->state) {
-                case SP_PEN_CONTEXT_POINT:
+                case SPPenContext::POINT:
                     if ( pc->npoints != 0 ) {
                         // Only set point, if we are already appending
                         spdc_endpoint_snap(pc, p, mevent.state);
@@ -595,23 +595,23 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
                         m.unSetup();
                     }
                     break;
-                case SP_PEN_CONTEXT_CONTROL:
-                case SP_PEN_CONTEXT_CLOSE:
+                case SPPenContext::CONTROL:
+                case SPPenContext::CLOSE:
                     // Placing controls is last operation in CLOSE state
                     spdc_endpoint_snap(pc, p, mevent.state);
                     spdc_pen_set_ctrl(pc, p, mevent.state);
                     ret = TRUE;
                     break;
-                case SP_PEN_CONTEXT_STOP:
+                case SPPenContext::STOP:
                     // This is perfectly valid
                     break;
                 default:
                     break;
             }
             break;
-        case SP_PEN_CONTEXT_MODE_DRAG:
+        case SPPenContext::MODE_DRAG:
             switch (pc->state) {
-                case SP_PEN_CONTEXT_POINT:
+                case SPPenContext::POINT:
                     if ( pc->npoints > 0 ) {
                         // Only set point, if we are already appending
 
@@ -647,8 +647,8 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
                         }
                     }
                     break;
-                case SP_PEN_CONTEXT_CONTROL:
-                case SP_PEN_CONTEXT_CLOSE:
+                case SPPenContext::CONTROL:
+                case SPPenContext::CLOSE:
                     // Placing controls is last operation in CLOSE state
 
                     // snap the handle
@@ -662,7 +662,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
                     gobble_motion_events(GDK_BUTTON1_MASK);
                     ret = TRUE;
                     break;
-                case SP_PEN_CONTEXT_STOP:
+                case SPPenContext::STOP:
                     // This is perfectly valid
                     break;
                 default:
@@ -706,9 +706,9 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
         SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
 
         switch (pc->mode) {
-            case SP_PEN_CONTEXT_MODE_CLICK:
+            case SPPenContext::MODE_CLICK:
                 switch (pc->state) {
-                    case SP_PEN_CONTEXT_POINT:
+                    case SPPenContext::POINT:
                         if ( pc->npoints == 0 ) {
                             // Start new thread only with button release
                             if (anchor) {
@@ -723,43 +723,43 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                                 p = anchor->dp;
                             }
                         }
-                        pc->state = SP_PEN_CONTEXT_CONTROL;
+                        pc->state = SPPenContext::CONTROL;
                         ret = TRUE;
                         break;
-                    case SP_PEN_CONTEXT_CONTROL:
+                    case SPPenContext::CONTROL:
                         // End current segment
                         spdc_endpoint_snap(pc, p, revent.state);
                         spdc_pen_finish_segment(pc, p, revent.state);
-                        pc->state = SP_PEN_CONTEXT_POINT;
+                        pc->state = SPPenContext::POINT;
                         ret = TRUE;
                         break;
-                    case SP_PEN_CONTEXT_CLOSE:
+                    case SPPenContext::CLOSE:
                         // End current segment
                         if (!anchor) {   // Snap node only if not hitting anchor
                             spdc_endpoint_snap(pc, p, revent.state);
                         }
                         spdc_pen_finish_segment(pc, p, revent.state);
                         spdc_pen_finish(pc, TRUE);
-                        pc->state = SP_PEN_CONTEXT_POINT;
+                        pc->state = SPPenContext::POINT;
                         ret = TRUE;
                         break;
-                    case SP_PEN_CONTEXT_STOP:
+                    case SPPenContext::STOP:
                         // This is allowed, if we just canceled curve
-                        pc->state = SP_PEN_CONTEXT_POINT;
+                        pc->state = SPPenContext::POINT;
                         ret = TRUE;
                         break;
                     default:
                         break;
                 }
                 break;
-            case SP_PEN_CONTEXT_MODE_DRAG:
+            case SPPenContext::MODE_DRAG:
                 switch (pc->state) {
-                    case SP_PEN_CONTEXT_POINT:
-                    case SP_PEN_CONTEXT_CONTROL:
+                    case SPPenContext::POINT:
+                    case SPPenContext::CONTROL:
                         spdc_endpoint_snap(pc, p, revent.state);
                         spdc_pen_finish_segment(pc, p, revent.state);
                         break;
-                    case SP_PEN_CONTEXT_CLOSE:
+                    case SPPenContext::CLOSE:
                         spdc_endpoint_snap(pc, p, revent.state);
                         spdc_pen_finish_segment(pc, p, revent.state);
                         if (pc->green_closed) {
@@ -770,13 +770,13 @@ static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton con
                             spdc_pen_finish(pc, FALSE);
                         }
                         break;
-                    case SP_PEN_CONTEXT_STOP:
+                    case SPPenContext::STOP:
                         // This is allowed, if we just cancelled curve
                         break;
                     default:
                         break;
                 }
-                pc->state = SP_PEN_CONTEXT_POINT;
+                pc->state = SPPenContext::POINT;
                 ret = TRUE;
                 break;
             default:
@@ -1118,7 +1118,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
                 sp_canvas_item_hide(pc->c1);
                 sp_canvas_item_hide(pc->cl0);
                 sp_canvas_item_hide(pc->cl1);
-                pc->state = SP_PEN_CONTEXT_POINT;
+                pc->state = SPPenContext::POINT;
                 spdc_pen_set_subsequent_point(pc, pt, true);
                 pen_last_paraxial_dir = !pen_last_paraxial_dir;
                 ret = TRUE;
@@ -1252,8 +1252,8 @@ static void spdc_pen_set_ctrl(SPPenContext *const pc, Geom::Point const p, guint
         sp_canvas_item_show(pc->c0);
         sp_canvas_item_show(pc->cl0);
         bool is_symm = false;
-        if ( ( ( pc->mode == SP_PEN_CONTEXT_MODE_CLICK ) && ( state & GDK_CONTROL_MASK ) ) ||
-             ( ( pc->mode == SP_PEN_CONTEXT_MODE_DRAG ) &&  !( state & GDK_SHIFT_MASK  ) ) ) {
+        if ( ( ( pc->mode == SPPenContext::MODE_CLICK ) && ( state & GDK_CONTROL_MASK ) ) ||
+             ( ( pc->mode == SPPenContext::MODE_DRAG ) &&  !( state & GDK_SHIFT_MASK  ) ) ) {
             Geom::Point delta = p - pc->p[3];
             pc->p[2] = pc->p[3] - delta;
             is_symm = true;
@@ -1323,7 +1323,7 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
     pc->ea = NULL;
 
     pc->npoints = 0;
-    pc->state = SP_PEN_CONTEXT_POINT;
+    pc->state = SPPenContext::POINT;
 
     sp_canvas_item_hide(pc->c0);
     sp_canvas_item_hide(pc->c1);
