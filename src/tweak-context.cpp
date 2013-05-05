@@ -32,6 +32,15 @@
 #include "desktop-style.h"
 #include "message-context.h"
 #include "pixmaps/cursor-tweak-move.xpm"
+#include "pixmaps/cursor-tweak-move-in.xpm"
+#include "pixmaps/cursor-tweak-move-out.xpm"
+#include "pixmaps/cursor-tweak-move-jitter.xpm"
+#include "pixmaps/cursor-tweak-scale-up.xpm"
+#include "pixmaps/cursor-tweak-scale-down.xpm"
+#include "pixmaps/cursor-tweak-rotate-clockwise.xpm"
+#include "pixmaps/cursor-tweak-rotate-counterclockwise.xpm"
+#include "pixmaps/cursor-tweak-more.xpm"
+#include "pixmaps/cursor-tweak-less.xpm"
 #include "pixmaps/cursor-thin.xpm"
 #include "pixmaps/cursor-thicken.xpm"
 #include "pixmaps/cursor-attract.xpm"
@@ -189,23 +198,39 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            break;
        case TWEAK_MODE_MOVE_IN_OUT:
            tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move in</b>; with Shift to <b>move out</b>."), sel_message);
-           event_context->cursor_shape = cursor_tweak_move_xpm;
+           if (with_shift) {
+               event_context->cursor_shape = cursor_tweak_move_out_xpm;
+           } else {
+               event_context->cursor_shape = cursor_tweak_move_in_xpm;
+           }
            break;
        case TWEAK_MODE_MOVE_JITTER:
            tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move randomly</b>."), sel_message);
-           event_context->cursor_shape = cursor_tweak_move_xpm;
+           event_context->cursor_shape = cursor_tweak_move_jitter_xpm;
            break;
        case TWEAK_MODE_SCALE:
            tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>scale down</b>; with Shift to <b>scale up</b>."), sel_message);
-           event_context->cursor_shape = cursor_tweak_move_xpm;
+           if (with_shift) {
+               event_context->cursor_shape = cursor_tweak_scale_up_xpm;
+           } else {
+               event_context->cursor_shape = cursor_tweak_scale_down_xpm;
+           }
            break;
        case TWEAK_MODE_ROTATE:
            tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>rotate clockwise</b>; with Shift, <b>counterclockwise</b>."), sel_message);
-           event_context->cursor_shape = cursor_tweak_move_xpm;
+           if (with_shift) {
+               event_context->cursor_shape = cursor_tweak_rotate_counterclockwise_xpm;
+           } else {
+               event_context->cursor_shape = cursor_tweak_rotate_clockwise_xpm;
+           }
            break;
        case TWEAK_MODE_MORELESS:
            tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>duplicate</b>; with Shift, <b>delete</b>."), sel_message);
-           event_context->cursor_shape = cursor_tweak_move_xpm;
+           if (with_shift) {
+               event_context->cursor_shape = cursor_tweak_less_xpm;
+           } else {
+               event_context->cursor_shape = cursor_tweak_more_xpm;
+           }
            break;
        case TWEAK_MODE_PUSH:
            tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>push paths</b>."), sel_message);
@@ -1233,7 +1258,7 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                 if (!tc->has_dilated) {
                     // if we did not rub, do a light tap
                     tc->pressure = 0.03;
-                    sp_tweak_dilate (tc, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT);
+                    sp_tweak_dilate (tc, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
                 }
                 tc->is_dilating = false;
                 tc->has_dilated = false;
@@ -1300,24 +1325,24 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                 case GDK_KEY_m:
                 case GDK_KEY_M:
                 case GDK_KEY_0:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_MOVE, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_MOVE, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_i:
                 case GDK_KEY_I:
                 case GDK_KEY_1:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_MOVE_IN_OUT, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_MOVE_IN_OUT, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_z:
                 case GDK_KEY_Z:
                 case GDK_KEY_2:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_MOVE_JITTER, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_MOVE_JITTER, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
@@ -1326,84 +1351,84 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                 case GDK_KEY_greater:
                 case GDK_KEY_period:
                 case GDK_KEY_3:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_SCALE, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_SCALE, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_bracketright:
                 case GDK_KEY_bracketleft:
                 case GDK_KEY_4:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_ROTATE, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_ROTATE, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_d:
                 case GDK_KEY_D:
                 case GDK_KEY_5:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_MORELESS, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_MORELESS, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_p:
                 case GDK_KEY_P:
                 case GDK_KEY_6:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_PUSH, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_PUSH, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_s:
                 case GDK_KEY_S:
                 case GDK_KEY_7:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_SHRINK_GROW, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_SHRINK_GROW, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_a:
                 case GDK_KEY_A:
                 case GDK_KEY_8:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_ATTRACT_REPEL, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_ATTRACT_REPEL, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_r:
                 case GDK_KEY_R:
                 case GDK_KEY_9:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_ROUGHEN, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_ROUGHEN, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_c:
                 case GDK_KEY_C:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_COLORPAINT, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_COLORPAINT, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_j:
                 case GDK_KEY_J:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_COLORJITTER, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_COLORJITTER, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_b:
                 case GDK_KEY_B:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_tweak_switch_mode(tc, TWEAK_MODE_BLUR, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_tweak_switch_mode(tc, TWEAK_MODE_BLUR, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
 
                 case GDK_KEY_Up:
                 case GDK_KEY_KP_Up:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->force += 0.05;
                         if (tc->force > 1.0) {
                             tc->force = 1.0;
@@ -1414,7 +1439,7 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                     break;
                 case GDK_KEY_Down:
                 case GDK_KEY_KP_Down:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->force -= 0.05;
                         if (tc->force < 0.0) {
                             tc->force = 0.0;
@@ -1425,7 +1450,7 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                     break;
                 case GDK_KEY_Right:
                 case GDK_KEY_KP_Right:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->width += 0.01;
                         if (tc->width > 1.0) {
                             tc->width = 1.0;
@@ -1437,7 +1462,7 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                     break;
                 case GDK_KEY_Left:
                 case GDK_KEY_KP_Left:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->width -= 0.01;
                         if (tc->width < 0.01) {
                             tc->width = 0.01;
@@ -1463,7 +1488,7 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                     break;
                 case GDK_KEY_x:
                 case GDK_KEY_X:
-                    if (MOD__ALT_ONLY) {
+                    if (MOD__ALT_ONLY(event)) {
                         desktop->setToolboxFocusTo ("altx-tweak");
                         ret = TRUE;
                     }
@@ -1476,12 +1501,12 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
 
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:
-                    sp_tweak_switch_mode_temporarily(tc, TWEAK_MODE_SHRINK_GROW, MOD__SHIFT);
+                    sp_tweak_switch_mode_temporarily(tc, TWEAK_MODE_SHRINK_GROW, MOD__SHIFT(event));
                     break;
                 case GDK_KEY_Delete:
                 case GDK_KEY_KP_Delete:
                 case GDK_KEY_BackSpace:
-                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY(event));
                     break;
 
                 default:
@@ -1498,11 +1523,11 @@ sp_tweak_context_root_handler(SPEventContext *event_context,
                     break;
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:
-                    sp_tweak_switch_mode (tc, prefs->getInt("/tools/tweak/mode"), MOD__SHIFT);
+                    sp_tweak_switch_mode (tc, prefs->getInt("/tools/tweak/mode"), MOD__SHIFT(event));
                     tc->_message_context->clear();
                     break;
                 default:
-                    sp_tweak_switch_mode (tc, prefs->getInt("/tools/tweak/mode"), MOD__SHIFT);
+                    sp_tweak_switch_mode (tc, prefs->getInt("/tools/tweak/mode"), MOD__SHIFT(event));
                     break;
             }
         }
