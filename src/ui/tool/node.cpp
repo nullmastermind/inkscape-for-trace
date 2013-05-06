@@ -216,8 +216,15 @@ void Handle::move(Geom::Point const &new_pos)
         h = this;
         setPosition(_pm().BSplineHandleReposition(h));
         _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
-        h2 = this->other();
-        this->other()->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+        typedef ControlPointSelection::Set Set;
+        Set &nodes = _parent->_selection.allPoints();
+        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+            Node *n = static_cast<Node*>(*i);
+            h = n->front();
+            h2 = n->back();
+            h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+            h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+        }
     }
     //BSpline End
 }
@@ -463,33 +470,11 @@ void Handle::ungrabbed(GdkEventButton *event)
     _drag_out = false;
 
     _pm()._handleUngrabbed();
-    //BSpline
-    if(_pm().isBSpline){
-        typedef ControlPointSelection::Set Set;
-        Set &nodes = _parent->_selection.allPoints();
-        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            Node *n = static_cast<Node*>(*i);
-                _parent->_selection.erase(n);
-        }
-        _parent->_selection.insert(_parent);
-    }
-    //BSpline End
 }
 
 bool Handle::clicked(GdkEventButton *event)
 {
     _pm()._handleClicked(this, event);
-    //BSpline
-    if(_pm().isBSpline){
-        typedef ControlPointSelection::Set Set;
-        Set &nodes = _parent->_selection.allPoints();
-        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            Node *n = static_cast<Node*>(*i);
-                _parent->_selection.erase(n);
-        }
-        _parent->_selection.insert(_parent);
-    }
-    //BSpline End
     return true;
 }
 
