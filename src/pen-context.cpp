@@ -1172,13 +1172,13 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 
         case GDK_KEY_Left: // move last point left
         case GDK_KEY_KP_Left:
-            if (!MOD__CTRL) { // not ctrl
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, -10, 0); // shift
+            if (!MOD__CTRL(event)) { // not ctrl
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) pen_lastpoint_move_screen(pc, -10, 0); // shift
                     else pen_lastpoint_move_screen(pc, -1, 0); // no shift
                 }
                 else { // no alt
-                    if (MOD__SHIFT) pen_lastpoint_move(pc, -10*nudge, 0); // shift
+                    if (MOD__SHIFT(event)) pen_lastpoint_move(pc, -10*nudge, 0); // shift
                     else pen_lastpoint_move(pc, -nudge, 0); // no shift
                 }
                 ret = TRUE;
@@ -1186,13 +1186,13 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
             break;
         case GDK_KEY_Up: // move last point up
         case GDK_KEY_KP_Up:
-            if (!MOD__CTRL) { // not ctrl
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, 0, 10); // shift
+            if (!MOD__CTRL(event)) { // not ctrl
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) pen_lastpoint_move_screen(pc, 0, 10); // shift
                     else pen_lastpoint_move_screen(pc, 0, 1); // no shift
                 }
                 else { // no alt
-                    if (MOD__SHIFT) pen_lastpoint_move(pc, 0, 10*nudge); // shift
+                    if (MOD__SHIFT(event)) pen_lastpoint_move(pc, 0, 10*nudge); // shift
                     else pen_lastpoint_move(pc, 0, nudge); // no shift
                 }
                 ret = TRUE;
@@ -1200,13 +1200,13 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
             break;
         case GDK_KEY_Right: // move last point right
         case GDK_KEY_KP_Right:
-            if (!MOD__CTRL) { // not ctrl
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, 10, 0); // shift
+            if (!MOD__CTRL(event)) { // not ctrl
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) pen_lastpoint_move_screen(pc, 10, 0); // shift
                     else pen_lastpoint_move_screen(pc, 1, 0); // no shift
                 }
                 else { // no alt
-                    if (MOD__SHIFT) pen_lastpoint_move(pc, 10*nudge, 0); // shift
+                    if (MOD__SHIFT(event)) pen_lastpoint_move(pc, 10*nudge, 0); // shift
                     else pen_lastpoint_move(pc, nudge, 0); // no shift
                 }
                 ret = TRUE;
@@ -1214,13 +1214,13 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
             break;
         case GDK_KEY_Down: // move last point down
         case GDK_KEY_KP_Down:
-            if (!MOD__CTRL) { // not ctrl
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) pen_lastpoint_move_screen(pc, 0, -10); // shift
+            if (!MOD__CTRL(event)) { // not ctrl
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) pen_lastpoint_move_screen(pc, 0, -10); // shift
                     else pen_lastpoint_move_screen(pc, 0, -1); // no shift
                 }
                 else { // no alt
-                    if (MOD__SHIFT) pen_lastpoint_move(pc, 0, -10*nudge); // shift
+                    if (MOD__SHIFT(event)) pen_lastpoint_move(pc, 0, -10*nudge); // shift
                     else pen_lastpoint_move(pc, 0, -nudge); // no shift
                 }
                 ret = TRUE;
@@ -1230,7 +1230,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 /*TODO: this is not yet enabled?? looks like some traces of the Geometry tool
         case GDK_KEY_P:
         case GDK_KEY_p:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_pen_context_wait_for_LPE_mouse_clicks(pc, Inkscape::LivePathEffect::PARALLEL, 2);
                 ret = TRUE;
             }
@@ -1238,7 +1238,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 
         case GDK_KEY_C:
         case GDK_KEY_c:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_pen_context_wait_for_LPE_mouse_clicks(pc, Inkscape::LivePathEffect::CIRCLE_3PTS, 3);
                 ret = TRUE;
             }
@@ -1246,7 +1246,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 
         case GDK_KEY_B:
         case GDK_KEY_b:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_pen_context_wait_for_LPE_mouse_clicks(pc, Inkscape::LivePathEffect::PERP_BISECTOR, 2);
                 ret = TRUE;
             }
@@ -1254,7 +1254,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 
         case GDK_KEY_A:
         case GDK_KEY_a:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_pen_context_wait_for_LPE_mouse_clicks(pc, Inkscape::LivePathEffect::ANGLE_BISECTOR, 3);
                 ret = TRUE;
             }
@@ -1263,14 +1263,14 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
 
         case GDK_KEY_U:
         case GDK_KEY_u:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 pen_lastpoint_tocurve(pc);
                 ret = TRUE;
             }
             break;
         case GDK_KEY_L:
         case GDK_KEY_l:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 pen_lastpoint_toline(pc);
                 ret = TRUE;
             }
@@ -1292,7 +1292,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
             break;
         case GDK_KEY_z:
         case GDK_KEY_Z:
-            if (MOD__CTRL_ONLY && pc->npoints != 0) {
+            if (MOD__CTRL_ONLY(event) && pc->npoints != 0) {
                 // if drawing, cancel, otherwise pass it up for undo
                 pen_cancel (pc);
                 ret = TRUE;
@@ -1300,7 +1300,7 @@ static gint pen_handle_key_press(SPPenContext *const pc, GdkEvent *event)
             break;
         case GDK_KEY_g:
         case GDK_KEY_G:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_selection_to_guides(SP_EVENT_CONTEXT(pc)->desktop);
                 ret = true;
             }
