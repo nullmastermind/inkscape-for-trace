@@ -219,11 +219,13 @@ void Handle::move(Geom::Point const &new_pos)
         typedef ControlPointSelection::Set Set;
         Set &nodes = _parent->_selection.allPoints();
         for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            Node *n = static_cast<Node*>(*i);
-            h = n->front();
-            h2 = n->back();
-            h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-            h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            if((*i)->selected()){
+                Node *n = static_cast<Node*>(*i);
+                h = n->front();
+                h2 = n->back();
+                h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+                h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            }
         }
     }
     //BSpline End
