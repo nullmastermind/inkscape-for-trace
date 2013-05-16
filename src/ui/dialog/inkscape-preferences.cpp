@@ -1341,6 +1341,13 @@ void InkscapePreferences::initPageBehavior()
                            _("Update marker color when object color changes"));
 
     this->AddPage(_page_markers, _("Markers"), iter_behavior, PREFS_PAGE_BEHAVIOR_MARKERS);
+    
+    
+    _page_cleanup.add_group_header( _("Document cleanup"));
+    _cleanup_swatches.init ( _("Remove unused swatches when doing a document cleanup"), "/options/cleanupswatches/value", false); // text label
+    _page_cleanup.add_line( true, "", _cleanup_swatches, "",
+                           _("Remove unused swatches when doing a document cleanup")); // tooltip
+    this->AddPage(_page_cleanup, _("Cleanup"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLEANUP);
 }
 
 void InkscapePreferences::initPageRendering()
@@ -1432,6 +1439,9 @@ void InkscapePreferences::initPageBitmaps()
         Glib::ustring values[] = {"embed", "link", "ask"};
         _bitmap_import.init("/dialogs/import/link", labels, values, G_N_ELEMENTS(values), "ask");
         _page_bitmaps.add_line( false, _("Bitmap import:"), _bitmap_import, "", "", false);
+
+        _bitmap_import_quality.init("/dialogs/import/quality", 1, 100, 1, 1, 100, true, false);
+        _page_bitmaps.add_line( false, _("Bitmap import quality:"), _bitmap_import_quality, "%", "Bitmap import quality (jpeg only). 100 is best quality", false);
     }
     _importexport_import_res.init("/dialogs/import/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
     _page_bitmaps.add_line( false, _("Default _import resolution:"), _importexport_import_res, _("dpi"),

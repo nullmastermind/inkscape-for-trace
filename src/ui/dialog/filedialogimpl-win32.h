@@ -9,11 +9,18 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef WIN32
-
+#if WITH_GLIBMM_2_32
+# include <glibmm/threads.h>
+#endif
 #include "gc-core.h"
 #include <windows.h>
+#include "filedialogimpl-gtkmm.h"
+
 
 namespace Inkscape
 {
