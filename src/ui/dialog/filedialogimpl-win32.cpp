@@ -16,7 +16,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-
+#include "filedialogimpl-win32.h"
 //General includes
 #include <list>
 #include <unistd.h>
@@ -26,9 +26,7 @@
 #include <gdk/gdkwin32.h>
 #include <glib/gstdio.h>
 #include <glibmm/i18n.h>
-#if GLIB_CHECK_VERSION(2,32,0)
-#include <glibmm/thread.h>
-#endif
+#include <glibmm/fileutils.h>
 #include <gtkmm/window.h>
 
 //Inkscape includes
@@ -44,7 +42,7 @@
 #include "display/canvas-arena.h"
 
 #include "filedialog.h"
-#include "filedialogimpl-win32.h"
+
 #include "sp-root.h"
 
 #include <zlib.h>
