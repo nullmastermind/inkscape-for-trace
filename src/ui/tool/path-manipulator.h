@@ -96,7 +96,7 @@ public:
 
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
-        bool search_unselected, bool closest);
+    bool search_unselected, bool closest);
     //BSpline
     bool isBSpline;
     int getSteps();

@@ -110,6 +110,7 @@ void build_segment(Geom::PathBuilder &, Node *, Node *);
 PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         Geom::Affine const &et, guint32 outline_color, Glib::ustring lpe_key)
     : PointManipulator(mpm._path_data.node_data.desktop, *mpm._path_data.node_data.selection)
+    ,  isBSpline(true)
     , _subpaths(*this)
     , _multi_path_manipulator(mpm)
     , _path(path)
@@ -157,7 +158,6 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
             lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
         }
     }
-    isBSpline = false;
     if(lpe_bsp){
         isBSpline = true;
     }

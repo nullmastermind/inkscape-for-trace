@@ -175,10 +175,25 @@ void Handle::move(Geom::Point const &new_pos)
         //BSpline
         if(_pm().isBSpline){
             h = this;
+            setPosition(_pm().BSplineHandleReposition(h));
             _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
-            setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-            h2 = this->other();
-            this->other()->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            typedef ControlPointSelection::Set Set;
+            Set &nodes = _parent->_selection.allPoints();
+            for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+                if((*i)->selected()){
+                    Node *n = static_cast<Node*>(*i);
+                    h = n->front();
+                    h2 = n->back();
+                    h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+                    h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+                }
+            }
+            if(!_parent->selected()){
+                h = _parent->front();
+                h2 = _parent->back();
+                h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+                h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            }
         }
         //BSpline End
         return;
@@ -192,6 +207,30 @@ void Handle::move(Geom::Point const &new_pos)
         Geom::Point new_delta = (Geom::dot(delta, direction)
             / Geom::L2sq(direction)) * direction;
         setRelativePos(new_delta);
+        //BSpline
+        if(_pm().isBSpline){
+            h = this;
+            setPosition(_pm().BSplineHandleReposition(h));
+            _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
+            typedef ControlPointSelection::Set Set;
+            Set &nodes = _parent->_selection.allPoints();
+            for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+                if((*i)->selected()){
+                    Node *n = static_cast<Node*>(*i);
+                    h = n->front();
+                    h2 = n->back();
+                    h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+                    h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+                }
+            }
+            if(!_parent->selected()){
+                h = _parent->front();
+                h2 = _parent->back();
+                h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+                h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            }
+        }
+        //BSpline End
         return;
     }
 
@@ -226,6 +265,12 @@ void Handle::move(Geom::Point const &new_pos)
                 h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
                 h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
             }
+        }
+        if(!_parent->selected()){
+            h = _parent->front();
+            h2 = _parent->back();
+            h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+            h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
         }
     }
     //BSpline End
@@ -779,14 +824,6 @@ void Node::setType(NodeType type, bool update_handles)
         updateState(); // The size of the control might have changed
         return;
     }
-    //BSpline
-    bool isBSpline = false;
-    try {
-        isBSpline = nodeList().subpathList().pm().isBSpline;
-    }
-    catch( char * str ) {
-    }
-    //BSpline End
     // if update_handles is true, adjust handle positions to match the node type
     // handle degenerate handles appropriately
     if (update_handles) {
@@ -870,7 +907,7 @@ void Node::setType(NodeType type, bool update_handles)
         default: break;
         }
         //BSpline
-        if(isBSpline){
+        if(_pm().isBSpline){
             Handle* front = &_front;
             Handle* back = &_back;
             this->bsplineWeight = _pm().BSplineHandlePosition(front);
