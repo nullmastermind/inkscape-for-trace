@@ -10,6 +10,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
@@ -60,7 +68,6 @@ private:
     SPDocument *doc;
     SPDocument *sandbox;
     Gtk::Image  *empty_image;
-    Gtk::CellRendererText label_renderer;
     Gtk::CellRendererPixbuf image_renderer;
 
     class MarkerColumns : public Gtk::TreeModel::ColumnRecord {
@@ -91,7 +98,6 @@ private:
     /*
      * Callbacks for drawing the combo box
      */
-    void prepareLabelRenderer( Gtk::TreeModel::const_iterator const &row );
     void prepareImageRenderer( Gtk::TreeModel::const_iterator const &row );
     static gboolean separator_cb (GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
 

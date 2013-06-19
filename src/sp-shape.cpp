@@ -868,6 +868,13 @@ int SPShape::hasMarkers() const
        all three settings.  This should be fixed later such that if 'marker' is
        specified, then all three should appear. */
 
+    // Ignore markers for objects which are inside markers themselves.
+    for (SPObject *parent = this->parent; parent != NULL; parent = parent->parent) {
+      if(SP_IS_MARKER(parent)) {
+        return 0;
+      }
+    }
+
     return (
         this->_curve &&
         (this->_marker[SP_MARKER_LOC] ||
@@ -889,8 +896,8 @@ int SPShape::numberOfMarkers(int type)
     if (pathv.size() == 0) {
         return 0;
     }
-
     switch(type) {
+
         case SP_MARKER_LOC:
         {
             if ( this->_marker[SP_MARKER_LOC] ) {
@@ -914,7 +921,9 @@ int SPShape::numberOfMarkers(int type)
                 for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
                     n += path_it->size_default() + 1;
                 }
-                return n - 2; // minus the start and end marker.
+                n = (n > 1) ? (n - 2) : 0; // Minus the start and end marker, but never negative.
+                                           // A path or polyline may have only one point.
+                return n;
             } else {
                 return 0;
             }

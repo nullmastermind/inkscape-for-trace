@@ -14,6 +14,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/widget.h>
 #include "icon-size.h"
 
@@ -45,7 +53,7 @@ struct SPIcon {
 
 
 GtkWidget *sp_icon_new( Inkscape::IconSize size, const gchar *name );
-
+GdkPixbuf *sp_pixbuf_new( Inkscape::IconSize size, const gchar *name );
 
 // Might return a wrapped SPIcon, or Gtk::Image
 Gtk::Widget *sp_icon_get_icon( const Glib::ustring &oid, Inkscape::IconSize size = Inkscape::ICON_SIZE_BUTTON );

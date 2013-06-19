@@ -15,6 +15,10 @@
 # include <config.h>
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/dialog.h>
 #include <gtkmm/stock.h>
 #include <2geom/transforms.h>

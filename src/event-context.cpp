@@ -18,6 +18,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include "shortcuts.h"
 #include "file.h"
 #include "event-context.h"
