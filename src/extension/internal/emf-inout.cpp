@@ -1400,8 +1400,10 @@ Emf::select_font(PEMF_CALLBACK_DATA d, int index)
         pEmr->elfw.elfLogFont.lfWeight == U_FW_EXTRABOLD ? SP_CSS_FONT_WEIGHT_BOLDER :
         U_FW_NORMAL;
     d->dc[d->level].style.font_style.value = (pEmr->elfw.elfLogFont.lfItalic ? SP_CSS_FONT_STYLE_ITALIC : SP_CSS_FONT_STYLE_NORMAL);
-    d->dc[d->level].style.text_decoration.underline = pEmr->elfw.elfLogFont.lfUnderline;
-    d->dc[d->level].style.text_decoration.line_through = pEmr->elfw.elfLogFont.lfStrikeOut;
+    d->dc[d->level].style.text_decoration_line.underline    = pEmr->elfw.elfLogFont.lfUnderline;
+    d->dc[d->level].style.text_decoration_line.line_through = pEmr->elfw.elfLogFont.lfStrikeOut;
+    d->dc[d->level].style.text_decoration_line.set          = true;
+    d->dc[d->level].style.text_decoration_line.inherit      = false;
     // malformed  EMF with empty filename may exist, ignore font change if encountered
     char *ctmp = U_Utf16leToUtf8((uint16_t *) (pEmr->elfw.elfLogFont.lfFaceName), U_LF_FACESIZE, NULL);
     if(ctmp){
@@ -2988,6 +2990,7 @@ std::cout << "BEFORE DRAW"
                 y1 = pEmr->emrtext.ptlReference.y;
                 cChars = 0;
             }
+            uint32_t fOptions = pEmr->emrtext.fOptions;
 
             if (d->dc[d->level].textAlign & U_TA_UPDATECP) {
                 x1 = d->dc[d->level].cur.x;
@@ -3078,6 +3081,10 @@ std::cout << "BEFORE DRAW"
                     case SP_CSS_FONT_WEIGHT_BOLDER:    tsp.weight =  FC_WEIGHT_EXTRABOLD  ; break;
                     default:                           tsp.weight =  FC_WEIGHT_NORMAL     ; break;
                 }
+                // EMF only supports two types of text decoration
+                tsp.decoration = TXTDECOR_NONE;
+                if(d->dc[d->level].style.text_decoration_line.underline){    tsp.decoration |= TXTDECOR_UNDER; }
+                if(d->dc[d->level].style.text_decoration_line.line_through){ tsp.decoration |= TXTDECOR_STRIKE;}
 
                 // EMF textalignment is a bit strange: 0x6 is center, 0x2 is right, 0x0 is left, the value 0x4 is also drawn left
                 tsp.taln  = ((d->dc[d->level].textAlign & U_TA_CENTER)  == U_TA_CENTER)  ?  ALICENTER :
@@ -3086,13 +3093,19 @@ std::cout << "BEFORE DRAW"
                 tsp.taln |= ((d->dc[d->level].textAlign & U_TA_BASEBIT) ?   ALIBASE :
                             ((d->dc[d->level].textAlign & U_TA_BOTTOM)  ?   ALIBOT  :
                                                                             ALITOP));
-                tsp.ldir  = (d->dc[d->level].textAlign & U_TA_RTLREADING ? LDIR_RL : LDIR_LR);  // language direction
+
+                // language direction can be encoded two ways, U_TA_RTLREADING is preferred 
+                if( (fOptions & U_ETO_RTLREADING) || (d->dc[d->level].textAlign & U_TA_RTLREADING) ){ tsp.ldir = LDIR_RL; }
+                else{                                                                                 tsp.ldir = LDIR_LR; }
+
                 tsp.condensed = FC_WIDTH_NORMAL; // Not implemented well in libTERE (yet)
                 tsp.ori = d->dc[d->level].style.baseline_shift.value;            // For now orientation is always the same as escapement
                 tsp.ori += 180.0 * current_rotation(d)/ M_PI;                    // radians to degrees
                 tsp.string = (uint8_t *) U_strdup(escaped_text);                 // this will be free'd much later at a trinfo_clear().
                 tsp.fs = d->dc[d->level].style.font_size.computed * 0.8;         // Font size in points
-                (void) trinfo_load_fontname(d->tri, (uint8_t *)d->dc[d->level].font_name, &tsp);
+                char *fontspec = TR_construct_fontspec(&tsp, d->dc[d->level].font_name);
+                tsp.fi_idx = ftinfo_load_fontname(d->tri->fti,fontspec);
+                free(fontspec);
                 // when font name includes narrow it may not be set to "condensed".  Narrow fonts do not work well anyway though
                 // as the metrics from fontconfig may not match, or the font may not be present.
                 if(0<= TR_findcasesub(d->dc[d->level].font_name, (char *) "Narrow")){ tsp.co=1; }
@@ -3101,7 +3114,7 @@ std::cout << "BEFORE DRAW"
                 int status = trinfo_load_textrec(d->tri, &tsp, tsp.ori,TR_EMFBOT);  // ori is actually escapement
                 if(status==-1){ // change of escapement, emit what we have and reset
                     TR_layout_analyze(d->tri);
-                     TR_layout_2_svg(d->tri);
+                    TR_layout_2_svg(d->tri);
                     ts << d->tri->out;
                     *(d->outsvg) += ts.str().c_str();
                     d->tri = trinfo_clear(d->tri);

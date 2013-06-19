@@ -38,6 +38,7 @@ class PrintEmf : public Inkscape::Extension::Implementation::Implementation
     double  _height;
     U_RECTL  rc;
 
+    uint32_t htextalignment;
     uint32_t hbrush, hbrushOld, hpen, hpenOld;
     uint32_t hpolyfillmode;             // used to minimize redundant records that set this
     float    htextcolor_rgb[3];         // used to minimize redundant records that set this
@@ -93,7 +94,7 @@ protected:
     static void  read_system_fflist(void); 
     static void  search_long_fflist(const char *fontname, double *f1, double *f2, double *f3);
     static void  search_short_fflist(const char *fontname, double *f1, double *f2, double *f3);
-    static void  smuggle_adxky_out(const char *string, uint32_t **adx, double *ky, int *ndx, float scale);
+    static void  smuggle_adxkyrtl_out(const char *string, uint32_t **adx, double *ky, int *rtl, int *ndx, float scale);
     U_COLORREF   gethexcolor(uint32_t color);
     uint32_t     transweight(const unsigned int inkweight);
 

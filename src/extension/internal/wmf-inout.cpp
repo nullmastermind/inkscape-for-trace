@@ -1278,8 +1278,10 @@ Wmf::select_font(PWMF_CALLBACK_DATA d, int index)
         font.Weight == U_FW_EXTRABOLD ? SP_CSS_FONT_WEIGHT_BOLDER :
         U_FW_NORMAL;
     d->dc[d->level].style.font_style.value = (font.Italic ? SP_CSS_FONT_STYLE_ITALIC : SP_CSS_FONT_STYLE_NORMAL);
-    d->dc[d->level].style.text_decoration.underline = font.Underline;
-    d->dc[d->level].style.text_decoration.line_through = font.StrikeOut;
+    d->dc[d->level].style.text_decoration_line.underline    = font.Underline;
+    d->dc[d->level].style.text_decoration_line.line_through = font.StrikeOut;
+    d->dc[d->level].style.text_decoration_line.set          = true;
+    d->dc[d->level].style.text_decoration_line.inherit      = false;
 
     // malformed  WMF with empty filename may exist, ignore font change if encountered
     if(d->dc[d->level].font_name)free(d->dc[d->level].font_name);
@@ -1325,13 +1327,13 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
         else if(index == d->dc[d->level].active_font){
             d->dc[d->level].active_font                         = -1;
             if(d->dc[d->level].font_name){ free(d->dc[d->level].font_name);}
-            d->dc[d->level].font_name = strdup("Arial");       // Default font, WMF spec says device can pick whatever it wants
-            d->dc[d->level].style.font_size.computed           = 16.0;
-            d->dc[d->level].style.font_weight.value            = SP_CSS_FONT_WEIGHT_400;
-            d->dc[d->level].style.font_style.value             = SP_CSS_FONT_STYLE_NORMAL;
-            d->dc[d->level].style.text_decoration.underline    = 0;
-            d->dc[d->level].style.text_decoration.line_through = 0;
-            d->dc[d->level].style.baseline_shift.value         = 0;
+            d->dc[d->level].font_name = strdup("Arial");            // Default font, WMF spec says device can pick whatever it wants
+            d->dc[d->level].style.font_size.computed                = 16.0;
+            d->dc[d->level].style.font_weight.value                 = SP_CSS_FONT_WEIGHT_400;
+            d->dc[d->level].style.font_style.value                  = SP_CSS_FONT_STYLE_NORMAL;
+            d->dc[d->level].style.text_decoration_line.underline    = 0;
+            d->dc[d->level].style.text_decoration_line.line_through = 0;
+            d->dc[d->level].style.baseline_shift.value              = 0;
         }
 
 
@@ -2522,6 +2524,7 @@ std::cout << "BEFORE DRAW"
                 dbg_str << "<!-- U_WMR_EXTTEXTOUT -->\n";
                 nSize = U_WMREXTTEXTOUT_get(contents, &Dst, &tlen, &Opts, &text, &dx, &rc );
             }
+            uint32_t fOptions = Opts;
 
             double x1,y1;
             int cChars;
@@ -2597,11 +2600,10 @@ std::cout << "BEFORE DRAW"
                     case SP_CSS_FONT_WEIGHT_BOLDER:    tsp.weight =  FC_WEIGHT_EXTRABOLD  ; break;
                     default:                           tsp.weight =  FC_WEIGHT_NORMAL     ; break;
                 }
-
-                // Inkscape cannot display underline or strike-through at present, but enter it into the SVG in any case.
-                if(      d->dc[d->level].style.text_decoration.underline){    tsp.decoration = TXTDECOR_UNDER;   }
-                else if (d->dc[d->level].style.text_decoration.line_through){ tsp.decoration = TXTDECOR_STRIKE1; }
-                else {                                                                   tsp.decoration = TXTDECOR_NONE;    }
+                // WMF only supports two types of text decoration
+                tsp.decoration = TXTDECOR_NONE;
+                if(d->dc[d->level].style.text_decoration_line.underline){    tsp.decoration |= TXTDECOR_UNDER; }
+                if(d->dc[d->level].style.text_decoration_line.line_through){ tsp.decoration |= TXTDECOR_STRIKE;}
 
                 // WMF textalignment is a bit strange: 0x6 is center, 0x2 is right, 0x0 is left, the value 0x4 is also drawn left
                 tsp.taln  = ((d->dc[d->level].textAlign & U_TA_CENTER)  == U_TA_CENTER)  ? ALICENTER :
@@ -2610,13 +2612,19 @@ std::cout << "BEFORE DRAW"
                 tsp.taln |= ((d->dc[d->level].textAlign & U_TA_BASEBIT) ? ALIBASE :
                             ((d->dc[d->level].textAlign & U_TA_BOTTOM)  ? ALIBOT  :
                                                                           ALITOP));
-                tsp.ldir  = (d->dc[d->level].textAlign & U_TA_RTLREADING ? LDIR_RL : LDIR_LR);  // language direction
+
+                // language direction can be encoded two ways, U_TA_RTLREADING is preferred 
+                if( (fOptions & U_ETO_RTLREADING) || (d->dc[d->level].textAlign & U_TA_RTLREADING) ){ tsp.ldir = LDIR_RL; }
+                else{                                                                                 tsp.ldir = LDIR_LR; }
+
                 tsp.condensed = FC_WIDTH_NORMAL; // Not implemented well in libTERE (yet)
                 tsp.ori = d->dc[d->level].style.baseline_shift.value;            // For now orientation is always the same as escapement
                 // There is no world transform, so ori need not be further rotated
                 tsp.string = (uint8_t *) U_strdup(escaped_text);                 // this will be free'd much later at a trinfo_clear().
                 tsp.fs = d->dc[d->level].style.font_size.computed * 0.8;         // Font size in points
-                (void) trinfo_load_fontname(d->tri, (uint8_t *)d->dc[d->level].font_name, &tsp);
+                char *fontspec = TR_construct_fontspec(&tsp, d->dc[d->level].font_name);
+                tsp.fi_idx = ftinfo_load_fontname(d->tri->fti,fontspec);
+                free(fontspec);
                 // when font name includes narrow it may not be set to "condensed".  Narrow fonts do not work well anyway though
                 // as the metrics from fontconfig may not match, or the font may not be present.
                 if(0<= TR_findcasesub(d->dc[d->level].font_name, (char *) "Narrow")){ tsp.co=1; }
@@ -3074,8 +3082,8 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.dc[0].style.font_size.computed           = 16.0;
     d.dc[0].style.font_weight.value            = SP_CSS_FONT_WEIGHT_400;
     d.dc[0].style.font_style.value             = SP_CSS_FONT_STYLE_NORMAL;
-    d.dc[0].style.text_decoration.underline    = 0;
-    d.dc[0].style.text_decoration.line_through = 0;
+    d.dc[0].style.text_decoration_line.underline    = 0;
+    d.dc[0].style.text_decoration_line.line_through = 0;
     d.dc[0].style.baseline_shift.value         = 0;
     d.dc[0].textColor                          = U_RGB(0, 0, 0);        // default foreground color (black)
     d.dc[0].bkColor                            = U_RGB(255, 255, 255);  // default background color (white)

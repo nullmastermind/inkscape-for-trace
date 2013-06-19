@@ -4,8 +4,8 @@
 See text_reassemble.c for notes
 
 File:      text_reassemble.h
-Version:   0.0.7
-Date:      12-FEB-2013
+Version:   0.0.12
+Date:      14-MAY-2013
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
@@ -56,16 +56,31 @@ extern "C" {
 /** \defgroup decoration options
   One of these values may be present in the decoration field. 
   Unused bits may be used by end user code.
-  SVG output can specify up to STRIKE1.
+  These values are SVG specific.  Other applications could use the text
+  decoration field for a different set of bits, so long as it provided its own
+  output function.
   @{
 */
-#define TXTDECOR_NONE     0x00  /**< text is not decorated (default) */
-#define TXTDECOR_UNDER    0x01  /**< underlined                      */
-#define TXTDECOR_OVER     0x02  /**< overlined                       */
-#define TXTDECOR_BLINK    0x04  /**< blinking text                   */
-#define TXTDECOR_STRIKE1  0x08  /**< single strike throug            */
-#define TXTDECOR_STRIKE2  0x10  /**< double strike through           */
+#define TXTDECOR_NONE     0x000  /**< text is not decorated (default) */
+#define TXTDECOR_UNDER    0x001  /**< underlined                      */
+#define TXTDECOR_OVER     0x002  /**< overlined                       */
+#define TXTDECOR_BLINK    0x004  /**< blinking text                   */
+#define TXTDECOR_STRIKE   0x008  /**< strike through                  */
+#define TXTDECOR_TMASK    0x00F  /**< Mask for selecting bits above   */
+
+#define TXTDECOR_SOLID    0x000  /**< draw as single solid line       */
+#define TXTDECOR_DOUBLE   0x010  /**< draw as double solid line       */
+#define TXTDECOR_DOTTED   0x020  /**< draw as single dotted line      */
+#define TXTDECOR_DASHED   0x040  /**< draw as single dashed line      */
+#define TXTDECOR_WAVY     0x080  /**< draw as single wavy line        */
+#define TXTDECOR_LMASK    0x0F0  /**< Mask for selecting these bits   */
+
+#define TXTDECOR_CLRSET   0x100  /**< decoration has its own color    */
+
 /** @} */
+
+
+
 
 
 /** \defgroup text alignment types
@@ -113,15 +128,27 @@ enum tr_classes {
 /** @} */
 
 /**
+   \brief alt font entries.
+*/
+typedef struct {
+   uint32_t    fi_idx;      /**< index into FT_INFO fonts, for fonts added for missing glyphs         */
+   uint32_t    weight;      /**< integer weight for alt fonts, kept sorted into descending order      */
+} ALT_SPECS;
+
+/**
    \brief Information for a font instance.
 */
 typedef struct {
+   FcFontSet  *fontset;     /**< all matching fonts (for fallback on missing glyphs)                  */
+   ALT_SPECS  *alts;        /**< index into FT_INFO fonts, for fonts added for missing glyphs         */
+   uint32_t    space;       /**< alts storage slots allocated                                         */
+   uint32_t    used;        /**< alts storage slots in use                                            */
    FT_Face     face;        /**< font face structures (FT_FACE is a pointer!)                         */
-   uint8_t    *file;        /**< pointers to font paths to files                                      */
-   uint8_t    *fname;       /**< pointers to font names                                               */
-   FcPattern  *fpat;        /**< must hang onto this or faces operations break                        */
-   double      spcadv;      /**< advance equal to a space, in points                                  */
-   double      fsize;       /**< face size in points                                                  */
+   uint8_t    *file;        /**< pointer to font paths to files                                       */
+   uint8_t    *fontspec;    /**< pointer to a font specification (name:italics, etc.)                 */
+   FcPattern  *fpat;        /**< current font, must hang onto this or faces operations break          */
+   double      spcadv;      /**< advance equal to a space, in points at font's face size              */
+   double      fsize;       /**< font's face size in points                                           */
 } FNT_SPECS;
 
 /**
@@ -130,8 +157,8 @@ typedef struct {
 typedef struct {
    FT_Library  library;     /**< Fontconfig handle                                                    */
    FNT_SPECS  *fonts;       /**< Array of fontinfo structures                                         */
-   int         space;       /**< storage slots allocated                                              */
-   int         used;        /**< storage slots in use                                                 */
+   uint32_t    space;       /**< storage slots allocated                                              */
+   uint32_t    used;        /**< storage slots in use                                                 */
 } FT_INFO;
 
 typedef struct {
@@ -150,6 +177,8 @@ typedef struct {
    double      fs;          /**< font size of text                                                    */
    double      x;           /**< x coordinate, relative to TR_INFO x,y, in points                     */
    double      y;           /**< y coordinate, relative to TR_INFO x,y, in points                     */
+   double      xkern;       /**< x kern relative to preceding text chunk in complex (if any)          */
+   double      ykern;       /**< y kern relative to preceding text chunk in complex (if any)          */
    double      boff;        /**< Y LL corner - boff finds baseline                                    */
    double      vadvance;    /**< Line spacing typically 1.25 or 1.2,  only set on the first text
                                  element in a complex                                                 */
@@ -159,7 +188,8 @@ typedef struct {
    int         italics;     /**< italics, as in FontConfig                                            */
    int         weight;      /**< weight, as in FontConfig                                             */
    int         condensed;   /**< condensed, as in FontConfig                                          */
-   int         decoration;  /**< text decorations, ignored during assembly,used during output         */
+   int         decoration;  /**< text decorations, ignored during assembly, used during output        */
+   TRCOLORREF  decColor;    /**< text decoration color, ignored during assembly, used during output   */
    int         co;          /**< condensed override, if set Font name included narrow                 */
    int         rt_tidx;     /**< index of rectangle that contains it                                  */
    int         fi_idx;      /**< index of the font it uses                                            */
@@ -171,8 +201,8 @@ typedef struct {
 */
 typedef struct {
    TCHUNK_SPECS *chunks;     /**< text chunks                                                         */
-   int         space;        /**< storage slots allocated                                             */
-   int         used;         /**< storage slots in use                                                */
+   uint32_t      space;      /**< storage slots allocated                                             */
+   uint32_t      used;       /**< storage slots in use                                                */
 } TP_INFO;
 
 /**
@@ -192,8 +222,8 @@ typedef struct {
 */
 typedef struct {
    BRECT_SPECS *rects;         /**< bounding rectangles                                               */
-   int         space;          /**< storage slots allocated                                           */
-   int         used;           /**< storage slots in use                                              */
+   uint32_t     space;         /**< storage slots allocated                                           */
+   uint32_t     used;          /**< storage slots in use                                              */
 } BR_INFO;
 
 /**
@@ -203,8 +233,8 @@ typedef struct {
    int        *members;        /**< array of immediate children (for TR_PARA_* these are indicies 
                                     for TR_TEXT or TR_LINE complexes also in cxi. For TR_TEXT
                                     and TR_LINE these are indices to the actual text in tpi.)         */
-   int         space;          /**< storage slots allocated                                           */
-   int         used;           /**< storage slots in use                                              */
+   uint32_t    space;          /**< storage slots allocated                                           */
+   uint32_t    used;           /**< storage slots in use                                              */
 } CHILD_SPECS;
 
 /**
@@ -222,11 +252,11 @@ typedef struct {
 */
 typedef struct {
    CX_SPECS   *cx;             /**< complexes                                                         */
-   int         space;          /**< storage slots allocated                                           */
-   int         used;           /**< storage slots in use                                              */
-   int         phase1;         /**< Number of complexes (lines + text fragments) entered in phase 1   */
-   int         lines;          /**< Number of lines in phase 1                                        */
-   int         paras;          /**< Number of complexes (paras) entered in phase 2                    */
+   uint32_t    space;          /**< storage slots allocated                                           */
+   uint32_t    used;           /**< storage slots in use                                              */
+   uint32_t    phase1;         /**< Number of complexes (lines + text fragments) entered in phase 1   */
+   uint32_t    lines;          /**< Number of lines in phase 1                                        */
+   uint32_t    paras;          /**< Number of complexes (paras) entered in phase 2                    */
 } CX_INFO;
 
 /**
@@ -246,8 +276,8 @@ typedef struct {
    int         use_kern;       /**< 1 if kerning is used, 0 if not                                    */
    int         load_flags;     /**< FT_LOAD_NO_SCALE or FT_LOAD_TARGET_NORMAL                         */
    int         kern_mode;      /**< FT_KERNING_DEFAULT, FT_KERNING_UNFITTED, or FT_KERNING_UNSCALED   */
-   int         outspace;       /**< storage in output buffer  allocated                               */
-   int         outused;        /**< storage in output buffer in use                                   */
+   uint32_t    outspace;       /**< storage in output buffer  allocated                               */
+   uint32_t    outused;        /**< storage in output buffer in use                                   */
    int         usebk;          /**< On output write the background color under the text               */
    TRCOLORREF  bkcolor;        /**< RGB background color                                              */
 } TR_INFO;
@@ -279,8 +309,11 @@ typedef struct {
 /** \endcond */
 
 /* Prototypes */
-int           TR_findcasesub(char *string, char *sub);
-int           TR_getadvance(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int load_flags, int kern_mode, int *ymin, int *ymax);
+int           TR_findcasesub(const char *string, const char *sub);
+char         *TR_construct_fontspec(const TCHUNK_SPECS *tsp, const char *fontname);
+char         *TR_reconstruct_fontspec(const char *fontspec, const  char *fontname);
+int           TR_find_alternate_font(FT_INFO *fti, FNT_SPECS **efsp, uint32_t wc);
+int           TR_getadvance(FT_INFO *fti, FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int load_flags, int kern_mode, int *ymin, int *ymax);
 int           TR_getkern2(FNT_SPECS *fsp, uint32_t wc, uint32_t pc, int kern_mode);
 int           TR_kern_gap(FNT_SPECS *fsp, TCHUNK_SPECS *tsp, TCHUNK_SPECS *ptsp, int kern_mode);
 void          TR_rt_pad_set(RT_PAD *rt_pad, double up, double down, double left, double right);
@@ -295,45 +328,57 @@ int           ftinfo_make_insertable(FT_INFO *fti);
 int           ftinfo_insert(FT_INFO *fti, FNT_SPECS *fsp);
 FT_INFO      *ftinfo_release(FT_INFO *fti);
 FT_INFO      *ftinfo_clear(FT_INFO *fti);
+int           ftinfo_find_loaded_by_spec(const FT_INFO *fti, const uint8_t *fname);
+int           ftinfo_find_loaded_by_src(const FT_INFO *fti, const uint8_t *filename);
+int           ftinfo_load_fontname(FT_INFO *fti, const char *fontspec);
+void          ftinfo_dump(const FT_INFO *fti);
+
+int           fsp_alts_make_insertable(FNT_SPECS *fsp);
+int           fsp_alts_insert(FNT_SPECS *fsp, uint32_t fi_idx);
+int           fsp_alts_weight(FNT_SPECS *fsp, uint32_t a_idx);
 
 int           csp_make_insertable(CHILD_SPECS *csp);
 int           csp_insert(CHILD_SPECS *csp, int src);
 int           csp_merge(CHILD_SPECS *dst, CHILD_SPECS *src);
 void          csp_release(CHILD_SPECS *csp);
+void          csp_clear(CHILD_SPECS *csp);
 
 CX_INFO      *cxinfo_init(void);
 int           cxinfo_make_insertable(CX_INFO *cxi);
 int           cxinfo_insert(CX_INFO *cxi, int src, int src_rt_idx, enum tr_classes type);
 int           cxinfo_append(CX_INFO *cxi, int src, enum tr_classes type);
 int           cxinfo_merge(CX_INFO *cxi,  int dst, int src, enum tr_classes type);
+int           cxinfo_trim(CX_INFO *cxi);
 CX_INFO      *cxinfo_release(CX_INFO *cxi);
-void          cxinfo_dump(TR_INFO *tri);
+void          cxinfo_dump(const TR_INFO *tri);
 
 TP_INFO      *tpinfo_init(void);
 int           tpinfo_make_insertable(TP_INFO *tpi);
-int           tpinfo_insert(TP_INFO *tpi, TCHUNK_SPECS *tsp);
+int           tpinfo_insert(TP_INFO *tpi, const TCHUNK_SPECS *tsp);
 TP_INFO      *tpinfo_release(TP_INFO *tpi);
 
 BR_INFO      *brinfo_init(void);
 int           brinfo_make_insertable(BR_INFO *bri);
-int           brinfo_insert(BR_INFO *bri, BRECT_SPECS *element);
+int           brinfo_insert(BR_INFO *bri, const BRECT_SPECS *element);
 int           brinfo_merge(BR_INFO *bri, int dst, int src);
 enum tr_classes 
-              brinfo_pp_alignment(BR_INFO *bri, int dst, int src, double slop, enum tr_classes type);
-int           brinfo_overlap(BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD *rp_src);
+              brinfo_pp_alignment(const BR_INFO *bri, int dst, int src, double slop, enum tr_classes type);
+int           brinfo_overlap(const BR_INFO *bri, int dst, int src, RT_PAD *rp_dst, RT_PAD *rp_src);
 BR_INFO      *brinfo_release(BR_INFO *bri);
 
 TR_INFO      *trinfo_init(TR_INFO *tri);
 TR_INFO      *trinfo_release(TR_INFO *tri);
 TR_INFO      *trinfo_release_except_FC(TR_INFO *tri);
 TR_INFO      *trinfo_clear(TR_INFO *tri);
-int           trinfo_load_fontname(TR_INFO *tri, uint8_t *fontname, TCHUNK_SPECS *tsp);
 int           trinfo_load_qe(TR_INFO *tri, double qe);
 int           trinfo_load_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor);
 int           trinfo_load_ft_opts(TR_INFO *tri, int use_kern, int load_flags, int kern_mode);
-int           trinfo_load_textrec(TR_INFO *tri, TCHUNK_SPECS *tsp, double escapement, int flags);  
+int           trinfo_load_textrec(TR_INFO *tri, const TCHUNK_SPECS *tsp, double escapement, int flags);  
 int           trinfo_check_bk(TR_INFO *tri, int usebk, TRCOLORREF bkcolor);
-int           trinfo_append_out(TR_INFO *tri, char *src);
+int           trinfo_append_out(TR_INFO *tri, const char *src);
+
+int           is_mn_unicode(int test);
+
 
 #ifdef __cplusplus
 }

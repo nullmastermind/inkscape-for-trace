@@ -211,7 +211,7 @@ void  PrintWmf::search_short_fflist(const char *fontname, double *f1, double *f2
     search_long_fflist(fontname, f1, f2, f3);
 }
 
-void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, int *ndx, float scale){
+void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, int *rtl, int *ndx, float scale){
     float       fdx;
     int         i;
     int16_t   *ladx;
@@ -232,6 +232,8 @@ void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, 
     cptr++; // skip 2nd fake terminator
     sscanf(cptr,"%7f",&fdx);
     *ky=fdx;
+    cptr += 7;  // advance over ky and its space
+    sscanf(cptr,"%07d",rtl);
 }
 
 /* convert an  0RGB color to EMF U_COLORREF.
@@ -307,6 +309,7 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
     // initialize a few global variables
     hbrush = hpen = 0;
+    htextalignment = U_TA_BASELINE | U_TA_LEFT;
     use_stroke = use_fill = simple_shape = usebk = false;
 
     Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
@@ -383,19 +386,19 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
         g_error("Fatal programming error in PrintWmf::begin at U_WMRSETPOLYFILLMODE");
     }
 
-    // Text alignment:  (Never changes)
+    // Text alignment:  (only changed if RTL text is encountered )
     //   - (x,y) coordinates received by this filter are those of the point where the text
     //     actually starts, and already takes into account the text object's alignment;
     //   - for this reason, the WMF text alignment must always be TA_BASELINE|TA_LEFT.
     rec = U_WMRSETTEXTALIGN_set(U_TA_BASELINE | U_TA_LEFT);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-        g_error("Fatal programming error in PrintWmf::text at U_WMRSETTEXTALIGN_set");
+        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETTEXTALIGN_set");
     }
 
     htextcolor_rgb[0] = htextcolor_rgb[1] = htextcolor_rgb[2] = 0.0; 
     rec = U_WMRSETTEXTCOLOR_set(U_RGB(0,0,0));
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
-        g_error("Fatal programming error in PrintWmf::text at U_WMRSETTEXTCOLOR_set");
+        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETTEXTCOLOR_set");
     }
 
     rec = U_WMRSETROP2_set(U_R2_COPYPEN);
@@ -1273,8 +1276,8 @@ unsigned int PrintWmf::fill(
             }
         }
         if (
-            (style->stroke.noneSet || style->stroke_width.computed == 0.0)               ||
-            (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine) ||
+            (style->stroke.isNone() || style->stroke.noneSet || style->stroke_width.computed == 0.0) ||
+            (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine)             ||
             !all_closed
         ){
             print_pathv(pathv, fill_transform);  // do any fills. side effect: clears fill_pathv
@@ -1767,10 +1770,21 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     double ky;
 
     // the dx array is smuggled in like: text<nul>w1 w2 w3 ...wn<nul><nul>, where the widths are floats 7 characters wide, including the space
-    int ndx;
+    int ndx, rtl;
     int16_t *adx;
-    smuggle_adxky_out(text, &adx, &ky, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
+    smuggle_adxky_out(text, &adx, &ky, &rtl, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
     
+    uint32_t textalignment;
+    if(rtl > 0){ textalignment = U_TA_BASELINE | U_TA_LEFT;                    }
+    else {       textalignment = U_TA_BASELINE | U_TA_RIGHT | U_TA_RTLREADING; }
+    if(textalignment != htextalignment){
+        htextalignment = textalignment;
+        rec = U_WMRSETTEXTALIGN_set(textalignment);
+        if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){
+            g_error("Fatal programming error in PrintWmf::text at U_WMRSETTEXTALIGN_set");
+        }
+    }
+
     char *text2 = strdup(text);  // because U_Utf8ToUtf16le calls iconv which does not like a const char *
     uint16_t *unicode_text = U_Utf8ToUtf16le( text2, 0, NULL );
     free(text2);
@@ -1838,8 +1852,8 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
             round(rot),
             transweight(style->font_weight.computed),
             (style->font_style.computed == SP_CSS_FONT_STYLE_ITALIC),
-            style->text_decoration.underline,
-            style->text_decoration.line_through,
+            style->text_decoration_line.underline,
+            style->text_decoration_line.line_through,
             U_DEFAULT_CHARSET,
             U_OUT_DEFAULT_PRECIS,
             U_CLIP_DEFAULT_PRECIS,
@@ -1922,7 +1936,12 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 //    This is currently being smuggled in from caller as part of text, works
 //    MUCH better than the fallback hack below
 //    uint32_t *adx = dx_set(textheight,  U_FW_NORMAL, slen);  // dx is needed, this makes one up
-    rec = U_WMREXTTEXTOUT_set((U_POINT16) {xpos, ypos}, ndx, U_ETO_NONE, latin1_text, adx, U_RCL16_DEF);
+    if(rtl>0){
+        rec = U_WMREXTTEXTOUT_set((U_POINT16) {xpos, ypos}, ndx, U_ETO_NONE, latin1_text, adx, U_RCL16_DEF);
+    }
+    else {  // RTL text, U_TA_RTLREADING should be enough, but set this one too just in case
+        rec = U_WMREXTTEXTOUT_set((U_POINT16) {xpos, ypos}, ndx, U_ETO_RTLREADING, latin1_text, adx, U_RCL16_DEF);
+    }
     free(latin1_text);
     free(adx);
     if(!rec || wmf_append((PU_METARECORD)rec, wt, U_REC_FREE)){

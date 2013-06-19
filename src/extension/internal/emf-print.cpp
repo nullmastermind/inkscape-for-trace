@@ -212,7 +212,7 @@ void PrintEmf::search_short_fflist(const char *fontname, double *f1, double *f2,
     search_long_fflist(fontname, f1, f2, f3);
 }
 
-void PrintEmf::smuggle_adxky_out(const char *string, uint32_t **adx, double *ky, int *ndx, float scale){
+void PrintEmf::smuggle_adxkyrtl_out(const char *string, uint32_t **adx, double *ky, int *rtl, int *ndx, float scale){
     float       fdx;
     int         i;
     uint32_t   *ladx;
@@ -233,6 +233,8 @@ void PrintEmf::smuggle_adxky_out(const char *string, uint32_t **adx, double *ky,
     cptr++; // skip 2nd fake terminator
     sscanf(cptr,"%7f",&fdx);
     *ky=fdx;
+    cptr += 7;  // advance over ky and its space
+    sscanf(cptr,"%07d",rtl);
 }
 
 /* convert an  0RGB color to EMF U_COLORREF.
@@ -313,6 +315,7 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
     // initialize a few global variables
     hbrush = hbrushOld = hpen = 0;
+    htextalignment = U_TA_BASELINE | U_TA_LEFT;
     use_stroke = use_fill = simple_shape = usebk = false;
 
     Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
@@ -418,33 +421,34 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
     rec = U_EMRSETBKMODE_set(U_TRANSPARENT);
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        g_error("Fatal programming error in PrintEmf::text at U_EMRSETBKMODE_set");
+        g_error("Fatal programming error in PrintEmf::begin at U_EMRSETBKMODE_set");
     }
 
     hpolyfillmode=U_WINDING;
     rec = U_EMRSETPOLYFILLMODE_set(U_WINDING);
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        g_error("Fatal programming error in PrintEmf::text at U_EMRSETPOLYFILLMODE_set");
+        g_error("Fatal programming error in PrintEmf::begin at U_EMRSETPOLYFILLMODE_set");
     }
 
-    // Text alignment:  (Never changes)
+    // Text alignment:  (only changed if RTL text is encountered )
     //   - (x,y) coordinates received by this filter are those of the point where the text
     //     actually starts, and already takes into account the text object's alignment;
     //   - for this reason, the EMF text alignment must always be TA_BASELINE|TA_LEFT.
+    htextalignment = U_TA_BASELINE | U_TA_LEFT;
     rec = U_EMRSETTEXTALIGN_set(U_TA_BASELINE | U_TA_LEFT);
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        g_error("Fatal programming error in PrintEmf::text at U_EMRSETTEXTALIGN_set");
+        g_error("Fatal programming error in PrintEmf::begin at U_EMRSETTEXTALIGN_set");
     }
 
     htextcolor_rgb[0] = htextcolor_rgb[1] = htextcolor_rgb[2] = 0.0; 
     rec = U_EMRSETTEXTCOLOR_set(U_RGB(0,0,0));
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        g_error("Fatal programming error in PrintEmf::text at U_EMRSETTEXTCOLOR_set");
+        g_error("Fatal programming error in PrintEmf::begin at U_EMRSETTEXTCOLOR_set");
     }
 
     rec = U_EMRSETROP2_set(U_R2_COPYPEN);
     if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
-        g_error("Fatal programming error in PrintEmf::text at U_EMRSETROP2_set");
+        g_error("Fatal programming error in PrintEmf::begin at U_EMRSETROP2_set");
     }
     
     /* miterlimit is set with eah pen, so no need to check for it changes as in WMF */
@@ -1415,8 +1419,8 @@ unsigned int PrintEmf::fill(
             }
         }
         if (
-            (style->stroke.noneSet || style->stroke_width.computed == 0.0)               ||
-            (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine) ||
+            (style->stroke.isNone() || style->stroke.noneSet || style->stroke_width.computed == 0.0) ||
+            (style->stroke_dash.n_dash   &&  style->stroke_dash.dash  && FixPPTDashLine)             ||
             !all_closed
         ){
             print_pathv(pathv, fill_transform);  // do any fills. side effect: clears fill_pathv
@@ -1977,10 +1981,21 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     double ky;
 
     // the dx array is smuggled in like: text<nul>w1 w2 w3 ...wn<nul><nul>, where the widths are floats 7 characters wide, including the space
-    int ndx;
+    int ndx, rtl;
     uint32_t *adx;
-    smuggle_adxky_out(text, &adx, &ky, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
+    smuggle_adxkyrtl_out(text, &adx, &ky, &rtl, &ndx, PX2WORLD * std::min(tf.expansionX(),tf.expansionY())); // side effect: free() adx
     
+    uint32_t textalignment;
+    if(rtl > 0){ textalignment = U_TA_BASELINE | U_TA_LEFT;                    }
+    else {       textalignment = U_TA_BASELINE | U_TA_RIGHT | U_TA_RTLREADING; }
+    if(textalignment != htextalignment){
+        htextalignment = textalignment;
+        rec = U_EMRSETTEXTALIGN_set(textalignment);
+        if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
+            g_error("Fatal programming error in PrintEmf::text at U_EMRSETTEXTALIGN_set");
+        }
+    }
+
     char *text2 = strdup(text);  // because U_Utf8ToUtf16le calls iconv which does not like a const char *
     uint16_t *unicode_text = U_Utf8ToUtf16le( text2, 0, NULL );
     free(text2);
@@ -2043,8 +2058,8 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
             round(rot),
             transweight(style->font_weight.computed),
             (style->font_style.computed == SP_CSS_FONT_STYLE_ITALIC),
-            style->text_decoration.underline,
-            style->text_decoration.line_through,
+            style->text_decoration_line.underline,
+            style->text_decoration_line.line_through,
             U_DEFAULT_CHARSET,
             U_OUT_DEFAULT_PRECIS,
             U_CLIP_DEFAULT_PRECIS,
@@ -2109,6 +2124,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     int32_t const xpos = (int32_t) round(p2[Geom::X]);
     int32_t const ypos = (int32_t) round(p2[Geom::Y]);
 
+
     // The number of characters in the string is a bit fuzzy.  ndx, the number of entries in adx is 
     // the number of VISIBLE characters, since some may combine from the UTF (8 originally,
     // now 16) encoding.  Conversely strlen() or wchar16len() would give the absolute number of
@@ -2117,7 +2133,13 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 //    This is currently being smuggled in from caller as part of text, works
 //    MUCH better than the fallback hack below
 //    uint32_t *adx = dx_set(textheight,  U_FW_NORMAL, slen);  // dx is needed, this makes one up
-    char *rec2 = emrtext_set( (U_POINTL) {xpos, ypos}, ndx, 2, unicode_text, U_ETO_NONE, U_RCL_DEF, adx);
+    char *rec2;
+    if(rtl>0){
+        rec2 = emrtext_set( (U_POINTL) {xpos, ypos}, ndx, 2, unicode_text, U_ETO_NONE, U_RCL_DEF, adx);
+    }
+    else {  // RTL text, U_TA_RTLREADING should be enough, but set this one too just in case
+        rec2 = emrtext_set( (U_POINTL) {xpos, ypos}, ndx, 2, unicode_text, U_ETO_RTLREADING, U_RCL_DEF, adx);
+    }
     free(unicode_text);
     free(adx);
     rec = U_EMREXTTEXTOUTW_set(U_RCL_DEF,U_GM_COMPATIBLE,1.0,1.0,(PU_EMRTEXT)rec2);
