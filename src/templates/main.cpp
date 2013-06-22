@@ -1,6 +1,8 @@
 #include <gtkmm/main.h>
 
-#include "newfromtemplate.h"
+#include "new-from-template.h"
+
+using namespace Inkscape::UI;
 
 int main (int argc, char *argv[])
 {
