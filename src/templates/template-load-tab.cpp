@@ -7,7 +7,8 @@ namespace Inkscape {
 namespace UI {
     
 
-TemplateLoadTab::TemplateLoadTab()
+TemplateLoadTab::TemplateLoadTab() :
+    _keywordsCombo(true)
 {
     set_border_width(10);
 
@@ -66,7 +67,6 @@ void TemplateLoadTab::_displayTemplateInfo()
 void TemplateLoadTab::_initKeywordsList()
 {
     _keywordsCombo.append_text("All");
-    _keywordsCombo.set_active_text("All");
     
     for (int i = 0 ; i < 10 ; ++i) {
         _keywordsCombo.append_text( "Keyword" + Glib::ustring::format(i));
