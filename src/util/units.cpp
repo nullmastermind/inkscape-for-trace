@@ -334,9 +334,46 @@ void UnitsSAXHandler::_endElement(xmlChar const *xname)
     }
 }
 
+/** Initialize a length. */
+Length::Length(Unit *u, double l) {
+    unit = u;
+    length = l;
+}
+
+/** Checks if a length is compatible with the specified unit. */
+bool Length::compatibleWith(Unit *u) {
+    // Percentages
+    if (unit->type == UNIT_TYPE_DIMENSIONLESS || u->type == UNIT_TYPE_DIMENSIONLESS) {
+        return true;
+    }
+    
+    // Other units with same type
+    if (unit->type == u->type) {
+        return true;
+    }
+    
+    // Different, incompatible types
+    return false;
+}
+
+/** Return the length's value in the specified unit. */
+double Length::value(Unit *u) {
+    return convert(length, unit, u);
+}
+
+/** Convert distances. */
+double Length::convert(double from_dist, Unit *from, Unit *to) const {
+    // Incompatible units
+    if (from->type != to->type) {
+        return -1;
+    }
+    
+    // Compatible units
+    return from_dist / from->factor * to->factor;
+}
+
 } // namespace Util
 } // namespace Inkscape
-
 
 /*
   Local Variables:

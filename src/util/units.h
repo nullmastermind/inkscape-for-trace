@@ -84,6 +84,18 @@ class UnitTable {
 
 };
 
+class Length {
+public:
+    Unit *unit;
+    double length;
+    
+    Length(Unit *u, double l);   // constructor
+    bool compatibleWith(Unit *u);
+    double value(Unit *u);
+    
+    double convert(double from_dist, Unit *from, Unit *to) const;
+};
+
 } // namespace Util
 } // namespace Inkscape
 
