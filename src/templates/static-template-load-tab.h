@@ -20,11 +20,11 @@ public:
 protected:
     virtual void _displayTemplateInfo();
     
-    Gtk::Button _moreInfoButton;
-    Gtk::Label _shortDescriptionLabel;
-    Gtk::Label _templateAuthorLabel;
-    Gtk::Label _templateNameLabel;
-    Gtk::Image _previewImage;
+    Gtk::Button _more_info_button;
+    Gtk::Label _short_description_label;
+    Gtk::Label _template_author_label;
+    Gtk::Label _template_name_label;
+    Gtk::Image _preview_image;
 };
 
 }

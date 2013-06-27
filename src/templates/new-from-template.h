@@ -18,8 +18,8 @@ public:
     NewFromTemplate();
     
 private:
-    Gtk::Notebook _mainWidget;
-    Gtk::Button _createButton;
+    Gtk::Notebook _main_widget;
+    Gtk::Button _create_template_button;
     StaticTemplateLoadTab _tab1;
     TemplateLoadTab _tab2;
     

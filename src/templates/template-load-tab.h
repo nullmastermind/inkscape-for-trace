@@ -31,8 +31,8 @@ protected:
         Gtk::TreeModelColumn<Glib::ustring> textValue;
     };
     
-    Glib::ustring _currentKeyword;
-    Glib::ustring _currentTemplate;
+    Glib::ustring _current_keyword;
+    Glib::ustring _current_template;
     
     virtual void _displayTemplateInfo();
     virtual void _initKeywordsList();
@@ -41,15 +41,15 @@ protected:
     void _initLists();
     void _keywordSelected();    
 
-    Gtk::HBox _mainBox;
-    Gtk::VBox _templatesColumn;
-    Gtk::VBox _templateInfoColumn;
+    Gtk::HBox _main_box;
+    Gtk::VBox _templates_column;
+    Gtk::VBox _template_info_column;
     
-    Gtk::ComboBoxText _keywordsCombo;
+    Gtk::ComboBoxText _keywords_combo;
     
-    Gtk::TreeView _templatesView;
-    Glib::RefPtr<Gtk::ListStore> _templatesRef;
-    StringModelColumns _templatesColumns;
+    Gtk::TreeView _templates_view;
+    Glib::RefPtr<Gtk::ListStore> _templates_ref;
+    StringModelColumns _templates_columns;
 
 };
 

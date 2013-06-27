@@ -7,38 +7,38 @@ namespace Inkscape {
 namespace UI {
     
 
-TemplateLoadTab::TemplateLoadTab() :
-    _keywordsCombo(true)
+TemplateLoadTab::TemplateLoadTab()
+    : _keywords_combo(true)
 {
     set_border_width(10);
 
     Gtk::Label *title;
     title = manage(new Gtk::Label("Search Tags:"));
-    _templatesColumn.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _templates_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
-    _templatesColumn.pack_start(_keywordsCombo, Gtk::PACK_SHRINK, 0);
+    _templates_column.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 0);
     
     title = manage(new Gtk::Label("Templates"));
-    _templatesColumn.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _templates_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     title = manage(new Gtk::Label("Selected template"));
-    _templateInfoColumn.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _template_info_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     _initLists();
     
-    add(_mainBox);
-    _mainBox.pack_start(_templatesColumn, Gtk::PACK_SHRINK, 20);
-    _mainBox.pack_start(_templateInfoColumn, Gtk::PACK_EXPAND_WIDGET, 10);
+    add(_main_box);
+    _main_box.pack_start(_templates_column, Gtk::PACK_SHRINK, 20);
+    _main_box.pack_start(_template_info_column, Gtk::PACK_EXPAND_WIDGET, 10);
     
-    _templatesColumn.pack_start(_templatesView, Gtk::PACK_SHRINK, 5);
+    _templates_column.pack_start(_templates_view, Gtk::PACK_SHRINK, 5);
 
     Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef =
-    _templatesView.get_selection();
+    _templates_view.get_selection();
     
     templateSelectionRef->signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_displayTemplateInfo));
     
-    _keywordsCombo.signal_changed().connect(
+    _keywords_combo.signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_keywordSelected));
     this->show_all();
 }
@@ -57,29 +57,29 @@ void TemplateLoadTab::createTemplate()
 
 void TemplateLoadTab::_displayTemplateInfo()
 {
-    Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef = _templatesView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef = _templates_view.get_selection();
     if (templateSelectionRef->get_selected()) {
-        _currentTemplate = (*templateSelectionRef->get_selected())[_templatesColumns.textValue];
+        _current_template = (*templateSelectionRef->get_selected())[_templates_columns.textValue];
     }
 }
 
 
 void TemplateLoadTab::_initKeywordsList()
 {
-    _keywordsCombo.append_text("All");
+    _keywords_combo.append_text("All");
     
     for (int i = 0 ; i < 10 ; ++i) {
-        _keywordsCombo.append_text( "Keyword" + Glib::ustring::format(i));
+        _keywords_combo.append_text( "Keyword" + Glib::ustring::format(i));
     }
 }
 
 
 void TemplateLoadTab::_initLists()
 {
-    _templatesRef = Gtk::ListStore::create(_templatesColumns);
-    _templatesView.set_model(_templatesRef);
-    _templatesView.append_column("", _templatesColumns.textValue);
-    _templatesView.set_headers_visible(false);
+    _templates_ref = Gtk::ListStore::create(_templates_columns);
+    _templates_view.set_model(_templates_ref);
+    _templates_view.append_column("", _templates_columns.textValue);
+    _templates_view.set_headers_visible(false);
     
     _initKeywordsList();
     _refreshTemplatesList();
@@ -88,18 +88,18 @@ void TemplateLoadTab::_initLists()
 
 void TemplateLoadTab::_keywordSelected()
 {
-    _currentKeyword = _keywordsCombo.get_active_text();
+    _current_keyword = _keywords_combo.get_active_text();
     _refreshTemplatesList();
 }
 
 
 void TemplateLoadTab::_refreshTemplatesList()
 {
-     _templatesRef->clear();
+     _templates_ref->clear();
      for (int i = 0 ; i < 7 ; ++i) {
-        Gtk::TreeModel::iterator iter = _templatesRef->append();
+        Gtk::TreeModel::iterator iter = _templates_ref->append();
         Gtk::TreeModel::Row row = *iter;
-        row[_templatesColumns.textValue] = "Template" + Glib::ustring::format(i);
+        row[_templates_columns.textValue] = "Template" + Glib::ustring::format(i);
     }
 } 
 

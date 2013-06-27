@@ -9,25 +9,25 @@ namespace Inkscape {
 namespace UI {
     
 
-StaticTemplateLoadTab::StaticTemplateLoadTab() :
-    _moreInfoButton("More info"),
-    _previewImage("preview.png"),
-    _shortDescriptionLabel("Short description - I like trains. ad asda asd asdweqe gdfg"),
-    _templateNameLabel("Template_name"),
-    _templateAuthorLabel("by template_author")
+StaticTemplateLoadTab::StaticTemplateLoadTab()
+    : _more_info_button("More info")
+    , _preview_image("preview.png")
+    , _short_description_label("Short description - I like trains. ad asda asd asdweqe gdfg")
+    , _template_name_label("Template_name")
+    , _template_author_label("by template_author")
 {
-    _templateInfoColumn.pack_start(_templateNameLabel, Gtk::PACK_SHRINK, 4);
-    _templateInfoColumn.pack_start(_templateAuthorLabel, Gtk::PACK_SHRINK, 0);
-    _templateInfoColumn.pack_start(_previewImage, Gtk::PACK_SHRINK, 15);
-    _templateInfoColumn.pack_start(_shortDescriptionLabel, Gtk::PACK_SHRINK, 4);
+    _template_info_column.pack_start(_template_name_label, Gtk::PACK_SHRINK, 4);
+    _template_info_column.pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
+    _template_info_column.pack_start(_preview_image, Gtk::PACK_SHRINK, 15);
+    _template_info_column.pack_start(_short_description_label, Gtk::PACK_SHRINK, 4);
     
-    _shortDescriptionLabel.set_line_wrap(true);
-    _shortDescriptionLabel.set_size_request(200);
+    _short_description_label.set_line_wrap(true);
+    _short_description_label.set_size_request(200);
 
     Gtk::Alignment *align;
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
-    _templateInfoColumn.pack_start(*align, Gtk::PACK_SHRINK, 5);
-    align->add(_moreInfoButton);
+    _template_info_column.pack_start(*align, Gtk::PACK_SHRINK, 5);
+    align->add(_more_info_button);
 }
 
 
@@ -40,7 +40,7 @@ void StaticTemplateLoadTab::createTemplate()
 void StaticTemplateLoadTab::_displayTemplateInfo()
 {
     TemplateLoadTab::_displayTemplateInfo();
-    _templateNameLabel.set_text(_currentTemplate);
+    _template_name_label.set_text(_current_template);
 }
 
 }
