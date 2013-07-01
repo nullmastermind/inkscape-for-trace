@@ -23,6 +23,9 @@ struct SPAction;
 class SPDocument;
 
 namespace Inkscape {
+
+class ActionContext;
+
 namespace UI {
 namespace View {
 class View;
@@ -472,8 +475,8 @@ public:
 
 
 protected:
-    SPAction *make_action_helper (Inkscape::UI::View::View *view, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
-    virtual SPAction *make_action (Inkscape::UI::View::View *view);
+    SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
+    virtual SPAction *make_action (Inkscape::ActionContext const & context);
 
 public:
 
@@ -521,7 +524,7 @@ public:
     Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image, gchar const * group);
     virtual ~Verb (void);
 
-    SPAction * get_action(Inkscape::UI::View::View * view);
+    SPAction * get_action(Inkscape::ActionContext const & context);
 
 private:
     static Verb * get_search (unsigned int code);

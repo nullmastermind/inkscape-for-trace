@@ -359,9 +359,9 @@ Effect::set_pref_dialog (PrefDialog * prefdialog)
 }
 
 SPAction *
-Effect::EffectVerb::make_action (Inkscape::UI::View::View * view)
+Effect::EffectVerb::make_action (Inkscape::ActionContext const & context)
 {
-    return make_action_helper(view, &perform, static_cast<void *>(this));
+    return make_action_helper(context, &perform, static_cast<void *>(this));
 }
 
 /** \brief  Decode the verb code and take appropriate action */

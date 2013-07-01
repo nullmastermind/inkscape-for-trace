@@ -60,6 +60,8 @@
 #include "macros.h"
 #include "file.h"
 #include "document.h"
+#include "layer-model.h"
+#include "selection.h"
 #include "sp-object.h"
 #include "interface.h"
 #include "print.h"
@@ -85,6 +87,7 @@
 #include "debug/logger.h"
 #include "debug/log-display-config.h"
 
+#include "helper/action-context.h"
 #include "helper/png-write.h"
 #include "helper/geom.h"
 
@@ -1066,7 +1069,20 @@ static int sp_process_file_list(GSList *fl)
             if (sp_vacuum_defs) {
                 doc->vacuumDocument();
             }
-            if (sp_vacuum_defs && !sp_export_svg) {
+            
+            bool has_performed_actions = false;
+            {
+                // Create layer model and selection model so we can run some verbs without a GUI
+                Inkscape::LayerModel layer_model;
+                layer_model.setDocument(doc);
+                Inkscape::Selection *selection = Inkscape::GC::release(new Inkscape::Selection(&layer_model, NULL));
+
+                // Execute command-line actions (selections and verbs) using our local models
+                Inkscape::ActionContext context(selection);
+                has_performed_actions = Inkscape::CmdLineAction::doList(context);
+            }
+
+            if (!sp_export_svg && (sp_vacuum_defs || has_performed_actions)) {
                 // save under the name given in the command line
                 sp_repr_save_file(doc->rdoc, filename, SP_SVG_NS_URI);
             }

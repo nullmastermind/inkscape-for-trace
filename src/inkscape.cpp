@@ -87,7 +87,7 @@ enum {
     LAST_SIGNAL
 };
 
-#define DESKTOP_IS_ACTIVE(d) ((d) == inkscape->desktops->data)
+#define DESKTOP_IS_ACTIVE(d) (inkscape->desktops && ((d) == inkscape->desktops->data))
 
 
 /*################################

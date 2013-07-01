@@ -30,6 +30,7 @@
 #include "extension/system.h" //IO
 #include "file.h" //IO
 #include "helper/action.h" //sp_action_perform
+#include "helper/action-context.h"
 #include "inkscape.h" //inkscape_find_desktop_by_dkey, activate desktops
 #include "layer-fns.h" //LPOS_BELOW
 #include "live_effects/parameter/text.h" //text
@@ -263,7 +264,7 @@ dbus_call_verb (DocumentInterface *object, int verbid, GError **error)
     if ( desk2 ) {
         Inkscape::Verb *verb = Inkscape::Verb::get( verbid );
         if ( verb ) {
-            SPAction *action = verb->get_action(desk2);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(desk2));
             if ( action ) {
                 //if (!object->updates)
                     //document_interface_pause_updates (object, error);
@@ -342,7 +343,7 @@ document_interface_call_verb (DocumentInterface *object, gchar *verbid, GError *
     if ( desk2 ) {
         Inkscape::Verb *verb = Inkscape::Verb::getbyid( verbid );
         if ( verb ) {
-            SPAction *action = verb->get_action(desk2);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(desk2));
             if ( action ) {
                 sp_action_perform( action, NULL );
                 if (object->updates) {
