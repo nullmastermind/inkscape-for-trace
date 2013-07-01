@@ -626,6 +626,12 @@ SPAction *Verb::get_action(Inkscape::ActionContext const & context)
     return action;
 }
 
+/* static */
+void Verb::show_gui_required_message(SPAction *action)
+{
+    g_printerr("WARNING: ignoring verb %s - GUI required for this verb.\n", action->id);
+}
+
 void Verb::sensitive(SPDocument *in_doc, bool in_sensitive)
 {
     // printf("Setting sensitivity of \"%s\" to %d\n", _name, in_sensitive);
@@ -807,7 +813,11 @@ void FileVerb::perform(SPAction *action, void *data)
 #endif
 
     SPDesktop *desktop = dynamic_cast<SPDesktop*>(sp_action_get_view(action));
-    g_assert(desktop != NULL);
+    if (desktop == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
+
     Gtk::Window *parent = desktop->getToplevel();
     g_assert(parent != NULL);
 
@@ -873,8 +883,10 @@ void FileVerb::perform(SPAction *action, void *data)
 void EditVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt)
+    if (dt == NULL) {
+        show_gui_required_message(action);
         return;
+    }
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
@@ -1037,6 +1049,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
         return;
     }
 
+    bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_UNION:
             sp_selected_path_union(selection, dt);
@@ -1057,12 +1070,19 @@ void SelectionVerb::perform(SPAction *action, void *data)
             sp_selected_path_slice(selection, dt);
             break;
         default:
+            handled = false;
             break;
     }
 
-    // The remaining operations require a desktop
-    if (!dt)
+    if (handled) {
         return;
+    }
+
+    // The remaining operations require a desktop
+    if (dt == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
 
     g_assert(dt->_dlg_mgr != NULL);
 
@@ -1162,8 +1182,12 @@ void LayerVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     size_t verb = reinterpret_cast<std::size_t>(data);
-
-    if ( !dt || !dt->currentLayer() ) {
+    
+    if (dt == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
+    if ( !dt->currentLayer() ) {
         return;
     }
 
@@ -1412,8 +1436,10 @@ void LayerVerb::perform(SPAction *action, void *data)
 void ObjectVerb::perform( SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt)
+    if (dt == NULL) {
+        show_gui_required_message(action);
         return;
+    }
 
     SPEventContext *ec = dt->event_context;
 
@@ -1500,9 +1526,11 @@ void ContextVerb::perform(SPAction *action, void *data)
     int vidx;
 
     dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-
-    if (!dt)
+    
+    if (dt == NULL) {
+        show_gui_required_message(action);
         return;
+    }
 
     verb = (sp_verb_t)GPOINTER_TO_INT((gpointer)data);
 
@@ -1701,8 +1729,10 @@ void ContextVerb::perform(SPAction *action, void *data)
 void TextVerb::perform(SPAction *action, void */*data*/)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt)
+    if (dt == NULL) {
+        show_gui_required_message(action);
         return;
+    }
 
     SPDocument *doc = sp_desktop_document(dt);
     (void)doc;
@@ -1716,8 +1746,10 @@ void TextVerb::perform(SPAction *action, void */*data*/)
 void ZoomVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt)
+    if (dt == NULL) {
+        show_gui_required_message(action);
         return;
+    }
     SPEventContext *ec = dt->event_context;
 
     SPDocument *doc = sp_desktop_document(dt);
@@ -1906,6 +1938,10 @@ void DialogVerb::perform(SPAction *action, void *data)
     }
 
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
+    if (dt == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {
@@ -2018,6 +2054,10 @@ void DialogVerb::perform(SPAction *action, void *data)
 void HelpVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
+    if (dt == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {
@@ -2050,8 +2090,12 @@ void HelpVerb::perform(SPAction *action, void *data)
 /**
  * Decode the verb code and take appropriate action.
  */
-void TutorialVerb::perform(SPAction */*action*/, void *data)
+void TutorialVerb::perform(SPAction *action, void *data)
 {
+    if (sp_action_get_view(action) == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_TUTORIAL_BASIC:
             // TRANSLATORS: If you have translated the tutorial-basic.en.svgz file to your language,
@@ -2136,11 +2180,14 @@ void EffectLastVerb::perform(SPAction *action, void *data)
     // These aren't used, but are here to remind people not to use
     // the CURRENT_DOCUMENT macros unless they really have to. 
     Inkscape::UI::View::View *current_view = sp_action_get_view(action);
+    if (current_view == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
     // SPDocument *current_document = SP_VIEW_DOCUMENT(current_view);
     Inkscape::Extension::Effect *effect = Inkscape::Extension::Effect::get_last_effect();
 
     if (effect == NULL) return;
-    if (current_view == NULL) return;
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EFFECT_LAST_PREF:
@@ -2200,7 +2247,11 @@ SPAction *FitCanvasVerb::make_action(Inkscape::ActionContext const & context)
 void FitCanvasVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt) return;
+    if (dt == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
+
     SPDocument *doc = sp_desktop_document(dt);
     if (!doc) return;
 
@@ -2266,7 +2317,11 @@ SPAction *LockAndHideVerb::make_action(Inkscape::ActionContext const & context)
 void LockAndHideVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
-    if (!dt) return;
+    if (dt == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
+
     SPDocument *doc = sp_desktop_document(dt);
     if (!doc) return;
 

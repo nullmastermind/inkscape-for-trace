@@ -550,6 +550,11 @@ public:
         }
     }
     static Verb * getbyid (gchar const * id);
+    
+    /**
+     * Print a message to stderr indicating that this verb needs a GUI to run
+     */
+    static void show_gui_required_message(SPAction *action);
 
     static void delete_all_view (Inkscape::UI::View::View * view);
     void delete_view (Inkscape::UI::View::View * view);

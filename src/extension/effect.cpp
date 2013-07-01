@@ -369,12 +369,15 @@ void
 Effect::EffectVerb::perform( SPAction *action, void * data )
 {
     Inkscape::UI::View::View * current_view = sp_action_get_view(action);
+    if (current_view == NULL) {
+        show_gui_required_message(action);
+        return;
+    }
 //  SPDocument * current_document = current_view->doc;
     Effect::EffectVerb * ev = reinterpret_cast<Effect::EffectVerb *>(data);
     Effect * effect = ev->_effect;
 
     if (effect == NULL) return;
-    if (current_view == NULL) return;
 
     if (ev->_showPrefs) {
         effect->prefs(current_view);
