@@ -45,6 +45,7 @@ Glib::ustring sp_file_default_template_uri();
  */
 SPDesktop* sp_file_new (const Glib::ustring &templ);
 SPDesktop* sp_file_new_default (void);
+SPDesktop* sp_file_new_from_templatee ();
 
 /*######################
 ## D E L E T E
