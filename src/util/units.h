@@ -47,6 +47,13 @@ class Unit {
 
     bool           isAbsolute() const { return type != UNIT_TYPE_DIMENSIONLESS; }
     int            defaultDigits() const;
+    bool           compatibleWith(const Unit *u) const;
+    
+    friend bool operator== (const Unit &u1, const Unit &u2);
+    friend bool operator!= (const Unit &u1, const Unit &u2);
+    
+    // temporary
+    int svgUnit() const;
 };
 
 class UnitTable {
@@ -84,16 +91,16 @@ class UnitTable {
 
 };
 
-class Length {
+class Quantity {
 public:
     Unit *unit;
-    double length;
+    double quantity;
     
-    Length(Unit *u, double l);   // constructor
-    bool compatibleWith(Unit *u);
-    double value(Unit *u);
+    Quantity(Unit *u, double q);   // constructor
+    bool compatibleWith(const Unit *u) const;
+    double value(Unit *u) const;
     
-    double convert(double from_dist, Unit *from, Unit *to) const;
+    static double convert(const double from_dist, const Unit *from, const Unit *to);
 };
 
 } // namespace Util

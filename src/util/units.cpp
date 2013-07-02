@@ -55,6 +55,57 @@ int Unit::defaultDigits() const {
     }
 }
 
+/** Checks if a unit is compatible with the specified unit. */
+bool Unit::compatibleWith(const Unit *u) const {
+    // Percentages
+    if (type == UNIT_TYPE_DIMENSIONLESS || u->type == UNIT_TYPE_DIMENSIONLESS) {
+        return true;
+    }
+    
+    // Other units with same type
+    if (type == u->type) {
+        return true;
+    }
+    
+    // Different, incompatible types
+    return false;
+}
+
+/** Check if units are equal. */
+bool operator== (const Unit &u1, const Unit &u2) {
+    return (u1.type == u2.type && u1.name.compare(u2.name) == 0);
+}
+
+/** Check if units are not equal. */ 
+bool operator!= (const Unit &u1, const Unit &u2) {
+    return !(u1 == u2);
+}
+
+/** Temporary - get SVG unit. */
+int Unit::svgUnit() const {
+    if (!abbr.compare("px"))
+        return 1;
+    if (!abbr.compare("pt"))
+        return 2;
+    if (!abbr.compare("pc"))
+        return 3;
+    if (!abbr.compare("mm"))
+        return 4;
+    if (!abbr.compare("cm"))
+        return 5;
+    if (!abbr.compare("in"))
+        return 6;
+    if (!abbr.compare("ft"))
+        return 7;
+    if (!abbr.compare("em"))
+        return 8;
+    if (!abbr.compare("ex"))
+        return 9;
+    if (!abbr.compare("%"))
+        return 10;
+    return 0;
+}
+
 /**
  * Initializes the unit tables and identifies the primary unit types.
  *
@@ -334,42 +385,31 @@ void UnitsSAXHandler::_endElement(xmlChar const *xname)
     }
 }
 
-/** Initialize a length. */
-Length::Length(Unit *u, double l) {
+/** Initialize a quantity. */
+Quantity::Quantity(Unit *u, double q) {
     unit = u;
-    length = l;
+    quantity = q;
 }
 
-/** Checks if a length is compatible with the specified unit. */
-bool Length::compatibleWith(Unit *u) {
-    // Percentages
-    if (unit->type == UNIT_TYPE_DIMENSIONLESS || u->type == UNIT_TYPE_DIMENSIONLESS) {
-        return true;
-    }
-    
-    // Other units with same type
-    if (unit->type == u->type) {
-        return true;
-    }
-    
-    // Different, incompatible types
-    return false;
+/** Checks if a quantity is compatible with the specified unit. */
+bool Quantity::compatibleWith(const Unit *u) const {
+    return unit->compatibleWith(u);
 }
 
-/** Return the length's value in the specified unit. */
-double Length::value(Unit *u) {
-    return convert(length, unit, u);
+/** Return the quantity's value in the specified unit. */
+double Quantity::value(Unit *u) const {
+    return convert(quantity, unit, u);
 }
 
 /** Convert distances. */
-double Length::convert(double from_dist, Unit *from, Unit *to) const {
+double Quantity::convert(const double from_dist, const Unit *from, const Unit *to) {
     // Incompatible units
     if (from->type != to->type) {
         return -1;
     }
     
     // Compatible units
-    return from_dist / from->factor * to->factor;
+    return from_dist * from->factor / to->factor;
 }
 
 } // namespace Util
