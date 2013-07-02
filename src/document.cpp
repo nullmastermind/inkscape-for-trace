@@ -49,7 +49,6 @@
 #include "display/drawing-item.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "helper/units.h"
 #include "id-clash.h"
 #include "inkscape-private.h"
 #include "inkscape-version.h"
@@ -86,6 +85,8 @@ gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer d
 static gint doc_count = 0;
 
 static unsigned long next_serial = 0;
+
+static Inkscape::Util::UnitTable unit_table;
 
 SPDocument::SPDocument() :
     keepalive(FALSE),
@@ -546,21 +547,22 @@ gdouble SPDocument::getWidth() const
     return result;
 }
 
-void SPDocument::setWidth(gdouble width, const SPUnit *unit)
+void SPDocument::setWidth(gdouble width, const Inkscape::Util::Unit *unit)
 {
+    Inkscape::Util::Unit px = unit_table.getUnit("px");
     if (root->width.unit == SVGLength::PERCENT && root->viewBox_set) { // set to viewBox=
-        root->viewBox.setMax(Geom::Point(root->viewBox.left() + sp_units_get_pixels (width, *unit), root->viewBox.bottom()));
+        root->viewBox.setMax(Geom::Point(root->viewBox.left() + Inkscape::Util::Quantity::convert(width, unit, &px), root->viewBox.bottom()));
     } else { // set to width=
         gdouble old_computed = root->width.computed;
-        root->width.computed = sp_units_get_pixels (width, *unit);
+        root->width.computed = Inkscape::Util::Quantity::convert(width, unit, &px);
         /* SVG does not support meters as a unit, so we must translate meters to
          * cm when writing */
-        if (!strcmp(unit->abbr, "m")) {
+        if (*unit == unit_table.getUnit("m")) {
             root->width.value = 100*width;
             root->width.unit = SVGLength::CM;
         } else {
             root->width.value = width;
-            root->width.unit = (SVGLength::Unit) sp_unit_get_svg_unit(unit);
+            root->width.unit = (SVGLength::Unit) unit->svgUnit();
         }
 
         if (root->viewBox_set)
@@ -582,21 +584,22 @@ gdouble SPDocument::getHeight() const
     return result;
 }
 
-void SPDocument::setHeight(gdouble height, const SPUnit *unit)
+void SPDocument::setHeight(gdouble height, const Inkscape::Util::Unit *unit)
 {
+    Inkscape::Util::Unit px = unit_table.getUnit("px");
     if (root->height.unit == SVGLength::PERCENT && root->viewBox_set) { // set to viewBox=
-        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + sp_units_get_pixels (height, *unit)));
+        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + Inkscape::Util::Quantity::convert(height, unit, &px)));
     } else { // set to height=
         gdouble old_computed = root->height.computed;
-        root->height.computed = sp_units_get_pixels (height, *unit);
+        root->height.computed = Inkscape::Util::Quantity::convert(height, unit, &px);
         /* SVG does not support meters as a unit, so we must translate meters to
          * cm when writing */
-        if (!strcmp(unit->abbr, "m")) {
+        if (*unit == unit_table.getUnit("m")) {
             root->height.value = 100*height;
             root->height.unit = SVGLength::CM;
         } else {
             root->height.value = height;
-            root->height.unit = (SVGLength::Unit) sp_unit_get_svg_unit(unit);
+            root->height.unit = (SVGLength::Unit) unit->svgUnit();
         }
 
         if (root->viewBox_set)
@@ -626,7 +629,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double const h = rect.height();
 
     double const old_height = getHeight();
-    SPUnit const &px(sp_unit_get_by_id(SP_UNIT_PX));
+    Inkscape::Util::Unit const px = unit_table.getUnit("px");
     
     /* in px */
     double margin_top = 0.0;
@@ -639,9 +642,10 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     if (with_margins && nv) {
         if (nv != NULL) {
             gchar const * const units_abbr = nv->getAttribute("units");
-            SPUnit const *margin_units = NULL;
+            Inkscape::Util::Unit const *margin_units = NULL;
             if (units_abbr != NULL) {
-                margin_units = sp_unit_get_by_abbreviation(units_abbr);
+                Inkscape::Util::Unit mu = unit_table.getUnit(units_abbr);
+                margin_units = &mu;
             }
             if (margin_units == NULL) {
                 margin_units = &px;

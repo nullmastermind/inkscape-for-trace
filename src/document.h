@@ -26,6 +26,7 @@
 #include "gc-anchored.h"
 #include <glibmm/ustring.h>
 #include <vector>
+#include "util/units.h"
 
 namespace Avoid {
 class Router;
@@ -35,7 +36,6 @@ class  SPItem;
 class  SPObject;
 struct SPGroup;
 struct SPRoot;
-struct SPUnit;
 
 namespace Inkscape {
     struct Application;
@@ -228,8 +228,8 @@ public:
     gdouble getWidth() const;
     gdouble getHeight() const;
     Geom::Point getDimensions() const;
-    void setWidth(gdouble width, const SPUnit *unit);
-    void setHeight(gdouble height, const SPUnit *unit);
+    void setWidth(gdouble width, const Inkscape::Util::Unit *unit);
+    void setHeight(gdouble height, const Inkscape::Util::Unit *unit);
     void requestModified();
     gint ensureUpToDate();
     bool addResource(const gchar *key, SPObject *object);
@@ -252,8 +252,6 @@ private:
     void do_change_uri(gchar const *const filename, bool const rebase);
     void setupViewport(SPItemCtx *ctx);
 };
-
-struct SPUnit;
 
 /*
  * Ideas: How to overcome style invalidation nightmare

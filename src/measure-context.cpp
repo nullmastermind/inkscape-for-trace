@@ -13,7 +13,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <boost/none_t.hpp>
-#include "helper/units.h"
+#include "util/units.h"
 #include "macros.h"
 #include "display/curve.h"
 #include "sp-shape.h"

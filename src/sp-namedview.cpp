@@ -1101,20 +1101,23 @@ bool SPNamedView::getGuides()
  * \return the margin size in px, else 0.0 if anything is invalid.
  */
 double SPNamedView::getMarginLength(gchar const * const key,
-                             SPUnit const * const margin_units,
-                             SPUnit const * const return_units,
+                             Inkscape::Util::Unit const * const margin_units,
+                             Inkscape::Util::Unit const * const return_units,
                              double const width,
                              double const height,
                              bool const use_width)
 {
     double value;
+    static Inkscape::Util::UnitTable unit_table;
+    Inkscape::Util::Unit percent = unit_table.getUnit("%");
     if(!this->storeAsDouble(key,&value)) {
         return 0.0;
     }
-    if (margin_units == &sp_unit_get_by_id (SP_UNIT_PERCENT)) {
+    if (*margin_units == percent) {
         return (use_width)? width * value : height * value; 
     }
-    if (!sp_convert_distance (&value, margin_units, return_units)) {
+//    if (!sp_convert_distance (&value, margin_units, return_units)) {
+    if (!margin_units->compatibleWith(return_units)) {
         return 0.0;
     }
     return value;

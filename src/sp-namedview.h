@@ -24,6 +24,7 @@
 #include "sp-metric.h"
 #include "snap.h"
 #include "document.h"
+#include "util/units.h"
 
 G_BEGIN_DECLS
 
@@ -94,7 +95,7 @@ struct SPNamedView : public SPObjectGroup {
     bool getGuides();
 
 private:
-    double getMarginLength(gchar const * const key,SPUnit const * const margin_units,SPUnit const * const return_units,double const width,double const height,bool const use_width);
+    double getMarginLength(gchar const * const key,Inkscape::Util::Unit const * const margin_units,Inkscape::Util::Unit const * const return_units,double const width,double const height,bool const use_width);
     friend class SPDocument;
 };
 
