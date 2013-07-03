@@ -18,6 +18,7 @@
 #include "application-interface.h"
 #include <string.h>
 #include "dbus-init.h"
+#include "file.h"
 
 G_DEFINE_TYPE(ApplicationInterface, application_interface, G_TYPE_OBJECT)
 
@@ -131,6 +132,7 @@ application_interface_desktop_close_all (ApplicationInterface *object,
 gboolean
 application_interface_exit (ApplicationInterface *object, GError **error)
 {
+    sp_file_exit();
     return TRUE;
 }
 
@@ -142,6 +144,13 @@ gchar* application_interface_document_new (ApplicationInterface *object,
                                            GError **error)
 {
   return (gchar*)Inkscape::Extension::Dbus::init_document();
+}
+
+gchar*
+application_interface_get_active_document(ApplicationInterface *object,
+                                          GError **error)
+{
+  return (gchar*)Inkscape::Extension::Dbus::init_active_document();
 }
 
 gchar** 

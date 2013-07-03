@@ -30,8 +30,12 @@
 #undef DBUS_MESSAGE_TYPE_ERROR
 #undef DBUS_MESSAGE_TYPE_SIGNAL
 
-#include "desktop.h"
+#include "helper/action-context.h"
 
+class SPDesktop;
+class SPItem;
+
+// TODO: this define doesn't seem to be used... although the path itself is also hardcoded in dbus-init.cpp
 #define DBUS_DOCUMENT_INTERFACE_PATH  "/org/inkscape/document"
         
 #define TYPE_DOCUMENT_INTERFACE            (document_interface_get_type ())
@@ -47,8 +51,8 @@ typedef struct _DocumentInterface DocumentInterface;
 typedef struct _DocumentInterfaceClass DocumentInterfaceClass;
 
 struct _DocumentInterface {
-        GObject parent;
-	SPDesktop *desk;
+    GObject parent;
+    Inkscape::ActionContext context;
     gboolean updates;
 };
 

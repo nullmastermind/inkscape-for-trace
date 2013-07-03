@@ -97,6 +97,10 @@ gchar*
 application_interface_document_new (ApplicationInterface *object, 
                                     GError **error);
 
+gchar*
+application_interface_get_active_document(ApplicationInterface *object,
+                                          GError **error);
+
 gchar** 
 application_interface_get_document_list (ApplicationInterface *object);
 

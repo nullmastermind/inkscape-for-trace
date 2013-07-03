@@ -35,6 +35,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "desktop.h"
 #include "desktop-style.h"
 #include "dir-util.h"
+#include "layer-model.h"
 #include "selection.h"
 #include "tools-switch.h"
 #include "desktop-handles.h"
@@ -521,16 +522,16 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
     g_slist_free(newsel);
 }
 
-void sp_edit_clear_all(SPDesktop *dt)
+void sp_edit_clear_all(Inkscape::Selection *selection)
 {
-    if (!dt)
+    if (!selection)
         return;
 
-    SPDocument *doc = sp_desktop_document(dt);
-    sp_desktop_selection(dt)->clear();
+    SPDocument *doc = selection->layerModel()->getDocument();
+    selection->clear();
 
-    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
-    GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
+    g_return_if_fail(SP_IS_GROUP(selection->layerModel()->currentLayer()));
+    GSList *items = sp_item_group_item_list(SP_GROUP(selection->layerModel()->currentLayer()));
 
     while (items) {
         reinterpret_cast<SPObject*>(items->data)->deleteObject();
@@ -2157,49 +2158,49 @@ sp_selection_scale_times(Inkscape::Selection *selection, gdouble times)
 }
 
 void
-sp_selection_move(SPDesktop *desktop, gdouble dx, gdouble dy)
+sp_selection_move(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
     if (selection->isEmpty()) {
         return;
     }
 
     sp_selection_move_relative(selection, dx, dy);
 
+    SPDocument *doc = selection->layerModel()->getDocument();
     if (dx == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically"));
     } else if (dy == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
                                 _("Move horizontally"));
     } else {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
                            _("Move"));
     }
 }
 
 void
-sp_selection_move_screen(SPDesktop *desktop, gdouble dx, gdouble dy)
+sp_selection_move_screen(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    if (selection->isEmpty()) {
+    if (selection->isEmpty() || !selection->desktop()) {
         return;
     }
 
     // same as sp_selection_move but divide deltas by zoom factor
-    gdouble const zoom = desktop->current_zoom();
+    gdouble const zoom = selection->desktop()->current_zoom();
     gdouble const zdx = dx / zoom;
     gdouble const zdy = dy / zoom;
     sp_selection_move_relative(selection, zdx, zdy);
 
+    SPDocument *doc = selection->layerModel()->getDocument();
     if (dx == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically by pixels"));
     } else if (dy == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
                                 _("Move horizontally by pixels"));
     } else {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
                            _("Move"));
     }
 }

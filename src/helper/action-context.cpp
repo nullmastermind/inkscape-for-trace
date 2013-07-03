@@ -60,6 +60,16 @@ UI::View::View *ActionContext::getView() const
     return _view;
 }
 
+SPDesktop *ActionContext::getDesktop() const
+{
+    // TODO: this slightly horrible storage of a UI::View::View*, and 
+    // casting to an SPDesktop*, is only done because that's what was
+    // already the norm in the Inkscape codebase. This seems wrong. Surely
+    // we should store an SPDesktop* in the first place? Is there a case
+    // of actions being carried out on a View that is not an SPDesktop?
+    return static_cast<SPDesktop *>(_view);
+}
+
 } // namespace Inkscape
 
 /*

@@ -25,6 +25,7 @@ struct SPActionClass;
 #define SP_ACTION_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), SP_TYPE_ACTION, SPActionClass))
 #define SP_IS_ACTION(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_ACTION))
 
+class SPDesktop;
 class SPDocument;
 namespace Inkscape {
 
@@ -78,6 +79,7 @@ void sp_action_set_name(SPAction *action, Glib::ustring const &name);
 SPDocument *sp_action_get_document(SPAction *action);
 Inkscape::Selection *sp_action_get_selection(SPAction *action);
 Inkscape::UI::View::View *sp_action_get_view(SPAction *action);
+SPDesktop *sp_action_get_desktop(SPAction *action);
 
 #endif
 

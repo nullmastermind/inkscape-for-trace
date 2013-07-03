@@ -108,7 +108,11 @@ init_document (void) {
         doc = SPDocument::createNewDoc(NULL, 1, TRUE);
 
         std::string name("/org/inkscape/");
-	name.append(doc->getName());
+        // This only works because a new document's name happens to contain
+        // only valid DBus characters [A-Z][a-z][0-9]_
+        // TODO: use the document->serial() instead, like below, and similar to
+        // how desktops work?
+        name.append(doc->getName());
         std::replace(name.begin(), name.end(), ' ', '_');
 
         connection = dbus_get_connection();
@@ -121,6 +125,38 @@ init_document (void) {
                 name.c_str());
 	return strdup(name.c_str());
 } //init_document
+
+gchar *
+init_active_document()
+{
+    SPDocument *doc = inkscape_active_document();
+    if (!doc) {
+        return NULL;
+    }
+    
+    // Document name is not suitable for DBus name, as it might contain invalid chars
+    std::string name("/org/inkscape/document_");
+    std::stringstream ss;
+    ss << doc->serial();
+    name.append(ss.str());
+    
+    DBusGConnection *connection = dbus_get_connection();
+    DBusGProxy *proxy = dbus_get_proxy(connection);
+
+    // Has the active document already been registered?
+    if (!dbus_g_connection_lookup_g_object(connection, name.c_str())) {
+        // No - register it
+        DocumentInterface *obj = (DocumentInterface*) dbus_register_object (connection, 
+            proxy,
+            TYPE_DOCUMENT_INTERFACE,
+            &dbus_glib_document_interface_object_info,
+            name.c_str());
+
+        // Set the document info for this interface
+        obj->context = inkscape_active_action_context();
+    }
+    return strdup(name.c_str());
+}
 
 gchar *
 dbus_init_desktop_interface (SPDesktop * dt)
@@ -142,7 +178,7 @@ dbus_init_desktop_interface (SPDesktop * dt)
     obj = (DocumentInterface*) dbus_register_object (connection, 
           proxy, TYPE_DOCUMENT_INTERFACE,
           &dbus_glib_document_interface_object_info, name.c_str());
-	obj->desk = dt;
+    obj->context = Inkscape::ActionContext(dt);
     obj->updates = TRUE;
     dt->dbus_document_interface=obj;
     return strdup(name.c_str());
