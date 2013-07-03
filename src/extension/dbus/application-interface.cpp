@@ -150,7 +150,11 @@ gchar*
 application_interface_get_active_document(ApplicationInterface *object,
                                           GError **error)
 {
-  return (gchar*)Inkscape::Extension::Dbus::init_active_document();
+  gchar *result = (gchar*)Inkscape::Extension::Dbus::init_active_document();
+  if (!result) {
+      g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "No active document");
+  }
+  return result;
 }
 
 gchar** 

@@ -1222,13 +1222,11 @@ document_interface_selection_invert (DocumentInterface *object, GError **error)
 gboolean
 document_interface_selection_group (DocumentInterface *object, GError **error)
 {
-    //sp_selection_group (object->desk);
     return dbus_call_verb (object, SP_VERB_SELECTION_GROUP, error);
 }
 gboolean
 document_interface_selection_ungroup (DocumentInterface *object, GError **error)
 {
-    //sp_selection_ungroup (object->desk);
     return dbus_call_verb (object, SP_VERB_SELECTION_UNGROUP, error);
 }
  
@@ -1362,8 +1360,8 @@ document_interface_selection_to_path (DocumentInterface *object, GError **error)
 }
 
 
-gchar *
-document_interface_selection_combine (DocumentInterface *object, gchar *cmd,
+gboolean
+document_interface_selection_combine (DocumentInterface *object, gchar *cmd, char ***newpaths,
                                       GError **error)
 {
     if (strcmp(cmd, "union") == 0)
@@ -1374,20 +1372,14 @@ document_interface_selection_combine (DocumentInterface *object, gchar *cmd,
         dbus_call_verb (object, SP_VERB_SELECTION_DIFF, error);
     else if (strcmp(cmd, "exclusion") == 0)
         dbus_call_verb (object, SP_VERB_SELECTION_SYMDIFF, error);
-    else
-        return NULL;
+    else if (strcmp(cmd, "division") == 0)
+        dbus_call_verb (object, SP_VERB_SELECTION_CUT, error);
+    else {
+        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Operation command not recognised");
+        return FALSE;
+    }
 
-    if (object->context.getSelection()->singleRepr() != NULL)
-        return g_strdup(object->context.getSelection()->singleRepr()->attribute("id"));
-    return NULL;
-}
-
-gboolean
-document_interface_selection_divide (DocumentInterface *object, char ***out, GError **error)
-{
-    dbus_call_verb (object, SP_VERB_SELECTION_CUT, error);
-
-    return document_interface_selection_get (object, out, error);
+    return document_interface_selection_get (object, newpaths, error);
 }
 
 gboolean

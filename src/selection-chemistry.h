@@ -77,13 +77,13 @@ void sp_selection_tile(SPDesktop *desktop, bool apply = true);
 void sp_selection_untile(SPDesktop *desktop);
 
 //void sp_selection_group_impl(GSList const *reprs_to_group, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc);
-void sp_selection_group(SPDesktop *desktop);
-void sp_selection_ungroup(SPDesktop *desktop);
+void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop);
+void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop);
 
-void sp_selection_raise(SPDesktop *desktop);
-void sp_selection_raise_to_top(SPDesktop *desktop);
-void sp_selection_lower(SPDesktop *desktop);
-void sp_selection_lower_to_bottom(SPDesktop *desktop);
+void sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop);
+void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *desktop);
+void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop);
+void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop);
 
 SPCSSAttr *take_style_from_item (SPItem *item);
 

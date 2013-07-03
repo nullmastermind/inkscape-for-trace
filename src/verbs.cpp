@@ -1089,6 +1089,24 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_SLICE:
             sp_selected_path_slice(selection, dt);
             break;
+        case SP_VERB_SELECTION_TO_FRONT:
+            sp_selection_raise_to_top(selection, dt);
+            break;
+        case SP_VERB_SELECTION_TO_BACK:
+            sp_selection_lower_to_bottom(selection, dt);
+            break;
+        case SP_VERB_SELECTION_RAISE:
+            sp_selection_raise(selection, dt);
+            break;
+        case SP_VERB_SELECTION_LOWER:
+            sp_selection_lower(selection, dt);
+            break;
+        case SP_VERB_SELECTION_GROUP:
+            sp_selection_group(selection, dt);
+            break;
+        case SP_VERB_SELECTION_UNGROUP:
+            sp_selection_ungroup(selection, dt);
+            break;
         default:
             handled = false;
             break;
@@ -1107,25 +1125,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {
-        case SP_VERB_SELECTION_TO_FRONT:
-            sp_selection_raise_to_top(dt);
-            break;
-        case SP_VERB_SELECTION_TO_BACK:
-            sp_selection_lower_to_bottom(dt);
-            break;
-        case SP_VERB_SELECTION_RAISE:
-            sp_selection_raise(dt);
-            break;
-        case SP_VERB_SELECTION_LOWER:
-            sp_selection_lower(dt);
-            break;
-        case SP_VERB_SELECTION_GROUP:
-            sp_selection_group(dt);
-            break;
-        case SP_VERB_SELECTION_UNGROUP:
-            sp_selection_ungroup(dt);
-            break;
-
         case SP_VERB_SELECTION_TEXTTOPATH:
             text_put_on_path();
             break;

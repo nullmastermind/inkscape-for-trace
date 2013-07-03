@@ -363,14 +363,9 @@ document_interface_selection_get_center (DocumentInterface *object);
 gboolean 
 document_interface_selection_to_path (DocumentInterface *object, GError **error);
 
-gchar *
-document_interface_selection_combine (DocumentInterface *object, gchar *cmd,
-                                      GError **error);
-
 gboolean
-document_interface_selection_divide (DocumentInterface *object, 
-                                     char ***out, GError **error);
-
+document_interface_selection_combine (DocumentInterface *object, gchar *cmd, char ***newpaths,
+                                      GError **error);
 
 gboolean
 document_interface_selection_change_level (DocumentInterface *object, gchar *cmd,
