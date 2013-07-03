@@ -66,6 +66,7 @@
 #include "verbs.h"
 #include "event-log.h"
 #include "ui/dialog/font-substitution.h"
+#include "ui/dialog/new-from-template.h"
 
 #include <gtk/gtk.h>
 
@@ -197,6 +198,13 @@ SPDesktop* sp_file_new_default()
     rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
 
     return desk;
+}
+
+SPDesktop* sp_file_new_from_templatee()
+{
+    Inkscape::UI::NewFromTemplate dl;
+    dl.run();
+    return sp_file_new_default();
 }
 
 /*######################

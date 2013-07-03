@@ -1,8 +1,8 @@
 #ifndef INKSCAPE_SEEN_UI_DIALOG_NEW_FROM_TEMPLATE_H
 #define INKSCAPE_SEEN_UI_DIALOG_NEW_FROM_TEMPLATE_H
 
-#include <gtkmm/button.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/button.h>
 #include <gtkmm/notebook.h>
 
 #include "template-load-tab.h"

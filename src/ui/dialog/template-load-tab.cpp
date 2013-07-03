@@ -1,7 +1,7 @@
+#include "template-load-tab.h"
 #include <gtkmm/alignment.h>
 #include <iostream>
 
-#include "template-load-tab.h"
 
 namespace Inkscape {
 namespace UI {
@@ -66,10 +66,11 @@ void TemplateLoadTab::_displayTemplateInfo()
 
 void TemplateLoadTab::_initKeywordsList()
 {
-    _keywords_combo.append_text("All");
+    _keywords_combo.append("All");
+  //  _keywords_combo
     
     for (int i = 0 ; i < 10 ; ++i) {
-        _keywords_combo.append_text( "Keyword" + Glib::ustring::format(i));
+        _keywords_combo.append( "Keyword" + Glib::ustring::format(i));
     }
 }
 

@@ -1,9 +1,10 @@
+#include "static-template-load-tab.h"
+
 #include <gtkmm/alignment.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 #include <iostream>
 
-#include "static-template-load-tab.h"
 
 namespace Inkscape {
 namespace UI {
