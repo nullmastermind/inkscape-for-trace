@@ -5,18 +5,25 @@
 #include <gtkmm/label.h>
 #include <iostream>
 
+#include "src/file.h"
+
 
 namespace Inkscape {
 namespace UI {
     
 
 StaticTemplateLoadTab::StaticTemplateLoadTab()
-    : _more_info_button("More info")
+    : TemplateLoadTab()
+    , _more_info_button("More info")
     , _preview_image("preview.png")
     , _short_description_label("Short description - I like trains. ad asda asd asdweqe gdfg")
     , _template_name_label("Template_name")
     , _template_author_label("by template_author")
 {
+    _loading_path = "/static";
+    _loadTemplates();
+    _initLists();
+    
     _template_info_column.pack_start(_template_name_label, Gtk::PACK_SHRINK, 4);
     _template_info_column.pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
     _template_info_column.pack_start(_preview_image, Gtk::PACK_SHRINK, 15);
@@ -34,7 +41,14 @@ StaticTemplateLoadTab::StaticTemplateLoadTab()
 
 void StaticTemplateLoadTab::createTemplate()
 {
-    std::cout << "Static template\n";
+    Glib::ustring path;
+    if (_templates.find(_current_template) != _templates.end()){
+        path = _templates[_current_template].path;
+    }
+    else
+        path = "";
+    
+    sp_file_new(path);
 }
 
 
@@ -42,6 +56,8 @@ void StaticTemplateLoadTab::_displayTemplateInfo()
 {
     TemplateLoadTab::_displayTemplateInfo();
     _template_name_label.set_text(_current_template);
+    _template_author_label.set_text(_templates[_current_template].author);
+    _short_description_label.set_text(_templates[_current_template].short_description);
 }
 
 }

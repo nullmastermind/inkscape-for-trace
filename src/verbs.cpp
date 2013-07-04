@@ -862,7 +862,7 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_exit();
             break;
         case SP_VERB_FILE_TEMPLATES:
-            sp_file_new_from_templatee();
+            Inkscape::UI::NewFromTemplate::load_new_from_template();
             break;
         default:
             break;

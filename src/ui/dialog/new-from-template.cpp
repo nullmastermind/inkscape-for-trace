@@ -1,5 +1,9 @@
 #include "new-from-template.h"
-#include "gtkmm/alignment.h"
+
+#include <gtkmm/alignment.h>
+
+#include "src/file.h"
+
 
 namespace Inkscape {
 namespace UI {
@@ -36,6 +40,12 @@ void NewFromTemplate::_createFromTemplate()
     }
     
     response(0);
+}
+
+void NewFromTemplate::load_new_from_template()
+{
+    NewFromTemplate dl;
+    dl.run();
 }
 
 }

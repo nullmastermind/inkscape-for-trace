@@ -1,6 +1,13 @@
 #include "template-load-tab.h"
+
 #include <gtkmm/alignment.h>
 #include <iostream>
+
+#include "src/interface.h"
+#include "src/file.h"
+#include "src/path-prefix.h"
+#include "src/preferences.h"
+#include "src/inkscape.h"
 
 
 namespace Inkscape {
@@ -9,6 +16,7 @@ namespace UI {
 
 TemplateLoadTab::TemplateLoadTab()
     : _keywords_combo(true)
+    , _current_keyword("")
 {
     set_border_width(10);
 
@@ -23,8 +31,6 @@ TemplateLoadTab::TemplateLoadTab()
     
     title = manage(new Gtk::Label("Selected template"));
     _template_info_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
-    
-    _initLists();
     
     add(_main_box);
     _main_box.pack_start(_templates_column, Gtk::PACK_SHRINK, 20);
@@ -67,7 +73,6 @@ void TemplateLoadTab::_displayTemplateInfo()
 void TemplateLoadTab::_initKeywordsList()
 {
     _keywords_combo.append("All");
-  //  _keywords_combo
     
     for (int i = 0 ; i < 10 ; ++i) {
         _keywords_combo.append( "Keyword" + Glib::ustring::format(i));
@@ -97,12 +102,54 @@ void TemplateLoadTab::_keywordSelected()
 void TemplateLoadTab::_refreshTemplatesList()
 {
      _templates_ref->clear();
-     for (int i = 0 ; i < 7 ; ++i) {
+    
+    for (std::map<Glib::ustring, TemplateData>::iterator it = _templates.begin() ; it != _templates.end() ; ++it) {
         Gtk::TreeModel::iterator iter = _templates_ref->append();
         Gtk::TreeModel::Row row = *iter;
-        row[_templates_columns.textValue] = "Template" + Glib::ustring::format(i);
+        row[_templates_columns.textValue]  = it->first;
     }
 } 
+
+
+void TemplateLoadTab::_loadTemplates()
+{
+    // user's local dir
+    _getTemplatesFromDir(profile_path("templates") + _loading_path);
+
+    // system templates dir
+    _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
+}
+
+
+TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(Glib::ustring path)
+{
+    TemplateData result;
+    result.path = path;
+    result.display_name = Glib::path_get_basename(path);
+    result.short_description = "LaLaLaLa";
+    result.author = "JAASDASD";
+    
+    return result;
+}
+
+
+void TemplateLoadTab::_getTemplatesFromDir(Glib::ustring path)
+{
+    if ( !Glib::file_test(path, Glib::FILE_TEST_EXISTS) ||
+         !Glib::file_test(path, Glib::FILE_TEST_IS_DIR))
+        return;
+    
+    Glib::Dir dir(path);
+    path += "/";
+    Glib::ustring file = path + dir.read_name();
+    while (file != path){
+        if (Glib::str_has_suffix(file, ".svg")){
+            TemplateData tmp = _processTemplateFile(file);
+            _templates[Glib::path_get_basename(file)] = tmp;
+        }
+        file = path + dir.read_name();
+    }
+}
 
 }
 }

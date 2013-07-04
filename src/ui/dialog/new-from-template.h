@@ -8,6 +8,7 @@
 #include "template-load-tab.h"
 #include "static-template-load-tab.h"
 
+
 namespace Inkscape {
 namespace UI {
     
@@ -15,9 +16,10 @@ namespace UI {
 class NewFromTemplate : public Gtk::Dialog
 {
 public:
-    NewFromTemplate();
+    static void load_new_from_template();
     
 private:
+    NewFromTemplate();
     Gtk::Notebook _main_widget;
     Gtk::Button _create_template_button;
     StaticTemplateLoadTab _tab1;

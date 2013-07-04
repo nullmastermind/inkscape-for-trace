@@ -66,7 +66,6 @@
 #include "verbs.h"
 #include "event-log.h"
 #include "ui/dialog/font-substitution.h"
-#include "ui/dialog/new-from-template.h"
 
 #include <gtk/gtk.h>
 
@@ -200,12 +199,6 @@ SPDesktop* sp_file_new_default()
     return desk;
 }
 
-SPDesktop* sp_file_new_from_templatee()
-{
-    Inkscape::UI::NewFromTemplate dl;
-    dl.run();
-    return sp_file_new_default();
-}
 
 /*######################
 ## D E L E T E
