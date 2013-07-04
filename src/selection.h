@@ -67,10 +67,10 @@ public:
      * Constructs an selection object, bound to a particular
      * layer model
      *
-     * @param layer_model the layer model (for the SPDesktop, if GUI)
+     * @param layers the layer model (for the SPDesktop, if GUI)
      * @param desktop the desktop associated with the layer model, or NULL if in console mode
      */
-    Selection(LayerModel *layer_model, SPDesktop *desktop);
+    Selection(LayerModel *layers, SPDesktop *desktop);
     ~Selection();
 
     /**
@@ -79,7 +79,7 @@ public:
      * @return the layer model the selection is bound to, which is the same as the desktop
      * layer model for GUI mode
      */
-    LayerModel *layerModel() { return _layer_model; }
+    LayerModel *layers() { return _layers; }
 
     /**
      * Returns the desktop the selection is bound to
@@ -352,7 +352,7 @@ private:
 
     std::list<SPBox3D *> _3dboxes;
 
-    LayerModel *_layer_model;
+    LayerModel *_layers;
     GC::soft_ptr<SPDesktop> _desktop;
     SPObject* _selection_context;
     guint _flags;

@@ -6,7 +6,7 @@
  *
  * Copyright (C) 2013 Eric Greveson
  *
- * This code is in public domain
+ * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include "desktop.h"
@@ -47,7 +47,7 @@ SPDocument *ActionContext::getDocument() const
     }
 
     // Should be the same as the view's document, if view is non-NULL
-    return _selection->layerModel()->getDocument();
+    return _selection->layers()->getDocument();
 }
 
 Selection *ActionContext::getSelection() const

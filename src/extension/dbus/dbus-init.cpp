@@ -153,7 +153,7 @@ init_active_document()
             name.c_str());
 
         // Set the document info for this interface
-        obj->context = inkscape_active_action_context();
+        obj->doc_context = inkscape_active_action_context();
     }
     return strdup(name.c_str());
 }
@@ -178,7 +178,7 @@ dbus_init_desktop_interface (SPDesktop * dt)
     obj = (DocumentInterface*) dbus_register_object (connection, 
           proxy, TYPE_DOCUMENT_INTERFACE,
           &dbus_glib_document_interface_object_info, name.c_str());
-    obj->context = Inkscape::ActionContext(dt);
+    obj->doc_context = Inkscape::ActionContext(dt);
     obj->updates = TRUE;
     dt->dbus_document_interface=obj;
     return strdup(name.c_str());

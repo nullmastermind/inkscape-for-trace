@@ -542,11 +542,11 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
     if (!selection)
         return;
 
-    SPDocument *doc = selection->layerModel()->getDocument();
+    SPDocument *doc = selection->layers()->getDocument();
     selection->clear();
 
-    g_return_if_fail(SP_IS_GROUP(selection->layerModel()->currentLayer()));
-    GSList *items = sp_item_group_item_list(SP_GROUP(selection->layerModel()->currentLayer()));
+    g_return_if_fail(SP_IS_GROUP(selection->layers()->currentLayer()));
+    GSList *items = sp_item_group_item_list(SP_GROUP(selection->layers()->currentLayer()));
 
     while (items) {
         reinterpret_cast<SPObject*>(items->data)->deleteObject();
@@ -739,7 +739,7 @@ static void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inksc
 
 void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    SPDocument *doc = selection->layerModel()->getDocument();
+    SPDocument *doc = selection->layers()->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     // Check if something is selected.
@@ -816,7 +816,7 @@ void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop)
 
     g_slist_free(items);
     
-    DocumentUndo::done(selection->layerModel()->getDocument(), SP_VERB_SELECTION_UNGROUP,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_UNGROUP,
                        _("Ungroup"));
 }
 
@@ -942,14 +942,14 @@ sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop)
         g_slist_free(rev);
     }
 
-    DocumentUndo::done(selection->layerModel()->getDocument(), SP_VERB_SELECTION_RAISE,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_RAISE,
                        //TRANSLATORS: "Raise" means "to raise an object" in the undo history
                        C_("Undo action", "Raise"));
 }
 
 void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    SPDocument *document = selection->layerModel()->getDocument();
+    SPDocument *document = selection->layers()->getDocument();
 
     if (selection->isEmpty()) {
         selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise to top."));
@@ -1031,13 +1031,13 @@ void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
         g_slist_free(rev);
     }
 
-    DocumentUndo::done(selection->layerModel()->getDocument(), SP_VERB_SELECTION_LOWER,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_LOWER,
                        _("Lower"));
 }
 
 void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    SPDocument *document = selection->layerModel()->getDocument();
+    SPDocument *document = selection->layers()->getDocument();
 
     if (selection->isEmpty()) {
         selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
@@ -2152,7 +2152,7 @@ sp_selection_move(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 
     sp_selection_move_relative(selection, dx, dy);
 
-    SPDocument *doc = selection->layerModel()->getDocument();
+    SPDocument *doc = selection->layers()->getDocument();
     if (dx == 0) {
         DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically"));
@@ -2178,7 +2178,7 @@ sp_selection_move_screen(Inkscape::Selection *selection, gdouble dx, gdouble dy)
     gdouble const zdy = dy / zoom;
     sp_selection_move_relative(selection, zdx, zdy);
 
-    SPDocument *doc = selection->layerModel()->getDocument();
+    SPDocument *doc = selection->layers()->getDocument();
     if (dx == 0) {
         DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically by pixels"));

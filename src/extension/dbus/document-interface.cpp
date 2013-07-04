@@ -190,7 +190,7 @@ selection_swap(Inkscape::Selection *sel, gchar *name, GError **error)
 {
     const GSList *oldsel = g_slist_copy((GSList *)sel->list());
     
-    sel->set(get_object_by_name(sel->layerModel()->getDocument(), name, error));
+    sel->set(get_object_by_name(sel->layers()->getDocument(), name, error));
     return oldsel;
 }
 
@@ -224,8 +224,8 @@ dbus_create_node (SPDocument *doc, const gchar *type)
 gchar *finish_create_shape (DocumentInterface *object, GError ** /*error*/, Inkscape::XML::Node *newNode, gchar *desc)
 {
     SPCSSAttr *style = NULL;
-    if (object->context.getDesktop()) {
-        style = sp_desktop_get_style(object->context.getDesktop(), TRUE);
+    if (object->doc_context.getDesktop()) {
+        style = sp_desktop_get_style(object->doc_context.getDesktop(), TRUE);
     }
     if (style) {
         Glib::ustring str;
@@ -236,13 +236,11 @@ gchar *finish_create_shape (DocumentInterface *object, GError ** /*error*/, Inks
         newNode->setAttribute("style", "fill:#0000ff;fill-opacity:1;stroke:#c900b9;stroke-width:0;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none", TRUE);
     }
 
-    object->context.getSelection()->layerModel()->currentLayer()->appendChildRepr(newNode);
-    object->context.getSelection()->layerModel()->currentLayer()->updateRepr();
+    object->doc_context.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
+    object->doc_context.getSelection()->layers()->currentLayer()->updateRepr();
 
     if (object->updates) {
-        Inkscape::DocumentUndo::done(object->context.getDocument(),  0, (gchar *)desc);
-    //} else {
-        //document_interface_pause_updates(object, error);
+        Inkscape::DocumentUndo::done(object->doc_context.getDocument(),  0, (gchar *)desc);
     }
 
     return strdup(newNode->attribute("id"));
@@ -259,26 +257,36 @@ gchar *finish_create_shape (DocumentInterface *object, GError ** /*error*/, Inks
 gboolean
 dbus_call_verb (DocumentInterface *object, int verbid, GError **error)
 {    
-    SPDesktop *desk = object->context.getDesktop();    
+    SPDesktop *desk = object->doc_context.getDesktop();    
     if ( desk ) {
         desktop_ensure_active (desk);
     }
     Inkscape::Verb *verb = Inkscape::Verb::get( verbid );
     if ( verb ) {
-        SPAction *action = verb->get_action(object->context);
+        SPAction *action = verb->get_action(object->doc_context);
         if ( action ) {
-            //if (!object->updates)
-                //document_interface_pause_updates (object, error);
             sp_action_perform( action, NULL );
             if (object->updates)
-                Inkscape::DocumentUndo::done(object->context.getDocument(),  verb->get_code(), g_strdup(verb->get_tip()));
-            //if (!object->updates)
-                //document_interface_pause_updates (object, error);
+                Inkscape::DocumentUndo::done(object->doc_context.getDocument(),  verb->get_code(), g_strdup(verb->get_tip()));
             return TRUE;
         }
     }
     g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_VERB, "Verb failed to execute");
     return FALSE;
+}
+
+/*
+ * Check that the desktop is not NULL. If it is NULL, set the error to a useful message.
+ */
+bool 
+ensure_desktop_valid(SPDesktop* desk, GError **error)
+{
+    if (desk) {
+        return true;
+    }
+
+    g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document interface action requires a GUI");
+    return false;
 }
 
 /****************************************************************************
@@ -313,7 +321,7 @@ document_interface_class_init (DocumentInterfaceClass *klass)
 static void
 document_interface_init (DocumentInterface *object)
 {
-    object->context = Inkscape::ActionContext();
+    object->doc_context = Inkscape::ActionContext();
 }
 
 
@@ -331,24 +339,24 @@ document_interface_new (void)
 
 gboolean document_interface_delete_all(DocumentInterface *object, GError ** /*error*/)
 {
-    sp_edit_clear_all(object->context.getSelection());
+    sp_edit_clear_all(object->doc_context.getSelection());
     return TRUE;
 }
 
 gboolean
 document_interface_call_verb (DocumentInterface *object, gchar *verbid, GError **error)
 {
-    SPDesktop *desk = object->context.getDesktop();
+    SPDesktop *desk = object->doc_context.getDesktop();
     if ( desk ) {
         desktop_ensure_active (desk);
     }
     Inkscape::Verb *verb = Inkscape::Verb::getbyid( verbid );
     if ( verb ) {
-        SPAction *action = verb->get_action(object->context);
+        SPAction *action = verb->get_action(object->doc_context);
         if ( action ) {
             sp_action_perform( action, NULL );
             if (object->updates) {
-                Inkscape::DocumentUndo::done(object->context.getDocument(),  verb->get_code(), g_strdup(verb->get_tip()));
+                Inkscape::DocumentUndo::done(object->doc_context.getDocument(),  verb->get_code(), g_strdup(verb->get_tip()));
             }
             return TRUE;
         }
@@ -368,7 +376,7 @@ document_interface_rectangle (DocumentInterface *object, int x, int y,
 {
 
 
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:rect");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:rect");
     sp_repr_set_int(newNode, "x", x);  //could also use newNode->setAttribute()
     sp_repr_set_int(newNode, "y", y);
     sp_repr_set_int(newNode, "width", width);
@@ -380,7 +388,7 @@ gchar*
 document_interface_ellipse_center (DocumentInterface *object, int cx, int cy, 
                                    int rx, int ry, GError **error)
 {
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:path");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:path");
     newNode->setAttribute("sodipodi:type", "arc");
     sp_repr_set_int(newNode, "sodipodi:cx", cx);
     sp_repr_set_int(newNode, "sodipodi:cy", cy);
@@ -395,7 +403,7 @@ document_interface_polygon (DocumentInterface *object, int cx, int cy,
                             GError **error)
 {
     gdouble rot = ((rotation / 180.0) * 3.14159265) - ( 3.14159265 / 2.0);
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:path");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:path");
     newNode->setAttribute("inkscape:flatsided", "true");
     newNode->setAttribute("sodipodi:type", "star");
     sp_repr_set_int(newNode, "sodipodi:cx", cx);
@@ -416,7 +424,7 @@ document_interface_star (DocumentInterface *object, int cx, int cy,
                          int r1, int r2, int sides, gdouble rounded,
                          gdouble arg1, gdouble arg2, GError **error)
 {
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:path");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:path");
     newNode->setAttribute("inkscape:flatsided", "false");
     newNode->setAttribute("sodipodi:type", "star");
     sp_repr_set_int(newNode, "sodipodi:cx", cx);
@@ -445,7 +453,7 @@ gchar*
 document_interface_line (DocumentInterface *object, int x, int y, 
                               int x2, int y2, GError **error)
 {
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:path");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:path");
     std::stringstream out;
     // Not sure why this works.
 	out << "m " << x << "," << y << " " << x2 - x << "," << y2 - y;
@@ -457,7 +465,7 @@ gchar*
 document_interface_spiral (DocumentInterface *object, int cx, int cy, 
                            int r, int revolutions, GError **error)
 {
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:path");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:path");
     newNode->setAttribute("sodipodi:type", "spiral");
     sp_repr_set_int(newNode, "sodipodi:cx", cx);
     sp_repr_set_int(newNode, "sodipodi:cy", cy);
@@ -478,13 +486,13 @@ gchar*
 document_interface_text (DocumentInterface *object, int x, int y, gchar *text, GError **error)
 {
 
-  Inkscape::XML::Node *text_node = dbus_create_node(object->context.getDocument(), "svg:text");
+  Inkscape::XML::Node *text_node = dbus_create_node(object->doc_context.getDocument(), "svg:text");
     sp_repr_set_int(text_node, "x", x);
     sp_repr_set_int(text_node, "y", y);
     //just a workaround so i can get an spitem from the name
     gchar  *name = finish_create_shape (object, error, text_node, (gchar *)"create text");
     
-    SPItem* text_obj=(SPItem* )get_object_by_name(object->context.getDocument(), name, error);
+    SPItem* text_obj=(SPItem* )get_object_by_name(object->doc_context.getDocument(), name, error);
     sp_te_set_repr_text_multiline(text_obj, text);
 
     return name;
@@ -497,16 +505,16 @@ document_interface_image (DocumentInterface *object, int x, int y, gchar *filena
     if (!uri)
         return FALSE;
     
-    Inkscape::XML::Node *newNode = dbus_create_node(object->context.getDocument(), "svg:image");
+    Inkscape::XML::Node *newNode = dbus_create_node(object->doc_context.getDocument(), "svg:image");
     sp_repr_set_int(newNode, "x", x);
     sp_repr_set_int(newNode, "y", y);
     newNode->setAttribute("xlink:href", uri);
     
-    object->context.getSelection()->layerModel()->currentLayer()->appendChildRepr(newNode);
-    object->context.getSelection()->layerModel()->currentLayer()->updateRepr();
+    object->doc_context.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
+    object->doc_context.getSelection()->layers()->currentLayer()->updateRepr();
 
     if (object->updates)
-        Inkscape::DocumentUndo::done(object->context.getDocument(),  0, "Imported bitmap.");
+        Inkscape::DocumentUndo::done(object->doc_context.getDocument(),  0, "Imported bitmap.");
 
     //g_free(uri);
     return strdup(newNode->attribute("id"));
@@ -514,18 +522,16 @@ document_interface_image (DocumentInterface *object, int x, int y, gchar *filena
 
 gchar *document_interface_node(DocumentInterface *object, gchar *type, GError ** /*error*/)
 {
-    SPDocument * doc = object->context.getDocument();
+    SPDocument * doc = object->doc_context.getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     Inkscape::XML::Node *newNode =  xml_doc->createElement(type);
 
-    object->context.getSelection()->layerModel()->currentLayer()->appendChildRepr(newNode);
-    object->context.getSelection()->layerModel()->currentLayer()->updateRepr();
+    object->doc_context.getSelection()->layers()->currentLayer()->appendChildRepr(newNode);
+    object->doc_context.getSelection()->layers()->currentLayer()->updateRepr();
 
     if (object->updates) {
         Inkscape::DocumentUndo::done(doc, 0, (gchar *)"created empty node");
-    //} else {
-        //document_interface_pause_updates(object, error);
     }
 
     return strdup(newNode->attribute("id"));
@@ -537,22 +543,19 @@ gchar *document_interface_node(DocumentInterface *object, gchar *type, GError **
 gdouble
 document_interface_document_get_width (DocumentInterface *object)
 {
-  return object->context.getDocument()->getWidth();
+  return object->doc_context.getDocument()->getWidth();
 }
 
 gdouble
 document_interface_document_get_height (DocumentInterface *object)
 {
-  return object->context.getDocument()->getHeight();
+  return object->doc_context.getDocument()->getHeight();
 }
 
 gchar *document_interface_document_get_css(DocumentInterface *object, GError ** error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document get CSS requires a GUI");
-        return NULL;
-    }
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), NULL);
     SPCSSAttr *current = desk->current;
     Glib::ustring str;
     sp_repr_css_write_string(current, str);
@@ -562,11 +565,8 @@ gchar *document_interface_document_get_css(DocumentInterface *object, GError ** 
 gboolean document_interface_document_merge_css(DocumentInterface *object,
                                                gchar *stylestring, GError ** error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document merge CSS requires a GUI");
-        return FALSE;
-    }
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
     SPCSSAttr * style = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(style, stylestring);
     sp_desktop_set_style(desk, style);
@@ -576,11 +576,8 @@ gboolean document_interface_document_merge_css(DocumentInterface *object,
 gboolean document_interface_document_set_css(DocumentInterface *object,
                                              gchar *stylestring, GError ** error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document set CSS requires a GUI");
-        return FALSE;
-    }
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
     SPCSSAttr * style = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string (style, stylestring);
     //Memory leak?
@@ -604,11 +601,8 @@ document_interface_document_set_display_area (DocumentInterface *object,
                                               double border,
                                               GError **error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document set display area requires a GUI");
-        return FALSE;
-    }
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
     desk->set_display_area (x0,
                     y0,
                     x1,
@@ -621,7 +615,7 @@ document_interface_document_set_display_area (DocumentInterface *object,
 GArray *
 document_interface_document_get_display_area (DocumentInterface *object)
 {
-  SPDesktop *desk = object->context.getDesktop();
+  SPDesktop *desk = object->doc_context.getDesktop();
   if (!desk) {
       return NULL;
   }
@@ -650,7 +644,7 @@ gboolean
 document_interface_set_attribute (DocumentInterface *object, char *shape, 
                                   char *attribute, char *newval, GError **error)
 {
-    Inkscape::XML::Node *newNode = get_repr_by_name(object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *newNode = get_repr_by_name(object->doc_context.getDocument(), shape, error);
 
     /* ALTERNATIVE (is this faster?)
     Inkscape::XML::Node *newnode = sp_repr_lookup_name((doc->root)->repr, name);
@@ -670,7 +664,7 @@ document_interface_set_int_attribute (DocumentInterface *object,
                                       char *shape, char *attribute, 
                                       int newval, GError **error)
 {
-    Inkscape::XML::Node *newNode = get_repr_by_name (object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *newNode = get_repr_by_name (object->doc_context.getDocument(), shape, error);
     if (!newNode)
         return FALSE;
         
@@ -684,7 +678,7 @@ document_interface_set_double_attribute (DocumentInterface *object,
                                          char *shape, char *attribute, 
                                          double newval, GError **error)
 {
-    Inkscape::XML::Node *newNode = get_repr_by_name (object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *newNode = get_repr_by_name (object->doc_context.getDocument(), shape, error);
     
     if (!dbus_check_string (attribute, error, "New value string was empty."))
         return FALSE;
@@ -699,7 +693,7 @@ gchar *
 document_interface_get_attribute (DocumentInterface *object, char *shape, 
                                   char *attribute, GError **error)
 {
-    Inkscape::XML::Node *newNode = get_repr_by_name(object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *newNode = get_repr_by_name(object->doc_context.getDocument(), shape, error);
 
     if (!dbus_check_string (attribute, error, "Attribute name empty."))
         return NULL;
@@ -713,11 +707,11 @@ gboolean
 document_interface_move (DocumentInterface *object, gchar *name, gdouble x, 
                          gdouble y, GError **error)
 {
-    const GSList *oldsel = selection_swap(object->context.getSelection(), name, error);
+    const GSList *oldsel = selection_swap(object->doc_context.getSelection(), name, error);
     if (!oldsel)
         return FALSE;
-    sp_selection_move (object->context.getSelection(), x, 0 - y);
-    selection_restore(object->context.getSelection(), oldsel);
+    sp_selection_move (object->doc_context.getSelection(), x, 0 - y);
+    selection_restore(object->doc_context.getSelection(), oldsel);
     return TRUE;
 }
 
@@ -725,13 +719,13 @@ gboolean
 document_interface_move_to (DocumentInterface *object, gchar *name, gdouble x, 
                          gdouble y, GError **error)
 {
-    const GSList *oldsel = selection_swap(object->context.getSelection(), name, error);
+    const GSList *oldsel = selection_swap(object->doc_context.getSelection(), name, error);
     if (!oldsel)
         return FALSE;
-    Inkscape::Selection * sel = object->context.getSelection();
-    sp_selection_move (object->context.getSelection(), x - selection_get_center_x(sel),
+    Inkscape::Selection * sel = object->doc_context.getSelection();
+    sp_selection_move (object->doc_context.getSelection(), x - selection_get_center_x(sel),
                                      0 - (y - selection_get_center_y(sel)));
-    selection_restore(object->context.getSelection(), oldsel);
+    selection_restore(object->doc_context.getSelection(), oldsel);
     return TRUE;
 }
 
@@ -739,18 +733,18 @@ gboolean
 document_interface_object_to_path (DocumentInterface *object, 
                                    char *shape, GError **error)
 {
-    const GSList *oldsel = selection_swap(object->context.getSelection(), shape, error);
+    const GSList *oldsel = selection_swap(object->doc_context.getSelection(), shape, error);
     if (!oldsel)
         return FALSE;
     dbus_call_verb (object, SP_VERB_OBJECT_TO_CURVE, error);
-    selection_restore(object->context.getSelection(), oldsel);
+    selection_restore(object->doc_context.getSelection(), oldsel);
     return TRUE;
 }
 
 gchar *
 document_interface_get_path (DocumentInterface *object, char *pathname, GError **error)
 {
-    Inkscape::XML::Node *node = get_repr_by_name(object->context.getDocument(), pathname, error);
+    Inkscape::XML::Node *node = get_repr_by_name(object->doc_context.getDocument(), pathname, error);
     
     if (!node)
         return NULL;
@@ -787,7 +781,7 @@ document_interface_modify_css (DocumentInterface *object, gchar *shape,
 {
     // Doesn't like non-variable strings for some reason.
     gchar style[] = "style";
-    Inkscape::XML::Node *node = get_repr_by_name(object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *node = get_repr_by_name(object->doc_context.getDocument(), shape, error);
     
     if (!dbus_check_string (cssattrb, error, "Attribute string empty."))
         return FALSE;
@@ -808,7 +802,7 @@ document_interface_merge_css (DocumentInterface *object, gchar *shape,
 {
     gchar style[] = "style";
     
-    Inkscape::XML::Node *node = get_repr_by_name(object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *node = get_repr_by_name(object->doc_context.getDocument(), shape, error);
     
     if (!dbus_check_string (stylestring, error, "Style string empty."))
         return FALSE;
@@ -854,12 +848,12 @@ gboolean
 document_interface_move_to_layer (DocumentInterface *object, gchar *shape, 
                               gchar *layerstr, GError **error)
 {
-    const GSList *oldsel = selection_swap(object->context.getSelection(), shape, error);
+    const GSList *oldsel = selection_swap(object->doc_context.getSelection(), shape, error);
     if (!oldsel)
         return FALSE;
         
     document_interface_selection_move_to_layer(object, layerstr, error);
-    selection_restore(object->context.getSelection(), oldsel);
+    selection_restore(object->doc_context.getSelection(), oldsel);
     return TRUE;
 }
 
@@ -867,7 +861,7 @@ GArray *document_interface_get_node_coordinates(DocumentInterface * /*object*/, 
 {
     //FIXME: Needs lot's of work.
 /*
-    Inkscape::XML::Node *shapenode = get_repr_by_name (object->context.getDocument(), shape, error);
+    Inkscape::XML::Node *shapenode = get_repr_by_name (object->doc_context.getDocument(), shape, error);
     if (shapenode == NULL || shapenode->attribute("d") == NULL) {
         return FALSE;
     }
@@ -885,7 +879,7 @@ gboolean
 document_interface_set_text (DocumentInterface *object, gchar *name, gchar *text, GError **error)
 {
 
-  SPItem* text_obj=(SPItem* )get_object_by_name(object->context.getDocument(), name, error);
+  SPItem* text_obj=(SPItem* )get_object_by_name(object->doc_context.getDocument(), name, error);
   //TODO verify object type
   if (!text_obj)
     return FALSE;
@@ -902,7 +896,7 @@ document_interface_text_apply_style (DocumentInterface *object, gchar *name,
                                      GError **error)
 {
 
-  SPItem* text_obj=(SPItem* )get_object_by_name(object->context.getDocument(), name, error);
+  SPItem* text_obj=(SPItem* )get_object_by_name(object->doc_context.getDocument(), name, error);
 
   //void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPCSSAttr const *css)
   //TODO verify object type
@@ -931,7 +925,7 @@ document_interface_text_apply_style (DocumentInterface *object, gchar *name,
 gboolean 
 document_interface_save (DocumentInterface *object, GError **error)
 {
-    SPDocument * doc = object->context.getDocument();
+    SPDocument * doc = object->doc_context.getDocument();
     printf("1:  %s\n2:  %s\n3:  %s\n", doc->getURI(), doc->getBase(), doc->getName());
     if (doc->getURI())
       return document_interface_save_as (object, doc->getURI(), error);
@@ -941,14 +935,14 @@ document_interface_save (DocumentInterface *object, GError **error)
 gboolean document_interface_load(DocumentInterface *object, 
                                  gchar *filename, GError ** /*error*/)
 {
-    SPDesktop *desk = object->context.getDesktop();
+    SPDesktop *desk = object->doc_context.getDesktop();
     if (desk) {
         desktop_ensure_active(desk);
     }
     const Glib::ustring file(filename);
     sp_file_open(file, NULL, TRUE, TRUE);
     if (object->updates) {
-        Inkscape::DocumentUndo::done(object->context.getDocument(),  SP_VERB_FILE_OPEN, "Opened File");
+        Inkscape::DocumentUndo::done(object->doc_context.getDocument(),  SP_VERB_FILE_OPEN, "Opened File");
     }
     return TRUE;
 }
@@ -957,12 +951,12 @@ gchar *
 document_interface_import (DocumentInterface *object, 
                            gchar *filename, GError **error)
 {
-    SPDesktop *desk = object->context.getDesktop();
+    SPDesktop *desk = object->doc_context.getDesktop();
     if (desk) {
         desktop_ensure_active(desk);
     }
     const Glib::ustring file(filename);
-    SPDocument * doc = object->context.getDocument();
+    SPDocument * doc = object->doc_context.getDocument();
 
     SPObject *new_obj = NULL;
     new_obj = file_import(doc, file, NULL);
@@ -973,7 +967,8 @@ gboolean
 document_interface_save_as (DocumentInterface *object, 
                            const gchar *filename, GError **error)
 {
-    SPDocument * doc = object->context.getDocument();
+    // FIXME: Isn't there a verb we can use for this instead?
+    SPDocument * doc = object->doc_context.getDocument();
     #ifdef WITH_GNOME_VFS
     const Glib::ustring file(filename);
     return file_save_remote(doc, file, NULL, TRUE, TRUE);
@@ -986,18 +981,16 @@ document_interface_save_as (DocumentInterface *object,
         Inkscape::Extension::save(NULL, doc, filename,
                  false, false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
     } catch (...) {
-        //SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        // FIXME: catch ... is not usually a great idea, why is it needed here?
         return false;
     }
 
-    //SP_ACTIVE_DESKTOP->event_log->rememberFileSave();
-    //SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, "Document saved.");
     return true;
 }
 
 gboolean document_interface_mark_as_unmodified(DocumentInterface *object, GError ** /*error*/)
 {
-    SPDocument * doc = object->context.getDocument();
+    SPDocument * doc = object->doc_context.getDocument();
     if (doc) {
         doc->modified_since_save = FALSE;
     }
@@ -1008,7 +1001,7 @@ gboolean document_interface_mark_as_unmodified(DocumentInterface *object, GError
 gboolean 
 document_interface_print_to_file (DocumentInterface *object, GError **error)
 {
-    SPDocument * doc = object->context.getDocument();
+    SPDocument * doc = object->doc_context.getDocument();
     sp_print_document_to_file (doc, g_strdup("/home/soren/test.pdf"));
                                
     return TRUE;
@@ -1053,45 +1046,27 @@ document_interface_redo (DocumentInterface *object, GError **error)
 
 void document_interface_pause_updates(DocumentInterface *object, GError ** error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document pause updates requires a GUI");
-        return;
-    }
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_if_fail(ensure_desktop_valid(desk, error));
     object->updates = FALSE;
     desk->canvas->drawing_disabled = 1;
-    //desk->canvas->need_redraw = 0;
-    //desk->canvas->need_repick = 0;
-    //object->context.getDocument()->root->uflags = FALSE;
-    //object->context.getDocument()->root->mflags = FALSE;
 }
 
 void document_interface_resume_updates(DocumentInterface *object, GError ** error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document resume updates requires a GUI");
-        return;
-    }
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_if_fail(ensure_desktop_valid(desk, error));
     object->updates = TRUE;
     desk->canvas->drawing_disabled = 0;
-    //desk->canvas->need_redraw = 1;
-    //desk->canvas->need_repick = 1;
-    //object->context.getDocument()->root->uflags = TRUE;
-    //object->context.getDocument()->root->mflags = TRUE;
-    //object->context.getDocument()->_updateDocument();
     //FIXME: use better verb than rect.
-    Inkscape::DocumentUndo::done(object->context.getDocument(),  SP_VERB_CONTEXT_RECT, "Multiple actions");
+    Inkscape::DocumentUndo::done(object->doc_context.getDocument(),  SP_VERB_CONTEXT_RECT, "Multiple actions");
 }
 
 void document_interface_update(DocumentInterface *object, GError ** error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document update requires a GUI");
-        return;
-    }
-    SPDocument *doc = object->context.getDocument();
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_if_fail(ensure_desktop_valid(desk, error));
+    SPDocument *doc = object->doc_context.getDocument();
     doc->getRoot()->uflags = TRUE;
     doc->getRoot()->mflags = TRUE;
     desk->enableInteraction();
@@ -1108,7 +1083,7 @@ void document_interface_update(DocumentInterface *object, GError ** error)
 
 gboolean document_interface_selection_get(DocumentInterface *object, char ***out, GError ** /*error*/)
 {
-    Inkscape::Selection * sel = object->context.getSelection();
+    Inkscape::Selection * sel = object->doc_context.getSelection();
     GSList const *oldsel = sel->list();
 
     int size = g_slist_length((GSList *) oldsel);
@@ -1128,11 +1103,11 @@ gboolean document_interface_selection_get(DocumentInterface *object, char ***out
 gboolean
 document_interface_selection_add (DocumentInterface *object, char *name, GError **error)
 {
-    SPObject * obj = get_object_by_name(object->context.getDocument(), name, error);
+    SPObject * obj = get_object_by_name(object->doc_context.getDocument(), name, error);
     if (!obj)
         return FALSE;
     
-    Inkscape::Selection *selection = object->context.getSelection();
+    Inkscape::Selection *selection = object->doc_context.getSelection();
 
     selection->add(obj);
     return TRUE;
@@ -1151,8 +1126,8 @@ document_interface_selection_add_list (DocumentInterface *object,
 
 gboolean document_interface_selection_set(DocumentInterface *object, char *name, GError ** /*error*/)
 {
-    SPDocument * doc = object->context.getDocument();
-    Inkscape::Selection *selection = object->context.getSelection();
+    SPDocument * doc = object->doc_context.getDocument();
+    Inkscape::Selection *selection = object->doc_context.getSelection();
     selection->set(doc->getObjectById(name));
     return TRUE;
 }
@@ -1161,7 +1136,7 @@ gboolean
 document_interface_selection_set_list (DocumentInterface *object, 
                                        gchar **names, GError **error)
 {
-    object->context.getSelection()->clear();
+    object->doc_context.getSelection()->clear();
     int i;
     for (i=0;names[i] != NULL;i++) {
         document_interface_selection_add(object, names[i], error);       
@@ -1171,7 +1146,7 @@ document_interface_selection_set_list (DocumentInterface *object,
 
 gboolean document_interface_selection_rotate(DocumentInterface *object, int angle, GError ** /*error*/)
 {
-    Inkscape::Selection *selection = object->context.getSelection();
+    Inkscape::Selection *selection = object->doc_context.getSelection();
     sp_selection_rotate(selection, angle);
     return TRUE;
 }
@@ -1179,20 +1154,18 @@ gboolean document_interface_selection_rotate(DocumentInterface *object, int angl
 gboolean
 document_interface_selection_delete (DocumentInterface *object, GError **error)
 {
-    //sp_selection_delete (object->desk);
     return dbus_call_verb (object, SP_VERB_EDIT_DELETE, error);
 }
 
 gboolean document_interface_selection_clear(DocumentInterface *object, GError ** /*error*/)
 {
-    object->context.getSelection()->clear();
+    object->doc_context.getSelection()->clear();
     return TRUE;
 }
 
 gboolean
 document_interface_select_all (DocumentInterface *object, GError **error)
 {
-    //sp_edit_select_all (object->desk);
     return dbus_call_verb (object, SP_VERB_EDIT_SELECT_ALL, error);
 }
 
@@ -1200,7 +1173,6 @@ gboolean
 document_interface_select_all_in_all_layers(DocumentInterface *object, 
                                             GError **error)
 {
-    //sp_edit_select_all_in_all_layers (object->desk);
     return dbus_call_verb (object, SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, error);
 }
 
@@ -1215,7 +1187,6 @@ gboolean document_interface_selection_box(DocumentInterface * /*object*/, int /*
 gboolean
 document_interface_selection_invert (DocumentInterface *object, GError **error)
 {
-    //sp_edit_invert (object->desk);
     return dbus_call_verb (object, SP_VERB_EDIT_INVERT, error);
 }
 
@@ -1233,46 +1204,30 @@ document_interface_selection_ungroup (DocumentInterface *object, GError **error)
 gboolean
 document_interface_selection_cut (DocumentInterface *object, GError **error)
 {
-    //desktop_ensure_active (object->desk);
-    //sp_selection_cut (object->desk);
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
     return dbus_call_verb (object, SP_VERB_EDIT_CUT, error);
 }
 
 gboolean
 document_interface_selection_copy (DocumentInterface *object, GError **error)
 {
-    //desktop_ensure_active (object->desk);
-    //sp_selection_copy ();
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
     return dbus_call_verb (object, SP_VERB_EDIT_COPY, error);
 }
-/*
+
 gboolean
 document_interface_selection_paste (DocumentInterface *object, GError **error)
 {
-    SPDesktop *desk = object->context.getDesktop();
-    if (!desk) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document selection paste requires a GUI");
-        return FALSE;
-    }
-    desktop_ensure_active (desk);
-                    if (!object->updates)
-                    document_interface_pause_updates (object, error);
-    sp_selection_paste (object->desk, TRUE);
-                    if (!object->updates)
-                    document_interface_pause_updates (object, error);
-    return TRUE;
-    //return dbus_call_verb (object, SP_VERB_EDIT_PASTE, error);
-}
-*/
-gboolean
-document_interface_selection_paste (DocumentInterface *object, GError **error)
-{
+    SPDesktop *desk = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
     return dbus_call_verb (object, SP_VERB_EDIT_PASTE, error);
 }
 
 gboolean document_interface_selection_scale(DocumentInterface *object, gdouble grow, GError ** /*error*/)
 {
-    Inkscape::Selection *selection = object->context.getSelection();
+    Inkscape::Selection *selection = object->doc_context.getSelection();
     if (!selection)
     {
         return FALSE;
@@ -1283,13 +1238,13 @@ gboolean document_interface_selection_scale(DocumentInterface *object, gdouble g
 
 gboolean document_interface_selection_move(DocumentInterface *object, gdouble x, gdouble y, GError ** /*error*/)
 {
-    sp_selection_move(object->context.getSelection(), x, 0 - y); //switching coordinate systems.
+    sp_selection_move(object->doc_context.getSelection(), x, 0 - y); //switching coordinate systems.
     return TRUE;
 }
 
 gboolean document_interface_selection_move_to(DocumentInterface *object, gdouble x, gdouble y, GError ** /*error*/)
 {
-    Inkscape::Selection * sel = object->context.getSelection();
+    Inkscape::Selection * sel = object->doc_context.getSelection();
 
     Geom::OptRect sel_bbox = sel->visualBounds();
     if (sel_bbox) {
@@ -1306,19 +1261,16 @@ gboolean
 document_interface_selection_move_to_layer (DocumentInterface *object,
                                             gchar *layerstr, GError **error)
 {
-    SPDesktop *dt = object->context.getDesktop();
-    if (!dt) {
-        g_set_error(error, INKSCAPE_ERROR, INKSCAPE_ERROR_OTHER, "Document selection move to layer requires a GUI");
-        return FALSE;
-    }
+    SPDesktop *dt = object->doc_context.getDesktop();
+    g_return_val_if_fail(ensure_desktop_valid(dt, error), FALSE);
 
-    Inkscape::Selection *selection = object->context.getSelection();
+    Inkscape::Selection *selection = object->doc_context.getSelection();
 
     // check if something is selected
     if (selection->isEmpty())
         return FALSE;
 
-    SPObject *next = get_object_by_name(object->context.getDocument(), layerstr, error);
+    SPObject *next = get_object_by_name(object->doc_context.getDocument(), layerstr, error);
     
     if (!next)
         return FALSE;
@@ -1327,7 +1279,7 @@ document_interface_selection_move_to_layer (DocumentInterface *object,
 
         sp_selection_cut(dt);
 
-        object->context.getSelection()->layerModel()->setCurrentLayer(next);
+        object->doc_context.getSelection()->layers()->setCurrentLayer(next);
 
         sp_selection_paste(dt, TRUE);
         }
@@ -1337,7 +1289,7 @@ document_interface_selection_move_to_layer (DocumentInterface *object,
 GArray *
 document_interface_selection_get_center (DocumentInterface *object)
 {
-    Inkscape::Selection * sel = object->context.getSelection();
+    Inkscape::Selection * sel = object->doc_context.getSelection();
 
     if (sel) 
     {
@@ -1403,9 +1355,9 @@ document_interface_selection_change_level (DocumentInterface *object, gchar *cmd
 
 gchar *document_interface_layer_new(DocumentInterface *object, GError ** /*error*/)
 {
-    Inkscape::LayerModel * layerModel = object->context.getSelection()->layerModel();
-    SPObject *new_layer = Inkscape::create_layer(layerModel->currentRoot(), layerModel->currentLayer(), Inkscape::LPOS_BELOW);
-    layerModel->setCurrentLayer(new_layer);
+    Inkscape::LayerModel * layers = object->doc_context.getSelection()->layers();
+    SPObject *new_layer = Inkscape::create_layer(layers->currentRoot(), layers->currentLayer(), Inkscape::LPOS_BELOW);
+    layers->setCurrentLayer(new_layer);
     return g_strdup(get_name_from_object(new_layer));
 }
 
@@ -1413,12 +1365,12 @@ gboolean
 document_interface_layer_set (DocumentInterface *object,
                               gchar *layerstr, GError **error)
 {
-    SPObject * obj = get_object_by_name (object->context.getDocument(), layerstr, error);
+    SPObject * obj = get_object_by_name (object->doc_context.getDocument(), layerstr, error);
     
     if (!obj)
         return FALSE;
         
-    object->context.getSelection()->layerModel()->setCurrentLayer (obj);
+    object->doc_context.getSelection()->layers()->setCurrentLayer (obj);
     return TRUE;
 }
 
@@ -1462,7 +1414,6 @@ document_interface_layer_previous (DocumentInterface *object, GError **error)
 DocumentInterface *fugly;
 gboolean dbus_send_ping (SPDesktop* desk,     SPItem *item)
 {
-  //DocumentInterface *obj;
   if (!item) return TRUE;
   g_signal_emit (desk->dbus_document_interface, signals[OBJECT_MOVED_SIGNAL], 0, item->getId());
   return TRUE;
@@ -1474,7 +1425,7 @@ gboolean dbus_send_ping (SPDesktop* desk,     SPItem *item)
 gboolean
 document_interface_get_children (DocumentInterface *object,  char *name, char ***out, GError **error)
 {
-  SPItem* parent=(SPItem* )get_object_by_name(object->context.getDocument(), name, error);
+  SPItem* parent=(SPItem* )get_object_by_name(object->doc_context.getDocument(), name, error);
 
   GSList const *children = parent->childList(false);
 
@@ -1497,7 +1448,7 @@ document_interface_get_children (DocumentInterface *object,  char *name, char **
 gchar* 
 document_interface_get_parent (DocumentInterface *object,  char *name, GError **error)
 {
-  SPItem* node=(SPItem* )get_object_by_name(object->context.getDocument(), name, error);
+  SPItem* node=(SPItem* )get_object_by_name(object->doc_context.getDocument(), name, error);
   
   SPObject* parent=node->parent;
 
@@ -1509,7 +1460,7 @@ document_interface_get_parent (DocumentInterface *object,  char *name, GError **
 //just pseudo code
 gboolean
 document_interface_get_xpath (DocumentInterface *object,  char *xpath_expression, char ***out, GError **error){
-  SPDocument * doc = object->context.getDocument();
+  SPDocument * doc = object->doc_context.getDocument();
   Inkscape::XML::Document *repr = doc->getReprDoc();
 
   xmlXPathObjectPtr xpathObj;

@@ -41,11 +41,11 @@
 
 namespace Inkscape {
 
-Selection::Selection(LayerModel *layer_model, SPDesktop *desktop) :
+Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
     _objs(NULL),
     _reprs(NULL),
     _items(NULL),
-    _layer_model(layer_model),
+    _layers(layers),
     _desktop(desktop),
     _selection_context(NULL),
     _flags(0),
@@ -55,7 +55,7 @@ Selection::Selection(LayerModel *layer_model, SPDesktop *desktop) :
 
 Selection::~Selection() {
     _clear();
-    _layer_model = NULL;
+    _layers = NULL;
     if (_idle) {
         g_source_remove(_idle);
         _idle = 0;
@@ -96,7 +96,7 @@ void Selection::_emitModified(guint flags) {
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
     if (persist_selection_context) {
         if (NULL == _selection_context) {
-            _selection_context = _layer_model->currentLayer();
+            _selection_context = _layers->currentLayer();
             sp_object_ref(_selection_context, NULL);
             _context_release_connection = _selection_context->connectRelease(sigc::mem_fun(*this, &Selection::_releaseContext));
         }
@@ -139,7 +139,7 @@ void Selection::_clear() {
 SPObject *Selection::activeContext() {
     if (NULL != _selection_context)
         return _selection_context;
-    return _layer_model->currentLayer();
+    return _layers->currentLayer();
     }
 
 bool Selection::includes(SPObject *obj) const {
@@ -487,7 +487,7 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
     gchar const *id = repr->attribute("id");
     g_return_val_if_fail(id != NULL, NULL);
-    SPObject *object=_layer_model->getDocument()->getObjectById(id);
+    SPObject *object=_layers->getDocument()->getObjectById(id);
     g_return_val_if_fail(object != NULL, NULL);
     return object;
 }
@@ -496,7 +496,7 @@ guint Selection::numberOfLayers() {
     GSList const *items = const_cast<Selection *>(this)->itemList();
     GSList *layers = NULL;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        SPObject *layer = _layer_model->layerForObject(SP_OBJECT(iter->data));
+        SPObject *layer = _layers->layerForObject(SP_OBJECT(iter->data));
         if (g_slist_find (layers, layer) == NULL) {
             layers = g_slist_prepend (layers, layer);
         }

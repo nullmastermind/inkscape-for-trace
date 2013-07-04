@@ -126,7 +126,7 @@ boolop_display_error_message(SPDesktop *desktop, Glib::ustring const &msg)
 void
 sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb, const Glib::ustring description)
 {
-    SPDocument *doc = selection->layerModel()->getDocument();
+    SPDocument *doc = selection->layers()->getDocument();
     GSList *il = (GSList *) selection->itemList();
     
     // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)

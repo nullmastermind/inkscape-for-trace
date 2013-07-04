@@ -96,7 +96,7 @@ SPDesktop::SPDesktop() :
     _dlg_mgr( 0 ),
     namedview( 0 ),
     canvas( 0 ),
-    layer_model( 0 ),
+    layers( 0 ),
     selection( 0 ),
     event_context( 0 ),
     layer_manager( 0 ),
@@ -142,11 +142,11 @@ SPDesktop::SPDesktop() :
     _d2w.setIdentity();
     _w2d.setIdentity();
     
-    layer_model = new Inkscape::LayerModel();
-    layer_model->_layer_activated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_activated), this));
-    layer_model->_layer_deactivated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
-    layer_model->_layer_changed_signal.connect(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
-    selection = Inkscape::GC::release( new Inkscape::Selection(layer_model, this) );
+    layers = new Inkscape::LayerModel();
+    layers->_layer_activated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_activated), this));
+    layers->_layer_deactivated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
+    layers->_layer_changed_signal.connect(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
+    selection = Inkscape::GC::release( new Inkscape::Selection(layers, this) );
 }
 
 void
@@ -176,7 +176,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     dkey = SPItem::display_key_new(1);
 
     /* Connect display key to layer model */
-    layer_model->setDisplayKey(dkey);
+    layers->setDisplayKey(dkey);
 
     /* Connect document */
     setDocument (document);
@@ -367,7 +367,7 @@ void SPDesktop::destroy()
         g_object_unref (G_OBJECT (ec));
     }
 
-    delete layer_model;
+    delete layers;
 
     if (layer_manager) {
         delete layer_manager;
@@ -491,42 +491,42 @@ void SPDesktop::displayColorModeToggle() {
 // Pass-through LayerModel functions
 SPObject *SPDesktop::currentRoot() const
 {
-    return layer_model->currentRoot();
+    return layers->currentRoot();
 }
 
 SPObject *SPDesktop::currentLayer() const
 {
-    return layer_model->currentLayer();
+    return layers->currentLayer();
 }
 
 void SPDesktop::setCurrentLayer(SPObject *object)
 {
-    layer_model->setCurrentLayer(object);
+    layers->setCurrentLayer(object);
 }
 
 void SPDesktop::toggleLayerSolo(SPObject *object)
 {
-    layer_model->toggleLayerSolo(object);
+    layers->toggleLayerSolo(object);
 }
 
 void SPDesktop::toggleHideAllLayers(bool hide)
 {
-    layer_model->toggleHideAllLayers(hide);
+    layers->toggleHideAllLayers(hide);
 }
 
 void SPDesktop::toggleLockAllLayers(bool lock)
 {
-    layer_model->toggleLockAllLayers(lock);
+    layers->toggleLockAllLayers(lock);
 }
 
 void SPDesktop::toggleLockOtherLayers(SPObject *object)
 {
-    layer_model->toggleLockOtherLayers(object);
+    layers->toggleLockOtherLayers(object);
 }
 
 bool SPDesktop::isLayer(SPObject *object) const
 {
-    return layer_model->isLayer(object);
+    return layers->isLayer(object);
 }
 
 /**
@@ -1491,7 +1491,7 @@ SPDesktop::setDocument (SPDocument *doc)
         this->doc()->getRoot()->invoke_hide(dkey);
     }
 
-    layer_model->setDocument(doc);
+    layers->setDocument(doc);
 
 	// remove old EventLog if it exists (see also: bug #1071082)
 	if (event_log) {
@@ -1599,9 +1599,9 @@ _onSelectionChanged
      */
     SPItem *item=selection->singleItem();
     if (item) {
-        SPObject *layer=desktop->layer_model->layerForObject(item);
+        SPObject *layer=desktop->layers->layerForObject(item);
         if ( layer && layer != desktop->currentLayer() ) {
-            desktop->layer_model->setCurrentLayer(layer);
+            desktop->layers->setCurrentLayer(layer);
         }
     }
 }
@@ -1646,9 +1646,9 @@ _layer_hierarchy_changed(SPObject */*top*/, SPObject *bottom,
 /// Called when document is starting to be rebuilt.
 static void _reconstruction_start(SPDesktop * desktop)
 {
-    // printf("Desktop, starting reconstruction\n");
+    g_debug("Desktop, starting reconstruction\n");
     desktop->_reconstruction_old_layer_id = desktop->currentLayer()->getId() ? desktop->currentLayer()->getId() : "";
-    desktop->layer_model->reset();
+    desktop->layers->reset();
 
     /*
     GSList const * selection_objs = desktop->selection->list();
@@ -1658,22 +1658,22 @@ static void _reconstruction_start(SPDesktop * desktop)
     */
     desktop->selection->clear();
 
-    // printf("Desktop, starting reconstruction end\n");
+    g_debug("Desktop, starting reconstruction end\n");
 }
 
 /// Called when document rebuild is finished.
 static void _reconstruction_finish(SPDesktop * desktop)
 {
-    // printf("Desktop, finishing reconstruction\n");
+    g_debug("Desktop, finishing reconstruction\n");
     if ( !desktop->_reconstruction_old_layer_id.empty() ) {
         SPObject * newLayer = desktop->namedview->document->getObjectById(desktop->_reconstruction_old_layer_id);
         if (newLayer != NULL) {
-            desktop->layer_model->setCurrentLayer(newLayer);
+            desktop->layers->setCurrentLayer(newLayer);
         }
 
         desktop->_reconstruction_old_layer_id.clear();
-        // printf("Desktop, finishing reconstruction end\n");
     }
+    g_debug("Desktop, finishing reconstruction end\n");
 }
 
 /**

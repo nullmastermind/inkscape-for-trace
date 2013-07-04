@@ -145,8 +145,8 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);
     } else {
         SPItem *item = SP_ITEM(items->data);
-        SPObject *layer = selection->layerModel()->layerForObject(item);
-        SPObject *root = selection->layerModel()->currentRoot();
+        SPObject *layer = selection->layers()->layerForObject(item);
+        SPObject *root = selection->layers()->currentRoot();
 
         // Layer name
         gchar *layer_name;

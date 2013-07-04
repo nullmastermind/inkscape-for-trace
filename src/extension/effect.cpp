@@ -368,12 +368,9 @@ Effect::EffectVerb::make_action (Inkscape::ActionContext const & context)
 void
 Effect::EffectVerb::perform( SPAction *action, void * data )
 {
+    g_return_if_fail(ensure_desktop_valid(action));
     Inkscape::UI::View::View * current_view = sp_action_get_view(action);
-    if (current_view == NULL) {
-        show_gui_required_message(action);
-        return;
-    }
-//  SPDocument * current_document = current_view->doc;
+
     Effect::EffectVerb * ev = reinterpret_cast<Effect::EffectVerb *>(data);
     Effect * effect = ev->_effect;
 

@@ -125,7 +125,7 @@ public:
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
     SPNamedView               *namedview;
     SPCanvas                  *canvas;
-    Inkscape::LayerModel      *layer_model;
+    Inkscape::LayerModel      *layers;
     /// current selection; will never generally be NULL
     Inkscape::Selection       *selection;
     SPEventContext            *event_context;
@@ -263,7 +263,7 @@ public:
 
     void set_active (bool new_active);
 
-    // Could make all callers use layer_model instead of passing calls through?
+    // Could make all callers use this->layers instead of passing calls through?
     SPObject *currentRoot() const;
     SPObject *currentLayer() const;
     void setCurrentLayer(SPObject *object);

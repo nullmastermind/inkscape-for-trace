@@ -6,7 +6,7 @@
  *
  * Copyright (C) 2013 Eric Greveson
  *
- * This code is in public domain
+ * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #ifndef SEEN_INKSCAPE_ACTION_CONTEXT_H

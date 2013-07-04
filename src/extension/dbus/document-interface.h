@@ -52,7 +52,7 @@ typedef struct _DocumentInterfaceClass DocumentInterfaceClass;
 
 struct _DocumentInterface {
     GObject parent;
-    Inkscape::ActionContext context;
+    Inkscape::ActionContext doc_context; ///< stores information about which document, selection, desktop etc this interface is linked to
     gboolean updates;
 };
 
