@@ -1277,7 +1277,11 @@ int sp_main_console(int argc, char const **argv)
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    if (fl == NULL && !sp_shell && !sp_dbus_listen) {
+    if (fl == NULL && !sp_shell
+#ifdef WITH_DBUS
+        && !sp_dbus_listen
+#endif // WITH_DBUS
+        ) {
         g_print("Nothing to do!\n");
         exit(0);
     }
