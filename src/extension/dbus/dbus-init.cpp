@@ -78,6 +78,44 @@ dbus_register_object (DBusGConnection *connection,
         return object;
 }
 
+/*
+ * PRIVATE register a document interface for the document in the given ActionContext, if none exists.
+ * Return the DBus path to the interface (something like /org/inkscape/document_0).
+ * Note that while a DocumentInterface could be used either for a document with no desktop, or a
+ * document with a desktop, this function is only used for creating interfaces in the former case.
+ * Desktop-associated DocumentInterfaces are named /org/inkscape/desktop_0, etc.
+ * FIXME: This state of affairs probably needs tidying up at some point in the future.
+ */
+static gchar *
+dbus_register_document(Inkscape::ActionContext const & target)
+{
+    SPDocument *doc = target.getDocument();
+    g_assert(doc != NULL);
+
+    // Document name is not suitable for DBus name, as it might contain invalid chars
+    std::string name("/org/inkscape/document_");
+    std::stringstream ss;
+    ss << doc->serial();
+    name.append(ss.str());
+    
+    DBusGConnection *connection = dbus_get_connection();
+    DBusGProxy *proxy = dbus_get_proxy(connection);
+
+    // Has the document already been registered?
+    if (!dbus_g_connection_lookup_g_object(connection, name.c_str())) {
+        // No - register it
+        DocumentInterface *doc_interface = (DocumentInterface*) dbus_register_object (connection, 
+            proxy,
+            TYPE_DOCUMENT_INTERFACE,
+            &dbus_glib_document_interface_object_info,
+            name.c_str());
+
+        // Set the document info for this interface
+        doc_interface->target = target;
+    }
+    return strdup(name.c_str());
+}
+
 /* Initialize a Dbus service */
 void 
 init (void)
@@ -97,34 +135,19 @@ init (void)
                 TYPE_APPLICATION_INTERFACE,
                 &dbus_glib_application_interface_object_info,
                 DBUS_APPLICATION_INTERFACE_PATH);
-} //init
+}
 
 gchar *
-init_document (void) {
-        DBusGConnection *connection;
-        DBusGProxy *proxy;
-	SPDocument *doc;
+init_document (void)
+{
+    // This is for command-line use only
+    g_assert(!inkscape_use_gui());
 
-        doc = SPDocument::createNewDoc(NULL, 1, TRUE);
-
-        std::string name("/org/inkscape/");
-        // This only works because a new document's name happens to contain
-        // only valid DBus characters [A-Z][a-z][0-9]_
-        // TODO: use the document->serial() instead, like below, and similar to
-        // how desktops work?
-        name.append(doc->getName());
-        std::replace(name.begin(), name.end(), ' ', '_');
-
-        connection = dbus_get_connection();
-        proxy = dbus_get_proxy(connection);
-
-        dbus_register_object (connection, 
-                proxy,
-                TYPE_DOCUMENT_INTERFACE,
-                &dbus_glib_document_interface_object_info,
-                name.c_str());
-	return strdup(name.c_str());
-} //init_document
+    // Create a blank document and get its selection model etc in an ActionContext
+    SPDocument *doc = SPDocument::createNewDoc(NULL, 1, TRUE);
+    inkscape_add_document(doc);
+    return dbus_register_document(inkscape_action_context_for_document(doc));
+}
 
 gchar *
 init_active_document()
@@ -134,28 +157,7 @@ init_active_document()
         return NULL;
     }
     
-    // Document name is not suitable for DBus name, as it might contain invalid chars
-    std::string name("/org/inkscape/document_");
-    std::stringstream ss;
-    ss << doc->serial();
-    name.append(ss.str());
-    
-    DBusGConnection *connection = dbus_get_connection();
-    DBusGProxy *proxy = dbus_get_proxy(connection);
-
-    // Has the active document already been registered?
-    if (!dbus_g_connection_lookup_g_object(connection, name.c_str())) {
-        // No - register it
-        DocumentInterface *obj = (DocumentInterface*) dbus_register_object (connection, 
-            proxy,
-            TYPE_DOCUMENT_INTERFACE,
-            &dbus_glib_document_interface_object_info,
-            name.c_str());
-
-        // Set the document info for this interface
-        obj->doc_context = inkscape_active_action_context();
-    }
-    return strdup(name.c_str());
+    return dbus_register_document(inkscape_active_action_context());
 }
 
 gchar *
@@ -163,7 +165,6 @@ dbus_init_desktop_interface (SPDesktop * dt)
 {
     DBusGConnection *connection;
     DBusGProxy *proxy;
-	DocumentInterface *obj;
 
     std::string name("/org/inkscape/desktop_");
 	std::stringstream out;
@@ -175,12 +176,12 @@ dbus_init_desktop_interface (SPDesktop * dt)
     connection = dbus_get_connection();
     proxy = dbus_get_proxy(connection);
 
-    obj = (DocumentInterface*) dbus_register_object (connection, 
+    DocumentInterface *doc_interface = (DocumentInterface*) dbus_register_object (connection, 
           proxy, TYPE_DOCUMENT_INTERFACE,
           &dbus_glib_document_interface_object_info, name.c_str());
-    obj->doc_context = Inkscape::ActionContext(dt);
-    obj->updates = TRUE;
-    dt->dbus_document_interface=obj;
+    doc_interface->target = Inkscape::ActionContext(dt);
+    doc_interface->updates = TRUE;
+    dt->dbus_document_interface=doc_interface;
     return strdup(name.c_str());
 }
 
@@ -195,7 +196,7 @@ init_desktop (void) {
 	out << dt->dkey;
 	name.append(out.str());
     return strdup(name.c_str());
-} //init_desktop
+}
 
 
 

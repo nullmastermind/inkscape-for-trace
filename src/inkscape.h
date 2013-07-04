@@ -57,6 +57,11 @@ SPDocument * inkscape_active_document (void);
 #define SP_ACTIVE_DESKTOP inkscape_active_desktop ()
 SPDesktop * inkscape_active_desktop (void);
 
+// Use this function to get selection model etc for a document, if possible!
+// The "active" alternative below has all the horrible static cling of a singleton.
+Inkscape::ActionContext
+inkscape_action_context_for_document(SPDocument *doc);
+
 // More horrible static cling... sorry about this. Should really replace all of
 // the static stuff with a single instance of some kind of engine class holding
 // all the document / non-GUI stuff, and an optional GUI class that behaves a
@@ -84,6 +89,11 @@ void inkscape_dialogs_toggle ();
 
 void inkscape_external_change ();
 void inkscape_subselection_changed (SPDesktop *desktop);
+
+/* Moved document add/remove functions into public inkscape.h as they are used
+  (rightly or wrongly) by console-mode functions */
+void inkscape_add_document (SPDocument *document);
+bool inkscape_remove_document (SPDocument *document);
 
 /*
  * fixme: This has to be rethought

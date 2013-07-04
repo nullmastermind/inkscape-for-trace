@@ -1359,7 +1359,22 @@ inkscape_active_action_context()
     if (!doc) {
         return Inkscape::ActionContext();
     }
-        
+
+    return inkscape_action_context_for_document(doc);
+}
+
+Inkscape::ActionContext
+inkscape_action_context_for_document(SPDocument *doc)
+{
+    // If there are desktops, check them first to see if the document is bound to one of them
+    for (GSList *iter = inkscape->desktops ; iter ; iter = iter->next) {
+        SPDesktop *desktop=static_cast<SPDesktop *>(iter->data);
+        if (desktop->doc() == doc) {
+            return Inkscape::ActionContext(desktop);
+        }
+    }
+
+    // Document is not associated with any desktops - maybe we're in command-line mode
     std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = inkscape->selection_models.find(doc);
     if (sel_iter == inkscape->selection_models.end()) {
         return Inkscape::ActionContext();
