@@ -147,7 +147,9 @@ enum {
     SP_ARG_EXPORT_SVG,
     SP_ARG_EXPORT_PS,
     SP_ARG_EXPORT_EPS,
+    SP_ARG_EXPORT_PS_LEVEL,
     SP_ARG_EXPORT_PDF,
+    SP_ARG_EXPORT_PDF_VERSION,
     SP_ARG_EXPORT_LATEX,
 #ifdef WIN32
     SP_ARG_EXPORT_EMF,
@@ -200,7 +202,9 @@ static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
+static gint sp_export_ps_level = 2;
 static gchar *sp_export_pdf = NULL;
+static gchar *sp_export_pdf_version = NULL;
 #ifdef WIN32
 static gchar *sp_export_emf = NULL;
 #endif //WIN32
@@ -244,7 +248,9 @@ static void resetCommandlineGlobals() {
         sp_export_svg = NULL;
         sp_export_ps = NULL;
         sp_export_eps = NULL;
+        sp_export_ps_level = 2;
         sp_export_pdf = NULL;
+        sp_export_pdf_version = NULL;
 #ifdef WIN32
         sp_export_emf = NULL;
 #endif //WIN32
@@ -381,10 +387,22 @@ struct poptOption options[] = {
      N_("Export document to an EPS file"),
      N_("FILENAME")},
 
+    {"export-ps-level", 0,
+     POPT_ARG_INT, &sp_export_ps_level, SP_ARG_EXPORT_PS_LEVEL,
+     N_("Choose the PostScript Level used to export. Possible choices are"
+        " 2 (the default) and 3"),
+     N_("PS Level")},
+
     {"export-pdf", 'A',
      POPT_ARG_STRING, &sp_export_pdf, SP_ARG_EXPORT_PDF,
      N_("Export document to a PDF file"),
      N_("FILENAME")},
+
+    {"export-pdf-version", 0,
+     POPT_ARG_STRING, &sp_export_pdf_version, SP_ARG_EXPORT_PDF_VERSION,
+     // TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
+     N_("Export PDF to given version. (hint: make sure to input the exact string found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"),
+     N_("PDF_VERSION")},
 
     {"export-latex", 0,
      POPT_ARG_NONE, &sp_export_latex, SP_ARG_EXPORT_LATEX,
@@ -1638,10 +1656,52 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
     }
     (*i)->set_param_float("bleed", margin);
 
+    // handle --export-pdf-version
+    if (g_strcmp0(mime, "application/pdf") == 0) {
+        bool set_export_pdf_version_fail=true;
+        const gchar *pdfver_param_name="PDFversion";
+        if(sp_export_pdf_version) {
+            // combine "PDF " and the given command line
+            std::string version_gui_string=std::string("PDF ")+sp_export_pdf_version;
+            try{
+                // first, check if the given pdf version is selectable in the ComboBox
+                if((*i)->get_param_enum_contains("PDFversion", version_gui_string.c_str())) {
+                    (*i)->set_param_enum(pdfver_param_name, version_gui_string.c_str());
+                    set_export_pdf_version_fail=false;
+                } else {
+                    g_warning("Desired PDF export version \"%s\" not supported! Hint: input one of the versions found in the pdf export dialog e.g. \"1.4\".",
+                              sp_export_pdf_version);
+                }
+            } catch (...) {
+                // can be thrown along the way:
+                // throw Extension::param_not_exist();
+                // throw Extension::param_not_enum_param();
+                g_warning("Parameter or Enum \"%s\" might not exist",pdfver_param_name);
+            }
+        }
+
+        // set default pdf export version to 1.4, also if something went wrong
+        if(set_export_pdf_version_fail) {
+            (*i)->set_param_enum(pdfver_param_name, "PDF 1.4");
+        }
+    }
+
     //check if specified directory exists
     if (!Inkscape::IO::file_directory_exists(uri)) {
         g_warning("File path \"%s\" includes directory that doesn't exist.\n", uri);
         return 1;
+    }
+
+    if ( g_strcmp0(mime, "image/x-postscript") == 0
+         || g_strcmp0(mime, "image/x-e-postscript") == 0 ) {
+        if ( sp_export_ps_level < 2 || sp_export_ps_level > 3 ) {
+            g_warning("Only supported PostScript levels are 2 and 3."
+                      " Defaulting to 2.");
+            sp_export_ps_level = 2;
+        }
+
+        (*i)->set_param_enum("PSlevel", (sp_export_ps_level == 3)
+                             ? "PostScript level 3" : "PostScript level 2");
     }
 
     (*i)->save(doc, uri);

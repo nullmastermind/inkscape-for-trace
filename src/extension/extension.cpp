@@ -19,6 +19,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/frame.h>
@@ -421,16 +425,31 @@ gchar const *Extension::get_param_string(gchar const *name, SPDocument const *do
 }
 
 const gchar *
-Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node) const
 {
-    Parameter* param = get_param(name);
+    Parameter const *param = get_param(name);
     return param->get_enum(doc, node);
 }
 
-gchar const *
-Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node)
+/**
+ * This is useful to find out, if a given string \c value is selectable in a ComboBox named \cname.
+ * 
+ * @param name The name of the enum parameter to get.
+ * @param doc The document to look in for document specific parameters.
+ * @param node The node to look in for a specific parameter.
+ * @return true if value exists, false if not
+ */
+bool
+Extension::get_param_enum_contains(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node) const
 {
-    Parameter* param = get_param(name);
+    Parameter const *param = get_param(name);
+    return param->get_enum_contains(value, doc, node);
+}
+
+gchar const *
+Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node) const
+{
+    Parameter const*param = get_param(name);
     return param->get_optiongroup(doc, node);
 }
 
@@ -504,9 +523,9 @@ Extension::get_param_float (const gchar * name, const SPDocument * doc, const In
     found parameter.
 */
 guint32
-Extension::get_param_color (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_color (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node) const
 {
-    Parameter* param = get_param(name);
+    Parameter const *param = get_param(name);
     return param->get_color(doc, node);
 }
 
@@ -595,6 +614,13 @@ Extension::set_param_optiongroup(gchar const * name, gchar const * value, SPDocu
 {
     Parameter * param = get_param(name);
     return param->set_optiongroup(value, doc, node);
+}
+
+gchar const *
+Extension::set_param_enum(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node)
+{
+    Parameter * param = get_param(name);
+    return param->set_enum(value, doc, node);
 }
 
 

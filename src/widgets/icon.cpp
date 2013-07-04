@@ -16,6 +16,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/icontheme.h>
 #include <cstring>
 #include <glib.h>
@@ -862,6 +866,13 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
 GtkWidget *sp_icon_new( Inkscape::IconSize lsize, gchar const *name )
 {
     return IconImpl::newFull( lsize, name );
+}
+
+// PUBLIC CALL for when you REALLY need a pixbuf
+GdkPixbuf *sp_pixbuf_new( Inkscape::IconSize lsize, gchar const *name )
+{
+    int psize = IconImpl::getPhysSize(lsize);
+    return IconImpl::renderup(name, lsize, psize);
 }
 
 // PUBLIC CALL:
