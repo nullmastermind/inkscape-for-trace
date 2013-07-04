@@ -335,6 +335,7 @@ src/widgets/text-toolbar.cpp
 src/widgets/toolbox.cpp
 src/widgets/tweak-toolbar.cpp
 src/widgets/zoom-toolbar.cpp
+share/extensions/dxf_input.py
 share/extensions/convert2dashes.py
 share/extensions/dimension.py
 share/extensions/draw_from_triangle.py
