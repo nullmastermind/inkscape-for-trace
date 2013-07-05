@@ -62,7 +62,7 @@ static void sp_select_context_reset_opacities(SPEventContext *event_context);
 
 static GdkCursor *CursorSelectMouseover = NULL;
 static GdkCursor *CursorSelectDragging = NULL;
-GdkPixbuf *handles[18];
+GdkPixbuf *handles[13];
 
 static gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
 static gint drag_escaped = 0; // if non-zero, drag was canceled by esc
