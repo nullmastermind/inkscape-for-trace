@@ -93,10 +93,10 @@ class UnitTable {
 
 class Quantity {
 public:
-    Unit *unit;
+    const Unit *unit;
     double quantity;
     
-    Quantity(Unit *u, double q);   // constructor
+    Quantity(double q, const Unit *u);   // constructor
     bool compatibleWith(const Unit *u) const;
     double value(Unit *u) const;
     

@@ -26,7 +26,6 @@
 #include "gc-anchored.h"
 #include <glibmm/ustring.h>
 #include <vector>
-#include "util/units.h"
 
 namespace Avoid {
 class Router;
@@ -46,6 +45,9 @@ namespace Inkscape {
     namespace XML {
         struct Document;
         class Node;
+    }
+    namespace Util {
+        class Quantity;
     }
 }
 
@@ -228,8 +230,8 @@ public:
     gdouble getWidth() const;
     gdouble getHeight() const;
     Geom::Point getDimensions() const;
-    void setWidth(gdouble width, const Inkscape::Util::Unit *unit);
-    void setHeight(gdouble height, const Inkscape::Util::Unit *unit);
+    void setWidth(const Inkscape::Util::Quantity &width);
+    void setHeight(const Inkscape::Util::Quantity &height);
     void requestModified();
     gint ensureUpToDate();
     bool addResource(const gchar *key, SPObject *object);

@@ -386,7 +386,7 @@ void UnitsSAXHandler::_endElement(xmlChar const *xname)
 }
 
 /** Initialize a quantity. */
-Quantity::Quantity(Unit *u, double q) {
+Quantity::Quantity(double q, const Unit *u) {
     unit = u;
     quantity = q;
 }
