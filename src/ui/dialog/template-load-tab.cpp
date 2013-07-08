@@ -1,13 +1,23 @@
+/** @file
+ * @brief New From Template abstract tab implementation
+ */
+/* Authors:
+ *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński   
+ *
+ * Copyright (C) 2013 Authors
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #include "template-load-tab.h"
 
-#include <gtkmm/alignment.h>
+#include <gtkmm/scrolledwindow.h>
 #include <iostream>
 
-#include "src/interface.h"
-#include "src/file.h"
-#include "src/path-prefix.h"
-#include "src/preferences.h"
-#include "src/inkscape.h"
+#include "interface.h"
+#include "file.h"
+#include "path-prefix.h"
+#include "preferences.h"
+#include "inkscape.h"
 
 
 namespace Inkscape {
@@ -15,34 +25,32 @@ namespace UI {
     
 
 TemplateLoadTab::TemplateLoadTab()
-    : _keywords_combo(true)
-    , _current_keyword("")
+    : _current_keyword("")
+    , _keywords_combo(true)
 {
     set_border_width(10);
 
     Gtk::Label *title;
-    title = manage(new Gtk::Label("Search Tags:"));
-    _templates_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    title = manage(new Gtk::Label("Search:"));
+    _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
-    _templates_column.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 0);
+    _tlist_box.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 0);
     
     title = manage(new Gtk::Label("Templates"));
-    _templates_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     title = manage(new Gtk::Label("Selected template"));
-    _template_info_column.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _info_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     add(_main_box);
-    _main_box.pack_start(_templates_column, Gtk::PACK_SHRINK, 20);
-    _main_box.pack_start(_template_info_column, Gtk::PACK_EXPAND_WIDGET, 10);
+    _main_box.pack_start(_tlist_box, Gtk::PACK_SHRINK, 20);
+    _main_box.pack_start(_info_box, Gtk::PACK_EXPAND_WIDGET, 10);
     
-    _templates_column.pack_start(_templates_view, Gtk::PACK_SHRINK, 5);
-
-    Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef =
-    _templates_view.get_selection();
-    
-    templateSelectionRef->signal_changed().connect(
-    sigc::mem_fun(*this, &TemplateLoadTab::_displayTemplateInfo));
+    Gtk::ScrolledWindow *scrolled;
+    scrolled = manage(new Gtk::ScrolledWindow());
+    scrolled->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    scrolled->add(_tlist_view);
+    _tlist_box.pack_start(*scrolled, Gtk::PACK_EXPAND_WIDGET, 5);
     
     _keywords_combo.signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_keywordSelected));
@@ -63,9 +71,9 @@ void TemplateLoadTab::createTemplate()
 
 void TemplateLoadTab::_displayTemplateInfo()
 {
-    Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef = _templates_view.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef = _tlist_view.get_selection();
     if (templateSelectionRef->get_selected()) {
-        _current_template = (*templateSelectionRef->get_selected())[_templates_columns.textValue];
+        _current_template = (*templateSelectionRef->get_selected())[_columns.textValue];
     }
 }
 
@@ -82,13 +90,18 @@ void TemplateLoadTab::_initKeywordsList()
 
 void TemplateLoadTab::_initLists()
 {
-    _templates_ref = Gtk::ListStore::create(_templates_columns);
-    _templates_view.set_model(_templates_ref);
-    _templates_view.append_column("", _templates_columns.textValue);
-    _templates_view.set_headers_visible(false);
+    _tlist_store = Gtk::ListStore::create(_columns);
+    _tlist_view.set_model(_tlist_store);
+    _tlist_view.append_column("", _columns.textValue);
+    _tlist_view.set_headers_visible(false);
     
     _initKeywordsList();
     _refreshTemplatesList();
+   
+    Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef =
+    _tlist_view.get_selection(); 
+    templateSelectionRef->signal_changed().connect(
+    sigc::mem_fun(*this, &TemplateLoadTab::_displayTemplateInfo));
 }
 
 
@@ -101,12 +114,12 @@ void TemplateLoadTab::_keywordSelected()
 
 void TemplateLoadTab::_refreshTemplatesList()
 {
-     _templates_ref->clear();
+     _tlist_store->clear();
     
-    for (std::map<Glib::ustring, TemplateData>::iterator it = _templates.begin() ; it != _templates.end() ; ++it) {
-        Gtk::TreeModel::iterator iter = _templates_ref->append();
+    for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
+        Gtk::TreeModel::iterator iter = _tlist_store->append();
         Gtk::TreeModel::Row row = *iter;
-        row[_templates_columns.textValue]  = it->first;
+        row[_columns.textValue]  = it->first;
     }
 } 
 
@@ -121,7 +134,7 @@ void TemplateLoadTab::_loadTemplates()
 }
 
 
-TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(Glib::ustring path)
+TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::ustring &path)
 {
     TemplateData result;
     result.path = path;
@@ -133,21 +146,21 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(Glib::ustrin
 }
 
 
-void TemplateLoadTab::_getTemplatesFromDir(Glib::ustring path)
+void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
 {
     if ( !Glib::file_test(path, Glib::FILE_TEST_EXISTS) ||
          !Glib::file_test(path, Glib::FILE_TEST_IS_DIR))
         return;
     
     Glib::Dir dir(path);
-    path += "/";
-    Glib::ustring file = path + dir.read_name();
+
+    Glib::ustring file = Glib::build_filename(path, dir.read_name());
     while (file != path){
-        if (Glib::str_has_suffix(file, ".svg")){
+        if (Glib::str_has_suffix(file, ".svg") && !Glib::str_has_prefix(Glib::path_get_basename(file), "default")){
             TemplateData tmp = _processTemplateFile(file);
-            _templates[Glib::path_get_basename(file)] = tmp;
+            _tdata[Glib::path_get_basename(file)] = tmp;
         }
-        file = path + dir.read_name();
+        file = Glib::build_filename(path, dir.read_name());
     }
 }
 

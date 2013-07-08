@@ -1,3 +1,13 @@
+/** @file
+ * @brief New From Template static templates tab
+ */
+/* Authors:
+ *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński  
+ *
+ * Copyright (C) 2013 Authors
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #ifndef INKSCAPE_SEEN_UI_DIALOG_STATIC_TEMPLATE_LOAD_TAB_H
 #define INKSCAPE_SEEN_UI_DIALOG_STATIC_TEMPLATE_LOAD_TAB_H
 

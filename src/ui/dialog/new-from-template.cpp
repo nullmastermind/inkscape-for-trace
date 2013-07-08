@@ -1,8 +1,19 @@
+/** @file
+ * @brief New From Template main dialog - implementation
+ */
+/* Authors:
+ *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński    
+ *
+ * Copyright (C) 2013 Authors
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+
 #include "new-from-template.h"
 
 #include <gtkmm/alignment.h>
 
-#include "src/file.h"
+#include "file.h"
 
 
 namespace Inkscape {
@@ -13,7 +24,7 @@ NewFromTemplate::NewFromTemplate()
     : _create_template_button("Create from template")
 {
     set_title("New From Template");
-    resize(400, 250);
+    resize(400, 400);
     
     get_vbox()->pack_start(_main_widget);
     _main_widget.append_page(_tab1, "Static Templates");

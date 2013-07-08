@@ -1,3 +1,13 @@
+/** @file
+ * @brief New From Template main dialog
+ */
+/* Authors:
+ *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński    
+ *
+ * Copyright (C) 2013 Authors
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #ifndef INKSCAPE_SEEN_UI_DIALOG_NEW_FROM_TEMPLATE_H
 #define INKSCAPE_SEEN_UI_DIALOG_NEW_FROM_TEMPLATE_H
 
