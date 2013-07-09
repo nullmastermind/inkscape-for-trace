@@ -294,7 +294,7 @@ static void lpetool_open_lpe_dialog(GtkToggleAction *act, gpointer data)
 void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     UnitTracker* tracker = new UnitTracker(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-    tracker->setActiveUnit(sp_desktop_namedview(desktop)->doc_units);
+    //tracker->setActiveUnit(sp_desktop_namedview(desktop)->doc_units);
     g_object_set_data(holder, "tracker", tracker);
     SPUnit const *unit = tracker->getActiveUnit();
 

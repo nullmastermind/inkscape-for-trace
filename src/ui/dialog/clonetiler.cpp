@@ -1093,7 +1093,7 @@ CloneTiler::CloneTiler (void) :
 
                 // unitmenu
                 GtkWidget *u = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-                sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), sp_desktop_namedview(SP_ACTIVE_DESKTOP)->doc_units);
+                //sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), sp_desktop_namedview(SP_ACTIVE_DESKTOP)->doc_units);
 
                 {
                     // Width spinbutton

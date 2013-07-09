@@ -488,7 +488,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     // Create the units menu.
     UnitTracker* tracker = new UnitTracker( SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE );
     tracker->addUnit( SP_UNIT_PERCENT, 0 );
-    tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
+    //tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
 
     g_object_set_data( G_OBJECT(spw), "tracker", tracker );
     g_signal_connect( G_OBJECT(spw), "destroy", G_CALLBACK(destroy_tracker), spw );

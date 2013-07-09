@@ -106,6 +106,27 @@ int Unit::svgUnit() const {
     return 0;
 }
 
+/** Temporary - get metric. */
+int Unit::metric() const {
+    if (!abbr.compare("mm"))
+        return 1;
+    if (!abbr.compare("cm"))
+        return 2;
+    if (!abbr.compare("in"))
+        return 3;
+    if (!abbr.compare("ft"))
+        return 4;
+    if (!abbr.compare("pt"))
+        return 5;
+    if (!abbr.compare("pc"))
+        return 6;
+    if (!abbr.compare("px"))
+        return 7;
+    if (!abbr.compare("m"))
+        return 8;
+    return 0;
+}
+
 /**
  * Initializes the unit tables and identifies the primary unit types.
  *

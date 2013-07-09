@@ -1431,8 +1431,8 @@ void DocumentProperties::update()
     _rcp_bord.setRgba32 (nv->bordercolor);
     _rcb_shad.setActive (nv->showpageshadow);
 
-    if (nv->doc_units)
-        _rum_deflt.setUnit (nv->doc_units);
+    //if (nv->doc_units)
+    //    _rum_deflt.setUnit (nv->doc_units);
 
     double const doc_w_px = sp_desktop_document(dt)->getWidth();
     double const doc_h_px = sp_desktop_document(dt)->getHeight();

@@ -193,8 +193,8 @@ StrokeStyle::StrokeStyle() :
     Gtk::Widget *us = manage(Glib::wrap(unitSelector));
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    if (desktop)
-        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(unitSelector), sp_desktop_namedview(desktop)->doc_units);
+    //if (desktop)
+    //    sp_unit_selector_set_unit (SP_UNIT_SELECTOR(unitSelector), sp_desktop_namedview(desktop)->doc_units);
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(unitSelector), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
     g_signal_connect ( G_OBJECT (unitSelector), "set_unit", G_CALLBACK (StrokeStyle::setStrokeWidthUnit), this );
     us->show();
@@ -884,7 +884,7 @@ StrokeStyle::updateLine()
         } else {
             // same width, or only one object; no sense to keep percent, switch to absolute
             if (unit->base != SP_UNIT_ABSOLUTE && unit->base != SP_UNIT_DEVICE) {
-                sp_unit_selector_set_unit(SP_UNIT_SELECTOR(unitSelector), sp_desktop_namedview(SP_ACTIVE_DESKTOP)->doc_units);
+                //sp_unit_selector_set_unit(SP_UNIT_SELECTOR(unitSelector), sp_desktop_namedview(SP_ACTIVE_DESKTOP)->doc_units);
             }
         }
 

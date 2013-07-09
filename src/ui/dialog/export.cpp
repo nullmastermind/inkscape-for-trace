@@ -200,8 +200,8 @@ Export::Export (void) :
            earlier than that */
         unit_selector = Glib::wrap(sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE));
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop)
-            sp_unit_selector_set_unit (SP_UNIT_SELECTOR(unit_selector->gobj()), sp_desktop_namedview(desktop)->doc_units);
+        //if (desktop)
+        //    sp_unit_selector_set_unit (SP_UNIT_SELECTOR(unit_selector->gobj()), sp_desktop_namedview(desktop)->doc_units);
         unitbox.pack_end(*unit_selector, false, false, 0);
         unitbox.pack_end(units_label, false, false, 3);
 

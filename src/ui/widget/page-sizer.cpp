@@ -316,9 +316,9 @@ PageSizer::PageSizer(Registry & _wr)
     SPNamedView *nv = sp_desktop_namedview(dt);
     _wr.setUpdating (true);
     if (nv->units) {
-        _dimensionUnits.setUnit(nv->units);
+        //_dimensionUnits.setUnit(nv->units);
     } else if (nv->doc_units) {
-        _dimensionUnits.setUnit(nv->doc_units);
+        //_dimensionUnits.setUnit(nv->doc_units);
     }
     _wr.setUpdating (false);
     

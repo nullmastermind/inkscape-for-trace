@@ -28,10 +28,11 @@
 
 G_BEGIN_DECLS
 
-struct SPUnit;
-
 namespace Inkscape {
-class CanvasGrid;
+    class CanvasGrid;
+    namespace Util {
+        class Unit;
+    }
 }
 
 enum {
@@ -59,8 +60,8 @@ struct SPNamedView : public SPObjectGroup {
     GSList * grids;
     bool grids_visible;
 
-    SPUnit const *doc_units;
-    SPUnit const *units;
+    Inkscape::Util::Unit const *doc_units;
+    Inkscape::Util::Unit const *units;
     
     GQuark default_layer_id;
 
