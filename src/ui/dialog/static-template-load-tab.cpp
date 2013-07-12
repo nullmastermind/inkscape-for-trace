@@ -46,6 +46,9 @@ StaticTemplateLoadTab::StaticTemplateLoadTab()
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
     _info_box.pack_start(*align, Gtk::PACK_SHRINK, 5);
     align->add(_more_info_button);
+    
+    _more_info_button.signal_pressed().connect(
+    sigc::mem_fun(*this, &StaticTemplateLoadTab::_displayTemplateDetails));
 }
 
 
@@ -68,6 +71,9 @@ void StaticTemplateLoadTab::_displayTemplateInfo()
     _template_name_label.set_text(_current_template);
     _template_author_label.set_text(_tdata[_current_template].author);
     _short_description_label.set_text(_tdata[_current_template].short_description);
+    
+    Glib::ustring imagePath = Glib::build_filename(Glib::path_get_dirname(_tdata[_current_template].path),  _tdata[_current_template].preview_name);
+    _preview_image.set(imagePath);
 }
 
 }

@@ -10,6 +10,7 @@
 
 #include "template-load-tab.h"
 
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <iostream>
 
@@ -18,6 +19,17 @@
 #include "path-prefix.h"
 #include "preferences.h"
 #include "inkscape.h"
+#include "xml/repr.h"
+#include "xml/document.h"
+#include "xml/node.h"
+
+//
+#include <gtk/gtk.h>
+
+#include <glibmm/convert.h>
+#include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
+//
 
 
 namespace Inkscape {
@@ -80,10 +92,10 @@ void TemplateLoadTab::_displayTemplateInfo()
 
 void TemplateLoadTab::_initKeywordsList()
 {
-    _keywords_combo.append("All");
+    _keywords_combo.append(_("All"));
     
-    for (int i = 0 ; i < 10 ; ++i) {
-        _keywords_combo.append( "Keyword" + Glib::ustring::format(i));
+    for (std::set<Glib::ustring>::iterator it = _keywords.begin() ; it != _keywords.end() ; ++it){
+        _keywords_combo.append(*it);
     }
 }
 
@@ -108,6 +120,8 @@ void TemplateLoadTab::_initLists()
 void TemplateLoadTab::_keywordSelected()
 {
     _current_keyword = _keywords_combo.get_active_text();
+    if (_current_keyword == "" && _keywords_combo.get_entry_text().size() > 0)
+        _current_keyword = _keywords_combo.get_entry_text();
     _refreshTemplatesList();
 }
 
@@ -117,9 +131,11 @@ void TemplateLoadTab::_refreshTemplatesList()
      _tlist_store->clear();
     
     for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
-        Gtk::TreeModel::iterator iter = _tlist_store->append();
-        Gtk::TreeModel::Row row = *iter;
-        row[_columns.textValue]  = it->first;
+        if (it->second.keywords.count(_current_keyword) > 0 || _current_keyword == _("All") || _current_keyword == ""){
+            Gtk::TreeModel::iterator iter = _tlist_store->append();
+            Gtk::TreeModel::Row row = *iter;
+            row[_columns.textValue]  = it->first;
+        }
     }
 } 
 
@@ -130,7 +146,7 @@ void TemplateLoadTab::_loadTemplates()
     _getTemplatesFromDir(profile_path("templates") + _loading_path);
 
     // system templates dir
-    _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
+  //  _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
 }
 
 
@@ -138,9 +154,54 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
 {
     TemplateData result;
     result.path = path;
-    result.display_name = Glib::path_get_basename(path);
+    result.display_name = Glib::path_get_basename(path);/*
     result.short_description = "LaLaLaLa";
-    result.author = "JAASDASD";
+    result.author = "JAASDASD";*/
+    
+    Inkscape::XML::Document *rdoc;
+    rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
+    Inkscape::XML::Node *myRoot;
+    Inkscape::XML::Node *dataNode;
+    if (rdoc){
+        myRoot = rdoc->root();
+        if (strcmp(myRoot->name(), "svg:svg") != 0){     // Wrong file format
+            return result;
+        }
+        
+        myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+        
+        if (myRoot == NULL)    // No template info
+            return result;
+
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_name")) != NULL)
+            result.display_name = dgettext(NULL, dataNode->firstChild()->content());
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:author")) != NULL)
+            result.author = dataNode->firstChild()->content();
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_short")) != NULL)
+            result.short_description = dgettext(NULL, dataNode->firstChild()->content());
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_long") )!= NULL)
+            result.long_description = dgettext(NULL, dataNode->firstChild()->content());
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:preview")) != NULL)
+            result.preview_name = dataNode->firstChild()->content();
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:date")) != NULL){
+            result.creation_date = dataNode->firstChild()->content();
+        }
+        
+        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_keywords")) != NULL){
+            Glib::ustring data = dataNode->firstChild()->content();
+            while (!data.empty()){
+                int pos = data.find_first_of(" ");
+                Glib::ustring keyword = dgettext(NULL, data.substr(0, pos).data());
+                result.keywords.insert(keyword);
+                std::cout<<keyword<<" ";
+                std::cout.flush();
+                _keywords.insert(keyword);
+                if (pos == data.size())
+                    break;
+                data.erase(0, pos+1);
+            }
+        }
+    }
     
     return result;
 }
@@ -158,10 +219,37 @@ void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
     while (file != path){
         if (Glib::str_has_suffix(file, ".svg") && !Glib::str_has_prefix(Glib::path_get_basename(file), "default")){
             TemplateData tmp = _processTemplateFile(file);
-            _tdata[Glib::path_get_basename(file)] = tmp;
+            if (tmp.display_name != "")
+                _tdata[tmp.display_name] = tmp;
         }
         file = Glib::build_filename(path, dir.read_name());
     }
+}
+
+void TemplateLoadTab::_displayTemplateDetails()
+{
+    if (_current_template == "")
+        return;
+    
+    TemplateData &tmpl = _tdata[_current_template];
+    
+    Glib::ustring message = tmpl.display_name + "\n\n" +
+                            "Path: " + tmpl.path + "\n\n";
+    
+    if (tmpl.long_description != "")
+        message += "Description: " + _tdata[_current_template].long_description + "\n\n";
+    if (tmpl.keywords.size() > 0){
+        message += "Keywords: ";
+        for (std::set<Glib::ustring>::iterator it = tmpl.keywords.begin(); it != tmpl.keywords.end(); ++it)
+            message += *it + " ";
+        message += "\n\n";
+    }
+    
+    if (tmpl.author != "")
+        message += "By: " + _tdata[_current_template].author + " " + tmpl.creation_date + "\n\n";
+    
+    Gtk::MessageDialog dl(message, false, Gtk::MESSAGE_OTHER);
+    dl.run();
 }
 
 }

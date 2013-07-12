@@ -39,6 +39,9 @@ protected:
         Glib::ustring display_name;
         Glib::ustring author;
         Glib::ustring short_description;
+        Glib::ustring long_description;
+        Glib::ustring preview_name;
+        Glib::ustring creation_date;
         std::set<Glib::ustring> keywords;
     };
     
@@ -57,6 +60,7 @@ protected:
     Glib::ustring _current_template;
     Glib::ustring _loading_path;
     std::map<Glib::ustring, TemplateData> _tdata;
+    std::set<Glib::ustring> _keywords;
     
     
     virtual void _displayTemplateInfo();
@@ -64,6 +68,7 @@ protected:
     virtual void _refreshTemplatesList();
     void _loadTemplates();
     void _initLists();
+    void _displayTemplateDetails();
     
     Gtk::HBox _main_box;
     Gtk::VBox _tlist_box;
