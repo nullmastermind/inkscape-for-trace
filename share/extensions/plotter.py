@@ -1,8 +1,7 @@
-#!/usr/bin/env python 
-# coding=utf-8
+#!/usr/bin/env python
+# coding=utf-8 
 '''
-Copyright (C) 2008 Aaron Spike, aaron@ekips.org
-Overcut, Tool Offset, Rotation, Serial Com., Many Bugfixes and Improvements: Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
+Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # standard library
 import sys
 # local library
-import hpgl_encoder, inkex
+import gettext, hpgl_decoder, hpgl_encoder, inkex
 inkex.localize()
 
 
@@ -46,20 +45,42 @@ class MyEffect(inkex.Effect):
         self.OptionParser.add_option("--precut",           action="store", type="inkbool", dest="precut",           default="TRUE",  help="Use precut")
         self.OptionParser.add_option("--offsetX",          action="store", type="float",   dest="offsetX",          default=0.0,     help="X offset (mm)")
         self.OptionParser.add_option("--offsetY",          action="store", type="float",   dest="offsetY",          default=0.0,     help="Y offset (mm)")
- 
+        self.OptionParser.add_option("--serialPort",       action="store", type="string",  dest="serialPort",       default="COM1",  help="Serial port")
+        self.OptionParser.add_option("--serialBaudRate",   action="store", type="string",  dest="serialBaudRate",   default="9600",  help="Serial Baud rate")
+
     def effect(self):
-        # get hpgl data
-        # TODO:2013-07-13:Sebastian Wüst:Think about how data is passed.
+        # gracefully exit script when pySerial is missing
+        try:
+            import serial
+        except ImportError, e:
+            # TODO:2013-07-13:Sebastian Wüst:Maybe add this text to extension window
+            inkex.errormsg(_("pySerial is not installed."
+                + "\n\n1. Download pySerial here: http://pypi.python.org/pypi/pyserial"
+                + "\n2. Extract the \"serial\" subfolder from the zip to the following folder: \"C:\\Program Files (x86)\\inkscape\\python\\Lib\\\" (Or wherever your Inkscape is installed to)"
+                + "\n3. Restart Inkscape."))
+            return
+        # get hpgl data 
         myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
-        # TODO:2013-07-13:Sebastian Wüst:Find a better way to pass errors correctly.
         self.hpgl = myHpglEncoder.getHpgl()
         if self.hpgl == -1:
-            inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
-
-    def output(self):
-        # print to file
-        if self.hpgl != -1:
-            print self.hpgl
+            inkex.errormsg(_("No paths where found. Please convert all objects you want to plot into paths."))
+            return
+        # TODO:2013-07-13:Sebastian Wüst:Get preview to work. This requires some work on the C++ side to be able to determine if it is a preview or a final run.
+        if 1 == 2: # reparse data for preview
+            self.options.showMovements = True
+            self.options.docWidth = float(inkex.unittouu(self.document.getroot().get('width')))
+            self.options.docHeight = float(inkex.unittouu(self.document.getroot().get('height')))
+            myHpglDecoder = hpgl_decoder.hpglDecoder(self.options)
+            (hasUnknownCommands, hasNoHpglData, doc) = myHpglDecoder.getSvg(self.hpgl)
+            if not hasNoHpglData:
+                self.document = doc
+        if 1 == 1: # send data to plotter
+            # TODO:2013-07-13:Sebastian Wüst:Somehow slow down sending to avoid buffer overruns in the plotter on very large drawings.
+            mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
+            mySerial.write(self.hpgl)
+            # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)
+            mySerial.read(2)
+            mySerial.close()
 
 if __name__ == '__main__':
     # Raise recursion limit to avoid exceptions on big documents
