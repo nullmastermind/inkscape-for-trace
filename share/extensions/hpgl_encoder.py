@@ -78,7 +78,7 @@ class hpglEncoder:
         self.groupmat = [[[self.mirrorX * self.scaleX * self.viewBoxTransformX, 0.0, 0.0], [0.0, self.mirrorY * self.scaleY * self.viewBoxTransformY, 0.0]]]
         self.groupmat[0] = simpletransform.composeTransform(self.groupmat[0], simpletransform.parseTransform('rotate(' + self.options.orientation + ')'))
         self.vData = [['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0]]
-        self.process_group(self.doc)
+        self.process_group(self.doc, self.groupmat)
         if self.divergenceX == 'False' or self.divergenceY == 'False' or self.sizeX == 'False' or self.sizeY == 'False':
             raise Exception('NO_PATHS')
         # live run
@@ -99,14 +99,14 @@ class hpglEncoder:
             self.calcOffset('PU', 0, 0)
             self.calcOffset('PD', 0, self.options.toolOffset * self.options.toolOffsetReturn * 2)
         # start conversion
-        self.process_group(self.doc)
+        self.process_group(self.doc, self.groupmat)
         # shift an empty node in in order to process last node in cache
         self.calcOffset('PU', 0, 0)
         # add return to zero point
         self.hpgl += 'PU0,0;'
         return self.hpgl
     
-    def process_group(self, group):
+    def process_group(self, group, groupmat):
         # process groups
         style = group.get('style')
         if style:
@@ -114,17 +114,14 @@ class hpglEncoder:
             if style.has_key('display'):
                 if style['display'] == 'none':
                     return
-        # TODO:2013-07-13:Sebastian Wüst:Pass groupmat in recursion instead of manipulating it.
         trans = group.get('transform')
         if trans:
-            self.groupmat.append(simpletransform.composeTransform(self.groupmat[-1], simpletransform.parseTransform(trans)))
+            groupmat.append(simpletransform.composeTransform(groupmat[-1], simpletransform.parseTransform(trans)))
         for node in group:
             if node.tag == inkex.addNS('path', 'svg'):
-                self.process_path(node, self.groupmat[-1])
+                self.process_path(node, groupmat[-1])
             if node.tag == inkex.addNS('g', 'svg'):
-                self.process_group(node)
-        if trans:
-            self.groupmat.pop()
+                self.process_group(node, groupmat)
     
     def process_path(self, node, mat):
         # process path 
