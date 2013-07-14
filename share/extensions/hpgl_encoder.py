@@ -125,42 +125,43 @@ class hpglEncoder:
     
     def process_path(self, node, mat):
         # process path 
-        # TODO:2013-07-13:Sebastian Wüst:Find better variable names.
-        d = node.get('d')
-        if d:
+        drawing = node.get('d')
+        if drawing:
             # transform path
-            p = cubicsuperpath.parsePath(d)
+            paths = cubicsuperpath.parsePath(drawing)
             trans = node.get('transform')
             if trans:
                 mat = simpletransform.composeTransform(mat, simpletransform.parseTransform(trans))
-            simpletransform.applyTransformToPath(mat, p)
-            cspsubdiv.cspsubdiv(p, self.options.flat)
+            simpletransform.applyTransformToPath(mat, paths)
+            cspsubdiv.cspsubdiv(paths, self.options.flat)
             # break path into HPGL commands
-            # TODO:2013-07-13:Sebastian Wüst:Somehow make this more readable.
-            xPosOld = -1
-            yPosOld = -1
-            for sp in p:
+            oldPosX = ''
+            oldPosY = ''
+            for singlePath in paths:
                 cmd = 'PU'
-                for csp in sp:
-                    xPos = csp[1][0]
-                    yPos = csp[1][1]
-                    if int(xPos) != int(xPosOld) or int(yPos) != int(yPosOld): 
-                        self.calcOffset(cmd, xPos, yPos)
+                for singlePathPoint in singlePath:
+                    posX, posY = singlePathPoint[1]
+                    # check if point is repeating, if so, ignore
+                    if posX != oldPosX or posY != oldPosY:
+                        self.calcOffset(cmd, posX, posY)
                         cmd = 'PD'
-                        xPosOld = xPos
-                        yPosOld = yPos
+                        oldPosX = posX
+                        oldPosY = posY
+                endPosX = posX
+                endPosY = posY
                 # perform overcut
                 if self.options.useOvercut and not self.dryRun:
-                    if int(xPos) == int(sp[0][1][0]) and int(yPos) == int(sp[0][1][1]):
-                        for csp in sp:
-                            xPos2 = csp[1][0]
-                            yPos2 = csp[1][1]
-                            if int(xPos) != int(xPos2) or int(yPos) != int(yPos2):
-                                self.calcOffset(cmd, xPos2, yPos2)
-                                if self.options.overcut - self.getLength(xPosOld, yPosOld, xPos2, yPos2) <= 0:
+                    # check if last and first points are the same, otherwise the path is not closed and no overcut can be performed
+                    if int(endPosX) == int(singlePath[0][1][0]) and int(endPosY) == int(singlePath[0][1][1]):
+                        for singlePathPoint in singlePath:
+                            posX, posY = singlePathPoint[1]
+                            # check if point is repeating, if so, ignore
+                            if posX != oldPosX or posY != oldPosY:
+                                self.calcOffset(cmd, posX, posY)
+                                if self.options.overcut - self.getLength(endPosX, endPosY, posX, posY) <= 0:
                                     break                                      
-                                xPos = xPos2
-                                yPos = yPos2
+                                oldPosX = posX
+                                oldPosY = posY
     
     # TODO:2013-07-13:Sebastian Wüst:Find methods from the existing classes to replace the next 4 methods.
     def getLength(self, x1, y1, x2, y2, abs = True):
@@ -189,14 +190,14 @@ class hpglEncoder:
             temp3 = 1.0
         return math.acos(temp3)
     
-    def calcOffset(self, cmd, xPos, yPos):
+    def calcOffset(self, cmd, posX, posY):
         # calculate offset correction (or dont)
         if not self.options.useToolOffset or self.dryRun:
-            self.storeData(cmd, xPos, yPos)
+            self.storeData(cmd, posX, posY)
         else:
             # insert data into cache
             self.vData.pop(0)
-            self.vData.insert(3, [cmd, xPos, yPos])
+            self.vData.insert(3, [cmd, posX, posY])
             # decide if enough data is availabe
             if self.vData[2][1] != -1.0:
                 if self.vData[1][1] == -1.0:
