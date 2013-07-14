@@ -50,14 +50,19 @@ class MyEffect(inkex.Effect):
     def effect(self):
         # get hpgl data
         myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
-        # TODO:2013-07-13:Sebastian Wüst:Find a better way to pass errors correctly.
-        self.hpgl = myHpglEncoder.getHpgl()
-        if self.hpgl == -1:
-            inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
+        try:
+            self.hpgl = myHpglEncoder.getHpgl()
+        except Exception as inst:
+            if inst.args[0] == 'NO_PATHS':
+                # issue error if no paths found
+                inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
+                self.hpgl = 1
+            else:
+                raise Exception(inst)
 
     def output(self):
         # print to file
-        if self.hpgl != -1:
+        if self.hpgl != 1:
             print self.hpgl
 
 if __name__ == '__main__':

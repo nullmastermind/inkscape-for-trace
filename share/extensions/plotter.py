@@ -53,7 +53,6 @@ class MyEffect(inkex.Effect):
         try:
             import serial
         except ImportError, e:
-            # TODO:2013-07-13:Sebastian Wüst:Maybe add this text to extension window
             inkex.errormsg(_("pySerial is not installed."
                 + "\n\n1. Download pySerial here: http://pypi.python.org/pypi/pyserial"
                 + "\n2. Extract the \"serial\" subfolder from the zip to the following folder: \"C:\\Program Files (x86)\\inkscape\\python\\Lib\\\" (Or wherever your Inkscape is installed to)"
@@ -61,10 +60,15 @@ class MyEffect(inkex.Effect):
             return
         # get hpgl data 
         myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
-        self.hpgl = myHpglEncoder.getHpgl()
-        if self.hpgl == -1:
-            inkex.errormsg(_("No paths where found. Please convert all objects you want to plot into paths."))
-            return
+        try:
+            self.hpgl = myHpglEncoder.getHpgl()
+        except Exception as inst:
+            if inst.args[0] == 'NO_PATHS':
+                # issue error if no paths found
+                inkex.errormsg(_("No paths where found. Please convert all objects you want to plot into paths."))
+                return 1
+            else:
+                raise Exception(inst)
         # TODO:2013-07-13:Sebastian Wüst:Get preview to work. This requires some work on the C++ side to be able to determine if it is a preview or a final run.
         '''
             # reparse data for preview

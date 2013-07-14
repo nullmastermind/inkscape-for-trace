@@ -81,7 +81,7 @@ class hpglEncoder:
         self.vData = [['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0]]
         self.process_group(self.doc)
         if self.divergenceX == 9999999999999.0 or self.divergenceY == 9999999999999.0 or self.sizeX == -9999999999999.0 or self.sizeY == -9999999999999.0:
-            return -1
+            raise Exception('NO_PATHS')
         # live run
         self.dryRun = False
         if self.options.center:
