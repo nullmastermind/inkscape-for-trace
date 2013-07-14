@@ -50,13 +50,12 @@ myHpglDecoder = hpgl_decoder.hpglDecoder(options)
 # issue warning if no hpgl data found
 if hasNoHpglData:
     inkex.errormsg(_("No HPGL data found."))
-    doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' % (options.docWidth, options.docHeight)))
-
-# issue warning if unknown commands where found
-if hasUnknownCommands:
-    inkex.errormsg(_("The HPGL data contained unknown (unsupported) commands, there is a possibility that the drawing is missing some content."))
-
-# deliver document to inkscape 
-doc.write(inkex.sys.stdout)
+    print 1
+else:
+    # issue warning if unknown commands where found
+    if hasUnknownCommands:
+        inkex.errormsg(_("The HPGL data contained unknown (unsupported) commands, there is a possibility that the drawing is missing some content."))
+    # deliver document to inkscape 
+        doc.write(inkex.sys.stdout)
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

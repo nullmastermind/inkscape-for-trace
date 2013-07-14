@@ -66,7 +66,8 @@ class MyEffect(inkex.Effect):
             inkex.errormsg(_("No paths where found. Please convert all objects you want to plot into paths."))
             return
         # TODO:2013-07-13:Sebastian Wüst:Get preview to work. This requires some work on the C++ side to be able to determine if it is a preview or a final run.
-        if 1 == 2: # reparse data for preview
+        '''
+            # reparse data for preview
             self.options.showMovements = True
             self.options.docWidth = float(inkex.unittouu(self.document.getroot().get('width')))
             self.options.docHeight = float(inkex.unittouu(self.document.getroot().get('height')))
@@ -74,13 +75,14 @@ class MyEffect(inkex.Effect):
             (hasUnknownCommands, hasNoHpglData, doc) = myHpglDecoder.getSvg(self.hpgl)
             if not hasNoHpglData:
                 self.document = doc
-        if 1 == 1: # send data to plotter
-            # TODO:2013-07-13:Sebastian Wüst:Somehow slow down sending to avoid buffer overruns in the plotter on very large drawings.
-            mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
-            mySerial.write(self.hpgl)
-            # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)
-            mySerial.read(2)
-            mySerial.close()
+        '''
+        # send data to plotter
+        # TODO:2013-07-13:Sebastian Wüst:Somehow slow down sending to avoid buffer overruns in the plotter on very large drawings.
+        mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
+        mySerial.write(self.hpgl)
+        # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)
+        mySerial.read(2)
+        mySerial.close()
 
 if __name__ == '__main__':
     # Raise recursion limit to avoid exceptions on big documents

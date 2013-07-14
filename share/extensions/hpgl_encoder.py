@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
 # standard library
-import math, string,
+import math, string
 # local library
 import bezmisc, cspsubdiv, cubicsuperpath, inkex, simplestyle, simpletransform
 
