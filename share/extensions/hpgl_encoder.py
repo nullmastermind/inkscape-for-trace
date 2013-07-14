@@ -136,7 +136,7 @@ class hpglEncoder:
             simpletransform.applyTransformToPath(mat, p)
             cspsubdiv.cspsubdiv(p, self.options.flat)
             # break path into HPGL commands
-            # TODO:2013-07-13:Sebastian Wüst:Somehow make this for more readable.
+            # TODO:2013-07-13:Sebastian Wüst:Somehow make this more readable.
             xPosOld = -1
             yPosOld = -1
             for sp in p:
@@ -209,37 +209,36 @@ class hpglEncoder:
                             return
                     # perform tool offset correction (It's a *tad* complicated, if you want to understand it draw the data as lines on paper) 
                     if self.vData[2][0] == 'PD': # If the 3rd entry in the cache is a pen down command make the line longer by the tool offset
-                        # TODO:2013-07-13:Sebastian Wüst:Find a better name for the variables.
-                        pointTwoX = self.changeLengthX(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
-                        pointTwoY = self.changeLengthY(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
-                        self.storeData('PD', pointTwoX, pointTwoY)
+                        pointThreeX = self.changeLengthX(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
+                        pointThreeY = self.changeLengthY(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
+                        self.storeData('PD', pointThreeX, pointThreeY)
                     elif self.vData[0][1] != -1.0: # Elif the 1st entry in the cache is filled with data shift the 3rd entry by the current tool offset position according to the 2nd command 
-                        pointTwoX = self.vData[2][1] - (self.vData[1][1] - self.changeLengthX(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset))
-                        pointTwoY = self.vData[2][2] - (self.vData[1][2] - self.changeLengthY(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset))
-                        self.storeData('PU', pointTwoX, pointTwoY)
+                        pointThreeX = self.vData[2][1] - (self.vData[1][1] - self.changeLengthX(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset))
+                        pointThreeY = self.vData[2][2] - (self.vData[1][2] - self.changeLengthY(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset))
+                        self.storeData('PU', pointThreeX, pointThreeY)
                     else: # Else just write the 3rd entry to HPGL
-                        pointTwoX = self.vData[2][1]
-                        pointTwoY = self.vData[2][2]
-                        self.storeData('PU', pointTwoX, pointTwoY)
+                        pointThreeX = self.vData[2][1]
+                        pointThreeY = self.vData[2][2]
+                        self.storeData('PU', pointThreeX, pointThreeY)
                     if self.vData[3][0] == 'PD': # If the 4th entry in the cache is a pen down command
                         # TODO:2013-07-13:Sebastian Wüst:Either remove old method or make it selectable by parameter.
                         if 1 == 1:
-                            pointThreeX = self.changeLengthX(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -(self.options.toolOffset * self.options.toolOffsetReturn))
-                            pointThreeY = self.changeLengthY(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -(self.options.toolOffset * self.options.toolOffsetReturn))
-                            self.storeData('PD', pointThreeX, pointThreeY)
+                            pointFourX = self.changeLengthX(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -(self.options.toolOffset * self.options.toolOffsetReturn))
+                            pointFourY = self.changeLengthY(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -(self.options.toolOffset * self.options.toolOffsetReturn))
+                            self.storeData('PD', pointFourX, pointFourY)
                         else:
                             # Create a circle between 3rd and 4th entry to correctly guide the tool around the corner
-                            pointThreeX = self.changeLengthX(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
-                            pointThreeY = self.changeLengthY(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
+                            pointFourX = self.changeLengthX(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
+                            pointFourY = self.changeLengthY(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
                             # TODO:2013-07-13:Sebastian Wüst:Fix that sucker! (number of points in the circle has to be calculated)
-                            alpha1 = math.atan2(pointTwoY - self.vData[2][2], pointTwoX - self.vData[2][1])
-                            alpha2 = math.atan2(pointThreeY - self.vData[2][2], pointThreeX - self.vData[2][1])
+                            alpha1 = math.atan2(pointThreeY - self.vData[2][2], pointThreeX - self.vData[2][1])
+                            alpha2 = math.atan2(pointFourY - self.vData[2][2], pointFourX - self.vData[2][1])
                             step = (2 * math.pi - math.fabs(alpha2 - alpha1)) * 6 + 1
                             #inkex.errormsg(str(alpha1) + ' | ' + str(alpha2))                        
                             for alpha in range(int(step), 101, int(step)):
                                 alpha = alpha1 + alpha * (alpha2 - alpha1) / 100
                                 self.storeData('PD', self.vData[2][1] + math.cos(alpha) * self.options.toolOffset, self.vData[2][2] + math.sin(alpha) * self.options.toolOffset)
-                            self.storeData('PD', pointThreeX, pointThreeY)
+                            self.storeData('PD', pointFourX, pointFourY)
     
     def storeData(self, command, x, y):
         # store point
