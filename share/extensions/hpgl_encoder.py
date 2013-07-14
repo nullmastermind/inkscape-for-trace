@@ -45,11 +45,10 @@ class hpglEncoder:
         '''
         self.doc = doc
         self.options = options
-        # TODO:2013-07-13:Sebastian Wüst:Find a way to avoid this crap, maybe make it a string so one can check if it was set before.
-        self.divergenceX = 9999999999999.0
-        self.divergenceY = 9999999999999.0
-        self.sizeX = -9999999999999.0
-        self.sizeY = -9999999999999.0
+        self.divergenceX = 'False' # dirty hack: i need to know if this was set before, but since False is evaluated to 0 it can not be determined, therefore the string.
+        self.divergenceY = 'False'
+        self.sizeX = 'False'
+        self.sizeY = 'False'
         self.dryRun = True
         self.scaleX = self.options.resolutionX / 90 # inch to pixels
         self.scaleY = self.options.resolutionY / 90 # inch to pixels
@@ -80,7 +79,7 @@ class hpglEncoder:
         self.groupmat[0] = simpletransform.composeTransform(self.groupmat[0], simpletransform.parseTransform('rotate(' + self.options.orientation + ')'))
         self.vData = [['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0]]
         self.process_group(self.doc)
-        if self.divergenceX == 9999999999999.0 or self.divergenceY == 9999999999999.0 or self.sizeX == -9999999999999.0 or self.sizeY == -9999999999999.0:
+        if self.divergenceX == 'False' or self.divergenceY == 'False' or self.sizeX == 'False' or self.sizeY == 'False':
             raise Exception('NO_PATHS')
         # live run
         self.dryRun = False
@@ -248,13 +247,13 @@ class hpglEncoder:
     def storeData(self, command, x, y):
         # store point
         if self.dryRun:
-            if x < self.divergenceX: self.divergenceX = x 
-            if y < self.divergenceY: self.divergenceY = y
-            if x > self.sizeX: self.sizeX = x
-            if y > self.sizeY: self.sizeY = y
+            if self.divergenceX == 'False' or x < self.divergenceX: self.divergenceX = x 
+            if self.divergenceY == 'False' or y < self.divergenceY: self.divergenceY = y
+            if self.sizeX == 'False' or x > self.sizeX: self.sizeX = x
+            if self.sizeY == 'False' or y > self.sizeY: self.sizeY = y
         else:
             if not self.options.center:
-                if x < 0: x = 0 # only positive values are allowed
+                if x < 0: x = 0 # only positive values are allowed (usually)
                 if y < 0: y = 0
             self.hpgl += '%s%d,%d;' % (command, x, y)
 
