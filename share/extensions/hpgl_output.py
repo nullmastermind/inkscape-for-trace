@@ -29,7 +29,7 @@ inkex.localize()
 class MyEffect(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
-        self.OptionParser.add_option("--tab", action="store", type="string", dest="tab")
+        self.OptionParser.add_option("--tab",              action="store", type="string",  dest="tab")
         self.OptionParser.add_option("--resolutionX",      action="store", type="float",   dest="resolutionX",      default=1016.0,  help="Resolution X (dpi)")
         self.OptionParser.add_option("--resolutionY",      action="store", type="float",   dest="resolutionY",      default=1016.0,  help="Resolution Y (dpi)")
         self.OptionParser.add_option("--pen",              action="store", type="int",     dest="pen",              default=1,       help="Pen number")
@@ -49,7 +49,6 @@ class MyEffect(inkex.Effect):
  
     def effect(self):
         # get hpgl data
-        # TODO:2013-07-13:Sebastian Wüst:Think about how data is passed.
         myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
         # TODO:2013-07-13:Sebastian Wüst:Find a better way to pass errors correctly.
         self.hpgl = myHpglEncoder.getHpgl()

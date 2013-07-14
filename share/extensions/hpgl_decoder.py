@@ -26,24 +26,25 @@ import inkex
 
 
 class hpglDecoder:
-    def __init__(self, options):
+    def __init__(self, hpglString, options):
         ''' options:
                 "resolutionX":float
                 "resolutionY":float
                 "showMovements":bool
         '''
+        self.hpglString = hpglString
         self.options = options
         self.scaleX = options.resolutionX / 90.0 # dots/inch to dots/pixels
         self.scaleY = options.resolutionY / 90.0 # dots/inch to dots/pixels
-        self.hasUnknownCommands = False
+        self.warnings = []
 
-    def getSvg(self, data):
+    def getSvg(self):
         # parse hpgl data
-        data = data.split(';')
-        if data[-1].strip() == '':
-            data.pop()
-        if len(data) < 3:
-            return (False, True, '')
+        hpglData = self.hpglString.split(';')
+        if hpglData[-1].strip() == '':
+            hpglData.pop()
+        if len(hpglData) < 3:
+            raise Exception('NO_HPGL_DATA')
         # prepare document
         doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' % (self.options.docWidth, self.options.docHeight)))
         layerDrawing = inkex.etree.SubElement(doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Drawing'})
@@ -52,14 +53,14 @@ class hpglDecoder:
         # parse paths
         oldCoordinates = (0.0, self.options.docHeight) 
         path = ''
-        for i, command in enumerate(data):
+        for i, command in enumerate(hpglData):
             if command.strip() != '':
                 # TODO:2013-07-13:Sebastian Wüst:Implement the "HP-GL/2 kernel" set of commands.
                 if command[:2] == 'PU': # if Pen Up command
-                    if " L" in path:
+                    if ' L' in path:
                         # TODO:2013-07-13:Sebastian Wüst:Make a method for adding a SubElement.
                         inkex.etree.SubElement(layerDrawing, 'path', {'d':path, 'style':'stroke:#000000; stroke-width:0.3; fill:none;'})
-                    if self.options.showMovements and i != len(data) - 1:
+                    if self.options.showMovements and i != len(hpglData) - 1:
                         path = 'M %f,%f' % oldCoordinates
                         path += ' L %f,%f' % self.getCoordinates(command[2:])
                         inkex.etree.SubElement(layerMovements, 'path', {'d':path, 'style':'stroke:#ff0000; stroke-width:0.3; fill:none;'})
@@ -73,16 +74,16 @@ class hpglDecoder:
                     # TODO:2013-07-13:Sebastian Wüst:Every pen number should go to a different layer.
                     pass
                 else:
-                    self.hasUnknownCommands = True
-        if " L" in path:
+                    self.warnings.append('UNKNOWN_COMMANDS')
+        if ' L' in path:
             inkex.etree.SubElement(layerDrawing, 'path', {'d':path, 'style':'stroke:#000000; stroke-width:0.3; fill:none;'})
-        return (self.hasUnknownCommands, False, doc)
+        return (doc, self.warnings)
     
     def getCoordinates(self, coord):
         # process coordinates
         (x, y) = coord.split(',')
         x = float(x) / self.scaleX; # convert to pixels coordinate system
         y = self.options.docHeight - float(y) / self.scaleY; # convert to pixels coordinate system, flip vertically for inkscape coordinate system
-        return (x, y)  
+        return (x, y)
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

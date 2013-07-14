@@ -71,10 +71,16 @@ class MyEffect(inkex.Effect):
             self.options.showMovements = True
             self.options.docWidth = float(inkex.unittouu(self.document.getroot().get('width')))
             self.options.docHeight = float(inkex.unittouu(self.document.getroot().get('height')))
-            myHpglDecoder = hpgl_decoder.hpglDecoder(self.options)
-            (hasUnknownCommands, hasNoHpglData, doc) = myHpglDecoder.getSvg(self.hpgl)
-            if not hasNoHpglData:
-                self.document = doc
+            myHpglDecoder = hpgl_decoder.hpglDecoder(self.hpgl, self.options)
+            try:
+                doc, warnings = myHpglDecoder.getSvg()
+                # deliver document to inkscape
+                self.document = doc 
+            except Exception as inst:
+                if inst.args[0] == 'NO_HPGL_DATA':
+                    # do nothing
+                else:
+                    raise Exception(inst)
         '''
         # send data to plotter
         # TODO:2013-07-13:Sebastian Wüst:Somehow slow down sending to avoid buffer overruns in the plotter on very large drawings.
