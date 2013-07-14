@@ -6,10 +6,16 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
+#include <map>
+#include <set>
+#include <vector>
+
 #include "../dialogs/dialog-events.h"
 #include "sp-color-icc-selector.h"
 #include "sp-color-scales.h"
+#include "sp-color-slider.h"
 #include "svg/svg-icc-color.h"
+#include "colorspace.h"
 #include "document.h"
 #include "inkscape.h"
 #include "profile-manager.h"
@@ -68,30 +74,174 @@ static void sp_color_icc_selector_dispose(GObject *object);
 static void sp_color_icc_selector_show_all (GtkWidget *widget);
 static void sp_color_icc_selector_hide(GtkWidget *widget);
 
-
 G_END_DECLS
+
+/**
+ * Class containing the parts for a single color component's UI presence.
+ */
+class ComponentUI
+{
+public:
+    ComponentUI() :
+        _component(),
+        _adj(0),
+        _slider(0),
+        _btn(0),
+        _label(0),
+        _map(0)
+    {
+    }
+
+    ComponentUI(colorspace::Component const &component) :
+        _component(component),
+        _adj(0),
+        _slider(0),
+        _btn(0),
+        _label(0),
+        _map(0)
+    {
+    }
+
+    colorspace::Component _component;
+    GtkAdjustment *_adj; // Component adjustment
+    GtkWidget *_slider;
+    GtkWidget *_btn;     // spinbutton
+    GtkWidget *_label;   // Label
+    guchar *_map;    
+};
+
+/**
+ * Class that implements the internals of the selector.
+ */
+class ColorICCSelectorImpl
+{
+public:
+
+    ColorICCSelectorImpl( ColorICCSelector *owner);
+
+    ~ColorICCSelectorImpl();
+
+    static void _adjustmentChanged ( GtkAdjustment *adjustment, SPColorICCSelector *cs );
+
+    static void _sliderGrabbed( SPColorSlider *slider, SPColorICCSelector *cs );
+    static void _sliderReleased( SPColorSlider *slider, SPColorICCSelector *cs );
+    static void _sliderChanged( SPColorSlider *slider, SPColorICCSelector *cs );
+
+    static void _profileSelected( GtkWidget* src, gpointer data );
+    static void _fixupHit( GtkWidget* src, gpointer data );
+
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    void _setProfile( SVGICCColor* profile );
+    void _switchToProfile( gchar const* name );
+#endif
+    void _updateSliders( gint ignore );
+    void _profilesChanged( std::string const & name );
+
+    ColorICCSelector *_owner;
+
+    gboolean _updating : 1;
+    gboolean _dragging : 1;
+
+    guint32 _fixupNeeded;
+    GtkWidget* _fixupBtn;
+    GtkWidget* _profileSel;
+
+    std::vector<ComponentUI> _compUI;
+
+    GtkAdjustment* _adj; // Channel adjustment
+    GtkWidget* _slider;
+    GtkWidget* _sbtn; // Spinbutton
+    GtkWidget* _label; // Label
+
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    std::string _profileName;
+    Inkscape::ColorProfile* _prof;
+    guint _profChannelCount;
+    gulong _profChangedID;
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+};
+
 
 static SPColorSelectorClass *parent_class;
 
 #define XPAD 4
 #define YPAD 1
 
-GType
-sp_color_icc_selector_get_type (void)
+namespace
+{
+
+size_t maxColorspaceComponentCount = 0;
+
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+
+/**
+ * Internal variable to track all known colorspaces.
+ */
+std::set<cmsUInt32Number> knownColorspaces;
+
+#endif
+
+
+/**
+ * Simple helper to allow bitwise or on GtkAttachOptions.
+ */
+GtkAttachOptions operator|(GtkAttachOptions lhs, GtkAttachOptions rhs)
+{
+    return static_cast<GtkAttachOptions>(static_cast<int>(lhs) | static_cast<int>(rhs));
+}
+
+/**
+ * Helper function to handle GTK2/GTK3 attachment #ifdef code.
+ */
+void attachToGridOrTable(GtkWidget *parent,
+                         GtkWidget *child,
+                         guint left,
+                         guint top,
+                         guint width,
+                         guint height,
+                         bool hexpand = false,
+                         bool centered = false,
+                         guint xpadding = XPAD,
+                         guint ypadding = YPAD)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left( child, xpadding );
+    gtk_widget_set_margin_right( child, xpadding );
+    gtk_widget_set_margin_top( child, ypadding );
+    gtk_widget_set_margin_bottom( child, ypadding );
+    if (hexpand) {
+        gtk_widget_set_hexpand(child, TRUE);
+    }
+    if (centered) {
+        gtk_widget_set_halign( child, GTK_ALIGN_CENTER );
+        gtk_widget_set_valign( child, GTK_ALIGN_CENTER );
+    }
+    gtk_grid_attach( GTK_GRID(parent), child, left, top, width, height );
+#else
+    GtkAttachOptions xoptions = centered ? static_cast<GtkAttachOptions>(0) : hexpand ? (GTK_EXPAND | GTK_FILL) : GTK_FILL;
+    GtkAttachOptions yoptions = centered ? static_cast<GtkAttachOptions>(0) : GTK_FILL;
+
+    gtk_table_attach( GTK_TABLE(parent), child, left, left + width, top, top + height, xoptions, yoptions, xpadding, ypadding );
+#endif
+}
+
+} // namespace
+
+GType sp_color_icc_selector_get_type(void)
 {
     static GType type = 0;
     if (!type) {
         static const GTypeInfo info = {
             sizeof (SPColorICCSelectorClass),
-            NULL, /* base_init */
-            NULL, /* base_finalize */
+            NULL, // base_init
+            NULL, // base_finalize
             (GClassInitFunc) sp_color_icc_selector_class_init,
-            NULL, /* class_finalize */
-            NULL, /* class_data */
+            NULL, // class_finalize
+            NULL, // class_data
             sizeof (SPColorICCSelector),
-            0,    /* n_preallocs */
+            0,    // n_preallocs
             (GInstanceInitFunc) sp_color_icc_selector_init,
-            0,    /* value_table */
+            0,    // value_table
         };
 
         type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,
@@ -123,40 +273,20 @@ static void sp_color_icc_selector_class_init(SPColorICCSelectorClass *klass)
 
 ColorICCSelector::ColorICCSelector( SPColorSelector* csel )
     : ColorSelector( csel ),
-      _updating( FALSE ),
-      _dragging( FALSE ),
-      _fixupNeeded(0),
-      _fixupBtn(0),
-      _profileSel(0),
-      _fooCount(0),
-      _fooScales(0),
-      _fooAdj(0),
-      _fooSlider(0),
-      _fooBtn(0),
-      _fooLabel(0),
-      _fooMap(0),
-      _adj(0),
-      _slider(0),
-      _sbtn(0),
-      _label(0)
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    ,
-      _profileName(""),
-      _prof(),
-      _profChannelCount(0),
-      _profChangedID(0)
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+      _impl(NULL)
 {
 }
 
 ColorICCSelector::~ColorICCSelector()
 {
-    _adj = 0;
-    _sbtn = 0;
-    _label = 0;
+    if (_impl)
+    {
+        delete _impl;
+        _impl = 0;
+    }
 }
 
-void sp_color_icc_selector_init (SPColorICCSelector *cs)
+void sp_color_icc_selector_init(SPColorICCSelector *cs)
 {
     SP_COLOR_SELECTOR(cs)->base = new ColorICCSelector( SP_COLOR_SELECTOR(cs) );
 
@@ -185,95 +315,127 @@ static cmsUInt16Number* getScratch() {
     return scritch;
 }
 
-struct MapMap {
-    cmsUInt32Number space;
-    cmsUInt32Number inForm;
-};
+colorspace::Component::Component() :
+    name(),
+    tip(),
+    scale(1)
+{
+}
 
-void getThings( cmsUInt32Number space, gchar const**& namers, gchar const**& tippies, guint const*& scalies ) {
-    MapMap possible[] = {
-        {cmsSigXYZData,   TYPE_XYZ_16},
-        {cmsSigLabData,   TYPE_Lab_16},
+colorspace::Component::Component(std::string const &name, std::string const &tip, guint scale) :
+    name(name),
+    tip(tip),
+    scale(scale)
+{
+}
+
+std::vector<colorspace::Component> colorspace::getColorSpaceInfo( uint32_t space )
+{
+    static std::map<cmsUInt32Number, std::vector<Component> > sets;
+    if (sets.empty())
+    {
+        sets[cmsSigXYZData].push_back(Component("_X", "X", 2)); //  TYPE_XYZ_16
+        sets[cmsSigXYZData].push_back(Component("_Y", "Y", 1));
+        sets[cmsSigXYZData].push_back(Component("_Z", "Z", 2));
+
+        sets[cmsSigLabData].push_back(Component("_L", "L", 100)); // TYPE_Lab_16
+        sets[cmsSigLabData].push_back(Component("_a", "a", 256));
+        sets[cmsSigLabData].push_back(Component("_b", "b", 256));
+
         //cmsSigLuvData
-        {cmsSigYCbCrData, TYPE_YCbCr_16},
-        {cmsSigYxyData,   TYPE_Yxy_16},
-        {cmsSigRgbData,   TYPE_RGB_16},
-        {cmsSigGrayData,  TYPE_GRAY_16},
-        {cmsSigHsvData,   TYPE_HSV_16},
-        {cmsSigHlsData,   TYPE_HLS_16},
-        {cmsSigCmykData,  TYPE_CMYK_16},
-        {cmsSigCmyData,   TYPE_CMY_16},
-    };
 
-    static gchar const *names[][6] = {
-        {"_X", "_Y", "_Z", "", "", ""},
-        {"_L", "_a", "_b", "", "", ""},
-        //
-        {"_Y", "C_b", "C_r", "", "", ""},
-        {"_Y", "_x", "y", "", "", ""},
-        {_("_R:"), _("_G:"), _("_B:"), "", "", ""},
-        {_("_G:"), "", "", "", "", ""},
-        {_("_H:"), _("_S:"), "_V:", "", "", ""},
-        {_("_H:"), _("_L:"), _("_S:"), "", "", ""},
-        {_("_C:"), _("_M:"), _("_Y:"), _("_K:"), "", ""},
-        {_("_C:"), _("_M:"), _("_Y:"), "", "", ""},
-    };
+        sets[cmsSigYCbCrData].push_back(Component("_Y", "Y", 1)); // TYPE_YCbCr_16
+        sets[cmsSigYCbCrData].push_back(Component("C_b", "Cb", 1));
+        sets[cmsSigYCbCrData].push_back(Component("C_r", "Cr", 1));
 
-    static gchar const *tips[][6] = {
-        {"X", "Y", "Z", "", "", ""},
-        {"L", "a", "b", "", "", ""},
-        //
-        {"Y", "Cb", "Cr", "", "", ""},
-        {"Y", "x", "y", "", "", ""},
-        {_("Red"), _("Green"), _("Blue"), "", "", ""},
-        {_("Gray"), "", "", "", "", ""},
-        {_("Hue"), _("Saturation"), "Value", "", "", ""},
-        {_("Hue"), _("Lightness"), _("Saturation"), "", "", ""},
-        {_("Cyan"), _("Magenta"), _("Yellow"), _("Black"), "", ""},
-        {_("Cyan"), _("Magenta"), _("Yellow"), "", "", ""},
-    };
+        sets[cmsSigYxyData].push_back(Component("_Y", "Y", 1)); // TYPE_Yxy_16
+        sets[cmsSigYxyData].push_back(Component("_x", "x", 1));
+        sets[cmsSigYxyData].push_back(Component("y", "y", 1));
 
-    static guint scales[][6] = {
-        {2, 1, 2, 1, 1, 1},
-        {100, 256, 256, 1, 1, 1},
-        //
-        {1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1},
-        {360, 1, 1, 1, 1, 1},
-        {360, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1},
-    };
+        sets[cmsSigRgbData].push_back(Component(_("_R:"), _("Red"), 1)); // TYPE_RGB_16
+        sets[cmsSigRgbData].push_back(Component(_("_G:"), _("Green"), 1));
+        sets[cmsSigRgbData].push_back(Component(_("_B:"), _("Blue"), 1));
 
-    int index = 0;
-    for ( guint i = 0; i < G_N_ELEMENTS(possible); i++ ) {
-        if ( possible[i].space == space ) {
-            index = i;
-            break;
+        sets[cmsSigGrayData].push_back(Component(_("G:"), _("Gray"), 1)); // TYPE_GRAY_16
+
+        sets[cmsSigHsvData].push_back(Component(_("_H:"), _("Hue"), 360)); // TYPE_HSV_16
+        sets[cmsSigHsvData].push_back(Component(_("_S:"), _("Saturation"), 1));
+        sets[cmsSigHsvData].push_back(Component("_V:", "Value", 1));
+
+        sets[cmsSigHlsData].push_back(Component(_("_H:"), _("Hue"), 360)); // TYPE_HLS_16
+        sets[cmsSigHlsData].push_back(Component(_("_L:"), _("Lightness"), 1));
+        sets[cmsSigHlsData].push_back(Component(_("_S:"), _("Saturation"), 1));
+
+        sets[cmsSigCmykData].push_back(Component(_("_C:"), _("Cyan"), 1)); // TYPE_CMYK_16
+        sets[cmsSigCmykData].push_back(Component(_("_M:"), _("Magenta"), 1));
+        sets[cmsSigCmykData].push_back(Component(_("_Y:"), _("Yellow"), 1));
+        sets[cmsSigCmykData].push_back(Component(_("_K:"), _("Black"), 1));
+
+        sets[cmsSigCmyData].push_back(Component(_("_C:"), _("Cyan"), 1)); // TYPE_CMY_16
+        sets[cmsSigCmyData].push_back(Component(_("_M:"), _("Magenta"), 1));
+        sets[cmsSigCmyData].push_back(Component(_("_Y:"), _("Yellow"), 1));
+
+        for (std::map<cmsUInt32Number, std::vector<Component> >::iterator it = sets.begin(); it != sets.end(); ++it)
+        {
+            knownColorspaces.insert(it->first);
+            maxColorspaceComponentCount = std::max(maxColorspaceComponentCount, it->second.size());
         }
     }
 
-    namers = names[index];
-    tippies = tips[index];
-    scalies = scales[index];
+    std::vector<Component> target;
+
+    if (sets.find(space) != sets.end())
+    {
+        target = sets[space];
+    }
+    return target;
 }
 
 
-void getThings( Inkscape::ColorProfile *prof, gchar const**& namers, gchar const**& tippies, guint const*& scalies ) {
-    getThings( asICColorSpaceSig(prof->getColorSpace()), namers, tippies, scalies );
+std::vector<colorspace::Component> colorspace::getColorSpaceInfo( Inkscape::ColorProfile *prof )
+{
+    return getColorSpaceInfo( asICColorSpaceSig(prof->getColorSpace()) );
 }
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
+ColorICCSelectorImpl::ColorICCSelectorImpl(ColorICCSelector *owner) :
+    _owner(owner),
+    _updating( FALSE ),
+    _dragging( FALSE ),
+    _fixupNeeded(0),
+    _fixupBtn(0),
+    _profileSel(0),
+    _compUI(),
+    _adj(0),
+    _slider(0),
+    _sbtn(0),
+    _label(0)
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    ,
+    _profileName(),
+    _prof(0),
+    _profChannelCount(0),
+    _profChangedID(0)
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+{
+}
+
+ColorICCSelectorImpl::~ColorICCSelectorImpl()
+{
+    _adj = 0;
+    _sbtn = 0;
+    _label = 0;
+}
 
 void ColorICCSelector::init()
 {
+    if (_impl) delete(_impl);
+	_impl = new ColorICCSelectorImpl(this);
     gint row = 0;
 
-    _updating = FALSE;
-    _dragging = FALSE;
+    _impl->_updating = FALSE;
+    _impl->_dragging = FALSE;
 
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget *t = gtk_grid_new();
@@ -284,232 +446,162 @@ void ColorICCSelector::init()
     gtk_widget_show (t);
     gtk_box_pack_start (GTK_BOX (_csel), t, TRUE, TRUE, 4);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    //guint partCount = _cmsChannelsOf( icSigRgbData );
-    gchar const** names = 0;
-    gchar const** tips = 0;
-    getThings( cmsSigRgbData, names, tips, _fooScales );
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    _impl->_compUI.clear();
 
-    /* Create components */
+    // Create components
     row = 0;
 
 
-    _fixupBtn = gtk_button_new_with_label(_("Fix"));
-    g_signal_connect( G_OBJECT(_fixupBtn), "clicked", G_CALLBACK(_fixupHit), (gpointer)this );
-    gtk_widget_set_sensitive( _fixupBtn, FALSE );
-    gtk_widget_set_tooltip_text( _fixupBtn, _("Fix RGB fallback to match icc-color() value.") );
-    //gtk_misc_set_alignment( GTK_MISC (_fixupBtn), 1.0, 0.5 );
-    gtk_widget_show( _fixupBtn );
+    _impl->_fixupBtn = gtk_button_new_with_label(_("Fix"));
+    g_signal_connect( G_OBJECT(_impl->_fixupBtn), "clicked", G_CALLBACK(ColorICCSelectorImpl::_fixupHit), (gpointer)_impl );
+    gtk_widget_set_sensitive( _impl->_fixupBtn, FALSE );
+    gtk_widget_set_tooltip_text( _impl->_fixupBtn, _("Fix RGB fallback to match icc-color() value.") );
+    //gtk_misc_set_alignment( GTK_MISC (_impl->_fixupBtn), 1.0, 0.5 );
+    gtk_widget_show( _impl->_fixupBtn );
 
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_fixupBtn, XPAD);
-    gtk_widget_set_margin_right(_fixupBtn, XPAD);
-    gtk_widget_set_margin_top(_fixupBtn, YPAD);
-    gtk_widget_set_margin_bottom(_fixupBtn, YPAD);
-    gtk_grid_attach(GTK_GRID(t), _fixupBtn, 0, row, 1, 1);
-#else
-    gtk_table_attach( GTK_TABLE (t), _fixupBtn, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD );
-#endif
+    attachToGridOrTable(t, _impl->_fixupBtn, 0, row, 1, 1);
 
     // Combobox and store with 2 columns : label (0) and full name (1)
     GtkListStore *store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-    _profileSel = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
+    _impl->_profileSel = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
 
     GtkCellRenderer *renderer = gtk_cell_renderer_text_new ();
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (_profileSel), renderer, TRUE);
-    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (_profileSel), renderer, "text", 0, NULL);
+    gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(_impl->_profileSel), renderer, TRUE);
+    gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(_impl->_profileSel), renderer, "text", 0, NULL);
 
     GtkTreeIter iter;
     gtk_list_store_append (store, &iter);
     gtk_list_store_set (store, &iter, 0, _("<none>"), 1, _("<none>"), -1);
 
-    gtk_widget_show( _profileSel );
-    gtk_combo_box_set_active( GTK_COMBO_BOX(_profileSel), 0 );
+    gtk_widget_show( _impl->_profileSel );
+    gtk_combo_box_set_active( GTK_COMBO_BOX(_impl->_profileSel), 0 );
 
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_profileSel, XPAD);
-    gtk_widget_set_margin_right(_profileSel, XPAD);
-    gtk_widget_set_margin_top(_profileSel, YPAD);
-    gtk_widget_set_margin_bottom(_profileSel, YPAD);
-    gtk_grid_attach(GTK_GRID(t), _profileSel, 1, row, 1, 1);
-#else
-    gtk_table_attach( GTK_TABLE(t), _profileSel, 1, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD );
-#endif
+    attachToGridOrTable(t, _impl->_profileSel, 1, row, 1, 1);
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    _profChangedID = g_signal_connect( G_OBJECT(_profileSel), "changed", G_CALLBACK(_profileSelected), (gpointer)this );
+    _impl->_profChangedID = g_signal_connect( G_OBJECT(_impl->_profileSel), "changed", G_CALLBACK(ColorICCSelectorImpl::_profileSelected), (gpointer)_impl );
 #else
-    gtk_widget_set_sensitive( _profileSel, false );
+    gtk_widget_set_sensitive( _impl->_profileSel, false );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 
     row++;
 
-    _fooCount = 4;
-    _fooAdj = new GtkAdjustment*[_fooCount];
-    _fooSlider = new GtkWidget*[_fooCount];
-    _fooBtn = new GtkWidget*[_fooCount];
-    _fooLabel = new GtkWidget*[_fooCount];
-    _fooMap = new guchar*[_fooCount];
-
-    for ( guint i = 0; i < _fooCount; i++ ) {
-        /* Label */
+    // populate the data for colorspaces and channels:
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-        _fooLabel[i] = gtk_label_new_with_mnemonic( names[i] );
-#else
-        _fooLabel[i] = gtk_label_new_with_mnemonic( "." );
+    std::vector<colorspace::Component> things = colorspace::getColorSpaceInfo( cmsSigRgbData );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-        gtk_misc_set_alignment( GTK_MISC (_fooLabel[i]), 1.0, 0.5 );
-        gtk_widget_show( _fooLabel[i] );
 
-#if GTK_CHECK_VERSION(3,0,0)
-        gtk_widget_set_margin_left(_fooLabel[i], XPAD);
-        gtk_widget_set_margin_right(_fooLabel[i], XPAD);
-        gtk_widget_set_margin_top(_fooLabel[i], YPAD);
-        gtk_widget_set_margin_bottom(_fooLabel[i], YPAD);
-        gtk_grid_attach(GTK_GRID(t), _fooLabel[i], 0, row, 1, 1);
+    for ( size_t i = 0; i < maxColorspaceComponentCount; i++ ) {
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+        if (i < things.size()) {
+            _impl->_compUI.push_back(ComponentUI(things[i]));
+        } else {
+            _impl->_compUI.push_back(ComponentUI());
+        }
+
+        std::string labelStr = (i < things.size()) ? things[i].name.c_str() : "";
 #else
-        gtk_table_attach( GTK_TABLE (t), _fooLabel[i], 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD );
+        _impl->_compUI.push_back(ComponentUI());
+
+        std::string labelStr = ".";
 #endif
 
-        /* Adjustment */
-        gdouble step = static_cast<gdouble>(_fooScales[i]) / 100.0;
-        gdouble page = static_cast<gdouble>(_fooScales[i]) / 10.0;
+        _impl->_compUI[i]._label = gtk_label_new_with_mnemonic( labelStr.c_str() );
+        gtk_misc_set_alignment( GTK_MISC (_impl->_compUI[i]._label), 1.0, 0.5 );
+        gtk_widget_show( _impl->_compUI[i]._label );
+
+        attachToGridOrTable(t, _impl->_compUI[i]._label, 0, row, 1, 1);
+
+        // Adjustment
+        guint scaleValue = _impl->_compUI[i]._component.scale;
+        gdouble step = static_cast<gdouble>(scaleValue) / 100.0;
+        gdouble page = static_cast<gdouble>(scaleValue) / 10.0;
         gint digits = (step > 0.9) ? 0 : 2;
-        _fooAdj[i] = GTK_ADJUSTMENT( gtk_adjustment_new( 0.0, 0.0, _fooScales[i],  step, page, page ) );
+        _impl->_compUI[i]._adj = GTK_ADJUSTMENT( gtk_adjustment_new( 0.0, 0.0, scaleValue,  step, page, page ) );
 
-        /* Slider */
-        _fooSlider[i] = sp_color_slider_new( _fooAdj[i] );
+        // Slider
+        _impl->_compUI[i]._slider = sp_color_slider_new( _impl->_compUI[i]._adj );
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-        gtk_widget_set_tooltip_text( _fooSlider[i], tips[i] );
+        gtk_widget_set_tooltip_text( _impl->_compUI[i]._slider, (i < things.size()) ? things[i].tip.c_str() : "" );
 #else
-        gtk_widget_set_tooltip_text( _fooSlider[i], "." );
+        gtk_widget_set_tooltip_text( _impl->_compUI[i]._slider, "." );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-        gtk_widget_show( _fooSlider[i] );
+        gtk_widget_show( _impl->_compUI[i]._slider );
 
-#if GTK_CHECK_VERSION(3,0,0)
-        gtk_widget_set_margin_left(_fooSlider[i], XPAD);
-        gtk_widget_set_margin_right(_fooSlider[i], XPAD);
-        gtk_widget_set_margin_top(_fooSlider[i], YPAD);
-        gtk_widget_set_margin_bottom(_fooSlider[i], YPAD);
-        gtk_widget_set_hexpand(_fooSlider[i], TRUE);
-        gtk_grid_attach(GTK_GRID(t), _fooSlider[i], 1, row, 1, 1);
-#else
-        gtk_table_attach( GTK_TABLE (t), _fooSlider[i], 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD );
-#endif
+        attachToGridOrTable(t, _impl->_compUI[i]._slider, 1, row, 1, 1, true);
 
-        _fooBtn[i] = gtk_spin_button_new( _fooAdj[i], step, digits );
+        _impl->_compUI[i]._btn = gtk_spin_button_new( _impl->_compUI[i]._adj, step, digits );
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-        gtk_widget_set_tooltip_text( _fooBtn[i], tips[i] );
+        gtk_widget_set_tooltip_text( _impl->_compUI[i]._btn, (i < things.size()) ? things[i].tip.c_str() : "" );
 #else
-        gtk_widget_set_tooltip_text( _fooBtn[i], "." );
+        gtk_widget_set_tooltip_text( _impl->_compUI[i]._btn, "." );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-        sp_dialog_defocus_on_enter( _fooBtn[i] );
-        gtk_label_set_mnemonic_widget( GTK_LABEL(_fooLabel[i]), _fooBtn[i] );
-        gtk_widget_show( _fooBtn[i] );
+        sp_dialog_defocus_on_enter( _impl->_compUI[i]._btn );
+        gtk_label_set_mnemonic_widget( GTK_LABEL(_impl->_compUI[i]._label), _impl->_compUI[i]._btn );
+        gtk_widget_show( _impl->_compUI[i]._btn );
 
-#if GTK_CHECK_VERSION(3,0,0)
-        gtk_widget_set_margin_left(_fooBtn[i], XPAD);
-        gtk_widget_set_margin_right(_fooBtn[i], XPAD);
-        gtk_widget_set_margin_top(_fooBtn[i], YPAD);
-        gtk_widget_set_margin_bottom(_fooBtn[i], YPAD);
-        gtk_widget_set_halign(_fooBtn[i], GTK_ALIGN_CENTER);
-        gtk_widget_set_valign(_fooBtn[i], GTK_ALIGN_CENTER);
-        gtk_grid_attach(GTK_GRID(t), _fooBtn[i], 2, row, 1, 1);
-#else
-        gtk_table_attach( GTK_TABLE (t), _fooBtn[i], 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD );
-#endif
+        attachToGridOrTable(t, _impl->_compUI[i]._btn, 2, row, 1, 1, false, true);
 
-        _fooMap[i] = g_new( guchar, 4 * 1024 );
-        memset( _fooMap[i], 0x0ff, 1024 * 4 );
+        _impl->_compUI[i]._map = g_new( guchar, 4 * 1024 );
+        memset( _impl->_compUI[i]._map, 0x0ff, 1024 * 4 );
 
 
-        /* Signals */
-        g_signal_connect( G_OBJECT( _fooAdj[i] ), "value_changed", G_CALLBACK( _adjustmentChanged ), _csel );
+        // Signals
+        g_signal_connect( G_OBJECT( _impl->_compUI[i]._adj ), "value_changed", G_CALLBACK( ColorICCSelectorImpl::_adjustmentChanged ), _csel );
 
-        g_signal_connect( G_OBJECT( _fooSlider[i] ), "grabbed", G_CALLBACK( _sliderGrabbed ), _csel );
-        g_signal_connect( G_OBJECT( _fooSlider[i] ), "released", G_CALLBACK( _sliderReleased ), _csel );
-        g_signal_connect( G_OBJECT( _fooSlider[i] ), "changed", G_CALLBACK( _sliderChanged ), _csel );
+        g_signal_connect( G_OBJECT( _impl->_compUI[i]._slider ), "grabbed", G_CALLBACK( ColorICCSelectorImpl::_sliderGrabbed ), _csel );
+        g_signal_connect( G_OBJECT( _impl->_compUI[i]._slider ), "released", G_CALLBACK( ColorICCSelectorImpl::_sliderReleased ), _csel );
+        g_signal_connect( G_OBJECT( _impl->_compUI[i]._slider ), "changed", G_CALLBACK( ColorICCSelectorImpl::_sliderChanged ), _csel );
 
         row++;
     }
 
-    /* Label */
-    _label = gtk_label_new_with_mnemonic (_("_A:"));
-    gtk_misc_set_alignment (GTK_MISC (_label), 1.0, 0.5);
-    gtk_widget_show (_label);
+    // Label
+    _impl->_label = gtk_label_new_with_mnemonic(_("_A:"));
+    gtk_misc_set_alignment(GTK_MISC(_impl->_label), 1.0, 0.5);
+    gtk_widget_show(_impl->_label);
 
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_label, XPAD);
-    gtk_widget_set_margin_right(_label, XPAD);
-    gtk_widget_set_margin_top(_label, YPAD);
-    gtk_widget_set_margin_bottom(_label, YPAD);
-    gtk_grid_attach(GTK_GRID(t), _label, 0, row, 1, 1);
-#else
-    gtk_table_attach (GTK_TABLE (t), _label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
-#endif
+    attachToGridOrTable(t, _impl->_label, 0, row, 1, 1);
 
-    /* Adjustment */
-    _adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
+    // Adjustment
+    _impl->_adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
 
-    /* Slider */
-    _slider = sp_color_slider_new (_adj);
-    gtk_widget_set_tooltip_text (_slider, _("Alpha (opacity)"));
-    gtk_widget_show (_slider);
+    // Slider
+    _impl->_slider = sp_color_slider_new(_impl->_adj);
+    gtk_widget_set_tooltip_text(_impl->_slider, _("Alpha (opacity)"));
+    gtk_widget_show(_impl->_slider);
 
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_slider, XPAD);
-    gtk_widget_set_margin_right(_slider, XPAD);
-    gtk_widget_set_margin_top(_slider, YPAD);
-    gtk_widget_set_margin_bottom(_slider, YPAD);
-    gtk_widget_set_hexpand(_slider, TRUE);
-    gtk_grid_attach(GTK_GRID(t), _slider, 1, row, 1, 1);
-#else
-    gtk_table_attach (GTK_TABLE (t), _slider, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
-#endif
+    attachToGridOrTable(t, _impl->_slider, 1, row, 1, 1, true);
 
-    sp_color_slider_set_colors( SP_COLOR_SLIDER( _slider ),
+    sp_color_slider_set_colors( SP_COLOR_SLIDER( _impl->_slider ),
                                 SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 0.0 ),
                                 SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 0.5 ),
                                 SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 1.0 ) );
 
 
-    /* Spinbutton */
-    _sbtn = gtk_spin_button_new (GTK_ADJUSTMENT (_adj), 1.0, 0);
-    gtk_widget_set_tooltip_text (_sbtn, _("Alpha (opacity)"));
-    sp_dialog_defocus_on_enter (_sbtn);
-    gtk_label_set_mnemonic_widget (GTK_LABEL(_label), _sbtn);
-    gtk_widget_show (_sbtn);
+    // Spinbutton
+    _impl->_sbtn = gtk_spin_button_new(GTK_ADJUSTMENT(_impl->_adj), 1.0, 0);
+    gtk_widget_set_tooltip_text(_impl->_sbtn, _("Alpha (opacity)"));
+    sp_dialog_defocus_on_enter(_impl->_sbtn);
+    gtk_label_set_mnemonic_widget(GTK_LABEL(_impl->_label), _impl->_sbtn);
+    gtk_widget_show(_impl->_sbtn);
 
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_sbtn, XPAD);
-    gtk_widget_set_margin_right(_sbtn, XPAD);
-    gtk_widget_set_margin_top(_sbtn, YPAD);
-    gtk_widget_set_margin_bottom(_sbtn, YPAD);
-    gtk_widget_set_halign(_sbtn, GTK_ALIGN_CENTER);
-    gtk_widget_set_valign(_sbtn, GTK_ALIGN_CENTER);
-    gtk_grid_attach(GTK_GRID(t), _sbtn, 2, row, 1, 1);
-#else
-    gtk_table_attach (GTK_TABLE (t), _sbtn, 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
-#endif
+    attachToGridOrTable(t, _impl->_sbtn, 2, row, 1, 1, false, true);
 
-    /* Signals */
-    g_signal_connect (G_OBJECT (_adj), "value_changed",
-                        G_CALLBACK (_adjustmentChanged), _csel);
+    // Signals
+    g_signal_connect(G_OBJECT(_impl->_adj), "value_changed", G_CALLBACK(ColorICCSelectorImpl::_adjustmentChanged), _csel);
 
-    g_signal_connect (G_OBJECT (_slider), "grabbed",
-                        G_CALLBACK (_sliderGrabbed), _csel);
-    g_signal_connect (G_OBJECT (_slider), "released",
-                        G_CALLBACK (_sliderReleased), _csel);
-    g_signal_connect (G_OBJECT (_slider), "changed",
-                        G_CALLBACK (_sliderChanged), _csel);
+    g_signal_connect(G_OBJECT(_impl->_slider), "grabbed", G_CALLBACK(ColorICCSelectorImpl::_sliderGrabbed), _csel);
+    g_signal_connect(G_OBJECT(_impl->_slider), "released", G_CALLBACK(ColorICCSelectorImpl::_sliderReleased), _csel);
+    g_signal_connect(G_OBJECT(_impl->_slider), "changed", G_CALLBACK(ColorICCSelectorImpl::_sliderChanged), _csel);
 }
 
 static void sp_color_icc_selector_dispose(GObject *object)
 {
-    if ((G_OBJECT_CLASS(parent_class))->dispose)
+    if ((G_OBJECT_CLASS(parent_class))->dispose) {
         (* (G_OBJECT_CLASS(parent_class))->dispose)(object);
+    }
 }
 
 static void
@@ -534,24 +626,24 @@ sp_color_icc_selector_new (void)
 }
 
 
-void ColorICCSelector::_fixupHit( GtkWidget* /*src*/, gpointer data )
+void ColorICCSelectorImpl::_fixupHit( GtkWidget* /*src*/, gpointer data )
 {
-    ColorICCSelector* self = reinterpret_cast<ColorICCSelector*>(data);
+    ColorICCSelectorImpl* self = reinterpret_cast<ColorICCSelectorImpl*>(data);
     gtk_widget_set_sensitive( self->_fixupBtn, FALSE );
-    self->_adjustmentChanged( self->_fooAdj[0], SP_COLOR_ICC_SELECTOR(self->_csel) );
+    self->_adjustmentChanged( self->_compUI[0]._adj, SP_COLOR_ICC_SELECTOR(self->_owner->_csel) );
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-void ColorICCSelector::_profileSelected( GtkWidget* /*src*/, gpointer data )
+void ColorICCSelectorImpl::_profileSelected( GtkWidget* /*src*/, gpointer data )
 {
-    ColorICCSelector* self = reinterpret_cast<ColorICCSelector*>(data);
+    ColorICCSelectorImpl* self = reinterpret_cast<ColorICCSelectorImpl*>(data);
 
     GtkTreeIter  iter;
-    if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX(self->_profileSel), &iter)) {
-        GtkTreeModel *store = gtk_combo_box_get_model (GTK_COMBO_BOX(self->_profileSel));
+    if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(self->_profileSel), &iter)) {
+        GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(self->_profileSel));
         gchar* name = 0;
 
-        gtk_tree_model_get (store, &iter, 1, &name, -1);
+        gtk_tree_model_get(store, &iter, 1, &name, -1);
         self->_switchToProfile( name );
         gtk_widget_set_tooltip_text(self->_profileSel, name );
 
@@ -559,15 +651,14 @@ void ColorICCSelector::_profileSelected( GtkWidget* /*src*/, gpointer data )
             g_free( name );
         }
     }
-
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-void ColorICCSelector::_switchToProfile( gchar const* name )
+void ColorICCSelectorImpl::_switchToProfile( gchar const* name )
 {
     bool dirty = false;
-    SPColor tmp( _color );
+    SPColor tmp( _owner->_color );
 
     if ( name ) {
         if ( tmp.icc && tmp.icc->colorProfile == name ) {
@@ -588,7 +679,7 @@ void ColorICCSelector::_switchToProfile( gchar const* name )
             if ( newProf ) {
                 cmsHTRANSFORM trans = newProf->getTransfFromSRGB8();
                 if ( trans ) {
-                    guint32 val = _color.toRGBA32(0);
+                    guint32 val = _owner->_color.toRGBA32(0);
                     guchar pre[4] = {
                         static_cast<guchar>(SP_RGBA32_R_U(val)),
                         static_cast<guchar>(SP_RGBA32_G_U(val)),
@@ -608,15 +699,12 @@ void ColorICCSelector::_switchToProfile( gchar const* name )
                     guint count = cmsChannelsOf( asICColorSpaceSig(newProf->getColorSpace()) );
 #endif
 
-                    gchar const** names = 0;
-                    gchar const** tips = 0;
-                    guint const* scales = 0;
-                    getThings( asICColorSpaceSig(newProf->getColorSpace()), names, tips, scales );
+                    std::vector<colorspace::Component> things = colorspace::getColorSpaceInfo(asICColorSpaceSig(newProf->getColorSpace()));
 
                     for ( guint i = 0; i < count; i++ ) {
-                        gdouble val = (((gdouble)post[i])/65535.0) * (gdouble)scales[i];
+                        gdouble val = (((gdouble)post[i])/65535.0) * (gdouble)((i < things.size()) ? things[i].scale : 1);
 #ifdef DEBUG_LCMS
-                        g_message("     scaled %d by %d to be %f", i, scales[i], val);
+                        g_message("     scaled %d by %d to be %f", i, ((i < things.size()) ? things[i].scale : 1), val);
 #endif // DEBUG_LCMS
                         tmp.icc->colors.push_back(val);
                     }
@@ -654,8 +742,8 @@ void ColorICCSelector::_switchToProfile( gchar const* name )
         g_message("+   new color is [%s]", tmp.toString().c_str());
 #endif // DEBUG_LCMS
         _setProfile( tmp.icc );
-        //_adjustmentChanged( _fooAdj[0], SP_COLOR_ICC_SELECTOR(_csel) );
-        setColorAlpha( tmp, _alpha, true );
+        //_adjustmentChanged( _compUI[0]._adj, SP_COLOR_ICC_SELECTOR(_csel) );
+        _owner->setColorAlpha( tmp, _owner->_alpha, true );
 #ifdef DEBUG_LCMS
         g_message("+_________________");
 #endif // DEBUG_LCMS
@@ -664,7 +752,7 @@ void ColorICCSelector::_switchToProfile( gchar const* name )
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-void ColorICCSelector::_profilesChanged( std::string const & name )
+void ColorICCSelectorImpl::_profilesChanged( std::string const & name )
 {
     GtkComboBox* combo = GTK_COMBO_BOX(_profileSel);
 
@@ -675,7 +763,7 @@ void ColorICCSelector::_profilesChanged( std::string const & name )
 
     GtkTreeIter iter;
     gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter, 0, _("<none>"), 1, _("<none>"), -1);
+    gtk_list_store_set(store, &iter, 0, _("<none>"), 1, _("<none>"), -1);
 
     gtk_combo_box_set_active( combo, 0 );
 
@@ -686,7 +774,7 @@ void ColorICCSelector::_profilesChanged( std::string const & name )
         Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
 
         gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter, 0, gr_ellipsize_text(prof->name, 25).c_str(), 1, prof->name, -1);
+        gtk_list_store_set(store, &iter, 0, gr_ellipsize_text(prof->name, 25).c_str(), 1, prof->name, -1);
 
         if ( name == prof->name ) {
             gtk_combo_box_set_active( combo, index );
@@ -700,16 +788,16 @@ void ColorICCSelector::_profilesChanged( std::string const & name )
     g_signal_handler_unblock( G_OBJECT(_profileSel), _profChangedID );
 }
 #else
-void ColorICCSelector::_profilesChanged( std::string const & /*name*/ )
+void ColorICCSelectorImpl::_profilesChanged( std::string const & /*name*/ )
 {
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-/* Helpers for setting color value */
+// Helpers for setting color value
 
 void ColorICCSelector::_colorChanged()
 {
-    _updating = TRUE;
+    _impl->_updating = TRUE;
      //sp_color_icc_set_color( SP_COLOR_ICC( _icc ), &color );
 
 #ifdef DEBUG_LCMS
@@ -722,36 +810,36 @@ void ColorICCSelector::_colorChanged()
     g_message("FLIPPIES!!!!     %p   '%s'", _color.icc, (_color.icc ? _color.icc->colorProfile.c_str():"<null>"));
 #endif // DEBUG_LCMS
 
-    _profilesChanged( (_color.icc) ? _color.icc->colorProfile : std::string("") );
-    ColorScales::setScaled( _adj, _alpha );
+    _impl->_profilesChanged( (_color.icc) ? _color.icc->colorProfile : std::string("") );
+    ColorScales::setScaled( _impl->_adj, _alpha );
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    _setProfile( _color.icc );
-    _fixupNeeded = 0;
-    gtk_widget_set_sensitive( _fixupBtn, FALSE );
+    _impl->_setProfile( _color.icc );
+    _impl->_fixupNeeded = 0;
+    gtk_widget_set_sensitive( _impl->_fixupBtn, FALSE );
 
-    if (_prof) {
-        if (_prof->getTransfToSRGB8() ) {
+    if (_impl->_prof) {
+        if (_impl->_prof->getTransfToSRGB8() ) {
             cmsUInt16Number tmp[4];
-            for ( guint i = 0; i < _profChannelCount; i++ ) {
+            for ( guint i = 0; i < _impl->_profChannelCount; i++ ) {
                 gdouble val = 0.0;
                 if ( _color.icc->colors.size() > i ) {
-                    if ( _fooScales[i] == 256 ) {
-                        val = (_color.icc->colors[i] + 128.0) / static_cast<gdouble>(_fooScales[i]);
+                    if ( _impl->_compUI[i]._component.scale == 256 ) {
+                        val = (_color.icc->colors[i] + 128.0) / static_cast<gdouble>(_impl->_compUI[i]._component.scale);
                     } else {
-                        val = _color.icc->colors[i] / static_cast<gdouble>(_fooScales[i]);
+                        val = _color.icc->colors[i] / static_cast<gdouble>(_impl->_compUI[i]._component.scale);
                     }
                 }
                 tmp[i] = val * 0x0ffff;
             }
             guchar post[4] = {0,0,0,0};
-            cmsHTRANSFORM trans = _prof->getTransfToSRGB8();
+            cmsHTRANSFORM trans = _impl->_prof->getTransfToSRGB8();
             if ( trans ) {
                 cmsDoTransform( trans, tmp, post, 1 );
                 guint32 other = SP_RGBA32_U_COMPOSE(post[0], post[1], post[2], 255 );
                 if ( other != _color.toRGBA32(255) ) {
-                    _fixupNeeded = other;
-                    gtk_widget_set_sensitive( _fixupBtn, TRUE );
+                    _impl->_fixupNeeded = other;
+                    gtk_widget_set_sensitive( _impl->_fixupBtn, TRUE );
 #ifdef DEBUG_LCMS
                     g_message("Color needs to change 0x%06x to 0x%06x", _color.toRGBA32(255) >> 8, other >> 8 );
 #endif // DEBUG_LCMS
@@ -762,17 +850,17 @@ void ColorICCSelector::_colorChanged()
 #else
     //(void)color;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    _updateSliders( -1 );
+    _impl->_updateSliders( -1 );
 
 
-    _updating = FALSE;
+    _impl->_updating = FALSE;
 #ifdef DEBUG_LCMS
     g_message( "\\_________  %p::_colorChanged()", this );
 #endif // DEBUG_LCMS
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-void ColorICCSelector::_setProfile( SVGICCColor* profile )
+void ColorICCSelectorImpl::_setProfile( SVGICCColor* profile )
 {
 #ifdef DEBUG_LCMS
     g_message( "/^^^^^^^^^  %p::_setProfile(%s)", this,
@@ -790,10 +878,10 @@ void ColorICCSelector::_setProfile( SVGICCColor* profile )
         profChanged = true;
     }
 
-    for ( guint i = 0; i < _fooCount; i++ ) {
-        gtk_widget_hide( _fooLabel[i] );
-        gtk_widget_hide( _fooSlider[i] );
-        gtk_widget_hide( _fooBtn[i] );
+    for ( size_t i = 0; i < _compUI.size(); i++ ) {
+        gtk_widget_hide( _compUI[i]._label );
+        gtk_widget_hide( _compUI[i]._slider );
+        gtk_widget_hide( _compUI[i]._btn );
     }
 
     if ( profile ) {
@@ -805,39 +893,41 @@ void ColorICCSelector::_setProfile( SVGICCColor* profile )
             _profChannelCount = cmsChannelsOf( asICColorSpaceSig(_prof->getColorSpace()) );
 #endif
 
-            gchar const** names = 0;
-            gchar const** tips = 0;
-            getThings( asICColorSpaceSig(_prof->getColorSpace()), names, tips, _fooScales );
-
             if ( profChanged ) {
+                std::vector<colorspace::Component> things = colorspace::getColorSpaceInfo(asICColorSpaceSig(_prof->getColorSpace()));
+                for (size_t i = 0; (i < things.size()) && (i < _profChannelCount); ++i)
+                {
+                    _compUI[i]._component = things[i];
+                }
+
                 for ( guint i = 0; i < _profChannelCount; i++ ) {
-                    gtk_label_set_text_with_mnemonic( GTK_LABEL(_fooLabel[i]), names[i]);
+                    gtk_label_set_text_with_mnemonic( GTK_LABEL(_compUI[i]._label), (i < things.size()) ? things[i].name.c_str() : "");
 
-                    gtk_widget_set_tooltip_text( _fooSlider[i], tips[i] );
-                    gtk_widget_set_tooltip_text( _fooBtn[i], tips[i] );
+                    gtk_widget_set_tooltip_text( _compUI[i]._slider, (i < things.size()) ?  things[i].tip.c_str() : "" );
+                    gtk_widget_set_tooltip_text( _compUI[i]._btn, (i < things.size()) ?  things[i].tip.c_str() : "" );
 
-                    sp_color_slider_set_colors( SP_COLOR_SLIDER(_fooSlider[i]),
+                    sp_color_slider_set_colors( SP_COLOR_SLIDER(_compUI[i]._slider),
                                                 SPColor(0.0, 0.0, 0.0).toRGBA32(0xff),
                                                 SPColor(0.5, 0.5, 0.5).toRGBA32(0xff),
                                                 SPColor(1.0, 1.0, 1.0).toRGBA32(0xff) );
 /*
-                    _fooAdj[i] = GTK_ADJUSTMENT( gtk_adjustment_new( val, 0.0, _fooScales[i],  step, page, page ) );
-                    g_signal_connect( G_OBJECT( _fooAdj[i] ), "value_changed", G_CALLBACK( _adjustmentChanged ), _csel );
+                    _compUI[i]._adj = GTK_ADJUSTMENT( gtk_adjustment_new( val, 0.0, _fooScales[i],  step, page, page ) );
+                    g_signal_connect( G_OBJECT( _compUI[i]._adj ), "value_changed", G_CALLBACK( _adjustmentChanged ), _csel );
 
-                    sp_color_slider_set_adjustment( SP_COLOR_SLIDER(_fooSlider[i]), _fooAdj[i] );
-                    gtk_spin_button_set_adjustment( GTK_SPIN_BUTTON(_fooBtn[i]), _fooAdj[i] );
-                    gtk_spin_button_set_digits( GTK_SPIN_BUTTON(_fooBtn[i]), digits );
+                    sp_color_slider_set_adjustment( SP_COLOR_SLIDER(_compUI[i]._slider), _compUI[i]._adj );
+                    gtk_spin_button_set_adjustment( GTK_SPIN_BUTTON(_compUI[i]._btn), _compUI[i]._adj );
+                    gtk_spin_button_set_digits( GTK_SPIN_BUTTON(_compUI[i]._btn), digits );
 */
-                    gtk_widget_show( _fooLabel[i] );
-                    gtk_widget_show( _fooSlider[i] );
-                    gtk_widget_show( _fooBtn[i] );
-                    //gtk_adjustment_set_value( _fooAdj[i], 0.0 );
-                    //gtk_adjustment_set_value( _fooAdj[i], val );
+                    gtk_widget_show( _compUI[i]._label );
+                    gtk_widget_show( _compUI[i]._slider );
+                    gtk_widget_show( _compUI[i]._btn );
+                    //gtk_adjustment_set_value( _compUI[i]._adj, 0.0 );
+                    //gtk_adjustment_set_value( _compUI[i]._adj, val );
                 }
-                for ( guint i = _profChannelCount; i < _fooCount; i++ ) {
-                    gtk_widget_hide( _fooLabel[i] );
-                    gtk_widget_hide( _fooSlider[i] );
-                    gtk_widget_hide( _fooBtn[i] );
+                for ( size_t i = _profChannelCount; i < _compUI.size(); i++ ) {
+                    gtk_widget_hide( _compUI[i]._label );
+                    gtk_widget_hide( _compUI[i]._slider );
+                    gtk_widget_hide( _compUI[i]._btn );
                 }
             }
         } else {
@@ -852,31 +942,31 @@ void ColorICCSelector::_setProfile( SVGICCColor* profile )
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-void ColorICCSelector::_updateSliders( gint ignore )
+void ColorICCSelectorImpl::_updateSliders( gint ignore )
 {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    if ( _color.icc )
+    if ( _owner->_color.icc )
     {
         for ( guint i = 0; i < _profChannelCount; i++ ) {
             gdouble val = 0.0;
-            if ( _color.icc->colors.size() > i ) {
-                if ( _fooScales[i] == 256 ) {
-                    val = (_color.icc->colors[i] + 128.0) / static_cast<gdouble>(_fooScales[i]);
+            if ( _owner->_color.icc->colors.size() > i ) {
+                if ( _compUI[i]._component.scale == 256 ) {
+                    val = (_owner->_color.icc->colors[i] + 128.0) / static_cast<gdouble>(_compUI[i]._component.scale);
                 } else {
-                    val = _color.icc->colors[i] / static_cast<gdouble>(_fooScales[i]);
+                    val = _owner->_color.icc->colors[i] / static_cast<gdouble>(_compUI[i]._component.scale);
                 }
             }
-            gtk_adjustment_set_value( _fooAdj[i], val );
+            gtk_adjustment_set_value( _compUI[i]._adj, val );
         }
 
-        if ( _prof) {
-            if (_prof->getTransfToSRGB8() ) {
+        if ( _prof ) {
+            if ( _prof->getTransfToSRGB8() ) {
                 for ( guint i = 0; i < _profChannelCount; i++ ) {
                     if ( static_cast<gint>(i) != ignore ) {
                         cmsUInt16Number* scratch = getScratch();
                         cmsUInt16Number filler[4] = {0, 0, 0, 0};
                         for ( guint j = 0; j < _profChannelCount; j++ ) {
-                            filler[j] = 0x0ffff * ColorScales::getScaled( _fooAdj[j] );
+                            filler[j] = 0x0ffff * ColorScales::getScaled( _compUI[j]._adj );
                         }
                         
                         cmsUInt16Number* p = scratch;
@@ -892,8 +982,8 @@ void ColorICCSelector::_updateSliders( gint ignore )
                         
                         cmsHTRANSFORM trans = _prof->getTransfToSRGB8();
                         if ( trans ) {
-                            cmsDoTransform( trans, scratch, _fooMap[i], 1024 );
-                            sp_color_slider_set_map( SP_COLOR_SLIDER(_fooSlider[i]), _fooMap[i] );
+                            cmsDoTransform( trans, scratch, _compUI[i]._map, 1024 );
+                            sp_color_slider_set_map( SP_COLOR_SLIDER(_compUI[i]._slider), _compUI[i]._map );
                         }
                     }
                 }
@@ -904,16 +994,15 @@ void ColorICCSelector::_updateSliders( gint ignore )
     (void)ignore;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    guint32 start = _color.toRGBA32( 0x00 );
-    guint32 mid = _color.toRGBA32( 0x7f );
-    guint32 end = _color.toRGBA32( 0xff );
+    guint32 start = _owner->_color.toRGBA32( 0x00 );
+    guint32 mid = _owner->_color.toRGBA32( 0x7f );
+    guint32 end = _owner->_color.toRGBA32( 0xff );
 
     sp_color_slider_set_colors( SP_COLOR_SLIDER(_slider), start, mid, end );
-
 }
 
 
-void ColorICCSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorICCSelector *cs )
+void ColorICCSelectorImpl::_adjustmentChanged( GtkAdjustment *adjustment, SPColorICCSelector *cs )
 {
 // // TODO check this. It looks questionable:
 //     // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
@@ -926,24 +1015,24 @@ void ColorICCSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorICC
 #endif // DEBUG_LCMS
 
      ColorICCSelector* iccSelector = static_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
-     if (iccSelector->_updating) {
+     if (iccSelector->_impl->_updating) {
          return;
      }
 
-     iccSelector->_updating = TRUE;
+     iccSelector->_impl->_updating = TRUE;
 
      gint match = -1;
 
      SPColor newColor( iccSelector->_color );
-     gfloat scaled = ColorScales::getScaled( iccSelector->_adj );
-     if ( iccSelector->_adj == adjustment ) {
+     gfloat scaled = ColorScales::getScaled( iccSelector->_impl->_adj );
+     if ( iccSelector->_impl->_adj == adjustment ) {
 #ifdef DEBUG_LCMS
          g_message("ALPHA");
 #endif // DEBUG_LCMS
      } else {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-         for ( guint i = 0; i < iccSelector->_fooCount; i++ ) {
-             if ( iccSelector->_fooAdj[i] == adjustment ) {
+         for ( size_t i = 0; i < iccSelector->_impl->_compUI.size(); i++ ) {
+             if ( iccSelector->_impl->_compUI[i]._adj == adjustment ) {
                  match = i;
                  break;
              }
@@ -957,11 +1046,11 @@ void ColorICCSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorICC
 
          cmsUInt16Number tmp[4];
          for ( guint i = 0; i < 4; i++ ) {
-             tmp[i] = ColorScales::getScaled( iccSelector->_fooAdj[i] ) * 0x0ffff;
+             tmp[i] = ColorScales::getScaled( iccSelector->_impl->_compUI[i]._adj ) * 0x0ffff;
          }
          guchar post[4] = {0,0,0,0};
 
-         cmsHTRANSFORM trans = iccSelector->_prof->getTransfToSRGB8();
+         cmsHTRANSFORM trans = iccSelector->_impl->_prof->getTransfToSRGB8();
          if ( trans ) {
              cmsDoTransform( trans, tmp, post, 1 );
          }
@@ -982,39 +1071,37 @@ void ColorICCSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorICC
 #endif // DEBUG_LCMS
              newColor = other;
              newColor.icc->colors.clear();
-             for ( guint i = 0; i < iccSelector->_profChannelCount; i++ ) {
-                 gdouble val = ColorScales::getScaled( iccSelector->_fooAdj[i] );
-                 if ( iccSelector->_fooScales ) {
-                     val *= iccSelector->_fooScales[i];
-                     if ( iccSelector->_fooScales[i] == 256 ) {
-                         val -= 128;
-                     }
+             for ( guint i = 0; i < iccSelector->_impl->_profChannelCount; i++ ) {
+                 gdouble val = ColorScales::getScaled( iccSelector->_impl->_compUI[i]._adj );
+                 val *= iccSelector->_impl->_compUI[i]._component.scale;
+                 if ( iccSelector->_impl->_compUI[i]._component.scale == 256 ) {
+                     val -= 128;
                  }
                  newColor.icc->colors.push_back( val );
              }
          }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
      }
-     iccSelector->_updateInternals( newColor, scaled, iccSelector->_dragging );
-     iccSelector->_updateSliders( match );
+     iccSelector->_updateInternals( newColor, scaled, iccSelector->_impl->_dragging );
+     iccSelector->_impl->_updateSliders( match );
 
-     iccSelector->_updating = FALSE;
+     iccSelector->_impl->_updating = FALSE;
 #ifdef DEBUG_LCMS
      g_message( "\\_________  %p::_adjustmentChanged()", cs );
 #endif // DEBUG_LCMS
 }
 
-void ColorICCSelector::_sliderGrabbed( SPColorSlider */*slider*/, SPColorICCSelector */*cs*/ )
+void ColorICCSelectorImpl::_sliderGrabbed( SPColorSlider * /*slider*/, SPColorICCSelector * /*cs*/ )
 {
 //    ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 //     if (!iccSelector->_dragging) {
 //         iccSelector->_dragging = TRUE;
 //         iccSelector->_grabbed();
-//         iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ), iccSelector->_dragging );
+//         iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_impl->_adj ), iccSelector->_dragging );
 //     }
 }
 
-void ColorICCSelector::_sliderReleased( SPColorSlider */*slider*/, SPColorICCSelector */*cs*/ )
+void ColorICCSelectorImpl::_sliderReleased( SPColorSlider * /*slider*/, SPColorICCSelector * /*cs*/ )
 {
 //     ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 //     if (iccSelector->_dragging) {
@@ -1025,9 +1112,9 @@ void ColorICCSelector::_sliderReleased( SPColorSlider */*slider*/, SPColorICCSel
 }
 
 #ifdef DEBUG_LCMS
-void ColorICCSelector::_sliderChanged( SPColorSlider *slider, SPColorICCSelector *cs )
+void ColorICCSelectorImpl::_sliderChanged( SPColorSlider *slider, SPColorICCSelector *cs )
 #else
-void ColorICCSelector::_sliderChanged( SPColorSlider */*slider*/, SPColorICCSelector */*cs*/ )
+void ColorICCSelectorImpl::_sliderChanged( SPColorSlider * /*slider*/, SPColorICCSelector * /*cs*/ )
 #endif // DEBUG_LCMS
 {
 #ifdef DEBUG_LCMS

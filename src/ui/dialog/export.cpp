@@ -20,6 +20,10 @@
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/dialog.h>
@@ -87,6 +91,7 @@
 #include <windows.h>
 #include <commdlg.h>
 #include <gdk/gdkwin32.h>
+#include <glibmm/fileutils.h>
 #endif
 
 #include <gtk/gtk.h>

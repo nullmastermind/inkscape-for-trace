@@ -64,7 +64,8 @@ extensions = \
 	foldablebox.py \
 	fractalize.py \
 	funcplot.py \
-	gears.py\
+	render_gears.py \
+	render_gear_rack.py \
 	gcodetools.py\
 	generate_voronoi.py \
 	gimp_xcf.py \
@@ -74,6 +75,9 @@ extensions = \
 	guides_creator.py \
 	guillotine.py \
 	handles.py \
+	hpgl_input.py \
+	hershey.py \
+	hersheydata.py \
 	hpgl_output.py \
 	ill2svg.pl \
 	ink2canvas.py \
@@ -242,7 +246,8 @@ modules = \
 	foldablebox.inx \
 	fractalize.inx \
 	funcplot.inx \
-	gears.inx\
+	render_gears.inx \
+	render_gear_rack.inx \
 	gcodetools_about.inx\
 	gcodetools_area.inx\
 	gcodetools_check_for_updates.inx\
@@ -262,6 +267,8 @@ modules = \
 	guides_creator.inx \
 	guillotine.inx \
 	handles.inx \
+	hpgl_input.inx \
+	hershey.inx \
 	hpgl_output.inx \
 	ink2canvas.inx \
 	inkscape_follow_link.inx \

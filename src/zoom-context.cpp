@@ -201,7 +201,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                 case GDK_KEY_KP_Up:
                 case GDK_KEY_KP_Down:
                     // prevent the zoom field from activation
-                    if (!MOD__CTRL_ONLY)
+                    if (!MOD__CTRL_ONLY(event))
                         ret = TRUE;
                     break;
 
@@ -214,7 +214,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                 case GDK_KEY_Delete:
                 case GDK_KEY_KP_Delete:
                 case GDK_KEY_BackSpace:
-                    ret = this->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    ret = this->deleteSelectedDrag(MOD__CTRL_ONLY(event));
                     break;
 
                 default:

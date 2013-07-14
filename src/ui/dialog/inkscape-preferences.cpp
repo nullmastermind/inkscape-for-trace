@@ -8,7 +8,7 @@
  *   Johan Engelen <j.b.c.engelen@ewi.utwente.nl>
  *   Bruno Dilly <bruno.dilly@gmail.com>
  *
- * Copyright (C) 2004-2011 Authors
+ * Copyright (C) 2004-2013 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -641,6 +641,15 @@ void InkscapePreferences::initPageUI()
     _win_ontop_none.init ( _("None"), "/options/transientpolicy/value", 0, false, 0);
     _win_ontop_normal.init ( _("Normal"), "/options/transientpolicy/value", 1, true, &_win_ontop_none);
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
+
+    {
+        Glib::ustring defaultSizeLabels[] = {_("Small"), _("Large"), _("Maximized")};
+        int defaultSizeValues[] = {0, 1, 2};
+
+        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), 1 );
+        _page_windows.add_line( false, _("Default window size:"),  _win_default_size, "",
+                           _("Set the default window size"), false);
+    }
 
     _page_windows.add_group_header( _("Saving window geometry (size and position)"));
     _page_windows.add_line( true, "", _win_save_geom_off, "",
@@ -1332,6 +1341,13 @@ void InkscapePreferences::initPageBehavior()
                            _("Update marker color when object color changes"));
 
     this->AddPage(_page_markers, _("Markers"), iter_behavior, PREFS_PAGE_BEHAVIOR_MARKERS);
+    
+    
+    _page_cleanup.add_group_header( _("Document cleanup"));
+    _cleanup_swatches.init ( _("Remove unused swatches when doing a document cleanup"), "/options/cleanupswatches/value", false); // text label
+    _page_cleanup.add_line( true, "", _cleanup_swatches, "",
+                           _("Remove unused swatches when doing a document cleanup")); // tooltip
+    this->AddPage(_page_cleanup, _("Cleanup"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLEANUP);
 }
 
 void InkscapePreferences::initPageRendering()
@@ -1423,6 +1439,9 @@ void InkscapePreferences::initPageBitmaps()
         Glib::ustring values[] = {"embed", "link", "ask"};
         _bitmap_import.init("/dialogs/import/link", labels, values, G_N_ELEMENTS(values), "ask");
         _page_bitmaps.add_line( false, _("Bitmap import:"), _bitmap_import, "", "", false);
+
+        _bitmap_import_quality.init("/dialogs/import/quality", 1, 100, 1, 1, 100, true, false);
+        _page_bitmaps.add_line( false, _("Bitmap import quality:"), _bitmap_import_quality, "%", "Bitmap import quality (jpeg only). 100 is best quality", false);
     }
     _importexport_import_res.init("/dialogs/import/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
     _page_bitmaps.add_line( false, _("Default _import resolution:"), _importexport_import_res, _("dpi"),

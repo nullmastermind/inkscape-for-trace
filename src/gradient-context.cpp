@@ -708,7 +708,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_x:
         case GDK_KEY_X:
-            if (MOD__ALT_ONLY) {
+            if (MOD__ALT_ONLY(event)) {
                 desktop->setToolboxFocusTo ("altx-grad");
                 ret = TRUE;
             }
@@ -716,7 +716,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_A:
         case GDK_KEY_a:
-            if (MOD__CTRL_ONLY && drag->isNonEmpty()) {
+            if (MOD__CTRL_ONLY(event) && drag->isNonEmpty()) {
                 drag->selectAll();
                 ret = TRUE;
             }
@@ -724,7 +724,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_L:
         case GDK_KEY_l:
-            if (MOD__CTRL_ONLY && drag->isNonEmpty() && drag->hasSelection()) {
+            if (MOD__CTRL_ONLY(event) && drag->isNonEmpty() && drag->hasSelection()) {
                 sp_gradient_simplify(this, 1e-4);
                 ret = TRUE;
             }
@@ -743,23 +743,22 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Left: // move handle left
         case GDK_KEY_KP_Left:
         case GDK_KEY_KP_4:
-            if (!MOD__CTRL) { // not ctrl
+            if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) {
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move_screen(mul*-10, 0); // shift
                     } else {
                     	drag->selected_move_screen(mul*-1, 0); // no shift
                     }
                 } else { // no alt
-                    if (MOD__SHIFT) {
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move(mul*-10*nudge, 0); // shift
                     } else {
                     	drag->selected_move(mul*-nudge, 0); // no shift
                     }
                 }
-
                 ret = TRUE;
             }
             break;
@@ -767,18 +766,17 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Up: // move handle up
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
-            if (!MOD__CTRL) { // not ctrl
+            if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
-
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) {
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move_screen(0, mul*10); // shift
                     } else {
                     	drag->selected_move_screen(0, mul*1); // no shift
                     }
                 } else { // no alt
-                    if (MOD__SHIFT) {
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move(0, mul*10*nudge); // shift
                     } else {
                     	drag->selected_move(0, mul*nudge); // no shift
@@ -792,18 +790,18 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Right: // move handle right
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
-            if (!MOD__CTRL) { // not ctrl
+            if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
 
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) {
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move_screen(mul*10, 0); // shift
                     } else {
                     	drag->selected_move_screen(mul*1, 0); // no shift
                     }
                 } else { // no alt
-                    if (MOD__SHIFT) {
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move(mul*10*nudge, 0); // shift
                     } else {
                     	drag->selected_move(mul*nudge, 0); // no shift
@@ -817,18 +815,18 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Down: // move handle down
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
-            if (!MOD__CTRL) { // not ctrl
+            if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
                     get_group0_keyval(&event->key), 0); // with any mask
 
-                if (MOD__ALT) { // alt
-                    if (MOD__SHIFT) {
+                if (MOD__ALT(event)) { // alt
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move_screen(0, mul*-10); // shift
                     } else {
                     	drag->selected_move_screen(0, mul*-1); // no shift
                     }
                 } else { // no alt
-                    if (MOD__SHIFT) {
+                    if (MOD__SHIFT(event)) {
                     	drag->selected_move(0, mul*-10*nudge); // shift
                     } else {
                     	drag->selected_move(0, mul*-nudge); // no shift
@@ -841,7 +839,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_r:
         case GDK_KEY_R:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_gradient_reverse_selected_gradients(desktop);
                 ret = TRUE;
             }
@@ -857,7 +855,7 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            ret = this->deleteSelectedDrag(MOD__CTRL_ONLY);
+            ret = this->deleteSelectedDrag(MOD__CTRL_ONLY(event));
             break;
 
         default:

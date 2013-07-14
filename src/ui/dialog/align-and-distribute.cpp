@@ -88,119 +88,73 @@ Action::Action(const Glib::ustring &id,
 }
 
 
-void ActionAlign::do_action(SPDesktop *desktop, int index) {
-
+void ActionAlign::do_action(SPDesktop *desktop, int index)
+{
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     if (!selection) return;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
-    int prefs_bbox = prefs->getBool("/tools/bounding_box");
 
     using Inkscape::Util::GSListConstIterator;
     std::list<SPItem *> selected;
     selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
     if (selected.empty()) return;
 
-    Geom::Point mp; //Anchor point
-    AlignAndDistribute::AlignTarget target = AlignAndDistribute::getAlignTarget();
-    const Coeffs &a= _allCoeffs[index];
-    switch (target)
-    {
-    case AlignAndDistribute::LAST:
-    case AlignAndDistribute::FIRST:
-    case AlignAndDistribute::BIGGEST:
-    case AlignAndDistribute::SMALLEST:
-    {
-        //Check 2 or more selected objects
-        std::list<SPItem *>::iterator second(selected.begin());
-        ++second;
-        if (second == selected.end())
-            return;
-        //Find the master (anchor on which the other objects are aligned)
-        std::list<SPItem *>::iterator master(
-                AlignAndDistribute::find_master (
-                selected,
-                (a.mx0 != 0.0) ||
-                (a.mx1 != 0.0) )
-            );
-        //remove the master from the selection
-        SPItem * thing = *master;
-        // TODO: either uncomment or remove the following commented lines, depending on which
-        //       behaviour of moving objects makes most sense; also cf. discussion at
-        //       https://bugs.launchpad.net/inkscape/+bug/255933
-        /*if (!sel_as_group) { */
-            selected.erase(master);
-        /*}*/
-        //Compute the anchor point
-        Geom::OptRect b = !prefs_bbox ? thing->desktopVisualBounds() : thing->desktopGeometricBounds();
-        if (b) {
-            mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
-                           a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
-        } else {
-            return;
-        }
-        break;
-    }
+    const Coeffs &a = _allCoeffs[index];
+    SPItem *focus = NULL;
+    Geom::OptRect b = Geom::OptRect();
+    Selection::CompareSize horiz = (a.mx0 != 0.0) || (a.mx1 != 0.0)
+        ? Selection::HORIZONTAL : Selection::VERTICAL;
 
-    case AlignAndDistribute::PAGE:
-        mp = Geom::Point(a.mx1 * sp_desktop_document(desktop)->getWidth(),
-                       a.my1 * sp_desktop_document(desktop)->getHeight());
-        break;
-
-    case AlignAndDistribute::DRAWING:
+    switch (AlignTarget(prefs->getInt("/dialogs/align/align-to", 6)))
     {
-        Geom::OptRect b = !prefs_bbox ? sp_desktop_document(desktop)->getRoot()->desktopVisualBounds()
-                                      : sp_desktop_document(desktop)->getRoot()->desktopGeometricBounds();
-        if (b) {
-            mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
-                           a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
-        } else {
-            return;
-        }
+    case LAST:
+        focus = SP_ITEM(*selected.begin());
         break;
-    }
-
-    case AlignAndDistribute::SELECTION:
-    {
-        Geom::OptRect b = !prefs_bbox ? selection->visualBounds() : selection->geometricBounds();
-        if (b) {
-            mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
-                           a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
-        } else {
-            return;
-        }
+    case FIRST:
+        focus = SP_ITEM(*--(selected.end()));
         break;
-    }
-
+    case BIGGEST:
+        focus = selection->largestItem(horiz);
+        break;
+    case SMALLEST:
+        focus = selection->smallestItem(horiz);
+        break;
+    case PAGE:
+        b = sp_desktop_document(desktop)->preferredBounds();
+        break;
+    case DRAWING:
+        b = sp_desktop_document(desktop)->getRoot()->desktopPreferredBounds();
+        break;
+    case SELECTION:
+        b = selection->preferredBounds();
+        break;
     default:
         g_assert_not_reached ();
         break;
-    };  // end of switch
+    };
 
-    // Top hack: temporarily set clone compensation to unmoved, so that we can align/distribute
-    // clones with their original (and the move of the original does not disturb the
-    // clones). The only problem with this is that if there are outside-of-selection clones of
-    // a selected original, they will be unmoved too, possibly contrary to user's
-    // expecation. However this is a minor point compared to making align/distribute always
-    // work as expected, and "unmoved" is the default option anyway.
-    int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-    prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+    if(focus)
+        b = focus->desktopPreferredBounds();
+    g_return_if_fail(b);
+
+    // Generate the move point from the selected bounding box
+    Geom::Point mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
+                                 a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
 
     bool changed = false;
-    Geom::OptRect b;
     if (sel_as_group)
-        b = !prefs_bbox ? selection->visualBounds() : selection->geometricBounds();
+        b = selection->preferredBounds();
 
     //Move each item in the selected list separately
     for (std::list<SPItem *>::iterator it(selected.begin());
-         it != selected.end();
-         it++)
+         it != selected.end(); ++it)
     {
         sp_desktop_document (desktop)->ensureUpToDate();
         if (!sel_as_group)
-            b = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
-        if (b) {
+            b = (*it)->desktopPreferredBounds();
+        if (b && (!focus || (*it) != focus)) {
             Geom::Point const sp(a.sx0 * b->min()[Geom::X] + a.sx1 * b->max()[Geom::X],
                                  a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
             Geom::Point const mp_rel( mp - sp );
@@ -211,15 +165,10 @@ void ActionAlign::do_action(SPDesktop *desktop, int index) {
         }
     }
 
-    // restore compensation setting
-    prefs->setInt("/options/clonecompensation/value", saved_compensation);
-
     if (changed) {
         DocumentUndo::done( sp_desktop_document(desktop) , SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
                             _("Align"));
     }
-
-
 }
 
 
@@ -347,7 +296,7 @@ private :
             float pos = sorted.front().bbox.min()[_orientation];
             for ( std::vector<BBoxSort> ::iterator it (sorted.begin());
                   it < sorted.end();
-                  it ++ )
+                  ++it )
             {
                 if (!Geom::are_near(pos, it->bbox.min()[_orientation], 1e-6)) {
                     Geom::Point t(0.0, 0.0);
@@ -1264,69 +1213,6 @@ void AlignAndDistribute::addBaselineButton(const Glib::ustring &id, const Glib::
             id, tiptext, row, col,
             *this, table, orientation, distribute));
 }
-
-
-
-
-std::list<SPItem *>::iterator AlignAndDistribute::find_master( std::list<SPItem *> &list, bool horizontal){
-    std::list<SPItem *>::iterator master = list.end();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int prefs_bbox = prefs->getBool("/tools/bounding_box");
-    switch (getAlignTarget()) {
-    case LAST:
-        return list.begin();
-        break;
-
-    case FIRST:
-        return --(list.end());
-        break;
-
-    case BIGGEST:
-    {
-        gdouble max = -1e18;
-        for (std::list<SPItem *>::iterator it = list.begin(); it != list.end(); ++it) {
-            Geom::OptRect b = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
-            if (b) {
-                gdouble dim = (*b)[horizontal ? Geom::X : Geom::Y].extent();
-                if (dim > max) {
-                    max = dim;
-                    master = it;
-                }
-            }
-        }
-        return master;
-    }
-
-    case SMALLEST:
-    {
-        gdouble max = 1e18;
-        for (std::list<SPItem *>::iterator it = list.begin(); it != list.end(); ++it) {
-            Geom::OptRect b = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
-            if (b) {
-                gdouble dim = (*b)[horizontal ? Geom::X : Geom::Y].extent();
-                if (dim < max) {
-                    max = dim;
-                    master = it;
-                }
-            }
-        }
-        return master;
-    }
-
-    default:
-        g_assert_not_reached ();
-        break;
-
-    } // end of switch statement
-    return master;
-}
-
-AlignAndDistribute::AlignTarget AlignAndDistribute::getAlignTarget() {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    return AlignTarget(prefs->getInt("/dialogs/align/align-to", 6));
-}
-
-
 
 } // namespace Dialog
 } // namespace UI

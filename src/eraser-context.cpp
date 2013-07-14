@@ -539,7 +539,7 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
         switch (get_group0_keyval (&event->key)) {
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
-            if (!MOD__CTRL_ONLY) {
+            if (!MOD__CTRL_ONLY(event)) {
                 this->angle += 5.0;
 
                 if (this->angle > 90.0) {
@@ -553,7 +553,7 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
-            if (!MOD__CTRL_ONLY) {
+            if (!MOD__CTRL_ONLY(event)) {
                 this->angle -= 5.0;
 
                 if (this->angle < -90.0) {
@@ -567,7 +567,7 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_Right:
         case GDK_KEY_KP_Right:
-            if (!MOD__CTRL_ONLY) {
+            if (!MOD__CTRL_ONLY(event)) {
                 this->width += 0.01;
 
                 if (this->width > 1.0) {
@@ -581,7 +581,7 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_Left:
         case GDK_KEY_KP_Left:
-            if (!MOD__CTRL_ONLY) {
+            if (!MOD__CTRL_ONLY(event)) {
                 this->width -= 0.01;
 
                 if (this->width < 0.01) {
@@ -609,7 +609,7 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_x:
         case GDK_KEY_X:
-            if (MOD__ALT_ONLY) {
+            if (MOD__ALT_ONLY(event)) {
                 desktop->setToolboxFocusTo ("altx-eraser");
                 ret = TRUE;
             }
@@ -627,7 +627,7 @@ gint SPEraserContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_z:
         case GDK_KEY_Z:
-            if (MOD__CTRL_ONLY && this->is_drawing) {
+            if (MOD__CTRL_ONLY(event) && this->is_drawing) {
                 // if drawing, cancel, otherwise pass it up for undo
                 eraser_cancel (this);
                 ret = TRUE;
@@ -750,7 +750,7 @@ set_to_accumulated(SPEraserContext *dc)
 
                                 selection->set(item);
                                 selection->add(dup);
-                                sp_selected_path_diff_skip_undo(desktop);
+                                sp_selected_path_diff_skip_undo(selection, desktop);
                                 workDone = true; // TODO set this only if something was cut.
 
                                 if ( !selection->isEmpty() ) {

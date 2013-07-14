@@ -27,6 +27,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "helper/action.h"
+#include "helper/action-context.h"
 #include "inkscape.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
@@ -41,6 +42,7 @@
 #include "xml/repr.h"
 #include "sp-root.h"
 #include "event-context.h"
+#include "selection-chemistry.h"
 
 //#define DUMP_LAYERS 1
 
@@ -98,7 +100,7 @@ void LayersPanel::_styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned i
     if ( desktop ) {
         Verb *verb = Verb::get( code );
         if ( verb ) {
-            SPAction *action = verb->get_action(desktop);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !set && action && action->image ) {
                 GtkWidget *child = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, action->image );
                 gtk_widget_show( child );
@@ -130,7 +132,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
     if ( desktop ) {
         Verb *verb = Verb::get( code );
         if ( verb ) {
-            SPAction *action = verb->get_action(desktop);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !iconWidget && action && action->image ) {
                 iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, action->image );
             }
@@ -171,7 +173,7 @@ void LayersPanel::_fireAction( unsigned int code )
     if ( _desktop ) {
         Verb *verb = Verb::get( code );
         if ( verb ) {
-            SPAction *action = verb->get_action(_desktop);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
             if ( action ) {
                 sp_action_perform( action, NULL );
 //             } else {
@@ -403,13 +405,13 @@ void LayersPanel::_addLayer( SPDocument* doc, SPObject* layer, Gtk::TreeModel::R
             SPObject *child = _desktop->layer_manager->nthChildOf(layer, i);
             if ( child ) {
 #if DUMP_LAYERS
-                g_message(" %3d    layer:%p  {%s}   [%s]", level, child, child->id, child->label() );
+                g_message(" %3d    layer:%p  {%s}   [%s]", level, child, child->getId(), child->label() );
 #endif // DUMP_LAYERS
 
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
                 Gtk::TreeModel::Row row = *iter;
                 row[_model->_colObject] = child;
-                row[_model->_colLabel] = child->label() ? child->label() : child->getId();
+                row[_model->_colLabel] = child->defaultLabel();
                 row[_model->_colVisible] = SP_IS_ITEM(child) ? !SP_ITEM(child)->isHidden() : false;
                 row[_model->_colLocked] = SP_IS_ITEM(child) ? SP_ITEM(child)->isLocked() : false;
 
@@ -536,6 +538,7 @@ void LayersPanel::_toggled( Glib::ustring const& str, int targetCol )
             break;
         }
     }
+    Inkscape::SelectionHelper::fixSelection(_desktop);
 }
 
 bool LayersPanel::_handleKeyEvent(GdkEventKey *event)

@@ -129,7 +129,7 @@ void ColorNotebook::switchPage(GtkNotebook*,
         csel->base->getColorAlpha(_color, _alpha);
     }
     widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (_book), page_num);
-    if ( widget && SP_IS_COLOR_SELECTOR (widget) )
+    if ( widget && SP_IS_COLOR_SELECTOR(widget) )
     {
         csel = SP_COLOR_SELECTOR (widget);
         csel->base->setColorAlpha( _color, _alpha );
@@ -165,9 +165,7 @@ gint ColorNotebook::menuHandler( GdkEvent* event )
 
 static void sp_color_notebook_menuitem_response (GtkMenuItem *menuitem, gpointer user_data)
 {
-    gboolean active = FALSE;
-
-    active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem));
+    gboolean active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem));
     SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (user_data);
     if ( entry )
     {
@@ -234,7 +232,7 @@ void ColorNotebook::init()
         {
             guint howmany = 1;
             gpointer klass = g_type_class_ref (selector_types[i]);
-            if ( klass && SP_IS_COLOR_SELECTOR_CLASS (klass) )
+            if ( klass && SP_IS_COLOR_SELECTOR_CLASS(klass) )
             {
                 SPColorSelectorClass *ck = SP_COLOR_SELECTOR_CLASS (klass);
                 howmany = MAX (1, ck->submode_count);
@@ -653,8 +651,11 @@ void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
 
 void ColorNotebook::_setCurrentPage(int i)
 {
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (_book), i);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(_buttons[i]), TRUE);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(_book), i);
+
+    if (_buttons && _trackerList && (static_cast<size_t>(i) < _trackerList->len) ) {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(_buttons[i]), TRUE);
+    }
 }
 
 void ColorNotebook::_buttonClicked(GtkWidget *widget,  SPColorNotebook *colorbook)

@@ -513,7 +513,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 selection->clear();
                 selection->add(item_copied);
                 selection->add(unionResult);
-                sp_selected_path_union_skip_undo(selection->desktop());
+                sp_selected_path_union_skip_undo(selection, selection->desktop());
                 selection->add(father);
                 Inkscape::GC::release(copy2);
                 did = true;
@@ -651,7 +651,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                 tc->has_dilated = false;
 
                 if(tc->is_dilating && event->button.button == 1 && !event_context->space_panning) {
-                    sp_spray_dilate(tc, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT);
+                    sp_spray_dilate(tc, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
                 }
 
                 tc->has_dilated = true;
@@ -744,7 +744,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                 if (!tc->has_dilated) {
                     // if we did not rub, do a light tap
                     tc->pressure = 0.03;
-                    sp_spray_dilate(tc, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT);
+                    sp_spray_dilate(tc, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
                 }
                 tc->is_dilating = false;
                 tc->has_dilated = false;
@@ -770,28 +770,28 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
             switch (get_group0_keyval (&event->key)) {
                 case GDK_KEY_j:
                 case GDK_KEY_J:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_spray_switch_mode(tc, SPRAY_MODE_COPY, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_spray_switch_mode(tc, SPRAY_MODE_COPY, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_k:
                 case GDK_KEY_K:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_spray_switch_mode(tc, SPRAY_MODE_CLONE, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_spray_switch_mode(tc, SPRAY_MODE_CLONE, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_l:
                 case GDK_KEY_L:
-                    if (MOD__SHIFT_ONLY) {
-                        sp_spray_switch_mode(tc, SPRAY_MODE_SINGLE_PATH, MOD__SHIFT);
+                    if (MOD__SHIFT_ONLY(event)) {
+                        sp_spray_switch_mode(tc, SPRAY_MODE_SINGLE_PATH, MOD__SHIFT(event));
                         ret = TRUE;
                     }
                     break;
                 case GDK_KEY_Up:
                 case GDK_KEY_KP_Up:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->population += 0.01;
                         if (tc->population > 1.0) {
                             tc->population = 1.0;
@@ -802,7 +802,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                     break;
                 case GDK_KEY_Down:
                 case GDK_KEY_KP_Down:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->population -= 0.01;
                         if (tc->population < 0.0) {
                             tc->population = 0.0;
@@ -813,7 +813,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                     break;
                 case GDK_KEY_Right:
                 case GDK_KEY_KP_Right:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->width += 0.01;
                         if (tc->width > 1.0) {
                             tc->width = 1.0;
@@ -826,7 +826,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                     break;
                 case GDK_KEY_Left:
                 case GDK_KEY_KP_Left:
-                    if (!MOD__CTRL_ONLY) {
+                    if (!MOD__CTRL_ONLY(event)) {
                         tc->width -= 0.01;
                         if (tc->width < 0.01) {
                             tc->width = 0.01;
@@ -852,7 +852,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                     break;
                 case GDK_KEY_x:
                 case GDK_KEY_X:
-                    if (MOD__ALT_ONLY) {
+                    if (MOD__ALT_ONLY(event)) {
                         desktop->setToolboxFocusTo("altx-spray");
                         ret = TRUE;
                     }
@@ -867,7 +867,7 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                 case GDK_KEY_Delete:
                 case GDK_KEY_KP_Delete:
                 case GDK_KEY_BackSpace:
-                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY);
+                    ret = event_context->deleteSelectedDrag(MOD__CTRL_ONLY(event));
                     break;
 
                 default:
@@ -884,11 +884,11 @@ gint SPSprayContext::root_handler(GdkEvent* event) {
                     break;
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:
-                    sp_spray_switch_mode (tc, prefs->getInt("/tools/spray/mode"), MOD__SHIFT);
+                    sp_spray_switch_mode (tc, prefs->getInt("/tools/spray/mode"), MOD__SHIFT(event));
                     tc->_message_context->clear();
                     break;
                 default:
-                    sp_spray_switch_mode (tc, prefs->getInt("/tools/spray/mode"), MOD__SHIFT);
+                    sp_spray_switch_mode (tc, prefs->getInt("/tools/spray/mode"), MOD__SHIFT(event));
                     break;
             }
         }

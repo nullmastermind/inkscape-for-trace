@@ -348,7 +348,7 @@ gint SPDropperContext::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_Down:
             // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY) {
+            if (!MOD__CTRL_ONLY(event)) {
                 ret = TRUE;
             }
             break;

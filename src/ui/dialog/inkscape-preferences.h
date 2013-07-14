@@ -7,7 +7,7 @@
  *   Johan Engelen <j.b.c.engelen@ewi.utwente.nl>
  *   Bruno Dilly <bruno.dilly@gmail.com>
  *
- * Copyright (C) 2004-2007 Authors
+ * Copyright (C) 2004-2013 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -74,6 +74,7 @@ enum {
     PREFS_PAGE_BEHAVIOR_CLONES,
     PREFS_PAGE_BEHAVIOR_MASKS,
     PREFS_PAGE_BEHAVIOR_MARKERS,
+    PREFS_PAGE_BEHAVIOR_CLEANUP,
     PREFS_PAGE_IO,
     PREFS_PAGE_IO_MOUSE,
     PREFS_PAGE_IO_SVGOUTPUT,
@@ -167,6 +168,7 @@ protected:
     UI::Widget::DialogPage _page_clones;
     UI::Widget::DialogPage _page_mask;
     UI::Widget::DialogPage _page_markers;
+    UI::Widget::DialogPage _page_cleanup;
 
     UI::Widget::DialogPage _page_io;
     UI::Widget::DialogPage _page_mouse;
@@ -241,6 +243,7 @@ protected:
     UI::Widget::PrefRadioButton _win_gtk;
     UI::Widget::PrefRadioButton _win_save_dialog_pos_on;
     UI::Widget::PrefRadioButton _win_save_dialog_pos_off;
+    UI::Widget::PrefCombo       _win_default_size;
     UI::Widget::PrefRadioButton _win_ontop_none;
     UI::Widget::PrefRadioButton _win_ontop_normal;
     UI::Widget::PrefRadioButton _win_ontop_agressive;
@@ -310,6 +313,8 @@ protected:
     UI::Widget::PrefCheckButton _markers_color_stock;
     UI::Widget::PrefCheckButton _markers_color_custom;
     UI::Widget::PrefCheckButton _markers_color_update;
+    
+    UI::Widget::PrefCheckButton _cleanup_swatches;
 
     UI::Widget::PrefSpinButton  _importexport_export_res;
     UI::Widget::PrefSpinButton  _importexport_import_res;
@@ -366,6 +371,7 @@ protected:
     UI::Widget::PrefCheckButton _misc_bitmap_autoreload;
     UI::Widget::PrefSpinButton  _bitmap_copy_res;
     UI::Widget::PrefCombo       _bitmap_import;
+    UI::Widget::PrefSpinButton  _bitmap_import_quality;
 
     UI::Widget::PrefEntry       _kb_search;
     UI::Widget::PrefCombo       _kb_filelist;

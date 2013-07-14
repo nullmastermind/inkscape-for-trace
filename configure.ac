@@ -630,6 +630,14 @@ PKG_CHECK_MODULES(INKSCAPE,
 		  sigc++-2.0  >= 2.0.12
 		  )
 
+dnl Check whether we need to use new Glib::Thread::Mutex API.
+dnl TODO: Drop this test once we bump the required version of glibmm to 2.32
+PKG_CHECK_MODULES(GLIBMM_2_32, glibmm-2.4 >= 2.32, with_glibmm_2_32=yes, with_glibmm_2_32=no)
+
+if test "x$with_glibmm_2_32" = "xyes"; then
+	AC_DEFINE(WITH_GLIBMM_2_32,1,[Build with Glibmm 2.32 or higher])
+fi
+
 dnl *********************************
 dnl   Allow experimental GTK+3 build
 dnl *********************************
@@ -664,6 +672,16 @@ if test "x$enable_gtk3" = "xyes"; then
 		AC_DEFINE(WITH_EXT_GDL,1,[Build with external GDL])
 	else
 		AC_MSG_ERROR([Some dependencies were not fulfilled for the experimental GTK+ 3 build. One possible cause for this is a new dependency on the gdl-3.0 development package.])
+	fi
+
+	# Check whether we are using Gdl >= 3.6.  This version introduced an API/ABI change.
+	# TODO: We should drop support for older versions of Gdl once all supported distros
+	#       provide Gdl 3.6 or higher
+	PKG_CHECK_MODULES(GDL_3_6, gdl-3.0 >= 3.6, with_gdl_3_6=yes, with_gdl_3_6=no)
+
+	if test "x$with_gdl_3_6" = "xyes"; then
+		AC_MSG_RESULT([Using Gdl 3.6 or higher])
+		AC_DEFINE(WITH_GDL_3_6,1,[Build with Gdl 3.6 or higher])
 	fi
 
 	dnl The following test is only defined if Gtk+ 3 development libraries
@@ -943,7 +961,7 @@ dnl set correctly because the gettext function isn't noticed.
 if test "$ac_cv_header_libintl_h" = "yes" &&
    test "$ac_cv_func_bind_textdomain_codeset" = "yes"  &&
    test "$gt_cv_func_have_gettext" != "yes"; then
-    AC_DEFINE(ENABLE_NLS)
+    AC_DEFINE([ENABLE_NLS], [], [Description])
 fi
 
 dnl ******************************
@@ -986,6 +1004,14 @@ dnl
 
 AC_SUBST(INKSCAPE_CFLAGS)
 AC_SUBST(INKSCAPE_LIBS)
+
+
+dnl Check to see if we have a newer (2.32.0+) glibmm
+TMP_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$GTK_CFLAGS $CPPFLAGS"
+AC_CHECK_HEADERS([glibmm/threads.h])
+CPPFLAGS="$TMP_CPPFLAGS"
+
 
 dnl Define our data paths for config.h
 AC_DEFINE_DIR([INKSCAPE_DATADIR], [datadir], [Base data directory])

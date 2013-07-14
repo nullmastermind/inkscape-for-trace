@@ -15,6 +15,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/entry.h>
 #include <gtkmm/window.h>
 #include <gdk/gdkkeysyms.h>
@@ -112,7 +116,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
                 case GDK_KEY_w:
                 case GDK_KEY_W:
                     // close dialog
-                    if (MOD__CTRL_ONLY) {
+                    if (MOD__CTRL_ONLY(event)) {
 
                         /* this code sends a delete_event to the dialog,
                          * instead of just destroying it, so that the

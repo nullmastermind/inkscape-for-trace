@@ -96,7 +96,9 @@ inkscape_desktop_init_dbus ()
     GError *error;
     DBusGProxy *proxy;
   
+#if !GLIB_CHECK_VERSION(2,36,0)
     g_type_init ();
+#endif
 
     error = NULL;
     connection = dbus_g_bus_get (DBUS_BUS_SESSION,
@@ -686,23 +688,13 @@ inkscape_selection_to_path (DocumentInterface *doc, GError **error)
 }
 
 //static
-char *
+char **
 inkscape_selection_combine (DocumentInterface *doc, const char * IN_type, GError **error)
 {
-  char * OUT_newpath;
+  char ** OUT_newpaths;
   DBusGProxy *proxy = doc->proxy;
-  org_inkscape_document_selection_combine (proxy, IN_type, &OUT_newpath, error);
-  return OUT_newpath;
-}
-
-//static
-char **
-inkscape_selection_divide (DocumentInterface *doc, GError **error)
-{
-  char ** OUT_pieces; 
-  DBusGProxy *proxy = doc->proxy;
-  org_inkscape_document_selection_divide (proxy, &OUT_pieces, error);
-  return OUT_pieces;
+  org_inkscape_document_selection_combine (proxy, IN_type, &OUT_newpaths, error);
+  return OUT_newpaths;
 }
 
 //static

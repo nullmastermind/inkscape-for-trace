@@ -2,9 +2,10 @@
  * @brief Symbols dialog
  */
 /* Authors:
- *   Tavmjong Bah
+ *   Tavmjong Bah, Martin Owens
  *
  * Copyright (C) 2012 Tavmjong Bah
+ *               2013 Martin Owens
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -29,8 +30,27 @@ namespace Dialog {
 class SymbolColumns; // For Gtk::ListStore
 
 /**
- * A dialog that displays selectable symbols.
+ * A dialog that displays selectable symbols and allows users to drag or paste
+ * those symbols from the dialog into the document.
+ *
+ * Symbol documents are loaded from the preferences paths and displayed in a
+ * drop-down list to the user. The user then selects which of the symbols
+ * documents they want to get symbols from. The first document in the list is
+ * always the current document.
+ *
+ * This then updates an icon-view with all the symbols available. Selecting one
+ * puts it onto the clipboard. Dragging it or pasting it onto the canvas copies
+ * the symbol from the symbol document, into the current document and places a
+ * new <use element at the correct location on the canvas.
+ *
+ * Selected groups on the canvas can be added to the current document's symbols
+ * table, and symbols can be removed from the current document. This allows
+ * new symbols documents to be constructed and if saved in the prefs folder will
+ * make those symbols available for all future documents.
  */
+
+const int SYMBOL_ICON_SIZES[] = {16, 24, 32, 48, 64};
+
 class SymbolsDialog : public UI::Widget::Panel {
 
 public:
@@ -45,8 +65,15 @@ private:
 
     static SymbolColumns *getColumns();
 
+    void zoomin();
+    void zoomout();
     void rebuild();
+    void insertSymbol();
+    void revertSymbol();
     void defsModified(SPObject *object, guint flags);
+    void selectionChanged(Inkscape::Selection *selection);
+    SPDocument* selectedSymbols();
+    Glib::ustring selectedSymbolId();
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
 
@@ -67,12 +94,15 @@ private:
     /* Keep track of all symbol template documents */
     std::map<Glib::ustring, SPDocument*> symbolSets;
 
+    // Index into sizes which is selected
+    int in_sizes;
 
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::ComboBoxText* symbolSet;
     Gtk::IconView* iconView;
-    Gtk::ComboBoxText* previewScale;
-    Gtk::ComboBoxText* previewSize;
+    Gtk::Button* addSymbol;
+    Gtk::Button* removeSymbol;
+    Gtk::ToggleButton* fitSymbol;
 
     void setTargetDesktop(SPDesktop *desktop);
     SPDesktop*  currentDesktop;

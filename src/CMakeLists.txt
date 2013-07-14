@@ -239,6 +239,7 @@ set(inkscape_SRC
 	knotholder.cpp
 	layer-fns.cpp
 	layer-manager.cpp
+  layer-model.cpp
 	line-geometry.cpp
 	line-snapper.cpp
 	lpe-tool-context.cpp
@@ -398,6 +399,7 @@ set(inkscape_SRC
 	knotholder.h
 	layer-fns.h
 	layer-manager.h
+  layer-model.h
 	line-geometry.h
 	line-snapper.h
 	lpe-tool-context.h
@@ -407,7 +409,6 @@ set(inkscape_SRC
 	marker.h
 	measure-context.h
 	media.h
-	memeq.h
 	menus-skeleton.h
 	mesh-context.h
 	message-context.h

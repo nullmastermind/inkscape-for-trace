@@ -29,6 +29,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/action.h>
 #include <gtkmm/actiongroup.h>
@@ -43,6 +47,8 @@
 #include "../ege-output-action.h"
 #include "../ege-select-one-action.h"
 #include "../graphlayout.h"
+#include "../helper/action.h"
+#include "../helper/action-context.h"
 #include "../helper/unit-menu.h"
 #include "../helper/units.h"
 #include "../helper/unit-tracker.h"
@@ -589,9 +595,9 @@ private:
 Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view)
 {
     Glib::RefPtr<VerbAction> result;
-    SPAction *action = verb->get_action(view);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
     if ( action ) {
-        //SPAction* action2 = verb2 ? verb2->get_action(view) : 0;
+        //SPAction* action2 = verb2 ? verb2->get_action(Inkscape::ActionContext(view)) : 0;
         result = Glib::RefPtr<VerbAction>(new VerbAction(verb, verb2, view));
     }
 
@@ -678,7 +684,7 @@ void VerbAction::set_active(bool active)
 void VerbAction::on_activate()
 {
     if ( verb ) {
-        SPAction *action = verb->get_action(view);
+        SPAction *action = verb->get_action(Inkscape::ActionContext(view));
         if ( action ) {
             sp_action_perform(action, 0);
         }
@@ -768,14 +774,14 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
                                                              Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
                                                              Inkscape::UI::View::View *view)
 {
-    SPAction *action = verb->get_action(view);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
     if (!action) {
         return NULL;
     }
 
     SPAction *doubleclick_action;
     if (doubleclick_verb) {
-        doubleclick_action = doubleclick_verb->get_action(view);
+        doubleclick_action = doubleclick_verb->get_action(Inkscape::ActionContext(view));
     } else {
         doubleclick_action = NULL;
     }
@@ -820,7 +826,7 @@ static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::Vi
 {
     GtkAction* act = 0;
 
-    SPAction* targetAction = verb->get_action(view);
+    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
     InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_name()), verb->get_tip(), verb->get_image(), size  );
     act = GTK_ACTION(inky);
     gtk_action_set_sensitive( act, targetAction->sensitive );

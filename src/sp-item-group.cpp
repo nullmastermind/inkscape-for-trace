@@ -405,7 +405,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
     SPItem *gitem = group;
     Inkscape::XML::Node *grepr = gitem->getRepr();
 
-    g_return_if_fail (!strcmp (grepr->name(), "svg:g") || !strcmp (grepr->name(), "svg:a") || !strcmp (grepr->name(), "svg:switch"));
+    g_return_if_fail (!strcmp (grepr->name(), "svg:g")
+                   || !strcmp (grepr->name(), "svg:a")
+                   || !strcmp (grepr->name(), "svg:switch")
+                   || !strcmp (grepr->name(), "svg:svg"));
 
     // this converts the gradient/pattern fill/stroke on the group, if any, to userSpaceOnUse
     gitem->adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
@@ -546,8 +549,9 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
         item->doWriteTransform(repr, item->transform, NULL, false);
 
         Inkscape::GC::release(repr);
-        if (children && SP_IS_ITEM (item))
-            *children = g_slist_prepend (*children, item);
+        if (children && SP_IS_ITEM(item)) {
+            *children = g_slist_prepend(*children, item);
+        }
 
         items = g_slist_remove (items, items->data);
     }

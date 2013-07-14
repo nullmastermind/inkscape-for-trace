@@ -26,6 +26,7 @@
 #include "document-undo.h"
 #include "selection.h"
 #include "sp-cursor.h"
+#include "style.h"
 #include "pixmaps/cursor-select-m.xpm"
 #include "pixmaps/cursor-select-d.xpm"
 #include "pixmaps/handles.xpm"
@@ -57,12 +58,6 @@ GdkPixbuf *handles[13];
 
 static gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
 static gint drag_escaped = 0; // if non-zero, drag was canceled by esc
-
-//static gint xp = 0, yp = 0; // where drag started
-//static gint tolerance = 0;
-//static bool within_tolerance = false;
-
-
 #include "tool-factory.h"
 
 namespace {
@@ -78,6 +73,17 @@ const std::string& SPSelectContext::getPrefsPath() {
 }
 
 const std::string SPSelectContext::prefsPath = "/tools/select";
+
+
+//Creates rotated variations for handles
+static void
+sp_load_handles(int start, int count, char const **xpm) {
+    handles[start] = gdk_pixbuf_new_from_xpm_data((gchar const **)xpm);
+    for(int i = start + 1; i < start + count; i++) {
+        // We use either the original at *start or previous loop item to rotate
+        handles[i] = gdk_pixbuf_rotate_simple(handles[i-1], GDK_PIXBUF_ROTATE_CLOCKWISE);
+    }
+}
 
 SPSelectContext::SPSelectContext() : SPEventContext() {
 	this->grabbed = 0;
@@ -96,25 +102,26 @@ SPSelectContext::SPSelectContext() : SPEventContext() {
     this->_seltrans = NULL;
     this->_describer = NULL;
 
+
     // cursors in select context
     CursorSelectMouseover = sp_cursor_new_from_xpm(cursor_select_m_xpm , 1, 1);
     CursorSelectDragging = sp_cursor_new_from_xpm(cursor_select_d_xpm , 1, 1);
     
     // selection handles
-    handles[0]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_scale_nw_xpm);
-    handles[1]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_scale_ne_xpm);
-    handles[2]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_scale_h_xpm);
-    handles[3]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_scale_v_xpm);
-    handles[4]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_nw_xpm);
-    handles[5]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_n_xpm);
-    handles[6]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_ne_xpm);
-    handles[7]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_e_xpm);
-    handles[8]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_se_xpm);
-    handles[9]  = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_s_xpm);
-    handles[10] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_sw_xpm);
-    handles[11] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_rotate_w_xpm);
-    handles[12] = gdk_pixbuf_new_from_xpm_data((gchar const **)handle_center_xpm);
+    sp_load_handles(0, 2, handle_scale_xpm);
+    sp_load_handles(2, 2, handle_stretch_xpm);
+    sp_load_handles(4, 4, handle_rotate_xpm);
+    sp_load_handles(8, 4, handle_skew_xpm);
+    sp_load_handles(12, 1, handle_center_xpm);
 }
+
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+static bool within_tolerance = false;
+static bool is_cycling = false;
+static bool moved_while_cycling = false;
+SPEventContext *prev_event_context = NULL;
+
 
 SPSelectContext::~SPSelectContext() {
     this->enableGrDrag(false);
@@ -428,6 +435,26 @@ sp_select_context_cycle_through_items(SPSelectContext *sc, Inkscape::Selection *
         selection->set(item);
 }
 
+
+static void
+sp_select_context_reset_opacities(SPEventContext *event_context)
+{
+    // SPDesktop *desktop = event_context->desktop;
+	SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
+	Inkscape::DrawingItem *arenaitem;
+	for (GList *l = sc->cycling_items; l != NULL; l = g_list_next(l)) {
+		arenaitem = SP_ITEM(l->data)->get_arenaitem(event_context->desktop->dkey);
+		arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(SP_ITEM(l->data)->style->opacity.value));
+		}
+	g_list_free(sc->cycling_items);
+	g_list_free(sc->cycling_items_selected_before);
+	g_list_free(sc->cycling_items_cmp);
+	sc->cycling_items = NULL;
+	sc->cycling_items_selected_before = NULL;
+	sc->cycling_cur_item = NULL;
+	sc->cycling_items_cmp = NULL;
+}
+
 gint SPSelectContext::root_handler(GdkEvent* event) {
     SPItem *item = NULL;
     SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
@@ -510,8 +537,15 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
             }
             break;
 
-        case GDK_MOTION_NOTIFY: {
-            tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+        case GDK_MOTION_NOTIFY:
+        {
+		if (is_cycling)
+			{
+			moved_while_cycling = true;
+			prev_event_context = this;
+			}
+            
+			tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
@@ -769,6 +803,15 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
             GdkEventScroll *scroll_event = (GdkEventScroll*) event;
 
             if (scroll_event->state & GDK_MOD1_MASK) { // alt modified pressed
+		if (moved_while_cycling) 
+			{
+			moved_while_cycling = false;
+			sp_select_context_reset_opacities(prev_event_context);
+			prev_event_context = NULL;
+			}
+
+		is_cycling = true;
+		
                 bool shift_pressed = scroll_event->state & GDK_SHIFT_MASK;
 
                 /* Rebuild list of items underneath the mouse pointer */
@@ -850,6 +893,13 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                 sp_select_context_cycle_through_items(this, selection, scroll_event, shift_pressed);
 
                 ret = TRUE;
+
+		GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel( GTK_WIDGET(desktop->canvas) ));
+		if (w)
+			{
+			gtk_window_present(w);
+			gtk_widget_grab_focus (GTK_WIDGET(desktop->canvas)); 
+			}
             }
             break;
         }
@@ -860,7 +910,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
 			{
         	guint keyval = get_group0_keyval(&event->key);
         	
-            bool alt = ( MOD__ALT
+                bool alt = ( MOD__ALT(event)
                                     || (keyval == GDK_KEY_Alt_L)
                                     || (keyval == GDK_KEY_Alt_R)
                                     || (keyval == GDK_KEY_Meta_L)
@@ -902,20 +952,20 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
 			switch (get_group0_keyval (&event->key)) {
                 case GDK_KEY_Left: // move selection left
                 case GDK_KEY_KP_Left:
-                    if (!MOD__CTRL) { // not ctrl
+                    if (!MOD__CTRL(event)) { // not ctrl
                         gint mul = 1 + gobble_key_events( get_group0_keyval(&event->key), 0); // with any mask
                         
-                        if (MOD__ALT) { // alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move_screen(desktop, mul*-10, 0); // shift
+                        if (MOD__ALT(event)) { // alt
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), mul*-10, 0); // shift
                             } else {
-                            	sp_selection_move_screen(desktop, mul*-1, 0); // no shift
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), mul*-1, 0); // no shift
                             }
                         } else { // no alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move(desktop, mul*-10*nudge, 0); // shift
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move(sp_desktop_selection(desktop), mul*-10*nudge, 0); // shift
                             } else {
-                            	sp_selection_move(desktop, mul*-nudge, 0); // no shift
+                            	sp_selection_move(sp_desktop_selection(desktop), mul*-nudge, 0); // no shift
                             }
                         }
                         
@@ -925,20 +975,20 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_Up: // move selection up
                 case GDK_KEY_KP_Up:
-                    if (!MOD__CTRL) { // not ctrl
+                    if (!MOD__CTRL(event)) { // not ctrl
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         
-                        if (MOD__ALT) { // alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move_screen(desktop, 0, mul*10); // shift
+                        if (MOD__ALT(event)) { // alt
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), 0, mul*10); // shift
                             } else {
-                            	sp_selection_move_screen(desktop, 0, mul*1); // no shift
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), 0, mul*1); // no shift
                             }
                         } else { // no alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move(desktop, 0, mul*10*nudge); // shift
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move(sp_desktop_selection(desktop), 0, mul*10*nudge); // shift
                             } else {
-                            	sp_selection_move(desktop, 0, mul*nudge); // no shift
+                            	sp_selection_move(sp_desktop_selection(desktop), 0, mul*nudge); // no shift
                             }
                         }
                         
@@ -948,20 +998,20 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_Right: // move selection right
                 case GDK_KEY_KP_Right:
-                    if (!MOD__CTRL) { // not ctrl
+                    if (!MOD__CTRL(event)) { // not ctrl
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         
-                        if (MOD__ALT) { // alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move_screen(desktop, mul*10, 0); // shift
+                        if (MOD__ALT(event)) { // alt
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), mul*10, 0); // shift
                             } else {
-                            	sp_selection_move_screen(desktop, mul*1, 0); // no shift
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), mul*1, 0); // no shift
                             }
                         } else { // no alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move(desktop, mul*10*nudge, 0); // shift
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move(sp_desktop_selection(desktop), mul*10*nudge, 0); // shift
                             } else {
-                            	sp_selection_move(desktop, mul*nudge, 0); // no shift
+                            	sp_selection_move(sp_desktop_selection(desktop), mul*nudge, 0); // no shift
                             }
                         }
                         
@@ -971,20 +1021,20 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_Down: // move selection down
                 case GDK_KEY_KP_Down:
-                    if (!MOD__CTRL) { // not ctrl
+                    if (!MOD__CTRL(event)) { // not ctrl
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         
-                        if (MOD__ALT) { // alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move_screen(desktop, 0, mul*-10); // shift
+                        if (MOD__ALT(event)) { // alt
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), 0, mul*-10); // shift
                             } else {
-                            	sp_selection_move_screen(desktop, 0, mul*-1); // no shift
+                            	sp_selection_move_screen(sp_desktop_selection(desktop), 0, mul*-1); // no shift
                             }
                         } else { // no alt
-                            if (MOD__SHIFT) {
-                            	sp_selection_move(desktop, 0, mul*-10*nudge); // shift
+                            if (MOD__SHIFT(event)) {
+                            	sp_selection_move(sp_desktop_selection(desktop), 0, mul*-10*nudge); // shift
                             } else {
-                            	sp_selection_move(desktop, 0, mul*-nudge); // no shift
+                            	sp_selection_move(sp_desktop_selection(desktop), 0, mul*-nudge); // no shift
                             }
                         }
                         
@@ -1002,7 +1052,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
 
                 case GDK_KEY_a:
                 case GDK_KEY_A:
-                    if (MOD__CTRL_ONLY) {
+                    if (MOD__CTRL_ONLY(event)) {
                         sp_edit_select_all(desktop);
                         ret = TRUE;
                     }
@@ -1019,17 +1069,17 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_x:
                 case GDK_KEY_X:
-                    if (MOD__ALT_ONLY) {
+                    if (MOD__ALT_ONLY(event)) {
                         desktop->setToolboxFocusTo ("altx");
                         ret = TRUE;
                     }
                     break;
                     
                 case GDK_KEY_bracketleft:
-                    if (MOD__ALT) {
+                    if (MOD__ALT(event)) {
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         sp_selection_rotate_screen(selection, mul*1);
-                    } else if (MOD__CTRL) {
+                    } else if (MOD__CTRL(event)) {
                         sp_selection_rotate(selection, 90);
                     } else if (snaps) {
                         sp_selection_rotate(selection, 180.0/snaps);
@@ -1039,10 +1089,10 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     break;
                     
                 case GDK_KEY_bracketright:
-                    if (MOD__ALT) {
+                    if (MOD__ALT(event)) {
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         sp_selection_rotate_screen(selection, -1*mul);
-                    } else if (MOD__CTRL) {
+                    } else if (MOD__CTRL(event)) {
                         sp_selection_rotate(selection, -90);
                     } else if (snaps) {
                         sp_selection_rotate(selection, -180.0/snaps);
@@ -1053,10 +1103,10 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_less:
                 case GDK_KEY_comma:
-                    if (MOD__ALT) {
+                    if (MOD__ALT(event)) {
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         sp_selection_scale_screen(selection, -2*mul);
-                    } else if (MOD__CTRL) {
+                    } else if (MOD__CTRL(event)) {
                         sp_selection_scale_times(selection, 0.5);
                     } else {
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
@@ -1068,10 +1118,10 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_greater:
                 case GDK_KEY_period:
-                    if (MOD__ALT) {
+                    if (MOD__ALT(event)) {
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
                         sp_selection_scale_screen(selection, 2*mul);
-                    } else if (MOD__CTRL) {
+                    } else if (MOD__CTRL(event)) {
                         sp_selection_scale_times(selection, 2);
                     } else {
                         gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
@@ -1082,7 +1132,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     break;
                     
                 case GDK_KEY_Return:
-                    if (MOD__CTRL_ONLY) {
+                    if (MOD__CTRL_ONLY(event)) {
                         if (selection->singleItem()) {
                             SPItem *clicked_item = selection->singleItem();
                             
@@ -1099,7 +1149,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     break;
                     
                 case GDK_KEY_BackSpace:
-                    if (MOD__CTRL_ONLY) {
+                    if (MOD__CTRL_ONLY(event)) {
                         sp_select_context_up_one_layer(desktop);
                         ret = TRUE;
                     }
@@ -1107,7 +1157,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_s:
                 case GDK_KEY_S:
-                    if (MOD__SHIFT_ONLY) {
+                    if (MOD__SHIFT_ONLY(event)) {
                         if (!selection->isEmpty()) {
                             _seltrans->increaseState();
                         }
@@ -1118,7 +1168,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                     
                 case GDK_KEY_g:
                 case GDK_KEY_G:
-                    if (MOD__SHIFT_ONLY) {
+                    if (MOD__SHIFT_ONLY(event)) {
                         sp_selection_to_guides(desktop);
                         ret = true;
                     }
@@ -1135,7 +1185,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
                 this->defaultMessageContext()->clear();
             }
             
-            bool alt = ( MOD__ALT
+            bool alt = ( MOD__ALT(event)
                          || (keyval == GDK_KEY_Alt_L)
                          || (keyval == GDK_KEY_Alt_R)
                          || (keyval == GDK_KEY_Meta_L)
@@ -1149,21 +1199,11 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
             } else {
                 if (alt) { // TODO: Should we have a variable like is_cycling or is it harmless to run this piece of code each time?
                     // quit cycle-selection and reset opacities
-                    Inkscape::DrawingItem *arenaitem;
-                    
-                    for (GList *l = this->cycling_items; l != NULL; l = g_list_next(l)) {
-                        arenaitem = SP_ITEM(l->data)->get_arenaitem(desktop->dkey);
-                        arenaitem->setOpacity(1.0);
-                    }
-
-                    g_list_free(this->cycling_items);
-                    g_list_free(this->cycling_items_selected_before);
-                    g_list_free(this->cycling_items_cmp);
-
-                    this->cycling_items = NULL;
-                    this->cycling_items_selected_before = NULL;
-                    this->cycling_cur_item = NULL;
-                    this->cycling_items_cmp = NULL;
+			if (is_cycling)
+				{
+				sp_select_context_reset_opacities(this);
+				is_cycling = false;	
+				}
                 }
             }
 
@@ -1186,6 +1226,7 @@ gint SPSelectContext::root_handler(GdkEvent* event) {
 
     return ret;
 }
+
 
 /*
   Local Variables:

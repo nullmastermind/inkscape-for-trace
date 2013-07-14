@@ -17,6 +17,7 @@
 
 #include <glibmm/i18n.h>
 #include "xml/quote.h"
+#include "layer-model.h"
 #include "selection.h"
 #include "selection-describer.h"
 #include "desktop.h"
@@ -37,9 +38,11 @@
 #include "sp-polyline.h"
 #include "sp-spiral.h"
 
-//static const gchar *
-//type2term(GType type)
-//{
+// CPPIFY: this is ugly.
+static const gchar *
+type2term(SPItem *item)
+{
+//    GType type = G_OBJECT_TYPE( item );
 //    if (type == SP_TYPE_ANCHOR)
 //        //TRANSLATORS: "Link" means internet link (anchor)
 //        { return C_("Web", "Link"); }
@@ -68,6 +71,8 @@
 //    if (type == SP_TYPE_TEXT)
 //        { return C_("Object", "Text"); }
 //    if (type == SP_TYPE_USE)
+//        if (SP_IS_SYMBOL(item->firstChild()))
+//            { return C_("Object", "Symbol"); }
 //        // TRANSLATORS: "Clone" is a noun, type of object
 //        { return C_("Object", "Clone"); }
 //    if (type == SP_TYPE_ARC)
@@ -79,57 +84,14 @@
 //    if (type == SP_TYPE_STAR)
 //        { return _("Star"); }
 //    return NULL;
-//}
-
-// CPPIFY: this is ugly.
-static const char* object2term(SPObject* object) {
-    if (SP_IS_ANCHOR(object))
-        //TRANSLATORS: "Link" means internet link (anchor)
-        { return C_("Web", "Link"); }
-    if (SP_IS_CIRCLE(object))
-        { return _("Circle"); }
-    if (SP_IS_ELLIPSE(object))
-        { return _("Ellipse"); }
-    if (SP_IS_FLOWTEXT(object))
-        { return _("Flowed text"); }
-    if (SP_IS_GROUP(object))
-        { return _("Group"); }
-    if (SP_IS_IMAGE(object))
-        { return _("Image"); }
-    if (SP_IS_LINE(object))
-        { return _("Line"); }
-    if (SP_IS_PATH(object))
-        { return _("Path"); }
-    if (SP_IS_POLYGON(object))
-        { return _("Polygon"); }
-    if (SP_IS_POLYLINE(object))
-        { return _("Polyline"); }
-    if (SP_IS_RECT(object))
-        { return _("Rectangle"); }
-    if (SP_IS_BOX3D(object))
-        { return _("3D Box"); }
-    if (SP_IS_TEXT(object))
-        { return C_("Object", "Text"); }
-    if (SP_IS_USE(object))
-        // TRANSLATORS: "Clone" is a noun, type of object
-        { return C_("Object", "Clone"); }
-    if (SP_IS_ARC(object))
-        { return _("Ellipse"); }
-    if (SP_IS_OFFSET(object))
-        { return _("Offset path"); }
-    if (SP_IS_SPIRAL(object))
-        { return _("Spiral"); }
-    if (SP_IS_STAR(object))
-        { return _("Star"); }
-    return NULL;
+	return "Selektion-Describer ---";
 }
 
 static GSList *collect_terms (GSList *items)
 {
     GSList *r = NULL;
     for (GSList *i = items; i != NULL; i = i->next) {
-        //const gchar *term = type2term (G_OBJECT_TYPE(i->data));
-    	const char* term = object2term(SP_OBJECT(i->data));
+        const gchar *term = type2term ( SP_ITEM(i->data) );
         if (term != NULL && g_slist_find (r, term) == NULL)
             r = g_slist_prepend (r, (void *) term);
     }
@@ -185,13 +147,15 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);
     } else {
         SPItem *item = SP_ITEM(items->data);
-        SPObject *layer = selection->desktop()->layerForObject(item);
-        SPObject *root = selection->desktop()->currentRoot();
+        SPObject *layer = selection->layers()->layerForObject(item);
+        SPObject *root = selection->layers()->currentRoot();
 
         // Layer name
         gchar *layer_name;
         if (layer == root) {
             layer_name = g_strdup(_("root"));
+        } else if(!layer) {
+            layer_name = g_strdup(_("none"));
         } else {
             char const *layer_label;
             bool is_label = false;
@@ -224,6 +188,8 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
             if (num_parents == 1) {
                 if (layer == parent)
                     in_phrase = g_strdup_printf(_(" in %s"), layer_name);
+                else if (!layer)
+                    in_phrase = g_strdup_printf(_(" hidden in definitions"));
                 else 
                     in_phrase = g_strdup_printf(_(" in group %s (%s)"), parent_name, layer_name);
             } else {
@@ -236,12 +202,16 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         g_free (parent_name);
 
         if (!items->next) { // one item
-            char *item_desc = item->getDetailedDescription();
+            char *item_desc = item->description();
             if (SP_IS_USE(item) && SP_IS_SYMBOL(item->firstChild())) {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
                               item_desc, in_phrase,
                               _("Convert symbol to group to edit"), _when_selected);
-            } else if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref)) {
+            } else if (SP_IS_SYMBOL(item)) {
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s.",
+                              item_desc, in_phrase,
+                              _("Remove from symbols tray to edit symbol"));
+            } else if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET(item)->sourceHref)) {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
                               item_desc, in_phrase,
                               _("Use <b>Shift+D</b> to look up original"), _when_selected);

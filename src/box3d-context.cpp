@@ -374,47 +374,47 @@ gint Box3DContext::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_Down:
             // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY)
+            if (!MOD__CTRL_ONLY(event))
                 ret = TRUE;
             break;
 
         case GDK_KEY_bracketright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, -180/snaps, MOD__ALT);
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, -180/snaps, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_bracketleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, 180/snaps, MOD__ALT);
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::X, 180/snaps, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_parenright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, -180/snaps, MOD__ALT);
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, -180/snaps, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_parenleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, 180/snaps, MOD__ALT);
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Y, 180/snaps, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_braceright:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, -180/snaps, MOD__ALT);
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, -180/snaps, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
             break;
 
         case GDK_KEY_braceleft:
-            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, 180/snaps, MOD__ALT);
+            persp3d_rotate_VP (document->getCurrentPersp3D(), Proj::Z, 180/snaps, MOD__ALT(event));
             DocumentUndo::done(document, SP_VERB_CONTEXT_3DBOX,
                              _("Change perspective (angle of PLs)"));
             ret = true;
@@ -422,7 +422,7 @@ gint Box3DContext::root_handler(GdkEvent* event) {
 
         /* TODO: what is this???
         case GDK_O:
-            if (MOD__CTRL && MOD__SHIFT) {
+            if (MOD__CTRL(event) && MOD__SHIFT(event)) {
                 Box3D::create_canvas_point(persp3d_get_VP(document()->getCurrentPersp3D(), Proj::W).affine(),
                                            6, 0xff00ff00);
             }
@@ -432,7 +432,7 @@ gint Box3DContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_g:
         case GDK_KEY_G:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 sp_selection_to_guides(desktop);
                 ret = true;
             }
@@ -440,7 +440,7 @@ gint Box3DContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_p:
         case GDK_KEY_P:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 if (document->getCurrentPersp3D()) {
                     persp3d_print_debugging_info (document->getCurrentPersp3D());
                 }
@@ -450,12 +450,11 @@ gint Box3DContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_x:
         case GDK_KEY_X:
-            if (MOD__ALT_ONLY) {
+            if (MOD__ALT_ONLY(event)) {
                 desktop->setToolboxFocusTo ("altx-box3d");
                 ret = TRUE;
             }
-
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 persp3d_toggle_VPs(selection->perspList(), Proj::X);
                 this->_vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?
                 ret = true;
@@ -464,7 +463,7 @@ gint Box3DContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_y:
         case GDK_KEY_Y:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 persp3d_toggle_VPs(selection->perspList(), Proj::Y);
                 this->_vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?
                 ret = true;
@@ -473,7 +472,7 @@ gint Box3DContext::root_handler(GdkEvent* event) {
 
         case GDK_KEY_z:
         case GDK_KEY_Z:
-            if (MOD__SHIFT_ONLY) {
+            if (MOD__SHIFT_ONLY(event)) {
                 persp3d_toggle_VPs(selection->perspList(), Proj::Z);
                 this->_vpdrag->updateLines(); // FIXME: Shouldn't this be done automatically?
                 ret = true;
@@ -502,7 +501,7 @@ gint Box3DContext::root_handler(GdkEvent* event) {
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            ret = this->deleteSelectedDrag(MOD__CTRL_ONLY);
+            ret = this->deleteSelectedDrag(MOD__CTRL_ONLY(event));
             break;
 
         default:

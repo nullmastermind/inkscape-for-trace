@@ -485,7 +485,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
                     ngettext("Area filled, path with <b>%d</b> node created and unioned with selection.","Area filled, path with <b>%d</b> nodes created and unioned with selection.",
                     SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath() );
                 selection->add(reprobj);
-                sp_selected_path_union_skip_undo(desktop);
+                sp_selected_path_union_skip_undo(sp_desktop_selection(desktop), desktop);
             } else {
                 desktop->messageStack()->flashF( Inkscape::WARNING_MESSAGE,
                     ngettext("Area filled, path with <b>%d</b> node created.","Area filled, path with <b>%d</b> nodes created.",
@@ -1211,7 +1211,7 @@ gint SPFloodContext::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_Down:
             // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY)
+            if (!MOD__CTRL_ONLY(event))
                 ret = TRUE;
             break;
         default:

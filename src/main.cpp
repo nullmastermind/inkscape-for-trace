@@ -60,6 +60,8 @@
 #include "macros.h"
 #include "file.h"
 #include "document.h"
+#include "layer-model.h"
+#include "selection.h"
 #include "sp-object.h"
 #include "interface.h"
 #include "print.h"
@@ -84,6 +86,7 @@
 #include "debug/logger.h"
 #include "debug/log-display-config.h"
 
+#include "helper/action-context.h"
 #include "helper/png-write.h"
 #include "helper/geom.h"
 
@@ -99,6 +102,11 @@
 #endif // WIN32
 
 #include "extension/init.h"
+// Not ideal, but there doesn't appear to be a nicer system in place for
+// passing command-line parameters to extensions before initialization...
+#ifdef WITH_DBUS
+#include "extension/dbus/dbus-init.h"
+#endif // WITH_DBUS
 
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
@@ -146,7 +154,9 @@ enum {
     SP_ARG_EXPORT_SVG,
     SP_ARG_EXPORT_PS,
     SP_ARG_EXPORT_EPS,
+    SP_ARG_EXPORT_PS_LEVEL,
     SP_ARG_EXPORT_PDF,
+    SP_ARG_EXPORT_PDF_VERSION,
     SP_ARG_EXPORT_LATEX,
 #ifdef WIN32
     SP_ARG_EXPORT_EMF,
@@ -163,6 +173,10 @@ enum {
     SP_ARG_SHELL,
     SP_ARG_VERSION,
     SP_ARG_VACUUM_DEFS,
+#ifdef WITH_DBUS
+    SP_ARG_DBUS_LISTEN,
+    SP_ARG_DBUS_NAME,
+#endif // WITH_DBUS
     SP_ARG_VERB_LIST,
     SP_ARG_VERB,
     SP_ARG_SELECT,
@@ -199,7 +213,9 @@ static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
+static gint sp_export_ps_level = 2;
 static gchar *sp_export_pdf = NULL;
+static gchar *sp_export_pdf_version = NULL;
 #ifdef WIN32
 static gchar *sp_export_emf = NULL;
 #endif //WIN32
@@ -214,7 +230,10 @@ static gboolean sp_query_all = FALSE;
 static gchar *sp_query_id = NULL;
 static gboolean sp_shell = FALSE;
 static gboolean sp_vacuum_defs = FALSE;
-
+#ifdef WITH_DBUS
+static gboolean sp_dbus_listen = FALSE;
+static gchar *sp_dbus_name = NULL;
+#endif // WITH_DBUS
 static gchar *sp_export_png_utf8 = NULL;
 static gchar *sp_export_svg_utf8 = NULL;
 static gchar *sp_global_printer_utf8 = NULL;
@@ -243,7 +262,9 @@ static void resetCommandlineGlobals() {
         sp_export_svg = NULL;
         sp_export_ps = NULL;
         sp_export_eps = NULL;
+        sp_export_ps_level = 2;
         sp_export_pdf = NULL;
+        sp_export_pdf_version = NULL;
 #ifdef WIN32
         sp_export_emf = NULL;
 #endif //WIN32
@@ -257,6 +278,10 @@ static void resetCommandlineGlobals() {
         sp_query_all = FALSE;
         sp_query_id = NULL;
         sp_vacuum_defs = FALSE;
+#ifdef WITH_DBUS
+        sp_dbus_listen = FALSE;
+        sp_dbus_name = NULL;
+#endif // WITH_DBUS
 
         sp_export_png_utf8 = NULL;
         sp_export_svg_utf8 = NULL;
@@ -380,10 +405,22 @@ struct poptOption options[] = {
      N_("Export document to an EPS file"),
      N_("FILENAME")},
 
+    {"export-ps-level", 0,
+     POPT_ARG_INT, &sp_export_ps_level, SP_ARG_EXPORT_PS_LEVEL,
+     N_("Choose the PostScript Level used to export. Possible choices are"
+        " 2 (the default) and 3"),
+     N_("PS Level")},
+
     {"export-pdf", 'A',
      POPT_ARG_STRING, &sp_export_pdf, SP_ARG_EXPORT_PDF,
      N_("Export document to a PDF file"),
      N_("FILENAME")},
+
+    {"export-pdf-version", 0,
+     POPT_ARG_STRING, &sp_export_pdf_version, SP_ARG_EXPORT_PDF_VERSION,
+     // TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
+     N_("Export PDF to given version. (hint: make sure to input the exact string found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"),
+     N_("PDF_VERSION")},
 
     {"export-latex", 0,
      POPT_ARG_NONE, &sp_export_latex, SP_ARG_EXPORT_LATEX,
@@ -451,6 +488,18 @@ struct poptOption options[] = {
      POPT_ARG_NONE, &sp_vacuum_defs, SP_ARG_VACUUM_DEFS,
      N_("Remove unused definitions from the defs section(s) of the document"),
      NULL},
+     
+#ifdef WITH_DBUS
+    {"dbus-listen", 0,
+     POPT_ARG_NONE, &sp_dbus_listen, SP_ARG_DBUS_LISTEN,
+     N_("Enter a listening loop for D-Bus messages in console mode"),
+     NULL},
+
+    {"dbus-name", 0,
+     POPT_ARG_STRING, &sp_dbus_name, SP_ARG_DBUS_NAME,
+     N_("Specify the D-Bus bus name to listen for messages on (default is org.inkscape)"),
+     N_("BUS-NAME")},
+#endif // WITH_DBUS
 
     {"verb-list", 0,
      POPT_ARG_NONE, NULL, SP_ARG_VERB_LIST,
@@ -709,6 +758,9 @@ main(int argc, char **argv)
             || !strcmp(argv[i], "-Y")
             || !strncmp(argv[i], "--query-y", 9)
             || !strcmp(argv[i], "--vacuum-defs")
+#ifdef WITH_DBUS
+            || !strcmp(argv[i], "--dbus-listen")
+#endif // WITH_DBUS
             || !strcmp(argv[i], "--shell")
            )
         {
@@ -845,6 +897,13 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
         if ( sp_global_printer )
             sp_global_printer_utf8 = g_strdup( sp_global_printer );
     }
+    
+#ifdef WITH_DBUS
+    // Before initializing extensions, we must set the DBus bus name if required
+    if (sp_dbus_name != NULL) {
+        Inkscape::Extension::Dbus::dbus_set_bus_name(sp_dbus_name);
+    }
+#endif
 
     // Return the list if wanted, else free it up.
     if ( flDest ) {
@@ -1016,6 +1075,17 @@ sp_main_gui(int argc, char const **argv)
 static int sp_process_file_list(GSList *fl)
 {
     int retVal = 0;
+#ifdef WITH_DBUS
+    if (!fl) {
+        // If we've been asked to listen for D-Bus messages, enter a main loop here
+        // The main loop may be exited by calling "exit" on the D-Bus application interface.
+        if (sp_dbus_listen) {
+            Gtk::Main main_dbus_loop(0, NULL);
+            main_dbus_loop.run();
+        }
+    }
+#endif // WITH_DBUS
+
     while (fl) {
         const gchar *filename = (gchar *)fl->data;
 
@@ -1047,7 +1117,20 @@ static int sp_process_file_list(GSList *fl)
             if (sp_vacuum_defs) {
                 doc->vacuumDocument();
             }
-            if (sp_vacuum_defs && !sp_export_svg) {
+            
+            // Execute command-line actions (selections and verbs) using our local models
+            bool has_performed_actions = Inkscape::CmdLineAction::doList(inkscape_active_action_context());
+
+#ifdef WITH_DBUS
+            // If we've been asked to listen for D-Bus messages, enter a main loop here
+            // The main loop may be exited by calling "exit" on the D-Bus application interface.
+            if (sp_dbus_listen) {
+                Gtk::Main main_dbus_loop(0, NULL);
+                main_dbus_loop.run();
+            }
+#endif // WITH_DBUS
+
+            if (!sp_export_svg && (sp_vacuum_defs || has_performed_actions)) {
                 // save under the name given in the command line
                 sp_repr_save_file(doc->rdoc, filename, SP_SVG_NS_URI);
             }
@@ -1213,7 +1296,11 @@ int sp_main_console(int argc, char const **argv)
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    if (fl == NULL && !sp_shell) {
+    if (fl == NULL && !sp_shell
+#ifdef WITH_DBUS
+        && !sp_dbus_listen
+#endif // WITH_DBUS
+        ) {
         g_print("Nothing to do!\n");
         exit(0);
     }
@@ -1637,10 +1724,52 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
     }
     (*i)->set_param_float("bleed", margin);
 
+    // handle --export-pdf-version
+    if (g_strcmp0(mime, "application/pdf") == 0) {
+        bool set_export_pdf_version_fail=true;
+        const gchar *pdfver_param_name="PDFversion";
+        if(sp_export_pdf_version) {
+            // combine "PDF " and the given command line
+            std::string version_gui_string=std::string("PDF ")+sp_export_pdf_version;
+            try{
+                // first, check if the given pdf version is selectable in the ComboBox
+                if((*i)->get_param_enum_contains("PDFversion", version_gui_string.c_str())) {
+                    (*i)->set_param_enum(pdfver_param_name, version_gui_string.c_str());
+                    set_export_pdf_version_fail=false;
+                } else {
+                    g_warning("Desired PDF export version \"%s\" not supported! Hint: input one of the versions found in the pdf export dialog e.g. \"1.4\".",
+                              sp_export_pdf_version);
+                }
+            } catch (...) {
+                // can be thrown along the way:
+                // throw Extension::param_not_exist();
+                // throw Extension::param_not_enum_param();
+                g_warning("Parameter or Enum \"%s\" might not exist",pdfver_param_name);
+            }
+        }
+
+        // set default pdf export version to 1.4, also if something went wrong
+        if(set_export_pdf_version_fail) {
+            (*i)->set_param_enum(pdfver_param_name, "PDF 1.4");
+        }
+    }
+
     //check if specified directory exists
     if (!Inkscape::IO::file_directory_exists(uri)) {
         g_warning("File path \"%s\" includes directory that doesn't exist.\n", uri);
         return 1;
+    }
+
+    if ( g_strcmp0(mime, "image/x-postscript") == 0
+         || g_strcmp0(mime, "image/x-e-postscript") == 0 ) {
+        if ( sp_export_ps_level < 2 || sp_export_ps_level > 3 ) {
+            g_warning("Only supported PostScript levels are 2 and 3."
+                      " Defaulting to 2.");
+            sp_export_ps_level = 2;
+        }
+
+        (*i)->set_param_enum("PSlevel", (sp_export_ps_level == 3)
+                             ? "PostScript level 3" : "PostScript level 2");
     }
 
     (*i)->save(doc, uri);

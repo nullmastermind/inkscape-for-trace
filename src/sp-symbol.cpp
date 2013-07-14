@@ -366,8 +366,9 @@ void SPSymbol::hide(unsigned int key) {
 Geom::OptRect SPSymbol::bbox(Geom::Affine const &transform, SPItem::BBoxType type) {
     Geom::OptRect bbox;
 
+    // We don't need a bounding box for Symbols dialog when selecting
+    // symbols. They have no canvas location. But cloned symbols are.
     if (this->cloned) {
-        // Cloned <symbol> is actually renderable
     	Geom::Affine const a( this->c2p * transform );
     	bbox = SPGroup::bbox(a, type);
     }

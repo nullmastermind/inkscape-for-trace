@@ -12,6 +12,14 @@
 #ifndef INKSCAPE_UI_WIDGET_DOCK_H
 #define INKSCAPE_UI_WIDGET_DOCK_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <list>
 #include "ui/widget/dock-item.h"
@@ -66,11 +74,11 @@ protected:
     /** Interface widgets, will be packed like 
      * _scrolled_window -> (_dock_box -> (_paned -> (_dock -> _filler) | _dock_bar))
      */
-    Gtk::Box *_dock_box;
-    Gtk::Paned* _paned;
-    GdlDock *_gdl_dock;
-    GdlDockBar *_gdl_dock_bar;
-    Gtk::VBox _filler;
+    Gtk::Box            *_dock_box;
+    Gtk::Paned          *_paned;
+    GtkWidget           *_gdl_dock;
+    GdlDockBar          *_gdl_dock_bar;
+    Gtk::VBox            _filler;
     Gtk::ScrolledWindow *_scrolled_window;
 
     /** Internal signal handlers */
