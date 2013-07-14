@@ -2,7 +2,7 @@
 # coding=utf-8
 '''
 Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
-This importer supports the "HP-GL/2 kernel" set of commands only (More should not be necessary).
+This importer supports the HP-GL commands only (More should not be necessary).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ class hpglDecoder:
         path = ''
         for i, command in enumerate(hpglData):
             if command.strip() != '':
-                # TODO:2013-07-13:Sebastian Wüst:Implement the "HP-GL/2 kernel" set of commands.
+                # TODO:2013-07-13:Sebastian Wüst:Implement the HP-GL commands.
                 if command[:2] == 'PU': # if Pen Up command
                     if ' L' in path:
                         # TODO:2013-07-13:Sebastian Wüst:Make a method for adding a SubElement.
