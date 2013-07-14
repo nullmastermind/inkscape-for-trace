@@ -122,6 +122,7 @@ class hpglEncoder:
                 self.process_path(node, groupmat[-1])
             if node.tag == inkex.addNS('g', 'svg'):
                 self.process_group(node, groupmat)
+        groupmat.pop()
     
     def process_path(self, node, mat):
         # process path 
@@ -163,7 +164,6 @@ class hpglEncoder:
                                 oldPosX = posX
                                 oldPosY = posY
     
-    # TODO:2013-07-13:Sebastian Wüst:Find methods from the existing classes to replace the next 4 methods.
     def getLength(self, x1, y1, x2, y2, abs = True):
         # calc absoulute or relative length between two points
         if abs: return math.fabs(math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0))
