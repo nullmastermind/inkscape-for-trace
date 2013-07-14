@@ -40,6 +40,7 @@ class hpglDecoder:
 
     def getSvg(self):
         # parse hpgl data
+        # TODO:2013-07-13:Sebastian Wüst:Try to parse all the different HPGL formats correctly.
         hpglData = self.hpglString.split(';')
         if hpglData[-1].strip() == '':
             hpglData.pop()

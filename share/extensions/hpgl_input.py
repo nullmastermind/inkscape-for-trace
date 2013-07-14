@@ -38,10 +38,14 @@ parser.add_option('--showMovements', action='store', type='inkbool', dest='showM
 options.docWidth = 210.0 * 3.5433070866 # 210mm to pixels (DIN A4)
 options.docHeight = 297.0 * 3.5433070866 # 297mm to pixels (DIN A4)
 
-# TODO:2013-07-13:Sebastian Wüst:Load the whole file and try to parse all the different HPGL formats correctly.
-# read file (read only one line, there should not be more than one line)
-stream = open(args[0], 'r')
-hpglString = stream.readline().strip()
+# read file
+fobj = open(args[0], 'r')
+hpglString = []
+for line in fobj:
+    hpglString.append(line.strip())
+fobj.close()
+# combine all lines
+hpglString = ';'.join(hpglString)
 
 # interpret HPGL data
 myHpglDecoder = hpgl_decoder.hpglDecoder(hpglString, options)
