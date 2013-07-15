@@ -19,6 +19,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
+# TODO:2013-07-15:Sebastian Wüst:make text to guide the user to the extension when he wants to plot
+
 # standard library
 import sys
 # local library
