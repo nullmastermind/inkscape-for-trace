@@ -358,6 +358,35 @@ SPItem *Selection::singleItem() {
     }
 }
 
+SPItem *Selection::smallestItem(Selection::CompareSize compare) {
+    return _sizeistItem(true, compare);
+}
+
+SPItem *Selection::largestItem(Selection::CompareSize compare) {
+    return _sizeistItem(false, compare);
+}
+
+SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
+    GSList const *items = const_cast<Selection *>(this)->itemList();
+    gdouble max = sml ? 1e18 : 0;
+    SPItem *ist = NULL;
+
+    for ( GSList const *i = items; i != NULL ; i = i->next ) {
+        Geom::OptRect obox = SP_ITEM(i->data)->desktopPreferredBounds();
+        if (!obox || obox.isEmpty()) continue;
+        Geom::Rect bbox = *obox;
+
+        gdouble size = compare == 2 ? bbox.area() :
+            (compare == 1 ? bbox.width() : bbox.height());
+        size = sml ? size : size * -1;
+        if (size < max) {
+            max = size;
+            ist = SP_ITEM(i->data);
+        }
+    }
+    return ist;
+}
+
 Inkscape::XML::Node *Selection::singleRepr() {
     SPObject *obj=single();
     return obj ? obj->getRepr() : NULL;
