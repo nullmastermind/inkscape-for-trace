@@ -477,6 +477,7 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
     ));
 
     //_sw_unit = const_cast<SPUnit*>(sp_desktop_namedview(desktop)->doc_units);
+    _sw_unit = const_cast<SPUnit*>(&sp_unit_get_by_id(SP_UNIT_PX));
 
     // Set the doc default unit active in the units list
     gint length = g_slist_length(_unit_mis);

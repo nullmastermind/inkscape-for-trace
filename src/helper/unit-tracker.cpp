@@ -94,7 +94,7 @@ SPUnit const* UnitTracker::getActiveUnit() const
 
 void UnitTracker::setActiveUnit( SPUnit const *unit )
 {
-    if ( unit ) {
+    /*if ( unit ) {
         GtkTreeIter iter;
         int index = 0;
         gboolean found = gtk_tree_model_get_iter_first( GTK_TREE_MODEL(_store), &iter );
@@ -109,7 +109,7 @@ void UnitTracker::setActiveUnit( SPUnit const *unit )
             found = gtk_tree_model_iter_next( GTK_TREE_MODEL(_store), &iter );
             index++;
         }
-    }
+    }*/
 }
 
 void UnitTracker::addAdjustment( GtkAdjustment* adj )
