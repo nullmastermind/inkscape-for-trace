@@ -58,16 +58,11 @@
 
 #include "../ui/icon-names.h"
 
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
-
 #include "../pen-context.h"
 
 #include "../box3d-context.h"
 #include "../box3d.h"
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;

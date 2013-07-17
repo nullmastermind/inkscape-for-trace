@@ -233,7 +233,7 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const oldUnit, Inkscape
         if ( (oldUnit.type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
             && (newUnit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
         {
-            val = 1.0 / newUnit.factor;
+            val = newUnit.factor;
             _priorValues[adj] = Inkscape::Util::Quantity::convert(oldVal, &oldUnit, &px);
         } else if ( (oldUnit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
             && (newUnit.type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
