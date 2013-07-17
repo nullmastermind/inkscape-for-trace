@@ -81,6 +81,15 @@ protected:
     StringModelColumns _columns;
     
 private:
+    enum SearchType
+    {
+        LIST_KEYWORD,
+        USER_SPECIFIED,
+        ALL
+    };
+    
+    SearchType _current_search_type;
+    
     void _getTemplatesFromDir(const Glib::ustring &);
     void _keywordSelected();    
     TemplateData _processTemplateFile(const Glib::ustring &);

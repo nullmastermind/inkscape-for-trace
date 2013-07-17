@@ -39,6 +39,7 @@ namespace UI {
 TemplateLoadTab::TemplateLoadTab()
     : _current_keyword("")
     , _keywords_combo(true)
+    ,_current_search_type(ALL)
 {
     set_border_width(10);
 
@@ -120,8 +121,16 @@ void TemplateLoadTab::_initLists()
 void TemplateLoadTab::_keywordSelected()
 {
     _current_keyword = _keywords_combo.get_active_text();
-    if (_current_keyword == "" && _keywords_combo.get_entry_text().size() > 0)
+    if (_current_keyword == ""){
         _current_keyword = _keywords_combo.get_entry_text();
+        _current_search_type = USER_SPECIFIED;
+    }
+    else
+        _current_search_type = LIST_KEYWORD;
+    
+    if (_current_keyword == "" || _current_keyword == "All")
+        _current_search_type = ALL;
+    
     _refreshTemplatesList();
 }
 
@@ -130,12 +139,43 @@ void TemplateLoadTab::_refreshTemplatesList()
 {
      _tlist_store->clear();
     
-    for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
-        if (it->second.keywords.count(_current_keyword) > 0 || _current_keyword == _("All") || _current_keyword == ""){
+    switch (_current_search_type){
+    case ALL :{
+            
+        for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
             Gtk::TreeModel::iterator iter = _tlist_store->append();
             Gtk::TreeModel::Row row = *iter;
             row[_columns.textValue]  = it->first;
         }
+        break;
+    }
+    
+    case LIST_KEYWORD: {
+        for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
+            if (it->second.keywords.count(_current_keyword) != 0){
+                Gtk::TreeModel::iterator iter = _tlist_store->append();
+                Gtk::TreeModel::Row row = *iter;
+                row[_columns.textValue]  = it->first;
+            }
+        }
+        break;
+    }
+    
+    case USER_SPECIFIED : {
+        for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
+            if (it->second.keywords.count(_current_keyword) != 0 || 
+                it->second.display_name.find(_current_keyword) != Glib::ustring::npos ||
+                it->second.author.find(_current_keyword) != Glib::ustring::npos ||
+                it->second.short_description.find(_current_keyword) != Glib::ustring::npos ||
+                it->second.long_description.find(_current_keyword) != Glib::ustring::npos )
+            {
+                Gtk::TreeModel::iterator iter = _tlist_store->append();
+                Gtk::TreeModel::Row row = *iter;
+                row[_columns.textValue]  = it->first;
+            }
+        }
+        break;
+    }
     }
 } 
 
@@ -174,13 +214,13 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
             return result;
 
         if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_name")) != NULL)
-            result.display_name = dgettext(NULL, dataNode->firstChild()->content());
+            result.display_name = dgettext("Document template name", dataNode->firstChild()->content());
         if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:author")) != NULL)
             result.author = dataNode->firstChild()->content();
         if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_short")) != NULL)
-            result.short_description = dgettext(NULL, dataNode->firstChild()->content());
+            result.short_description = dgettext("Document template short description", dataNode->firstChild()->content());
         if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_long") )!= NULL)
-            result.long_description = dgettext(NULL, dataNode->firstChild()->content());
+            result.long_description = dgettext("Document template long description", dataNode->firstChild()->content());
         if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:preview")) != NULL)
             result.preview_name = dataNode->firstChild()->content();
         if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:date")) != NULL){
@@ -191,10 +231,8 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
             Glib::ustring data = dataNode->firstChild()->content();
             while (!data.empty()){
                 int pos = data.find_first_of(" ");
-                Glib::ustring keyword = dgettext(NULL, data.substr(0, pos).data());
+                Glib::ustring keyword = dgettext("Document template keyword", data.substr(0, pos).data());
                 result.keywords.insert(keyword);
-                std::cout<<keyword<<" ";
-                std::cout.flush();
                 _keywords.insert(keyword);
                 if (pos == data.size())
                     break;
@@ -234,19 +272,19 @@ void TemplateLoadTab::_displayTemplateDetails()
     TemplateData &tmpl = _tdata[_current_template];
     
     Glib::ustring message = tmpl.display_name + "\n\n" +
-                            "Path: " + tmpl.path + "\n\n";
+                            _("Path: ") + tmpl.path + "\n\n";
     
     if (tmpl.long_description != "")
-        message += "Description: " + _tdata[_current_template].long_description + "\n\n";
+        message += _("Description: ") + _tdata[_current_template].long_description + "\n\n";
     if (tmpl.keywords.size() > 0){
-        message += "Keywords: ";
+        message += _("Keywords: ");
         for (std::set<Glib::ustring>::iterator it = tmpl.keywords.begin(); it != tmpl.keywords.end(); ++it)
             message += *it + " ";
         message += "\n\n";
     }
     
     if (tmpl.author != "")
-        message += "By: " + _tdata[_current_template].author + " " + tmpl.creation_date + "\n\n";
+        message += _("By: ") + _tdata[_current_template].author + " " + tmpl.creation_date + "\n\n";
     
     Gtk::MessageDialog dl(message, false, Gtk::MESSAGE_OTHER);
     dl.run();
