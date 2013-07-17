@@ -65,20 +65,14 @@ class Unit {
      */
     int            defaultDigits() const;
 
+    bool           compatibleWith(const Unit *u) const;
+
     UnitType       type;
     double         factor;
     Glib::ustring  name;
     Glib::ustring  name_plural;
     Glib::ustring  abbr;
     Glib::ustring  description;
-
-    UnitType       type;
-
-    double         factor;
-
-    bool           isAbsolute() const { return type != UNIT_TYPE_DIMENSIONLESS; }
-    int            defaultDigits() const;
-    bool           compatibleWith(const Unit *u) const;
     
     friend bool operator== (const Unit &u1, const Unit &u2);
     friend bool operator!= (const Unit &u1, const Unit &u2);

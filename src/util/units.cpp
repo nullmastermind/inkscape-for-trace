@@ -196,11 +196,6 @@ int Unit::metric() const {
     return 0;
 }
 
-/**
- * Initializes the unit tables and identifies the primary unit types.
- *
- * The primary unit's conversion factor is required to be 1.00
- */
 UnitTable::UnitTable()
 {
     // if we swich to the xml file, don't forget to force locale to 'C'
