@@ -52,13 +52,12 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
 #include "../pen-context.h"
 #include "../sp-namedview.h"
+#include "ui/widget/unit-tracker.h"
 
-using Inkscape::UnitTracker;
+using Inkscape::UI::Widget::UnitTracker;
+using Inkscape::Util::Unit;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -83,15 +82,20 @@ sp_measure_fontsize_value_changed(GtkAdjustment *adj, GObject *tbl)
 static void measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
-    SPUnit const *unit = tracker->getActiveUnit();
+    Glib::ustring const unit = tracker->getActiveUnit().abbr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/measure/unitid", unit->unit_id);
+    prefs->setString("/tools/measure/unit", unit);
 }
 
 void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    UnitTracker* tracker = new UnitTracker( SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE );
-    //tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
+    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    tracker->setActiveUnitByAbbr(prefs->getString("/tools/measure/unit").c_str());
+    
+    //tracker->setUnitType(UNIT_TYPE_LINEAR);
+    //tracker->setUnit("px");
+    
     g_object_set_data( holder, "tracker", tracker );
 
     EgeAdjustmentAction *eact = 0;
@@ -121,8 +125,10 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     // units menu
     {
         GtkAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
+        //EgeOutputAction* act = ege_output_action_new( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements"), 0 );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(measure_unit_changed), holder );
         gtk_action_group_add_action( mainActions, act );
+        //gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
     }
 } // end of sp_measure_toolbox_prep()
 
