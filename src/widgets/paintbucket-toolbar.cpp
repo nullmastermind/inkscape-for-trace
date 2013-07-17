@@ -54,9 +54,8 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
+#include "util/units.h"
+#include "ui/widget/unit-tracker.h"
 #include "../pen-context.h"
 #include "../sp-namedview.h"
 #include "../flood-context.h"
@@ -64,7 +63,7 @@
 #include <gtk/gtk.h>
 
 
-using Inkscape::UnitTracker;
+using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -97,13 +96,13 @@ static void paintbucket_autogap_changed(EgeSelectOneAction* act, GObject * /*tbl
 static void paintbucket_offset_changed(GtkAdjustment *adj, GObject *tbl)
 {
     UnitTracker* tracker = static_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
-    SPUnit const *unit = tracker->getActiveUnit();
+    Unit const unit = tracker->getActiveUnit();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Don't adjust the offset value because we're saving the
     // unit and it'll be correctly handled on load.
     prefs->setDouble("/tools/paintbucket/offset", (gdouble)gtk_adjustment_get_value(adj));
-    prefs->setString("/tools/paintbucket/offsetunits", sp_unit_get_abbreviation(unit));
+    prefs->setString("/tools/paintbucket/offsetunits", unit.abbr);
 }
 
 static void paintbucket_defaults(GtkWidget *, GObject *tbl)
@@ -175,10 +174,12 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
     }
 
     // Create the units menu.
-    UnitTracker* tracker = new UnitTracker( SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE );
+    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
+    Inkscape::Util::UnitTable unit_table;
     Glib::ustring stored_unit = prefs->getString("/tools/paintbucket/offsetunits");
     if (!stored_unit.empty()) {
-        tracker->setActiveUnit(sp_unit_get_by_abbreviation(stored_unit.data()));
+        Unit u = unit_table.getUnit(stored_unit);
+        tracker->setActiveUnit(&u);
     }
     g_object_set_data( holder, "tracker", tracker );
     {

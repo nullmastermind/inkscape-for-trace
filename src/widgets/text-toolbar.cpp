@@ -56,9 +56,6 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
 #include "../pen-context.h"
 #include "../sp-namedview.h"
 #include "../svg/css-ostringstream.h"
@@ -72,7 +69,6 @@
 #include "widgets/font-selector.h"
 
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -1218,9 +1214,10 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     // Is this used?
-    UnitTracker* tracker = new UnitTracker( SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE );
+    /*UnitTracker* tracker = new UnitTracker( SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE );
     //tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
-    g_object_set_data( holder, "tracker", tracker );
+    tracker->setActiveUnit(&sp_unit_get_by_id(SP_UNIT_PX));
+    g_object_set_data( holder, "tracker", tracker );*/
 
     /* Font family */
     {
