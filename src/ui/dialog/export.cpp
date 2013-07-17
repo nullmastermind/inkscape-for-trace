@@ -48,8 +48,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
-#include "helper/unit-menu.h"
-#include "helper/units.h"
+#include "ui/widget/unit-menu.h"
+#include "util/units.h"
 #include "unit-constants.h"
 #include "helper/window.h"
 #include "inkscape-private.h"
@@ -198,10 +198,13 @@ Export::Export (void) :
         /* Units box */
         /* gets added to the vbox later, but the unit selector is needed
            earlier than that */
-        unit_selector = Glib::wrap(sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE));
+        unit_selector = new Inkscape::UI::Widget::UnitMenu();
+        unit_selector->setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
+        unitChangedConn = unit_selector->signal_changed().connect(sigc::mem_fun(*this, &Export::onUnitChanged));
+        
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        //if (desktop)
-        //    sp_unit_selector_set_unit (SP_UNIT_SELECTOR(unit_selector->gobj()), sp_desktop_namedview(desktop)->doc_units);
+        if (desktop)
+            unit_selector->setUnit(sp_desktop_namedview(desktop)->doc_units->abbr);
         unitbox.pack_end(*unit_selector, false, false, 0);
         unitbox.pack_end(units_label, false, false, 3);
 
@@ -226,28 +229,28 @@ Export::Export (void) :
         t->set_col_spacings (4);
 #endif
 
-        x0_adj = createSpinbutton ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
+        x0_adj = createSpinbutton ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, ((Gtk::Widget*) unit_selector)->gobj(),
                                    t, 0, 0, _("_x0:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaX0Change);
 
-        x1_adj = createSpinbutton ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
+        x1_adj = createSpinbutton ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, ((Gtk::Widget*) unit_selector)->gobj(),
                                    t, 0, 1, _("x_1:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaX1Change);
 
         width_adj = createSpinbutton ( "width", 0.0, 0.0, PNG_UINT_31_MAX, 0.1, 1.0,
-                                   unit_selector->gobj(), t, 0, 2, _("Wid_th:"), "", EXPORT_COORD_PRECISION, 1,
+                                   ((Gtk::Widget*) unit_selector)->gobj(), t, 0, 2, _("Wid_th:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaWidthChange);
 
-        y0_adj = createSpinbutton ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
+        y0_adj = createSpinbutton ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, ((Gtk::Widget*) unit_selector)->gobj(),
                                    t, 2, 0, _("_y0:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaY0Change);
 
-        y1_adj = createSpinbutton ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
+        y1_adj = createSpinbutton ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, ((Gtk::Widget*) unit_selector)->gobj(),
                                    t, 2, 1, _("y_1:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaY1Change);
 
         height_adj = createSpinbutton ( "height", 0.0, 0.0, PNG_UINT_31_MAX, 0.1, 1.0,
-                                   unit_selector->gobj(), t, 2, 2, _("Hei_ght:"), "", EXPORT_COORD_PRECISION, 1,
+                                   ((Gtk::Widget*) unit_selector)->gobj(), t, 2, 2, _("Hei_ght:"), "", EXPORT_COORD_PRECISION, 1,
                                    &Export::onAreaHeightChange);
 
         area_box.pack_start(togglebox, false, false, 3);
@@ -496,9 +499,6 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
 #else
     Gtk::Adjustment *adj = new Gtk::Adjustment  ( val, min, max, step, page, 0 );
 #endif
-    if (us) {
-        sp_unit_selector_add_adjustment ( SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (adj->gobj()) );
-    }
 
     int pos = 0;
     Gtk::Label *l = NULL;
@@ -977,6 +977,12 @@ Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, c
         path = filename;
     }
     return path;
+}
+
+// Called when unit is changed
+void Export::onUnitChanged()
+{
+    onAreaToggled();
 }
 
 void Export::onHideExceptSelected ()
@@ -1507,10 +1513,6 @@ void Export::areaXChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
-        return;
-    }
-
     update = true;
 
     x0 = getValuePx(x0_adj);
@@ -1554,10 +1556,6 @@ void Export::areaYChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test (SP_UNIT_SELECTOR(unit_selector->gobj())))  {
-        return;
-    }
-
     update = true;
 
     y0 = getValuePx(y0_adj);
@@ -1597,10 +1595,6 @@ void Export::onAreaWidthChange()
         return;
     }
 
-    if (sp_unit_selector_update_test(reinterpret_cast<SPUnitSelector *>(unit_selector->gobj()))) {
-        return;
-    }
-
     update = true;
 
     float x0 = getValuePx(x0_adj);
@@ -1627,10 +1621,6 @@ void Export::onAreaWidthChange()
 void Export::onAreaHeightChange()
 {
     if (update) {
-        return;
-    }
-
-    if (sp_unit_selector_update_test(reinterpret_cast<SPUnitSelector *>(unit_selector->gobj()))) {
         return;
     }
 
@@ -1709,10 +1699,6 @@ void Export::onBitmapWidthChange ()
         return;
     }
 
-    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
-       return;
-    }
-
     update = true;
 
     x0 = getValuePx(x0_adj);
@@ -1741,10 +1727,6 @@ void Export::onBitmapHeightChange ()
 
     if (update) {
         return;
-    }
-
-    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
-       return;
     }
 
     update = true;
@@ -1801,10 +1783,6 @@ void Export::onExportXdpiChange()
 
     if (update) {
         return;
-    }
-
-    if (sp_unit_selector_update_test(SP_UNIT_SELECTOR(unit_selector->gobj()))) {
-       return;
     }
 
     update = true;
@@ -1905,9 +1883,11 @@ void Export::setValuePx(Glib::RefPtr<Gtk::Adjustment>& adj, double val)
 void Export::setValuePx( Gtk::Adjustment *adj, double val)
 #endif
 {
-    const SPUnit *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(unit_selector->gobj()) );
+    const Unit unit = unit_selector->getUnit();
+    Inkscape::Util::UnitTable unit_table;
+    Inkscape::Util::Unit px = unit_table.getUnit("px");
 
-    setValue(adj, sp_pixels_get_units (val, *unit));
+    setValue(adj, Inkscape::Util::Quantity::convert(val, &px, &unit));
 
     return;
 }
@@ -1955,9 +1935,11 @@ float Export::getValuePx(  Gtk::Adjustment *adj )
 #endif
 {
     float value = getValue( adj);
-    const SPUnit *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(unit_selector->gobj()));
+    const Unit unit = unit_selector->getUnit();
+    Inkscape::Util::UnitTable unit_table;
+    Inkscape::Util::Unit px = unit_table.getUnit("px");
 
-    return sp_units_get_pixels (value, *unit);
+    return Inkscape::Util::Quantity::convert(value, &unit, &px);
 } // end of sp_export_value_get_px()
 
 /**
