@@ -230,6 +230,7 @@ public:
     gdouble getWidth() const;
     gdouble getHeight() const;
     Geom::Point getDimensions() const;
+    Geom::OptRect preferredBounds() const;
     void setWidth(const Inkscape::Util::Quantity &width);
     void setHeight(const Inkscape::Util::Quantity &height);
     void requestModified();
