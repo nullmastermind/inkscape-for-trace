@@ -43,8 +43,8 @@
 #include "file.h"
 #include "helper/action.h"
 #include "helper/action-context.h"
-#include "helper/units.h"
-#include "helper/unit-tracker.h"
+#include "util/units.h"
+#include "ui/widget/unit-tracker.h"
 #include "inkscape-private.h"
 #include "interface.h"
 #include "macros.h"
@@ -79,7 +79,7 @@
 using Inkscape::round;
 #endif
 
-using Inkscape::UnitTracker;
+using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
 using ege::AppearTimeTracker;
@@ -1780,7 +1780,7 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                         if (tracker == NULL) // it's null when inkscape is first opened
                             continue;
 
-                        // tracker->setActiveUnit( nv->doc_units );
+                        tracker->setActiveUnit( nv->doc_units );
                     } // grandchildren
                 } // if child is a container
             } // children

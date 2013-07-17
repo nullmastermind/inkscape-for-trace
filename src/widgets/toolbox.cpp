@@ -50,8 +50,6 @@
 #include "../helper/action.h"
 #include "../helper/action-context.h"
 #include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
 #include "icon.h"
 #include "../ink-action.h"
 #include "../ink-comboboxentry-action.h"
@@ -101,7 +99,6 @@
 
 //#define DEBUG_TEXT
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::PrefPusher;
