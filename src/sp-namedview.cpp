@@ -552,11 +552,11 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
              * doc_units.
              */
             static Inkscape::Util::Unit px = unit_table.getUnit("px");
-            Inkscape::Util::Unit const *new_unit = &px;
+            Inkscape::Util::Unit const *new_unit = new Inkscape::Util::Unit(px);
 
             if (value) {
                 Inkscape::Util::Unit u = unit_table.getUnit(value);
-                Inkscape::Util::Unit const *const req_unit = &u;
+                Inkscape::Util::Unit const *const req_unit = new Inkscape::Util::Unit(u);
                 if ( !unit_table.hasUnit(value) ) {
                     g_warning("Unrecognized unit `%s'", value);
                     /* fixme: Document errors should be reported in the status bar or
@@ -580,7 +580,7 @@ static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *va
 
             if (value) {
                 Inkscape::Util::Unit u = unit_table.getUnit(value);
-                Inkscape::Util::Unit const *const req_unit = &u;
+                Inkscape::Util::Unit const *const req_unit = new Inkscape::Util::Unit(u);
                 if ( !unit_table.hasUnit(value) ) {
                     g_warning("Unrecognized unit `%s'", value);
                     /* fixme: Document errors should be reported in the status bar or
