@@ -1,4 +1,15 @@
 /*
+ * Inkscape Units
+ *
+ * Authors:
+ *   Matthew Petroff <matthew@mpetroff.net>
+ *
+ * Copyright (C) 2013 Matthew Petroff
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+/*
 This is a rough draft of a global 'units' thingee, to allow dialogs and
 the ruler to share info about unit systems...  Dunno if this is the
 right kind of object though, so we may have to redo this or shift things
