@@ -74,7 +74,7 @@ UnitParam::param_newWidget()
                                                      param_effect->getRepr(),
                                                      param_effect->getSPDoc()));
 
-    unit_menu->setUnit(unit);
+    unit_menu->setUnit(unit->abbr);
     unit_menu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change unit parameter"));
 
     return dynamic_cast<Gtk::Widget *> (unit_menu);
