@@ -228,10 +228,6 @@ static PaperSizeRec const inkscape_papers[] = {
 //# P A G E    S I Z E R
 //########################################################################
 
-//The default unit for this widget and its calculations
-static Inkscape::Util::Unit _px_unit = unit_table.getUnit("px");
-
-
 /**
  * Constructor
  */
@@ -481,8 +477,8 @@ PageSizer::setDim (double w, double h, bool changeList)
     if (SP_ACTIVE_DESKTOP && !_widgetRegistry->isUpdating()) {
         SPDocument *doc = sp_desktop_document(SP_ACTIVE_DESKTOP);
         double const old_height = doc->getHeight();
-        doc->setWidth (Inkscape::Util::Quantity(w, &_px_unit));
-        doc->setHeight (Inkscape::Util::Quantity(h, &_px_unit));
+        doc->setWidth (Inkscape::Util::Quantity(w, "px"));
+        doc->setHeight (Inkscape::Util::Quantity(h, "px"));
         // The origin for the user is in the lower left corner; this point should remain stationary when
         // changing the page size. The SVG's origin however is in the upper left corner, so we must compensate for this
         Geom::Translate const vert_offset(Geom::Point(0, (old_height - h)));
@@ -567,8 +563,8 @@ PageSizer::find_paper_size (double w, double h) const
          iter != _paperSizeTable.end() ; ++iter) {
         PaperSize paper = iter->second;
         Inkscape::Util::Unit const &i_unit = paper.unit;
-        double smallX = Inkscape::Util::Quantity::convert(paper.smaller, &i_unit, &_px_unit);
-        double largeX = Inkscape::Util::Quantity::convert(paper.larger, &i_unit, &_px_unit);
+        double smallX = Inkscape::Util::Quantity::convert(paper.smaller, i_unit, "px");
+        double largeX = Inkscape::Util::Quantity::convert(paper.larger, i_unit, "px");
 
         g_return_val_if_fail(smallX <= largeX, _paperSizeListStore->children().end());
 
@@ -659,9 +655,8 @@ PageSizer::on_paper_size_list_changed()
         _landscape = _landscapeButton.get_active();
     }
 
-    Inkscape::Util::Unit const &src_unit = paper.unit;
-    w = Inkscape::Util::Quantity::convert(w, &src_unit, &_px_unit);
-    h = Inkscape::Util::Quantity::convert(h, &src_unit, &_px_unit);
+    w = Inkscape::Util::Quantity::convert(w, paper.unit, "px");
+    h = Inkscape::Util::Quantity::convert(h, paper.unit, "px");
 
     if (_landscape)
         setDim (h, w, false);

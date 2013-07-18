@@ -224,7 +224,6 @@ void UnitTracker::_setActive(gint active)
 void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const oldUnit, Inkscape::Util::Unit const newUnit)
 {
     _isUpdating = true;
-    Inkscape::Util::Unit px = _unit_table.getUnit("px");
     for ( GSList *cur = _adjList ; cur ; cur = g_slist_next(cur) ) {
         GtkAdjustment *adj = GTK_ADJUSTMENT(cur->data);
         gdouble oldVal = gtk_adjustment_get_value(adj);
@@ -234,15 +233,15 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const oldUnit, Inkscape
             && (newUnit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
         {
             val = newUnit.factor;
-            _priorValues[adj] = Inkscape::Util::Quantity::convert(oldVal, &oldUnit, &px);
+            _priorValues[adj] = Inkscape::Util::Quantity::convert(oldVal, oldUnit, "px");
         } else if ( (oldUnit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
             && (newUnit.type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
         {
             if (_priorValues.find(adj) != _priorValues.end()) {
-                val = Inkscape::Util::Quantity::convert(_priorValues[adj], &newUnit, &px);
+                val = Inkscape::Util::Quantity::convert(_priorValues[adj], newUnit, "px");
             }
         } else {
-            val = Inkscape::Util::Quantity::convert(oldVal, &oldUnit, &newUnit);
+            val = Inkscape::Util::Quantity::convert(oldVal, oldUnit, newUnit);
         }
 
         gtk_adjustment_set_value(adj, val);

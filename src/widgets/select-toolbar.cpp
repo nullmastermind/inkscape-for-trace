@@ -97,10 +97,9 @@ sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
                 }
             } else {
                 Inkscape::Util::UnitTable unit_table;
-                Unit px = unit_table.getUnit("px");
                 for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
                     GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
-                    gtk_adjustment_set_value(a, Quantity::convert(keyval[i].val, &px, &unit));
+                    gtk_adjustment_set_value(a, Quantity::convert(keyval[i].val, "px", unit));
                 }
             }
         }
@@ -194,15 +193,14 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     GtkAdjustment* a_h = GTK_ADJUSTMENT( g_object_get_data( G_OBJECT(spw), "height" ) );
 
     Inkscape::Util::UnitTable unit_table;
-    Unit px = unit_table.getUnit("px");
 
     if (unit.type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-        x0 = Quantity::convert(gtk_adjustment_get_value(a_x), &unit, &px);
-        y0 = Quantity::convert(gtk_adjustment_get_value(a_y), &unit, &px);
-        x1 = x0 + Quantity::convert(gtk_adjustment_get_value(a_w), &unit, &px);
-        xrel = Quantity::convert(gtk_adjustment_get_value(a_w), &unit, &px) / bbox_user->dimensions()[Geom::X];
-        y1 = y0 + Quantity::convert(gtk_adjustment_get_value(a_h), &unit, &px);;
-        yrel = Quantity::convert(gtk_adjustment_get_value(a_h), &unit, &px) / bbox_user->dimensions()[Geom::Y];
+        x0 = Quantity::convert(gtk_adjustment_get_value(a_x), unit, "px");
+        y0 = Quantity::convert(gtk_adjustment_get_value(a_y), unit, "px");
+        x1 = x0 + Quantity::convert(gtk_adjustment_get_value(a_w), unit, "px");
+        xrel = Quantity::convert(gtk_adjustment_get_value(a_w), unit, "px") / bbox_user->dimensions()[Geom::X];
+        y1 = y0 + Quantity::convert(gtk_adjustment_get_value(a_h), unit, "px");;
+        yrel = Quantity::convert(gtk_adjustment_get_value(a_h), unit, "px") / bbox_user->dimensions()[Geom::Y];
     } else {
         double const x0_propn = gtk_adjustment_get_value (a_x) * unit.factor;
         x0 = bbox_user->min()[Geom::X] * x0_propn;
@@ -232,10 +230,10 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
 
     // unless the unit is %, convert the scales and moves to the unit
     if (unit.type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-        mh = Quantity::convert(mh, &px, &unit);
-        sh = Quantity::convert(sh, &px, &unit);
-        mv = Quantity::convert(mv, &px, &unit);
-        sv = Quantity::convert(sv, &px, &unit);
+        mh = Quantity::convert(mh, "px", unit);
+        sh = Quantity::convert(sh, "px", unit);
+        mv = Quantity::convert(mv, "px", unit);
+        sv = Quantity::convert(sv, "px", unit);
     }
 
     // do the action only if one of the scales/moves is greater than half the last significant

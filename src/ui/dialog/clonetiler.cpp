@@ -1108,8 +1108,7 @@ CloneTiler::CloneTiler (void) :
                     double value = prefs->getDouble(prefs_path + "fillwidth", 50.0);
                     Inkscape::Util::Unit const unit = unit_menu->getUnit();
                     Inkscape::Util::UnitTable unit_table;
-                    Inkscape::Util::Unit const px = unit_table.getUnit("px");
-                    gdouble const units = Inkscape::Util::Quantity::convert(value, &px, &unit);
+                    gdouble const units = Inkscape::Util::Quantity::convert(value, "px", unit);
                     fill_width->set_value (units);
 
 #if WITH_GTKMM_3_0
@@ -1143,8 +1142,7 @@ CloneTiler::CloneTiler (void) :
                     double value = prefs->getDouble(prefs_path + "fillheight", 50.0);
                     Inkscape::Util::Unit const unit = unit_menu->getUnit();
                     Inkscape::Util::UnitTable unit_table;
-                    Inkscape::Util::Unit const px = unit_table.getUnit("px");
-                    gdouble const units = Inkscape::Util::Quantity::convert(value, &px, &unit);
+                    gdouble const units = Inkscape::Util::Quantity::convert(value, "px", unit);
                     fill_height->set_value (units);
 
 #if WITH_GTKMM_3_0
@@ -2953,8 +2951,7 @@ void CloneTiler::clonetiler_fill_width_changed(GtkAdjustment *adj, Inkscape::UI:
     gdouble const raw_dist = gtk_adjustment_get_value (adj);
     Inkscape::Util::Unit const unit = u->getUnit();
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit const px = unit_table.getUnit("px");
-    gdouble const pixels = Inkscape::Util::Quantity::convert(raw_dist, &unit, &px);
+    gdouble const pixels = Inkscape::Util::Quantity::convert(raw_dist, unit, "px");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble(prefs_path + "fillwidth", pixels);
@@ -2965,8 +2962,7 @@ void CloneTiler::clonetiler_fill_height_changed(GtkAdjustment *adj, Inkscape::UI
     gdouble const raw_dist = gtk_adjustment_get_value (adj);
     Inkscape::Util::Unit const unit = u->getUnit();
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit const px = unit_table.getUnit("px");
-    gdouble const pixels = Inkscape::Util::Quantity::convert(raw_dist, &unit, &px);
+    gdouble const pixels = Inkscape::Util::Quantity::convert(raw_dist, unit, "px");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble(prefs_path + "fillheight", pixels);
@@ -2980,10 +2976,9 @@ void CloneTiler::clonetiler_unit_changed()
     
     Inkscape::Util::Unit unit = unit_menu->getUnit();
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
     
-    gdouble width_value = Inkscape::Util::Quantity::convert(width_pixels, &px, &unit);
-    gdouble height_value = Inkscape::Util::Quantity::convert(height_pixels, &px, &unit);
+    gdouble width_value = Inkscape::Util::Quantity::convert(width_pixels, "px", unit);
+    gdouble height_value = Inkscape::Util::Quantity::convert(height_pixels, "px", unit);
     gtk_adjustment_set_value(fill_width->gobj(), width_value);
     gtk_adjustment_set_value(fill_height->gobj(), height_value);
 }

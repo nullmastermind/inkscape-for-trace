@@ -250,16 +250,15 @@ static void sp_node_toolbox_coord_changed(gpointer /*shape_editor*/, GObject *tb
         gtk_action_set_sensitive(xact, TRUE);
         gtk_action_set_sensitive(yact, TRUE);
         Inkscape::Util::UnitTable unit_table;
-        Unit px = unit_table.getUnit("px");
-        Geom::Coord oldx = Quantity::convert(gtk_adjustment_get_value(xadj), &unit, &px);
-        Geom::Coord oldy = Quantity::convert(gtk_adjustment_get_value(yadj), &unit, &px);
+        Geom::Coord oldx = Quantity::convert(gtk_adjustment_get_value(xadj), unit, "px");
+        Geom::Coord oldy = Quantity::convert(gtk_adjustment_get_value(yadj), unit, "px");
         Geom::Point mid = nt->_selected_nodes->pointwiseBounds()->midpoint();
 
         if (oldx != mid[Geom::X]) {
-            gtk_adjustment_set_value(xadj, Quantity::convert(mid[Geom::X], &px, &unit));
+            gtk_adjustment_set_value(xadj, Quantity::convert(mid[Geom::X], "px", unit));
         }
         if (oldy != mid[Geom::Y]) {
-            gtk_adjustment_set_value(yadj, Quantity::convert(mid[Geom::Y], &px, &unit));
+            gtk_adjustment_set_value(yadj, Quantity::convert(mid[Geom::Y], "px", unit));
         }
     }
 
@@ -278,11 +277,10 @@ static void sp_node_path_value_changed(GtkAdjustment *adj, GObject *tbl, Geom::D
     Unit const unit = tracker->getActiveUnit();
 
     Inkscape::Util::UnitTable unit_table;
-    Unit px = unit_table.getUnit("px");
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         prefs->setDouble(Glib::ustring("/tools/nodes/") + (d == Geom::X ? "x" : "y"),
-            Quantity::convert(gtk_adjustment_get_value(adj), &unit, &px));
+            Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
     }
 
     // quit if run by the attr_changed listener
@@ -295,7 +293,7 @@ static void sp_node_path_value_changed(GtkAdjustment *adj, GObject *tbl, Geom::D
 
     InkNodeTool *nt = get_node_tool();
     if (nt && !nt->_selected_nodes->empty()) {
-        double val = Quantity::convert(gtk_adjustment_get_value(adj), &unit, &px);
+        double val = Quantity::convert(gtk_adjustment_get_value(adj), unit, "px");
         double oldval = nt->_selected_nodes->pointwiseBounds()->midpoint()[d];
         Geom::Point delta(0,0);
         delta[d] = val - oldval;

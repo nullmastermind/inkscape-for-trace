@@ -1885,9 +1885,8 @@ void Export::setValuePx( Gtk::Adjustment *adj, double val)
 {
     const Unit unit = unit_selector->getUnit();
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
 
-    setValue(adj, Inkscape::Util::Quantity::convert(val, &px, &unit));
+    setValue(adj, Inkscape::Util::Quantity::convert(val, "px", unit));
 
     return;
 }
@@ -1937,9 +1936,8 @@ float Export::getValuePx(  Gtk::Adjustment *adj )
     float value = getValue( adj);
     const Unit unit = unit_selector->getUnit();
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
 
-    return Inkscape::Util::Quantity::convert(value, &unit, &px);
+    return Inkscape::Util::Quantity::convert(value, unit, "px");
 } // end of sp_export_value_get_px()
 
 /**

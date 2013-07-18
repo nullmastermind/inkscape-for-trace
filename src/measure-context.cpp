@@ -520,8 +520,6 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
                 if (!unit_name.compare("")) {
                     unit_name = "px";
                 }
-                Inkscape::Util::Unit unit = unit_table.getUnit(unit_name);
-                Inkscape::Util::Unit px = unit_table.getUnit("px");
 
                 double fontsize = prefs->getInt("/tools/measure/fontsize");
 
@@ -532,7 +530,7 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
                 for (size_t idx = 1; idx < intersections.size(); ++idx) {
                     LabelPlacement placement;
                     placement.lengthVal = (intersections[idx] - intersections[idx - 1]).length();
-                    placement.lengthVal = Inkscape::Util::Quantity::convert(placement.lengthVal, &px, &unit);
+                    placement.lengthVal = Inkscape::Util::Quantity::convert(placement.lengthVal, "px", unit_name);
                     placement.offset = DIMENSION_OFFSET;
                     placement.start = desktop->doc2dt( (intersections[idx - 1] + intersections[idx]) / 2 );
                     placement.end = placement.start - (normal * placement.offset);
@@ -548,7 +546,7 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
                     LabelPlacement &place = *it;
 
                     // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *measure_str = g_strdup_printf("%.2f %s", place.lengthVal, unit.abbr.c_str());
+                    gchar *measure_str = g_strdup_printf("%.2f %s", place.lengthVal, unit_name.c_str());
                     SPCanvasText *canvas_tooltip = sp_canvastext_new(sp_desktop_tempgroup(desktop),
                                                                      desktop,
                                                                      place.end,
@@ -589,10 +587,10 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
 
                 {
                     double totallengthval = (end_point - start_point).length();
-                    totallengthval = Inkscape::Util::Quantity::convert(totallengthval, &px, &unit);
+                    totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
 
                     // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit.abbr.c_str());
+                    gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
                     SPCanvasText *canvas_tooltip = sp_canvastext_new(sp_desktop_tempgroup(desktop),
                                                                      desktop,
                                                                      end_point + desktop->w2d(Geom::Point(3*fontsize, -fontsize)),
@@ -610,10 +608,10 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
 
                 if (intersections.size() > 2) {
                     double totallengthval = (intersections[intersections.size()-1] - intersections[0]).length();
-                    totallengthval = Inkscape::Util::Quantity::convert(totallengthval, &px, &unit);
+                    totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
 
                     // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *total_str = g_strdup_printf("%.2f %s", totallengthval, unit.abbr.c_str());
+                    gchar *total_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
                     SPCanvasText *canvas_tooltip = sp_canvastext_new(sp_desktop_tempgroup(desktop),
                                                                      desktop,
                                                                      desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * 60,

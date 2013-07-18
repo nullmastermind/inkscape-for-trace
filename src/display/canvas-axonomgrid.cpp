@@ -161,16 +161,15 @@ CanvasAxonomGrid::CanvasAxonomGrid (SPNamedView * nv, Inkscape::XML::Node * in_r
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
     gridunit = new Inkscape::Util::Unit(unit_table.getUnit(prefs->getString("/options/grids/axonom/units")));
     if (!gridunit)
         gridunit = new Inkscape::Util::Unit(unit_table.getUnit("px"));
-    origin[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/origin_x", 0.0), gridunit, &px);
-    origin[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/origin_y", 0.0), gridunit, &px);
+    origin[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/origin_x", 0.0), *gridunit, "px");
+    origin[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/origin_y", 0.0), *gridunit, "px");
     color = prefs->getInt("/options/grids/axonom/color", 0x0000ff20);
     empcolor = prefs->getInt("/options/grids/axonom/empcolor", 0x0000ff40);
     empspacing = prefs->getInt("/options/grids/axonom/empspacing", 5);
-    lengthy = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/spacing_y", 1.0), gridunit, &px);
+    lengthy = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/axonom/spacing_y", 1.0), *gridunit, "px");
     angle_deg[X] = prefs->getDouble("/options/grids/axonom/angle_x", 30.0);
     angle_deg[Z] = prefs->getDouble("/options/grids/axonom/angle_z", 30.0);
     angle_deg[Y] = 0;
@@ -215,22 +214,21 @@ CanvasAxonomGrid::readRepr()
 {
     gchar const *value;
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
     if ( (value = repr->attribute("originx")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
         gridunit = q.unit;
-        origin[Geom::X] = unit_table.getQuantity(value).value(&px);
+        origin[Geom::X] = unit_table.getQuantity(value).value("px");
     }
     if ( (value = repr->attribute("originy")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
         gridunit = q.unit;
-        origin[Geom::Y] = unit_table.getQuantity(value).value(&px);
+        origin[Geom::Y] = unit_table.getQuantity(value).value("px");
     }
 
     if ( (value = repr->attribute("spacingy")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
         gridunit = q.unit;
-        lengthy = q.value(&px);
+        lengthy = q.value("px");
         if (lengthy < 0.0500) lengthy = 0.0500;
     }
 
@@ -373,15 +371,14 @@ _wr.setUpdating (false);
 
     gdouble val;
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
     val = origin[Geom::X];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_ox->setValue (val);
     val = origin[Geom::Y];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_oy->setValue (val);
     val = lengthy;
-    double gridy = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    double gridy = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_sy->setValue (gridy);
 
     _rsu_ax->setValue(angle_deg[X]);

@@ -1119,8 +1119,7 @@ double SPNamedView::getMarginLength(gchar const * const key,
     if (*margin_units == percent) {
         return (use_width)? width * value : height * value; 
     }
-//    if (!sp_convert_distance (&value, margin_units, return_units)) {
-    if (!margin_units->compatibleWith(return_units)) {
+    if (!margin_units->compatibleWith(*return_units)) {
         return 0.0;
     }
     return value;

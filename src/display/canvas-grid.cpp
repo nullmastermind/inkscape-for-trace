@@ -398,13 +398,12 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
     gdouble val;
 
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
 
     val = origin_px[Geom::X];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     os_x << val << gridunit->abbr;
     val = origin_px[Geom::Y];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     os_y << val << gridunit->abbr;
     repr->setAttribute("originx", os_x.str().c_str());
     repr->setAttribute("originy", os_y.str().c_str());
@@ -496,14 +495,13 @@ CanvasXYGrid::CanvasXYGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr, SPD
     if (!gridunit) {
         gridunit = new Inkscape::Util::Unit(unit_table.getUnit("px"));
     }
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
-    origin[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/origin_x", 0.0), gridunit, &px);
-    origin[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/origin_y", 0.0), gridunit, &px);
+    origin[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/origin_x", 0.0), *gridunit, "px");
+    origin[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/origin_y", 0.0), *gridunit, "px");
     color = prefs->getInt("/options/grids/xy/color", 0x0000ff20);
     empcolor = prefs->getInt("/options/grids/xy/empcolor", 0x0000ff40);
     empspacing = prefs->getInt("/options/grids/xy/empspacing", 5);
-    spacing[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/spacing_x", 0.0), gridunit, &px);
-    spacing[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/spacing_y", 0.0), gridunit, &px);
+    spacing[Geom::X] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/spacing_x", 0.0), *gridunit, "px");
+    spacing[Geom::Y] = Inkscape::Util::Quantity::convert(prefs->getDouble("/options/grids/xy/spacing_y", 0.0), *gridunit, "px");
     render_dotted = prefs->getBool("/options/grids/xy/dotted", false);
 
     snapper = new CanvasXYGridSnapper(this, &namedview->snap_manager, 0);
@@ -591,19 +589,18 @@ void
 CanvasXYGrid::readRepr()
 {
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
     
     gchar const *value;
     if ( (value = repr->attribute("originx")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
         gridunit = q.unit;
-        origin[Geom::X] = unit_table.getQuantity(value).value(&px);
+        origin[Geom::X] = unit_table.getQuantity(value).value("px");
     }
 
     if ( (value = repr->attribute("originy")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
         gridunit = q.unit;
-        origin[Geom::Y] = unit_table.getQuantity(value).value(&px);
+        origin[Geom::Y] = unit_table.getQuantity(value).value("px");
     }
 
     if ( (value = repr->attribute("spacingx")) ) {
@@ -612,7 +609,7 @@ CanvasXYGrid::readRepr()
         gridunit = q.unit;
         spacing[Geom::X] = q.quantity;
         validateScalar(oldVal, &spacing[Geom::X]);
-        spacing[Geom::X] = Inkscape::Util::Quantity::convert(spacing[Geom::X], gridunit, &px);
+        spacing[Geom::X] = Inkscape::Util::Quantity::convert(spacing[Geom::X], *gridunit, "px");
     }
     if ( (value = repr->attribute("spacingy")) ) {
         double oldVal = spacing[Geom::Y];
@@ -620,7 +617,7 @@ CanvasXYGrid::readRepr()
         gridunit = q.unit;
         spacing[Geom::Y] = q.quantity;
         validateScalar(oldVal, &spacing[Geom::Y]);
-        spacing[Geom::Y] = Inkscape::Util::Quantity::convert(spacing[Geom::Y], gridunit, &px);
+        spacing[Geom::Y] = Inkscape::Util::Quantity::convert(spacing[Geom::Y], *gridunit, "px");
     }
 
     if ( (value = repr->attribute("color")) ) {
@@ -760,18 +757,17 @@ CanvasXYGrid::newSpecificWidget()
 
     gdouble val;
     Inkscape::Util::UnitTable unit_table;
-    Inkscape::Util::Unit px = unit_table.getUnit("px");
     val = origin[Geom::X];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_ox->setValue (val);
     val = origin[Geom::Y];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_oy->setValue (val);
     val = spacing[Geom::X];
-    double gridx = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    double gridx = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_sx->setValue (gridx);
     val = spacing[Geom::Y];
-    double gridy = Inkscape::Util::Quantity::convert(val, &px, gridunit);
+    double gridy = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_sy->setValue (gridy);
 
     _rcp_gcol->setRgba32 (color);
@@ -811,16 +807,16 @@ CanvasXYGrid::updateWidgets()
 
     gdouble val;
     val = origin[Geom::X];
-    val = Inkscape::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Quantity::convert(val, "px", *gridunit);
     _rsu_ox.setValue (val);
     val = origin[Geom::Y];
-    val = Inkscape::Quantity::convert(val, &px, gridunit);
+    val = Inkscape::Quantity::convert(val, "px", *gridunit);
     _rsu_oy.setValue (val);
     val = spacing[Geom::X];
-    double gridx = Inkscape::Quantity::convert(val, &px, gridunit);
+    double gridx = Inkscape::Quantity::convert(val, "px", *gridunit);
     _rsu_sx.setValue (gridx);
     val = spacing[Geom::Y];
-    double gridy = Inkscape::Quantity::convert(val, &px, gridunit);
+    double gridy = Inkscape::Quantity::convert(val, "px", *gridunit);
     _rsu_sy.setValue (gridy);
 
     _rcp_gcol.setRgba32 (color);

@@ -115,7 +115,8 @@ void Unit::clear()
     *this = Unit();
 }
 
-int Unit::defaultDigits() const {
+int Unit::defaultDigits() const
+{
     int factor_digits = int(log10(factor));
     if (factor_digits < 0) {
         g_warning("factor = %f, factor_digits = %d", factor, factor_digits);
@@ -126,14 +127,15 @@ int Unit::defaultDigits() const {
 }
 
 /** Checks if a unit is compatible with the specified unit. */
-bool Unit::compatibleWith(const Unit *u) const {
+bool Unit::compatibleWith(const Unit &u) const
+{
     // Percentages
-    if (type == UNIT_TYPE_DIMENSIONLESS || u->type == UNIT_TYPE_DIMENSIONLESS) {
+    if (type == UNIT_TYPE_DIMENSIONLESS || u.type == UNIT_TYPE_DIMENSIONLESS) {
         return true;
     }
     
     // Other units with same type
-    if (type == u->type) {
+    if (type == u.type) {
         return true;
     }
     
@@ -143,22 +145,24 @@ bool Unit::compatibleWith(const Unit *u) const {
 bool Unit::compatibleWith(const Glib::ustring u) const
 {
     static UnitTable unit_table;
-    Unit compatible_unit = unit_table.getUnit(u);
-    return compatibleWith(&compatible_unit);
+    return compatibleWith(unit_table.getUnit(u));
 }
 
 /** Check if units are equal. */
-bool operator== (const Unit &u1, const Unit &u2) {
+bool operator== (const Unit &u1, const Unit &u2)
+{
     return (u1.type == u2.type && u1.name.compare(u2.name) == 0);
 }
 
 /** Check if units are not equal. */ 
-bool operator!= (const Unit &u1, const Unit &u2) {
+bool operator!= (const Unit &u1, const Unit &u2)
+{
     return !(u1 == u2);
 }
 
 /** Temporary - get SVG unit. */
-int Unit::svgUnit() const {
+int Unit::svgUnit() const
+{
     if (!abbr.compare("px"))
         return 1;
     if (!abbr.compare("pt"))
@@ -183,7 +187,8 @@ int Unit::svgUnit() const {
 }
 
 /** Temporary - get metric. */
-int Unit::metric() const {
+int Unit::metric() const
+{
     if (!abbr.compare("mm"))
         return 1;
     if (!abbr.compare("cm"))
@@ -212,21 +217,24 @@ UnitTable::UnitTable()
     g_free(filename);
 }
 
-UnitTable::~UnitTable() {
+UnitTable::~UnitTable()
+{
     for (UnitMap::iterator iter = _unit_map.begin(); iter != _unit_map.end(); ++iter)
     {
         delete (*iter).second;
     }
 }
 
-void UnitTable::addUnit(Unit const &u, bool primary) {
+void UnitTable::addUnit(Unit const &u, bool primary)
+{
     _unit_map[u.abbr] = new Unit(u);
     if (primary) {
         _primary_unit[u.type] = u.abbr;
     }
 }
 
-Unit UnitTable::getUnit(Glib::ustring const &unit_abbr) const {
+Unit UnitTable::getUnit(Glib::ustring const &unit_abbr) const
+{
     UnitMap::const_iterator iter = _unit_map.find(unit_abbr);
     if (iter != _unit_map.end()) {
         return *((*iter).second);
@@ -235,7 +243,8 @@ Unit UnitTable::getUnit(Glib::ustring const &unit_abbr) const {
     }
 }
 
-Quantity UnitTable::getQuantity(Glib::ustring const& q) const {
+Quantity UnitTable::getQuantity(Glib::ustring const& q) const
+{
     Glib::MatchInfo match_info;
     
     // Extract value
@@ -251,12 +260,12 @@ Quantity UnitTable::getQuantity(Glib::ustring const& q) const {
     if (unit_regex->match(q, match_info)) {
         abbr = match_info.fetch(0);
     }
-    Unit *u = new Inkscape::Util::Unit(getUnit(abbr));
     
-    return Quantity(value, u);
+    return Quantity(value, abbr);
 }
 
-bool UnitTable::deleteUnit(Unit const &u) {
+bool UnitTable::deleteUnit(Unit const &u)
+{
     bool deleted = false;
     // Cannot delete the primary unit type since it's
     // used for conversions
@@ -365,7 +374,8 @@ bool UnitTable::loadText(Glib::ustring const &filename)
     return true;
 }
 
-bool UnitTable::load(Glib::ustring const &filename) {
+bool UnitTable::load(Glib::ustring const &filename)
+{
     UnitsSAXHandler handler(this);
 
     int result = handler.parseFile( filename.c_str() );
@@ -378,8 +388,8 @@ bool UnitTable::load(Glib::ustring const &filename) {
     return true;
 }
 
-bool UnitTable::save(Glib::ustring const &filename) {
-
+bool UnitTable::save(Glib::ustring const &filename)
+{
     // open file for writing
     FILE *f = fopen(filename.c_str(), "w");
     if (f == NULL) {
@@ -457,65 +467,65 @@ void UnitsSAXHandler::_endElement(xmlChar const *xname)
 }
 
 /** Initialize a quantity. */
-Quantity::Quantity(double q, const Unit *u) {
-    unit = u;
+Quantity::Quantity(double q, const Unit &u)
+{
+    unit = new Unit(u);
     quantity = q;
 }
-Quantity::Quantity(double q, const Glib::ustring u) {
+Quantity::Quantity(double q, const Glib::ustring u)
+{
     UnitTable unit_table;
     unit = new Unit(unit_table.getUnit(u));
     quantity = q;
 }
 
 /** Checks if a quantity is compatible with the specified unit. */
-bool Quantity::compatibleWith(const Unit *u) const {
+bool Quantity::compatibleWith(const Unit &u) const
+{
     return unit->compatibleWith(u);
 }
 bool Quantity::compatibleWith(const Glib::ustring u) const
 {
     static UnitTable unit_table;
-    Unit other_unit = unit_table.getUnit(u);
-    return compatibleWith(&other_unit);
+    return compatibleWith(unit_table.getUnit(u));
 }
 
 /** Return the quantity's value in the specified unit. */
-double Quantity::value(const Unit *u) const {
-    return convert(quantity, unit, u);
+double Quantity::value(const Unit &u) const
+{
+    return convert(quantity, *unit, u);
 }
-double Quantity::value(const Glib::ustring u) const {
+double Quantity::value(const Glib::ustring u) const
+{
     static UnitTable unit_table;
-    Unit to_unit = unit_table.getUnit(u);
-    return value(&to_unit);
+    return value(unit_table.getUnit(u));
 }
 
 /** Convert distances. */
-double Quantity::convert(const double from_dist, const Unit *from, const Unit *to) {
+double Quantity::convert(const double from_dist, const Unit &from, const Unit &to)
+{
     // Incompatible units
-    if (from->type != to->type) {
+    if (from.type != to.type) {
         return -1;
     }
     
     // Compatible units
-    return from_dist * from->factor / to->factor;
+    return from_dist * from.factor / to.factor;
 }
 double Quantity::convert(const double from_dist, const Glib::ustring from, const Unit &to)
 {
     static UnitTable unit_table;
-    Unit from_unit = unit_table.getUnit(from);
-    return convert(from_dist, &from_unit, &to);
+    return convert(from_dist, unit_table.getUnit(from), to);
 }
 double Quantity::convert(const double from_dist, const Unit &from, const Glib::ustring to)
 {
     static UnitTable unit_table;
-    Unit to_unit = unit_table.getUnit(to);
-    return convert(from_dist, &from, &to_unit);
+    return convert(from_dist, from, unit_table.getUnit(to));
 }
 double Quantity::convert(const double from_dist, const Glib::ustring from, const Glib::ustring to)
 {
     static UnitTable unit_table;
-    Unit from_unit = unit_table.getUnit(from);
-    Unit to_unit = unit_table.getUnit(to);
-    return convert(from_dist, &from_unit, &to_unit);
+    return convert(from_dist, unit_table.getUnit(from), unit_table.getUnit(to));
 }
 
 } // namespace Util
