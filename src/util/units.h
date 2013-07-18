@@ -82,6 +82,18 @@ class Unit {
     int metric() const;
 };
 
+class Quantity {
+public:
+    const Unit *unit;
+    double quantity;
+    
+    Quantity(double q, const Unit *u);   // constructor
+    bool compatibleWith(const Unit *u) const;
+    double value(Unit *u) const;
+    
+    static double convert(const double from_dist, const Unit *from, const Unit *to);
+};
+
 class UnitTable {
  public:
     /**
@@ -99,6 +111,9 @@ class UnitTable {
 
     /** Retrieve a given unit based on its string identifier */
     Unit    getUnit(Glib::ustring const& name) const;
+    
+    /** Retrieve a quantity based on its string identifier */
+    Quantity getQuantity(Glib::ustring const& q) const;
 
     /** Remove a unit definition from the given unit type table */
     bool    deleteUnit(Unit const& u);
@@ -140,18 +155,6 @@ class UnitTable {
     UnitTable(UnitTable const& t);
     UnitTable operator=(UnitTable const& t);
 
-};
-
-class Quantity {
-public:
-    const Unit *unit;
-    double quantity;
-    
-    Quantity(double q, const Unit *u);   // constructor
-    bool compatibleWith(const Unit *u) const;
-    double value(Unit *u) const;
-    
-    static double convert(const double from_dist, const Unit *from, const Unit *to);
 };
 
 } // namespace Util

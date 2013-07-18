@@ -16,6 +16,7 @@
 #include <cmath>
 #include <cerrno>
 #include <glib.h>
+#include <glibmm/regex.h>
 
 #include "io/simple-sax.h"
 #include "util/units.h"
@@ -226,6 +227,27 @@ Unit UnitTable::getUnit(Glib::ustring const &unit_abbr) const {
     } else {
         return Unit();
     }
+}
+
+Quantity UnitTable::getQuantity(Glib::ustring const& q) const {
+    Glib::MatchInfo match_info;
+    
+    // Extract value
+    double value = 0;
+    Glib::RefPtr<Glib::Regex> value_regex = Glib::Regex::create("\\d+\\.?\\d");
+    if (value_regex->match(q, match_info)) {
+        value = atof(match_info.fetch(0).c_str());
+    }
+    
+    // Extract unit abbreviation
+    Glib::ustring abbr;
+    Glib::RefPtr<Glib::Regex> unit_regex = Glib::Regex::create("[A-z]+");
+    if (unit_regex->match(q, match_info)) {
+        abbr = match_info.fetch(0);
+    }
+    Unit *u = new Inkscape::Util::Unit(getUnit(abbr));
+    
+    return Quantity(value, u);
 }
 
 bool UnitTable::deleteUnit(Unit const &u) {
