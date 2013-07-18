@@ -462,8 +462,13 @@ bool Quantity::compatibleWith(const Unit *u) const {
 }
 
 /** Return the quantity's value in the specified unit. */
-double Quantity::value(Unit *u) const {
+double Quantity::value(const Unit *u) const {
     return convert(quantity, unit, u);
+}
+double Quantity::value(const Glib::ustring u) const {
+    static UnitTable unit_table;
+    Unit to_unit = unit_table.getUnit(u);
+    return value(&to_unit);
 }
 
 /** Convert distances. */
@@ -475,6 +480,25 @@ double Quantity::convert(const double from_dist, const Unit *from, const Unit *t
     
     // Compatible units
     return from_dist * from->factor / to->factor;
+}
+double Quantity::convert(const double from_dist, const Glib::ustring from, const Unit &to)
+{
+    static UnitTable unit_table;
+    Unit from_unit = unit_table.getUnit(from);
+    return convert(from_dist, &from_unit, &to);
+}
+double Quantity::convert(const double from_dist, const Unit &from, const Glib::ustring to)
+{
+    static UnitTable unit_table;
+    Unit to_unit = unit_table.getUnit(to);
+    return convert(from_dist, &from, &to_unit);
+}
+double Quantity::convert(const double from_dist, const Glib::ustring from, const Glib::ustring to)
+{
+    static UnitTable unit_table;
+    Unit from_unit = unit_table.getUnit(from);
+    Unit to_unit = unit_table.getUnit(to);
+    return convert(from_dist, &from_unit, &to_unit);
 }
 
 } // namespace Util
