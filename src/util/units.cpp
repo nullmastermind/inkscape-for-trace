@@ -140,6 +140,12 @@ bool Unit::compatibleWith(const Unit *u) const {
     // Different, incompatible types
     return false;
 }
+bool Unit::compatibleWith(const Glib::ustring u) const
+{
+    static UnitTable unit_table;
+    Unit compatible_unit = unit_table.getUnit(u);
+    return compatibleWith(&compatible_unit);
+}
 
 /** Check if units are equal. */
 bool operator== (const Unit &u1, const Unit &u2) {
@@ -455,10 +461,21 @@ Quantity::Quantity(double q, const Unit *u) {
     unit = u;
     quantity = q;
 }
+Quantity::Quantity(double q, const Glib::ustring u) {
+    UnitTable unit_table;
+    unit = new Unit(unit_table.getUnit(u));
+    quantity = q;
+}
 
 /** Checks if a quantity is compatible with the specified unit. */
 bool Quantity::compatibleWith(const Unit *u) const {
     return unit->compatibleWith(u);
+}
+bool Quantity::compatibleWith(const Glib::ustring u) const
+{
+    static UnitTable unit_table;
+    Unit other_unit = unit_table.getUnit(u);
+    return compatibleWith(&other_unit);
 }
 
 /** Return the quantity's value in the specified unit. */

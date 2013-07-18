@@ -66,6 +66,7 @@ class Unit {
     int            defaultDigits() const;
 
     bool           compatibleWith(const Unit *u) const;
+    bool           compatibleWith(const Glib::ustring) const;
 
     UnitType       type;
     double         factor;
@@ -87,8 +88,10 @@ public:
     const Unit *unit;
     double quantity;
     
-    Quantity(double q, const Unit *u);   // constructor
+    Quantity(double q, const Unit *u);          // constructor
+    Quantity(double q, const Glib::ustring u);  // constructor
     bool compatibleWith(const Unit *u) const;
+    bool compatibleWith(const Glib::ustring u) const;
     double value(const Unit *u) const;
     double value(const Glib::ustring u) const;
     
