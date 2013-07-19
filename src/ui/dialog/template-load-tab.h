@@ -22,19 +22,16 @@
 
 namespace Inkscape {
 namespace UI {
-    
+
+class TemplateWidget;
     
 class TemplateLoadTab : public Gtk::Frame
 {
 
 public:
-    TemplateLoadTab();
-    virtual ~TemplateLoadTab();
-    virtual void createTemplate();
-
-protected:
     struct TemplateData
     {
+        bool is_procedural;
         Glib::ustring path;
         Glib::ustring display_name;
         Glib::ustring author;
@@ -44,6 +41,12 @@ protected:
         Glib::ustring creation_date;
         std::set<Glib::ustring> keywords;
     };
+    
+    TemplateLoadTab();
+    virtual ~TemplateLoadTab();
+    virtual void createTemplate();
+
+protected:
     
     class StringModelColumns : public Gtk::TreeModelColumnRecord
     {
@@ -68,17 +71,18 @@ protected:
     virtual void _refreshTemplatesList();
     void _loadTemplates();
     void _initLists();
-    void _displayTemplateDetails();
     
     Gtk::HBox _main_box;
     Gtk::VBox _tlist_box;
-    Gtk::VBox _info_box;
+    TemplateWidget *_info_widget;
     
     Gtk::ComboBoxText _keywords_combo;
     
     Gtk::TreeView _tlist_view;
     Glib::RefPtr<Gtk::ListStore> _tlist_store;
     StringModelColumns _columns;
+    
+    
     
 private:
     enum SearchType

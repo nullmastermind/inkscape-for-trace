@@ -87,8 +87,6 @@ ink_common_sources +=		\
 	ui/dialog/scriptdialog.h		\
 	ui/dialog/spellcheck.cpp		\
 	ui/dialog/spellcheck.h		\
-	ui/dialog/static-template-load-tab.cpp	\
-	ui/dialog/static-template-load-tab.h	\
 	ui/dialog/svg-fonts-dialog.cpp		\
 	ui/dialog/svg-fonts-dialog.h		\
 	ui/dialog/swatches.cpp			\
@@ -97,6 +95,8 @@ ink_common_sources +=		\
 	ui/dialog/symbols.h			\
 	ui/dialog/template-load-tab.cpp		\
 	ui/dialog/template-load-tab.h		\
+	ui/dialog/template-widget.cpp		\
+	ui/dialog/template-widget.h		\
 	ui/dialog/text-edit.cpp			\
 	ui/dialog/text-edit.h			\
 	ui/dialog/tile.cpp			\

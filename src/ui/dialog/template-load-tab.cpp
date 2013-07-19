@@ -23,6 +23,8 @@
 #include "xml/document.h"
 #include "xml/node.h"
 
+#include "template-widget.h"
+
 //
 #include <gtk/gtk.h>
 
@@ -39,10 +41,11 @@ namespace UI {
 TemplateLoadTab::TemplateLoadTab()
     : _current_keyword("")
     , _keywords_combo(true)
-    ,_current_search_type(ALL)
+    , _current_search_type(ALL)
 {
     set_border_width(10);
 
+    _info_widget = manage(new TemplateWidget());
     Gtk::Label *title;
     title = manage(new Gtk::Label("Search:"));
     _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
@@ -53,11 +56,11 @@ TemplateLoadTab::TemplateLoadTab()
     _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     title = manage(new Gtk::Label("Selected template"));
-    _info_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _info_widget->pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     add(_main_box);
     _main_box.pack_start(_tlist_box, Gtk::PACK_SHRINK, 20);
-    _main_box.pack_start(_info_box, Gtk::PACK_EXPAND_WIDGET, 10);
+    _main_box.pack_start(*_info_widget, Gtk::PACK_EXPAND_WIDGET, 10);
     
     Gtk::ScrolledWindow *scrolled;
     scrolled = manage(new Gtk::ScrolledWindow());
@@ -68,6 +71,11 @@ TemplateLoadTab::TemplateLoadTab()
     _keywords_combo.signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_keywordSelected));
     this->show_all();
+    
+    
+    _loading_path = "";
+    _loadTemplates();
+    _initLists();
 }
 
 
@@ -78,7 +86,7 @@ TemplateLoadTab::~TemplateLoadTab()
 
 void TemplateLoadTab::createTemplate()
 {
-    std::cout << "Default Template Tab" << std::endl;
+    _info_widget->create();
 }
 
 
@@ -87,7 +95,10 @@ void TemplateLoadTab::_displayTemplateInfo()
     Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef = _tlist_view.get_selection();
     if (templateSelectionRef->get_selected()) {
         _current_template = (*templateSelectionRef->get_selected())[_columns.textValue];
+
+       _info_widget->display(_tdata[_current_template]);
     }
+     
 }
 
 
@@ -194,7 +205,8 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
 {
     TemplateData result;
     result.path = path;
-    result.display_name = Glib::path_get_basename(path);/*
+    result.display_name = Glib::path_get_basename(path);
+    result.is_procedural = false;/*
     result.short_description = "LaLaLaLa";
     result.author = "JAASDASD";*/
     
@@ -262,32 +274,6 @@ void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
         }
         file = Glib::build_filename(path, dir.read_name());
     }
-}
-
-void TemplateLoadTab::_displayTemplateDetails()
-{
-    if (_current_template == "")
-        return;
-    
-    TemplateData &tmpl = _tdata[_current_template];
-    
-    Glib::ustring message = tmpl.display_name + "\n\n" +
-                            _("Path: ") + tmpl.path + "\n\n";
-    
-    if (tmpl.long_description != "")
-        message += _("Description: ") + _tdata[_current_template].long_description + "\n\n";
-    if (tmpl.keywords.size() > 0){
-        message += _("Keywords: ");
-        for (std::set<Glib::ustring>::iterator it = tmpl.keywords.begin(); it != tmpl.keywords.end(); ++it)
-            message += *it + " ";
-        message += "\n\n";
-    }
-    
-    if (tmpl.author != "")
-        message += _("By: ") + _tdata[_current_template].author + " " + tmpl.creation_date + "\n\n";
-    
-    Gtk::MessageDialog dl(message, false, Gtk::MESSAGE_OTHER);
-    dl.run();
 }
 
 }

@@ -27,9 +27,7 @@ NewFromTemplate::NewFromTemplate()
     resize(400, 400);
     
     get_vbox()->pack_start(_main_widget);
-    _main_widget.append_page(_tab1, "Static Templates");
-    _main_widget.append_page(_tab2, "Procedural Templates");
-    
+   
     Gtk::Alignment *align;
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
     get_vbox()->pack_end(*align, Gtk::PACK_SHRINK, 5);
@@ -44,11 +42,7 @@ NewFromTemplate::NewFromTemplate()
 
 void NewFromTemplate::_createFromTemplate()
 {
-    if ( _main_widget.get_current_page() == 0 ) {
-        _tab1.createTemplate();
-    } else {
-        _tab2.createTemplate();
-    }
+    _main_widget.createTemplate();
     
     response(0);
 }

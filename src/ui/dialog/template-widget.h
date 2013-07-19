@@ -1,5 +1,5 @@
 /** @file
- * @brief New From Template static templates tab
+ * @brief New From Template - template widget
  */
 /* Authors:
  *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński  
@@ -8,34 +8,38 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef INKSCAPE_SEEN_UI_DIALOG_STATIC_TEMPLATE_LOAD_TAB_H
-#define INKSCAPE_SEEN_UI_DIALOG_STATIC_TEMPLATE_LOAD_TAB_H
+#ifndef INKSCAPE_SEEN_UI_DIALOG_TEMPLATE_WIDGET_H
+#define INKSCAPE_SEEN_UI_DIALOG_TEMPLATE_WIDGET_H
 
 #include "template-load-tab.h"
+#include <gtkmm/box.h>
 
-#include <gtkmm/label.h>
-#include <gtkmm/button.h>
-#include <gtkmm/image.h>
 
 
 namespace Inkscape {
 namespace UI {
     
+class TemplateLoadTab;
+    
 
-class StaticTemplateLoadTab : public TemplateLoadTab
+class TemplateWidget : public Gtk::VBox
 {
 public:
-    StaticTemplateLoadTab();
-    virtual void createTemplate();
+    TemplateWidget ();
+    void create();
+    void display(TemplateLoadTab::TemplateData);
     
-protected:
-    virtual void _displayTemplateInfo();
+private:
+    TemplateLoadTab::TemplateData _current_template;
     
     Gtk::Button _more_info_button;
     Gtk::Label _short_description_label;
     Gtk::Label _template_author_label;
     Gtk::Label _template_name_label;
     Gtk::Image _preview_image;
+    
+    void _displayTemplateDetails();
+    
 };
 
 }

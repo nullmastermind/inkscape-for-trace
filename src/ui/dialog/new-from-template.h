@@ -16,7 +16,6 @@
 #include <gtkmm/notebook.h>
 
 #include "template-load-tab.h"
-#include "static-template-load-tab.h"
 
 
 namespace Inkscape {
@@ -30,10 +29,9 @@ public:
     
 private:
     NewFromTemplate();
-    Gtk::Notebook _main_widget;
     Gtk::Button _create_template_button;
-    StaticTemplateLoadTab _tab1;
-    TemplateLoadTab _tab2;
+    //StaticTemplateLoadTab _tab1;
+    TemplateLoadTab _main_widget;
     
     void _createFromTemplate();
 };
