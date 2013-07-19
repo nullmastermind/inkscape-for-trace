@@ -53,7 +53,6 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
 #include "util/units.h"
 #include "ui/widget/unit-tracker.h"
 #include "../pen-context.h"
