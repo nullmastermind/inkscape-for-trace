@@ -455,8 +455,6 @@ lpetool_create_measuring_items(SPLPEToolContext *lc, Inkscape::Selection *select
             if (!show)
                 sp_canvas_item_hide(SP_CANVAS_ITEM(canvas_text));
 
-            //SPUnitId unitid = static_cast<SPUnitId>(prefs->getInt("/tools/lpetool/unitid", SP_UNIT_PX));
-            //SPUnit unit = sp_unit_get_by_id(unitid);
             Inkscape::Util::Unit unit;
             if (prefs->getString("/tools/lpetool/unit").compare("")) {
                 unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
@@ -466,9 +464,7 @@ lpetool_create_measuring_items(SPLPEToolContext *lc, Inkscape::Selection *select
 
             lengthval = Geom::length(pwd2);
             gboolean success;
-            //success = sp_convert_distance(&lengthval, &sp_unit_get_by_id(SP_UNIT_PX), &unit);
             lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
-            //arc_length = g_strdup_printf("%.2f %s", lengthval, success ? sp_unit_get_abbreviation(&unit) : "px");
             arc_length = g_strdup_printf("%.2f %s", lengthval, unit.abbr.c_str());
             sp_canvastext_set_text (canvas_text, arc_length);
             set_pos_and_anchor(canvas_text, pwd2, 0.5, 10);
@@ -502,8 +498,6 @@ lpetool_update_measuring_items(SPLPEToolContext *lc)
         path = i->first;
         curve = SP_SHAPE(path)->getCurve();
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = Geom::paths_to_pw(curve->get_pathvector());
-        //SPUnitId unitid = static_cast<SPUnitId>(prefs->getInt("/tools/lpetool/unitid", SP_UNIT_PX));
-        //SPUnit unit = sp_unit_get_by_id(unitid);
         Inkscape::Util::Unit unit;
         if (prefs->getString("/tools/lpetool/unit").compare("")) {
             unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
@@ -512,9 +506,7 @@ lpetool_update_measuring_items(SPLPEToolContext *lc)
         }
         lengthval = Geom::length(pwd2);
         gboolean success;
-        //success = sp_convert_distance(&lengthval, &sp_unit_get_by_id(SP_UNIT_PX), &unit);
         lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
-        //arc_length = g_strdup_printf("%.2f %s", lengthval, success ? sp_unit_get_abbreviation(&unit) : "px");
         arc_length = g_strdup_printf("%.2f %s", lengthval, unit.abbr.c_str());
         sp_canvastext_set_text (SP_CANVASTEXT(i->second), arc_length);
         set_pos_and_anchor(SP_CANVASTEXT(i->second), pwd2, 0.5, 10);
