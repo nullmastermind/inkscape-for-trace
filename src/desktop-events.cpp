@@ -34,8 +34,6 @@
 #include "document-undo.h"
 #include "event-context.h"
 #include "helper/action.h"
-#include "helper/unit-menu.h"
-#include "helper/units.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "snap.h"
