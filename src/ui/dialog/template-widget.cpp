@@ -12,18 +12,13 @@
 
 #include "template-widget.h"
 #include "template-load-tab.h"
+#include "file.h"
 
 #include <gtkmm/alignment.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 #include <gtkmm/messagedialog.h>
-#include <iostream>
-
-#include "file.h"
-
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
 
 
 namespace Inkscape {
@@ -31,12 +26,14 @@ namespace UI {
     
 
 TemplateWidget::TemplateWidget()
-    : _more_info_button("More info")
-    , _short_description_label("Short description - I like trains. ad asda asd asdweqe gdfg")
-    , _template_author_label("by template_author")
-    , _template_name_label("Template_name")
+    : _more_info_button(_("More info"))
+    , _short_description_label(_("Short description"))
+    , _template_author_label(_("by template_author"))
+    , _template_name_label(_("Template_name"))
     , _preview_image("preview.png")
 {
+    Gtk::Label *title = manage(new Gtk::Label(_("Selected template")));
+    pack_start(*title, Gtk::PACK_SHRINK, 10);
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 4);
     pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
     pack_start(_preview_image, Gtk::PACK_SHRINK, 15);
@@ -59,9 +56,8 @@ void TemplateWidget::create()
 {
     if (_current_template.path == "")
         return;
-    if (_current_template.is_procedural){
-        
-    }
+    
+    if (_current_template.is_procedural) {}
     else {
         sp_file_new(_current_template.path);
     }
@@ -81,6 +77,7 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
         _preview_image.set(imagePath);
     }
 }
+
 
 void TemplateWidget::_displayTemplateDetails()
 {    

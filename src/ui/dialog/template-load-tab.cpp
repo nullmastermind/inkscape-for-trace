@@ -9,9 +9,11 @@
  */
 
 #include "template-load-tab.h"
+#include "template-widget.h"
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
+#include <glibmm/i18n.h>
 #include <iostream>
 
 #include "interface.h"
@@ -22,16 +24,6 @@
 #include "xml/repr.h"
 #include "xml/document.h"
 #include "xml/node.h"
-
-#include "template-widget.h"
-
-//
-#include <gtk/gtk.h>
-
-#include <glibmm/convert.h>
-#include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
-//
 
 
 namespace Inkscape {
@@ -47,16 +39,13 @@ TemplateLoadTab::TemplateLoadTab()
 
     _info_widget = manage(new TemplateWidget());
     Gtk::Label *title;
-    title = manage(new Gtk::Label("Search:"));
+    title = manage(new Gtk::Label(_("Search:")));
     _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     _tlist_box.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 0);
     
-    title = manage(new Gtk::Label("Templates"));
+    title = manage(new Gtk::Label(_("Templates")));
     _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
-    
-    title = manage(new Gtk::Label("Selected template"));
-    _info_widget->pack_start(*title, Gtk::PACK_SHRINK, 10);
     
     add(_main_box);
     _main_box.pack_start(_tlist_box, Gtk::PACK_SHRINK, 20);
@@ -71,7 +60,6 @@ TemplateLoadTab::TemplateLoadTab()
     _keywords_combo.signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_keywordSelected));
     this->show_all();
-    
     
     _loading_path = "";
     _loadTemplates();
@@ -139,7 +127,7 @@ void TemplateLoadTab::_keywordSelected()
     else
         _current_search_type = LIST_KEYWORD;
     
-    if (_current_keyword == "" || _current_keyword == "All")
+    if (_current_keyword == "" || _current_keyword == _("All"))
         _current_search_type = ALL;
     
     _refreshTemplatesList();
@@ -206,9 +194,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
     TemplateData result;
     result.path = path;
     result.display_name = Glib::path_get_basename(path);
-    result.is_procedural = false;/*
-    result.short_description = "LaLaLaLa";
-    result.author = "JAASDASD";*/
+    result.is_procedural = false;
     
     Inkscape::XML::Document *rdoc;
     rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);

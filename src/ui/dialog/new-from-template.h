@@ -13,7 +13,6 @@
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
-#include <gtkmm/notebook.h>
 
 #include "template-load-tab.h"
 
@@ -30,7 +29,6 @@ public:
 private:
     NewFromTemplate();
     Gtk::Button _create_template_button;
-    //StaticTemplateLoadTab _tab1;
     TemplateLoadTab _main_widget;
     
     void _createFromTemplate();

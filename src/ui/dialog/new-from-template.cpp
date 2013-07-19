@@ -10,10 +10,10 @@
 
 
 #include "new-from-template.h"
+#include "file.h"
 
 #include <gtkmm/alignment.h>
-
-#include "file.h"
+#include <glibmm/i18n.h>
 
 
 namespace Inkscape {
@@ -21,9 +21,9 @@ namespace UI {
 
 
 NewFromTemplate::NewFromTemplate()
-    : _create_template_button("Create from template")
+    : _create_template_button(_("Create from template"))
 {
-    set_title("New From Template");
+    set_title(_("New From Template"));
     resize(400, 400);
     
     get_vbox()->pack_start(_main_widget);
@@ -46,6 +46,7 @@ void NewFromTemplate::_createFromTemplate()
     
     response(0);
 }
+
 
 void NewFromTemplate::load_new_from_template()
 {

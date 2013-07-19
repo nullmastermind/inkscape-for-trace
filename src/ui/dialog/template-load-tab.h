@@ -46,8 +46,7 @@ public:
     virtual ~TemplateLoadTab();
     virtual void createTemplate();
 
-protected:
-    
+protected:    
     class StringModelColumns : public Gtk::TreeModelColumnRecord
     {
         public:
@@ -80,9 +79,7 @@ protected:
     
     Gtk::TreeView _tlist_view;
     Glib::RefPtr<Gtk::ListStore> _tlist_store;
-    StringModelColumns _columns;
-    
-    
+    StringModelColumns _columns;    
     
 private:
     enum SearchType
@@ -97,7 +94,6 @@ private:
     void _getTemplatesFromDir(const Glib::ustring &);
     void _keywordSelected();    
     TemplateData _processTemplateFile(const Glib::ustring &);
-
 };
 
 }

@@ -15,13 +15,10 @@
 #include <gtkmm/box.h>
 
 
-
 namespace Inkscape {
 namespace UI {
     
-class TemplateLoadTab;
     
-
 class TemplateWidget : public Gtk::VBox
 {
 public:
@@ -39,7 +36,6 @@ private:
     Gtk::Image _preview_image;
     
     void _displayTemplateDetails();
-    
 };
 
 }
