@@ -42,7 +42,7 @@
 #include "display/canvas-grid.h"
 #include "display/sp-canvas-group.h"
 #include "document.h"
-#include "helper/units.h"
+#include "util/units.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "sp-namedview.h"
