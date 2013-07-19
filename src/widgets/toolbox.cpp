@@ -49,7 +49,6 @@
 #include "../graphlayout.h"
 #include "../helper/action.h"
 #include "../helper/action-context.h"
-#include "../helper/unit-menu.h"
 #include "icon.h"
 #include "../ink-action.h"
 #include "../ink-comboboxentry-action.h"
@@ -1028,7 +1027,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
                                                        GtkWidget *focusTarget,
-                                                       GtkWidget *us,
                                                        GObject *dataKludge,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
@@ -1045,9 +1043,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
                                                              lower, upper, step, page, 0 ) );
-    if (us) {
-        sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us), adj );
-    }
 
     g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
 

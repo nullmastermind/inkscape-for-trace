@@ -1459,7 +1459,6 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "/tools/text/lineheight",             /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            NULL,                                 /* unit selector */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
@@ -1490,7 +1489,6 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "/tools/text/wordspacing",            /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            NULL,                                 /* unit selector */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
@@ -1521,7 +1519,6 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "/tools/text/letterspacing",          /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            NULL,                                 /* unit selector */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
@@ -1552,7 +1549,6 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "/tools/text/dx",                     /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            NULL,                                 /* unit selector */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
@@ -1583,7 +1579,6 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "/tools/text/dy",                     /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            NULL,                                 /* unit selector */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
@@ -1614,7 +1609,6 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             "/tools/text/rotation",               /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            NULL,                                 /* unit selector */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */

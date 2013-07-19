@@ -317,7 +317,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RectWidthAction",
                                          _("Width"), _("W:"), _("Width of rectangle"),
                                          "/tools/shapes/rect/width", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, TRUE, "altx-rect",
+                                         GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-rect",
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_width_value_changed );
@@ -334,7 +334,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RectHeightAction",
                                          _("Height"), _("H:"), _("Height of rectangle"),
                                          "/tools/shapes/rect/height", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_height_value_changed );
@@ -351,7 +351,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RadiusXAction",
                                          _("Horizontal radius"), _("Rx:"), _("Horizontal radius of rounded corners"),
                                          "/tools/shapes/rect/rx", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_rx_value_changed);
@@ -366,7 +366,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RadiusYAction",
                                          _("Vertical radius"), _("Ry:"), _("Vertical radius of rounded corners"),
                                          "/tools/shapes/rect/ry", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_ry_value_changed);

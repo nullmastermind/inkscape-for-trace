@@ -106,7 +106,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Font Size"), _("Font Size:"),
                                          _("The font size to be used in the measurement labels"),
                                          "/tools/measure/fontsize", 0.0,
-                                         GTK_WIDGET(desktop->canvas), NULL, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          10, 36, 1.0, 4.0,
                                          0, 0, 0,
                                          sp_measure_fontsize_value_changed);

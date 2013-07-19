@@ -164,7 +164,7 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             "ThresholdAction",
             _("Fill Threshold"), _("Threshold:"),
             _("The maximum allowed difference between the clicked pixel and the neighboring pixels to be counted in the fill"),
-            "/tools/paintbucket/threshold", 5, GTK_WIDGET(desktop->canvas), NULL, holder, TRUE,
+            "/tools/paintbucket/threshold", 5, GTK_WIDGET(desktop->canvas), holder, TRUE,
             "inkscape:paintbucket-threshold", 0, 100.0, 1.0, 10.0,
             0, 0, 0,
             paintbucket_threshold_changed, 1, 0 );
@@ -193,7 +193,7 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             "OffsetAction",
             _("Grow/shrink by"), _("Grow/shrink by:"),
             _("The amount to grow (positive) or shrink (negative) the created fill path"),
-            "/tools/paintbucket/offset", 0, GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, TRUE,
+            "/tools/paintbucket/offset", 0, GTK_WIDGET(desktop->canvas), holder, TRUE,
             "inkscape:paintbucket-offset", -1e4, 1e4, 0.1, 0.5,
             0, 0, 0,
             paintbucket_offset_changed, 1, 2);
