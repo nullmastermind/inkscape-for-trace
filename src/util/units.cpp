@@ -15,6 +15,7 @@
 
 #include <cmath>
 #include <cerrno>
+#include <iomanip>
 #include <glib.h>
 #include <glibmm/regex.h>
 
@@ -499,6 +500,18 @@ double Quantity::value(const Glib::ustring u) const
 {
     static UnitTable unit_table;
     return value(unit_table.getUnit(u));
+}
+
+/** Return a printable string of the value in the specified unit. */
+Glib::ustring Quantity::string(const Unit &u) const {
+    return Glib::ustring::format(std::fixed, std::setprecision(2), value(u)) + " " + unit->abbr;
+}
+Glib::ustring Quantity::string(const Glib::ustring u) const {
+    static UnitTable unit_table;
+    return string(unit_table.getUnit(u));
+}
+Glib::ustring Quantity::string() const {
+    return string(*unit);
 }
 
 /** Convert distances. */

@@ -94,6 +94,9 @@ public:
     bool compatibleWith(const Glib::ustring u) const;
     double value(const Unit &u) const;
     double value(const Glib::ustring u) const;
+    Glib::ustring string(const Unit &u) const;
+    Glib::ustring string(const Glib::ustring u) const;
+    Glib::ustring string() const;
     
     static double convert(const double from_dist, const Unit &from, const Unit &to);
     static double convert(const double from_dist, const Glib::ustring from, const Unit &to);
