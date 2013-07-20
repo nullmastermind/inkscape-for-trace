@@ -504,6 +504,11 @@ double Quantity::value(const Glib::ustring u) const
 /** Convert distances. */
 double Quantity::convert(const double from_dist, const Unit &from, const Unit &to)
 {
+    // Percentage
+    if (to.type == UNIT_TYPE_DIMENSIONLESS) {
+        return from_dist * to.factor;
+    }
+    
     // Incompatible units
     if (from.type != to.type) {
         return -1;
