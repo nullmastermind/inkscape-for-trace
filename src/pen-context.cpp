@@ -22,7 +22,6 @@
 
 #include "pen-context.h"
 #include "sp-namedview.h"
-#include "sp-metrics.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
@@ -1184,7 +1183,8 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
 
     SPDesktop *desktop = SP_EVENT_CONTEXT(pc)->desktop;
     Geom::Point rel = p - pc->p[pc_point_to_compare];
-    GString *dist = SP_PX_TO_METRIC_STRING(Geom::L2(rel), desktop->namedview->getDefaultMetric());
+    Inkscape::Util::Quantity q = Inkscape::Util::Quantity(Geom::L2(rel), "px");
+    GString *dist = g_string_new(q.string(*desktop->namedview->doc_units).c_str());
     double angle = atan2(rel[Geom::Y], rel[Geom::X]) * 180 / M_PI;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/compassangledisplay/value", 0) != 0) {

@@ -39,7 +39,6 @@
 #include "snap.h"
 #include "display/sp-canvas.h"
 #include "sp-guide.h"
-#include "sp-metrics.h"
 #include "sp-namedview.h"
 #include "tools-switch.h"
 #include "verbs.h"

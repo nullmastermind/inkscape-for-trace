@@ -200,7 +200,6 @@ ink_common_sources +=	\
 	sp-mesh-row-fns.h						\
 	sp-mesh-row.cpp sp-mesh-row.h					\
 	sp-metric.h							\
-	sp-metrics.cpp sp-metrics.h					\
         sp-missing-glyph.cpp sp-missing-glyph.h \
 	sp-namedview.cpp sp-namedview.h		\
 	sp-object.cpp sp-object.h		\

@@ -46,7 +46,6 @@ set(sp_SRC
 	sp-mesh-patch.cpp
 	sp-mesh-row.cpp
 	sp-metadata.cpp
-	sp-metrics.cpp
 	sp-missing-glyph.cpp
 	sp-namedview.cpp
 	sp-object-group.cpp
@@ -137,7 +136,6 @@ set(sp_SRC
 	sp-mesh-row.h
 	sp-metadata.h
 	sp-metric.h
-	sp-metrics.h
 	sp-missing-glyph.h
 	sp-namedview.h
 	sp-object-group.h

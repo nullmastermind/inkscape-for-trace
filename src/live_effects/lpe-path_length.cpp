@@ -14,7 +14,6 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/lpe-path_length.h"
-#include "sp-metrics.h"
 #include "util/units.h"
 
 #include "2geom/sbasis-geometric.h"

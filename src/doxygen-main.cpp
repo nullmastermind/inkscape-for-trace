@@ -334,8 +334,6 @@ namespace XML {}
  *
  * Inkscape::GC
  *
- * [\ref sp-metrics.cpp, \ref sp-metrics.h]
- *
  * [\ref prefs-utils.cpp] [\ref print.cpp]
  *
  * - Inkscape::GZipBuffer [\ref streams-gzip.h]
