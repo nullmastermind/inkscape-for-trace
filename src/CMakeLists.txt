@@ -135,7 +135,6 @@ set(sp_SRC
 	sp-mesh-row-fns.h
 	sp-mesh-row.h
 	sp-metadata.h
-	sp-metric.h
 	sp-missing-glyph.h
 	sp-namedview.h
 	sp-object-group.h

@@ -1125,19 +1125,6 @@ double SPNamedView::getMarginLength(gchar const * const key,
     return value;
 }
 
-
-/**
- * Returns namedview's default metric.
- */
-SPMetric SPNamedView::getDefaultMetric() const
-{
-    if (doc_units) {
-        return (SPMetric) doc_units->metric();
-    } else {
-        return SP_PT;
-    }
-}
-
 /**
  * Returns namedview's default unit.
  */

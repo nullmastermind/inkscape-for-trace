@@ -80,7 +80,6 @@ class Unit {
     
     // temporary
     int svgUnit() const;
-    int metric() const;
 };
 
 class Quantity {

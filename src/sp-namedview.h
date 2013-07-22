@@ -21,7 +21,6 @@
 #define SP_IS_NAMEDVIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_NAMEDVIEW))
 
 #include "sp-object-group.h"
-#include "sp-metric.h"
 #include "snap.h"
 #include "document.h"
 #include "util/units.h"
@@ -84,7 +83,6 @@ struct SPNamedView : public SPObjectGroup {
     gchar const *getName() const;
     guint getViewCount();
     GSList const *getViewList() const;
-    SPMetric getDefaultMetric() const;
     Inkscape::Util::Unit const getDefaultUnit() const;
 
     void translateGuides(Geom::Translate const &translation);
