@@ -1139,6 +1139,19 @@ SPMetric SPNamedView::getDefaultMetric() const
 }
 
 /**
+ * Returns namedview's default unit.
+ */
+Inkscape::Util::Unit const SPNamedView::getDefaultUnit() const
+{
+    if (doc_units) {
+        return *doc_units;
+    } else {
+        Inkscape::Util::UnitTable unit_table;
+        return *(new Inkscape::Util::Unit(unit_table.getUnit("pt")));
+    }
+}
+
+/**
  * Returns the first grid it could find that isEnabled(). Returns NULL, if none is enabled
  */
 Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedview)

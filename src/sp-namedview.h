@@ -85,6 +85,7 @@ struct SPNamedView : public SPObjectGroup {
     guint getViewCount();
     GSList const *getViewList() const;
     SPMetric getDefaultMetric() const;
+    Inkscape::Util::Unit const getDefaultUnit() const;
 
     void translateGuides(Geom::Translate const &translation);
     void translateGrids(Geom::Translate const &translation);

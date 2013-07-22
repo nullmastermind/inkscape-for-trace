@@ -393,9 +393,10 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     GtkWidget *eventbox = gtk_event_box_new ();
     dtw->hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
     dtw->hruler_box = eventbox;
-    sp_ruler_set_unit(SP_RULER(dtw->hruler), SP_PT);
     Inkscape::Util::UnitTable unit_table;
-    gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(unit_table.getUnit("pt").name_plural.c_str()));
+    Inkscape::Util::Unit pt = unit_table.getUnit("pt");
+    sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
+    gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt.name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -423,8 +424,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     eventbox = gtk_event_box_new ();
     dtw->vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
     dtw->vruler_box = eventbox;
-    sp_ruler_set_unit (SP_RULER (dtw->vruler), SP_PT);
-    gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(unit_table.getUnit("pt").name_plural.c_str()));
+    sp_ruler_set_unit (SP_RULER (dtw->vruler), pt);
+    gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(pt.name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -1675,7 +1676,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, NULL));
 
-    dtw->dt2r = namedview->doc_units->factor;
+    dtw->dt2r = 1. / namedview->doc_units->factor;
 
     dtw->ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
 
@@ -1747,11 +1748,11 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
     SPNamedView *nv=SP_NAMEDVIEW(obj);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->dt2r = nv->doc_units->factor;
+        this->dt2r = 1. / nv->doc_units->factor;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
-        sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultMetric());
-        sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultMetric());
+        sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultUnit());
+        sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultUnit());
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),
