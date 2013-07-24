@@ -185,7 +185,7 @@ void TemplateLoadTab::_loadTemplates()
     _getTemplatesFromDir(profile_path("templates") + _loading_path);
 
     // system templates dir
-  //  _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
+    _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
 }
 
 
