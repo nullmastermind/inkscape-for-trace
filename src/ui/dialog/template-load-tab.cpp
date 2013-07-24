@@ -38,18 +38,16 @@ TemplateLoadTab::TemplateLoadTab()
     set_border_width(10);
 
     _info_widget = manage(new TemplateWidget());
+    
     Gtk::Label *title;
     title = manage(new Gtk::Label(_("Search:")));
-    _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
+    _search_box.pack_start(*title, Gtk::PACK_SHRINK);
+    _search_box.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 5);
     
-    _tlist_box.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 0);
+    _tlist_box.pack_start(_search_box, Gtk::PACK_SHRINK, 10);
     
-    title = manage(new Gtk::Label(_("Templates")));
-    _tlist_box.pack_start(*title, Gtk::PACK_SHRINK, 10);
-    
-    add(_main_box);
-    _main_box.pack_start(_tlist_box, Gtk::PACK_SHRINK, 20);
-    _main_box.pack_start(*_info_widget, Gtk::PACK_EXPAND_WIDGET, 10);
+    pack_start(_tlist_box, Gtk::PACK_SHRINK);
+    pack_start(*_info_widget, Gtk::PACK_EXPAND_WIDGET, 5);
     
     Gtk::ScrolledWindow *scrolled;
     scrolled = manage(new Gtk::ScrolledWindow());

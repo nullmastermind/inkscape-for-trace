@@ -25,7 +25,7 @@ namespace UI {
 
 class TemplateWidget;
     
-class TemplateLoadTab : public Gtk::Frame
+class TemplateLoadTab : public Gtk::HBox
 {
 
 public:
@@ -71,8 +71,9 @@ protected:
     void _loadTemplates();
     void _initLists();
     
-    Gtk::HBox _main_box;
+   // Gtk::HBox _main_box;
     Gtk::VBox _tlist_box;
+    Gtk::HBox _search_box;
     TemplateWidget *_info_widget;
     
     Gtk::ComboBoxText _keywords_combo;

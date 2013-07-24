@@ -30,7 +30,8 @@ NewFromTemplate::NewFromTemplate()
    
     Gtk::Alignment *align;
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
-    get_vbox()->pack_end(*align, Gtk::PACK_SHRINK, 5);
+    get_vbox()->pack_end(*align, Gtk::PACK_SHRINK);
+    align->set_padding(0, 0, 0, 15);
     align->add(_create_template_button);
     
     _create_template_button.signal_pressed().connect(

@@ -27,25 +27,24 @@ namespace UI {
 
 TemplateWidget::TemplateWidget()
     : _more_info_button(_("More info"))
-    , _short_description_label(_("Short description"))
-    , _template_author_label(_("by template_author"))
-    , _template_name_label(_("Template_name"))
-    , _preview_image("preview.png")
+    , _short_description_label(_(" "))
+    , _template_author_label(_(" "))
+    , _template_name_label(_("no template selected"))
+    , _preview_image(" ")
 {
-    Gtk::Label *title = manage(new Gtk::Label(_("Selected template")));
-    pack_start(*title, Gtk::PACK_SHRINK, 10);
-    pack_start(_template_name_label, Gtk::PACK_SHRINK, 4);
+    pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
     pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
     pack_start(_preview_image, Gtk::PACK_SHRINK, 15);
-    pack_start(_short_description_label, Gtk::PACK_SHRINK, 4);
     
     _short_description_label.set_line_wrap(true);
     _short_description_label.set_size_request(200);
 
     Gtk::Alignment *align;
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
-    pack_start(*align, Gtk::PACK_SHRINK, 5);
+    pack_end(*align, Gtk::PACK_SHRINK);
     align->add(_more_info_button);
+    
+    pack_end(_short_description_label, Gtk::PACK_SHRINK, 5);
     
     _more_info_button.signal_pressed().connect(
     sigc::mem_fun(*this, &TemplateWidget::_displayTemplateDetails));
