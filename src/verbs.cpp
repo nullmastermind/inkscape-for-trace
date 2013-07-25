@@ -40,7 +40,6 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
 
-#include "bind/javabind.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "display/curve.h"
@@ -1992,10 +1991,6 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_DEBUG:
             dt->_dlg_mgr->showDialog("Messages");
             break;
-        case SP_VERB_DIALOG_SCRIPT:
-            //dt->_dlg_mgr->showDialog("Script");
-            Inkscape::Bind::JavaBindery::getInstance()->showConsole();
-            break;
         case SP_VERB_DIALOG_UNDO_HISTORY:
             dt->_dlg_mgr->showDialog("UndoHistory");
             break;
@@ -2452,9 +2447,9 @@ Verb *Verb::_base_verbs[] = {
                  N_("Select previous object or node"), NULL),
     new EditVerb(SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"),
                  N_("Deselect any selected objects or nodes"), INKSCAPE_ICON("edit-select-none")),
-    new EditVerb(SP_VERB_EDIT_GUIDES_AROUND_PAGE, "EditGuidesAroundPage", N_("Create _Guides Around the Page"),
-                 N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_DELETE_ALL_GUIDES, "EditRemoveAllGuides", N_("Delete All Guides"),
+                 N_("Create four guides aligned with the page borders"), NULL),
+    new EditVerb(SP_VERB_EDIT_GUIDES_AROUND_PAGE, "EditGuidesAroundPage", N_("Create _Guides Around the Page"),
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
                  N_("Show next editable path effect parameter"), INKSCAPE_ICON("path-effect-parameter-next")),
@@ -2821,8 +2816,6 @@ Verb *Verb::_base_verbs[] = {
                    N_("Check spelling of text in document"), GTK_STOCK_SPELL_CHECK ),
     new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."),
                    N_("View debug messages"), INKSCAPE_ICON("dialog-messages")),
-    new DialogVerb(SP_VERB_DIALOG_SCRIPT, "DialogScript", N_("S_cripts..."),
-                   N_("Run scripts"), INKSCAPE_ICON("dialog-scripts")),
     new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/Hide D_ialogs"),
                    N_("Show or hide all open dialogs"), INKSCAPE_ICON("show-dialogs")),
     new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogClonetiler", N_("Create Tiled Clones..."),
