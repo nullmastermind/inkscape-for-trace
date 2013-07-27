@@ -1,7 +1,8 @@
 #!/usr/bin/env python 
 # coding=utf-8
 '''
-Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
+Copyright (C) 2008 Aaron Spike, aaron@ekips.org
+Overcut, Tool Offset, Rotation, Serial Com., Many Bugfixes and Improvements: Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
