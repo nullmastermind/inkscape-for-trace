@@ -31,10 +31,12 @@ TemplateWidget::TemplateWidget()
     , _template_author_label(_(" "))
     , _template_name_label(_("no template selected"))
     , _preview_image(" ")
+    , _preview_render()
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
     pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
     pack_start(_preview_image, Gtk::PACK_SHRINK, 15);
+    pack_start(_preview_render, Gtk::PACK_SHRINK, 10);
     
     _short_description_label.set_line_wrap(true);
     _short_description_label.set_size_request(200);
@@ -73,7 +75,16 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
         _short_description_label.set_text(_current_template.short_description);
         
         Glib::ustring imagePath = Glib::build_filename(Glib::path_get_dirname(_current_template.path),  _current_template.preview_name);
-        _preview_image.set(imagePath);
+        if (data.preview_name != ""){
+            _preview_image.set(imagePath);
+            _preview_image.show();
+            _preview_render.hide();
+        }
+        else{
+            _preview_render.showImage(data.path);
+            _preview_render.show();
+            _preview_image.hide();
+        }
     }
 }
 

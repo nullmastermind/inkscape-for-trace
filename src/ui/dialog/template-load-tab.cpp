@@ -192,6 +192,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
     TemplateData result;
     result.path = path;
     result.is_procedural = false;
+    result.preview_name = "";
     
     // convert path into valid template name
     result.display_name = Glib::path_get_basename(path);

@@ -12,6 +12,7 @@
 #define INKSCAPE_SEEN_UI_DIALOG_TEMPLATE_WIDGET_H
 
 #include "template-load-tab.h"
+#include "filedialogimpl-gtkmm.h"
 #include <gtkmm/box.h>
 
 
@@ -34,6 +35,7 @@ private:
     Gtk::Label _template_author_label;
     Gtk::Label _template_name_label;
     Gtk::Image _preview_image;
+    Dialog::SVGPreview _preview_render;
     
     void _displayTemplateDetails();
 };
