@@ -19,8 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
-# TODO:2013-07-15:Sebastian Wüst:make text to guide the user to the extension when he wants to plot
-
 # standard library
 import sys
 # local library
@@ -64,8 +62,7 @@ class MyEffect(inkex.Effect):
 
     def output(self):
         # print to file
-        if self.hpgl != 1:
-            print self.hpgl
+        print self.hpgl
 
 if __name__ == '__main__':
     # Raise recursion limit to avoid exceptions on big documents

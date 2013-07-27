@@ -87,7 +87,6 @@ class MyEffect(inkex.Effect):
                     raise Exception(inst)
         '''
         # send data to plotter
-        # TODO:2013-07-13:Sebastian Wüst:Somehow slow down sending to avoid buffer overruns in the plotter on very large drawings.
         mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
         mySerial.write(self.hpgl)
         # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)

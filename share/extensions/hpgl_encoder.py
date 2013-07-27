@@ -45,7 +45,7 @@ class hpglEncoder:
         '''
         self.doc = doc
         self.options = options
-        self.divergenceX = 'False' # dirty hack: i need to know if this was set before, but since False is evaluated to 0 it can not be determined, therefore the string.
+        self.divergenceX = 'False' # dirty hack: i need to know if this was set to a number before, but since False is evaluated to 0 it can not be determined, therefore the string.
         self.divergenceY = 'False'
         self.sizeX = 'False'
         self.sizeY = 'False'
@@ -97,7 +97,7 @@ class hpglEncoder:
         # add precut
         if self.options.useToolOffset and self.options.precut:
             self.calcOffset('PU', 0, 0)
-            self.calcOffset('PD', 0, self.options.toolOffset * self.options.toolOffsetReturn * 2)
+            self.calcOffset('PD', 0, self.options.toolOffset * 8)
         # start conversion
         self.process_group(self.doc, self.groupmat)
         # shift an empty node in in order to process last node in cache
@@ -122,7 +122,8 @@ class hpglEncoder:
                 self.process_path(node, groupmat[-1])
             if node.tag == inkex.addNS('g', 'svg'):
                 self.process_group(node, groupmat)
-        groupmat.pop()
+        if trans:
+            groupmat.pop()
     
     def process_path(self, node, mat):
         # process path 
