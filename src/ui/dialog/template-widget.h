@@ -34,6 +34,7 @@ private:
     Gtk::Label _short_description_label;
     Gtk::Label _template_author_label;
     Gtk::Label _template_name_label;
+    Gtk::HBox _preview_box;
     Gtk::Image _preview_image;
     Dialog::SVGPreview _preview_render;
     

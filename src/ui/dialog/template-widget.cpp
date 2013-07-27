@@ -35,8 +35,10 @@ TemplateWidget::TemplateWidget()
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
     pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
-    pack_start(_preview_image, Gtk::PACK_SHRINK, 15);
-    pack_start(_preview_render, Gtk::PACK_SHRINK, 10);
+    pack_start(_preview_box, Gtk::PACK_SHRINK, 0);
+    
+    _preview_box.pack_start(_preview_image, Gtk::PACK_EXPAND_PADDING, 15);
+    _preview_box.pack_start(_preview_render, Gtk::PACK_EXPAND_PADDING, 10);
     
     _short_description_label.set_line_wrap(true);
     _short_description_label.set_size_request(200);
