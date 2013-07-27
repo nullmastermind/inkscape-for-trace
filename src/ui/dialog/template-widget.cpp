@@ -58,7 +58,7 @@ void TemplateWidget::create()
     
     if (_current_template.is_procedural) {}
     else {
-        sp_file_new(_current_template.path);
+        sp_file_open(_current_template.path, NULL);
     }
 }
 

@@ -191,8 +191,16 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
 {
     TemplateData result;
     result.path = path;
-    result.display_name = Glib::path_get_basename(path);
     result.is_procedural = false;
+    
+    // convert path into valid template name
+    result.display_name = Glib::path_get_basename(path);
+    gsize n = 0;
+    while ((n = result.display_name.find_first_of("_", 0)) < Glib::ustring::npos){
+        result.display_name.replace(n, 1, 1, ' ');
+    }   
+    n =  result.display_name.rfind(".svg");
+    result.display_name.replace(n, 4, 1, ' ');
     
     Inkscape::XML::Document *rdoc;
     rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
