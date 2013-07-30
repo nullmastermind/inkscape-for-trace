@@ -1021,7 +1021,6 @@ AC_CONFIG_FILES([
 Makefile
 src/Makefile
 src/check-header-compile
-src/bind/makefile
 src/debug/makefile
 src/dialogs/makefile
 src/display/makefile
@@ -1029,7 +1028,6 @@ src/dom/makefile
 src/extension/implementation/makefile
 src/extension/internal/makefile
 src/extension/makefile
-src/extension/script/makefile
 src/extension/dbus/wrapper/inkdbus.pc
 src/filters/makefile
 src/helper/makefile
@@ -1056,7 +1054,7 @@ doc/Makefile
 po/Makefile.in
 share/Makefile
 share/attributes/Makefile
-share/clipart/Makefile
+share/branding/Makefile
 share/examples/Makefile
 share/extensions/Makefile
 share/extensions/alphabet_soup/Makefile

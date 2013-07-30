@@ -213,7 +213,6 @@ set(inkscape_SRC
 	file.cpp
 	filter-chemistry.cpp
 	filter-enums.cpp
-	fixes.cpp
 	flood-context.cpp
 	gc-anchored.cpp
 	gc-finalized.cpp
@@ -309,7 +308,6 @@ set(inkscape_SRC
 	MultiPrinter.h
 	PylogFormatter.h
 	TRPIFormatter.h
-	approx-equal.h
 	arc-context.h
 	attributes-test.h
 	attributes.h
@@ -535,7 +533,6 @@ list(APPEND inkscape_SRC
 
 # All folders for internal inkscape
 # these call add_inkscape_source
-add_subdirectory(bind)
 add_subdirectory(debug)
 add_subdirectory(dialogs)
 add_subdirectory(display)
