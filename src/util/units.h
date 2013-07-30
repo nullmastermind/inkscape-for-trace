@@ -65,6 +65,7 @@ class Unit {
      */
     int            defaultDigits() const;
 
+    /** Checks if a unit is compatible with the specified unit. */
     bool           compatibleWith(const Unit &u) const;
     bool           compatibleWith(const Glib::ustring) const;
 
@@ -75,10 +76,12 @@ class Unit {
     Glib::ustring  abbr;
     Glib::ustring  description;
     
+    /** Check if units are equal. */
     friend bool operator== (const Unit &u1, const Unit &u2);
+    /** Check if units are not equal. */ 
     friend bool operator!= (const Unit &u1, const Unit &u2);
     
-    // temporary
+    /** Get SVG unit. */
     int svgUnit() const;
 };
 
@@ -87,16 +90,24 @@ public:
     const Unit *unit;
     double quantity;
     
+    /** Initialize a quantity. */
     Quantity(double q, const Unit &u);          // constructor
     Quantity(double q, const Glib::ustring u);  // constructor
+    
+    /** Checks if a quantity is compatible with the specified unit. */
     bool compatibleWith(const Unit &u) const;
     bool compatibleWith(const Glib::ustring u) const;
+    
+    /** Return the quantity's value in the specified unit. */
     double value(const Unit &u) const;
     double value(const Glib::ustring u) const;
+    
+    /** Return a printable string of the value in the specified unit. */
     Glib::ustring string(const Unit &u) const;
     Glib::ustring string(const Glib::ustring u) const;
     Glib::ustring string() const;
     
+    /** Convert distances. */
     static double convert(const double from_dist, const Unit &from, const Unit &to);
     static double convert(const double from_dist, const Glib::ustring from, const Unit &to);
     static double convert(const double from_dist, const Unit &from, const Glib::ustring to);

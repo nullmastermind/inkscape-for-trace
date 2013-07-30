@@ -93,9 +93,6 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     tracker->setActiveUnitByAbbr(prefs->getString("/tools/measure/unit").c_str());
     
-    //tracker->setUnitType(UNIT_TYPE_LINEAR);
-    //tracker->setUnit("px");
-    
     g_object_set_data( holder, "tracker", tracker );
 
     EgeAdjustmentAction *eact = 0;
@@ -125,10 +122,8 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     // units menu
     {
         GtkAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
-        //EgeOutputAction* act = ege_output_action_new( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements"), 0 );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(measure_unit_changed), holder );
         gtk_action_group_add_action( mainActions, act );
-        //gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
     }
 } // end of sp_measure_toolbox_prep()
 

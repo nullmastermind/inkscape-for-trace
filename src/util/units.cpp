@@ -132,7 +132,6 @@ int Unit::defaultDigits() const
     return factor_digits;
 }
 
-/** Checks if a unit is compatible with the specified unit. */
 bool Unit::compatibleWith(const Unit &u) const
 {
     // Percentages
@@ -154,19 +153,16 @@ bool Unit::compatibleWith(const Glib::ustring u) const
     return compatibleWith(unit_table.getUnit(u));
 }
 
-/** Check if units are equal. */
 bool operator== (const Unit &u1, const Unit &u2)
 {
     return (u1.type == u2.type && u1.name.compare(u2.name) == 0);
 }
 
-/** Check if units are not equal. */ 
 bool operator!= (const Unit &u1, const Unit &u2)
 {
     return !(u1 == u2);
 }
 
-/** Temporary - get SVG unit. */
 int Unit::svgUnit() const
 {
     if (!abbr.compare("px"))
@@ -355,7 +351,6 @@ void UnitParser::on_end_element(Ctx &ctx, Glib::ustring const &name)
     }
 }
 
-/** Initialize a quantity. */
 Quantity::Quantity(double q, const Unit &u)
 {
     unit = new Unit(u);
@@ -368,7 +363,6 @@ Quantity::Quantity(double q, const Glib::ustring u)
     quantity = q;
 }
 
-/** Checks if a quantity is compatible with the specified unit. */
 bool Quantity::compatibleWith(const Unit &u) const
 {
     return unit->compatibleWith(u);
@@ -379,7 +373,6 @@ bool Quantity::compatibleWith(const Glib::ustring u) const
     return compatibleWith(unit_table.getUnit(u));
 }
 
-/** Return the quantity's value in the specified unit. */
 double Quantity::value(const Unit &u) const
 {
     return convert(quantity, *unit, u);
@@ -390,7 +383,6 @@ double Quantity::value(const Glib::ustring u) const
     return value(unit_table.getUnit(u));
 }
 
-/** Return a printable string of the value in the specified unit. */
 Glib::ustring Quantity::string(const Unit &u) const {
     return Glib::ustring::format(std::fixed, std::setprecision(2), value(u)) + " " + unit->abbr;
 }
@@ -402,7 +394,6 @@ Glib::ustring Quantity::string() const {
     return string(*unit);
 }
 
-/** Convert distances. */
 double Quantity::convert(const double from_dist, const Unit &from, const Unit &to)
 {
     // Percentage
