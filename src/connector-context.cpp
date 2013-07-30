@@ -417,7 +417,7 @@ cc_deselect_handle(SPKnot* knot)
     sp_knot_update_ctrl(knot);
 }
 
-gint SPConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     Geom::Point p(event->button.x, event->button.y);
@@ -472,7 +472,7 @@ gint SPConnectorContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-gint SPConnectorContext::root_handler(GdkEvent* event) {
+bool SPConnectorContext::root_handler(GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {
@@ -1096,7 +1096,7 @@ cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot *knot)
 static gboolean
 endpt_handler(SPKnot */*knot*/, GdkEvent *event, SPConnectorContext *cc)
 {
-    g_assert( SP_IS_CONNECTOR_CONTEXT(cc) );
+    //g_assert( SP_IS_CONNECTOR_CONTEXT(cc) );
 
     gboolean consumed = FALSE;
 

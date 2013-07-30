@@ -25,7 +25,7 @@ public:
 	static const std::string prefsPath;
 
 	virtual void finish();
-	virtual gint root_handler(GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 

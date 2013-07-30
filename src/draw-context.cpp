@@ -192,7 +192,7 @@ void SPDrawContext::finish() {
 void SPDrawContext::set(const Inkscape::Preferences::Entry& value) {
 }
 
-gint SPDrawContext::root_handler(GdkEvent* event) {
+bool SPDrawContext::root_handler(GdkEvent* event) {
 	SPEventContext* ec = this;
 
     gint ret = FALSE;

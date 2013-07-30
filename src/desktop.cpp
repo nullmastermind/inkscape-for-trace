@@ -401,6 +401,65 @@ SPDesktop::~SPDesktop()
 {
 }
 
+
+SPEventContext* SPDesktop::getEventContext() const {
+	return event_context;
+}
+
+Inkscape::Selection* SPDesktop::getSelection() const {
+	return selection;
+}
+
+SPDocument* SPDesktop::getDocument() const {
+	return doc();
+}
+
+SPCanvas* SPDesktop::getCanvas() const {
+	return SP_CANVAS_ITEM(main)->canvas;
+}
+
+SPCanvasItem* SPDesktop::getAcetate() const {
+	return acetate;
+}
+
+SPCanvasGroup* SPDesktop::getMain() const {
+	return main;
+}
+
+SPCanvasGroup* SPDesktop::getGridGroup() const {
+	return gridgroup;
+}
+
+SPCanvasGroup* SPDesktop::getGuides() const {
+	return guides;
+}
+
+SPCanvasItem* SPDesktop::getDrawing() const {
+	return drawing;
+}
+
+SPCanvasGroup* SPDesktop::getSketch() const {
+	return sketch;
+}
+
+SPCanvasGroup* SPDesktop::getControls() const {
+	return controls;
+}
+
+SPCanvasGroup* SPDesktop::getTempGroup() const {
+	return tempgroup;
+}
+
+Inkscape::MessageStack* SPDesktop::getMessageStack() const {
+	return messageStack();
+}
+
+SPNamedView* SPDesktop::getNamedView() const {
+	return namedview;
+}
+
+
+
 //--------------------------------------------------------------------
 /* Public methods */
 
@@ -1444,10 +1503,10 @@ void SPDesktop::setWaitingCursor()
     waiting_cursor = true;
 }
 
-void SPDesktop::clearWaitingCursor()
-{
-  if (waiting_cursor)
-      sp_event_context_update_cursor(sp_desktop_event_context(this));
+void SPDesktop::clearWaitingCursor() {
+  if (waiting_cursor) {
+      this->event_context->sp_event_context_update_cursor();
+  }
 }
 
 void SPDesktop::toggleColorProfAdjust()

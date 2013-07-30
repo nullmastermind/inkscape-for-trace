@@ -143,7 +143,7 @@ void SPArcContext::setup() {
     this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
-gint SPArcContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPArcContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {
@@ -167,7 +167,7 @@ gint SPArcContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-gint SPArcContext::root_handler(GdkEvent* event) {
+bool SPArcContext::root_handler(GdkEvent* event) {
     static bool dragging;
 
     Inkscape::Selection *selection = sp_desktop_selection(desktop);

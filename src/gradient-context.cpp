@@ -475,7 +475,7 @@ sp_gradient_context_add_stop_near_point (SPGradientContext *rc, SPItem *item,  G
     ec->get_drag()->selectByStop(newstop);
 }
 
-gint SPGradientContext::root_handler(GdkEvent* event) {
+bool SPGradientContext::root_handler(GdkEvent* event) {
     static bool dragging;
 
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
@@ -608,11 +608,11 @@ gint SPGradientContext::root_handler(GdkEvent* event) {
 
             if (this->cursor_addnode && !over_line) {
                 this->cursor_shape = cursor_gradient_xpm;
-                sp_event_context_update_cursor(this);
+                this->sp_event_context_update_cursor();
                 this->cursor_addnode = false;
             } else if (!this->cursor_addnode && over_line) {
                 this->cursor_shape = cursor_gradient_add_xpm;
-                sp_event_context_update_cursor(this);
+                this->sp_event_context_update_cursor();
                 this->cursor_addnode = true;
             }
         }

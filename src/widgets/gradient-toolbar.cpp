@@ -373,7 +373,7 @@ static void gr_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
 
     Inkscape::Selection *selection = sp_desktop_selection(desktop); // take from desktop, not from args
     if (selection) {
-        SPEventContext *ev = sp_desktop_event_context(desktop);
+        SPEventContext *ev = desktop->getEventContext();
         GrDrag *drag = NULL;
         if (ev) {
             drag = ev->get_drag();
@@ -585,7 +585,7 @@ static void gr_add_stop(GtkWidget * /*button*/, GtkWidget *vb)
         return;
     }
 
-    SPEventContext *ev = sp_desktop_event_context(desktop);
+    SPEventContext *ev = desktop->getEventContext();
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(ev);
 
     if (rc) {
@@ -607,7 +607,7 @@ static void gr_remove_stop(GtkWidget * /*button*/, GtkWidget *vb)
         return;
     }
 
-    SPEventContext *ev = sp_desktop_event_context(desktop);
+    SPEventContext *ev = desktop->getEventContext();
     GrDrag *drag = NULL;
     if (ev) {
         drag = ev->get_drag();
@@ -939,7 +939,7 @@ static void gr_gradient_combo_changed(EgeSelectOneAction *act, gpointer data)
 
         SPDesktop *desktop = static_cast<SPDesktop *>(data);
         Inkscape::Selection *selection = sp_desktop_selection(desktop);
-        SPEventContext *ev = sp_desktop_event_context(desktop);
+        SPEventContext *ev = desktop->getEventContext();
 
         gr_apply_gradient(selection, ev? ev->get_drag() : NULL, gr);
 
@@ -981,7 +981,7 @@ static void gr_stop_combo_changed(GtkComboBox * /*widget*/, GtkWidget *data)
     }
 
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(data), "desktop"));
-    SPEventContext *ev = sp_desktop_event_context(desktop);
+    SPEventContext *ev = desktop->getEventContext();
     SPGradient *gr = gr_get_selected_gradient(data);
 
     select_drag_by_stop(data, gr, ev);

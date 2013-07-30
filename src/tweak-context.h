@@ -15,9 +15,6 @@
 #include "event-context.h"
 #include <2geom/point.h>
 
-#define SP_TWEAK_CONTEXT(obj) ((SPTweakContext*)obj)
-#define SP_IS_TWEAK_CONTEXT(obj) (dynamic_cast<const SPTweakContext*>((const SPEventContext*)obj))
-
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
 #define TC_MIN_PRESSURE      0.0
@@ -79,7 +76,7 @@ public:
 
 	virtual void setup();
 	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 

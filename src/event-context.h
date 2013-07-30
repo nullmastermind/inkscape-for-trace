@@ -148,8 +148,8 @@ public:
 	virtual void activate();
 	virtual void deactivate();
 
-	virtual gint root_handler(GdkEvent* event);
-	virtual gint item_handler(SPItem* item, GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
+	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath() = 0;
 
@@ -169,6 +169,9 @@ public:
 	private:
 	    SPEventContext * const ec;
 	};
+
+//protected:
+	void sp_event_context_update_cursor();
 
 private:
 	SPEventContext(const SPEventContext&);
@@ -196,7 +199,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
 gint gobble_key_events(guint keyval, gint mask);
 gint gobble_motion_events(gint mask);
 
-void sp_event_context_update_cursor(SPEventContext *ec);
+//void sp_event_context_update_cursor(SPEventContext *ec);
 
 void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEvent *event,
                                 gchar const *ctrl_tip, gchar const *shift_tip, gchar const *alt_tip);
@@ -208,14 +211,14 @@ SPItem *sp_event_context_over_item (SPDesktop *desktop, SPItem *item, Geom::Poin
 
 void sp_toggle_dropper(SPDesktop *dt);
 
-ShapeEditor *sp_event_context_get_shape_editor (SPEventContext *ec);
+//ShapeEditor *sp_event_context_get_shape_editor (SPEventContext *ec);
 bool sp_event_context_knot_mouseover(SPEventContext *ec);
 
-void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
-                                     gchar const *name, gchar const *old_value, gchar const *new_value,
-                                 bool const is_interactive, gpointer const data);
-
-void event_context_print_event_info(GdkEvent *event, bool print_return = true);
+//void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
+//                                     gchar const *name, gchar const *old_value, gchar const *new_value,
+//                                 bool const is_interactive, gpointer const data);
+//
+//void event_context_print_event_info(GdkEvent *event, bool print_return = true);
 
 #endif // SEEN_SP_EVENT_CONTEXT_H
 

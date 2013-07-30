@@ -311,7 +311,7 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
     }
 }
 
-gint SPMeasureContext::root_handler(GdkEvent* event) {
+bool SPMeasureContext::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 

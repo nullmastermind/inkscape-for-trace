@@ -21,9 +21,6 @@
 
 #include "common-context.h"
 
-#define SP_ERASER_CONTEXT(obj) ((SPEraserContext*)obj)
-#define SP_IS_ERASER_CONTEXT(obj) (dynamic_cast<const SPEraserContext*>((const SPEventContext*)obj))
-
 #define ERC_MIN_PRESSURE      0.0
 #define ERC_MAX_PRESSURE      1.0
 #define ERC_DEFAULT_PRESSURE  1.0
@@ -40,9 +37,21 @@ public:
 	static const std::string prefsPath;
 
 	virtual void setup();
-	virtual gint root_handler(GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	void reset(Geom::Point p);
+	void extinput(GdkEvent *event);
+	bool apply(Geom::Point p);
+	void brush();
+	void cancel();
+	void clear_current();
+	void set_to_accumulated();
+	void accumulate();
+	void fit_and_split(bool release);
+	void draw_temporary_box();
 };
 
 #endif // SP_ERASER_CONTEXT_H_SEEN

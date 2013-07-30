@@ -411,7 +411,7 @@ void InkNodeTool::selection_changed(Inkscape::Selection *sel) {
     this->desktop->updateNow();
 }
 
-gint InkNodeTool::root_handler(GdkEvent* event) {
+bool InkNodeTool::root_handler(GdkEvent* event) {
     /* things to handle here:
      * 1. selection of items
      * 2. passing events to manipulators
@@ -613,7 +613,7 @@ void InkNodeTool::update_tip(GdkEvent *event) {
     }
 }
 
-gint InkNodeTool::item_handler(SPItem* item, GdkEvent* event) {
+bool InkNodeTool::item_handler(SPItem* item, GdkEvent* event) {
 	SPEventContext::item_handler(item, event);
 
     return FALSE;
@@ -684,13 +684,13 @@ void InkNodeTool::mouseover_changed(Inkscape::UI::ControlPoint *p) {
         this->cursor_shape = cursor_node_d_xpm;
         this->hot_x = 1;
         this->hot_y = 1;
-        sp_event_context_update_cursor(this);
+        this->sp_event_context_update_cursor();
         this->cursor_drag = true;
     } else if (!cdp && this->cursor_drag) {
         this->cursor_shape = cursor_node_xpm;
         this->hot_x = 1;
         this->hot_y = 1;
-        sp_event_context_update_cursor(this);
+        this->sp_event_context_update_cursor();
         this->cursor_drag = false;
     }
 }

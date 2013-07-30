@@ -67,35 +67,30 @@ const std::string& SPStarContext::getPrefsPath() {
 const std::string SPStarContext::prefsPath = "/tools/shapes/star";
 
 SPStarContext::SPStarContext() : SPEventContext() {
-	SPStarContext* star_context = this;
+	this->randomized = 0;
+	this->message_context = 0;
+	this->rounded = 0;
 
-	star_context->randomized = 0;
-	star_context->_message_context = 0;
-	star_context->rounded = 0;
+    this->cursor_shape = cursor_star_xpm;
+    this->hot_x = 4;
+    this->hot_y = 4;
+    this->xp = 0;
+    this->yp = 0;
+    this->tolerance = 0;
+    this->within_tolerance = false;
+    this->item_to_select = NULL;
+    //this->tool_url = "/tools/shapes/star";
 
-    SPEventContext *event_context = SP_EVENT_CONTEXT (star_context);
+    this->star = NULL;
 
-    event_context->cursor_shape = cursor_star_xpm;
-    event_context->hot_x = 4;
-    event_context->hot_y = 4;
-    event_context->xp = 0;
-    event_context->yp = 0;
-    event_context->tolerance = 0;
-    event_context->within_tolerance = false;
-    event_context->item_to_select = NULL;
-    //event_context->tool_url = "/tools/shapes/star";
-
-    star_context->star = NULL;
-
-    star_context->magnitude = 5;
-    star_context->proportion = 0.5;
-    star_context->isflatsided = false;
+    this->magnitude = 5;
+    this->proportion = 0.5;
+    this->isflatsided = false;
 }
 
 void SPStarContext::finish() {
-    SPDesktop *desktop = this->desktop;
-
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), GDK_CURRENT_TIME);
+
     this->finishItem();
     this->sel_changed_connection.disconnect();
 
@@ -115,8 +110,8 @@ SPStarContext::~SPStarContext() {
     	this->finishItem();
     }
 
-    if (this->_message_context) {
-        delete this->_message_context;
+    if (this->message_context) {
+        delete this->message_context;
     }
 }
 
@@ -164,7 +159,7 @@ void SPStarContext::setup() {
 		this->enableGrDrag();
 	}
 
-	this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
+	this->message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 void SPStarContext::set(const Inkscape::Preferences::Entry& val) {
@@ -183,7 +178,7 @@ void SPStarContext::set(const Inkscape::Preferences::Entry& val) {
     }
 }
 
-gint SPStarContext::root_handler(GdkEvent* event) {
+bool SPStarContext::root_handler(GdkEvent* event) {
     static bool dragging;
 
     SPDesktop *desktop = this->desktop;
@@ -383,7 +378,7 @@ void SPStarContext::drag(Geom::Point p, guint state)
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
     if (!this->star) {
-        if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
             return;
         }
 
@@ -430,7 +425,7 @@ void SPStarContext::drag(Geom::Point p, guint state)
 
     /* status text */
     GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->namedview->getDefaultMetric());
-    this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+    this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                ( this->isflatsided?
                                  _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
                                  : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
@@ -440,7 +435,7 @@ void SPStarContext::drag(Geom::Point p, guint state)
 }
 
 void SPStarContext::finishItem() {
-    this->_message_context->clear();
+    this->message_context->clear();
 
     if (this->star != NULL) {
         if (this->star->r[1] == 0) {

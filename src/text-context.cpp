@@ -299,7 +299,7 @@ void SPTextContext::finish() {
     tc->text_selection_quads.clear();
 }
 
-gint SPTextContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPTextContext::item_handler(SPItem* item, GdkEvent* event) {
 	SPEventContext* event_context = this;
 
     SPTextContext *tc = SP_TEXT_CONTEXT(event_context);
@@ -421,7 +421,7 @@ gint SPTextContext::item_handler(SPItem* item, GdkEvent* event) {
                 event_context->cursor_shape = cursor_text_insert_xpm;
                 event_context->hot_x = 7;
                 event_context->hot_y = 10;
-                sp_event_context_update_cursor(event_context);
+                event_context->sp_event_context_update_cursor();
                 sp_text_context_update_text_selection(tc);
 
                 if (SP_IS_TEXT (item_ungrouped)) {
@@ -563,7 +563,7 @@ static void show_curr_uni_char(SPTextContext *const tc)
     }
 }
 
-gint SPTextContext::root_handler(GdkEvent* event) {
+bool SPTextContext::root_handler(GdkEvent* event) {
 	SPEventContext* event_context = this;
 
     SPTextContext *const tc = SP_TEXT_CONTEXT(event_context);
@@ -617,7 +617,7 @@ gint SPTextContext::root_handler(GdkEvent* event) {
                 event_context->cursor_shape = cursor_text_xpm;
                 event_context->hot_x = 7;
                 event_context->hot_y = 7;
-                sp_event_context_update_cursor(event_context);
+                event_context->sp_event_context_update_cursor();
                 desktop->event_context->defaultMessageContext()->clear();
             }
 

@@ -143,7 +143,7 @@ spdc_endpoint_snap(SPPencilContext const *pc, Geom::Point &p, guint const state)
 /**
  * Callback for handling all pencil context events.
  */
-gint SPPencilContext::root_handler(GdkEvent* event) {
+bool SPPencilContext::root_handler(GdkEvent* event) {
 	SPEventContext* ec = this;
 
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);

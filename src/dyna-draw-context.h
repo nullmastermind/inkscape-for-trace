@@ -21,10 +21,6 @@
 #include "common-context.h"
 #include "splivarot.h"
 
-#define SP_DYNA_DRAW_CONTEXT(obj) ((SPDynaDrawContext*)obj)
-#define SP_IS_DYNA_DRAW_CONTEXT(obj) (dynamic_cast<const SPDynaDrawContext*>((const SPEventContext*)obj))
-
-
 #define DDC_MIN_PRESSURE      0.0
 #define DDC_MAX_PRESSURE      1.0
 #define DDC_DEFAULT_PRESSURE  1.0
@@ -38,6 +34,15 @@ public:
 	SPDynaDrawContext();
 	virtual ~SPDynaDrawContext();
 
+	static const std::string prefsPath;
+
+	virtual void setup();
+	virtual void set(const Inkscape::Preferences::Entry& val);
+	virtual bool root_handler(GdkEvent* event);
+
+	virtual const std::string& getPrefsPath();
+
+private:
     /** newly created object remain selected */
     bool keep_selected;
 
@@ -55,13 +60,16 @@ public:
     bool just_started_drawing;
     bool trace_bg;
 
-	static const std::string prefsPath;
-
-	virtual void setup();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
-
-	virtual const std::string& getPrefsPath();
+	void clear_current();
+	void set_to_accumulated(bool unionize, bool subtract);
+	bool accumulate();
+	void fit_and_split(bool release);
+	void draw_temporary_box();
+	void cancel();
+	void brush();
+	bool apply(Geom::Point p);
+	void extinput(GdkEvent *event);
+	void reset(Geom::Point p);
 };
 
 #endif // SP_DYNA_DRAW_CONTEXT_H_SEEN

@@ -15,22 +15,23 @@
 #include <glib.h>
 #include "event-context.h"
 
+namespace Inkscape {
+	namespace Display {
+		class TemporaryItem;
+	}
+
+	namespace UI {
+		class MultiPathManipulator;
+		class ControlPointSelection;
+		class Selector;
+		class ControlPoint;
+
+		struct PathSharedData;
+	}
+}
+
 #define INK_NODE_TOOL(obj) ((InkNodeTool*)obj)
 #define INK_IS_NODE_TOOL(obj) (dynamic_cast<const InkNodeTool*>((const SPEventContext*)obj))
-
-namespace Inkscape {
-
-namespace Display {
-class TemporaryItem;
-} // namespace Display
-namespace UI {
-class MultiPathManipulator;
-class ControlPointSelection;
-class Selector;
-struct PathSharedData;
-class ControlPoint;
-} // namespace UI
-} // namespace Inkscape
 
 class InkNodeTool : public SPEventContext {
 public:
@@ -47,8 +48,8 @@ public:
 
 	virtual void setup();
 	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
-	virtual gint item_handler(SPItem* item, GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
+	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 

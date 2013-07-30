@@ -166,7 +166,7 @@ guint32 SPDropperContext::get_color() {
                                (pick == SP_DROPPER_PICK_ACTUAL && setalpha) ? this->alpha : 1.0);
 }
 
-gint SPDropperContext::root_handler(GdkEvent* event) {
+bool SPDropperContext::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     int ret = FALSE;

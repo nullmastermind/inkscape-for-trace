@@ -1092,7 +1092,7 @@ static void sp_flood_do_flood_fill(SPEventContext *event_context, GdkEvent *even
     DocumentUndo::done(document, SP_VERB_CONTEXT_PAINTBUCKET, _("Fill bounded area"));
 }
 
-gint SPFloodContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPFloodContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {
@@ -1124,7 +1124,7 @@ gint SPFloodContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-gint SPFloodContext::root_handler(GdkEvent* event) {
+bool SPFloodContext::root_handler(GdkEvent* event) {
     static bool dragging;
     
     gint ret = FALSE;

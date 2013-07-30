@@ -258,7 +258,7 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            event_context->cursor_shape = cursor_color_xpm;
            break;
    }
-   sp_event_context_update_cursor(event_context);
+   event_context->sp_event_context_update_cursor();
    g_free(sel_message);
 }
 
@@ -1154,7 +1154,7 @@ sp_tweak_switch_mode_temporarily (SPTweakContext *tc, gint mode, bool with_shift
    sp_tweak_update_cursor (tc, with_shift);
 }
 
-gint SPTweakContext::root_handler(GdkEvent* event) {
+bool SPTweakContext::root_handler(GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {

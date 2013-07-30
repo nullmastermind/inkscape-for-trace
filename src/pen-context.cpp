@@ -291,7 +291,7 @@ static void spdc_endpoint_snap_handle(SPPenContext const *const pc, Geom::Point 
     }
 }
 
-gint SPPenContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPPenContext::item_handler(SPItem* item, GdkEvent* event) {
 	SPEventContext* ec = this;
 
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
@@ -321,7 +321,7 @@ gint SPPenContext::item_handler(SPItem* item, GdkEvent* event) {
 /**
  * Callback to handle all pen events.
  */
-gint SPPenContext::root_handler(GdkEvent* event) {
+bool SPPenContext::root_handler(GdkEvent* event) {
 	SPEventContext* ec = this;
 
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);

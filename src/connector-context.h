@@ -21,7 +21,7 @@
 #include <glibmm/i18n.h>
 
 #define SP_CONNECTOR_CONTEXT(obj) ((SPConnectorContext*)obj)
-#define SP_IS_CONNECTOR_CONTEXT(obj) (dynamic_cast<const SPConnectorContext*>((const SPEventContext*)obj))
+//#define SP_IS_CONNECTOR_CONTEXT(obj) (dynamic_cast<const SPConnectorContext*>((const SPEventContext*)obj))
 
 struct SPKnot;
 class SPCurve;
@@ -99,8 +99,8 @@ public:
 	virtual void setup();
 	virtual void finish();
 	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
-	virtual gint item_handler(SPItem* item, GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
+	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 

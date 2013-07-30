@@ -159,7 +159,7 @@ void SPRectContext::set(const Inkscape::Preferences::Entry& val) {
     }
 }
 
-gint SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {
@@ -181,7 +181,7 @@ gint SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-gint SPRectContext::root_handler(GdkEvent* event) {
+bool SPRectContext::root_handler(GdkEvent* event) {
     static bool dragging;
 
     SPDesktop *desktop = this->desktop;

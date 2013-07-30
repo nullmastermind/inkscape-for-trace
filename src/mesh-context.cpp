@@ -443,7 +443,7 @@ sp_mesh_context_corner_operation (SPMeshContext *rc, MeshCornerOperation operati
 /**
 Handles all keyboard and mouse input for meshs.
 */
-gint SPMeshContext::root_handler(GdkEvent* event) {
+bool SPMeshContext::root_handler(GdkEvent* event) {
     static bool dragging;
 
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
@@ -615,11 +615,11 @@ gint SPMeshContext::root_handler(GdkEvent* event) {
 
             if (this->cursor_addnode && !over_line) {
                 this->cursor_shape = cursor_gradient_xpm;
-                sp_event_context_update_cursor(this);
+                this->sp_event_context_update_cursor();
                 this->cursor_addnode = false;
             } else if (!this->cursor_addnode && over_line) {
                 this->cursor_shape = cursor_gradient_add_xpm;
-                sp_event_context_update_cursor(this);
+                this->sp_event_context_update_cursor();
                 this->cursor_addnode = true;
             }
         }

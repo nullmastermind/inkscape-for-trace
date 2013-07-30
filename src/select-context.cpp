@@ -277,7 +277,7 @@ sp_select_context_up_one_layer(SPDesktop *desktop)
     }
 }
 
-gint SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -455,7 +455,7 @@ sp_select_context_reset_opacities(SPEventContext *event_context)
 	sc->cycling_items_cmp = NULL;
 }
 
-gint SPSelectContext::root_handler(GdkEvent* event) {
+bool SPSelectContext::root_handler(GdkEvent* event) {
     SPItem *item = NULL;
     SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
     gint ret = FALSE;

@@ -23,17 +23,17 @@ public:
 	SPZoomContext();
 	virtual ~SPZoomContext();
 
-	//SPEventContext event_context;
-	SPCanvasItem *grabbed;
-
 	static const std::string prefsPath;
 
 	virtual void setup();
 	virtual void finish();
-	virtual gint root_handler(GdkEvent* event);
-	//virtual gint item_handler(SPItem* item, GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	SPCanvasItem *grabbed;
+	bool escaped;
 };
 
 #endif

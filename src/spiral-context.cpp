@@ -163,7 +163,7 @@ void SPSpiralContext::set(const Inkscape::Preferences::Entry& val) {
     }
 }
 
-gint SPSpiralContext::root_handler(GdkEvent* event) {
+bool SPSpiralContext::root_handler(GdkEvent* event) {
     static gboolean dragging;
 
     SPDesktop *desktop = this->desktop;

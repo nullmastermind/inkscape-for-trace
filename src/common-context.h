@@ -23,9 +23,6 @@
 #include "display/curve.h"
 #include <2geom/point.h>
 
-#define SP_COMMON_CONTEXT(obj) ((SPCommonContext*)obj)
-#define SP_IS_COMMON_CONTEXT(obj) (dynamic_cast<const SPCommonContext*>((const SPEventContext*)obj))
-
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
 class SPCommonContext : public SPEventContext {
@@ -33,6 +30,9 @@ public:
 	SPCommonContext();
 	virtual ~SPCommonContext();
 
+	virtual void set(const Inkscape::Preferences::Entry& val);
+
+protected:
     /** accumulated shape which ultimately goes in svg:path */
     SPCurve *accumulated;
 
@@ -89,14 +89,15 @@ public:
     double tremor;
     double cap_rounding;
 
-    Inkscape::MessageContext *_message_context;
+    //Inkscape::MessageContext *_message_context;
 
     bool is_drawing;
 
     /** uses absolute width independent of zoom */
     bool abs_width;
 
-	virtual void set(const Inkscape::Preferences::Entry& val);
+	Geom::Point getViewPoint(Geom::Point n) const;
+	Geom::Point getNormalizedPoint(Geom::Point v) const;
 };
 
 #endif // COMMON_CONTEXT_H_SEEN

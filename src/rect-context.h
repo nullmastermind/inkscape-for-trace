@@ -34,8 +34,8 @@ public:
 	virtual void setup();
 	virtual void finish();
 	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
-	virtual gint item_handler(SPItem* item, GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
+	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 

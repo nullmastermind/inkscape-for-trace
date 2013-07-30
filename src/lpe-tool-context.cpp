@@ -182,7 +182,7 @@ void SPLPEToolContext::set(const Inkscape::Preferences::Entry& val) {
     */
 }
 
-gint SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
 	SPEventContext* ec = this;
 
     gint ret = FALSE;
@@ -214,7 +214,7 @@ gint SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-gint SPLPEToolContext::root_handler(GdkEvent* event) {
+bool SPLPEToolContext::root_handler(GdkEvent* event) {
 	SPEventContext* event_context = this;
 
     SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(event_context);

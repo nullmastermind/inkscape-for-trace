@@ -166,60 +166,60 @@ static void sp_event_context_set_cursor(SPEventContext *event_context, GdkCursor
 /**
  * Recreates and draws cursor on desktop related to SPEventContext.
  */
-void sp_event_context_update_cursor(SPEventContext *ec) {
-    GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(ec->desktop));
+void SPEventContext::sp_event_context_update_cursor() {
+    GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(this->desktop));
     if (gtk_widget_get_window (w)) {
     
         GtkStyle *style = gtk_widget_get_style(w);
 
         /* fixme: */
-        if (ec->cursor_shape) {
+        if (this->cursor_shape) {
             GdkDisplay *display = gdk_display_get_default();
             if (gdk_display_supports_cursor_alpha(display) && gdk_display_supports_cursor_color(display)) {
                 bool fillHasColor=false, strokeHasColor=false;
-                guint32 fillColor = sp_desktop_get_color_tool(ec->desktop, ec->getPrefsPath(), true, &fillHasColor);
-                guint32 strokeColor = sp_desktop_get_color_tool(ec->desktop, ec->getPrefsPath(), false, &strokeHasColor);
-                double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(ec->desktop, ec->getPrefsPath(), true) : 0;
-                double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(ec->desktop, ec->getPrefsPath(), false) : 0;
+                guint32 fillColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), true, &fillHasColor);
+                guint32 strokeColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), false, &strokeHasColor);
+                double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), true) : 0;
+                double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 0;
 
                 GdkPixbuf *pixbuf = sp_cursor_pixbuf_from_xpm(
-                    ec->cursor_shape,
+                    this->cursor_shape,
                     style->black, style->white,
                     SP_RGBA32_U_COMPOSE(SP_RGBA32_R_U(fillColor),SP_RGBA32_G_U(fillColor),SP_RGBA32_B_U(fillColor),SP_COLOR_F_TO_U(fillOpacity)),
                     SP_RGBA32_U_COMPOSE(SP_RGBA32_R_U(strokeColor),SP_RGBA32_G_U(strokeColor),SP_RGBA32_B_U(strokeColor),SP_COLOR_F_TO_U(strokeOpacity))
                     );
                 if (pixbuf != NULL) {
-                    if (ec->cursor) {
+                    if (this->cursor) {
 #if GTK_CHECK_VERSION(3,0,0)
-                        g_object_unref(ec->cursor);
+                        g_object_unref(this->cursor);
 #else
-                        gdk_cursor_unref(ec->cursor);
+                        gdk_cursor_unref(this->cursor);
 #endif
                     }
-                    ec->cursor = gdk_cursor_new_from_pixbuf(display, pixbuf, ec->hot_x, ec->hot_y);
+                    this->cursor = gdk_cursor_new_from_pixbuf(display, pixbuf, this->hot_x, this->hot_y);
                     g_object_unref(pixbuf);
                 }
             } else {
-            	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)ec->cursor_shape);
+            	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)this->cursor_shape);
 
                 if (pixbuf) {
-                    if (ec->cursor) {
+                    if (this->cursor) {
 #if GTK_CHECK_VERSION(3,0,0)
-                        g_object_unref(ec->cursor);
+                        g_object_unref(this->cursor);
 #else
-                        gdk_cursor_unref(ec->cursor);
+                        gdk_cursor_unref(this->cursor);
 #endif
                     }
-                    ec->cursor = gdk_cursor_new_from_pixbuf(display,
-                    pixbuf, ec->hot_x, ec->hot_y);
+                    this->cursor = gdk_cursor_new_from_pixbuf(display,
+                    pixbuf, this->hot_x, this->hot_y);
                     g_object_unref(pixbuf);
                 }
             }
         }
-        gdk_window_set_cursor(gtk_widget_get_window (w), ec->cursor);
+        gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
         gdk_flush();
     }
-    ec->desktop->waiting_cursor = false;
+    this->desktop->waiting_cursor = false;
 }
 
 /**
@@ -234,7 +234,7 @@ void SPEventContext::setup() {
     this->pref_observer = new ToolPrefObserver(this->getPrefsPath(), this);
     Inkscape::Preferences::get()->addObserver(*(this->pref_observer));
 
-	sp_event_context_update_cursor(this);
+	this->sp_event_context_update_cursor();
 }
 
 /**
@@ -361,7 +361,7 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
 //	return event_context->ceventcontext->root_handler(event);
 //}
 
-gint SPEventContext::root_handler(GdkEvent* event) {
+bool SPEventContext::root_handler(GdkEvent* event) {
     static Geom::Point button_w;
     static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
@@ -872,7 +872,7 @@ gint SPEventContext::root_handler(GdkEvent* event) {
 //	return ec->ceventcontext->item_handler(item, event);
 //}
 
-gint SPEventContext::item_handler(SPItem* item, GdkEvent* event) {
+bool SPEventContext::item_handler(SPItem* item, GdkEvent* event) {
     int ret = FALSE;
 
     switch (event->type) {

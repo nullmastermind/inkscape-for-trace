@@ -77,7 +77,7 @@ public:
 
     gint mode;
 
-    Inkscape::MessageContext *_message_context;
+    Inkscape::MessageContext *message_context;
 
     bool is_drawing;
 
@@ -92,7 +92,7 @@ public:
 
 	virtual void setup();
 	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 };

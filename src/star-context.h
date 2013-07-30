@@ -21,9 +21,6 @@
 
 #include "sp-star.h"
 
-#define SP_STAR_CONTEXT(obj) ((SPStarContext*)obj)
-#define SP_IS_STAR_CONTEXT(obj) (dynamic_cast<const SPStarContext*>((const SPEventContext*)obj))
-
 class SPStarContext : public SPEventContext {
 public:
 	SPStarContext();
@@ -34,7 +31,7 @@ public:
 	virtual void setup();
 	virtual void finish();
 	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual gint root_handler(GdkEvent* event);
+	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
 
@@ -60,7 +57,7 @@ private:
 
     sigc::connection sel_changed_connection;
 
-    Inkscape::MessageContext *_message_context;
+    Inkscape::MessageContext *message_context;
 
 	void drag(Geom::Point p, guint state);
 	void finishItem();

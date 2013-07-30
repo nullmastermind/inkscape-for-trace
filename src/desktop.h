@@ -135,6 +135,21 @@ public:
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
 
+    SPEventContext* getEventContext() const;
+    Inkscape::Selection* getSelection() const;
+    SPDocument* getDocument() const;
+    SPCanvas* getCanvas() const;
+    SPCanvasItem* getAcetate() const;
+    SPCanvasGroup* getMain() const;
+    SPCanvasGroup* getGridGroup() const;
+    SPCanvasGroup* getGuides() const;
+    SPCanvasItem* getDrawing() const;
+    SPCanvasGroup* getSketch() const;
+    SPCanvasGroup* getControls() const;
+    SPCanvasGroup* getTempGroup() const;
+    Inkscape::MessageStack* getMessageStack() const;
+    SPNamedView* getNamedView() const;
+
     SPCanvasItem  *acetate;
     SPCanvasGroup *main;
     SPCanvasGroup *gridgroup;

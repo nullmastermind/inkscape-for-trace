@@ -182,7 +182,7 @@ void Box3DContext::setup() {
     this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
-gint Box3DContext::item_handler(SPItem* item, GdkEvent* event) {
+bool Box3DContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {
@@ -206,7 +206,7 @@ gint Box3DContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-gint Box3DContext::root_handler(GdkEvent* event) {
+bool Box3DContext::root_handler(GdkEvent* event) {
     static bool dragging;
 
     SPDocument *document = sp_desktop_document (desktop);

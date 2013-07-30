@@ -25,12 +25,6 @@
 #include "selection-chemistry.h"
 
 #include "zoom-context.h"
-
-//static gint xp = 0, yp = 0; // where drag started
-//static gint tolerance = 0;
-//static bool within_tolerance = false;
-static bool escaped;
-
 #include "tool-factory.h"
 
 namespace {
@@ -52,6 +46,7 @@ SPZoomContext::SPZoomContext() : SPEventContext() {
     this->cursor_shape = cursor_zoom_xpm;
     this->hot_x = 6;
     this->hot_y = 6;
+    this->escaped = false;
 }
 
 SPZoomContext::~SPZoomContext() {
@@ -80,21 +75,13 @@ void SPZoomContext::setup() {
     SPEventContext::setup();
 }
 
-//gint SPZoomContext::item_handler(SPItem* item, GdkEvent* event) {
-//    gint ret = FALSE;
-//
-//    ret = SPEventContext::item_handler(item, event);
-//
-//    return ret;
-//}
-
-gint SPZoomContext::root_handler(GdkEvent* event) {
+bool SPZoomContext::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 	
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     double const zoom_inc = prefs->getDoubleLimited("/options/zoomincrement/value", M_SQRT2, 1.01, 10);
 
-    gint ret = FALSE;
+    bool ret = false;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -112,14 +99,14 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
 
                 escaped = false;
 
-                ret = TRUE;
+                ret = true;
             } else if (event->button.button == 3) {
                 double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
                                        ? zoom_inc
                                        : 1 / zoom_inc );
 
                 desktop->zoom_relative_keep_point(button_dt, zoom_rel);
-                ret = TRUE;
+                ret = true;
             }
 			
 			sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
@@ -132,7 +119,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
 
 	case GDK_MOTION_NOTIFY:
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
-                ret = TRUE;
+                ret = true;
 
                 if ( within_tolerance
                      && ( abs( (gint) event->motion.x - xp ) < tolerance )
@@ -169,7 +156,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                     desktop->zoom_relative_keep_point(button_dt, zoom_rel);
                 }
 
-                ret = TRUE;
+                ret = true;
             }
 
             Inkscape::Rubberband::get(desktop)->stop();
@@ -193,7 +180,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                     Inkscape::Rubberband::get(desktop)->stop();
                     xp = yp = 0;
                     escaped = true;
-                    ret = TRUE;
+                    ret = true;
                     break;
 
                 case GDK_KEY_Up:
@@ -202,13 +189,13 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
                 case GDK_KEY_KP_Down:
                     // prevent the zoom field from activation
                     if (!MOD__CTRL_ONLY(event))
-                        ret = TRUE;
+                        ret = true;
                     break;
 
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
                     this->cursor_shape = cursor_zoom_out_xpm;
-                    sp_event_context_update_cursor(this);
+                    this->sp_event_context_update_cursor();
                     break;
 
                 case GDK_KEY_Delete:
@@ -226,7 +213,7 @@ gint SPZoomContext::root_handler(GdkEvent* event) {
             	case GDK_KEY_Shift_L:
             	case GDK_KEY_Shift_R:
                     this->cursor_shape = cursor_zoom_xpm;
-                    sp_event_context_update_cursor(this);
+                    this->sp_event_context_update_cursor();
                     break;
             	default:
                     break;
