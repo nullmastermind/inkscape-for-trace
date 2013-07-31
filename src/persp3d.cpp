@@ -76,15 +76,13 @@ Persp3D::~Persp3D() {
 void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-	Persp3D* object = this;
-
-    object->readAttr( "inkscape:vp_x" );
-    object->readAttr( "inkscape:vp_y" );
-    object->readAttr( "inkscape:vp_z" );
-    object->readAttr( "inkscape:persp3d-origin" );
+    this->readAttr( "inkscape:vp_x" );
+    this->readAttr( "inkscape:vp_y" );
+    this->readAttr( "inkscape:vp_z" );
+    this->readAttr( "inkscape:persp3d-origin" );
 
     if (repr) {
-        repr->addListener (&persp3d_repr_events, object);
+        repr->addListener (&persp3d_repr_events, this);
     }
 }
 
@@ -92,11 +90,8 @@ void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
  * Virtual release of Persp3D members before destruction.
  */
 void Persp3D::release() {
-	Persp3D* object = this;
-
-    Persp3D *persp = SP_PERSP3D(object);
-    delete persp->perspective_impl;
-    object->getRepr()->removeListenerByData(object);
+    delete this->perspective_impl;
+    this->getRepr()->removeListenerByData(this);
 }
 
 
@@ -106,9 +101,7 @@ void Persp3D::release() {
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
 void Persp3D::set(unsigned key, gchar const *value) {
-	Persp3D* object = this;
-
-    Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     switch (key) {
         case SP_ATTR_INKSCAPE_PERSP3D_VP_X: {
@@ -223,9 +216,7 @@ Persp3D *persp3d_document_first_persp(SPDocument *document)
  * Virtual write: write object attributes to repr.
  */
 Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	Persp3D* object = this;
-
-    Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     if ((flags & SP_OBJECT_WRITE_BUILD & SP_OBJECT_WRITE_EXT) && !repr) {
         // this is where we end up when saving as plain SVG (also in other circumstances?);

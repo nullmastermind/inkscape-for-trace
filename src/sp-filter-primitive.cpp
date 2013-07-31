@@ -29,9 +29,9 @@
 
 
 // CPPIFY: Make pure virtual.
-void SPFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
+//void SPFilterPrimitive::build_renderer(Inkscape::Filters::Filter* filter) {
 	// throw;
-}
+//}
 
 SPFilterPrimitive::SPFilterPrimitive() : SPObject() {
     this->image_in = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;

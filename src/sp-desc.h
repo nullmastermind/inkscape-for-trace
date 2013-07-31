@@ -22,6 +22,7 @@ public:
 	SPDesc();
 	virtual ~SPDesc();
 
+protected:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 };
 

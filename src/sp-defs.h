@@ -23,6 +23,7 @@ public:
 	SPDefs();
 	virtual ~SPDefs();
 
+protected:
 	virtual void release();
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);

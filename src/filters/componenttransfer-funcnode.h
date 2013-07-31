@@ -54,6 +54,7 @@ public:
     double exponent;
     double offset;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

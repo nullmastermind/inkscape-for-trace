@@ -23,7 +23,7 @@ class  GrDrag;
 class  SPDesktop;
 class  SPItem;
 class  ShapeEditor;
-struct SPEventContext;
+class SPEventContext;
 
 namespace Inkscape {
     class MessageContext;

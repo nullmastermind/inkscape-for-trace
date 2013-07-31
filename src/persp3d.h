@@ -50,6 +50,7 @@ public:
 
     Persp3DImpl *perspective_impl;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

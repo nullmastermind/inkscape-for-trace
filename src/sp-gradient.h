@@ -39,7 +39,7 @@
 //struct SPMeshGradient;
 
 class SPGradientReference;
-struct SPStop;
+class SPStop;
 
 #define SP_GRADIENT(obj) ((SPGradient*)obj)
 #define SP_IS_GRADIENT(obj) (dynamic_cast<const SPGradient*>((SPObject*)obj))

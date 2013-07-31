@@ -40,9 +40,9 @@ public:
      * So one should always check whether the returned value is NULL or not */
     Inkscape::LivePathEffect::Effect * get_lpe() { return lpe; };
 
-//private:
     Inkscape::LivePathEffect::Effect *lpe; // this can be NULL in a valid LivePathEffectObject
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

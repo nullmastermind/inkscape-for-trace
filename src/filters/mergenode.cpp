@@ -33,8 +33,8 @@ namespace {
 	bool mergeNodeRegistered = SPFactory::instance().registerObject("svg:feMergeNode", createMergeNode);
 }
 
-SPFeMergeNode::SPFeMergeNode() : SPObject() {
-    this->input = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+SPFeMergeNode::SPFeMergeNode()
+    : SPObject(), input(Inkscape::Filters::NR_FILTER_SLOT_NOT_SET) {
 }
 
 SPFeMergeNode::~SPFeMergeNode() {
@@ -46,8 +46,7 @@ SPFeMergeNode::~SPFeMergeNode() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeMergeNode::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeMergeNode* object = this;
-	object->readAttr( "in" );
+	this->readAttr( "in" );
 }
 
 /**
@@ -61,15 +60,13 @@ void SPFeMergeNode::release() {
  * Sets a specific value in the SPFeMergeNode.
  */
 void SPFeMergeNode::set(unsigned int key, gchar const *value) {
-	SPFeMergeNode* object = this;
-    SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
-    SPFeMerge *parent = SP_FEMERGE(object->parent);
+    SPFeMerge *parent = SP_FEMERGE(this->parent);
 
     if (key == SP_ATTR_IN) {
         int input = sp_filter_primitive_read_in(parent, value);
-        if (input != feMergeNode->input) {
-            feMergeNode->input = input;
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        if (input != this->input) {
+            this->input = input;
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
     }
 
@@ -81,11 +78,8 @@ void SPFeMergeNode::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPFeMergeNode::update(SPCtx *ctx, guint flags) {
-	SPFeMergeNode* object = this;
-    //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
     SPObject::update(ctx, flags);
@@ -95,16 +89,13 @@ void SPFeMergeNode::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeMergeNode::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeMergeNode* object = this;
-    //SPFeMergeNode *feMergeNode = SP_FEMERGENODE(object);
-
-    // Inkscape-only object, not copied during an "plain SVG" dump:
+    // Inkscape-only this, not copied during an "plain SVG" dump:
     if (flags & SP_OBJECT_WRITE_EXT) {
         if (repr) {
             // is this sane?
             //repr->mergeFrom(object->getRepr(), "id");
         } else {
-            repr = object->getRepr()->duplicate(doc);
+            repr = this->getRepr()->duplicate(doc);
         }
     }
 

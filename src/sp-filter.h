@@ -33,7 +33,7 @@ class Filter;
 } }
 
 class SPFilterReference;
-struct SPFilterPrimitive;
+class SPFilterPrimitive;
 
 struct ltstr {
     bool operator()(const char* s1, const char* s2) const;
@@ -61,6 +61,7 @@ public:
     std::map<gchar *, int, ltstr>* _image_name;
     int _image_number_next;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

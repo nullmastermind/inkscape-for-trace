@@ -39,24 +39,12 @@ namespace {
 	bool spotLightRegistered = SPFactory::instance().registerObject("svg:feSpotLight", createSpotLight);
 }
 
-SPFeSpotLight::SPFeSpotLight() : SPObject() {
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
-    this->pointsAtX = 0;
-    this->pointsAtY = 0;
-    this->pointsAtZ = 0;
-    this->specularExponent = 1;
-    this->limitingConeAngle = 90;
-
-    this->x_set = FALSE;
-    this->y_set = FALSE;
-    this->z_set = FALSE;
-    this->pointsAtX_set = FALSE;
-    this->pointsAtY_set = FALSE;
-    this->pointsAtZ_set = FALSE;
-    this->specularExponent_set = FALSE;
-    this->limitingConeAngle_set = FALSE;
+SPFeSpotLight::SPFeSpotLight()
+    : SPObject(), x(0), x_set(FALSE), y(0), y_set(FALSE), z(0), z_set(FALSE), pointsAtX(0), pointsAtX_set(FALSE),
+      pointsAtY(0), pointsAtY_set(FALSE), pointsAtZ(0), pointsAtZ_set(FALSE),
+      specularExponent(1), specularExponent_set(FALSE), limitingConeAngle(90),
+      limitingConeAngle_set(FALSE)
+{
 }
 
 SPFeSpotLight::~SPFeSpotLight() {
@@ -71,32 +59,27 @@ SPFeSpotLight::~SPFeSpotLight() {
 void SPFeSpotLight::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-	SPFeSpotLight* object = this;
-
     //Read values of key attributes from XML nodes into object.
-    object->readAttr( "x" );
-    object->readAttr( "y" );
-    object->readAttr( "z" );
-    object->readAttr( "pointsAtX" );
-    object->readAttr( "pointsAtY" );
-    object->readAttr( "pointsAtZ" );
-    object->readAttr( "specularExponent" );
-    object->readAttr( "limitingConeAngle" );
+    this->readAttr( "x" );
+    this->readAttr( "y" );
+    this->readAttr( "z" );
+    this->readAttr( "pointsAtX" );
+    this->readAttr( "pointsAtY" );
+    this->readAttr( "pointsAtZ" );
+    this->readAttr( "specularExponent" );
+    this->readAttr( "limitingConeAngle" );
 
 //is this necessary?
-    document->addResource("fespotlight", object);
+    document->addResource("fespotlight", this);
 }
 
 /**
  * Drops any allocated memory.
  */
 void SPFeSpotLight::release() {
-	SPFeSpotLight* object = this;
-    //SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
-
-    if ( object->document ) {
+    if ( this->document ) {
         // Unregister ourselves
-        object->document->removeResource("fespotlight", object);
+        this->document->removeResource("fespotlight", this);
     }
 
 //TODO: release resources here
@@ -106,146 +89,183 @@ void SPFeSpotLight::release() {
  * Sets a specific value in the SPFeSpotLight.
  */
 void SPFeSpotLight::set(unsigned int key, gchar const *value) {
-	SPFeSpotLight* object = this;
-
-    SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
     gchar *end_ptr;
 
     switch (key) {
     case SP_ATTR_X:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->x = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->x_set = TRUE;
+            this->x = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->x_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->x = 0;
-            fespotlight->x_set = FALSE;
+            this->x = 0;
+            this->x_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_Y:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->y = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->y_set = TRUE;
+            this->y = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->y_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->y = 0;
-            fespotlight->y_set = FALSE;
+            this->y = 0;
+            this->y_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_Z:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->z = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->z_set = TRUE;
+            this->z = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->z_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->z = 0;
-            fespotlight->z_set = FALSE;
+            this->z = 0;
+            this->z_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_POINTSATX:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->pointsAtX = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->pointsAtX_set = TRUE;
+            this->pointsAtX = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->pointsAtX_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->pointsAtX = 0;
-            fespotlight->pointsAtX_set = FALSE;
+            this->pointsAtX = 0;
+            this->pointsAtX_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_POINTSATY:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->pointsAtY = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->pointsAtY_set = TRUE;
+            this->pointsAtY = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->pointsAtY_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->pointsAtY = 0;
-            fespotlight->pointsAtY_set = FALSE;
+            this->pointsAtY = 0;
+            this->pointsAtY_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_POINTSATZ:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->pointsAtZ = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->pointsAtZ_set = TRUE;
+            this->pointsAtZ = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->pointsAtZ_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->pointsAtZ = 0;
-            fespotlight->pointsAtZ_set = FALSE;
+            this->pointsAtZ = 0;
+            this->pointsAtZ_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_SPECULAREXPONENT:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->specularExponent = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->specularExponent_set = TRUE;
+            this->specularExponent = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->specularExponent_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->specularExponent = 1;
-            fespotlight->specularExponent_set = FALSE;
+            this->specularExponent = 1;
+            this->specularExponent_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     case SP_ATTR_LIMITINGCONEANGLE:
         end_ptr = NULL;
+        
         if (value) {
-            fespotlight->limitingConeAngle = g_ascii_strtod(value, &end_ptr);
-            if (end_ptr)
-                fespotlight->limitingConeAngle_set = TRUE;
+            this->limitingConeAngle = g_ascii_strtod(value, &end_ptr);
+            
+            if (end_ptr) {
+                this->limitingConeAngle_set = TRUE;
+            }
         }
+        
         if(!value || !end_ptr) {
-            fespotlight->limitingConeAngle = 90;
-            fespotlight->limitingConeAngle_set = FALSE;
+            this->limitingConeAngle = 90;
+            this->limitingConeAngle_set = FALSE;
         }
-        if (object->parent &&
-                (SP_IS_FEDIFFUSELIGHTING(object->parent) ||
-                 SP_IS_FESPECULARLIGHTING(object->parent))) {
-            object->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        
+        if (this->parent &&
+                (SP_IS_FEDIFFUSELIGHTING(this->parent) ||
+                 SP_IS_FESPECULARLIGHTING(this->parent))) {
+            this->parent->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         break;
     default:
@@ -259,21 +279,16 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
  *  * Receives update notifications.
  *   */
 void SPFeSpotLight::update(SPCtx *ctx, guint flags) {
-	SPFeSpotLight* object = this;
-
-    SPFeSpotLight *feSpotLight = SP_FESPOTLIGHT(object);
-    (void)feSpotLight;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-        object->readAttr( "x" );
-        object->readAttr( "y" );
-        object->readAttr( "z" );
-        object->readAttr( "pointsAtX" );
-        object->readAttr( "pointsAtY" );
-        object->readAttr( "pointsAtZ" );
-        object->readAttr( "specularExponent" );
-        object->readAttr( "limitingConeAngle" );
+        this->readAttr( "x" );
+        this->readAttr( "y" );
+        this->readAttr( "z" );
+        this->readAttr( "pointsAtX" );
+        this->readAttr( "pointsAtY" );
+        this->readAttr( "pointsAtZ" );
+        this->readAttr( "specularExponent" );
+        this->readAttr( "limitingConeAngle" );
     }
 
     SPObject::update(ctx, flags);
@@ -283,29 +298,26 @@ void SPFeSpotLight::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeSpotLight::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeSpotLight* object = this;
-    SPFeSpotLight *fespotlight = SP_FESPOTLIGHT(object);
-
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
-    if (fespotlight->x_set)
-        sp_repr_set_css_double(repr, "x", fespotlight->x);
-    if (fespotlight->y_set)
-        sp_repr_set_css_double(repr, "y", fespotlight->y);
-    if (fespotlight->z_set)
-        sp_repr_set_css_double(repr, "z", fespotlight->z);
-    if (fespotlight->pointsAtX_set)
-        sp_repr_set_css_double(repr, "pointsAtX", fespotlight->pointsAtX);
-    if (fespotlight->pointsAtY_set)
-        sp_repr_set_css_double(repr, "pointsAtY", fespotlight->pointsAtY);
-    if (fespotlight->pointsAtZ_set)
-        sp_repr_set_css_double(repr, "pointsAtZ", fespotlight->pointsAtZ);
-    if (fespotlight->specularExponent_set)
-        sp_repr_set_css_double(repr, "specularExponent", fespotlight->specularExponent);
-    if (fespotlight->limitingConeAngle_set)
-        sp_repr_set_css_double(repr, "limitingConeAngle", fespotlight->limitingConeAngle);
+    if (this->x_set)
+        sp_repr_set_css_double(repr, "x", this->x);
+    if (this->y_set)
+        sp_repr_set_css_double(repr, "y", this->y);
+    if (this->z_set)
+        sp_repr_set_css_double(repr, "z", this->z);
+    if (this->pointsAtX_set)
+        sp_repr_set_css_double(repr, "pointsAtX", this->pointsAtX);
+    if (this->pointsAtY_set)
+        sp_repr_set_css_double(repr, "pointsAtY", this->pointsAtY);
+    if (this->pointsAtZ_set)
+        sp_repr_set_css_double(repr, "pointsAtZ", this->pointsAtZ);
+    if (this->specularExponent_set)
+        sp_repr_set_css_double(repr, "specularExponent", this->specularExponent);
+    if (this->limitingConeAngle_set)
+        sp_repr_set_css_double(repr, "limitingConeAngle", this->limitingConeAngle);
 
     SPObject::write(doc, repr, flags);
 

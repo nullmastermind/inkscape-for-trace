@@ -104,44 +104,25 @@ public:
 static gchar *sp_object_get_unique_id(SPObject    *object,
                                       gchar const *defid);
 
-SPObject::SPObject() {
+SPObject::SPObject()
+    : cloned(0), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
+      document(NULL), parent(NULL), children(NULL), _last_child(NULL),
+      next(NULL), id(NULL), repr(NULL), refCount(1),
+      _successor(NULL), _collection_policy(SPObject::COLLECT_WITH_PARENT),
+      _label(NULL), _default_label(NULL)
+{
     debug("id=%x, typename=%s",this, g_type_name_from_instance((GTypeInstance*)object));
-
-    this->refCount = 1;
-
-    this->repr = NULL;
-    this->mflags = 0;
-    this->id = NULL;
-    this->cloned = 0;
-    this->uflags = 0;
-
-    this->hrefcount = 0;
-    this->_total_hrefcount = 0;
-    this->document = NULL;
-    this->children = this->_last_child = NULL;
-    this->parent = this->next = NULL;
 
     //used XML Tree here.
     this->getRepr(); // TODO check why this call is made
 
     SPObjectImpl::setIdNull(this);
 
-    this->_collection_policy = SPObject::COLLECT_WITH_PARENT;
-
-    //new (&this->_release_signal) sigc::signal<void, SPObject *>();
-    //new (&this->_modified_signal) sigc::signal<void, SPObject *, unsigned int>();
-    //new (&this->_delete_signal) sigc::signal<void, SPObject *>();
-    //new (&this->_position_changed_signal) sigc::signal<void, SPObject *>();
-    this->_successor = NULL;
-
     // FIXME: now we create style for all objects, but per SVG, only the following can have style attribute:
     // vg, g, defs, desc, title, symbol, use, image, switch, path, rect, circle, ellipse, line, polyline,
     // polygon, text, tspan, tref, textPath, altGlyph, glyphRef, marker, linearGradient, radialGradient,
     // stop, pattern, clipPath, mask, filter, feImage, a, font, glyph, missing-glyph, foreignObject
     this->style = sp_style_new_from_object(this);
-
-    this->_label = NULL;
-    this->_default_label = NULL;
 }
 
 SPObject::~SPObject() {
@@ -155,11 +136,6 @@ SPObject::~SPObject() {
         sp_object_unref(this->_successor, NULL);
         this->_successor = NULL;
     }
-
-    //this->_release_signal.~signal();
-    //this->_modified_signal.~signal();
-    //this->_delete_signal.~signal();
-    //this->_position_changed_signal.~signal();
 }
 
 // CPPIFY: make pure virtual
@@ -208,34 +184,6 @@ public:
 };
 
 }
-
-
-
-
-
-
-//#include <stdexcept>
-//#include <exception>
-//
-//void log_exception(std::exception_ptr exception) {
-//	try {
-//		std::rethrow_exception(exception);
-//	} catch (const std::exception& e) {
-//		std::cerr << "Caught Exception of type " << std::string(typeid(e).name()) << '\n';
-//		std::cerr << "Message: " << std::string(e.what()) << '\n';
-//
-//		try {
-//			std::rethrow_if_nested(e);
-//		} catch (...) {
-//			std::cerr << "Inner Exception: \n";
-//			log_exception(std::current_exception());
-//		}
-//	}
-//}
-
-
-
-
 
 gchar const* SPObject::getId() const {
     return id;

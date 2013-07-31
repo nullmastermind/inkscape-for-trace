@@ -32,18 +32,15 @@ SPDesc::SPDesc() : SPObject() {
 SPDesc::~SPDesc() {
 }
 
+/**
+ * Writes it's settings to an incoming repr object, if any.
+ */
 Inkscape::XML::Node* SPDesc::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
-	SPDesc* object = this;
-
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPObject::write(doc, repr, flags);
 
     return repr;
 }
-
-/**
- * Writes it's settings to an incoming repr object, if any.
- */

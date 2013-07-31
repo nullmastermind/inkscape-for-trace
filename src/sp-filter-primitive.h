@@ -36,6 +36,7 @@ public:
     /* filter primitive subregion */
     SVGLength x, y, height, width;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
@@ -45,7 +46,8 @@ public:
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 
-	virtual void build_renderer(Inkscape::Filters::Filter* filter);
+public:
+	virtual void build_renderer(Inkscape::Filters::Filter* filter) = 0;
 };
 
 /* Common initialization for filter primitives */

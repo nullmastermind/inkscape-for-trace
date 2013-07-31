@@ -35,6 +35,7 @@ public:
     gfloat z; 
     guint z_set : 1;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

@@ -20,7 +20,7 @@
 #define SP_PATTERN(obj) ((SPPattern*)obj)
 #define SP_IS_PATTERN(obj) (dynamic_cast<const SPPattern*>((SPObject*)obj))
 
-struct SPPatternReference;
+class SPPatternReference;
 
 #include "svg/svg-length.h"
 #include "sp-paint-server.h"

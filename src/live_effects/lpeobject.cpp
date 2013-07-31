@@ -41,15 +41,13 @@ static Inkscape::XML::NodeEventVector const livepatheffect_repr_events = {
 };
 
 
-LivePathEffectObject::LivePathEffectObject() : SPObject() {
+LivePathEffectObject::LivePathEffectObject()
+    : SPObject(), effecttype(Inkscape::LivePathEffect::INVALID_LPE), effecttype_set(false),
+      lpe(NULL)
+{
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_message("Init livepatheffectobject");
 #endif
-
-    this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
-    this->lpe = NULL;
-
-    this->effecttype_set = false;
 }
 
 LivePathEffectObject::~LivePathEffectObject() {
@@ -59,17 +57,15 @@ LivePathEffectObject::~LivePathEffectObject() {
  * Virtual build: set livepatheffect attributes from its associated XML node.
  */
 void LivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	LivePathEffectObject* object = this;
-
-    g_assert(object != NULL);
-    g_assert(SP_IS_OBJECT(object));
+    g_assert(this != NULL);
+    g_assert(SP_IS_OBJECT(this));
 
     SPObject::build(document, repr);
 
-    object->readAttr( "effect" );
+    this->readAttr( "effect" );
 
     if (repr) {
-        repr->addListener (&livepatheffect_repr_events, object);
+        repr->addListener (&livepatheffect_repr_events, this);
     }
 
     /* Register ourselves, is this necessary? */
@@ -80,12 +76,7 @@ void LivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr
  * Virtual release of livepatheffect members before destruction.
  */
 void LivePathEffectObject::release() {
-	LivePathEffectObject* object = this;
-
-    LivePathEffectObject *lpeobj = LIVEPATHEFFECT(object);
-
-    object->getRepr()->removeListenerByData(object);
-
+    this->getRepr()->removeListenerByData(this);
 
 /*
     if (object->document) {
@@ -101,14 +92,14 @@ void LivePathEffectObject::release() {
     }
 
     gradient->modified_connection.~connection();
-
 */
 
-    if (lpeobj->lpe) {
-        delete lpeobj->lpe;
-        lpeobj->lpe = NULL;
+    if (this->lpe) {
+        delete this->lpe;
+        this->lpe = NULL;
     }
-    lpeobj->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
+
+    this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
 
     SPObject::release();
 }
@@ -117,28 +108,27 @@ void LivePathEffectObject::release() {
  * Virtual set: set attribute to value.
  */
 void LivePathEffectObject::set(unsigned key, gchar const *value) {
-	LivePathEffectObject* object = this;
-
-    LivePathEffectObject *lpeobj = LIVEPATHEFFECT(object);
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_print("Set livepatheffect");
 #endif
+
     switch (key) {
         case SP_PROP_PATH_EFFECT:
-            if (lpeobj->lpe) {
-                delete lpeobj->lpe;
-                lpeobj->lpe = NULL;
+            if (this->lpe) {
+                delete this->lpe;
+                this->lpe = NULL;
             }
 
             if ( value && Inkscape::LivePathEffect::LPETypeConverter.is_valid_key(value) ) {
-                lpeobj->effecttype = Inkscape::LivePathEffect::LPETypeConverter.get_id_from_key(value);
-                lpeobj->lpe = Inkscape::LivePathEffect::Effect::New(lpeobj->effecttype, lpeobj);
-                lpeobj->effecttype_set = true;
+                this->effecttype = Inkscape::LivePathEffect::LPETypeConverter.get_id_from_key(value);
+                this->lpe = Inkscape::LivePathEffect::Effect::New(this->effecttype, this);
+                this->effecttype_set = true;
             } else {
-                lpeobj->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
-                lpeobj->effecttype_set = false;
+                this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
+                this->effecttype_set = false;
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     }
 
@@ -149,18 +139,14 @@ void LivePathEffectObject::set(unsigned key, gchar const *value) {
  * Virtual write: write object attributes to repr.
  */
 Inkscape::XML::Node* LivePathEffectObject::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	LivePathEffectObject* object = this;
-
-    LivePathEffectObject *lpeobj = LIVEPATHEFFECT(object);
-
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("inkscape:path-effect");
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || lpeobj->lpe) {
-        repr->setAttribute("effect", Inkscape::LivePathEffect::LPETypeConverter.get_key(lpeobj->effecttype).c_str());
+    if ((flags & SP_OBJECT_WRITE_ALL) || this->lpe) {
+        repr->setAttribute("effect", Inkscape::LivePathEffect::LPETypeConverter.get_key(this->effecttype).c_str());
 
-        lpeobj->lpe->writeParamsToSVG();
+        this->lpe->writeParamsToSVG();
     }
 
     SPObject::write(xml_doc, repr, flags);

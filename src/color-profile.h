@@ -55,7 +55,7 @@ public:
     gchar* intentStr;
     guint rendering_intent;
 
-public:
+protected:
     ColorProfileImpl *impl;
 
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
@@ -68,7 +68,7 @@ public:
 
 } // namespace Inkscape
 
-#define COLORPROFILE_TYPE (Inkscape::colorprofile_get_type())
+//#define COLORPROFILE_TYPE (Inkscape::colorprofile_get_type())
 #define COLORPROFILE(obj) ((Inkscape::ColorProfile*)obj)
 #define IS_COLORPROFILE(obj) (dynamic_cast<const Inkscape::ColorProfile*>((SPObject*)obj))
 
