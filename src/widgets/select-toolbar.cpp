@@ -89,7 +89,7 @@ sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
             };
 
             if (unit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
-                double const val = unit.factor;
+                double const val = unit.factor * 100;
                 for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
                     GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
                     gtk_adjustment_set_value(a, val);
@@ -202,13 +202,13 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         y1 = y0 + Quantity::convert(gtk_adjustment_get_value(a_h), unit, "px");;
         yrel = Quantity::convert(gtk_adjustment_get_value(a_h), unit, "px") / bbox_user->dimensions()[Geom::Y];
     } else {
-        double const x0_propn = gtk_adjustment_get_value (a_x) * unit.factor;
+        double const x0_propn = gtk_adjustment_get_value (a_x) / 100 / unit.factor;
         x0 = bbox_user->min()[Geom::X] * x0_propn;
-        double const y0_propn = gtk_adjustment_get_value (a_y) * unit.factor;
+        double const y0_propn = gtk_adjustment_get_value (a_y) / 100 / unit.factor;
         y0 = y0_propn * bbox_user->min()[Geom::Y];
-        xrel = gtk_adjustment_get_value (a_w) * unit.factor;
+        xrel = gtk_adjustment_get_value (a_w) / 100 / unit.factor;
         x1 = x0 + xrel * bbox_user->dimensions()[Geom::X];
-        yrel = gtk_adjustment_get_value (a_h) * unit.factor;
+        yrel = gtk_adjustment_get_value (a_h) / 100 / unit.factor;
         y1 = y0 + yrel * bbox_user->dimensions()[Geom::Y];
     }
 
@@ -493,7 +493,8 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 
     // Create the units menu.
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
-    //tracker->addUnit( SP_UNIT_PERCENT, 0 );
+    Inkscape::Util::UnitTable unit_table;
+    tracker->addUnit(unit_table.getUnit("%"));
     tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
 
     g_object_set_data( G_OBJECT(spw), "tracker", tracker );

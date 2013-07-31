@@ -39,6 +39,7 @@ public:
     void setActiveUnitByAbbr(gchar const *abbr);
     Inkscape::Util::Unit getActiveUnit() const;
 
+    void addUnit(Inkscape::Util::Unit const &u);
     void addAdjustment(GtkAdjustment *adj);
     void setFullVal(GtkAdjustment *adj, gdouble val);
 

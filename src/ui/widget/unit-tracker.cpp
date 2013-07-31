@@ -111,6 +111,13 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
     }
 }
 
+void UnitTracker::addUnit(Inkscape::Util::Unit const &u)
+{
+    GtkTreeIter iter;
+    gtk_list_store_append(_store, &iter);
+    gtk_list_store_set(_store, &iter, COLUMN_STRING, u.abbr.c_str(), -1);
+}
+
 void UnitTracker::setFullVal(GtkAdjustment *adj, gdouble val)
 {
     _priorValues[adj] = val;
@@ -232,7 +239,7 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const oldUnit, Inkscape
         if ( (oldUnit.type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
             && (newUnit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
         {
-            val = newUnit.factor;
+            val = newUnit.factor * 100;
             _priorValues[adj] = Inkscape::Util::Quantity::convert(oldVal, oldUnit, "px");
         } else if ( (oldUnit.type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS)
             && (newUnit.type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
