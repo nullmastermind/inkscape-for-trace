@@ -250,7 +250,6 @@ ink_common_sources +=	\
 	unclump.cpp unclump.h			\
 	undo-stack-observer.h			\
 	unicoderange.cpp unicoderange.h		\
-	unit-constants.h			\
 	uri.cpp uri.h				\
 	uri-references.cpp uri-references.h	\
 	vanishing-point.cpp vanishing-point.h	\

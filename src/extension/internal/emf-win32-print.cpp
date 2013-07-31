@@ -43,8 +43,6 @@
 
 #include "emf-win32-print.h"
 
-#include "unit-constants.h"
-
 #include "extension/system.h"
 #include "extension/print.h"
 #include "document.h"

@@ -348,7 +348,7 @@ namespace XML {}
  * Inkscape::Whiteboard::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
  * [\ref document-undo.cpp]
  *
- * {\ref dialogs/} [\ref decimal-round.h] [\ref enums.h] [\ref unit-constants.h]
+ * {\ref dialogs/} [\ref decimal-round.h] [\ref enums.h]
  */
 
 

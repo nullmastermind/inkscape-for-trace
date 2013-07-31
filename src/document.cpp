@@ -62,7 +62,7 @@
 #include "sp-object-repr.h"
 #include "sp-symbol.h"
 #include "transf_mat_3x4.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "xml/repr.h"
 #include "xml/rebase-hrefs.h"
 #include "libcroco/cr-cascade.h"
@@ -966,7 +966,7 @@ void SPDocument::setupViewport(SPItemCtx *ctx)
     if (root->viewBox_set) { // if set, take from viewBox
         ctx->viewport = root->viewBox;
     } else { // as a last resort, set size to A4
-        ctx->viewport = Geom::Rect::from_xywh(0, 0, 210 * PX_PER_MM, 297 * PX_PER_MM);
+        ctx->viewport = Geom::Rect::from_xywh(0, 0, 210 * Inkscape::Util::Quantity::convert(1, "mm", "px"), 297 * Inkscape::Util::Quantity::convert(1, "mm", "px"));
     }
     ctx->i2vp = Geom::identity();
 }

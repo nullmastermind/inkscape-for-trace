@@ -37,7 +37,6 @@
 #include "extension/output.h"
 #include "display/drawing.h"
 #include "display/drawing-item.h"
-#include "unit-constants.h"
 #include "clear-n_.h"
 #include "document.h"
 

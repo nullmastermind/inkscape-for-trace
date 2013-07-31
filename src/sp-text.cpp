@@ -55,7 +55,6 @@
 #include "sp-tspan.h"
 
 #include "text-editing.h"
-#include "unit-constants.h"
 
 /*#####################################################
 #  SPTEXT

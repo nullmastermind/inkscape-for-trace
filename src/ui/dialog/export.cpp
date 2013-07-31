@@ -50,7 +50,6 @@
 
 #include "ui/widget/unit-menu.h"
 #include "util/units.h"
-#include "unit-constants.h"
 #include "helper/window.h"
 #include "inkscape-private.h"
 #include "document.h"
@@ -98,7 +97,7 @@
 
 #define SP_EXPORT_MIN_SIZE 1.0
 
-#define DPI_BASE PX_PER_IN
+#define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 
 #define EXPORT_COORD_PRECISION 3
 
@@ -1048,8 +1047,8 @@ void Export::onExport ()
 
             Geom::OptRect area = item->desktopVisualBounds();
             if (area) {
-                gint width = (gint) (area->width() * dpi / PX_PER_IN + 0.5);
-                gint height = (gint) (area->height() * dpi / PX_PER_IN + 0.5);
+                gint width = (gint) (area->width() * dpi / DPI_BASE + 0.5);
+                gint height = (gint) (area->height() * dpi / DPI_BASE + 0.5);
 
                 if (width > 1 && height > 1) {
                     // Do export

@@ -481,7 +481,6 @@ set(inkscape_SRC
 	unclump.h
 	undo-stack-observer.h
 	unicoderange.h
-	unit-constants.h
 	uri-references.h
 	uri.h
 	vanishing-point.h
