@@ -128,10 +128,10 @@ SPObject::SPObject() {
 
     this->_collection_policy = SPObject::COLLECT_WITH_PARENT;
 
-    new (&this->_release_signal) sigc::signal<void, SPObject *>();
-    new (&this->_modified_signal) sigc::signal<void, SPObject *, unsigned int>();
-    new (&this->_delete_signal) sigc::signal<void, SPObject *>();
-    new (&this->_position_changed_signal) sigc::signal<void, SPObject *>();
+    //new (&this->_release_signal) sigc::signal<void, SPObject *>();
+    //new (&this->_modified_signal) sigc::signal<void, SPObject *, unsigned int>();
+    //new (&this->_delete_signal) sigc::signal<void, SPObject *>();
+    //new (&this->_position_changed_signal) sigc::signal<void, SPObject *>();
     this->_successor = NULL;
 
     // FIXME: now we create style for all objects, but per SVG, only the following can have style attribute:
@@ -156,10 +156,10 @@ SPObject::~SPObject() {
         this->_successor = NULL;
     }
 
-    this->_release_signal.~signal();
-    this->_modified_signal.~signal();
-    this->_delete_signal.~signal();
-    this->_position_changed_signal.~signal();
+    //this->_release_signal.~signal();
+    //this->_modified_signal.~signal();
+    //this->_delete_signal.~signal();
+    //this->_position_changed_signal.~signal();
 }
 
 // CPPIFY: make pure virtual

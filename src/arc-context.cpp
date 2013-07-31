@@ -67,7 +67,6 @@ const std::string SPArcContext::prefsPath = "/tools/shapes/arc";
 
 
 SPArcContext::SPArcContext() : SPEventContext() {
-	this->_message_context = 0;
     this->cursor_shape = cursor_ellipse_xpm;
     this->hot_x = 4;
     this->hot_y = 4;
@@ -101,8 +100,6 @@ SPArcContext::~SPArcContext() {
     if (this->arc) {
         this->finishItem();
     }
-
-    delete this->_message_context;
 }
 
 /**
@@ -139,8 +136,6 @@ void SPArcContext::setup() {
     if (prefs->getBool("/tools/shapes/gradientdrag")) {
         this->enableGrDrag();
     }
-
-    this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 bool SPArcContext::item_handler(SPItem* item, GdkEvent* event) {
@@ -357,7 +352,7 @@ bool SPArcContext::root_handler(GdkEvent* event) {
 
 void SPArcContext::drag(Geom::Point pt, guint state) {
     if (!this->arc) {
-        if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
             return;
         }
 
@@ -435,9 +430,9 @@ void SPArcContext::drag(Geom::Point pt, guint state) {
             ratio_y = (int) rint (rdimy / rdimx);
         }
 
-        this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str, ratio_x, ratio_y);
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str, ratio_x, ratio_y);
     } else {
-        this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     }
 
     g_string_free(xs, FALSE);
@@ -445,7 +440,7 @@ void SPArcContext::drag(Geom::Point pt, guint state) {
 }
 
 void SPArcContext::finishItem() {
-    this->_message_context->clear();
+    this->message_context->clear();
 
     if (this->arc != NULL) {
         if (this->arc->rx.computed == 0 || this->arc->ry.computed == 0) {

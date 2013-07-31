@@ -122,10 +122,10 @@ public:
                             ///< be selected if this is a click not drag
 
     Inkscape::MessageContext *defaultMessageContext() {
-        return _message_context;
+        return message_context;
     }
 
-    Inkscape::MessageContext *_message_context;
+    Inkscape::MessageContext *message_context;
 
     Inkscape::SelCue *_selcue;
 

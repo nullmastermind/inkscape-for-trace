@@ -104,7 +104,7 @@ SPEventContext::SPEventContext() {
 
     this->desktop = NULL;
     this->cursor = NULL;
-    this->_message_context = NULL;
+    this->message_context = NULL;
     this->_selcue = NULL;
     this->_grdrag = NULL;
     this->space_panning = false;
@@ -115,8 +115,8 @@ SPEventContext::SPEventContext() {
 }
 
 SPEventContext::~SPEventContext() {
-    if (this->_message_context) {
-        delete this->_message_context;
+    if (this->message_context) {
+        delete this->message_context;
     }
 
     if (this->cursor != NULL) {
@@ -704,7 +704,7 @@ bool SPEventContext::root_handler(GdkEvent* event) {
             panning = 4;
 
             this->space_panning = true;
-            this->_message_context->set(Inkscape::INFORMATION_MESSAGE,
+            this->message_context->set(Inkscape::INFORMATION_MESSAGE,
                     _("<b>Space+mouse move</b> to pan canvas"));
 
             ret = TRUE;
@@ -728,7 +728,7 @@ bool SPEventContext::root_handler(GdkEvent* event) {
         // Stop panning on any key release
         if (this->space_panning) {
             this->space_panning = false;
-            this->_message_context->clear();
+            this->message_context->clear();
         }
 
         if (panning) {

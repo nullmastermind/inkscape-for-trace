@@ -64,8 +64,6 @@ const std::string& SPRectContext::getPrefsPath() {
 const std::string SPRectContext::prefsPath = "/tools/shapes/rect";
 
 SPRectContext::SPRectContext() : SPEventContext() {
-    this->_message_context = 0;
-
     this->cursor_shape = cursor_rect_xpm;
     this->hot_x = 4;
     this->hot_y = 4;
@@ -101,10 +99,6 @@ SPRectContext::~SPRectContext() {
     /* fixme: This is necessary because we do not grab */
     if (this->rect) {
         this->finishItem();
-    }
-
-    if (this->_message_context) {
-        delete this->_message_context;
     }
 }
 
@@ -143,8 +137,6 @@ void SPRectContext::setup() {
     if (prefs->getBool("/tools/shapes/gradientdrag")) {
         this->enableGrDrag();
     }
-
-    this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 void SPRectContext::set(const Inkscape::Preferences::Entry& val) {
@@ -396,7 +388,7 @@ void SPRectContext::drag(Geom::Point const pt, guint state) {
     SPDesktop *desktop = this->desktop;
 
     if (!this->rect) {
-        if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
             return;
         }
 
@@ -459,16 +451,16 @@ void SPRectContext::drag(Geom::Point const pt, guint state) {
         }
 
         if (!is_golden_ratio) {
-            this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str, ratio_x, ratio_y);
+            this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str, ratio_x, ratio_y);
         } else {
             if (ratio_y == 1) {
-                this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
+                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
             } else {
-                this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
+                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
             }
         }
     } else {
-        this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     }
 
     g_string_free(xs, FALSE);
@@ -476,7 +468,7 @@ void SPRectContext::drag(Geom::Point const pt, guint state) {
 }
 
 void SPRectContext::finishItem() {
-    this->_message_context->clear();
+    this->message_context->clear();
 
     if (this->rect != NULL) {
         if (this->rect->width.computed == 0 || this->rect->height.computed == 0) {

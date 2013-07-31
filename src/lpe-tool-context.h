@@ -53,8 +53,6 @@ public:
 
     std::map<SPPath *, SPCanvasItem*> *measuring_items;
 
-    Inkscape::MessageContext *_lpetool_message_context;
-
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
 

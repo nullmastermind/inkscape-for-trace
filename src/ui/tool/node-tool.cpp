@@ -127,7 +127,6 @@ InkNodeTool::InkNodeTool() : SPEventContext() {
 	this->single_node_transform_handles = false;
 	this->show_transform_handles = false;
 	this->cursor_drag = false;
-	this->_node_message_context = 0;
 	this->live_objects = false;
 	this->edit_clipping_paths = false;
 	this->live_outline = false;
@@ -183,16 +182,11 @@ InkNodeTool::~InkNodeTool() {
     destroy_group(data.outline_group);
     destroy_group(data.dragpoint_group);
     destroy_group(this->_transform_handle_group);
-
-    if (this->_node_message_context) {
-        delete this->_node_message_context;
-    }
 }
 
 void InkNodeTool::setup() {
     SPEventContext::setup();
 
-    this->_node_message_context = new Inkscape::MessageContext((this->desktop)->messageStack());
     this->_path_data = new Inkscape::UI::PathSharedData();
 
     Inkscape::UI::PathSharedData &data = *this->_path_data;
@@ -559,11 +553,11 @@ void InkNodeTool::update_tip(GdkEvent *event) {
 
         if (state_held_shift(new_state)) {
             if (this->_last_over) {
-                this->_node_message_context->set(Inkscape::NORMAL_MESSAGE,
+                this->message_context->set(Inkscape::NORMAL_MESSAGE,
                     C_("Node tool tip", "<b>Shift</b>: drag to add nodes to the selection, "
                     "click to toggle object selection"));
             } else {
-                this->_node_message_context->set(Inkscape::NORMAL_MESSAGE,
+                this->message_context->set(Inkscape::NORMAL_MESSAGE,
                     C_("Node tool tip", "<b>Shift</b>: drag to add nodes to the selection"));
             }
 
@@ -584,30 +578,30 @@ void InkNodeTool::update_tip(GdkEvent *event) {
             char *dyntip = g_strdup_printf(C_("Node tool tip",
                 "%s Drag to select nodes, click to edit only this object (more: Shift)"),
                 nodestring);
-            this->_node_message_context->set(Inkscape::NORMAL_MESSAGE, dyntip);
+            this->message_context->set(Inkscape::NORMAL_MESSAGE, dyntip);
             g_free(dyntip);
         } else {
             char *dyntip = g_strdup_printf(C_("Node tool tip",
                 "%s Drag to select nodes, click clear the selection"),
                 nodestring);
-            this->_node_message_context->set(Inkscape::NORMAL_MESSAGE, dyntip);
+            this->message_context->set(Inkscape::NORMAL_MESSAGE, dyntip);
             g_free(dyntip);
         }
         g_free(nodestring);
     } else if (!this->_multipath->empty()) {
         if (this->_last_over) {
-            this->_node_message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
+            this->message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
                 "Drag to select nodes, click to edit only this object"));
         } else {
-            this->_node_message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
+            this->message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
                 "Drag to select nodes, click to clear the selection"));
         }
     } else {
         if (this->_last_over) {
-            this->_node_message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
+            this->message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
                 "Drag to select objects to edit, click to edit this object (more: Shift)"));
         } else {
-            this->_node_message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
+            this->message_context->set(Inkscape::NORMAL_MESSAGE, C_("Node tool tip",
                 "Drag to select objects to edit"));
         }
     }

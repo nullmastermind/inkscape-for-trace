@@ -117,9 +117,9 @@ SPItem::SPItem() : SPObject() {
 
     avoidRef = new SPAvoidRef(this);
 
-    new (&constraints) std::vector<SPGuideConstraint>();
+    //new (&constraints) std::vector<SPGuideConstraint>();
 
-    new (&_transformed_signal) sigc::signal<void, Geom::Affine const *, SPItem *>();
+    //new (&_transformed_signal) sigc::signal<void, Geom::Affine const *, SPItem *>();
 }
 
 SPItem::~SPItem() {

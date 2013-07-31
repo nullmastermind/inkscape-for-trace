@@ -47,8 +47,6 @@ private:
 
     sigc::connection sel_changed_connection;
 
-    Inkscape::MessageContext *_message_context;
-
 	void selection_changed(Inkscape::Selection* selection);
 
 	void drag(Geom::Point pt, guint state);

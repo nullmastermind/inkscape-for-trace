@@ -20,7 +20,6 @@
 #define DRAG_MAX 1.0
 
 SPCommonContext::SPCommonContext() : SPEventContext() {
-	this->_message_context = 0;
 	this->tremor = 0;
 	this->usetilt = 0;
 	this->is_drawing = false;
@@ -96,13 +95,6 @@ SPCommonContext::~SPCommonContext() {
         sp_canvas_item_destroy(this->currentshape);
         this->currentshape = 0;
     }
-
-    if (this->_message_context) {
-        delete this->_message_context;
-        this->_message_context = 0;
-    }
-
-    //G_OBJECT_CLASS(sp_common_context_parent_class)->dispose(object);
 }
 
 void SPCommonContext::set(const Inkscape::Preferences::Entry& value) {

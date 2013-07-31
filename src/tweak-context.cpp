@@ -107,7 +107,6 @@ const std::string& SPTweakContext::getPrefsPath() {
 const std::string SPTweakContext::prefsPath = "/tools/tweak";
 
 SPTweakContext::SPTweakContext() : SPEventContext() {
-	this->_message_context = 0;
 	this->mode = 0;
 	this->dilate_area = 0;
 	this->usetilt = 0;
@@ -144,10 +143,6 @@ SPTweakContext::~SPTweakContext() {
         sp_canvas_item_destroy(this->dilate_area);
         this->dilate_area = NULL;
     }
-
-    if (this->_message_context) {
-        delete this->_message_context;
-    }
 }
 
 static bool is_transform_mode (gint mode)
@@ -182,11 +177,11 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
 
    switch (tc->mode) {
        case TWEAK_MODE_MOVE:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>move</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>move</b>."), sel_message);
            event_context->cursor_shape = cursor_tweak_move_xpm;
            break;
        case TWEAK_MODE_MOVE_IN_OUT:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move in</b>; with Shift to <b>move out</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move in</b>; with Shift to <b>move out</b>."), sel_message);
            if (with_shift) {
                event_context->cursor_shape = cursor_tweak_move_out_xpm;
            } else {
@@ -194,11 +189,11 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            }
            break;
        case TWEAK_MODE_MOVE_JITTER:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move randomly</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>move randomly</b>."), sel_message);
            event_context->cursor_shape = cursor_tweak_move_jitter_xpm;
            break;
        case TWEAK_MODE_SCALE:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>scale down</b>; with Shift to <b>scale up</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>scale down</b>; with Shift to <b>scale up</b>."), sel_message);
            if (with_shift) {
                event_context->cursor_shape = cursor_tweak_scale_up_xpm;
            } else {
@@ -206,7 +201,7 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            }
            break;
        case TWEAK_MODE_ROTATE:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>rotate clockwise</b>; with Shift, <b>counterclockwise</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>rotate clockwise</b>; with Shift, <b>counterclockwise</b>."), sel_message);
            if (with_shift) {
                event_context->cursor_shape = cursor_tweak_rotate_counterclockwise_xpm;
            } else {
@@ -214,7 +209,7 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            }
            break;
        case TWEAK_MODE_MORELESS:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>duplicate</b>; with Shift, <b>delete</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>duplicate</b>; with Shift, <b>delete</b>."), sel_message);
            if (with_shift) {
                event_context->cursor_shape = cursor_tweak_less_xpm;
            } else {
@@ -222,11 +217,11 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            }
            break;
        case TWEAK_MODE_PUSH:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>push paths</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag to <b>push paths</b>."), sel_message);
            event_context->cursor_shape = cursor_push_xpm;
            break;
        case TWEAK_MODE_SHRINK_GROW:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>inset paths</b>; with Shift to <b>outset</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>inset paths</b>; with Shift to <b>outset</b>."), sel_message);
            if (with_shift) {
                event_context->cursor_shape = cursor_thicken_xpm;
            } else {
@@ -234,7 +229,7 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            }
            break;
        case TWEAK_MODE_ATTRACT_REPEL:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>attract paths</b>; with Shift to <b>repel</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>attract paths</b>; with Shift to <b>repel</b>."), sel_message);
            if (with_shift) {
                event_context->cursor_shape = cursor_repel_xpm;
            } else {
@@ -242,19 +237,19 @@ sp_tweak_update_cursor (SPTweakContext *tc, bool with_shift)
            }
            break;
        case TWEAK_MODE_ROUGHEN:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>roughen paths</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>roughen paths</b>."), sel_message);
            event_context->cursor_shape = cursor_roughen_xpm;
            break;
        case TWEAK_MODE_COLORPAINT:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>paint objects</b> with color."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>paint objects</b> with color."), sel_message);
            event_context->cursor_shape = cursor_color_xpm;
            break;
        case TWEAK_MODE_COLORJITTER:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>randomize colors</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>randomize colors</b>."), sel_message);
            event_context->cursor_shape = cursor_color_xpm;
            break;
        case TWEAK_MODE_BLUR:
-           tc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>increase blur</b>; with Shift to <b>decrease</b>."), sel_message);
+           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag or click to <b>increase blur</b>; with Shift to <b>decrease</b>."), sel_message);
            event_context->cursor_shape = cursor_color_xpm;
            break;
    }
@@ -295,8 +290,6 @@ void SPTweakContext::setup() {
     }
 
     this->is_drawing = false;
-
-    this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 
     sp_event_context_read(this, "width");
     sp_event_context_read(this, "mode");
@@ -1167,7 +1160,7 @@ bool SPTweakContext::root_handler(GdkEvent* event) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
 
-                if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
                     return TRUE;
                 }
 
@@ -1205,7 +1198,7 @@ bool SPTweakContext::root_handler(GdkEvent* event) {
                     num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
                 }
                 if (num == 0) {
-                    this->_message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));
+                    this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));
                 }
 
             // dilating:
@@ -1498,7 +1491,7 @@ bool SPTweakContext::root_handler(GdkEvent* event) {
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:
                     sp_tweak_switch_mode (this, prefs->getInt("/tools/tweak/mode"), MOD__SHIFT(event));
-                    this->_message_context->clear();
+                    this->message_context->clear();
                     break;
                 default:
                     sp_tweak_switch_mode (this, prefs->getInt("/tools/tweak/mode"), MOD__SHIFT(event));

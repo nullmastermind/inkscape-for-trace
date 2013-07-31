@@ -77,8 +77,6 @@ public:
 
     gint mode;
 
-    Inkscape::MessageContext *message_context;
-
     bool is_drawing;
 
     bool is_dilating;

@@ -141,7 +141,6 @@ ink_common_sources +=	\
 	seltrans-handles.cpp seltrans-handles.h				\
 	shape-editor.cpp shape-editor.h					\
 	shortcuts.cpp shortcuts.h					\
-	singleton.h							\
 	snap.cpp snap.h							\
 	snap-enums.h snap-candidate.h					\
 	snapped-curve.cpp snapped-curve.h				\

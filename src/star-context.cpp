@@ -68,7 +68,6 @@ const std::string SPStarContext::prefsPath = "/tools/shapes/star";
 
 SPStarContext::SPStarContext() : SPEventContext() {
 	this->randomized = 0;
-	this->message_context = 0;
 	this->rounded = 0;
 
     this->cursor_shape = cursor_star_xpm;
@@ -108,10 +107,6 @@ SPStarContext::~SPStarContext() {
     /* fixme: This is necessary because we do not grab */
     if (this->star) {
     	this->finishItem();
-    }
-
-    if (this->message_context) {
-        delete this->message_context;
     }
 }
 
@@ -158,8 +153,6 @@ void SPStarContext::setup() {
 	if (prefs->getBool("/tools/shapes/gradientdrag")) {
 		this->enableGrDrag();
 	}
-
-	this->message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 void SPStarContext::set(const Inkscape::Preferences::Entry& val) {

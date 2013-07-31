@@ -646,7 +646,7 @@ bool SPTextContext::root_handler(GdkEvent* event) {
                 // status text
                 GString *xs = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[Geom::X]), desktop->namedview->getDefaultMetric());
                 GString *ys = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[Geom::Y]), desktop->namedview->getDefaultMetric());
-                event_context->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs->str, ys->str);
+                event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs->str, ys->str);
                 g_string_free(xs, FALSE);
                 g_string_free(ys, FALSE);
 
@@ -703,7 +703,7 @@ bool SPTextContext::root_handler(GdkEvent* event) {
                         im_cursor.height = (int) -floor(SP_EVENT_CONTEXT(tc)->desktop->d2w(cursor_size)[Geom::Y]);
                         gtk_im_context_set_cursor_location(tc->imc, &im_cursor);
                     }
-                    event_context->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Type text; <b>Enter</b> to start new line.")); // FIXME:: this is a copy of a string from _update_cursor below, do not desync
+                    event_context->message_context->set(Inkscape::NORMAL_MESSAGE, _("Type text; <b>Enter</b> to start new line.")); // FIXME:: this is a copy of a string from _update_cursor below, do not desync
 
                     event_context->within_tolerance = false;
                 } else if (tc->creating) {
@@ -1650,9 +1650,9 @@ static void sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see
                 }
             }
 
-            SP_EVENT_CONTEXT(tc)->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph."), nChars, trunc);
+            SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, _("Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph."), nChars, trunc);
         } else {
-            SP_EVENT_CONTEXT(tc)->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("Type or edit text (%d characters%s); <b>Enter</b> to start new line."), nChars, trunc);
+            SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, _("Type or edit text (%d characters%s); <b>Enter</b> to start new line."), nChars, trunc);
         }
 
     } else {
@@ -1660,7 +1660,7 @@ static void sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see
         sp_canvas_item_hide(tc->frame);
         tc->show = FALSE;
         if (!tc->nascent_object) {
-            SP_EVENT_CONTEXT(tc)->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type.")); // FIXME: this is a copy of string from tools-switch, do not desync
+            SP_EVENT_CONTEXT(tc)->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type.")); // FIXME: this is a copy of string from tools-switch, do not desync
         }
     }
 

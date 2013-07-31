@@ -92,7 +92,6 @@ const std::string& SPFloodContext::getPrefsPath() {
 const std::string SPFloodContext::prefsPath = "/tools/paintbucket";
 
 SPFloodContext::SPFloodContext() : SPEventContext() {
-	this->_message_context = 0;
     this->cursor_shape = cursor_paintbucket_xpm;
     this->hot_x = 11;
     this->hot_y = 30;
@@ -114,10 +113,6 @@ SPFloodContext::~SPFloodContext() {
     /* fixme: This is necessary because we do not grab */
     if (this->item) {
         this->finishItem();
-    }
-
-    if (this->_message_context) {
-        delete this->_message_context;
     }
 }
 
@@ -144,8 +139,6 @@ void SPFloodContext::setup() {
     this->sel_changed_connection = sp_desktop_selection(this->desktop)->connectChanged(
     	sigc::mem_fun(this, &SPFloodContext::selection_changed)
     );
-
-    this->_message_context = new Inkscape::MessageContext((this->desktop)->messageStack());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1231,7 +1224,7 @@ bool SPFloodContext::root_handler(GdkEvent* event) {
 }
 
 void SPFloodContext::finishItem() {
-    this->_message_context->clear();
+    this->message_context->clear();
 
     if (this->item != NULL) {
         this->item->updateRepr();

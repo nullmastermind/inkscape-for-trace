@@ -74,7 +74,6 @@ const std::string SPMeshContext::prefsPath = "/tools/mesh";
 
 SPMeshContext::SPMeshContext() : SPEventContext() {
 	this->selcon = 0;
-	this->_message_context = 0;
 	this->node_added = false;
 	this->subselcon = 0;
 
@@ -91,10 +90,6 @@ SPMeshContext::SPMeshContext() : SPEventContext() {
 
 SPMeshContext::~SPMeshContext() {
     this->enableGrDrag(false);
-
-    if (this->_message_context) {
-        delete this->_message_context;
-    }
 
     this->selcon->disconnect();
     delete this->selcon;
@@ -135,7 +130,7 @@ void SPMeshContext::selection_changed(Inkscape::Selection* sel) {
                 //TRANSLATORS: Mind the space in front. This is part of a compound message
                 ngettext(" out of %d mesh handle"," out of %d mesh handles",n_tot),
                 ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-            this->_message_context->setF(Inkscape::NORMAL_MESSAGE,
+            this->message_context->setF(Inkscape::NORMAL_MESSAGE,
                                        message,_(ms_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
         } else {
             gchar * message =
@@ -146,7 +141,7 @@ void SPMeshContext::selection_changed(Inkscape::Selection* sel) {
                              drag->singleSelectedDraggerNumDraggables()),
                     ngettext(" out of %d mesh handle"," out of %d mesh handles",n_tot),
                     ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-            this->_message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
+            this->message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
         }
     } else if (n_sel > 1) {
         //TRANSLATORS: The plural refers to number of selected mesh handles. This is part of a compound message (part two indicates selected object count)
@@ -154,9 +149,9 @@ void SPMeshContext::selection_changed(Inkscape::Selection* sel) {
             g_strconcat(ngettext("<b>%d</b> mesh handle selected out of %d","<b>%d</b> mesh handles selected out of %d",n_sel),
                         //TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
                         ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-        this->_message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
+        this->message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
     } else if (n_sel == 0) {
-        this->_message_context->setF(Inkscape::NORMAL_MESSAGE,
+        this->message_context->setF(Inkscape::NORMAL_MESSAGE,
                                    //TRANSLATORS: The plural refers to number of selected objects
                                    ngettext("<b>No</b> mesh handles selected out of %d on %d selected object",
                                             "<b>No</b> mesh handles selected out of %d on %d selected objects",n_obj), n_tot, n_obj);
@@ -239,8 +234,6 @@ void SPMeshContext::setup() {
 
     this->enableGrDrag();
     Inkscape::Selection *selection = sp_desktop_selection(this->desktop);
-
-    this->_message_context = new Inkscape::MessageContext(sp_desktop_message_stack(this->desktop));
 
     this->selcon = new sigc::connection(selection->connectChanged(
     	sigc::mem_fun(this, &SPMeshContext::selection_changed)
@@ -995,7 +988,7 @@ static void sp_mesh_drag(SPMeshContext &rc, Geom::Point const /*pt*/, guint /*st
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
         int n_objects = g_slist_length((GSList *) selection->itemList());
-        rc._message_context->setF(Inkscape::NORMAL_MESSAGE,
+        rc.message_context->setF(Inkscape::NORMAL_MESSAGE,
                                   ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
                                            "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),
                                   n_objects);

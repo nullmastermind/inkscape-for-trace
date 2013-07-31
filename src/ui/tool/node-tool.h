@@ -58,7 +58,6 @@ private:
     sigc::connection _mouseover_changed_connection;
     sigc::connection _sizeUpdatedConn;
 
-    Inkscape::MessageContext *_node_message_context;
     SPItem *flashed_item;
     Inkscape::Display::TemporaryItem *flash_tempitem;
     Inkscape::UI::Selector* _selector;

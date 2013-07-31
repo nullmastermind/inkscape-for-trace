@@ -518,7 +518,7 @@ connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const
 
             SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
 
-            if (Inkscape::have_viable_layer(desktop, cc->_message_context) == false) {
+            if (Inkscape::have_viable_layer(desktop, cc->message_context) == false) {
                 return TRUE;
             }
 

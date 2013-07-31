@@ -1,8 +1,20 @@
-#pragma once
+#ifndef FACTORY_H_SEEN
+#define FACTORY_H_SEEN
 
 #include <exception>
 #include <map>
 #include <string>
+
+/**
+ * A simple singleton implementation.
+ */
+template<class T>
+struct Singleton {
+	static T& instance() {
+		static T inst;
+		return inst;
+	}
+};
 
 namespace FactoryExceptions {
 	class TypeNotRegistered : public std::exception {
@@ -78,3 +90,6 @@ struct NodeTraits {
 		return name;
 	}
 };
+
+#endif
+

@@ -131,7 +131,6 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
 
 SPSprayContext::SPSprayContext() : SPEventContext() {
 	this->usetilt = 0;
-	this->message_context = 0;
 	this->dilate_area = 0;
 	this->usetext = false;
 	this->population = 0;
@@ -168,10 +167,6 @@ SPSprayContext::~SPSprayContext() {
     if (this->dilate_area) {
         sp_canvas_item_destroy(this->dilate_area);
         this->dilate_area = NULL;
-    }
-
-    if (this->message_context) {
-        delete this->message_context;
     }
 }
 
@@ -236,8 +231,6 @@ void SPSprayContext::setup() {
     }
 
     this->is_drawing = false;
-
-    this->message_context = new Inkscape::MessageContext((this->desktop)->messageStack());
 
     sp_event_context_read(this, "distrib");
     sp_event_context_read(this, "width");

@@ -205,8 +205,8 @@ static void pen_cancel (SPPenContext *const pc)
     sp_canvas_item_hide(pc->c1);
     sp_canvas_item_hide(pc->cl0);
     sp_canvas_item_hide(pc->cl1);
-    pc->_message_context->clear();
-    pc->_message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
+    pc->message_context->clear();
+    pc->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
 
     pc->desktop->canvas->endForcedFullRedraws();
 }
@@ -386,7 +386,7 @@ static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
         && pc->expecting_clicks_for_LPE != 1) {
 
-        if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, dc->message_context) == false) {
             return TRUE;
         }
 
@@ -623,20 +623,20 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
                         }
 
                         if (anchor && !pc->anchor_statusbar) {
-                            pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path."));
+                            pc->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path."));
                             pc->anchor_statusbar = true;
                         } else if (!anchor && pc->anchor_statusbar) {
-                            pc->_message_context->clear();
+                            pc->message_context->clear();
                             pc->anchor_statusbar = false;
                         }
 
                         ret = TRUE;
                     } else {
                         if (anchor && !pc->anchor_statusbar) {
-                            pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point."));
+                            pc->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point."));
                             pc->anchor_statusbar = true;
                         } else if (!anchor && pc->anchor_statusbar) {
-                            pc->_message_context->clear();
+                            pc->message_context->clear();
                             pc->anchor_statusbar = false;
                         }
                         if (!sp_event_context_knot_mouseover(pc)) {
@@ -1185,7 +1185,7 @@ static void spdc_pen_set_angle_distance_status_message(SPPenContext *const pc, G
     if (prefs->getBool("/options/compassangledisplay/value", 0) != 0)
         angle = angle_to_compass (angle);
 
-    pc->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, message, angle, dist->str);
+    pc->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, message, angle, dist->str);
     g_string_free(dist, FALSE);
 }
 
@@ -1314,7 +1314,7 @@ static void spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
     pen_disable_events(pc);
 
     SPDesktop *const desktop = pc->desktop;
-    pc->_message_context->clear();
+    pc->message_context->clear();
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Drawing finished"));
 
     pc->red_curve->reset();

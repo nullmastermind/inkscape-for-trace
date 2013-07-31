@@ -70,8 +70,6 @@ const std::string& Box3DContext::getPrefsPath() {
 const std::string Box3DContext::prefsPath = "/tools/shapes/3dbox";
 
 Box3DContext::Box3DContext() : SPEventContext() {
-	this->_message_context = 0;
-
     this->cursor_shape = cursor_3dbox_xpm;
     this->hot_x = 4;
     this->hot_y = 4;
@@ -112,10 +110,6 @@ Box3DContext::~Box3DContext() {
     /* fixme: This is necessary because we do not grab */
     if (this->box3d) {
         this->finishItem();
-    }
-
-    if (this->_message_context) {
-        delete this->_message_context;
     }
 }
 
@@ -178,8 +172,6 @@ void Box3DContext::setup() {
     if (prefs->getBool("/tools/shapes/gradientdrag")) {
         this->enableGrDrag();
     }
-
-    this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 bool Box3DContext::item_handler(SPItem* item, GdkEvent* event) {
@@ -522,7 +514,7 @@ bool Box3DContext::root_handler(GdkEvent* event) {
 
 void Box3DContext::drag(guint state) {
     if (!this->box3d) {
-        if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
             return;
         }
 
@@ -594,11 +586,11 @@ void Box3DContext::drag(guint state) {
     box3d_position_set(this->box3d);
 
     // status text
-    this->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>3D Box</b>; with <b>Shift</b> to extrude along the Z axis"));
+    this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>3D Box</b>; with <b>Shift</b> to extrude along the Z axis"));
 }
 
 void Box3DContext::finishItem() {
-    this->_message_context->clear();
+    this->message_context->clear();
     this->ctrl_dragged = false;
     this->extruded = false;
 

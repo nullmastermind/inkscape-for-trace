@@ -152,8 +152,6 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
 
     this->is_drawing = false;
 
-    this->_message_context = new Inkscape::MessageContext(desktop->messageStack());
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/eraser/selcue", 0) != 0) {
     	this->enableSelectionCue();
@@ -383,7 +381,7 @@ bool SPEraserContext::root_handler(GdkEvent* event) {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
-                if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
                     return TRUE;
                 }
 
@@ -427,12 +425,12 @@ bool SPEraserContext::root_handler(GdkEvent* event) {
             		);
             this->extinput(event);
 
-            this->_message_context->clear();
+            this->message_context->clear();
 
             if ( this->is_drawing && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 this->dragging = TRUE;
 
-                this->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
+                this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> an eraser stroke"));
 
                 if (!this->apply(motion_dt)) {
                     ret = TRUE;
@@ -484,7 +482,7 @@ bool SPEraserContext::root_handler(GdkEvent* event) {
                 this->repr = NULL;
             }
 
-            this->_message_context->clear();
+            this->message_context->clear();
             ret = TRUE;
         }
 
@@ -603,7 +601,7 @@ bool SPEraserContext::root_handler(GdkEvent* event) {
         switch (get_group0_keyval(&event->key)) {
             case GDK_KEY_Control_L:
             case GDK_KEY_Control_R:
-                this->_message_context->clear();
+                this->message_context->clear();
                 break;
 
             default:

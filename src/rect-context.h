@@ -48,8 +48,6 @@ private:
 
 	sigc::connection sel_changed_connection;
 
-	Inkscape::MessageContext *_message_context;
-
 	void drag(Geom::Point const pt, guint state);
 	void finishItem();
 	void cancel();

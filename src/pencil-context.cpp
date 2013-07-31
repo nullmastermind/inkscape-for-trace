@@ -198,7 +198,7 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
         SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
         Inkscape::Selection *selection = sp_desktop_selection(desktop);
 
-        if (Inkscape::have_viable_layer(desktop, dc->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, dc->message_context) == false) {
             return TRUE;
         }
 
@@ -359,21 +359,21 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
                 }
 
                 if (anchor && !pc->anchor_statusbar) {
-                    pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Release</b> here to close and finish the path."));
+                    pc->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Release</b> here to close and finish the path."));
                     pc->anchor_statusbar = true;
                 } else if (!anchor && pc->anchor_statusbar) {
-                    pc->_message_context->clear();
+                    pc->message_context->clear();
                     pc->anchor_statusbar = false;
                 } else if (!anchor) {
-                    pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Drawing a freehand path"));
+                    pc->message_context->set(Inkscape::NORMAL_MESSAGE, _("Drawing a freehand path"));
                 }
 
             } else {
                 if (anchor && !pc->anchor_statusbar) {
-                    pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to continue the path from this point."));
+                    pc->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to continue the path from this point."));
                     pc->anchor_statusbar = true;
                 } else if (!anchor && pc->anchor_statusbar) {
-                    pc->_message_context->clear();
+                    pc->message_context->clear();
                     pc->anchor_statusbar = false;
                 }
             }
@@ -517,8 +517,8 @@ pencil_cancel (SPPencilContext *const pc)
         pc->green_anchor = sp_draw_anchor_destroy(pc->green_anchor);
     }
 
-    pc->_message_context->clear();
-    pc->_message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
+    pc->message_context->clear();
+    pc->message_context->flash(Inkscape::NORMAL_MESSAGE, _("Drawing cancelled"));
 
     pc->desktop->canvas->endForcedFullRedraws();
 }

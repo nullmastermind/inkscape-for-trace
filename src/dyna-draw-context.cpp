@@ -102,36 +102,29 @@ const std::string& SPDynaDrawContext::getPrefsPath() {
 const std::string SPDynaDrawContext::prefsPath = "/tools/calligraphic";
 
 SPDynaDrawContext::SPDynaDrawContext() : SPCommonContext() {
-	SPDynaDrawContext* ddc = this;
+    this->cursor_shape = cursor_calligraphy_xpm;
+    this->hot_x = 4;
+    this->hot_y = 4;
 
-    ddc->cursor_shape = cursor_calligraphy_xpm;
-    ddc->hot_x = 4;
-    ddc->hot_y = 4;
+    this->vel_thin = 0.1;
+    this->flatness = 0.9;
+    this->cap_rounding = 0.0;
 
-    ddc->vel_thin = 0.1;
-    ddc->flatness = 0.9;
-    ddc->cap_rounding = 0.0;
+    this->abs_width = false;
+    this->keep_selected = true;
 
-    ddc->abs_width = false;
-    ddc->keep_selected = true;
+    this->hatch_spacing = 0;
+    this->hatch_spacing_step = 0;
 
-    ddc->hatch_spacing = 0;
-    ddc->hatch_spacing_step = 0;
+    this->hatch_last_nearest = Geom::Point(0,0);
+    this->hatch_last_pointer = Geom::Point(0,0);
+    this->hatch_escaped = false;
+    this->hatch_area = NULL;
+    this->hatch_item = NULL;
+    this->hatch_livarot_path = NULL;
 
-//    new (&ddc->hatch_pointer_past) std::list<double>();
-//    new (&ddc->hatch_nearest_past) std::list<double>();
-//    new (&ddc->inertia_vectors) std::list<Geom::Point>();
-//    new (&ddc->hatch_vectors) std::list<Geom::Point>();
-
-    ddc->hatch_last_nearest = Geom::Point(0,0);
-    ddc->hatch_last_pointer = Geom::Point(0,0);
-    ddc->hatch_escaped = false;
-    ddc->hatch_area = NULL;
-    ddc->hatch_item = NULL;
-    ddc->hatch_livarot_path = NULL;
-
-    ddc->trace_bg = false;
-    ddc->just_started_drawing = false;
+    this->trace_bg = false;
+    this->just_started_drawing = false;
 }
 
 SPDynaDrawContext::~SPDynaDrawContext() {
@@ -194,7 +187,6 @@ void SPDynaDrawContext::setup() {
     sp_event_context_read(this, "cap_rounding");
 
     this->is_drawing = false;
-    this->_message_context = new Inkscape::MessageContext((this->desktop)->messageStack());
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/calligraphic/selcue")) {
@@ -476,7 +468,7 @@ bool SPDynaDrawContext::root_handler(GdkEvent* event) {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
-                if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
                     return TRUE;
                 }
 
@@ -511,7 +503,7 @@ bool SPDynaDrawContext::root_handler(GdkEvent* event) {
             Geom::Point motion_dt(desktop->w2d(motion_w));
             this->extinput(event);
 
-            this->_message_context->clear();
+            this->message_context->clear();
 
             // for hatching:
             double hatch_dist = 0;
@@ -549,9 +541,9 @@ bool SPDynaDrawContext::root_handler(GdkEvent* event) {
                     // unit-length vector
                     hatch_unit_vector = (pointer - nearest)/hatch_dist;
 
-                    this->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Guide path selected</b>; start drawing along the guide with <b>Ctrl</b>"));
+                    this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Guide path selected</b>; start drawing along the guide with <b>Ctrl</b>"));
                 } else {
-                    this->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Select a guide path</b> to track with <b>Ctrl</b>"));
+                    this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Select a guide path</b> to track with <b>Ctrl</b>"));
                 }
             }
 
@@ -686,10 +678,10 @@ bool SPDynaDrawContext::root_handler(GdkEvent* event) {
                             this->hatch_vectors.pop_back();
                     }
 
-                    this->_message_context->set(Inkscape::NORMAL_MESSAGE, this->hatch_escaped? _("Tracking: <b>connection to guide path lost!</b>") : _("<b>Tracking</b> a guide path"));
+                    this->message_context->set(Inkscape::NORMAL_MESSAGE, this->hatch_escaped? _("Tracking: <b>connection to guide path lost!</b>") : _("<b>Tracking</b> a guide path"));
 
                 } else {
-                    this->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> a calligraphic stroke"));
+                    this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drawing</b> a calligraphic stroke"));
                 }
 
                 if (this->just_started_drawing) {
@@ -805,7 +797,7 @@ bool SPDynaDrawContext::root_handler(GdkEvent* event) {
                 this->hatch_spacing += this->hatch_spacing_step;
             }
 
-            this->_message_context->clear();
+            this->message_context->clear();
             ret = TRUE;
         }
         break;
@@ -896,7 +888,7 @@ bool SPDynaDrawContext::root_handler(GdkEvent* event) {
         switch (get_group0_keyval(&event->key)) {
             case GDK_KEY_Control_L:
             case GDK_KEY_Control_R:
-                this->_message_context->clear();
+                this->message_context->clear();
                 this->hatch_spacing = 0;
                 this->hatch_spacing_step = 0;
                 break;

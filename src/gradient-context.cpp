@@ -74,7 +74,6 @@ const std::string SPGradientContext::prefsPath = "/tools/gradient";
 SPGradientContext::SPGradientContext() : SPEventContext() {
 	this->node_added = false;
 	this->subselcon = 0;
-	this->_message_context = 0;
 	this->selcon = 0;
 
     this->cursor_addnode = false;
@@ -90,10 +89,6 @@ SPGradientContext::SPGradientContext() : SPEventContext() {
 
 SPGradientContext::~SPGradientContext() {
     this->enableGrDrag(false);
-
-    if (this->_message_context) {
-        delete this->_message_context;
-    }
 
     this->selcon->disconnect();
     delete this->selcon;
@@ -138,7 +133,7 @@ void SPGradientContext::selection_changed(Inkscape::Selection*) {
                 //TRANSLATORS: Mind the space in front. This is part of a compound message
                 ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
                 ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-            rc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
+            rc->message_context->setF(Inkscape::NORMAL_MESSAGE,
                                        message,_(gr_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
         } else {
             gchar * message = g_strconcat(
@@ -147,16 +142,16 @@ void SPGradientContext::selection_changed(Inkscape::Selection*) {
                          "One handle merging %d stops (drag with <b>Shift</b> to separate) selected",drag->singleSelectedDraggerNumDraggables()),
                 ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
                 ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-            rc->_message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
+            rc->message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
         }
     } else if (n_sel > 1) {
         //TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
         gchar * message = g_strconcat(ngettext("<b>%d</b> gradient handle selected out of %d","<b>%d</b> gradient handles selected out of %d",n_sel),
                                       //TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
                                       ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
-        rc->_message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
+        rc->message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
     } else if (n_sel == 0) {
-        rc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
+        rc->message_context->setF(Inkscape::NORMAL_MESSAGE,
                                    //TRANSLATORS: The plural refers to number of selected objects
                                    ngettext("<b>No</b> gradient handles selected out of %d on %d selected object",
                                             "<b>No</b> gradient handles selected out of %d on %d selected objects",n_obj), n_tot, n_obj);
@@ -174,8 +169,6 @@ void SPGradientContext::setup() {
 
     this->enableGrDrag();
     Inkscape::Selection *selection = sp_desktop_selection(this->desktop);
-
-    this->_message_context = new Inkscape::MessageContext(sp_desktop_message_stack(this->desktop));
 
     this->selcon = new sigc::connection(selection->connectChanged(
     	sigc::mem_fun(this, &SPGradientContext::selection_changed)
@@ -955,7 +948,7 @@ static void sp_gradient_drag(SPGradientContext &rc, Geom::Point const pt, guint 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
         int n_objects = g_slist_length((GSList *) selection->itemList());
-        rc._message_context->setF(Inkscape::NORMAL_MESSAGE,
+        rc.message_context->setF(Inkscape::NORMAL_MESSAGE,
                                   ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
                                            "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),
                                   n_objects);

@@ -682,7 +682,7 @@ void SPDesktop::set_event_context2(const std::string& toolName) {
 	event_context = ToolFactory::instance().createObject(toolName);
 
 	event_context->desktop = this;
-    event_context->_message_context = new Inkscape::MessageContext(this->messageStack());
+    event_context->message_context = new Inkscape::MessageContext(this->messageStack());
 
     event_context->setup();
 

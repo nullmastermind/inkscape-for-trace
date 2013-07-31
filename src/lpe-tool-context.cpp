@@ -79,9 +79,8 @@ SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
 
 	lc->mode = Inkscape::LivePathEffect::BEND_PATH;
 	lc->shape_editor = 0;
-	lc->_lpetool_message_context = 0;
 
-    lc->cursor_shape = cursor_crosshairs_xpm;
+	lc->cursor_shape = cursor_crosshairs_xpm;
     lc->hot_x = 7;
     lc->hot_y = 7;
 
@@ -107,9 +106,6 @@ SPLPEToolContext::~SPLPEToolContext() {
     lc->sel_changed_connection.disconnect();
     //lc->sel_changed_connection.~connection();
 
-    if (lc->_lpetool_message_context) {
-        delete lc->_lpetool_message_context;
-    }
 
     //G_OBJECT_CLASS(sp_lpetool_context_parent_class)->dispose(object);
 }
@@ -149,8 +145,6 @@ void SPLPEToolContext::setup() {
     if (prefs->getBool("/tools/lpetool/selcue")) {
         ec->enableSelectionCue();
     }
-
-    lc->_lpetool_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 /**

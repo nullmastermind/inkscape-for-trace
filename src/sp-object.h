@@ -822,7 +822,7 @@ public:
 
     friend class SPObjectImpl;
 
-public:
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
@@ -833,12 +833,13 @@ public:
 
 	virtual void set(unsigned int key, const gchar* value);
 
-	virtual void read_content();
-
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
 
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+public:
+	virtual void read_content();
 };
 
 

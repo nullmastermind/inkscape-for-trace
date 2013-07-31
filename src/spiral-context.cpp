@@ -63,8 +63,6 @@ const std::string& SPSpiralContext::getPrefsPath() {
 const std::string SPSpiralContext::prefsPath = "/tools/shapes/spiral";
 
 SPSpiralContext::SPSpiralContext() : SPEventContext() {
-	this->_message_context = 0;
-
     this->cursor_shape = cursor_spiral_xpm;
     this->hot_x = 4;
     this->hot_y = 4;
@@ -103,10 +101,6 @@ SPSpiralContext::~SPSpiralContext() {
     /* fixme: This is necessary because we do not grab */
     if (this->spiral) {
     	this->finishItem();
-    }
-
-    if (this->_message_context) {
-        delete this->_message_context;
     }
 }
 
@@ -147,8 +141,6 @@ void SPSpiralContext::setup() {
     if (prefs->getBool("/tools/shapes/gradientdrag")) {
         this->enableGrDrag();
     }
-
-    this->_message_context = new Inkscape::MessageContext(this->desktop->messageStack());
 }
 
 void SPSpiralContext::set(const Inkscape::Preferences::Entry& val) {
@@ -362,7 +354,7 @@ void SPSpiralContext::drag(Geom::Point const &p, guint state) {
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
     if (!this->spiral) {
-        if (Inkscape::have_viable_layer(desktop, this->_message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
             return;
         }
 
@@ -408,14 +400,14 @@ void SPSpiralContext::drag(Geom::Point const &p, guint state) {
 
     /* status text */
     GString *rads = SP_PX_TO_METRIC_STRING(rad, desktop->namedview->getDefaultMetric());
-    this->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+    this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
                                rads->str, sp_round((arg + 2.0*M_PI*this->spiral->revo)*180/M_PI, 0.0001));
     g_string_free(rads, FALSE);
 }
 
 void SPSpiralContext::finishItem() {
-    this->_message_context->clear();
+    this->message_context->clear();
 
     if (this->spiral != NULL) {
     	if (this->spiral->rad == 0) {
