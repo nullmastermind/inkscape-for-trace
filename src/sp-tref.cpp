@@ -64,12 +64,12 @@ static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 SPTRef::SPTRef() : SPItem() {
 	this->stringChild = NULL;
 
-    new (&this->attributes) TextTagAttributes;
+    //new (&this->attributes) TextTagAttributes;
 
     this->href = NULL;
     this->uriOriginalRef = new SPTRefReference(this);
-    new (&this->_delete_connection) sigc::connection();
-    new (&this->_changed_connection) sigc::connection();
+    //new (&this->_delete_connection) sigc::connection();
+    //new (&this->_changed_connection) sigc::connection();
 
     this->_changed_connection =
         this->uriOriginalRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_tref_href_changed), this));
@@ -78,8 +78,8 @@ SPTRef::SPTRef() : SPItem() {
 SPTRef::~SPTRef() {
 	delete this->uriOriginalRef;
 
-	this->_delete_connection.~connection();
-	this->_changed_connection.~connection();
+	//this->_delete_connection.~connection();
+	//this->_changed_connection.~connection();
 }
 
 void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
@@ -94,7 +94,7 @@ void SPTRef::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 void SPTRef::release() {
-    this->attributes.~TextTagAttributes();
+    //this->attributes.~TextTagAttributes();
 
     this->_delete_connection.disconnect();
     this->_changed_connection.disconnect();

@@ -75,7 +75,7 @@ SPPattern::SPPattern() : SPPaintServer() {
 
 	this->viewBox_set = FALSE;
 
-	new (&this->modified_connection) sigc::connection();
+	//new (&this->modified_connection) sigc::connection();
 }
 
 SPPattern::~SPPattern() {
@@ -111,7 +111,7 @@ void SPPattern::release() {
         this->ref = NULL;
     }
 
-    this->modified_connection.~connection();
+    //this->modified_connection.~connection();
 
     SPPaintServer::release();
 }

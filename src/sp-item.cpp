@@ -418,7 +418,7 @@ void SPItem::release() {
         item->display = sp_item_view_list_remove(item->display, item->display);
     }
 
-    item->_transformed_signal.~signal();
+    //item->_transformed_signal.~signal();
 }
 
 void SPItem::set(unsigned int key, gchar const* value) {

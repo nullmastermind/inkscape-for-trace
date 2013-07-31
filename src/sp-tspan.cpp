@@ -63,7 +63,7 @@ namespace {
 #####################################################*/
 SPTSpan::SPTSpan() : SPItem() {
     this->role = SP_TSPAN_ROLE_UNSPECIFIED;
-    new (&this->attributes) TextTagAttributes;
+    //new (&this->attributes) TextTagAttributes;
 }
 
 SPTSpan::~SPTSpan() {
@@ -81,7 +81,7 @@ void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 }
 
 void SPTSpan::release() {
-    this->attributes.~TextTagAttributes();
+    //this->attributes.~TextTagAttributes();
 
     SPItem::release();
 }
@@ -227,7 +227,7 @@ gchar* SPTSpan::description() {
 void   refresh_textpath_source(SPTextPath* offset);
 
 SPTextPath::SPTextPath() : SPItem() {
-    new (&this->attributes) TextTagAttributes;
+    //new (&this->attributes) TextTagAttributes;
 
     this->startOffset._set = false;
     this->originalPath = NULL;
@@ -271,7 +271,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 }
 
 void SPTextPath::release() {
-    this->attributes.~TextTagAttributes();
+    //this->attributes.~TextTagAttributes();
 
     if (this->originalPath) {
     	delete this->originalPath;

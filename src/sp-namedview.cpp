@@ -286,7 +286,7 @@ void SPNamedView::release() {
 
     SPObjectGroup::release();
 
-    namedview->snap_manager.~SnapManager();
+    //namedview->snap_manager.~SnapManager();
 }
 
 void SPNamedView::set(unsigned int key, const gchar* value) {

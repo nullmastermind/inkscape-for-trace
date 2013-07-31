@@ -45,11 +45,11 @@ namespace {
 
 SPFlowtext::SPFlowtext() : SPItem() {
     this->par_indent = 0;
-    new (&this->layout) Inkscape::Text::Layout();
+    //new (&this->layout) Inkscape::Text::Layout();
 }
 
 SPFlowtext::~SPFlowtext() {
-	this->layout.~Layout();
+	//this->layout.~Layout();
 }
 
 void SPFlowtext::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {

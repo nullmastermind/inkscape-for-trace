@@ -60,10 +60,10 @@ SPUse::SPUse() : SPItem() {
     this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
     this->href = NULL;
 
-    new (&this->_delete_connection) sigc::connection();
-    new (&this->_changed_connection) sigc::connection();
+    //new (&this->_delete_connection) sigc::connection();
+    //new (&this->_changed_connection) sigc::connection();
 
-    new (&this->_transformed_connection) sigc::connection();
+    //new (&this->_transformed_connection) sigc::connection();
 
     this->ref = new SPUseReference(this);
 
@@ -80,10 +80,10 @@ SPUse::~SPUse() {
     delete this->ref;
     this->ref = 0;
 
-    this->_delete_connection.~connection();
-    this->_changed_connection.~connection();
+    //this->_delete_connection.~connection();
+    //this->_changed_connection.~connection();
 
-    this->_transformed_connection.~connection();
+    //this->_transformed_connection.~connection();
 }
 
 void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {

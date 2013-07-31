@@ -47,7 +47,7 @@ namespace {
 #####################################################*/
 
 SPString::SPString() : SPObject() {
-    new (&this->string) Glib::ustring();
+    //new (&this->string) Glib::ustring();
 }
 
 SPString::~SPString() {
@@ -64,7 +64,7 @@ void SPString::release() {
 	SPString* object = this;
     SPString *string = SP_STRING(object);
 
-    string->string.~ustring();
+    //string->string.~ustring();
 
     SPObject::release();
 }

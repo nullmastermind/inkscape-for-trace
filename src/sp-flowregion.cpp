@@ -42,7 +42,7 @@ static void         GetDest(SPObject* child,Shape **computed);
 
 
 SPFlowregion::SPFlowregion() : SPItem() {
-	new (&this->computed) std::vector<Shape*>;
+	//new (&this->computed) std::vector<Shape*>;
 }
 
 SPFlowregion::~SPFlowregion() {
@@ -50,7 +50,7 @@ SPFlowregion::~SPFlowregion() {
         delete *it;
 	}
 
-    this->computed.~vector<Shape*>();
+    //this->computed.~vector<Shape*>();
 }
 
 void SPFlowregion::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {

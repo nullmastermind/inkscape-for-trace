@@ -170,7 +170,7 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
     this->vector.built = false;
     this->vector.stops.clear();
 
-    new (&this->modified_connection) sigc::connection();
+    //new (&this->modified_connection) sigc::connection();
 }
 
 SPGradient::~SPGradient() {
@@ -227,7 +227,7 @@ void SPGradient::release()
         this->ref = NULL;
     }
 
-    this->modified_connection.~connection();
+    //this->modified_connection.~connection();
 
     SPPaintServer::release();
 }
