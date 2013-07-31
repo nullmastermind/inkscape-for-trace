@@ -39,9 +39,9 @@ namespace {
 	bool colorMatrixRegistered = SPFactory::instance().registerObject("svg:feColorMatrix", createColorMatrix);
 }
 
-SPFeColorMatrix::SPFeColorMatrix() : SPFilterPrimitive() {
-	this->value = 0;
-	this->type = Inkscape::Filters::COLORMATRIX_MATRIX;
+SPFeColorMatrix::SPFeColorMatrix() 
+    : SPFilterPrimitive(), type(Inkscape::Filters::COLORMATRIX_MATRIX), value(0)
+{
 }
 
 SPFeColorMatrix::~SPFeColorMatrix() {
@@ -55,11 +55,9 @@ SPFeColorMatrix::~SPFeColorMatrix() {
 void SPFeColorMatrix::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	SPFeColorMatrix* object = this;
-
 	/*LOAD ATTRIBUTES FROM REPR HERE*/
-	object->readAttr( "type" );
-	object->readAttr( "values" );
+	this->readAttr( "type" );
+	this->readAttr( "values" );
 }
 
 /**
@@ -70,7 +68,10 @@ void SPFeColorMatrix::release() {
 }
 
 static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar const *value){
-    if (!value) return Inkscape::Filters::COLORMATRIX_MATRIX; //matrix is default
+    if (!value) {
+    	return Inkscape::Filters::COLORMATRIX_MATRIX; //matrix is default
+    }
+
     switch(value[0]){
         case 'm':
             if (strcmp(value, "matrix") == 0) return Inkscape::Filters::COLORMATRIX_MATRIX;
@@ -85,6 +86,7 @@ static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar
             if (strcmp(value, "luminanceToAlpha") == 0) return Inkscape::Filters::COLORMATRIX_LUMINANCETOALPHA;
             break;
     }
+
     return Inkscape::Filters::COLORMATRIX_MATRIX; //matrix is default
 }
 
@@ -92,26 +94,23 @@ static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar
  * Sets a specific value in the SPFeColorMatrix.
  */
 void SPFeColorMatrix::set(unsigned int key, gchar const *str) {
-	SPFeColorMatrix* object = this;
-
-    SPFeColorMatrix *feColorMatrix = SP_FECOLORMATRIX(object);
-    (void)feColorMatrix;
-
     Inkscape::Filters::FilterColorMatrixType read_type;
+
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
     switch(key) {
         case SP_ATTR_TYPE:
             read_type = sp_feColorMatrix_read_type(str);
-            if (feColorMatrix->type != read_type){
-                feColorMatrix->type = read_type;
-                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (this->type != read_type){
+                this->type = read_type;
+                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         case SP_ATTR_VALUES:
             if (str){
-                feColorMatrix->values = helperfns_read_vector(str);
-                feColorMatrix->value = helperfns_read_number(str, HELPERFNS_NO_WARNING);
-                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                this->values = helperfns_read_vector(str);
+                this->value = helperfns_read_number(str, HELPERFNS_NO_WARNING);
+                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         default:
@@ -124,8 +123,6 @@ void SPFeColorMatrix::set(unsigned int key, gchar const *str) {
  * Receives update notifications.
  */
 void SPFeColorMatrix::update(SPCtx *ctx, guint flags) {
-	SPFeColorMatrix* object = this;
-
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
@@ -140,12 +137,10 @@ void SPFeColorMatrix::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeColorMatrix::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeColorMatrix* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -154,22 +149,18 @@ Inkscape::XML::Node* SPFeColorMatrix::write(Inkscape::XML::Document *doc, Inksca
 }
 
 void SPFeColorMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeColorMatrix* primitive = this;
-
-    g_assert(primitive != NULL);
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeColorMatrix *sp_colormatrix = SP_FECOLORMATRIX(primitive);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_COLORMATRIX);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterColorMatrix *nr_colormatrix = dynamic_cast<Inkscape::Filters::FilterColorMatrix*>(nr_primitive);
     g_assert(nr_colormatrix != NULL);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
-    nr_colormatrix->set_type(sp_colormatrix->type);
-    nr_colormatrix->set_value(sp_colormatrix->value);
-    nr_colormatrix->set_values(sp_colormatrix->values);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
+    nr_colormatrix->set_type(this->type);
+    nr_colormatrix->set_value(this->value);
+    nr_colormatrix->set_values(this->values);
 }
 
 /*

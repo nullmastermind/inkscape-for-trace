@@ -38,6 +38,7 @@ public:
     double k1, k2, k3, k4;
     int in2;
 
+protected:
     virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

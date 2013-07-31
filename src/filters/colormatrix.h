@@ -27,6 +27,7 @@ public:
     gdouble value;
     std::vector<gdouble> values;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

@@ -40,6 +40,7 @@ public:
     Inkscape::Filters::FilterDiffuseLighting *renderer;
     SVGICCColor *icc;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

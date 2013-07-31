@@ -39,6 +39,7 @@ public:
     bool divisorIsSet;
     bool kernelMatrixIsSet;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

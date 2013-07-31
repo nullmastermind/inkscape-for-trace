@@ -59,30 +59,27 @@ SPFeImage::~SPFeImage() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeImage* object = this;
-
     // Save document reference so we can load images with relative paths.
-    SPFeImage *feImage = SP_FEIMAGE(object);
-    feImage->document = document;
+    this->document = document;
 
     SPFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
 
-    object->readAttr( "preserveAspectRatio" );
-    object->readAttr( "xlink:href" );
+    this->readAttr( "preserveAspectRatio" );
+    this->readAttr( "xlink:href" );
 }
 
 /**
  * Drops any allocated memory.
  */
 void SPFeImage::release() {
-	SPFeImage* object = this;
+    this->_image_modified_connection.disconnect();
+    this->_href_modified_connection.disconnect();
 
-    SPFeImage *feImage = SP_FEIMAGE(object);
-    feImage->_image_modified_connection.disconnect();
-    feImage->_href_modified_connection.disconnect();
-    if (feImage->SVGElemRef) delete feImage->SVGElemRef;
+    if (this->SVGElemRef) {
+    	delete this->SVGElemRef;
+    }
 
     SPFilterPrimitive::release();
 }
@@ -110,42 +107,38 @@ static void sp_feImage_href_modified(SPObject* /*old_elem*/, SPObject* new_elem,
  * Sets a specific value in the SPFeImage.
  */
 void SPFeImage::set(unsigned int key, gchar const *value) {
-	SPFeImage* object = this;
-
-    SPFeImage *feImage = SP_FEIMAGE(object);
-    (void)feImage;
     switch(key) {
     /*DEAL WITH SETTING ATTRIBUTES HERE*/
         case SP_ATTR_XLINK_HREF:
-            if (feImage->href) {
-                g_free(feImage->href);
+            if (this->href) {
+                g_free(this->href);
             }
-            feImage->href = (value) ? g_strdup (value) : NULL;
-            if (!feImage->href) return;
-            delete feImage->SVGElemRef;
-            feImage->SVGElemRef = 0;
-            feImage->SVGElem = 0;
-            feImage->_image_modified_connection.disconnect();
-            feImage->_href_modified_connection.disconnect();
+            this->href = (value) ? g_strdup (value) : NULL;
+            if (!this->href) return;
+            delete this->SVGElemRef;
+            this->SVGElemRef = 0;
+            this->SVGElem = 0;
+            this->_image_modified_connection.disconnect();
+            this->_href_modified_connection.disconnect();
             try{
-                Inkscape::URI SVGElem_uri(feImage->href);
-                feImage->SVGElemRef = new Inkscape::URIReference(feImage->document);
-                feImage->SVGElemRef->attach(SVGElem_uri);
-                feImage->from_element = true;
-                feImage->_href_modified_connection = feImage->SVGElemRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(&sp_feImage_href_modified), object));
-                if (SPObject *elemref = feImage->SVGElemRef->getObject()) {
-                    feImage->SVGElem = SP_ITEM(elemref);
-                    feImage->_image_modified_connection = ((SPObject*) feImage->SVGElem)->connectModified(sigc::bind(sigc::ptr_fun(&sp_feImage_elem_modified), object));
-                    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                Inkscape::URI SVGElem_uri(this->href);
+                this->SVGElemRef = new Inkscape::URIReference(this->document);
+                this->SVGElemRef->attach(SVGElem_uri);
+                this->from_element = true;
+                this->_href_modified_connection = this->SVGElemRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(&sp_feImage_href_modified), this));
+                if (SPObject *elemref = this->SVGElemRef->getObject()) {
+                    this->SVGElem = SP_ITEM(elemref);
+                    this->_image_modified_connection = ((SPObject*) this->SVGElem)->connectModified(sigc::bind(sigc::ptr_fun(&sp_feImage_elem_modified), this));
+                    this->requestModified(SP_OBJECT_MODIFIED_FLAG);
                     break;
                 } else {
-                    g_warning("SVG element URI was not found in the document while loading feImage");
+                    g_warning("SVG element URI was not found in the document while loading this");
                 }
             }
             // catches either MalformedURIException or UnsupportedURIException
             catch(const Inkscape::BadURIException & e)
             {
-                feImage->from_element = false;
+                this->from_element = false;
                 /* This occurs when using external image as the source */
                 //g_warning("caught Inkscape::BadURIException in sp_feImage_set");
                 break;
@@ -155,9 +148,9 @@ void SPFeImage::set(unsigned int key, gchar const *value) {
         case SP_ATTR_PRESERVEASPECTRATIO:
             /* Copied from sp-image.cpp */
             /* Do setup before, so we can use break to escape */
-            feImage->aspect_align = SP_ASPECT_XMID_YMID; // Default
-            feImage->aspect_clip = SP_ASPECT_MEET; // Default
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+            this->aspect_align = SP_ASPECT_XMID_YMID; // Default
+            this->aspect_clip = SP_ASPECT_MEET; // Default
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             if (value) {
                 int len;
                 gchar c[256];
@@ -208,8 +201,8 @@ void SPFeImage::set(unsigned int key, gchar const *value) {
                         break;
                     }
                 }
-                feImage->aspect_align = align;
-                feImage->aspect_clip = clip;
+                this->aspect_align = align;
+                this->aspect_clip = clip;
             }
             break;
 
@@ -223,8 +216,6 @@ void SPFeImage::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPFeImage::update(SPCtx *ctx, guint flags) {
-	SPFeImage* object = this;
-
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
@@ -238,12 +229,10 @@ void SPFeImage::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeImage::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeImage* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -252,26 +241,22 @@ Inkscape::XML::Node* SPFeImage::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeImage* primitive = this;
-
-    g_assert(primitive != NULL);
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeImage *sp_image = SP_FEIMAGE(primitive);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_IMAGE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterImage *nr_image = dynamic_cast<Inkscape::Filters::FilterImage*>(nr_primitive);
     g_assert(nr_image != NULL);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 
-    nr_image->from_element = sp_image->from_element;
-    nr_image->SVGElem = sp_image->SVGElem;
-    nr_image->set_align( sp_image->aspect_align );
-    nr_image->set_clip( sp_image->aspect_clip );
-    nr_image->set_href(sp_image->href);
-    nr_image->set_document(sp_image->document);
+    nr_image->from_element = this->from_element;
+    nr_image->SVGElem = this->SVGElem;
+    nr_image->set_align( this->aspect_align );
+    nr_image->set_clip( this->aspect_clip );
+    nr_image->set_href(this->href);
+    nr_image->set_document(this->document);
 }
 
 /*

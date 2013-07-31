@@ -60,11 +60,6 @@ void SPFeMerge::release() {
  * Sets a specific value in the SPFeMerge.
  */
 void SPFeMerge::set(unsigned int key, gchar const *value) {
-	SPFeMerge* object = this;
-
-    SPFeMerge *feMerge = SP_FEMERGE(object);
-    (void)feMerge;
-
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
@@ -77,10 +72,8 @@ void SPFeMerge::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPFeMerge::update(SPCtx *ctx, guint flags) {
-	SPFeMerge* object = this;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 
     SPFilterPrimitive::update(ctx, flags);
@@ -90,12 +83,10 @@ void SPFeMerge::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeMerge* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it. And child nodes, too! */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
 
@@ -105,29 +96,26 @@ Inkscape::XML::Node* SPFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeMerge* primitive = this;
-
-    g_assert(primitive != NULL);
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeMerge *sp_merge = SP_FEMERGE(primitive);
-    (void)sp_merge;
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_MERGE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterMerge *nr_merge = dynamic_cast<Inkscape::Filters::FilterMerge*>(nr_primitive);
     g_assert(nr_merge != NULL);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 
-    SPObject *input = primitive->children;
+    SPObject *input = this->children;
     int in_nr = 0;
+
     while (input) {
         if (SP_IS_FEMERGENODE(input)) {
             SPFeMergeNode *node = SP_FEMERGENODE(input);
             nr_merge->set_input(in_nr, node->input);
             in_nr++;
         }
+
         input = input->next;
     }
 }

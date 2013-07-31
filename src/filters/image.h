@@ -39,6 +39,7 @@ public:
     sigc::connection _image_modified_connection;
     sigc::connection _href_modified_connection;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

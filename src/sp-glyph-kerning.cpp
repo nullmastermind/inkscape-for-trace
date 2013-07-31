@@ -39,15 +39,13 @@ SPGlyphKerning::~SPGlyphKerning() {
 }
 
 void SPGlyphKerning::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPGlyphKerning* object = this;
-
 	SPObject::build(document, repr);
 
-	object->readAttr( "u1" );
-	object->readAttr( "g1" );
-	object->readAttr( "u2" );
-	object->readAttr( "g2" );
-	object->readAttr( "k" );
+	this->readAttr( "u1" );
+	this->readAttr( "g1" );
+	this->readAttr( "u2" );
+	this->readAttr( "g2" );
+	this->readAttr( "k" );
 }
 
 void SPGlyphKerning::release() {
@@ -55,72 +53,84 @@ void SPGlyphKerning::release() {
 }
 
 GlyphNames::GlyphNames(const gchar* value){
-        if (value) this->names = strdup(value);
+    if (value) {
+    	this->names = strdup(value);
+    }
 }
 
 GlyphNames::~GlyphNames(){
-    if (this->names) g_free(this->names);
+    if (this->names) {
+    	g_free(this->names);
+    }
 }
 
 bool GlyphNames::contains(const char* name){
-    if (!(this->names) || !name) return false;
+    if (!(this->names) || !name) {
+    	return false;
+    }
+    
     std::istringstream is(this->names);
     std::string str;
     std::string s(name);
-    while (is >> str){
-        if (str == s) return true;
+    
+    while (is >> str) {
+        if (str == s) {
+        	return true;
+        }
     }
+    
     return false;
 }
 
 void SPGlyphKerning::set(unsigned int key, const gchar *value) {
-	SPGlyphKerning* object = this;
-
-    SPGlyphKerning * glyphkern = (SPGlyphKerning*) object; //even if it is a VKern this will work. I did it this way just to avoind warnings.
-
     switch (key) {
         case SP_ATTR_U1:
         {
-            if (glyphkern->u1) {
-                delete glyphkern->u1;
+            if (this->u1) {
+                delete this->u1;
             }
-            glyphkern->u1 = new UnicodeRange(value);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            
+            this->u1 = new UnicodeRange(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
         case SP_ATTR_U2:
         {
-            if (glyphkern->u2) {
-                delete glyphkern->u2;
+            if (this->u2) {
+                delete this->u2;
             }
-            glyphkern->u2 = new UnicodeRange(value);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            
+            this->u2 = new UnicodeRange(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
         case SP_ATTR_G1:
         {
-            if (glyphkern->g1) {
-                delete glyphkern->g1;
+            if (this->g1) {
+                delete this->g1;
             }
-            glyphkern->g1 = new GlyphNames(value);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            
+            this->g1 = new GlyphNames(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
         case SP_ATTR_G2:
         {
-            if (glyphkern->g2) {
-                delete glyphkern->g2;
+            if (this->g2) {
+                delete this->g2;
             }
-            glyphkern->g2 = new GlyphNames(value);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            
+            this->g2 = new GlyphNames(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
              break;
         }
         case SP_ATTR_K:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != glyphkern->k){
-                glyphkern->k = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            
+            if (number != this->k){
+                this->k = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
@@ -136,17 +146,12 @@ void SPGlyphKerning::set(unsigned int key, const gchar *value) {
  *  * Receives update notifications.
  *   */
 void SPGlyphKerning::update(SPCtx *ctx, guint flags) {
-	SPGlyphKerning* object = this;
-
-    SPGlyphKerning *glyph = (SPGlyphKerning *)object;
-    (void)glyph;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* do something to trigger redisplay, updates? */
-            object->readAttr( "u1" );
-            object->readAttr( "u2" );
-            object->readAttr( "g2" );
-            object->readAttr( "k" );
+            this->readAttr( "u1" );
+            this->readAttr( "u2" );
+            this->readAttr( "g2" );
+            this->readAttr( "k" );
     }
 
     SPObject::update(ctx, flags);
@@ -155,13 +160,9 @@ void SPGlyphKerning::update(SPCtx *ctx, guint flags) {
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
 Inkscape::XML::Node* SPGlyphKerning::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPGlyphKerning* object = this;
-
-	//    SPGlyphKerning *glyph = SP_GLYPH_KERNING(object);
-
-	    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-	        repr = xml_doc->createElement("svg:glyphkerning");//fix this!
-	    }
+	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+		repr = xml_doc->createElement("svg:glyphkerning");//fix this!
+	}
 
 	/* I am commenting out this part because I am not certain how does it work. I will have to study it later. Juca
 	    repr->setAttribute("unicode", glyph->unicode);
@@ -175,19 +176,19 @@ Inkscape::XML::Node* SPGlyphKerning::write(Inkscape::XML::Document *xml_doc, Ink
 	    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
 	    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
 	*/
-	    if (repr != object->getRepr()) {
-	        // All the COPY_ATTR functions below use
-	        //   XML Tree directly, while they shouldn't.
-	        COPY_ATTR(repr, object->getRepr(), "u1");
-	        COPY_ATTR(repr, object->getRepr(), "g1");
-	        COPY_ATTR(repr, object->getRepr(), "u2");
-	        COPY_ATTR(repr, object->getRepr(), "g2");
-	        COPY_ATTR(repr, object->getRepr(), "k");
-	    }
+	if (repr != this->getRepr()) {
+		// All the COPY_ATTR functions below use
+		//   XML Tree directly, while they shouldn't.
+		COPY_ATTR(repr, this->getRepr(), "u1");
+		COPY_ATTR(repr, this->getRepr(), "g1");
+		COPY_ATTR(repr, this->getRepr(), "u2");
+		COPY_ATTR(repr, this->getRepr(), "g2");
+		COPY_ATTR(repr, this->getRepr(), "k");
+	}
 
-	    SPObject::write(xml_doc, repr, flags);
+	SPObject::write(xml_doc, repr, flags);
 
-	    return repr;
+	return repr;
 }
 /*
   Local Variables:

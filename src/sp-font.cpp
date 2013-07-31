@@ -55,32 +55,23 @@ SPFont::~SPFont() {
 void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
 
-	SPFont* object = this;
+	this->readAttr( "horiz-origin-x" );
+	this->readAttr( "horiz-origin-y" );
+	this->readAttr( "horiz-adv-x" );
+	this->readAttr( "vert-origin-x" );
+	this->readAttr( "vert-origin-y" );
+	this->readAttr( "vert-adv-y" );
 
-	object->readAttr( "horiz-origin-x" );
-	object->readAttr( "horiz-origin-y" );
-	object->readAttr( "horiz-adv-x" );
-	object->readAttr( "vert-origin-x" );
-	object->readAttr( "vert-origin-y" );
-	object->readAttr( "vert-adv-y" );
-
-	document->addResource("font", object);
-}
-
-static void sp_font_children_modified(SPFont */*sp_font*/)
-{
+	document->addResource("font", this);
 }
 
 /**
  * Callback for child_added event.
  */
 void SPFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFont* object = this;
-    SPFont *f = SP_FONT(object);
     SPObject::child_added(child, ref);
 
-    sp_font_children_modified(f);
-    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -88,81 +79,77 @@ void SPFont::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
  * Callback for remove_child event.
  */
 void SPFont::remove_child(Inkscape::XML::Node* child) {
-	SPFont* object = this;
-    SPFont *f = SP_FONT(object);
-
     SPObject::remove_child(child);
 
-    sp_font_children_modified(f);
-    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPFont::release() {
-    //SPFont *font = SP_FONT(object);
-	SPFont* object = this;
-
-    object->document->removeResource("font", object);
+    this->document->removeResource("font", this);
 
     SPObject::release();
 }
 
 void SPFont::set(unsigned int key, const gchar *value) {
-	SPFont* object = this;
-    SPFont *font = SP_FONT(object);
-
     // TODO these are floating point, so some epsilon comparison would be good
     switch (key) {
         case SP_ATTR_HORIZ_ORIGIN_X:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != font->horiz_origin_x){
-                font->horiz_origin_x = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (number != this->horiz_origin_x){
+                this->horiz_origin_x = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_HORIZ_ORIGIN_Y:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != font->horiz_origin_y){
-                font->horiz_origin_y = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (number != this->horiz_origin_y){
+                this->horiz_origin_y = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_HORIZ_ADV_X:
         {
             double number = value ? g_ascii_strtod(value, 0) : FNT_DEFAULT_ADV;
-            if (number != font->horiz_adv_x){
-                font->horiz_adv_x = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (number != this->horiz_adv_x){
+                this->horiz_adv_x = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_VERT_ORIGIN_X:
         {
             double number = value ? g_ascii_strtod(value, 0) : FNT_DEFAULT_ADV / 2.0;
-            if (number != font->vert_origin_x){
-                font->vert_origin_x = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (number != this->vert_origin_x){
+                this->vert_origin_x = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_VERT_ORIGIN_Y:
         {
             double number = value ? g_ascii_strtod(value, 0) : FNT_DEFAULT_ASCENT;
-            if (number != font->vert_origin_y){
-                font->vert_origin_y = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (number != this->vert_origin_y){
+                this->vert_origin_y = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_VERT_ADV_Y:
         {
             double number = value ? g_ascii_strtod(value, 0) : FNT_UNITS_PER_EM;
-            if (number != font->vert_adv_y){
-                font->vert_adv_y = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (number != this->vert_adv_y){
+                this->vert_adv_y = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
@@ -176,15 +163,13 @@ void SPFont::set(unsigned int key, const gchar *value) {
  * Receives update notifications.
  */
 void SPFont::update(SPCtx *ctx, guint flags) {
-	SPFont* object = this;
-
     if (flags & (SP_OBJECT_MODIFIED_FLAG)) {
-        object->readAttr( "horiz-origin-x" );
-        object->readAttr( "horiz-origin-y" );
-        object->readAttr( "horiz-adv-x" );
-        object->readAttr( "vert-origin-x" );
-        object->readAttr( "vert-origin-y" );
-        object->readAttr( "vert-adv-y" );
+        this->readAttr( "horiz-origin-x" );
+        this->readAttr( "horiz-origin-y" );
+        this->readAttr( "horiz-adv-x" );
+        this->readAttr( "vert-origin-x" );
+        this->readAttr( "vert-origin-y" );
+        this->readAttr( "vert-adv-y" );
     }
 
     SPObject::update(ctx, flags);
@@ -193,29 +178,26 @@ void SPFont::update(SPCtx *ctx, guint flags) {
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
 Inkscape::XML::Node* SPFont::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFont* object = this;
-    SPFont *font = SP_FONT(object);
-
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = xml_doc->createElement("svg:font");
+        repr = xml_doc->createElement("svg:this");
     }
 
-    sp_repr_set_svg_double(repr, "horiz-origin-x", font->horiz_origin_x);
-    sp_repr_set_svg_double(repr, "horiz-origin-y", font->horiz_origin_y);
-    sp_repr_set_svg_double(repr, "horiz-adv-x", font->horiz_adv_x);
-    sp_repr_set_svg_double(repr, "vert-origin-x", font->vert_origin_x);
-    sp_repr_set_svg_double(repr, "vert-origin-y", font->vert_origin_y);
-    sp_repr_set_svg_double(repr, "vert-adv-y", font->vert_adv_y);
+    sp_repr_set_svg_double(repr, "horiz-origin-x", this->horiz_origin_x);
+    sp_repr_set_svg_double(repr, "horiz-origin-y", this->horiz_origin_y);
+    sp_repr_set_svg_double(repr, "horiz-adv-x", this->horiz_adv_x);
+    sp_repr_set_svg_double(repr, "vert-origin-x", this->vert_origin_x);
+    sp_repr_set_svg_double(repr, "vert-origin-y", this->vert_origin_y);
+    sp_repr_set_svg_double(repr, "vert-adv-y", this->vert_adv_y);
 
-    if (repr != object->getRepr()) {
+    if (repr != this->getRepr()) {
         // All the below COPY_ATTR funtions are directly using 
         //  the XML Tree while they shouldn't
-        COPY_ATTR(repr, object->getRepr(), "horiz-origin-x");
-        COPY_ATTR(repr, object->getRepr(), "horiz-origin-y");
-        COPY_ATTR(repr, object->getRepr(), "horiz-adv-x");
-        COPY_ATTR(repr, object->getRepr(), "vert-origin-x");
-        COPY_ATTR(repr, object->getRepr(), "vert-origin-y");
-        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
+        COPY_ATTR(repr, this->getRepr(), "horiz-origin-x");
+        COPY_ATTR(repr, this->getRepr(), "horiz-origin-y");
+        COPY_ATTR(repr, this->getRepr(), "horiz-adv-x");
+        COPY_ATTR(repr, this->getRepr(), "vert-origin-x");
+        COPY_ATTR(repr, this->getRepr(), "vert-origin-y");
+        COPY_ATTR(repr, this->getRepr(), "vert-adv-y");
     }
 
     SPObject::write(xml_doc, repr, flags);

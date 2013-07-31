@@ -49,12 +49,10 @@ SPFeOffset::~SPFeOffset() {
  * sp-object-repr.cpp's repr_name_entries array.
  */
 void SPFeOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPFeOffset* object = this;
-
 	SPFilterPrimitive::build(document, repr);
 
-	object->readAttr( "dx" );
-	object->readAttr( "dy" );
+	this->readAttr( "dx" );
+	this->readAttr( "dy" );
 }
 
 /**
@@ -68,24 +66,23 @@ void SPFeOffset::release() {
  * Sets a specific value in the SPFeOffset.
  */
 void SPFeOffset::set(unsigned int key, gchar const *value) {
-	SPFeOffset* object = this;
-
-    SPFeOffset *feOffset = SP_FEOFFSET(object);
-
     double read_num;
+
     switch(key) {
         case SP_ATTR_DX:
             read_num = value ? helperfns_read_number(value) : 0;
-            if (read_num != feOffset->dx) {
-                feOffset->dx = read_num;
-                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (read_num != this->dx) {
+                this->dx = read_num;
+                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         case SP_ATTR_DY:
             read_num = value ? helperfns_read_number(value) : 0;
-            if (read_num != feOffset->dy) {
-                feOffset->dy = read_num;
-                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (read_num != this->dy) {
+                this->dy = read_num;
+                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
             
@@ -100,11 +97,9 @@ void SPFeOffset::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPFeOffset::update(SPCtx *ctx, guint flags) {
-	SPFeOffset* object = this;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        object->readAttr( "dx" );
-        object->readAttr( "dy" );
+        this->readAttr( "dx" );
+        this->readAttr( "dy" );
     }
 
     SPFilterPrimitive::update(ctx, flags);
@@ -114,12 +109,10 @@ void SPFeOffset::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeOffset::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeOffset* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -128,22 +121,18 @@ Inkscape::XML::Node* SPFeOffset::write(Inkscape::XML::Document *doc, Inkscape::X
 }
 
 void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeOffset* primitive = this;
-
-    g_assert(primitive != NULL);
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeOffset *sp_offset = SP_FEOFFSET(primitive);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_OFFSET);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterOffset *nr_offset = dynamic_cast<Inkscape::Filters::FilterOffset*>(nr_primitive);
     g_assert(nr_offset != NULL);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 
-    nr_offset->set_dx(sp_offset->dx);
-    nr_offset->set_dy(sp_offset->dy);
+    nr_offset->set_dx(this->dx);
+    nr_offset->set_dy(this->dy);
 }
 
 

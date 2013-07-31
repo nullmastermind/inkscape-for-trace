@@ -51,6 +51,7 @@ public:
     Geom::Point getPositionFrom(Geom::Point const &pt) const;
     double getDistanceFrom(Geom::Point const &pt) const;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 	virtual void set(unsigned int key, const gchar* value);

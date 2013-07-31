@@ -6,10 +6,6 @@
 #endif
 
 #include "xml/repr.h"
-//#include "svg/svg.h"
-
-//#include "style.h"
-
 #include "sp-flowdiv.h"
 #include "sp-string.h"
 #include "document.h"
@@ -55,7 +51,6 @@ void SPFlowdiv::release() {
 }
 
 void SPFlowdiv::update(SPCtx *ctx, unsigned int flags) {
-	SPFlowdiv* object = this;
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
 
@@ -64,17 +59,21 @@ void SPFlowdiv::update(SPCtx *ctx, unsigned int flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList* l = NULL;
-    for (SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
+    for (SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse(l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             if (SP_IS_ITEM(child)) {
                 SPItem const &chi = *SP_ITEM(child);
@@ -85,41 +84,43 @@ void SPFlowdiv::update(SPCtx *ctx, unsigned int flags) {
                 child->updateDisplay(ctx, flags);
             }
         }
+
         sp_object_unref(child);
     }
 }
 
 void SPFlowdiv::modified(unsigned int flags) {
-	SPFlowdiv* object = this;
-
     SPItem::modified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
+    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse (l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
+
         sp_object_unref(child);
     }
 }
 
 
 void SPFlowdiv::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-	SPFlowdiv* object = this;
-
-	object->_requireSVGVersion(Inkscape::Version(1, 2));
+	this->_requireSVGVersion(Inkscape::Version(1, 2));
 
 	SPItem::build(doc, repr);
 }
@@ -130,15 +131,16 @@ void SPFlowdiv::set(unsigned int key, const gchar* value) {
 
 
 Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFlowdiv* object = this;
-
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
             repr = xml_doc->createElement("svg:flowDiv");
         }
+
         GSList *l = NULL;
-        for (SPObject* child = object->firstChild() ; child ; child = child->getNext() ) {
+
+        for (SPObject* child = this->firstChild() ; child ; child = child->getNext() ) {
             Inkscape::XML::Node* c_repr = NULL;
+
             if ( SP_IS_FLOWTSPAN (child) ) {
                 c_repr = child->updateRepr(xml_doc, NULL, flags);
             } else if ( SP_IS_FLOWPARA(child) ) {
@@ -146,17 +148,19 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
             } else if ( SP_IS_STRING(child) ) {
                 c_repr = xml_doc->createTextNode(SP_STRING(child)->string.c_str());
             }
+
             if ( c_repr ) {
                 l = g_slist_prepend (l, c_repr);
             }
         }
+
         while ( l ) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for ( SPObject* child = object->firstChild() ; child ; child = child->getNext() ) {
+        for ( SPObject* child = this->firstChild() ; child ; child = child->getNext() ) {
             if ( SP_IS_FLOWTSPAN (child) ) {
                 child->updateRepr(flags);
             } else if ( SP_IS_FLOWPARA(child) ) {
@@ -188,8 +192,6 @@ void SPFlowtspan::release() {
 }
 
 void SPFlowtspan::update(SPCtx *ctx, unsigned int flags) {
-	SPFlowtspan* object = this;
-
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
 
@@ -198,17 +200,21 @@ void SPFlowtspan::update(SPCtx *ctx, unsigned int flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList* l = NULL;
-    for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
+    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse (l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             if (SP_IS_ITEM(child)) {
                 SPItem const &chi = *SP_ITEM(child);
@@ -219,39 +225,42 @@ void SPFlowtspan::update(SPCtx *ctx, unsigned int flags) {
                 child->updateDisplay(ctx, flags);
             }
         }
+
         sp_object_unref(child);
     }
 }
 
 void SPFlowtspan::modified(unsigned int flags) {
-	SPFlowtspan* object = this;
-
     SPItem::modified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
+    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse (l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
+
         sp_object_unref(child);
     }
 }
 
 
-void SPFlowtspan::build(SPDocument *doc, Inkscape::XML::Node *repr)
-{
+void SPFlowtspan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
@@ -259,17 +268,17 @@ void SPFlowtspan::set(unsigned int key, const gchar* value) {
 	SPItem::set(key, value);
 }
 
-Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	SPFlowtspan* object = this;
-
+Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
             repr = xml_doc->createElement("svg:flowSpan");
         }
+
         GSList *l = NULL;
-        for ( SPObject* child = object->firstChild() ; child ; child = child->getNext() ) {
+
+        for ( SPObject* child = this->firstChild() ; child ; child = child->getNext() ) {
             Inkscape::XML::Node* c_repr = NULL;
+
             if ( SP_IS_FLOWTSPAN(child) ) {
                 c_repr = child->updateRepr(xml_doc, NULL, flags);
             } else if ( SP_IS_FLOWPARA(child) ) {
@@ -277,17 +286,19 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
             } else if ( SP_IS_STRING(child) ) {
                 c_repr = xml_doc->createTextNode(SP_STRING(child)->string.c_str());
             }
+
             if ( c_repr ) {
                 l = g_slist_prepend(l, c_repr);
             }
         }
+
         while ( l ) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for ( SPObject* child = object->firstChild() ; child ; child = child->getNext() ) {
+        for ( SPObject* child = this->firstChild() ; child ; child = child->getNext() ) {
             if ( SP_IS_FLOWTSPAN(child) ) {
                 child->updateRepr(flags);
             } else if ( SP_IS_FLOWPARA(child) ) {
@@ -304,8 +315,6 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
 }
 
 
-
-
 /*
  *
  */
@@ -319,10 +328,7 @@ void SPFlowpara::release() {
 	SPItem::release();
 }
 
-void SPFlowpara::update(SPCtx *ctx, unsigned int flags)
-{
-	SPFlowpara* object = this;
-
+void SPFlowpara::update(SPCtx *ctx, unsigned int flags) {
     SPItemCtx *ictx = reinterpret_cast<SPItemCtx *>(ctx);
     SPItemCtx cctx = *ictx;
 
@@ -331,17 +337,21 @@ void SPFlowpara::update(SPCtx *ctx, unsigned int flags)
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList* l = NULL;
-    for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
+    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse (l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             if (SP_IS_ITEM(child)) {
                 SPItem const &chi = *SP_ITEM(child);
@@ -352,39 +362,42 @@ void SPFlowpara::update(SPCtx *ctx, unsigned int flags)
                 child->updateDisplay(ctx, flags);
             }
         }
+
         sp_object_unref(child);
     }
 }
 
 void SPFlowpara::modified(unsigned int flags) {
-	SPFlowpara* object = this;
-
     SPItem::modified(flags);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
+
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for ( SPObject *child = object->firstChild() ; child ; child = child->getNext() ) {
+    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse (l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
+
         sp_object_unref(child);
     }
 }
 
 
-void SPFlowpara::build(SPDocument *doc, Inkscape::XML::Node *repr)
-{
+void SPFlowpara::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 	SPItem::build(doc, repr);
 }
 
@@ -392,15 +405,17 @@ void SPFlowpara::set(unsigned int key, const gchar* value) {
 	SPItem::set(key, value);
 }
 
-Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-	SPFlowpara* object = this;
-
+Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == NULL ) repr = xml_doc->createElement("svg:flowPara");
+        if ( repr == NULL ) {
+        	repr = xml_doc->createElement("svg:flowPara");
+        }
+
         GSList *l = NULL;
-        for ( SPObject* child = object->firstChild() ; child ; child = child->getNext() ) {
+
+        for ( SPObject* child = this->firstChild() ; child ; child = child->getNext() ) {
             Inkscape::XML::Node* c_repr = NULL;
+
             if ( SP_IS_FLOWTSPAN(child) ) {
                 c_repr = child->updateRepr(xml_doc, NULL, flags);
             } else if ( SP_IS_FLOWPARA(child) ) {
@@ -408,17 +423,19 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
             } else if ( SP_IS_STRING(child) ) {
                 c_repr = xml_doc->createTextNode(SP_STRING(child)->string.c_str());
             }
+
             if ( c_repr ) {
                 l = g_slist_prepend(l, c_repr);
             }
         }
+
         while ( l ) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             Inkscape::GC::release((Inkscape::XML::Node *) l->data);
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for ( SPObject* child = object->firstChild() ; child ; child = child->getNext() ) {
+        for ( SPObject* child = this->firstChild() ; child ; child = child->getNext() ) {
             if ( SP_IS_FLOWTSPAN(child) ) {
                 child->updateRepr(flags);
             } else if ( SP_IS_FLOWPARA(child) ) {
@@ -455,16 +472,15 @@ void SPFlowline::modified(unsigned int flags) {
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	}
+
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 }
 
-Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
+Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
             repr = xml_doc->createElement("svg:flowLine");
         }
-    } else {
     }
 
     SPObject::write(xml_doc, repr, flags);
@@ -493,16 +509,15 @@ void SPFlowregionbreak::modified(unsigned int flags) {
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	}
+
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 }
 
-Inkscape::XML::Node *SPFlowregionbreak::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
+Inkscape::XML::Node *SPFlowregionbreak::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         if ( repr == NULL ) {
             repr = xml_doc->createElement("svg:flowLine");
         }
-    } else {
     }
 
     SPObject::write(xml_doc, repr, flags);

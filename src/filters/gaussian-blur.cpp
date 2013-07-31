@@ -54,9 +54,7 @@ SPGaussianBlur::~SPGaussianBlur() {
 void SPGaussianBlur::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPFilterPrimitive::build(document, repr);
 
-	SPGaussianBlur* object = this;
-
-    object->readAttr( "stdDeviation" );
+    this->readAttr( "stdDeviation" );
 }
 
 /**
@@ -70,14 +68,10 @@ void SPGaussianBlur::release() {
  * Sets a specific value in the SPGaussianBlur.
  */
 void SPGaussianBlur::set(unsigned int key, gchar const *value) {
-	SPGaussianBlur* object = this;
-
-    SPGaussianBlur *gaussianBlur = SP_GAUSSIANBLUR(object);
-
     switch(key) {
         case SP_ATTR_STDDEVIATION:
-            gaussianBlur->stdDeviation.set(value);
-            object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            this->stdDeviation.set(value);
+            this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         default:
         	SPFilterPrimitive::set(key, value);
@@ -89,10 +83,8 @@ void SPGaussianBlur::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPGaussianBlur::update(SPCtx *ctx, guint flags) {
-	SPGaussianBlur* object = this;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        object->readAttr( "stdDeviation" );
+        this->readAttr( "stdDeviation" );
     }
 
     SPFilterPrimitive::update(ctx, flags);
@@ -102,12 +94,10 @@ void SPGaussianBlur::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPGaussianBlur::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPGaussianBlur* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -119,6 +109,7 @@ void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num)
 {
     blur->stdDeviation.setNumber(num);
 }
+
 void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num, float optnum)
 {
     blur->stdDeviation.setNumber(num);
@@ -126,23 +117,22 @@ void  sp_gaussianBlur_setDeviation(SPGaussianBlur *blur, float num, float optnum
 }
 
 void SPGaussianBlur::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPGaussianBlur* primitive = this;
-
-    SPGaussianBlur *sp_blur = SP_GAUSSIANBLUR(primitive);
-
     int handle = filter->add_primitive(Inkscape::Filters::NR_FILTER_GAUSSIANBLUR);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(handle);
     Inkscape::Filters::FilterGaussian *nr_blur = dynamic_cast<Inkscape::Filters::FilterGaussian*>(nr_primitive);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 
-    gfloat num = sp_blur->stdDeviation.getNumber();
+    gfloat num = this->stdDeviation.getNumber();
+
     if (num >= 0.0) {
-        gfloat optnum = sp_blur->stdDeviation.getOptNumber();
-        if(optnum >= 0.0)
+        gfloat optnum = this->stdDeviation.getOptNumber();
+
+        if(optnum >= 0.0) {
             nr_blur->set_deviation((double) num, (double) optnum);
-        else
+        } else {
             nr_blur->set_deviation((double) num);
+        }
     }
 }
 

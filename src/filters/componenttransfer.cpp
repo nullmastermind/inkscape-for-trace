@@ -37,8 +37,9 @@ namespace {
 	bool componentTransferRegistered = SPFactory::instance().registerObject("svg:feComponentTransfer", createComponentTransfer);
 }
 
-SPFeComponentTransfer::SPFeComponentTransfer() : SPFilterPrimitive() {
-	this->renderer = NULL;
+SPFeComponentTransfer::SPFeComponentTransfer()
+    : SPFilterPrimitive(), renderer(NULL)
+{
 }
 
 SPFeComponentTransfer::~SPFeComponentTransfer() {
@@ -95,28 +96,20 @@ static void sp_feComponentTransfer_children_modified(SPFeComponentTransfer *sp_c
  * Callback for child_added event.
  */
 void SPFeComponentTransfer::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPFeComponentTransfer* object = this;
-
-    SPFeComponentTransfer *f = SP_FECOMPONENTTRANSFER(object);
-
     SPFilterPrimitive::child_added(child, ref);
 
-    sp_feComponentTransfer_children_modified(f);
-    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    sp_feComponentTransfer_children_modified(this);
+    this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**
  * Callback for remove_child event.
  */
 void SPFeComponentTransfer::remove_child(Inkscape::XML::Node *child) {
-	SPFeComponentTransfer* object = this;
-
-    SPFeComponentTransfer *f = SP_FECOMPONENTTRANSFER(object);
-
     SPFilterPrimitive::remove_child(child);
 
-    sp_feComponentTransfer_children_modified(f);
-    object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    sp_feComponentTransfer_children_modified(this);
+    this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**
@@ -130,11 +123,6 @@ void SPFeComponentTransfer::release() {
  * Sets a specific value in the SPFeComponentTransfer.
  */
 void SPFeComponentTransfer::set(unsigned int key, gchar const *value) {
-	SPFeComponentTransfer* object = this;
-
-    SPFeComponentTransfer *feComponentTransfer = SP_FECOMPONENTTRANSFER(object);
-    (void)feComponentTransfer;
-
     switch(key) {
         /*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
@@ -147,8 +135,6 @@ void SPFeComponentTransfer::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPFeComponentTransfer::update(SPCtx *ctx, guint flags) {
-	SPFeComponentTransfer* object = this;
-
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
@@ -163,12 +149,10 @@ void SPFeComponentTransfer::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeComponentTransfer::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeComponentTransfer* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -177,23 +161,19 @@ Inkscape::XML::Node* SPFeComponentTransfer::write(Inkscape::XML::Document *doc, 
 }
 
 void SPFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeComponentTransfer* primitive = this;
-
-    g_assert(primitive != NULL);
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeComponentTransfer *sp_componenttransfer = SP_FECOMPONENTTRANSFER(primitive);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_COMPONENTTRANSFER);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterComponentTransfer *nr_componenttransfer = dynamic_cast<Inkscape::Filters::FilterComponentTransfer*>(nr_primitive);
     g_assert(nr_componenttransfer != NULL);
 
-    sp_componenttransfer->renderer = nr_componenttransfer;
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    this->renderer = nr_componenttransfer;
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 
 
-    sp_feComponentTransfer_children_modified(sp_componenttransfer);    //do we need it?!
+    sp_feComponentTransfer_children_modified(this);    //do we need it?!
 }
 
 /*

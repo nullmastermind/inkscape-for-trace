@@ -27,6 +27,7 @@ public:
     Inkscape::Filters::FilterMorphologyOperator Operator;
     NumberOptNumber radius;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

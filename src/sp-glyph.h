@@ -50,6 +50,7 @@ public:
     double vert_origin_y;
     double vert_adv_y;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

@@ -36,6 +36,7 @@ public:
     SVGLength x, y, height, width;
     bool updated;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

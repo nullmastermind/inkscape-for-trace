@@ -110,6 +110,7 @@ public:
     double overline_position;
     double overline_thickness;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

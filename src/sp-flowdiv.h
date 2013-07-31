@@ -28,6 +28,7 @@ public:
 	SPFlowdiv();
 	virtual ~SPFlowdiv();
 
+protected:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void update(SPCtx* ctx, guint flags);
@@ -42,6 +43,7 @@ public:
 	SPFlowtspan();
 	virtual ~SPFlowtspan();
 
+protected:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void update(SPCtx* ctx, guint flags);
@@ -56,6 +58,7 @@ public:
 	SPFlowpara();
 	virtual ~SPFlowpara();
 
+protected:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void update(SPCtx* ctx, guint flags);
@@ -71,6 +74,7 @@ public:
 	SPFlowline();
 	virtual ~SPFlowline();
 
+protected:
 	virtual void release();
 	virtual void modified(unsigned int flags);
 
@@ -82,6 +86,7 @@ public:
 	SPFlowregionbreak();
 	virtual ~SPFlowregionbreak();
 
+protected:
 	virtual void release();
 	virtual void modified(unsigned int flags);
 

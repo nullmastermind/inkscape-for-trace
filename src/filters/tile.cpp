@@ -58,11 +58,6 @@ void SPFeTile::release() {
  * Sets a specific value in the SPFeTile.
  */
 void SPFeTile::set(unsigned int key, gchar const *value) {
-	SPFeTile* object = this;
-
-    SPFeTile *feTile = SP_FETILE(object);
-    (void)feTile;
-
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:
@@ -75,8 +70,6 @@ void SPFeTile::set(unsigned int key, gchar const *value) {
  * Receives update notifications.
  */
 void SPFeTile::update(SPCtx *ctx, guint flags) {
-	SPFeTile* object = this;
-
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
                  SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
@@ -91,12 +84,10 @@ void SPFeTile::update(SPCtx *ctx, guint flags) {
  * Writes its settings to an incoming repr object, if any.
  */
 Inkscape::XML::Node* SPFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPFeTile* object = this;
-
     /* TODO: Don't just clone, but create a new repr node and write all
      * relevant values into it */
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -105,20 +96,15 @@ Inkscape::XML::Node* SPFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML
 }
 
 void SPFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
-	SPFeTile* primitive = this;
-
-    g_assert(primitive != NULL);
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeTile *sp_tile = SP_FETILE(primitive);
-    (void)sp_tile;
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_TILE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterTile *nr_tile = dynamic_cast<Inkscape::Filters::FilterTile*>(nr_primitive);
     g_assert(nr_tile != NULL);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 }
 
 /*

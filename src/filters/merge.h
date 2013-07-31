@@ -20,6 +20,7 @@ public:
 	SPFeMerge();
     virtual ~SPFeMerge();
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

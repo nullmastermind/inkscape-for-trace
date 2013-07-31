@@ -57,6 +57,7 @@ public:
     GlyphNames* g2;
     double k;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

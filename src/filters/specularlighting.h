@@ -46,6 +46,7 @@ public:
 
     Inkscape::Filters::FilterSpecularLighting *renderer;
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
