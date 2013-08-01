@@ -777,18 +777,18 @@ myEnhMetaFileProc(HDC /*hDC*/, HANDLETABLE * /*lpHTable*/, ENHMETARECORD const *
 
             d->dc[d->level].PixelsInX = pEmr->rclFrame.right - pEmr->rclFrame.left;
             d->dc[d->level].PixelsInY = pEmr->rclFrame.bottom - pEmr->rclFrame.top;
-            device_x = pEmr->rclFrame.left/100.0*Inkscape::Util::Quantity::Convert(1, "mm", "px");
-            device_y = pEmr->rclFrame.top/100.0*Inkscape::Util::Quantity::Convert(1, "mm", "px");
+            device_x = pEmr->rclFrame.left/100.0*Inkscape::Util::Quantity::convert(1, "mm", "px");
+            device_y = pEmr->rclFrame.top/100.0*Inkscape::Util::Quantity::convert(1, "mm", "px");
 
             d->MMX = d->dc[d->level].PixelsInX / 100.0;
             d->MMY = d->dc[d->level].PixelsInY / 100.0;
 
-            d->dc[d->level].PixelsOutX = d->MMX * Inkscape::Util::Quantity::Convert(1, "mm", "px");
-            d->dc[d->level].PixelsOutY = d->MMY * Inkscape::Util::Quantity::Convert(1, "mm", "px");
+            d->dc[d->level].PixelsOutX = d->MMX * Inkscape::Util::Quantity::convert(1, "mm", "px");
+            d->dc[d->level].PixelsOutY = d->MMY * Inkscape::Util::Quantity::convert(1, "mm", "px");
 
             // calculate ratio of Inkscape dpi/device dpi
             if (pEmr->szlMillimeters.cx && pEmr->szlDevice.cx)
-                device_scale = Inkscape::Util::Quantity::Convert(1, "mm", "px")*pEmr->szlMillimeters.cx/pEmr->szlDevice.cx;
+                device_scale = Inkscape::Util::Quantity::convert(1, "mm", "px")*pEmr->szlMillimeters.cx/pEmr->szlDevice.cx;
             
             tmp_outdef <<
                 "  width=\"" << d->MMX << "mm\"\n" <<
