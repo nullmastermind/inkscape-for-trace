@@ -24,7 +24,7 @@
 #define SP_BOX3D(obj) ((SPBox3D*)obj)
 #define SP_IS_BOX3D(obj) (dynamic_cast<const SPBox3D*>((SPObject*)obj))
 
-struct Persp3D;
+class Persp3D;
 class Persp3DReference;
 
 class SPBox3D : public SPGroup {

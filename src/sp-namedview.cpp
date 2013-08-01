@@ -260,7 +260,9 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
         if (SP_IS_GUIDE(o)) {
             SPGuide * g = SP_GUIDE(o);
             nv->guides = g_slist_prepend(nv->guides, g);
-            g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
+            //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
+            g->setColor(nv->guidecolor);
+            g->setHiColor(nv->guidehicolor);
         }
     }
 
@@ -330,38 +332,52 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             break;
     case SP_ATTR_GUIDECOLOR:
             nv->guidecolor = (nv->guidecolor & 0xff) | (DEFAULTGUIDECOLOR & 0xffffff00);
+
             if (value) {
                 nv->guidecolor = (nv->guidecolor & 0xff) | sp_svg_read_color(value, nv->guidecolor);
             }
+
             for (GSList *l = nv->guides; l != NULL; l = l->next) {
-                g_object_set(G_OBJECT(l->data), "color", nv->guidecolor, NULL);
+                //g_object_set(G_OBJECT(l->data), "color", nv->guidecolor, NULL);
+            	SP_GUIDE(l->data)->setColor(nv->guidecolor);
             }
+
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_GUIDEOPACITY:
             nv->guidecolor = (nv->guidecolor & 0xffffff00) | (DEFAULTGUIDECOLOR & 0xff);
             sp_nv_read_opacity(value, &nv->guidecolor);
+
             for (GSList *l = nv->guides; l != NULL; l = l->next) {
-                g_object_set(G_OBJECT(l->data), "color", nv->guidecolor, NULL);
+                //g_object_set(G_OBJECT(l->data), "color", nv->guidecolor, NULL);
+            	SP_GUIDE(l->data)->setColor(nv->guidecolor);
             }
+
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_GUIDEHICOLOR:
             nv->guidehicolor = (nv->guidehicolor & 0xff) | (DEFAULTGUIDEHICOLOR & 0xffffff00);
+
             if (value) {
                 nv->guidehicolor = (nv->guidehicolor & 0xff) | sp_svg_read_color(value, nv->guidehicolor);
             }
+
             for (GSList *l = nv->guides; l != NULL; l = l->next) {
-                g_object_set(G_OBJECT(l->data), "hicolor", nv->guidehicolor, NULL);
+                //g_object_set(G_OBJECT(l->data), "hicolor", nv->guidehicolor, NULL);
+            	SP_GUIDE(l->data)->setHiColor(nv->guidehicolor);
             }
+
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_GUIDEHIOPACITY:
             nv->guidehicolor = (nv->guidehicolor & 0xffffff00) | (DEFAULTGUIDEHICOLOR & 0xff);
             sp_nv_read_opacity(value, &nv->guidehicolor);
+
             for (GSList *l = nv->guides; l != NULL; l = l->next) {
-                g_object_set(G_OBJECT(l->data), "hicolor", nv->guidehicolor, NULL);
+                //g_object_set(G_OBJECT(l->data), "hicolor", nv->guidehicolor, NULL);
+            	SP_GUIDE(l->data)->setHiColor(nv->guidehicolor);
             }
+
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_SHOWBORDER:
@@ -667,7 +683,11 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
         if (SP_IS_GUIDE(no)) {
             SPGuide *g = (SPGuide *) no;
             nv->guides = g_slist_prepend(nv->guides, g);
-            g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
+
+            //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
+            g->setColor(nv->guidecolor);
+            g->setHiColor(nv->guidehicolor);
+
             if (nv->editable) {
                 for (GSList *l = nv->views; l != NULL; l = l->next) {
                     g->SPGuide::showSPGuide(static_cast<SPDesktop*>(l->data)->guides, (GCallback) sp_dt_guide_event);

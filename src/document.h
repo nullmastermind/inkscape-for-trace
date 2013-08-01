@@ -51,7 +51,7 @@ namespace Inkscape {
 
 class SPDefs;
 class SP3DBox;
-struct Persp3D;
+class Persp3D;
 class Persp3DImpl;
 class SPItemCtx;
 

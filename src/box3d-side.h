@@ -21,7 +21,7 @@
 #define SP_IS_BOX3D_SIDE(obj) (dynamic_cast<const Box3DSide*>((SPObject*)obj))
 
 class SPBox3D;
-struct Persp3D;
+class Persp3D;
 
 // FIXME: Would it be better to inherit from SPPath instead?
 class Box3DSide : public SPPolygon {

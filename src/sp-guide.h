@@ -41,6 +41,11 @@ public:
     GSList *views;
     std::vector<SPGuideAttachment> attached_items;
 
+    guint32 getColor() const;
+    guint32 getHiColor() const;
+    void setColor(guint32 c);
+    void setHiColor(guint32 h);
+
     inline bool isHorizontal() const { return (normal_to_line[Geom::X] == 0.); };
     inline bool isVertical() const { return (normal_to_line[Geom::Y] == 0.); };
     inline double angle() const { return std::atan2( - normal_to_line[Geom::X], normal_to_line[Geom::Y] ); };

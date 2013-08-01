@@ -47,14 +47,14 @@
 using Inkscape::DocumentUndo;
 using std::vector;
 
-enum {
-    PROP_0,
-    PROP_COLOR,
-    PROP_HICOLOR
-};
-
-static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
-static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+//enum {
+//    PROP_0,
+//    PROP_COLOR,
+//    PROP_HICOLOR
+//};
+//
+//static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+//static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 
 #include "sp-factory.h"
 
@@ -104,37 +104,57 @@ SPGuide::SPGuide() : SPObject() {
 SPGuide::~SPGuide() {
 }
 
-static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec */*pspec*/)
-{
-    SPGuide &guide = *SP_GUIDE(object);
-
-    switch (prop_id) {
-        case PROP_COLOR:
-            guide.color = g_value_get_uint(value);
-            for (GSList *l = guide.views; l != NULL; l = l->next) {
-                sp_guideline_set_color(SP_GUIDELINE(l->data), guide.color);
-            }
-            break;
-
-        case PROP_HICOLOR:
-            guide.hicolor = g_value_get_uint(value);
-            break;
-    }
+guint32 SPGuide::getColor() const {
+	return color;
 }
 
-static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec */*pspec*/)
-{
-    SPGuide const &guide = *SP_GUIDE(object);
-
-    switch (prop_id) {
-        case PROP_COLOR:
-            g_value_set_uint(value, guide.color);
-            break;
-        case PROP_HICOLOR:
-            g_value_set_uint(value, guide.hicolor);
-            break;
-    }
+guint32 SPGuide::getHiColor() const {
+	return hicolor;
 }
+
+void SPGuide::setColor(guint32 c) {
+	color = c;
+
+	for (GSList *l = this->views; l != NULL; l = l->next) {
+		sp_guideline_set_color(SP_GUIDELINE(l->data), this->color);
+	}
+}
+
+void SPGuide::setHiColor(guint32 h) {
+	this->hicolor = h;
+}
+
+//static void sp_guide_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec */*pspec*/)
+//{
+//    SPGuide &guide = *SP_GUIDE(object);
+//
+//    switch (prop_id) {
+//        case PROP_COLOR:
+//            guide.color = g_value_get_uint(value);
+//            for (GSList *l = guide.views; l != NULL; l = l->next) {
+//                sp_guideline_set_color(SP_GUIDELINE(l->data), guide.color);
+//            }
+//            break;
+//
+//        case PROP_HICOLOR:
+//            guide.hicolor = g_value_get_uint(value);
+//            break;
+//    }
+//}
+//
+//static void sp_guide_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec */*pspec*/)
+//{
+//    SPGuide const &guide = *SP_GUIDE(object);
+//
+//    switch (prop_id) {
+//        case PROP_COLOR:
+//            g_value_set_uint(value, guide.color);
+//            break;
+//        case PROP_HICOLOR:
+//            g_value_set_uint(value, guide.hicolor);
+//            break;
+//    }
+//}
 
 void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);
