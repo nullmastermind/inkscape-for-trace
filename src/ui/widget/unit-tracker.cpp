@@ -245,7 +245,7 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const oldUnit, Inkscape
             && (newUnit.type != Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) )
         {
             if (_priorValues.find(adj) != _priorValues.end()) {
-                val = Inkscape::Util::Quantity::convert(_priorValues[adj], newUnit, "px");
+                val = Inkscape::Util::Quantity::convert(_priorValues[adj], "px", newUnit);
             }
         } else {
             val = Inkscape::Util::Quantity::convert(oldVal, oldUnit, newUnit);
