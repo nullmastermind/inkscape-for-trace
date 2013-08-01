@@ -206,9 +206,9 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         x0 = bbox_user->min()[Geom::X] * x0_propn;
         double const y0_propn = gtk_adjustment_get_value (a_y) / 100 / unit.factor;
         y0 = y0_propn * bbox_user->min()[Geom::Y];
-        xrel = gtk_adjustment_get_value (a_w) / 100 / unit.factor;
+        xrel = gtk_adjustment_get_value (a_w) / (100 / unit.factor);
         x1 = x0 + xrel * bbox_user->dimensions()[Geom::X];
-        yrel = gtk_adjustment_get_value (a_h) / 100 / unit.factor;
+        yrel = gtk_adjustment_get_value (a_h) / (100 / unit.factor);
         y1 = y0 + yrel * bbox_user->dimensions()[Geom::Y];
     }
 
