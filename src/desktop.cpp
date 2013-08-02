@@ -673,20 +673,26 @@ SPDesktop::change_document (SPDocument *theDocument)
 #include "tool-factory.h"
 
 void SPDesktop::set_event_context2(const std::string& toolName) {
-	if (event_context) {
-		event_context->deactivate();
-		event_context->finish();
-		delete event_context;
+	SPEventContext* ec_old = event_context;
+
+	if (ec_old) {
+		ec_old->deactivate();
 	}
 
-	event_context = ToolFactory::instance().createObject(toolName);
+	SPEventContext* ec_new = ToolFactory::instance().createObject(toolName);
+	ec_new->desktop = this;
+	ec_new->message_context = new Inkscape::MessageContext(this->messageStack());
+	ec_new->setup();
 
-	event_context->desktop = this;
-    event_context->message_context = new Inkscape::MessageContext(this->messageStack());
+	event_context = ec_new;
 
-    event_context->setup();
+	if (ec_old) {
+		ec_old->finish();
+		delete ec_old;
+	}
 
 	sp_event_context_activate(event_context);
+
 	_event_context_changed_signal.emit(this, event_context);
 }
 

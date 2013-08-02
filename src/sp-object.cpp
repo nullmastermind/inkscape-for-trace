@@ -588,7 +588,6 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 
 		ochild->invoke_build(object->document, child, object->cloned);
 	} catch (const FactoryExceptions::TypeNotRegistered& e) {
-		//log_exception(std::current_exception());
 		g_warning("TypeNotRegistered exception: %s", e.what());
 	}
 }
@@ -654,8 +653,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 			sp_object_unref(child, NULL);
 			child->invoke_build(document, rchild, object->cloned);
     	} catch (const FactoryExceptions::TypeNotRegistered& e) {
-    		//log_exception(std::current_exception());
-    		g_warning("TypeNotRegistered exception: %s", e.what());
+    		//g_warning("TypeNotRegistered exception: %s", e.what());
     	}
     }
 }
