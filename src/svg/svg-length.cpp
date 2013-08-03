@@ -330,6 +330,8 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                 *next = (char *) e + 1;
             }
             return 1;
+        } else if (g_ascii_isspace(e[0])) {
+            return 0; // spaces are not allowed
         } else {
             /* Unitless */
             if (unit) {
