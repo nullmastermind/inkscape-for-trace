@@ -42,15 +42,13 @@ SPMissingGlyph::~SPMissingGlyph() {
 }
 
 void SPMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPMissingGlyph* object = this;
-
     SPObject::build(doc, repr);
 
-    object->readAttr( "d" );
-    object->readAttr( "horiz-adv-x" );
-    object->readAttr( "vert-origin-x" );
-    object->readAttr( "vert-origin-y" );
-    object->readAttr( "vert-adv-y" );
+    this->readAttr( "d" );
+    this->readAttr( "horiz-adv-x" );
+    this->readAttr( "vert-origin-x" );
+    this->readAttr( "vert-origin-y" );
+    this->readAttr( "vert-adv-y" );
 }
 
 void SPMissingGlyph::release() {
@@ -59,53 +57,49 @@ void SPMissingGlyph::release() {
 
 
 void SPMissingGlyph::set(unsigned int key, const gchar* value) {
-	SPMissingGlyph* object = this;
-
-    SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
-
     switch (key) {
         case SP_ATTR_D:
         {
-            if (glyph->d) {
-                g_free(glyph->d);
+            if (this->d) {
+                g_free(this->d);
             }
-            glyph->d = g_strdup(value);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            this->d = g_strdup(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
         case SP_ATTR_HORIZ_ADV_X:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != glyph->horiz_adv_x){
-                glyph->horiz_adv_x = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            if (number != this->horiz_adv_x){
+                this->horiz_adv_x = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_VERT_ORIGIN_X:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != glyph->vert_origin_x){
-                glyph->vert_origin_x = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            if (number != this->vert_origin_x){
+                this->vert_origin_x = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_VERT_ORIGIN_Y:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != glyph->vert_origin_y){
-                glyph->vert_origin_y = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            if (number != this->vert_origin_y){
+                this->vert_origin_y = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
         case SP_ATTR_VERT_ADV_Y:
         {
             double number = value ? g_ascii_strtod(value, 0) : 0;
-            if (number != glyph->vert_adv_y){
-                glyph->vert_adv_y = number;
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            if (number != this->vert_adv_y){
+                this->vert_adv_y = number;
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }
@@ -120,10 +114,6 @@ void SPMissingGlyph::set(unsigned int key, const gchar* value) {
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
 Inkscape::XML::Node* SPMissingGlyph::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
-	SPMissingGlyph* object = this;
-
-	//    SPMissingGlyph *glyph = SP_MISSING_GLYPH(object);
-
 	    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 	        repr = xml_doc->createElement("svg:glyph");
 	    }
@@ -135,15 +125,16 @@ Inkscape::XML::Node* SPMissingGlyph::write(Inkscape::XML::Document* xml_doc, Ink
 	    sp_repr_set_svg_double(repr, "vert-origin-y", glyph->vert_origin_y);
 	    sp_repr_set_svg_double(repr, "vert-adv-y", glyph->vert_adv_y);
 	*/
-	    if (repr != object->getRepr()) {
+	    if (repr != this->getRepr()) {
 
+	    	// TODO
 	        // All the COPY_ATTR functions below use
 	        //  XML Tree directly while they shouldn't.
-	        COPY_ATTR(repr, object->getRepr(), "d");
-	        COPY_ATTR(repr, object->getRepr(), "horiz-adv-x");
-	        COPY_ATTR(repr, object->getRepr(), "vert-origin-x");
-	        COPY_ATTR(repr, object->getRepr(), "vert-origin-y");
-	        COPY_ATTR(repr, object->getRepr(), "vert-adv-y");
+	        COPY_ATTR(repr, this->getRepr(), "d");
+	        COPY_ATTR(repr, this->getRepr(), "horiz-adv-x");
+	        COPY_ATTR(repr, this->getRepr(), "vert-origin-x");
+	        COPY_ATTR(repr, this->getRepr(), "vert-origin-y");
+	        COPY_ATTR(repr, this->getRepr(), "vert-adv-y");
 	    }
 
 	    SPObject::write(xml_doc, repr, flags);

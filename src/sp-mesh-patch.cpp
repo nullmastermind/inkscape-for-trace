@@ -77,11 +77,9 @@ SPMeshPatch::~SPMeshPatch() {
 }
 
 void SPMeshPatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPMeshPatch* object = this;
-
 	SPObject::build(doc, repr);
 
-	object->readAttr( "tensor" );
+	this->readAttr( "tensor" );
 }
 
 /**
@@ -89,14 +87,10 @@ void SPMeshPatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  */
 
 void SPMeshPatch::set(unsigned int key, const gchar* value) {
-	SPMeshPatch* object = this;
-
-    SPMeshPatch *patch = SP_MESHPATCH(object);
-
     switch (key) {
         case SP_ATTR_TENSOR: {
             if (value) {
-                patch->tensor_string = new Glib::ustring( value );
+                this->tensor_string = new Glib::ustring( value );
                 // std::cout << "sp_meshpatch_set: Tensor string: " << patch->tensor_string->c_str() << std::endl;
             }
             break;

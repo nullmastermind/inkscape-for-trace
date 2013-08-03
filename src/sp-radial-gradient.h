@@ -24,10 +24,12 @@ public:
     SVGLength fx;
     SVGLength fy;
 
+    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+
+protected:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void set(unsigned key, gchar const *value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 };
 
 #endif /* !SP_RADIAL_GRADIENT_H */

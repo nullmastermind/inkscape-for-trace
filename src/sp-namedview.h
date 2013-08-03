@@ -96,7 +96,7 @@ private:
     double getMarginLength(gchar const * const key,SPUnit const * const margin_units,SPUnit const * const return_units,double const width,double const height,bool const use_width);
     friend class SPDocument;
 
-public:
+protected:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void set(unsigned int key, gchar const* value);

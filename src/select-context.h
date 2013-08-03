@@ -56,6 +56,10 @@ public:
 	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+private:
+	bool sp_select_context_abort();
+	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed);
 };
 
 #endif

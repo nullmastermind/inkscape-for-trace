@@ -800,7 +800,7 @@ static gboolean update_stop_list( GtkWidget *stop_combo, SPGradient *gradient, S
             if (SP_IS_STOP(sl->data)){
                 SPStop *stop = SP_STOP(sl->data);
                 Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(sl->data)->getRepr();
-                Inkscape::UI::Widget::ColorPreview *cpv = Gtk::manage(new Inkscape::UI::Widget::ColorPreview(sp_stop_get_rgba32(stop)));
+                Inkscape::UI::Widget::ColorPreview *cpv = Gtk::manage(new Inkscape::UI::Widget::ColorPreview(stop->get_rgba32()));
                 GdkPixbuf *pb = cpv->toPixbuf(32, 16);
                 Glib::ustring label = gr_ellipsize_text(repr->attribute("id"), 25);
 

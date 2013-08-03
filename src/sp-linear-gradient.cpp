@@ -96,28 +96,6 @@ Inkscape::XML::Node* SPLinearGradient::write(Inkscape::XML::Document *xml_doc, I
     return repr;
 }
 
-
-/**
- * Directly set properties of linear gradient and request modified.
- */
-void
-sp_lineargradient_set_position(SPLinearGradient *lg,
-                               gdouble x1, gdouble y1,
-                               gdouble x2, gdouble y2)
-{
-    g_return_if_fail(lg != NULL);
-    g_return_if_fail(SP_IS_LINEARGRADIENT(lg));
-
-    /* fixme: units? (Lauris)  */
-    lg->x1.set(SVGLength::NONE, x1, x1);
-    lg->y1.set(SVGLength::NONE, y1, y1);
-    lg->x2.set(SVGLength::NONE, x2, x2);
-    lg->y2.set(SVGLength::NONE, y2, y2);
-
-    lg->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-
 cairo_pattern_t* SPLinearGradient::pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
     this->ensureVector();
 

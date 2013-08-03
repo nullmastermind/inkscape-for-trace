@@ -14,8 +14,6 @@
 #include <glib.h>
 #include "sp-object.h"
 
-class SPObjectClass;
-
 #define SP_MESHROW(obj) ((SPMeshRow*)obj)
 #define SP_IS_MESHROW(obj) (dynamic_cast<const SPMeshRow*>((SPObject*)obj))
 
@@ -28,6 +26,7 @@ public:
     SPMeshRow* getNextMeshRow();
     SPMeshRow* getPrevMeshRow();
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);

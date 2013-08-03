@@ -38,43 +38,15 @@ SPPaintServer::SPPaintServer() : SPObject() {
 SPPaintServer::~SPPaintServer() {
 }
 
-cairo_pattern_t *sp_paint_server_invoke_create_pattern(SPPaintServer *ps,
-                                                cairo_t *ct,
-                                                Geom::OptRect const &bbox,
-                                                double opacity)
-{
-    g_return_val_if_fail(ps != NULL, NULL);
-    g_return_val_if_fail(SP_IS_PAINT_SERVER(ps), NULL);
-
-    cairo_pattern_t *cp = NULL;
-
-    cp = ps->pattern_new(ct, bbox, opacity);
-
-    return cp;
-}
-
-// CPPIFY: make pure virtual
-cairo_pattern_t* SPPaintServer::pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
-	//throw;
-
-	// dummy_pattern
-	cairo_pattern_t *cp = cairo_pattern_create_rgb(1.0, 0.0, 1.0);
-	return cp;
-}
-
-cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps,
-                                                cairo_t *ct,
-                                                Geom::OptRect const &bbox,
-                                                double opacity)
-{
-	return sp_paint_server_invoke_create_pattern(ps, ct, bbox, opacity);
-}
-
 bool SPPaintServer::isSwatch() const
 {
     return swatch;
 }
 
+
+// TODO: So a solid brush is a gradient with a swatch and zero stops?
+// Should we derive a new class for that? Or at least make this method
+// virtual and move it out of the way?
 bool SPPaintServer::isSolid() const
 {
     bool solid = false;

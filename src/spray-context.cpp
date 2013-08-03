@@ -178,13 +178,10 @@ static bool is_transform_modes(gint mode)
             mode == SPRAY_OPTION);
 }
 
-static void sp_spray_update_cursor(SPSprayContext *tc, bool /*with_shift*/)
-{
-    SPEventContext *event_context = SP_EVENT_CONTEXT(tc);
-    SPDesktop *desktop = event_context->desktop;
-
+void SPSprayContext::update_cursor(bool /*with_shift*/) {
     guint num = 0;
     gchar *sel_message = NULL;
+
     if (!desktop->selection->isEmpty()) {
         num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
@@ -192,22 +189,22 @@ static void sp_spray_update_cursor(SPSprayContext *tc, bool /*with_shift*/)
         sel_message = g_strdup_printf(_("<b>Nothing</b> selected"));
     }
 
+	switch (this->mode) {
+	   case SPRAY_MODE_COPY:
+		   this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>copies</b> of the initial selection."), sel_message);
+		   break;
+	   case SPRAY_MODE_CLONE:
+		   this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>clones</b> of the initial selection."), sel_message);
+		   break;
+	   case SPRAY_MODE_SINGLE_PATH:
+		   this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray in a <b>single path</b> of the initial selection."), sel_message);
+		   break;
+	   default:
+		   break;
+	}
 
-   switch (tc->mode) {
-       case SPRAY_MODE_COPY:
-           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>copies</b> of the initial selection."), sel_message);
-           break;
-       case SPRAY_MODE_CLONE:
-           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>clones</b> of the initial selection."), sel_message);
-           break;
-       case SPRAY_MODE_SINGLE_PATH:
-           tc->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray in a <b>single path</b> of the initial selection."), sel_message);
-           break;
-       default:
-           break;
-   }
-   event_context->sp_event_context_update_cursor();
-   g_free(sel_message);
+	this->sp_event_context_update_cursor();
+	g_free(sel_message);
 }
 
 void SPSprayContext::setup() {
@@ -260,7 +257,7 @@ void SPSprayContext::set(const Inkscape::Preferences::Entry& val) {
 
     if (path == "mode") {
         this->mode = val.getInt();
-        sp_spray_update_cursor(this, false);
+        this->update_cursor(false);
     } else if (path == "width") {
         this->width = 0.01 * CLAMP(val.getInt(10), 1, 100);
     } else if (path == "usepressure") {
@@ -585,7 +582,7 @@ static void sp_spray_switch_mode(SPSprayContext *tc, gint mode, bool with_shift)
     SP_EVENT_CONTEXT(tc)->desktop->setToolboxSelectOneValue("spray_tool_mode", mode); 
     // need to set explicitly, because the prefs may not have changed by the previous
     tc->mode = mode;
-    sp_spray_update_cursor(tc, with_shift);
+    tc->update_cursor(with_shift);
 }
 
 bool SPSprayContext::root_handler(GdkEvent* event) {
@@ -824,7 +821,7 @@ bool SPSprayContext::root_handler(GdkEvent* event) {
                     break;
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
-                    sp_spray_update_cursor(this, true);
+                    this->update_cursor(true);
                     break;
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:
@@ -845,7 +842,7 @@ bool SPSprayContext::root_handler(GdkEvent* event) {
             switch (get_group0_keyval(&event->key)) {
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
-                    sp_spray_update_cursor(this, false);
+                    this->update_cursor(false);
                     break;
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:

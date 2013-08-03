@@ -136,27 +136,6 @@ Inkscape::XML::Node* SPRadialGradient::write(Inkscape::XML::Document *xml_doc, I
     return repr;
 }
 
-/**
- * Directly set properties of radial gradient and request modified.
- */
-void
-sp_radialgradient_set_position(SPRadialGradient *rg,
-                               gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r)
-{
-    g_return_if_fail(rg != NULL);
-    g_return_if_fail(SP_IS_RADIALGRADIENT(rg));
-
-    /* fixme: units? (Lauris)  */
-    rg->cx.set(SVGLength::NONE, cx, cx);
-    rg->cy.set(SVGLength::NONE, cy, cy);
-    rg->fx.set(SVGLength::NONE, fx, fx);
-    rg->fy.set(SVGLength::NONE, fy, fy);
-    rg->r.set(SVGLength::NONE, r, r);
-
-    rg->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-
 cairo_pattern_t* SPRadialGradient::pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) {
     this->ensureVector();
 

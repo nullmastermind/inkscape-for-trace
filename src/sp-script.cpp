@@ -34,14 +34,12 @@ SPScript::~SPScript() {
 }
 
 void SPScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPScript* object = this;
-
     SPObject::build(doc, repr);
 
     //Read values of key attributes from XML nodes into object.
-    object->readAttr( "xlink:href" );
+    this->readAttr( "xlink:href" );
 
-    doc->addResource("script", object);
+    doc->addResource("script", this);
 }
 
 /**
@@ -51,11 +49,9 @@ void SPScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  */
 
 void SPScript::release() {
-	SPScript* object = this;
-
-    if (object->document) {
+    if (this->document) {
         // Unregister ourselves
-        object->document->removeResource("script", object);
+        this->document->removeResource("script", this);
     }
 
     SPObject::release();
@@ -70,15 +66,14 @@ void SPScript::modified(unsigned int flags) {
 
 
 void SPScript::set(unsigned int key, const gchar* value) {
-	SPScript* object = this;
-
-    SPScript *scr = SP_SCRIPT(object);
-
     switch (key) {
 	case SP_ATTR_XLINK_HREF:
-            if (scr->xlinkhref) g_free(scr->xlinkhref);
-            scr->xlinkhref = g_strdup(value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            if (this->xlinkhref) {
+            	g_free(this->xlinkhref);
+            }
+
+            this->xlinkhref = g_strdup(value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 	default:
             SPObject::set(key, value);

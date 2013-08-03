@@ -93,6 +93,9 @@ public:
 	virtual bool root_handler(GdkEvent* event);
 
 	virtual const std::string& getPrefsPath();
+
+
+	void update_cursor(bool /*with_shift*/);
 };
 
 #endif

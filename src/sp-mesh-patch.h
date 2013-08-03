@@ -32,6 +32,7 @@ public:
     //SVGLength tx[4];  // Tensor points
     //SVGLength ty[4];  // Tensor points
 
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);

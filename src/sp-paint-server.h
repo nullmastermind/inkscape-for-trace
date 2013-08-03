@@ -28,19 +28,14 @@ public:
 	SPPaintServer();
 	virtual ~SPPaintServer();
 
-protected:
-    bool swatch;
-public:
-
     bool isSwatch() const;
     bool isSolid() const;
 
-    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) = 0;
+
+protected:
+    bool swatch;
 };
-
-
-cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
 
 #endif // SEEN_SP_PAINT_SERVER_H
 /*

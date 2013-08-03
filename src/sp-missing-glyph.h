@@ -26,16 +26,19 @@ public:
 	SPMissingGlyph();
 	virtual ~SPMissingGlyph();
 
-    char* d;
-    double horiz_adv_x;
-    double vert_origin_x;
-    double vert_origin_y;
-    double vert_adv_y;
+	char* d;
 
+protected:
     virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+private:
+    double horiz_adv_x;
+    double vert_origin_x;
+    double vert_origin_y;
+    double vert_adv_y;
 };
 
 #endif //#ifndef __SP_MISSING_GLYPH_H__

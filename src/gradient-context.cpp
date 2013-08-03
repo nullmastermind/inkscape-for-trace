@@ -410,9 +410,9 @@ sp_gradient_simplify(SPGradientContext *rc, double tolerance)
                 if (g_slist_find(todel, stop0) || g_slist_find(todel, stop2))
                     continue;
 
-                guint32 const c0 = sp_stop_get_rgba32(stop0);
-                guint32 const c2 = sp_stop_get_rgba32(stop2);
-                guint32 const c1r = sp_stop_get_rgba32(stop1);
+                guint32 const c0 = stop0->get_rgba32();
+                guint32 const c2 = stop2->get_rgba32();
+                guint32 const c1r = stop1->get_rgba32();
                 guint32 c1 = average_color (c0, c2,
                        (stop1->offset - stop0->offset) / (stop2->offset - stop0->offset));
 

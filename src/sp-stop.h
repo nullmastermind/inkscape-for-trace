@@ -49,13 +49,13 @@ public:
 
     SPColor getEffectiveColor() const;
 
+    guint32 get_rgba32() const;
+
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void set(unsigned int key, const gchar* value);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
 };
-
-
-guint32 sp_stop_get_rgba32(SPStop const *);
 
 
 #endif /* !SEEN_SP_STOP_H */

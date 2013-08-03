@@ -44,8 +44,6 @@ namespace {
 }
 
 SPMetadata::SPMetadata() : SPObject() {
-    (void)this;
-    debug("0x%08x",(unsigned int)this);
 }
 
 SPMetadata::~SPMetadata() {
@@ -69,11 +67,12 @@ void strip_ids_recursively(Inkscape::XML::Node *node) {
 void SPMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     using Inkscape::XML::NodeSiblingIterator;
 
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%08x",(unsigned int)this);
 
     /* clean up our mess from earlier versions; elements under rdf:RDF should not
      * have id= attributes... */
-    static GQuark const rdf_root_name=g_quark_from_static_string("rdf:RDF");
+    static GQuark const rdf_root_name = g_quark_from_static_string("rdf:RDF");
+
     for ( NodeSiblingIterator iter=repr->firstChild() ; iter ; ++iter ) {
         if ( (GQuark)iter->code() == rdf_root_name ) {
             strip_ids_recursively(iter);
@@ -84,7 +83,7 @@ void SPMetadata::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 }
 
 void SPMetadata::release() {
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%08x",(unsigned int)this);
 
     // handle ourself
 
@@ -92,7 +91,7 @@ void SPMetadata::release() {
 }
 
 void SPMetadata::set(unsigned int key, const gchar* value) {
-    debug("0x%08x %s(%u): '%s'",(unsigned int)object,
+    debug("0x%08x %s(%u): '%s'",(unsigned int)this,
           sp_attribute_name(key),key,value);
 
     // see if any parents need this value
@@ -100,7 +99,7 @@ void SPMetadata::set(unsigned int key, const gchar* value) {
 }
 
 void SPMetadata::update(SPCtx* ctx, unsigned int flags) {
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%08x",(unsigned int)this);
     //SPMetadata *metadata = SP_METADATA(object);
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -114,16 +113,13 @@ void SPMetadata::update(SPCtx* ctx, unsigned int flags) {
 }
 
 Inkscape::XML::Node* SPMetadata::write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) {
-	SPMetadata* object = this;
+    debug("0x%08x",(unsigned int)this);
 
-    debug("0x%08x",(unsigned int)object);
-    //SPMetadata *metadata = SP_METADATA(object);
-
-    if ( repr != object->getRepr() ) {
+    if ( repr != this->getRepr() ) {
         if (repr) {
-            repr->mergeFrom(object->getRepr(), "id");
+            repr->mergeFrom(this->getRepr(), "id");
         } else {
-            repr = object->getRepr()->duplicate(doc);
+            repr = this->getRepr()->duplicate(doc);
         }
     }
 

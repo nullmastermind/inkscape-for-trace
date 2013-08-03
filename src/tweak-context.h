@@ -78,6 +78,8 @@ public:
 
 	virtual const std::string& getPrefsPath();
 
+	void update_cursor(bool with_shift);
+
 private:
 	bool set_style(const SPCSSAttr* css);
 };

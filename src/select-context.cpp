@@ -115,9 +115,9 @@ SPSelectContext::SPSelectContext() : SPEventContext() {
     sp_load_handles(12, 1, handle_center_xpm);
 }
 
-static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
-static bool within_tolerance = false;
+//static gint xp = 0, yp = 0; // where drag started
+//static gint tolerance = 0;
+//static bool within_tolerance = false;
 static bool is_cycling = false;
 static bool moved_while_cycling = false;
 SPEventContext *prev_event_context = NULL;
@@ -190,45 +190,41 @@ void SPSelectContext::set(const Inkscape::Preferences::Entry& val) {
     }
 }
 
-static bool
-sp_select_context_abort(SPEventContext *event_context)
-{
-    SPDesktop *desktop = event_context->desktop;
-    SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
-    Inkscape::SelTrans *seltrans = sc->_seltrans;
+bool SPSelectContext::sp_select_context_abort() {
+    Inkscape::SelTrans *seltrans = this->_seltrans;
 
-    if (sc->dragging) {
-        if (sc->moved) { // cancel dragging an object
+    if (this->dragging) {
+        if (this->moved) { // cancel dragging an object
             seltrans->ungrab();
-            sc->moved = FALSE;
-            sc->dragging = FALSE;
-            sp_event_context_discard_delayed_snap_event(event_context);
+            this->moved = FALSE;
+            this->dragging = FALSE;
+            sp_event_context_discard_delayed_snap_event(this);
             drag_escaped = 1;
 
-            if (sc->item) {
+            if (this->item) {
                 // only undo if the item is still valid
-                if (sc->item->document) {
+                if (this->item->document) {
                     DocumentUndo::undo(sp_desktop_document(desktop));
                 }
 
-                sp_object_unref( sc->item, NULL);
-            } else if (sc->button_press_ctrl) {
+                sp_object_unref( this->item, NULL);
+            } else if (this->button_press_ctrl) {
                 // NOTE:  This is a workaround to a bug.
                 // When the ctrl key is held, sc->item is not defined
                 // so in this case (only), we skip the object doc check
                 DocumentUndo::undo(sp_desktop_document(desktop));
             }
-            sc->item = NULL;
+            this->item = NULL;
 
-            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
+            SP_EVENT_CONTEXT(this)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
             return true;
         }
     } else {
         if (Inkscape::Rubberband::get(desktop)->is_started()) {
             Inkscape::Rubberband::get(desktop)->stop();
             rb_escaped = 1;
-            SP_EVENT_CONTEXT(sc)->defaultMessageContext()->clear();
-            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
+            SP_EVENT_CONTEXT(this)->defaultMessageContext()->clear();
+            SP_EVENT_CONTEXT(this)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
             return true;
         }
     }
@@ -285,7 +281,7 @@ bool SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
 
     // make sure we still have valid objects to move around
     if (this->item && this->item->document == NULL) {
-        sp_select_context_abort(this);
+        this->sp_select_context_abort();
     }
 
     switch (event->type) {
@@ -345,7 +341,7 @@ bool SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
                 }
             } else if (event->button.button == 3) {
                 // right click; do not eat it so that right-click menu can appear, but cancel dragging & rubberband
-                sp_select_context_abort(this);
+                this->sp_select_context_abort();
             }
             break;
 
@@ -396,43 +392,47 @@ bool SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
     return ret;
 }
 
-static void
-sp_select_context_cycle_through_items(SPSelectContext *sc, Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed) {
-    if (!sc->cycling_cur_item)
+void SPSelectContext::sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed) {
+    if (!this->cycling_cur_item) {
         return;
+    }
 
     Inkscape::DrawingItem *arenaitem;
-    SPDesktop *desktop = SP_EVENT_CONTEXT(sc)->desktop;
-    SPItem *item = SP_ITEM(sc->cycling_cur_item->data);
+    SPItem *item = SP_ITEM(this->cycling_cur_item->data);
 
     // Deactivate current item
-    if (!g_list_find(sc->cycling_items_selected_before, item) && selection->includes(item))
+    if (!g_list_find(this->cycling_items_selected_before, item) && selection->includes(item)) {
         selection->remove(item);
+    }
+
     arenaitem = item->get_arenaitem(desktop->dkey);
     arenaitem->setOpacity(0.3);
 
     // Find next item and activate it
     GList *next;
     if (scroll_event->direction == GDK_SCROLL_UP) {
-        next = sc->cycling_cur_item->next;
-        if (next == NULL && sc->cycling_wrap)
-            next = sc->cycling_items;
+        next = this->cycling_cur_item->next;
+        if (next == NULL && this->cycling_wrap)
+            next = this->cycling_items;
     } else {
-        next = sc->cycling_cur_item->prev;
-        if (next == NULL && sc->cycling_wrap)
-            next = g_list_last(sc->cycling_items);
+        next = this->cycling_cur_item->prev;
+        if (next == NULL && this->cycling_wrap)
+            next = g_list_last(this->cycling_items);
     }
+
     if (next) {
-        sc->cycling_cur_item = next;
-        item = SP_ITEM(sc->cycling_cur_item->data);
+        this->cycling_cur_item = next;
+        item = SP_ITEM(this->cycling_cur_item->data);
     }
+
     arenaitem = item->get_arenaitem(desktop->dkey);
     arenaitem->setOpacity(1.0);
 
-    if (shift_pressed)
+    if (shift_pressed) {
         selection->add(item);
-    else
+    } else {
         selection->set(item);
+    }
 }
 
 
@@ -465,7 +465,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
 
     // make sure we still have valid objects to move around
     if (this->item && this->item->document == NULL) {
-        sp_select_context_abort(this);
+        this->sp_select_context_abort();
     }
 
     switch (event->type) {
@@ -533,7 +533,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
                 ret = TRUE;
             } else if (event->button.button == 3) {
                 // right click; do not eat it so that right-click menu can appear, but cancel dragging & rubberband
-                sp_select_context_abort(this);
+                this->sp_select_context_abort();
             }
             break;
 
@@ -890,7 +890,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
                 this->cycling_wrap = prefs->getBool("/options/selection/cycleWrap", true);
 
                 // Cycle through the items underneath the mouse pointer, one-by-one
-                sp_select_context_cycle_through_items(this, selection, scroll_event, shift_pressed);
+                this->sp_select_context_cycle_through_items(selection, scroll_event, shift_pressed);
 
                 ret = TRUE;
 
@@ -1043,7 +1043,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
                     break;
                     
                 case GDK_KEY_Escape:
-                    if (!sp_select_context_abort(this)) {
+                    if (!this->sp_select_context_abort()) {
                         selection->clear();
                     }
                     

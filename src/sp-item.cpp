@@ -541,7 +541,7 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
     if (old_mask) {
         /* Hide mask */
         for (SPItemView *v = item->display; v != NULL; v = v->next) {
-            sp_mask_hide(SP_MASK(old_mask), v->arenaitem->key());
+            SP_MASK(old_mask)->sp_mask_hide(v->arenaitem->key());
         }
     }
     if (SP_IS_MASK(mask)) {
@@ -550,11 +550,11 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
-            Inkscape::DrawingItem *ai = sp_mask_show(SP_MASK(mask),
+            Inkscape::DrawingItem *ai = SP_MASK(mask)->sp_mask_show(
                                            v->arenaitem->drawing(),
                                            v->arenaitem->key());
             v->arenaitem->setMask(ai);
-            sp_mask_set_bbox(SP_MASK(mask), v->arenaitem->key(), bbox);
+            SP_MASK(mask)->sp_mask_set_bbox(v->arenaitem->key(), bbox);
             mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
@@ -589,7 +589,7 @@ void SPItem::update(SPCtx *ctx, guint flags) {
             }
             if (mask) {
                 for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                    sp_mask_set_bbox(mask, v->arenaitem->key(), bbox);
+                    mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
                 }
             }
         }
@@ -1050,11 +1050,11 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             int mask_key = display->arenaitem->key();
 
             // Show and set mask
-            Inkscape::DrawingItem *ac = sp_mask_show(mask, drawing, mask_key);
+            Inkscape::DrawingItem *ac = mask->sp_mask_show(drawing, mask_key);
             ai->setMask(ac);
 
             // Update bbox, in case the mask uses bbox units
-            sp_mask_set_bbox(SP_MASK(mask), mask_key, item_bbox);
+            SP_MASK(mask)->sp_mask_set_bbox(mask_key, item_bbox);
             mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
         if (style->filter.set && display) {
@@ -1086,7 +1086,7 @@ void SPItem::invoke_hide(unsigned key)
                 v->arenaitem->setClip(NULL);
             }
             if (mask_ref->getObject()) {
-                sp_mask_hide(mask_ref->getObject(), v->arenaitem->key());
+                mask_ref->getObject()->sp_mask_hide(v->arenaitem->key());
                 v->arenaitem->setMask(NULL);
             }
             if (!ref) {

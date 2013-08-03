@@ -51,6 +51,7 @@ public:
     void setBBox(unsigned int key, Geom::OptRect const &bbox);
     Geom::OptRect geometricBounds(Geom::Affine const &transform);
 
+protected:
     virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 

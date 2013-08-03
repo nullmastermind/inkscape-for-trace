@@ -86,21 +86,6 @@ Inkscape::XML::Node* SPMeshGradient::write(Inkscape::XML::Document *xml_doc, Ink
     return repr;
 }
 
-/**
- * Directly set properties of mesh gradient and request modified.
- */
-void
-sp_meshgradient_set_position(SPMeshGradient *mg, gdouble x, gdouble y)
-{
-    g_return_if_fail(mg != NULL);
-    g_return_if_fail(SP_IS_MESHGRADIENT(mg));
-
-    mg->x.set(SVGLength::NONE, x, x);
-    mg->y.set(SVGLength::NONE, y, y);
-
-    mg->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
 void
 sp_meshgradient_repr_write(SPMeshGradient *mg)
 {

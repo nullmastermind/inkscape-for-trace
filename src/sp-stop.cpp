@@ -47,15 +47,13 @@ SPStop::~SPStop() {
 }
 
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPStop* object = this;
-
     SPObject::build(doc, repr);
 
-    object->readAttr( "offset" );
-    object->readAttr( "stop-color" );
-    object->readAttr( "stop-opacity" );
-    object->readAttr( "style" );
-    object->readAttr( "path" ); // For mesh
+    this->readAttr( "offset" );
+    this->readAttr( "stop-color" );
+    this->readAttr( "stop-opacity" );
+    this->readAttr( "style" );
+    this->readAttr( "path" ); // For mesh
 }
 
 /**
@@ -63,10 +61,6 @@ void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  */
 
 void SPStop::set(unsigned int key, const gchar* value) {
-	SPStop* object = this;
-
-    SPStop *stop = SP_STOP(object);
-
     switch (key) {
         case SP_ATTR_STYLE: {
         /** \todo
@@ -80,51 +74,51 @@ void SPStop::set(unsigned int key, const gchar* value) {
          * stop-color and stop-opacity properties.
          */
             {
-                gchar const *p = object->getStyleProperty( "stop-color", "black");
+                gchar const *p = this->getStyleProperty( "stop-color", "black");
                 if (streq(p, "currentColor")) {
-                    stop->currentColor = true;
+                    this->currentColor = true;
                 } else {
-                    stop->specified_color = SPStop::readStopColor( p );
+                    this->specified_color = SPStop::readStopColor( p );
                 }
             }
             {
-                gchar const *p = object->getStyleProperty( "stop-opacity", "1");
-                gdouble opacity = sp_svg_read_percentage(p, stop->opacity);
-                stop->opacity = opacity;
+                gchar const *p = this->getStyleProperty( "stop-opacity", "1");
+                gdouble opacity = sp_svg_read_percentage(p, this->opacity);
+                this->opacity = opacity;
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
         case SP_PROP_STOP_COLOR: {
             {
-                gchar const *p = object->getStyleProperty( "stop-color", "black");
+                gchar const *p = this->getStyleProperty( "stop-color", "black");
                 if (streq(p, "currentColor")) {
-                    stop->currentColor = true;
+                    this->currentColor = true;
                 } else {
-                    stop->currentColor = false;
-                    stop->specified_color = SPStop::readStopColor( p );
+                    this->currentColor = false;
+                    this->specified_color = SPStop::readStopColor( p );
                 }
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
         case SP_PROP_STOP_OPACITY: {
             {
-                gchar const *p = object->getStyleProperty( "stop-opacity", "1");
-                gdouble opacity = sp_svg_read_percentage(p, stop->opacity);
-                stop->opacity = opacity;
+                gchar const *p = this->getStyleProperty( "stop-opacity", "1");
+                gdouble opacity = sp_svg_read_percentage(p, this->opacity);
+                this->opacity = opacity;
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
         case SP_ATTR_OFFSET: {
-            stop->offset = sp_svg_read_percentage(value, 0.0);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            this->offset = sp_svg_read_percentage(value, 0.0);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
         case SP_PROP_STOP_PATH: {
             if (value) {
-                stop->path_string = new Glib::ustring( value );
+                this->path_string = new Glib::ustring( value );
                 //Geom::PathVector pv = sp_svg_read_pathv(value);
                 //SPCurve *curve = new SPCurve(pv);
                 //if( curve ) {
@@ -146,16 +140,12 @@ void SPStop::set(unsigned int key, const gchar* value) {
  */
 
 Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::XML::Node* repr, guint flags) {
-	SPStop* object = this;
-
-    SPStop *stop = SP_STOP(object);
-
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:stop");
     }
 
-    Glib::ustring colorStr = stop->specified_color.toString();
-    gfloat opacity = stop->opacity;
+    Glib::ustring colorStr = this->specified_color.toString();
+    gfloat opacity = this->opacity;
 
     SPObject::write(xml_doc, repr, flags);
 
@@ -165,7 +155,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
 
     Inkscape::CSSOStringStream os;
     os << "stop-color:";
-    if (stop->currentColor) {
+    if (this->currentColor) {
         os << "currentColor";
     } else {
         os << colorStr;
@@ -174,7 +164,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
     repr->setAttribute("style", os.str().c_str());
     repr->setAttribute("stop-color", NULL);
     repr->setAttribute("stop-opacity", NULL);
-    sp_repr_set_css_double(repr, "offset", stop->offset);
+    sp_repr_set_css_double(repr, "offset", this->offset);
     /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
      * for offset proportions. */
 
@@ -186,8 +176,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
  */
 
 // A stop might have some non-stop siblings
-SPStop* SPStop::getNextStop()
-{
+SPStop* SPStop::getNextStop() {
     SPStop *result = 0;
 
     for (SPObject* obj = getNext(); obj && !result; obj = obj->getNext()) {
@@ -199,8 +188,7 @@ SPStop* SPStop::getNextStop()
     return result;
 }
 
-SPStop* SPStop::getPrevStop()
-{
+SPStop* SPStop::getPrevStop() {
     SPStop *result = 0;
 
     for (SPObject* obj = getPrev(); obj; obj = obj->getPrev()) {
@@ -220,22 +208,24 @@ SPStop* SPStop::getPrevStop()
     return result;
 }
 
-SPColor SPStop::readStopColor( Glib::ustring const &styleStr, guint32 dfl )
-{
+SPColor SPStop::readStopColor(Glib::ustring const &styleStr, guint32 dfl) {
     SPColor color(dfl);
     SPStyle* style = sp_style_new(0);
     SPIPaint paint;
     paint.read( styleStr.c_str(), *style );
+
     if ( paint.isColor() ) {
         color = paint.value.color;
     }
+
     sp_style_unref(style);
+
     return color;
 }
 
-SPColor SPStop::getEffectiveColor() const
-{
+SPColor SPStop::getEffectiveColor() const {
     SPColor ret;
+
     if (currentColor) {
         char const *str = getStyleProperty("color", NULL);
         /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
@@ -245,30 +235,33 @@ SPColor SPStop::getEffectiveColor() const
     } else {
         ret = specified_color;
     }
+
     return ret;
 }
 
 /**
  * Return stop's color as 32bit value.
  */
-guint32
-sp_stop_get_rgba32(SPStop const *const stop)
-{
+guint32 SPStop::get_rgba32() const {
     guint32 rgb0 = 0;
+
     /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
      * value depends on user agent, and don't give any further restrictions that I can
      * see.) */
-    if (stop->currentColor) {
-        char const *str = stop->getStyleProperty( "color", NULL);
+    if (this->currentColor) {
+        char const *str = this->getStyleProperty("color", NULL);
+
         if (str) {
             rgb0 = sp_svg_read_color(str, rgb0);
         }
-        unsigned const alpha = static_cast<unsigned>(stop->opacity * 0xff + 0.5);
-        g_return_val_if_fail((alpha & ~0xff) == 0,
-                             rgb0 | 0xff);
+
+        unsigned const alpha = static_cast<unsigned>(this->opacity * 0xff + 0.5);
+
+        g_return_val_if_fail((alpha & ~0xff) == 0, rgb0 | 0xff);
+
         return rgb0 | alpha;
     } else {
-        return stop->specified_color.toRGBA32( stop->opacity );
+        return this->specified_color.toRGBA32(this->opacity);
     }
 }
 

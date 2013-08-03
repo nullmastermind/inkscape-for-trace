@@ -61,65 +61,60 @@ SPMask::~SPMask() {
 }
 
 void SPMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {
-	SPMask* object = this;
-
 	SPObjectGroup::build(doc, repr);
 
-	object->readAttr( "maskUnits" );
-	object->readAttr( "maskContentUnits" );
+	this->readAttr( "maskUnits" );
+	this->readAttr( "maskContentUnits" );
 
 	/* Register ourselves */
-	doc->addResource("mask", object);
+	doc->addResource("mask", this);
 }
 
 void SPMask::release() {
-	SPMask* object = this;
-
-    if (object->document) {
+    if (this->document) {
         // Unregister ourselves
-        object->document->removeResource("mask", object);
+        this->document->removeResource("mask", this);
     }
 
-    SPMask *cp = SP_MASK (object);
-    while (cp->display) {
+    while (this->display) {
         // We simply unref and let item manage this in handler
-        cp->display = sp_mask_view_list_remove (cp->display, cp->display);
+        this->display = sp_mask_view_list_remove(this->display, this->display);
     }
 
     SPObjectGroup::release();
 }
 
 void SPMask::set(unsigned int key, const gchar* value) {
-	SPMask* object = this;
-
-	SPMask *mask = SP_MASK (object);
-
 	switch (key) {
 	case SP_ATTR_MASKUNITS:
-		mask->maskUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
-		mask->maskUnits_set = FALSE;
+		this->maskUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
+		this->maskUnits_set = FALSE;
+		
 		if (value) {
 			if (!strcmp (value, "userSpaceOnUse")) {
-				mask->maskUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
-				mask->maskUnits_set = TRUE;
+				this->maskUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
+				this->maskUnits_set = TRUE;
 			} else if (!strcmp (value, "objectBoundingBox")) {
-				mask->maskUnits_set = TRUE;
+				this->maskUnits_set = TRUE;
 			}
 		}
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_MASKCONTENTUNITS:
-		mask->maskContentUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
-		mask->maskContentUnits_set = FALSE;
+		this->maskContentUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
+		this->maskContentUnits_set = FALSE;
+		
 		if (value) {
 			if (!strcmp (value, "userSpaceOnUse")) {
-				mask->maskContentUnits_set = TRUE;
+				this->maskContentUnits_set = TRUE;
 			} else if (!strcmp (value, "objectBoundingBox")) {
-				mask->maskContentUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
-				mask->maskContentUnits_set = TRUE;
+				this->maskContentUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
+				this->maskContentUnits_set = TRUE;
 			}
 		}
-		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		
+		this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		SPObjectGroup::set(key, value);
@@ -128,19 +123,16 @@ void SPMask::set(unsigned int key, const gchar* value) {
 }
 
 void SPMask::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
-	SPMask* object = this;
-
 	/* Invoke SPObjectGroup implementation */
 	SPObjectGroup::child_added(child, ref);
 
 	/* Show new object */
-	SPObject *ochild = object->document->getObjectByRepr(child);
+	SPObject *ochild = this->document->getObjectByRepr(child);
+	
 	if (SP_IS_ITEM (ochild)) {
-		SPMask *cp = SP_MASK (object);
-		for (SPMaskView *v = cp->display; v != NULL; v = v->next) {
-			Inkscape::DrawingItem *ac = SP_ITEM (ochild)->invoke_show (							       v->arenaitem->drawing(),
-							       v->key,
-							       SP_ITEM_REFERENCE_FLAGS);
+		for (SPMaskView *v = this->display; v != NULL; v = v->next) {
+			Inkscape::DrawingItem *ac = SP_ITEM (ochild)->invoke_show(v->arenaitem->drawing(), v->key, SP_ITEM_REFERENCE_FLAGS);
+			
 			if (ac) {
 			    v->arenaitem->prependChild(ac);
 			}
@@ -150,34 +142,35 @@ void SPMask::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 
 
 void SPMask::update(SPCtx* ctx, unsigned int flags) {
-	SPMask* object = this;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
 	
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    SPObjectGroup *og = SP_OBJECTGROUP(object);
     GSList *l = NULL;
-    for (SPObject *child = og->firstChild(); child; child = child->getNext()) {
+    for (SPObject *child = this->firstChild(); child; child = child->getNext()) {
         sp_object_ref(child);
         l = g_slist_prepend (l, child);
     }
+    
     l = g_slist_reverse (l);
+    
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+        
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
+        
         sp_object_unref(child);
     }
 
-    SPMask *mask = SP_MASK(object);
-    for (SPMaskView *v = mask->display; v != NULL; v = v->next) {
+    for (SPMaskView *v = this->display; v != NULL; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && v->bbox) {
+        
+        if (this->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && v->bbox) {
             Geom::Affine t = Geom::Scale(v->bbox->dimensions());
             t.setTranslation(v->bbox->min());
             g->setChildTransform(t);
@@ -188,27 +181,28 @@ void SPMask::update(SPCtx* ctx, unsigned int flags) {
 }
 
 void SPMask::modified(unsigned int flags) {
-	SPMask* object = this;
-
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
 	
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    SPObjectGroup *og = SP_OBJECTGROUP(object);
     GSList *l = NULL;
-    for (SPObject *child = og->firstChild(); child; child = child->getNext()) {
+    for (SPObject *child = this->firstChild(); child; child = child->getNext()) {
         sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+    
     l = g_slist_reverse(l);
+    
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+        
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
+        
         sp_object_unref(child);
     }
 }
@@ -255,47 +249,46 @@ sp_mask_create (GSList *reprs, SPDocument *document, Geom::Affine const* applyTr
     return mask_id;
 }
 
-Inkscape::DrawingItem *sp_mask_show(SPMask *mask, Inkscape::Drawing &drawing, unsigned int key)
-{
-	g_return_val_if_fail (mask != NULL, NULL);
-	g_return_val_if_fail (SP_IS_MASK (mask), NULL);
+Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned int key) {
+	g_return_val_if_fail (this != NULL, NULL);
+	g_return_val_if_fail (SP_IS_MASK (this), NULL);
 
 	Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
-	mask->display = sp_mask_view_new_prepend (mask->display, key, ai);
+	this->display = sp_mask_view_new_prepend (this->display, key, ai);
 
-	for ( SPObject *child = mask->firstChild() ; child; child = child->getNext() ) {
+	for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
 		if (SP_IS_ITEM (child)) {
 			Inkscape::DrawingItem *ac = SP_ITEM (child)->invoke_show (drawing, key, SP_ITEM_REFERENCE_FLAGS);
+
 			if (ac) {
 				ai->prependChild(ac);
 			}
 		}
 	}
 
-	if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && mask->display->bbox) {
-	    Geom::Affine t = Geom::Scale(mask->display->bbox->dimensions());
-	    t.setTranslation(mask->display->bbox->min());
+	if (this->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && this->display->bbox) {
+	    Geom::Affine t = Geom::Scale(this->display->bbox->dimensions());
+	    t.setTranslation(this->display->bbox->min());
 	    ai->setChildTransform(t);
 	}
 
 	return ai;
 }
 
-void sp_mask_hide(SPMask *cp, unsigned int key)
-{
-	g_return_if_fail (cp != NULL);
-	g_return_if_fail (SP_IS_MASK (cp));
+void SPMask::sp_mask_hide(unsigned int key) {
+	g_return_if_fail (this != NULL);
+	g_return_if_fail (SP_IS_MASK (this));
 
-	for ( SPObject *child = cp->firstChild(); child; child = child->getNext()) {
+	for ( SPObject *child = this->firstChild(); child; child = child->getNext()) {
 		if (SP_IS_ITEM (child)) {
 			SP_ITEM(child)->invoke_hide (key);
 		}
 	}
 
-	for (SPMaskView *v = cp->display; v != NULL; v = v->next) {
+	for (SPMaskView *v = this->display; v != NULL; v = v->next) {
 		if (v->key == key) {
 			/* We simply unref and let item to manage this in handler */
-			cp->display = sp_mask_view_list_remove (cp->display, v);
+			this->display = sp_mask_view_list_remove (this->display, v);
 			return;
 		}
 	}
@@ -303,10 +296,8 @@ void sp_mask_hide(SPMask *cp, unsigned int key)
 	g_assert_not_reached ();
 }
 
-void
-sp_mask_set_bbox (SPMask *mask, unsigned int key, Geom::OptRect const &bbox)
-{
-	for (SPMaskView *v = mask->display; v != NULL; v = v->next) {
+void SPMask::sp_mask_set_bbox(unsigned int key, Geom::OptRect const &bbox) {
+	for (SPMaskView *v = this->display; v != NULL; v = v->next) {
 		if (v->key == key) {
 		    v->bbox = bbox;
 		    break;

@@ -195,20 +195,20 @@ public:
 
     void setSwatch(bool swatch = true);
 
+    static void gradientRefModified(SPObject *href, guint flags, SPGradient *gradient);
+    static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
+
 private:
     bool invalidateVector();
     bool invalidateArray();
     void rebuildVector();
     void rebuildArray();
 
-public:
+protected:
     virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
     virtual void release();
     virtual void modified(guint flags);
     virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-    static void gradientRefModified(SPObject *href, guint flags, SPGradient *gradient);
-    static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
 
     virtual void child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
     virtual void remove_child(Inkscape::XML::Node *child);

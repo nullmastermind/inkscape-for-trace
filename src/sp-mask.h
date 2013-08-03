@@ -44,6 +44,12 @@ public:
 
 	SPMaskView *display;
 
+	Inkscape::DrawingItem *sp_mask_show(Inkscape::Drawing &drawing, unsigned int key);
+	void sp_mask_hide(unsigned int key);
+
+	void sp_mask_set_bbox(unsigned int key, Geom::OptRect const &bbox);
+
+protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
@@ -101,11 +107,6 @@ protected:
         return true;
 	}
 };
-
-Inkscape::DrawingItem *sp_mask_show (SPMask *mask, Inkscape::Drawing &drawing, unsigned int key);
-void sp_mask_hide (SPMask *mask, unsigned int key);
-
-void sp_mask_set_bbox (SPMask *mask, unsigned int key, Geom::OptRect const &bbox);
 
 const gchar *sp_mask_create (GSList *reprs, SPDocument *document, Geom::Affine const* applyTransform);
 
