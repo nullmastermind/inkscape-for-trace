@@ -40,9 +40,3 @@ helper/sp-marshal.cpp: helper/sp-marshal.list helper/sp-marshal.h
 	else mv helper/tmp.sp-marshal.cpp helper/sp-marshal.cpp; fi
 
 helper/sp-marshal.cpp helper/sp-marshal.h: helper/sp-marshal.list
-
-# ######################
-# ### CxxTest stuff ####
-# ######################
-CXXTEST_TESTSUITES += \
-	$(srcdir)/helper/units-test.h
