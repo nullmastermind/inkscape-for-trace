@@ -62,7 +62,7 @@ void TemplateWidget::create()
     
     if (_current_template.is_procedural) {}
     else {
-        sp_file_open(_current_template.path, NULL);
+        sp_file_open(_current_template.path, NULL, REPLACE_EMPTY | ADD_TO_RECENT | IS_FROM_TEMPLATE);
     }
 }
 

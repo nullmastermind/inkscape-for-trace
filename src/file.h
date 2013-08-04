@@ -62,11 +62,17 @@ void sp_file_exit (void);
 /**
  * Opens a new file and window from the given URI
  */
+enum SPFileOpenFlags
+{
+    ADD_TO_RECENT = 1,
+    REPLACE_EMPTY = 2,
+    IS_FROM_TEMPLATE = 4
+};
+
 bool sp_file_open(
     const Glib::ustring &uri,
     Inkscape::Extension::Extension *key,
-    bool add_to_recent = true,
-    bool replace_empty = true
+    int flags = ADD_TO_RECENT | REPLACE_EMPTY
     );
 
 /**

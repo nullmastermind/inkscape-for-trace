@@ -227,7 +227,7 @@ sp_file_exit()
  */
 bool sp_file_open(const Glib::ustring &uri,
                   Inkscape::Extension::Extension *key,
-                  bool add_to_recent, bool replace_empty)
+                  int flags)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
@@ -252,9 +252,19 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     if (doc) {
+        if (flags & IS_FROM_TEMPLATE){
+            Inkscape::XML::Node *myRoot = doc->getReprRoot();
+            Inkscape::XML::Node *nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+            if (nodeToRemove != NULL){
+                sp_repr_unparent(nodeToRemove);
+                delete nodeToRemove;
+                DocumentUndo::clearUndo(doc);
+            }
+        }
+        
         SPDocument *existing = desktop ? sp_desktop_document(desktop) : NULL;
 
-        if (existing && existing->virgin && replace_empty) {
+        if (existing && existing->virgin && (flags & REPLACE_EMPTY)) {
             // If the current desktop is empty, open the document there
             doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
             desktop->change_document(doc);
@@ -268,14 +278,14 @@ bool sp_file_open(const Glib::ustring &uri,
 
         doc->virgin = FALSE;
 
-        // everyone who cares now has a reference, get rid of ours
+        // everyone who cares now has a reference, get rid of our`s
         doc->doUnref();
 
         // resize the window to match the document properties
         sp_namedview_window_from_document(desktop);
         sp_namedview_update_layers_from_document(desktop);
 
-        if (add_to_recent) {
+        if (flags & ADD_TO_RECENT) {
             sp_file_add_recent( doc->getURI() );
         }
 

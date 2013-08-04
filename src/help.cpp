@@ -34,7 +34,7 @@ sp_help_open_tutorial(GtkMenuItem *, gpointer data)
 {
     gchar const *name = static_cast<gchar const *>(data);
     gchar *c = g_build_filename(INKSCAPE_TUTORIALSDIR, name, NULL);
-    sp_file_open(c, NULL, false, false);
+    sp_file_open(c, NULL, 0);
     g_free(c);
 }
 

@@ -918,7 +918,7 @@ gboolean document_interface_load(DocumentInterface *object,
 {
     desktop_ensure_active(object->desk);
     const Glib::ustring file(filename);
-    sp_file_open(file, NULL, TRUE, TRUE);
+    sp_file_open(file, NULL);
     if (object->updates) {
         Inkscape::DocumentUndo::done(sp_desktop_document(object->desk),  SP_VERB_FILE_OPEN, "Opened File");
     }
