@@ -484,7 +484,6 @@ bool SPMeasureContext::root_handler(GdkEvent* event) {
                                 }
 
                                 curve->transform(item->i2doc_affine());
-                                Geom::PathVector pathv = curve->get_pathvector();
 
                                 calculate_intersections(desktop, item, lineseg, curve, intersections);
 

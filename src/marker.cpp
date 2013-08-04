@@ -571,7 +571,6 @@ void
 sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 {
     SPMarkerView *view;
-    unsigned int i;
 
     for (view = marker->views; view != NULL; view = view->next) {
         if (view->key == key) break;
@@ -587,7 +586,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
     if (!view) {
         view = new SPMarkerView();
         view->items.clear();
-        for (i = 0; i < size; i++) {
+        for (unsigned int i = 0; i < size; i++) {
             view->items.push_back(NULL);
         }
         view->next = marker->views;
@@ -681,7 +680,6 @@ sp_marker_hide (SPMarker *marker, unsigned int key)
 static void
 sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destroyitems)
 {
-	unsigned int i;
 	if (view == marker->views) {
 		marker->views = view->next;
 	} else {
@@ -690,7 +688,7 @@ sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destro
 		v->next = view->next;
 	}
 	if (destroyitems) {
-      for (i = 0; i < view->items.size(); i++) {
+      for (unsigned int i = 0; i < view->items.size(); i++) {
 			/* We have to walk through the whole array because there may be hidden items */
 			delete view->items[i];
 		}

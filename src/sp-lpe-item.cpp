@@ -133,7 +133,7 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
 
                         try {
                             path_effect_ref->link(href.c_str());
-                        } catch (Inkscape::BadURIException& e) {
+                        } catch (Inkscape::BadURIException &e) {
                             g_warning("BadURIException when trying to find LPE: %s", e.what());
                             path_effect_ref->unlink();
                             delete path_effect_ref;
