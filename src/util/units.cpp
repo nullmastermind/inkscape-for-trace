@@ -303,6 +303,8 @@ bool UnitTable::save(std::string const &filename) {
     return true;
 }
 
+Inkscape::Util::UnitTable unit_table;
+
 void UnitParser::on_start_element(Ctx &ctx, Glib::ustring const &name, AttrMap const &attrs)
 {
     if (name == "unit") {
@@ -358,7 +360,6 @@ Quantity::Quantity(double q, const Unit &u)
 }
 Quantity::Quantity(double q, const Glib::ustring u)
 {
-    UnitTable unit_table;
     unit = new Unit(unit_table.getUnit(u));
     quantity = q;
 }
@@ -369,7 +370,6 @@ bool Quantity::compatibleWith(const Unit &u) const
 }
 bool Quantity::compatibleWith(const Glib::ustring u) const
 {
-    static UnitTable unit_table;
     return compatibleWith(unit_table.getUnit(u));
 }
 
@@ -379,7 +379,6 @@ double Quantity::value(const Unit &u) const
 }
 double Quantity::value(const Glib::ustring u) const
 {
-    static UnitTable unit_table;
     return value(unit_table.getUnit(u));
 }
 
@@ -387,7 +386,6 @@ Glib::ustring Quantity::string(const Unit &u) const {
     return Glib::ustring::format(std::fixed, std::setprecision(2), value(u)) + " " + unit->abbr;
 }
 Glib::ustring Quantity::string(const Glib::ustring u) const {
-    static UnitTable unit_table;
     return string(unit_table.getUnit(u));
 }
 Glib::ustring Quantity::string() const {
@@ -411,17 +409,14 @@ double Quantity::convert(const double from_dist, const Unit &from, const Unit &t
 }
 double Quantity::convert(const double from_dist, const Glib::ustring from, const Unit &to)
 {
-    static UnitTable unit_table;
     return convert(from_dist, unit_table.getUnit(from), to);
 }
 double Quantity::convert(const double from_dist, const Unit &from, const Glib::ustring to)
 {
-    static UnitTable unit_table;
     return convert(from_dist, from, unit_table.getUnit(to));
 }
 double Quantity::convert(const double from_dist, const Glib::ustring from, const Glib::ustring to)
 {
-    static UnitTable unit_table;
     return convert(from_dist, unit_table.getUnit(from), unit_table.getUnit(to));
 }
 

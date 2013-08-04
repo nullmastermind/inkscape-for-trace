@@ -83,6 +83,7 @@ using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
 using ege::AppearTimeTracker;
+using Inkscape::Util::unit_table;
 
 enum {
     ACTIVATE,
@@ -393,7 +394,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     GtkWidget *eventbox = gtk_event_box_new ();
     dtw->hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
     dtw->hruler_box = eventbox;
-    Inkscape::Util::UnitTable unit_table;
     Inkscape::Util::Unit pt = unit_table.getUnit("pt");
     sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
     gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt.name_plural.c_str()));

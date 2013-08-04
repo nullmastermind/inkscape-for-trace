@@ -41,6 +41,8 @@
 
 #include "lpe-tool-context.h"
 
+using Inkscape::Util::unit_table;
+
 static void sp_lpetool_context_dispose(GObject *object);
 
 static void sp_lpetool_context_setup(SPEventContext *ec);
@@ -444,8 +446,6 @@ lpetool_create_measuring_items(SPLPEToolContext *lc, Inkscape::Selection *select
     gchar *arc_length;
     double lengthval;
 
-    Inkscape::Util::UnitTable unit_table;
-
     for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
         if (SP_IS_PATH(i->data)) {
             path = SP_PATH(i->data);
@@ -488,7 +488,6 @@ void
 lpetool_update_measuring_items(SPLPEToolContext *lc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::Util::UnitTable unit_table;
     SPPath *path;
     SPCurve *curve;
     double lengthval;

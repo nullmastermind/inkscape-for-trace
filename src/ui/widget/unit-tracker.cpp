@@ -17,6 +17,9 @@
 
 #define COLUMN_STRING 0
 
+using Inkscape::Util::UnitTable;
+using Inkscape::Util::unit_table;
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -32,10 +35,9 @@ UnitTracker::UnitTracker(UnitType unit_type) :
     _priorValues()
 {
     _store = gtk_list_store_new(1, G_TYPE_STRING);
-    static Inkscape::Util::UnitTable unit_table;
     
     GtkTreeIter iter;
-    UnitTable::UnitMap m = _unit_table.units(unit_type);
+    UnitTable::UnitMap m = unit_table.units(unit_type);
     UnitTable::UnitMap::iterator m_iter = m.begin();
     while(m_iter != m.end()) {
         Glib::ustring text = (*m_iter).first;
@@ -99,7 +101,7 @@ void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
 
 void UnitTracker::setActiveUnitByAbbr(gchar const *abbr)
 {
-    Inkscape::Util::Unit u = _unit_table.getUnit(abbr);
+    Inkscape::Util::Unit u = unit_table.getUnit(abbr);
     setActiveUnit(&u);
 }
 
@@ -195,13 +197,13 @@ void UnitTracker::_setActive(gint active)
         if (found) {
             gchar *abbr;
             gtk_tree_model_get(GTK_TREE_MODEL(_store), &iter, COLUMN_STRING, &abbr, -1);
-            Inkscape::Util::Unit unit = _unit_table.getUnit(abbr);
+            Inkscape::Util::Unit unit = unit_table.getUnit(abbr);
 
             found = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(_store), &iter, NULL, active);
             if (found) {
                 gchar *newAbbr;
                 gtk_tree_model_get(GTK_TREE_MODEL(_store), &iter, COLUMN_STRING, &newAbbr, -1);
-                Inkscape::Util::Unit newUnit = _unit_table.getUnit(newAbbr);
+                Inkscape::Util::Unit newUnit = unit_table.getUnit(newAbbr);
                 _activeUnit = newUnit;
 
                 if (_adjList) {

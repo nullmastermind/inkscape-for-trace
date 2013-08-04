@@ -52,6 +52,8 @@
 #include "gradient-chemistry.h"
 #include "util/units.h"
 
+using Inkscape::Util::unit_table;
+
 static gdouble const _sw_presets[]     = { 32 ,  16 ,  10 ,  8 ,  6 ,  4 ,  3 ,  2 ,  1.5 ,  1 ,  0.75 ,  0.5 ,  0.25 ,  0.1 };
 static gchar const *const _sw_presets_str[] = {"32", "16", "10", "8", "6", "4", "3", "2", "1.5", "1", "0.75", "0.5", "0.25", "0.1"};
 
@@ -307,7 +309,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     {
         int row = 0;
 
-        Inkscape::Util::UnitTable unit_table;
         Inkscape::Util::UnitTable::UnitMap m = unit_table.units(Inkscape::Util::UNIT_TYPE_LINEAR);
         Inkscape::Util::UnitTable::UnitMap::iterator iter = m.begin();
         while(iter != m.end()) {

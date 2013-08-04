@@ -175,6 +175,8 @@ class UnitTable {
 
 };
 
+extern UnitTable unit_table;
+
 } // namespace Util
 } // namespace Inkscape
 

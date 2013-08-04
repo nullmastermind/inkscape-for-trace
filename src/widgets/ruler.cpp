@@ -44,6 +44,7 @@
 #define DEFAULT_RULER_FONT_SCALE  PANGO_SCALE_X_SMALL
 #define MINIMUM_INCR              5
 
+using Inkscape::Util::unit_table;
 
 enum {
   PROP_0,
@@ -258,8 +259,6 @@ sp_ruler_init (SPRuler *ruler)
 
   gtk_widget_set_has_window (GTK_WIDGET (ruler), FALSE);
 
-  Inkscape::Util::UnitTable unit_table;
-
   priv->orientation   = GTK_ORIENTATION_HORIZONTAL;
   priv->unit          = new Inkscape::Util::Unit(unit_table.getUnit("px"));
   priv->lower         = 0;
@@ -379,8 +378,6 @@ sp_ruler_set_property (GObject      *object,
 {
   SPRuler *ruler = SP_RULER (object);
   SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (ruler);
-
-  Inkscape::Util::UnitTable unit_table;
 
   switch (prop_id)
     {
@@ -1189,7 +1186,6 @@ sp_ruler_draw_ticks (SPRuler *ruler)
     SPRulerMetric    ruler_metric = ruler_metric_general; /* The metric to use for this unit system */
     PangoLayout     *layout;
     PangoRectangle   logical_rect, ink_rect;
-    Inkscape::Util::UnitTable unit_table;
 
     if (! gtk_widget_is_drawable (widget))
       return;

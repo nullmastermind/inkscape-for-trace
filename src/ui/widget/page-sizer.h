@@ -117,7 +117,6 @@ private:
 	    name    = "";
 	    smaller = 0.0;
 	    larger  = 0.0;
-	    static Inkscape::Util::UnitTable unit_table;
 	    unit    = unit_table.getUnit("px");
 	    }
 

@@ -12,6 +12,8 @@
 #include "verbs.h"
 #include "util/units.h"
 
+using Inkscape::Util::unit_table;
+
 namespace Inkscape {
 
 namespace LivePathEffect {
@@ -22,7 +24,6 @@ UnitParam::UnitParam( const Glib::ustring& label, const Glib::ustring& tip,
                               Effect* effect, Glib::ustring default_unit)
     : Parameter(label, tip, key, wr, effect)
 {
-    Inkscape::Util::UnitTable unit_table;
     defunit = new Inkscape::Util::Unit(unit_table.getUnit(default_unit));
     unit = defunit;
 }
@@ -34,7 +35,6 @@ UnitParam::~UnitParam()
 bool
 UnitParam::param_readSVGValue(const gchar * strvalue)
 {
-    Inkscape::Util::UnitTable unit_table;
     if (strvalue) {
         param_set_value(unit_table.getUnit(strvalue));
         return true;

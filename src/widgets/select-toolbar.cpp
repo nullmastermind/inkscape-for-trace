@@ -59,6 +59,7 @@ using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
 using Inkscape::DocumentUndo;
+using Inkscape::Util::unit_table;
 
 static void
 sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
@@ -96,7 +97,6 @@ sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
                     tracker->setFullVal( a, keyval[i].val );
                 }
             } else {
-                Inkscape::Util::UnitTable unit_table;
                 for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
                     GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
                     gtk_adjustment_set_value(a, Quantity::convert(keyval[i].val, "px", unit));
@@ -191,8 +191,6 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     GtkAdjustment* a_y = GTK_ADJUSTMENT( g_object_get_data( G_OBJECT(spw), "Y" ) );
     GtkAdjustment* a_w = GTK_ADJUSTMENT( g_object_get_data( G_OBJECT(spw), "width" ) );
     GtkAdjustment* a_h = GTK_ADJUSTMENT( g_object_get_data( G_OBJECT(spw), "height" ) );
-
-    Inkscape::Util::UnitTable unit_table;
 
     if (unit.type == Inkscape::Util::UNIT_TYPE_LINEAR) {
         x0 = Quantity::convert(gtk_adjustment_get_value(a_x), unit, "px");
@@ -493,7 +491,6 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 
     // Create the units menu.
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
-    Inkscape::Util::UnitTable unit_table;
     tracker->addUnit(unit_table.getUnit("%"));
     tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
 

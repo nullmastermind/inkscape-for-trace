@@ -47,9 +47,8 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 
-static Inkscape::Util::UnitTable unit_table;
-
 using std::pair;
+using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 namespace UI {

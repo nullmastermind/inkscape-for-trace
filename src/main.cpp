@@ -68,7 +68,6 @@
 #include "color.h"
 #include "sp-item.h"
 #include "sp-root.h"
-#include "util/units.h"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"

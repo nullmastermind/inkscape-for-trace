@@ -70,6 +70,7 @@ using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
+using Inkscape::Util::unit_table;
 
 //####################################
 //# node editing callbacks
@@ -249,7 +250,6 @@ static void sp_node_toolbox_coord_changed(gpointer /*shape_editor*/, GObject *tb
     } else {
         gtk_action_set_sensitive(xact, TRUE);
         gtk_action_set_sensitive(yact, TRUE);
-        Inkscape::Util::UnitTable unit_table;
         Geom::Coord oldx = Quantity::convert(gtk_adjustment_get_value(xadj), unit, "px");
         Geom::Coord oldy = Quantity::convert(gtk_adjustment_get_value(yadj), unit, "px");
         Geom::Point mid = nt->_selected_nodes->pointwiseBounds()->midpoint();
@@ -275,8 +275,6 @@ static void sp_node_path_value_changed(GtkAdjustment *adj, GObject *tbl, Geom::D
         return;
     }
     Unit const unit = tracker->getActiveUnit();
-
-    Inkscape::Util::UnitTable unit_table;
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         prefs->setDouble(Glib::ustring("/tools/nodes/") + (d == Geom::X ? "x" : "y"),

@@ -55,6 +55,7 @@
 #include "display/sp-canvas.h"
 
 using Inkscape::DocumentUndo;
+using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 
@@ -397,8 +398,6 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
     Inkscape::SVGOStringStream os_x, os_y;
     gdouble val;
 
-    Inkscape::Util::UnitTable unit_table;
-
     val = origin_px[Geom::X];
     val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     os_x << val << gridunit->abbr;
@@ -490,7 +489,6 @@ CanvasXYGrid::CanvasXYGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr, SPD
     : CanvasGrid(nv, in_repr, in_doc, GRID_RECTANGULAR)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::Util::UnitTable unit_table;
     gridunit = new Inkscape::Util::Unit(unit_table.getUnit(prefs->getString("/options/grids/xy/units")));
     if (!gridunit) {
         gridunit = new Inkscape::Util::Unit(unit_table.getUnit("px"));
@@ -588,8 +586,6 @@ static void validateInt(gint oldVal,
 void
 CanvasXYGrid::readRepr()
 {
-    Inkscape::Util::UnitTable unit_table;
-    
     gchar const *value;
     if ( (value = repr->attribute("originx")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
@@ -756,7 +752,6 @@ CanvasXYGrid::newSpecificWidget()
     _rumg->setUnit (gridunit->abbr);
 
     gdouble val;
-    Inkscape::Util::UnitTable unit_table;
     val = origin[Geom::X];
     val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_ox->setValue (val);

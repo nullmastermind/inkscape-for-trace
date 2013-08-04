@@ -53,6 +53,7 @@
 #include "round.h"
 #include "util/units.h"
 
+using Inkscape::Util::unit_table;
 
 enum Dim3 { X=0, Y, Z };
 
@@ -160,7 +161,6 @@ CanvasAxonomGrid::CanvasAxonomGrid (SPNamedView * nv, Inkscape::XML::Node * in_r
     : CanvasGrid(nv, in_repr, in_doc, GRID_AXONOMETRIC)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::Util::UnitTable unit_table;
     gridunit = new Inkscape::Util::Unit(unit_table.getUnit(prefs->getString("/options/grids/axonom/units")));
     if (!gridunit)
         gridunit = new Inkscape::Util::Unit(unit_table.getUnit("px"));
@@ -213,7 +213,6 @@ void
 CanvasAxonomGrid::readRepr()
 {
     gchar const *value;
-    Inkscape::Util::UnitTable unit_table;
     if ( (value = repr->attribute("originx")) ) {
         Inkscape::Util::Quantity q = unit_table.getQuantity(value);
         gridunit = q.unit;
@@ -370,7 +369,6 @@ _wr.setUpdating (false);
     _rumg->setUnit (gridunit->abbr);
 
     gdouble val;
-    Inkscape::Util::UnitTable unit_table;
     val = origin[Geom::X];
     val = Inkscape::Util::Quantity::convert(val, "px", *gridunit);
     _rsu_ox->setValue (val);

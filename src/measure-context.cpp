@@ -46,6 +46,7 @@
 
 using Inkscape::ControlManager;
 using Inkscape::CTLINE_SECONDARY;
+using Inkscape::Util::unit_table;
 
 static void sp_measure_context_setup(SPEventContext *ec);
 static void sp_measure_context_finish(SPEventContext *ec);
@@ -515,7 +516,6 @@ static gint sp_measure_context_root_handler(SPEventContext *event_context, GdkEv
                     std::sort(intersections.begin(), intersections.end(), GeomPointSortPredicate);
                 }
 
-                Inkscape::Util::UnitTable unit_table;
                 Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
                 if (!unit_name.compare("")) {
                     unit_name = "px";

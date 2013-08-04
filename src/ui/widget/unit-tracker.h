@@ -21,7 +21,6 @@
 #include "util/units.h"
 
 using Inkscape::Util::Unit;
-using Inkscape::Util::UnitTable;
 using Inkscape::Util::UnitType;
 
 namespace Inkscape {
@@ -46,7 +45,6 @@ public:
     GtkAction *createAction(gchar const *name, gchar const *label, gchar const *tooltip);
 
 protected:
-    UnitTable _unit_table;
     UnitType _type;
 
 private:

@@ -68,6 +68,7 @@ using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
+using Inkscape::Util::unit_table;
 
 
 
@@ -175,7 +176,6 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
     // Create the units menu.
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
-    Inkscape::Util::UnitTable unit_table;
     Glib::ustring stored_unit = prefs->getString("/tools/paintbucket/offsetunits");
     if (!stored_unit.empty()) {
         Unit u = unit_table.getUnit(stored_unit);

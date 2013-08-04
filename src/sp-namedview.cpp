@@ -40,6 +40,7 @@
 #include <gtkmm/window.h>
 
 using Inkscape::DocumentUndo;
+using Inkscape::Util::unit_table;
 
 #define DEFAULTGRIDCOLOR 0x3f3fff25
 #define DEFAULTGRIDEMPCOLOR 0x3f3fff60
@@ -286,8 +287,6 @@ static void sp_namedview_release(SPObject *object)
 static void sp_namedview_set(SPObject *object, unsigned int key, const gchar *value)
 {
     SPNamedView *nv = SP_NAMEDVIEW(object);
-
-    static Inkscape::Util::UnitTable unit_table;
 
     switch (key) {
     case SP_ATTR_VIEWONLY:
@@ -1111,7 +1110,6 @@ double SPNamedView::getMarginLength(gchar const * const key,
                              bool const use_width)
 {
     double value;
-    static Inkscape::Util::UnitTable unit_table;
     Inkscape::Util::Unit percent = unit_table.getUnit("%");
     if(!this->storeAsDouble(key,&value)) {
         return 0.0;
@@ -1133,7 +1131,6 @@ Inkscape::Util::Unit const SPNamedView::getDefaultUnit() const
     if (doc_units) {
         return *doc_units;
     } else {
-        Inkscape::Util::UnitTable unit_table;
         return *(new Inkscape::Util::Unit(unit_table.getUnit("pt")));
     }
 }

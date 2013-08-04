@@ -66,6 +66,7 @@ using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
+using Inkscape::Util::unit_table;
 
 
 //########################
@@ -93,7 +94,6 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
     Unit const unit = tracker->getActiveUnit();
-    Inkscape::Util::UnitTable unit_table;
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -187,7 +187,6 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar con
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
     Unit const unit = tracker->getActiveUnit();
-    Inkscape::Util::UnitTable unit_table;
 
     gpointer item = g_object_get_data( tbl, "item" );
     if (item && SP_IS_RECT(item)) {

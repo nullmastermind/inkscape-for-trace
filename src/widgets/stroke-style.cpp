@@ -26,6 +26,7 @@
 #include "ui/widget/unit-menu.h"
 
 using Inkscape::DocumentUndo;
+using Inkscape::Util::unit_table;
 
 /**
  * Creates a new widget for the line stroke paint.
@@ -196,7 +197,6 @@ StrokeStyle::StrokeStyle() :
     Gtk::Widget *us = manage(unitSelector);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    Inkscape::Util::UnitTable unit_table;
     unitSelector->addUnit(unit_table.getUnit("%"));
     if (desktop) {
         unitSelector->setUnit(sp_desktop_namedview(desktop)->doc_units->abbr);

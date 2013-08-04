@@ -68,6 +68,7 @@
 #include "libcroco/cr-cascade.h"
 
 using Inkscape::DocumentUndo;
+using Inkscape::Util::unit_table;
 
 // Higher number means lower priority.
 #define SP_DOCUMENT_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE - 2)
@@ -85,8 +86,6 @@ gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer d
 static gint doc_count = 0;
 
 static unsigned long next_serial = 0;
-
-static Inkscape::Util::UnitTable unit_table;
 
 SPDocument::SPDocument() :
     keepalive(FALSE),
