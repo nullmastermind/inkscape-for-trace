@@ -29,13 +29,14 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual bool root_handler(GdkEvent* event);
-
 	virtual const std::string& getPrefsPath();
 
 	guint32 get_color();
+
+protected:
+	virtual void setup();
+	virtual void finish();
+	virtual bool root_handler(GdkEvent* event);
 
 private:
     double        R;

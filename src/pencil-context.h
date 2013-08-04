@@ -39,10 +39,11 @@ public:
 
 	static const std::string prefsPath;
 
+	virtual const std::string& getPrefsPath();
+
+protected:
 	virtual void setup();
 	virtual bool root_handler(GdkEvent* event);
-
-	virtual const std::string& getPrefsPath();
 };
 
 #endif /* !SEEN_PENCIL_CONTEXT_H */

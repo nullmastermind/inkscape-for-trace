@@ -75,75 +75,61 @@ const std::string& SPLPEToolContext::getPrefsPath() {
 const std::string SPLPEToolContext::prefsPath = "/tools/lpetool";
 
 SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
-	SPLPEToolContext* lc = this;
+	this->mode = Inkscape::LivePathEffect::BEND_PATH;
+	this->shape_editor = 0;
 
-	lc->mode = Inkscape::LivePathEffect::BEND_PATH;
-	lc->shape_editor = 0;
+	this->cursor_shape = cursor_crosshairs_xpm;
+    this->hot_x = 7;
+    this->hot_y = 7;
 
-	lc->cursor_shape = cursor_crosshairs_xpm;
-    lc->hot_x = 7;
-    lc->hot_y = 7;
-
-    lc->canvas_bbox = NULL;
-    lc->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
-
-    //new (&lc->sel_changed_connection) sigc::connection();
+    this->canvas_bbox = NULL;
+    this->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
 }
 
 SPLPEToolContext::~SPLPEToolContext() {
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(this);
-    delete lc->shape_editor;
+    delete this->shape_editor;
+    this->shape_editor = NULL;
 
-    if (lc->canvas_bbox) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(lc->canvas_bbox));
-        lc->canvas_bbox = NULL;
+    if (this->canvas_bbox) {
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(this->canvas_bbox));
+        this->canvas_bbox = NULL;
     }
 
-    lpetool_delete_measuring_items(lc);
-    delete lc->measuring_items;
-    lc->measuring_items = NULL;
+    lpetool_delete_measuring_items(this);
+    delete this->measuring_items;
+    this->measuring_items = NULL;
 
-    lc->sel_changed_connection.disconnect();
-    //lc->sel_changed_connection.~connection();
-
-
-    //G_OBJECT_CLASS(sp_lpetool_context_parent_class)->dispose(object);
+    this->sel_changed_connection.disconnect();
 }
 
 void SPLPEToolContext::setup() {
-	SPEventContext* ec = this;
-
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(ec);
-
-//    if (((SPEventContextClass *) sp_lpetool_context_parent_class)->setup)
-//        ((SPEventContextClass *) sp_lpetool_context_parent_class)->setup(ec);
     SPPenContext::setup();
 
-    Inkscape::Selection *selection = sp_desktop_selection (ec->desktop);
+    Inkscape::Selection *selection = sp_desktop_selection (this->desktop);
     SPItem *item = selection->singleItem();
 
-    lc->sel_changed_connection.disconnect();
-    lc->sel_changed_connection =
-        selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_lpetool_context_selection_changed), (gpointer)lc));
+    this->sel_changed_connection.disconnect();
+    this->sel_changed_connection =
+        selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_lpetool_context_selection_changed), (gpointer)this));
 
-    lc->shape_editor = new ShapeEditor(ec->desktop);
+    this->shape_editor = new ShapeEditor(this->desktop);
 
-    lpetool_context_switch_mode(lc, Inkscape::LivePathEffect::INVALID_LPE);
-    lpetool_context_reset_limiting_bbox(lc);
-    lpetool_create_measuring_items(lc);
+    lpetool_context_switch_mode(this, Inkscape::LivePathEffect::INVALID_LPE);
+    lpetool_context_reset_limiting_bbox(this);
+    lpetool_create_measuring_items(this);
 
 // TODO temp force:
-    ec->enableSelectionCue();
+    this->enableSelectionCue();
     
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (item) {
-        lc->shape_editor->set_item(item, SH_NODEPATH);
-        lc->shape_editor->set_item(item, SH_KNOTHOLDER);
+        this->shape_editor->set_item(item, SH_NODEPATH);
+        this->shape_editor->set_item(item, SH_KNOTHOLDER);
     }
 
     if (prefs->getBool("/tools/lpetool/selcue")) {
-        ec->enableSelectionCue();
+        this->enableSelectionCue();
     }
 }
 
@@ -161,31 +147,20 @@ void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpoint
 }
 
 void SPLPEToolContext::set(const Inkscape::Preferences::Entry& val) {
-	SPEventContext* ec = this;
-
     if (val.getEntryName() == "mode") {
         Inkscape::Preferences::get()->setString("/tools/geometric/mode", "drag");
-        SP_PEN_CONTEXT(ec)->mode = SPPenContext::MODE_DRAG;
+        SP_PEN_CONTEXT(this)->mode = SPPenContext::MODE_DRAG;
     }
-
-    /*
-    //pass on up to parent class to handle common attributes.
-    if ( sp_lpetool_context_parent_class->set ) {
-        sp_lpetool_context_parent_class->set(ec, key, val);
-    }
-    */
 }
 
 bool SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* ec = this;
-
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
         {
             // select the clicked item but do nothing else
-            Inkscape::Selection * const selection = sp_desktop_selection(ec->desktop);
+            Inkscape::Selection * const selection = sp_desktop_selection(this->desktop);
             selection->clear();
             selection->add(item);
             ret = TRUE;
@@ -200,8 +175,6 @@ bool SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
     }
 
     if (!ret) {
-//        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler)
-//            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler(ec, item, event);
     	ret = SPPenContext::item_handler(item, event);
     }
 
@@ -209,25 +182,21 @@ bool SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
 }
 
 bool SPLPEToolContext::root_handler(GdkEvent* event) {
-	SPEventContext* event_context = this;
-
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(event_context);
-    SPDesktop *desktop = event_context->desktop;
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
 
     bool ret = false;
 
-    if (sp_pen_context_has_waiting_LPE(lc)) {
+    if (sp_pen_context_has_waiting_LPE(this)) {
         // quit when we are waiting for a LPE to be applied
         //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-    	ret = event_context->root_handler(event);
+    	ret = this->root_handler(event);
         return ret;
     }
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !event_context->space_panning) {
-                if (lc->mode == Inkscape::LivePathEffect::INVALID_LPE) {
+            if (event->button.button == 1 && !this->space_panning) {
+                if (this->mode == Inkscape::LivePathEffect::INVALID_LPE) {
                     // don't do anything for now if we are inactive (except clearing the selection
                     // since this was a click into empty space)
                     selection->clear();
@@ -237,9 +206,9 @@ bool SPLPEToolContext::root_handler(GdkEvent* event) {
                 }
 
                 // save drag origin
-                event_context->xp = (gint) event->button.x;
-                event_context->yp = (gint) event->button.y;
-                event_context->within_tolerance = true;
+                this->xp = (gint) event->button.x;
+                this->yp = (gint) event->button.y;
+                this->within_tolerance = true;
 
                 using namespace Inkscape::LivePathEffect;
 
@@ -249,11 +218,11 @@ bool SPLPEToolContext::root_handler(GdkEvent* event) {
 
                 //bool over_stroke = lc->shape_editor->is_over_stroke(Geom::Point(event->button.x, event->button.y), true);
 
-                sp_pen_context_wait_for_LPE_mouse_clicks(lc, type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
+                sp_pen_context_wait_for_LPE_mouse_clicks(this, type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
 
                 // we pass the mouse click on to pen tool as the first click which it should collect
                 //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-                ret = event_context->root_handler(event);
+                ret = this->root_handler(event);
             }
             break;
 
@@ -289,9 +258,6 @@ bool SPLPEToolContext::root_handler(GdkEvent* event) {
     }
 
     if (!ret) {
-//        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler) {
-//            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-//        }
     	ret = SPPenContext::root_handler(event);
     }
 

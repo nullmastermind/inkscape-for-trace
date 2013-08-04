@@ -80,6 +80,7 @@ public:
 
     bool anchor_statusbar;
 
+protected:
 	virtual void setup();
 	virtual void finish();
 	virtual void set(const Inkscape::Preferences::Entry& val);

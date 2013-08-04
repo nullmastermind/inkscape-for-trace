@@ -90,59 +90,51 @@ const std::string& SPPenContext::getPrefsPath() {
 const std::string SPPenContext::prefsPath = "/tools/freehand/pen";
 
 SPPenContext::SPPenContext() : SPDrawContext() {
-	SPPenContext* pc = this;
+	this->polylines_only = false;
+	this->polylines_paraxial = false;
+	this->expecting_clicks_for_LPE = 0;
 
-	pc->polylines_only = false;
-	pc->polylines_paraxial = false;
-	pc->expecting_clicks_for_LPE = 0;
+    this->cursor_shape = cursor_pen_xpm;
+    this->hot_x = 4;
+    this->hot_y = 4;
 
-    SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
+    this->npoints = 0;
+    this->mode = MODE_CLICK;
+    this->state = POINT;
 
-    event_context->cursor_shape = cursor_pen_xpm;
-    event_context->hot_x = 4;
-    event_context->hot_y = 4;
+    this->c0 = NULL;
+    this->c1 = NULL;
+    this->cl0 = NULL;
+    this->cl1 = NULL;
 
-    pc->npoints = 0;
-    pc->mode = MODE_CLICK;
-    pc->state = POINT;
+    this->events_disabled = 0;
 
-    pc->c0 = NULL;
-    pc->c1 = NULL;
-    pc->cl0 = NULL;
-    pc->cl1 = NULL;
-
-    pc->events_disabled = 0;
-
-    pc->num_clicks = 0;
-    pc->waiting_LPE = NULL;
-    pc->waiting_item = NULL;
+    this->num_clicks = 0;
+    this->waiting_LPE = NULL;
+    this->waiting_item = NULL;
 }
 
 SPPenContext::~SPPenContext() {
-    SPPenContext *pc = SP_PEN_CONTEXT(this);
-
-    if (pc->c0) {
-        sp_canvas_item_destroy(pc->c0);
-        pc->c0 = NULL;
+    if (this->c0) {
+        sp_canvas_item_destroy(this->c0);
+        this->c0 = NULL;
     }
-    if (pc->c1) {
-        sp_canvas_item_destroy(pc->c1);
-        pc->c1 = NULL;
+    if (this->c1) {
+        sp_canvas_item_destroy(this->c1);
+        this->c1 = NULL;
     }
-    if (pc->cl0) {
-        sp_canvas_item_destroy(pc->cl0);
-        pc->cl0 = NULL;
+    if (this->cl0) {
+        sp_canvas_item_destroy(this->cl0);
+        this->cl0 = NULL;
     }
-    if (pc->cl1) {
-        sp_canvas_item_destroy(pc->cl1);
-        pc->cl1 = NULL;
+    if (this->cl1) {
+        sp_canvas_item_destroy(this->cl1);
+        this->cl1 = NULL;
     }
 
-    //G_OBJECT_CLASS(sp_pen_context_parent_class)->dispose(object);
-
-    if (pc->expecting_clicks_for_LPE > 0) {
+    if (this->expecting_clicks_for_LPE > 0) {
         // we received too few clicks to sanely set the parameter path so we remove the LPE from the item
-        sp_lpe_item_remove_current_path_effect(pc->waiting_item, false);
+        sp_lpe_item_remove_current_path_effect(this->waiting_item, false);
     }
 }
 
@@ -157,42 +149,34 @@ void sp_pen_context_set_polyline_mode(SPPenContext *const pc) {
  * Callback to initialize SPPenContext object.
  */
 void SPPenContext::setup() {
-	SPEventContext* ec = this;
-
-    SPPenContext *pc = SP_PEN_CONTEXT(ec);
-
-//    if (((SPEventContextClass *) sp_pen_context_parent_class)->setup) {
-//        ((SPEventContextClass *) sp_pen_context_parent_class)->setup(ec);
-//    }
     SPDrawContext::setup();
 
     ControlManager &mgr = ControlManager::getManager();
 
     // Pen indicators
-    pc->c0 = mgr.createControl(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(ec)), Inkscape::CTRL_TYPE_ADJ_HANDLE);
-    mgr.track(pc->c0);
+    this->c0 = mgr.createControl(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(this)), Inkscape::CTRL_TYPE_ADJ_HANDLE);
+    mgr.track(this->c0);
 
-    pc->c1 = mgr.createControl(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(ec)), Inkscape::CTRL_TYPE_ADJ_HANDLE);
-    mgr.track(pc->c1);
+    this->c1 = mgr.createControl(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(this)), Inkscape::CTRL_TYPE_ADJ_HANDLE);
+    mgr.track(this->c1);
 
-    pc->cl0 = mgr.createControlLine(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(ec)));
-    pc->cl1 = mgr.createControlLine(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(ec)));
+    this->cl0 = mgr.createControlLine(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(this)));
+    this->cl1 = mgr.createControlLine(sp_desktop_controls(SP_EVENT_CONTEXT_DESKTOP(this)));
 
+    sp_canvas_item_hide(this->c0);
+    sp_canvas_item_hide(this->c1);
+    sp_canvas_item_hide(this->cl0);
+    sp_canvas_item_hide(this->cl1);
 
-    sp_canvas_item_hide(pc->c0);
-    sp_canvas_item_hide(pc->c1);
-    sp_canvas_item_hide(pc->cl0);
-    sp_canvas_item_hide(pc->cl1);
+    sp_event_context_read(this, "mode");
 
-    sp_event_context_read(ec, "mode");
+    this->anchor_statusbar = false;
 
-    pc->anchor_statusbar = false;
-
-    sp_pen_context_set_polyline_mode(pc);
+    sp_pen_context_set_polyline_mode(this);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/freehand/pen/selcue")) {
-        ec->enableSelectionCue();
+        this->enableSelectionCue();
     }
 }
 
@@ -215,19 +199,12 @@ static void pen_cancel (SPPenContext *const pc)
  * Finalization callback.
  */
 void SPPenContext::finish() {
-	SPEventContext* ec = this;
+    sp_event_context_discard_delayed_snap_event(this);
 
-    SPPenContext *pc = SP_PEN_CONTEXT(ec);
-
-    sp_event_context_discard_delayed_snap_event(ec);
-
-    if (pc->npoints != 0) {
-        pen_cancel (pc);
+    if (this->npoints != 0) {
+        pen_cancel(this);
     }
 
-//    if (((SPEventContextClass *) sp_pen_context_parent_class)->finish) {
-//        ((SPEventContextClass *) sp_pen_context_parent_class)->finish(ec);
-//    }
     SPDrawContext::finish();
 }
 
@@ -235,16 +212,13 @@ void SPPenContext::finish() {
  * Callback that sets key to value in pen context.
  */
 void SPPenContext::set(const Inkscape::Preferences::Entry& val) {
-	SPEventContext* ec = this;
-
-    SPPenContext *pc = SP_PEN_CONTEXT(ec);
     Glib::ustring name = val.getEntryName();
 
     if (name == "mode") {
         if ( val.getString() == "drag" ) {
-            pc->mode = MODE_DRAG;
+            this->mode = MODE_DRAG;
         } else {
-            pc->mode = MODE_CLICK;
+            this->mode = MODE_CLICK;
         }
     }
 }
@@ -292,26 +266,20 @@ static void spdc_endpoint_snap_handle(SPPenContext const *const pc, Geom::Point 
 }
 
 bool SPPenContext::item_handler(SPItem* item, GdkEvent* event) {
-	SPEventContext* ec = this;
-
-    SPPenContext *const pc = SP_PEN_CONTEXT(ec);
-
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            ret = pen_handle_button_press(pc, event->button);
+            ret = pen_handle_button_press(this, event->button);
             break;
         case GDK_BUTTON_RELEASE:
-            ret = pen_handle_button_release(pc, event->button);
+            ret = pen_handle_button_release(this, event->button);
             break;
         default:
             break;
     }
 
     if (!ret) {
-//        if (((SPEventContextClass *) sp_pen_context_parent_class)->item_handler)
-//            ret = ((SPEventContextClass *) sp_pen_context_parent_class)->item_handler(ec, item, event);
     	ret = SPDrawContext::item_handler(item, event);
     }
 
@@ -322,31 +290,27 @@ bool SPPenContext::item_handler(SPItem* item, GdkEvent* event) {
  * Callback to handle all pen events.
  */
 bool SPPenContext::root_handler(GdkEvent* event) {
-	SPEventContext* ec = this;
-
-    SPPenContext *const pc = SP_PEN_CONTEXT(ec);
-
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            ret = pen_handle_button_press(pc, event->button);
+            ret = pen_handle_button_press(this, event->button);
             break;
 
         case GDK_MOTION_NOTIFY:
-            ret = pen_handle_motion_notify(pc, event->motion);
+            ret = pen_handle_motion_notify(this, event->motion);
             break;
 
         case GDK_BUTTON_RELEASE:
-            ret = pen_handle_button_release(pc, event->button);
+            ret = pen_handle_button_release(this, event->button);
             break;
 
         case GDK_2BUTTON_PRESS:
-            ret = pen_handle_2button_press(pc, event->button);
+            ret = pen_handle_2button_press(this, event->button);
             break;
 
         case GDK_KEY_PRESS:
-            ret = pen_handle_key_press(pc, event);
+            ret = pen_handle_key_press(this, event);
             break;
 
         default:
@@ -354,11 +318,6 @@ bool SPPenContext::root_handler(GdkEvent* event) {
     }
 
     if (!ret) {
-//        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
-//            = ((SPEventContextClass *) sp_pen_context_parent_class)->root_handler;
-//        if (parent_root_handler) {
-//            ret = parent_root_handler(ec, event);
-//        }
     	ret = SPDrawContext::root_handler(event);
     }
 

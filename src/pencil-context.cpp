@@ -81,42 +81,31 @@ const std::string& SPPencilContext::getPrefsPath() {
 const std::string SPPencilContext::prefsPath = "/tools/freehand/pencil";
 
 SPPencilContext::SPPencilContext() : SPDrawContext() {
-	SPPencilContext* pc = this;
+	this->is_drawing = false;
 
-	pc->is_drawing = false;
+    this->cursor_shape = cursor_pencil_xpm;
+    this->hot_x = 4;
+    this->hot_y = 4;
 
-    SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
-
-    event_context->cursor_shape = cursor_pencil_xpm;
-    event_context->hot_x = 4;
-    event_context->hot_y = 4;
-
-    pc->npoints = 0;
-    pc->state = SP_PENCIL_CONTEXT_IDLE;
-    pc->req_tangent = Geom::Point(0, 0);
+    this->npoints = 0;
+    this->state = SP_PENCIL_CONTEXT_IDLE;
+    this->req_tangent = Geom::Point(0, 0);
 
     // since SPPencilContext is not properly constructed...
-    pc->sketch_interpolation = Geom::Piecewise<Geom::D2<Geom::SBasis> >();
-    pc->sketch_n = 0;
+    this->sketch_interpolation = Geom::Piecewise<Geom::D2<Geom::SBasis> >();
+    this->sketch_n = 0;
 }
 
 void SPPencilContext::setup() {
-	SPEventContext* ec = this;
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/freehand/pencil/selcue")) {
-        ec->enableSelectionCue();
+        this->enableSelectionCue();
     }
 
-//    if (((SPEventContextClass *) sp_pencil_context_parent_class)->setup) {
-//        ((SPEventContextClass *) sp_pencil_context_parent_class)->setup(ec);
-//    }
     SPDrawContext::setup();
 
-    SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
-    pc->is_drawing = false;
-
-    pc->anchor_statusbar = false;
+    this->is_drawing = false;
+    this->anchor_statusbar = false;
 }
 
 SPPencilContext::~SPPencilContext() {
@@ -144,31 +133,27 @@ spdc_endpoint_snap(SPPencilContext const *pc, Geom::Point &p, guint const state)
  * Callback for handling all pencil context events.
  */
 bool SPPencilContext::root_handler(GdkEvent* event) {
-	SPEventContext* ec = this;
-
-    SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
-
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            ret = pencil_handle_button_press(pc, event->button);
+            ret = pencil_handle_button_press(this, event->button);
             break;
 
         case GDK_MOTION_NOTIFY:
-            ret = pencil_handle_motion_notify(pc, event->motion);
+            ret = pencil_handle_motion_notify(this, event->motion);
             break;
 
         case GDK_BUTTON_RELEASE:
-            ret = pencil_handle_button_release(pc, event->button);
+            ret = pencil_handle_button_release(this, event->button);
             break;
 
         case GDK_KEY_PRESS:
-            ret = pencil_handle_key_press(pc, get_group0_keyval (&event->key), event->key.state);
+            ret = pencil_handle_key_press(this, get_group0_keyval (&event->key), event->key.state);
             break;
 
         case GDK_KEY_RELEASE:
-            ret = pencil_handle_key_release(pc, get_group0_keyval (&event->key), event->key.state);
+            ret = pencil_handle_key_release(this, get_group0_keyval (&event->key), event->key.state);
             break;
 
         default:
@@ -176,11 +161,6 @@ bool SPPencilContext::root_handler(GdkEvent* event) {
     }
 
     if (!ret) {
-//        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
-//            = ((SPEventContextClass *) sp_pencil_context_parent_class)->root_handler;
-//        if (parent_root_handler) {
-//            ret = parent_root_handler(ec, event);
-//        }
     	ret = SPDrawContext::root_handler(event);
     }
 
