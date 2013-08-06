@@ -65,8 +65,7 @@ void sp_file_exit (void);
 enum SPFileOpenFlags
 {
     ADD_TO_RECENT = 1,
-    REPLACE_EMPTY = 2,
-    IS_FROM_TEMPLATE = 4
+    REPLACE_EMPTY = 2
 };
 
 bool sp_file_open(
