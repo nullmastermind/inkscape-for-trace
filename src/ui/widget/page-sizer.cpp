@@ -97,7 +97,7 @@ struct PaperSizeRec {
     char const * const name;  //name
     double const smaller;     //lesser dimension
     double const larger;      //greater dimension
-    Inkscape::Util::Unit const unit;      //units
+    Glib::ustring const unit;      //units
 };
 
 // list of page formats that should be in landscape automatically
@@ -115,31 +115,31 @@ fill_landscape_papers() {
 }
 
 static PaperSizeRec const inkscape_papers[] = {
-    { "A4",                210,  297, unit_table.getUnit("mm") },
-    { "US Letter",         8.5,   11, unit_table.getUnit("in") },
-    { "US Legal",          8.5,   14, unit_table.getUnit("in") },
-    { "US Executive",     7.25, 10.5, unit_table.getUnit("in") },
-    { "A0",                841, 1189, unit_table.getUnit("mm") },
-    { "A1",                594,  841, unit_table.getUnit("mm") },
-    { "A2",                420,  594, unit_table.getUnit("mm") },
-    { "A3",                297,  420, unit_table.getUnit("mm") },
-    { "A5",                148,  210, unit_table.getUnit("mm") },
-    { "A6",                105,  148, unit_table.getUnit("mm") },
-    { "A7",                 74,  105, unit_table.getUnit("mm") },
-    { "A8",                 52,   74, unit_table.getUnit("mm") },
-    { "A9",                 37,   52, unit_table.getUnit("mm") },
-    { "A10",                26,   37, unit_table.getUnit("mm") },
-    { "B0",               1000, 1414, unit_table.getUnit("mm") },
-    { "B1",                707, 1000, unit_table.getUnit("mm") },
-    { "B2",                500,  707, unit_table.getUnit("mm") },
-    { "B3",                353,  500, unit_table.getUnit("mm") },
-    { "B4",                250,  353, unit_table.getUnit("mm") },
-    { "B5",                176,  250, unit_table.getUnit("mm") },
-    { "B6",                125,  176, unit_table.getUnit("mm") },
-    { "B7",                 88,  125, unit_table.getUnit("mm") },
-    { "B8",                 62,   88, unit_table.getUnit("mm") },
-    { "B9",                 44,   62, unit_table.getUnit("mm") },
-    { "B10",                31,   44, unit_table.getUnit("mm") },
+    { "A4",                210,  297, "mm" },
+    { "US Letter",         8.5,   11, "in" },
+    { "US Legal",          8.5,   14, "in" },
+    { "US Executive",     7.25, 10.5, "in" },
+    { "A0",                841, 1189, "mm" },
+    { "A1",                594,  841, "mm" },
+    { "A2",                420,  594, "mm" },
+    { "A3",                297,  420, "mm" },
+    { "A5",                148,  210, "mm" },
+    { "A6",                105,  148, "mm" },
+    { "A7",                 74,  105, "mm" },
+    { "A8",                 52,   74, "mm" },
+    { "A9",                 37,   52, "mm" },
+    { "A10",                26,   37, "mm" },
+    { "B0",               1000, 1414, "mm" },
+    { "B1",                707, 1000, "mm" },
+    { "B2",                500,  707, "mm" },
+    { "B3",                353,  500, "mm" },
+    { "B4",                250,  353, "mm" },
+    { "B5",                176,  250, "mm" },
+    { "B6",                125,  176, "mm" },
+    { "B7",                 88,  125, "mm" },
+    { "B8",                 62,   88, "mm" },
+    { "B9",                 44,   62, "mm" },
+    { "B10",                31,   44, "mm" },
 
 
 
@@ -151,63 +151,63 @@ static PaperSizeRec const inkscape_papers[] = {
          don't know what D and E series are used for.
          */
 
-    { "C0",                917, 1297, unit_table.getUnit("mm") },
-    { "C1",                648,  917, unit_table.getUnit("mm") },
-    { "C2",                458,  648, unit_table.getUnit("mm") },
-    { "C3",                324,  458, unit_table.getUnit("mm") },
-    { "C4",                229,  324, unit_table.getUnit("mm") },
-    { "C5",                162,  229, unit_table.getUnit("mm") },
-    { "C6",                114,  162, unit_table.getUnit("mm") },
-    { "C7",                 81,  114, unit_table.getUnit("mm") },
-    { "C8",                 57,   81, unit_table.getUnit("mm") },
-    { "C9",                 40,   57, unit_table.getUnit("mm") },
-    { "C10",                28,   40, unit_table.getUnit("mm") },
-    { "D1",                545,  771, unit_table.getUnit("mm") },
-    { "D2",                385,  545, unit_table.getUnit("mm") },
-    { "D3",                272,  385, unit_table.getUnit("mm") },
-    { "D4",                192,  272, unit_table.getUnit("mm") },
-    { "D5",                136,  192, unit_table.getUnit("mm") },
-    { "D6",                 96,  136, unit_table.getUnit("mm") },
-    { "D7",                 68,   96, unit_table.getUnit("mm") },
-    { "E3",                400,  560, unit_table.getUnit("mm") },
-    { "E4",                280,  400, unit_table.getUnit("mm") },
-    { "E5",                200,  280, unit_table.getUnit("mm") },
-    { "E6",                140,  200, unit_table.getUnit("mm") },
+    { "C0",                917, 1297, "mm" },
+    { "C1",                648,  917, "mm" },
+    { "C2",                458,  648, "mm" },
+    { "C3",                324,  458, "mm" },
+    { "C4",                229,  324, "mm" },
+    { "C5",                162,  229, "mm" },
+    { "C6",                114,  162, "mm" },
+    { "C7",                 81,  114, "mm" },
+    { "C8",                 57,   81, "mm" },
+    { "C9",                 40,   57, "mm" },
+    { "C10",                28,   40, "mm" },
+    { "D1",                545,  771, "mm" },
+    { "D2",                385,  545, "mm" },
+    { "D3",                272,  385, "mm" },
+    { "D4",                192,  272, "mm" },
+    { "D5",                136,  192, "mm" },
+    { "D6",                 96,  136, "mm" },
+    { "D7",                 68,   96, "mm" },
+    { "E3",                400,  560, "mm" },
+    { "E4",                280,  400, "mm" },
+    { "E5",                200,  280, "mm" },
+    { "E6",                140,  200, "mm" },
 //#endif
 
 
 
-    { "CSE",               462,  649, unit_table.getUnit("pt") },
-    { "US #10 Envelope", 4.125,  9.5, unit_table.getUnit("in") },
+    { "CSE",               462,  649, "pt" },
+    { "US #10 Envelope", 4.125,  9.5, "in" },
     /* See http://www.hbp.com/content/PCR_envelopes.cfm for a much larger list of US envelope
        sizes. */
-    { "DL Envelope",       110,  220, unit_table.getUnit("mm") },
-    { "Ledger/Tabloid",     11,   17, unit_table.getUnit("in") },
+    { "DL Envelope",       110,  220, "mm" },
+    { "Ledger/Tabloid",     11,   17, "in" },
     /* Note that `Folio' (used in QPrinter/KPrinter) is deliberately absent from this list, as it
        means different sizes to different people: different people may expect the width to be
        either 8, 8.25 or 8.5 inches, and the height to be either 13 or 13.5 inches, even
        restricting our interpretation to foolscap folio.  If you wish to introduce a folio-like
        page size to the list, then please consider using a name more specific than just `Folio' or
        `Foolscap Folio'. */
-    { "Banner 468x60",      60,  468, unit_table.getUnit("px") },
-    { "Icon 16x16",         16,   16, unit_table.getUnit("px") },
-    { "Icon 32x32",         32,   32, unit_table.getUnit("px") },
-    { "Icon 48x48",         48,   48, unit_table.getUnit("px") },
+    { "Banner 468x60",      60,  468, "px" },
+    { "Icon 16x16",         16,   16, "px" },
+    { "Icon 32x32",         32,   32, "px" },
+    { "Icon 48x48",         48,   48, "px" },
     /* business cards */
-    { "Business Card (ISO 7810)", 53.98, 85.60, unit_table.getUnit("mm") },
-    { "Business Card (US)",             2,     3.5,  unit_table.getUnit("in") },
-    { "Business Card (Europe)",        55,    85,    unit_table.getUnit("mm") },
-    { "Business Card (Aus/NZ)",        55,    90,    unit_table.getUnit("mm") },
+    { "Business Card (ISO 7810)", 53.98, 85.60, "mm" },
+    { "Business Card (US)",             2,     3.5,  "in" },
+    { "Business Card (Europe)",        55,    85,    "mm" },
+    { "Business Card (Aus/NZ)",        55,    90,    "mm" },
 
     // Start Arch Series List
 
 
-    { "Arch A",         9,    12,    unit_table.getUnit("in") },  // 229 x 305 mm
-    { "Arch B",        12,    18,    unit_table.getUnit("in") },  // 305 x 457 mm
-    { "Arch C",        18,    24,    unit_table.getUnit("in") },  // 457 x 610 mm
-    { "Arch D",        24,    36,    unit_table.getUnit("in") },  // 610 x 914 mm
-    { "Arch E",        36,    48,    unit_table.getUnit("in") },  // 914 x 1219 mm
-    { "Arch E1",       30,    42,    unit_table.getUnit("in") },  // 762 x 1067 mm
+    { "Arch A",         9,    12,    "in" },  // 229 x 305 mm
+    { "Arch B",        12,    18,    "in" },  // 305 x 457 mm
+    { "Arch C",        18,    24,    "in" },  // 457 x 610 mm
+    { "Arch D",        24,    36,    "in" },  // 610 x 914 mm
+    { "Arch E",        36,    48,    "in" },  // 914 x 1219 mm
+    { "Arch E1",       30,    42,    "in" },  // 762 x 1067 mm
 
     /*
      * The above list of Arch sizes were taken from the following site:
@@ -218,7 +218,7 @@ static PaperSizeRec const inkscape_papers[] = {
      * September 2009 - DAK
      */
 
-    { NULL,                     0,    0, unit_table.getUnit("px") },
+    { NULL,                     0,    0, "px" },
 };
 
 
@@ -277,8 +277,8 @@ PageSizer::PageSizer(Registry & _wr)
         char formatBuf[80];
         snprintf(formatBuf, 79, "%0.1f x %0.1f", p->smaller, p->larger);
         Glib::ustring desc = formatBuf;
-        desc.append(" " + p->unit.abbr);
-        PaperSize paper(name, p->smaller, p->larger, p->unit);
+        desc.append(" " + p->unit);
+        PaperSize paper(name, p->smaller, p->larger, unit_table.getUnit(p->unit));
         _paperSizeTable[name] = paper;
         Gtk::TreeModel::Row row = *(_paperSizeListStore->append());
         row[_paperSizeListColumns.nameColumn] = name;
