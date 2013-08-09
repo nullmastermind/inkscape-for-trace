@@ -134,8 +134,6 @@ src/flood-context.cpp
 src/gradient-chemistry.cpp
 src/gradient-context.cpp
 src/gradient-drag.cpp
-src/helper/units-test.h
-src/helper/units.cpp
 src/inkscape.cpp
 src/interface.cpp
 src/io/sys.cpp
@@ -199,6 +197,7 @@ src/select-context.cpp
 src/selection-chemistry.cpp
 src/selection-describer.cpp
 src/seltrans.cpp
+src/seltrans-handles.cpp
 src/shortcuts.cpp
 src/shape-editor.cpp
 src/sp-anchor.cpp
@@ -264,7 +263,6 @@ src/ui/dialog/object-properties.cpp
 src/ui/dialog/ocaldialogs.cpp
 src/ui/dialog/print.cpp
 src/ui/dialog/print-colors-preview-dialog.cpp
-src/ui/dialog/scriptdialog.cpp
 src/ui/dialog/svg-fonts-dialog.cpp
 src/ui/dialog/symbols.cpp
 src/ui/dialog/swatches.cpp
@@ -303,7 +301,7 @@ src/widgets/dash-selector.cpp
 src/widgets/desktop-widget.cpp
 src/widgets/dropper-toolbar.cpp
 src/widgets/ege-paint-def.cpp
-src/widgets/erasor-toolbar.cpp
+src/widgets/eraser-toolbar.cpp
 src/widgets/fill-style.cpp
 src/widgets/font-selector.cpp
 src/widgets/gradient-selector.cpp
@@ -317,6 +315,7 @@ src/widgets/paintbucket-toolbar.cpp
 src/widgets/paint-selector.cpp
 src/widgets/pencil-toolbar.cpp
 src/widgets/rect-toolbar.cpp
+src/widgets/ruler.cpp
 src/widgets/select-toolbar.cpp
 src/widgets/spiral-toolbar.cpp
 src/widgets/spray-toolbar.cpp
@@ -330,6 +329,7 @@ src/widgets/sp-xmlview-attr-list.cpp
 src/widgets/sp-xmlview-content.cpp
 src/widgets/star-toolbar.cpp
 src/widgets/stroke-style.cpp
+src/widgets/stroke-marker-selector.cpp
 src/widgets/swatch-selector.cpp
 src/widgets/text-toolbar.cpp
 src/widgets/toolbox.cpp
@@ -339,6 +339,7 @@ share/extensions/dxf_input.py
 share/extensions/convert2dashes.py
 share/extensions/dimension.py
 share/extensions/draw_from_triangle.py
+share/extensions/dxf_input.py
 share/extensions/dxf_outlines.py
 share/extensions/embedimage.py
 share/extensions/export_gimp_palette.py
@@ -350,6 +351,8 @@ share/extensions/generate_voronoi.py
 share/extensions/gimp_xcf.py
 share/extensions/guides_creator.py
 share/extensions/guillotine.py
+share/extensions/hpgl_input.py
+share/extensions/dxf_outlines.py
 share/extensions/inkex.py
 share/extensions/interp_att_g.py
 share/extensions/jessyInk_autoTexts.py

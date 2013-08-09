@@ -181,10 +181,9 @@ static std::vector<int> gauss_jordan (double A[S][T], int avoid_col = -1) {
     if (avoid_col != -1) {
         cols_used.push_back (avoid_col);
     }
-    int col;
     for (int i = 0; i < S; ++i) {
         /* for each row find a pivot element of maximal absolute value, skipping the columns that were used before */
-        col = find_pivot<S,T>(A, i, cols_used);
+        int col = find_pivot<S,T>(A, i, cols_used);
         cols_used.push_back(col);
         if (col == -1) {
             // no non-zero elements in the row
@@ -289,7 +288,7 @@ template <int S, int T> SolutionKind gaussjord_solve (double A[S][T], double x[T
      * afterwards copy the result back to x
      */
     double w[S];
-    SysEq::multiply<S,T>(B,x,w);
+    SysEq::multiply<S,T>(B,x,w); // initializes w
     for (int j = 0; j < S; ++j) {
         x[cols[j]] = w[j];
     }

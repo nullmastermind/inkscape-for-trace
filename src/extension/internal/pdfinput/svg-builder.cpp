@@ -33,7 +33,7 @@
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 #include "color.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "io/stringstream.h"
 #include "io/base64stream.h"
 #include "display/nr-filter-utils.h"
@@ -266,14 +266,12 @@ static void svgSetTransform(Inkscape::XML::Node *node, double c0, double c1,
  * \brief Generates a SVG path string from poppler's data structure
  */
 static gchar *svgInterpretPath(GfxPath *path) {
-    GfxSubpath *subpath;
     Inkscape::SVG::PathString pathString;
-    int i, j;
-    for ( i = 0 ; i < path->getNumSubpaths() ; ++i ) {
-        subpath = path->getSubpath(i);
+    for (int i = 0 ; i < path->getNumSubpaths() ; ++i ) {
+        GfxSubpath *subpath = path->getSubpath(i);
         if (subpath->getNumPoints() > 0) {
             pathString.moveTo(subpath->getX(0), subpath->getY(0));
-            j = 1;
+            int j = 1;
             while (j < subpath->getNumPoints()) {
                 if (subpath->getCurve(j)) {
                     pathString.curveTo(subpath->getX(j), subpath->getY(j),
@@ -676,7 +674,25 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
     Inkscape::XML::Node *pattern_node = _xml_doc->createElement("svg:pattern");
     // Set pattern transform matrix
     double *p2u = tiling_pattern->getMatrix();
-    Geom::Affine pat_matrix(p2u[0], p2u[1], p2u[2], p2u[3], p2u[4], p2u[5]);
+    double m[6] = {1, 0, 0, 1, 0, 0};
+    double det;
+    det = ttm[0] * ttm[3] - ttm[1] * ttm[2];    // see LP Bug 1168908
+    if (det) {
+        double ittm[6];	// invert ttm
+        ittm[0] =  ttm[3] / det;
+        ittm[1] = -ttm[1] / det;
+        ittm[2] = -ttm[2] / det;
+        ittm[3] =  ttm[0] / det;
+        ittm[4] = (ttm[2] * ttm[5] - ttm[3] * ttm[4]) / det;
+        ittm[5] = (ttm[1] * ttm[4] - ttm[0] * ttm[5]) / det;
+        m[0] = p2u[0] * ittm[0] + p2u[1] * ittm[2];
+        m[1] = p2u[0] * ittm[1] + p2u[1] * ittm[3];
+        m[2] = p2u[2] * ittm[0] + p2u[3] * ittm[2];
+        m[3] = p2u[2] * ittm[1] + p2u[3] * ittm[3];
+        m[4] = p2u[4] * ittm[0] + p2u[5] * ittm[2] + ittm[4];
+        m[5] = p2u[4] * ittm[1] + p2u[5] * ittm[3] + ittm[5];
+    }
+    Geom::Affine pat_matrix(m[0], m[1], m[2], m[3], m[4], m[5]);
     gchar *transform_text = sp_svg_transform_write(pat_matrix);
     pattern_node->setAttribute("patternTransform", transform_text);
     g_free(transform_text);
@@ -777,7 +793,7 @@ gchar *SvgBuilder::_createGradient(GfxShading *shading, double *matrix, bool for
         Geom::Affine pat_matrix(matrix[0], matrix[1], matrix[2], matrix[3],
                               matrix[4], matrix[5]);
         if ( !for_shading && _is_top_level ) {
-            Geom::Affine flip(1.0, 0.0, 0.0, -1.0, 0.0, _height * PT_PER_PX);
+            Geom::Affine flip(1.0, 0.0, 0.0, -1.0, 0.0, _height * Inkscape::Util::Quantity::convert(1, "px", "pt"));
             pat_matrix *= flip;
         }
         gchar *transform_text = sp_svg_transform_write(pat_matrix);

@@ -46,7 +46,6 @@ set(sp_SRC
 	sp-mesh-patch.cpp
 	sp-mesh-row.cpp
 	sp-metadata.cpp
-	sp-metrics.cpp
 	sp-missing-glyph.cpp
 	sp-namedview.cpp
 	sp-object-group.cpp
@@ -136,8 +135,6 @@ set(sp_SRC
 	sp-mesh-row-fns.h
 	sp-mesh-row.h
 	sp-metadata.h
-	sp-metric.h
-	sp-metrics.h
 	sp-missing-glyph.h
 	sp-namedview.h
 	sp-object-group.h
@@ -216,7 +213,6 @@ set(inkscape_SRC
 	file.cpp
 	filter-chemistry.cpp
 	filter-enums.cpp
-	fixes.cpp
 	flood-context.cpp
 	gc-anchored.cpp
 	gc-finalized.cpp
@@ -312,7 +308,6 @@ set(inkscape_SRC
 	MultiPrinter.h
 	PylogFormatter.h
 	TRPIFormatter.h
-	approx-equal.h
 	arc-context.h
 	attributes-test.h
 	attributes.h
@@ -486,7 +481,6 @@ set(inkscape_SRC
 	unclump.h
 	undo-stack-observer.h
 	unicoderange.h
-	unit-constants.h
 	uri-references.h
 	uri.h
 	vanishing-point.h
@@ -538,7 +532,6 @@ list(APPEND inkscape_SRC
 
 # All folders for internal inkscape
 # these call add_inkscape_source
-add_subdirectory(bind)
 add_subdirectory(debug)
 add_subdirectory(dialogs)
 add_subdirectory(display)

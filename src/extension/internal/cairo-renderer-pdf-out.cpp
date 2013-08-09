@@ -39,7 +39,7 @@
 #include <2geom/affine.h>
 #include "document.h"
 
-#include "unit-constants.h"
+#include "util/units.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -136,12 +136,12 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
     if (ext == NULL)
         return;
 
-    const gchar *new_level = NULL;
     int level = 0;
     try {
-        new_level = mod->get_param_enum("PDFversion");
-        if((new_level != NULL) && (g_ascii_strcasecmp("PDF-1.5", new_level) == 0))
+        const gchar *new_level = mod->get_param_enum("PDFversion");
+        if((new_level != NULL) && (g_ascii_strcasecmp("PDF-1.5", new_level) == 0)) {
             level = 1;
+        }
     }
     catch(...) {
         g_warning("Parameter <PDFversion> might not exist");
@@ -197,7 +197,7 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
 
     float new_bleedmargin_px = 0.;
     try {
-        new_bleedmargin_px = mod->get_param_float("bleed") * PX_PER_MM;
+        new_bleedmargin_px = mod->get_param_float("bleed") * Inkscape::Util::Quantity::convert(1, "mm", "px");
     }
     catch(...) {
         g_warning("Parameter <bleed> might not exist");
