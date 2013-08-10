@@ -207,6 +207,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
     rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
     Inkscape::XML::Node *myRoot;
     Inkscape::XML::Node *dataNode;
+    std::cerr << path.c_str();
     if (rdoc){
         myRoot = rdoc->root();
         if (strcmp(myRoot->name(), "svg:svg") != 0){     // Wrong file format
@@ -236,9 +237,13 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
             Glib::ustring data = dataNode->firstChild()->content();
             while (!data.empty()){
                 int pos = data.find_first_of(" ");
+                if (pos == Glib::ustring::npos)
+                    pos = data.size();
+                
                 Glib::ustring keyword = dgettext("Document template keyword", data.substr(0, pos).data());
                 result.keywords.insert(keyword);
                 _keywords.insert(keyword);
+                
                 if (pos == data.size())
                     break;
                 data.erase(0, pos+1);
