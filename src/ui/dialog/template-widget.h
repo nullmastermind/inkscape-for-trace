@@ -31,12 +31,12 @@ private:
     TemplateLoadTab::TemplateData _current_template;
     
     Gtk::Button _more_info_button;
-    Gtk::Label _short_description_label;
-    Gtk::Label _template_author_label;
-    Gtk::Label _template_name_label;
     Gtk::HBox _preview_box;
     Gtk::Image _preview_image;
     Dialog::SVGPreview _preview_render;
+    Gtk::Label _short_description_label;
+    Gtk::Label _template_author_label;
+    Gtk::Label _template_name_label;
     
     void _displayTemplateDetails();
 };

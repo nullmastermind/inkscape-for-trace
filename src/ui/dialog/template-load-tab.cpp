@@ -14,7 +14,6 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <glibmm/i18n.h>
-#include <iostream>
 
 #include "interface.h"
 #include "file.h"
@@ -207,7 +206,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
     rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
     Inkscape::XML::Node *myRoot;
     Inkscape::XML::Node *dataNode;
-    std::cerr << path.c_str();
+
     if (rdoc){
         myRoot = rdoc->root();
         if (strcmp(myRoot->name(), "svg:svg") != 0){     // Wrong file format

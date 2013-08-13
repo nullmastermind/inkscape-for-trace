@@ -30,7 +30,7 @@ TemplateWidget::TemplateWidget()
     , _short_description_label(_(" "))
     , _template_author_label(_(" "))
     , _template_name_label(_("no template selected"))
-    , _preview_image(" ")
+    , _preview_image()
     , _preview_render()
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
@@ -41,7 +41,7 @@ TemplateWidget::TemplateWidget()
     _preview_box.pack_start(_preview_render, Gtk::PACK_EXPAND_PADDING, 10);
     
     _short_description_label.set_line_wrap(true);
-    _short_description_label.set_size_request(200);
+    //_short_description_label.set_size_request(200);
 
     Gtk::Alignment *align;
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
