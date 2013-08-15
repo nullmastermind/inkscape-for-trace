@@ -2705,9 +2705,8 @@ std::cout << "BEFORE DRAW"
             int f1;
             int f2 = (d->arcdir == U_AD_COUNTERCLOCKWISE ? 0 : 1);
             if(!emr_arc_points( lpEMFR, &f1, f2, &center, &start, &end, &size)){
-                // draw a line from current position to start
+                // draw a line from current position to start, arc from there
                 tmp_path <<  "\n\tL " << pix_to_xy(d, start.x, start.y);
-                tmp_path <<  "\n\tM " << pix_to_xy(d, start.x, start.y);
                 tmp_path <<  " A "    << pix_to_abs_size(d, size.x)/2.0      << ","  << pix_to_abs_size(d, size.y)/2.0 ;
                 tmp_path <<  " ";
                 tmp_path <<  180.0 * current_rotation(d)/M_PI;
