@@ -538,11 +538,11 @@ Glib::ustring Layout::dumpAsText() const
 
     Glib::ustring::const_iterator icc;
     
-    snprintf(line, sizeof(line), "spans     %d\n", _spans.size());
+    snprintf(line, sizeof(line), "spans     %zu\n", _spans.size());
     result += line;
-    snprintf(line, sizeof(line), "chars     %d\n", _characters.size());
+    snprintf(line, sizeof(line), "chars     %zu\n", _characters.size());
     result += line;
-    snprintf(line, sizeof(line), "glyphs    %d\n", _glyphs.size());
+    snprintf(line, sizeof(line), "glyphs    %zu\n", _glyphs.size());
     result += line;
     unsigned lastspan=5000;
     if(_characters.size() > 1){
