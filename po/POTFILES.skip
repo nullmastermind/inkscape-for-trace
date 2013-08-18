@@ -31,24 +31,3 @@ src/ui/dialog/whiteboard-connect.cpp
 src/ui/dialog/whiteboard-sharewithchat.cpp
 src/ui/dialog/whiteboard-sharewithuser.cpp
 
-share/extensions/extrude.py
-share/extensions/generate_voronoi.py
-share/extensions/print_win32_vector.py
-share/extensions/render_barcode_qrcode.py
-share/extensions/svgcalendar.py
-src/color-profile.cpp
-src/extension/internal/cdr-input.cpp
-src/extension/internal/pdf-input-cairo.cpp
-src/extension/internal/vsd-input.cpp
-src/gradient-chemistry.cpp
-src/live_effects/lpe-bspline.cpp
-src/live_effects/parameter/originalpath.cpp
-src/live_effects/parameter/powerstrokepointarray.cpp
-src/mesh-context.cpp
-src/resource-manager.cpp
-src/shortcuts.cpp
-src/ui/dialog/font-substitution.cpp
-src/ui/widget/spin-scale.cpp
-src/widgets/mesh-toolbar.cpp
-src/widgets/ruler.cpp
-src/widgets/stroke-marker-selector.cpp
