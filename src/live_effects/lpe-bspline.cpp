@@ -2,7 +2,7 @@
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+ 
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
