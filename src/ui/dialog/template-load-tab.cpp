@@ -18,6 +18,8 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
+#include <list>
+#include <iostream>
 
 #include "interface.h"
 #include "file.h"
@@ -27,6 +29,8 @@
 #include "xml/repr.h"
 #include "xml/document.h"
 #include "xml/node.h"
+#include "extension/db.h"
+#include "extension/effect.h"
 
 
 namespace Inkscape {
@@ -187,6 +191,10 @@ void TemplateLoadTab::_loadTemplates()
 
     // system templates dir
     _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
+    
+    
+    // procedural templates
+    _getProceduralTemplates();
 }
 
 
@@ -209,7 +217,6 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
     Inkscape::XML::Document *rdoc;
     rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
     Inkscape::XML::Node *myRoot;
-    Inkscape::XML::Node *dataNode;
 
     if (rdoc){
         myRoot = rdoc->root();
@@ -221,37 +228,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
         
         if (myRoot == NULL)    // No template info
             return result;
-
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_name")) != NULL)
-            result.display_name = dgettext("Document template name", dataNode->firstChild()->content());
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:author")) != NULL)
-            result.author = dataNode->firstChild()->content();
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_short")) != NULL)
-            result.short_description = dgettext("Document template short description", dataNode->firstChild()->content());
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_long") )!= NULL)
-            result.long_description = dgettext("Document template long description", dataNode->firstChild()->content());
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:preview")) != NULL)
-            result.preview_name = dataNode->firstChild()->content();
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:date")) != NULL){
-            result.creation_date = dataNode->firstChild()->content();
-        }
-        
-        if ((dataNode = sp_repr_lookup_name(myRoot, "inkscape:_keywords")) != NULL){
-            Glib::ustring data = dataNode->firstChild()->content();
-            while (!data.empty()){
-                std::size_t pos = data.find_first_of(" ");
-                if (pos == Glib::ustring::npos)
-                    pos = data.size();
-                
-                Glib::ustring keyword = dgettext("Document template keyword", data.substr(0, pos).data());
-                result.keywords.insert(keyword);
-                _keywords.insert(keyword);
-                
-                if (pos == data.size())
-                    break;
-                data.erase(0, pos+1);
-            }
-        }
+        _getDataFromNode(myRoot, result);
     }
     
     return result;
@@ -274,6 +251,65 @@ void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
                 _tdata[tmp.display_name] = tmp;
         }
         file = Glib::build_filename(path, dir.read_name());
+    }
+}
+
+
+void TemplateLoadTab::_getProceduralTemplates()
+{
+    std::list<Inkscape::Extension::Effect *> effects;
+    Inkscape::Extension::db.get_effect_list(effects);
+    
+    std::list<Inkscape::Extension::Effect *>::iterator it = effects.begin();
+    while (it != effects.end()){
+        Inkscape::XML::Node *myRoot;
+        myRoot  = (*it)->get_repr();
+        myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+        
+        if (myRoot){
+            TemplateData result;
+            result.display_name = (*it)->get_name();
+            result.is_procedural = true;
+            result.path = "";
+            _getDataFromNode(myRoot, result);
+            _tdata[result.display_name] = result;
+        }
+        ++it;
+    }
+}
+
+
+void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateData &data)
+{
+    Inkscape::XML::Node *currentData;
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != NULL)
+        data.display_name = dgettext("Document template name", currentData->firstChild()->content());
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != NULL)
+        data.author = currentData->firstChild()->content();
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_short")) != NULL)
+        data.short_description = dgettext("Document template short description", currentData->firstChild()->content());
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= NULL)
+        data.long_description = dgettext("Document template long description", currentData->firstChild()->content());
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != NULL)
+        data.preview_name = currentData->firstChild()->content();
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != NULL)
+        data.creation_date = currentData->firstChild()->content();
+        
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != NULL){
+        Glib::ustring tplKeywords = currentData->firstChild()->content();
+        while (!tplKeywords.empty()){
+            std::size_t pos = tplKeywords.find_first_of(" ");
+            if (pos == Glib::ustring::npos)
+                pos = tplKeywords.size();
+                
+            Glib::ustring keyword = dgettext("Document template keyword", tplKeywords.substr(0, pos).data());
+            data.keywords.insert(keyword);
+            _keywords.insert(keyword);
+                
+            if (pos == tplKeywords.size())
+                break;
+            tplKeywords.erase(0, pos+1);
+        }
     }
 }
 

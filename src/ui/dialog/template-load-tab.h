@@ -19,6 +19,8 @@
 #include <map>
 #include <set>
 
+#include "xml/node.h"
+
 
 namespace Inkscape {
 namespace UI {
@@ -91,6 +93,8 @@ private:
     
     SearchType _current_search_type;
     
+    void _getDataFromNode(Inkscape::XML::Node *, TemplateData &);
+    void _getProceduralTemplates();
     void _getTemplatesFromDir(const Glib::ustring &);
     void _keywordSelected();    
     TemplateData _processTemplateFile(const Glib::ustring &);
