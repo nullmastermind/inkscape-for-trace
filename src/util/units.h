@@ -28,6 +28,7 @@ Need to review the Units support that's in Gtkmm already...
 
 #include <map>
 #include <glibmm/ustring.h>
+#include "svg/svg.h"
 
 namespace Inkscape {
 namespace Util {
@@ -131,6 +132,9 @@ class UnitTable {
 
     /** Retrieve a given unit based on its string identifier */
     Unit    getUnit(Glib::ustring const &name) const;
+    
+    /** Retrieve a given unit based on its SVGLength unit */
+    Unit    getUnit(SVGLength::Unit const u) const;
     
     /** Retrieve a quantity based on its string identifier */
     Quantity getQuantity(Glib::ustring const &q) const;

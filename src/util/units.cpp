@@ -220,6 +220,36 @@ Unit UnitTable::getUnit(Glib::ustring const &unit_abbr) const
         return Unit();
     }
 }
+Unit UnitTable::getUnit(SVGLength::Unit const u) const
+{
+    Glib::ustring u_str;
+    switch(u) {
+        case 1:
+            u_str = "px"; break;
+        case 2:
+            u_str = "pt"; break;
+        case 3:
+            u_str = "pc"; break;
+        case 4:
+            u_str = "mm"; break;
+        case 5:
+            u_str = "cm"; break;
+        case 6:
+            u_str = "in"; break;
+        case 7:
+            u_str = "ft"; break;
+        case 8:
+            u_str = "em"; break;
+        case 9:
+            u_str = "ex"; break;
+        case 10:
+            u_str = "%"; break;
+        default:
+            u_str = "";
+    }
+    
+    return getUnit(u_str);
+}
 
 Quantity UnitTable::getQuantity(Glib::ustring const& q) const
 {

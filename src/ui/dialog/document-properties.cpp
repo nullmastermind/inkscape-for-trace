@@ -1433,9 +1433,33 @@ void DocumentProperties::update()
     if (nv->doc_units)
         _rum_deflt.setUnit (nv->doc_units->abbr);
 
-    double const doc_w_px = sp_desktop_document(dt)->getWidth();
-    double const doc_h_px = sp_desktop_document(dt)->getHeight();
-    _page_sizer.setDim (doc_w_px, doc_h_px);
+    double const doc_w = sp_desktop_document(dt)->getRoot()->width.value;
+    Glib::ustring doc_w_unit = unit_table.getUnit(sp_desktop_document(dt)->getRoot()->width.unit).abbr;
+    if (doc_w_unit == "") {
+        if (nv->units) {
+            doc_w_unit = nv->units->abbr;
+        } else {
+            if (nv->doc_units) {
+                doc_w_unit = nv->doc_units->abbr;
+            } else {
+                doc_w_unit = "px";
+            }
+        }
+    }
+    double const doc_h = sp_desktop_document(dt)->getRoot()->height.value;
+    Glib::ustring doc_h_unit = unit_table.getUnit(sp_desktop_document(dt)->getRoot()->height.unit).abbr;
+    if (doc_h_unit == "") {
+        if (nv->units) {
+            doc_h_unit = nv->units->abbr;
+        } else {
+            if (nv->doc_units) {
+                doc_h_unit = nv->doc_units->abbr;
+            } else {
+                doc_h_unit = "px";
+            }
+        }
+    }
+    _page_sizer.setDim(Inkscape::Util::Quantity(doc_w, doc_w_unit), Inkscape::Util::Quantity(doc_h, doc_h_unit));
     _page_sizer.updateFitMarginsUI(nv->getRepr());
 
     //-----------------------------------------------------------guide page

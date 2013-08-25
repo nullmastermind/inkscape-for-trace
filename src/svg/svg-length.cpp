@@ -367,7 +367,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::PT;
                 }
                 if (computed) {
-                    *computed = v * Inkscape::Util::Quantity::convert(1, "pt", "px");
+                    *computed = Inkscape::Util::Quantity::convert(v, "pt", "px");
                 }
                 break;
             case UVAL('p','c'):
@@ -375,7 +375,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::PC;
                 }
                 if (computed) {
-                    *computed = v * Inkscape::Util::Quantity::convert(1, "pc", "px");
+                    *computed = Inkscape::Util::Quantity::convert(v, "pc", "px");
                 }
                 break;
             case UVAL('m','m'):
@@ -383,7 +383,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::MM;
                 }
                 if (computed) {
-                    *computed = v * Inkscape::Util::Quantity::convert(1, "mm", "px");
+                    *computed = Inkscape::Util::Quantity::convert(v, "mm", "px");
                 }
                 break;
             case UVAL('c','m'):
@@ -391,7 +391,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::CM;
                 }
                 if (computed) {
-                    *computed = v * Inkscape::Util::Quantity::convert(1, "cm", "px");
+                    *computed = Inkscape::Util::Quantity::convert(v, "cm", "px");
                 }
                 break;
             case UVAL('i','n'):
@@ -399,7 +399,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::INCH;
                 }
                 if (computed) {
-                    *computed = v * Inkscape::Util::Quantity::convert(1, "in", "px");
+                    *computed = Inkscape::Util::Quantity::convert(v, "in", "px");
                 }
                 break;
             case UVAL('f','t'):
@@ -407,7 +407,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::FOOT;
                 }
                 if (computed) {
-                    *computed = v * Inkscape::Util::Quantity::convert(1, "ft", "px");
+                    *computed = Inkscape::Util::Quantity::convert(v, "ft", "px");
                 }
                 break;
             case UVAL('e','m'):
