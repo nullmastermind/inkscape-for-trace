@@ -111,6 +111,7 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _ps_level(1),
     _eps(false),
     _is_texttopath(FALSE),
+    _is_omittext(FALSE),
     _is_filtertobitmap(FALSE),
     _bitmapresolution(72),
     _stream(NULL),
@@ -424,6 +425,16 @@ void CairoRenderContext::setPDFLevel(unsigned int level)
 void CairoRenderContext::setTextToPath(bool texttopath)
 {
     _is_texttopath = texttopath;
+}
+
+void CairoRenderContext::setOmitText(bool omittext)
+{
+    _is_omittext = omittext;
+}
+
+bool CairoRenderContext::getOmitText(void)
+{
+    return _is_omittext;
 }
 
 void CairoRenderContext::setFilterToBitmap(bool filtertobitmap)
@@ -1490,6 +1501,9 @@ bool
 CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_matrix,
                                     std::vector<CairoGlyphInfo> const &glyphtext, SPStyle const *style)
 {
+    if (_is_omittext)
+        return true;
+
     // create a cairo_font_face from PangoFont
     double size = style->font_size.computed; /// \fixme why is this variable never used?
     gpointer fonthash = (gpointer)font;

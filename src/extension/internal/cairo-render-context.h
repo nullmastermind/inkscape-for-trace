@@ -94,6 +94,8 @@ public:
     void setPDFLevel(unsigned int level);
     void setTextToPath(bool texttopath);
     bool getTextToPath(void);
+    void setOmitText(bool omittext);
+    bool getOmitText(void);
     void setFilterToBitmap(bool filtertobitmap);
     bool getFilterToBitmap(void);
     void setBitmapResolution(int resolution);
@@ -108,6 +110,9 @@ public:
 
     /** Saves the contents of the context to a PNG file. */
     bool saveAsPng(const char *file_name);
+
+    /** On targets supporting multiple pages, sends subsequent rendering to a new page*/
+    void newPage(void);
 
     /* Render/clip mode setting/query */
     void setRenderMode(CairoRenderMode mode);
@@ -157,6 +162,7 @@ protected:
     unsigned int _ps_level;
     bool _eps;
     bool _is_texttopath;
+    bool _is_omittext;
     bool _is_filtertobitmap;
     int _bitmapresolution;
 
