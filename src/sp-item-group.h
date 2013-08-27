@@ -53,6 +53,7 @@ struct SPGroup : public SPLPEItem {
     LayerMode layerDisplayMode(unsigned int display_key) const;
     void setLayerDisplayMode(unsigned int display_key, LayerMode mode);
     void translateChildItems(Geom::Translate const &tr);
+    void scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p);
 
     CGroup *group;
     

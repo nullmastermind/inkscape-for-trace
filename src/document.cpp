@@ -534,16 +534,20 @@ SPDocument *SPDocument::doUnref()
     return NULL;
 }
 
-gdouble SPDocument::getWidth() const
+Inkscape::Util::Quantity SPDocument::getWidth() const
 {
-    g_return_val_if_fail(this->priv != NULL, 0.0);
-    g_return_val_if_fail(this->root != NULL, 0.0);
+    g_return_val_if_fail(this->priv != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
+    g_return_val_if_fail(this->root != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
 
-    gdouble result = root->width.computed;
+    gdouble result = root->width.value;
+    SVGLength::Unit u = root->width.unit;
     if (root->width.unit == SVGLength::PERCENT && root->viewBox_set) {
         result = root->viewBox.width();
     }
-    return result;
+    if (u == SVGLength::NONE) {
+        u = SVGLength::PX;
+    }
+    return Inkscape::Util::Quantity(result, unit_table.getUnit(u));
 }
 
 void SPDocument::setWidth(const Inkscape::Util::Quantity &width)
@@ -570,16 +574,20 @@ void SPDocument::setWidth(const Inkscape::Util::Quantity &width)
     root->updateRepr();
 }
 
-gdouble SPDocument::getHeight() const
+Inkscape::Util::Quantity SPDocument::getHeight() const
 {
-    g_return_val_if_fail(this->priv != NULL, 0.0);
-    g_return_val_if_fail(this->root != NULL, 0.0);
+    g_return_val_if_fail(this->priv != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
+    g_return_val_if_fail(this->root != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
 
-    gdouble result = root->height.computed;
+    gdouble result = root->height.value;
+    SVGLength::Unit u = root->height.unit;
     if (root->height.unit == SVGLength::PERCENT && root->viewBox_set) {
         result = root->viewBox.height();
     }
-    return result;
+    if (u == SVGLength::NONE) {
+        u = SVGLength::PX;
+    }
+    return Inkscape::Util::Quantity(result, unit_table.getUnit(u));
 }
 
 void SPDocument::setHeight(const Inkscape::Util::Quantity &height)
@@ -606,9 +614,16 @@ void SPDocument::setHeight(const Inkscape::Util::Quantity &height)
     root->updateRepr();
 }
 
+void SPDocument::setViewBox(const Geom::Rect &viewBox)
+{
+    root->viewBox_set = true;
+    root->viewBox = viewBox;
+    root->updateRepr();
+}
+
 Geom::Point SPDocument::getDimensions() const
 {
-    return Geom::Point(getWidth(), getHeight());
+    return Geom::Point(getWidth().value("px"), getHeight().value("px"));
 }
 
 Geom::OptRect SPDocument::preferredBounds() const
@@ -630,7 +645,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double const w = rect.width();
     double const h = rect.height();
 
-    double const old_height = getHeight();
+    double const old_height = getHeight().value("px");
     Inkscape::Util::Unit const px = unit_table.getUnit("px");
     
     /* in px */

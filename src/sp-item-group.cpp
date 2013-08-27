@@ -50,6 +50,8 @@
 #include "sp-switch.h"
 #include "sp-defs.h"
 #include "verbs.h"
+#include "layer-model.h"
+#include "selection-chemistry.h"
 
 using Inkscape::DocumentUndo;
 
@@ -556,6 +558,35 @@ void SPGroup::translateChildItems(Geom::Translate const &tr)
         for (SPObject *o = firstChild() ; o ; o = o->getNext() ) {
             if ( SP_IS_ITEM(o) ) {
                 sp_item_move_rel(reinterpret_cast<SPItem *>(o), tr);
+            }
+        }
+    }
+}
+
+// Recursively scale child items around a point
+void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
+{
+    if ( hasChildren() ) {
+        for (SPObject *o = firstChild() ; o ; o = o->getNext() ) {
+            if ( SP_IS_ITEM(o) ) {
+                if (SP_IS_GROUP(o)) {
+                    SP_GROUP(o)->scaleChildItemsRec(sc, p);
+                } else {
+                    SPItem *item = reinterpret_cast<SPItem *>(o);
+                    Geom::OptRect bbox = item->desktopVisualBounds();
+                    if (bbox) {
+                        // Clear selection (TODO: save and restore selection)
+                        sp_desktop_selection(SP_ACTIVE_DESKTOP)->clear();
+                        
+                        // Scale item
+                        Geom::Translate const s(p);
+                        Geom::Affine final = s.inverse() * sc * s;
+                        Inkscape::LayerModel layers = Inkscape::LayerModel();
+                        Inkscape::Selection selection(&layers, SP_ACTIVE_DESKTOP);
+                        selection.add(item);
+                        sp_selection_apply_affine(&selection, final, true, true);
+                    }
+                }
             }
         }
     }

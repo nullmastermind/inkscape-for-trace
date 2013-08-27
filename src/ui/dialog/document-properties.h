@@ -216,6 +216,10 @@ private:
     // callback methods for buttons on grids page.
     void onNewGrid();
     void onRemoveGrid();
+    
+    // callback for document unit change
+    Inkscape::Util::Unit _old_doc_unit;
+    void onDocUnitChange();
 };
 
 } // namespace Dialog
