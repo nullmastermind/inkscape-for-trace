@@ -980,7 +980,7 @@ void SPDocument::setupViewport(SPItemCtx *ctx)
     if (root->viewBox_set) { // if set, take from viewBox
         ctx->viewport = root->viewBox;
     } else { // as a last resort, set size to A4
-        ctx->viewport = Geom::Rect::from_xywh(0, 0, 210 * Inkscape::Util::Quantity::convert(1, "mm", "px"), 297 * Inkscape::Util::Quantity::convert(1, "mm", "px"));
+        ctx->viewport = Geom::Rect::from_xywh(0, 0, Inkscape::Util::Quantity::convert(210, "mm", "px"), Inkscape::Util::Quantity::convert(297, "mm", "px"));
     }
     ctx->i2vp = Geom::identity();
 }

@@ -72,8 +72,8 @@ static void draw_page(
 
             sp_export_png_file(junk->_doc, tmp_png.c_str(), 0.0, 0.0,
                 width, height,
-                (unsigned long)(width * dpi / Inkscape::Util::Quantity::convert(1, "in", "px")),
-                (unsigned long)(height * dpi / Inkscape::Util::Quantity::convert(1, "in", "px")),
+                (unsigned long)(Inkscape::Util::Quantity::convert(width, "px", "in") * dpi),
+                (unsigned long)(Inkscape::Util::Quantity::convert(height, "px", "in") * dpi),
                 dpi, dpi, bgcolor, NULL, NULL, true, NULL);
 
             // This doesn't seem to work:

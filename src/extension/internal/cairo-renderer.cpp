@@ -463,8 +463,8 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     }
 
     // The width and height of the bitmap in pixels
-    unsigned width =  ceil(bbox->width() * (res / Inkscape::Util::Quantity::convert(1, "in", "px")));
-    unsigned height = ceil(bbox->height() * (res / Inkscape::Util::Quantity::convert(1, "in", "px")));
+    unsigned width =  ceil(bbox->width() * Inkscape::Util::Quantity::convert(res, "px", "in"));
+    unsigned height = ceil(bbox->height() * Inkscape::Util::Quantity::convert(res, "px", "in"));
 
     if (width == 0 || height == 0) return;
 
