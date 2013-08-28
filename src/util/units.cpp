@@ -450,6 +450,27 @@ double Quantity::convert(const double from_dist, const Glib::ustring from, const
     return convert(from_dist, unit_table.getUnit(from), unit_table.getUnit(to));
 }
 
+bool operator< (const Quantity &ql, const Quantity &qr)
+{
+    if (ql.unit->type != qr.unit->type) {
+        g_warning("Incompatible units");
+        return false;
+    }
+    return ql.quantity < qr.value(*ql.unit);
+}
+bool operator> (const Quantity &ql, const Quantity &qr)
+{
+    if (ql.unit->type != qr.unit->type) {
+        g_warning("Incompatible units");
+        return false;
+    }
+    return ql.quantity > qr.value(*ql.unit);
+}
+bool operator!= (const Quantity &q1, const Quantity &q2)
+{
+    return (*q1.unit != *q2.unit) || (q1.quantity != q2.quantity);
+}
+
 } // namespace Util
 } // namespace Inkscape
 

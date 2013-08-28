@@ -113,6 +113,11 @@ public:
     static double convert(const double from_dist, const Glib::ustring from, const Unit &to);
     static double convert(const double from_dist, const Unit &from, const Glib::ustring to);
     static double convert(const double from_dist, const Glib::ustring from, const Glib::ustring to);
+    
+    /** Comparison operators. */
+    friend bool operator< (const Quantity &ql, const Quantity &qr);
+    friend bool operator> (const Quantity &ql, const Quantity &qr);
+    friend bool operator!= (const Quantity &q1, const Quantity &q2);
 };
 
 class UnitTable {
