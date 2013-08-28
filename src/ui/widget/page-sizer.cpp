@@ -486,10 +486,10 @@ PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool 
         DocumentUndo::done(doc, SP_VERB_NONE, _("Set page size"));
     }
 
-    if ( w.quantity != h.quantity ) {
+    if ( w != h ) {
         _landscapeButton.set_sensitive(true);
         _portraitButton.set_sensitive (true);
-        _landscape = ( w.quantity > h.quantity );
+        _landscape = ( w > h );
         _landscapeButton.set_active(_landscape ? true : false);
         _portraitButton.set_active (_landscape ? false : true);
     } else {
@@ -553,7 +553,7 @@ PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity
 {
     double smaller = w.quantity;
     double larger  = h.quantity;
-    if ( h.quantity < w.quantity ) {
+    if ( h < w ) {
         smaller = h.quantity; larger = w.quantity;
     }
 
@@ -674,7 +674,7 @@ PageSizer::on_portrait()
         return;
     Inkscape::Util::Quantity w = Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionWidth.getUnit());
     Inkscape::Util::Quantity h = Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionHeight.getUnit());
-    if (h.quantity < w.quantity) {
+    if (h < w) {
         setDim (h, w);
     }
 }
@@ -690,7 +690,7 @@ PageSizer::on_landscape()
         return;
     Inkscape::Util::Quantity w = Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionWidth.getUnit());
     Inkscape::Util::Quantity h = Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionHeight.getUnit());
-    if (w.quantity < h.quantity) {
+    if (w < h) {
         setDim (h, w);
     }
 }
