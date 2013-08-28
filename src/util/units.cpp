@@ -166,25 +166,25 @@ bool operator!= (const Unit &u1, const Unit &u2)
 int Unit::svgUnit() const
 {
     if (!abbr.compare("px"))
-        return 1;
+        return SVGLength::PX;
     if (!abbr.compare("pt"))
-        return 2;
+        return SVGLength::PT;
     if (!abbr.compare("pc"))
-        return 3;
+        return SVGLength::PC;
     if (!abbr.compare("mm"))
-        return 4;
+        return SVGLength::MM;
     if (!abbr.compare("cm"))
-        return 5;
+        return SVGLength::CM;
     if (!abbr.compare("in"))
-        return 6;
+        return SVGLength::INCH;
     if (!abbr.compare("ft"))
-        return 7;
+        return SVGLength::FOOT;
     if (!abbr.compare("em"))
-        return 8;
+        return SVGLength::EM;
     if (!abbr.compare("ex"))
-        return 9;
+        return SVGLength::EX;
     if (!abbr.compare("%"))
-        return 10;
+        return SVGLength::PERCENT;
     return 0;
 }
 
@@ -224,25 +224,25 @@ Unit UnitTable::getUnit(SVGLength::Unit const u) const
 {
     Glib::ustring u_str;
     switch(u) {
-        case 1:
+        case SVGLength::PX:
             u_str = "px"; break;
-        case 2:
+        case SVGLength::PT:
             u_str = "pt"; break;
-        case 3:
+        case SVGLength::PC:
             u_str = "pc"; break;
-        case 4:
+        case SVGLength::MM:
             u_str = "mm"; break;
-        case 5:
+        case SVGLength::CM:
             u_str = "cm"; break;
-        case 6:
+        case SVGLength::INCH:
             u_str = "in"; break;
-        case 7:
+        case SVGLength::FOOT:
             u_str = "ft"; break;
-        case 8:
+        case SVGLength::EM:
             u_str = "em"; break;
-        case 9:
+        case SVGLength::EX:
             u_str = "ex"; break;
-        case 10:
+        case SVGLength::PERCENT:
             u_str = "%"; break;
         default:
             u_str = "";

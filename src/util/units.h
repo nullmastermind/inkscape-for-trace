@@ -28,7 +28,7 @@ Need to review the Units support that's in Gtkmm already...
 
 #include <map>
 #include <glibmm/ustring.h>
-#include "svg/svg.h"
+#include "svg/svg-length.h"
 
 namespace Inkscape {
 namespace Util {
