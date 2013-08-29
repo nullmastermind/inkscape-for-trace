@@ -125,7 +125,8 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _state(NULL),
     _renderer(parent),
     _render_mode(RENDER_MODE_NORMAL),
-    _clip_mode(CLIP_MODE_MASK)
+    _clip_mode(CLIP_MODE_MASK),
+    _omittext_state(EMPTY)
 {
     font_table = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, font_data_free);
 }
@@ -1342,10 +1343,35 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
     cairo_set_miter_limit(_cr, MAX(1, style->stroke_miterlimit.value));
 }
 
+void
+CairoRenderContext::_prepareRenderGraphic()
+{
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
+        if (_omittext_state == NEW_PAGE_ON_GRAPHIC)
+            cairo_show_page(_cr);
+        _omittext_state = GRAPHIC_ON_TOP;
+    }
+}
+
+void
+CairoRenderContext::_prepareRenderText()
+{
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
+        if (_omittext_state == GRAPHIC_ON_TOP)
+            _omittext_state = NEW_PAGE_ON_GRAPHIC;
+    }
+}
+
 bool
 CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle const *style, Geom::OptRect const &pbox)
 {
     g_assert( _is_valid );
+
+    _prepareRenderGraphic();
 
     if (_render_mode == RENDER_MODE_CLIP) {
         if (_clip_mode == CLIP_MODE_PATH) {
@@ -1418,6 +1444,8 @@ bool CairoRenderContext::renderImage(GdkPixbuf *pb,
     if (_render_mode == RENDER_MODE_CLIP) {
         return true;
     }
+
+    _prepareRenderGraphic();
 
     int w = gdk_pixbuf_get_width (pb);
     int h = gdk_pixbuf_get_height (pb);
@@ -1500,7 +1528,9 @@ unsigned int CairoRenderContext::_showGlyphs(cairo_t *cr, PangoFont * /*font*/, 
 bool
 CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_matrix,
                                     std::vector<CairoGlyphInfo> const &glyphtext, SPStyle const *style)
-{
+{    
+
+    _prepareRenderText();
     if (_is_omittext)
         return true;
 

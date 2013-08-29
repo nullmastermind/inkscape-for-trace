@@ -155,6 +155,12 @@ protected:
     CairoRenderContext(CairoRenderer *renderer);
     virtual ~CairoRenderContext(void);
 
+    enum CairoOmitTextPageState {
+        EMPTY,
+        GRAPHIC_ON_TOP,
+        NEW_PAGE_ON_GRAPHIC
+    };
+
     float _width;
     float _height;
     unsigned short _dpi;
@@ -188,6 +194,8 @@ protected:
     CairoRenderMode _render_mode;
     CairoClipMode _clip_mode;
 
+    CairoOmitTextPageState _omittext_state;
+
     cairo_pattern_t *_createPatternForPaintServer(SPPaintServer const *const paintserver,
                                                   Geom::OptRect const &pbox, float alpha);
     cairo_pattern_t *_createPatternPainter(SPPaintServer const *const paintserver, Geom::OptRect const &pbox);
@@ -201,6 +209,9 @@ protected:
     void _initCairoMatrix(cairo_matrix_t *matrix, Geom::Affine const &transform);
     void _concatTransform(cairo_t *cr, double xx, double yx, double xy, double yy, double x0, double y0);
     void _concatTransform(cairo_t *cr, Geom::Affine const &transform);
+
+    void _prepareRenderGraphic(void);
+    void _prepareRenderText(void);
 
     GHashTable *font_table;
     static void font_data_free(gpointer data);
