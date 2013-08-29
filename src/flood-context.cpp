@@ -54,7 +54,6 @@
 #include "sp-defs.h"
 #include "sp-item.h"
 #include "splivarot.h"
-#include "sp-metrics.h"
 #include "sp-namedview.h"
 #include "sp-object.h"
 #include "sp-path.h"
@@ -511,7 +510,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
                     ngettext("Area filled, path with <b>%d</b> node created and unioned with selection.","Area filled, path with <b>%d</b> nodes created and unioned with selection.",
                     SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath() );
                 selection->add(reprobj);
-                sp_selected_path_union_skip_undo(desktop);
+                sp_selected_path_union_skip_undo(sp_desktop_selection(desktop), desktop);
             } else {
                 desktop->messageStack()->flashF( Inkscape::WARNING_MESSAGE,
                     ngettext("Area filled, path with <b>%d</b> node created.","Area filled, path with <b>%d</b> nodes created.",

@@ -59,7 +59,6 @@ set(ui_SRC
 	dialog/ocaldialogs.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
-	dialog/scriptdialog.cpp
 	dialog/symbols.cpp
 	dialog/xml-tree.cpp
 	# dialog/session-player.cpp
@@ -113,6 +112,7 @@ set(ui_SRC
 	widget/text.cpp
 	widget/tolerance-slider.cpp
 	widget/unit-menu.cpp
+	widget/unit-tracker.cpp
 
 	view/view.cpp
 	view/view-widget.cpp
@@ -172,7 +172,6 @@ set(ui_SRC
 	dialog/panel-dialog.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
-	dialog/scriptdialog.h
 	dialog/spellcheck.h
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
@@ -242,6 +241,7 @@ set(ui_SRC
 	widget/text.h
 	widget/tolerance-slider.h
 	widget/unit-menu.h
+	widget/unit-tracker.h
 
 	view/edit-widget-interface.h
 	view/view-widget.h

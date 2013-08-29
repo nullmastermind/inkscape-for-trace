@@ -47,9 +47,8 @@
 #include "../ege-output-action.h"
 #include "../ege-select-one-action.h"
 #include "../graphlayout.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
+#include "../helper/action.h"
+#include "../helper/action-context.h"
 #include "icon.h"
 #include "../ink-action.h"
 #include "../ink-comboboxentry-action.h"
@@ -77,7 +76,7 @@
 #include "calligraphy-toolbar.h"
 #include "connector-toolbar.h"
 #include "dropper-toolbar.h"
-#include "erasor-toolbar.h"
+#include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
 #include "mesh-toolbar.h"
@@ -99,7 +98,6 @@
 
 //#define DEBUG_TEXT
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::PrefPusher;
@@ -591,9 +589,9 @@ private:
 Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view)
 {
     Glib::RefPtr<VerbAction> result;
-    SPAction *action = verb->get_action(view);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
     if ( action ) {
-        //SPAction* action2 = verb2 ? verb2->get_action(view) : 0;
+        //SPAction* action2 = verb2 ? verb2->get_action(Inkscape::ActionContext(view)) : 0;
         result = Glib::RefPtr<VerbAction>(new VerbAction(verb, verb2, view));
     }
 
@@ -680,7 +678,7 @@ void VerbAction::set_active(bool active)
 void VerbAction::on_activate()
 {
     if ( verb ) {
-        SPAction *action = verb->get_action(view);
+        SPAction *action = verb->get_action(Inkscape::ActionContext(view));
         if ( action ) {
             sp_action_perform(action, 0);
         }
@@ -770,14 +768,14 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
                                                              Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
                                                              Inkscape::UI::View::View *view)
 {
-    SPAction *action = verb->get_action(view);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
     if (!action) {
         return NULL;
     }
 
     SPAction *doubleclick_action;
     if (doubleclick_verb) {
-        doubleclick_action = doubleclick_verb->get_action(view);
+        doubleclick_action = doubleclick_verb->get_action(Inkscape::ActionContext(view));
     } else {
         doubleclick_action = NULL;
     }
@@ -822,7 +820,7 @@ static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::Vi
 {
     GtkAction* act = 0;
 
-    SPAction* targetAction = verb->get_action(view);
+    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
     InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_name()), verb->get_tip(), verb->get_image(), size  );
     act = GTK_ACTION(inky);
     gtk_action_set_sensitive( act, targetAction->sensitive );
@@ -1029,7 +1027,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
                                                        GtkWidget *focusTarget,
-                                                       GtkWidget *us,
                                                        GObject *dataKludge,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
@@ -1046,9 +1043,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
                                                              lower, upper, step, page, 0 ) );
-    if (us) {
-        sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us), adj );
-    }
 
     g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
 

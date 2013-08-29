@@ -64,7 +64,8 @@ extensions = \
 	foldablebox.py \
 	fractalize.py \
 	funcplot.py \
-	gears.py\
+	render_gears.py \
+	render_gear_rack.py \
 	gcodetools.py\
 	generate_voronoi.py \
 	gimp_xcf.py \
@@ -75,6 +76,8 @@ extensions = \
 	guillotine.py \
 	handles.py \
 	hpgl_input.py \
+	hershey.py \
+	hersheydata.py \
 	hpgl_output.py \
 	ill2svg.pl \
 	ink2canvas.py \
@@ -163,6 +166,7 @@ extensions = \
 	text_flipcase.py \
 	text_randomcase.py \
 	text_braille.py \
+	text_merge.py \
 	triangle.py \
 	txt2svg.pl \
 	uniconv-ext.py \
@@ -244,7 +248,8 @@ modules = \
 	foldablebox.inx \
 	fractalize.inx \
 	funcplot.inx \
-	gears.inx\
+	render_gears.inx \
+	render_gear_rack.inx \
 	gcodetools_about.inx\
 	gcodetools_area.inx\
 	gcodetools_check_for_updates.inx\
@@ -265,6 +270,7 @@ modules = \
 	guillotine.inx \
 	handles.inx \
 	hpgl_input.inx \
+	hershey.inx \
 	hpgl_output.inx \
 	ink2canvas.inx \
 	inkscape_follow_link.inx \
@@ -344,6 +350,7 @@ modules = \
 	text_flipcase.inx \
 	text_randomcase.inx \
 	text_braille.inx \
+	text_merge.inx \
 	triangle.inx \
 	txt2svg.inx \
 	voronoi2svg.inx \

@@ -5,6 +5,8 @@ helper/unit-menu.$(OBJEXT): helper/sp-marshal.h
 ink_common_sources +=	\
 	helper/action.cpp	\
 	helper/action.h	\
+	helper/action-context.cpp	\
+	helper/action-context.h	\
 	helper/geom.cpp	\
 	helper/geom.h	\
 	helper/geom-curves.h	\
@@ -16,12 +18,6 @@ ink_common_sources +=	\
 	helper/png-write.h	\
 	helper/sp-marshal.cpp	\
 	helper/sp-marshal.h	\
-	helper/unit-menu.cpp	\
-	helper/unit-menu.h	\
-	helper/unit-tracker.cpp	\
-	helper/unit-tracker.h	\
-	helper/units.cpp	\
-	helper/units.h	\
 	helper/window.cpp	\
 	helper/window.h		\
 	helper/stock-items.cpp	\
@@ -44,9 +40,3 @@ helper/sp-marshal.cpp: helper/sp-marshal.list helper/sp-marshal.h
 	else mv helper/tmp.sp-marshal.cpp helper/sp-marshal.cpp; fi
 
 helper/sp-marshal.cpp helper/sp-marshal.h: helper/sp-marshal.list
-
-# ######################
-# ### CxxTest stuff ####
-# ######################
-CXXTEST_TESTSUITES += \
-	$(srcdir)/helper/units-test.h

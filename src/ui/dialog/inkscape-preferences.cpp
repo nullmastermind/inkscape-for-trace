@@ -28,7 +28,7 @@
 #include "preferences.h"
 #include "verbs.h"
 #include "selcue.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include <iostream>
 #include "enums.h"
 #include "desktop-handles.h"
@@ -879,8 +879,12 @@ void InkscapePreferences::initPageIO()
 
     _page_svgoutput.add_group_header( _("Path data"));
 
-    _svgoutput_allowrelativecoordinates.init( _("Allow relative coordinates"), "/options/svgoutput/allowrelativecoordinates", true);
-    _page_svgoutput.add_line( true, "", _svgoutput_allowrelativecoordinates, "", _("If set, relative coordinates may be used in path data"), false);
+    int const numPathstringFormat = 3;
+    Glib::ustring pathstringFormatLabels[numPathstringFormat] = {_("Absolute"), _("Relative"), _("Optimized")};
+    int pathstringFormatValues[numPathstringFormat] = {0, 1, 2};
+
+    _svgoutput_pathformat.init("/options/svgoutput/pathstring_format", pathstringFormatLabels, pathstringFormatValues, numPathstringFormat, 2);
+    _page_svgoutput.add_line( true, _("Path string format"), _svgoutput_pathformat, "", _("Path data should be written: only with absolute coordinates, only with relative coordinates, or optimized for string length (mixed absolute and relative coordinates)"), false);
 
     _svgoutput_forcerepeatcommands.init( _("Force repeat commands"), "/options/svgoutput/forcerepeatcommands", false);
     _page_svgoutput.add_line( true, "", _svgoutput_forcerepeatcommands, "", _("Force repeating of the same path command (for example, 'L 1,2 L 3,4' instead of 'L 1,2 3,4')"), false);
@@ -1428,10 +1432,10 @@ void InkscapePreferences::initPageBitmaps()
                            _("Automatically reload linked images when file is changed on disk"));
     _misc_bitmap_editor.init("/options/bitmapeditor/value", true);
     _page_bitmaps.add_line( false, _("_Bitmap editor:"), _misc_bitmap_editor, "", "", true);
-    _importexport_export_res.init("/dialogs/export/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
+    _importexport_export_res.init("/dialogs/export/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, Inkscape::Util::Quantity::convert(1, "in", "px"), true, false);
     _page_bitmaps.add_line( false, _("Default export _resolution:"), _importexport_export_res, _("dpi"),
                             _("Default bitmap resolution (in dots per inch) in the Export dialog"), false);
-    _bitmap_copy_res.init("/options/createbitmap/resolution", 1.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
+    _bitmap_copy_res.init("/options/createbitmap/resolution", 1.0, 6000.0, 1.0, 1.0, Inkscape::Util::Quantity::convert(1, "in", "px"), true, false);
     _page_bitmaps.add_line( false, _("Resolution for Create Bitmap _Copy:"), _bitmap_copy_res, _("dpi"),
                             _("Resolution used by the Create Bitmap Copy command"), false);
     {
@@ -1443,7 +1447,7 @@ void InkscapePreferences::initPageBitmaps()
         _bitmap_import_quality.init("/dialogs/import/quality", 1, 100, 1, 1, 100, true, false);
         _page_bitmaps.add_line( false, _("Bitmap import quality:"), _bitmap_import_quality, "%", "Bitmap import quality (jpeg only). 100 is best quality", false);
     }
-    _importexport_import_res.init("/dialogs/import/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, PX_PER_IN, true, false);
+    _importexport_import_res.init("/dialogs/import/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, Inkscape::Util::Quantity::convert(1, "in", "px"), true, false);
     _page_bitmaps.add_line( false, _("Default _import resolution:"), _importexport_import_res, _("dpi"),
                             _("Default bitmap resolution (in dots per inch) for bitmap import"), false);
     _importexport_import_res_override.init(_("Override file resolution"), "/dialogs/import/forcexdpi", false);

@@ -64,8 +64,6 @@ set(extension_SRC
 	internal/pdfinput/pdf-parser.cpp
 	internal/pdfinput/svg-builder.cpp
 
-	script/InkscapeScript.cpp
-
 	# ------
 	# Header
 	db.h
@@ -140,8 +138,6 @@ set(extension_SRC
 	internal/vsd-input.h
 	internal/wmf-inout.h
 	internal/wmf-print.h
-
-	script/InkscapeScript.h
 )
 
 if(WIN32)

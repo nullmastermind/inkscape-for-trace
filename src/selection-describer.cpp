@@ -17,6 +17,7 @@
 
 #include <glibmm/i18n.h>
 #include "xml/quote.h"
+#include "layer-model.h"
 #include "selection.h"
 #include "selection-describer.h"
 #include "desktop.h"
@@ -99,9 +100,8 @@ static GSList *collect_terms (GSList *items)
 static int count_filtered (GSList *items)
 {
     int count=0;
-    SPItem *item=NULL;
     for (GSList *i = items; i != NULL; i = i->next) {
-        item = SP_ITEM(i->data);
+        SPItem *item = SP_ITEM(i->data);
         count += item->ifilt();
     }
     return count;
@@ -144,8 +144,8 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);
     } else {
         SPItem *item = SP_ITEM(items->data);
-        SPObject *layer = selection->desktop()->layerForObject(item);
-        SPObject *root = selection->desktop()->currentRoot();
+        SPObject *layer = selection->layers()->layerForObject(item);
+        SPObject *root = selection->layers()->currentRoot();
 
         // Layer name
         gchar *layer_name;

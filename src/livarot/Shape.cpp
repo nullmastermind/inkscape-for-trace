@@ -20,7 +20,12 @@
  */
 
 Shape::Shape()
-  : qrsData(NULL),
+  : nbQRas(0),
+    firstQRas(-1),
+    lastQRas(-1),
+    qrsData(NULL),
+    nbInc(0),
+    maxInc(0),
     iData(NULL),
     sTree(NULL),
     sEvts(NULL),
@@ -130,7 +135,12 @@ Shape::MakeQuickRasterData (bool nVal)
       if (_has_quick_raster_data == false)
         {
           _has_quick_raster_data = true;
-          qrsData = (quick_raster_data*)realloc(qrsData, maxAr * sizeof(quick_raster_data));
+          quick_raster_data* new_qrsData = static_cast<quick_raster_data*>(realloc(qrsData, maxAr * sizeof(quick_raster_data)));
+          if (!new_qrsData) {
+              g_error("Not enough memory available for reallocating Shape::qrsData");
+          } else {
+              qrsData = new_qrsData;
+          }
         }
     }
   else

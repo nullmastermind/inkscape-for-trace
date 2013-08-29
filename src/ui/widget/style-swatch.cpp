@@ -26,8 +26,9 @@
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 #include "widgets/widget-sizes.h"
-#include "helper/units.h"
+#include "util/units.h"
 #include "helper/action.h"
+#include "helper/action-context.h"
 #include "preferences.h"
 #include "inkscape.h"
 #include "verbs.h"
@@ -200,7 +201,7 @@ StyleSwatch::on_click(GdkEventButton */*event*/)
 {
     if (this->_desktop && this->_verb_t != SP_VERB_NONE) {
         Inkscape::Verb *verb = Inkscape::Verb::get(this->_verb_t);
-        SPAction *action = verb->get_action((Inkscape::UI::View::View *) this->_desktop);
+        SPAction *action = verb->get_action(Inkscape::ActionContext((Inkscape::UI::View::View *) this->_desktop));
         sp_action_perform (action, NULL);
         return true;
     }
@@ -332,7 +333,7 @@ void StyleSwatch::setStyle(SPStyle *query)
     if (has_stroke) {
         double w;
         if (_sw_unit) {
-            w = sp_pixels_get_units(query->stroke_width.computed, *_sw_unit);
+            w = Inkscape::Util::Quantity::convert(query->stroke_width.computed, "px", *_sw_unit);
         } else {
             w = query->stroke_width.computed;
         }
@@ -345,7 +346,7 @@ void StyleSwatch::setStyle(SPStyle *query)
         {
             gchar *str = g_strdup_printf(_("Stroke width: %.5g%s"),
                                          w,
-                                         _sw_unit? sp_unit_get_abbreviation(_sw_unit) : "px");
+                                         _sw_unit? _sw_unit->abbr.c_str() : "px");
             _stroke_width_place.set_tooltip_text(str);
             g_free (str);
         }

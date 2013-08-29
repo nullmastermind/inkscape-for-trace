@@ -62,6 +62,7 @@ void sp_file_exit (void);
 /**
  * Opens a new file and window from the given URI
  */
+
 bool sp_file_open(
     const Glib::ustring &uri,
     Inkscape::Extension::Extension *key,
@@ -200,7 +201,7 @@ void sp_file_print (Gtk::Window& parentWindow);
 /**
  * clean unused defs out of file
  */
-void sp_file_vacuum ();
+void sp_file_vacuum (SPDocument *doc);
 
 
 #endif // SEEN_SP_FILE_H

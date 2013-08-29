@@ -3,7 +3,7 @@
 ink_common_sources +=	\
 	util/find-last-if.h					\
 	util/longest-common-suffix.h				\
-	approx-equal.h remove-last.h					\
+	remove-last.h					\
 	arc-context.cpp arc-context.h					\
 	attributes.cpp attributes.h					\
 	attribute-rel-svg.cpp attribute-rel-svg.h			\
@@ -21,6 +21,7 @@ ink_common_sources +=	\
 	color-profile.cpp color-profile.h				\
 	color-profile-cms-fns.h						\
 	color-rgba.h							\
+	colorspace.h							\
 	common-context.cpp common-context.h				\
 	composite-undo-stack-observer.cpp				\
 	composite-undo-stack-observer.h					\
@@ -58,7 +59,6 @@ ink_common_sources +=	\
 	fill-or-stroke.h						\
 	filter-chemistry.cpp filter-chemistry.h				\
 	filter-enums.cpp filter-enums.h					\
-	fixes.cpp							\
 	flood-context.cpp flood-context.h				\
 	gc-alloc.h							\
 	gc-anchored.h gc-anchored.cpp					\
@@ -92,6 +92,7 @@ ink_common_sources +=	\
 	knot-holder-entity.h knot-holder-entity.cpp			\
 	layer-fns.cpp layer-fns.h					\
 	layer-manager.cpp layer-manager.h				\
+  layer-model.cpp layer-model.h         \
 	line-geometry.cpp line-geometry.h				\
 	line-snapper.cpp line-snapper.h					\
 	lpe-tool-context.cpp lpe-tool-context.h				\
@@ -99,7 +100,6 @@ ink_common_sources +=	\
 	main-cmdlineact.cpp main-cmdlineact.h				\
 	marker.cpp marker.h						\
 	media.cpp media.h						\
-	memeq.h								\
 	menus-skeleton.h						\
 	mesh-context.cpp mesh-context.h					\
 	message-context.cpp message-context.h				\
@@ -198,8 +198,6 @@ ink_common_sources +=	\
 	sp-mesh-patch.cpp sp-mesh-patch.h				\
 	sp-mesh-row-fns.h						\
 	sp-mesh-row.cpp sp-mesh-row.h					\
-	sp-metric.h							\
-	sp-metrics.cpp sp-metrics.h					\
         sp-missing-glyph.cpp sp-missing-glyph.h \
 	sp-namedview.cpp sp-namedview.h		\
 	sp-object.cpp sp-object.h		\
@@ -252,7 +250,6 @@ ink_common_sources +=	\
 	unclump.cpp unclump.h			\
 	undo-stack-observer.h			\
 	unicoderange.cpp unicoderange.h		\
-	unit-constants.h			\
 	uri.cpp uri.h				\
 	uri-references.cpp uri-references.h	\
 	vanishing-point.cpp vanishing-point.h	\
@@ -284,8 +281,8 @@ CXXTEST_TESTSUITES +=			\
 	$(srcdir)/extract-uri-test.h	\
 	$(srcdir)/marker-test.h		\
 	$(srcdir)/mod360-test.h		\
+	$(srcdir)/preferences-test.h    \
 	$(srcdir)/round-test.h		\
-	$(srcdir)/preferences-test.h	\
 	$(srcdir)/sp-gradient-test.h	\
 	$(srcdir)/sp-style-elem-test.h	\
 	$(srcdir)/style-test.h		\

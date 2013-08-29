@@ -35,6 +35,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "desktop.h"
 #include "desktop-style.h"
 #include "dir-util.h"
+#include "layer-model.h"
 #include "selection.h"
 #include "tools-switch.h"
 #include "desktop-handles.h"
@@ -85,11 +86,10 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include <map>
 #include <cstring>
 #include <string>
-#include "helper/units.h"
 #include "sp-item.h"
 #include "box3d.h"
 #include "persp3d.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "xml/simple-document.h"
 #include "sp-filter-reference.h"
 #include "gradient-drag.h"
@@ -124,6 +124,21 @@ because the layer manipulation code uses them. It should be rewritten specifical
 for that purpose. */
 
 
+// helper for printing error messages, regardless of whether we have a GUI or not
+// If desktop == NULL, errors will be shown on stderr
+static void
+selection_display_message(SPDesktop *desktop, Inkscape::MessageType msgType, Glib::ustring const &msg)
+{
+    if (desktop) {
+        desktop->messageStack()->flash(msgType, msg);
+    } else {
+        if (msgType == Inkscape::IMMEDIATE_MESSAGE ||
+            msgType == Inkscape::WARNING_MESSAGE ||
+            msgType == Inkscape::ERROR_MESSAGE) {
+            g_printerr("%s\n", msg.c_str());
+        }
+    }
+}
 
 namespace Inkscape {
 
@@ -521,16 +536,16 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
     g_slist_free(newsel);
 }
 
-void sp_edit_clear_all(SPDesktop *dt)
+void sp_edit_clear_all(Inkscape::Selection *selection)
 {
-    if (!dt)
+    if (!selection)
         return;
 
-    SPDocument *doc = sp_desktop_document(dt);
-    sp_desktop_selection(dt)->clear();
+    SPDocument *doc = selection->layers()->getDocument();
+    selection->clear();
 
-    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
-    GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
+    g_return_if_fail(SP_IS_GROUP(selection->layers()->currentLayer()));
+    GSList *items = sp_item_group_item_list(SP_GROUP(selection->layers()->currentLayer()));
 
     while (items) {
         reinterpret_cast<SPObject*>(items->data)->deleteObject();
@@ -721,20 +736,14 @@ static void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inksc
     group->setPosition(topmost + 1);
 }
 
-void sp_selection_group(SPDesktop *desktop)
+void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL) {
-        return;
-    }
-
-    SPDocument *doc = sp_desktop_document(desktop);
+    SPDocument *doc = selection->layers()->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
 
     // Check if something is selected.
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>some objects</b> to group."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>some objects</b> to group."));
         return;
     }
 
@@ -748,22 +757,17 @@ void sp_selection_group(SPDesktop *desktop)
 
     sp_selection_group_impl(p, group, xml_doc, doc);
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_GROUP,
+    DocumentUndo::done(doc, SP_VERB_SELECTION_GROUP,
                        _("Group"));
 
     selection->set(group);
     Inkscape::GC::release(group);
 }
 
-void sp_selection_ungroup(SPDesktop *desktop)
+void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>group</b> to ungroup."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select a <b>group</b> to ungroup."));
         return;
     }
 
@@ -806,12 +810,12 @@ void sp_selection_ungroup(SPDesktop *desktop)
         g_slist_free(new_select);
     }
     if (!ungrouped) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
     }
 
     g_slist_free(items);
-
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_UNGROUP,
+    
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_UNGROUP,
                        _("Ungroup"));
 }
 
@@ -889,22 +893,17 @@ static SPObject *prev_sibling(SPObject *child)
 }
 
 void
-sp_selection_raise(SPDesktop *desktop)
+sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (!desktop)
-        return;
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     GSList const *items = const_cast<GSList *>(selection->itemList());
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise."));
         return;
     }
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -942,21 +941,17 @@ sp_selection_raise(SPDesktop *desktop)
         g_slist_free(rev);
     }
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_RAISE,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_RAISE,
                        //TRANSLATORS: "Raise" means "to raise an object" in the undo history
                        C_("Undo action", "Raise"));
 }
 
-void sp_selection_raise_to_top(SPDesktop *desktop)
+void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    SPDocument *document = sp_desktop_document(desktop);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    SPDocument *document = selection->layers()->getDocument();
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise to top."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise to top."));
         return;
     }
 
@@ -964,7 +959,7 @@ void sp_selection_raise_to_top(SPDesktop *desktop)
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -982,22 +977,17 @@ void sp_selection_raise_to_top(SPDesktop *desktop)
                        _("Raise to top"));
 }
 
-void sp_selection_lower(SPDesktop *desktop)
+void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     GSList const *items = const_cast<GSList *>(selection->itemList());
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower."));
         return;
     }
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -1040,20 +1030,16 @@ void sp_selection_lower(SPDesktop *desktop)
         g_slist_free(rev);
     }
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_LOWER,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_LOWER,
                        _("Lower"));
 }
 
-void sp_selection_lower_to_bottom(SPDesktop *desktop)
+void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    SPDocument *document = sp_desktop_document(desktop);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    SPDocument *document = selection->layers()->getDocument();
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
         return;
     }
 
@@ -1061,7 +1047,7 @@ void sp_selection_lower_to_bottom(SPDesktop *desktop)
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -2157,49 +2143,49 @@ sp_selection_scale_times(Inkscape::Selection *selection, gdouble times)
 }
 
 void
-sp_selection_move(SPDesktop *desktop, gdouble dx, gdouble dy)
+sp_selection_move(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
     if (selection->isEmpty()) {
         return;
     }
 
     sp_selection_move_relative(selection, dx, dy);
 
+    SPDocument *doc = selection->layers()->getDocument();
     if (dx == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically"));
     } else if (dy == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
                                 _("Move horizontally"));
     } else {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
                            _("Move"));
     }
 }
 
 void
-sp_selection_move_screen(SPDesktop *desktop, gdouble dx, gdouble dy)
+sp_selection_move_screen(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    if (selection->isEmpty()) {
+    if (selection->isEmpty() || !selection->desktop()) {
         return;
     }
 
     // same as sp_selection_move but divide deltas by zoom factor
-    gdouble const zoom = desktop->current_zoom();
+    gdouble const zoom = selection->desktop()->current_zoom();
     gdouble const zdx = dx / zoom;
     gdouble const zdy = dy / zoom;
     sp_selection_move_relative(selection, zdx, zdy);
 
+    SPDocument *doc = selection->layers()->getDocument();
     if (dx == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically by pixels"));
     } else if (dy == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
                                 _("Move horizontally by pixels"));
     } else {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
                            _("Move"));
     }
 }
@@ -3411,7 +3397,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
         res = prefs_res;
     } else if (0 < prefs_min) {
         // If minsize is given, look up minimum bitmap size (default 250 pixels) and calculate resolution from it
-        res = PX_PER_IN * prefs_min / MIN(bbox->width(), bbox->height());
+        res = Inkscape::Util::Quantity::convert(1, "in", "px") * prefs_min / MIN(bbox->width(), bbox->height());
     } else {
         float hint_xdpi = 0, hint_ydpi = 0;
         Glib::ustring hint_filename;
@@ -3426,14 +3412,14 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
                 res = hint_xdpi;
             } else {
                 // if all else fails, take the default 90 dpi
-                res = PX_PER_IN;
+                res = Inkscape::Util::Quantity::convert(1, "in", "px");
             }
         }
     }
 
     // The width and height of the bitmap in pixels
-    unsigned width = (unsigned) floor(bbox->width() * res / PX_PER_IN);
-    unsigned height =(unsigned) floor(bbox->height() * res / PX_PER_IN);
+    unsigned width = (unsigned) floor(bbox->width() * res / Inkscape::Util::Quantity::convert(1, "in", "px"));
+    unsigned height =(unsigned) floor(bbox->height() * res / Inkscape::Util::Quantity::convert(1, "in", "px"));
 
     // Find out if we have to run an external filter
     gchar const *run = NULL;
@@ -3465,7 +3451,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
 
     double shift_x = bbox->min()[Geom::X];
     double shift_y = bbox->max()[Geom::Y];
-    if (res == PX_PER_IN) { // for default 90 dpi, snap it to pixel grid
+    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
         shift_x = round(shift_x);
         shift_y = -round(-shift_y); // this gets correct rounding despite coordinate inversion, remove the negations when the inversion is gone
     }
@@ -3498,7 +3484,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
         // Create the repr for the image
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
         sp_embed_image(repr, pb, "image/png");
-        if (res == PX_PER_IN) { // for default 90 dpi, snap it to pixel grid
+        if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
         } else {

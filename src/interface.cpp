@@ -53,6 +53,7 @@
 #include "sp-namedview.h"
 #include "ui/view/view.h"
 #include "helper/action.h"
+#include "helper/action-context.h"
 #include "helper/gnome-utils.h"
 #include "helper/window.h"
 #include "io/sys.h"
@@ -370,13 +371,13 @@ sp_ui_menu_activate(void */*object*/, SPAction *action)
 static void
 sp_ui_menu_select_action(void */*object*/, SPAction *action)
 {
-    action->view->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, action->tip);
+    sp_action_get_view(action)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, action->tip);
 }
 
 static void
 sp_ui_menu_deselect_action(void */*object*/, SPAction *action)
 {
-    action->view->tipsMessageContext()->clear();
+    sp_action_get_view(action)->tipsMessageContext()->clear();
 }
 
 static void
@@ -419,7 +420,7 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
     gchar        *s;
     gchar        *atitle;
 
-    action = verb->get_action(NULL);
+    action = verb->get_action(Inkscape::ActionContext());
     if (!action)
         return;
 
@@ -456,7 +457,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb
 
     } else {
 
-        action = verb->get_action(view);
+        action = verb->get_action(Inkscape::ActionContext(view));
         if (!action) return NULL;
 
         if (radio) {
@@ -670,7 +671,7 @@ sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *
                                        Inkscape::Verb *verb)
 {
     unsigned int shortcut = (verb) ? sp_shortcut_get_primary(verb) : 0;
-    SPAction *action = (verb) ? verb->get_action(view) : 0;
+    SPAction *action = (verb) ? verb->get_action(Inkscape::ActionContext(view)) : 0;
     GtkWidget *item = gtk_check_menu_item_new_with_mnemonic(action ? action->name : label);
 
 #if 0
@@ -716,13 +717,6 @@ sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
     g_free(uri);
 }
 
-static void
-sp_file_new_from_template(GtkWidget */*widget*/, gchar const *uri)
-{
-    sp_file_new(uri);
-}
-
-
 static bool
 compare_file_basenames(gchar const *a, gchar const *b) {
     bool rc;
@@ -748,91 +742,6 @@ compare_file_basenames(gchar const *a, gchar const *b) {
     g_free(fb);
 
     return rc;
-}
-
-static void
-sp_menu_get_svg_filenames_from_dir(gchar const *dirname, std::list<gchar const*> *files)
-{
-    if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
-        GError *err = 0;
-        GDir *dir = g_dir_open(dirname, 0, &err);
-
-        if (dir) {
-            for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
-                if (!g_str_has_suffix(file, ".svg") && !g_str_has_suffix(file, ".svgz")) {
-                    continue; // skip non-svg files
-                }
-
-                {
-                    gchar *basename = g_path_get_basename(file);
-                    if (g_str_has_suffix(basename, ".svg") && g_str_has_prefix(basename, "default.")) {
-                        g_free(basename);
-                        basename = 0;
-                        continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
-                    }
-                    g_free(basename);
-                    basename = 0;
-                }
-
-                gchar const *filepath = g_build_filename(dirname, file, NULL);
-                files->push_front(filepath);
-            }
-            g_dir_close(dir);
-        }
-    }
-
-    files->sort(compare_file_basenames);
-}
-
-static void
-sp_menu_add_filenames_to_menu(GtkWidget *menu, Inkscape::UI::View::View *view, std::list<gchar const*> *files)
-{
-    if (!files->empty()) {
-        GtkWidget *sep = gtk_separator_menu_item_new();
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), sep);
-    }
-
-    for(std::list<gchar const*>::iterator it=files->begin(); it != files->end(); ++it) {
-        gchar const *filepath = *it;
-        gchar const *file = g_path_get_basename(filepath);
-        gchar *dupfile = g_strndup(file, strlen(file) - 4);
-        gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
-        g_free(dupfile);
-
-        GtkWidget *item = gtk_menu_item_new_with_label(filename);
-        g_free(filename);
-
-        gtk_widget_show(item);
-        // how does "filepath" ever get freed?
-        g_signal_connect(G_OBJECT(item),
-                         "activate",
-                         G_CALLBACK(sp_file_new_from_template),
-                         (gpointer) filepath);
-
-        if (view) {
-            // set null tip for now; later use a description from the template file
-            g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
-            g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) NULL );
-            g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
-        }
-
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-    }
-
-}
-static void
-sp_menu_append_new_templates(GtkWidget *menu, Inkscape::UI::View::View *view)
-{
-    // user's local dir
-    std::list<gchar const*> userfiles;
-    sp_menu_get_svg_filenames_from_dir(profile_path("templates"), &userfiles);
-    sp_menu_add_filenames_to_menu(menu, view, &userfiles);
-
-    // system templates dir
-    std::list<gchar const*> templatefiles;
-    sp_menu_get_svg_filenames_from_dir(INKSCAPE_TEMPLATESDIR, &templatefiles);
-    sp_menu_add_filenames_to_menu(menu, view, &templatefiles);
-
 }
 
 static void
@@ -955,7 +864,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
                     }
                     if (verb->get_code() != SP_VERB_NONE) {
-                        SPAction *action = verb->get_action(view);
+                        SPAction *action = verb->get_action(Inkscape::ActionContext(view));
 #if GTK_CHECK_VERSION(3,0,0)
                         g_signal_connect( G_OBJECT(item), "draw", (GCallback) update_view_menu, (void *) action);
 #else
@@ -965,7 +874,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                 } else if (menu_pntr->attribute("check") != NULL) {
                     SPAction *action = NULL;
                     if (verb->get_code() != SP_VERB_NONE) {
-                        action = verb->get_action(view);
+                        action = verb->get_action(Inkscape::ActionContext(view));
                     }
                     sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, action->name, action->tip, NULL,
                             checkitem_toggled, checkitem_update, verb);
@@ -995,10 +904,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
             continue;
         }
-        if (!strcmp(menu_pntr->name(), "template-list")) {
-            sp_menu_append_new_templates(menu, view);
-            continue;
-        }
+        
         if (!strcmp(menu_pntr->name(), "recent-file-list")) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1671,7 +1577,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
         item->show();
         append(*item);
     } else {
-        action = verb->get_action(view);
+        action = verb->get_action(Inkscape::ActionContext(view));
         if (!action) {
             return;
         }
@@ -1986,7 +1892,7 @@ void ContextMenu::MakeGroupMenu(void)
 
 void ContextMenu::ActivateGroup(void)
 {
-    sp_selection_group(_desktop);
+    sp_selection_group(_desktop->selection, _desktop);
 }
 
 void ContextMenu::ActivateUngroup(void)
@@ -2035,7 +1941,7 @@ void ContextMenu::AnchorLinkFollow(void)
     // Opening the selected links with a python extension
     Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.inkscape.followlink" );
     if (verb) {
-        SPAction *action = verb->get_action(_desktop);
+        SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
             sp_action_perform(action, NULL);
         }
@@ -2205,7 +2111,7 @@ void ContextMenu::ImageEmbed(void)
 
     Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" );
     if (verb) {
-        SPAction *action = verb->get_action(_desktop);
+        SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
             sp_action_perform(action, NULL);
         }
@@ -2220,7 +2126,7 @@ void ContextMenu::ImageExtract(void)
 
     Inkscape::Verb *verb = Inkscape::Verb::getbyid( "org.ekips.filter.extractimage" );
     if (verb) {
-        SPAction *action = verb->get_action(_desktop);
+        SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
             sp_action_perform(action, NULL);
         }

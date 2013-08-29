@@ -68,6 +68,7 @@
 #include "ui/dialog/font-substitution.h"
 
 #include <gtk/gtk.h>
+#include <gtkmm/main.h>
 
 #include <glibmm/convert.h>
 #include <glibmm/i18n.h>
@@ -127,21 +128,46 @@ SPDesktop *sp_file_new(const Glib::ustring &templ)
 {
     SPDocument *doc = SPDocument::createNewDoc( !templ.empty() ? templ.c_str() : 0 , TRUE, true );
     g_return_val_if_fail(doc != NULL, NULL);
+    
+    // Remove all the template info from xml tree
+    Inkscape::XML::Node *myRoot = doc->getReprRoot();
+    Inkscape::XML::Node *nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+    if (nodeToRemove != NULL){
+        sp_repr_unparent(nodeToRemove);
+        delete nodeToRemove;
+        DocumentUndo::clearUndo(doc);
+    }
+    
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        desktop->setWaitingCursor();
+    }
+    
+    SPDocument *existing = desktop ? sp_desktop_document(desktop) : NULL;
+      
+    if (existing && existing->virgin) {
+            // If the current desktop is empty, open the document there
+        doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
+        desktop->change_document(doc);
+        doc->emitResizedSignal(doc->getWidth(), doc->getHeight());
+    } else {
+            // create a whole new desktop and window
+        SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
+        g_return_val_if_fail(dtw != NULL, NULL);
+        sp_create_window(dtw, TRUE);
+        desktop = static_cast<SPDesktop *>(dtw->view);
+    } 
 
-    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
-    g_return_val_if_fail(dtw != NULL, NULL);
     doc->doUnref();
 
-    sp_create_window(dtw, TRUE);
-    SPDesktop *dt = static_cast<SPDesktop *>(dtw->view);
-    sp_namedview_window_from_document(dt);
-    sp_namedview_update_layers_from_document(dt);
+    sp_namedview_window_from_document(desktop);
+    sp_namedview_update_layers_from_document(desktop);    
 
 #ifdef WITH_DBUS
-    Inkscape::Extension::Dbus::dbus_init_desktop_interface(dt);
+    Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
 #endif
 
-    return dt;
+    return desktop;
 }
 
 Glib::ustring sp_file_default_template_uri()
@@ -199,6 +225,7 @@ SPDesktop* sp_file_new_default()
     return desk;
 }
 
+
 /*######################
 ## D E L E T E
 ######################*/
@@ -209,8 +236,13 @@ SPDesktop* sp_file_new_default()
 void
 sp_file_exit()
 {
-    sp_ui_close_all();
-    // no need to call inkscape_exit here; last document being closed will take care of that
+    if (SP_ACTIVE_DESKTOP == NULL) {
+        // We must be in console mode
+        Gtk::Main::quit();
+    } else {
+        sp_ui_close_all();
+        // no need to call inkscape_exit here; last document being closed will take care of that
+    }
 }
 
 
@@ -226,7 +258,8 @@ sp_file_exit()
  */
 bool sp_file_open(const Glib::ustring &uri,
                   Inkscape::Extension::Extension *key,
-                  bool add_to_recent, bool replace_empty)
+                  bool add_to_recent,
+                  bool replace_empty)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
@@ -251,6 +284,7 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     if (doc) {
+
         SPDocument *existing = desktop ? sp_desktop_document(desktop) : NULL;
 
         if (existing && existing->virgin && replace_empty) {
@@ -267,7 +301,7 @@ bool sp_file_open(const Glib::ustring &uri,
 
         doc->virgin = FALSE;
 
-        // everyone who cares now has a reference, get rid of ours
+        // everyone who cares now has a reference, get rid of our`s
         doc->doUnref();
 
         // resize the window to match the document properties
@@ -582,24 +616,25 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
 /**
  * Remove unreferenced defs from the defs section of the document.
  */
-void sp_file_vacuum()
+void sp_file_vacuum(SPDocument *doc)
 {
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-
     unsigned int diff = doc->vacuumDocument();
 
     DocumentUndo::done(doc, SP_VERB_FILE_VACUUM,
                        _("Clean up document"));
 
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
-    if (diff > 0) {
-        dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
-                ngettext("Removed <b>%i</b> unused definition in &lt;defs&gt;.",
-                         "Removed <b>%i</b> unused definitions in &lt;defs&gt;.",
-                         diff),
-                diff);
-    } else {
-        dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE,  _("No unused definitions in &lt;defs&gt;."));
+    if (dt != NULL) {
+        // Show status messages when in GUI mode
+        if (diff > 0) {
+            dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
+                    ngettext("Removed <b>%i</b> unused definition in &lt;defs&gt;.",
+                            "Removed <b>%i</b> unused definitions in &lt;defs&gt;.",
+                            diff),
+                    diff);
+        } else {
+            dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE,  _("No unused definitions in &lt;defs&gt;."));
+        }
     }
 }
 

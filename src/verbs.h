@@ -23,6 +23,9 @@ struct SPAction;
 class SPDocument;
 
 namespace Inkscape {
+
+class ActionContext;
+
 namespace UI {
 namespace View {
 class View;
@@ -56,6 +59,7 @@ enum {
     SP_VERB_FILE_PREV_DESKTOP,
     SP_VERB_FILE_CLOSE_VIEW,
     SP_VERB_FILE_QUIT,
+    SP_VERB_FILE_TEMPLATES,
     /* Edit */
     SP_VERB_EDIT_UNDO,
     SP_VERB_EDIT_REDO,
@@ -277,7 +281,6 @@ enum {
     SP_VERB_DIALOG_FINDREPLACE,
     SP_VERB_DIALOG_SPELLCHECK,
     SP_VERB_DIALOG_DEBUG,
-    SP_VERB_DIALOG_SCRIPT,
     SP_VERB_DIALOG_TOGGLE,
     SP_VERB_DIALOG_CLONETILER,
     SP_VERB_DIALOG_ATTR,
@@ -472,8 +475,8 @@ public:
 
 
 protected:
-    SPAction *make_action_helper (Inkscape::UI::View::View *view, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
-    virtual SPAction *make_action (Inkscape::UI::View::View *view);
+    SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
+    virtual SPAction *make_action (Inkscape::ActionContext const & context);
 
 public:
 
@@ -521,7 +524,7 @@ public:
     Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image, gchar const * group);
     virtual ~Verb (void);
 
-    SPAction * get_action(Inkscape::UI::View::View * view);
+    SPAction * get_action(Inkscape::ActionContext const & context);
 
 private:
     static Verb * get_search (unsigned int code);
@@ -547,6 +550,11 @@ public:
         }
     }
     static Verb * getbyid (gchar const * id);
+    
+    /**
+     * Print a message to stderr indicating that this verb needs a GUI to run
+     */
+    static bool ensure_desktop_valid(SPAction *action);
 
     static void delete_all_view (Inkscape::UI::View::View * view);
     void delete_view (Inkscape::UI::View::View * view);
