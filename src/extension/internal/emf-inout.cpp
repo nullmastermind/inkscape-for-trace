@@ -42,11 +42,10 @@
 #include "extension/output.h"
 #include "display/drawing.h"
 #include "display/drawing-item.h"
-#include "unit-constants.h"
 #include "clear-n_.h"
 #include "document.h"
 #include "libunicode-convert/unicode-convert.h"
-
+#include "util/units.h"
 
 #include "emf-print.h"
 #include "emf-inout.h"
@@ -1784,7 +1783,7 @@ std::cout << "BEFORE DRAW"
             */
             if ((pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy) && ( pEmr->szlDevice.cx + pEmr->szlDevice.cy)){
                 d->E2IdirY = 1.0;  // assume MM_TEXT, if not, this will be changed later
-                d->D2PscaleX = d->D2PscaleY = PX_PER_MM *
+                d->D2PscaleX = d->D2PscaleY = Inkscape::Util::Quantity::convert(1, "mm", "px") *
                     (double)(pEmr->szlMillimeters.cx + pEmr->szlMillimeters.cy)/
                     (double)( pEmr->szlDevice.cx + pEmr->szlDevice.cy);
             }
@@ -1804,8 +1803,8 @@ std::cout << "BEFORE DRAW"
             d->MMX = d->MM100InX / 100.0;
             d->MMY = d->MM100InY / 100.0;
 
-            d->PixelsOutX = d->MMX * PX_PER_MM;
-            d->PixelsOutY = d->MMY * PX_PER_MM;
+            d->PixelsOutX = d->MMX * Inkscape::Util::Quantity::convert(1, "mm", "px");
+            d->PixelsOutY = d->MMY * Inkscape::Util::Quantity::convert(1, "mm", "px");
 
             // Upper left corner, from header rclBounds, in device units, usually both 0, but not always
             d->ulCornerInX = pEmr->rclBounds.left;

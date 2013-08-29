@@ -42,7 +42,7 @@
 #include "extension/output.h"
 #include "display/drawing.h"
 #include "display/drawing-item.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "clear-n_.h"
 #include "document.h"
 #include "libunicode-convert/unicode-convert.h"
@@ -1720,7 +1720,7 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         d->ulCornerInY  = Placeable.Dst.top;
 
         d->E2IdirY = 1.0;  // assume MM_ANISOTROPIC, if not, this will be changed later
-        d->D2PscaleX = d->D2PscaleY = PX_PER_IN/(double) Placeable.Inch;
+        d->D2PscaleX = d->D2PscaleY = Inkscape::Util::Quantity::convert(1, "in", "px")/(double) Placeable.Inch;
         trinfo_load_qe(d->tri, d->D2PscaleX);  /* quantization error that will affect text positions */
 
         // drawing size in Inkscape pixels
@@ -1745,8 +1745,8 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         tmp_outdef << "  version=\"1.0\"\n";
 
         tmp_outdef <<
-            "  width=\"" << d->PixelsOutX/ PX_PER_MM << "mm\"\n" <<
-            "  height=\"" << d->PixelsOutY/ PX_PER_MM  << "mm\">\n";
+            "  width=\"" << d->PixelsOutX/ Inkscape::Util::Quantity::convert(1, "mm", "px") << "mm\"\n" <<
+            "  height=\"" << d->PixelsOutY/ Inkscape::Util::Quantity::convert(1, "mm", "px")  << "mm\">\n";
         *(d->outdef) += tmp_outdef.str().c_str();
         *(d->outdef) += "<defs>";                           // temporary end of header
 

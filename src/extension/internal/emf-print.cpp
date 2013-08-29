@@ -40,13 +40,11 @@
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include "sp-item.h"
+#include "util/units.h"
 
 #include "style.h"
 #include "inkscape-version.h"
 #include "sp-root.h"
-
-
-#include "unit-constants.h"
 
 #include "extension/system.h"
 #include "extension/print.h"
@@ -342,7 +340,7 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
         if (bbox) d = *bbox;
     }
 
-    d *= Geom::Scale(IN_PER_PX);
+    d *= Geom::Scale(Inkscape::Util::Quantity::convert(1, "px", "in"));
 
     float dwInchesX = d.width();
     float dwInchesY = d.height();
@@ -410,7 +408,7 @@ unsigned int PrintEmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
         }
 
-        snprintf(buff, sizeof(buff)-1, "Drawing=%.1lfx%.1lfpx, %.1lfx%.1lfmm", _width, _height, dwInchesX * MM_PER_IN, dwInchesY * MM_PER_IN);
+        snprintf(buff, sizeof(buff)-1, "Drawing=%.1lfx%.1lfpx, %.1lfx%.1lfmm", _width, _height, dwInchesX * Inkscape::Util::Quantity::convert(1, "in", "mm"), dwInchesY * Inkscape::Util::Quantity::convert(1, "in", "mm"));
         rec = textcomment_set(buff);
         if(!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)){
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
@@ -1715,7 +1713,7 @@ unsigned int PrintEmf::image(
     unsigned int w,      /** width of bitmap */
     unsigned int h,      /** height of bitmap */
     unsigned int rs,     /** row stride (normally w*4) */
-    Geom::Affine const &tf_ignore,  /** WRONG affine transform, use the one from m_tr_stack */
+    Geom::Affine const &/*tf_ignore*/,  /** WRONG affine transform, use the one from m_tr_stack */
     SPStyle const *style)  /** provides indirect link to image object */
 {
     double x1,y1,dw,dh;

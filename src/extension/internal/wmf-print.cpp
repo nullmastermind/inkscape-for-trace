@@ -45,8 +45,7 @@
 #include "inkscape-version.h"
 #include "sp-root.h"
 
-
-#include "unit-constants.h"
+#include "util/units.h"
 
 #include "extension/system.h"
 #include "extension/print.h"
@@ -336,7 +335,7 @@ unsigned int PrintWmf::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
         if (bbox) d = *bbox;
     }
 
-    d *= Geom::Scale(IN_PER_PX);  // 90 dpi inside inkscape, wmf file will be 1200 dpi
+    d *= Geom::Scale(Inkscape::Util::Quantity::convert(1, "px", "in"));  // 90 dpi inside inkscape, wmf file will be 1200 dpi
 
     /* -1/1200 in next two lines so that WMF read in will write out again at exactly the same size */
     float dwInchesX = d.width()  - 1.0/1200.0;
