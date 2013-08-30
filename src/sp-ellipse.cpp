@@ -158,11 +158,11 @@ void SPGenericEllipse::set_shape() {
         return;
     }
 
-    double rx, ry, s, e;
-    double x0, y0, x1, y1, x2, y2, x3, y3;
+    double rx;
+    double ry;
+    double s;
     double len;
     gint slice = FALSE;
- //   gint i;
 
     if ((this->rx.computed < 1e-18) || (this->ry.computed < 1e-18)) {
     	return;
@@ -195,21 +195,21 @@ void SPGenericEllipse::set_shape() {
     curve->moveto(cos(this->start), sin(this->start));
 
     for (s = this->start; s < this->end; s += M_PI_2) {
-        e = s + M_PI_2;
+        double e = s + M_PI_2;
 
         if (e > this->end) {
             e = this->end;
         }
 
         len = 4*tan((e - s)/4)/3;
-        x0 = cos(s);
-        y0 = sin(s);
-        x1 = x0 + len * cos(s + M_PI_2);
-        y1 = y0 + len * sin(s + M_PI_2);
-        x3 = cos(e);
-        y3 = sin(e);
-        x2 = x3 + len * cos(e - M_PI_2);
-        y2 = y3 + len * sin(e - M_PI_2);
+        double x0 = cos(s);
+        double y0 = sin(s);
+        double x1 = x0 + len * cos(s + M_PI_2);
+        double y1 = y0 + len * sin(s + M_PI_2);
+        double x3 = cos(e);
+        double y3 = sin(e);
+        double x2 = x3 + len * cos(e - M_PI_2);
+        double y2 = y3 + len * sin(e - M_PI_2);
 #ifdef ELLIPSE_VERBOSE
         g_print("step %d s %f e %f coords %f %f %f %f %f %f\n",
                 i, s, e, x1, y1, x2, y2, x3, y3);

@@ -1035,6 +1035,7 @@ void SPImage::print(SPPrintContext *ctx) {
             t = ti * t;
             sp_print_image_R8G8B8A8_N(ctx, px + trimx*pixskip + trimy*rs, trimwidth, trimheight, rs, t, this->style);
         }
+        free(px);  // else big memory leak on each image print!
     }
 }
 

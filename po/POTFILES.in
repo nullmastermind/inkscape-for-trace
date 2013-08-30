@@ -88,7 +88,7 @@ src/extension/internal/cairo-ps-out.cpp
 src/extension/internal/cairo-renderer-pdf-out.cpp
 src/extension/internal/cdr-input.cpp
 src/extension/internal/clear-n_.h
-src/extension/internal/emf-win32-inout.cpp
+src/extension/internal/emf-inout.cpp
 src/extension/internal/filter/bevels.h
 src/extension/internal/filter/blurs.h
 src/extension/internal/filter/bumps.h
@@ -117,6 +117,7 @@ src/extension/internal/pov-out.cpp
 src/extension/internal/svg.cpp
 src/extension/internal/svgz.cpp
 src/extension/internal/vsd-input.cpp
+src/extension/internal/wmf-inout.cpp
 src/extension/internal/wpg-input.cpp
 src/extension/param/bool.cpp
 src/extension/param/description.cpp
@@ -134,8 +135,6 @@ src/flood-context.cpp
 src/gradient-chemistry.cpp
 src/gradient-context.cpp
 src/gradient-drag.cpp
-src/helper/units-test.h
-src/helper/units.cpp
 src/inkscape.cpp
 src/interface.cpp
 src/io/sys.cpp
@@ -260,6 +259,9 @@ src/ui/dialog/livepatheffect-editor.cpp
 src/ui/dialog/livepatheffect-add.cpp
 src/ui/dialog/memory.cpp
 src/ui/dialog/messages.cpp
+src/ui/dialog/new-from-template.cpp
+src/ui/dialog/template-load-tab.cpp
+src/ui/dialog/template-widget.cpp
 src/ui/dialog/object-attributes.cpp
 src/ui/dialog/object-properties.cpp
 src/ui/dialog/ocaldialogs.cpp
@@ -536,6 +538,7 @@ share/extensions/wireframe_sphere.py
 [type: gettext/xml] share/extensions/text_extract.inx
 [type: gettext/xml] share/extensions/text_flipcase.inx
 [type: gettext/xml] share/extensions/text_lowercase.inx
+[type: gettext/xml] share/extensions/text_merge.inx
 [type: gettext/xml] share/extensions/text_randomcase.inx
 [type: gettext/xml] share/extensions/text_sentencecase.inx
 [type: gettext/xml] share/extensions/text_titlecase.inx

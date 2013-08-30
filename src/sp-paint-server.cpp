@@ -30,7 +30,6 @@ bool SPPaintServerReference::_acceptObject(SPObject *obj) const
     return SP_IS_PAINT_SERVER(obj);
 }
 
-
 SPPaintServer::SPPaintServer() : SPObject() {
 	this->swatch = 0;
 }

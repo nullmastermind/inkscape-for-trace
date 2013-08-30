@@ -36,7 +36,6 @@
 #include "desktop-style.h"
 #include "message-context.h"
 #include "pixmaps/cursor-star.xpm"
-#include "sp-metrics.h"
 #include <glibmm/i18n.h>
 #include "preferences.h"
 #include "xml/repr.h"
@@ -417,7 +416,8 @@ void SPStarContext::drag(Geom::Point p, guint state)
                          arg1, arg1 + M_PI / sides, this->isflatsided, this->rounded, this->randomized);
 
     /* status text */
-    GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->namedview->getDefaultMetric());
+    Inkscape::Util::Quantity q = Inkscape::Util::Quantity(r1, "px");
+    GString *rads = g_string_new(q.string(*desktop->namedview->doc_units).c_str());
     this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                ( this->isflatsided?
                                  _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")

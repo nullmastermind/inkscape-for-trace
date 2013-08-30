@@ -16,7 +16,6 @@
  */
 
 #include "pen-context.h"
-#include "helper/units.h"
 
 #define SP_LPETOOL_CONTEXT(obj) ((SPLPEToolContext*)obj)
 #define SP_IS_LPETOOL_CONTEXT(obj) (dynamic_cast<const SPLPEToolContext*>((const SPEventContext*)obj))

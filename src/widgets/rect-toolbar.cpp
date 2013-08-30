@@ -53,18 +53,20 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
+#include "util/units.h"
+#include "ui/widget/unit-tracker.h"
 #include "../pen-context.h"
 #include "../sp-namedview.h"
 #include "../sp-rect.h"
 
-using Inkscape::UnitTracker;
+using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
+using Inkscape::Util::Unit;
+using Inkscape::Util::Quantity;
+using Inkscape::Util::unit_table;
 
 
 //########################
@@ -91,12 +93,12 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
-    SPUnit const *unit = tracker->getActiveUnit();
+    Unit const unit = tracker->getActiveUnit();
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(Glib::ustring("/tools/shapes/rect/") + value_name,
-            sp_units_get_pixels(gtk_adjustment_get_value(adj), *unit));
+            Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
     }
 
     // quit if run by the attr_changed listener
@@ -112,7 +114,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
     for (GSList const *items = selection->itemList(); items != NULL; items = items->next) {
         if (SP_IS_RECT(items->data)) {
             if (gtk_adjustment_get_value(adj) != 0) {
-            	(SP_RECT(items->data)->*setter)(sp_units_get_pixels(gtk_adjustment_get_value(adj), *unit));
+                (SP_RECT(items->data)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
             } else {
                 SP_OBJECT(items->data)->getRepr()->setAttribute(value_name, NULL);
             }
@@ -183,32 +185,36 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar con
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
-    SPUnit const *unit = tracker->getActiveUnit();
+    Unit const unit = tracker->getActiveUnit();
 
     gpointer item = g_object_get_data( tbl, "item" );
     if (item && SP_IS_RECT(item)) {
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "rx" ) );
+
             gdouble rx = SP_RECT(item)->getVisibleRx();
-            gtk_adjustment_set_value(adj, sp_pixels_get_units(rx, *unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(rx, "px", unit));
         }
 
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "ry" ) );
+
             gdouble ry = SP_RECT(item)->getVisibleRy();
-            gtk_adjustment_set_value(adj, sp_pixels_get_units(ry, *unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(ry, "px", unit));
         }
 
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "width" ) );
+
             gdouble width = SP_RECT(item)->getVisibleWidth();
-            gtk_adjustment_set_value(adj, sp_pixels_get_units(width, *unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(width, "px", unit));
         }
 
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "height" ) );
+
             gdouble height = SP_RECT(item)->getVisibleHeight();
-            gtk_adjustment_set_value(adj, sp_pixels_get_units(height, *unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(height, "px", unit));
         }
     }
 
@@ -300,7 +306,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     }
 
     // rx/ry units menu: create
-    UnitTracker* tracker = new UnitTracker( SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE );
+    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
     //tracker->addUnit( SP_UNIT_PERCENT, 0 );
     // fixme: add % meaning per cent of the width/height
     tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
@@ -313,7 +319,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RectWidthAction",
                                          _("Width"), _("W:"), _("Width of rectangle"),
                                          "/tools/shapes/rect/width", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, TRUE, "altx-rect",
+                                         GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-rect",
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_width_value_changed );
@@ -330,7 +336,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RectHeightAction",
                                          _("Height"), _("H:"), _("Height of rectangle"),
                                          "/tools/shapes/rect/height", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_height_value_changed );
@@ -347,7 +353,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RadiusXAction",
                                          _("Horizontal radius"), _("Rx:"), _("Horizontal radius of rounded corners"),
                                          "/tools/shapes/rect/rx", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_rx_value_changed);
@@ -362,7 +368,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RadiusYAction",
                                          _("Vertical radius"), _("Ry:"), _("Vertical radius of rounded corners"),
                                          "/tools/shapes/rect/ry", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_ry_value_changed);

@@ -326,7 +326,7 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
 }
 
 
-void   refresh_textpath_source(SPTextPath* tp)
+void refresh_textpath_source(SPTextPath* tp)
 {
     if ( tp == NULL ) {
     	return;
@@ -429,21 +429,19 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
 }
 
 
-SPItem *
-sp_textpath_get_path_item(SPTextPath *tp)
+SPItem *sp_textpath_get_path_item(SPTextPath *tp)
 {
     if (tp && tp->sourcePath) {
         SPItem *refobj = tp->sourcePath->getObject();
 
         if (SP_IS_ITEM(refobj)) {
-            return (SPItem *) refobj;
+            return refobj;
         }
     }
     return NULL;
 }
 
-void
-sp_textpath_to_text(SPObject *tp)
+void sp_textpath_to_text(SPObject *tp)
 {
     SPObject *text = tp->parent;
 

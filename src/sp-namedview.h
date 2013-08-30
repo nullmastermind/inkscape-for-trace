@@ -18,14 +18,15 @@
 #define SP_IS_NAMEDVIEW(obj) (dynamic_cast<const SPNamedView*>((SPObject*)obj))
 
 #include "sp-object-group.h"
-#include "sp-metric.h"
 #include "snap.h"
 #include "document.h"
-
-struct SPUnit;
+#include "util/units.h"
 
 namespace Inkscape {
-class CanvasGrid;
+    class CanvasGrid;
+    namespace Util {
+        class Unit;
+    }
 }
 
 enum {
@@ -57,8 +58,8 @@ public:
     GSList * grids;
     bool grids_visible;
 
-    SPUnit const *doc_units;
-    SPUnit const *units;
+    Inkscape::Util::Unit const *doc_units;
+    Inkscape::Util::Unit const *units;
     
     GQuark default_layer_id;
 
@@ -81,7 +82,7 @@ public:
     gchar const *getName() const;
     guint getViewCount();
     GSList const *getViewList() const;
-    SPMetric getDefaultMetric() const;
+    Inkscape::Util::Unit const getDefaultUnit() const;
 
     void translateGuides(Geom::Translate const &translation);
     void translateGrids(Geom::Translate const &translation);
@@ -93,7 +94,7 @@ public:
     bool getGuides();
 
 private:
-    double getMarginLength(gchar const * const key,SPUnit const * const margin_units,SPUnit const * const return_units,double const width,double const height,bool const use_width);
+    double getMarginLength(gchar const * const key,Inkscape::Util::Unit const * const margin_units,Inkscape::Util::Unit const * const return_units,double const width,double const height,bool const use_width);
     friend class SPDocument;
 
 protected:

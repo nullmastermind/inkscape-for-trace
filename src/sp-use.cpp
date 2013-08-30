@@ -250,7 +250,7 @@ gchar* SPUse::description() {
         char *child_desc = SP_ITEM(this->child)->getDetailedDescription();
         --recursion_depth;
 
-        ret = g_strdup_printf(_("<b>Clone</b> of: %s"), child_desc);
+        char *ret = g_strdup_printf(_("<b>Clone</b> of: %s"), child_desc);
         g_free(child_desc);
 
         return ret;

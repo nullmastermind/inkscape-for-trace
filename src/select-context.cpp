@@ -303,10 +303,11 @@ bool SPSelectContext::item_handler(SPItem* item, GdkEvent* event) {
                     // if shift or ctrl was pressed, do not move objects;
                     // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
                 } else {
-                	GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
+                    GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
                    
                 	this->dragging = TRUE;
                     this->moved = FALSE;
+
                     gdk_window_set_cursor(window, CursorSelectDragging);
 
                     desktop->canvas->forceFullRedrawAfterInterruptions(5);
@@ -567,6 +568,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
                     this->dragging = TRUE;
 
                     GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
+
                     gdk_window_set_cursor(window, CursorSelectDragging);
 
                     desktop->canvas->forceFullRedrawAfterInterruptions(5);
@@ -691,6 +693,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
 
                     this->dragging = FALSE;
                     window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
+
                     gdk_window_set_cursor(window, CursorSelectMouseover);
                     sp_event_context_discard_delayed_snap_event(this);
                     desktop->canvas->endForcedFullRedraws();
@@ -803,15 +806,15 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
             GdkEventScroll *scroll_event = (GdkEventScroll*) event;
 
             if (scroll_event->state & GDK_MOD1_MASK) { // alt modified pressed
-		if (moved_while_cycling) 
-			{
-			moved_while_cycling = false;
-			sp_select_context_reset_opacities(prev_event_context);
-			prev_event_context = NULL;
-			}
+        if (moved_while_cycling) 
+            {
+            moved_while_cycling = false;
+            sp_select_context_reset_opacities(prev_event_context);
+            prev_event_context = NULL;
+            }
 
-		is_cycling = true;
-		
+        is_cycling = true;
+        
                 bool shift_pressed = scroll_event->state & GDK_SHIFT_MASK;
 
                 /* Rebuild list of items underneath the mouse pointer */
@@ -894,18 +897,17 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
 
-		GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel( GTK_WIDGET(desktop->canvas) ));
-		if (w)
-			{
-			gtk_window_present(w);
-			gtk_widget_grab_focus (GTK_WIDGET(desktop->canvas)); 
-			}
+        GtkWindow *w =GTK_WINDOW(gtk_widget_get_toplevel( GTK_WIDGET(desktop->canvas) ));
+        if (w)
+            {
+            gtk_window_present(w);
+            gtk_widget_grab_focus (GTK_WIDGET(desktop->canvas)); 
+            }
             }
             break;
         }
 
         case GDK_KEY_PRESS: // keybindings for select context
-
 			{
 			{
         	guint keyval = get_group0_keyval(&event->key);
@@ -938,18 +940,19 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
                     // if Alt and nonempty selection, show moving cursor ("move selected"):
                     if (alt && !selection->isEmpty() && !desktop->isWaitingCursor()) {
                     	GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (sp_desktop_canvas(desktop)));
+
                         gdk_window_set_cursor(window, CursorSelectDragging);
                     }
                     //*/
                     break;
             }
-			}
+            }
 
             gdouble const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
-			gdouble const offset = prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000, "px");
-			int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+            gdouble const offset = prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000, "px");
+            int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
-			switch (get_group0_keyval (&event->key)) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_KEY_Left: // move selection left
                 case GDK_KEY_KP_Left:
                     if (!MOD__CTRL(event)) { // not ctrl
@@ -1204,6 +1207,7 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
 				sp_select_context_reset_opacities(this);
 				is_cycling = false;	
 				}
+
                 }
             }
 
@@ -1226,7 +1230,6 @@ bool SPSelectContext::root_handler(GdkEvent* event) {
 
     return ret;
 }
-
 
 /*
   Local Variables:
