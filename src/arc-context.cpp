@@ -485,6 +485,7 @@ static void sp_arc_finish(SPArcContext *ac)
         SPDesktop *desktop = SP_EVENT_CONTEXT(ac)->desktop;
 
         SP_OBJECT(ac->item)->updateRepr();
+        ac->item->doWriteTransform(ac->item->getRepr(), ac->item->transform, NULL, true);
 
         desktop->canvas->endForcedFullRedraws();
 

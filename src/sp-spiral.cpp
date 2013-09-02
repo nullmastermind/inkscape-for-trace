@@ -35,6 +35,7 @@ static void sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_spiral_description (SPItem * item);
 static void sp_spiral_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+static Geom::Affine sp_spiral_set_transform(SPItem *item, Geom::Affine const &xform);
 
 static void sp_spiral_set_shape (SPShape *shape);
 static void sp_spiral_update_patheffect (SPLPEItem *lpeitem, bool write);
@@ -60,6 +61,7 @@ static void sp_spiral_class_init(SPSpiralClass *klass)
 
     item_class->description = sp_spiral_description;
     item_class->snappoints = sp_spiral_snappoints;
+    item_class->set_transform = sp_spiral_set_transform;
 
     lpe_item_class->update_patheffect = sp_spiral_update_patheffect;
 
@@ -490,6 +492,63 @@ static void sp_spiral_snappoints(SPItem const *item, std::vector<Inkscape::SnapC
         // This point is the start-point of the spiral, which is also returned when _snap_to_itemnode has been set
         // in the object snapper. In that case we will get a duplicate!
     }
+}
+
+/**
+ * Set spiral transform
+ */
+static Geom::Affine sp_spiral_set_transform(SPItem *item, Geom::Affine const &xform)
+{
+    // Only set transform with proportional scaling
+    if (!xform.withoutTranslation().isUniformScale()) {
+        return xform;
+    }
+    
+    g_assert(item != NULL);
+    g_assert(SP_IS_SPIRAL(item));
+
+    SPSpiral *spiral = SP_SPIRAL(item);
+
+    /* Calculate spiral start in parent coords. */
+    Geom::Point pos( Geom::Point(spiral->cx, spiral->cy) * xform );
+
+    /* This function takes care of translation and scaling, we return whatever parts we can't
+       handle. */
+    Geom::Affine ret(Geom::Affine(xform).withoutTranslation());
+    gdouble const s = hypot(ret[0], ret[1]);
+    if (s > 1e-9) {
+        ret[0] /= s;
+        ret[1] /= s;
+        ret[2] /= s;
+        ret[3] /= s;
+    } else {
+        ret[0] = 1.0;
+        ret[1] = 0.0;
+        ret[2] = 0.0;
+        ret[3] = 1.0;
+    }
+
+    spiral->rad *= s;
+
+    /* Find start in item coords */
+    pos = pos * ret.inverse();
+    spiral->cx = pos[Geom::X];
+    spiral->cy = pos[Geom::Y];
+
+    sp_spiral_set_shape(spiral);
+
+    // Adjust stroke width
+    item->adjust_stroke(s);
+
+    // Adjust pattern fill
+    item->adjust_pattern(xform * ret.inverse());
+
+    // Adjust gradient fill
+    item->adjust_gradient(xform * ret.inverse());
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+    return ret;
 }
 
 /**

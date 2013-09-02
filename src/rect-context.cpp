@@ -532,6 +532,7 @@ static void sp_rect_finish(SPRectContext *rc)
         SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(rc);
 
         SP_OBJECT(rc->item)->updateRepr();
+        rc->item->doWriteTransform(rc->item->getRepr(), rc->item->transform, NULL, true);
 
         desktop->canvas->endForcedFullRedraws();
 

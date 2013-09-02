@@ -39,6 +39,7 @@ static void sp_star_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_star_description (SPItem * item);
 static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+static Geom::Affine sp_star_set_transform(SPItem *item, Geom::Affine const &xform);
 
 static void sp_star_set_shape (SPShape *shape);
 static void sp_star_update_patheffect (SPLPEItem *lpeitem, bool write);
@@ -59,6 +60,7 @@ static void sp_star_class_init(SPStarClass *klass)
 
     item_class->description = sp_star_description;
     item_class->snappoints = sp_star_snappoints;
+    item_class->set_transform = sp_star_set_transform;
 
     lpe_item_class->update_patheffect = sp_star_update_patheffect;
 
@@ -526,6 +528,60 @@ static void sp_star_snappoints(SPItem const *item, std::vector<Inkscape::SnapCan
         Geom::Affine const i2dt (item->i2dt_affine ());
         p.push_back(Inkscape::SnapCandidatePoint(SP_STAR(item)->center * i2dt,Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT));
     }
+}
+
+static Geom::Affine sp_star_set_transform(SPItem *item, Geom::Affine const &xform)
+{
+    // Only set transform with proportional scaling
+    if (!xform.withoutTranslation().isUniformScale()) {
+        return xform;
+    }
+    
+    g_assert(item != NULL);
+    g_assert(SP_IS_STAR(item));
+
+    SPStar *star = SP_STAR(item);
+
+    /* Calculate star start in parent coords. */
+    Geom::Point pos( star->center * xform );
+
+    /* This function takes care of translation and scaling, we return whatever parts we can't
+       handle. */
+    Geom::Affine ret(Geom::Affine(xform).withoutTranslation());
+    gdouble const s = hypot(ret[0], ret[1]);
+    if (s > 1e-9) {
+        ret[0] /= s;
+        ret[1] /= s;
+        ret[2] /= s;
+        ret[3] /= s;
+    } else {
+        ret[0] = 1.0;
+        ret[1] = 0.0;
+        ret[2] = 0.0;
+        ret[3] = 1.0;
+    }
+
+    star->r[0] *= s;
+    star->r[1] *= s;
+
+    /* Find start in item coords */
+    pos = pos * ret.inverse();
+    star->center = pos;
+
+    sp_star_set_shape(star);
+
+    // Adjust stroke width
+    item->adjust_stroke(s);
+
+    // Adjust pattern fill
+    item->adjust_pattern(xform * ret.inverse());
+
+    // Adjust gradient fill
+    item->adjust_gradient(xform * ret.inverse());
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+    return ret;
 }
 
 /**

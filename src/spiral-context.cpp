@@ -460,6 +460,7 @@ sp_spiral_finish(SPSpiralContext *sc)
 
         SP_SHAPE(spiral)->setShape();
         SP_OBJECT(spiral)->updateRepr(SP_OBJECT_WRITE_EXT);
+        sc->item->doWriteTransform(sc->item->getRepr(), sc->item->transform, NULL, true);
 
         desktop->canvas->endForcedFullRedraws();
 
