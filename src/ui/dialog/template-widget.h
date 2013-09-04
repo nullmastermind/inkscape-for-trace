@@ -38,6 +38,7 @@ private:
     Gtk::Label _short_description_label;
     Gtk::Label _template_author_label;
     Gtk::Label _template_name_label;
+    Gtk::Widget *_effect_prefs;
     
     void _displayTemplateDetails();
 };

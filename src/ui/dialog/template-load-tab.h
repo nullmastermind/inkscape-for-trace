@@ -20,6 +20,7 @@
 #include <set>
 
 #include "xml/node.h"
+#include "extension/effect.h"
 
 
 namespace Inkscape {
@@ -42,6 +43,7 @@ public:
         Glib::ustring preview_name;
         Glib::ustring creation_date;
         std::set<Glib::ustring> keywords;
+        Inkscape::Extension::Effect *tpl_effect;
     };
     
     TemplateLoadTab();

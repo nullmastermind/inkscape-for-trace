@@ -271,6 +271,8 @@ void TemplateLoadTab::_getProceduralTemplates()
             result.display_name = (*it)->get_name();
             result.is_procedural = true;
             result.path = "";
+            result.tpl_effect = *it;
+            
             _getDataFromNode(myRoot, result);
             _tdata[result.display_name] = result;
         }
