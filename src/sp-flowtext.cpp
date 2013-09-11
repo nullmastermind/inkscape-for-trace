@@ -28,6 +28,7 @@
 #include "text-tag-attributes.h"
 #include "text-chemistry.h"
 #include "text-editing.h"
+#include "sp-text.h"
 
 #include "livarot/Shape.h"
 
@@ -50,6 +51,7 @@ static gchar *sp_flowtext_description(SPItem *item);
 static void sp_flowtext_snappoints(SPItem const *item, std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 static Inkscape::DrawingItem *sp_flowtext_show(SPItem *item, Inkscape::Drawing &drawing, unsigned key, unsigned flags);
 static void sp_flowtext_hide(SPItem *item, unsigned key);
+static Geom::Affine sp_flowtext_set_transform(SPItem *item, Geom::Affine const &xform);
 
 G_DEFINE_TYPE(SPFlowtext, sp_flowtext, SP_TYPE_ITEM);
 
@@ -76,6 +78,7 @@ sp_flowtext_class_init(SPFlowtextClass *klass)
     item_class->snappoints = sp_flowtext_snappoints;
     item_class->show = sp_flowtext_show;
     item_class->hide = sp_flowtext_hide;
+    item_class->set_transform = sp_flowtext_set_transform;
 }
 
 static void
@@ -700,6 +703,42 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     return ft_item;
 }
 
+static Geom::Affine
+sp_flowtext_set_transform (SPItem *item, Geom::Affine const &xform)
+{
+    if (!xform.isNonzeroUniformScale()) {
+        return xform;
+    }
+    
+    SPText *text = reinterpret_cast<SPText *>(item);
+    
+    double const ex = xform.descrim();
+    if (ex == 0) {
+        return xform;
+    }
+
+    Geom::Affine ret(xform);
+    ret[0] /= ex;
+    ret[1] /= ex;
+    ret[2] /= ex;
+    ret[3] /= ex;
+
+    // Adjust font size
+    text->_adjustFontsizeRecursive (item, ex);
+
+    // Adjust stroke width
+    item->adjust_stroke_width_recursive (ex);
+
+    // Adjust pattern fill
+    item->adjust_pattern(xform * ret.inverse());
+
+    // Adjust gradient fill
+    item->adjust_gradient(xform * ret.inverse());
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+
+    return ret;
+}
 
 /*
   Local Variables:
