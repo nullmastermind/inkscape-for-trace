@@ -175,7 +175,6 @@ DocumentProperties::DocumentProperties()
     
     _rum_deflt._changed_connection.block();
     _rum_deflt.getUnitMenu()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onDocUnitChange));
-    _old_doc_unit = _rum_deflt.getUnit();
 }
 
 void DocumentProperties::init()
@@ -1637,6 +1636,11 @@ void DocumentProperties::onRemoveGrid()
 void DocumentProperties::onDocUnitChange()
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Node *repr = sp_desktop_namedview(getDesktop())->getRepr();
+    Inkscape::Util::Unit old_doc_unit = unit_table.getUnit("px");
+    if(repr->attribute("inkscape:document-units")) {
+        old_doc_unit = unit_table.getUnit(repr->attribute("inkscape:document-units"));
+    }
     Inkscape::Util::Unit doc_unit = _rum_deflt.getUnit();
     
     // Don't execute when change is being undone
@@ -1647,7 +1651,6 @@ void DocumentProperties::onDocUnitChange()
     // Set document unit
     Inkscape::SVGOStringStream os;
     os << doc_unit.abbr;
-    Inkscape::XML::Node *repr = sp_desktop_namedview(getDesktop())->getRepr();
     repr->setAttribute("inkscape:document-units", os.str().c_str());
     
     // Set viewBox
@@ -1656,12 +1659,11 @@ void DocumentProperties::onDocUnitChange()
     doc->setViewBox(Geom::Rect::from_xywh(0, 0, width.value(doc_unit), height.value(doc_unit)));
     
     // Scale and translate objects
-    gdouble scale = Inkscape::Util::Quantity::convert(1, _old_doc_unit, doc_unit);
+    gdouble scale = Inkscape::Util::Quantity::convert(1, old_doc_unit, doc_unit);
     doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, doc->getHeight().value("px")));
     
     doc->setModifiedSinceSave();
     
-    _old_doc_unit = doc_unit;
     DocumentUndo::done(doc, SP_VERB_NONE, _("Changed document unit"));
 }
 

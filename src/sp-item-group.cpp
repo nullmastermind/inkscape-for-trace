@@ -591,12 +591,12 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                             } else {
                                 // TODO: transformed text on textpath
                             }
-                        }
-                        
-                        if (SP_IS_BOX3D(item)) {
+                        } else if (SP_IS_BOX3D(item)) {
                             // Force recalculation from perspective
                             box3d_position_set(SP_BOX3D(item));
-                        } else if (SP_IS_USE(item)) {
+                        }
+                        
+                        if (SP_IS_USE(item)) {
                             // calculate the matrix we need to apply to the clone
                             // to cancel its induced transform from its original
                             Geom::Affine move = final.inverse() * item->transform * final;

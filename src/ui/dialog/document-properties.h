@@ -218,7 +218,6 @@ private:
     void onRemoveGrid();
     
     // callback for document unit change
-    Inkscape::Util::Unit _old_doc_unit;
     void onDocUnitChange();
 };
 
