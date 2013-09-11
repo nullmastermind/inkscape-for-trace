@@ -59,6 +59,8 @@ struct SPText : public SPItem {
     /** discards the drawing objects representing this text. */
     void _clearFlow(Inkscape::DrawingGroup *in_arena);
 
+    bool _optimizeTextpathText;
+
 private:
     /** Recursively walks the xml tree adding tags and their contents. The
     non-trivial code does two things: firstly, it manages the positioning
@@ -66,6 +68,11 @@ private:
     breaks and makes sure both that they are assigned the correct SPObject and
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
+
+public:
+    /** Optimize textpath text on next set_transform. */
+    void optimizeTextpathText()
+        {_optimizeTextpathText = true;}
 };
 
 struct SPTextClass {

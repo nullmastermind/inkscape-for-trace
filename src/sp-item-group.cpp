@@ -52,6 +52,7 @@
 #include "verbs.h"
 #include "layer-model.h"
 #include "selection-chemistry.h"
+#include "sp-textpath.h"
 
 using Inkscape::DocumentUndo;
 
@@ -569,22 +570,46 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
     if ( hasChildren() ) {
         for (SPObject *o = firstChild() ; o ; o = o->getNext() ) {
             if ( SP_IS_ITEM(o) ) {
-                if (SP_IS_GROUP(o)) {
+                if (SP_IS_GROUP(o) && !SP_IS_BOX3D(o)) {
                     SP_GROUP(o)->scaleChildItemsRec(sc, p);
                 } else {
-                    SPItem *item = reinterpret_cast<SPItem *>(o);
+                    SPItem *item = SP_ITEM(o);
                     Geom::OptRect bbox = item->desktopVisualBounds();
                     if (bbox) {
-                        // Clear selection (TODO: save and restore selection)
-                        sp_desktop_selection(SP_ACTIVE_DESKTOP)->clear();
-                        
                         // Scale item
                         Geom::Translate const s(p);
                         Geom::Affine final = s.inverse() * sc * s;
-                        Inkscape::LayerModel layers = Inkscape::LayerModel();
-                        Inkscape::Selection selection(&layers, SP_ACTIVE_DESKTOP);
-                        selection.add(item);
-                        sp_selection_apply_affine(&selection, final, true, true);
+                        
+                        Geom::Point old_center(0,0);
+                        if (item->isCenterSet()) {
+                            old_center = item->getCenter();
+                        }
+                        
+                        if (SP_IS_TEXT_TEXTPATH(item) && item->transform.isIdentity()) {
+                            if (item->transform.isIdentity()) {
+                                SP_TEXT(item)->optimizeTextpathText();
+                            } else {
+                                // TODO: transformed text on textpath
+                            }
+                        }
+                        
+                        if (SP_IS_BOX3D(item)) {
+                            // Force recalculation from perspective
+                            box3d_position_set(SP_BOX3D(item));
+                        } else if (SP_IS_USE(item)) {
+                            // calculate the matrix we need to apply to the clone
+                            // to cancel its induced transform from its original
+                            Geom::Affine move = final.inverse() * item->transform * final;
+                            item->doWriteTransform(item->getRepr(), move, &move, true);
+                        } else {
+                            item->set_i2d_affine(item->i2dt_affine() * final);
+                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                        }
+                        
+                        if (item->isCenterSet() && !(final.isTranslation() || final.isIdentity())) {
+                            item->setCenter(old_center * final);
+                            item->updateRepr();
+                        }
                     }
                 }
             }

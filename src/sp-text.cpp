@@ -109,6 +109,8 @@ sp_text_init (SPText *text)
 {
     new (&text->layout) Inkscape::Text::Layout;
     new (&text->attributes) TextTagAttributes;
+    
+    text->_optimizeTextpathText = false;
 }
 
 static void
@@ -427,8 +429,13 @@ sp_text_set_transform (SPItem *item, Geom::Affine const &xform)
     SPText *text = SP_TEXT(item);
 
     // we cannot optimize textpath because changing its fontsize will break its match to the path
-    if (SP_IS_TEXT_TEXTPATH (text))
-        return xform;
+    if (SP_IS_TEXT_TEXTPATH (text)) {
+        if (!text->_optimizeTextpathText) {
+            return xform;
+        } else {
+            text->_optimizeTextpathText = false;
+        }
+    }
 
     /* This function takes care of scaling & translation only, we return whatever parts we can't
        handle. */
