@@ -35,6 +35,7 @@
 #include "sp-object-repr.h"
 #include "sp-root.h"
 #include "sp-script.h"
+#include "svg/stringstream.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/dialog/filedialog.h"
@@ -172,6 +173,7 @@ DocumentProperties::DocumentProperties()
     signalActivateDesktop().connect(sigc::mem_fun(*this, &DocumentProperties::_handleActivateDesktop));
     signalDeactiveDesktop().connect(sigc::mem_fun(*this, &DocumentProperties::_handleDeactivateDesktop));
     
+    _rum_deflt._changed_connection.block();
     _rum_deflt.getUnitMenu()->signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::onDocUnitChange));
     _old_doc_unit = _rum_deflt.getUnit();
 }
@@ -1637,6 +1639,17 @@ void DocumentProperties::onDocUnitChange()
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     Inkscape::Util::Unit doc_unit = _rum_deflt.getUnit();
     
+    // Don't execute when change is being undone
+    if (!DocumentUndo::getUndoSensitive(doc)) {
+        return;
+    }
+    
+    // Set document unit
+    Inkscape::SVGOStringStream os;
+    os << doc_unit.abbr;
+    Inkscape::XML::Node *repr = sp_desktop_namedview(getDesktop())->getRepr();
+    repr->setAttribute("inkscape:document-units", os.str().c_str());
+    
     // Set viewBox
     Inkscape::Util::Quantity width = doc->getWidth();
     Inkscape::Util::Quantity height = doc->getHeight();
@@ -1645,6 +1658,8 @@ void DocumentProperties::onDocUnitChange()
     // Scale and translate objects
     gdouble scale = Inkscape::Util::Quantity::convert(1, _old_doc_unit, doc_unit);
     doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, doc->getHeight().value("px")));
+    
+    doc->setModifiedSinceSave();
     
     _old_doc_unit = doc_unit;
     DocumentUndo::done(doc, SP_VERB_NONE, _("Changed document unit"));
