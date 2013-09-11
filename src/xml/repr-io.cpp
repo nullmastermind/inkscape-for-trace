@@ -100,6 +100,9 @@ public:
 
     int setFile( char const * filename );
 
+    xmlDocPtr readXml();
+    bool SystemCheck; // Checks for SYSTEM Entities
+
     static int readCb( void * context, char * buffer, int len );
     static int closeCb( void * context );
 
@@ -121,6 +124,7 @@ int XmlSource::setFile(char const *filename)
 {
     int retVal = -1;
 
+    this->SystemCheck = false;
     this->filename = filename;
 
     fp = Inkscape::IO::fopen_utf8name(filename, "r");
@@ -178,6 +182,18 @@ int XmlSource::setFile(char const *filename)
     return retVal;
 }
 
+xmlDocPtr XmlSource::readXml()
+{
+    int parse_options = XML_PARSE_HUGE; // do not use XML_PARSE_NOENT ! see bug lp:1025185
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
+    if (!allowNetAccess) parse_options |= XML_PARSE_NONET;
+    if (SystemCheck)     parse_options |= XML_PARSE_NOENT;
+
+    return xmlReadIO( readCb, closeCb, this,
+                      filename, getEncoding(), parse_options);
+}
 
 int XmlSource::readCb( void * context, char * buffer, int len )
 {
@@ -185,6 +201,15 @@ int XmlSource::readCb( void * context, char * buffer, int len )
     if ( context ) {
         XmlSource* self = static_cast<XmlSource*>(context);
         retVal = self->read( buffer, len );
+
+        if(self->SystemCheck) {
+            // Check for ENTITY SYSTEM entry and kill with fire
+            char *system = strstr(buffer, "SYSTEM");
+            while (system != NULL) {
+                strncpy (system,"      ",6);
+                system = strstr(buffer, "SYSTEM");
+            }
+        }
     }
     return retVal;
 }
@@ -299,22 +324,21 @@ Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
         XmlSource src;
 
         if ( (src.setFile(filename) == 0) ) {
-            int parse_options = XML_PARSE_HUGE; // do not use XML_PARSE_NOENT ! see bug lp:1025185
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
-            if (!allowNetAccess) {
-                parse_options |= XML_PARSE_NONET;
+            doc = src.readXml();
+            rdoc = sp_repr_do_read( doc, default_ns );
+            // For some reason, failed ns loading results in this
+            // We try a system check version of load with NOENT for adobe
+            if(rdoc && strcmp(rdoc->root()->name(), "ns:svg") == 0) {
+                xmlFreeDoc( doc );
+                src.setFile(filename);
+                src.SystemCheck = true;
+                doc = src.readXml();
+                rdoc = sp_repr_do_read( doc, default_ns );
             }
-            doc = xmlReadIO( XmlSource::readCb,
-                             XmlSource::closeCb,
-                             &src,
-                             localFilename,
-                             src.getEncoding(),
-                             parse_options);
         }
     }
 
-    rdoc = sp_repr_do_read( doc, default_ns );
+
     if ( doc ) {
         xmlFreeDoc( doc );
     }
