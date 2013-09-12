@@ -8,59 +8,33 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#ifndef __INKSCAPE_EXTENSION_INTERNAL_PRINT_EMF_WIN32_H__
-#define __INKSCAPE_EXTENSION_INTERNAL_PRINT_EMF_WIN32_H__
-
-#ifdef WIN32
+#ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_EMF_PRINT_H
+#define SEEN_INKSCAPE_EXTENSION_INTERNAL_EMF_PRINT_H
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <libuemf/uemf.h>
+#include "extension/internal/metafile-print.h"
 
-#include "extension/implementation/implementation.h"
-//#include "extension/extension.h"
-
-#include <2geom/pathvector.h>
-
-#include <stack>
+#include "sp-gradient.h"
+#include "splivarot.h"             // pieces for union on shapes
+#include "display/canvas-bpath.h"  // for SPWindRule
 
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-class PrintEmfWin32 : public Inkscape::Extension::Implementation::Implementation
+class PrintEmf : public PrintMetafile
 {
-    double  _width;
-    double  _height;
-    HDC    hdc;
-    RECT   rc;
-
-    HBRUSH hbrush, hbrushOld;
-    HPEN hpen, hpenOld;
-
-    std::stack<Geom::Affine> m_tr_stack;
-    Geom::PathVector fill_pathv;
-    Geom::Affine fill_transform;
-    bool stroke_and_fill;
-    bool fill_only;
-    bool simple_shape;
+    uint32_t hbrush, hbrushOld, hpen, hpenOld;
 
     unsigned int print_pathv (Geom::PathVector const &pathv, const Geom::Affine &transform);
     bool print_simple_shape (Geom::PathVector const &pathv, const Geom::Affine &transform);
-    unsigned int image(Inkscape::Extension::Print * /* module */, /** not used */
-        unsigned char *px, /** array of pixel values, Gdk::Pixbuf bitmap format */
-        unsigned int w, /** width of bitmap */
-        unsigned int h, /** height of bitmap */
-        unsigned int rs, /** row stride (normally w*4) */
-        Geom::Affine const &tf_ignore, /** WRONG affine transform, use the one from m_tr_stack */
-        SPStyle const *style); /** provides indirect link to image object */
 
 public:
-    PrintEmfWin32 (void);
-    virtual ~PrintEmfWin32 (void);
+    PrintEmf();
 
     /* Print functions */
     virtual unsigned int setup (Inkscape::Extension::Print * module);
@@ -69,8 +43,6 @@ public:
     virtual unsigned int finish (Inkscape::Extension::Print * module);
 
     /* Rendering methods */
-    virtual unsigned int bind(Inkscape::Extension::Print *module, Geom::Affine const &transform, float opacity);
-    virtual unsigned int release(Inkscape::Extension::Print *module);
     virtual unsigned int fill (Inkscape::Extension::Print *module,
                                Geom::PathVector const &pathv,
                                Geom::Affine const &ctm, SPStyle const *style,
@@ -81,32 +53,33 @@ public:
                                  Geom::Affine const &ctm, SPStyle const *style,
                                  Geom::OptRect const &pbox, Geom::OptRect const &dbox,
                                  Geom::OptRect const &bbox);
+    virtual unsigned int image(Inkscape::Extension::Print *module,
+                           unsigned char *px,
+                           unsigned int w,
+                           unsigned int h,
+                           unsigned int rs,
+                           Geom::Affine const &transform,
+                           SPStyle const *style);
     virtual unsigned int comment(Inkscape::Extension::Print *module, const char * comment);
     virtual unsigned int text(Inkscape::Extension::Print *module, char const *text,
                               Geom::Point const &p, SPStyle const *style);
-    bool textToPath (Inkscape::Extension::Print * ext);
 
     static void init (void);
 protected:
-    int create_brush(SPStyle const *style);
+    static void  smuggle_adxkyrtl_out(const char *string, uint32_t **adx, double *ky, int *rtl, int *ndx, float scale);
 
-    void destroy_brush();
-
-    void create_pen(SPStyle const *style, const Geom::Affine &transform);
-
-    void destroy_pen();
-
-    void flush_fill();
-
+    int         create_brush(SPStyle const *style, PU_COLORREF fcolor);
+    void        destroy_brush();
+    int         create_pen(SPStyle const *style, const Geom::Affine &transform);
+    void        destroy_pen();
 };
 
 }  /* namespace Internal */
 }  /* namespace Extension */
 }  /* namespace Inkscape */
 
-#endif /* WIN32 */
 
-#endif /* __INKSCAPE_EXTENSION_INTERNAL_PRINT_EMF_WIN32_H__ */
+#endif /* __INKSCAPE_EXTENSION_INTERNAL_PRINT_EMF_H__ */
 
 /*
   Local Variables:
