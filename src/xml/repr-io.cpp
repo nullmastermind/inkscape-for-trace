@@ -184,11 +184,13 @@ int XmlSource::setFile(char const *filename)
 
 xmlDocPtr XmlSource::readXml()
 {
-    int parse_options = XML_PARSE_HUGE; // do not use XML_PARSE_NOENT ! see bug lp:1025185
+    int parse_options = XML_PARSE_HUGE | XML_PARSE_RECOVER;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
     if (!allowNetAccess) parse_options |= XML_PARSE_NONET;
+
+    // Allow NOENT only if we're filtering out SYSTEM and PUBLIC entities
     if (SystemCheck)     parse_options |= XML_PARSE_NOENT;
 
     return xmlReadIO( readCb, closeCb, this,
@@ -198,21 +200,34 @@ xmlDocPtr XmlSource::readXml()
 int XmlSource::readCb( void * context, char * buffer, int len )
 {
     int retVal = -1;
+
     if ( context ) {
         XmlSource* self = static_cast<XmlSource*>(context);
         retVal = self->read( buffer, len );
 
         if(self->SystemCheck) {
-            // Check for ENTITY SYSTEM cdata and kill with fire, does
-            // Break svg files who use entities for ns and system entities.
-            GRegex *entity_regex = g_regex_new(
-                "<!ENTITY\\s+[^>\\s]+\\s+SYSTEM\\s+\"[^>\"]+\"\\s*>",
+            GMatchInfo *info;
+            gint start, end;
+
+            GRegex *regex = g_regex_new(
+                "<!ENTITY\\s+[^>\\s]+\\s+(SYSTEM|PUBLIC\\s+\"[^>\"]+\")\\s+\"[^>\"]+\"\\s*>",
                 G_REGEX_CASELESS, G_REGEX_MATCH_NEWLINE_ANY, NULL);
-            gchar *fixed_buffer = g_regex_replace(
-                    entity_regex, buffer, len, 0, "",
-                    G_REGEX_MATCH_NEWLINE_ANY, NULL);
-            g_regex_unref(entity_regex);
-            buffer = fixed_buffer;
+
+            // Check for SYSTEM or PUBLIC entities and kill them with spaces
+            // Note: g_regex_replace does not modify buffer in place, this
+            // logic is used instead because we can just blank out the offending
+            // charicters in the right place without hurting the length.
+            g_regex_match (regex, buffer, G_REGEX_MATCH_NEWLINE_ANY, &info);
+
+            while (g_match_info_matches (info)) {
+                if (g_match_info_fetch_pos (info, 1, &start, &end)) {
+                    for (int x=start; x<end; x++)
+                        buffer[x] = 0x20;
+                }
+                g_match_info_next (info, NULL);
+            }
+            g_match_info_unref(info);
+            g_regex_unref(regex);
         }
     }
     return retVal;
@@ -975,7 +990,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     // THIS DOESN'T APPEAR TO DO ANYTHING. Can it be commented out or deleted?
     {
         GQuark const href_key = g_quark_from_static_string("xlink:href");
-        GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
+        //GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
 
         gchar const *xxHref = 0;
         //gchar const *xxAbsref = 0;
