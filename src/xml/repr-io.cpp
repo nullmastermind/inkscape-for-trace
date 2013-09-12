@@ -203,12 +203,16 @@ int XmlSource::readCb( void * context, char * buffer, int len )
         retVal = self->read( buffer, len );
 
         if(self->SystemCheck) {
-            // Check for ENTITY SYSTEM entry and kill with fire
-            char *system = strstr(buffer, "SYSTEM");
-            while (system != NULL) {
-                strncpy (system,"      ",6);
-                system = strstr(buffer, "SYSTEM");
-            }
+            // Check for ENTITY SYSTEM cdata and kill with fire, does
+            // Break svg files who use entities for ns and system entities.
+            GRegex *entity_regex = g_regex_new(
+                "<!ENTITY\\s+[^>\\s]+\\s+SYSTEM\\s+\"[^>\"]+\"\\s*>",
+                G_REGEX_CASELESS, G_REGEX_MATCH_NEWLINE_ANY, NULL);
+            gchar *fixed_buffer = g_regex_replace(
+                    entity_regex, buffer, len, 0, "",
+                    G_REGEX_MATCH_NEWLINE_ANY, NULL);
+            g_regex_unref(entity_regex);
+            buffer = fixed_buffer;
         }
     }
     return retVal;
@@ -974,12 +978,12 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
 
         gchar const *xxHref = 0;
-        gchar const *xxAbsref = 0;
+        //gchar const *xxAbsref = 0;
         for ( List<AttributeRecord const> ai(attributes); ai; ++ai ) {
             if ( ai->key == href_key ) {
                 xxHref = ai->value;
-            } else if ( ai->key == absref_key ) {
-                xxAbsref = ai->value;
+            //} else if ( ai->key == absref_key ) {
+                //xxAbsref = ai->value;
             }
         }
 
