@@ -25,7 +25,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glibmm/ustring.h>
 #include "svg/svg-length.h"
-#include "sp-item.h"
+#include "sp-shape.h"
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 

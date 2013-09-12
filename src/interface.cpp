@@ -1986,6 +1986,15 @@ void ContextMenu::MakeImageMenu (void)
         mi->set_sensitive(FALSE);
     }
 
+    /* Trace Pixel Art */
+    mi = manage(new Gtk::MenuItem(_("Trace Pixel Art"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTracePixelArt));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
+    }
+
     /* Embed image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
         mi = manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
@@ -2101,6 +2110,12 @@ void ContextMenu::ImageTraceBitmap(void)
 {
     inkscape_dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
+}
+
+void ContextMenu::ImageTracePixelArt(void)
+{
+    inkscape_dialogs_unhide();
+    _desktop->_dlg_mgr->showDialog("PixelArt");
 }
 
 void ContextMenu::ImageEmbed(void)
