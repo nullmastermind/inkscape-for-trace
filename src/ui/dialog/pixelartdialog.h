@@ -29,25 +29,14 @@ class PixelArtDialog : public UI::Widget::Panel
 
 public:
 
-    /**
-     * Constructor
-     */
     PixelArtDialog() : 
-     UI::Widget::Panel("", "/dialogs/pixelart", SP_VERB_SELECTION_PIXEL_ART)
-     {}
+        UI::Widget::Panel("", "/dialogs/pixelart", SP_VERB_SELECTION_PIXEL_ART)
+    {}
 
 
-    /**
-     * Factory method
-     */
     static PixelArtDialog &getInstance();
 
-    /**
-     * Destructor
-     */
     virtual ~PixelArtDialog() {};
-
-
 };
 
 
