@@ -32,31 +32,13 @@ namespace Tracer {
  */
 namespace branchless {
 
+/*
+ * All modern processors optimize the branch to a conditional move
+ */
 template<class T>
 T first_if(T first, T second, bool cond)
 {
-    return first * cond + second * (1 - cond);
-}
-
-template<class T>
-T min(T first, T second)
-{
-    return first - (first > second) * (first - second);
-}
-
-template<class T>
-T max(T first, T second)
-{
-    return first + (first < second) * (second - first);
-}
-
-/**
- * When abs(first - second) == 1
- */
-template<class T>
-T max_consecutive(T first, T second)
-{
-    return first + (first < second);
+    return cond ? first : second;
 }
 
 } // namespace branchless

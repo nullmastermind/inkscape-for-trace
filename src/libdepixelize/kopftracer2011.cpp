@@ -38,22 +38,40 @@
 #include "priv/homogeneoussplines.h"
 #include "priv/branchless.h"
 #include "priv/splines.h"
+#include "priv/iterator.h"
 
 namespace Tracer {
 namespace Heuristics {
 
-int curves(PixelGraph &graph, PixelGraph::Node *a, PixelGraph::Node *b);
-bool islands(PixelGraph &graph, PixelGraph::Node *a, PixelGraph::Node *b);
+int curves(const PixelGraph &graph, PixelGraph::const_iterator a,
+           PixelGraph::const_iterator b);
+bool islands(PixelGraph::const_iterator a, PixelGraph::const_iterator b);
 
 struct SparsePixels
 {
-    typedef std::pair<PixelGraph::Node*, PixelGraph::Node*> Edge;
+    enum Diagonal {
+        /**
+         * From (first) the top left corner to (second) the bottom right.
+         */
+        MAIN_DIAGONAL      = 0,
+        /**
+         * From (first) the top right to (second) the bottom left.
+         */
+        SECONDARY_DIAGONAL = 1
+    };
+
+    typedef std::pair<PixelGraph::const_iterator, PixelGraph::const_iterator>
+    Edge;
     typedef std::pair<Edge, int> EdgeWeight;
 
-    void operator()(PixelGraph &graph, unsigned radius);
+    void operator()(const PixelGraph &graph, unsigned radius);
 
-    static bool similar_colors(PixelGraph::Node *n, Edge edge);
+    static bool similar_colors(PixelGraph::const_iterator n,
+                               const guint8 (&a)[4], const guint8 (&b)[4]);
 
+    /*
+     * Precondition: Must be filled according to Diagonal enum.
+     */
     EdgeWeight diagonals[2];
 };
 
@@ -231,12 +249,13 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph,
             using std::pair;
             using std::make_pair;
 
-            typedef pair<PixelGraph::Node*, PixelGraph::Node*> Edge;
+            typedef pair<PixelGraph::iterator, PixelGraph::iterator> Edge;
             typedef pair<Edge, int> EdgeWeight;
 
             EdgeWeight diagonals[2] = {
-                make_pair(make_pair(&*it, &*(it + graph.width() + 1)), 0),
-                make_pair(make_pair(&*(it + 1), &*(it + graph.width())), 0)
+                make_pair(make_pair(it, graph.nodeBottomRight(it)), 0),
+                make_pair(make_pair(graph.nodeRight(it), graph.nodeBottom(it)),
+                          0)
             };
 
             // Check if there are crossing edges
@@ -248,13 +267,13 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph,
             // Compute weights
             for ( int i = 0 ; i != 2 ; ++i ) {
                 // Curves and islands heuristics
-                PixelGraph::Node *a = diagonals[i].first.first;
-                PixelGraph::Node *b = diagonals[i].first.second;
+                PixelGraph::const_iterator a = diagonals[i].first.first;
+                PixelGraph::const_iterator b = diagonals[i].first.second;
 
                 diagonals[i].second += Heuristics::curves(graph, a, b)
                     * options.curvesMultiplier;
 
-                diagonals[i].second += Heuristics::islands(graph, a, b)
+                diagonals[i].second += Heuristics::islands(a, b)
                     * options.islandsWeight;
             }
 
@@ -290,20 +309,23 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph,
     }
 }
 
-inline int Heuristics::curves(PixelGraph &graph, PixelGraph::Node *a,
-                              PixelGraph::Node *b)
+inline int Heuristics::curves(const PixelGraph &graph,
+                              PixelGraph::const_iterator a,
+                              PixelGraph::const_iterator b)
 {
     int count = 1;
+    ToPtr<PixelGraph::Node> to_ptr;
+    ToIter<PixelGraph::Node> to_iter(graph.begin());
 
     // b -> a
     // and then a -> b
     for ( int i = 0 ; i != 2 ; ++i ) {
-        PixelGraph::Node *it = i ? a : b;
-        PixelGraph::Node *prev = i ? b : a;
+        PixelGraph::const_iterator it = i ? a : b;
+        PixelGraph::const_iterator prev = i ? b : a;
         int local_count = 0;
 
         // Used to avoid inifinite loops in circular-like edges
-        PixelGraph::Node *const initial = it;
+        const PixelGraph::const_iterator initial = it;
 
         while ( it->adjsize() == 2 ) {
             ++local_count;
@@ -312,18 +334,26 @@ inline int Heuristics::curves(PixelGraph &graph, PixelGraph::Node *a,
             {
                 // There are only two values that won't be zero'ed
                 // and one of them has the same value of prev
-                guintptr aux = guintptr(it);
-                aux = it->adj.top * guintptr(it - graph.width())
-                    + it->adj.topright * guintptr(it - graph.width() + 1)
-                    + it->adj.right * guintptr(it + 1)
-                    + it->adj.bottomright * guintptr(it + graph.width() + 1)
-                    + it->adj.bottom * guintptr(it + graph.width())
-                    + it->adj.bottomleft * guintptr(it + graph.width() - 1)
-                    + it->adj.left * guintptr(it - 1)
-                    + it->adj.topleft * guintptr(it - graph.width() - 1)
-                    - guintptr(prev);
+                guintptr aux = guintptr(to_ptr(it));
+                aux = (it->adj.top
+                       * guintptr(to_ptr(graph.nodeTop(it))))
+                    + (it->adj.topright
+                       * guintptr(to_ptr(graph.nodeTopRight(it))))
+                    + (it->adj.right
+                       * guintptr(to_ptr(graph.nodeRight(it))))
+                    + (it->adj.bottomright
+                       * guintptr(to_ptr(graph.nodeBottomRight(it))))
+                    + (it->adj.bottom
+                       * guintptr(to_ptr(graph.nodeBottom(it))))
+                    + (it->adj.bottomleft
+                       * guintptr(to_ptr(graph.nodeBottomLeft(it))))
+                    + (it->adj.left
+                       * guintptr(to_ptr(graph.nodeLeft(it))))
+                    + (it->adj.topleft
+                       * guintptr(to_ptr(graph.nodeTopLeft(it))))
+                    - guintptr(to_ptr(prev));
                 prev = it;
-                it = reinterpret_cast<PixelGraph::Node*>(aux);
+                it = to_iter(reinterpret_cast<PixelGraph::Node const*>(aux));
             }
 
             // Break infinite loops
@@ -336,7 +366,7 @@ inline int Heuristics::curves(PixelGraph &graph, PixelGraph::Node *a,
     return count;
 }
 
-inline void Heuristics::SparsePixels::operator ()(PixelGraph &graph,
+inline void Heuristics::SparsePixels::operator ()(const PixelGraph &graph,
                                                   unsigned radius)
 {
     if ( !graph.width() || !graph.height() )
@@ -346,72 +376,79 @@ inline void Heuristics::SparsePixels::operator ()(PixelGraph &graph,
     for ( int i = 0 ; i != 2 ; ++i )
         diagonals[i].second = 0;
 
-    // Compute begin and end nodes under a (2*radius)^2 window
-    std::pair<unsigned, unsigned> begin(0, 0);
+    if ( !radius )
+        return;
 
-    // Get midpoint
+    // Fix radius/bounds
     {
-        using branchless::max_consecutive;
+        unsigned x = graph.toX(diagonals[MAIN_DIAGONAL].first.first);
+        unsigned y = graph.toY(diagonals[MAIN_DIAGONAL].first.first);
+        unsigned minor = std::min(x, y);
+        unsigned displace = radius - 1;
 
-        unsigned x1 = graph.toX(diagonals[0].first.first);
-        unsigned x2 = graph.toX(diagonals[0].first.second);
-        begin.first = max_consecutive(x1, x2);
+        if ( displace > minor ) {
+            displace = minor;
+            radius = displace + 1;
+        }
 
-        unsigned y1 = graph.toY(diagonals[0].first.first);
-        unsigned y2 = graph.toY(diagonals[0].first.second);
-        begin.second = max_consecutive(y1, y2);
-    }
+        displace = radius;
 
-    std::pair<unsigned, unsigned> end(begin.first + radius,
-                                      begin.second + radius);
+        if ( x + displace >= graph.width() ) {
+            displace = unsigned(graph.width()) - x - 1;
+            radius = displace;
+        }
 
-    // Get beginning point
-    {
-        using branchless::first_if;
-
-        begin.first = first_if(begin.first - radius, 0u, begin.first >= radius);
-
-        begin.second = first_if(begin.second - radius, 0u,
-                                begin.second >= radius);
-    }
-
-    // Fix ending point if misplaced
-    {
-        using branchless::first_if;
-
-        end.first = first_if(unsigned(graph.width()), end.first,
-                             end.first > graph.width());
-
-        end.second = first_if(unsigned(graph.height()), end.second,
-                              end.second > graph.height());
-    }
-
-    // Iterate over nodes and count them
-    for ( int i = begin.second ; i != end.second ; ++i ) {
-        PixelGraph::Node *it = &graph[begin.first][i];
-        for ( int j = begin.first ; j != end.first ; ++j, ++it ) {
-            for ( int k = 0 ; k != 2 ; ++k )
-                diagonals[k].second += similar_colors(it, diagonals[k].first);
+        if ( y + displace >= graph.height() ) {
+            displace = unsigned(graph.height()) - y - 1;
+            radius = displace;
         }
     }
 
-    int minor = branchless::min(diagonals[0].second, diagonals[1].second);
+    if ( !radius )
+        return;
+
+    // Iterate over nodes and count them
+    {
+        PixelGraph::const_iterator it = diagonals[MAIN_DIAGONAL].first.first;
+        for ( unsigned i = radius - 1 ; i ; --i )
+            it = graph.nodeTopLeft(it);
+
+        bool invert = false;
+        for ( unsigned i = 0 ; i != 2 * radius ; ++i ) {
+            for ( unsigned j = 0 ; j != 2 * radius ; ++j ) {
+                for ( int k = 0 ; k != 2 ; ++k ) {
+                    diagonals[k].second
+                        += similar_colors(it, diagonals[k].first.first->rgba,
+                                          diagonals[k].first.second->rgba);
+                }
+                it = (invert ? graph.nodeLeft(it) : graph.nodeRight(it));
+            }
+            it = (invert ? graph.nodeRight(it) : graph.nodeLeft(it));
+
+
+            invert = !invert;
+            it = graph.nodeBottom(it);
+        }
+    }
+
+    int minor = std::min(diagonals[0].second, diagonals[1].second);
     for ( int i = 0 ; i != 2 ; ++i )
         diagonals[i].second -= minor;
+
     std::swap(diagonals[0].second, diagonals[1].second);
 }
 
 inline bool
-Heuristics::SparsePixels::similar_colors(PixelGraph::Node *n,
-                                         Heuristics::SparsePixels::Edge edge)
+Heuristics::SparsePixels::similar_colors(PixelGraph::const_iterator n,
+                                         const guint8 (&a)[4],
+                                         const guint8 (&b)[4])
 {
     using colorspace::similar_colors;
-    return (similar_colors(n->rgba, edge.first->rgba)
-            || similar_colors(n->rgba, edge.second->rgba));
+    return similar_colors(n->rgba, a) || similar_colors(n->rgba, b);
 }
 
-inline bool Heuristics::islands(PixelGraph &graph, PixelGraph::Node *a,
-                               PixelGraph::Node *b)
+inline bool Heuristics::islands(PixelGraph::const_iterator a,
+                                PixelGraph::const_iterator b)
 {
     if ( a->adjsize() == 1 || b->adjsize() == 1 )
         return true;

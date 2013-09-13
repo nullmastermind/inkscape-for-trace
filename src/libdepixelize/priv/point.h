@@ -25,8 +25,6 @@
 #ifndef LIBDEPIXELIZE_TRACER_POINT_H
 #define LIBDEPIXELIZE_TRACER_POINT_H
 
-#include <glib/gtypes.h>
-
 namespace Tracer {
 
 template<class T>

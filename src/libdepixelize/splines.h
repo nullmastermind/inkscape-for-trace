@@ -49,8 +49,8 @@ public:
         guint8 rgba[4];
     };
 
-    typedef typename std::vector<Path>::iterator iterator;
-    typedef typename std::vector<Path>::const_iterator const_iterator;
+    typedef std::vector<Path>::iterator iterator;
+    typedef std::vector<Path>::const_iterator const_iterator;
 
     Splines() /* = default */ {}
 

@@ -25,7 +25,7 @@
 #ifndef LIBDEPIXELIZE_TRACER_YUV_H
 #define LIBDEPIXELIZE_TRACER_YUV_H
 
-#include <glib/gtypes.h>
+#include <glib.h>
 
 namespace Tracer {
 namespace colorspace {

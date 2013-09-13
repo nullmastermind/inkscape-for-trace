@@ -82,8 +82,6 @@ public:
         return _polygons.end();
     }
 
-    // Capacity
-
     size_type size() const
     {
         return _polygons.size();

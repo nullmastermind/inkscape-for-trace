@@ -105,7 +105,6 @@ public:
         return _cells.rend();
     }
 
-    // Capacity
     size_t size() const
     {
         return _cells.size();
@@ -1011,7 +1010,7 @@ SimplifiedVoronoi<T>
                 // or it might be 1-color and doesn't matter,
                 // because the current node will disappear
                 vertex.smooth
-                    = !( vertex.smooth = bottom(a_it) ^ bottom(b_it) );
+                    = !( bottom(a_it) ^ bottom(b_it) );
 
                 if ( vertex.smooth ) {
                     vertex.smooth

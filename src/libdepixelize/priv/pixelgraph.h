@@ -40,7 +40,7 @@ public:
         /*
          * Hamming weight of \p adj
          */
-        unsigned adjsize()
+        unsigned adjsize() const
         {
             unsigned all[8] = {
                 adj.top,
@@ -145,7 +145,6 @@ public:
         return _nodes.rend();
     }
 
-    // Capacity
     size_t size() const
     {
         return _nodes.size();
@@ -164,14 +163,14 @@ public:
     // Algorithms
     void connectAllNeighbors();
 
-    int toX(Node *n) const
+    int toX(const_iterator n) const
     {
-        return (n - &_nodes[0]) % _width;
+        return (&*n - &_nodes[0]) % _width;
     }
 
-    int toY(Node *n) const
+    int toY(const_iterator n) const
     {
-        return (n - &_nodes[0]) / _width;
+        return (&*n - &_nodes[0]) / _width;
     }
 
     iterator nodeTop(iterator n)
