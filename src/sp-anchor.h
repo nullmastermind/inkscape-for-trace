@@ -16,7 +16,7 @@
 #include "sp-item-group.h"
 
 #define SP_ANCHOR(obj) ((SPAnchor*)obj)
-#define SP_IS_ANCHOR(obj) (dynamic_cast<const SPAnchor*>((SPObject*)obj))
+#define SP_IS_ANCHOR(obj) (dynamic_cast<const SPAnchor*>((SPObject*)obj) != NULL)
 
 class SPAnchor : public SPGroup {
 public:

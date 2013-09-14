@@ -13,7 +13,7 @@
 #include "sp-filter-primitive.h"
 
 #define SP_FEMERGE(obj) ((SPFeMerge*)obj)
-#define SP_IS_FEMERGE(obj) (dynamic_cast<const SPFeMerge*>((SPObject*)obj))
+#define SP_IS_FEMERGE(obj) (dynamic_cast<const SPFeMerge*>((SPObject*)obj) != NULL)
 
 class SPFeMerge : public SPFilterPrimitive {
 public:

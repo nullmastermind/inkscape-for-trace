@@ -16,7 +16,7 @@
 #include "svg/svg-icc-color.h"
 
 #define SP_FEFLOOD(obj) ((SPFeFlood*)obj)
-#define SP_IS_FEFLOOD(obj) (dynamic_cast<const SPFeFlood*>((SPObject*)obj))
+#define SP_IS_FEFLOOD(obj) (dynamic_cast<const SPFeFlood*>((SPObject*)obj) != NULL)
 
 class SPFeFlood : public SPFilterPrimitive {
 public:

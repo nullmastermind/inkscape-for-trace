@@ -7,10 +7,10 @@
 #include "sp-item.h"
 
 #define SP_FLOWREGION(obj) ((SPFlowregion*)obj)
-#define SP_IS_FLOWREGION(obj) (dynamic_cast<const SPFlowregion*>((SPObject*)obj))
+#define SP_IS_FLOWREGION(obj) (dynamic_cast<const SPFlowregion*>((SPObject*)obj) != NULL)
 
 #define SP_FLOWREGIONEXCLUDE(obj) ((SPFlowregionExclude*)obj)
-#define SP_IS_FLOWREGIONEXCLUDE(obj) (dynamic_cast<const SPFlowregionExclude*>((SPObject*)obj))
+#define SP_IS_FLOWREGIONEXCLUDE(obj) (dynamic_cast<const SPFlowregionExclude*>((SPObject*)obj) != NULL)
 
 class Path;
 class Shape;

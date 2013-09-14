@@ -15,7 +15,7 @@
  */
 
 #define SP_IMAGE(obj) ((SPImage*)obj)
-#define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj))
+#define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj) != NULL)
 
 /* SPImage */
 

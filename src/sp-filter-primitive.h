@@ -18,7 +18,7 @@
 #include "svg/svg-length.h"
 
 #define SP_FILTER_PRIMITIVE(obj) ((SPFilterPrimitive*)obj)
-#define SP_IS_FILTER_PRIMITIVE(obj) (dynamic_cast<const SPFilterPrimitive*>((SPObject*)obj))
+#define SP_IS_FILTER_PRIMITIVE(obj) (dynamic_cast<const SPFilterPrimitive*>((SPObject*)obj) != NULL)
 
 namespace Inkscape {
 namespace Filters {

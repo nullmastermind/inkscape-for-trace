@@ -15,7 +15,7 @@
 #include "sp-filter-primitive.h"
 
 #define SP_FEDISPLACEMENTMAP(obj) ((SPFeDisplacementMap*)obj)
-#define SP_IS_FEDISPLACEMENTMAP(obj) (dynamic_cast<const SPFeDisplacementMap*>((SPObject*)obj))
+#define SP_IS_FEDISPLACEMENTMAP(obj) (dynamic_cast<const SPFeDisplacementMap*>((SPObject*)obj) != NULL)
 
 enum FilterDisplacementMapChannelSelector {
     DISPLACEMENTMAP_CHANNEL_RED,

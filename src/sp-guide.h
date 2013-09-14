@@ -24,7 +24,7 @@ struct SPCanvasGroup;
 class SPDesktop;
 
 #define SP_GUIDE(obj) ((SPGuide*)obj)
-#define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj))
+#define SP_IS_GUIDE(obj) (dynamic_cast<const SPGuide*>((SPObject*)obj) != NULL)
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
 class SPGuide : public SPObject {

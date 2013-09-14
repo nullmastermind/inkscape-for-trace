@@ -9,7 +9,7 @@
 #include "sp-gradient.h"
 
 #define SP_MESHGRADIENT(obj) ((SPMeshGradient*)obj)
-#define SP_IS_MESHGRADIENT(obj) (dynamic_cast<const SPMeshGradient*>((SPObject*)obj))
+#define SP_IS_MESHGRADIENT(obj) (dynamic_cast<const SPMeshGradient*>((SPObject*)obj) != NULL)
 
 /** Mesh gradient. */
 class SPMeshGradient : public SPGradient {

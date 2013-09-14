@@ -17,7 +17,7 @@
 #include <sigc++/sigc++.h>
 
 #define SP_OFFSET(obj) ((SPOffset*)obj)
-#define SP_IS_OFFSET(obj) (dynamic_cast<const SPOffset*>((SPObject*)obj))
+#define SP_IS_OFFSET(obj) (dynamic_cast<const SPOffset*>((SPObject*)obj) != NULL)
 
 class SPUseReference;
 

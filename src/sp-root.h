@@ -20,7 +20,7 @@
 #include "sp-item-group.h"
 
 #define SP_ROOT(obj) ((SPRoot*)obj)
-#define SP_IS_ROOT(obj) (dynamic_cast<const SPRoot*>((SPObject*)obj))
+#define SP_IS_ROOT(obj) (dynamic_cast<const SPRoot*>((SPObject*)obj) != NULL)
 
 class SPDefs;
 

@@ -22,7 +22,7 @@
 class SPCurve;
 
 #define SP_PATH(obj) ((SPPath*)obj)
-#define SP_IS_PATH(obj) (dynamic_cast<const SPPath*>((SPObject*)obj))
+#define SP_IS_PATH(obj) (dynamic_cast<const SPPath*>((SPObject*)obj) != NULL)
 
 /**
  * SVG <path> implementation

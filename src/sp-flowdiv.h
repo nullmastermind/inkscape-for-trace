@@ -8,19 +8,19 @@
 #include "sp-item.h"
 
 #define SP_FLOWDIV(obj) ((SPFlowdiv*)obj)
-#define SP_IS_FLOWDIV(obj) (dynamic_cast<const SPFlowdiv*>((SPObject*)obj))
+#define SP_IS_FLOWDIV(obj) (dynamic_cast<const SPFlowdiv*>((SPObject*)obj) != NULL)
 
 #define SP_FLOWTSPAN(obj) ((SPFlowtspan*)obj)
-#define SP_IS_FLOWTSPAN(obj) (dynamic_cast<const SPFlowtspan*>((SPObject*)obj))
+#define SP_IS_FLOWTSPAN(obj) (dynamic_cast<const SPFlowtspan*>((SPObject*)obj) != NULL)
 
 #define SP_FLOWPARA(obj) ((SPFlowpara*)obj)
-#define SP_IS_FLOWPARA(obj) (dynamic_cast<const SPFlowpara*>((SPObject*)obj))
+#define SP_IS_FLOWPARA(obj) (dynamic_cast<const SPFlowpara*>((SPObject*)obj) != NULL)
 
 #define SP_FLOWLINE(obj) ((SPFlowline*)obj)
-#define SP_IS_FLOWLINE(obj) (dynamic_cast<const SPFlowline*>((SPObject*)obj))
+#define SP_IS_FLOWLINE(obj) (dynamic_cast<const SPFlowline*>((SPObject*)obj) != NULL)
 
 #define SP_FLOWREGIONBREAK(obj) ((SPFlowregionbreak*)obj)
-#define SP_IS_FLOWREGIONBREAK(obj) (dynamic_cast<const SPFlowregionbreak*>((SPObject*)obj))
+#define SP_IS_FLOWREGIONBREAK(obj) (dynamic_cast<const SPFlowregionbreak*>((SPObject*)obj) != NULL)
 
 // these 3 are derivatives of SPItem to get the automatic style handling
 class SPFlowdiv : public SPItem {

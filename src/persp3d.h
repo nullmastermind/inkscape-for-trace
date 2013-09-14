@@ -13,7 +13,7 @@
  */
 
 #define SP_PERSP3D(obj) ((Persp3D*)obj)
-#define SP_IS_PERSP3D(obj) (dynamic_cast<const Persp3D*>((SPObject*)obj))
+#define SP_IS_PERSP3D(obj) (dynamic_cast<const Persp3D*>((SPObject*)obj) != NULL)
 
 #include <list>
 #include <vector>

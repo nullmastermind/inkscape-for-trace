@@ -15,7 +15,7 @@
 #include "sp-filter-primitive.h"
 
 #define SP_FEOFFSET(obj) ((SPFeOffset*)obj)
-#define SP_IS_FEOFFSET(obj) (dynamic_cast<const SPFeOffset*>((SPObject*)obj))
+#define SP_IS_FEOFFSET(obj) (dynamic_cast<const SPFeOffset*>((SPObject*)obj) != NULL)
 
 class SPFeOffset : public SPFilterPrimitive {
 public:

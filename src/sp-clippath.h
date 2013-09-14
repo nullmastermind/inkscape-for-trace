@@ -16,7 +16,7 @@
  */
 
 #define SP_CLIPPATH(obj) ((SPClipPath*)obj)
-#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj))
+#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj) != NULL)
 
 struct SPClipPathView;
 

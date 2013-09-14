@@ -42,7 +42,7 @@ class SPGradientReference;
 class SPStop;
 
 #define SP_GRADIENT(obj) ((SPGradient*)obj)
-#define SP_IS_GRADIENT(obj) (dynamic_cast<const SPGradient*>((SPObject*)obj))
+#define SP_IS_GRADIENT(obj) (dynamic_cast<const SPGradient*>((SPObject*)obj) != NULL)
 
 enum SPGradientType {
     SP_GRADIENT_TYPE_UNKNOWN,

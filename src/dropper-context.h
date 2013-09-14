@@ -15,7 +15,7 @@
 #include "event-context.h"
 
 #define SP_DROPPER_CONTEXT(obj) ((SPDropperContext*)obj)
-#define SP_IS_DROPPER_CONTEXT(obj) (dynamic_cast<const SPDropperContext*>((const SPEventContext*)obj))
+#define SP_IS_DROPPER_CONTEXT(obj) (dynamic_cast<const SPDropperContext*>((const SPEventContext*)obj) != NULL)
 
 enum {
       SP_DROPPER_PICK_VISIBLE,

@@ -17,7 +17,7 @@ class ustring;
 }
 
 #define SP_STOP(obj) ((SPStop*)obj)
-#define SP_IS_STOP(obj) (dynamic_cast<const SPStop*>((SPObject*)obj))
+#define SP_IS_STOP(obj) (dynamic_cast<const SPStop*>((SPObject*)obj) != NULL)
 
 /** Gradient stop. */
 class SPStop : public SPObject {

@@ -21,7 +21,7 @@
 #include <glibmm/i18n.h>
 
 #define SP_CONNECTOR_CONTEXT(obj) ((SPConnectorContext*)obj)
-//#define SP_IS_CONNECTOR_CONTEXT(obj) (dynamic_cast<const SPConnectorContext*>((const SPEventContext*)obj))
+//#define SP_IS_CONNECTOR_CONTEXT(obj) (dynamic_cast<const SPConnectorContext*>((const SPEventContext*)obj) != NULL)
 
 struct SPKnot;
 class SPCurve;

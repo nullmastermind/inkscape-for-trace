@@ -10,7 +10,7 @@
 #include "libnrtype/Layout-TNG.h"
 
 #define SP_FLOWTEXT(obj) ((SPFlowtext*)obj)
-#define SP_IS_FLOWTEXT(obj) (dynamic_cast<const SPFlowtext*>((SPObject*)obj))
+#define SP_IS_FLOWTEXT(obj) (dynamic_cast<const SPFlowtext*>((SPObject*)obj) != NULL)
 
 
 namespace Inkscape {

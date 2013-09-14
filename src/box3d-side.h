@@ -18,7 +18,7 @@
 
 
 #define SP_BOX3D_SIDE(obj) ((Box3DSide*)obj)
-#define SP_IS_BOX3D_SIDE(obj) (dynamic_cast<const Box3DSide*>((SPObject*)obj))
+#define SP_IS_BOX3D_SIDE(obj) (dynamic_cast<const Box3DSide*>((SPObject*)obj) != NULL)
 
 class SPBox3D;
 class Persp3D;

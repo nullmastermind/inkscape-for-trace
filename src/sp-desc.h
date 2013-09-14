@@ -15,7 +15,7 @@
 #include "sp-object.h"
 
 #define SP_DESC(obj) ((SPDesc*)obj)
-#define SP_IS_DESC(obj) (dynamic_cast<const SPDesc*>((SPObject*)obj))
+#define SP_IS_DESC(obj) (dynamic_cast<const SPDesc*>((SPObject*)obj) != NULL)
 
 class SPDesc : public SPObject {
 public:

@@ -22,7 +22,7 @@
 #include "event-context.h"
 
 #define SP_SPRAY_CONTEXT(obj) ((SPSprayContext*)obj)
-#define SP_IS_SPRAY_CONTEXT(obj) (dynamic_cast<const SPSprayContext*>((const SPEventContext*)obj))
+#define SP_IS_SPRAY_CONTEXT(obj) (dynamic_cast<const SPSprayContext*>((const SPEventContext*)obj) != NULL)
 
 namespace Inkscape {
   namespace UI {

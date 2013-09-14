@@ -17,7 +17,7 @@
 #include "display/nr-filter-morphology.h"
 
 #define SP_FEMORPHOLOGY(obj) ((SPFeMorphology*)obj)
-#define SP_IS_FEMORPHOLOGY(obj) (dynamic_cast<const SPFeMorphology*>((SPObject*)obj))
+#define SP_IS_FEMORPHOLOGY(obj) (dynamic_cast<const SPFeMorphology*>((SPObject*)obj) != NULL)
 
 class SPFeMorphology : public SPFilterPrimitive {
 public:

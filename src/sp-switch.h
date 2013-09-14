@@ -18,7 +18,7 @@
 #include <sigc++/connection.h>
 
 #define SP_SWITCH(obj) ((SPSwitch*)obj)
-#define SP_IS_SWITCH(obj) (dynamic_cast<const SPSwitch*>((SPObject*)obj))
+#define SP_IS_SWITCH(obj) (dynamic_cast<const SPSwitch*>((SPObject*)obj) != NULL)
 
 class SPSwitch : public SPGroup {
 public:

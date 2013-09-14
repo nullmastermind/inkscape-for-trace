@@ -25,7 +25,7 @@
 //#define SP_IS_HKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_HKERN))
 
 #define SP_HKERN(obj) ((SPHkern*)obj)
-#define SP_IS_HKERN(obj) (dynamic_cast<const SPHkern*>((SPObject*)obj))
+#define SP_IS_HKERN(obj) (dynamic_cast<const SPHkern*>((SPObject*)obj) != NULL)
 
 //#define SP_VKERN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_VKERN, SPVkern))
 //#define SP_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_VKERN, SPGlyphKerningClass))
@@ -33,7 +33,7 @@
 //#define SP_IS_VKERN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_VKERN))
 
 #define SP_VKERN(obj) ((SPVkern*)obj)
-#define SP_IS_VKERN(obj) (dynamic_cast<const SPVkern*>((SPObject*)obj))
+#define SP_IS_VKERN(obj) (dynamic_cast<const SPVkern*>((SPObject*)obj) != NULL)
 
 // CPPIFY: These casting macros are buggy, as Vkern and Hkern aren't "real" classes.
 

@@ -5,7 +5,7 @@
 #include "media.h"
 
 #define SP_STYLE_ELEM(obj) ((SPStyleElem*)obj)
-#define SP_IS_STYLE_ELEM(obj) (dynamic_cast<const SPStyleElem*>((SPObject*)obj))
+#define SP_IS_STYLE_ELEM(obj) (dynamic_cast<const SPStyleElem*>((SPObject*)obj) != NULL)
 
 class SPStyleElem : public SPObject {
 public:

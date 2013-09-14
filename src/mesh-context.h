@@ -22,7 +22,7 @@
 #include "event-context.h"
 
 #define SP_MESH_CONTEXT(obj) ((SPMeshContext*)obj)
-#define SP_IS_MESH_CONTEXT(obj) (dynamic_cast<const SPMeshContext*>((const SPEventContext*)obj))
+#define SP_IS_MESH_CONTEXT(obj) (dynamic_cast<const SPMeshContext*>((const SPEventContext*)obj) != NULL)
 
 class SPMeshContext : public SPEventContext {
 public:

@@ -18,7 +18,7 @@
 class SPObject;
 
 #define SP_OBJECT(obj) ((SPObject*)obj)
-#define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>((SPObject*)obj))
+#define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>((SPObject*)obj) != NULL)
 
 /* Async modification flags */
 #define SP_OBJECT_MODIFIED_FLAG (1 << 0)

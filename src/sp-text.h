@@ -22,7 +22,7 @@
 #include "libnrtype/Layout-TNG.h"
 
 #define SP_TEXT(obj) ((SPText*)obj)
-#define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj))
+#define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
 
 /* Text specific flags */
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A

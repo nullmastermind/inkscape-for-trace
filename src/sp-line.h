@@ -18,7 +18,7 @@
 #include "sp-shape.h"
 
 #define SP_LINE(obj) ((SPLine*)obj)
-#define SP_IS_LINE(obj) (dynamic_cast<const SPLine*>((SPObject*)obj))
+#define SP_IS_LINE(obj) (dynamic_cast<const SPLine*>((SPObject*)obj) != NULL)
 
 class SPLine : public SPShape {
 public:

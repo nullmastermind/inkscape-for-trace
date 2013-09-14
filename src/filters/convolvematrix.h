@@ -19,7 +19,7 @@
 #include "display/nr-filter-convolve-matrix.h"
 
 #define SP_FECONVOLVEMATRIX(obj) ((SPFeConvolveMatrix*)obj)
-#define SP_IS_FECONVOLVEMATRIX(obj) (dynamic_cast<const SPFeConvolveMatrix*>((SPObject*)obj))
+#define SP_IS_FECONVOLVEMATRIX(obj) (dynamic_cast<const SPFeConvolveMatrix*>((SPObject*)obj) != NULL)
 
 class SPFeConvolveMatrix : public SPFilterPrimitive {
 public:

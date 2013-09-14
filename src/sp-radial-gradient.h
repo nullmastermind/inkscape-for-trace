@@ -10,7 +10,7 @@
 #include "svg/svg-length.h"
 
 #define SP_RADIALGRADIENT(obj) ((SPRadialGradient*)obj)
-#define SP_IS_RADIALGRADIENT(obj) (dynamic_cast<const SPRadialGradient*>((SPObject*)obj))
+#define SP_IS_RADIALGRADIENT(obj) (dynamic_cast<const SPRadialGradient*>((SPObject*)obj) != NULL)
 
 /** Radial gradient. */
 class SPRadialGradient : public SPGradient {

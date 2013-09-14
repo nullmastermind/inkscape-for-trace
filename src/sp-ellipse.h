@@ -19,7 +19,7 @@
 
 /* Common parent class */
 #define SP_GENERICELLIPSE(obj) ((SPGenericEllipse*)obj)
-#define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj))
+#define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj) != NULL)
 
 class SPGenericEllipse : public SPShape {
 public:
@@ -48,7 +48,7 @@ void sp_genericellipse_normalize (SPGenericEllipse *ellipse);
 
 /* SVG <ellipse> element */
 #define SP_ELLIPSE(obj) ((SPEllipse*)obj)
-#define SP_IS_ELLIPSE(obj) (dynamic_cast<const SPEllipse*>((SPObject*)obj))
+#define SP_IS_ELLIPSE(obj) (dynamic_cast<const SPEllipse*>((SPObject*)obj) != NULL)
 
 class SPEllipse : public SPGenericEllipse {
 public:
@@ -65,7 +65,7 @@ void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble
 
 /* SVG <circle> element */
 #define SP_CIRCLE(obj) ((SPCircle*)obj)
-#define SP_IS_CIRCLE(obj) (dynamic_cast<const SPCircle*>((SPObject*)obj))
+#define SP_IS_CIRCLE(obj) (dynamic_cast<const SPCircle*>((SPObject*)obj) != NULL)
 
 class SPCircle : public SPGenericEllipse {
 public:
@@ -80,7 +80,7 @@ public:
 
 /* <path sodipodi:type="arc"> element */
 #define SP_ARC(obj) ((SPArc*)obj)
-#define SP_IS_ARC(obj) (dynamic_cast<const SPArc*>((SPObject*)obj))
+#define SP_IS_ARC(obj) (dynamic_cast<const SPArc*>((SPObject*)obj) != NULL)
 
 class SPArc : public SPGenericEllipse {
 public:

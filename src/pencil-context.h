@@ -8,7 +8,7 @@
 #include "draw-context.h"
 
 #define SP_PENCIL_CONTEXT(obj) ((SPPencilContext*)obj)
-#define SP_IS_PENCIL_CONTEXT(obj) (dynamic_cast<const SPPencilContext*>((const SPEventContext*)obj))
+#define SP_IS_PENCIL_CONTEXT(obj) (dynamic_cast<const SPPencilContext*>((const SPEventContext*)obj) != NULL)
 
 enum PencilState {
     SP_PENCIL_CONTEXT_IDLE,

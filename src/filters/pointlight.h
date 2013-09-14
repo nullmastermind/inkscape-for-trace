@@ -18,7 +18,7 @@
 #include "sp-object.h"
 
 #define SP_FEPOINTLIGHT(obj) ((SPFePointLight*)obj)
-#define SP_IS_FEPOINTLIGHT(obj) (dynamic_cast<const SPFePointLight*>((SPObject*)obj))
+#define SP_IS_FEPOINTLIGHT(obj) (dynamic_cast<const SPFePointLight*>((SPObject*)obj) != NULL)
 
 class SPFePointLight : public SPObject {
 public:

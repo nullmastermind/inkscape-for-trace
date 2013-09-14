@@ -14,7 +14,7 @@
 #include "sp-filter-primitive.h"
 
 #define SP_FECOMPONENTTRANSFER(obj) ((SPFeComponentTransfer*)obj)
-#define SP_IS_FECOMPONENTTRANSFER(obj) (dynamic_cast<const SPFeComponentTransfer*>((SPObject*)obj))
+#define SP_IS_FECOMPONENTTRANSFER(obj) (dynamic_cast<const SPFeComponentTransfer*>((SPObject*)obj) != NULL)
 
 namespace Inkscape {
 namespace Filters {

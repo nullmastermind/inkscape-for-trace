@@ -15,7 +15,7 @@
  */
 
 #define SP_NAMEDVIEW(obj) ((SPNamedView*)obj)
-#define SP_IS_NAMEDVIEW(obj) (dynamic_cast<const SPNamedView*>((SPObject*)obj))
+#define SP_IS_NAMEDVIEW(obj) (dynamic_cast<const SPNamedView*>((SPObject*)obj) != NULL)
 
 #include "sp-object-group.h"
 #include "snap.h"

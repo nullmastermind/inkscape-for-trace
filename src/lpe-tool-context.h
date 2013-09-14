@@ -18,7 +18,7 @@
 #include "pen-context.h"
 
 #define SP_LPETOOL_CONTEXT(obj) ((SPLPEToolContext*)obj)
-#define SP_IS_LPETOOL_CONTEXT(obj) (dynamic_cast<const SPLPEToolContext*>((const SPEventContext*)obj))
+#define SP_IS_LPETOOL_CONTEXT(obj) (dynamic_cast<const SPLPEToolContext*>((const SPEventContext*)obj) != NULL)
 
 /* This is the list of subtools from which the toolbar of the LPETool is built automatically */
 extern const int num_subtools;

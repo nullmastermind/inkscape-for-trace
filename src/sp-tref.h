@@ -23,7 +23,7 @@
 /* tref base class */
 
 #define SP_TREF(obj) ((SPTRef*)obj)
-#define SP_IS_TREF(obj) (dynamic_cast<const SPTRef*>((SPObject*)obj))
+#define SP_IS_TREF(obj) (dynamic_cast<const SPTRef*>((SPObject*)obj) != NULL)
 
 class SPTRef : public SPItem {
 public:

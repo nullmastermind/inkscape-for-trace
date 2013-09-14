@@ -25,7 +25,7 @@
 
 
 #define SP_SPIRAL(obj) ((SPSpiral*)obj)
-#define SP_IS_SPIRAL(obj) (dynamic_cast<const SPSpiral*>((SPObject*)obj))
+#define SP_IS_SPIRAL(obj) (dynamic_cast<const SPSpiral*>((SPObject*)obj) != NULL)
 
 /**
  * A spiral Shape.

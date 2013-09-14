@@ -14,7 +14,7 @@
 #include "sp-filter-primitive.h"
 
 #define SP_FECOMPOSITE(obj) ((SPFeComposite*)obj)
-#define SP_IS_FECOMPOSITE(obj) (dynamic_cast<const SPFeComposite*>((SPObject*)obj))
+#define SP_IS_FECOMPOSITE(obj) (dynamic_cast<const SPFeComposite*>((SPObject*)obj) != NULL)
 
 enum FeCompositeOperator {
     // Default value is 'over', but let's distinquish specifying the

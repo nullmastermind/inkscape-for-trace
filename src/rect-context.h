@@ -22,7 +22,7 @@
 #include "sp-rect.h"
 
 #define SP_RECT_CONTEXT(obj) ((SPRectContext*)obj)
-#define SP_IS_RECT_CONTEXT(obj) (dynamic_cast<const SPRectContext*>((const SPEventContext*)obj))
+#define SP_IS_RECT_CONTEXT(obj) (dynamic_cast<const SPRectContext*>((const SPEventContext*)obj) != NULL)
 
 class SPRectContext : public SPEventContext {
 public:

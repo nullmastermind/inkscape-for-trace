@@ -23,7 +23,7 @@
 /* Freehand context */
 
 #define SP_DRAW_CONTEXT(obj) ((SPDrawContext*)obj)
-#define SP_IS_DRAW_CONTEXT(obj) (dynamic_cast<const SPDrawContext*>((const SPEventContext*)obj))
+#define SP_IS_DRAW_CONTEXT(obj) (dynamic_cast<const SPDrawContext*>((const SPEventContext*)obj) != NULL)
 
 struct SPDrawAnchor;
 namespace Inkscape

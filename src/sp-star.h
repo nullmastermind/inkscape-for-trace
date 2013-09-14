@@ -18,7 +18,7 @@
 
 
 #define SP_STAR(obj) ((SPStar*)obj)
-#define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj))
+#define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj) != NULL)
 
 typedef enum {
 	SP_STAR_POINT_KNOT1,

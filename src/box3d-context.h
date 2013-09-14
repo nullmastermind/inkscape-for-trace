@@ -24,7 +24,7 @@
 #include "box3d.h"
 
 #define SP_BOX3D_CONTEXT(obj) ((Box3DContext*)obj)
-#define SP_IS_BOX3D_CONTEXT(obj) (dynamic_cast<const Box3DContext*>((const SPEventContext*)obj))
+#define SP_IS_BOX3D_CONTEXT(obj) (dynamic_cast<const Box3DContext*>((const SPEventContext*)obj) != NULL)
 
 class Box3DContext : public SPEventContext {
 public:

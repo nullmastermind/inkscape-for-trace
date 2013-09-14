@@ -18,7 +18,7 @@
 #include "sp-object.h"
 
 #define SP_FEMERGENODE(obj) ((SPFeMergeNode*)obj)
-#define SP_IS_FEMERGENODE(obj) (dynamic_cast<const SPFeMergeNode*>((SPObject*)obj))
+#define SP_IS_FEMERGENODE(obj) (dynamic_cast<const SPFeMergeNode*>((SPObject*)obj) != NULL)
 
 class SPFeMergeNode : public SPObject {
 public:

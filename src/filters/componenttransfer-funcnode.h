@@ -36,10 +36,10 @@
 //#define SP_IS_FEFUNCB(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
 //#define SP_IS_FEFUNCA(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
 
-#define SP_IS_FEFUNCR(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
-#define SP_IS_FEFUNCG(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
-#define SP_IS_FEFUNCB(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
-#define SP_IS_FEFUNCA(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj))
+#define SP_IS_FEFUNCR(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj) != NULL)
+#define SP_IS_FEFUNCG(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj) != NULL)
+#define SP_IS_FEFUNCB(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj) != NULL)
+#define SP_IS_FEFUNCA(obj) (dynamic_cast<const SPFeFuncNode*>((SPObject*)obj) != NULL)
 
 class SPFeFuncNode : public SPObject {
 public:
