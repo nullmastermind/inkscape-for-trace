@@ -31,11 +31,13 @@
 #include "inkscape.h"
 #include "io/sys.h"
 #include "preferences.h"
+#include "shape-editor.h"
 #include "sp-namedview.h"
 #include "sp-object-repr.h"
 #include "sp-root.h"
 #include "sp-script.h"
 #include "svg/stringstream.h"
+#include "tools-switch.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/dialog/filedialog.h"
@@ -1658,9 +1660,16 @@ void DocumentProperties::onDocUnitChange()
     Inkscape::Util::Quantity height = doc->getHeight();
     doc->setViewBox(Geom::Rect::from_xywh(0, 0, width.value(doc_unit), height.value(doc_unit)));
     
+    // TODO: Fix bug in nodes tool instead of switching away from it
+    if (tools_active(getDesktop()) == TOOLS_NODES) {
+        tools_switch(getDesktop(), TOOLS_SELECT);
+    }
+    
     // Scale and translate objects
     gdouble scale = Inkscape::Util::Quantity::convert(1, old_doc_unit, doc_unit);
+    ShapeEditor::blockSetItem(true);
     doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, doc->getHeight().value("px")));
+    ShapeEditor::blockSetItem(false);
     
     doc->setModifiedSinceSave();
     
