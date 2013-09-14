@@ -30,7 +30,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#define  EMF_DRIVER //work around SPStyle issue, MUST be EMF, not WMF
+#include <libuemf/symbol_convert.h>
+
 #include "sp-root.h"
 #include "sp-path.h"
 #include "style.h"
@@ -45,7 +46,6 @@
 #include "util/units.h"
 #include "clear-n_.h"
 #include "document.h"
-#include "libunicode-convert/unicode-convert.h"
 
 
 #include "wmf-inout.h"
@@ -314,9 +314,6 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 
     return;
 }
-
-
-enum drawmode {DRAW_PAINT, DRAW_PATTERN, DRAW_IMAGE};  // apply to either fill or stroke
 
 
 /* WMF has no worldTranform, so this always returns 1.0.  Retain it to keep WMF and WMF in sync as much as possible.*/

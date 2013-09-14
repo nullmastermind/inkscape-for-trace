@@ -101,7 +101,6 @@ namespace Extension {
 namespace Internal {
 
 CairoRenderer::CairoRenderer(void)
-  : _omitText(false)
 {}
 
 CairoRenderer::~CairoRenderer(void)
@@ -450,7 +449,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     Geom::OptRect bbox = item->desktopVisualBounds();
 
     // no bbox, e.g. empty group
-	if (!bbox) {
+    if (!bbox) {
         return;
     }
 
@@ -504,8 +503,13 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 
     if (pb) {
         TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
-        // TODO this is stupid - we just converted to pixbuf format when generating the bitmap!
-        convert_pixbuf_normal_to_argb32(pb);
+
+        /* TODO: find a way to avoid a duplicate conversion between
+         * Cairo and GdkPixbuf pixel formats here.
+         * Internally, generate_internal_bitmap creates a Cairo surface,
+         * but then converts it to pixbuf format. In turn, renderImage()
+         * below converts back to Cairo format.
+         */
         ctx->renderImage(pb, t, item->style);
         g_object_unref(pb);
         pb = 0;
@@ -578,11 +582,6 @@ CairoRenderer::setStateForItem(CairoRenderContext *ctx, SPItem const *item)
 // TODO change this to accept a const SPItem:
 void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
 {
-    if ( _omitText && (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) ) {
-        // skip text if _omitText is true
-        return;
-    }
-
     ctx->pushState();
     setStateForItem(ctx, item);
 

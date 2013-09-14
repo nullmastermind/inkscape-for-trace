@@ -30,7 +30,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#define  EMF_DRIVER // work around for SPStyle issue
+#include <libuemf/symbol_convert.h>
+
 #include "sp-root.h"
 #include "sp-path.h"
 #include "style.h"
@@ -44,7 +45,6 @@
 #include "display/drawing-item.h"
 #include "clear-n_.h"
 #include "document.h"
-#include "libunicode-convert/unicode-convert.h"
 #include "util/units.h"
 
 #include "emf-print.h"
@@ -315,10 +315,6 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 
     return;
 }
-
-
-enum drawmode {DRAW_PAINT, DRAW_PATTERN, DRAW_IMAGE};  // apply to either fill or stroke
-
 
 
 /*  given the transformation matrix from worldTranform return the scale in the matrix part.  Assumes that the
