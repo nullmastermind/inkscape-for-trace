@@ -585,6 +585,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                             old_center = item->getCenter();
                         }
                         
+                        gchar const *conn_type = NULL;
                         if (SP_IS_TEXT_TEXTPATH(item)) {
                             SP_TEXT(item)->optimizeTextpathText();
                         } else if (SP_IS_FLOWTEXT(item)) {
@@ -592,6 +593,12 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                         } else if (SP_IS_BOX3D(item)) {
                             // Force recalculation from perspective
                             box3d_position_set(SP_BOX3D(item));
+                        } else if (item->getAttribute("inkscape:connector-type") != NULL
+                            && (item->getAttribute("inkscape:connection-start") == NULL
+                                || item->getAttribute("inkscape:connection-end") == NULL)) {
+                            // Remove and store connector type for transform if disconnected
+                            conn_type = item->getAttribute("inkscape:connector-type");
+                            item->removeAttribute("inkscape:connector-type");
                         }
                         
                         if ((SP_IS_TEXT_TEXTPATH(item) || SP_IS_FLOWTEXT(item)) && !item->transform.isIdentity()) {
@@ -613,6 +620,10 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                         } else {
                             item->set_i2d_affine(item->i2dt_affine() * final);
                             item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                        }
+                        
+                        if (conn_type != NULL) {
+                            item->setAttribute("inkscape:connector-type", conn_type);
                         }
                         
                         if (item->isCenterSet() && !(final.isTranslation() || final.isIdentity())) {
