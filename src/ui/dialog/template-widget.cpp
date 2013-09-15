@@ -24,6 +24,9 @@
 
 #include "inkscape.h"
 #include "desktop.h"
+#include "desktop-handles.h"
+#include "document.h"
+#include "document-undo.h"
 
 namespace Inkscape {
 namespace UI {
@@ -66,6 +69,7 @@ void TemplateWidget::create()
     if (_current_template.is_procedural){
         SPDesktop *desc = sp_file_new_default();
         _current_template.tpl_effect->effect(desc);
+        DocumentUndo::clearUndo(sp_desktop_document(desc));
     }
     else {
         sp_file_new(_current_template.path);
