@@ -156,7 +156,7 @@ void TemplateLoadTab::_refreshTemplatesList()
     
     case LIST_KEYWORD: {
         for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
-            if (it->second.keywords.count(_current_keyword) != 0){
+            if (it->second.keywords.count(_current_keyword.lowercase()) != 0){
                 Gtk::TreeModel::iterator iter = _tlist_store->append();
                 Gtk::TreeModel::Row row = *iter;
                 row[_columns.textValue]  = it->first;
@@ -167,11 +167,11 @@ void TemplateLoadTab::_refreshTemplatesList()
     
     case USER_SPECIFIED : {
         for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
-            if (it->second.keywords.count(_current_keyword) != 0 || 
-                it->second.display_name.find(_current_keyword) != Glib::ustring::npos ||
-                it->second.author.find(_current_keyword) != Glib::ustring::npos ||
-                it->second.short_description.find(_current_keyword) != Glib::ustring::npos ||
-                it->second.long_description.find(_current_keyword) != Glib::ustring::npos )
+            if (it->second.keywords.count(_current_keyword.lowercase()) != 0 || 
+                it->second.display_name.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
+                it->second.author.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
+                it->second.short_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
+                it->second.long_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos )
             {
                 Gtk::TreeModel::iterator iter = _tlist_store->append();
                 Gtk::TreeModel::Row row = *iter;
@@ -191,7 +191,6 @@ void TemplateLoadTab::_loadTemplates()
 
     // system templates dir
     _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
-    
     
     // procedural templates
     _getProceduralTemplates();
@@ -305,8 +304,8 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
                 pos = tplKeywords.size();
                 
             Glib::ustring keyword = dgettext("Document template keyword", tplKeywords.substr(0, pos).data());
-            data.keywords.insert(keyword);
-            _keywords.insert(keyword);
+            data.keywords.insert(keyword.lowercase());
+            _keywords.insert(keyword.lowercase());
                 
             if (pos == tplKeywords.size())
                 break;
