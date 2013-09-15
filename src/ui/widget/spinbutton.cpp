@@ -14,6 +14,7 @@
 #include "spinbutton.h"
 
 #include "unit-menu.h"
+#include "unit-tracker.h"
 #include "util/expression-evaluator.h"
 #include "event-context.h"
 
@@ -33,8 +34,13 @@ int SpinButton::on_input(double* newvalue)
 {
     try {
         Inkscape::Util::GimpEevlQuantity result;
-        if (_unit_menu) {
-            Unit unit = _unit_menu->getUnit();
+        if (_unit_menu || _unit_tracker) {
+            Unit unit;
+            if (_unit_menu) {
+                unit = _unit_menu->getUnit();
+            } else {
+                unit = _unit_tracker->getActiveUnit();
+            }
             result = Inkscape::Util::gimp_eevl_evaluate (get_text().c_str(), &unit);
             // check if output dimension corresponds to input unit
             if (result.dimension != (unit.isAbsolute() ? 1 : 0) ) {

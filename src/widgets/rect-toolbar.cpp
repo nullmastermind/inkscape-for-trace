@@ -319,7 +319,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-rect",
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_rtb_width_value_changed );
+                                         sp_rtb_width_value_changed, tracker);
         tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "width_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
@@ -336,7 +336,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_rtb_height_value_changed );
+                                         sp_rtb_height_value_changed, tracker);
         tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "height_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
@@ -353,7 +353,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_rtb_rx_value_changed);
+                                         sp_rtb_rx_value_changed, tracker);
         tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
@@ -368,7 +368,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_rtb_ry_value_changed);
+                                         sp_rtb_ry_value_changed, tracker);
         tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
