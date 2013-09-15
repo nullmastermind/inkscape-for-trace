@@ -86,6 +86,8 @@ sp_flowtext_init(SPFlowtext *group)
 {
     group->par_indent = 0;
     new (&group->layout) Inkscape::Text::Layout();
+    
+    group->_optimizeScaledText = false;
 }
 
 static void
@@ -706,9 +708,13 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
 static Geom::Affine
 sp_flowtext_set_transform (SPItem *item, Geom::Affine const &xform)
 {
-    if (!xform.isNonzeroUniformScale()) {
+    SPFlowtext *ft = SP_FLOWTEXT(item);
+    if ((ft->_optimizeScaledText && !xform.withoutTranslation().isNonzeroUniformScale())
+        || (!ft->_optimizeScaledText && !xform.isNonzeroUniformScale())) {
+        ft->_optimizeScaledText = false;
         return xform;
     }
+    ft->_optimizeScaledText = false;
     
     SPText *text = reinterpret_cast<SPText *>(item);
     

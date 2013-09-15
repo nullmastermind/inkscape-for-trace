@@ -51,8 +51,8 @@
 #include "sp-defs.h"
 #include "verbs.h"
 #include "layer-model.h"
-#include "selection-chemistry.h"
 #include "sp-textpath.h"
+#include "sp-flowtext.h"
 
 using Inkscape::DocumentUndo;
 
@@ -585,18 +585,27 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                             old_center = item->getCenter();
                         }
                         
-                        if (SP_IS_TEXT_TEXTPATH(item) && item->transform.isIdentity()) {
-                            if (item->transform.isIdentity()) {
-                                SP_TEXT(item)->optimizeTextpathText();
-                            } else {
-                                // TODO: transformed text on textpath
-                            }
+                        if (SP_IS_TEXT_TEXTPATH(item)) {
+                            SP_TEXT(item)->optimizeTextpathText();
+                        } else if (SP_IS_FLOWTEXT(item)) {
+                            SP_FLOWTEXT(item)->optimizeScaledText();
                         } else if (SP_IS_BOX3D(item)) {
                             // Force recalculation from perspective
                             box3d_position_set(SP_BOX3D(item));
                         }
                         
-                        if (SP_IS_USE(item)) {
+                        if ((SP_IS_TEXT_TEXTPATH(item) || SP_IS_FLOWTEXT(item)) && !item->transform.isIdentity()) {
+                            // Save and reset current transform
+                            Geom::Affine tmp(item->transform);
+                            item->transform = Geom::Affine();
+                            // Apply scale
+                            item->set_i2d_affine(item->i2dt_affine() * sc);
+                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            // Scale translation and restore original transform
+                            tmp[4] *= sc[0];
+                            tmp[5] *= sc[1];
+                            item->doWriteTransform(item->getRepr(), tmp, NULL, true);
+                        } else if (SP_IS_USE(item)) {
                             // calculate the matrix we need to apply to the clone
                             // to cancel its induced transform from its original
                             Geom::Affine move = final.inverse() * item->transform * final;

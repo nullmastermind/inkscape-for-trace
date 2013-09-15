@@ -43,6 +43,12 @@ struct SPFlowtext : public SPItem {
 
     double par_indent;
 
+    bool _optimizeScaledText;
+
+    /** Optimize scaled flow text on next set_transform. */
+    void optimizeScaledText()
+        {_optimizeScaledText = true;}
+
 private:
     /** Recursively walks the xml tree adding tags and their contents. */
     void _buildLayoutInput(SPObject *root, Shape const *exclusion_shape, std::list<Shape> *shapes, SPObject **pending_line_break_object);
