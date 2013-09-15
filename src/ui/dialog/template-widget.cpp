@@ -70,6 +70,7 @@ void TemplateWidget::create()
         SPDesktop *desc = sp_file_new_default();
         _current_template.tpl_effect->effect(desc);
         DocumentUndo::clearUndo(sp_desktop_document(desc));
+        sp_desktop_document(desc)->setModifiedSinceSave(false);
     }
     else {
         sp_file_new(_current_template.path);
