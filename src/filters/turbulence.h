@@ -17,7 +17,7 @@
 #include "number-opt-number.h"
 #include "display/nr-filter-turbulence.h"
 
-#define SP_FETURBULENCE(obj) ((SPFeTurbulence*)obj)
+#define SP_FETURBULENCE(obj) (dynamic_cast<SPFeTurbulence*>((SPObject*)obj))
 #define SP_IS_FETURBULENCE(obj) (dynamic_cast<const SPFeTurbulence*>((SPObject*)obj) != NULL)
 
 /* FeTurbulence base class */

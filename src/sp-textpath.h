@@ -9,7 +9,7 @@ class SPUsePath;
 class Path;
 
 
-#define SP_TEXTPATH(obj) ((SPTextPath*)obj)
+#define SP_TEXTPATH(obj) (dynamic_cast<SPTextPath*>((SPObject*)obj))
 #define SP_IS_TEXTPATH(obj) (dynamic_cast<const SPTextPath*>((SPObject*)obj) != NULL)
 
 class SPTextPath : public SPItem {

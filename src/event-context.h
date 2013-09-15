@@ -33,7 +33,7 @@ namespace Inkscape {
     }
 }
 
-#define SP_EVENT_CONTEXT(obj) ((SPEventContext*)obj)
+#define SP_EVENT_CONTEXT(obj) (dynamic_cast<SPEventContext*>((SPEventContext*)obj))
 #define SP_IS_EVENT_CONTEXT(obj) (dynamic_cast<const SPEventContext*>((const SPEventContext*)obj) != NULL)
 
 gboolean sp_event_context_snap_watchdog_callback(gpointer data);

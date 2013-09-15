@@ -18,7 +18,7 @@
 #include "uri-references.h"
 #include "xml/node.h"
 
-#define SP_MASK(obj) ((SPMask*)obj)
+#define SP_MASK(obj) (dynamic_cast<SPMask*>((SPObject*)obj))
 #define SP_IS_MASK(obj) (dynamic_cast<const SPMask*>((SPObject*)obj) != NULL)
 
 struct SPMaskView;

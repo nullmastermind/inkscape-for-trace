@@ -23,7 +23,7 @@
 
 #include "sp-spiral.h"
 
-#define SP_SPIRAL_CONTEXT(obj) ((SPSpiralContext*)obj)
+#define SP_SPIRAL_CONTEXT(obj) (dynamic_cast<SPSpiralContext*>((SPEventContext*)obj))
 #define SP_IS_SPIRAL_CONTEXT(obj) (dynamic_cast<const SPSpiralContext*>((const SPEventContext*)obj) != NULL)
 
 class SPSpiralContext : public SPEventContext {

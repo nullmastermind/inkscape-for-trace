@@ -17,7 +17,7 @@
 #include "sp-filter-primitive.h"
 #include "number-opt-number.h"
 
-#define SP_FESPECULARLIGHTING(obj) ((SPFeSpecularLighting*)obj)
+#define SP_FESPECULARLIGHTING(obj) (dynamic_cast<SPFeSpecularLighting*>((SPObject*)obj))
 #define SP_IS_FESPECULARLIGHTING(obj) (dynamic_cast<const SPFeSpecularLighting*>((SPObject*)obj) != NULL)
 
 struct SVGICCColor;

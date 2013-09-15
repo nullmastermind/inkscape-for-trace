@@ -18,7 +18,7 @@
  */
 
 #define SP_TYPE_SYMBOL (sp_symbol_get_type ())
-#define SP_SYMBOL(obj) ((SPSymbol*)obj)
+#define SP_SYMBOL(obj) (dynamic_cast<SPSymbol*>((SPObject*)obj))
 #define SP_IS_SYMBOL(obj) (dynamic_cast<const SPSymbol*>((SPObject*)obj) != NULL)
 
 #include <2geom/affine.h>

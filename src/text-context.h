@@ -23,7 +23,7 @@
 #include <2geom/point.h>
 #include "libnrtype/Layout-TNG.h"
 
-#define SP_TEXT_CONTEXT(obj) ((SPTextContext*)obj)
+#define SP_TEXT_CONTEXT(obj) (dynamic_cast<SPTextContext*>((SPEventContext*)obj))
 #define SP_IS_TEXT_CONTEXT(obj) (dynamic_cast<const SPTextContext*>((const SPEventContext*)obj) != NULL)
 
 struct SPCtrlLine;

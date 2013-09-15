@@ -18,7 +18,7 @@
 
 #include "sp-object.h"
 
-#define SP_GLYPH(obj) ((SPGlyph*)obj)
+#define SP_GLYPH(obj) (dynamic_cast<SPGlyph*>((SPObject*)obj))
 #define SP_IS_GLYPH(obj) (dynamic_cast<const SPGlyph*>((SPObject*)obj) != NULL)
 
 enum glyphArabicForm {

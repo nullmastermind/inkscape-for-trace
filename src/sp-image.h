@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_IMAGE(obj) ((SPImage*)obj)
+#define SP_IMAGE(obj) (dynamic_cast<SPImage*>((SPObject*)obj))
 #define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj) != NULL)
 
 /* SPImage */

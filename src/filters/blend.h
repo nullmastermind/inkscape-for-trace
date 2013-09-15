@@ -16,7 +16,7 @@
 #include "sp-filter-primitive.h"
 #include "display/nr-filter-blend.h"
 
-#define SP_FEBLEND(obj) ((SPFeBlend*)obj)
+#define SP_FEBLEND(obj) (dynamic_cast<SPFeBlend*>((SPObject*)obj))
 #define SP_IS_FEBLEND(obj) (dynamic_cast<const SPFeBlend*>((SPObject*)obj) != NULL)
 
 class SPFeBlend : public SPFilterPrimitive {

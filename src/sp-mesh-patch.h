@@ -17,7 +17,7 @@
 //#include "svg/svg-length.h"
 #include "sp-object.h"
 
-#define SP_MESHPATCH(obj) ((SPMeshPatch*)obj)
+#define SP_MESHPATCH(obj) (dynamic_cast<SPMeshPatch*>((SPObject*)obj))
 #define SP_IS_MESHPATCH(obj) (dynamic_cast<const SPMeshPatch*>((SPObject*)obj) != NULL)
 
 /** Gradient MeshPatch. */

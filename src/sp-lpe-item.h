@@ -18,7 +18,7 @@
 
 #include <list>
 
-#define SP_LPE_ITEM(obj) ((SPLPEItem*)obj)
+#define SP_LPE_ITEM(obj) (dynamic_cast<SPLPEItem*>((SPObject*)obj))
 #define SP_IS_LPE_ITEM(obj) (dynamic_cast<const SPLPEItem*>((SPObject*)obj) != NULL)
 
 class CLPEItem;

@@ -15,7 +15,7 @@
 #include "sp-filter-primitive.h"
 #include "number-opt-number.h"
 
-#define SP_GAUSSIANBLUR(obj) ((SPGaussianBlur*)obj)
+#define SP_GAUSSIANBLUR(obj) (dynamic_cast<SPGaussianBlur*>((SPObject*)obj))
 #define SP_IS_GAUSSIANBLUR(obj) (dynamic_cast<const SPGaussianBlur*>((SPObject*)obj) != NULL)
 
 class SPGaussianBlur : public SPFilterPrimitive {

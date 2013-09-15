@@ -19,7 +19,7 @@
  */
 
 #define SP_TYPE_MARKER (sp_marker_get_type ())
-#define SP_MARKER(obj) ((SPMarker*)obj)
+#define SP_MARKER(obj) (dynamic_cast<SPMarker*>((SPObject*)obj))
 #define SP_IS_MARKER(obj) (dynamic_cast<const SPMarker*>((SPObject*)obj) != NULL)
 
 struct SPMarkerView;

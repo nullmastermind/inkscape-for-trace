@@ -15,7 +15,7 @@
 
 #include "event-context.h"
 
-#define SP_ZOOM_CONTEXT(obj) ((SPZoomContext*)obj)
+#define SP_ZOOM_CONTEXT(obj) (dynamic_cast<SPZoomContext*>((SPEventContext*)obj))
 #define SP_IS_ZOOM_CONTEXT(obj) (dynamic_cast<const SPZoomContext*>((const SPEventContext*)obj) != NULL)
 
 class SPZoomContext : public SPEventContext {

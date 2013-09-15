@@ -16,7 +16,7 @@
 
 #include "sp-object.h"
 
-#define SP_OBJECTGROUP(obj) ((SPObjectGroup*)obj)
+#define SP_OBJECTGROUP(obj) (dynamic_cast<SPObjectGroup*>((SPObject*)obj))
 #define SP_IS_OBJECTGROUP(obj) (dynamic_cast<const SPObjectGroup*>((SPObject*)obj) != NULL)
 
 class SPObjectGroup : public SPObject {

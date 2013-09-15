@@ -14,7 +14,7 @@
 
 #include "sp-filter-primitive.h"
 
-#define SP_FETILE(obj) ((SPFeTile*)obj)
+#define SP_FETILE(obj) (dynamic_cast<SPFeTile*>((SPObject*)obj))
 #define SP_IS_FETILE(obj) (dynamic_cast<const SPFeTile*>((SPObject*)obj) != NULL)
 
 /* FeTile base class */

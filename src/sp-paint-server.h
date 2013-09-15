@@ -20,7 +20,7 @@
 #include "sp-object.h"
 #include "uri-references.h"
 
-#define SP_PAINT_SERVER(obj) ((SPPaintServer*)obj)
+#define SP_PAINT_SERVER(obj) (dynamic_cast<SPPaintServer*>((SPObject*)obj))
 #define SP_IS_PAINT_SERVER(obj) (dynamic_cast<const SPPaintServer*>((SPObject*)obj) != NULL)
 
 class SPPaintServer : public SPObject {

@@ -14,7 +14,7 @@
 #include <glib.h>
 #include "sp-object.h"
 
-#define SP_MESHROW(obj) ((SPMeshRow*)obj)
+#define SP_MESHROW(obj) (dynamic_cast<SPMeshRow*>((SPObject*)obj))
 #define SP_IS_MESHROW(obj) (dynamic_cast<const SPMeshRow*>((SPObject*)obj) != NULL)
 
 /** Gradient MeshRow. */

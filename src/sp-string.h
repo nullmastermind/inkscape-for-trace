@@ -10,7 +10,7 @@
 
 #include "sp-object.h"
 
-#define SP_STRING(obj) ((SPString*)obj)
+#define SP_STRING(obj) (dynamic_cast<SPString*>((SPObject*)obj))
 #define SP_IS_STRING(obj) (dynamic_cast<const SPString*>((SPObject*)obj) != NULL)
 
 class SPString : public SPObject {

@@ -18,7 +18,7 @@
 #include "sp-item.h"
 #include "uri-references.h"
 
-#define SP_FEIMAGE(obj) ((SPFeImage*)obj)
+#define SP_FEIMAGE(obj) (dynamic_cast<SPFeImage*>((SPObject*)obj))
 #define SP_IS_FEIMAGE(obj) (dynamic_cast<const SPFeImage*>((SPObject*)obj) != NULL)
 
 class SPFeImage : public SPFilterPrimitive {

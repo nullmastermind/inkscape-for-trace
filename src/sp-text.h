@@ -21,7 +21,7 @@
 #include "text-tag-attributes.h"
 #include "libnrtype/Layout-TNG.h"
 
-#define SP_TEXT(obj) ((SPText*)obj)
+#define SP_TEXT(obj) (dynamic_cast<SPText*>((SPObject*)obj))
 #define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
 
 /* Text specific flags */

@@ -22,7 +22,7 @@
 #include <stddef.h>
 #include <sigc++/connection.h>
 
-#define SP_SHAPE(obj) ((SPShape*)obj)
+#define SP_SHAPE(obj) (dynamic_cast<SPShape*>((SPObject*)obj))
 #define SP_IS_SHAPE(obj) (dynamic_cast<const SPShape*>((SPObject*)obj) != NULL)
 
 #define SP_SHAPE_WRITE_PATH (1 << 2)

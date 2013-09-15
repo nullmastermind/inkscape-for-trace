@@ -17,7 +17,7 @@
 
 #include "sp-object.h"
 
-#define SP_FEDISTANTLIGHT(obj) ((SPFeDistantLight*)obj)
+#define SP_FEDISTANTLIGHT(obj) (dynamic_cast<SPFeDistantLight*>((SPObject*)obj))
 #define SP_IS_FEDISTANTLIGHT(obj) (dynamic_cast<const SPFeDistantLight*>((SPObject*)obj) != NULL)
 
 /* Distant light class */

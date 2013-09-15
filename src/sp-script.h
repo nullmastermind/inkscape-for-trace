@@ -14,7 +14,7 @@
 
 #include "sp-item.h"
 
-#define SP_SCRIPT(obj) ((SPScript*)obj)
+#define SP_SCRIPT(obj) (dynamic_cast<SPScript*>((SPObject*)obj))
 #define SP_IS_SCRIPT(obj) (dynamic_cast<const SPScript*>((SPObject*)obj) != NULL)
 
 /* SPScript */

@@ -18,7 +18,7 @@
 
 #include "sp-object.h"
 
-#define SP_MISSING_GLYPH(obj) ((SPMissingGlyph*)obj)
+#define SP_MISSING_GLYPH(obj) (dynamic_cast<SPMissingGlyph*>((SPObject*)obj))
 #define SP_IS_MISSING_GLYPH(obj) (dynamic_cast<const SPMissingGlyph*>((SPObject*)obj) != NULL)
 
 class SPMissingGlyph : public SPObject {

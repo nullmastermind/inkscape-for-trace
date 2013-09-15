@@ -23,7 +23,7 @@
 
 #include "sp-ellipse.h"
 
-#define SP_ARC_CONTEXT(obj) ((SPArcContext*)obj)
+#define SP_ARC_CONTEXT(obj) (dynamic_cast<SPArcContext*>((SPEventContext*)obj))
 #define SP_IS_ARC_CONTEXT(obj) (dynamic_cast<const SPArcContext*>(const SPEventContext*(obj)) != NULL)
 
 class SPArcContext : public SPEventContext {

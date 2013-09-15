@@ -8,7 +8,7 @@
 #include "draw-context.h"
 #include "live_effects/effect.h"
 
-#define SP_PEN_CONTEXT(obj) ((SPPenContext*)obj)
+#define SP_PEN_CONTEXT(obj) (dynamic_cast<SPPenContext*>((SPEventContext*)obj))
 #define SP_IS_PEN_CONTEXT(obj) (dynamic_cast<const SPPenContext*>((const SPEventContext*)obj) != NULL)
 
 struct SPCtrlLine;

@@ -15,7 +15,7 @@
 #include "sp-filter-primitive.h"
 #include "display/nr-filter-colormatrix.h"
 
-#define SP_FECOLORMATRIX(obj) ((SPFeColorMatrix*)obj)
+#define SP_FECOLORMATRIX(obj) (dynamic_cast<SPFeColorMatrix*>((SPObject*)obj))
 #define SP_IS_FECOLORMATRIX(obj) (dynamic_cast<const SPFeColorMatrix*>((SPObject*)obj) != NULL)
 
 class SPFeColorMatrix : public SPFilterPrimitive {

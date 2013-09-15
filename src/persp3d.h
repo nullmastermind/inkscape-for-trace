@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_PERSP3D(obj) ((Persp3D*)obj)
+#define SP_PERSP3D(obj) (dynamic_cast<Persp3D*>((SPObject*)obj))
 #define SP_IS_PERSP3D(obj) (dynamic_cast<const Persp3D*>((SPObject*)obj) != NULL)
 
 #include <list>

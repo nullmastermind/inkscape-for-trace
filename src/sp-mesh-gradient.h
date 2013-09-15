@@ -8,7 +8,7 @@
 #include "svg/svg-length.h"
 #include "sp-gradient.h"
 
-#define SP_MESHGRADIENT(obj) ((SPMeshGradient*)obj)
+#define SP_MESHGRADIENT(obj) (dynamic_cast<SPMeshGradient*>((SPObject*)obj))
 #define SP_IS_MESHGRADIENT(obj) (dynamic_cast<const SPMeshGradient*>((SPObject*)obj) != NULL)
 
 /** Mesh gradient. */

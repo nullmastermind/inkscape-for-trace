@@ -16,7 +16,7 @@
 #include <gtk/gtk.h>
 #include "event-context.h"
 
-#define SP_FLOOD_CONTEXT(obj) ((SPFloodContext*)obj)
+#define SP_FLOOD_CONTEXT(obj) (dynamic_cast<SPFloodContext*>((SPEventContext*)obj))
 #define SP_IS_FLOOD_CONTEXT(obj) (dynamic_cast<const SPFloodContext*>((const SPEventContext*)obj) != NULL)
 
 

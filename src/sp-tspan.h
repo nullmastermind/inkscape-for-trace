@@ -9,7 +9,7 @@
 #include "sp-item.h"
 #include "text-tag-attributes.h"
 
-#define SP_TSPAN(obj) ((SPTSpan*)obj)
+#define SP_TSPAN(obj) (dynamic_cast<SPTSpan*>((SPObject*)obj))
 #define SP_IS_TSPAN(obj) (dynamic_cast<const SPTSpan*>((SPObject*)obj) != NULL)
 
 enum {

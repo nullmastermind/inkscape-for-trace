@@ -17,7 +17,7 @@
 
 #include "sp-item.h"
 
-#define SP_PATTERN(obj) ((SPPattern*)obj)
+#define SP_PATTERN(obj) (dynamic_cast<SPPattern*>((SPObject*)obj))
 #define SP_IS_PATTERN(obj) (dynamic_cast<const SPPattern*>((SPObject*)obj) != NULL)
 
 class SPPatternReference;

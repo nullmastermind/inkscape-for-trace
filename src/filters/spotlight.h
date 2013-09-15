@@ -17,7 +17,7 @@
 
 #include "sp-object.h"
 
-#define SP_FESPOTLIGHT(obj) ((SPFeSpotLight*)obj)
+#define SP_FESPOTLIGHT(obj) (dynamic_cast<SPFeSpotLight*>((SPObject*)obj))
 #define SP_IS_FESPOTLIGHT(obj) (dynamic_cast<const SPFeSpotLight*>((SPObject*)obj) != NULL)
 
 class SPFeSpotLight : public SPObject {

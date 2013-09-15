@@ -14,7 +14,7 @@
 
 #include "event-context.h"
 
-#define SP_MEASURE_CONTEXT(obj) ((SPMeasureContext*)obj)
+#define SP_MEASURE_CONTEXT(obj) (dynamic_cast<SPMeasureContext*>((SPEventContext*)obj))
 #define SP_IS_MEASURE_CONTEXT(obj) (dynamic_cast<const SPMeasureContext*>((const SPEventContext*)obj) != NULL)
 
 class SPMeasureContext : public SPEventContext {

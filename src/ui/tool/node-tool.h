@@ -30,7 +30,7 @@ namespace Inkscape {
 	}
 }
 
-#define INK_NODE_TOOL(obj) ((InkNodeTool*)obj)
+#define INK_NODE_TOOL(obj) (dynamic_cast<InkNodeTool*>((SPEventContext*)obj))
 #define INK_IS_NODE_TOOL(obj) (dynamic_cast<const InkNodeTool*>((const SPEventContext*)obj))
 
 class InkNodeTool : public SPEventContext {

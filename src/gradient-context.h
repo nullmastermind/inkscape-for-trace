@@ -19,7 +19,7 @@
 #include <sigc++/sigc++.h>
 #include "event-context.h"
 
-#define SP_GRADIENT_CONTEXT(obj) ((SPGradientContext*)obj)
+#define SP_GRADIENT_CONTEXT(obj) (dynamic_cast<SPGradientContext*>((SPEventContext*)obj))
 #define SP_IS_GRADIENT_CONTEXT(obj) (dynamic_cast<const SPGradientContext*>((const SPEventContext*)obj) != NULL)
 
 class SPGradientContext : public SPEventContext {

@@ -15,7 +15,7 @@
 #include "event-context.h"
 #include <gtk/gtk.h>
 
-#define SP_SELECT_CONTEXT(obj) ((SPSelectContext*)obj)
+#define SP_SELECT_CONTEXT(obj) (dynamic_cast<SPSelectContext*>((SPEventContext*)obj))
 #define SP_IS_SELECT_CONTEXT(obj) (dynamic_cast<const SPSelectContext*>((const SPEventContext*)obj) != NULL)
 
 struct SPCanvasItem;

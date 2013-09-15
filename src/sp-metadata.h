@@ -17,7 +17,7 @@
 
 /* Metadata base class */
 
-#define SP_METADATA(obj) ((SPMetadata*)obj)
+#define SP_METADATA(obj) (dynamic_cast<SPMetadata*>((SPObject*)obj))
 #define SP_IS_METADATA(obj) (dynamic_cast<const SPMetadata*>((SPObject*)obj) != NULL)
 
 class SPMetadata : public SPObject {

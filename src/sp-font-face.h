@@ -24,7 +24,7 @@
 
 #include "sp-object.h"
 
-#define SP_FONTFACE(obj) ((SPFontFace*)obj)
+#define SP_FONTFACE(obj) (dynamic_cast<SPFontFace*>((SPObject*)obj))
 #define SP_IS_FONTFACE(obj) (dynamic_cast<const SPFontFace*>((SPObject*)obj) != NULL)
 
 enum FontFaceStyleType{

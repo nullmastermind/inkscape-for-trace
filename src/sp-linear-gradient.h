@@ -8,7 +8,7 @@
 #include "sp-gradient.h"
 #include "svg/svg-length.h"
 
-#define SP_LINEARGRADIENT(obj) ((SPLinearGradient*)obj)
+#define SP_LINEARGRADIENT(obj) (dynamic_cast<SPLinearGradient*>((SPObject*)obj))
 #define SP_IS_LINEARGRADIENT(obj) (dynamic_cast<const SPLinearGradient*>((SPObject*)obj) != NULL)
 
 /** Linear gradient. */

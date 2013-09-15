@@ -14,7 +14,7 @@
 
 #include "sp-object.h"
 
-#define SP_TITLE(obj) ((SPTitle*)obj)
+#define SP_TITLE(obj) (dynamic_cast<SPTitle*>((SPObject*)obj))
 #define SP_IS_TITLE(obj) (dynamic_cast<const SPTitle*>((SPObject*)obj) != NULL)
 
 class SPTitle : public SPObject {

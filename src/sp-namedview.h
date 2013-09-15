@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_NAMEDVIEW(obj) ((SPNamedView*)obj)
+#define SP_NAMEDVIEW(obj) (dynamic_cast<SPNamedView*>((SPObject*)obj))
 #define SP_IS_NAMEDVIEW(obj) (dynamic_cast<const SPNamedView*>((SPObject*)obj) != NULL)
 
 #include "sp-object-group.h"

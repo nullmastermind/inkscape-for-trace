@@ -15,7 +15,7 @@
 
 #include "sp-object.h"
 
-#define SP_DEFS(obj) ((SPDefs*)obj)
+#define SP_DEFS(obj) (dynamic_cast<SPDefs*>((SPObject*)obj))
 #define SP_IS_DEFS(obj) (dynamic_cast<const SPDefs*>((SPObject*)obj) != NULL)
 
 class SPDefs : public SPObject {

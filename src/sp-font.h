@@ -18,7 +18,7 @@
 
 #include "sp-object.h"
 
-#define SP_FONT(obj) ((SPFont*)obj)
+#define SP_FONT(obj) (dynamic_cast<SPFont*>((SPObject*)obj))
 #define SP_IS_FONT(obj) (dynamic_cast<const SPFont*>((SPObject*)obj) != NULL)
 
 class SPFont : public SPObject {

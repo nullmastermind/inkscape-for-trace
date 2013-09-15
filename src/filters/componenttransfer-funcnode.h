@@ -29,7 +29,7 @@
 //#define SP_IS_FEFUNCB(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCB))
 //#define SP_IS_FEFUNCA(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCA))
 
-#define SP_FEFUNCNODE(obj) ((SPFeFuncNode*)obj)
+#define SP_FEFUNCNODE(obj) (dynamic_cast<SPFeFuncNode*>((SPObject*)obj))
 
 //#define SP_IS_FEFUNCR(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))
 //#define SP_IS_FEFUNCG(obj) (obj != NULL && static_cast<const SPObject*>(obj)->typeHierarchy.count(typeid(SPFeFuncNode)))

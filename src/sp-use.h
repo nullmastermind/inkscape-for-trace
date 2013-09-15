@@ -18,7 +18,7 @@
 #include "svg/svg-length.h"
 #include "sp-item.h"
 
-#define SP_USE(obj) ((SPUse*)obj)
+#define SP_USE(obj) (dynamic_cast<SPUse*>((SPObject*)obj))
 #define SP_IS_USE(obj) (dynamic_cast<const SPUse*>((SPObject*)obj) != NULL)
 
 class SPUseReference;

@@ -21,7 +21,7 @@
 
 #include <glibmm/ustring.h>
 
-#define SP_FILTER(obj) ((SPFilter*)obj)
+#define SP_FILTER(obj) (dynamic_cast<SPFilter*>((SPObject*)obj))
 #define SP_IS_FILTER(obj) (dynamic_cast<const SPFilter*>((SPObject*)obj) != NULL)
 
 #define SP_FILTER_FILTER_UNITS(f) (SP_FILTER(f)->filterUnits)

@@ -16,7 +16,7 @@
 #include <map>
 #include "sp-lpe-item.h"
 
-#define SP_GROUP(obj) ((SPGroup*)obj)
+#define SP_GROUP(obj) (dynamic_cast<SPGroup*>((SPObject*)obj))
 #define SP_IS_GROUP(obj) (dynamic_cast<const SPGroup*>((SPObject*)obj) != NULL)
 
 #define SP_IS_LAYER(obj)         (SP_IS_GROUP(obj) && SP_GROUP(obj)->layerMode() == SPGroup::LAYER)

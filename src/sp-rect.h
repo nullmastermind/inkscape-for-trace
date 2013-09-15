@@ -19,7 +19,7 @@
 #include <2geom/forward.h>
 
 
-#define SP_RECT(obj) ((SPRect*)obj)
+#define SP_RECT(obj) (dynamic_cast<SPRect*>((SPObject*)obj))
 #define SP_IS_RECT(obj) (dynamic_cast<const SPRect*>((SPObject*)obj) != NULL)
 
 class SPRect : public SPShape {
