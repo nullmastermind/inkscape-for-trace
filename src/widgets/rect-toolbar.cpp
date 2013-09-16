@@ -115,7 +115,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
         if (SP_IS_RECT(items->data)) {
             if (gtk_adjustment_get_value(adj) != 0) {
                 setter(SP_RECT(items->data),
-                Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
+                Quantity::convert(gtk_adjustment_get_value(adj), unit, *sp_desktop_namedview(desktop)->doc_units));
             } else {
                 SP_OBJECT(items->data)->getRepr()->setAttribute(value_name, NULL);
             }
@@ -187,31 +187,32 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar con
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
     Unit const unit = tracker->getActiveUnit();
+    Unit const doc_unit = *sp_desktop_namedview(SP_ACTIVE_DESKTOP)->doc_units;
 
     gpointer item = g_object_get_data( tbl, "item" );
     if (item && SP_IS_RECT(item)) {
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "rx" ) );
             gdouble rx = sp_rect_get_visible_rx(SP_RECT(item));
-            gtk_adjustment_set_value(adj, Quantity::convert(rx, "px", unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(rx, doc_unit, unit));
         }
 
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "ry" ) );
             gdouble ry = sp_rect_get_visible_ry(SP_RECT(item));
-            gtk_adjustment_set_value(adj, Quantity::convert(ry, "px", unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(ry, doc_unit, unit));
         }
 
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "width" ) );
             gdouble width = sp_rect_get_visible_width (SP_RECT(item));
-            gtk_adjustment_set_value(adj, Quantity::convert(width, "px", unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(width, doc_unit, unit));
         }
 
         {
             GtkAdjustment *adj = GTK_ADJUSTMENT( g_object_get_data( tbl, "height" ) );
             gdouble height = sp_rect_get_visible_height (SP_RECT(item));
-            gtk_adjustment_set_value(adj, Quantity::convert(height, "px", unit));
+            gtk_adjustment_set_value(adj, Quantity::convert(height, doc_unit, unit));
         }
     }
 
