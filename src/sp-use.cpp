@@ -453,7 +453,7 @@ sp_use_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPUse *use)
 //                }
 //            }
 
-            SPObject* obj = SPFactory::instance().createObject(NodeTraits::getTypeString(*childrepr));
+            SPObject* obj = SPFactory::instance().createObject(NodeTraits::get_type_string(*childrepr));
             if (SP_IS_ITEM(obj)) {
             	use->child = obj;
 

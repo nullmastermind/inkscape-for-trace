@@ -578,7 +578,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 	SPObject* object = this;
 
 	try {
-		const std::string typeString = NodeTraits::getTypeString(*child);
+		const std::string typeString = NodeTraits::get_type_string(*child);
 
 		SPObject* ochild = SPFactory::instance().createObject(typeString);
 
@@ -645,7 +645,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 //    	}
 
     	try {
-    		const std::string typeString = NodeTraits::getTypeString(*rchild);
+    		const std::string typeString = NodeTraits::get_type_string(*rchild);
 
     		SPObject* child = SPFactory::instance().createObject(typeString);
 

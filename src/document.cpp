@@ -349,7 +349,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     document->name = g_strdup(name);
 
     // Create SPRoot element
-    const std::string typeString = NodeTraits::getTypeString(*rroot);
+    const std::string typeString = NodeTraits::get_type_string(*rroot);
     SPObject* rootObj = SPFactory::instance().createObject(typeString);
     document->root = dynamic_cast<SPRoot*>(rootObj);
 

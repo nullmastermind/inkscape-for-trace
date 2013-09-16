@@ -405,7 +405,7 @@ void sp_tref_update_text(SPTRef *tref)
         Inkscape::XML::Document *xml_doc = tref->document->getReprDoc();
 
         Inkscape::XML::Node *newStringRepr = xml_doc->createTextNode(charData.c_str());
-        tref->stringChild = SPFactory::instance().createObject(NodeTraits::getTypeString(*newStringRepr));
+        tref->stringChild = SPFactory::instance().createObject(NodeTraits::get_type_string(*newStringRepr));
 
         // Add this SPString as a child of the tref
         tref->attach(tref->stringChild, tref->lastChild());

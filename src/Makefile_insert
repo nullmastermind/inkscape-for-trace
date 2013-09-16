@@ -243,7 +243,6 @@ ink_common_sources +=	\
 	tools-switch.cpp tools-switch.h		\
 	transf_mat_3x4.cpp transf_mat_3x4.h	\
 	tweak-context.h tweak-context.cpp	\
-	type-info.h type-info.cpp		\
 	unclump.cpp unclump.h			\
 	undo-stack-observer.h			\
 	unicoderange.cpp unicoderange.h		\
