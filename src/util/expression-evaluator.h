@@ -6,6 +6,7 @@
  * Copyright (C) 2008-2009 Martin Nordholts <martinn@svn.gnome.org>
  * Modified for Inkscape by Johan Engelen
  * Copyright (C) 2011 Johan Engelen
+ * Copyright (C) 2013 Matthew Petroff
  *
  * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,8 +23,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SEEN_GIMP_EEVL_H
-#define SEEN_GIMP_EEVL_H
+#ifndef INKSCAPE_UTIL_EXPRESSION_EVALUATOR_H
+#define INKSCAPE_UTIL_EXPRESSION_EVALUATOR_H
 
 #include "util/units.h"
 
@@ -79,37 +80,92 @@ namespace Util {
 class Unit;
 
 /**
-* GimpEevlQuantity:
+* EvaluatorQuantity:
 * @value: In reference units.
-* @dimension: in has a dimension of 1, in^2 has a dimension of 2 etc
+* @dimension: mm has a dimension of 1, mm^2 has a dimension of 2, etc.
 */
-typedef struct
+class EvaluatorQuantity
 {
+public:
+    EvaluatorQuantity(double value = 0, unsigned int dimension = 0);
+    
     double value;
-    gint dimension;
-} GimpEevlQuantity;
+    unsigned int dimension;
+};
 
-typedef bool (* GimpEevlUnitResolverProc) (const gchar      *identifier,
-                                               GimpEevlQuantity *result,
-                                               Unit* unit);
+enum {
+  TOKEN_NUM        = 30000,
+  TOKEN_IDENTIFIER = 30001,
+  TOKEN_ANY        = 40000,
+  TOKEN_END        = 50000
+};
+typedef int TokenType;
 
-GimpEevlQuantity gimp_eevl_evaluate (const gchar* string, Unit* unit = NULL);
+class EvaluatorToken
+{
+public:
+    EvaluatorToken();
+    
+    TokenType type;
+    
+    union {
+        double fl;
+        struct {
+            const char *c;
+            int size;
+        };
+    } value;
+};
+
+class ExpressionEvaluator
+{
+public:
+    ExpressionEvaluator(const char *string, Unit *unit = NULL);
+    
+    EvaluatorQuantity evaluate();
+
+private:
+    const char *string;
+    Unit *unit;
+    
+    EvaluatorToken current_token;
+    const char *start_of_current_token;
+    
+    EvaluatorQuantity evaluateExpression();
+    EvaluatorQuantity evaluateTerm();
+    EvaluatorQuantity evaluateSignedFactor();
+    EvaluatorQuantity evaluateFactor();
+    
+    bool acceptToken(TokenType token_type, EvaluatorToken *consumed_token);
+    void parseNextToken();
+    void acceptTokenCount(int count, TokenType token_type);
+    void isExpected(TokenType token_type, EvaluatorToken *value);
+    
+    void movePastWhiteSpace();
+    
+    static bool isUnitIdentifierStart(gunichar c);
+    static int getIdentifierSize(const char *s, int start);
+    
+    static bool resolveUnit(const char *identifier, EvaluatorQuantity *result, Unit *unit);
+    
+    void throwError(const char *msg);
+};
 
 /**
  * Special exception class for the expression evaluator.
  */
 class EvaluatorException : public std::exception {
 public:
-    EvaluatorException(const char * message, const char *at_position) {
+    EvaluatorException(const char *message, const char *at_position) {
         std::ostringstream os;
-        const char* token = at_position ? at_position : "<End of input>";
+        const char *token = at_position ? at_position : "<End of input>";
         os << "Expression evaluator error: " << message << " at '" << token << "'";
         msgstr = os.str();
     }
 
     virtual ~EvaluatorException() throw() {} // necessary to destroy the string object!!!
 
-    virtual const char* what() const throw () {
+    virtual const char *what() const throw () {
         return msgstr.c_str();
     }
 protected:
@@ -119,4 +175,4 @@ protected:
 }
 }
 
-#endif // SEEN_GIMP_EEVL_H
+#endif // INKSCAPE_UTIL_EXPRESSION_EVALUATOR_H

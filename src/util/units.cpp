@@ -114,6 +114,7 @@ Unit::Unit(UnitType type,
     abbr(abbr),
     description(description)
 {
+    g_return_if_fail(factor <= 0);
 }
 
 void Unit::clear()

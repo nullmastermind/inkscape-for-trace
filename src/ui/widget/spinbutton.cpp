@@ -33,7 +33,7 @@ SpinButton::connect_signals() {
 int SpinButton::on_input(double* newvalue)
 {
     try {
-        Inkscape::Util::GimpEevlQuantity result;
+        Inkscape::Util::EvaluatorQuantity result;
         if (_unit_menu || _unit_tracker) {
             Unit unit;
             if (_unit_menu) {
@@ -41,13 +41,15 @@ int SpinButton::on_input(double* newvalue)
             } else {
                 unit = _unit_tracker->getActiveUnit();
             }
-            result = Inkscape::Util::gimp_eevl_evaluate (get_text().c_str(), &unit);
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), &unit);
+            result = eval.evaluate();
             // check if output dimension corresponds to input unit
             if (result.dimension != (unit.isAbsolute() ? 1 : 0) ) {
                 throw Inkscape::Util::EvaluatorException("Input dimensions do not match with parameter dimensions.","");
             }
         } else {
-            result = Inkscape::Util::gimp_eevl_evaluate (get_text().c_str(), NULL);
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), NULL);
+            result = eval.evaluate();
         }
 
         *newvalue = result.value;
