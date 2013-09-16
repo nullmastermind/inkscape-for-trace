@@ -133,6 +133,7 @@ private:
     
     EvaluatorQuantity evaluateExpression();
     EvaluatorQuantity evaluateTerm();
+    EvaluatorQuantity evaluateExpTerm();
     EvaluatorQuantity evaluateSignedFactor();
     EvaluatorQuantity evaluateFactor();
     

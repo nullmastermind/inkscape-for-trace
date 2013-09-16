@@ -28,6 +28,7 @@
 #include "util/expression-evaluator.h"
 #include "util/units.h"
 
+#include <math.h>
 #include <string.h>
 
 using Inkscape::Util::unit_table;
@@ -117,7 +118,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
     {
         EvaluatorQuantity new_term = evaluateTerm();
         
-        // If dimensions missmatch, attempt default unit assignent
+        // If dimensions mismatch, attempt default unit assignent
         if ( new_term.dimension != evaluated_terms.dimension ) {
             EvaluatorQuantity default_unit_factor;
             
@@ -134,7 +135,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
                 evaluated_terms.value     /= default_unit_factor.value;
                 evaluated_terms.dimension  = default_unit_factor.dimension;
             } else {
-                throwError("Dimension missmatch during addition");
+                throwError("Dimension mismatch during addition");
             }
         }
         
@@ -147,22 +148,39 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
 EvaluatorQuantity ExpressionEvaluator::evaluateTerm()
 {
     bool division;
-    EvaluatorQuantity evaluated_signed_factors;
+    EvaluatorQuantity evaluated_exp_terms = evaluateExpTerm();
     
-    evaluated_signed_factors = evaluateSignedFactor();
-    
-    for ( division = FALSE;
-        acceptToken('*', NULL) || (division = acceptToken ('/', NULL));
-        division = FALSE )
+    for ( division = false;
+        acceptToken('*', NULL) || (division = acceptToken('/', NULL));
+        division = false )
     {
-        EvaluatorQuantity new_signed_factor = evaluateSignedFactor();
+        EvaluatorQuantity new_exp_term = evaluateExpTerm();
         
         if (division) {
-            evaluated_signed_factors.value     /= new_signed_factor.value;
-            evaluated_signed_factors.dimension -= new_signed_factor.dimension;
+            evaluated_exp_terms.value     /= new_exp_term.value;
+            evaluated_exp_terms.dimension -= new_exp_term.dimension;
         } else {
-            evaluated_signed_factors.value     *= new_signed_factor.value;
-            evaluated_signed_factors.dimension += new_signed_factor.dimension;
+            evaluated_exp_terms.value     *= new_exp_term.value;
+            evaluated_exp_terms.dimension += new_exp_term.dimension;
+        }
+    }
+    
+    return evaluated_exp_terms;
+}
+
+EvaluatorQuantity ExpressionEvaluator::evaluateExpTerm()
+{
+    EvaluatorQuantity evaluated_signed_factors = evaluateSignedFactor();
+    
+    while(acceptToken('^', NULL)) {
+        EvaluatorQuantity new_signed_factor = evaluateSignedFactor();
+        
+        if (new_signed_factor.dimension == 0) {
+            evaluated_signed_factors.value = pow(evaluated_signed_factors.value,
+                                                 new_signed_factor.value);
+            evaluated_signed_factors.dimension *= new_signed_factor.value;
+        } else {
+            throwError("Unit in exponent");
         }
     }
     
