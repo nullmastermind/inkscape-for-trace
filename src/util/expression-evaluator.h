@@ -34,7 +34,7 @@
 
 /**
  * @file
- * Introducing eevl eva, the evaluator. A straightforward recursive
+ * Expression evaluator: A straightforward recursive
  * descent parser, no fuss, no new dependencies. The lexer is hand
  * coded, tedious, not extremely fast but works. It evaluates the
  * expression as it goes along, and does not create a parse tree or
@@ -44,8 +44,8 @@
  *
  * It relies on external unit resolving through a callback and does
  * elementary dimensionality constraint check (e.g. "2 mm + 3 px * 4
- * in" is an error, as L + L^2 is a missmatch). It uses g_strtod() for numeric
- * conversions and it's non-destructive in terms of the paramters, and
+ * in" is an error, as L + L^2 is a mismatch). It uses g_strtod() for numeric
+ * conversions and it's non-destructive in terms of the parameters, and
  * it's reentrant.
  *
  * EBNF:
@@ -53,7 +53,9 @@
  *   expression    ::= term { ('+' | '-') term }*  |
  *                     <empty string> ;
  *
- *   term          ::= signed factor { ( '*' | '/' ) signed factor }* ;
+ *   term          ::= exponent { ( '*' | '/' ) exponent }* ;
+ *
+ *   exponent      ::= signed factor { '^' signed factor }* ;
  *
  *   signed factor ::= ( '+' | '-' )? factor ;
  *
@@ -80,10 +82,10 @@ namespace Util {
 class Unit;
 
 /**
-* EvaluatorQuantity:
-* @value: In reference units.
-* @dimension: mm has a dimension of 1, mm^2 has a dimension of 2, etc.
-*/
+ * EvaluatorQuantity:
+ * @param value         In reference units.
+ * @param dimension     mm has a dimension of 1, mm^2 has a dimension of 2, etc.
+ */
 class EvaluatorQuantity
 {
 public:
@@ -93,6 +95,9 @@ public:
     unsigned int dimension;
 };
 
+/**
+ * TokenType
+ */
 enum {
   TOKEN_NUM        = 30000,
   TOKEN_IDENTIFIER = 30001,
@@ -101,6 +106,9 @@ enum {
 };
 typedef int TokenType;
 
+/**
+ * EvaluatorToken
+ */
 class EvaluatorToken
 {
 public:
@@ -117,6 +125,11 @@ public:
     } value;
 };
 
+/**
+ * ExpressionEvaluator
+ * @param string    NULL terminated input string to evaluate
+ * @param unit      Unit output should be in
+ */
 class ExpressionEvaluator
 {
 public:

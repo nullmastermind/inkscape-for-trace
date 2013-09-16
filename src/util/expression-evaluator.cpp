@@ -62,9 +62,6 @@ ExpressionEvaluator::ExpressionEvaluator(const char *string, Unit *unit) :
  * Evaluates the given arithmetic expression, along with an optional dimension
  * analysis, and basic unit conversions.
  *
- * @param string              The NULL-terminated string to be evaluated.
- * @param unit_resolver_proc  Unit resolver callback.
- *
  * All units conversions factors are relative to some implicit
  * base-unit. This is also the unit of the returned value.
  *
