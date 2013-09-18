@@ -244,7 +244,7 @@ void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
 
     Glib::ustring file = Glib::build_filename(path, dir.read_name());
     while (file != path){
-        if (Glib::str_has_suffix(file, ".svg") && !Glib::str_has_prefix(Glib::path_get_basename(file), "default")){
+        if (Glib::str_has_suffix(file, ".svg") && !Glib::str_has_prefix(Glib::path_get_basename(file), "default.")){
             TemplateData tmp = _processTemplateFile(file);
             if (tmp.display_name != "")
                 _tdata[tmp.display_name] = tmp;
