@@ -139,24 +139,14 @@ SPDesktop *sp_file_new(const Glib::ustring &templ)
     }
     
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
+    if (desktop)
         desktop->setWaitingCursor();
-    }
     
-    SPDocument *existing = desktop ? sp_desktop_document(desktop) : NULL;
       
-    if (existing && existing->virgin) {
-            // If the current desktop is empty, open the document there
-        doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
-        desktop->change_document(doc);
-        doc->emitResizedSignal(doc->getWidth(), doc->getHeight());
-    } else {
-            // create a whole new desktop and window
-        SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
-        g_return_val_if_fail(dtw != NULL, NULL);
-        sp_create_window(dtw, TRUE);
-        desktop = static_cast<SPDesktop *>(dtw->view);
-    } 
+    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
+    g_return_val_if_fail(dtw != NULL, NULL);
+    sp_create_window(dtw, TRUE);
+    desktop = static_cast<SPDesktop *>(dtw->view);
 
     doc->doUnref();
 
@@ -166,6 +156,9 @@ SPDesktop *sp_file_new(const Glib::ustring &templ)
 #ifdef WITH_DBUS
     Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
 #endif
+    
+    if (desktop)
+        desktop->clearWaitingCursor();
 
     return desktop;
 }
@@ -220,7 +213,7 @@ SPDesktop* sp_file_new_default()
 {
     Glib::ustring templateUri = sp_file_default_template_uri();
     SPDesktop* desk = sp_file_new(sp_file_default_template_uri());
-    rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
+    //rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
 
     return desk;
 }
