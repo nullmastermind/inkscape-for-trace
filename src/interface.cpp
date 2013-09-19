@@ -47,7 +47,6 @@
 #include "widgets/desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-text.h"
-#include "sp-gradient-fns.h"
 #include "sp-gradient.h"
 #include "sp-flowtext.h"
 #include "sp-namedview.h"
@@ -1607,32 +1606,56 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
 
 void ContextMenu::MakeObjectMenu(void)
 {
-    GObjectClass *klass = G_OBJECT_GET_CLASS(_object); //to deduce the object's type from its class
-    
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ITEM))
-    {
-        MakeItemMenu ();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_GROUP))
-    {
-        MakeGroupMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ANCHOR))
-    {
-        MakeAnchorMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_IMAGE))
-    {
-        MakeImageMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_SHAPE))
-    {
-        MakeShapeMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_TEXT))
-    {
-        MakeTextMenu();
-    }
+//    GObjectClass *klass = G_OBJECT_GET_CLASS(_object); //to deduce the object's type from its class
+//
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ITEM))
+//    {
+//        MakeItemMenu ();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_GROUP))
+//    {
+//        MakeGroupMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ANCHOR))
+//    {
+//        MakeAnchorMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_IMAGE))
+//    {
+//        MakeImageMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_SHAPE))
+//    {
+//        MakeShapeMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_TEXT))
+//    {
+//        MakeTextMenu();
+//    }
+
+	if (SP_IS_ITEM(_object)) {
+		MakeItemMenu();
+	}
+
+	if (SP_IS_GROUP(_object)) {
+		MakeGroupMenu();
+	}
+
+	if (SP_IS_ANCHOR(_object)) {
+		MakeAnchorMenu();
+	}
+
+	if (SP_IS_IMAGE(_object)) {
+		MakeImageMenu();
+	}
+
+	if (SP_IS_SHAPE(_object)) {
+		MakeShapeMenu();
+	}
+
+	if (SP_IS_TEXT(_object)) {
+		MakeTextMenu();
+	}
 }
 
 void ContextMenu::MakeItemMenu (void)
@@ -1986,6 +2009,15 @@ void ContextMenu::MakeImageMenu (void)
         mi->set_sensitive(FALSE);
     }
 
+    /* Trace Pixel Art */
+    mi = manage(new Gtk::MenuItem(_("Trace Pixel Art"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTracePixelArt));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
+    }
+
     /* Embed image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
         mi = manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
@@ -2101,6 +2133,12 @@ void ContextMenu::ImageTraceBitmap(void)
 {
     inkscape_dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
+}
+
+void ContextMenu::ImageTracePixelArt(void)
+{
+    inkscape_dialogs_unhide();
+    _desktop->_dlg_mgr->showDialog("PixelArt");
 }
 
 void ContextMenu::ImageEmbed(void)

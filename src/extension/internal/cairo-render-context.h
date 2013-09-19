@@ -6,7 +6,7 @@
  */
 /*
  * Authors:
- * 	   Miklos Erdelyi <erdelyim@gmail.com>
+ *     Miklos Erdelyi <erdelyim@gmail.com>
  *
  * Copyright (C) 2006 Miklos Erdelyi
  *
@@ -29,9 +29,11 @@
 #include <cairo.h>
 
 class SPClipPath;
-struct SPMask;
+class SPMask;
 
 namespace Inkscape {
+class Pixbuf;
+
 namespace Extension {
 namespace Internal {
 
@@ -144,7 +146,7 @@ public:
 
     /* Rendering methods */
     bool renderPathVector(Geom::PathVector const &pathv, SPStyle const *style, Geom::OptRect const &pbox);
-    bool renderImage(GdkPixbuf *pb,
+    bool renderImage(Inkscape::Pixbuf *pb,
                      Geom::Affine const &image_transform, SPStyle const *style);
     bool renderGlyphtext(PangoFont *font, Geom::Affine const &font_matrix,
                          std::vector<CairoGlyphInfo> const &glyphtext, SPStyle const *style);

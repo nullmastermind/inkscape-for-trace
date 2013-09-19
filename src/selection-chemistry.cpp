@@ -70,10 +70,10 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "document-undo.h"
 #include "sp-gradient.h"
 #include "sp-gradient-reference.h"
-#include "sp-linear-gradient-fns.h"
+#include "sp-linear-gradient.h"
 #include "sp-pattern.h"
 #include "sp-symbol.h"
-#include "sp-radial-gradient-fns.h"
+#include "sp-radial-gradient.h"
 #include "gradient-context.h"
 #include "sp-namedview.h"
 #include "preferences.h"
@@ -96,6 +96,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "uri-references.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
+#include "display/cairo-utils.h"
 #include "inkscape-private.h"
 #include "path-chemistry.h"
 #include "ui/tool/control-point-selection.h"
@@ -2873,7 +2874,7 @@ static void sp_selection_to_guides_recursive(SPItem *item, bool deleteitem, bool
             sp_selection_to_guides_recursive(SP_ITEM(i->data), deleteitem, wholegroups);
         }
     } else {
-        item->convert_item_to_guides();
+        item->convert_to_guides();
 
         if (deleteitem) {
             item->deleteObject(true);
@@ -3480,9 +3481,10 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
     }
 
     // Import the image back
-    GdkPixbuf *pb = gdk_pixbuf_new_from_file(filepath, NULL);
+    Inkscape::Pixbuf *pb = Inkscape::Pixbuf::create_from_file(filepath);
     if (pb) {
         // Create the repr for the image
+        // TODO: avoid unnecessary roundtrip between data URI and decoded pixbuf
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
         sp_embed_image(repr, pb);
         if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid

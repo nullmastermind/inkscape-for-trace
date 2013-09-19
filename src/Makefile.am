@@ -23,16 +23,16 @@ endif
 
 
 noinst_LIBRARIES =	\
-	libinkscape.a		\
-	dom/libdom.a		\
-	libcroco/libcroco.a	\
-	libavoid/libavoid.a	\
-	$(internal_GDL)		\
-	libuemf/libuemf.a   \
-	libcola/libcola.a	\
-	libvpsc/libvpsc.a	\
-	livarot/libvarot.a	\
-	2geom/lib2geom.a	\
+	dom/libdom.a			\
+	libcroco/libcroco.a		\
+	libavoid/libavoid.a		\
+	$(internal_GDL)			\
+	libuemf/libuemf.a   		\
+	libcola/libcola.a		\
+	libvpsc/libvpsc.a		\
+	livarot/libvarot.a		\
+	2geom/lib2geom.a		\
+	libdepixelize/libdepixelize.a	\
 	libinkversion.a
 
 all_libs =			\
@@ -139,6 +139,7 @@ include ui/widget/Makefile_insert
 include util/Makefile_insert
 include trace/Makefile_insert
 include 2geom/Makefile_insert
+include libdepixelize/Makefile_insert
 
 # Extra files not mentioned as sources to include in the source tarball
 EXTRA_DIST +=	\
@@ -182,8 +183,8 @@ EXTRA_DIST +=	\
 	io/crystalegg.xml	\
 	io/doc2html.xsl 	\
 	show-preview.bmp \
-	sp-skeleton.cpp sp-skeleton.h	\
 	winconsole.cpp \
+	libdepixelize/makefile.in	\
 	$(CXXTEST_TEMPLATE)
 
 # Extra files to remove when doing "make distclean"
@@ -197,13 +198,13 @@ DISTCLEANFILES =	\
 # ################################################
 
 # this should speed up the build
-libinkscape_a_SOURCES = $(ink_common_sources)
+#libinkscape_a_SOURCES = $(ink_common_sources)
 
-inkscape_SOURCES += main.cpp $(win32_sources)
+inkscape_SOURCES += main.cpp $(ink_common_sources) $(win32_sources)
 inkscape_LDADD = $(all_libs)
 inkscape_LDFLAGS = $(kdeldflags) $(mwindows)
 
-inkview_SOURCES += inkview.cpp $(win32_sources)
+inkview_SOURCES += inkview.cpp $(ink_common_sources) $(win32_sources)
 inkview_LDADD = $(all_libs)
 inkview_LDFLAGS = $(mwindows) 
 
