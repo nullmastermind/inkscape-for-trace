@@ -140,15 +140,15 @@ SPObject::~SPObject() {
 
 // CPPIFY: make pure virtual
 void SPObject::read_content() {
-	//throw;
+    //throw;
 }
 
 void SPObject::update(SPCtx* ctx, unsigned int flags) {
-	//throw;
+    //throw;
 }
 
 void SPObject::modified(unsigned int flags) {
-	//throw;
+    //throw;
 }
 
 namespace {
@@ -221,7 +221,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
     object->refCount--;
 
     if (object->refCount < 0) {
-    	delete object;
+        delete object;
     }
 
     return NULL;
@@ -575,25 +575,27 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
 }
 
 void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	SPObject* object = this;
+    SPObject* object = this;
 
-	try {
-		const std::string typeString = NodeTraits::get_type_string(*child);
+    try {
+        const std::string typeString = NodeTraits::get_type_string(*child);
 
-		SPObject* ochild = SPFactory::instance().createObject(typeString);
+        SPObject* ochild = SPFactory::instance().createObject(typeString);
 
-		SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
-		object->attach(ochild, prev);
-		sp_object_unref(ochild, NULL);
+        SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
+        object->attach(ochild, prev);
+        sp_object_unref(ochild, NULL);
 
-		ochild->invoke_build(object->document, child, object->cloned);
-	} catch (const FactoryExceptions::TypeNotRegistered& e) {
-		g_warning("TypeNotRegistered exception: %s", e.what());
-	}
+        ochild->invoke_build(object->document, child, object->cloned);
+    } catch (const FactoryExceptions::TypeNotRegistered& e) {
+        if (std::string(e.what()) != "rdf:RDF") { // temporary special case
+            g_warning("TypeNotRegistered exception: %s", e.what());
+        }
+    }
 }
 
 void SPObject::release() {
-	SPObject* object = this;
+    SPObject* object = this;
 
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
     while (object->children) {
@@ -602,7 +604,7 @@ void SPObject::release() {
 }
 
 void SPObject::remove_child(Inkscape::XML::Node* child) {
-	SPObject* object = this;
+    SPObject* object = this;
 
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
     SPObject *ochild = object->get_child_by_repr(child);
@@ -613,7 +615,7 @@ void SPObject::remove_child(Inkscape::XML::Node* child) {
 }
 
 void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node *new_ref) {
-	SPObject* object = this;
+    SPObject* object = this;
 
     SPObject *ochild = object->get_child_by_repr(child);
     g_return_if_fail(ochild != NULL);
@@ -623,7 +625,7 @@ void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * o
 }
 
 void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPObject* object = this;
+    SPObject* object = this;
 
     /* Nothing specific here */
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
@@ -639,22 +641,22 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 //        }
 //        SPObject *child = SP_OBJECT(g_object_new(type, 0));
 
-//    	SPObject* child = SPFactory::instance().createObject(*rchild);
-//    	if (!child) {
-//    		continue;
-//    	}
+//      SPObject* child = SPFactory::instance().createObject(*rchild);
+//      if (!child) {
+//          continue;
+//      }
 
-    	try {
-    		const std::string typeString = NodeTraits::get_type_string(*rchild);
+        try {
+            const std::string typeString = NodeTraits::get_type_string(*rchild);
 
-    		SPObject* child = SPFactory::instance().createObject(typeString);
+            SPObject* child = SPFactory::instance().createObject(typeString);
 
-    		object->attach(child, object->lastChild());
-			sp_object_unref(child, NULL);
-			child->invoke_build(document, rchild, object->cloned);
-    	} catch (const FactoryExceptions::TypeNotRegistered& e) {
-    		//g_warning("TypeNotRegistered exception: %s", e.what());
-    	}
+            object->attach(child, object->lastChild());
+            sp_object_unref(child, NULL);
+            child->invoke_build(document, rchild, object->cloned);
+        } catch (const FactoryExceptions::TypeNotRegistered& e) {
+            //g_warning("TypeNotRegistered exception: %s", e.what());
+        }
     }
 }
 
@@ -723,7 +725,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
 int SPObject::getIntAttribute(char const *key, int def)
 {
     sp_repr_get_int(getRepr(),key,&def);
-	return def;
+    return def;
 }
 
 unsigned SPObject::getPosition(){
@@ -907,7 +909,7 @@ void SPObject::setKeyValue(unsigned int key, gchar const *value)
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
 
-	this->set(key, value);
+    this->set(key, value);
 }
 
 void SPObject::readAttr(gchar const *key)
@@ -964,7 +966,7 @@ static gchar const *sp_xml_get_space_string(unsigned int space)
 }
 
 Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-	SPObject* object = this;
+    SPObject* object = this;
 
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
         repr = object->getRepr()->duplicate(doc);
@@ -1066,10 +1068,10 @@ Inkscape::XML::Node * SPObject::updateRepr(Inkscape::XML::Document *doc, Inkscap
         return NULL;
     }
 
-	if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = getRepr();
-	}
-	return this->write(doc, repr, flags);
+    if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+        repr = getRepr();
+    }
+    return this->write(doc, repr, flags);
 
 }
 
@@ -1136,7 +1138,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 
     try
     {
-    	this->update(ctx, flags);
+        this->update(ctx, flags);
     }
     catch(...)
     {

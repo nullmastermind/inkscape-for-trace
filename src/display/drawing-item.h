@@ -89,7 +89,7 @@ public:
 
     Geom::OptIntRect geometricBounds() const { return _bbox; }
     Geom::OptIntRect visualBounds() const { return _drawbox; }
-    Geom::OptRect itemBounds() const { return _item_bbox; }
+    Geom::OptRect filterBounds() const { return _filter_bbox; }
     Geom::Affine ctm() const { return _ctm; }
     Geom::Affine transform() const { return _transform ? *_transform : Geom::identity(); }
     Drawing &drawing() const { return _drawing; }
@@ -175,7 +175,7 @@ protected:
     Geom::Affine _ctm; ///< Total transform from item coords to display coords
     Geom::OptIntRect _bbox; ///< Bounding box in display (pixel) coords including stroke
     Geom::OptIntRect _drawbox; ///< Full visual bounding box - enlarged by filters, shrunk by clips and masks
-    Geom::OptRect _item_bbox; ///< Geometric bounding box in item coordinates
+    Geom::OptRect _filter_bbox; ///< Used by filters when settings bounds
 
     DrawingItem *_clip;
     DrawingItem *_mask;

@@ -61,7 +61,6 @@ set(sp_SRC
 	sp-root.cpp
 	sp-script.cpp
 	sp-shape.cpp
-	# sp-skeleton.cpp
 	sp-spiral.cpp
 	sp-star.cpp
 	sp-stop.cpp
@@ -153,7 +152,6 @@ set(sp_SRC
 	sp-root.h
 	sp-script.h
 	sp-shape.h
-	# sp-skeleton.h
 	sp-spiral.h
 	sp-star.h
 	sp-stop.h
@@ -560,6 +558,7 @@ add_subdirectory(libuemf)
 add_subdirectory(libvpsc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
+add_subdirectory(libdepixelize)
 
 
 get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)

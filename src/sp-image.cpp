@@ -17,9 +17,6 @@
 # include "config.h"
 #endif
 
-// This has to be included prior to anything that includes setjmp.h, it croaks otherwise
-#include <png.h>
-
 #include <cstring>
 #include <algorithm>
 #include <string>
@@ -43,8 +40,9 @@
 #include "xml/repr.h"
 #include "snap-candidate.h"
 #include "preferences.h"
-
 #include "io/sys.h"
+#include "sp-factory.h"
+
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 #include "cms-system.h"
 #include "color-profile.h"
@@ -77,8 +75,7 @@
 
 static void sp_image_set_curve(SPImage *image);
 
-static GdkPixbuf *sp_image_repr_read_image( time_t& modTime, gchar*& pixPath, const gchar *href, const gchar *absref, const gchar *base );
-static GdkPixbuf *sp_image_pixbuf_force_rgba (GdkPixbuf * pixbuf);
+static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base );
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
 static GdkPixbuf * sp_image_repr_read_dataURI (const gchar * uri_data);
@@ -117,78 +114,16 @@ extern guint update_in_progress;
 #define DEBUG_MESSAGE_SCISLAC(key, ...)
 #endif // DEBUG_LCMS
 
-namespace Inkscape {
-namespace IO {
-
-GdkPixbuf* pixbuf_new_from_file(const char *filename, time_t &modTime, gchar*& pixPath)
-{
-    GdkPixbuf* buf = NULL;
-    modTime = 0;
-    if ( pixPath ) {
-        g_free(pixPath);
-        pixPath = NULL;
-    }
-
-    //test correctness of filename
-    if (!g_file_test (filename, G_FILE_TEST_EXISTS)){ 
-        return NULL;
-    }
-    struct stat stdir;
-    int val = g_stat(filename, &stdir);
-    if (stdir.st_mode & S_IFDIR){
-        g_warning("Linked image file %s is a directory", filename);
-        return NULL;
-    }
-
-    // we need to load the entire pixbuf into memory
-    gchar *data = NULL;
-    gsize len = 0;
-
-    if (g_file_get_contents(filename, &data, &len, NULL)) {
-        if (!val) {
-            modTime = stdir.st_mtime;
-            pixPath = g_strdup(filename);
-        }
-
-        GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
-        gdk_pixbuf_loader_write(loader, (guchar *) data, len, NULL);
-        gdk_pixbuf_loader_close(loader, NULL);
-
-        buf = gdk_pixbuf_loader_get_pixbuf(loader);
-        if (buf) {
-            g_object_ref(buf);
-            buf = sp_image_pixbuf_force_rgba(buf);
-            pixbuf_set_mime_data(buf, (guchar *) data, len, gdk_pixbuf_loader_get_format(loader));
-        } else {
-            g_free(data);
-            g_warning("Error loading pixbuf");
-        }
-
-        // TODO: we could also read DPI, ICC profile, gamma correction, and other information
-        // from the file. This can be done by using format-specific libraries e.g. libpng.
-    } else {
-        g_warning("Unable to open linked file: %s", filename);
-    }
-
-    return buf;
-}
-
-}
-}
-
-
-#include "sp-factory.h"
-
 namespace {
-	SPObject* createImage() {
-		return new SPImage();
-	}
+SPObject* createImage() {
+    return new SPImage();
+}
 
-	bool imageRegistered = SPFactory::instance().registerObject("svg:image", createImage);
+bool imageRegistered = SPFactory::instance().registerObject("svg:image", createImage);
 }
 
 SPImage::SPImage() : SPItem() {
-	this->aspect_clip = 0;
+    this->aspect_clip = 0;
 
     this->x.unset();
     this->y.unset();
@@ -206,15 +141,13 @@ SPImage::SPImage() : SPItem() {
     this->color_profile = 0;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     this->pixbuf = 0;
-    this->pixPath = 0;
-    this->lastMod = 0;
 }
 
 SPImage::~SPImage() {
 }
 
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPItem::build(document, repr);
+    SPItem::build(document, repr);
 
     this->readAttr( "xlink:href" );
     this->readAttr( "x" );
@@ -231,7 +164,7 @@ void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
 void SPImage::release() {
     if (this->document) {
         // Unregister ourselves
-    	this->document->removeResource("image", this);
+        this->document->removeResource("image", this);
     }
 
     if (this->href) {
@@ -239,11 +172,8 @@ void SPImage::release() {
         this->href = NULL;
     }
 
-    if (this->pixbuf) {
-        g_object_set_data(G_OBJECT(this->pixbuf), "cairo_surface", NULL);
-        g_object_unref (this->pixbuf);
-        this->pixbuf = NULL;
-    }
+    delete this->pixbuf;
+    this->pixbuf = NULL;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     if (this->color_profile) {
@@ -251,11 +181,6 @@ void SPImage::release() {
         this->color_profile = NULL;
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-    if (this->pixPath) {
-        g_free(this->pixPath);
-        this->pixPath = 0;
-    }
 
     if (this->curve) {
         this->curve = this->curve->unref();
@@ -275,7 +200,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
         case SP_ATTR_X:
             if (!this->x.readAbsolute(value)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-            	this->x.unset();
+                this->x.unset();
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -284,7 +209,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
         case SP_ATTR_Y:
             if (!this->y.readAbsolute(value)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-            	this->y.unset();
+                this->y.unset();
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -293,7 +218,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
         case SP_ATTR_WIDTH:
             if (!this->width.readAbsolute(value)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-            	this->width.unset();
+                this->width.unset();
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -302,7 +227,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
         case SP_ATTR_HEIGHT:
             if (!this->height.readAbsolute(value)) {
                 /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
-            	this->height.unset();
+                this->height.unset();
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -310,7 +235,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
 
         case SP_ATTR_PRESERVEASPECTRATIO:
             /* Do setup before, so we can use break to escape */
-        	this->aspect_align = SP_ASPECT_NONE;
+            this->aspect_align = SP_ASPECT_NONE;
             this->aspect_clip = SP_ASPECT_MEET;
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 
@@ -406,28 +331,13 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     SPItem::update(ctx, flags);
 
     if (flags & SP_IMAGE_HREF_MODIFIED_FLAG) {
-        if (this->pixbuf) {
-            g_object_unref (this->pixbuf);
-            this->pixbuf = NULL;
-        }
-        
-        if ( this->pixPath ) {
-            g_free(this->pixPath);
-            this->pixPath = 0;
-        }
-        
-        this->lastMod = 0;
-        
+        delete this->pixbuf;
+        this->pixbuf = NULL;
+
         if (this->href) {
-            GdkPixbuf *pixbuf;
+            Inkscape::Pixbuf *pixbuf = NULL;
             pixbuf = sp_image_repr_read_image (
-                this->lastMod,
-                this->pixPath,
-
-                //XML Tree being used directly while it shouldn't be.
                 this->getRepr()->attribute("xlink:href"),
-
-                //XML Tree being used directly while it shouldn't be.
                 this->getRepr()->attribute("sodipodi:absref"),
                 doc->getBase());
             
@@ -436,10 +346,13 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
                 if ( this->color_profile )
                 {
-                    int imagewidth = gdk_pixbuf_get_width( pixbuf );
-                    int imageheight = gdk_pixbuf_get_height( pixbuf );
-                    int rowstride = gdk_pixbuf_get_rowstride( pixbuf );
-                    guchar* px = gdk_pixbuf_get_pixels( pixbuf );
+                    // TODO: this will prevent using MIME data when exporting.
+                    // Integrate color correction into loading.
+                    pixbuf->ensurePixelFormat(Inkscape::Pixbuf::PF_GDK);
+                    int imagewidth = pixbuf->width();
+                    int imageheight = pixbuf->height();
+                    int rowstride = pixbuf->rowstride();;
+                    guchar* px = pixbuf->pixels();
 
                     if ( px ) {
                         DEBUG_MESSAGE( lcmsFive, "in <image>'s sp_image_update. About to call colorprofile_get_handle()" );
@@ -508,23 +421,23 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     if (this->pixbuf) {
         /* fixme: We are slightly violating spec here (Lauris) */
         if (!this->width._set) {
-            this->width.computed = gdk_pixbuf_get_width(this->pixbuf);
+            this->width.computed = this->pixbuf->width();
         }
-        
+
         if (!this->height._set) {
-            this->height.computed = gdk_pixbuf_get_height(this->pixbuf);
+            this->height.computed = this->pixbuf->height();
         }
     }
 
-    Geom::Point p(this->x.computed, this->y.computed);
-    Geom::Point wh(this->width.computed, this->height.computed);
-    this->clipbox = Geom::Rect(p, p + wh);
+    this->clipbox = Geom::Rect::from_xywh(
+        this->x.computed, this->y.computed,
+        this->width.computed, this->height.computed);
 
     this->ox = this->x.computed;
     this->oy = this->y.computed;
 
-    int pixwidth = gdk_pixbuf_get_width (this->pixbuf);
-    int pixheight = gdk_pixbuf_get_height (this->pixbuf);
+    int pixwidth = this->pixbuf->width();
+    int pixheight = this->pixbuf->height();
 
     this->sx = this->width.computed / pixwidth;
     this->sy = this->height.computed / pixheight;
@@ -656,16 +569,15 @@ Geom::OptRect SPImage::bbox(Geom::Affine const &transform, SPItem::BBoxType type
 
 void SPImage::print(SPPrintContext *ctx) {
     if (this->pixbuf && (this->width.computed > 0.0) && (this->height.computed > 0.0) ) {
-        GdkPixbuf *pb = gdk_pixbuf_copy(this->pixbuf);
-        // GObject data is not copied, so we have to set the pixel format explicitly
-        g_object_set_data_full(G_OBJECT(pb), "pixel_format", g_strdup("argb32"), g_free);
-        ink_pixbuf_ensure_normal(pb);
+        Inkscape::Pixbuf *pb = new Inkscape::Pixbuf(*this->pixbuf);
+        pb->ensurePixelFormat(Inkscape::Pixbuf::PF_GDK);
 
-        guchar *px = gdk_pixbuf_get_pixels(pb);
-        int w = gdk_pixbuf_get_width(pb);
-        int h = gdk_pixbuf_get_height(pb);
-        int rs = gdk_pixbuf_get_rowstride(pb);
-        int pixskip = gdk_pixbuf_get_n_channels(pb) * gdk_pixbuf_get_bits_per_sample(pb) / 8;
+        guchar *px = pb->pixels();
+        int w = pb->width();
+        int h = pb->height();
+        int rs = pb->rowstride();
+        //int pixskip = gdk_pixbuf_get_n_channels(pb) * gdk_pixbuf_get_bits_per_sample(pb) / 8;
+        int pixskip = 4;
 
         if (this->aspect_align == SP_ASPECT_NONE) {
             Geom::Affine t;
@@ -697,7 +609,7 @@ void SPImage::print(SPPrintContext *ctx) {
             t = ti * t;
             sp_print_image_R8G8B8A8_N(ctx, px + trimx*pixskip + trimy*rs, trimwidth, trimheight, rs, t, this->style);
         }
-        g_object_unref(pb);
+        delete pb;
     }
 }
 
@@ -716,8 +628,8 @@ gchar* SPImage::description() {
     char *ret = ( this->pixbuf == NULL
                   ? g_strdup_printf(_("<b>Image with bad reference</b>: %s"), href_desc)
                   : g_strdup_printf(_("<b>Image</b> %d &#215; %d: %s"),
-                                    gdk_pixbuf_get_width(this->pixbuf),
-                                    gdk_pixbuf_get_height(this->pixbuf),
+                                    this->pixbuf->width(),
+                                    this->pixbuf->height(),
                                     href_desc) );
     g_free(href_desc);
     return ret;
@@ -731,22 +643,9 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int ke
     return ai;
 }
 
-/*
- * utility function to try loading image from href
- *
- * docbase/relative_src
- * absolute_src
- *
- */
-
-GdkPixbuf *sp_image_repr_read_image( time_t& modTime, char*& pixPath, const gchar *href, const gchar *absref, const gchar *base )
+Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base)
 {
-    GdkPixbuf *pixbuf = 0;
-    modTime = 0;
-    if ( pixPath ) {
-        g_free(pixPath);
-        pixPath = 0;
-    }
+    Inkscape::Pixbuf *inkpb = 0;
 
     gchar const *filename = href;
     
@@ -754,18 +653,18 @@ GdkPixbuf *sp_image_repr_read_image( time_t& modTime, char*& pixPath, const gcha
         if (strncmp (filename,"file:",5) == 0) {
             gchar *fullname = g_filename_from_uri(filename, NULL, NULL);
             if (fullname) {
-                pixbuf = Inkscape::IO::pixbuf_new_from_file(fullname, modTime, pixPath);
+                inkpb = Inkscape::Pixbuf::create_from_file(fullname);
                 g_free(fullname);
-                if (pixbuf != NULL) {
-                    return pixbuf;
+                if (inkpb != NULL) {
+                    return inkpb;
                 }
             }
         } else if (strncmp (filename,"data:",5) == 0) {
             /* data URI - embedded image */
             filename += 5;
-            pixbuf = sp_image_repr_read_dataURI (filename);
-            if (pixbuf != NULL) {
-                return pixbuf;
+            inkpb = Inkscape::Pixbuf::create_from_data_uri(filename);
+            if (inkpb != NULL) {
+                return inkpb;
             }
         } else {
 
@@ -781,19 +680,19 @@ GdkPixbuf *sp_image_repr_read_image( time_t& modTime, char*& pixPath, const gcha
                 // different dir) or unset (when doc is not saved yet), so we check for base+href existence first,
                 // and if it fails, we also try to use bare href regardless of its g_path_is_absolute
                 if (g_file_test (fullname, G_FILE_TEST_EXISTS) && !g_file_test (fullname, G_FILE_TEST_IS_DIR)) {
-                    pixbuf = Inkscape::IO::pixbuf_new_from_file(fullname, modTime, pixPath);
+                    inkpb = Inkscape::Pixbuf::create_from_file(fullname);
                     g_free (fullname);
-                    if (pixbuf != NULL) {
-                        return pixbuf;
+                    if (inkpb != NULL) {
+                        return inkpb;
                     }
                 }
             }
 
             /* try filename as absolute */
             if (g_file_test (filename, G_FILE_TEST_EXISTS) && !g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-                pixbuf = Inkscape::IO::pixbuf_new_from_file(filename, modTime, pixPath);
-                if (pixbuf != NULL) {
-                    return pixbuf;
+                inkpb = Inkscape::Pixbuf::create_from_file(filename);
+                if (inkpb != NULL) {
+                    return inkpb;
                 }
             }
         }
@@ -809,31 +708,20 @@ GdkPixbuf *sp_image_repr_read_image( time_t& modTime, char*& pixPath, const gcha
             g_warning ("xlink:href did not resolve to a valid image file, now trying sodipodi:absref=\"%s\"", absref);
         }
 
-        pixbuf = Inkscape::IO::pixbuf_new_from_file(filename, modTime, pixPath);
-        if (pixbuf != NULL) {
-            return pixbuf;
+        inkpb = Inkscape::Pixbuf::create_from_file(filename);
+        if (inkpb != NULL) {
+            return inkpb;
         }
     }
     /* Nope: We do not find any valid pixmap file :-( */
-    pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **) brokenimage_xpm);
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **) brokenimage_xpm);
+    inkpb = new Inkscape::Pixbuf(pixbuf);
 
     /* It should be included xpm, so if it still does not does load, */
     /* our libraries are broken */
-    g_assert (pixbuf != NULL);
+    g_assert (inkpb != NULL);
 
-    return pixbuf;
-}
-
-static GdkPixbuf *sp_image_pixbuf_force_rgba( GdkPixbuf * pixbuf )
-{
-    GdkPixbuf* result;
-    if (gdk_pixbuf_get_has_alpha(pixbuf)) {
-        result = pixbuf;
-    } else {
-        result = gdk_pixbuf_add_alpha(pixbuf, FALSE, 0, 0, 0);
-        g_object_unref(pixbuf);
-    }
-    return result;
+    return inkpb;
 }
 
 /* We assert that realpixbuf is either NULL or identical size to pixbuf */
@@ -841,7 +729,7 @@ static void
 sp_image_update_arenaitem (SPImage *image, Inkscape::DrawingImage *ai)
 {
     ai->setStyle(SP_OBJECT(image)->style);
-    ai->setARGB32Pixbuf(image->pixbuf);
+    ai->setPixbuf(image->pixbuf);
     ai->setOrigin(Geom::Point(image->ox, image->oy));
     ai->setScale(image->sx, image->sy);
     ai->setClipbox(image->clipbox);
@@ -928,113 +816,6 @@ Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
     return ret;
 }
 
-static GdkPixbuf *sp_image_repr_read_dataURI( const gchar * uri_data )
-{
-    GdkPixbuf * pixbuf = NULL;
-
-    gint data_is_image = 0;
-    gint data_is_base64 = 0;
-
-    const gchar * data = uri_data;
-
-    while (*data) {
-        if (strncmp(data,"base64",6) == 0) {
-            /* base64-encoding */
-            data_is_base64 = 1;
-            data_is_image = 1; // Illustrator produces embedded images without MIME type, so we assume it's image no matter what
-            data += 6;
-        }
-        else if (strncmp(data,"image/png",9) == 0) {
-            /* PNG image */
-            data_is_image = 1;
-            data += 9;
-        }
-        else if (strncmp(data,"image/jpg",9) == 0) {
-            /* JPEG image */
-            data_is_image = 1;
-            data += 9;
-        }
-        else if (strncmp(data,"image/jpeg",10) == 0) {
-            /* JPEG image */
-            data_is_image = 1;
-            data += 10;
-        }
-        else { /* unrecognized option; skip it */
-            while (*data) {
-                if (((*data) == ';') || ((*data) == ',')) {
-                    break;
-                }
-                data++;
-            }
-        }
-        if ((*data) == ';') {
-            data++;
-            continue;
-        }
-        if ((*data) == ',') {
-            data++;
-            break;
-        }
-    }
-
-    if ((*data) && data_is_image && data_is_base64) {
-        pixbuf = sp_image_repr_read_b64(data);
-    }
-
-    return pixbuf;
-}
-
-static GdkPixbuf *sp_image_repr_read_b64(gchar const *uri_data)
-{
-    GdkPixbuf *pixbuf = NULL;
-    GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
-
-    if (!loader) return NULL;
-
-    gsize decoded_len = 0;
-    guchar *decoded = g_base64_decode(uri_data, &decoded_len);
-
-    if (gdk_pixbuf_loader_write(loader, decoded, decoded_len, NULL)) {
-        gdk_pixbuf_loader_close(loader, NULL);
-        pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
-        g_object_ref(pixbuf);
-        pixbuf = sp_image_pixbuf_force_rgba(pixbuf);
-        pixbuf_set_mime_data(pixbuf, decoded, decoded_len, gdk_pixbuf_loader_get_format(loader));
-    } else {
-        g_free(decoded);
-    }
-    g_object_unref(loader);
-
-    return pixbuf;
-}
-
-// takes ownership of passed data
-static void pixbuf_set_mime_data(GdkPixbuf *pb, guchar *data, gsize len, GdkPixbufFormat *fmt)
-{
-    cairo_surface_t *s = ink_cairo_surface_get_for_pixbuf(pb);
-
-    gchar const *mimetype = NULL;
-    gchar *fmt_name = gdk_pixbuf_format_get_name(fmt);
-    Glib::ustring name = fmt_name;
-    g_free(fmt_name);
-
-    if (name == "jpeg") {
-        mimetype = CAIRO_MIME_TYPE_JPEG;
-    } else if (name == "jpeg2000") {
-        mimetype = CAIRO_MIME_TYPE_JP2;
-    } else if (name == "png") {
-        mimetype = CAIRO_MIME_TYPE_PNG;
-    }
-
-    if (mimetype != NULL) {
-        cairo_surface_set_mime_data(s, mimetype, data, len, g_free, data);
-        //g_message("Setting Cairo MIME data: %s", mimetype);
-    } else {
-        g_free(data);
-        //g_message("Not setting Cairo MIME data: unknown format %s", name.c_str());
-    }
-}
-
 static void sp_image_set_curve( SPImage *image )
 {
     //create a curve at the image's boundary for snapping
@@ -1070,52 +851,32 @@ SPCurve *sp_image_get_curve( SPImage *image )
     return result;
 }
 
-void sp_embed_image(Inkscape::XML::Node *image_node, GdkPixbuf *pb)
+void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)
 {
-    static gchar const *mimetypes[] = {
-        CAIRO_MIME_TYPE_JPEG, CAIRO_MIME_TYPE_JP2, CAIRO_MIME_TYPE_PNG, NULL };
-    static guint mimetypes_len = g_strv_length(const_cast<gchar**>(mimetypes));
-
     bool free_data = false;
 
     // check whether the pixbuf has MIME data
     guchar *data = NULL;
     gsize len = 0;
-    gchar const *data_mimetype = NULL;
+    std::string data_mimetype;
 
-    cairo_surface_t *s = reinterpret_cast<cairo_surface_t*>(g_object_get_data(G_OBJECT(pb), "cairo_surface"));
-    if (s) {
-        for (guint i = 0; i < mimetypes_len; ++i) {
-            unsigned long len_long = 0;
-            cairo_surface_get_mime_data(s, mimetypes[i], const_cast<unsigned char const **>(&data), &len_long);
-            len = len_long; // this assumes that the added range of long is not needed. the code below assumes gsize range of values is sufficient.
-            if (data != NULL) {
-                data_mimetype = mimetypes[i];
-                break;
-            }
-        }
-    }
+    data = const_cast<guchar *>(pb->getMimeData(len, data_mimetype));
 
     if (data == NULL) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring quality = Glib::ustring::format(prefs->getInt("/dialogs/import/quality", 100));
-
         // if there is no supported MIME data, embed as PNG
         data_mimetype = "image/png";
-        ink_pixbuf_ensure_normal(pb);
-        gdk_pixbuf_save_to_buffer(pb, reinterpret_cast<gchar**>(&data), &len, "png", NULL,
-            "quality", quality.c_str(), NULL);
+        gdk_pixbuf_save_to_buffer(pb->getPixbufRaw(), reinterpret_cast<gchar**>(&data), &len, "png", NULL, NULL);
         free_data = true;
     }
 
     // Save base64 encoded data in image node
     // this formula taken from Glib docs
     gsize needed_size = len * 4 / 3 + len * 4 / (3 * 72) + 7;
-    needed_size += 5 + 8 + strlen(data_mimetype); // 5 bytes for data: + 8 for ;base64,
+    needed_size += 5 + 8 + data_mimetype.size(); // 5 bytes for data: + 8 for ;base64,
 
     gchar *buffer = (gchar *) g_malloc(needed_size);
     gchar *buf_work = buffer;
-    buf_work += g_sprintf(buffer, "data:%s;base64,", data_mimetype);
+    buf_work += g_sprintf(buffer, "data:%s;base64,", data_mimetype.c_str());
 
     gint state = 0;
     gint save = 0;
@@ -1135,18 +896,18 @@ void sp_embed_image(Inkscape::XML::Node *image_node, GdkPixbuf *pb)
 
 void sp_image_refresh_if_outdated( SPImage* image )
 {
-    if ( image->href && image->lastMod ) {
+    if ( image->href && image->pixbuf && image->pixbuf->modificationTime()) {
         // It *might* change
 
         struct stat st;
         memset(&st, 0, sizeof(st));
         int val = 0;
-        if (g_file_test (image->pixPath, G_FILE_TEST_EXISTS)){ 
-            val = g_stat(image->pixPath, &st);
+        if (g_file_test (image->pixbuf->originalPath().c_str(), G_FILE_TEST_EXISTS)){ 
+            val = g_stat(image->pixbuf->originalPath().c_str(), &st);
         }
         if ( !val ) {
             // stat call worked. Check time now
-            if ( st.st_mtime != image->lastMod ) {
+            if ( st.st_mtime != image->pixbuf->modificationTime() ) {
                 SPCtx *ctx = 0;
                 unsigned int flags = SP_IMAGE_HREF_MODIFIED_FLAG;
                 image->update(ctx, flags);

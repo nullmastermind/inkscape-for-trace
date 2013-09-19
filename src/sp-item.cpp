@@ -601,11 +601,9 @@ void SPItem::update(SPCtx *ctx, guint flags) {
             }
         }
     }
-
     /* Update bounding box data used by filters */
     if (item->style->filter.set && item->display) {
         Geom::OptRect item_bbox = item->visualBounds();
-
         SPItemView *itemview = item->display;
         do {
             if (itemview->arenaitem)

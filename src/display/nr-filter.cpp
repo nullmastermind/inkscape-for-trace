@@ -114,13 +114,16 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
 
     Geom::Affine trans = item->ctm();
 
-//    Geom::OptRect filter_area = filter_effect_area(item->itemBounds()); // disabled, already done in visualBounds
-    Geom::OptRect filter_area = item->itemBounds(); // see LP Bug 1188336
-    if (!filter_area) return 1;
+    // Get filter are, the filter_effect_area is already done in visualBounds
+    Geom::OptRect filter_area = item->filterBounds();
+    // Use the geometricBounds as a backup solution
+    if (!filter_area || (filter_area->hasZeroArea() &&
+      filter_area->min()[Geom::X] == 0 && filter_area->min()[Geom::Y] == 0))
+        filter_area = item->geometricBounds();
 
     FilterUnits units(_filter_units, _primitive_units);
     units.set_ctm(trans);
-    units.set_item_bbox(item->itemBounds());
+    units.set_item_bbox(filter_area);
     units.set_filter_area(*filter_area);
 
     std::pair<double,double> resolution
@@ -200,7 +203,7 @@ void Filter::area_enlarge(Geom::IntRect &bbox, Inkscape::DrawingItem const *item
     }
 
     Geom::Rect item_bbox;
-    Geom::OptRect maybe_bbox = item->itemBounds();
+    Geom::OptRect maybe_bbox = item->geometricBounds();
     if (maybe_bbox.isEmpty()) {
         // Code below needs a bounding box
         return;
@@ -218,20 +221,6 @@ void Filter::area_enlarge(Geom::IntRect &bbox, Inkscape::DrawingItem const *item
     bbox.y0 -= (int)pixels_per_block;
     bbox.y1 += (int)pixels_per_block;
 */
-}
-
-Geom::OptIntRect Filter::compute_drawbox(Inkscape::DrawingItem const *item, Geom::OptRect const &item_bbox) {
-
-//    Geom::OptRect enlarged = filter_effect_area(item_bbox); // disabled, already done in visualBounds
-    Geom::OptRect enlarged = item_bbox; // see LP Bug 1188336
-    if (enlarged) {
-        *enlarged *= item->ctm();
-
-        Geom::OptIntRect ret(enlarged->roundOutwards());
-        return ret;
-    } else {
-        return Geom::OptIntRect();
-    }
 }
 
 Geom::OptRect Filter::filter_effect_area(Geom::OptRect const &bbox)

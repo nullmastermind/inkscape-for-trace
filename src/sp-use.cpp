@@ -44,15 +44,15 @@ static void sp_use_delete_self(SPObject *deleted, SPUse *self);
 #include "sp-factory.h"
 
 namespace {
-	SPObject* createUse() {
-		return new SPUse();
-	}
+    SPObject* createUse() {
+        return new SPUse();
+    }
 
-	bool useRegistered = SPFactory::instance().registerObject("svg:use", createUse);
+    bool useRegistered = SPFactory::instance().registerObject("svg:use", createUse);
 }
 
 SPUse::SPUse() : SPItem() {
-	this->child = NULL;
+    this->child = NULL;
 
     this->x.unset();
     this->y.unset();
@@ -102,7 +102,7 @@ void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
 void SPUse::release() {
     if (this->child) {
-    	this->detach(this->child);
+        this->detach(this->child);
         this->child = NULL;
     }
 
@@ -227,8 +227,6 @@ void SPUse::print(SPPrintContext* ctx) {
 }
 
 gchar* SPUse::description() {
-    char *ret;
-
     if (this->child) {
         if( SP_IS_SYMBOL( this->child ) ) {
             char *symbol_desc = SP_ITEM(this->child)->title();
@@ -455,9 +453,9 @@ sp_use_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPUse *use)
 
             SPObject* obj = SPFactory::instance().createObject(NodeTraits::get_type_string(*childrepr));
             if (SP_IS_ITEM(obj)) {
-            	use->child = obj;
+                use->child = obj;
 
-            	use->attach(use->child, use->lastChild());
+                use->attach(use->child, use->lastChild());
                 sp_object_unref(use->child, use);
                 (use->child)->invoke_build(use->document, childrepr, TRUE);
 
@@ -469,7 +467,7 @@ sp_use_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPUse *use)
                     }
                 }
             } else {
-            	delete obj;
+                delete obj;
             }
 
             use->_delete_connection = refobj->connectDelete(sigc::bind(sigc::ptr_fun(&sp_use_delete_self), use));
@@ -523,7 +521,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     }
 
     if (this->y.unit == SVGLength::PERCENT) {
-    	this->y.computed = this->y.value * ictx->viewport.height();
+        this->y.computed = this->y.value * ictx->viewport.height();
     }
 
     if (this->width.unit == SVGLength::PERCENT) {

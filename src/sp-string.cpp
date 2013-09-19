@@ -35,11 +35,11 @@
 #include "sp-factory.h"
 
 namespace {
-	SPObject* createString() {
-		return new SPString();
-	}
+    SPObject* createString() {
+        return new SPString();
+    }
 
-	bool stringRegistered = SPFactory::instance().registerObject("string", createString);
+    bool stringRegistered = SPFactory::instance().registerObject("string", createString);
 }
 
 /*#####################################################
@@ -54,24 +54,19 @@ SPString::~SPString() {
 }
 
 void SPString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-	SPString* object = this;
+    SPString* object = this;
     object->read_content();
 
     SPObject::build(doc, repr);
 }
 
 void SPString::release() {
-	SPString* object = this;
-    SPString *string = SP_STRING(object);
-
-    //string->string.~ustring();
-
     SPObject::release();
 }
 
 
 void SPString::read_content() {
-	SPString* object = this;
+    SPString* object = this;
 
     SPString *string = SP_STRING(object);
 
