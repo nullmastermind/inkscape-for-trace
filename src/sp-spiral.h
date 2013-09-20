@@ -53,6 +53,7 @@ public:
 
 	/* Lowlevel interface */
 	void setPosition(gdouble cx, gdouble cy, gdouble exp, gdouble revo, gdouble rad, gdouble arg, gdouble t0);
+	virtual Geom::Affine set_transform(Geom::Affine const& xform);
 
 	Geom::Point getXY(gdouble t) const;
 
@@ -71,6 +72,7 @@ public:
 	virtual void set(unsigned int key, gchar const* value);
 
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+    virtual const char* display_name();
 	virtual gchar* description();
 
 	virtual void set_shape();

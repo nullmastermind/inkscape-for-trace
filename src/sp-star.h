@@ -50,11 +50,13 @@ public:
 	virtual void set(unsigned int key, gchar const* value);
 	virtual void update(SPCtx* ctx, guint flags);
 
+    virtual const char* display_name();
 	virtual gchar* description();
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 
 	virtual void update_patheffect(bool write);
 	virtual void set_shape();
+	virtual Geom::Affine set_transform(Geom::Affine const& xform);
 };
 
 void sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized);
