@@ -5,16 +5,16 @@
     <dependency type="executable" location="extensions">empty_page.py</dependency>
     <dependency type="executable" location="extensions">inkex.py</dependency>
     
-    <_param name="size-help" type="description">Select your empty page size.</_param>
     <param name="size" _gui-text="Page size:" type="enum">
         <item value="a3">A3</item>
         <item value="a4">A4</item>
         <item value="a5">A5</item>
-        <item value="a3l">A3 landscape</item>
-        <item value="a4l">A4 landscape</item>
-        <item value="a5l">A5 landscape</item>
         <item value="letter">letter</item>
-        <item value="letterl">letter landscape</item>
+    </param>
+    
+    <param name="orientation" _gui-text="Page orientation:" type="enum">
+        <item value="horizontal">Horizontal</item>
+        <item value="vertical">Vertical</item>
     </param>
         
     <effect needs-live-preview="false">
