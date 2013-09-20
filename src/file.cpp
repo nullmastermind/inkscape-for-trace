@@ -74,6 +74,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
+#include <string>
+
 using Inkscape::DocumentUndo;
 
 #ifdef WITH_GNOME_VFS
@@ -124,7 +126,7 @@ static void sp_file_add_recent(gchar const *uri)
 /**
  * Create a blank document and add it to the desktop
  */
-SPDesktop *sp_file_new(const Glib::ustring &templ)
+SPDesktop *sp_file_new(const std::string &templ)
 {
     SPDocument *doc = SPDocument::createNewDoc( !templ.empty() ? templ.c_str() : 0 , TRUE, true );
     g_return_val_if_fail(doc != NULL, NULL);

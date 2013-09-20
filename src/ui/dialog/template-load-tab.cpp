@@ -197,7 +197,7 @@ void TemplateLoadTab::_loadTemplates()
 }
 
 
-TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::ustring &path)
+TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const std::string &path)
 {
     TemplateData result;
     result.path = path;
@@ -234,7 +234,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const Glib::
 }
 
 
-void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
+void TemplateLoadTab::_getTemplatesFromDir(const std::string &path)
 {
     if ( !Glib::file_test(path, Glib::FILE_TEST_EXISTS) ||
          !Glib::file_test(path, Glib::FILE_TEST_IS_DIR))
@@ -242,7 +242,7 @@ void TemplateLoadTab::_getTemplatesFromDir(const Glib::ustring &path)
     
     Glib::Dir dir(path);
 
-    Glib::ustring file = Glib::build_filename(path, dir.read_name());
+    std::string file = Glib::build_filename(path, dir.read_name());
     while (file != path){
         if (Glib::str_has_suffix(file, ".svg") && !Glib::str_has_prefix(Glib::path_get_basename(file), "default.")){
             TemplateData tmp = _processTemplateFile(file);

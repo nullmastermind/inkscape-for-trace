@@ -89,13 +89,14 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
     _preview_render.hide();
     _preview_image.hide();
     
-    Glib::ustring imagePath = Glib::build_filename(Glib::path_get_dirname(_current_template.path),  _current_template.preview_name);
+    std::string imagePath = Glib::build_filename(Glib::path_get_dirname(_current_template.path),  _current_template.preview_name);
     if (data.preview_name != ""){
         _preview_image.set(imagePath);
         _preview_image.show();
     }
     else if (!data.is_procedural){
-        _preview_render.showImage(data.path);
+        Glib::ustring gPath = data.path.c_str();
+        _preview_render.showImage(gPath);
         _preview_render.show();
     }
     
