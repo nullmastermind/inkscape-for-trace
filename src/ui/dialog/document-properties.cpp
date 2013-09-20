@@ -33,7 +33,6 @@
 #include "preferences.h"
 #include "shape-editor.h"
 #include "sp-namedview.h"
-#include "sp-object-repr.h"
 #include "sp-root.h"
 #include "sp-script.h"
 #include "svg/stringstream.h"
