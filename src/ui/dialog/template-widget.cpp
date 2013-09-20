@@ -19,14 +19,14 @@
 #include <glibmm/miscutils.h>
 
 #include "template-load-tab.h"
-#include "file.h"
-#include "extension/implementation/implementation.h"
-
-#include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
 #include "document-undo.h"
+#include "file.h"
+#include "extension/implementation/implementation.h"
+#include "inkscape.h"
+
 
 namespace Inkscape {
 namespace UI {
