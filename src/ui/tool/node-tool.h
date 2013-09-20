@@ -14,6 +14,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <glib.h>
 #include "event-context.h"
+#include "selection.h"
 
 namespace Inkscape {
 	namespace Display {
