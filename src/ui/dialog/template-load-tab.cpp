@@ -18,19 +18,19 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
-#include <list>
 #include <iostream>
+#include <list>
 
+#include "extension/db.h"
+#include "extension/effect.h"
+#include "inkscape.h"
 #include "interface.h"
 #include "file.h"
 #include "path-prefix.h"
 #include "preferences.h"
-#include "inkscape.h"
 #include "xml/repr.h"
 #include "xml/document.h"
 #include "xml/node.h"
-#include "extension/db.h"
-#include "extension/effect.h"
 
 
 namespace Inkscape {

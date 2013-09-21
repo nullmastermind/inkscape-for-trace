@@ -35,19 +35,16 @@ namespace UI {
 TemplateWidget::TemplateWidget()
     : _more_info_button(_("More info"))
     , _short_description_label(_(" "))
-    , _template_author_label(_(" "))
     , _template_name_label(_("no template selected"))
     , _effect_prefs(NULL)
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
-    pack_start(_template_author_label, Gtk::PACK_SHRINK, 0);
     pack_start(_preview_box, Gtk::PACK_SHRINK, 0);
     
     _preview_box.pack_start(_preview_image, Gtk::PACK_EXPAND_PADDING, 15);
     _preview_box.pack_start(_preview_render, Gtk::PACK_EXPAND_PADDING, 10);
     
     _short_description_label.set_line_wrap(true);
-    //_short_description_label.set_size_request(200);
 
     Gtk::Alignment *align;
     align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
@@ -83,7 +80,6 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
     _current_template = data;
 
     _template_name_label.set_text(_current_template.display_name);
-    //    _template_author_label.set_text(_current_template.author);
     _short_description_label.set_text(_current_template.short_description);
         
     _preview_render.hide();
@@ -105,7 +101,7 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
         _effect_prefs = NULL;
     }
     if (data.is_procedural){
-        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, NULL, NULL); // SP_ACTIVE_DESKTOP?
+        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, NULL, NULL); 
         pack_start(*_effect_prefs);
     }
 }
