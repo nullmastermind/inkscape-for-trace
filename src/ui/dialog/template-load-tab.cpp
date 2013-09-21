@@ -287,7 +287,7 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
         data.display_name = dgettext("Document template name", currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != NULL)
         data.author = currentData->firstChild()->content();
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_short")) != NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != NULL)
         data.short_description = dgettext("Document template short description", currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= NULL)
         data.long_description = dgettext("Document template long description", currentData->firstChild()->content());
