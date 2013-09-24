@@ -28,6 +28,7 @@
 #include "text-tag-attributes.h"
 #include "text-chemistry.h"
 #include "text-editing.h"
+#include "sp-text.h"
 
 #include "livarot/Shape.h"
 
@@ -203,7 +204,7 @@ void SPFlowtext::set(unsigned int key, const gchar* value) {
                 if ( val == NULL ) {
                     this->par_indent = 0.0;
                 } else {
-                    sp_repr_get_double((Inkscape::XML::Node*)opts, "par-indent", &this->par_indent);
+                    this->par_indent = g_ascii_strtod(val, NULL);
                 }
             }
 
@@ -280,17 +281,20 @@ void SPFlowtext::print(SPPrintContext *ctx) {
     this->layout.print(ctx, pbox, dbox, bbox, ctm);
 }
 
+const char* SPFlowtext::displayName() {
+    if (SP_FLOWTEXT(this)->has_internal_frame()) {
+        return _("Flowed Text");
+    } else {
+        return _("Linked Flowed Text");
+    }
+}
+
 gchar* SPFlowtext::description() {
     Inkscape::Text::Layout const &layout = SP_FLOWTEXT(this)->layout;
     int const nChars = layout.iteratorToCharIndex(layout.end());
-
     char const *trunc = (layout.inputTruncated()) ? _(" [truncated]") : "";
 
-    if (SP_FLOWTEXT(this)->has_internal_frame()) {
-        return g_strdup_printf(ngettext("<b>Flowed text</b> (%d character%s)", "<b>Flowed text</b> (%d characters%s)", nChars), nChars, trunc);
-    } else {
-        return g_strdup_printf(ngettext("<b>Linked flowed text</b> (%d character%s)", "<b>Linked flowed text</b> (%d characters%s)", nChars), nChars, trunc);
-    }
+    return g_strdup_printf(ngettext(_("(%d character%s)"), _("(%d characters%s)"), nChars), nChars, trunc);
 }
 
 void SPFlowtext::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) {
@@ -578,7 +582,7 @@ SPItem *SPFlowtext::get_frame(SPItem *after)
         }
 
         if ( frame && SP_IS_USE(frame) ) {
-            frame = sp_use_get_original(SP_USE(frame));
+            frame = SP_USE(frame)->get_original();
         }
     }
     return frame;
@@ -645,6 +649,44 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     return ft_item;
 }
 
+Geom::Affine SPFlowtext::set_transform (Geom::Affine const &xform)
+{
+    if ((this->_optimizeScaledText && !xform.withoutTranslation().isNonzeroUniformScale())
+        || (!this->_optimizeScaledText && !xform.isNonzeroUniformScale())) {
+        this->_optimizeScaledText = false;
+        return xform;
+    }
+    this->_optimizeScaledText = false;
+    
+    SPText *text = reinterpret_cast<SPText *>(this);
+    
+    double const ex = xform.descrim();
+    if (ex == 0) {
+        return xform;
+    }
+
+    Geom::Affine ret(xform);
+    ret[0] /= ex;
+    ret[1] /= ex;
+    ret[2] /= ex;
+    ret[3] /= ex;
+
+    // Adjust font size
+    text->_adjustFontsizeRecursive (this, ex);
+
+    // Adjust stroke width
+    this->adjust_stroke_width_recursive (ex);
+
+    // Adjust pattern fill
+    this->adjust_pattern(xform * ret.inverse());
+
+    // Adjust gradient fill
+    this->adjust_gradient(xform * ret.inverse());
+
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+
+    return ret;
+}
 
 /*
   Local Variables:
