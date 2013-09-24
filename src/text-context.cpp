@@ -441,6 +441,7 @@ static void sp_text_context_setup_text(SPTextContext *tc)
     text_item->transform = SP_ITEM(ec->desktop->currentLayer())->i2doc_affine().inverse();
 
     text_item->updateRepr();
+    text_item->doWriteTransform(text_item->getRepr(), text_item->transform, NULL, true);
     DocumentUndo::done(sp_desktop_document(ec->desktop), SP_VERB_CONTEXT_TEXT,
 		       _("Create text"));
 }
@@ -1389,8 +1390,11 @@ SPCSSAttr *sp_text_get_style_at_cursor(SPEventContext const *ec)
         return NULL;
 
     SPObject const *obj = sp_te_object_at_position(tc->text, tc->text_sel_end);
-    if (obj)
-        return take_style_from_item(SP_ITEM(obj));
+
+    if (obj) {
+        return take_style_from_item(const_cast<SPObject*>(obj));
+    }
+
     return NULL;
 }
 

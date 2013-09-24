@@ -165,9 +165,7 @@ bool SPRectContext::item_handler(SPItem* item, GdkEvent* event) {
         break;
     }
 
-    if (!ret) {
-    	ret = SPEventContext::item_handler(item, event);
-    }
+   	ret = SPEventContext::item_handler(item, event);
 
     return ret;
 }
@@ -478,6 +476,7 @@ void SPRectContext::finishItem() {
         }
 
         this->rect->updateRepr();
+        this->rect->doWriteTransform(this->rect->getRepr(), this->rect->transform, NULL, true);
 
         this->desktop->canvas->endForcedFullRedraws();
 

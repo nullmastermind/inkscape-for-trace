@@ -39,6 +39,7 @@ public:
 
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
 	virtual void set_shape();
+	virtual Geom::Affine set_transform(Geom::Affine const& xform);
 
 	virtual void update_patheffect(bool write);
 };
@@ -58,7 +59,7 @@ public:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
-	virtual gchar* description();
+    virtual const char* displayName();
 };
 
 void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble rx, gdouble ry);
@@ -75,7 +76,7 @@ public:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
-	virtual gchar* description();
+    virtual const char* displayName();
 };
 
 /* <path sodipodi:type="arc"> element */
@@ -90,7 +91,7 @@ public:
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 	virtual void set(unsigned int key, gchar const* value);
-	virtual gchar* description();
+    virtual const char* displayName();
 	virtual void modified(unsigned int flags);
 };
 

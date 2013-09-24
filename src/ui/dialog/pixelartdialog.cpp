@@ -16,13 +16,10 @@
 # include <config.h>
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "pixelartdialog.h"
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/stock.h>
+#include <gtkmm/messagedialog.h>
 
 #include <gtk/gtk.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
@@ -132,7 +129,9 @@ private:
 
     Gtk::RadioButton voronoiRadioButton;
     Gtk::RadioButton noOptimizeRadioButton;
+#if LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
     Gtk::RadioButton optimizeRadioButton;
+#endif // LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
 
     SPDesktop *desktop;
     DesktopTracker deskTrack;
@@ -250,12 +249,14 @@ PixelArtDialogImpl::PixelArtDialogImpl() :
 
         outputVBox.pack_start(noOptimizeRadioButton, false, false);
 
+#if LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
         optimizeRadioButton.set_label(_("_Smooth curves"));
         optimizeRadioButton.set_tooltip_text(_("The Kopf-Lischinski algorithm"));
         optimizeRadioButton.set_use_underline(true);
         optimizeRadioButton.set_group(outputGroup);
 
         outputVBox.pack_start(optimizeRadioButton, false, false);
+#endif // LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
 
         outputFrame.set_label(_("Output"));
         outputFrame.add(outputVBox);
@@ -311,7 +312,11 @@ Tracer::Kopf2011::Options PixelArtDialogImpl::options()
     options.islandsWeight = islandsWeightSpinner.get_value_as_int();
     options.sparsePixelsMultiplier = sparsePixelsMultiplierSpinner.get_value();
     options.sparsePixelsRadius = sparsePixelsRadiusSpinner.get_value_as_int();
+#if LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
     options.optimize = optimizeRadioButton.get_active();
+#else // LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
+    options.optimize = false;
+#endif // LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
 
     options.nthreads = Inkscape::Preferences::get()
         ->getIntLimited("/options/threading/numthreads",
@@ -366,6 +371,17 @@ void PixelArtDialogImpl::processLibdepixelize(SPImage *img)
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf
         = Glib::wrap(img->pixbuf->getPixbufRaw(), true);
+
+    if ( pixbuf->get_width() > 256 || pixbuf->get_height() > 256 ) {
+        char *msg = _("Image looks too big. Process may take a while and is"
+                      " wise to save your document before continue."
+                      "\n\nContinue the procedure (without saving)?");
+        Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING,
+                                  Gtk::BUTTONS_OK_CANCEL, true);
+
+        if ( dialog.run() != Gtk::RESPONSE_OK )
+            return;
+    }
 
     if ( voronoiRadioButton.get_active() ) {
         out = Tracer::Kopf2011::to_voronoi(pixbuf, options());
@@ -442,7 +458,11 @@ void PixelArtDialogImpl::setDefaults()
     sparsePixelsMultiplierSpinner.set_value(Tracer::Kopf2011::Options
                                             ::SPARSE_PIXELS_MULTIPLIER);
 
+#if LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
     optimizeRadioButton.set_active();
+#else // LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
+    noOptimizeRadioButton.set_active();
+#endif // LIBDEPIXELIZE_INKSCAPE_ENABLE_SMOOTH
 
     ignorePreview = false;
 

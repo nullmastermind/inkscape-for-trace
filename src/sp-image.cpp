@@ -78,9 +78,6 @@ static void sp_image_set_curve(SPImage *image);
 static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base );
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
-static GdkPixbuf * sp_image_repr_read_dataURI (const gchar * uri_data);
-static GdkPixbuf * sp_image_repr_read_b64 (const gchar * uri_data);
-static void pixbuf_set_mime_data(GdkPixbuf *pb, guchar *data, gsize len, GdkPixbufFormat *fmt);
 
 #ifdef DEBUG_LCMS
 extern guint update_in_progress;
@@ -613,6 +610,10 @@ void SPImage::print(SPPrintContext *ctx) {
     }
 }
 
+const char* SPImage::displayName() {
+    return _("Image");
+}
+
 gchar* SPImage::description() {
     char *href_desc;
 
@@ -626,8 +627,8 @@ gchar* SPImage::description() {
     }
 
     char *ret = ( this->pixbuf == NULL
-                  ? g_strdup_printf(_("<b>Image with bad reference</b>: %s"), href_desc)
-                  : g_strdup_printf(_("<b>Image</b> %d &#215; %d: %s"),
+                  ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
+                  : g_strdup_printf(_("%d &#215; %d: %s"),
                                     this->pixbuf->width(),
                                     this->pixbuf->height(),
                                     href_desc) );

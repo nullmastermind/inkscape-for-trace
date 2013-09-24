@@ -50,6 +50,7 @@
 #include "sp-gradient.h"
 #include "sp-flowtext.h"
 #include "sp-namedview.h"
+#include "sp-root.h"
 #include "ui/view/view.h"
 #include "helper/action.h"
 #include "helper/action-context.h"
@@ -321,6 +322,10 @@ sp_ui_close_view(GtkWidget */*widget*/)
     if (desktops.size() == 1) {
         Glib::ustring templateUri = sp_file_default_template_uri();
         SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
+        // Set viewBox if it doesn't exist
+        if (!doc->getRoot()->viewBox_set) {
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+        }
         dt->change_document(doc);
         sp_namedview_window_from_document(dt);
         sp_namedview_update_layers_from_document(dt);
@@ -714,33 +719,6 @@ sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
     g_free(utf8_fn);
     g_free(local_fn);
     g_free(uri);
-}
-
-static bool
-compare_file_basenames(gchar const *a, gchar const *b) {
-    bool rc;
-    gchar *ba, *bb;
-
-    bool sort_by_fullname = true; // Sort by full name (including path) or just filename
-    if (sort_by_fullname) {
-        ba = g_strdup(a);
-        bb = g_strdup(b);
-    } else {
-        ba = g_path_get_basename(a);
-        bb = g_path_get_basename(b);
-    }
-
-    gchar *fa =  g_filename_to_utf8(ba,  -1, NULL, NULL, NULL);
-    gchar *fb =  g_filename_to_utf8(bb,  -1, NULL, NULL, NULL);
-    g_free(ba);
-    g_free(bb);
-
-    rc = g_utf8_collate(fa, fb) < 0;
-
-    g_free(fa);
-    g_free(fb);
-
-    return rc;
 }
 
 static void

@@ -216,8 +216,8 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
     return repr;
 }
 
-gchar* SPTSpan::description() {
-    return g_strdup(_("<b>Text span</b>"));
+const char* SPTSpan::displayName() {
+    return _("Text Span");
 }
 
 

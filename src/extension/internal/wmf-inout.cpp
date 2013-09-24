@@ -1742,8 +1742,8 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         tmp_outdef << "  version=\"1.0\"\n";
 
         tmp_outdef <<
-            "  width=\"" << d->PixelsOutX/ Inkscape::Util::Quantity::convert(1, "mm", "px") << "mm\"\n" <<
-            "  height=\"" << d->PixelsOutY/ Inkscape::Util::Quantity::convert(1, "mm", "px")  << "mm\">\n";
+            "  width=\"" << Inkscape::Util::Quantity::convert(d->PixelsOutX, "px", "mm") << "mm\"\n" <<
+            "  height=\"" << Inkscape::Util::Quantity::convert(d->PixelsOutY, "px", "mm")  << "mm\">\n";
         *(d->outdef) += tmp_outdef.str().c_str();
         *(d->outdef) += "<defs>";                           // temporary end of header
 
@@ -3170,6 +3170,11 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     }
 
     d.tri = trinfo_release_except_FC(d.tri);
+
+    // Set viewBox if it doesn't exist
+    if (!doc->getRoot()->viewBox_set) {
+        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+    }
 
     return doc;
 }

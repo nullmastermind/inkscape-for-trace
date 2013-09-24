@@ -548,81 +548,90 @@ SPDocument *SPDocument::doUnref()
     return NULL;
 }
 
-gdouble SPDocument::getWidth() const
+Inkscape::Util::Quantity SPDocument::getWidth() const
 {
-    g_return_val_if_fail(this->priv != NULL, 0.0);
-    g_return_val_if_fail(this->root != NULL, 0.0);
+    g_return_val_if_fail(this->priv != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
+    g_return_val_if_fail(this->root != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
 
-    gdouble result = root->width.computed;
+    gdouble result = root->width.value;
+    SVGLength::Unit u = root->width.unit;
     if (root->width.unit == SVGLength::PERCENT && root->viewBox_set) {
         result = root->viewBox.width();
+        u = SVGLength::PX;
     }
-    return result;
+    if (u == SVGLength::NONE) {
+        u = SVGLength::PX;
+    }
+    return Inkscape::Util::Quantity(result, unit_table.getUnit(u));
 }
 
 void SPDocument::setWidth(const Inkscape::Util::Quantity &width)
 {
-    if (root->width.unit == SVGLength::PERCENT && root->viewBox_set) { // set to viewBox=
-        root->viewBox.setMax(Geom::Point(root->viewBox.left() + width.value("px"), root->viewBox.bottom()));
-    } else { // set to width=
-        gdouble old_computed = root->width.computed;
-        root->width.computed = width.value("px");
-        /* SVG does not support meters as a unit, so we must translate meters to
-         * cm when writing */
-        if (*width.unit == unit_table.getUnit("m")) {
-            root->width.value = width.value("cm");
-            root->width.unit = SVGLength::CM;
-        } else {
-            root->width.value = width.quantity;
-            root->width.unit = (SVGLength::Unit) width.unit->svgUnit();
-        }
-
-        if (root->viewBox_set)
-            root->viewBox.setMax(Geom::Point(root->viewBox.left() + (root->width.computed / old_computed) * root->viewBox.width(), root->viewBox.bottom()));
+    gdouble old_computed = root->width.computed;
+    root->width.computed = width.value("px");
+    /* SVG does not support meters as a unit, so we must translate meters to
+     * cm when writing */
+    if (*width.unit == unit_table.getUnit("m")) {
+        root->width.value = width.value("cm");
+        root->width.unit = SVGLength::CM;
+    } else {
+        root->width.value = width.quantity;
+        root->width.unit = (SVGLength::Unit) width.unit->svgUnit();
     }
+
+    if (root->viewBox_set)
+        root->viewBox.setMax(Geom::Point(root->viewBox.left() + (root->width.computed / old_computed) * root->viewBox.width(), root->viewBox.bottom()));
 
     root->updateRepr();
 }
 
-gdouble SPDocument::getHeight() const
+Inkscape::Util::Quantity SPDocument::getHeight() const
 {
-    g_return_val_if_fail(this->priv != NULL, 0.0);
-    g_return_val_if_fail(this->root != NULL, 0.0);
+    g_return_val_if_fail(this->priv != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
+    g_return_val_if_fail(this->root != NULL, Inkscape::Util::Quantity(0.0, Inkscape::Util::Unit()));
 
-    gdouble result = root->height.computed;
+    gdouble result = root->height.value;
+    SVGLength::Unit u = root->height.unit;
     if (root->height.unit == SVGLength::PERCENT && root->viewBox_set) {
         result = root->viewBox.height();
+        u = SVGLength::PX;
     }
-    return result;
+    if (u == SVGLength::NONE) {
+        u = SVGLength::PX;
+    }
+    return Inkscape::Util::Quantity(result, unit_table.getUnit(u));
 }
 
 void SPDocument::setHeight(const Inkscape::Util::Quantity &height)
 {
-    if (root->height.unit == SVGLength::PERCENT && root->viewBox_set) { // set to viewBox=
-        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + height.value("px")));
-    } else { // set to height=
-        gdouble old_computed = root->height.computed;
-        root->height.computed = height.value("px");
-        /* SVG does not support meters as a unit, so we must translate meters to
-         * cm when writing */
-        if (*height.unit == unit_table.getUnit("m")) {
-            root->height.value = height.value("cm");
-            root->height.unit = SVGLength::CM;
-        } else {
-            root->height.value = height.quantity;
-            root->height.unit = (SVGLength::Unit) height.unit->svgUnit();
-        }
-
-        if (root->viewBox_set)
-            root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.computed / old_computed) * root->viewBox.height()));
+    gdouble old_computed = root->height.computed;
+    root->height.computed = height.value("px");
+    /* SVG does not support meters as a unit, so we must translate meters to
+     * cm when writing */
+    if (*height.unit == unit_table.getUnit("m")) {
+        root->height.value = height.value("cm");
+        root->height.unit = SVGLength::CM;
+    } else {
+        root->height.value = height.quantity;
+        root->height.unit = (SVGLength::Unit) height.unit->svgUnit();
     }
 
+    if (root->viewBox_set)
+        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.computed / old_computed) * root->viewBox.height()));
+
+    root->updateRepr();
+}
+
+void SPDocument::setViewBox(const Geom::Rect &viewBox)
+{
+    root->viewBox_set = true;
+    root->viewBox = viewBox;
     root->updateRepr();
 }
 
 Geom::Point SPDocument::getDimensions() const
 {
-    return Geom::Point(getWidth(), getHeight());
+    return Geom::Point(getWidth().value("px"), getHeight().value("px"));
 }
 
 Geom::OptRect SPDocument::preferredBounds() const
@@ -644,7 +653,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double const w = rect.width();
     double const h = rect.height();
 
-    double const old_height = getHeight();
+    double const old_height = getHeight().value("px");
     Inkscape::Util::Unit const px = unit_table.getUnit("px");
     
     /* in px */
@@ -979,7 +988,7 @@ void SPDocument::setupViewport(SPItemCtx *ctx)
     if (root->viewBox_set) { // if set, take from viewBox
         ctx->viewport = root->viewBox;
     } else { // as a last resort, set size to A4
-        ctx->viewport = Geom::Rect::from_xywh(0, 0, 210 * Inkscape::Util::Quantity::convert(1, "mm", "px"), 297 * Inkscape::Util::Quantity::convert(1, "mm", "px"));
+        ctx->viewport = Geom::Rect::from_xywh(0, 0, Inkscape::Util::Quantity::convert(210, "mm", "px"), Inkscape::Util::Quantity::convert(297, "mm", "px"));
     }
     ctx->i2vp = Geom::identity();
 }

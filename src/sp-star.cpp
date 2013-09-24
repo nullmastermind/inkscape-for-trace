@@ -251,19 +251,18 @@ void SPStar::update_patheffect(bool write) {
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+const char* SPStar::displayName() {
+    if (this->flatsided == false)
+        return _("Star");
+    return _("Polygon");
+}
+
 gchar* SPStar::description() {
     // while there will never be less than 3 vertices, we still need to
     // make calls to ngettext because the pluralization may be different
     // for various numbers >=3.  The singular form is used as the index.
-    if (this->flatsided == false) {
-    	return g_strdup_printf (ngettext("<b>Star</b> with %d vertex",
-                         "<b>Star</b> with %d vertices",
-                         this->sides), this->sides);
-    } else {
-        return g_strdup_printf (ngettext("<b>Polygon</b> with %d vertex",
-                         "<b>Polygon</b> with %d vertices",
-                         this->sides), this->sides);
-    }
+    return g_strdup_printf (ngettext(_("with %d vertex"), _("with %d vertices"),
+                this->sides), this->sides);
 }
 
 /**
@@ -513,6 +512,55 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
         Geom::Affine const i2dt (this->i2dt_affine ());
         p.push_back(Inkscape::SnapCandidatePoint(this->center * i2dt,Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT));
     }
+}
+
+Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
+{
+    // Only set transform with proportional scaling
+    if (!xform.withoutTranslation().isUniformScale()) {
+        return xform;
+    }
+
+    /* Calculate star start in parent coords. */
+    Geom::Point pos( this->center * xform );
+
+    /* This function takes care of translation and scaling, we return whatever parts we can't
+       handle. */
+    Geom::Affine ret(Geom::Affine(xform).withoutTranslation());
+    gdouble const s = hypot(ret[0], ret[1]);
+    if (s > 1e-9) {
+        ret[0] /= s;
+        ret[1] /= s;
+        ret[2] /= s;
+        ret[3] /= s;
+    } else {
+        ret[0] = 1.0;
+        ret[1] = 0.0;
+        ret[2] = 0.0;
+        ret[3] = 1.0;
+    }
+
+    this->r[0] *= s;
+    this->r[1] *= s;
+
+    /* Find start in item coords */
+    pos = pos * ret.inverse();
+    this->center = pos;
+
+    this->set_shape();
+
+    // Adjust stroke width
+    this->adjust_stroke(s);
+
+    // Adjust pattern fill
+    this->adjust_pattern(xform * ret.inverse());
+
+    // Adjust gradient fill
+    this->adjust_gradient(xform * ret.inverse());
+
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+    return ret;
 }
 
 /**

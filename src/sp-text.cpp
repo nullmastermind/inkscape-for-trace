@@ -321,6 +321,9 @@ void SPText::hide(unsigned int key) {
 //	SPItem::onHide(key);
 }
 
+const char* SPText::displayName() {
+    return _("Text");
+}
 
 gchar* SPText::description() {
     SPStyle *style = this->style;
@@ -350,8 +353,8 @@ gchar* SPText::description() {
     }
 
     char *ret = ( SP_IS_TEXT_TEXTPATH(this)
-                  ? g_strdup_printf(_("<b>Text on path</b>%s (%s, %s)"), trunc, n, xs->str)
-                  : g_strdup_printf(_("<b>Text</b>%s (%s, %s)"), trunc, n, xs->str) );
+                  ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs->str)
+                  : g_strdup_printf(_("%s (%s, %s)"), trunc, n, xs->str) );
     g_free(n);
     return ret;
 }
@@ -374,8 +377,13 @@ void SPText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 
 Geom::Affine SPText::set_transform(Geom::Affine const &xform) {
     // we cannot optimize textpath because changing its fontsize will break its match to the path
-    if (SP_IS_TEXT_TEXTPATH (this))
-        return xform;
+    if (SP_IS_TEXT_TEXTPATH (this)) {
+        if (!this->_optimizeTextpathText) {
+            return xform;
+        } else {
+            this->_optimizeTextpathText = false;
+        }
+    }
 
     /* This function takes care of scaling & translation only, we return whatever parts we can't
        handle. */

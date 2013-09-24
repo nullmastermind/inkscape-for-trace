@@ -30,9 +30,9 @@ namespace Tracer {
 template<class T>
 struct Point
 {
-    Point() {}
-    Point(T x, T y) : x(x), y(y) {}
-    Point(T x, T y, bool smooth) : smooth(smooth), x(x), y(y) {}
+    Point() : visible(true) {}
+    Point(T x, T y) : visible(true), x(x), y(y) {}
+    Point(T x, T y, bool smooth) : smooth(smooth), visible(true), x(x), y(y) {}
 
     Point operator+(const Point &rhs) const
     {
@@ -44,19 +44,56 @@ struct Point
         return Point(x / foo, y / foo);
     }
 
+    Point invisible() const
+    {
+        Point p = *this;
+        p.visible = false;
+        return p;
+    }
+
     bool smooth;
+
+    /**
+     * By default, all points are visible, but the poor amount of information
+     * that B-Splines (libdepixelize-specific) allows us to represent forces us
+     * to create additional points. But... these additional points don't need to
+     * be visible.
+     */
+    bool visible;
 
     T x, y;
 };
 
 template<class T>
-inline bool operator==(const Point<T> &lhs, const Point<T> &rhs)
+Point<T> midpoint(const Point<T> &a, const Point<T> &b)
+{
+    return Point<T>((a.x + b.x) / 2, (a.y + b.y) / 2);
+}
+
+template<class T>
+bool operator==(const Point<T> &lhs, const Point<T> &rhs)
 {
     return
+        /*
+         * Will make a better job identifying which points can be eliminated by
+         * cells union.
+         */
 #ifndef LIBDEPIXELIZE_IS_VERY_WELL_TESTED
         lhs.smooth == rhs.smooth &&
 #endif // LIBDEPIXELIZE_IS_VERY_WELL_TESTED
         lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
+template<class T>
+bool weakly_equal(const Point<T> &a, const Point<T> &b)
+{
+    return a.x == b.x && a.y == b.y;
+}
+
+template<class T>
+Geom::Point to_geom_point(Point<T> p)
+{
+    return Geom::Point(p.x, p.y);
 }
 
 } // namespace Tracer

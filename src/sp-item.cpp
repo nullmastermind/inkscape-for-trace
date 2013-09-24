@@ -73,6 +73,8 @@
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"
 
+#include "util/units.h"
+
 #define noSP_ITEM_DEBUG_IDLE
 
 
@@ -606,8 +608,8 @@ void SPItem::update(SPCtx *ctx, guint flags) {
         Geom::OptRect item_bbox = item->visualBounds();
         SPItemView *itemview = item->display;
         do {
-            if (itemview->arenaitem)
-                itemview->arenaitem->setItemBounds(item_bbox);
+            if (itemview->arenaitem) // Already enlarged by visualBounds
+                itemview->arenaitem->setFilterBounds(item_bbox);
         } while ( (itemview = itemview->next) );
     }
 
@@ -818,7 +820,7 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
     /// @fixme hardcoded desktop transform
-    Geom::Affine m = Geom::Scale(1, -1) * Geom::Translate(0, document->getHeight());
+    Geom::Affine m = Geom::Scale(1, -1) * Geom::Translate(0, document->getHeight().value("px"));
     Geom::OptRect ret = documentVisualBounds();
     if (ret) *ret *= m;
     return ret;
@@ -931,9 +933,12 @@ void SPItem::invoke_print(SPPrintContext *ctx)
     }
 }
 
-// CPPIFY: is it possible to combine this method with "SPItem::description()"?
+const char* SPItem::displayName() {
+    return _("Object");
+}
+
 gchar* SPItem::description() {
-	return g_strdup(_("Object"));
+    return g_strdup("");
 }
 
 /**
@@ -941,9 +946,10 @@ gchar* SPItem::description() {
  *
  * Must be freed by caller.
  */
-gchar *SPItem::getDetailedDescription()
+gchar *SPItem::detailedDescription()
 {
-	gchar* s = this->description();
+        gchar* s = g_strdup_printf("<b>%s</b> %s",
+                    this->displayName(), this->description());
 
 	if (s && clip_ref->getObject()) {
 		gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
@@ -1059,7 +1065,8 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             item_bbox = visualBounds();
         }
         ai->setData(this);
-        ai->setItemBounds(item_bbox);
+        // Already enlarged by visualBounds for filters
+        ai->setFilterBounds(item_bbox);
     }
 
     return ai;
@@ -1496,7 +1503,7 @@ Geom::Affine SPItem::i2dt_affine() const
         // TODO temp code to prevent crashing on command-line launch:
         ret = i2doc_affine()
             * Geom::Scale(1, -1)
-            * Geom::Translate(0, document->getHeight());
+            * Geom::Translate(0, document->getHeight().value("px"));
     }
     return ret;
 }
