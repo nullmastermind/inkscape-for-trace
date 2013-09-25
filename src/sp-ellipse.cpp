@@ -144,7 +144,7 @@ void SPGenericEllipse::update_patheffect(bool write) {
 /* fixme: Think (Lauris) */
 /* Can't we use arcto in this method? */
 void SPGenericEllipse::set_shape() {
-    if (sp_lpe_item_has_broken_path_effect(this)) {
+    if (hasBrokenPathEffect()) {
         g_warning ("The ellipse shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as ellipse will remove the bad LPE");
 
         if (this->getRepr()->attribute("d")) {
@@ -233,7 +233,7 @@ void SPGenericEllipse::set_shape() {
     this->setCurveInsync( curve, TRUE);
     this->setCurveBeforeLPE(curve);
 
-    if (sp_lpe_item_has_path_effect(this) && sp_lpe_item_path_effects_enabled(this)) {
+    if (hasPathEffect() && sp_lpe_item_path_effects_enabled(this)) {
         SPCurve *c_lpe = curve->copy();
         bool success = sp_lpe_item_perform_path_effect(this, c_lpe);
 
@@ -480,7 +480,7 @@ void SPEllipse::set(unsigned int key, gchar const* value) {
     }
 }
 
-const char* SPEllipse::display_name() {
+const char* SPEllipse::displayName() {
     return _("Ellipse");
 }
 
@@ -560,7 +560,7 @@ void SPCircle::set(unsigned int key, gchar const* value) {
     }
 }
 
-const char* SPCircle::display_name() {
+const char* SPCircle::displayName() {
 	return _("Circle");
 }
 
@@ -734,7 +734,7 @@ void SPArc::modified(guint flags) {
 }
 
 
-const char* SPArc::display_name() {
+const char* SPArc::displayName() {
     gdouble len = fmod(this->end - this->start, SP_2PI);
 
     if (len < 0.0) {

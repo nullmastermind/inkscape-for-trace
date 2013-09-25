@@ -204,7 +204,7 @@ void SPFlowtext::set(unsigned int key, const gchar* value) {
                 if ( val == NULL ) {
                     this->par_indent = 0.0;
                 } else {
-                    sp_repr_get_double((Inkscape::XML::Node*)opts, "par-indent", &this->par_indent);
+                    this->par_indent = g_ascii_strtod(val, NULL);
                 }
             }
 
@@ -281,7 +281,7 @@ void SPFlowtext::print(SPPrintContext *ctx) {
     this->layout.print(ctx, pbox, dbox, bbox, ctm);
 }
 
-const char* SPFlowtext::display_name() {
+const char* SPFlowtext::displayName() {
     if (SP_FLOWTEXT(this)->has_internal_frame()) {
         return _("Flowed Text");
     } else {
