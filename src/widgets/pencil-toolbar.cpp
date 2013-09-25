@@ -186,6 +186,8 @@ static GList * freehand_shape_dropdown_items_list() {
     glist = g_list_append (glist, _("Triangle out"));
     glist = g_list_append (glist, _("Ellipse"));
     glist = g_list_append (glist, _("From clipboard"));
+    glist = g_list_append (glist, _("Skeletal Stroke from clipboard"));
+    glist = g_list_append (glist, _("Last applied"));
 
     return glist;
 }

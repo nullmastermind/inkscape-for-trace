@@ -20,6 +20,7 @@
 # include "config.h"
 #endif
 
+#include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "display/canvas-bpath.h"
 #include "xml/repr.h"
@@ -45,7 +46,7 @@
 #include "style.h"
 #include "ui/control-manager.h"
 #include "draw-context.h"
-
+#include "ui/clipboard.h"
 #include <gdk/gdkkeysyms.h>
 
 using Inkscape::DocumentUndo;
@@ -244,7 +245,10 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
 
+        static Geom::PathVector pathv;
+        static SPItem *itemEnd;
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
+        static int previous_shape;
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
@@ -299,13 +303,108 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                 Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
                 Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item));
                 static_cast<LPEPatternAlongPath*>(lpe)->pattern.on_paste_button_click();
-
+                Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+                Glib::ustring svgd = cm->getPathParameter(SP_ACTIVE_DESKTOP);
+                pathv = sp_svg_read_pathv(svgd.data());
                 shape_applied = true;
                 break;
+            }
+            case 5:
+            {
+                // take shape from clipboard; TODO: catch the case where clipboard is empty
+                Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+                if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
+                    Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
+                    sp_selection_group(selection, dc->desktop);
+                    GSList *items = const_cast<GSList *>(selection->itemList());
+                    SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
+                    itemEnd = SP_ITEM(obj);
+                    Effect::createAndApply(BEND_PATH, dc->desktop->doc(), itemEnd);
+                    Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(itemEnd));
+                    gchar const *svgd = item->getRepr()->attribute("d");
+                    static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
+                    static_cast<LPEBendPath*>(lpe)->bend_path.param_editOncanvas(itemEnd, SP_ACTIVE_DESKTOP);
+                    item->deleteObject(false,false);
+                    //SPItem* item = itemEnd;
+                }
+                break;
+            }
+            case 6:
+            {
+                // "Last applied"
+                switch(previous_shape){
+                    case 0:
+                        // don't apply any shape
+                        break;
+                    case 1:
+                    {
+                        // "triangle in"
+                        std::vector<Geom::Point> points(1);
+                        points[0] = Geom::Point(0., SHAPE_HEIGHT/2);
+                        spdc_apply_powerstroke_shape(points, dc, item);
+
+                        shape_applied = true;
+                        break;
+                    }
+                    case 2:
+                    {
+                        // "triangle out"
+                        guint curve_length = curve->get_segment_count();
+                        std::vector<Geom::Point> points(1);
+                        points[0] = Geom::Point((double)curve_length, SHAPE_HEIGHT/2);
+                        spdc_apply_powerstroke_shape(points, dc, item);
+
+                        shape_applied = true;
+                        break;
+                    }
+                    case 3:
+                    {
+                        // "ellipse"
+                        SPCurve *c = new SPCurve();
+                        const double C1 = 0.552;
+                        c->moveto(0, SHAPE_HEIGHT/2);
+                        c->curveto(0, (1 - C1) * SHAPE_HEIGHT/2, (1 - C1) * SHAPE_LENGTH/2, 0, SHAPE_LENGTH/2, 0);
+                        c->curveto((1 + C1) * SHAPE_LENGTH/2, 0, SHAPE_LENGTH, (1 - C1) * SHAPE_HEIGHT/2, SHAPE_LENGTH, SHAPE_HEIGHT/2);
+                        c->curveto(SHAPE_LENGTH, (1 + C1) * SHAPE_HEIGHT/2, (1 + C1) * SHAPE_LENGTH/2, SHAPE_HEIGHT, SHAPE_LENGTH/2, SHAPE_HEIGHT);
+                        c->curveto((1 - C1) * SHAPE_LENGTH/2, SHAPE_HEIGHT, 0, (1 + C1) * SHAPE_HEIGHT/2, 0, SHAPE_HEIGHT/2);
+                        c->closepath();
+                        spdc_paste_curve_as_freehand_shape(c, dc, item);
+                        c->unref();
+                        shape_applied = true;
+                        break;
+                    }
+                    case 4:
+                    {
+                        if(pathv.size() != 0){
+                            SPCurve * c = new SPCurve();
+                            c->set_pathvector(pathv);
+                            spdc_paste_curve_as_freehand_shape(c, dc, item);
+                            c->unref();
+                            shape_applied = true;
+                        }
+                        break;
+                    }
+                    case 5:
+                    {
+                        // take shape from clipboard; TODO: catch the case where clipboard is empty
+                        if(itemEnd != NULL){
+                            Effect::createAndApply(BEND_PATH, dc->desktop->doc(), itemEnd);
+                            Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(itemEnd));
+                            gchar const *svgd = item->getRepr()->attribute("d");
+                            static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
+                            static_cast<LPEBendPath*>(lpe)->bend_path.param_editOncanvas(itemEnd, SP_ACTIVE_DESKTOP);
+                            item->deleteObject(false,false);
+                            //SPItem* item = itemEnd;
+                        }
+                        break;
+                    }
+                        }
+                        shape = previous_shape;
             }
             default:
                 break;
         }
+        previous_shape = shape;
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
             SPCSSAttr *css = sp_repr_css_attr_new();
@@ -322,7 +421,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         }
 
         if (dc->waiting_LPE_type != INVALID_LPE) {
-            Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
+            if(shape != 5) Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
             dc->waiting_LPE_type = INVALID_LPE;
 
             if (SP_IS_LPETOOL_CONTEXT(dc)) {
