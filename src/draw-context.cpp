@@ -235,6 +235,20 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
 }
 
+static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *item)
+{
+    using namespace Inkscape::LivePathEffect;
+
+    Effect::createAndApply(BEND_PATH, dc->desktop->doc(), item);
+    Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item));
+
+    // write bend parameters:
+    lpe->getRepr()->setAttribute("bend_path", svgd);
+    lpe->getRepr()->setAttribute("prop_scale", "1");
+    lpe->getRepr()->setAttribute("scale_y_rel", "false");
+    lpe->getRepr()->setAttribute("vertical_pattern", "false");
+}
+
 static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item, SPCurve *curve)
 {
     using namespace Inkscape::LivePathEffect;
@@ -319,13 +333,9 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                     GSList *items = const_cast<GSList *>(selection->itemList());
                     SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
                     itemEnd = SP_ITEM(obj);
-                    Effect::createAndApply(BEND_PATH, dc->desktop->doc(), itemEnd);
-                    Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(itemEnd));
                     gchar const *svgd = item->getRepr()->attribute("d");
-                    static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
-                    static_cast<LPEBendPath*>(lpe)->bend_path.param_editOncanvas(itemEnd, SP_ACTIVE_DESKTOP);
-                    item->deleteObject(false,false);
-                    //SPItem* item = itemEnd;
+                    spdc_apply_bend_shape(svgd, dc, itemEnd);
+                    item->deleteObject();
                 }
                 break;
             }
@@ -388,13 +398,9 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                     {
                         // take shape from clipboard; TODO: catch the case where clipboard is empty
                         if(itemEnd != NULL){
-                            Effect::createAndApply(BEND_PATH, dc->desktop->doc(), itemEnd);
-                            Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(itemEnd));
                             gchar const *svgd = item->getRepr()->attribute("d");
-                            static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
-                            static_cast<LPEBendPath*>(lpe)->bend_path.param_editOncanvas(itemEnd, SP_ACTIVE_DESKTOP);
-                            item->deleteObject(false,false);
-                            //SPItem* item = itemEnd;
+                            spdc_apply_bend_shape(svgd, dc, itemEnd);
+                            item->deleteObject();
                         }
                         break;
                     }
@@ -421,7 +427,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         }
 
         if (dc->waiting_LPE_type != INVALID_LPE) {
-            if(shape != 5) Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
+            Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
             dc->waiting_LPE_type = INVALID_LPE;
 
             if (SP_IS_LPETOOL_CONTEXT(dc)) {
