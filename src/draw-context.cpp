@@ -243,10 +243,10 @@ static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *
     Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item));
 
     // write bend parameters:
-    lpe->getRepr()->setAttribute("bend_path", svgd);
+    lpe->getRepr()->setAttribute("bendpath", svgd);
     lpe->getRepr()->setAttribute("prop_scale", "1");
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
-    lpe->getRepr()->setAttribute("vertical_pattern", "false");
+    lpe->getRepr()->setAttribute("vertical", "false");
 }
 
 static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item, SPCurve *curve)
