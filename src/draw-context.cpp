@@ -328,14 +328,22 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                 // take shape from clipboard; TODO: catch the case where clipboard is empty
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
+                    gchar const *svgd = item->getRepr()->attribute("d");
+                    item->deleteObject();
+                    if(itemEnd != NULL && itemEnd->getRepr() != NULL)
+                        itemEnd->deleteObject();
                     Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
                     sp_selection_group(selection, dc->desktop);
                     GSList *items = const_cast<GSList *>(selection->itemList());
                     SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
                     itemEnd = SP_ITEM(obj);
-                    gchar const *svgd = item->getRepr()->attribute("d");
-                    spdc_apply_bend_shape(svgd, dc, itemEnd);
-                    item->deleteObject();
+                    sp_selection_duplicate(dc->desktop);
+                    itemEnd->setExplicitlyHidden(true);
+                    items = const_cast<GSList *>(selection->itemList());
+                    obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
+                    spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
+                    SP_ITEM(obj)->setExplicitlyHidden(false);
+                    selection->set(obj,true);
                 }
                 break;
             }
@@ -397,25 +405,24 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                     case 5:
                     {
                         // take shape from clipboard; TODO: catch the case where clipboard is empty
-                        if(itemEnd != NULL){
+                        if(itemEnd != NULL && itemEnd->getRepr() != NULL){
+                            gchar const *svgd = item->getRepr()->attribute("d");
+                            item->deleteObject();
                             Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
-                            selection->clear();
-                            selection->add(itemEnd);
+                            selection->add(SP_OBJECT(itemEnd));
                             sp_selection_duplicate(dc->desktop);
+                            selection->remove(SP_OBJECT(itemEnd));
                             GSList *items = const_cast<GSList *>(selection->itemList());
                             SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
-                            itemEnd = SP_ITEM(obj);
-                            itemEnd->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                            gchar const *svgd = item->getRepr()->attribute("d");
-                            spdc_apply_bend_shape(svgd, dc, itemEnd);
-                            selection->clear();
-                            selection->add(itemEnd);
-                            item->deleteObject();
+                            SP_ITEM(obj)->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                            spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
+                            SP_ITEM(obj)->setExplicitlyHidden(false);
+                            selection->set(obj,true);
                         }
                         break;
                     }
-                        }
-                        shape = previous_shape;
+                }
+                shape = previous_shape;
             }
             default:
                 break;
