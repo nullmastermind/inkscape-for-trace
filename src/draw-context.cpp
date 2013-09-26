@@ -398,8 +398,18 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                     {
                         // take shape from clipboard; TODO: catch the case where clipboard is empty
                         if(itemEnd != NULL){
+                            Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
+                            selection->clear();
+                            selection->add(itemEnd);
+                            sp_selection_duplicate(dc->desktop);
+                            GSList *items = const_cast<GSList *>(selection->itemList());
+                            SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
+                            itemEnd = SP_ITEM(obj);
+                            itemEnd->getRepr()->setAttribute("inkscape:path-effect", NULL);
                             gchar const *svgd = item->getRepr()->attribute("d");
                             spdc_apply_bend_shape(svgd, dc, itemEnd);
+                            selection->clear();
+                            selection->add(itemEnd);
                             item->deleteObject();
                         }
                         break;
@@ -679,7 +689,7 @@ static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
         Inkscape::XML::Node *repr;
         if (dc->white_item) {
             repr = dc->white_item->getRepr();
-            has_lpe = sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(dc->white_item));
+            has_lpe = SP_LPE_ITEM(dc->white_item)->hasPathEffectRecursive();
         } else {
             repr = xml_doc->createElement("svg:path");
             // Set style
