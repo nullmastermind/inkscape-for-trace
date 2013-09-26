@@ -39,9 +39,9 @@ public:
 
     virtual void resetDefaults(SPItem const* item);
 
+    PathParam  bend_path;
 
 private:
-    PathParam  bend_path;
     ScalarParam  prop_scale;
     BoolParam scale_y_rel;
     BoolParam    vertical_pattern;
