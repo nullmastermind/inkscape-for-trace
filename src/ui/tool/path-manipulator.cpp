@@ -153,7 +153,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     //BSpline
     lpe_bsp = NULL;
 
-    if (_path->hasPathEffect()){
+    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
         Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
         if(thisEffect){
             lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
