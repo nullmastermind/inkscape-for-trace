@@ -665,16 +665,20 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (item->clip_ref){
         if (item->clip_ref->getObject()) {
-            const gchar *value = g_strdup_printf ("url(%s)", item->clip_ref->getURI()->toString());
+            gchar *uri = item->clip_ref->getURI()->toString();
+            const gchar *value = g_strdup_printf ("url(%s)", uri);
             repr->setAttribute ("clip-path", value);
             g_free ((void *) value);
+            g_free ((void *) uri);
         }
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
-            const gchar *value = g_strdup_printf ("url(%s)", item->mask_ref->getURI()->toString());
+            gchar *uri = item->mask_ref->getURI()->toString();
+            const gchar *value = g_strdup_printf ("url(%s)", uri);
             repr->setAttribute ("mask", value);
             g_free ((void *) value);
+            g_free ((void *) uri);
         }
     }
 
@@ -721,7 +725,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         // call the subclass method
     	// CPPIFY
     	//bbox = this->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
-    	bbox = const_cast<SPItem*>(this)->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
+    	bbox = const_cast<SPItem*>(this)->bbox(Geom::identity(), SPItem::GEOMETRIC_BBOX); // see LP Bug 1229971
 
         SPFilter *filter = SP_FILTER(style->getFilter());
         // default filer area per the SVG spec:
