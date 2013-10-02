@@ -603,13 +603,13 @@ void SPItem::update(SPCtx *ctx, guint flags) {
             }
         }
     }
-    /* Update bounding box data used by filters */
+    /* Update bounding box in user space, used for filter and objectBoundingBox units */
     if (item->style->filter.set && item->display) {
-        Geom::OptRect item_bbox = item->visualBounds();
+        Geom::OptRect item_bbox = item->geometricBounds();
         SPItemView *itemview = item->display;
         do {
-            if (itemview->arenaitem) // Already enlarged by visualBounds
-                itemview->arenaitem->setFilterBounds(item_bbox);
+            if (itemview->arenaitem)
+                itemview->arenaitem->setItemBounds(item_bbox);
         } while ( (itemview = itemview->next) );
     }
 
@@ -665,16 +665,20 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (item->clip_ref){
         if (item->clip_ref->getObject()) {
-            const gchar *value = g_strdup_printf ("url(%s)", item->clip_ref->getURI()->toString());
+            gchar *uri = item->clip_ref->getURI()->toString();
+            const gchar *value = g_strdup_printf ("url(%s)", uri);
             repr->setAttribute ("clip-path", value);
             g_free ((void *) value);
+            g_free ((void *) uri);
         }
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
-            const gchar *value = g_strdup_printf ("url(%s)", item->mask_ref->getURI()->toString());
+            gchar *uri = item->mask_ref->getURI()->toString();
+            const gchar *value = g_strdup_printf ("url(%s)", uri);
             repr->setAttribute ("mask", value);
             g_free ((void *) value);
+            g_free ((void *) uri);
         }
     }
 
@@ -721,7 +725,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         // call the subclass method
     	// CPPIFY
     	//bbox = this->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
-    	bbox = const_cast<SPItem*>(this)->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
+    	bbox = const_cast<SPItem*>(this)->bbox(Geom::identity(), SPItem::GEOMETRIC_BBOX); // see LP Bug 1229971
 
         SPFilter *filter = SP_FILTER(style->getFilter());
         // default filer area per the SVG spec:
@@ -1061,12 +1065,8 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             SP_MASK(mask)->sp_mask_set_bbox(mask_key, item_bbox);
             mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
-        if (style->filter.set && display) {
-            item_bbox = visualBounds();
-        }
         ai->setData(this);
-        // Already enlarged by visualBounds for filters
-        ai->setFilterBounds(item_bbox);
+        ai->setItemBounds(geometricBounds());
     }
 
     return ai;

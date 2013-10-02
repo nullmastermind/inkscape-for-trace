@@ -48,10 +48,6 @@ using Inkscape::ControlManager;
 using Inkscape::CTLINE_SECONDARY;
 using Inkscape::Util::unit_table;
 
-Geom::Point start_point;
-boost::optional<Geom::Point> explicitBase;
-boost::optional<Geom::Point> lastEnd;
-
 std::vector<Inkscape::Display::TemporaryItem*> measure_tmp_items;
 
 
