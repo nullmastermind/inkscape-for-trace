@@ -38,51 +38,71 @@ class hpglDecoder:
         self.scaleY = options.resolutionY / 90.0 # dots/inch to dots/pixels
         self.warnings = []
 
-    def getSvg(self):
-        # parse hpgl data
+    def getSvg(self): # parse hpgl data
+        # prepare document
+        self.doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' % (self.options.docWidth, self.options.docHeight)))
+        actualLayer = 0;
+        self.layers = {}
+        if self.options.showMovements:
+        	self.layers[0] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Movements'})
+        # parse paths
         # TODO:2013-07-13:Sebastian Wüst:Try to parse all the different HPGL formats correctly.
         hpglData = self.hpglString.split(';')
-        if hpglData[-1].strip() == '':
-            hpglData.pop()
         if len(hpglData) < 3:
             raise Exception('NO_HPGL_DATA')
-        # prepare document
-        doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' % (self.options.docWidth, self.options.docHeight)))
-        layerDrawing = inkex.etree.SubElement(doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Drawing'})
-        if self.options.showMovements:
-        	layerMovements = inkex.etree.SubElement(doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Movements'})
-        # parse paths
         oldCoordinates = (0.0, self.options.docHeight) 
         path = ''
         for i, command in enumerate(hpglData):
             if command.strip() != '':
-                # TODO:2013-07-13:Sebastian Wüst:Implement the HP-GL commands.
+                # TODO:2013-07-13:Sebastian Wüst:Implement all the HP-GL commands.
                 if command[:2] == 'PU': # if Pen Up command
-                    if ' L' in path:
-                        # TODO:2013-07-13:Sebastian Wüst:Make a method for adding a SubElement.
-                        inkex.etree.SubElement(layerDrawing, 'path', {'d':path, 'style':'stroke:#000000; stroke-width:0.3; fill:none;'})
+                    if ' L ' in path:
+                        self.addPathToLayer(path, actualLayer)
                     if self.options.showMovements and i != len(hpglData) - 1:
                         path = 'M %f,%f' % oldCoordinates
-                        path += ' L %f,%f' % self.getCoordinates(command[2:])
-                        inkex.etree.SubElement(layerMovements, 'path', {'d':path, 'style':'stroke:#ff0000; stroke-width:0.3; fill:none;'})
-                    path = 'M %f,%f' % self.getCoordinates(command[2:])
+                        path += ' L %f,%f' % self.getParameters(command[2:])
+                        self.addPathToLayer(path, 0)
+                    path = 'M %f,%f' % self.getParameters(command[2:])
                 elif command[:2] == 'PD': # if Pen Down command
-                    path += ' L %f,%f' % self.getCoordinates(command[2:])
-                    oldCoordinates = self.getCoordinates(command[2:])
-                elif command[:2] == 'IN': # if Initialize command
+                    path += ' L %f,%f' % self.getParameters(command[2:])
+                    oldCoordinates = self.getParameters(command[2:])
+                elif command[:2] == 'IN': # if Initialize command, ignore
                     pass
                 elif command[:2] == 'SP': # if Select Pen command
-                    # TODO:2013-07-13:Sebastian Wüst:Every pen number should go to a different layer.
-                    pass
+                    actualLayer = command[2:]
+                    self.createLayer(actualLayer)
                 else:
                     self.warnings.append('UNKNOWN_COMMANDS')
-        if ' L' in path:
-            inkex.etree.SubElement(layerDrawing, 'path', {'d':path, 'style':'stroke:#000000; stroke-width:0.3; fill:none;'})
-        return (doc, self.warnings)
-    
-    def getCoordinates(self, coord):
-        # process coordinates
-        (x, y) = coord.split(',')
+        if ' L ' in path:
+            self.addPathToLayer(path, actualLayer)
+        return (self.doc, self.warnings)
+
+    def createLayer(self, layerNumber):
+        self.layers[layerNumber] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Drawing Pen ' + layerNumber})
+
+    def addPathToLayer(self, path, layerNumber):
+        if layerNumber == 0:
+            lineColor = 'ff0000'
+        else:
+            lineColor = '000000'
+        inkex.etree.SubElement(self.layers[layerNumber], 'path', {'d':path, 'style':'stroke:#' + lineColor + '; stroke-width:0.4; fill:none;'})
+   
+    def getParameters(self, parameterString): # process coordinates
+        if parameterString.strip() == '':
+            return []
+        # remove command delimiter
+        parameterString = parameterString.replace(';', '').strip()
+        # correct parameter delimiter
+        parameterString = parameterString.replace(' ', ',')
+        parameterString = parameterString.replace('+', ',')
+        parameterString = parameterString.replace('-', ',-')
+        while ',,' in parameterString:
+            parameterString = parameterString.replace(',,', ',')
+        # split parameter
+        parameterString = parameterString.split(',')
+        return self.correctAbsoluteCoordinates(parameterString[0], parameterString[1])
+
+    def correctAbsoluteCoordinates(self, x, y):
         x = float(x) / self.scaleX; # convert to pixels coordinate system
         y = self.options.docHeight - float(y) / self.scaleY; # convert to pixels coordinate system, flip vertically for inkscape coordinate system
         return (x, y)

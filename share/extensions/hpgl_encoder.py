@@ -137,7 +137,7 @@ class hpglEncoder:
                 mat = simpletransform.composeTransform(mat, simpletransform.parseTransform(trans))
             simpletransform.applyTransformToPath(mat, paths)
             cspsubdiv.cspsubdiv(paths, self.options.flat)
-            # break path into HPGL commands
+            # path to HPGL commands
             oldPosX = ''
             oldPosY = ''
             for singlePath in paths:
@@ -208,9 +208,9 @@ class hpglEncoder:
                     # check if tool offset correction is needed (if the angle is big enough)
                     if self.vData[2][0] == 'PD' and self.vData[3][0] == 'PD':
                         # TODO:2013-07-13:Sebastian Wüst:Is this necessary?
-                        if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) < self.options.toolOffset:
-                            self.storeData(self.vData[2][0], self.vData[2][1], self.vData[2][2])
-                            return
+                        #if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) < self.options.toolOffset:
+                        #    self.storeData(self.vData[2][0], self.vData[2][1], self.vData[2][2])
+                        #    return
                         if self.getAlpha(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) > 2.748893:
                             self.storeData(self.vData[2][0], self.vData[2][1], self.vData[2][2])
                             return
@@ -240,7 +240,6 @@ class hpglEncoder:
                             # TODO:2013-07-13:Sebastian Wüst:Fix that sucker! (number of points in the circle has to be calculated)
                             alpha1 = math.atan2(pointThreeY - self.vData[2][2], pointThreeX - self.vData[2][1])
                             alpha2 = math.atan2(pointFourY - self.vData[2][2], pointFourX - self.vData[2][1])
-                            inkex.errormsg(str(math.fabs(alpha2 - alpha1)))
                             step = (2 * math.pi - math.fabs(alpha2 - alpha1)) * 6 + 1
                             #inkex.errormsg(str(alpha1) + ' | ' + str(alpha2))                        
                             for alpha in range(int(step), 101, int(step)):

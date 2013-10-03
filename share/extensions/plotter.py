@@ -68,25 +68,29 @@ class MyEffect(inkex.Effect):
                 inkex.errormsg(_("No paths where found. Please convert all objects you want to plot into paths."))
                 return 1
             else:
-                raise Exception(inst)
-        # TODO:2013-07-13:Sebastian Wüst:Get preview to work. This requires some work on the C++ side to be able to determine if it is a preview or a final run.
+                type, value, traceback = sys.exc_info()
+                raise ValueError, ("", type, value), traceback
+        # TODO:2013-07-13:Sebastian Wüst:Get preview to work. This requires some work on the C++ side to be able to determine if it is a preview or a final run. (Remember to set <effect needs-live-preview="false"> to true)
         '''
-            # reparse data for preview
-            self.options.showMovements = True
-            self.options.docWidth = float(inkex.unittouu(self.document.getroot().get('width')))
-            self.options.docHeight = float(inkex.unittouu(self.document.getroot().get('height')))
-            myHpglDecoder = hpgl_decoder.hpglDecoder(self.hpgl, self.options)
-            try:
-                doc, warnings = myHpglDecoder.getSvg()
-                # deliver document to inkscape
-                self.document = doc 
-            except Exception as inst:
-                if inst.args[0] == 'NO_HPGL_DATA':
-                    # do nothing
-                else:
-                    raise Exception(inst)
+        # reparse data for preview
+        self.options.showMovements = True
+        self.options.docWidth = float(inkex.unittouu(self.document.getroot().get('width')))
+        self.options.docHeight = float(inkex.unittouu(self.document.getroot().get('height')))
+        myHpglDecoder = hpgl_decoder.hpglDecoder(self.hpgl, self.options)
+        try:
+            doc, warnings = myHpglDecoder.getSvg()
+            # deliver document to inkscape
+            self.document = doc 
+        except Exception as inst:
+            if inst.args[0] == 'NO_HPGL_DATA':
+                # do nothing
+                pass
+            else:
+                type, value, traceback = sys.exc_info()
+                raise ValueError, ("", type, value), traceback
         '''
         # send data to plotter
+        # TODO:2013-07-13:Sebastian Wüst:Slow down sending to prevent buffer overflow (Somewhat esotherical)
         mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
         mySerial.write(self.hpgl)
         # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)

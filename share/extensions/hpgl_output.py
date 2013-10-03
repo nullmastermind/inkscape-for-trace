@@ -58,7 +58,8 @@ class MyEffect(inkex.Effect):
                 inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
                 self.hpgl = 1
             else:
-                raise Exception(inst)
+                type, value, traceback = sys.exc_info()
+                raise ValueError, ("", type, value), traceback
 
     def output(self):
         # print to file

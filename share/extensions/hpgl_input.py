@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
 '''
-hpgl_input.py - input a HP Graphics Language file
-
 Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
 
 This program is free software; you can redistribute it and/or modify
@@ -21,9 +19,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
 # standard library
+import sys
 from StringIO import StringIO
 # local library
-import hpgl_decoder, inkex
+import hpgl_decoder, inkex, sys
 inkex.localize()
 
 
@@ -62,6 +61,7 @@ except Exception as inst:
         inkex.errormsg(_("No HPGL data found."))
         print 1
     else:
-        raise Exception(inst)
+        type, value, traceback = sys.exc_info()
+        raise ValueError, ("", type, value), traceback
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
