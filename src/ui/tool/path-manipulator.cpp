@@ -1268,12 +1268,14 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
             nextPos = BSplineHandlePosition(nextNode->back());
         n->front()->setPosition(BSplineHandleReposition(n->front()));
         n->back()->setPosition(BSplineHandleReposition(n->back()));
-        if(prevNode && !prevNode->isEndNode())
+        if(prevNode && !prevNode->isEndNode()){
             prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevPos));
             prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevPos));
-        if(nextNode && !nextNode->isEndNode())
+        }
+        if(nextNode && !nextNode->isEndNode()){
             nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextPos));
             nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),prevPos));
+        }
     }
 }
 
