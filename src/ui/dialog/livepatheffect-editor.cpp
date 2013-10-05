@@ -280,7 +280,7 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
 
                 set_sensitize_all(true);
                 if ( lpeitem->hasPathEffect() ) {
-                    Inkscape::LivePathEffect::Effect *lpe = sp_lpe_item_get_current_lpe(lpeitem);
+                    Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
                     if (lpe) {
                         showParams(*lpe);
                         lpe_list_locked = true;
@@ -332,7 +332,7 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
 {
     effectlist_store->clear();
 
-    PathEffectList effectlist = sp_lpe_item_get_effect_list(lpeitem);
+    PathEffectList effectlist = lpeitem->getEffectList();
     PathEffectList::iterator it;
     for( it = effectlist.begin() ; it!=effectlist.end(); ++it)
     {
@@ -475,7 +475,7 @@ LivePathEffectEditor::onRemove()
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
         if ( item && SP_IS_LPE_ITEM(item) ) {
-            sp_lpe_item_remove_current_path_effect(SP_LPE_ITEM(item), false);
+            SP_LPE_ITEM(item)->removeCurrentPathEffect(false);
 
             DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Remove path effect") );
@@ -491,13 +491,13 @@ void LivePathEffectEditor::onUp()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( item && SP_IS_LPE_ITEM(item) ) {
-            sp_lpe_item_up_current_path_effect(SP_LPE_ITEM(item));
+        if ( SPLPEItem *lpeitem = SP_LPE_ITEM(item) ) {
+            lpeitem->upCurrentPathEffect();
 
             DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
 
-            effect_list_reload(SP_LPE_ITEM(item));
+            effect_list_reload(lpeitem);
         }
     }
 }
@@ -507,13 +507,13 @@ void LivePathEffectEditor::onDown()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( item && SP_IS_LPE_ITEM(item) ) {
-            sp_lpe_item_down_current_path_effect(SP_LPE_ITEM(item));
+        if ( SPLPEItem *lpeitem = SP_LPE_ITEM(item) ) {
+            lpeitem->downCurrentPathEffect();
 
             DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect down") );
 
-            effect_list_reload(SP_LPE_ITEM(item));
+            effect_list_reload(lpeitem);
         }
     }
 }
@@ -530,7 +530,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
     if (lperef && current_lpeitem) {
         if (lperef->lpeobject->get_lpe()) {
             lpe_list_locked = true; // prevent reload of the list which would lose selection
-            sp_lpe_item_set_current_path_effect(current_lpeitem, lperef);
+            current_lpeitem->setCurrentPathEffect(lperef);
             showParams(*lperef->lpeobject->get_lpe());
         }
     }
