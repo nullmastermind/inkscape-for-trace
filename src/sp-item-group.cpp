@@ -424,7 +424,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 		gitem = group;
 	}
 
-	sp_lpe_item_remove_all_path_effects(SP_LPE_ITEM(group), false);
+    SP_LPE_ITEM(group)->removeAllPathEffects(false);
 
     /* Step 1 - generate lists of children objects */
     GSList *items = NULL;
@@ -763,7 +763,7 @@ void SPGroup::update_patheffect(bool write) {
         }
     }
 
-    if (hasPathEffect() && sp_lpe_item_path_effects_enabled(this)) {
+    if (hasPathEffect() && pathEffectsEnabled()) {
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); it++)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
@@ -799,7 +799,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
             // only run LPEs when the shape has a curve defined
             if (c) {
                 c->transform(i2anc_affine(subitem, topgroup));
-                sp_lpe_item_perform_path_effect(SP_LPE_ITEM(topgroup), c);
+                SP_LPE_ITEM(topgroup)->performPathEffect(c);
                 c->transform(i2anc_affine(subitem, topgroup).inverse());
                 SP_SHAPE(subitem)->setCurve(c, TRUE);
 

@@ -76,7 +76,7 @@ gchar* SPPath::description() {
     
     if (hasPathEffect()) {
         Glib::ustring s;
-        PathEffectList effect_list =  sp_lpe_item_get_effect_list(this);
+        PathEffectList effect_list =  this->getEffectList();
         
         for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
         {
@@ -265,7 +265,7 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
     if (_curve_before_lpe && hasPathEffectRecursive()) {
-        if (getPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
+        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
             // if path has the CLONE_ORIGINAL LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
             return transform;
         } else {
@@ -307,7 +307,7 @@ g_message("sp_path_update_patheffect");
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
         this->setCurveInsync(curve, TRUE);
 
-        bool success = sp_lpe_item_perform_path_effect(this, curve);
+        bool success = this->performPathEffect(curve);
 
         if (success && write) {
             // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
