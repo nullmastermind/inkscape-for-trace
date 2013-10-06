@@ -1213,12 +1213,12 @@ double PathManipulator::BSplineHandlePosition(Handle *h){
     using Geom::Y;
     double pos = 0.0000;
     Node *n = h->parent();
-    SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = NULL;
     nextNode = n->nodeToward(h);
     Geom::Point positionH = h->position();
     positionH = Geom::Point(positionH[X] + 0.0001,positionH[Y] + 0.0001);
     if(nextNode && n->position() != h->position()){
+        SPCurve *lineInsideNodes = new SPCurve();
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         pos = Geom::nearest_point(positionH,*lineInsideNodes->first_segment());
@@ -1263,11 +1263,11 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
         double prevPos = 0.0000;
         double nextPos = 0.0000;
         if(prevNode){
-            prevPos = BSplineHandlePosition(prevNode->front());
+            prevPos = BSplineHandlePosition(prevNode->front(),prevNode->bsplineWeight);
             n->back()->setPosition(BSplineHandleReposition(n->back()));
         }
         if(nextNode){
-            nextPos = BSplineHandlePosition(nextNode->back());
+            nextPos = BSplineHandlePosition(nextNode->back(),nextNode->bsplineWeight);
             n->front()->setPosition(BSplineHandleReposition(n->front()));
         }
         if(prevNode){
