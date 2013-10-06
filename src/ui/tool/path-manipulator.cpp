@@ -1257,29 +1257,19 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
 }
 
 void PathManipulator::BSplineNodeHandlesReposition(Node *n){
-    if(n->selected()){
-        Node * nextNode = n->nodeToward(n->front());
-        Node * prevNode = n->nodeToward(n->back());
-        double prevPos = 0.0000;
-        double nextPos = 0.0000;
-        if(prevNode){
-            prevPos = BSplineHandlePosition(prevNode->front(),prevNode->bsplineWeight);
-            n->back()->setPosition(BSplineHandleReposition(n->back()));
-        }
-        if(nextNode){
-            nextPos = BSplineHandlePosition(nextNode->back(),nextNode->bsplineWeight);
-            n->front()->setPosition(BSplineHandleReposition(n->front()));
-        }
-        if(prevNode){
-            if(!prevNode->isEndNode())
-                prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevPos));
-            prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevPos));
-        }
-        if(nextNode){
-            if(!nextNode->isEndNode())
-                nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextPos));
-            nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextPos));
-        }
+    Node * nextNode = n->nodeToward(n->front());
+    Node * prevNode = n->nodeToward(n->back());
+    if(prevNode){
+        n->back()->setPosition(BSplineHandleReposition(n->back()));
+        if(!prevNode->isEndNode())
+            prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevNode->bsplineWeight));
+        prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevNode->bsplineWeight));
+    }
+    if(nextNode){
+        n->front()->setPosition(BSplineHandleReposition(n->front()));
+        if(!nextNode->isEndNode())
+            nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextNode->bsplineWeight));
+        nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextNode->bsplineWeight));
     }
 }
 
