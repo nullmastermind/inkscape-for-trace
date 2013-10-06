@@ -165,6 +165,7 @@ src/live_effects/lpe-powerstroke.cpp
 src/live_effects/lpe-recursiveskeleton.cpp
 src/live_effects/lpe-rough-hatches.cpp
 src/live_effects/lpe-ruler.cpp
+src/live_effects/lpe-bspline.cpp
 src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-tangent_to_curve.cpp
