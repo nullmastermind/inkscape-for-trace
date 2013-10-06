@@ -94,8 +94,8 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     if(!_pm.isBSpline){
         first->front()->move(first->front()->position() + offset0);
         second->back()->move(second->back()->position() + offset1);
-    }else if(weight>=0.8)second->back()->move(new_pos);
-    else if(weight<=0.2)first->front()->move(new_pos);
+    }else if(weight>=0.8 && !second->isEndNode())second->back()->move(new_pos);
+    else if(weight<=0.2 && !first->isEndNode())first->front()->move(new_pos);
     //BSpline End
     _pm.update();
 }
