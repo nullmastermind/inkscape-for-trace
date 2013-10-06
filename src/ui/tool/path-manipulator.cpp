@@ -1274,7 +1274,7 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
         }
         if(nextNode && !nextNode->isEndNode()){
             nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextPos));
-            nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),prevPos));
+            nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextPos));
         }
     }
 }
