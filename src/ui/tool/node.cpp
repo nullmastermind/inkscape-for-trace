@@ -176,23 +176,23 @@ void Handle::move(Geom::Point const &new_pos)
             h = this;
             setPosition(_pm().BSplineHandleReposition(h));
             _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
-            typedef ControlPointSelection::Set Set;
-            Set &nodes = _parent->_selection.allPoints();
-            for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-                if((*i)->selected()){
-                    Node *n = static_cast<Node*>(*i);
-                    h = n->front();
-                    h2 = n->back();
-                    h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-                    h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
-                }
-            }
-            if(!_parent->selected()){
-                h = _parent->front();
-                h2 = _parent->back();
-                h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-                h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
-            }
+            //typedef ControlPointSelection::Set Set;
+            //Set &nodes = _parent->_selection.allPoints();
+            //for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+            //    if((*i)->selected()){
+            //       Node *n = static_cast<Node*>(*i);
+            //        h = n->front();
+            //        h2 = n->back();
+            //        h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+            //        h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+                //}
+            //}
+            //if(!_parent->selected()){
+            h = _parent->front();
+            h2 = _parent->back();
+            h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+            h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            //}
         }
         //BSpline End
         return;
@@ -211,23 +211,23 @@ void Handle::move(Geom::Point const &new_pos)
             h = this;
             setPosition(_pm().BSplineHandleReposition(h));
             _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
-            typedef ControlPointSelection::Set Set;
-            Set &nodes = _parent->_selection.allPoints();
-            for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-                if((*i)->selected()){
-                    Node *n = static_cast<Node*>(*i);
-                    h = n->front();
-                    h2 = n->back();
-                    h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-                    h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
-                }
-            }
-            if(!_parent->selected()){
-                h = _parent->front();
-                h2 = _parent->back();
-                h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-                h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
-            }
+            //typedef ControlPointSelection::Set Set;
+            //Set &nodes = _parent->_selection.allPoints();
+            //for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+            //    if((*i)->selected()){
+            //        Node *n = static_cast<Node*>(*i);
+            //      h = n->front();
+            //        h2 = n->back();
+            //        h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+            //        h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            //    }
+            //}
+            //if(!_parent->selected()){
+            h = _parent->front();
+            h2 = _parent->back();
+            h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+            h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+            //}
         }
         //BSpline End
         return;
@@ -254,23 +254,23 @@ void Handle::move(Geom::Point const &new_pos)
         h = this;
         setPosition(_pm().BSplineHandleReposition(h));
         _parent->bsplineWeight = _pm().BSplineHandlePosition(h);
-        typedef ControlPointSelection::Set Set;
-        Set &nodes = _parent->_selection.allPoints();
-        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            if((*i)->selected()){
-                Node *n = static_cast<Node*>(*i);
-                h = n->front();
-                h2 = n->back();
-                h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-                h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
-            }
-        }
-        if(!_parent->selected()){
-            h = _parent->front();
-            h2 = _parent->back();
-            h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
-            h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
-        }
+        //typedef ControlPointSelection::Set Set;
+        //Set &nodes = _parent->_selection.allPoints();
+        //for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
+        //    if((*i)->selected()){
+        //        Node *n = static_cast<Node*>(*i);
+        //        h = n->front();
+        //        h2 = n->back();
+        //        h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+        //        h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+        //    }
+        //}
+        //if(!_parent->selected()){
+        h = _parent->front();
+        h2 = _parent->back();
+        h->setPosition(_pm().BSplineHandleReposition(h,_parent->bsplineWeight));
+        h2->setPosition(_pm().BSplineHandleReposition(h2,_parent->bsplineWeight));
+        //}
     }
     //BSpline End
 }
