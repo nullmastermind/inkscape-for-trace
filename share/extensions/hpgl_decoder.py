@@ -54,7 +54,7 @@ class hpglDecoder:
         path = ''
         for i, command in enumerate(hpglData):
             if command.strip() != '':
-                # TODO:2013-07-13:Sebastian Wüst:Implement all the HP-GL commands.
+                # TODO:2013-07-13:Sebastian Wüst:Implement all the HP-GL commands. (Or pass it as PLT to UniConverter when unknown commands are found?)
                 if command[:2] == 'PU': # if Pen Up command
                     if ' L ' in path:
                         self.addPathToLayer(path, actualLayer)

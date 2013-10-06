@@ -40,8 +40,9 @@
                 <option value="57600">57600</option>
                 <option value="115200">115200</option>
             </param>
-            <_param name="serialHelp" type="description">This can be a physical serial connection or a virtual USB-to-Serial bridge. Ask your plotter manufacturer for drivers if needed.</_param>
-            <_param name="parallelHelp" type="description">Parallel (LPT) connections are not supported.</_param>
+            <_param name="serialHelp" type="description">This can be a physical serial connection or a USB-to-Serial bridge. Ask your plotter manufacturer for drivers if needed.</_param>
+            <_param name="parallelHelp" type="description">Please note that Parallel (LPT) connections are not supported.</_param>
+            <_param name="hpglNote" type="description">Please note that only the HPGL command language is supported at the moment.</_param>
         </page>
         <page name="overcut" _gui-text="Overcut">
             <param name="useOvercut" type="boolean" _gui-text="Use overcut" _gui-description="Check this to use the overcut, if not checked the 'Overcut' parameter is unused (Default: Checked)">true</param>

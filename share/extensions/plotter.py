@@ -58,6 +58,7 @@ class MyEffect(inkex.Effect):
                 + "\n2. Extract the \"serial\" subfolder from the zip to the following folder: \"C:\\Program Files (x86)\\inkscape\\python\\Lib\\\" (Or wherever your Inkscape is installed to)"
                 + "\n3. Restart Inkscape."))
             return
+        # TODO:2013-07-13:Sebastian Wüst:Maybe implement DMPL?
         # get hpgl data 
         myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
         try:
