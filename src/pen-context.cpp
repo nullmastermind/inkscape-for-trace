@@ -1573,7 +1573,7 @@ static void bspline_spiro_motion(SPPenContext *const pc, bool shift){
     using Geom::X;
     using Geom::Y;
     SPCurve *tmpCurve = new SPCurve();
-    pc->p[2] = pc->p[3];
+    pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
     if(pc->green_curve->is_empty() && !pc->sa){
         pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
     }else if(!pc->green_curve->is_empty()){
@@ -1601,6 +1601,10 @@ static void bspline_spiro_motion(SPPenContext *const pc, bool shift){
                 pc->p[1] = SBasisWPower.valueAt(WP);
                 if(!Geom::are_near(pc->p[1],pc->p[0]))
                     pc->p[1] = Geom::Point(pc->p[1][X] + 0.0001,pc->p[1][Y] + 0.0001);
+                if(shift)
+                    pc->p[2]=pc->p[3];
+                else
+                    pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
             }else{
                 pc->p[1] =  (*cubic)[3] + (Geom::Point)((*cubic)[3] - (*cubic)[2] );
             }

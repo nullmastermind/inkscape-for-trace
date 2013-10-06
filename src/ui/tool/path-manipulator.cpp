@@ -683,7 +683,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
     }
     //BSpline
     if(isBSpline){
-        double pos = 0;
+        double pos = 0.0000;
         if(start.prev()){
             pos = BSplineHandlePosition(start.prev()->back());
             start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),pos));
@@ -1215,8 +1215,7 @@ double PathManipulator::BSplineHandlePosition(Handle *h){
     Node *n = h->parent();
     SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = NULL;
-    if(!n->isEndNode())
-        nextNode = n->nodeToward(h);
+    nextNode = n->nodeToward(h);
     Geom::Point positionH = h->position();
     positionH = Geom::Point(positionH[X] + 0.0001,positionH[Y] + 0.0001);
     if(nextNode && n->position() != h->position()){
@@ -1235,13 +1234,12 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h){
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     using Geom::X;
     using Geom::Y;
-    Geom::Point ret(0,0);
+    Geom::Point ret = h->position();
     Node *n = h->parent();
     Geom::D2< Geom::SBasis > SBasisInsideNodes;
     SPCurve *lineInsideNodes = new SPCurve();
     Node * nextNode = NULL;
-    if(!n->isEndNode())
-        nextNode = n->nodeToward(h);
+    nextNode = n->nodeToward(h);
     if(nextNode && pos != 0.0000){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
@@ -1250,8 +1248,10 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
         ret = SBasisInsideNodes.valueAt(pos);
         ret = Geom::Point(ret[X] + 0.0001,ret[Y] + 0.0001);
     }else{
-        n->bsplineWeight = 0.0000;
-        ret = n->position();
+        if(pos == 0.0000){
+            n->bsplineWeight = 0.0000;
+            ret = n->position();
+        }
     }
     return ret;
 }
@@ -1262,19 +1262,23 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
         Node * prevNode = n->nodeToward(n->back());
         double prevPos = 0.0000;
         double nextPos = 0.0000;
-        if(prevNode)
+        if(prevNode){
             prevPos = BSplineHandlePosition(prevNode->front());
-        if(nextNode)
-            nextPos = BSplineHandlePosition(nextNode->back());
-        n->front()->setPosition(BSplineHandleReposition(n->front()));
-        n->back()->setPosition(BSplineHandleReposition(n->back()));
-        if(prevNode && !prevNode->isEndNode()){
-            prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevPos));
-            prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevPos));
+            n->back()->setPosition(BSplineHandleReposition(n->back()));
         }
-        if(nextNode && !nextNode->isEndNode()){
+        if(nextNode){
+            nextPos = BSplineHandlePosition(nextNode->back());
+            n->front()->setPosition(BSplineHandleReposition(n->front()));
+        }
+        if(prevNode){
+            if(!prevNode->isEndNode())
+                prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevPos));
+            prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevPos));
+        }
+        if(nextNode){
+            if(!nextNode->isEndNode())
+                nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextPos));
             nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextPos));
-            nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextPos));
         }
     }
 }
