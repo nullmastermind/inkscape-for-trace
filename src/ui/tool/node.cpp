@@ -635,8 +635,6 @@ Node::Node(NodeSharedData const &data, Geom::Point const &initial_pos) :
     _handles_shown(false)
 {
     this->bsplineWeight = 0.3334;
-    if(this->front()->position() == this->position() && this->back()->position() == this->position())
-        this->bsplineWeight = 0.0000;
     // NOTE we do not set type here, because the handles are still degenerate
 }
 
