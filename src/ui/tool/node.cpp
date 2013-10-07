@@ -726,6 +726,7 @@ void Node::transform(Geom::Affine const &m)
     /* Affine transforms keep handle invariants for smooth and symmetric nodes,
      * but smooth nodes at ends of linear segments and auto nodes need special treatment */
     _fixNeighbors(old_pos, position());
+    _pm().BSplineNodeHandlesReposition(this);
 }
 
 Geom::Rect Node::bounds() const

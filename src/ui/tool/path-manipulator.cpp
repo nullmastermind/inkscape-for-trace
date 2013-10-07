@@ -1261,12 +1261,16 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
     Node * prevNode = n->nodeToward(n->back());
     if(prevNode){
         n->back()->setPosition(BSplineHandleReposition(n->back()));
+        if(prevNode->front()->position() == prevNode->position())
+            prevNode->bsplineWeight = 0.000;
         if(!prevNode->isEndNode())
             prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevNode->bsplineWeight));
         prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevNode->bsplineWeight));
     }
     if(nextNode){
         n->front()->setPosition(BSplineHandleReposition(n->front()));
+        if(nextNode->front()->position() == nextNode->position())
+            nextNode->bsplineWeight = 0.000;
         if(!nextNode->isEndNode())
             nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextNode->bsplineWeight));
         nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextNode->bsplineWeight));
@@ -1287,14 +1291,14 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             continue;
         }
         NodeList::iterator prev = subpath->begin();
-        if(isBSpline){
-            BSplineNodeHandlesReposition(prev.ptr());
-        }
+        //if(isBSpline){
+        //    BSplineNodeHandlesReposition(prev.ptr());
+        //}
         builder.moveTo(prev->position());
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
-            if(isBSpline){
-                BSplineNodeHandlesReposition(i.ptr());
-            }
+            //if(isBSpline){
+            //    BSplineNodeHandlesReposition(i.ptr());
+            //}
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;
         }
