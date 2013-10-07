@@ -396,7 +396,6 @@ void PixelArtDialogImpl::vectorize()
         }
 
         queue.push_back(input);
-        //processLibdepixelize(SP_IMAGE(list->data));
     }
 
     if ( !queue.size() ) {
