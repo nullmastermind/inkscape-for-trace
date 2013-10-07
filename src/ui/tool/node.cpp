@@ -725,8 +725,9 @@ void Node::transform(Geom::Affine const &m)
      * but smooth nodes at ends of linear segments and auto nodes need special treatment */
     _fixNeighbors(old_pos, position());
     if(_pm().isBSpline){
-        _front.setPosition(_pm().BSplineHandleReposition(_front,this->bsplineWeight));
-        _back.setPosition(_pm().BSplineHandleReposition(_back,this->bsplineWeight));
+        _front.setPosition(_pm().BSplineHandleReposition(this->front(),this->bsplineWeight));
+        _back.setPosition(_pm().BSplineHandleReposition(this->back(),this->bsplineWeight));
+        _pm().BSplineNodeHandlesReposition(this);
     }
 }
 
