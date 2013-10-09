@@ -9,18 +9,18 @@
     <_param name="introduction" type="description">Please make sure that all objects you want to save are converted to paths. The plot will automatically be aligned to the zero point.</_param>
     <param name="tab" type="notebook">
         <page name="plotter" _gui-text="Plotter Settings">
-            <param name="pen" type="int" min="1" max="10" _gui-text="Pen number" _gui-description="The number of the pen (tool) to use, on most plotters 1 (Standard: '1')">1</param>
+            <param name="pen" type="int" min="0" max="10" _gui-text="Pen number" _gui-description="The number of the pen (tool) to use, on most plotters 1 (Standard: '1')">1</param>
             <param name="space" type="description"> </param>
             <param name="resolutionX" type="float" min="1.0" max="4096.0" precision="1" _gui-text="Resolution X (dpi)" _gui-description="The amount of steps the cutter moves if it moves for 1 inch on the X axis - Try different settings to find the one that fits your plotter (Default: 1016.0)">1016.0</param>
             <param name="resolutionY" type="float" min="1.0" max="4096.0" precision="1" _gui-text="Resolution Y (dpi)" _gui-description="The amount of steps the cutter moves if it moves for 1 inch on the Y axis - Try different settings to find the one that fits your plotter (Default: 1016.0)">1016.0</param>
             <param name="space" type="description"> </param>
             <param name="mirrorX" type="boolean" _gui-text="Mirror X-axis" _gui-description="Check this to mirror the X axis - Try different settings to find the one that fits your plotter (Default: Unchecked)">false</param>
             <param name="mirrorY" type="boolean" _gui-text="Mirror Y-axis" _gui-description="Check this to mirror the Y axis - Try different settings to find the one that fits your plotter (Default: Unchecked)">false</param>
-            <param name="orientation" type="optiongroup" appearance="minimal" _gui-text="Orientation" _gui-description="Orientation of the plot - Try different settings to find the one that fits your plotter (Default: 90°)">
-                <option value="90">90°</option>
-                <option value="-90">-90°</option>
+            <param name="orientation" type="optiongroup" appearance="minimal" _gui-text="Orientation (CW)" _gui-description="Orientation of the plot - Try different settings to find the one that fits your plotter (Default: 0°)">
                 <option value="0">0°</option>
+                <option value="90">90°</option>
                 <option value="180">180°</option>
+                <option value="270">270°</option>
             </param>
             <param name="center" type="boolean" _gui-text="Center zero point" _gui-description="Check this if the plotter needs the zero point to be in the center of the drawing - Try different settings to find the one that fits your plotter (Default: Unchecked)">false</param>
         </page>

@@ -92,6 +92,7 @@ class MyEffect(inkex.Effect):
         '''
         # send data to plotter
         # TODO:2013-07-13:Sebastian Wüst:Slow down sending to prevent buffer overflow (Somewhat esotherical)
+        # TODO:2013-10-09:Sebastian Wüst: add rtscts=1 ?
         mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
         mySerial.write(self.hpgl)
         # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)
