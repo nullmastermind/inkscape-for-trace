@@ -205,11 +205,6 @@ class hpglEncoder:
                 if self.vData[1][1] == -1.0:
                     self.storeData(self.vData[2][0], self.vData[2][1], self.vData[2][2])
                 else:
-                    # check if tool offset correction is needed (if the angle is big enough)
-                    if self.vData[2][0] == 'PD' and self.vData[3][0] == 'PD':
-                        if self.getAlpha(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) > 3:
-                            self.storeData(self.vData[2][0], self.vData[2][1], self.vData[2][2])
-                            return
                     # perform tool offset correction (It's a *tad* complicated, if you want to understand it draw the data as lines on paper) 
                     if self.vData[2][0] == 'PD': # If the 3rd entry in the cache is a pen down command make the line longer by the tool offset
                         pointThree = self.changeLength(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
@@ -227,18 +222,17 @@ class hpglEncoder:
                         if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) >= self.options.toolOffset:
                             pointFour = self.changeLength(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
                         else:
-                            pointFour = self.changeLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2], (self.options.toolOffset - self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2])))
-                        alpha1 = math.atan2(pointThree[1] - self.vData[2][2], pointThree[0] - self.vData[2][1])
-                        alpha2 = math.atan2(pointFour[1] - self.vData[2][2], pointFour[0] - self.vData[2][1])
-                        # TODO:2013-07-13:Sebastian Wüst:Fix that sucker! (number of points in the circle has to be calculated)
-                        step = 10
-                        #inkex.errormsg(str(alpha1) + ' | ' + str(alpha2))                        
-                        for alpha in range(int(step), 101, int(step)):
-                            alpha = alpha1 + alpha * (alpha2 - alpha1) / 100
-                            self.storeData('PD', self.vData[2][1] + math.cos(alpha) * self.options.toolOffset, self.vData[2][2] + math.sin(alpha) * self.options.toolOffset)
+                            pointFour = self.changeLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2], 
+                                (self.options.toolOffset - self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2])))
+                        alpha = self.angleDiff(math.atan2(pointThree[1] - self.vData[2][2], pointThree[0] - self.vData[2][1]) * 57.295779,
+                            math.atan2(pointFour[1] - self.vData[2][2], pointFour[0] - self.vData[2][1]) * 57.295779)
+                        if alpha > 15.0:                        
+                            self.storeData('AA', self.vData[2][1], self.vData[2][2], alpha - 10)
+                        if alpha < -15.0:
+                            self.storeData('AA', self.vData[2][1], self.vData[2][2], alpha + 10)
                         self.storeData('PD', pointFour[0], pointFour[1])
     
-    def storeData(self, command, x, y):
+    def storeData(self, command, x, y, z="False"):
         # store point
         if self.dryRun:
             if self.divergenceX == 'False' or x < self.divergenceX: self.divergenceX = x 
@@ -249,6 +243,17 @@ class hpglEncoder:
             if not self.options.center:
                 if x < 0: x = 0 # only positive values are allowed (usually)
                 if y < 0: y = 0
-            self.hpgl += '%s%d,%d;' % (command, x, y)
+            if z == "False":
+                self.hpgl += '%s%d,%d;' % (command, x, y)
+            else:
+                self.hpgl += '%s%d,%d,%d;' % (command, x, y, z)
+
+    def angleDiff(self, a1, a2):
+        diff = a2 - a1
+        if diff > 180:
+            diff -= 360
+        elif diff < -180:
+            diff += 360
+        return diff
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

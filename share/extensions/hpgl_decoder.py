@@ -2,7 +2,7 @@
 # coding=utf-8
 '''
 Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
-This importer supports the HP-GL commands only (More should not be necessary).
+This importer supports HP-GL commands only.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -55,7 +55,16 @@ class hpglDecoder:
         for i, command in enumerate(hpglData):
             if command.strip() != '':
                 # TODO:2013-07-13:Sebastian Wüst:Implement all the HP-GL commands. (Or pass it as PLT to UniConverter when unknown commands are found?)
-                if command[:2] == 'PU': # if Pen Up command
+                if command[:2] == 'IN': # if Initialize command, ignore
+                    pass
+                elif command[:2] == 'SP': # if Select Pen command
+                    actualLayer = command[2:]
+                    self.createLayer(actualLayer)
+                elif command[:2] == 'AA': # if arc command
+                    # a150,150 0 1,0 150,-150
+                    path += ' A %f,%f,%d,%d,%d,%f,%f' % (150, 150, 0, 0, 0, 150, 150)
+                    oldCoordinates = self.getParameters(command[2:])
+                elif command[:2] == 'PU': # if Pen Up command
                     if ' L ' in path:
                         self.addPathToLayer(path, actualLayer)
                     if self.options.showMovements and i != len(hpglData) - 1:
@@ -63,14 +72,10 @@ class hpglDecoder:
                         path += ' L %f,%f' % self.getParameters(command[2:])
                         self.addPathToLayer(path, 0)
                     path = 'M %f,%f' % self.getParameters(command[2:])
+                    oldCoordinates = self.getParameters(command[2:])
                 elif command[:2] == 'PD': # if Pen Down command
                     path += ' L %f,%f' % self.getParameters(command[2:])
                     oldCoordinates = self.getParameters(command[2:])
-                elif command[:2] == 'IN': # if Initialize command, ignore
-                    pass
-                elif command[:2] == 'SP': # if Select Pen command
-                    actualLayer = command[2:]
-                    self.createLayer(actualLayer)
                 else:
                     self.warnings.append('UNKNOWN_COMMANDS')
         if ' L ' in path:
@@ -92,19 +97,14 @@ class hpglDecoder:
             return []
         # remove command delimiter
         parameterString = parameterString.replace(';', '').strip()
-        # correct parameter delimiter
-        parameterString = parameterString.replace(' ', ',')
-        parameterString = parameterString.replace('+', ',')
-        parameterString = parameterString.replace('-', ',-')
-        while ',,' in parameterString:
-            parameterString = parameterString.replace(',,', ',')
         # split parameter
-        parameterString = parameterString.split(',')
-        return self.correctAbsoluteCoordinates(parameterString[0], parameterString[1])
-
-    def correctAbsoluteCoordinates(self, x, y):
-        x = float(x) / self.scaleX; # convert to pixels coordinate system
-        y = self.options.docHeight - float(y) / self.scaleY; # convert to pixels coordinate system, flip vertically for inkscape coordinate system
-        return (x, y)
+        parameter = parameterString.split(',')
+        # convert to svg coordinate system
+        parameter[0] = float(parameter[0]) / self.scaleX; # convert to pixels coordinate system
+        parameter[1] = self.options.docHeight - float(parameter[1]) / self.scaleY; # convert to pixels coordinate system, flip vertically for inkscape coordinate system
+        if len(parameter) == 2:
+            return (parameter[0], parameter[1])
+        elif len(parameter) == 3:
+            return (parameter[0], parameter[1], parameter[2])
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
