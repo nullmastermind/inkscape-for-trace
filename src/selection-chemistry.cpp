@@ -1032,7 +1032,8 @@ void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
     }
 
     DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_LOWER,
-                       _("Lower"));
+                       //TRANSLATORS: "Lower" means "to lower an object" in the undo history
+                       C_("Undo action", "Lower"));
 }
 
 void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
@@ -1915,8 +1916,8 @@ static bool item_type_match (SPItem *i, SPItem *j)
     if ( SP_IS_RECT(i)) {
         return ( SP_IS_RECT(j) );
 
-    } else if (SP_IS_GENERICELLIPSE(i) || SP_IS_ELLIPSE(i) || SP_IS_ARC(i) || SP_IS_CIRCLE(i)) {
-        return (SP_IS_GENERICELLIPSE(j) || SP_IS_ELLIPSE(j) || SP_IS_ARC(j) || SP_IS_CIRCLE(j));
+    } else if (SP_IS_GENERICELLIPSE(i)) {
+        return (SP_IS_GENERICELLIPSE(j));
 
     } else if (SP_IS_STAR(i) || SP_IS_POLYGON(i)) {
         return (SP_IS_STAR(j) || SP_IS_POLYGON(j)) ;
