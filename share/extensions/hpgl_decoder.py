@@ -60,10 +60,6 @@ class hpglDecoder:
                 elif command[:2] == 'SP': # if Select Pen command
                     actualLayer = command[2:]
                     self.createLayer(actualLayer)
-                elif command[:2] == 'AA': # if arc command
-                    # a150,150 0 1,0 150,-150
-                    path += ' A %f,%f,%d,%d,%d,%f,%f' % (150, 150, 0, 0, 0, 150, 150)
-                    oldCoordinates = self.getParameters(command[2:])
                 elif command[:2] == 'PU': # if Pen Up command
                     if ' L ' in path:
                         self.addPathToLayer(path, actualLayer)
