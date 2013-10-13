@@ -46,6 +46,10 @@
 #include "clear-n_.h"
 #include "document.h"
 #include "util/units.h"
+#include "shape-editor.h"
+#include "sp-namedview.h"
+#include "document-undo.h"
+#include "inkscape.h"
 
 #include "emf-print.h"
 #include "emf-inout.h"
@@ -317,7 +321,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 }
 
 
-/*  given the transformation matrix from worldTranform return the scale in the matrix part.  Assumes that the
+/*  given the transformation matrix from worldTransform return the scale in the matrix part.  Assumes that the
     matrix is not used to skew, invert, or make another distorting transformation.  */
 double Emf::current_scale(PEMF_CALLBACK_DATA d){
     double scale =
@@ -328,7 +332,7 @@ double Emf::current_scale(PEMF_CALLBACK_DATA d){
     return(scale);
 }
 
-/*  given the transformation matrix from worldTranform and the current x,y position in inkscape coordinates,
+/*  given the transformation matrix from worldTransform and the current x,y position in inkscape coordinates,
     generate an SVG transform that gives the same amount of rotation, no scaling, and maps x,y back onto x,y.  This is used for
     rotating objects when the location of at least one point in that object is known. Returns:
     "matrix(a,b,c,d,e,f)"  (WITH the double quotes)
@@ -355,7 +359,7 @@ std::string Emf::current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int us
     return(cxform.str());
 }
 
-/*  given the transformation matrix from worldTranform return the rotation angle in radians.
+/*  given the transformation matrix from worldTransform return the rotation angle in radians.
     counter clocwise from the x axis.  */
 double Emf::current_rotation(PEMF_CALLBACK_DATA d){
     return -std::atan2(d->dc[d->level].worldTransform.eM12, d->dc[d->level].worldTransform.eM11);
@@ -3485,7 +3489,29 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     // Set viewBox if it doesn't exist
     if (!doc->getRoot()->viewBox_set) {
+        bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
+        Inkscape::DocumentUndo::setUndoSensitive(doc, false);
+        
+        doc->ensureUpToDate();
+        
+        // Set document unit
+        Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
+        Inkscape::SVGOStringStream os;
+        os << doc->getWidth().unit->abbr;
+        repr->setAttribute("inkscape:document-units", os.str().c_str());
+        
+        // Set viewBox
         doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+        
+        // Scale and translate objects
+        double scale = Inkscape::Util::Quantity::convert(1, "px", doc->getWidth().unit);
+        ShapeEditor::blockSetItem(true);
+        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, SP_ACTIVE_DOCUMENT->getHeight().value("px")));
+        ShapeEditor::blockSetItem(false);
+        
+        doc->ensureUpToDate();
+        
+        Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
     }
 
     return doc;

@@ -86,7 +86,7 @@ Splines Kopf2011::to_voronoi(const std::string &filename,
 Splines Kopf2011::to_voronoi(const Glib::RefPtr<Gdk::Pixbuf const> &buf,
                              const Options &options)
 {
-    return Splines(_voronoi<Precision>(buf, options));
+    return Splines(_voronoi<Precision, false>(buf, options));
 }
 
 Splines Kopf2011::to_splines(const std::string &filename,
@@ -98,13 +98,15 @@ Splines Kopf2011::to_splines(const std::string &filename,
 Splines Kopf2011::to_splines(const Glib::RefPtr<Gdk::Pixbuf const> &buf,
                              const Options &options)
 {
-    HomogeneousSplines<Precision> splines(_voronoi<Precision>(buf, options));
+    HomogeneousSplines<Precision> splines(_voronoi<Precision, true>
+                                          (buf, options));
     return Splines(splines, options.optimize, options.nthreads);
 }
 
-template<class T>
-SimplifiedVoronoi<T> Kopf2011::_voronoi(const Glib::RefPtr<Gdk::Pixbuf const> &buf,
-                                        const Options &options)
+template<class T, bool adjust_splines>
+SimplifiedVoronoi<T, adjust_splines>
+Kopf2011::_voronoi(const Glib::RefPtr<Gdk::Pixbuf const> &buf,
+                   const Options &options)
 {
     PixelGraph graph(buf);
 
@@ -146,13 +148,7 @@ SimplifiedVoronoi<T> Kopf2011::_voronoi(const Glib::RefPtr<Gdk::Pixbuf const> &b
     graph.checkConsistency();
 #endif
 
-    _remove_puzzle_pattern(graph);
-
-#ifndef NDEBUG
-    graph.checkConsistency();
-#endif
-
-    return SimplifiedVoronoi<T>(graph);
+    return SimplifiedVoronoi<T, adjust_splines>(graph);
 }
 
 // TODO: move this function (plus connectAllNeighbors) to PixelGraph constructor
@@ -315,40 +311,6 @@ void Kopf2011::_remove_crossing_edges_unsafe(PixelGraph &graph,
     }
 }
 
-inline
-void Kopf2011::_remove_puzzle_pattern(PixelGraph &graph)
-{
-    if ( graph.width() < 2 || graph.height() < 2 )
-        return;
-
-    PixelGraph::iterator it = graph.begin();
-    for ( int i = 0 ; i + 1 != graph.height() ; ++i ) {
-        PixelGraph::iterator it2 = it;
-        for ( int j = 0 ; j + 1 != graph.width() ; ++j ) {
-            // Evil pattern currently not handled correctly in SimplifiedVoronoi
-            if ( it2->adj.right + it2->adj.bottom
-                 + graph.nodeBottomRight(it2)->adj.left
-                 + graph.nodeBottomRight(it2)->adj.top == 3 ) {
-                // We fake a new connection =)
-                it2->adj.right = true;
-                graph.nodeRight(it2)->adj.left = true;
-
-                it2->adj.bottom = true;
-                graph.nodeBottom(it2)->adj.top = true;
-
-                graph.nodeBottomRight(it2)->adj.left = true;
-                graph.nodeBottom(it2)->adj.right = true;
-
-                graph.nodeBottomRight(it2)->adj.top = true;
-                graph.nodeRight(it2)->adj.bottom = true;
-            }
-
-            it2 = graph.nodeRight(it2);
-        }
-        it = graph.nodeBottom(it);
-    }
-}
-
 inline int Heuristics::curves(const PixelGraph &graph,
                               PixelGraph::const_iterator a,
                               PixelGraph::const_iterator b)
@@ -374,8 +336,7 @@ inline int Heuristics::curves(const PixelGraph &graph,
             {
                 // There are only two values that won't be zero'ed
                 // and one of them has the same value of prev
-                guintptr aux = guintptr(to_ptr(it));
-                aux = (it->adj.top
+                guintptr aux = (it->adj.top
                        * guintptr(to_ptr(graph.nodeTop(it))))
                     + (it->adj.topright
                        * guintptr(to_ptr(graph.nodeTopRight(it))))

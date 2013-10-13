@@ -88,7 +88,7 @@ static char const *const tool_names[] = {
 };
 static char const *const tool_msg[] = {
     NULL,
-    N_("<b>Click</b> to Select and Tranform objects, <b>Drag</b> to select many objects."),
+    N_("<b>Click</b> to Select and Transform objects, <b>Drag</b> to select many objects."),
     N_("Modify selected path points (nodes) directly."),
     N_("To tweak a path by pushing, select it and drag over it."),
     N_("<b>Drag</b>, <b>click</b> or <b>click and scroll</b> to spray the selected objects."),
@@ -143,7 +143,9 @@ tools_active(SPDesktop *dt)
 void
 tools_switch(SPDesktop *dt, int num)
 {
+    dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tool_msg[num] ) );
     if (dt) {
+        // This event may change the above message
         dt->_tool_changed.emit(num);
     }
 
@@ -152,7 +154,6 @@ tools_switch(SPDesktop *dt, int num)
     /* First 4 tools use guides, first is undefined but we don't care */
     dt->activate_guides(num < 5);
     inkscape_eventcontext_set(dt->getEventContext());
-    dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, gettext( tool_msg[num] ) );
 }
 
 void tools_switch_by_item(SPDesktop *dt, SPItem *item, Geom::Point const p)

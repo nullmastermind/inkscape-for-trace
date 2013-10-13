@@ -46,6 +46,10 @@
 #include "util/units.h"
 #include "clear-n_.h"
 #include "document.h"
+#include "shape-editor.h"
+#include "sp-namedview.h"
+#include "document-undo.h"
+#include "inkscape.h"
 
 
 #include "wmf-inout.h"
@@ -316,12 +320,12 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 }
 
 
-/* WMF has no worldTranform, so this always returns 1.0.  Retain it to keep WMF and WMF in sync as much as possible.*/
+/* WMF has no worldTransform, so this always returns 1.0.  Retain it to keep WMF and WMF in sync as much as possible.*/
 double Wmf::current_scale(PWMF_CALLBACK_DATA d){
     return 1.0;
 }
 
-/* WMF has no worldTranform, so this always returns an Identity rotation matrix, but the offsets may have values.*/
+/* WMF has no worldTransform, so this always returns an Identity rotation matrix, but the offsets may have values.*/
 std::string Wmf::current_matrix(PWMF_CALLBACK_DATA d, double x, double y, int useoffset){
     std::stringstream cxform;
     double scale = current_scale(d);
@@ -336,7 +340,7 @@ std::string Wmf::current_matrix(PWMF_CALLBACK_DATA d, double x, double y, int us
     return(cxform.str());
 }
 
-/* WMF has no worldTranform, so this always returns 0.  Retain it to keep WMF and WMF in sync as much as possible.*/
+/* WMF has no worldTransform, so this always returns 0.  Retain it to keep WMF and WMF in sync as much as possible.*/
 double Wmf::current_rotation(PWMF_CALLBACK_DATA d){
     return 0.0;
 }
@@ -3173,7 +3177,29 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     // Set viewBox if it doesn't exist
     if (!doc->getRoot()->viewBox_set) {
+        bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
+        Inkscape::DocumentUndo::setUndoSensitive(doc, false);
+        
+        doc->ensureUpToDate();
+        
+        // Set document unit
+        Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
+        Inkscape::SVGOStringStream os;
+        os << doc->getWidth().unit->abbr;
+        repr->setAttribute("inkscape:document-units", os.str().c_str());
+        
+        // Set viewBox
         doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+        
+        // Scale and translate objects
+        double scale = Inkscape::Util::Quantity::convert(1, "px", doc->getWidth().unit);
+        ShapeEditor::blockSetItem(true);
+        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, SP_ACTIVE_DOCUMENT->getHeight().value("px")));
+        ShapeEditor::blockSetItem(false);
+        
+        doc->ensureUpToDate();
+        
+        Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
     }
 
     return doc;
