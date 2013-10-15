@@ -240,7 +240,7 @@ static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *
     using namespace Inkscape::LivePathEffect;
 
     Effect::createAndApply(BEND_PATH, dc->desktop->doc(), item);
-    Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item));
+    Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
     // write bend parameters:
     lpe->getRepr()->setAttribute("bendpath", svgd);
@@ -258,7 +258,12 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
-
+        //BSpline
+        //Añadimos el modo BSpline a los efectos en espera
+        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
+            Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
+        }
+        //BSPline End
         static Geom::PathVector pathv;
         static SPItem *itemEnd;
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
@@ -266,6 +271,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
+        Inkscape::XML::Document *xml_doc = SP_ACTIVE_DESKTOP->doc()->getReprDoc();
 
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
@@ -329,21 +335,26 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
                     gchar const *svgd = item->getRepr()->attribute("d");
-                    item->deleteObject();
-                    if(itemEnd != NULL && itemEnd->getRepr() != NULL)
+                    //item->deleteObject();
+                    if(itemEnd != NULL && !itemEnd->getRepr())
                         itemEnd->deleteObject();
                     Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
                     sp_selection_group(selection, dc->desktop);
                     GSList *items = const_cast<GSList *>(selection->itemList());
                     SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
-                    itemEnd = SP_ITEM(obj);
-                    sp_selection_duplicate(dc->desktop);
-                    itemEnd->setExplicitlyHidden(true);
-                    items = const_cast<GSList *>(selection->itemList());
-                    obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
-                    spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
-                    SP_ITEM(obj)->setExplicitlyHidden(false);
-                    selection->set(obj,true);
+                    if(SP_IS_OBJECT(obj)){
+                        itemEnd = SP_ITEM(obj);
+                        sp_selection_duplicate(dc->desktop);
+                        itemEnd->setExplicitlyHidden(true);
+                        items = const_cast<GSList *>(selection->itemList());
+                        obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
+                        if(SP_IS_OBJECT(obj)){
+                            spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
+                            SP_ITEM(obj)->setExplicitlyHidden(false);
+                            item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_BUILD);
+                            SP_ITEM(obj)->deleteObject();
+                        }
+                    }
                 }
                 break;
             }
@@ -405,19 +416,23 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                     case 5:
                     {
                         // take shape from clipboard; TODO: catch the case where clipboard is empty
-                        if(itemEnd != NULL && itemEnd->getRepr() != NULL){
+                        if(itemEnd != NULL && !itemEnd->getRepr()){
                             gchar const *svgd = item->getRepr()->attribute("d");
-                            item->deleteObject();
+                            //item->deleteObject();
                             Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
                             selection->add(SP_OBJECT(itemEnd));
                             sp_selection_duplicate(dc->desktop);
                             selection->remove(SP_OBJECT(itemEnd));
                             GSList *items = const_cast<GSList *>(selection->itemList());
                             SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
-                            SP_ITEM(obj)->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                            spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
-                            SP_ITEM(obj)->setExplicitlyHidden(false);
-                            selection->set(obj,true);
+                            if(SP_IS_OBJECT(obj)){
+                                SP_ITEM(obj)->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                                spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
+                                SP_ITEM(obj)->setExplicitlyHidden(false);
+                                item = SP_ITEM(obj);
+                                item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_BUILD);
+                                SP_ITEM(obj)->deleteObject();
+                            }
                         }
                         break;
                     }
@@ -442,6 +457,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
             sp_repr_css_attr_unref(css);
             return;
         }
+        if(shape == 5 || (shape == 6 && previous_shape == 5))return;
 
         if (dc->waiting_LPE_type != INVALID_LPE) {
             Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
