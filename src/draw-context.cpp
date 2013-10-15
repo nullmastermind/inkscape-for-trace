@@ -351,7 +351,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                         if(SP_IS_OBJECT(obj)){
                             spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
                             SP_ITEM(obj)->setExplicitlyHidden(false);
-                            item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_BUILD);
+                            item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_ALL);
                             SP_ITEM(obj)->deleteObject();
                         }
                     }
@@ -430,7 +430,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                                 spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
                                 SP_ITEM(obj)->setExplicitlyHidden(false);
                                 item = SP_ITEM(obj);
-                                item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_BUILD);
+                                item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_ALL);
                                 SP_ITEM(obj)->deleteObject();
                             }
                         }
