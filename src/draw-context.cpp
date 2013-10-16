@@ -259,12 +259,6 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
-        //BSpline
-        //Añadimos el modo BSpline a los efectos en espera
-        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
-            Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
-        }
-        //BSPline End
         bend = false;
         static Geom::PathVector pathv;
         static SPItem *itemEnd;
