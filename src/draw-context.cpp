@@ -337,7 +337,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                 if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
                     gchar const *svgd = item->getRepr()->attribute("d");
                     item->deleteObject();
-                    if(itemEnd != NULL && !itemEnd->getRepr())
+                    if(itemEnd != NULL && itemEnd->getRepr() != NULL)
                         itemEnd->deleteObject();
                     Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
                     sp_selection_group(selection, dc->desktop);
@@ -417,7 +417,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                     case 5:
                     {
                         // take shape from clipboard; TODO: catch the case where clipboard is empty
-                        if(itemEnd != NULL && !itemEnd->getRepr()){
+                        if(itemEnd != NULL && itemEnd->getRepr() != NULL){
                             gchar const *svgd = item->getRepr()->attribute("d");
                             item->deleteObject();
                             Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
