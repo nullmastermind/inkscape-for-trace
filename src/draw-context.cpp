@@ -683,8 +683,6 @@ static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
 {
     SPCurve *c;
 
-    if(bend) return;
-
     if (dc->white_curves) {
         g_assert(dc->white_item);
         c = SPCurve::concat(dc->white_curves);
@@ -738,11 +736,11 @@ static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
             // we finished the path; now apply any waiting LPEs or freehand shapes
             spdc_check_for_and_apply_waiting_LPE(dc, item, c);
 
-            dc->selection->set(repr);
+            if(!bend) dc->selection->set(repr);
             Inkscape::GC::release(repr);
-            item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
-            item->updateRepr();
+            if(!bend) item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+            if(!bend) item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+            if(!bend) item->updateRepr();
         }
 
         DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,
