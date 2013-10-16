@@ -430,8 +430,6 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                                 SP_ITEM(obj)->getRepr()->setAttribute("inkscape:path-effect", NULL);
                                 spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
                                 SP_ITEM(obj)->setExplicitlyHidden(false);
-                                item = SP_ITEM(obj);
-                                SP_OBJECT(item)->setSuccessor(obj);
                                 bend = true;
                                 selection->set(SP_ITEM(obj),true);
                             }
