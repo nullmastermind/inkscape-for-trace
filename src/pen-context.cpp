@@ -733,10 +733,15 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
     }
     //BSpline
     //Lanzamos la función "bspline_spiro_motion" al moverse el ratón o cuando se para.
-    if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
+    if(pc->bspline){
         bspline_spiro_color(pc);
         bspline_spiro_motion(pc,(mevent.state & GDK_SHIFT_MASK));
-        pen_drag_origin_w = event_w;
+    }else{
+        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
+            bspline_spiro_color(pc);
+            bspline_spiro_motion(pc,(mevent.state & GDK_SHIFT_MASK));
+            pen_drag_origin_w = event_w;
+        }
     }
     //BSpline End
     return ret;
