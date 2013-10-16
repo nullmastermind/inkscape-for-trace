@@ -249,6 +249,7 @@ static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *
     lpe->getRepr()->setAttribute("vertical", "false");
 }
 
+static bool bend;
 static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item, SPCurve *curve)
 {
     using namespace Inkscape::LivePathEffect;
@@ -264,6 +265,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
         //BSPline End
+        bend = false;
         static Geom::PathVector pathv;
         static SPItem *itemEnd;
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
@@ -271,7 +273,6 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
-        Inkscape::XML::Document *xml_doc = SP_ACTIVE_DESKTOP->doc()->getReprDoc();
 
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
@@ -335,7 +336,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
                     gchar const *svgd = item->getRepr()->attribute("d");
-                    //item->deleteObject();
+                    item->deleteObject();
                     if(itemEnd != NULL && !itemEnd->getRepr())
                         itemEnd->deleteObject();
                     Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
@@ -351,8 +352,8 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                         if(SP_IS_OBJECT(obj)){
                             spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
                             SP_ITEM(obj)->setExplicitlyHidden(false);
-                            item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_ALL);
-                            SP_ITEM(obj)->deleteObject();
+                            bend = true;
+                            selection->set(SP_ITEM(obj),true);
                         }
                     }
                 }
@@ -418,7 +419,7 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                         // take shape from clipboard; TODO: catch the case where clipboard is empty
                         if(itemEnd != NULL && !itemEnd->getRepr()){
                             gchar const *svgd = item->getRepr()->attribute("d");
-                            //item->deleteObject();
+                            item->deleteObject();
                             Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
                             selection->add(SP_OBJECT(itemEnd));
                             sp_selection_duplicate(dc->desktop);
@@ -430,8 +431,9 @@ static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item
                                 spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
                                 SP_ITEM(obj)->setExplicitlyHidden(false);
                                 item = SP_ITEM(obj);
-                                item->updateRepr(xml_doc,SP_ITEM(obj)->getRepr(),SP_OBJECT_WRITE_ALL);
-                                SP_ITEM(obj)->deleteObject();
+                                SP_OBJECT(item)->setSuccessor(obj);
+                                bend = true;
+                                selection->set(SP_ITEM(obj),true);
                             }
                         }
                         break;
@@ -680,6 +682,8 @@ void spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed)
 static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
 {
     SPCurve *c;
+
+    if(bend) return;
 
     if (dc->white_curves) {
         g_assert(dc->white_item);
