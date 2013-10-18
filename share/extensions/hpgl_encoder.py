@@ -233,19 +233,23 @@ class hpglEncoder:
                         self.storeData('PD', pointFour[0], pointFour[1])
     
     def storeData(self, command, x, y, z="False"):
-        # store point
+        x = int(round(x))
+        y = int(round(y))
         if self.dryRun:
+            # find edges
             if self.divergenceX == 'False' or x < self.divergenceX: self.divergenceX = x 
             if self.divergenceY == 'False' or y < self.divergenceY: self.divergenceY = y
             if self.sizeX == 'False' or x > self.sizeX: self.sizeX = x
             if self.sizeY == 'False' or y > self.sizeY: self.sizeY = y
         else:
+            # store point
             if not self.options.center:
                 if x < 0: x = 0 # only positive values are allowed (usually)
                 if y < 0: y = 0
             if z == "False":
                 self.hpgl += '%s%d,%d;' % (command, x, y)
             else:
+                z = int(round(z))
                 self.hpgl += '%s%d,%d,%d;' % (command, x, y, z)
 
     def angleDiff(self, a1, a2):
