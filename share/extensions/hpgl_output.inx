@@ -6,7 +6,7 @@
     <dependency type="executable" location="extensions">hpgl_output.py</dependency>
     <dependency type="executable" location="extensions">hpgl_encoder.py</dependency>
     <dependency type="executable" location="extensions">inkex.py</dependency>
-    <_param name="introduction" type="description">Please make sure that all objects you want to save are converted to paths. The drawing will be automatically aligned to the zero point. Please use the plotter extension from the extension menu to plot directly out of Inkscape.</_param>
+    <_param name="introduction" type="description">Please make sure that all objects you want to save are converted to paths. The drawing will be automatically aligned to the zero point. Please use the plotter extension from the extension menu to plot directly on a serial plotter.</_param>
     <param name="tab" type="notebook">
         <page name="plotter" _gui-text="Plotter Settings">
             <param name="pen" type="int" min="0" max="10" _gui-text="Pen number" _gui-description="The number of the pen (tool) to use, on most plotters 1 (Standard: '1')">1</param>
