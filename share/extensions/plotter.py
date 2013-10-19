@@ -28,25 +28,25 @@ inkex.localize()
 class MyEffect(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
-        self.OptionParser.add_option('--tab',              action='store', type='string',  dest='tab')
-        self.OptionParser.add_option('--resolutionX',      action='store', type='float',   dest='resolutionX',      default=1016.0,  help='Resolution X (dpi)')
-        self.OptionParser.add_option('--resolutionY',      action='store', type='float',   dest='resolutionY',      default=1016.0,  help='Resolution Y (dpi)')
-        self.OptionParser.add_option('--pen',              action='store', type='int',     dest='pen',              default=1,       help='Pen number')
-        self.OptionParser.add_option('--orientation',      action='store', type='string',  dest='orientation',      default='90',    help='orientation')
-        self.OptionParser.add_option('--mirrorX',          action='store', type='inkbool', dest='mirrorX',          default='FALSE', help='Mirror X-axis')
-        self.OptionParser.add_option('--mirrorY',          action='store', type='inkbool', dest='mirrorY',          default='FALSE', help='Mirror Y-axis')
-        self.OptionParser.add_option('--center',           action='store', type='inkbool', dest='center',           default='FALSE', help='Center zero point')
-        self.OptionParser.add_option('--flat',             action='store', type='float',   dest='flat',             default=1.2,     help='Curve flatness')
-        self.OptionParser.add_option('--useOvercut',       action='store', type='inkbool', dest='useOvercut',       default='TRUE',  help='Use overcut')
-        self.OptionParser.add_option('--overcut',          action='store', type='float',   dest='overcut',          default=1.0,     help='Overcut (mm)')
-        self.OptionParser.add_option('--useToolOffset',    action='store', type='inkbool', dest='useToolOffset',    default='TRUE',  help='Correct tool offset')
-        self.OptionParser.add_option('--toolOffset',       action='store', type='float',   dest='toolOffset',       default=0.25,    help='Tool offset (mm)')
-        self.OptionParser.add_option('--toolOffsetReturn', action='store', type='float',   dest='toolOffsetReturn', default=2.5,     help='Return factor')
-        self.OptionParser.add_option('--precut',           action='store', type='inkbool', dest='precut',           default='TRUE',  help='Use precut')
-        self.OptionParser.add_option('--offsetX',          action='store', type='float',   dest='offsetX',          default=0.0,     help='X offset (mm)')
-        self.OptionParser.add_option('--offsetY',          action='store', type='float',   dest='offsetY',          default=0.0,     help='Y offset (mm)')
-        self.OptionParser.add_option('--serialPort',       action='store', type='string',  dest='serialPort',       default='COM1',  help='Serial port')
-        self.OptionParser.add_option('--serialBaudRate',   action='store', type='string',  dest='serialBaudRate',   default='9600',  help='Serial Baud rate')
+        self.OptionParser.add_option('--tab',            action='store', type='string',  dest='tab')
+        self.OptionParser.add_option('--resolutionX',    action='store', type='float',   dest='resolutionX',    default=1016.0,  help='Resolution X (dpi)')
+        self.OptionParser.add_option('--resolutionY',    action='store', type='float',   dest='resolutionY',    default=1016.0,  help='Resolution Y (dpi)')
+        self.OptionParser.add_option('--pen',            action='store', type='int',     dest='pen',            default=1,       help='Pen number')
+        self.OptionParser.add_option('--orientation',    action='store', type='string',  dest='orientation',    default='90',    help='orientation')
+        self.OptionParser.add_option('--mirrorX',        action='store', type='inkbool', dest='mirrorX',        default='FALSE', help='Mirror X-axis')
+        self.OptionParser.add_option('--mirrorY',        action='store', type='inkbool', dest='mirrorY',        default='FALSE', help='Mirror Y-axis')
+        self.OptionParser.add_option('--center',         action='store', type='inkbool', dest='center',         default='FALSE', help='Center zero point')
+        self.OptionParser.add_option('--flat',           action='store', type='float',   dest='flat',           default=1.2,     help='Curve flatness')
+        self.OptionParser.add_option('--useOvercut',     action='store', type='inkbool', dest='useOvercut',     default='TRUE',  help='Use overcut')
+        self.OptionParser.add_option('--overcut',        action='store', type='float',   dest='overcut',        default=1.0,     help='Overcut (mm)')
+        self.OptionParser.add_option('--useToolOffset',  action='store', type='inkbool', dest='useToolOffset',  default='TRUE',  help='Correct tool offset')
+        self.OptionParser.add_option('--toolOffset',     action='store', type='float',   dest='toolOffset',     default=0.25,    help='Tool offset (mm)')
+        self.OptionParser.add_option('--precut',         action='store', type='inkbool', dest='precut',         default='TRUE',  help='Use precut')
+        self.OptionParser.add_option('--offsetX',        action='store', type='float',   dest='offsetX',        default=0.0,     help='X offset (mm)')
+        self.OptionParser.add_option('--offsetY',        action='store', type='float',   dest='offsetY',        default=0.0,     help='Y offset (mm)')
+        self.OptionParser.add_option('--serialPort',     action='store', type='string',  dest='serialPort',     default='COM1',  help='Serial port')
+        self.OptionParser.add_option('--serialBaudRate', action='store', type='string',  dest='serialBaudRate', default='9600',  help='Serial Baud rate')
+        self.OptionParser.add_option('--flowControl',    action='store', type='string',  dest='flowControl',    default='0',     help='Flow control')
 
     def effect(self):
         # gracefully exit script when pySerial is missing
@@ -55,10 +55,10 @@ class MyEffect(inkex.Effect):
         except ImportError, e:
             inkex.errormsg(_("pySerial is not installed."
                 + "\n\n1. Download pySerial here: http://pypi.python.org/pypi/pyserial"
-                + "\n2. Extract the \"serial\" subfolder from the zip to the following folder: \"C:\\Program Files (x86)\\inkscape\\python\\Lib\\\" (Or wherever your Inkscape is installed to)"
+                + "\n2. Extract the \"serial\" subfolder from the zip to the following folder: \"\\inkscape\\python\\Lib\\\" (Or wherever your Inkscape is installed to)"
                 + "\n3. Restart Inkscape."))
             return
-        # TODO:2013-07-13:Sebastian Wüst:Maybe implement DMPL?
+        # TODO:2013-10-01:Sebastian Wüst:Maybe implement DMPL?
         # get hpgl data 
         myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
         try:
@@ -91,9 +91,13 @@ class MyEffect(inkex.Effect):
                 raise ValueError, ("", type, value), traceback
         '''
         # send data to plotter
-        # TODO:2013-07-13:Sebastian Wüst:Slow down sending to prevent buffer overflow (Somewhat esotherical)
-        # TODO:2013-10-09:Sebastian Wüst: add rtscts=1 ?
-        mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None)
+        # TODO:2013-07-13:Sebastian Wüst:Slow down sending to prevent buffer overflow on plotter side (should be investigated first)
+        if self.options.flowControl == '1':
+            mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None, rtscts=True)
+        elif self.options.flowControl == '2':
+            mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None, dsrdtr=True)
+        else:
+            mySerial = serial.Serial(port=self.options.serialPort, baudrate=self.options.serialBaudRate, timeout=0.1, writeTimeout=None, xonxoff=True)
         mySerial.write(self.hpgl)
         # Read back 2 chars to avoid plotter not plotting last command (I have no idea why this is necessary)
         mySerial.read(2)

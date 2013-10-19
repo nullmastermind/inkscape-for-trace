@@ -42,7 +42,6 @@ class MyEffect(inkex.Effect):
         self.OptionParser.add_option('--overcut',          action='store', type='float',   dest='overcut',          default=1.0,     help='Overcut (mm)')
         self.OptionParser.add_option('--useToolOffset',    action='store', type='inkbool', dest='useToolOffset',    default='TRUE',  help='Correct tool offset')
         self.OptionParser.add_option('--toolOffset',       action='store', type='float',   dest='toolOffset',       default=0.25,    help='Tool offset (mm)')
-        self.OptionParser.add_option('--toolOffsetReturn', action='store', type='float',   dest='toolOffsetReturn', default=2.5,     help='Return factor')
         self.OptionParser.add_option('--precut',           action='store', type='inkbool', dest='precut',           default='TRUE',  help='Use precut')
         self.OptionParser.add_option('--offsetX',          action='store', type='float',   dest='offsetX',          default=0.0,     help='X offset (mm)')
         self.OptionParser.add_option('--offsetY',          action='store', type='float',   dest='offsetY',          default=0.0,     help='Y offset (mm)')

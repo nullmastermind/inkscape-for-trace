@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 # standard library
 from StringIO import StringIO
+import math
 # local library
 import inkex
 
@@ -46,7 +47,6 @@ class hpglDecoder:
         if self.options.showMovements:
         	self.layers[0] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Movements'})
         # parse paths
-        # TODO:2013-07-13:Sebastian Wüst:Try to parse all the different HPGL formats correctly.
         hpglData = self.hpglString.split(';')
         if len(hpglData) < 3:
             raise Exception('NO_HPGL_DATA')
@@ -54,7 +54,6 @@ class hpglDecoder:
         path = ''
         for i, command in enumerate(hpglData):
             if command.strip() != '':
-                # TODO:2013-07-13:Sebastian Wüst:Implement all the HP-GL commands. (Or pass it as PLT to UniConverter when unknown commands are found?)
                 if command[:2] == 'IN': # if Initialize command, ignore
                     pass
                 elif command[:2] == 'SP': # if Select Pen command
@@ -70,8 +69,18 @@ class hpglDecoder:
                     path = 'M %f,%f' % self.getParameters(command[2:])
                     oldCoordinates = self.getParameters(command[2:])
                 elif command[:2] == 'PD': # if Pen Down command
-                    path += ' L %f,%f' % self.getParameters(command[2:])
-                    oldCoordinates = self.getParameters(command[2:])
+                    parameterString = command[2:]
+                    if parameterString.strip() != '':
+                        parameterString = parameterString.replace(';', '').strip()
+                        parameter = parameterString.split(',')
+                        oldCoordinates = (float(parameter[-2]) / self.scaleX, self.options.docHeight - float(parameter[-1]) / self.scaleX)
+                        for i, param in enumerate(parameter):
+                            if i % 2 == 0:
+                                parameter[i] = str(float(param) / self.scaleX)
+                            else:
+                                parameter[i] = str(self.options.docHeight - float(param) / self.scaleY)
+                        parameterString = ','.join(parameter)
+                        path += ' L %s' % parameterString
                 else:
                     self.warnings.append('UNKNOWN_COMMANDS')
         if ' L ' in path:
@@ -87,7 +96,7 @@ class hpglDecoder:
         else:
             lineColor = '000000'
         inkex.etree.SubElement(self.layers[layerNumber], 'path', {'d':path, 'style':'stroke:#' + lineColor + '; stroke-width:0.4; fill:none;'})
-   
+
     def getParameters(self, parameterString): # process coordinates
         if parameterString.strip() == '':
             return []
@@ -95,12 +104,6 @@ class hpglDecoder:
         parameterString = parameterString.replace(';', '').strip()
         # split parameter
         parameter = parameterString.split(',')
-        # convert to svg coordinate system
-        parameter[0] = float(parameter[0]) / self.scaleX; # convert to pixels coordinate system
-        parameter[1] = self.options.docHeight - float(parameter[1]) / self.scaleY; # convert to pixels coordinate system, flip vertically for inkscape coordinate system
-        if len(parameter) == 2:
-            return (parameter[0], parameter[1])
-        elif len(parameter) == 3:
-            return (parameter[0], parameter[1], parameter[2])
+        return (float(parameter[0]) / self.scaleX, self.options.docHeight - float(parameter[1]) / self.scaleY) # convert to svg coordinate system
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

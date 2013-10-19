@@ -40,6 +40,12 @@
                 <option value="57600">57600</option>
                 <option value="115200">115200</option>
             </param>
+            <param name="flowControl" type="optiongroup" appearance="minimal" _gui-text="Flow control" _gui-description="Software / Hardware flow control - Try different settings to find the one that fits your plotter (Default: Software)">
+                <option value="0">Software</option>
+                <option value="1">Hardware (RTS/CTS)</option>
+                <option value="2">Hardware (DSR/DTR)</option>
+            </param>
+            <param name="space" type="description"> </param>
             <_param name="serialHelp" type="description">This can be a physical serial connection or a USB-to-Serial bridge. Ask your plotter manufacturer for drivers if needed.</_param>
             <_param name="parallelHelp" type="description">Please note that Parallel (LPT) connections are not supported.</_param>
             <_param name="hpglNote" type="description">Please note that only the HPGL command language is supported at the moment.</_param>
@@ -49,10 +55,8 @@
             <param name="overcut" type="float" min="0.0" max="100.0" precision="2" _gui-text="Overcut (mm)" _gui-description="The distance in mm that will be cut over the starting point of the path to prevent open paths (Default: 1.00)">1.00</param>
         </page>
         <page name="toolOffset" _gui-text="Tool Offset">
-            <param name="useToolOffset" type="boolean" _gui-text="Use tool offset correction" _gui-description="Check this to use the tool offset correction, if not checked the 'Tool offset', 'Return Factor' and 'Precut' parameters are unused (Default: Checked)">true</param>
+            <param name="useToolOffset" type="boolean" _gui-text="Use tool offset correction" _gui-description="Check this to use the tool offset correction, if not checked the 'Tool offset' and 'Precut' parameters are unused (Default: Checked)">true</param>
             <param name="toolOffset" type="float" min="0.0" max="20.0" precision="2" _gui-text="Tool offset (mm)" _gui-description="The offset from the tool tip to the tool axis in mm (Default: 0.25)">0.25</param>
-            <param name="toolOffsetReturn" type="float" min="1.0" max="10.0" precision="2" _gui-text="Return factor" _gui-description="The return factor multiplied by the tool offset is the length that is used to guide the tool back to the original path after an overcut is performed, you can only determine this value by experimentation (Default: 2.50)">2.50</param>
-            <param name="space" type="description"> </param>
             <param name="precut" type="boolean" _gui-text="Use precut" _gui-description="Check this to cut a small line before the real drawing to align the tool orientation for the first cut (Default: Checked)">true</param>
             <param name="space" type="description"> </param>
             <_param name="offsetNote" type="description">Please note that using the tool offset correction will move your drawing away from the zero point on both axes by the tool offset specified.</_param>

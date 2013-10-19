@@ -25,6 +25,10 @@ import math, string
 import bezmisc, cspsubdiv, cubicsuperpath, inkex, simplestyle, simpletransform
 
 class hpglEncoder:
+    
+    PI = math.pi
+    TWO_PI = PI * 2
+    
     def __init__(self, doc, options):
         ''' options:
                 "resolutionX":float
@@ -39,7 +43,6 @@ class hpglEncoder:
                 "overcut":float
                 "useToolOffset":bool
                 "toolOffset":float
-                "toolOffsetReturn":float
                 "precut":bool
                 "offsetX":float
                 "offsetY":float
@@ -51,6 +54,7 @@ class hpglEncoder:
         self.sizeX = 'False'
         self.sizeY = 'False'
         self.dryRun = True
+        self.lastPoint = [0, 0, 0]
         self.scaleX = self.options.resolutionX / 90 # inch to pixels
         self.scaleY = self.options.resolutionY / 90 # inch to pixels
         self.options.offsetX = self.options.offsetX * 3.5433070866 * self.scaleX # mm to dots (plotter coordinate system)
@@ -58,13 +62,14 @@ class hpglEncoder:
         self.options.overcut = self.options.overcut * 3.5433070866 * ((self.scaleX + self.scaleY) / 2) # mm to dots
         self.options.toolOffset = self.options.toolOffset * 3.5433070866 * ((self.scaleX + self.scaleY) / 2) # mm to dots
         self.options.flat = ((self.options.resolutionX + self.options.resolutionY) / 2) * self.options.flat / 1000 # scale flatness to resolution
+        self.toolOffsetFlat = self.options.flat / self.options.toolOffset * 4.5 # scale flatness to offset
         self.mirrorX = 1.0
         if self.options.mirrorX:
             self.mirrorX = -1.0
         self.mirrorY = -1.0
         if self.options.mirrorY:
             self.mirrorY = 1.0
-        # process viewBox parameter to correct scaling
+        # process viewBox attribute to correct page scaling
         viewBox = doc.get('viewBox')
         self.viewBoxTransformX = 1
         self.viewBoxTransformY = 1
@@ -94,7 +99,7 @@ class hpglEncoder:
         self.groupmat[0] = simpletransform.composeTransform(self.groupmat[0], simpletransform.parseTransform('rotate(' + self.options.orientation + ')'))
         self.vData = [['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0]]
         # store first hpgl commands
-        self.hpgl = 'IN;SP%d;' % self.options.pen
+        self.hpgl = 'IN;SP%d' % self.options.pen
         # add precut
         if self.options.useToolOffset and self.options.precut:
             self.calcOffset('PU', 0, 0)
@@ -104,7 +109,7 @@ class hpglEncoder:
         # shift an empty node in in order to process last node in cache
         self.calcOffset('PU', 0, 0)
         # add return to zero point
-        self.hpgl += 'PU0,0;'
+        self.hpgl += ';PU0,0;'
         return self.hpgl
     
     def process_group(self, group, groupmat):
@@ -153,7 +158,7 @@ class hpglEncoder:
                 # perform overcut
                 if self.options.useOvercut and not self.dryRun:
                     # check if last and first points are the same, otherwise the path is not closed and no overcut can be performed
-                    if int(oldPosX) == int(singlePath[0][1][0]) and int(oldPosY) == int(singlePath[0][1][1]):
+                    if int(round(oldPosX)) == int(round(singlePath[0][1][0])) and int(round(oldPosY)) == int(round(singlePath[0][1][1])):
                         overcutLength = 0
                         for singlePathPoint in singlePath:
                             posX, posY = singlePathPoint[1]
@@ -217,24 +222,39 @@ class hpglEncoder:
                     else: # Else just write the 3rd entry
                         pointThree = [self.vData[2][1], self.vData[2][2]]
                         self.storeData('PU', pointThree[0], pointThree[1])
-                    if self.vData[3][0] == 'PD': # If the 4th entry in the cache is a pen down command guide tool to next angle
-                        # Create a circle between the prolonged 3rd and 4th entry to correctly guide the tool around the corner
+                    if self.vData[3][0] == 'PD': # If the 4th entry in the cache is a pen down command guide tool to next line with a circle between the prolonged 3rd and 4th entry
                         if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) >= self.options.toolOffset:
                             pointFour = self.changeLength(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
                         else:
                             pointFour = self.changeLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2], 
                                 (self.options.toolOffset - self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2])))
-                        alpha = self.angleDiff(math.atan2(pointThree[1] - self.vData[2][2], pointThree[0] - self.vData[2][1]) * 57.295779,
-                            math.atan2(pointFour[1] - self.vData[2][2], pointFour[0] - self.vData[2][1]) * 57.295779)
-                        if alpha > 15.0:                        
-                            self.storeData('AA', self.vData[2][1], self.vData[2][2], alpha - 10)
-                        if alpha < -15.0:
-                            self.storeData('AA', self.vData[2][1], self.vData[2][2], alpha + 10)
+                        # get start and end angle
+                        angleStart = math.atan2(pointThree[1] - self.vData[2][2], pointThree[0] - self.vData[2][1])
+                        angleDiff = math.atan2(pointFour[1] - self.vData[2][2], pointFour[0] - self.vData[2][1]) - angleStart
+                        # switch direction when arc is bigger than 180°
+                        if angleDiff > self.PI:
+                            angleDiff -= self.TWO_PI
+                        elif angleDiff < -self.PI:
+                            angleDiff += self.TWO_PI
+                        # draw arc
+                        if angleDiff >= 0:
+                            angle = angleStart + self.toolOffsetFlat
+                            while angle < angleStart + angleDiff:
+                                self.storeData('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
+                                angle += self.toolOffsetFlat
+                        else:
+                            angle = angleStart - self.toolOffsetFlat
+                            while angle > angleStart + angleDiff:
+                                self.storeData('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
+                                angle -= self.toolOffsetFlat
                         self.storeData('PD', pointFour[0], pointFour[1])
     
-    def storeData(self, command, x, y, z="False"):
+    def storeData(self, command, x, y):
         x = int(round(x))
         y = int(round(y))
+        # skip when no change in movement
+        if self.lastPoint[0] == command and self.lastPoint[1] == x and self.lastPoint[2] == y:
+            return
         if self.dryRun:
             # find edges
             if self.divergenceX == 'False' or x < self.divergenceX: self.divergenceX = x 
@@ -246,18 +266,13 @@ class hpglEncoder:
             if not self.options.center:
                 if x < 0: x = 0 # only positive values are allowed (usually)
                 if y < 0: y = 0
-            if z == "False":
-                self.hpgl += '%s%d,%d;' % (command, x, y)
+            # do not repeat command
+            if command == 'PD' and self.lastPoint[0] == 'PD':
+                self.hpgl += ',%d,%d' % (x, y)
             else:
-                z = int(round(z))
-                self.hpgl += '%s%d,%d,%d;' % (command, x, y, z)
-
-    def angleDiff(self, a1, a2):
-        diff = a2 - a1
-        if diff > 180:
-            diff -= 360
-        elif diff < -180:
-            diff += 360
-        return diff
+                self.hpgl += ';%s%d,%d' % (command, x, y)
+        self.lastPoint[0] = command
+        self.lastPoint[1] = x
+        self.lastPoint[2] = y
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
