@@ -294,18 +294,16 @@ sp_selected_path_break_apart(SPDesktop *desktop)
 
 /* This function is an entry point from GUI */
 void
-sp_selected_path_to_curves(SPDesktop *desktop, bool interactive)
+sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, bool interactive)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     if (selection->isEmpty()) {
-        if (interactive)
+        if (interactive && desktop)
             sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to path."));
         return;
     }
 
     bool did = false;
-    if (interactive) {
+    if (interactive && desktop) {
         desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Converting objects to paths..."));
         // set "busy" cursor
         desktop->setWaitingCursor();
@@ -324,7 +322,7 @@ sp_selected_path_to_curves(SPDesktop *desktop, bool interactive)
     g_slist_free (to_select);
     g_slist_free (selected);
 
-    if (interactive) {
+    if (interactive && desktop) {
         desktop->clearWaitingCursor();
         if (did) {
             DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_OBJECT_TO_CURVE, 
@@ -407,7 +405,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
         }
         
         if (SP_IS_GROUP(item)) {
-            sp_lpe_item_remove_all_path_effects(SP_LPE_ITEM(item), true);
+            SP_LPE_ITEM(item)->removeAllPathEffects(true);
             GSList *item_list = sp_item_group_item_list(SP_GROUP(item));
             
             GSList *item_to_select = NULL;
@@ -630,7 +628,7 @@ sp_selected_path_reverse(SPDesktop *desktop)
         SPCurve *rcurve = path->get_curve_reference()->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
-        if ( sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(path)) ) {
+        if ( path->hasPathEffectRecursive() ) {
             path->getRepr()->setAttribute("inkscape:original-d", str);
         } else {
             path->getRepr()->setAttribute("d", str);

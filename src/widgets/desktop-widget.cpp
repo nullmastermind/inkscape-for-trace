@@ -43,8 +43,8 @@
 #include "file.h"
 #include "helper/action.h"
 #include "helper/action-context.h"
-#include "helper/units.h"
-#include "helper/unit-tracker.h"
+#include "util/units.h"
+#include "ui/widget/unit-tracker.h"
 #include "inkscape-private.h"
 #include "interface.h"
 #include "macros.h"
@@ -79,10 +79,11 @@
 using Inkscape::round;
 #endif
 
-using Inkscape::UnitTracker;
+using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
 using ege::AppearTimeTracker;
+using Inkscape::Util::unit_table;
 
 enum {
     ACTIVATE,
@@ -393,8 +394,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     GtkWidget *eventbox = gtk_event_box_new ();
     dtw->hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
     dtw->hruler_box = eventbox;
-    sp_ruler_set_unit(SP_RULER(dtw->hruler), SP_PT);
-    gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT))));
+    Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
+    sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
+    gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt->name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -422,8 +424,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     eventbox = gtk_event_box_new ();
     dtw->vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
     dtw->vruler_box = eventbox;
-    sp_ruler_set_unit (SP_RULER (dtw->vruler), SP_PT);
-    gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT))));
+    sp_ruler_set_unit (SP_RULER (dtw->vruler), pt);
+    gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(pt->name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -1674,7 +1676,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, NULL));
 
-    dtw->dt2r = 1.0 / namedview->doc_units->unittobase;
+    dtw->dt2r = 1. / namedview->doc_units->factor;
 
     dtw->ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
 
@@ -1746,11 +1748,11 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
     SPNamedView *nv=SP_NAMEDVIEW(obj);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->dt2r = 1.0 / nv->doc_units->unittobase;
+        this->dt2r = 1. / nv->doc_units->factor;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
-        sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultMetric());
-        sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultMetric());
+        sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDefaultUnit());
+        sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDefaultUnit());
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),
@@ -1786,8 +1788,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
             } // children
         } // if aux_toolbox is a container
 
-        gtk_widget_set_tooltip_text(this->hruler_box, gettext(sp_unit_get_plural (nv->doc_units)));
-        gtk_widget_set_tooltip_text(this->vruler_box, gettext(sp_unit_get_plural (nv->doc_units)));
+        gtk_widget_set_tooltip_text(this->hruler_box, gettext(nv->doc_units->name_plural.c_str()));
+        gtk_widget_set_tooltip_text(this->vruler_box, gettext(nv->doc_units->name_plural.c_str()));
 
         sp_desktop_widget_update_rulers(this);
         ToolboxFactory::updateSnapToolbox(this->desktop, 0, this->snap_toolbox);
@@ -1807,7 +1809,10 @@ sp_desktop_widget_adjustment_value_changed (GtkAdjustment */*adj*/, SPDesktopWid
     sp_desktop_widget_update_rulers (dtw);
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    sp_box3d_context_update_lines(dtw->desktop->event_context);
+    //sp_box3d_context_update_lines(dtw->desktop->event_context);
+    if (SP_IS_BOX3D_CONTEXT(dtw->desktop->event_context)) {
+		SP_BOX3D_CONTEXT(dtw->desktop->event_context)->_vpdrag->updateLines();
+	}
 
     dtw->update = 0;
 }
@@ -2130,8 +2135,8 @@ sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale)
 
     /* The desktop region we always show unconditionally */
     SPDocument *doc = dtw->desktop->doc();
-    Geom::Rect darea ( Geom::Point(-doc->getWidth(), -doc->getHeight()),
-                     Geom::Point(2 * doc->getWidth(), 2 * doc->getHeight())  );
+    Geom::Rect darea ( Geom::Point(-doc->getWidth().value("px"), -doc->getHeight().value("px")),
+                     Geom::Point(2 * doc->getWidth().value("px"), 2 * doc->getHeight().value("px"))  );
 
     Geom::OptRect deskarea;
     if (Inkscape::Preferences::get()->getInt("/tools/bounding_box") == 0) {

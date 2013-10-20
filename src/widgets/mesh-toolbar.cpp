@@ -262,10 +262,10 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         eact = create_adjustment_action( "MeshRowAction",
                                          _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
                                          "/tools/mesh/mesh_rows", 1,
-                                         GTK_WIDGET(desktop->canvas), NULL, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          1, 20, 1, 1,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         ms_row_changed,
+                                         ms_row_changed, NULL /*unit tracker*/,
                                          1.0, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -278,10 +278,10 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         eact = create_adjustment_action( "MeshColumnAction",
                                          _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
                                          "/tools/mesh/mesh_cols", 1,
-                                         GTK_WIDGET(desktop->canvas), NULL, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          1, 20, 1, 1,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         ms_col_changed,
+                                         ms_col_changed, NULL /*unit tracker*/,
                                          1.0, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );

@@ -106,12 +106,11 @@ void Inkscape::ObjectSnapper::_findCandidates(SPObject* parent,
             if (it == NULL || i == it->end()) {
                 SPItem *item = SP_ITEM(o);
                 if (item) {
-                    SPObject *obj = NULL;
                     if (!clip_or_mask) { // cannot clip or mask more than once
                         // The current item is not a clipping path or a mask, but might
                         // still be the subject of clipping or masking itself ; if so, then
                         // we should also consider that path or mask for snapping to
-                        obj = SP_OBJECT(item->clip_ref ? item->clip_ref->getObject() : NULL);
+                        SPObject *obj = SP_OBJECT(item->clip_ref ? item->clip_ref->getObject() : NULL);
                         if (obj && _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_PATH_CLIP)) {
                             _findCandidates(obj, it, false, bbox_to_snap, true, item->i2doc_affine());
                         }
@@ -195,7 +194,7 @@ void Inkscape::ObjectSnapper::_collectNodes(SnapSourceType const &t,
             //Geom::Affine i2doc(Geom::identity());
             SPItem *root_item = (*i).item;
             if (SP_IS_USE((*i).item)) {
-                root_item = sp_use_root(SP_USE((*i).item));
+                root_item = SP_USE((*i).item)->root();
             }
             g_return_if_fail(root_item);
 
@@ -383,8 +382,8 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
             SPItem *root_item = NULL;
             /* We might have a clone at hand, so make sure we get the root item */
             if (SP_IS_USE((*i).item)) {
-                i2doc = sp_use_get_root_transform(SP_USE((*i).item));
-                root_item = sp_use_root(SP_USE((*i).item));
+                i2doc = SP_USE((*i).item)->get_root_transform();
+                root_item = SP_USE((*i).item)->root();
                 g_return_if_fail(root_item);
             } else {
                 i2doc = (*i).item->i2doc_affine();
@@ -539,7 +538,7 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
                          * - Linking the individual nodes of the SPPath we have here, to the nodes of the NodePath::SubPath class as being
                          *   used in sp_nodepath_selected_nodes_move. This class has a member variable called "selected". For this the nodes
                          *   should be in the exact same order for both classes, so we can index them
-                         * - Replacing the SPPath being used here by the the NodePath::SubPath class; but how?
+                         * - Replacing the SPPath being used here by the NodePath::SubPath class; but how?
                          */
                     }
 
@@ -771,7 +770,7 @@ void Inkscape::ObjectSnapper::_clear_paths() const
 
 Geom::PathVector* Inkscape::ObjectSnapper::_getBorderPathv() const
 {
-    Geom::Rect const border_rect = Geom::Rect(Geom::Point(0,0), Geom::Point((_snapmanager->getDocument())->getWidth(),(_snapmanager->getDocument())->getHeight()));
+    Geom::Rect const border_rect = Geom::Rect(Geom::Point(0,0), Geom::Point((_snapmanager->getDocument())->getWidth().value("px"),(_snapmanager->getDocument())->getHeight().value("px")));
     return _getPathvFromRect(border_rect);
 }
 
@@ -788,8 +787,8 @@ Geom::PathVector* Inkscape::ObjectSnapper::_getPathvFromRect(Geom::Rect const re
 
 void Inkscape::ObjectSnapper::_getBorderNodes(std::vector<SnapCandidatePoint> *points) const
 {
-    Geom::Coord w = (_snapmanager->getDocument())->getWidth();
-    Geom::Coord h = (_snapmanager->getDocument())->getHeight();
+    Geom::Coord w = (_snapmanager->getDocument())->getWidth().value("px");
+    Geom::Coord h = (_snapmanager->getDocument())->getHeight().value("px");
     points->push_back(SnapCandidatePoint(Geom::Point(0,0), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));
     points->push_back(SnapCandidatePoint(Geom::Point(0,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));
     points->push_back(SnapCandidatePoint(Geom::Point(w,h), SNAPSOURCE_UNDEFINED, SNAPTARGET_PAGE_CORNER));

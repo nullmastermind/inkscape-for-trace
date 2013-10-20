@@ -19,7 +19,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE([-Wall dist-zip dist-bzip2 tar-pax])
+# We need version 1.9 of Automake or higher since we no longer distribute the
+# obsolete mkinstalldirs script
+AM_INIT_AUTOMAKE([-Wall dist-zip dist-bzip2 tar-pax 1.9])
 
 AC_ARG_ENABLE([lsb], AS_HELP_STRING([--enable-lsb], [LSB-compatible build configuration]), [
   prefix=/opt/inkscape
@@ -1021,7 +1023,6 @@ AC_CONFIG_FILES([
 Makefile
 src/Makefile
 src/check-header-compile
-src/bind/makefile
 src/debug/makefile
 src/dialogs/makefile
 src/display/makefile
@@ -1029,7 +1030,6 @@ src/dom/makefile
 src/extension/implementation/makefile
 src/extension/internal/makefile
 src/extension/makefile
-src/extension/script/makefile
 src/extension/dbus/wrapper/inkdbus.pc
 src/filters/makefile
 src/helper/makefile
@@ -1038,6 +1038,7 @@ src/libcroco/makefile
 src/libgdl/makefile
 src/libnrtype/makefile
 src/libavoid/makefile
+src/libuemf/makefile
 src/livarot/makefile
 src/live_effects/makefile
 src/live_effects/parameter/makefile
@@ -1056,7 +1057,7 @@ doc/Makefile
 po/Makefile.in
 share/Makefile
 share/attributes/Makefile
-share/clipart/Makefile
+share/branding/Makefile
 share/examples/Makefile
 share/extensions/Makefile
 share/extensions/alphabet_soup/Makefile

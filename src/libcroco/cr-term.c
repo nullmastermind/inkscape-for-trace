@@ -766,12 +766,12 @@ cr_term_unref (CRTerm * a_this)
 }
 
 /**
- *The destructor of the the #CRTerm class.
+ *The destructor of the #CRTerm class.
  *@param a_this the "this pointer" of the current instance
  *of #CRTerm.
  */
 void
-cr_term_destroy (CRTerm * a_this)
+cr_term_destroy (CRTerm * const a_this)
 {
         g_return_if_fail (a_this);
 
@@ -782,8 +782,5 @@ cr_term_destroy (CRTerm * a_this)
                 a_this->next = NULL;
         }
 
-        if (a_this) {
-                g_free (a_this);
-        }
-
+        g_free (a_this);
 }

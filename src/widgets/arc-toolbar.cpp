@@ -56,14 +56,10 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
 #include "../pen-context.h"
 #include "../sp-ellipse.h"
 #include "../mod360.h"
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -116,10 +112,9 @@ sp_arctb_startend_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *v
     {
         SPItem *item = SP_ITEM(items->data);
 
-        if (SP_IS_ARC(item) && SP_IS_GENERICELLIPSE(item)) {
+        if (SP_IS_GENERICELLIPSE(item)) {
 
             SPGenericEllipse *ge = SP_GENERICELLIPSE(item);
-            SPArc *arc = SP_ARC(item);
 
             if (!strcmp(value_name, "start")) {
                 ge->start = (gtk_adjustment_get_value(adj) * M_PI)/ 180;
@@ -127,9 +122,9 @@ sp_arctb_startend_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *v
                 ge->end = (gtk_adjustment_get_value(adj) * M_PI)/ 180;
             }
 
-            sp_genericellipse_normalize(ge);
-            (SP_OBJECT(arc))->updateRepr();
-            (SP_OBJECT(arc))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            ge->normalize();
+            (SP_OBJECT(ge))->updateRepr();
+            (SP_OBJECT(ge))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
             modmade = true;
         }
@@ -185,7 +180,7 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
              items = items->next)
         {
             SPItem *item = reinterpret_cast<SPItem*>(items->data);
-            if (SP_IS_ARC(item)) {
+            if (SP_IS_GENERICELLIPSE(item)) {
                 Inkscape::XML::Node *repr = item->getRepr();
                 repr->setAttribute("sodipodi:open", "true");
                 item->updateRepr();
@@ -198,7 +193,7 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
              items = items->next)
         {
             SPItem *item = reinterpret_cast<SPItem *>(items->data);
-            if (SP_IS_ARC(item)) {
+            if (SP_IS_GENERICELLIPSE(item)) {
                 Inkscape::XML::Node *repr = item->getRepr();
                 repr->setAttribute("sodipodi:open", NULL);
                 item->updateRepr();
@@ -290,7 +285,7 @@ static void sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GOb
          items = items->next)
     {
         SPItem *item = reinterpret_cast<SPItem *>(items->data);
-        if (SP_IS_ARC(item)) {
+        if (SP_IS_GENERICELLIPSE(item)) {
             n_selected++;
             repr = item->getRepr();
         }
@@ -341,7 +336,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
                                          _("Start"), _("Start:"),
                                          _("The angle (in degrees) from the horizontal to the arc's start point"),
                                          "/tools/shapes/arc/start", 0.0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, TRUE, "altx-arc",
+                                         GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-arc",
                                          -360.0, 360.0, 1.0, 10.0,
                                          0, 0, 0,
                                          sp_arctb_start_value_changed);
@@ -354,7 +349,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
                                          _("End"), _("End:"),
                                          _("The angle (in degrees) from the horizontal to the arc's end point"),
                                          "/tools/shapes/arc/end", 0.0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          -360.0, 360.0, 1.0, 10.0,
                                          0, 0, 0,
                                          sp_arctb_end_value_changed);

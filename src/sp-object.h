@@ -16,12 +16,9 @@
 /* SPObject flags */
 
 class SPObject;
-class SPObjectClass;
 
-#define SP_TYPE_OBJECT (sp_object_get_type())
-#define SP_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_OBJECT, SPObject))
-#define SP_OBJECT_CLASS(clazz) (G_TYPE_CHECK_CLASS_CAST((clazz), SP_TYPE_OBJECT, SPObjectClass))
-#define SP_IS_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OBJECT))
+#define SP_OBJECT(obj) (dynamic_cast<SPObject*>((SPObject*)obj))
+#define SP_IS_OBJECT(obj) (dynamic_cast<const SPObject*>((SPObject*)obj) != NULL)
 
 /* Async modification flags */
 #define SP_OBJECT_MODIFIED_FLAG (1 << 0)
@@ -109,12 +106,12 @@ enum {
 class SPDocument;
 
 /// Internal class consisting of two bits.
-struct SPIXmlSpace {
+class SPIXmlSpace {
+public:    
+    SPIXmlSpace(): set(0), value(SP_XML_SPACE_DEFAULT) {};
     guint set : 1;
     guint value : 1;
 };
-
-GType sp_object_get_type() G_GNUC_CONST;
 
 /*
  * Refcounting
@@ -169,7 +166,6 @@ SPObject *sp_object_href(SPObject *object, gpointer owner);
  */
 SPObject *sp_object_hunref(SPObject *object, gpointer owner);
 
-
 /**
  * SPObject is an abstract base class of all of the document nodes at the
  * SVG document level. Each SPObject subclass implements a certain SVG
@@ -187,12 +183,15 @@ SPObject *sp_object_hunref(SPObject *object, gpointer owner);
  * provides document level functionality such as the undo stack,
  * dictionary and so on. Source: doc/architecture.txt
  */
-class SPObject : public GObject {
+class SPObject { // : public GObject {
 public:
     enum CollectionPolicy {
         COLLECT_WITH_PARENT,
         ALWAYS_COLLECT
     };
+
+    SPObject();
+    virtual ~SPObject();
 
     unsigned int cloned : 1;
     unsigned int uflags : 8;
@@ -207,9 +206,13 @@ public:
     SPObject *next; /* Next object in linked list */
 
 private:
+    SPObject(const SPObject&);
+    SPObject& operator=(const SPObject&);
+
     gchar *id; /* Our very own unique id */
     Inkscape::XML::Node *repr; /* Our xml representation */
 public:
+    int refCount;
 
     /**
      * Returns the objects current ID string.
@@ -511,7 +514,7 @@ public:
     /**
      * Updates the object's repr based on the object's state.
      *
-     *  This method updates the the repr attached to the object to reflect the object's current
+     *  This method updates the repr attached to the object to reflect the object's current
      *  state; see the three-argument version for details.
      *
      * @param flags object write flags that apply to this update
@@ -791,9 +794,6 @@ private:
     /* Real handlers of repr signals */
 
 public:
-
-    static GType get_type() {return sp_object_get_type();}
-
     /**
      * Callback for attr_changed node event.
      */
@@ -822,37 +822,26 @@ public:
     static void repr_order_changed(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data);
 
 
-    friend class SPObjectClass;
     friend class SPObjectImpl;
-};
 
-/// The SPObject vtable.
-class SPObjectClass {
+protected:
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
+
+	virtual void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr);
+
+	virtual void set(unsigned int key, const gchar* value);
+
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
+
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
 public:
-    GObjectClass parent_class;
-
-    void (* build) (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr);
-    void (* release) (SPObject *object);
-
-    /* Virtual handlers of repr signals */
-    void (* child_added) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-    void (* remove_child) (SPObject *object, Inkscape::XML::Node *child);
-
-    void (* order_changed) (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *new_repr);
-
-    void (* set) (SPObject *object, unsigned int key, gchar const *value);
-
-    void (* read_content) (SPObject *object);
-
-    /* Update handler */
-    void (* update) (SPObject *object, SPCtx *ctx, unsigned int flags);
-    /* Modification handler */
-    void (* modified) (SPObject *object, unsigned int flags);
-
-    Inkscape::XML::Node * (* write) (SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, unsigned int flags);
-
-private:
-    friend class SPObject;
+	virtual void read_content();
 };
 
 

@@ -46,7 +46,7 @@ static KnotHolder *sp_lpe_knot_holder(SPItem *item, SPDesktop *desktop)
 {
     KnotHolder *knot_holder = new KnotHolder(desktop, item, NULL);
 
-    Inkscape::LivePathEffect::Effect *effect = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item));
+    Inkscape::LivePathEffect::Effect *effect = SP_LPE_ITEM(item)->getCurrentLPE();
     effect->addHandles(knot_holder, desktop, item);
 
     return knot_holder;
@@ -61,15 +61,15 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
     KnotHolder *knotholder = NULL;
 
     if (SP_IS_LPE_ITEM(item) &&
-        sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item)) &&
-        sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item))->isVisible() &&
-        sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item))->providesKnotholder()) {
+        SP_LPE_ITEM(item)->getCurrentLPE() &&
+        SP_LPE_ITEM(item)->getCurrentLPE()->isVisible() &&
+        SP_LPE_ITEM(item)->getCurrentLPE()->providesKnotholder()) {
         knotholder = sp_lpe_knot_holder(item, desktop);
     } else if (SP_IS_RECT(item)) {
         knotholder = new RectKnotHolder(desktop, item, NULL);
     } else if (SP_IS_BOX3D(item)) {
         knotholder = new Box3DKnotHolder(desktop, item, NULL);
-    } else if (SP_IS_ARC(item)) {
+    } else if (SP_IS_GENERICELLIPSE(item)) {
         knotholder = new ArcKnotHolder(desktop, item, NULL);
     } else if (SP_IS_STAR(item)) {
         knotholder = new StarKnotHolder(desktop, item, NULL);
@@ -785,33 +785,31 @@ sp_genericellipse_side(SPGenericEllipse *ellipse, Geom::Point const &p)
 void
 ArcKnotHolderEntityStart::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    int snaps = Inkscape::Preferences::get()->getInt("/options/rotationsnapsperpi/value", 12);
 
-    SPGenericEllipse *ge = SP_GENERICELLIPSE(item);
-    SPArc *arc = SP_ARC(item);
+    SPGenericEllipse *arc = SP_GENERICELLIPSE(item);
 
-    ge->closed = (sp_genericellipse_side(ge, p) == -1) ? TRUE : FALSE;
+    arc->setClosed(sp_genericellipse_side(arc, p) == -1);
 
-    Geom::Point delta = p - Geom::Point(ge->cx.computed, ge->cy.computed);
-    Geom::Scale sc(ge->rx.computed, ge->ry.computed);
-    ge->start = atan2(delta * sc.inverse());
-    if ( ( state & GDK_CONTROL_MASK )
-         && snaps )
-    {
-        ge->start = sp_round(ge->start, M_PI/snaps);
+    Geom::Point delta = p - Geom::Point(arc->cx.computed, arc->cy.computed);
+    Geom::Scale sc(arc->rx.computed, arc->ry.computed);
+
+    arc->start = atan2(delta * sc.inverse());
+
+    if ((state & GDK_CONTROL_MASK) && snaps) {
+        arc->start = sp_round(arc->start, M_PI / snaps);
     }
-    sp_genericellipse_normalize(ge);
-    (static_cast<SPObject *>(arc))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+    arc->normalize();
+    arc->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 Geom::Point
 ArcKnotHolderEntityStart::knot_get() const
 {
     SPGenericEllipse const *ge = SP_GENERICELLIPSE(item);
-    SPArc *arc = SP_ARC(item);
 
-    return sp_arc_get_xy(arc, ge->start);
+    return ge->getPointAtAngle(ge->start);
 }
 
 void
@@ -828,33 +826,31 @@ ArcKnotHolderEntityStart::knot_click(guint state)
 void
 ArcKnotHolderEntityEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+    int snaps = Inkscape::Preferences::get()->getInt("/options/rotationsnapsperpi/value", 12);
 
-    SPGenericEllipse *ge = SP_GENERICELLIPSE(item);
-    SPArc *arc = SP_ARC(item);
+    SPGenericEllipse *arc = SP_GENERICELLIPSE(item);
 
-    ge->closed = (sp_genericellipse_side(ge, p) == -1) ? TRUE : FALSE;
+    arc->setClosed(sp_genericellipse_side(arc, p) == -1);
 
-    Geom::Point delta = p - Geom::Point(ge->cx.computed, ge->cy.computed);
-    Geom::Scale sc(ge->rx.computed, ge->ry.computed);
-    ge->end = atan2(delta * sc.inverse());
-    if ( ( state & GDK_CONTROL_MASK )
-         && snaps )
-    {
-        ge->end = sp_round(ge->end, M_PI/snaps);
+    Geom::Point delta = p - Geom::Point(arc->cx.computed, arc->cy.computed);
+    Geom::Scale sc(arc->rx.computed, arc->ry.computed);
+
+    arc->end = atan2(delta * sc.inverse());
+
+    if ((state & GDK_CONTROL_MASK) && snaps) {
+        arc->end = sp_round(arc->end, M_PI/snaps);
     }
-    sp_genericellipse_normalize(ge);
-    (static_cast<SPObject *>(arc))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+    arc->normalize();
+    arc->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 Geom::Point
 ArcKnotHolderEntityEnd::knot_get() const
 {
     SPGenericEllipse const *ge = SP_GENERICELLIPSE(item);
-    SPArc *arc = SP_ARC(item);
 
-    return sp_arc_get_xy(arc, ge->end);
+    return ge->getPointAtAngle(ge->end);
 }
 
 
@@ -1164,7 +1160,7 @@ SpiralKnotHolderEntityInner::knot_set(Geom::Point const &p, Geom::Point const &o
     } else {
         // roll/unroll from inside
         gdouble   arg_t0;
-        sp_spiral_get_polar(spiral, spiral->t0, NULL, &arg_t0);
+        spiral->getPolar(spiral->t0, NULL, &arg_t0);
 
         gdouble   arg_tmp = atan2(dy, dx) - arg_t0;
         gdouble   arg_t0_new = arg_tmp - floor((arg_tmp+M_PI)/(2.0*M_PI))*2.0*M_PI + arg_t0;
@@ -1213,7 +1209,7 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
     } else { // roll/unroll
         // arg of the spiral outer end
         double arg_1;
-        sp_spiral_get_polar(spiral, 1, NULL, &arg_1);
+        spiral->getPolar(1, NULL, &arg_1);
 
         // its fractional part after the whole turns are subtracted
         double arg_r = arg_1 - sp_round(arg_1, 2.0*M_PI);
@@ -1241,7 +1237,7 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
         // the rad at that t:
         double rad_new = 0;
         if (t_temp > spiral->t0)
-            sp_spiral_get_polar(spiral, t_temp, &rad_new, NULL);
+            spiral->getPolar(t_temp, &rad_new, NULL);
 
         // change the revo (converting diff from radians to the number of turns)
         spiral->revo += diff/(2*M_PI);
@@ -1252,7 +1248,7 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
         if (!(state & GDK_MOD1_MASK) && rad_new > 1e-3 && rad_new/spiral->rad < 2) {
             // adjust t0 too so that the inner point stays unmoved
             double r0;
-            sp_spiral_get_polar(spiral, spiral->t0, &r0, NULL);
+            spiral->getPolar(spiral->t0, &r0, NULL);
             spiral->rad = rad_new;
             spiral->t0 = pow(r0 / spiral->rad, 1.0/spiral->exp);
         }
@@ -1268,7 +1264,7 @@ SpiralKnotHolderEntityInner::knot_get() const
 {
     SPSpiral const *spiral = SP_SPIRAL(item);
 
-    return sp_spiral_get_xy(spiral, spiral->t0);
+    return spiral->getXY(spiral->t0);
 }
 
 Geom::Point
@@ -1276,7 +1272,7 @@ SpiralKnotHolderEntityOuter::knot_get() const
 {
     SPSpiral const *spiral = SP_SPIRAL(item);
 
-    return sp_spiral_get_xy(spiral, 1.0);
+    return spiral->getXY(1.0);
 }
 
 void

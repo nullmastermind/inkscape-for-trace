@@ -36,8 +36,8 @@
 #include "xml/repr.h"
 
 #include "sp-color-notebook.h"
-#include "sp-linear-gradient-fns.h"
-#include "sp-radial-gradient-fns.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
 #include <inkscape.h>
@@ -1141,14 +1141,12 @@ static void sp_paint_selector_set_mode_swatch(SPPaintSelector *psel, SPPaintSele
 
     gtk_widget_set_sensitive(psel->style, TRUE);
 
-    SwatchSelector *swatchsel = NULL;
-
     if (psel->mode == SPPaintSelector::MODE_SWATCH){
         // swatchsel = static_cast<SwatchSelector*>(g_object_get_data(G_OBJECT(psel->selector), "swatch-selector"));
     } else {
         sp_paint_selector_clear_frame(psel);
         // Create new gradient selector
-        swatchsel = new SwatchSelector();
+        SwatchSelector *swatchsel = new SwatchSelector();
         swatchsel->show();
 
         swatchsel->connectGrabbedHandler( G_CALLBACK(sp_paint_selector_gradient_grabbed), psel );

@@ -367,22 +367,22 @@ class Poly_3D(inkex.Effect):
 #VEIW SETTINGS
         self.OptionParser.add_option("--r1_ax",
             action="store", type="string", 
-            dest="r1_ax", default=0)
+            dest="r1_ax", default="X-Axis")
         self.OptionParser.add_option("--r2_ax",
             action="store", type="string", 
-            dest="r2_ax", default=0)
+            dest="r2_ax", default="X-Axis")
         self.OptionParser.add_option("--r3_ax",
             action="store", type="string", 
-            dest="r3_ax", default=0)
+            dest="r3_ax", default="X-Axis")
         self.OptionParser.add_option("--r4_ax",
             action="store", type="string", 
-            dest="r4_ax", default=0)
+            dest="r4_ax", default="X-Axis")
         self.OptionParser.add_option("--r5_ax",
             action="store", type="string", 
-            dest="r5_ax", default=0)
+            dest="r5_ax", default="X-Axis")
         self.OptionParser.add_option("--r6_ax",
             action="store", type="string", 
-            dest="r6_ax", default=0)
+            dest="r6_ax", default="X-Axis")
         self.OptionParser.add_option("--r1_ang",
             action="store", type="float", 
             dest="r1_ang", default=0)
@@ -473,7 +473,7 @@ class Poly_3D(inkex.Effect):
                         'transform':poly_transform }
         poly = inkex.etree.SubElement(self.current_layer, 'g', poly_attribs)#the group to put everything in
         
-        #TRANFORMATION OF THE OBJECT (ROTATION, SCALE, ETC)
+        #TRANSFORMATION OF THE OBJECT (ROTATION, SCALE, ETC)
         
         trans_mat = mat(identity(3, float)) #init. trans matrix as identity matrix
         for i in range(1, 7):#for each rotation

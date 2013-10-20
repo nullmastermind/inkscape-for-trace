@@ -52,13 +52,9 @@
 #include "../xml/repr.h"
 #include "ui/uxmanager.h"
 #include "../ui/icon-names.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
 #include "../pen-context.h"
 #include "../tweak-context.h"
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -145,10 +141,10 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
                                                               "/tools/tweak/width", 15,
-                                                              GTK_WIDGET(desktop->canvas), NULL, holder, TRUE, "altx-tweak",
+                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-tweak",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_width_value_changed,  0.01, 0, 100 );
+                                                              sp_tweak_width_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -162,10 +158,10 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakForceAction",
                                                               _("Force"), _("Force:"), _("The force of the tweak action"),
                                                               "/tools/tweak/force", 20,
-                                                              GTK_WIDGET(desktop->canvas), NULL, holder, TRUE, "tweak-force",
+                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-force",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_force_value_changed,  0.01, 0, 100 );
+                                                              sp_tweak_force_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -371,10 +367,10 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               _("Fidelity"), _("Fidelity:"),
                                                               _("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"),
                                                               "/tools/tweak/fidelity", 50,
-                                                              GTK_WIDGET(desktop->canvas), NULL, holder, TRUE, "tweak-fidelity",
+                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-fidelity",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_fidelity_value_changed,  0.01, 0, 100 );
+                                                              sp_tweak_fidelity_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         if (mode == TWEAK_MODE_COLORPAINT || mode == TWEAK_MODE_COLORJITTER) {

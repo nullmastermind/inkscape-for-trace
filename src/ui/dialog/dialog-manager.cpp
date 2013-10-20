@@ -32,10 +32,10 @@
 #include "ui/dialog/livepatheffect-editor.h"
 #include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
-#include "ui/dialog/scriptdialog.h"
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
 #include "ui/dialog/tracedialog.h"
+#include "ui/dialog/pixelartdialog.h"
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/undo-history.h"
 #include "ui/dialog/panel-dialog.h"
@@ -114,12 +114,12 @@ DialogManager::DialogManager() {
         registerFactory("ObjectAttributes",    &create<ObjectAttributes,     FloatingBehavior>);
         registerFactory("ObjectProperties",    &create<ObjectProperties,     FloatingBehavior>);
 //        registerFactory("PrintColorsPreviewDialog",      &create<PrintColorsPreviewDialog,       FloatingBehavior>);
-        registerFactory("Script",              &create<ScriptDialog,         FloatingBehavior>);
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       FloatingBehavior>);
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
         registerFactory("TileDialog",          &create<TileDialog,           FloatingBehavior>);
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
+        registerFactory("PixelArt",            &create<PixelArtDialog,       FloatingBehavior>);
         registerFactory("Transformation",      &create<Transformation,       FloatingBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          FloatingBehavior>);
         registerFactory("InputDevices",        &create<InputDialog,          FloatingBehavior>);
@@ -148,12 +148,12 @@ DialogManager::DialogManager() {
         registerFactory("ObjectAttributes",    &create<ObjectAttributes,     DockBehavior>);
         registerFactory("ObjectProperties",    &create<ObjectProperties,     DockBehavior>);
 //        registerFactory("PrintColorsPreviewDialog",      &create<PrintColorsPreviewDialog,       DockBehavior>);
-        registerFactory("Script",              &create<ScriptDialog,         DockBehavior>);
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       DockBehavior>);
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
         registerFactory("TileDialog",          &create<TileDialog,           DockBehavior>);
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
+        registerFactory("PixelArt",            &create<PixelArtDialog,       DockBehavior>);
         registerFactory("Transformation",      &create<Transformation,       DockBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          DockBehavior>);
         registerFactory("InputDevices",        &create<InputDialog,          DockBehavior>);
@@ -243,14 +243,14 @@ Dialog *DialogManager::getDialog(GQuark name) {
 /**
  * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::showDialog(gchar const *name) {
-    showDialog(g_quark_from_string(name));
+void DialogManager::showDialog(gchar const *name, bool grabfocus) {
+    showDialog(g_quark_from_string(name), grabfocus);
 }
 
 /**
  * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::showDialog(GQuark name) {
+void DialogManager::showDialog(GQuark name, bool grabfocus) {
     bool wantTiming = Inkscape::Preferences::get()->getBool("/dialogs/debug/trackAppear", false);
     GTimer *timer = (wantTiming) ? g_timer_new() : 0; // if needed, must be created/started before getDialog()
     Dialog *dialog = getDialog(name);
@@ -261,7 +261,8 @@ void DialogManager::showDialog(GQuark name) {
             tracker->setAutodelete(true);
             timer = 0;
         }
-        dialog->present();
+        if (grabfocus)
+            dialog->present();
     }
 
     if ( timer ) {

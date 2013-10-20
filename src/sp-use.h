@@ -18,19 +18,19 @@
 #include "svg/svg-length.h"
 #include "sp-item.h"
 
-
-#define SP_TYPE_USE            (sp_use_get_type ())
-#define SP_USE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_USE, SPUse))
-#define SP_USE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_USE, SPUseClass))
-#define SP_IS_USE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_USE))
-#define SP_IS_USE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_USE))
+#define SP_USE(obj) (dynamic_cast<SPUse*>((SPObject*)obj))
+#define SP_IS_USE(obj) (dynamic_cast<const SPUse*>((SPObject*)obj) != NULL)
 
 class SPUseReference;
 
-struct SPUse : public SPItem {
+class SPUse : public SPItem {
+public:
+	SPUse();
+	virtual ~SPUse();
+
     // item built from the original's repr (the visible clone)
     // relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
-    SPObject *child;
+    SPItem *child;
 
     // SVG attrs
     SVGLength x;
@@ -48,18 +48,44 @@ struct SPUse : public SPItem {
 
     // a sigc connection for transformed signal, used to do move compensation
     sigc::connection _transformed_connection;
+
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+	virtual void set(unsigned key, gchar const *value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
+
+	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype);
+    virtual const char* displayName();
+	virtual gchar* description();
+	virtual void print(SPPrintContext *ctx);
+	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void hide(unsigned int key);
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+
+	SPItem *root();
+
+	SPItem *unlink();
+	SPItem *get_original();
+	Geom::Affine get_parent_transform();
+	Geom::Affine get_root_transform();
+
+private:
+    void href_changed();
+    void move_compensate(Geom::Affine const *mp);
+    void delete_self();
 };
 
-struct SPUseClass {
-    SPItemClass parent_class;
-};
-
-GType sp_use_get_type (void);
-
-SPItem *sp_use_unlink (SPUse *use);
-SPItem *sp_use_get_original (SPUse *use);
-Geom::Affine sp_use_get_parent_transform (SPUse *use);
-Geom::Affine sp_use_get_root_transform(SPUse *use);
-
-SPItem *sp_use_root(SPUse *use);
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

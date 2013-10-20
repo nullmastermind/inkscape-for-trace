@@ -40,7 +40,6 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
 
-#include "bind/javabind.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "display/curve.h"
@@ -81,6 +80,7 @@
 #include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/dialog/layers.h"
+#include "ui/dialog/new-from-template.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/symbols.h"
@@ -881,6 +881,9 @@ void FileVerb::perform(SPAction *action, void *data)
         case SP_VERB_FILE_CLOSE_VIEW:
             sp_ui_close_view(NULL);
             break;
+        case SP_VERB_FILE_TEMPLATES:
+            Inkscape::UI::NewFromTemplate::load_new_from_template();
+            break;
         default:
             break;
     }
@@ -1170,6 +1173,10 @@ void SelectionVerb::perform(SPAction *action, void *data)
             inkscape_dialogs_unhide();
             dt->_dlg_mgr->showDialog("Trace");
             break;
+        case SP_VERB_SELECTION_PIXEL_ART:
+            inkscape_dialogs_unhide();
+            dt->_dlg_mgr->showDialog("PixelArt");
+            break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
             sp_selection_create_bitmap_copy(dt);
             break;
@@ -1447,12 +1454,26 @@ void LayerVerb::perform(SPAction *action, void *data)
  */
 void ObjectVerb::perform( SPAction *action, void *data)
 {
-    g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
+    Inkscape::Selection *sel = sp_action_get_selection(action);
+
+    // We can perform some actions without a desktop
+    bool handled = true;
+    switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_OBJECT_TO_CURVE:
+            sp_selected_path_to_curves(sel, dt);
+            break;
+        default:
+            handled = false;
+            break;
+    }
+    if (handled) {
+        return;
+    }
+
+    g_return_if_fail(ensure_desktop_valid(action));
 
     SPEventContext *ec = dt->event_context;
-
-    Inkscape::Selection *sel = sp_desktop_selection(dt);
 
     if (sel->isEmpty())
         return;
@@ -1478,9 +1499,6 @@ void ObjectVerb::perform( SPAction *action, void *data)
             break;
         case SP_VERB_OBJECT_FLATTEN:
             sp_selection_remove_transform(dt);
-            break;
-        case SP_VERB_OBJECT_TO_CURVE:
-            sp_selected_path_to_curves(dt);
             break;
         case SP_VERB_OBJECT_FLOW_TEXT:
             text_flow_into_shape();
@@ -1992,10 +2010,6 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_DEBUG:
             dt->_dlg_mgr->showDialog("Messages");
             break;
-        case SP_VERB_DIALOG_SCRIPT:
-            //dt->_dlg_mgr->showDialog("Script");
-            Inkscape::Bind::JavaBindery::getInstance()->showConsole();
-            break;
         case SP_VERB_DIALOG_UNDO_HISTORY:
             dt->_dlg_mgr->showDialog("UndoHistory");
             break;
@@ -2104,6 +2118,9 @@ void TutorialVerb::perform(SPAction *action, void *data)
         case SP_VERB_TUTORIAL_TRACING:
             // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-tracing.svg"));
+            break;
+        case SP_VERB_TUTORIAL_TRACING_PIXELART:
+            sp_help_open_tutorial(NULL, (gpointer)_("tutorial-tracing-pixelart.svg"));
             break;
         case SP_VERB_TUTORIAL_CALLIGRAPHY:
             // TRANSLATORS: See "tutorial-basic.svg" comment.
@@ -2366,6 +2383,8 @@ Verb *Verb::_base_verbs[] = {
     new FileVerb(SP_VERB_FILE_CLOSE_VIEW, "FileClose", N_("_Close"),
                  N_("Close this document window"), GTK_STOCK_CLOSE),
     new FileVerb(SP_VERB_FILE_QUIT, "FileQuit", N_("_Quit"), N_("Quit Inkscape"), GTK_STOCK_QUIT),
+    new FileVerb(SP_VERB_FILE_TEMPLATES, "FileTemplates", N_("_Templates..."),
+                N_("Create new project from template"), INKSCAPE_ICON("dialog-templates")),
 
     // Edit
     new EditVerb(SP_VERB_EDIT_UNDO, "EditUndo", N_("_Undo"), N_("Undo last action"),
@@ -2452,9 +2471,9 @@ Verb *Verb::_base_verbs[] = {
                  N_("Select previous object or node"), NULL),
     new EditVerb(SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"),
                  N_("Deselect any selected objects or nodes"), INKSCAPE_ICON("edit-select-none")),
-    new EditVerb(SP_VERB_EDIT_GUIDES_AROUND_PAGE, "EditGuidesAroundPage", N_("Create _Guides Around the Page"),
-                 N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_DELETE_ALL_GUIDES, "EditRemoveAllGuides", N_("Delete All Guides"),
+                 N_("Create four guides aligned with the page borders"), NULL),
+    new EditVerb(SP_VERB_EDIT_GUIDES_AROUND_PAGE, "EditGuidesAroundPage", N_("Create _Guides Around the Page"),
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
                  N_("Show next editable path effect parameter"), INKSCAPE_ICON("path-effect-parameter-next")),
@@ -2533,6 +2552,8 @@ Verb *Verb::_base_verbs[] = {
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new SelectionVerb(SP_VERB_SELECTION_TRACE, "SelectionTrace", N_("_Trace Bitmap..."),
                       N_("Create one or more paths from a bitmap by tracing it"), INKSCAPE_ICON("bitmap-trace")),
+    new SelectionVerb(SP_VERB_SELECTION_PIXEL_ART, "SelectionPixelArt", N_("Trace Pixel Art..."),
+                      N_("Create paths using Kopf-Lischinski algorithm to vectorize pixel art"), INKSCAPE_ICON("pixelart-trace")),
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("Make a _Bitmap Copy"),
                       N_("Export selection to a bitmap and insert it into document"), INKSCAPE_ICON("selection-make-bitmap-copy") ),
     new SelectionVerb(SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
@@ -2821,8 +2842,6 @@ Verb *Verb::_base_verbs[] = {
                    N_("Check spelling of text in document"), GTK_STOCK_SPELL_CHECK ),
     new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."),
                    N_("View debug messages"), INKSCAPE_ICON("dialog-messages")),
-    new DialogVerb(SP_VERB_DIALOG_SCRIPT, "DialogScript", N_("S_cripts..."),
-                   N_("Run scripts"), INKSCAPE_ICON("dialog-scripts")),
     new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/Hide D_ialogs"),
                    N_("Show or hide all open dialogs"), INKSCAPE_ICON("show-dialogs")),
     new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogClonetiler", N_("Create Tiled Clones..."),
@@ -2867,6 +2886,8 @@ Verb *Verb::_base_verbs[] = {
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING, "TutorialsTracing", N_("Inkscape: T_racing"),
                      N_("Using bitmap tracing"), NULL/*"tutorial_tracing"*/),
+    new TutorialVerb(SP_VERB_TUTORIAL_TRACING_PIXELART, "TutorialsTracingPixelArt", N_("Inkscape: Tracing Pixel Art"),
+                     N_("Using Trace Pixel Art dialog"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_CALLIGRAPHY, "TutorialsCalligraphy", N_("Inkscape: _Calligraphy"),
                      N_("Using the Calligraphy pen tool"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_INTERPOLATE, "TutorialsInterpolate", N_("Inkscape: _Interpolate"),

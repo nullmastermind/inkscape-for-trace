@@ -97,7 +97,7 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
     ctx->setPSLevel(level);
     ctx->setEPS(eps);
     ctx->setTextToPath(texttopath);
-    renderer->_omitText = omittext;
+    ctx->setOmitText(omittext);
     ctx->setFilterToBitmap(filtertobitmap);
     ctx->setBitmapResolution(resolution);
 
@@ -136,12 +136,12 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
     if (ext == NULL)
         return;
 
-    const gchar *new_level = NULL;
     int level = CAIRO_PS_LEVEL_2;
     try {
-        new_level = mod->get_param_enum("PSlevel");
-        if((new_level != NULL) && (g_ascii_strcasecmp("PS3", new_level) == 0))
+        const gchar *new_level = mod->get_param_enum("PSlevel");
+        if((new_level != NULL) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
             level = CAIRO_PS_LEVEL_3;
+        }
     } catch(...) {}
 
     bool new_textToPath  = FALSE;
@@ -225,12 +225,12 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
     if (ext == NULL)
         return;
 
-    const gchar *new_level = NULL;
     int level = CAIRO_PS_LEVEL_2;
     try {
-        new_level = mod->get_param_enum("PSlevel");
-        if((new_level != NULL) && (g_ascii_strcasecmp("PS3", new_level) == 0))
+        const gchar *new_level = mod->get_param_enum("PSlevel");
+        if((new_level != NULL) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
             level = CAIRO_PS_LEVEL_3;
+        }
     } catch(...) {}
 
     bool new_textToPath  = FALSE;
@@ -340,7 +340,7 @@ CairoPsOutput::init (void)
                 "<_option value=\"page\">" N_("Use document's page size") "</_option>"
                 "<_option value=\"drawing\">" N_("Use exported object's size") "</_option>"
             "</param>"
-            "<param name=\"bleed\" gui-text=\"" N_("Bleed/margin (mm)") "\" type=\"float\" min=\"-10000\" max=\"10000\">0</param>\n"
+            "<param name=\"bleed\" gui-text=\"" N_("Bleed/margin (mm):") "\" type=\"float\" min=\"-10000\" max=\"10000\">0</param>\n"
             "<param name=\"exportId\" gui-text=\"" N_("Limit export to the object with ID:") "\" type=\"string\"></param>\n"
             "<output>\n"
             "<extension>.ps</extension>\n"

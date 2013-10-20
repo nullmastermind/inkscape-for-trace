@@ -23,9 +23,6 @@
 #include <stdlib.h>
 #include "svg/stringstream.h"
 
-
-gdouble fixed_g_ascii_strtod (const gchar *nptr, gchar **endptr);
-
 class NumberOptNumber {
 
 public:
@@ -123,6 +120,8 @@ public:
                 _set = FALSE;
                 optNumber_set = FALSE;
         }
+
+        g_strfreev(values);
     }
 
 };

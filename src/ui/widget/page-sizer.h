@@ -18,7 +18,7 @@
 #include "ui/widget/registered-widget.h"
 #include <sigc++/sigc++.h>
 
-#include "helper/units.h"
+#include "util/units.h"
 
 #include <gtkmm/alignment.h>
 #include <gtkmm/expander.h>
@@ -64,7 +64,7 @@ public:
     PaperSize(const Glib::ustring &nameArg,
 	          double smallerArg,
 	          double largerArg,
-			  SPUnitId unitArg)
+			  Inkscape::Util::Unit const *unitArg)
 	    {
 	    name    = nameArg;
 	    smaller = smallerArg;
@@ -108,7 +108,7 @@ public:
     /**
      * The units (px, pt, mm, etc) of this specification
      */	     
-    SPUnitId unit;
+    Inkscape::Util::Unit const *unit; /// pointer to object in UnitTable, do not delete
 
 private:
 
@@ -117,7 +117,7 @@ private:
 	    name    = "";
 	    smaller = 0.0;
 	    larger  = 0.0;
-	    unit    = SP_UNIT_PX;
+	    unit    = unit_table.getUnit("px");
 	    }
 
 	void assign(const PaperSize &other)
@@ -161,7 +161,7 @@ public:
      * Set the page size to the given dimensions.  If 'changeList' is
      * true, then reset the paper size list to the closest match
      */
-    void setDim (double w, double h, bool changeList=true);
+    void setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList=true);
     
     /**
      * Updates the scalar widgets for the fit margins.  (Just changes the value
@@ -179,7 +179,7 @@ protected:
     /**
      *	Find the closest standard paper size in the table, to the
      */
-    Gtk::ListStore::iterator find_paper_size (double w, double h) const;
+    Gtk::ListStore::iterator find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h) const;
  
     void fire_fit_canvas_to_selection_or_drawing();
     
@@ -252,13 +252,17 @@ protected:
 
     //callback
     void on_value_changed();
+    void on_units_changed();
     sigc::connection    _changedw_connection;
     sigc::connection    _changedh_connection;
+    sigc::connection    _changedu_connection;
 
     Registry            *_widgetRegistry;
 
     //### state - whether we are currently landscape or portrait
     bool                 _landscape;
+    
+    Glib::ustring       _unit;
 
 };
 

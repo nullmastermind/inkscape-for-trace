@@ -9,7 +9,8 @@
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    width="343pt"
-   height="340pt">
+   height="340pt"
+   viewBox="0 0 343 340">
   <defs />
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -32,5 +33,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <inkscape:_templateinfo>
+      <inkscape:_name>CD Cover 300dpi</inkscape:_name>
+      <inkscape:_shortdesc>Empty CD box cover.</inkscape:_shortdesc>
+      <inkscape:_keywords>CD cover disc disk 300dpi box</inkscape:_keywords>
+  </inkscape:_templateinfo>
   <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" />
 </svg>

@@ -13,7 +13,7 @@
 #include "line-snapper.h"
 
 class  SPDesktop;
-struct SPNamedView;
+class SPNamedView;
 struct SPCanvasBuf;
 class  SPDocument;
 
@@ -26,6 +26,10 @@ class Snapper;
 
 namespace XML {
 class Node;
+}
+
+namespace Util {
+class Unit;
 }
 
 enum GridType {
@@ -88,7 +92,7 @@ public:
     guint32 empcolor;     /**< Color for emphasis lines */
     gint empspacing;      /**< Spacing between emphasis lines */
 
-    SPUnit const* gridunit;
+    Inkscape::Util::Unit const* gridunit;  /**< points to Unit object in UnitTable (so don't delete it) */
 
     Inkscape::XML::Node * repr;
     SPDocument *doc;

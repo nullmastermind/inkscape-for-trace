@@ -74,6 +74,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
+#include <string>
+
 using Inkscape::DocumentUndo;
 
 #ifdef WITH_GNOME_VFS
@@ -124,25 +126,50 @@ static void sp_file_add_recent(gchar const *uri)
 /**
  * Create a blank document and add it to the desktop
  */
-SPDesktop *sp_file_new(const Glib::ustring &templ)
+SPDesktop *sp_file_new(const std::string &templ)
 {
     SPDocument *doc = SPDocument::createNewDoc( !templ.empty() ? templ.c_str() : 0 , TRUE, true );
     g_return_val_if_fail(doc != NULL, NULL);
-
-    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
+    
+    // Remove all the template info from xml tree
+    Inkscape::XML::Node *myRoot = doc->getReprRoot();
+    Inkscape::XML::Node *nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+    if (nodeToRemove != NULL){
+        DocumentUndo::setUndoSensitive(doc, false);
+        sp_repr_unparent(nodeToRemove);
+        delete nodeToRemove;
+        DocumentUndo::setUndoSensitive(doc, true);
+    }
+    
+    // Set viewBox if it doesn't exist
+    if (!doc->getRoot()->viewBox_set) {
+        DocumentUndo::setUndoSensitive(doc, false);
+        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+        DocumentUndo::setUndoSensitive(doc, true);
+    }
+    
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop)
+        desktop->setWaitingCursor();
+    
+    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
     g_return_val_if_fail(dtw != NULL, NULL);
+    sp_create_window(dtw, TRUE);
+    desktop = static_cast<SPDesktop *>(dtw->view);
+
     doc->doUnref();
 
-    sp_create_window(dtw, TRUE);
-    SPDesktop *dt = static_cast<SPDesktop *>(dtw->view);
-    sp_namedview_window_from_document(dt);
-    sp_namedview_update_layers_from_document(dt);
+    sp_namedview_window_from_document(desktop);
+    sp_namedview_update_layers_from_document(desktop);    
 
 #ifdef WITH_DBUS
-    Inkscape::Extension::Dbus::dbus_init_desktop_interface(dt);
+    Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
 #endif
+    
+    if (desktop)
+        desktop->clearWaitingCursor();
 
-    return dt;
+    return desktop;
 }
 
 Glib::ustring sp_file_default_template_uri()
@@ -195,10 +222,11 @@ SPDesktop* sp_file_new_default()
 {
     Glib::ustring templateUri = sp_file_default_template_uri();
     SPDesktop* desk = sp_file_new(sp_file_default_template_uri());
-    rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
+    //rdf_add_from_preferences( SP_ACTIVE_DOCUMENT );
 
     return desk;
 }
+
 
 /*######################
 ## D E L E T E
@@ -232,7 +260,8 @@ sp_file_exit()
  */
 bool sp_file_open(const Glib::ustring &uri,
                   Inkscape::Extension::Extension *key,
-                  bool add_to_recent, bool replace_empty)
+                  bool add_to_recent,
+                  bool replace_empty)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
@@ -257,13 +286,14 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     if (doc) {
+
         SPDocument *existing = desktop ? sp_desktop_document(desktop) : NULL;
 
         if (existing && existing->virgin && replace_empty) {
             // If the current desktop is empty, open the document there
             doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
             desktop->change_document(doc);
-            doc->emitResizedSignal(doc->getWidth(), doc->getHeight());
+            doc->emitResizedSignal(doc->getWidth().value("px"), doc->getHeight().value("px"));
         } else {
             // create a whole new desktop and window
             SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
@@ -273,7 +303,7 @@ bool sp_file_open(const Glib::ustring &uri,
 
         doc->virgin = FALSE;
 
-        // everyone who cares now has a reference, get rid of ours
+        // everyone who cares now has a reference, get rid of our`s
         doc->doUnref();
 
         // resize the window to match the document properties
@@ -1116,7 +1146,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                Inkscape::Extension::Extension *key)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-
+    bool cancelled = false;
+    
     //DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
     SPDocument *doc;
     try {
@@ -1125,6 +1156,9 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         doc = NULL;
     } catch (Inkscape::Extension::Input::open_failed &e) {
         doc = NULL;
+    } catch (Inkscape::Extension::Input::open_cancelled &e) {
+        doc = NULL;
+        cancelled = true;
     }
 
     if (doc != NULL) {
@@ -1221,7 +1255,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         DocumentUndo::done(in_doc, SP_VERB_FILE_IMPORT,
                            _("Import"));
         return new_obj;
-    } else {
+    } else if (!cancelled) {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri.c_str());
         sp_ui_error_dialog(text);
         g_free(text);

@@ -23,15 +23,16 @@ endif
 
 
 noinst_LIBRARIES =	\
-	libinkscape.a		\
-	dom/libdom.a		\
-	libcroco/libcroco.a	\
-	libavoid/libavoid.a	\
-	$(internal_GDL)		\
-	libcola/libcola.a	\
-	libvpsc/libvpsc.a	\
-	livarot/libvarot.a	\
-	2geom/lib2geom.a	\
+	dom/libdom.a			\
+	libcroco/libcroco.a		\
+	libavoid/libavoid.a		\
+	$(internal_GDL)			\
+	libuemf/libuemf.a   		\
+	libcola/libcola.a		\
+	libvpsc/libvpsc.a		\
+	livarot/libvarot.a		\
+	2geom/lib2geom.a		\
+	libdepixelize/libdepixelize.a	\
 	libinkversion.a
 
 all_libs =			\
@@ -82,8 +83,6 @@ AM_CPPFLAGS =	\
 	$(INKSCAPE_CFLAGS) \
 	-I$(top_srcdir)/cxxtest \
 	$(WIN32_CFLAGS) \
-	-I$(srcdir)/bind/javainc \
-	-I$(srcdir)/bind/javainc/linux \
 	-I$(builddir)/extension/dbus   \
 	$(X11_CFLAGS)
 
@@ -107,7 +106,6 @@ endif
 
 # Include all partial makefiles from subdirectories
 include Makefile_insert
-include bind/Makefile_insert
 include dialogs/Makefile_insert
 include display/Makefile_insert
 include dom/Makefile_insert
@@ -115,7 +113,6 @@ include extension/Makefile_insert
 include extension/dbus/Makefile_insert
 include extension/implementation/Makefile_insert
 include extension/internal/Makefile_insert
-include extension/script/Makefile_insert
 include filters/Makefile_insert
 include helper/Makefile_insert
 include io/Makefile_insert
@@ -128,6 +125,7 @@ include live_effects/Makefile_insert
 include live_effects/parameter/Makefile_insert
 include libvpsc/Makefile_insert
 include libcola/Makefile_insert
+include libuemf/Makefile_insert
 include svg/Makefile_insert
 include widgets/Makefile_insert
 include debug/Makefile_insert
@@ -141,13 +139,11 @@ include ui/widget/Makefile_insert
 include util/Makefile_insert
 include trace/Makefile_insert
 include 2geom/Makefile_insert
+include libdepixelize/Makefile_insert
 
 # Extra files not mentioned as sources to include in the source tarball
 EXTRA_DIST +=	\
-	$(top_srcdir)/Doxyfile	\
-	sp-skeleton.cpp sp-skeleton.h	\
-	util/makefile.in	\
-	bind/makefile.in	\
+	2geom/makefile.in	\
 	debug/makefile.in	\
 	dialogs/makefile.in	\
 	display/makefile.in	\
@@ -155,37 +151,40 @@ EXTRA_DIST +=	\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\
 	extension/makefile.in	\
-	extension/script/makefile.in	\
 	filters/makefile.in \
 	helper/makefile.in	\
 	io/makefile.in	\
-	io/crystalegg.xml	\
-	io/doc2html.xsl 	\
-	libgdl/makefile.in	\
-	libcroco/makefile.in	\
-	libnrtype/makefile.in	\
 	libavoid/makefile.in	\
+	libcroco/makefile.in	\
+	libgdl/makefile.in	\
+	libnrtype/makefile.in	\
+	libuemf/makefile.in \
 	livarot/makefile.in	\
 	live_effects/makefile.in	\
 	live_effects/parameter/makefile.in	\
 	svg/makefile.in		\
 	trace/makefile.in	\
-	ui/makefile.in		\
 	ui/cache/makefile.in	\
 	ui/dialog/makefile.in	\
+	ui/makefile.in		\
 	ui/view/makefile.in	\
 	ui/widget/makefile.in	\
 	util/makefile.in	\
+	util/makefile.in	\
 	widgets/makefile.in	\
 	xml/makefile.in		\
-	2geom/makefile.in	\
-	extension/internal/emf-win32-inout.cpp	\
-	extension/internal/emf-win32-inout.h	\
-	extension/internal/emf-win32-print.cpp	\
-	extension/internal/emf-win32-print.h	\
+	\
+	$(top_srcdir)/Doxyfile \
+	extension/internal/emf-inout.cpp  \
+	extension/internal/emf-inout.h    \
+	extension/internal/emf-print.cpp  \
+	extension/internal/emf-print.h    \
 	helper/sp-marshal.list	\
+	io/crystalegg.xml	\
+	io/doc2html.xsl 	\
 	show-preview.bmp \
 	winconsole.cpp \
+	libdepixelize/makefile.in	\
 	$(CXXTEST_TEMPLATE)
 
 # Extra files to remove when doing "make distclean"
@@ -199,13 +198,13 @@ DISTCLEANFILES =	\
 # ################################################
 
 # this should speed up the build
-libinkscape_a_SOURCES = $(ink_common_sources)
+#libinkscape_a_SOURCES = $(ink_common_sources)
 
-inkscape_SOURCES += main.cpp $(win32_sources)
+inkscape_SOURCES += main.cpp $(ink_common_sources) $(win32_sources)
 inkscape_LDADD = $(all_libs)
 inkscape_LDFLAGS = $(kdeldflags) $(mwindows)
 
-inkview_SOURCES += inkview.cpp $(win32_sources)
+inkview_SOURCES += inkview.cpp $(ink_common_sources) $(win32_sources)
 inkview_LDADD = $(all_libs)
 inkview_LDFLAGS = $(mwindows) 
 
@@ -254,10 +253,21 @@ check_PROGRAMS = cxxtests
 
 # List of all tests to be run.
 TESTS = $(check_PROGRAMS) ../share/extensions/test/run-all-extension-tests
-XFAIL_TESTS = $(check_PROGRAMS) ../share/extensions/test/run-all-extension-tests
 
-# including the the testsuites here ensures that they get distributed
-cxxtests_SOURCES = cxxtests.cpp $(CXXTEST_TESTSUITES)
+# FIXME: Currently, a number of cxxtest tests fail.  These should be fixed and
+#        the XFAIL_TESTS build target should be removed.
+#        See the following Launchpad bugs:
+#
+#          LP #1202271 <cxxtest: preferences-test.h fails>
+#          LP #1208013 <cxxtest: curve-test.h fails>
+#          LP #1208002 <cxxtest: svg-length-test.h fails>
+#          LP #1208005 <cxxtest: svg-path-geom-test.h fails>
+#          LP #1207502 <cxxtest: svg-affine-test.h fails>
+
+XFAIL_TESTS = $(check_PROGRAMS)
+
+# including the testsuites here ensures that they get distributed
+cxxtests_SOURCES = cxxtests.cpp $(CXXTEST_TESTSUITES) $(ink_common_sources) $(win32_sources)
 cxxtests_LDADD = $(all_libs)
 
 cxxtests.cpp: $(CXXTEST_TESTSUITES) $(CXXTEST_TEMPLATE)

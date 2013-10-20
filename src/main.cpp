@@ -11,7 +11,7 @@
  *   Michael Meeks <michael@helixcode.com>
  *   Chema Celorio <chema@celorio.com>
  *   Pawel Palucha
- *   Bryce Harrington <bryce@bryceharrington.com>
+ *   Bryce Harrington <bryce@bryceharrington.org>
  * ... and various people who have worked with various projects
  *   Jon A. Cruz <jon@oncruz.org>
  *   Abhishek Sharma
@@ -68,7 +68,6 @@
 #include "color.h"
 #include "sp-item.h"
 #include "sp-root.h"
-#include "unit-constants.h"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"
@@ -79,7 +78,6 @@
 
 #include "sp-namedview.h"
 #include "sp-guide.h"
-#include "sp-object-repr.h"
 #include "xml/repr.h"
 
 #include "io/sys.h"
@@ -855,8 +853,8 @@ static GSList *fixupFilenameEncoding( GSList* fl )
 static int sp_common_main( int argc, char const **argv, GSList **flDest )
 {
     /// \todo fixme: Move these to some centralized location (Lauris)
-    sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
-    sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
+    //sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
+    //sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
 
 
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
@@ -1283,12 +1281,15 @@ int sp_main_console(int argc, char const **argv)
 {
     /* We are started in text mode */
 
+#if !GLIB_CHECK_VERSION(2,36,0)
     /* Do this g_type_init(), so that we can use Xft/Freetype2 (Pango)
      * in a non-Gtk environment.  Used in libnrtype's
      * FontInstance.cpp and FontFactory.cpp.
      * http://mail.gnome.org/archives/gtk-list/2003-December/msg00063.html
      */
     g_type_init();
+#endif
+
     char **argv2 = const_cast<char **>(argv);
     gtk_init_check( &argc, &argv2 );
     //setlocale(LC_ALL, "");
@@ -1521,7 +1522,7 @@ static int sp_do_export_png(SPDocument *doc)
 
     // default dpi
     if (dpi == 0.0) {
-        dpi = PX_PER_IN;
+        dpi = Inkscape::Util::Quantity::convert(1, "in", "px");
     }
 
     unsigned long int width = 0;
@@ -1534,7 +1535,7 @@ static int sp_do_export_png(SPDocument *doc)
             g_warning("Export width %lu out of range (1 - %lu). Nothing exported.", width, (unsigned long int)PNG_UINT_31_MAX);
             return 1;
         }
-        dpi = (gdouble) width * PX_PER_IN / area.width();
+        dpi = (gdouble) Inkscape::Util::Quantity::convert(width, "in", "px") / area.width();
     }
 
     if (sp_export_height) {
@@ -1544,15 +1545,15 @@ static int sp_do_export_png(SPDocument *doc)
             g_warning("Export height %lu out of range (1 - %lu). Nothing exported.", height, (unsigned long int)PNG_UINT_31_MAX);
             return 1;
         }
-        dpi = (gdouble) height * PX_PER_IN / area.height();
+        dpi = (gdouble) Inkscape::Util::Quantity::convert(height, "in", "px") / area.height();
     }
 
     if (!sp_export_width) {
-        width = (unsigned long int) (area.width() * dpi / PX_PER_IN + 0.5);
+        width = (unsigned long int) (Inkscape::Util::Quantity::convert(area.width(), "px", "in") * dpi + 0.5);
     }
 
     if (!sp_export_height) {
-        height = (unsigned long int) (area.height() * dpi / PX_PER_IN + 0.5);
+        height = (unsigned long int) (Inkscape::Util::Quantity::convert(area.height(), "px", "in") * dpi + 0.5);
     }
 
     guint32 bgcolor = 0x00000000;

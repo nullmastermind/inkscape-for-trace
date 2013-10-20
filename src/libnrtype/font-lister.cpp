@@ -39,7 +39,7 @@ namespace Inkscape
         std::list<Glib::ustring> familyList;
         for (FamilyToStylesMap::iterator iter = familyStyleMap.begin();
                  iter != familyStyleMap.end();
-                 iter++) {
+                 ++iter) {
             familyList.push_back((*iter).first);
         }
         familyList.sort();
@@ -60,7 +60,7 @@ namespace Inkscape
                 std::list<Glib::ustring> &styleStrings = familyStyleMap[familyName];
                 for (std::list<Glib::ustring>::iterator it=styleStrings.begin();
                         it != styleStrings.end();
-                        it++) {
+                        ++it) {
                     styles = g_list_append(styles, g_strdup((*it).c_str()));
                 }
                 
@@ -203,6 +203,7 @@ namespace Inkscape
       font_list_store->thaw_notify();
     }
 
+    // FIXME: why do we parse the style attribute instead of the object's SPStyle?
     void
     FontLister::update_font_list_recursive( SPObject *r, std::list<Glib::ustring> *l ) {
 

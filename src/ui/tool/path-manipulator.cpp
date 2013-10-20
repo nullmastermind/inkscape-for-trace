@@ -203,7 +203,7 @@ void PathManipulator::writeXML()
         sp_object_ref(_path);
         _path->deleteObject(true, true);
         sp_object_unref(_path);
-        _path = 0;
+        _path = NULL;
     }
     _observer->unblock();
 }
@@ -459,7 +459,10 @@ void PathManipulator::weldSegments()
             if (j->selected()) ++num_selected;
             else ++num_unselected;
         }
-        if (num_selected < 3) continue;
+
+        // if 2 or fewer nodes are selected, there can't be any middle points to remove.
+        if (num_selected <= 2) continue;
+
         if (num_unselected == 0 && sp->closed()) {
             // if all nodes in a closed subpath are selected, the operation doesn't make much sense
             continue;
@@ -489,14 +492,16 @@ void PathManipulator::weldSegments()
             }
             if (num_points > 2) {
                 // remove nodes in the middle
+                // TODO: fit bezier to the former shape
                 sel_beg = sel_beg.next();
                 while (sel_beg != sel_end.prev()) {
                     NodeList::iterator next = sel_beg.next();
                     sp->erase(sel_beg);
                     sel_beg = next;
                 }
-                sel_beg = sel_end;
             }
+            sel_beg = sel_end;
+            // decrease num_selected by the number of points processed
             num_selected -= num_points;
         }
     }
@@ -1201,8 +1206,9 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     Geom::PathVector pathv = builder.peek() * (_edit_transform * _i2d_transform).inverse();
     _spcurve->set_pathvector(pathv);
     if (alert_LPE) {
-        if (SP_IS_LPE_ITEM(_path) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(_path))) {
-            PathEffectList effect_list = sp_lpe_item_get_effect_list(SP_LPE_ITEM(_path));
+        /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
+        if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()) {
+            PathEffectList effect_list = _path->getEffectList();
             LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>( effect_list.front()->lpeobject->get_lpe() );
             if (lpe_pwr) {
                 lpe_pwr->adjustForNewPath(pathv);
@@ -1304,6 +1310,10 @@ void PathManipulator::_getGeometry()
     } else {
         _spcurve->unref();
         _spcurve = _path->get_curve_for_edit();
+        // never allow NULL to sneak in here!
+        if (_spcurve == NULL) {
+            _spcurve = new SPCurve();
+        }
     }
 }
 
@@ -1328,7 +1338,7 @@ void PathManipulator::_setGeometry()
         if (_path->getRepr()->attribute("inkscape:original-d"))
             _path->set_original_curve(_spcurve, false, false);
         else
-            SP_SHAPE(_path)->setCurve(_spcurve, false);
+            _path->setCurve(_spcurve, false);
     }
 }
 

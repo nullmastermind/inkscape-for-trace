@@ -245,7 +245,6 @@ namespace XML {}
  *       - SPLinearGradient
  *       - SPRadialGradient
  *     - SPPattern [\ref sp-pattern.cpp, \ref sp-pattern.h]
- *   - SPSkeleton [\ref sp-skeleton.cpp, \ref sp-skeleton.h]
  *   - SPStop [\ref sp-stop.h]
  *   - SPString [\ref sp-string.cpp, \ref sp-string.h]
  *   - SPStyleElem [\ref sp-style-elem.cpp, \ref sp-style-elem.h]
@@ -334,8 +333,6 @@ namespace XML {}
  *
  * Inkscape::GC
  *
- * [\ref sp-metrics.cpp, \ref sp-metrics.h]
- *
  * [\ref prefs-utils.cpp] [\ref print.cpp]
  *
  * - Inkscape::GZipBuffer [\ref streams-gzip.h]
@@ -350,7 +347,7 @@ namespace XML {}
  * Inkscape::Whiteboard::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
  * [\ref document-undo.cpp]
  *
- * {\ref dialogs/} [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] [\ref unit-constants.h]
+ * {\ref dialogs/} [\ref decimal-round.h] [\ref enums.h]
  */
 
 

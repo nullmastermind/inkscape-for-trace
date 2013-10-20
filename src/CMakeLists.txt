@@ -40,17 +40,17 @@ set(sp_SRC
 	sp-item-update-cns.cpp
 	sp-item.cpp
 	sp-line.cpp
+	sp-linear-gradient.cpp
 	sp-lpe-item.cpp
 	sp-mask.cpp
 	sp-mesh-array.cpp
+	sp-mesh-gradient.cpp
 	sp-mesh-patch.cpp
 	sp-mesh-row.cpp
 	sp-metadata.cpp
-	sp-metrics.cpp
 	sp-missing-glyph.cpp
 	sp-namedview.cpp
 	sp-object-group.cpp
-	sp-object-repr.cpp
 	sp-object.cpp
 	sp-offset.cpp
 	sp-paint-server.cpp
@@ -58,11 +58,11 @@ set(sp_SRC
 	sp-pattern.cpp
 	sp-polygon.cpp
 	sp-polyline.cpp
+	sp-radial-gradient.cpp
 	sp-rect.cpp
 	sp-root.cpp
 	sp-script.cpp
 	sp-shape.cpp
-	# sp-skeleton.cpp
 	sp-spiral.cpp
 	sp-star.cpp
 	sp-stop.cpp
@@ -94,6 +94,7 @@ set(sp_SRC
 	sp-defs.h
 	sp-desc.h
 	sp-ellipse.h
+	sp-factory.h
 	sp-filter-primitive.h
 	sp-filter-reference.h
 	sp-filter-units.h
@@ -105,7 +106,6 @@ set(sp_SRC
 	sp-font.h
 	sp-glyph-kerning.h
 	sp-glyph.h
-	sp-gradient-fns.h
 	sp-gradient-reference.h
 	sp-gradient-spread.h
 	sp-gradient-test.h
@@ -123,25 +123,18 @@ set(sp_SRC
 	sp-item-update-cns.h
 	sp-item.h
 	sp-line.h
-	sp-linear-gradient-fns.h
 	sp-linear-gradient.h
 	sp-lpe-item.h
 	sp-marker-loc.h
 	sp-mask.h
 	sp-mesh-array.h
-	sp-mesh-gradient-fns.h
 	sp-mesh-gradient.h
-	sp-mesh-patch-fns.h
 	sp-mesh-patch.h
-	sp-mesh-row-fns.h
 	sp-mesh-row.h
 	sp-metadata.h
-	sp-metric.h
-	sp-metrics.h
 	sp-missing-glyph.h
 	sp-namedview.h
 	sp-object-group.h
-	sp-object-repr.h
 	sp-object.h
 	sp-offset.h
 	sp-paint-server-reference.h
@@ -150,13 +143,11 @@ set(sp_SRC
 	sp-pattern.h
 	sp-polygon.h
 	sp-polyline.h
-	sp-radial-gradient-fns.h
 	sp-radial-gradient.h
 	sp-rect.h
 	sp-root.h
 	sp-script.h
 	sp-shape.h
-	# sp-skeleton.h
 	sp-spiral.h
 	sp-star.h
 	sp-stop.h
@@ -216,7 +207,6 @@ set(inkscape_SRC
 	file.cpp
 	filter-chemistry.cpp
 	filter-enums.cpp
-	fixes.cpp
 	flood-context.cpp
 	gc-anchored.cpp
 	gc-finalized.cpp
@@ -239,7 +229,7 @@ set(inkscape_SRC
 	knotholder.cpp
 	layer-fns.cpp
 	layer-manager.cpp
-  layer-model.cpp
+	layer-model.cpp
 	line-geometry.cpp
 	line-snapper.cpp
 	lpe-tool-context.cpp
@@ -312,7 +302,6 @@ set(inkscape_SRC
 	MultiPrinter.h
 	PylogFormatter.h
 	TRPIFormatter.h
-	approx-equal.h
 	arc-context.h
 	attributes-test.h
 	attributes.h
@@ -328,6 +317,7 @@ set(inkscape_SRC
 	color-profile.h
 	color-rgba.h
 	color.h
+	colorspace.h
 	common-context.h
 	composite-undo-stack-observer.h
 	conditions.h
@@ -363,6 +353,7 @@ set(inkscape_SRC
 	event.h
 	extract-uri-test.h
 	extract-uri.h
+	factory.h
 	file.h
 	fill-or-stroke.h
 	filter-chemistry.h
@@ -399,7 +390,7 @@ set(inkscape_SRC
 	knotholder.h
 	layer-fns.h
 	layer-manager.h
-  layer-model.h
+	layer-model.h
 	line-geometry.h
 	line-snapper.h
 	lpe-tool-context.h
@@ -480,13 +471,13 @@ set(inkscape_SRC
 	text-context.h
 	text-editing.h
 	text-tag-attributes.h
+	tool-factory.h
 	tools-switch.h
 	transf_mat_3x4.h
 	tweak-context.h
 	unclump.h
 	undo-stack-observer.h
 	unicoderange.h
-	unit-constants.h
 	uri-references.h
 	uri.h
 	vanishing-point.h
@@ -497,7 +488,7 @@ set(inkscape_SRC
 )
 
 if(WIN32)
-    list(APPEND inkscape_SRC
+	list(APPEND inkscape_SRC
 		registrytool.cpp
 		#deptool.cpp
 		winmain.cpp
@@ -538,7 +529,6 @@ list(APPEND inkscape_SRC
 
 # All folders for internal inkscape
 # these call add_inkscape_source
-add_subdirectory(bind)
 add_subdirectory(debug)
 add_subdirectory(dialogs)
 add_subdirectory(display)
@@ -562,9 +552,11 @@ add_subdirectory(libavoid)
 add_subdirectory(libcola)
 add_subdirectory(libcroco)
 add_subdirectory(libgdl)
+add_subdirectory(libuemf)
 add_subdirectory(libvpsc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
+add_subdirectory(libdepixelize)
 
 
 get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)
@@ -577,21 +569,21 @@ set(inkscape_SRC
 # -----------------------------------------------------------------------------
 # Setup the executable
 # -----------------------------------------------------------------------------
-add_inkscape_lib(sp_LIB "${sp_SRC}")
-add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
+#add_inkscape_lib(sp_LIB "${sp_SRC}")
+#add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
 
 # make executable for INKSCAPE
-add_executable(inkscape ${main_SRC})
+add_executable(inkscape ${main_SRC} ${inkscape_SRC} ${sp_SRC})
 
 add_dependencies(inkscape inkscape_version)
 
 target_link_libraries(inkscape
 	# order from automake 
-	sp_LIB
+	#sp_LIB
 	nrtype_LIB
 
-	inkscape_LIB
-	sp_LIB # annoying, we need both!
+	#inkscape_LIB
+	#sp_LIB # annoying, we need both!
 	nrtype_LIB # annoying, we need both!
 
 	dom_LIB
@@ -601,7 +593,9 @@ target_link_libraries(inkscape
 	cola_LIB
 	vpsc_LIB
 	livarot_LIB
+	uemf_LIB
 	2geom_LIB
+	depixelize_LIB
 
 	${INKSCAPE_LIBS}
 )

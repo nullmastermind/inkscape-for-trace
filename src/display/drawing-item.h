@@ -113,6 +113,7 @@ public:
     void setMask(DrawingItem *item);
     void setZOrder(unsigned z);
     void setItemBounds(Geom::OptRect const &bounds);
+    void setFilterBounds(Geom::OptRect const &bounds);
 
     void setKey(unsigned key) { _key = key; }
     unsigned key() const { return _key; }
@@ -175,7 +176,9 @@ protected:
     Geom::Affine _ctm; ///< Total transform from item coords to display coords
     Geom::OptIntRect _bbox; ///< Bounding box in display (pixel) coords including stroke
     Geom::OptIntRect _drawbox; ///< Full visual bounding box - enlarged by filters, shrunk by clips and masks
-    Geom::OptRect _item_bbox; ///< Geometric bounding box in item coordinates
+    Geom::OptRect _item_bbox; ///< Geometric bounding box in item's user space.
+                              ///  This is used to compute the filter effect region and render in
+                              ///  objectBoundingBox units.
 
     DrawingItem *_clip;
     DrawingItem *_mask;

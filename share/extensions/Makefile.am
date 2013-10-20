@@ -54,6 +54,7 @@ extensions = \
 	edge3d.py \
 	embedimage.py \
 	embed_raster_in_svg.pl \
+	empty_page.py \
 	eqtexsvg.py \
 	export_gimp_palette.py \
 	extractimage.py \
@@ -166,6 +167,7 @@ extensions = \
 	text_flipcase.py \
 	text_randomcase.py \
 	text_braille.py \
+	text_merge.py \
 	triangle.py \
 	txt2svg.pl \
 	uniconv-ext.py \
@@ -184,6 +186,7 @@ extensions = \
 	yocto_css.py
 
 otherstuff = \
+	fontfix.conf \
 	inkweb.js \
 	jessyInk.js \
 	jessyInk_core_mouseHandler_noclick.js \
@@ -236,6 +239,7 @@ modules = \
 	edge3d.inx \
 	embedimage.inx \
 	embedselectedimages.inx \
+	empty_page.inx \
 	eps_input.inx \
 	eqtexsvg.inx \
 	export_gimp_palette.inx \
@@ -348,6 +352,7 @@ modules = \
 	text_flipcase.inx \
 	text_randomcase.inx \
 	text_braille.inx \
+	text_merge.inx \
 	triangle.inx \
 	txt2svg.inx \
 	voronoi2svg.inx \

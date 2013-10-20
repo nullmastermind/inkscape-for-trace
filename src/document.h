@@ -33,9 +33,8 @@ class Router;
 
 class  SPItem;
 class  SPObject;
-struct SPGroup;
-struct SPRoot;
-struct SPUnit;
+class SPGroup;
+class SPRoot;
 
 namespace Inkscape {
     struct Application;
@@ -47,11 +46,14 @@ namespace Inkscape {
         struct Document;
         class Node;
     }
+    namespace Util {
+        class Quantity;
+    }
 }
 
 class SPDefs;
 class SP3DBox;
-struct Persp3D;
+class Persp3D;
 class Persp3DImpl;
 class SPItemCtx;
 
@@ -225,12 +227,13 @@ public:
 
     SPDocument *doRef();
     SPDocument *doUnref();
-    gdouble getWidth() const;
-    gdouble getHeight() const;
+    Inkscape::Util::Quantity getWidth() const;
+    Inkscape::Util::Quantity getHeight() const;
     Geom::Point getDimensions() const;
     Geom::OptRect preferredBounds() const;
-    void setWidth(gdouble width, const SPUnit *unit);
-    void setHeight(gdouble height, const SPUnit *unit);
+    void setWidth(const Inkscape::Util::Quantity &width);
+    void setHeight(const Inkscape::Util::Quantity &height);
+    void setViewBox(const Geom::Rect &viewBox);
     void requestModified();
     gint ensureUpToDate();
     bool addResource(const gchar *key, SPObject *object);
@@ -253,8 +256,6 @@ private:
     void do_change_uri(gchar const *const filename, bool const rebase);
     void setupViewport(SPItemCtx *ctx);
 };
-
-struct SPUnit;
 
 /*
  * Ideas: How to overcome style invalidation nightmare

@@ -604,7 +604,10 @@ cr_statement_ruleset_to_string (CRStatement * a_this, glong a_indent)
 
         g_return_val_if_fail (a_this && a_this->type == RULESET_STMT, NULL);
 
-        GString *stringue = (GString *)g_string_new (NULL);
+        GString * stringue = (GString *)g_string_new (NULL);
+        if (!stringue) {
+            return result;
+        }
 
         if (a_this->kind.ruleset->sel_list) {
                 if (a_indent)
@@ -635,10 +638,9 @@ cr_statement_ruleset_to_string (CRStatement * a_this, glong a_indent)
         g_string_append (stringue, "}");
         result = stringue->str;
 
-        if (stringue) {
-                g_string_free (stringue, FALSE);
-                stringue = NULL;
-        }
+        g_string_free (stringue, FALSE);
+        stringue = NULL;
+
         if (tmp_str) {
                 g_free (tmp_str);
                 tmp_str = NULL;
@@ -1377,7 +1379,6 @@ cr_statement_at_import_rule_parse_from_buf (const guchar * a_buf,
         }
         if (media_list) {
                 GList *cur = NULL;
-
                 for (cur = media_list; media_list;
                      media_list = g_list_next (media_list)) {
                         if (media_list->data) {
@@ -1906,7 +1907,7 @@ cr_statement_ruleset_set_sel_list (CRStatement * a_this,
  *Gets a pointer to the list of declaration contained
  *in the ruleset statement.
  *@param a_this the current instance of #CRStatement.
- *@a_decl_list out parameter. A pointer to the the returned
+ *@a_decl_list out parameter. A pointer to the returned
  *list of declaration. Must not be NULL.
  *@return CR_OK upon successfull completion, an error code if something
  *bad happened.

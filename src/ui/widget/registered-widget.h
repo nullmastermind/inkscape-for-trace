@@ -32,7 +32,6 @@
 
 #include <gtkmm/checkbutton.h>
 
-struct SPUnit;
 class SPDocument;
 
 namespace Gtk {
@@ -128,6 +127,7 @@ private:
         repr = NULL;
         doc = NULL;
         write_undo = false;
+        event_type = -1;
     }
 };
 
@@ -166,8 +166,8 @@ public:
                          Inkscape::XML::Node* repr_in = NULL,
                          SPDocument *doc_in = NULL );
 
-    void setUnit (const SPUnit*);
-    Unit getUnit() const { return static_cast<UnitMenu*>(_widget)->getUnit(); };
+    void setUnit (const Glib::ustring);
+    Unit const * getUnit() const { return static_cast<UnitMenu*>(_widget)->getUnit(); };
     UnitMenu* getUnitMenu() const { return static_cast<UnitMenu*>(_widget); };
     sigc::connection _changed_connection;
 

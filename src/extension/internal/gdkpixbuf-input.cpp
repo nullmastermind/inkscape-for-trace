@@ -1,6 +1,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#include <boost/scoped_ptr.hpp>
 #include <glib/gprintf.h>
 #include <glibmm/i18n.h>
 #include "document-private.h"
@@ -12,30 +13,21 @@
 #include "selection-chemistry.h"
 #include "sp-image.h"
 #include "document-undo.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "image-resolution.h"
+#include "display/cairo-utils.h"
 #include <set>
 
 namespace Inkscape {
 
-namespace IO {
-GdkPixbuf* pixbuf_new_from_file( char const *utf8name, GError **error );
-}
-
 namespace Extension {
 namespace Internal {
-
-static std::set<Glib::ustring> create_lossy_set()
-{
-    std::set<Glib::ustring> lossy;
-    lossy.insert(".jpg");
-    lossy.insert(".jpeg");
-    return lossy;
-}
 
 SPDocument *
 GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 {
+    // determine whether the image should be embedded
+    // TODO: this logic seems very wrong
     bool embed = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring attr = prefs->getString("/dialogs/import/link");
@@ -52,73 +44,40 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
     }
 
     SPDocument *doc = NULL;
-    GdkPixbuf *pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
-    static std::set<Glib::ustring> lossy = create_lossy_set();
+    boost::scoped_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
 
-    if (pb) {         /* We are readable */
-        // TODO revisit: bool is_lossy;
-        Glib::ustring mime_type, ext;
-        Glib::ustring u = uri;
-        std::size_t dotpos = u.rfind('.');
-        if (dotpos != Glib::ustring::npos) {
-            ext = u.substr(dotpos, Glib::ustring::npos);
-        }
+    // TODO: the pixbuf is created again from the base64-encoded attribute in SPImage.
+    // Find a way to create the pixbuf only once.
 
-        // HACK: replace with something better based on GIO
-        if (!ext.empty() && lossy.find(ext) != lossy.end()) {
-            // TODO revisit: is_lossy = true;
-            mime_type = "image/jpeg";
-        } else {
-            // TODO revisit: is_lossy = false;
-            mime_type = "image/png";
-        }
-
+    if (pb) {
         doc = SPDocument::createNewDoc(NULL, TRUE, TRUE);
         bool saved = DocumentUndo::getUndoSensitive(doc);
         DocumentUndo::setUndoSensitive(doc, false); // no need to undo in this temporary document
 
-        double width = gdk_pixbuf_get_width(pb);
-        double height = gdk_pixbuf_get_height(pb);
-        double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", PX_PER_IN);
+        double width = pb->width();
+        double height = pb->height();
+        double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", Inkscape::Util::Quantity::convert(1, "in", "px"));
         bool forcexdpi = prefs->getBool("/dialogs/import/forcexdpi");
         ImageResolution *ir = 0;
         double xscale = 1;
         double yscale = 1;
 
-        gchar const *str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
-        if ( str ) {
-            gint dpi = atoi(str);
-            if ( dpi > 0 && dpi != 72 ) {
-                xscale = 72.0 / (double)dpi;
-            }
-        } else {
-            if (!ir && !forcexdpi)
-                ir = new ImageResolution(uri);
-            if (ir && ir->ok())
-                xscale = 900.0 / floor(10.*ir->x() + .5);  // round-off to 0.1 dpi
-            else
-                xscale = 90.0 / defaultxdpi;
-        }
-        width *= xscale;
 
-        str = gdk_pixbuf_get_option( pb, "Inkscape::DpiY" );
-        if ( str ) {
-            gint dpi = atoi(str);
-            if ( dpi > 0 && dpi != 72 ) {
-                yscale = 72.0 / (double)dpi;
-            }
-        } else {
-            if (!ir && !forcexdpi)
-                ir = new ImageResolution(uri);
-            if (ir && ir->ok())
-                yscale = 900.0 / floor(10.*ir->y() + .5);  // round-off to 0.1 dpi
-            else
-                yscale = 90.0 / defaultxdpi;
+        if (!ir && !forcexdpi) {
+            ir = new ImageResolution(uri);
         }
+        if (ir && ir->ok()) {
+            xscale = 900.0 / floor(10.*ir->x() + .5);  // round-off to 0.1 dpi
+            yscale = 900.0 / floor(10.*ir->y() + .5);
+        } else {
+            xscale = 90.0 / defaultxdpi;
+            yscale = 90.0 / defaultxdpi;
+        }
+
+        width *= xscale;
         height *= yscale;
 
-        if (ir)
-            delete ir;
+        delete ir; // deleting NULL is safe
 
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -127,7 +86,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         sp_repr_set_svg_double(image_node, "height", height);
 
         if (embed) {
-            sp_embed_image(image_node, pb, mime_type);
+            sp_embed_image(image_node, pb.get());
         } else {
             // convert filename to uri
             gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
@@ -139,12 +98,16 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             }
         }
 
-        g_object_unref(pb);
-
         // Add it to the current layer
         doc->getRoot()->appendChildRepr(image_node);
         Inkscape::GC::release(image_node);
         fit_canvas_to_drawing(doc);
+        
+        // Set viewBox if it doesn't exist
+        if (!doc->getRoot()->viewBox_set) {
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+        }
+        
         // restore undo, as now this document may be shown to the user if a bitmap was opened
         DocumentUndo::setUndoSensitive(doc, saved);
     } else {

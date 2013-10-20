@@ -35,7 +35,6 @@ EXTRA_DIST = \
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
-	mkinstalldirs		\
 	$(Graphics_in_files)	\
 	po/check-markup \
 	utf8-to-roff \
@@ -178,6 +177,7 @@ EXTRA_DIST = \
 	packaging/win32/languages/French.nsh	\
 	packaging/win32/languages/Galician.nsh	\
 	packaging/win32/languages/German.nsh	\
+	packaging/win32/languages/Hebrew.nsh	\
 	packaging/win32/languages/Indonesian.nsh \
 	packaging/win32/languages/Italian.nsh	\
 	packaging/win32/languages/Japanese.nsh	\

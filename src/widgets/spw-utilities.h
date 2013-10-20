@@ -5,7 +5,7 @@
  * Inkscape Widget Utilities
  *
  * Author:
- *   Bryce W. Harrington <brycehar@bryceharrington.com>
+ *   Bryce W. Harrington <brycehar@bryceharrington.org>
  * 
  * Copyright (C) 2003 Bryce Harrington
  *
@@ -55,11 +55,6 @@ spw_dropdown(GtkWidget *dialog, GtkWidget *table,
 	     gchar const *label, gchar *key, int row,
 	     GtkWidget *selector
 	     );
-
-GtkWidget *
-spw_unit_selector(GtkWidget *dialog, GtkWidget *table,
-		  gchar const *label, gchar *key, int row,
-		GtkWidget *us, GCallback cb, bool can_be_negative = false);
 
 void sp_set_font_size (GtkWidget *w, guint font);
 void sp_set_font_size_smaller (GtkWidget *w);

@@ -54,7 +54,6 @@
 #include "document.h"
 #include "event-log.h"
 #include "helper/action-context.h"
-#include "helper/units.h"
 #include "interface.h"
 #include "inkscape-private.h"
 #include "layer-fns.h"
@@ -236,12 +235,14 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
      * call "set" instead of "push".  Can we assume that there is only one
      * context ever?
      */
-    push_event_context (SP_TYPE_SELECT_CONTEXT, "/tools/select", SP_EVENT_CONTEXT_STATIC);
+    //push_event_context (SP_TYPE_SELECT_CONTEXT, "/tools/select", SP_EVENT_CONTEXT_STATIC);
+    //set_event_context(SP_TYPE_SELECT_CONTEXT, "/tools/select");
+    set_event_context2("/tools/select");
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
 
     Geom::Rect const d(Geom::Point(0.0, 0.0),
-                       Geom::Point(document->getWidth(), document->getHeight()));
+                       Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")));
 
     SP_CTRLRECT(page)->setRectangle(d);
     SP_CTRLRECT(page_border)->setRectangle(d);
@@ -258,7 +259,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
 
     /* Connect event for page resize */
-    _doc2dt[5] = document->getHeight();
+    _doc2dt[5] = document->getHeight().value("px");
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
 
     _modified_connection = namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
@@ -360,11 +361,18 @@ void SPDesktop::destroy()
     g_signal_handlers_disconnect_by_func(G_OBJECT (main), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
     g_signal_handlers_disconnect_by_func(G_OBJECT (drawing), (gpointer) G_CALLBACK(_arena_handler), this);
 
-    while (event_context) {
-        SPEventContext *ec = event_context;
-        event_context = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
+//    while (event_context) {
+//        SPEventContext *ec = event_context;
+//        event_context = ec->next;
+//        sp_event_context_finish (ec);
+//        g_object_unref (G_OBJECT (ec));
+//    }
+    //sp_event_context_finish(event_context);
+    event_context->finish();
+    //g_object_unref(G_OBJECT(event_context));
+    if (event_context) {
+    	delete event_context;
+    	event_context = 0;
     }
 
     delete layers;
@@ -391,6 +399,65 @@ void SPDesktop::destroy()
 SPDesktop::~SPDesktop()
 {
 }
+
+
+SPEventContext* SPDesktop::getEventContext() const {
+	return event_context;
+}
+
+Inkscape::Selection* SPDesktop::getSelection() const {
+	return selection;
+}
+
+SPDocument* SPDesktop::getDocument() const {
+	return doc();
+}
+
+SPCanvas* SPDesktop::getCanvas() const {
+	return SP_CANVAS_ITEM(main)->canvas;
+}
+
+SPCanvasItem* SPDesktop::getAcetate() const {
+	return acetate;
+}
+
+SPCanvasGroup* SPDesktop::getMain() const {
+	return main;
+}
+
+SPCanvasGroup* SPDesktop::getGridGroup() const {
+	return gridgroup;
+}
+
+SPCanvasGroup* SPDesktop::getGuides() const {
+	return guides;
+}
+
+SPCanvasItem* SPDesktop::getDrawing() const {
+	return drawing;
+}
+
+SPCanvasGroup* SPDesktop::getSketch() const {
+	return sketch;
+}
+
+SPCanvasGroup* SPDesktop::getControls() const {
+	return controls;
+}
+
+SPCanvasGroup* SPDesktop::getTempGroup() const {
+	return tempgroup;
+}
+
+Inkscape::MessageStack* SPDesktop::getMessageStack() const {
+	return messageStack();
+}
+
+SPNamedView* SPDesktop::getNamedView() const {
+	return namedview;
+}
+
+
 
 //--------------------------------------------------------------------
 /* Public methods */
@@ -601,62 +668,89 @@ SPDesktop::change_document (SPDocument *theDocument)
     _document_replaced_signal.emit (this, theDocument);
 }
 
+
+#include "tool-factory.h"
+
+void SPDesktop::set_event_context2(const std::string& toolName) {
+	SPEventContext* ec_old = event_context;
+
+	if (ec_old) {
+		ec_old->deactivate();
+	}
+
+	SPEventContext* ec_new = ToolFactory::instance().createObject(toolName);
+	ec_new->desktop = this;
+	ec_new->message_context = new Inkscape::MessageContext(this->messageStack());
+	ec_new->setup();
+
+	event_context = ec_new;
+
+	if (ec_old) {
+		ec_old->finish();
+		delete ec_old;
+	}
+
+	sp_event_context_activate(event_context);
+
+	_event_context_changed_signal.emit(this, event_context);
+}
+
 /**
  * Make desktop switch event contexts.
  */
-void
-SPDesktop::set_event_context (GType type, const gchar *config)
-{
-    SPEventContext *ec;
-    while (event_context) {
-        ec = event_context;
-        sp_event_context_deactivate (ec);
-        // we have to keep event_context valid during destruction - otherwise writing
-        // destructors is next to impossible
-        SPEventContext *next = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-        event_context = next;
-    }
-
-    // The event_context will be null. This means that it will be impossible
-    // to process any event invoked by the lines below. See for example bug
-    // LP #622350. Cutting and undoing again in the node tool resets the event
-    // context to the node tool. In this bug the line bellow invokes GDK_LEAVE_NOTIFY
-    // events which cannot be handled and must be discarded.
-    ec = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
-    ec->next = event_context;
-    event_context = ec;
-    // Now the event_context has been set again and we can process all events again
-    sp_event_context_activate (ec);
-    _event_context_changed_signal.emit (this, ec);
-}
+//void
+//SPDesktop::set_event_context (GType type, const gchar *config)
+//{
+//    //SPEventContext *ec;
+//    //while (event_context) {
+//        //ec = event_context;
+//        sp_event_context_deactivate (event_context);
+//        // we have to keep event_context valid during destruction - otherwise writing
+//        // destructors is next to impossible
+//      //  SPEventContext *next = ec->next;
+//        sp_event_context_finish (event_context);
+//        g_object_unref (G_OBJECT (event_context));
+//      //  event_context = next;
+//    //}
+//
+//    // The event_context will be null. This means that it will be impossible
+//    // to process any event invoked by the lines below. See for example bug
+//    // LP #622350. Cutting and undoing again in the node tool resets the event
+//    // context to the node tool. In this bug the line bellow invokes GDK_LEAVE_NOTIFY
+//    // events which cannot be handled and must be discarded.
+//    event_context = sp_event_context_new (type, this, config, SP_EVENT_CONTEXT_STATIC);
+//  //  ec->next = event_context;
+//    //event_context = ec;
+//    // Now the event_context has been set again and we can process all events again
+//    sp_event_context_activate (event_context);
+//    _event_context_changed_signal.emit (this, event_context);
+//}
 
 /**
  * Push event context onto desktop's context stack.
  */
-void
-SPDesktop::push_event_context (GType type, const gchar *config, unsigned int key)
-{
-    SPEventContext *ref, *ec;
-
-    if (event_context && event_context->key == key) return;
-    ref = event_context;
-    while (ref && ref->next && ref->next->key != key) ref = ref->next;
-    if (ref && ref->next) {
-        ec = ref->next;
-        ref->next = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-    }
-
-    if (event_context) sp_event_context_deactivate (event_context);
-    ec = sp_event_context_new (type, this, config, key);
-    ec->next = event_context;
-    event_context = ec;
-    sp_event_context_activate (ec);
-    _event_context_changed_signal.emit (this, ec);
-}
+//void
+//SPDesktop::push_event_context (GType type, const gchar *config, unsigned int key)
+//{
+//    SPEventContext *ref, *ec;
+//
+//    if (event_context && event_context->key == key) return;
+//    ref = event_context;
+//    while (ref && ref->next && ref->next->key != key) ref = ref->next;
+//    if (ref && ref->next) {
+//        ec = ref->next;
+//        ref->next = ec->next;
+//        sp_event_context_finish (ec);
+//        g_object_unref (G_OBJECT (ec));
+//    }
+//
+//    if (event_context) sp_event_context_deactivate (event_context);
+//    ec = sp_event_context_new (type, this, config, key);
+//    ec->next = event_context;
+//    event_context = ec;
+//    sp_event_context_activate (ec);
+//    _event_context_changed_signal.emit (this, ec);
+//}
 
 /**
  * Sets the coordinate status to a given point
@@ -787,7 +881,10 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
     canvas->scrollTo(x0 * newscale - border, y1 * -newscale - border, clear);
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    sp_box3d_context_update_lines(event_context);
+    //sp_box3d_context_update_lines(event_context);
+    if (SP_IS_BOX3D_CONTEXT(event_context)) {
+    	SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
+    }
 
     _widget->updateRulers();
     _widget->updateScrollbars(_d2w.descrim());
@@ -1011,7 +1108,7 @@ void
 SPDesktop::zoom_page()
 {
     Geom::Rect d(Geom::Point(0, 0),
-                 Geom::Point(doc()->getWidth(), doc()->getHeight()));
+                 Geom::Point(doc()->getWidth().value("px"), doc()->getHeight().value("px")));
 
     if (d.minExtent() < 1.0) {
         return;
@@ -1028,12 +1125,12 @@ SPDesktop::zoom_page_width()
 {
     Geom::Rect const a = get_display_area();
 
-    if (doc()->getWidth() < 1.0) {
+    if (doc()->getWidth().value("px") < 1.0) {
         return;
     }
 
     Geom::Rect d(Geom::Point(0, a.midpoint()[Geom::Y]),
-                 Geom::Point(doc()->getWidth(), a.midpoint()[Geom::Y]));
+                 Geom::Point(doc()->getWidth().value("px"), a.midpoint()[Geom::Y]));
 
     set_display_area(d, 10);
 }
@@ -1108,7 +1205,10 @@ SPDesktop::scroll_world (double dx, double dy, bool is_scrolling)
     canvas->scrollTo(viewbox.min()[Geom::X] - dx, viewbox.min()[Geom::Y] - dy, FALSE, is_scrolling);
 
     /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    sp_box3d_context_update_lines(event_context);
+    //sp_box3d_context_update_lines(event_context);
+    if (SP_IS_BOX3D_CONTEXT(event_context)) {
+		SP_BOX3D_CONTEXT(event_context)->_vpdrag->updateLines();
+	}
 
     _widget->updateRulers();
     _widget->updateScrollbars(_d2w.descrim());
@@ -1408,10 +1508,10 @@ void SPDesktop::setWaitingCursor()
     waiting_cursor = true;
 }
 
-void SPDesktop::clearWaitingCursor()
-{
-  if (waiting_cursor)
-      sp_event_context_update_cursor(sp_desktop_event_context(this));
+void SPDesktop::clearWaitingCursor() {
+  if (waiting_cursor) {
+      this->event_context->sp_event_context_update_cursor();
+  }
 }
 
 void SPDesktop::toggleColorProfAdjust()
@@ -1796,54 +1896,45 @@ SPDesktop::show_dialogs()
 
 
     /*
-     * Get each dialogs previous state from preferences and reopen on startup if needed.
-     * Map dialog 'open' verb ids to dialog last visible state preference.
-     * Would prefer to use the Dialog Manager to open, but currently it doesn't support non-dockable dialogs
+     * Get each dialogs previous state from preferences and reopen on startup if needed, without grabbing focus (canvas retains focus).
+     * Map dialog manager's dialog IDs to dialog last visible state preference. FIXME: store this correspondence in dialogs themselves!
      */
-    std::map<int, Glib::ustring> mapVerbPreference;
-    std::map<int, Glib::ustring>::const_iterator iter;
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_LAYERS, "/dialogs/layers") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_FILL_STROKE, "/dialogs/fillstroke") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_EXTENSIONEDITOR, "/dialogs/extensioneditor") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "/dialogs/align") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_METADATA, "/dialogs/documentmetadata") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_NAMEDVIEW, "/dialogs/documentoptions") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_FILTER_EFFECTS, "/dialogs/filtereffects") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_FIND, "/dialogs/find") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_GLYPHS, "/dialogs/glyphs") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_DEBUG, "/dialogs/messages") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_HELP_MEMORY, "/dialogs/memory") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_LIVE_PATH_EFFECT, "/dialogs/livepatheffect") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_UNDO_HISTORY, "/dialogs/undo-history") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_TRANSFORM, "/dialogs/transformation") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SWATCHES, "/dialogs/swatches") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_VIEW_ICON_PREVIEW, "/dialogs/iconpreview") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SVG_FONTS, "/dialogs/svgfonts") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_INPUT, "/dialogs/inputdevices") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_DISPLAY, "/dialogs/preferences") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_SELECTION_GRIDTILE, "/dialogs/gridtiler") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_SELECTION_TRACE, "/dialogs/trace") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_TEXT, "/dialogs/textandfont") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_EXPORT, "/dialogs/export") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_XML_EDITOR, "/dialogs/xml") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_FIND, "/dialogs/find") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_CLONETILER, "/dialogs/clonetiler") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_ITEM, "/dialogs/object") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SPELLCHECK, "/dialogs/spellcheck") );
-    mapVerbPreference.insert(std::make_pair ((int)SP_VERB_DIALOG_SYMBOLS, "/dialogs/symbols") );
+    std::map<Glib::ustring, Glib::ustring> mapVerbPreference;
+    mapVerbPreference.insert(std::make_pair ("LayersPanel", "/dialogs/layers") );
+    mapVerbPreference.insert(std::make_pair ("FillAndStroke", "/dialogs/fillstroke") );
+    mapVerbPreference.insert(std::make_pair ("ExtensionEditor", "/dialogs/extensioneditor") );
+    mapVerbPreference.insert(std::make_pair ("AlignAndDistribute", "/dialogs/align") );
+    mapVerbPreference.insert(std::make_pair ("DocumentMetadata", "/dialogs/documentmetadata") );
+    mapVerbPreference.insert(std::make_pair ("DocumentProperties", "/dialogs/documentoptions") );
+    mapVerbPreference.insert(std::make_pair ("FilterEffectsDialog", "/dialogs/filtereffects") );
+    mapVerbPreference.insert(std::make_pair ("Find", "/dialogs/find") );
+    mapVerbPreference.insert(std::make_pair ("Glyphs", "/dialogs/glyphs") );
+    mapVerbPreference.insert(std::make_pair ("Messages", "/dialogs/messages") );
+    mapVerbPreference.insert(std::make_pair ("Memory", "/dialogs/memory") );
+    mapVerbPreference.insert(std::make_pair ("LivePathEffect", "/dialogs/livepatheffect") );
+    mapVerbPreference.insert(std::make_pair ("UndoHistory", "/dialogs/undo-history") );
+    mapVerbPreference.insert(std::make_pair ("Transformation", "/dialogs/transformation") );
+    mapVerbPreference.insert(std::make_pair ("Swatches", "/dialogs/swatches") );
+    mapVerbPreference.insert(std::make_pair ("IconPreviewPanel", "/dialogs/iconpreview") );
+    mapVerbPreference.insert(std::make_pair ("SvgFontsDialog", "/dialogs/svgfonts") );
+    mapVerbPreference.insert(std::make_pair ("InputDevices", "/dialogs/inputdevices") );
+    mapVerbPreference.insert(std::make_pair ("InkscapePreferences", "/dialogs/preferences") );
+    mapVerbPreference.insert(std::make_pair ("TileDialog", "/dialogs/gridtiler") );
+    mapVerbPreference.insert(std::make_pair ("Trace", "/dialogs/trace") );
+    mapVerbPreference.insert(std::make_pair ("PixelArt", "/dialogs/pixelart") );
+    mapVerbPreference.insert(std::make_pair ("TextFont", "/dialogs/textandfont") );
+    mapVerbPreference.insert(std::make_pair ("Export", "/dialogs/export") );
+    mapVerbPreference.insert(std::make_pair ("XmlTree", "/dialogs/xml") );
+    mapVerbPreference.insert(std::make_pair ("CloneTiler", "/dialogs/clonetiler") );
+    mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object") );
+    mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
+    mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
 
-    for (iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); iter++) {
-        int verbId = iter->first;
+    for (std::map<Glib::ustring, Glib::ustring>::const_iterator iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); ++iter) {
         Glib::ustring pref = iter->second;
         int visible = prefs->getInt(pref + "/visible", 0);
         if (visible) {
-            Inkscape::Verb *verb = Inkscape::Verb::get(verbId);
-            if (verb) {
-                SPAction *action = verb->get_action(Inkscape::ActionContext(this));
-                if (action) {
-                    sp_action_perform(action, NULL);
-                }
-            }
+            _dlg_mgr->showDialog(iter->first.c_str(), false); // without grabbing focus, we need focus to remain on the canvas
         }
     }
 }

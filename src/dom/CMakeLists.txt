@@ -20,7 +20,6 @@ set(dom_SRC
 	
 	io/domstream.cpp
 	
-	util/digest.cpp
 	util/ziptool.cpp
 
 
@@ -39,7 +38,6 @@ set(dom_SRC
 	smilimpl.h
 	stylesheets.h
 	svg.h
-	svg2.h
 	svgimpl.h
 	svgreader.h
 	svgtypes.h
@@ -57,7 +55,6 @@ set(dom_SRC
 
 	io/domstream.h
 
-	util/digest.h
 	util/ziptool.h
 )
 

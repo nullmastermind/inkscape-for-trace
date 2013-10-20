@@ -78,11 +78,14 @@ public:
     XmlSource()
         : filename(0),
           encoding(0),
-          fp(0),
+          fp(NULL),
           firstFewLen(0),
+          LoadEntities(false),
+          cachedData(),
+          cachedPos(0),
           dummy("x"),
-          instr(0),
-          gzin(0)
+          instr(NULL),
+          gzin(NULL)
     {
         for (int k=0;k<4;k++)
         {
@@ -98,7 +101,9 @@ public:
         }
     }
 
-    int setFile( char const * filename );
+    int setFile( char const * filename, bool load_entities );
+
+    xmlDocPtr readXml();
 
     static int readCb( void * context, char * buffer, int len );
     static int closeCb( void * context );
@@ -112,12 +117,15 @@ private:
     FILE* fp;
     unsigned char firstFew[4];
     int firstFewLen;
+    bool LoadEntities; // Checks for SYSTEM Entities (requires cached data)
+    std::string cachedData;
+    unsigned int cachedPos;
     Inkscape::URI dummy;
     Inkscape::IO::UriInputStream* instr;
     Inkscape::IO::GzipInputStream* gzin;
 };
 
-int XmlSource::setFile(char const *filename)
+int XmlSource::setFile(char const *filename, bool load_entities=false)
 {
     int retVal = -1;
 
@@ -174,14 +182,62 @@ int XmlSource::setFile(char const *filename)
             retVal = 0; // no error
         }
     }
+    if(load_entities) {
+        this->cachedData = std::string("");
+        this->cachedPos = 0;
 
+        // First get data from file in typical way (cache it all)
+        char *buffer = new char [4096];
+        while(true) {
+            int len = this->read(buffer, 4096);
+            if(len <= 0) break;
+            buffer[len] = 0;
+            this->cachedData += buffer;
+        }
+        delete[] buffer;
+
+        // Check for SYSTEM or PUBLIC entities and remove them from the cache
+        GMatchInfo *info;
+        gint start, end;
+
+        GRegex *regex = g_regex_new(
+            "<!ENTITY\\s+[^>\\s]+\\s+(SYSTEM|PUBLIC\\s+\"[^>\"]+\")\\s+\"[^>\"]+\"\\s*>",
+            G_REGEX_CASELESS, G_REGEX_MATCH_NEWLINE_ANY, NULL);
+
+        g_regex_match (regex, this->cachedData.c_str(), G_REGEX_MATCH_NEWLINE_ANY, &info);
+
+        while (g_match_info_matches (info)) {
+            if (g_match_info_fetch_pos (info, 1, &start, &end))
+                this->cachedData.erase(start, end - start);
+            g_match_info_next (info, NULL);
+        }
+        g_match_info_free(info);
+        g_regex_unref(regex);
+    }
+    // Do this after loading cache, so reads don't return cache to fill cache.
+    this->LoadEntities = load_entities;
     return retVal;
 }
 
+xmlDocPtr XmlSource::readXml()
+{
+    int parse_options = XML_PARSE_HUGE | XML_PARSE_RECOVER;
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
+    if (!allowNetAccess) parse_options |= XML_PARSE_NONET;
+
+    // Allow NOENT only if we're filtering out SYSTEM and PUBLIC entities
+    if (LoadEntities)     parse_options |= XML_PARSE_NOENT;
+
+    return xmlReadIO( readCb, closeCb, this,
+                      filename, getEncoding(), parse_options);
+}
 
 int XmlSource::readCb( void * context, char * buffer, int len )
 {
     int retVal = -1;
+
     if ( context ) {
         XmlSource* self = static_cast<XmlSource*>(context);
         retVal = self->read( buffer, len );
@@ -203,7 +259,15 @@ int XmlSource::read( char *buffer, int len )
     int retVal = 0;
     size_t got = 0;
 
-    if ( firstFewLen > 0 ) {
+    if ( LoadEntities ) {
+        if (cachedPos >= cachedData.length()) {
+            return -1;
+        } else {
+            retVal = cachedData.copy(buffer, len, cachedPos);
+            cachedPos += retVal;
+            return retVal; // Do NOT continue.
+        }
+    } else if ( firstFewLen > 0 ) {
         int some = (len < firstFewLen) ? len : firstFewLen;
         memcpy( buffer, firstFew, some );
         if ( len < firstFewLen ) {
@@ -299,22 +363,20 @@ Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
         XmlSource src;
 
         if ( (src.setFile(filename) == 0) ) {
-            int parse_options = XML_PARSE_HUGE; // do not use XML_PARSE_NOENT ! see bug lp:1025185
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
-            if (!allowNetAccess) {
-                parse_options |= XML_PARSE_NONET;
+            doc = src.readXml();
+            rdoc = sp_repr_do_read( doc, default_ns );
+            // For some reason, failed ns loading results in this
+            // We try a system check version of load with NOENT for adobe
+            if(rdoc && strcmp(rdoc->root()->name(), "ns:svg") == 0) {
+                xmlFreeDoc( doc );
+                src.setFile(filename, true);
+                doc = src.readXml();
+                rdoc = sp_repr_do_read( doc, default_ns );
             }
-            doc = xmlReadIO( XmlSource::readCb,
-                             XmlSource::closeCb,
-                             &src,
-                             localFilename,
-                             src.getEncoding(),
-                             parse_options);
         }
     }
 
-    rdoc = sp_repr_do_read( doc, default_ns );
+
     if ( doc ) {
         xmlFreeDoc( doc );
     }
@@ -504,7 +566,6 @@ gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *nam
 
 static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map)
 {
-    Node *repr, *crepr;
     xmlAttrPtr prop;
     xmlNodePtr child;
     gchar c[256];
@@ -544,7 +605,7 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
     }
 
     sp_repr_qualified_name (c, 256, node->ns, node->name, default_ns, prefix_map);
-    repr = xml_doc->createElement(c);
+    Node *repr = xml_doc->createElement(c);
     /* TODO remember node->ns->prefix if node->ns != NULL */
 
     for (prop = node->properties; prop != NULL; prop = prop->next) {
@@ -561,7 +622,7 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
 
     child = node->xmlChildrenNode;
     for (child = node->xmlChildrenNode; child != NULL; child = child->next) {
-        crepr = sp_repr_svg_read_node (xml_doc, child, default_ns, prefix_map);
+        Node *crepr = sp_repr_svg_read_node (xml_doc, child, default_ns, prefix_map);
         if (crepr) {
             repr->appendChild(crepr);
             Inkscape::GC::release(crepr);
@@ -948,15 +1009,15 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     // THIS DOESN'T APPEAR TO DO ANYTHING. Can it be commented out or deleted?
     {
         GQuark const href_key = g_quark_from_static_string("xlink:href");
-        GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
+        //GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
 
         gchar const *xxHref = 0;
-        gchar const *xxAbsref = 0;
+        //gchar const *xxAbsref = 0;
         for ( List<AttributeRecord const> ai(attributes); ai; ++ai ) {
             if ( ai->key == href_key ) {
                 xxHref = ai->value;
-            } else if ( ai->key == absref_key ) {
-                xxAbsref = ai->value;
+            //} else if ( ai->key == absref_key ) {
+                //xxAbsref = ai->value;
             }
         }
 

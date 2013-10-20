@@ -59,7 +59,7 @@ Glib::ustring GuidelinePropertiesDialog::_angle_unit_status = DEG; // initialize
 GuidelinePropertiesDialog::~GuidelinePropertiesDialog() {
     // save current status
     _relative_toggle_status = _relative_toggle.get_active();
-    _angle_unit_status = _spin_angle.getUnit().abbr;
+    _angle_unit_status = _spin_angle.getUnit()->abbr;
 }
 
 void GuidelinePropertiesDialog::showDialog(SPGuide *guide, SPDesktop *desktop) {
@@ -230,7 +230,7 @@ void GuidelinePropertiesDialog::_setup() {
     _unit_menu.setUnitType(UNIT_TYPE_LINEAR);
     _unit_menu.setUnit("px");
     if (_desktop->namedview->doc_units) {
-        _unit_menu.setUnit( sp_unit_get_abbreviation(_desktop->namedview->doc_units) );
+        _unit_menu.setUnit( _desktop->namedview->doc_units->abbr );
     }
     _spin_angle.setUnit(_angle_unit_status);
 

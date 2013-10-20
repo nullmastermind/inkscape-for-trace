@@ -49,9 +49,6 @@
 #include "../graphlayout.h"
 #include "../helper/action.h"
 #include "../helper/action-context.h"
-#include "../helper/unit-menu.h"
-#include "../helper/units.h"
-#include "../helper/unit-tracker.h"
 #include "icon.h"
 #include "../ink-action.h"
 #include "../ink-comboboxentry-action.h"
@@ -79,7 +76,7 @@
 #include "calligraphy-toolbar.h"
 #include "connector-toolbar.h"
 #include "dropper-toolbar.h"
-#include "erasor-toolbar.h"
+#include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
 #include "mesh-toolbar.h"
@@ -99,9 +96,10 @@
 #include "toolbox.h"
 #include <gtk/gtk.h>
 
+#include "event-context.h"
+
 //#define DEBUG_TEXT
 
-using Inkscape::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::PrefPusher;
@@ -140,29 +138,29 @@ static struct {
     sp_verb_t verb;
     sp_verb_t doubleclick_verb;
 } const tools[] = {
-    { "SPSelectContext",   "select_tool",    SP_VERB_CONTEXT_SELECT,  SP_VERB_CONTEXT_SELECT_PREFS},
-    { "InkNodeTool",     "node_tool",      SP_VERB_CONTEXT_NODE, SP_VERB_CONTEXT_NODE_PREFS },
-    { "SPTweakContext",    "tweak_tool",     SP_VERB_CONTEXT_TWEAK, SP_VERB_CONTEXT_TWEAK_PREFS },
-    { "SPSprayContext",    "spray_tool",     SP_VERB_CONTEXT_SPRAY, SP_VERB_CONTEXT_SPRAY_PREFS },
-    { "SPZoomContext",     "zoom_tool",      SP_VERB_CONTEXT_ZOOM, SP_VERB_CONTEXT_ZOOM_PREFS },
-    { "SPMeasureContext",  "measure_tool",   SP_VERB_CONTEXT_MEASURE, SP_VERB_CONTEXT_MEASURE_PREFS },
-    { "SPRectContext",     "rect_tool",      SP_VERB_CONTEXT_RECT, SP_VERB_CONTEXT_RECT_PREFS },
-    { "Box3DContext",      "3dbox_tool",     SP_VERB_CONTEXT_3DBOX, SP_VERB_CONTEXT_3DBOX_PREFS },
-    { "SPArcContext",      "arc_tool",       SP_VERB_CONTEXT_ARC, SP_VERB_CONTEXT_ARC_PREFS },
-    { "SPStarContext",     "star_tool",      SP_VERB_CONTEXT_STAR, SP_VERB_CONTEXT_STAR_PREFS },
-    { "SPSpiralContext",   "spiral_tool",    SP_VERB_CONTEXT_SPIRAL, SP_VERB_CONTEXT_SPIRAL_PREFS },
-    { "SPPencilContext",   "pencil_tool",    SP_VERB_CONTEXT_PENCIL, SP_VERB_CONTEXT_PENCIL_PREFS },
-    { "SPPenContext",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
-    { "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
-    { "SPLPEToolContext",  "lpetool_tool",   SP_VERB_CONTEXT_LPETOOL, SP_VERB_CONTEXT_LPETOOL_PREFS },
-    { "SPEraserContext",   "eraser_tool",    SP_VERB_CONTEXT_ERASER, SP_VERB_CONTEXT_ERASER_PREFS },
-    { "SPFloodContext",    "paintbucket_tool",     SP_VERB_CONTEXT_PAINTBUCKET, SP_VERB_CONTEXT_PAINTBUCKET_PREFS },
-    { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
-    { "SPConnectorContext","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
-    { "SPGradientContext", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
-    { "SPMeshContext",     "mesh_tool",      SP_VERB_CONTEXT_MESH, SP_VERB_CONTEXT_MESH_PREFS },
-    { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
-    { NULL, NULL, 0, 0 }
+	{ "/tools/select",   "select_tool",    SP_VERB_CONTEXT_SELECT,  SP_VERB_CONTEXT_SELECT_PREFS},
+	{ "/tools/nodes",     "node_tool",      SP_VERB_CONTEXT_NODE, SP_VERB_CONTEXT_NODE_PREFS },
+	{ "/tools/tweak",    "tweak_tool",     SP_VERB_CONTEXT_TWEAK, SP_VERB_CONTEXT_TWEAK_PREFS },
+	{ "/tools/spray",    "spray_tool",     SP_VERB_CONTEXT_SPRAY, SP_VERB_CONTEXT_SPRAY_PREFS },
+	{ "/tools/zoom",     "zoom_tool",      SP_VERB_CONTEXT_ZOOM, SP_VERB_CONTEXT_ZOOM_PREFS },
+	{ "/tools/measure",  "measure_tool",   SP_VERB_CONTEXT_MEASURE, SP_VERB_CONTEXT_MEASURE_PREFS },
+	{ "/tools/shapes/rect",     "rect_tool",      SP_VERB_CONTEXT_RECT, SP_VERB_CONTEXT_RECT_PREFS },
+	{ "/tools/shapes/3dbox",      "3dbox_tool",     SP_VERB_CONTEXT_3DBOX, SP_VERB_CONTEXT_3DBOX_PREFS },
+	{ "/tools/shapes/arc",      "arc_tool",       SP_VERB_CONTEXT_ARC, SP_VERB_CONTEXT_ARC_PREFS },
+	{ "/tools/shapes/star",     "star_tool",      SP_VERB_CONTEXT_STAR, SP_VERB_CONTEXT_STAR_PREFS },
+	{ "/tools/shapes/spiral",   "spiral_tool",    SP_VERB_CONTEXT_SPIRAL, SP_VERB_CONTEXT_SPIRAL_PREFS },
+	{ "/tools/freehand/pencil",   "pencil_tool",    SP_VERB_CONTEXT_PENCIL, SP_VERB_CONTEXT_PENCIL_PREFS },
+	{ "/tools/freehand/pen",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
+	{ "/tools/calligraphic", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
+	{ "/tools/lpetool",  "lpetool_tool",   SP_VERB_CONTEXT_LPETOOL, SP_VERB_CONTEXT_LPETOOL_PREFS },
+	{ "/tools/eraser",   "eraser_tool",    SP_VERB_CONTEXT_ERASER, SP_VERB_CONTEXT_ERASER_PREFS },
+	{ "/tools/paintbucket",    "paintbucket_tool",     SP_VERB_CONTEXT_PAINTBUCKET, SP_VERB_CONTEXT_PAINTBUCKET_PREFS },
+	{ "/tools/text",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
+	{ "/tools/connector","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
+	{ "/tools/gradient", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
+	{ "/tools/mesh",     "mesh_tool",      SP_VERB_CONTEXT_MESH, SP_VERB_CONTEXT_MESH_PREFS },
+	{ "/tools/dropper",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
+	{ NULL, NULL, 0, 0 }
 };
 
 static struct {
@@ -175,49 +173,49 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "SPSelectContext", "select_toolbox", 0, sp_select_toolbox_prep,            "SelectToolbar",
+    { "/tools/select", "select_toolbox", 0, sp_select_toolbox_prep,            "SelectToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "InkNodeTool",   "node_toolbox",   0, sp_node_toolbox_prep,              "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",   0, sp_node_toolbox_prep,              "NodeToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPTweakContext",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
+    { "/tools/tweak",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
-    { "SPSprayContext",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
+    { "/tools/spray",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPZoomContext",   "zoom_toolbox",   0, sp_zoom_toolbox_prep,              "ZoomToolbar",
+    { "/tools/zoom",   "zoom_toolbox",   0, sp_zoom_toolbox_prep,              "ZoomToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPMeasureContext",   "measure_toolbox",   0, sp_measure_toolbox_prep,              "MeasureToolbar",
+    { "/tools/measure",   "measure_toolbox",   0, sp_measure_toolbox_prep,              "MeasureToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPStarContext",   "star_toolbox",   0, sp_star_toolbox_prep,              "StarToolbar",
+    { "/tools/shapes/star",   "star_toolbox",   0, sp_star_toolbox_prep,              "StarToolbar",
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
-    { "SPRectContext",   "rect_toolbox",   0, sp_rect_toolbox_prep,              "RectToolbar",
+    { "/tools/shapes/rect",   "rect_toolbox",   0, sp_rect_toolbox_prep,              "RectToolbar",
       SP_VERB_CONTEXT_RECT_PREFS,   "/tools/shapes/rect",     N_("Style of new rectangles")},
-    { "Box3DContext",  "3dbox_toolbox",  0, box3d_toolbox_prep,             "3DBoxToolbar",
+    { "/tools/shapes/3dbox",  "3dbox_toolbox",  0, box3d_toolbox_prep,             "3DBoxToolbar",
       SP_VERB_CONTEXT_3DBOX_PREFS,  "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
-    { "SPArcContext",    "arc_toolbox",    0, sp_arc_toolbox_prep,               "ArcToolbar",
+    { "/tools/shapes/arc",    "arc_toolbox",    0, sp_arc_toolbox_prep,               "ArcToolbar",
       SP_VERB_CONTEXT_ARC_PREFS,    "/tools/shapes/arc",      N_("Style of new ellipses")},
-    { "SPSpiralContext", "spiral_toolbox", 0, sp_spiral_toolbox_prep,            "SpiralToolbar",
+    { "/tools/shapes/spiral", "spiral_toolbox", 0, sp_spiral_toolbox_prep,            "SpiralToolbar",
       SP_VERB_CONTEXT_SPIRAL_PREFS, "/tools/shapes/spiral",   N_("Style of new spirals")},
-    { "SPPencilContext", "pencil_toolbox", 0, sp_pencil_toolbox_prep,            "PencilToolbar",
+    { "/tools/freehand/pencil", "pencil_toolbox", 0, sp_pencil_toolbox_prep,            "PencilToolbar",
       SP_VERB_CONTEXT_PENCIL_PREFS, "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
-    { "SPPenContext", "pen_toolbox", 0, sp_pen_toolbox_prep,                     "PenToolbar",
+    { "/tools/freehand/pen", "pen_toolbox", 0, sp_pen_toolbox_prep,                     "PenToolbar",
       SP_VERB_CONTEXT_PEN_PREFS,    "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
-    { "SPDynaDrawContext", "calligraphy_toolbox", 0, sp_calligraphy_toolbox_prep,"CalligraphyToolbar",
+    { "/tools/calligraphic", "calligraphy_toolbox", 0, sp_calligraphy_toolbox_prep,"CalligraphyToolbar",
       SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic", N_("Style of new calligraphic strokes")},
-    { "SPEraserContext", "eraser_toolbox", 0, sp_eraser_toolbox_prep,"EraserToolbar",
+    { "/tools/eraser", "eraser_toolbox", 0, sp_eraser_toolbox_prep,"EraserToolbar",
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},
-    { "SPLPEToolContext", "lpetool_toolbox", 0, sp_lpetool_toolbox_prep, "LPEToolToolbar",
+    { "/tools/lpetool", "lpetool_toolbox", 0, sp_lpetool_toolbox_prep, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
-    { "SPTextContext",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
+    { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPDropperContext", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
+    { "/tools/dropper", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPConnectorContext", "connector_toolbox", 0, sp_connector_toolbox_prep,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", 0, sp_connector_toolbox_prep,   "ConnectorToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPGradientContext", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
+    { "/tools/gradient", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPMeshContext", "mesh_toolbox", 0, sp_mesh_toolbox_prep, "MeshToolbar",
+    { "/tools/mesh", "mesh_toolbox", 0, sp_mesh_toolbox_prep, "MeshToolbar",
       SP_VERB_INVALID, 0, 0},
-    { "SPFloodContext",  "paintbucket_toolbox",  0, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
+    { "/tools/paintbucket",  "paintbucket_toolbox",  0, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
     { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
 };
@@ -1014,7 +1012,7 @@ GtkWidget *ToolboxFactory::createSnapToolbox()
     return toolboxNewCommon( tb, BAR_SNAP, GTK_POS_LEFT );
 }
 
-static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRate, guint digits )
+static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRate, guint digits, Inkscape::UI::Widget::UnitTracker *unit_tracker)
 {
 #if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> adj = Glib::wrap(adjustment, true);
@@ -1022,6 +1020,7 @@ static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRa
 #else
     Inkscape::UI::Widget::SpinButton *inkSpinner = new Inkscape::UI::Widget::SpinButton(*Glib::wrap(adjustment, true), climbRate, digits);
 #endif
+    inkSpinner->addUnitTracker(unit_tracker);
     inkSpinner = Gtk::manage( inkSpinner );
     GtkWidget *widget = GTK_WIDGET( inkSpinner->gobj() );
     return widget;
@@ -1031,12 +1030,12 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
                                                        GtkWidget *focusTarget,
-                                                       GtkWidget *us,
                                                        GObject *dataKludge,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
                                                        void (*callback)(GtkAdjustment *, GObject *),
+                                                       Inkscape::UI::Widget::UnitTracker *unit_tracker,
                                                        gdouble climb/* = 0.1*/, guint digits/* = 3*/, double factor/* = 1.0*/ )
 {
     static bool init = false;
@@ -1048,13 +1047,10 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
                                                              lower, upper, step, page, 0 ) );
-    if (us) {
-        sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us), adj );
-    }
 
     g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
 
-    EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, 0, climb, digits );
+    EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, 0, climb, digits, unit_tracker );
     if ( shortLabel ) {
         g_object_set( act, "short_label", shortLabel, NULL );
     }
@@ -1317,7 +1313,7 @@ void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 void update_tool_toolbox( SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget * /*toolbox*/ )
 {
     gchar const *const tname = ( eventcontext
-                                 ? g_type_name(G_OBJECT_TYPE(eventcontext))
+                                 ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                                  : NULL );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
@@ -1439,7 +1435,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 void update_aux_toolbox(SPDesktop * /*desktop*/, SPEventContext *eventcontext, GtkWidget *toolbox)
 {
     gchar const *tname = ( eventcontext
-                           ? g_type_name(G_OBJECT_TYPE(eventcontext))
+                           ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                            : NULL );
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));

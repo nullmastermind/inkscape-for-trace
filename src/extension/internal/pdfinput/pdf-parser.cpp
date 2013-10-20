@@ -34,7 +34,7 @@ extern "C" {
 #include "svg-builder.h"
 #include "Gfx.h"
 #include "pdf-parser.h"
-#include "unit-constants.h"
+#include "util/units.h"
 
 #include "goo/gmem.h"
 #include "goo/GooTimer.h"
@@ -279,14 +279,14 @@ PdfParser::PdfParser(XRef *xrefA, Inkscape::Extension::Internal::SvgBuilder *bui
   ignoreUndef = 0;
   operatorHistory = NULL;
   builder = builderA;
-  builder->setDocumentSize(state->getPageWidth()*PX_PER_PT,
-                           state->getPageHeight()*PX_PER_PT);
+  builder->setDocumentSize(Inkscape::Util::Quantity::convert(state->getPageWidth(), "pt", "px"),
+                           Inkscape::Util::Quantity::convert(state->getPageHeight(), "pt", "px"));
 
   double *ctm = state->getCTM();
   double scaledCTM[6];
   for (int i = 0; i < 6; ++i) {
     baseMatrix[i] = ctm[i];
-    scaledCTM[i] = PX_PER_PT * ctm[i];
+    scaledCTM[i] = Inkscape::Util::Quantity::convert(ctm[i], "pt", "px");
   }
   saveState();
   builder->setTransform((double*)&scaledCTM);
@@ -579,14 +579,13 @@ void PdfParser::execOp(Object *cmd, Object args[], int numArgs) {
   (this->*op->func)(argPtr, numArgs);
 }
 
-PdfOperator *PdfParser::findOp(char *name) {
-  int a, b, m, cmp;
-
-  a = -1;
-  b = numOps;
+PdfOperator* PdfParser::findOp(char *name) {
+  int a = -1;
+  int b = numOps;
+  int cmp = -1;
   // invariant: opTab[a] < name < opTab[b]
   while (b - a > 1) {
-    m = (a + b) / 2;
+    const int m = (a + b) / 2;
     cmp = strcmp(opTab[m].name, name);
     if (cmp < 0)
       a = m;

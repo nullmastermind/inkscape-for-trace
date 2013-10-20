@@ -18,23 +18,17 @@
 #include "sp-object.h"
 #include "display/nr-filter-component-transfer.h"
 
-#define SP_TYPE_FEFUNCR (sp_fefuncR_get_type())
-#define SP_TYPE_FEFUNCG (sp_fefuncG_get_type())
-#define SP_TYPE_FEFUNCB (sp_fefuncB_get_type())
-#define SP_TYPE_FEFUNCA (sp_fefuncA_get_type())
+#define SP_FEFUNCNODE(obj) (dynamic_cast<SPFeFuncNode*>((SPObject*)obj))
 
-#define SP_IS_FEFUNCR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCR))
-#define SP_IS_FEFUNCG(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCG))
-#define SP_IS_FEFUNCB(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCB))
-#define SP_IS_FEFUNCA(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_FEFUNCA))
+class SPFeFuncNode : public SPObject {
+public:
+    enum Channel {
+        R, G, B, A
+    };
 
-#define SP_FEFUNCNODE(obj) (SP_IS_FEFUNCR(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCR, SPFeFuncNode) : (SP_IS_FEFUNCG(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCG, SPFeFuncNode) : (SP_IS_FEFUNCB(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCB, SPFeFuncNode):(SP_IS_FEFUNCA(obj) ? G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_FEFUNCA, SPFeFuncNode): NULL))))
+	SPFeFuncNode(Channel channel);
+	virtual ~SPFeFuncNode();
 
-#define SP_FEFUNCNODE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_FEFUNCNODE, SPFeFuncNodeClass))
-
-#define SP_IS_FEFUNCNODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_FEFUNCNODE))
-
-struct SPFeFuncNode : public SPObject {
     Inkscape::Filters::FilterComponentTransferType type;
     std::vector<double> tableValues;
     double slope;
@@ -42,17 +36,18 @@ struct SPFeFuncNode : public SPObject {
     double amplitude;
     double exponent;
     double offset;
-};
+    Channel channel;
 
-/* Component Transfer funcNode class */
-struct SPFeFuncNodeClass {
-    SPObjectClass parent_class;
-};
+protected:
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
 
-GType sp_fefuncR_get_type();
-GType sp_fefuncG_get_type();
-GType sp_fefuncB_get_type();
-GType sp_fefuncA_get_type();
+	virtual void set(unsigned int key, const gchar* value);
+
+	virtual void update(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+};
 
 #endif /* !SP_FECOMPONENTTRANSFER_FUNCNODE_H_SEEN */
 

@@ -1,9 +1,6 @@
-#ifndef __SP_IMAGE_H__
-#define __SP_IMAGE_H__
-
-/*
+/** @file
  * SVG <image> implementation
- *
+ *//*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Edward Flick (EAF)
@@ -14,22 +11,25 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_TYPE_IMAGE (sp_image_get_type ())
-#define SP_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_IMAGE, SPImage))
-#define SP_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_IMAGE, SPImageClass))
-#define SP_IS_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_IMAGE))
-#define SP_IS_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_IMAGE))
-
-/* SPImage */
+#ifndef SEEN_INKSCAPE_SP_IMAGE_H
+#define SEEN_INKSCAPE_SP_IMAGE_H
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glibmm/ustring.h>
 #include "svg/svg-length.h"
-#include "sp-item.h"
+#include "sp-shape.h"
+
+#define SP_IMAGE(obj) (dynamic_cast<SPImage*>((SPObject*)obj))
+#define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj) != NULL)
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-struct SPImage : public SPItem {
+namespace Inkscape { class Pixbuf; }
+class SPImage : public SPItem {
+public:
+    SPImage();
+    virtual ~SPImage();
+
     SVGLength x;
     SVGLength y;
     SVGLength width;
@@ -53,20 +53,27 @@ struct SPImage : public SPItem {
     gchar *color_profile;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    GdkPixbuf *pixbuf;
-    gchar *pixPath;
-    time_t lastMod;
-};
+    Inkscape::Pixbuf *pixbuf;
 
-struct SPImageClass {
-    SPItemClass parent_class;
-};
+    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+    virtual void release();
+    virtual void set(unsigned int key, gchar const* value);
+    virtual void update(SPCtx *ctx, guint flags);
+    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+    virtual void modified(unsigned int flags);
 
-GType sp_image_get_type (void);
+    virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type);
+    virtual void print(SPPrintContext *ctx);
+    virtual const char* displayName();
+    virtual gchar* description();
+    virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+    virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs);
+    virtual Geom::Affine set_transform(Geom::Affine const &transform);
+};
 
 /* Return duplicate of curve or NULL */
 SPCurve *sp_image_get_curve (SPImage *image);
-void sp_embed_image(Inkscape::XML::Node *imgnode, GdkPixbuf *pb, Glib::ustring const &mime);
+void sp_embed_image(Inkscape::XML::Node *imgnode, Inkscape::Pixbuf *pb);
 void sp_image_refresh_if_outdated( SPImage* image );
 
 #endif

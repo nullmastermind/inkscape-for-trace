@@ -2,12 +2,10 @@
 set(io_SRC
 	base64stream.cpp
 	bufferstream.cpp
-	ftos.cpp
 	gzipstream.cpp
 	inkjar.cpp
 	inkscapestream.cpp
 	resource.cpp
-	simple-sax.cpp
 	stringstream.cpp
 	sys.cpp
 	uristream.cpp
@@ -17,12 +15,10 @@ set(io_SRC
 	# Headers
 	base64stream.h
 	bufferstream.h
-	ftos.h
 	gzipstream.h
 	inkjar.h
 	inkscapestream.h
 	resource.h
-	simple-sax.h
 	stringstream.h
 	sys.h
 	uristream.h

@@ -709,12 +709,14 @@ GrDraggable::GrDraggable(SPItem *item, GrPointType point_type, guint point_i, In
     point_i(point_i),
     fill_or_stroke(fill_or_stroke)
 {
-    g_object_ref(G_OBJECT(item));
+    //g_object_ref(G_OBJECT(item));
+	sp_object_ref(item);
 }
 
 GrDraggable::~GrDraggable()
 {
-    g_object_unref (G_OBJECT (this->item));
+    //g_object_unref (G_OBJECT (this->item));
+	sp_object_unref(this->item);
 }
 
 
@@ -877,7 +879,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
         if (!bsp.getSnapped()) {
             // If we didn't truly snap to an object or to a grid, then we will still have to look for the
             // closest projection onto one of the constraints. findBestSnap() will not do this for us
-            for (std::list<Inkscape::SnappedPoint>::const_iterator i = isr.points.begin(); i != isr.points.end(); i++) {
+            for (std::list<Inkscape::SnappedPoint>::const_iterator i = isr.points.begin(); i != isr.points.end(); ++i) {
                 if (i == isr.points.begin() || (Geom::L2((*i).getPoint() - p) < Geom::L2(bsp.getPoint() - p))) {
                     bsp.setPoint((*i).getPoint());
                     bsp.setTarget(Inkscape::SNAPTARGET_CONSTRAINED_ANGLE);
@@ -1415,7 +1417,7 @@ void GrDragger::updateTip()
 
     if (g_slist_length (this->draggables) == 1) {
         GrDraggable *draggable = (GrDraggable *) this->draggables->data;
-        char *item_desc = draggable->item->description();
+        char *item_desc = draggable->item->detailedDescription();
         switch (draggable->point_type) {
             case POINT_LG_MID:
             case POINT_RG_MID1:
@@ -1436,7 +1438,7 @@ void GrDragger::updateTip()
         }
         g_free(item_desc);
     } else if (g_slist_length (draggables) == 2 && isA (POINT_RG_CENTER) && isA (POINT_RG_FOCUS)) {
-        this->knot->tip = g_strdup_printf (_("Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to separate focus"));
+        this->knot->tip = g_strdup_printf ("%s", _("Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to separate focus"));
     } else {
         int length = g_slist_length (this->draggables);
         this->knot->tip = g_strdup_printf (ngettext("Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to separate",

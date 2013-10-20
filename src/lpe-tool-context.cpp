@@ -37,16 +37,11 @@
 #include "display/canvas-text.h"
 #include "message-stack.h"
 #include "sp-path.h"
-#include "helper/units.h"
+#include "util/units.h"
 
 #include "lpe-tool-context.h"
 
-static void sp_lpetool_context_dispose(GObject *object);
-
-static void sp_lpetool_context_setup(SPEventContext *ec);
-static void sp_lpetool_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *);
-static gint sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event);
-static gint sp_lpetool_context_root_handler(SPEventContext *ec, GdkEvent *event);
+using Inkscape::Util::unit_table;
 
 void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpointer data);
 
@@ -64,96 +59,80 @@ SubtoolEntry lpesubtools[] = {
     {Inkscape::LivePathEffect::MIRROR_SYMMETRY, "draw-geometry-mirror"}
 };
 
-G_DEFINE_TYPE(SPLPEToolContext, sp_lpetool_context, SP_TYPE_PEN_CONTEXT);
 
-static void
-sp_lpetool_context_class_init(SPLPEToolContextClass *klass)
-{
-    GObjectClass *object_class = (GObjectClass *) klass;
-    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
+#include "tool-factory.h"
 
-    object_class->dispose = sp_lpetool_context_dispose;
+namespace {
+	SPEventContext* createLPEToolContext() {
+		return new SPLPEToolContext();
+	}
 
-    event_context_class->setup = sp_lpetool_context_setup;
-    event_context_class->set = sp_lpetool_context_set;
-    event_context_class->root_handler = sp_lpetool_context_root_handler;
-    event_context_class->item_handler = sp_lpetool_context_item_handler;
+	bool lpetoolContextRegistered = ToolFactory::instance().registerObject("/tools/lpetool", createLPEToolContext);
 }
 
-static void
-sp_lpetool_context_init(SPLPEToolContext *lc)
-{
-    lc->cursor_shape = cursor_crosshairs_xpm;
-    lc->hot_x = 7;
-    lc->hot_y = 7;
-
-    lc->canvas_bbox = NULL;
-    lc->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
-
-    new (&lc->sel_changed_connection) sigc::connection();
+const std::string& SPLPEToolContext::getPrefsPath() {
+	return SPLPEToolContext::prefsPath;
 }
 
-static void
-sp_lpetool_context_dispose(GObject *object)
-{
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(object);
-    delete lc->shape_editor;
+const std::string SPLPEToolContext::prefsPath = "/tools/lpetool";
 
-    if (lc->canvas_bbox) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(lc->canvas_bbox));
-        lc->canvas_bbox = NULL;
+SPLPEToolContext::SPLPEToolContext() : SPPenContext() {
+	this->mode = Inkscape::LivePathEffect::BEND_PATH;
+	this->shape_editor = 0;
+
+	this->cursor_shape = cursor_crosshairs_xpm;
+    this->hot_x = 7;
+    this->hot_y = 7;
+
+    this->canvas_bbox = NULL;
+    this->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
+}
+
+SPLPEToolContext::~SPLPEToolContext() {
+    delete this->shape_editor;
+    this->shape_editor = NULL;
+
+    if (this->canvas_bbox) {
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(this->canvas_bbox));
+        this->canvas_bbox = NULL;
     }
 
-    lpetool_delete_measuring_items(lc);
-    delete lc->measuring_items;
-    lc->measuring_items = NULL;
+    lpetool_delete_measuring_items(this);
+    delete this->measuring_items;
+    this->measuring_items = NULL;
 
-    lc->sel_changed_connection.disconnect();
-    lc->sel_changed_connection.~connection();
-
-    if (lc->_lpetool_message_context) {
-        delete lc->_lpetool_message_context;
-    }
-
-    G_OBJECT_CLASS(sp_lpetool_context_parent_class)->dispose(object);
+    this->sel_changed_connection.disconnect();
 }
 
-static void
-sp_lpetool_context_setup(SPEventContext *ec)
-{
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(ec);
+void SPLPEToolContext::setup() {
+    SPPenContext::setup();
 
-    if (((SPEventContextClass *) sp_lpetool_context_parent_class)->setup)
-        ((SPEventContextClass *) sp_lpetool_context_parent_class)->setup(ec);
-
-    Inkscape::Selection *selection = sp_desktop_selection (ec->desktop);
+    Inkscape::Selection *selection = sp_desktop_selection (this->desktop);
     SPItem *item = selection->singleItem();
 
-    lc->sel_changed_connection.disconnect();
-    lc->sel_changed_connection =
-        selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_lpetool_context_selection_changed), (gpointer)lc));
+    this->sel_changed_connection.disconnect();
+    this->sel_changed_connection =
+        selection->connectChanged(sigc::bind(sigc::ptr_fun(&sp_lpetool_context_selection_changed), (gpointer)this));
 
-    lc->shape_editor = new ShapeEditor(ec->desktop);
+    this->shape_editor = new ShapeEditor(this->desktop);
 
-    lpetool_context_switch_mode(lc, Inkscape::LivePathEffect::INVALID_LPE);
-    lpetool_context_reset_limiting_bbox(lc);
-    lpetool_create_measuring_items(lc);
+    lpetool_context_switch_mode(this, Inkscape::LivePathEffect::INVALID_LPE);
+    lpetool_context_reset_limiting_bbox(this);
+    lpetool_create_measuring_items(this);
 
 // TODO temp force:
-    ec->enableSelectionCue();
+    this->enableSelectionCue();
     
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (item) {
-        lc->shape_editor->set_item(item, SH_NODEPATH);
-        lc->shape_editor->set_item(item, SH_KNOTHOLDER);
+        this->shape_editor->set_item(item, SH_NODEPATH);
+        this->shape_editor->set_item(item, SH_KNOTHOLDER);
     }
 
     if (prefs->getBool("/tools/lpetool/selcue")) {
-        ec->enableSelectionCue();
+        this->enableSelectionCue();
     }
-
-    lc->_lpetool_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 /**
@@ -169,32 +148,21 @@ void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpoint
     lc->shape_editor->set_item(item, SH_KNOTHOLDER);
 }
 
-static void
-sp_lpetool_context_set(SPEventContext *ec, Inkscape::Preferences::Entry *val)
-{
-    if (val->getEntryName() == "mode") {
+void SPLPEToolContext::set(const Inkscape::Preferences::Entry& val) {
+    if (val.getEntryName() == "mode") {
         Inkscape::Preferences::get()->setString("/tools/geometric/mode", "drag");
-        SP_PEN_CONTEXT(ec)->mode = SP_PEN_CONTEXT_MODE_DRAG;
+        SP_PEN_CONTEXT(this)->mode = SPPenContext::MODE_DRAG;
     }
-
-    /*
-    //pass on up to parent class to handle common attributes.
-    if ( sp_lpetool_context_parent_class->set ) {
-        sp_lpetool_context_parent_class->set(ec, key, val);
-    }
-    */
 }
 
-static gint 
-sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
-{
+bool SPLPEToolContext::item_handler(SPItem* item, GdkEvent* event) {
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
         {
             // select the clicked item but do nothing else
-            Inkscape::Selection * const selection = sp_desktop_selection(ec->desktop);
+            Inkscape::Selection * const selection = sp_desktop_selection(this->desktop);
             selection->clear();
             selection->add(item);
             ret = TRUE;
@@ -209,32 +177,27 @@ sp_lpetool_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *even
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler)
-            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->item_handler(ec, item, event);
+    	ret = SPPenContext::item_handler(item, event);
     }
 
     return ret;
 }
 
-gint
-sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
-{
-    SPLPEToolContext *lc = SP_LPETOOL_CONTEXT(event_context);
-    SPDesktop *desktop = event_context->desktop;
+bool SPLPEToolContext::root_handler(GdkEvent* event) {
     Inkscape::Selection *selection = sp_desktop_selection (desktop);
 
     bool ret = false;
 
-    if (sp_pen_context_has_waiting_LPE(lc)) {
+    if (sp_pen_context_has_waiting_LPE(this)) {
         // quit when we are waiting for a LPE to be applied
-        ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-        return ret;
+        //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+	return SPPenContext::root_handler(event);
     }
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1 && !event_context->space_panning) {
-                if (lc->mode == Inkscape::LivePathEffect::INVALID_LPE) {
+            if (event->button.button == 1 && !this->space_panning) {
+                if (this->mode == Inkscape::LivePathEffect::INVALID_LPE) {
                     // don't do anything for now if we are inactive (except clearing the selection
                     // since this was a click into empty space)
                     selection->clear();
@@ -244,9 +207,9 @@ sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 }
 
                 // save drag origin
-                event_context->xp = (gint) event->button.x;
-                event_context->yp = (gint) event->button.y;
-                event_context->within_tolerance = true;
+                this->xp = (gint) event->button.x;
+                this->yp = (gint) event->button.y;
+                this->within_tolerance = true;
 
                 using namespace Inkscape::LivePathEffect;
 
@@ -256,10 +219,11 @@ sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                 //bool over_stroke = lc->shape_editor->is_over_stroke(Geom::Point(event->button.x, event->button.y), true);
 
-                sp_pen_context_wait_for_LPE_mouse_clicks(lc, type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
+                sp_pen_context_wait_for_LPE_mouse_clicks(this, type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
 
                 // we pass the mouse click on to pen tool as the first click which it should collect
-                ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+                //ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
+		ret = SPPenContext::root_handler(event);
             }
             break;
 
@@ -295,9 +259,7 @@ sp_lpetool_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler) {
-            ret = ((SPEventContextClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
-        }
+    	ret = SPPenContext::root_handler(event);
     }
 
     return ret;
@@ -327,7 +289,7 @@ int lpetool_item_has_construction(SPLPEToolContext */*lc*/, SPItem *item)
         return -1;
     }
 
-    Inkscape::LivePathEffect::Effect* lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(item));
+    Inkscape::LivePathEffect::Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     if (!lpe) {
         return -1;
     }
@@ -367,8 +329,8 @@ lpetool_context_switch_mode(SPLPEToolContext *lc, Inkscape::LivePathEffect::Effe
 
 void
 lpetool_get_limiting_bbox_corners(SPDocument *document, Geom::Point &A, Geom::Point &B) {
-    Geom::Coord w = document->getWidth();
-    Geom::Coord h = document->getHeight();
+    Geom::Coord w = document->getWidth().value("px");
+    Geom::Coord h = document->getHeight().value("px");
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     double ulx = prefs->getDouble("/tools/lpetool/bbox_upperleftx", 0);
@@ -447,19 +409,22 @@ lpetool_create_measuring_items(SPLPEToolContext *lc, Inkscape::Selection *select
     for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
         if (SP_IS_PATH(i->data)) {
             path = SP_PATH(i->data);
-            curve = SP_SHAPE(path)->getCurve();
+            curve = path->getCurve();
             Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = paths_to_pw(curve->get_pathvector());
             canvas_text = (SPCanvasText *) sp_canvastext_new(tmpgrp, lc->desktop, Geom::Point(0,0), "");
             if (!show)
                 sp_canvas_item_hide(SP_CANVAS_ITEM(canvas_text));
 
-            SPUnitId unitid = static_cast<SPUnitId>(prefs->getInt("/tools/lpetool/unitid", SP_UNIT_PX));
-            SPUnit unit = sp_unit_get_by_id(unitid);
+            Inkscape::Util::Unit const * unit = NULL;
+            if (prefs->getString("/tools/lpetool/unit").compare("")) {
+                unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
+            } else {
+                unit = unit_table.getUnit("px");
+            }
 
             lengthval = Geom::length(pwd2);
-            gboolean success;
-            success = sp_convert_distance(&lengthval, &sp_unit_get_by_id(SP_UNIT_PX), &unit);
-            arc_length = g_strdup_printf("%.2f %s", lengthval, success ? sp_unit_get_abbreviation(&unit) : "px");
+            lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
+            arc_length = g_strdup_printf("%.2f %s", lengthval, unit->abbr.c_str());
             sp_canvastext_set_text (canvas_text, arc_length);
             set_pos_and_anchor(canvas_text, pwd2, 0.5, 10);
             // TODO: must we free arc_length?
@@ -482,21 +447,22 @@ void
 lpetool_update_measuring_items(SPLPEToolContext *lc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPPath *path;
-    SPCurve *curve;
-    double lengthval;
-    gchar *arc_length;
-    std::map<SPPath *, SPCanvasItem*>::iterator i;
-    for (i = lc->measuring_items->begin(); i != lc->measuring_items->end(); ++i) {
-        path = i->first;
-        curve = SP_SHAPE(path)->getCurve();
+    for ( std::map<SPPath *, SPCanvasItem*>::iterator i = lc->measuring_items->begin();
+          i != lc->measuring_items->end();
+          ++i )
+    {
+        SPPath *path = i->first;
+        SPCurve *curve = path->getCurve();
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = Geom::paths_to_pw(curve->get_pathvector());
-        SPUnitId unitid = static_cast<SPUnitId>(prefs->getInt("/tools/lpetool/unitid", SP_UNIT_PX));
-        SPUnit unit = sp_unit_get_by_id(unitid);
-        lengthval = Geom::length(pwd2);
-        gboolean success;
-        success = sp_convert_distance(&lengthval, &sp_unit_get_by_id(SP_UNIT_PX), &unit);
-        arc_length = g_strdup_printf("%.2f %s", lengthval, success ? sp_unit_get_abbreviation(&unit) : "px");
+        Inkscape::Util::Unit const * unit = NULL;
+        if (prefs->getString("/tools/lpetool/unit").compare("")) {
+            unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
+        } else {
+            unit = unit_table.getUnit("px");
+        }
+        double lengthval = Geom::length(pwd2);
+        lengthval = Inkscape::Util::Quantity::convert(lengthval, "px", unit);
+        gchar *arc_length = g_strdup_printf("%.2f %s", lengthval, unit->abbr.c_str());
         sp_canvastext_set_text (SP_CANVASTEXT(i->second), arc_length);
         set_pos_and_anchor(SP_CANVASTEXT(i->second), pwd2, 0.5, 10);
         // TODO: must we free arc_length?

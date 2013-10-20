@@ -47,10 +47,10 @@
 #include "widgets/desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-text.h"
-#include "sp-gradient-fns.h"
 #include "sp-gradient.h"
 #include "sp-flowtext.h"
 #include "sp-namedview.h"
+#include "sp-root.h"
 #include "ui/view/view.h"
 #include "helper/action.h"
 #include "helper/action-context.h"
@@ -322,6 +322,10 @@ sp_ui_close_view(GtkWidget */*widget*/)
     if (desktops.size() == 1) {
         Glib::ustring templateUri = sp_file_default_template_uri();
         SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
+        // Set viewBox if it doesn't exist
+        if (!doc->getRoot()->viewBox_set) {
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
+        }
         dt->change_document(doc);
         sp_namedview_window_from_document(dt);
         sp_namedview_update_layers_from_document(dt);
@@ -718,125 +722,6 @@ sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
 }
 
 static void
-sp_file_new_from_template(GtkWidget */*widget*/, gchar const *uri)
-{
-    sp_file_new(uri);
-}
-
-
-static bool
-compare_file_basenames(gchar const *a, gchar const *b) {
-    bool rc;
-    gchar *ba, *bb;
-
-    bool sort_by_fullname = true; // Sort by full name (including path) or just filename
-    if (sort_by_fullname) {
-        ba = g_strdup(a);
-        bb = g_strdup(b);
-    } else {
-        ba = g_path_get_basename(a);
-        bb = g_path_get_basename(b);
-    }
-
-    gchar *fa =  g_filename_to_utf8(ba,  -1, NULL, NULL, NULL);
-    gchar *fb =  g_filename_to_utf8(bb,  -1, NULL, NULL, NULL);
-    g_free(ba);
-    g_free(bb);
-
-    rc = g_utf8_collate(fa, fb) < 0;
-
-    g_free(fa);
-    g_free(fb);
-
-    return rc;
-}
-
-static void
-sp_menu_get_svg_filenames_from_dir(gchar const *dirname, std::list<gchar const*> *files)
-{
-    if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
-        GError *err = 0;
-        GDir *dir = g_dir_open(dirname, 0, &err);
-
-        if (dir) {
-            for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
-                if (!g_str_has_suffix(file, ".svg") && !g_str_has_suffix(file, ".svgz")) {
-                    continue; // skip non-svg files
-                }
-
-                {
-                    gchar *basename = g_path_get_basename(file);
-                    if (g_str_has_suffix(basename, ".svg") && g_str_has_prefix(basename, "default.")) {
-                        g_free(basename);
-                        basename = 0;
-                        continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
-                    }
-                    g_free(basename);
-                    basename = 0;
-                }
-
-                gchar const *filepath = g_build_filename(dirname, file, NULL);
-                files->push_front(filepath);
-            }
-            g_dir_close(dir);
-        }
-    }
-
-    files->sort(compare_file_basenames);
-}
-
-static void
-sp_menu_add_filenames_to_menu(GtkWidget *menu, Inkscape::UI::View::View *view, std::list<gchar const*> *files)
-{
-    if (!files->empty()) {
-        GtkWidget *sep = gtk_separator_menu_item_new();
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), sep);
-    }
-
-    for(std::list<gchar const*>::iterator it=files->begin(); it != files->end(); ++it) {
-        gchar const *filepath = *it;
-        gchar const *file = g_path_get_basename(filepath);
-        gchar *dupfile = g_strndup(file, strlen(file) - 4);
-        gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
-        g_free(dupfile);
-
-        GtkWidget *item = gtk_menu_item_new_with_label(filename);
-        g_free(filename);
-
-        gtk_widget_show(item);
-        // how does "filepath" ever get freed?
-        g_signal_connect(G_OBJECT(item),
-                         "activate",
-                         G_CALLBACK(sp_file_new_from_template),
-                         (gpointer) filepath);
-
-        if (view) {
-            // set null tip for now; later use a description from the template file
-            g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
-            g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) NULL );
-            g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
-        }
-
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-    }
-
-}
-static void
-sp_menu_append_new_templates(GtkWidget *menu, Inkscape::UI::View::View *view)
-{
-    // user's local dir
-    std::list<gchar const*> userfiles;
-    sp_menu_get_svg_filenames_from_dir(profile_path("templates"), &userfiles);
-    sp_menu_add_filenames_to_menu(menu, view, &userfiles);
-
-    // system templates dir
-    std::list<gchar const*> templatefiles;
-    sp_menu_get_svg_filenames_from_dir(INKSCAPE_TEMPLATESDIR, &templatefiles);
-    sp_menu_add_filenames_to_menu(menu, view, &templatefiles);
-
-}
-
-static void
 sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
 {
     //sp_ui_menu_append_check_item_from_verb(m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
@@ -996,10 +881,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
             continue;
         }
-        if (!strcmp(menu_pntr->name(), "template-list")) {
-            sp_menu_append_new_templates(menu, view);
-            continue;
-        }
+        
         if (!strcmp(menu_pntr->name(), "recent-file-list")) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1702,32 +1584,56 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
 
 void ContextMenu::MakeObjectMenu(void)
 {
-    GObjectClass *klass = G_OBJECT_GET_CLASS(_object); //to deduce the object's type from its class
-    
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ITEM))
-    {
-        MakeItemMenu ();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_GROUP))
-    {
-        MakeGroupMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ANCHOR))
-    {
-        MakeAnchorMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_IMAGE))
-    {
-        MakeImageMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_SHAPE))
-    {
-        MakeShapeMenu();
-    }
-    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_TEXT))
-    {
-        MakeTextMenu();
-    }
+//    GObjectClass *klass = G_OBJECT_GET_CLASS(_object); //to deduce the object's type from its class
+//
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ITEM))
+//    {
+//        MakeItemMenu ();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_GROUP))
+//    {
+//        MakeGroupMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_ANCHOR))
+//    {
+//        MakeAnchorMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_IMAGE))
+//    {
+//        MakeImageMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_SHAPE))
+//    {
+//        MakeShapeMenu();
+//    }
+//    if (G_TYPE_CHECK_CLASS_TYPE(klass, SP_TYPE_TEXT))
+//    {
+//        MakeTextMenu();
+//    }
+
+	if (SP_IS_ITEM(_object)) {
+		MakeItemMenu();
+	}
+
+	if (SP_IS_GROUP(_object)) {
+		MakeGroupMenu();
+	}
+
+	if (SP_IS_ANCHOR(_object)) {
+		MakeAnchorMenu();
+	}
+
+	if (SP_IS_IMAGE(_object)) {
+		MakeImageMenu();
+	}
+
+	if (SP_IS_SHAPE(_object)) {
+		MakeShapeMenu();
+	}
+
+	if (SP_IS_TEXT(_object)) {
+		MakeTextMenu();
+	}
 }
 
 void ContextMenu::MakeItemMenu (void)
@@ -2081,6 +1987,15 @@ void ContextMenu::MakeImageMenu (void)
         mi->set_sensitive(FALSE);
     }
 
+    /* Trace Pixel Art */
+    mi = manage(new Gtk::MenuItem(_("Trace Pixel Art"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTracePixelArt));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(FALSE);
+    }
+
     /* Embed image */
     if (Inkscape::Verb::getbyid( "org.ekips.filter.embedselectedimages" )) {
         mi = manage(new Gtk::MenuItem(C_("Context menu", "Embed Image")));
@@ -2196,6 +2111,12 @@ void ContextMenu::ImageTraceBitmap(void)
 {
     inkscape_dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
+}
+
+void ContextMenu::ImageTracePixelArt(void)
+{
+    inkscape_dialogs_unhide();
+    _desktop->_dlg_mgr->showDialog("PixelArt");
 }
 
 void ContextMenu::ImageEmbed(void)

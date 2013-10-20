@@ -70,10 +70,10 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "document-undo.h"
 #include "sp-gradient.h"
 #include "sp-gradient-reference.h"
-#include "sp-linear-gradient-fns.h"
+#include "sp-linear-gradient.h"
 #include "sp-pattern.h"
 #include "sp-symbol.h"
-#include "sp-radial-gradient-fns.h"
+#include "sp-radial-gradient.h"
 #include "gradient-context.h"
 #include "sp-namedview.h"
 #include "preferences.h"
@@ -86,17 +86,17 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include <map>
 #include <cstring>
 #include <string>
-#include "helper/units.h"
 #include "sp-item.h"
 #include "box3d.h"
 #include "persp3d.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "xml/simple-document.h"
 #include "sp-filter-reference.h"
 #include "gradient-drag.h"
 #include "uri-references.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
+#include "display/cairo-utils.h"
 #include "inkscape-private.h"
 #include "path-chemistry.h"
 #include "ui/tool/control-point-selection.h"
@@ -482,7 +482,7 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
         if (fork_livepatheffects) {
             SPObject *new_obj = doc->getObjectByRepr(copy);
             if (new_obj && SP_IS_LPE_ITEM(new_obj)) {
-                sp_lpe_item_fork_path_effects_if_necessary(SP_LPE_ITEM(new_obj), 1);
+                SP_LPE_ITEM(new_obj)->forkPathEffectsIfNecessary(1);
             }
         }
 
@@ -499,7 +499,7 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
             const gchar *id = old_ids[i];
             SPObject *old_clone = doc->getObjectById(id);
             if (SP_IS_USE(old_clone)) {
-                SPItem *orig = sp_use_get_original(SP_USE(old_clone));
+                SPItem *orig = SP_USE(old_clone)->get_original();
                 if (!orig) // orphaned
                     continue;
                 for (unsigned int j = 0; j < old_ids.size(); j++) {
@@ -785,7 +785,7 @@ void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop)
         SPItem *group = static_cast<SPItem *>(i->data);
 
         // when ungrouping cloned groups with their originals, some objects that were selected may no more exist due to unlinking
-        if (!SP_IS_OBJECT(group)) {
+        if (!SP_IS_OBJECT(group) || !group->getRepr()) {
             continue;
         }
 
@@ -1032,7 +1032,8 @@ void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
     }
 
     DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_LOWER,
-                       _("Lower"));
+                       //TRANSLATORS: "Lower" means "to lower an object" in the undo history
+                       C_("Undo action", "Lower"));
 }
 
 void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
@@ -1104,18 +1105,21 @@ void sp_selection_cut(SPDesktop *desktop)
  * \pre item != NULL
  */
 SPCSSAttr *
-take_style_from_item(SPItem *item)
+take_style_from_item(SPObject *object)
 {
+    // CPPIFY:
+    // This function should only take SPItems, but currently SPString is not an Item.
+
     // write the complete cascaded style, context-free
-    SPCSSAttr *css = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
+    SPCSSAttr *css = sp_css_attr_from_object(object, SP_STYLE_FLAG_ALWAYS);
     if (css == NULL)
         return NULL;
 
-    if ((SP_IS_GROUP(item) && item->children) ||
-        (SP_IS_TEXT(item) && item->children && item->children->next == NULL)) {
+    if ((SP_IS_GROUP(object) && object->children) ||
+        (SP_IS_TEXT(object) && object->children && object->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
-        for (SPObject *last_element = item->lastChild(); last_element != NULL; last_element = last_element->getPrev()) {
+        for (SPObject *last_element = object->lastChild(); last_element != NULL; last_element = last_element->getPrev()) {
             if ( last_element->style ) {
                 SPCSSAttr *temp = sp_css_attr_from_object(last_element, SP_STYLE_FLAG_IFSET);
                 if (temp) {
@@ -1126,15 +1130,18 @@ take_style_from_item(SPItem *item)
             }
         }
     }
-    if (!(SP_IS_TEXT(item) || SP_IS_TSPAN(item) || SP_IS_TREF(item) || SP_IS_STRING(item))) {
+
+    if (!(SP_IS_TEXT(object) || SP_IS_TSPAN(object) || SP_IS_TREF(object) || SP_IS_STRING(object))) {
         // do not copy text properties from non-text objects, it's confusing
         css = sp_css_attr_unset_text(css);
     }
 
-    // FIXME: also transform gradient/pattern fills, by forking? NO, this must be nondestructive
-    double ex = item->i2doc_affine().descrim();
-    if (ex != 1.0) {
-        css = sp_css_attr_scale(css, ex);
+    if (SP_IS_ITEM(object)) {
+        // FIXME: also transform gradient/pattern fills, by forking? NO, this must be nondestructive
+        double ex = SP_ITEM(object)->i2doc_affine().descrim();
+        if (ex != 1.0) {
+            css = sp_css_attr_scale(css, ex);
+        }
     }
 
     return css;
@@ -1176,9 +1183,10 @@ void sp_selection_paste_livepatheffect(SPDesktop *desktop)
 
 static void sp_selection_remove_livepatheffect_impl(SPItem *item)
 {
-    if ( item && SP_IS_LPE_ITEM(item) &&
-         sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
-        sp_lpe_item_remove_all_path_effects(SP_LPE_ITEM(item), false);
+    if ( SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item) ) {
+        if ( lpeitem->hasPathEffect() ) {
+            lpeitem->removeAllPathEffects(false);
+        }
     }
 }
 
@@ -1375,7 +1383,7 @@ selection_contains_original(SPItem *item, Inkscape::Selection *selection)
     SPItem *item_use_first = item;
     while (is_use && item_use && !contains_original)
     {
-        item_use = sp_use_get_original(SP_USE(item_use));
+        item_use = SP_USE(item_use)->get_original();
         contains_original |= selection->includes(item_use);
         if (item_use == item_use_first)
             break;
@@ -1520,7 +1528,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
                 // we need to cancel out the move compensation, too
 
                 // find out the clone move, same as in sp_use_move_compensate
-                Geom::Affine parent = sp_use_get_parent_transform(SP_USE(item));
+                Geom::Affine parent = SP_USE(item)->get_parent_transform();
                 Geom::Affine clone_move = parent.inverse() * t * parent;
 
                 if (prefs_parallel) {
@@ -1908,8 +1916,8 @@ static bool item_type_match (SPItem *i, SPItem *j)
     if ( SP_IS_RECT(i)) {
         return ( SP_IS_RECT(j) );
 
-    } else if (SP_IS_GENERICELLIPSE(i) || SP_IS_ELLIPSE(i) || SP_IS_ARC(i) || SP_IS_CIRCLE(i)) {
-        return (SP_IS_GENERICELLIPSE(j) || SP_IS_ELLIPSE(j) || SP_IS_ARC(j) || SP_IS_CIRCLE(j));
+    } else if (SP_IS_GENERICELLIPSE(i)) {
+        return (SP_IS_GENERICELLIPSE(j));
 
     } else if (SP_IS_STAR(i) || SP_IS_POLYGON(i)) {
         return (SP_IS_STAR(j) || SP_IS_POLYGON(j)) ;
@@ -2312,9 +2320,9 @@ void sp_selection_next_patheffect_param(SPDesktop * dt)
     Inkscape::Selection *selection = sp_desktop_selection(dt);
     if ( selection && !selection->isEmpty() ) {
         SPItem *item = selection->singleItem();
-        if ( item && SP_IS_SHAPE(item)) {
-            if (sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
-                sp_lpe_item_edit_next_param_oncanvas(SP_LPE_ITEM(item), dt);
+        if ( SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item) ) {
+            if (lpeitem->hasPathEffect()) {
+                lpeitem->editNextParamOncanvas(dt);
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("The selection has no applied path effect."));
             }
@@ -2505,7 +2513,9 @@ void sp_selection_clone(SPDesktop *desktop)
         Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
         clone->setAttribute("x", "0", false);
         clone->setAttribute("y", "0", false);
-        clone->setAttribute("xlink:href", g_strdup_printf("#%s", sel_repr->attribute("id")), false);
+        gchar *href_str = g_strdup_printf("#%s", sel_repr->attribute("id"));
+        clone->setAttribute("xlink:href", href_str, false);
+        g_free(href_str);
 
         clone->setAttribute("inkscape:transform-center-x", sel_repr->attribute("inkscape:transform-center-x"), false);
         clone->setAttribute("inkscape:transform-center-y", sel_repr->attribute("inkscape:transform-center-y"), false);
@@ -2616,7 +2626,7 @@ sp_selection_unlink(SPDesktop *desktop)
 
         SPItem *unlink;
         if (SP_IS_USE(item)) {
-            unlink = sp_use_unlink(SP_USE(item));
+            unlink = SP_USE(item)->unlink();
             // Unable to unlink use (external or invalid href?)
             if (!unlink) {
                 new_select = g_slist_prepend(new_select, item);
@@ -2664,7 +2674,7 @@ sp_select_clone_original(SPDesktop *desktop)
 
     SPItem *original = NULL;
     if (SP_IS_USE(item)) {
-        original = sp_use_get_original(SP_USE(item));
+        original = SP_USE(item)->get_original();
     } else if (SP_IS_OFFSET(item) && SP_OFFSET(item)->sourceHref) {
         original = sp_offset_get_source(SP_OFFSET(item));
     } else if (SP_IS_TEXT_TEXTPATH(item)) {
@@ -2673,7 +2683,7 @@ sp_select_clone_original(SPDesktop *desktop)
         original = SP_FLOWTEXT(item)->get_frame(NULL); // first frame only
     } else if (SP_IS_LPE_ITEM(item)) {
         // check if the applied LPE is Clone original, if so, go to the refered path
-        Inkscape::LivePathEffect::Effect* lpe = sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(item), Inkscape::LivePathEffect::CLONE_ORIGINAL);
+        Inkscape::LivePathEffect::Effect* lpe = SP_LPE_ITEM(item)->getPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL);
         if (lpe) {
             Inkscape::LivePathEffect::Parameter *lpeparam = lpe->getParameter("linkedpath");
             if (Inkscape::LivePathEffect::OriginalPathParam *pathparam = dynamic_cast<Inkscape::LivePathEffect::OriginalPathParam *>(lpeparam)) {
@@ -2770,7 +2780,7 @@ void sp_selection_clone_original_path_lpe(SPDesktop *desktop)
         SPObject *clone_obj = desktop->doc()->getObjectById(clone->attribute("id"));
         if (SP_IS_LPE_ITEM(clone_obj)) {
             gchar *href = g_strdup_printf("#%s", lpe_id);
-            sp_lpe_item_add_path_effect( SP_LPE_ITEM(clone_obj), href, false );
+            SP_LPE_ITEM(clone_obj)->addPathEffect( href, false );
             g_free(href);
         }
     }
@@ -2809,7 +2819,7 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
     }
 
     // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point move_p = Geom::Point(0, doc->getHeight()) - *c;
+    Geom::Point move_p = Geom::Point(0, doc->getHeight().value("px")) - *c;
     move_p[Geom::Y] = -move_p[Geom::Y];
     Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
 
@@ -2874,7 +2884,7 @@ static void sp_selection_to_guides_recursive(SPItem *item, bool deleteitem, bool
             sp_selection_to_guides_recursive(SP_ITEM(i->data), deleteitem, wholegroups);
         }
     } else {
-        item->convert_item_to_guides();
+        item->convert_to_guides();
 
         if (deleteitem) {
             item->deleteObject(true);
@@ -2986,7 +2996,9 @@ void sp_selection_symbol(SPDocument *doc, SPObject *group)
     Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
     clone->setAttribute("x", "0", false);
     clone->setAttribute("y", "0", false);
-    clone->setAttribute("xlink:href", g_strdup_printf("#%s", id.c_str()), false);
+    gchar *href_str = g_strdup_printf("#%s", id.c_str());
+    clone->setAttribute("xlink:href", href_str, false);
+    g_free(href_str);
 
     clone->setAttribute("inkscape:transform-center-x", group->getAttribute("inkscape:transform-center-x"), false);
     clone->setAttribute("inkscape:transform-center-y", group->getAttribute("inkscape:transform-center-y"), false);
@@ -3093,7 +3105,7 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     }
 
     // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point move_p = Geom::Point(0, doc->getHeight()) - (r->min() + Geom::Point(0, r->dimensions()[Geom::Y]));
+    Geom::Point move_p = Geom::Point(0, doc->getHeight().value("px")) - (r->min() + Geom::Point(0, r->dimensions()[Geom::Y]));
     move_p[Geom::Y] = -move_p[Geom::Y];
     Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
 
@@ -3146,7 +3158,9 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
 
     if (apply) {
         Inkscape::XML::Node *rect = xml_doc->createElement("svg:rect");
-        rect->setAttribute("style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+        gchar *style_str = g_strdup_printf("stroke:none;fill:url(#%s)", pat_id);
+        rect->setAttribute("style", style_str);
+        g_free(style_str);
 
         Geom::Point min = bbox.min() * parent_transform.inverse();
         Geom::Point max = bbox.max() * parent_transform.inverse();
@@ -3398,7 +3412,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
         res = prefs_res;
     } else if (0 < prefs_min) {
         // If minsize is given, look up minimum bitmap size (default 250 pixels) and calculate resolution from it
-        res = PX_PER_IN * prefs_min / MIN(bbox->width(), bbox->height());
+        res = Inkscape::Util::Quantity::convert(prefs_min, "in", "px") / MIN(bbox->width(), bbox->height());
     } else {
         float hint_xdpi = 0, hint_ydpi = 0;
         Glib::ustring hint_filename;
@@ -3413,14 +3427,14 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
                 res = hint_xdpi;
             } else {
                 // if all else fails, take the default 90 dpi
-                res = PX_PER_IN;
+                res = Inkscape::Util::Quantity::convert(1, "in", "px");
             }
         }
     }
 
     // The width and height of the bitmap in pixels
-    unsigned width = (unsigned) floor(bbox->width() * res / PX_PER_IN);
-    unsigned height =(unsigned) floor(bbox->height() * res / PX_PER_IN);
+    unsigned width = (unsigned) floor(bbox->width() * Inkscape::Util::Quantity::convert(res, "px", "in"));
+    unsigned height =(unsigned) floor(bbox->height() * Inkscape::Util::Quantity::convert(res, "px", "in"));
 
     // Find out if we have to run an external filter
     gchar const *run = NULL;
@@ -3452,12 +3466,13 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
 
     double shift_x = bbox->min()[Geom::X];
     double shift_y = bbox->max()[Geom::Y];
-    if (res == PX_PER_IN) { // for default 90 dpi, snap it to pixel grid
+    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
         shift_x = round(shift_x);
         shift_y = -round(-shift_y); // this gets correct rounding despite coordinate inversion, remove the negations when the inversion is gone
     }
     t = Geom::Scale(1, -1) * Geom::Translate(shift_x, shift_y) * eek.inverse();  /// @fixme hardcoded doc2dt transform?
 
+    // TODO: avoid roundtrip via file
     // Do the export
     sp_export_png_file(document, filepath,
                        bbox->min()[Geom::X], bbox->min()[Geom::Y],
@@ -3480,12 +3495,13 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
     }
 
     // Import the image back
-    GdkPixbuf *pb = gdk_pixbuf_new_from_file(filepath, NULL);
+    Inkscape::Pixbuf *pb = Inkscape::Pixbuf::create_from_file(filepath);
     if (pb) {
         // Create the repr for the image
+        // TODO: avoid unnecessary roundtrip between data URI and decoded pixbuf
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
-        sp_embed_image(repr, pb, "image/png");
-        if (res == PX_PER_IN) { // for default 90 dpi, snap it to pixel grid
+        sp_embed_image(repr, pb);
+        if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
         } else {
@@ -3710,7 +3726,9 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
             Inkscape::GC::release(group);
         }
 
-        apply_mask_to->setAttribute(attributeName, g_strdup_printf("url(#%s)", mask_id));
+        gchar *value_str = g_strdup_printf("url(#%s)", mask_id);
+        apply_mask_to->setAttribute(attributeName, value_str);
+        g_free(value_str);
 
     }
 

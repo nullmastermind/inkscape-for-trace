@@ -238,14 +238,7 @@ void Selection::_remove(SPObject *obj) {
 
 void Selection::setList(GSList const *list) {
     _clear();
-
-    if ( list != NULL ) {
-        for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-            _add(reinterpret_cast<SPObject *>(iter->data));
-        }
-    }
-
-    _emitChanged();
+    addList(list);
 }
 
 void Selection::addList(GSList const *list) {
@@ -257,9 +250,7 @@ void Selection::addList(GSList const *list) {
 
     for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
         SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
-        if (includes(obj)) {
-            continue;
-        }
+        if (includes(obj)) continue;
         _add (obj);
     }
 
@@ -329,11 +320,11 @@ std::list<Persp3D *> const Selection::perspList() {
 std::list<SPBox3D *> const Selection::box3DList(Persp3D *persp) {
     std::list<SPBox3D *> boxes;
     if (persp) {
-        SPBox3D *box;
         for (std::list<SPBox3D *>::iterator i = _3dboxes.begin(); i != _3dboxes.end(); ++i) {
-            box = *i;
-            if (persp == box3d_get_perspective(box))
+            SPBox3D *box = *i;
+            if (persp == box3d_get_perspective(box)) {
                 boxes.push_back(box);
+            }
         }
     } else {
         boxes = _3dboxes;

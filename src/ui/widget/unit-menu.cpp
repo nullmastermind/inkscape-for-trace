@@ -15,6 +15,8 @@
 
 #include "unit-menu.h"
 
+using Inkscape::Util::unit_table;
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -30,15 +32,13 @@ UnitMenu::~UnitMenu() {
 bool UnitMenu::setUnitType(UnitType unit_type) 
 {
     // Expand the unit widget with unit entries from the unit table
-    UnitTable::UnitMap m = _unit_table.units(unit_type);
-    UnitTable::UnitMap::iterator iter = m.begin();
-    while(iter != m.end()) {
-        Glib::ustring text = (*iter).first;
-        append(text);
-        ++iter;
+    UnitTable::UnitMap m = unit_table.units(unit_type);
+
+    for (UnitTable::UnitMap::iterator i = m.begin(); i != m.end(); ++i) {
+        append(i->first);
     }
     _type = unit_type;
-    set_active_text(_unit_table.primary(unit_type));
+    set_active_text(unit_table.primary(unit_type));
 
     return true;
 }
@@ -52,17 +52,17 @@ bool UnitMenu::resetUnitType(UnitType unit_type)
 
 void UnitMenu::addUnit(Unit const& u)
 {
-    _unit_table.addUnit(u, false);
+    unit_table.addUnit(u, false);
     append(u.abbr);
 }
 
-Unit UnitMenu::getUnit() const
+Unit const * UnitMenu::getUnit() const
 {
     if (get_active_text() == "") {
         g_assert(_type != UNIT_TYPE_NONE);
-        return _unit_table.getUnit(_unit_table.primary(_type));
+        return unit_table.getUnit(unit_table.primary(_type));
     }
-    return _unit_table.getUnit(get_active_text());
+    return unit_table.getUnit(get_active_text());
 }
 
 bool UnitMenu::setUnit(Glib::ustring const & unit)
@@ -79,27 +79,27 @@ Glib::ustring UnitMenu::getUnitAbbr() const
     if (get_active_text() == "") {
         return "";
     }
-    return getUnit().abbr;
+    return getUnit()->abbr;
 }
 
 UnitType UnitMenu::getUnitType() const
 {
-    return getUnit().type;
+    return getUnit()->type;
 }
 
 double  UnitMenu::getUnitFactor() const
 {
-    return getUnit().factor;
+    return getUnit()->factor;
 }
 
 int UnitMenu::getDefaultDigits() const
 {
-    return getUnit().defaultDigits();
+    return getUnit()->defaultDigits();
 }
 
 double UnitMenu::getDefaultStep() const
 { 
-    int factor_digits = -1*int(log10(getUnit().factor));
+    int factor_digits = -1*int(log10(getUnit()->factor));
     return pow(10.0, factor_digits);
 }
 
@@ -110,19 +110,20 @@ double UnitMenu::getDefaultPage() const
 
 double UnitMenu::getConversion(Glib::ustring const &new_unit_abbr, Glib::ustring const &old_unit_abbr) const
 {
-    double old_factor = getUnit().factor;
-    if (old_unit_abbr != "no_unit")
-        old_factor = _unit_table.getUnit(old_unit_abbr).factor;
-    Unit new_unit = _unit_table.getUnit(new_unit_abbr);
+    double old_factor = getUnit()->factor;
+    if (old_unit_abbr != "no_unit") {
+        old_factor = unit_table.getUnit(old_unit_abbr)->factor;
+    }
+    Unit const * new_unit = unit_table.getUnit(new_unit_abbr);
 
     // Catch the case of zero or negative unit factors (error!)
     if (old_factor < 0.0000001 ||
-        new_unit.factor < 0.0000001) {
+        new_unit->factor < 0.0000001) {
         // TODO:  Should we assert here?
         return 0.00;
     }
 
-    return old_factor / new_unit.factor;
+    return old_factor / new_unit->factor;
 }
 
 bool UnitMenu::isAbsolute() const

@@ -21,6 +21,7 @@
 class SVGLength
 {
 public:
+    SVGLength();
 
     enum Unit {
         NONE,
@@ -37,9 +38,16 @@ public:
         LAST_UNIT = PERCENT
     };
 
+    // The object's value is valid / exists in SVG.
     bool _set;
+
+    // The unit of value.
     Unit unit;
+
+    // The value of this SVGLength as found in the SVG.
     float value;
+
+    // The value in pixels (value * pixels/unit).
     float computed;
 
     float operator=(float v) {

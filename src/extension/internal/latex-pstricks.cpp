@@ -21,7 +21,7 @@
 #include <2geom/hvlinesegment.h>
 #include <errno.h>
 #include <signal.h>
-#include <unit-constants.h>
+#include "util/units.h"
 #include "helper/geom-curves.h"
 
 #include "extension/print.h"
@@ -117,8 +117,8 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
     }
 
     // width and height in pt
-    _width = doc->getWidth() * PT_PER_PX;
-    _height = doc->getHeight() * PT_PER_PX;
+    _width = doc->getWidth().value("pt");
+    _height = doc->getHeight().value("pt");
 
     if (res >= 0) {
 
@@ -128,10 +128,10 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
         os << "\\psset{xunit=.5pt,yunit=.5pt,runit=.5pt}\n";
         // from now on we can output px, but they will be treated as pt
     
-        os << "\\begin{pspicture}(" << doc->getWidth() << "," << doc->getHeight() << ")\n";
+        os << "\\begin{pspicture}(" << doc->getWidth().value("px") << "," << doc->getHeight().value("px") << ")\n";
     }
 
-    m_tr_stack.push( Geom::Scale(1, -1) * Geom::Translate(0, doc->getHeight()));  /// @fixme hardcoded doc2dt transform
+    m_tr_stack.push( Geom::Scale(1, -1) * Geom::Translate(0, doc->getHeight().value("px")));  /// @fixme hardcoded doc2dt transform
 
     return fprintf(_stream, "%s", os.str().c_str());
 }
