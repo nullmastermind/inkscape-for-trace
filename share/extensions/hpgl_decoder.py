@@ -91,10 +91,9 @@ class hpglDecoder:
         self.layers[layerNumber] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Drawing Pen ' + layerNumber})
 
     def addPathToLayer(self, path, layerNumber):
+        lineColor = '000000'
         if layerNumber == 0:
             lineColor = 'ff0000'
-        else:
-            lineColor = '000000'
         inkex.etree.SubElement(self.layers[layerNumber], 'path', {'d':path, 'style':'stroke:#' + lineColor + '; stroke-width:0.4; fill:none;'})
 
     def getParameters(self, parameterString): # process coordinates

@@ -174,33 +174,27 @@ class hpglEncoder:
                                 oldPosX = posX
                                 oldPosY = posY
     
-    def getLength(self, x1, y1, x2, y2, absolute = True):
-        # calc absoulute or relative length between two points
-        if absolute: return math.fabs(math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0))
-        else: return math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0)
+    def getLength(self, x1, y1, x2, y2, absolute = True): # calc absoulute or relative length between two points
+        length = math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0)
+        if absolute:
+            length = math.fabs(length)
+        return length
     
-    def changeLength(self, x1, y1, x2, y2, offset):
-        # change length of line
+    def changeLength(self, x1, y1, x2, y2, offset): # change length of line
         if offset < 0: offset = max(-self.getLength(x1, y1, x2, y2), offset)
         x = x2 + (x2 - x1) / self.getLength(x1, y1, x2, y2, False) * offset;
         y = y2 + (y2 - y1) / self.getLength(x1, y1, x2, y2, False) * offset;
         return [x, y]
 
-    def getAlpha(self, x1, y1, x2, y2, x3, y3):
-        # get alpha of point 2
+    def getAlpha(self, x1, y1, x2, y2, x3, y3): # get alpha of point 2
         temp1 = (x1-x2)**2 + (y1-y2)**2 + (x3-x2)**2 + (y3-y2)**2 - (x1-x3)**2 - (y1-y3)**2
         temp2 = 2 * math.sqrt((x1-x2)**2 + (y1-y2)**2) * math.sqrt((x3-x2)**2 + (y3-y2)**2)
-        temp3 = temp1 / temp2
-        if temp3 < -1.0:
-            temp3 = -1.0
-        if temp3 > 1.0:
-            temp3 = 1.0
-        return math.acos(temp3)
+        return math.acos(max(min(temp1 / temp2, 1.0), -1.0))
     
     def calcOffset(self, cmd, posX, posY):
         # calculate offset correction (or dont)
         if not self.options.useToolOffset or self.dryRun:
-            self.storeData(cmd, posX, posY)
+            self.storePoint(cmd, posX, posY)
         else:
             # insert data into cache
             self.vData.pop(0)
@@ -208,48 +202,48 @@ class hpglEncoder:
             # decide if enough data is availabe
             if self.vData[2][1] != -1.0:
                 if self.vData[1][1] == -1.0:
-                    self.storeData(self.vData[2][0], self.vData[2][1], self.vData[2][2])
+                    self.storePoint(self.vData[2][0], self.vData[2][1], self.vData[2][2])
                 else:
                     # perform tool offset correction (It's a *tad* complicated, if you want to understand it draw the data as lines on paper) 
                     if self.vData[2][0] == 'PD': # If the 3rd entry in the cache is a pen down command make the line longer by the tool offset
                         pointThree = self.changeLength(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
-                        self.storeData('PD', pointThree[0], pointThree[1])
+                        self.storePoint('PD', pointThree[0], pointThree[1])
                     elif self.vData[0][1] != -1.0: # Elif the 1st entry in the cache is filled with data and the 3rd entry is a pen up command shift the 3rd entry by the current tool offset position according to the 2nd command
                         pointThree = self.changeLength(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset) 
                         pointThree[0] = self.vData[2][1] - (self.vData[1][1] - pointThree[0])
                         pointThree[1] = self.vData[2][2] - (self.vData[1][2] - pointThree[1])
-                        self.storeData('PU', pointThree[0], pointThree[1])
+                        self.storePoint('PU', pointThree[0], pointThree[1])
                     else: # Else just write the 3rd entry
                         pointThree = [self.vData[2][1], self.vData[2][2]]
-                        self.storeData('PU', pointThree[0], pointThree[1])
+                        self.storePoint('PU', pointThree[0], pointThree[1])
                     if self.vData[3][0] == 'PD': # If the 4th entry in the cache is a pen down command guide tool to next line with a circle between the prolonged 3rd and 4th entry
                         if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) >= self.options.toolOffset:
                             pointFour = self.changeLength(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
                         else:
                             pointFour = self.changeLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2], 
                                 (self.options.toolOffset - self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2])))
-                        # get start and end angle
+                        # get angle start and angle vector
                         angleStart = math.atan2(pointThree[1] - self.vData[2][2], pointThree[0] - self.vData[2][1])
-                        angleDiff = math.atan2(pointFour[1] - self.vData[2][2], pointFour[0] - self.vData[2][1]) - angleStart
+                        angleVector = math.atan2(pointFour[1] - self.vData[2][2], pointFour[0] - self.vData[2][1]) - angleStart
                         # switch direction when arc is bigger than 180°
-                        if angleDiff > self.PI:
-                            angleDiff -= self.TWO_PI
-                        elif angleDiff < -self.PI:
-                            angleDiff += self.TWO_PI
+                        if angleVector > self.PI:
+                            angleVector -= self.TWO_PI
+                        elif angleVector < -self.PI:
+                            angleVector += self.TWO_PI
                         # draw arc
-                        if angleDiff >= 0:
+                        if angleVector >= 0:
                             angle = angleStart + self.toolOffsetFlat
-                            while angle < angleStart + angleDiff:
-                                self.storeData('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
+                            while angle < angleStart + angleVector:
+                                self.storePoint('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
                                 angle += self.toolOffsetFlat
                         else:
                             angle = angleStart - self.toolOffsetFlat
-                            while angle > angleStart + angleDiff:
-                                self.storeData('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
+                            while angle > angleStart + angleVector:
+                                self.storePoint('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
                                 angle -= self.toolOffsetFlat
-                        self.storeData('PD', pointFour[0], pointFour[1])
+                        self.storePoint('PD', pointFour[0], pointFour[1])
     
-    def storeData(self, command, x, y):
+    def storePoint(self, command, x, y):
         x = int(round(x))
         y = int(round(y))
         # skip when no change in movement
