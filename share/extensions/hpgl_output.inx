@@ -6,7 +6,7 @@
     <dependency type="executable" location="extensions">hpgl_output.py</dependency>
     <dependency type="executable" location="extensions">hpgl_encoder.py</dependency>
     <dependency type="executable" location="extensions">inkex.py</dependency>
-    <_param name="introduction" type="description">Please make sure that all objects you want to save are converted to paths. The drawing will be automatically aligned to the zero point. Please use the plotter extension from the extension menu to plot directly on a serial plotter.</_param>
+    <_param name="introduction" type="description">Please make sure that all objects you want to save are converted to paths. The drawing will be automatically aligned to the zero point. Please use the plotter extension (Extensions menu) to plot directly on a plotter.</_param>
     <param name="tab" type="notebook">
         <page name="plotter" _gui-text="Plotter Settings">
             <param name="pen" type="int" min="0" max="10" _gui-text="Pen number" _gui-description="The number of the pen (tool) to use, on most plotters 1 (Standard: '1')">1</param>
@@ -20,7 +20,7 @@
                 <option value="180">180°</option>
                 <option value="270">270°</option>
             </param>
-            <param name="center" type="boolean" _gui-text="Center zero point" _gui-description="Check this if the plotter needs the zero point to be in the center of the drawing - Try different settings to find the one that fits your plotter (Default: Unchecked)">false</param>
+            <param name="center" type="boolean" _gui-text="Center zero point" _gui-description="Check this if your plotter uses a centered zero point - Try different settings to find the one that fits your plotter (Default: Unchecked)">false</param>
         </page>
         <page name="overcut" _gui-text="Overcut">
             <param name="useOvercut" type="boolean" _gui-text="Use overcut" _gui-description="Check this to use the overcut, if not checked the 'Overcut' parameter is unused (Default: Checked)">true</param>
@@ -31,7 +31,7 @@
             <param name="toolOffset" type="float" min="0.0" max="20.0" precision="2" _gui-text="Tool offset (mm)" _gui-description="The offset from the tool tip to the tool axis in mm (Default: 0.25)">0.25</param>
             <param name="precut" type="boolean" _gui-text="Use precut" _gui-description="Check this to cut a small line before the real drawing to align the tool orientation for the first cut (Default: Checked)">true</param>
             <param name="space" type="description"> </param>
-            <_param name="offsetNote" type="description">Please note that using the tool offset correction will shift your drawing away from the zero point by the length of the tool offset on both axes.</_param>
+            <_param name="offsetNote" type="description">Please note that using the tool offset correction will move your plot away from the zero point by the tool offset specified.</_param>
         </page>
         <page name="misc" _gui-text="Miscellaneous">
             <param name="flat" type="float" min="0.1" max="10.0" precision="1" _gui-text="Curve flatness" _gui-description="Curves are divided into lines, this number controls how fine the curves will be reproduced, the smaller the finer (Default: '1.2')">1.2</param>
