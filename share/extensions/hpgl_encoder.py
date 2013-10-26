@@ -145,6 +145,7 @@ class hpglEncoder:
             # path to HPGL commands
             oldPosX = ''
             oldPosY = ''
+            # TODO: Plot smallest parts first to avid plotter dragging parts of foil around (on text)
             for singlePath in paths:
                 cmd = 'PU'
                 for singlePathPoint in singlePath:
@@ -156,6 +157,7 @@ class hpglEncoder:
                         oldPosX = posX
                         oldPosY = posY
                 # perform overcut
+                # TODO: Find that evasive bug that produces an extra point between the end of the path and the overcut
                 if self.options.useOvercut and not self.dryRun:
                     # check if last and first points are the same, otherwise the path is not closed and no overcut can be performed
                     if int(round(oldPosX)) == int(round(singlePath[0][1][0])) and int(round(oldPosY)) == int(round(singlePath[0][1][1])):
