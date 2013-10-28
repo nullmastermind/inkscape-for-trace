@@ -1970,7 +1970,9 @@ std::cout << "BEFORE DRAW"
             }
 
             if (!d->dc[d->level].sizeView.x || !d->dc[d->level].sizeView.y) {
-                d->dc[d->level].sizeView = d->dc[d->level].sizeWnd;
+                /* Previously it used sizeWnd, but that always resulted in scale = 1 if no viewport ever appeared, and in most files, it did not */
+                d->dc[d->level].sizeView.x = d->PixelsInX - 1;
+                d->dc[d->level].sizeView.y = d->PixelsInY - 1;
             }
 
             /* scales logical to WMF pixels, transfer a negative sign on Y, if any */
@@ -2284,6 +2286,7 @@ std::cout << "BEFORE DRAW"
             dbg_str << "<!-- U_WMR_BITBLT -->\n";
             nSize = U_WMRBITBLT_get(contents,&Dst,&cwh,&Src,&dwRop3,&Bm16,&px);
             if(!px){
+                if(dwRop3 == U_NOOP)break; /* GDI applications apparently often end with this as a sort of flush(), nothing should be drawn */
                 int32_t dx = Dst.x;
                 int32_t dy = Dst.y;
                 int32_t dw = cwh.x;
@@ -2321,6 +2324,7 @@ std::cout << "BEFORE DRAW"
             dbg_str << "<!-- U_WMR_STRETCHBLT -->\n";
             nSize = U_WMRSTRETCHBLT_get(contents,&Dst,&cDst,&Src,&cSrc,&dwRop3,&Bm16,&px);
             if(!px){
+                if(dwRop3 == U_NOOP)break; /* GDI applications apparently often end with this as a sort of flush(), nothing should be drawn */
                 int32_t dx = Dst.x;
                 int32_t dy = Dst.y;
                 int32_t dw = cDst.x;
@@ -2715,6 +2719,7 @@ std::cout << "BEFORE DRAW"
             if (!dib) {
                 // should be an application of a DIBPATTERNBRUSHPT, use a solid color instead
 
+                if(dwRop3 == U_NOOP)break; /* GDI applications apparently often end with this as a sort of flush(), nothing should be drawn */
                 int32_t dx = Dst.x;
                 int32_t dy = Dst.y;
                 int32_t dw = cwh.x;
@@ -3176,7 +3181,7 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.tri = trinfo_release_except_FC(d.tri);
 
     // Set viewBox if it doesn't exist
-    if (!doc->getRoot()->viewBox_set) {
+    if (doc && !doc->getRoot()->viewBox_set) {
         bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
         Inkscape::DocumentUndo::setUndoSensitive(doc, false);
         
@@ -3185,20 +3190,20 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
         // Set document unit
         Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
         Inkscape::SVGOStringStream os;
-        os << doc->getWidth().unit->abbr;
+        Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
+        os << doc_unit->abbr;
         repr->setAttribute("inkscape:document-units", os.str().c_str());
         
         // Set viewBox
-        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
-        
-        // Scale and translate objects
-        double scale = Inkscape::Util::Quantity::convert(1, "px", doc->getWidth().unit);
-        ShapeEditor::blockSetItem(true);
-        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, SP_ACTIVE_DOCUMENT->getHeight().value("px")));
-        ShapeEditor::blockSetItem(false);
-        
+        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc_unit), doc->getHeight().value(doc_unit)));
         doc->ensureUpToDate();
-        
+
+        // Scale and translate objects
+        double scale = Inkscape::Util::Quantity::convert(1, "px", doc_unit);
+        ShapeEditor::blockSetItem(true);
+        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, doc->getHeight().value("px")));
+        ShapeEditor::blockSetItem(false);
+
         Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
     }
 

@@ -151,11 +151,11 @@ void SPObject::read_content() {
     //throw;
 }
 
-void SPObject::update(SPCtx* ctx, unsigned int flags) {
+void SPObject::update(SPCtx* /*ctx*/, unsigned int /*flags*/) {
     //throw;
 }
 
-void SPObject::modified(unsigned int flags) {
+void SPObject::modified(unsigned int /*flags*/) {
     //throw;
 }
 
@@ -228,7 +228,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
     //g_object_unref(G_OBJECT(object));
     object->refCount--;
 
-    if (object->refCount < 0) {
+    if (object->refCount <= 0) {
         delete object;
     }
 
@@ -624,7 +624,7 @@ void SPObject::remove_child(Inkscape::XML::Node* child) {
     }
 }
 
-void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node *new_ref) {
+void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * /*old_ref*/, Inkscape::XML::Node *new_ref) {
     SPObject* object = this;
 
     SPObject *ochild = object->get_child_by_repr(child);
@@ -648,11 +648,6 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
         try {
             const std::string typeString = NodeTraits::get_type_string(*rchild);
 
-            // special cases
-            if (typeString.empty()) continue;      // comments, usually
-            if (typeString == "rdf:RDF") continue; // no SP node yet
-            if (typeString == "inkscape:clipboard") continue; // SP node not necessary
-
             SPObject* child = SPFactory::instance().createObject(typeString);
 
             object->attach(child, object->lastChild());
@@ -663,7 +658,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
             // corresponding classes in the SPObject tree.
             // (rdf:RDF, inkscape:clipboard, ...)
             // Thus, simply ignore this case for now.
-            return;
+            continue;
         }
     }
 }

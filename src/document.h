@@ -47,6 +47,7 @@ namespace Inkscape {
         class Node;
     }
     namespace Util {
+        class Unit;
         class Quantity;
     }
 }
@@ -123,6 +124,7 @@ public:
 
     /** Returns our SPRoot */
     SPRoot *getRoot() { return root; }
+    SPRoot const *getRoot() const { return root; }
 
     Inkscape::XML::Node *getReprRoot() { return rroot; }
 
@@ -227,6 +229,7 @@ public:
 
     SPDocument *doRef();
     SPDocument *doUnref();
+    Inkscape::Util::Unit const* getDefaultUnit() const;
     Inkscape::Util::Quantity getWidth() const;
     Inkscape::Util::Quantity getHeight() const;
     Geom::Point getDimensions() const;

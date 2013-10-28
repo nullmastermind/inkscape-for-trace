@@ -48,7 +48,7 @@ class MyEffect(inkex.Effect):
  
     def effect(self):
         # get hpgl data
-        myHpglEncoder = hpgl_encoder.hpglEncoder(self.document.getroot(), self.options)
+        myHpglEncoder = hpgl_encoder.hpglEncoder(self)
         try:
             self.hpgl = myHpglEncoder.getHpgl()
         except Exception as inst:

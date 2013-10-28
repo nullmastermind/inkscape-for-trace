@@ -24,12 +24,13 @@ import math, string
 # local library
 import bezmisc, cspsubdiv, cubicsuperpath, inkex, simplestyle, simpletransform
 
+
 class hpglEncoder:
     
     PI = math.pi
     TWO_PI = PI * 2
     
-    def __init__(self, doc, options):
+    def __init__(self, effect):
         ''' options:
                 "resolutionX":float
                 "resolutionY":float
@@ -47,8 +48,8 @@ class hpglEncoder:
                 "offsetX":float
                 "offsetY":float
         '''
-        self.doc = doc
-        self.options = options
+        self.doc = effect.document.getroot()
+        self.options = effect.options
         self.divergenceX = 'False' # dirty hack: i need to know if this was set to a number before, but since False is evaluated to 0 it can not be determined, therefore the string.
         self.divergenceY = 'False'
         self.sizeX = 'False'
@@ -70,14 +71,14 @@ class hpglEncoder:
         if self.options.mirrorY:
             self.mirrorY = 1.0
         # process viewBox attribute to correct page scaling
-        viewBox = doc.get('viewBox')
+        viewBox = self.doc.get('viewBox')
         self.viewBoxTransformX = 1
         self.viewBoxTransformY = 1
         if viewBox:
             viewBox = string.split(viewBox, ' ')
             if viewBox[2] and viewBox[3]:
-                self.viewBoxTransformX = float(inkex.unittouu(doc.get('width'))) / float(viewBox[2])
-                self.viewBoxTransformY = float(inkex.unittouu(doc.get('height'))) / float(viewBox[3])
+                self.viewBoxTransformX = float(effect.unittouu(self.doc.get('width'))) / float(viewBox[2])
+                self.viewBoxTransformY = float(effect.unittouu(self.doc.get('height'))) / float(viewBox[3])
 
     def getHpgl(self):
         # dryRun to find edges

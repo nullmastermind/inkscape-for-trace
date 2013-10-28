@@ -789,8 +789,12 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
     // Assume src color is "white"
     if(d->dwRop3){
         switch(d->dwRop3){
-            case U_PATINVERT: // treat all of these as black
-            case U_SRCINVERT:
+            case U_PATINVERT: // invert pattern
+                fill_rgb[0] = 1.0 - fill_rgb[0];
+                fill_rgb[1] = 1.0 - fill_rgb[1];
+                fill_rgb[2] = 1.0 - fill_rgb[2];
+                break;
+            case U_SRCINVERT: // treat all of these as black
             case U_DSTINVERT:
             case U_BLACKNESS:
             case U_SRCERASE:
@@ -799,7 +803,6 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
                 break;
             case U_SRCCOPY:    // treat all of these as white
             case U_NOTSRCERASE:
-            case U_PATCOPY:
             case U_WHITENESS:
                 fill_rgb[0]=fill_rgb[1]=fill_rgb[2]=1.0;
                 break;
@@ -808,6 +811,7 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
             case U_MERGECOPY:
             case U_MERGEPAINT:
             case U_PATPAINT:
+            case U_PATCOPY:
             default:
                 break;
         }
@@ -2747,7 +2751,10 @@ std::cout << "BEFORE DRAW"
         {
             dbg_str << "<!-- U_EMR_BEGINPATH -->\n";
             // The next line should never be needed, should have been handled before main switch
-            *(d->path) = "";
+            // qualifier added because EMF's encountered where moveto preceded beginpath followed by lineto
+            if(d->mask & U_DRAW_VISIBLE){
+               *(d->path) = "";
+            }
             d->mask |= emr_mask;
             break;
         }
@@ -2859,6 +2866,7 @@ std::cout << "BEFORE DRAW"
             if (!pEmr->cbBmiSrc) {
                 // should be an application of a DIBPATTERNBRUSHPT, use a solid color instead
 
+                if(pEmr->dwRop == U_NOOP)break; /* GDI applications apparently often end with this as a sort of flush(), nothing should be drawn */
                 int32_t dx = pEmr->Dest.x;
                 int32_t dy = pEmr->Dest.y;
                 int32_t dw = pEmr->cDest.x;
@@ -3488,7 +3496,7 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.tri = trinfo_release_except_FC(d.tri);
 
     // Set viewBox if it doesn't exist
-    if (!doc->getRoot()->viewBox_set) {
+    if (doc && !doc->getRoot()->viewBox_set) {
         bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
         Inkscape::DocumentUndo::setUndoSensitive(doc, false);
         
@@ -3497,20 +3505,20 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
         // Set document unit
         Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
         Inkscape::SVGOStringStream os;
-        os << doc->getWidth().unit->abbr;
+        Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
+        os << doc_unit->abbr;
         repr->setAttribute("inkscape:document-units", os.str().c_str());
-        
+
         // Set viewBox
-        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().quantity, doc->getHeight().quantity));
-        
-        // Scale and translate objects
-        double scale = Inkscape::Util::Quantity::convert(1, "px", doc->getWidth().unit);
-        ShapeEditor::blockSetItem(true);
-        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, SP_ACTIVE_DOCUMENT->getHeight().value("px")));
-        ShapeEditor::blockSetItem(false);
-        
+        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc_unit), doc->getHeight().value(doc_unit)));
         doc->ensureUpToDate();
-        
+
+        // Scale and translate objects
+        double scale = Inkscape::Util::Quantity::convert(1, "px", doc_unit);
+        ShapeEditor::blockSetItem(true);
+        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, doc->getHeight().value("px")));
+        ShapeEditor::blockSetItem(false);
+
         Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
     }
 
