@@ -362,16 +362,17 @@ bool UnitTable::load(std::string const &filename) {
     return true;
 }
 
+/*
 bool UnitTable::save(std::string const &filename) {
-
     g_warning("UnitTable::save(): not implemented");
 
-    return true;
+    return false;
 }
+*/
 
 Inkscape::Util::UnitTable unit_table;
 
-void UnitParser::on_start_element(Ctx &ctx, Glib::ustring const &name, AttrMap const &attrs)
+void UnitParser::on_start_element(Ctx &/*ctx*/, Glib::ustring const &name, AttrMap const &attrs)
 {
     if (name == "unit") {
         // reset for next use
@@ -413,7 +414,7 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
     }
 }
 
-void UnitParser::on_end_element(Ctx &ctx, Glib::ustring const &name)
+void UnitParser::on_end_element(Ctx &/*ctx*/, Glib::ustring const &name)
 {
     if (name == "unit" && !skip) {
         tbl->addUnit(unit, primary);
@@ -463,7 +464,7 @@ double Quantity::value(char const *u) const
 }
 
 Glib::ustring Quantity::string(Unit const *u) const {
-    return Glib::ustring::format(std::fixed, std::setprecision(2), value(u)) + " " + unit->abbr;
+    return Glib::ustring::format(std::fixed, std::setprecision(2), value(u)) + " " + u->abbr;
 }
 Glib::ustring Quantity::string(Glib::ustring const &u) const {
     return string(unit_table.getUnit(u.c_str()));
