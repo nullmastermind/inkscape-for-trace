@@ -2,7 +2,6 @@
 # coding=utf-8
 '''
 Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
-This importer supports HP-GL commands only.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
