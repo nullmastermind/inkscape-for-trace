@@ -1,8 +1,8 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # coding=utf-8
 '''
 Copyright (C) 2008 Aaron Spike, aaron@ekips.org
-Overcut, Tool Offset, Rotation, Serial Com., Many Bugfixes and Improvements: Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
+Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,17 +19,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
-# standard library
-import math, string
-# local library
-import bezmisc, cspsubdiv, cubicsuperpath, inkex, simplestyle, simpletransform
+# standard libraries
+import math
+import string
+# local libraries
+import bezmisc
+import cspsubdiv
+import cubicsuperpath
+import inkex
+import simplestyle
+import simpletransform
 
 
 class hpglEncoder:
-    
     PI = math.pi
     TWO_PI = PI * 2
-    
+
     def __init__(self, effect):
         ''' options:
                 "resolutionX":float
@@ -96,7 +101,7 @@ class hpglEncoder:
         elif self.options.useToolOffset:
             self.options.offsetX += self.options.toolOffset
             self.options.offsetY += self.options.toolOffset
-        self.groupmat = [[[self.mirrorX * self.scaleX * self.viewBoxTransformX, 0.0, -self.divergenceX + self.options.offsetX], [0.0, self.mirrorY * self.scaleY * self.viewBoxTransformY, -self.divergenceY + self.options.offsetY]]]
+        self.groupmat = [[[self.mirrorX * self.scaleX * self.viewBoxTransformX, 0.0, - self.divergenceX + self.options.offsetX], [0.0, self.mirrorY * self.scaleY * self.viewBoxTransformY, - self.divergenceY + self.options.offsetY]]]
         self.groupmat[0] = simpletransform.composeTransform(self.groupmat[0], simpletransform.parseTransform('rotate(' + self.options.orientation + ')'))
         self.vData = [['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0]]
         # store first hpgl commands
@@ -112,7 +117,7 @@ class hpglEncoder:
         # add return to zero point
         self.hpgl += ';PU0,0;'
         return self.hpgl
-    
+
     def process_group(self, group, groupmat):
         # process groups
         style = group.get('style')
@@ -131,9 +136,9 @@ class hpglEncoder:
                 self.process_group(node, groupmat)
         if trans:
             groupmat.pop()
-    
+
     def process_path(self, node, mat):
-        # process path 
+        # process path
         drawing = node.get('d')
         if drawing:
             # transform path
@@ -169,31 +174,32 @@ class hpglEncoder:
                             if posX != oldPosX or posY != oldPosY:
                                 overcutLength += self.getLength(oldPosX, oldPosY, posX, posY)
                                 if overcutLength >= self.options.overcut:
-                                    newLength = self.changeLength(oldPosX, oldPosY, posX, posY, -(overcutLength - self.options.overcut));
+                                    newLength = self.changeLength(oldPosX, oldPosY, posX, posY, - (overcutLength - self.options.overcut))
                                     self.calcOffset(cmd, newLength[0], newLength[1])
                                     break
                                 else:
                                     self.calcOffset(cmd, posX, posY)
                                 oldPosX = posX
                                 oldPosY = posY
-    
-    def getLength(self, x1, y1, x2, y2, absolute = True): # calc absoulute or relative length between two points
+
+    def getLength(self, x1, y1, x2, y2, absolute=True): # calc absoulute or relative length between two points
         length = math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0)
         if absolute:
             length = math.fabs(length)
         return length
-    
+
     def changeLength(self, x1, y1, x2, y2, offset): # change length of line
-        if offset < 0: offset = max(-self.getLength(x1, y1, x2, y2), offset)
-        x = x2 + (x2 - x1) / self.getLength(x1, y1, x2, y2, False) * offset;
-        y = y2 + (y2 - y1) / self.getLength(x1, y1, x2, y2, False) * offset;
+        if offset < 0:
+            offset = max( - self.getLength(x1, y1, x2, y2), offset)
+        x = x2 + (x2 - x1) / self.getLength(x1, y1, x2, y2, False) * offset
+        y = y2 + (y2 - y1) / self.getLength(x1, y1, x2, y2, False) * offset
         return [x, y]
 
     def getAlpha(self, x1, y1, x2, y2, x3, y3): # get alpha of point 2
-        temp1 = (x1-x2)**2 + (y1-y2)**2 + (x3-x2)**2 + (y3-y2)**2 - (x1-x3)**2 - (y1-y3)**2
-        temp2 = 2 * math.sqrt((x1-x2)**2 + (y1-y2)**2) * math.sqrt((x3-x2)**2 + (y3-y2)**2)
+        temp1 = (x1 - x2) ** 2 + (y1 - y2) ** 2 + (x3 - x2) ** 2 + (y3 - y2) ** 2 - (x1 - x3) ** 2 - (y1 - y3) ** 2
+        temp2 = 2 * math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) * math.sqrt((x3 - x2) ** 2 + (y3 - y2) ** 2)
         return math.acos(max(min(temp1 / temp2, 1.0), -1.0))
-    
+
     def calcOffset(self, cmd, posX, posY):
         # calculate offset correction (or dont)
         if not self.options.useToolOffset or self.dryRun:
@@ -207,12 +213,12 @@ class hpglEncoder:
                 if self.vData[1][1] == -1.0:
                     self.storePoint(self.vData[2][0], self.vData[2][1], self.vData[2][2])
                 else:
-                    # perform tool offset correction (It's a *tad* complicated, if you want to understand it draw the data as lines on paper) 
+                    # perform tool offset correction (It's a *tad* complicated, if you want to understand it draw the data as lines on paper)
                     if self.vData[2][0] == 'PD': # If the 3rd entry in the cache is a pen down command make the line longer by the tool offset
                         pointThree = self.changeLength(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
                         self.storePoint('PD', pointThree[0], pointThree[1])
                     elif self.vData[0][1] != -1.0: # Elif the 1st entry in the cache is filled with data and the 3rd entry is a pen up command shift the 3rd entry by the current tool offset position according to the 2nd command
-                        pointThree = self.changeLength(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset) 
+                        pointThree = self.changeLength(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset)
                         pointThree[0] = self.vData[2][1] - (self.vData[1][1] - pointThree[0])
                         pointThree[1] = self.vData[2][2] - (self.vData[1][2] - pointThree[1])
                         self.storePoint('PU', pointThree[0], pointThree[1])
@@ -221,9 +227,9 @@ class hpglEncoder:
                         self.storePoint('PU', pointThree[0], pointThree[1])
                     if self.vData[3][0] == 'PD': # If the 4th entry in the cache is a pen down command guide tool to next line with a circle between the prolonged 3rd and 4th entry
                         if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) >= self.options.toolOffset:
-                            pointFour = self.changeLength(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], -self.options.toolOffset)
+                            pointFour = self.changeLength(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], - self.options.toolOffset)
                         else:
-                            pointFour = self.changeLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2], 
+                            pointFour = self.changeLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2],
                                 (self.options.toolOffset - self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2])))
                         # get angle start and angle vector
                         angleStart = math.atan2(pointThree[1] - self.vData[2][2], pointThree[0] - self.vData[2][1])
@@ -231,7 +237,7 @@ class hpglEncoder:
                         # switch direction when arc is bigger than 180°
                         if angleVector > self.PI:
                             angleVector -= self.TWO_PI
-                        elif angleVector < -self.PI:
+                        elif angleVector < - self.PI:
                             angleVector += self.TWO_PI
                         # draw arc
                         if angleVector >= 0:
@@ -245,7 +251,7 @@ class hpglEncoder:
                                 self.storePoint('PD', self.vData[2][1] + math.cos(angle) * self.options.toolOffset, self.vData[2][2] + math.sin(angle) * self.options.toolOffset)
                                 angle -= self.toolOffsetFlat
                         self.storePoint('PD', pointFour[0], pointFour[1])
-    
+
     def storePoint(self, command, x, y):
         x = int(round(x))
         y = int(round(y))
@@ -254,15 +260,21 @@ class hpglEncoder:
             return
         if self.dryRun:
             # find edges
-            if self.divergenceX == 'False' or x < self.divergenceX: self.divergenceX = x 
-            if self.divergenceY == 'False' or y < self.divergenceY: self.divergenceY = y
-            if self.sizeX == 'False' or x > self.sizeX: self.sizeX = x
-            if self.sizeY == 'False' or y > self.sizeY: self.sizeY = y
+            if self.divergenceX == 'False' or x < self.divergenceX:
+                self.divergenceX = x
+            if self.divergenceY == 'False' or y < self.divergenceY:
+                self.divergenceY = y
+            if self.sizeX == 'False' or x > self.sizeX:
+                self.sizeX = x
+            if self.sizeY == 'False' or y > self.sizeY:
+                self.sizeY = y
         else:
             # store point
             if not self.options.center:
-                if x < 0: x = 0 # only positive values are allowed (usually)
-                if y < 0: y = 0
+                if x < 0:
+                    x = 0 # only positive values are allowed (usually)
+                if y < 0:
+                    y = 0
             # do not repeat command
             if command == 'PD' and self.lastPoint[0] == 'PD':
                 self.hpgl += ',%d,%d' % (x, y)

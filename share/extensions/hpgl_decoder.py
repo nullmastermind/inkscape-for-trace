@@ -1,7 +1,7 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # coding=utf-8
 '''
-Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
+Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
-# standard library
+# standard libraries
 from StringIO import StringIO
 import math
 # local library
@@ -26,6 +26,7 @@ import inkex
 
 
 class hpglDecoder:
+
     def __init__(self, hpglString, options):
         ''' options:
                 "resolutionX":float
@@ -41,15 +42,15 @@ class hpglDecoder:
     def getSvg(self): # parse hpgl data
         # prepare document
         self.doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' % (self.options.docWidth, self.options.docHeight)))
-        actualLayer = 0;
+        actualLayer = 0
         self.layers = {}
         if self.options.showMovements:
-        	self.layers[0] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Movements'})
+            self.layers[0] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode', 'inkscape'): 'layer', inkex.addNS('label', 'inkscape'): 'Movements'})
         # parse paths
         hpglData = self.hpglString.split(';')
         if len(hpglData) < 3:
             raise Exception('NO_HPGL_DATA')
-        oldCoordinates = (0.0, self.options.docHeight) 
+        oldCoordinates = (0.0, self.options.docHeight)
         path = ''
         for i, command in enumerate(hpglData):
             if command.strip() != '':
@@ -87,13 +88,13 @@ class hpglDecoder:
         return (self.doc, self.warnings)
 
     def createLayer(self, layerNumber):
-        self.layers[layerNumber] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode','inkscape'):'layer', inkex.addNS('label','inkscape'):'Drawing Pen ' + layerNumber})
+        self.layers[layerNumber] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode', 'inkscape'): 'layer', inkex.addNS('label', 'inkscape'): 'Drawing Pen ' + layerNumber})
 
     def addPathToLayer(self, path, layerNumber):
         lineColor = '000000'
         if layerNumber == 0:
             lineColor = 'ff0000'
-        inkex.etree.SubElement(self.layers[layerNumber], 'path', {'d':path, 'style':'stroke:#' + lineColor + '; stroke-width:0.4; fill:none;'})
+        inkex.etree.SubElement(self.layers[layerNumber], 'path', {'d': path, 'style': 'stroke:#' + lineColor + '; stroke-width:0.4; fill:none;'})
 
     def getParameters(self, parameterString): # process coordinates
         if parameterString.strip() == '':

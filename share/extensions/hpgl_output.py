@@ -1,8 +1,7 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # coding=utf-8
 '''
-Copyright (C) 2008 Aaron Spike, aaron@ekips.org
-Overcut, Tool Offset, Rotation, Serial Com., Many Bugfixes and Improvements: Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
+Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,12 +20,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 # standard library
 import sys
-# local library
-import hpgl_encoder, inkex
+# local libraries
+import hpgl_encoder
+import inkex
 inkex.localize()
 
 
 class MyEffect(inkex.Effect):
+
     def __init__(self):
         inkex.Effect.__init__(self)
         self.OptionParser.add_option('--tab',              action='store', type='string',  dest='tab')
@@ -45,7 +46,7 @@ class MyEffect(inkex.Effect):
         self.OptionParser.add_option('--precut',           action='store', type='inkbool', dest='precut',           default='TRUE',  help='Use precut')
         self.OptionParser.add_option('--offsetX',          action='store', type='float',   dest='offsetX',          default=0.0,     help='X offset (mm)')
         self.OptionParser.add_option('--offsetY',          action='store', type='float',   dest='offsetY',          default=0.0,     help='Y offset (mm)')
- 
+
     def effect(self):
         # get hpgl data
         myHpglEncoder = hpgl_encoder.hpglEncoder(self)
@@ -66,7 +67,7 @@ class MyEffect(inkex.Effect):
 
 if __name__ == '__main__':
     # Raise recursion limit to avoid exceptions on big documents
-    sys.setrecursionlimit(20000);
+    sys.setrecursionlimit(20000)
     # start extension
     e = MyEffect()
     e.affect()

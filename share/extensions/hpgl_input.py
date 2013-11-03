@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 '''
-Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de, http://www.timewasters-place.com/
+Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,11 +18,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
-# standard library
+# standard libraries
 import sys
 from StringIO import StringIO
-# local library
-import hpgl_decoder, inkex, sys
+# local libraries
+import hpgl_decoder
+import inkex
+import sys
 inkex.localize()
 
 
@@ -53,7 +55,7 @@ try:
     # issue warning if unknown commands where found
     if 'UNKNOWN_COMMANDS' in warnings:
         inkex.errormsg(_("The HPGL data contained unknown (unsupported) commands, there is a possibility that the drawing is missing some content."))
-    # deliver document to inkscape 
+    # deliver document to inkscape
     doc.write(inkex.sys.stdout)
 except Exception as inst:
     if inst.args[0] == 'NO_HPGL_DATA':
