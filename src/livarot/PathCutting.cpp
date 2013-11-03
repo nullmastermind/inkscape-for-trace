@@ -303,7 +303,7 @@ Path::MakePathVector()
             {
                 /* TODO: add testcase for this descr_arcto case */
                 PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
-                currentpath->appendNew<Geom::SVGEllipticalArc>( nData->rx, nData->ry, nData->angle, nData->large, !nData->clockwise, nData->p );
+                currentpath->appendNew<Geom::SVGEllipticalArc>( nData->rx, nData->ry, nData->angle*M_PI/180.0, nData->large, !nData->clockwise, nData->p );
                 lastP = nData->p;
             }
             break;
@@ -398,7 +398,7 @@ void  Path::AddCurve(Geom::Curve const &c)
     else if(Geom::SVGEllipticalArc const *svg_elliptical_arc = dynamic_cast<Geom::SVGEllipticalArc const *>(&c)) {
         ArcTo( svg_elliptical_arc->finalPoint(),
                svg_elliptical_arc->ray(Geom::X), svg_elliptical_arc->ray(Geom::Y),
-               svg_elliptical_arc->rotationAngle(),  /// \todo check that this parameter is in radians (rotation_angle returns the angle in radians!)
+               svg_elliptical_arc->rotationAngle()*180.0/M_PI,  // convert from radians to degrees
                svg_elliptical_arc->largeArc(), !svg_elliptical_arc->sweep() );
     } else { 
         //this case handles sbasis as well as all other curve types
@@ -1217,7 +1217,7 @@ void Path::ConvertPositionsToForced(int nbPos, cut_position *poss)
         }
         {
           double      sang,eang;
-          ArcAngles(startP,endP,rx,ry,angle,large,clockw,sang,eang);
+          ArcAngles(startP,endP,rx,ry,angle*M_PI/180.0,large,clockw,sang,eang);
           
           if (clockw) {
             if ( sang < eang ) sang += 2*M_PI;

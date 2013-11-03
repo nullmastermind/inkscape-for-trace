@@ -21,7 +21,7 @@
  */
 
 /*
- *$Id: cr-enc-handler.c,v 1.7 2004/03/07 13:22:47 dodji Exp $
+ *$Id$
  */
 
 /**
@@ -57,7 +57,7 @@ static struct CREncAlias gv_default_aliases[] = {
         {"UCS-4", CR_UCS_4},
         {"UCS_4", CR_UCS_4},
         {"ASCII", CR_ASCII},
-        {(char *)0, (enum CREncoding)0}
+        {0, 0}
 };
 
 static CREncHandler gv_default_enc_handlers[] = {
@@ -70,14 +70,17 @@ static CREncHandler gv_default_enc_handlers[] = {
         {CR_ASCII, cr_utils_ucs1_to_utf8, cr_utils_utf8_to_ucs1,
          cr_utils_ucs1_str_len_as_utf8, cr_utils_utf8_str_len_as_ucs1},
 
-        {(enum CREncoding)0, NULL, NULL, NULL, NULL}
+        {0, NULL, NULL, NULL, NULL}
 };
 
 /**
+ * cr_enc_handler_get_instance:
+ *@a_enc: the encoding of the Handler.
+ *
  *Gets the instance of encoding handler.
  *This function implements a singleton pattern.
- *@param a_enc the encoding of the Handler.
- *@return the instance of #CREncHandler.
+ *
+ *Returns the instance of #CREncHandler.
  */
 CREncHandler *
 cr_enc_handler_get_instance (enum CREncoding a_enc)
@@ -95,23 +98,27 @@ cr_enc_handler_get_instance (enum CREncoding a_enc)
 }
 
 /**
+ * cr_enc_handler_resolve_enc_alias:
+ *@a_alias_name: the encoding name.
+ *@a_enc: output param. The returned encoding type
+ *or 0 if the alias is not supported.
+ *
  *Given an encoding name (called an alias name)
  *the function returns the matching encoding type.
- *@param a_alias_name the encoding name
- *@param a_enc output param. The returned encoding type
- *or 0 if the alias is not supported.
- *@return CR_OK upon successfull completion, an error code otherwise.
+ *
+ *Returns CR_OK upon successfull completion, an error code otherwise.
  */
 enum CRStatus
 cr_enc_handler_resolve_enc_alias (const guchar * a_alias_name,
                                   enum CREncoding *a_enc)
 {
         gulong i = 0;
+        guchar *alias_name_up = NULL;
         enum CRStatus status = CR_ENCODING_NOT_FOUND_ERROR;
 
         g_return_val_if_fail (a_alias_name != NULL, CR_BAD_PARAM_ERROR);
 
-        gchar *alias_name_up = g_strdup ((gchar *)a_alias_name);
+        alias_name_up = g_strdup (a_alias_name);
         g_ascii_strup (alias_name_up, -1);
 
         for (i = 0; gv_default_aliases[i].name; i++) {
@@ -126,16 +133,19 @@ cr_enc_handler_resolve_enc_alias (const guchar * a_alias_name,
 }
 
 /**
- *Converts a raw input buffer into an utf8 buffer.
- *@param a_this the current instance of #CREncHandler.
- *@param a_in the input buffer to convert.
- *@param a_in_len in/out parameter. The len of the input
+ * cr_enc_handler_convert_input:
+ *@a_this: the current instance of #CREncHandler.
+ *@a_in: the input buffer to convert.
+ *@a_in_len: in/out parameter. The len of the input
  *buffer to convert. After return, contains the number of
  *bytes actually consumed.
- *@param @a_out output parameter. The converted output buffer.
+ *@a_out: output parameter. The converted output buffer.
  *Must be freed by the buffer.
- *@param a_out_len output parameter. The length of the output buffer.
- *@return CR_OK upon successfull completion, an error code otherwise.
+ *@a_out_len: output parameter. The length of the output buffer.
+ *
+ *Converts a raw input buffer into an utf8 buffer.
+ *
+ *Returns CR_OK upon successfull completion, an error code otherwise.
  */
 enum CRStatus
 cr_enc_handler_convert_input (CREncHandler * a_this,
@@ -161,7 +171,7 @@ cr_enc_handler_convert_input (CREncHandler * a_this,
                 *a_out_len = *a_in_len;
         }
 
-        *a_out = (guchar *)g_malloc0 (*a_out_len);
+        *a_out = g_malloc0 (*a_out_len);
 
         status = a_this->decode_input (a_in, a_in_len, *a_out, a_out_len);
 

@@ -327,7 +327,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   MakeSweepDestData (false);
 }
 void 
-Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced)
+Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*/,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced)
 {
   nesting=NULL;
   contStart=NULL;
@@ -1056,7 +1056,7 @@ Shape::ReFormeArcTo (int bord, int /*curBord*/, Path * dest, Path * from)
   PathDescrArcTo* nData = dynamic_cast<PathDescrArcTo *>(from->descr_cmd[nPiece]);
   bool nLarge = nData->large;
   bool nClockwise = nData->clockwise;
-  Path::ArcAngles (from->PrevPoint (nPiece - 1), nData->p,nData->rx,nData->ry,nData->angle, nLarge, nClockwise,  sang, eang);
+  Path::ArcAngles (from->PrevPoint (nPiece - 1), nData->p,nData->rx,nData->ry,nData->angle*M_PI/180.0, nLarge, nClockwise,  sang, eang);
   if (nClockwise)
   {
     if (sang < eang)
