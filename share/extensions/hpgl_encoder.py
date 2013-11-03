@@ -134,6 +134,7 @@ class hpglEncoder:
             if node.tag == inkex.addNS('path', 'svg'):
                 self.process_path(node, groupmat[-1])
             if node.tag == inkex.addNS('g', 'svg'):
+                # TODO: Remove recursion
                 self.process_group(node, groupmat)
         if trans:
             groupmat.pop()
