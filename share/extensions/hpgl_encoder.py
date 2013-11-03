@@ -31,6 +31,7 @@ import simplestyle
 import simpletransform
 
 
+# TODO: Unittests
 class hpglEncoder:
     PI = math.pi
     TWO_PI = PI * 2

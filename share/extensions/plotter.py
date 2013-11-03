@@ -28,7 +28,8 @@ import inkex
 inkex.localize()
 
 
-# TODO: Materialvorschub nach plot, rechtecke plotten
+# TODO: Unittests
+# TODO: Material feed after plot, plot rectangles
 class MyEffect(inkex.Effect):
 
     def __init__(self):

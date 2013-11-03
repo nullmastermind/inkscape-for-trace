@@ -26,6 +26,7 @@ import inkex
 inkex.localize()
 
 
+# TODO: Unittests
 class MyEffect(inkex.Effect):
 
     def __init__(self):

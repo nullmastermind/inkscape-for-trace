@@ -25,6 +25,7 @@ import math
 import inkex
 
 
+# TODO: Unittests
 class hpglDecoder:
 
     def __init__(self, hpglString, options):
