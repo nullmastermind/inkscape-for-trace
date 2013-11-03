@@ -39,9 +39,11 @@ class hpglDecoder:
         self.scaleY = options.resolutionY / 90.0 # dots/inch to dots/pixels
         self.warnings = []
 
-    def getSvg(self): # parse hpgl data
+    def getSvg(self):
+        # parse hpgl data
         # prepare document
-        self.doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' % (self.options.docWidth, self.options.docHeight)))
+        self.doc = inkex.etree.parse(StringIO('<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" width="%s" height="%s"></svg>' %
+            (self.options.docWidth, self.options.docHeight)))
         actualLayer = 0
         self.layers = {}
         if self.options.showMovements:
@@ -54,12 +56,15 @@ class hpglDecoder:
         path = ''
         for i, command in enumerate(hpglData):
             if command.strip() != '':
-                if command[:2] == 'IN': # if Initialize command, ignore
+                if command[:2] == 'IN':
+                    # if Initialize command, ignore
                     pass
-                elif command[:2] == 'SP': # if Select Pen command
+                elif command[:2] == 'SP':
+                    # if Select Pen command
                     actualLayer = command[2:]
                     self.createLayer(actualLayer)
-                elif command[:2] == 'PU': # if Pen Up command
+                elif command[:2] == 'PU':
+                    # if Pen Up command
                     if ' L ' in path:
                         self.addPathToLayer(path, actualLayer)
                     if self.options.showMovements and i != len(hpglData) - 1:
@@ -68,7 +73,8 @@ class hpglDecoder:
                         self.addPathToLayer(path, 0)
                     path = 'M %f,%f' % self.getParameters(command[2:])
                     oldCoordinates = self.getParameters(command[2:])
-                elif command[:2] == 'PD': # if Pen Down command
+                elif command[:2] == 'PD':
+                    # if Pen Down command
                     parameterString = command[2:]
                     if parameterString.strip() != '':
                         parameterString = parameterString.replace(';', '').strip()
@@ -88,7 +94,8 @@ class hpglDecoder:
         return (self.doc, self.warnings)
 
     def createLayer(self, layerNumber):
-        self.layers[layerNumber] = inkex.etree.SubElement(self.doc.getroot(), 'g', {inkex.addNS('groupmode', 'inkscape'): 'layer', inkex.addNS('label', 'inkscape'): 'Drawing Pen ' + layerNumber})
+        self.layers[layerNumber] = inkex.etree.SubElement(self.doc.getroot(), 'g',
+            {inkex.addNS('groupmode', 'inkscape'): 'layer', inkex.addNS('label', 'inkscape'): 'Drawing Pen ' + layerNumber})
 
     def addPathToLayer(self, path, layerNumber):
         lineColor = '000000'
@@ -96,13 +103,15 @@ class hpglDecoder:
             lineColor = 'ff0000'
         inkex.etree.SubElement(self.layers[layerNumber], 'path', {'d': path, 'style': 'stroke:#' + lineColor + '; stroke-width:0.4; fill:none;'})
 
-    def getParameters(self, parameterString): # process coordinates
+    def getParameters(self, parameterString):
+        # process coordinates
         if parameterString.strip() == '':
             return []
         # remove command delimiter
         parameterString = parameterString.replace(';', '').strip()
         # split parameter
         parameter = parameterString.split(',')
-        return (float(parameter[0]) / self.scaleX, self.options.docHeight - float(parameter[1]) / self.scaleY) # convert to svg coordinate system
+        # convert to svg coordinate system and return
+        return (float(parameter[0]) / self.scaleX, self.options.docHeight - float(parameter[1]) / self.scaleY)
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

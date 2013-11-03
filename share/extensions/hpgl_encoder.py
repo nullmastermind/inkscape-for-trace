@@ -55,7 +55,7 @@ class hpglEncoder:
         '''
         self.doc = effect.document.getroot()
         self.options = effect.options
-        self.divergenceX = 'False' # dirty hack: i need to know if this was set to a number before, but since False is evaluated to 0 it can not be determined, therefore the string.
+        self.divergenceX = 'False'
         self.divergenceY = 'False'
         self.sizeX = 'False'
         self.sizeY = 'False'
@@ -101,7 +101,8 @@ class hpglEncoder:
         elif self.options.useToolOffset:
             self.options.offsetX += self.options.toolOffset
             self.options.offsetY += self.options.toolOffset
-        self.groupmat = [[[self.mirrorX * self.scaleX * self.viewBoxTransformX, 0.0, - self.divergenceX + self.options.offsetX], [0.0, self.mirrorY * self.scaleY * self.viewBoxTransformY, - self.divergenceY + self.options.offsetY]]]
+        self.groupmat = [[[self.mirrorX * self.scaleX * self.viewBoxTransformX, 0.0, - self.divergenceX + self.options.offsetX],
+            [0.0, self.mirrorY * self.scaleY * self.viewBoxTransformY, - self.divergenceY + self.options.offsetY]]]
         self.groupmat[0] = simpletransform.composeTransform(self.groupmat[0], simpletransform.parseTransform('rotate(' + self.options.orientation + ')'))
         self.vData = [['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0], ['', -1.0, -1.0]]
         # store first hpgl commands
@@ -182,20 +183,23 @@ class hpglEncoder:
                                 oldPosX = posX
                                 oldPosY = posY
 
-    def getLength(self, x1, y1, x2, y2, absolute=True): # calc absoulute or relative length between two points
+    def getLength(self, x1, y1, x2, y2, absolute=True):
+        # calc absoulute or relative length between two points
         length = math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0)
         if absolute:
             length = math.fabs(length)
         return length
 
-    def changeLength(self, x1, y1, x2, y2, offset): # change length of line
+    def changeLength(self, x1, y1, x2, y2, offset):
+        # change length of line
         if offset < 0:
             offset = max( - self.getLength(x1, y1, x2, y2), offset)
         x = x2 + (x2 - x1) / self.getLength(x1, y1, x2, y2, False) * offset
         y = y2 + (y2 - y1) / self.getLength(x1, y1, x2, y2, False) * offset
         return [x, y]
 
-    def getAlpha(self, x1, y1, x2, y2, x3, y3): # get alpha of point 2
+    def getAlpha(self, x1, y1, x2, y2, x3, y3):
+        # get alpha of point 2
         temp1 = (x1 - x2) ** 2 + (y1 - y2) ** 2 + (x3 - x2) ** 2 + (y3 - y2) ** 2 - (x1 - x3) ** 2 - (y1 - y3) ** 2
         temp2 = 2 * math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) * math.sqrt((x3 - x2) ** 2 + (y3 - y2) ** 2)
         return math.acos(max(min(temp1 / temp2, 1.0), -1.0))
@@ -217,15 +221,19 @@ class hpglEncoder:
                     if self.vData[2][0] == 'PD': # If the 3rd entry in the cache is a pen down command make the line longer by the tool offset
                         pointThree = self.changeLength(self.vData[1][1], self.vData[1][2], self.vData[2][1], self.vData[2][2], self.options.toolOffset)
                         self.storePoint('PD', pointThree[0], pointThree[1])
-                    elif self.vData[0][1] != -1.0: # Elif the 1st entry in the cache is filled with data and the 3rd entry is a pen up command shift the 3rd entry by the current tool offset position according to the 2nd command
+                    elif self.vData[0][1] != -1.0:
+                        # Elif the 1st entry in the cache is filled with data and the 3rd entry is a pen up command shift
+                        # the 3rd entry by the current tool offset position according to the 2nd command
                         pointThree = self.changeLength(self.vData[0][1], self.vData[0][2], self.vData[1][1], self.vData[1][2], self.options.toolOffset)
                         pointThree[0] = self.vData[2][1] - (self.vData[1][1] - pointThree[0])
                         pointThree[1] = self.vData[2][2] - (self.vData[1][2] - pointThree[1])
                         self.storePoint('PU', pointThree[0], pointThree[1])
-                    else: # Else just write the 3rd entry
+                    else:
+                        # Else just write the 3rd entry
                         pointThree = [self.vData[2][1], self.vData[2][2]]
                         self.storePoint('PU', pointThree[0], pointThree[1])
-                    if self.vData[3][0] == 'PD': # If the 4th entry in the cache is a pen down command guide tool to next line with a circle between the prolonged 3rd and 4th entry
+                    if self.vData[3][0] == 'PD':
+                        # If the 4th entry in the cache is a pen down command guide tool to next line with a circle between the prolonged 3rd and 4th entry
                         if self.getLength(self.vData[2][1], self.vData[2][2], self.vData[3][1], self.vData[3][2]) >= self.options.toolOffset:
                             pointFour = self.changeLength(self.vData[3][1], self.vData[3][2], self.vData[2][1], self.vData[2][2], - self.options.toolOffset)
                         else:
@@ -271,8 +279,9 @@ class hpglEncoder:
         else:
             # store point
             if not self.options.center:
+                # only positive values are allowed (usually)
                 if x < 0:
-                    x = 0 # only positive values are allowed (usually)
+                    x = 0
                 if y < 0:
                     y = 0
             # do not repeat command
@@ -280,8 +289,6 @@ class hpglEncoder:
                 self.hpgl += ',%d,%d' % (x, y)
             else:
                 self.hpgl += ';%s%d,%d' % (command, x, y)
-        self.lastPoint[0] = command
-        self.lastPoint[1] = x
-        self.lastPoint[2] = y
+        self.lastPoint = [command, x, y]
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
