@@ -335,7 +335,7 @@ LPEBSpline::changeWeight(double weightValue)
     gchar *str = sp_svg_write_path(curve->get_pathvector());
     path->getRepr()->setAttribute("inkscape:original-d", str);
     if(INK_IS_NODE_TOOL(desktop->event_context)){
-        InkNodeTool *nt = INK_NODE_TOOL(desktop->event_context);
+        Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(desktop->event_context);
         nt->desktop->updateNow();
     }
     g_free(str);
@@ -367,7 +367,7 @@ LPEBSpline::doBSplineFromWidget(SPCurve * curve, double weightValue)
     using Geom::Y;
     SPDesktop *desktop = inkscape_active_desktop();
     if(INK_IS_NODE_TOOL(desktop->event_context)){
-        InkNodeTool *nt = INK_NODE_TOOL(desktop->event_context);
+        Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(desktop->event_context);
         Inkscape::UI::ControlPointSelection::Set &selection = nt->_selected_nodes->allPoints();
         points.clear();
         std::vector<Geom::Point>::iterator pbegin;
