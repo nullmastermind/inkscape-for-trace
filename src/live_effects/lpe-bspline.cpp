@@ -17,7 +17,7 @@
 #include "live_effects/parameter/parameter.h"
 #include "ui/widget/scalar.h"
 #include "ui/tool/node.h"
-#include "ui/tool/node-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/selectable-control-point.h"
 #include "selection.h"
