@@ -19,7 +19,7 @@
 #include "desktop.h"
 #include "display/sp-canvas-item.h"
 #include "display/sp-ctrlline.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "xml/repr.h"
 #include "perspective-line.h"
 #include "shape-editor.h"
@@ -632,7 +632,7 @@ VPDrag::updateBoxHandles ()
         return;
     }
 
-    SPEventContext *ec = inkscape_active_event_context();
+    Inkscape::UI::Tools::ToolBase *ec = inkscape_active_event_context();
     g_assert (ec != NULL);
     if (ec->shape_editor != NULL) {
         ec->shape_editor->update_knotholder();

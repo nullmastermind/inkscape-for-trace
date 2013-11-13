@@ -16,7 +16,13 @@
 #include <iosfwd>
 #include <stdexcept>
 #include <cstddef>
+
+#if __cplusplus >= 201103L
+#include <functional>
+#else
 #include <tr1/functional>
+#endif
+
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 #include "ui/tool/selectable-control-point.h"
@@ -31,11 +37,13 @@ template <typename> class NodeIterator;
 }
 }
 
+#if __cplusplus < 201103L
 namespace std {
 namespace tr1 {
 template <typename N> struct hash< Inkscape::UI::NodeIterator<N> >;
 }
 }
+#endif
 
 namespace Inkscape {
 namespace UI {
@@ -106,7 +114,7 @@ protected:
 
     Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent);
 
-    virtual bool _eventHandler(SPEventContext *event_context, GdkEvent *event);
+    virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
     virtual void ungrabbed(GdkEventButton *event);
@@ -217,7 +225,7 @@ public:
 
     // temporarily public
     /** Customized event handler to catch scroll events needed for selection grow/shrink. */
-    virtual bool _eventHandler(SPEventContext *event_context, GdkEvent *event);
+    virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
 
     Inkscape::SnapCandidatePoint snapCandidatePoint();
 

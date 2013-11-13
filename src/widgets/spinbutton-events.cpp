@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "../event-context.h"
+#include "ui/tools/tool-base.h"
 
 #include "sp-widget.h"
 #include "widget-sizes.h"
@@ -67,7 +67,7 @@ gboolean spinbutton_keypress(GtkWidget *w, GdkEventKey *event, gpointer /*data*/
 {
     gboolean result = FALSE; // I didn't consume the event
 
-    switch (get_group0_keyval(event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
 	case GDK_KEY_Escape: // defocus
             spinbutton_undo(w);
             spinbutton_defocus(w);

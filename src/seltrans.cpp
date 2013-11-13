@@ -31,7 +31,7 @@
 #include "knot.h"
 #include "snap.h"
 #include "selection.h"
-#include "select-context.h"
+#include "ui/tools/select-tool.h"
 #include "sp-item.h"
 #include "sp-item-transform.h"
 #include "seltrans-handles.h"
@@ -66,7 +66,7 @@ static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, gpointe
         case GDK_MOTION_NOTIFY:
             break;
         case GDK_KEY_PRESS:
-            if (get_group0_keyval (&event->key) == GDK_KEY_space) {
+            if (Inkscape::UI::Tools::get_group0_keyval (&event->key) == GDK_KEY_space) {
                 /* stamping mode: both mode(show content and outline) operation with knot */
                 if (!SP_KNOT_IS_GRABBED(knot)) {
                     return FALSE;

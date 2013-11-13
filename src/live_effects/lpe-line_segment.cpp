@@ -12,7 +12,7 @@
  */
 
 #include "live_effects/lpe-line_segment.h"
-#include "lpe-tool-context.h"
+#include "ui/tools/lpe-tool.h"
 
 #include <2geom/pathvector.h>
 #include <2geom/geom.h>
@@ -45,7 +45,7 @@ LPELineSegment::~LPELineSegment()
 void
 LPELineSegment::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    lpetool_get_limiting_bbox_corners(lpeitem->document, bboxA, bboxB);
+    Inkscape::UI::Tools::lpetool_get_limiting_bbox_corners(lpeitem->document, bboxA, bboxB);
 }
 
 std::vector<Geom::Path>

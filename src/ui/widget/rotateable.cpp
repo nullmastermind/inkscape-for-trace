@@ -19,7 +19,7 @@
 #include <gtkmm/eventbox.h>
 #include <glibmm/i18n.h>
 #include <2geom/point.h>
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "rotateable.h"
 
 namespace Inkscape {
@@ -111,7 +111,7 @@ bool Rotateable::on_motion(GdkEventMotion *event) {
                 do_motion(force, modifier);
             }
         }
-        gobble_motion_events(GDK_BUTTON1_MASK);
+        Inkscape::UI::Tools::gobble_motion_events(GDK_BUTTON1_MASK);
         return true;
 		} 
 		return false; 

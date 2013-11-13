@@ -58,7 +58,7 @@
 #include "document-private.h"
 #include "xml/document.h"
 #include <glibmm/i18n.h>
-#include "pen-context.h"
+#include "ui/tools/pen-tool.h"
 #include "tools-switch.h"
 #include "message-stack.h"
 #include "desktop.h"
@@ -343,8 +343,8 @@ Effect::doAcceptPathPreparations(SPLPEItem *lpeitem)
         tools_switch(desktop, TOOLS_FREEHAND_PEN);
     }
 
-    SPEventContext *ec = desktop->event_context;
-    SPPenContext *pc = SP_PEN_CONTEXT(ec);
+    Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
+    Inkscape::UI::Tools::PenTool *pc = SP_PEN_CONTEXT(ec);
     pc->expecting_clicks_for_LPE = this->acceptsNumClicks();
     pc->waiting_LPE = this;
     pc->waiting_item = lpeitem;

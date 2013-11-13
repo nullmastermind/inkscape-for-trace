@@ -16,7 +16,7 @@
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace UI {
@@ -71,7 +71,7 @@ bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
 
 bool SpinButton::on_my_key_press_event(GdkEventKey* event)
 {
-    switch (get_group0_keyval (event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval (event)) {
     case GDK_KEY_Escape:
         undo();
         return true; // I consumed the event

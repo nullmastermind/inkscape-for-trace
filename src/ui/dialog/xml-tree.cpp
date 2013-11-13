@@ -27,7 +27,7 @@
 #include "dialogs/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "helper/window.h"
 #include "inkscape.h"
 #include "interface.h"
@@ -328,7 +328,7 @@ void XmlTree::attr_reset_context(gint attr)
 
 bool XmlTree::sp_xml_tree_key_press(GdkEventKey *event)
 {
-    unsigned int shortcut = get_group0_keyval (event) |
+    unsigned int shortcut = Inkscape::UI::Tools::get_group0_keyval (event) |
         ( event->state & GDK_SHIFT_MASK ?
           SP_SHORTCUT_SHIFT_MASK : 0 ) |
         ( event->state & GDK_CONTROL_MASK ?
@@ -842,7 +842,7 @@ void XmlTree::on_document_uri_set(gchar const * /*uri*/, SPDocument * /*document
 
 gboolean XmlTree::quit_on_esc (GtkWidget *w, GdkEventKey *event, GObject */*tbl*/)
 {
-    switch (get_group0_keyval (event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval (event)) {
         case GDK_KEY_Escape: // defocus
             gtk_widget_destroy(w);
             return TRUE;

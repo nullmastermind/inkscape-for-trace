@@ -40,7 +40,7 @@
 #include "sp-text.h"
 #include "display/curve.h"
 
-#include "ui/tool/node-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/shape-record.h"
 
@@ -208,7 +208,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
         tools_switch(dt, TOOLS_NODES);
     }
 
-    InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+    Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     std::set<ShapeRecord> shapes;
     ShapeRecord r;
 

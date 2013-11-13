@@ -44,9 +44,9 @@
 #include "desktop-handles.h"
 #include "display/curve.h"
 #include "document.h"
-#include "draw-context.h"
+#include "ui/tools/freehand-base.h"
 #include "extension/effect.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "file.h"
 #include "gradient-drag.h"
 #include "helper/action.h"
@@ -59,7 +59,7 @@
 #include "message-stack.h"
 #include "path-chemistry.h"
 #include "preferences.h"
-#include "select-context.h"
+#include "ui/tools/select-tool.h"
 #include "selection-chemistry.h"
 #include "seltrans.h"
 #include "shape-editor.h"
@@ -86,7 +86,7 @@
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/spellcheck.h"
 #include "ui/icon-names.h"
-#include "ui/tool/node-tool.h"
+#include "ui/tools/node-tool.h"
 #include "selection.h"
 
 #include <gtk/gtk.h>
@@ -1473,7 +1473,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
 
     g_return_if_fail(ensure_desktop_valid(action));
 
-    SPEventContext *ec = dt->event_context;
+    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
 
     if (sel->isEmpty())
         return;
@@ -1622,7 +1622,7 @@ void ContextVerb::perform(SPAction *action, void *data)
             tools_switch(dt, TOOLS_MEASURE);
             break;
         case SP_VERB_CONTEXT_DROPPER:
-            sp_toggle_dropper(dt); // Functionality defined in event-context.cpp
+            Inkscape::UI::Tools::sp_toggle_dropper(dt); // Functionality defined in event-context.cpp
             break;
         case SP_VERB_CONTEXT_CONNECTOR:
             tools_switch(dt,  TOOLS_CONNECTOR);
@@ -1767,7 +1767,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
 {
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
-    SPEventContext *ec = dt->event_context;
+    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
 
     SPDocument *doc = sp_desktop_document(dt);
 
@@ -1780,7 +1780,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_ZOOM_IN:
         {
-            gint mul = 1 + gobble_key_events(
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(
                  GDK_KEY_KP_Add, 0); // with any mask
             // While drawing with the pen/pencil tool, zoom towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
@@ -1798,7 +1798,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         }
         case SP_VERB_ZOOM_OUT:
         {
-            gint mul = 1 + gobble_key_events(
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(
                  GDK_KEY_KP_Subtract, 0); // with any mask
             // While drawing with the pen/pencil tool, zoom away from the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {

@@ -41,7 +41,7 @@
 #include "widgets/icon.h"
 #include "xml/repr.h"
 #include "sp-root.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "selection-chemistry.h"
 
 //#define DUMP_LAYERS 1
@@ -544,7 +544,7 @@ void LayersPanel::_toggled( Glib::ustring const& str, int targetCol )
 bool LayersPanel::_handleKeyEvent(GdkEventKey *event)
 {
 
-    switch (get_group0_keyval(event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
         case GDK_KEY_F2: {

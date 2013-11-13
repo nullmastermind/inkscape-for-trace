@@ -32,7 +32,7 @@
 #include "desktop.h"
 #include "desktop-style.h"
 #include "desktop-handles.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "selection.h"
 #include "verbs.h"
 #include <glibmm/i18n.h>
@@ -1571,7 +1571,7 @@ void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTa
 void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
 {
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    SPEventContext *ev = desktop->getEventContext();
+    Inkscape::UI::Tools::ToolBase *ev = desktop->getEventContext();
 
     if (!ev) {
         return;

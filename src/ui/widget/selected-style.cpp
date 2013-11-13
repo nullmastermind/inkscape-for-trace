@@ -39,7 +39,7 @@
 #include "sp-gradient.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "message-context.h"
 #include "verbs.h"
 #include "color.h"
@@ -1439,9 +1439,7 @@ RotateableStrokeWidth::RotateableStrokeWidth(SelectedStyle *parent) :
     parent(parent),
     startvalue(0),
     startvalue_set(false),
-    undokey("swrot1"),
-    cr(0),
-    cr_set(false)
+    undokey("swrot1")
 {
 }
 
