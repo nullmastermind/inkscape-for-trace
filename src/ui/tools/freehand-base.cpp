@@ -241,7 +241,7 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
 }
 
 
-static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *item)
+static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *item)
 {
     using namespace Inkscape::LivePathEffect;
 
