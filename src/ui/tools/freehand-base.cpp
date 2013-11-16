@@ -240,7 +240,7 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
 }
 
-<<<<<<< TREE
+
 static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *item)
 {
     using namespace Inkscape::LivePathEffect;
@@ -256,10 +256,8 @@ static void spdc_apply_bend_shape(gchar const *svgd, SPDrawContext *dc, SPItem *
 }
 
 static bool bend;
-static void spdc_check_for_and_apply_waiting_LPE(SPDrawContext *dc, SPItem *item, SPCurve *curve)
-=======
 static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item, SPCurve *curve)
->>>>>>> MERGE-SOURCE
+
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
