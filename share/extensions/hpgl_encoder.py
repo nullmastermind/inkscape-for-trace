@@ -62,13 +62,14 @@ class hpglEncoder:
         self.sizeY = 'False'
         self.dryRun = True
         self.lastPoint = [0, 0, 0]
-        self.scaleX = self.options.resolutionX / 90 # inch to pixels
-        self.scaleY = self.options.resolutionY / 90 # inch to pixels
-        self.options.offsetX = self.options.offsetX * 3.5433070866 * self.scaleX # mm to dots (plotter coordinate system)
-        self.options.offsetY = self.options.offsetY * 3.5433070866 * self.scaleY # mm to dots
-        self.options.overcut = self.options.overcut * 3.5433070866 * ((self.scaleX + self.scaleY) / 2) # mm to dots
-        self.options.toolOffset = self.options.toolOffset * 3.5433070866 * ((self.scaleX + self.scaleY) / 2) # mm to dots
-        self.options.flat = ((self.options.resolutionX + self.options.resolutionY) / 2) * self.options.flat / 1000 # scale flatness to resolution
+        self.scaleX = self.options.resolutionX / effect.unittouu("1.0in") # dots per inch to dots per user unit
+        self.scaleY = self.options.resolutionY / effect.unittouu("1.0in") # dots per inch to dots per user unit
+        scaleXY = (self.scaleX + self.scaleY) / 2
+        self.options.offsetX = effect.unittouu(str(self.options.offsetX) + "mm") * self.scaleX # mm to dots (plotter coordinate system)
+        self.options.offsetY = effect.unittouu(str(self.options.offsetY) + "mm") * self.scaleY # mm to dots
+        self.options.overcut = effect.unittouu(str(self.options.overcut) + "mm") * scaleXY # mm to dots
+        self.options.toolOffset = effect.unittouu(str(self.options.toolOffset) + "mm") * scaleXY # mm to dots
+        self.options.flat = self.options.flat / (1016 / ((self.options.resolutionX + self.options.resolutionY) / 2)) # scale flatness to resolution
         self.toolOffsetFlat = self.options.flat / self.options.toolOffset * 4.5 # scale flatness to offset
         self.mirrorX = 1.0
         if self.options.mirrorX:
@@ -83,8 +84,8 @@ class hpglEncoder:
         if viewBox:
             viewBox = string.split(viewBox, ' ')
             if viewBox[2] and viewBox[3]:
-                self.viewBoxTransformX = float(effect.unittouu(self.doc.get('width'))) / float(viewBox[2])
-                self.viewBoxTransformY = float(effect.unittouu(self.doc.get('height'))) / float(viewBox[3])
+                self.viewBoxTransformX = effect.unittouu(self.doc.get('width')) / effect.unittouu(viewBox[2])
+                self.viewBoxTransformY = effect.unittouu(self.doc.get('height')) / effect.unittouu(viewBox[3])
 
     def getHpgl(self):
         # dryRun to find edges
