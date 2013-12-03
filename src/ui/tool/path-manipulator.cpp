@@ -43,9 +43,9 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
-//BSpline
+
 #include "live_effects/lpe-bspline.h"
-//BSpline end
+
 
 namespace Inkscape {
 namespace UI {
@@ -150,20 +150,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
-    //BSpline
-    lpe_bsp = NULL;
-
-    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
-        if(thisEffect){
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
-        }
-    }
-
-    if(lpe_bsp){
-        isBSpline = true;
-    }
-    //BSpline End
+    BSpline();
 }
 
 PathManipulator::~PathManipulator()
@@ -681,7 +668,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
-    //BSpline
+    
     if(isBSpline){
         double pos = 0.0000;
         if(start.prev()){
@@ -693,7 +680,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
             end->back()->setPosition(BSplineHandleReposition(end->back(),pos));
         }
     }
-    //BSpline End
+    
 
     return del_len;
 }
@@ -928,9 +915,9 @@ void PathManipulator::showHandles(bool show)
 /** Set the visibility of outline. */
 void PathManipulator::showOutline(bool show)
 {
-    //BSpline
+    
     if(isBSpline) show = true;
-    //BSpline
+    
     if (show == _show_outline) return;
     _show_outline = show;
     _updateOutline();
@@ -1204,8 +1191,31 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
-int PathManipulator::getSteps(){
+int PathManipulator::BSplineGetSteps(){
+    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+
+    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
+        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        if(thisEffect){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
+        }
+    }
     return lpe_bsp->steps+1;
+}
+
+void PathManipulator::BSpline(){
+    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+
+    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
+        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        if(thisEffect){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
+        }
+    }
+    isBSpline = false;
+    if(lpe_bsp){
+        isBSpline = true;
+    }
 }
 
 double PathManipulator::BSplineHandlePosition(Handle *h){

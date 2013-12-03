@@ -19,9 +19,9 @@
 #include <boost/weak_ptr.hpp>
 #include "ui/tool/node.h"
 #include "ui/tool/manipulator.h"
-//BSpline
+
 #include "live_effects/lpe-bspline.h"
-//BSpline end
+
 
 struct SPCanvasItem;
 class SPCurve;
@@ -97,10 +97,10 @@ public:
     NodeList::iterator subdivideSegment(NodeList::iterator after, double t);
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
     bool search_unselected, bool closest);
-    //BSpline
+    
     bool isBSpline;
-    int getSteps();
-    //BSpline End
+    int BSplineGetSteps();
+    
     // this is necessary for Tab-selection in MultiPathManipulator
     SubpathList &subpathList() { return _subpaths; }
 
@@ -110,13 +110,13 @@ private:
     typedef boost::shared_ptr<NodeList> SubpathPtr;
 
     void _createControlPointsFromGeometry();
-    //BSpline
-    LivePathEffect::LPEBSpline *lpe_bsp;
+
+    void BSpline();
     double BSplineHandlePosition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h,double pos);
     void BSplineNodeHandlesReposition(Node *n);
-    //BSpline End
+    
     void _createGeometryFromControlPoints(bool alert_LPE = false);
     unsigned _deleteStretch(NodeList::iterator first, NodeList::iterator last, bool keep_shape);
     std::string _createTypeString();
