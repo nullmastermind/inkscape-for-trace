@@ -1648,6 +1648,7 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
     Geom::Point C(0,0);
     if(!pc->sa || pc->sa->curve->is_empty()){
         tmpCurve = pc->green_curve->create_reverse();
+        if(pc->green_curve->get_segment_count()==0)return;
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(pc->bspline){
             C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
@@ -1715,6 +1716,7 @@ static void bspline_spiro_end_anchor_off(PenTool *const pc)
     SPCurve *lastSeg = new SPCurve();
     if(!pc->sa || pc->sa->curve->is_empty()){
         tmpCurve = pc->green_curve->create_reverse();
+        if(pc->green_curve->get_segment_count()==0)return;
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(cubic){
             lastSeg->moveto((*cubic)[0]);
