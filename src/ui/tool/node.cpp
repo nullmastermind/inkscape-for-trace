@@ -974,6 +974,7 @@ bool Node::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent 
             _selection.spatialGrow(this, dir);
         }
         return true;
+
     default:
         break;
     }
