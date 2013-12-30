@@ -33,7 +33,6 @@
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
 #include "sp-path.h"
-#include "sp-lpe-item.h"
 #include "helper/geom.h"
 #include "preferences.h"
 #include "style.h"
@@ -43,6 +42,7 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
+#include "sp-lpe-item.h"
 #include "live_effects/lpe-bspline.h"
 
 namespace Inkscape {
@@ -104,7 +104,7 @@ private:
 };
 
 void build_segment(Geom::PathBuilder &, Node *, Node *);
-
+//spanish: una propiedad isBSpline, por defecto falsa y una función al final de la función (BSpline()) que la define realmente
 PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         Geom::Affine const &et, guint32 outline_color, Glib::ustring lpe_key)
     : PointManipulator(mpm._path_data.node_data.desktop, *mpm._path_data.node_data.selection)
@@ -666,6 +666,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
+    //spanish: si se borra, reajustamos los tiradores
     if(isBSpline){
         double pos = 0.0000;
         if(start.prev()){
@@ -1185,7 +1186,9 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
+//spanish: determina si el trazado tiene efecto bspline y el numero de pasos que realiza
 int PathManipulator::BSplineGetSteps(){
+
     LivePathEffect::LPEBSpline *lpe_bsp = NULL;
 
     if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
@@ -1194,24 +1197,22 @@ int PathManipulator::BSplineGetSteps(){
             lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
         }
     }
-    return lpe_bsp->steps+1;
+    int steps = 0;
+    if(lpe_bsp){
+        steps = lpe_bsp->steps+1;
+    }
+    return steps;
 }
 
+//spanish: determina si el trazado tiene efecto bspline
 void PathManipulator::BSpline(){
-    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
-
-    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
-        if(thisEffect){
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
-        }
-    }
     isBSpline = false;
-    if(lpe_bsp){
+    if(this->BSplineGetSteps()>0){
         isBSpline = true;
     }
 }
 
+//spanish: devuelve la fuerza que le corresponderia a la posicón de un tirador
 double PathManipulator::BSplineHandlePosition(Handle *h){
     using Geom::X;
     using Geom::Y;
@@ -1230,11 +1231,13 @@ double PathManipulator::BSplineHandlePosition(Handle *h){
     return pos;
 }
 
+//spanish: mueve el tirador a la posición que le corresponda
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h){
     double pos = this->BSplineHandlePosition(h);
     return BSplineHandleReposition(h,pos);
 }
 
+//spanish: mueve el tirador a una posición específica
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     using Geom::X;
     using Geom::Y;
@@ -1260,11 +1263,12 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     return ret;
 }
 
+//spanish: mueve los tiradores del nodo y sus tiradores opuestos a la potencia de sus nodos
 void PathManipulator::BSplineNodeHandlesReposition(Node *n){
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
     if(prevNode){
-        n->back()->setPosition(BSplineHandleReposition(n->back()));
+        n->back()->setPosition(BSplineHandleReposition(n->back(),n->bsplineWeight));
         if(prevNode->front()->position() == prevNode->position())
             prevNode->bsplineWeight = 0.000;
         if(!prevNode->isEndNode())
@@ -1272,7 +1276,7 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
         prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevNode->bsplineWeight));
     }
     if(nextNode){
-        n->front()->setPosition(BSplineHandleReposition(n->front()));
+        n->front()->setPosition(BSplineHandleReposition(n->front(),n->bsplineWeight));
         if(nextNode->front()->position() == nextNode->position())
             nextNode->bsplineWeight = 0.000;
         if(!nextNode->isEndNode())
