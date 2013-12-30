@@ -1461,7 +1461,7 @@ Geom::Point Inkscape::SelTrans::_getGeomHandlePos(Geom::Point const &visual_hand
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
     bool preserve = prefs->getBool("/options/preservetransform/value", false);
-    Geom::Affine abs_affine = get_scale_transform_for_uniform_stroke (*_bbox, _strokewidth, transform_stroke, preserve,
+    Geom::Affine abs_affine = get_scale_transform_for_uniform_stroke (*_bbox, _strokewidth, _strokewidth, transform_stroke, preserve,
                     new_bbox.min()[Geom::X], new_bbox.min()[Geom::Y], new_bbox.max()[Geom::X], new_bbox.max()[Geom::Y]);
 
     // Calculate the scaled geometrical bbox

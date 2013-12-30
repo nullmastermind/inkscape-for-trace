@@ -38,6 +38,8 @@ public:
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
     virtual void resetDefaults(SPItem const* item);
+
+
 private:
     PathParam  bend_path;
     ScalarParam  prop_scale;
