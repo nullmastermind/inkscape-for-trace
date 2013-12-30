@@ -492,7 +492,7 @@ Glib::ustring Handle::_getTip(unsigned state) const
     if (can_shift_rotate && !isBSpline) {
         more = C_("Path handle tip", "more: Shift, Ctrl, Alt");
     } else if(isBSpline){
-        more = C_("Path handle tip", "move:Shift, reset:double click, more: Ctrl");
+        more = C_("Path handle tip", "more: Ctrl");
     }else {
         more = C_("Path handle tip", "more: Ctrl, Alt");
     }
@@ -545,9 +545,13 @@ Glib::ustring Handle::_getTip(unsigned state) const
         return format_tip(C_("Path handle tip",
             "<b>Auto node handle</b>: drag to convert to smooth node (%s)"), more);
     default:
-        return format_tip(C_("Path handle tip",
-            "<b>%s</b>: drag to shape the segment (%s)"),
-            handle_type_to_localized_string(_parent->type()), more);
+        if(!isBSpline){
+            return format_tip(C_("Path handle tip",
+                "<b>Auto node handle</b>: drag to convert to smooth node (%s)"), more);
+        }else{
+            return format_tip(C_("Path handle tip",
+                "<b>BSpline node handle</b>: Shift to drag, double click to reset (%s)"), more);
+        }
     }
 }
 
