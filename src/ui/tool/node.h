@@ -97,6 +97,7 @@ public:
 
     virtual void setVisible(bool);
     virtual void move(Geom::Point const &p);
+
     virtual void setPosition(Geom::Point const &p);
     inline void setRelativePos(Geom::Point const &p);
     void setLength(double len);
@@ -112,28 +113,25 @@ public:
 protected:
 
     Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent);
-    //Bspline
     virtual void handle_2button_press();
-    //BSpline End
-
     virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
-
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
     virtual void ungrabbed(GdkEventButton *event);
     virtual bool clicked(GdkEventButton *event);
-
 
     virtual Glib::ustring _getTip(unsigned state) const;
     virtual Glib::ustring _getDragTip(GdkEventMotion *event) const;
     virtual bool _hasDragTips() const { return true; }
 
 private:
+
     inline PathManipulator &_pm();
     Node *_parent; // the handle's lifetime does not extend beyond that of the parent node,
     // so a naked pointer is OK and allows setting it during Node's construction
     SPCtrlLine *_handle_line;
     bool _degenerate; // True if the handle is retracted, i.e. has zero length. This is used often internally so it makes sense to cache this
+
     /**
      * Control point of a cubic Bezier curve in a path.
      *
@@ -190,6 +188,7 @@ public:
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
     double bsplineWeight;
+
     /**
      * Gets the handle that faces the given adjacent node.
      * Will abort with error if the given node is not adjacent.

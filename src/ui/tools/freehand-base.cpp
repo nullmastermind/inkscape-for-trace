@@ -247,12 +247,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
-        //BSpline
         //Añadimos el modo BSpline a los efectos en espera
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
-        //BSPline End
 
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
         bool shape_applied = false;
@@ -489,7 +487,6 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
 
-
     if (c->is_empty()) {
         c->unref();
         return;
@@ -520,7 +517,6 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         dc->sa->curve->append_continuous(c, 0.0625);
         c->unref();
         dc->sa->curve->closepath_current();
-        //BSpline
         //Si la curva tiene un LPE del tipo BSpline ejecutamos spdc_flush_white
         //pasándole la curva de inicio necesaria
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -529,7 +525,6 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
             dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
             spdc_flush_white(dc, dc->sa->curve);
         }else
-        //BSpline End
             spdc_flush_white(dc, NULL);
         return;
     }
@@ -657,7 +652,6 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
         }
     }
 
-    //BSpline
     //Modificamos la curva del "anchor" final para que sea igual que la curva de inicio.
     //Esta curva fue modificada al continuar la curva y necesitamos que sea igual que la curva en
     //la que cerramos el trazado.
@@ -670,7 +664,6 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
             active->curve->ref();
         }
     }
-    //BSpline End
 
     return active;
 }
@@ -815,4 +808,3 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
-

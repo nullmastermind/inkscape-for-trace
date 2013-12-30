@@ -115,7 +115,6 @@ enum BarId {
     BAR_COMMANDS,
     BAR_SNAP,
 };
-//#define WITH_MESH
 #define BAR_ID_KEY "BarIdValue"
 #define HANDLE_POS_MARK "x-inkscape-pos"
 

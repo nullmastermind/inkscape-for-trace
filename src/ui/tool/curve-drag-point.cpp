@@ -53,12 +53,10 @@ bool CurveDragPoint::grabbed(GdkEventMotion */*event*/)
 
         // delta is a vector equal 1/3 of distance from first to second
         Geom::Point delta = (second->position() - first->position()) / 3.0;
-        //BSpline
         if(!_pm.isBSpline){
             first->front()->move(first->front()->position() + delta);
             second->back()->move(second->back()->position() - delta);
         }
-        //BSpline End
         _pm.update();
     } else {
         _segment_was_degenerate = false;

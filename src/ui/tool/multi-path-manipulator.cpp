@@ -298,7 +298,6 @@ void MultiPathManipulator::invertSelectionInSubpaths()
     invokeForAll(&PathManipulator::invertSelectionInSubpaths);
 }
 
-
 void MultiPathManipulator::setNodeType(NodeType type)
 {
     if (_selection.empty()) return;
@@ -326,7 +325,6 @@ void MultiPathManipulator::setNodeType(NodeType type)
 
     _done(retract_handles ? _("Retract handles") : _("Change node type"));
 }
-
 
 void MultiPathManipulator::setSegmentType(SegmentType type)
 {
@@ -691,7 +689,6 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
                         deleteNodes(true);
                 }
                 else
-                //BSpline end
                     deleteNodes(del_preserves_shape ^ held_control(event->key));
 
                 // Delete any selected gradient nodes as well

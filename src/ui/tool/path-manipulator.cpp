@@ -43,9 +43,7 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
-
 #include "live_effects/lpe-bspline.h"
-
 
 namespace Inkscape {
 namespace UI {
@@ -668,7 +666,6 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
-    
     if(isBSpline){
         double pos = 0.0000;
         if(start.prev()){
@@ -680,7 +677,6 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
             end->back()->setPosition(BSplineHandleReposition(end->back(),pos));
         }
     }
-    
 
     return del_len;
 }
@@ -856,9 +852,9 @@ void PathManipulator::rotateHandle(Node *n, int which, int dir, bool pixel)
         int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
         angle = M_PI * dir / snaps;
     }
+
     h->setRelativePos(h->relativePos() * Geom::Rotate(angle));
     update();
-
     gchar const *key = which < 0 ? "handle:rotate:left" : "handle:rotate:right";
     _commit(_("Rotate handle"), key);
 }
@@ -915,9 +911,7 @@ void PathManipulator::showHandles(bool show)
 /** Set the visibility of outline. */
 void PathManipulator::showOutline(bool show)
 {
-    
     if(isBSpline) show = true;
-    
     if (show == _show_outline) return;
     _show_outline = show;
     _updateOutline();
@@ -1307,7 +1301,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;
         }
-        
         if (subpath->closed()) {
             // Here we link the last and first node if the path is closed.
             // If the last segment is Bezier, we add it.
@@ -1319,7 +1312,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         }
         ++spi;
     }
-
     builder.finish();
     Geom::PathVector pathv = builder.peek() * (_edit_transform * _i2d_transform).inverse();
     _spcurve->set_pathvector(pathv);
@@ -1380,6 +1372,7 @@ void PathManipulator::_updateOutline()
         sp_canvas_item_hide(_outline);
         return;
     }
+
     Geom::PathVector pv = _spcurve->get_pathvector();
     pv *= (_edit_transform * _i2d_transform);
     // This SPCurve thing has to be killed with extreme prejudice

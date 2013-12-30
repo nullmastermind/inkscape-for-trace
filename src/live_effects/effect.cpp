@@ -21,9 +21,7 @@
 #include "live_effects/lpe-rough-hatches.h"
 #include "live_effects/lpe-dynastroke.h"
 #include "live_effects/lpe-test-doEffect-stack.h"
-//BSpline
 #include "live_effects/lpe-bspline.h"
-//BSpline End
 #include "live_effects/lpe-gears.h"
 #include "live_effects/lpe-curvestitch.h"
 #include "live_effects/lpe-circle_with_radius.h"
@@ -125,9 +123,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.49 */
     {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
-    //BSpline
     {BSPLINE,               N_("BSpline"),                 "bspline"},
-    //BSpline End
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -236,11 +232,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case DOEFFECTSTACK_TEST:
             neweffect = static_cast<Effect*> ( new LPEdoEffectStackTest(lpeobj) );
             break;
-        //BSpline
         case BSPLINE:
             neweffect = static_cast<Effect*> ( new LPEBSpline(lpeobj) );
             break;
-        //BSpline End
         case DYNASTROKE:
             neweffect = static_cast<Effect*> ( new LPEDynastroke(lpeobj) );
             break;

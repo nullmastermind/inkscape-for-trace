@@ -28,9 +28,7 @@
 #include "ui/tool/node.h"
 #include "ui/tool/path-manipulator.h"
 #include <gdk/gdkkeysyms.h>
-
 #include <math.h>
-;
 
 namespace {
 
@@ -137,7 +135,7 @@ void Handle::move(Geom::Point const &new_pos)
     Node *node_away = _parent->nodeAwayFrom(this); // node in the opposite direction
     Handle *towards = node_towards ? node_towards->handleAwayFrom(_parent) : NULL;
     Handle *towards_second = node_towards ? node_towards->handleToward(_parent) : NULL;
-    
+
     if (Geom::are_near(new_pos, _parent->position())) {
         // The handle becomes degenerate.
         // Adjust node type as necessary.
@@ -308,7 +306,6 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-
 void Handle::handle_2button_press(){
     if(_pm().isBSpline){
         setPosition(_pm().BSplineHandleReposition(this,0.3334));
@@ -317,7 +314,6 @@ void Handle::handle_2button_press(){
         _pm().update();
     }
 }
-
 
 bool Handle::grabbed(GdkEventMotion *)
 {
@@ -335,6 +331,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     SnapManager &sm = _desktop->namedview->snap_manager;
     bool snap = held_shift(*event) ? false : sm.someSnapperMightSnap();
     boost::optional<Inkscape::Snapper::SnapConstraint> ctrl_constraint;
+
     // with Alt, preserve length
     if (held_alt(*event)) {
         new_pos = parent_pos + Geom::unit_vector(new_pos - parent_pos) * _saved_length;
@@ -366,14 +363,13 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - perp_pos);
         }
         new_pos = result;
-        
+
         if(_pm().isBSpline){
             setPosition(new_pos);
             int steps = _pm().BSplineGetSteps();
             _parent->bsplineWeight = ceilf(_pm().BSplineHandlePosition(this)*steps)/steps;
             new_pos=_pm().BSplineHandleReposition(this,_parent->bsplineWeight);
         }
-        
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
@@ -627,22 +623,22 @@ void Node::move(Geom::Point const &new_pos)
     // move handles when the node moves.
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
-     
+
     double oldPos = 0.0000;
     Node *n = this;
     if(_pm().isBSpline){
         oldPos = n->bsplineWeight;
     }
-    
+
     setPosition(new_pos);
 
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
-    
+
     // if the node has a smooth handle after a line segment, it should be kept colinear
     // with the segment
     _fixNeighbors(old_pos, new_pos);
-    
+
     if(_pm().isBSpline){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
@@ -774,6 +770,7 @@ void Node::setType(NodeType type, bool update_handles)
         updateState(); // The size of the control might have changed
         return;
     }
+
     // if update_handles is true, adjust handle positions to match the node type
     // handle degenerate handles appropriately
     if (update_handles) {
@@ -861,7 +858,6 @@ void Node::setType(NodeType type, bool update_handles)
             _front.setPosition(_pm().BSplineHandleReposition(this->front(),this->bsplineWeight));
             _back.setPosition(_pm().BSplineHandleReposition(this->back(),this->bsplineWeight));
         }
-        
     }
     _type = type;
     _setControlType(nodeTypeToCtrlType(_type));
@@ -1124,7 +1120,6 @@ void Node::_setState(State state)
                     this->back()->setPosition(_pm().BSplineHandleReposition(this->back(),this->bsplineWeight));
                 }
             }
-            
             break;
     }
     SelectableControlPoint::_setState(state);

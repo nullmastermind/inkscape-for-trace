@@ -57,7 +57,6 @@ public:
     SPCanvasItem *blue_bpath;
     SPCurve *blue_curve;
 
-
     // Green
     GSList *green_bpaths;
     SPCurve *green_curve;
@@ -143,4 +142,3 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
-
