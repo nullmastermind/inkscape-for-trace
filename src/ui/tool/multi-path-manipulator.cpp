@@ -682,7 +682,9 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
                 // b) ctrl+del preserves shape (del_preserves_shape is false), and control is pressed
                 // Hence xor
                 guint mode = prefs->getInt("/tools/freehand/pen/freehand-mode", 0);
+                //spanish: si es trazado bspline (mode 2)
                 if(mode==2){
+                    //spanish: ¿correcto?
                     if(del_preserves_shape ^ held_control(event->key))
                         deleteNodes(false);
                     else
