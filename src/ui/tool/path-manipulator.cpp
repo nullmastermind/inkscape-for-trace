@@ -1294,6 +1294,7 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
 void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
 {
     Geom::PathBuilder builder;
+    BSpline();
     for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
@@ -1301,14 +1302,8 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             continue;
         }
         NodeList::iterator prev = subpath->begin();
-        //if(isBSpline){
-        //    BSplineNodeHandlesReposition(prev.ptr());
-        //}
         builder.moveTo(prev->position());
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
-            //if(isBSpline){
-            //    BSplineNodeHandlesReposition(i.ptr());
-            //}
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;
         }

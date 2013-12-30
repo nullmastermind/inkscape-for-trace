@@ -116,7 +116,7 @@ private:
     Geom::Point BSplineHandleReposition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h,double pos);
     void BSplineNodeHandlesReposition(Node *n);
-    
+
     void _createGeometryFromControlPoints(bool alert_LPE = false);
     unsigned _deleteStretch(NodeList::iterator first, NodeList::iterator last, bool keep_shape);
     std::string _createTypeString();

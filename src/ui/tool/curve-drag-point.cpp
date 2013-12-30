@@ -90,13 +90,11 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     Geom::Point delta = new_pos - position();
     Geom::Point offset0 = ((1-weight)/(3*t*(1-t)*(1-t))) * delta;
     Geom::Point offset1 = (weight/(3*t*t*(1-t))) * delta;
-    //BSpline
     if(!_pm.isBSpline){
         first->front()->move(first->front()->position() + offset0);
         second->back()->move(second->back()->position() + offset1);
-    }else if(weight>=0.8 && !second->isEndNode())second->back()->move(new_pos);
-    else if(weight<=0.2 && !first->isEndNode())first->front()->move(new_pos);
-    //BSpline End
+    }else if(weight>=0.8 && !second->isEndNode() && held_shift(*event))second->back()->move(new_pos);
+    else if(weight<=0.2 && !first->isEndNode() && held_shift(*event))first->front()->move(new_pos);
     _pm.update();
 }
 
