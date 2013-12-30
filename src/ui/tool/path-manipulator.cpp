@@ -42,7 +42,6 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
-#include "sp-lpe-item.h"
 #include "live_effects/lpe-bspline.h"
 
 namespace Inkscape {
