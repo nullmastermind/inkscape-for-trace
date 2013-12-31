@@ -764,7 +764,7 @@ void Node::showHandles(bool v)
     //Cada vez que actuemos sobre dichos tiradores en un trazado
     //bspline esta fuerza se tiene que actualizar
     this->bsplineWeight = 0.0000;
-    if(_pm().isBSpline)
+    if(_pm().isBSpline && (!_front.isDegenerate() || !_back.isDegenerate()))
         this->bsplineWeight = 0.3334;
 }
 
