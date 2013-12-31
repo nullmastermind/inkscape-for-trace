@@ -48,7 +48,7 @@ public:
 
     bool polylines_only;
     bool polylines_paraxial;
-    //Propiedad que guarda si el modo Spiro está activo o no
+    //spanish: propiedad que guarda si el modo Spiro está activo o no
     bool spiro;
     bool bspline;
     int num_clicks;
