@@ -1388,6 +1388,12 @@ Node *Node::nodeAwayFrom(Handle *h)
 
 Glib::ustring Node::_getTip(unsigned state) const
 {
+    //spanish: un truco par, si el nodo tiene fuerza, nos marca que es
+    //del tipo bspline, lo utilizaremos despues para mostras los mensajes apropiados
+    //no lo podemos hacer de otra forma al ser constante la funcion
+    bool isBSpline = false;
+    if( this->bsplineWeight != 0.0000)
+        isBSpline = true;
     if (state_held_shift(state)) {
         bool can_drag_out = (_next() && _front.isDegenerate()) || (_prev() && _back.isDegenerate());
         if (can_drag_out) {
@@ -1417,15 +1423,24 @@ Glib::ustring Node::_getTip(unsigned state) const
     // No modifiers: assemble tip from node type
     char const *nodetype = node_type_to_localized_string(_type);
     if (_selection.transformHandlesEnabled() && selected()) {
-        if (_selection.size() == 1) {
+        if (_selection.size() == 1 && !isBSpline) {
             return format_tip(C_("Path node tip",
                 "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"), nodetype);
+        }else if(_selection.size() == 1){
+            return format_tip(C_("Path node tip",
+                "<b>BSpline node</b>: %g weight, drag to shape the path (more: Shift, Ctrl, Alt)"),this->bsplineWeight);
         }
         return format_tip(C_("Path node tip",
             "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
     }
-    return format_tip(C_("Path node tip",
-        "<b>%s</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt)"), nodetype);
+    if (!isBSpline) {
+        return format_tip(C_("Path node tip",
+            "<b>%s</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt)"), nodetype);
+    }else{
+        return format_tip(C_("Path node tip",
+            "<b>BSpline node</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt)"));
+    
+    }
 }
 
 Glib::ustring Node::_getDragTip(GdkEventMotion */*event*/) const

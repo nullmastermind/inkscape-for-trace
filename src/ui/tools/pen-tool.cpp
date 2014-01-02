@@ -959,7 +959,7 @@ static void pen_redraw_all (PenTool *const pc)
         }
     }
 
-    //spanish: simplemente redibujamos la spiro teniendo en cuenta si el nodo es cusp o symm.
+    //spanish: simplemente redibujamos la spiro.
     //como es un redibujo simplemente no llamamos a la función global sino al final de esta
     //Lanzamos solamente el redibujado
      bspline_spiro_build(pc);
@@ -1451,7 +1451,7 @@ static void bspline_spiro_on(PenTool *const pc)
         pc->p[0] = pc->red_curve->first_segment()->initialPoint();
         pc->p[3] = pc->red_curve->first_segment()->finalPoint();
         pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
-        pc->p[2] = Geom::Point(pc->p[2][X] + 0.0001,pc->p[2][Y] + 0.0001);
+        pc->p[2] = Geom::Point(pc->p[2][X] + 0.005,pc->p[2][Y] + 0.005);
     }
 }
 
@@ -1492,7 +1492,7 @@ static void bspline_spiro_start_anchor_on(PenTool *const pc)
     Geom::Point A = tmpCurve->last_segment()->initialPoint();
     Geom::Point D = tmpCurve->last_segment()->finalPoint();
     Geom::Point C = D + (1./3)*(A - D);
-    C = Geom::Point(C[X] + 0.0001,C[Y] + 0.0001);
+    C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
     if(cubic){
         lastSeg->moveto(A);
         lastSeg->curveto((*cubic)[1],C,D);
@@ -1549,19 +1549,23 @@ static void bspline_spiro_motion(PenTool *const pc, bool shift){
 
     using Geom::X;
     using Geom::Y;
+    if(pc->red_curve->is_empty()) return;
+    pc->npoints = 5;
     SPCurve *tmpCurve = new SPCurve();
     pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+    pc->p[2] = Geom::Point(pc->p[2][X] + 0.005,pc->p[2][Y] + 0.005);
     if(pc->green_curve->is_empty() && !pc->sa){
         pc->p[1] = pc->p[0] + (1./3)*(pc->p[3] - pc->p[0]);
+        pc->p[1] = Geom::Point(pc->p[1][X] + 0.005,pc->p[1][Y] + 0.005);
     }else if(!pc->green_curve->is_empty()){
         tmpCurve = pc->green_curve->copy();
     }else{
         tmpCurve = pc->sa->curve->copy();
         if(pc->sa->start)
             tmpCurve = tmpCurve->create_reverse();
-
     }
-    if(!tmpCurve->is_empty() && !pc->red_curve->is_empty()){
+
+    if(!tmpCurve->is_empty()){
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(cubic){
             if(pc->bspline){
@@ -1577,16 +1581,17 @@ static void bspline_spiro_motion(PenTool *const pc, bool shift){
                 WPower->reset();
                 pc->p[1] = SBasisWPower.valueAt(WP);
                 if(!Geom::are_near(pc->p[1],pc->p[0]))
-                    pc->p[1] = Geom::Point(pc->p[1][X] + 0.0001,pc->p[1][Y] + 0.0001);
+                    pc->p[1] = Geom::Point(pc->p[1][X] + 0.005,pc->p[1][Y] + 0.005);
                 if(shift)
-                    pc->p[2]=pc->p[3];
-                else
-                    pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
+                    pc->p[2] = pc->p[3];
             }else{
                 pc->p[1] =  (*cubic)[3] + (Geom::Point)((*cubic)[3] - (*cubic)[2] );
+                pc->p[1] = Geom::Point(pc->p[1][X] + 0.005,pc->p[1][Y] + 0.005);
             }
         }else{
             pc->p[1] = pc->p[0];
+            if(shift)
+                pc->p[2] = pc->p[3];
         }
     }
 
@@ -1606,7 +1611,7 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
     using Geom::X;
     using Geom::Y;
     pc->p[2] = pc->p[3] + (1./3)*(pc->p[0] - pc->p[3]);
-    pc->p[2] = Geom::Point(pc->p[2][X] + 0.0001,pc->p[2][Y] + 0.0001);
+    pc->p[2] = Geom::Point(pc->p[2][X] + 0.005,pc->p[2][Y] + 0.005);
     SPCurve *tmpCurve = new SPCurve();
     SPCurve *lastSeg = new SPCurve();
     Geom::Point C(0,0);
@@ -1616,7 +1621,7 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(pc->bspline){
             C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-            C = Geom::Point(C[X] + 0.0001,C[Y] + 0.0001);
+            C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
         }else{
             C =  pc->p[3] + (Geom::Point)(pc->p[3] - pc->p[2] );
         }
@@ -1645,7 +1650,7 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(pc->bspline){
             C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-            C = Geom::Point(C[X] + 0.0001,C[Y] + 0.0001);
+            C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
         }else{
             C =  pc->p[3] + (Geom::Point)(pc->p[3] - pc->p[2] );
         }
