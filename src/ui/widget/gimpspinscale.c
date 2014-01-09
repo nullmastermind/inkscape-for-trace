@@ -174,6 +174,13 @@ gimp_spin_scale_init (GimpSpinScale *scale)
 {
   GimpSpinScalePrivate *private = GET_PRIVATE (scale);
 
+  gtk_widget_add_events (GTK_WIDGET (scale),
+                         GDK_BUTTON_PRESS_MASK   |
+                         GDK_BUTTON_RELEASE_MASK |
+                         GDK_POINTER_MOTION_MASK |
+                         GDK_BUTTON1_MOTION_MASK |
+                         GDK_LEAVE_NOTIFY_MASK);
+
   gtk_entry_set_alignment (GTK_ENTRY (scale), 1.0);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (scale), TRUE);
 
@@ -218,26 +225,20 @@ gimp_spin_scale_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GimpSpinScalePrivate *private = GET_PRIVATE (object);
+  GimpSpinScale        *scale   = GIMP_SPIN_SCALE (object);
 
   switch (property_id)
     {
     case PROP_LABEL:
-      g_free (private->label);
-      private->label = g_value_dup_string (value);
-      if (private->layout)
-        {
-          g_object_unref (private->layout);
-          private->layout = NULL;
-        }
-      gtk_widget_queue_resize (GTK_WIDGET (object));
+      gimp_spin_scale_set_label (scale, g_value_get_string (value));
       break;
 
     case PROP_FOCUS_WIDGET:
-    {
+      {
         /* TODO unhook prior */
-        private->focusWidget = (GtkWidget*)g_value_get_pointer( value );
-    }
-    break;
+        private->focusWidget = GTK_WIDGET (g_value_get_pointer (value));
+      }
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -252,16 +253,17 @@ gimp_spin_scale_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   GimpSpinScalePrivate *private = GET_PRIVATE (object);
+  GimpSpinScale        *scale   = GIMP_SPIN_SCALE (object);
 
   switch (property_id)
     {
     case PROP_LABEL:
-      g_value_set_string (value, private->label);
+      g_value_set_string (value, gimp_spin_scale_get_label (scale));
       break;
 
     case PROP_FOCUS_WIDGET:
-        g_value_set_pointer( value, private->focusWidget );
-        break;
+      g_value_set_pointer (value, private->focusWidget);
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -292,46 +294,23 @@ gimp_spin_scale_set_appearance( GtkWidget *widget, const gchar *appearance)
     }
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
 static void
-#if WITH_GTKMM_3_0
 gimp_spin_scale_get_preferred_width (GtkWidget *widget,
                                      gint      *minimum_width,
                                      gint      *natural_width)
-#else
-gimp_spin_scale_size_request (GtkWidget      *widget,
-                              GtkRequisition *requisition)
-#endif
 {
   GimpSpinScalePrivate *private = GET_PRIVATE (widget);
-  GtkStyle             *style   = gtk_widget_get_style (widget);
   PangoContext         *context = gtk_widget_get_pango_context (widget);
   PangoFontMetrics     *metrics;
 
-#if WITH_GTKMM_3_0
   GTK_WIDGET_CLASS (parent_class)->get_preferred_width (widget,
-                                                          minimum_width,
-                                                          natural_width);
-#else
-  gint                  height;
-  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
-#endif
+                                                        minimum_width,
+                                                        natural_width);
 
-  metrics = pango_context_get_metrics (context, style->font_desc,
+  metrics = pango_context_get_metrics (context,
+                                       pango_context_get_font_description (context),
                                        pango_context_get_language (context));
-
-#if WITH_GTKMM_3_0
-#else
-  height = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
-                         pango_font_metrics_get_descent (metrics));
-
-  if (private->appearanceMode == APPEARANCE_COMPACT) {
-      requisition->height += 1;
-  } else {
-      requisition->height += height;
-  }
-
-#endif
-
 
   if (private->label)
     {
@@ -343,26 +322,19 @@ gimp_spin_scale_size_request (GtkWidget      *widget,
       digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       char_pixels = PANGO_PIXELS (MAX (char_width, digit_width));
 
-#if WITH_GTKMM_3_0
+      /* ~3 chars for the ellipse */
       *minimum_width += char_pixels * 3;
       *natural_width += char_pixels * 3;
-#else
-      /* ~3 chars for the ellipses */
-      requisition->width += char_pixels * 3;
-#endif
-
     }
 
   pango_font_metrics_unref (metrics);
 }
 
-#if WITH_GTKMM_3_0
 static void
 gimp_spin_scale_get_preferred_height (GtkWidget *widget,
                                       gint      *minimum_height,
                                       gint      *natural_height)
 {
-  GtkStyle         *style   = gtk_widget_get_style (widget);
   PangoContext     *context = gtk_widget_get_pango_context (widget);
   PangoFontMetrics *metrics;
   //gint              height;
@@ -371,7 +343,8 @@ gimp_spin_scale_get_preferred_height (GtkWidget *widget,
                                                          minimum_height,
                                                          natural_height);
 
-  metrics = pango_context_get_metrics (context, style->font_desc,
+  metrics = pango_context_get_metrics (context,
+                                       pango_context_get_font_description (context),
                                        pango_context_get_language (context));
 
   //height = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
@@ -379,6 +352,47 @@ gimp_spin_scale_get_preferred_height (GtkWidget *widget,
 
   *minimum_height += 1;
   *natural_height += 1;
+
+  pango_font_metrics_unref (metrics);
+}
+#else
+static void
+gimp_spin_scale_size_request (GtkWidget      *widget,
+                              GtkRequisition *requisition)
+{
+  GimpSpinScalePrivate *private = GET_PRIVATE (widget);
+  GtkStyle             *style   = gtk_widget_get_style (widget);
+  PangoContext         *context = gtk_widget_get_pango_context (widget);
+  PangoFontMetrics     *metrics;
+  gint                  height;
+
+  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+
+  metrics = pango_context_get_metrics (context, style->font_desc,
+                                       pango_context_get_language (context));
+
+  height = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
+                         pango_font_metrics_get_descent (metrics));
+
+  if (private->appearanceMode == APPEARANCE_COMPACT) {
+      requisition->height += 1;
+  } else {
+      requisition->height += height;
+  }
+
+  if (private->label)
+    {
+      gint char_width;
+      gint digit_width;
+      gint char_pixels;
+
+      char_width = pango_font_metrics_get_approximate_char_width (metrics);
+      digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+      char_pixels = PANGO_PIXELS (MAX (char_width, digit_width));
+
+      /* ~3 chars for the ellipses */
+      requisition->width += char_pixels * 3;
+    }
 
   pango_font_metrics_unref (metrics);
 }
@@ -401,67 +415,81 @@ gimp_spin_scale_style_set (GtkWidget *widget,
 
 
 static gboolean
-
-#if WITH_GTKMM_3_0
-    gimp_spin_scale_draw (GtkWidget *widget, cairo_t   *cr)
+#if GTK_CHECK_VERSION(3,0,0)
+    gimp_spin_scale_draw (GtkWidget *widget,
+                          cairo_t   *cr)
 #else
-    gimp_spin_scale_expose (GtkWidget      *widget, GdkEventExpose *event)
+    gimp_spin_scale_expose (GtkWidget      *widget,
+                            GdkEventExpose *event)
 #endif
 {
-    GimpSpinScalePrivate *private = GET_PRIVATE (widget);
+  GimpSpinScalePrivate *private = GET_PRIVATE (widget);
+#if GTK_CHECK_VERSION(3,0,0)
+  GtkStyleContext      *style   = gtk_widget_get_style_context(widget);
+  GtkAllocation         allocation;
+  GdkRGBA               color;
 
-#if WITH_GTKMM_3_0
-    GtkStyleContext      *style   = gtk_widget_get_style_context(widget);
-    GtkAllocation         allocation;
-    GdkRGBA               color;
+  cairo_save (cr);
+  GTK_WIDGET_CLASS (parent_class)->draw (widget, cr);
+  cairo_restore (cr);
 
-    cairo_save (cr);
-    GTK_WIDGET_CLASS (parent_class)->draw (widget, cr);
-    cairo_restore (cr);
-
-    gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
 #else
-    GtkStyle             *style   = gtk_widget_get_style (widget);
-    cairo_t              *cr;
-    gint                  w;
+  GtkStyle             *style   = gtk_widget_get_style (widget);
+  cairo_t              *cr;
+  gint                  w;
 
-    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+  GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
-    cr = gdk_cairo_create (event->window);
-    gdk_cairo_region (cr, event->region);
-    cairo_clip (cr);
+  cr = gdk_cairo_create (event->window);
+  gdk_cairo_region (cr, event->region);
+  cairo_clip (cr);
 
-    w = gdk_window_get_width (event->window);
+  w = gdk_window_get_width (event->window);
 #endif
 
-    cairo_set_line_width (cr, 1.0);
+  cairo_set_line_width (cr, 1.0);
 
-
-#if WITH_GTKMM_3_0
-      if (private->label)
-      {
-          GdkRectangle   text_area;
-          gint           minimum_width;
-          gint           natural_width;
+#if GTK_CHECK_VERSION(3,0,0)
+  if (private->label)
+    {
+      GdkRectangle   text_area;
+      gint           minimum_width;
+      gint           natural_width;
 #else
-      if (private->label  &&
-          gtk_widget_is_drawable (widget) &&
-          event->window == gtk_entry_get_text_window (GTK_ENTRY (widget)))
-      {
-          GtkRequisition requisition;
-          GtkAllocation  allocation;
+  if (private->label  &&
+      gtk_widget_is_drawable (widget) &&
+      event->window == gtk_entry_get_text_window (GTK_ENTRY (widget)))
+    {
+      GtkRequisition requisition;
+      GtkAllocation  allocation;
 #endif
-
       PangoRectangle logical;
       gint           layout_offset_x;
       gint           layout_offset_y;
+#if GTK_CHECK_VERSION(3,0,0)
+      GtkStateFlags  state;
+      GdkRGBA        text_color;
+      GdkRGBA        bar_text_color;
+#else
+      GtkStateType   state;
+      GdkColor       text_color;
+      GdkColor       bar_text_color;
+      gint           window_width;
+      gint           window_height;
+#endif
+      gdouble        progress_fraction;
+      gint           progress_x;
+      gint           progress_y;
+      gint           progress_width;
+      gint           progress_height;
 
-#if WITH_GTKMM_3_0
+#if GTK_CHECK_VERSION(3,0,0)
       gtk_entry_get_text_area (GTK_ENTRY (widget), &text_area);
 
       GTK_WIDGET_CLASS (parent_class)->get_preferred_width (widget,
-                                                               &minimum_width,
-                                                               &natural_width);
+                                                            &minimum_width,
+                                                            &natural_width);
 #else
       GTK_WIDGET_CLASS (parent_class)->size_request (widget, &requisition);
       gtk_widget_get_allocation (widget, &allocation);
@@ -476,17 +504,17 @@ static gboolean
 
       pango_layout_set_width (private->layout,
                               PANGO_SCALE *
-#if WITH_GTKMM_3_0
-                              (allocation.width - minimum_width + 10));
+#if GTK_CHECK_VERSION(3,0,0)
+                              (allocation.width - minimum_width));
 #else
-                              (allocation.width - requisition.width + 10));
+                              (allocation.width - requisition.width));
 #endif
       pango_layout_get_pixel_extents (private->layout, NULL, &logical);
 
       gtk_entry_get_layout_offsets (GTK_ENTRY (widget), NULL, &layout_offset_y);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-#if WITH_GTKMM_3_0
+#if GTK_CHECK_VERSION(3,0,0)
           layout_offset_x = text_area.x + text_area.width - logical.width - 4;
 #else
           layout_offset_x = w - logical.width - 4;
@@ -496,25 +524,97 @@ static gboolean
 
       layout_offset_x -= logical.x;
 
-#if WITH_GTKMM_3_0
-      cairo_move_to (cr, layout_offset_x, text_area.y + layout_offset_y-3);
-      
-      gtk_style_context_get_color (style, gtk_widget_get_state_flags (widget),
-                                   &color);
-      
-      gdk_cairo_set_source_rgba (cr, &color);
+#if GTK_CHECK_VERSION(3,0,0)
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_get_color (style, state, &text_color);
+
+      gtk_style_context_save (style);
+      gtk_style_context_add_class (style, GTK_STYLE_CLASS_PROGRESSBAR);
+      gtk_style_context_get_color (style, state, &bar_text_color);
+      gtk_style_context_restore (style);
 #else
-      cairo_move_to (cr, layout_offset_x, layout_offset_y-3);
-      
-      gdk_cairo_set_source_color (cr,
-                                  &style->text[gtk_widget_get_state (widget)]);
+      state = GTK_STATE_SELECTED;
+      if (! gtk_widget_get_sensitive (widget))
+        state = GTK_STATE_INSENSITIVE;
+      text_color     = style->text[gtk_widget_get_state (widget)];
+      bar_text_color = style->fg[state];
+
+      window_width  = gdk_window_get_width  (event->window);
+      window_height = gdk_window_get_height (event->window);
 #endif
 
+      progress_fraction = gtk_entry_get_progress_fraction (GTK_ENTRY (widget));
+
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        {
+          progress_fraction = 1.0 - progress_fraction;
+
+#if GTK_CHECK_VERSION(3,0,0)
+          progress_x      = text_area.width * progress_fraction;
+#else
+          progress_x      = window_width * progress_fraction;
+#endif
+          progress_y      = 0;
+#if GTK_CHECK_VERSION(3,0,0)
+          progress_width  = text_area.width - progress_x;
+          progress_height = text_area.height;
+#else
+          progress_width  = window_width - progress_x;
+          progress_height = window_height;
+#endif
+        }
+      else
+        {
+          progress_x      = 0;
+          progress_y      = 0;
+#if GTK_CHECK_VERSION(3,0,0)
+          progress_width  = text_area.width * progress_fraction;
+          progress_height = text_area.height;
+#else
+          progress_width  = window_width * progress_fraction;
+          progress_height = window_height;
+#endif
+        }
+
+      cairo_save (cr);
+
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+#if GTK_CHECK_VERSION(3,0,0)
+      cairo_rectangle (cr, 0, 0, text_area.width, text_area.height);
+#else
+      cairo_rectangle (cr, 0, 0, window_width, window_height);
+#endif
+      cairo_rectangle (cr, progress_x, progress_y,
+                       progress_width, progress_height);
+      cairo_clip (cr);
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+
+#if GTK_CHECK_VERSION(3,0,0)
+      cairo_move_to (cr, layout_offset_x, text_area.y + layout_offset_y-3);
+      gdk_cairo_set_source_rgba (cr, &text_color);
+#else
+      cairo_move_to (cr, layout_offset_x, layout_offset_y-3);
+      gdk_cairo_set_source_color (cr, &text_color);
+#endif
+      pango_cairo_show_layout (cr, private->layout);
+      cairo_restore (cr);
+
+      cairo_rectangle (cr, progress_x, progress_y,
+                       progress_width, progress_height);
+      cairo_clip (cr);
+
+#if GTK_CHECK_VERSION(3,0,0)
+      cairo_move_to (cr, layout_offset_x, text_area.y + layout_offset_y-3);
+      gdk_cairo_set_source_rgba (cr, &bar_text_color);
+#else
+      cairo_move_to (cr, layout_offset_x, layout_offset_y-3);
+      gdk_cairo_set_source_color (cr, &bar_text_color);
+#endif
       pango_cairo_show_layout (cr, private->layout);
     }
 
-#if WITH_GTKMM_3_0
-#else
+#if !GTK_CHECK_VERSION(3,0,0)
   cairo_destroy (cr);
 #endif
 
@@ -845,6 +945,9 @@ gimp_spin_scale_motion_notify (GtkWidget      *widget,
                                GdkEventMotion *event)
 {
   GimpSpinScalePrivate *private = GET_PRIVATE (widget);
+
+  gdk_event_request_motions (event);
+
 #if WITH_GTKMM_3_0
   gint                  x, y;
 
@@ -973,7 +1076,6 @@ gimp_spin_scale_value_changed (GtkSpinButton *spin_button)
 
   value = CLAMP (gtk_adjustment_get_value (adjustment), lower, upper);
 
-
   gtk_entry_set_progress_fraction (GTK_ENTRY (spin_button),
                                    pow ((value - lower) / (upper - lower),
                                         1.0 / private->gamma));
@@ -1003,6 +1105,41 @@ gimp_spin_scale_new (GtkAdjustment *adjustment,
 }
 
 void
+gimp_spin_scale_set_label (GimpSpinScale *scale,
+                           const gchar   *label)
+{
+  GimpSpinScalePrivate *private;
+
+  g_return_if_fail (GIMP_IS_SPIN_SCALE (scale));
+
+  private = GET_PRIVATE (scale);
+
+  if (label == private->label)
+    return;
+
+  g_free (private->label);
+  private->label = g_strdup (label);
+
+  if (private->layout)
+    {
+      g_object_unref (private->layout);
+      private->layout = NULL;
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (scale));
+
+  g_object_notify (G_OBJECT (scale), "label");
+}
+
+const gchar *
+gimp_spin_scale_get_label (GimpSpinScale *scale)
+{
+  g_return_val_if_fail (GIMP_IS_SPIN_SCALE (scale), NULL);
+
+  return GET_PRIVATE (scale)->label;
+}
+
+void
 gimp_spin_scale_set_scale_limits (GimpSpinScale *scale,
                                   gdouble        lower,
                                   gdouble        upper)
@@ -1026,33 +1163,6 @@ gimp_spin_scale_set_scale_limits (GimpSpinScale *scale,
   private->gamma            = 1.0;
 
   gimp_spin_scale_value_changed (spin_button);
-}
-
-void
-gimp_spin_scale_set_gamma (GimpSpinScale *scale,
-                           gdouble        gamma)
-{
-  GimpSpinScalePrivate *private;
-
-  g_return_if_fail (GIMP_IS_SPIN_SCALE (scale));
-
-  private = GET_PRIVATE (scale);
-
-  private->gamma = gamma;
-
-  gimp_spin_scale_value_changed (GTK_SPIN_BUTTON (scale));
-}
-
-gdouble
-gimp_spin_scale_get_gamma (GimpSpinScale *scale)
-{
-  GimpSpinScalePrivate *private;
-
-  g_return_val_if_fail (GIMP_IS_SPIN_SCALE (scale), 1.0);
-
-  private = GET_PRIVATE (scale);
-
-  return private->gamma;
 }
 
 void
@@ -1089,4 +1199,27 @@ gimp_spin_scale_get_scale_limits (GimpSpinScale *scale,
     *upper = private->scale_upper;
 
   return private->scale_limits_set;
+}
+
+void
+gimp_spin_scale_set_gamma (GimpSpinScale *scale,
+                           gdouble        gamma)
+{
+  GimpSpinScalePrivate *private;
+
+  g_return_if_fail (GIMP_IS_SPIN_SCALE (scale));
+
+  private = GET_PRIVATE (scale);
+
+  private->gamma = gamma;
+
+  gimp_spin_scale_value_changed (GTK_SPIN_BUTTON (scale));
+}
+
+gdouble
+gimp_spin_scale_get_gamma (GimpSpinScale *scale)
+{
+  g_return_val_if_fail (GIMP_IS_SPIN_SCALE (scale), 1.0);
+
+  return GET_PRIVATE(scale)->gamma;
 }

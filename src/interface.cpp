@@ -1392,7 +1392,7 @@ sp_ui_overwrite_file(gchar const *filename)
                                                                 dirName
             );
         gtk_dialog_add_buttons( GTK_DIALOG(dialog),
-                                GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+                                _("_Cancel"), GTK_RESPONSE_NO,
                                 _("Replace"), GTK_RESPONSE_YES,
                                 NULL );
         gtk_dialog_set_default_response( GTK_DIALOG(dialog), GTK_RESPONSE_YES );
@@ -1418,13 +1418,13 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
     if (data || GTK_IS_BIN (data)) {
         void *child = gtk_bin_get_child (GTK_BIN (data));
         //child is either
-        //- a GtkHBox, whose first child is a label displaying name if the menu
+        //- a GtkBox, whose first child is a label displaying name if the menu
         //item has an accel key
         //- a GtkLabel if the menu has no accel key
         if (child != NULL){
             if (GTK_IS_LABEL(child)) {
                 gtk_label_set_markup_with_mnemonic(GTK_LABEL (child), name.c_str());
-            } else if (GTK_IS_HBOX(child)) {
+            } else if (GTK_IS_BOX(child)) {
                 gtk_label_set_markup_with_mnemonic(
                 GTK_LABEL (gtk_container_get_children(GTK_CONTAINER (child))->data),
                 name.c_str());
