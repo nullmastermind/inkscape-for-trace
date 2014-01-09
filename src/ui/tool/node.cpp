@@ -170,7 +170,6 @@ void Handle::move(Geom::Point const &new_pos)
         //spanish: mueve el tirador y su opuesto la misma proporción
         if(_pm().isBSpline){
             setPosition(_pm().BSplineHandleReposition(this));
-            _parent->bsplineWeight = _pm().BSplineHandlePosition(this);
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
         }
         return;
@@ -188,7 +187,6 @@ void Handle::move(Geom::Point const &new_pos)
         //spanish: mueve el tirador y su opuesto la misma proporción
         if(_pm().isBSpline){
             setPosition(_pm().BSplineHandleReposition(this));
-            _parent->bsplineWeight = _pm().BSplineHandlePosition(this);
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
         }
         
@@ -215,7 +213,6 @@ void Handle::move(Geom::Point const &new_pos)
     //spanish: mueve el tirador y su opuesto la misma proporción
     if(_pm().isBSpline){
         setPosition(_pm().BSplineHandleReposition(this));
-        _parent->bsplineWeight = _pm().BSplineHandlePosition(this);
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
     }
     
@@ -310,7 +307,6 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
 void Handle::handle_2button_press(){
     if(_pm().isBSpline){
         setPosition(_pm().BSplineHandleReposition(this,0.3334));
-        _parent->bsplineWeight = 0.3334;
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
         _pm().update();
     }
@@ -764,8 +760,14 @@ void Node::showHandles(bool v)
     //Cada vez que actuemos sobre dichos tiradores en un trazado
     //bspline esta fuerza se tiene que actualizar
     this->bsplineWeight = 0.0000;
-    if(_pm().isBSpline && (!_front.isDegenerate() || !_back.isDegenerate()))
-        this->bsplineWeight = 0.3334;
+    if(_pm().isBSpline && (!_front.isDegenerate() || !_back.isDegenerate())){
+        if (!_front.isDegenerate()) {
+            _pm().BSplineHandlePosition(&_front);
+        }
+        if (!_back.isDegenerate()) {
+            _pm().BSplineHandlePosition(&_back);
+        }
+    }
 }
 
 void Node::updateHandles()
@@ -1125,9 +1127,9 @@ void Node::_setState(State state)
             //spanish: esto muestra los tiradores al seleccionar los nodos
             if(_pm().isBSpline){
                 if(!this->back()->isDegenerate()){
-                    this->bsplineWeight = _pm().BSplineHandlePosition(this->back());
+                    _pm().BSplineHandlePosition(this->back());
                 }else if (!this->front()->isDegenerate()){
-                    this->bsplineWeight = _pm().BSplineHandlePosition(this->front());
+                    _pm().BSplineHandlePosition(this->front());
                 }else{
                     this->bsplineWeight = 0.0000;
                 }
