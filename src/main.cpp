@@ -26,12 +26,13 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include "path-prefix.h"
 
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
 
-#include "ui/widget/panel.h"
+#include "ui/widget/panel.h" // This has to be the first to include <glib.h> because of Glibmm's dependence on a deprecated feature...
+
+#include "path-prefix.h"
 
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
@@ -583,11 +584,14 @@ static void _win32_set_inkscape_env(gchar const *exe)
     } else {
         printf("python not found\n\n");
     }*/
-    
+
     // INKSCAPE_LOCALEDIR is needed by Python/Gettext
     gchar *localepath = g_build_filename(exe, PACKAGE_LOCALE_DIR, NULL);
     g_setenv("INKSCAPE_LOCALEDIR", localepath, TRUE);
-    
+
+    // prevent "please insert disk" messages. fixes bug #950781
+    SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
+
     g_free(python);
     g_free(scripts);
     g_free(perl);

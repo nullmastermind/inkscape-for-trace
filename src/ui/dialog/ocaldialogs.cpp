@@ -16,13 +16,14 @@
 # include <config.h>
 #endif
 
+#include "ocaldialogs.h"
+
 #include <stdio.h>  // rename()
 #include <unistd.h> // close()
 #include <errno.h>  // errno
 #include <string.h> // strerror()
 
 #include "path-prefix.h"
-#include "ocaldialogs.h"
 #include "filedialogimpl-gtkmm.h"
 #include "interface.h"
 #include "gc-core.h"
@@ -42,6 +43,7 @@
 #include <glibmm/main.h>
 #include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
+#include "ui/icon-names.h"
 
 namespace Inkscape
 {
@@ -577,8 +579,8 @@ SearchEntry::SearchEntry() : Gtk::Entry()
     signal_changed().connect(sigc::mem_fun(*this, &SearchEntry::_on_changed));
     signal_icon_press().connect(sigc::mem_fun(*this, &SearchEntry::_on_icon_pressed));
 
-    set_icon_from_stock(Gtk::Stock::FIND, Gtk::ENTRY_ICON_PRIMARY);
-    gtk_entry_set_icon_from_stock(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
+    set_icon_from_icon_name(INKSCAPE_ICON("edit-find"), Gtk::ENTRY_ICON_PRIMARY);
+    gtk_entry_set_icon_from_icon_name(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
 }
 
 void SearchEntry::_on_icon_pressed(Gtk::EntryIconPosition icon_position, const GdkEventButton* /*event*/)
@@ -595,9 +597,9 @@ void SearchEntry::_on_icon_pressed(Gtk::EntryIconPosition icon_position, const G
 void SearchEntry::_on_changed()
 {
     if (get_text().empty()) {
-        gtk_entry_set_icon_from_stock(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
+        gtk_entry_set_icon_from_icon_name(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
     } else {
-        set_icon_from_stock(Gtk::Stock::CLEAR, Gtk::ENTRY_ICON_SECONDARY);
+        set_icon_from_icon_name(INKSCAPE_ICON("edit-clear"), Gtk::ENTRY_ICON_SECONDARY);
     }
 }
 #endif

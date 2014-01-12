@@ -247,7 +247,7 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
 {
     gboolean handled = FALSE;
 
-    if ( (event->button == 3) && (event->type == GDK_BUTTON_PRESS) ) {
+    if ( event && (event->button == 3) && (event->type == GDK_BUTTON_PRESS) ) {
         SwatchesPanel* swp = findContainingPanel( widget );
 
         if ( !popupMenu ) {
@@ -309,8 +309,8 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
             gtk_widget_show_all(popupMenu);
         }
 
-        ColorItem* item = reinterpret_cast<ColorItem*>(user_data);
-        if ( item ) {
+        if ( user_data ) {
+            ColorItem* item = reinterpret_cast<ColorItem*>(user_data);
             bool show = swp && (swp->getSelectedIndex() == 0);
             for ( std::vector<GtkWidget*>::iterator it = popupExtras.begin(); it != popupExtras.end(); ++ it) {
                 gtk_widget_set_sensitive(*it, show);

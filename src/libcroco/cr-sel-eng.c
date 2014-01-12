@@ -150,9 +150,7 @@ lang_pseudo_class_handler (CRSelEng *const a_this,
         for (; node; node = get_next_parent_element_node (node_iface, node)) {
                 char *val = node_iface->getProp (node, "lang");
                 if (val) {
-                        if (!strqcmp (val,
-                                      a_sel->content.pseudo->extra->stryng->str,
-                                      a_sel->content.pseudo->extra->stryng->len)) {
+                        if (!strcasecmp(val, a_sel->content.pseudo->extra->stryng->str)) {
                                 result = TRUE;
                                 break;
                         }
@@ -514,11 +512,11 @@ additional_selector_matches_node (CRSelEng * a_this,
                         continue ;
                 } else if (cur_add_sel->type == PSEUDO_CLASS_ADD_SELECTOR
                            && cur_add_sel->content.pseudo) {
-                        if (pseudo_class_add_sel_matches_node
+                        if (!pseudo_class_add_sel_matches_node
                             (a_this, cur_add_sel, a_node)) {
-                                return TRUE;
+                                return FALSE;
                         }
-                        return FALSE;
+                        continue ;
                 }
         }
         if (evaluated == TRUE)
