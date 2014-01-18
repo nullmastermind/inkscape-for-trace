@@ -10,6 +10,7 @@
 
 #include "template-widget.h"
 #include "template-load-tab.h"
+#include "new-from-template.h"
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
@@ -31,10 +32,8 @@
 #include "xml/document.h"
 #include "xml/node.h"
 
-
 namespace Inkscape {
 namespace UI {
-    
 
 TemplateLoadTab::TemplateLoadTab()
     : _current_keyword("")
@@ -84,7 +83,9 @@ void TemplateLoadTab::createTemplate()
 
 void TemplateLoadTab::_onRowActivated(const Gtk::TreeModel::Path &, Gtk::TreeViewColumn*)
 {
-    _info_widget->create();
+    createTemplate();
+    NewFromTemplate* parent = static_cast<NewFromTemplate*> (this->get_toplevel());
+    parent->_onClose();
 }
 
 void TemplateLoadTab::_displayTemplateInfo()
@@ -290,26 +291,26 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
 {
     Inkscape::XML::Node *currentData;
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != NULL)
-        data.display_name = dgettext("Document template name", currentData->firstChild()->content());
+        data.display_name = _(currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != NULL)
         data.author = currentData->firstChild()->content();
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != NULL)
-        data.short_description = dgettext("Document template short description", currentData->firstChild()->content());
+        data.short_description = _( currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= NULL)
-        data.long_description = dgettext("Document template long description", currentData->firstChild()->content());
+        data.long_description = _(currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != NULL)
         data.preview_name = currentData->firstChild()->content();
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != NULL)
         data.creation_date = currentData->firstChild()->content();
         
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != NULL){
-        Glib::ustring tplKeywords = currentData->firstChild()->content();
+        Glib::ustring tplKeywords = _(currentData->firstChild()->content());
         while (!tplKeywords.empty()){
             std::size_t pos = tplKeywords.find_first_of(" ");
             if (pos == Glib::ustring::npos)
                 pos = tplKeywords.size();
                 
-            Glib::ustring keyword = dgettext("Document template keyword", tplKeywords.substr(0, pos).data());
+            Glib::ustring keyword = tplKeywords.substr(0, pos).data();
             data.keywords.insert(keyword.lowercase());
             _keywords.insert(keyword.lowercase());
                 
