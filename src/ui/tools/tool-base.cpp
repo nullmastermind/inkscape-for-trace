@@ -98,6 +98,7 @@ ToolBase::ToolBase() {
 	this->hot_x = 0;
 	this->yp = 0;
 	this->within_tolerance = false;
+        this->is_dragging = false;
 	this->tolerance = 0;
 	//this->key = 0;
 	this->item_to_select = 0;
@@ -977,12 +978,15 @@ gint sp_event_context_root_handler(ToolBase * event_context,
 
 gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * event) {
     gint ret = false;
-    if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
-                            // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
-        //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->root_handler(event_context, event);
-    	ret = event_context->root_handler(event);
+    if (event_context) {
+        if(event->type == GDK_BUTTON_PRESS)
+            event_context->is_dragging = true;
 
+    	ret = event_context->root_handler(event);
         set_event_location(event_context->desktop, event);
+
+        if(event->type == GDK_BUTTON_RELEASE)
+            event_context->is_dragging = false;
     }
     return ret;
 }
