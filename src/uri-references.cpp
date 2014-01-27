@@ -57,20 +57,18 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
     }
 
     // The path contains references to seperate document files to load.
-    const char *path = uri.getPath();
-    if(path) {
-        if(document != NULL) {
-            // Calculate the absolute path from an available document
-            std::string basePath = std::string( document->getBase() );
-            std::string absPath = Glib::build_filename(basePath, std::string( path ) );
-            path = absPath.c_str();
-        }
-        // TODO: This is inefficient because it will load the same svg file
-        // many times if it's used many times. A global list of documents would
-        // be useful for tracking linked items.
-        document = SPDocument::createNewDoc(path, FALSE);
+    if(document && uri.getPath()) {
+        std::string base = std::string(document->getBase());
+        std::string path = uri.getFullPath(base);
+        if(!path.empty())
+            document = document->createChildDoc(path);
+        else
+            document = NULL;
     }
-    g_return_if_fail(document != NULL);
+    if(!document) {
+        g_warning("Can't get document for referenced URI: %s", uri.toString());
+        return;
+    }
 
     gchar const *fragment = uri.getFragment();
     if ( !uri.isRelative() || uri.getQuery() || !fragment ) {

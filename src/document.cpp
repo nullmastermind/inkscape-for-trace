@@ -108,7 +108,8 @@ SPDocument::SPDocument() :
     _collection_queue(0),
     oldSignalsConnected(false),
     current_persp3d(NULL),
-    current_persp3d_impl(NULL)
+    current_persp3d_impl(NULL),
+    _parent_document(NULL)
 {
     // Penalise libavoid for choosing paths with needless extra segments.
     // This results in much better looking orthogonal connector paths.
@@ -314,7 +315,8 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                                   gchar const *uri,
                                   gchar const *base,
                                   gchar const *name,
-                                  unsigned int keepalive)
+                                  unsigned int keepalive,
+                                  SPDocument *parent)
 {
     SPDocument *document = new SPDocument();
 
@@ -325,6 +327,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 
     document->rdoc = rdoc;
     document->rroot = rroot;
+    if (parent) {
+        document->_parent_document = parent;
+        parent->_child_documents.push_back(document);
+    }
 
     if (document->uri){
         g_free(document->uri);
@@ -470,10 +476,43 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 }
 
 /**
+ * Fetches a document and attaches it to the current document as a child href
+ */
+SPDocument *SPDocument::createChildDoc(std::string const &uri)
+{
+    SPDocument *parent = this;
+    SPDocument *document = NULL;
+
+    while(parent != NULL && document == NULL) {
+        // Check myself and any parents int he chain
+        if(uri == parent->getURI()) {
+            document = parent;
+            break;
+        }
+        // Then check children of those.
+        boost::ptr_list<SPDocument>::iterator iter;
+        for (iter = parent->_child_documents.begin();
+          iter != parent->_child_documents.end(); ++iter) {
+            if(uri == iter->getURI()) {
+                document = &*iter;
+                break;
+            }
+        }
+        parent = parent->_parent_document;
+    }
+
+    // Load a fresh document from the svg source.
+    if(!document) {
+        const char *path = uri.c_str();
+        document = createNewDoc(path, false, false, this);
+    }
+    return document;
+}
+/**
  * Fetches document from URI, or creates new, if NULL; public document
  * appears in document list.
  */
-SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, bool make_new)
+SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, bool make_new, SPDocument *parent)
 {
     SPDocument *doc;
     Inkscape::XML::Document *rdoc;
@@ -518,7 +557,7 @@ SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, b
     //# These should be set by now
     g_assert(name);
 
-    doc = createDoc(rdoc, uri, base, name, keepalive);
+    doc = createDoc(rdoc, uri, base, name, keepalive, parent);
 
     g_free(base);
     g_free(name);
@@ -539,7 +578,7 @@ SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, un
             // TODO fixme: destroy document
         } else {
             Glib::ustring name = Glib::ustring::compose( _("Memory document %1"), ++doc_mem_count );
-            doc = createDoc(rdoc, NULL, NULL, name.c_str(), keepalive);
+            doc = createDoc(rdoc, NULL, NULL, name.c_str(), keepalive, NULL);
         }
     }
 
@@ -601,6 +640,7 @@ void SPDocument::setWidth(const Inkscape::Util::Quantity &width)
 
     root->updateRepr();
 }
+
 
 Inkscape::Util::Quantity SPDocument::getHeight() const
 {
