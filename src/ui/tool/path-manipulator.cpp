@@ -150,6 +150,8 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     BSpline();
     if(isBSpline){
         _show_outline = true;
+        _updateOutline();
+        _show_outline = false;
     }
 }
 
@@ -914,8 +916,7 @@ void PathManipulator::showHandles(bool show)
 /** Set the visibility of outline. */
 void PathManipulator::showOutline(bool show)
 {
-    //if(isBSpline) show = true;
-    //if (show == _show_outline) return;
+    if (show == _show_outline) return;
     _show_outline = show;
     _updateOutline();
 }
