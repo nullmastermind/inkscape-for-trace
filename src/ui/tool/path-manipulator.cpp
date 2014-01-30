@@ -149,7 +149,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     _createControlPointsFromGeometry();
     BSpline();
     if(isBSpline){
-        _show_outline(true);
+        _show_outline = true;
     }
 }
 
