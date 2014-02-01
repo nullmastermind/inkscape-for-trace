@@ -43,6 +43,10 @@
 #include "tools-switch.h"
 #include "ui/control-manager.h"
 //spanish: incluimos los archivos necesarios para las BSpline y Spiro
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/parameter/path.h"
 #define INKSCAPE_LPE_SPIRO_C
 #include "live_effects/lpe-spiro.h"
 
@@ -67,6 +71,8 @@
 #include <2geom/nearest-point.h>
 
 #include "tool-factory.h"
+
+#include "live_effects/effect.h"
 
 
 using Inkscape::ControlManager;
@@ -1467,6 +1473,32 @@ static void bspline_spiro_off(PenTool *const pc)
 
 static void bspline_spiro_start_anchor(PenTool *const pc, bool shift)
 {
+    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+
+    if (SP_IS_LPE_ITEM(pc->white_item) && SP_LPE_ITEM(pc->white_item)->hasPathEffect()){
+        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(pc->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        if(thisEffect){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
+        }
+    }
+    if(lpe_bsp){
+        pc->bspline = true;
+    }else{
+        pc->bspline = false;
+    }
+    LivePathEffect::LPESpiro *lpe_spi = NULL;
+
+    if (SP_IS_LPE_ITEM(pc->white_item) && SP_LPE_ITEM(pc->white_item)->hasPathEffect()){
+        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(pc->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
+        if(thisEffect){
+            lpe_spi = dynamic_cast<LivePathEffect::LPESpiro*>(thisEffect->getLPEObj()->get_lpe());
+        }
+    }
+    if(lpe_spi){
+        pc->spiro = true;
+    }else{
+        pc->spiro = false;
+    }
     if(!pc->spiro && !pc->bspline)
         return;
 
