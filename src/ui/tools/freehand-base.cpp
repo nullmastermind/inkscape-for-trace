@@ -531,22 +531,33 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 
     // Step C - test start
     if (dc->sa) {
-        SPCurve *s = dc->sa->curve;
-        dc->white_curves = g_slist_remove(dc->white_curves, s);
-        if (dc->sa->start) {
-            s = reverse_then_unref(s);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) != 1 && 
+           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) != 2){
+            dc->sa->curve->unref()
+        }else{
+            SPCurve *s = dc->sa->curve;
+            dc->white_curves = g_slist_remove(dc->white_curves, s);
+            if (dc->sa->start) {
+                s = reverse_then_unref(s);
+            }
+            s->append_continuous(c, 0.0625);
+            c->unref();
+            c = s;
         }
-        s->append_continuous(c, 0.0625);
-        c->unref();
-        c = s;
     } else /* Step D - test end */ if (dc->ea) {
-        SPCurve *e = dc->ea->curve;
-        dc->white_curves = g_slist_remove(dc->white_curves, e);
-        if (!dc->ea->start) {
-            e = reverse_then_unref(e);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) != 1 && 
+           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) != 2){
+            dc->ea->curve->unref()
+            SPCurve *e = dc->ea->curve;
+            dc->white_curves = g_slist_remove(dc->white_curves, e);
+            if (!dc->ea->start) {
+                e = reverse_then_unref(e);
+            }
+            c->append_continuous(e, 0.0625);
+            e->unref();
         }
-        c->append_continuous(e, 0.0625);
-        e->unref();
     }
 
 
