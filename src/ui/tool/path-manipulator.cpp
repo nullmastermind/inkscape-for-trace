@@ -148,13 +148,6 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
 
     _createControlPointsFromGeometry();
     BSpline();
-    //Small Hack to default show red path in bspline on select, independent of the state of toogle button
-    //it become some inconsistent behaviour in the show_path toogle button
-    if(isBSpline){
-        _show_outline = true;
-        _updateOutline();
-        _show_outline = false;
-    }
 }
 
 PathManipulator::~PathManipulator()
