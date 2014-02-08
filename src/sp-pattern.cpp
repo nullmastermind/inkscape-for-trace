@@ -53,7 +53,7 @@ namespace {
 	bool patternRegistered = SPFactory::instance().registerObject("svg:pattern", createPattern);
 }
 
-SPPattern::SPPattern() : SPPaintServer() {
+SPPattern::SPPattern() : SPPaintServer(), SPViewBox() {
 	this->href = NULL;
 
 	this->ref = new SPPatternReference(this);
@@ -72,8 +72,6 @@ SPPattern::SPPattern() : SPPaintServer() {
 	this->y.unset();
 	this->width.unset();
 	this->height.unset();
-
-	this->viewBox_set = FALSE;
 }
 
 SPPattern::~SPPattern() {
@@ -90,6 +88,7 @@ void SPPattern::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	this->readAttr( "width" );
 	this->readAttr( "height" );
 	this->readAttr( "viewBox" );
+        this->readAttr( "preserveAspectRatio" );
 	this->readAttr( "xlink:href" );
 
 	/* Register ourselves */
@@ -180,50 +179,16 @@ void SPPattern::set(unsigned int key, const gchar* value) {
 		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_VIEWBOX: {
-		/* fixme: Think (Lauris) */
-		double x, y, width, height;
-		char *eptr;
+	case SP_ATTR_VIEWBOX:
+            set_viewBox( value );
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+            break;
 
-		if (value) {
-			eptr = (gchar *) value;
-			x = g_ascii_strtod (eptr, &eptr);
+        case SP_ATTR_PRESERVEASPECTRATIO:
+            set_preserveAspectRatio( value );
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+            break;
 
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			y = g_ascii_strtod (eptr, &eptr);
-
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			width = g_ascii_strtod (eptr, &eptr);
-
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			height = g_ascii_strtod (eptr, &eptr);
-
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			if ((width > 0) && (height > 0)) {
-			    this->viewBox = Geom::Rect::from_xywh(x, y, width, height);
-			    this->viewBox_set = TRUE;
-			} else {
-				this->viewBox_set = FALSE;
-			}
-		} else {
-			this->viewBox_set = FALSE;
-		}
-
-		this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
-		break;
-	}
 	case SP_ATTR_XLINK_HREF:
 		if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
 			/* Href unchanged, do nothing. */
@@ -674,25 +639,25 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     // Create drawing surface with size of pattern tile (in tile space) but with number of pixels
     // based on required resolution (c).
     Inkscape::DrawingSurface pattern_surface(pattern_tile, c.ceil());
-    Inkscape::DrawingContext ct(pattern_surface);
+    Inkscape::DrawingContext dc(pattern_surface);
 
     pattern_tile *= pattern_surface.drawingTransform();
     Geom::IntRect one_tile = pattern_tile.roundOutwards();
 
     // render pattern.
     if (needs_opacity) {
-        ct.pushGroup(); // this group is for pattern + opacity
+        dc.pushGroup(); // this group is for pattern + opacity
     }
 
     // TODO: make sure there are no leaks.
     Inkscape::UpdateContext ctx;  // UpdateContext is structure with only ctm!
     ctx.ctm = vb2ps * pattern_surface.drawingTransform();
-    ct.transform( pattern_surface.drawingTransform().inverse() );
+    dc.transform( pattern_surface.drawingTransform().inverse() );
     drawing.update(Geom::IntRect::infinite(), ctx);
 
     // Render drawing to pattern_surface via drawing context, this calls root->render
     // which is really DrawingItem->render().
-    drawing.render(ct, one_tile);
+    drawing.render(dc, one_tile);
     for (SPObject *child = shown->firstChild() ; child != NULL; child = child->getNext() ) {
         if (SP_IS_ITEM (child)) {
             SP_ITEM(child)->invoke_hide(dkey);
@@ -708,8 +673,8 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     // cairo_surface_write_to_png( pattern_surface.raw(), "sp-pattern.png" );
 
     if (needs_opacity) {
-        ct.popGroupToSource(); // pop raw pattern
-        ct.paint(opacity); // apply opacity
+        dc.popGroupToSource(); // pop raw pattern
+        dc.paint(opacity); // apply opacity
     }
 
     cairo_pattern_t *cp = cairo_pattern_create_for_surface(pattern_surface.raw());

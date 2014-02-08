@@ -31,8 +31,9 @@ struct SPMarkerView;
 #include "sp-item-group.h"
 #include "sp-marker-loc.h"
 #include "uri-references.h"
+#include "viewbox.h"
 
-class SPMarker : public SPGroup {
+class SPMarker : public SPGroup, public SPViewBox {
 public:
 	SPMarker();
 	virtual ~SPMarker();
@@ -54,17 +55,6 @@ public:
 	unsigned int orient_auto : 1;
 	float orient;
 
-    /* viewBox; */
-    Geom::OptRect viewBox;
-
-	/* preserveAspectRatio */
-	unsigned int aspect_set : 1;
-	unsigned int aspect_align : 4;
-	unsigned int aspect_clip : 1;
-
-	/* Child to parent additional transform */
-	Geom::Affine c2p;
-
 	/* Private views */
 	SPMarkerView *views;
 
@@ -75,6 +65,7 @@ public:
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual Inkscape::DrawingItem* private_show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
 	virtual void hide(unsigned int key);
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
