@@ -26,6 +26,15 @@ URI::URI(gchar const *preformed) throw(BadURIException) {
     if (!preformed) {
         throw MalformedURIException();
     }
+    // One day Inkscape::URI should use std::string by default
+    std::string path = std::string(preformed);
+    // Check for a data URI and parse seperately because
+    // libxml can't handle this; although svgs need to.
+    if( path.compare(0, 5, "data:") == 0 ) {
+        parseDataUri( path );
+        // Empty the uri for libxml
+        preformed = "";
+    }
     uri = xmlParseURI(preformed);
     if (!uri) {
         throw MalformedURIException();
@@ -135,6 +144,17 @@ gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
     filename = tmp.toNativeFilename();
     return filename;
 }
+
+/*
+ * Parse data:... uris so we can access their data transparently.
+ * otherwise data: is considered a malformed protocol like http:
+ * and two // as appended and the data is stored in the path of the uri.
+ */
+bool URI::parseDataUri(const std::string &uri) {
+
+    return true;
+}
+
 /*
  * Returns the absolute path to an existing file referenced in this URI,
  * if the uri is data, the path is empty or the file doesn't exist, then
@@ -149,6 +169,8 @@ const std::string URI::getFullPath(std::string const base) const {
     if(!base.empty() && !path.empty() && path[0] != '/') {
         path = Glib::build_filename(base, path);
     }
+    // Path normalisation should go here TODO
+
     // Check the existance of the file
     if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS) 
       || g_file_test(path.c_str(), G_FILE_TEST_IS_DIR) ) {

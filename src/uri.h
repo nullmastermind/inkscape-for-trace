@@ -121,6 +121,8 @@ public:
     URI &operator=(URI const &uri);
 
 private:
+    bool parseDataUri(const std::string &uri);
+
     class Impl {
     public:
         static Impl *create(xmlURIPtr uri);

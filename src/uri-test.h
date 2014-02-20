@@ -47,7 +47,7 @@ public:
             { "foo", "foo" },
             { "#foo", "#foo" },
             { "blah.svg#h", "blah.svg#h" },
-            //{ "data:data", "data:data" },
+            { "data:data", "data:data" },
         };
 
         for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ ) {
