@@ -123,6 +123,11 @@ public:
 private:
     bool parseDataUri(const std::string &uri);
 
+    std::string data_mimetype;
+    std::string data_charset;
+    bool        data_base64;
+    std::string data;
+
     class Impl {
     public:
         static Impl *create(xmlURIPtr uri);

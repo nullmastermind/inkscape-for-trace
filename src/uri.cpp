@@ -14,6 +14,8 @@
 #include <glibmm/ustring.h>
 #include <glibmm/miscutils.h>
 
+#include <iostream>
+
 namespace Inkscape {
 
 URI::URI(const URI &uri) {
@@ -151,6 +153,22 @@ gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
  * and two // as appended and the data is stored in the path of the uri.
  */
 bool URI::parseDataUri(const std::string &uri) {
+    unsigned int track = 5; // Ignore start of uri 'data:'
+
+    unsigned int head_end = uri.find(",", track);
+    if (head_end < uri.length()) {
+        std::string head = uri.substr(track, head_end);
+        // Head split by ';' for mime-type, charset and base64 bool
+        track = head_end + 1;
+    } else {
+        head = "No Head";
+    }
+    data = uri.substr(track, uri.length()-track);
+    if(data_base64) {
+        // Parse data here
+    } else {
+        // Fill data here
+    }
 
     return true;
 }
