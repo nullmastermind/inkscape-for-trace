@@ -469,7 +469,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 {
     // Concat RBG
     SPCurve *c = dc->green_curve;
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // Green
     dc->green_curve = new SPCurve();
     while (dc->green_bpaths) {
@@ -490,12 +490,16 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
 
     if (c->is_empty()) {
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+            SPDesktop *desktop = dc->desktop;
+            spdc_selection_modified(sp_desktop_selection(desktop), 0, dc);
+        }
         c->unref();
         return;
     }
 
     // Step A - test, whether we ended on green anchor
-    if ( forceclosed || ( dc->green_anchor && dc->green_anchor->active ) ) {
+    if ( forceclosed || (dc->green_anchor && dc->green_anchor->active) ) {
         // We hit green anchor, closing Green-Blue-Red
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         c->closepath_current();
@@ -513,21 +517,33 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
-        if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
-            c = reverse_then_unref(c);
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+            if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
+                dc->sa->curve = reverse_then_unref(dc->sa->curve);
+            }
+            dc->sa->curve->append_continuous(c, 0.0625);
+            c->unref();
+            if(Geom::are_near(dc->sa->curve->first_path()->initialPoint(), dc->ea->dp)){
+                dc->sa->curve->closepath_current();
+            }
+        }else{
+            if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
+                c = reverse_then_unref(c);
+            }
+            dc->sa->curve->append_continuous(c, 0.0625);
+            c->unref();
+            dc->sa->curve->closepath_current();
         }
-        dc->sa->curve->append_continuous(c, 0.0625);
-        c->unref();
-        dc->sa->curve->closepath_current();
         //spanish: Si la curva tiene un LPE del tipo bspline o spiro ejecutamos spdc_flush_white
         //pasándole la curva de inicio necesaria
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
             dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
             spdc_flush_white(dc, dc->sa->curve);
-        }else
+        }else{
             spdc_flush_white(dc, NULL);
+        }
         return;
     }
 
@@ -550,10 +566,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         c->append_continuous(e, 0.0625);
         e->unref();
     }
-
-
     spdc_flush_white(dc, c);
-
     c->unref();
 }
 

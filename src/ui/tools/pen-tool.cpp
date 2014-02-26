@@ -414,11 +414,18 @@ static gint pen_handle_button_press(PenTool *const pc, GdkEventButton const &bev
     ToolBase *event_context = SP_EVENT_CONTEXT(pc);
     //Test whether we hit any anchor.
     SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
+
     //with this we avoid creating a new point over the existing one
-    if(!bevent.button == 3 && (pc->spiro || pc->bspline) && pc->npoints > 0 && pc->p[0] == pc->p[3]){
+    if(bevent.button != 3 && (pc->spiro || pc->bspline) && pc->npoints > 0 && pc->p[0] == pc->p[3]){
+        pc->state = PenTool::STOP;
+        if( anchor && anchor == pc->sa && pc->green_curve->is_empty()){
+            //spanish Borrar siguiente linea para evitar un nodo encima de otro
+            spdc_pen_finish_segment(pc, event_dt, bevent.state);
+            spdc_pen_finish(pc, FALSE);
+            return TRUE;
+        }
         return FALSE;
     } 
-
     gint ret = FALSE;
     if (bevent.button == 1 && !event_context->space_panning
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
@@ -486,7 +493,7 @@ static gint pen_handle_button_press(PenTool *const pc, GdkEventButton const &bev
                             if(anchor){
                                 bspline_spiro_start_anchor(pc,(bevent.state & GDK_SHIFT_MASK));
                             }
-                            if (anchor && !sp_pen_context_has_waiting_LPE(pc)) {
+                            if (anchor && (!sp_pen_context_has_waiting_LPE(pc) || pc->bspline || pc->spiro)) {
                                 // Adjust point to anchor if needed; if we have a waiting LPE, we need
                                 // a fresh path to be created so don't continue an existing one
                                 p = anchor->dp;
@@ -755,7 +762,6 @@ static gint pen_handle_button_release(PenTool *const pc, GdkEventButton const &r
     }
 
     gint ret = FALSE;
-
     ToolBase *event_context = SP_EVENT_CONTEXT(pc);
     if ( revent.button == 1  && !event_context->space_panning) {
 
@@ -769,11 +775,10 @@ static gint pen_handle_button_release(PenTool *const pc, GdkEventButton const &r
         // Test whether we hit any anchor.
         SPDrawAnchor *anchor = spdc_test_inside(pc, event_w);
         //with this we avoid creating a new point over the existing one
-        if(pc->spiro || pc->bspline){
-            //spanish: si intentamos crear un nodo en el mismo sitio que el origen, paramos.
-            if(pc->npoints > 0 && pc->p[0] == pc->p[3]){
-                return FALSE;
-            }
+        //spanish: si intentamos crear un nodo en el mismo sitio que el origen, paramos.
+
+        if((!anchor || anchor == pc->sa) && (pc->spiro || pc->bspline) && pc->npoints > 0 && pc->p[0] == pc->p[3]){
+            return TRUE;
         }
 
         switch (pc->mode) {
@@ -1442,9 +1447,7 @@ static void bspline_spiro(PenTool *const pc, bool shift)
     if(!pc->spiro && !pc->bspline)
         return;
 
-    if(!pc->anchor_statusbar)
-        shift?bspline_spiro_off(pc):bspline_spiro_on(pc);
-
+    shift?bspline_spiro_off(pc):bspline_spiro_on(pc);
     bspline_spiro_build(pc);
 }
 
@@ -1628,10 +1631,11 @@ static void bspline_spiro_motion(PenTool *const pc, bool shift){
     }
 
     if(pc->anchor_statusbar && !pc->red_curve->is_empty()){
-        if(shift)
+        if(shift){
             bspline_spiro_end_anchor_off(pc);
-        else
+        }else{
             bspline_spiro_end_anchor_on(pc);
+        }
     }
 
     bspline_spiro_build(pc);
@@ -1675,10 +1679,9 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
         tmpCurve = tmpCurve->create_reverse();
         pc->green_curve->reset();
         pc->green_curve = tmpCurve;
-    }else{
+    }else {
         tmpCurve = pc->sa->curve->copy();
-        if(!pc->sa->start)
-            tmpCurve = tmpCurve->create_reverse();
+        if(!pc->sa->start) tmpCurve = tmpCurve->create_reverse();
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(pc->bspline){
             C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
@@ -1712,10 +1715,11 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
 static void bspline_spiro_end_anchor_off(PenTool *const pc)
 {
 
-    pc->p[2] = pc->p[3];
     SPCurve *tmpCurve = new SPCurve();
     SPCurve *lastSeg = new SPCurve();
+    pc->p[2] = pc->p[3];
     if(!pc->sa || pc->sa->curve->is_empty()){
+
         tmpCurve = pc->green_curve->create_reverse();
         if(pc->green_curve->get_segment_count()==0)return;
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
@@ -1734,10 +1738,9 @@ static void bspline_spiro_end_anchor_off(PenTool *const pc)
             pc->green_curve->reset();
             pc->green_curve = tmpCurve;
         }
-    }else{
+    }else {
         tmpCurve = pc->sa->curve->copy();
-        if(!pc->sa->start)
-            tmpCurve = tmpCurve->create_reverse();
+        if(!pc->sa->start) tmpCurve = tmpCurve->create_reverse();
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
         if(cubic){
             lastSeg->moveto((*cubic)[0]);
@@ -1789,7 +1792,7 @@ static void bspline_spiro_build(PenTool *const pc)
     }
 
     if(!curve->is_empty()){
-        //spanish: cerramos la curva si estan cerca los puntos finales de la curva spiro
+        //spanish: cerramos la curva si estan cerca los puntos finales de la curva
         if(Geom::are_near(curve->first_path()->initialPoint(), curve->last_path()->finalPoint())){
             curve->closepath_current();
         }
@@ -2194,7 +2197,8 @@ static void spdc_pen_finish(PenTool *const pc, gboolean const closed)
     SPDesktop *const desktop = pc->desktop;
     pc->message_context->clear();
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Drawing finished"));
-
+    if(pc->spiro || pc->bspline) pc->blue_curve->reset();
+    //spanish para cancelar linea sin un segmento creado
     pc->red_curve->reset();
     spdc_concat_colors_and_flush(pc, closed);
     pc->sa = NULL;
