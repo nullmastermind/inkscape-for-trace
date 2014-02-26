@@ -16,6 +16,7 @@
 #include <libxml/uri.h>
 #include "bad-uri-exception.h"
 #include <string>
+#include <vector>
 
 namespace Inkscape {
 
@@ -24,6 +25,9 @@ namespace Inkscape {
  */
 class URI {
 public:
+
+    /* Blank constructor */
+    URI();
 
     /**
      * Copy constructor.
@@ -115,6 +119,27 @@ public:
      */
     gchar *toString() const { return _impl->toString(); }
 
+
+    /**
+     * Data URI public get methods.
+     */
+    bool              isDataUri()       { return not data.empty(); }
+    const std::string getData()   const { return data; }
+
+    const std::string getMimeType() const {
+        if (data_mimetype.empty())
+            return "text/plain";
+        return data_mimetype;
+    }
+
+    const std::string getCharset() const {
+        if (data_charset.empty())
+            return "US-ASCII";
+        return data_mimetype;
+    }
+    // Return decoded bytes if requested.
+    std::vector<char> getDataBytes() const;
+
     /**
      * Assignment operator.
      */
@@ -123,10 +148,10 @@ public:
 private:
     bool parseDataUri(const std::string &uri);
 
-    std::string data_mimetype;
-    std::string data_charset;
-    bool        data_base64;
-    std::string data;
+    std::string data_mimetype; // Defaults to test/plain (we expect image/jpeg)
+    std::string data_charset;  // Defaults to US-ASCII
+    bool        data_base64;   // true: base64, false: safe-url octets
+    std::string data;          // Base64/Octet stored image.
 
     class Impl {
     public:

@@ -18,6 +18,11 @@
 
 namespace Inkscape {
 
+URI::URI() {
+    const gchar *in = "";
+    _impl = Impl::create(xmlParseURI(in));
+}
+
 URI::URI(const URI &uri) {
     uri._impl->reference();
     _impl = uri._impl;
@@ -153,24 +158,50 @@ gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
  * and two // as appended and the data is stored in the path of the uri.
  */
 bool URI::parseDataUri(const std::string &uri) {
-    unsigned int track = 5; // Ignore start of uri 'data:'
 
-    unsigned int head_end = uri.find(",", track);
+    data_base64 = false;
+
+    unsigned int head_end = uri.find(",", 5);
     if (head_end < uri.length()) {
-        std::string head = uri.substr(track, head_end);
-        // Head split by ';' for mime-type, charset and base64 bool
-        track = head_end + 1;
-    } else {
-        head = "No Head";
-    }
-    data = uri.substr(track, uri.length()-track);
-    if(data_base64) {
-        // Parse data here
-    } else {
-        // Fill data here
+        unsigned int last_sep = 5;
+        while (last_sep < head_end) {
+            unsigned int next_sep = uri.find(";", 5);
+            if (next_sep > head_end) next_sep = head_end;
+
+            if( uri.compare(last_sep, next_sep, "base64") == 0 ) {
+                data_base64 = true;
+            } else if ( uri.compare(last_sep, last_sep+8, "charset=") && data_charset.empty() ) {
+                data_charset = uri.substr(last_sep+8, next_sep);
+            } else if ( data_mimetype.empty() ) {
+                data_mimetype = uri.substr(last_sep, next_sep);
+            } else {
+                throw BadURIException();
+            }
+
+            last_sep = next_sep;
+        }
     }
 
+    data = uri.substr(head_end, uri.length() - head_end);
     return true;
+}
+/*
+ * Returns the data as a decoded byte vector.
+ */
+std::vector<char> URI::getDataBytes() const {
+  std::vector<char> result;
+  gsize len;
+
+  if(data_base64) {
+    guchar *decoded = g_base64_decode(data.data(), &len);
+    for (gsize i = 0; i < len; ++i) {
+        result.push_back(decoded[i]);
+    }
+    g_free(decoded);
+  } else {
+    // XXX Unimlemented Octet decoding!
+  }
+  return result;
 }
 
 /*
