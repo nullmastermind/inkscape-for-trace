@@ -79,6 +79,11 @@ using namespace std;
 #define DDC_RED_RGBA 0xff0000ff
 #define DYNA_MIN_WIDTH 1.0e-6
 
+// Disabled in 0.91 because of Bug #1274831 (crash, spraying an object 
+// with the mode: spray object in single path)
+// Please enable again when working on 1.0
+//#define ENABLE_SPRAY_MODE_SINGLE_PATH
+
 #include "tool-factory.h"
 
 namespace Inkscape {
@@ -86,15 +91,15 @@ namespace UI {
 namespace Tools {
 
 namespace {
-	ToolBase* createSprayContext() {
-		return new SprayTool();
-	}
+    ToolBase* createSprayContext() {
+        return new SprayTool();
+    }
 
-	bool sprayContextRegistered = ToolFactory::instance().registerObject("/tools/spray", createSprayContext);
+    bool sprayContextRegistered = ToolFactory::instance().registerObject("/tools/spray", createSprayContext);
 }
 
 const std::string& SprayTool::getPrefsPath() {
-	return SprayTool::prefsPath;
+    return SprayTool::prefsPath;
 }
 
 const std::string SprayTool::prefsPath = "/tools/spray";
@@ -114,9 +119,9 @@ inline double NormalDistribution(double mu, double sigma)
 static void sp_spray_rotate_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *item, Geom::Rotate const &rotation)
 {
     Geom::Translate const s(c);
-    Geom::Affine affine = Geom::Affine(s).inverse() * Geom::Affine(rotation) * Geom::Affine(s);
+    Geom::Affine affine = s.inverse() * rotation * s;
     // Rotate item.
-    item->set_i2d_affine(item->i2dt_affine() * (Geom::Affine)affine);
+    item->set_i2d_affine(item->i2dt_affine() * affine);
     // Use each item's own transform writer, consistent with sp_selection_apply_affine()
     item->doWriteTransform(item->getRepr(), item->transform);
     // Restore the center position (it's changed because the bbox center changed)
@@ -134,35 +139,30 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
     item->doWriteTransform(item->getRepr(), item->transform);
 }
 
-SprayTool::SprayTool() : ToolBase() {
-	this->usetilt = 0;
-	this->dilate_area = 0;
-	this->usetext = false;
-	this->population = 0;
-	this->is_drawing = false;
-	this->mode = 0;
-	this->usepressure = 0;
-
-    this->cursor_shape = cursor_spray_xpm;
-    this->hot_x = 4;
-    this->hot_y = 4;
-
-    /* attributes */
-    this->dragging = FALSE;
-    this->distrib = 1;
-    this->width = 0.2;
-    this->force = 0.2;
-    this->ratio = 0;
-    this->tilt = 0;
-    this->mean = 0.2;
-    this->rotation_variation = 0;
-    this->standard_deviation = 0.2;
-    this->scale = 1;
-    this->scale_variation = 1;
-    this->pressure = TC_DEFAULT_PRESSURE;
-
-    this->is_dilating = false;
-    this->has_dilated = false;
+SprayTool::SprayTool()
+    : ToolBase(cursor_spray_xpm, 4, 4)
+    , pressure(TC_DEFAULT_PRESSURE)
+    , dragging(false)
+    , usepressure(0)
+    , usetilt(0)
+    , usetext(false)
+    , width(0.2)
+    , ratio(0)
+    , tilt(0)
+    , rotation_variation(0)
+    , force(0.2)
+    , population(0)
+    , scale_variation(1)
+    , scale(1)
+    , mean(0.2)
+    , standard_deviation(0.2)
+    , distrib(1)
+    , mode(0)
+    , is_drawing(false)
+    , is_dilating(false)
+    , has_dilated(false)
+    , dilate_area(NULL)
+{
 }
 
 SprayTool::~SprayTool() {
@@ -194,22 +194,22 @@ void SprayTool::update_cursor(bool /*with_shift*/) {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
     }
 
-	switch (this->mode) {
-	   case SPRAY_MODE_COPY:
-		   this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>copies</b> of the initial selection."), sel_message);
-		   break;
-	   case SPRAY_MODE_CLONE:
-		   this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>clones</b> of the initial selection."), sel_message);
-		   break;
-	   case SPRAY_MODE_SINGLE_PATH:
-		   this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray in a <b>single path</b> of the initial selection."), sel_message);
-		   break;
-	   default:
-		   break;
-	}
+    switch (this->mode) {
+        case SPRAY_MODE_COPY:
+            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>copies</b> of the initial selection."), sel_message);
+            break;
+        case SPRAY_MODE_CLONE:
+            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray <b>clones</b> of the initial selection."), sel_message);
+            break;
+        case SPRAY_MODE_SINGLE_PATH:
+            this->message_context->setF(Inkscape::NORMAL_MESSAGE, _("%s. Drag, click or click and scroll to spray in a <b>single path</b> of the initial selection."), sel_message);
+            break;
+        default:
+            break;
+    }
 
-	this->sp_event_context_update_cursor();
-	g_free(sel_message);
+    this->sp_event_context_update_cursor();
+    g_free(sel_message);
 }
 
 void SprayTool::setup() {
@@ -425,6 +425,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 did = true;
             }
         }
+#ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
     } else if (mode == SPRAY_MODE_SINGLE_PATH) {
 
         SPItem *parent_item = NULL;    // Initial object
@@ -480,6 +481,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 did = true;
             }
         }
+#endif
     } else if (mode == SPRAY_MODE_CLONE) {
         Geom::OptRect a = item->documentVisualBounds();
         if (a) {
@@ -521,8 +523,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
 
 static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point p, Geom::Point vector, bool reverse)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(SP_EVENT_CONTEXT(tc)->desktop);
-    SPDesktop *desktop = SP_EVENT_CONTEXT(tc)->desktop;
+    SPDesktop *desktop = tc->desktop;
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
 
     if (selection->isEmpty()) {
         return false;
@@ -546,18 +548,35 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     double move_mean = get_move_mean(tc);
     double move_standard_deviation = get_move_standard_deviation(tc);
 
-    for (GSList *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
-         items != NULL;
-         items = items->next) {
+    {
+        GSList *const original_selection = g_slist_copy(const_cast<GSList *>(selection->itemList()));
 
-        SPItem *item = SP_ITEM(items->data);
+        for (GSList *items = original_selection;
+                items != NULL;
+                items = items->next) {
+            sp_object_ref(SP_ITEM(items->data));
+        }
 
-        if (is_transform_modes(tc->mode)) {
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, move_force, tc->population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib))
-                did = true;
-        } else {
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, path_force, tc->population, tc->scale, tc->scale_variation, reverse, path_mean, path_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib))
-                did = true;
+        for (GSList *items = original_selection;
+                items != NULL;
+                items = items->next) {
+            SPItem *item = SP_ITEM(items->data);
+
+            if (is_transform_modes(tc->mode)) {
+                if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, move_force, tc->population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
+                    did = true;
+                }
+            } else {
+                if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, path_force, tc->population, tc->scale, tc->scale_variation, reverse, path_mean, path_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
+                    did = true;
+                }
+            }
+        }
+
+        for (GSList *items = original_selection;
+                items != NULL;
+                items = items->next) {
+            sp_object_unref(SP_ITEM(items->data));
         }
     }
 
@@ -740,6 +759,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         ret = TRUE;
                     }
                     break;
+#ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
                 case GDK_KEY_l:
                 case GDK_KEY_L:
                     if (MOD__SHIFT_ONLY(event)) {
@@ -747,6 +767,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         ret = TRUE;
                     }
                     break;
+#endif
                 case GDK_KEY_Up:
                 case GDK_KEY_KP_Up:
                     if (!MOD__CTRL_ONLY(event)) {
@@ -859,7 +880,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 //        if ((SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler) {
 //            ret = (SP_EVENT_CONTEXT_CLASS(sp_spray_context_parent_class))->root_handler(event_context, event);
 //        }
-    	ret = ToolBase::root_handler(event);
+        ret = ToolBase::root_handler(event);
     }
 
     return ret;
