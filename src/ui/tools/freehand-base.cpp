@@ -483,6 +483,9 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
 
+    //spanish: si c esta vacio, puede ser que se haya tratado de contnuar una curva existente
+    //y se haya cancelado. Si es asi y el modo es bspline o spirolive la curva previa necesita volver a ser seleccionada
+    //porque la modificamos al continuar por un anchor
     if (c->is_empty()) {
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
             SPDesktop *desktop = dc->desktop;
@@ -493,7 +496,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     }
 
     // Step A - test, whether we ended on green anchor
-    if ( forceclosed || (dc->green_anchor && dc->green_anchor->active) ) {
+    if ( forceclosed || ( dc->green_anchor && dc->green_anchor->active ) ) {
         // We hit green anchor, closing Green-Blue-Red
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
         c->closepath_current();
@@ -511,6 +514,8 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
+        //spanish: si estamos en modo bspline o spirolive, la curva de continuación y finalización es actualizada al continuar o finalizar la curva en un anchor
+        //esto proboca que la función original no detecte si es la misma curva en el caso de curvas con multiples partes -shift- y cierre de manera erronea una de las partes
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
             if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {

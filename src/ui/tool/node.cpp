@@ -322,7 +322,6 @@ bool Handle::grabbed(GdkEventMotion *)
 
 void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 {
-
     Geom::Point parent_pos = _parent->position();
     Geom::Point origin = _last_drag_origin();
     SnapManager &sm = _desktop->namedview->snap_manager;
@@ -479,7 +478,7 @@ static double snap_increment_degrees() {
 Glib::ustring Handle::_getTip(unsigned state) const
 {
     char const *more;
-    //spanish: un truco par, si el nodo tiene fuerza, nos marca que es
+    //spanish: un truco para, si el nodo tiene fuerza, nos marca que es
     //del tipo bspline, lo utilizaremos despues para mostras los mensajes apropiados
     //no lo podemos hacer de otra forma al ser constante la funcion
     bool isBSpline = false;
