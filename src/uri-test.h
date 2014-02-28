@@ -34,43 +34,43 @@ public:
         return s == NULL ? std::string() : s;
     }
 
-    void toStringTest( std::string uri, std::string expected ) {
-        stringTest( URI(uri.c_str()).toString(), expected );
-    }
-    void pathTest( std::string uri, std::string expected ) {
-        stringTest( ValueOrEmpty(URI(uri.c_str()).getPath()), expected );
-    }
-
     void testToString()
     {
-        char const* cases[][2] = {
-            { "foo", "foo" },
-            { "#foo", "#foo" },
+        // Using std::strings is a statement that URI should move to std::string
+        // instead of using c_strings. Please don't turn these to c strings.
+        const std::string cases[][2] = {
+            { "foo",            "foo" },
+            { "#foo",           "#foo" },
             { "blah.svg#h",     "blah.svg#h" },
             { "data:data",      "data:data" },
             { "data:head,data", "data:head,data" },
         };
 
         for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ ) {
-            toStringTest( std::string(cases[i][0]), std::string(cases[i][1]) );
+            stringTest( URI(cases[i][0].c_str()).toString(), cases[i][1] );
         }
     }
     void testDataUri()
     {
-        char const* cases[][2] = {
-            { "data:HAIL-DATUM", "HAIL-DATUM" },
-            { "data:head,HAIL-DATUM", "HAIL-DATUM" },
+        URI test_uri;
+        std::string cases[][5] = {
+            { "data:HAIL-DATUM",           "HAIL-DATUM", "test/plain", "US-ASCII", "" },
+            { "data:image/png,HAIL-DATUM", "HAIL-DATUM", "image/png", "US-ASCII",  "" },
         };
 
         for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ ) {
-            // XXX replace this with a getData test
-            toStringTest( std::string(cases[i][0]), std::string(cases[i][1]) );
+            test_uri = URI( cases[i][0].c_str() );
+            stringText( test_uri.getData(),      cases[i][1] );
+            stringText( test_uri.getMimeType(),  cases[i][2] );
+            stringText( test_uri.getCharset(),   cases[i][3] );
+            vectorText( test_uri.getDataBytes(), cases[i][4] );
+            // We will assert urls aren't data in the url test
+            TS_ASSERT_TRUE( test_uri.isData() );
         }
-
     }
     void testPath()
     {
-        char const* cases[][2] = {
+        const std::string cases[][2] = {
             { "foo.svg",     "foo.svg" },
             { "foo.svg#bar", "foo.svg" },
             { "#bar",        NULL },
@@ -78,13 +78,29 @@ public:
         };
 
         for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ ) {
-            pathTest( ValueOrEmpty(cases[i][0]), ValueOrEmpty(cases[i][1]) );
+            stringTest( ValueOrEmpty(URI(cases[i][0].c_str()).getPath()), cases[i][1] );
         }
     }
     void testFullPath() {
         std::ofstream fhl("/tmp/cxxtest-uri.svg", std::ofstream::out);
         stringTest( URI("cxxtest-uri.svg").getFullPath("/tmp"), std::string("/tmp/cxxtest-uri.svg") );
         //stringTest( URI("cxxtest-uri.svg").getFullPath("/usr/../tmp"), std::string("/tmp/cxxtest-uri.svg") );
+    }
+    void testUrls() {
+        URI test_uri;
+        char const* cases[][3] = {
+            { "file:///tmp/a.svg",         "/tmp/a.svg", "file" },
+            { "http://i.org/s.svg",        "",           "http" },
+        };
+
+        for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ ) {
+            test_uri = URI( cases[i][0].c_str() );
+            stringText( test_uri.getPath(),       cases[i][1] );
+            stringText( test_uri.getTransport(),  cases[i][2] );
+            // We will assert urls are data in the data uri test
+            TS_ASSERT_FALSE( test_uri.isData() );
+        }
+
     }
 
 };
