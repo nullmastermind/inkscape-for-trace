@@ -168,7 +168,7 @@ void Handle::move(Geom::Point const &new_pos)
         setPosition(new_pos);
 
         //spanish: mueve el tirador y su opuesto la misma proporción
-        if(_pm().isBSpline){
+        if(_pm().isBSpline(false)){
             setPosition(_pm().BSplineHandleReposition(this));
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
         }
@@ -185,7 +185,7 @@ void Handle::move(Geom::Point const &new_pos)
         setRelativePos(new_delta);
 
         //spanish: mueve el tirador y su opuesto la misma proporción
-        if(_pm().isBSpline){
+        if(_pm().isBSpline(false)){
             setPosition(_pm().BSplineHandleReposition(this));
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
         }
@@ -211,7 +211,7 @@ void Handle::move(Geom::Point const &new_pos)
     setPosition(new_pos);
 
     //spanish: mueve el tirador y su opuesto la misma proporción
-    if(_pm().isBSpline){
+    if(_pm().isBSpline(false)){
         setPosition(_pm().BSplineHandleReposition(this));
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
     }
@@ -305,7 +305,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
 
 //spanish: función que mueve el tirador y su opuesto a la proporción por defecto de 0.3334
 void Handle::handle_2button_press(){
-    if(_pm().isBSpline){
+    if(_pm().isBSpline(false)){
         setPosition(_pm().BSplineHandleReposition(this,0.3334));
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
         _pm().update();
@@ -361,7 +361,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         new_pos = result;
         //spanish: mueve el tirador y su opuesto en X posiciones fijas depenfiendo de la configuración de el
         //parametro "steps whith control" del efecto en vivo BSpline
-        if(_pm().isBSpline){
+        if(_pm().isBSpline(false)){
             setPosition(new_pos);
             int steps = _pm().BSplineGetSteps();
             _parent->bsplineWeight = ceilf(_pm().BSplineHandlePosition(this)*steps)/steps;
@@ -371,7 +371,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
     //spanish: si está activado el ajuste (snap) y no es bspline
-    if (snap && !_pm().isBSpline) {
+    if (snap && !_pm().isBSpline(false)) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
@@ -413,7 +413,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     }
     //spanish: si es bspline pero no está presionado SHIFT o CONTROL
     //lo fija en la posición original
-    if(_pm().isBSpline && !held_shift(*event) && !held_control(*event)){
+    if(_pm().isBSpline(false) && !held_shift(*event) && !held_control(*event)){
         new_pos=_last_drag_origin();
     }
     move(new_pos); // needed for correct update, even though it's redundant
@@ -433,7 +433,7 @@ void Handle::ungrabbed(GdkEventButton *event)
         if (dist.length() <= drag_tolerance) {
             move(_parent->position());
             //spanish: marca la fuerza del bspline como 0.0000
-            if(_pm().isBSpline){
+            if(_pm().isBSpline(false)){
                 _parent->bsplineWeight = 0.0000;
             }
         }
@@ -626,7 +626,7 @@ void Node::move(Geom::Point const &new_pos)
     //de nuevo una vez sea movido el nodo
     double oldPos = 0.0000;
     Node *n = this;
-    if(_pm().isBSpline){
+    if(_pm().isBSpline(false)){
         oldPos = n->bsplineWeight;
     }
 
@@ -640,7 +640,7 @@ void Node::move(Geom::Point const &new_pos)
     _fixNeighbors(old_pos, new_pos);
     //spanish: movemos los tiradores involucrados, primero los del nodo en cuestión
     //y despues los de los nodos colindantes
-    if(_pm().isBSpline){
+    if(_pm().isBSpline(false)){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
         _pm().BSplineNodeHandlesReposition(this);
@@ -652,7 +652,7 @@ void Node::transform(Geom::Affine const &m)
     //spanish: guardamos la fuerza anterior del nodo para reaplicarsela
     //de nuevo una vez sea movido el nodo
     double oldPos = 0.0000;
-    if(_pm().isBSpline){
+    if(_pm().isBSpline(false)){
         oldPos = this->bsplineWeight;
     }
     Geom::Point old_pos = position();
@@ -665,7 +665,7 @@ void Node::transform(Geom::Affine const &m)
     _fixNeighbors(old_pos, position());
     //spanish: movemos los tiradores involucrados, primero los del nodo en cuestión
     //y despues los de los nodos colindantes
-    if(_pm().isBSpline){
+    if(_pm().isBSpline(false)){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
         _pm().BSplineNodeHandlesReposition(this);
@@ -759,7 +759,7 @@ void Node::showHandles(bool v)
     //Cada vez que actuemos sobre dichos tiradores en un trazado
     //bspline esta fuerza se tiene que actualizar
     this->bsplineWeight = 0.0000;
-    if(_pm().isBSpline && (!_front.isDegenerate() || !_back.isDegenerate())){
+    if(_pm().isBSpline(false) && (!_front.isDegenerate() || !_back.isDegenerate())){
         if (!_front.isDegenerate()) {
             _pm().BSplineHandlePosition(&_front);
         }
@@ -871,7 +871,7 @@ void Node::setType(NodeType type, bool update_handles)
         //spanish: en los cambios de tipo de nodo, sobre trazados bspline, 
         //o bien los mantenemos con potencia 0.0000 en modo esquina
         //o les damos la potencia por defecto en modo de curva
-        if(_pm().isBSpline){
+        if(_pm().isBSpline(false)){
             if(this->bsplineWeight !=0.0000) this->bsplineWeight = 0.3334;
             _front.setPosition(_pm().BSplineHandleReposition(this->front(),this->bsplineWeight));
             _back.setPosition(_pm().BSplineHandleReposition(this->back(),this->bsplineWeight));
@@ -1124,7 +1124,7 @@ void Node::_setState(State state)
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
             //spanish: esto muestra los tiradores al seleccionar los nodos
-            if(_pm().isBSpline){
+            if(_pm().isBSpline(false)){
                 if(!this->back()->isDegenerate()){
                     _pm().BSplineHandlePosition(this->back());
                 }else if (!this->front()->isDegenerate()){

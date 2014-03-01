@@ -96,7 +96,6 @@ public:
     NodeList::iterator extremeNode(NodeList::iterator origin, bool search_selected,
         bool search_unselected, bool closest);
 
-    bool isBSpline;
     int BSplineGetSteps();
     // this is necessary for Tab-selection in MultiPathManipulator
     SubpathList &subpathList() { return _subpaths; }
@@ -107,7 +106,7 @@ private:
     typedef boost::shared_ptr<NodeList> SubpathPtr;
 
     void _createControlPointsFromGeometry();
-    void BSpline();
+    bool isBSpline(bool recalculate);
     double BSplineHandlePosition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h,double pos);

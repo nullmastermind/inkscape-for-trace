@@ -54,7 +54,7 @@ bool CurveDragPoint::grabbed(GdkEventMotion */*event*/)
         // delta is a vector equal 1/3 of distance from first to second
         Geom::Point delta = (second->position() - first->position()) / 3.0;
         //spanish: solo actualizamos los nodos si no es bspline
-        if(!_pm.isBSpline){
+        if(!_pm.isBSpline(false)){
             first->front()->move(first->front()->position() + delta);
             second->back()->move(second->back()->position() - delta);
         }
@@ -90,7 +90,7 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     Geom::Point offset0 = ((1-weight)/(3*t*(1-t)*(1-t))) * delta;
     Geom::Point offset1 = (weight/(3*t*t*(1-t))) * delta;
     //spanish: modificado para que, si el trazado es bspline solo actue si está presionada la tecla SHIFT
-    if(!_pm.isBSpline){
+    if(!_pm.isBSpline(false)){
         first->front()->move(first->front()->position() + offset0);
         second->back()->move(second->back()->position() + offset1);
     }else if(weight>=0.8 && !second->isEndNode() && held_shift(*event))second->back()->move(new_pos);

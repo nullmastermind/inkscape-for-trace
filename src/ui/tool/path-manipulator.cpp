@@ -103,11 +103,9 @@ private:
 };
 
 void build_segment(Geom::PathBuilder &, Node *, Node *);
-//spanish: una propiedad isBSpline, por defecto falsa y una función al final de la función (BSpline()) que la define realmente
 PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         Geom::Affine const &et, guint32 outline_color, Glib::ustring lpe_key)
     : PointManipulator(mpm._path_data.node_data.desktop, *mpm._path_data.node_data.selection)
-    ,  isBSpline(false)
     , _subpaths(*this)
     , _multi_path_manipulator(mpm)
     , _path(path)
@@ -147,7 +145,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
-    BSpline();
+    isBSpline(true);
 }
 
 PathManipulator::~PathManipulator()
@@ -666,7 +664,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         start = next;
     }
     //spanish: si se borra, reajustamos los tiradores
-    if(isBSpline){
+    if(isBSpline(false)){
         double pos = 0.0000;
         if(start.prev()){
             pos = BSplineHandlePosition(start.prev()->back());
@@ -1203,11 +1201,16 @@ int PathManipulator::BSplineGetSteps(){
 }
 
 //spanish: determina si el trazado tiene efecto bspline
-void PathManipulator::BSpline(){
-    isBSpline = false;
-    if(this->BSplineGetSteps()>0){
+bool PathManipulator::isBSpline(bool recalculate){
+    static int BSplineSteps = this->BSplineGetSteps();
+    if(recalculate){
+        BSplineSteps = this->BSplineGetSteps();
+    }
+    bool isBSpline = false;
+    if(BSplineSteps>0){
         isBSpline = true;
     }
+    return isBSpline;
 }
 
 //spanish: devuelve la fuerza que le corresponderia a la posicón de un tirador
@@ -1283,7 +1286,7 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
 void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
 {
     Geom::PathBuilder builder;
-    BSpline();
+    isBSpline(true);
     for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
