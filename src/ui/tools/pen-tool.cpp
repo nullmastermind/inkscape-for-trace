@@ -1303,6 +1303,9 @@ void PenTool::_resetColors() {
     // Blue
     this->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), NULL);
+    // Blue2
+    this->blue2_curve->reset();
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue2_bpath), NULL);
     // Green
     while (this->green_bpaths) {
         sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
@@ -1373,6 +1376,16 @@ void PenTool::_bspline_spiro_color()
             this->green_color = 0x00ff000;
             remake_green_bpaths = true;
         }
+    }else if(this->bspline){
+        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
+        if(this->green_color != 0xff00007f){
+            //since we are not im spiro mode, we assign the original colours
+            //to the red and the green curve, removing their transparency 
+            this->red_color = 0xff00007f;
+            //Damos color rojo a la linea verde
+            this->green_color = 0xff00007f;
+            remake_green_bpaths = true;
+        }
     }else{
         //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
         if(this->green_color != 0x00ff007f){
@@ -1383,9 +1396,7 @@ void PenTool::_bspline_spiro_color()
             remake_green_bpaths = true;
         }
         //we hide the spiro/bspline rests
-        if(!this->bspline){
-            sp_canvas_item_hide(this->blue_bpath);
-        }
+        sp_canvas_item_hide(this->blue2_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
@@ -1771,11 +1782,11 @@ void PenTool::_bspline_spiro_build()
             this->_spiro_doEffect(curve);
         }
 
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), curve);   
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_show(this->blue_bpath);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue2_bpath), curve);   
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue2_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+        sp_canvas_item_show(this->blue2_bpath);
         curve->unref();
-        this->blue_curve->reset();
+        this->blue2_curve->reset();
         //We hide the holders that doesn't contribute anything
         if(this->spiro){
             sp_canvas_item_show(this->c1);
@@ -1787,7 +1798,7 @@ void PenTool::_bspline_spiro_build()
         sp_canvas_item_hide(this->cl0);
     }else{
         //if the curve is empty
-        sp_canvas_item_hide(this->blue_bpath);
+        sp_canvas_item_hide(this->blue2_bpath);
 
     }
 }
@@ -2167,7 +2178,6 @@ void PenTool::_finish(gboolean const closed) {
 
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Drawing finished"));
 
-    if(this->spiro || this->bspline) this->blue_curve->reset();
     //spanish para cancelar linea sin un segmento creado
     this->red_curve->reset();
     spdc_concat_colors_and_flush(this, closed);
