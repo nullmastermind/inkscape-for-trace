@@ -416,6 +416,7 @@ void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr( "inkscape:transform-center-y" );
     object->readAttr( "inkscape:connector-avoid" );
     object->readAttr( "inkscape:connection-points" );
+    object->readAttr( "inkscape:highlight-color" );
 
     SPObject::build(document, repr);
 }

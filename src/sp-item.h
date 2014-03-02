@@ -146,6 +146,10 @@ public:
     void setHidden(bool hidden);
 
     /* Objects dialogue */
+    bool isSensitive() const {
+        return sensitive;
+    };
+
     bool isHighlightSet() const;
     guint32 highlight_color() const;
     
