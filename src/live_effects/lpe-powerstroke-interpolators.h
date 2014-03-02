@@ -27,7 +27,8 @@ enum InterpolatorType {
   INTERP_LINEAR,
   INTERP_CUBICBEZIER,
   INTERP_CUBICBEZIER_JOHAN,
-  INTERP_SPIRO
+  INTERP_SPIRO,
+  INTERP_CUBICBEZIER_SMOOTH
 };
 
 class Interpolator {
@@ -133,6 +134,43 @@ private:
     CubicBezierJohan& operator=(const CubicBezierJohan&);
 };
 
+/// @todo invent name for this class
+class CubicBezierSmooth : public Interpolator {
+public:
+    CubicBezierSmooth(double beta = 0.2) {
+        _beta = beta;
+    };
+    virtual ~CubicBezierSmooth() {};
+
+    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+        Path fit;
+        fit.start(points.at(0));
+        unsigned int num_points = points.size();
+        for (unsigned int i = 1; i < num_points; ++i) {
+            Point p0 = points.at(i-1);
+            Point p1 = points.at(i);
+            Point dx = Point(p1[X] - p0[X], 0);
+            if (i == 1) {
+                fit.appendNew<CubicBezier>(p0, p1-0.75*dx, p1);
+            } else if (i == points.size() - 1) {
+                fit.appendNew<CubicBezier>(p0+0.75*dx, p1, p1);
+            } else {
+                fit.appendNew<CubicBezier>(p0+_beta*dx, p1-_beta*dx, p1);
+            }
+        }
+        return fit;
+    };
+
+    void setBeta(double beta) {
+        _beta = beta;
+    }
+
+    double _beta;
+
+private:
+    CubicBezierSmooth(const CubicBezierSmooth&);
+    CubicBezierSmooth& operator=(const CubicBezierSmooth&);
+};
 
 class SpiroInterpolator : public Interpolator {
 public:
@@ -179,6 +217,8 @@ Interpolator::create(InterpolatorType type) {
         return new Geom::Interpolate::CubicBezierJohan();
       case INTERP_SPIRO:
         return new Geom::Interpolate::SpiroInterpolator();
+      case INTERP_CUBICBEZIER_SMOOTH:
+        return new Geom::Interpolate::CubicBezierSmooth();
       default:
         return new Geom::Interpolate::Linear();
     }

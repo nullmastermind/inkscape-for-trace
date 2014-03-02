@@ -5,7 +5,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-//#define LPE_ENABLE_TEST_EFFECTS
+#define LPE_ENABLE_TEST_EFFECTS
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -47,6 +47,12 @@
 #include "live_effects/lpe-extrude.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpe-attach-path.h"
+#include "live_effects/lpe-fill-between-strokes.h"
+#include "live_effects/lpe-fill-between-many.h"
+#include "live_effects/lpe-ellipse_5pts.h"
+#include "live_effects/lpe-bounding-box.h"
+#include "live_effects/lpe-jointype.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -103,9 +109,10 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
+    {JOIN_TYPE,             N_("Join type"),               "join_type"},
 #endif
 /* 0.46 */
-    {BEND_PATH,             N_("Bend"),                     "bend_path"},
+    {BEND_PATH,             N_("Bend"),                    "bend_path"},
     {GEARS,                 N_("Gears"),                   "gears"},
     {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),      "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
     {CURVE_STITCH,          N_("Stitch Sub-Paths"),        "curvestitching"},
@@ -120,8 +127,14 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {SKETCH,                N_("Sketch"),                  "sketch"},
     {RULER,                 N_("Ruler"),                   "ruler"},
 /* 0.49 */
-    {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
+    {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
+    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+/* Ponyscape */
+    {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
+    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
+    {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
+    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
+    {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -244,6 +257,24 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case CLONE_ORIGINAL:
             neweffect = static_cast<Effect*> ( new LPECloneOriginal(lpeobj) );
+            break;
+        case ATTACH_PATH:
+            neweffect = static_cast<Effect*> ( new LPEAttachPath(lpeobj) );
+            break;
+        case FILL_BETWEEN_STROKES:
+            neweffect = static_cast<Effect*> ( new LPEFillBetweenStrokes(lpeobj) );
+            break;
+        case FILL_BETWEEN_MANY:
+            neweffect = static_cast<Effect*> ( new LPEFillBetweenMany(lpeobj) );
+            break;
+        case ELLIPSE_5PTS:
+            neweffect = static_cast<Effect*> ( new LPEEllipse5Pts(lpeobj) );
+            break;
+        case BOUNDING_BOX:
+            neweffect = static_cast<Effect*> ( new LPEBoundingBox(lpeobj) );
+            break;
+        case JOIN_TYPE:
+            neweffect = static_cast<Effect*> ( new LPEJoinType(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);

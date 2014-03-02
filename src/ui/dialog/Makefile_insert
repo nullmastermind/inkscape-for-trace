@@ -109,4 +109,8 @@ ink_common_sources +=		\
 	ui/dialog/undo-history.h		\
 	ui/dialog/xml-tree.cpp		\
 	ui/dialog/xml-tree.h		\
+	ui/dialog/lpe-powerstroke-properties.cpp	\
+	ui/dialog/lpe-powerstroke-properties.h	\
+	ui/dialog/objects.cpp	\
+	ui/dialog/objects.h	\
 	$(inkboard_dialogs)

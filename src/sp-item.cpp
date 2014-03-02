@@ -183,6 +183,26 @@ bool SPItem::isHidden(unsigned display_key) const {
     return true;
 }
 
+bool SPItem::isHighlightSet() const {
+    return _highlightColor != NULL;
+}
+
+guint32 SPItem::highlight_color() const {
+    if (_highlightColor)
+    {
+        return atoi(_highlightColor) | 0x000000ff;
+    }
+    else if (parent && parent != this && SP_IS_ITEM(parent))
+    {
+        return SP_ITEM(parent)->highlight_color();
+    }
+    else
+    {
+        static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        return prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) | 0x000000ff;
+    }
+}
+
 void SPItem::setEvaluated(bool evaluated) {
     _is_evaluated = evaluated;
     _evaluated_status = StatusSet;

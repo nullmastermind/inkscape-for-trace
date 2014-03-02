@@ -8649,7 +8649,7 @@ msgstr "Lineal"
 #. 0.49
 #: ../src/live_effects/effect.cpp:123
 msgid "Power stroke"
-msgstr "Kräftige Kontur"
+msgstr "Powerstroke"
 
 #: ../src/live_effects/effect.cpp:124 ../src/selection-chemistry.cpp:2789
 msgid "Clone original path"

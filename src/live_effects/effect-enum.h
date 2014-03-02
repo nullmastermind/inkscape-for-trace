@@ -50,6 +50,12 @@ enum EffectType {
     EXTRUDE,
     POWERSTROKE,
     CLONE_ORIGINAL,
+    ATTACH_PATH,
+    FILL_BETWEEN_STROKES,
+    FILL_BETWEEN_MANY,
+    ELLIPSE_5PTS,
+    BOUNDING_BOX,
+    JOIN_TYPE,
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
 };
 
