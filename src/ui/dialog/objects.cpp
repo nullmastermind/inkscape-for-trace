@@ -57,6 +57,8 @@
 
 //#define DUMP_LAYERS 1
 
+guint get_group0_keyval(GdkEventKey *event);
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -414,7 +416,7 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
         row[_model->_colLocked] = item ? !item->isSensitive() : false;
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
         row[_model->_colHighlight] = item ? (item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00) : 0;
-        row[_model->_colClipMask] = item ? (item->clip_ref && item->clip_ref->getObject() ? (item->clip_ref->getObject()->inverse ? 3 : 1) : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)) : 0;
+        row[_model->_colClipMask] = item ? (item->clip_ref && item->clip_ref->getObject() ?  1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)) : 0;
         row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
         return true;
@@ -2035,6 +2037,14 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
 } //namespace UI
 } //namespace Inkscape
 
+guint get_group0_keyval(GdkEventKey *event) {
+    guint keyval = 0;
+    gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
+            gdk_display_get_default()), event->hardware_keycode,
+            (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
+            NULL, NULL, NULL);
+    return keyval;
+}
 
 /*
   Local Variables:
