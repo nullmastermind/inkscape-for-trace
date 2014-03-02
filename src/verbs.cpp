@@ -2040,6 +2040,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_LAYERS:
             dt->_dlg_mgr->showDialog("LayersPanel");
             break;
+        case SP_VERB_DIALOG_OBJECTS:
+            dt->_dlg_mgr->showDialog("ObjectsPanel");
+            break;
         case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
             dt->_dlg_mgr->showDialog("LivePathEffect");
             break;
