@@ -157,10 +157,40 @@ HighlightPicker::activate_vfunc(GdkEvent* event,
     return false;
 }
 
-
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
+
+//should be okay to put this here
+/**
+ * Converts GdkPixbuf's data to premultiplied ARGB.
+ * This function will convert a GdkPixbuf in place into Cairo's native pixel format.
+ * Note that this is a hack intended to save memory. When the pixbuf is in Cairo's format,
+ * using it with GTK will result in corrupted drawings.
+ */
+void
+convert_pixbuf_normal_to_argb32(GdkPixbuf *pb)
+{
+    convert_pixels_pixbuf_to_argb32(
+        gdk_pixbuf_get_pixels(pb),
+        gdk_pixbuf_get_width(pb),
+        gdk_pixbuf_get_height(pb),
+        gdk_pixbuf_get_rowstride(pb));
+}
+
+/**
+ * Converts GdkPixbuf's data back to its native format.
+ * Once this is done, the pixbuf can be used with GTK again.
+ */
+void
+convert_pixbuf_argb32_to_normal(GdkPixbuf *pb)
+{
+    convert_pixels_argb32_to_pixbuf(
+        gdk_pixbuf_get_pixels(pb),
+        gdk_pixbuf_get_width(pb),
+        gdk_pixbuf_get_height(pb),
+        gdk_pixbuf_get_rowstride(pb));
+}
 
 /*
   Local Variables:

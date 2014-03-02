@@ -87,4 +87,6 @@ ink_common_sources +=	\
 	ui/widget/highlight-picker.cpp	\
 	ui/widget/highlight-picker.h	\
 	ui/widget/layertypeicon.cpp	\
-	ui/widget/layertypeicon.h
+	ui/widget/layertypeicon.h	\
+	ui/widget/insertordericon.cpp	\
+	ui/widget/insertordericon.h

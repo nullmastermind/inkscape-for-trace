@@ -37,6 +37,7 @@
 #include "ui/widget/insertordericon.h"
 #include "ui/widget/clipmaskicon.h"
 #include "ui/widget/highlight-picker.h"
+#include "ui/tools/node-tool.h"
 #include "verbs.h"
 #include "widgets/icon.h"
 #include "xml/node.h"
@@ -54,6 +55,7 @@
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "layer-manager.h"
+#include "tools-switch.h"
 
 //#define DUMP_LAYERS 1
 
@@ -2037,6 +2039,9 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
 } //namespace UI
 } //namespace Inkscape
 
+//should be okay to put these here because they are never referenced anywhere else
+using namespace Inkscape::UI::Tools;
+
 guint get_group0_keyval(GdkEventKey *event) {
     guint keyval = 0;
     gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
@@ -2044,6 +2049,42 @@ guint get_group0_keyval(GdkEventKey *event) {
             (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
             NULL, NULL, NULL);
     return keyval;
+}
+
+void SPItem::setHighlightColor(guint32 const color)
+{
+    g_free(_highlightColor);
+    if (color & 0x000000ff)
+    {
+        _highlightColor = g_strdup_printf("%u", color);
+    }
+    else
+    {
+        _highlightColor = NULL;
+    }
+    
+    NodeTool *tool = 0;
+    if (SP_ACTIVE_DESKTOP ) {
+        ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+        if (INK_IS_NODE_TOOL(ec)) {
+            tool = static_cast<NodeTool*>(ec);
+            tools_switch(tool->desktop, TOOLS_NODES);
+        }
+    }
+}
+
+void SPItem::unsetHighlightColor()
+{
+    g_free(_highlightColor);
+    _highlightColor = NULL;
+    NodeTool *tool = 0;
+    if (SP_ACTIVE_DESKTOP ) {
+        ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+        if (INK_IS_NODE_TOOL(ec)) {
+            tool = static_cast<NodeTool*>(ec);
+            tools_switch(tool->desktop, TOOLS_NODES);
+        }
+    }
 }
 
 /*
