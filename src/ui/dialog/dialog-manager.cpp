@@ -54,6 +54,7 @@
 #include "ui/dialog/xml-tree.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/svg-fonts-dialog.h"
+#include "ui/dialog/objects.h"
 
 namespace Inkscape {
 namespace UI {
@@ -108,6 +109,7 @@ DialogManager::DialogManager() {
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     FloatingBehavior>);
         registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          FloatingBehavior>);
+        registerFactory("ObjectsPanel",        &create<ObjectsPanel,         FloatingBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, FloatingBehavior>);
         registerFactory("Memory",              &create<Memory,               FloatingBehavior>);
         registerFactory("Messages",            &create<Messages,             FloatingBehavior>);
@@ -142,6 +144,7 @@ DialogManager::DialogManager() {
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     DockBehavior>);
         registerFactory("InkscapePreferences", &create<InkscapePreferences,  DockBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          DockBehavior>);
+        registerFactory("ObjectsPanel",        &create<ObjectsPanel,         DockBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, DockBehavior>);
         registerFactory("Memory",              &create<Memory,               DockBehavior>);
         registerFactory("Messages",            &create<Messages,             DockBehavior>);
