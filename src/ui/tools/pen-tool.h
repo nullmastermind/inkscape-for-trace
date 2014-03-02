@@ -88,7 +88,34 @@ private:
 	gint _handleButtonRelease(GdkEventButton const &revent);
 	gint _handle2ButtonPress(GdkEventButton const &bevent);
 	gint _handleKeyPress(GdkEvent *event);
-
+    //spanish: añade los modos spiro y bspline
+    void _pen_context_set_mode(guint mode);
+    //spanish: esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
+    void _bspline_spiro_color();
+    //spanish: crea un nodo en modo bspline o spiro
+    void _bspline_spiro(bool shift);
+    //spanish: crea un nodo de modo spiro o bspline
+    void _bspline_spiro_on();
+    //spanish: crea un nodo de tipo CUSP
+    void _bspline_spiro_off();
+    //spanish: continua una curva existente en modo bspline o spiro
+    void _bspline_spiro_start_anchor(bool shift);
+    //spanish: continua una curva exsitente con el nodo de union en modo bspline o spiro
+    void _bspline_spiro_start_anchor_on();
+    //spanish: continua una curva existente con el nodo de union en modo CUSP
+    void _bspline_spiro_start_anchor_off();
+    //spanish: modifica la "red_curve" cuando se detecta movimiento
+    void _bspline_spiro_motion(bool shift);
+    //spanish: cierra la curva con el último nodo en modo bspline o spiro
+    void _bspline_spiro_end_anchor_on();
+    //spanish: cierra la curva con el último nodo en modo CUSP
+    void _bspline_spiro_end_anchor_off();
+    //spanish: unimos todas las curvas en juego y llamamos a la función doEffect.
+    void _bspline_spiro_build();
+    //function bspline cloned from lpe-bspline.cpp
+    void _bspline_doEffect(SPCurve * curve);
+    //function spiro cloned from lpe-spiro.cpp
+    void _spiro_doEffect(SPCurve * curve);
 	void _setInitialPoint(Geom::Point const p);
 	void _setSubsequentPoint(Geom::Point const p, bool statusbar, guint status = 0);
 	void _setCtrl(Geom::Point const p, guint state);

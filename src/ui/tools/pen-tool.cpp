@@ -81,52 +81,6 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static void spdc_pen_set_initial_point(PenTool *pc, Geom::Point const p);
-//spanish: añade los modos spiro y bspline
-static void sp_pen_context_set_mode(PenTool *const pc, guint mode);
-//spanish: esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
-static void bspline_spiro_color(PenTool *const pc);
-//spanish: crea un nodo en modo bspline o spiro
-static void bspline_spiro(PenTool *const pc,bool shift);
-//spanish: crea un nodo de modo spiro o bspline
-static void bspline_spiro_on(PenTool *const pc);
-//spanish: crea un nodo de tipo CUSP
-static void bspline_spiro_off(PenTool *const pc);
-//spanish: continua una curva existente en modo bspline o spiro
-static void bspline_spiro_start_anchor(PenTool *const pc,bool shift);
-//spanish: continua una curva exsitente con el nodo de union en modo bspline o spiro
-static void bspline_spiro_start_anchor_on(PenTool *const pc);
-//spanish: continua una curva existente con el nodo de union en modo CUSP
-static void bspline_spiro_start_anchor_off(PenTool *const pc);
-//spanish: modifica la "red_curve" cuando se detecta movimiento
-static void bspline_spiro_motion(PenTool *const pc,bool shift);
-//spanish: cierra la curva con el último nodo en modo bspline o spiro
-static void bspline_spiro_end_anchor_on(PenTool *const pc);
-//spanish: cierra la curva con el último nodo en modo CUSP
-static void bspline_spiro_end_anchor_off(PenTool *const pc);
-//spanish: unimos todas las curvas en juego y llamamos a la función doEffect.
-static void bspline_spiro_build(PenTool *const pc);
-//function bspline cloned from lpe-bspline.cpp
-static void bspline_doEffect(SPCurve * curve);
-//function spiro cloned from lpe-spiro.cpp
-static void spiro_doEffect(SPCurve * curve);
-
-static void spdc_pen_set_subsequent_point(PenTool *const pc, Geom::Point const p, bool statusbar, guint status = 0);
-static void spdc_pen_set_ctrl(PenTool *pc, Geom::Point const p, guint state);
-static void spdc_pen_finish_segment(PenTool *pc, Geom::Point p, guint state);
-
-static void spdc_pen_finish(PenTool *pc, gboolean closed);
-
-static gint pen_handle_button_press(PenTool *const pc, GdkEventButton const &bevent);
-static gint pen_handle_motion_notify(PenTool *const pc, GdkEventMotion const &mevent);
-static gint pen_handle_button_release(PenTool *const pc, GdkEventButton const &revent);
-static gint pen_handle_2button_press(PenTool *const pc, GdkEventButton const &bevent);
-static gint pen_handle_key_press(PenTool *const pc, GdkEvent *event);
-static void spdc_reset_colors(PenTool *pc);
-
-static void pen_disable_events(PenTool *const pc);
-static void pen_enable_events(PenTool *const pc);
-
 static Geom::Point pen_drag_origin_w(0, 0);
 static bool pen_within_tolerance = false;
 static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
@@ -217,13 +171,13 @@ void PenTool::setPolylineMode() {
     this->polylines_paraxial = (mode == 4);
     //we call the function which defines the Spiro modes and the BSpline
     //todo: merge to one function only
-    sp_pen_context_set_mode(this, mode);
+    this->_pen_context_set_mode(mode);
 }
 
 /*
 *.Set the mode of draw spiro, and bsplines
 */
-void sp_pen_context_set_mode(PenTool *const pc, guint mode) {
+void PenTool::_pen_context_set_mode(guint mode) {
     //spanish: definimos los modos
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
@@ -425,7 +379,7 @@ gint PenTool::_handleButtonPress(GdkEventButton const &bevent) {
     Geom::Point const event_w(bevent.x, bevent.y);
     Geom::Point event_dt(desktop->w2d(event_w));
     //Test whether we hit any anchor.
-    SPDrawAnchor * const anchor = spdc_test_inside(pc, event_w);
+    SPDrawAnchor * const anchor = spdc_test_inside(this, event_w);
     ToolBase *event_context = SP_EVENT_CONTEXT(this);
 
     //with this we avoid creating a new point over the existing one
@@ -433,8 +387,8 @@ gint PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         this->state = PenTool::STOP;
         if( anchor && anchor == this->sa && this->green_curve->is_empty()){
             //spanish Borrar siguiente linea para evitar un nodo encima de otro
-            spdc_pen_finish_segment(pc, event_dt, bevent.state);
-            spdc_pen_finish(pc, FALSE);
+            _finishSegment(event_dt, bevent.state);
+            _finish( FALSE);
             return TRUE;
         }
         return FALSE;
@@ -505,7 +459,7 @@ gint PenTool::_handleButtonPress(GdkEventButton const &bevent) {
 
                             this->sa = anchor;
                             if(anchor){
-                                bspline_spiro_start_anchor(pc,(bevent.state & GDK_SHIFT_MASK));
+                                this->_bspline_spiro_start_anchor(bevent.state & GDK_SHIFT_MASK);
                             }
                             if (anchor && (!this->hasWaitingLPE()|| this->bspline || this->spiro)) {
                                 // Adjust point to anchor if needed; if we have a waiting LPE, we need
@@ -753,12 +707,12 @@ gint PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     }
     //spanish: lanzamos la función "bspline_spiro_motion" al moverse el ratón o cuando se para.
     if(this->bspline){
-        bspline_spiro_color(pc);
-        bspline_spiro_motion(pc,(mevent.state & GDK_SHIFT_MASK));
+        this->_bspline_spiro_color();
+        this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
     }else{
         if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
-            bspline_spiro_color(pc);
-            bspline_spiro_motion(pc,(mevent.state & GDK_SHIFT_MASK));
+            this->_bspline_spiro_color();
+            this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
             pen_drag_origin_w = event_w;
         }
     }
@@ -809,7 +763,7 @@ gint PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                             //spanish: continuamos una curva existente
                             if (anchor) {
                                 if(this->bspline || this->spiro){
-                                    bspline_spiro_start_anchor(pc,(revent.state & GDK_SHIFT_MASK));
+                                    this->_bspline_spiro_start_anchor(revent.state & GDK_SHIFT_MASK);;
                                 }
                             }
                             this->_setInitialPoint(p);
@@ -986,7 +940,7 @@ void PenTool::_redrawAll() {
     //spanish: simplemente redibujamos la spiro.
     //como es un redibujo simplemente no llamamos a la función global sino al final de esta
     //Lanzamos solamente el redibujado
-     bspline_spiro_build(pc);
+     this->_bspline_spiro_build();
 }
 
 void PenTool::_lastpointMove(gdouble x, gdouble y) {
@@ -1060,7 +1014,7 @@ void PenTool::_lastpointToCurve() {
         }
         //spanish: si el último nodo es una union con otra curva
         if(this->green_curve->is_empty() && this->sa && !this->sa->curve->is_empty()){
-            bspline_spiro_start_anchor(pc, false); 
+            this->_bspline_spiro_start_anchor(false);
         }
     }
 
@@ -1107,7 +1061,7 @@ void PenTool::_lastpointToLine() {
         }
         //spanish: si el último nodo es una union con otra curva
         if(this->green_curve->is_empty() && this->sa && !this->sa->curve->is_empty()){
-            bspline_spiro_start_anchor(pc, true);
+            this->_bspline_spiro_start_anchor(true);
         }
     }
     
@@ -1332,7 +1286,7 @@ gint PenTool::_handleKeyPress(GdkEvent *event) {
                 this->_setSubsequentPoint(pt, true);
                 pen_last_paraxial_dir = !pen_last_paraxial_dir;
                 //spanish: redibujamos
-                bspline_spiro_build(pc);
+                this->_bspline_spiro_build();
                 ret = TRUE;
             }
             break;
@@ -1406,7 +1360,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 
 
 //spanish: esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
-static void bspline_spiro_color(PenTool *const pc)
+void PenTool::_bspline_spiro_color()
 {
     bool remake_green_bpaths = false;
     if(this->spiro){
@@ -1451,16 +1405,16 @@ static void bspline_spiro_color(PenTool *const pc)
 }
 
 
-static void bspline_spiro(PenTool *const pc, bool shift)
+void PenTool::_bspline_spiro(bool shift)
 {
     if(!this->spiro && !this->bspline)
         return;
 
-    shift?bspline_spiro_off(pc):bspline_spiro_on(pc);
-    bspline_spiro_build(pc);
+    shift?this->_bspline_spiro_off():this->_bspline_spiro_on();
+    this->_bspline_spiro_build();
 }
 
-static void bspline_spiro_on(PenTool *const pc)
+void PenTool::_bspline_spiro_on()
 {
     if(!this->red_curve->is_empty()){
         using Geom::X;
@@ -1473,7 +1427,7 @@ static void bspline_spiro_on(PenTool *const pc)
     }
 }
 
-static void bspline_spiro_off(PenTool *const pc)
+void PenTool::_bspline_spiro_off()
 {
     if(!this->red_curve->is_empty()){
         this->npoints = 5;
@@ -1483,7 +1437,7 @@ static void bspline_spiro_off(PenTool *const pc)
     }
 }
 
-static void bspline_spiro_start_anchor(PenTool *const pc, bool shift)
+void PenTool::_bspline_spiro_start_anchor(bool shift)
 {
     LivePathEffect::LPEBSpline *lpe_bsp = NULL;
 
@@ -1518,12 +1472,12 @@ static void bspline_spiro_start_anchor(PenTool *const pc, bool shift)
         return;
 
     if(shift)
-        bspline_spiro_start_anchor_off(pc);
+        this->_bspline_spiro_start_anchor_off();
     else
-        bspline_spiro_start_anchor_on(pc);
+        this->_bspline_spiro_start_anchor_on();
 }
 
-static void bspline_spiro_start_anchor_on(PenTool *const pc)
+void PenTool::_bspline_spiro_start_anchor_on()
 {
     using Geom::X;
     using Geom::Y;
@@ -1559,7 +1513,7 @@ static void bspline_spiro_start_anchor_on(PenTool *const pc)
     this->sa->curve = tmpCurve;
 }
 
-static void bspline_spiro_start_anchor_off(PenTool *const pc)
+void PenTool::_bspline_spiro_start_anchor_off()
 {
     SPCurve *tmpCurve = new SPCurve();
     tmpCurve = this->sa->curve->copy();
@@ -1587,7 +1541,7 @@ static void bspline_spiro_start_anchor_off(PenTool *const pc)
 
 }
 
-static void bspline_spiro_motion(PenTool *const pc, bool shift){
+void PenTool::_bspline_spiro_motion(bool shift){
     if(!this->spiro && !this->bspline)
         return;
 
@@ -1641,16 +1595,16 @@ static void bspline_spiro_motion(PenTool *const pc, bool shift){
 
     if(this->anchor_statusbar && !this->red_curve->is_empty()){
         if(shift){
-            bspline_spiro_end_anchor_off(pc);
+            this->_bspline_spiro_end_anchor_off();
         }else{
-            bspline_spiro_end_anchor_on(pc);
+            this->_bspline_spiro_end_anchor_on();
         }
     }
 
-    bspline_spiro_build(pc);
+    this->_bspline_spiro_build();
 }
 
-static void bspline_spiro_end_anchor_on(PenTool *const pc)
+void PenTool::_bspline_spiro_end_anchor_on()
 {
 
     using Geom::X;
@@ -1721,7 +1675,7 @@ static void bspline_spiro_end_anchor_on(PenTool *const pc)
     }
 }
 
-static void bspline_spiro_end_anchor_off(PenTool *const pc)
+void PenTool::_bspline_spiro_end_anchor_off()
 {
 
     SPCurve *tmpCurve = new SPCurve();
@@ -1773,7 +1727,7 @@ static void bspline_spiro_end_anchor_off(PenTool *const pc)
 
 
 //spanish: preparates the curves for its trasformation into BSline curves.
-static void bspline_spiro_build(PenTool *const pc)
+void PenTool::_bspline_spiro_build()
 {
     if(!this->spiro && !this->bspline)
         return;
@@ -1812,9 +1766,9 @@ static void bspline_spiro_build(PenTool *const pc)
         //Effect *spr = static_cast<Effect*> ( new LPEbspline(lpeobj) );
         //spr->doEffect(curve);
         if(this->bspline){
-            bspline_doEffect(curve);
+            this->_bspline_doEffect(curve);
         }else{
-            spiro_doEffect(curve);
+            this->_spiro_doEffect(curve);
         }
 
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), curve);   
@@ -1838,7 +1792,7 @@ static void bspline_spiro_build(PenTool *const pc)
     }
 }
 
-static void bspline_doEffect(SPCurve * curve)
+void PenTool::_bspline_doEffect(SPCurve * curve)
 {
     //spanish: comentado en funcion "doEffect" de src/live_effects/lpe-bspline.cpp
     if(curve->get_segment_count() < 2)
@@ -1981,7 +1935,7 @@ static void bspline_doEffect(SPCurve * curve)
 
 //Spiro function cloned from lpe-spiro.cpp
 //spanish: comentado en funcion "doEffect" de src/live_effects/lpe-spiro.cpp
-static void spiro_doEffect(SPCurve * curve)
+void PenTool::_spiro_doEffect(SPCurve * curve)
 {
     using Geom::X;
     using Geom::Y;
@@ -2178,7 +2132,7 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
 
 
     if (!this->red_curve->is_empty()) {
-        bspline_spiro(pc,(state & GDK_SHIFT_MASK));
+        this->_bspline_spiro(state & GDK_SHIFT_MASK);
         this->green_curve->append_continuous(this->red_curve, 0.0625);
         SPCurve *curve = this->red_curve->copy();
 
