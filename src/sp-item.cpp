@@ -99,6 +99,8 @@ SPItem::SPItem() : SPObject() {
     sensitive = TRUE;
     bbox_valid = FALSE;
 
+    _highlightColor = NULL;
+
     transform_center_x = 0;
     transform_center_y = 0;
 
