@@ -21,6 +21,8 @@
 #include "style.h"
 
 struct SPColor;
+void ink_cairo_pixbuf_cleanup(guchar *, void *);
+void convert_pixbuf_argb32_to_normal(GdkPixbuf *pb);
 
 namespace Inkscape {
 
