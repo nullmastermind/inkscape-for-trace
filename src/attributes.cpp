@@ -41,6 +41,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_TRANSFORM_CENTER_X, "inkscape:transform-center-x"},
     {SP_ATTR_TRANSFORM_CENTER_Y, "inkscape:transform-center-y"},
     {SP_ATTR_INKSCAPE_PATH_EFFECT, "inkscape:path-effect"},
+    {SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR, "inkscape:highlight-color"},
     /* SPAnchor */
     {SP_ATTR_XLINK_HREF, "xlink:href"},
     {SP_ATTR_XLINK_TYPE, "xlink:type"},

@@ -493,11 +493,23 @@ void SPItem::set(unsigned int key, gchar const* value) {
             break;
         }
         case SP_ATTR_SODIPODI_INSENSITIVE:
+        {
             item->sensitive = !value;
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
                 v->arenaitem->setSensitive(item->sensitive);
             }
             break;
+        }
+        case SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR:
+        {
+            g_free(item->_highlightColor);
+            if (value) {
+                item->_highlightColor = g_strdup(value);
+            } else {
+                item->_highlightColor = NULL;
+            }
+            break;
+        }
         case SP_ATTR_CONNECTOR_AVOID:
             item->avoidRef->setAvoid(value);
             break;
@@ -705,6 +717,11 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             g_free ((void *) value);
             g_free ((void *) uri);
         }
+    }
+    if (item->_highlightColor){
+        repr->setAttribute("inkscape:highlight-color", item->_highlightColor);
+    } else {
+        repr->setAttribute("inkscape:highlight-color", NULL);
     }
 
     SPObject::write(xml_doc, repr, flags);
