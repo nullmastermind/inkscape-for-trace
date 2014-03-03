@@ -71,13 +71,15 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
     if(document && uri.getPath() && !skip ) {
         std::string base = document->getBase() ? document->getBase() : "";
         std::string path = uri.getFullPath(base);
-        if(!path.empty())
+        if(!path.empty()) {
             document = document->createChildDoc(path);
-        else
+        } else {
             document = NULL;
+        }
     }
     if(!document) {
         g_warning("Can't get document for referenced URI: %s", filename);
+        g_free( filename );
         return;
     }
     g_free( filename );
@@ -91,7 +93,7 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
     /* for now this handles the minimal xpointer form that SVG 1.0
      * requires of us
      */
-    gchar *id;
+    gchar *id = NULL;
     if (!strncmp(fragment, "xpointer(", 9)) {
         /* FIXME !!! this is wasteful */
         /* FIXME: It looks as though this is including "))" in the id.  I suggest moving
@@ -113,9 +115,7 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
 
     /* FIXME !!! validate id as an NCName somewhere */
 
-    if (_uri) {
-        delete _uri;
-    }
+    delete _uri;
     _uri = new URI(uri);
 
     _connection.disconnect();
@@ -172,7 +172,7 @@ void URIReference::_release(SPObject *obj)
 
 SPObject* sp_css_uri_reference_resolve( SPDocument *document, const gchar *uri )
 {
-    SPObject* ref = 0;
+    SPObject* ref = NULL;
 
     if ( document && uri && ( strncmp(uri, "url(", 4) == 0 ) ) {
         gchar *trimmed = extract_uri( uri );
@@ -188,7 +188,7 @@ SPObject* sp_css_uri_reference_resolve( SPDocument *document, const gchar *uri )
 SPObject *
 sp_uri_reference_resolve (SPDocument *document, const gchar *uri)
 {
-    SPObject* ref = 0;
+    SPObject* ref = NULL;
 
     if ( uri && (*uri == '#') ) {
         ref = document->getObjectById( uri + 1 );
