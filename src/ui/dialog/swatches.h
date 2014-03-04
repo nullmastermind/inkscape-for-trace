@@ -12,17 +12,26 @@
 
 #include "ui/widget/panel.h"
 #include "enums.h"
+#include "sp-object.h"
+#include "sp-item-group.h"
+#include <gtk/gtk.h>
+#include <gtkmm/radiomenuitem.h>
+#include <gtkmm/menuitem.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/table.h>
+#include <gtkmm/box.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/treemodel.h>
+#include "sp-gradient.h"
+#include "xml/node-observer.h"
 
 namespace Inkscape {
 namespace UI {
 
-class PreviewHolder;
-
 namespace Dialogs {
-
-class ColorItem;
-class SwatchPage;
-class DocTrack;
 
 /**
  * A panel that displays paint swatches.
@@ -30,48 +39,134 @@ class DocTrack;
 class SwatchesPanel : public Inkscape::UI::Widget::Panel
 {
 public:
-    SwatchesPanel(gchar const* prefsPath = "/dialogs/swatches");
+    SwatchesPanel(gchar const* prefsPath = "/dialogs/swatches", bool showLabels = true);
     virtual ~SwatchesPanel();
-
+    
     static SwatchesPanel& getInstance();
-
-    virtual void setOrientation(SPAnchorType how);
 
     virtual void setDesktop( SPDesktop* desktop );
     virtual SPDesktop* getDesktop() {return _currentDesktop;}
 
-    virtual int getSelectedIndex() {return _currentIndex;} // temporary
-
 protected:
-    static void handleDocumentDestroy(SPDocument *document);
-    static void handleGradientsChange(SPDocument *document);
 
-    virtual void _updateFromSelection();
-    virtual void _handleAction( int setId, int itemId );
-    virtual void _setDocument( SPDocument *document );
-    virtual void _setSelectedIndex( int index );
-    virtual void _rebuild();
-
-    virtual std::vector<SwatchPage*> _getSwatchSets() const;
+    virtual void _setDocument( SPDesktop* desktop, SPDocument *document );
 
 private:
+    class ModelColumns;
+    class ModelColumnsDoc;
+    
+    class StopWatcher;
+    class GradientWatcher;
+    class SwatchWatcher;
+    
     SwatchesPanel(SwatchesPanel const &); // no copy
     SwatchesPanel &operator=(SwatchesPanel const &); // no assign
+    
+    void _styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback );
 
-    static void _trackDocument( SwatchesPanel *panel, SPDocument *document );
-    static void handleDefsModified(SPDocument *document);
+    void _setSelectionSwatch(SPGradient* swatchItem, bool isStroke);
 
-    PreviewHolder* _holder;
-    ColorItem* _clear;
-    ColorItem* _remove;
-    int _currentIndex;
+    void NoLinkToggled();
+    void NewGroup();
+    void NewGroupBI();
+    void _addBIButtonClicked(GdkEventButton* event);
+    void Duplicate(SPGroup* page);
+    void SaveAs();
+    void AddSelectedFill(SPGroup* page);
+    void AddSelectedStroke(SPGroup* page);
+    void MoveUp(SPGroup* page);
+    void MoveDown(SPGroup* page);
+    void Remove(SPGroup* page);
+    
+    void SetSelectedFill(SPGradient* swatch);
+    void SetSelectedStroke(SPGradient* swatch);
+    void MoveSwatchUp(SPGradient* swatch);
+    void MoveSwatchDown(SPGradient* swatch);
+    void RemoveSwatch(SPGradient* swatch);
+    
+    void _lblClick(GdkEventButton* event, SPGroup* page);
+    void _addSwatchButtonClicked(SPGroup* swatch, bool recurse);
+    void _defsChanged();
+    void _importButtonClicked(bool addToDoc, bool addToBI);
+    void _deleteButtonClicked();
+    void _addButtonClicked(GdkEventButton* event);
+    void _swatchClicked(GdkEventButton* event, SPGradient* swatchItem);
+    
+    Gtk::MenuItem* _addSwatchGroup(SPGroup* group, Gtk::TreeModel::Row* parentRow);
+    void _swatchesChanged();
+    
+    bool _handleButtonEvent(GdkEventButton *event);
+    bool _handleKeyEvent(GdkEventKey *event);
+    
+    void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleEditingCancelled();
+    void _renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name);
+    
+    void _setCollapsed(SPGroup * group);
+    void _setExpanded(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& /*path*/, bool isexpanded);
+    
+    void _deleteButtonClickedDoc();
+    bool _handleButtonEventDoc(GdkEventButton* event);
+    bool _handleKeyEventDoc(GdkEventKey *event);
+
+    void _handleEditedDoc(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleEditingCancelledDoc();
+    void _renameObjectDoc(Gtk::TreeModel::Row row, const Glib::ustring& name);
+    
+    bool _handleDragDropDoc(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, guint time);
+    bool _handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, guint time);
+    
+    Gtk::Menu *popUpMenu;
+    Gtk::Menu *popUpImportMenu;
+
+    Gtk::ScrolledWindow _scroller;
+    Gtk::Table _insideTable;
+    Gtk::VBox _insideV;
+    Gtk::HBox _insideH;
+    Gtk::HBox _buttonsRow;
+    Gtk::VBox _outsideV;
+    Gtk::CheckButton _noLink;
+    bool _showlabels;
+
+    SwatchesPanel::ModelColumns* _model;
+    Glib::RefPtr<Gtk::TreeStore> _store;
+    
+    Gtk::CellRendererText *_text_rendererBI;
+    Gtk::TreeView::Column *_name_columnBI;
+    Gtk::ScrolledWindow _scrollerBI;
+    Gtk::TreeView _editBI;
+    Gtk::HBox _buttonsRowBI;
+    Gtk::VBox _editBIV;
+
+    SwatchesPanel::ModelColumnsDoc* _modelDoc;
+    Glib::RefPtr<Gtk::TreeStore> _storeDoc;
+    
+    Gtk::CellRendererText *_text_rendererDoc;
+    Gtk::CellRendererPixbuf *_pixbuf_rendererDoc;
+    Gtk::TreeView::Column *_name_columnDoc;
+    Gtk::TreeView::Column *_pixbuf_columnDoc;
+    Gtk::ScrolledWindow _scrollerDoc;
+    Gtk::TreeView _editDoc;
+    Gtk::HBox _buttonsRowDoc;
+    Gtk::VBox _editDocV;
+
+    Gtk::Notebook _notebook;
+    
+    SwatchWatcher* rootWatcher;
+    std::vector<Inkscape::XML::NodeObserver*> rootWatchers;
+    
+    std::vector<Inkscape::XML::NodeObserver*> docWatchers;
+    SwatchWatcher* docWatcher;
+
     SPDesktop*  _currentDesktop;
     SPDocument* _currentDocument;
+    
+    bool _dnd_into;
+    SPObject* _dnd_source;
+    SPObject* _dnd_target;
 
     sigc::connection _documentConnection;
     sigc::connection _selChanged;
-
-    friend class DocTrack;
 };
 
 } //namespace Dialogs
