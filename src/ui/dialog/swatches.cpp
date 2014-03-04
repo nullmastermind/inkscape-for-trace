@@ -20,6 +20,7 @@
 
 #include "swatches.h"
 #include <gtkmm/radiomenuitem.h>
+#include <gtkmm/widget.h>
 
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
@@ -57,6 +58,22 @@
 #include "gradient-chemistry.h"
 #include "helper/action.h"
 #include "helper/action-context.h"
+#include "xml/node-observer.h"
+#include "xml/repr.h"
+#include "sp-pattern.h"
+#include "icon-size.h"
+#include "widgets/icon.h"
+#include "filedialog.h"
+#include "sp-stop.h"
+#include "svg/svg-color.h"
+#include "sp-radial-gradient.h"
+#include "color-rgba.h"
+#include "event-context.h"
+#include <queue>
+//sorry!
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 namespace Inkscape {
 namespace UI {
@@ -64,6 +81,7 @@ namespace Dialogs {
 
 #define VBLOCK 16
 #define PREVIEW_PIXBUF_WIDTH 128
+#define SWATCHES_FILE_NAME "swatches.svg"
 
 void _loadPaletteFile( gchar const *filename, gboolean user=FALSE );
 

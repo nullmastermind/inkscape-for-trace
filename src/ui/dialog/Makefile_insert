@@ -113,6 +113,4 @@ ink_common_sources +=		\
 	ui/dialog/lpe-powerstroke-properties.h	\
 	ui/dialog/objects.cpp	\
 	ui/dialog/objects.h	\
-	ui/dialog/tags.cpp	\
-	ui/dialog/tags.h	\
 	$(inkboard_dialogs)
