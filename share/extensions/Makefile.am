@@ -13,9 +13,7 @@ otherstuffdir = $(datadir)/inkscape/extensions
 
 moduledir = $(datadir)/inkscape/extensions
 
-# If you remove an extension from here, either add it to EXTRA_DIST
-# below, or remove all mention of it from po/inkscape.pot as well.
-module_DATA = $(wildcard $(extensiondir)/*.py)
+extension_SCRIPTS = $(wildcard $(srcdir)/*.py)
 
 otherstuff_DATA = \
 	fontfix.conf \
@@ -30,7 +28,7 @@ otherstuff_DATA = \
 	svg2xaml.xsl \
 	xaml2svg.xsl
 
-module_DATA = $(wildcard $(moduledir)/*.inx)
+module_DATA = $(wildcard $(srcdir)/*.inx)
 
 EXTRA_DIST = \
 	$(extension_SCRIPTS) $(otherstuff_DATA) $(module_DATA)
