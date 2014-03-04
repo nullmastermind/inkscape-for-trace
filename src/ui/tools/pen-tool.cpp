@@ -710,7 +710,7 @@ gint PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
         this->_bspline_spiro_color();
         this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
     }else{
-        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
+        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > (tolerance/2) || mevent.time == 0) {
             this->_bspline_spiro_color();
             this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
             pen_drag_origin_w = event_w;
