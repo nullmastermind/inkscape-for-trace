@@ -42,7 +42,7 @@
 #include "xml/node-observer.h"
 #include "xml/repr.h"
 #include "sp-root.h"
-#include "event-context.h"
+//#include "event-context.h"
 #include "selection.h"
 #include "dialogs/dialog-events.h"
 #include "widgets/sp-color-notebook.h"

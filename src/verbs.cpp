@@ -2043,6 +2043,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_OBJECTS:
             dt->_dlg_mgr->showDialog("ObjectsPanel");
             break;
+        case SP_VERB_DIALOG_TAGS:
+            dt->_dlg_mgr->showDialog("TagsPanel");
+            break;
         case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
             dt->_dlg_mgr->showDialog("LivePathEffect");
             break;
@@ -2863,6 +2866,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("View Layers"), INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."),
                    N_("View Objects"), INKSCAPE_ICON("dialog-layers")),
+    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogObjects", N_("Ta_gs..."),
+                   N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
                    N_("Manage, edit, and apply path effects"), NULL),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
