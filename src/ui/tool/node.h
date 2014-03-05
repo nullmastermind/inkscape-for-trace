@@ -187,7 +187,7 @@ public:
     bool isEndNode() const;
     Handle *front() { return &_front; }
     Handle *back()  { return &_back;  }
-    //spanish: creamos valor de potencia bspline asociado a cada nodo
+    //strength value for each node
     double bsplineWeight;
 
     /**

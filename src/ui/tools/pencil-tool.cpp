@@ -685,7 +685,7 @@ void PencilTool::_interpolate() {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         for (int c = 0; c < n_segs; c++) {
-            //spanish: si el modo es BSpline modificamos para que el trazado cree los nodos adhoc
+            // if we are in BSpline we modify the trace to create adhoc nodes 
             if(mode == 2){
                 Geom::Point BP = b[4*c+0] + (1./3)*(b[4*c+3] - b[4*c+0]);
                 BP = Geom::Point(BP[X] + 0.0001,BP[Y] + 0.0001);
@@ -835,7 +835,7 @@ void PencilTool::_fitAndSplit() {
         this->red_curve->moveto(b[0]);
         using Geom::X;
         using Geom::Y;
-        //spanish: si el modo es BSpline modificamos para que el trazado cree los nodos adhoc
+            // if we are in BSpline we modify the trace to create adhoc nodes
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         if(mode == 2){
