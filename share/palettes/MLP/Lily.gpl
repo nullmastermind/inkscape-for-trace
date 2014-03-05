@@ -1,0 +1,18 @@
+GIMP Palette
+Name: Lily
+Columns: 0
+#
+239 148 186	Body Fill
+231 129 174	Body fill Shadow
+211  90 138	Body stroke
+247 225 141	Mane Fill
+220 197  97	Mane Stroke
+250 236 181	Mane Highlight
+251 244 172	Eye Grad Light
+246 181  65	Eye Grad Dark
+235 227 103	Eye Accent
+255 255 254	Eye Highlight
+251 252 250	CM Fill
+192 220 232	CM Stroke
+246 212  68	CM stem
+243 155  63	CM pollin

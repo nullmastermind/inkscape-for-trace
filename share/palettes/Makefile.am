@@ -1,5 +1,6 @@
+SUBDIRS = MLP
 
-palettesdir = $(datadir)/inkscape/palettes
+palettesdir = $(datadir)/ponyscape/palettes
 
 palettes_DATA = \
     README \
@@ -17,6 +18,7 @@ palettes_DATA = \
     Reds.gpl \
     Royal.gpl \
     svg.gpl \
+    swatches.svg \
     Tango-Palette.gpl \
     Topographic.gpl \
     Ubuntu.gpl \

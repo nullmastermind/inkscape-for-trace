@@ -15,7 +15,11 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "widgets/ege-paint-def.h"
-#include "ui/previewable.h"
+#include "widgets/eek-preview.h"
+#include <gtk/gtk.h>
+#include <gtkmm/widget.h>
+#include "desktop.h"
+#include "selection.h"
 
 class SPGradient;
 
@@ -23,89 +27,43 @@ namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
-class ColorItem;
-
-class SwatchPage
-{
-public:
-    SwatchPage();
-    ~SwatchPage();
-
-    Glib::ustring _name;
-    int _prefWidth;
-    boost::ptr_vector<ColorItem> _colors;
-};
-
 
 /**
  * The color swatch you see on screen as a clickable box.
  */
-class ColorItem : public Inkscape::UI::Previewable
+class ColorItem : public Gtk::Widget
 {
-    friend void _loadPaletteFile( gchar const *filename );
 public:
-    ColorItem( ege::PaintDef::ColorType type );
-    ColorItem( unsigned int r, unsigned int g, unsigned int b,
-               Glib::ustring& name );
+    ColorItem( SPGradient * grad, const gchar* name, SPDesktop* desktop );
     virtual ~ColorItem();
-    ColorItem(ColorItem const &other);
-    virtual ColorItem &operator=(ColorItem const &other);
-    virtual Gtk::Widget* getPreview(PreviewStyle style,
-                                    ViewType view,
-                                    ::PreviewSize size,
-                                    guint ratio,
-                                    guint border);
-    void buttonClicked(bool secondary = false);
+    
+    SPGradient * getGradient() { return gradient; }
 
-    void setGradient(SPGradient *grad);
-    SPGradient * getGradient() const { return _grad; }
-    void setPattern(cairo_pattern_t *pattern);
-    void setName(const Glib::ustring name);
+protected:    
+    
+    const gchar* def;
+    SPGradient * gradient;
+    virtual bool on_enter_notify_event(GdkEventCrossing* event);
+    virtual bool on_leave_notify_event(GdkEventCrossing* event);
+    
+    virtual void on_size_request(Gtk::Requisition* requisition);
+    virtual void on_size_allocate(Gtk::Allocation& allocation);
+    virtual void on_map();
+    virtual void on_unmap();
+    virtual void on_realize();
+    virtual void on_unrealize();
+    virtual bool on_expose_event(GdkEventExpose* event);
 
-    void setState( bool fill, bool stroke );
-    bool isFill() { return _isFill; }
-    bool isStroke() { return _isStroke; }
+    Glib::RefPtr<Gdk::Window> m_refGdkWindow;
 
-    ege::PaintDef def;
-
+    
 private:
+    void selection_changed(Selection* selection);
+    void selection_modified(Selection* selection, guint flags);
 
-    static void _dropDataIn( GtkWidget *widget,
-                             GdkDragContext *drag_context,
-                             gint x, gint y,
-                             GtkSelectionData *data,
-                             guint info,
-                             guint event_time,
-                             gpointer user_data);
-
-    static void _dragGetColorData( GtkWidget *widget,
-                                   GdkDragContext *drag_context,
-                                   GtkSelectionData *data,
-                                   guint info,
-                                   guint time,
-                                   gpointer user_data);
-
-    static void _wireMagicColors( SwatchPage *colorSet );
-    static void _colorDefChanged(void* data);
-
-    void _updatePreviews();
-    void _regenPreview(EekPreview * preview);
-
-    void _linkTint( ColorItem& other, int percent );
-    void _linkTone( ColorItem& other, int percent, int grayLevel );
-
-    std::vector<Gtk::Widget*> _previews;
-
-    bool _isFill;
-    bool _isStroke;
-    bool _isLive;
-    bool _linkIsTone;
-    int _linkPercent;
-    int _linkGray;
-    ColorItem* _linkSrc;
-    SPGradient* _grad;
-    cairo_pattern_t *_pattern;
-    std::vector<ColorItem*> _listeners;
+    sigc::connection sel_connection;
+    sigc::connection mod_connection;
+    bool _isSelected;
 };
 
 } // namespace Dialogs

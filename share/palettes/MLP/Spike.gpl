@@ -1,0 +1,17 @@
+GIMP Palette
+Name: Spike
+Columns: 0
+#
+198 147 201	Body Fill
+176 116 185	Body Shadow
+153  95 160	Body Stroke
+219 236 180	Body Green Fill
+152 210 124	Body Green Stroke
+ 82 196  88	Spike Fill
+ 44 151  47	Spike Stroke
+178 217 100	Ear Fill
+226 236 139	Ear Stroke
+ 98 187  77	Eye Grad Light
+ 39 117  20	Eye Grad Dark
+127 217 104	Eye Accent
+203 240 196	Eye Highlight

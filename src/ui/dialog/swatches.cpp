@@ -67,14 +67,14 @@
 #include "svg/svg-color.h"
 #include "sp-radial-gradient.h"
 #include "color-rgba.h"
+#include "ui/tools/tool-base.h"
 #include "svg/css-ostringstream.h"
-#include "ui/tools/tool-base.h" //event-context.h
 #include <queue>
 #ifdef WIN32
 #include <windows.h>
 #endif
 
-guint get_group0_keyval(GdkEventKey *event);
+//lazy!
 void sp_desktop_set_gradient(SPDesktop *desktop, SPGradient* gradient, bool fill);
 
 namespace Inkscape {
@@ -1335,10 +1335,10 @@ void SwatchesPanel::_defsChanged()
             eb->add(*lbl);
             _insideTable.attach( *eb, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND , 5, 0);
         }
-        Glib::ustring str1 = Glib::ustring(_("[None]"));
-        ColorItem* item = Gtk::manage(new ColorItem(NULL, NULL, NULL, str1));
-        //item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), NULL));
-        item->setName(_("[None]"));
+
+        ColorItem* item = Gtk::manage(new ColorItem(NULL, _("[None]"), _currentDesktop));
+        item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), NULL));
+        item->set_tooltip_text(_("[None]"));
         _insideTable.attach( *item, _showlabels ? 1 : 0, _showlabels ? 2 : 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
         
         unsigned int i = 1;
@@ -1365,11 +1365,10 @@ void SwatchesPanel::_defsChanged()
                             GdkPixbuf* pixb = sp_gradient_to_pixbuf (grad, 64, 18);
                             row[_modelDoc->_colPixbuf] = Glib::wrap(pixb);
                         }
-                        Glib::ustring str2 = Glib::ustring(it->label() ? it->label() : it->getId());
-                        item = Gtk::manage(new ColorItem(NULL, NULL, NULL, str2));
-                        item->setGradient(grad);
-                        //item->colorItemHandleButtonPress().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), grad));
-                        item->setName(it->label() ? it->label() : it->getId());
+
+                        item = Gtk::manage(new ColorItem(grad, it->label() ? it->label() : it->getId(), _currentDesktop));
+                        item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), grad));
+                        item->set_tooltip_text(it->label() ? it->label() : it->getId());
                         if (_showlabels) {
                             _insideTable.attach( *item, 1 + (i % 20), 2 + (i % 20), i / 20, i / 20 + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
                         } else {
@@ -1432,11 +1431,10 @@ void SwatchesPanel::_defsChanged()
 
                                     _editDoc.expand_to_path(_storeDoc->get_path(iter));
                                 }
-                                Glib::ustring str3= Glib::ustring(cit->label() ? cit->label() : cit->getId());
-                                item = Gtk::manage(new ColorItem(NULL, NULL, NULL, str3));
-                                item->setGradient(grad);
-                                //item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), grad));
-                                item->setName(cit->label() ? cit->label() : cit->getId());
+
+                                item = Gtk::manage(new ColorItem(grad, cit->label() ? cit->label() : cit->getId(), _currentDesktop));
+                                item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), grad));
+                                item->set_tooltip_text(cit->label() ? cit->label() : cit->getId());
                                 if (_showlabels) {
                                     _insideTable.attach( *item, 1 + (i % 20), 2 + (i % 20), i / 20, i / 20 + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
                                 } else {
@@ -1643,7 +1641,7 @@ bool SwatchesPanel::_handleButtonEvent(GdkEventButton *event)
 
 bool SwatchesPanel::_handleKeyEvent(GdkEventKey *event)
 {
-    switch (get_group0_keyval(event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
         case GDK_KEY_F2: {
@@ -1815,7 +1813,7 @@ void SwatchesPanel::_deleteButtonClickedDoc()
 
 bool SwatchesPanel::_handleKeyEventDoc(GdkEventKey *event)
 {
-    switch (get_group0_keyval(event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
         case GDK_KEY_F2: {
@@ -2323,18 +2321,8 @@ void SwatchesPanel::_setDocument( SPDesktop* desktop, SPDocument *document )
 } //namespace UI
 } //namespace Inkscape
 
-//should be okay to add this here
-guint get_group0_keyval(GdkEventKey *event) {
-    guint keyval = 0;
-    gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
-            gdk_display_get_default()), event->hardware_keycode,
-            (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
-            NULL, NULL, NULL);
-    return keyval;
-}
-
-void
-sp_desktop_set_gradient(SPDesktop *desktop, SPGradient* gradient, bool fill)
+//really lazy!
+void sp_desktop_set_gradient(SPDesktop *desktop, SPGradient* gradient, bool fill)
 {
     
     bool intercepted = false;

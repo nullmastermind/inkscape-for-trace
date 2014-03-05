@@ -1,0 +1,18 @@
+GIMP Palette
+Name: Rarity
+Columns: 0
+#
+240 242 243	Body Fill
+226 228 230	Body Shadow
+194 197 198	Body Stroke
+ 94  81 163	Mane Fill
+ 75  21 102	Mane Stroke
+126  74 153	Mane Grad Light
+ 75  21 102	Mane Grad Dark
+ 55 119 190	Eye Grad Light
+ 26  70 106	Eye Grad Dark
+ 85 149 211	Eye Accent
+122 172 236	Eye Highlight
+188 228 247	Eyeshadow
+115 212 253	Cutie Mark Fill
+ 44 143 183	Cutie Mark Stroke

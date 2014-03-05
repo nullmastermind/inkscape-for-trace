@@ -1,0 +1,2008 @@
+=== modified file 'src/live_effects/CMakeLists.txt'
+--- src/live_effects/CMakeLists.txt	2012-03-23 21:02:03 +0000
++++ src/live_effects/CMakeLists.txt	2014-03-01 16:12:14 +0000
+@@ -2,8 +2,10 @@
+ set(live_effects_SRC
+ 	effect.cpp
+ 	lpe-angle_bisector.cpp
++	lpe-attach-path.cpp
+ 	lpe-bendpath.cpp
+ 	lpe-boolops.cpp
++	lpe-bounding-box.cpp
+ 	lpe-circle_3pts.cpp
+ 	lpe-circle_with_radius.cpp
+ 	lpe-clone-original.cpp
+@@ -11,8 +13,11 @@
+ 	lpe-copy_rotate.cpp
+ 	lpe-curvestitch.cpp
+ 	lpe-dynastroke.cpp
++	lpe-ellipse-5pts.cpp
+ 	lpe-envelope.cpp
+ 	lpe-extrude.cpp
++	lpe-fill-between-many.cpp
++	lpe-fill-between-strokes.cpp
+ 	lpe-gears.cpp
+ 	lpe-interpolate.cpp
+ 	lpe-knot.cpp
+@@ -47,11 +52,13 @@
+ 	parameter/parameter.cpp
+ 	parameter/path.cpp
+ 	parameter/originalpath.cpp
++	parameter/originalpatharray.cpp
+ 	parameter/path-reference.cpp
+ 	parameter/point.cpp
+ 	parameter/powerstrokepointarray.cpp
+ 	parameter/random.cpp
+ 	parameter/text.cpp
++	paramter/transformedpoint.cpp
+ 	parameter/unit.cpp
+ 	parameter/vector.cpp
+ 
+@@ -61,8 +68,10 @@
+ 	effect-enum.h
+ 	effect.h
+ 	lpe-angle_bisector.h
++	lpe-attach-path.h
+ 	lpe-bendpath.h
+ 	lpe-boolops.h
++	lpe-bounding-box.h
+ 	lpe-circle_3pts.h
+ 	lpe-circle_with_radius.h
+ 	lpe-clone-original.h
+@@ -70,8 +79,11 @@
+ 	lpe-copy_rotate.h
+ 	lpe-curvestitch.h
+ 	lpe-dynastroke.h
++	lpe-ellipse-5pts.h
+ 	lpe-envelope.h
+ 	lpe-extrude.h
++	lpe-fill-between-many.h
++	lpe-fill-between-strokes.h
+ 	lpe-gears.h
+ 	lpe-interpolate.h
+ 	lpe-knot.h
+@@ -109,6 +121,7 @@
+ 	parameter/path-reference.h
+ 	parameter/path.h
+ 	parameter/originalpath.h
++	parameter/originalpatharray.h
+ 	parameter/point.h
+ 	parameter/powerstrokepointarray.h
+ 	parameter/random.h
+
+=== modified file 'src/live_effects/Makefile_insert'
+--- src/live_effects/Makefile_insert	2012-03-23 21:02:03 +0000
++++ src/live_effects/Makefile_insert	2014-03-01 18:49:52 +0000
+@@ -82,4 +82,14 @@
+ 	live_effects/lpe-path_length.cpp	\
+ 	live_effects/lpe-path_length.h	\
+ 	live_effects/lpe-line_segment.cpp	\
+-	live_effects/lpe-line_segment.h
++	live_effects/lpe-line_segment.h	\
++	live_effects/lpe-bounding-box.cpp	\
++	live_effects/lpe-bounding-box.h	\
++	live_effects/lpe-attach-path.cpp	\
++	live_effects/lpe-attach-path.h	\
++	live_effects/lpe-fill-between-strokes.cpp	\
++	live_effects/lpe-fill-between-stroke.h	\
++	live_effects/lpe-fill-between-many.cpp	\
++	live_effects/lpe-fill-between-many.h	\
++	live_effects/lpe-ellipse-5pts.cpp	\
++	live_effects/lpe-ellipse-5pts.h
+
+=== modified file 'src/live_effects/effect-enum.h'
+--- src/live_effects/effect-enum.h	2012-01-12 21:06:16 +0000
++++ src/live_effects/effect-enum.h	2014-03-01 02:07:48 +0000
+@@ -50,6 +50,11 @@
+     EXTRUDE,
+     POWERSTROKE,
+     CLONE_ORIGINAL,
++    ATTACH_PATH,
++    FILL_BETWEEN_STROKES,
++    FILL_BETWEEN_MANY,
++    ELLIPSE_5PTS,
++    BOUNDING_BOX,
+     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
+ };
+ 
+
+=== modified file 'src/live_effects/effect.cpp'
+--- src/live_effects/effect.cpp	2014-01-12 22:12:14 +0000
++++ src/live_effects/effect.cpp	2014-03-01 02:27:38 +0000
+@@ -5,7 +5,7 @@
+  * Released under GNU GPL, read the file 'COPYING' for more information
+  */
+ 
+-//#define LPE_ENABLE_TEST_EFFECTS
++#define LPE_ENABLE_TEST_EFFECTS
+ 
+ #ifdef HAVE_CONFIG_H
+ # include "config.h"
+@@ -47,6 +47,11 @@
+ #include "live_effects/lpe-extrude.h"
+ #include "live_effects/lpe-powerstroke.h"
+ #include "live_effects/lpe-clone-original.h"
++#include "live_effects/lpe-attach-path.h"
++#include "live_effects/lpe-fill-between-strokes.h"
++#include "live_effects/lpe-fill-between-many.h"
++#include "live_effects/lpe-ellipse_5pts.h"
++#include "live_effects/lpe-bounding-box.h"
+ 
+ #include "xml/node-event-vector.h"
+ #include "sp-object.h"
+@@ -122,6 +127,12 @@
+ /* 0.49 */
+     {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
+     {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
++/* Ponyscape */
++    {ATTACH_PATH,           N_("Attach path"), "attach_path"},
++    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"), "fill_between_strokes"},
++    {FILL_BETWEEN_MANY,     N_("Fill between many"), "fill_between_many"},
++    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"), "ellipse_5pts"},
++    {BOUNDING_BOX,          N_("Bounding Box"), "bounding_box"},
+ };
+ const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
+ 
+@@ -245,6 +256,21 @@
+         case CLONE_ORIGINAL:
+             neweffect = static_cast<Effect*> ( new LPECloneOriginal(lpeobj) );
+             break;
++        case ATTACH_PATH:
++            neweffect = static_cast<Effect*> ( new LPEAttachPath(lpeobj) );
++            break;
++        case FILL_BETWEEN_STROKES:
++            neweffect = static_cast<Effect*> ( new LPEFillBetweenStrokes(lpeobj) );
++            break;
++        case FILL_BETWEEN_MANY:
++            neweffect = static_cast<Effect*> ( new LPEFillBetweenMany(lpeobj) );
++            break;
++        case ELLIPSE_5PTS:
++            neweffect = static_cast<Effect*> ( new LPEEllipse5Pts(lpeobj) );
++            break;
++        case BOUNDING_BOX:
++            neweffect = static_cast<Effect*> ( new LPEBoundingBox(lpeobj) );
++            break;
+         default:
+             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
+             neweffect = NULL;
+
+=== added file 'src/live_effects/lpe-attach-path.cpp'
+--- src/live_effects/lpe-attach-path.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-attach-path.cpp	2014-03-01 22:47:28 +0000
+@@ -0,0 +1,203 @@
++/*
++ * Copyright (C) Johan Engelen 2012 <j.b.c.engelen@alumnus.utwente.nl>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <glibmm/i18n.h>
++#include <math.h>
++
++#include "live_effects/lpe-attach-path.h"
++
++#include "display/curve.h"
++#include "sp-item.h"
++#include "2geom/path.h"
++#include "sp-shape.h"
++#include "sp-text.h"
++#include "2geom/bezier-curve.h"
++#include "2geom/path-sink.h"
++#include "parameter/parameter.h"
++#include "live_effects/parameter/point.h"
++#include "parameter/originalpath.h"
++#include "2geom/affine.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++LPEAttachPath::LPEAttachPath(LivePathEffectObject *lpeobject) :
++    Effect(lpeobject),
++    start_path(_("Start path:"), _("Path to attach to the start of this path"), "startpath", &wr, this),
++    start_path_position(_("Start path position:"), _("Position to attach path start to"), "startposition", &wr, this, 0.0),
++    start_path_curve_start(_("Start path curve start:"), _("Starting curve"), "startcurvestart", &wr, this, Geom::Point(20,0)/*, true*/),
++    start_path_curve_end(_("Start path curve end:"), _("Ending curve"), "startcurveend", &wr, this, Geom::Point(20,0)/*, true*/),
++    end_path(_("End path:"), _("Path to attach to the end of this path"), "endpath", &wr, this),
++    end_path_position(_("End path position:"), _("Position to attach path end to"), "endposition", &wr, this, 0.0),
++    end_path_curve_start(_("End path curve start:"), _("Starting curve"), "endcurvestart", &wr, this, Geom::Point(20,0)/*, true*/),
++    end_path_curve_end(_("End path curve end:"), _("Ending curve"), "endcurveend", &wr, this, Geom::Point(20,0)/*, true*/)
++{
++    registerParameter( dynamic_cast<Parameter *>(&start_path) );
++    registerParameter( dynamic_cast<Parameter *>(&start_path_position) );
++    registerParameter( dynamic_cast<Parameter *>(&start_path_curve_start) );
++    registerParameter( dynamic_cast<Parameter *>(&start_path_curve_end) );
++    
++    registerParameter( dynamic_cast<Parameter *>(&end_path) );
++    registerParameter( dynamic_cast<Parameter *>(&end_path_position) );
++    registerParameter( dynamic_cast<Parameter *>(&end_path_curve_start) );
++    registerParameter( dynamic_cast<Parameter *>(&end_path_curve_end) );
++
++    //perceived_path = true;
++    show_orig_path = true;
++    curve_start_previous_origin = start_path_curve_end.getOrigin();
++    curve_end_previous_origin = end_path_curve_end.getOrigin();
++}
++
++LPEAttachPath::~LPEAttachPath()
++{
++
++}
++
++void LPEAttachPath::resetDefaults(SPItem const * item)
++{
++    curve_start_previous_origin = start_path_curve_end.getOrigin();
++    curve_end_previous_origin = end_path_curve_end.getOrigin();
++}
++
++void LPEAttachPath::doBeforeEffect(const SPLPEItem *lpeitem)
++{
++    lpe_effect = lpeitem;
++}
++
++void LPEAttachPath::doEffect (SPCurve * curve)
++{
++    std::vector<Geom::Path> this_pathv = curve->get_pathvector();
++    if (lpe_effect && !this_pathv.empty()) {
++        Geom::Path p = Geom::Path(this_pathv.front().initialPoint());
++        
++        bool set_start_end = start_path_curve_end.getOrigin() != curve_start_previous_origin;
++        bool set_end_end = end_path_curve_end.getOrigin() != curve_end_previous_origin;
++        
++        if (start_path.linksToPath()) {
++
++            std::vector<Geom::Path> linked_pathv = start_path.get_pathvector();
++            Geom::Affine linkedtransform = start_path.getObject()->getRelativeTransform(lpe_effect);
++
++            if ( !linked_pathv.empty() )
++            {
++                Geom::Path transformedpath = linked_pathv.front() * linkedtransform;
++                start_path_curve_start.setOrigin(this_pathv.front().initialPoint());
++
++                std::vector<Geom::Point> derivs = this_pathv.front().front().pointAndDerivatives(0, 3);
++                
++                for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
++                    Geom::Coord length = derivs[deriv_n].length();
++                    if ( ! Geom::are_near(length, 0) ) {
++                        if (set_start_end) {
++                            start_path_position.param_set_value(transformedpath.nearestPoint(start_path_curve_end.getOrigin()));
++                        }
++                        
++                        if (start_path_position > transformedpath.size()) {
++                            start_path_position.param_set_value(transformedpath.size());
++                        } else if (start_path_position < 0) {
++                            start_path_position.param_set_value(0);
++                        }
++                        const Geom::Curve *c = start_path_position >= transformedpath.size() ? &transformedpath.back() : &transformedpath.at_index((int)start_path_position);
++
++                        std::vector<Geom::Point> derivs_2 = c->pointAndDerivatives(start_path_position >= transformedpath.size() ? 1 : (start_path_position - (int)start_path_position), 3);
++                        for (unsigned deriv_n_2 = 1; deriv_n_2 < derivs_2.size(); deriv_n_2++) {
++                            Geom::Coord length_2 = derivs[deriv_n_2].length();
++                            if ( ! Geom::are_near(length_2, 0) ) {
++                                start_path_curve_end.setOrigin(derivs_2[0]);
++                                curve_start_previous_origin = start_path_curve_end.getOrigin();
++
++                                double startangle = atan2(start_path_curve_start.getVector().y(), start_path_curve_start.getVector().x());
++                                double endangle = atan2(start_path_curve_end.getVector().y(), start_path_curve_end.getVector().x());
++                                double startderiv = atan2(derivs[deriv_n].y(), derivs[deriv_n].x());
++                                double endderiv = atan2(derivs_2[deriv_n_2].y(), derivs_2[deriv_n_2].x());
++                                Geom::Point pt1 = Geom::Point(start_path_curve_start.getVector().length() * cos(startangle + startderiv), start_path_curve_start.getVector().length() * sin(startangle + startderiv));
++                                Geom::Point pt2 = Geom::Point(start_path_curve_end.getVector().length() * cos(endangle + endderiv), start_path_curve_end.getVector().length() * sin(endangle + endderiv));
++                                p = Geom::Path(derivs_2[0]);
++                                p.appendNew<Geom::CubicBezier>(-pt2 + derivs_2[0], -pt1 + this_pathv.front().initialPoint(), this_pathv.front().initialPoint());
++                                break;
++
++                            }
++                        }
++                        break;
++                    }
++                }
++            }
++        }
++        
++        p.append(this_pathv.front());
++        
++        if (end_path.linksToPath()) {
++
++            std::vector<Geom::Path> linked_pathv = end_path.get_pathvector();
++            Geom::Affine linkedtransform = end_path.getObject()->getRelativeTransform(lpe_effect);
++
++            if ( !linked_pathv.empty() )
++            {
++                Geom::Path transformedpath = linked_pathv.front() * linkedtransform;
++                Geom::Curve * last_seg_reverse = this_pathv.front().back().reverse();
++                
++                end_path_curve_start.setOrigin(last_seg_reverse->initialPoint());
++
++                std::vector<Geom::Point> derivs = last_seg_reverse->pointAndDerivatives(0, 3);
++                for (unsigned deriv_n = 1; deriv_n < derivs.size(); deriv_n++) {
++                    Geom::Coord length = derivs[deriv_n].length();
++                    if ( ! Geom::are_near(length, 0) ) {
++                        if (set_end_end) {
++                            end_path_position.param_set_value(transformedpath.nearestPoint(end_path_curve_end.getOrigin()));
++                        }
++                        
++                        if (end_path_position > transformedpath.size()) {
++                            end_path_position.param_set_value(transformedpath.size());
++                        } else if (end_path_position < 0) {
++                            end_path_position.param_set_value(0);
++                        }
++                        const Geom::Curve *c = end_path_position >= transformedpath.size() ? &transformedpath.back() : &transformedpath.at_index((int)end_path_position);
++
++                        std::vector<Geom::Point> derivs_2 = c->pointAndDerivatives(end_path_position >= transformedpath.size() ? 1 : (end_path_position - (int)end_path_position), 3);
++                        for (unsigned deriv_n_2 = 1; deriv_n_2 < derivs_2.size(); deriv_n_2++) {
++                            Geom::Coord length_2 = derivs[deriv_n_2].length();
++                            if ( ! Geom::are_near(length_2, 0) ) {
++                                
++                                end_path_curve_end.setOrigin(derivs_2[0]);
++                                curve_end_previous_origin = end_path_curve_end.getOrigin();
++                                
++                                double startangle = atan2(end_path_curve_start.getVector().y(), end_path_curve_start.getVector().x());
++                                double endangle = atan2(end_path_curve_end.getVector().y(), end_path_curve_end.getVector().x());
++                                double startderiv = atan2(derivs[deriv_n].y(), derivs[deriv_n].x());
++                                double endderiv = atan2(derivs_2[deriv_n_2].y(), derivs_2[deriv_n_2].x());
++                                Geom::Point pt1 = Geom::Point(end_path_curve_start.getVector().length() * cos(startangle + startderiv), end_path_curve_start.getVector().length() * sin(startangle + startderiv));
++                                Geom::Point pt2 = Geom::Point(end_path_curve_end.getVector().length() * cos(endangle + endderiv), end_path_curve_end.getVector().length() * sin(endangle + endderiv));
++                                p.appendNew<Geom::CubicBezier>(-pt1 + this_pathv.front().finalPoint(), -pt2 + derivs_2[0], derivs_2[0]);
++
++                                break;
++
++                            }
++                        }
++                        break;
++                    }
++                }
++                delete last_seg_reverse;
++            }
++        }
++        Geom::PathVector outvector;
++        outvector.push_back(p);
++        curve->set_pathvector(outvector);
++    }
++}
++
++} // namespace LivePathEffect
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/lpe-attach-path.h'
+--- src/live_effects/lpe-attach-path.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-attach-path.h	2014-03-01 22:40:18 +0000
+@@ -0,0 +1,54 @@
++#ifndef INKSCAPE_LPE_ATTACH_PATH_H
++#define INKSCAPE_LPE_ATTACH_PATH_H
++
++/*
++ * Inkscape::LPEAttachPath
++ *
++ * Copyright (C) Ted Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/effect.h"
++#include "live_effects/parameter/parameter.h"
++#include "live_effects/parameter/point.h"
++#include "live_effects/parameter/originalpath.h"
++#include "live_effects/parameter/vector.h"
++#include "live_effects/parameter/bool.h"
++#include "live_effects/parameter/transformedpoint.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++class LPEAttachPath : public Effect {
++public:
++    LPEAttachPath(LivePathEffectObject *lpeobject);
++    virtual ~LPEAttachPath();
++
++    virtual void doBeforeEffect(const SPLPEItem *lpeitem);
++    virtual void doEffect (SPCurve * curve);
++    virtual void resetDefaults(SPItem const * item);
++
++private:
++    LPEAttachPath(const LPEAttachPath&);
++    LPEAttachPath& operator=(const LPEAttachPath&);
++
++    Geom::Point curve_start_previous_origin;
++    Geom::Point curve_end_previous_origin;
++        
++    OriginalPathParam start_path;
++    ScalarParam start_path_position;
++    TransformedPointParam start_path_curve_start;
++    VectorParam start_path_curve_end;
++
++    OriginalPathParam end_path;
++    ScalarParam end_path_position;
++    TransformedPointParam end_path_curve_start;
++    VectorParam end_path_curve_end;
++    const SPLPEItem * lpe_effect;
++};
++
++}; //namespace LivePathEffect
++}; //namespace Inkscape
++
++#endif
+
+=== added file 'src/live_effects/lpe-bounding-box.cpp'
+--- src/live_effects/lpe-bounding-box.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-bounding-box.cpp	2014-03-01 21:18:13 +0000
+@@ -0,0 +1,67 @@
++/*
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <glibmm/i18n.h>
++
++#include "live_effects/lpe-bounding-box.h"
++
++#include "display/curve.h"
++#include "sp-item.h"
++#include "2geom/path.h"
++#include "sp-shape.h"
++#include "sp-text.h"
++#include "2geom/bezier-curve.h"
++#include "lpe-bounding-box.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++LPEBoundingBox::LPEBoundingBox(LivePathEffectObject *lpeobject) :
++    Effect(lpeobject),
++    linked_path(_("Linked path:"), _("Path from which to take the original path data"), "linkedpath", &wr, this),
++    visual_bounds(_("Visual Bounds"), _("Uses the visual bounding box"), "visualbounds", &wr, this)
++{
++    registerParameter( dynamic_cast<Parameter *>(&linked_path) );
++    registerParameter( dynamic_cast<Parameter *>(&visual_bounds) );
++    //perceived_path = true;
++}
++
++LPEBoundingBox::~LPEBoundingBox()
++{
++
++}
++
++void LPEBoundingBox::doEffect (SPCurve * curve)
++{
++    if (curve) {
++        if ( linked_path.linksToPath() && linked_path.getObject() ) {
++            SPItem * item = linked_path.getObject();
++            Geom::OptRect bbox = visual_bounds.get_value() ? item->visualBounds() : item->geometricBounds();
++            Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
++            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
++            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
++            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
++            p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
++            std::vector<Geom::Path> out;
++            out.push_back(p);
++            curve->set_pathvector(out);
++        }
++    }
++}
++
++} // namespace LivePathEffect
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/lpe-bounding-box.h'
+--- src/live_effects/lpe-bounding-box.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-bounding-box.h	2014-03-01 19:37:36 +0000
+@@ -0,0 +1,37 @@
++#ifndef INKSCAPE_LPE_BOUNDING_BOX_H
++#define INKSCAPE_LPE_BOUNDING_BOX_H
++
++/*
++ * Inkscape::LPEFillBetweenStrokes
++ *
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/effect.h"
++#include "live_effects/parameter/originalpath.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++class LPEBoundingBox : public Effect {
++public:
++    LPEBoundingBox(LivePathEffectObject *lpeobject);
++    virtual ~LPEBoundingBox();
++
++    virtual void doEffect (SPCurve * curve);
++
++private:
++    OriginalPathParam  linked_path;
++    BoolParam visual_bounds;
++
++private:
++    LPEBoundingBox(const LPEBoundingBox&);
++    LPEBoundingBox& operator=(const LPEBoundingBox&);
++};
++
++}; //namespace LivePathEffect
++}; //namespace Inkscape
++
++#endif
+
+=== added file 'src/live_effects/lpe-ellipse_5pts.cpp'
+--- src/live_effects/lpe-ellipse_5pts.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-ellipse_5pts.cpp	2013-09-07 18:46:36 +0000
+@@ -0,0 +1,214 @@
++/** \file
++ * LPE "Ellipse through 5 points" implementation
++ */
++
++/*
++ * Authors:
++ *   Theodore Janeczko
++ *
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/lpe-ellipse_5pts.h"
++
++// You might need to include other 2geom files. You can add them here:
++#include <glibmm/i18n.h>
++#include <2geom/path.h>
++#include <2geom/circle.h>
++#include <2geom/ellipse.h>
++#include <2geom/svg-path.h>
++#include "inkscape.h"
++#include "desktop.h"
++#include "message-stack.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++LPEEllipse5Pts::LPEEllipse5Pts(LivePathEffectObject *lpeobject) :
++    Effect(lpeobject)
++{
++    perceived_path = true;
++}
++
++LPEEllipse5Pts::~LPEEllipse5Pts()
++{
++}
++
++static double _det3(double (*mat)[3])
++{
++    for (int i = 0; i < 2; i++)
++    {
++        for (int j = i + 1; j < 3; j++)
++        {
++            for (int k = i + 1; k < 3; k++)
++            {
++                mat[j][k] = (mat[j][k] * mat[i][i] - mat[j][i] * mat[i][k]);
++                if (i) mat[j][k] /= mat[i-1][i-1];
++            }
++        }
++    }
++    return mat[2][2];
++}
++static double _det5(double (*mat)[5])
++{
++    for (int i = 0; i < 4; i++)
++    {
++        for (int j = i + 1; j < 5; j++)
++        {
++            for (int k = i + 1; k < 5; k++)
++            {
++                mat[j][k] = (mat[j][k] * mat[i][i] - mat[j][i] * mat[i][k]);
++                if (i) mat[j][k] /= mat[i-1][i-1];
++            }
++        }
++    }
++    return mat[4][4];
++}
++
++std::vector<Geom::Path>
++LPEEllipse5Pts::doEffect_path (std::vector<Geom::Path> const & path_in)
++{
++    std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
++
++    if (path_in[0].size() < 4) {
++        
++        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Five points required for constructing an ellipse"));
++        return path_in;
++    }
++    // we assume that the path has >= 3 nodes
++    Geom::Point A = path_in[0].initialPoint();
++    Geom::Point B = path_in[0].pointAt(1);
++    Geom::Point C = path_in[0].pointAt(2);
++    Geom::Point D = path_in[0].pointAt(3);
++    Geom::Point E = path_in[0].pointAt(4);
++
++    using namespace Geom;
++
++    double rowmajor_matrix[5][6] =
++    {
++        {A.x()*A.x(), A.x()*A.y(), A.y()*A.y(), A.x(), A.y(), 1},
++        {B.x()*B.x(), B.x()*B.y(), B.y()*B.y(), B.x(), B.y(), 1},
++        {C.x()*C.x(), C.x()*C.y(), C.y()*C.y(), C.x(), C.y(), 1},
++        {D.x()*D.x(), D.x()*D.y(), D.y()*D.y(), D.x(), D.y(), 1},
++        {E.x()*E.x(), E.x()*E.y(), E.y()*E.y(), E.x(), E.y(), 1}
++    };
++    
++    double mat_a[5][5] =
++    {
++        {rowmajor_matrix[0][1], rowmajor_matrix[1][1], rowmajor_matrix[2][1], rowmajor_matrix[3][1], rowmajor_matrix[4][1]},
++        {rowmajor_matrix[0][2], rowmajor_matrix[1][2], rowmajor_matrix[2][2], rowmajor_matrix[3][2], rowmajor_matrix[4][2]},
++        {rowmajor_matrix[0][3], rowmajor_matrix[1][3], rowmajor_matrix[2][3], rowmajor_matrix[3][3], rowmajor_matrix[4][3]},
++        {rowmajor_matrix[0][4], rowmajor_matrix[1][4], rowmajor_matrix[2][4], rowmajor_matrix[3][4], rowmajor_matrix[4][4]},
++        {rowmajor_matrix[0][5], rowmajor_matrix[1][5], rowmajor_matrix[2][5], rowmajor_matrix[3][5], rowmajor_matrix[4][5]}
++    };
++    double mat_b[5][5] =
++    {
++        {rowmajor_matrix[0][0], rowmajor_matrix[1][0], rowmajor_matrix[2][0], rowmajor_matrix[3][0], rowmajor_matrix[4][0]},
++        {rowmajor_matrix[0][2], rowmajor_matrix[1][2], rowmajor_matrix[2][2], rowmajor_matrix[3][2], rowmajor_matrix[4][2]},
++        {rowmajor_matrix[0][3], rowmajor_matrix[1][3], rowmajor_matrix[2][3], rowmajor_matrix[3][3], rowmajor_matrix[4][3]},
++        {rowmajor_matrix[0][4], rowmajor_matrix[1][4], rowmajor_matrix[2][4], rowmajor_matrix[3][4], rowmajor_matrix[4][4]},
++        {rowmajor_matrix[0][5], rowmajor_matrix[1][5], rowmajor_matrix[2][5], rowmajor_matrix[3][5], rowmajor_matrix[4][5]}
++    };
++    double mat_c[5][5] =
++    {
++        {rowmajor_matrix[0][0], rowmajor_matrix[1][0], rowmajor_matrix[2][0], rowmajor_matrix[3][0], rowmajor_matrix[4][0]},
++        {rowmajor_matrix[0][1], rowmajor_matrix[1][1], rowmajor_matrix[2][1], rowmajor_matrix[3][1], rowmajor_matrix[4][1]},
++        {rowmajor_matrix[0][3], rowmajor_matrix[1][3], rowmajor_matrix[2][3], rowmajor_matrix[3][3], rowmajor_matrix[4][3]},
++        {rowmajor_matrix[0][4], rowmajor_matrix[1][4], rowmajor_matrix[2][4], rowmajor_matrix[3][4], rowmajor_matrix[4][4]},
++        {rowmajor_matrix[0][5], rowmajor_matrix[1][5], rowmajor_matrix[2][5], rowmajor_matrix[3][5], rowmajor_matrix[4][5]}
++    };
++    double mat_d[5][5] =
++    {
++        {rowmajor_matrix[0][0], rowmajor_matrix[1][0], rowmajor_matrix[2][0], rowmajor_matrix[3][0], rowmajor_matrix[4][0]},
++        {rowmajor_matrix[0][1], rowmajor_matrix[1][1], rowmajor_matrix[2][1], rowmajor_matrix[3][1], rowmajor_matrix[4][1]},
++        {rowmajor_matrix[0][2], rowmajor_matrix[1][2], rowmajor_matrix[2][2], rowmajor_matrix[3][2], rowmajor_matrix[4][2]},
++        {rowmajor_matrix[0][4], rowmajor_matrix[1][4], rowmajor_matrix[2][4], rowmajor_matrix[3][4], rowmajor_matrix[4][4]},
++        {rowmajor_matrix[0][5], rowmajor_matrix[1][5], rowmajor_matrix[2][5], rowmajor_matrix[3][5], rowmajor_matrix[4][5]}
++    };
++    double mat_e[5][5] =
++    {
++        {rowmajor_matrix[0][0], rowmajor_matrix[1][0], rowmajor_matrix[2][0], rowmajor_matrix[3][0], rowmajor_matrix[4][0]},
++        {rowmajor_matrix[0][1], rowmajor_matrix[1][1], rowmajor_matrix[2][1], rowmajor_matrix[3][1], rowmajor_matrix[4][1]},
++        {rowmajor_matrix[0][2], rowmajor_matrix[1][2], rowmajor_matrix[2][2], rowmajor_matrix[3][2], rowmajor_matrix[4][2]},
++        {rowmajor_matrix[0][3], rowmajor_matrix[1][3], rowmajor_matrix[2][3], rowmajor_matrix[3][3], rowmajor_matrix[4][3]},
++        {rowmajor_matrix[0][5], rowmajor_matrix[1][5], rowmajor_matrix[2][5], rowmajor_matrix[3][5], rowmajor_matrix[4][5]}
++    };
++    double mat_f[5][5] =
++    {
++        {rowmajor_matrix[0][0], rowmajor_matrix[1][0], rowmajor_matrix[2][0], rowmajor_matrix[3][0], rowmajor_matrix[4][0]},
++        {rowmajor_matrix[0][1], rowmajor_matrix[1][1], rowmajor_matrix[2][1], rowmajor_matrix[3][1], rowmajor_matrix[4][1]},
++        {rowmajor_matrix[0][2], rowmajor_matrix[1][2], rowmajor_matrix[2][2], rowmajor_matrix[3][2], rowmajor_matrix[4][2]},
++        {rowmajor_matrix[0][3], rowmajor_matrix[1][3], rowmajor_matrix[2][3], rowmajor_matrix[3][3], rowmajor_matrix[4][3]},
++        {rowmajor_matrix[0][4], rowmajor_matrix[1][4], rowmajor_matrix[2][4], rowmajor_matrix[3][4], rowmajor_matrix[4][4]}
++    };
++    
++    double a1 = _det5(mat_a);
++    double b1 = -_det5(mat_b);
++    double c1 = _det5(mat_c);
++    double d1 = -_det5(mat_d);
++    double e1 = _det5(mat_e);
++    double f1 = -_det5(mat_f);
++    
++    double mat_check[][3] = 
++    {
++        {a1, b1/2, d1/2},
++        {b1/2, c1, e1/2},
++        {d1/2, e1/2, f1}
++    };
++    
++    if (_det3(mat_check) == 0 || a1*c1 - b1*b1/4 <= 0) {
++        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No ellipse found for specified points"));
++        return path_in;
++    }
++    
++    Geom::Ellipse el(a1, b1, c1, d1, e1, f1);
++    
++    double s, e;
++    double x0, y0, x1, y1, x2, y2, x3, y3;
++    double len;
++
++    // figure out if we have a slice, guarding against rounding errors
++
++    Path p(Geom::Point(cos(0), sin(0)));
++
++    double end = 2 * M_PI;
++    for (s = 0; s < end; s += M_PI_2) {
++        e = s + M_PI_2;
++        if (e > end)
++            e = end;
++        len = 4*tan((e - s)/4)/3;
++        x0 = cos(s);
++        y0 = sin(s);
++        x1 = x0 + len * cos(s + M_PI_2);
++        y1 = y0 + len * sin(s + M_PI_2);
++        x3 = cos(e);
++        y3 = sin(e);
++        x2 = x3 + len * cos(e - M_PI_2);
++        y2 = y3 + len * sin(e - M_PI_2);
++        p.appendNew<Geom::CubicBezier>(Geom::Point(x1,y1), Geom::Point(x2,y2), Geom::Point(x3,y3));
++    }
++    
++    Geom::Affine aff = Geom::Scale(el.ray(Geom::X), el.ray(Geom::Y)) * Geom::Rotate(el.rot_angle()) * Geom::Translate(el.center());
++    
++    path_out.push_back(p * aff);
++
++    return path_out;
++}
++
++/* ######################## */
++
++} //namespace LivePathEffect
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/lpe-ellipse_5pts.h'
+--- src/live_effects/lpe-ellipse_5pts.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-ellipse_5pts.h	2013-09-07 18:46:36 +0000
+@@ -0,0 +1,50 @@
++#ifndef INKSCAPE_LPE_ELLIPSE_5PTS_H
++#define INKSCAPE_LPE_ELLIPSE_5PTS_H
++
++/** \file
++ * LPE "Ellipse through 5 points" implementation
++ */
++
++/*
++ * Authors:
++ *   Theodore Janeczko
++ *
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/effect.h"
++#include "live_effects/parameter/parameter.h"
++#include "live_effects/parameter/point.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++class LPEEllipse5Pts : public Effect {
++public:
++    LPEEllipse5Pts(LivePathEffectObject *lpeobject);
++    virtual ~LPEEllipse5Pts();
++
++    virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & path_in);
++
++private:
++    LPEEllipse5Pts(const LPEEllipse5Pts&);
++    LPEEllipse5Pts& operator=(const LPEEllipse5Pts&);
++};
++
++} //namespace LivePathEffect
++} //namespace Inkscape
++
++#endif
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/lpe-fill-between-many.cpp'
+--- src/live_effects/lpe-fill-between-many.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-fill-between-many.cpp	2014-03-01 21:14:38 +0000
+@@ -0,0 +1,77 @@
++/*
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <glibmm/i18n.h>
++#include <gtkmm/box.h>
++
++#include "live_effects/lpe-fill-between-many.h"
++
++#include "display/curve.h"
++#include "sp-item.h"
++#include "2geom/path.h"
++#include "sp-shape.h"
++#include "sp-text.h"
++#include "2geom/bezier-curve.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
++    Effect(lpeobject),
++    linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this)
++{
++    registerParameter( dynamic_cast<Parameter *>(&linked_paths) );
++    //perceived_path = true;
++}
++
++LPEFillBetweenMany::~LPEFillBetweenMany()
++{
++
++}
++
++void LPEFillBetweenMany::doEffect (SPCurve * curve)
++{
++    std::vector<Geom::Path> res_pathv;
++    SPItem * firstObj = NULL;
++    for (std::vector<PathAndDirection*>::iterator iter = linked_paths._vector.begin(); iter != linked_paths._vector.end(); iter++) {
++        SPObject *obj;
++        if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj) && !(*iter)->_pathvector.empty()) {
++            Geom::Path linked_path;
++            if ((*iter)->reversed) {
++                linked_path = (*iter)->_pathvector.front().reverse();
++            } else {
++                linked_path = (*iter)->_pathvector.front();
++            }
++            
++            if (!res_pathv.empty()) {
++                linked_path = linked_path * SP_ITEM(obj)->getRelativeTransform(firstObj);
++                res_pathv.front().appendNew<Geom::LineSegment>(linked_path.initialPoint());
++                res_pathv.front().append(linked_path);
++            } else {
++                firstObj = SP_ITEM(obj);
++                res_pathv.push_back(linked_path);
++            }
++        }
++    }
++    if (!res_pathv.empty()) {
++        res_pathv.front().close();
++    }
++    curve->set_pathvector(res_pathv);
++}
++
++} // namespace LivePathEffect
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/lpe-fill-between-many.h'
+--- src/live_effects/lpe-fill-between-many.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-fill-between-many.h	2014-03-01 21:13:34 +0000
+@@ -0,0 +1,36 @@
++#ifndef INKSCAPE_LPE_FILL_BETWEEN_MANY_H
++#define INKSCAPE_LPE_FILL_BETWEEN_MANY_H
++
++/*
++ * Inkscape::LPEFillBetweenStrokes
++ *
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/effect.h"
++#include "live_effects/parameter/originalpatharray.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++class LPEFillBetweenMany : public Effect {
++public:
++    LPEFillBetweenMany(LivePathEffectObject *lpeobject);
++    virtual ~LPEFillBetweenMany();
++    
++    virtual void doEffect (SPCurve * curve);
++
++private:
++    OriginalPathArrayParam linked_paths;
++
++private:
++    LPEFillBetweenMany(const LPEFillBetweenMany&);
++    LPEFillBetweenMany& operator=(const LPEFillBetweenMany&);
++};
++
++}; //namespace LivePathEffect
++}; //namespace Inkscape
++
++#endif
+
+=== added file 'src/live_effects/lpe-fill-between-strokes.cpp'
+--- src/live_effects/lpe-fill-between-strokes.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-fill-between-strokes.cpp	2014-03-01 21:13:06 +0000
+@@ -0,0 +1,116 @@
++/*
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <glibmm/i18n.h>
++
++#include "live_effects/lpe-fill-between-strokes.h"
++
++#include "display/curve.h"
++#include "sp-item.h"
++#include "2geom/path.h"
++#include "sp-shape.h"
++#include "sp-text.h"
++#include "2geom/bezier-curve.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
++    Effect(lpeobject),
++    linked_path(_("Linked path:"), _("Path from which to take the original path data"), "linkedpath", &wr, this),
++    second_path(_("Second path:"), _("Second path from which to take the original path data"), "secondpath", &wr, this),
++    reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this)
++{
++    registerParameter( dynamic_cast<Parameter *>(&linked_path) );
++    registerParameter( dynamic_cast<Parameter *>(&second_path) );
++    registerParameter( dynamic_cast<Parameter *>(&reverse_second) );
++    //perceived_path = true;
++}
++
++LPEFillBetweenStrokes::~LPEFillBetweenStrokes()
++{
++
++}
++
++void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
++{
++    if (curve) {
++        if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
++            std::vector<Geom::Path> linked_pathv = linked_path.get_pathvector();
++            std::vector<Geom::Path> second_pathv = second_path.get_pathvector();
++            std::vector<Geom::Path> result_linked_pathv;
++            std::vector<Geom::Path> result_second_pathv;
++            Geom::Affine second_transform = second_path.getObject()->getRelativeTransform(linked_path.getObject());
++
++            for (std::vector<Geom::Path>::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
++            {
++                result_linked_pathv.push_back((*iter));
++            }
++            for (std::vector<Geom::Path>::iterator iter = second_pathv.begin(); iter != second_pathv.end(); ++iter)
++            {
++                result_second_pathv.push_back((*iter) * second_transform);
++            }
++
++            if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
++                if (reverse_second.get_value())
++                {
++                    result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().finalPoint());
++                    result_linked_pathv.front().append(result_second_pathv.front().reverse());
++                }
++                else
++                {
++                    result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().initialPoint());
++                    result_linked_pathv.front().append(result_second_pathv.front());
++                }
++                curve->set_pathvector(result_linked_pathv);
++            }
++            else if ( !result_linked_pathv.empty() ) {
++                curve->set_pathvector(result_linked_pathv);
++            }
++            else if ( !result_second_pathv.empty() ) {
++                curve->set_pathvector(result_second_pathv);
++            }
++        }
++        else if ( linked_path.linksToPath() && linked_path.getObject() ) {
++            std::vector<Geom::Path> linked_pathv = linked_path.get_pathvector();
++            std::vector<Geom::Path> result_pathv;
++
++            for (std::vector<Geom::Path>::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
++            {
++                result_pathv.push_back((*iter));
++            }
++            if ( !result_pathv.empty() ) {
++                curve->set_pathvector(result_pathv);
++            }
++        }
++        else if ( second_path.linksToPath() && second_path.getObject() ) {
++            std::vector<Geom::Path> second_pathv = second_path.get_pathvector();
++            std::vector<Geom::Path> result_pathv;
++
++            for (std::vector<Geom::Path>::iterator iter = second_pathv.begin(); iter != second_pathv.end(); ++iter)
++            {
++                result_pathv.push_back((*iter));
++            }
++            if ( !result_pathv.empty() ) {
++                curve->set_pathvector(result_pathv);
++            }
++        }
++    }
++}
++
++} // namespace LivePathEffect
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/lpe-fill-between-strokes.h'
+--- src/live_effects/lpe-fill-between-strokes.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/lpe-fill-between-strokes.h	2014-03-01 21:11:40 +0000
+@@ -0,0 +1,38 @@
++#ifndef INKSCAPE_LPE_FILL_BETWEEN_STROKES_H
++#define INKSCAPE_LPE_FILL_BETWEEN_STROKES_H
++
++/*
++ * Inkscape::LPEFillBetweenStrokes
++ *
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/effect.h"
++#include "live_effects/parameter/originalpath.h"
++
++namespace Inkscape {
++namespace LivePathEffect {
++
++class LPEFillBetweenStrokes : public Effect {
++public:
++    LPEFillBetweenStrokes(LivePathEffectObject *lpeobject);
++    virtual ~LPEFillBetweenStrokes();
++    
++    virtual void doEffect (SPCurve * curve);
++
++private:
++    OriginalPathParam  linked_path;
++    OriginalPathParam  second_path;
++    BoolParam reverse_second;
++
++private:
++    LPEFillBetweenStrokes(const LPEFillBetweenStrokes&);
++    LPEFillBetweenStrokes& operator=(const LPEFillBetweenStrokes&);
++};
++
++}; //namespace LivePathEffect
++}; //namespace Inkscape
++
++#endif
+
+=== added file 'src/live_effects/parameter/originalpatharray.cpp'
+--- src/live_effects/parameter/originalpatharray.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/parameter/originalpatharray.cpp	2013-09-07 18:46:36 +0000
+@@ -0,0 +1,486 @@
++/*
++ * Copyright (C) Johan Engelen 2008 <j.b.c.engelen@utwente.nl>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include "live_effects/parameter/originalpatharray.h"
++
++#include <gtkmm/widget.h>
++#include <gtkmm/icontheme.h>
++#include <gtkmm/imagemenuitem.h>
++#include <gtkmm/separatormenuitem.h>
++
++#include <glibmm/i18n.h>
++
++#include "inkscape.h"
++#include "icon-size.h"
++#include "widgets/icon.h"
++#include "ui/clipboard.h"
++#include "svg/svg.h"
++#include "svg/stringstream.h"
++#include "originalpath.h"
++#include "uri.h"
++#include "display/curve.h"
++
++#include <glibmm/i18n.h>
++#include <2geom/coord.h>
++#include <2geom/point.h>
++#include "sp-shape.h"
++#include "sp-text.h"
++#include "live_effects/effect.h"
++
++#include "verbs.h"
++#include "document-undo.h"
++#include "document.h"
++
++namespace Inkscape {
++
++namespace LivePathEffect {
++
++class OriginalPathArrayParam::ModelColumns : public Gtk::TreeModel::ColumnRecord
++{
++public:
++
++    ModelColumns()
++    {
++        add(_colObject);
++        add(_colLabel);
++        add(_colReverse);
++    }
++    virtual ~ModelColumns() {}
++
++    Gtk::TreeModelColumn<PathAndDirection*> _colObject;
++    Gtk::TreeModelColumn<Glib::ustring> _colLabel;
++    Gtk::TreeModelColumn<bool> _colReverse;
++};
++
++OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
++        const Glib::ustring& tip,
++        const Glib::ustring& key,
++        Inkscape::UI::Widget::Registry* wr,
++        Effect* effect )
++: Parameter(label, tip, key, wr, effect), 
++        _vector(),
++        _tree(),
++        _text_renderer(),
++        _toggle_renderer(),
++        _scroller()
++{    
++    _model = new ModelColumns();
++    _store = Gtk::TreeStore::create(*_model);
++    _tree.set_model(_store);
++
++    _tree.set_reorderable(true);
++    _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
++    
++    _text_renderer = manage(new Gtk::CellRendererText());
++    int nameColNum = _tree.append_column(_("Name"), *_text_renderer) - 1;
++    _name_column = _tree.get_column(nameColNum);
++    _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
++
++    _tree.set_expander_column( *_tree.get_column(nameColNum) );
++    _tree.set_search_column(_model->_colLabel);
++    
++    Gtk::CellRendererToggle * _toggle_renderer = manage(new Gtk::CellRendererToggle());
++    int toggleColNum = _tree.append_column(_("Reverse"), *_toggle_renderer) - 1;
++    Gtk::TreeViewColumn* col = _tree.get_column(toggleColNum);
++    _toggle_renderer->set_activatable(true);
++    _toggle_renderer->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
++    col->add_attribute(_toggle_renderer->property_active(), _model->_colReverse);
++    
++    _scroller.add(_tree);
++    _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
++    _scroller.set_shadow_type(Gtk::SHADOW_IN);
++    
++    oncanvas_editable = true;
++    
++}
++
++OriginalPathArrayParam::~OriginalPathArrayParam()
++{
++    while (!_vector.empty()) {
++        PathAndDirection *w = _vector.back();
++        _vector.pop_back();
++        unlink(w);
++        delete w;
++    }
++    delete _model;
++}
++
++void OriginalPathArrayParam::on_reverse_toggled(const Glib::ustring& path)
++{
++    Gtk::TreeModel::iterator iter = _store->get_iter(path);
++    Gtk::TreeModel::Row row = *iter;
++    PathAndDirection *w = row[_model->_colObject];
++    row[_model->_colReverse] = !row[_model->_colReverse];
++    w->reversed = row[_model->_colReverse];
++    
++    gchar * full = param_getSVGValue();
++    param_write_to_repr(full);
++    g_free(full);
++    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
++                       _("Link path parameter to path"));
++}
++
++void OriginalPathArrayParam::param_set_default()
++{
++    
++}
++
++Gtk::Widget* OriginalPathArrayParam::param_newWidget()
++{
++    Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
++    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
++
++    vbox->pack_start(_scroller, Gtk::PACK_EXPAND_WIDGET);
++    
++    
++    { // Paste path to link button
++        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_PASTE, Inkscape::ICON_SIZE_BUTTON) );
++        Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
++        pButton->set_relief(Gtk::RELIEF_NONE);
++        pIcon->show();
++        pButton->add(*pIcon);
++        pButton->show();
++        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_link_button_click));
++        hbox->pack_start(*pButton, Gtk::PACK_SHRINK);
++        pButton->set_tooltip_text(_("Link to path"));
++    }
++    
++    { // Remove linked path
++        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_REMOVE, Inkscape::ICON_SIZE_BUTTON) );
++        Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
++        pButton->set_relief(Gtk::RELIEF_NONE);
++        pIcon->show();
++        pButton->add(*pIcon);
++        pButton->show();
++        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_remove_button_click));
++        hbox->pack_start(*pButton, Gtk::PACK_SHRINK);
++        pButton->set_tooltip_text(_("Remove Path"));
++    }
++    
++    { // Move Down
++        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_GO_DOWN, Inkscape::ICON_SIZE_BUTTON) );
++        Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
++        pButton->set_relief(Gtk::RELIEF_NONE);
++        pIcon->show();
++        pButton->add(*pIcon);
++        pButton->show();
++        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_down_button_click));
++        hbox->pack_end(*pButton, Gtk::PACK_SHRINK);
++        pButton->set_tooltip_text(_("Move Down"));
++    }
++    
++    { // Move Down
++        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_GO_UP, Inkscape::ICON_SIZE_BUTTON) );
++        Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
++        pButton->set_relief(Gtk::RELIEF_NONE);
++        pIcon->show();
++        pButton->add(*pIcon);
++        pButton->show();
++        pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_up_button_click));
++        hbox->pack_end(*pButton, Gtk::PACK_SHRINK);
++        pButton->set_tooltip_text(_("Move Up"));
++    }
++    
++    vbox->pack_end(*hbox, Gtk::PACK_SHRINK);
++    
++    vbox->show_all_children(true);
++    
++    return vbox;
++}
++
++bool OriginalPathArrayParam::_selectIndex(const Gtk::TreeIter& iter, int* i)
++{
++    if ((*i)-- <= 0) {
++        _tree.get_selection()->select(iter);
++        return true;
++    }
++    return false;
++}
++
++void OriginalPathArrayParam::on_up_button_click()
++{
++    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
++    if (iter) {
++        Gtk::TreeModel::Row row = *iter;
++        
++        int i = -1;
++        std::vector<PathAndDirection*>::iterator piter = _vector.begin();
++        for (std::vector<PathAndDirection*>::iterator iter = _vector.begin(); iter != _vector.end(); piter = iter, i++, iter++) {
++            if (*iter == row[_model->_colObject]) {
++                _vector.erase(iter);
++                _vector.insert(piter, row[_model->_colObject]);
++                break;
++            }
++        }
++        
++        gchar * full = param_getSVGValue();
++        param_write_to_repr(full);
++        g_free(full);
++        
++        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
++                       _("Move path up"));
++        
++        _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_selectIndex), &i));
++    }
++}
++
++void OriginalPathArrayParam::on_down_button_click()
++{
++    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
++    if (iter) {
++        Gtk::TreeModel::Row row = *iter;
++
++        int i = 0;
++        for (std::vector<PathAndDirection*>::iterator iter = _vector.begin(); iter != _vector.end(); i++, iter++) {
++            if (*iter == row[_model->_colObject]) {
++                std::vector<PathAndDirection*>::iterator niter = _vector.erase(iter);
++                if (niter != _vector.end()) {
++                    niter++;
++                    i++;
++                }
++                _vector.insert(niter, row[_model->_colObject]);
++                break;
++            }
++        }
++        
++        gchar * full = param_getSVGValue();
++        param_write_to_repr(full);
++        g_free(full);
++        
++        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
++                       _("Move path down"));
++        
++        _store->foreach_iter(sigc::bind<int*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_selectIndex), &i));
++    }
++}
++
++void OriginalPathArrayParam::on_remove_button_click()
++{
++    Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
++    if (iter) {
++        Gtk::TreeModel::Row row = *iter;
++        remove_link(row[_model->_colObject]);
++        
++        gchar * full = param_getSVGValue();
++        param_write_to_repr(full);
++        g_free(full);
++        
++        DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
++                       _("Remove path"));
++    }
++    
++}
++
++void
++OriginalPathArrayParam::on_link_button_click()
++{
++    Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
++    Glib::ustring pathid = cm->getShapeOrTextObjectId(SP_ACTIVE_DESKTOP);
++
++    if (pathid == "") {
++        return;
++    }
++    // add '#' at start to make it an uri.
++    pathid.insert(pathid.begin(), '#');
++    
++    Inkscape::SVGOStringStream os;
++    bool foundOne = false;
++    for (std::vector<PathAndDirection*>::const_iterator iter = _vector.begin(); iter != _vector.end(); iter++) {
++        if (foundOne) {
++            os << "|";
++        } else {
++            foundOne = true;
++        }
++        os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0");
++    }
++    
++    if (foundOne) {
++        os << "|";
++    }
++    
++    os << pathid.c_str() << ",0";
++    
++    param_write_to_repr(os.str().c_str());
++    DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
++                       _("Link path parameter to path"));
++}
++
++void OriginalPathArrayParam::unlink(PathAndDirection* to)
++{
++    to->linked_modified_connection.disconnect();
++    to->linked_delete_connection.disconnect();
++    to->ref.detach();
++    to->_pathvector = Geom::PathVector();
++    if (to->href) {
++        g_free(to->href);
++        to->href = NULL;
++    }    
++}
++
++void OriginalPathArrayParam::remove_link(PathAndDirection* to)
++{
++    unlink(to);
++    for (std::vector<PathAndDirection*>::iterator iter = _vector.begin(); iter != _vector.end(); iter++) {
++        if (*iter == to) {
++            PathAndDirection *w = *iter;
++            _vector.erase(iter);
++            delete w;
++            return;
++        }
++    }
++}
++
++void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirection* to)
++{
++    //remove_link(to);
++    
++    gchar * full = param_getSVGValue();
++    param_write_to_repr(full);
++    g_free(full);
++}
++
++bool OriginalPathArrayParam::_updateLink(const Gtk::TreeIter& iter, PathAndDirection* pd)
++{
++    Gtk::TreeModel::Row row = *iter;
++    if (row[_model->_colObject] == pd) {
++        SPObject *obj = pd->ref.getObject();
++        row[_model->_colLabel] = obj && obj->getId() ? ( obj->label() ? obj->label() : obj->getId() ) : pd->href;
++        return true;
++    }
++    return false;
++}
++
++void OriginalPathArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new_obj, PathAndDirection* to)
++{
++    to->linked_delete_connection.disconnect();
++    to->linked_modified_connection.disconnect();
++    to->linked_transformed_connection.disconnect();
++    
++    if (new_obj && SP_IS_ITEM(new_obj)) {
++        to->linked_delete_connection = new_obj->connectDelete(sigc::bind<PathAndDirection*>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_delete), to));
++        to->linked_modified_connection = new_obj->connectModified(sigc::bind<PathAndDirection*>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_modified), to));
++        to->linked_transformed_connection = SP_ITEM(new_obj)->connectTransformed(sigc::bind<PathAndDirection*>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_transformed), to));
++
++        linked_modified(new_obj, SP_OBJECT_MODIFIED_FLAG, to);
++    } else {
++        to->_pathvector = Geom::PathVector();
++        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
++        _store->foreach_iter(sigc::bind<PathAndDirection*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
++    }
++}
++
++void OriginalPathArrayParam::linked_transformed(Geom::Affine const *mp, SPItem* original, PathAndDirection* to)
++{
++    
++}
++
++void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint flags, PathAndDirection* to)
++{
++    if (!to) {
++        return;
++    }
++    SPCurve *curve = NULL;
++    if (SP_IS_SHAPE(linked_obj)) {
++        curve = SP_SHAPE(linked_obj)->getCurvePerceived();
++    }
++    if (SP_IS_TEXT(linked_obj)) {
++        curve = SP_TEXT(linked_obj)->getNormalizedBpath();
++    }
++
++    if (curve == NULL) {
++        // curve invalid, set empty pathvector
++        to->_pathvector = Geom::PathVector();
++    } else {
++        to->_pathvector = curve->get_pathvector();
++        curve->unref();
++    }
++}
++
++void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, PathAndDirection* to)
++{
++    if (!to) {
++        return;
++    }
++    setPathVector(linked_obj, flags, to);
++    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
++    _store->foreach_iter(sigc::bind<PathAndDirection*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
++}
++
++//void PathParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item)
++//{
++//    linked_transformed_callback(rel_transf, moved_item);
++//}
++
++bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
++{
++    if (strvalue) {
++        while (!_vector.empty()) {
++            PathAndDirection *w = _vector.back();
++            unlink(w);
++            _vector.pop_back();
++            delete w;
++        }
++        _store->clear();
++
++        gchar ** strarray = g_strsplit(strvalue, "|", 0);
++        for (gchar ** iter = strarray; *iter != NULL; iter++) {
++            if ((*iter)[0] == '#') {
++                gchar ** substrarray = g_strsplit(*iter, ",", 0);
++                PathAndDirection* w = new PathAndDirection((SPObject *)param_effect->getLPEObj());
++                w->href = g_strdup(*substrarray);
++                w->reversed = *(substrarray+1) != NULL && (*(substrarray+1))[0] == '1';
++
++                w->linked_changed_connection = w->ref.changedSignal().connect(sigc::bind<PathAndDirection *>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_changed), w));
++                w->ref.attach(URI(w->href));
++
++                _vector.push_back(w);
++
++                Gtk::TreeModel::iterator iter = _store->append();
++                Gtk::TreeModel::Row row = *iter;
++                SPObject *obj = w->ref.getObject();
++
++                row[_model->_colObject] = w;
++                row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
++                row[_model->_colReverse] = w->reversed;
++                g_strfreev (substrarray);
++            }
++        }
++        g_strfreev (strarray);
++        return true;
++    }
++    return false;
++}
++
++gchar * OriginalPathArrayParam::param_getSVGValue() const
++{
++    Inkscape::SVGOStringStream os;
++    bool foundOne = false;
++    for (std::vector<PathAndDirection*>::const_iterator iter = _vector.begin(); iter != _vector.end(); iter++) {
++        if (foundOne) {
++            os << "|";
++        } else {
++            foundOne = true;
++        }
++        os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0");
++    }
++    gchar * str = g_strdup(os.str().c_str());
++    return str;
++}
++
++} /* namespace LivePathEffect */
++
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/parameter/originalpatharray.h'
+--- src/live_effects/parameter/originalpatharray.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/parameter/originalpatharray.h	2013-09-07 18:46:36 +0000
+@@ -0,0 +1,123 @@
++#ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINALPATHARRAY_H
++#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINALPATHARRAY_H
++
++/*
++ * Inkscape::LivePathEffectParameters
++ *
++* Copyright (C) Johan Engelen 2008 <j.b.c.engelen@utwente.nl>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <vector>
++
++#include <gtkmm/box.h>
++#include <gtkmm/treeview.h>
++#include <gtkmm/treestore.h>
++#include <gtkmm/scrolledwindow.h>
++
++#include "live_effects/parameter/parameter.h"
++#include "live_effects/parameter/path-reference.h"
++
++#include "svg/svg.h"
++#include "svg/stringstream.h"
++#include "path-reference.h"
++#include "sp-object.h"
++
++namespace Inkscape {
++
++namespace LivePathEffect {
++
++class PathAndDirection {
++public:
++    PathAndDirection(SPObject *owner)
++    : href(NULL),
++    ref(owner),
++    _pathvector(Geom::PathVector()),
++    reversed(false)
++    {
++        
++    }
++    gchar *href;
++    URIReference ref;
++    //SPItem *obj;
++    std::vector<Geom::Path> _pathvector;
++    bool reversed;
++    
++    sigc::connection linked_changed_connection;
++    sigc::connection linked_delete_connection;
++    sigc::connection linked_modified_connection;
++    sigc::connection linked_transformed_connection;
++};
++    
++class OriginalPathArrayParam : public Parameter {
++public:
++    class ModelColumns;
++    
++    OriginalPathArrayParam( const Glib::ustring& label,
++                const Glib::ustring& tip,
++                const Glib::ustring& key,
++                Inkscape::UI::Widget::Registry* wr,
++                Effect* effect);
++
++    virtual ~OriginalPathArrayParam();
++
++    virtual Gtk::Widget * param_newWidget();
++    virtual bool param_readSVGValue(const gchar * strvalue);
++    virtual gchar * param_getSVGValue() const;
++    virtual void param_set_default();
++    
++    /** Disable the canvas indicators of parent class by overriding this method */
++    virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
++    /** Disable the canvas indicators of parent class by overriding this method */
++    virtual void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) {};
++    
++    std::vector<PathAndDirection*> _vector;
++    
++protected:
++    bool _updateLink(const Gtk::TreeIter& iter, PathAndDirection* pd);
++    bool _selectIndex(const Gtk::TreeIter& iter, int* i);
++    void unlink(PathAndDirection* to);
++    void remove_link(PathAndDirection* to);
++    void setPathVector(SPObject *linked_obj, guint flags, PathAndDirection* to);
++    
++    void linked_changed(SPObject *old_obj, SPObject *new_obj, PathAndDirection* to);
++    void linked_modified(SPObject *linked_obj, guint flags, PathAndDirection* to);
++    void linked_transformed(Geom::Affine const *mp, SPItem *original, PathAndDirection* to);
++    void linked_delete(SPObject *deleted, PathAndDirection* to);
++    
++    ModelColumns *_model;
++    Glib::RefPtr<Gtk::TreeStore> _store;
++    Gtk::TreeView _tree;
++    Gtk::CellRendererText *_text_renderer;
++    Gtk::CellRendererToggle *_toggle_renderer;
++    Gtk::TreeView::Column *_name_column;
++    Gtk::ScrolledWindow _scroller;
++    
++    void on_link_button_click();
++    void on_remove_button_click();
++    void on_up_button_click();
++    void on_down_button_click();
++    void on_reverse_toggled(const Glib::ustring& path);
++    
++private:
++    OriginalPathArrayParam(const OriginalPathArrayParam&);
++    OriginalPathArrayParam& operator=(const OriginalPathArrayParam&);
++};
++
++} //namespace LivePathEffect
++
++} //namespace Inkscape
++
++#endif
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/parameter/transformedpoint.cpp'
+--- src/live_effects/parameter/transformedpoint.cpp	1970-01-01 00:00:00 +0000
++++ src/live_effects/parameter/transformedpoint.cpp	2013-09-07 18:46:36 +0000
+@@ -0,0 +1,182 @@
++/*
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <glibmm/i18n.h>
++
++#include "ui/widget/registered-widget.h"
++#include "live_effects/parameter/transformedpoint.h"
++#include "sp-lpe-item.h"
++#include "knotholder.h"
++#include "svg/svg.h"
++#include "svg/stringstream.h"
++
++#include "live_effects/effect.h"
++#include "desktop.h"
++#include "verbs.h"
++
++namespace Inkscape {
++
++namespace LivePathEffect {
++
++TransformedPointParam::TransformedPointParam( const Glib::ustring& label, const Glib::ustring& tip,
++                        const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
++                        Effect* effect, Geom::Point default_vector,
++                        bool dontTransform)
++    : Parameter(label, tip, key, wr, effect),
++      defvalue(default_vector),
++      origin(0.,0.),
++      vector(default_vector),
++      noTransform(dontTransform)
++{
++    vec_knot_shape = SP_KNOT_SHAPE_DIAMOND;
++    vec_knot_mode  = SP_KNOT_MODE_XOR;
++    vec_knot_color = 0xffffb500;
++}
++
++TransformedPointParam::~TransformedPointParam()
++{
++
++}
++
++void
++TransformedPointParam::param_set_default()
++{
++    setOrigin(Geom::Point(0.,0.));
++    setVector(defvalue);
++}
++
++bool
++TransformedPointParam::param_readSVGValue(const gchar * strvalue)
++{
++    gchar ** strarray = g_strsplit(strvalue, ",", 4);
++    if (!strarray) {
++        return false;
++    }
++    double val[4];
++    unsigned int i = 0;
++    while (i < 4 && strarray[i]) {
++        if (sp_svg_number_read_d(strarray[i], &val[i]) != 0) {
++            i++;
++        } else {
++            break;
++        }
++    }
++    g_strfreev (strarray);
++    if (i == 4) {
++        setOrigin( Geom::Point(val[0], val[1]) );
++        setVector( Geom::Point(val[2], val[3]) );
++        return true;
++    }
++    return false;
++}
++
++gchar *
++TransformedPointParam::param_getSVGValue() const
++{
++    Inkscape::SVGOStringStream os;
++    os << origin << " , " << vector;
++    gchar * str = g_strdup(os.str().c_str());
++    return str;
++}
++
++Gtk::Widget *
++TransformedPointParam::param_newWidget()
++{
++    Inkscape::UI::Widget::RegisteredVector * pointwdg = Gtk::manage(
++        new Inkscape::UI::Widget::RegisteredVector( param_label,
++                                                    param_tooltip,
++                                                    param_key,
++                                                    *param_wr,
++                                                    param_effect->getRepr(),
++                                                    param_effect->getSPDoc() ) );
++    pointwdg->setPolarCoords();
++    pointwdg->setValue( vector, origin );
++    pointwdg->clearProgrammatically();
++    pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change vector parameter"));
++
++    Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
++    static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
++    static_cast<Gtk::HBox*>(hbox)->show_all_children();
++
++    return dynamic_cast<Gtk::Widget *> (hbox);
++}
++
++void
++TransformedPointParam::set_and_write_new_values(Geom::Point const &new_origin, Geom::Point const &new_vector)
++{
++    setValues(new_origin, new_vector);
++    gchar * str = param_getSVGValue();
++    param_write_to_repr(str);
++    g_free(str);
++}
++
++void
++TransformedPointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
++{
++    if (!noTransform) {
++        set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
++    }
++}
++
++
++void
++TransformedPointParam::set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color)
++{
++    vec_knot_shape = shape;
++    vec_knot_mode  = mode;
++    vec_knot_color = color;
++}
++
++void
++TransformedPointParam::set_oncanvas_color(guint32 color)
++{
++    vec_knot_color = color;
++}
++
++class TransformedPointParamKnotHolderEntity_Vector : public KnotHolderEntity {
++public:
++    TransformedPointParamKnotHolderEntity_Vector(TransformedPointParam *p) : param(p) { }
++    virtual ~TransformedPointParamKnotHolderEntity_Vector() {}
++
++    virtual void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) {
++        Geom::Point const s = p - param->origin;
++        /// @todo implement angle snapping when holding CTRL
++        param->setVector(s);
++        sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
++    };
++    virtual Geom::Point knot_get() const{
++        return param->origin + param->vector;
++    };
++    virtual void knot_click(guint /*state*/){
++        g_print ("This is the vector handle associated to parameter '%s'\n", param->param_key.c_str());
++    };
++
++private:
++    TransformedPointParam *param;
++};
++
++void
++TransformedPointParam::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
++{
++    TransformedPointParamKnotHolderEntity_Vector *vector_e = new TransformedPointParamKnotHolderEntity_Vector(this);
++    vector_e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), vec_knot_shape, vec_knot_mode, vec_knot_color);
++    knotholder->add(vector_e);
++}
++
++} /* namespace LivePathEffect */
++
++} /* namespace Inkscape */
++
++/*
++  Local Variables:
++  mode:c++
++  c-file-style:"stroustrup"
++  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
++  indent-tabs-mode:nil
++  fill-column:99
++  End:
++*/
++// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
+=== added file 'src/live_effects/parameter/transformedpoint.h'
+--- src/live_effects/parameter/transformedpoint.h	1970-01-01 00:00:00 +0000
++++ src/live_effects/parameter/transformedpoint.h	2013-09-07 18:46:36 +0000
+@@ -0,0 +1,87 @@
++#ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_TRANSFORMED_POINT_H
++#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_TRANSFORMED_POINT_H
++
++/*
++ * Inkscape::LivePathEffectParameters
++ *
++ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
++ *
++ * Released under GNU GPL, read the file 'COPYING' for more information
++ */
++
++#include <glib.h>
++#include <2geom/point.h>
++
++#include "live_effects/parameter/parameter.h"
++
++#include "knot-holder-entity.h"
++
++namespace Inkscape {
++
++namespace LivePathEffect {
++
++
++class TransformedPointParam : public Parameter {
++public:
++    TransformedPointParam( const Glib::ustring& label,
++                const Glib::ustring& tip,
++                const Glib::ustring& key,
++                Inkscape::UI::Widget::Registry* wr,
++                Effect* effect,
++                Geom::Point default_vector = Geom::Point(1,0),
++                bool dontTransform = false);
++    virtual ~TransformedPointParam();
++
++    virtual Gtk::Widget * param_newWidget();
++    inline const gchar *handleTip() const { return param_tooltip.c_str(); }
++
++    virtual bool param_readSVGValue(const gchar * strvalue);
++    virtual gchar * param_getSVGValue() const;
++
++    Geom::Point getVector() const { return vector; };
++    Geom::Point getOrigin() const { return origin; };
++    void setValues(Geom::Point const &new_origin, Geom::Point const &new_vector) { setVector(new_vector); setOrigin(new_origin); };
++    void setVector(Geom::Point const &new_vector) { vector = new_vector; };
++    void setOrigin(Geom::Point const &new_origin) { origin = new_origin; };
++    virtual void param_set_default();
++
++    void set_and_write_new_values(Geom::Point const &new_origin, Geom::Point const &new_vector);
++
++    virtual void param_transform_multiply(Geom::Affine const &postmul, bool set);
++
++    void set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
++    //void set_origin_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
++    void set_oncanvas_color(guint32 color);
++
++    virtual bool providesKnotHolderEntities() const { return true; }
++    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
++
++private:
++    TransformedPointParam(const TransformedPointParam&);
++    TransformedPointParam& operator=(const TransformedPointParam&);
++
++    Geom::Point defvalue;
++
++    Geom::Point origin;
++    Geom::Point vector;
++
++    bool noTransform;
++    
++    /// The looks of the vector and origin knots oncanvas
++    SPKnotShapeType vec_knot_shape;
++    SPKnotModeType  vec_knot_mode;
++    guint32         vec_knot_color;
++//    SPKnotShapeType ori_knot_shape;
++//    SPKnotModeType  ori_knot_mode;
++//    guint32         ori_knot_color;
++
++//    friend class VectorParamKnotHolderEntity_Origin;
++    friend class TransformedPointParamKnotHolderEntity_Vector;
++};
++
++
++} //namespace LivePathEffect
++
++} //namespace Inkscape
++
++#endif
+
