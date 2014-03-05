@@ -42,7 +42,7 @@
 #include "context-fns.h"
 #include "tools-switch.h"
 #include "ui/control-manager.h"
-//spanish: incluimos los archivos necesarios para las BSpline y Spiro
+// we include the necessary files for BSpline & Spiro
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
@@ -166,7 +166,7 @@ PenTool::~PenTool() {
 void PenTool::setPolylineMode() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     guint mode = prefs->getInt("/tools/freehand/pen/freehand-mode", 0);
-    //spanish: cambiamos los modos para dar cabida al modo bspline
+    // change the nodes to make space for bspline mode
     this->polylines_only = (mode == 3 || mode == 4);
     this->polylines_paraxial = (mode == 4);
     //we call the function which defines the Spiro modes and the BSpline
@@ -178,7 +178,7 @@ void PenTool::setPolylineMode() {
 *.Set the mode of draw spiro, and bsplines
 */
 void PenTool::_pen_context_set_mode(guint mode) {
-    //spanish: definimos los modos
+    // define the nodes
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
 }
@@ -386,7 +386,7 @@ gint PenTool::_handleButtonPress(GdkEventButton const &bevent) {
     if(bevent.button != 3 && (this->spiro || this->bspline) && this->npoints > 0 && this->p[0] == this->p[3]){
         this->state = PenTool::STOP;
         if( anchor && anchor == this->sa && this->green_curve->is_empty()){
-            //spanish Borrar siguiente linea para evitar un nodo encima de otro
+            //remove the following line to avoid having one node on top of another
             _finishSegment(event_dt, bevent.state);
             _finish( FALSE);
             return TRUE;
@@ -512,7 +512,7 @@ gint PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                             }
                         }
 
-                        //spanish: evitamos la creación de un punto de control para que se cree el nodo en el evento de soltar
+                        // avoid the creation of a control point so a node is created in the release event
                         this->state = (this->spiro || this->bspline || this->polylines_only) ? PenTool::POINT : PenTool::CONTROL;
 
                         ret = TRUE;
@@ -705,7 +705,7 @@ gint PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
         default:
             break;
     }
-    //spanish: lanzamos la función "bspline_spiro_motion" al moverse el ratón o cuando se para.
+    // calls the function "bspline_spiro_motion" when the mouse starts or stops moving
     if(this->bspline){
         this->_bspline_spiro_color();
         this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
@@ -743,9 +743,7 @@ gint PenTool::_handleButtonRelease(GdkEventButton const &revent) {
         // Test whether we hit any anchor.
 
         SPDrawAnchor *anchor = spdc_test_inside(this, event_w);
-        //with this we avoid creating a new point over the existing one
-        //spanish: si intentamos crear un nodo en el mismo sitio que el origen, paramos.
-
+        // if we try to create a node in the same place as another node, we skip
         if((!anchor || anchor == this->sa) && (this->spiro || this->bspline) && this->npoints > 0 && this->p[0] == this->p[3]){
             return TRUE;
         }
@@ -760,7 +758,7 @@ gint PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                                 p = anchor->dp;
                             }
                             this->sa = anchor;
-                            //spanish: continuamos una curva existente
+                            // continue the existing curve
                             if (anchor) {
                                 if(this->bspline || this->spiro){
                                     this->_bspline_spiro_start_anchor(revent.state & GDK_SHIFT_MASK);;
@@ -790,7 +788,7 @@ gint PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                             this->_endpointSnap(p, revent.state);
                         }
                         this->_finishSegment(p, revent.state);
-                        //spanish: ocultamos la guia del penultimo nodo al cerrar la curva
+                        // hude the guide of the penultimate node when closing the curve
                         if(this->spiro){
                             sp_canvas_item_hide(this->c1);
                         }
@@ -817,7 +815,7 @@ gint PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                     case PenTool::CLOSE:
                         this->_endpointSnap(p, revent.state);
                         this->_finishSegment(p, revent.state);
-                        //spanish: ocultamos la guia del penultimo nodo al cerrar la curva
+                        // hide the penultimate node guide when closing the curve
                         if(this->spiro){
                             sp_canvas_item_hide(this->c1);
                         }
@@ -908,7 +906,7 @@ void PenTool::_redrawAll() {
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve);
 
     // handles
-    //spanish: ocultamos los tiradores en modo bspline y spiro
+    // hide the handlers in bspline and spiro modes
     if (this->p[0] != this->p[1] && !this->spiro && !this->bspline) {
         SP_CTRL(this->c1)->moveto(this->p[1]);
         this->cl1->setCoords(this->p[0], this->p[1]);
@@ -922,7 +920,7 @@ void PenTool::_redrawAll() {
     Geom::Curve const * last_seg = this->green_curve->last_segment();
     if (last_seg) {
         Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const *>( last_seg );
-        //spanish: ocultamos los tiradores en modo bspline y spiro
+        // hide the handlers in bspline and spiro modes
         if ( cubic &&
              (*cubic)[2] != this->p[0] && !this->spiro && !this->bspline )
         {
@@ -937,9 +935,8 @@ void PenTool::_redrawAll() {
         }
     }
 
-    //spanish: simplemente redibujamos la spiro.
-    //como es un redibujo simplemente no llamamos a la función global sino al final de esta
-    //Lanzamos solamente el redibujado
+    // simply redraw the spiro. because its a redrawing, we don't call the global function, 
+    // but we call the redrawing at the ending.
      this->_bspline_spiro_build();
 }
 
@@ -969,12 +966,12 @@ void PenTool::_lastpointMoveScreen(gdouble x, gdouble y) {
 }
 
 void PenTool::_lastpointToCurve() {
-    //spanish: evitamos que si la "red_curve" tiene solo dos puntos -recta- no se pare aqui.
+    // avoid that if the "red_curve" contains only two points ( rect ), it doesn't stop here.
     if (this->npoints != 5 && !this->spiro && !this->bspline)
         return;
     Geom::CubicBezier const * cubic;
     this->p[1] = this->red_curve->last_segment()->initialPoint() + (1./3)* (Geom::Point)(this->red_curve->last_segment()->finalPoint() - this->red_curve->last_segment()->initialPoint());
-    //spanish: modificamos el último segmento de la curva verde para que forme el tipo de nodo que deseamos
+    //modificate the last segment of the green curve so it creates the type of node we need
     if(this->spiro||this->bspline){
         if(!this->green_curve->is_empty()){
             Geom::Point A(0,0);
@@ -1012,7 +1009,7 @@ void PenTool::_lastpointToCurve() {
                 this->green_curve->append_continuous(previous, 0.0625);
             }
         }
-        //spanish: si el último nodo es una union con otra curva
+        //if the last node is an union with another curve
         if(this->green_curve->is_empty() && this->sa && !this->sa->curve->is_empty()){
             this->_bspline_spiro_start_anchor(false);
         }
@@ -1023,11 +1020,11 @@ void PenTool::_lastpointToCurve() {
 
 
 void PenTool::_lastpointToLine() {
-    //spanish: evitamos que si la "red_curve" tiene solo dos puntos -recta- no se pare aqui.
+    // avoid that if the "red_curve" contains only two points ( rect) it doesn't stop here.
     if (this->npoints != 5 && !this->bspline)
         return;
 
-    //spanish: modificamos el último segmento de la curva verde para que forme el tipo de nodo que deseamos
+    // modify the last segment of the green curve so the type of node we want is created.
     if(this->spiro || this->bspline){
         if(!this->green_curve->is_empty()){
             Geom::Point A(0,0);
@@ -1059,7 +1056,7 @@ void PenTool::_lastpointToLine() {
                 this->green_curve->append_continuous(previous, 0.0625);
             }
         }
-        //spanish: si el último nodo es una union con otra curva
+        // if the last node is an union with another curve
         if(this->green_curve->is_empty() && this->sa && !this->sa->curve->is_empty()){
             this->_bspline_spiro_start_anchor(true);
         }
@@ -1248,7 +1245,7 @@ gint PenTool::_handleKeyPress(GdkEvent *event) {
                     this->p[1] = this->p[0];
                 }
 
-                //spanish: asignamos el valor a un tercio de distancia del último segmento.
+                // asign the value in a third of the distance of the last segment.
                 if(this->bspline){
                     this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
                 }
@@ -1258,7 +1255,7 @@ gint PenTool::_handleKeyPress(GdkEvent *event) {
                                      : this->p[3]));
                 
                 this->npoints = 2;
-                //spanish: eliminamos el último segmento de la curva verde
+                // delete the last segment of the green curve
                 if( this->green_curve->get_segment_count() == 1){
                     this->npoints = 5;
                     if (this->green_bpaths) {
@@ -1270,7 +1267,7 @@ gint PenTool::_handleKeyPress(GdkEvent *event) {
                 }else{
                     this->green_curve->backspace();
                 }
-                //spanish: asignamos el valor de this->p[1] a el opuesto de el ultimo segmento de la línea verde
+                // assign the value of this->p[1] to the oposite of the green line last segment 
                 if(this->spiro){
                     cubic = dynamic_cast<Geom::CubicBezier const *>(this->green_curve->last_segment());
                     if ( cubic ) {
@@ -1285,7 +1282,8 @@ gint PenTool::_handleKeyPress(GdkEvent *event) {
                 this->state = PenTool::POINT;
                 this->_setSubsequentPoint(pt, true);
                 pen_last_paraxial_dir = !pen_last_paraxial_dir;
-                //spanish: redibujamos
+
+                //redraw
                 this->_bspline_spiro_build();
                 ret = TRUE;
             }
@@ -1360,9 +1358,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
     g_string_free(dist, FALSE);
 }
 
-
-
-//spanish: esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
+// this function changes the colors red, green and blue making them transparent or not, depending on if spiro is being used.
 void PenTool::_bspline_spiro_color()
 {
     bool remake_green_bpaths = false;
@@ -1736,8 +1732,7 @@ void PenTool::_bspline_spiro_end_anchor_off()
     }
 }
 
-
-//spanish: preparates the curves for its trasformation into BSline curves.
+//prepares the curves for its transformation into BSpline curve.
 void PenTool::_bspline_spiro_build()
 {
     if(!this->spiro && !this->bspline)
@@ -1766,7 +1761,7 @@ void PenTool::_bspline_spiro_build()
     }
 
     if(!curve->is_empty()){
-        //spanish: cerramos la curva si estan cerca los puntos finales de la curva
+        // close the curve if the final points of the curve are close enough
         if(Geom::are_near(curve->first_path()->initialPoint(), curve->last_path()->finalPoint())){
             curve->closepath_current();
         }
@@ -1805,7 +1800,7 @@ void PenTool::_bspline_spiro_build()
 
 void PenTool::_bspline_doEffect(SPCurve * curve)
 {
-    //spanish: comentado en funcion "doEffect" de src/live_effects/lpe-bspline.cpp
+    // commenting the function doEffect in src/live_effects/lpe-bspline.cpp
     if(curve->get_segment_count() < 2)
         return;
     Geom::PathVector const original_pathv = curve->get_pathvector();
@@ -1945,7 +1940,7 @@ void PenTool::_bspline_doEffect(SPCurve * curve)
 }
 
 //Spiro function cloned from lpe-spiro.cpp
-//spanish: comentado en funcion "doEffect" de src/live_effects/lpe-spiro.cpp
+// commenting the function "doEffect" from src/live_effects/lpe-spiro.cpp
 void PenTool::_spiro_doEffect(SPCurve * curve)
 {
     using Geom::X;
@@ -2178,7 +2173,7 @@ void PenTool::_finish(gboolean const closed) {
 
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Drawing finished"));
 
-    //spanish para cancelar linea sin un segmento creado
+    // cancelate line without a created segment
     this->red_curve->reset();
     spdc_concat_colors_and_flush(this, closed);
     this->sa = NULL;
