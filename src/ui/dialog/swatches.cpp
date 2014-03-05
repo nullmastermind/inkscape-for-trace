@@ -68,7 +68,7 @@
 #include "sp-radial-gradient.h"
 #include "color-rgba.h"
 #include "svg/css-ostringstream.h"
-//#include "event-context.h" //no longer exists
+#include "ui/tools/tool-base.h" //event-context.h
 #include <queue>
 #ifdef WIN32
 #include <windows.h>
