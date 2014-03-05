@@ -642,7 +642,7 @@ gint PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                             if(!this->spiro && !this->bspline){
                                 this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path."));
                             }else{
-                                this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path. Shift to cusp node"));
+                                this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path. Shift+Click make a cusp node"));
                             }
                             this->anchor_statusbar = true;
                         } else if (!anchor && this->anchor_statusbar) {
@@ -656,7 +656,7 @@ gint PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                             if(!this->spiro && !this->bspline){
                                 this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point."));
                             }else{
-                                this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point. Shift to cusp node"));      
+                                this->message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point. Shift+Click make a cusp node"));      
                             }
                             this->anchor_statusbar = true;
                         } else if (!anchor && this->anchor_statusbar) {
@@ -710,7 +710,7 @@ gint PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
         this->_bspline_spiro_color();
         this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
     }else{
-        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > tolerance || mevent.time == 0) {
+        if ( Geom::LInfty( event_w - pen_drag_origin_w ) > (tolerance/2) || mevent.time == 0) {
             this->_bspline_spiro_color();
             this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
             pen_drag_origin_w = event_w;
@@ -2079,8 +2079,8 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
             _("<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, <b>Enter</b> to finish the path");
         if(this->spiro || this->bspline){
             message = is_curve ?
-            _("<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift</b> to cusp node, <b>Enter</b> to finish the path" ):
-            _("<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift</b> to cusp node, <b>Enter</b> to finish the path");        
+            _("<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</b> make a cusp node, <b>Enter</b> to finish the path" ):
+            _("<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</b> make a cusp node, <b>Enter</b> to finish the path");        
         }
         this->_setAngleDistanceStatusMessage(p, 0, message);
     }
