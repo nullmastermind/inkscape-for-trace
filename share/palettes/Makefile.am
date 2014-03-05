@@ -1,6 +1,6 @@
 SUBDIRS = MLP
 
-palettesdir = $(datadir)/ponyscape/palettes
+palettesdir = $(datadir)/inkscape/palettes
 
 palettes_DATA = \
     README \

@@ -1,5 +1,5 @@
 
-MLPdir = $(datadir)/ponyscape/palettes/MLP
+MLPdir = $(datadir)/inkscape/palettes/MLP
 
 MLP_DATA = \
     All.gpl \

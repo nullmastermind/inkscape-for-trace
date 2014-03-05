@@ -1333,13 +1333,13 @@ void SwatchesPanel::_defsChanged()
 
             lbl = Gtk::manage(new Gtk::Label(_("[Base]")));
             eb->add(*lbl);
-            _insideTable.attach( *eb, 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND , 5, 0);
+            _insideTable.attach( *eb, 0, 1, 0, 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ , 5, 0);
         }
 
         ColorItem* item = Gtk::manage(new ColorItem(NULL, _("[None]"), _currentDesktop));
         item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), NULL));
         item->set_tooltip_text(_("[None]"));
-        _insideTable.attach( *item, _showlabels ? 1 : 0, _showlabels ? 2 : 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+        _insideTable.attach( *item, _showlabels ? 1 : 0, _showlabels ? 2 : 1, 0, 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ );
         
         unsigned int i = 1;
         for (SPObject *it = _currentDocument->getDefs()->firstChild(); it != NULL; it = it->next) {
@@ -1370,9 +1370,9 @@ void SwatchesPanel::_defsChanged()
                         item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), grad));
                         item->set_tooltip_text(it->label() ? it->label() : it->getId());
                         if (_showlabels) {
-                            _insideTable.attach( *item, 1 + (i % 20), 2 + (i % 20), i / 20, i / 20 + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+                            _insideTable.attach( *item, 1 + (i % 20), 2 + (i % 20), i / 20, i / 20 + 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ );
                         } else {
-                            _insideTable.attach( *item, i, i + 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+                            _insideTable.attach( *item, i, i + 1, 0, 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ );
                         }
 
                         i++;
@@ -1393,7 +1393,7 @@ void SwatchesPanel::_defsChanged()
                     eb->signal_button_press_event().connect_notify(sigc::bind<SPGroup*>(sigc::mem_fun(*this, &SwatchesPanel::_lblClick), SP_GROUP(it)));
                     lbl = Gtk::manage(new Gtk::Label(it->label() ? it->label() : it->getId()));
                     eb->add(*lbl);
-                    _insideTable.attach( *eb, 0, 1, i / 20, i / 20 + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND , 5, 0);
+                    _insideTable.attach( *eb, 0, 1, i / 20, i / 20 + 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ , 5, 0);
                 }
                 
                 Gtk::TreeModel::iterator rowiter;
@@ -1436,9 +1436,9 @@ void SwatchesPanel::_defsChanged()
                                 item->signal_button_press_event().connect_notify(sigc::bind<SPGradient *>(sigc::mem_fun(*this, &SwatchesPanel::_swatchClicked), grad));
                                 item->set_tooltip_text(cit->label() ? cit->label() : cit->getId());
                                 if (_showlabels) {
-                                    _insideTable.attach( *item, 1 + (i % 20), 2 + (i % 20), i / 20, i / 20 + 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+                                    _insideTable.attach( *item, 1 + (i % 20), 2 + (i % 20), i / 20, i / 20 + 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ );
                                 } else {
-                                    _insideTable.attach( *item, i, i + 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+                                    _insideTable.attach( *item, i, i + 1, 0, 1, Gtk::FILL/*|Gtk::EXPAND*/, Gtk::FILL/*|Gtk::EXPAND*/ );
                                 }
                                 i++;
                             }
@@ -2072,7 +2072,7 @@ bool SwatchesPanel::_handleDragDropDoc(const Glib::RefPtr<Gdk::DragContext>& con
 SwatchesPanel::SwatchesPanel(gchar const* prefsPath, bool showLabels) :
     Inkscape::UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SWATCHES, ""),
     _scroller(),
-    _insideTable(1, 2),
+    _insideTable(1, 1),
     _insideV(),
     _insideH(),
     _buttonsRow(),
