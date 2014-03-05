@@ -14,8 +14,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <glib.h>
 #include "ui/tools/tool-base.h"
-
-// we need it to call it from Live Effect
+//spanish: lo necesitamos para llamarlo desde el Live Effect
 #include "selection.h"
 
 namespace Inkscape {

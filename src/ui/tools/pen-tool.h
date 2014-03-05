@@ -49,7 +49,7 @@ public:
 
     bool polylines_only;
     bool polylines_paraxial;
-    // propiety which saves if Spiro mode is active or not
+    //spanish: propiedad que guarda si el modo Spiro está activo o no
     bool spiro;
     bool bspline;
     int num_clicks;
@@ -88,29 +88,29 @@ private:
 	gint _handleButtonRelease(GdkEventButton const &revent);
 	gint _handle2ButtonPress(GdkEventButton const &bevent);
 	gint _handleKeyPress(GdkEvent *event);
-    //adds spiro & bspline modes
+    //spanish: añade los modos spiro y bspline
     void _pen_context_set_mode(guint mode);
-    //this function changes the colors red, green and blue making them transparent or not depending on if the function uses spiro
+    //spanish: esta función cambia los colores rojo,verde y azul haciendolos transparentes o no en función de si se usa spiro
     void _bspline_spiro_color();
-    //creates a node in bspline or spiro modes
+    //spanish: crea un nodo en modo bspline o spiro
     void _bspline_spiro(bool shift);
-    //creates a node in bspline or spiro modes
+    //spanish: crea un nodo de modo spiro o bspline
     void _bspline_spiro_on();
-    //creates a CUSP node
+    //spanish: crea un nodo de tipo CUSP
     void _bspline_spiro_off();
-    //continues the existing curve in bspline or spiro mode
+    //spanish: continua una curva existente en modo bspline o spiro
     void _bspline_spiro_start_anchor(bool shift);
-    //continues the existing curve with the union node in bspline or spiro modes
+    //spanish: continua una curva exsitente con el nodo de union en modo bspline o spiro
     void _bspline_spiro_start_anchor_on();
-    //continues an existing curve with the union node in CUSP mode
+    //spanish: continua una curva existente con el nodo de union en modo CUSP
     void _bspline_spiro_start_anchor_off();
-    //modifies the "red_curve" when it detects movement
+    //spanish: modifica la "red_curve" cuando se detecta movimiento
     void _bspline_spiro_motion(bool shift);
-    //closes the curve with the last node in bspline or spiro mode
+    //spanish: cierra la curva con el último nodo en modo bspline o spiro
     void _bspline_spiro_end_anchor_on();
-    //closes the curve with the last node in CUSP mode
+    //spanish: cierra la curva con el último nodo en modo CUSP
     void _bspline_spiro_end_anchor_off();
-    //CHECK: join all the curves "in game" and we call doEffect function
+    //spanish: unimos todas las curvas en juego y llamamos a la función doEffect.
     void _bspline_spiro_build();
     //function bspline cloned from lpe-bspline.cpp
     void _bspline_doEffect(SPCurve * curve);

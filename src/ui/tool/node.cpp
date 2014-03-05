@@ -167,7 +167,7 @@ void Handle::move(Geom::Point const &new_pos)
         }
         setPosition(new_pos);
 
-        //move the handler and its oposite the same proportion
+        //spanish: mueve el tirador y su opuesto la misma proporción
         if(_pm().isBSpline(false)){
             setPosition(_pm().BSplineHandleReposition(this));
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
@@ -184,7 +184,7 @@ void Handle::move(Geom::Point const &new_pos)
             / Geom::L2sq(direction)) * direction;
         setRelativePos(new_delta);
 
-        //move the handler and its oposite the same proportion
+        //spanish: mueve el tirador y su opuesto la misma proporción
         if(_pm().isBSpline(false)){
             setPosition(_pm().BSplineHandleReposition(this));
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
@@ -210,7 +210,7 @@ void Handle::move(Geom::Point const &new_pos)
     }
     setPosition(new_pos);
 
-    // moves the handler and its oposite the same proportion
+    //spanish: mueve el tirador y su opuesto la misma proporción
     if(_pm().isBSpline(false)){
         setPosition(_pm().BSplineHandleReposition(this));
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
@@ -292,7 +292,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
             break;
         default: break;
         }
-    // new double click event to set the handlers of a node to the default proportion, 0.3334% 
+    //spanish: nuevo evento de doble click para resetear a la proporción por defecto, 0.3334%, los tiradores de un nodo
     case GDK_2BUTTON_PRESS:
         handle_2button_press();
         break;
@@ -303,7 +303,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-//this function moves the handler and its oposite to the default proportion of 0.3334
+//spanish: función que mueve el tirador y su opuesto a la proporción por defecto de 0.3334
 void Handle::handle_2button_press(){
     if(_pm().isBSpline(false)){
         setPosition(_pm().BSplineHandleReposition(this,0.3334));
@@ -359,8 +359,8 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - perp_pos);
         }
         new_pos = result;
-        // moves the handler and its oposite in X fixed positions depending on parameter "steps with control" 
-        // by default in live BSpline
+        //spanish: mueve el tirador y su opuesto en X posiciones fijas depenfiendo de la configuración de el
+        //parametro "steps whith control" del efecto en vivo BSpline
         if(_pm().isBSpline(false)){
             setPosition(new_pos);
             int steps = _pm().BSplineGetSteps();
@@ -370,7 +370,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
-    //if the snap adjustment is activated and it is not bspline
+    //spanish: si está activado el ajuste (snap) y no es bspline
     if (snap && !_pm().isBSpline(false)) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
@@ -411,7 +411,8 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             other()->setPosition(_saved_other_pos);
         }
     }
-    //if it is bspline but SHIFT or CONTROL are not pressed it fixes it in the original position
+    //spanish: si es bspline pero no está presionado SHIFT o CONTROL
+    //lo fija en la posición original
     if(_pm().isBSpline(false) && !held_shift(*event) && !held_control(*event)){
         new_pos=_last_drag_origin();
     }
@@ -431,7 +432,7 @@ void Handle::ungrabbed(GdkEventButton *event)
         Geom::Point dist = _desktop->d2w(_parent->position()) - _desktop->d2w(position());
         if (dist.length() <= drag_tolerance) {
             move(_parent->position());
-            //sets the bspline strength to 0.0000 
+            //spanish: marca la fuerza del bspline como 0.0000
             if(_pm().isBSpline(false)){
                 _parent->bsplineWeight = 0.0000;
             }
@@ -477,9 +478,9 @@ static double snap_increment_degrees() {
 Glib::ustring Handle::_getTip(unsigned state) const
 {
     char const *more;
-    // a trick to mark as bspline if the node has no strength, we are going to use it later
-    // to show the appropiate messages. We cannot do it in any different way becasue the function is constant
-
+    //spanish: un truco para, si el nodo tiene fuerza, nos marca que es
+    //del tipo bspline, lo utilizaremos despues para mostras los mensajes apropiados
+    //no lo podemos hacer de otra forma al ser constante la funcion
     bool isBSpline = false;
     if( _parent->bsplineWeight != 0.0000)
         isBSpline = true;
@@ -621,8 +622,8 @@ void Node::move(Geom::Point const &new_pos)
     // move handles when the node moves.
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
-
-    // save the previous node strength to apply it again once the node is moved 
+    //spanish: guardamos la fuerza anterior del nodo para reaplicarsela
+    //de nuevo una vez sea movido el nodo
     double oldPos = 0.0000;
     Node *n = this;
     if(_pm().isBSpline(false)){
@@ -637,8 +638,8 @@ void Node::move(Geom::Point const &new_pos)
     // if the node has a smooth handle after a line segment, it should be kept colinear
     // with the segment
     _fixNeighbors(old_pos, new_pos);
-
-    // move the affected handlers. First the node ones, later the adjoining ones.
+    //spanish: movemos los tiradores involucrados, primero los del nodo en cuestión
+    //y despues los de los nodos colindantes
     if(_pm().isBSpline(false)){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
@@ -648,7 +649,8 @@ void Node::move(Geom::Point const &new_pos)
 
 void Node::transform(Geom::Affine const &m)
 {
-    // save the previous node strength to apply it again later when the node is moved 
+    //spanish: guardamos la fuerza anterior del nodo para reaplicarsela
+    //de nuevo una vez sea movido el nodo
     double oldPos = 0.0000;
     if(_pm().isBSpline(false)){
         oldPos = this->bsplineWeight;
@@ -661,8 +663,8 @@ void Node::transform(Geom::Affine const &m)
     /* Affine transforms keep handle invariants for smooth and symmetric nodes,
      * but smooth nodes at ends of linear segments and auto nodes need special treatment */
     _fixNeighbors(old_pos, position());
-
-    // move the involved handlers, first the node ones, later the adjoining ones 
+    //spanish: movemos los tiradores involucrados, primero los del nodo en cuestión
+    //y despues los de los nodos colindantes
     if(_pm().isBSpline(false)){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
@@ -753,11 +755,9 @@ void Node::showHandles(bool v)
     if (!_back.isDegenerate()) {
         _back.setVisible(v);
     }
-
-    // define the node strength, depending on being or not bspline traced.
-    // every time we operate over these handlers in a trace bspline
-    // that strength needs to be updated.
-
+    //spanish: definimos la fuerza de los nodos,según sea o no trazado bspline.
+    //Cada vez que actuemos sobre dichos tiradores en un trazado
+    //bspline esta fuerza se tiene que actualizar
     this->bsplineWeight = 0.0000;
     if(_pm().isBSpline(false) && (!_front.isDegenerate() || !_back.isDegenerate())){
         if (!_front.isDegenerate()) {
@@ -868,8 +868,9 @@ void Node::setType(NodeType type, bool update_handles)
             break;
         default: break;
         }
-        /* in node type changes, about bspline traces, we can mantain them with 0.0000 power in border mode,
-           or we give them the default power in curve mode */
+        //spanish: en los cambios de tipo de nodo, sobre trazados bspline, 
+        //o bien los mantenemos con potencia 0.0000 en modo esquina
+        //o les damos la potencia por defecto en modo de curva
         if(_pm().isBSpline(false)){
             if(this->bsplineWeight !=0.0000) this->bsplineWeight = 0.3334;
             _front.setPosition(_pm().BSplineHandleReposition(this->front(),this->bsplineWeight));
@@ -1122,7 +1123,7 @@ void Node::_setState(State state)
         case STATE_CLICKED:
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
-            //this shows the handlers when selecting the nodes
+            //spanish: esto muestra los tiradores al seleccionar los nodos
             if(_pm().isBSpline(false)){
                 if(!this->back()->isDegenerate()){
                     _pm().BSplineHandlePosition(this->back());
@@ -1388,10 +1389,9 @@ Node *Node::nodeAwayFrom(Handle *h)
 
 Glib::ustring Node::_getTip(unsigned state) const
 {
-
-    /* if the node doesnt have strength, it marks it as bspline, we'll use it later
-       to show the appropiate messages. We cannot do it in any other way, because the
-       function is constant */
+    //spanish: un truco par, si el nodo tiene fuerza, nos marca que es
+    //del tipo bspline, lo utilizaremos despues para mostras los mensajes apropiados
+    //no lo podemos hacer de otra forma al ser constante la funcion
     bool isBSpline = false;
     if( this->bsplineWeight != 0.0000)
         isBSpline = true;

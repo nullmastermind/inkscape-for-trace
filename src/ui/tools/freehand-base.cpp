@@ -252,7 +252,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
-        //add the bspline node in the waiting effects
+        //spanish: añadimos el modo bspline a los efectos en espera
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
@@ -496,9 +496,9 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->blue2_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue2_bpath), NULL);
 
-    /* if c is empty, it might be that the user was trying to continue an existing curve and cancelled.
-       if this is the case and we are in bspline or spirolive the previous curve needs to be selected again because
-       we modify it when continuing through an anchor.     */
+    //spanish: si c esta vacio, puede ser que se haya tratado de contnuar una curva existente
+    //y se haya cancelado. Si es asi y el modo es bspline o spirolive la curva previa necesita volver a ser seleccionada
+    //porque la modificamos al continuar por un anchor
     if (c->is_empty()) {
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
             SPDesktop *desktop = dc->desktop;
@@ -527,10 +527,8 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
-
-        /* if we are in bspline or spirolive mode, the continuation and ending curve are updated when continuing or ending the curve in an anchor.
-           this causes that the original function doesn't detect if it's the same curve in case the curves have multiples parts -shift- and
-           close incorrectly one of the parts */
+        //spanish: si estamos en modo bspline o spirolive, la curva de continuación y finalización es actualizada al continuar o finalizar la curva en un anchor
+        //esto proboca que la función original no detecte si es la misma curva en el caso de curvas con multiples partes -shift- y cierre de manera erronea una de las partes
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
             if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
@@ -549,8 +547,8 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
             c->unref();
             dc->sa->curve->closepath_current();
         }
-
-        //if the curve has an bspline or spiro LPE, we execute spdc_flush_white, passing the necessary starting curve.
+        //spanish: Si la curva tiene un LPE del tipo bspline o spiro ejecutamos spdc_flush_white
+        //pasándole la curva de inicio necesaria
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
             dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
@@ -681,8 +679,9 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
         }
     }
 
-    /* modify the anchoring curve so it is equal to the starting curve. 
-       this curve is modified when it's modified and we need them to be equal to the closing curve */
+    //spanish: modificamos la curva de anclaje para que sea igual que la curva de inicio.
+    //esta curva fue modificada al continuar la curva y necesitamos que sea igual que la curva en
+    //la que cerramos el trazado.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if((prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
         prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) && 

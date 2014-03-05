@@ -663,7 +663,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
-    // if we are removing, we readjust the handlers
+    //spanish: si se borra, reajustamos los tiradores
     if(isBSpline(false)){
         double pos = 0.0000;
         if(start.prev()){
@@ -1182,7 +1182,7 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
-//determines if the trace has a bspline effect and the number of steps that it takes
+//spanish: determina si el trazado tiene efecto bspline y el numero de pasos que realiza
 int PathManipulator::BSplineGetSteps(){
 
     LivePathEffect::LPEBSpline *lpe_bsp = NULL;
@@ -1200,7 +1200,7 @@ int PathManipulator::BSplineGetSteps(){
     return steps;
 }
 
-// determines if the trace has bspline effect
+//spanish: determina si el trazado tiene efecto bspline
 bool PathManipulator::isBSpline(bool recalculate){
     static int BSplineSteps = this->BSplineGetSteps();
     if(recalculate){
@@ -1213,7 +1213,7 @@ bool PathManipulator::isBSpline(bool recalculate){
     return isBSpline;
 }
 
-// returns the corresponding strength to the position of a handler
+//spanish: devuelve la fuerza que le corresponderia a la posicón de un tirador
 double PathManipulator::BSplineHandlePosition(Handle *h){
     using Geom::X;
     using Geom::Y;
@@ -1231,13 +1231,13 @@ double PathManipulator::BSplineHandlePosition(Handle *h){
     return pos;
 }
 
-// moves the handler to the corresponding position
+//spanish: mueve el tirador a la posición que le corresponda
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h){
     double pos = this->BSplineHandlePosition(h);
     return BSplineHandleReposition(h,pos);
 }
 
-// moves the handler to the specified position
+//spanish: mueve el tirador a una posición específica
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     using Geom::X;
     using Geom::Y;
@@ -1263,7 +1263,7 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     return ret;
 }
 
-//moves the node handlers and its oposite handlers to the strength of its nodes  
+//spanish: mueve los tiradores del nodo y sus tiradores opuestos a la potencia de sus nodos
 void PathManipulator::BSplineNodeHandlesReposition(Node *n){
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
