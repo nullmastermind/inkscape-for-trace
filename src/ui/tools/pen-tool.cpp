@@ -384,7 +384,6 @@ gint PenTool::_handleButtonPress(GdkEventButton const &bevent) {
 
     //with this we avoid creating a new point over the existing one
     if(bevent.button != 3 && (this->spiro || this->bspline) && this->npoints > 0 && this->p[0] == this->p[3]){
-        this->state = PenTool::STOP;
         if( anchor && anchor == this->sa && this->green_curve->is_empty()){
             //remove the following line to avoid having one node on top of another
             _finishSegment(event_dt, bevent.state);
