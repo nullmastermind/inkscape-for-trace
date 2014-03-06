@@ -2102,7 +2102,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath, bool showLabels) :
         _insideV.pack_start(_insideH, Gtk::PACK_SHRINK);
         _scroller.add(_insideV);
     } else {
-        _scroller.property_height_request() = 45;
+        _scroller.property_height_request() = 20;
         _scroller.add(_insideH);
     }
         
