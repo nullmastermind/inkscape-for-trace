@@ -16,10 +16,10 @@
 
 
 
-pkgdatadir = $(datadir)/ponyscape
-pkgincludedir = $(includedir)/ponyscape
-pkglibdir = $(libdir)/ponyscape
-pkglibexecdir = $(libexecdir)/ponyscape
+pkgdatadir = $(datadir)/inkscape
+pkgincludedir = $(includedir)/inkscape
+pkglibdir = $(libdir)/inkscape
+pkglibexecdir = $(libexecdir)/inkscape
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -87,21 +87,19 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(MLPdir)"
 DATA = $(MLP_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/ponyscape-src/build-aux/missing --run aclocal-1.11
+ACLOCAL = ${SHELL} /home/inkscape-diff/build-aux/missing --run aclocal-1.11
 ALL_LINGUAS = 
-AMTAR = ${SHELL} /home/ponyscape-src/build-aux/missing --run tar
+AMTAR = ${SHELL} /home/inkscape-diff/build-aux/missing --run tar
 AM_DEFAULT_VERBOSITY = 0
 AR = ar
-AUTOCONF = ${SHELL} /home/ponyscape-src/build-aux/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/ponyscape-src/build-aux/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/ponyscape-src/build-aux/missing --run automake-1.11
+AUTOCONF = ${SHELL} /home/inkscape-diff/build-aux/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/inkscape-diff/build-aux/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/inkscape-diff/build-aux/missing --run automake-1.11
 AWK = mawk
 CAIRO_PDF_CFLAGS = -pthread -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  
 CAIRO_PDF_LIBS = -lz -lcairo  
 CAIRO_SVG_CFLAGS = -pthread -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  
 CAIRO_SVG_LIBS = -lcairo  
-CAIRO_USER_FONTS_CFLAGS = -pthread -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  
-CAIRO_USER_FONTS_LIBS = -lcairo  
 CARBON_LDFLAGS = 
 CC = gcc
 CCAS = gcc
@@ -136,20 +134,24 @@ FGREP = /bin/grep -F
 FREETYPE_CFLAGS = -I/usr/include/freetype2
 FREETYPE_CONFIG = /usr/bin/freetype-config
 FREETYPE_LIBS = -L/usr/lib/x86_64-linux-gnu -lfreetype -lz
+GDL_3_6_CFLAGS = 
+GDL_3_6_LIBS = 
 GETTEXT_MACRO_VERSION = 0.17
-GETTEXT_PACKAGE = ponyscape
-GLIBMM_USES_DEPRECATED_GLIB_SYMBOLS_CFLAGS = 
-GLIBMM_USES_DEPRECATED_GLIB_SYMBOLS_LIBS = 
+GETTEXT_PACKAGE = inkscape
+GLIBMM_2_32_CFLAGS = 
+GLIBMM_2_32_LIBS = 
 GMSGFMT = /usr/bin/msgfmt
 GMSGFMT_015 = /usr/bin/msgfmt
 GNOME_VFS_CFLAGS = -pthread -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/gnome-vfs-2.0 -I/usr/lib/gnome-vfs-2.0/include -I/usr/include/gconf/2  
 GNOME_VFS_LIBS = -pthread -lgnomevfs-2 -lgconf-2 -lgmodule-2.0 -lgobject-2.0 -lgthread-2.0 -lrt -lglib-2.0  
 GREP = /bin/grep
+GTK_CFLAGS = -pthread -I/usr/include/gtk-2.0 -I/usr/lib/x86_64-linux-gnu/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/pango-1.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/gtk-unix-print-2.0 -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/giomm-2.4 -I/usr/lib/giomm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/lib/pangomm-1.4/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/atkmm-1.6  
+GTK_LIBS = -pthread -lgtkmm-2.4 -latkmm-1.6 -lgdkmm-2.4 -lgiomm-2.4 -lpangomm-1.4 -lgtk-x11-2.0 -lglibmm-2.4 -lcairomm-1.0 -lsigc-2.0 -lgdk-x11-2.0 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0  
 IMAGEMAGICK_CFLAGS = -fopenmp -I/usr/include/ImageMagick  
 IMAGEMAGICK_LIBS = -lMagick++ -lMagickCore  
-INKSCAPE_CFLAGS = -pthread -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/gtk-2.0 -I/usr/lib/x86_64-linux-gnu/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/pango-1.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/gtk-unix-print-2.0 -I/usr/include/libxml2 -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/giomm-2.4 -I/usr/lib/giomm-2.4/include -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/lib/pangomm-1.4/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/atkmm-1.6  
+INKSCAPE_CFLAGS = -pthread -I/usr/include/gtk-2.0 -I/usr/lib/x86_64-linux-gnu/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/pango-1.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/gtk-unix-print-2.0 -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/giomm-2.4 -I/usr/lib/giomm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/lib/pangomm-1.4/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/atkmm-1.6   -pthread -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/pango-1.0 -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/giomm-2.4 -I/usr/lib/giomm-2.4/include -I/usr/include/libxml2  
 INKSCAPE_DATADIR = /usr/local/share
-INKSCAPE_LIBS = -pthread -lgc -lxslt -lxml2 -lpng12 -lgsl -lgslcblas -lm -lgtkmm-2.4 -latkmm-1.6 -lgdkmm-2.4 -lgiomm-2.4 -lpangomm-1.4 -lgtk-x11-2.0 -lglibmm-2.4 -lcairomm-1.0 -lsigc-2.0 -lgdk-x11-2.0 -latk-1.0 -lgio-2.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo -lpangoft2-1.0 -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0   -lX11 -lz -lxml2 -ldl -lgomp -lpopt -laspell
+INKSCAPE_LIBS = -pthread -lgtkmm-2.4 -latkmm-1.6 -lgdkmm-2.4 -lgiomm-2.4 -lpangomm-1.4 -lgtk-x11-2.0 -lglibmm-2.4 -lcairomm-1.0 -lsigc-2.0 -lgdk-x11-2.0 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0   -pthread -lgc -lcairomm-1.0 -lcairo -lgiomm-2.4 -lgio-2.0 -lglibmm-2.4 -lgsl -lgslcblas -lm -lpng12 -lxslt -lxml2 -lpangoft2-1.0 -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0 -lsigc-2.0   -lz -lxml2 -ldl -lgomp -lpopt -laspell
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -187,7 +189,7 @@ LN_S = ln -s
 LTLIBICONV = -liconv
 LTLIBINTL = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/ponyscape-src/build-aux/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/inkscape-diff/build-aux/missing --run makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 MSGFMT = /usr/bin/msgfmt
@@ -200,14 +202,14 @@ OBJEXT = o
 OPENMP_CXXFLAGS = -fopenmp
 OTOOL = 
 OTOOL64 = 
-PACKAGE = ponyscape
+PACKAGE = inkscape
 PACKAGE_BUGREPORT = http://bugs.launchpad.net/inkscape/+filebug
 PACKAGE_LOCALE_DIR = /usr/local/share/locale
-PACKAGE_NAME = ponyscape
-PACKAGE_STRING = ponyscape 0.4
-PACKAGE_TARNAME = ponyscape
-PACKAGE_URL = http://ponyscape.org/
-PACKAGE_VERSION = 0.4
+PACKAGE_NAME = inkscape
+PACKAGE_STRING = inkscape 0.48+devel
+PACKAGE_TARNAME = inkscape
+PACKAGE_URL = http://inkscape.org/
+PACKAGE_VERSION = 0.48+devel
 PANGO_USES_DEPRECATED_GLIB_SYMBOLS_CFLAGS = 
 PANGO_USES_DEPRECATED_GLIB_SYMBOLS_LIBS = 
 PATH_SEPARATOR = :
@@ -232,15 +234,17 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = strip
 USE_NLS = yes
-VERSION = 0.4
+VERSION = 0.48+devel
 WIN32_CFLAGS = 
+X11_CFLAGS =  
+X11_LIBS = -lX11  
 XGETTEXT = /usr/bin/xgettext
 XGETTEXT_015 = /usr/bin/xgettext
 XGETTEXT_EXTRA_OPTIONS = 
-abs_builddir = /home/ponyscape-src/share/palettes/MLP
-abs_srcdir = /home/ponyscape-src/share/palettes/MLP
-abs_top_builddir = /home/ponyscape-src
-abs_top_srcdir = /home/ponyscape-src
+abs_builddir = /home/inkscape-diff/share/palettes/MLP
+abs_srcdir = /home/inkscape-diff/share/palettes/MLP
+abs_top_builddir = /home/inkscape-diff
+abs_top_srcdir = /home/inkscape-diff
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -270,7 +274,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/ponyscape-src/build-aux/install-sh
+install_sh = ${SHELL} /home/inkscape-diff/build-aux/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -290,7 +294,7 @@ target_alias =
 top_build_prefix = ../../../
 top_builddir = ../../..
 top_srcdir = ../../..
-MLPdir = $(datadir)/ponyscape/palettes/MLP
+MLPdir = $(datadir)/inkscape/palettes/MLP
 MLP_DATA = \
     All.gpl \
     Applejack.gpl \
@@ -318,9 +322,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu share/palettes/MLP/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign share/palettes/MLP/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu share/palettes/MLP/Makefile
+	  $(AUTOMAKE) --foreign share/palettes/MLP/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

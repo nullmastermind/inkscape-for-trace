@@ -1100,6 +1100,7 @@ share/icons/application/256x256/Makefile
 share/keys/Makefile
 share/markers/Makefile
 share/palettes/Makefile
+share/palettes/MLP/Makefile
 share/patterns/Makefile
 share/screens/Makefile
 share/symbols/Makefile

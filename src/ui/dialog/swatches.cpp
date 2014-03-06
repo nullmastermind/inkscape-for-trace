@@ -1448,9 +1448,11 @@ void SwatchesPanel::_defsChanged()
             }
         }
     }
-    
+    //_scroller.resize(1,1);
+    _insideTable.resize(1,1);
     _scroller.show_all_children();
     _scroller.queue_draw();
+
 }
 
 Gtk::MenuItem* SwatchesPanel::_addSwatchGroup(SPGroup* group, Gtk::TreeModel::Row* parentRow)
@@ -2258,6 +2260,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath, bool showLabels) :
     rootWatcher = new SwatchWatcher(this, SwatchDocument->getDefs(), true);
     SwatchDocument->getDefs()->getRepr()->addObserver(*rootWatcher);
     _swatchesChanged();
+    _insideTable.resize(1,1);
 }
 
 SwatchesPanel::~SwatchesPanel()
