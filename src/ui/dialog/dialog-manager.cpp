@@ -111,7 +111,7 @@ DialogManager::DialogManager() {
         registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          FloatingBehavior>);
         registerFactory("ObjectsPanel",        &create<ObjectsPanel,         FloatingBehavior>);
-        //registerFactory("TagsPanel",           &create<TagsPanel,            FloatingBehavior>);
+//        registerFactory("TagsPanel",           &create<TagsPanel,            FloatingBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, FloatingBehavior>);
         registerFactory("Memory",              &create<Memory,               FloatingBehavior>);
         registerFactory("Messages",            &create<Messages,             FloatingBehavior>);
@@ -147,7 +147,7 @@ DialogManager::DialogManager() {
         registerFactory("InkscapePreferences", &create<InkscapePreferences,  DockBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          DockBehavior>);
         registerFactory("ObjectsPanel",        &create<ObjectsPanel,         DockBehavior>);
-        //registerFactory("TagsPanel",           &create<TagsPanel,            FloatingBehavior>);
+//        registerFactory("TagsPanel",           &create<TagsPanel,            DockBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, DockBehavior>);
         registerFactory("Memory",              &create<Memory,               DockBehavior>);
         registerFactory("Messages",            &create<Messages,             DockBehavior>);

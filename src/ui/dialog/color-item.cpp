@@ -12,7 +12,6 @@
  */
 
 #include <errno.h>
-#include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <cairo.h>
 #include <gtk/gtk.h>
@@ -40,6 +39,7 @@
 
 #include "color.h" // for SP_RGBA32_U_COMPOSE
 
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {

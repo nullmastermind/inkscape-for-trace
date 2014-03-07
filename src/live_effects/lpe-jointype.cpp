@@ -12,6 +12,9 @@
 
 #include <math.h>
 
+#include "live_effects/parameter/enum.h"
+#include "live_effects/pathoutlineprovider.h"
+
 #include "sp-shape.h"
 #include "style.h"
 #include "xml/repr.h"
@@ -20,11 +23,9 @@
 #include "desktop-style.h"
 #include "svg/css-ostringstream.h"
 #include "display/curve.h"
-#include "live_effects/parameter/enum.h"
 
 #include <2geom/path.h>
 #include <2geom/svg-elliptical-arc.h>
-#include "live_effects/pathoutlineprovider.h"
 
 #include "lpe-jointype.h"
 

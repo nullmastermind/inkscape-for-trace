@@ -7,7 +7,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include "display/cairo-utils.h"
 
 #include <gtkmm/icontheme.h>
@@ -16,6 +23,7 @@
 #include "widgets/icon.h"
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {

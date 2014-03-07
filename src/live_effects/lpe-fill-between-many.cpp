@@ -4,7 +4,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 
 #include "live_effects/lpe-fill-between-many.h"
@@ -15,6 +14,8 @@
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "2geom/bezier-curve.h"
+
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

@@ -1,4 +1,3 @@
-SUBDIRS = MLP
 
 palettesdir = $(datadir)/inkscape/palettes
 

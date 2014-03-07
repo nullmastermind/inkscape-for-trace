@@ -4,8 +4,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
-
 #include "ui/dialog/lpe-powerstroke-properties.h"
 #include "live_effects/parameter/powerstrokepointarray.h"
 
@@ -21,6 +19,8 @@
 // needed for on-canvas editting:
 #include "desktop.h"
 #include "live_effects/lpeobject.h"
+
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 
@@ -145,7 +145,7 @@ public:
     virtual Geom::Point knot_get() const;
     virtual void knot_click(guint state);
 
-    /** Checks whether the index falls within the size of the parameter's vector /
+    // Checks whether the index falls within the size of the parameter's vector
     bool valid_index(unsigned int index) const {
         return (_pparam->_vector.size() > index);
     };
