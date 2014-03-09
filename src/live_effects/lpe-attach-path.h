@@ -45,7 +45,7 @@ private:
     ScalarParam end_path_position;
     TransformedPointParam end_path_curve_start;
     VectorParam end_path_curve_end;
-    const SPLPEItem * lpe_effect;
+    SPLPEItem * lpe_effect;
 };
 
 }; //namespace LivePathEffect

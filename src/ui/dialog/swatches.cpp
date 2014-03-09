@@ -6,6 +6,7 @@
  *   Jon A. Cruz
  *   John Bintz
  *   Abhishek Sharma
+ *   Theodore Janezcko
  *
  * Copyright (C) 2005 Jon A. Cruz
  * Copyright (C) 2008 John Bintz

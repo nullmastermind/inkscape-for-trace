@@ -62,9 +62,9 @@ void LPEAttachPath::resetDefaults(SPItem const * item)
     curve_end_previous_origin = end_path_curve_end.getOrigin();
 }
 
-void LPEAttachPath::doBeforeEffect(const SPLPEItem *lpeitem)
+void LPEAttachPath::doBeforeEffect(SPLPEItem const *lpeitem)
 {
-    lpe_effect = lpeitem;
+    lpe_effect = const_cast<SPLPEItem*> (lpeitem);
 }
 
 void LPEAttachPath::doEffect (SPCurve * curve)

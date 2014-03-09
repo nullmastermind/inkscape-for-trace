@@ -47,7 +47,7 @@
 #include "live_effects/lpe-extrude.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-clone-original.h"
-//#include "live_effects/lpe-attach-path.h"
+#include "live_effects/lpe-attach-path.h"
 #include "live_effects/lpe-fill-between-strokes.h"
 #include "live_effects/lpe-fill-between-many.h"
 #include "live_effects/lpe-ellipse_5pts.h"
@@ -130,7 +130,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
 /* Ponyscape */
-//    {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
+    {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
@@ -258,9 +258,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case CLONE_ORIGINAL:
             neweffect = static_cast<Effect*> ( new LPECloneOriginal(lpeobj) );
             break;
-        /*case ATTACH_PATH:
+        case ATTACH_PATH:
             neweffect = static_cast<Effect*> ( new LPEAttachPath(lpeobj) );
-            break;*/
+            break;
         case FILL_BETWEEN_STROKES:
             neweffect = static_cast<Effect*> ( new LPEFillBetweenStrokes(lpeobj) );
             break;
