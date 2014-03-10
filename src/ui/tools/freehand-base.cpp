@@ -501,8 +501,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
        we modify it when continuing through an anchor.     */
     if (c->is_empty()) {
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-            SPDesktop *desktop = dc->desktop;
-            spdc_selection_modified(sp_desktop_selection(desktop), 0, dc);
+            spdc_selection_modified(sp_desktop_selection(dc->desktop), 0, dc);
         }
         c->unref();
         return;
@@ -541,6 +540,11 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
             if(Geom::are_near(dc->sa->curve->first_path()->initialPoint(), dc->ea->dp)){
                 dc->sa->curve->closepath_current();
             }
+
+            // if the curve has an bspline or spiro LPE, we execute
+            // spdc_flush_white, passing the necessary starting curve.
+            dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
+            spdc_flush_white(dc, dc->sa->curve);
         }else{
             if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
                 c = reverse_then_unref(c);
@@ -548,16 +552,9 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
             dc->sa->curve->append_continuous(c, 0.0625);
             c->unref();
             dc->sa->curve->closepath_current();
-        }
-
-        //if the curve has an bspline or spiro LPE, we execute spdc_flush_white, passing the necessary starting curve.
-        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
-           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-            dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
-            spdc_flush_white(dc, dc->sa->curve);
-        }else{
             spdc_flush_white(dc, NULL);
         }
+
         return;
     }
 
