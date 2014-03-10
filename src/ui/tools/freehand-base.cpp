@@ -501,8 +501,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
        we modify it when continuing through an anchor.     */
     if (c->is_empty()) {
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-            SPDesktop *desktop = dc->desktop;
-            spdc_selection_modified(sp_desktop_selection(desktop), 0, dc);
+            spdc_selection_modified(sp_desktop_selection(dc->desktop), 0, dc);
         }
         c->unref();
         return;
