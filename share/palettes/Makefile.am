@@ -17,7 +17,6 @@ palettes_DATA = \
     Reds.gpl \
     Royal.gpl \
     svg.gpl \
-    swatches.svg \
     Tango-Palette.gpl \
     Topographic.gpl \
     Ubuntu.gpl \

@@ -5,7 +5,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define LPE_ENABLE_TEST_EFFECTS
+//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -52,7 +52,7 @@
 #include "live_effects/lpe-fill-between-many.h"
 #include "live_effects/lpe-ellipse_5pts.h"
 #include "live_effects/lpe-bounding-box.h"
-#include "live_effects/lpe-jointype.h"
+//#include "live_effects/lpe-jointype.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -109,7 +109,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
-    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+//    {JOIN_TYPE,             N_("Join type"),               "join_type"},
 #endif
 /* 0.46 */
     {BEND_PATH,             N_("Bend"),                    "bend_path"},
@@ -273,9 +273,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case BOUNDING_BOX:
             neweffect = static_cast<Effect*> ( new LPEBoundingBox(lpeobj) );
             break;
-        case JOIN_TYPE:
+        /*case JOIN_TYPE:
             neweffect = static_cast<Effect*> ( new LPEJoinType(lpeobj) );
-            break;
+            break;*/
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
             neweffect = NULL;

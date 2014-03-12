@@ -467,6 +467,7 @@ void ObjectProperties::label_changed(void)
     blocked = true;
 
     /* Retrieve the label widget for the object's id */
+    //bug 1290573: getId() crashes after undo (cannot create string from NULL ptr)
     gchar *id = g_strdup(EntryID.get_text().c_str());
     g_strcanon (id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
     if (!strcmp (id, item->getId())) {

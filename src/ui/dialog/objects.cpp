@@ -3,6 +3,7 @@
  *
  * Authors:
  *   Theodore Janeczko
+ *   Tweaked by Liam P White for use in Inkscape
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
@@ -17,20 +18,31 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
+#include <gtkmm/stock.h>
 
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "desktop-style.h"
+#include "dialogs/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
+#include "filter-chemistry.h"
+#include "filters/blend.h"
+#include "filters/gaussian-blur.h"
 #include "helper/action.h"
 #include "inkscape.h"
+#include "layer-manager.h"
 #include "preferences.h"
+#include "selection.h"
+#include "sp-clippath.h"
+#include "sp-mask.h"
 #include "sp-item.h"
 #include "sp-object.h"
+#include "sp-root.h"
 #include "sp-shape.h"
-#include "svg/css-ostringstream.h"
+#include "style.h"
+#include "tools-switch.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/layertypeicon.h"
@@ -38,28 +50,15 @@
 #include "ui/widget/clipmaskicon.h"
 #include "ui/widget/highlight-picker.h"
 #include "ui/tools/node-tool.h"
+#include "ui/tools/tool-base.h"
 #include "verbs.h"
+#include "widgets/sp-color-notebook.h"
 #include "widgets/icon.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
 #include "xml/repr.h"
-#include "sp-root.h"
-//#include "event-context.h"
-#include "selection.h"
-#include "dialogs/dialog-events.h"
-#include "widgets/sp-color-notebook.h"
-#include "style.h"
-#include "filter-chemistry.h"
-#include "filters/blend.h"
-#include "filters/gaussian-blur.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "layer-manager.h"
-#include "tools-switch.h"
 
 //#define DUMP_LAYERS 1
-
-guint get_group0_keyval(GdkEventKey *event);
 
 namespace Inkscape {
 namespace UI {
@@ -82,7 +81,7 @@ enum {
     COL_VISIBLE = 1,
     COL_LOCKED,
     COL_TYPE,
-    COL_INSERTORDER,
+//    COL_INSERTORDER,
     COL_CLIPMASK,
     COL_HIGHLIGHT
 };
@@ -106,8 +105,8 @@ enum {
     BUTTON_LOCK_ALL,
     BUTTON_UNLOCK_ALL,
     BUTTON_SETCLIP,
-    BUTTON_CLIPGROUP,
-    BUTTON_SETINVCLIP,
+//    BUTTON_CLIPGROUP,
+//    BUTTON_SETINVCLIP,
     BUTTON_UNSETCLIP,
     BUTTON_SETMASK,
     BUTTON_UNSETMASK,
@@ -214,7 +213,7 @@ public:
         add(_colType);
         add(_colHighlight);
         add(_colClipMask);
-        add(_colInsertOrder);
+        //add(_colInsertOrder);
     }
     virtual ~ModelColumns() {}
 
@@ -225,7 +224,7 @@ public:
     Gtk::TreeModelColumn<int> _colType;
     Gtk::TreeModelColumn<guint32> _colHighlight;
     Gtk::TreeModelColumn<int> _colClipMask;
-    Gtk::TreeModelColumn<int> _colInsertOrder;
+    //Gtk::TreeModelColumn<int> _colInsertOrder;
 };
 
 /**
@@ -352,13 +351,19 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
                 Gtk::TreeModel::Row row = *iter;
                 row[_model->_colObject] = item;
-                row[_model->_colLabel] = item->label() ? item->label() : item->getId();
+                //this seems to crash on convert stroke to path then undo (probably no ID?)
+                try {
+                    row[_model->_colLabel] = item->label() ? item->label() : item->getId();
+                } catch (...) {
+                    row[_model->_colLabel] = Glib::ustring("getId_failure");
+                    g_critical("item->getId() failed, using \"getId_failure\"");
+                }
                 row[_model->_colVisible] = !item->isHidden();
                 row[_model->_colLocked] = !item->isSensitive();
                 row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
                 row[_model->_colHighlight] = item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00;
                 row[_model->_colClipMask] = item->clip_ref && item->clip_ref->getObject() ? 1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0);
-                row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
+                //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
                 //If our parent object is a group and it's expanded, expand the tree
                 if (SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded())
@@ -388,7 +393,10 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
  */
 void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
     //Find the object in the tree store and update it
+
+    //mark
     _store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
+    //end mark
     if (recurse)
     {
         for (SPObject * iter = obj->children; iter != NULL; iter = iter->next)
@@ -419,7 +427,7 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
         row[_model->_colHighlight] = item ? (item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00) : 0;
         row[_model->_colClipMask] = item ? (item->clip_ref && item->clip_ref->getObject() ?  1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)) : 0;
-        row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
+        //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
         return true;
     }
@@ -685,7 +693,9 @@ void ObjectsPanel::_setLockedIter( const Gtk::TreeModel::iterator& iter, const b
 bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
 {
 
-    switch (get_group0_keyval(event)) {
+    bool empty = _desktop->selection->isEmpty();
+
+    switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
         case GDK_KEY_F2:
@@ -702,68 +712,33 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         }
         break;
         case GDK_Home:
-        {
             //Move item(s) to top of containing group/layer
-            if (_desktop->selection->isEmpty())
-            {
-                _fireAction( SP_VERB_LAYER_TO_TOP );
-            }
-            else
-            {
-                _fireAction( SP_VERB_SELECTION_TO_FRONT );
-            }
-            return true;
-        }
+            _fireAction( empty ? SP_VERB_LAYER_TO_TOP : SP_VERB_SELECTION_TO_FRONT );
+            break;
         case GDK_End:
-        {
             //Move item(s) to bottom of containing group/layer
-            if (_desktop->selection->isEmpty())
-            {
-                _fireAction( SP_VERB_LAYER_TO_BOTTOM );
-            }
-            else
-            {
-                _fireAction( SP_VERB_SELECTION_TO_BACK );
-            }
-            return true;
-        }
+            _fireAction( empty ? SP_VERB_LAYER_TO_BOTTOM : SP_VERB_SELECTION_TO_BACK );
+            break;
         case GDK_KEY_Page_Up:
         {
             //Move item(s) up in containing group/layer
-            if (_desktop->selection->isEmpty())
-            {
-                _fireAction( SP_VERB_LAYER_RAISE );
-            }
-            else
-            {
-                if (event->state & GDK_SHIFT_MASK) {
-                    _fireAction( SP_VERB_LAYER_MOVE_TO_NEXT );
-                } else {
-                    _fireAction( SP_VERB_SELECTION_RAISE );
-                }
-            }
-            return true;
+            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_NEXT : SP_VERB_SELECTION_RAISE;
+            _fireAction( empty ? SP_VERB_LAYER_RAISE : ch );
+            break;
         }
         case GDK_KEY_Page_Down:
         {
             //Move item(s) down in containing group/layer
-            if (_desktop->selection->isEmpty())
-            {
-                _fireAction( SP_VERB_LAYER_LOWER );
-            }
-            else
-            {
-                if (event->state & GDK_SHIFT_MASK) {
-                    _fireAction( SP_VERB_LAYER_MOVE_TO_PREV );
-                } else {
-                    _fireAction( SP_VERB_SELECTION_LOWER );
-                }
-            }
-            return true;
+            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_PREV : SP_VERB_SELECTION_LOWER;
+            _fireAction( empty ? SP_VERB_LAYER_LOWER : ch );
+            break;
         }
+
         //TODO: Handle Ctrl-A, etc.
+        default:
+            return false;
     }
-    return false;
+    return true;
 }
 
 /**
@@ -809,7 +784,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                 return true;
             } else if (col == _tree.get_column(COL_LOCKED-1) ||
                     col == _tree.get_column(COL_TYPE-1) ||
-                    col == _tree.get_column(COL_INSERTORDER - 1) ||
+                        //col == _tree.get_column(COL_INSERTORDER - 1) ||
                     col == _tree.get_column(COL_HIGHLIGHT-1)) {
                 //Click on an icon column, eat this event to keep row selection
                 return true;
@@ -926,7 +901,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                             DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Layer to group") : _("Group to layer"));
                         }
-                    } else if (col == _tree.get_column(COL_INSERTORDER - 1)) {
+                    } /*else if (col == _tree.get_column(COL_INSERTORDER - 1)) {
                         if (SP_IS_GROUP(item))
                         {
                             //Toggle the current item's insert order
@@ -938,7 +913,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                             DocumentUndo::done( _desktop->doc() , SP_VERB_DIALOG_OBJECTS,
                                             newValue? _("Set insert mode bottom") : _("Set insert mode top"));
                         }
-                    } else if (col == _tree.get_column(COL_HIGHLIGHT - 1)) {
+                    }*/ else if (col == _tree.get_column(COL_HIGHLIGHT - 1)) {
                         //Clear the highlight targets
                         _highlight_target.clear();
                         if (_tree.get_selection()->is_selected(path))
@@ -1474,7 +1449,7 @@ void sp_highlight_picker_color_mod(SPColorSelector *csel, GObject * cp)
         target->setHighlightColor(rgba);
         target->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
-    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_OBJECTS, _("Set object highlight color"));
+    DocumentUndo::maybeDone(SP_ACTIVE_DOCUMENT, "highlight", SP_VERB_DIALOG_OBJECTS, _("Set object highlight color"));
 }
 
 /**
@@ -1689,13 +1664,13 @@ ObjectsPanel::ObjectsPanel() :
         col->add_attribute( typeRenderer->property_active(), _model->_colType );
     }
 
-    //Insert order
-    Inkscape::UI::Widget::InsertOrderIcon * insertRenderer = Gtk::manage( new Inkscape::UI::Widget::InsertOrderIcon());
+    //Insert order (LiamW: unused)
+    /*Inkscape::UI::Widget::InsertOrderIcon * insertRenderer = Gtk::manage( new Inkscape::UI::Widget::InsertOrderIcon());
     int insertColNum = _tree.append_column("type", *insertRenderer) - 1;
     col = _tree.get_column(insertColNum);
     if ( col ) {
         col->add_attribute( insertRenderer->property_active(), _model->_colInsertOrder );
-    }
+    }*/
     
     //Clip/mask
     Inkscape::UI::Widget::ClipMaskIcon * clipRenderer = Gtk::manage( new Inkscape::UI::Widget::ClipMaskIcon());
@@ -1807,43 +1782,102 @@ ObjectsPanel::ObjectsPanel() :
     SPDesktop* targetDesktop = getDesktop();
 
     //Set up the button row
+
+
+    //Add object/layer
     Gtk::Button* btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_ADD, _("New Layer") );
+    btn->set_tooltip_text(_("Add layer..."));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_image_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    Gtk::Image *image_add = Gtk::manage(new Gtk::Image());
+    image_add->set_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_add);
+#endif    
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_NEW) );
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
     
+
+    //Remove object
     btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_REMOVE, _("Remove") );
+    btn->set_tooltip_text(_("Remove object"));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_image_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    Gtk::Image *image_remove = Gtk::manage(new Gtk::Image());
+    image_remove->set_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_remove);
+#endif
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DELETE) );
     _watching.push_back( btn );
     _buttonsSecondary.pack_start(*btn, Gtk::PACK_SHRINK);
 
+    //Move to bottom
     btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_GOTO_BOTTOM, _("Move To Bottom") );
+    btn->set_tooltip_text(_("Move To Bottom"));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_image_from_icon_name(INKSCAPE_ICON("go-bottom"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    image_remove = Gtk::manage(new Gtk::Image());
+    image_remove->set_from_icon_name(INKSCAPE_ICON("go-bottom"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_remove);
+#endif
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_BOTTOM) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
-        
+    
+    //Move down    
     btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_GO_DOWN, _("Move Down") );
+    btn->set_tooltip_text(_("Move Down"));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_image_from_icon_name(INKSCAPE_ICON("go-down"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    image_remove = Gtk::manage(new Gtk::Image());
+    image_remove->set_from_icon_name(INKSCAPE_ICON("go-down"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_remove);
+#endif
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_DOWN) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
+    //Move up
     btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_GO_UP, _("Move Up") );
+    btn->set_tooltip_text(_("Move Up"));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_image_from_icon_name(INKSCAPE_ICON("go-up"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    image_remove = Gtk::manage(new Gtk::Image());
+    image_remove->set_from_icon_name(INKSCAPE_ICON("go-up"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_remove);
+#endif
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_UP) );
     _watchingNonTop.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
+    //Move to top
     btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_GOTO_TOP, _("Move To Top") );
+    btn->set_tooltip_text(_("Move To Top"));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_image_from_icon_name(INKSCAPE_ICON("go-top"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    image_remove = Gtk::manage(new Gtk::Image());
+    image_remove->set_from_icon_name(INKSCAPE_ICON("go-top"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_remove);
+#endif
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_TOP) );
     _watchingNonTop.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
-    btn = Gtk::manage( new Gtk::Button() );
-    _styleButton( *btn, GTK_STOCK_UNINDENT, _("Collapse All") );
+    //Collapse all
+    btn = Gtk::manage( new Gtk::Button(Gtk::Stock::UNINDENT) );
+    btn->set_tooltip_text(_("Collapse All"));
+    btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_COLLAPSE_ALL) );
     _watchingNonBottom.push_back( btn );
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
@@ -2042,15 +2076,6 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
 //should be okay to put these here because they are never referenced anywhere else
 using namespace Inkscape::UI::Tools;
 
-guint get_group0_keyval(GdkEventKey *event) {
-    guint keyval = 0;
-    gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
-            gdk_display_get_default()), event->hardware_keycode,
-            (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
-            NULL, NULL, NULL);
-    return keyval;
-}
-
 void SPItem::setHighlightColor(guint32 const color)
 {
     g_free(_highlightColor);
@@ -2065,7 +2090,7 @@ void SPItem::setHighlightColor(guint32 const color)
     
     NodeTool *tool = 0;
     if (SP_ACTIVE_DESKTOP ) {
-        ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+        Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
             tools_switch(tool->desktop, TOOLS_NODES);
@@ -2079,7 +2104,7 @@ void SPItem::unsetHighlightColor()
     _highlightColor = NULL;
     NodeTool *tool = 0;
     if (SP_ACTIVE_DESKTOP ) {
-        ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+        Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
             tool = static_cast<NodeTool*>(ec);
             tools_switch(tool->desktop, TOOLS_NODES);

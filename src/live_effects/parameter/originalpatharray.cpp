@@ -18,6 +18,7 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
+#include <gtkmm/scrolledwindow.h>
 
 #include <glibmm/i18n.h>
 
@@ -31,7 +32,6 @@
 #include "uri.h"
 #include "display/curve.h"
 
-#include <glibmm/i18n.h>
 #include <2geom/coord.h>
 #include <2geom/point.h>
 #include "sp-shape.h"
@@ -97,8 +97,9 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
     _toggle_renderer->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
     col->add_attribute(_toggle_renderer->property_active(), _model->_colReverse);
     
-    //quick little hack -- new versions of gtk did not give the item enough space
-    _scroller.property_height_request() = 120;
+    //quick little hack -- newer versions of gtk gave the item zero space allotment
+    _scroller.set_size_request(-1, 120);
+
     _scroller.add(_tree);
     _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     //_scroller.set_shadow_type(Gtk::SHADOW_IN);
