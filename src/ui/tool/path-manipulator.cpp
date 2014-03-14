@@ -1206,11 +1206,7 @@ bool PathManipulator::isBSpline(bool recalculate){
     if(recalculate){
         BSplineSteps = this->BSplineGetSteps();
     }
-    bool isBSpline = false;
-    if(BSplineSteps>0){
-        isBSpline = true;
-    }
-    return isBSpline;
+    return BSplineSteps > 0;
 }
 
 // returns the corresponding strength to the position of a handler
