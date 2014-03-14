@@ -1202,12 +1202,13 @@ int PathManipulator::BSplineGetSteps(){
 
 // determines if the trace has bspline effect
 bool PathManipulator::isBSpline(/*bool recalculate*/){
-    /*static*/ int BSplineSteps = this->BSplineGetSteps();
     // Taking out the static dont need this part
+    // static int BSplineSteps = this->BSplineGetSteps();
     //if(recalculate){
     //    BSplineSteps = this->BSplineGetSteps();
     //}
-    return BSplineSteps > 0;
+    //return BSplineSteps > 0;
+    return  this->BSplineGetSteps() > 0;
 }
 
 // returns the corresponding strength to the position of a handler
