@@ -106,7 +106,7 @@ private:
     typedef boost::shared_ptr<NodeList> SubpathPtr;
 
     void _createControlPointsFromGeometry();
-    bool isBSpline(/*bool recalculate = true*/);
+    bool isBSpline(bool recalculate = true);
     double BSplineHandlePosition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h);
     Geom::Point BSplineHandleReposition(Handle *h,double pos);
@@ -152,6 +152,7 @@ private:
     bool _show_path_direction;
     bool _live_outline;
     bool _live_objects;
+    bool _is_bspline;
     Glib::ustring _lpe_key;
 
     friend class PathManipulatorObserver;

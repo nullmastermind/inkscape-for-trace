@@ -145,7 +145,8 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
-    isBSpline(/*true*/);
+    //Define if the path is BSpline on construction
+    isBSpline(true);
 }
 
 PathManipulator::~PathManipulator()
@@ -664,7 +665,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         start = next;
     }
     // if we are removing, we readjust the handlers
-    if(isBSpline(false)){
+    if(isBSpline()){
         double pos = 0.0000;
         if(start.prev()){
             pos = BSplineHandlePosition(start.prev()->back());
@@ -1201,14 +1202,11 @@ int PathManipulator::BSplineGetSteps(){
 }
 
 // determines if the trace has bspline effect
-bool PathManipulator::isBSpline(/*bool recalculate*/){
-    // Taking out the static dont need this part
-    // static int BSplineSteps = this->BSplineGetSteps();
-    //if(recalculate){
-    //    BSplineSteps = this->BSplineGetSteps();
-    //}
-    //return BSplineSteps > 0;
-    return  this->BSplineGetSteps() > 0;
+bool PathManipulator::isBSpline(bool recalculate){
+    if(recalculate){
+        _is_bspline = this->BSplineGetSteps() > 0;
+    }
+    return  _is_bspline;
 }
 
 // returns the corresponding strength to the position of a handler
@@ -1284,7 +1282,8 @@ void PathManipulator::BSplineNodeHandlesReposition(Node *n){
 void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
 {
     Geom::PathBuilder builder;
-    isBSpline(/*true*/);
+    //Refresh if is bspline some times -think on path change selection, this value get lost
+    isBSpline(true);
     for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
