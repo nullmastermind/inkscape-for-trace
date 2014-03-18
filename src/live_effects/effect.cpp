@@ -52,7 +52,8 @@
 #include "live_effects/lpe-fill-between-many.h"
 #include "live_effects/lpe-ellipse_5pts.h"
 #include "live_effects/lpe-bounding-box.h"
-//#include "live_effects/lpe-jointype.h"
+#include "live_effects/lpe-jointype.h"
+#include "live_effects/lpe-taperstroke.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -109,7 +110,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
-//    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
 #endif
 /* 0.46 */
     {BEND_PATH,             N_("Bend"),                    "bend_path"},
@@ -273,9 +275,12 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case BOUNDING_BOX:
             neweffect = static_cast<Effect*> ( new LPEBoundingBox(lpeobj) );
             break;
-        /*case JOIN_TYPE:
+        case JOIN_TYPE:
             neweffect = static_cast<Effect*> ( new LPEJoinType(lpeobj) );
-            break;*/
+            break;
+        case TAPER_STROKE:
+            neweffect = static_cast<Effect*> ( new LPETaperStroke(lpeobj) );
+            break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
             neweffect = NULL;
