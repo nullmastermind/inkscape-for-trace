@@ -1445,6 +1445,10 @@ void PenTool::_bspline_spiro_off()
 
 void PenTool::_bspline_spiro_start_anchor(bool shift)
 {
+    if(this->sa->curve->is_empty()){
+        return;
+    }
+
     LivePathEffect::LPEBSpline *lpe_bsp = NULL;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
@@ -1472,9 +1476,6 @@ void PenTool::_bspline_spiro_start_anchor(bool shift)
         this->spiro = false;
     }
     if(!this->spiro && !this->bspline)
-        return;
-
-    if(this->sa->curve->is_empty())
         return;
 
     if(shift)
