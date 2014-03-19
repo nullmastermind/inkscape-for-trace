@@ -495,7 +495,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     // Blue2
     dc->blue2_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue2_bpath), NULL);
-
+  
     /* if c is empty, it might be that the user was trying to continue an existing curve and cancelled.
        if this is the case and we are in bspline or spirolive the previous curve needs to be selected again because
        we modify it when continuing through an anchor.     */
@@ -614,6 +614,18 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         bool has_lpe = false;
         Inkscape::XML::Node *repr;
+
+        /* if we are in bspline or spirolive the anchors curves, if exist, needs to be selected again because
+        we modify it when continuing through an anchor.     */
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if ( ((dc->sa && !dc->sa->curve->is_empty()) ||
+             (dc->ea && !dc->ea->curve->is_empty())) &&
+             (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 ||
+             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2)
+            ) {
+                spdc_selection_modified(sp_desktop_selection(dc->desktop), 0, dc);
+        }
+
         if (dc->white_item) {
             repr = dc->white_item->getRepr();
             has_lpe = SP_LPE_ITEM(dc->white_item)->hasPathEffectRecursive();
