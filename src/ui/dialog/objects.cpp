@@ -21,6 +21,7 @@
 #include <gtkmm/stock.h>
 
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 
 #include "desktop.h"
 #include "desktop-style.h"
@@ -511,7 +512,11 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _blurConnection.block();
 
     //Set the opacity
+#if WITH_GTKMM_3_0
+    _opacity_adjustment->set_value((item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1) * _opacity_adjustment->get_upper());
+#else
     _opacity_adjustment.set_value((item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1) * _opacity_adjustment.get_upper());
+#endif
     SPFeBlend *spblend = NULL;
     SPGaussianBlur *spblur = NULL;
     if (item->style->getFilter())
@@ -711,11 +716,11 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
             }
         }
         break;
-        case GDK_Home:
+        case GDK_KEY_Home:
             //Move item(s) to top of containing group/layer
             _fireAction( empty ? SP_VERB_LAYER_TO_TOP : SP_VERB_SELECTION_TO_FRONT );
             break;
-        case GDK_End:
+        case GDK_KEY_End:
             //Move item(s) to bottom of containing group/layer
             _fireAction( empty ? SP_VERB_LAYER_TO_BOTTOM : SP_VERB_SELECTION_TO_BACK );
             break;
@@ -1474,7 +1479,11 @@ void ObjectsPanel::_opacityChangedIter(const Gtk::TreeIter& iter)
     if (item)
     {
         item->style->opacity.set = TRUE;
+#if WITH_GTKMM_3_0
+        item->style->opacity.value = SP_SCALE24_FROM_FLOAT(_opacity_adjustment->get_value() / _opacity_adjustment->get_upper());
+#else
         item->style->opacity.value = SP_SCALE24_FROM_FLOAT(_opacity_adjustment.get_value() / _opacity_adjustment.get_upper());
+#endif
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }
@@ -1759,7 +1768,7 @@ ObjectsPanel::ObjectsPanel() :
     _opacity_hbox.pack_start(_opacity_label_unit, false, false, 3);
     _opacity_hscale.set_draw_value(false);
 #if WITH_GTKMM_3_0
-    _opacityConnection = _opacity_adjustment->signal_value_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));
+    _opacityConnection = _opacity_adjustment->signal_value_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
     _opacity_label.set_mnemonic_widget(_opacity_hscale);
 #else
     _opacityConnection = _opacity_adjustment.signal_value_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
@@ -1875,8 +1884,14 @@ ObjectsPanel::ObjectsPanel() :
     _buttonsPrimary.pack_end(*btn, Gtk::PACK_SHRINK);
     
     //Collapse all
-    btn = Gtk::manage( new Gtk::Button(Gtk::Stock::UNINDENT) );
+    btn = Gtk::manage( new Gtk::Button() );
     btn->set_tooltip_text(_("Collapse All"));
+#if GTK_CHECK_VERSION(3,10,0)
+    btn->set_from_icon_name(INKSCAPE_ICON("gtk-unindent-ltr"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    image_remove->set_from_icon_name(INKSCAPE_ICON("gtk-unindent-ltr"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image(*image_remove);
+#endif
     btn->set_relief(Gtk::RELIEF_NONE);
     btn->signal_clicked().connect( sigc::bind( sigc::mem_fun(*this, &ObjectsPanel::_takeAction), (int)BUTTON_COLLAPSE_ALL) );
     _watchingNonBottom.push_back( btn );

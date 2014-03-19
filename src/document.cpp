@@ -1133,12 +1133,11 @@ static gint
 sp_document_idle_handler(gpointer data)
 {
     SPDocument *doc = static_cast<SPDocument *>(data);
-    if (doc->_updateDocument()) {
+    bool status = !doc->_updateDocument(); // method TRUE if it does NOT need further modification, so invert
+    if (!status) {
         doc->modified_id = 0;
-        return false;
-    } else {
-        return true;
     }
+    return status;
 }
 
 /**
@@ -1552,7 +1551,8 @@ void SPDocument::importDefs(SPDocument *source)
             SPGradient *gr = SP_GRADIENT(src);
             for (SPObject *trg = this->getDefs()->firstChild() ; trg ; trg = trg->getNext()) {
                 if (trg && SP_IS_GRADIENT(trg) && src != trg) {
-                    if (gr->isEquivalent(SP_GRADIENT(trg))) {
+                    if (gr->isEquivalent(SP_GRADIENT(trg)) &&
+                        gr->isAligned(SP_GRADIENT(trg))) {
                         // Change object references to the existing equivalent gradient
                         change_def_references(src, trg);
                         duplicate = true;
