@@ -55,6 +55,7 @@ static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinType, sizeo
 
 LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
+    line_width(_("Stroke width"), _("The (non-tapered) width of the path"), "stroke_width", &wr, this, 3),
 	attach_start(_("Start offset"), _("Taper distance from path start"), "attach_start", &wr, this, 0.2),
 	attach_end(_("End offset"), _("The ending position of the taper"), "end_offset", &wr, this, 0.2),
 	smoothing(_("Taper smoothing"), _("Amount of smoothing to apply to the tapers"), "smoothing", &wr, this, 0.2),
@@ -67,7 +68,9 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
 
 	attach_start.param_set_digits(3);
 	attach_end.param_set_digits(3);
-
+	
+	
+	registerParameter( dynamic_cast<Parameter *>(&line_width) );
 	registerParameter( dynamic_cast<Parameter *>(&attach_start) );
 	registerParameter( dynamic_cast<Parameter *>(&attach_end) );
 	registerParameter( dynamic_cast<Parameter *>(&smoothing) );
@@ -235,31 +238,30 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	
 	//now for the fun stuff. Right? RIGHT?
 	
-	//decide on case
-	
-	//first case: taper on both sides
-	if (true/*pathv_out[0].length() != 0.001 && pathv_out[2].length() != 0.001*/) {
+	if (true) {
 		Geom::PathVector real_pathv;
 		
-		//Construct the pattern
-		
-		Geom::PathVector pat_vec = sp_svg_read_pathv("M 1,0 1,1 C 0.5,1 0,0.5 0,0.5 0,0.5 0.5,0 1,0 Z");
+		//Construct the pattern (pat_str stands for pattern string)
+		char* pat_str = new char[200];
+		sprintf(pat_str, "M 1,0 1,1 C %5.5f,1 0,0.5 0,0.5 0,0.5 %5.5f,0 1,0 Z", (double)smoothing, (double)smoothing);
+		Geom::PathVector pat_vec = sp_svg_read_pathv(pat_str);
 		
 		Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2;
-		pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], 40));
+		pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));
 		
 		real_pathv.push_back(path_from_piecewise(pwd2, 0.001)[0]);
 		
 		Geom::PathVector sht_path;
 		sht_path.push_back(pathv_out[1]);
-		sht_path = Outline::outlinePath_extr(sht_path, 40, LINEJOIN_STRAIGHT, butt_straight, 30);
+		sht_path = Outline::outlinePath_extr(sht_path, line_width, LINEJOIN_STRAIGHT, butt_straight, miter_limit);
 		
 		real_pathv.push_back(sht_path[0]);
 		
-		pat_vec = sp_svg_read_pathv("M 0,0 0,1 C 0.5,1 1,0.5 1,0.5 1,0.5 0.5,0 0,0 Z");
+		sprintf(pat_str, "M 0,0 0,1 C %5.5f,1 1,0.5 1,0.5 1,0.5 %5.5f,0 0,0 Z", (double)smoothing, (double)smoothing);
+		pat_vec = sp_svg_read_pathv(pat_str);
 		
 		pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
-		pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], 40));
+		pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], line_width));
 		real_pathv.push_back(path_from_piecewise(pwd2, 0.001)[0].reverse());
 		
 		//clever union

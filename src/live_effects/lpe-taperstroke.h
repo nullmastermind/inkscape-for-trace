@@ -38,6 +38,7 @@ public:
 	friend class TpS::KnotHolderEntityAttachBegin;
 	friend class TpS::KnotHolderEntityAttachEnd;
 private:
+        ScalarParam line_width;
 	ScalarParam attach_start;
 	ScalarParam attach_end;
 	ScalarParam smoothing;
@@ -53,11 +54,6 @@ private:
 
 } //namespace LivePathEffect
 } //namespace Inkscape
-
-//because Windoze is stupid
-# ifdef WIN32
-# include "lpe-taperstroke.cpp"
-# endif
 
 #endif
 
