@@ -1563,7 +1563,7 @@ void PenTool::_bspline_spiro_motion(bool shift){
     }else if(!this->green_curve->is_empty()){
         tmpCurve = this->green_curve->copy();
     }else{
-        tmpCurve = this->sa->curve->copy();
+        tmpCurve = this->sc->copy();
         if(this->sa->start)
             tmpCurve = tmpCurve->create_reverse();
     }
