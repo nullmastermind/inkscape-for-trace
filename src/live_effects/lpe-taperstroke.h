@@ -8,12 +8,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef INKSCAPE_LPE_SKELETON_H
-#define INKSCAPE_LPE_SKELETON_H
+#ifndef INKSCAPE_LPE_TAPERSTROKE_H
+#define INKSCAPE_LPE_TAPERSTROKE_H
 
+#include "live_effects/parameter/enum.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/parameter.h"
-#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/vector.h"
 
 namespace Inkscape {
@@ -29,6 +29,9 @@ class LPETaperStroke : public Effect {
 public:
 	LPETaperStroke(LivePathEffectObject *lpeobject);
 	virtual ~LPETaperStroke();
+	
+	virtual void doOnApply(SPLPEItem const* lpeitem);
+	virtual void doOnRemove(SPLPEItem const* lpeitem);
 
 	virtual Geom::PathVector doEffect_path (Geom::PathVector const& path_in);
 	Geom::PathVector doEffect_simplePath(Geom::PathVector const& path_in);

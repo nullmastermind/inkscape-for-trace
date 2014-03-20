@@ -1887,8 +1887,9 @@ ObjectsPanel::ObjectsPanel() :
     btn = Gtk::manage( new Gtk::Button() );
     btn->set_tooltip_text(_("Collapse All"));
 #if GTK_CHECK_VERSION(3,10,0)
-    btn->set_from_icon_name(INKSCAPE_ICON("gtk-unindent-ltr"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    btn->set_image_from_icon_name(INKSCAPE_ICON("gtk-unindent-ltr"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
 #else
+    image_remove = Gtk::manage(new Gtk::Image());
     image_remove->set_from_icon_name(INKSCAPE_ICON("gtk-unindent-ltr"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
     btn->set_image(*image_remove);
 #endif

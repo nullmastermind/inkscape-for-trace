@@ -13,11 +13,20 @@
 
 #include "live_effects/lpe-taperstroke.h"
 
-// You might need to include other 2geom files. You can add them here:
 #include <2geom/path.h>
 #include <2geom/shape.h>
+#include <2geom/path.h>
+#include <2geom/circle.h>
+#include <2geom/sbasis-to-bezier.h>
 #include "pathoutlineprovider.h"
 #include "display/curve.h"
+#include "sp-shape.h"
+#include "style.h"
+#include "xml/repr.h"
+#include "sp-paint-server.h"
+#include "svg/svg-color.h"
+#include "desktop-style.h"
+#include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
 //#include <glibmm/i18n.h>
@@ -58,7 +67,7 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     line_width(_("Stroke width"), _("The (non-tapered) width of the path"), "stroke_width", &wr, this, 3),
 	attach_start(_("Start offset"), _("Taper distance from path start"), "attach_start", &wr, this, 0.2),
 	attach_end(_("End offset"), _("The ending position of the taper"), "end_offset", &wr, this, 0.2),
-	smoothing(_("Taper smoothing"), _("Amount of smoothing to apply to the tapers"), "smoothing", &wr, this, 0.2),
+	smoothing(_("Taper smoothing"), _("Amount of smoothing to apply to the tapers"), "smoothing", &wr, this, 0.5),
 	join_type(_("Join type"), _("Join type for non-smooth nodes"), "jointype", JoinTypeConverter, &wr, this, LINEJOIN_EXTRAPOLATED),
 	miter_limit(_("Miter limit"), _("Limit for miter joins"), "miter_limit", &wr, this, 30.)
 {
@@ -83,21 +92,93 @@ LPETaperStroke::~LPETaperStroke()
 	
 }
 
-unsigned curveOrder (const Geom::Curve* curve_in)
+//from LPEPowerStroke -- sets fill if stroke color because we will
+//be converting to a fill to make the new join.
+
+void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 {
-	using namespace Geom;
-	//cast it
-	const CubicBezier *cbc = dynamic_cast<const CubicBezier*>(curve_in);
-	if (cbc) return 3;
-	const QuadraticBezier * qbc = dynamic_cast<const QuadraticBezier*>(curve_in);
-	if (qbc) return 2;
-	const BezierCurveN<1U> * lbc = dynamic_cast<const BezierCurveN<1U> *>(curve_in);
-	if (lbc) return 1;
-	//BezierCurveN<0> * dbc = dynamic_cast<BezierCurveN<0> *> (curve_in);
-	return 0;
+	if (SP_IS_SHAPE(lpeitem)) {
+        SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
+        double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
+        
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        if (lpeitem->style->stroke.isSet()) {
+            if (lpeitem->style->stroke.isPaintserver()) {
+                SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+                if (server) {
+                    Glib::ustring str;
+                    str += "url(#";
+                    str += server->getId();
+                    str += ")";
+                    sp_repr_css_set_property (css, "fill", str.c_str());
+                }
+            } else if (lpeitem->style->stroke.isColor()) {
+                gchar c[64];
+                sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+                sp_repr_css_set_property (css, "fill", c);
+            } else {
+                sp_repr_css_set_property (css, "fill", "none");
+            }
+        } else {
+            sp_repr_css_unset_property (css, "fill");
+        }
+        
+        sp_repr_css_set_property(css, "stroke", "none");
+        
+        sp_desktop_apply_css_recursive(item, css, true);
+        sp_repr_css_attr_unref (css);
+
+		line_width.param_set_value(width);
+    } else {
+        g_warning("LPE Join Type can only be applied to paths (not groups).");
+    }
 }
 
-Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_tolerance = 0.01)
+//from LPEPowerStroke -- sets stroke color from existing fill color
+
+void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
+{
+	
+	if (SP_IS_SHAPE(lpeitem)) {
+        SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
+
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        if (lpeitem->style->fill.isSet()) {
+            if (lpeitem->style->fill.isPaintserver()) {
+                SPPaintServer * server = lpeitem->style->getFillPaintServer();
+                if (server) {
+                    Glib::ustring str;
+                    str += "url(#";
+                    str += server->getId();
+                    str += ")";
+                    sp_repr_css_set_property (css, "stroke", str.c_str());
+                }
+            } else if (lpeitem->style->fill.isColor()) {
+                gchar c[64];
+                sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+                sp_repr_css_set_property (css, "stroke", c);
+            } else {
+                sp_repr_css_set_property (css, "stroke", "none");
+            }
+        } else {
+            sp_repr_css_unset_property (css, "stroke");
+        }
+
+	Inkscape::CSSOStringStream os;
+        os << fabs(line_width);
+        sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
+
+        sp_repr_css_set_property(css, "fill", "none");
+
+        sp_desktop_apply_css_recursive(item, css, true);
+        sp_repr_css_attr_unref (css);
+        item->updateRepr();
+        }
+}
+
+//actual effect impl here
+
+Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_tolerance = 0.05)
 {
 	Geom::Path path_out = Geom::Path();
 
@@ -108,7 +189,7 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 			break;
 
 		//determine order of curve
-		int order = curveOrder(&path_in[i]);
+		int order = Outline::bezierOrder(&path_in[i]);
 		
 		Geom::Point start_point;
 		Geom::Point cross_point = path_in[i].finalPoint();
@@ -131,7 +212,7 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 			start_point = path_in[i].initialPoint();
 		}
 
-		order = curveOrder(&path_in[i+1]);
+		order = Outline::bezierOrder(&path_in[i+1]);
 
 		switch (order)
 		{
@@ -155,7 +236,7 @@ Geom::Curve * subdivide_at(const Geom::Curve* curve_in, Geom::Coord time, bool f
 {
 	//the only reason for this function is the lack of a subdivide function in the Curve class.
 	//you have to cast to Beziers to be able to use subdivide(t)
-	unsigned order = curveOrder(curve_in);
+	unsigned order = Outline::bezierOrder(curve_in);
 	Geom::Curve* curve_out = curve_in->duplicate();
 	switch (order)
 	{
@@ -211,22 +292,25 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	if (attach_end <= 0) {
 		attach_end.param_set_value( 0.0001 );
 	}
+	
+	//don't let it be integer
+	if (double(unsigned(attach_start)) == attach_start) {
+		attach_start.param_set_value(attach_start - 0.0001);
+	}
+	if (double(unsigned(attach_end)) == attach_end) {
+		attach_end.param_set_value(attach_end - 0.0001);
+	}
 
-	/*if (size != return_at_first_cusp(path_in[0]).size()) { //will  get to this in a bit
-		//check to see if either knot was dragged past their allowed amount
-		volatile unsigned size_p_start = (unsigned)attach_start;
-		volatile unsigned size_p_end = (unsigned)attach_end;
-		
-		//maximum allowed value in either direction is return_at_first_cusp(path_in[0]).size
-		volatile unsigned allowed_p_start = return_at_first_cusp(path_in[0]).size();
-		volatile unsigned allowed_p_end = return_at_first_cusp(path_in[0].reverse()).size();
-		
-		if (size_p_start > allowed_p_start) {
-			attach_start.param_set_value(allowed_p_start - 0.0001);
-		} else if (size_p_end > allowed_p_end) {
-			attach_end.param_set_value(allowed_p_end - 0.0001);
-		}
-	}*/
+	unsigned allowed_start = return_at_first_cusp(path_in[0]).size();
+	
+	unsigned allowed_end = return_at_first_cusp(path_in[0].reverse()).size();
+	
+	if ((unsigned)attach_start >= allowed_start) {
+	    attach_start.param_set_value((double)allowed_start - 0.0001);
+	}
+	if ((unsigned)attach_end >= allowed_end) {
+	    attach_end.param_set_value((double)allowed_end - 0.0001);
+	}
 	
 	//Path::operator () means get point at time t
 	start_attach_point = return_at_first_cusp(path_in[0])(attach_start);
@@ -242,8 +326,8 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 		Geom::PathVector real_pathv;
 		
 		//Construct the pattern (pat_str stands for pattern string)
-		char* pat_str = new char[200];
-		sprintf(pat_str, "M 1,0 1,1 C %5.5f,1 0,0.5 0,0.5 0,0.5 %5.5f,0 1,0 Z", (double)smoothing, (double)smoothing);
+		char pat_str[200];
+		sprintf(pat_str, "M 1,0 1,1 C %5.5f,1 0,0.5 0,0.5 0,0.5 %5.5f,0 1,0 Z", 1 - (double)smoothing, 1 - (double)smoothing);
 		Geom::PathVector pat_vec = sp_svg_read_pathv(pat_str);
 		
 		Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2;
@@ -253,12 +337,13 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 		
 		Geom::PathVector sht_path;
 		sht_path.push_back(pathv_out[1]);
-		sht_path = Outline::outlinePath_extr(sht_path, line_width, LINEJOIN_STRAIGHT, butt_straight, miter_limit);
+		sht_path = Outline::PathVectorOutline(sht_path, line_width, butt_straight, static_cast<join_typ>(join_type.get_value()) , miter_limit);
 		
 		real_pathv.push_back(sht_path[0]);
 		
-		sprintf(pat_str, "M 0,0 0,1 C %5.5f,1 1,0.5 1,0.5 1,0.5 %5.5f,0 0,0 Z", (double)smoothing, (double)smoothing);
-		pat_vec = sp_svg_read_pathv(pat_str);
+		char pat_str_1[200];
+		sprintf(pat_str_1, "M 0,0 0,1 C %5.5f,1 1,0.5 1,0.5 1,0.5 %5.5f,0 0,0 Z", (double)smoothing, (double)smoothing);
+		pat_vec = sp_svg_read_pathv(pat_str_1);
 		
 		pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
 		pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], line_width));
@@ -298,7 +383,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 			trimmed_start.append(path_in[0] [i]);
 		}
 		
-		#define OVERLAP 0.001
+		#define OVERLAP (0.001 / (line_width < 1 ? 1 : line_width))
 		
 		trimmed_start.append(*subdivide_at(curve_start, (attach_start - loc) + OVERLAP, true));
 		curve_start = subdivide_at(curve_start, attach_start - loc, false);
@@ -450,6 +535,7 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
         return pwd2_in;
     }
 }
+
 
 void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) 
 {
