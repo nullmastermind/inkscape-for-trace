@@ -493,6 +493,10 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), NULL);
 
+    // Blue2
+    dc->blue2_curve->reset();
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue2_bpath), NULL);
+
     // Red
     if (dc->red_curve_is_valid) {
         c->append_continuous(dc->red_curve, 0.0625);
