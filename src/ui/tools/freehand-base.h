@@ -74,11 +74,11 @@ public:
 
     // Start anchor
     SPDrawAnchor *sa;
-    SPCurve * sc;
+    SPCurve *sc;
 
     // End anchor
     SPDrawAnchor *ea;
-    SPCurve * ec;
+    SPCurve *ec;
 
     /* type of the LPE that is to be applied automatically to a finished path (if any) */
     Inkscape::LivePathEffect::EffectType waiting_LPE_type;

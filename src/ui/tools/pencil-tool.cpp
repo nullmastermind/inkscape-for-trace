@@ -203,6 +203,7 @@ gint PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                 }
                 if (anchor) {
                     p = anchor->dp;
+                    this->sc = anchor->curve;
                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                 } else {
                     m.setup(desktop);
@@ -380,6 +381,7 @@ gint PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                 /* Finish segment now */
                 if (anchor) {
                     p = anchor->dp;
+                    this->ec = anchor->curve;
                 } else {
                     this->_endpointSnap(p, revent.state);
                 }
@@ -406,6 +408,7 @@ gint PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     /// \todo fixme: Clean up what follows (Lauris)
                     if (anchor) {
                         p = anchor->dp;
+                        this->ec = anchor->curve;
                     } else {
                         Geom::Point p_end = p;
                         this->_endpointSnap(p_end, revent.state);

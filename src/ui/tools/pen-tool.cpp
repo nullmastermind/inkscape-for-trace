@@ -1516,7 +1516,6 @@ void PenTool::_bspline_spiro_start_anchor_on()
     if (this->sa->start) {
         tmpCurve = tmpCurve->create_reverse();
     }
-    this->sc->reset();
     this->sc = tmpCurve;
 }
 
@@ -1542,7 +1541,6 @@ void PenTool::_bspline_spiro_start_anchor_off()
         if (this->sa->start) {
             tmpCurve = tmpCurve->create_reverse();
         }
-        this->sc->reset();
         this->sc = tmpCurve;
     }
 
@@ -1677,7 +1675,6 @@ void PenTool::_bspline_spiro_end_anchor_on()
         if (!this->sa->start) {
             tmpCurve = tmpCurve->create_reverse();
         }
-        this->sc->reset();
         this->sc = tmpCurve;
     }
 }
@@ -2176,6 +2173,8 @@ void PenTool::_finish(gboolean const closed) {
     // cancelate line without a created segment
     this->red_curve->reset();
     spdc_concat_colors_and_flush(this, closed);
+    this->sc = NULL;
+    this->ec = NULL;
     this->sa = NULL;
     this->ea = NULL;
 
