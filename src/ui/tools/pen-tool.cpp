@@ -1516,8 +1516,8 @@ void PenTool::_bspline_spiro_start_anchor_on()
     if (this->sa->start) {
         tmpCurve = tmpCurve->create_reverse();
     }
-    this->sa->curve->reset();
-    this->sa->curve = tmpCurve;
+    this->sc->reset();
+    this->sc = tmpCurve;
 }
 
 void PenTool::_bspline_spiro_start_anchor_off()
@@ -1542,8 +1542,8 @@ void PenTool::_bspline_spiro_start_anchor_off()
         if (this->sa->start) {
             tmpCurve = tmpCurve->create_reverse();
         }
-        this->sa->curve->reset();
-        this->sa->curve = tmpCurve;
+        this->sc->reset();
+        this->sc = tmpCurve;
     }
 
 }
@@ -1677,8 +1677,8 @@ void PenTool::_bspline_spiro_end_anchor_on()
         if (!this->sa->start) {
             tmpCurve = tmpCurve->create_reverse();
         }
-        this->sa->curve->reset();
-        this->sa->curve = tmpCurve;
+        this->sc->reset();
+        this->sc = tmpCurve;
     }
 }
 
@@ -1726,8 +1726,8 @@ void PenTool::_bspline_spiro_end_anchor_off()
             if (!this->sa->start) {
                 tmpCurve = tmpCurve->create_reverse();
             }
-            this->sa->curve->reset();
-            this->sa->curve = tmpCurve;
+            this->sc->reset();
+            this->sc = tmpCurve;
         }
     }
 }
@@ -1742,7 +1742,7 @@ void PenTool::_bspline_spiro_build()
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
     if(this->sa && !this->sa->curve->is_empty()){
-        curve = this->sa->curve->copy();
+        curve = this->sc->copy();
         if (this->sa->start) {
             curve = curve->create_reverse();
         }

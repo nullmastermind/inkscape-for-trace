@@ -492,17 +492,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
 
-    // Blue2
-    dc->blue2_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue2_bpath), NULL);
-  
-    /* if c is empty, it might be that the user was trying to continue an existing curve and cancelled.
-       if this is the case and we are in bspline or spirolive the previous curve needs to be selected again because
-       we modify it when continuing through an anchor.     */
     if (c->is_empty()) {
-        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-            spdc_selection_modified(sp_desktop_selection(dc->desktop), 0, dc);
-        }
         c->unref();
         return;
     }
@@ -526,50 +516,43 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
-
-        /* if we are in bspline or spirolive mode, the continuation and ending curve are updated when continuing or ending the curve in an anchor.
-           this causes that the original function doesn't detect if it's the same curve in case the curves have multiples parts -shift- and
-           close incorrectly one of the parts */
+        if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
+            c = reverse_then_unref(c);
+        }
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
-           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-            if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
-                dc->sa->curve = reverse_then_unref(dc->sa->curve);
-            }
-            dc->sa->curve->append_continuous(c, 0.0625);
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+            dc->sc->append_continuous(c, 0.0625);
             c->unref();
-            if(Geom::are_near(dc->sa->curve->first_path()->initialPoint(), dc->ea->dp)){
-                dc->sa->curve->closepath_current();
-            }
-
-            // if the curve has an bspline or spiro LPE, we execute
-            // spdc_flush_white, passing the necessary starting curve.
-            dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
-            spdc_flush_white(dc, dc->sa->curve);
+            dc->sc->closepath_current();
         }else{
-            if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
-                c = reverse_then_unref(c);
-            }
             dc->sa->curve->append_continuous(c, 0.0625);
             c->unref();
             dc->sa->curve->closepath_current();
-            spdc_flush_white(dc, NULL);
         }
-
+        spdc_flush_white(dc, NULL);
         return;
     }
 
     // Step C - test start
     if (dc->sa) {
         SPCurve *s = dc->sa->curve;
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                s = dc->sc;
+        }
         dc->white_curves = g_slist_remove(dc->white_curves, s);
         if (dc->sa->start) {
             s = reverse_then_unref(s);
         }
         s->append_continuous(c, 0.0625);
-        c->reset();
+        c->unref();
         c = s;
     } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e = dc->ea->curve;
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                e = dc->ec;
+        }
         dc->white_curves = g_slist_remove(dc->white_curves, e);
         if (!dc->ea->start) {
             e = reverse_then_unref(e);
@@ -577,16 +560,30 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         c->append_continuous(e, 0.0625);
         e->unref();
     }
+
+
     spdc_flush_white(dc, c);
+
     c->unref();
 }
 
 static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 {
     SPCurve *c;
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (dc->white_curves) {
         g_assert(dc->white_item);
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+           prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                if(dc->sa){
+                    dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
+                    dc->white_curves = g_slist_append(dc->white_curves, dc->sc);
+                }
+                if(dc->ea){
+                    dc->white_curves = g_slist_remove(dc->white_curves, dc->ea->curve);
+                    dc->white_curves = g_slist_append(dc->white_curves, dc->ec);
+                }
+        }
         c = SPCurve::concat(dc->white_curves);
         g_slist_free(dc->white_curves);
         dc->white_curves = NULL;
@@ -614,17 +611,6 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         bool has_lpe = false;
         Inkscape::XML::Node *repr;
-
-        /* if we are in bspline or spirolive the anchors curves, if exist, needs to be selected again because
-        we modify it when continuing through an anchor.     */
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if ( ((dc->sa && !dc->sa->curve->is_empty()) ||
-             (dc->ea && !dc->ea->curve->is_empty())) &&
-             (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 ||
-             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2)
-            ) {
-                spdc_selection_modified(sp_desktop_selection(dc->desktop), 0, dc);
-        }
 
         if (dc->white_item) {
             repr = dc->white_item->getRepr();
@@ -689,19 +675,6 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
             active = na;
         }
     }
-
-    /* modify the anchoring curve so it is equal to the starting curve. 
-       this curve is modified when it's modified and we need them to be equal to the closing curve */
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if((prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
-        prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) && 
-        dc->sa && !dc->red_curve->is_empty() && !dc->green_anchor){
-        if(active){
-            active->curve = dc->sa->curve;
-            active->curve->ref();
-        }
-    }
-
     return active;
 }
 
@@ -748,6 +721,14 @@ static void spdc_free_colors(FreehandBase *dc)
     }
     if (dc->blue2_curve) {
         dc->blue2_curve = dc->blue2_curve->unref();
+    }
+
+    if (dc->sc) {
+        dc->sc = dc->sc->unref();
+    }
+
+    if (dc->ec) {
+        dc->ec = dc->ec->unref();
     }
 
     // Green
