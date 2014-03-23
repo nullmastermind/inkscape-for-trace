@@ -324,40 +324,54 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	
 	if (true) {
 		Geom::PathVector real_pathv;
+		Geom::Path real_path;
 		
 		//Construct the pattern (pat_str stands for pattern string)
-		char pat_str[200];
-		sprintf(pat_str, "M 1,0 1,1 C %5.5f,1 0,0.5 0,0.5 0,0.5 %5.5f,0 1,0 Z", 1 - (double)smoothing, 1 - (double)smoothing);
-		Geom::PathVector pat_vec = sp_svg_read_pathv(pat_str);
+		std::stringstream pat_str;
+		pat_str << "M 1,0 1,1 C " << 1 - (double)smoothing << ",1 0,0.5 0,0.5 0,0.5 " << 1 - double(smoothing) << ",0 1,0";
+
+		Geom::PathVector pat_vec = sp_svg_read_pathv(pat_str.str().c_str());
 		
 		Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2;
 		pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));
 		
-		real_pathv.push_back(path_from_piecewise(pwd2, 0.001)[0]);
+		Geom::Path throwaway_path = path_from_piecewise(pwd2, 0.001)[0].reverse();
+		throwaway_path.erase_last();
 		
-		Geom::PathVector sht_path;
-		sht_path.push_back(pathv_out[1]);
-		sht_path = Outline::PathVectorOutline(sht_path, line_width, butt_straight, static_cast<join_typ>(join_type.get_value()) , miter_limit);
+		real_path.append(throwaway_path); //wtf
 		
-		real_pathv.push_back(sht_path[0]);
+		throwaway_path = Outline::PathOutsideOutline(pathv_out[1], 
+			line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+			
+		throwaway_path.setInitial(real_path.finalPoint());
+		real_path.append(throwaway_path);
 		
-		char pat_str_1[200];
-		sprintf(pat_str_1, "M 0,0 0,1 C %5.5f,1 1,0.5 1,0.5 1,0.5 %5.5f,0 0,0 Z", (double)smoothing, (double)smoothing);
-		pat_vec = sp_svg_read_pathv(pat_str_1);
+		std::stringstream pat_str_1;
+		pat_str_1 << "M 0,0 0,1 C " << (double)smoothing << ",1 1,0.5 1,0.5 1,0.5 " << double(smoothing) << ",0 0,0";
+		pat_vec = sp_svg_read_pathv(pat_str_1.str().c_str());
 		
 		pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
 		pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], line_width));
-		real_pathv.push_back(path_from_piecewise(pwd2, 0.001)[0].reverse());
 		
-		//clever union
-		//Geom::Shape shape1 = Geom::sanitize(Geom::PathVector(1, real_pathv[0]));
-		//Geom::Shape shape2 = Geom::sanitize(Geom::PathVector(1, real_pathv[1]));
-		//Geom::Shape shape3 = Geom::boolop(shape1, shape2, Geom::BOOLOP_UNION);
+		throwaway_path = Geom::Path();
+		throwaway_path = path_from_piecewise(pwd2, 0.001)[0];
+		throwaway_path.setInitial(real_path.finalPoint());
+		real_path.append(throwaway_path);
 		
-		//shape2 = Geom::sanitize(Geom::PathVector(1, real_pathv[2]));
-		//shape1 = Geom::boolop(shape3, shape2, Geom::BOOLOP_UNION);
+		throwaway_path = Geom::Path();
+		throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), 
+			line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+			
+		//throwaway_path = throwaway_path.reverse();
+		throwaway_path.setInitial(real_path.finalPoint());
 		
-		//real_pathv = Geom::desanitize(shape1);
+		real_path.append(throwaway_path);
+		//real_path.close();
+		
+		real_pathv.push_back(real_path);
+		
+		//real_pathv.push_back(path_from_piecewise(pwd2, 0.001)[0].reverse());
+		
 		return real_pathv;
 	}
 	
@@ -383,7 +397,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 			trimmed_start.append(path_in[0] [i]);
 		}
 		
-		#define OVERLAP (0.001 / (line_width < 1 ? 1 : line_width))
+		#define OVERLAP 0 /*(0.001 / (line_width < 1 ? 1 : line_width))*/
 		
 		trimmed_start.append(*subdivide_at(curve_start, (attach_start - loc) + OVERLAP, true));
 		curve_start = subdivide_at(curve_start, attach_start - loc, false);

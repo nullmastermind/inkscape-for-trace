@@ -825,6 +825,39 @@ Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line
 	#undef miter_lim
 	return path_out;
 }
+Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, LineJoinType linejoin_type, double miter_limit)
+{
+
+    #define miter_lim fabs(line_width * miter_limit)
+    
+    Geom::Path path_out;
+
+    if (linejoin_type <= LINEJOIN_POINTY || path_in.size() <= 1) {
+    
+        Geom::PathVector * pathvec;
+        
+        Path path_tangent = Path();
+        Path path_outline = Path();
+        path_outline.LoadPath(path_in, Geom::Affine(), false, false);
+        path_outline.OutsideOutline(&path_tangent, line_width / 2, static_cast<join_typ>(linejoin_type), butt_straight, miter_lim);
+        
+        pathvec = path_tangent.MakePathVector();
+        path_out = pathvec[0]/* deref pointer */[0]/*actual object ref*/;
+        delete pathvec;
+        return path_out;
+    }
+    else if (linejoin_type == LINEJOIN_REFLECTED) {
+        //reflected half outline
+        Geom::PathVector pathvec; pathvec.push_back(path_in);
+        path_out = half_outline(path_in, line_width, butt_straight, miter_lim);
+        return path_out;
+    }
+    else if (linejoin_type == LINEJOIN_EXTRAPOLATED) {
+        path_out = half_outline_extrp(path_in, line_width, butt_straight, miter_lim);
+        return path_out;
+    }
+    return path_out;
+}
 
 } // namespace Outline
 

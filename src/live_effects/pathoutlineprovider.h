@@ -20,6 +20,7 @@ namespace Outline
     
 	Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width, JoinType join, ButtType butt, double miter_lim);
 	Geom::PathVector outlinePath_extr(const Geom::PathVector& path_in, double line_width, LineJoinType join, ButtType butt, double miter_lim);
+	Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, LineJoinType linejoin_type, double miter_limit);
 }
 
 #endif // _SEEN_PATH_OUTLINE_H
