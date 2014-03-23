@@ -1351,6 +1351,7 @@ Handle *Node::handleToward(Node *to)
         return back();
     }
     g_error("Node::handleToward(): second node is not adjacent!");
+    return NULL;
 }
 
 Node *Node::nodeToward(Handle *dir)
@@ -1362,6 +1363,7 @@ Node *Node::nodeToward(Handle *dir)
         return _prev();
     }
     g_error("Node::nodeToward(): handle is not a child of this node!");
+    return NULL;
 }
 
 Handle *Node::handleAwayFrom(Node *to)
@@ -1373,6 +1375,7 @@ Handle *Node::handleAwayFrom(Node *to)
         return front();
     }
     g_error("Node::handleAwayFrom(): second node is not adjacent!");
+    return NULL;
 }
 
 Node *Node::nodeAwayFrom(Handle *h)
@@ -1384,6 +1387,7 @@ Node *Node::nodeAwayFrom(Handle *h)
         return _next();
     }
     g_error("Node::nodeAwayFrom(): handle is not a child of this node!");
+    return NULL;
 }
 
 Glib::ustring Node::_getTip(unsigned state) const
