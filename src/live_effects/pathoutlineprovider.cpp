@@ -141,721 +141,392 @@ typedef Geom::Piecewise<D2SB> PWD2;
 
 unsigned bezierOrder (const Geom::Curve* curve_in)
 {
-	using namespace Geom;
-	//cast it
-	const CubicBezier *cbc = dynamic_cast<const CubicBezier*>(curve_in);
-	if (cbc) return 3;
-	const QuadraticBezier * qbc = dynamic_cast<const QuadraticBezier*>(curve_in);
-	if (qbc) return 2;
-	const BezierCurveN<1U> * lbc = dynamic_cast<const BezierCurveN<1U> *>(curve_in);
-	if (lbc) return 1;
-	return 0;
+    using namespace Geom;
+    //cast it
+    const CubicBezier *cbc = dynamic_cast<const CubicBezier*>(curve_in);
+    if (cbc) return 3;
+    const QuadraticBezier * qbc = dynamic_cast<const QuadraticBezier*>(curve_in);
+    if (qbc) return 2;
+    const BezierCurveN<1U> * lbc = dynamic_cast<const BezierCurveN<1U> *>(curve_in);
+    if (lbc) return 1;
+    return 0;
 }
 
 //returns true if the angle formed by the curves and their handles
 //is >180 clockwise, otherwise false.
 bool outside_angle (const Geom::Curve* cbc1, const Geom::Curve* cbc2)
 {
-	Geom::Point start_point = cbc1->initialPoint();
-	Geom::Point end_point = cbc2->finalPoint();
-	unsigned order = bezierOrder(cbc1);
-	switch (order)
-	{
-		case 3:
-			start_point = ( dynamic_cast<const Geom::CubicBezier*>(cbc1) )->operator [] (2);
-			break;
-		case 2:
-			start_point = ( dynamic_cast<const Geom::QuadraticBezier*>(cbc1) )->operator [] (1);
-			break;
-	}
-	order = bezierOrder(cbc2);
-	switch (order)
-	{
-		case 3:
-			end_point = ( dynamic_cast<const Geom::CubicBezier*>(cbc2) )->operator [] (1);
-			break;
-		case 2:
-			end_point = ( dynamic_cast<const Geom::QuadraticBezier*>(cbc2) )->operator[] (1);
-			break;
-	}
-	return false;
+    Geom::Point start_point = cbc1->initialPoint();
+    Geom::Point end_point = cbc2->finalPoint();
+    unsigned order = bezierOrder(cbc1);
+    switch (order) {
+    case 3:
+        start_point = ( dynamic_cast<const Geom::CubicBezier*>(cbc1) )->operator [] (2);
+        break;
+    case 2:
+        start_point = ( dynamic_cast<const Geom::QuadraticBezier*>(cbc1) )->operator [] (1);
+        break;
+    }
+    order = bezierOrder(cbc2);
+    switch (order) {
+    case 3:
+        end_point = ( dynamic_cast<const Geom::CubicBezier*>(cbc2) )->operator [] (1);
+        break;
+    case 2:
+        end_point = ( dynamic_cast<const Geom::QuadraticBezier*>(cbc2) )->operator[] (1);
+        break;
+    }
+    return false;
 }
 
-void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve*cbc2, Geom::Point endPt, double miter_limit)
+void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit)
 {
-	
-	Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
-	if (cross.empty())
-	{
-		Geom::Path pth;
-		pth.append(*cbc1);
-				
-		//Geom::Point tang1 = Geom::unitTangentAt(pth.toPwSb()[0], 1);
 
-		pth = Geom::Path();
-		pth.append( *cbc2 );
-		Geom::Point tang2 = Geom::unitTangentAt(pth.toPwSb()[0], 0);
+    Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
+    if (cross.empty()) {
+        Geom::Path pth;
+        pth.append(*cbc1);
+
+        //Geom::Point tang1 = Geom::unitTangentAt(pth.toPwSb()[0], 1);
+
+        pth = Geom::Path();
+        pth.append( *cbc2 );
+        Geom::Point tang2 = Geom::unitTangentAt(pth.toPwSb()[0], 0);
 
 
-		Geom::Circle circle1 = Geom::touching_circle(Geom::reverse(cbc1->toSBasis()), 0.);
-		Geom::Circle circle2 = Geom::touching_circle(cbc2->toSBasis(), 0);
+        Geom::Circle circle1 = Geom::touching_circle(Geom::reverse(cbc1->toSBasis()), 0.);
+        Geom::Circle circle2 = Geom::touching_circle(cbc2->toSBasis(), 0);
 
-		Geom::Point points[2];
-		int solutions = Geom::circle_circle_intersection(circle1, circle2, points[0], points[1]);
-		if (solutions == 2)
-		{
-			Geom::Point sol(0,0);
-			if ( dot(tang2,points[0]-endPt) > 0 ) 
-			{
-				// points[0] is bad, choose points[1]
-				sol = points[1];
-			}
-			else if ( dot(tang2,points[1]-endPt) > 0 ) { // points[0] could be good, now check points[1]
-				// points[1] is bad, choose points[0]
-				sol = points[0];
-			} 
-			else 
-			{
-				// both points are good, choose nearest
-				sol = ( distanceSq(endPt, points[0]) < distanceSq(endPt, points[1]) ) ?
-						points[0] : points[1];
-			}
-			Geom::EllipticalArc *arc0 = circle1.arc(cbc1->finalPoint(), 0.5*(cbc1->finalPoint()+sol), sol, true);
-			Geom::EllipticalArc *arc1 = circle2.arc(sol, 0.5*(sol+endPt), endPt, true);
+        Geom::Point points[2];
+        int solutions = Geom::circle_circle_intersection(circle1, circle2, points[0], points[1]);
+        if (solutions == 2) {
+            Geom::Point sol(0,0);
+            if ( dot(tang2,points[0]-endPt) > 0 ) {
+                // points[0] is bad, choose points[1]
+                sol = points[1];
+            } else if ( dot(tang2,points[1]-endPt) > 0 ) { // points[0] could be good, now check points[1]
+                // points[1] is bad, choose points[0]
+                sol = points[0];
+            } else {
+                // both points are good, choose nearest
+                sol = ( distanceSq(endPt, points[0]) < distanceSq(endPt, points[1]) ) ?
+                      points[0] : points[1];
+            }
+            Geom::EllipticalArc *arc0 = circle1.arc(cbc1->finalPoint(), 0.5*(cbc1->finalPoint()+sol), sol, true);
+            Geom::EllipticalArc *arc1 = circle2.arc(sol, 0.5*(sol+endPt), endPt, true);
 
-			if (arc0)
-			{
-				path_builder.append (arc0->toSBasis());
-				delete arc0;
-				arc0 = NULL;
-			}
+            if (arc0) {
+                path_builder.append (arc0->toSBasis());
+                delete arc0;
+                arc0 = NULL;
+            }
 
-			if (arc1)
-			{
-				path_builder.append (arc1->toSBasis());
-				delete arc1;
-				arc1 = NULL;
-			}
-		}
-		else
-		{
-			path_builder.appendNew<Geom::LineSegment> (endPt);
-		}
-	}
-	else
-	{
-		path_builder.appendNew<Geom::LineSegment> (endPt);
-	}
+            if (arc1) {
+                path_builder.append (arc1->toSBasis());
+                delete arc1;
+                arc1 = NULL;
+            }
+        } else {
+            path_builder.appendNew<Geom::LineSegment> (endPt);
+        }
+    } else {
+        path_builder.appendNew<Geom::LineSegment> (endPt);
+    }
 }
-	Geom::Path half_outline_extrp(const Geom::Path& path_in, double line_width, ButtType linecap_type, double miter_limit)
-	{
-			Geom::PathVector pv = split_at_cusps(path_in);
-			unsigned m;
-			Path path_outline = Path();
-			Path path_tangent = Path();
 
-			Geom::Point initialPoint;
-			Geom::Point endPoint;
-
-			Geom::Path path_builder = Geom::Path();
-			Geom::PathVector * pathvec;
-		
-			//load the first portion in before the loop starts
-			{
-				path_outline = Path();
-				path_outline.LoadPath(pv[0], Geom::Affine(), false, false);
-				path_outline.OutsideOutline(&path_tangent, line_width / 2, join_straight, linecap_type, 10);
-				//now half of first cusp has been loaded
-
-				pathvec = path_tangent.MakePathVector();
-				path_tangent = Path();
-			
-				//instead of array accessing twice, dereferencing used for clarity
-				initialPoint = (*pathvec)[0].initialPoint();
-
-				path_builder.start(initialPoint);
-				path_builder.append( (*pathvec)[0] );
-
-				path_outline = Path();
-				path_outline.LoadPath(pv[1], Geom::Affine(), false, false);
-				path_outline.OutsideOutline(&path_tangent, line_width / 2, join_straight, linecap_type, 10);
-
-				delete pathvec; pathvec = NULL;
-				pathvec = path_tangent.MakePathVector();
-				path_tangent = Path();
-
-				Geom::Curve *cbc1 = path_builder[path_builder.size() - 1].duplicate();
-				Geom::Curve *cbc2 = (*pathvec)[0][0].duplicate();
-
-				extrapolate_curves(path_builder, cbc1, cbc2, (*pathvec)[0].initialPoint(), miter_limit );
-			
-				path_builder.append( (*pathvec)[0] );
-
-				//always set pointers null after deleting
-				delete pathvec; pathvec = NULL;
-				delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-			}
-
-			for (m = 2; m < pv.size(); m++)
-			{
-				path_outline = Path();
-				path_outline.LoadPath(pv[m], Geom::Affine(), false, false);
-				path_outline.OutsideOutline(&path_tangent, line_width / 2, join_straight, linecap_type, 10);
-
-				delete pathvec; pathvec = NULL;
-				pathvec = path_tangent.MakePathVector();
-
-				Geom::Curve *cbc1 = path_builder[path_builder.size() - 1].duplicate();
-				Geom::Curve *cbc2 = (*pathvec)[0][0].duplicate();
-
-				extrapolate_curves(path_builder, cbc1, cbc2, (*pathvec)[0].initialPoint(), miter_limit );
-				path_builder.append( (*pathvec)[0] );
-			
-				delete pathvec; pathvec = NULL;
-				delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-			}
-		
-			return path_builder;
-	}
-
-	//Create a reflected outline join.
-	//Note: it is generally recommended to let half_outline do this for you!
-	//path_builder: the path to append the curves to
-	//cbc1: the curve before the join
-	//cbc2: the curve after the join
-	//endPt: the point to end at
-	//miter_limit: the miter parameter
-	void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit)
-	{
-		//the most important work for the reflected join is done here
-
-		//determine where we are in the path. If we're on the inside, ignore
-		//and just lineTo. On the outside, we'll do a little reflection magic :)
-		Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
-		if (cross.empty())
-		{
-				//probably on the outside of the corner
-				Geom::Path pth;
-				pth.append(*cbc1);
-				
-				Geom::Point tang1 = Geom::unitTangentAt(pth.toPwSb()[0], 1);
-
-				//reflect curves along the bevel
-				D2SB newcurve1 = pth.toPwSb()[0] *
-					Geom::reflection ( -Geom::rot90(tang1) , 
-					cbc1->finalPoint() );
-
-				Geom::CubicBezier bzr1 = sbasis_to_cubicbezier(Geom::reverse(newcurve1));
-
-				pth = Geom::Path();
-				pth.append( *cbc2 );
-				Geom::Point tang2 = Geom::unitTangentAt(pth.toPwSb()[0], 0);
-
-				D2SB newcurve2 = pth.toPwSb()[0] *
-					Geom::reflection ( -Geom::rot90(tang2) ,
-					cbc2->initialPoint() );
-				Geom::CubicBezier bzr2 = sbasis_to_cubicbezier(Geom::reverse(newcurve2));
-
-				cross = Geom::crossings(bzr1, bzr2);
-				if ( cross.empty() )
-				{
-					//std::cout << "Oops, no crossings!" << std::endl;
-					//curves didn't cross; default to miter
-					/*boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
-																		cbc2->initialPoint(), tang2);
-					if (p)
-					{
-						path_builder.appendNew<Geom::LineSegment> (*p);
-					}*/
-					//bevel
-					path_builder.appendNew<Geom::LineSegment>( endPt );
-				}
-				else
-				{
-					//join
-					std::pair<Geom::CubicBezier, Geom::CubicBezier> sub1 = bzr1.subdivide(cross[0].ta);
-					std::pair<Geom::CubicBezier, Geom::CubicBezier> sub2 = bzr2.subdivide(cross[0].tb);
-
-					//@TODO joins have a strange tendency to cross themselves twice. Check this.
-
-					//sections commented out are for general stability
-					path_builder.appendNew <Geom::CubicBezier> (sub1.first[1], sub1.first[2], /*sub1.first[3]*/ sub2.second[0] );
-					path_builder.appendNew <Geom::CubicBezier> (sub2.second[1], sub2.second[2], /*sub2.second[3]*/ endPt );
-				}
-		}
-		else // cross.empty()
-		{
-			//probably on the inside of the corner
-			path_builder.appendNew<Geom::LineSegment> ( endPt );
-		}
-	}
-
-	/** @brief Converts a path to one half of an outline.
-	* path_in: The input path to use. (To create the other side use path_in.reverse() )
-	* line_width: the line width to use (usually you want to divide this by 2)
-	* linecap_type: (not used here) the cap to apply. Passed to libvarot.
-	* miter_limit: the miter parameter
-	*/
-	Geom::Path half_outline(const Geom::Path& path_in, double line_width, ButtType linecap_type, double miter_limit)
-	{
-			Geom::PathVector pv = split_at_cusps(path_in);
-			unsigned m;
-			Path path_outline = Path();
-			Path path_tangent = Path();
-			//needed for closing the path
-			Geom::Point initialPoint;
-			Geom::Point endPoint;
-
-			//some issues prevented me from using a PathBuilder here
-			//it seems like PathBuilder::peek() gave me a null reference exception
-			//and I was unable to get a stack trace on Windows, so had to switch to Linux
-			//to see what the hell was wrong. :( 
-			//I wasted five hours opening it in IDAPro, VS2012, and GDB Windows
-
-			/*Program received signal SIGSEGV, Segmentation fault.
-				0x00000000006539ac in get_curves (this=0x0)
-					at /usr/include/c++/4.6/bits/locale_facets.h:1077
-				1077	      { return __c; }
-			*/
-
-			Geom::Path path_builder = Geom::Path();
-			Geom::PathVector * pathvec;
-		
-			//load the first portion in before the loop starts
-			{
-				path_outline = Path();
-				path_outline.LoadPath(pv[0], Geom::Affine(), false, false);
-				path_outline.OutsideOutline(&path_tangent, line_width / 2, join_straight, linecap_type, 10);
-				//now half of first cusp has been loaded
-
-				pathvec = path_tangent.MakePathVector();
-				path_tangent = Path();
-			
-				//instead of array accessing twice, dereferencing used for clarity
-				initialPoint = (*pathvec)[0].initialPoint();
-
-				path_builder.start(initialPoint);
-				path_builder.append( (*pathvec)[0] );
-
-				path_outline = Path();
-				path_outline.LoadPath(pv[1], Geom::Affine(), false, false);
-				path_outline.OutsideOutline(&path_tangent, line_width / 2, join_straight, linecap_type, 10);
-
-				delete pathvec; pathvec = NULL;
-				pathvec = path_tangent.MakePathVector();
-				path_tangent = Path();
-
-				Geom::Curve *cbc1 = path_builder[path_builder.size() - 1].duplicate();
-				Geom::Curve *cbc2 = (*pathvec)[0][0].duplicate();
-
-				reflect_curves(path_builder, cbc1, cbc2, (*pathvec)[0].initialPoint(), miter_limit );
-			
-				path_builder.append( (*pathvec)[0] );
-
-				//always set pointers null after deleting
-				delete pathvec; pathvec = NULL;
-				delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-			}
-
-			for (m = 2; m < pv.size(); m++)
-			{
-				path_outline = Path();
-				path_outline.LoadPath(pv[m], Geom::Affine(), false, false);
-				path_outline.OutsideOutline(&path_tangent, line_width / 2, join_straight, linecap_type, 10);
-
-				delete pathvec; pathvec = NULL;
-				pathvec = path_tangent.MakePathVector();
-
-				Geom::Curve *cbc1 = path_builder[path_builder.size() - 1].duplicate();
-				Geom::Curve *cbc2 = (*pathvec)[0][0].duplicate();
-
-				reflect_curves(path_builder, cbc1, cbc2, (*pathvec)[0].initialPoint(), miter_limit );
-				path_builder.append( (*pathvec)[0] );
-			
-				delete pathvec; pathvec = NULL;
-				delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-			}
-		
-			return path_builder;
-	}
-
-	Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width, JoinType join, ButtType butt, double miter_lim)
-	{
-		Path p = Path();
-		Path outlinepath = Path();
-		for (unsigned i = 0; i < path_in.size(); i++)
-		{
-			p.LoadPath(path_in[i], Geom::Affine(), false, ( (i==0) ? false : true));
-		}
-
-		Geom::PathVector path_out;
-		for (unsigned lmnop = 0; lmnop < path_in.size(); lmnop++)
-		{
-			if (path_in[lmnop].size() > 1)
-			{
-				Geom::Path p_init;
-				Geom::Path p_rev;
-				Geom::PathBuilder pb = Geom::PathBuilder();
-			
-				if ( !path_in[lmnop].closed() )
-				{
-					p_init = Outline::half_outline( path_in[lmnop], -line_width, butt,
-						miter_lim );
-					p_rev = Outline::half_outline( path_in[lmnop].reverse(), -line_width, butt,
-						miter_lim );
-
-					pb.moveTo(p_init.initialPoint() );
-					pb.append(p_init);
-
-					//cap
-					if (butt == butt_straight) {
-						pb.lineTo(p_rev.initialPoint() );
-					} else if (butt == butt_round) {
-						pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, p_rev.initialPoint() );
-					} else if (butt == butt_square) {
-						//don't know what to do
-						pb.lineTo(p_rev.initialPoint() );
-					} else if (butt == butt_pointy) {
-						//don't know what to do
-						pb.lineTo(p_rev.initialPoint() );
-					}
-
-					pb.append(p_rev);
-
-					if (butt == butt_straight) {
-						pb.lineTo(p_init.initialPoint() );
-					} else if (butt == butt_round) {
-						pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, p_init.initialPoint() );
-					} else if (butt == butt_square) {
-						//don't know what to do
-						pb.lineTo(p_init.initialPoint() );
-					} else if (butt == butt_pointy) {
-						//don't know what to do
-						//Geom::Point end_deriv = Geom::unitTangentAt( Geom::reverse(path_in[lmnop].toPwSb()[path_in[lmnop].size()]), 0);
-						//double radius = 0.5 * Geom::distance(path_in[lmnop].finalPoint(), p_rev.initialPoint());
-
-						pb.lineTo(p_init.initialPoint() );
-					}
-				}
-				else
-				{
-					//final join
-					//refer to half_outline for documentation
-					Geom::Path p_almost = path_in[lmnop];
-					p_almost.appendNew<Geom::LineSegment> ( path_in[lmnop].initialPoint() );
-					p_init = Outline::half_outline( p_almost, -line_width, butt,
-						miter_lim );
-					p_rev = Outline::half_outline( p_almost.reverse(), -line_width, butt,
-						miter_lim );
-					p.LoadPath(path_in[lmnop], Geom::Affine(), false, false);
-
-					//this is a kludge, because I can't find how to make this work properly
-					bool lastIsLinear = ( (Geom::distance(path_in[lmnop].finalPoint(), 
-						path_in[lmnop] [path_in[lmnop].size() - 1].finalPoint())) == 
-						(path_in[lmnop] [path_in[lmnop].size()].length()));
-
-					p_almost = p_init;
-					if (lastIsLinear)
-					{
-						p_almost.erase_last(); p_almost.erase_last();
-					}
-
-					//outside test
-					Geom::Curve* cbc1 = p_almost[p_almost.size() - 1].duplicate();
-					Geom::Curve* cbc2 = p_almost[0].duplicate();
-
-					Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
-
-					if (cross.empty())
-					{
-						//this is the outside path
-						
-						//reuse the old one
-						p_init = p_almost;
-						Outline::reflect_curves(p_init, cbc1, cbc2, p_almost.initialPoint(), miter_lim );
-						pb.moveTo(p_init.initialPoint()); pb.append(p_init);
-					}
-					else
-					{
-						//inside, carry on :-)
-						pb.moveTo(p_almost.initialPoint()); pb.append(p_almost);
-					}
-
-					p_almost = p_rev;
-					if (lastIsLinear)
-					{			
-						p_almost.erase(p_almost.begin() );
-						p_almost.erase(p_almost.begin() );
-					}
-
-					delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-
-					cbc1 = p_almost[p_almost.size() - 1].duplicate();
-					cbc2 = p_almost[0].duplicate();
-
-					cross = Geom::crossings(*cbc1, *cbc2);
-
-					if (cross.empty())
-					{
-						//outside path
-					
-						p_init = p_almost;
-						reflect_curves(p_init, cbc1, cbc2, p_almost.initialPoint(), miter_lim );
-						pb.moveTo(p_init.initialPoint()); pb.append(p_init);
-					}
-					else
-					{
-						//inside
-						pb.moveTo(p_almost.initialPoint()); pb.append(p_almost);
-					}
-					delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-				}
-				//pb.closePath();
-				pb.flush();
-				Geom::PathVector pv_np = pb.peek();
-				//hack
-				for (unsigned abcd = 0; abcd < pv_np.size(); abcd++)
-				{
-					path_out.push_back( pv_np[abcd] );
-				}
-			} 
-			else
-			{
-				p.LoadPath(path_in[lmnop], Geom::Affine(), false, false);
-				p.Outline(&outlinepath, line_width / 2, join, butt, miter_lim);
-				std::vector<Geom::Path> *pv_p = outlinepath.MakePathVector();
-				//hack
-				path_out.push_back( (*pv_p)[0].reverse() );
-				delete pv_p;
-			}
-		}
-		return path_out;
-	}
-	Geom::PathVector outlinePath_extr(const Geom::PathVector& path_in, double line_width, LineJoinType join, ButtType butt, double miter_lim)
-	{
-		Path p = Path();
-		Path outlinepath = Path();
-		for (unsigned i = 0; i < path_in.size(); i++)
-		{
-			p.LoadPath(path_in[i], Geom::Affine(), false, ( (i==0) ? false : true));
-		}
-
-		Geom::PathVector path_out;
-		for (unsigned lmnop = 0; lmnop < path_in.size(); lmnop++)
-		{
-			if (path_in[lmnop].size() > 1)
-			{
-				Geom::Path p_init;
-				Geom::Path p_rev;
-				Geom::PathBuilder pb = Geom::PathBuilder();
-			
-				if ( !path_in[lmnop].closed() )
-				{
-					p_init = Outline::half_outline_extrp( path_in[lmnop], -line_width, butt,
-						miter_lim );
-					p_rev = Outline::half_outline_extrp( path_in[lmnop].reverse(), -line_width, butt,
-						miter_lim );
-
-					pb.moveTo(p_init.initialPoint() );
-					pb.append(p_init);
-
-					//cap
-					if (butt == butt_straight) {
-						pb.lineTo(p_rev.initialPoint() );
-					} else if (butt == butt_round) {
-						pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, p_rev.initialPoint() );
-					} else if (butt == butt_square) {
-						//don't know what to do
-						pb.lineTo(p_rev.initialPoint() );
-					} else if (butt == butt_pointy) {
-						//don't know what to do
-						pb.lineTo(p_rev.initialPoint() );
-					}
-
-					pb.append(p_rev);
-
-					if (butt == butt_straight) {
-						pb.lineTo(p_init.initialPoint() );
-					} else if (butt == butt_round) {
-						pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, p_init.initialPoint() );
-					} else if (butt == butt_square) {
-						//don't know what to do
-						pb.lineTo(p_init.initialPoint() );
-					} else if (butt == butt_pointy) {
-						//don't know what to do
-						//Geom::Point end_deriv = Geom::unitTangentAt( Geom::reverse(path_in[lmnop].toPwSb()[path_in[lmnop].size()]), 0);
-						//double radius = 0.5 * Geom::distance(path_in[lmnop].finalPoint(), p_rev.initialPoint());
-
-						pb.lineTo(p_init.initialPoint() );
-					}
-				}
-				else
-				{
-					//final join
-					//refer to half_outline for documentation
-					Geom::Path p_almost = path_in[lmnop];
-					p_almost.appendNew<Geom::LineSegment> ( path_in[lmnop].initialPoint() );
-					p_init = Outline::half_outline_extrp( p_almost, -line_width, butt,
-						miter_lim );
-					p_rev = Outline::half_outline_extrp( p_almost.reverse(), -line_width, butt,
-						miter_lim );
-					p.LoadPath(path_in[lmnop], Geom::Affine(), false, false);
-
-					//this is a kludge, because I can't find how to make this work properly
-					bool lastIsLinear = ( (Geom::distance(path_in[lmnop].finalPoint(), 
-						path_in[lmnop] [path_in[lmnop].size() - 1].finalPoint())) == 
-						(path_in[lmnop] [path_in[lmnop].size()].length()));
-
-					p_almost = p_init;
-					if (lastIsLinear)
-					{
-						p_almost.erase_last(); p_almost.erase_last();
-					}
-
-					//outside test
-					Geom::Curve* cbc1 = p_almost[p_almost.size() - 1].duplicate();
-					Geom::Curve* cbc2 = p_almost[0].duplicate();
-
-					Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
-
-					if (cross.empty())
-					{
-						//this is the outside path
-						
-						//reuse the old one
-						p_init = p_almost;
-						Outline::extrapolate_curves(p_init, cbc1, cbc2, p_almost.initialPoint(), miter_lim );
-						pb.moveTo(p_init.initialPoint()); pb.append(p_init);
-					}
-					else
-					{
-						//inside, carry on :-)
-						pb.moveTo(p_almost.initialPoint()); pb.append(p_almost);
-					}
-
-					p_almost = p_rev;
-					if (lastIsLinear)
-					{			
-						p_almost.erase(p_almost.begin() );
-						p_almost.erase(p_almost.begin() );
-					}
-
-					delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-
-					cbc1 = p_almost[p_almost.size() - 1].duplicate();
-					cbc2 = p_almost[0].duplicate();
-
-					cross = Geom::crossings(*cbc1, *cbc2);
-
-					if (cross.empty())
-					{
-						//outside path
-					
-						p_init = p_almost;
-						extrapolate_curves(p_init, cbc1, cbc2, p_almost.initialPoint(), miter_lim );
-						pb.moveTo(p_init.initialPoint()); pb.append(p_init);
-					}
-					else
-					{
-						//inside
-						pb.moveTo(p_almost.initialPoint()); pb.append(p_almost);
-					}
-					delete cbc1; delete cbc2; cbc1 = cbc2 = NULL;
-				}
-				//pb.closePath();
-				pb.flush();
-				Geom::PathVector pv_np = pb.peek();
-				//hack
-				for (unsigned abcd = 0; abcd < pv_np.size(); abcd++)
-				{
-					path_out.push_back( pv_np[abcd] );
-				}
-			} 
-			else
-			{
-				p.LoadPath(path_in[lmnop], Geom::Affine(), false, false);
-				p.Outline(&outlinepath, line_width / 2, join_pointy, butt, miter_lim);
-				std::vector<Geom::Path> *pv_p = outlinepath.MakePathVector();
-				//hack
-				path_out.push_back( (*pv_p)[0].reverse() );
-				delete pv_p;
-			}
-		}
-		return path_out;
-	}
-	
-Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line_width, ButtType linecap_type, 
-    join_typ linejoin_type, double miter_limit)
+void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit)
 {
-	std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
-	if (path_in.empty())
-	{
-		return path_out;
-	}
-	Path p = Path();
-	Path outlinepath = Path();
-	for (unsigned i = 0; i < path_in.size(); i++)
-	{
-		p.LoadPath(path_in[i], Geom::Affine(), false, ( (i==0) ? false : true));
-	}
+    //the most important work for the reflected join is done here
 
-	#define miter_lim fabs(line_width * miter_limit)
+    //determine where we are in the path. If we're on the inside, ignore
+    //and just lineTo. On the outside, we'll do a little reflection magic :)
+    
+    //note: this is TERRIBLY inaccurate.
+    Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
+    if (cross.empty()) {
+        //probably on the outside of the corner
+        Geom::Path pth;
+        pth.append(*cbc1);
 
-	//magic!
-	if (linejoin_type <= 2)
-	{
-		p.Outline(&outlinepath, line_width / 2, linejoin_type, 
-			linecap_type, miter_lim);
-		//fix memory leak
-		std::vector<Geom::Path> *pv_p = outlinepath.MakePathVector();
-		path_out = *pv_p;
-		delete pv_p;
+        Geom::Point tang1 = Geom::unitTangentAt(pth.toPwSb()[0], 1);
 
-	} else if (linejoin_type == 3) {
-		//reflected arc join
-		path_out = outlinePath(path_in, line_width, linejoin_type,
-			linecap_type , miter_lim);
+        //reflect curves along the bevel
+        D2SB newcurve1 = pth.toPwSb()[0] *
+                         Geom::reflection ( -Geom::rot90(tang1) ,
+                                            cbc1->finalPoint() );
 
-	} else if (linejoin_type == 4) {
-		//extrapolated arc join
-		path_out = outlinePath_extr(path_in, line_width, LINEJOIN_STRAIGHT, linecap_type, miter_lim);
-		
-	}
-	
-	#undef miter_lim
-	return path_out;
+        Geom::CubicBezier bzr1 = sbasis_to_cubicbezier(Geom::reverse(newcurve1));
+
+        pth = Geom::Path();
+        pth.append( *cbc2 );
+        Geom::Point tang2 = Geom::unitTangentAt(pth.toPwSb()[0], 0);
+
+        D2SB newcurve2 = pth.toPwSb()[0] *
+                         Geom::reflection ( -Geom::rot90(tang2) ,
+                                            cbc2->initialPoint() );
+        Geom::CubicBezier bzr2 = sbasis_to_cubicbezier(Geom::reverse(newcurve2));
+
+        cross = Geom::crossings(bzr1, bzr2);
+        if ( cross.empty() ) {
+            //curves didn't cross; default to miter
+            /*boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
+                    cbc2->initialPoint(), tang2);
+            if (p)
+            {
+            	path_builder.appendNew<Geom::LineSegment> (*p);
+            }*/
+            //bevel
+            path_builder.appendNew<Geom::LineSegment>( endPt );
+        } else {
+            //join
+            std::pair<Geom::CubicBezier, Geom::CubicBezier> sub1 = bzr1.subdivide(cross[0].ta);
+            std::pair<Geom::CubicBezier, Geom::CubicBezier> sub2 = bzr2.subdivide(cross[0].tb);
+
+            //@TODO joins have a strange tendency to cross themselves twice. Check this.
+
+            //sections commented out are for general stability
+            path_builder.appendNew <Geom::CubicBezier> (sub1.first[1], sub1.first[2], /*sub1.first[3]*/ sub2.second[0] );
+            path_builder.appendNew <Geom::CubicBezier> (sub2.second[1], sub2.second[2], /*sub2.second[3]*/ endPt );
+        }
+    } else { // cross.empty()
+        //probably on the inside of the corner
+        path_builder.appendNew<Geom::LineSegment> ( endPt );
+    }
 }
+
+/** @brief Converts a path to one half of an outline.
+* path_in: The input path to use. (To create the other side use path_in.reverse() )
+* line_width: the line width to use (usually you want to divide this by 2)
+* miter_limit: the miter parameter
+* extrapolate: whether the join should be extrapolated instead of reflected
+*/
+Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double miter_limit, bool extrapolate = false)
+{
+    // NOTE: it is important to notice the distinction between a Geom::Path and a livarot Path here!
+    // if you do not see "Geom::" there is a different function set!
+    Geom::PathVector pv = split_at_cusps(path_in);
+    
+    Path to_outline;
+    Path outlined_result;
+    
+    Geom::Path path_builder = Geom::Path(); //the path to store the result in
+    Geom::PathVector * path_vec; //needed because livarot returns a goddamn pointer
+    
+    const unsigned k = path_in.size();
+    
+    for (unsigned u = 0; u < k; u+=2)
+    {   
+        to_outline = Path();
+        outlined_result = Path();
+        
+        to_outline.LoadPath(pv[u], Geom::Affine(), false, false);
+        to_outline.OutsideOutline(&outlined_result, line_width / 2, join_straight, butt_straight, 10);
+        //now a curve has been outside outlined and loaded into outlined_result
+        
+        //get the Geom::Path
+        path_vec = outlined_result.MakePathVector();
+        
+        //thing to do on the first run through
+        if (u == 0) {
+            //I could use the pv->operator[] (0) notation but that looks terrible
+            path_builder.start( (*path_vec)[0].initialPoint() );
+        } else {
+            //get the curves ready for the operation
+            Geom::Curve * cbc1 = path_builder[path_builder.size() - 1].duplicate();
+            Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();
+            
+            //do the reflection/extrapolation:
+            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
+            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
+        }
+        
+        path_builder.append( (*path_vec)[0] );
+        
+        //outline the next segment, but don't store it yet
+        if (path_vec) delete path_vec;
+        
+        if (u < k - 1) {
+            outlined_result = Path();
+            to_outline = Path();
+            
+            to_outline.LoadPath(pv[u+1], Geom::Affine(), false, false);
+            to_outline.OutsideOutline(&outlined_result, line_width / 2, join_straight, butt_straight, 10);
+            
+            path_vec = outlined_result.MakePathVector();
+            
+            //get the curves ready for the operation
+            Geom::Curve * cbc1 = path_builder[path_builder.size() - 1].duplicate();
+            Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();
+            
+            //do the reflection/extrapolation:
+            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
+            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
+                          
+            //Now we can store it.
+            path_builder.append( (*path_vec)[0] );
+            
+            if (cbc1) delete cbc1;
+            if (cbc2) delete cbc2;
+            if (path_vec) delete path_vec;
+        }
+    }
+    
+    return path_builder;
+}
+
+Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width, LineJoinType join, 
+                             ButtType butt, double miter_lim, bool extrapolate)
+{
+    Geom::PathVector path_out;
+    
+    unsigned pv_size = path_in.size();
+    for (unsigned i = 0; i < pv_size; i++) {
+    
+        if (path_in[i].size() > 1) {
+            //since you've made it this far, hopefully all this is obvious :P
+            Geom::Path with_direction;
+            Geom::Path against_direction;
+            
+            with_direction = Outline::doAdvHalfOutline( path_in[i], -line_width, miter_lim, extrapolate );
+            against_direction = Outline::doAdvHalfOutline( path_in[i].reverse(), -line_width, extrapolate );
+            
+            Geom::PathBuilder pb;
+            
+            //add in the...do I really need to say this?
+            pb.moveTo(with_direction.initialPoint());
+            pb.append(with_direction);
+            
+            //add in our line caps
+            if (!path_in[i].closed()) {
+                switch (butt) {
+                    case butt_straight:
+                        pb.lineTo(against_direction.initialPoint());
+                        break;
+                    case butt_round:
+                        pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, against_direction.initialPoint() );
+                        break;                
+                    case butt_pointy:
+                        //I have ZERO idea what to do here.
+                        pb.lineTo(against_direction.initialPoint());
+                        break;
+                    case butt_square:
+                        pb.lineTo(against_direction.initialPoint());
+                        break;
+                }
+            } else {
+                pb.moveTo(against_direction.initialPoint());
+            }
+            
+            pb.append(against_direction);
+            
+            //cap (if necessary)
+            if (!path_in[i].closed()) {
+                switch (butt) {
+                    case butt_straight:
+                        pb.lineTo(with_direction.initialPoint());
+                        break;
+                    case butt_round:
+                        pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, with_direction.initialPoint() );
+                        break;                
+                    case butt_pointy:
+                        //I have ZERO idea what to do here.
+                        pb.lineTo(with_direction.initialPoint());
+                        break;
+                    case butt_square:
+                        pb.lineTo(with_direction.initialPoint());
+                        break;
+                }
+            }
+            pb.flush();
+            for (unsigned m = 0; i < pb.peek().size(); i++) {
+                path_out.push_back(pb.peek()[m]);
+            }
+        } else {
+            Path p = Path();
+            Path outlinepath = Path();
+            
+            p.LoadPath(path_in[i], Geom::Affine(), false, false);
+            p.Outline(&outlinepath, line_width / 2, static_cast<join_typ>(join), butt, miter_lim);
+            Geom::PathVector *pv_p = outlinepath.MakePathVector();
+            //somewhat hack-ish
+            path_out.push_back( (*pv_p)[0].reverse() );
+            if (pv_p) delete pv_p;
+        }
+    }
+    return path_out;
+}
+
+Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line_width, ButtType linecap_type,
+                                   LineJoinType linejoin_type, double miter_limit)
+{
+    std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
+    if (path_in.empty()) {
+        return path_out;
+    }
+    Path p = Path();
+    Path outlinepath = Path();
+    for (unsigned i = 0; i < path_in.size(); i++) {
+        p.LoadPath(path_in[i], Geom::Affine(), false, ( (i==0) ? false : true));
+    }
+
+#define miter_lim fabs(line_width * miter_limit)
+
+    //magic!
+    if (linejoin_type <= 2) {
+        p.Outline(&outlinepath, line_width / 2, static_cast<join_typ>(linejoin_type),
+                  linecap_type, miter_lim);
+        //fix memory leak
+        std::vector<Geom::Path> *pv_p = outlinepath.MakePathVector();
+        path_out = *pv_p;
+        delete pv_p;
+
+    } else if (linejoin_type == 3) {
+        //reflected arc join
+        path_out = outlinePath(path_in, line_width, static_cast<LineJoinType>(linejoin_type),
+                               linecap_type , miter_lim, false);
+
+    } else if (linejoin_type == 4) {
+        //extrapolated arc join
+        path_out = outlinePath(path_in, line_width, LINEJOIN_STRAIGHT, linecap_type, miter_lim, true);
+
+    }
+
+#undef miter_lim
+    return path_out;
+}
+
 Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, LineJoinType linejoin_type, double miter_limit)
 {
 
-    #define miter_lim fabs(line_width * miter_limit)
-    
+#define miter_lim fabs(line_width * miter_limit)
+
     Geom::Path path_out;
 
     if (linejoin_type <= LINEJOIN_POINTY || path_in.size() <= 1) {
-    
+
         Geom::PathVector * pathvec;
-        
+
         Path path_tangent = Path();
         Path path_outline = Path();
         path_outline.LoadPath(path_in, Geom::Affine(), false, false);
         path_outline.OutsideOutline(&path_tangent, line_width / 2, static_cast<join_typ>(linejoin_type), butt_straight, miter_lim);
-        
+
         pathvec = path_tangent.MakePathVector();
         path_out = pathvec[0]/* deref pointer */[0]/*actual object ref*/;
         delete pathvec;
         return path_out;
-    }
-    else if (linejoin_type == LINEJOIN_REFLECTED) {
+    } else if (linejoin_type == LINEJOIN_REFLECTED) {
         //reflected half outline
-        Geom::PathVector pathvec; pathvec.push_back(path_in);
-        path_out = half_outline(path_in, line_width, butt_straight, miter_lim);
+        Geom::PathVector pathvec;
+        pathvec.push_back(path_in);
+        path_out = doAdvHalfOutline(path_in, line_width, miter_lim, false);
+        return path_out;
+    } else if (linejoin_type == LINEJOIN_EXTRAPOLATED) {
+        //what the hell do you think this is? :P
+        path_out = doAdvHalfOutline(path_in, line_width, miter_lim, true);
         return path_out;
     }
-    else if (linejoin_type == LINEJOIN_EXTRAPOLATED) {
-        path_out = half_outline_extrp(path_in, line_width, butt_straight, miter_lim);
-        return path_out;
-    }
+#undef miter_lim
     return path_out;
 }
 

@@ -232,6 +232,198 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 	return path_out;
 }
 
+Geom::Curve * subdivide_at(const Geom::Curve* curve_in, Geom::Coord time, bool first);
+Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double width);
+
+Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
+{
+	Geom::Path first_cusp = return_at_first_cusp(path_in[0]);
+	Geom::Path last_cusp = return_at_first_cusp(path_in[0].reverse());
+	
+	bool zeroStart = false;
+	bool zeroEnd = false;
+	//there is a pretty good chance that people will try to drag the knots
+	//on top of each other, so block it
+
+	unsigned size = path_in[0].size();
+	if (size == first_cusp.size()) {
+		//check to see if the knots were dragged over each other
+		//if so, reset the end offset
+		if ( attach_start >= (size - attach_end) ) {
+			attach_end.param_set_value( size - attach_start );
+		}
+	}
+
+	//don't ever let it be zero
+	if (attach_start <= 0) {
+		attach_start.param_set_value( 0.00000001 );
+	}
+	if (attach_end <= 0) {
+		attach_end.param_set_value( 0.00000001 );
+	}
+	
+	//don't let it be integer
+	if (double(unsigned(attach_start)) == attach_start) {
+		attach_start.param_set_value(attach_start - 0.00000001);
+		zeroStart = true;
+	}
+	if (double(unsigned(attach_end)) == attach_end) {
+		attach_end.param_set_value(attach_end - 0.00000001);
+		zeroStart = true;
+	}
+
+	unsigned allowed_start = first_cusp.size();
+	unsigned allowed_end = last_cusp.size();
+	
+	//don't let the knots be farther than they are allowed to be
+	if ((unsigned)attach_start >= allowed_start) {
+	    attach_start.param_set_value((double)allowed_start - 0.00000001);
+	}
+	if ((unsigned)attach_end >= allowed_end) {
+	    attach_end.param_set_value((double)allowed_end - 0.00000001);
+	}
+	
+	//remember, Path::operator () means get point at time t
+	start_attach_point = first_cusp(attach_start);
+	end_attach_point = last_cusp(attach_end);
+	Geom::PathVector pathv_out;
+	
+	//the following function just splits it up into three pieces.
+	pathv_out = doEffect_simplePath(path_in);
+	
+	//now for the actual tapering. We use a Pattern Along Path method to get this done.
+	
+	Geom::PathVector real_pathv;
+	Geom::Path real_path;
+	Geom::PathVector pat_vec;
+	Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2;
+        Geom::Path throwaway_path;
+ 	
+	if (!zeroStart) {	
+	//Construct the pattern (pat_str stands for pattern string) (yes, this is easier, trust me)
+	std::stringstream pat_str;
+	pat_str << "M 1,0 1,1 C " << 1 - (double)smoothing << ",1 0,0.5 0,0.5 0,0.5 " << 1 - double(smoothing) << ",0 1,0";
+
+	pat_vec = sp_svg_read_pathv(pat_str.str().c_str());
+		
+	pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));
+		
+	throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0].reverse();
+	throwaway_path.erase_last(); //wtf
+		
+	real_path.append(throwaway_path);
+	}	
+	//append the outside outline of the path (with direction)
+	throwaway_path = Outline::PathOutsideOutline(pathv_out[1], 
+		line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+			
+	throwaway_path.setInitial(real_path.finalPoint());
+	real_path.append(throwaway_path);
+	
+	if (!zeroEnd) {	
+	//append the ending taper		
+	std::stringstream pat_str_1;
+	pat_str_1 << "M 0,0 0,1 C " << (double)smoothing << ",1 1,0.5 1,0.5 1,0.5 " << double(smoothing) << ",0 0,0";
+	pat_vec = sp_svg_read_pathv(pat_str_1.str().c_str());
+		
+	pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
+	pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], line_width));
+		
+	throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
+	throwaway_path.setInitial(real_path.finalPoint());
+	real_path.append(throwaway_path);
+	}	
+	//append the inside outline of the path (against direction)
+	throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), 
+		line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+		
+	throwaway_path.setInitial(real_path.finalPoint());
+		
+	real_path.append(throwaway_path);
+	real_path.close();
+		
+	real_pathv.push_back(real_path);
+		
+	return real_pathv;
+}
+
+//in all cases, this should return a PathVector with three elements.
+Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & path_in)
+{
+	unsigned size = path_in[0].size();
+		
+	//do subdivision and get out
+	unsigned loc = (unsigned)attach_start;
+	Geom::Curve * curve_start = path_in[0] [loc].duplicate();
+		
+	std::vector<Geom::Path> pathv_out;
+	Geom::Path path_out = Geom::Path();
+		
+	Geom::Path trimmed_start = Geom::Path();
+	Geom::Path trimmed_end = Geom::Path();
+		
+	for (unsigned i = 0; i < loc; i++) {
+		trimmed_start.append(path_in[0] [i]);
+	}
+		
+		
+	trimmed_start.append(*subdivide_at(curve_start, (attach_start - loc), true));
+	curve_start = subdivide_at(curve_start, attach_start - loc, false);
+		
+	//special case: path is one segment long
+	//special case: what if the two knots occupy the same segment?
+	if ((size == 1) || ( size - unsigned(attach_end) - 1 == loc ))
+	{
+		Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_start);
+		//it is just a dumb segment
+		//we have to do some shifting here because the value changed when we reduced the length
+		//of the previous segment.
+		trimmed_end.append(*subdivide_at(curve_start, t, false));
+		for (unsigned j = (size - attach_end) + 1; j < size; j++) {
+			trimmed_end.append(path_in[0] [j]);
+		}
+			
+		curve_start = subdivide_at(curve_start, t, true);
+		path_out.append(*curve_start);
+		pathv_out.push_back(trimmed_start);
+		pathv_out.push_back(path_out);
+		pathv_out.push_back(trimmed_end);
+		return pathv_out;
+	}
+		
+	pathv_out.push_back(trimmed_start);
+		
+	//append almost all of the rest of the path, ignore the curves that the knot is past (we'll get to it in a minute)
+	path_out.append(*curve_start);
+
+	for (unsigned k = loc + 1; k < (size - unsigned(attach_end)) - 1; k++) {
+		path_out.append(path_in[0] [k]);
+	}
+		
+	//deal with the last segment in a very similar fashion to the first
+	loc = size - attach_end;
+		
+	Geom::Curve * curve_end = path_in[0] [loc].duplicate();
+
+	Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_end);
+		
+	trimmed_end.append(*subdivide_at(curve_end, t, false));
+	curve_end = subdivide_at(curve_end, t, true);
+		
+	for (unsigned j = (size - attach_end) + 1; j < size; j++) {
+		trimmed_end.append(path_in[0] [j]);
+	}
+		
+	path_out.append(*curve_end);
+	pathv_out.push_back(path_out);
+		
+	pathv_out.push_back(trimmed_end);
+		
+	if (curve_end) delete curve_end;
+	if (curve_start) delete curve_start;
+	return pathv_out;
+}
+
 Geom::Curve * subdivide_at(const Geom::Curve* curve_in, Geom::Coord time, bool first)
 {
 	//the only reason for this function is the lack of a subdivide function in the Curve class.
@@ -269,192 +461,6 @@ Geom::Curve * subdivide_at(const Geom::Curve* curve_in, Geom::Coord time, bool f
 	return curve_out;
 }
 
-Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double width);
-
-Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
-{
-	//there is a pretty good chance that people will try to drag the knots
-	//on top of each other, so block it
-
-	unsigned size = path_in[0].size();
-	if (size == return_at_first_cusp(path_in[0]).size()) {
-		//check to see if the knots were dragged over each other
-		//if so, reset the end offset
-		if ( attach_start >= (size - attach_end) ) {
-			attach_end.param_set_value( size - attach_start );
-		}
-	}
-
-	//don't ever let it be zero
-	if (attach_start <= 0) {
-		attach_start.param_set_value( 0.0001 );
-	}
-	if (attach_end <= 0) {
-		attach_end.param_set_value( 0.0001 );
-	}
-	
-	//don't let it be integer
-	if (double(unsigned(attach_start)) == attach_start) {
-		attach_start.param_set_value(attach_start - 0.0001);
-	}
-	if (double(unsigned(attach_end)) == attach_end) {
-		attach_end.param_set_value(attach_end - 0.0001);
-	}
-
-	unsigned allowed_start = return_at_first_cusp(path_in[0]).size();
-	
-	unsigned allowed_end = return_at_first_cusp(path_in[0].reverse()).size();
-	
-	if ((unsigned)attach_start >= allowed_start) {
-	    attach_start.param_set_value((double)allowed_start - 0.0001);
-	}
-	if ((unsigned)attach_end >= allowed_end) {
-	    attach_end.param_set_value((double)allowed_end - 0.0001);
-	}
-	
-	//Path::operator () means get point at time t
-	start_attach_point = return_at_first_cusp(path_in[0])(attach_start);
-	end_attach_point = return_at_first_cusp(path_in[0].reverse())(attach_end);
-	Geom::PathVector pathv_out;
-	
-	pathv_out = doEffect_simplePath(path_in);
-	
-	
-	//now for the fun stuff. Right? RIGHT?
-	
-	if (true) {
-		Geom::PathVector real_pathv;
-		Geom::Path real_path;
-		
-		//Construct the pattern (pat_str stands for pattern string)
-		std::stringstream pat_str;
-		pat_str << "M 1,0 1,1 C " << 1 - (double)smoothing << ",1 0,0.5 0,0.5 0,0.5 " << 1 - double(smoothing) << ",0 1,0";
-
-		Geom::PathVector pat_vec = sp_svg_read_pathv(pat_str.str().c_str());
-		
-		Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2;
-		pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));
-		
-		Geom::Path throwaway_path = path_from_piecewise(pwd2, 0.001)[0].reverse();
-		throwaway_path.erase_last();
-		
-		real_path.append(throwaway_path); //wtf
-		
-		throwaway_path = Outline::PathOutsideOutline(pathv_out[1], 
-			line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
-			
-		throwaway_path.setInitial(real_path.finalPoint());
-		real_path.append(throwaway_path);
-		
-		std::stringstream pat_str_1;
-		pat_str_1 << "M 0,0 0,1 C " << (double)smoothing << ",1 1,0.5 1,0.5 1,0.5 " << double(smoothing) << ",0 0,0";
-		pat_vec = sp_svg_read_pathv(pat_str_1.str().c_str());
-		
-		pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
-		pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], line_width));
-		
-		throwaway_path = Geom::Path();
-		throwaway_path = path_from_piecewise(pwd2, 0.001)[0];
-		throwaway_path.setInitial(real_path.finalPoint());
-		real_path.append(throwaway_path);
-		
-		throwaway_path = Geom::Path();
-		throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), 
-			line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
-			
-		//throwaway_path = throwaway_path.reverse();
-		throwaway_path.setInitial(real_path.finalPoint());
-		
-		real_path.append(throwaway_path);
-		//real_path.close();
-		
-		real_pathv.push_back(real_path);
-		
-		//real_pathv.push_back(path_from_piecewise(pwd2, 0.001)[0].reverse());
-		
-		return real_pathv;
-	}
-	
-	return pathv_out;
-}
-
-//in all cases, this should return a PathVector with three elements.
-Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & path_in)
-{
-		unsigned size = path_in[0].size();
-		
-		//do subdivision and get out
-		unsigned loc = (unsigned)attach_start;
-		Geom::Curve * curve_start = path_in[0] [loc].duplicate();
-		
-		std::vector<Geom::Path> pathv_out;
-		Geom::Path path_out = Geom::Path();
-		
-		Geom::Path trimmed_start = Geom::Path();
-		Geom::Path trimmed_end = Geom::Path();
-		
-		for (unsigned i = 0; i < loc; i++) {
-			trimmed_start.append(path_in[0] [i]);
-		}
-		
-		#define OVERLAP 0 /*(0.001 / (line_width < 1 ? 1 : line_width))*/
-		
-		trimmed_start.append(*subdivide_at(curve_start, (attach_start - loc) + OVERLAP, true));
-		curve_start = subdivide_at(curve_start, attach_start - loc, false);
-		
-		//special case: path is one segment long
-		//special case: what if the two knots occupy the same segment?
-		if ((size == 1) || ( size - unsigned(attach_end) - 1 == loc ))
-		{
-			Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_start);
-			//it is just a dumb segment
-			//we have to do some shifting here because the value changed when we reduced the length
-			//of the previous segment.
-			trimmed_end.append(*subdivide_at(curve_start, t - OVERLAP, false));
-			for (unsigned j = (size - attach_end) + 1; j < size; j++) {
-				trimmed_end.append(path_in[0] [j]);
-			}
-			
-			curve_start = subdivide_at(curve_start, t, true);
-			path_out.append(*curve_start);
-			pathv_out.push_back(trimmed_start);
-			pathv_out.push_back(path_out);
-			pathv_out.push_back(trimmed_end);
-			return pathv_out;
-		}
-		
-		pathv_out.push_back(trimmed_start);
-		
-		//append almost all of the rest of the path, ignore the curves that the knot is past (we'll get to it in a minute)
-		path_out.append(*curve_start);
-
-		for (unsigned k = loc + 1; k < (size - unsigned(attach_end)) - 1; k++) {
-			path_out.append(path_in[0] [k]);
-		}
-		
-		//deal with the last segment in a very similar fashion to the first
-		loc = size - attach_end;
-		
-		Geom::Curve * curve_end = path_in[0] [loc].duplicate();
-
-		Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_end);
-		
-		trimmed_end.append(*subdivide_at(curve_end, t - OVERLAP, false));
-		curve_end = subdivide_at(curve_end, t, true);
-		
-		for (unsigned j = (size - attach_end) + 1; j < size; j++) {
-			trimmed_end.append(path_in[0] [j]);
-		}
-		
-		path_out.append(*curve_end);
-		pathv_out.push_back(path_out);
-		
-		pathv_out.push_back(trimmed_end);
-		
-		if (curve_end) delete curve_end;
-		if (curve_start) delete curve_start;
-		return pathv_out;
-}
 
 
 //most of the below code is verbatim from Pattern Along Path. However, it needed a little

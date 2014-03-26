@@ -158,46 +158,13 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
     }
 }
 
-
+//NOTE: I originally had all the outliner functions defined in here, but they were actually useful
+//enough for other LPEs so I moved them all into pathoutlineprovider.cpp. The code here is just a 
+//wrapper around it.
 std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const & path_in)
-{
-	std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
-	if (path_in.empty())
-	{
-		return path_out;
-	}
-	Path p = Path();
-	Path outlinepath = Path();
-	for (unsigned i = 0; i < path_in.size(); i++)
-	{
-		p.LoadPath(path_in[i], Geom::Affine(), false, ( (i==0) ? false : true));
-	}
-
-	#define miter_lim ( (attempt_force_join) ? std::numeric_limits<double>::max() : fabs(line_width * miter_limit))
-
-	//magic!
-	if (linejoin_type.get_value() <= 2)
-	{
-		p.Outline(&outlinepath, line_width / 2, static_cast<JoinType>( linejoin_type.get_value() ), 
-			static_cast<ButtType>( linecap_type.get_value() ), miter_lim);
-		//fix memory leak
-		std::vector<Geom::Path> *pv_p = outlinepath.MakePathVector();
-		path_out = *pv_p;
-		delete pv_p;
-
-	} else if (linejoin_type.get_value() == 3) {
-		//reflected arc join
-		path_out = Outline::outlinePath(path_in, line_width, static_cast<JoinType>( linejoin_type.get_value() ),
-			static_cast<ButtType>( linecap_type.get_value() ), miter_lim);
-
-	} else if (linejoin_type.get_value() == 4) {
-		//extrapolated arc join
-		path_out = Outline::outlinePath_extr(path_in, line_width, LINEJOIN_STRAIGHT, static_cast<ButtType>(linecap_type.get_value()), miter_lim);
-		
-	}
-	
-	#undef miter_lim
-	return path_out;
+{       
+	return Outline::PathVectorOutline(path_in, line_width, static_cast<ButtType>(linecap_type.get_value()), 
+						static_cast<LineJoinType>(linejoin_type.get_value()), miter_limit);
 }
 
 } //namespace LivePathEffect
