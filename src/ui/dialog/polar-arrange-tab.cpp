@@ -7,11 +7,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <2geom/transforms.h>
-#include <glibmm/i18n.h>
-
 #include "ui/dialog/polar-arrange-tab.h"
 #include "ui/dialog/tile.h"
+
+#include <2geom/transforms.h>
+#include <glibmm/i18n.h>
 
 #include "verbs.h"
 #include "preferences.h"
@@ -240,7 +240,7 @@ static Geom::Point getAnchorPoint(int anchor, SPItem *item)
 	else
 	{
 		// FIXME:
-		source[1] -= item->document->getHeight();
+		source[1] -= item->document->getHeight().value("px");
 		source[1] *= -1;
 	}
 

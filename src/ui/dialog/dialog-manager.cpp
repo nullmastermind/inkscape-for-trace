@@ -150,12 +150,8 @@ DialogManager::DialogManager() {
 //        registerFactory("PrintColorsPreviewDialog",      &create<PrintColorsPreviewDialog,       DockBehavior>);
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       DockBehavior>);
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
-<<<<<<< TREE
-        registerFactory("TileDialog",          &create<ArrangeDialog,           DockBehavior>);
-=======
+        registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
-        registerFactory("TileDialog",          &create<TileDialog,           DockBehavior>);
->>>>>>> MERGE-SOURCE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
         registerFactory("PixelArt",            &create<PixelArtDialog,       DockBehavior>);
         registerFactory("Transformation",      &create<Transformation,       DockBehavior>);

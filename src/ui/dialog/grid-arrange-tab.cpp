@@ -587,7 +587,12 @@ static void updateSelectionCallback(Inkscape::Application */*inkscape*/, Inkscap
 GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     : Parent(parent),
       XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns", &PaddingUnitMenu),
-      YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows", &PaddingUnitMenu)
+      YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows", &PaddingUnitMenu),
+#if WITH_GTKMM_3_0
+      PaddingTable(Gtk::manage(new Gtk::Grid()))
+#else
+      PaddingTable(Gtk::manage(new Gtk::Table(2, 2, false)))
+#endif
 {
      // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;

@@ -14,13 +14,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "ui/dialog/grid-arrange-tab.h"
+#include "ui/dialog/polar-arrange-tab.h"
+
 #include <glibmm/i18n.h>
 
 #include "tile.h"
 #include "verbs.h"
-
-#include "ui/dialog/grid-arrange-tab.h"
-#include "ui/dialog/polar-arrange-tab.h"
 
 namespace Inkscape {
 namespace UI {
