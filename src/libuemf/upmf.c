@@ -21,11 +21,11 @@
 
 /*
 File:      upmf.c
-Version:   0.0.4
-Date:      27-NOV-2013
+Version:   0.0.5
+Date:      24-MAR-2014
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2014 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -70,18 +70,25 @@ void U_swap4(void *ul, unsigned int count);
 
 /**
     \brief  Utility function for writing one or more EMF+ records in a PseudoObject to the EMF output file
-    \param  po          U_PSEUDO_OBJ to write 
+    \return 1 on success, 0 on error.
+    \param  po          U_PSEUDO_OBJ to write, it is deleted after it is written
     \param  sum         U_PSEUDO_OBJ to use for scratch space
     \param  et          EMFTRACK used to write records to EMF file
 */
-void U_PMR_write(U_PSEUDO_OBJ *po, U_PSEUDO_OBJ *sum, EMFTRACK *et){
+int U_PMR_write(U_PSEUDO_OBJ *po, U_PSEUDO_OBJ *sum, EMFTRACK *et){
    char *rec;
+   int status = 0;
    sum->Used = 0;                                          /* clean it out, retaining allocated memory         */
    sum       = U_PO_append(sum, "EMF+", 4);                /* indicates that this comment holds an EMF+ record */
+   if(!sum)goto end;
    sum       = U_PO_append(sum,  po->Data, po->Used);      /* the EMF+ record itself                           */
+   if(!sum)goto end;
+   U_PO_free(&po);                                         /* delete the PseudoObject                          */
    rec       = U_EMRCOMMENT_set(sum->Used, sum->Data);     /* stuff it into the EMF comment                    */
-   (void) emf_append((PU_ENHMETARECORD)rec, et, 1);        /* write it to the EMF file                         */
-   U_PO_free(&po);                                         /* delete the PseudoObjects                         */
+   if(!emf_append((PU_ENHMETARECORD)rec, et, 1))goto end;  /* write it to the EMF file, delete the record, check status */
+   status = 1;
+end:
+   return(status);
 }
 
 /**
@@ -442,8 +449,12 @@ int U_OA_append(U_OBJ_ACCUM *oa, const char *data, int size, int Type, int Id){
    tail = oa->used;
    if(oa->used + size >= oa->space){
       oa->space += size;
-      oa->accum = (char *) realloc(oa->accum, oa->space);
-      if(!oa->accum)return(1);
+      char *newaccum = (char *) realloc(oa->accum, oa->space);
+      if(!newaccum){
+         oa->space -= size; /* put it back the way it was */
+         return(1);
+      }
+      oa->accum = newaccum;
    }
    memcpy(oa->accum + tail,data,size);
    oa->used += size;
@@ -525,18 +536,21 @@ U_PSEUDO_OBJ *U_PO_create(char *Data, size_t Size, size_t Use, uint32_t Type){
 U_PSEUDO_OBJ *U_PO_append(U_PSEUDO_OBJ *po, const char *Data, size_t Size){
    /* po cannot be NULL,as in U_PO_po_append(), because there would be no way to determine the TYPE of the resulting PO */
    if(po){
-      if(po->Used + Size > po->Size){
+      if(!po->Data || po->Used + Size > po->Size){
          po->Size = po->Used + Size;
-         po->Data = realloc(po->Data, po->Size);
+         char *newData = realloc(po->Data, po->Size);
+         if(!newData){
+            po->Size -= Size; /* put it back the way it was*/
+            po=NULL;          /* skip the rest of the actions, does not affect po in caller */
+         }
+         else {
+            po->Data = newData;
+         }
       }
-      if(po->Data){
+      if(po){ /* po->Data ready to append new data */
          if(Data){ memcpy(po->Data + po->Used, Data, Size); }
          else {    memset(po->Data + po->Used, 0,    Size); }
          po->Used += Size;
-      }
-      if(!po->Data){
-         free(po);
-         po=NULL;
       }
    }
    return(po);
@@ -551,33 +565,35 @@ U_PSEUDO_OBJ *U_PO_append(U_PSEUDO_OBJ *po, const char *Data, size_t Size){
 */
 U_PSEUDO_OBJ *U_PO_po_append(U_PSEUDO_OBJ *po, U_PSEUDO_OBJ *Src, int StripE){
    if(!Src){ return(NULL); }
+   if((StripE && (Src->Used == 4)) || !Src->Used){ return(po); } /* appending nothing is not an error */
    char   *Data = Src->Data;
-   size_t  Size = Src->Size;
+   size_t  Size = Src->Used;  /* append only what is used */
+   U_PSEUDO_OBJ *ipo = po;
    if(StripE){ Size -= 4; }
-   if(!po){
-      po = U_PO_create(NULL, 0, 0, Src->Type); /* create an empty pseudoobject */
+   if(!ipo){
+      ipo = U_PO_create(NULL, 0, 0, Src->Type); /* create an empty pseudoobject */
    }
-   if(po){
-      if(po->Data){
-         if(po->Used + Size > po->Size){
-            po->Size = po->Used + Size;
-            po->Data = realloc(po->Data, po->Size);
+   if(ipo){
+      if(!ipo->Data || ipo->Used + Size > ipo->Size){
+         ipo->Size = ipo->Used + Size;
+         char *newData = realloc(ipo->Data, ipo->Size);
+         if(!newData){
+            if(ipo != po)U_PO_free(&ipo);
          }
-         if(po->Data){
-            if(Data){
-               if(StripE){  memcpy(po->Data + po->Used, Data + 4, Size); } /* Size is already 4 less, skip the leading Elements value */
-               else {       memcpy(po->Data + po->Used, Data,     Size); } /* copy everything */
-            }
-            else {          memset(po->Data + po->Used, 0,        Size); } /* set everything  */
-            po->Used += Size;
+         else {
+            ipo->Data = newData;
          }
       }
-      if(!po->Data){
-         free(po);
-         po=NULL;
+      if(ipo){
+         if(Data){
+            if(StripE){  memcpy(ipo->Data + ipo->Used, Data + 4, Size); } /* Size is already 4 less, skip the leading Elements value */
+            else {       memcpy(ipo->Data + ipo->Used, Data,     Size); } /* copy everything */
+         }
+         else {          memset(ipo->Data + ipo->Used, 0,        Size); } /* set everything  */
+         ipo->Used += Size;
       }
    }
-   return(po);
+   return(ipo);
 }
 
 /**
@@ -608,7 +624,7 @@ int U_PO_free(U_PSEUDO_OBJ **po){
    Data fields: an array of a basic type of Units bytes repeated Reps times with the target byte order
       described in TE. 
    
-   Ptrs:  Address of the first byte of the data fields.  
+   Ptrs:  Address of the first byte of the data fields.
 
    Units: Number of bytes of in each data field unit
 
@@ -672,7 +688,7 @@ U_DPSEUDO_OBJ *U_PATH_create(int Elements, const U_PMF_POINTF *Points, uint8_t F
       if(!(Others & U_PPT_Bezier)){              return(NULL); } /* will pass if either line or bezier is set */
    }
     
-   U_DPSEUDO_OBJ *Path = (U_DPSEUDO_OBJ *)malloc(sizeof(U_DPSEUDO_OBJ));
+   U_DPSEUDO_OBJ *Path = (U_DPSEUDO_OBJ *)calloc(sizeof(U_DPSEUDO_OBJ),1); /* make poTypes and poPoints NULL */
    const U_SERIAL_DESC List[] = { {NULL,0,0,U_XX} };
    if(Path){
       Path->Elements = Elements;
@@ -733,17 +749,23 @@ int U_DPO_clear(U_DPSEUDO_OBJ *dpo){
 int U_PATH_moveto(U_DPSEUDO_OBJ *Path, U_PMF_POINTF Point, uint8_t Flags){
    if(!Path){ return(0); }
    U_PSEUDO_OBJ *tpo;
+   U_PSEUDO_OBJ *tpo2;
    uint8_t Type = (Flags & U_PTP_NotClose) | U_PPT_Start;
 
    tpo = U_PMF_POINTF_set(1, &Point);
    if(!tpo){ return(0); }
-   Path->poPoints = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poPoints = tpo2;
+   
 
    tpo  = U_PMF_PATHPOINTTYPE_set(1, &Type);
    if(!tpo){ return(0); }
-   Path->poTypes = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2= U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poTypes = tpo2;
 
    Path->Elements++;
    return(1);
@@ -760,16 +782,22 @@ int U_PATH_lineto(U_DPSEUDO_OBJ *Path,  U_PMF_POINTF Point, uint8_t Flags){
    if(!Path || !Path->Elements){ return(0); }  /* must be at least one point to extend from */
    if(Path->poTypes->Data[Path->Elements - 1] & U_PTP_CloseSubpath){ return(0); }  /* cannot extend a closed subpath */
    U_PSEUDO_OBJ *tpo;
+   U_PSEUDO_OBJ *tpo2;
    uint8_t Type = (Flags & U_PTP_NotClose) | U_PPT_Line;
    tpo = U_PMF_POINTF_set(1, &Point);
    if(!tpo){ return(0); }
-   Path->poPoints = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poPoints  = tpo2;
+   
 
    tpo  = U_PMF_PATHPOINTTYPE_set(1, &Type);
    if(!tpo){ return(0); }
-   Path->poTypes = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poTypes  = tpo2;
 
    Path->Elements++;
    return(1);
@@ -802,18 +830,24 @@ int U_PATH_polylineto(U_DPSEUDO_OBJ *Path, uint32_t Elements, const U_PMF_POINTF
    if(!Path || !Points){ return(0); }
    if(!Elements){ return(1); } /* harmless - do nothing */
    U_PSEUDO_OBJ *tpo;
+   U_PSEUDO_OBJ *tpo2;
    uint8_t First, Others;
 
    tpo = U_PMF_POINTF_set(Elements, Points);
-   Path->poPoints = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poPoints = tpo2;
+   
    if(StartSeg){ First  = (Flags & U_PTP_NotClose) | U_PPT_Start; }
    else {        First  = (Flags & U_PTP_NotClose) | U_PPT_Line;  }
                  Others = (Flags & U_PTP_NotClose) | U_PPT_Line;  
    tpo  = U_PMF_PATHPOINTTYPE_set2(Elements, First, Others);
    if(!tpo){ return(0); }
-   Path->poTypes = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poTypes = tpo2;
 
    Path->Elements += Elements;
    return(1);
@@ -842,19 +876,24 @@ int U_PATH_polybezierto(U_DPSEUDO_OBJ *Path, uint32_t Elements, const U_PMF_POIN
    if(StartSeg  && ((Elements - 1) % 3)){ return(0); }    /* new segment    must be 1 + N*3 points */
    if(!StartSeg && (Elements % 3)){       return(0); }    /* extend segment must be     N*3 points */
    U_PSEUDO_OBJ *tpo;
+   U_PSEUDO_OBJ *tpo2;
    uint8_t First, Others;
 
    tpo = U_PMF_POINTF_set(Elements, Points);
-   Path->poPoints = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poPoints, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poPoints = tpo2;
  
    if(StartSeg){ First  = (Flags & U_PTP_NotClose) | U_PPT_Start;  }
    else {        First  = (Flags & U_PTP_NotClose) | U_PPT_Bezier; }
                  Others = (Flags & U_PTP_NotClose) | U_PPT_Bezier;
    tpo  = U_PMF_PATHPOINTTYPE_set2(Elements, First, Others);
    if(!tpo){ return(0); }
-   Path->poTypes = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
+   tpo2 = U_PO_po_append(Path->poTypes, tpo, U_PMF_DROP_ELEMENTS);
    U_PO_free(&tpo);
+   if(!tpo2)return(0);
+   Path->poTypes = tpo2;
 
    Path->Elements += Elements;
    return(1);
@@ -1303,8 +1342,9 @@ uint8_t *U_LOAD_GUID(char *string){
       if(3 != sscanf(string +  0,"%8X",&Data1)  + 
               sscanf(string +  8,"%4X",&tData2) + 
               sscanf(string + 12,"%4X",&tData3)){
-         free(lf);
-         return(NULL);
+         free(hold);
+         hold = NULL;
+         goto bye;
       }
       Data2=tData2;
       Data3=tData3;
@@ -1318,12 +1358,14 @@ uint8_t *U_LOAD_GUID(char *string){
       /* remainder is converted byte by byte and stored in that order */
       for(i=0;i<8;i++,Data4+=2,lf++){
          if(1 != sscanf(Data4,"%2X",&tByte)){
-            free(lf);
-            return(NULL);
+            free(hold);
+            hold = NULL;
+            goto bye;
          }
          *lf=tByte;
       }
    }
+bye:
    return(hold);
 }
 
@@ -1767,7 +1809,7 @@ U_PSEUDO_OBJ *U_PMF_PEN_set(uint32_t Version, const U_PSEUDO_OBJ *PenData, const
     EMF+ manual 2.2.1.8, Microsoft name: EmfPlusRegion Object
 */
 U_PSEUDO_OBJ *U_PMF_REGION_set(uint32_t Version, uint32_t Count, const U_PSEUDO_OBJ *Nodes){
-   if(Nodes->Type  != U_PMF_REGIONNODE_OID)return(NULL);
+   if(!Nodes || Nodes->Type  != U_PMF_REGIONNODE_OID)return(NULL);
    const U_SERIAL_DESC List[] = {
       {&Version,    4,           1, U_LE},
       {&Count,      4,           1, U_LE},
@@ -1787,6 +1829,7 @@ U_PSEUDO_OBJ *U_PMF_REGION_set(uint32_t Version, uint32_t Count, const U_PSEUDO_
     EMF+ manual 2.2.1.9, Microsoft name: EmfPlusStringFormat Object
 */
 U_PSEUDO_OBJ *U_PMF_STRINGFORMAT_set(U_PMF_STRINGFORMAT *Sfs, const U_PSEUDO_OBJ *Sfd){
+   if(!Sfs){ return(NULL); }
    if(Sfd){
      if((!Sfs->TabStopCount && !Sfs->RangeCount) || (Sfd->Type  != U_PMF_STRINGFORMATDATA_OID))return(NULL);
    }
@@ -1901,6 +1944,7 @@ U_PMF_ARGB U_PMF_ARGBOBJ_set(uint8_t Alpha, uint8_t Red, uint8_t Green, uint8_t 
     EMF+ manual 2.2.2.2, Microsoft name: EmfPlusBitmap Object
 */
 U_PSEUDO_OBJ *U_PMF_BITMAP_set(const U_PMF_BITMAP *Bs, const U_PSEUDO_OBJ *Bm){
+   if(!Bs)return(NULL);
    if(Bm->Type  != U_PMF_BITMAPDATA_OID &&
       Bm->Type  != U_PMF_COMPRESSEDIMAGE_OID )return(NULL);
    uint32_t Pad = UP4(Bm->Used) - Bm->Used;  /* undocumented padding, must be present for at least PNG */
@@ -1925,6 +1969,7 @@ U_PSEUDO_OBJ *U_PMF_BITMAP_set(const U_PMF_BITMAP *Bs, const U_PSEUDO_OBJ *Bm){
 */
 U_PSEUDO_OBJ *U_PMF_BITMAPDATA_set( const U_PSEUDO_OBJ *Ps, int cbBm, const char *Bm){
    if(Ps && (Ps->Type  != U_PMF_PALETTE_OID))return(NULL);
+   if(!Bm && cbBm)return(NULL);
    const U_SERIAL_DESC List[] = {
       {(Ps ? Ps->Data : NULL), (Ps  ? Ps->Used : 0), (Ps ? 1 : 0), U_LE},
       {Bm,                     cbBm,                 1,            U_XE},
@@ -2020,7 +2065,7 @@ U_PSEUDO_OBJ *U_PMF_BLENDCOLORS_linear_set(uint32_t Elements, U_PMF_ARGB StartCo
     \return Pointer to PseudoObject, NULL on error
     \param  Elements   members in each array
     \param  Positions  positions along gradient line.  The first position MUST be 0.0 and the last MUST be 1.0.
-    \param  Factors    blending factors, 0.0->1.0 values, inclusiv
+    \param  Factors    blending factors, 0.0->1.0 values, inclusive
 
     EMF+ manual 2.2.2.5, Microsoft name: EmfPlusBlendFactors Object
 */
@@ -2088,7 +2133,7 @@ U_PSEUDO_OBJ *U_PMF_BLENDFACTORS_linear_set(uint32_t Elements, U_FLOAT StartFact
     EMF+ manual 2.2.2.6, Microsoft name: EmfPlusBoundaryPathData Object
 */
 U_PSEUDO_OBJ *U_PMF_BOUNDARYPATHDATA_set(const U_PSEUDO_OBJ *Path){
-   if(Path->Type  != U_PMF_PATH_OID)return(NULL);
+   if(!Path || Path->Type  != U_PMF_PATH_OID)return(NULL);
    /* PO Used is size_t, might be 8 bytes, value in record must be 4 bytes */
    uint32_t Used = Path->Used;
    const U_SERIAL_DESC List[] = {
@@ -2183,7 +2228,7 @@ U_PSEUDO_OBJ *U_PMF_COMPRESSEDIMAGE_set(int32_t cbImage, const char *Image){
     EMF+ manual 2.2.2.11, Microsoft name: EmfPlusCustomEndCapData Object
 */
 U_PSEUDO_OBJ *U_PMF_CUSTOMENDCAPDATA_set(const U_PSEUDO_OBJ *Clc){
-   if(Clc->Type  != U_PMF_CUSTOMLINECAP_OID)return(NULL);
+   if(!Clc || Clc->Type  != U_PMF_CUSTOMLINECAP_OID)return(NULL);
    /* PO Used is size_t, might be 8 bytes, value in record must be 4 bytes */
    uint32_t Used = Clc->Used;
    const U_SERIAL_DESC List[] = {
@@ -2252,7 +2297,7 @@ U_PSEUDO_OBJ *U_PMF_CUSTOMLINECAPDATA_set(uint32_t Flags, uint32_t Cap,
       uint32_t Join, U_FLOAT MiterLimit, U_FLOAT WidthScale, 
       const U_PSEUDO_OBJ *Clcod
    ){
-   if(Clcod->Type  != U_PMF_CUSTOMLINECAPOPTIONALDATA_OID)return(NULL);
+   if(!Clcod || Clcod->Type  != U_PMF_CUSTOMLINECAPOPTIONALDATA_OID)return(NULL);
    const U_SERIAL_DESC List[] = {
       {&Flags,      4,           1, U_LE},
       {&Cap,        4,           1, U_LE},
@@ -2282,8 +2327,8 @@ U_PSEUDO_OBJ *U_PMF_CUSTOMLINECAPOPTIONALDATA_set(const U_PSEUDO_OBJ *Fill, cons
    if(Fill && (Fill->Type  != U_PMF_FILLPATHOBJ_OID))return(NULL);
    if(Line && (Line->Type  != U_PMF_LINEPATH_OID))return(NULL);
    const U_SERIAL_DESC List[] = {
-      {Fill->Data, Fill->Used, 1, U_XE},
-      {Line->Data, Line->Used, 1, U_XE},
+      {(Fill ? Fill->Data : NULL), (Fill ? Fill->Used : 0), 1, U_XE},
+      {(Line ? Line->Data : NULL), (Line ? Line->Used : 0), 1, U_XE},
       {NULL,0,0,U_XX}
    };
    U_PSEUDO_OBJ *po = U_PMF_SERIAL_set(U_PMF_CUSTOMLINECAPOPTIONALDATA_OID, List);
@@ -2298,7 +2343,7 @@ U_PSEUDO_OBJ *U_PMF_CUSTOMLINECAPOPTIONALDATA_set(const U_PSEUDO_OBJ *Fill, cons
     EMF+ manual 2.2.2.15, Microsoft name: EmfPlusCustomStartCapData Object
 */
 U_PSEUDO_OBJ *U_PMF_CUSTOMSTARTCAPDATA_set(const U_PSEUDO_OBJ *Clc){
-   if(Clc && (Clc->Type  != U_PMF_CUSTOMLINECAP_OID))return(NULL);
+   if(!Clc || Clc->Type  != U_PMF_CUSTOMLINECAP_OID)return(NULL);
    const U_SERIAL_DESC List[] = {
       {Clc->Data, Clc->Used, 1, U_XE},
       {NULL,0,0,U_XX}
@@ -2464,7 +2509,7 @@ U_PSEUDO_OBJ *U_PMF_DASHEDLINEDATA_set3(U_FLOAT Unit, uint32_t BitPat){
     EMF+ manual 2.2.2.17, Microsoft name: EmfPlusFillPath Object
 */
 U_PSEUDO_OBJ *U_PMF_FILLPATHOBJ_set(const U_PSEUDO_OBJ *Path){
-   if(Path && (Path->Type  != U_PMF_PATH_OID))return(NULL);
+   if(!Path || (Path->Type  != U_PMF_PATH_OID))return(NULL);
    const U_SERIAL_DESC List[] = {
       {Path->Data, Path->Used, 1, U_XE},
       {NULL,0,0,U_XX}
@@ -2642,10 +2687,10 @@ U_PSEUDO_OBJ *U_PMF_LINEARGRADIENTBRUSHDATA_set(const U_PMF_LINEARGRADIENTBRUSHD
     \brief  Create and set a U_PMF_LINEARGRADIENTBRUSHOPTIONALDATA PseudoObject
     \return Pointer to PseudoObject, NULL on error
     \param  Flags      Bits are set that indicate which of the following were included. The caller must clear before passing it in.
-    \param  Tm         U_PSEUDO_OBJ containing a U_PMF_TRANSFORMMATRIX object
-    \param  Bc         U_PSEUDO_OBJ containing a U_PMF_BLENDCOLORS object or NULL
-    \param  BfH        U_PSEUDO_OBJ containing a U_PMF_BLENDFACTORS (H) object or NULL
-    \param  BfV        U_PSEUDO_OBJ containing a U_PMF_BLENDFACTORS (V) object or NULL (WARNING, GDI+ defines this field but does not render it.  DO NOT USE.)
+    \param  Tm         (optional) U_PSEUDO_OBJ containing a U_PMF_TRANSFORMMATRIX object
+    \param  Bc         (optional) U_PSEUDO_OBJ containing a U_PMF_BLENDCOLORS object or NULL
+    \param  BfH        (optional) U_PSEUDO_OBJ containing a U_PMF_BLENDFACTORS (H) object or NULL
+    \param  BfV        (optional) U_PSEUDO_OBJ containing a U_PMF_BLENDFACTORS (V) object or NULL (WARNING, GDI+ defines this field but does not render it.  DO NOT USE.)
      
 
     EMF+ manual 2.2.2.25, Microsoft name: EmfPlusLinearGradientBrushOptionalData Object
@@ -2746,7 +2791,7 @@ U_PSEUDO_OBJ *U_PMF_PATHGRADIENTBRUSHDATA_set(uint32_t Flags, int32_t WrapMode, 
       const U_PSEUDO_OBJ *Gradient, const U_PSEUDO_OBJ *Boundary, const U_PSEUDO_OBJ *Data){
    if( (Flags & U_BD_Path) && (!Boundary || (Boundary->Type != U_PMF_BOUNDARYPATHDATA_OID)))return(NULL);
    if(!(Flags & U_BD_Path) && (!Boundary || (Boundary->Type != U_PMF_BOUNDARYPOINTDATA_OID)))return(NULL);
-   if(!(Gradient) || (Gradient->Type != (U_PMF_ARGB_OID | U_PMF_ARRAY_OID)))return(NULL);
+   if(!Gradient || (Gradient->Type != (U_PMF_ARGB_OID | U_PMF_ARRAY_OID)))return(NULL);
    if(!(Flags & U_BD_Transform) && 
       !(Flags & U_BD_PresetColors) && 
       !(Flags & U_BD_BlendFactorsH) && 
@@ -2850,23 +2895,28 @@ U_PSEUDO_OBJ *U_PMF_PATHPOINTTYPERLE_set(uint32_t Elements, const uint8_t *Bz, c
    if(!Bz || !RL || !Ppte)return(NULL);
    /* allocate space in the structure but put no data in */
    U_PSEUDO_OBJ *po =  U_PO_create(NULL, 4 + 2*Elements, 0, U_PMF_PATHPOINTTYPERLE_OID | U_PMF_ARRAY_OID);
-
-   U_PSEUDO_OBJ *poi = U_PMF_4NUM_set(Elements);
-   po = U_PO_append(po, poi->Data, poi->Used);      
-   U_PO_free(&poi);
-
+   U_PSEUDO_OBJ *holdpo = po; 
    if(po){
+      U_PSEUDO_OBJ *poi = U_PMF_4NUM_set(Elements);
+      if(!poi)goto end;
+      po = U_PO_append(po, poi->Data, poi->Used);   
+      U_PO_free(&poi);
+      if(!po)goto end;
+
       for( ;Elements; Elements--, Bz++, RL++, Ppte++){
          po = U_PO_append(po, (char *)Ppte, 1);
-         if(*RL > 0x3F){ /* run length too big for field */
-            U_PO_free(&po);
-            return(NULL);
-         }
+         if(!po)goto end;
+         
+         if(*RL > 0x3F) goto end; /* run length too big for field */
+           
          utmp = (*Bz ? 1 : 0) | ((*RL & 0x3F)<<2); /* bit 1 is not used and is set to 0 */
          po = U_PO_append(po, (char *)&utmp, 1);
+         if(!po)goto end;
       }
    }
-   return(po);
+end:
+   if(!po)U_PO_free(&holdpo);
+   return(holdpo);
 }
 
 /**
@@ -2925,7 +2975,7 @@ U_PSEUDO_OBJ *U_PMF_PENOPTIONALDATA_set(uint32_t Flags, U_PSEUDO_OBJ *Tm, int32_
    if((Flags & U_PD_DLData)         && (!DLData        || (DLData->Type        != U_PMF_DASHEDLINEDATA_OID))    )return(NULL);
    if((Flags & U_PD_CLData)         && (!CmpndLineData || (CmpndLineData->Type != U_PMF_COMPOUNDLINEDATA_OID))  )return(NULL);
    if((Flags & U_PD_CustomStartCap) && (!CSCapData     || (CSCapData->Type     != U_PMF_CUSTOMSTARTCAPDATA_OID)))return(NULL); 
-   if((Flags & U_PD_CustomEndCap)   &&(!CECapData      || (CECapData->Type     != U_PMF_CUSTOMENDCAPDATA_OID))  )return(NULL);
+   if((Flags & U_PD_CustomEndCap)   && (!CECapData     || (CECapData->Type     != U_PMF_CUSTOMENDCAPDATA_OID))  )return(NULL);
    
    /* prepend the Flags field to the PseudoObject proper */
    const U_SERIAL_DESC List[] = {
@@ -3001,10 +3051,13 @@ U_PSEUDO_OBJ *U_PMF_POINTR_set(uint32_t Elements, const U_PMF_POINTF *Coords){
    U_PSEUDO_OBJ *poi;
    /* Worst case scenario it is 4 bytes per coord, plus the count  */
    U_PSEUDO_OBJ *po =  U_PO_create(NULL, 4 + 4*Elements, 0, U_PMF_POINTR_OID); /* not exactly an array, so no U_PMF_ARRAY_OID */
+   U_PSEUDO_OBJ *holdpo = po;
+   if(!po)goto end;
 
    poi = U_PMF_4NUM_set(Elements);
    po = U_PO_append(po, poi->Data, poi->Used);      
    U_PO_free(&poi);
+   if(po)goto end;
 
    for(Xf = Yf = 0.0 ;Elements; Elements--, Coords++){
       Xf = U_ROUND(Coords->X) - Xf;
@@ -3020,27 +3073,27 @@ U_PSEUDO_OBJ *U_PMF_POINTR_set(uint32_t Elements, const U_PMF_POINTF *Coords){
       if(!poi)poi = U_PMF_INTEGER15_set(X); /* This one must work because of the range checking, above */
       po = U_PO_append(po, poi->Data, poi->Used);      
       U_PO_free(&poi);
+      if(!po)goto end;
 
       poi = U_PMF_INTEGER7_set(Y);
       if(!poi)poi = U_PMF_INTEGER15_set(Y); /* This one must work because of the range checking, above */
       po = U_PO_append(po, poi->Data, poi->Used);      
       U_PO_free(&poi);
+      if(!po)goto end;
    }
    /* Because the values stored were some unpredictable combination of 1 and 2 bytes, the last byte may not end
    on a 4 byte boundary.  Make it do so by padding with up to 3 zero bytes.  */
-#if 1
+
    int residual;
-   unsigned long int us, uu;
-   us = po->Size; /* printing size_t portably is a pain, this avoids the issue */
-   uu = po->Used;
    residual = 3 & po->Used;
-printf("DEBUG Used:%lu residual:%d\n",uu, residual);fflush(stdout);
    if(residual){ 
-      po = U_PO_append(po, NULL, (4 - residual));      
+      po = U_PO_append(po, NULL, (4 - residual));
+      if(!po)goto end;     
    }
-printf("DEBUG Size:%lu Used:%lu \n",us,uu);fflush(stdout);
-#endif
-   return(po);
+
+end:
+   if(!po)U_PO_free(&holdpo);
+   return(holdpo);
 }
 
 /**
@@ -3092,13 +3145,15 @@ U_PSEUDO_OBJ *U_PMF_RECT_set(U_PMF_RECT *Rect){
 U_PSEUDO_OBJ *U_PMF_RECTN_set(uint32_t Elements, U_PMF_RECT *Rects){
    if(!Rects){ return(NULL); }
    uint32_t count = Elements;
-   U_SERIAL_DESC *Lptr = (U_SERIAL_DESC *) malloc(4 + (Elements * 2 * 4) + 4);
-   U_SERIAL_DESC *List = List;
+   U_SERIAL_DESC *List = (U_SERIAL_DESC *) malloc((Elements + 2) * sizeof(U_SERIAL_DESC));
+   U_SERIAL_DESC *Lptr = List;
    if(!List){ return(NULL); }
    *Lptr++ = (U_SERIAL_DESC){&Elements, 4, 1, U_LE};
-   for(; count; count--, Lptr++, Rects++){ *Lptr = (U_SERIAL_DESC){Rects, 2, 4, U_LE}; }
+   for(; count; count--, Lptr++, Rects++){
+      *Lptr = (U_SERIAL_DESC){Rects, 2, 4, U_LE};
+   }
    *Lptr = (U_SERIAL_DESC){NULL,0,0,U_XX};
-   U_PSEUDO_OBJ *po = U_PMF_SERIAL_set(U_PMF_RECTF_OID | U_PMF_ARRAY_OID, List);
+   U_PSEUDO_OBJ *po = U_PMF_SERIAL_set(U_PMF_RECT_OID | U_PMF_ARRAY_OID, List);
    free(List);
    return(po);
 }
@@ -3777,6 +3832,7 @@ U_PSEUDO_OBJ *U_PMR_SETCLIPREGION_set(uint32_t PathID, uint32_t CMenum){
 */
 U_PSEUDO_OBJ *U_PMR_COMMENT_set(size_t cbData, const void *Data){
    if(UP4(cbData) != cbData){ return(NULL); }
+   if(cbData && !Data){       return(NULL); }
    int Size=cbData;
 
    U_PSEUDO_OBJ *ph = U_PMR_CMN_HDR_set(U_PMR_COMMENT,0,Size);
@@ -4365,6 +4421,7 @@ U_PSEUDO_OBJ *U_PMR_DRAWSTRING_set(uint32_t FontID, const U_PSEUDO_OBJ *BrushID,
    int btype; 
    if(FontID>63){                                 return(NULL); }
    if(!Length){                                   return(NULL); }
+   else if (!Text){                               return(NULL); }
    if(!Rect || Rect->Type != U_PMF_RECTF_OID){    return(NULL); }
    if(BrushID){  
       if(      BrushID->Used != 4){               return(NULL); }
@@ -4668,6 +4725,7 @@ U_PSEUDO_OBJ *U_PMR_FILLREGION_set(uint32_t RgnID, const U_PSEUDO_OBJ *BrushID){
     \param  Po          U_PSEUDO_OBJ containing an object type that may be stored in the EMF+ object table
 */
 U_PSEUDO_OBJ *U_PMR_OBJECT_PO_set(uint32_t ObjID, U_PSEUDO_OBJ *Po){
+   if(!Po){ return(NULL); }
    int otype = U_OID_To_OT(Po->Type); /* This will return 0 if the type is not valid for an object */
    if(!otype){ return(NULL); } 
    U_PSEUDO_OBJ *po = U_PMR_OBJECT_set(ObjID, otype, 0, 0, Po->Used, Po->Data); /* 0,0 = rec. not continued, TSize value (ignored)  */
@@ -4703,21 +4761,29 @@ U_PSEUDO_OBJ *U_PMR_OBJECT_set(uint32_t ObjID, int otype, int ntype, uint32_t TS
    int      Pad   = UP4(TSize) - TSize;   
    if((otype < U_OT_Brush) || (otype > U_OT_CustomLineCap)){ return(NULL); }
    if(ntype && (cbData > U_OBJRECLIM)){                      return(NULL); }
+   if(!Data || !cbData){                                     return(NULL); }
    U_PSEUDO_OBJ *po;
    
    if(!ntype && !TSize && (cbData > U_OBJRECLIM)){  
       ntype = 1;
       TSize = cbData;
       po = U_PO_create(NULL, TSize + 16 * (1 + (TSize/cbData)), 0, U_PMR_OBJECT_OID);
-      if(!po)return(po);
-      while(cbData){
-        CSize = (cbData > U_OBJRECLIM ? U_OBJRECLIM : cbData);
-        U_PSEUDO_OBJ *pot = U_PMR_OBJECT_set(ObjID, otype, ntype, TSize, CSize, Data);
-        po = U_PO_po_append(po, pot, U_PMF_KEEP_ELEMENTS);
-        U_PO_free(&pot);
-        Data   += U_OBJRECLIM;
-        cbData -= CSize;
-     }
+      if(po){
+         while(cbData){
+            CSize = (cbData > U_OBJRECLIM ? U_OBJRECLIM : cbData);
+            U_PSEUDO_OBJ *pot = U_PMR_OBJECT_set(ObjID, otype, ntype, TSize, CSize, Data);
+            if(!pot)break;
+            U_PSEUDO_OBJ *newpo = U_PO_po_append(po, pot, U_PMF_KEEP_ELEMENTS);
+            U_PO_free(&pot);
+            if(!newpo)break;
+            po = newpo; 
+            Data   += U_OBJRECLIM;
+            cbData -= CSize;
+         }
+         if(cbData){ /* some error */
+            U_PO_free(&po);
+         }
+      }
    }
    else {
       /* Send in DataSize, U_PMR_CMN_HDR_set will adjust Header Size with 1-3 pad bytes if needed */
@@ -6268,22 +6334,24 @@ int U_PMF_POINTR_get(const char **contents, U_FLOAT *X, U_FLOAT *Y){
     \param  Points     Caller must free.  Array of U_PMF_POINTF coordinates.
 */
 int U_PMF_VARPOINTS_get(const char **contents, uint16_t Flags, int Elements, U_PMF_POINTF **Points){
+   int status = 0;
+   if(!contents || !*contents || !Points || !Elements){ return(status); }
    U_PMF_POINTF *pts = (U_PMF_POINTF *)malloc(Elements * sizeof(U_PMF_POINTF));
+   if(!pts){ return(status); }
+   *Points = pts;
    U_FLOAT XF, YF;
    U_FLOAT XFS, YFS;
    
-   if(!contents || !*contents || !Points){ return(0); }
-   *Points = pts;
    for(XFS = YFS = 0.0; Elements; Elements--, pts++){
       if(Flags & U_PPF_P){ 
-         U_PMF_POINTR_get(contents, &XF, &YF);
+         if(!U_PMF_POINTR_get(contents, &XF, &YF))break; /* this should never happen */
          XFS      += XF; /* position relative to previous point, first point is always 0,0 */
          YFS      += YF;
          pts->X    = XFS;
          pts->Y    = YFS; 
       }
       else if(Flags & U_PPF_C){
-         (void) U_PMF_POINT_get(contents, &XF, &XF);  
+         if(!U_PMF_POINT_get(contents, &XF, &XF))break; /* this should never happen */
          pts->X    = XF;
          pts->Y    = YF; 
       }
@@ -6291,7 +6359,14 @@ int U_PMF_VARPOINTS_get(const char **contents, uint16_t Flags, int Elements, U_P
          (void) U_PMF_POINTF_get(contents, &(pts->X), &(pts->Y)); 
       }
    }
-   return(1);
+   if(Elements){ /* some error in the preceding */
+      free(*Points);
+      *Points = NULL;
+   }
+   else {
+      status = 1;
+   }
+   return(status);
 }
 
 /**

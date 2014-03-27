@@ -83,11 +83,11 @@ protected:
 	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 private:
-	gint _handleButtonPress(GdkEventButton const &bevent);
-	gint _handleMotionNotify(GdkEventMotion const &mevent);
-	gint _handleButtonRelease(GdkEventButton const &revent);
-	gint _handle2ButtonPress(GdkEventButton const &bevent);
-	gint _handleKeyPress(GdkEvent *event);
+	bool _handleButtonPress(GdkEventButton const &bevent);
+	bool _handleMotionNotify(GdkEventMotion const &mevent);
+	bool _handleButtonRelease(GdkEventButton const &revent);
+	bool _handle2ButtonPress(GdkEventButton const &bevent);
+	bool _handleKeyPress(GdkEvent *event);
     //adds spiro & bspline modes
     void _pen_context_set_mode(guint mode);
     //this function changes the colors red, green and blue making them transparent or not depending on if the function uses spiro
@@ -116,6 +116,7 @@ private:
     void _bspline_doEffect(SPCurve * curve);
     //function spiro cloned from lpe-spiro.cpp
     void _spiro_doEffect(SPCurve * curve);
+
 	void _setInitialPoint(Geom::Point const p);
 	void _setSubsequentPoint(Geom::Point const p, bool statusbar, guint status = 0);
 	void _setCtrl(Geom::Point const p, guint state);

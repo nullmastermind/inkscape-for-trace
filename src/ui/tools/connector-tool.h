@@ -12,24 +12,33 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stddef.h>
-#include <sigc++/sigc++.h>
-#include <sigc++/connection.h>
-#include "ui/tools/tool-base.h"
+#include <map>
+#include <string>
+
 #include <2geom/point.h>
-#include "libavoid/connector.h"
-#include <glibmm/i18n.h>
+#include <sigc++/connection.h>
+
+#include "ui/tools/tool-base.h"
+
+class SPItem;
+class SPCurve;
+struct SPKnot;
+struct SPCanvasItem;
+
+namespace Avoid {
+    class ConnRef;
+}
+
+namespace Inkscape {
+    class Selection;
+
+    namespace XML {
+        class Node;
+    }
+}
 
 #define SP_CONNECTOR_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::ConnectorTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 //#define SP_IS_CONNECTOR_CONTEXT(obj) (dynamic_cast<const ConnectorTool*>((const ToolBase*)obj) != NULL)
-
-struct SPKnot;
-class SPCurve;
-
-namespace Inkscape
-{
-  class Selection;
-}
 
 enum {
     SP_CONNECTOR_CONTEXT_IDLE,
@@ -115,10 +124,10 @@ public:
 private:
 	void _selectionChanged(Inkscape::Selection *selection);
 
-	gint _handleButtonPress(GdkEventButton const &bevent);
-	gint _handleMotionNotify(GdkEventMotion const &mevent);
-	gint _handleButtonRelease(GdkEventButton const &revent);
-	gint _handleKeyPress(guint const keyval);
+	bool _handleButtonPress(GdkEventButton const &bevent);
+	bool _handleMotionNotify(GdkEventMotion const &mevent);
+	bool _handleButtonRelease(GdkEventButton const &revent);
+	bool _handleKeyPress(guint const keyval);
 
 	void _setInitialPoint(Geom::Point const p);
 	void _setSubsequentPoint(Geom::Point const p);

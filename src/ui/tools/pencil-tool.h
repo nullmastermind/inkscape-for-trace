@@ -7,6 +7,10 @@
 
 #include "ui/tools/freehand-base.h"
 
+#include <2geom/piecewise.h>
+#include <2geom/d2.h>
+#include <2geom/sbasis.h>
+
 #define SP_PENCIL_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::PencilTool*>((ToolBase*)obj))
 #define SP_IS_PENCIL_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::PencilTool*>((const ToolBase*)obj) != NULL)
 
@@ -50,11 +54,11 @@ protected:
 	virtual bool root_handler(GdkEvent* event);
 
 private:
-	gint _handleButtonPress(GdkEventButton const &bevent);
-	gint _handleMotionNotify(GdkEventMotion const &mevent);
-	gint _handleButtonRelease(GdkEventButton const &revent);
-	gint _handleKeyPress(guint const keyval, guint const state);
-	gint _handleKeyRelease(guint const keyval, guint const state);
+	bool _handleButtonPress(GdkEventButton const &bevent);
+	bool _handleMotionNotify(GdkEventMotion const &mevent);
+	bool _handleButtonRelease(GdkEventButton const &revent);
+	bool _handleKeyPress(guint const keyval, guint const state);
+	bool _handleKeyRelease(guint const keyval, guint const state);
 
 	void _setStartpoint(Geom::Point const &p);
 	void _setEndpoint(Geom::Point const &p);
