@@ -232,8 +232,8 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 	return path_out;
 }
 
-Geom::Curve * subdivide_at(const Geom::Curve* curve_in, Geom::Coord time, bool first);
 Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double width);
+
 
 Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 {
@@ -255,21 +255,21 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	}
 
 	//don't ever let it be zero
-	if (attach_start <= 0) {
+	if (attach_start <= 0.00000001) {
 		attach_start.param_set_value( 0.00000001 );
+		zeroStart = true;
 	}
-	if (attach_end <= 0) {
+	if (attach_end <= 0.00000001) {
 		attach_end.param_set_value( 0.00000001 );
+		zeroEnd = true;
 	}
 	
 	//don't let it be integer
 	if (double(unsigned(attach_start)) == attach_start) {
 		attach_start.param_set_value(attach_start - 0.00000001);
-		zeroStart = true;
 	}
 	if (double(unsigned(attach_end)) == attach_end) {
-		attach_end.param_set_value(attach_end - 0.00000001);
-		zeroStart = true;
+		attach_end.param_set_value(attach_end - 0.00000001);	
 	}
 
 	unsigned allowed_start = first_cusp.size();
@@ -302,14 +302,11 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	if (!zeroStart) {	
 	//Construct the pattern (pat_str stands for pattern string) (yes, this is easier, trust me)
 	std::stringstream pat_str;
-	pat_str << "M 1,0 1,1 C " << 1 - (double)smoothing << ",1 0,0.5 0,0.5 0,0.5 " << 1 - double(smoothing) << ",0 1,0";
+	pat_str << "M 1,0 C " << 1 - (double)smoothing << ",0 0,0.5 0,0.5 0,0.5 " << 1 - (double)smoothing << ",1 1,1";
 
-	pat_vec = sp_svg_read_pathv(pat_str.str().c_str());
-		
-	pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));
-		
-	throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0].reverse();
-	throwaway_path.erase_last(); //wtf
+	pat_vec = sp_svg_read_pathv(pat_str.str().c_str());	
+	pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));	
+	throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
 		
 	real_path.append(throwaway_path);
 	}	
@@ -317,8 +314,12 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	throwaway_path = Outline::PathOutsideOutline(pathv_out[1], 
 		line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 			
-	throwaway_path.setInitial(real_path.finalPoint());
-	real_path.append(throwaway_path);
+	if (!zeroStart) {	
+	    throwaway_path.setInitial(real_path.finalPoint());
+	    real_path.append(throwaway_path);
+	} else {	
+	    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+	}
 	
 	if (!zeroEnd) {	
 	//append the ending taper		
@@ -336,10 +337,13 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	//append the inside outline of the path (against direction)
 	throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), 
 		line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
-		
-	throwaway_path.setInitial(real_path.finalPoint());
-		
-	real_path.append(throwaway_path);
+	
+	if (!zeroEnd) {	
+	    throwaway_path.setInitial(real_path.finalPoint());
+	    real_path.append(throwaway_path);
+	} else {	
+	    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+	}
 	real_path.close();
 		
 	real_pathv.push_back(real_path);
@@ -355,7 +359,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 	//do subdivision and get out
 	unsigned loc = (unsigned)attach_start;
 	Geom::Curve * curve_start = path_in[0] [loc].duplicate();
-		
+			
 	std::vector<Geom::Path> pathv_out;
 	Geom::Path path_out = Geom::Path();
 		
@@ -365,25 +369,69 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 	for (unsigned i = 0; i < loc; i++) {
 		trimmed_start.append(path_in[0] [i]);
 	}
-		
-		
-	trimmed_start.append(*subdivide_at(curve_start, (attach_start - loc), true));
-	curve_start = subdivide_at(curve_start, attach_start - loc, false);
+	
+
+	//this is pretty annoying
+	//previously I wrote a function for this but it wasted a lot of time
+	//so I optimized it back into here.
+	unsigned order = Outline::bezierOrder(curve_start);
+	switch (order) {
+		case 3: {
+			Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_start);
+			std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide((attach_start - loc));
+			trimmed_start.append(cb_pair.first); curve_start = cb_pair.second.duplicate(); //goes out of scope
+			break;
+		}
+		case 2: {
+			Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_start);
+			std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide((attach_start - loc));
+			trimmed_start.append(qb_pair.first); curve_start = qb_pair.second.duplicate();
+			break;
+		}
+		case 1: {
+			Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_start);
+			std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide((attach_start - loc));
+			trimmed_start.append(lb_pair.first); curve_start = lb_pair.second.duplicate();
+			break;
+		}
+	}
 		
 	//special case: path is one segment long
 	//special case: what if the two knots occupy the same segment?
 	if ((size == 1) || ( size - unsigned(attach_end) - 1 == loc ))
 	{
 		Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_start);
+		
 		//it is just a dumb segment
 		//we have to do some shifting here because the value changed when we reduced the length
 		//of the previous segment.
-		trimmed_end.append(*subdivide_at(curve_start, t, false));
+		
+		order = Outline::bezierOrder(curve_start);
+		switch (order) {
+			case 3: {
+				Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_start);
+				std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide(t);
+				trimmed_end.append(cb_pair.second); curve_start = cb_pair.first.duplicate();
+				break;
+			}
+			case 2: {
+				Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_start);
+				std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide(t);
+				trimmed_end.append(qb_pair.second); curve_start = qb_pair.first.duplicate();
+				break;
+			}
+			case 1: {
+				Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_start);
+				std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide(t);
+				trimmed_end.append(lb_pair.second); curve_start = lb_pair.first.duplicate();
+				break;
+			}
+		}
+		
 		for (unsigned j = (size - attach_end) + 1; j < size; j++) {
 			trimmed_end.append(path_in[0] [j]);
 		}
 			
-		curve_start = subdivide_at(curve_start, t, true);
 		path_out.append(*curve_start);
 		pathv_out.push_back(trimmed_start);
 		pathv_out.push_back(path_out);
@@ -406,9 +454,28 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 	Geom::Curve * curve_end = path_in[0] [loc].duplicate();
 
 	Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_end);
-		
-	trimmed_end.append(*subdivide_at(curve_end, t, false));
-	curve_end = subdivide_at(curve_end, t, true);
+	
+	order = Outline::bezierOrder(curve_end);
+	switch (order) {
+		case 3: {
+			Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_end);
+			std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide(t);
+			trimmed_end.append(cb_pair.second); curve_end = cb_pair.first.duplicate();
+			break;
+		}
+		case 2: {
+			Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_end);
+			std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide(t);
+			trimmed_end.append(qb_pair.second); curve_end = qb_pair.first.duplicate();
+			break;
+		}
+		case 1: {
+			Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_end);
+			std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide(t);
+			trimmed_end.append(lb_pair.second); curve_end = lb_pair.first.duplicate();
+			break;
+		}
+	}	
 		
 	for (unsigned j = (size - attach_end) + 1; j < size; j++) {
 		trimmed_end.append(path_in[0] [j]);
@@ -423,44 +490,6 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 	if (curve_start) delete curve_start;
 	return pathv_out;
 }
-
-Geom::Curve * subdivide_at(const Geom::Curve* curve_in, Geom::Coord time, bool first)
-{
-	//the only reason for this function is the lack of a subdivide function in the Curve class.
-	//you have to cast to Beziers to be able to use subdivide(t)
-	unsigned order = Outline::bezierOrder(curve_in);
-	Geom::Curve* curve_out = curve_in->duplicate();
-	switch (order)
-	{
-	//these need to be scoped because of the variable 'c'
-	case 3:
-	{
-		Geom::CubicBezier c = first ? (dynamic_cast<Geom::CubicBezier*> (curve_out))->subdivide(time).first :
-									  (dynamic_cast<Geom::CubicBezier*> (curve_out))->subdivide(time).second;
-		if (curve_out) delete curve_out;
-		curve_out = c.duplicate();
-		break;
-	}
-	case 2:
-	{
-		Geom::QuadraticBezier c = first ? (dynamic_cast<Geom::QuadraticBezier*>(curve_out))->subdivide(time).first :
-										  (dynamic_cast<Geom::QuadraticBezier*>(curve_out))->subdivide(time).second;
-		if (curve_out) delete curve_out;
-		curve_out = c.duplicate();
-		break;
-	}
-	case 1:
-	{
-		Geom::BezierCurveN<1> c = first ? (dynamic_cast<Geom::BezierCurveN<1>* >(curve_out))->subdivide(time).first :
-										  (dynamic_cast<Geom::BezierCurveN<1>* >(curve_out))->subdivide(time).second;
-		if (curve_out) delete curve_out;
-		curve_out = c.duplicate();
-		break;
-	}
-	}
-	return curve_out;
-}
-
 
 
 //most of the below code is verbatim from Pattern Along Path. However, it needed a little
@@ -587,8 +616,9 @@ namespace TpS {
 		Piecewise<D2<SBasis> > pwd2;
 		Geom::Path p_in = return_at_first_cusp(pathv[0]);
 		pwd2.concat(p_in.toPwSb());
+		std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > pwd_vec = split_at_discontinuities(pwd2);
 
-		double t0 = nearest_point(s, pwd2);
+		double t0 = nearest_point(s, pwd_vec[0]);
 		lpe->attach_start.param_set_value(t0);
 
 		// FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
@@ -607,8 +637,9 @@ namespace TpS {
 		Piecewise<D2<SBasis> > pwd2;
 		Geom::Path p_in = return_at_first_cusp(pathv[0].reverse());
 		pwd2.concat(p_in.toPwSb());
+		std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > pwd_vec = split_at_discontinuities(pwd2);
 		
-		double t0 = nearest_point(s, pwd2);
+		double t0 = nearest_point(s, pwd_vec[0]);
 		lpe->attach_end.param_set_value(t0);
 
 		// FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
