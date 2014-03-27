@@ -24,7 +24,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "tools-switch.h"
-#include "text-context.h"
+#include "ui/tools/text-tool.h"
 #include "interface.h"
 #include "preferences.h"
 #include "sp-text.h"
@@ -109,10 +109,6 @@ SpellCheck::SpellCheck (void) :
     tree_view.append_column(_("Suggestions:"), tree_columns.suggestions);
 
     {
-// Backward compatibility fix: The GtkComboBoxText API was introduced with
-// GTK+ 2.24.  This check should eventually be dropped when we bump our
-// GTK dependency.
-#if GTK_CHECK_VERSION(2, 24, 0)
         dictionary_combo = gtk_combo_box_text_new();
         gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (dictionary_combo),  _lang.c_str());
         if (_lang2 != "") {
@@ -121,16 +117,6 @@ SpellCheck::SpellCheck (void) :
         if (_lang3 != "") {
             gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (dictionary_combo), _lang3.c_str());
         }
-#else
-        dictionary_combo = gtk_combo_box_new_text();
-        gtk_combo_box_append_text (GTK_COMBO_BOX (dictionary_combo),  _lang.c_str());
-        if (_lang2 != "") {
-            gtk_combo_box_append_text (GTK_COMBO_BOX (dictionary_combo), _lang2.c_str());
-        }
-        if (_lang3 != "") {
-            gtk_combo_box_append_text (GTK_COMBO_BOX (dictionary_combo), _lang3.c_str());
-        }
-#endif
         gtk_combo_box_set_active (GTK_COMBO_BOX (dictionary_combo), 0);
         gtk_widget_show_all (dictionary_combo);
     }
@@ -219,8 +205,8 @@ void SpellCheck::setTargetDesktop(SPDesktop *desktop)
 void SpellCheck::clearRects()
 {
     for (GSList *it = _rects; it; it = it->next) {
-        sp_canvas_item_hide((SPCanvasItem*) it->data);
-        gtk_object_destroy((SPCanvasItem*) it->data);
+        sp_canvas_item_hide(SP_CANVAS_ITEM(it->data));
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(it->data));
     }
     g_slist_free(_rects);
     _rects = NULL;
@@ -330,8 +316,8 @@ SpellCheck::nextText()
     _text = getText(_root);
     if (_text) {
 
-        _modified_connection = ((SPObject*) _text)->connectModified(sigc::mem_fun(*this, &SpellCheck::onObjModified));
-        _release_connection = ((SPObject*) _text)->connectRelease(sigc::mem_fun(*this, &SpellCheck::onObjReleased));
+        _modified_connection = (SP_OBJECT(_text))->connectModified(sigc::mem_fun(*this, &SpellCheck::onObjModified));
+        _release_connection = (SP_OBJECT(_text))->connectRelease(sigc::mem_fun(*this, &SpellCheck::onObjReleased));
 
         _layout = te_get_layout (_text);
         _begin_w = _layout->begin();
@@ -473,7 +459,7 @@ SpellCheck::finished ()
         if (_stops)
             label = g_strdup_printf(_("<b>Finished</b>, <b>%d</b> words added to dictionary"), _adds);
         else
-            label = g_strdup_printf(_("<b>Finished</b>, nothing suspicious found"));
+            label = g_strdup_printf("%s", _("<b>Finished</b>, nothing suspicious found"));
         banner_label.set_markup(label);
         g_free(label);
     }
@@ -604,52 +590,54 @@ SpellCheck::nextWord()
         // draw rect
         std::vector<Geom::Point> points =
             _layout->createSelectionShape(_begin_w, _end_w, _text->i2dt_affine());
-        Geom::Point tl, br;
-        tl = br = points.front();
-        for (unsigned i = 0 ; i < points.size() ; i ++) {
-            if (points[i][Geom::X] < tl[Geom::X])
-                tl[Geom::X] = points[i][Geom::X];
-            if (points[i][Geom::Y] < tl[Geom::Y])
-                tl[Geom::Y] = points[i][Geom::Y];
-            if (points[i][Geom::X] > br[Geom::X])
-                br[Geom::X] = points[i][Geom::X];
-            if (points[i][Geom::Y] > br[Geom::Y])
-                br[Geom::Y] = points[i][Geom::Y];
-        }
-
-        // expand slightly
-        Geom::Rect area = Geom::Rect(tl, br);
-        double mindim = fabs(tl[Geom::Y] - br[Geom::Y]);
-        if (fabs(tl[Geom::X] - br[Geom::X]) < mindim)
-            mindim = fabs(tl[Geom::X] - br[Geom::X]);
-        area.expandBy(MAX(0.05 * mindim, 1));
-
-        // create canvas path rectangle, red stroke
-        SPCanvasItem *rect = sp_canvas_bpath_new(sp_desktop_sketch(desktop), NULL);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(rect), 0xff0000ff, 3.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(rect), 0, SP_WIND_RULE_NONZERO);
-        SPCurve *curve = new SPCurve();
-        curve->moveto(area.corner(0));
-        curve->lineto(area.corner(1));
-        curve->lineto(area.corner(2));
-        curve->lineto(area.corner(3));
-        curve->lineto(area.corner(0));
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(rect), curve);
-        sp_canvas_item_show(rect);
-        _rects = g_slist_prepend(_rects, rect);
-
-        // scroll to make it all visible
-        Geom::Point const center = desktop->get_display_area().midpoint();
-        area.expandBy(0.5 * mindim);
-        Geom::Point scrollto;
-        double dist = 0;
-        for (unsigned corner = 0; corner < 4; corner ++) {
-            if (Geom::L2(area.corner(corner) - center) > dist) {
-                dist = Geom::L2(area.corner(corner) - center);
-                scrollto = area.corner(corner);
+        if (points.size() >= 4) { // we may not have a single quad if this is a clipped part of text on path; in that case skip drawing the rect
+            Geom::Point tl, br;
+            tl = br = points.front();
+            for (unsigned i = 0 ; i < points.size() ; i ++) {
+                if (points[i][Geom::X] < tl[Geom::X])
+                    tl[Geom::X] = points[i][Geom::X];
+                if (points[i][Geom::Y] < tl[Geom::Y])
+                    tl[Geom::Y] = points[i][Geom::Y];
+                if (points[i][Geom::X] > br[Geom::X])
+                    br[Geom::X] = points[i][Geom::X];
+                if (points[i][Geom::Y] > br[Geom::Y])
+                    br[Geom::Y] = points[i][Geom::Y];
             }
+
+            // expand slightly
+            Geom::Rect area = Geom::Rect(tl, br);
+            double mindim = fabs(tl[Geom::Y] - br[Geom::Y]);
+            if (fabs(tl[Geom::X] - br[Geom::X]) < mindim)
+                mindim = fabs(tl[Geom::X] - br[Geom::X]);
+            area.expandBy(MAX(0.05 * mindim, 1));
+
+            // create canvas path rectangle, red stroke
+            SPCanvasItem *rect = sp_canvas_bpath_new(sp_desktop_sketch(desktop), NULL);
+            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(rect), 0xff0000ff, 3.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(rect), 0, SP_WIND_RULE_NONZERO);
+            SPCurve *curve = new SPCurve();
+            curve->moveto(area.corner(0));
+            curve->lineto(area.corner(1));
+            curve->lineto(area.corner(2));
+            curve->lineto(area.corner(3));
+            curve->lineto(area.corner(0));
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(rect), curve);
+            sp_canvas_item_show(rect);
+            _rects = g_slist_prepend(_rects, rect);
+
+            // scroll to make it all visible
+            Geom::Point const center = desktop->get_display_area().midpoint();
+            area.expandBy(0.5 * mindim);
+            Geom::Point scrollto;
+            double dist = 0;
+            for (unsigned corner = 0; corner < 4; corner ++) {
+                if (Geom::L2(area.corner(corner) - center) > dist) {
+                    dist = Geom::L2(area.corner(corner) - center);
+                    scrollto = area.corner(corner);
+                }
+            }
+            desktop->scroll_to_point (scrollto, 1.0);
         }
-        desktop->scroll_to_point (scrollto, 1.0);
 
         // select text; if in Text tool, position cursor to the beginning of word
         // unless it is already in the word
@@ -729,7 +717,7 @@ SpellCheck::deleteLastRect ()
 {
     if (_rects) {
         sp_canvas_item_hide(SP_CANVAS_ITEM(_rects->data));
-        gtk_object_destroy(GTK_OBJECT(_rects->data));
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(_rects->data));
         _rects = _rects->next; // pop latest-prepended rect
     }
 }

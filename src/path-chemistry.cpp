@@ -83,10 +83,10 @@ sp_selected_path_combine(SPDesktop *desktop)
     gint position = 0;
     char const *id = NULL;
     char const *transform = NULL;
-    gchar *style = NULL;
-    gchar *path_effect = NULL;
+    char const *style = NULL;
+    char const *path_effect = NULL;
 
-    SPCurve* curve = 0;
+    SPCurve* curve = NULL;
     SPItem *first = NULL;
     Inkscape::XML::Node *parent = NULL; 
 
@@ -114,18 +114,15 @@ sp_selected_path_combine(SPDesktop *desktop)
             id = first->getRepr()->attribute("id");
             transform = first->getRepr()->attribute("transform");
             // FIXME: merge styles of combined objects instead of using the first one's style
-            style = g_strdup(first->getRepr()->attribute("style"));
-            path_effect = g_strdup(first->getRepr()->attribute("inkscape:path-effect"));
+            style = first->getRepr()->attribute("style");
+            path_effect = first->getRepr()->attribute("inkscape:path-effect");
             //c->transform(item->transform);
             curve = c;
         } else {
             c->transform(item->getRelativeTransform(first));
             curve->append(c, false);
             c->unref();
-        }
 
-        // unless this is the topmost object,
-        if (item != first) {
             // reduce position only if the same parent
             if (item->getRepr()->parent() == parent) {
                 position--;
@@ -150,10 +147,8 @@ sp_selected_path_combine(SPDesktop *desktop)
             repr->setAttribute("transform", transform);
         }
         repr->setAttribute("style", style);
-        g_free(style);
 
         repr->setAttribute("inkscape:path-effect", path_effect);
-        g_free(path_effect);
 
         // set path data corresponding to new curve
         gchar *dstring = sp_svg_write_path(curve->get_pathvector());
@@ -294,18 +289,16 @@ sp_selected_path_break_apart(SPDesktop *desktop)
 
 /* This function is an entry point from GUI */
 void
-sp_selected_path_to_curves(SPDesktop *desktop, bool interactive)
+sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, bool interactive)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     if (selection->isEmpty()) {
-        if (interactive)
+        if (interactive && desktop)
             sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to path."));
         return;
     }
 
     bool did = false;
-    if (interactive) {
+    if (interactive && desktop) {
         desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Converting objects to paths..."));
         // set "busy" cursor
         desktop->setWaitingCursor();
@@ -324,7 +317,7 @@ sp_selected_path_to_curves(SPDesktop *desktop, bool interactive)
     g_slist_free (to_select);
     g_slist_free (selected);
 
-    if (interactive) {
+    if (interactive && desktop) {
         desktop->clearWaitingCursor();
         if (did) {
             DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_OBJECT_TO_CURVE, 
@@ -372,7 +365,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
          items = items->next) {
 
         SPItem *item = SP_ITEM(items->data);
-    	SPDocument *document = item->document;
+        SPDocument *document = item->document;
 
         if ( skip_all_lpeitems &&
              SP_IS_LPE_ITEM(item) && 
@@ -382,6 +375,14 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
         }
 
         if (SP_IS_PATH(item) && !SP_SHAPE(item)->_curve_before_lpe) {
+            // remove connector attributes
+            if (item->getAttribute("inkscape:connector-type") != NULL) {
+                item->removeAttribute("inkscape:connection-start");
+                item->removeAttribute("inkscape:connection-end");
+                item->removeAttribute("inkscape:connector-type");
+                item->removeAttribute("inkscape:connector-curvature");
+                did = true;
+            }
             continue; // already a path, and no path effect
         }
 
@@ -399,7 +400,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
         }
         
         if (SP_IS_GROUP(item)) {
-            sp_lpe_item_remove_all_path_effects(SP_LPE_ITEM(item), true);
+            SP_LPE_ITEM(item)->removeAllPathEffects(true);
             GSList *item_list = sp_item_group_item_list(SP_GROUP(item));
             
             GSList *item_to_select = NULL;
@@ -442,12 +443,12 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
         parent->appendChild(repr);
         SPObject* newObj = document->getObjectByRepr(repr);
         if (title && newObj) {
-        	newObj->setTitle(title);
-        	g_free(title);
+            newObj->setTitle(title);
+            g_free(title);
         }
         if (desc && newObj) {
-        	newObj->setDesc(desc);
-        	g_free(desc);
+            newObj->setDesc(desc);
+            g_free(desc);
         }
 
         // move to the saved position
@@ -622,7 +623,7 @@ sp_selected_path_reverse(SPDesktop *desktop)
         SPCurve *rcurve = path->get_curve_reference()->create_reverse();
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
-        if ( sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(path)) ) {
+        if ( path->hasPathEffectRecursive() ) {
             path->getRepr()->setAttribute("inkscape:original-d", str);
         } else {
             path->getRepr()->setAttribute("d", str);

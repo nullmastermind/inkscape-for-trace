@@ -1,4 +1,3 @@
-#define INKSCAPE_LPE_ROUGH_HATCHES_CPP
 /** \file
  * LPE Curve Stitching implementation, used as an example for a base starting class
  * when implementing new LivePathEffects.
@@ -14,6 +13,7 @@
  */
 
 #include "ui/widget/scalar.h"
+#include <glibmm/i18n.h>
 #include "live_effects/lpe-rough-hatches.h"
 
 #include "sp-item.h"
@@ -67,7 +67,7 @@ struct LevelCrossingInfoOrder {
 
 typedef std::vector<LevelCrossing> LevelCrossings;
 
-std::vector<double>
+static std::vector<double>
 discontinuities(Piecewise<D2<SBasis> > const &f){
     std::vector<double> result;
     if (f.size()==0) return result;
@@ -210,7 +210,7 @@ public:
 // Bend a path...
 //-------------------------------------------------------
 
-Piecewise<D2<SBasis> > bend(Piecewise<D2<SBasis> > const &f, Piecewise<SBasis> bending){
+static Piecewise<D2<SBasis> > bend(Piecewise<D2<SBasis> > const &f, Piecewise<SBasis> bending){
     D2<Piecewise<SBasis> > ff = make_cuts_independent(f);
     ff[X] += compose(bending, ff[Y]);
     return sectionize(ff);
@@ -239,10 +239,10 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
     fat_output(_("Generate thick/thin path"), _("Simulate a stroke of varying width"), "fat_output", &wr, this, true),
     do_bend(_("Bend hatches"), _("Add a global bend to the hatches (slower)"), "do_bend", &wr, this, true),
     stroke_width_top(_("Thickness: at 1st side:"), _("Width at 'bottom' half-turns"), "stroke_width_top", &wr, this, 1.),
-    stroke_width_bot(_("at 2nd side:"), _("Width at 'top' half-turns"), "stroke_width_bottom", &wr, this, 1.),
+    stroke_width_bot(_("At 2nd side:"), _("Width at 'top' half-turns"), "stroke_width_bottom", &wr, this, 1.),
 //
-    front_thickness(_("from 2nd to 1st side:"), _("Width from 'top' to 'bottom'"), "front_thickness", &wr, this, 1.),
-    back_thickness(_("from 1st to 2nd side:"), _("Width from 'bottom' to 'top'"), "back_thickness", &wr, this, .25),
+    front_thickness(_("From 2nd to 1st side:"), _("Width from 'top' to 'bottom'"), "front_thickness", &wr, this, 1.),
+    back_thickness(_("From 1st to 2nd side:"), _("Width from 'bottom' to 'top'"), "back_thickness", &wr, this, .25),
 
     direction(_("Hatches width and dir"), _("Defines hatches frequency and direction"), "direction", &wr, this, Geom::Point(50,0)),
 //
@@ -413,7 +413,7 @@ LPERoughHatches::linearSnake(Piecewise<D2<SBasis> > const &f, Point const &org){
     while ( i < lscs.size() ){
         int dir = 0;
         //switch orientation of first segment according to starting point.
-        if ((i % 2 == n % 2) && ((j + 1) < lscs[i].size()) && !lscs[i][j].used){
+        if ((static_cast<long long>(i) % 2 == n % 2) && ((j + 1) < lscs[i].size()) && !lscs[i][j].used){
             j += 1;
             dir = 2;
         }
@@ -538,7 +538,7 @@ LPERoughHatches::smoothSnake(std::vector<std::vector<Point> > const &linearSnake
 }
 
 void
-LPERoughHatches::doBeforeEffect (SPLPEItem */*lpeitem*/)
+LPERoughHatches::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     using namespace Geom;
     top_edge_variation.resetRandomizer();
@@ -554,7 +554,7 @@ LPERoughHatches::doBeforeEffect (SPLPEItem */*lpeitem*/)
 
 
 void
-LPERoughHatches::resetDefaults(SPItem * item)
+LPERoughHatches::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

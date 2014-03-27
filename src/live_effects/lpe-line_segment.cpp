@@ -1,5 +1,3 @@
-#define INKSCAPE_LPE_LINE_SEGMENT_CPP
-
 /** \file
  * LPE <line_segment> implementation
  */
@@ -14,7 +12,7 @@
  */
 
 #include "live_effects/lpe-line_segment.h"
-#include "lpe-tool-context.h"
+#include "ui/tools/lpe-tool.h"
 
 #include <2geom/pathvector.h>
 #include <2geom/geom.h>
@@ -33,7 +31,7 @@ static const Util::EnumDataConverter<EndType> EndTypeConverter(EndTypeData, size
 
 LPELineSegment::LPELineSegment(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    end_type(_("End type"), _("Determines on which side the line or line segment is infinite."), "end_type", EndTypeConverter, &wr, this, END_OPEN_BOTH)
+    end_type(_("End type:"), _("Determines on which side the line or line segment is infinite."), "end_type", EndTypeConverter, &wr, this, END_OPEN_BOTH)
 {
     /* register all your parameters here, so Inkscape knows which parameters this effect has: */
     registerParameter( dynamic_cast<Parameter *>(&end_type) );
@@ -45,9 +43,9 @@ LPELineSegment::~LPELineSegment()
 }
 
 void
-LPELineSegment::doBeforeEffect (SPLPEItem *lpeitem)
+LPELineSegment::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    lpetool_get_limiting_bbox_corners(lpeitem->document, bboxA, bboxB);
+    Inkscape::UI::Tools::lpetool_get_limiting_bbox_corners(lpeitem->document, bboxA, bboxB);
 }
 
 std::vector<Geom::Path>

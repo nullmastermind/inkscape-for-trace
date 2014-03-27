@@ -45,46 +45,67 @@ struct _ApplicationInterfaceClass {
         GObjectClass parent;
 };
 
+
+typedef enum
+{
+  INKSCAPE_ERROR_SELECTION,
+  INKSCAPE_ERROR_OBJECT,
+  INKSCAPE_ERROR_VERB,
+  INKSCAPE_ERROR_OTHER
+} InkscapeError;
+
+
+
+#define INKSCAPE_ERROR (inkscape_error_quark ())
+#define INKSCAPE_TYPE_ERROR (inkscape_error_get_type ())
+
+GQuark inkscape_error_quark (void);
+GType inkscape_error_get_type (void);
+
 /****************************************************************************
      DESKTOP FUNCTIONS
 ****************************************************************************/
 
 gchar* 
-application_interface_desktop_new (ApplicationInterface *object, 
+application_interface_desktop_new (ApplicationInterface *app_interface, 
                                    GError **error);
 
 gchar** 
-application_interface_get_desktop_list (ApplicationInterface *object);
+application_interface_get_desktop_list (ApplicationInterface *app_interface);
 
 gchar* 
-application_interface_get_active_desktop (ApplicationInterface *object, 
+application_interface_get_active_desktop (ApplicationInterface *app_interface, 
                                           GError **error);
 
 gboolean
-application_interface_set_active_desktop (ApplicationInterface *object,
+application_interface_set_active_desktop (ApplicationInterface *app_interface,
                                           gchar* document_name, 
                                           GError **error);
 
 gboolean
-application_interface_desktop_close_all (ApplicationInterface *object, 
+application_interface_desktop_close_all (ApplicationInterface *app_interface, 
                                          GError **error);
 
 gboolean
-application_interface_exit (ApplicationInterface *object, GError **error);
+application_interface_exit (ApplicationInterface *app_interface, GError **error);
 
 /****************************************************************************
      DOCUMENT FUNCTIONS
 ****************************************************************************/
 
 gchar* 
-application_interface_document_new (ApplicationInterface *object, 
+application_interface_document_new (ApplicationInterface *app_interface, 
                                     GError **error);
 
+gchar*
+application_interface_get_active_document(ApplicationInterface *app_interface,
+                                          GError **error);
+
 gchar** 
-application_interface_get_document_list (ApplicationInterface *object);
+application_interface_get_document_list (ApplicationInterface *app_interface);
 
 gboolean
-application_interface_document_close_all (ApplicationInterface *object,
+application_interface_document_close_all (ApplicationInterface *app_interface,
                                           GError **error);
 
 

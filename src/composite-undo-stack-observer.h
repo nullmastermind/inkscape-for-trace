@@ -11,14 +11,13 @@
 #define SEEN_COMPOSITE_UNDO_COMMIT_OBSERVER_H
 
 #include "gc-alloc.h"
-#include "gc-managed.h"
 #include "undo-stack-observer.h"
 
 #include <list>
 
 namespace Inkscape {
 
-class Event;
+struct Event;
 
 /**
  * Aggregates UndoStackObservers for management and triggering in an SPDocument's undo/redo

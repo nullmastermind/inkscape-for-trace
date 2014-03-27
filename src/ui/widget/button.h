@@ -10,6 +10,14 @@
 #ifndef INKSCAPE_UI_WIDGET_BUTTON_H
 #define INKSCAPE_UI_WIDGET_BUTTON_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/radiobutton.h>
 
@@ -19,6 +27,7 @@ namespace Widget {
 
 /**
  * Button widget.
+ * @deprecated - no need for an explicit subclass... just perhaps a helper function.
  */
 class Button : public Gtk::Button
 {
@@ -29,6 +38,7 @@ public:
 
 /**
  * CheckButton widget.
+ * @deprecated - no need for an explicit subclass... just perhaps a helper function.
  */
 class CheckButton : public Gtk::CheckButton
 {
@@ -41,6 +51,7 @@ public:
 
 /**
  * RadioButton widget.
+ * @deprecated - no need for an explicit subclass... just perhaps a helper function.
  */
 class RadioButton : public Gtk::RadioButton
 {

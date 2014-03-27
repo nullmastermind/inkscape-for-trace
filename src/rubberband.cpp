@@ -32,14 +32,14 @@ Inkscape::Rubberband::Rubberband(SPDesktop *dt)
 void Inkscape::Rubberband::delete_canvas_items()
 {
     if (_rect) {
-        GtkObject *temp = _rect;
+        SPCanvasItem *temp = _rect;
         _rect = NULL;
-        gtk_object_destroy(temp);
+        sp_canvas_item_destroy(temp);
     }
     if (_touchpath) {
-        GtkObject *temp = _touchpath;
+        SPCanvasItem *temp = _touchpath;
         _touchpath = NULL;
-        gtk_object_destroy(temp);
+        sp_canvas_item_destroy(temp);
     }
 }
 
@@ -99,6 +99,7 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     if (_mode == RUBBERBAND_MODE_RECT) {
         if (_rect == NULL) {
             _rect = static_cast<CtrlRect *>(sp_canvas_item_new(sp_desktop_controls(_desktop), SP_TYPE_CTRLRECT, NULL));
+            _rect->setShadow(1, 0xffffffff);
         }
         _rect->setRectangle(Geom::Rect(_start, _end));
 

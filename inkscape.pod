@@ -32,7 +32,10 @@ options:
     -P, --export-ps=FILENAME
     -E, --export-eps=FILENAME
     -A, --export-pdf=FILENAME
+        --export-pdf-version=VERSION-STRING
         --export-latex
+
+    --export-ps-level {2,3}
 
     -T, --export-text-to-path
         --export-ignore-filters
@@ -268,6 +271,13 @@ The default export area is page; you can set it to drawing by --export-area-draw
 specify --export-id to export a single object (all other are hidden); in that case 
 export area is that object's bounding box, but can be set to page by --export-area-page.
 
+=item B<--export-pdf-version>=I<PDF-VERSION>
+
+Select the PDF version of the exported PDF file. This option basically
+exposes the PDF version selector found in the PDF-export dialog of the
+GUI. You must provide one of the versions from that combo-box,
+e.g. "1.4". The default pdf export version is "1.4".
+
 =item B<--export-latex>
 
 (for PS, EPS, and PDF export)
@@ -282,7 +292,7 @@ Also see GNUPlot's `epslatex' output terminal.
 
 =item B<-T>, B<--export-text-to-path>
 
-Convert text objects to paths on export, where applicable (for PS, EPS, and PDF export).
+Convert text objects to paths on export, where applicable (for PS, EPS, PDF and SVG export).
 
 =item B<--export-ignore-filters>
 
@@ -521,7 +531,7 @@ application sits:
 [% INCLUDE "AUTHORS" %]
 
 This man page was put together by Bryce Harrington
-E<lt>brycehar@bryceharrington.comE<gt>.
+E<lt>brycehar@bryceharrington.orgE<gt>.
 
 =head1 HISTORY
 

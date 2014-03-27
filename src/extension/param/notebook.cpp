@@ -16,6 +16,9 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -206,14 +209,16 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
         Parameter * param = reinterpret_cast<Parameter *>(list->data);
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
-        gchar const * tip = param->get_tooltip();
-//        printf("Tip: '%s'\n", tip);
-        vbox->pack_start(*widg, false, false, 2);
-        if (tip) {
-            widg->set_tooltip_text(tip);
-        } else {
-            widg->set_tooltip_text("");
-            widg->set_has_tooltip(false);
+        if (widg) {
+            gchar const * tip = param->get_tooltip();
+    //        printf("Tip: '%s'\n", tip);
+            vbox->pack_start(*widg, false, false, 2);
+            if (tip) {
+                widg->set_tooltip_text(tip);
+            } else {
+                widg->set_tooltip_text("");
+                widg->set_has_tooltip(false);
+            }
         }
     }
 
@@ -352,7 +357,11 @@ public:
         // hook function
         this->signal_switch_page().connect(sigc::mem_fun(this, &ParamNotebookWdg::changed_page));
     };
+#if WITH_GTKMM_3_0
+    void changed_page(Gtk::Widget *page, guint pagenum);
+#else
     void changed_page(GtkNotebookPage *page, guint pagenum);
+#endif
     bool activated;
 };
 
@@ -363,8 +372,11 @@ public:
  * is actually visible. This to exclude 'fake' changes when the
  * notebookpages are added or removed.
  */
-void ParamNotebookWdg::changed_page(GtkNotebookPage */*page*/,
-                                    guint pagenum)
+#if WITH_GTKMM_3_0
+void ParamNotebookWdg::changed_page(Gtk::Widget * /*page*/, guint pagenum)
+#else
+void ParamNotebookWdg::changed_page(GtkNotebookPage * /*page*/, guint pagenum)
+#endif
 {
     if (get_visible()) {
         _pref->set((int)pagenum, _doc, _node);

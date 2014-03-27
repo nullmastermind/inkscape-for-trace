@@ -26,14 +26,14 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
-import sys, copy, optparse, random, re
+import copy
 import gettext
+import optparse
+import os
+import random
+import re
+import sys
 from math import *
-
-gettext.install('inkscape')
-# _ = gettext.gettext
-# gettext.bindtextdomain('inkscape', '/usr/share/locale')
-# gettext.textdomain('inkscape')
 
 #a dictionary of all of the xmlns prefixes in a standard inkscape doc
 NSS = {
@@ -48,35 +48,35 @@ u'xlink'    :u'http://www.w3.org/1999/xlink',
 u'xml'      :u'http://www.w3.org/XML/1998/namespace'
 }
 
-#a dictionary of unit to user unit conversion factors
-uuconv = {'in':90.0, 'pt':1.25, 'px':1, 'mm':3.5433070866, 'cm':35.433070866, 'm':3543.3070866,
-          'km':3543307.0866, 'pc':15.0, 'yd':3240 , 'ft':1080}
-def unittouu(string):
-    '''Returns userunits given a string representation of units in another system'''
-    unit = re.compile('(%s)$' % '|'.join(uuconv.keys()))
-    param = re.compile(r'(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)')
-
-    p = param.match(string)
-    u = unit.search(string)    
-    if p:
-        retval = float(p.string[p.start():p.end()])
-    else:
-        retval = 0.0
-    if u:
+def localize():
+    domain = 'inkscape'
+    if sys.platform.startswith('win'):
+        import locale
+        current_locale, encoding = locale.getdefaultlocale()
+        os.environ['LANG'] = current_locale
         try:
-            return retval * uuconv[u.string[u.start():u.end()]]
+            localdir = os.environ['INKSCAPE_LOCALEDIR'];
+            trans = gettext.translation(domain, localdir, [current_locale], fallback=True)
         except KeyError:
-            pass
-    return retval
-
-def uutounit(val, unit):
-    return val/uuconv[unit]
-
-try:
-    from lxml import etree
-except Exception, e:
-    sys.exit(_("The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore this extension. Please download and install the latest version from http://cheeseshop.python.org/pypi/lxml/, or install it through your package manager by a command like: sudo apt-get install python-lxml\n\nTechnical details:\n%s" % (e,)))
- 
+            trans = gettext.translation(domain, fallback=True)
+    elif sys.platform.startswith('darwin'):
+        try:
+            localdir = os.environ['INKSCAPE_LOCALEDIR'];
+            trans = gettext.translation(domain, localdir, fallback=True)
+        except KeyError:
+            try:
+                localdir = os.environ['PACKAGE_LOCALE_DIR'];
+                trans = gettext.translation(domain, localdir, fallback=True)
+            except KeyError:
+                trans = gettext.translation(domain, fallback=True)
+    else:
+        try:
+            localdir = os.environ['PACKAGE_LOCALE_DIR'];
+            trans = gettext.translation(domain, localdir, fallback=True)
+        except KeyError:
+            trans = gettext.translation(domain, fallback=True)
+    #sys.stderr.write(str(localdir) + "\n")
+    trans.install()
 
 def debug(what):
     sys.stderr.write(str(what) + "\n")
@@ -91,16 +91,24 @@ def errormsg(msg):
       
        Note that this should always be combined with translation:
 
-         import gettext
-         _ = gettext.gettext
+         import inkex
+         inkex.localize()
          ...
          inkex.errormsg(_("This extension requires two selected paths."))
     """
     if isinstance(msg, unicode):
-        sys.stderr.write((msg + "\n").encode("UTF-8"))
+        sys.stderr.write(msg.encode("UTF-8") + "\n")
     else:
         sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("UTF-8"))
 
+# third party library
+try:
+    from lxml import etree
+except Exception, e:
+    localize()
+    errormsg(_("The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore this extension. Please download and install the latest version from http://cheeseshop.python.org/pypi/lxml/, or install it through your package manager by a command like: sudo apt-get install python-lxml\n\nTechnical details:\n%s" % (e,)))
+    sys.exit()
+    
 def check_inkbool(option, opt, value):
     if str(value).capitalize() == 'True':
         return True
@@ -125,6 +133,7 @@ class Effect:
 
     def __init__(self, *args, **kwargs):
         self.document=None
+        self.original_document=None
         self.ctx=None
         self.selected={}
         self.doc_ids={}
@@ -142,18 +151,37 @@ class Effect:
         """Collect command line arguments"""
         self.options, self.args = self.OptionParser.parse_args(args)
 
-    def parse(self,file=None):
+    def parse(self, filename=None):
         """Parse document in specified file or on stdin"""
-        try:
+
+        # First try to open the file from the function argument
+        if filename != None:
             try:
-                stream = open(file,'r')
-            except:
-                stream = open(self.svg_file,'r')
-        except:
+                stream = open(filename, 'r')
+            except Exception:
+                errormsg(_("Unable to open specified file: %s") % filename)
+                sys.exit()
+
+        # If it wasn't specified, try to open the file specified as
+        # an object member
+        elif self.svg_file != None:
+            try:
+                stream = open(self.svg_file, 'r')
+            except Exception:
+                errormsg(_("Unable to open specified file: %s") % self.svg_file)
+                sys.exit()
+
+        # Finally, if the filename was not specified anywhere, use
+        # standard input stream
+        else:
             stream = sys.stdin
-        self.document = etree.parse(stream)
+
+        p = etree.XMLParser(huge_tree=True)
+        self.document = etree.parse(stream, parser=p)
+        self.original_document = copy.deepcopy(self.document)
         stream.close()
 
+    # defines view_center in terms of document units
     def getposinlayer(self):
         #defaults
         self.current_layer = self.document.getroot()
@@ -168,10 +196,10 @@ class Effect:
 
         xattr = self.document.xpath('//sodipodi:namedview/@inkscape:cx', namespaces=NSS)
         yattr = self.document.xpath('//sodipodi:namedview/@inkscape:cy', namespaces=NSS)
-        doc_height = unittouu(self.document.getroot().get('height'))
         if xattr and yattr:
-            x = xattr[0]
-            y = yattr[0]
+            x = self.unittouu( xattr[0] + 'px' )
+            y = self.unittouu( yattr[0] + 'px')
+            doc_height = self.unittouu(self.document.getroot().get('height'))
             if x and y:
                 self.view_center = (float(x), doc_height - float(y)) # FIXME: y-coordinate flip, eliminate it when it's gone in Inkscape
 
@@ -217,7 +245,10 @@ class Effect:
 
     def output(self):
         """Serialize document into XML on stdout"""
-        self.document.write(sys.stdout)
+        original = etree.tostring(self.original_document)        
+        result = etree.tostring(self.document)        
+        if original != result:
+            self.document.write(sys.stdout)
 
     def affect(self, args=sys.argv[1:], output=True):
         """Affect an SVG document with a callback effect"""
@@ -245,6 +276,47 @@ class Effect:
             errormsg(_("No matching node for expression: %s") % path)
             retval = None
         return retval
-            
+
+    def getDocumentUnit(self):
+        docunit = self.document.xpath('//sodipodi:namedview/@inkscape:document-units', namespaces=NSS)
+        if docunit:
+            return docunit[0]
+        else:
+            return 'px'
+
+    #a dictionary of unit to user unit conversion factors
+    __uuconv = {'in':90.0, 'pt':1.25, 'px':1, 'mm':3.5433070866, 'cm':35.433070866, 'm':3543.3070866,
+              'km':3543307.0866, 'pc':15.0, 'yd':3240 , 'ft':1080}
+    def unittouu(self, string):
+        '''Returns userunits given a string representation of units in another system'''
+        unit = re.compile('(%s)$' % '|'.join(self.__uuconv.keys()))
+        param = re.compile(r'(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)')
+
+        p = param.match(string)
+        u = unit.search(string)    
+        if p:
+            retval = float(p.string[p.start():p.end()])
+        else:
+            retval = 0.0
+        if u:
+            try:
+                return retval * (self.__uuconv[u.string[u.start():u.end()]] / self.__uuconv[self.getDocumentUnit()])
+            except KeyError:
+                pass
+        else: # default assume 'px' unit
+            return retval / self.__uuconv[self.getDocumentUnit()]
+
+        return retval
+
+    def uutounit(self, val, unit):
+        return val / (self.__uuconv[unit] / self.__uuconv[self.getDocumentUnit()])
+
+    def addDocumentUnit(self, value):
+        ''' Add document unit when no unit is specified in the string '''
+        try:
+            float(value)
+            return value + self.getDocumentUnit()
+        except ValueError:
+            return value
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

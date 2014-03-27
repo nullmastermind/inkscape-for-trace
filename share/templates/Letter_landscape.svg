@@ -8,8 +8,9 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   width="792pt"
-   height="612pt">
+   width="11in"
+   height="8.5in"
+   viewBox="0 0 11 8.5">
   <defs />
   <sodipodi:namedview
      inkscape:document-units="in"
@@ -32,5 +33,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <inkscape:_templateinfo>
+      <inkscape:_name>Letter Landscape</inkscape:_name>
+      <inkscape:_shortdesc>Standard letter landscape sheet - 792x612</inkscape:_shortdesc>
+      <inkscape:_keywords>letter landscape 792x612 empty</inkscape:_keywords>
+  </inkscape:_templateinfo>
   <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" />
 </svg>

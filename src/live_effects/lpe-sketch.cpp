@@ -13,6 +13,8 @@
 
 #include "live_effects/lpe-sketch.h"
 
+#include <glibmm/i18n.h>
+
 // You might need to include other 2geom files. You can add them here:
 #include <2geom/path.h>
 #include <2geom/sbasis.h>
@@ -360,7 +362,7 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
 }
 
 void
-LPESketch::doBeforeEffect (SPLPEItem */*lpeitem*/)
+LPESketch::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //init random parameters.
     parallel_offset.resetRandomizer();

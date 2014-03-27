@@ -8,11 +8,10 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include <glib.h>
+#include "spin-slider.h"
+
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
-
-#include "spin-slider.h"
 
 namespace Inkscape {
 namespace UI {
@@ -116,11 +115,20 @@ Gtk::Adjustment& SpinSlider::get_adjustment()
     return _adjustment;
 }
 
+#if WITH_GTKMM_3_0
+const Gtk::Scale& SpinSlider::get_scale() const
+#else
 const Gtk::HScale& SpinSlider::get_scale() const
+#endif
 {
     return _scale;
 }
+
+#if WITH_GTKMM_3_0
+Gtk::Scale& SpinSlider::get_scale()
+#else
 Gtk::HScale& SpinSlider::get_scale()
+#endif
 {
     return _scale;
 }
@@ -186,7 +194,7 @@ void DualSpinSlider::set_from_attribute(SPObject* o)
         gchar** toks = g_strsplit(val, " ", 2);
 
         if(toks) {
-            double v1, v2;
+            double v1 = 0.0, v2 = 0.0;
             if(toks[0])
                 v1 = v2 = Glib::Ascii::strtod(toks[0]);
             if(toks[1])

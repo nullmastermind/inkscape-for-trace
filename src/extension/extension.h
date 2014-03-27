@@ -19,9 +19,15 @@
 #include <vector>
 #include <glibmm/ustring.h>
 #include "xml/repr.h"
+#include <sigc++/signal.h>
 
 namespace Gtk {
+#if WITH_GTKMM_3_0
+	class Grid;
+#else
 	class Table;
+#endif
+
 	class VBox;
 	class Widget;
 }
@@ -65,7 +71,7 @@ namespace Gtk {
 #define INKSCAPE_EXTENSION_NS_NC "extension"
 #define INKSCAPE_EXTENSION_NS    "extension:"
 
-struct SPDocument;
+class SPDocument;
 
 namespace Inkscape {
 namespace Extension {
@@ -138,12 +144,12 @@ private:
                               extension */
 
 public:
-    /** \brief  A function to get the the number of parameters that
+    /** \brief  A function to get the number of parameters that
                 the extension has.
         \return The number of parameters. */
     unsigned int param_count ( ) { return parameters == NULL ? 0 :
                                               g_slist_length(parameters); };
-    /** \brief  A function to get the the number of parameters that
+    /** \brief  A function to get the number of parameters that
                 are visible to the user that the extension has.
         \return The number of visible parameters.
 
@@ -228,15 +234,20 @@ public:
 
     guint32          get_param_color  (const gchar * name,
                                        const SPDocument *   doc = NULL,
-                                       const Inkscape::XML::Node * node = NULL);
+                                       const Inkscape::XML::Node * node = NULL) const;
 
     const gchar *    get_param_enum   (const gchar * name,
                                        const SPDocument *   doc = NULL,
-                                       const Inkscape::XML::Node * node = NULL);
+                                       const Inkscape::XML::Node * node = NULL) const;
 
     gchar const *get_param_optiongroup( gchar const * name,
                                         SPDocument const *   doc = 0,
-                                        Inkscape::XML::Node const * node = 0);
+                                        Inkscape::XML::Node const * node = 0) const;
+
+    bool             get_param_enum_contains(gchar const * name,
+                                             gchar const * value,
+                                             SPDocument  * doc = 0x0,
+                                             Inkscape::XML::Node * node = 0x0) const;
 
     bool             set_param_bool   (const gchar * name,
                                        bool          value,
@@ -263,6 +274,11 @@ public:
                                         SPDocument * doc = 0,
                                         Inkscape::XML::Node * node = 0);
 
+    gchar const *    set_param_enum   (gchar const * name,
+                                       gchar const * value,
+                                       SPDocument * doc = 0x0,
+                                       Inkscape::XML::Node * node = 0x0);
+
     guint32          set_param_color  (const gchar * name,
                                        guint32 color,
                                        SPDocument *   doc = NULL,
@@ -284,8 +300,11 @@ public:
     Gtk::VBox *    get_help_widget(void);
     Gtk::VBox *    get_params_widget(void);
 protected:
+#if WITH_GTKMM_3_0
+    inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row);
+#else
     inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Table * table, int * row);
-
+#endif
 };
 
 

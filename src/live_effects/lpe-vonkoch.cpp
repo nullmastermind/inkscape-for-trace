@@ -1,5 +1,3 @@
-#define INKSCAPE_LPE_VONKOCH_CPP
-
 /*
  * Copyright (C) JF Barraud 2007 <jf.barraud@gmail.com>
  *
@@ -7,6 +5,9 @@
  */
 
 #include <cstdio>
+
+#include <glibmm/i18n.h>
+
 #include "live_effects/lpe-vonkoch.h"
 #include <2geom/transforms.h>
 
@@ -175,7 +176,7 @@ LPEVonKoch::doEffect_path (std::vector<Geom::Path> const & path_in)
 
 //Usefull?? 
 //void 
-//LPEVonKoch::addCanvasIndicators(SPLPEItem */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+//LPEVonKoch::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 /*{
     using namespace Geom;
     if (draw_boxes.get_value()){
@@ -240,7 +241,7 @@ LPEVonKoch::doEffect_path (std::vector<Geom::Path> const & path_in)
 */
 
 void
-LPEVonKoch::doBeforeEffect (SPLPEItem *lpeitem)
+LPEVonKoch::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
@@ -268,7 +269,7 @@ LPEVonKoch::doBeforeEffect (SPLPEItem *lpeitem)
 
 
 void
-LPEVonKoch::resetDefaults(SPItem * item)
+LPEVonKoch::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

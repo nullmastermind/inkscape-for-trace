@@ -7,13 +7,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#include "device-manager.h"
 #include <map>
 #include <set>
 
-#include "device-manager.h"
 #include "preferences.h"
 #include <gtk/gtk.h>
+#include <glibmm/regex.h>
 
 #define noDEBUG_VERBOSE 1
 
@@ -26,9 +26,7 @@ struct GdkDeviceFake {
 	GdkInputMode    mode;
 	gboolean        has_cursor;
 	gint            num_axes;
-	GdkDeviceAxis  *axes;
 	gint            num_keys;
-	GdkDeviceKey   *keys;
 };
 
 
@@ -40,24 +38,11 @@ static bool isValidDevice(GdkDevice *device)
 {
     bool valid = true;
     for (size_t i = 0; (i < G_N_ELEMENTS(fakeout)) && valid; i++) {
-	// Ideally, we should probably check all fields of the GdkDevice
-#if GTK_CHECK_VERSION (2, 22, 0)
 	gboolean name_matches = (g_strcmp0 (gdk_device_get_name (device), fakeout[i].name) == 0);
 	gboolean source_matches = (gdk_device_get_source (device) == fakeout[i].source);
 	gboolean mode_matches = (gdk_device_get_mode (device) == fakeout[i].mode);
 	gboolean num_axes_matches = (gdk_device_get_n_axes (device) == fakeout[i].num_axes);
-#else
-	gboolean name_matches = (g_strcmp0 (device->name, fakeout[i].name) == 0);
-	gboolean source_matches = (device->source == fakeout[i].source);
-	gboolean mode_matches = (device->mode == fakeout[i].mode);
-	gboolean num_axes_matches = (device->num_axes == fakeout[i].num_axes);
-#endif
-
-#if GTK_CHECK_VERSION (2, 24, 0)
 	gboolean num_keys_matches = (gdk_device_get_n_keys (device) == fakeout[i].num_keys);
-#else
-	gboolean num_keys_matches = (device->num_keys == fakeout[i].num_keys);
-#endif
 
 	if (name_matches && source_matches && mode_matches 
 			&& num_axes_matches && num_keys_matches)
@@ -123,7 +108,7 @@ static std::map<Glib::ustring, Gdk::AxisUse> &getStringToAxis()
     return mapping;
 }
 
-std::map<Gdk::AxisUse, Glib::ustring> &getAxisToString()
+static std::map<Gdk::AxisUse, Glib::ustring> &getAxisToString()
 {
     static bool init = false;
     static std::map<Gdk::AxisUse, Glib::ustring> mapping;
@@ -149,7 +134,7 @@ static std::map<Glib::ustring, Gdk::InputMode> &getStringToMode()
     return mapping;
 }
 
-std::map<Gdk::InputMode, Glib::ustring> &getModeToString()
+static std::map<Gdk::InputMode, Glib::ustring> &getModeToString()
 {
     static bool init = false;
     static std::map<Gdk::InputMode, Glib::ustring> mapping;
@@ -178,26 +163,12 @@ public:
     virtual Glib::ustring getId() const {return id;}
     virtual Glib::ustring getName() const {return name;}
     virtual Gdk::InputSource getSource() const {return source;}
-
-#if GTK_CHECK_VERSION (2, 22, 0)
     virtual Gdk::InputMode getMode() const {return static_cast<Gdk::InputMode>(gdk_device_get_mode (device));}
     virtual gint getNumAxes() const {return gdk_device_get_n_axes (device);}
     virtual bool hasCursor() const {return gdk_device_get_has_cursor (device);}
-#else
-    virtual Gdk::InputMode getMode() const {return static_cast<Gdk::InputMode>(device->mode);}
-    virtual gint getNumAxes() const {return device->num_axes;}
-    virtual bool hasCursor() const {return device->has_cursor;}
-#endif
 
     virtual gint getNumKeys() const {
-// Backward-compatibility: The GSEAL-compliant
-// gdk_device_get_n_keys function was only introduced
-// with GTK 2.24
-#if GTK_CHECK_VERSION(2, 24, 0)
-	    return gdk_device_get_n_keys (device);
-#else
-	    return device->num_keys;
-#endif // GTK_CHECK_VERSION
+        return gdk_device_get_n_keys (device);
     }
     virtual Glib::ustring getLink() const {return link;}
     virtual void setLink( Glib::ustring const& link ) {this->link = link;}
@@ -246,13 +217,8 @@ InputDeviceImpl::InputDeviceImpl(GdkDevice* device, std::set<Glib::ustring> &kno
     : InputDevice(),
       device(device),
       id(),
-#if GTK_CHECK_VERSION (2, 22, 0)
       name(gdk_device_get_name (device) ? gdk_device_get_name (device) : ""),
       source(static_cast<Gdk::InputSource>(gdk_device_get_source (device))),
-#else
-      name(device->name ? device->name : ""),
-      source(static_cast<Gdk::InputSource>(device->source)),
-#endif
       link(),
       liveAxes(0),
       liveButtons(0)
@@ -346,7 +312,13 @@ DeviceManagerImpl::DeviceManagerImpl() :
     DeviceManager(),
     devices()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDisplay *display = gdk_display_get_default();
+    GdkDeviceManager *dm = gdk_display_get_device_manager(display);
+    GList* devList = gdk_device_manager_list_devices(dm, GDK_DEVICE_TYPE_SLAVE);
+#else
     GList* devList = gdk_devices_list();
+#endif
 
     if ( !fakeList ) {
         createFakeList();
@@ -357,17 +329,32 @@ DeviceManagerImpl::DeviceManagerImpl() :
 
     for ( GList* curr = devList; curr; curr = g_list_next(curr) ) {
         GdkDevice* dev = reinterpret_cast<GdkDevice*>(curr->data);
-        if ( dev ) {
-#if DEBUG_VERBOSE
-            g_message("device: name[%s] source[0x%x] mode[0x%x] cursor[%s] axis count[%d] key count[%d]", dev->name, dev->source, dev->mode,
-                      dev->has_cursor?"Yes":"no", dev->num_axes, dev->num_keys);
+        if (dev) {
+
+#if GTK_CHECK_VERSION(3,0,0)
+           // GTK+ 3 has added keyboards to the list of supported devices.
+           if(gdk_device_get_source(dev) != GDK_SOURCE_KEYBOARD) {
 #endif
 
-            InputDeviceImpl* device = new InputDeviceImpl(dev, knownIDs);
-            device->reference();
-            devices.push_back(Glib::RefPtr<InputDeviceImpl>(device));
+#if DEBUG_VERBOSE
+               g_message("device: name[%s] source[0x%x] mode[0x%x] cursor[%s] axis count[%d] key count[%d]", dev->name, dev->source, dev->mode,
+                       dev->has_cursor?"Yes":"no", dev->num_axes, dev->num_keys);
+#endif
+
+               InputDeviceImpl* device = new InputDeviceImpl(dev, knownIDs);
+               device->reference();
+               devices.push_back(Glib::RefPtr<InputDeviceImpl>(device));
+
+#if GTK_CHECK_VERSION(3,0,0)
+           }
+#endif
+
         }
     }
+
+#if GTK_CHECK_VERSION(3,0,0)
+    g_list_free(devList);
+#endif
 }
 
 void DeviceManagerImpl::loadConfig()
@@ -434,11 +421,7 @@ void DeviceManagerImpl::saveConfig()
                     tmp += ";";
                 }
 		GdkDevice *device = (*it)->getDevice();
-#if GTK_CHECK_VERSION (2, 22, 0)
                 tmp += getAxisToString()[static_cast<Gdk::AxisUse>(gdk_device_get_axis_use (device, i))];
-#else
-                tmp += getAxisToString()[static_cast<Gdk::AxisUse>(device->axes[i].use)];
-#endif
             }
             prefs->setString( path + "/axes", tmp );
 
@@ -448,14 +431,10 @@ void DeviceManagerImpl::saveConfig()
                     tmp += ";";
                 }
 		GdkDevice *device = (*it)->getDevice();
-#if GTK_CHECK_VERSION (2, 22, 0)
 		guint keyval;
 		GdkModifierType modifiers;
 		gdk_device_get_key (device, i, &keyval, &modifiers);
                 tmp += gtk_accelerator_name(keyval, modifiers);
-#else
-                tmp += gtk_accelerator_name(device->keys[i].keyval, device->keys[i].modifiers);
-#endif
             }
             prefs->setString( path + "/keys", tmp );
         }
@@ -494,11 +473,7 @@ void DeviceManagerImpl::setAxisUse( Glib::ustring const & id, guint index, Gdk::
             if (static_cast<gint>(index) <= (*it)->getNumAxes()) {
                 GdkDevice *device = (*it)->getDevice();
 
-#if GTK_CHECK_VERSION (2, 22, 0)
                 if (gdk_device_get_axis_use (device, index) != static_cast<GdkAxisUse>(use)) {
-#else
-                if (device->axes[index].use != static_cast<GdkAxisUse>(use)) {
-#endif
                     gdk_device_set_axis_use(device, index, static_cast<GdkAxisUse>(use));
                     signalDeviceChangedPriv.emit(*it);
                 }
@@ -652,50 +627,6 @@ DeviceManager& DeviceManager::getManager() {
 } // namespace Inkscape
 
 
-
-
-
-
-GdkDeviceAxis padAxes[] = {{GDK_AXIS_X, 0.0, 0.0},
-                           {GDK_AXIS_Y, 0.0, 0.0},
-                           {GDK_AXIS_PRESSURE, 0.0, 1.0},
-                           {GDK_AXIS_XTILT, -1.0, 1.0},
-                           {GDK_AXIS_YTILT, -1.0, 1.0},
-                           {GDK_AXIS_WHEEL, 0.0, 1.0}};
-GdkDeviceKey padKeys[] = {{0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0},
-                          {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}};
-
-GdkDeviceAxis eraserAxes[] = {{GDK_AXIS_X, 0.0, 0.0},
-                              {GDK_AXIS_Y, 0.0, 0.0},
-                              {GDK_AXIS_PRESSURE, 0.0, 1.0},
-                              {GDK_AXIS_XTILT, -1.0, 1.0},
-                              {GDK_AXIS_YTILT, -1.0, 1.0},
-                              {GDK_AXIS_WHEEL, 0.0, 1.0}};
-GdkDeviceKey eraserKeys[] = {{0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0},
-                             {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}};
-
-GdkDeviceAxis cursorAxes[] = {{GDK_AXIS_X, 0.0, 0.0},
-                              {GDK_AXIS_Y, 0.0, 0.0},
-                              {GDK_AXIS_PRESSURE, 0.0, 1.0},
-                              {GDK_AXIS_XTILT, -1.0, 1.0},
-                              {GDK_AXIS_YTILT, -1.0, 1.0},
-                              {GDK_AXIS_WHEEL, 0.0, 1.0}};
-GdkDeviceKey cursorKeys[] = {{0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0},
-                             {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}};
-
-GdkDeviceAxis stylusAxes[] = {{GDK_AXIS_X, 0.0, 0.0},
-                              {GDK_AXIS_Y, 0.0, 0.0},
-                              {GDK_AXIS_PRESSURE, 0.0, 1.0},
-                              {GDK_AXIS_XTILT, -1.0, 1.0},
-                              {GDK_AXIS_YTILT, -1.0, 1.0},
-                              {GDK_AXIS_WHEEL, 0.0, 1.0}};
-GdkDeviceKey stylusKeys[] = {{0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0},
-                             {0, (GdkModifierType)0}, {0, (GdkModifierType)0}, {0, (GdkModifierType)0}};
-
-
-GdkDeviceAxis coreAxes[] = {{GDK_AXIS_X, 0.0, 0.0},
-                            {GDK_AXIS_Y, 0.0, 0.0}};
-
 static void createFakeList() {
     if ( !fakeList ) {
         fakeout[0].name = g_strdup("pad");
@@ -703,83 +634,69 @@ static void createFakeList() {
         fakeout[0].mode = GDK_MODE_SCREEN;
         fakeout[0].has_cursor = TRUE;
         fakeout[0].num_axes = 6;
-        fakeout[0].axes = padAxes;
         fakeout[0].num_keys = 8;
-        fakeout[0].keys = padKeys;
 
         fakeout[1].name = g_strdup("eraser");
         fakeout[1].source = GDK_SOURCE_ERASER;
         fakeout[1].mode = GDK_MODE_SCREEN;
         fakeout[1].has_cursor = TRUE;
         fakeout[1].num_axes = 6;
-        fakeout[1].axes = eraserAxes;
         fakeout[1].num_keys = 7;
-        fakeout[1].keys = eraserKeys;
 
         fakeout[2].name = g_strdup("cursor");
         fakeout[2].source = GDK_SOURCE_CURSOR;
         fakeout[2].mode = GDK_MODE_SCREEN;
         fakeout[2].has_cursor = TRUE;
         fakeout[2].num_axes = 6;
-        fakeout[2].axes = cursorAxes;
         fakeout[2].num_keys = 7;
-        fakeout[2].keys = cursorKeys;
 
         fakeout[3].name = g_strdup("stylus");
         fakeout[3].source = GDK_SOURCE_PEN;
         fakeout[3].mode = GDK_MODE_SCREEN;
         fakeout[3].has_cursor = TRUE;
         fakeout[3].num_axes = 6;
-        fakeout[3].axes = stylusAxes;
         fakeout[3].num_keys = 7;
-        fakeout[3].keys = stylusKeys;
 
-// try to find the first *real* core pointer
-        GList* devList = gdk_devices_list();
-#if GTK_CHECK_VERSION (2, 22, 0)
-        while ( devList && devList->data && (gdk_device_get_source ((GdkDevice*)devList->data) != GDK_SOURCE_MOUSE)) {
+        // try to find the first *real* core pointer
+#if GTK_CHECK_VERSION(3,0,0)
+        GdkDisplay *display = gdk_display_get_default();
+        GdkDeviceManager *dm = gdk_display_get_device_manager(display);
+        GList* devList = gdk_device_manager_list_devices(dm, GDK_DEVICE_TYPE_SLAVE);	
 #else
-        while ( devList && devList->data && (((GdkDevice*)devList->data)->source != GDK_SOURCE_MOUSE)) {
+        GList* devList = gdk_devices_list();
 #endif
+
+        // Skip past any items in the device list that are not mice
+        while ( devList && devList->data && (gdk_device_get_source ((GdkDevice*)devList->data) != GDK_SOURCE_MOUSE)) {
             devList = g_list_next(devList);
         }
+
         if ( devList && devList->data ) {
-            //fakeout[4] = *((GdkDevice*)devList->data);
-	    // We should probably copy the axes and keys too
             GdkDevice *device = (GdkDevice*)devList->data;
-#if GTK_CHECK_VERSION (2, 22, 0)
             fakeout[4].name = g_strdup(gdk_device_get_name (device));
             fakeout[4].source = gdk_device_get_source (device);
             fakeout[4].mode = gdk_device_get_mode (device);
             fakeout[4].has_cursor = gdk_device_get_has_cursor (device);
             fakeout[4].num_axes = gdk_device_get_n_axes (device);
-#else
-            fakeout[4].name = g_strdup(device->name);
-            fakeout[4].source = device->source;
-            fakeout[4].mode = device->mode;
-            fakeout[4].has_cursor = device->has_cursor;
-            fakeout[4].num_axes = device->num_axes;
-#endif
-#if GTK_CHECK_VERSION (2, 24, 0)
             fakeout[4].num_keys = gdk_device_get_n_keys (device);
-#else
-            fakeout[4].num_keys = device->num_keys;
-#endif
         } else {
             fakeout[4].name = g_strdup("Core Pointer");
             fakeout[4].source = GDK_SOURCE_MOUSE;
             fakeout[4].mode = GDK_MODE_SCREEN;
             fakeout[4].has_cursor = TRUE;
             fakeout[4].num_axes = 2;
-            fakeout[4].axes = coreAxes;
             fakeout[4].num_keys = 0;
-            fakeout[4].keys = NULL;
         }
 
         for ( guint pos = 0; pos < G_N_ELEMENTS(fakeout); pos++) {
             fakeList = g_list_append(fakeList, &(fakeout[pos]));
         }
+        
+#if GTK_CHECK_VERSION(3,0,0)
+        g_list_free(devList);
+#endif
     }
+
 }
 
 

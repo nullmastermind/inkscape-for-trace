@@ -43,7 +43,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "inkscape.h"
 #include "style.h"
 #include "message-stack.h"
@@ -51,126 +51,65 @@
 
 #define noPATH_VERBOSE
 
-static void sp_path_class_init(SPPathClass *klass);
-static void sp_path_init(SPPath *path);
-static void sp_path_finalize(GObject *obj);
-static void sp_path_release(SPObject *object);
+#include "sp-factory.h"
 
-static void sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_path_set(SPObject *object, unsigned key, gchar const *value);
+namespace {
+	SPObject* createPath() {
+		return new SPPath();
+	}
 
-static Inkscape::XML::Node *sp_path_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static Geom::Affine sp_path_set_transform(SPItem *item, Geom::Affine const &xform);
-static gchar * sp_path_description(SPItem *item);
-static void sp_path_convert_to_guides(SPItem *item);
-
-static void sp_path_update(SPObject *object, SPCtx *ctx, guint flags);
-static void sp_path_update_patheffect(SPLPEItem *lpeitem, bool write);
-
-static SPShapeClass *parent_class;
-
-/**
- * Gets the GType object for SPPathClass
- */
-GType
-sp_path_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPPathClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_path_class_init,
-            NULL, NULL,
-            sizeof(SPPath),
-            16,
-            (GInstanceInitFunc) sp_path_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_SHAPE, "SPPath", &info, (GTypeFlags)0);
-    }
-    return type;
+	bool pathRegistered = SPFactory::instance().registerObject("svg:path", createPath);
 }
-
-/**
- *  Does the object-oriented work of initializing the class structure
- *  including parent class, and registers function pointers for
- *  the functions build, set, write, and set_transform.
- */
-static void
-sp_path_class_init(SPPathClass * klass)
-{
-    GObjectClass *gobject_class = (GObjectClass *) klass;
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPItemClass *item_class = (SPItemClass *) klass;
-    SPLPEItemClass *lpe_item_class = (SPLPEItemClass *) klass;
-
-    parent_class = (SPShapeClass *)g_type_class_peek_parent(klass);
-
-    gobject_class->finalize = sp_path_finalize;
-
-    sp_object_class->build = sp_path_build;
-    sp_object_class->release = sp_path_release;
-    sp_object_class->set = sp_path_set;
-    sp_object_class->write = sp_path_write;
-    sp_object_class->update = sp_path_update;
-
-    item_class->description = sp_path_description;
-    item_class->set_transform = sp_path_set_transform;
-    item_class->convert_to_guides = sp_path_convert_to_guides;
-
-    lpe_item_class->update_patheffect = sp_path_update_patheffect;
-}
-
 
 gint SPPath::nodesInPath() const
 {
     return _curve ? _curve->nodes_in_path() : 0;
 }
 
-static gchar *
-sp_path_description(SPItem * item)
-{
-    int count = SP_PATH(item)->nodesInPath();
-    if (SP_IS_LPE_ITEM(item) && sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
+const char* SPPath::displayName() const {
+    return _("Path");
+}
 
+gchar* SPPath::description() const {
+    int count = this->nodesInPath();
+    char *lpe_desc = g_strdup("");
+    
+    if (hasPathEffect()) {
         Glib::ustring s;
-
-        PathEffectList effect_list =  sp_lpe_item_get_effect_list(SP_LPE_ITEM(item));
+        PathEffectList effect_list =  this->getEffectList();
+        
         for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
-            if (!lpeobj || !lpeobj->get_lpe())
+            
+            if (!lpeobj || !lpeobj->get_lpe()) {
                 break;
-            if (s.empty())
+            }
+            
+            if (s.empty()) {
                 s = lpeobj->get_lpe()->getName();
-            else
+            } else {
                 s = s + ", " + lpeobj->get_lpe()->getName();
+            }
         }
-
-        return g_strdup_printf(ngettext("<b>Path</b> (%i node, path effect: %s)",
-                                        "<b>Path</b> (%i nodes, path effect: %s)",count), count, s.c_str());
-    } else {
-        return g_strdup_printf(ngettext("<b>Path</b> (%i node)",
-                                        "<b>Path</b> (%i nodes)",count), count);
+        lpe_desc = g_strdup_printf(_(", path effect: %s"), s.c_str());
     }
+    char *ret = g_strdup_printf(ngettext(
+                _("%i node%s"), _("%i nodes%s"), count), count, lpe_desc);
+    g_free(lpe_desc);
+    return ret;
 }
 
-static void
-sp_path_convert_to_guides(SPItem *item)
-{
-    SPPath *path = SP_PATH(item);
-
-    if (!path->_curve) {
+void SPPath::convert_to_guides() const {
+    if (!this->_curve) {
         return;
     }
 
     std::list<std::pair<Geom::Point, Geom::Point> > pts;
 
-    Geom::Affine const i2dt(path->i2dt_affine());
-
-    Geom::PathVector const & pv = path->_curve->get_pathvector();
+    Geom::Affine const i2dt(this->i2dt_affine());
+    Geom::PathVector const & pv = this->_curve->get_pathvector();
+    
     for(Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
         for(Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit) {
             // only add curves for straight line segments
@@ -181,135 +120,101 @@ sp_path_convert_to_guides(SPItem *item)
         }
     }
 
-    sp_guide_pt_pairs_to_guides(item->document, pts);
+    sp_guide_pt_pairs_to_guides(this->document, pts);
 }
 
-/**
- * Initializes an SPPath.
- */
-static void
-sp_path_init(SPPath *path)
-{
-    new (&path->connEndPair) SPConnEndPair(path);
+SPPath::SPPath() : SPShape(), connEndPair(this) {
 }
 
-static void
-sp_path_finalize(GObject *obj)
-{
-    SPPath *path = (SPPath *) obj;
-
-    path->connEndPair.~SPConnEndPair();
+SPPath::~SPPath() {
 }
 
-/**
- *  Given a repr, this sets the data items in the path object such as
- *  fill & style attributes, markers, and CSS properties.
- */
-static void
-sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Are these calls actually necessary? */
-    object->readAttr( "marker" );
-    object->readAttr( "marker-start" );
-    object->readAttr( "marker-mid" );
-    object->readAttr( "marker-end" );
+    this->readAttr( "marker" );
+    this->readAttr( "marker-start" );
+    this->readAttr( "marker-mid" );
+    this->readAttr( "marker-end" );
 
-    sp_conn_end_pair_build(object);
+    sp_conn_end_pair_build(this);
 
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
+    SPShape::build(document, repr);
 
-    object->readAttr( "inkscape:original-d" );
-    object->readAttr( "d" );
+    this->readAttr( "inkscape:original-d" );
+    this->readAttr( "d" );
 
     /* d is a required attribute */
-    gchar const *d = object->getAttribute("d", NULL);
+    gchar const *d = this->getAttribute("d", NULL);
+
     if (d == NULL) {
-        object->setKeyValue( sp_attribute_lookup("d"), "");
+        this->setKeyValue( sp_attribute_lookup("d"), "");
     }
 }
 
-static void
-sp_path_release(SPObject *object)
-{
-    SPPath *path = SP_PATH(object);
+void SPPath::release() {
+    this->connEndPair.release();
 
-    path->connEndPair.release();
-
-    if (((SPObjectClass *) parent_class)->release) {
-        ((SPObjectClass *) parent_class)->release(object);
-    }
+    SPShape::release();
 }
 
-/**
- *  Sets a value in the path object given by 'key', to 'value'.  This is used
- *  for setting attributes and markers on a path object.
- */
-static void
-sp_path_set(SPObject *object, unsigned int key, gchar const *value)
-{
-    SPPath *path = (SPPath *) object;
-
+void SPPath::set(unsigned int key, const gchar* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_ORIGINAL_D:
-                if (value) {
-                    Geom::PathVector pv = sp_svg_read_pathv(value);
-                    SPCurve *curve = new SPCurve(pv);
-                    if (curve) {
-                        path->set_original_curve(curve, TRUE, true);
-                        curve->unref();
-                    }
-                } else {
-                    path->set_original_curve(NULL, TRUE, true);
-                }
-                object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			if (value) {
+				Geom::PathVector pv = sp_svg_read_pathv(value);
+				SPCurve *curve = new SPCurve(pv);
+
+				if (curve) {
+					this->set_original_curve(curve, TRUE, true);
+					curve->unref();
+				}
+			} else {
+				this->set_original_curve(NULL, TRUE, true);
+			}
+
+			this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
        case SP_ATTR_D:
-                if (value) {
-                    Geom::PathVector pv = sp_svg_read_pathv(value);
-                    SPCurve *curve = new SPCurve(pv);
-                    if (curve) {
-                        ((SPShape *) path)->setCurve(curve, TRUE);
-                        curve->unref();
-                    }
-                } else {
-                    ((SPShape *) path)->setCurve(NULL, TRUE);
-                }
-                object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			if (value) {
+				Geom::PathVector pv = sp_svg_read_pathv(value);
+				SPCurve *curve = new SPCurve(pv);
+
+				if (curve) {
+					this->setCurve(curve, TRUE);
+					curve->unref();
+				}
+			} else {
+				this->setCurve(NULL, TRUE);
+			}
+
+			this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_PROP_MARKER:
         case SP_PROP_MARKER_START:
         case SP_PROP_MARKER_MID:
         case SP_PROP_MARKER_END:
-            sp_shape_set_marker(object, key, value);
-            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            sp_shape_set_marker(this, key, value);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_CONNECTOR_TYPE:
         case SP_ATTR_CONNECTOR_CURVATURE:
         case SP_ATTR_CONNECTION_START:
         case SP_ATTR_CONNECTION_END:
         case SP_ATTR_CONNECTION_START_POINT:
         case SP_ATTR_CONNECTION_END_POINT:
-            path->connEndPair.setAttr(key, value);
+            this->connEndPair.setAttr(key, value);
             break;
+
         default:
-            if (((SPObjectClass *) parent_class)->set) {
-                ((SPObjectClass *) parent_class)->set(object, key, value);
-            }
+            SPShape::set(key, value);
             break;
     }
 }
 
-/**
- *
- * Writes the path object into a Inkscape::XML::Node
- */
-static Inkscape::XML::Node *
-sp_path_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPShape *shape = (SPShape *) object;
-
+Inkscape::XML::Node* SPPath::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:path");
     }
@@ -317,8 +222,9 @@ sp_path_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML:
 #ifdef PATH_VERBOSE
 g_message("sp_path_write writes 'd' attribute");
 #endif
-    if ( shape->_curve != NULL ) {
-        gchar *str = sp_svg_write_path(shape->_curve->get_pathvector());
+
+    if ( this->_curve != NULL ) {
+        gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
         repr->setAttribute("d", str);
         g_free(str);
     } else {
@@ -326,8 +232,8 @@ g_message("sp_path_write writes 'd' attribute");
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        if ( shape->_curve_before_lpe != NULL ) {
-            gchar *str = sp_svg_write_path(shape->_curve_before_lpe->get_pathvector());
+        if ( this->_curve_before_lpe != NULL ) {
+            gchar *str = sp_svg_write_path(this->_curve_before_lpe->get_pathvector());
             repr->setAttribute("inkscape:original-d", str);
             g_free(str);
         } else {
@@ -335,101 +241,82 @@ g_message("sp_path_write writes 'd' attribute");
         }
     }
 
-    SP_PATH(shape)->connEndPair.writeRepr(repr);
+    this->connEndPair.writeRepr(repr);
 
-    if (((SPObjectClass *)(parent_class))->write) {
-        ((SPObjectClass *)(parent_class))->write(object, xml_doc, repr, flags);
-    }
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }
 
-static void
-sp_path_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
-    }
+void SPPath::update(SPCtx *ctx, guint flags) {
+	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+		flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
+	}
 
-    if (((SPObjectClass *) parent_class)->update) {
-        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
-    }
+	SPShape::update(ctx, flags);
 
-    SPPath *path = SP_PATH(object);
-    path->connEndPair.update();
+	this->connEndPair.update();
 }
 
-
-/**
- * Writes the given transform into the repr for the given item.
- */
-static Geom::Affine
-sp_path_set_transform(SPItem *item, Geom::Affine const &xform)
-{
-    if (!SP_IS_PATH(item)) {
-        return Geom::identity();
-    }
-    SPPath *path = SP_PATH(item);
-
-    if (!path->_curve) { // 0 nodes, nothing to transform
+Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
+    if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
 
-    // Transform the original-d path if this is a valid LPE item, other else the (ordinary) path
-    if (path->_curve_before_lpe && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(item))) {
-        if (sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(item), Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
+    // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) {
             // if path has the CLONE_ORIGINAL LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-            return xform;
+            return transform;
         } else {
-            path->_curve_before_lpe->transform(xform);
+            _curve_before_lpe->transform(transform);
         }
     } else {
-        path->_curve->transform(xform);
+        _curve->transform(transform);
     }
 
     // Adjust stroke
-    item->adjust_stroke(xform.descrim());
+    this->adjust_stroke(transform.descrim());
 
     // Adjust pattern fill
-    item->adjust_pattern(xform);
+    this->adjust_pattern(transform);
 
     // Adjust gradient fill
-    item->adjust_gradient(xform);
+    this->adjust_gradient(transform);
 
     // Adjust LPE
-    item->adjust_livepatheffect(xform);
+    this->adjust_livepatheffect(transform);
 
-    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
     // nothing remains - we've written all of the transform, so return identity
     return Geom::identity();
 }
 
 
-static void
-sp_path_update_patheffect(SPLPEItem *lpeitem, bool write)
-{
-    SPShape * const shape = (SPShape *) lpeitem;
-    Inkscape::XML::Node *repr = shape->getRepr();
+void SPPath::update_patheffect(bool write) {
+    Inkscape::XML::Node *repr = this->getRepr();
 
 #ifdef PATH_VERBOSE
 g_message("sp_path_update_patheffect");
 #endif
 
-    if (shape->_curve_before_lpe && sp_lpe_item_has_path_effect_recursive(lpeitem)) {
-        SPCurve *curve = shape->_curve_before_lpe->copy();
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        SPCurve *curve = _curve_before_lpe->copy();
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-        shape->setCurveInsync(curve, TRUE);
+        this->setCurveInsync(curve, TRUE);
 
-        bool success = sp_lpe_item_perform_path_effect(SP_LPE_ITEM(shape), curve);
+        bool success = this->performPathEffect(curve);
+
         if (success && write) {
-            // could also do shape->getRepr()->updateRepr();  but only the d attribute needs updating.
+            // could also do this->getRepr()->updateRepr();  but only the d attribute needs updating.
 #ifdef PATH_VERBOSE
 g_message("sp_path_update_patheffect writes 'd' attribute");
 #endif
-            if ( shape->_curve != NULL ) {
-                gchar *str = sp_svg_write_path(shape->_curve->get_pathvector());
+
+            if (_curve) {
+                gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
                 repr->setAttribute("d", str);
                 g_free(str);
             } else {
@@ -440,13 +327,15 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
             if (gchar const * value = repr->attribute("d")) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 SPCurve *oldcurve = new SPCurve(pv);
+
                 if (oldcurve) {
-                    shape->setCurve(oldcurve, TRUE);
+                    this->setCurve(oldcurve, TRUE);
                     oldcurve->unref();
                 }
             }
         }
-        shape->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         curve->unref();
     }
 }
@@ -465,6 +354,7 @@ void SPPath::set_original_curve (SPCurve *new_curve, unsigned int owner, bool wr
     if (_curve_before_lpe) {
         _curve_before_lpe = _curve_before_lpe->unref();
     }
+
     if (new_curve) {
         if (owner) {
             _curve_before_lpe = new_curve->ref();
@@ -472,6 +362,7 @@ void SPPath::set_original_curve (SPCurve *new_curve, unsigned int owner, bool wr
             _curve_before_lpe = new_curve->copy();
         }
     }
+
     sp_lpe_item_update_patheffect(this, true, write);
     requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -484,6 +375,7 @@ SPCurve * SPPath::get_original_curve () const
     if (_curve_before_lpe) {
         return _curve_before_lpe->copy();
     }
+
     return NULL;
 }
 
@@ -493,7 +385,7 @@ SPCurve * SPPath::get_original_curve () const
  */
 SPCurve* SPPath::get_curve_for_edit () const
 {
-    if (_curve_before_lpe && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(this))) {
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
         return get_original_curve();
     } else {
         return getCurve();
@@ -506,7 +398,7 @@ SPCurve* SPPath::get_curve_for_edit () const
  */
 const SPCurve* SPPath::get_curve_reference () const
 {
-    if (_curve_before_lpe && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(this))) {
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
         return _curve_before_lpe;
     } else {
         return _curve;
@@ -519,7 +411,7 @@ const SPCurve* SPPath::get_curve_reference () const
  */
 SPCurve* SPPath::get_curve ()
 {
-    if (_curve_before_lpe && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(this))) {
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
         return _curve_before_lpe;
     } else {
         return _curve;

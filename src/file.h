@@ -16,18 +16,25 @@
  */
 
 #include <glibmm/ustring.h>
-#include "ui/dialog/ocaldialogs.h"
+#include <string>
+#include "extension/system.h"
 
-struct SPDesktop;
-struct SPDocument;
+class SPDesktop;
+class SPDocument;
 class SPObject;
 
 namespace Inkscape {
     namespace Extension {
-        struct Extension;
+        class Extension;
     }
 }
 
+namespace Gtk {
+class Window;
+}
+
+// Get the name of the default template uri
+Glib::ustring sp_file_default_template_uri();
 
 /*######################
 ## N E W
@@ -37,7 +44,7 @@ namespace Inkscape {
  * Creates a new Inkscape document and window.
  * Return value is a pointer to the newly created desktop.
  */
-SPDesktop* sp_file_new (const Glib::ustring &templ);
+SPDesktop* sp_file_new (const std::string &templ);
 SPDesktop* sp_file_new_default (void);
 
 /*######################
@@ -56,6 +63,7 @@ void sp_file_exit (void);
 /**
  * Opens a new file and window from the given URI
  */
+
 bool sp_file_open(
     const Glib::ustring &uri,
     Inkscape::Extension::Extension *key,
@@ -194,7 +202,7 @@ void sp_file_print (Gtk::Window& parentWindow);
 /**
  * clean unused defs out of file
  */
-void sp_file_vacuum ();
+void sp_file_vacuum (SPDocument *doc);
 
 
 #endif // SEEN_SP_FILE_H

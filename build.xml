@@ -51,6 +51,9 @@
   <!-- Use these settings for the native compiler -->  
   <!-- -->
   <property name="arch"          value="mingw32-"/>
+  <property name="arch_cc"       value="${arch}gcc"/>
+  <property name="arch_cxx"      value="${arch}g++"/>
+  <property name="arch_link"     value="${arch}g++"/>
   <property name="archutil"      value=""/>
   <property name="devlibs"       location="${env.DEVLIBS_PATH}"/>
   <property name="mingw"         location="${env.MINGW_PATH}"/>
@@ -62,6 +65,9 @@
   <!-- Use these settings for the cross compiler -->  
   <!--
   <property name="arch"          value="i686-pc-mingw32-"/>
+  <property name="arch_cc"       value="${arch}gcc"/>
+  <property name="arch_cxx"      value="${arch}g++"/>
+  <property name="arch_link"     value="${arch}g++"/>
   <property name="archutil"      value="${arch}"/>
   <property name="devlibs"       location="/target"/>
   <property name="mingw_bin"     location="${env.MINGW_BIN}"/>
@@ -92,9 +98,6 @@
 
 
     <mkdir dir="${build}"/>
-    <mkdir dir="${build}/java"/>
-    <mkdir dir="${build}/java/classes"/>
-    <mkdir dir="${build}/java/lib"/>
     <mkdir dir="${dist}"/>
     
     <copy file="${src}/helper/sp-marshal.h.mingw"
@@ -151,9 +154,11 @@
         #define HAVE_SYS_STAT_H               1
         #define HAVE_INTTYPES_H               1
         #define HAVE_OPENMP                   1
-		#define HAVE_TR1_UNORDERED_SET        1
+        #define HAVE_TR1_UNORDERED_SET        1
 
-        #define HAVE_LIBLCMS1                 1
+        #define HAVE_LIBLCMS2                 1
+
+        #define WITH_GTKMM_2_24               1
 
         #define ENABLE_NLS                    1
         #define HAVE_BIND_TEXTDOMAIN_CODESET  1
@@ -175,26 +180,36 @@
         /* shared whiteboard */
         #undef WITH_INKBOARD
         #undef HAVE_SSL
-        
+
         /* use poppler for pdf import? */
         #define HAVE_POPPLER                  1
-	#define HAVE_POPPLER_GLIB             1
+        #define HAVE_POPPLER_GLIB             1
         #define HAVE_POPPLER_CAIRO            1
 
         /* do we want bitmap manipulation? */
         #define WITH_IMAGE_MAGICK             1
 
+        /* Exif and JPEG support for image resolution import */
+        #define HAVE_EXIF                     1
+        #define HAVE_JPEG                     1
+
         /* Allow reading WordPerfect? */
         #define WITH_LIBWPG                   1
 
-        /* Default  to libwpg 0.1.x */
-        #define WITH_LIBWPG01                 1
+        /* Default  to libwpg 0.2.x */
+        #define WITH_LIBWPG02                 1
+
+        /* Visio import filter */
+        #define WITH_LIBVISIO                 1
+
+        /* Corel Draw import filter */
+        #define WITH_LIBCDR                   1
 
         /* Do we support SVG Fonts? */
         #define ENABLE_SVG_FONTS              1
 
         /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
-        #define LPE_ENABLE_TEST_EFFECTS    1
+        //#define LPE_ENABLE_TEST_EFFECTS    1
 
         #define HAVE_ASPELL                   1
 
@@ -286,7 +301,7 @@
         description="compile the source to .o" >
 
     <!-- Compile from source to build -->
-    <cc cc="${arch}gcc" cxx="${arch}g++"
+    <cc cc="${arch_cc}" cxx="${arch_cxx}"
              destdir="${build}/obj"
              continueOnError="true"
              refreshCache="${refresh}">
@@ -300,14 +315,10 @@
             <!--<exclude name="test-src.cpp"/>-->
             <exclude name="display/test-display.cpp"/>
             <exclude name="display/testnr.cpp"/>
-            <exclude name="dom/work/.*"/>
-            <exclude name="dom/odf/SvgOdg.cpp"/>
             <exclude name="extension/api.cpp"/>
             <exclude name="extension/dbus/.*"/>
             <exclude name="extension/dxf2svg/.*"/>
             <exclude name="extension/implementation/plugin.cpp"/>
-            <exclude name="extension/script/bindtest.cpp"/>
-            <exclude name="extension/script/cpptest.cpp"/>
             <exclude name="extension/plugin/.*"/>
             <exclude name="extract-uri-test.cpp"/>
             <exclude name="helper/units-test.cpp"/>
@@ -339,8 +350,16 @@
             <file name="extension/param"/>
         </excludeinc>
         <flags>
-            -Wall -Wformat -Werror=format-security -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch
+            <!-- -std=gnu++0x -DCPP11  -Wno-unused-local-typedefs -->
+            -Wall -Wformat -Werror=format-security -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch
             -Werror=return-type
+            <!-- - ->  -Werror <!-- -->
+            <!-- A list of warnings that should not error *yet*, any help is welcome in fixing the code generating these warnings! -->
+            <!-- libcroco is using guchar where it should use gchar, so we need: --> -Wno-error=pointer-sign
+            -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=strict-overflow -Wno-error=write-strings
+            <!-- Format warnings are obviously bad errors, but with the current old compiler on Windows (gcc 4.6.) we run into a problem with long long ints...
+                 The errors can be restored by removing these flags after updating to a newer compiler (soon after 0.91 release hopefully)  -->
+            -Wno-error=format -Wno-error=format-extra-args
             -O2
             -mms-bitfields
             -fopenmp
@@ -352,6 +371,8 @@
             -DHAVE_SSL
             -DRELAYTOOL_SSL="static const int libssl_is_present=1; static int __attribute__((unused)) libssl_symbol_is_present(char *s){ return 1; }" <!-- inkboard -->
             -DPOPPLER_NEW_GFXFONT <!-- poppler changed the api for 0.8.3 -->
+	    <!-- uncomment below for future devlibs, if poppler >= 0.20.0 -->
+	    <!-- -DPOPPLER_NEW_ERRORAPI --> <!-- poppler changed the error api for 0.20.0 -->
             <!-- GTK+3 migration -->
             -DGLIBMM_DISABLE_DEPRECATED
             -DG_DISABLE_DEPRECATED
@@ -359,7 +380,7 @@
             <!-- -DGTKMM_DISABLE_DEPRECATED -->
             <!-- -DGTK_DISABLE_DEPRECATED  -->
             -DGDKMM_DISABLE_DEPRECATED
-            <!-- -DGSEAL_ENABLE -->
+            -DGSEAL_ENABLE
         </defines>
         <includes>
             -I${devlibs}/include
@@ -372,44 +393,16 @@
             ${pcc.cairo}
             ${pcc.poppler}
             -I${devlibs}/include/gc
-            ${pcc.libwpg-0.1} ${pcc.libwpg-stream-0.1}
+            ${pcc.libwpg-0.2} ${pcc.libvisio-0.0} ${pcc.libcdr-0.0}
             -I${cxxtest}
             <!-- PERL -->
             <!-- -Wno-comment -I${devlibs}/perl/lib/CORE -->
             <!-- PYTHON -->
             -I${devlibs}/python/include
-            <!-- JAVA -->
-            -I${src}/bind/javainc -I${src}/bind/javainc/win32
         </includes>
     </cc>
   </target>
   
-
-  <!--
-  ########################################################################
-  ## T A R G E T    :    L I B
-  ########################################################################
-  -->
-  <target name="lib" depends="compile"
-      description="create a static library">
-    <staticlib command="${archutil}ar crsv"
-           file="${build}/libinkscape.a">
-       <fileset dir="${build}/obj">
-           <exclude name="main.o"/>
-           <exclude name="winmain.o"/>
-           <exclude name="inkview.o"/>
-           <!-- CxxTest -->
-           <exclude name="test-main.o"/>
-           <exclude name="test-src.o"/>
-           <exclude name="display/test-display.o"/>
-           <exclude name="helper/test-helper.o"/>
-           <exclude name="svg/test-svg.o"/>
-           <exclude name="util/test-util.o"/>
-           <exclude name="xml/test-xml.o"/>
-       </fileset>
-    </staticlib>
-  </target>
-
 
 
   <!--
@@ -436,29 +429,36 @@
   ## T A R G E T    :    L I N K
   ########################################################################
   -->
-  <target name="link" depends="lib"
+  <target name="link" depends="compile"
       description="link objects and library to create executable">
 
     <rc command="${archutil}windres" 
         file="${src}/inkscape.rc"
-        out="${build}/inkres.o">
+        out="${build}/obj/inkres.o">
         <flags>
         --include-dir=${src}
         </flags>
     </rc>
-    <link command="${arch}g++" out="${build}/inkscape.exe"
+    <link command="${arch_link}" out="${build}/inkscape.exe"
               strip="true" symfile="${build}/inkscape.dbg"
               stripcommand="${archutil}strip"
               objcopycommand="${archutil}objcopy">
        <flags>
-           -mwindows
+           -mconsole
            -mthreads
        </flags>
-       <fileset dir="${build}">
-           <include name="inkres.o"/>
-           <include name="obj/main.o"/>
-           <include name="obj/winmain.o"/>
-           <include name="libinkscape.a"/>
+       <fileset dir="${build}/obj">
+           <exclude name="winconsole.o"/>
+           <exclude name="inkview.o"/>
+           <exclude name="inkviewres.o"/>
+           <!-- CxxTest -->
+           <exclude name="test-main.o"/>
+           <exclude name="test-src.o"/>
+           <exclude name="display/test-display.o"/>
+           <exclude name="helper/test-helper.o"/>
+           <exclude name="svg/test-svg.o"/>
+           <exclude name="util/test-util.o"/>
+           <exclude name="xml/test-xml.o"/>
        </fileset>
        <!-- WARNING: If you change these libraries, don't forget to change them for inkview and cxxtests below as well! -->
        <libs>
@@ -467,14 +467,15 @@
            ${pcl.gtkmm-2.4}  ${pcl.pangoft2} ${pcl.gthread-2.0}
            ${devlibs}/bin/libxml2.dll
            ${devlibs}/bin/libxslt.dll
+           ${devlibs}/bin/libexslt.dll
            ${pcl.cairo} ${pcl.cairomm-1.0}
-           ${pcl.libwpg-0.1} ${pcl.libwpg-stream-0.1}
+           ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0}
            -liconv
            ${pcl.Magick++}
            ${pcl.fontconfig} ${pcl.freetype2}
-           ${pcl.lcms}
+           ${pcl.lcms2}
            ${pcl.gsl}
-           -lpng -ljpeg -ltiff -lpopt -lz
+           -lpng -ljpeg -ltiff -lexif -lpopt -lz
            -lgc
            -lws2_32 -lintl -lgdi32 -lcomdlg32 -lm
            -lgomp -lpthreadGC2 -laspell
@@ -491,7 +492,7 @@
   <target name="linkconsole" depends="compile"
         description="link console helper">
 
-    <link command="${arch}g++" out="${build}/inkscape-console.exe"
+    <link command="${arch_link}" out="${build}/inkscape-console.exe"
               strip="true" stripcommand="${archutil}strip">
        <flags>
            -mconsole
@@ -509,17 +510,17 @@
   ## T A R G E T    :    L I N K I N K V I E W
   ########################################################################
   -->
-  <target name="linkinkview" depends="lib"
+  <target name="linkinkview" depends="compile"
         description="link objects and library to create Inkview executable">
 
     <rc command="${archutil}windres" 
         file="${src}/inkview.rc"
-        out="${build}/inkviewres.o">
+        out="${build}/obj/inkviewres.o">
         <flags>
         --include-dir=${src}
         </flags>
     </rc>
-    <link command="${arch}g++" out="${build}/inkview.exe"
+    <link command="${arch_link}" out="${build}/inkview.exe"
               strip="true" symfile="${build}/inkview.dbg"
               stripcommand="${archutil}strip"
               objcopycommand="${archutil}objcopy">
@@ -527,10 +528,20 @@
            -mwindows
            -mthreads
        </flags>
-       <fileset dir="${build}">
-           <include name="inkviewres.o"/>
-           <include name="obj/inkview.o"/>
-           <include name="libinkscape.a"/>
+       <fileset dir="${build}/obj">
+           <!-- exclude the other programs -->
+           <exclude name="main.o"/>
+           <exclude name="winmain.o"/>
+           <exclude name="winconsole.o"/>
+           <exclude name="inkres.o"/>
+           <!-- CxxTest -->
+           <exclude name="test-main.o"/>
+           <exclude name="test-src.o"/>
+           <exclude name="display/test-display.o"/>
+           <exclude name="helper/test-helper.o"/>
+           <exclude name="svg/test-svg.o"/>
+           <exclude name="util/test-util.o"/>
+           <exclude name="xml/test-xml.o"/>
        </fileset>
        <libs>
            -L${devlibs}/lib
@@ -538,14 +549,15 @@
            ${pcl.gtkmm-2.4}  ${pcl.pangoft2} ${pcl.gthread-2.0}
            ${devlibs}/bin/libxml2.dll
            ${devlibs}/bin/libxslt.dll
+           ${devlibs}/bin/libexslt.dll
            ${pcl.cairo} ${pcl.cairomm-1.0}
-           ${pcl.libwpg-0.1} ${pcl.libwpg-stream-0.1}
+           ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0}
            -liconv
            ${pcl.Magick++}
            ${pcl.fontconfig} ${pcl.freetype2}
-           ${pcl.lcms}
+           ${pcl.lcms2}
            ${pcl.gsl}
-           -lpng -ljpeg -ltiff -lpopt -lz
+           -lpng -ljpeg -ltiff -lexif -lpopt -lz
            -lgc
            -lws2_32 -lintl -lgdi32 -lcomdlg32 -lm
            -lgomp -lpthreadGC2 -laspell
@@ -561,25 +573,25 @@
   ## T A R G E T    :    L I N K C X X T E S T S
   ########################################################################
   -->
-  <target name="linkcxxtests" depends="lib"
+  <target name="linkcxxtests" depends="compile"
       description="link objects and library to create executable">
 
-    <link command="${arch}g++" out="${build}/cxxtests.exe"
+    <link command="${arch_link}" out="${build}/cxxtests.exe"
               strip="true" symfile="${build}/cxxtests.dbg"
               stripcommand="${archutil}strip"
               objcopycommand="${archutil}objcopy">
        <flags>
+           -mconsole
            -mthreads
        </flags>
-       <fileset dir="${build}">
-           <include name="obj/test-main.o"/>
-           <include name="obj/test-src.o"/>
-           <include name="obj/display/test-display.o"/>
-           <include name="obj/helper/test-helper.o"/>
-           <include name="obj/svg/test-svg.o"/>
-           <include name="obj/util/test-util.o"/>
-           <include name="obj/xml/test-xml.o"/>
-           <include name="libinkscape.a"/>
+       <fileset dir="${build}/obj">
+           <!-- exclude the other programs -->
+           <exclude name="main.o"/>
+           <exclude name="winmain.o"/>
+           <exclude name="winconsole.o"/>
+           <exclude name="inkres.o"/>
+           <exclude name="inkviewres.o"/>
+           <exclude name="inkview.o"/>
        </fileset>
        <libs>
            -L${devlibs}/lib
@@ -587,14 +599,15 @@
            ${pcl.gtkmm-2.4}  ${pcl.pangoft2} ${pcl.gthread-2.0}
            ${devlibs}/bin/libxml2.dll
            ${devlibs}/bin/libxslt.dll
+           ${devlibs}/bin/libexslt.dll
            ${pcl.cairo} ${pcl.cairomm-1.0}
-           ${pcl.libwpg-0.1} ${pcl.libwpg-stream-0.1}
+           ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0}
            -liconv
            ${pcl.Magick++}
            ${pcl.fontconfig} ${pcl.freetype2}
-           ${pcl.lcms}
+           ${pcl.lcms2}
            ${pcl.gsl}
-           -lpng -ljpeg -ltiff -lpopt -lz
+           -lpng -ljpeg -ltiff -lexif -lpopt -lz
            -lgc
            -lws2_32 -lintl -lgdi32 -lcomdlg32 -lm
            -lgomp -lpthreadGC2 -laspell
@@ -621,7 +634,7 @@
     <copy todir="${dist}" file="TRANSLATORS"/>
     <copy todir="${dist}" file="${devlibs}/bin/libatkmm-1.6-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libglibmm-2.4-1.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/libgiomm-2.4-1.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libgiomm-2.4-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libgtkmm-2.4-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libgdkmm-2.4-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangomm-1.4-1.dll"/>
@@ -642,7 +655,7 @@
     <copy todir="${dist}" file="${devlibs}/bin/libpixman-1-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libgcc_s_sjlj-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpoppler-5.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/libpoppler-glib-4.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libpoppler-glib-4.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangocairo-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpango-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangoft2-1.0-0.dll"/>
@@ -651,32 +664,39 @@
     <copy todir="${dist}" file="${devlibs}/bin/libfontconfig-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxml2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxslt.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libexslt.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libexpat-1.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/libwpg-0.1.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/libwpg-stream-0.1.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/libwpd-0.8.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/libwpd-stream-0.8.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libwpg-0.2.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libwpd-0.9.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libwpd-stream-0.9.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libvisio-0.0.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libcdr-0.0.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/icui18n50.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/icudata50.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/icuuc50.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libjpeg-7.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpng12-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpng14-14.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libtiff-3.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/libopenjpeg-2.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libexif-12.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libopenjpeg-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/msvcr70.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/msvcr71.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/zlib1.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/bzip2.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/bzip2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/iconv.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpopt-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/liblcms-1.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/libMagick++-3.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/libMagickCore-3.dll"/>
-	<copy todir="${dist}" file="${devlibs}/bin/libMagickWand-3.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/liblcms2-2.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libMagick++-3.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libMagickCore-3.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/libMagickWand-3.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/intl.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libintl-8.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/pthreadGC2.dll"/>
     <!-- MINGW support DLLs needed for openmp support  -->
     <copy todir="${dist}" file="${mingw_bin}/mingwm10.dll"/>
-	<copy todir="${dist}" file="${mingw_bin}/libgomp-1.dll"/>
+    <copy todir="${dist}" file="${mingw_bin}/libgomp-1.dll"/>
 
     <!-- MSGFMT files -->
     <copy todir="${dist}">
@@ -816,54 +836,6 @@
     <cxxtestrun command="${build}/cxxtests" workingdir="${dist}" />
   </target>
 
-
-  <!--
-  ########################################################################
-  ## T A R G E T    :    JAVAC
-  ########################################################################
-  -->
-  <target name="javac" depends="init"
-      description="compile java binding classes">
-    <javac srcdir="${src}/bind/java" destdir="${build}/java/classes"/>
-  </target>
-
-
-  <!--
-  ########################################################################
-  ## T A R G E T    :    JAR
-  ########################################################################
-  -->
-  <target name="jar" depends="javac"
-      description="pack java classes and resources into a jar file">
-    <copy todir="${build}/java/classes"> <fileset dir="${devlibs}/bind/data"/> </copy>
-    <jar basedir="${build}/java/classes" destfile="${build}/java/lib/inkscape.jar"/>
-  </target>
-
-  <!--
-  ########################################################################
-  ## T A R G E T    :    BINDDIST
-  ########################################################################
-  -->
-  <target name="binddist" depends="jar"
-      description="pack java classes and resources into a jar file">
-    <copy todir="${dist}/share/bind"> <fileset dir="${devlibs}/bind/java"/> </copy>
-    <copy todir="${dist}/share/bind/java"> <fileset dir="${build}/java/lib"/> </copy>
-
-  </target>
-
-  <!--
-  ########################################################################
-  ## T A R G E T    :    BINDCLEAN
-  ########################################################################
-  -->
-  <target name="bindclean" depends=""
-      description="clean up java binding classes">
-        <delete dir="${build}/java"/>
-  </target>
-
-
-
-
   <!--
   ########################################################################
   ## T A R G E T    :    D I S T - A L L
@@ -894,7 +866,7 @@
   ## T A R G E T    :    C L E A N
   ########################################################################
   -->
-  <target name="clean" depends="bindclean"
+  <target name="clean"
         description="clean up.  deleting build and distro dirs" >
 
     <delete dir="${build}"/>

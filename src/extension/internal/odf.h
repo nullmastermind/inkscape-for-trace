@@ -23,22 +23,19 @@
 #ifndef EXTENSION_INTERNAL_ODG_OUT_H
 #define EXTENSION_INTERNAL_ODG_OUT_H
 
-#include <dom/dom.h>
-#include <dom/io/stringstream.h>
-#include <dom/uri.h>
+#include <io/stringstream.h>
+#include <util/ziptool.h>
 
-#include <glibmm.h>
 #include "extension/implementation/implementation.h"
 
-
 #include <xml/repr.h>
-
 #include <string>
 #include <map>
 
-#include <dom/util/ziptool.h>
-#include <dom/io/domstream.h>
+#include "uri.h"
 #include "sp-item.h"
+
+#include <glibmm/ustring.h>
 
 namespace Inkscape
 {
@@ -47,9 +44,7 @@ namespace Extension
 namespace Internal
 {
 
-typedef org::w3c::dom::URI URI;
-typedef org::w3c::dom::io::Writer Writer;
-
+typedef Inkscape::IO::Writer Writer;
 
 class StyleInfo
 {
@@ -281,7 +276,7 @@ public:
 
 private:
 
-    URI documentUri;
+    Inkscape::URI documentUri;
 
     void reset();
 
@@ -315,10 +310,10 @@ private:
 
     bool writeStyle(ZipFile &zf);
 
-    bool processStyle(Writer &outs, SPItem *item, const Glib::ustring &id);
+    bool processStyle(SPItem *item, const Glib::ustring &id, const Glib::ustring &gradientNameFill, const Glib::ustring &gradientNameStroke, Glib::ustring& output);
 
-    bool processGradient(Writer &outs, SPItem *item,
-                    const Glib::ustring &id, Geom::Affine &tf);
+    bool processGradient(SPItem *item,
+                    const Glib::ustring &id, Geom::Affine &tf, Glib::ustring& gradientName, Glib::ustring& output, bool checkFillGradient = 1);
 
     bool writeStyleHeader(Writer &outs);
 
@@ -333,8 +328,6 @@ private:
     bool writeContent(ZipFile &zf, Inkscape::XML::Node *node);
 
 };
-
-
 
 
 }  //namespace Internal

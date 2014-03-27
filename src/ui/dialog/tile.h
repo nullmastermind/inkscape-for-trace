@@ -16,6 +16,14 @@
 #ifndef SEEN_UI_DIALOG_TILE_H
 #define SEEN_UI_DIALOG_TILE_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/checkbutton.h>
@@ -25,6 +33,12 @@
 
 namespace Gtk {
 class Button;
+
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
 }
 
 namespace Inkscape {

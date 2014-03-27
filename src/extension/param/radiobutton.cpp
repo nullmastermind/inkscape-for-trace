@@ -18,6 +18,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/radiobutton.h>
@@ -172,7 +176,7 @@ const gchar *ParamRadioButton::set(const gchar * in, SPDocument * /*doc*/, Inksc
     Glib::ustring * settext = NULL;
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         optionentry * entr = reinterpret_cast<optionentry *>(list->data);
-        if ( !entr->guitext->compare(in) ) {
+        if ( !entr->value->compare(in) ) {
             settext = entr->value;
             break;  // break out of for loop
         }
@@ -186,6 +190,8 @@ const gchar *ParamRadioButton::set(const gchar * in, SPDocument * /*doc*/, Inksc
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString(extension_pref_root + prefname, _value);
         g_free(prefname);
+    } else {
+        g_warning("Couldn't set ParamRadioButton %s", in);
     }
 
     return _value;
@@ -233,8 +239,8 @@ public:
 void ParamRadioButtonWdg::changed(void)
 {
     if (this->get_active()) {
-        Glib::ustring data = this->get_label();
-        _pref->set(data.c_str(), _doc, _node);
+        Glib::ustring value = _pref->value_from_label(this->get_label());
+        _pref->set(value.c_str(), _doc, _node);
     }
     if (_changeSignal != NULL) {
         _changeSignal->emit();
@@ -260,10 +266,30 @@ protected:
 
     virtual void on_changed() {
         if ( base ) {
-            base->set(get_active_text().c_str(), doc, node);
+            Glib::ustring value = base->value_from_label(get_active_text());
+            base->set(value.c_str(), doc, node);
         }
     }
 };
+
+/**
+ * Returns the value for the options label parameter
+ */
+Glib::ustring ParamRadioButton::value_from_label(const Glib::ustring label)
+{
+    Glib::ustring value = "";
+
+    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
+        optionentry * entr = reinterpret_cast<optionentry *>(list->data);
+        if ( !entr->guitext->compare(label) ) {
+            value = *(entr->value);
+            break;
+        }
+    }
+
+    return value;
+
+}
 
 /**
  * Creates a combobox widget for an enumeration parameter.
@@ -284,11 +310,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
     Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox(false, 0));
 #endif
 
-#if WITH_GTKMM_2_22
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START, Gtk::ALIGN_START));
-#else
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP));
-#endif
     label->show();
     hbox->pack_start(*label, false, false, _indent);
 
@@ -309,11 +331,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
         switch ( _mode ) {
             case MINIMAL:
             {
-#if WITH_GTKMM_2_24
                 cbt->append(*text);
-#else
-                cbt->append_text(*text);
-#endif
                 if (!entr->value->compare(_value)) {
                     cbt->set_active_text(*text);
                     comboSet = true;

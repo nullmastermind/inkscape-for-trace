@@ -34,7 +34,12 @@
 
 #include <gtkmm/expander.h>
 #include <gtkmm/stock.h>
+
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
+
 #include "extension/input.h"
 #include "extension/output.h"
 #include "extension/db.h"
@@ -100,9 +105,9 @@ findEntryWidgets(Gtk::Container *parent,
         Gtk::Widget *child = children[i];
         GtkWidget *wid = child->gobj();
         if (GTK_IS_ENTRY(wid))
-           result.push_back((Gtk::Entry *)child);
+           result.push_back(dynamic_cast<Gtk::Entry *>(child));
         else if (GTK_IS_CONTAINER(wid))
-            findEntryWidgets((Gtk::Container *)child, result);
+            findEntryWidgets(dynamic_cast<Gtk::Container *>(child), result);
         }
 
 }
@@ -119,9 +124,9 @@ findExpanderWidgets(Gtk::Container *parent,
         Gtk::Widget *child = children[i];
         GtkWidget *wid = child->gobj();
         if (GTK_IS_EXPANDER(wid))
-           result.push_back((Gtk::Expander *)child);
+           result.push_back(dynamic_cast<Gtk::Expander *>(child));
         else if (GTK_IS_CONTAINER(wid))
-            findExpanderWidgets((Gtk::Container *)child, result);
+            findExpanderWidgets(dynamic_cast<Gtk::Container *>(child), result);
         }
 
 }
@@ -141,13 +146,12 @@ bool SVGPreview::setDocument(SPDocument *doc)
 
     //This should remove it from the box, and free resources
     if (viewerGtk)
-        gtk_widget_destroy(viewerGtk);
+        Gtk::Container::remove(*viewerGtk);
 
-    viewerGtk  = sp_svg_view_widget_new(doc);
-    GtkWidget *vbox = (GtkWidget *)gobj();
-    gtk_box_pack_start(GTK_BOX(vbox), viewerGtk, TRUE, TRUE, 0);
-    gtk_widget_show(viewerGtk);
-
+    viewerGtk  = Glib::wrap(sp_svg_view_widget_new(doc));
+    Gtk::VBox *vbox = Glib::wrap(gobj());
+    vbox->pack_start(*viewerGtk,  TRUE, TRUE, 0);
+    viewerGtk->show();
     return true;
 }
 
@@ -523,9 +527,9 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
     if (Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR))
         {
         Glib::ustring fileNameUtf8 = Glib::filename_to_utf8(fileName);
-        gchar *fName = (gchar *)fileNameUtf8.c_str();
+        gchar *fName = const_cast<gchar *>(fileNameUtf8.c_str());
         struct stat info;
-        if (g_stat(fName, &info))
+        if (g_file_test (fName, G_FILE_TEST_EXISTS) && g_stat(fName, &info))
             {
             g_warning("SVGPreview::set() : %s : %s",
                            fName, strerror(errno));
@@ -732,38 +736,86 @@ FileOpenDialogImplGtk::~FileOpenDialogImplGtk()
 
 }
 
+void FileOpenDialogImplGtk::addFilterMenu(Glib::ustring name, Glib::ustring pattern)
+{
+
+#if WITH_GTKMM_3_0
+        Glib::RefPtr<Gtk::FileFilter> allFilter = Gtk::FileFilter::create();
+        allFilter->set_name(_(name.c_str()));
+        allFilter->add_pattern(pattern);
+#else
+        Gtk::FileFilter allFilter;
+        allFilter.set_name(_(name.c_str()));
+        allFilter.add_pattern(pattern);
+#endif
+        extensionMap[Glib::ustring(_("All Files"))]=NULL;
+        add_filter(allFilter);
+}
+
 void FileOpenDialogImplGtk::createFilterMenu()
 {
+    if (_dialogType == CUSTOM_TYPE) {
+        return;
+    }
+
     if (_dialogType == EXE_TYPES) {
+#if WITH_GTKMM_3_0
+        Glib::RefPtr<Gtk::FileFilter> allFilter = Gtk::FileFilter::create();
+        allFilter->set_name(_("All Files"));
+        allFilter->add_pattern("*");
+#else
         Gtk::FileFilter allFilter;
         allFilter.set_name(_("All Files"));
-        extensionMap[Glib::ustring(_("All Files"))]=NULL;
         allFilter.add_pattern("*");
+#endif
+        extensionMap[Glib::ustring(_("All Files"))]=NULL;
         add_filter(allFilter);
     } else {
+#if WITH_GTKMM_3_0
+        Glib::RefPtr<Gtk::FileFilter> allInkscapeFilter = Gtk::FileFilter::create();
+        allInkscapeFilter->set_name(_("All Inkscape Files"));
+	
+	Glib::RefPtr<Gtk::FileFilter> allFilter = Gtk::FileFilter::create();
+        allFilter->set_name(_("All Files"));
+        allFilter->add_pattern("*");
+        
+	Glib::RefPtr<Gtk::FileFilter> allImageFilter = Gtk::FileFilter::create();
+        allImageFilter->set_name(_("All Images"));
+        
+	Glib::RefPtr<Gtk::FileFilter> allVectorFilter = Gtk::FileFilter::create();
+        allVectorFilter->set_name(_("All Vectors"));
+        
+	Glib::RefPtr<Gtk::FileFilter> allBitmapFilter = Gtk::FileFilter::create();
+        allBitmapFilter->set_name(_("All Bitmaps"));
+#else
         Gtk::FileFilter allInkscapeFilter;
         allInkscapeFilter.set_name(_("All Inkscape Files"));
+        
+	Gtk::FileFilter allFilter;
+        allFilter.set_name(_("All Files"));
+        allFilter.add_pattern("*");
+        
+	Gtk::FileFilter allImageFilter;
+        allImageFilter.set_name(_("All Images"));
+        
+	Gtk::FileFilter allVectorFilter;
+        allVectorFilter.set_name(_("All Vectors"));
+        
+	Gtk::FileFilter allBitmapFilter;
+        allBitmapFilter.set_name(_("All Bitmaps"));
+#endif
         extensionMap[Glib::ustring(_("All Inkscape Files"))]=NULL;
         add_filter(allInkscapeFilter);
 
-        Gtk::FileFilter allFilter;
-        allFilter.set_name(_("All Files"));
         extensionMap[Glib::ustring(_("All Files"))]=NULL;
-        allFilter.add_pattern("*");
         add_filter(allFilter);
     
-        Gtk::FileFilter allImageFilter;
-        allImageFilter.set_name(_("All Images"));
         extensionMap[Glib::ustring(_("All Images"))]=NULL;
         add_filter(allImageFilter);
 
-        Gtk::FileFilter allVectorFilter;
-        allVectorFilter.set_name(_("All Vectors"));
         extensionMap[Glib::ustring(_("All Vectors"))]=NULL;
         add_filter(allVectorFilter);
 
-        Gtk::FileFilter allBitmapFilter;
-        allBitmapFilter.set_name(_("All Bitmaps"));
         extensionMap[Glib::ustring(_("All Bitmaps"))]=NULL;
         add_filter(allBitmapFilter);
 
@@ -783,17 +835,31 @@ void FileOpenDialogImplGtk::createFilterMenu()
             Glib::ustring extension = imod->get_extension();
             fileDialogExtensionToPattern(upattern, extension);
 
-            Gtk::FileFilter filter;
             Glib::ustring uname(_(imod->get_filetypename()));
+
+#if WITH_GTKMM_3_0
+	    Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+            filter->set_name(uname);
+            filter->add_pattern(upattern);
+#else
+            Gtk::FileFilter filter;
             filter.set_name(uname);
             filter.add_pattern(upattern);
+#endif
+
             add_filter(filter);
             extensionMap[uname] = imod;
 
             //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
+#if WITH_GTKMM_3_0
+            allInkscapeFilter->add_pattern(upattern);
+            if ( strncmp("image", imod->get_mimetype(), 5)==0 )
+                allImageFilter->add_pattern(upattern);
+#else
             allInkscapeFilter.add_pattern(upattern);
             if ( strncmp("image", imod->get_mimetype(), 5)==0 )
                 allImageFilter.add_pattern(upattern);
+#endif
 
             // uncomment this to find out all mime types supported by Inkscape import/open
             // g_print ("%s\n", imod->get_mimetype());
@@ -814,9 +880,17 @@ void FileOpenDialogImplGtk::createFilterMenu()
                 strncmp("image/x-tga", imod->get_mimetype(), 11)==0 ||
                 strncmp("image/x-pcx", imod->get_mimetype(), 11)==0 
                )
+#if WITH_GTKMM_3_0
+                allBitmapFilter->add_pattern(upattern);
+#else
                 allBitmapFilter.add_pattern(upattern);
+#endif
             else 
+#if WITH_GTKMM_3_0
+                allVectorFilter->add_pattern(upattern);
+#else
                 allVectorFilter.add_pattern(upattern);
+#endif
         }
     }
     return;
@@ -829,7 +903,7 @@ bool
 FileOpenDialogImplGtk::show()
 {
     set_modal (TRUE);                      //Window
-    sp_transientize((GtkWidget *)gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     gint b = run();                        //Dialog
     svgPreview.showNoPreview();
     hide();
@@ -889,7 +963,20 @@ FileOpenDialogImplGtk::getFilename (void)
  */
 std::vector<Glib::ustring>FileOpenDialogImplGtk::getFilenames()
 {
+#if WITH_GTKMM_3_0
+    std::vector<std::string> result_tmp = get_filenames();
+
+    // Copy filenames to a vector of type Glib::ustring
+    std::vector<Glib::ustring> result;
+
+    for (std::vector<std::string>::iterator it = result_tmp.begin();
+		    it != result_tmp.end(); ++it)
+	    result.push_back(*it);
+
+#else
     std::vector<Glib::ustring> result = get_filenames();
+#endif
+
 #ifdef WITH_GNOME_VFS
     if (result.empty() && gnome_vfs_initialized())
         result = get_uris();
@@ -965,7 +1052,9 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk( Gtk::Window &parentWindow,
         fileTypeCheckbox.set_active(prefs->getBool("/dialogs/save_as/append_extension", true));
     }
 
-    createFileTypeMenu();
+    if (_dialogType != CUSTOM_TYPE)
+        createFileTypeMenu();
+
     fileTypeComboBox.set_size_request(200,40);
     fileTypeComboBox.signal_changed().connect(
          sigc::mem_fun(*this, &FileSaveDialogImplGtk::fileTypeChangedCallback) );
@@ -984,7 +1073,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk( Gtk::Window &parentWindow,
     std::vector<Gtk::Entry *> entries;
     findEntryWidgets(cont, entries);
     //g_message("Found %d entry widgets\n", entries.size());
-    if (entries.size() >=1 )
+    if (!entries.empty())
         {
         //Catch when user hits [return] on the text field
         fileNameEntry = entries[0];
@@ -996,7 +1085,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk( Gtk::Window &parentWindow,
     std::vector<Gtk::Expander *> expanders;
     findExpanderWidgets(cont, expanders);
     //g_message("Found %d expander widgets\n", expanders.size());
-    if (expanders.size() >=1 )
+    if (!expanders.empty())
         {
         //Always show the file list
         Gtk::Expander *expander = expanders[0];
@@ -1080,14 +1169,32 @@ void FileSaveDialogImplGtk::fileTypeChangedCallback()
     //g_message("selected: %s\n", type.name.c_str());
 
     extension = type.extension;
+#if WITH_GTKMM_3_0
+    Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+    filter->add_pattern(type.pattern);
+#else
     Gtk::FileFilter filter;
     filter.add_pattern(type.pattern);
+#endif
     set_filter(filter);
 
     updateNameAndExtension();
 }
 
+void FileSaveDialogImplGtk::addFileType(Glib::ustring name, Glib::ustring pattern)
+{
+    //#Let user choose
+    FileType guessType;
+    guessType.name = name;
+    guessType.pattern = pattern;
+    guessType.extension = NULL;
+    fileTypeComboBox.append(guessType.name);
+    fileTypes.push_back(guessType);
 
+
+    fileTypeComboBox.set_active(0);
+    fileTypeChangedCallback(); //call at least once to set the filter
+}
 
 void FileSaveDialogImplGtk::createFileTypeMenu()
 {
@@ -1110,11 +1217,7 @@ void FileSaveDialogImplGtk::createFileTypeMenu()
         knownExtensions.insert( extension.casefold() );
         fileDialogExtensionToPattern (type.pattern, extension);
         type.extension= omod;
-#if WITH_GTKMM_2_24
         fileTypeComboBox.append(type.name);
-#else
-        fileTypeComboBox.append_text(type.name);
-#endif
         fileTypes.push_back(type);
     }
 
@@ -1123,11 +1226,7 @@ void FileSaveDialogImplGtk::createFileTypeMenu()
     guessType.name = _("Guess from extension");
     guessType.pattern = "*";
     guessType.extension = NULL;
-#if WITH_GTKMM_2_24
     fileTypeComboBox.append(guessType.name);
-#else
-    fileTypeComboBox.append_text(guessType.name);
-#endif
     fileTypes.push_back(guessType);
 
 
@@ -1147,7 +1246,7 @@ FileSaveDialogImplGtk::show()
 {
     change_path(myFilename);
     set_modal (TRUE);                      //Window
-    sp_transientize((GtkWidget *)gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     gint b = run();                        //Dialog
     svgPreview.showNoPreview();
     set_preview_widget_active(false);
@@ -1545,7 +1644,7 @@ FileExportDialogImpl::FileExportDialogImpl( Gtk::Window& parentWindow,
     std::vector<Gtk::Entry *> entries;
     findEntryWidgets(cont, entries);
     //g_message("Found %d entry widgets\n", entries.size());
-    if (entries.size() >=1 )
+    if (!entries.empty())
         {
         //Catch when user hits [return] on the text field
         fileNameEntry = entries[0];
@@ -1557,7 +1656,7 @@ FileExportDialogImpl::FileExportDialogImpl( Gtk::Window& parentWindow,
     std::vector<Gtk::Expander *> expanders;
     findExpanderWidgets(cont, expanders);
     //g_message("Found %d expander widgets\n", expanders.size());
-    if (expanders.size() >=1 )
+    if (!expanders.empty())
         {
         //Always show the file list
         Gtk::Expander *expander = expanders[0];
@@ -1594,7 +1693,7 @@ FileExportDialogImpl::show()
         s = getcwd (NULL, 0);
     set_current_folder(Glib::filename_from_utf8(s)); //hack to force initial dir listing
     set_modal (TRUE);                      //Window
-    sp_transientize((GtkWidget *)gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     gint b = run();                        //Dialog
     svgPreview.showNoPreview();
     hide();

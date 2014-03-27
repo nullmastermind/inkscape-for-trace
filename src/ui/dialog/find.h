@@ -12,14 +12,20 @@
 #ifndef INKSCAPE_UI_DIALOG_FIND_H
 #define INKSCAPE_UI_DIALOG_FIND_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h" 
 #include "ui/widget/frame.h"
-#include <glib.h>
-#include <gtkmm.h>
 
-#include "desktop.h"
+#include <gtkmm/box.h>
+#include <gtkmm/buttonbox.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/label.h>
+
 #include "ui/dialog/desktop-tracker.h"
 
 class SPItem;
@@ -280,7 +286,13 @@ private:
     Gtk::Label status;
     UI::Widget::Button button_find;
     UI::Widget::Button button_replace;
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox box_buttons;
+#else
     Gtk::HButtonBox box_buttons;
+#endif
+
     Gtk::HBox hboxbutton_row;
 
     /**

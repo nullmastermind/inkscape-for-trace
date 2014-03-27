@@ -16,17 +16,13 @@
 #include <glib.h>
 #include <stddef.h>
 #include <sigc++/sigc++.h>
+#include "sp-string.h" // Provides many other headers with SP_IS_STRING
 #include "sp-item.h"
-#include "sp-string.h"
 #include "text-tag-attributes.h"
 #include "libnrtype/Layout-TNG.h"
 
-
-#define SP_TYPE_TEXT (sp_text_get_type())
-#define SP_TEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_TEXT, SPText))
-#define SP_TEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), SP_TYPE_TEXT, SPTextClass))
-#define SP_IS_TEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_TEXT))
-#define SP_IS_TEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_TEXT))
+#define SP_TEXT(obj) (dynamic_cast<SPText*>((SPObject*)obj))
+#define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
 
 /* Text specific flags */
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
@@ -34,8 +30,11 @@
 
 
 /* SPText */
+class SPText : public SPItem {
+public:
+	SPText();
+	virtual ~SPText();
 
-struct SPText : public SPItem {
     /** Converts the text object to its component curves */
     SPCurve *getNormalizedBpath() const
         {return layout.convertToCurves();}
@@ -59,6 +58,8 @@ struct SPText : public SPItem {
     /** discards the drawing objects representing this text. */
     void _clearFlow(Inkscape::DrawingGroup *in_arena);
 
+    bool _optimizeTextpathText;
+
 private:
     /** Recursively walks the xml tree adding tags and their contents. The
     non-trivial code does two things: firstly, it manages the positioning
@@ -66,13 +67,30 @@ private:
     breaks and makes sure both that they are assigned the correct SPObject and
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
-};
 
-struct SPTextClass {
-    SPItemClass parent_class;
-};
+public:
+    /** Optimize textpath text on next set_transform. */
+    void optimizeTextpathText()
+        {_optimizeTextpathText = true;}
 
-GType sp_text_get_type();
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
+	virtual void set(unsigned int key, const gchar* value);
+	virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void modified(unsigned int flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+
+	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
+	virtual void print(SPPrintContext *ctx);
+        virtual const char* displayName() const;
+	virtual gchar* description() const;
+	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void hide(unsigned int key);
+	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
+	virtual Geom::Affine set_transform(Geom::Affine const &transform);
+};
 
 #endif
 

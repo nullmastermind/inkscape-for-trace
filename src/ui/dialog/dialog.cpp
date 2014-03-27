@@ -23,7 +23,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "inkscape.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "modifier-fns.h"
@@ -61,7 +61,7 @@ void sp_dialog_shutdown(GObject * /*object*/, gpointer dlgPtr)
 }
 
 
-void hideCallback(GObject * /*object*/, gpointer dlgPtr)
+static void hideCallback(GObject * /*object*/, gpointer dlgPtr)
 {
     g_return_if_fail( dlgPtr != NULL );
 
@@ -69,7 +69,7 @@ void hideCallback(GObject * /*object*/, gpointer dlgPtr)
     dlg->onHideF12();
 }
 
-void unhideCallback(GObject * /*object*/, gpointer dlgPtr)
+static void unhideCallback(GObject * /*object*/, gpointer dlgPtr)
 {
     g_return_if_fail( dlgPtr != NULL );
 
@@ -270,15 +270,15 @@ bool Dialog::_onEvent(GdkEvent *event)
 
     switch (event->type) {
         case GDK_KEY_PRESS: {
-            switch (get_group0_keyval (&event->key)) {
-                case GDK_Escape: {
+            switch (Inkscape::UI::Tools::get_group0_keyval (&event->key)) {
+                case GDK_KEY_Escape: {
                     _defocus();
                     ret = true;
                     break;
                 }
-                case GDK_F4:
-                case GDK_w:
-                case GDK_W: {
+                case GDK_KEY_F4:
+                case GDK_KEY_w:
+                case GDK_KEY_W: {
                     if (mod_ctrl_only(event->key.state)) {
                         _close();
                         ret = true;
@@ -300,7 +300,7 @@ bool Dialog::_onEvent(GdkEvent *event)
 bool Dialog::_onKeyPress(GdkEventKey *event)
 {
     unsigned int shortcut;
-    shortcut = get_group0_keyval(event) |
+    shortcut = Inkscape::UI::Tools::get_group0_keyval(event) |
         ( event->state & GDK_SHIFT_MASK ?
           SP_SHORTCUT_SHIFT_MASK : 0 ) |
         ( event->state & GDK_CONTROL_MASK ?

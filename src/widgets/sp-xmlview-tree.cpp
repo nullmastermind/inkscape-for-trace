@@ -27,10 +27,14 @@ enum { STORE_TEXT_COL = 0, STORE_DATA_COL, STORE_REPR_COL, STORE_N_COLS };
 
 static void sp_xmlview_tree_class_init (SPXMLViewTreeClass * klass);
 static void sp_xmlview_tree_init (SPXMLViewTree * tree);
-static void sp_xmlview_tree_destroy (GtkObject * object);
+
+#if GTK_CHECK_VERSION(3,0,0)
+static void sp_xmlview_tree_destroy(GtkWidget * object);
+#else
+static void sp_xmlview_tree_destroy(GtkObject * object);
+#endif
 
 static NodeData * node_data_new (SPXMLViewTree * tree, GtkTreeIter * node, GtkTreeRowReference  *rowref, Inkscape::XML::Node * repr);
-static void node_data_free (gpointer data);
 
 static GtkTreeRowReference * add_node (SPXMLViewTree * tree, GtkTreeIter * parent, GtkTreeIter * before, Inkscape::XML::Node * repr);
 
@@ -45,7 +49,6 @@ static void pi_content_changed (Inkscape::XML::Node * repr, const gchar * old_co
 
 static gboolean ref_to_sibling (NodeData *node, Inkscape::XML::Node * ref, GtkTreeIter *);
 static gboolean repr_to_child (NodeData *node, Inkscape::XML::Node * repr, GtkTreeIter *);
-static Inkscape::XML::Node * sibling_to_ref (GtkTreeView * tree, GtkTreeIter * parent, GtkTreeIter * sibling);
 static gboolean tree_model_iter_compare(GtkTreeModel* store, GtkTreeIter * iter1, GtkTreeIter * iter2);
 GtkTreeRowReference  *tree_iter_to_ref (SPXMLViewTree * tree, GtkTreeIter* iter);
 static gboolean tree_ref_to_iter (SPXMLViewTree * tree, GtkTreeIter* iter, GtkTreeRowReference  *ref);
@@ -91,15 +94,16 @@ static const Inkscape::XML::NodeEventVector pi_repr_events = {
 
 static GtkTreeViewClass * parent_class = NULL;
 
-GtkWidget *
-sp_xmlview_tree_new (Inkscape::XML::Node * repr, void * /*factory*/, void * /*data*/)
+GtkWidget *sp_xmlview_tree_new(Inkscape::XML::Node * repr, void * /*factory*/, void * /*data*/)
 {
-	SPXMLViewTree * tree;
+    SPXMLViewTree *tree = SP_XMLVIEW_TREE(g_object_new (SP_TYPE_XMLVIEW_TREE, NULL));
 
-	tree = (SPXMLViewTree*)g_object_new (SP_TYPE_XMLVIEW_TREE, NULL);
+    tree->store = gtk_tree_store_new (STORE_N_COLS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
 
-	tree->store = gtk_tree_store_new (STORE_N_COLS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
-    gtk_tree_view_set_model (GTK_TREE_VIEW(tree), GTK_TREE_MODEL(tree->store));
+    // Detach the model from the view until all the data is loaded
+    g_object_ref(tree->store);
+    gtk_tree_view_set_model(GTK_TREE_VIEW(tree), NULL);
+
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(tree), FALSE);
     gtk_tree_view_set_reorderable (GTK_TREE_VIEW(tree), TRUE);
     gtk_tree_view_set_enable_search (GTK_TREE_VIEW(tree), TRUE);
@@ -117,7 +121,7 @@ sp_xmlview_tree_new (Inkscape::XML::Node * repr, void * /*factory*/, void * /*da
     g_signal_connect(GTK_TREE_VIEW(tree), "drag_data_received",  G_CALLBACK(on_drag_data_received), tree);
     g_signal_connect(GTK_TREE_VIEW(tree), "drag-motion",  G_CALLBACK(do_drag_motion), tree);
 
-	return (GtkWidget *) tree;
+    return GTK_WIDGET(tree);
 }
 
 GType
@@ -143,13 +147,17 @@ sp_xmlview_tree_get_type (void)
 	return type;
 }
 
-void
-sp_xmlview_tree_class_init (SPXMLViewTreeClass * klass)
+void sp_xmlview_tree_class_init(SPXMLViewTreeClass * klass)
 {
-	GtkObjectClass * object_class;
-
-	object_class = (GtkObjectClass *) klass;
-	parent_class = (GtkTreeViewClass *) g_type_class_peek_parent (klass);
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidgetClass * widget_class = GTK_WIDGET_CLASS(klass);
+    widget_class->destroy = sp_xmlview_tree_destroy;
+#else
+    GtkObjectClass * object_class = GTK_OBJECT_CLASS(klass);
+    object_class->destroy = sp_xmlview_tree_destroy;
+#endif
+    
+    parent_class = GTK_TREE_VIEW_CLASS(g_type_class_peek_parent (klass));
 
     // Signal for when a tree drag and drop has completed
     g_signal_new (  "tree_move",
@@ -160,8 +168,6 @@ sp_xmlview_tree_class_init (SPXMLViewTreeClass * klass)
         g_cclosure_marshal_VOID__UINT,
         G_TYPE_NONE, 1,
         G_TYPE_UINT);
-
-	object_class->destroy = sp_xmlview_tree_destroy;
 }
 
 void
@@ -172,16 +178,22 @@ sp_xmlview_tree_init (SPXMLViewTree * tree)
 	tree->dndactive = FALSE;
 }
 
-void
-sp_xmlview_tree_destroy (GtkObject * object)
-{
-	SPXMLViewTree * tree;
 
-	tree = SP_XMLVIEW_TREE (object);
+#if GTK_CHECK_VERSION(3,0,0)
+void sp_xmlview_tree_destroy(GtkWidget * object)
+#else
+void sp_xmlview_tree_destroy(GtkObject * object)
+#endif
+{
+	SPXMLViewTree * tree = SP_XMLVIEW_TREE (object);
 
 	sp_xmlview_tree_set_repr (tree, NULL);
 
-	GTK_OBJECT_CLASS (parent_class)->destroy (object);
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS(parent_class)->destroy (object);
+#else
+	GTK_OBJECT_CLASS(parent_class)->destroy (object);
+#endif
 }
 
 /*
@@ -248,93 +260,71 @@ NodeData *node_data_new(SPXMLViewTree * tree, GtkTreeIter * /*node*/, GtkTreeRow
     return data;
 }
 
-void
-node_data_free (gpointer ptr) {
-	NodeData * data;
-	data = (NodeData *) ptr;
-	sp_repr_remove_listener_by_data (data->repr, data);
-	g_assert (data->repr != NULL);
-	Inkscape::GC::release(data->repr);
-	g_free (data);
-}
-
-void
-element_child_added (Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer ptr)
+void element_child_added (Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer ptr)
 {
-	NodeData * data;
-	GtkTreeIter before;
+    NodeData *data = static_cast<NodeData *>(ptr);
+    GtkTreeIter before;
 
-	data = (NodeData *) ptr;
+    if (data->tree->blocked) return;
 
-	if (data->tree->blocked) return;
-
-	if (!ref_to_sibling (data, ref, &before)) {
-	    return;
-	}
+    if (!ref_to_sibling (data, ref, &before)) {
+        return;
+    }
 
     GtkTreeIter data_iter;
     tree_ref_to_iter(data->tree, &data_iter,  data->rowref);
-	add_node (data->tree, &data_iter, &before, child);
+    add_node (data->tree, &data_iter, &before, child);
 }
 
-void
-element_attr_changed (Inkscape::XML::Node * repr, const gchar * key, const gchar * /*old_value*/, const gchar * new_value, bool /*is_interactive*/, gpointer ptr)
+void element_attr_changed(Inkscape::XML::Node * repr, const gchar * key, const gchar * /*old_value*/, const gchar * new_value, bool /*is_interactive*/, gpointer ptr)
 {
-	NodeData * data;
-	gchar *label;
-	const gchar *layer;
+    NodeData *data = static_cast<NodeData *>(ptr);
+    gchar *label;
 
-	data = (NodeData *) ptr;
+    if (data->tree->blocked) return;
 
-	if (data->tree->blocked) return;
+    if (0 != strcmp (key, "id") && 0 != strcmp (key, "inkscape:label"))
+        return;
 
-	if (0 != strcmp (key, "id") && 0 != strcmp (key, "inkscape:label"))
-		return;
+    new_value = repr->attribute("id");
+    const gchar *layer = repr->attribute("inkscape:label");
 
-	new_value = repr->attribute("id");
-	layer = repr->attribute("inkscape:label");
-
-	if (new_value && layer) {
-		label = g_strdup_printf ("<%s id=\"%s\" inkscape:label=\"%s\">", repr->name(), new_value, layer);
-	} else if (new_value) {
-		label = g_strdup_printf ("<%s id=\"%s\">", repr->name(), new_value);
-	} else {
-		label = g_strdup_printf ("<%s>", repr->name());
-	}
-
-	GtkTreeIter iter;
-	if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
-	    gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
-	}
-	g_free (label);
-}
-
-void
-element_child_removed (Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * /*ref*/, gpointer ptr)
-{
-	NodeData * data;
-	data = (NodeData *) ptr;
-
-	if (data->tree->blocked) return;
-
-	GtkTreeIter iter;
-	if (repr_to_child (data, child, &iter)) {
-        gtk_tree_store_remove (GTK_TREE_STORE(data->tree->store), &iter);
+    if (new_value && layer) {
+        label = g_strdup_printf ("<%s id=\"%s\" inkscape:label=\"%s\">", repr->name(), new_value, layer);
+    } else if (new_value) {
+        label = g_strdup_printf ("<%s id=\"%s\">", repr->name(), new_value);
+    } else {
+        label = g_strdup_printf ("<%s>", repr->name());
     }
 
+    GtkTreeIter iter;
+    if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
+        gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
+    }
+    g_free (label);
 }
 
-void
-element_order_changed (Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * /*oldref*/, Inkscape::XML::Node * newref, gpointer ptr)
+void element_child_removed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * /*ref*/, gpointer ptr)
 {
-	NodeData * data;
-	GtkTreeIter before, node;
-	data = (NodeData *) ptr;
+    NodeData *data = static_cast<NodeData *>(ptr);
 
-	if (data->tree->blocked) return;
+    if (data->tree->blocked) return;
 
-	ref_to_sibling (data, newref, &before);
-	repr_to_child (data, child, &node);
+    GtkTreeIter iter;
+    if (repr_to_child (data, child, &iter)) {
+        gtk_tree_store_remove (GTK_TREE_STORE(data->tree->store), &iter);
+    }
+}
+
+void element_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * /*oldref*/, Inkscape::XML::Node * newref, gpointer ptr)
+{
+    NodeData *data = static_cast<NodeData *>(ptr);
+    GtkTreeIter before, node;
+
+    if (data->tree->blocked) return;
+
+    ref_to_sibling (data, newref, &before);
+    repr_to_child (data, child, &node);
 
     if (gtk_tree_store_iter_is_valid(data->tree->store, &before)) {
         gtk_tree_store_move_before (data->tree->store, &node, &before);
@@ -344,59 +334,47 @@ element_order_changed (Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * chi
     }
 }
 
-void
-text_content_changed (Inkscape::XML::Node * /*repr*/, const gchar * /*old_content*/, const gchar * new_content, gpointer ptr)
+void text_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_content*/, const gchar * new_content, gpointer ptr)
 {
-	NodeData *data;
-	gchar *label;
+    NodeData *data = static_cast<NodeData *>(ptr);
 
-	data = (NodeData *) ptr;
+    if (data->tree->blocked) return;
 
-	if (data->tree->blocked) return;
-
-	label = g_strdup_printf ("\"%s\"", new_content);
+    gchar *label = g_strdup_printf ("\"%s\"", new_content);
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
         gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
     }
 
-	g_free (label);
+    g_free (label);
 }
 
-void
-comment_content_changed (Inkscape::XML::Node */*repr*/, const gchar * /*old_content*/, const gchar *new_content, gpointer ptr)
+void comment_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_content*/, const gchar *new_content, gpointer ptr)
 {
-	NodeData *data;
-	gchar *label;
+    NodeData *data = static_cast<NodeData*>(ptr);
 
-	data = (NodeData *) ptr;
+    if (data->tree->blocked) return;
 
-	if (data->tree->blocked) return;
-
-	label = g_strdup_printf ("<!--%s-->", new_content);
+    gchar *label = g_strdup_printf ("<!--%s-->", new_content);
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
         gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
     }
-	g_free (label);
+    g_free (label);
 }
 
-void
-pi_content_changed(Inkscape::XML::Node *repr, const gchar * /*old_content*/, const gchar *new_content, gpointer ptr)
+void pi_content_changed(Inkscape::XML::Node *repr, const gchar * /*old_content*/, const gchar *new_content, gpointer ptr)
 {
-	NodeData *data;
-	gchar *label;
+    NodeData *data = static_cast<NodeData *>(ptr);
 
-	data = (NodeData *) ptr;
+    if (data->tree->blocked) return;
 
-	if (data->tree->blocked) return;
-
-	label = g_strdup_printf ("<?%s %s?>", repr->name(), new_content);
+    gchar *label = g_strdup_printf ("<?%s %s?>", repr->name(), new_content);
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
         gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
     }
-	g_free (label);
+    g_free (label);
 }
 
 /*
@@ -438,14 +416,14 @@ void on_drag_data_received(GtkWidget * /*wgt*/, GdkDragContext * /*context*/, in
  */
 void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data)
 {
-    SPXMLViewTree *tree = (SPXMLViewTree *)user_data;
+    SPXMLViewTree *tree = SP_XMLVIEW_TREE(user_data);
 
     if (!tree->dndactive) {
         return;
     }
     tree->dndactive = FALSE;
 
-    Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(GTK_TREE_VIEW(tree), iter);
+    Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(tree_model, iter);
     GtkTreeIter new_parent;
     if (!gtk_tree_model_iter_parent(tree_model, &new_parent, iter)) {
         //No parent of drop location
@@ -453,7 +431,7 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
         return;
     }
 
-    GtkTreeRowReference  *old_parent_ref = (GtkTreeRowReference *)g_object_get_data (G_OBJECT (tree), "drag-src-path");
+    GtkTreeRowReference  *old_parent_ref = static_cast<GtkTreeRowReference *>(g_object_get_data (G_OBJECT (tree), "drag-src-path"));
     if (!old_parent_ref) {
         //No drag source location
         g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0) );
@@ -489,10 +467,10 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
 
     SP_XMLVIEW_TREE (tree)->blocked++;
     if (!tree_model_iter_compare (tree_model, &new_parent, &old_parent)) {
-        sp_xmlview_tree_node_get_repr (GTK_TREE_VIEW(tree), &old_parent)->changeOrder(repr, before_repr);
+        sp_xmlview_tree_node_get_repr (tree_model, &old_parent)->changeOrder(repr, before_repr);
     } else {
-        sp_xmlview_tree_node_get_repr (GTK_TREE_VIEW(tree), &old_parent)->removeChild(repr);
-        sp_xmlview_tree_node_get_repr (GTK_TREE_VIEW(tree), &new_parent)->addChild(repr, before_repr);
+        sp_xmlview_tree_node_get_repr (tree_model, &old_parent)->removeChild(repr);
+        sp_xmlview_tree_node_get_repr (tree_model, &new_parent)->addChild(repr, before_repr);
     }
     SP_XMLVIEW_TREE (tree)->blocked--;
 
@@ -533,14 +511,28 @@ gboolean repr_to_child (NodeData *data, Inkscape::XML::Node * repr, GtkTreeIter 
 {
     GtkTreeIter data_iter;
     tree_ref_to_iter(data->tree, &data_iter,  data->rowref);
+    GtkTreeModel *model = GTK_TREE_MODEL(data->tree->store);
+    gboolean valid = false;
 
-    if (!gtk_tree_store_iter_is_valid(GTK_TREE_STORE(data->tree->store), &data_iter)) {
+    if (!gtk_tree_store_iter_is_valid(data->tree->store, &data_iter)) {
         return false;
     }
 
-    gboolean valid = gtk_tree_model_iter_children(GTK_TREE_MODEL(data->tree->store), iter, &data_iter);
-    while (valid && sp_xmlview_tree_node_get_repr (GTK_TREE_VIEW(data->tree), iter) != repr) {
-        valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(data->tree->store), iter);
+    /*
+     * The node we are looking for is likely to be the last one, so check it first.
+     */
+    gint n_children = gtk_tree_model_iter_n_children (model, &data_iter);
+    if (n_children > 1) {
+        valid = gtk_tree_model_iter_nth_child (model, iter, &data_iter, n_children-1);
+        if (valid && sp_xmlview_tree_node_get_repr (model, iter) == repr) {
+            //g_message("repr_to_child hit %d", n_children);
+            return valid;
+        }
+    }
+
+    valid = gtk_tree_model_iter_children(model, iter, &data_iter);
+    while (valid && sp_xmlview_tree_node_get_repr (model, iter) != repr) {
+        valid = gtk_tree_model_iter_next(model, iter);
 	}
 
     return valid;
@@ -589,31 +581,6 @@ gboolean tree_model_iter_compare(GtkTreeModel* store, GtkTreeIter * iter1, GtkTr
 
 }
 
-/*
- * Return the node of parent iter's child sibling or NULL if sibling is the first child
- */
-Inkscape::XML::Node *
-sibling_to_ref (GtkTreeView * tree, GtkTreeIter * parent, GtkTreeIter * sibling)
-{
-	GtkTreeIter child;
-    GtkTreeModel* store = gtk_tree_view_get_model(tree);
-
-    gboolean valid = gtk_tree_model_iter_children(store, &child, parent);
-
-	if (! tree_model_iter_compare(store, &child, sibling)) {
-	    return NULL;
-	}
-
-    while (valid && tree_model_iter_compare(store, &child, sibling)) {
-        valid = gtk_tree_model_iter_next(store, &child);
-    }
-
-    if (!gtk_tree_store_iter_is_valid(GTK_TREE_STORE(store), &child)) {
-        return NULL;
-    }
-
-	return sp_xmlview_tree_node_get_repr (tree, &child);
-}
 
 /*
  * Disable drag and drop target on : root node and non-element nodes
@@ -629,10 +596,10 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
     if (path) {
         action = GDK_ACTION_MOVE;
 
-        SPXMLViewTree *tree = (SPXMLViewTree *)user_data;
+        SPXMLViewTree *tree = SP_XMLVIEW_TREE(user_data);
         GtkTreeIter iter;
         gtk_tree_model_get_iter(GTK_TREE_MODEL(tree->store), &iter, path);
-        if (sp_xmlview_tree_node_get_repr (GTK_TREE_VIEW(widget), &iter)->type() != Inkscape::XML::ELEMENT_NODE) {
+        if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() != Inkscape::XML::ELEMENT_NODE) {
             action = 0;
         }
 
@@ -661,7 +628,17 @@ sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
 {
     if ( tree->repr == repr ) return;
     if (tree->repr) {
-        gtk_tree_store_clear(tree->store);
+        /*
+         *  Would like to simple call gtk_tree_store_clear here,
+         *  but it is extremely slow on large data sets.
+         *  Instead just unref the old and create a new store.
+         */
+        //gtk_tree_store_clear(tree->store);
+        gtk_tree_view_set_model(GTK_TREE_VIEW(tree), NULL);
+        g_object_unref(tree->store);
+        tree->store = gtk_tree_store_new (STORE_N_COLS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
+        gtk_tree_view_set_model (GTK_TREE_VIEW(tree), GTK_TREE_MODEL(tree->store));
+
         Inkscape::GC::release(tree->repr);
     }
     tree->repr = repr;
@@ -669,6 +646,11 @@ sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
         GtkTreeRowReference * rowref;
         Inkscape::GC::anchor(repr);
         rowref = add_node (tree, NULL, NULL, repr);
+
+        // Set the tree model here, after all data is inserted
+        gtk_tree_view_set_model (GTK_TREE_VIEW(tree), GTK_TREE_MODEL(tree->store));
+        g_object_unref(tree->store);
+
         GtkTreePath *path = gtk_tree_row_reference_get_path(rowref);
         gtk_tree_view_expand_to_path (GTK_TREE_VIEW(tree), path);
         gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(tree), path, NULL, true, 0.5, 0.0);
@@ -680,10 +662,9 @@ sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr)
  * Return the repr at a given GtkTreeIter position
  */
 Inkscape::XML::Node *
-sp_xmlview_tree_node_get_repr (GtkTreeView *tree, GtkTreeIter * iter)
+sp_xmlview_tree_node_get_repr (GtkTreeModel *model, GtkTreeIter * iter)
 {
     Inkscape::XML::Node *repr;
-    GtkTreeModel *model = gtk_tree_view_get_model(tree);
     gtk_tree_model_get (model, iter, STORE_REPR_COL, &repr, -1);
 
     return repr;
@@ -743,3 +724,14 @@ gboolean search_equal_func(GtkTreeModel *model, gint /*column*/, const gchar *ke
 
     return !match;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

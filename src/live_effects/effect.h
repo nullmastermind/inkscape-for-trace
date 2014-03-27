@@ -51,24 +51,24 @@ public:
 
     virtual ~Effect();
 
-    EffectType effectType ();
+    EffectType effectType() const;
 
-    virtual void doOnApply (SPLPEItem *lpeitem);
-    virtual void doBeforeEffect (SPLPEItem *lpeitem);
+    virtual void doOnApply (SPLPEItem const* lpeitem);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
     void writeParamsToSVG();
 
-    virtual void acceptParamPath (SPPath *param_path);
+    virtual void acceptParamPath (SPPath const* param_path);
     static int acceptsNumClicks(EffectType type);
-    int acceptsNumClicks() { return acceptsNumClicks(effectType()); }
+    int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
 
     /*
      * isReady() indicates whether all preparations which are necessary to apply the LPE are done,
      * e.g., waiting for a parameter path either before the effect is created or when it needs a
-     * path as argument. This is set in sp_lpe_item_add_path_effect().
+     * path as argument. This is set in SPLPEItem::addPathEffect().
      */
-    inline bool isReady() { return is_ready; }
+    inline bool isReady() const { return is_ready; }
     inline void setReady(bool ready = true) { is_ready = ready; }
 
     virtual void doEffect (SPCurve * curve);
@@ -78,35 +78,35 @@ public:
     /**
      * Sets all parameters to their default values and writes them to SVG.
      */
-    virtual void resetDefaults(SPItem * item);
+    virtual void resetDefaults(SPItem const* item);
 
     /// /todo: is this method really necessary? it causes UI inconsistensies... (johan)
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
 
     // /TODO: providesKnotholder() is currently used as an indicator of whether a nodepath is
     // created for an item or not. When we allow both at the same time, this needs rethinking!
-    bool providesKnotholder();
+    bool providesKnotholder() const;
     // /TODO: in view of providesOwnFlashPaths() below, this is somewhat redundant
     //       (but spiro lpe still needs it!)
-    virtual LPEPathFlashType pathFlashType() { return DEFAULT; }
+    virtual LPEPathFlashType pathFlashType() const { return DEFAULT; }
     void addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-    std::vector<Geom::PathVector> getHelperPaths(SPLPEItem *lpeitem);
+    std::vector<Geom::PathVector> getCanvasIndicators(SPLPEItem const* lpeitem);
 
-    inline bool providesOwnFlashPaths() {
+    inline bool providesOwnFlashPaths() const {
         return provides_own_flash_paths || show_orig_path;
     }
-    inline bool showOrigPath() { return show_orig_path; }
+    inline bool showOrigPath() const { return show_orig_path; }
 
-    Glib::ustring          getName();
+    Glib::ustring          getName() const;
     Inkscape::XML::Node *  getRepr();
     SPDocument *           getSPDoc();
     LivePathEffectObject * getLPEObj() {return lpeobj;};
     Parameter *            getParameter(const char * key);
 
-    void readallParameters(Inkscape::XML::Node * repr);
+    void readallParameters(Inkscape::XML::Node const* repr);
     void setParameter(const gchar * key, const gchar * new_value);
 
-    inline bool isVisible() { return is_visible; }
+    inline bool isVisible() const { return is_visible; }
 
     void editNextParamOncanvas(SPItem * item, SPDesktop * desktop);
 
@@ -128,7 +128,7 @@ protected:
 
     virtual void addKnotHolderEntities(KnotHolder * /*knotholder*/, SPDesktop * /*desktop*/, SPItem * /*item*/) {};
 
-    virtual void addCanvasIndicators(SPLPEItem *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
     std::vector<Parameter *> param_vector;
     bool _provides_knotholder_entities;

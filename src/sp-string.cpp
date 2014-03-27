@@ -32,87 +32,42 @@
 #include "sp-string.h"
 #include "xml/repr.h"
 
+#include "sp-factory.h"
+
+namespace {
+    SPObject* createString() {
+        return new SPString();
+    }
+
+    bool stringRegistered = SPFactory::instance().registerObject("string", createString);
+}
 
 /*#####################################################
 #  SPSTRING
 #####################################################*/
 
-static void sp_string_class_init(SPStringClass *classname);
-static void sp_string_init(SPString *string);
-
-static void sp_string_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_string_release(SPObject *object);
-static void sp_string_read_content(SPObject *object);
-static void sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags);
-
-static SPObjectClass *string_parent_class;
-
-GType
-sp_string_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPStringClass),
-            NULL,    /* base_init */
-            NULL,    /* base_finalize */
-            (GClassInitFunc) sp_string_class_init,
-            NULL,    /* class_finalize */
-            NULL,    /* class_data */
-            sizeof(SPString),
-            16,    /* n_preallocs */
-            (GInstanceInitFunc) sp_string_init,
-            NULL,    /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPString", &info, (GTypeFlags)0);
-    }
-    return type;
+SPString::SPString() : SPObject() {
+    //new (&this->string) Glib::ustring();
 }
 
-static void
-sp_string_class_init(SPStringClass *classname)
-{
-    SPObjectClass *sp_object_class;
-
-    sp_object_class = (SPObjectClass *) classname;
-
-    string_parent_class = (SPObjectClass*)g_type_class_ref(SP_TYPE_OBJECT);
-
-    sp_object_class->build        = sp_string_build;
-    sp_object_class->release      = sp_string_release;
-    sp_object_class->read_content = sp_string_read_content;
-    sp_object_class->update       = sp_string_update;
+SPString::~SPString() {
 }
 
-static void
-sp_string_init(SPString *string)
-{
-    new (&string->string) Glib::ustring();
+void SPString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
+    SPString* object = this;
+    object->read_content();
+
+    SPObject::build(doc, repr);
 }
 
-static void
-sp_string_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
-{
-    sp_string_read_content(object);
-
-    if (((SPObjectClass *) string_parent_class)->build)
-        ((SPObjectClass *) string_parent_class)->build(object, doc, repr);
+void SPString::release() {
+    SPObject::release();
 }
 
-static void
-sp_string_release(SPObject *object)
-{
-    SPString *string = SP_STRING(object);
 
-    string->string.~ustring();
+void SPString::read_content() {
+    SPString* object = this;
 
-    if (((SPObjectClass *) string_parent_class)->release)
-        ((SPObjectClass *) string_parent_class)->release(object);
-}
-
-static void
-sp_string_read_content(SPObject *object)
-{
     SPString *string = SP_STRING(object);
 
     string->string.clear();
@@ -153,16 +108,13 @@ sp_string_read_content(SPObject *object)
     object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags)
-{
-    if (((SPObjectClass *) string_parent_class)->update)
-        ((SPObjectClass *) string_parent_class)->update(object, ctx, flags);
+void SPString::update(SPCtx * /*ctx*/, unsigned /*flags*/) {
+//    SPObject::onUpdate(ctx, flags);
 
-    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
-        /* Parent style or we ourselves changed, so recalculate */
-        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
-    }
+    // if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
+    //     /* Parent style or we ourselves changed, so recalculate */
+    //     flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
+    // }
 }
 
 

@@ -14,11 +14,11 @@
 #include <2geom/point.h>
 
 struct PathDescr;
-class PathDescrLineTo;
-class PathDescrArcTo;
-class PathDescrCubicTo;
-class PathDescrBezierTo;
-class PathDescrIntermBezierTo;
+struct PathDescrLineTo;
+struct PathDescrArcTo;
+struct PathDescrCubicTo;
+struct PathDescrBezierTo;
+struct PathDescrIntermBezierTo;
 
 struct SPStyle;
 
@@ -335,7 +335,7 @@ public:
 			      PathDescrBezierTo & fin, bool before,
 			      Geom::Point & pos, Geom::Point & tgt, double &len, double &rad);
   static void OutlineJoin (Path * dest, Geom::Point pos, Geom::Point stNor, Geom::Point enNor,
-			   double width, JoinType join, double miter);
+			   double width, JoinType join, double miter, int nType);
 
   static bool IsNulCurve (std::vector<PathDescr*> const &cmd, int curD, Geom::Point const &curX);
 

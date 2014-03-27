@@ -51,13 +51,13 @@ public:
 
     virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & path_in);
 
-    virtual void resetDefaults(SPItem * item);
+    virtual void resetDefaults(SPItem const* item);
 
-    virtual void doBeforeEffect(SPLPEItem * item);
+    virtual void doBeforeEffect(SPLPEItem const* item);
 
     //Usefull??
     //    protected: 
-    //virtual void addCanvasIndicators(SPLPEItem *lpeitem, std::vector<Geom::PathVector> &hp_vec); 
+    //virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec); 
 
 private:
     ScalarParam  nbgenerations;

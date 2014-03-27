@@ -18,10 +18,9 @@
  */
 
 #include <glib.h>
-#include "knot-enums.h"
 #include <2geom/forward.h>
-#include "knot-holder-entity.h"
 #include <list>
+#include <sigc++/connection.h>
 
 namespace Inkscape {
 namespace XML {
@@ -31,6 +30,14 @@ namespace LivePathEffect {
 class PowerStrokePointArrayParamKnotHolderEntity;
 }
 }
+
+class KnotHolderEntity;
+class SPItem;
+class SPDesktop;
+struct SPKnot;
+
+/* fixme: Think how to make callbacks most sensitive (Lauris) */
+typedef void (* SPKnotHolderReleasedFunc) (SPItem *item);
 
 class KnotHolder {
 public:
@@ -49,7 +56,7 @@ public:
 
     const SPItem *getItem() { return item; }
 
-    bool knot_mouseover();
+    bool knot_mouseover() const;
 
     friend class ShapeEditor;
     friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity;

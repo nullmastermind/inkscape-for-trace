@@ -27,7 +27,6 @@
 #include "ui/widget/random.h"
 #include "widgets/spinbutton-events.h"
 
-#include "helper/units.h"
 #include "xml/repr.h"
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
@@ -50,8 +49,10 @@ RegisteredCheckButton::~RegisteredCheckButton()
     _toggled_connection.disconnect();
 }
 
-RegisteredCheckButton::RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in)
+RegisteredCheckButton::RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in, char const *active_str, char const *inactive_str)
     : RegisteredWidget<Gtk::CheckButton>()
+    , _active_str(active_str)
+    , _inactive_str(inactive_str)
 {
     init_parent(key, wr, repr_in, doc_in);
 
@@ -89,7 +90,7 @@ RegisteredCheckButton::on_toggled()
         return;
     _wr->setUpdating (true);
 
-    write_to_xml(get_active() ? "true" : "false");
+    write_to_xml(get_active() ? _active_str : _inactive_str);
     //The slave button is greyed out if the master button is unchecked
     for (std::list<Gtk::Widget*>::const_iterator i = _slavewidgets.begin(); i != _slavewidgets.end(); ++i) {
         (*i)->set_sensitive(get_active());
@@ -118,9 +119,9 @@ RegisteredUnitMenu::RegisteredUnitMenu (const Glib::ustring& label, const Glib::
 }
 
 void
-RegisteredUnitMenu::setUnit (const SPUnit* unit)
+RegisteredUnitMenu::setUnit (Glib::ustring unit)
 {
-    getUnitMenu()->setUnit (sp_unit_get_abbreviation (unit));
+    getUnitMenu()->setUnit(unit);
 }
 
 void

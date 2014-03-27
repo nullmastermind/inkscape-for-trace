@@ -13,13 +13,17 @@
 # include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/button.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/scrolledwindow.h>
+#include <glibmm/i18n.h>
 
 #include "debug.h"
 
@@ -69,16 +73,29 @@ DebugDialogImpl::DebugDialogImpl()
     set_title(_("Messages"));
     set_size_request(300, 400);
 
+#if WITH_GTKMM_3_0
+    Gtk::Box *mainVBox = get_content_area();
+#else
     Gtk::Box *mainVBox = get_vbox();
+#endif
 
     //## Add a menu for clear()
-    menuBar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), fileMenu) );
-    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Clear"),
-           sigc::mem_fun(*this, &DebugDialogImpl::clear) ) );
-    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("Capture log messages"),
-           sigc::mem_fun(*this, &DebugDialogImpl::captureLogMessages) ) );
-    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("Release log messages"),
-           sigc::mem_fun(*this, &DebugDialogImpl::releaseLogMessages) ) );
+    Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem(_("_File"), true));
+    item->set_submenu(fileMenu);
+    menuBar.append(*item);
+
+    item = Gtk::manage(new Gtk::MenuItem(_("_Clear"), true));
+    item->signal_activate().connect(sigc::mem_fun(*this, &DebugDialogImpl::clear));
+    fileMenu.append(*item);
+
+    item = Gtk::manage(new Gtk::MenuItem(_("Capture log messages")));
+    item->signal_activate().connect(sigc::mem_fun(*this, &DebugDialogImpl::captureLogMessages));
+    fileMenu.append(*item);
+    
+    item = Gtk::manage(new Gtk::MenuItem(_("Release log messages")));
+    item->signal_activate().connect(sigc::mem_fun(*this, &DebugDialogImpl::releaseLogMessages));
+    fileMenu.append(*item);
+
     mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
     
 
@@ -117,7 +134,7 @@ void DebugDialogImpl::show()
 {
     //call super()
     Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
+    //sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     raise();
     Gtk::Dialog::present();
 }
@@ -162,10 +179,10 @@ void DebugDialog::showInstance()
 
 
 /*##### THIS IS THE IMPORTANT PART ##### */
-void dialogLoggingFunction(const gchar */*log_domain*/,
-                           GLogLevelFlags /*log_level*/,
-                           const gchar *messageText,
-                           gpointer user_data)
+static void dialogLoggingFunction(const gchar */*log_domain*/,
+                                  GLogLevelFlags /*log_level*/,
+                                  const gchar *messageText,
+                                  gpointer user_data)
 {
     DebugDialogImpl *dlg = static_cast<DebugDialogImpl *>(user_data);
     dlg->message(messageText);

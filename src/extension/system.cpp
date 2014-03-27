@@ -21,6 +21,8 @@
 #endif
 
 #include <interface.h>
+#include <unistd.h>
+#include <glibmm/miscutils.h>
 
 #include "system.h"
 #include "preferences.h"
@@ -68,24 +70,6 @@ static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementatio
  */
 SPDocument *open(Extension *key, gchar const *filename)
 {
-    // Convert to absolute pathname to tolerate chdir().
-    bool relpath = (filename[0] != '/');
-#ifdef WIN32
-    relpath &= (filename[0] != '\\') && !(isalpha(filename[0]) && (filename[1] == ':'));
-#endif
-
-    if (relpath) {
-        gchar * curdir = NULL;
-#ifndef WIN32
-        curdir = getcwd(NULL, 0);
-#else
-        curdir = _getcwd(NULL, 0);
-#endif
-
-        filename = g_build_filename(curdir, filename, NULL);
-        free(curdir);
-    }
-
     Input *imod = NULL;
 
     if (key == NULL) {
@@ -113,9 +97,9 @@ SPDocument *open(Extension *key, gchar const *filename)
     bool show = true;
     if (strlen(imod->get_id()) > 27) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring attr = prefs->getString("/dialogs/import/link");
+        bool ask = prefs->getBool("/dialogs/import/ask");
         Glib::ustring id = Glib::ustring(imod->get_id(), 28);
-        if (strcmp(attr.c_str(), "ask") != 0 and strcmp(id.c_str(), "org.inkscape.input.gdkpixbuf") == 0) {
+        if (!ask and id.compare( "org.inkscape.input.gdkpixbuf") == 0) {
             show = false;
             imod->set_gui(false);
         }
@@ -127,13 +111,11 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     if (!imod->prefs(filename)) {
-        if (relpath){
-            free((void *) filename);
-        }
         return NULL;
     }
 
     SPDocument *doc = imod->open(filename);
+
     if (!doc) {
         throw Input::open_failed();
     }
@@ -142,7 +124,7 @@ SPDocument *open(Extension *key, gchar const *filename)
         if ( inkscape_use_gui() ) {
             sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
         } else {
-            g_warning(_("Format autodetect failed. The file is being opened as SVG."));
+            g_warning("%s", _("Format autodetect failed. The file is being opened as SVG."));
         }
     }
 
@@ -151,9 +133,6 @@ SPDocument *open(Extension *key, gchar const *filename)
         imod->set_gui(true);
     }
 
-    if (relpath){
-        free((void *) filename);
-    }
     return doc;
 }
 
@@ -301,10 +280,9 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 
     // remember attributes in case this is an unofficial save and/or overwrite fails
     gchar *saved_uri = g_strdup(doc->getURI());
-    bool saved_modified = false;
     gchar *saved_output_extension = NULL;
     gchar *saved_dataloss = NULL;
-    saved_modified = doc->isModifiedSinceSave();
+    bool saved_modified = doc->isModifiedSinceSave();
     saved_output_extension = g_strdup(get_file_save_extension(save_method).c_str());
     saved_dataloss = g_strdup(repr->attribute("inkscape:dataloss"));
     if (official) {
@@ -614,10 +592,14 @@ get_file_save_extension (Inkscape::Extension::FileSaveMethod method) {
         case FILE_SAVE_METHOD_INKSCAPE_SVG:
             extension = SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE;
             break;
+        case FILE_SAVE_METHOD_EXPORT:
+            /// \todo no default extension set for Export? defaults to SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE is ok?
+            break;
     }
 
-    if(extension.empty())
+    if(extension.empty()) {
         extension = SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE;
+    }
 
     return extension;
 }
@@ -657,13 +639,19 @@ get_file_save_path (SPDocument *doc, FileSaveMethod method) {
                 // leave this as a choice to the user.
                 path = prefs->getString("/dialogs/save_as/path");
             }
+            break;
+        case FILE_SAVE_METHOD_EXPORT:
+            /// \todo no default path set for Export? 
+            // defaults to g_get_home_dir()
+            break;
     }
 
-    if(path.empty())
+    if(path.empty()) {
         path = g_get_home_dir(); // Is this the most sensible solution? Note that we should avoid
                                  // g_get_current_dir because this leads to problems on OS X where
                                  // Inkscape opens the dialog inside application bundle when it is
                                  // invoked for the first teim.
+    }
 
     return path;
 }
@@ -680,6 +668,7 @@ store_file_extension_in_prefs (Glib::ustring extension, FileSaveMethod method) {
             prefs->setString("/dialogs/save_copy/default", extension);
             break;
         case FILE_SAVE_METHOD_INKSCAPE_SVG:
+        case FILE_SAVE_METHOD_EXPORT:
             // do nothing
             break;
     }
@@ -697,6 +686,7 @@ store_save_path_in_prefs (Glib::ustring path, FileSaveMethod method) {
             prefs->setString("/dialogs/save_copy/path", path);
             break;
         case FILE_SAVE_METHOD_INKSCAPE_SVG:
+        case FILE_SAVE_METHOD_EXPORT:
             // do nothing
             break;
     }

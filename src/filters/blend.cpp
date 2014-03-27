@@ -30,62 +30,23 @@
 #include "display/nr-filter-blend.h"
 #include "display/nr-filter-types.h"
 
-/* FeBlend base class */
+#include "sp-factory.h"
 
-static void sp_feBlend_class_init(SPFeBlendClass *klass);
-static void sp_feBlend_init(SPFeBlend *feBlend);
+namespace {
+	SPObject* createBlend() {
+		return new SPFeBlend();
+	}
 
-static void sp_feBlend_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_feBlend_release(SPObject *object);
-static void sp_feBlend_set(SPObject *object, unsigned int key, gchar const *value);
-static void sp_feBlend_update(SPObject *object, SPCtx *ctx, guint flags);
-static Inkscape::XML::Node *sp_feBlend_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-static void sp_feBlend_build_renderer(SPFilterPrimitive *sp_prim, Inkscape::Filters::Filter *filter);
-
-static SPFilterPrimitiveClass *feBlend_parent_class;
-
-GType
-sp_feBlend_get_type()
-{
-    static GType feBlend_type = 0;
-
-    if (!feBlend_type) {
-        GTypeInfo feBlend_info = {
-            sizeof(SPFeBlendClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_feBlend_class_init,
-            NULL, NULL,
-            sizeof(SPFeBlend),
-            16,
-            (GInstanceInitFunc) sp_feBlend_init,
-            NULL,    /* value_table */
-        };
-        feBlend_type = g_type_register_static(SP_TYPE_FILTER_PRIMITIVE, "SPFeBlend", &feBlend_info, (GTypeFlags)0);
-    }
-    return feBlend_type;
+	bool blendRegistered = SPFactory::instance().registerObject("svg:feBlend", createBlend);
 }
 
-static void
-sp_feBlend_class_init(SPFeBlendClass *klass)
+SPFeBlend::SPFeBlend()
+    : SPFilterPrimitive(), blend_mode(Inkscape::Filters::BLEND_NORMAL),
+      in2(Inkscape::Filters::NR_FILTER_SLOT_NOT_SET)
 {
-    SPObjectClass *sp_object_class = (SPObjectClass *)klass;
-    SPFilterPrimitiveClass *sp_primitive_class = (SPFilterPrimitiveClass *)klass;
-
-    feBlend_parent_class = (SPFilterPrimitiveClass*)g_type_class_peek_parent(klass);
-
-    sp_object_class->build = sp_feBlend_build;
-    sp_object_class->release = sp_feBlend_release;
-    sp_object_class->write = sp_feBlend_write;
-    sp_object_class->set = sp_feBlend_set;
-    sp_object_class->update = sp_feBlend_update;
-
-    sp_primitive_class->build_renderer = sp_feBlend_build_renderer;
 }
 
-static void
-sp_feBlend_init(SPFeBlend *feBlend)
-{
-    feBlend->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
+SPFeBlend::~SPFeBlend() {
 }
 
 /**
@@ -93,43 +54,36 @@ sp_feBlend_init(SPFeBlend *feBlend)
  * our name must be associated with a repr via "sp_object_type_register".  Best done through
  * sp-object-repr.cpp's repr_name_entries array.
  */
-static void
-sp_feBlend_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    SPFeBlend *blend = SP_FEBLEND(object);
-
-    if (((SPObjectClass *) feBlend_parent_class)->build) {
-        ((SPObjectClass *) feBlend_parent_class)->build(object, document, repr);
-    }
+void SPFeBlend::build(SPDocument *document, Inkscape::XML::Node *repr) {
+    SPFilterPrimitive::build(document, repr);
 
     /*LOAD ATTRIBUTES FROM REPR HERE*/
-    object->readAttr( "mode" );
-    object->readAttr( "in2" );
+    this->readAttr( "mode" );
+    this->readAttr( "in2" );
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
      * it by some name. */
-    if (blend->in2 == Inkscape::Filters::NR_FILTER_SLOT_NOT_SET ||
-        blend->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
+    if (this->in2 == Inkscape::Filters::NR_FILTER_SLOT_NOT_SET ||
+        this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
     {
-        SPFilter *parent = SP_FILTER(object->parent);
-        blend->in2 = sp_filter_primitive_name_previous_out(blend);
-        repr->setAttribute("in2", sp_filter_name_for_image(parent, blend->in2));
+        SPFilter *parent = SP_FILTER(this->parent);
+        this->in2 = sp_filter_primitive_name_previous_out(this);
+        repr->setAttribute("in2", sp_filter_name_for_image(parent, this->in2));
     }
 }
 
 /**
  * Drops any allocated memory.
  */
-static void
-sp_feBlend_release(SPObject *object)
-{
-    if (((SPObjectClass *) feBlend_parent_class)->release)
-        ((SPObjectClass *) feBlend_parent_class)->release(object);
+void SPFeBlend::release() {
+	SPFilterPrimitive::release();
 }
 
-static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value)
-{
-    if (!value) return Inkscape::Filters::BLEND_NORMAL;
+static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value) {
+    if (!value) {
+    	return Inkscape::Filters::BLEND_NORMAL;
+    }
+
     switch (value[0]) {
         case 'n':
             if (strncmp(value, "normal", 6) == 0)
@@ -142,153 +96,203 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
         case 's':
             if (strncmp(value, "screen", 6) == 0)
                 return Inkscape::Filters::BLEND_SCREEN;
+#ifdef WITH_CSSBLEND
+            if (strncmp(value, "saturation", 6) == 0)
+                return Inkscape::Filters::BLEND_SATURATION;
+#endif
             break;
         case 'd':
             if (strncmp(value, "darken", 6) == 0)
                 return Inkscape::Filters::BLEND_DARKEN;
+#ifdef WITH_CSSBLEND
+            if (strncmp(value, "difference", 10) == 0)
+                return Inkscape::Filters::BLEND_DIFFERENCE;
+#endif
             break;
         case 'l':
             if (strncmp(value, "lighten", 7) == 0)
                 return Inkscape::Filters::BLEND_LIGHTEN;
+#ifdef WITH_CSSBLEND
+            if (strncmp(value, "luminosity", 10) == 0)
+                return Inkscape::Filters::BLEND_LUMINOSITY;
             break;
+        case 'o':
+            if (strncmp(value, "overlay", 7) == 0)
+                return Inkscape::Filters::BLEND_OVERLAY;
+            break;
+        case 'c':
+            if (strncmp(value, "color-dodge", 11) == 0)
+                return Inkscape::Filters::BLEND_COLORDODGE;
+            if (strncmp(value, "color-burn", 10) == 0)
+                return Inkscape::Filters::BLEND_COLORBURN;
+            if (strncmp(value, "color", 5) == 0)
+                return Inkscape::Filters::BLEND_COLOR;
+            break;
+        case 'h':
+            if (strncmp(value, "hard-light", 7) == 0)
+                return Inkscape::Filters::BLEND_HARDLIGHT;
+            if (strncmp(value, "hue", 3) == 0)
+                return Inkscape::Filters::BLEND_HUE;
+            break;
+        case 'e':
+            if (strncmp(value, "exclusion", 10) == 0)
+                return Inkscape::Filters::BLEND_EXCLUSION;
+#endif
         default:
+            std::cout << "Inkscape::Filters::FilterBlendMode: Unimplemented mode: " << value << std::endl;
             // do nothing by default
             break;
     }
+
     return Inkscape::Filters::BLEND_NORMAL;
 }
 
 /**
  * Sets a specific value in the SPFeBlend.
  */
-static void
-sp_feBlend_set(SPObject *object, unsigned int key, gchar const *value)
-{
-    SPFeBlend *feBlend = SP_FEBLEND(object);
-    (void)feBlend;
-
+void SPFeBlend::set(unsigned int key, gchar const *value) {
     Inkscape::Filters::FilterBlendMode mode;
     int input;
+
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         case SP_ATTR_MODE:
             mode = sp_feBlend_readmode(value);
-            if (mode != feBlend->blend_mode) {
-                feBlend->blend_mode = mode;
-                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            if (mode != this->blend_mode) {
+                this->blend_mode = mode;
+                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         case SP_ATTR_IN2:
-            input = sp_filter_primitive_read_in(feBlend, value);
-            if (input != feBlend->in2) {
-                feBlend->in2 = input;
-                object->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            input = sp_filter_primitive_read_in(this, value);
+
+            if (input != this->in2) {
+                this->in2 = input;
+                this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         default:
-            if (((SPObjectClass *) feBlend_parent_class)->set)
-                ((SPObjectClass *) feBlend_parent_class)->set(object, key, value);
+        	SPFilterPrimitive::set(key, value);
             break;
     }
-
 }
 
 /**
  * Receives update notifications.
  */
-static void
-sp_feBlend_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    SPFeBlend *blend = SP_FEBLEND(object);
-
+void SPFeBlend::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        object->readAttr( "mode" );
-        object->readAttr( "in2" );
+        this->readAttr( "mode" );
+        this->readAttr( "in2" );
     }
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
      * it by some name. */
-    if (blend->in2 == Inkscape::Filters::NR_FILTER_SLOT_NOT_SET ||
-        blend->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
+    if (this->in2 == Inkscape::Filters::NR_FILTER_SLOT_NOT_SET ||
+        this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
     {
-        SPFilter *parent = SP_FILTER(object->parent);
-        blend->in2 = sp_filter_primitive_name_previous_out(blend);
+        SPFilter *parent = SP_FILTER(this->parent);
+        this->in2 = sp_filter_primitive_name_previous_out(this);
 
-        //XML Tree being used directly here while it shouldn't be.
-        object->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, blend->in2));
+        // TODO: XML Tree being used directly here while it shouldn't be.
+        this->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, this->in2));
     }
 
-    if (((SPObjectClass *) feBlend_parent_class)->update) {
-        ((SPObjectClass *) feBlend_parent_class)->update(object, ctx, flags);
-    }
+    SPFilterPrimitive::update(ctx, flags);
 }
 
 /**
  * Writes its settings to an incoming repr object, if any.
  */
-static Inkscape::XML::Node *
-sp_feBlend_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPFeBlend *blend = SP_FEBLEND(object);
-    SPFilter *parent = SP_FILTER(object->parent);
+Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
+    SPFilter *parent = SP_FILTER(this->parent);
 
     if (!repr) {
         repr = doc->createElement("svg:feBlend");
     }
 
-    gchar const *out_name = sp_filter_name_for_image(parent, blend->in2);
+    gchar const *out_name = sp_filter_name_for_image(parent, this->in2);
+
     if (out_name) {
         repr->setAttribute("in2", out_name);
     } else {
         SPObject *i = parent->children;
-        while (i && i->next != object) i = i->next;
+
+        while (i && i->next != this) {
+        	i = i->next;
+        }
+
         SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
         out_name = sp_filter_name_for_image(parent, i_prim->image_out);
         repr->setAttribute("in2", out_name);
+
         if (!out_name) {
             g_warning("Unable to set in2 for feBlend");
         }
     }
 
     char const *mode;
-    switch(blend->blend_mode) {
+    switch(this->blend_mode) {
         case Inkscape::Filters::BLEND_NORMAL:
-            mode = "normal"; break;
+            mode = "normal";      break;
         case Inkscape::Filters::BLEND_MULTIPLY:
-            mode = "multiply"; break;
+            mode = "multiply";    break;
         case Inkscape::Filters::BLEND_SCREEN:
-            mode = "screen"; break;
+            mode = "screen";      break;
         case Inkscape::Filters::BLEND_DARKEN:
-            mode = "darken"; break;
+            mode = "darken";      break;
         case Inkscape::Filters::BLEND_LIGHTEN:
-            mode = "lighten"; break;
+            mode = "lighten";     break;
+#ifdef WITH_CSSBLEND
+        // New
+        case Inkscape::Filters::BLEND_OVERLAY:
+            mode = "overlay";     break;
+        case Inkscape::Filters::BLEND_COLORDODGE:
+            mode = "color-dodge"; break;
+        case Inkscape::Filters::BLEND_COLORBURN:
+            mode = "color-burn";  break;
+        case Inkscape::Filters::BLEND_HARDLIGHT:
+            mode = "hard-light";  break;
+        case Inkscape::Filters::BLEND_SOFTLIGHT:
+            mode = "soft-light";  break;
+        case Inkscape::Filters::BLEND_DIFFERENCE:
+            mode = "difference";  break;
+        case Inkscape::Filters::BLEND_EXCLUSION:
+            mode = "exclusion";   break;
+        case Inkscape::Filters::BLEND_HUE:
+            mode = "hue";         break;
+        case Inkscape::Filters::BLEND_SATURATION:
+            mode = "saturation";  break;
+        case Inkscape::Filters::BLEND_COLOR:
+            mode = "color";       break;
+        case Inkscape::Filters::BLEND_LUMINOSITY:
+            mode = "luminosity";  break;
+#endif
         default:
             mode = 0;
     }
+
     repr->setAttribute("mode", mode);
 
-    if (((SPObjectClass *) feBlend_parent_class)->write) {
-        ((SPObjectClass *) feBlend_parent_class)->write(object, doc, repr, flags);
-    }
+    SPFilterPrimitive::write(doc, repr, flags);
 
     return repr;
 }
 
-static void sp_feBlend_build_renderer(SPFilterPrimitive *primitive, Inkscape::Filters::Filter *filter) {
-    g_assert(primitive != NULL);
+void SPFeBlend::build_renderer(Inkscape::Filters::Filter* filter) {
+    g_assert(this != NULL);
     g_assert(filter != NULL);
-
-    SPFeBlend *sp_blend = SP_FEBLEND(primitive);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_BLEND);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterBlend *nr_blend = dynamic_cast<Inkscape::Filters::FilterBlend*>(nr_primitive);
     g_assert(nr_blend != NULL);
 
-    sp_filter_primitive_renderer_common(primitive, nr_primitive);
+    sp_filter_primitive_renderer_common(this, nr_primitive);
 
-    nr_blend->set_mode(sp_blend->blend_mode);
-    nr_blend->set_input(1, sp_blend->in2);
+    nr_blend->set_mode(this->blend_mode);
+    nr_blend->set_input(1, this->in2);
 }
 
 /*

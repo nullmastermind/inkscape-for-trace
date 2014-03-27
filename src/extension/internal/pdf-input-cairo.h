@@ -16,6 +16,10 @@
 # include <config.h>
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
@@ -36,6 +40,14 @@
 #include <poppler/glib/poppler.h>
 
 #include "../implementation/implementation.h"
+
+namespace Gtk {
+#if WITH_GTKMM_3_0
+    class Scale;
+#else
+    class HScale;
+#endif
+}
 
 namespace Inkscape {
 
@@ -63,7 +75,11 @@ private:
     void _setPreviewPage(int page);
 
     // Signal handlers
+#if !WITH_GTKMM_3_0
     bool _onExposePreview(GdkEventExpose *event);
+#endif
+
+    bool _onDraw(const Cairo::RefPtr<Cairo::Context>& cr);
     void _onPageNumberChanged();
     void _onToggleCropping();
     void _onPrecisionChanged();
@@ -81,10 +97,11 @@ private:
     class Inkscape::UI::Widget::Frame * _pageSettingsFrame;
     class Gtk::Label * _labelPrecision;
     class Gtk::Label * _labelPrecisionWarning;
-    class Gtk::HScale * _fallbackPrecisionSlider;
 #if WITH_GTKMM_3_0
+    class Gtk::Scale * _fallbackPrecisionSlider;
     Glib::RefPtr<Gtk::Adjustment> _fallbackPrecisionSlider_adj;
 #else
+    class Gtk::HScale * _fallbackPrecisionSlider;
     class Gtk::Adjustment *_fallbackPrecisionSlider_adj;
 #endif
     class Gtk::Label * _labelPrecisionComment;

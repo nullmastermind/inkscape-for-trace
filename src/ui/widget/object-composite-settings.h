@@ -11,6 +11,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/alignment.h>
 #include <gtkmm/adjustment.h>
@@ -21,8 +29,10 @@
 #include "ui/widget/filter-effect-chooser.h"
 #include "ui/widget/spinbutton.h"
 
+class SPDesktop;
+
 namespace Inkscape {
-class Application;
+struct Application;
 
 namespace UI {
 namespace Widget {
@@ -45,21 +55,12 @@ private:
     Glib::ustring   _opacity_tag;
 
     Gtk::VBox       _opacity_vbox;
-    Gtk::HBox       _opacity_hbox;
-    Gtk::Label      _opacity_label;
-#if WITH_GTKMM_3_0
-    Glib::RefPtr<Gtk::Adjustment> _opacity_adjustment;
-#else
-    Gtk::Adjustment _opacity_adjustment;
-#endif
-    Gtk::HScale     _opacity_hscale;
-    Inkscape::UI::Widget::SpinButton _opacity_spin_button;
+    Inkscape::UI::Widget::SpinScale _opacity_scale;
 
     StyleSubject *_subject;
 
     SimpleFilterModifier _fe_cb;
     Gtk::VBox       _fe_vbox;
-    Gtk::Alignment  _fe_alignment;
 
     bool _blocked;
     gulong _desktop_activated;

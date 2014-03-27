@@ -36,7 +36,7 @@ class MultiPathManipulator : public PointManipulator {
 public:
     MultiPathManipulator(PathSharedData &data, sigc::connection &chg);
     virtual ~MultiPathManipulator();
-    virtual bool event(SPEventContext *, GdkEvent *event);
+    virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *event);
 
     bool empty() { return _mmap.empty(); }
     unsigned size() { return _mmap.empty(); }
@@ -70,6 +70,7 @@ public:
     void setLiveOutline(bool set);
     void setLiveObjects(bool set);
     void updateOutlineColors();
+    void updateHandles();
     
     sigc::signal<void> signal_coords_changed; /// Emitted whenever the coordinates
         /// shown in the status bar need updating

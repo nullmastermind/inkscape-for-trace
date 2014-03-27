@@ -35,6 +35,8 @@
 
 using Inkscape::createKnotHolder;
 
+bool ShapeEditor::_blockSetItem = false;
+
 ShapeEditor::ShapeEditor(SPDesktop *dt) {
     this->desktop = dt;
     this->knotholder = NULL;
@@ -46,15 +48,13 @@ ShapeEditor::~ShapeEditor() {
 }
 
 void ShapeEditor::unset_item(SubType type, bool keep_knotholder) {
-    Inkscape::XML::Node *old_repr = NULL;
-
     switch (type) {
         case SH_NODEPATH:
             // defunct
             break;
         case SH_KNOTHOLDER:
             if (this->knotholder) {
-                old_repr = this->knotholder->repr;
+                Inkscape::XML::Node *old_repr = this->knotholder->repr;
                 if (old_repr && old_repr == knotholder_listener_attached_for) {
                     sp_repr_remove_listener_by_data(old_repr, this);
                     Inkscape::GC::release(old_repr);
@@ -171,6 +171,10 @@ static Inkscape::XML::NodeEventVector shapeeditor_repr_events = {
 
 
 void ShapeEditor::set_item(SPItem *item, SubType type, bool keep_knotholder) {
+    if (_blockSetItem) {
+        return;
+    }
+
     // this happens (and should only happen) when for an LPEItem having both knotholder and
     // nodepath the knotholder is adapted; in this case we don't want to delete the knotholder
     // since this freezes the handles
@@ -231,11 +235,11 @@ bool ShapeEditor::has_selection() {
 /**
  * Returns true if this ShapeEditor has a knot above which the mouse currently hovers.
  */
-bool ShapeEditor::knot_mouseover()
-{
+bool ShapeEditor::knot_mouseover() const {
     if (this->knotholder) {
         return knotholder->knot_mouseover();
     }
+
     return false;
 }
 

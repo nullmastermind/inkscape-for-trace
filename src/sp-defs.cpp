@@ -20,75 +20,45 @@
 #include "xml/repr.h"
 #include "document.h"
 
-SPObjectClass * SPDefsClass::static_parent_class = 0;
+#include "sp-factory.h"
 
-GType SPDefs::sp_defs_get_type(void)
-{
-    static GType defs_type = 0;
+namespace {
+	SPObject* createDefs() {
+		return new SPDefs();
+	}
 
-    if (!defs_type) {
-        GTypeInfo defs_info = {
-            sizeof(SPDefsClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) SPDefsClass::sp_defs_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof(SPDefs),
-            16, /* n_preallocs */
-            (GInstanceInitFunc) init,
-            NULL,       /* value_table */
-        };
-        defs_type = g_type_register_static(SP_TYPE_OBJECT, "SPDefs", &defs_info, (GTypeFlags) 0);
-    }
-
-    return defs_type;
+	bool defsRegistered = SPFactory::instance().registerObject("svg:defs", createDefs);
 }
 
-void SPDefsClass::sp_defs_class_init(SPDefsClass *dc)
-{
-    static_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-    SPObjectClass *sp_object_class = (SPObjectClass *) dc;
-
-    sp_object_class->release = SPDefs::release;
-    sp_object_class->update = SPDefs::update;
-    sp_object_class->modified = SPDefs::modified;
-    sp_object_class->write = SPDefs::write;
+SPDefs::SPDefs() : SPObject() {
 }
 
-void SPDefs::init(SPDefs */*defs*/)
-{
-
+SPDefs::~SPDefs() {
 }
 
-void SPDefs::release(SPObject *object)
-{
-    if (((SPObjectClass *) (SPDefsClass::static_parent_class))->release) {
-        ((SPObjectClass *) (SPDefsClass::static_parent_class))->release(object);
-    }
+void SPDefs::release() {
+	SPObject::release();
 }
 
-void SPDefs::update(SPObject *object, SPCtx *ctx, guint flags)
-{
+void SPDefs::update(SPCtx *ctx, guint flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = g_slist_reverse(object->childList(true));
+    GSList *l = g_slist_reverse(this->childList(true));
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
-        g_object_unref (G_OBJECT (child));
+        sp_object_unref(child);
     }
 }
 
-void SPDefs::modified(SPObject *object, guint flags)
-{
+void SPDefs::modified(unsigned int flags) {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -96,8 +66,8 @@ void SPDefs::modified(SPObject *object, guint flags)
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for ( SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
-        g_object_ref(G_OBJECT(child));
+    for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
 
@@ -109,12 +79,11 @@ void SPDefs::modified(SPObject *object, guint flags)
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref( G_OBJECT(child) );
+        sp_object_unref(child);
     }
 }
 
-Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
+Inkscape::XML::Node* SPDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
 
         if (!repr) {
@@ -122,7 +91,7 @@ Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *x
         }
 
         GSList *l = NULL;
-        for ( SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
+        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
             Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
             if (crepr) {
                 l = g_slist_prepend(l, crepr);
@@ -136,14 +105,12 @@ Inkscape::XML::Node * SPDefs::write(SPObject *object, Inkscape::XML::Document *x
         }
 
     } else {
-        for ( SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
+        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
             child->updateRepr(flags);
         }
     }
 
-    if (((SPObjectClass *) (SPDefsClass::static_parent_class))->write) {
-        (* ((SPObjectClass *) (SPDefsClass::static_parent_class))->write)(object, xml_doc, repr, flags);
-    }
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

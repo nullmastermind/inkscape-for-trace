@@ -25,18 +25,17 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include <glibmm/ustring.h>
+#include <boost/ptr_container/ptr_list.hpp>
 #include <vector>
 
 namespace Avoid {
 class Router;
 }
 
-struct SPDesktop;
 class  SPItem;
 class  SPObject;
-struct SPGroup;
-struct SPRoot;
-struct SPUnit;
+class SPGroup;
+class SPRoot;
 
 namespace Inkscape {
     struct Application;
@@ -45,8 +44,12 @@ namespace Inkscape {
     class EventLog;
     class ProfileManager;
     namespace XML {
-        class Document;
+        struct Document;
         class Node;
+    }
+    namespace Util {
+        class Unit;
+        class Quantity;
     }
 }
 
@@ -60,7 +63,7 @@ namespace Proj {
     class TransfMat3x4;
 }
 
-class SPDocumentPrivate;
+struct SPDocumentPrivate;
 
 /// Typed SVG document implementation.
 class SPDocument : public Inkscape::GC::Managed<>,
@@ -81,6 +84,9 @@ public:
 
     SPDocument();
     virtual ~SPDocument();
+
+    sigc::connection connectDestroy(sigc::signal<void>::slot_type slot);
+
 
     unsigned int keepalive : 1;
     unsigned int virgin    : 1; ///< Has the document never been touched?
@@ -122,6 +128,7 @@ public:
 
     /** Returns our SPRoot */
     SPRoot *getRoot() { return root; }
+    SPRoot const *getRoot() const { return root; }
 
     Inkscape::XML::Node *getReprRoot() { return rroot; }
 
@@ -199,6 +206,11 @@ private:
     Persp3D *current_persp3d; /**< Currently 'active' perspective (to which, e.g., newly created boxes are attached) */
     Persp3DImpl *current_persp3d_impl;
 
+    // A list of svg documents being used or shown within this document
+    boost::ptr_list<SPDocument> _child_documents;
+    // Conversely this is a parent document because this is a child.
+    SPDocument *_parent_document;
+
 public:
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
@@ -213,24 +225,30 @@ public:
     sigc::connection connectResourcesChanged(const gchar *key, SPDocument::ResourcesChangedSignal::slot_type slot);
 
     void fitToRect(Geom::Rect const &rect, bool with_margins = false);
-    static SPDocument *createNewDoc(const gchar *uri, unsigned int keepalive, bool make_new = false);
+    static SPDocument *createNewDoc(const gchar *uri, unsigned int keepalive,
+            bool make_new = false, SPDocument *parent=NULL );
     static SPDocument *createNewDocFromMem(const gchar *buffer, gint length, unsigned int keepalive);
+           SPDocument *createChildDoc(std::string const &uri);
 
     /**
      * Returns the bottommost item from the list which is at the point, or NULL if none.
      */
-    static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const GSList *list, Geom::Point const p, bool take_insensitive = false);
+    static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const GSList *list, Geom::Point const &p, bool take_insensitive = false);
 
-    // ToDo - Merge createDoc with createNewDoc
-    static SPDocument *createDoc(Inkscape::XML::Document *rdoc, gchar const *uri, gchar const *base, gchar const *name, unsigned int keepalive);
+    static SPDocument *createDoc(Inkscape::XML::Document *rdoc, gchar const *uri,
+            gchar const *base, gchar const *name, unsigned int keepalive,
+            SPDocument *parent);
 
     SPDocument *doRef();
     SPDocument *doUnref();
-    gdouble getWidth() const;
-    gdouble getHeight() const;
+    Inkscape::Util::Unit const* getDefaultUnit() const;
+    Inkscape::Util::Quantity getWidth() const;
+    Inkscape::Util::Quantity getHeight() const;
     Geom::Point getDimensions() const;
-    void setWidth(gdouble width, const SPUnit *unit);
-    void setHeight(gdouble height, const SPUnit *unit);
+    Geom::OptRect preferredBounds() const;
+    void setWidth(const Inkscape::Util::Quantity &width);
+    void setHeight(const Inkscape::Util::Quantity &height);
+    void setViewBox(const Geom::Rect &viewBox);
     void requestModified();
     gint ensureUpToDate();
     bool addResource(const gchar *key, SPObject *object);
@@ -238,9 +256,9 @@ public:
     const GSList *getResourceList(const gchar *key) const;
     GSList *getItemsInBox(unsigned int dkey, Geom::Rect const &box) const;
     GSList *getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box) const;
-    SPItem *getItemAtPoint(unsigned int key, Geom::Point const p, gboolean into_groups, SPItem *upto = NULL) const;
+    SPItem *getItemAtPoint(unsigned int key, Geom::Point const &p, gboolean into_groups, SPItem *upto = NULL) const;
     GSList *getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points) const;
-    SPItem *getGroupAtPoint(unsigned int key,  Geom::Point const p) const;
+    SPItem *getGroupAtPoint(unsigned int key,  Geom::Point const &p) const;
 
     void changeUriAndHrefs(gchar const *uri);
     void emitResizedSignal(gdouble width, gdouble height);
@@ -253,8 +271,6 @@ private:
     void do_change_uri(gchar const *const filename, bool const rebase);
     void setupViewport(SPItemCtx *ctx);
 };
-
-struct SPUnit;
 
 /*
  * Ideas: How to overcome style invalidation nightmare

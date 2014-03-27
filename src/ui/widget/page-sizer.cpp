@@ -27,13 +27,17 @@
 #include <string>
 #include <string.h>
 #include <vector>
+
+#include <glibmm/i18n.h>
+
 #include <2geom/transforms.h>
 
 #include "desktop-handles.h"
 #include "document.h"
 #include "desktop.h"
 #include "helper/action.h"
-#include "helper/units.h"
+#include "helper/action-context.h"
+#include "util/units.h"
 #include "inkscape.h"
 #include "sp-namedview.h"
 #include "sp-root.h"
@@ -44,6 +48,7 @@
 #include "xml/repr.h"
 
 using std::pair;
+using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 namespace UI {
@@ -92,7 +97,7 @@ struct PaperSizeRec {
     char const * const name;  //name
     double const smaller;     //lesser dimension
     double const larger;      //greater dimension
-    SPUnitId const unit;      //units
+    Glib::ustring const unit;      //units
 };
 
 // list of page formats that should be in landscape automatically
@@ -110,31 +115,31 @@ fill_landscape_papers() {
 }
 
 static PaperSizeRec const inkscape_papers[] = {
-    { "A4",                210,  297, SP_UNIT_MM },
-    { "US Letter",         8.5,   11, SP_UNIT_IN },
-    { "US Legal",          8.5,   14, SP_UNIT_IN },
-    { "US Executive",     7.25, 10.5, SP_UNIT_IN },
-    { "A0",                841, 1189, SP_UNIT_MM },
-    { "A1",                594,  841, SP_UNIT_MM },
-    { "A2",                420,  594, SP_UNIT_MM },
-    { "A3",                297,  420, SP_UNIT_MM },
-    { "A5",                148,  210, SP_UNIT_MM },
-    { "A6",                105,  148, SP_UNIT_MM },
-    { "A7",                 74,  105, SP_UNIT_MM },
-    { "A8",                 52,   74, SP_UNIT_MM },
-    { "A9",                 37,   52, SP_UNIT_MM },
-    { "A10",                26,   37, SP_UNIT_MM },
-    { "B0",               1000, 1414, SP_UNIT_MM },
-    { "B1",                707, 1000, SP_UNIT_MM },
-    { "B2",                500,  707, SP_UNIT_MM },
-    { "B3",                353,  500, SP_UNIT_MM },
-    { "B4",                250,  353, SP_UNIT_MM },
-    { "B5",                176,  250, SP_UNIT_MM },
-    { "B6",                125,  176, SP_UNIT_MM },
-    { "B7",                 88,  125, SP_UNIT_MM },
-    { "B8",                 62,   88, SP_UNIT_MM },
-    { "B9",                 44,   62, SP_UNIT_MM },
-    { "B10",                31,   44, SP_UNIT_MM },
+    { "A4",                210,  297, "mm" },
+    { "US Letter",         8.5,   11, "in" },
+    { "US Legal",          8.5,   14, "in" },
+    { "US Executive",     7.25, 10.5, "in" },
+    { "A0",                841, 1189, "mm" },
+    { "A1",                594,  841, "mm" },
+    { "A2",                420,  594, "mm" },
+    { "A3",                297,  420, "mm" },
+    { "A5",                148,  210, "mm" },
+    { "A6",                105,  148, "mm" },
+    { "A7",                 74,  105, "mm" },
+    { "A8",                 52,   74, "mm" },
+    { "A9",                 37,   52, "mm" },
+    { "A10",                26,   37, "mm" },
+    { "B0",               1000, 1414, "mm" },
+    { "B1",                707, 1000, "mm" },
+    { "B2",                500,  707, "mm" },
+    { "B3",                353,  500, "mm" },
+    { "B4",                250,  353, "mm" },
+    { "B5",                176,  250, "mm" },
+    { "B6",                125,  176, "mm" },
+    { "B7",                 88,  125, "mm" },
+    { "B8",                 62,   88, "mm" },
+    { "B9",                 44,   62, "mm" },
+    { "B10",                31,   44, "mm" },
 
 
 
@@ -146,63 +151,63 @@ static PaperSizeRec const inkscape_papers[] = {
          don't know what D and E series are used for.
          */
 
-    { "C0",                917, 1297, SP_UNIT_MM },
-    { "C1",                648,  917, SP_UNIT_MM },
-    { "C2",                458,  648, SP_UNIT_MM },
-    { "C3",                324,  458, SP_UNIT_MM },
-    { "C4",                229,  324, SP_UNIT_MM },
-    { "C5",                162,  229, SP_UNIT_MM },
-    { "C6",                114,  162, SP_UNIT_MM },
-    { "C7",                 81,  114, SP_UNIT_MM },
-    { "C8",                 57,   81, SP_UNIT_MM },
-    { "C9",                 40,   57, SP_UNIT_MM },
-    { "C10",                28,   40, SP_UNIT_MM },
-    { "D1",                545,  771, SP_UNIT_MM },
-    { "D2",                385,  545, SP_UNIT_MM },
-    { "D3",                272,  385, SP_UNIT_MM },
-    { "D4",                192,  272, SP_UNIT_MM },
-    { "D5",                136,  192, SP_UNIT_MM },
-    { "D6",                 96,  136, SP_UNIT_MM },
-    { "D7",                 68,   96, SP_UNIT_MM },
-    { "E3",                400,  560, SP_UNIT_MM },
-    { "E4",                280,  400, SP_UNIT_MM },
-    { "E5",                200,  280, SP_UNIT_MM },
-    { "E6",                140,  200, SP_UNIT_MM },
+    { "C0",                917, 1297, "mm" },
+    { "C1",                648,  917, "mm" },
+    { "C2",                458,  648, "mm" },
+    { "C3",                324,  458, "mm" },
+    { "C4",                229,  324, "mm" },
+    { "C5",                162,  229, "mm" },
+    { "C6",                114,  162, "mm" },
+    { "C7",                 81,  114, "mm" },
+    { "C8",                 57,   81, "mm" },
+    { "C9",                 40,   57, "mm" },
+    { "C10",                28,   40, "mm" },
+    { "D1",                545,  771, "mm" },
+    { "D2",                385,  545, "mm" },
+    { "D3",                272,  385, "mm" },
+    { "D4",                192,  272, "mm" },
+    { "D5",                136,  192, "mm" },
+    { "D6",                 96,  136, "mm" },
+    { "D7",                 68,   96, "mm" },
+    { "E3",                400,  560, "mm" },
+    { "E4",                280,  400, "mm" },
+    { "E5",                200,  280, "mm" },
+    { "E6",                140,  200, "mm" },
 //#endif
 
 
 
-    { "CSE",               462,  649, SP_UNIT_PT },
-    { "US #10 Envelope", 4.125,  9.5, SP_UNIT_IN },
+    { "CSE",               462,  649, "pt" },
+    { "US #10 Envelope", 4.125,  9.5, "in" },
     /* See http://www.hbp.com/content/PCR_envelopes.cfm for a much larger list of US envelope
        sizes. */
-    { "DL Envelope",       110,  220, SP_UNIT_MM },
-    { "Ledger/Tabloid",     11,   17, SP_UNIT_IN },
+    { "DL Envelope",       110,  220, "mm" },
+    { "Ledger/Tabloid",     11,   17, "in" },
     /* Note that `Folio' (used in QPrinter/KPrinter) is deliberately absent from this list, as it
        means different sizes to different people: different people may expect the width to be
        either 8, 8.25 or 8.5 inches, and the height to be either 13 or 13.5 inches, even
        restricting our interpretation to foolscap folio.  If you wish to introduce a folio-like
        page size to the list, then please consider using a name more specific than just `Folio' or
        `Foolscap Folio'. */
-    { "Banner 468x60",      60,  468, SP_UNIT_PX },
-    { "Icon 16x16",         16,   16, SP_UNIT_PX },
-    { "Icon 32x32",         32,   32, SP_UNIT_PX },
-    { "Icon 48x48",         48,   48, SP_UNIT_PX },
+    { "Banner 468x60",      60,  468, "px" },
+    { "Icon 16x16",         16,   16, "px" },
+    { "Icon 32x32",         32,   32, "px" },
+    { "Icon 48x48",         48,   48, "px" },
     /* business cards */
-    { "Business Card (ISO 7810)", 53.98, 85.60, SP_UNIT_MM },
-    { "Business Card (US)",             2,     3.5,  SP_UNIT_IN },
-    { "Business Card (Europe)",        55,    85,    SP_UNIT_MM },
-    { "Business Card (Aus/NZ)",        55,    90,    SP_UNIT_MM },
+    { "Business Card (ISO 7810)", 53.98, 85.60, "mm" },
+    { "Business Card (US)",             2,     3.5,  "in" },
+    { "Business Card (Europe)",        55,    85,    "mm" },
+    { "Business Card (Aus/NZ)",        55,    90,    "mm" },
 
     // Start Arch Series List
 
 
-    { "Arch A",         9,    12,    SP_UNIT_IN },  // 229 x 305 mm
-    { "Arch B",        12,    18,    SP_UNIT_IN },  // 305 x 457 mm
-    { "Arch C",        18,    24,    SP_UNIT_IN },  // 457 x 610 mm
-    { "Arch D",        24,    36,    SP_UNIT_IN },  // 610 x 914 mm
-    { "Arch E",        36,    48,    SP_UNIT_IN },  // 914 x 1219 mm
-    { "Arch E1",       30,    42,    SP_UNIT_IN },  // 762 x 1067 mm
+    { "Arch A",         9,    12,    "in" },  // 229 x 305 mm
+    { "Arch B",        12,    18,    "in" },  // 305 x 457 mm
+    { "Arch C",        18,    24,    "in" },  // 457 x 610 mm
+    { "Arch D",        24,    36,    "in" },  // 610 x 914 mm
+    { "Arch E",        36,    48,    "in" },  // 914 x 1219 mm
+    { "Arch E1",       30,    42,    "in" },  // 762 x 1067 mm
 
     /*
      * The above list of Arch sizes were taken from the following site:
@@ -213,7 +218,7 @@ static PaperSizeRec const inkscape_papers[] = {
      * September 2009 - DAK
      */
 
-    { NULL,                     0,    0, SP_UNIT_PX },
+    { NULL,                     0,    0, "px" },
 };
 
 
@@ -221,10 +226,6 @@ static PaperSizeRec const inkscape_papers[] = {
 //########################################################################
 //# P A G E    S I Z E R
 //########################################################################
-
-//The default unit for this widget and its calculations
-static const SPUnit _px_unit = sp_unit_get_by_id (SP_UNIT_PX);
-
 
 /**
  * Constructor
@@ -242,12 +243,14 @@ PageSizer::PageSizer(Registry & _wr)
       _widgetRegistry(&_wr)
 {
     // set precision of scalar entry boxes
+    _wr.setUpdating (true);
     _dimensionWidth.setDigits(5);
     _dimensionHeight.setDigits(5);
     _marginTop.setDigits(5);
     _marginLeft.setDigits(5);
     _marginRight.setDigits(5);
     _marginBottom.setDigits(5);
+    _wr.setUpdating (false);
 
     //# Set up the Paper Size combo box
     _paperSizeListStore = Gtk::ListStore::create(_paperSizeListColumns);
@@ -274,13 +277,8 @@ PageSizer::PageSizer(Registry & _wr)
         char formatBuf[80];
         snprintf(formatBuf, 79, "%0.1f x %0.1f", p->smaller, p->larger);
         Glib::ustring desc = formatBuf;
-        if (p->unit == SP_UNIT_IN)
-            desc.append(" in");
-        else if (p->unit == SP_UNIT_MM)
-             desc.append(" mm");
-        else if (p->unit == SP_UNIT_PX)
-            desc.append(" px");
-        PaperSize paper(name, p->smaller, p->larger, p->unit);
+        desc.append(" " + p->unit);
+        PaperSize paper(name, p->smaller, p->larger, unit_table.getUnit(p->unit));
         _paperSizeTable[name] = paper;
         Gtk::TreeModel::Row row = *(_paperSizeListStore->append());
         row[_paperSizeListColumns.nameColumn] = name;
@@ -312,25 +310,49 @@ PageSizer::PageSizer(Registry & _wr)
     // Setting default custom unit to document unit
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     SPNamedView *nv = sp_desktop_namedview(dt);
+    _wr.setUpdating (true);
     if (nv->units) {
-        _dimensionUnits.setUnit(nv->units);
+        _dimensionUnits.setUnit(nv->units->abbr);
     } else if (nv->doc_units) {
-        _dimensionUnits.setUnit(nv->doc_units);
+        _dimensionUnits.setUnit(nv->doc_units->abbr);
     }
+    _wr.setUpdating (false);
     
     //## Set up custom size frame
     _customFrame.set_label(_("Custom size"));
     pack_start (_customFrame, false, false, 0);
     _customFrame.add(_customDimTable);
 
-    _customDimTable.resize(3, 2);
     _customDimTable.set_border_width(4);
+
+#if WITH_GTKMM_3_0
+    _customDimTable.set_row_spacing(4);
+    _customDimTable.set_column_spacing(4);
+
+    _dimensionWidth.set_hexpand();
+    _dimensionWidth.set_vexpand();
+    _customDimTable.attach(_dimensionWidth,        0, 0, 1, 1);
+
+    _dimensionUnits.set_hexpand();
+    _dimensionUnits.set_vexpand();
+    _customDimTable.attach(_dimensionUnits,        1, 0, 1, 1);
+
+    _dimensionHeight.set_hexpand();
+    _dimensionHeight.set_vexpand();
+    _customDimTable.attach(_dimensionHeight,       0, 1, 1, 1);
+
+    _fitPageMarginExpander.set_hexpand();
+    _fitPageMarginExpander.set_vexpand();
+    _customDimTable.attach(_fitPageMarginExpander, 0, 2, 2, 1);
+#else
+    _customDimTable.resize(3, 2);
     _customDimTable.set_row_spacings(4);
     _customDimTable.set_col_spacings(4);
     _customDimTable.attach(_dimensionWidth,        0,1, 0,1);
     _customDimTable.attach(_dimensionUnits,        1,2, 0,1);
     _customDimTable.attach(_dimensionHeight,       0,1, 1,2);
     _customDimTable.attach(_fitPageMarginExpander, 0,2, 2,3);
+#endif
     
     _dimTabOrderGList = NULL;
     _dimTabOrderGList = g_list_append(_dimTabOrderGList, _dimensionWidth.gobj());
@@ -346,7 +368,32 @@ PageSizer::PageSizer(Registry & _wr)
     _fitPageMarginExpander.add(_marginTable);
     
     //## Set up margin settings
-    _marginTable.resize(4, 2);
+    _marginTable.set_border_width(4);
+
+#if WITH_GTKMM_3_0
+    _marginTable.set_row_spacing(4);
+    _marginTable.set_column_spacing(4);
+
+    _marginTopAlign.set_hexpand();
+    _marginTopAlign.set_vexpand();
+    _marginTable.attach(_marginTopAlign,     0, 0, 2, 1);
+
+    _marginLeftAlign.set_hexpand();
+    _marginLeftAlign.set_vexpand();
+    _marginTable.attach(_marginLeftAlign,    0, 1, 1, 1);
+
+    _marginRightAlign.set_hexpand();
+    _marginRightAlign.set_vexpand();
+    _marginTable.attach(_marginRightAlign,   1, 1, 1, 1);
+
+    _marginBottomAlign.set_hexpand();
+    _marginBottomAlign.set_vexpand();
+    _marginTable.attach(_marginBottomAlign,  0, 2, 2, 1);
+
+    _fitPageButtonAlign.set_hexpand();
+    _fitPageButtonAlign.set_vexpand();
+    _marginTable.attach(_fitPageButtonAlign, 0, 3, 2, 1);
+#else
     _marginTable.set_border_width(4);
     _marginTable.set_row_spacings(4);
     _marginTable.set_col_spacings(4);
@@ -355,6 +402,7 @@ PageSizer::PageSizer(Registry & _wr)
     _marginTable.attach(_marginRightAlign,   1,2, 1,2);
     _marginTable.attach(_marginBottomAlign,  0,2, 2,3);
     _marginTable.attach(_fitPageButtonAlign, 0,2, 3,4);
+#endif
     
     _marginTopAlign.set(0.5, 0.5, 0.0, 1.0);
     _marginTopAlign.add(_marginTop);
@@ -394,6 +442,7 @@ PageSizer::init ()
     _portrait_connection = _portraitButton.signal_toggled().connect (sigc::mem_fun (*this, &PageSizer::on_portrait));
     _changedw_connection = _dimensionWidth.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
     _changedh_connection = _dimensionHeight.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
+    _changedu_connection = _dimensionUnits.getUnitMenu()->signal_changed().connect (sigc::mem_fun (*this, &PageSizer::on_units_changed));
     _fitPageButton.signal_clicked().connect(sigc::mem_fun(*this, &PageSizer::fire_fit_canvas_to_selection_or_drawing));
 
     show_all_children();
@@ -406,11 +455,11 @@ PageSizer::init ()
  * 'changeList' is true, then adjust the paperSizeList to show the closest
  * standard page size.
  *
- * \param w, h given in px
+ * \param w, h
  * \param changeList whether to modify the paper size list
  */
 void
-PageSizer::setDim (double w, double h, bool changeList)
+PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList)
 {
     static bool _called = false;
     if (_called) {
@@ -425,14 +474,16 @@ PageSizer::setDim (double w, double h, bool changeList)
     _changedw_connection.block();
     _changedh_connection.block();
 
+    _unit = w.unit->abbr;
+
     if (SP_ACTIVE_DESKTOP && !_widgetRegistry->isUpdating()) {
         SPDocument *doc = sp_desktop_document(SP_ACTIVE_DESKTOP);
-        double const old_height = doc->getHeight();
-        doc->setWidth (w, &_px_unit);
-        doc->setHeight (h, &_px_unit);
+        Inkscape::Util::Quantity const old_height = doc->getHeight();
+        doc->setWidth (w);
+        doc->setHeight (h);
         // The origin for the user is in the lower left corner; this point should remain stationary when
         // changing the page size. The SVG's origin however is in the upper left corner, so we must compensate for this
-        Geom::Translate const vert_offset(Geom::Point(0, (old_height - h)));
+        Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - h.value("px"))));
         doc->getRoot()->translateChildItems(vert_offset);
         DocumentUndo::done(doc, SP_VERB_NONE, _("Set page size"));
     }
@@ -455,9 +506,10 @@ PageSizer::setDim (double w, double h, bool changeList)
             _paperSizeListSelection->select(row);
         }
 
-    Unit const& unit = _dimensionUnits.getUnit();
-    _dimensionWidth.setValue (w / unit.factor);
-    _dimensionHeight.setValue (h / unit.factor);
+    _dimensionWidth.setUnit(w.unit->abbr);
+    _dimensionWidth.setValue (w.quantity);
+    _dimensionHeight.setUnit(h.unit->abbr);
+    _dimensionHeight.setValue (h.quantity);
 
     _paper_size_list_connection.unblock();
     _landscape_connection.unblock();
@@ -495,37 +547,40 @@ PageSizer::updateFitMarginsUI(Inkscape::XML::Node *nv_repr)
 
 /**
  * Returns an iterator pointing to a row in paperSizeListStore which
- * contains a paper of the specified size (specified in px), or
+ * contains a paper of the specified size, or
  * paperSizeListStore->children().end() if no such paper exists.
+ *
+ * The code is not tested for the case where w and h have different units.
  */
 Gtk::ListStore::iterator
-PageSizer::find_paper_size (double w, double h) const
+PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h) const
 {
-    double smaller = w;
-    double larger  = h;
+    using Inkscape::Util::Quantity;
+    using std::swap;
+
+    // The code below assumes that w < h, so make sure that's the case:
     if ( h < w ) {
-        smaller = h; larger = w;
+        swap(h,w);
     }
 
-    g_return_val_if_fail(smaller <= larger, _paperSizeListStore->children().end());
+    g_return_val_if_fail(w <= h, _paperSizeListStore->children().end());
 
     std::map<Glib::ustring, PaperSize>::const_iterator iter;
     for (iter = _paperSizeTable.begin() ;
          iter != _paperSizeTable.end() ; ++iter) {
         PaperSize paper = iter->second;
-        SPUnit const &i_unit = sp_unit_get_by_id(paper.unit);
-        double smallX = sp_units_get_pixels(paper.smaller, i_unit);
-        double largeX = sp_units_get_pixels(paper.larger,  i_unit);
+        Quantity smallX (paper.smaller, paper.unit);
+        Quantity largeX (paper.larger, paper.unit);
 
-        g_return_val_if_fail(smallX <= largeX, _paperSizeListStore->children().end());
+        g_return_val_if_fail(smallX.quantity < largeX.quantity + 0.001, _paperSizeListStore->children().end());
 
-        if ((std::abs(smaller - smallX) <= 0.1) &&
-            (std::abs(larger  - largeX) <= 0.1)   ) {
-            Gtk::ListStore::iterator p;
+        if ( are_near(w, smallX, 0.1) && are_near(h, largeX, 0.1) ) {
+            Gtk::ListStore::iterator p = _paperSizeListStore->children().begin();
+            Gtk::ListStore::iterator pend = _paperSizeListStore->children().end();
             // We need to search paperSizeListStore explicitly for the
             // specified paper size because it is sorted in a different
             // way than paperSizeTable (which is sorted alphabetically)
-            for (p = _paperSizeListStore->children().begin(); p != _paperSizeListStore->children().end(); ++p) {
+            for ( ; p != pend; ++p) {
                 if ((*p)[_paperSizeListColumns.nameColumn] == paper.name) {
                     return p;
                 }
@@ -550,7 +605,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
     SPDocument *doc;
     SPNamedView *nv;
     Inkscape::XML::Node *nv_repr;
-	
+  
     if ((doc = sp_desktop_document(SP_ACTIVE_DESKTOP))
         && (nv = sp_document_namedview(doc, 0))
         && (nv_repr = nv->getRepr())) {
@@ -564,7 +619,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
 
     Verb *verb = Verb::get( SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING );
     if (verb) {
-        SPAction *action = verb->get_action(dt);
+        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
         if (action) {
             sp_action_perform(action, NULL);
         }
@@ -595,8 +650,8 @@ PageSizer::on_paper_size_list_changed()
         return;
     }
     PaperSize paper = piter->second;
-    double w = paper.smaller;
-    double h = paper.larger;
+    Inkscape::Util::Quantity w = Inkscape::Util::Quantity(paper.smaller, paper.unit);
+    Inkscape::Util::Quantity h = Inkscape::Util::Quantity(paper.larger, paper.unit);
 
     if (std::find(lscape_papers.begin(), lscape_papers.end(), paper.name.c_str()) != lscape_papers.end()) {
         // enforce landscape mode if this is desired for the given page format
@@ -605,10 +660,6 @@ PageSizer::on_paper_size_list_changed()
         // otherwise we keep the current mode
         _landscape = _landscapeButton.get_active();
     }
-
-    SPUnit const &src_unit = sp_unit_get_by_id (paper.unit);
-    sp_convert_distance (&w, &src_unit, &_px_unit);
-    sp_convert_distance (&h, &src_unit, &_px_unit);
 
     if (_landscape)
         setDim (h, w, false);
@@ -626,8 +677,8 @@ PageSizer::on_portrait()
 {
     if (!_portraitButton.get_active())
         return;
-    double w = _dimensionWidth.getValue ("px");
-    double h = _dimensionHeight.getValue ("px");
+    Inkscape::Util::Quantity w = Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionWidth.getUnit());
+    Inkscape::Util::Quantity h = Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionHeight.getUnit());
     if (h < w) {
         setDim (h, w);
     }
@@ -642,8 +693,8 @@ PageSizer::on_landscape()
 {
     if (!_landscapeButton.get_active())
         return;
-    double w = _dimensionWidth.getValue ("px");
-    double h = _dimensionHeight.getValue ("px");
+    Inkscape::Util::Quantity w = Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionWidth.getUnit());
+    Inkscape::Util::Quantity h = Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionHeight.getUnit());
     if (w < h) {
         setDim (h, w);
     }
@@ -656,11 +707,18 @@ void
 PageSizer::on_value_changed()
 {
     if (_widgetRegistry->isUpdating()) return;
-
-    setDim (_dimensionWidth.getValue("px"),
-            _dimensionHeight.getValue("px"));
+    if (_unit != _dimensionUnits.getUnit()->abbr) return;
+    setDim (Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionUnits.getUnit()),
+            Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionUnits.getUnit()));
 }
-
+void
+PageSizer::on_units_changed()
+{
+    if (_widgetRegistry->isUpdating()) return;
+    _unit = _dimensionUnits.getUnit()->abbr;
+    setDim (Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionUnits.getUnit()),
+            Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionUnits.getUnit()));
+}
 
 } // namespace Widget
 } // namespace UI

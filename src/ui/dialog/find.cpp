@@ -15,7 +15,10 @@
 #endif
 
 #include "find.h"
+
+#include <gtkmm/entry.h>
 #include <gtkmm/widget.h>
+
 #include "verbs.h"
 
 #include "message-stack.h"
@@ -56,6 +59,7 @@
 #include "xml/attribute-record.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 namespace Inkscape {
 namespace UI {
@@ -65,12 +69,12 @@ Find::Find()
     : UI::Widget::Panel("", "/dialogs/find", SP_VERB_DIALOG_FIND),
 
       entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
-      entry_replace(_("Re_place:"), _("Replace match with this value")),
+      entry_replace(_("R_eplace:"), _("Replace match with this value")),
 
       check_scope_all(_("_All"), _("Search in all layers")),
       check_scope_layer(_("Current _layer"), _("Limit search to the current layer")),
-      check_scope_selection(_("S_election"), _("Limit search to the current selection")),
-      check_searchin_text(_("Te_xt"), _("Search in text objects")),
+      check_scope_selection(_("Sele_ction"), _("Limit search to the current selection")),
+      check_searchin_text(_("_Text"), _("Search in text objects")),
       check_searchin_property(_("_Properties"), _("Search in object properties, styles, attributes and IDs")),
       vbox_searchin(0, false),
       frame_searchin(_("Search in")),
@@ -85,9 +89,9 @@ Find::Find()
 
       check_ids(_("_ID"), _("Search id name"), true),
       check_attributename(_("Attribute _name"), _("Search attribute name"), false),
-      check_attributevalue(_("Attribute _value"), _("Search attribute value"), true),
+      check_attributevalue(_("Attri_bute value"), _("Search attribute value"), true),
       check_style(_("_Style"), _("Search style"), true),
-      check_font(_("_Font"), _("Search fonts"), false),
+      check_font(_("F_ont"), _("Search fonts"), false),
       frame_properties(_("Properties")),
 
       check_alltypes(_("All types"), _("Search all object types"), true),
@@ -333,8 +337,7 @@ bool Find::find_strcmp(const gchar *str, const gchar *find, bool exact, bool cas
     return (std::string::npos != find_strcmp_pos(str, find, exact, casematch));
 }
 
-bool
-Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool casematch, bool replace/*=false*/)
+bool Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool casematch, bool replace/*=false*/)
 {
     if (item->getRepr() == NULL) {
         return false;
@@ -379,8 +382,7 @@ Find::item_text_match (SPItem *item, const gchar *find, bool exact, bool casemat
 }
 
 
-bool
-Find::item_id_match (SPItem *item, const gchar *id, bool exact, bool casematch, bool replace/*=false*/)
+bool Find::item_id_match (SPItem *item, const gchar *id, bool exact, bool casematch, bool replace/*=false*/)
 {
     if (item->getRepr() == NULL) {
         return false;
@@ -409,8 +411,7 @@ Find::item_id_match (SPItem *item, const gchar *id, bool exact, bool casematch, 
     return found;
 }
 
-bool
-Find::item_style_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace/*=false*/)
+bool Find::item_style_match (SPItem *item, const gchar *text, bool exact, bool casematch, bool replace/*=false*/)
 {
     if (item->getRepr() == NULL) {
         return false;
@@ -547,8 +548,7 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
 }
 
 
-GSList *
-Find::filter_fields (GSList *l, bool exact, bool casematch)
+GSList *Find::filter_fields (GSList *l, bool exact, bool casematch)
 {
     Glib::ustring tmp = entry_find.getEntry()->get_text();
     if (tmp.empty()) {
@@ -657,15 +657,14 @@ Find::filter_fields (GSList *l, bool exact, bool casematch)
 }
 
 
-bool
-Find::item_type_match (SPItem *item)
+bool Find::item_type_match (SPItem *item)
 {
     bool all  =check_alltypes.get_active();
 
     if ( SP_IS_RECT(item)) {
         return ( all ||check_rects.get_active());
 
-    } else if (SP_IS_GENERICELLIPSE(item) || SP_IS_ELLIPSE(item) || SP_IS_ARC(item) || SP_IS_CIRCLE(item)) {
+    } else if (SP_IS_GENERICELLIPSE(item)) {
         return ( all ||  check_ellipses.get_active());
 
     } else if (SP_IS_STAR(item) || SP_IS_POLYGON(item)) {
@@ -696,8 +695,7 @@ Find::item_type_match (SPItem *item)
     return false;
 }
 
-GSList *
-Find::filter_types (GSList *l)
+GSList *Find::filter_types (GSList *l)
 {
     GSList *n = NULL;
     for (GSList *i = l; i != NULL; i = i->next) {
@@ -709,16 +707,14 @@ Find::filter_types (GSList *l)
 }
 
 
-GSList *
-Find::filter_list (GSList *l, bool exact, bool casematch)
+GSList *Find::filter_list (GSList *l, bool exact, bool casematch)
 {
     l = filter_types (l);
     l = filter_fields (l, exact, casematch);
     return l;
 }
 
-GSList *
-Find::all_items (SPObject *r, GSList *l, bool hidden, bool locked)
+GSList *Find::all_items (SPObject *r, GSList *l, bool hidden, bool locked)
 {
     if (SP_IS_DEFS(r)) {
         return l; // we're not interested in items in defs
@@ -740,8 +736,7 @@ Find::all_items (SPObject *r, GSList *l, bool hidden, bool locked)
     return l;
 }
 
-GSList *
-Find::all_selection_items (Inkscape::Selection *s, GSList *l, SPObject *ancestor, bool hidden, bool locked)
+GSList *Find::all_selection_items (Inkscape::Selection *s, GSList *l, SPObject *ancestor, bool hidden, bool locked)
 {
     for (GSList *i = (GSList *) s->itemList(); i != NULL; i = i->next) {
         if (SP_IS_ITEM (i->data) && !reinterpret_cast<SPItem *>(i->data)->cloned && !desktop->isLayer(SP_ITEM(i->data))) {
@@ -765,8 +760,7 @@ Find::all_selection_items (Inkscape::Selection *s, GSList *l, SPObject *ancestor
 # BUTTON CLICK HANDLERS    (callbacks)
 ########################################################################*/
 
-void
-Find::onFind()
+void Find::onFind()
 {
     _action_replace = false;
     onAction();
@@ -775,8 +769,7 @@ Find::onFind()
     entry_find.getEntry()->grab_focus();
 }
 
-void
-Find::onReplace()
+void Find::onReplace()
 {
     if (entry_find.getEntry()->get_text().length() < 1) {
         status.set_text(_("Nothing to replace"));
@@ -789,8 +782,7 @@ Find::onReplace()
     entry_find.getEntry()->grab_focus();
 }
 
-void
-Find::onAction()
+void Find::onAction()
 {
 
     bool hidden = check_include_hidden.get_active();
@@ -827,11 +819,13 @@ Find::onAction()
                                         count, all, exact? _("exact") : _("partial"));
         if (_action_replace){
             // TRANSLATORS: "%1" is replaced with the number of matches
-            status.set_text(Glib::ustring::compose(_("%1 objects replaced"), count));
+            status.set_text(Glib::ustring::compose(ngettext("%1 match replaced","%1 matches replaced",count), count));
         }
         else {
             // TRANSLATORS: "%1" is replaced with the number of matches
-            status.set_text(Glib::ustring::compose(_("%1 objects found"), count));
+            status.set_text(Glib::ustring::compose(ngettext("%1 object found","%1 objects found",count), count));
+            bool attributenameyok = !check_attributename.get_active();
+            button_replace.set_sensitive(attributenameyok);
         }
 
         Inkscape::Selection *selection = sp_desktop_selection (desktop);
@@ -840,7 +834,7 @@ Find::onAction()
         scroll_to_show_item (desktop, SP_ITEM(n->data));
 
         if (_action_replace) {
-            DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Text Replace"));
+            DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Replace text or property"));
         }
 
     } else {
@@ -854,8 +848,8 @@ Find::onAction()
     blocked = false;
 
 }
-void
-Find::onToggleCheck ()
+
+void Find::onToggleCheck ()
 {
     bool objectok = false;
     status.set_text("");
@@ -892,15 +886,14 @@ Find::onToggleCheck ()
     }
 
     // Can't replace attribute names
-    bool attributenameyok = !check_attributename.get_active();
+    // bool attributenameyok = !check_attributename.get_active();
 
     button_find.set_sensitive(objectok && propertyok);
-    button_replace.set_sensitive(objectok && propertyok && attributenameyok);
-
+    // button_replace.set_sensitive(objectok && propertyok && attributenameyok);
+    button_replace.set_sensitive(false);
 }
 
-void
-Find::onToggleAlltypes ()
+void Find::onToggleAlltypes ()
 {
      bool all  =check_alltypes.get_active();
      for(size_t i = 0; i < checkTypes.size(); i++) {
@@ -910,30 +903,26 @@ Find::onToggleAlltypes ()
      onToggleCheck();
 }
 
-void
-Find::onSearchinText ()
+void Find::onSearchinText ()
 {
     searchinToggle(false);
     onToggleCheck();
 }
 
-void
-Find::onSearchinProperty ()
+void Find::onSearchinProperty ()
 {
     searchinToggle(true);
     onToggleCheck();
 }
 
-void
-Find::searchinToggle(bool on)
+void Find::searchinToggle(bool on)
 {
     for(size_t i = 0; i < checkProperties.size(); i++) {
         checkProperties[i]->set_sensitive(on);
     }
 }
 
-void
-Find::onExpander ()
+void Find::onExpander ()
 {
     if (!expander_options.get_expanded())
         squeeze_window();
@@ -943,8 +932,7 @@ Find::onExpander ()
 # UTILITY
 ########################################################################*/
 
-void
-Find::squeeze_window()
+void Find::squeeze_window()
 {
     // TODO: resize dialog window when the expander is closed
     // set_size_request(-1, -1);

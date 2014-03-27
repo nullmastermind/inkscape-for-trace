@@ -54,13 +54,35 @@ NRStyle::NRStyle()
     , line_join(CAIRO_LINE_JOIN_MITER)
     , fill_pattern(NULL)
     , stroke_pattern(NULL)
-{}
+    , text_decoration_line(TEXT_DECORATION_LINE_CLEAR)
+    , text_decoration_style(TEXT_DECORATION_STYLE_CLEAR)
+    , phase_length(0.0)
+    , tspan_line_start(false)
+    , tspan_line_end(false)
+    , tspan_width(0)
+    , ascender(0)
+    , descender(0)
+    , line_gap(0)
+    , underline_thickness(0)
+    , underline_position(0)
+    , line_through_thickness(0)
+    , line_through_position(0)
+    , font_size(0)
+{
+#ifdef WITH_SVG2
+    paint_order_layer[0] = PAINT_ORDER_NORMAL;
+#endif
+}
 
 NRStyle::~NRStyle()
 {
     if (fill_pattern) cairo_pattern_destroy(fill_pattern);
     if (stroke_pattern) cairo_pattern_destroy(stroke_pattern);
-    if (dash) delete dash;
+    if (dash){
+        delete [] dash;
+    }
+    fill.clear();
+    stroke.clear();
 }
 
 void NRStyle::set(SPStyle *style)
@@ -126,31 +148,99 @@ void NRStyle::set(SPStyle *style)
     }
     miter_limit = style->stroke_miterlimit.value;
 
-    if (dash) delete [] dash;
+    if (dash){
+        delete [] dash;
+    }
 
-    n_dash = style->stroke_dash.n_dash;
+    n_dash = style->stroke_dasharray.values.size();
     if (n_dash != 0) {
-        dash_offset = style->stroke_dash.offset;
+        dash_offset = style->stroke_dashoffset.value;
         dash = new double[n_dash];
         for (unsigned int i = 0; i < n_dash; ++i) {
-            dash[i] = style->stroke_dash.dash[i];
+            dash[i] = style->stroke_dasharray.values[i];
         }
     } else {
         dash_offset = 0.0;
         dash = NULL;
     }
 
+
+#ifdef WITH_SVG2
+    for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
+        switch (style->paint_order.layer[i]) {
+            case SP_CSS_PAINT_ORDER_NORMAL:
+                paint_order_layer[i]=PAINT_ORDER_NORMAL;
+                break;
+            case SP_CSS_PAINT_ORDER_FILL:
+                paint_order_layer[i]=PAINT_ORDER_FILL;
+                break;
+            case SP_CSS_PAINT_ORDER_STROKE:
+                paint_order_layer[i]=PAINT_ORDER_STROKE;
+                break;
+            case SP_CSS_PAINT_ORDER_MARKER:
+                paint_order_layer[i]=PAINT_ORDER_MARKER;
+                break;
+        }
+    }
+#endif
+
+    text_decoration_line = TEXT_DECORATION_LINE_CLEAR;
+    if(style->text_decoration_line.inherit     ){ text_decoration_line |= TEXT_DECORATION_LINE_INHERIT;                                }
+    if(style->text_decoration_line.underline   ){ text_decoration_line |= TEXT_DECORATION_LINE_UNDERLINE   + TEXT_DECORATION_LINE_SET; }
+    if(style->text_decoration_line.overline    ){ text_decoration_line |= TEXT_DECORATION_LINE_OVERLINE    + TEXT_DECORATION_LINE_SET; }
+    if(style->text_decoration_line.line_through){ text_decoration_line |= TEXT_DECORATION_LINE_LINETHROUGH + TEXT_DECORATION_LINE_SET; }
+    if(style->text_decoration_line.blink       ){ text_decoration_line |= TEXT_DECORATION_LINE_BLINK       + TEXT_DECORATION_LINE_SET; }
+
+    text_decoration_style = TEXT_DECORATION_STYLE_CLEAR;
+    if(style->text_decoration_style.inherit      ){ text_decoration_style |= TEXT_DECORATION_STYLE_INHERIT;                              }
+    if(style->text_decoration_style.solid        ){ text_decoration_style |= TEXT_DECORATION_STYLE_SOLID    + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.isdouble     ){ text_decoration_style |= TEXT_DECORATION_STYLE_ISDOUBLE + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.dotted       ){ text_decoration_style |= TEXT_DECORATION_STYLE_DOTTED   + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.dashed       ){ text_decoration_style |= TEXT_DECORATION_STYLE_DASHED   + TEXT_DECORATION_STYLE_SET; }
+    if(style->text_decoration_style.wavy         ){ text_decoration_style |= TEXT_DECORATION_STYLE_WAVY     + TEXT_DECORATION_STYLE_SET; }
+ 
+    if( style->text_decoration_color.set          ||
+        style->text_decoration_color.inherit      || 
+        style->text_decoration_color.currentcolor ||
+        style->text_decoration_color.colorSet){
+        text_decoration_color.set(style->text_decoration_color.value.color);
+        text_decoration_useColor = true;
+    }
+    else {
+        text_decoration_color.clear();
+        text_decoration_useColor = false;
+    }
+
+    if(text_decoration_line != TEXT_DECORATION_LINE_CLEAR){
+        phase_length           = style->text_decoration_data.phase_length;
+        tspan_line_start       = style->text_decoration_data.tspan_line_start;
+        tspan_line_end         = style->text_decoration_data.tspan_line_end;
+        tspan_width            = style->text_decoration_data.tspan_width;
+        ascender               = style->text_decoration_data.ascender;
+        descender              = style->text_decoration_data.descender;
+        line_gap               = style->text_decoration_data.line_gap;
+        underline_thickness    = style->text_decoration_data.underline_thickness;
+        underline_position     = style->text_decoration_data.underline_position; 
+        line_through_thickness = style->text_decoration_data.line_through_thickness;
+        line_through_position  = style->text_decoration_data.line_through_position;
+        font_size              = style->font_size.computed; 
+    }
+    
+    text_direction = style->direction.computed;                                   
+
     update();
 }
 
-bool NRStyle::prepareFill(Inkscape::DrawingContext &ct, Geom::OptRect const &paintbox)
+bool NRStyle::prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox)
 {
     // update fill pattern
     if (!fill_pattern) {
         switch (fill.type) {
         case PAINT_SERVER: {
-            fill_pattern = sp_paint_server_create_pattern(fill.server, ct.raw(), paintbox, fill.opacity);
-            } break;
+            //fill_pattern = sp_paint_server_create_pattern(fill.server, dc.raw(), paintbox, fill.opacity);
+        	fill_pattern = fill.server->pattern_new(dc.raw(), paintbox, fill.opacity);
+
+		} break;
         case PAINT_COLOR: {
             SPColor const &c = fill.color;
             fill_pattern = cairo_pattern_create_rgba(
@@ -163,19 +253,21 @@ bool NRStyle::prepareFill(Inkscape::DrawingContext &ct, Geom::OptRect const &pai
     return true;
 }
 
-void NRStyle::applyFill(Inkscape::DrawingContext &ct)
+void NRStyle::applyFill(Inkscape::DrawingContext &dc)
 {
-    ct.setSource(fill_pattern);
-    ct.setFillRule(fill_rule);
+    dc.setSource(fill_pattern);
+    dc.setFillRule(fill_rule);
 }
 
-bool NRStyle::prepareStroke(Inkscape::DrawingContext &ct, Geom::OptRect const &paintbox)
+bool NRStyle::prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox)
 {
     if (!stroke_pattern) {
         switch (stroke.type) {
         case PAINT_SERVER: {
-            stroke_pattern = sp_paint_server_create_pattern(stroke.server, ct.raw(), paintbox, stroke.opacity);
-            } break;
+            //stroke_pattern = sp_paint_server_create_pattern(stroke.server, dc.raw(), paintbox, stroke.opacity);
+        	stroke_pattern = stroke.server->pattern_new(dc.raw(), paintbox, stroke.opacity);
+
+		} break;
         case PAINT_COLOR: {
             SPColor const &c = stroke.color;
             stroke_pattern = cairo_pattern_create_rgba(
@@ -188,14 +280,14 @@ bool NRStyle::prepareStroke(Inkscape::DrawingContext &ct, Geom::OptRect const &p
     return true;
 }
 
-void NRStyle::applyStroke(Inkscape::DrawingContext &ct)
+void NRStyle::applyStroke(Inkscape::DrawingContext &dc)
 {
-    ct.setSource(stroke_pattern);
-    ct.setLineWidth(stroke_width);
-    ct.setLineCap(line_cap);
-    ct.setLineJoin(line_join);
-    ct.setMiterLimit(miter_limit);
-    cairo_set_dash(ct.raw(), dash, n_dash, dash_offset); // fixme
+    dc.setSource(stroke_pattern);
+    dc.setLineWidth(stroke_width);
+    dc.setLineCap(line_cap);
+    dc.setLineJoin(line_join);
+    dc.setMiterLimit(miter_limit);
+    cairo_set_dash(dc.raw(), dash, n_dash, dash_offset); // fixme
 }
 
 void NRStyle::update()
@@ -216,4 +308,4 @@ void NRStyle::update()
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

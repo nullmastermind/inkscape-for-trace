@@ -23,6 +23,10 @@
 #include "extension/input.h"
 #include "dialogs/dialog-events.h"
 #include "document.h"
+#include "sp-root.h"
+#include "util/units.h"
+
+#include <2geom/rect.h>
 
 #include "inkscape.h"
 
@@ -95,11 +99,7 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     _cropTypeCombo = Gtk::manage(new class Gtk::ComboBoxText());
     int num_crop_choices = sizeof(crop_setting_choices) / sizeof(crop_setting_choices[0]);
     for ( int i = 0 ; i < num_crop_choices ; i++ ) {
-#if WITH_GTKMM_2_24
         _cropTypeCombo->append(_(crop_setting_choices[i]));
-#else
-        _cropTypeCombo->append_text(_(crop_setting_choices[i]));
-#endif
     }
     _cropTypeCombo->set_active_text(_(crop_setting_choices[0]));
     _cropTypeCombo->set_sensitive(false);
@@ -112,7 +112,7 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
 
 #if WITH_GTKMM_3_0
     _fallbackPrecisionSlider_adj = Gtk::Adjustment::create(2, 1, 256, 1, 10, 10);
-    _fallbackPrecisionSlider = Gtk::manage(new Gtk::HScale(_fallbackPrecisionSlider_adj));
+    _fallbackPrecisionSlider = Gtk::manage(new Gtk::Scale(_fallbackPrecisionSlider_adj));
 #else
     _fallbackPrecisionSlider_adj = Gtk::manage(new class Gtk::Adjustment(2, 1, 256, 1, 10, 10));
     _fallbackPrecisionSlider = Gtk::manage(new class Gtk::HScale(*_fallbackPrecisionSlider_adj));
@@ -124,11 +124,7 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     // Text options
     _labelText = Gtk::manage(new class Gtk::Label(_("Text handling:")));
     _textHandlingCombo = Gtk::manage(new class Gtk::ComboBoxText());
-#if WITH_GTKMM_2_24
     _textHandlingCombo->append(_("Import text as text"));
-#else
-    _textHandlingCombo->append_text(_("Import text as text"));
-#endif
     _textHandlingCombo->set_active_text(_("Import text as text"));
     _localFontsCheck = Gtk::manage(new class Gtk::CheckButton(_("Replace PDF fonts by closest-named installed fonts")));
 
@@ -232,12 +228,20 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     vbox1->pack_start(*_importSettingsFrame, Gtk::PACK_EXPAND_PADDING, 0);
     hbox1->pack_start(*vbox1);
     hbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 4);
+
+#if WITH_GTKMM_3_0
+    get_content_area()->set_homogeneous(false);
+    get_content_area()->set_spacing(0);
+    get_content_area()->pack_start(*hbox1);
+#else
     this->get_vbox()->set_homogeneous(false);
     this->get_vbox()->set_spacing(0);
     this->get_vbox()->pack_start(*hbox1);
+#endif
+
     this->set_title(_("PDF Import Settings"));
     this->set_modal(true);
-    sp_transientize((GtkWidget *)this->gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(this->gobj()));  //Make transient
     this->property_window_position().set_value(Gtk::WIN_POS_NONE);
     this->set_resizable(true);
     this->property_destroy_with_parent().set_value(false);
@@ -271,7 +275,11 @@ PdfImportCairoDialog::PdfImportCairoDialog(PopplerDocument *doc)
     hbox1->show();
 
     // Connect signals
+#if WITH_GTKMM_3_0
+    _previewArea->signal_draw().connect(sigc::mem_fun(*this, &PdfImportCairoDialog::_onDraw));
+#else
     _previewArea->signal_expose_event().connect(sigc::mem_fun(*this, &PdfImportCairoDialog::_onExposePreview));
+#endif
     _pageNumberSpin_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PdfImportCairoDialog::_onPageNumberChanged));
     _cropCheck->signal_toggled().connect(sigc::mem_fun(*this, &PdfImportCairoDialog::_onToggleCropping));
     _fallbackPrecisionSlider_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PdfImportCairoDialog::_onPrecisionChanged));
@@ -420,7 +428,7 @@ static void copy_cairo_surface_to_pixbuf (cairo_surface_t *surface,
         cairo_height = gdk_pixbuf_get_height (pixbuf);
     for (y = 0; y < cairo_height; y++)
     {
-        src = (unsigned int *) (cairo_data + y * cairo_rowstride);
+        src = reinterpret_cast<unsigned int *>(cairo_data + y * cairo_rowstride);
         dst = pixbuf_data + y * pixbuf_rowstride;
         for (x = 0; x < cairo_width; x++)
         {
@@ -438,8 +446,15 @@ static void copy_cairo_surface_to_pixbuf (cairo_surface_t *surface,
 /**
  * \brief Updates the preview area with the previously rendered thumbnail
  */
-bool PdfImportCairoDialog::_onExposePreview(GdkEventExpose */*event*/) {
+#if !WITH_GTKMM_3_0
+bool PdfImportCairoDialog::_onExposePreview(GdkEventExpose * /*event*/) {
+    Cairo::RefPtr<Cairo::Context> cr = _previewArea->get_window()->create_cairo_context();
+    return _onDraw(cr);
+}
+#endif
 
+
+bool PdfImportCairoDialog::_onDraw(const Cairo::RefPtr<Cairo::Context>& cr) {	
     // Check if we have a thumbnail at all
     if (!_thumb_data) {
         return true;
@@ -461,24 +476,14 @@ bool PdfImportCairoDialog::_onExposePreview(GdkEventExpose */*event*/) {
     // Set background to white
     if (_render_thumb) {
         thumb->fill(0xffffffff);
-        Glib::RefPtr<Gdk::Pixmap> back_pixmap = Gdk::Pixmap::create(
-                _previewArea->get_window(), _thumb_width, _thumb_height, -1);
-        if (!back_pixmap) {
-            return true;
-        }
-
-	Cairo::RefPtr<Cairo::Context> cr = back_pixmap->create_cairo_context();
 	Gdk::Cairo::set_source_pixbuf(cr, thumb, 0, 0);
 	cr->paint();
-        _previewArea->get_window()->set_back_pixmap(back_pixmap, false);
-        _previewArea->get_window()->clear();
     }
 
     // Copy the thumbnail image from the Cairo surface
     if (_render_thumb) {
         copy_cairo_surface_to_pixbuf(_cairo_surface, _thumb_data, thumb->gobj());
     }
-    Cairo::RefPtr<Cairo::Context> cr = _previewArea->get_window()->create_cairo_context();
     Gdk::Cairo::set_source_pixbuf(cr, thumb, 0, _render_thumb ? 0 : 20);
     cr->paint();
 
@@ -490,7 +495,7 @@ bool PdfImportCairoDialog::_onExposePreview(GdkEventExpose */*event*/) {
  */
 void PdfImportCairoDialog::_setPreviewPage(int page) {
 
-    PopplerPage *_previewed_page = poppler_document_get_page(_poppler_doc, page);
+    PopplerPage *_previewed_page = poppler_document_get_page(_poppler_doc, page-1);
 
     // Try to get a thumbnail from the PDF if possible
     if (!_render_thumb) {
@@ -619,6 +624,11 @@ PdfInputCairo::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 
     SPDocument * doc = SPDocument::createNewDocFromMem(output->c_str(), output->length(), TRUE);
 
+    // Set viewBox if it doesn't exist
+    if (doc && !doc->getRoot()->viewBox_set) {
+        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDefaultUnit()), doc->getHeight().value(doc->getDefaultUnit())));
+    }
+
     delete output;
     g_object_unref(page);
     g_object_unref(document);
@@ -629,8 +639,8 @@ PdfInputCairo::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 static cairo_status_t
         _write_ustring_cb(void *closure, const unsigned char *data, unsigned int length)
 {
-    Glib::ustring* stream = (Glib::ustring*)closure;
-    stream->append((const char*)data, length);
+    Glib::ustring* stream = static_cast<Glib::ustring*>(closure);
+    stream->append(reinterpret_cast<const char*>(data), length);
 
     return CAIRO_STATUS_SUCCESS;
 }
@@ -642,13 +652,13 @@ void
 PdfInputCairo::init(void) {
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-            "<name>PDF Input</name>\n"
+        "<name>" N_("PDF Input") "</name>\n"
             "<id>org.inkscape.input.cairo-pdf</id>\n"
             "<input>\n"
                 "<extension>.pdf</extension>\n"
                 "<mimetype>application/pdf</mimetype>\n"
-                "<filetypename>Adobe PDF via poppler-cairo (*.pdf)</filetypename>\n"
-                "<filetypetooltip>PDF Document</filetypetooltip>\n"
+                "<filetypename>" N_("Adobe PDF via poppler-cairo (*.pdf)") "</filetypename>\n"
+                "<filetypetooltip>" N_("PDF Document") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new PdfInputCairo());
 } // init

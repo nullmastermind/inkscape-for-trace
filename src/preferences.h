@@ -503,6 +503,13 @@ public:
     static void unload(bool save=true);
     /*@}*/
 
+    /**
+     * Remove a node from prefs
+     * @param pref_path　Path to entry
+     *
+     */
+    void remove(Glib::ustring const &pref_path);
+
 protected:
     /* helper methods used by Entry
      * This will enable using the same Entry class with different backends.
@@ -525,7 +532,7 @@ private:
     void _loadDefaults();
     void _load();
     void _getRawValue(Glib::ustring const &path, gchar const *&result);
-    void _setRawValue(Glib::ustring const &path, gchar const *value);
+    void _setRawValue(Glib::ustring const &path, Glib::ustring const &value);
     void _reportError(Glib::ustring const &, Glib::ustring const &);
     void _keySplit(Glib::ustring const &pref_path, Glib::ustring &node_key, Glib::ustring &attr_key);
     XML::Node *_getNode(Glib::ustring const &pref_path, bool create=false);

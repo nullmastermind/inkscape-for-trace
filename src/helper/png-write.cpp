@@ -4,6 +4,7 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Whoever wrote this example in libpng documentation
+ *   Peter Bostrom
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *
@@ -33,6 +34,7 @@
 #include "preferences.h"
 #include "rdf.h"
 #include "display/cairo-utils.h"
+#include "util/units.h"
 
 /* This is an example of how to use libpng to read and write PNG files.
  * The file libpng.txt is much more verbose then this.  If you have not
@@ -140,7 +142,7 @@ sp_png_write_rgba_striped(SPDocument *doc,
 
     Inkscape::IO::dump_fopen_call(filename, "M");
     fp = Inkscape::IO::fopen_utf8name(filename, "wb");
-    g_return_val_if_fail(fp != NULL, false);
+    if(fp == NULL) return false;
 
     /* Create and initialize the png_struct with the desired error handler
      * functions.  If you want to use the default stderr and longjump method,
@@ -333,14 +335,14 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
 
     cairo_surface_t *s = cairo_image_surface_create_for_data(
         px, CAIRO_FORMAT_ARGB32, ebp->width, num_rows, stride);
-    Inkscape::DrawingContext ct(s, bbox.min());
-    ct.setSource(ebp->background);
-    ct.setOperator(CAIRO_OPERATOR_SOURCE);
-    ct.paint();
-    ct.setOperator(CAIRO_OPERATOR_OVER);
+    Inkscape::DrawingContext dc(s, bbox.min());
+    dc.setSource(ebp->background);
+    dc.setOperator(CAIRO_OPERATOR_SOURCE);
+    dc.paint();
+    dc.setOperator(CAIRO_OPERATOR_OVER);
 
     /* Render */
-    ebp->drawing->render(ct, bbox);
+    ebp->drawing->render(dc, bbox);
     cairo_surface_destroy(s);
 
     *to_free = px;
@@ -379,49 +381,42 @@ static void hide_other_items_recursively(SPObject *o, GSList *list, unsigned dke
 }
 
 
-/**
- * Export the given document as a Portable Network Graphics (PNG) file.
- *
- * \return true if succeeded (or if no action was taken), false if an error occurred.
- */
-bool sp_export_png_file (SPDocument *doc, gchar const *filename,
-                   double x0, double y0, double x1, double y1,
-                   unsigned long int width, unsigned long int height, double xdpi, double ydpi,
-                   unsigned long bgcolor,
-                   unsigned int (*status) (float, void *),
-                   void *data, bool force_overwrite,
-                   GSList *items_only)
+ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
+                                double x0, double y0, double x1, double y1,
+                                unsigned long int width, unsigned long int height, double xdpi, double ydpi,
+                                unsigned long bgcolor,
+                                unsigned int (*status) (float, void *),
+                                void *data, bool force_overwrite,
+                                GSList *items_only)
 {
     return sp_export_png_file(doc, filename, Geom::Rect(Geom::Point(x0,y0),Geom::Point(x1,y1)),
                               width, height, xdpi, ydpi, bgcolor, status, data, force_overwrite, items_only);
 }
-bool
-sp_export_png_file(SPDocument *doc, gchar const *filename,
-                   Geom::Rect const &area,
-                   unsigned long width, unsigned long height, double xdpi, double ydpi,
-                   unsigned long bgcolor,
-                   unsigned (*status)(float, void *),
-                   void *data, bool force_overwrite,
-                   GSList *items_only)
+
+ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
+                                Geom::Rect const &area,
+                                unsigned long width, unsigned long height, double xdpi, double ydpi,
+                                unsigned long bgcolor,
+                                unsigned (*status)(float, void *),
+                                void *data, bool force_overwrite,
+                                GSList *items_only)
 {
-    g_return_val_if_fail(doc != NULL, false);
-    g_return_val_if_fail(filename != NULL, false);
-    g_return_val_if_fail(width >= 1, false);
-    g_return_val_if_fail(height >= 1, false);
-    g_return_val_if_fail(!area.hasZeroArea(), false);
+    g_return_val_if_fail(doc != NULL, EXPORT_ERROR);
+    g_return_val_if_fail(filename != NULL, EXPORT_ERROR);
+    g_return_val_if_fail(width >= 1, EXPORT_ERROR);
+    g_return_val_if_fail(height >= 1, EXPORT_ERROR);
+    g_return_val_if_fail(!area.hasZeroArea(), EXPORT_ERROR);
+
 
     if (!force_overwrite && !sp_ui_overwrite_file(filename)) {
-        /* Remark: We return true so as not to invoke an error dialog in case export is cancelled
-           by the user; currently this is safe because the callers only act when false is returned.
-           If this changes in the future we need better distinction of return types (e.g., use int)
-        */
-        return true;
+        // aborted overwrite
+	return EXPORT_ABORTED;
     }
 
     doc->ensureUpToDate();
 
     /* Calculate translation by transforming to document coordinates (flipping Y)*/
-    Geom::Point translation = Geom::Point(-area[Geom::X][0], area[Geom::Y][1] - doc->getHeight());
+    Geom::Point translation = Geom::Point(-area[Geom::X][0], area[Geom::Y][1] - doc->getHeight().value("px"));
 
     /*  This calculation is only valid when assumed that (x0,y0)= area.corner(0) and (x1,y1) = area.corner(2)
      * 1) a[0] * x0 + a[2] * y1 + a[4] = 0.0
@@ -482,7 +477,7 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     // Hide items, this releases arenaitem
     doc->getRoot()->invoke_hide(dkey);
 
-    return write_status;
+    return write_status ? EXPORT_OK : EXPORT_ERROR;
 }
 
 

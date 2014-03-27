@@ -1,5 +1,3 @@
-#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_BOOL_CPP
-
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
@@ -15,6 +13,7 @@
 #include "inkscape.h"
 #include "verbs.h"
 #include "helper-fns.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 

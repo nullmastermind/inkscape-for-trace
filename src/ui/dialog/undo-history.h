@@ -3,8 +3,9 @@
  */
 /* Author:
  *   Gustav Broberg <broberg@kth.se>
+ *   Jon A. Cruz <jon@joncruz.org>
  *
- * Copyright (C) 2006 Authors
+ * Copyright (C) 2014 Authors
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
@@ -24,6 +25,7 @@
 #include "event-log.h"
 
 #include "widgets/icon.h"
+#include "ui/dialog/desktop-tracker.h"
 
 class SPDesktop;
 
@@ -48,19 +50,26 @@ public:
     property_event_type() { return _property_event_type.get_proxy(); }
 
 protected:
-
-    virtual void
-    render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
-                 Gtk::Widget& widget,
-                 const Gdk::Rectangle& background_area,
-                 const Gdk::Rectangle& cell_area,
-                 const Gdk::Rectangle& expose_area,
-                 Gtk::CellRendererState flags);
+#if WITH_GTKMM_3_0
+    virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
+                              Gtk::Widget& widget,
+                              const Gdk::Rectangle& background_area,
+                              const Gdk::Rectangle& cell_area,
+                              Gtk::CellRendererState flags);
+#else
+    virtual void render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
+                              Gtk::Widget& widget,
+                              const Gdk::Rectangle& background_area,
+                              const Gdk::Rectangle& cell_area,
+                              const Gdk::Rectangle& expose_area,
+                              Gtk::CellRendererState flags);
+#endif
 private:
 
     Glib::Property<Glib::RefPtr<Gdk::Pixbuf> > _property_icon;
     Glib::Property<unsigned int> _property_event_type;
     std::map<const unsigned int, Glib::RefPtr<Gdk::Pixbuf> > _icon_cache;
+
 };
 
 
@@ -85,15 +94,21 @@ public:
 
     static const Filter& no_filter;
 
- protected:
-
-    virtual void 
-    render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
-                 Gtk::Widget& widget,
-                 const Gdk::Rectangle& background_area,
-                 const Gdk::Rectangle& cell_area,
-                 const Gdk::Rectangle& expose_area,
-                 Gtk::CellRendererState flags);
+protected:
+#if WITH_GTKMM_3_0
+    virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
+                              Gtk::Widget& widget,
+                              const Gdk::Rectangle& background_area,
+                              const Gdk::Rectangle& cell_area,
+                              Gtk::CellRendererState flags);
+#else
+    virtual void render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
+                              Gtk::Widget& widget,
+                              const Gdk::Rectangle& background_area,
+                              const Gdk::Rectangle& cell_area,
+                              const Gdk::Rectangle& expose_area,
+                              Gtk::CellRendererState flags);
+#endif
 
 private:
 
@@ -120,8 +135,10 @@ public:
 
 protected:
 
+    SPDesktop *_desktop;
     SPDocument *_document;
     EventLog *_event_log;
+
 
     const EventLog::EventModelColumns *_columns;
 
@@ -131,8 +148,17 @@ protected:
     Gtk::TreeView _event_list_view;
     Glib::RefPtr<Gtk::TreeSelection> _event_list_selection;
 
+    DesktopTracker _deskTrack;
+    sigc::connection _desktopChangeConn;
+
     EventLog::CallbackMap _callback_connections;
 
+    static void *_handleEventLogDestroyCB(void *data);
+
+    void _connectDocument(SPDesktop* desktop, SPDocument *document);
+    void _connectEventLog();
+    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
+    void *_handleEventLogDestroy();
     void _onListSelectionChange();
     void _onExpandEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _onCollapseEvent(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);

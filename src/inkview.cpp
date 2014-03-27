@@ -38,6 +38,7 @@
 #include <sys/stat.h>
 #include <locale.h>
 
+#include <gtkmm/main.h>
 #include <glib.h>
 
 // #include <stropts.h>
@@ -46,8 +47,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
-#include <gtkmm/main.h>
-
 #include "gc-core.h"
 #include "preferences.h"
 
@@ -55,6 +54,7 @@
 #include "document.h"
 #include "svg-view.h"
 #include "svg-view-widget.h"
+#include "util/units.h"
 
 #ifdef WITH_INKJAR
 #include "io/inkjar.h"
@@ -70,9 +70,7 @@ Inkscape::Application *inkscape;
 #define bind_textdomain_codeset(p,c)
 #endif
 
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
+#include "ui/icon-names.h"
 
 extern char *optarg;
 extern int  optind, opterr;
@@ -313,8 +311,8 @@ main (int argc, const char **argv)
     w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title( GTK_WINDOW(w), ss.doc->getName() );
     gtk_window_set_default_size (GTK_WINDOW (w),
-				 MIN ((int)(ss.doc)->getWidth (), (int)gdk_screen_width () - 64),
-				 MIN ((int)(ss.doc)->getHeight (), (int)gdk_screen_height () - 64));
+				 MIN ((int)(ss.doc)->getWidth().value("px"), (int)gdk_screen_width() - 64),
+				 MIN ((int)(ss.doc)->getHeight().value("px"), (int)gdk_screen_height() - 64));
     ss.window = w;
 
     g_signal_connect (G_OBJECT (w), "delete_event", (GCallback) sp_svgview_main_delete, &ss);
@@ -323,7 +321,7 @@ main (int argc, const char **argv)
     (ss.doc)->ensureUpToDate();
     ss.view = sp_svg_view_widget_new (ss.doc);
     (ss.doc)->doUnref ();
-    SP_SVG_VIEW_WIDGET(ss.view)->setResize( false, ss.doc->getWidth(), ss.doc->getHeight() );
+    SP_SVG_VIEW_WIDGET(ss.view)->setResize( false, ss.doc->getWidth().value("px"), ss.doc->getHeight().value("px") );
     gtk_widget_show (ss.view);
     gtk_container_add (GTK_CONTAINER (w), ss.view);
 
@@ -341,44 +339,65 @@ sp_svgview_ctrlwin_delete (GtkWidget */*widget*/, GdkEvent */*event*/, void */*d
     return FALSE;
 }
 
-static GtkWidget *
-sp_svgview_control_show (struct SPSlideShow *ss)
+static GtkWidget* sp_svgview_control_show(struct SPSlideShow *ss)
 {
     if (!ctrlwin) {
-	GtkWidget *t, *b;
-	ctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_transient_for (GTK_WINDOW(ctrlwin), GTK_WINDOW(ss->window));
-    g_signal_connect (G_OBJECT (ctrlwin), "key_press_event", (GCallback) sp_svgview_main_key_press, ss);
-	g_signal_connect (G_OBJECT (ctrlwin), "delete_event", (GCallback) sp_svgview_ctrlwin_delete, NULL);
-	t = gtk_table_new (1, 4, TRUE);
-	gtk_container_add ((GtkContainer *) ctrlwin, t);
-	b = gtk_button_new_from_stock (GTK_STOCK_GOTO_FIRST);
-	gtk_table_attach ((GtkTable *) t, b, 0, 1, 0, 1,
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  0, 0);
-	g_signal_connect ((GObject *) b, "clicked", (GCallback) sp_svgview_goto_first_cb, ss);
-	b = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
-	gtk_table_attach ((GtkTable *) t, b, 1, 2, 0, 1,
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  0, 0);
-	g_signal_connect (G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_prev_cb, ss);
-	b = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-	gtk_table_attach ((GtkTable *) t, b, 2, 3, 0, 1,
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  0, 0);
-	g_signal_connect (G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_next_cb, ss);
-	b = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
-	gtk_table_attach ((GtkTable *) t, b, 3, 4, 0, 1,
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-			  0, 0);
-	g_signal_connect (G_OBJECT(b), "clicked", (GCallback) sp_svgview_goto_last_cb, ss);
-	gtk_widget_show_all (ctrlwin);
+	ctrlwin = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_window_set_resizable(GTK_WINDOW(ctrlwin), FALSE);
+        gtk_window_set_transient_for(GTK_WINDOW(ctrlwin), GTK_WINDOW(ss->window));
+        g_signal_connect(G_OBJECT (ctrlwin), "key_press_event", (GCallback) sp_svgview_main_key_press, ss);
+        g_signal_connect(G_OBJECT (ctrlwin), "delete_event", (GCallback) sp_svgview_ctrlwin_delete, NULL);
+
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkWidget *t = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+#else
+	GtkWidget *t = gtk_hbutton_box_new();
+#endif
+
+	gtk_container_add(GTK_CONTAINER(ctrlwin), t);
+
+#if GTK_CHECK_VERSION(3,10,0)
+        GtkWidget *b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-first"), GTK_ICON_SIZE_BUTTON);
+#else
+	GtkWidget *b   = gtk_button_new();
+        GtkWidget *img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-first"), GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image(GTK_BUTTON(b), img);
+#endif
+	gtk_container_add(GTK_CONTAINER(t), b);
+
+	g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_goto_first_cb, ss);
+#if GTK_CHECK_VERSION(3,10,0)
+        b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-previous"), GTK_ICON_SIZE_BUTTON);
+#else
+	b   = gtk_button_new();
+        img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-previous"), GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image(GTK_BUTTON(b), img);
+#endif
+	gtk_container_add(GTK_CONTAINER(t), b);
+
+	g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_prev_cb, ss);
+#if GTK_CHECK_VERSION(3,10,0)
+        b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-next"), GTK_ICON_SIZE_BUTTON);
+#else
+	b   = gtk_button_new();
+        img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-next"), GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image(GTK_BUTTON(b), img);
+#endif
+	gtk_container_add(GTK_CONTAINER(t), b);
+
+	g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_next_cb, ss);
+#if GTK_CHECK_VERSION(3,10,0)
+        b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-last"), GTK_ICON_SIZE_BUTTON);
+#else
+	b   = gtk_button_new();
+        img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-last"), GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image(GTK_BUTTON(b), img);
+#endif
+	gtk_container_add(GTK_CONTAINER(t), b);
+	g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_goto_last_cb, ss);
+	gtk_widget_show_all(ctrlwin);
     } else {
-	gtk_window_present ((GtkWindow *) ctrlwin);
+	gtk_window_present(GTK_WINDOW(ctrlwin));
     }
 
     return NULL;

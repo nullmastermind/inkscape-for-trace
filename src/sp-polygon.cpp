@@ -25,67 +25,29 @@
 #include "xml/repr.h"
 #include "document.h"
 
-static void sp_polygon_class_init(SPPolygonClass *pc);
-static void sp_polygon_init(SPPolygon *polygon);
+#include "sp-factory.h"
 
-static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
+namespace {
+	SPObject* createPolygon() {
+		return new SPPolygon();
+	}
 
-static gchar *sp_polygon_description(SPItem *item);
-
-static SPShapeClass *parent_class;
-
-GType sp_polygon_get_type(void)
-{
-    static GType type = 0;
-
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPPolygonClass),
-            0, // base_init
-            0, // base_finalize
-            (GClassInitFunc)sp_polygon_class_init,
-            0, // class_finalize
-            0, // class_data
-            sizeof(SPPolygon),
-            0, // n_preallocs
-            (GInstanceInitFunc)sp_polygon_init,
-            0 // value_table
-        };
-        type = g_type_register_static(SP_TYPE_SHAPE, "SPPolygon", &info, static_cast<GTypeFlags>(0));
-    }
-
-    return type;
+	bool polygonRegistered = SPFactory::instance().registerObject("svg:polygon", createPolygon);
 }
 
-static void sp_polygon_class_init(SPPolygonClass *pc)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) pc;
-    SPItemClass *item_class = (SPItemClass *) pc;
-
-    parent_class = (SPShapeClass *) g_type_class_ref(SP_TYPE_SHAPE);
-
-    sp_object_class->build = sp_polygon_build;
-    sp_object_class->write = sp_polygon_write;
-    sp_object_class->set = sp_polygon_set;
-
-    item_class->description = sp_polygon_description;
+SPPolygon::SPPolygon() : SPShape() {
 }
 
-static void sp_polygon_init(SPPolygon */*polygon*/)
-{
-    /* Nothing here */
+SPPolygon::~SPPolygon() {
 }
 
-static void sp_polygon_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
+void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPPolygon* object = this;
+
+    SPShape::build(document, repr);
 
     object->readAttr( "points" );
 }
-
 
 /*
  * sp_svg_write_polygon: Write points attribute for polygon tag.
@@ -110,25 +72,24 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
     return g_strdup(os.str().c_str());
 }
 
-static Inkscape::XML::Node *sp_polygon_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPShape *shape = SP_SHAPE(object);
+Inkscape::XML::Node* SPPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     // Tolerable workaround: we need to update the object's curve before we set points=
     // because it's out of sync when e.g. some extension attrs of the polygon or star are changed in XML editor
-    shape->setShape();
+	this->set_shape();
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:polygon");
     }
 
     /* We can safely write points here, because all subclasses require it too (Lauris) */
-    gchar *str = sp_svg_write_polygon(shape->_curve->get_pathvector());
-    repr->setAttribute("points", str);
-    g_free(str);
-
-    if (((SPObjectClass *) (parent_class))->write) {
-        ((SPObjectClass *) (parent_class))->write(object, xml_doc, repr, flags);
+    /* While saving polygon element without points attribute _curve is NULL (see bug 1202753) */
+    if (this->_curve != NULL) {
+        gchar *str = sp_svg_write_polygon(this->_curve->get_pathvector());
+        repr->setAttribute("points", str);
+        g_free(str);
     }
+
+    SPShape::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -140,25 +101,23 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
         (*p)++;
     }
 
-    if (*p == '\0') {
+    if (**p == '\0') {
         return false;
     }
 
     gchar *e = NULL;
     *v = g_ascii_strtod(*p, &e);
+
     if (e == *p) {
         return false;
     }
 
     *p = e;
+
     return true;
 }
 
-
-void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
-{
-    SPPolygon *polygon = SP_POLYGON(object);
-
+void SPPolygon::set(unsigned int key, const gchar* value) {
     switch (key) {
         case SP_ATTR_POINTS: {
             if (!value) {
@@ -166,6 +125,7 @@ void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
                  * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing. */
                 break;
             }
+
             SPCurve *curve = new SPCurve();
             gboolean hascpt = FALSE;
 
@@ -174,11 +134,13 @@ void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
 
             while (TRUE) {
                 gdouble x;
+
                 if (!polygon_get_value(&cptr, &x)) {
                     break;
                 }
 
                 gdouble y;
+
                 if (!polygon_get_value(&cptr, &y)) {
                     /* fixme: It is an error for an odd number of points to be specified.  We
                      * should display the points up to now (as we currently do, though perhaps
@@ -208,21 +170,19 @@ void sp_polygon_set(SPObject *object, unsigned int key, const gchar *value)
                  * a single-point polygon in SPCurve. TODO: add a testcase with only one coordinate pair */
                 curve->closepath();
             }
-            (SP_SHAPE(polygon))->setCurve(curve, TRUE);
+
+            this->setCurve(curve, TRUE);
             curve->unref();
             break;
         }
         default:
-            if (((SPObjectClass *) parent_class)->set) {
-                ((SPObjectClass *) parent_class)->set(object, key, value);
-            }
+            SPShape::set(key, value);
             break;
     }
 }
 
-static gchar *sp_polygon_description(SPItem */*item*/)
-{
-    return g_strdup(_("<b>Polygon</b>"));
+gchar* SPPolygon::description() const {
+	return g_strdup(_("<b>Polygon</b>"));
 }
 
 /*

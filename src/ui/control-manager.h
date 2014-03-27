@@ -14,18 +14,35 @@
 #include <memory>
 #include <sigc++/sigc++.h>
 
-#include "display/sp-canvas-item.h"
+#include "ui/control-types.h"
 
-struct SPCanvasItem;
 struct SPCanvasGroup;
+struct SPCanvasItem;
+struct SPCtrlLine;
+struct SPCtrlCurve;
+
+namespace Geom
+{
+
+class Point;
+
+} // namespace Geom
 
 namespace Inkscape {
+
+enum CtrlLineType {
+    CTLINE_PRIMARY,
+    CTLINE_SECONDARY,
+    CTLINE_TERTIARY,
+};
+
 
 class ControlManagerImpl;
 
 class ControlManager
 {
 public:
+
     static ControlManager &getManager();
 
     ~ControlManager();
@@ -34,9 +51,26 @@ public:
 
     SPCanvasItem *createControl(SPCanvasGroup *parent, ControlType type);
 
+    SPCtrlLine *createControlLine(SPCanvasGroup *parent, CtrlLineType type = CTLINE_PRIMARY);
+
+    SPCtrlLine *createControlLine(SPCanvasGroup *parent, Geom::Point const &p1, Geom::Point const &p2, CtrlLineType type = CTLINE_PRIMARY);
+
+    SPCtrlCurve *createControlCurve(SPCanvasGroup *parent, Geom::Point const &p0, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3, CtrlLineType type = CTLINE_PRIMARY);
+
     void track(SPCanvasItem *item);
 
     void updateItem(SPCanvasItem *item);
+
+    bool setControlType(SPCanvasItem *item, ControlType type);
+
+    bool isActive(SPCanvasItem *item) const;
+    void setActive(SPCanvasItem *item, bool active);
+
+    bool isPrelight(SPCanvasItem *item) const;
+    void setPrelight(SPCanvasItem *item, bool prelight);
+
+    bool isSelected(SPCanvasItem *item) const;
+    void setSelected(SPCanvasItem *item, bool selected);
 
 private:
     ControlManager();

@@ -11,7 +11,12 @@
 #include <stdio.h>
 #include <io.h>
 #include <conio.h>
-#define _WIN32_WINNT 0x0501
+
+#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0501)
+# undef _WIN32_WINNT 
+# define _WIN32_WINNT 0x0501
+#endif
+
 #include <windows.h>
 
 extern int main (int argc, char **argv);
@@ -25,10 +30,10 @@ extern int main (int argc, char **argv);
 #endif
 
 int _stdcall
-WinMain (struct HINSTANCE__ *hInstance,
-	 struct HINSTANCE__ *hPrevInstance,
-	 char               *lpszCmdLine,
-	 int                 nCmdShow)
+WinMain (struct HINSTANCE__ */*hInstance*/,
+	 struct HINSTANCE__ */*hPrevInstance*/,
+	 char               */*lpszCmdLine*/,
+	 int                 /*nCmdShow*/)
 {
     if (fileno (stdout) != -1 &&
  	  _get_osfhandle (fileno (stdout)) != -1)

@@ -101,9 +101,6 @@ struct EditWidgetInterface
     /// Update the "inactive desktop" indicator
     virtual void deactivateDesktop() = 0;
 
-    /// Set rulers to position
-    virtual void viewSetPosition (Geom::Point p) = 0;
-
     /// Update rulers from current values
     virtual void updateRulers() = 0;
 
@@ -118,6 +115,9 @@ struct EditWidgetInterface
 
     /// Toggle CMS on/off and set preference value accordingly
     virtual void toggleColorProfAdjust() = 0;
+
+    /// Is CMS on/off
+    virtual bool colorProfAdjustEnabled() = 0;
 
     /// Temporarily block signals and update zoom display
     virtual void updateZoom() = 0;
@@ -148,7 +148,7 @@ struct EditWidgetInterface
     virtual bool showInfoDialog( Glib::ustring const &message ) = 0;
 
     /// Open yes/no dialog with warning text and confirmation question.
-    virtual bool warnDialog (gchar*) = 0;
+    virtual bool warnDialog (Glib::ustring const &) = 0;
 
     virtual Inkscape::UI::Widget::Dock* getDock () = 0;
 };

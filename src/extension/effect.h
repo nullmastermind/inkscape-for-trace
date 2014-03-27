@@ -20,7 +20,7 @@ namespace Gtk {
 	class VBox;
 }
 
-struct SPDocument;
+class SPDocument;
 
 namespace Inkscape {
 
@@ -58,7 +58,7 @@ class Effect : public Extension {
             /** \brief  Name with elipses if that makes sense */
             gchar * _elip_name;
         protected:
-            virtual SPAction * make_action (Inkscape::UI::View::View * view);
+            virtual SPAction * make_action (Inkscape::ActionContext const & context);
         public:
             /** \brief Use the Verb initializer with the same parameters. */
             EffectVerb(gchar const * id,
@@ -67,7 +67,7 @@ class Effect : public Extension {
                        gchar const * image,
                        Effect *      effect,
                        bool          showPrefs) :
-                    Verb(id, _(name), _(tip), image), 
+                    Verb(id, _(name), _(tip), image, _("Extensions")),
                     _effect(effect), 
                     _showPrefs(showPrefs),
                     _elip_name(NULL) {

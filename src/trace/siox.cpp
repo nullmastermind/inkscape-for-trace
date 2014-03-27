@@ -2,18 +2,8 @@
    Copyright 2005, 2006 by Gerald Friedland, Kristian Jantz and Lars Knipping
 
    Conversion to C++ for Inkscape by Bob Jamison
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+   
+   Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "siox.h"
 
@@ -21,6 +11,7 @@
 #include <stdarg.h>
 #include <map>
 #include <algorithm>
+#include <cstdlib>
 
 
 namespace org
@@ -591,7 +582,7 @@ bool SioxImage::writePPM(const std::string &fileName)
     if (!f)
         return false;
 
-    fprintf(f, "P6 %d %d 255\n", width, height);
+    fprintf(f, "P6 %u %u 255\n", width, height);
 
     for (unsigned int y=0 ; y<height; y++)
         {
@@ -898,7 +889,7 @@ SioxImage Siox::extractForeground(const SioxImage &originalImage,
         return workImage;
         }
 
-    trace("knownBg:%zu knownFg:%zu", knownBg.size(), knownFg.size());
+    trace("knownBg:%u knownFg:%u", static_cast<unsigned int>(knownBg.size()), static_cast<unsigned int>(knownFg.size()));
 
 
     std::vector<CieLab> bgSignature ;
@@ -933,7 +924,7 @@ SioxImage Siox::extractForeground(const SioxImage &originalImage,
 
     //trace("### bgSignature:%d", bgSignature.size());
 
-    if (bgSignature.size() < 1)
+    if (bgSignature.empty())
         {
         // segmentation impossible
         error("Signature size is < 1.  Segmentation is impossible");

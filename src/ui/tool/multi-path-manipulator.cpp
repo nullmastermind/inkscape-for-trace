@@ -11,9 +11,8 @@
  */
 
 #include <boost/shared_ptr.hpp>
-#include <glib.h>
-#include <glibmm/i18n.h>
 #include "node.h"
+#include <glibmm/i18n.h>
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
@@ -30,21 +29,6 @@
 #include "verbs.h"
 
 #include <gdk/gdkkeysyms.h>
-
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
-
-#ifdef USE_GNU_HASHES
-namespace __gnu_cxx {
-template<>
-struct hash<Inkscape::UI::NodeList::iterator> {
-    size_t operator()(Inkscape::UI::NodeList::iterator const &n) const {
-        return reinterpret_cast<size_t>(n.ptr());
-    }
-};
-} // namespace __gnu_cxx
-#endif // USE_GNU_HASHES
 
 namespace Inkscape {
 namespace UI {
@@ -69,7 +53,6 @@ typedef std::pair<double, IterPair> DistanceMapItem;
 void find_join_iterators(ControlPointSelection &sel, IterPairList &pairs)
 {
     IterSet join_iters;
-    DistanceMap dists;
 
     // find all endnodes in selection
     for (ControlPointSelection::iterator i = sel.begin(); i != sel.end(); ++i) {
@@ -230,10 +213,12 @@ void MultiPathManipulator::shiftSelection(int dir)
     SubpathList::iterator last_j;
     NodeList::iterator last_k;
     bool anything_found = false;
+    bool anynode_found = false;
 
     for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
         SubpathList &sp = i->second->subpathList();
         for (SubpathList::iterator j = sp.begin(); j != sp.end(); ++j) {
+            anynode_found = true;
             for (NodeList::iterator k = (*j)->begin(); k != (*j)->end(); ++k) {
                 if (k->selected()) {
                     last_i = i;
@@ -255,10 +240,12 @@ void MultiPathManipulator::shiftSelection(int dir)
     if (!anything_found) {
         // select first / last node
         // this should never fail because there must be at least 1 non-empty manipulator
-        if (dir == 1) {
+        if (anynode_found) {
+          if (dir == 1) {
             _selection.insert((*_mmap.begin()->second->subpathList().begin())->begin().ptr());
-        } else {
+          } else {
             _selection.insert((--(*--(--_mmap.end())->second->subpathList().end())->end()).ptr());
+          }
         }
         return;
     }
@@ -341,23 +328,27 @@ void MultiPathManipulator::setSegmentType(SegmentType type)
 
 void MultiPathManipulator::insertNodes()
 {
+    if (_selection.empty()) return;
     invokeForAll(&PathManipulator::insertNodes);
     _done(_("Add nodes"));
 }
 void MultiPathManipulator::insertNodesAtExtrema(ExtremumType extremum)
 {
+    if (_selection.empty()) return;
     invokeForAll(&PathManipulator::insertNodeAtExtremum, extremum);
     _done(_("Add extremum nodes"));
 }
 
 void MultiPathManipulator::duplicateNodes()
 {
+    if (_selection.empty()) return;
     invokeForAll(&PathManipulator::duplicateNodes);
     _done(_("Duplicate nodes"));
 }
 
 void MultiPathManipulator::joinNodes()
 {
+    if (_selection.empty()) return;
     invokeForAll(&PathManipulator::hideDragPoint);
     // Node join has two parts. In the first one we join two subpaths by fusing endpoints
     // into one. In the second we fuse nodes in each subpath.
@@ -435,6 +426,7 @@ void MultiPathManipulator::deleteNodes(bool keep_shape)
 /** Join selected endpoints to create segments. */
 void MultiPathManipulator::joinSegments()
 {
+    if (_selection.empty()) return;
     IterPairList joins;
     find_join_iterators(_selection, joins);
 
@@ -467,6 +459,7 @@ void MultiPathManipulator::deleteSegments()
 
 void MultiPathManipulator::alignNodes(Geom::Dim2 d)
 {
+    if (_selection.empty()) return;
     _selection.align(d);
     if (d == Geom::X) {
         _done("Align nodes to a horizontal line");
@@ -477,6 +470,7 @@ void MultiPathManipulator::alignNodes(Geom::Dim2 d)
 
 void MultiPathManipulator::distributeNodes(Geom::Dim2 d)
 {
+    if (_selection.empty()) return;
     _selection.distribute(d);
     if (d == Geom::X) {
         _done("Distrubute nodes horizontally");
@@ -498,6 +492,7 @@ void MultiPathManipulator::reverseSubpaths()
 
 void MultiPathManipulator::move(Geom::Point const &delta)
 {
+    if (_selection.empty()) return;
     _selection.transform(Geom::Translate(delta));
     _done("Move nodes");
 }
@@ -554,7 +549,12 @@ void MultiPathManipulator::updateOutlineColors()
     //}
 }
 
-bool MultiPathManipulator::event(SPEventContext *event_context, GdkEvent *event)
+void MultiPathManipulator::updateHandles()
+{
+    invokeForAll(&PathManipulator::updateHandles);
+}
+
+bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event)
 {
     _tracker.event(event);
     guint key = 0;
@@ -671,6 +671,9 @@ bool MultiPathManipulator::event(SPEventContext *event_context, GdkEvent *event)
                 // b) ctrl+del preserves shape (del_preserves_shape is false), and control is pressed
                 // Hence xor
                 deleteNodes(del_preserves_shape ^ held_control(event->key));
+
+                // Delete any selected gradient nodes as well
+                event_context->deleteSelectedDrag(held_control(event->key));
             }
             return true;
         case GDK_KEY_c:
@@ -723,7 +726,7 @@ bool MultiPathManipulator::event(SPEventContext *event_context, GdkEvent *event)
         case GDK_KEY_u:
         case GDK_KEY_U:
             if (held_only_shift(event->key)) {
-                // Shift+L - make segments curves
+                // Shift+U - make segments curves
                 setSegmentType(SEGMENT_CUBIC_BEZIER);
                 return true;
             }

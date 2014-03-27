@@ -1,5 +1,3 @@
-#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_TEXT_CPP
-
 /*
  * Copyright (C) Maximilian Albert 2008 <maximilian.albert@gmail.com>
  *
@@ -11,6 +9,8 @@
  */
 
 #include "ui/widget/registered-widget.h"
+#include <glibmm/i18n.h>
+
 #include "live_effects/parameter/text.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"

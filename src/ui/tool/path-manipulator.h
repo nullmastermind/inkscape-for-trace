@@ -21,8 +21,8 @@
 #include "ui/tool/manipulator.h"
 
 struct SPCanvasItem;
-struct SPCurve;
-struct SPPath;
+class SPCurve;
+class SPPath;
 
 namespace Inkscape {
 namespace XML { class Node; }
@@ -56,7 +56,7 @@ public:
     PathManipulator(MultiPathManipulator &mpm, SPPath *path, Geom::Affine const &edit_trans,
         guint32 outline_color, Glib::ustring lpe_key);
     ~PathManipulator();
-    virtual bool event(SPEventContext *, GdkEvent *);
+    virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *);
 
     bool empty();
     void writeXML();
@@ -86,6 +86,7 @@ public:
     void showPathDirection(bool show);
     void setLiveOutline(bool set);
     void setLiveObjects(bool set);
+    void updateHandles();
     void setControlsTransform(Geom::Affine const &);
     void hideDragPoint();
     MultiPathManipulator &mpm() { return _multi_path_manipulator; }
@@ -130,7 +131,7 @@ private:
 
     SubpathList _subpaths;
     MultiPathManipulator &_multi_path_manipulator;
-    SPPath *_path;
+    SPPath *_path; ///< can be an SPPath or an Inkscape::LivePathEffect::Effect  !!!
     SPCurve *_spcurve; // in item coordinates
     SPCanvasItem *_outline;
     CurveDragPoint *_dragpoint; // an invisible control point hoverng over curve

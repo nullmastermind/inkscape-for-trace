@@ -2,7 +2,7 @@
  * Inkscape Widget Utilities
  *
  * Authors:
- *   Bryce W. Harrington <brycehar@bryceharrington.com>
+ *   Bryce W. Harrington <brycehar@bryceharrington.org>
  *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2003 Bryce W. Harrington
@@ -17,13 +17,22 @@
 #include <cstring>
 #include <string>
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
+
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkmm/grid.h>
+#else
 #include <gtkmm/table.h>
+#endif
 
 #include "selection.h"
 
-#include "helper/unit-menu.h"
+#include "spw-utilities.h"
 
 #include <gtk/gtk.h>
 
@@ -31,8 +40,11 @@
  * Creates a label widget with the given text, at the given col, row
  * position in the table.
  */
-Gtk::Label *
-spw_label(Gtk::Table *table, const gchar *label_text, int col, int row, Gtk::Widget* target)
+#if GTK_CHECK_VERSION(3,0,0)
+Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int row, Gtk::Widget* target)
+#else
+Gtk::Label * spw_label(Gtk::Table *table, const gchar *label_text, int col, int row, Gtk::Widget* target)
+#endif
 {
   Gtk::Label *label_widget = new Gtk::Label();
   g_assert(label_widget != NULL);
@@ -47,7 +59,18 @@ spw_label(Gtk::Table *table, const gchar *label_text, int col, int row, Gtk::Wid
   }
   label_widget->set_alignment(1.0, 0.5);
   label_widget->show();
+
+#if GTK_CHECK_VERSION(3,0,0)
+  label_widget->set_hexpand();
+  label_widget->set_halign(Gtk::ALIGN_FILL);
+  label_widget->set_valign(Gtk::ALIGN_CENTER);
+  label_widget->set_margin_left(4);
+  label_widget->set_margin_right(4);
+  table->attach(*label_widget, col, row, 1, 1);
+#else
   table->attach(*label_widget, col, col+1, row, row+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 4, 0);
+#endif
+
   return label_widget;
 }
 
@@ -60,8 +83,19 @@ spw_label_old(GtkWidget *table, const gchar *label_text, int col, int row)
   g_assert(label_widget != NULL);
   gtk_misc_set_alignment (GTK_MISC (label_widget), 1.0, 0.5);
   gtk_widget_show (label_widget);
-  gtk_table_attach (GTK_TABLE (table), label_widget, col, col+1, row, row+1,
+
+#if GTK_CHECK_VERSION(3,0,0)
+  gtk_widget_set_margin_left(label_widget, 4);
+  gtk_widget_set_margin_right(label_widget, 4);
+  gtk_widget_set_hexpand(label_widget, TRUE);
+  gtk_widget_set_halign(label_widget, GTK_ALIGN_FILL);
+  gtk_widget_set_valign(label_widget, GTK_ALIGN_CENTER);
+  gtk_grid_attach(GTK_GRID(table), label_widget, col, row, 1, 1);
+#else
+  gtk_table_attach(GTK_TABLE (table), label_widget, col, col+1, row, row+1,
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 4, 0);
+#endif
+
   return label_widget;
 }
 
@@ -69,14 +103,26 @@ spw_label_old(GtkWidget *table, const gchar *label_text, int col, int row)
  * Creates a horizontal layout manager with 4-pixel spacing between children
  * and space for 'width' columns.
  */
-Gtk::HBox *
-spw_hbox(Gtk::Table * table, int width, int col, int row)
+#if GTK_CHECK_VERSION(3,0,0)
+Gtk::HBox * spw_hbox(Gtk::Grid * table, int width, int col, int row)
+#else
+Gtk::HBox * spw_hbox(Gtk::Table * table, int width, int col, int row)
+#endif
 {
   /* Create a new hbox with a 4-pixel spacing between children */
   Gtk::HBox *hb = new Gtk::HBox(false, 4);
   g_assert(hb != NULL);
   hb->show();
+
+#if GTK_CHECK_VERSION(3,0,0)
+  hb->set_hexpand();
+  hb->set_halign(Gtk::ALIGN_FILL);
+  hb->set_valign(Gtk::ALIGN_CENTER);
+  table->attach(*hb, col, row, width, 1);
+#else
   table->attach(*hb, col, col+width, row, row+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 0, 0);
+#endif
+
   return hb;
 }
 
@@ -116,16 +162,33 @@ spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
   g_assert(dialog != NULL);
   g_assert(table  != NULL);
 
-	GtkWidget *l = gtk_label_new (label);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_widget_show (l);
+  GtkWidget *l = gtk_label_new (label);
+  gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+  gtk_widget_show (l);
+
+#if GTK_CHECK_VERSION(3,0,0)
+  gtk_widget_set_halign(l, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand(l, TRUE);
+  gtk_widget_set_valign(l, GTK_ALIGN_CENTER);
+  gtk_grid_attach(GTK_GRID(table), l, 0, row, 1, 1);
+#else
   gtk_table_attach (GTK_TABLE (table), l, 0, 1, row, row+1,
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+#endif
 
   b = gtk_check_button_new ();
   gtk_widget_show (b);
+
+#if GTK_CHECK_VERSION(3,0,0)
+  gtk_widget_set_halign(b, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand(b, TRUE);
+  gtk_widget_set_valign(b, GTK_ALIGN_CENTER);
+  gtk_grid_attach(GTK_GRID(table), b, 1, row, 1, 1);
+#else
   gtk_table_attach (GTK_TABLE (table), b, 1, 2, row, row+1,
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+#endif
+
   g_object_set_data (G_OBJECT (b), "key", key);
   g_object_set_data (G_OBJECT (dialog), key, b);
   g_signal_connect (G_OBJECT (b), "toggled", cb, dialog);
@@ -152,47 +215,22 @@ spw_dropdown(GtkWidget * dialog, GtkWidget * table,
   spw_label_old(table, label_text, 0, row);
 
   gtk_widget_show (selector);
+
+#if GTK_CHECK_VERSION(3,0,0)
+  gtk_widget_set_halign(selector, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand(selector, TRUE);
+  gtk_widget_set_valign(selector, GTK_ALIGN_CENTER);
+  gtk_grid_attach(GTK_GRID(table), selector, 1, row, 1, 1);
+#else
   gtk_table_attach (GTK_TABLE (table), selector, 1, 2, row, row+1,
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+#endif
+
   g_object_set_data (G_OBJECT (dialog), key, selector);
   return selector;
 }
 
-/**
- * Creates a unit selector widget, used for selecting whether one wishes
- * to measure screen elements in millimeters, points, etc.  This is a
- * compound unit that includes a label as well as the dropdown selector.
- */
-GtkWidget *
-spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
-		  const gchar * label_text, gchar * key, int row,
-		GtkWidget * us, GCallback cb, bool can_be_negative)
-{
-  GtkWidget * sb;
-  GtkObject * a;
-
-  g_assert(dialog != NULL);
-  g_assert(table  != NULL);
-  g_assert(us     != NULL);
-
-  spw_label_old(table, label_text, 0, row);
-
-  a = gtk_adjustment_new (0.0, can_be_negative?-1e6:0, 1e6, 1.0, 10.0, 10.0);
-  g_assert(a != NULL);
-  g_object_set_data (G_OBJECT (a), "key", key);
-  g_object_set_data (G_OBJECT (a), "unit_selector", us);
-  g_object_set_data (G_OBJECT (dialog), key, a);
-  sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
-  sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 4);
-  g_assert(sb != NULL);
-  gtk_widget_show (sb);
-  gtk_table_attach (GTK_TABLE (table), sb, 1, 2, row, row+1,
-		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-  g_signal_connect (G_OBJECT (a), "value_changed", cb, dialog);
-  return sb;
-}
-
-void
+static void
 sp_set_font_size_recursive (GtkWidget *w, gpointer font)
 {
 	guint size = GPOINTER_TO_UINT (font);
@@ -231,7 +269,7 @@ gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
 {
 	gpointer r = NULL;
 
-	if (w && GTK_IS_OBJECT(w)) {
+	if (w && G_IS_OBJECT(w)) {
 		r = g_object_get_data(G_OBJECT(w), (gchar *) key);
 	}
 	if (r) return r;
@@ -253,9 +291,8 @@ gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
 GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
 {
 	gchar *r = NULL;
-	GtkWidget *child;
 
-	if (w && GTK_IS_OBJECT(w)) {
+	if (w && G_IS_OBJECT(w)) {
 		r = (gchar *) g_object_get_data(G_OBJECT(w), key);
 	}
 	if (r && !strcmp (r, value)) return w;
@@ -263,7 +300,7 @@ GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
 	if (GTK_IS_CONTAINER(w)) {
 		GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
 		for (GList *i = ch; i != NULL; i = i->next) {
-			child = sp_search_by_value_recursive(GTK_WIDGET(i->data), key, value);
+			GtkWidget *child = sp_search_by_value_recursive(GTK_WIDGET(i->data), key, value);
 			if (child) return child;
 		}
 	}

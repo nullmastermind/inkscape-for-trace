@@ -69,71 +69,6 @@ static void sp_xml_ns_register_defaults();
 static char *sp_xml_ns_auto_prefix(char const *uri);
 
 /*#####################
-# UTILITY
-#####################*/
-
-/**
- * Locale-independent double to string conversion
- */
-unsigned int sp_xml_dtoa(gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
-{
-    double dival, fval, epsilon;
-    int idigits, ival, i;
-    i = 0;
-    if (val < 0.0) {
-        buf[i++] = '-';
-        val = -val;
-    }
-    /* Determine number of integral digits */
-    if (val >= 1.0) {
-        idigits = (int) floor(log10(val));
-    } else {
-        idigits = 0;
-    }
-    /* Determine the actual number of fractional digits */
-    fprec = MAX(fprec, tprec - idigits);
-    /* Find epsilon */
-    epsilon = 0.5 * pow(10.0, - (double) fprec);
-    /* Round value */
-    val += epsilon;
-    /* Extract integral and fractional parts */
-    dival = floor(val);
-    ival = (int) dival;
-    fval = val - dival;
-    /* Write integra */
-    if (ival > 0) {
-        char c[32];
-        int j;
-        j = 0;
-        while (ival > 0) {
-            c[32 - (++j)] = '0' + (ival % 10);
-            ival /= 10;
-        }
-        memcpy(buf + i, &c[32 - j], j);
-        i += j;
-        tprec -= j;
-    } else {
-        buf[i++] = '0';
-        tprec -= 1;
-    }
-    if ((fprec > 0) && (padf || (fval > epsilon))) {
-        buf[i++] = '.';
-        while ((fprec > 0) && (padf || (fval > epsilon))) {
-            fval *= 10.0;
-            dival = floor(fval);
-            fval -= dival;
-            buf[i++] = '0' + (int) dival;
-            fprec -= 1;
-        }
-
-    }
-    buf[i] = 0;
-    return i;
-}
-
-
-
-/*#####################
 # MAIN
 #####################*/
 
@@ -261,8 +196,13 @@ gchar const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested)
             GQuark const prefix_key=g_quark_from_string(suggested);
 
             SPXMLNs *found=namespaces;
-            while ( found && found->prefix != prefix_key ) {
-                found = found->next;
+            while (found) {
+                if (found->prefix != prefix_key) {
+                    found = found->next;
+                }
+                else {
+                    break;
+                }
             }
 
             if (found) { // prefix already used?
@@ -492,13 +432,11 @@ unsigned int sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *v
 
 unsigned int sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, double *val)
 {
-    gchar const *v;
-
     g_return_val_if_fail(repr != NULL, FALSE);
     g_return_val_if_fail(key != NULL, FALSE);
     g_return_val_if_fail(val != NULL, FALSE);
 
-    v = repr->attribute(key);
+    gchar const *v = repr->attribute(key);
 
     if (v != NULL) {
         *val = g_ascii_strtod(v, NULL);
@@ -583,6 +521,8 @@ unsigned int sp_repr_get_point(Inkscape::XML::Node *repr, gchar const *key, Geom
     g_return_val_if_fail(val != NULL, FALSE);
 
     gchar const *v = repr->attribute(key);
+
+    g_return_val_if_fail(v != NULL, FALSE);
 
     gchar ** strarray = g_strsplit(v, ",", 2);
 

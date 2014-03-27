@@ -1,4 +1,3 @@
-#define INKSCAPE_LPE_OFFSET_CPP
 /** \file
  * LPE <offset> implementation
  */
@@ -11,6 +10,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <glibmm/i18n.h>
 
 #include "live_effects/lpe-offset.h"
 #include "sp-shape.h"
@@ -39,7 +40,7 @@ LPEOffset::~LPEOffset()
 }
 
 void
-LPEOffset::doOnApply(SPLPEItem *lpeitem)
+LPEOffset::doOnApply(SPLPEItem const* lpeitem)
 {
     offset_pt.param_set_and_write_new_value(*(SP_SHAPE(lpeitem)->_curve->first_point()));
 }

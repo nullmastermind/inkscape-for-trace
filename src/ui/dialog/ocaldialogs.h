@@ -13,12 +13,27 @@
 #ifndef __OCAL_DIALOG_H__
 #define __OCAL_DIALOG_H__
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 //Gtk includes
 #include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/listviewtext.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/window.h>
+
+#include <cairomm/refptr.h>
+
+#if GTK_CHECK_VERSION(3,6,0)
+# include <gtkmm/searchentry.h>
+#endif
+
 #include <giomm/file.h>
 
 //Inkscape includes
@@ -62,7 +77,7 @@ public:
     FileDialogBase(const Glib::ustring &title, Gtk::Window& /*parent*/) : Gtk::Window(Gtk::WINDOW_TOPLEVEL)
     {
         set_title(title);
-        sp_transientize((GtkWidget*) gobj());
+        sp_transientize(GTK_WIDGET(gobj()));
         
         // Allow shrinking of window so labels wrap correctly
         set_resizable(true);
@@ -272,7 +287,12 @@ private:
     unsigned int spinner_step;
     sigc::connection timeout;
     bool draw_spinner;
+
+#if !WITH_GTKMM_3_0
     bool _on_expose_event(GdkEventExpose* event);
+#endif
+
+    bool _on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
     bool on_timeout();
 };
 
@@ -286,7 +306,6 @@ public:
     void hide_box_loading();
     void set_image(std::string path);
     void clear();
-    bool _on_expose_event(GdkEventExpose* event);
 
 private:
     LoadingBox* box_loading;
@@ -295,6 +314,12 @@ private:
     WrapLabel* label_title;
     WrapLabel* label_description;
     WrapLabel* label_time;
+    
+#if !WITH_GTKMM_3_0
+    bool _on_expose_event(GdkEventExpose* event);
+#endif
+
+    bool _on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 };
 
 /**
@@ -316,6 +341,7 @@ public:
     Gtk::Label* label;
 };
 
+#if !GTK_CHECK_VERSION(3,6,0)
 /**
  * A Gtk::Entry with search & clear icons
  */
@@ -328,6 +354,7 @@ private:
     void _on_icon_pressed(Gtk::EntryIconPosition icon_position, const GdkEventButton* event);
     void _on_changed();
 };
+#endif
 
 /**
  * A box which paints an overlay of the OCAL logo
@@ -337,7 +364,10 @@ class LogoArea : public Gtk::EventBox
 public:
     LogoArea();
 private:
+#if !WITH_GTKMM_3_0
     bool _on_expose_event(GdkEventExpose* event);
+#endif
+    bool _on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
     bool draw_logo;
     Cairo::RefPtr<Cairo::ImageSurface> logo_mask;
 };
@@ -350,7 +380,10 @@ class BaseBox : public Gtk::EventBox
 public:
     BaseBox();
 private:
+#if !WITH_GTKMM_3_0
     bool _on_expose_event(GdkEventExpose* event);
+#endif
+    bool _on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 };
 
 enum {
@@ -431,7 +464,13 @@ protected:
 private:
     Glib::ustring filename_image;
     Glib::ustring filename_thumbnail;
+
+#if GTK_CHECK_VERSION(3,6,0)
+    Gtk::SearchEntry *entry_search;
+#else
     SearchEntry *entry_search;
+#endif
+
     LogoArea *drawingarea_logo;
     SearchResultList *list_results;
     PreviewWidget *preview_files;

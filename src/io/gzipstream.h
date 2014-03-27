@@ -17,7 +17,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
+#include <vector>
 #include "inkscapestream.h"
 #include <zlib.h>
 
@@ -98,7 +98,7 @@ public:
     
     virtual void flush();
     
-    virtual void put(int ch);
+    virtual int put(gunichar ch);
 
 private:
 

@@ -39,9 +39,10 @@
 #include "sp-tref.h"
 #include "sp-tspan.h"
 #include "xml/repr.h"
+#include "xml/sp-css-attr.h"
 #include "libnrtype/font-style-to-pos.h"
 #include "sp-path.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 
 #include "desktop-style.h"
 #include "svg/svg-icc-color.h"
@@ -199,7 +200,7 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write
     if (!intercepted) {
         // If we have an event context, update its cursor (TODO: it could be neater to do this with the signal sent above, but what if the signal gets intercepted?)
         if (desktop->event_context) {
-            sp_event_context_update_cursor(desktop->event_context);
+            desktop->event_context->sp_event_context_update_cursor();
         }
 
         // Remove text attributes if not text...
@@ -445,9 +446,9 @@ stroke_average_width (GSList const *objects)
 
 static bool vectorsClose( std::vector<double> const &lhs, std::vector<double> const &rhs )
 {
-    static double epsilon = 1e-6;
     bool isClose = false;
     if ( lhs.size() == rhs.size() ) {
+        static double epsilon = 1e-6;
         isClose = true;
         for ( size_t i = 0; (i < lhs.size()) && isClose; ++i ) {
             isClose = fabs(lhs[i] - rhs[i]) < epsilon;
@@ -500,7 +501,8 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
             || SP_IS_FLOWTSPAN(parent) || SP_IS_FLOWLINE(parent));
 
         // 1. Bail out with QUERY_STYLE_MULTIPLE_DIFFERENT if necessary
-
+        
+        // cppcheck-suppress comparisonOfBoolWithInt
         if ((!paintImpossible) && (!paint->isSameType(*paint_res) || (paint_res->set != paint_effectively_set))) {
             return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different types of paint
         }
@@ -585,11 +587,15 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
        paint_res->colorSet = paint->colorSet;
        paint_res->currentcolor = paint->currentcolor;
        if (paint_res->set && paint_effectively_set && paint->isPaintserver()) { // copy the server
+           gchar const *string = NULL; // memory leak results if style->get* called inside sp_style_set_to_uri_string.
            if (isfill) {
-               sp_style_set_to_uri_string (style_res, true, style->getFillURI());
+               string = style->getFillURI();
+               sp_style_set_to_uri_string (style_res, true, string);
            } else {
-               sp_style_set_to_uri_string (style_res, false, style->getStrokeURI());
+               string = style->getStrokeURI();
+               sp_style_set_to_uri_string (style_res, false, string);
            }
+           if(string)g_free((void *) string);
        }
        paint_res->set = paint_effectively_set;
        style_res->fill_rule.computed = style->fill_rule.computed; // no averaging on this, just use the last one
@@ -1096,6 +1102,8 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
         style_res->font_stretch.value = style_res->font_stretch.computed = style->font_stretch.computed;
         style_res->font_variant.value = style_res->font_variant.computed = style->font_variant.computed;
         style_res->text_align.value = style_res->text_align.computed = style->text_align.computed;
+        style_res->font_size.value = style->font_size.value;
+        style_res->font_size.unit = style->font_size.unit;
     }
 
     if (texts == 0 || !set)
@@ -1115,7 +1123,7 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
 /**
  * Write to style_res the baseline numbers.
  */
-int
+static int
 objects_query_baselines (GSList *objects, SPStyle *style_res)
 {
     bool different = false;
@@ -1271,7 +1279,7 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
     }
 }
 
-int
+static int
 objects_query_fontspecification (GSList *objects, SPStyle *style_res)
 {
     bool different = false;
@@ -1333,7 +1341,7 @@ objects_query_fontspecification (GSList *objects, SPStyle *style_res)
     }
 }
 
-int
+static int
 objects_query_blend (GSList *objects, SPStyle *style_res)
 {
     const int empty_prev = -2;

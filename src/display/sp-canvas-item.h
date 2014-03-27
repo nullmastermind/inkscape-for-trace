@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <2geom/rect.h>
+#include "ui/control-types.h"
 
 G_BEGIN_DECLS
 
@@ -38,31 +39,17 @@ typedef struct _SPCanvasItemClass SPCanvasItemClass;
 
 #define SP_TYPE_CANVAS_ITEM (SPCanvasItem::getType())
 #define SP_CANVAS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_CANVAS_ITEM, SPCanvasItem))
+#define SP_CANVAS_ITEM_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_CANVAS_ITEM, SPCanvasItemClass))
 #define SP_IS_CANVAS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_CANVAS_ITEM))
 #define SP_CANVAS_ITEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), SP_TYPE_CANVAS_ITEM, SPCanvasItemClass))
 
-namespace Inkscape
-{
-
-// Rough initial set. Most likely needs refinement.
-enum ControlType {
-    CTRL_TYPE_UNKNOWN,
-    CTRL_TYPE_ADJ_HANDLE,
-    CTRL_TYPE_ANCHOR,
-    CTRL_TYPE_POINT,
-    CTRL_TYPE_ROTATE,
-    CTRL_TYPE_SIZER,
-    CTRL_TYPE_SHAPER,
-    CTRL_TYPE_ORIGIN
-};
-
-} // namespace Inkscape
 
 /**
  * An SPCanvasItem refers to a SPCanvas and to its parent item; it has
  * four coordinates, a bounding rectangle, and a transformation matrix.
  */
-struct SPCanvasItem : public GtkObject {
+struct SPCanvasItem {
+    GInitiallyUnowned parent_instance;
     static GType getType();
 
     SPCanvas *canvas;
@@ -76,17 +63,22 @@ struct SPCanvasItem : public GtkObject {
     Geom::Affine xform;
 
     Inkscape::ControlType ctrlType;
+    Inkscape::ControlFlags ctrlFlags;
 
     // Replacement for custom GtkObject flag enumeration
     gboolean visible;
     gboolean need_update;
     gboolean need_affine;
+ 
+    bool in_destruction;
 };
 
 /**
  * The vtable of an SPCanvasItem.
  */
-struct _SPCanvasItemClass : public GtkObjectClass {
+struct _SPCanvasItemClass {
+    GInitiallyUnownedClass parent_class;
+
     void (* update) (SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
 
     void (* render) (SPCanvasItem *item, SPCanvasBuf *buf);
@@ -94,6 +86,16 @@ struct _SPCanvasItemClass : public GtkObjectClass {
 
     int (* event) (SPCanvasItem *item, GdkEvent *event);
     void (* viewbox_changed) (SPCanvasItem *item, Geom::IntRect const &new_area);
+
+    /* Default signal handler for the ::destroy signal, which is
+     *  invoked to request that references to the widget be dropped.
+     *  If an object class overrides destroy() in order to perform class
+     *  specific destruction then it must still invoke its superclass'
+     *  implementation of the method after it is finished with its
+     *  own cleanup. (See gtk_widget_real_destroy() for an example of
+     *  how to do this).
+     */
+    void (*destroy)  (SPCanvasItem *object);
 };
 
 /**
@@ -104,8 +106,6 @@ SPCanvasItem *sp_canvas_item_new(SPCanvasGroup *parent, GType type, const gchar 
 G_END_DECLS
 
 
-#define sp_canvas_item_set g_object_set
-
 void sp_canvas_item_affine_absolute(SPCanvasItem *item, Geom::Affine const &aff);
 
 void sp_canvas_item_raise(SPCanvasItem *item, int positions);
@@ -113,6 +113,7 @@ void sp_canvas_item_lower(SPCanvasItem *item, int positions);
 bool sp_canvas_item_is_visible(SPCanvasItem *item);
 void sp_canvas_item_show(SPCanvasItem *item);
 void sp_canvas_item_hide(SPCanvasItem *item);
+void sp_canvas_item_destroy(SPCanvasItem *item);
 int sp_canvas_item_grab(SPCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime);
 void sp_canvas_item_ungrab(SPCanvasItem *item, guint32 etime);
 

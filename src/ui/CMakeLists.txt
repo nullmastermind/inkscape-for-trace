@@ -14,12 +14,37 @@ set(ui_SRC
 	tool/manipulator.cpp
 	tool/modifier-tracker.cpp
 	tool/multi-path-manipulator.cpp
-	tool/node-tool.cpp
 	tool/node.cpp
 	tool/path-manipulator.cpp
 	tool/selectable-control-point.cpp
 	tool/selector.cpp
 	tool/transform-handle-set.cpp
+
+	tools/arc-tool.cpp
+	tools/box3d-tool.cpp
+	tools/calligraphic-tool.cpp
+	tools/connector-tool.cpp
+	tools/dropper-tool.cpp
+	tools/dynamic-base.cpp
+	tools/eraser-tool.cpp
+	tools/flood-tool.cpp
+	tools/freehand-base.cpp
+	tools/gradient-tool.cpp
+	tools/lpe-tool.cpp
+	tools/measure-tool.cpp
+	tools/mesh-tool.cpp
+	tools/node-tool.cpp
+	tools/pencil-tool.cpp
+	tools/pen-tool.cpp
+	tools/rect-tool.cpp
+	tools/select-tool.cpp
+	tools/spiral-tool.cpp
+	tools/spray-tool.cpp
+	tools/star-tool.cpp
+	tools/text-tool.cpp
+	tools/tool-base.cpp
+	tools/tweak-tool.cpp
+	tools/zoom-tool.cpp
 
 	dialog/aboutbox.cpp
 	dialog/align-and-distribute.cpp
@@ -42,6 +67,7 @@ set(ui_SRC
 	dialog/filter-effects-dialog.cpp
 	dialog/find.cpp
 	dialog/floating-behavior.cpp
+	dialog/font-substitution.cpp
 	dialog/glyphs.cpp
 	dialog/grid-arrange-tab.cpp
 	dialog/guides.cpp
@@ -54,21 +80,25 @@ set(ui_SRC
 	dialog/livepatheffect-editor.cpp
 	dialog/memory.cpp
 	dialog/messages.cpp
+	dialog/new-from-template.cpp
 	dialog/object-attributes.cpp
 	dialog/object-properties.cpp
 	dialog/ocaldialogs.cpp
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
-	dialog/scriptdialog.cpp
+	dialog/symbols.cpp
 	dialog/xml-tree.cpp
 	# dialog/session-player.cpp
 	dialog/spellcheck.cpp
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
+	dialog/template-load-tab.cpp
+	dialog/template-widget.cpp
 	dialog/text-edit.cpp
 	dialog/tile.cpp
 	dialog/tracedialog.cpp
+	dialog/pixelartdialog.cpp
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	# dialog/whiteboard-connect.cpp
@@ -83,10 +113,10 @@ set(ui_SRC
 	widget/dock.cpp
 	widget/entity-entry.cpp
 	widget/entry.cpp
-	widget/frame.cpp
 	widget/filter-effect-chooser.cpp
-	widget/handlebox.cpp
-	widget/icon-widget.cpp
+	widget/frame.cpp
+	widget/gimpcolorwheel.c
+	widget/gimpspinscale.c
 	widget/imageicon.cpp
 	widget/imagetoggler.cpp
 	widget/labelled.cpp
@@ -103,20 +133,18 @@ set(ui_SRC
 	widget/registry.cpp
 	widget/rendering-options.cpp
 	widget/rotateable.cpp
-	widget/ruler.cpp
 	widget/scalar-unit.cpp
 	widget/scalar.cpp
 	widget/selected-style.cpp
+	widget/spin-scale.cpp
 	widget/spin-slider.cpp
 	widget/spinbutton.cpp
 	widget/style-subject.cpp
 	widget/style-swatch.cpp
-	widget/svg-canvas.cpp
 	widget/text.cpp
 	widget/tolerance-slider.cpp
-	widget/toolbox.cpp
 	widget/unit-menu.cpp
-	widget/zoom-status.cpp
+	widget/unit-tracker.cpp
 
 	view/view.cpp
 	view/view-widget.cpp
@@ -126,6 +154,7 @@ set(ui_SRC
 	# Headers
 	clipboard.h
 	control-manager.h
+	control-types.h
 	icon-names.h
 	previewable.h
 	previewfillable.h
@@ -158,6 +187,7 @@ set(ui_SRC
 	dialog/filter-effects-dialog.h
 	dialog/find.h
 	dialog/floating-behavior.h
+	dialog/font-substitution.h
 	dialog/glyphs.h
 	dialog/guides.h
 	dialog/grid-arrange-tab.h
@@ -170,17 +200,22 @@ set(ui_SRC
 	dialog/livepatheffect-editor.h
 	dialog/memory.h
 	dialog/messages.h
+	dialog/new-from-template.h
 	dialog/object-attributes.h
 	dialog/object-properties.h
 	dialog/ocaldialogs.h
 	dialog/panel-dialog.h
 	dialog/polar-arrange-tab.h
+	dialog/pixelartdialog.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
-	dialog/scriptdialog.h
+	
 	dialog/spellcheck.h
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
+	dialog/symbols.h
+	dialog/template-load-tab.h
+	dialog/template-widget.h
 	dialog/text-edit.h
 	dialog/tile.h
 	dialog/tracedialog.h
@@ -196,7 +231,6 @@ set(ui_SRC
 	tool/manipulator.h
 	tool/modifier-tracker.h
 	tool/multi-path-manipulator.h
-	tool/node-tool.h
 	tool/node-types.h
 	tool/node.h
 	tool/path-manipulator.h
@@ -205,9 +239,31 @@ set(ui_SRC
 	tool/shape-record.h
 	tool/transform-handle-set.h
 
-	view/edit-widget-interface.h
-	view/view-widget.h
-	view/view.h
+	tools/arc-tool.h
+	tools/box3d-tool.h
+	tools/calligraphic-tool.h
+	tools/connector-tool.h
+	tools/dropper-tool.h
+	tools/dynamic-base.h
+	tools/eraser-tool.h
+	tools/flood-tool.h
+	tools/freehand-base.h
+	tools/gradient-tool.h
+	tools/lpe-tool.h
+	tools/measure-tool.h
+	tools/mesh-tool.h
+	tools/node-tool.h
+	tools/pencil-tool.h
+	tools/pen-tool.h
+	tools/rect-tool.h
+	tools/select-tool.h
+	tools/spiral-tool.h
+	tools/spray-tool.h
+	tools/star-tool.h
+	tools/text-tool.h
+	tools/tool-base.h
+	tools/tweak-tool.h
+	tools/zoom-tool.h
 
 	widget/anchor-selector.h
 	widget/attr-widget.h
@@ -219,10 +275,10 @@ set(ui_SRC
 	widget/dock.h
 	widget/entity-entry.h
 	widget/entry.h
-	widget/frame.h
 	widget/filter-effect-chooser.h
-	widget/handlebox.h
-	widget/icon-widget.h
+	widget/frame.h
+	widget/gimpspinscale.h
+	widget/gimpcolorwheel.h
 	widget/imageicon.h
 	widget/imagetoggler.h
 	widget/labelled.h
@@ -240,20 +296,22 @@ set(ui_SRC
 	widget/registry.h
 	widget/rendering-options.h
 	widget/rotateable.h
-	widget/ruler.h
 	widget/scalar-unit.h
 	widget/scalar.h
 	widget/selected-style.h
+	widget/spin-scale.h
 	widget/spin-slider.h
 	widget/spinbutton.h
 	widget/style-subject.h
 	widget/style-swatch.h
-	widget/svg-canvas.h
 	widget/text.h
 	widget/tolerance-slider.h
-	widget/toolbox.h
 	widget/unit-menu.h
-	widget/zoom-status.h
+	widget/unit-tracker.h
+
+	view/edit-widget-interface.h
+	view/view-widget.h
+	view/view.h
 )
 
 if(WIN32)

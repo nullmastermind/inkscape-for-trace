@@ -23,6 +23,8 @@
 // You might need to include other 2geom files. You can add them here:
 #include <2geom/path.h>
 
+#include <glibmm/i18n.h>
+
 //#include "knot-holder-entity.h"
 //#include "knotholder.h"
 
@@ -93,7 +95,7 @@ class KnotHolderEntityMyHandle : public LPEKnotHolderEntity
 public:
     // the set() and get() methods must be implemented, click() is optional
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
     //virtual void knot_click(guint state);
 };
 

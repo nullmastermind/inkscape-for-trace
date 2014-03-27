@@ -20,7 +20,12 @@
  */
 
 Shape::Shape()
-  : qrsData(NULL),
+  : nbQRas(0),
+    firstQRas(-1),
+    lastQRas(-1),
+    qrsData(NULL),
+    nbInc(0),
+    maxInc(0),
     iData(NULL),
     sTree(NULL),
     sEvts(NULL),
@@ -54,10 +59,10 @@ void Shape::Affiche(void)
 {
   printf("sh=%p nbPt=%i nbAr=%i\n", this, static_cast<int>(_pts.size()), static_cast<int>(_aretes.size())); // localizing ok
   for (unsigned int i=0; i<_pts.size(); i++) {
-    printf("pt %i : x=(%f %f) dI=%i dO=%i\n",i, _pts[i].x[0], _pts[i].x[1], _pts[i].dI, _pts[i].dO); // localizing ok
+    printf("pt %u : x=(%f %f) dI=%i dO=%i\n",i, _pts[i].x[0], _pts[i].x[1], _pts[i].dI, _pts[i].dO); // localizing ok
   }
   for (unsigned int i=0; i<_aretes.size(); i++) {
-    printf("ar %i : dx=(%f %f) st=%i en=%i\n",i, _aretes[i].dx[0], _aretes[i].dx[1], _aretes[i].st, _aretes[i].en); // localizing ok
+    printf("ar %u : dx=(%f %f) st=%i en=%i\n",i, _aretes[i].dx[0], _aretes[i].dx[1], _aretes[i].st, _aretes[i].en); // localizing ok
   }
 }
 
@@ -130,7 +135,12 @@ Shape::MakeQuickRasterData (bool nVal)
       if (_has_quick_raster_data == false)
         {
           _has_quick_raster_data = true;
-          qrsData = (quick_raster_data*)realloc(qrsData, maxAr * sizeof(quick_raster_data));
+          quick_raster_data* new_qrsData = static_cast<quick_raster_data*>(realloc(qrsData, maxAr * sizeof(quick_raster_data)));
+          if (!new_qrsData) {
+              g_error("Not enough memory available for reallocating Shape::qrsData");
+          } else {
+              qrsData = new_qrsData;
+          }
         }
     }
   else

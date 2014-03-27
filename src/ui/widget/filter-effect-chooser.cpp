@@ -22,11 +22,9 @@ namespace UI {
 namespace Widget {
 
 SimpleFilterModifier::SimpleFilterModifier(int flags)
-    : _hb_blur(false, 0),
-      _lb_blend(_("Blend mode:")),
-      _lb_blur(_("_Blur:")),
+    : _lb_blend(_("Blend mode:")),
       _blend(BlendModeConverter, SP_ATTR_INVALID, false),
-      _blur(0, 0, 100, 1, 0.01, 1)
+      _blur(_("Blur (%)"), 0, 0, 100, 1, 0.01, 1)
 {
     _flags = flags;
 
@@ -36,14 +34,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
         _hb_blend.pack_start(_blend);
     }
     if (flags & BLUR) {
-        add(_hb_blur);
-        #if WITH_GTKMM_2_22
-            _lb_blur.set_alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER);
-        #else
-            _lb_blur.set_alignment(Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER);
-        #endif
-        _hb_blur.pack_start(_lb_blur, false, false, 0);
-        _hb_blur.pack_start(_blur, true, true, 0);
+        add(_blur);
     }
 
     show_all_children();
@@ -51,8 +42,6 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
     _hb_blend.set_spacing(12);
     _lb_blend.set_use_underline();
     _lb_blend.set_mnemonic_widget(_blend);
-    _lb_blur.set_use_underline();
-    _lb_blur.set_mnemonic_widget(_blur.get_scale());
     _blend.signal_changed().connect(signal_blend_blur_changed());
     _blur.signal_value_changed().connect(signal_blend_blur_changed());
 }

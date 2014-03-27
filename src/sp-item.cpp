@@ -73,62 +73,29 @@
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"
 
+#include "util/units.h"
+
 #define noSP_ITEM_DEBUG_IDLE
 
-SPObjectClass * SPItemClass::static_parent_class=0;
 
-/**
- * Registers SPItem class and returns its type number.
- */
-GType
-SPItem::getType(void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPItemClass),
-            NULL, NULL,
-            (GClassInitFunc) SPItemClass::sp_item_class_init,
-            NULL, NULL,
-            sizeof(SPItem),
-            16,
-            (GInstanceInitFunc) sp_item_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPItem", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+static SPItemView*          sp_item_view_list_remove(SPItemView     *list,
+                                                     SPItemView     *view);
 
-/**
- * SPItem vtable initialization.
- */
-void
-SPItemClass::sp_item_class_init(SPItemClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
-    static_parent_class = (SPObjectClass *)g_type_class_ref(SP_TYPE_OBJECT);
+SPItem::SPItem() : SPObject() {
+	this->sensitive = 0;
+	this->clip_ref = NULL;
+	this->avoidRef = NULL;
+	this->_is_evaluated = false;
+	this->stop_paint = 0;
+	this->_evaluated_status = StatusUnknown;
+	this->bbox_valid = 0;
+	this->freeze_stroke_width = false;
+	this->transform_center_x = 0;
+	this->transform_center_y = 0;
+	this->display = NULL;
+	this->mask_ref = NULL;
 
-    sp_object_class->build = SPItem::sp_item_build;
-    sp_object_class->release = SPItem::sp_item_release;
-    sp_object_class->set = SPItem::sp_item_set;
-    sp_object_class->update = SPItem::sp_item_update;
-    sp_object_class->write = SPItem::sp_item_write;
-
-    klass->description = SPItem::sp_item_private_description;
-    klass->snappoints = SPItem::sp_item_private_snappoints;
-}
-
-/**
- * Callback for SPItem object initialization.
- */
-void SPItem::sp_item_init(SPItem *item)
-{
-    item->init();
-}
-
-void SPItem::init() {
     sensitive = TRUE;
     bbox_valid = FALSE;
 
@@ -152,9 +119,12 @@ void SPItem::init() {
 
     avoidRef = new SPAvoidRef(this);
 
-    new (&constraints) std::vector<SPGuideConstraint>();
+    //new (&constraints) std::vector<SPGuideConstraint>();
 
-    new (&_transformed_signal) sigc::signal<void, Geom::Affine const *, SPItem *>();
+    //new (&_transformed_signal) sigc::signal<void, Geom::Affine const *, SPItem *>();
+}
+
+SPItem::~SPItem() {
 }
 
 bool SPItem::isVisibleAndUnlocked() const {
@@ -285,7 +255,7 @@ SPItem::unsetCenter() {
     transform_center_y = 0;
 }
 
-bool SPItem::isCenterSet() {
+bool SPItem::isCenterSet() const {
     return (transform_center_x != 0 || transform_center_y != 0);
 }
 
@@ -368,8 +338,54 @@ void SPItem::lowerToBottom() {
     }
 }
 
-void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
+/*
+ * Move this SPItem into or after another SPItem in the doc
+ * \param  target - the SPItem to move into or after
+ * \param  intoafter - move to after the target (false), move inside (sublayer) of the target (true)
+ */
+void SPItem::moveTo(SPItem *target, gboolean intoafter) {
+
+    Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : NULL );
+    Inkscape::XML::Node *our_ref = getRepr();
+    gboolean first = FALSE;
+
+    if (target_ref == our_ref) {
+        // Move to ourself ignore
+        return;
+    }
+
+    if (!target_ref) {
+        // Assume move to the "first" in the top node, find the top node
+        target_ref = our_ref;
+        while (target_ref->parent() != target_ref->root()) {
+            target_ref = target_ref->parent();
+        }
+        first = TRUE;
+    }
+
+    if (intoafter) {
+        // Move this inside of the target at the end
+        our_ref->parent()->removeChild(our_ref);
+        target_ref->addChild(our_ref, NULL);
+    } else if (target_ref->parent() != our_ref->parent()) {
+        // Change in parent, need to remove and add
+        our_ref->parent()->removeChild(our_ref);
+        target_ref->parent()->addChild(our_ref, target_ref);
+    } else if (!first) {
+        // Same parent, just move
+        our_ref->parent()->changeOrder(our_ref, target_ref);
+    }
+
+    if (first && parent) {
+        // If "first" ensure it appears after the defs etc
+        lowerToBottom();
+        return;
+    }
+}
+
+void SPItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPItem* object = this;
+
     object->readAttr( "style" );
     object->readAttr( "transform" );
     object->readAttr( "clip-path" );
@@ -381,14 +397,11 @@ void SPItem::sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML
     object->readAttr( "inkscape:connector-avoid" );
     object->readAttr( "inkscape:connection-points" );
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->build) {
-        (* ((SPObjectClass *) (SPItemClass::static_parent_class))->build)(object, document, repr);
-    }
+    SPObject::build(document, repr);
 }
 
-void SPItem::sp_item_release(SPObject *object)
-{
-    SPItem *item = (SPItem *) object;
+void SPItem::release() {
+	SPItem* item = this;
 
     // Note: do this here before the clip_ref is deleted, since calling
     // ensureUpToDate() for triggered routing may reference
@@ -401,20 +414,18 @@ void SPItem::sp_item_release(SPObject *object)
     delete item->clip_ref;
     delete item->mask_ref;
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->release) {
-        ((SPObjectClass *) SPItemClass::static_parent_class)->release(object);
-    }
+    SPObject::release();
 
     while (item->display) {
         item->display = sp_item_view_list_remove(item->display, item->display);
     }
 
-    item->_transformed_signal.~signal();
+    //item->_transformed_signal.~signal();
 }
 
-void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
-{
-    SPItem *item = (SPItem *) object;
+void SPItem::set(unsigned int key, gchar const* value) {
+    SPItem *item = this;
+    SPItem* object = item;
 
     switch (key) {
         case SP_ATTR_TRANSFORM: {
@@ -467,9 +478,6 @@ void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
         case SP_ATTR_CONNECTOR_AVOID:
             item->avoidRef->setAvoid(value);
             break;
-        case SP_ATTR_CONNECTION_POINTS:
-            item->avoidRef->setConnectionPoints(value);
-            break;
         case SP_ATTR_TRANSFORM_CENTER_X:
             if (value) {
                 item->transform_center_x = g_strtod(value, NULL);
@@ -498,9 +506,7 @@ void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
                 sp_style_read_from_object(object->style, object);
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
-                if (((SPObjectClass *) (SPItemClass::static_parent_class))->set) {
-                    (* ((SPObjectClass *) (SPItemClass::static_parent_class))->set)(object, key, value);
-                }
+                SPObject::set(key, value);
             }
             break;
     }
@@ -508,6 +514,7 @@ void SPItem::sp_item_set(SPObject *object, unsigned key, gchar const *value)
 
 void SPItem::clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
 {
+    item->bbox_valid = FALSE; // force a re-evaluation
     if (old_clip) {
         SPItemView *v;
         /* Hide clippath */
@@ -536,7 +543,7 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
     if (old_mask) {
         /* Hide mask */
         for (SPItemView *v = item->display; v != NULL; v = v->next) {
-            sp_mask_hide(SP_MASK(old_mask), v->arenaitem->key());
+            SP_MASK(old_mask)->sp_mask_hide(v->arenaitem->key());
         }
     }
     if (SP_IS_MASK(mask)) {
@@ -545,23 +552,21 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
-            Inkscape::DrawingItem *ai = sp_mask_show(SP_MASK(mask),
+            Inkscape::DrawingItem *ai = SP_MASK(mask)->sp_mask_show(
                                            v->arenaitem->drawing(),
                                            v->arenaitem->key());
             v->arenaitem->setMask(ai);
-            sp_mask_set_bbox(SP_MASK(mask), v->arenaitem->key(), bbox);
+            SP_MASK(mask)->sp_mask_set_bbox(v->arenaitem->key(), bbox);
             mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
 }
 
-void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    SPItem *item = SP_ITEM(object);
+void SPItem::update(SPCtx* /*ctx*/, guint flags) {
+    SPItem *item = this;
+    SPItem* object = item;
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->update) {
-        (* ((SPObjectClass *) (SPItemClass::static_parent_class))->update)(object, ctx, flags);
-    }
+//    SPObject::onUpdate(ctx, flags);
 
     // any of the modifications defined in sp-object.h might change bbox,
     // so we invalidate it unconditionally
@@ -586,7 +591,7 @@ void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
             }
             if (mask) {
                 for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                    sp_mask_set_bbox(mask, v->arenaitem->key(), bbox);
+                    mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
                 }
             }
         }
@@ -594,15 +599,16 @@ void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
                 v->arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(object->style->opacity.value));
+                v->arenaitem->setAntialiasing(object->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
+                v->arenaitem->setIsolation( object->style->isolation.value );
+                v->arenaitem->setBlendMode( object->style->blend_mode.value );
                 v->arenaitem->setVisible(!item->isHidden());
             }
         }
     }
-
-    /* Update bounding box data used by filters */
+    /* Update bounding box in user space, used for filter and objectBoundingBox units */
     if (item->style->filter.set && item->display) {
         Geom::OptRect item_bbox = item->geometricBounds();
-
         SPItemView *itemview = item->display;
         do {
             if (itemview->arenaitem)
@@ -615,9 +621,9 @@ void SPItem::sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
         item->avoidRef->handleSettingChange();
 }
 
-Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPItem *item = SP_ITEM(object);
+Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    SPItem *item = this;
+    SPItem* object = item;
 
     // in the case of SP_OBJECT_WRITE_BUILD, the item should always be newly created,
     // so we need to add any children from the underlying object to the new repr
@@ -662,26 +668,33 @@ Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML
 
     if (item->clip_ref){
         if (item->clip_ref->getObject()) {
-            const gchar *value = g_strdup_printf ("url(%s)", item->clip_ref->getURI()->toString());
+            gchar *uri = item->clip_ref->getURI()->toString();
+            const gchar *value = g_strdup_printf ("url(%s)", uri);
             repr->setAttribute ("clip-path", value);
             g_free ((void *) value);
+            g_free ((void *) uri);
         }
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
-            const gchar *value = g_strdup_printf ("url(%s)", item->mask_ref->getURI()->toString());
+            gchar *uri = item->mask_ref->getURI()->toString();
+            const gchar *value = g_strdup_printf ("url(%s)", uri);
             repr->setAttribute ("mask", value);
             g_free ((void *) value);
+            g_free ((void *) uri);
         }
     }
 
-    if (((SPObjectClass *) (SPItemClass::static_parent_class))->write) {
-        ((SPObjectClass *) (SPItemClass::static_parent_class))->write(object, xml_doc, repr, flags);
-    }
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }
 
+// CPPIFY: make pure virtual
+Geom::OptRect SPItem::bbox(Geom::Affine const & /*transform*/, SPItem::BBoxType /*type*/) const {
+	//throw;
+	return Geom::OptRect();
+}
 /**
  * Get item's geometric bounding box in this item's coordinate system.
  *
@@ -690,10 +703,12 @@ Inkscape::XML::Node *SPItem::sp_item_write(SPObject *const object, Inkscape::XML
 Geom::OptRect SPItem::geometricBounds(Geom::Affine const &transform) const
 {
     Geom::OptRect bbox;
+
     // call the subclass method
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox) {
-        bbox = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox(this, transform, SPItem::GEOMETRIC_BBOX);
-    }
+    // CPPIFY
+    //bbox = this->bbox(transform, SPItem::GEOMETRIC_BBOX);
+    bbox = const_cast<SPItem*>(this)->bbox(transform, SPItem::GEOMETRIC_BBOX);
+
     return bbox;
 }
 
@@ -710,10 +725,10 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     Geom::OptRect bbox;
 
     if ( style && style->filter.href && style->getFilter() && SP_IS_FILTER(style->getFilter())) {
-         // call the subclass method
-        if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox) {
-            bbox = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox(this, Geom::identity(), SPItem::VISUAL_BBOX);
-        }
+        // call the subclass method
+    	// CPPIFY
+    	//bbox = this->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
+    	bbox = const_cast<SPItem*>(this)->bbox(Geom::identity(), SPItem::GEOMETRIC_BBOX); // see LP Bug 1229971
 
         SPFilter *filter = SP_FILTER(style->getFilter());
         // default filer area per the SVG spec:
@@ -756,10 +771,10 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         bbox = Geom::OptRect(minp, maxp);
         *bbox *= transform;
     } else {
-         // call the subclass method
-        if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox) {
-            bbox = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->bbox(this, transform, SPItem::VISUAL_BBOX);
-        }
+        // call the subclass method
+    	// CPPIFY
+    	//bbox = this->bbox(transform, SPItem::VISUAL_BBOX);
+    	bbox = const_cast<SPItem*>(this)->bbox(transform, SPItem::VISUAL_BBOX);
     }
     if (clip_ref->getObject()) {
         bbox.intersectWith(SP_CLIPPATH(clip_ref->getObject())->geometricBounds(transform));
@@ -767,6 +782,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
 
     return bbox;
 }
+
 Geom::OptRect SPItem::bounds(BBoxType type, Geom::Affine const &transform) const
 {
     if (type == GEOMETRIC_BBOX) {
@@ -811,7 +827,7 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
     /// @fixme hardcoded desktop transform
-    Geom::Affine m = Geom::Scale(1, -1) * Geom::Translate(0, document->getHeight());
+    Geom::Affine m = Geom::Scale(1, -1) * Geom::Translate(0, document->getHeight().value("px"));
     Geom::OptRect ret = documentVisualBounds();
     if (ret) *ret *= m;
     return ret;
@@ -835,18 +851,17 @@ Geom::OptRect SPItem::desktopBounds(BBoxType type) const
     }
 }
 
-unsigned SPItem::pos_in_parent()
-{
+unsigned int SPItem::pos_in_parent() const {
     g_assert(parent != NULL);
     g_assert(SP_IS_OBJECT(parent));
 
-    SPObject *object = this;
+    unsigned int pos = 0;
 
-    unsigned pos=0;
     for ( SPObject *iter = parent->firstChild() ; iter ; iter = iter->next) {
-        if ( iter == object ) {
+        if (iter == this) {
             return pos;
         }
+
         if (SP_IS_ITEM(iter)) {
             pos++;
         }
@@ -856,23 +871,22 @@ unsigned SPItem::pos_in_parent()
     return 0;
 }
 
-void SPItem::sp_item_private_snappoints(SPItem const * /*item*/, std::vector<Inkscape::SnapCandidatePoint> &/*p*/, Inkscape::SnapPreferences const * /*snapprefs*/)
-{
+// CPPIFY: make pure virtual, see below!
+void SPItem::snappoints(std::vector<Inkscape::SnapCandidatePoint> & /*p*/, Inkscape::SnapPreferences const */*snapprefs*/) const {
+	//throw;
+}
     /* This will only be called if the derived class doesn't override this.
      * see for example sp_genericellipse_snappoints in sp-ellipse.cpp
      * We don't know what shape we could be dealing with here, so we'll just
      * do nothing
      */
-}
-
 
 void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const
 {
     // Get the snappoints of the item
-    SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(this);
-    if (item_class.snappoints) {
-        item_class.snappoints(this, p, snapprefs);
-    }
+	// CPPIFY
+	//this->snappoints(p, snapprefs);
+	const_cast<SPItem*>(this)->snappoints(p, snapprefs);
 
     // Get the snappoints at the item's center
     if (snapprefs != NULL && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
@@ -907,26 +921,30 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
     }
 }
 
+// CPPIFY: make pure virtual
+void SPItem::print(SPPrintContext* /*ctx*/) {
+	//throw;
+}
+
 void SPItem::invoke_print(SPPrintContext *ctx)
 {
     if ( !isHidden() ) {
-        if ( reinterpret_cast<SPItemClass *>(G_OBJECT_GET_CLASS(this))->print ) {
-            if (!transform.isIdentity()
-                || style->opacity.value != SP_SCALE24_MAX)
-            {
-                sp_print_bind(ctx, transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
-                reinterpret_cast<SPItemClass *>(G_OBJECT_GET_CLASS(this))->print(this, ctx);
-                sp_print_release(ctx);
-            } else {
-                reinterpret_cast<SPItemClass *>(G_OBJECT_GET_CLASS(this))->print(this, ctx);
-            }
-        }
+    	if (!transform.isIdentity() || style->opacity.value != SP_SCALE24_MAX) {
+			sp_print_bind(ctx, transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
+			this->print(ctx);
+			sp_print_release(ctx);
+    	} else {
+    		this->print(ctx);
+    	}
     }
 }
 
-gchar *SPItem::sp_item_private_description(SPItem */*item*/)
-{
-    return g_strdup(_("Object"));
+const char* SPItem::displayName() const {
+    return _("Object");
+}
+
+gchar* SPItem::description() const {
+    return g_strdup("");
 }
 
 /**
@@ -934,36 +952,45 @@ gchar *SPItem::sp_item_private_description(SPItem */*item*/)
  *
  * Must be freed by caller.
  */
-gchar *SPItem::description()
-{
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->description) {
-        gchar *s = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->description(this);
-        if (s && clip_ref->getObject()) {
-            gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
-            g_free (s);
-            s = snew;
-        }
-        if (s && mask_ref->getObject()) {
-            gchar *snew = g_strdup_printf (_("%s; <i>masked</i>"), s);
-            g_free (s);
-            s = snew;
-        }
-        if ( style && style->filter.href && style->filter.href->getObject() ) {
-            const gchar *label = style->filter.href->getObject()->label();
-            gchar *snew = 0;
-            if (label) {
-                snew = g_strdup_printf (_("%s; <i>filtered (%s)</i>"), s, _(label));
-            } else {
-                snew = g_strdup_printf (_("%s; <i>filtered</i>"), s);
-            }
-            g_free (s);
-            s = snew;
-        }
-        return s;
-    }
+gchar *SPItem::detailedDescription() const {
+        gchar* s = g_strdup_printf("<b>%s</b> %s",
+                    this->displayName(), this->description());
 
-    g_assert_not_reached();
-    return NULL;
+	if (s && clip_ref->getObject()) {
+		gchar *snew = g_strdup_printf (_("%s; <i>clipped</i>"), s);
+		g_free (s);
+		s = snew;
+	}
+
+	if (s && mask_ref->getObject()) {
+		gchar *snew = g_strdup_printf (_("%s; <i>masked</i>"), s);
+		g_free (s);
+		s = snew;
+	}
+
+	if ( style && style->filter.href && style->filter.href->getObject() ) {
+		const gchar *label = style->filter.href->getObject()->label();
+		gchar *snew = 0;
+
+		if (label) {
+			snew = g_strdup_printf (_("%s; <i>filtered (%s)</i>"), s, _(label));
+		} else {
+			snew = g_strdup_printf (_("%s; <i>filtered</i>"), s);
+		}
+
+		g_free (s);
+		s = snew;
+	}
+
+	return s;
+}
+
+/**
+ * Returns true if the item is filtered, false otherwise.  Used with groups/lists to determine how many, or if any, are filtered
+ *
+ */
+bool SPItem::isFiltered() const {
+	return (style && style->filter.href && style->filter.href->getObject());
 }
 
 /**
@@ -981,12 +1008,17 @@ unsigned SPItem::display_key_new(unsigned numkeys)
     return dkey - numkeys;
 }
 
+// CPPIFY: make pure virtual
+Inkscape::DrawingItem* SPItem::show(Inkscape::Drawing& /*drawing*/, unsigned int /*key*/, unsigned int /*flags*/) {
+	//throw;
+	return 0;
+}
+
 Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned key, unsigned flags)
 {
     Inkscape::DrawingItem *ai = NULL;
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->show) {
-        ai = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->show(this, drawing, key, flags);
-    }
+
+    ai = this->show(drawing, key, flags);
 
     if (ai != NULL) {
         Geom::OptRect item_bbox = geometricBounds();
@@ -994,6 +1026,9 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
         display = sp_item_view_new_prepend(display, this, flags, key, ai);
         ai->setTransform(transform);
         ai->setOpacity(SP_SCALE24_TO_FLOAT(style->opacity.value));
+        ai->setIsolation( style->isolation.value );
+        ai->setBlendMode( style->blend_mode.value );
+        //ai->setCompositeOperator( style->composite_op.value );
         ai->setVisible(!isHidden());
         ai->setSensitive(sensitive);
         if (clip_ref->getObject()) {
@@ -1021,25 +1056,28 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             int mask_key = display->arenaitem->key();
 
             // Show and set mask
-            Inkscape::DrawingItem *ac = sp_mask_show(mask, drawing, mask_key);
+            Inkscape::DrawingItem *ac = mask->sp_mask_show(drawing, mask_key);
             ai->setMask(ac);
 
             // Update bbox, in case the mask uses bbox units
-            sp_mask_set_bbox(SP_MASK(mask), mask_key, item_bbox);
+            SP_MASK(mask)->sp_mask_set_bbox(mask_key, item_bbox);
             mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
         ai->setData(this);
-        ai->setItemBounds(item_bbox);
+        ai->setItemBounds(geometricBounds());
     }
 
     return ai;
 }
 
+// CPPIFY: make pure virtual
+void SPItem::hide(unsigned int /*key*/) {
+	//throw;
+}
+
 void SPItem::invoke_hide(unsigned key)
 {
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->hide) {
-        ((SPItemClass *) G_OBJECT_GET_CLASS(this))->hide(this, key);
-    }
+	this->hide(key);
 
     SPItemView *ref = NULL;
     SPItemView *v = display;
@@ -1051,7 +1089,7 @@ void SPItem::invoke_hide(unsigned key)
                 v->arenaitem->setClip(NULL);
             }
             if (mask_ref->getObject()) {
-                sp_mask_hide(mask_ref->getObject(), v->arenaitem->key());
+                mask_ref->getObject()->sp_mask_hide(v->arenaitem->key());
                 v->arenaitem->setMask(NULL);
             }
             if (!ref) {
@@ -1131,11 +1169,11 @@ void SPItem::adjust_stroke( gdouble ex )
         style->stroke_width.computed *= ex;
         style->stroke_width.set = TRUE;
 
-        if ( style->stroke_dash.n_dash != 0 ) {
-            for (int i = 0; i < style->stroke_dash.n_dash; i++) {
-                style->stroke_dash.dash[i] *= ex;
+        if ( !style->stroke_dasharray.values.empty() ) {
+            for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
+                style->stroke_dasharray.values[i] *= ex;
             }
-            style->stroke_dash.offset *= ex;
+            style->stroke_dashoffset.value *= ex;
         }
 
         updateRepr();
@@ -1145,7 +1183,7 @@ void SPItem::adjust_stroke( gdouble ex )
 /**
  * Find out the inverse of previous transform of an item (from its repr)
  */
-Geom::Affine sp_item_transform_repr (SPItem *item)
+static Geom::Affine sp_item_transform_repr (SPItem *item)
 {
     Geom::Affine t_old(Geom::identity());
     gchar const *t_attr = item->getRepr()->attribute("transform");
@@ -1194,11 +1232,11 @@ void SPItem::freeze_stroke_width_recursive(bool freeze)
 /**
  * Recursively adjust rx and ry of rects.
  */
-void
+static void
 sp_item_adjust_rects_recursive(SPItem *item, Geom::Affine advertized_transform)
 {
     if (SP_IS_RECT (item)) {
-        sp_rect_compensate_rxry (SP_RECT(item), advertized_transform);
+    	SP_RECT(item)->compensateRxRy(advertized_transform);
     }
 
     for (SPObject *o = item->children; o != NULL; o = o->next) {
@@ -1247,11 +1285,11 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
 {
     if ( SP_IS_LPE_ITEM(this) ) {
         SPLPEItem *lpeitem = SP_LPE_ITEM (this);
-        if ( sp_lpe_item_has_path_effect(lpeitem) ) {
-            sp_lpe_item_fork_path_effects_if_necessary(lpeitem);
+        if ( lpeitem->hasPathEffect() ) {
+            lpeitem->forkPathEffectsIfNecessary();
 
             // now that all LPEs are forked_if_necessary, we can apply the transform
-            PathEffectList effect_list =  sp_lpe_item_get_effect_list(lpeitem);
+            PathEffectList effect_list =  lpeitem->getEffectList();
             for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
             {
                 LivePathEffectObject *lpeobj = (*it)->lpeobject;
@@ -1262,6 +1300,13 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
             }
         }
     }
+}
+
+// CPPIFY:: make pure virtual?
+// Not all SPItems must necessarily have a set transform method!
+Geom::Affine SPItem::set_transform(Geom::Affine const &transform) {
+//	throw;
+	return transform;
 }
 
 /**
@@ -1328,14 +1373,20 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
 
     gint preserve = prefs->getBool("/options/preservetransform/value", 0);
     Geom::Affine transform_attr (transform);
+
+    // CPPIFY: check this code.
+    // If onSetTransform is not overridden, CItem::onSetTransform will return the transform it was given as a parameter.
+    // onSetTransform cannot be pure due to the fact that not all visible Items are transformable.
+
     if ( // run the object's set_transform (i.e. embed transform) only if:
-         ((SPItemClass *) G_OBJECT_GET_CLASS(this))->set_transform && // it does have a set_transform method
              !preserve && // user did not chose to preserve all transforms
-             !clip_ref->getObject() && // the object does not have a clippath
-             !mask_ref->getObject() && // the object does not have a mask
+             (!clip_ref || !clip_ref->getObject()) && // the object does not have a clippath
+             (!mask_ref || !mask_ref->getObject()) && // the object does not have a mask
              !(!transform.isTranslation() && style && style->getFilter()) // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
-        ) {
-        transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(this))->set_transform(this, transform);
+        )
+    {
+        transform_attr = this->set_transform(transform);
+
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
         }
@@ -1366,13 +1417,14 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
     _transformed_signal.emit(&advertized_transform, this);
 }
 
+// CPPIFY: see below, do not make pure?
+gint SPItem::event(SPEvent* /*event*/) {
+	return FALSE;
+}
+
 gint SPItem::emitEvent(SPEvent &event)
 {
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->event) {
-        return ((SPItemClass *) G_OBJECT_GET_CLASS(this))->event(this, &event);
-    }
-
-    return FALSE;
+	return this->event(&event);
 }
 
 /**
@@ -1390,16 +1442,10 @@ void SPItem::set_item_transform(Geom::Affine const &transform_matrix)
     }
 }
 
-void SPItem::convert_item_to_guides() {
-    // Use derived method if present ...
-    if (((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides) {
-        (*((SPItemClass *) G_OBJECT_GET_CLASS(this))->convert_to_guides)(this);
-    } else {
-        // .. otherwise simply place the guides around the item's bounding box
-
-        convert_to_guides();
-    }
-}
+//void SPItem::convert_to_guides() const {
+//	// CPPIFY: If not overridden, call SPItem::convert_to_guides() const, see below!
+//	this->convert_to_guides();
+//}
 
 
 /**
@@ -1456,9 +1502,7 @@ Geom::Affine SPItem::i2dt_affine() const
         // TODO temp code to prevent crashing on command-line launch:
         ret = i2doc_affine()
             * Geom::Scale(1, -1)
-            * Geom::Translate(0, document->getHeight());
-
-        g_return_val_if_fail(desktop != NULL, ret);
+            * Geom::Translate(0, document->getHeight().value("px"));
     }
     return ret;
 }
@@ -1505,7 +1549,8 @@ SPItemView *SPItem::sp_item_view_new_prepend(SPItemView *list, SPItem *item, uns
     return new_view;
 }
 
-SPItemView *SPItem::sp_item_view_list_remove(SPItemView *list, SPItemView *view)
+static SPItemView*
+sp_item_view_list_remove(SPItemView *list, SPItemView *view)
 {
     SPItemView *ret = list;
     if (view == list) {
@@ -1561,7 +1606,7 @@ SPItem *sp_item_first_item_child(SPObject *obj)
     return child;
 }
 
-void SPItem::convert_to_guides() {
+void SPItem::convert_to_guides() const {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int prefs_bbox = prefs->getInt("/tools/bounding_box", 0);
 

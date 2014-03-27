@@ -12,9 +12,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
+#include <gtkmm/box.h>
+#include <glibmm/ustring.h>
 
 class SPDocument;
 

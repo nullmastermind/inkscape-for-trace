@@ -70,7 +70,7 @@ static void set_filter_area(Inkscape::XML::Node *repr, gdouble radius,
     double rx = radius * (expansionY != 0 ? (expansion / expansionY) : 1);
     double ry = radius * (expansionX != 0 ? (expansion / expansionX) : 1);
 
-    if (width != 0 && height != 0 && (2.4 * rx > width * 0.1 || 2.4 * ry > height * 0.1)) {
+    if (width != 0 && height != 0) {
         // If not within the default 10% margin (see
         // http://www.w3.org/TR/SVG11/filters.html#FilterEffectsRegion), specify margins
         // The 2.4 is an empirical coefficient: at that distance the cutoff is practically invisible 
@@ -98,7 +98,10 @@ SPFilter *new_filter(SPDocument *document)
     Inkscape::XML::Node *repr;
     repr = xml_doc->createElement("svg:filter");
 
-    // Inkscape only supports sRGB. See note in sp-filter.cpp.
+    // Inkscape now supports both sRGB and linear color-interpolation-filters.
+    // But, for the moment, keep sRGB as default value for new filters
+    // (historically set to sRGB and doesn't require conversion between
+    // filter cairo surfaces and other types of cairo surfaces).
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_set_property(css, "color-interpolation-filters", "sRGB");
     sp_repr_css_change(repr, css, "style");
@@ -205,6 +208,15 @@ new_filter_gaussian_blur (SPDocument *document, gdouble radius, double expansion
     set_filter_area(repr, radius, expansion, expansionX, expansionY,
                     width, height);
 
+    /* Inkscape now supports both sRGB and linear color-interpolation-filters.  
+     * But, for the moment, keep sRGB as default value for new filters.
+     * historically set to sRGB and doesn't require conversion between
+     * filter cairo surfaces and other types of cairo surfaces. lp:1127103 */
+    SPCSSAttr *css = sp_repr_css_attr_new();                                    
+    sp_repr_css_set_property(css, "color-interpolation-filters", "sRGB");       
+    sp_repr_css_change(repr, css, "style");                                     
+    sp_repr_css_attr_unref(css);
+
     //create feGaussianBlur node
     Inkscape::XML::Node *b_repr;
     b_repr = xml_doc->createElement("svg:feGaussianBlur");
@@ -242,7 +254,7 @@ new_filter_gaussian_blur (SPDocument *document, gdouble radius, double expansion
  * Creates a simple filter with a blend primitive and a blur primitive of specified radius for
  * an item with the given matrix expansion, width and height
  */
-SPFilter *
+static SPFilter *
 new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdouble radius, double expansion,
                                 double expansionX, double expansionY, double width, double height)
 {
@@ -256,6 +268,15 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
     Inkscape::XML::Node *repr;
     repr = xml_doc->createElement("svg:filter");
     repr->setAttribute("inkscape:collect", "always");
+
+    /* Inkscape now supports both sRGB and linear color-interpolation-filters.  
+     * But, for the moment, keep sRGB as default value for new filters. 
+     * historically set to sRGB and doesn't require conversion between
+     * filter cairo surfaces and other types of cairo surfaces. lp:1127103 */
+    SPCSSAttr *css = sp_repr_css_attr_new();                                    
+    sp_repr_css_set_property(css, "color-interpolation-filters", "sRGB");       
+    sp_repr_css_change(repr, css, "style");                                     
+    sp_repr_css_attr_unref(css);
 
     // Append the new filter node to defs
     defs->appendChild(repr);

@@ -16,37 +16,13 @@
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
 #include "ui/view/view.h"
+#include "desktop.h"
 #include "document.h"
 #include "helper/action.h"
 
-static void sp_action_class_init (SPActionClass *klass);
-static void sp_action_init (SPAction *action);
 static void sp_action_finalize (GObject *object);
 
-static GObjectClass *parent_class;
-
-/**
- * Register SPAction class and return its type.
- */
-GType
-sp_action_get_type (void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPActionClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_action_class_init,
-            NULL, NULL,
-            sizeof(SPAction),
-            0,
-            (GInstanceInitFunc) sp_action_init,
-            NULL
-        };
-        type = g_type_register_static(G_TYPE_OBJECT, "SPAction", &info, (GTypeFlags)0);
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPAction, sp_action, G_TYPE_OBJECT);
 
 /**
  * SPAction vtable initialization.
@@ -54,8 +30,6 @@ sp_action_get_type (void)
 static void
 sp_action_class_init (SPActionClass *klass)
 {
-    parent_class = (GObjectClass*) g_type_class_ref(G_TYPE_OBJECT);
-
     GObjectClass *object_class = (GObjectClass *) klass;
     object_class->finalize = sp_action_finalize;
 }
@@ -66,16 +40,16 @@ sp_action_class_init (SPActionClass *klass)
 static void
 sp_action_init (SPAction *action)
 {
-	action->sensitive = 0;
-	action->active = 0;
-	action->view = NULL;
-	action->id = action->name = action->tip = NULL;
-	action->image = NULL;
-	
-	new (&action->signal_perform) sigc::signal<void>();
-	new (&action->signal_set_sensitive) sigc::signal<void, bool>();
-	new (&action->signal_set_active) sigc::signal<void, bool>();
-	new (&action->signal_set_name) sigc::signal<void, Glib::ustring const &>();
+    action->sensitive = 0;
+    action->active = 0;
+    action->context = Inkscape::ActionContext();
+    action->id = action->name = action->tip = NULL;
+    action->image = NULL;
+    
+    new (&action->signal_perform) sigc::signal<void>();
+    new (&action->signal_set_sensitive) sigc::signal<void, bool>();
+    new (&action->signal_set_active) sigc::signal<void, bool>();
+    new (&action->signal_set_name) sigc::signal<void, Glib::ustring const &>();
 }
 
 /**
@@ -84,43 +58,43 @@ sp_action_init (SPAction *action)
 static void
 sp_action_finalize (GObject *object)
 {
-	SPAction *action = SP_ACTION(object);
+    SPAction *action = SP_ACTION(object);
 
-	g_free (action->image);
-	g_free (action->tip);
-	g_free (action->name);
-	g_free (action->id);
+    g_free (action->image);
+    g_free (action->tip);
+    g_free (action->name);
+    g_free (action->id);
 
     action->signal_perform.~signal();
     action->signal_set_sensitive.~signal();
     action->signal_set_active.~signal();
     action->signal_set_name.~signal();
 
-	parent_class->finalize (object);
+    G_OBJECT_CLASS(sp_action_parent_class)->finalize (object);
 }
 
 /**
  * Create new SPAction object and set its properties.
  */
 SPAction *
-sp_action_new(Inkscape::UI::View::View *view,
+sp_action_new(Inkscape::ActionContext const &context,
               const gchar *id,
               const gchar *name,
               const gchar *tip,
               const gchar *image,
               Inkscape::Verb * verb)
 {
-	SPAction *action = (SPAction *)g_object_new(SP_TYPE_ACTION, NULL);
+    SPAction *action = (SPAction *)g_object_new(SP_TYPE_ACTION, NULL);
 
-	action->view = view;
-	action->sensitive = TRUE;
-	action->id = g_strdup (id);
-	action->name = g_strdup (name);
-	action->tip = g_strdup (tip);
-	action->image = g_strdup (image);
-	action->verb = verb;
+    action->context = context;
+    action->sensitive = TRUE;
+    action->id = g_strdup (id);
+    action->name = g_strdup (name);
+    action->tip = g_strdup (tip);
+    action->image = g_strdup (image);
+    action->verb = verb;
 
-	return action;
+    return action;
 }
 
 namespace {
@@ -138,11 +112,9 @@ public:
     : ActionEventBase(share_static_string("action"))
     {
         _addProperty(share_static_string("timestamp"), timestamp());
-        if (action->view) {
-            SPDocument *document = action->view->doc();
-            if (document) {
-                _addProperty(share_static_string("document"), document->serial());
-            }
+        SPDocument *document = action->context.getDocument();
+        if (document) {
+            _addProperty(share_static_string("document"), document->serial());
         }
         _addProperty(share_static_string("verb"), action->id);
     }
@@ -157,11 +129,11 @@ public:
  */
 void sp_action_perform(SPAction *action, void * /*data*/)
 {
-	g_return_if_fail (action != NULL);
-	g_return_if_fail (SP_IS_ACTION (action));
+    g_return_if_fail (action != NULL);
+    g_return_if_fail (SP_IS_ACTION (action));
 
-        Inkscape::Debug::EventTracker<ActionEvent> tracker(action);
-        action->signal_perform.emit();
+    Inkscape::Debug::EventTracker<ActionEvent> tracker(action);
+    action->signal_perform.emit();
 }
 
 /**
@@ -170,10 +142,10 @@ void sp_action_perform(SPAction *action, void * /*data*/)
 void
 sp_action_set_active (SPAction *action, unsigned int active)
 {
-	g_return_if_fail (action != NULL);
-	g_return_if_fail (SP_IS_ACTION (action));
+    g_return_if_fail (action != NULL);
+    g_return_if_fail (SP_IS_ACTION (action));
 
-        action->signal_set_active.emit(active);
+    action->signal_set_active.emit(active);
 }
 
 /**
@@ -182,28 +154,65 @@ sp_action_set_active (SPAction *action, unsigned int active)
 void
 sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 {
-	g_return_if_fail (action != NULL);
-	g_return_if_fail (SP_IS_ACTION (action));
+    g_return_if_fail (action != NULL);
+    g_return_if_fail (SP_IS_ACTION (action));
 
-	action->signal_set_sensitive.emit(sensitive);
+    action->signal_set_sensitive.emit(sensitive);
 }
 
 void
 sp_action_set_name (SPAction *action, Glib::ustring const &name)
 {
+    g_return_if_fail (action != NULL);
+    g_return_if_fail (SP_IS_ACTION (action));
+
     g_free(action->name);
     action->name = g_strdup(name.data());
     action->signal_set_name.emit(name);
 }
 
 /**
- * Return View associated with the action.
+ * Return Document associated with the action.
+ */
+SPDocument *
+sp_action_get_document (SPAction *action)
+{
+    g_return_val_if_fail (SP_IS_ACTION (action), NULL);
+    return action->context.getDocument();
+}
+
+/**
+ * Return Selection associated with the action
+ */
+Inkscape::Selection *
+sp_action_get_selection (SPAction *action)
+{
+    g_return_val_if_fail (SP_IS_ACTION (action), NULL);
+    return action->context.getSelection();
+}
+
+/**
+ * Return View associated with the action, if any.
  */
 Inkscape::UI::View::View *
 sp_action_get_view (SPAction *action)
 {
-	g_return_val_if_fail (SP_IS_ACTION (action), NULL);
-	return action->view;
+    g_return_val_if_fail (SP_IS_ACTION (action), NULL);
+    return action->context.getView();
+}
+
+/**
+ * Return Desktop associated with the action, if any.
+ */
+SPDesktop *
+sp_action_get_desktop (SPAction *action)
+{
+    // TODO: this slightly horrible storage of a UI::View::View*, and 
+    // casting to an SPDesktop*, is only done because that's what was
+    // already the norm in the Inkscape codebase. This seems wrong. Surely
+    // we should store an SPDesktop* in the first place? Is there a case
+    // of actions being carried out on a View that is not an SPDesktop?
+      return static_cast<SPDesktop *>(sp_action_get_view(action));
 }
 
 /*

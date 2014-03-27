@@ -16,13 +16,14 @@
 # include <config.h>
 #endif
 
+#include "ocaldialogs.h"
+
 #include <stdio.h>  // rename()
 #include <unistd.h> // close()
 #include <errno.h>  // errno
 #include <string.h> // strerror()
 
 #include "path-prefix.h"
-#include "ocaldialogs.h"
 #include "filedialogimpl-gtkmm.h"
 #include "interface.h"
 #include "gc-core.h"
@@ -33,9 +34,16 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/spinner.h>
 #include <gtkmm/stock.h>
-#include <glibmm/i18n.h>
 #include <gdkmm/general.h>
 #include <libxml/tree.h>
+
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/markup.h>
+#include <glibmm/miscutils.h>
+#include "ui/icon-names.h"
 
 namespace Inkscape
 {
@@ -139,7 +147,7 @@ bool
 ExportDialog::show()
 {
     set_modal (TRUE);                      //Window
-    sp_transientize((GtkWidget *)gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     gint b = run();                        //Dialog
     hide();
 
@@ -244,7 +252,7 @@ bool
 ExportPasswordDialog::show()
 {
     set_modal (TRUE);                      //Window
-    sp_transientize((GtkWidget *)gobj());  //Make transient
+    sp_transientize(GTK_WIDGET(gobj()));  //Make transient
     gint b = run();                        //Dialog
     hide();
 
@@ -307,33 +315,56 @@ LoadingBox::LoadingBox() : Gtk::EventBox()
     set_visible_window(false);
     draw_spinner = false;
     spinner_step = 0;
+
+#if WITH_GTKMM_3_0
+    signal_draw().connect(sigc::mem_fun(*this, &LoadingBox::_on_draw), false);
+#else
     signal_expose_event().connect(sigc::mem_fun(*this, &LoadingBox::_on_expose_event), false);
+#endif
 }
 
+#if !WITH_GTKMM_3_0
 bool LoadingBox::_on_expose_event(GdkEventExpose* /*event*/)
 {
     Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
+    return _on_draw(cr);
+}
+#endif
+
+bool LoadingBox::_on_draw(const Cairo::RefPtr<Cairo::Context> &
+#if WITH_GTKMM_3_0
+cr
+#endif
+)
+{
     // Draw shadow
     int x = get_allocation().get_x();
     int y = get_allocation().get_y();
     int width = get_allocation().get_width();
     int height = get_allocation().get_height();
 
+#if WITH_GTKMM_3_0
+    get_style_context()->render_frame(cr, x, y, width, height);
+#else
     get_style()->paint_shadow(get_window(), get_state(), Gtk::SHADOW_IN,
         Gdk::Rectangle(x, y, width, height),
         *this, Glib::ustring("viewport"), x, y, width, height);
+#endif
 
     if (draw_spinner) {
         int spinner_size = 16;
         int spinner_x = x + (width - spinner_size) / 2;
         int spinner_y = y + (height - spinner_size) / 2;
 
-        // FIXME: Gtk::Style::paint_spinner not yet in gtkmm
+#if WITH_GTKMM_3_0
+        get_style_context()->render_activity(cr, spinner_x, spinner_y, spinner_size, spinner_size);
+#else
         gtk_paint_spinner(gtk_widget_get_style(GTK_WIDGET(gobj())),
             gtk_widget_get_window(GTK_WIDGET(gobj())),
             gtk_widget_get_state(GTK_WIDGET(gobj())), NULL, GTK_WIDGET(gobj()),
             NULL, spinner_step, spinner_x, spinner_y, spinner_size, spinner_size);
+#endif
     }
 
     return false;
@@ -403,7 +434,11 @@ PreviewWidget::PreviewWidget() : Gtk::VBox(false, 12)
     box_loading->set_size_request(90, 90);
     set_border_width(12);
 
+#if WITH_GTKMM_3_0
+    signal_draw().connect(sigc::mem_fun(*this, &PreviewWidget::_on_draw), false);
+#else 
     signal_expose_event().connect(sigc::mem_fun(*this, &PreviewWidget::_on_expose_event), false);
+#endif
 
     clear();
 }
@@ -447,19 +482,34 @@ void PreviewWidget::clear()
     image->hide();
 }
 
+#if !WITH_GTKMM_3_0
 bool PreviewWidget::_on_expose_event(GdkEventExpose* /*event*/)
 {
     Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
+    return _on_draw(cr);
+}
+#endif
+
+bool PreviewWidget::_on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+{
     // Draw background
     int x = get_allocation().get_x();
     int y = get_allocation().get_y();
     int width = get_allocation().get_width();
     int height = get_allocation().get_height();
-    Gdk::Color background_fill = get_style()->get_base(get_state());
 
+#if WITH_GTKMM_3_0
+    Gdk::RGBA background_fill;
+    get_style_context()->lookup_color("base_color", background_fill);
+    cr->rectangle(x, y, width, height);
+    Gdk::Cairo::set_source_rgba(cr, background_fill);
+#else
+    Gdk::Color background_fill = get_style()->get_base(get_state());
     cr->rectangle(x, y, width, height);
     Gdk::Cairo::set_source_color(cr, background_fill);
+#endif
+    
     cr->fill();
 
     return false;
@@ -523,13 +573,14 @@ void StatusWidget::end_process()
     clear();
 }
 
+#if !GTK_CHECK_VERSION(3,6,0)
 SearchEntry::SearchEntry() : Gtk::Entry()
 {
     signal_changed().connect(sigc::mem_fun(*this, &SearchEntry::_on_changed));
     signal_icon_press().connect(sigc::mem_fun(*this, &SearchEntry::_on_icon_pressed));
 
-    set_icon_from_stock(Gtk::Stock::FIND, Gtk::ENTRY_ICON_PRIMARY);
-    gtk_entry_set_icon_from_stock(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
+    set_icon_from_icon_name(INKSCAPE_ICON("edit-find"), Gtk::ENTRY_ICON_PRIMARY);
+    gtk_entry_set_icon_from_icon_name(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
 }
 
 void SearchEntry::_on_icon_pressed(Gtk::EntryIconPosition icon_position, const GdkEventButton* /*event*/)
@@ -546,36 +597,58 @@ void SearchEntry::_on_icon_pressed(Gtk::EntryIconPosition icon_position, const G
 void SearchEntry::_on_changed()
 {
     if (get_text().empty()) {
-        gtk_entry_set_icon_from_stock(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
+        gtk_entry_set_icon_from_icon_name(gobj(), GTK_ENTRY_ICON_SECONDARY, NULL);
     } else {
-        set_icon_from_stock(Gtk::Stock::CLEAR, Gtk::ENTRY_ICON_SECONDARY);
+        set_icon_from_icon_name(INKSCAPE_ICON("edit-clear"), Gtk::ENTRY_ICON_SECONDARY);
     }
 }
+#endif
+
 
 BaseBox::BaseBox() : Gtk::EventBox()
 {
+#if WITH_GTKMM_3_0
+    signal_draw().connect(sigc::mem_fun(*this, &BaseBox::_on_draw), false);
+#else
     signal_expose_event().connect(sigc::mem_fun(*this, &BaseBox::_on_expose_event), false);
+#endif
     set_visible_window(false);
 }
 
+#if !WITH_GTKMM_3_0
 bool BaseBox::_on_expose_event(GdkEventExpose* /*event*/)
 {
     Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
 
+    return _on_draw(cr);
+}
+#endif
+
+bool BaseBox::_on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+{
     // Draw background and shadow
     int x = get_allocation().get_x();
     int y = get_allocation().get_y();
     int width = get_allocation().get_width();
     int height = get_allocation().get_height();
-    Gdk::Color background_fill = get_style()->get_base(get_state());
 
+#if WITH_GTKMM_3_0
+    Gdk::RGBA background_fill;
+    get_style_context()->lookup_color("base_color", background_fill);
+    cr->rectangle(x, y, width, height);
+    Gdk::Cairo::set_source_rgba(cr, background_fill);
+    cr->fill();
+    get_style_context()->render_frame(cr, x, y, width, height);
+#else
+    Gdk::Color background_fill = get_style()->get_base(get_state());
     cr->rectangle(x, y, width, height);
     Gdk::Cairo::set_source_color(cr, background_fill);
     cr->fill();
-
+    
     get_style()->paint_shadow(get_window(), get_state(), Gtk::SHADOW_IN,
         Gdk::Rectangle(x, y, width, height),
         *this, Glib::ustring("viewport"), x, y, width, height);
+#endif
 
     return false;
 }
@@ -591,11 +664,25 @@ LogoArea::LogoArea() : Gtk::EventBox()
         logo_mask = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, 1,1);
         draw_logo = false;
     }
+
+#if WITH_GTKMM_3_0
+    signal_draw().connect(sigc::mem_fun(*this, &LogoArea::_on_draw));
+#else
     signal_expose_event().connect(sigc::mem_fun(*this, &LogoArea::_on_expose_event));
+#endif
     set_visible_window(false);
 }
 
+#if !WITH_GTKMM_3_0
 bool LogoArea::_on_expose_event(GdkEventExpose* /*event*/)
+{
+        Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
+
+	return _on_draw(cr);
+}
+#endif
+
+bool LogoArea::_on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
     if (draw_logo) {
         int x = get_allocation().get_x();
@@ -605,13 +692,17 @@ bool LogoArea::_on_expose_event(GdkEventExpose* /*event*/)
         int x_logo = x + (width - 220) / 2;
         int y_logo = y + (height - 76) / 2;
         
-        Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
-        
         // Draw logo, we mask [read fill] it with the mid colour from the
         // user's GTK theme
+#if WITH_GTKMM_3_0
+        // For GTK+ 3, use grey
+        Gdk::RGBA logo_fill("grey");
+        Gdk::Cairo::set_source_rgba(cr, logo_fill);
+#else
         Gdk::Color logo_fill = get_style()->get_mid(get_state());
-
         Gdk::Cairo::set_source_color(cr, logo_fill);
+#endif
+
         cr->mask(logo_mask, x_logo, y_logo);
     }
     
@@ -830,7 +921,7 @@ void ImportDialog::on_image_downloaded(Glib::ustring path, bool success)
         m_signal_response.emit(path);
         widget_status->set_info(_("Clipart downloaded successfully"));
     } catch(Glib::Error) {
-        success = false;
+        // success = false; //has no effect, value not returned
     }
     
     cancelled_image = false;
@@ -854,7 +945,7 @@ void ImportDialog::on_thumbnail_downloaded(Glib::ustring path, bool success)
         widget_status->clear();
         preview_files->set_image(path);
     } catch(Glib::Error) {
-        success = false;
+        // success = false; //has no effect, value not returned
     }
     
     cancelled_thumbnail = false;
@@ -881,44 +972,40 @@ void SearchResultList::populate_from_xml(xmlNode * a_node)
     for (xmlNode *cur_node = a_node; cur_node; cur_node = cur_node->next) {
 
         // Get items information
-        if (strcmp((const char*)cur_node->name, "rss")) // Avoid the root
+        if (strcmp(reinterpret_cast<const char*>(cur_node->name), "rss")) // Avoid the root
             if (cur_node->type == XML_ELEMENT_NODE &&
-                    (cur_node->parent->name && !strcmp((const char*)cur_node->parent->name, "item")))
+                    (cur_node->parent->name && !strcmp(reinterpret_cast<const char*>(cur_node->parent->name), "item")))
             {
-                if (!strcmp((const char*)cur_node->name, "title"))
+                if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "title"))
                 {
-#if WITH_GTKMM_2_24
                     row_num = append("");
-#else
-                    row_num = append_text("");
-#endif
                     xmlChar *xml_title = xmlNodeGetContent(cur_node);
-                    char* title = (char*) xml_title;
+                    char* title = reinterpret_cast<char*>(xml_title);
                     
                     set_text(row_num, RESULTS_COLUMN_TITLE, title);
                     xmlFree(title);
                 }
-                else if (!strcmp((const char*)cur_node->name, "pubDate"))
+                else if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "pubDate"))
                 {
                     xmlChar *xml_date = xmlNodeGetContent(cur_node);
-                    char* date = (char*) xml_date;
+                    char* date = reinterpret_cast<char*>(xml_date);
                     
                     set_text(row_num, RESULTS_COLUMN_DATE, date);
                     xmlFree(xml_date);
                 }
-                else if (!strcmp((const char*)cur_node->name, "creator"))
+                else if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "creator"))
                 {
                     xmlChar *xml_creator = xmlNodeGetContent(cur_node);
-                    char* creator = (char*) xml_creator;
+                    char* creator = reinterpret_cast<char*>(xml_creator);
                     
                     set_text(row_num, RESULTS_COLUMN_CREATOR, creator);
                     xmlFree(xml_creator);
                 }
-                else if (!strcmp((const char*)cur_node->name, "description"))
+                else if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "description"))
                 {
                     xmlChar *xml_description = xmlNodeGetContent(cur_node);
                     //char* final_description;
-                    char* stripped_description = g_strstrip((char*) xml_description);
+                    char* stripped_description = g_strstrip(reinterpret_cast<char*>(xml_description));
 
                     if (!strcmp(stripped_description, "")) {
                         stripped_description = _("No description");
@@ -930,30 +1017,30 @@ void SearchResultList::populate_from_xml(xmlNode * a_node)
                     set_text(row_num, RESULTS_COLUMN_DESCRIPTION, stripped_description);
                     xmlFree(xml_description);
                 }
-                else if (!strcmp((const char*)cur_node->name, "enclosure"))
+                else if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "enclosure"))
                 {
-                    xmlChar *xml_url = xmlGetProp(cur_node, (xmlChar*) "url");
-                    char* url = (char*) xml_url;
+                    xmlChar *xml_url = xmlGetProp(cur_node, reinterpret_cast<xmlChar const*>("url"));
+                    char* url = reinterpret_cast<char*>(xml_url);
                     char* filename = g_path_get_basename(url);
 
                     set_text(row_num, RESULTS_COLUMN_URL, url);
                     set_text(row_num, RESULTS_COLUMN_FILENAME, filename);
                     xmlFree(xml_url);
                 }
-                else if (!strcmp((const char*)cur_node->name, "thumbnail"))
+                else if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "thumbnail"))
                 {
-                    xmlChar *xml_thumbnail_url = xmlGetProp(cur_node, (xmlChar*) "url");
-                    char* thumbnail_url = (char*) xml_thumbnail_url;
+                    xmlChar *xml_thumbnail_url = xmlGetProp(cur_node, reinterpret_cast<xmlChar const*>("url"));
+                    char* thumbnail_url = reinterpret_cast<char*>(xml_thumbnail_url);
                     char* thumbnail_filename = g_path_get_basename(thumbnail_url);
 
                     set_text(row_num, RESULTS_COLUMN_THUMBNAIL_URL, thumbnail_url);
                     set_text(row_num, RESULTS_COLUMN_THUMBNAIL_FILENAME, thumbnail_filename);
                     xmlFree(xml_thumbnail_url);
                 }
-                else if (!strcmp((const char*)cur_node->name, "guid"))
+                else if (!strcmp(reinterpret_cast<const char*>(cur_node->name), "guid"))
                 {
                     xmlChar *xml_guid = xmlNodeGetContent(cur_node);
-                    char* guid_url = (char*) xml_guid;
+                    char* guid_url = reinterpret_cast<char*>(xml_guid);
                     char* guid = g_path_get_basename(guid_url);
 
                     set_text(row_num, RESULTS_COLUMN_GUID, guid);
@@ -1007,7 +1094,12 @@ void ImportDialog::on_entry_search_activated()
 
     // Open the RSS feed
     Glib::RefPtr<Gio::File> xml_file = Gio::File::create_for_uri(xml_uri);
-    
+#ifdef WIN32
+    if (!xml_file->query_exists()) {
+        widget_status->set_error(_("Could not connect to the Open Clip Art Library"));
+        return;
+    }
+#endif
     xml_file->load_contents_async(
         sigc::bind<Glib::RefPtr<Gio::File> , Glib::ustring>(
             sigc::mem_fun(*this, &ImportDialog::on_xml_file_read),
@@ -1035,8 +1127,14 @@ void ImportDialog::on_xml_file_read(const Glib::RefPtr<Gio::AsyncResult>& result
     xmlDoc *doc = NULL;
     xmlNode *root_element = NULL;
 
-    doc = xmlReadMemory(data, (int) length, xml_uri.c_str(), NULL,
-            XML_PARSE_RECOVER + XML_PARSE_NOWARNING + XML_PARSE_NOERROR);
+    int parse_options = XML_PARSE_RECOVER + XML_PARSE_NOWARNING + XML_PARSE_NOERROR;  // do not use XML_PARSE_NOENT ! see bug lp:1025185
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool allowNetAccess = prefs->getBool("/options/externalresources/xml/allow_net_access", false);
+    if (!allowNetAccess) {
+        parse_options |= XML_PARSE_NONET;
+    }
+
+    doc = xmlReadMemory(data, (int) length, xml_uri.c_str(), NULL, parse_options);
         
     if (doc == NULL) {
         // If nothing is returned, no results could be found
@@ -1068,23 +1166,30 @@ void ImportDialog::on_xml_file_read(const Glib::RefPtr<Gio::AsyncResult>& result
 
     // free the document
     xmlFreeDoc(doc);
-    // free the global variables that may have been allocated by the parser
-    xmlCleanupParser();
 }
 
 
 void ImportDialog::update_label_no_search_results()
 {
     Glib::ustring keywords = Glib::Markup::escape_text(entry_search->get_text());
-    Gdk::Color grey = entry_search->get_style()->get_text_aa(entry_search->get_state());
+
     Glib::ustring msg_one = Glib::ustring::compose(
         _("No clipart named <b>%1</b> was found."),
         keywords);
     Glib::ustring msg_two = _("Please make sure all keywords are spelled correctly,"
                               " or try again with different keywords.");
+
+#if WITH_GTKMM_3_0
+    Glib::ustring markup = Glib::ustring::compose(
+        "<span size=\"large\">%1</span>\n<span>%2</span>",
+        msg_one, msg_two);
+#else
+    Gdk::Color grey = entry_search->get_style()->get_text_aa(entry_search->get_state());
     Glib::ustring markup = Glib::ustring::compose(
         "<span size=\"large\">%1</span>\n<span color=\"%2\">%3</span>",
         msg_one, grey.to_string(), msg_two);
+#endif
+
     label_not_found->set_markup(markup);
 }
 
@@ -1104,15 +1209,33 @@ ImportDialog::ImportDialog(Gtk::Window& parent_window, FileDialogType file_types
 
     // Creation
     Gtk::VBox *vbox = new Gtk::VBox(false, 0);
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox *hbuttonbox_bottom = new Gtk::ButtonBox();
+#else
     Gtk::HButtonBox *hbuttonbox_bottom = new Gtk::HButtonBox();
+#endif
+
     Gtk::HBox *hbox_bottom = new Gtk::HBox(false, 12);
     BaseBox *basebox_logo = new BaseBox();
     BaseBox *basebox_no_search_results = new BaseBox();
     label_not_found = new Gtk::Label();
     label_description = new Gtk::Label();
+
+#if GTK_CHECK_VERSION(3,6,0)
+    entry_search = new Gtk::SearchEntry();
+#else
     entry_search = new SearchEntry();
+#endif
+
     button_search = new Gtk::Button(_("Search"));
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox* hbuttonbox_search = new Gtk::ButtonBox();
+#else
     Gtk::HButtonBox* hbuttonbox_search = new Gtk::HButtonBox();
+#endif
+
     Gtk::ScrolledWindow* scrolledwindow_preview = new Gtk::ScrolledWindow();
     preview_files = new PreviewWidget();
     /// Add the buttons in the bottom of the dialog
@@ -1211,7 +1334,8 @@ ImportDialog::ImportDialog(Gtk::Window& parent_window, FileDialogType file_types
  */
 ImportDialog::~ImportDialog()
 {
-
+    // free the global variables that may have been allocated by the parser
+    xmlCleanupParser();
 }
 
 /**

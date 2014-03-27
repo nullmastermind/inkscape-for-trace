@@ -53,12 +53,14 @@ public:
     virtual Gtk::Widget* getPreview(PreviewStyle style,
                                     ViewType view,
                                     ::PreviewSize size,
-                                    guint ratio);
+                                    guint ratio,
+                                    guint border);
     void buttonClicked(bool secondary = false);
 
     void setGradient(SPGradient *grad);
     SPGradient * getGradient() const { return _grad; }
     void setPattern(cairo_pattern_t *pattern);
+    void setName(const Glib::ustring name);
 
     void setState( bool fill, bool stroke );
     bool isFill() { return _isFill; }

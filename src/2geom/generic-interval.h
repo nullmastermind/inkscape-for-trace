@@ -274,10 +274,12 @@ public:
 
     /** @brief Union with another interval, gracefully handling empty ones. */
     void unionWith(GenericOptInterval<C> const &a) {
-        if (*this) { // check that we are not empty
-            (*this)->unionWith(*a);
-        } else if (a) {
-            *this = *a;
+        if (a) {
+            if (*this) { // check that we are not empty
+                (*this)->unionWith(*a);
+            } else {
+                *this = *a;
+            }
         }
     }
     void intersectWith(GenericOptInterval<C> const &o) {
@@ -315,14 +317,14 @@ inline GenericOptInterval<C> operator&(GenericInterval<C> const &a, GenericInter
     return GenericOptInterval<C>(a) & GenericOptInterval<C>(b);
 }
 
-#ifdef _GLIBCXX_IOSTREAM
+//#ifdef _GLIBCXX_IOSTREAM
 template <typename C>
 inline std::ostream &operator<< (std::ostream &os, 
                                  Geom::GenericInterval<C> const &I) {
     os << "Interval("<<I.min() << ", "<<I.max() << ")";
     return os;
 }
-#endif
+//#endif
 
 } // namespace Geom
 #endif // !LIB2GEOM_SEEN_GENERIC_INTERVAL_H

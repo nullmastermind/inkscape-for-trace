@@ -1,6 +1,25 @@
 
 set(widgets_SRC
 	button.cpp
+	  arc-toolbar.cpp
+	  box3d-toolbar.cpp
+	  calligraphy-toolbar.cpp
+	  connector-toolbar.cpp
+	  dropper-toolbar.cpp
+	  eraser-toolbar.cpp
+	  lpe-toolbar.cpp
+	  measure-toolbar.cpp
+	  mesh-toolbar.cpp
+	  node-toolbar.cpp
+	  paintbucket-toolbar.cpp
+	  pencil-toolbar.cpp
+	  rect-toolbar.cpp
+	  spiral-toolbar.cpp
+	  spray-toolbar.cpp
+	  star-toolbar.cpp
+	  text-toolbar.cpp
+	  tweak-toolbar.cpp
+	  zoom-toolbar.cpp		
 	dash-selector.cpp
 	desktop-widget.cpp
 	eek-preview.cpp
@@ -17,7 +36,6 @@ set(widgets_SRC
 	select-toolbar.cpp
 	shrink-wrap-button.cpp
 	sp-attribute-widget.cpp
-	sp-color-gtkselector.cpp
 	sp-color-icc-selector.cpp
 	sp-color-notebook.cpp
 	sp-color-scales.cpp
@@ -39,6 +57,25 @@ set(widgets_SRC
 	# -------
 	# Headers
 	button.h
+	  arc-toolbar.h
+	  box3d-toolbar.h
+	  calligraphy-toolbar.h
+	  connector-toolbar.h
+	  dropper-toolbar.h
+	  eraser-toolbar.h
+	  lpe-toolbar.h
+	  measure-toolbar.h
+	  mesh-toolbar.h
+	  node-toolbar.h
+	  paintbucket-toolbar.h
+	  pencil-toolbar.h
+	  rect-toolbar.h
+	  spiral-toolbar.h
+	  spray-toolbar.h
+	  star-toolbar.h
+	  text-toolbar.h
+	  tweak-toolbar.h
+	  zoom-toolbar.h	
 	dash-selector.h
 	desktop-widget.h
 	eek-preview.h
@@ -56,7 +93,6 @@ set(widgets_SRC
 	select-toolbar.h
 	shrink-wrap-button.h
 	sp-attribute-widget.h
-	sp-color-gtkselector.h
 	sp-color-icc-selector.h
 	sp-color-notebook.h
 	sp-color-scales.h

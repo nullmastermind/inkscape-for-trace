@@ -76,7 +76,14 @@ void sp_attribute_clean_recursive(Node *repr, unsigned int flags) {
   }
   
   for(Node *child=repr->firstChild() ; child ; child = child->next()) {
-    sp_attribute_clean_recursive( child, flags );
+
+    // Don't remove default css values if element is in <defs> or is a <symbol>
+    Glib::ustring element = child->name();
+    unsigned int flags_temp = flags;
+    if( element.compare( "svg:defs" ) == 0 || element.compare( "svg:symbol" ) == 0 ) {
+      flags_temp &= ~(SP_ATTR_CLEAN_DEFAULT_WARN|SP_ATTR_CLEAN_DEFAULT_REMOVE);
+    }
+    sp_attribute_clean_recursive( child, flags_temp );
   }
 }
 
@@ -128,17 +135,17 @@ void sp_attribute_clean_style(Node *repr, unsigned int flags) {
 
   // Find element's style
   SPCSSAttr *css = sp_repr_css_attr( repr, "style" );
-
   sp_attribute_clean_style(repr, css, flags);
-
-  // g_warning( "sp_repr_write_stream_element(): Final style:" );
-  //sp_repr_css_print( css );
 
   // Convert css node's properties data to string and set repr node's attribute "style" to that string.
   // sp_repr_css_set( repr, css, "style"); // Don't use as it will cause loop.
-  gchar *value = sp_repr_css_write_string(css);
-  repr->setAttribute("style", value);
-  if (value) g_free (value);
+  Glib::ustring value;
+  sp_repr_css_write_string(css, value);
+  if( value.empty() ) {
+      repr->setAttribute("style", NULL );
+  } else {
+      repr->setAttribute("style", value.c_str());
+  }
 
   sp_repr_css_attr_unref( css );
 }
@@ -147,7 +154,7 @@ void sp_attribute_clean_style(Node *repr, unsigned int flags) {
 /**
  * Clean CSS style on an element.
  */
-gchar * sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int flags) {
+Glib::ustring sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int flags) {
 
   g_return_val_if_fail (repr != NULL, NULL);
   g_return_val_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE, NULL);
@@ -155,11 +162,12 @@ gchar * sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int f
   SPCSSAttr *css = sp_repr_css_attr_new();
   sp_repr_css_attr_add_from_string( css, string );
   sp_attribute_clean_style(repr, css, flags);
-  gchar* string_cleaned = sp_repr_css_write_string( css );
+  Glib::ustring string_cleaned;
+  sp_repr_css_write_string (css, string_cleaned);
 
   sp_repr_css_attr_unref( css );
 
-  return  string_cleaned;
+  return string_cleaned;
 }
 
 
@@ -194,23 +202,22 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
 
     // Check if a property is applicable to an element (i.e. is font-family useful for a <rect>?).
     if( !SPAttributeRelCSS::findIfValid( property, element ) ) {
-      if( flags & SP_ATTR_CLEAN_STYLE_WARN ) {
-	g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" is inappropriate.",
-		   element.c_str(), id.c_str(), property );
-      }
-      if( flags & SP_ATTR_CLEAN_STYLE_REMOVE ) {
-	toDelete.insert(property);
-      }
-      continue;
+        if( flags & SP_ATTR_CLEAN_STYLE_WARN ) {
+            g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" is inappropriate.",
+                       element.c_str(), id.c_str(), property );
+        }
+        if( flags & SP_ATTR_CLEAN_STYLE_REMOVE ) {
+            toDelete.insert(property);
+        }
+        continue;
     }
 
     // Find parent value for same property (property)
-    gchar const * property_p = NULL;
     gchar const * value_p = NULL;
     if( css_parent != NULL ) {
         for ( List<AttributeRecord const> iter_p = css_parent->attributeList() ; iter_p ; ++iter_p ) {
 
-            property_p = g_quark_to_string(iter_p->key);
+            gchar const * property_p = g_quark_to_string(iter_p->key);
 
             if( !g_strcmp0( property, property_p ) ) {
                 value_p = iter_p->value;
@@ -222,29 +229,29 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     // If parent has same property value and property is inherited, mark for deletion.
     if ( !g_strcmp0( value, value_p ) && SPAttributeRelCSS::findIfInherit( property ) ) {
 
-      if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
-	g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" has same value as parent (%s).",
-		   element.c_str(), id.c_str(), property, value );
-      }
-      if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
-	toDelete.insert( property );
-      }
-      continue;
+        if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
+            g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" has same value as parent (%s).",
+                       element.c_str(), id.c_str(), property, value );
+        }
+        if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
+            toDelete.insert( property );
+        }
+        continue;
     }
 
     // If property value is same as default and the parent value not set or property is not inherited,
     // mark for deletion.
     if ( SPAttributeRelCSS::findIfDefault( property, value ) &&
-	 ( (css_parent != NULL && value_p == NULL) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
+         ( (css_parent != NULL && value_p == NULL) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
 
-      if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
-	g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" with default value (%s) not needed.",
-		   element.c_str(), id.c_str(), property, value );
-      }
-      if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
-	toDelete.insert( property );
-      }
-      continue;
+        if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
+            g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" with default value (%s) not needed.",
+                       element.c_str(), id.c_str(), property, value );
+        }
+        if ( flags & SP_ATTR_CLEAN_DEFAULT_REMOVE ) {
+            toDelete.insert( property );
+        }
+        continue;
     }
 
   } // End loop over style properties

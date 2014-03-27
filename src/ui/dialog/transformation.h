@@ -12,26 +12,20 @@
 #define INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 
 
-
 #include <gtkmm/notebook.h>
 #include <glibmm/i18n.h>
-
-
 
 #include "ui/widget/panel.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/imageicon.h"
 #include "ui/widget/button.h"
-
-
+#include "ui/dialog/desktop-tracker.h"
 
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
-
-
 
 
 /**
@@ -151,10 +145,17 @@ protected:
     UI::Widget::Scalar            _scalar_transform_e;
     UI::Widget::Scalar            _scalar_transform_f;
 
+    Gtk::RadioButton         _counterclockwise_rotate;
+    Gtk::RadioButton         _clockwise_rotate;
+
     UI::Widget::CheckButton  _check_move_relative;
     UI::Widget::CheckButton  _check_scale_proportional;
     UI::Widget::CheckButton  _check_apply_separately;
     UI::Widget::CheckButton  _check_replace_matrix;
+
+    SPDesktop *_desktop;
+    DesktopTracker _deskTrack;
+    sigc::connection _desktopChangeConn;
 
     /**
      * Layout the GUI components, and prepare for use
@@ -167,8 +168,12 @@ protected:
 
     virtual void _apply();
     void presentPage(PageType page);
-    void onSwitchPage(GtkNotebookPage *page,
-                    guint pagenum);
+
+#if WITH_GTKMM_3_0
+    void onSwitchPage(Gtk::Widget *page, guint pagenum);
+#else
+    void onSwitchPage(GtkNotebookPage *page, guint pagenum);
+#endif
 
     /**
      * Callbacks for when a user changes values on the panels
@@ -178,6 +183,8 @@ protected:
     void onScaleXValueChanged();
     void onScaleYValueChanged();
     void onRotateValueChanged();
+    void onRotateCounterclockwiseClicked();
+    void onRotateClockwiseClicked();
     void onSkewValueChanged();
     void onTransformValueChanged();
     void onReplaceMatrixToggled();
@@ -207,6 +214,8 @@ protected:
     void applyPageRotate(Inkscape::Selection *);
     void applyPageSkew(Inkscape::Selection *);
     void applyPageTransform(Inkscape::Selection *);
+
+    void setTargetDesktop(SPDesktop* desktop);
 
 private:
 

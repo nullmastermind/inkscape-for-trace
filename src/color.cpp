@@ -61,6 +61,10 @@ SPColor::~SPColor()
 
 SPColor& SPColor::operator= (SPColor const& other)
 {
+    if (this == &other){
+        return *this;
+    }
+    
     SVGICCColor* tmp_icc = other.icc ? new SVGICCColor(*other.icc) : 0;
 
     v.c[0] = other.v.c[0];
@@ -80,9 +84,10 @@ SPColor& SPColor::operator= (SPColor const& other)
  */
 bool SPColor::operator == (SPColor const& other) const
 {
-    bool match = (v.c[0] != other.v.c[0])
-        && (v.c[1] != other.v.c[1])
-        && (v.c[2] != other.v.c[2]);
+    bool match =
+        (v.c[0] == other.v.c[0]) &&
+        (v.c[1] == other.v.c[1]) &&
+        (v.c[2] == other.v.c[2]);
 
     match &= profileMatches( icc, other.icc );
 
@@ -95,9 +100,7 @@ bool SPColor::operator == (SPColor const& other) const
  */
 bool SPColor::isClose( SPColor const& other, float epsilon ) const
 {
-    bool match = false;
-
-    match = (fabs((v.c[0]) - (other.v.c[0])) < epsilon)
+    bool match = (fabs((v.c[0]) - (other.v.c[0])) < epsilon)
         && (fabs((v.c[1]) - (other.v.c[1])) < epsilon)
         && (fabs((v.c[2]) - (other.v.c[2])) < epsilon);
 
@@ -348,7 +351,7 @@ sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b)
     }
 }
 
-float
+static float
 hue_2_rgb (float v1, float v2, float h)
 {
     if (h < 0) h += 6.0;

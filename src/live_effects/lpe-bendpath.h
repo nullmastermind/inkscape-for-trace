@@ -10,9 +10,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "live_effects/parameter/enum.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/path.h"
-#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/bool.h"
 
 #include <2geom/sbasis.h>
@@ -33,11 +33,11 @@ public:
     LPEBendPath(LivePathEffectObject *lpeobject);
     virtual ~LPEBendPath();
 
-    virtual void doBeforeEffect (SPLPEItem *lpeitem);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
-    virtual void resetDefaults(SPItem * item);
+    virtual void resetDefaults(SPItem const* item);
 
 
 private:

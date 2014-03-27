@@ -13,6 +13,7 @@
 #include <cstring>
 #include <sstream>
 #include <glibmm/fileutils.h>
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -26,6 +27,8 @@
 #include "util/units.h"
 
 #define PREFERENCES_FILE_NAME "preferences.xml"
+
+using Inkscape::Util::unit_table;
 
 namespace Inkscape {
 
@@ -435,9 +438,7 @@ void Preferences::setBool(Glib::ustring const &pref_path, bool value)
  */
 void Preferences::setInt(Glib::ustring const &pref_path, int value)
 {
-    gchar intstr[32];
-    g_snprintf(intstr, 32, "%d", value);
-    _setRawValue(pref_path, intstr);
+    _setRawValue(pref_path, Glib::ustring::compose("%1",value));
 }
 
 /**
@@ -448,9 +449,7 @@ void Preferences::setInt(Glib::ustring const &pref_path, int value)
  */
 void Preferences::setDouble(Glib::ustring const &pref_path, double value)
 {
-    gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
-    g_ascii_dtostr(buf, G_ASCII_DTOSTR_BUF_SIZE, value);
-    _setRawValue(pref_path, buf);
+    _setRawValue(pref_path, Glib::ustring::compose("%1",value));
 }
 
 /**
@@ -462,11 +461,8 @@ void Preferences::setDouble(Glib::ustring const &pref_path, double value)
  */
 void Preferences::setDoubleUnit(Glib::ustring const &pref_path, double value, Glib::ustring const &unit_abbr)
 {
-    gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
-    g_ascii_dtostr(buf, G_ASCII_DTOSTR_BUF_SIZE, value);
-    Glib::ustring str(buf);
-    str += unit_abbr;
-    _setRawValue(pref_path, str.c_str());
+    Glib::ustring str = Glib::ustring::compose("%1%2",value,unit_abbr);
+    _setRawValue(pref_path, str);
 }
 
 void Preferences::setColor(Glib::ustring const &pref_path, guint32 value)
@@ -484,26 +480,37 @@ void Preferences::setColor(Glib::ustring const &pref_path, guint32 value)
  */
 void Preferences::setString(Glib::ustring const &pref_path, Glib::ustring const &value)
 {
-    _setRawValue(pref_path, value.c_str());
+    _setRawValue(pref_path, value);
 }
 
 void Preferences::setStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
 {
-    gchar *css_str = sp_repr_css_write_string(style);
+    Glib::ustring css_str;
+    sp_repr_css_write_string(style, css_str);
     _setRawValue(pref_path, css_str);
-    g_free(css_str);
 }
 
 void Preferences::mergeStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
 {
     SPCSSAttr *current = getStyle(pref_path);
     sp_repr_css_merge(current, style);
-    gchar *css_str = sp_repr_css_write_string(current);
+    Glib::ustring css_str;
+    sp_repr_css_write_string(current, css_str);
     _setRawValue(pref_path, css_str);
-    g_free(css_str);
     sp_repr_css_attr_unref(current);
 }
 
+/**
+ *  Remove an entry
+ *  Make sure observers have been removed before calling
+ */
+void Preferences::remove(Glib::ustring const &pref_path)
+{
+    Inkscape::XML::Node *node = _getNode(pref_path, false);
+    if (node && node->parent()) {
+        node->parent()->removeChild(node);
+    }
+}
 
 /**
  * Class that holds additional information for registered Observers.
@@ -654,6 +661,9 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
     // No longer necessary, can cause problems with input devices which have a dot in the name
     // g_assert( pref_key.find('.') == Glib::ustring::npos );
 
+    if (_prefs_doc == NULL){
+        return NULL;
+    }
     Inkscape::XML::Node *node = _prefs_doc->root();
     Inkscape::XML::Node *child = NULL;
     gchar **splits = g_strsplit(pref_key.c_str(), "/", 0);
@@ -721,7 +731,7 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
     }
 }
 
-void Preferences::_setRawValue(Glib::ustring const &path, gchar const *value)
+void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &value)
 {
     // create node and attribute keys
     Glib::ustring node_key, attr_key;
@@ -729,7 +739,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, gchar const *value)
 
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
-    node->setAttribute(attr_key.c_str(), value);
+    node->setAttribute(attr_key.c_str(), value.c_str());
 }
 
 // The _extract* methods are where the actual wrok is done - they define how preferences are stored
@@ -765,17 +775,14 @@ double Preferences::_extractDouble(Entry const &v)
 
 double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requested_unit)
 {
-    static Inkscape::Util::UnitTable unit_table; // load the unit_table once by making it static
-
     double val = _extractDouble(v);
     Glib::ustring unit = _extractUnit(v);
 
     if (unit.length() == 0) {
         // no unit specified, don't do conversion
         return val;
-    } else {
-        return val * (unit_table.getUnit(unit).factor / unit_table.getUnit(requested_unit).factor);
     }
+    return val * (unit_table.getUnit(unit)->factor / unit_table.getUnit(requested_unit)->factor); /// \todo rewrite using Quantity class, so the standard code handles unit conversion
 }
 
 Glib::ustring Preferences::_extractString(Entry const &v)

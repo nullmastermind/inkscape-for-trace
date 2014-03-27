@@ -1,27 +1,24 @@
 
 set(io_SRC
 	base64stream.cpp
-	ftos.cpp
+	bufferstream.cpp
 	gzipstream.cpp
 	inkjar.cpp
 	inkscapestream.cpp
 	resource.cpp
-	simple-sax.cpp
 	stringstream.cpp
 	sys.cpp
 	uristream.cpp
 	xsltstream.cpp
 
-
 	# -------
 	# Headers
 	base64stream.h
-	ftos.h
+	bufferstream.h
 	gzipstream.h
 	inkjar.h
 	inkscapestream.h
 	resource.h
-	simple-sax.h
 	stringstream.h
 	sys.h
 	uristream.h

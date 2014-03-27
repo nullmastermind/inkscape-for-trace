@@ -16,11 +16,9 @@
 #include <2geom/point.h>
 #include "knot.h"
 #include "selection.h"
-#include "axis-manip.h"
-#include "inkscape.h"
 #include "persp3d.h"
 #include "box3d.h"
-#include "persp3d-reference.h"
+#include "ui/control-manager.h" // TODO break enums out separately
 
 class SPBox3D;
 
@@ -112,7 +110,7 @@ private:
     Proj::Axis _axis;
 };
 
-class VPDrag;
+struct VPDrag;
 
 struct less_ptr : public std::binary_function<VanishingPoint *, VanishingPoint *, bool> {
     bool operator()(VanishingPoint *vp1, VanishingPoint *vp2) {
@@ -199,7 +197,10 @@ public:
 private:
     //void deselect_all();
 
-    void addLine (Geom::Point p1, Geom::Point p2, guint32 rgba);
+    /**
+     * Create a line from p1 to p2 and add it to the lines list.
+     */
+    void addLine(Geom::Point const &p1, Geom::Point const &p2, Inkscape::CtrlLineType type);
 
     Inkscape::Selection *selection;
     sigc::connection sel_changed_connection;

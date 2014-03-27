@@ -13,21 +13,39 @@
 #ifndef INKSCAPE_UI_CURRENT_STYLE_H
 #define INKSCAPE_UI_CURRENT_STYLE_H
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
-#include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/enums.h>
 
 #include "desktop.h"
-#include "button.h"
 #include "preferences.h"
 
-class SPUnit;
-class SPStyle;
+struct SPStyle;
 class SPCSSAttr;
 
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
+}
+
 namespace Inkscape {
+
+namespace Util {
+    class Unit;
+}
+
 namespace UI {
 namespace Widget {
 
@@ -60,7 +78,13 @@ private:
     Glib::ustring _tool_path;
 
     Gtk::EventBox _swatch;
-    Gtk::Table _table;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid *_table;
+#else
+    Gtk::Table *_table;
+#endif
+
     Gtk::Label _label[2];
     Gtk::EventBox _place[2];
     Gtk::EventBox _opacity_place;
@@ -72,7 +96,7 @@ private:
     Gtk::EventBox _stroke_width_place;
     Gtk::Label _stroke_width;
 
-    SPUnit *_sw_unit;
+    Inkscape::Util::Unit *_sw_unit;
 
 friend class ToolObserver;
 };

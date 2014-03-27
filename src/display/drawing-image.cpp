@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <2geom/bezier-curve.h>
 #include "display/cairo-utils.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
@@ -21,33 +22,22 @@ namespace Inkscape {
 DrawingImage::DrawingImage(Drawing &drawing)
     : DrawingItem(drawing)
     , _pixbuf(NULL)
-    , _surface(NULL)
     , _style(NULL)
 {}
 
 DrawingImage::~DrawingImage()
 {
-    if (_style)
+    if (_style) {
         sp_style_unref(_style);
-    if (_pixbuf) {
-        cairo_surface_destroy(_surface);
-        g_object_unref(_pixbuf);
     }
+
+    // _pixbuf is owned by SPImage - do not delete it
 }
 
 void
-DrawingImage::setARGB32Pixbuf(GdkPixbuf *pb)
+DrawingImage::setPixbuf(Inkscape::Pixbuf *pb)
 {
-    // when done in this order, it won't break if pb == image->pixbuf and the refcount is 1
-    if (pb != NULL) {
-        g_object_ref (pb);
-    }
-    if (_pixbuf != NULL) {
-        g_object_unref(_pixbuf);
-        cairo_surface_destroy(_surface);
-    }
     _pixbuf = pb;
-    _surface = pb ? ink_cairo_surface_create_for_argb32_pixbuf(pb) : NULL;
 
     _markForUpdate(STATE_ALL, false);
 }
@@ -84,8 +74,8 @@ DrawingImage::bounds() const
 {
     if (!_pixbuf) return _clipbox;
 
-    double pw = gdk_pixbuf_get_width(_pixbuf);
-    double ph = gdk_pixbuf_get_height(_pixbuf);
+    double pw = _pixbuf->width();
+    double ph = _pixbuf->height();
     double vw = pw * _scale[Geom::X];
     double vh = ph * _scale[Geom::Y];
     Geom::Point wh(vw, vh);
@@ -112,42 +102,51 @@ DrawingImage::_updateItem(Geom::IntRect const &, UpdateContext const &, unsigned
     return STATE_ALL;
 }
 
-unsigned DrawingImage::_renderItem(DrawingContext &ct, Geom::IntRect const &/*area*/, unsigned /*flags*/, DrawingItem * /*stop_at*/)
+unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*area*/, unsigned /*flags*/, DrawingItem * /*stop_at*/)
 {
     bool outline = _drawing.outline();
 
     if (!outline) {
         if (!_pixbuf) return RENDER_OK;
 
-        Inkscape::DrawingContext::Save save(ct);
-        ct.transform(_ctm);
-        ct.newPath();
-        ct.rectangle(_clipbox);
-        ct.clip();
+        Inkscape::DrawingContext::Save save(dc);
+        dc.transform(_ctm);
+        dc.newPath();
+        dc.rectangle(_clipbox);
+        dc.clip();
 
-        ct.translate(_origin);
-        ct.scale(_scale);
-        ct.setSource(_surface, 0, 0);
+        dc.translate(_origin);
+        dc.scale(_scale);
+        dc.setSource(_pixbuf->getSurfaceRaw(), 0, 0);
 
-        cairo_matrix_t tt;
-        Geom::Affine total;
-        cairo_get_matrix(ct.raw(), &tt);
-        ink_matrix_to_2geom(total, tt);
-
-        if (total.expansionX() > 1.0 || total.expansionY() > 1.0) {
-            cairo_pattern_t *p = cairo_get_source(ct.raw());
-            cairo_pattern_set_filter(p, CAIRO_FILTER_NEAREST);
+        if (_style) {
+            // See: http://www.w3.org/TR/SVG/painting.html#ImageRenderingProperty
+            //      http://www.w3.org/TR/css4-images/#the-image-rendering
+            //      style.h/style.cpp
+            switch (_style->image_rendering.computed) {
+                case SP_CSS_COLOR_RENDERING_AUTO:
+                    // Do nothing
+                    break;
+                case SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY:
+                    // In recent Cairo, BEST used Lanczos3, which is prohibitively slow
+                    dc.patternSetFilter( CAIRO_FILTER_GOOD );
+                    break;
+                case SP_CSS_COLOR_RENDERING_OPTIMIZESPEED:
+                default:
+                    dc.patternSetFilter( CAIRO_FILTER_NEAREST );
+                    break;
+            }
         }
-        //ct.paint(_opacity);
-        ct.paint();
+
+        dc.paint(_opacity);
 
     } else { // outline; draw a rect instead
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint32 rgba = prefs->getInt("/options/wireframecolors/images", 0xff0000ff);
 
-        {   Inkscape::DrawingContext::Save save(ct);
-            ct.transform(_ctm);
-            ct.newPath();
+        {   Inkscape::DrawingContext::Save save(dc);
+            dc.transform(_ctm);
+            dc.newPath();
 
             Geom::Rect r = bounds();
             Geom::Point c00 = r.corner(0);
@@ -155,21 +154,21 @@ unsigned DrawingImage::_renderItem(DrawingContext &ct, Geom::IntRect const &/*ar
             Geom::Point c11 = r.corner(2);
             Geom::Point c10 = r.corner(1);
 
-            ct.moveTo(c00);
+            dc.moveTo(c00);
             // the box
-            ct.lineTo(c10);
-            ct.lineTo(c11);
-            ct.lineTo(c01);
-            ct.lineTo(c00);
+            dc.lineTo(c10);
+            dc.lineTo(c11);
+            dc.lineTo(c01);
+            dc.lineTo(c00);
             // the diagonals
-            ct.lineTo(c11);
-            ct.moveTo(c10);
-            ct.lineTo(c01);
+            dc.lineTo(c11);
+            dc.moveTo(c10);
+            dc.lineTo(c01);
         }
 
-        ct.setLineWidth(0.5);
-        ct.setSource(rgba);
-        ct.stroke();
+        dc.setLineWidth(0.5);
+        dc.setSource(rgba);
+        dc.stroke();
     }
     return RENDER_OK;
 }
@@ -178,21 +177,9 @@ unsigned DrawingImage::_renderItem(DrawingContext &ct, Geom::IntRect const &/*ar
 static double
 distance_to_segment (Geom::Point const &p, Geom::Point const &a1, Geom::Point const &a2)
 {
-    // calculate sides of the triangle and their squares
-    double d1 = Geom::L2(p - a1);
-    double d1_2 = d1 * d1;
-    double d2 = Geom::L2(p - a2);
-    double d2_2 = d2 * d2;
-    double a = Geom::L2(a1 - a2);
-    double a_2 = a * a;
-
-    // if one of the angles at the base is > 90, return the corresponding side
-    if (d1_2 + a_2 <= d2_2) return d1;
-    if (d2_2 + a_2 <= d1_2) return d2;
-
-    // otherwise calculate the height to the base
-    double peri = (a + d1 + d2)/2;
-    return (2*sqrt(peri * (peri - a) * (peri - d1) * (peri - d2))/a);
+    Geom::LineSegment l(a1, a2);
+    Geom::Point np = l.pointAt(l.nearestPoint(p));
+    return Geom::distance(np, p);
 }
 
 DrawingItem *
@@ -204,29 +191,24 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
 
     if (outline) {
         Geom::Rect r = bounds();
+        Geom::Point pick = p * _ctm.inverse();
 
-        Geom::Point c00 = r.corner(0);
-        Geom::Point c01 = r.corner(3);
-        Geom::Point c11 = r.corner(2);
-        Geom::Point c10 = r.corner(1);
-
-        // frame
-        if (distance_to_segment (p, c00, c10) < delta) return this;
-        if (distance_to_segment (p, c10, c11) < delta) return this;
-        if (distance_to_segment (p, c11, c01) < delta) return this;
-        if (distance_to_segment (p, c01, c00) < delta) return this;
-
-        // diagonals
-        if (distance_to_segment (p, c00, c11) < delta) return this;
-        if (distance_to_segment (p, c10, c01) < delta) return this;
-
+        // find whether any side or diagonal is within delta
+        // to do so, iterate over all pairs of corners
+        for (unsigned i = 0; i < 3; ++i) { // for i=3, there is nothing to do
+            for (unsigned j = i+1; j < 4; ++j) {
+                if (distance_to_segment(pick, r.corner(i), r.corner(j)) < delta) {
+                    return this;
+                }
+            }
+        }
         return NULL;
 
     } else {
-        unsigned char *const pixels = gdk_pixbuf_get_pixels(_pixbuf);
-        int width = gdk_pixbuf_get_width(_pixbuf);
-        int height = gdk_pixbuf_get_height(_pixbuf);
-        int rowstride = gdk_pixbuf_get_rowstride(_pixbuf);
+        unsigned char *const pixels = _pixbuf->pixels();
+        int width = _pixbuf->width();
+        int height = _pixbuf->height();
+        int rowstride = _pixbuf->rowstride();
 
         Geom::Point tp = p * _ctm.inverse();
         Geom::Rect r = bounds();
@@ -244,8 +226,17 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
 
         unsigned char *pix_ptr = pixels + iy * rowstride + ix * 4;
         // pick if the image is less than 99% transparent
-        float alpha = (pix_ptr[3] / 255.0f) * _opacity;
-        return alpha > 0.01 ? this : NULL;
+        guint32 alpha = 0;
+        if (_pixbuf->pixelFormat() == Inkscape::Pixbuf::PF_CAIRO) {
+            guint32 px = *reinterpret_cast<guint32 const *>(pix_ptr);
+            alpha = (px & 0xff000000) >> 24;
+        } else if (_pixbuf->pixelFormat() == Inkscape::Pixbuf::PF_GDK) {
+            alpha = pix_ptr[3];
+        } else {
+            throw std::runtime_error("Unrecognized pixel format");
+        }
+        float alpha_f = (alpha / 255.0f) * _opacity;
+        return alpha_f > 0.01 ? this : NULL;
     }
 }
 

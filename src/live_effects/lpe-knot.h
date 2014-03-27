@@ -56,7 +56,7 @@ public:
   LPEKnot(LivePathEffectObject *lpeobject);
   virtual ~LPEKnot();
   
-  virtual void doBeforeEffect (SPLPEItem *lpeitem);
+  virtual void doBeforeEffect (SPLPEItem const* lpeitem);
   virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & input_path);
   
   /* the knotholder entity classes must be declared friends */
@@ -64,7 +64,7 @@ public:
   void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
-    virtual void addCanvasIndicators(SPLPEItem *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
   
 private:
   void updateSwitcher();

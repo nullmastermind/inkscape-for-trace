@@ -15,6 +15,7 @@
 #include <exception>
 #include <libxml/uri.h>
 #include "bad-uri-exception.h"
+#include <string>
 
 namespace Inkscape {
 
@@ -23,6 +24,9 @@ namespace Inkscape {
  */
 class URI {
 public:
+
+    /* Blank constructor */
+    URI();
 
     /**
      * Copy constructor.
@@ -100,6 +104,8 @@ public:
     static URI from_native_filename(gchar const *path) throw(BadURIException);
 
     static gchar *to_native_filename(gchar const* uri) throw(BadURIException);
+
+    const std::string getFullPath(std::string const base) const;
 
     gchar *toNativeFilename() const throw(BadURIException);
 

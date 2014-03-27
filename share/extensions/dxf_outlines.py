@@ -30,9 +30,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
-import inkex, simplestyle, simpletransform, cubicsuperpath, coloreffect, dxf_templates, math
-import gettext
-_ = gettext.gettext
+# standard library
+import math
+# local library
+import inkex
+import simplestyle
+import simpletransform
+import cubicsuperpath
+import coloreffect
+import dxf_templates
+
+inkex.localize()
 
 try:
     from numpy import *
@@ -76,12 +84,17 @@ class MyEffect(inkex.Effect):
                                      type="string", dest="tab")
         self.OptionParser.add_option("--inputhelp", action="store",
                                      type="string", dest="inputhelp")
-        self.OptionParser.add_option("--visibleLayers", action="store",
-                                     type="string", dest="visibleLayers")
+        self.OptionParser.add_option("--layer_option", action="store",
+                                     type="string", dest="layer_option",
+                                     default="all")
+        self.OptionParser.add_option("--layer_name", action="store",
+                                     type="string", dest="layer_name")
+                                     
         self.dxf = []
         self.handle = 255                       # handle for DXF ENTITY
         self.layers = ['0']
         self.layer = '0'                        # mandatory layer
+        self.layernames = []
         self.csp_old = [[0.0,0.0]]*4            # previous spline
         self.d = array([0], float)              # knot vector
         self.poly = [[0.0,0.0]]                 # LWPOLYLINE data
@@ -100,12 +113,13 @@ class MyEffect(inkex.Effect):
             self.poly = [csp[0]]                            # initiallize new polyline
             self.color_LWPOLY = self.color
             self.layer_LWPOLY = self.layer
+            self.closed_LWPOLY = self.closed
         self.poly.append(csp[1])
     def LWPOLY_output(self):
         if len(self.poly) == 1:
             return
         self.handle += 1
-        self.dxf_add("  0\nLWPOLYLINE\n  5\n%x\n100\nAcDbEntity\n  8\n%s\n 62\n%d\n100\nAcDbPolyline\n 90\n%d\n 70\n0\n" % (self.handle, self.layer_LWPOLY, self.color_LWPOLY, len(self.poly)))
+        self.dxf_add("  0\nLWPOLYLINE\n  5\n%x\n100\nAcDbEntity\n  8\n%s\n 62\n%d\n100\nAcDbPolyline\n 90\n%d\n 70\n%d\n" % (self.handle, self.layer_LWPOLY, self.color_LWPOLY, len(self.poly), self.closed_LWPOLY))
         for i in range(len(self.poly)):
             self.dxf_add(" 10\n%f\n 20\n%f\n 30\n0.0\n" % (self.poly[i][0],self.poly[i][1]))
     def dxf_spline(self,csp):
@@ -181,6 +195,7 @@ class MyEffect(inkex.Effect):
                 if style['stroke'] and style['stroke'] != 'none' and style['stroke'][0:3] != 'url':
                     rgb = simplestyle.parseColor(style['stroke'])
         hsl = coloreffect.ColorEffect.rgb_to_hsl(coloreffect.ColorEffect(),rgb[0]/255.0,rgb[1]/255.0,rgb[2]/255.0)
+        self.closed = 0                                 # only for LWPOLYLINE
         self.color = 7                                  # default is black
         if hsl[2]:
             self.color = 1 + (int(6*hsl[0] + 0.5) % 6)  # use 6 hues
@@ -188,8 +203,11 @@ class MyEffect(inkex.Effect):
             d = node.get('d')
             if not d:
                 return
+            if (d[-1] == 'z' or d[-1] == 'Z'):
+                self.closed = 1
             p = cubicsuperpath.parsePath(d)
         elif node.tag == inkex.addNS('rect','svg'):
+            self.closed = 1
             x = float(node.get('x'))
             y = float(node.get('y'))
             width = float(node.get('width'))
@@ -254,9 +272,12 @@ class MyEffect(inkex.Effect):
             if style:
                 style = simplestyle.parseStyle(style)
                 if style.has_key('display'):
-                    if style['display'] == 'none' and self.options.visibleLayers == 'true':
+                    if style['display'] == 'none' and self.options.layer_option and self.options.layer_option=='visible':
                         return
             layer = group.get(inkex.addNS('label', 'inkscape'))
+            if self.options.layer_name and self.options.layer_option and self.options.layer_option=='name' and not layer.lower() in self.options.layer_name:
+                return
+              
             layer = layer.replace(' ', '_')
             if layer in self.layers:
                 self.layer = layer
@@ -274,6 +295,14 @@ class MyEffect(inkex.Effect):
             self.groupmat.pop()
 
     def effect(self):
+        #Warn user if name match field is empty
+        if self.options.layer_option and self.options.layer_option=='name' and not self.options.layer_name:
+            inkex.errormsg(_("Error: Field 'Layer match name' must be filled when using 'By name match' option"))
+            inkex.sys.exit()
+        #Split user layer data into a list: "layerA,layerb,LAYERC" becomes ["layera", "layerb", "layerc"]
+        if self.options.layer_name:
+            self.options.layer_name = self.options.layer_name.lower().split(',')
+			
         #References:   Minimum Requirements for Creating a DXF File of a 3D Model By Paul Bourke
         #              NURB Curves: A Guide for the Uninitiated By Philip J. Schneider
         #              The NURBS Book By Les Piegl and Wayne Tiller (Springer, 1995)
@@ -282,6 +311,9 @@ class MyEffect(inkex.Effect):
         for node in self.document.getroot().xpath('//svg:g', namespaces=inkex.NSS):
             if node.get(inkex.addNS('groupmode', 'inkscape')) == 'layer':
                 layer = node.get(inkex.addNS('label', 'inkscape'))
+                self.layernames.append(layer.lower())
+                if self.options.layer_name and self.options.layer_option and self.options.layer_option=='name' and not layer.lower() in self.options.layer_name:
+                    continue
                 layer = layer.replace(' ', '_')
                 if layer and not layer in self.layers:
                     self.layers.append(layer)
@@ -293,7 +325,7 @@ class MyEffect(inkex.Effect):
         scale = eval(self.options.units)
         if not scale:
             scale = 25.4/90     # if no scale is specified, assume inch as baseunit
-        h = inkex.unittouu(self.document.getroot().xpath('@height', namespaces=inkex.NSS)[0])
+        h = self.unittouu(self.document.getroot().xpath('@height', namespaces=inkex.NSS)[0])
         self.groupmat = [[[scale, 0.0, 0.0], [0.0, -scale, h*scale]]]
         doc = self.document.getroot()
         self.process_group(doc)
@@ -302,6 +334,11 @@ class MyEffect(inkex.Effect):
         if self.options.POLY == 'true':
             self.LWPOLY_output()
         self.dxf_add(dxf_templates.r14_footer)
+		#Warn user if layer data seems wrong
+        if self.options.layer_name and self.options.layer_option and self.options.layer_option=='name':
+            for layer in self.options.layer_name:
+                if not layer in self.layernames:
+                    inkex.errormsg(_("Warning: Layer '%s' not found!") % (layer))
 
 if __name__ == '__main__':
     e = MyEffect()

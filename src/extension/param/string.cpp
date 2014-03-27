@@ -10,10 +10,15 @@
 # include "config.h"
 #endif
 
-#include <glibmm/value.h>
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/spinbutton.h>
+
+#include <glibmm/value.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
@@ -165,12 +170,7 @@ Gtk::Widget * ParamString::get_widget(SPDocument * doc, Inkscape::XML::Node * no
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
-
-#if WITH_GTKMM_2_22
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
-#else
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_LEFT));
-#endif
     label->show();
     hbox->pack_start(*label, false, false, _indent);
 

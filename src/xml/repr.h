@@ -14,16 +14,11 @@
 #ifndef SEEN_SP_REPR_H
 #define SEEN_SP_REPR_H
 
-#include <stdio.h>
 #include <glib.h>
-#include "gc-anchored.h"
+#include <glibmm/quark.h>
 
 #include "xml/node.h"
 #include "xml/document.h"
-#include "xml/sp-css-attr.h"
-#include "io/inkscapestream.h"
-
-#include <2geom/forward.h>
 
 #define SP_SODIPODI_NS_URI "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
 #define SP_BROKEN_SODIPODI_NS_URI "http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -34,6 +29,18 @@
 #define SP_CC_NS_URI "http://creativecommons.org/ns#"
 #define SP_OLD_CC_NS_URI "http://web.resource.org/cc/"
 #define SP_DC_NS_URI "http://purl.org/dc/elements/1.1/"
+
+class SPCSSAttr;
+
+namespace Inkscape {
+namespace IO {
+class Writer;
+} // namespace IO
+} // namespace Inkscape
+
+namespace Geom {
+class Point;
+}
 
 /* SPXMLNs */
 char const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
@@ -79,7 +86,7 @@ void sp_repr_css_unset_property(SPCSSAttr *css, gchar const *name);
 bool sp_repr_css_property_is_unset(SPCSSAttr *css, gchar const *name);
 double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval);
 
-gchar *sp_repr_css_write_string(SPCSSAttr *css);
+void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str);
 void sp_repr_css_set(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
 void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src);
 void sp_repr_css_attr_add_from_string(SPCSSAttr *css, const gchar *data);
@@ -91,9 +98,11 @@ void sp_repr_css_print(SPCSSAttr *css);
 /* Utility finctions */
 /// Remove \a repr from children of its parent node.
 inline void sp_repr_unparent(Inkscape::XML::Node *repr) {
-    Inkscape::XML::Node *parent=repr->parent();
-    if (parent) {
-        parent->removeChild(repr);
+    if (repr) {
+        Inkscape::XML::Node *parent=repr->parent();
+        if (parent) {
+            parent->removeChild(repr);
+        }
     }
 }
 

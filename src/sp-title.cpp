@@ -16,59 +16,31 @@
 #include "sp-title.h"
 #include "xml/repr.h"
 
-static void sp_title_class_init(SPTitleClass *klass);
-static void sp_title_init(SPTitle *rect);
-static Inkscape::XML::Node *sp_title_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
+#include "sp-factory.h"
 
-static SPObjectClass *title_parent_class;
+namespace {
+	SPObject* createTitle() {
+		return new SPTitle();
+	}
 
-GType
-sp_title_get_type (void)
-{
-    static GType title_type = 0;
-
-    if (!title_type) {
-        GTypeInfo title_info = {
-            sizeof (SPTitleClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_title_class_init,
-            NULL, NULL,
-            sizeof (SPTitle),
-            16,
-            (GInstanceInitFunc) sp_title_init,
-            NULL,    /* value_table */
-        };
-        title_type = g_type_register_static (SP_TYPE_OBJECT, "SPTitle", &title_info, (GTypeFlags)0);
-    }
-    return title_type;
+	bool titleRegistered = SPFactory::instance().registerObject("svg:title", createTitle);
 }
 
-static void
-sp_title_class_init(SPTitleClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    title_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-
-    sp_object_class->write = sp_title_write;
+SPTitle::SPTitle() : SPObject() {
 }
 
-static void
-sp_title_init(SPTitle */*desc*/)
-{
+SPTitle::~SPTitle() {
 }
 
-/**
- * Writes it's settings to an incoming repr object, if any.
- */
-static Inkscape::XML::Node *sp_title_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags)
-{
+Inkscape::XML::Node* SPTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+	SPTitle* object = this;
+
     if (!repr) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = object->getRepr()->duplicate(xml_doc);
     }
 
-    if (((SPObjectClass *) title_parent_class)->write) {
-        ((SPObjectClass *) title_parent_class)->write(object, doc, repr, flags);
-    }
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }
+

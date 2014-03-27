@@ -21,12 +21,13 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "registrytool.h"
+
 #include <windows.h>
 #include <string>
 #include <cstdio>
 
-#include "registrytool.h"
-
+#include <glibmm/ustring.h>
 
 typedef struct
 {
@@ -70,6 +71,7 @@ bool RegistryTool::setStringValue(const Glib::ustring &keyNameArg,
     //Get or create the key
     gunichar2 *keyw       = g_utf8_to_utf16(keyName.data(), -1, 0,0,0);
     gunichar2 *valuenamew = g_utf8_to_utf16(valueName.data(), -1, 0,0,0);
+    gunichar2 *valuew     = g_utf8_to_utf16(value.data(), -1, 0,0,0);
 
     HKEY key;
     if (RegCreateKeyExW(rootKey, (WCHAR*) keyw,
@@ -82,7 +84,7 @@ bool RegistryTool::setStringValue(const Glib::ustring &keyNameArg,
 
     // Set the value
     if (RegSetValueExW(key, (WCHAR*) valuenamew,
-          0,  REG_SZ, (LPBYTE) value.data(), (DWORD) (value.size() + 1)))
+          0,  REG_SZ, (LPBYTE) valuew, (DWORD) (2*value.size() + 2)))
     {
        fprintf(stderr, "RegistryTool: Could not set the value '%s'\n", value.c_str());
        goto failkey;
@@ -140,7 +142,7 @@ bool RegistryTool::setPathInfo()
     //    fullPath.c_str(), path.c_str(), exeName.c_str());
 
     Glib::ustring keyName =
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\";
+    "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\";
     keyName.append(exeName);
 
     Glib::ustring valueName = "";

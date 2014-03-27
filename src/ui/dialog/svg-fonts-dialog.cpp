@@ -15,14 +15,13 @@
 # include <config.h>
 #endif
 
-#ifdef ENABLE_SVG_FONTS
-
 #include "svg-fonts-dialog.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include <gtkmm/notebook.h>
+#include <gtkmm/imagemenuitem.h>
+#include <gtkmm/scale.h>
 #include <gtkmm/stock.h>
-#include <glibmm/i18n.h>
 #include <message-stack.h>
 #include "selection.h"
 #include <string.h>
@@ -37,6 +36,9 @@
 #include "sp-missing-glyph.h"
 #include "sp-font.h"
 #include "sp-glyph-kerning.h"
+
+#include <glibmm/i18n.h>
+#include <glibmm/stringutils.h>
 
 SvgFontDrawingArea::SvgFontDrawingArea():
     _x(0),
@@ -162,23 +164,14 @@ GlyphComboBox::GlyphComboBox(){
 
 void GlyphComboBox::update(SPFont* spfont){
     if (!spfont) return
-//TODO: figure out why do we need to append_text("") before clearing items properly...
+//TODO: figure out why do we need to append("") before clearing items properly...
 
-#if WITH_GTKMM_2_24
     this->append(""); //Gtk is refusing to clear the combobox when I comment out this line
     this->remove_all();
-#else
-    this->append_text(""); //Gtk is refusing to clear the combobox when I comment out this line
-    this->clear_items();
-#endif
 
     for(SPObject* node = spfont->children; node; node=node->next){
         if (SP_IS_GLYPH(node)){
-#if WITH_GTKMM_2_24
             this->append((static_cast<SPGlyph*>(node))->unicode);
-#else
-            this->append_text((static_cast<SPGlyph*>(node))->unicode);
-#endif
         }
     }
 }
@@ -199,7 +192,7 @@ void SvgFontsDialog::on_kerning_value_changed(){
     //slider values increase from right to left so that they match the kerning pair preview
 
     //XML Tree being directly used here while it shouldn't be.
-    this->kerning_pair->getRepr()->setAttribute("k", Glib::Ascii::dtostr(get_selected_spfont()->horiz_adv_x - kerning_slider.get_value()).c_str());
+    this->kerning_pair->getRepr()->setAttribute("k", Glib::Ascii::dtostr(get_selected_spfont()->horiz_adv_x - kerning_slider->get_value()).c_str());
     DocumentUndo::maybeDone(document, undokey.c_str(), SP_VERB_DIALOG_SVG_FONTS, _("Adjust kerning value"));
 
     //populate_kerning_pairs_box();
@@ -277,7 +270,7 @@ void SvgFontsDialog::update_fonts()
     _model->clear();
     for(const GSList *l = fonts; l; l = l->next) {
         Gtk::TreeModel::Row row = *_model->append();
-        SPFont* f = (SPFont*)l->data;
+        SPFont* f = SP_FONT(l->data);
         row[_columns.spfont] = f;
         row[_columns.svgfont] = new SvgFont(f);
         const gchar* lbl = f->label();
@@ -307,7 +300,7 @@ void SvgFontsDialog::on_kerning_pair_selection_changed(){
     this->kerning_pair = kern;
 
     //slider values increase from right to left so that they match the kerning pair preview
-    kerning_slider.set_value(get_selected_spfont()->horiz_adv_x - kern->k);
+    kerning_slider->set_value(get_selected_spfont()->horiz_adv_x - kern->k);
 }
 
 void SvgFontsDialog::update_global_settings_tab(){
@@ -317,7 +310,7 @@ void SvgFontsDialog::update_global_settings_tab(){
     SPObject* obj;
     for (obj=font->children; obj; obj=obj->next){
         if (SP_IS_FONTFACE(obj)){
-            _familyname_entry->set_text(((SPFontFace*) obj)->font_family);
+            _familyname_entry->set_text((SP_FONTFACE(obj))->font_family);
         }
     }
 }
@@ -336,9 +329,9 @@ void SvgFontsDialog::on_font_selection_changed(){
     double set_width = spfont->horiz_adv_x;
     setwidth_spin.set_value(set_width);
 
-    kerning_slider.set_range(0, set_width);
-    kerning_slider.set_draw_value(false);
-    kerning_slider.set_value(0);
+    kerning_slider->set_range(0, set_width);
+    kerning_slider->set_draw_value(false);
+    kerning_slider->set_value(0);
 
     update_global_settings_tab();
     populate_glyphs_box();
@@ -548,7 +541,9 @@ void SvgFontsDialog::set_glyph_description_from_selected_path(){
     Geom::PathVector pathv = sp_svg_read_pathv(node->attribute("d"));
 
 	//XML Tree being directly used here while it shouldn't be.
-    glyph->getRepr()->setAttribute("d", (char*) sp_svg_write_path (flip_coordinate_system(pathv)));
+    gchar *str = sp_svg_write_path (flip_coordinate_system(pathv));
+    glyph->getRepr()->setAttribute("d", str);
+    g_free(str);
     DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Set glyph curves"));
 
     update_glyphs();
@@ -585,7 +580,9 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
         if (SP_IS_MISSING_GLYPH(obj)){
 
             //XML Tree being directly used here while it shouldn't be.
-            obj->getRepr()->setAttribute("d", (char*) sp_svg_write_path (flip_coordinate_system(pathv)));
+            gchar *str = sp_svg_write_path (flip_coordinate_system(pathv));
+            obj->getRepr()->setAttribute("d", str);
+            g_free(str);
             DocumentUndo::done(doc, SP_VERB_DIALOG_SVG_FONTS, _("Set glyph curves"));
         }
     }
@@ -787,7 +784,7 @@ Gtk::VBox* SvgFontsDialog::kerning_tab(){
     add_kernpair_button.set_label(_("Add pair"));
     add_kernpair_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_kerning_pair));
     _KerningPairsList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_kerning_pair_selection_changed));
-    kerning_slider.signal_value_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_kerning_value_changed));
+    kerning_slider->signal_value_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_kerning_value_changed));
 
     kerning_vbox.pack_start(*kerning_selector, false,false);
 
@@ -805,7 +802,7 @@ Gtk::VBox* SvgFontsDialog::kerning_tab(){
     Gtk::HBox* kerning_amount_hbox = Gtk::manage(new Gtk::HBox());
     kerning_vbox.pack_start(*kerning_amount_hbox, false,false);
     kerning_amount_hbox->add(*Gtk::manage(new Gtk::Label(_("Kerning value:"))));
-    kerning_amount_hbox->add(kerning_slider);
+    kerning_amount_hbox->add(*kerning_slider);
 
     kerning_preview.set_size(300 + 20, 150 + 20);
     _font_da.set_size(150 + 20, 50 + 20);
@@ -892,6 +889,12 @@ void SvgFontsDialog::add_font(){
 SvgFontsDialog::SvgFontsDialog()
  : UI::Widget::Panel("", "/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS), _add(Gtk::Stock::NEW)
 {
+#if WITH_GTKMM_3_0
+    kerning_slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
+#else
+    kerning_slider = Gtk::manage(new Gtk::HScale);
+#endif
+
     _add.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_font));
 
     Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
@@ -945,8 +948,6 @@ SvgFontsDialog::~SvgFontsDialog(){}
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
-
-#endif //#ifdef ENABLE_SVG_FONTS
 
 /*
   Local Variables:

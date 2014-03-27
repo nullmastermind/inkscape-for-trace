@@ -18,35 +18,31 @@
  */
 
 #define SP_TYPE_SYMBOL (sp_symbol_get_type ())
-#define SP_SYMBOL(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_SYMBOL, SPSymbol))
-#define SP_IS_SYMBOL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_SYMBOL))
-
-class SPSymbol;
-class SPSymbolClass;
+#define SP_SYMBOL(obj) (dynamic_cast<SPSymbol*>((SPObject*)obj))
+#define SP_IS_SYMBOL(obj) (dynamic_cast<const SPSymbol*>((SPObject*)obj) != NULL)
 
 #include <2geom/affine.h>
-#include "svg/svg-length.h"
-#include "enums.h"
 #include "sp-item-group.h"
+#include "viewbox.h"
 
-struct SPSymbol : public SPGroup {
-	/* viewBox; */
-	unsigned int viewBox_set : 1;
-	Geom::Rect viewBox;
+class SPSymbol : public SPGroup, public SPViewBox {
+public:
+	SPSymbol();
+	virtual ~SPSymbol();
 
-	/* preserveAspectRatio */
-	unsigned int aspect_set : 1;
-	unsigned int aspect_align : 4;
-	unsigned int aspect_clip : 1;
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void set(unsigned int key, gchar const* value);
+	virtual void update(SPCtx *ctx, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 
-	/* Child to parent additional transform */
-	Geom::Affine c2p;
+	virtual void modified(unsigned int flags);
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+
+	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	virtual void print(SPPrintContext *ctx);
+	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
+	virtual void hide (unsigned int key);
 };
-
-struct SPSymbolClass {
-	SPGroupClass parent_class;
-};
-
-GType sp_symbol_get_type (void);
 
 #endif

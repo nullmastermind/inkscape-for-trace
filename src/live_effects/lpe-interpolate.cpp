@@ -1,4 +1,3 @@
-#define INKSCAPE_LPE_INTERPOLATE_CPP
 /** \file
  * LPE interpolate implementation
  */
@@ -10,6 +9,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <glibmm/i18n.h>
 
 #include "live_effects/lpe-interpolate.h"
 
@@ -98,7 +99,7 @@ LPEInterpolate::doEffect_path (Geom::PathVector const & path_in)
 }
 
 void
-LPEInterpolate::resetDefaults(SPItem * item)
+LPEInterpolate::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

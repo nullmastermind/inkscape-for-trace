@@ -1,16 +1,16 @@
-#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_CPP
-
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "ui/widget/registered-widget.h"
+#include <glibmm/i18n.h>
+
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
-#include "ui/widget/registered-widget.h"
 
 #include "svg/stringstream.h"
 
@@ -51,8 +51,8 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
                       Effect* effect, gdouble default_value)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
-      min(-Geom::infinity()),
-      max(Geom::infinity()),
+      min(-G_MAXDOUBLE),
+      max(G_MAXDOUBLE),
       integer(false),
       defvalue(default_value),
       digits(2),

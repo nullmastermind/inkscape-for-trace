@@ -35,7 +35,7 @@ class Spirograph(inkex.Effect):
                         help="The distance of the pen from the inner gear")
         self.OptionParser.add_option("-p", "--gearplacement",
                         action="store", type="string",
-                        dest="gearplacement", default=50.0,
+                        dest="gearplacement", default="inside",
                         help="Selects whether the gear is inside or outside the ring")
         self.OptionParser.add_option("-a", "--rotation",
                         action="store", type="float",
@@ -47,6 +47,9 @@ class Spirograph(inkex.Effect):
                         help="The quality of the calculated output")
 
     def effect(self):
+        self.options.primaryr = self.unittouu(str(self.options.primaryr) + 'px')
+        self.options.secondaryr = self.unittouu(str(self.options.secondaryr) + 'px')
+        self.options.penr = self.unittouu(str(self.options.penr) + 'px')
 
         if self.options.secondaryr == 0:
             return
@@ -68,7 +71,7 @@ class Spirograph(inkex.Effect):
         rotation = - math.pi * self.options.rotation / 180;
 
         new = inkex.etree.Element(inkex.addNS('path','svg'))
-        s = { 'stroke': '#000000', 'fill': 'none' }
+        s = { 'stroke': '#000000', 'fill': 'none', 'stroke-width': str(self.unittouu('1px')) }
         new.set('style', simplestyle.formatStyle(s))
 
         pathString = ''

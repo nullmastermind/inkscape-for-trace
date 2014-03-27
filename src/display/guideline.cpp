@@ -31,7 +31,7 @@ using Inkscape::ControlManager;
 
 static void sp_guideline_class_init(SPGuideLineClass *c);
 static void sp_guideline_init(SPGuideLine *guideline);
-static void sp_guideline_destroy(GtkObject *object);
+static void sp_guideline_destroy(SPCanvasItem *object);
 
 static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
 static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf);
@@ -66,12 +66,10 @@ GType sp_guideline_get_type()
 
 static void sp_guideline_class_init(SPGuideLineClass *c)
 {
-    parent_class = (SPCanvasItemClass*) g_type_class_peek_parent(c);
+    parent_class = SP_CANVAS_ITEM_CLASS(g_type_class_peek_parent(c));
 
-    GtkObjectClass *object_class = (GtkObjectClass *) c;
-    object_class->destroy = sp_guideline_destroy;
-
-    SPCanvasItemClass *item_class = (SPCanvasItemClass *) c;
+    SPCanvasItemClass *item_class = SP_CANVAS_ITEM_CLASS(c);
+    item_class->destroy = sp_guideline_destroy;
     item_class->update = sp_guideline_update;
     item_class->render = sp_guideline_render;
     item_class->point = sp_guideline_point;
@@ -90,21 +88,27 @@ static void sp_guideline_init(SPGuideLine *gl)
     gl->label = NULL;
 }
 
-static void sp_guideline_destroy(GtkObject *object)
+static void sp_guideline_destroy(SPCanvasItem *object)
 {
     g_return_if_fail (object != NULL);
     g_return_if_fail (SP_IS_GUIDELINE (object));
     //g_return_if_fail (SP_GUIDELINE(object)->origin != NULL);
     //g_return_if_fail (SP_IS_CTRLPOINT(SP_GUIDELINE(object)->origin));
-    
-    if (SP_GUIDELINE(object)->origin != NULL && SP_IS_CTRLPOINT(SP_GUIDELINE(object)->origin)) {
-        gtk_object_destroy(GTK_OBJECT(SP_GUIDELINE(object)->origin));
+
+    SPGuideLine *gl = SP_GUIDELINE(object);
+
+    if (gl->origin != NULL && SP_IS_CTRLPOINT(gl->origin)) {
+        sp_canvas_item_destroy(gl->origin);
     } else {
         // FIXME: This branch shouldn't be reached (although it seems to be harmless).
         //g_error("Why can it be that gl->origin is not a valid SPCtrlPoint?\n");
     }
 
-    GTK_OBJECT_CLASS(parent_class)->destroy(object);
+    if (gl->label) {
+        g_free(gl->label);
+    }
+
+    SP_CANVAS_ITEM_CLASS(parent_class)->destroy(object);
 }
 
 static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
@@ -193,8 +197,8 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
 {
     SPGuideLine *gl = SP_GUIDELINE(item);
 
-    if (((SPCanvasItemClass *) parent_class)->update) {
-        ((SPCanvasItemClass *) parent_class)->update(item, affine, flags);
+    if ((SP_CANVAS_ITEM_CLASS(parent_class))->update) {
+        (SP_CANVAS_ITEM_CLASS(parent_class))->update(item, affine, flags);
     }
 
     gl->affine = affine;
@@ -290,7 +294,7 @@ void sp_guideline_set_sensitive(SPGuideLine *gl, int sensitive)
 void sp_guideline_delete(SPGuideLine *gl)
 {
     //gtk_object_destroy(GTK_OBJECT(gl->origin));
-    gtk_object_destroy(GTK_OBJECT(gl));
+    sp_canvas_item_destroy(SP_CANVAS_ITEM(gl));
 }
 
 static void

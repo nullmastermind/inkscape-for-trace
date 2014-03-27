@@ -53,13 +53,44 @@ ImageToggler::ImageToggler( char const* on, char const* off) :
     property_pixbuf() = _property_pixbuf_off.get_value();
 }
 
-void
-ImageToggler::get_size_vfunc( Gtk::Widget& widget,
-                             const Gdk::Rectangle* cell_area,
-                             int* x_offset,
-                             int* y_offset,
-                             int* width,
-                             int* height ) const
+
+#if WITH_GTKMM_3_0
+void ImageToggler::get_preferred_height_vfunc(Gtk::Widget& widget,
+                                              int& min_h,
+                                              int& nat_h) const
+{
+    Gtk::CellRendererPixbuf::get_preferred_height_vfunc(widget, min_h, nat_h);
+
+    if (min_h) {
+        min_h += (min_h) >> 1;
+    }
+    
+    if (nat_h) {
+        nat_h += (nat_h) >> 1;
+    }
+}
+
+void ImageToggler::get_preferred_width_vfunc(Gtk::Widget& widget,
+                                             int& min_w,
+                                             int& nat_w) const
+{
+    Gtk::CellRendererPixbuf::get_preferred_width_vfunc(widget, min_w, nat_w);
+
+    if (min_w) {
+        min_w += (min_w) >> 1;
+    }
+    
+    if (nat_w) {
+        nat_w += (nat_w) >> 1;
+    }
+}
+#else
+void ImageToggler::get_size_vfunc(Gtk::Widget& widget,
+                                  const Gdk::Rectangle* cell_area,
+                                  int* x_offset,
+                                  int* y_offset,
+                                  int* width,
+                                  int* height ) const
 {
     Gtk::CellRendererPixbuf::get_size_vfunc( widget, cell_area, x_offset, y_offset, width, height );
 
@@ -70,18 +101,29 @@ ImageToggler::get_size_vfunc( Gtk::Widget& widget,
         *height += (*height) >> 1;
     }
 }
+#endif
 
-
-void
-ImageToggler::render_vfunc( const Glib::RefPtr<Gdk::Drawable>& window,
-                           Gtk::Widget& widget,
-                           const Gdk::Rectangle& background_area,
-                           const Gdk::Rectangle& cell_area,
-                           const Gdk::Rectangle& expose_area,
-                           Gtk::CellRendererState flags )
+#if WITH_GTKMM_3_0
+void ImageToggler::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+                                 Gtk::Widget& widget,
+                                 const Gdk::Rectangle& background_area,
+                                 const Gdk::Rectangle& cell_area,
+                                 Gtk::CellRendererState flags )
+#else
+void ImageToggler::render_vfunc( const Glib::RefPtr<Gdk::Drawable>& window,
+                                 Gtk::Widget& widget,
+                                 const Gdk::Rectangle& background_area,
+                                 const Gdk::Rectangle& cell_area,
+                                 const Gdk::Rectangle& expose_area,
+                                 Gtk::CellRendererState flags )
+#endif
 {
     property_pixbuf() = _property_active.get_value() ? _property_pixbuf_on : _property_pixbuf_off;
+#if WITH_GTKMM_3_0
+    Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
+#else
     Gtk::CellRendererPixbuf::render_vfunc( window, widget, background_area, cell_area, expose_area, flags );
+#endif
 }
 
 bool

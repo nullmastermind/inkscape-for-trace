@@ -14,12 +14,9 @@
 #include "spinbutton.h"
 
 #include "unit-menu.h"
+#include "unit-tracker.h"
 #include "util/expression-evaluator.h"
-#include "event-context.h"
-
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
+#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace UI {
@@ -36,16 +33,23 @@ SpinButton::connect_signals() {
 int SpinButton::on_input(double* newvalue)
 {
     try {
-        Inkscape::Util::GimpEevlQuantity result;
-        if (_unit_menu) {
-            Unit unit = _unit_menu->getUnit();
-            result = Inkscape::Util::gimp_eevl_evaluate (get_text().c_str(), &unit);
+        Inkscape::Util::EvaluatorQuantity result;
+        if (_unit_menu || _unit_tracker) {
+            Unit const *unit = NULL;
+            if (_unit_menu) {
+                unit = _unit_menu->getUnit();
+            } else {
+                unit = _unit_tracker->getActiveUnit();
+            }
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), unit);
+            result = eval.evaluate();
             // check if output dimension corresponds to input unit
-            if (result.dimension != (unit.isAbsolute() ? 1 : 0) ) {
+            if (result.dimension != (unit->isAbsolute() ? 1 : 0) ) {
                 throw Inkscape::Util::EvaluatorException("Input dimensions do not match with parameter dimensions.","");
             }
         } else {
-            result = Inkscape::Util::gimp_eevl_evaluate (get_text().c_str(), NULL);
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), NULL);
+            result = eval.evaluate();
         }
 
         *newvalue = result.value;
@@ -61,13 +65,13 @@ int SpinButton::on_input(double* newvalue)
 
 bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
 {
-    on_focus_in_value = get_value();
+    _on_focus_in_value = get_value();
     return false; // do not consume the event
 }
 
 bool SpinButton::on_my_key_press_event(GdkEventKey* event)
 {
-    switch (get_group0_keyval (event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval (event)) {
     case GDK_KEY_Escape:
         undo();
         return true; // I consumed the event
@@ -88,7 +92,7 @@ bool SpinButton::on_my_key_press_event(GdkEventKey* event)
 
 void SpinButton::undo()
 {
-    set_value(on_focus_in_value);
+    set_value(_on_focus_in_value);
 }
 
 

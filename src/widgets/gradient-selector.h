@@ -15,8 +15,24 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <glib.h>
 #include <gtk/gtk.h>
+
+#include <gtkmm/entry.h>
+#include <gtkmm/label.h>
+#include <gtkmm/table.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/scrolledwindow.h>
+
 #include <vector>
 #include "sp-gradient.h"
 #include "sp-gradient-spread.h"
@@ -49,24 +65,63 @@ struct SPGradientSelector {
     /* Vector selector */
     GtkWidget *vectors;
 
+    /* Tree */
+    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPGradient *vector);
+    void onTreeSelection();
+    void onGradientRename( const Glib::ustring& path_string, const Glib::ustring& new_text);
+    void onTreeNameColClick();
+    void onTreeColorColClick();
+    void onTreeCountColClick();
+
+    Gtk::TreeView     *treeview;
+    Gtk::ScrolledWindow *scrolled_window;
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord
+    {
+      public:
+        ModelColumns()
+        {
+            add(name);
+            add(refcount);
+            add(color);
+            add(data);
+            add(pixbuf);
+        }
+        virtual ~ModelColumns() {}
+
+        Gtk::TreeModelColumn<Glib::ustring> name;
+        Gtk::TreeModelColumn<unsigned long> color;
+        Gtk::TreeModelColumn<gint> refcount;
+        Gtk::TreeModelColumn<SPGradient*> data;
+        Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > pixbuf;
+
+    };
+
+    ModelColumns *columns;
+    Glib::RefPtr<Gtk::ListStore> store;
+    Gtk::CellRendererPixbuf* icon_renderer;
+    Gtk::CellRendererText* text_renderer;
+
     /* Editing buttons */
     GtkWidget *edit;
     GtkWidget *add;
+    GtkWidget *del;
+    GtkWidget *merge;
 
     /* Position widget */
     GtkWidget *position;
 
-    /* Spread selector */
-    GtkWidget *spread;
-    GtkWidget *spreadLbl;
-
     bool safelyInit;
+    bool blocked;
+
     std::vector<GtkWidget*> nonsolid;
+    std::vector<GtkWidget*> swatch_widgets;
 
     void setMode(SelectorMode mode);
     void setUnits(SPGradientUnits units);
     void setSpread(SPGradientSpread spread);
     void setVector(SPDocument *doc, SPGradient *vector);
+    void selectGradientInTree(SPGradient *vector);
+
     SPGradientUnits getUnits();
     SPGradientSpread getSpread();
     SPGradient *getVector();

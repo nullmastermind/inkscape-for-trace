@@ -32,9 +32,10 @@
 #include "ui/dialog/livepatheffect-editor.h"
 #include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
-#include "ui/dialog/scriptdialog.h"
+#include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
 #include "ui/dialog/tracedialog.h"
+#include "ui/dialog/pixelartdialog.h"
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/undo-history.h"
 #include "ui/dialog/panel-dialog.h"
@@ -52,10 +53,7 @@
 #include "ui/dialog/export.h"
 #include "ui/dialog/xml-tree.h"
 #include "ui/dialog/clonetiler.h"
-
-#ifdef ENABLE_SVG_FONTS
 #include "ui/dialog/svg-fonts-dialog.h"
-#endif // ENABLE_SVG_FONTS
 
 namespace Inkscape {
 namespace UI {
@@ -116,13 +114,12 @@ DialogManager::DialogManager() {
         registerFactory("ObjectAttributes",    &create<ObjectAttributes,     FloatingBehavior>);
         registerFactory("ObjectProperties",    &create<ObjectProperties,     FloatingBehavior>);
 //        registerFactory("PrintColorsPreviewDialog",      &create<PrintColorsPreviewDialog,       FloatingBehavior>);
-        registerFactory("Script",              &create<ScriptDialog,         FloatingBehavior>);
-#ifdef ENABLE_SVG_FONTS
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       FloatingBehavior>);
-#endif
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
+        registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
+        registerFactory("PixelArt",            &create<PixelArtDialog,       FloatingBehavior>);
         registerFactory("Transformation",      &create<Transformation,       FloatingBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          FloatingBehavior>);
         registerFactory("InputDevices",        &create<InputDialog,          FloatingBehavior>);
@@ -151,13 +148,16 @@ DialogManager::DialogManager() {
         registerFactory("ObjectAttributes",    &create<ObjectAttributes,     DockBehavior>);
         registerFactory("ObjectProperties",    &create<ObjectProperties,     DockBehavior>);
 //        registerFactory("PrintColorsPreviewDialog",      &create<PrintColorsPreviewDialog,       DockBehavior>);
-        registerFactory("Script",              &create<ScriptDialog,         DockBehavior>);
-#ifdef ENABLE_SVG_FONTS
         registerFactory("SvgFontsDialog",      &create<SvgFontsDialog,       DockBehavior>);
-#endif
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
+<<<<<<< TREE
         registerFactory("TileDialog",          &create<ArrangeDialog,           DockBehavior>);
+=======
+        registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
+        registerFactory("TileDialog",          &create<TileDialog,           DockBehavior>);
+>>>>>>> MERGE-SOURCE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
+        registerFactory("PixelArt",            &create<PixelArtDialog,       DockBehavior>);
         registerFactory("Transformation",      &create<Transformation,       DockBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          DockBehavior>);
         registerFactory("InputDevices",        &create<InputDialog,          DockBehavior>);
@@ -247,14 +247,14 @@ Dialog *DialogManager::getDialog(GQuark name) {
 /**
  * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::showDialog(gchar const *name) {
-    showDialog(g_quark_from_string(name));
+void DialogManager::showDialog(gchar const *name, bool grabfocus) {
+    showDialog(g_quark_from_string(name), grabfocus);
 }
 
 /**
  * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::showDialog(GQuark name) {
+void DialogManager::showDialog(GQuark name, bool grabfocus) {
     bool wantTiming = Inkscape::Preferences::get()->getBool("/dialogs/debug/trackAppear", false);
     GTimer *timer = (wantTiming) ? g_timer_new() : 0; // if needed, must be created/started before getDialog()
     Dialog *dialog = getDialog(name);
@@ -265,7 +265,8 @@ void DialogManager::showDialog(GQuark name) {
             tracker->setAutodelete(true);
             timer = 0;
         }
-        dialog->present();
+        if (grabfocus)
+            dialog->present();
     }
 
     if ( timer ) {

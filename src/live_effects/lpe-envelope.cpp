@@ -1,5 +1,3 @@
-#define INKSCAPE_LPE_ENVELOPE_CPP
-
 /*
  * Copyright (C) Steren Giannini 2008 <steren.giannini@gmail.com>
  *
@@ -52,7 +50,7 @@ LPEEnvelope::~LPEEnvelope()
 }
 
 void
-LPEEnvelope::doBeforeEffect (SPLPEItem *lpeitem)
+LPEEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     // get the item bounding box
     original_bbox(lpeitem);
@@ -227,7 +225,7 @@ LPEEnvelope::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
 }
 
 void
-LPEEnvelope::resetDefaults(SPItem * item)
+LPEEnvelope::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

@@ -31,11 +31,11 @@ public:
     class Save {
     public:
         Save();
-        Save(DrawingContext &ct);
+        Save(DrawingContext &dc);
         ~Save();
-        void save(DrawingContext &ct);
+        void save(DrawingContext &dc);
     private:
-        DrawingContext *_ct;
+        DrawingContext *_dc;
     };
 
     DrawingContext(cairo_t *ct, Geom::Point const &origin);
@@ -67,6 +67,21 @@ public:
     void rectangle(Geom::IntRect const &r) {
         cairo_rectangle(_ct, r.left(), r.top(), r.width(), r.height());
     }
+    // Used in drawing-text.cpp to overwrite glyphs, which have the opposite path rotation as a regular rect
+    void revrectangle(Geom::Rect const &r) {
+        cairo_move_to (    _ct, r.left(), r.top()      );
+        cairo_rel_line_to (_ct, 0,        r.height()   );
+        cairo_rel_line_to (_ct,           r.width(), 0 );
+        cairo_rel_line_to (_ct, 0,       -r.height()   );
+        cairo_close_path ( _ct);
+    }
+    void revrectangle(Geom::IntRect const &r) {
+        cairo_move_to (    _ct, r.left(), r.top()      );
+        cairo_rel_line_to (_ct, 0,        r.height()   );
+        cairo_rel_line_to (_ct,           r.width(), 0 );
+        cairo_rel_line_to (_ct, 0,       -r.height()   );
+        cairo_close_path ( _ct);
+    }
     void newPath() { cairo_new_path(_ct); }
     void newSubpath() { cairo_new_sub_path(_ct); }
     void path(Geom::PathVector const &pv);
@@ -96,10 +111,16 @@ public:
     void setSource(DrawingSurface *s);
     void setSourceCheckerboard();
 
+    void patternSetFilter(cairo_filter_t filter) {
+        cairo_pattern_set_filter(cairo_get_source(_ct), filter);
+    }
+
     Geom::Rect targetLogicalBounds() const;
 
     cairo_t *raw() { return _ct; }
     cairo_surface_t *rawTarget() { return cairo_get_group_target(_ct); }
+
+    DrawingSurface *surface() { return _surface; } // Needed to find scale in drawing-item.cpp
 
 private:
     DrawingContext(cairo_t *ct, DrawingSurface *surface, bool destroy);

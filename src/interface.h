@@ -17,6 +17,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/menu.h>
 
 class SPItem;
@@ -81,6 +89,7 @@ GtkWidget *sp_ui_main_menubar (Inkscape::UI::View::View *view);
 void sp_menu_append_recent_documents (GtkWidget *menu);
 void sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c);
 
+Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view );
 
 /**
  *
@@ -171,7 +180,12 @@ class ContextMenu : public Gtk::Menu
         //callbacks for the context menu entries of an SP_TYPE_ITEM object
         void ItemProperties(void);
         void ItemSelectThis(void);
+        void ItemMoveTo(void);
         void SelectSameFillStroke(void);
+        void SelectSameFillColor(void);
+        void SelectSameStrokeColor(void);
+        void SelectSameStrokeStyle(void);
+        void SelectSameObjectType(void);
         void ItemCreateLink(void);
         void SetMask(void);
         void ReleaseMask(void);
@@ -181,10 +195,10 @@ class ContextMenu : public Gtk::Menu
         
         
         /**
-         * callback, is executed on clicking the anchor "Ungroup" menu entry
+         * callback, is executed on clicking the anchor "Group" and "Ungroup" menu entry
          */
         void ActivateUngroup(void);
-        
+        void ActivateGroup(void);
         
         void AnchorLinkProperties(void);
         /**
@@ -219,6 +233,16 @@ class ContextMenu : public Gtk::Menu
          */
         void ImageEmbed(void);
         
+        /**
+         * callback, is executed on clicking the "Trace Bitmap" menu entry
+         */
+        void ImageTraceBitmap(void);
+
+        /**
+         * callback, is executed on clicking the "Trace Pixel Art" menu entry
+         */
+        void ImageTracePixelArt(void);
+
         /**
          * callback, is executed on clicking the "Extract Image" menu entry
          */

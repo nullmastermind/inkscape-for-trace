@@ -18,6 +18,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <glibmm/i18n.h>
@@ -173,6 +177,24 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
     return _value;
 }
 
+/**
+ * function to test if \c guitext is selectable
+ */
+bool ParamComboBox::contains(const gchar * guitext, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const
+{
+    if (guitext == NULL) {
+        return false; /* Can't have NULL string */
+    }
+
+    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
+        enumentry * entr = reinterpret_cast<enumentry *>(list->data);
+        if ( !entr->guitext.compare(guitext) )
+            return true;
+    }
+    // if we did not find the guitext in this ParamComboBox:
+    return false;
+}
+
 void
 ParamComboBox::changed (void) {
 
@@ -232,12 +254,7 @@ Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * n
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
-
-#if WITH_GTKMM_2_22
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
-#else
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_LEFT));
-#endif
     label->show();
     hbox->pack_start(*label, false, false, _indent);
 
@@ -247,11 +264,7 @@ Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * n
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         enumentry * entr = reinterpret_cast<enumentry *>(list->data);
         Glib::ustring text = entr->guitext;
-#if WITH_GTKMM_2_24
         combo->append(text);
-#else
-        combo->append_text(text);
-#endif
 
         if ( _value && !entr->value.compare(_value) ) {
             settext = entr->guitext;

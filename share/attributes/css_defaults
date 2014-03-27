@@ -62,6 +62,8 @@
 
 "image-rendering" - "auto" - "yes"
 
+"isolation" - "auto" - "no"
+
 "kerning" - "auto" - "yes"
 
 "letter-spacing" - "normal" - "yes"
@@ -80,9 +82,13 @@
 
 "mask" - "none" - "no"
 
+"mix-blend-mode" - "normal" - "no"
+
 "opacity" - "1" - "no"
 
 "overflow" - "hidden" - "no"
+
+"paint-order" - "normal" - "yes"
 
 "pointer-events" - "visiblePainted" - "yes"
 
@@ -108,11 +114,15 @@
 
 "stroke-width" - "1" - "yes"
 
+"text-align" - "start" - "yes"
+
 "text-anchor" - "start" - "yes"
 
 "text-decoration" - "NO_DEFAULT" - "no"
 
 "text-rendering" - "auto" - "yes"
+
+"title" - "NO DEFAULT" - "no"
 
 "unicode-bidi" - "normal" - "no"
 

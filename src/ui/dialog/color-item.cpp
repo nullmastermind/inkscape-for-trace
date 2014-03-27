@@ -11,9 +11,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <errno.h>
-#include <glibmm/i18n.h>
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/label.h>
+#include <glibmm/i18n.h>
 #include <cairo.h>
 #include <gtk/gtk.h>
 
@@ -35,6 +44,7 @@
 #include "xml/node.h"
 #include "xml/repr.h"
 #include "verbs.h"
+#include "widgets/gradient-vector.h"
 
 #include "color.h" // for SP_RGBA32_U_COMPOSE
 
@@ -138,12 +148,12 @@ static gboolean handleLeaveNotify( GtkWidget* /*widget*/, GdkEventCrossing* /*ev
     return FALSE;
 }
 
-static void dieDieDie( GtkObject *obj, gpointer user_data )
+static void dieDieDie( GObject *obj, gpointer user_data )
 {
     g_message("die die die %p  %p", obj, user_data );
 }
 
-static bool getBlock( std::string& dst, guchar ch, std::string const str )
+static bool getBlock( std::string& dst, guchar ch, std::string const & str )
 {
     bool good = false;
     std::string::size_type pos = str.find(ch);
@@ -225,11 +235,7 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
                 cairo_pattern_destroy(gradient);
                 cairo_surface_flush(s);
 
-                pixbuf = gdk_pixbuf_new_from_data(cairo_image_surface_get_data(s),
-                                                  GDK_COLORSPACE_RGB, TRUE, 8,
-                                                  width, height, cairo_image_surface_get_stride(s),
-                                                  ink_cairo_pixbuf_cleanup, s);
-                convert_pixbuf_argb32_to_normal(pixbuf);
+                pixbuf = ink_pixbuf_create_from_cairo_surface(s);
             } else {
                 Glib::RefPtr<Gdk::Pixbuf> thumb = Gdk::Pixbuf::create( Gdk::COLORSPACE_RGB, false, 8, width, height );
                 guint32 fillWith = (0xff000000 & (item->def.getR() << 24))
@@ -355,6 +361,23 @@ void ColorItem::setGradient(SPGradient *grad)
         _grad = grad;
         // TODO regen and push to listeners
     }
+
+    setName( gr_prepare_label(_grad) );
+}
+
+void ColorItem::setName(const Glib::ustring name)
+{
+    //def.descr = name;
+
+    for ( std::vector<Gtk::Widget*>::iterator it = _previews.begin(); it != _previews.end(); ++it ) {
+        Gtk::Widget* widget = *it;
+        if ( IS_EEK_PREVIEW(widget->gobj()) ) {
+            gtk_widget_set_tooltip_text(GTK_WIDGET(widget->gobj()), name.c_str());
+        }
+        else if ( GTK_IS_LABEL(widget->gobj()) ) {
+            gtk_label_set_text(GTK_LABEL(widget->gobj()), name.c_str());
+        }
+    }
 }
 
 void ColorItem::setPattern(cairo_pattern_t *pattern)
@@ -366,6 +389,7 @@ void ColorItem::setPattern(cairo_pattern_t *pattern)
         cairo_pattern_destroy(_pattern);
     }
     _pattern = pattern;
+
     _updatePreviews();
 }
 
@@ -533,11 +557,7 @@ void ColorItem::_regenPreview(EekPreview * preview)
         cairo_destroy(ct);
         cairo_surface_flush(s);
 
-        GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data( cairo_image_surface_get_data(s),
-                                                      GDK_COLORSPACE_RGB, TRUE, 8,
-                                                      w, h, cairo_image_surface_get_stride(s),
-                                                      ink_cairo_pixbuf_cleanup, s);
-        convert_pixbuf_argb32_to_normal(pixbuf);
+        GdkPixbuf* pixbuf = ink_pixbuf_create_from_cairo_surface(s);
         eek_preview_set_pixbuf( preview, pixbuf );
     }
 
@@ -546,57 +566,28 @@ void ColorItem::_regenPreview(EekPreview * preview)
                                                 | (_isLive ? PREVIEW_LINK_OTHER:0)) );
 }
 
-Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewSize size, guint ratio)
+Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewSize size, guint ratio, guint border)
 {
     Gtk::Widget* widget = 0;
     if ( style == PREVIEW_STYLE_BLURB) {
         Gtk::Label *lbl = new Gtk::Label(def.descr);
-#if WITH_GTKMM_2_22
         lbl->set_alignment(Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
-#else
-        lbl->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
-#endif
         widget = lbl;
     } else {
-//         Glib::ustring blank("          ");
-//         if ( size == Inkscape::ICON_SIZE_MENU || size == Inkscape::ICON_SIZE_DECORATION ) {
-//             blank = " ";
-//         }
-
         GtkWidget* eekWidget = eek_preview_new();
         EekPreview * preview = EEK_PREVIEW(eekWidget);
         Gtk::Widget* newBlot = Glib::wrap(eekWidget);
-
         _regenPreview(preview);
 
-        eek_preview_set_details( preview, (::PreviewStyle)style, (::ViewType)view, (::PreviewSize)size, ratio );
+        eek_preview_set_details( preview, 
+                                 (::ViewType)view,
+                                 (::PreviewSize)size,
+                                 ratio,
+                                 border );
 
         def.addCallback( _colorDefChanged, this );
-
-        GValue val = {0, {{0}, {0}}};
-        g_value_init( &val, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &val, FALSE );
-        g_object_set_property( G_OBJECT(preview), "focus-on-click", &val );
-
-/*
-        Gtk::Button *btn = new Gtk::Button(blank);
-        Gdk::Color color;
-        color.set_rgb((_r << 8)|_r, (_g << 8)|_g, (_b << 8)|_b);
-        btn->modify_bg(Gtk::STATE_NORMAL, color);
-        btn->modify_bg(Gtk::STATE_ACTIVE, color);
-        btn->modify_bg(Gtk::STATE_PRELIGHT, color);
-        btn->modify_bg(Gtk::STATE_SELECTED, color);
-
-        Gtk::Widget* newBlot = btn;
-*/
-
+        eek_preview_set_focus_on_click(preview, FALSE);
         newBlot->set_tooltip_text(def.descr);
-
-/*
-        newBlot->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
-
-        sigc::signal<void> type_signal_something;
-*/
 
         g_signal_connect( G_OBJECT(newBlot->gobj()),
                           "clicked",
@@ -658,26 +649,6 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewS
                           "leave-notify-event",
                           G_CALLBACK(handleLeaveNotify),
                           this);
-
-//         g_signal_connect( G_OBJECT(newBlot->gobj()),
-//                           "drag-drop",
-//                           G_CALLBACK(dragDropColorData),
-//                           this);
-
-        if ( def.isEditable() )
-        {
-//             gtk_drag_dest_set( GTK_WIDGET(newBlot->gobj()),
-//                                GTK_DEST_DEFAULT_ALL,
-//                                destColorTargets,
-//                                G_N_ELEMENTS(destColorTargets),
-//                                GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE) );
-
-
-//             g_signal_connect( G_OBJECT(newBlot->gobj()),
-//                               "drag-data-received",
-//                               G_CALLBACK(_dropDataIn),
-//                               this );
-        }
 
         g_signal_connect( G_OBJECT(newBlot->gobj()),
                           "destroy",

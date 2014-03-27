@@ -17,6 +17,14 @@
 #ifndef __FILE_DIALOGIMPL_H__
 #define __FILE_DIALOGIMPL_H__
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 //Gtk includes
 #include <gtkmm/filechooserdialog.h>
 #include <glib/gstdio.h>
@@ -121,7 +129,7 @@ private:
     /**
      * The sp_svg_view widget
      */
-    GtkWidget *viewerGtk;
+    Gtk::Widget *viewerGtk;
 
     /**
      * are we currently showing the "no preview" image?
@@ -236,12 +244,19 @@ public:
 
 	Glib::ustring getCurrentDirectory();
 
+    /// Add a custom file filter menu item
+    /// @param name - Name of the filter (such as "Javscript")
+    /// @param pattern - File filtering patter (such as "*.js")
+    /// Use the FileDialogType::CUSTOM_TYPE in constructor to not include other file types
+    void addFilterMenu(Glib::ustring name, Glib::ustring pattern);
+
 private:
 
     /**
      *  Create a filter menu for this type of dialog
      */
     void createFilterMenu();
+
 
     /**
      * Filter name->extension lookup
@@ -284,6 +299,7 @@ public:
     virtual void setSelectionType( Inkscape::Extension::Extension * key );
 
 	Glib::ustring getCurrentDirectory();
+	void addFileType(Glib::ustring name, Glib::ustring pattern);
 
 private:
     //void change_title(const Glib::ustring& title);

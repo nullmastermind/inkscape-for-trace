@@ -18,36 +18,23 @@
 #include <cairo.h>
 #include <2geom/rect.h>
 #include "sp-object.h"
-#include "uri-references.h"
 
-#define SP_TYPE_PAINT_SERVER (SPPaintServer::get_type())
-#define SP_PAINT_SERVER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PAINT_SERVER, SPPaintServer))
-#define SP_PAINT_SERVER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_PAINT_SERVER, SPPaintServerClass))
-#define SP_IS_PAINT_SERVER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PAINT_SERVER))
-#define SP_IS_PAINT_SERVER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_PAINT_SERVER))
+#define SP_PAINT_SERVER(obj) (dynamic_cast<SPPaintServer*>((SPObject*)obj))
+#define SP_IS_PAINT_SERVER(obj) (dynamic_cast<const SPPaintServer*>((SPObject*)obj) != NULL)
 
-struct SPPaintServer : public SPObject {
-protected:
-    bool swatch;
+class SPPaintServer : public SPObject {
 public:
-
-    static GType get_type(void);
+	SPPaintServer();
+	virtual ~SPPaintServer();
 
     bool isSwatch() const;
     bool isSolid() const;
 
-private:
-    static void init(SPPaintServer *ps);
+    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) = 0;
+
+protected:
+    bool swatch;
 };
-
-struct SPPaintServerClass {
-    SPObjectClass sp_object_class;
-    /** Get SPPaint instance. */
-    cairo_pattern_t *(*pattern_new)(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-};
-
-cairo_pattern_t *sp_paint_server_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
 
 #endif // SEEN_SP_PAINT_SERVER_H
 /*

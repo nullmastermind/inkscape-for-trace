@@ -39,7 +39,7 @@
 #include "sp-rect.h"
 #include "text-editing.h"
 
-#include <unit-constants.h>
+#include "util/units.h"
 
 #include "extension/system.h"
 
@@ -56,7 +56,7 @@ namespace Internal {
  */
 bool
 latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
-                                    const gchar * const exportId, bool exportDrawing, bool exportCanvas,
+                                    const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
                                     bool pdflatex)
 {
     doc->ensureUpToDate();
@@ -84,7 +84,7 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
     bool ret = renderer->setTargetFile(filename);
     if (ret) {
         /* Render document */
-        bool ret = renderer->setupDocument(doc, pageBoundingBox, base);
+        bool ret = renderer->setupDocument(doc, pageBoundingBox, bleedmargin_px, base);
         if (ret) {
             renderer->renderItem(base);
         }
@@ -98,7 +98,9 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
 LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex)
   : _stream(NULL),
     _filename(NULL),
-    _pdflatex(pdflatex)
+    _pdflatex(pdflatex),
+    _omittext_state(EMPTY),
+    _omittext_page(1)
 {
     push_transform(Geom::identity());
 }
@@ -262,6 +264,11 @@ LaTeXTextRenderer::sp_use_render(SPItem *item)
 void
 LaTeXTextRenderer::sp_text_render(SPItem *item)
 {
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_pdflatex && _omittext_state ==  GRAPHIC_ON_TOP)
+        _omittext_state = NEW_PAGE_ON_GRAPHIC;
+
     SPText *textobj = SP_TEXT (item);
     SPStyle *style = item->style;
 
@@ -395,6 +402,11 @@ Flowtext is possible by using a minipage! :)
 Flowing in rectangle is possible, not in arb shape.
 */
 
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_pdflatex && _omittext_state ==  GRAPHIC_ON_TOP)
+        _omittext_state = NEW_PAGE_ON_GRAPHIC;
+
     SPFlowtext *flowtext = SP_FLOWTEXT(item);
     SPStyle *style = item->style;
 
@@ -405,7 +417,7 @@ Flowing in rectangle is possible, not in arb shape.
     }
 
     SPRect *frame = SP_RECT(frame_item);
-    Geom::Rect framebox = sp_rect_get_rect(frame) * transform();
+    Geom::Rect framebox = frame->getRect() * transform();
 
     // get position and alignment
     // Align on topleft corner.
@@ -556,8 +568,13 @@ LaTeXTextRenderer::sp_item_invoke_render(SPItem *item)
         return sp_text_render(item);
     } else if (SP_IS_FLOWTEXT(item)) {
         return sp_flowtext_render(item);
+    } else {
+        // Only PDFLaTeX supports importing a single page of a graphics file,
+        // so only PDF backend gets interleaved text/graphics
+        if (_pdflatex && (_omittext_state == EMPTY || _omittext_state == NEW_PAGE_ON_GRAPHIC))
+            writeGraphicPage();
+        _omittext_state = GRAPHIC_ON_TOP;
     }
-    // We are not interested in writing the other SPItem types to LaTeX
 }
 
 void
@@ -568,8 +585,22 @@ LaTeXTextRenderer::renderItem(SPItem *item)
     pop_transform();
 }
 
+void
+LaTeXTextRenderer::writeGraphicPage(void) {
+    Inkscape::SVGOStringStream os;
+    os.setf(std::ios::fixed); // no scientific notation
+
+    // strip pathname, as it is probably desired. Having a specific path in the TeX file is not convenient.
+    if (_pdflatex)
+        os << "    \\put(0,0){\\includegraphics[width=\\unitlength,page=" << _omittext_page++ << "]{" << _filename << "}}%\n";
+    else
+        os << "    \\put(0,0){\\includegraphics[width=\\unitlength]{" << _filename << "}}%\n";
+
+    fprintf(_stream, "%s", os.str().c_str());
+}
+
 bool
-LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, SPItem *base)
+LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base)
 {
 // The boundingbox calculation here should be exactly the same as the one by CairoRenderer::setupDocument !
 
@@ -588,6 +619,7 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, SPItem *
         }
         d = *bbox;
     }
+    d.expandBy(bleedmargin_px);
 
     // scale all coordinates, such that the width of the image is 1, this is convenient for scaling the image in LaTeX
     double scale = 1/(d.width());
@@ -601,7 +633,7 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, SPItem *
     }
 
     // flip y-axis
-    push_transform( Geom::Scale(1,-1) * Geom::Translate(0, doc->getHeight()) ); /// @fixme hardcoded desktop transform!
+    push_transform( Geom::Scale(1,-1) * Geom::Translate(0, doc->getHeight().value("px")) ); /// @fixme hardcoded desktop transform!
 
     // write the info to LaTeX
     Inkscape::SVGOStringStream os;
@@ -610,7 +642,7 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, SPItem *
     // scaling of the image when including it in LaTeX
 
     os << "  \\ifx\\svgwidth\\undefined%\n";
-    os << "    \\setlength{\\unitlength}{" << d.width() * PT_PER_PX << "bp}%\n"; // note: 'bp' is the Postscript pt unit in LaTeX, see LP bug #792384
+    os << "    \\setlength{\\unitlength}{" << Inkscape::Util::Quantity::convert(d.width(), "px", "pt") << "bp}%\n"; // note: 'bp' is the Postscript pt unit in LaTeX, see LP bug #792384
     os << "    \\ifx\\svgscale\\undefined%\n";
     os << "      \\relax%\n";
     os << "    \\else%\n";
@@ -624,10 +656,11 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, SPItem *
     os << "  \\makeatother%\n";
 
     os << "  \\begin{picture}(" << _width << "," << _height << ")%\n";
-    // strip pathname, as it is probably desired. Having a specific path in the TeX file is not convenient.
-    os << "    \\put(0,0){\\includegraphics[width=\\unitlength]{" << _filename << "}}%\n";
 
     fprintf(_stream, "%s", os.str().c_str());
+
+    if (!_pdflatex)
+        writeGraphicPage();
 
     return true;
 }

@@ -23,7 +23,8 @@ ConstrainedMajorizationLayout
         double* eweights,
         double idealLength,
         TestConvergence& done)
-    : constrainedLayout(false),
+    : avoidOverlaps(false),
+      constrainedLayout(false),
       n(rs.size()),
       lapSize(n), lap2(new double*[lapSize]), 
       Q(lap2), Dij(new double*[lapSize]),
@@ -116,18 +117,17 @@ void ConstrainedMajorizationLayout::majlayout(
 void ConstrainedMajorizationLayout::majlayout(
         double** Dij, GradientProjection* gp, double* coords, double* b) 
 {
-    double L_ij,dist_ij,degree;
     /* compute the vector b */
     /* multiply on-the-fly with distance-based laplacian */
     for (unsigned i = 0; i < n; i++) {
-        degree = 0;
         if(i<lapSize) {
+            double degree = 0;
             for (unsigned j = 0; j < lapSize; j++) {
                 if (j == i) continue;
-                dist_ij = euclidean_distance(i, j);
+                double dist_ij = euclidean_distance(i, j);
                 if (dist_ij > 1e-30 && Dij[i][j] > 1e-30) {     /* skip zero distances */
                     /* calculate L_ij := w_{ij}*d_{ij}/dist_{ij} */
-                    L_ij = 1.0 / (dist_ij * Dij[i][j]);
+                    double L_ij = 1.0 / (dist_ij * Dij[i][j]);
                     degree -= L_ij;
                     b[i] += L_ij * coords[j];
                 }
@@ -271,7 +271,7 @@ void ConstrainedMajorizationLayout::straighten(std::vector<straightener::Edge*>&
     double b[n],*coords=dim==HORIZONTAL?X:Y,dist_ub,dist_bv;
     std::fill(b,b+n,0);
     for(LinearConstraints::iterator i=linearConstraints.begin();
-           i!= linearConstraints.end();i++) {
+           i!= linearConstraints.end();++i) {
         LinearConstraint* c=*i;
         if(straightenToProjection) {
             Q[c->u][c->u]+=c->w*c->duu;

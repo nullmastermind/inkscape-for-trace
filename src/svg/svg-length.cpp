@@ -23,7 +23,7 @@
 
 #include "svg.h"
 #include "stringstream.h"
-#include "../unit-constants.h"
+#include "util/units.h"
 
 
 static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next);
@@ -65,6 +65,7 @@ unsigned int sp_svg_number_read_d(gchar const *str, double *val)
 }
 
 // TODO must add a buffer length parameter for safety:
+// rewrite using std::string?
 static unsigned int sp_svg_number_write_ui(gchar *buf, unsigned int val)
 {
     unsigned int i = 0;
@@ -81,6 +82,7 @@ static unsigned int sp_svg_number_write_ui(gchar *buf, unsigned int val)
 }
 
 // TODO unsafe code ingnoring bufLen
+// rewrite using std::string?
 static unsigned int sp_svg_number_write_i(gchar *buf, int bufLen, int val)
 {
     int p = 0;
@@ -98,6 +100,7 @@ static unsigned int sp_svg_number_write_i(gchar *buf, int bufLen, int val)
 }
 
 // TODO unsafe code ingnoring bufLen
+// rewrite using std::string?
 static unsigned sp_svg_number_write_d(gchar *buf, int bufLen, double val, unsigned int tprec, unsigned int fprec)
 {
     /* Process sign */
@@ -169,6 +172,14 @@ unsigned int sp_svg_number_write_de(gchar *buf, int bufLen, double val, unsigned
         p += sp_svg_number_write_i(buf + p, bufLen - p, eval);
         return p;
     }
+}
+
+SVGLength::SVGLength()
+    : _set(false)
+    , unit(NONE)
+    , value(0)
+    , computed(0)
+{
 }
 
 /* Length */
@@ -285,6 +296,10 @@ std::vector<SVGLength> sp_svg_length_list_read(gchar const *str)
 
 static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next)
 {
+/* note: this function is sometimes fed a string with several consecutive numbers, e.g. by sp_svg_length_list_read.
+So after the number, the string does not necessarily have a \0 or a unit, it might also contain a space or comma and then the next number!
+*/
+
     if (!str) {
         return 0;
     }
@@ -330,6 +345,8 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                 *next = (char *) e + 1;
             }
             return 1;
+        } else if (g_ascii_isspace(e[0]) && e[1] && g_ascii_isalpha(e[1])) {
+            return 0; // spaces between value and unit are not allowed
         } else {
             /* Unitless */
             if (unit) {
@@ -365,7 +382,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::PT;
                 }
                 if (computed) {
-                    *computed = v * PX_PER_PT;
+                    *computed = Inkscape::Util::Quantity::convert(v, "pt", "px");
                 }
                 break;
             case UVAL('p','c'):
@@ -373,7 +390,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::PC;
                 }
                 if (computed) {
-                    *computed = v * PX_PER_PC;
+                    *computed = Inkscape::Util::Quantity::convert(v, "pc", "px");
                 }
                 break;
             case UVAL('m','m'):
@@ -381,7 +398,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::MM;
                 }
                 if (computed) {
-                    *computed = v * PX_PER_MM;
+                    *computed = Inkscape::Util::Quantity::convert(v, "mm", "px");
                 }
                 break;
             case UVAL('c','m'):
@@ -389,7 +406,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::CM;
                 }
                 if (computed) {
-                    *computed = v * PX_PER_CM;
+                    *computed = Inkscape::Util::Quantity::convert(v, "cm", "px");
                 }
                 break;
             case UVAL('i','n'):
@@ -397,7 +414,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::INCH;
                 }
                 if (computed) {
-                    *computed = v * PX_PER_IN;
+                    *computed = Inkscape::Util::Quantity::convert(v, "in", "px");
                 }
                 break;
             case UVAL('f','t'):
@@ -405,7 +422,7 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, 
                     *unit = SVGLength::FOOT;
                 }
                 if (computed) {
-                    *computed = v * PX_PER_FT;
+                    *computed = Inkscape::Util::Quantity::convert(v, "ft", "px");
                 }
                 break;
             case UVAL('e','m'):
@@ -527,6 +544,8 @@ std::string sp_svg_length_write_with_units(SVGLength const &length)
     Inkscape::SVGOStringStream os;
     if (length.unit == SVGLength::PERCENT) {
         os << 100*length.value << sp_svg_length_get_css_units(length.unit);
+    } else if (length.unit == SVGLength::FOOT) {
+        os << 12*length.value << sp_svg_length_get_css_units(SVGLength::INCH);
     } else {
         os << length.value << sp_svg_length_get_css_units(length.unit);
     }

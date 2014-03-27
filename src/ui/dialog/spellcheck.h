@@ -12,6 +12,14 @@
 #ifndef SEEN_SPELLCHECK_H
 #define SEEN_SPELLCHECK_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
@@ -240,10 +248,20 @@ private:
     GtkWidget *     dictionary_combo;
     Gtk::HBox       dictionary_hbox;
 
+#if WITH_GTKMM_3_0
+    Gtk::Separator  action_sep;
+#else
     Gtk::HSeparator action_sep;
+#endif
+
     Gtk::Button     stop_button;
     Gtk::Button     start_button;
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox  actionbutton_hbox;
+#else
     Gtk::HButtonBox actionbutton_hbox;
+#endif
 
     SPDesktop *     desktop;
     DesktopTracker  deskTrack;

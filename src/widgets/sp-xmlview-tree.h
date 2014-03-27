@@ -13,10 +13,7 @@
  */
 
 #include <gtk/gtk.h>
-#include "../xml/repr.h"
-
 #include <glib.h>
-
 
 
 #define SP_TYPE_XMLVIEW_TREE (sp_xmlview_tree_get_type ())
@@ -48,8 +45,19 @@ GtkWidget * sp_xmlview_tree_new (Inkscape::XML::Node * repr, void * factory, voi
 
 void sp_xmlview_tree_set_repr (SPXMLViewTree * tree, Inkscape::XML::Node * repr);
 
-Inkscape::XML::Node * sp_xmlview_tree_node_get_repr (GtkTreeView * tree, GtkTreeIter * node);
+Inkscape::XML::Node * sp_xmlview_tree_node_get_repr (GtkTreeModel *model, GtkTreeIter * node);
 gboolean sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, Inkscape::XML::Node * repr, GtkTreeIter *node);
 
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

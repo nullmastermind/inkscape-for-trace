@@ -30,7 +30,8 @@
 #include <pango/pangowin32.h>
 #else
 #include <pango/pangoft2.h>
-#include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #endif
 
 
@@ -53,6 +54,9 @@ struct font_descr_equal : public std::binary_function<PangoFontDescription*, Pan
 // Comparison functions for style names
 int style_name_compare(char const *aa, char const *bb);
 int family_name_compare(char const *a, char const *b);
+
+// Wraps calls to pango_font_description_get_family with some name substitution
+const char *sp_font_description_get_family(PangoFontDescription const *fontDescr);
 
 // Map type for gathering UI family and style strings
 typedef std::map<Glib::ustring, std::list<Glib::ustring> > FamilyToStylesMap;

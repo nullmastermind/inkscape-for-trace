@@ -238,21 +238,37 @@ void FilterComponentTransfer::render_cairo(FilterSlot &slot)
 {
     cairo_surface_t *input = slot.getcairo(_input);
     cairo_surface_t *out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_COLOR_ALPHA);
+
+    // We may need to transform input surface to correct color interpolation space. The input surface
+    // might be used as input to another primitive but it is likely that all the primitives in a given
+    // filter use the same color interpolation space so we don't copy the input before converting.
+    SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
+    if( _style ) {
+        ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
+        set_cairo_surface_ci(out, ci_fp );
+    }
+    set_cairo_surface_ci( input, ci_fp );
+
     //cairo_surface_t *outtemp = ink_cairo_surface_create_identical(out);
     ink_cairo_surface_blit(input, out);
 
     // parameters: R = 0, G = 1, B = 2, A = 3
     // Cairo:      R = 2, G = 1, B = 0, A = 3
+    // If tableValues is empty, use identity.
     for (unsigned i = 0; i < 3; ++i) {
         guint32 color = 2 - i;
         switch (type[i]) {
         case COMPONENTTRANSFER_TYPE_TABLE:
-            ink_cairo_surface_filter(out, out,
-                ComponentTransferTable<false>(color, tableValues[i]));
+            if(!tableValues[i].empty()) {
+              ink_cairo_surface_filter(out, out,
+                  ComponentTransferTable<false>(color, tableValues[i]));
+            }
             break;
         case COMPONENTTRANSFER_TYPE_DISCRETE:
-            ink_cairo_surface_filter(out, out,
-                ComponentTransferDiscrete<false>(color, tableValues[i]));
+            if(!tableValues[i].empty()) {
+                ink_cairo_surface_filter(out, out,
+                    ComponentTransferDiscrete<false>(color, tableValues[i]));
+            }
             break;
         case COMPONENTTRANSFER_TYPE_LINEAR:
             ink_cairo_surface_filter(out, out,
@@ -273,12 +289,16 @@ void FilterComponentTransfer::render_cairo(FilterSlot &slot)
     // fast paths for alpha channel
     switch (type[3]) {
     case COMPONENTTRANSFER_TYPE_TABLE:
-        ink_cairo_surface_filter(out, out,
-            ComponentTransferTable<true>(tableValues[3]));
+        if(!tableValues[3].empty()) {
+          ink_cairo_surface_filter(out, out,
+              ComponentTransferTable<true>(tableValues[3]));
+        }
         break;
     case COMPONENTTRANSFER_TYPE_DISCRETE:
-        ink_cairo_surface_filter(out, out,
-            ComponentTransferDiscrete<true>(tableValues[3]));
+        if(!tableValues[3].empty()) {
+          ink_cairo_surface_filter(out, out,
+              ComponentTransferDiscrete<true>(tableValues[3]));
+        }
         break;
     case COMPONENTTRANSFER_TYPE_LINEAR:
         ink_cairo_surface_filter(out, out,

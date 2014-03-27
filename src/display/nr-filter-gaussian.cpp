@@ -102,15 +102,16 @@ static inline Tt clip_round_cast(Ts const v) {
     Ts const minval = std::numeric_limits<Tt>::min();
     Ts const maxval = std::numeric_limits<Tt>::max();
     Tt const minval_rounded = std::numeric_limits<Tt>::min();
-    Ts const maxval_rounded = std::numeric_limits<Tt>::max();
+    Tt const maxval_rounded = std::numeric_limits<Tt>::max();
     if ( v < minval ) return minval_rounded;
     if ( v > maxval ) return maxval_rounded;
     return round_cast<Tt>(v);
 }
 
 template<typename Tt, typename Ts>
-static inline Tt clip_round_cast_varmax(Ts const v, Ts const maxval, Tt const maxval_rounded) {
+static inline Tt clip_round_cast_varmax(Ts const v, Tt const maxval_rounded) {
     Ts const minval = std::numeric_limits<Tt>::min();
+    Tt const maxval = maxval_rounded;
     Tt const minval_rounded = std::numeric_limits<Tt>::min();
     if ( v < minval ) return minval_rounded;
     if ( v > maxval ) return maxval_rounded;
@@ -145,6 +146,7 @@ static void
 _make_kernel(FIRValue *const kernel, double const deviation)
 {
     int const scr_len = _effect_area_scr(deviation);
+    g_assert(scr_len >= 0);
     double const d_sq = sqr(deviation) * 2;
     double k[scr_len+1]; // This is only called for small kernel sizes (above approximately 10 coefficients the IIR filter is used)
 
@@ -302,10 +304,9 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
     #define PREMUL_ALPHA_LOOP for(unsigned int c=1; c<PC; ++c)
 #endif
 
+INK_UNUSED(num_threads); // to suppress unused argument compiler warning
 #if HAVE_OPENMP
 #pragma omp parallel for num_threads(num_threads)
-#else
-    INK_UNUSED(num_threads);
 #endif // HAVE_OPENMP
     for ( int c2 = 0 ; c2 < n2 ; c2++ ) {
 #if HAVE_OPENMP
@@ -338,7 +339,7 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
         dstimg -= dstr1;
         if ( PREMULTIPLIED_ALPHA ) {
             dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
-            PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], v[0][alpha_PC], dstimg[alpha_PC]);
+            PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
         } else {
             for(unsigned int c=0; c<PC; c++) dstimg[c] = clip_round_cast<PT>(v[0][c]);
         }
@@ -353,7 +354,7 @@ filter2D_IIR(PT *const dest, int const dstr1, int const dstr2,
             dstimg -= dstr1;
             if ( PREMULTIPLIED_ALPHA ) {
                 dstimg[alpha_PC] = clip_round_cast<PT>(v[0][alpha_PC]);
-                PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], v[0][alpha_PC], dstimg[alpha_PC]);
+                PREMUL_ALPHA_LOOP dstimg[c] = clip_round_cast_varmax<PT>(v[0][c], dstimg[alpha_PC]);
             } else {
                 for(unsigned int c=0; c<PC; c++) dstimg[c] = clip_round_cast<PT>(v[0][c]);
             }
@@ -373,10 +374,9 @@ filter2D_FIR(PT *const dst, int const dstr1, int const dstr2,
     // Past pixels seen (to enable in-place operation)
     PT history[scr_len+1][PC];
 
+INK_UNUSED(num_threads); // suppresses unused argument compiler warning
 #if HAVE_OPENMP
 #pragma omp parallel for num_threads(num_threads) private(history)
-#else
-    INK_UNUSED(num_threads);
 #endif // HAVE_OPENMP
     for ( int c2 = 0 ; c2 < n2 ; c2++ ) {
 
@@ -551,6 +551,15 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     cairo_surface_t *in = slot.getcairo(_input);
     if (!in) return;
 
+    // We may need to transform input surface to correct color interpolation space. The input surface
+    // might be used as input to another primitive but it is likely that all the primitives in a given
+    // filter use the same color interpolation space so we don't copy the input before converting.
+    SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
+    if( _style ) {
+        ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
+    }
+    set_cairo_surface_ci( in, ci_fp );
+
     // zero deviation = no change in output
     if (_deviation_x <= 0 && _deviation_y <= 0) {
         cairo_surface_t *cp = ink_cairo_surface_copy(in);
@@ -559,12 +568,21 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
         return;
     }
 
-    Geom::Affine trans = slot.get_units().get_matrix_primitiveunits2pb();
+    // Handle bounding box case.
+    double dx = _deviation_x;
+    double dy = _deviation_y;
+    if( slot.get_units().get_primitive_units() == SP_FILTER_UNITS_OBJECTBOUNDINGBOX ) {
+        Geom::OptRect const bbox = slot.get_units().get_item_bbox();
+        if( bbox ) {
+            dx *= (*bbox).width();
+            dy *= (*bbox).height();
+        }
+    }
 
-    int w_orig = ink_cairo_surface_get_width(in);
-    int h_orig = ink_cairo_surface_get_height(in);
-    double deviation_x_orig = _deviation_x * trans.expansionX();
-    double deviation_y_orig = _deviation_y * trans.expansionY();
+    Geom::Affine trans = slot.get_units().get_matrix_user2pb();
+
+    double deviation_x_orig = dx * trans.expansionX();
+    double deviation_y_orig = dy * trans.expansionY();
     cairo_format_t fmt = cairo_image_surface_get_format(in);
     int bytes_per_pixel = 0;
     switch (fmt) {
@@ -586,6 +604,8 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     int x_step = 1 << _effect_subsample_step_log2(deviation_x_orig, quality);
     int y_step = 1 << _effect_subsample_step_log2(deviation_y_orig, quality);
     bool resampling = x_step > 1 || y_step > 1;
+    int w_orig = ink_cairo_surface_get_width(in);
+    int h_orig = ink_cairo_surface_get_height(in);
     int w_downsampled = resampling ? static_cast<int>(ceil(static_cast<double>(w_orig)/x_step))+1 : w_orig;
     int h_downsampled = resampling ? static_cast<int>(ceil(static_cast<double>(h_orig)/y_step))+1 : h_orig;
     double deviation_x = deviation_x_orig / x_step;
@@ -658,10 +678,14 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
         cairo_paint(ct);
         cairo_destroy(ct);
 
+        set_cairo_surface_ci( upsampled, ci_fp );
+
         slot.set(_output, upsampled);
         cairo_surface_destroy(upsampled);
         cairo_surface_destroy(downsampled);
     } else {
+        set_cairo_surface_ci( downsampled, ci_fp );
+
         slot.set(_output, downsampled);
         cairo_surface_destroy(downsampled);
     }

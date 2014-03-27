@@ -1,10 +1,10 @@
-#define INKSCAPE_LPE_CLONE_ORIGINAL_CPP
-
 /*
  * Copyright (C) Johan Engelen 2012 <j.b.c.engelen@alumnus.utwente.nl>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <glibmm/i18n.h>
 
 #include "live_effects/lpe-clone-original.h"
 

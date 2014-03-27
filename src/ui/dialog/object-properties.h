@@ -1,30 +1,61 @@
 /** 
  * @file Object properties dialog.
  */
-/* Author:
- *   Lauris Kaplinski <lauris@ximian.com>
- *   Kris De Gussem <Kris.DeGussem@gmail.com>
+/* 
+ * Inkscape, an Open Source vector graphics editor
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (C) 2001 Ximian, Inc.
- * Copyright (C) 2012 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Copyright (C) 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
+ * c++version based on former C-version (GPL v2) with authors:
+ *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
+ *   Johan Engelen <goejendaagh@zonnet.nl>
+ *   Abhishek Sharma
  */
 
 #ifndef SEEN_DIALOGS_ITEM_PROPERTIES_H
 #define SEEN_DIALOGS_ITEM_PROPERTIES_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
+
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/comboboxtext.h>
 
 #include "ui/dialog/desktop-tracker.h"
-#include "widgets/sp-attribute-widget.h"
 
+class SPAttributeTable;
 class SPDesktop;
 class SPItem;
+
+namespace Gtk {
+#if WITH_GTKMM_3_0
+class Grid;
+#else
+class Table;
+#endif
+}
 
 namespace Inkscape {
 namespace UI {
@@ -38,85 +69,64 @@ namespace Dialog {
  */
 class ObjectProperties : public Widget::Panel {
 public:
-    ObjectProperties ();
-    ~ObjectProperties ();
+    ObjectProperties();
+    ~ObjectProperties();
     
     static ObjectProperties &getInstance() { return *new ObjectProperties(); }
     
-    /**
-     * Updates entries and other child widgets on selection change, object modification, etc.
-     */
-    void widget_setup(void);
+    /// Updates entries and other child widgets on selection change, object modification, etc.
+    void update();
 
 private:
-    bool blocked;
-    SPItem *CurrentItem; //to store the current item, for not wasting resources
-    std::vector<Glib::ustring> int_labels;
-    
-    Gtk::Table TopTable; //the table with the object properties
-    Gtk::Label LabelID; //the label for the object ID
-    Gtk::Entry EntryID; //the entry for the object ID
-    Gtk::Label LabelLabel; //the label for the object label
-    Gtk::Entry EntryLabel; //the entry for the object label
-    Gtk::Label LabelTitle; //the label for the object title
-    Gtk::Entry EntryTitle; //the entry for the object title
-    
-    Gtk::Label LabelDescription; //the label for the object description
-    UI::Widget::Frame FrameDescription; //the frame for the object description
-    Gtk::Frame  FrameTextDescription; //the frame for the text of the object description
-    Gtk::TextView TextViewDescription; //the text view object showing the object description
-    
-    Gtk::HBox HBoxCheck; // the HBox for the check boxes
-    Gtk::Table CheckTable; //the table for the check boxes
-    Gtk::CheckButton CBHide; //the check button hide
-    Gtk::CheckButton CBLock; //the check button lock
-    Gtk::Button BSet; //the button set
-    
-    Gtk::Label LabelInteractivity; //the label for interactivity
-    Gtk::Expander EInteractivity; //the label for interactivity
-    SPAttributeTable attrTable; //the widget for showing the on... names at the bottom
-    
-    SPDesktop *desktop;
-    DesktopTracker deskTrack;
-    sigc::connection desktopChangeConn;
-    sigc::connection selectChangedConn;
-    sigc::connection subselChangedConn;
-    
-    /**
-     * Constructor auxiliary function creating the child widgets.
-     */
-    void MakeWidget(void);
-    
-    /**
-     * Sets object properties (ID, label, title, description) on user input.
-     */
-    void label_changed(void);
-    
-	/**
-     * Callback for checkbox Lock.
-     */
-    void sensitivity_toggled (void);
-    
-	/**
-     * Callback for checkbox Hide.
-     */
-    void hidden_toggled(void);
-    
-    /*
-     * On signal modified, invokes an update.
-     */
-    //void selectionModifiedCB( guint flags );
-    
-    /**
-     * Can be invoked for setting the desktop. Currently not used.
-     */
-    void setDesktop(SPDesktop *desktop);
-    
-    /**
-     * Is invoked by the desktop tracker when the desktop changes.
-     */
-    void setTargetDesktop(SPDesktop *desktop);
+    bool _blocked;
+    SPItem *_current_item; //to store the current item, for not wasting resources
+    std::vector<Glib::ustring> _int_attrs;
+    std::vector<Glib::ustring> _int_labels;
 
+    Gtk::Label _label_id; //the label for the object ID
+    Gtk::Entry _entry_id; //the entry for the object ID
+    Gtk::Label _label_label; //the label for the object label
+    Gtk::Entry _entry_label; //the entry for the object label
+    Gtk::Label _label_title; //the label for the object title
+    Gtk::Entry _entry_title; //the entry for the object title
+    Gtk::Label _label_image_rendering; // the label for 'image-rendering'
+    Gtk::ComboBoxText _combo_image_rendering; // the combo box text for 'image-rendering'
+    
+    Gtk::Frame  _ft_description; //the frame for the text of the object description
+    Gtk::TextView _tv_description; //the text view object showing the object description
+
+    Gtk::CheckButton _cb_hide; //the check button hide
+    Gtk::CheckButton _cb_lock; //the check button lock
+
+    Gtk::Expander _exp_interactivity; //the expander for interactivity
+    SPAttributeTable *_attr_table; //the widget for showing the on... names at the bottom
+    
+    SPDesktop *_desktop;
+    DesktopTracker _desktop_tracker;
+    sigc::connection _desktop_changed_connection;
+    sigc::connection _selection_changed_connection;
+    sigc::connection _subselection_changed_connection;
+    
+    /// Constructor auxiliary function creating the child widgets.
+    void _init();
+
+    /// Sets object properties (ID, label, title, description) on user input.
+    void _labelChanged();
+
+    /// Callback for 'image-rendering'.
+    void _imageRenderingChanged();
+
+    /// Callback for checkbox Lock.
+    void _sensitivityToggled();
+
+    /// Callback for checkbox Hide.
+    void _hiddenToggled();
+
+    /// Can be invoked for setting the desktop. Currently not used.
+    void _setDesktop(SPDesktop *desktop);
+    
+    /// Is invoked by the desktop tracker when the desktop changes.
+    void _setTargetDesktop(SPDesktop *desktop);
 };
 
 }

@@ -327,7 +327,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   MakeSweepDestData (false);
 }
 void 
-Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced)
+Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*/,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced)
 {
   nesting=NULL;
   contStart=NULL;
@@ -373,7 +373,9 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   int lastPtUsed = 0;
   do
   {
-    int dadContour=-1;
+    int parentContour=-1;
+    int childEdge = -1;
+    bool foundChild = false;
     int startBord = -1;
     {
       int fi = 0;
@@ -385,10 +387,11 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       {
         int askTo = pData[fi].askForWindingB;
         if (askTo < 0 || askTo >= numberOfEdges() ) {
-          dadContour=-1;
+          parentContour=-1;
         } else {
-          dadContour = GPOINTER_TO_INT(swdData[askTo].misc);
-          dadContour-=1; // pour compenser le decalage
+          parentContour = GPOINTER_TO_INT(swdData[askTo].misc);
+          parentContour-=1; // pour compenser le decalage
+          childEdge = getPoint(fi).incidentEdge[FIRST];
         }
       }
       lastPtUsed = fi + 1;
@@ -406,7 +409,10 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
     if (startBord >= 0)
     {
       // parcours en profondeur pour mettre les leF et riF a leurs valeurs
-      swdData[startBord].misc = (void *) (1+nbNest);
+      swdData[startBord].misc = (void *)(intptr_t)(1 + nbNest);
+      if (startBord == childEdge) {
+          foundChild = true;
+      }
       //printf("part de %d\n",startBord);
       int curBord = startBord;
       bool back = false;
@@ -444,22 +450,23 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
             }
             else
             {
-              bool escapePath=false;
-              int tb=curBord;
-              while ( tb >= 0 && tb < numberOfEdges() ) {
-                if ( ebData[tb].pathID == wildPath ) {
-                  escapePath=true;
-                  break;
-                }
-                tb=swdData[tb].precParc;
-              }
+//              bool escapePath=false;
+//              int tb=curBord;
+//              while ( tb >= 0 && tb < numberOfEdges() ) {
+//                if ( ebData[tb].pathID == wildPath ) {
+//                  escapePath=true;
+//                  break;
+//                }
+//                tb=swdData[tb].precParc;
+//              }
               nesting=(int*)g_realloc(nesting,(nbNest+1)*sizeof(int));
               contStart=(int*)g_realloc(contStart,(nbNest+1)*sizeof(int));
               contStart[nbNest]=dest->descr_cmd.size();
-              if ( escapePath ) {
-                nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
+              if (foundChild) {
+                nesting[nbNest++]=parentContour;
+                foundChild = false;
               } else {
-                nesting[nbNest++]=dadContour;
+                nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
               }
               swdData[curBord].suivParc = -1;
               AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
@@ -484,34 +491,37 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
             if ( getEdge(curBord).en == curStartPt ) {
               //printf("contour %i ",curStartPt);
               
-              bool escapePath=false;
-              int tb=curBord;
-              while ( tb >= 0 && tb < numberOfEdges() ) {
-                if ( ebData[tb].pathID == wildPath ) {
-                  escapePath=true;
-                  break;
-                }
-                tb=swdData[tb].precParc;
-              }
+//              bool escapePath=false;
+//              int tb=curBord;
+//              while ( tb >= 0 && tb < numberOfEdges() ) {
+//                if ( ebData[tb].pathID == wildPath ) {
+//                  escapePath=true;
+//                  break;
+//                }
+//                tb=swdData[tb].precParc;
+//              }
               nesting=(int*)g_realloc(nesting,(nbNest+1)*sizeof(int));
               contStart=(int*)g_realloc(contStart,(nbNest+1)*sizeof(int));
               contStart[nbNest]=dest->descr_cmd.size();
-              if ( escapePath ) {
-                nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
+              if (foundChild) {
+                nesting[nbNest++]=parentContour;
+                foundChild = false;
               } else {
-                nesting[nbNest++]=dadContour;
+                nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
               }
-
               swdData[curBord].suivParc = -1;
               AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
               startBord=nb;
             }
           }
-          swdData[nb].misc = (void *) (1+nbNest);
+          swdData[nb].misc = (void *)(intptr_t)(1 + nbNest);
           swdData[nb].ind = searchInd++;
           swdData[nb].precParc = curBord;
           swdData[curBord].suivParc = nb;
           curBord = nb;
+          if (nb == childEdge) {
+              foundChild = true;
+          }
           //printf("suite %d\n",curBord);
         }
 	    }
@@ -1046,7 +1056,7 @@ Shape::ReFormeArcTo (int bord, int /*curBord*/, Path * dest, Path * from)
   PathDescrArcTo* nData = dynamic_cast<PathDescrArcTo *>(from->descr_cmd[nPiece]);
   bool nLarge = nData->large;
   bool nClockwise = nData->clockwise;
-  Path::ArcAngles (from->PrevPoint (nPiece - 1), nData->p,nData->rx,nData->ry,nData->angle, nLarge, nClockwise,  sang, eang);
+  Path::ArcAngles (from->PrevPoint (nPiece - 1), nData->p,nData->rx,nData->ry,nData->angle*M_PI/180.0, nLarge, nClockwise,  sang, eang);
   if (nClockwise)
   {
     if (sang < eang)

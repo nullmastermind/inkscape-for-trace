@@ -12,9 +12,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtk.h>
-struct SPDesktop;
+class SPDesktop;
+
+typedef struct _GtkActionGroup GtkActionGroup;
+typedef struct _GObject GObject;
 
 void sp_gradient_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainActions, GObject* holder);
 
-#endif /* !SEEN_SELECT_TOOLBAR_H */
+#endif /* !SEEN_GRADIENT_TOOLBAR_H */

@@ -16,11 +16,12 @@
 #ifndef __FILE_DIALOG_H__
 #define __FILE_DIALOG_H__
 
-#include <glibmm.h>
 #include <vector>
 #include <set>
 
 #include "extension/system.h"
+
+#include <glibmm/ustring.h>
 
 class SPDocument;
 
@@ -46,7 +47,8 @@ typedef enum {
     SVG_TYPES,
     IMPORT_TYPES,
     EXPORT_TYPES,
-    EXE_TYPES
+    EXE_TYPES,
+    CUSTOM_TYPE
     } FileDialogType;
 
 /**
@@ -123,6 +125,8 @@ public:
     virtual std::vector<Glib::ustring> getFilenames() = 0;
 
     virtual Glib::ustring getCurrentDirectory() = 0;
+
+    virtual void addFilterMenu(Glib::ustring name, Glib::ustring pattern) = 0;
 
 protected:
     /**
@@ -204,6 +208,8 @@ public:
     Glib::ustring getDocTitle ();
 
     virtual Glib::ustring getCurrentDirectory() = 0;
+
+    virtual void addFileType(Glib::ustring name, Glib::ustring pattern) = 0;
 
 protected:
 

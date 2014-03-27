@@ -24,34 +24,38 @@
 #include "cr-attr-sel.h"
 
 /**
- *@file
- *The class that abstracts an attribute selector.
- *Attributes selectors are described in the css2 spec [5.8].
- *There are more generally used in the css2 selectors described in
- *css2 spec [5] .
+ * CRAttrSel:
+ *
+ * #CRAdditionalSel abstracts an attribute selector.
+ * Attributes selectors are described in the css2 spec [5.8].
+ * There are more generally used in the css2 selectors described in
+ * css2 spec [5] .
  */
 
 /**
- *The constructor of #CRAttrSel.
- *@return the newly allocated instance
- *of #CRAttrSel.
+ * cr_attr_sel_new:
+ * The constructor of #CRAttrSel.
+ * Returns the newly allocated instance
+ * of #CRAttrSel.
  */
 CRAttrSel *
 cr_attr_sel_new (void)
 {
-        CRAttrSel *result = (CRAttrSel *)g_malloc0 (sizeof (CRAttrSel));
+        CRAttrSel *result = NULL;
+
+        result = g_malloc0 (sizeof (CRAttrSel));
 
         return result;
 }
 
 /**
- *Appends an attribute selector to the current list of
- *attribute selectors represented by a_this.
+ * cr_attr_sel_append_attr_sel:
+ * @a_this: the this pointer of the current instance of  #CRAttrSel.
+ * @a_attr_sel: selector to append.
  *
- *@param a_this the this pointer of the current instance of
- *#CRAttrSel.
- *@param a_attr_sel selector to append.
- *@return CR_OK upon successfull completion, an error code otherwise.
+ * Appends an attribute selector to the current list of
+ * attribute selectors represented by a_this.
+ * Returns CR_OK upon successfull completion, an error code otherwise.
  */
 enum CRStatus
 cr_attr_sel_append_attr_sel (CRAttrSel * a_this, CRAttrSel * a_attr_sel)
@@ -72,13 +76,13 @@ cr_attr_sel_append_attr_sel (CRAttrSel * a_this, CRAttrSel * a_attr_sel)
 }
 
 /**
+ * cr_attr_sel_prepend_attr_sel:
+ *@a_this: the "this pointer" of the current instance *of #CRAttrSel.
+ *@a_attr_sel: the attribute selector to append.
+ *
  *Prepends an attribute selector to the list of
  *attributes selector represented by a_this.
- *
- *@param a_this the "this pointer" of the current instance
- *of #CRAttrSel.
- *@param a_attr_sel the attribute selector to append.
- *@return CR_OK upon successfull completion, an error code otherwise.
+ *Returns CR_OK upon successfull completion, an error code otherwise.
  */
 enum CRStatus
 cr_attr_sel_prepend_attr_sel (CRAttrSel * a_this, 
@@ -93,10 +97,17 @@ cr_attr_sel_prepend_attr_sel (CRAttrSel * a_this,
         return CR_OK;
 }
 
+/**
+ * cr_attr_sel_to_string:
+ * @a_this: the current instance of #CRAttrSel.
+ *
+ * Serializes an attribute selector into a string
+ * Returns the serialized attribute selector.
+ */
 guchar *
-cr_attr_sel_to_string (CRAttrSel * a_this)
+cr_attr_sel_to_string (CRAttrSel const * a_this)
 {
-        CRAttrSel *cur = NULL;
+        CRAttrSel const *cur = NULL;
         guchar *result = NULL;
         GString *str_buf = NULL;
 
@@ -110,7 +121,9 @@ cr_attr_sel_to_string (CRAttrSel * a_this)
                 }
 
                 if (cur->name) {
-                        gchar *name = g_strndup (cur->name->stryng->str, 
+                        guchar *name = NULL;
+
+                        name = g_strndup (cur->name->stryng->str, 
                                           cur->name->stryng->len);
                         if (name) {
                                 g_string_append (str_buf, name);
@@ -120,7 +133,9 @@ cr_attr_sel_to_string (CRAttrSel * a_this)
                 }
 
                 if (cur->value) {
-                        gchar *value = g_strndup (cur->value->stryng->str, 
+                        guchar *value = NULL;
+
+                        value = g_strndup (cur->value->stryng->str, 
                                            cur->value->stryng->len);
                         if (value) {
                                 switch (cur->match_way) {
@@ -153,7 +168,7 @@ cr_attr_sel_to_string (CRAttrSel * a_this)
         }
 
         if (str_buf) {
-                result = (guchar *)str_buf->str;
+                result = str_buf->str;
                 g_string_free (str_buf, FALSE);
         }
 
@@ -161,13 +176,15 @@ cr_attr_sel_to_string (CRAttrSel * a_this)
 }
 
 /**
- *Dumps the current instance of #CRAttrSel to a file.
- *@param a_this the "this pointer" of the current instance of
- *#CRAttrSel.
- *@param a_fp the destination file.
+ * cr_attr_sel_dump:
+ * @a_this: the "this pointer" of the current instance of
+ * #CRAttrSel.
+ * @a_fp: the destination file.
+ *
+ * Dumps the current instance of #CRAttrSel to a file.
  */
 void
-cr_attr_sel_dump (CRAttrSel * a_this, FILE * a_fp)
+cr_attr_sel_dump (CRAttrSel const * a_this, FILE * a_fp)
 {
         guchar *tmp_str = NULL;
 
@@ -183,10 +200,12 @@ cr_attr_sel_dump (CRAttrSel * a_this, FILE * a_fp)
 }
 
 /**
+ *cr_attr_sel_destroy:
+ *@a_this: the "this pointer" of the current
+ *instance of #CRAttrSel.
+ *
  *Destroys the current instance of #CRAttrSel.
  *Frees all the fields if they are non null.
- *@param a_this the "this pointer" of the current
- *instance of #CRAttrSel.
  */
 void
 cr_attr_sel_destroy (CRAttrSel * a_this)
@@ -208,8 +227,6 @@ cr_attr_sel_destroy (CRAttrSel * a_this)
                 a_this->next = NULL;
         }
 
-        if (a_this) {
-                g_free (a_this);
-                a_this = NULL;
-        }
+        g_free (a_this);
 }
+

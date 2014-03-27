@@ -33,7 +33,7 @@
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 #include "color.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "io/stringstream.h"
 #include "io/base64stream.h"
 #include "display/nr-filter-utils.h"
@@ -56,15 +56,12 @@ namespace Internal {
 
 #define TRACE(_args) IFTRACE(g_print _args)
 
-static double ttm[6] = {1, 0, 0, 1, 0, 0};	// temporary transform matrix
-static bool ttm_is_set = false;             // flag to forbid setting ttm
-
 /**
  * \struct SvgTransparencyGroup
  * \brief Holds information about a PDF transparency group
  */
 struct SvgTransparencyGroup {
-    double bbox[6];
+    double bbox[6]; // TODO should this be 4?
     Inkscape::XML::Node *container;
 
     bool isolated;
@@ -94,6 +91,9 @@ SvgBuilder::SvgBuilder(SPDocument *document, gchar *docname, XRef *xref)
     _preferences = _xml_doc->createElement("svgbuilder:prefs");
     _preferences->setAttribute("embedImages", "1");
     _preferences->setAttribute("localFonts", "1");
+
+    _ttm[0] = 1; _ttm[1] = 0; _ttm[2] = 0; _ttm[3] = 1; _ttm[4] = 0; _ttm[5] = 0;
+    _ttm_is_set = false;
 }
 
 SvgBuilder::SvgBuilder(SvgBuilder *parent, Inkscape::XML::Node *root) {
@@ -216,9 +216,9 @@ Inkscape::XML::Node *SvgBuilder::pushGroup() {
         }
     }
     if (_container->parent()->attribute("inkscape:groupmode") != NULL) {
-        ttm[0] = ttm[3] = 1.0;    // clear ttm if parent is a layer
-        ttm[1] = ttm[2] = ttm[4] = ttm[5] = 0.0;
-        ttm_is_set = false;
+        _ttm[0] = _ttm[3] = 1.0;    // clear ttm if parent is a layer
+        _ttm[1] = _ttm[2] = _ttm[4] = _ttm[5] = 0.0;
+        _ttm_is_set = false;
     }
     return _container;
 }
@@ -266,14 +266,12 @@ static void svgSetTransform(Inkscape::XML::Node *node, double c0, double c1,
  * \brief Generates a SVG path string from poppler's data structure
  */
 static gchar *svgInterpretPath(GfxPath *path) {
-    GfxSubpath *subpath;
     Inkscape::SVG::PathString pathString;
-    int i, j;
-    for ( i = 0 ; i < path->getNumSubpaths() ; ++i ) {
-        subpath = path->getSubpath(i);
+    for (int i = 0 ; i < path->getNumSubpaths() ; ++i ) {
+        GfxSubpath *subpath = path->getSubpath(i);
         if (subpath->getNumPoints() > 0) {
             pathString.moveTo(subpath->getX(0), subpath->getY(0));
-            j = 1;
+            int j = 1;
             while (j < subpath->getNumPoints()) {
                 if (subpath->getCurve(j)) {
                     pathString.curveTo(subpath->getX(j), subpath->getY(j),
@@ -300,14 +298,6 @@ static gchar *svgInterpretPath(GfxPath *path) {
  * Uses the given SPCSSAttr for storing the style properties
  */
 void SvgBuilder::_setStrokeStyle(SPCSSAttr *css, GfxState *state) {
-
-    // Check line width
-    if ( state->getLineWidth() <= 0.0 ) {
-        // Ignore stroke
-        sp_repr_css_set_property(css, "stroke", "none");
-        return;
-    }
-
     // Stroke color/pattern
     if ( state->getStrokeColorSpace()->getMode() == csPattern ) {
         gchar *urltext = _createPattern(state->getStrokePattern(), state, true);
@@ -328,7 +318,14 @@ void SvgBuilder::_setStrokeStyle(SPCSSAttr *css, GfxState *state) {
 
     // Line width
     Inkscape::CSSOStringStream os_width;
-    os_width << state->getLineWidth();
+    double lw = state->getLineWidth();
+    if (lw > 0.0) {
+        os_width << lw;
+    } else {
+        // emit a stroke which is 1px in toplevel user units
+        double pxw = Inkscape::Util::Quantity::convert(1.0, "pt", "px");
+        os_width << 1.0 / state->transformWidth(pxw);
+    }
     sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
 
     // Line cap
@@ -572,14 +569,14 @@ bool SvgBuilder::getTransform(double *transform) {
 void SvgBuilder::setTransform(double c0, double c1, double c2, double c3,
                               double c4, double c5) {
     // do not remember the group which is a layer
-    if ((_container->attribute("inkscape:groupmode") == NULL) && !ttm_is_set) {
-        ttm[0] = c0;
-        ttm[1] = c1;
-        ttm[2] = c2;
-        ttm[3] = c3;
-        ttm[4] = c4;
-        ttm[5] = c5;
-        ttm_is_set = true;
+    if ((_container->attribute("inkscape:groupmode") == NULL) && !_ttm_is_set) {
+        _ttm[0] = c0;
+        _ttm[1] = c1;
+        _ttm[2] = c2;
+        _ttm[3] = c3;
+        _ttm[4] = c4;
+        _ttm[5] = c5;
+        _ttm_is_set = true;
     }
 
     // Avoid transforming a group with an already set clip-path
@@ -629,21 +626,21 @@ gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_
         if ( pattern->getType() == 2 ) {  // Shading pattern
             GfxShadingPattern *shading_pattern = static_cast<GfxShadingPattern *>(pattern);
             double *ptm;
-            double ittm[6];	// invert ttm
             double m[6] = {1, 0, 0, 1, 0, 0};
             double det;
 
             // construct a (pattern space) -> (current space) transform matrix
 
             ptm = shading_pattern->getMatrix();
-            det = ttm[0] * ttm[3] - ttm[1] * ttm[2];
+            det = _ttm[0] * _ttm[3] - _ttm[1] * _ttm[2];
             if (det) {
-                ittm[0] =  ttm[3] / det;
-                ittm[1] = -ttm[1] / det;
-                ittm[2] = -ttm[2] / det;
-                ittm[3] =  ttm[0] / det;
-                ittm[4] = (ttm[2] * ttm[5] - ttm[3] * ttm[4]) / det;
-                ittm[5] = (ttm[1] * ttm[4] - ttm[0] * ttm[5]) / det;
+                double ittm[6];	// invert ttm
+                ittm[0] =  _ttm[3] / det;
+                ittm[1] = -_ttm[1] / det;
+                ittm[2] = -_ttm[2] / det;
+                ittm[3] =  _ttm[0] / det;
+                ittm[4] = (_ttm[2] * _ttm[5] - _ttm[3] * _ttm[4]) / det;
+                ittm[5] = (_ttm[1] * _ttm[4] - _ttm[0] * _ttm[5]) / det;
                 m[0] = ptm[0] * ittm[0] + ptm[1] * ittm[2];
                 m[1] = ptm[0] * ittm[1] + ptm[1] * ittm[3];
                 m[2] = ptm[2] * ittm[0] + ptm[3] * ittm[2];
@@ -676,7 +673,25 @@ gchar *SvgBuilder::_createTilingPattern(GfxTilingPattern *tiling_pattern,
     Inkscape::XML::Node *pattern_node = _xml_doc->createElement("svg:pattern");
     // Set pattern transform matrix
     double *p2u = tiling_pattern->getMatrix();
-    Geom::Affine pat_matrix(p2u[0], p2u[1], p2u[2], p2u[3], p2u[4], p2u[5]);
+    double m[6] = {1, 0, 0, 1, 0, 0};
+    double det;
+    det = _ttm[0] * _ttm[3] - _ttm[1] * _ttm[2];    // see LP Bug 1168908
+    if (det) {
+        double ittm[6];	// invert ttm
+        ittm[0] =  _ttm[3] / det;
+        ittm[1] = -_ttm[1] / det;
+        ittm[2] = -_ttm[2] / det;
+        ittm[3] =  _ttm[0] / det;
+        ittm[4] = (_ttm[2] * _ttm[5] - _ttm[3] * _ttm[4]) / det;
+        ittm[5] = (_ttm[1] * _ttm[4] - _ttm[0] * _ttm[5]) / det;
+        m[0] = p2u[0] * ittm[0] + p2u[1] * ittm[2];
+        m[1] = p2u[0] * ittm[1] + p2u[1] * ittm[3];
+        m[2] = p2u[2] * ittm[0] + p2u[3] * ittm[2];
+        m[3] = p2u[2] * ittm[1] + p2u[3] * ittm[3];
+        m[4] = p2u[4] * ittm[0] + p2u[5] * ittm[2] + ittm[4];
+        m[5] = p2u[4] * ittm[1] + p2u[5] * ittm[3] + ittm[5];
+    }
+    Geom::Affine pat_matrix(m[0], m[1], m[2], m[3], m[4], m[5]);
     gchar *transform_text = sp_svg_transform_write(pat_matrix);
     pattern_node->setAttribute("patternTransform", transform_text);
     g_free(transform_text);
@@ -777,7 +792,7 @@ gchar *SvgBuilder::_createGradient(GfxShading *shading, double *matrix, bool for
         Geom::Affine pat_matrix(matrix[0], matrix[1], matrix[2], matrix[3],
                               matrix[4], matrix[5]);
         if ( !for_shading && _is_top_level ) {
-            Geom::Affine flip(1.0, 0.0, 0.0, -1.0, 0.0, _height * PT_PER_PX);
+            Geom::Affine flip(1.0, 0.0, 0.0, -1.0, 0.0, Inkscape::Util::Quantity::convert(_height, "px", "pt"));
             pat_matrix *= flip;
         }
         gchar *transform_text = sp_svg_transform_write(pat_matrix);
@@ -1004,9 +1019,7 @@ void SvgBuilder::updateFont(GfxState *state) {
     _font_style = sp_repr_css_attr_new();
     GfxFont *font = state->getFont();
     // Store original name
-    if (font->getOrigName()) {
-        _font_specification = font->getOrigName()->getCString();
-    } else if (font->getName()) {
+    if (font->getName()) {
         _font_specification = font->getName()->getCString();
     } else {
         _font_specification = (char*) "Arial";
@@ -1210,7 +1223,7 @@ void SvgBuilder::updateTextMatrix(GfxState *state) {
  */
 void SvgBuilder::_flushText() {
     // Ignore empty strings
-    if ( _glyphs.size() < 1 ) {
+    if ( _glyphs.empty()) {
         _glyphs.clear();
         return;
     }
@@ -1302,7 +1315,8 @@ void SvgBuilder::_flushText() {
                 sp_repr_css_set_property(glyph.style, "-inkscape-font-specification", properFontSpec.c_str());
 
                 // Set style and unref SPCSSAttr if it won't be needed anymore
-                sp_repr_css_change(tspan_node, glyph.style, "style");
+                // assume all <tspan> nodes in a <text> node share the same style
+                sp_repr_css_change(text_node, glyph.style, "style");
                 if ( glyph.style_changed && i != _glyphs.begin() ) {    // Free previous style
                     sp_repr_css_attr_unref((*prev_iterator).style);
                 }
@@ -1642,6 +1656,10 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     Inkscape::XML::Node *image_node = _xml_doc->createElement("svg:image");
     sp_repr_set_svg_double(image_node, "width", 1);
     sp_repr_set_svg_double(image_node, "height", 1);
+
+    // PS/PDF images are placed via a transformation matrix, no preserveAspectRatio used
+    image_node->setAttribute("preserveAspectRatio", "none");
+
     // Set transformation
 
         svgSetTransform(image_node, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0);
@@ -1818,7 +1836,9 @@ void SvgBuilder::pushTransparencyGroup(GfxState * /*state*/, double *bbox,
 
     // Setup new transparency group
     SvgTransparencyGroup *transpGroup = new SvgTransparencyGroup;
-    memcpy(&transpGroup->bbox, bbox, sizeof(bbox));
+    for (size_t i = 0; i < 4; i++) {
+        transpGroup->bbox[i] = bbox[i];        
+    }
     transpGroup->isolated = isolated;
     transpGroup->knockout = knockout;
     transpGroup->for_softmask = for_softmask;

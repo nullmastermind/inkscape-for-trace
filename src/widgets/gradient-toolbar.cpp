@@ -17,51 +17,37 @@
 #endif
 
 #include "ui/widget/color-preview.h"
-#include "verbs.h"
-
-#include "macros.h"
-#include "widgets/button.h"
-#include "widgets/widget-sizes.h"
-#include "widgets/spw-utilities.h"
-#include "widgets/spinbutton-events.h"
-#include "widgets/gradient-vector.h"
-#include "widgets/gradient-image.h"
-#include "style.h"
-
-#include "preferences.h"
-#include "document-private.h"
-#include "document-undo.h"
-#include "desktop.h"
-#include "desktop-handles.h"
 #include <glibmm/i18n.h>
-
-#include "gradient-context.h"
+#include "desktop-handles.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "ege-adjustment-action.h"
+#include "ege-select-one-action.h"
+#include "gradient-chemistry.h"
 #include "gradient-drag.h"
+#include "gradient-toolbar.h"
+#include "ink-action.h"
+#include "macros.h"
+#include "preferences.h"
+#include "selection.h"
+#include "sp-defs.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
-#include "gradient-chemistry.h"
-#include "gradient-selector.h"
-#include "selection.h"
-#include "ui/icon-names.h"
-
-#include "../ege-adjustment-action.h"
-#include "../ege-output-action.h"
-#include "../ege-select-one-action.h"
-#include "../ink-action.h"
-#include "../ink-comboboxentry-action.h"
-
 #include "sp-stop.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg-color.h"
-#include "desktop-style.h"
-#include "gradient-context.h"
-
+#include "style.h"
 #include "toolbox.h"
+#include "ui/icon-names.h"
+#include "ui/tools/gradient-tool.h"
+#include "verbs.h"
+#include "widgets/gradient-image.h"
+#include "widgets/gradient-vector.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
+using Inkscape::UI::Tools::ToolBase;
 
-void gr_apply_gradient_to_item( SPItem *item, SPGradient *gr, SPGradientType new_type, guint new_fill, bool do_fill, bool do_stroke );
+void gr_apply_gradient_to_item( SPItem *item, SPGradient *gr, SPGradientType initialType, Inkscape::PaintTarget initialMode, Inkscape::PaintTarget mode );
 void gr_apply_gradient(Inkscape::Selection *selection, GrDrag *drag, SPGradient *gr);
 gboolean gr_vector_list(GtkWidget *combo_box, SPDesktop *desktop, bool selection_empty, SPGradient *gr_selected, bool gr_multi);
 void gr_get_dt_selected_gradient(Inkscape::Selection *selection, SPGradient *&gr_selected);
@@ -69,8 +55,8 @@ void gr_read_selection( Inkscape::Selection *selection, GrDrag *drag, SPGradient
 static gboolean update_stop_list( GtkWidget *stop_combo, SPGradient *gradient, SPStop *new_stop, GtkWidget *widget, bool gr_multi);
 static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradient *gradient);
 static void select_stop_in_list( GtkWidget *combo_box, SPGradient *gradient, SPStop *new_stop, GtkWidget *data, gboolean block);
-static void select_stop_by_drag( GtkWidget *combo_box, SPGradient *gradient, SPEventContext *ev, GtkWidget *data);
-static void select_drag_by_stop( GtkWidget *combo_box, SPGradient *gradient, SPEventContext *ev);
+static void select_stop_by_drag( GtkWidget *combo_box, SPGradient *gradient, ToolBase *ev, GtkWidget *data);
+static void select_drag_by_stop( GtkWidget *combo_box, SPGradient *gradient, ToolBase *ev);
 static SPGradient *gr_get_selected_gradient(GtkWidget *widget);
 static void gr_stop_set_offset(GtkComboBox *widget, GtkWidget *data);
 void add_toolbar_widget(GtkWidget *tbl, GtkWidget *widget);
@@ -84,36 +70,24 @@ static gboolean blocked = FALSE;
 //##       Gradient     ##
 //########################
 
-void gr_apply_gradient_to_item( SPItem *item, SPGradient *gr, SPGradientType new_type, guint new_fill, bool do_fill, bool do_stroke )
+void gr_apply_gradient_to_item( SPItem *item, SPGradient *gr, SPGradientType initialType, Inkscape::PaintTarget initialMode, Inkscape::PaintTarget mode )
 {
     SPStyle *style = item->style;
-
-    if (do_fill) {
-        if (style && (style->fill.isPaintserver()) &&
-            SP_IS_GRADIENT( item->style->getFillPaintServer() )) {
-            SPPaintServer *server = item->style->getFillPaintServer();
-            if ( SP_IS_LINEARGRADIENT(server) ) {
-                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, true);
-            } else if ( SP_IS_RADIALGRADIENT(server) ) {
-                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, true);
-            }
-        } else if (new_fill) {
-            sp_item_set_gradient(item, gr, new_type, true);
+    bool isFill = (mode == Inkscape::FOR_FILL);
+    if (style
+        && (isFill ? style->fill.isPaintserver() : style->stroke.isPaintserver())
+        //&& SP_IS_GRADIENT(isFill ? style->getFillPaintServer() : style->getStrokePaintServer()) ) {
+        && (isFill ? SP_IS_GRADIENT(style->getFillPaintServer()) : SP_IS_GRADIENT(style->getStrokePaintServer())) ) {
+        SPPaintServer *server = isFill ? style->getFillPaintServer() : style->getStrokePaintServer();
+        if ( SP_IS_LINEARGRADIENT(server) ) {
+            sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, mode);
+        } else if ( SP_IS_RADIALGRADIENT(server) ) {
+            sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, mode);
         }
     }
-
-    if (do_stroke) {
-        if (style && (style->stroke.isPaintserver()) &&
-            SP_IS_GRADIENT( item->style->getStrokePaintServer() )) {
-            SPPaintServer *server = item->style->getStrokePaintServer();
-            if ( SP_IS_LINEARGRADIENT(server) ) {
-                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, false);
-            } else if ( SP_IS_RADIALGRADIENT(server) ) {
-                sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, false);
-            }
-        } else if (!new_fill) {
-            sp_item_set_gradient(item, gr, new_type, false);
-        }
+    else if (initialMode == mode)
+    {
+        sp_item_set_gradient(item, gr, initialType, mode);
     }
 }
 
@@ -126,8 +100,8 @@ gradient.
 void gr_apply_gradient(Inkscape::Selection *selection, GrDrag *drag, SPGradient *gr)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPGradientType new_type = static_cast<SPGradientType>(prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR));
-    guint new_fill = prefs->getBool("/tools/gradient/newfillorstroke", true);
+    SPGradientType initialType = static_cast<SPGradientType>(prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR));
+    Inkscape::PaintTarget initialMode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
     // GRADIENTFIXME: make this work for multiple selected draggers.
 
@@ -135,15 +109,15 @@ void gr_apply_gradient(Inkscape::Selection *selection, GrDrag *drag, SPGradient 
     if (drag && drag->selected) {
         GrDragger *dragger = static_cast<GrDragger*>(drag->selected->data);
         for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
-            GrDraggable *draggable = (GrDraggable *) i->data;
-            gr_apply_gradient_to_item(draggable->item, gr, new_type, new_fill, draggable->fill_or_stroke, !draggable->fill_or_stroke);
+            GrDraggable *draggable = static_cast<GrDraggable*>(i->data);
+            gr_apply_gradient_to_item(draggable->item, gr, initialType, initialMode, draggable->fill_or_stroke);
         }
         return;
     }
 
    // If no drag or no dragger selected, act on selection
    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-       gr_apply_gradient_to_item(SP_ITEM(i->data), gr, new_type, new_fill, new_fill, !new_fill);
+       gr_apply_gradient_to_item(SP_ITEM(i->data), gr, initialType, initialMode, initialMode);
    }
 }
 
@@ -207,11 +181,10 @@ gboolean gr_vector_list(GtkWidget *combo_box, SPDesktop *desktop, bool selection
             SPGradient *gradient = SP_GRADIENT(gl->data);
             gl = g_slist_remove(gl, gradient);
 
-            gchar *label = gr_prepare_label(gradient);
+            Glib::ustring label = gr_prepare_label(gradient);
             GdkPixbuf *pixb = sp_gradient_to_pixbuf(gradient, 64, 16);
             gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter, 0, label, 1, pixb, 2, gradient, -1);
-            g_free(label);
+            gtk_list_store_set(store, &iter, 0, label.c_str(), 1, pixb, 2, gradient, -1);
 
             if (gradient == gr_selected) {
                 pos = idx;
@@ -298,7 +271,7 @@ void gr_read_selection( Inkscape::Selection *selection,
                 }
             }
             if (spread != spr_selected) {
-                if (spr_selected != INT_MAX) {
+                if (spr_selected != SP_GRADIENT_SPREAD_UNDEFINED) {
                     spr_multi = true;
                 } else {
                     spr_selected = spread;
@@ -331,7 +304,7 @@ void gr_read_selection( Inkscape::Selection *selection,
                     }
                 }
                 if (spread != spr_selected) {
-                    if (spr_selected != INT_MAX) {
+                    if (spr_selected != SP_GRADIENT_SPREAD_UNDEFINED) {
                         spr_multi = true;
                     } else {
                         spr_selected = spread;
@@ -357,7 +330,7 @@ void gr_read_selection( Inkscape::Selection *selection,
                     }
                 }
                 if (spread != spr_selected) {
-                    if (spr_selected != INT_MAX) {
+                    if (spr_selected != SP_GRADIENT_SPREAD_UNDEFINED) {
                         spr_multi = true;
                     } else {
                         spr_selected = spread;
@@ -385,14 +358,14 @@ static void gr_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
 
     Inkscape::Selection *selection = sp_desktop_selection(desktop); // take from desktop, not from args
     if (selection) {
-        SPEventContext *ev = sp_desktop_event_context(desktop);
+        ToolBase *ev = desktop->getEventContext();
         GrDrag *drag = NULL;
         if (ev) {
             drag = ev->get_drag();
         }
 
         SPGradient *gr_selected = 0;
-        SPGradientSpread spr_selected = static_cast<SPGradientSpread>(INT_MAX); // meaning undefined
+        SPGradientSpread spr_selected = SP_GRADIENT_SPREAD_UNDEFINED;
         bool gr_multi = false;
         bool spr_multi = false;
 
@@ -597,8 +570,8 @@ static void gr_add_stop(GtkWidget * /*button*/, GtkWidget *vb)
         return;
     }
 
-    SPEventContext *ev = sp_desktop_event_context(desktop);
-    SPGradientContext *rc = SP_GRADIENT_CONTEXT(ev);
+    ToolBase *ev = desktop->getEventContext();
+    Inkscape::UI::Tools::GradientTool *rc = SP_GRADIENT_CONTEXT(ev);
 
     if (rc) {
         sp_gradient_context_add_stops_between_selected_stops(rc);
@@ -619,7 +592,7 @@ static void gr_remove_stop(GtkWidget * /*button*/, GtkWidget *vb)
         return;
     }
 
-    SPEventContext *ev = sp_desktop_event_context(desktop);
+    ToolBase *ev = desktop->getEventContext();
     GrDrag *drag = NULL;
     if (ev) {
         drag = ev->get_drag();
@@ -647,33 +620,13 @@ static void gr_linked_changed(GtkToggleAction *act, gpointer /*data*/)
 static void gr_reverse(GtkWidget * /*button*/, gpointer data)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    SPEventContext *ev = sp_desktop_event_context(desktop);
-
-    if (!ev) {
-        return;
-    }
-
-    GrDrag *drag = ev->get_drag();
-
-    // First try selected dragger
-    if (drag && drag->selected) {
-        drag->selected_reverse_vector();
-    } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
-        for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-            sp_item_gradient_reverse_vector(SP_ITEM(i->data), true);
-            sp_item_gradient_reverse_vector(SP_ITEM(i->data), false);
-        }
-    }
-    // we did an undoable action
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_GRADIENT,
-                       _("Invert gradient"));
+    sp_gradient_reverse_selected_gradients(desktop);
 }
 
 /*
  *  Change desktop drag selection to this stop
  */
-static void select_drag_by_stop( GtkWidget *data, SPGradient *gradient, SPEventContext *ev)
+static void select_drag_by_stop( GtkWidget *data, SPGradient *gradient, ToolBase *ev)
 {
     if (blocked || !ev || !gradient)
         return;
@@ -685,25 +638,11 @@ static void select_drag_by_stop( GtkWidget *data, SPGradient *gradient, SPEventC
 
     SPStop *stop = get_selected_stop(data);
 
-
-    SPStop *stop_iter;
-    GList *i;
-
-    // Walk thru the draggers and the gradient stops at the same time
-    for (i = drag->draggers, stop_iter = gradient->getFirstStop();
-            i != NULL && stop_iter && SP_IS_STOP(stop_iter);
-                i = i->next, stop_iter = SP_STOP(stop_iter->getNext())) {
-
-        if (stop == stop_iter) {
-            GrDragger *d = (GrDragger *) i->data;
-            drag->setSelected(d, false, true);
-            blocked = FALSE;
-            return;
-        }
-    }
+    drag->selectByStop(stop, false, true);
+    blocked = FALSE;
 }
 
-static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, SPEventContext *ev, GtkWidget *data)
+static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, ToolBase *ev, GtkWidget *data)
 {
     if (blocked || !ev || !gradient)
         return;
@@ -722,10 +661,10 @@ static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, SPEv
 
     // for all selected draggers
     for (GList *i = drag->selected; i != NULL; i = i->next) {
-        GrDragger *dragger = (GrDragger *) i->data;
+        GrDragger *dragger = static_cast<GrDragger*>(i->data);
         // for all draggables of dragger
         for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
-            GrDraggable *draggable = (GrDraggable *) j->data;
+            GrDraggable *draggable = static_cast<GrDraggable*>(j->data);
 
             if (draggable->point_type != POINT_RG_FOCUS) {
                 n++;
@@ -846,11 +785,12 @@ static gboolean update_stop_list( GtkWidget *stop_combo, SPGradient *gradient, S
             if (SP_IS_STOP(sl->data)){
                 SPStop *stop = SP_STOP(sl->data);
                 Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(sl->data)->getRepr();
-                Inkscape::UI::Widget::ColorPreview *cpv = Gtk::manage(new Inkscape::UI::Widget::ColorPreview(sp_stop_get_rgba32(stop)));
+                Inkscape::UI::Widget::ColorPreview *cpv = Gtk::manage(new Inkscape::UI::Widget::ColorPreview(stop->get_rgba32()));
                 GdkPixbuf *pb = cpv->toPixbuf(32, 16);
+                Glib::ustring label = gr_ellipsize_text(repr->attribute("id"), 25);
 
                 gtk_list_store_append(store, &iter);
-                gtk_list_store_set(store, &iter, 0, repr->attribute("id"), 1, pb, 2, stop, -1);
+                gtk_list_store_set(store, &iter, 0, label.c_str(), 1, pb, 2, stop, -1);
                 sensitive = FALSE;
             }
         }
@@ -958,14 +898,14 @@ static void gr_new_type_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
 static void gr_new_fillstroke_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool fillmode = ege_select_one_action_get_active( act ) == 0;
-    prefs->setBool("/tools/gradient/newfillorstroke", fillmode);
+    Inkscape::PaintTarget fsmode = (ege_select_one_action_get_active( act ) == 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+    prefs->setInt("/tools/gradient/newfillorstroke", (fsmode == Inkscape::FOR_FILL) ? 1 : 0);
 }
 
 /*
  * User selected a gradient from the combobox
  */
-void gr_gradient_combo_changed(EgeSelectOneAction *act, gpointer data)
+static void gr_gradient_combo_changed(EgeSelectOneAction *act, gpointer data)
 {
     if (blocked) {
         return;
@@ -984,7 +924,7 @@ void gr_gradient_combo_changed(EgeSelectOneAction *act, gpointer data)
 
         SPDesktop *desktop = static_cast<SPDesktop *>(data);
         Inkscape::Selection *selection = sp_desktop_selection(desktop);
-        SPEventContext *ev = sp_desktop_event_context(desktop);
+        ToolBase *ev = desktop->getEventContext();
 
         gr_apply_gradient(selection, ev? ev->get_drag() : NULL, gr);
 
@@ -994,7 +934,7 @@ void gr_gradient_combo_changed(EgeSelectOneAction *act, gpointer data)
 
 }
 
-void gr_spread_change(EgeSelectOneAction *act, GtkWidget *widget)
+static void gr_spread_change(EgeSelectOneAction *act, GtkWidget *widget)
 {
     if (blocked) {
         return;
@@ -1026,7 +966,7 @@ static void gr_stop_combo_changed(GtkComboBox * /*widget*/, GtkWidget *data)
     }
 
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(data), "desktop"));
-    SPEventContext *ev = sp_desktop_event_context(desktop);
+    ToolBase *ev = desktop->getEventContext();
     SPGradient *gr = gr_get_selected_gradient(data);
 
     select_drag_by_stop(data, gr, ev);
@@ -1140,10 +1080,9 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
         ege_select_one_action_set_icon_column( act, 2 );
         ege_select_one_action_set_tooltip_column( act, 1  );
 
-        /// @todo Convert to boolean?
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool fillstrokemode = !prefs->getBool("/tools/gradient/newfillorstroke", true);
-        ege_select_one_action_set_active( act, fillstrokemode );
+        Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+        ege_select_one_action_set_active( act, (fsmode == Inkscape::FOR_FILL) ? 0 : 1 );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(gr_new_fillstroke_changed), holder );
     }
 
@@ -1156,7 +1095,7 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 0, _("No gradient"), 1, NULL, 2, NULL, -1);
 
-        EgeSelectOneAction* act1 = ege_select_one_action_new( "GradientSelectGradientAction", _("Select"), ("Choose a gradient"), NULL, GTK_TREE_MODEL(store) );
+        EgeSelectOneAction* act1 = ege_select_one_action_new( "GradientSelectGradientAction", _("Select"), (_("Choose a gradient")), NULL, GTK_TREE_MODEL(store) );
         g_object_set( act1, "short_label", _("Select:"), NULL );
         ege_select_one_action_set_appearance( act1, "compact" );
         gtk_action_set_sensitive( GTK_ACTION(act1), FALSE );
@@ -1172,13 +1111,13 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
 
         GtkTreeIter iter;
         gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("none"), 1, SP_GRADIENT_SPREAD_PAD, -1 );
+        gtk_list_store_set( model, &iter, 0, _("None"), 1, SP_GRADIENT_SPREAD_PAD, -1 );
 
         gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("reflected"), 1, SP_GRADIENT_SPREAD_REFLECT, -1 );
+        gtk_list_store_set( model, &iter, 0, _("Reflected"), 1, SP_GRADIENT_SPREAD_REFLECT, -1 );
 
         gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("direct"), 1, SP_GRADIENT_SPREAD_REPEAT, -1 );
+        gtk_list_store_set( model, &iter, 0, _("Direct"), 1, SP_GRADIENT_SPREAD_REPEAT, -1 );
 
         EgeSelectOneAction* act1 = ege_select_one_action_new( "GradientSelectRepeatAction", _("Repeat"),
                 (// TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
@@ -1201,10 +1140,10 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
 
         GtkTreeIter iter;
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 0, _("No gradient"), 1, NULL, 2, NULL, -1);
+        gtk_list_store_set(store, &iter, 0, _("No stops"), 1, NULL, 2, NULL, -1);
 
         EgeSelectOneAction* act1 = ege_select_one_action_new( "GradientEditStopsAction", _("Stops"), _("Select a stop for the current gradient"), NULL, GTK_TREE_MODEL(store) );
-        g_object_set( act1, "short_label", _("Edit:"), NULL );
+        g_object_set( act1, "short_label", _("Stops:"), NULL );
         ege_select_one_action_set_appearance( act1, "compact" );
         gtk_action_set_sensitive( GTK_ACTION(act1), FALSE );
         g_signal_connect( G_OBJECT(act1), "changed", G_CALLBACK(gr_stop_combo_changed), holder );
@@ -1216,13 +1155,14 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
     {
         EgeAdjustmentAction* eact = 0;
         eact = create_adjustment_action( "GradientEditOffsetAction",
-                                         _("Offset"), _("Offset:"), _("Offset of selected stop"),
+                                         _("Offset"), C_("Gradient", "Offset:"), _("Offset of selected stop"),
                                          "/tools/gradient/stopoffset", 0,
-                                         GTK_WIDGET(desktop->canvas), NULL/*us*/, holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0.0, 1.0, 0.01, 0.1,
                                          0, 0, 0,
-                                         gr_stop_offset_adjustment_changed
-                                         , 0.01, 2, 1.0);
+                                         gr_stop_offset_adjustment_changed,
+                                         NULL /*unit tracker*/,
+                                         0.01, 2, 1.0);
 
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "offset_action", eact );
@@ -1279,7 +1219,7 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
                                                         _("Link gradients"),
                                                         _("Link gradients to change all related gradients"),
                                                         INKSCAPE_ICON("object-unlocked"),
-                                                        secondarySize );
+                                                        Inkscape::ICON_SIZE_DECORATION );
         g_object_set( itact, "short_label", "Lock", NULL );
         g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(gr_linked_changed), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );

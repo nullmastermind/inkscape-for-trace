@@ -8,27 +8,23 @@
  * Authors?
  */
 
-#include <glib.h>
-#include <glibmm/ustring.h>
 #include "sp-object.h"
 #include "color.h"
+#include <glib.h>
 
-class SPObjectClass;
-class SPColor;
+namespace Glib {
+class ustring;
+}
 
-struct SPStop;
-struct SPStopClass;
-
-#define SP_TYPE_STOP (sp_stop_get_type())
-#define SP_STOP(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_STOP, SPStop))
-#define SP_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_STOP, SPStopClass))
-#define SP_IS_STOP(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_STOP))
-#define SP_IS_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_STOP))
-
-GType sp_stop_get_type();
+#define SP_STOP(obj) (dynamic_cast<SPStop*>((SPObject*)obj))
+#define SP_IS_STOP(obj) (dynamic_cast<const SPStop*>((SPObject*)obj) != NULL)
 
 /** Gradient stop. */
-struct SPStop : public SPObject {
+class SPStop : public SPObject {
+public:
+	SPStop();
+	virtual ~SPStop();
+
     /// \todo fixme: Should be SPSVGPercentage
     gfloat offset;
 
@@ -43,6 +39,8 @@ struct SPStop : public SPObject {
     /// \todo fixme: Implement SPSVGNumber or something similar.
     gfloat opacity;
 
+    Glib::ustring * path_string;
+    //SPCurve path;
 
     static SPColor readStopColor( Glib::ustring const &styleStr, guint32 dfl = 0 );
 
@@ -50,14 +48,14 @@ struct SPStop : public SPObject {
     SPStop* getPrevStop();
 
     SPColor getEffectiveColor() const;
-};
 
-/// The SPStop vtable.
-struct SPStopClass {
-    SPObjectClass parent_class;
-};
+    guint32 get_rgba32() const;
 
-guint32 sp_stop_get_rgba32(SPStop const *);
+protected:
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void set(unsigned int key, const gchar* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+};
 
 
 #endif /* !SEEN_SP_STOP_H */

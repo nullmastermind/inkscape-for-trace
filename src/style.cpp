@@ -45,7 +45,7 @@
 #include "svg/css-ostringstream.h"
 #include "xml/repr.h"
 #include "xml/simple-document.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "macros.h"
 #include "preferences.h"
 
@@ -61,7 +61,9 @@ using std::vector;
 
 #define BMAX 8192
 
-class SPStyleEnum;
+#define SP_CSS_FONT_SIZE_DEFAULT 12.0;
+
+struct SPStyleEnum;
 
 /*#########################
 ## FORWARD DECLARATIONS
@@ -87,7 +89,14 @@ static void sp_style_read_ienum(SPIEnum *val, gchar const *str, SPStyleEnum cons
 static void sp_style_read_istring(SPIString *val, gchar const *str);
 static void sp_style_read_ilength(SPILength *val, gchar const *str);
 static void sp_style_read_ilengthornormal(SPILengthOrNormal *val, gchar const *str);
-static void sp_style_read_itextdecoration(SPITextDecoration *val, gchar const *str);
+
+static void sp_style_read_ipaintorder(SPIPaintOrder *val, gchar const *str);
+
+static void sp_style_read_itextdecoration(SPITextDecorationLine *line, SPITextDecorationStyle *style, SPIPaint *color, gchar const *str);
+static void sp_style_read_itextdecorationLine(SPITextDecorationLine *line, gchar const *str);
+static void sp_style_read_itextdecorationStyle(SPITextDecorationStyle *style, gchar const *str);
+static void sp_style_read_itextdecorationColor(SPIPaint *color, gchar const *str);
+
 static void sp_style_read_icolor(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize(SPIFontSize *val, gchar const *str);
 static void sp_style_read_ibaselineshift(SPIBaselineShift *val, gchar const *str);
@@ -105,10 +114,20 @@ static gint sp_style_write_ienum(gchar *p, gint len, gchar const *key, SPStyleEn
 static gint sp_style_write_istring(gchar *p, gint len, gchar const *key, SPIString const *val, SPIString const *base, guint flags);
 static gint sp_style_write_ilength(gchar *p, gint len, gchar const *key, SPILength const *val, SPILength const *base, guint flags);
 static gint sp_style_write_ipaint(gchar *b, gint len, gchar const *key, SPIPaint const *paint, SPIPaint const *base, guint flags);
+static gint sp_style_write_ipaintorder(gchar *p, gint len, gchar const *key, SPIPaintOrder const *paint_order, SPIPaintOrder const *base, guint flags);
+static gint sp_style_write_idasharray(gchar *p, gint const len, gchar const *const key, SPIDashArray const *const val, SPIDashArray const *const base, guint const flags);
+
 static gint sp_style_write_ifontsize(gchar *p, gint len, gchar const *key, SPIFontSize const *val, SPIFontSize const *base, guint flags);
 static gint sp_style_write_ibaselineshift(gchar *p, gint len, gchar const *key, SPIBaselineShift const *val, SPIBaselineShift const *base, guint flags);
 static gint sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key, SPILengthOrNormal const *const val, SPILengthOrNormal const *const base, guint const flags);
-static gint sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key, SPITextDecoration const *const val, SPITextDecoration const *const base, guint const flags);
+static gint sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key,
+                               SPITextDecorationLine  const *const line,
+                               SPITextDecorationStyle const *const style,
+                               SPIPaint               const *const color,
+                               SPITextDecorationLine  const *const baseLine,
+                               SPITextDecorationStyle const *const baseStyle,
+                               SPIPaint               const *const baseColor,
+                               guint const flags);
 static gint sp_style_write_ifilter(gchar *b, gint len, gchar const *key, SPIFilter const *filter, SPIFilter const *base, guint flags);
 
 static void sp_style_filter_clear(SPStyle *style);
@@ -289,6 +308,33 @@ static SPStyleEnum const enum_overflow[] = {
     {NULL, -1}
 };
 
+// CSS Compositing and Blending Level 1
+static SPStyleEnum const enum_isolation[] = {
+    {"auto",             SP_CSS_ISOLATION_AUTO},
+    {"isolate",          SP_CSS_ISOLATION_ISOLATE},
+    {NULL, -1}
+};
+
+static SPStyleEnum const enum_blend_mode[] = {
+    {"normal",           SP_CSS_BLEND_NORMAL},
+    {"multiply",         SP_CSS_BLEND_MULTIPLY},
+    {"screen",           SP_CSS_BLEND_SCREEN},
+    {"darken",           SP_CSS_BLEND_DARKEN},
+    {"lighten",          SP_CSS_BLEND_LIGHTEN},
+    {"overlay",          SP_CSS_BLEND_OVERLAY},
+    {"color-dodge",      SP_CSS_BLEND_COLORDODGE},
+    {"color-burn",       SP_CSS_BLEND_COLORBURN},
+    {"hard-light",       SP_CSS_BLEND_HARDLIGHT},
+    {"soft-light",       SP_CSS_BLEND_SOFTLIGHT},
+    {"difference",       SP_CSS_BLEND_DIFFERENCE},
+    {"exclusion",        SP_CSS_BLEND_EXCLUSION},
+    {"hue",              SP_CSS_BLEND_HUE},
+    {"saturation",       SP_CSS_BLEND_SATURATION},
+    {"color",            SP_CSS_BLEND_COLOR},
+    {"luminosity",       SP_CSS_BLEND_LUMINOSITY},
+    {NULL, -1}
+};
+
 static SPStyleEnum const enum_display[] = {
     {"none",      SP_CSS_DISPLAY_NONE},
     {"inline",    SP_CSS_DISPLAY_INLINE},
@@ -311,27 +357,34 @@ static SPStyleEnum const enum_display[] = {
 };
 
 static SPStyleEnum const enum_shape_rendering[] = {
-    {"auto", 0},
-    {"optimizeSpeed", 0},
-    {"crispEdges", 0},
-    {"geometricPrecision", 0},
+    {"auto",                SP_CSS_SHAPE_RENDERING_AUTO},
+    {"optimizeSpeed",       SP_CSS_SHAPE_RENDERING_OPTIMIZESPEED},
+    {"crispEdges",          SP_CSS_SHAPE_RENDERING_CRISPEDGES},
+    {"geometricPrecision",  SP_CSS_SHAPE_RENDERING_GEOMETRICPRECISION},
     {NULL, -1}
 };
 
 static SPStyleEnum const enum_color_rendering[] = {
-    {"auto", 0},
-    {"optimizeSpeed", 0},
-    {"optimizeQuality", 0},
+    {"auto",            SP_CSS_COLOR_RENDERING_AUTO},
+    {"optimizeSpeed",   SP_CSS_COLOR_RENDERING_OPTIMIZESPEED},
+    {"optimizeQuality", SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY},
     {NULL, -1}
 };
 
-static SPStyleEnum const *const enum_image_rendering = enum_color_rendering;
+static SPStyleEnum const enum_image_rendering[] = {
+    {"auto",                  SP_CSS_IMAGE_RENDERING_AUTO},
+    {"optimizeSpeed",         SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED},
+    {"optimizeQuality",       SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY},
+    {"-inkscape-crisp-edges", SP_CSS_IMAGE_RENDERING_CRISPEDGES},
+    {"-inkscape-pixelated",   SP_CSS_IMAGE_RENDERING_PIXELATED},
+    {NULL, -1}
+};
 
 static SPStyleEnum const enum_text_rendering[] = {
-    {"auto", 0},
-    {"optimizeSpeed", 0},
-    {"optimizeLegibility", 0},
-    {"geometricPrecision", 0},
+    {"auto",               SP_CSS_TEXT_RENDERING_AUTO},
+    {"optimizeSpeed",      SP_CSS_TEXT_RENDERING_OPTIMIZESPEED},
+    {"optimizeLegibility", SP_CSS_TEXT_RENDERING_OPTIMIZELEGIBILITY},
+    {"geometricPrecision", SP_CSS_TEXT_RENDERING_GEOMETRICPRECISION},
     {NULL, -1}
 };
 
@@ -571,11 +624,19 @@ sp_style_unref(SPStyle *style)
         style->stroke.clear();
         sp_style_filter_clear(style);
 
-        g_free(style->stroke_dash.dash);
-        g_free(style);
-    }
+        style->stroke_dasharray.values.clear();
 
-    return NULL;
+        for (unsigned i = SP_MARKER_LOC; i < SP_MARKER_LOC_QTY; i++) {
+            if (style->marker[i].value) {
+                g_free(style->marker[i].value);
+                style->marker[i].value = NULL;
+            }
+        }
+
+        g_free(style);
+        return NULL;
+    }
+    return style;
 }
 
 /**
@@ -596,7 +657,7 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 
     /* 1. Style attribute */
     gchar const *val = repr->attribute("style");
-    if (val != NULL) {
+    if (val != NULL && *val) {
         sp_style_merge_from_style_string(style, val);
     }
 
@@ -610,10 +671,17 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     }
 
     /* 2. Presentation attributes */
+    /* Attributes are only read in if not already set in a style sheet or style attribute above. */
+
     /* CSS2 */
     SPS_READ_PENUM_IF_UNSET(&style->visibility, repr, "visibility", enum_visibility, true);
     SPS_READ_PENUM_IF_UNSET(&style->display, repr, "display", enum_display, true);
     SPS_READ_PENUM_IF_UNSET(&style->overflow, repr, "overflow", enum_overflow, true);
+
+    /* CSS Compositing and Blending Level 1 */
+    SPS_READ_PENUM_IF_UNSET(&style->isolation,  repr, "isolation",      enum_isolation,  true);
+    SPS_READ_PENUM_IF_UNSET(&style->blend_mode, repr, "mix_blend_mode", enum_blend_mode, true);
+
     /* Font */
     SPS_READ_PFONTSIZE_IF_UNSET(&style->font_size, repr, "font-size");
     SPS_READ_PENUM_IF_UNSET(&style->font_style, repr, "font-style", enum_font_style, true);
@@ -623,10 +691,10 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     /* Text (css2 chapter 16) */
     SPS_READ_PLENGTH_IF_UNSET(&style->text_indent, repr, "text-indent");
     SPS_READ_PENUM_IF_UNSET(&style->text_align, repr, "text-align", enum_text_align, true);
-    if (!style->text_decoration.set) {
-        val = repr->attribute("text-decoration");
-        if (val) {
-            sp_style_read_itextdecoration(&style->text_decoration, val);
+    if (!style->text_decoration_line.set) {
+        // assume it uses either text-decoration or text-decoration-line, but not both
+        if ((val = repr->attribute("text-decoration")) || (val = repr->attribute("text-decoration-line"))) {
+            sp_style_read_itextdecoration(&style->text_decoration_line, &style->text_decoration_style, &style->text_decoration_color, val);
         }
     }
     if (!style->line_height.set) {
@@ -675,9 +743,9 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         }
     }
     /* color interpolation */
-    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation, repr, "color_interpolation", enum_color_interpolation, true);
+    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation, repr, "color-interpolation", enum_color_interpolation, true);
     /* color interpolation filters*/
-    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation_filters, repr, "color_interpolation_filters", enum_color_interpolation, true);
+    SPS_READ_PENUM_IF_UNSET(&style->color_interpolation_filters, repr, "color-interpolation-filters", enum_color_interpolation, true);
     /* fill */
     if (!style->fill.set) {
         val = repr->attribute("fill");
@@ -739,22 +807,21 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
             sp_style_read_iscale24(&style->stroke_opacity, val);
         }
     }
-    if (!style->stroke_dasharray_set) {
+    if (!style->stroke_dasharray.set) {
         val = repr->attribute("stroke-dasharray");
         if (val) {
             sp_style_read_dash(style, val);
         }
     }
+    SPS_READ_PLENGTH_IF_UNSET(&style->stroke_width, repr, "stroke-dashoffset");
 
-    if (!style->stroke_dashoffset_set) {
-        val = repr->attribute("stroke-dashoffset");
-        if (sp_svg_number_read_d(val, &style->stroke_dash.offset)) {
-            style->stroke_dashoffset_set = TRUE;
-        } else if (val && !strcmp(val, "inherit")) {
-            style->stroke_dashoffset_set = TRUE;
-            style->stroke_dashoffset_inherit = TRUE;
+    /* paint-order */
+    if (!style->paint_order.set) {
+        val = repr->attribute("paint-order");
+        if (val) {
+            sp_style_read_ipaintorder(&style->paint_order, val);
         } else {
-            style->stroke_dashoffset_set = FALSE;
+            style->paint_order.layer[0] = SP_CSS_PAINT_ORDER_NORMAL;
         }
     }
 
@@ -792,6 +859,12 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 
     /* clip-rule */
     SPS_READ_PENUM_IF_UNSET(&style->clip_rule, repr, "clip-rule", enum_clip_rule, true);
+
+    /* color_rendering, image_rendering, shape_rendering, text_rendering */
+    SPS_READ_PENUM_IF_UNSET(&style->color_rendering, repr, "color-rendering", enum_color_rendering, true);
+    SPS_READ_PENUM_IF_UNSET(&style->image_rendering, repr, "image-rendering", enum_image_rendering, true);
+    SPS_READ_PENUM_IF_UNSET(&style->shape_rendering, repr, "shape-rendering", enum_shape_rendering, true);
+    SPS_READ_PENUM_IF_UNSET(&style->text_rendering,  repr, "text-rendering",  enum_text_rendering,  true);
 
     /* 3. Merge from parent */
     if (object) {
@@ -1075,8 +1148,23 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             SPS_READ_IENUM_IF_UNSET(&style->text_align, val, enum_text_align, true);
             break;
         case SP_PROP_TEXT_DECORATION:
-            if (!style->text_decoration.set) {
-                sp_style_read_itextdecoration(&style->text_decoration, val);
+            if (!style->text_decoration_line.set) {
+                sp_style_read_itextdecoration(&style->text_decoration_line, &style->text_decoration_style, &style->text_decoration_color, val);
+            }
+            break;
+        case SP_PROP_TEXT_DECORATION_LINE:
+            if (!style->text_decoration_line.set) {
+                sp_style_read_itextdecorationLine(&style->text_decoration_line, val);
+            }
+            break;
+        case SP_PROP_TEXT_DECORATION_STYLE:
+            if (!style->text_decoration_style.set) {
+                sp_style_read_itextdecorationStyle(&style->text_decoration_style, val);
+            }
+            break;
+        case SP_PROP_TEXT_DECORATION_COLOR:
+            if (!style->text_decoration_color.set) {
+                sp_style_read_itextdecorationColor(&style->text_decoration_color, val);
             }
             break;
         case SP_PROP_LINE_HEIGHT:
@@ -1113,11 +1201,8 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
         case SP_PROP_BASELINE_SHIFT:
             SPS_READ_IBASELINE_SHIFT_IF_UNSET(&style->baseline_shift, val);
             break;
-            /* Text (unimplemented) */
         case SP_PROP_TEXT_RENDERING: {
-            /* Ignore the hint. */
-            SPIEnum dummy;
-            SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_text_rendering, true);
+            SPS_READ_IENUM_IF_UNSET(&style->text_rendering, val, enum_text_rendering, true);
             break;
         }
         case SP_PROP_ALIGNMENT_BASELINE:
@@ -1160,6 +1245,13 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
         case SP_PROP_VISIBILITY:
             SPS_READ_IENUM_IF_UNSET(&style->visibility, val, enum_visibility, true);
             break;
+        case SP_PROP_ISOLATION:
+            SPS_READ_IENUM_IF_UNSET(&style->isolation,  val, enum_isolation,  true);
+            break;
+        case SP_PROP_BLEND_MODE:
+            SPS_READ_IENUM_IF_UNSET(&style->blend_mode, val, enum_blend_mode, true);
+            break;
+
             /* SVG */
             /* Clip/Mask */
         case SP_PROP_CLIP_PATH:
@@ -1232,19 +1324,13 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             }
             break;
         case SP_PROP_COLOR_INTERPOLATION_FILTERS:
-            // We read it but issue warning
             SPS_READ_IENUM_IF_UNSET(&style->color_interpolation_filters, val, enum_color_interpolation, true);
-            if( style->color_interpolation_filters.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
-                g_warning("Inkscape currently only supports color-interpolation-filters = sRGB");
-            }
             break;
         case SP_PROP_COLOR_PROFILE:
             g_warning("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
             break;
         case SP_PROP_COLOR_RENDERING: {
-            /* Ignore the hint. */
-            SPIEnum dummy;
-            SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_color_rendering, true);
+            SPS_READ_IENUM_IF_UNSET(&style->color_rendering, val, enum_color_rendering, true);
             break;
         }
         case SP_PROP_FILL:
@@ -1263,9 +1349,7 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             }
             break;
         case SP_PROP_IMAGE_RENDERING: {
-            /* Ignore the hint. */
-            SPIEnum dummy;
-            SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_image_rendering, true);
+            SPS_READ_IENUM_IF_UNSET(&style->image_rendering, val, enum_image_rendering, true);
             break;
         }
         case SP_PROP_MARKER:
@@ -1308,9 +1392,7 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             break;
 
         case SP_PROP_SHAPE_RENDERING: {
-            /* Ignore the hint. */
-            SPIEnum dummy;
-            SPS_READ_IENUM_IF_UNSET(&dummy, val, enum_shape_rendering, true);
+            SPS_READ_IENUM_IF_UNSET(&style->shape_rendering, val, enum_shape_rendering, true);
             break;
         }
 
@@ -1323,21 +1405,12 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             SPS_READ_ILENGTH_IF_UNSET(&style->stroke_width, val);
             break;
         case SP_PROP_STROKE_DASHARRAY:
-            if (!style->stroke_dasharray_set) {
+            if (!style->stroke_dasharray.set) {
                 sp_style_read_dash(style, val);
             }
             break;
         case SP_PROP_STROKE_DASHOFFSET:
-            if (!style->stroke_dashoffset_set) {
-                if (sp_svg_number_read_d(val, &style->stroke_dash.offset)) {
-                    style->stroke_dashoffset_set = TRUE;
-                } else if (val && !strcmp(val, "inherit")) {
-                    style->stroke_dashoffset_set = TRUE;
-                    style->stroke_dashoffset_inherit = TRUE;
-                } else {
-                    style->stroke_dashoffset_set = FALSE;
-                }
-            }
+            SPS_READ_ILENGTH_IF_UNSET(&style->stroke_dashoffset, val);
             break;
         case SP_PROP_STROKE_LINECAP:
             if (!style->stroke_linecap.set) {
@@ -1357,6 +1430,11 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
         case SP_PROP_STROKE_OPACITY:
             if (!style->stroke_opacity.set) {
                 sp_style_read_iscale24(&style->stroke_opacity, val);
+            }
+            break;
+        case SP_PROP_PAINT_ORDER:
+            if (!style->paint_order.set) {
+                sp_style_read_ipaintorder(&style->paint_order, val);
             }
             break;
 
@@ -1677,11 +1755,23 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
         style->text_align.computed = parent->text_align.computed;
     }
 
-    if (!style->text_decoration.set || style->text_decoration.inherit) {
-        style->text_decoration.underline = parent->text_decoration.underline;
-        style->text_decoration.overline = parent->text_decoration.overline;
-        style->text_decoration.line_through = parent->text_decoration.line_through;
-        style->text_decoration.blink = parent->text_decoration.blink;
+    if (!style->text_decoration_line.set || style->text_decoration_line.inherit) {
+        style->text_decoration_line.underline    = parent->text_decoration_line.underline;
+        style->text_decoration_line.overline     = parent->text_decoration_line.overline;
+        style->text_decoration_line.line_through = parent->text_decoration_line.line_through;
+        style->text_decoration_line.blink        = parent->text_decoration_line.blink;
+    }
+
+    if (!style->text_decoration_style.set || style->text_decoration_style.inherit) {
+        style->text_decoration_style.solid    = parent->text_decoration_style.solid;
+        style->text_decoration_style.isdouble = parent->text_decoration_style.isdouble;
+        style->text_decoration_style.dotted   = parent->text_decoration_style.dotted;
+        style->text_decoration_style.dashed   = parent->text_decoration_style.dashed;
+        style->text_decoration_style.wavy     = parent->text_decoration_style.wavy;
+    }
+
+    if (!style->text_decoration_color.set || style->text_decoration_color.inherit) {
+        sp_style_merge_ipaint(style, &style->text_decoration_color, &parent->text_decoration_color);
     }
 
     if (!style->line_height.set || style->line_height.inherit) {
@@ -1785,20 +1875,25 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
         style->stroke_miterlimit.value = parent->stroke_miterlimit.value;
     }
 
-    if (!style->stroke_dasharray_set || style->stroke_dasharray_inherit) {
-        style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
-        if (style->stroke_dash.n_dash > 0) {
-            style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
-            memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
-        }
+    if (!style->stroke_dasharray.set || style->stroke_dasharray.inherit) {
+        style->stroke_dasharray.values = parent->stroke_dasharray.values;
     }
 
-    if (!style->stroke_dashoffset_set || style->stroke_dashoffset_inherit) {
-        style->stroke_dash.offset = parent->stroke_dash.offset;
+    if (!style->stroke_dashoffset.set || style->stroke_dashoffset.inherit) {
+        style->stroke_dashoffset.value = parent->stroke_dashoffset.value;
     }
 
     if (!style->stroke_opacity.set || style->stroke_opacity.inherit) {
         style->stroke_opacity.value = parent->stroke_opacity.value;
+    }
+
+    if (!style->paint_order.set || style->paint_order.inherit) {
+        g_free(style->paint_order.value);
+        style->paint_order.value = g_strdup(parent->paint_order.value);
+        for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
+            style->paint_order.layer[i]     = parent->paint_order.layer[i];
+            style->paint_order.layer_set[i] = parent->paint_order.layer_set[i];
+        }
     }
 
     if (style->text && parent->text) {
@@ -1835,6 +1930,20 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
     /* Clipping */
     if (!style->clip_rule.set || style->clip_rule.inherit) {
         style->clip_rule.computed = parent->clip_rule.computed;
+    }
+
+    /* Rendering */
+    if (!style->color_rendering.set || style->color_rendering.inherit) {
+        style->color_rendering.computed = parent->color_rendering.computed;
+    }
+    if (!style->image_rendering.set || style->image_rendering.inherit) {
+        style->image_rendering.computed = parent->image_rendering.computed;
+    }
+    if (!style->shape_rendering.set || style->shape_rendering.inherit) {
+        style->shape_rendering.computed = parent->shape_rendering.computed;
+    }
+    if (!style->text_rendering.set || style->text_rendering.inherit) {
+        style->text_rendering.computed = parent->text_rendering.computed;
     }
 }
 
@@ -2125,21 +2234,23 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
     /* Enum values that don't have any relative settings (other than `inherit'). */
     {
         SPIEnum SPStyle::*const fields[] = {
+            &SPStyle::blend_mode,
             &SPStyle::clip_rule,
             &SPStyle::color_interpolation,
             &SPStyle::color_interpolation_filters,
-            //nyi: SPStyle::color_rendering,
+            &SPStyle::color_rendering,
             &SPStyle::direction,
             &SPStyle::fill_rule,
             &SPStyle::font_style,
             &SPStyle::font_variant,
-            //nyi: SPStyle::image_rendering,
+            &SPStyle::image_rendering,
+            &SPStyle::isolation,
             //nyi: SPStyle::pointer_events,
-            //nyi: SPStyle::shape_rendering,
+            &SPStyle::shape_rendering,
             &SPStyle::stroke_linecap,
             &SPStyle::stroke_linejoin,
             &SPStyle::text_anchor,
-            //nyi: &SPStyle::text_rendering,
+            &SPStyle::text_rendering,
             &SPStyle::visibility,
             &SPStyle::writing_mode
         };
@@ -2161,8 +2272,9 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
          * property (fixme). This code may need changing once we do the
          * special fill/stroke inheritance mentioned by the spec.
          */
-        sp_style_merge_prop_from_dying_parent<SPITextDecoration>(style->text_decoration,
-                                                                 parent->text_decoration);
+        sp_style_merge_prop_from_dying_parent<SPITextDecorationLine>( style->text_decoration_line,  parent->text_decoration_line);
+        sp_style_merge_prop_from_dying_parent<SPITextDecorationStyle>(style->text_decoration_style, parent->text_decoration_style);
+        sp_style_merge_paint_prop_from_dying_parent(style,style->text_decoration_color, parent->text_decoration_color);
 
         //nyi: font-size-adjust,  // <number> | none | inherit
         //nyi: glyph-orientation-horizontal,
@@ -2336,8 +2448,8 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
         if (!style->filter.set || style->filter.inherit)
         {
             sp_style_merge_ifilter(style, &parent->filter);
-        }
-
+        
+}
         /** \todo
          * fixme: Check that we correctly handle all properties that don't
          * inherit by default (as shown in
@@ -2375,26 +2487,16 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
     }
 
     /* Note: this will need length handling once dasharray supports units. */
-    if ( ( !style->stroke_dasharray_set || style->stroke_dasharray_inherit )
-         && parent->stroke_dasharray_set && !parent->stroke_dasharray_inherit )
+    if ( ( !style->stroke_dasharray.set || style->stroke_dasharray.inherit )
+         && parent->stroke_dasharray.set && !parent->stroke_dasharray.inherit )
     {
-        style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
-        if (style->stroke_dash.n_dash > 0) {
-            style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
-            memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
-        }
-        style->stroke_dasharray_set = parent->stroke_dasharray_set;
-        style->stroke_dasharray_inherit = parent->stroke_dasharray_inherit;
+        style->stroke_dasharray.values = parent->stroke_dasharray.values;
+        style->stroke_dasharray.set = parent->stroke_dasharray.set;
+        style->stroke_dasharray.inherit = parent->stroke_dasharray.inherit;
     }
 
-    /* Note: this will need length handling once dasharray_offset supports units. */
-    if ((!style->stroke_dashoffset_set || style->stroke_dashoffset_inherit) && parent->stroke_dashoffset_set && !parent->stroke_dashoffset_inherit) {
-        style->stroke_dash.offset = parent->stroke_dash.offset;
-        style->stroke_dashoffset_set = parent->stroke_dashoffset_set;
-        style->stroke_dashoffset_inherit = parent->stroke_dashoffset_inherit;
-        /* TODO: Try to
-         * represent it as a normal SPILength; though will need to do something about existing
-         * users of stroke_dash.offset and stroke_dashoffset_set. */
+    {
+        sp_style_merge_prop_from_dying_parent<SPILength>(style->stroke_dashoffset, parent->stroke_dashoffset);
     }
 }
 
@@ -2413,9 +2515,7 @@ sp_style_set_ipaint_to_uri(SPStyle *style, SPIPaint *paint, const Inkscape::URI 
         if (paint->value.href->getObject()){
             paint->value.href->detach();
         }
-    }
 
-    if (paint->value.href) {
         try {
             paint->value.href->attach(*uri);
         } catch (Inkscape::BadURIException &e) {
@@ -2442,6 +2542,68 @@ sp_style_set_to_uri_string (SPStyle *style, bool isfill, const gchar *uri)
     sp_style_set_ipaint_to_uri_string (style, isfill? &style->fill : &style->stroke, uri);
 }
 
+gchar const *
+sp_style_get_css_unit_string(int unit)
+{
+    // specify px by default, see inkscape bug 1221626, mozilla bug 234789
+
+    switch (unit) {
+
+        case SP_CSS_UNIT_NONE: return "px";
+        case SP_CSS_UNIT_PX: return "px";
+        case SP_CSS_UNIT_PT: return "pt";
+        case SP_CSS_UNIT_PC: return "pc";
+        case SP_CSS_UNIT_MM: return "mm";
+        case SP_CSS_UNIT_CM: return "cm";
+        case SP_CSS_UNIT_IN: return "in";
+        case SP_CSS_UNIT_EM: return "em";
+        case SP_CSS_UNIT_EX: return "ex";
+        case SP_CSS_UNIT_PERCENT: return "%";
+        default: return "px";
+    }
+    return "px";
+}
+
+/*
+ * Convert a size in pixels into another CSS unit size
+ */
+double
+sp_style_css_size_px_to_units(double size, int unit)
+{
+    double unit_size = size;
+    switch (unit) {
+
+        case SP_CSS_UNIT_NONE: unit_size = size; break;
+        case SP_CSS_UNIT_PX: unit_size = size; break;
+        case SP_CSS_UNIT_PT: unit_size = Inkscape::Util::Quantity::convert(size, "px", "pt");  break;
+        case SP_CSS_UNIT_PC: unit_size = Inkscape::Util::Quantity::convert(size, "px", "pc");  break;
+        case SP_CSS_UNIT_MM: unit_size = Inkscape::Util::Quantity::convert(size, "px", "mm");  break;
+        case SP_CSS_UNIT_CM: unit_size = Inkscape::Util::Quantity::convert(size, "px", "cm");  break;
+        case SP_CSS_UNIT_IN: unit_size = Inkscape::Util::Quantity::convert(size, "px", "in");  break;
+        case SP_CSS_UNIT_EM: unit_size = size / SP_CSS_FONT_SIZE_DEFAULT; break;
+        case SP_CSS_UNIT_EX: unit_size = size * 2.0 / SP_CSS_FONT_SIZE_DEFAULT ; break;
+        case SP_CSS_UNIT_PERCENT: unit_size = size * 100.0 / SP_CSS_FONT_SIZE_DEFAULT; break;
+
+        default:
+            g_warning("sp_style_get_css_font_size_units conversion to %d not implemented.", unit);
+            break;
+    }
+
+    return unit_size;
+}
+
+/*
+ * Convert a size in a CSS unit size to pixels
+ */
+double
+sp_style_css_size_units_to_px(double size, int unit)
+{
+    if (unit == SP_CSS_UNIT_PX) {
+        return size;
+    }
+    //g_message("sp_style_css_size_units_to_px %f %d = %f px", size, unit, out);
+    return size * (size / sp_style_css_size_px_to_units(size, unit));;
+}
 /**
  *
  */
@@ -2553,7 +2715,9 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
     /* Text */
     p += sp_style_write_ilength(p, c + BMAX - p, "text-indent", &style->text_indent, NULL, flags);
     p += sp_style_write_ienum(p, c + BMAX - p, "text-align", enum_text_align, &style->text_align, NULL, flags);
-    p += sp_style_write_itextdecoration(p, c + BMAX - p, "text-decoration", &style->text_decoration, NULL, flags);
+    p += sp_style_write_itextdecoration(p, c + BMAX - p, "text-decoration",
+            &style->text_decoration_line, &style->text_decoration_style, &style->text_decoration_color,
+            NULL, NULL, NULL, flags);
     p += sp_style_write_ilengthornormal(p, c + BMAX - p, "line-height", &style->line_height, NULL, flags);
     p += sp_style_write_ilengthornormal(p, c + BMAX - p, "letter-spacing", &style->letter_spacing, NULL, flags);
     p += sp_style_write_ilengthornormal(p, c + BMAX - p, "word-spacing", &style->word_spacing, NULL, flags);
@@ -2603,44 +2767,14 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
         p += sp_style_write_ienum(p, c + BMAX - p, "stroke-linejoin", enum_stroke_linejoin, &style->stroke_linejoin, NULL, flags);
         p += sp_style_write_ifloat(p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, flags);
         p += sp_style_write_iscale24(p, c + BMAX - p, "stroke-opacity", &style->stroke_opacity, NULL, flags);
+        p += sp_style_write_idasharray(p, c + BMAX - p, "stroke-dasharray", &style->stroke_dasharray, NULL, flags);
+        p += sp_style_write_ilength(p, c + BMAX - p, "stroke-dashoffset", &style->stroke_dashoffset, NULL, flags);
+    }
 
-        /** \todo fixme: */
-        if ((flags == SP_STYLE_FLAG_ALWAYS)
-            || style->stroke_dasharray_set)
-        {
-            if (style->stroke_dasharray_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
-            } else if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
-                gint i;
-                for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                    Inkscape::CSSOStringStream os;
-                    if (i) {
-                        os << ", ";
-                    }
-                    os << style->stroke_dash.dash[i];
-                    p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-                }
-                if (p < c + BMAX) {
-                    *p++ = ';';
-                }
-            } else {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:none;");
-            }
-        }
-
-        /** \todo fixme: */
-        if (style->stroke_dashoffset_set) {
-            if (style->stroke_dashoffset_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dashoffset:inherit;");
-            } else {
-                Inkscape::CSSOStringStream os;
-                os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
-                p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-            }
-        } else if (flags == SP_STYLE_FLAG_ALWAYS) {
-            p += g_snprintf(p, c + BMAX - p, "stroke-dashoffset:0;");
-        }
+    if (style->paint_order.set) {
+        p += sp_style_write_ipaintorder(p, c + BMAX - p, "paint-order", &style->paint_order, NULL, flags);
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf(p, c + BMAX - p, "paint-order:normal;");
     }
 
     bool marker_none = false;
@@ -2673,6 +2807,8 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
     p += sp_style_write_ienum(p, c + BMAX - p, "visibility", enum_visibility, &style->visibility, NULL, flags);
     p += sp_style_write_ienum(p, c + BMAX - p, "display", enum_display, &style->display, NULL, flags);
     p += sp_style_write_ienum(p, c + BMAX - p, "overflow", enum_overflow, &style->overflow, NULL, flags);
+    p += sp_style_write_ienum(p, c + BMAX - p, "isolation",      enum_isolation,  &style->isolation,  NULL, flags);
+    p += sp_style_write_ienum(p, c + BMAX - p, "mix-blend-mode", enum_blend_mode, &style->blend_mode, NULL, flags);
 
     /* filter: */
     p += sp_style_write_ifilter(p, c + BMAX - p, "filter", &style->filter, NULL, flags);
@@ -2681,6 +2817,12 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
     /* clipping */
     p += sp_style_write_ienum(p, c + BMAX - p, "clip-rule", enum_clip_rule, &style->clip_rule, NULL, flags);
+
+    /* rendering */
+    p += sp_style_write_ienum(p, c + BMAX - p, "color-rendering", enum_color_rendering, &style->color_rendering, NULL, flags);
+    p += sp_style_write_ienum(p, c + BMAX - p, "image-rendering", enum_image_rendering, &style->image_rendering, NULL, flags);
+    p += sp_style_write_ienum(p, c + BMAX - p, "shape-rendering", enum_shape_rendering, &style->shape_rendering, NULL, flags);
+    p += sp_style_write_ienum(p, c + BMAX - p, "text-rendering",  enum_text_rendering,  &style->text_rendering,  NULL, flags);
 
     /* fixme: */
     p += sp_text_style_write(p, c + BMAX - p, style->text, flags);
@@ -2725,7 +2867,10 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     /* Text */
     p += sp_style_write_ilength(p, c + BMAX - p, "text-indent", &from->text_indent, &to->text_indent, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum(p, c + BMAX - p, "text-align", enum_text_align, &from->text_align, &to->text_align, SP_STYLE_FLAG_IFDIFF);
-    p += sp_style_write_itextdecoration(p, c + BMAX - p, "text-decoration", &from->text_decoration, &to->text_decoration, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_itextdecoration(p, c + BMAX - p, "text-decoration",
+            &from->text_decoration_line,  &from->text_decoration_style, &from->text_decoration_color,
+            &to->text_decoration_line,    &to->text_decoration_style,   &to->text_decoration_color,
+            SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ilengthornormal(p, c + BMAX - p, "line-height", &from->line_height, &to->line_height, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ilengthornormal(p, c + BMAX - p, "letter-spacing", &from->letter_spacing, &to->letter_spacing, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ilengthornormal(p, c + BMAX - p, "word-spacing", &from->word_spacing, &to->word_spacing, SP_STYLE_FLAG_IFDIFF);
@@ -2774,34 +2919,15 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
                                   &from->stroke_linejoin, &to->stroke_linejoin, SP_STYLE_FLAG_IFDIFF);
         p += sp_style_write_ifloat(p, c + BMAX - p, "stroke-miterlimit",
                                    &from->stroke_miterlimit, &to->stroke_miterlimit, SP_STYLE_FLAG_IFDIFF);
-        /** \todo fixme: */
-        if (from->stroke_dasharray_set) {
-            if (from->stroke_dasharray_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
-            } else if (from->stroke_dash.n_dash && from->stroke_dash.dash) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
-                for (gint i = 0; i < from->stroke_dash.n_dash; i++) {
-                    Inkscape::CSSOStringStream os;
-                    if (i) {
-                        os << ", ";
-                    }
-                    os << from->stroke_dash.dash[i];
-                    p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-                }
-                p += g_snprintf(p, c + BMAX - p, ";");
-            }
-        }
-        /* fixme: */
-        if (from->stroke_dashoffset_set) {
-            if (from->stroke_dashoffset_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dashoffset:inherit;");
-            } else {
-                Inkscape::CSSOStringStream os;
-                os << "stroke-dashoffset:" << from->stroke_dash.offset << ";";
-                p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-            }
-        }
+        p += sp_style_write_idasharray(p, c + BMAX - p, "stroke-dasharray",
+                                   &from->stroke_dasharray, &to->stroke_dasharray, SP_STYLE_FLAG_IFDIFF);
+        p += sp_style_write_ilength(p, c + BMAX - p, "stroke-dashoffset", &from->stroke_dashoffset, &to->stroke_dashoffset, SP_STYLE_FLAG_IFDIFF);
         p += sp_style_write_iscale24(p, c + BMAX - p, "stroke-opacity", &from->stroke_opacity, &to->stroke_opacity, SP_STYLE_FLAG_IFDIFF);
+    }
+
+    /* paint-order */
+    if( from->paint_order.set) {
+        p += sp_style_write_ipaintorder(p, c + BMAX - p, "paint-order", &from->paint_order, &to->paint_order, SP_STYLE_FLAG_IFDIFF);
     }
 
     /* markers */
@@ -2822,6 +2948,8 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     p += sp_style_write_ienum(p, c + BMAX - p, "visibility", enum_visibility, &from->visibility, &to->visibility, SP_STYLE_FLAG_IFSET);
     p += sp_style_write_ienum(p, c + BMAX - p, "display", enum_display, &from->display, &to->display, SP_STYLE_FLAG_IFSET);
     p += sp_style_write_ienum(p, c + BMAX - p, "overflow", enum_overflow, &from->overflow, &to->overflow, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ienum(p, c + BMAX - p, "isolation",      enum_isolation,  &from->isolation,  &to->isolation, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ienum(p, c + BMAX - p, "mix-blend-mode", enum_blend_mode, &from->blend_mode, &to->blend_mode, SP_STYLE_FLAG_IFSET);
 
     /* filter: */
     p += sp_style_write_ifilter(p, c + BMAX - p, "filter", &from->filter, &to->filter, SP_STYLE_FLAG_IFDIFF);
@@ -2831,6 +2959,12 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     p += sp_text_style_write(p, c + BMAX - p, from->text, SP_STYLE_FLAG_IFDIFF);
 
     p += sp_style_write_ienum(p, c + BMAX - p, "clip-rule", enum_clip_rule, &from->clip_rule, &to->clip_rule, SP_STYLE_FLAG_IFDIFF);
+
+    /* rendering */
+    p += sp_style_write_ienum(p, c + BMAX - p, "color-rendering", enum_color_rendering, &from->color_rendering, &to->color_rendering, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum(p, c + BMAX - p, "image-rendering", enum_image_rendering, &from->image_rendering, &to->image_rendering, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum(p, c + BMAX - p, "shape-rendering", enum_shape_rendering, &from->shape_rendering, &to->shape_rendering, SP_STYLE_FLAG_IFDIFF);
+    p += sp_style_write_ienum(p, c + BMAX - p, "text-rendering",  enum_text_rendering,  &from->text_rendering,  &to->text_rendering,  SP_STYLE_FLAG_IFDIFF);
 
     /** \todo
      * The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
@@ -2863,25 +2997,27 @@ sp_style_clear(SPStyle *style)
     style->stroke.clear();
     sp_style_filter_clear(style);
 
+    style->release_connection.disconnect();
+
+    style->fill_ps_modified_connection.disconnect();
     if (style->fill.value.href) {
         delete style->fill.value.href;
         style->fill.value.href = NULL;
     }
+    style->stroke_ps_modified_connection.disconnect();
     if (style->stroke.value.href) {
         delete style->stroke.value.href;
         style->stroke.value.href = NULL;
     }
+    style->filter_modified_connection.disconnect();
     if (style->filter.href) {
         delete style->filter.href;
         style->filter.href = NULL;
     }
 
-    if (style->stroke_dash.dash) {
-        g_free(style->stroke_dash.dash);
-    }
-
-    style->stroke_dasharray_inherit = FALSE;
-    style->stroke_dashoffset_inherit = FALSE;
+    style->stroke_dasharray.values.clear();
+    style->stroke_dasharray.inherit = FALSE;
+    style->stroke_dashoffset.inherit = FALSE;
 
     /** \todo fixme: Do that text manipulation via parents */
     SPObject *object = style->object;
@@ -2890,7 +3026,6 @@ sp_style_clear(SPStyle *style)
     SPTextStyle *text = style->text;
     unsigned const text_private = style->text_private;
 
-    memset(style, 0, sizeof(SPStyle));
 
     style->refcount = refcount;
     style->object = object;
@@ -2915,49 +3050,73 @@ sp_style_clear(SPStyle *style)
     style->text->font_family.set = FALSE;
 
     style->font_size.set = FALSE;
+    style->font_size.inherit = FALSE;
     style->font_size.type = SP_FONT_SIZE_LITERAL;
+    style->font_size.unit = 0;
     style->font_size.literal = SP_CSS_FONT_SIZE_MEDIUM;
+    style->font_size.value = 12.0;
     style->font_size.computed = 12.0;
     style->font_style.set = FALSE;
+    style->font_style.inherit = FALSE;
     style->font_style.value = style->font_style.computed = SP_CSS_FONT_STYLE_NORMAL;
     style->font_variant.set = FALSE;
+    style->font_variant.inherit = FALSE;
     style->font_variant.value = style->font_variant.computed = SP_CSS_FONT_VARIANT_NORMAL;
     style->font_weight.set = FALSE;
+    style->font_weight.inherit = FALSE;
     style->font_weight.value = SP_CSS_FONT_WEIGHT_NORMAL;
     style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
     style->font_stretch.set = FALSE;
+    style->font_stretch.inherit = FALSE;
     style->font_stretch.value = style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
 
     /* text */
     style->text_indent.set = FALSE;
+    style->text_indent.inherit = FALSE;
     style->text_indent.unit = SP_CSS_UNIT_NONE;
     style->text_indent.computed = 0.0;
 
     style->text_align.set = FALSE;
+    style->text_align.inherit = FALSE;
     style->text_align.value = style->text_align.computed = SP_CSS_TEXT_ALIGN_START;
 
-    style->text_decoration.set = FALSE;
-    style->text_decoration.underline = FALSE;
-    style->text_decoration.overline = FALSE;
-    style->text_decoration.line_through = FALSE;
-    style->text_decoration.blink = FALSE;
+    style->text_decoration_line.set          = FALSE;
+    style->text_decoration_line.inherit      = FALSE;
+    style->text_decoration_line.underline    = FALSE;
+    style->text_decoration_line.overline     = FALSE;
+    style->text_decoration_line.line_through = FALSE;
+    style->text_decoration_line.blink        = FALSE;
+
+    style->text_decoration_style.set      = FALSE;
+    style->text_decoration_style.inherit  = FALSE;
+    style->text_decoration_style.solid    = FALSE;
+    style->text_decoration_style.isdouble = FALSE;
+    style->text_decoration_style.dotted   = FALSE;
+    style->text_decoration_style.dashed   = FALSE;
+    style->text_decoration_style.wavy     = FALSE;
+
+    style->text_decoration_color.clear();
 
     style->line_height.set = FALSE;
+    style->line_height.inherit = FALSE;
     style->line_height.unit = SP_CSS_UNIT_PERCENT;
     style->line_height.normal = TRUE;
     style->line_height.value = style->line_height.computed = 1.0;
 
     style->letter_spacing.set = FALSE;
+    style->letter_spacing.inherit = FALSE;
     style->letter_spacing.unit = SP_CSS_UNIT_NONE;
     style->letter_spacing.normal = TRUE;
     style->letter_spacing.value = style->letter_spacing.computed = 0.0;
 
     style->word_spacing.set = FALSE;
+    style->word_spacing.inherit = FALSE;
     style->word_spacing.unit = SP_CSS_UNIT_NONE;
     style->word_spacing.normal = TRUE;
     style->word_spacing.value = style->word_spacing.computed = 0.0;
 
     style->baseline_shift.set = FALSE;
+    style->baseline_shift.inherit = FALSE;
     style->baseline_shift.type = SP_BASELINE_SHIFT_LITERAL;
     style->baseline_shift.unit = SP_CSS_UNIT_NONE;
     style->baseline_shift.literal = SP_CSS_BASELINE_SHIFT_BASELINE; 
@@ -2965,68 +3124,143 @@ sp_style_clear(SPStyle *style)
     style->baseline_shift.computed = 0.0;
 
     style->text_transform.set = FALSE;
+    style->text_transform.inherit = FALSE;
     style->text_transform.value = style->text_transform.computed = SP_CSS_TEXT_TRANSFORM_NONE;
 
     style->direction.set = FALSE;
+    style->direction.inherit = FALSE;
     style->direction.value = style->direction.computed = SP_CSS_DIRECTION_LTR;
 
     style->block_progression.set = FALSE;
+    style->block_progression.inherit = FALSE;
     style->block_progression.value = style->block_progression.computed = SP_CSS_BLOCK_PROGRESSION_TB;
 
     style->writing_mode.set = FALSE;
+    style->writing_mode.inherit = FALSE;
     style->writing_mode.value = style->writing_mode.computed = SP_CSS_WRITING_MODE_LR_TB;
 
     style->text_anchor.set = FALSE;
+    style->text_anchor.inherit = FALSE;
     style->text_anchor.value = style->text_anchor.computed = SP_CSS_TEXT_ANCHOR_START;
 
+    style->clip_set = FALSE;
+    style->color_set = FALSE;
+    style->cursor_set = FALSE;
+    style->overflow_set  = FALSE;
+    style->clip_path_set = FALSE;
+    style->mask_set = FALSE;
 
+    style->clip_rule.set = FALSE;
+    style->clip_rule.inherit = FALSE;
+    style->clip_rule.value = style->clip_rule.computed = SP_WIND_RULE_NONZERO;
+
+    style->opacity.set = FALSE;
+    style->opacity.inherit = FALSE;
     style->opacity.value = SP_SCALE24_MAX;
     style->visibility.set = FALSE;
+    style->visibility.inherit = FALSE;
     style->visibility.value = style->visibility.computed = SP_CSS_VISIBILITY_VISIBLE;
     style->display.set = FALSE;
+    style->display.inherit = FALSE;
     style->display.value = style->display.computed = SP_CSS_DISPLAY_INLINE;
     style->overflow.set = FALSE;
+    style->overflow.inherit = FALSE;
     style->overflow.value = style->overflow.computed = SP_CSS_OVERFLOW_VISIBLE;
+    style->isolation.set = FALSE;
+    style->isolation.inherit = FALSE;
+    style->isolation.value = style->isolation.computed = SP_CSS_ISOLATION_AUTO;
+    style->blend_mode.set = FALSE;
+    style->blend_mode.inherit = FALSE;
+    style->blend_mode.value = style->blend_mode.computed = SP_CSS_BLEND_NORMAL;
 
     style->color.clear();
     style->color.setColor(0.0, 0.0, 0.0);
+    style->color_interpolation.set = FALSE;
+    style->color_interpolation.inherit = FALSE;
     style->color_interpolation.value = style->color_interpolation.computed = SP_CSS_COLOR_INTERPOLATION_SRGB;
+    style->color_interpolation_filters.set = FALSE;
+    style->color_interpolation_filters.inherit = FALSE;
     style->color_interpolation_filters.value = style->color_interpolation_filters.computed = SP_CSS_COLOR_INTERPOLATION_LINEARRGB;
+
 
     style->fill.clear();
     style->fill.setColor(0.0, 0.0, 0.0);
+    style->fill_opacity.set = FALSE;
+    style->fill_opacity.inherit = FALSE;
     style->fill_opacity.value = SP_SCALE24_MAX;
+    style->fill_rule.set = FALSE;
+    style->fill_rule.inherit = FALSE;
     style->fill_rule.value = style->fill_rule.computed = SP_WIND_RULE_NONZERO;
 
     style->stroke.clear();
+    style->stroke_opacity.set = FALSE;
+    style->stroke_opacity.inherit = FALSE;
     style->stroke_opacity.value = SP_SCALE24_MAX;
 
     style->stroke_width.set = FALSE;
+    style->stroke_width.inherit = FALSE;
     style->stroke_width.unit = SP_CSS_UNIT_NONE;
-    style->stroke_width.computed = 1.0;
+    style->stroke_width.value = style->stroke_width.computed = 1.0;
 
     style->stroke_linecap.set = FALSE;
+    style->stroke_linecap.inherit = FALSE;
     style->stroke_linecap.value = style->stroke_linecap.computed = SP_STROKE_LINECAP_BUTT;
     style->stroke_linejoin.set = FALSE;
+    style->stroke_linejoin.inherit = FALSE;
     style->stroke_linejoin.value = style->stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER;
 
     style->stroke_miterlimit.set = FALSE;
+    style->stroke_miterlimit.inherit = FALSE;
     style->stroke_miterlimit.value = 4.0;
 
-    style->stroke_dash.n_dash = 0;
-    style->stroke_dash.dash = NULL;
-    style->stroke_dash.offset = 0.0;
+    style->stroke_dasharray.values.clear();
+    style->stroke_dasharray.set = FALSE;
+    style->stroke_dasharray.inherit = FALSE;
+
+    style->stroke_dashoffset.value = style->stroke_dashoffset.computed = 0.0;
+    style->stroke_dashoffset.set = FALSE;
+    style->stroke_dashoffset.inherit = FALSE;
 
     for (unsigned i = SP_MARKER_LOC; i < SP_MARKER_LOC_QTY; i++) {
         g_free(style->marker[i].value);
         style->marker[i].set = FALSE;
+        style->marker[i].inherit = FALSE;
+        style->marker[i].data = 0;
+        style->marker[i].value = NULL;
     }
+
+    /* SVG 2 */
+    style->paint_order.set = FALSE;
+    style->paint_order.inherit = FALSE; // For now
+    for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
+        style->paint_order.layer[i] = SP_CSS_PAINT_ORDER_NORMAL;
+        style->paint_order.layer_set[i] = false;
+    }
+    style->paint_order.value = NULL;
+
+    style->filter.set = FALSE;
+    style->filter.inherit = FALSE;
+    style->filter.href = NULL;
 
     style->enable_background.value = SP_CSS_BACKGROUND_ACCUMULATE;
     style->enable_background.set = false;
     style->enable_background.inherit = false;
 
-    style->clip_rule.value = style->clip_rule.computed = SP_WIND_RULE_NONZERO;
+    style->filter_blend_mode.set   = style->filter_blend_mode.inherit = false;
+    style->filter_blend_mode.value = style->filter_blend_mode.computed = 0;
+    style->filter_gaussianBlur_deviation.set   = style->filter_gaussianBlur_deviation.inherit = false;
+    style->filter_gaussianBlur_deviation.value = style->filter_gaussianBlur_deviation.computed = 0;
+
+    style->color_rendering.set   = style->color_rendering.inherit = false;
+    style->color_rendering.value = style->color_rendering.computed = SP_CSS_COLOR_RENDERING_AUTO;
+    style->image_rendering.set   = style->image_rendering.inherit = false;
+    style->image_rendering.value = style->image_rendering.computed = SP_CSS_IMAGE_RENDERING_AUTO;
+    style->shape_rendering.set   = style->shape_rendering.inherit = false;
+    style->shape_rendering.value = style->shape_rendering.computed = SP_CSS_SHAPE_RENDERING_AUTO;
+    style->text_rendering.set    = style->text_rendering.inherit = false;
+    style->text_rendering.value  = style->text_rendering.computed  = SP_CSS_TEXT_RENDERING_AUTO;
+
+    style->cloned = false;
 }
 
 
@@ -3038,49 +3272,36 @@ static void
 sp_style_read_dash(SPStyle *style, gchar const *str)
 {
     /* Ref: http://www.w3.org/TR/SVG11/painting.html#StrokeDasharrayProperty */
-    style->stroke_dasharray_set = TRUE;
+    style->stroke_dasharray.set = TRUE;
 
     if (strcmp(str, "inherit") == 0) {
-        style->stroke_dasharray_inherit = true;
+        style->stroke_dasharray.inherit = true;
         return;
     }
-    style->stroke_dasharray_inherit = false;
+    style->stroke_dasharray.inherit = false;
 
-    NRVpathDash &dash = style->stroke_dash;
-    g_free(dash.dash);
-    dash.dash = NULL;
+    style->stroke_dasharray.values.clear();
 
     if (strcmp(str, "none") == 0) {
-        dash.n_dash = 0;
         return;
     }
 
-    gint n_dash = 0;
-    gdouble d[64];
     gchar *e = NULL;
-
-    bool LineSolid=true;
-    while (e != str && n_dash < 64) {
+    bool LineSolid = true;
+    while (e != str) {
         /* TODO: Should allow <length> rather than just a unitless (px) number. */
-        d[n_dash] = g_ascii_strtod(str, (char **) &e);
-        if (d[n_dash] > 0.00000001)
+        double number = g_ascii_strtod(str, (char **) &e);
+        style->stroke_dasharray.values.push_back( number );
+        if (number > 0.00000001)
             LineSolid = false;
         if (e != str) {
-            n_dash += 1;
             str = e;
         }
         while (str && *str && !isalnum(*str)) str += 1;
     }
 
     if (LineSolid) {
-        dash.n_dash = 0;
-        return;
-    }
-
-    if (n_dash > 0) {
-        dash.dash = g_new(gdouble, n_dash);
-        memcpy(dash.dash, d, sizeof(gdouble) * n_dash);
-        dash.n_dash = n_dash;
+        style->stroke_dasharray.values.clear();
     }
 }
 
@@ -3100,9 +3321,9 @@ sp_text_style_new()
     ts->refcount = 1;
     sp_text_style_clear(ts);
 
-    ts->font_specification.value = g_strdup("Sans");
-    ts->font.value = g_strdup("Sans");
-    ts->font_family.value = g_strdup("Sans");
+    ts->font_specification.value = g_strdup("sans-serif");
+    ts->font.value = g_strdup("sans-serif");
+    ts->font_family.value = g_strdup("sans-serif");
 
     return ts;
 }
@@ -3300,6 +3521,7 @@ sp_style_read_ilength(SPILength *val, gchar const *str)
              * X server or whatever).  E.g. don't fill in computed here, do
              * it at the same time as percentage units are done.
              */
+            val->value = value;
             if (!*e) {
                 /* Userspace */
                 val->unit = SP_CSS_UNIT_NONE;
@@ -3311,27 +3533,27 @@ sp_style_read_ilength(SPILength *val, gchar const *str)
             } else if (!strcmp(e, "pt")) {
                 /* Userspace / DEVICESCALE */
                 val->unit = SP_CSS_UNIT_PT;
-                val->computed = value * PX_PER_PT;
+                val->computed = Inkscape::Util::Quantity::convert(value, "pt", "px");
             } else if (!strcmp(e, "pc")) {
                 val->unit = SP_CSS_UNIT_PC;
-                val->computed = value * PX_PER_PC;
+                val->computed = Inkscape::Util::Quantity::convert(value, "pc", "px");
             } else if (!strcmp(e, "mm")) {
                 val->unit = SP_CSS_UNIT_MM;
-                val->computed = value * PX_PER_MM;
+                val->computed = Inkscape::Util::Quantity::convert(value, "mm", "px");
             } else if (!strcmp(e, "cm")) {
                 val->unit = SP_CSS_UNIT_CM;
-                val->computed = value * PX_PER_CM;
+                val->computed = Inkscape::Util::Quantity::convert(value, "cm", "px");
             } else if (!strcmp(e, "in")) {
                 val->unit = SP_CSS_UNIT_IN;
-                val->computed = value * PX_PER_IN;
+                val->computed = Inkscape::Util::Quantity::convert(value, "in", "px");
             } else if (!strcmp(e, "em")) {
                 /* EM square */
                 val->unit = SP_CSS_UNIT_EM;
-                val->value = value;
+                val->computed = value * SP_CSS_FONT_SIZE_DEFAULT;
             } else if (!strcmp(e, "ex")) {
                 /* ex square */
                 val->unit = SP_CSS_UNIT_EX;
-                val->value = value;
+                val->computed = value * 0.5 * SP_CSS_FONT_SIZE_DEFAULT;
             } else if (!strcmp(e, "%")) {
                 /* Percentage */
                 val->unit = SP_CSS_UNIT_PERCENT;
@@ -3371,55 +3593,229 @@ sp_style_read_ilengthornormal(SPILengthOrNormal *val, gchar const *str)
 }
 
 /**
+ * Set SPIPaintOrder object from string.
+ */
+static void
+sp_style_read_ipaintorder(SPIPaintOrder *val, gchar const *str)
+{
+    g_free(val->value);
+
+    if (!strcmp(str, "inherit")) {
+        // NEED TO CHECK FINAL SPEC
+        val->set = TRUE;
+        val->inherit = TRUE;
+        val->value = NULL;
+    } else {
+        val->set = TRUE;
+        val->inherit = FALSE;
+        val->value = g_strdup(str);
+
+        if (!strcmp(str, "normal")) {
+            val->layer[0] = SP_CSS_PAINT_ORDER_NORMAL;
+            val->layer_set[0] = true;
+        } else {
+            // This certainly can be done more efficiently
+            gchar** c = g_strsplit(str, " ", PAINT_ORDER_LAYERS + 1);
+            bool used[3] = {false, false, false};
+            unsigned int i = 0;
+            for( ; i < PAINT_ORDER_LAYERS; ++i ) {
+                if( c[i] ) {
+                    val->layer_set[i] = false;
+                    if( !strcmp( c[i], "fill")) {
+                        val->layer[i] = SP_CSS_PAINT_ORDER_FILL;
+                        val->layer_set[i] = true;
+                        used[0] = true;
+                    } else if( !strcmp( c[i], "stroke")) {
+                        val->layer[i] = SP_CSS_PAINT_ORDER_STROKE;
+                        val->layer_set[i] = true;
+                        used[1] = true;
+                    } else if( !strcmp( c[i], "markers")) {
+                        val->layer[i] = SP_CSS_PAINT_ORDER_MARKER;
+                        val->layer_set[i] = true;
+                        used[2] = true;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            g_strfreev(c);
+
+            // Fill out rest of the layers using the default order
+            if( !used[0] && i < PAINT_ORDER_LAYERS ) {
+                val->layer[i] = SP_CSS_PAINT_ORDER_FILL;
+                val->layer_set[i] = false;
+                ++i;
+            }
+            if( !used[1] && i < PAINT_ORDER_LAYERS ) {
+                val->layer[i] = SP_CSS_PAINT_ORDER_STROKE;
+                val->layer_set[i] = false;
+                ++i;
+            }
+            if( !used[2] && i < PAINT_ORDER_LAYERS ) {
+                val->layer[i] = SP_CSS_PAINT_ORDER_MARKER;
+                val->layer_set[i] = false;
+            }
+        }
+    }
+}
+
+
+
+/**
  * Set SPITextDecoration object from string.
  */
 static void
-sp_style_read_itextdecoration(SPITextDecoration *val, gchar const *str)
-{
-    if (!strcmp(str, "inherit")) {
-        val->set = TRUE;
-        val->inherit = TRUE;
-    } else if (!strcmp(str, "none")) {
-        val->set = TRUE;
-        val->inherit = FALSE;
-        val->underline = FALSE;
-        val->overline = FALSE;
-        val->line_through = FALSE;
-        val->blink = FALSE;
-    } else {
-        bool found_underline = false;
-        bool found_overline = false;
-        bool found_line_through = false;
-        bool found_blink = false;
-        for ( ; *str ; str++ ) {
-            if (*str == ' ') continue;
-            if (strneq(str, "underline", 9) && (str[9] == ' ' || str[9] == '\0')) {
-                found_underline = true;
-                str += 9;
-            } else if (strneq(str, "overline", 8) && (str[8] == ' ' || str[8] == '\0')) {
-                found_overline = true;
-                str += 8;
-            } else if (strneq(str, "line-through", 12) && (str[12] == ' ' || str[12] == '\0')) {
-                found_line_through = true;
-                str += 12;
-            } else if (strneq(str, "blink", 5) && (str[5] == ' ' || str[5] == '\0')) {
-                found_blink = true;
-                str += 5;
-            } else {
-                return;  // invalid value
-            }
+sp_style_read_itextdecoration(SPITextDecorationLine *line, SPITextDecorationStyle *style, SPIPaint *color, gchar const *str){
+    sp_style_read_itextdecorationLine(line, str);   // scans all tokens for line types
+    sp_style_read_itextdecorationStyle(style, str); // scans all tokens for style types
+    // the color routine must be fed one token at a time - if multiple colors are found the LAST one is used
+    const gchar *hstr = str;
+    while (1) {
+        if (*str == ' ' || *str == ',' || *str == '\0'){
+            int slen = str - hstr;
+            gchar *frag = g_strndup(hstr,slen+1); // only send one piece at a time, since keywords may be intermixed
+            sp_style_read_itextdecorationColor(color, frag);
+            g_free(frag);
+            if(color->set)break;
+            if(*str == '\0')break;
+            hstr = str + 1;
         }
-        if (!(found_underline || found_overline || found_line_through || found_blink)) {
-            return;  // invalid value: empty
-        }
-        val->set = TRUE;
-        val->inherit = FALSE;
-        val->underline = found_underline;
-        val->overline = found_overline;
-        val->line_through = found_line_through;
-        val->blink = found_blink;
+        str++;
     }
 }
+
+/**
+ * Set SPITextDecorationLine object from string.
+ * returns true if there was a match, false otherwise
+ */
+static void
+sp_style_read_itextdecorationLine(SPITextDecorationLine *line, gchar const *str){
+    if (!strcmp(str, "inherit")) {
+        line->set          = true;
+        line->inherit      = true;
+    } else if (!strcmp(str, "none")) {
+        line->set          = true;
+        line->inherit      = false;
+        line->underline    = false;
+        line->overline     = false;
+        line->line_through = false;
+        line->blink        = false;
+    } else {
+        bool found_one          = false;
+        bool hit_one            = false;
+
+        // CSS 2 keywords
+        bool found_underline    = false;
+        bool found_overline     = false;
+        bool found_line_through = false;
+        bool found_blink        = false;
+
+        // this method ignores inlineid keys and extra delimiters, so " ,,, blink hello" will set blink and ignore hello
+        const gchar *hstr = str;
+        while (1) {
+            if (*str == ' ' || *str == ',' || *str == '\0'){
+                int slen = str - hstr;
+                // CSS 2 keywords
+                while(1){ // not really a loop, used to avoid a goto
+                    hit_one = true; // most likely we will
+                    if ((slen ==  9) && strneq(hstr, "underline",    slen)){  found_underline    = true; break; }
+                    if ((slen ==  8) && strneq(hstr, "overline",     slen)){  found_overline     = true; break; }
+                    if ((slen == 12) && strneq(hstr, "line-through", slen)){  found_line_through = true; break; }
+                    if ((slen ==  5) && strneq(hstr, "blink",        slen)){  found_blink        = true; break; }
+                    if ((slen ==  4) && strneq(hstr, "none",         slen)){                             break; }
+                    
+                    hit_one = false; // whatever this thing is, we do not recognize it
+                    break;
+                }
+                found_one |= hit_one;
+                if(*str == '\0')break;
+                hstr = str + 1;
+            }
+            str++;
+        }
+        if (found_one) {
+            line->set          = true;
+            line->inherit      = false;
+            line->underline    = found_underline;
+            line->overline     = found_overline;
+            line->line_through = found_line_through;
+            line->blink        = found_blink;
+        }
+        else {
+            line->set          = false;
+            line->inherit      = false;
+        }
+    }
+}
+
+/**
+ * Set SPITextDecorationStyle object from string.
+ * returns true if there was a match, false otherwise
+*/
+static void
+sp_style_read_itextdecorationStyle(SPITextDecorationStyle *style, gchar const *str){
+    if (!strcmp(str, "inherit")) {
+        style->set         = true;
+        style->inherit     = true;
+    } else if (!strcmp(str, "none")) {
+        style->set         = true;
+        style->inherit     = false;
+        style->solid       = false;
+        style->isdouble    = false;
+        style->dotted      = false;
+        style->dashed      = false;
+        style->wavy        = false;
+    } else {
+        // note, these are CSS 3 keywords
+        bool found_solid        = false;
+        bool found_double       = false;
+        bool found_dotted       = false;
+        bool found_dashed       = false;
+        bool found_wavy         = false;
+        bool found_one          = false;
+        
+        // this method ignores inlineid keys and extra delimiters, so " ,,, style hello" will set style and ignore hello
+        // if more than one style is present, the first is used
+        const gchar *hstr = str;
+        while (1) {
+            if (*str == ' ' || *str == ',' || *str == '\0'){
+                int slen = str - hstr;
+                if (     (slen ==  5) && strneq(hstr, "solid",        slen)){  found_solid  = true; found_one = true; break; }
+                else if ((slen ==  6) && strneq(hstr, "double",       slen)){  found_double = true; found_one = true; break; }
+                else if ((slen ==  6) && strneq(hstr, "dotted",       slen)){  found_dotted = true; found_one = true; break; }
+                else if ((slen ==  6) && strneq(hstr, "dashed",       slen)){  found_dashed = true; found_one = true; break; }
+                else if ((slen ==  4) && strneq(hstr, "wavy",         slen)){  found_wavy   = true; found_one = true; break; }
+                if(*str == '\0')break; // nothing more to test
+                hstr = str + 1;
+            }
+            str++;
+        }
+        if(found_one){
+            style->set         = true;
+            style->inherit     = false;
+            style->solid       = found_solid;
+            style->isdouble    = found_double;
+            style->dotted      = found_dotted;
+            style->dashed      = found_dashed;
+            style->wavy        = found_wavy;
+        }
+        else {
+            style->set         = false;
+            style->inherit     = false;
+        }
+    }
+}
+
+/**
+ * Set SPIPaint object from string.
+ */
+static void
+sp_style_read_itextdecorationColor(SPIPaint *color, gchar const *str){
+    sp_style_read_icolor(color, str, NULL,NULL);
+}
+
 
 /**
  * Set SPIPaint object from string containing an integer value.
@@ -3435,11 +3831,11 @@ sp_style_read_icolor(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
         paint->set = TRUE;
         paint->inherit = TRUE;
     } else {
+        paint->inherit = FALSE;
         guint32 const rgb0 = sp_svg_read_color(str, 0xff);
         if (rgb0 != 0xff) {
             paint->setColor(rgb0);
             paint->set = TRUE;
-            paint->inherit = FALSE;
         }
     }
 }
@@ -3816,22 +4212,22 @@ static gint
 sp_style_write_istring(gchar *p, gint const len, gchar const *const key,
                        SPIString const *const val, SPIString const *const base, guint const flags)
 {
+    gint res = 0;
     if ((flags & SP_STYLE_FLAG_ALWAYS)
         || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
         || ((flags & SP_STYLE_FLAG_IFDIFF) && val->set
             && (!base->set || strcmp(val->value, base->value))))
     {
         if (val->inherit) {
-            return g_snprintf(p, len, "%s:inherit;", key);
+            res = g_snprintf(p, len, "%s:inherit;", key);
         } else {
-            gchar *val_quoted = css2_escape_quote(val->value);
-            if (val_quoted) {
-                return g_snprintf(p, len, "%s:%s;", key, val_quoted);
-                g_free (val_quoted);
+            Glib::ustring val_quoted = css2_escape_quote(val->value);
+            if (~val_quoted.empty()) {
+                res = g_snprintf(p, len, "%s:%s;", key, val_quoted.c_str());
             }
         }
     }
-    return 0;
+    return res;
 }
 
 
@@ -3882,23 +4278,23 @@ sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
                     return g_strlcpy(p, os.str().c_str(), len);
                     break;
                 case SP_CSS_UNIT_PT:
-                    os << key << ":" << val->computed * PT_PER_PX << "pt;";
+                    os << key << ":" << Inkscape::Util::Quantity::convert(val->computed, "px", "pt") << "pt;";
                     return g_strlcpy(p, os.str().c_str(), len);
                     break;
                 case SP_CSS_UNIT_PC:
-                    os << key << ":" << val->computed * PT_PER_PX / 12.0 << "pc;";
+                    os << key << ":" << Inkscape::Util::Quantity::convert(val->computed, "px", "pc") << "pc;";
                     return g_strlcpy(p, os.str().c_str(), len);
                     break;
                 case SP_CSS_UNIT_MM:
-                    os << key << ":" << val->computed * MM_PER_PX << "mm;";
+                    os << key << ":" << Inkscape::Util::Quantity::convert(val->computed, "px", "mm") << "mm;";
                     return g_strlcpy(p, os.str().c_str(), len);
                     break;
                 case SP_CSS_UNIT_CM:
-                    os << key << ":" << val->computed * CM_PER_PX << "cm;";
+                    os << key << ":" << Inkscape::Util::Quantity::convert(val->computed, "px", "cm") << "cm;";
                     return g_strlcpy(p, os.str().c_str(), len);
                     break;
                 case SP_CSS_UNIT_IN:
-                    os << key << ":" << val->computed * IN_PER_PX << "in;";
+                    os << key << ":" << Inkscape::Util::Quantity::convert(val->computed, "px", "in") << "in;";
                     return g_strlcpy(p, os.str().c_str(), len);
                     break;
                 case SP_CSS_UNIT_EM:
@@ -3974,15 +4370,75 @@ sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key,
 }
 
 /**
+ * Write SPIDashArray object into string.
+ */
+static gint
+sp_style_write_idasharray(gchar *p, gint const len, gchar const *const /*key*/,
+                          SPIDashArray const *const val, SPIDashArray const *const base, guint const flags)
+{
+    if ((flags & SP_STYLE_FLAG_ALWAYS)
+        || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && val->set
+            && (!base->set || (val->values != base->values))))
+    {
+        if (val->inherit) {
+            return g_snprintf(p, len, "stroke-dasharray:inherit;");
+        } else if ( !val->values.empty() ) {
+            Inkscape::CSSOStringStream os;
+            os << "stroke-dasharray:";
+            for (unsigned i = 0; i < val->values.size(); i++) {
+                if (i) {
+                    os << ", ";
+                }
+                os << val->values[i];
+            }
+            os << ";";
+            return g_strlcpy(p, os.str().c_str(), len);
+        } else {
+            return g_snprintf(p, len, "stroke-dasharray:none;");
+        }
+    }
+    return 0;
+}
+
+
+/**
  *
  */
 static bool
-sp_textdecoration_differ(SPITextDecoration const *const a, SPITextDecoration const *const b)
+sp_textdecorationLine_differ(SPITextDecorationLine const *const a, SPITextDecorationLine const *const b)
 {
-    return    a->underline != b->underline
-           || a->overline != b->overline
-           || a->line_through != b->line_through
-           || a->blink != b->blink;
+    return(     (a->underline    != b->underline   )
+            ||  (a->overline     != b->overline    )
+            ||  (a->line_through != b->line_through)
+            ||  (a->blink        != b->blink       )
+    );
+}
+
+/**
+ *
+ */
+static bool
+sp_textdecorationStyle_differ(SPITextDecorationStyle const *const a, SPITextDecorationStyle const *const b)
+{
+    return(     (a->solid    != b->solid    )
+            ||  (a->isdouble != b->isdouble )
+            ||  (a->dotted   != b->dotted   )
+            ||  (a->dashed   != b->dashed   )
+            ||  (a->wavy     != b->wavy     )
+    );
+}
+
+/**
+ *
+ */
+static bool
+sp_textdecorationColor_differ(SPIPaint const *const a, SPIPaint const *const b)
+{
+    bool status =   (a->isPaintserver() == b->isPaintserver()) && 
+                    (a->colorSet == b->colorSet) &&
+                    (a->currentcolor == b->currentcolor);
+    return(status);
 }
 
 /**
@@ -3990,31 +4446,55 @@ sp_textdecoration_differ(SPITextDecoration const *const a, SPITextDecoration con
  */
 static gint
 sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key,
-                               SPITextDecoration const *const val,
-                               SPITextDecoration const *const base,
+                               SPITextDecorationLine  const *const line,
+                               SPITextDecorationStyle const *const style,
+                               SPIPaint               const *const color,
+                               SPITextDecorationLine  const *const baseLine,
+                               SPITextDecorationStyle const *const baseStyle,
+                               SPIPaint               const *const baseColor,
                                guint const flags)
 {
     Inkscape::CSSOStringStream os;
 
-    if ((flags & SP_STYLE_FLAG_ALWAYS)
-        || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
-        || ((flags & SP_STYLE_FLAG_IFDIFF) && val->set
-            && (!base->set || sp_textdecoration_differ(val, base))))
-    {
-        if (val->inherit) {
-            return g_snprintf(p, len, "%s:inherit;", key);
-        } else {
-            os << key << ":";
-            if (val->underline || val->overline || val->line_through || val->blink) {
-                if (val->underline) os << " underline";
-                if (val->overline) os << " overline";
-                if (val->line_through) os << " line-through";
-                if (val->blink) os << " blink";
-            } else
-                os << "none";
-            os << ";";
-            return g_strlcpy(p, os.str().c_str(), len);
+    if (    (flags & SP_STYLE_FLAG_ALWAYS)
+        || ((flags & SP_STYLE_FLAG_IFSET)  && line->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && line->set
+                && (   !baseLine->set  || sp_textdecorationLine_differ(line,   baseLine)))
+        || ((flags & SP_STYLE_FLAG_IFSET)  && style->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && style->set
+                && (   !baseStyle->set  || sp_textdecorationStyle_differ(style, baseStyle)))
+        || ((flags & SP_STYLE_FLAG_IFSET)  && color->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && color->set
+                && (   !baseColor->set  || sp_textdecorationColor_differ(color, baseColor)))
+    ){
+        os << key << ":";
+        if (line->inherit || style->inherit || color->inherit) {
+            os << " inherit";
         }
+        else if (line->underline || line->overline || line->line_through || line->blink) {
+            if (line->underline)         os << " underline";
+            if (line->overline)          os << " overline";
+            if (line->line_through)      os << " line-through";
+            if (line->blink)             os << " blink";
+
+            if (     style->solid)       os << " solid";
+            else if (style->isdouble)    os << " double";
+            else if (style->dotted)      os << " dotted";
+            else if (style->dashed)      os << " dashed";
+            else if (style->wavy)        os << " wavy";
+            // color, if it is set, otherwise omit it 
+            if(color->set){
+                char color_buf[8];
+                sp_svg_write_color(color_buf, sizeof(color_buf), color->value.color.toRGBA32( 0 ));
+                os << " ";
+                os << color_buf;
+            } 
+        }
+        else {
+            os << "none";
+        }
+        os << ";";
+        return g_strlcpy(p, os.str().c_str(), len);
     }
     return 0;
 }
@@ -4076,6 +4556,7 @@ sp_style_write_ipaint(gchar *b, gint const len, gchar const *const key,
             if ( paint->value.href && paint->value.href->getURI() ) {
                 const gchar* uri = paint->value.href->getURI()->toString();
                 css << "url(" << uri << ")";
+                g_free((void *)uri);
             }
 
             if ( paint->noneSet ) {
@@ -4128,6 +4609,81 @@ sp_style_write_ipaint(gchar *b, gint const len, gchar const *const key,
  *
  */
 static bool
+sp_paint_order_differ(SPIPaintOrder const *const a, SPIPaintOrder const *const b)
+{
+    if( (a->set != b->set) ||
+        (a->inherit!= b->inherit) ) {
+        return true;
+    }
+
+    // Check this works when paint-order value is 'normal'
+    for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
+        if( (a->layer[i]     != b->layer[i]) ||
+            (a->layer_set[i] != b->layer_set[i]) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+/**
+ * Write SPIPaintOrder object into string.
+ */
+static gint
+sp_style_write_ipaintorder(gchar *p, gint len, gchar const *key, SPIPaintOrder const *paint_order, SPIPaintOrder const *base, guint flags)
+{
+    int retval = 0;
+
+    if ((flags & SP_STYLE_FLAG_ALWAYS)
+        || ((flags & SP_STYLE_FLAG_IFSET) && paint_order->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && paint_order->set
+            && (!base->set || sp_paint_order_differ(paint_order, base))))
+    {
+        CSSOStringStream css;
+
+        if (paint_order->inherit) {
+            css << "inherit";
+        } else {
+            for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
+                if( paint_order->layer_set[i] == true ) {
+                    switch (paint_order->layer[i]) {
+                        case SP_CSS_PAINT_ORDER_NORMAL:
+                            css << "normal";
+                            assert( i == 0 );
+                            break;
+                        case SP_CSS_PAINT_ORDER_FILL:
+                            if (i!=0) css << " ";
+                            css << "fill";
+                            break;
+                        case SP_CSS_PAINT_ORDER_STROKE:
+                            if (i!=0) css << " ";
+                            css << "stroke";
+                            break;
+                        case SP_CSS_PAINT_ORDER_MARKER:
+                            if (i!=0) css << " ";
+                            css << "markers";
+                            break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
+        if ( !css.str().empty() ) {
+            retval = g_snprintf( p, len, "%s:%s;", key, css.str().c_str() );
+        }
+    }
+
+    return retval;
+}
+
+/**
+ *
+ */
+static bool
 sp_fontsize_differ(SPIFontSize const *const a, SPIFontSize const *const b)
 {
     if (a->type != b->type)
@@ -4160,13 +4716,18 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
             return g_snprintf(p, len, "%s:inherit;", key);
         } else if (val->type == SP_FONT_SIZE_LITERAL) {
             for (unsigned i = 0; enum_font_size[i].key; i++) {
-                if (enum_font_size[i].value == static_cast< gint > (val->value) ) {
+                if (enum_font_size[i].value == static_cast< gint > (val->literal) ) {
                     return g_snprintf(p, len, "%s:%s;", key, enum_font_size[i].key);
                 }
             }
         } else if (val->type == SP_FONT_SIZE_LENGTH) {
             Inkscape::CSSOStringStream os;
-            os << key << ":" << val->computed << "px;";      // must specify px, see inkscape bug 1221626, mozilla bug 234789
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
+            if (prefs->getBool("/options/font/textOutputPx", true)) {
+                unit = SP_CSS_UNIT_PX;
+            }
+            os << key << ":" << sp_style_css_size_px_to_units(val->computed, unit) << sp_style_get_css_unit_string(unit) << ";";
             return g_strlcpy(p, os.str().c_str(), len);
         } else if (val->type == SP_FONT_SIZE_PERCENTAGE) {
             Inkscape::CSSOStringStream os;
@@ -4255,7 +4816,10 @@ sp_style_write_ifilter(gchar *p, gint const len, gchar const *key,
         if (val->inherit) {
             return g_snprintf(p, len, "%s:inherit;", key);
         } else if (val->href && val->href->getURI()) {
-            return g_snprintf(p, len, "%s:url(%s);", key, val->href->getURI()->toString());
+            gchar *uri = val->href->getURI()->toString();
+            gint ret = g_snprintf(p, len, "%s:url(%s);", key, uri);
+            g_free(uri);
+            return ret;        
         }
     }
 
@@ -4264,7 +4828,7 @@ sp_style_write_ifilter(gchar *p, gint const len, gchar const *key,
 }
 
 SPIPaint::SPIPaint() :
-    set(0),
+    set(false),
     inherit(0),
     currentcolor(0),
     colorSet(0),
@@ -4289,7 +4853,6 @@ void SPIPaint::clear()
         }
     }
 }
-
 
 /**
  * Clear filter object, and disconnect style from paintserver (if present).
@@ -4400,11 +4963,14 @@ sp_style_unset_property_attrs(SPObject *o)
     if (style->stroke_opacity.set) {
         repr->setAttribute("stroke-opacity", NULL);
     }
-    if (style->stroke_dasharray_set) {
+    if (style->stroke_dasharray.set) {
         repr->setAttribute("stroke-dasharray", NULL);
     }
-    if (style->stroke_dashoffset_set) {
+    if (style->stroke_dashoffset.set) {
         repr->setAttribute("stroke-dashoffset", NULL);
+    }
+    if (style->paint_order.set) {
+        repr->setAttribute("paint-order", NULL);
     }
     if (style->text_private && style->text->font_specification.set) {
         repr->setAttribute("-inkscape-font-specification", NULL);
@@ -4426,6 +4992,18 @@ sp_style_unset_property_attrs(SPObject *o)
     }
     if (style->clip_rule.set) {
         repr->setAttribute("clip-rule", NULL);
+    }
+    if (style->color_rendering.set) {
+        repr->setAttribute("color-rendering", NULL);
+    }
+    if (style->image_rendering.set) {
+        repr->setAttribute("image-rendering", NULL);
+    }
+    if (style->shape_rendering.set) {
+        repr->setAttribute("shape-rendering", NULL);
+    }
+    if (style->text_rendering.set) {
+        repr->setAttribute("text-rendering", NULL);
     }
 }
 
@@ -4498,7 +5076,7 @@ sp_css_attr_unset_text(SPCSSAttr *css)
     return css;
 }
 
-bool
+static bool
 is_url(char const *p)
 {
     if (p == NULL)
@@ -4538,7 +5116,7 @@ sp_css_attr_unset_uris(SPCSSAttr *css)
 /**
  * Scale a single-value property.
  */
-void
+static void
 sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
                                   double ex, bool only_with_units = false)
 {
@@ -4562,7 +5140,7 @@ sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
 /**
  * Scale a list-of-values property.
  */
-void
+static void
 sp_css_attr_scale_property_list(SPCSSAttr *css, gchar const *property, double ex)
 {
     gchar const *string = sp_repr_css_property(css, property, NULL);
@@ -4599,7 +5177,7 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
 {
     sp_css_attr_scale_property_single(css, "baseline-shift", ex);
     sp_css_attr_scale_property_single(css, "stroke-width", ex);
-    sp_css_attr_scale_property_list   (css, "stroke-dasharray", ex);
+    sp_css_attr_scale_property_list  (css, "stroke-dasharray", ex);
     sp_css_attr_scale_property_single(css, "stroke-dashoffset", ex);
     sp_css_attr_scale_property_single(css, "font-size", ex);
     sp_css_attr_scale_property_single(css, "kerning", ex);
@@ -4640,8 +5218,7 @@ attribute_unquote(gchar const *val)
 /**
  * Quote and/or escape string for writing to CSS (style=). Returned value must be g_free'd.
  */
-gchar *
-css2_escape_quote(gchar const *val) {
+Glib::ustring css2_escape_quote(gchar const *val) {
 
     Glib::ustring t;
     bool quote = false;
@@ -4685,7 +5262,7 @@ css2_escape_quote(gchar const *val) {
         t.push_back('\'');
     }
 
-    return (t.empty() ? NULL : g_strdup (t.c_str()));
+    return t;
 }
 
 /*

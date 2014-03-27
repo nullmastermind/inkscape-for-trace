@@ -1,11 +1,8 @@
-/**
- * @file
- * PNG export dialog.
- */
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *   Johan Engelen <j.b.c.engelen@ewi.utwente.nl>
+ *   Peter Bostrom
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
@@ -23,24 +20,36 @@
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/buttonbox.h>
-#include <gtkmm/label.h>
-#include <gtkmm/widget.h>
-#include <gtkmm/togglebutton.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/image.h>
-#include <gtkmm/stockid.h>
+#include <gtkmm/label.h>
+#include <gtkmm/spinbutton.h>
 #include <gtkmm/stock.h>
-#include <gtkmm/table.h>
+#include <gtkmm/stockid.h>
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+#include <gtkmm/togglebutton.h>
+#include <gtkmm/widget.h>
+
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs-init.h>  // gnome_vfs_initialized
 #endif
 
 #include <glibmm/i18n.h>
-#include "helper/unit-menu.h"
-#include "helper/units.h"
-#include "unit-constants.h"
+#include <glibmm/miscutils.h>
+
+#include "ui/widget/unit-menu.h"
+#include "util/units.h"
 #include "helper/window.h"
 #include "inkscape-private.h"
 #include "document.h"
@@ -66,17 +75,29 @@
 
 #include "helper/png-write.h"
 
+#if WITH_EXT_GDL
+#include <gdl/gdl-dock-item.h>
+#else
+#include "libgdl/gdl-dock-item.h"
+#endif
+
+
+// required to set status message after export
+#include "desktop.h"
+#include "message-stack.h"
+
 #ifdef WIN32
 #include <windows.h>
 #include <commdlg.h>
 #include <gdk/gdkwin32.h>
+#include <glibmm/fileutils.h>
 #endif
 
 #include <gtk/gtk.h>
 
 #define SP_EXPORT_MIN_SIZE 1.0
 
-#define DPI_BASE PX_PER_IN
+#define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 
 #define EXPORT_COORD_PRECISION 3
 
@@ -86,10 +107,50 @@
 #include "verbs.h"
 #include "export.h"
 
+using Inkscape::Util::unit_table;
+
+namespace {
+
+class MessageCleaner
+{
+public:
+    MessageCleaner(Inkscape::MessageId messageId, SPDesktop *desktop) :
+        _desktop(desktop),
+        _messageId(messageId)
+    {
+    }
+
+    ~MessageCleaner()
+    {
+        if (_messageId && _desktop) {
+            _desktop->messageStack()->cancel(_messageId);
+        }
+    }
+
+private:
+    MessageCleaner(MessageCleaner const &other);
+    MessageCleaner &operator=(MessageCleaner const &other);
+
+    SPDesktop *_desktop;
+    Inkscape::MessageId _messageId;
+};
+
+} // namespace
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+/** A list of strings that is used both in the preferences, and in the
+    data fields to describe the various values of \c selection_type. */
+static const char * selection_names[SELECTION_NUMBER_OF] = {
+    "page", "drawing", "selection", "custom"
+};
+
+/** The names on the buttons for the various selection types. */
+static const char * selection_labels[SELECTION_NUMBER_OF] = {
+    N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")
+};
 
 Export::Export (void) :
     UI::Widget::Panel ("", "/dialogs/export/", SP_VERB_DIALOG_EXPORT),
@@ -105,17 +166,20 @@ Export::Export (void) :
     size_box(false, 3),
     file_box(false, 3),
     unitbox(false, 0),
+    unit_selector(),
     units_label(_("Units:")),
     filename_box(false, 5),
-    browse_label(_("_Browse..."), 1),
+    browse_label(_("_Export As..."), 1),
     browse_image(Gtk::StockID(Gtk::Stock::INDEX), Gtk::ICON_SIZE_BUTTON),
     batch_box(false, 5),
     batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
     hide_box(false, 5),
     hide_export(_("Hide a_ll except selected"), _("In the exported image, hide all objects except those that are selected")),
-    button_box(Gtk::BUTTONBOX_END),
+    closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
+    button_box(false, 3),
     export_label(_("_Export"), 1),
     export_image(Gtk::StockID(Gtk::Stock::APPLY), Gtk::ICON_SIZE_BUTTON),
+    _prog(),
     prog_dlg(NULL),
     interrupted(false),
     prefs(NULL),
@@ -131,23 +195,21 @@ Export::Export (void) :
 
     /* Export area frame */
     {
-
-    #if WITH_GTKMM_2_22
-        Gtk::Label* lbl = new Gtk::Label(_("<big><b>Export area</b></big>"), Gtk::ALIGN_START);
-    #else
-        Gtk::Label* lbl = new Gtk::Label(_("<big><b>Export area</b></big>"), Gtk::ALIGN_LEFT);
-    #endif
+        Gtk::Label* lbl = new Gtk::Label(_("<b>Export area</b>"), Gtk::ALIGN_START);
         lbl->set_use_markup(true);
         area_box.pack_start(*lbl);
 
         /* Units box */
         /* gets added to the vbox later, but the unit selector is needed
            earlier than that */
-        unit_selector = Glib::wrap(sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE));
+        unit_selector.setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
+
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        if (desktop)
-            sp_unit_selector_set_unit (SP_UNIT_SELECTOR(unit_selector->gobj()), sp_desktop_namedview(desktop)->doc_units);
-        unitbox.pack_end(*unit_selector, false, false, 0);
+        if (desktop) {
+            unit_selector.setUnit(sp_desktop_namedview(desktop)->doc_units->abbr);
+        }
+        unitChangedConn = unit_selector.signal_changed().connect(sigc::mem_fun(*this, &Export::onUnitChanged));
+        unitbox.pack_end(unit_selector, false, false, 0);
         unitbox.pack_end(units_label, false, false, 3);
 
         for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
@@ -161,33 +223,39 @@ Export::Export (void) :
             selectiontype_buttons[i]->signal_clicked().connect(sigc::mem_fun(*this, &Export::onAreaToggled));
         }
 
-        Gtk::Table* t = new Gtk::Table(2, 6, false);
+#if WITH_GTKMM_3_0
+        Gtk::Grid* t = new Gtk::Grid();
+        t->set_row_spacing(4);
+        t->set_column_spacing(4);
+#else
+        Gtk::Table* t = new Gtk::Table(3, 4, false);
         t->set_row_spacings (4);
         t->set_col_spacings (4);
+#endif
 
-        x0_adj = createSpinbutton ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   t, 0, 0, _("_x0:"), "", EXPORT_COORD_PRECISION, 1,
-                                   &Export::onAreaX0Change);
+        x0_adj = createSpinbutton ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0,
+                                    t, 0, 0, _("_x0:"), "", EXPORT_COORD_PRECISION, 1,
+                                    &Export::onAreaX0Change);
 
-        x1_adj = createSpinbutton ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   t, 2, 0, _("x_1:"), "", EXPORT_COORD_PRECISION, 1,
-                                   &Export::onAreaX1Change);
+        x1_adj = createSpinbutton ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0,
+                                    t, 0, 1, _("x_1:"), "", EXPORT_COORD_PRECISION, 1,
+                                    &Export::onAreaX1Change);
 
         width_adj = createSpinbutton ( "width", 0.0, 0.0, PNG_UINT_31_MAX, 0.1, 1.0,
-                                   unit_selector->gobj(), t, 4, 0, _("Wid_th:"), "", EXPORT_COORD_PRECISION, 1,
-                                   &Export::onAreaWidthChange);
+                                       t, 0, 2, _("Wid_th:"), "", EXPORT_COORD_PRECISION, 1,
+                                       &Export::onAreaWidthChange);
 
-        y0_adj = createSpinbutton ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   t, 0, 1, _("_y0:"), "", EXPORT_COORD_PRECISION, 1,
-                                   &Export::onAreaY0Change);
+        y0_adj = createSpinbutton ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0,
+                                    t, 2, 0, _("_y0:"), "", EXPORT_COORD_PRECISION, 1,
+                                    &Export::onAreaY0Change);
 
-        y1_adj = createSpinbutton ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, unit_selector->gobj(),
-                                   t, 2, 1, _("y_1:"), "", EXPORT_COORD_PRECISION, 1,
-                                   &Export::onAreaY1Change);
+        y1_adj = createSpinbutton ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0,
+                                    t, 2, 1, _("y_1:"), "", EXPORT_COORD_PRECISION, 1,
+                                    &Export::onAreaY1Change);
 
         height_adj = createSpinbutton ( "height", 0.0, 0.0, PNG_UINT_31_MAX, 0.1, 1.0,
-                                   unit_selector->gobj(), t, 4, 1, _("Hei_ght:"), "", EXPORT_COORD_PRECISION, 1,
-                                   &Export::onAreaHeightChange);
+                                        t, 2, 2, _("Hei_ght:"), "", EXPORT_COORD_PRECISION, 1,
+                                        &Export::onAreaHeightChange);
 
         area_box.pack_start(togglebox, false, false, 3);
         area_box.pack_start(*t, false, false, 0);
@@ -201,41 +269,44 @@ Export::Export (void) :
     /* Bitmap size frame */
     {
         size_box.set_border_width(3);
-
-#if WITH_GTKMM_2_22
-        bm_label = new Gtk::Label(_("<big><b>Bitmap size</b></big>"), Gtk::ALIGN_START);
-#else
-        bm_label = new Gtk::Label(_("<big><b>Bitmap size</b></big>"), Gtk::ALIGN_LEFT);
-#endif
+        bm_label = new Gtk::Label(_("<b>Image size</b>"), Gtk::ALIGN_START);
         bm_label->set_use_markup(true);
         size_box.pack_start(*bm_label, false, false, 0);
+
+#if WITH_GTKMM_3_0
+        Gtk::Grid *t = new Gtk::Grid();
+        t->set_row_spacing(4);
+        t->set_column_spacing(4);
+#else
         Gtk::Table *t = new Gtk::Table(2, 5, false);
         t->set_row_spacings (4);
         t->set_col_spacings (4);
+#endif
+
         size_box.pack_start(*t);
 
         bmwidth_adj = createSpinbutton ( "bmwidth", 16.0, 1.0, 1000000.0, 1.0, 10.0,
-                                   NULL, t, 0, 0,
-                                   _("_Width:"), _("pixels at"), 0, 1,
-                                   &Export::onBitmapWidthChange);
+                                         t, 0, 0,
+                                         _("_Width:"), _("pixels at"), 0, 1,
+                                         &Export::onBitmapWidthChange);
 
         xdpi_adj = createSpinbutton ( "xdpi",
-                                   prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE),
-                                   0.01, 100000.0, 0.1, 1.0, NULL, t, 3, 0,
-                                   "", _("dp_i"), 2, 1,
-                                   &Export::onExportXdpiChange);
+                                      prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE),
+                                      0.01, 100000.0, 0.1, 1.0, t, 3, 0,
+                                      "", _("dp_i"), 2, 1,
+                                      &Export::onExportXdpiChange);
 
         bmheight_adj = createSpinbutton ( "bmheight", 16.0, 1.0, 1000000.0, 1.0, 10.0,
-                                   NULL, t, 0, 1,
-                                   _("_Height:"), _("pixels at"), 0, 1,
-                                   &Export::onBitmapHeightChange);
+                                          t, 0, 1,
+                                          _("_Height:"), _("pixels at"), 0, 1,
+                                          &Export::onBitmapHeightChange);
 
         /** TODO
          *  There's no way to set ydpi currently, so we use the defaultxdpi value here, too...
          */
         ydpi_adj = createSpinbutton ( "ydpi", prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE),
-                                   0.01, 100000.0, 0.1, 1.0, NULL, t, 3, 1,
-                                   "", _("dpi"), 2, 0, NULL );
+                                      0.01, 100000.0, 0.1, 1.0, t, 3, 1,
+                                      "", _("dpi"), 2, 0, NULL );
 
         singleexport_box.pack_start(size_box);
     }
@@ -243,12 +314,7 @@ Export::Export (void) :
     /* File entry */
     {
         file_box.set_border_width(3);
-
-#if WITH_GTKMM_2_22
-        flabel = new Gtk::Label(_("<big><b>_Filename</b></big>"), Gtk::ALIGN_START, Gtk::ALIGN_CENTER, true);
-#else
-        flabel = new Gtk::Label(_("<big><b>_Filename</b></big>"), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true);
-#endif
+        flabel = new Gtk::Label(_("<b>_Filename</b>"), Gtk::ALIGN_START, Gtk::ALIGN_CENTER, true);
         flabel->set_use_markup(true);
         file_box.pack_start(*flabel, false, false, 0);
 
@@ -279,7 +345,9 @@ Export::Export (void) :
     batch_box.pack_start(batch_export, false, false);
 
     hide_export.set_sensitive(true);
+    hide_export.set_active (prefs->getBool("/dialogs/export/hideexceptselected/value", false));
     hide_box.pack_start(hide_export, false, false);
+
 
     /* Export Button row */
     button_box.set_border_width(3);
@@ -289,8 +357,9 @@ Export::Export (void) :
 
     export_button.add(*export_image_label);
     export_button.set_tooltip_text (_("Export the bitmap file with these settings"));
-    button_box.pack_end(export_button, false, false, 0);
 
+    button_box.pack_start(closeWhenDone, true, true, 0 );
+    button_box.pack_end(export_button, false, false, 0);
 
     /* Main dialog */
     Gtk::Box *contents = _getContents();
@@ -298,7 +367,8 @@ Export::Export (void) :
     contents->pack_start(singleexport_box);
     contents->pack_start(batch_box);
     contents->pack_start(hide_box);
-    contents->pack_end(button_box, false, false, 0);
+    contents->pack_end(button_box, false, 0);
+    contents->pack_end(_prog, Gtk::PACK_EXPAND_WIDGET);
 
     /* Signal handlers */
     filename_entry.signal_changed().connect( sigc::mem_fun(*this, &Export::onFilenameModified) );
@@ -307,11 +377,13 @@ Export::Export (void) :
     browse_button.signal_clicked().connect(sigc::mem_fun(*this, &Export::onBrowse));
     batch_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onBatchClicked));
     export_button.signal_clicked().connect(sigc::mem_fun(*this, &Export::onExport));
+    hide_export.signal_clicked().connect(sigc::mem_fun(*this, &Export::onHideExceptSelected));
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Export::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children();
+    setExporting(false);
 
     findDefaultSelection();
     onAreaToggled();
@@ -370,7 +442,6 @@ void Export::set_default_filename () {
 
     if ( SP_ACTIVE_DOCUMENT && SP_ACTIVE_DOCUMENT->getURI() )
     {
-        gchar *name;
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         const gchar *uri = doc->getURI();
         const gchar *text_extension = get_file_save_extension (Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS).c_str();
@@ -393,13 +464,16 @@ void Export::set_default_filename () {
 
                 final_name = g_strconcat(uri_copy, ".png", NULL);
                 filename_entry.set_text(final_name);
+                filename_entry.set_position(strlen(final_name));
 
                 g_free(final_name);
                 g_free(uri_copy);
             }
         } else {
-            name = g_strconcat(uri, ".png", NULL);
+            gchar *name = g_strconcat(uri, ".png", NULL);
             filename_entry.set_text(name);
+            filename_entry.set_position(strlen(name));
+
             g_free(name);
         }
 
@@ -410,18 +484,18 @@ void Export::set_default_filename () {
 
 #if WITH_GTKMM_3_0
 Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, float val, float min, float max,
-                                      float step, float page, GtkWidget *us,
-                                      Gtk::Table *t, int x, int y,
-                                      const Glib::ustring ll, const Glib::ustring lr,
-                                      int digits, unsigned int sensitive,
-                                      void (Export::*cb)() )
+        float step, float page,
+        Gtk::Grid *t, int x, int y,
+        const Glib::ustring& ll, const Glib::ustring& lr,
+        int digits, unsigned int sensitive,
+        void (Export::*cb)() )
 #else
 Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, float min, float max,
-                                      float step, float page, GtkWidget *us,
-                                      Gtk::Table *t, int x, int y,
-                                      const Glib::ustring ll, const Glib::ustring lr,
-                                      int digits, unsigned int sensitive,
-                                      void (Export::*cb)() )
+        float step, float page,
+        Gtk::Table *t, int x, int y,
+        const Glib::ustring& ll, const Glib::ustring& lr,
+        int digits, unsigned int sensitive,
+        void (Export::*cb)() )
 #endif
 {
 #if WITH_GTKMM_3_0
@@ -429,9 +503,6 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
 #else
     Gtk::Adjustment *adj = new Gtk::Adjustment  ( val, min, max, step, page, 0 );
 #endif
-    if (us) {
-        sp_unit_selector_add_adjustment ( SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (adj->gobj()) );
-    }
 
     int pos = 0;
     Gtk::Label *l = NULL;
@@ -439,27 +510,49 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
     if (!ll.empty()) {
         l = new Gtk::Label(ll,true);
         l->set_alignment (1.0, 0.5);
+
+#if WITH_GTKMM_3_0
+        l->set_hexpand();
+        l->set_vexpand();
+        t->attach(*l, x + pos, y, 1, 1);
+#else
         t->attach (*l, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
+#endif
+
         l->set_sensitive(sensitive);
         pos++;
     }
 
 #if WITH_GTKMM_3_0
     Gtk::SpinButton *sb = new Gtk::SpinButton(adj, 1.0, digits);
+    sb->set_hexpand();
+    sb->set_vexpand();
+    t->attach(*sb, x + pos, y, 1, 1);
 #else
     Gtk::SpinButton *sb = new Gtk::SpinButton(*adj, 1.0, digits);
-#endif
     t->attach (*sb, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
-    sb->set_size_request (80, -1);
+#endif
+
+    sb->set_width_chars(7);
     sb->set_sensitive (sensitive);
     pos++;
 
-    if (!ll.empty()) { l->set_mnemonic_widget(*sb);}
+    if (!ll.empty()) {
+        l->set_mnemonic_widget(*sb);
+    }
 
     if (!lr.empty()) {
         l = new Gtk::Label(lr,true);
         l->set_alignment (0.0, 0.5);
+
+#if WITH_GTKMM_3_0
+        l->set_hexpand();
+        l->set_vexpand();
+        t->attach(*l, x + pos, y, 1, 1);
+#else
         t->attach (*l, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
+#endif
+
         l->set_sensitive (sensitive);
         pos++;
         l->set_mnemonic_widget (*sb);
@@ -476,7 +569,7 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
 Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ustring &file_entry_text)
 {
     if (id.empty())
-    {    /* This should never happen */
+    {   /* This should never happen */
         id = "bitmap";
     }
 
@@ -521,11 +614,8 @@ void Export::updateCheckbuttons ()
         batch_export.set_active (false);
         batch_export.set_sensitive(false);
     }
-    if (num > 0) {
-        hide_export.set_sensitive(true);
-    } else {
-        hide_export.set_sensitive(false);
-    }
+
+    //hide_export.set_sensitive (num > 0);
 }
 
 inline void Export::findDefaultSelection()
@@ -592,35 +682,35 @@ void Export::onSelectionModified ( guint /*flags*/ )
 {
     Inkscape::Selection * Sel;
     switch (current_key) {
-        case SELECTION_DRAWING:
-            if ( SP_ACTIVE_DESKTOP ) {
-                SPDocument *doc;
-                doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
-                Geom::OptRect bbox = doc->getRoot()->desktopVisualBounds();
-                if (bbox) {
-                    setArea ( bbox->left(),
-                                              bbox->top(),
-                                              bbox->right(),
-                                              bbox->bottom());
-                }
+    case SELECTION_DRAWING:
+        if ( SP_ACTIVE_DESKTOP ) {
+            SPDocument *doc;
+            doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
+            Geom::OptRect bbox = doc->getRoot()->desktopVisualBounds();
+            if (bbox) {
+                setArea ( bbox->left(),
+                          bbox->top(),
+                          bbox->right(),
+                          bbox->bottom());
             }
-            break;
-        case SELECTION_SELECTION:
-            Sel = sp_desktop_selection(SP_ACTIVE_DESKTOP);
-            if (Sel->isEmpty() == false) {
-                Geom::OptRect bbox = Sel->visualBounds();
-                if (bbox)
-                {
-                    setArea ( bbox->left(),
-                                          bbox->top(),
-                                          bbox->right(),
-                                          bbox->bottom());
-                }
+        }
+        break;
+    case SELECTION_SELECTION:
+        Sel = sp_desktop_selection(SP_ACTIVE_DESKTOP);
+        if (Sel->isEmpty() == false) {
+            Geom::OptRect bbox = Sel->visualBounds();
+            if (bbox)
+            {
+                setArea ( bbox->left(),
+                          bbox->top(),
+                          bbox->right(),
+                          bbox->bottom());
             }
-            break;
-        default:
-            /* Do nothing for page or for custom */
-            break;
+        }
+        break;
+    default:
+        /* Do nothing for page or for custom */
+        break;
     }
 
     return;
@@ -652,39 +742,39 @@ void Export::onAreaToggled ()
            various backups.  If you modify this without noticing you'll
            probabaly screw something up. */
         switch (key) {
-            case SELECTION_SELECTION:
-                if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false)
-                {
-                    bbox = sp_desktop_selection (SP_ACTIVE_DESKTOP)->visualBounds();
-                    /* Only if there is a selection that we can set
-                       do we break, otherwise we fall through to the
-                       drawing */
-                    // std::cout << "Using selection: SELECTION" << std::endl;
-                    key = SELECTION_SELECTION;
-                    break;
-                }
-            case SELECTION_DRAWING:
-                /** \todo
-                 * This returns wrong values if the document has a viewBox.
-                 */
-                bbox = doc->getRoot()->desktopVisualBounds();
-                /* If the drawing is valid, then we'll use it and break
-                   otherwise we drop through to the page settings */
-                if (bbox) {
-                    // std::cout << "Using selection: DRAWING" << std::endl;
-                    key = SELECTION_DRAWING;
-                    break;
-                }
-            case SELECTION_PAGE:
-                bbox = Geom::Rect(Geom::Point(0.0, 0.0),
-                                  Geom::Point(doc->getWidth(), doc->getHeight()));
+        case SELECTION_SELECTION:
+            if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false)
+            {
+                bbox = sp_desktop_selection (SP_ACTIVE_DESKTOP)->visualBounds();
+                /* Only if there is a selection that we can set
+                   do we break, otherwise we fall through to the
+                   drawing */
+                // std::cout << "Using selection: SELECTION" << std::endl;
+                key = SELECTION_SELECTION;
+                break;
+            }
+        case SELECTION_DRAWING:
+            /** \todo
+             * This returns wrong values if the document has a viewBox.
+             */
+            bbox = doc->getRoot()->desktopVisualBounds();
+            /* If the drawing is valid, then we'll use it and break
+               otherwise we drop through to the page settings */
+            if (bbox) {
+                // std::cout << "Using selection: DRAWING" << std::endl;
+                key = SELECTION_DRAWING;
+                break;
+            }
+        case SELECTION_PAGE:
+            bbox = Geom::Rect(Geom::Point(0.0, 0.0),
+                              Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
 
-                // std::cout << "Using selection: PAGE" << std::endl;
-                key = SELECTION_PAGE;
-                break;
-            case SELECTION_CUSTOM:
-            default:
-                break;
+            // std::cout << "Using selection: PAGE" << std::endl;
+            key = SELECTION_PAGE;
+            break;
+        case SELECTION_CUSTOM:
+        default:
+            break;
         } // switch
 
         current_key = key;
@@ -694,9 +784,9 @@ void Export::onAreaToggled ()
 
         if ( key != SELECTION_CUSTOM && bbox ) {
             setArea ( bbox->min()[Geom::X],
-                                      bbox->min()[Geom::Y],
-                                      bbox->max()[Geom::X],
-                                      bbox->max()[Geom::Y]);
+                      bbox->min()[Geom::Y],
+                      bbox->max()[Geom::X],
+                      bbox->max()[Geom::Y]);
         }
 
     } // end of if ( SP_ACTIVE_DESKTOP )
@@ -707,48 +797,49 @@ void Export::onAreaToggled ()
         float xdpi = 0.0, ydpi = 0.0;
 
         switch (key) {
-            case SELECTION_PAGE:
-            case SELECTION_DRAWING: {
-                SPDocument * doc = SP_ACTIVE_DOCUMENT;
-                sp_document_get_export_hints (doc, filename, &xdpi, &ydpi);
+        case SELECTION_PAGE:
+        case SELECTION_DRAWING: {
+            SPDocument * doc = SP_ACTIVE_DOCUMENT;
+            sp_document_get_export_hints (doc, filename, &xdpi, &ydpi);
 
-                if (filename.empty()) {
-                    if (!doc_export_name.empty()) {
-                        filename = doc_export_name;
-                    }
+            if (filename.empty()) {
+                if (!doc_export_name.empty()) {
+                    filename = doc_export_name;
                 }
-                break;
             }
-            case SELECTION_SELECTION:
-                if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
+            break;
+        }
+        case SELECTION_SELECTION:
+            if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
 
-                    sp_selection_get_export_hints (sp_desktop_selection(SP_ACTIVE_DESKTOP), filename, &xdpi, &ydpi);
+                sp_selection_get_export_hints (sp_desktop_selection(SP_ACTIVE_DESKTOP), filename, &xdpi, &ydpi);
 
-                    /* If we still don't have a filename -- let's build
-                       one that's nice */
-                    if (filename.empty()) {
-                        const gchar * id = NULL;
-                        const GSList * reprlst = sp_desktop_selection(SP_ACTIVE_DESKTOP)->reprList();
-                        for(; reprlst != NULL; reprlst = reprlst->next) {
-                            Inkscape::XML::Node * repr = (Inkscape::XML::Node *)reprlst->data;
-                            if (repr->attribute("id")) {
-                                id = repr->attribute("id");
-                                break;
-                            }
+                /* If we still don't have a filename -- let's build
+                   one that's nice */
+                if (filename.empty()) {
+                    const gchar * id = "object";
+                    const GSList * reprlst = sp_desktop_selection(SP_ACTIVE_DESKTOP)->reprList();
+                    for(; reprlst != NULL; reprlst = reprlst->next) {
+                        Inkscape::XML::Node * repr = (Inkscape::XML::Node *)reprlst->data;
+                        if (repr->attribute("id")) {
+                            id = repr->attribute("id");
+                            break;
                         }
-
-                        filename = create_filepath_from_id (id, filename_entry.get_text());
                     }
+
+                    filename = create_filepath_from_id (id, filename_entry.get_text());
                 }
-                break;
-            case SELECTION_CUSTOM:
-            default:
-                break;
+            }
+            break;
+        case SELECTION_CUSTOM:
+        default:
+            break;
         }
 
         if (!filename.empty()) {
             original_name = filename;
             filename_entry.set_text(filename);
+            filename_entry.set_position(filename.length());
         }
 
         if (xdpi != 0.0) {
@@ -782,32 +873,62 @@ void Export::onProgressCancel ()
 
 
 /// Called for every progress iteration
-unsigned int Export::onProgressCallback (float value, void *dlg)
+unsigned int Export::onProgressCallback(float value, void *dlg)
 {
     Gtk::Dialog *dlg2 = reinterpret_cast<Gtk::Dialog*>(dlg);
-    if (dlg2->get_data("cancel")){
+    if (dlg2->get_data("cancel")) {
         return FALSE;
     }
 
-    Gtk::ProgressBar *prg = (Gtk::ProgressBar *) dlg2->get_data ("progress");
-    prg->set_fraction(value);
+    gint current = GPOINTER_TO_INT(dlg2->get_data("current"));
+    gint total = GPOINTER_TO_INT(dlg2->get_data("total"));
+    if (total > 0) {
+        double completed = current;
+        completed /= static_cast<double>(total);
 
-    int evtcount = 0;
-    while ((evtcount < 16) && gdk_events_pending ()) {
-            gtk_main_iteration_do (FALSE);
-            evtcount += 1;
+        value = completed + (value / static_cast<double>(total));
     }
 
-    gtk_main_iteration_do (FALSE);
+    Gtk::ProgressBar *prg = reinterpret_cast<Gtk::ProgressBar *>(dlg2->get_data("progress"));
+    prg->set_fraction(value);
+
+    Export *self = reinterpret_cast<Export *>(dlg2->get_data("exportPanel"));
+    if (self) {
+        self->_prog.set_fraction(value);
+    }
+
+    int evtcount = 0;
+    while ((evtcount < 16) && gdk_events_pending()) {
+        gtk_main_iteration_do(FALSE);
+        evtcount += 1;
+    }
+
+    gtk_main_iteration_do(FALSE);
     return TRUE;
 } // end of sp_export_progress_callback()
 
+void Export::setExporting(bool exporting, Glib::ustring const &text)
+{
+    if (exporting) {
+        _prog.set_text(text);
+        _prog.set_fraction(0.0);
+        _prog.set_sensitive(true);
+
+        export_button.set_sensitive(false);
+    } else {
+        _prog.set_text("");
+        _prog.set_fraction(0.0);
+        _prog.set_sensitive(false);
+
+        export_button.set_sensitive(true);
+    }
+}
+
 Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
     Gtk::Dialog *dlg = new Gtk::Dialog(_("Export in progress"), TRUE);
-    
+
     Gtk::ProgressBar *prg = new Gtk::ProgressBar ();
     prg->set_text(progress_text);
-    prg->set_orientation(Gtk::PROGRESS_LEFT_TO_RIGHT);
     dlg->set_data ("progress", prg);
 #if GTK_CHECK_VERSION(3,0,0)
     Gtk::Box* CA = dlg->get_content_area();
@@ -829,7 +950,7 @@ Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
 Glib::ustring Export::filename_add_extension (Glib::ustring filename, Glib::ustring extension)
 {
     Glib::ustring::size_type dot;
-    
+
     dot = filename.find_last_of(".");
     if ( !dot )
     {
@@ -843,7 +964,7 @@ Glib::ustring Export::filename_add_extension (Glib::ustring filename, Glib::ustr
         }
         else
         {
-          return filename = filename + "." + extension;
+            return filename = filename + "." + extension;
         }
     }
 }
@@ -864,33 +985,52 @@ Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, c
     return path;
 }
 
+// Called when unit is changed
+void Export::onUnitChanged()
+{
+    onAreaToggled();
+}
+
+void Export::onHideExceptSelected ()
+{
+    prefs->setBool("/dialogs/export/hideexceptselected/value", hide_export.get_active());
+}
+
 /// Called when export button is clicked
 void Export::onExport ()
 {
-    if (!SP_ACTIVE_DESKTOP) return;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop) return;
 
-    SPNamedView *nv = sp_desktop_namedview(SP_ACTIVE_DESKTOP);
-    SPDocument *doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
+    SPNamedView *nv = sp_desktop_namedview(desktop);
+    SPDocument *doc = sp_desktop_document (desktop);
+
+    bool exportSuccessful = false;
 
     bool hide = hide_export.get_active ();
     if (batch_export.get_active ()) {
         // Batch export of selected objects
 
-        gint num = g_slist_length(const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList()));
+        gint num = g_slist_length(const_cast<GSList *>(sp_desktop_selection(desktop)->itemList()));
         gint n = 0;
 
-        if (num < 1)
+        if (num < 1) {
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No items selected."));
             return;
+        }
 
-        prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 files"),num));
+        prog_dlg = create_progress_dialog(Glib::ustring::compose(_("Exporting %1 files"), num));
+        prog_dlg->set_data("exportPanel", this);
+        setExporting(true, Glib::ustring::compose(_("Exporting %1 files"), num));
 
-        for (GSList *i = const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList());
-                i != NULL;
-                i = i->next) {
-            if (interrupted){
-                break;
-            }
+        gint export_count = 0;
+
+        for (GSList *i = const_cast<GSList *>(sp_desktop_selection(desktop)->itemList()); i && !interrupted; i = i->next) {
             SPItem *item = reinterpret_cast<SPItem *>(i->data);
+
+            prog_dlg->set_data("current", GINT_TO_POINTER(n));
+            prog_dlg->set_data("total", GINT_TO_POINTER(num));
+            onProgressCallback(0.0, prog_dlg);
 
             // retrieve export filename hint
             const gchar *filename = item->getRepr()->attribute("inkscape:export-filename");
@@ -909,47 +1049,63 @@ void Export::onExport ()
                 dpi = atof(dpi_hint);
             }
             if (dpi == 0.0) {
-                dpi = DPI_BASE;
+                dpi = getValue(xdpi_adj);
             }
 
             Geom::OptRect area = item->desktopVisualBounds();
             if (area) {
-                gint width = (gint) (area->width() * dpi / PX_PER_IN + 0.5);
-                gint height = (gint) (area->height() * dpi / PX_PER_IN + 0.5);
+                gint width = (gint) (area->width() * dpi / DPI_BASE + 0.5);
+                gint height = (gint) (area->height() * dpi / DPI_BASE + 0.5);
 
                 if (width > 1 && height > 1) {
-                    /* Do export */
+                    // Do export
+                    gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
+                    MessageCleaner msgCleanup(desktop->messageStack()->pushF(Inkscape::IMMEDIATE_MESSAGE,
+                                              _("Exporting file <b>%s</b>..."), safeFile), desktop);
+                    MessageCleaner msgFlashCleanup(desktop->messageStack()->flashF(Inkscape::IMMEDIATE_MESSAGE,
+                                                   _("Exporting file <b>%s</b>..."), safeFile), desktop);
+
                     if (!sp_export_png_file (doc, path.c_str(),
                                              *area, width, height, dpi, dpi,
                                              nv->pagecolor,
-                                             NULL, NULL, TRUE,  // overwrite without asking
-                                             hide ? const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList()) : NULL
-                            )) {
-                        gchar * error;
-                        gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
-                        error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
+                                             onProgressCallback, (void*)prog_dlg,
+                                             TRUE,  // overwrite without asking
+                                             hide ? const_cast<GSList *>(sp_desktop_selection(desktop)->itemList()) : NULL
+                                            )) {
+                        gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
+
+                        desktop->messageStack()->flashF(Inkscape::ERROR_MESSAGE,
+                                                        _("Could not export to filename <b>%s</b>."), safeFile);
+
                         sp_ui_error_dialog(error);
-                        g_free(safeFile);
                         g_free(error);
+                    } else {
+                        ++export_count; // one more item exported successfully
                     }
+                    g_free(safeFile);
                 }
             }
+
             n++;
-            onProgressCallback((float)n/num, prog_dlg);
         }
 
+        desktop->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE,
+                                        _("Successfully exported <b>%d</b> files from <b>%d</b> selected items."), export_count, num);
+
+        setExporting(false);
         delete prog_dlg;
         prog_dlg = NULL;
         interrupted = false;
-
+        exportSuccessful = (export_count > 0);
     } else {
         Glib::ustring filename = filename_entry.get_text();
 
-        if (filename.empty()){
+        if (filename.empty()) {
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You have to enter a filename."));
             sp_ui_error_dialog(_("You have to enter a filename"));
             return;
         }
-        
+
         float const x0 = getValuePx(x0_adj);
         float const y0 = getValuePx(y0_adj);
         float const x1 = getValuePx(x1_adj);
@@ -960,23 +1116,28 @@ void Export::onExport ()
         unsigned long int const height = int(getValue(bmheight_adj) + 0.5);
 
         if (!((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0))) {
-            sp_ui_error_dialog (_("The chosen area to be exported is invalid"));
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The chosen area to be exported is invalid."));
+            sp_ui_error_dialog(_("The chosen area to be exported is invalid"));
             return;
         }
 
         // make sure that .png is the extension of the file:
         Glib::ustring const filename_ext = filename_add_extension(filename, "png");
         filename_entry.set_text(filename_ext);
+        filename_entry.set_position(filename_ext.length());
         Glib::ustring path = absolutize_path_from_document_location(doc, filename_ext);
 
         Glib::ustring dirname = Glib::path_get_dirname(path);
         if ( dirname.empty()
-             || !Inkscape::IO::file_test(dirname.c_str(), (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) )
+                || !Inkscape::IO::file_test(dirname.c_str(), (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) )
         {
             gchar *safeDir = Inkscape::IO::sanitizeString(dirname.c_str());
             gchar *error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"),
                                            safeDir);
+
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, error);
             sp_ui_error_dialog(error);
+
             g_free(safeDir);
             g_free(error);
             return;
@@ -984,21 +1145,40 @@ void Export::onExport ()
 
         Glib::ustring fn = path_get_basename (path);
 
+        /* TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image */
         prog_dlg = create_progress_dialog (Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
+        prog_dlg->set_data("exportPanel", this);
+        setExporting(true, Glib::ustring::compose(_("Exporting %1 (%2 x %3)"), fn, width, height));
+
+        prog_dlg->set_data("current", GINT_TO_POINTER(0));
+        prog_dlg->set_data("total", GINT_TO_POINTER(0));
 
         /* Do export */
-        if (!sp_export_png_file (sp_desktop_document (SP_ACTIVE_DESKTOP), path.c_str(),
-                                 Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
-                                 nv->pagecolor,
-                                 onProgressCallback, (void*)prog_dlg, FALSE,
-                                 hide ? const_cast<GSList *>(sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList()) : NULL
-                )) {
-            gchar * error;
+        ExportResult status = sp_export_png_file(sp_desktop_document(desktop), path.c_str(),
+                              Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
+                              nv->pagecolor,
+                              onProgressCallback, (void*)prog_dlg,
+                              FALSE,
+                              hide ? const_cast<GSList *>(sp_desktop_selection(desktop)->itemList()) : NULL
+                                                );
+        if (status == EXPORT_ERROR) {
             gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
-            error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
+            gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
+
+            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, error);
             sp_ui_error_dialog(error);
+
             g_free(safeFile);
             g_free(error);
+        } else if (status == EXPORT_OK) {
+            exportSuccessful = true;
+            gchar *safeFile = Inkscape::IO::sanitizeString(path.c_str());
+
+            desktop->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("Drawing exported to <b>%s</b>."), safeFile);
+
+            g_free(safeFile);
+        } else {
+            desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Export aborted."));
         }
 
         /* Reset the filename so that it can be changed again by changing
@@ -1006,25 +1186,72 @@ void Export::onExport ()
         original_name = filename_ext;
         filename_modified = false;
 
+        setExporting(false);
         delete prog_dlg;
         prog_dlg = NULL;
         interrupted = false;
 
         /* Setup the values in the document */
         switch (current_key) {
-            case SELECTION_PAGE:
-            case SELECTION_DRAWING: {
-                SPDocument * doc = SP_ACTIVE_DOCUMENT;
-                Inkscape::XML::Node * repr = doc->getReprRoot();
-                bool modified = false;
+        case SELECTION_PAGE:
+        case SELECTION_DRAWING: {
+            SPDocument * doc = SP_ACTIVE_DOCUMENT;
+            Inkscape::XML::Node * repr = doc->getReprRoot();
+            bool modified = false;
 
-                bool saved = DocumentUndo::getUndoSensitive(doc);
-                DocumentUndo::setUndoSensitive(doc, false);
+            bool saved = DocumentUndo::getUndoSensitive(doc);
+            DocumentUndo::setUndoSensitive(doc, false);
 
-                gchar const *temp_string = repr->attribute("inkscape:export-filename");
-                if (temp_string == NULL || (filename_ext != temp_string)) {
-                    repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
-                    modified = true;
+            gchar const *temp_string = repr->attribute("inkscape:export-filename");
+            if (temp_string == NULL || (filename_ext != temp_string)) {
+                repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
+                modified = true;
+            }
+            temp_string = repr->attribute("inkscape:export-xdpi");
+            if (temp_string == NULL || xdpi != atof(temp_string)) {
+                sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
+                modified = true;
+            }
+            temp_string = repr->attribute("inkscape:export-ydpi");
+            if (temp_string == NULL || ydpi != atof(temp_string)) {
+                sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
+                modified = true;
+            }
+            DocumentUndo::setUndoSensitive(doc, saved);
+
+            if (modified) {
+                doc->setModifiedSinceSave();
+            }
+            break;
+        }
+        case SELECTION_SELECTION: {
+            const GSList * reprlst;
+            SPDocument * doc = SP_ACTIVE_DOCUMENT;
+            bool modified = false;
+
+            bool saved = DocumentUndo::getUndoSensitive(doc);
+            DocumentUndo::setUndoSensitive(doc, false);
+            reprlst = sp_desktop_selection(desktop)->reprList();
+
+            for(; reprlst != NULL; reprlst = reprlst->next) {
+                Inkscape::XML::Node * repr = static_cast<Inkscape::XML::Node *>(reprlst->data);
+                const gchar * temp_string;
+                Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
+                const gchar* docURI=SP_ACTIVE_DOCUMENT->getURI();
+                Glib::ustring docdir;
+                if (docURI)
+                {
+                    docdir = Glib::path_get_dirname(docURI);
+                }
+                if (repr->attribute("id") == NULL ||
+                        !(filename_ext.find_last_of(repr->attribute("id")) &&
+                          ( !docURI ||
+                            (dir == docdir)))) {
+                    temp_string = repr->attribute("inkscape:export-filename");
+                    if (temp_string == NULL || (filename_ext != temp_string)) {
+                        repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
+                        modified = true;
+                    }
                 }
                 temp_string = repr->attribute("inkscape:export-xdpi");
                 if (temp_string == NULL || xdpi != atof(temp_string)) {
@@ -1036,65 +1263,30 @@ void Export::onExport ()
                     sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                     modified = true;
                 }
-                DocumentUndo::setUndoSensitive(doc, saved);
-
-                if (modified) {
-                    doc->setModifiedSinceSave();
-                }
-                break;
             }
-            case SELECTION_SELECTION: {
-                const GSList * reprlst;
-                SPDocument * doc = SP_ACTIVE_DOCUMENT;
-                bool modified = false;
+            DocumentUndo::setUndoSensitive(doc, saved);
 
-                bool saved = DocumentUndo::getUndoSensitive(doc);
-                DocumentUndo::setUndoSensitive(doc, false);
-                reprlst = sp_desktop_selection(SP_ACTIVE_DESKTOP)->reprList();
-
-                for(; reprlst != NULL; reprlst = reprlst->next) {
-                    Inkscape::XML::Node * repr = static_cast<Inkscape::XML::Node *>(reprlst->data);
-                    const gchar * temp_string;
-                    Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
-                    const gchar* docURI=SP_ACTIVE_DOCUMENT->getURI();
-                    Glib::ustring docdir;
-                    if (docURI)
-                    {
-                        docdir = Glib::path_get_dirname(docURI);
-                    }
-                    if (repr->attribute("id") == NULL ||
-                            !(filename_ext.find_last_of(repr->attribute("id")) &&
-                              ( !docURI ||
-                                (dir == docdir)))) {
-                        temp_string = repr->attribute("inkscape:export-filename");
-                        if (temp_string == NULL || (filename_ext != temp_string)) {
-                            repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
-                            modified = true;
-                        }
-                    }
-                    temp_string = repr->attribute("inkscape:export-xdpi");
-                    if (temp_string == NULL || xdpi != atof(temp_string)) {
-                        sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
-                        modified = true;
-                    }
-                    temp_string = repr->attribute("inkscape:export-ydpi");
-                    if (temp_string == NULL || ydpi != atof(temp_string)) {
-                        sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
-                        modified = true;
-                    }
-                }
-                DocumentUndo::setUndoSensitive(doc, saved);
-
-                if (modified) {
-                    doc->setModifiedSinceSave();
-                }
-                break;
+            if (modified) {
+                doc->setModifiedSinceSave();
             }
-            default:
-                break;
+            break;
+        }
+        default:
+            break;
         }
     }
 
+    if (exportSuccessful && closeWhenDone.get_active()) {
+        for ( Gtk::Container *parent = get_parent(); parent; parent = parent->get_parent()) {
+            if ( GDL_IS_DOCK_ITEM(parent->gobj()) ) {
+                GdlDockItem *item = GDL_DOCK_ITEM(parent->gobj());
+                if (item) {
+                    gdl_dock_item_hide_item(item);
+                }
+                break;
+            }
+        }
+    }
 } // end of sp_export_export_clicked()
 
 /// Called when Browse button is clicked
@@ -1107,8 +1299,8 @@ void Export::onBrowse ()
     fs = gtk_file_chooser_dialog_new (_("Select a filename for exporting"),
                                       (GtkWindow*)desktop->getToplevel(),
                                       GTK_FILE_CHOOSER_ACTION_SAVE,
-                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                      _("_Save"),   GTK_RESPONSE_ACCEPT,
                                       NULL );
 
 #ifdef WITH_GNOME_VFS
@@ -1141,13 +1333,29 @@ void Export::onBrowse ()
     WCHAR* title_string = (WCHAR*)g_utf8_to_utf16(_("Select a filename for exporting"), -1, NULL, NULL, NULL);
     WCHAR* extension_string = (WCHAR*)g_utf8_to_utf16("*.png", -1, NULL, NULL, NULL);
     // Copy the selected file name, converting from UTF-8 to UTF-16
+    std::string dirname = Glib::path_get_dirname(filename.raw());
+    if ( !Glib::file_test(dirname, Glib::FILE_TEST_EXISTS) ||
+            Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) ||
+            dirname.empty() )
+    {
+        Glib::ustring tmp;
+        filename = create_filepath_from_id(tmp, tmp);
+    }
     WCHAR _filename[_MAX_PATH + 1];
     memset(_filename, 0, sizeof(_filename));
     gunichar2* utf16_path_string = g_utf8_to_utf16(filename.c_str(), -1, NULL, NULL, NULL);
-    wcsncpy(_filename, (wchar_t*)utf16_path_string, _MAX_PATH);
+    wcsncpy(_filename, reinterpret_cast<wchar_t*>(utf16_path_string), _MAX_PATH);
     g_free(utf16_path_string);
 
-    opf.hwndOwner = (HWND)(GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(this))));
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Glib::RefPtr<const Gdk::Window> parentWindow = desktop->getToplevel()->get_window();
+    g_assert(parentWindow->gobj() != NULL);
+
+#if WITH_GTKMM_3_0
+    opf.hwndOwner = (HWND)gdk_win32_window_get_handle((GdkWindow*)parentWindow->gobj());
+#else
+    opf.hwndOwner = (HWND)gdk_win32_drawable_get_handle((GdkDrawable*)parentWindow->gobj());
+#endif
     opf.lpstrFilter = filter_string;
     opf.lpstrCustomFilter = 0;
     opf.nMaxCustFilter = 0L;
@@ -1170,6 +1378,7 @@ void Export::onBrowse ()
         // Copy the selected file name, converting from UTF-16 to UTF-8
         gchar *utf8string = g_utf16_to_utf8((const gunichar2*)opf.lpstrFile, _MAX_PATH, NULL, NULL, NULL);
         filename_entry.set_text(utf8string);
+        filename_entry.set_position(strlen(utf8string));
         g_free(utf8string);
 
     }
@@ -1185,6 +1394,7 @@ void Export::onBrowse ()
 
         gchar * utf8file = g_filename_to_utf8( file, -1, NULL, NULL, NULL );
         filename_entry.set_text (utf8file);
+        filename_entry.set_position(strlen(utf8file));
 
         g_free(utf8file);
         g_free(file);
@@ -1201,11 +1411,11 @@ bool Export::bbox_equal(Geom::Rect const &one, Geom::Rect const &two)
 {
     double const epsilon = pow(10.0, -EXPORT_COORD_PRECISION);
     return (
-        (fabs(one.min()[Geom::X] - two.min()[Geom::X]) < epsilon) &&
-        (fabs(one.min()[Geom::Y] - two.min()[Geom::Y]) < epsilon) &&
-        (fabs(one.max()[Geom::X] - two.max()[Geom::X]) < epsilon) &&
-        (fabs(one.max()[Geom::Y] - two.max()[Geom::Y]) < epsilon)
-        );
+               (fabs(one.min()[Geom::X] - two.min()[Geom::X]) < epsilon) &&
+               (fabs(one.min()[Geom::Y] - two.min()[Geom::Y]) < epsilon) &&
+               (fabs(one.max()[Geom::X] - two.max()[Geom::X]) < epsilon) &&
+               (fabs(one.max()[Geom::Y] - two.max()[Geom::Y]) < epsilon)
+           );
 }
 
 /**
@@ -1234,7 +1444,7 @@ void Export::detectSize() {
     static const selection_type test_order[SELECTION_NUMBER_OF] = {SELECTION_SELECTION, SELECTION_DRAWING, SELECTION_PAGE, SELECTION_CUSTOM};
     selection_type this_test[SELECTION_NUMBER_OF + 1];
     selection_type key = SELECTION_NUMBER_OF;
-    
+
     Geom::Point x(getValuePx(x0_adj),
                   getValuePx(y0_adj));
     Geom::Point y(getValuePx(x1_adj),
@@ -1248,48 +1458,48 @@ void Export::detectSize() {
 
     for (int i = 0;
             i < SELECTION_NUMBER_OF + 1 &&
-                key == SELECTION_NUMBER_OF &&
-                SP_ACTIVE_DESKTOP != NULL;
+            key == SELECTION_NUMBER_OF &&
+            SP_ACTIVE_DESKTOP != NULL;
             i++) {
         switch (this_test[i]) {
-            case SELECTION_SELECTION:
-                if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
-                    Geom::OptRect bbox = (sp_desktop_selection (SP_ACTIVE_DESKTOP))->bounds(SPItem::VISUAL_BBOX);
+        case SELECTION_SELECTION:
+            if ((sp_desktop_selection(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
+                Geom::OptRect bbox = (sp_desktop_selection (SP_ACTIVE_DESKTOP))->bounds(SPItem::VISUAL_BBOX);
 
-                    if ( bbox && bbox_equal(*bbox,current_bbox)) {
-                        key = SELECTION_SELECTION;
-                    }
+                if ( bbox && bbox_equal(*bbox,current_bbox)) {
+                    key = SELECTION_SELECTION;
                 }
-                break;
-            case SELECTION_DRAWING: {
-                SPDocument *doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
+            }
+            break;
+        case SELECTION_DRAWING: {
+            SPDocument *doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
 
-                Geom::OptRect bbox = doc->getRoot()->desktopVisualBounds();
+            Geom::OptRect bbox = doc->getRoot()->desktopVisualBounds();
 
-                if ( bbox && bbox_equal(*bbox,current_bbox) ) {
-                    key = SELECTION_DRAWING;
-                }
-                break;
+            if ( bbox && bbox_equal(*bbox,current_bbox) ) {
+                key = SELECTION_DRAWING;
+            }
+            break;
+        }
+
+        case SELECTION_PAGE: {
+            SPDocument *doc;
+
+            doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
+
+            Geom::Point x(0.0, 0.0);
+            Geom::Point y(doc->getWidth().value("px"),
+                          doc->getHeight().value("px"));
+            Geom::Rect bbox(x, y);
+
+            if (bbox_equal(bbox,current_bbox)) {
+                key = SELECTION_PAGE;
             }
 
-            case SELECTION_PAGE: {
-                SPDocument *doc;
-
-                doc = sp_desktop_document (SP_ACTIVE_DESKTOP);
-
-                Geom::Point x(0.0, 0.0);
-                Geom::Point y(doc->getWidth(),
-                              doc->getHeight());
-                Geom::Rect bbox(x, y);
-
-                if (bbox_equal(bbox,current_bbox)) {
-                    key = SELECTION_PAGE;
-                }
-
-                break;
-           }
+            break;
+        }
         default:
-           break;
+            break;
         }
     }
     // std::cout << std::endl;
@@ -1314,10 +1524,6 @@ void Export::areaXChange (Gtk::Adjustment *adj)
     float x0, x1, xdpi, width;
 
     if (update) {
-        return;
-    }
-
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
         return;
     }
 
@@ -1364,10 +1570,6 @@ void Export::areaYChange (Gtk::Adjustment *adj)
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj()))  {
-        return;
-    }
-
     update = true;
 
     y0 = getValuePx(y0_adj);
@@ -1381,7 +1583,7 @@ void Export::areaYChange (Gtk::Adjustment *adj)
         height = SP_EXPORT_MIN_SIZE;
         //key = (const gchar *)g_object_get_data(G_OBJECT (adj), "key");
         if (adj == y1_adj) {
-        //if (!strcmp (key, "y0")) {
+            //if (!strcmp (key, "y0")) {
             y1 = y0 + height * DPI_BASE / ydpi;
             setValuePx(y1_adj, y1);
         } else {
@@ -1404,10 +1606,6 @@ void Export::areaYChange (Gtk::Adjustment *adj)
 void Export::onAreaWidthChange()
 {
     if (update) {
-        return;
-    }
-
-    if (sp_unit_selector_update_test(reinterpret_cast<SPUnitSelector *>(unit_selector->gobj()))) {
         return;
     }
 
@@ -1437,10 +1635,6 @@ void Export::onAreaWidthChange()
 void Export::onAreaHeightChange()
 {
     if (update) {
-        return;
-    }
-
-    if (sp_unit_selector_update_test(reinterpret_cast<SPUnitSelector *>(unit_selector->gobj()))) {
         return;
     }
 
@@ -1519,10 +1713,6 @@ void Export::onBitmapWidthChange ()
         return;
     }
 
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
-       return;
-    }
-
     update = true;
 
     x0 = getValuePx(x0_adj);
@@ -1551,10 +1741,6 @@ void Export::onBitmapHeightChange ()
 
     if (update) {
         return;
-    }
-
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
-       return;
     }
 
     update = true;
@@ -1611,10 +1797,6 @@ void Export::onExportXdpiChange()
 
     if (update) {
         return;
-    }
-
-    if (sp_unit_selector_update_test ((SPUnitSelector *)unit_selector->gobj())) {
-       return;
     }
 
     update = true;
@@ -1715,9 +1897,9 @@ void Export::setValuePx(Glib::RefPtr<Gtk::Adjustment>& adj, double val)
 void Export::setValuePx( Gtk::Adjustment *adj, double val)
 #endif
 {
-    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)unit_selector->gobj() );
+    Unit const *unit = unit_selector.getUnit();
 
-    setValue(adj, sp_pixels_get_units (val, *unit));
+    setValue(adj, Inkscape::Util::Quantity::convert(val, "px", unit));
 
     return;
 }
@@ -1765,9 +1947,9 @@ float Export::getValuePx(  Gtk::Adjustment *adj )
 #endif
 {
     float value = getValue( adj);
-    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)unit_selector->gobj());
+    Unit const *unit = unit_selector.getUnit();
 
-    return sp_units_get_pixels (value, *unit);
+    return Inkscape::Util::Quantity::convert(value, unit, "px");
 } // end of sp_export_value_get_px()
 
 /**

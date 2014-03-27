@@ -18,10 +18,16 @@
 #include <windows.h>
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/alignment.h>
+#include <gtkmm/scale.h>
 #include <gtkmm/stock.h>
+#include <gtkmm/table.h>
 
 #include "preferences.h"
 #include "ui/widget/preferences-widget.h"
@@ -39,6 +45,8 @@
 #include "selection-chemistry.h"
 #include "ui/dialog/filedialog.h"
 #include "xml/repr.h"
+
+#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 
 using namespace Inkscape::UI::Widget;
@@ -49,98 +57,139 @@ namespace Widget {
 
 DialogPage::DialogPage()
 {
-    this->set_border_width(12);
-    this->set_col_spacings(12);
-    this->set_row_spacings(6);
+    set_border_width(12);
+
+#if WITH_GTKMM_3_0
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
+    set_column_spacing(12);
+    set_row_spacing(6);
+#else
+    set_col_spacings(12);
+    set_row_spacings(6);
+#endif
 }
 
-void DialogPage::add_line(bool indent, Glib::ustring const &label, Gtk::Widget &widget, Glib::ustring const &suffix, const Glib::ustring &tip, bool expand_widget)
+/**
+ * Add a widget to the bottom row of the dialog page
+ *
+ * \param[in] indent         Whether the widget should be indented by one column
+ * \param[in] label          The label text for the widget
+ * \param[in] widget         The widget to add to the page
+ * \param[in] suffix         Text for an optional label at the right of the widget
+ * \param[in] tip            Tooltip text for the widget
+ * \param[in] expand_widget  Whether to expand the widget horizontally
+ * \param[in] other_widget   An optional additional widget to display at the right of the first one
+ */
+void DialogPage::add_line(bool                 indent,
+                          Glib::ustring const &label,
+                          Gtk::Widget         &widget,
+                          Glib::ustring const &suffix,
+                          const Glib::ustring &tip,
+                          bool                 expand_widget,
+                          Gtk::Widget         *other_widget)
 {
-    int start_col;
-    int row = this->property_n_rows();
-    Gtk::Widget* w;
-    if (expand_widget)
-    {
-        w = &widget;
-    }
-    else
-    {
-        Gtk::HBox* hb = Gtk::manage(new Gtk::HBox());
-        hb->set_spacing(12);
-        hb->pack_start(widget,false,false);
-        w = (Gtk::Widget*) hb;
-    }
+    if (tip != "")
+        widget.set_tooltip_text (tip);
+    
+    Gtk::Alignment* label_alignment = Gtk::manage(new Gtk::Alignment());
+    
+    Gtk::HBox* hb = Gtk::manage(new Gtk::HBox());
+    hb->set_spacing(12);
+    hb->pack_start(widget, expand_widget, expand_widget);
+        
+    // Pack an additional widget into a box with the widget if desired 
+    if (other_widget)
+        hb->pack_start(*other_widget, expand_widget, expand_widget);
+    
+    // Pack the widget into an alignment container so that it can
+    // be indented if desired
+    Gtk::Alignment* w_alignment = Gtk::manage(new Gtk::Alignment());
+    w_alignment->add(*hb);
+
+#if WITH_GTKMM_3_0
+    w_alignment->set_valign(Gtk::ALIGN_CENTER);
+#else
+    guint row = property_n_rows();
+#endif
+    
+    // Add a label in the first column if provided
     if (label != "")
     {
-        Gtk::Label* label_widget;
-#if WITH_GTKMM_2_22
-        label_widget = Gtk::manage(new Gtk::Label(label , Gtk::ALIGN_START , Gtk::ALIGN_CENTER, true));
-#else
-        label_widget = Gtk::manage(new Gtk::Label(label , Gtk::ALIGN_LEFT , Gtk::ALIGN_CENTER, true));
-#endif
+        Gtk::Label* label_widget = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START,
+                                                              Gtk::ALIGN_CENTER, true));
         label_widget->set_mnemonic_widget(widget);
+        
+        // Pack the label into an alignment container so that we can indent it
+        // if necessary
+        label_alignment->add(*label_widget);
+ 
         if (indent)
-        {
-            Gtk::Alignment* alignment = Gtk::manage(new Gtk::Alignment());
-            alignment->set_padding(0, 0, 12, 0);
-            alignment->add(*label_widget);
-            this->attach(*alignment , 0, 1, row, row + 1, Gtk::FILL, Gtk::AttachOptions(), 0, 0);
-        }
-        else
-            this->attach(*label_widget , 0, 1, row, row + 1, Gtk::FILL, Gtk::AttachOptions(), 0, 0);
-        start_col = 1;
-    }
-    else
-        start_col = 0;
+            label_alignment->set_padding(0, 0, 12, 0);
 
-    if (start_col == 0 && indent) //indent this widget
-    {
-        Gtk::Alignment* alignment = Gtk::manage(new Gtk::Alignment());
-        alignment->set_padding(0, 0, 12, 0);
-        alignment->add(*w);
-        this->attach(*alignment, start_col, 2, row, row + 1, Gtk::FILL | Gtk::EXPAND, Gtk::AttachOptions(),  0, 0);
-    }
-    else
-    {
-        this->attach(*w, start_col, 2, row, row + 1, Gtk::FILL | Gtk::EXPAND, Gtk::AttachOptions(),  0, 0);
+#if WITH_GTKMM_3_0
+        label_alignment->set_valign(Gtk::ALIGN_CENTER);
+        add(*label_alignment);
+        attach_next_to(*w_alignment, *label_alignment, Gtk::POS_RIGHT, 1, 1);
+#else
+        attach(*label_alignment, 0, 1, row, row + 1, Gtk::FILL, Gtk::AttachOptions(), 0, 0);
+#endif
     }
 
+    // Now add the widget to the bottom of the dialog
+#if WITH_GTKMM_3_0
+    if (label == "")
+    {
+        if (indent)
+            w_alignment->set_padding(0, 0, 12, 0);
+
+        add(*w_alignment);
+        
+        GValue width = G_VALUE_INIT;
+        g_value_init(&width, G_TYPE_INT);
+        g_value_set_int(&width, 2);
+        gtk_container_child_set_property(GTK_CONTAINER(gobj()), GTK_WIDGET(w_alignment->gobj()), "width", &width);
+    }
+#else
+    // The widget should span two columns if there is no label
+    int w_col_span = 1;
+    if (label == "")
+        w_col_span = 2;
+    
+    attach(*w_alignment, 2 - w_col_span, 2, row, row + 1,
+            Gtk::FILL | Gtk::EXPAND,
+            Gtk::AttachOptions(),
+            0, 0);
+#endif
+
+    // Add a label on the right of the widget if desired
     if (suffix != "")
     {
-#if WITH_GTKMM_2_22
         Gtk::Label* suffix_widget = Gtk::manage(new Gtk::Label(suffix , Gtk::ALIGN_START , Gtk::ALIGN_CENTER, true));
-#else
-        Gtk::Label* suffix_widget = Gtk::manage(new Gtk::Label(suffix , Gtk::ALIGN_LEFT , Gtk::ALIGN_CENTER, true));
-#endif
-        if (expand_widget)
-            this->attach(*suffix_widget, 2, 3, row, row + 1, Gtk::FILL,  Gtk::AttachOptions(), 0, 0);
-        else
-            ((Gtk::HBox*)w)->pack_start(*suffix_widget,false,false);
-    }
-
-    if (tip != "")
-    {
-        widget.set_tooltip_text (tip);
+        hb->pack_start(*suffix_widget,false,false);
     }
 
 }
 
 void DialogPage::add_group_header(Glib::ustring name)
 {
-    int row = this->property_n_rows();
     if (name != "")
     {
-#if WITH_GTKMM_2_22
         Gtk::Label* label_widget = Gtk::manage(new Gtk::Label(Glib::ustring(/*"<span size='large'>*/"<b>") + name +
                                                Glib::ustring("</b>"/*</span>"*/) , Gtk::ALIGN_START , Gtk::ALIGN_CENTER, true));
-#else
-        Gtk::Label* label_widget = Gtk::manage(new Gtk::Label(Glib::ustring(/*"<span size='large'>*/"<b>") + name +
-                                               Glib::ustring("</b>"/*</span>"*/) , Gtk::ALIGN_LEFT , Gtk::ALIGN_CENTER, true));
-#endif
+        
         label_widget->set_use_markup(true);
-        this->attach(*label_widget , 0, 4, row, row + 1, Gtk::FILL, Gtk::AttachOptions(), 0, 0);
+        
+#if WITH_GTKMM_3_0
+        label_widget->set_valign(Gtk::ALIGN_CENTER);
+        add(*label_widget);
+//        if (row != 1)
+  //          set_row_spacing(row - 1, 18);
+#else
+        int row = property_n_rows();
+        attach(*label_widget , 0, 4, row, row + 1, Gtk::FILL, Gtk::AttachOptions(), 0, 0);
         if (row != 1)
-            this->set_row_spacing(row - 1, 18);
+            set_row_spacing(row - 1, 18);
+#endif
     }
 }
 
@@ -305,7 +354,7 @@ void PrefSpinUnit::on_my_value_changed()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (getWidget()->get_visible()) //only take action if user changed value
     {
-        prefs->setDoubleUnit(_prefs_path, getValue(getUnit().abbr), getUnit().abbr);
+        prefs->setDoubleUnit(_prefs_path, getValue(getUnit()->abbr), getUnit()->abbr);
     }
 }
 
@@ -381,17 +430,29 @@ ZoomCorrRuler::draw_marks(Cairo::RefPtr<Cairo::Context> cr, double dist, int maj
     }
 }
 
-void
-ZoomCorrRuler::redraw() {
-    Glib::RefPtr<Gdk::Window> window = get_window();
-    Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
+#if !WITH_GTKMM_3_0
+bool
+ZoomCorrRuler::on_expose_event(GdkEventExpose *event) {
+    bool result = false;
 
-#if WITH_GTKMM_2_24
-    int w = window->get_width();
-#else
-    int w, h;
-    window->get_size(w, h);
+    if(get_is_drawable())
+    {
+        Cairo::RefPtr<Cairo::Context> cr = get_window()->create_cairo_context();
+        cr->rectangle(event->area.x, event->area.y,
+                      event->area.width, event->area.height);
+        cr->clip();
+        result = on_draw(cr);
+    }
+
+    return result;
+}
 #endif
+
+bool
+ZoomCorrRuler::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
+    Glib::RefPtr<Gdk::Window> window = get_window();
+
+    int w = window->get_width();
     _drawing_width = w - _border * 2;
 
     cr->set_source_rgb(1.0, 1.0, 1.0);
@@ -428,13 +489,10 @@ ZoomCorrRuler::redraw() {
         draw_marks(cr, 1, 1);
     }
     cr->stroke();
-}
 
-bool
-ZoomCorrRuler::on_expose_event(GdkEventExpose */*event*/) {
-    this->redraw();
     return true;
 }
+
 
 void
 ZoomCorrRulerSlider::on_slider_value_changed()
@@ -443,9 +501,9 @@ ZoomCorrRulerSlider::on_slider_value_changed()
     {
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble("/options/zoomcorrection/value", _slider.get_value() / 100.0);
-        _sb.set_value(_slider.get_value());
-        _ruler.redraw();
+        prefs->setDouble("/options/zoomcorrection/value", _slider->get_value() / 100.0);
+        _sb.set_value(_slider->get_value());
+        _ruler.queue_draw();
         freeze = false;
     }
 }
@@ -458,8 +516,8 @@ ZoomCorrRulerSlider::on_spinbutton_value_changed()
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble("/options/zoomcorrection/value", _sb.get_value() / 100.0);
-        _slider.set_value(_sb.get_value());
-        _ruler.redraw();
+        _slider->set_value(_sb.get_value());
+        _ruler.queue_draw();
         freeze = false;
     }
 }
@@ -476,9 +534,15 @@ ZoomCorrRulerSlider::on_unit_changed() {
     double conv = _unit.getConversion(_unit.getUnitAbbr(), "px");
     _ruler.set_unit_conversion(conv);
     if (_ruler.get_visible()) {
-        _ruler.redraw();
+        _ruler.queue_draw();
     }
 }
+
+bool ZoomCorrRulerSlider::on_mnemonic_activate ( bool group_cycling )
+{
+    return _sb.mnemonic_activate ( group_cycling );
+}
+
 
 void
 ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, double upper,
@@ -491,13 +555,19 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
 
     _ruler.set_size(ruler_width, ruler_height);
 
-    _slider.set_size_request(_ruler.width(), -1);
-    _slider.set_range (lower, upper);
-    _slider.set_increments (step_increment, page_increment);
-    _slider.set_value (value);
-    _slider.set_digits(2);
+#if WITH_GTKMM_3_0
+    _slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
+#else
+    _slider = Gtk::manage(new Gtk::HScale());
+#endif
 
-    _slider.signal_value_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_slider_value_changed));
+    _slider->set_size_request(_ruler.width(), -1);
+    _slider->set_range (lower, upper);
+    _slider->set_increments (step_increment, page_increment);
+    _slider->set_value (value);
+    _slider->set_digits(2);
+
+    _slider->signal_value_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_slider_value_changed));
     _sb.signal_value_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_spinbutton_value_changed));
     _unit.signal_changed().connect(sigc::mem_fun(*this, &ZoomCorrRulerSlider::on_unit_changed));
 
@@ -511,18 +581,28 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
     _unit.set_data("sensitive", GINT_TO_POINTER(1));
     _unit.setUnit(prefs->getString("/options/zoomcorrection/unit"));
 
-    Gtk::Table *table = Gtk::manage(new Gtk::Table());
     Gtk::Alignment *alignment1 = Gtk::manage(new Gtk::Alignment(0.5,1,0,0));
     Gtk::Alignment *alignment2 = Gtk::manage(new Gtk::Alignment(0.5,1,0,0));
     alignment1->add(_sb);
     alignment2->add(_unit);
 
-    table->attach(_slider,     0, 1, 0, 1);
+#if WITH_GTKMM_3_0
+    Gtk::Grid *table = Gtk::manage(new Gtk::Grid());
+    table->attach(*_slider,    0, 0, 1, 1);
+    alignment1->set_halign(Gtk::ALIGN_CENTER);
+    table->attach(*alignment1, 1, 0, 1, 1);
+    table->attach(_ruler,      0, 1, 1, 1);
+    alignment2->set_halign(Gtk::ALIGN_CENTER);
+    table->attach(*alignment2, 1, 1, 1, 1);
+#else
+    Gtk::Table *table = Gtk::manage(new Gtk::Table());
+    table->attach(*_slider,    0, 1, 0, 1);
     table->attach(*alignment1, 1, 2, 0, 1, static_cast<Gtk::AttachOptions>(0));
     table->attach(_ruler,      0, 1, 1, 2);
     table->attach(*alignment2, 1, 2, 1, 2, static_cast<Gtk::AttachOptions>(0));
+#endif
 
-    this->pack_start(*table, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*table, Gtk::PACK_SHRINK);
 }
 
 void
@@ -532,8 +612,8 @@ PrefSlider::on_slider_value_changed()
     {
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(_prefs_path, _slider.get_value());
-        _sb.set_value(_slider.get_value());
+        prefs->setDouble(_prefs_path, _slider->get_value());
+        _sb.set_value(_slider->get_value());
         freeze = false;
     }
 }
@@ -546,9 +626,14 @@ PrefSlider::on_spinbutton_value_changed()
         freeze = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble(_prefs_path, _sb.get_value());
-        _slider.set_value(_sb.get_value());
+        _slider->set_value(_sb.get_value());
         freeze = false;
     }
+}
+
+bool PrefSlider::on_mnemonic_activate ( bool group_cycling )
+{
+    return _sb.mnemonic_activate ( group_cycling );
 }
 
 void
@@ -562,11 +647,17 @@ PrefSlider::init(Glib::ustring const &prefs_path,
 
     freeze = false;
 
-    _slider.set_range (lower, upper);
-    _slider.set_increments (step_increment, page_increment);
-    _slider.set_value (value);
-    _slider.set_digits(digits);
-    _slider.signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_slider_value_changed));
+#if WITH_GTKMM_3_0
+    _slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));
+#else
+    _slider = Gtk::manage(new Gtk::HScale());
+#endif
+
+    _slider->set_range (lower, upper);
+    _slider->set_increments (step_increment, page_increment);
+    _slider->set_value (value);
+    _slider->set_digits(digits);
+    _slider->signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_slider_value_changed));
 
     _sb.signal_value_changed().connect(sigc::mem_fun(*this, &PrefSlider::on_spinbutton_value_changed));
     _sb.set_range (lower, upper);
@@ -574,12 +665,20 @@ PrefSlider::init(Glib::ustring const &prefs_path,
     _sb.set_value (value);
     _sb.set_digits(digits);
 
-    Gtk::Table *table = Gtk::manage(new Gtk::Table());
     Gtk::Alignment *alignment1 = Gtk::manage(new Gtk::Alignment(0.5,1,0,0));
     alignment1->add(_sb);
 
-    table->attach(_slider,     0, 1, 0, 1);
+#if WITH_GTKMM_3_0
+    Gtk::Grid *table = Gtk::manage(new Gtk::Grid());
+    _slider->set_hexpand();
+    table->attach(*_slider,    0, 0, 1, 1);
+    alignment1->set_halign(Gtk::ALIGN_CENTER);
+    table->attach(*alignment1, 1, 0, 1, 1);
+#else
+    Gtk::Table *table = Gtk::manage(new Gtk::Table());
+    table->attach(*_slider,    0, 1, 0, 1);
     table->attach(*alignment1, 1, 2, 0, 1, static_cast<Gtk::AttachOptions>(0));
+#endif
 
     this->pack_start(*table, Gtk::PACK_EXPAND_WIDGET);
 }
@@ -594,11 +693,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path,
 
     for (int i = 0 ; i < num_items; ++i)
     {
-#if WITH_GTKMM_2_24
         this->append(labels[i]);
-#else
-        this->append_text(labels[i]);
-#endif
         _values.push_back(values[i]);
         if (value == values[i])
             row = i;
@@ -620,11 +715,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path,
 
     for (int i = 0 ; i < num_items; ++i)
     {
-#if WITH_GTKMM_2_24
         this->append(labels[i]);
-#else
-        this->append_text(labels[i]);
-#endif
         _ustr_values.push_back(values[i]);
         if (value == values[i])
             row = i;
@@ -637,7 +728,7 @@ void PrefCombo::on_changed()
     if (this->get_visible()) //only take action if user changed value
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if(_values.size() > 0)
+        if(!_values.empty())
         {
             prefs->setInt(_prefs_path, _values[this->get_active_row_number()]);
         }
@@ -684,6 +775,11 @@ void PrefEntryButtonHBox::onRelatedButtonClickedCallback()
         prefs->setString(_prefs_path, _default_string);
         relatedEntry->set_text(_default_string);
     }
+}
+
+bool PrefEntryButtonHBox::on_mnemonic_activate ( bool group_cycling )
+{
+    return relatedEntry->mnemonic_activate ( group_cycling );
 }
 
 void PrefEntryFileButtonHBox::init(Glib::ustring const &prefs_path,
@@ -816,6 +912,11 @@ void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
         
         relatedEntry->set_text(fileName);
     }
+}
+
+bool PrefEntryFileButtonHBox::on_mnemonic_activate ( bool group_cycling )
+{
+    return relatedEntry->mnemonic_activate ( group_cycling );
 }
 
 void PrefFileButton::init(Glib::ustring const &prefs_path)

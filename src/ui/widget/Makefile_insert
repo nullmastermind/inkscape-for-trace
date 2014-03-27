@@ -21,12 +21,12 @@ ink_common_sources +=	\
 	ui/widget/entry.h        \
 	ui/widget/filter-effect-chooser.h \
 	ui/widget/filter-effect-chooser.cpp \
+	ui/widget/gimpspinscale.c      \
+	ui/widget/gimpspinscale.h        \
+	ui/widget/gimpcolorwheel.c \
+	ui/widget/gimpcolorwheel.h \
 	ui/widget/frame.cpp      \
 	ui/widget/frame.h        \
-	ui/widget/handlebox.cpp		\
-	ui/widget/handlebox.h		\
-	ui/widget/icon-widget.cpp	\
-	ui/widget/icon-widget.h		\
 	ui/widget/imageicon.cpp		\
 	ui/widget/imageicon.h		\
 	ui/widget/imagetoggler.cpp		\
@@ -60,8 +60,6 @@ ink_common_sources +=	\
 	ui/widget/rendering-options.h            \
 	ui/widget/rotateable.h            \
 	ui/widget/rotateable.cpp            \
-	ui/widget/ruler.cpp             \
-	ui/widget/ruler.h		\
 	ui/widget/scalar-unit.cpp	\
 	ui/widget/scalar-unit.h		\
 	ui/widget/scalar.cpp		\
@@ -70,22 +68,20 @@ ink_common_sources +=	\
 	ui/widget/selected-style.cpp	\
 	ui/widget/spinbutton.h	\
 	ui/widget/spinbutton.cpp	\
+	ui/widget/spin-scale.h		\
+	ui/widget/spin-scale.cpp	\
 	ui/widget/spin-slider.h		\
 	ui/widget/spin-slider.cpp	\
 	ui/widget/style-subject.h	\
 	ui/widget/style-subject.cpp	\
 	ui/widget/style-swatch.h        \
 	ui/widget/style-swatch.cpp      \
-	ui/widget/svg-canvas.cpp        \
-	ui/widget/svg-canvas.h          \
 	ui/widget/text.cpp		\
 	ui/widget/text.h		\
 	ui/widget/tolerance-slider.cpp  \
 	ui/widget/tolerance-slider.h    \
-	ui/widget/toolbox.cpp		\
-	ui/widget/toolbox.h		\
 	ui/widget/unit-menu.cpp		\
-	ui/widget/unit-menu.h           \
-	ui/widget/zoom-status.h         \
-	ui/widget/zoom-status.cpp
+	ui/widget/unit-menu.h \
+	ui/widget/unit-tracker.h \
+	ui/widget/unit-tracker.cpp
 

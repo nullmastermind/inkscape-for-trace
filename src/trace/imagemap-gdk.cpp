@@ -58,7 +58,7 @@ GdkPixbuf *grayMapToGdkPixbuf(GrayMap *grayMap)
 
     GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata, GDK_COLORSPACE_RGB,
                         0, 8, grayMap->width, grayMap->height,
-                        rowstride, NULL, NULL);
+                        rowstride, (GdkPixbufDestroyNotify)g_free, NULL);
 
     //### Fill in the odd cells with RGB values
     int x,y;
@@ -122,44 +122,6 @@ PackedPixelMap *gdkPixbufToPackedPixelMap(GdkPixbuf *buf)
     return ppMap;
 }
 
-GdkPixbuf *packedPixelMapToGdkPixbuf(PackedPixelMap *ppMap)
-{
-    if (!ppMap)
-        return NULL;
-
-    guchar *pixdata = (guchar *)
-          malloc(sizeof(guchar) * ppMap->width * ppMap->height * 3);
-    if (!pixdata)
-        return NULL;
-
-    int n_channels = 3;
-    int rowstride  = ppMap->width * 3;
-
-    GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata, GDK_COLORSPACE_RGB,
-                        0, 8, ppMap->width, ppMap->height,
-                        rowstride, NULL, NULL);
-
-    //### Fill in the cells with RGB values
-    int x,y;
-    int row  = 0;
-    for (y=0 ; y<ppMap->height ; y++)
-        {
-        guchar *p = pixdata + row;
-        for (x=0 ; x<ppMap->width ; x++)
-            {
-            unsigned long rgb = ppMap->getPixel(ppMap, x, y);
-            p[0] = (rgb >> 16) & 0xff;
-            p[1] = (rgb >>  8) & 0xff;
-            p[2] = (rgb      ) & 0xff;
-            p += n_channels;
-            }
-        row += rowstride;
-        }
-
-    return buf;
-}
-
-
 
 /*#########################################################################
 ## R G B   M A P
@@ -190,9 +152,9 @@ RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf)
             {
             int alpha = (int)p[3];
             int white = 255 - alpha;
-            int r     = (int)p[2];  r = r * alpha / 256 + white;
+            int r     = (int)p[0];  r = r * alpha / 256 + white;
             int g     = (int)p[1];  g = g * alpha / 256 + white;
-            int b     = (int)p[0];  b = b * alpha / 256 + white;
+            int b     = (int)p[2];  b = b * alpha / 256 + white;
 
             rgbMap->setPixel(rgbMap, x, y, r, g, b);
             p += n_channels;
@@ -203,42 +165,7 @@ RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf)
     return rgbMap;
 }
 
-GdkPixbuf *rgbMapToGdkPixbuf(RgbMap *rgbMap)
-{
-    if (!rgbMap)
-        return NULL;
 
-    guchar *pixdata = (guchar *)
-          malloc(sizeof(guchar) * rgbMap->width * rgbMap->height * 3);
-    if (!pixdata)
-        return NULL;
-
-    int n_channels = 3;
-    int rowstride  = rgbMap->width * 3;
-
-    GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata, GDK_COLORSPACE_RGB,
-                        0, 8, rgbMap->width, rgbMap->height,
-                        rowstride, NULL, NULL);
-
-    //### Fill in the cells with RGB values
-    int x,y;
-    int row  = 0;
-    for (y=0 ; y<rgbMap->height ; y++)
-        {
-        guchar *p = pixdata + row;
-        for (x=0 ; x<rgbMap->width ; x++)
-            {
-            RGB rgb = rgbMap->getPixel(rgbMap, x, y);
-            p[0] = rgb.r & 0xff;
-            p[1] = rgb.g & 0xff;
-            p[2] = rgb.b & 0xff;
-            p += n_channels;
-            }
-        row += rowstride;
-        }
-
-    return buf;
-}
 
 /*#########################################################################
 ## I N D E X E D   M A P
@@ -260,7 +187,7 @@ GdkPixbuf *indexedMapToGdkPixbuf(IndexedMap *iMap)
 
     GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata, GDK_COLORSPACE_RGB,
                         0, 8, iMap->width, iMap->height,
-                        rowstride, NULL, NULL);
+                        rowstride, (GdkPixbufDestroyNotify)g_free, NULL);
 
     //### Fill in the cells with RGB values
     int x,y;

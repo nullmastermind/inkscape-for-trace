@@ -12,9 +12,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "sp-attribute-widget.h"
+
 #include <glibmm/i18n.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
@@ -24,7 +33,6 @@
 #include "document.h"
 #include "document-undo.h"
 #include "verbs.h"
-#include "sp-attribute-widget.h"
 
 using Inkscape::DocumentUndo;
 
@@ -93,14 +101,12 @@ SPAttributeTable::~SPAttributeTable ()
 
 void SPAttributeTable::clear(void)
 {
-    Gtk::Widget *w;
-    
     if (table)
     {
         std::vector<Gtk::Widget*> ch = table->get_children();
         for (int i = (ch.size())-1; i >=0 ; i--)
         {
-            w = ch[i];
+            Gtk::Widget *w = ch[i];
             ch.pop_back();
             if (w != NULL)
             {
@@ -150,11 +156,14 @@ void SPAttributeTable::set_object(SPObject *object,
         release_connection  = object->connectRelease (sigc::bind<1>(sigc::ptr_fun(&sp_attribute_table_object_release), this));
 
         // Create table
-        table = new Gtk::Table (attributes.size(), 2, false);
+#if WITH_GTKMM_3_0
+        table = new Gtk::Grid();
+#else
+        table = new Gtk::Table(attributes.size(), 2, false);
+#endif
+
         if (!(parent == NULL))
-        {
-            gtk_container_add (GTK_CONTAINER (parent),(GtkWidget*)table->gobj());
-        }
+            gtk_container_add(GTK_CONTAINER(parent), (GtkWidget*)table->gobj());
         
         // Fill rows
         _attributes = attributes;
@@ -162,18 +171,41 @@ void SPAttributeTable::set_object(SPObject *object,
             Gtk::Label *ll = new Gtk::Label (_(labels[i].c_str()));
             ll->show();
             ll->set_alignment (1.0, 0.5);
+
+#if WITH_GTKMM_3_0
+            ll->set_vexpand();
+            ll->set_margin_left(XPAD);
+            ll->set_margin_right(XPAD);
+            ll->set_margin_top(XPAD);
+            ll->set_margin_bottom(XPAD);
+            table->attach(*ll, 0, i, 1, 1);
+#else
             table->attach (*ll, 0, 1, i, i + 1,
                                Gtk::FILL,
                                (Gtk::EXPAND | Gtk::FILL),
                                XPAD, YPAD );
+#endif
+
             Gtk::Entry *ee = new Gtk::Entry();
             ee->show();
             const gchar *val = object->getRepr()->attribute(attributes[i].c_str());
             ee->set_text (val ? val : (const gchar *) "");
+
+#if WITH_GTKMM_3_0
+            ee->set_hexpand();
+            ee->set_vexpand();
+            ee->set_margin_left(XPAD);
+            ee->set_margin_right(XPAD);
+            ee->set_margin_top(XPAD);
+            ee->set_margin_bottom(XPAD);
+            table->attach(*ee, 1, i, 1, 1);
+#else
             table->attach (*ee, 1, 2, i, i + 1,
                                (Gtk::EXPAND | Gtk::FILL),
                                (Gtk::EXPAND | Gtk::FILL),
                                XPAD, YPAD );
+#endif
+
             _entries.push_back(ee);
             g_signal_connect ( ee->gobj(), "changed",
                                G_CALLBACK (sp_attribute_table_entry_changed),
@@ -227,7 +259,7 @@ static void sp_attribute_table_object_modified ( SPObject */*object*/,
                                      guint flags,
                                      SPAttributeTable *spat )
 {
-    if (flags && SP_OBJECT_MODIFIED_FLAG)
+    if (flags & SP_OBJECT_MODIFIED_FLAG)
     {
         std::vector<Glib::ustring> attributes = spat->get_attributes();
         std::vector<Gtk::Entry *> entries = spat->get_entries();
@@ -238,7 +270,7 @@ static void sp_attribute_table_object_modified ( SPObject */*object*/,
             text = e->get_text ();
             if (val || !text.empty()) {
                 if (text != val) {
-                    /* We are different */
+                    // We are different
                     spat->blocked = true;
                     e->set_text (val ? val : (const gchar *) "");
                     spat->blocked = false;

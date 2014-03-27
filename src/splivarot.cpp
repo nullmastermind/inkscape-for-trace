@@ -34,6 +34,7 @@
 #include "style.h"
 #include "document.h"
 #include "document-undo.h"
+#include "layer-model.h"
 #include "message-stack.h"
 #include "selection.h"
 #include "desktop-handles.h"
@@ -53,188 +54,94 @@
 
 #include "splivarot.h"
 #include "verbs.h"
+#include "2geom/svg-path-parser.h" // to get from SVG on boolean to Geom::Path
 
 using Inkscape::DocumentUndo;
 
 bool   Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who);
 
-void sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb=SP_VERB_NONE, const Glib::ustring description="");
+void sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb=SP_VERB_NONE, const Glib::ustring description="");
 void sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset);
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating);
 
 void
-sp_selected_path_union(SPDesktop *desktop)
+sp_selected_path_union(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_union, SP_VERB_SELECTION_UNION, _("Union"));
+    sp_selected_path_boolop(selection, desktop, bool_op_union, SP_VERB_SELECTION_UNION, _("Union"));
 }
 
 void
-sp_selected_path_union_skip_undo(SPDesktop *desktop)
+sp_selected_path_union_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_union, SP_VERB_NONE, _("Union"));
+    sp_selected_path_boolop(selection, desktop, bool_op_union, SP_VERB_NONE, _("Union"));
 }
 
 void
-sp_selected_path_intersect(SPDesktop *desktop)
+sp_selected_path_intersect(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_inters, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
+    sp_selected_path_boolop(selection, desktop, bool_op_inters, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
 }
 
 void
-sp_selected_path_diff(SPDesktop *desktop)
+sp_selected_path_diff(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_diff, SP_VERB_SELECTION_DIFF, _("Difference"));
+    sp_selected_path_boolop(selection, desktop, bool_op_diff, SP_VERB_SELECTION_DIFF, _("Difference"));
 }
 
 void
-sp_selected_path_diff_skip_undo(SPDesktop *desktop)
+sp_selected_path_diff_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_diff, SP_VERB_NONE, _("Difference"));
+    sp_selected_path_boolop(selection, desktop, bool_op_diff, SP_VERB_NONE, _("Difference"));
 }
 
 void
-sp_selected_path_symdiff(SPDesktop *desktop)
+sp_selected_path_symdiff(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_symdiff, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
+    sp_selected_path_boolop(selection, desktop, bool_op_symdiff, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
 }
 void
-sp_selected_path_cut(SPDesktop *desktop)
+sp_selected_path_cut(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_cut, SP_VERB_SELECTION_CUT, _("Division"));
+    sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_SELECTION_CUT, _("Division"));
 }
 void
-sp_selected_path_slice(SPDesktop *desktop)
+sp_selected_path_slice(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(desktop, bool_op_slice, SP_VERB_SELECTION_SLICE,  _("Cut path"));
+    sp_selected_path_boolop(selection, desktop, bool_op_slice, SP_VERB_SELECTION_SLICE,  _("Cut path"));
 }
 
+// helper for printing error messages, regardless of whether we have a GUI or not
+// If desktop == NULL, errors will be shown on stderr
+static void
+boolop_display_error_message(SPDesktop *desktop, Glib::ustring const &msg)
+{
+    if (desktop) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+    } else {
+        g_printerr("%s\n", msg.c_str());
+    }
+}
 
-// boolean operations
+// boolean operations PathVectors A,B -> PathVector result.
+// This is derived from sp_selected_path_boolop
 // take the source paths from the file, do the operation, delete the originals and add the results
-void
-sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb, const Glib::ustring description)
-{
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    
-    GSList *il = (GSList *) selection->itemList();
-    
-    // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)
-    if ( (g_slist_length(il) < 2) && (bop != bool_op_union)) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>at least 2 paths</b> to perform a boolean operation."));
-        return;
-    }
-    else if ( g_slist_length(il) < 1 ) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>at least 1 path</b> to perform a boolean union."));
-        return;
-    }
-
-    if (g_slist_length(il) > 2) {
-        if (bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice ) {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>exactly 2 paths</b> to perform difference, division, or path cut."));
-            return;
-        }
-    }
-
-    // reverseOrderForOp marks whether the order of the list is the top->down order
-    // it's only used when there are 2 objects, and for operations who need to know the
-    // topmost object (differences, cuts)
-    bool reverseOrderForOp = false;
-
-    if (bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice) {
-        // check in the tree to find which element of the selection list is topmost (for 2-operand commands only)
-        Inkscape::XML::Node *a = reinterpret_cast<SPObject *>(il->data)->getRepr();
-        Inkscape::XML::Node *b = reinterpret_cast<SPObject *>(il->next->data)->getRepr();
-
-        if (a == NULL || b == NULL) {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
-            return;
-        }
-
-        if (Ancetre(a, b)) {
-            // a is the parent of b, already in the proper order
-        } else if (Ancetre(b, a)) {
-            // reverse order
-            reverseOrderForOp = true;
-        } else {
-
-            // objects are not in parent/child relationship;
-            // find their lowest common ancestor
-            Inkscape::XML::Node *dad = LCA(a, b);
-            if (dad == NULL) {
-                desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
-                return;
-            }
-
-            // find the children of the LCA that lead from it to the a and b
-            Inkscape::XML::Node *as = AncetreFils(a, dad);
-            Inkscape::XML::Node *bs = AncetreFils(b, dad);
-
-            // find out which comes first
-            for (Inkscape::XML::Node *child = dad->firstChild(); child; child = child->next()) {
-                if (child == as) {
-                    /* a first, so reverse. */
-                    reverseOrderForOp = true;
-                    break;
-                }
-                if (child == bs)
-                    break;
-            }
-        }
-    }
-
-    il = g_slist_copy(il);
-
-    // first check if all the input objects have shapes
-    // otherwise bail out
-    for (GSList *l = il; l != NULL; l = l->next)
-    {
-        SPItem *item = SP_ITEM(l->data);
-        if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
-        {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
-            g_slist_free(il);
-            return;
-        }
-    }
+// fra,fra are fill_rules for PathVectors a,b
+Geom::PathVector 
+sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pathvb, bool_op bop, fill_typ fra, fill_typ frb)
+{        
 
     // extract the livarot Paths from the source objects
     // also get the winding rule specified in the style
-    int nbOriginaux = g_slist_length(il);
+    int nbOriginaux = 2;
     std::vector<Path *> originaux(nbOriginaux);
     std::vector<FillRule> origWind(nbOriginaux);
-    int curOrig;
-    {
-        curOrig = 0;
-        for (GSList *l = il; l != NULL; l = l->next)
-        {
-            SPCSSAttr *css = sp_repr_css_attr(reinterpret_cast<SPObject *>(il->data)->getRepr(), "style");
-            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
-            if (val && strcmp(val, "nonzero") == 0) {
-                origWind[curOrig]= fill_nonZero;
-            } else if (val && strcmp(val, "evenodd") == 0) {
-                origWind[curOrig]= fill_oddEven;
-            } else {
-                origWind[curOrig]= fill_nonZero;
-            }
+    origWind[0]=fra;
+    origWind[1]=frb;
+    Geom::PathVector patht;
+    // Livarot's outline of arcs is broken. So convert the path to linear and cubics only, for which the outline is created correctly. 
+    originaux[0] = Path_for_pathvector(pathv_to_linear_and_cubic_beziers( pathva));
+    originaux[1] = Path_for_pathvector(pathv_to_linear_and_cubic_beziers( pathvb));
 
-            originaux[curOrig] = Path_for_item((SPItem *) l->data, true, true);
-            if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
-            {
-                for (int i = curOrig; i >= 0; i--) delete originaux[i];
-                g_slist_free(il);
-                return;
-            }
-            curOrig++;
-        }
-    }
-    // reverse if needed
-    // note that the selection list keeps its order
-    if ( reverseOrderForOp ) {
-        Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
-        FillRule swai=origWind[0]; origWind[0]=origWind[1]; origWind[1]=swai;
-    }
-
-    // and work
     // some temporary instances, first
     Shape *theShapeA = new Shape;
     Shape *theShapeB = new Shape;
@@ -253,30 +160,13 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
-        curOrig = 1;
-        for (GSList *l = il->next; l != NULL; l = l->next) {
-            originaux[curOrig]->ConvertWithBackData(0.1);
+        originaux[1]->ConvertWithBackData(0.1);
 
-            originaux[curOrig]->Fill(theShape, curOrig);
+        originaux[1]->Fill(theShape, 1);
 
-            theShapeB->ConvertToShape(theShape, origWind[curOrig]);
-
-            // les elements arrivent en ordre inverse dans la liste
-            theShape->Booleen(theShapeB, theShapeA, bop);
-
-            {
-                Shape *swap = theShape;
-                theShape = theShapeA;
-                theShapeA = swap;
-            }
-            curOrig++;
-        }
-
-        {
-            Shape *swap = theShape;
-            theShape = theShapeA;
-            theShapeA = swap;
-        }
+        theShapeB->ConvertToShape(theShape, origWind[1]);
+        
+        theShape->Booleen(theShapeB, theShapeA, bop);
 
     } else if ( bop == bool_op_cut ) {
         // cuts= sort of a bastard boolean operation, thus not the axact same modus operandi
@@ -412,6 +302,367 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
     delete theShape;
     delete theShapeA;
     delete theShapeB;
+    delete originaux[0];
+    delete originaux[1];
+
+    std::vector<Geom::Path> outres =  Geom::parse_svg_path(res->svg_dump_path());
+
+
+    delete res;
+    return outres;
+}
+
+
+/* Convert from a livarot path to a 2geom PathVector */
+Geom::PathVector pathliv_to_pathvector(Path *pathliv){
+    std::vector<Geom::Path> outres =  Geom::parse_svg_path(pathliv->svg_dump_path());
+    return outres;
+}
+
+
+// boolean operations on the desktop
+// take the source paths from the file, do the operation, delete the originals and add the results
+void
+sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb, const Glib::ustring description)
+{
+    SPDocument *doc = selection->layers()->getDocument();
+    GSList *il = (GSList *) selection->itemList();
+    
+    // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)
+    if ( (g_slist_length(il) < 2) && (bop != bool_op_union)) {
+        boolop_display_error_message(desktop, _("Select <b>at least 2 paths</b> to perform a boolean operation."));
+        return;
+    }
+    else if ( g_slist_length(il) < 1 ) {
+        boolop_display_error_message(desktop, _("Select <b>at least 1 path</b> to perform a boolean union."));
+        return;
+    }
+
+    g_assert(il != NULL);
+
+    if (g_slist_length(il) > 2) {
+        if (bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice ) {
+            boolop_display_error_message(desktop, _("Select <b>exactly 2 paths</b> to perform difference, division, or path cut."));
+            return;
+        }
+    }
+
+    // reverseOrderForOp marks whether the order of the list is the top->down order
+    // it's only used when there are 2 objects, and for operations who need to know the
+    // topmost object (differences, cuts)
+    bool reverseOrderForOp = false;
+
+    if (bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice) {
+        // check in the tree to find which element of the selection list is topmost (for 2-operand commands only)
+        Inkscape::XML::Node *a = SP_OBJECT(il->data)->getRepr();
+        Inkscape::XML::Node *b = SP_OBJECT(il->next->data)->getRepr();
+
+        if (a == NULL || b == NULL) {
+            boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
+            return;
+        }
+
+        if (Ancetre(a, b)) {
+            // a is the parent of b, already in the proper order
+        } else if (Ancetre(b, a)) {
+            // reverse order
+            reverseOrderForOp = true;
+        } else {
+
+            // objects are not in parent/child relationship;
+            // find their lowest common ancestor
+            Inkscape::XML::Node *parent = LCA(a, b);
+            if (parent == NULL) {
+                boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
+                return;
+            }
+
+            // find the children of the LCA that lead from it to the a and b
+            Inkscape::XML::Node *as = AncetreFils(a, parent);
+            Inkscape::XML::Node *bs = AncetreFils(b, parent);
+
+            // find out which comes first
+            for (Inkscape::XML::Node *child = parent->firstChild(); child; child = child->next()) {
+                if (child == as) {
+                    /* a first, so reverse. */
+                    reverseOrderForOp = true;
+                    break;
+                }
+                if (child == bs)
+                    break;
+            }
+        }
+    }
+
+    il = g_slist_copy(il);
+    g_assert(il != NULL);
+
+    // first check if all the input objects have shapes
+    // otherwise bail out
+    for (GSList *l = il; l != NULL; l = l->next)
+    {
+        SPItem *item = SP_ITEM(l->data);
+        if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
+        {
+            boolop_display_error_message(desktop, _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
+            g_slist_free(il);
+            return;
+        }
+    }
+
+    // extract the livarot Paths from the source objects
+    // also get the winding rule specified in the style
+    int nbOriginaux = g_slist_length(il);
+    std::vector<Path *> originaux(nbOriginaux);
+    std::vector<FillRule> origWind(nbOriginaux);
+    int curOrig;
+    {
+        curOrig = 0;
+        for (GSList *l = il; l != NULL; l = l->next)
+        {
+            // apply live path effects prior to performing boolean operation
+            if (SP_IS_LPE_ITEM(l->data)) {
+                SP_LPE_ITEM(l->data)->removeAllPathEffects(true);
+            }
+
+            SPCSSAttr *css = sp_repr_css_attr(reinterpret_cast<SPObject *>(il->data)->getRepr(), "style");
+            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
+            if (val && strcmp(val, "nonzero") == 0) {
+                origWind[curOrig]= fill_nonZero;
+            } else if (val && strcmp(val, "evenodd") == 0) {
+                origWind[curOrig]= fill_oddEven;
+            } else {
+                origWind[curOrig]= fill_nonZero;
+            }
+
+            originaux[curOrig] = Path_for_item((SPItem *) l->data, true, true);
+            if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
+            {
+                for (int i = curOrig; i >= 0; i--) delete originaux[i];
+                g_slist_free(il);
+                return;
+            }
+            curOrig++;
+        }
+    }
+    // reverse if needed
+    // note that the selection list keeps its order
+    if ( reverseOrderForOp ) {
+        Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
+        FillRule swai=origWind[0]; origWind[0]=origWind[1]; origWind[1]=swai;
+    }
+
+    // and work
+    // some temporary instances, first
+    Shape *theShapeA = new Shape;
+    Shape *theShapeB = new Shape;
+    Shape *theShape = new Shape;
+    Path *res = new Path;
+    res->SetBackData(false);
+    Path::cut_position  *toCut=NULL;
+    int                  nbToCut=0;
+
+    if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
+        // true boolean op
+        // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
+        originaux[0]->ConvertWithBackData(0.1);
+
+        originaux[0]->Fill(theShape, 0);
+
+        theShapeA->ConvertToShape(theShape, origWind[0]);
+
+        curOrig = 1;
+        for (GSList *l = il->next; l != NULL; l = l->next) {
+            originaux[curOrig]->ConvertWithBackData(0.1);
+
+            originaux[curOrig]->Fill(theShape, curOrig);
+
+            theShapeB->ConvertToShape(theShape, origWind[curOrig]);
+
+            /* Due to quantization of the input shape coordinates, we may end up with A or B being empty.
+             * If this is a union or symdiff operation, we just use the non-empty shape as the result:
+             *   A=0  =>  (0 or B) == B
+             *   B=0  =>  (A or 0) == A
+             *   A=0  =>  (0 xor B) == B
+             *   B=0  =>  (A xor 0) == A
+             * If this is an intersection operation, we just use the empty shape as the result:
+             *   A=0  =>  (0 and B) == 0 == A
+             *   B=0  =>  (A and 0) == 0 == B
+             * If this a difference operation, and the upper shape (A) is empty, we keep B.
+             * If the lower shape (B) is empty, we still keep B, as it's empty:
+             *   A=0  =>  (B - 0) == B
+             *   B=0  =>  (0 - A) == 0 == B
+             *
+             * In any case, the output from this operation is stored in shape A, so we may apply
+             * the above rules simply by judicious use of swapping A and B where necessary.
+             */
+            bool zeroA = theShapeA->numberOfEdges() == 0;
+            bool zeroB = theShapeB->numberOfEdges() == 0;
+            if (zeroA || zeroB) {
+            	// We might need to do a swap. Apply the above rules depending on operation type.
+            	bool resultIsB =   ((bop == bool_op_union || bop == bool_op_symdiff) && zeroA)
+            		        || ((bop == bool_op_inters) && zeroB)
+            			||  (bop == bool_op_diff);
+                if (resultIsB) {
+                	// Swap A and B to use B as the result
+                    Shape *swap = theShapeB;
+                    theShapeB = theShapeA;
+                    theShapeA = swap;
+                }
+            } else {
+            	// Just do the Boolean operation as usual
+                // les elements arrivent en ordre inverse dans la liste
+                theShape->Booleen(theShapeB, theShapeA, bop);
+                Shape *swap = theShape;
+                theShape = theShapeA;
+                theShapeA = swap;
+            }
+            curOrig++;
+        }
+
+        {
+            Shape *swap = theShape;
+            theShape = theShapeA;
+            theShapeA = swap;
+        }
+
+    } else if ( bop == bool_op_cut ) {
+        // cuts= sort of a bastard boolean operation, thus not the axact same modus operandi
+        // technically, the cut path is not necessarily a polygon (thus has no winding rule)
+        // it is just uncrossed, and cleaned from duplicate edges and points
+        // then it's fed to Booleen() which will uncross it against the other path
+        // then comes the trick: each edge of the cut path is duplicated (one in each direction),
+        // thus making a polygon. the weight of the edges of the cut are all 0, but
+        // the Booleen need to invert the ones inside the source polygon (for the subsequent
+        // ConvertToForme)
+
+        // the cut path needs to have the highest pathID in the back data
+        // that's how the Booleen() function knows it's an edge of the cut
+
+        // FIXME: this gives poor results, the final paths are full of extraneous nodes. Decreasing
+        // ConvertWithBackData parameter below simply increases the number of nodes, so for now I
+        // left it at 1.0. Investigate replacing this by a combination of difference and
+        // intersection of the same two paths. -- bb
+        {
+            Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
+            int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
+        }
+        originaux[0]->ConvertWithBackData(1.0);
+
+        originaux[0]->Fill(theShape, 0);
+
+        theShapeA->ConvertToShape(theShape, origWind[0]);
+
+        originaux[1]->ConvertWithBackData(1.0);
+
+        if ((originaux[1]->pts.size() == 2) && originaux[1]->pts[0].isMoveTo && !originaux[1]->pts[1].isMoveTo)
+            originaux[1]->Fill(theShape, 1,false,true,false); // see LP Bug 177956
+        else
+            originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
+
+        theShapeB->ConvertToShape(theShape, fill_justDont); // fill_justDont doesn't computes winding numbers
+
+        // les elements arrivent en ordre inverse dans la liste
+        theShape->Booleen(theShapeB, theShapeA, bool_op_cut, 1);
+
+    } else if ( bop == bool_op_slice ) {
+        // slice is not really a boolean operation
+        // you just put the 2 shapes in a single polygon, uncross it
+        // the points where the degree is > 2 are intersections
+        // just check it's an intersection on the path you want to cut, and keep it
+        // the intersections you have found are then fed to ConvertPositionsToMoveTo() which will
+        // make new subpath at each one of these positions
+        // inversion pour l'opration
+        {
+            Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
+            int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
+        }
+        originaux[0]->ConvertWithBackData(1.0);
+
+        originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
+
+        originaux[1]->ConvertWithBackData(1.0);
+
+        originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
+
+        theShape->ConvertToShape(theShapeA, fill_justDont);
+
+        if ( theShape->hasBackData() ) {
+            // should always be the case, but ya never know
+            {
+                for (int i = 0; i < theShape->numberOfPoints(); i++) {
+                    if ( theShape->getPoint(i).totalDegree() > 2 ) {
+                        // possibly an intersection
+                        // we need to check that at least one edge from the source path is incident to it
+                        // before we declare it's an intersection
+                        int cb = theShape->getPoint(i).incidentEdge[FIRST];
+                        int   nbOrig=0;
+                        int   nbOther=0;
+                        int   piece=-1;
+                        float t=0.0;
+                        while ( cb >= 0 && cb < theShape->numberOfEdges() ) {
+                            if ( theShape->ebData[cb].pathID == 0 ) {
+                                // the source has an edge incident to the point, get its position on the path
+                                piece=theShape->ebData[cb].pieceID;
+                                if ( theShape->getEdge(cb).st == i ) {
+                                    t=theShape->ebData[cb].tSt;
+                                } else {
+                                    t=theShape->ebData[cb].tEn;
+                                }
+                                nbOrig++;
+                            }
+                            if ( theShape->ebData[cb].pathID == 1 ) nbOther++; // the cut is incident to this point
+                            cb=theShape->NextAt(i, cb);
+                        }
+                        if ( nbOrig > 0 && nbOther > 0 ) {
+                            // point incident to both path and cut: an intersection
+                            // note that you only keep one position on the source; you could have degenerate
+                            // cases where the source crosses itself at this point, and you wouyld miss an intersection
+                            toCut=(Path::cut_position*)realloc(toCut, (nbToCut+1)*sizeof(Path::cut_position));
+                            toCut[nbToCut].piece=piece;
+                            toCut[nbToCut].t=t;
+                            nbToCut++;
+                        }
+                    }
+                }
+            }
+            {
+                // i think it's useless now
+                int i = theShape->numberOfEdges() - 1;
+                for (;i>=0;i--) {
+                    if ( theShape->ebData[i].pathID == 1 ) {
+                        theShape->SubEdge(i);
+                    }
+                }
+            }
+
+        }
+    }
+
+    int*    nesting=NULL;
+    int*    conts=NULL;
+    int     nbNest=0;
+    // pour compenser le swap juste avant
+    if ( bop == bool_op_slice ) {
+//    theShape->ConvertToForme(res, nbOriginaux, originaux, true);
+//    res->ConvertForcedToMoveTo();
+        res->Copy(originaux[0]);
+        res->ConvertPositionsToMoveTo(nbToCut, toCut); // cut where you found intersections
+        free(toCut);
+    } else if ( bop == bool_op_cut ) {
+        // il faut appeler pour desallouer PointData (pas vital, mais bon)
+        // the Booleen() function did not deallocated the point_data array in theShape, because this
+        // function needs it.
+        // this function uses the point_data to get the winding number of each path (ie: is a hole or not)
+        // for later reconstruction in objects, you also need to extract which path is parent of holes (nesting info)
+        theShape->ConvertToFormeNested(res, nbOriginaux, &originaux[0], 1, nbNest, nesting, conts);
+    } else {
+        theShape->ConvertToForme(res, nbOriginaux, &originaux[0]);
+    }
+
+    delete theShape;
+    delete theShapeA;
+    delete theShapeB;
     for (int i = 0; i < nbOriginaux; i++)  delete originaux[i];
 
     if (res->descr_cmd.size() <= 1)
@@ -421,8 +672,7 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
         {
             SP_OBJECT(l->data)->deleteObject();
         }
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE, 
-                           description);
+        DocumentUndo::done(doc, SP_VERB_NONE, description);
         selection->clear();
 
         delete res;
@@ -444,8 +694,7 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
 
         sorted = g_slist_sort(sorted, (GCompareFunc) sp_repr_compare_position);
 
-        source = sp_desktop_document(desktop)->
-            getObjectByRepr((Inkscape::XML::Node *)sorted->data);
+        source = doc->getObjectByRepr((Inkscape::XML::Node *)sorted->data);
 
         g_slist_free(sorted);
     }
@@ -485,7 +734,7 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
     g_slist_free(il);
 
     // premultiply by the inverse of parent's repr
-    SPItem *parent_item = SP_ITEM(sp_desktop_document(desktop)->getObjectByRepr(parent));
+    SPItem *parent_item = SP_ITEM(doc->getObjectByRepr(parent));
     Geom::Affine local (parent_item->i2doc_affine());
     gchar *transform = sp_svg_transform_write(local.inverse());
 
@@ -515,7 +764,7 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
         for (int i=0;i<nbRP;i++) {
             gchar *d = resPath[i]->svg_dump_path();
 
-            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+            Inkscape::XML::Document *xml_doc = doc->getReprDoc();
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
             repr->setAttribute("style", style);
             if (mask)
@@ -561,7 +810,7 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
     } else {
         gchar *d = res->svg_dump_path();
 
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+        Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
         repr->setAttribute("style", style);
 
@@ -579,10 +828,10 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
         repr->setAttribute("id", id);
         parent->appendChild(repr);
         if (title) {
-        	sp_desktop_document(desktop)->getObjectByRepr(repr)->setTitle(title);
+        	doc->getObjectByRepr(repr)->setTitle(title);
         }            
         if (desc) {
-        	sp_desktop_document(desktop)->getObjectByRepr(repr)->setDesc(desc);
+        	doc->getObjectByRepr(repr)->setDesc(desc);
         }
 		repr->setPosition(pos > 0 ? pos : 0);
 
@@ -595,7 +844,7 @@ sp_selected_path_boolop(SPDesktop *desktop, bool_op bop, const unsigned int verb
     if (desc) g_free(desc);
 
     if (verb != SP_VERB_NONE) {
-        DocumentUndo::done(sp_desktop_document(desktop), verb, description);
+        DocumentUndo::done(doc, verb, description);
     }
 
     delete res;
@@ -716,8 +965,8 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
     ButtType o_butt;
     {
         o_width = i_style->stroke_width.computed;
-        if (o_width < 0.1) {
-            o_width = 0.1;
+        if (o_width < 0.01) {
+            o_width = 0.01;
         }
         o_miter = i_style->stroke_miterlimit.value * o_width;
 
@@ -746,7 +995,7 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
         }
     }
 
-    // Livarots outline of arcs is broken. So convert the path to linear and cubics only, for which the outline is created correctly.
+    // Livarot's outline of arcs is broken. So convert the path to linear and cubics only, for which the outline is created correctly.
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( curve->get_pathvector() );
 
     Path *orig = new Path;
@@ -755,7 +1004,7 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
     Path *res = new Path;
     res->SetBackData(false);
 
-    if (i_style->stroke_dash.n_dash) {
+    if (!i_style->stroke_dasharray.values.empty()) {
         // For dashed strokes, use Stroke method, because Outline can't do dashes
         // However Stroke adds lots of extra nodes _or_ makes the path crooked, so consider this a temporary workaround
 
@@ -914,7 +1163,7 @@ sp_selected_path_outline(SPDesktop *desktop)
          items != NULL;
          items = items->next) {
 
-        SPItem *item = (SPItem *) items->data;
+        SPItem *item = SP_ITEM(items->data);
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
             continue;
@@ -930,6 +1179,8 @@ sp_selected_path_outline(SPDesktop *desktop)
             if (curve == NULL)
                 continue;
         }
+
+        g_assert(curve != NULL);
 
         if (curve->get_pathvector().empty()) {
             continue;
@@ -1002,8 +1253,8 @@ sp_selected_path_outline(SPDesktop *desktop)
                     break;
             }
 
-            if (o_width < 0.1)
-                o_width = 0.1;
+            if (o_width < 0.032)
+                o_width = 0.032;
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
@@ -1012,7 +1263,7 @@ sp_selected_path_outline(SPDesktop *desktop)
             curve->unref();
             continue;
         }
-        // Livarots outline of arcs is broken. So convert the path to linear and cubics only, for which the outline is created correctly.
+        // Livarot's outline of arcs is broken. So convert the path to linear and cubics only, for which the outline is created correctly.
         Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( curvetemp->get_pathvector() );
         curvetemp->unref();
 
@@ -1022,7 +1273,7 @@ sp_selected_path_outline(SPDesktop *desktop)
         Path *res = new Path;
         res->SetBackData(false);
 
-        if (i_style->stroke_dash.n_dash) {
+        if (!i_style->stroke_dasharray.values.empty()) {
             // For dashed strokes, use Stroke method, because Outline can't do dashes
             // However Stroke adds lots of extra nodes _or_ makes the path crooked, so consider this a temporary workaround
 
@@ -1334,19 +1585,17 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Selected object is <b>not a path</b>, cannot inset/outset."));
         return;
     }
-    if (SP_IS_SHAPE(item))
+    else if (SP_IS_SHAPE(item))
     {
         curve = SP_SHAPE(item)->getCurve();
-        if (curve == NULL) {
-            return;
-        }
     }
-    if (SP_IS_TEXT(item))
+    else // Item must be SP_TEXT
     {
         curve = SP_TEXT(item)->getNormalizedBpath();
-        if (curve == NULL) {
-            return;
-        }
+    }
+        
+    if (curve == NULL) {
+        return;
     }
 
     Geom::Affine const transform(item->transform);
@@ -1363,48 +1612,15 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     Inkscape::XML::Node *parent = item->getRepr()->parent();
 
     float o_width = 0;
-    JoinType o_join = join_straight;
-    ButtType o_butt = butt_straight;
-    float o_miter = 0;
     {
-        SPStyle *i_style = item->style;
-        int jointype = i_style->stroke_linejoin.value;
-        int captype = i_style->stroke_linecap.value;
-
-        o_width = i_style->stroke_width.computed;
-        if (jointype == SP_STROKE_LINEJOIN_MITER)
-        {
-            o_join = join_pointy;
-        }
-        else if (jointype == SP_STROKE_LINEJOIN_ROUND)
-        {
-            o_join = join_round;
-        }
-        else
-        {
-            o_join = join_straight;
-        }
-        if (captype == SP_STROKE_LINECAP_SQUARE)
-        {
-            o_butt = butt_square;
-        }
-        else if (captype == SP_STROKE_LINECAP_ROUND)
-        {
-            o_butt = butt_round;
-        }
-        else
-        {
-            o_butt = butt_straight;
-        }
-
         {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
         }
 
-        if (o_width < 0.01)
+        if (o_width < 0.01){
             o_width = 0.01;
-        o_miter = i_style->stroke_miterlimit.value * o_width;
+        }
     }
 
     Path *orig = Path_for_item(item, true, false);
@@ -1502,7 +1718,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         // move to the saved position
         repr->setPosition(pos > 0 ? pos : 0);
 
-        SPItem *nitem = (SPItem *) sp_desktop_document(desktop)->getObjectByRepr(repr);
+        SPItem *nitem = reinterpret_cast<SPItem *>(sp_desktop_document(desktop)->getObjectByRepr(repr));
 
         if ( !updating ) {
             // delete original, apply the transform to the offset
@@ -1558,22 +1774,20 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
          items != NULL;
          items = items->next) {
 
-        SPItem *item = (SPItem *) items->data;
+        SPItem *item = SP_ITEM(items->data);
+        SPCurve *curve = NULL;
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
             continue;
-
-        SPCurve *curve = NULL;
-        if (SP_IS_SHAPE(item)) {
+        else if (SP_IS_SHAPE(item)) {
             curve = SP_SHAPE(item)->getCurve();
-            if (curve == NULL)
-                continue;
         }
-        if (SP_IS_TEXT(item)) {
+        else { // Item must be SP_TEXT
             curve = SP_TEXT(item)->getNormalizedBpath();
-            if (curve == NULL)
-                continue;
         }
+
+        if (curve == NULL)
+            continue;
 
         Geom::Affine const transform(item->transform);
 
@@ -1584,14 +1798,11 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
         float o_width = 0;
         float o_miter = 0;
         JoinType o_join = join_straight;
-        ButtType o_butt = butt_straight;
+        //ButtType o_butt = butt_straight;
 
         {
             SPStyle *i_style = item->style;
             int jointype = i_style->stroke_linejoin.value;
-            int captype = i_style->stroke_linecap.value;
-
-            o_width = i_style->stroke_width.computed;
 
             switch (jointype) {
                 case SP_STROKE_LINEJOIN_MITER:
@@ -1602,18 +1813,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
                     break;
                 default:
                     o_join = join_straight;
-                    break;
-            }
-
-            switch (captype) {
-                case SP_STROKE_LINECAP_SQUARE:
-                    o_butt = butt_square;
-                    break;
-                case SP_STROKE_LINECAP_ROUND:
-                    o_butt = butt_round;
-                    break;
-                default:
-                    o_butt = butt_straight;
                     break;
             }
 
@@ -1778,7 +1977,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
 
 
 //return true if we changed something, else false
-bool
+static bool
 sp_selected_path_simplify_item(SPDesktop *desktop,
                  Inkscape::Selection *selection, SPItem *item,
                  float threshold,  bool justCoalesce,
@@ -1967,6 +2166,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
             gchar *message = g_strdup_printf(_("%s <b>%d</b> of <b>%d</b> paths simplified..."),
                 simplificationType, pathsSimplified, totalPathCount);
             desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, message);
+            g_free(message);
         }
 
         didSomething |= sp_selected_path_simplify_item(desktop, selection, item,
@@ -1976,13 +2176,13 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
     desktop->clearWaitingCursor();
 
     if (pathsSimplified > 20) {
-        desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, g_strdup_printf(_("<b>%d</b> paths simplified."), pathsSimplified));
+        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("<b>%d</b> paths simplified."), pathsSimplified);
     }
 
     return didSomething;
 }
 
-void
+static void
 sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool justCoalesce,
                                     float angleLimit, bool breakableAngles)
 {
@@ -2063,6 +2263,21 @@ Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who)
     if (who == a)
         return true;
     return Ancetre(a->parent(), who);
+}
+
+// derived from Path_for_item
+// there must be some other way to load dest directly from epathv,  without going through pathv...
+Path *
+Path_for_pathvector(Geom::PathVector const &epathv)
+{
+    Geom::PathVector *pathv = new Geom::PathVector;
+    std::copy(epathv.begin(), epathv.end(), std::back_inserter(*pathv)); 
+    
+    Path *dest = new Path;
+    dest->LoadPathVector(*pathv);    
+    delete pathv;
+    
+    return dest;
 }
 
 Path *

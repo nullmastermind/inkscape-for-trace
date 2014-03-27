@@ -11,6 +11,14 @@
 #ifndef INKSCAPE_UI_WIDGET_LABELLED_H
 #define INKSCAPE_UI_WIDGET_LABELLED_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 
 namespace Gtk {
@@ -54,8 +62,13 @@ public:
     Gtk::Label const *getLabel() const;
 
     void setLabelText(const Glib::ustring &str);
+    void setTooltipText(const Glib::ustring &tooltip);
+
+private:
+    virtual bool on_mnemonic_activate( bool group_cycling );
 
 protected:
+
     Gtk::Widget  *_widget;
     Gtk::Label   *_label;
     Gtk::Label   *_suffix;

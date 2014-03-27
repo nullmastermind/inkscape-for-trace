@@ -286,7 +286,7 @@ void ConnRef::common_updateEndPoint(const unsigned int type, const ConnEnd& conn
     }
     
     VertInf *altered = NULL;
-    VertInf *partner = NULL;
+    // VertInf *partner = NULL;
     bool isShape = false;
 
     if (type == (unsigned int) VertID::src)
@@ -302,7 +302,7 @@ void ConnRef::common_updateEndPoint(const unsigned int type, const ConnEnd& conn
         _srcVert->visDirections = connEnd.directions();
         
         altered = _srcVert;
-        partner = _dstVert;
+        // partner = _dstVert;
     }
     else // if (type == (unsigned int) VertID::tar)
     {
@@ -317,7 +317,7 @@ void ConnRef::common_updateEndPoint(const unsigned int type, const ConnEnd& conn
         _dstVert->visDirections = connEnd.directions();
         
         altered = _dstVert;
-        partner = _srcVert;
+        // partner = _srcVert;
     }
     
     // XXX: Seems to be faster to just remove the edges and recreate
@@ -1736,7 +1736,8 @@ CrossingsInfoPair countRealCrossings(Avoid::Polygon& poly,
                                 !reversedY);
                     }
                     else
-                    {
+                    { /// \todo FIXME: this whole branch was not doing anything
+                    /*
                         int turnDirA = vecDir(a0, a1, a2); 
                         int turnDirB = vecDir(b0, b1, b2); 
                         bool reversed = (side1 != -turnDirA); 
@@ -1761,6 +1762,7 @@ CrossingsInfoPair countRealCrossings(Avoid::Polygon& poly,
                         }
                         VertID vID(b1.id, true, b1.vn);
                         //(*pointOrders)[b1].addPoints(&b1, &a1, reversed);
+                    */
                     }
                 }
             }

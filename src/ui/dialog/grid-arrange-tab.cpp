@@ -15,14 +15,17 @@
  */
 //#define DEBUG_GRID_ARRANGE 1
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include "ui/dialog/grid-arrange-tab.h"
 #include <gtk/gtk.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
 #include <gtkmm/stock.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 #include <2geom/transforms.h>
 
 #include "verbs.h"
@@ -45,7 +48,7 @@
  *    0  *elem1 == *elem2
  *    >0  *elem1 goes after *elem2
  */
-int sp_compare_x_position(SPItem *first, SPItem *second)
+static int sp_compare_x_position(SPItem *first, SPItem *second)
 {
     using Geom::X;
     using Geom::Y;
@@ -87,7 +90,7 @@ int sp_compare_x_position(SPItem *first, SPItem *second)
 /*
  *    Sort items by their y co-ordinates.
  */
-int sp_compare_y_position(SPItem *first, SPItem *second)
+static int sp_compare_y_position(SPItem *first, SPItem *second)
 {
     Geom::OptRect a = first->documentVisualBounds();
     Geom::OptRect b = second->documentVisualBounds();
@@ -126,7 +129,7 @@ void GridArrangeTab::arrange()
 {
 
     int cnt,row_cnt,col_cnt,a,row,col;
-    double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y,cx,cy;
+    double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y;
     double total_col_width,total_row_height;
     col_width = 0;
     row_height = 0;
@@ -177,9 +180,6 @@ void GridArrangeTab::arrange()
         width = b->dimensions()[Geom::X];
         height = b->dimensions()[Geom::Y];
 
-        cx = b->midpoint()[Geom::X];
-        cy = b->midpoint()[Geom::Y];
-
         if (b->min()[Geom::X] < grid_left) {
             grid_left = b->min()[Geom::X];
         }
@@ -199,7 +199,7 @@ void GridArrangeTab::arrange()
 
     g_return_if_fail(selection);
     const GSList *items2 = selection->itemList();
-    GSList *rev = g_slist_copy((GSList *) items2);
+    GSList *rev = g_slist_copy(const_cast<GSList *>(items2));
     GSList *sorted = NULL;
     rev = g_slist_sort(rev, (GCompareFunc) sp_compare_y_position);
     sorted = g_slist_sort(rev, (GCompareFunc) sp_compare_x_position);
@@ -586,8 +586,8 @@ static void updateSelectionCallback(Inkscape::Application */*inkscape*/, Inkscap
  */
 GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     : Parent(parent),
-      XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns"),
-      YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows")
+      XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns", &PaddingUnitMenu),
+      YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows", &PaddingUnitMenu)
 {
      // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;
@@ -665,7 +665,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     XByYLabel.set_markup(" &#215; ");
     XByYLabelVBox.pack_start(XByYLabel, false, false, MARGIN);
     SpinsHBox.pack_start(XByYLabelVBox, false, false, MARGIN);
-    gtk_size_group_add_widget(_col2, (GtkWidget *) XByYLabelVBox.gobj());
+    gtk_size_group_add_widget(_col2, GTK_WIDGET(XByYLabelVBox.gobj()));
 
     /*#### Number of columns ####*/
 
@@ -680,7 +680,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_row_spinbutton_changed));
     NoOfColsSpinner.set_tooltip_text(_("Number of columns"));
     NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
-    gtk_size_group_add_widget(_col3, (GtkWidget *) NoOfColsBox.gobj());
+    gtk_size_group_add_widget(_col3, GTK_WIDGET(NoOfColsBox.gobj()));
 
     ColumnWidthButton.set_label(_("Equal _width"));
     ColumnWidthButton.set_use_underline(true);
@@ -730,6 +730,8 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     {
         /*#### Padding ####*/
+        PaddingUnitMenu.setUnitType(UNIT_TYPE_LINEAR);
+        PaddingUnitMenu.setUnit("px");
 
         YPadding.setDigits(5);
         YPadding.setIncrements(0.2, 0);
@@ -746,8 +748,24 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
         XPadding.signal_value_changed().connect(sigc::mem_fun(*this, &GridArrangeTab::on_xpad_spinbutton_changed));
     }
-    TileBox.pack_start(XPadding, false, false, MARGIN);
-    TileBox.pack_start(YPadding, false, false, MARGIN);
+
+    PaddingTable->set_border_width(MARGIN);
+
+#if WITH_GTKMM_3_0
+    PaddingTable->set_row_spacing(MARGIN);
+    PaddingTable->set_column_spacing(MARGIN);
+    PaddingTable->attach(XPadding,        0, 0, 1, 1);
+    PaddingTable->attach(PaddingUnitMenu, 1, 0, 1, 1);
+    PaddingTable->attach(YPadding,        0, 1, 1, 1);
+#else
+    PaddingTable->set_row_spacings(MARGIN);
+    PaddingTable->set_col_spacings(MARGIN);
+    PaddingTable->attach(XPadding, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+    PaddingTable->attach(PaddingUnitMenu, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+    PaddingTable->attach(YPadding, 0, 1, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
+#endif
+
+    TileBox.pack_start(*PaddingTable, false, false, MARGIN);
 
     contents->pack_start(TileBox);
 

@@ -10,18 +10,28 @@
 #ifndef INKSCAPE_UI_WIDGET_PAGE_SIZER_H
 #define INKSCAPE_UI_WIDGET_PAGE_SIZER_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <stddef.h>
 #include "ui/widget/registered-widget.h"
 #include <sigc++/sigc++.h>
 
-#include "helper/units.h"
+#include "util/units.h"
 
 #include <gtkmm/alignment.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/table.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 #include <gtkmm/radiobutton.h>
 
 namespace Inkscape {    
@@ -54,7 +64,7 @@ public:
     PaperSize(const Glib::ustring &nameArg,
 	          double smallerArg,
 	          double largerArg,
-			  SPUnitId unitArg)
+			  Inkscape::Util::Unit const *unitArg)
 	    {
 	    name    = nameArg;
 	    smaller = smallerArg;
@@ -98,7 +108,7 @@ public:
     /**
      * The units (px, pt, mm, etc) of this specification
      */	     
-    SPUnitId unit;
+    Inkscape::Util::Unit const *unit; /// pointer to object in UnitTable, do not delete
 
 private:
 
@@ -107,7 +117,7 @@ private:
 	    name    = "";
 	    smaller = 0.0;
 	    larger  = 0.0;
-	    unit    = SP_UNIT_PX;
+	    unit    = unit_table.getUnit("px");
 	    }
 
 	void assign(const PaperSize &other)
@@ -151,7 +161,7 @@ public:
      * Set the page size to the given dimensions.  If 'changeList' is
      * true, then reset the paper size list to the closest match
      */
-    void setDim (double w, double h, bool changeList=true);
+    void setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList=true);
     
     /**
      * Updates the scalar widgets for the fit margins.  (Just changes the value
@@ -169,7 +179,7 @@ protected:
     /**
      *	Find the closest standard paper size in the table, to the
      */
-    Gtk::ListStore::iterator find_paper_size (double w, double h) const;
+    Gtk::ListStore::iterator find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h) const;
  
     void fire_fit_canvas_to_selection_or_drawing();
     
@@ -207,7 +217,13 @@ protected:
 
     //### Custom size frame
     Gtk::Frame           _customFrame;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid            _customDimTable;
+#else
     Gtk::Table           _customDimTable;
+#endif
+
     RegisteredUnitMenu   _dimensionUnits;
     RegisteredScalarUnit _dimensionWidth;
     RegisteredScalarUnit _dimensionHeight;
@@ -215,7 +231,13 @@ protected:
 
     //### Fit Page options
     Gtk::Expander        _fitPageMarginExpander;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid            _marginTable;
+#else
     Gtk::Table           _marginTable;
+#endif
+
     Gtk::Alignment       _marginTopAlign;
     Gtk::Alignment       _marginLeftAlign;
     Gtk::Alignment       _marginRightAlign;
@@ -230,13 +252,17 @@ protected:
 
     //callback
     void on_value_changed();
+    void on_units_changed();
     sigc::connection    _changedw_connection;
     sigc::connection    _changedh_connection;
+    sigc::connection    _changedu_connection;
 
     Registry            *_widgetRegistry;
 
     //### state - whether we are currently landscape or portrait
     bool                 _landscape;
+    
+    Glib::ustring       _unit;
 
 };
 

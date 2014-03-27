@@ -12,6 +12,14 @@
  *      ? -2004
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/window.h>
 #include "message.h"
 #include "ui/view/view-widget.h"
@@ -25,7 +33,7 @@
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
 class SPDesktop;
-class SPDesktopWidget;
+struct SPDesktopWidget;
 class SPObject;
 
 
@@ -34,8 +42,6 @@ class SPObject;
 #define SP_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidgetClass))
 #define SP_IS_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
-
-void sp_desktop_widget_destroy (SPDesktopWidget* dtw);
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
@@ -51,6 +57,7 @@ void sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw );
+bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
 
 void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
@@ -106,7 +113,11 @@ struct SPDesktopWidget {
 
     unsigned int _interaction_disabled_counter;
 
-    SPCanvas *canvas;
+    SPCanvas  *canvas;
+
+    /** A table for displaying the canvas, rulers etc */
+    GtkWidget *canvas_tbl;
+
     Geom::Point ruler_origin;
     double dt2r;
 
@@ -118,7 +129,6 @@ struct SPDesktopWidget {
 
     struct WidgetStub : public Inkscape::UI::View::EditWidgetInterface {
         SPDesktopWidget *_dtw;
-        SPDesktop       *_dt;
         WidgetStub (SPDesktopWidget* dtw) : _dtw(dtw) {}
 
         virtual void setTitle (gchar const *uri)
@@ -169,8 +179,6 @@ struct SPDesktopWidget {
             { sp_dtw_desktop_activate (_dtw); }
         virtual void deactivateDesktop()
             { sp_dtw_desktop_deactivate (_dtw); }
-        virtual void viewSetPosition (Geom::Point p)
-            { _dtw->viewSetPosition (p); }
         virtual void updateRulers()
             { sp_desktop_widget_update_rulers (_dtw); }
         virtual void updateScrollbars (double scale)
@@ -181,6 +189,8 @@ struct SPDesktopWidget {
             { sp_desktop_widget_toggle_scrollbars (_dtw); }
         virtual void toggleColorProfAdjust()
             { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
+        virtual bool colorProfAdjustEnabled()
+            { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
         virtual void updateZoom()
             { sp_desktop_widget_update_zoom (_dtw); }
         virtual void letZoomGrabFocus()
@@ -202,7 +212,7 @@ struct SPDesktopWidget {
             return _dtw->showInfoDialog( message );
         }
 
-        virtual bool warnDialog (gchar* text)
+        virtual bool warnDialog (Glib::ustring const &text)
             { return _dtw->warnDialog (text); }
 
         virtual Inkscape::UI::Widget::Dock* getDock ()
@@ -222,7 +232,7 @@ struct SPDesktopWidget {
     void setWindowTransient (void *p, int transient_policy);
     void presentWindow();
     bool showInfoDialog( Glib::ustring const &message );
-    bool warnDialog (gchar *text);
+    bool warnDialog (Glib::ustring const &text);
     void setToolboxFocusTo (gchar const *);
     void setToolboxAdjustmentValue (gchar const * id, double value);
     void setToolboxSelectOneValue (gchar const * id, gint value);

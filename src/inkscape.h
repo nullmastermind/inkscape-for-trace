@@ -15,15 +15,25 @@
 #include <list>
 #include <glib.h>
 
-struct SPDesktop;
-struct SPDocument;
-struct SPEventContext;
+class SPDesktop;
+class SPDocument;
 
 namespace Inkscape {
+namespace UI {
+namespace Tools {
+
+class ToolBase;
+
+}
+}
+}
+
+namespace Inkscape {
+    class ActionContext;
     struct Application;
     namespace XML {
         class Node;
-        class Document;
+        struct Document;
         }
 }
 
@@ -48,13 +58,28 @@ bool inkscapeIsCrashing();
 SPDesktop * inkscape_find_desktop_by_dkey (unsigned int dkey);
 
 #define SP_ACTIVE_EVENTCONTEXT inkscape_active_event_context ()
-SPEventContext * inkscape_active_event_context (void);
+Inkscape::UI::Tools::ToolBase * inkscape_active_event_context (void);
 
 #define SP_ACTIVE_DOCUMENT inkscape_active_document ()
 SPDocument * inkscape_active_document (void);
 
 #define SP_ACTIVE_DESKTOP inkscape_active_desktop ()
 SPDesktop * inkscape_active_desktop (void);
+
+// Use this function to get selection model etc for a document, if possible!
+// The "active" alternative below has all the horrible static cling of a singleton.
+Inkscape::ActionContext
+inkscape_action_context_for_document(SPDocument *doc);
+
+// More horrible static cling... sorry about this. Should really replace all of
+// the static stuff with a single instance of some kind of engine class holding
+// all the document / non-GUI stuff, and an optional GUI class that behaves a
+// bit like SPDesktop does currently. Then it will be easier to write good code
+// that doesn't just expect a GUI all the time (like lots of the app currently
+// does).
+// Also, while the "active" document / desktop concepts are convenient, they
+// appear to have been abused somewhat, further increasing static cling.
+Inkscape::ActionContext inkscape_active_action_context();
 
 bool inkscape_is_sole_desktop_for_document(SPDesktop const &desktop);
 
@@ -73,6 +98,11 @@ void inkscape_dialogs_toggle ();
 
 void inkscape_external_change ();
 void inkscape_subselection_changed (SPDesktop *desktop);
+
+/* Moved document add/remove functions into public inkscape.h as they are used
+  (rightly or wrongly) by console-mode functions */
+void inkscape_add_document (SPDocument *document);
+bool inkscape_remove_document (SPDocument *document);
 
 /*
  * fixme: This has to be rethought

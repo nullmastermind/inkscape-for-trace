@@ -26,16 +26,18 @@
 #include "path-prefix.h"
 
 #include "inkscape.h"
-#include <glibmm/ustring.h>
+
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <glibmm/ustring.h>
 
 #include "system.h"
 #include "db.h"
 #include "internal/svgz.h"
-#ifdef WIN32
-# include "internal/emf-win32-inout.h"
-# include "internal/emf-win32-print.h"
-#endif
+# include "internal/emf-inout.h"
+# include "internal/emf-print.h"
+# include "internal/wmf-inout.h"
+# include "internal/wmf-print.h"
 #ifdef HAVE_CAIRO_PDF
 # include "internal/cairo-renderer-pdf-out.h"
 # include "internal/cairo-png-out.h"
@@ -52,6 +54,12 @@
 #include "internal/grid.h"
 #ifdef WITH_LIBWPG
 #include "internal/wpg-input.h"
+#endif
+#ifdef WITH_LIBVISIO
+#include "internal/vsd-input.h"
+#endif
+#ifdef WITH_LIBCDR
+#include "internal/cdr-input.h"
 #endif
 #include "preferences.h"
 #include "io/sys.h"
@@ -99,7 +107,7 @@
 
 #include "internal/filter/filter.h"
 
-extern gboolean inkscape_app_use_gui( Inkscape::Application const *app );
+#include "init.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -171,10 +179,10 @@ init()
     Internal::PdfInputCairo::init();
     }
 #endif
-#ifdef WIN32
-    Internal::PrintEmfWin32::init();
-    Internal::EmfWin32::init();
-#endif
+    Internal::PrintEmf::init();
+    Internal::Emf::init();
+    Internal::PrintWmf::init();
+    Internal::Wmf::init();
     Internal::PovOutput::init();
     Internal::JavaFXOutput::init();
     Internal::OdfOutput::init();
@@ -182,6 +190,12 @@ init()
     Internal::LatexOutput::init();
 #ifdef WITH_LIBWPG
     Internal::WpgInput::init();
+#endif
+#ifdef WITH_LIBVISIO
+    Internal::VsdInput::init();
+#endif
+#ifdef WITH_LIBCDR
+    Internal::CdrInput::init();
 #endif
 
     /* Effects */
@@ -279,7 +293,7 @@ static void
 build_module_from_dir(gchar const *dirname)
 {
     if (!dirname) {
-        g_warning(_("Null external module directory name.  Modules will not be loaded."));
+        g_warning("%s", _("Null external module directory name.  Modules will not be loaded."));
         return;
     }
 
@@ -308,7 +322,7 @@ build_module_from_dir(gchar const *dirname)
             continue;
         }
 
-        gchar *pathname = g_build_filename(dirname, filename, NULL);
+        gchar *pathname = g_build_filename(dirname, filename, (char *) NULL);
         build_from_file(pathname);
         g_free(pathname);
     }

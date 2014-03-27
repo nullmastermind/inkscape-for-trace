@@ -148,6 +148,15 @@ gdl_dock_item_grip_expose (GtkWidget      *widget,
         }
         
     }
+  
+   if (gdl_dock_item_or_child_has_focus(grip->item)) { 
+	   
+      gtk_paint_focus (gtk_widget_get_style (widget),
+                       gtk_widget_get_window (widget),
+                       gtk_widget_get_state (widget),
+                       &event->area, widget,
+                       NULL, 0, 0, -1, -1);
+   }
 
     return GTK_WIDGET_CLASS (gdl_dock_item_grip_parent_class)->expose_event (widget, event);
 }
@@ -265,10 +274,6 @@ gdl_dock_item_grip_close_clicked (GtkWidget       *widget,
 
     gdl_dock_item_hide_item (grip->item);
 }
-
-#if !GTK_CHECK_VERSION (2, 22, 0)
-#  define gtk_button_get_event_window(button) button->event_window
-#endif // Gtk+ >= 2.22
 
 static void
 gdl_dock_item_grip_fix_iconify_button (GdlDockItemGrip *grip)
@@ -531,10 +536,9 @@ gdl_dock_item_grip_size_allocate (GtkWidget     *widget,
                                   GtkAllocation *allocation)
 {
     GdlDockItemGrip *grip;
-    GtkRequisition   close_requisition = { 0, };
-    GtkRequisition   iconify_requisition = { 0, };
+    GtkRequisition   close_requisition = { 0, 0 };
+    GtkRequisition   iconify_requisition = { 0, 0 };
     GtkAllocation    child_allocation;
-    GdkRectangle     label_area;
     guint            border_width;
 
     g_return_if_fail (GDL_IS_DOCK_ITEM_GRIP (widget));

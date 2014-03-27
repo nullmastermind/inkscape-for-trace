@@ -40,19 +40,7 @@
 
 using Inkscape::DocumentUndo;
 
-SPItem *
-text_in_selection(Inkscape::Selection *selection)
-{
-    for (GSList *items = (GSList *) selection->itemList();
-         items != NULL;
-         items = items->next) {
-        if (SP_IS_TEXT(items->data))
-            return ((SPItem *) items->data);
-    }
-    return NULL;
-}
-
-SPItem *
+static SPItem *
 flowtext_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
@@ -64,7 +52,7 @@ flowtext_in_selection(Inkscape::Selection *selection)
     return NULL;
 }
 
-SPItem *
+static SPItem *
 text_or_flowtext_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
@@ -76,7 +64,7 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
     return NULL;
 }
 
-SPItem *
+static SPItem *
 shape_in_selection(Inkscape::Selection *selection)
 {
     for (GSList *items = (GSList *) selection->itemList();
@@ -164,7 +152,9 @@ text_put_on_path()
     // create textPath and put it into the text
     Inkscape::XML::Node *textpath = xml_doc->createElement("svg:textPath");
     // reference the shape
-    textpath->setAttribute("xlink:href", g_strdup_printf("#%s", shape->getRepr()->attribute("id")));
+    gchar *href_str = g_strdup_printf("#%s", shape->getRepr()->attribute("id"));
+    textpath->setAttribute("xlink:href", href_str);
+    g_free(href_str);
     if (text_alignment == Inkscape::Text::Layout::RIGHT) {
         textpath->setAttribute("startOffset", "100%");
     } else if (text_alignment == Inkscape::Text::Layout::CENTER) {
@@ -233,7 +223,7 @@ text_remove_from_path()
     }
 }
 
-void
+static void
 text_remove_all_kerns_recursively(SPObject *o)
 {
     o->getRepr()->setAttribute("dx", NULL);
@@ -246,9 +236,9 @@ text_remove_all_kerns_recursively(SPObject *o)
         gchar **xa_space = g_strsplit(x, " ", 0);
         gchar **xa_comma = g_strsplit(x, ",", 0);
         if (xa_space && *xa_space && *(xa_space + 1)) {
-            o->getRepr()->setAttribute("x", g_strdup(*xa_space));
+            o->getRepr()->setAttribute("x", *xa_space);
         } else if (xa_comma && *xa_comma && *(xa_comma + 1)) {
-            o->getRepr()->setAttribute("x", g_strdup(*xa_comma));
+            o->getRepr()->setAttribute("x", *xa_comma);
         }
         g_strfreev(xa_space);
         g_strfreev(xa_comma);
@@ -256,6 +246,7 @@ text_remove_all_kerns_recursively(SPObject *o)
 
     for (SPObject *i = o->firstChild(); i != NULL; i = i->getNext()) {
         text_remove_all_kerns_recursively(i);
+        i->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
     }
 }
 
@@ -343,7 +334,9 @@ text_flow_into_shape()
             Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
             clone->setAttribute("x", "0");
             clone->setAttribute("y", "0");
-            clone->setAttribute("xlink:href", g_strdup_printf("#%s", item->getRepr()->attribute("id")));
+            gchar *href_str = g_strdup_printf("#%s", item->getRepr()->attribute("id"));
+            clone->setAttribute("xlink:href", href_str);
+            g_free(href_str);
 
             // add the new clone to the region
             region_repr->appendChild(clone);

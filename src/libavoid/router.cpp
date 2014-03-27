@@ -58,13 +58,17 @@ class ActionInfo {
         }
         ActionInfo(ActionType t, ShapeRef *s)
             : type(t),
-              objPtr(s)
+              objPtr(s),
+              newPoly(),
+              firstMove(0)
         {
             COLA_ASSERT(type != ConnChange);
         }
         ActionInfo(ActionType t, ConnRef *c)
             : type(t),
-              objPtr(c)
+              objPtr(c),
+              newPoly(),
+              firstMove(0)
         {
             COLA_ASSERT(type == ConnChange);
         }
@@ -789,7 +793,6 @@ void Router::improveCrossings(void)
             }
             // Determine if this pair cross.
             Avoid::Polygon& jRoute = (*j)->routeRef();
-            CrossingsInfoPair crossingInfo = std::make_pair(0, 0);
             bool meetsPenaltyCriteria = false;
             for (size_t jInd = 1; jInd < jRoute.size(); ++jInd)
             {
@@ -1430,7 +1433,6 @@ bool Router::existsOrthogonalPathOverlap(void)
         {
             // Determine if this pair overlap
             Avoid::Polygon jRoute = (*j)->displayRoute();
-            CrossingsInfoPair crossingInfo = std::make_pair(0, 0);
             for (size_t jInd = 1; jInd < jRoute.size(); ++jInd)
             {
                 const bool finalSegment = ((jInd + 1) == jRoute.size());
@@ -1464,7 +1466,6 @@ bool Router::existsOrthogonalTouchingCorners(void)
         {
             // Determine if this pair overlap
             Avoid::Polygon jRoute = (*j)->displayRoute();
-            CrossingsInfoPair crossingInfo = std::make_pair(0, 0);
             for (size_t jInd = 1; jInd < jRoute.size(); ++jInd)
             {
                 const bool finalSegment = ((jInd + 1) == jRoute.size());

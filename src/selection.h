@@ -23,15 +23,16 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include "gc-soft-ptr.h"
-#include "util/list.h"
 #include "sp-item.h"
-#include "snapped-point.h"
 
+
+class SPDesktop;
 class SPItem;
 class SPBox3D;
 class Persp3D;
 
 namespace Inkscape {
+class LayerModel;
 namespace XML {
 class Node;
 }
@@ -40,10 +41,10 @@ class Node;
 namespace Inkscape {
 
 /**
- * The set of selected SPObjects for a given desktop.
+ * The set of selected SPObjects for a given document and layer model.
  *
  * This class represents the set of selected SPItems for a given
- * SPDesktop.
+ * document (referenced in LayerModel).
  *
  * An SPObject and its parent cannot be simultaneously selected;
  * selecting an SPObjects has the side-effect of unselecting any of
@@ -61,19 +62,29 @@ class Selection : public Inkscape::GC::Managed<>,
                   public Inkscape::GC::Anchored
 {
 public:
+    enum CompareSize { HORIZONTAL, VERTICAL, AREA };
     /**
      * Constructs an selection object, bound to a particular
-     * SPDesktop
+     * layer model
      *
-     * @param desktop the desktop in question
+     * @param layers the layer model (for the SPDesktop, if GUI)
+     * @param desktop the desktop associated with the layer model, or NULL if in console mode
      */
-    Selection(SPDesktop *desktop);
+    Selection(LayerModel *layers, SPDesktop *desktop);
     ~Selection();
+
+    /**
+     * Returns the layer model the selection is bound to (works in console or GUI mode)
+     *
+     * @return the layer model the selection is bound to, which is the same as the desktop
+     * layer model for GUI mode
+     */
+    LayerModel *layers() { return _layers; }
 
     /**
      * Returns the desktop the selection is bound to
      *
-     * @return the desktop the selection is bound to
+     * @return the desktop the selection is bound to, or NULL if in console mode
      */
     SPDesktop *desktop() { return _desktop; }
 
@@ -209,6 +220,16 @@ public:
     SPItem *singleItem();
 
     /**
+     * Returns the smallest item from this selection.
+     */
+    SPItem *smallestItem(CompareSize compare);
+
+    /**
+     * Returns the largest item from this selection.
+     */
+    SPItem *largestItem(CompareSize compare);
+
+    /**
      * Returns a single selected object's xml node.
      *
      * @return NULL unless exactly one object is selected
@@ -267,12 +288,6 @@ public:
     std::vector<Inkscape::SnapCandidatePoint> getSnapPoints(SnapPreferences const *snapprefs) const;
 
     /**
-     * Gets the snap points of a selection that form a convex hull.
-     * @return Selection's convex hull points
-     */
-    std::vector<Inkscape::SnapCandidatePoint> getSnapPointsConvexHull(SnapPreferences const *snapprefs) const;
-
-    /**
      * Connects a slot to be notified of selection changes.
      *
      * This method connects the given slot such that it will
@@ -284,6 +299,10 @@ public:
      */
     sigc::connection connectChanged(sigc::slot<void, Selection *> const &slot) {
         return _changed_signal.connect(slot);
+    }
+    sigc::connection connectChangedFirst(sigc::slot<void, Selection *> const &slot)
+    {
+        return _changed_signal.slots().insert(_changed_signal.slots().begin(), slot);
     }
 
     /**
@@ -301,6 +320,10 @@ public:
     sigc::connection connectModified(sigc::slot<void, Selection *, guint> const &slot)
     {
         return _modified_signal.connect(slot);
+    }
+    sigc::connection connectModifiedFirst(sigc::slot<void, Selection *, guint> const &slot)
+    {
+        return _modified_signal.slots().insert(_modified_signal.slots().begin(), slot);
     }
 
 private:
@@ -344,9 +367,11 @@ private:
     void add_3D_boxes_recursively(SPObject *obj);
     void remove_box_perspective(SPBox3D *box);
     void remove_3D_boxes_recursively(SPObject *obj);
+    SPItem *_sizeistItem(bool sml, CompareSize compare);
 
     std::list<SPBox3D *> _3dboxes;
 
+    LayerModel *_layers;
     GC::soft_ptr<SPDesktop> _desktop;
     SPObject* _selection_context;
     guint _flags;

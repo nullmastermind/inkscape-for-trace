@@ -17,6 +17,7 @@
 #include "document.h"
 #include "selection.h"
 #include "helper/action.h"
+#include "helper/action-context.h"
 #include "preferences.h"
 #include "path-chemistry.h"
 #include "sp-item.h"
@@ -93,16 +94,16 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 
             new_group->appendChild(new_items[i]);
             selection->add(new_items[i]);
-            sp_selected_path_to_curves(static_cast<SPDesktop *>(desktop));
+            sp_selected_path_to_curves(selection, static_cast<SPDesktop *>(desktop));
 
             if (offset < 0.0) {
                 /* Doing an inset here folks */
                 offset *= -1.0;
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(desktop), NULL);
+                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(Inkscape::ActionContext(desktop)), NULL);
             } else if (offset > 0.0) {
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(desktop), NULL);
+                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(Inkscape::ActionContext(desktop)), NULL);
             }
 
             selection->clear();

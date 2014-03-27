@@ -115,9 +115,11 @@ Rect EllipticalArc::boundsExact() const
     if ( arc_extremes[2] < arc_extremes[3] )
         std::swap(arc_extremes[2], arc_extremes[3]);
 
-    for (unsigned i = 0; i < 4; ++i) {
-        if (containsAngle(extremes[i])) {
-            arc_extremes[i] = valueAtAngle(extremes[i], (i >> 1) ? Y : X);
+    if ( !are_near(initialPoint(), finalPoint()) ) {
+        for (unsigned i = 0; i < 4; ++i) {
+            if (containsAngle(extremes[i])) {
+                arc_extremes[i] = valueAtAngle(extremes[i], (i >> 1) ? Y : X);
+            }
         }
     }
 
@@ -202,7 +204,7 @@ std::vector<Coord> EllipticalArc::roots(Coord v, Dim2 d) const
             {
                 return sol;
             }
-            double ray_prj;
+            double ray_prj = 0.0;
             switch(d)
             {
                 case X:
@@ -264,7 +266,7 @@ std::vector<Coord> EllipticalArc::roots(Coord v, Dim2 d) const
     }
 
     double rotx, roty;
-    sincos(_rot_angle, roty, rotx);
+    sincos(_rot_angle, roty, rotx); /// \todo sin and cos are calculated in many places in this function, optimize this a bit!
     if (d == X) roty = -roty;
 
     double rxrotx = ray(X) * rotx;
@@ -360,7 +362,7 @@ EllipticalArc::pointAndDerivatives(Coord t, unsigned int n) const
     for ( unsigned int i = 0; i < m; ++i )
     {
         result.push_back( ea->pointAtAngle(angle) );
-        angle += M_PI/2;
+        angle += (_sweep ? M_PI/2 : -M_PI/2);
         if ( !(angle < 2*M_PI) ) angle -= 2*M_PI;
     }
     m = nn / 4;
@@ -569,7 +571,7 @@ std::vector<double> EllipticalArc::allNearestPoints( Point const& p, double from
     double mindistsq1 = std::numeric_limits<double>::max();
     double mindistsq2 = std::numeric_limits<double>::max();
     double dsq;
-    unsigned int mi1, mi2;
+    unsigned int mi1 = 0, mi2 = 0;
     for ( unsigned int i = 0; i < real_sol.size(); ++i )
     {
         dsq = distanceSq(p, pointAtAngle(real_sol[i]));

@@ -1,5 +1,3 @@
-#define INKSCAPE_LPE_BENDPATH_CPP
-
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright (C) Steren Giannini 2008 <steren.giannini@gmail.com>
@@ -74,7 +72,7 @@ LPEBendPath::~LPEBendPath()
 }
 
 void
-LPEBendPath::doBeforeEffect (SPLPEItem *lpeitem)
+LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     // get the item bounding box
     original_bbox(lpeitem);
@@ -96,6 +94,10 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
         bend_path.changed = false;
     }
 
+    if (uskeleton.empty()) {
+        return pwd2_in;  /// \todo or throw an exception instead? might be better to throw an exception so that the UI can display an error message or smth
+    }
+
     D2<Piecewise<SBasis> > patternd2 = make_cuts_independent(pwd2_in);
     Piecewise<SBasis> x = vertical_pattern.get_value() ? Piecewise<SBasis>(patternd2[1]) : Piecewise<SBasis>(patternd2[0]);
     Piecewise<SBasis> y = vertical_pattern.get_value() ? Piecewise<SBasis>(patternd2[0]) : Piecewise<SBasis>(patternd2[1]);
@@ -107,9 +109,9 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
     x-= bboxHorizontal.min();
     y-= bboxVertical.middle();
 
-  double scaling = uskeleton.cuts.back()/bboxHorizontal.extent();
+    double scaling = uskeleton.cuts.back()/bboxHorizontal.extent();
 
-  if (scaling != 1.0) {
+    if (scaling != 1.0) {
         x*=scaling;
     }
 
@@ -119,13 +121,12 @@ LPEBendPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
         if (prop_scale != 1.0) y *= prop_scale;
     }
 
-
     Piecewise<D2<SBasis> > output = compose(uskeleton,x) + y*compose(n,x);
     return output;
 }
 
 void
-LPEBendPath::resetDefaults(SPItem * item)
+LPEBendPath::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

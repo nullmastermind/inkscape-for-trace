@@ -25,13 +25,13 @@
 namespace Inkscape {
 namespace Filters {
 
-FilterSlot::FilterSlot(DrawingItem *item, DrawingContext *bgct,
+FilterSlot::FilterSlot(DrawingItem *item, DrawingContext *bgdc,
         DrawingContext &graphic, FilterUnits const &u)
     : _item(item)
     , _source_graphic(graphic.rawTarget())
-    , _background_ct(bgct ? bgct->raw() : NULL)
+    , _background_ct(bgdc ? bgdc->raw() : NULL)
     , _source_graphic_area(graphic.targetLogicalBounds().roundOutwards()) // fixme
-    , _background_area(bgct ? bgct->targetLogicalBounds().roundOutwards() : Geom::IntRect()) // fixme
+    , _background_area(bgdc ? bgdc->targetLogicalBounds().roundOutwards() : Geom::IntRect()) // fixme
     , _units(u)
     , _last_out(NR_FILTER_SOURCEGRAPHIC)
     , filterquality(FILTER_QUALITY_BEST)
@@ -83,11 +83,15 @@ cairo_surface_t *FilterSlot::getcairo(int slot_nr)
         switch (slot_nr) {
             case NR_FILTER_SOURCEGRAPHIC: {
                 cairo_surface_t *tr = _get_transformed_source_graphic();
+                // Assume all source graphics are sRGB
+                set_cairo_surface_ci( tr, SP_CSS_COLOR_INTERPOLATION_SRGB );
                 _set_internal(NR_FILTER_SOURCEGRAPHIC, tr);
                 cairo_surface_destroy(tr);
             } break;
             case NR_FILTER_BACKGROUNDIMAGE: {
                 cairo_surface_t *bg = _get_transformed_background();
+                // Assume all backgrounds are sRGB
+                set_cairo_surface_ci( bg, SP_CSS_COLOR_INTERPOLATION_SRGB );
                 _set_internal(NR_FILTER_BACKGROUNDIMAGE, bg);
                 cairo_surface_destroy(bg);
             } break;
@@ -177,9 +181,10 @@ cairo_surface_t *FilterSlot::_get_transformed_background()
 
 cairo_surface_t *FilterSlot::get_result(int res)
 {
+    cairo_surface_t *result = getcairo(res);
+
     Geom::Affine trans = _units.get_matrix_pb2display();
     if (trans.isIdentity()) {
-        cairo_surface_t *result = getcairo(res);
         cairo_surface_reference(result);
         return result;
     }
@@ -188,12 +193,13 @@ cairo_surface_t *FilterSlot::get_result(int res)
         cairo_surface_get_content(_source_graphic),
         _source_graphic_area.width(),
         _source_graphic_area.height());
+    copy_cairo_surface_ci( result, r );
     cairo_t *r_ct = cairo_create(r);
 
     cairo_translate(r_ct, -_source_graphic_area.left(), -_source_graphic_area.top());
     ink_cairo_transform(r_ct, trans);
     cairo_translate(r_ct, _slot_x, _slot_y);
-    cairo_set_source_surface(r_ct, getcairo(res), 0, 0);
+    cairo_set_source_surface(r_ct, result, 0, 0);
     cairo_set_operator(r_ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(r_ct);
     cairo_destroy(r_ct);

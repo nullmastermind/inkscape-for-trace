@@ -17,7 +17,7 @@
 #include <sigc++/connection.h>
 
 class SvgFont;
-struct SPFont;
+class SPFont;
 class SPGlyph;
 class SPMissingGlyph;
 

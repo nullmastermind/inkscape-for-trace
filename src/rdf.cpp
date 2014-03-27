@@ -19,6 +19,7 @@
 #include "sp-item-group.h"
 #include "inkscape.h"
 #include "sp-root.h"
+#include "preferences.h"
 
 /*
    Example RDF XML from various places...
@@ -201,8 +202,8 @@ struct rdf_license_t rdf_licenses [] = {
       rdf_license_cc_a_nc_nd,
     },
 
-    { N_("Public Domain"),
-      "http://creativecommons.org/licenses/publicdomain/",
+    { N_("CC0 Public Domain Dedication"),
+      "http://creativecommons.org/publicdomain/zero/1.0/",
       rdf_license_pd,
     },
 
@@ -224,61 +225,64 @@ struct rdf_license_t rdf_licenses [] = {
 #define XML_TAG_NAME_RDF      "rdf:RDF"
 #define XML_TAG_NAME_WORK     "cc:Work"
 #define XML_TAG_NAME_LICENSE  "cc:License"
+// Note the lowercase L!
+#define XML_TAG_NAME_LICENSE_PROP  "cc:license"
+
 
 // Remember when using the "title" and "tip" elements to pass them through
 // the localization functions when you use them!
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title:"), "dc:title", RDF_CONTENT,
-      N_("Name by which this document is formally known"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("A name given to the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "date", N_("Date:"), "dc:date", RDF_CONTENT,
-      N_("Date associated with the creation of this document (YYYY-MM-DD)"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("A point or period of time associated with an event in the lifecycle of the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "format", N_("Format:"), "dc:format", RDF_CONTENT,
-      N_("The physical or digital manifestation of this document (MIME type)"), RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
+      N_("The file format, physical medium, or dimensions of the resource"), RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     },
     { "type", N_("Type:"), "dc:type", RDF_RESOURCE,
-      N_("Type of document (DCMI Type)"), RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
+      N_("The nature or genre of the resource"), RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     },
 
     { "creator", N_("Creator:"), "dc:creator", RDF_AGENT,
-      N_("Name of entity primarily responsible for making the content of this document"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("An entity primarily responsible for making the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "rights", N_("Rights:"), "dc:rights", RDF_AGENT,
-      N_("Name of entity with rights to the Intellectual Property of this document"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("Information about rights held in and over the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "publisher", N_("Publisher:"), "dc:publisher", RDF_AGENT,
-      N_("Name of entity responsible for making this document available"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("An entity responsible for making the resource available"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
 
     { "identifier", N_("Identifier:"), "dc:identifier", RDF_CONTENT,
-      N_("Unique URI to reference this document"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("An unambiguous reference to the resource within a given context"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "source", N_("Source:"), "dc:source", RDF_CONTENT,
-      N_("Unique URI to reference the source of this document"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("A related resource from which the described resource is derived"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "relation", N_("Relation:"), "dc:relation", RDF_CONTENT,
-      N_("Unique URI to a related document"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("A related resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "language", N_("Language:"), "dc:language", RDF_CONTENT,
-      N_("Two-letter language tag with optional subtags for the language of this document (e.g. 'en-GB')"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("A language of the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "subject", N_("Keywords:"), "dc:subject", RDF_BAG,
-      N_("The topic of this document as comma-separated key words, phrases, or classifications"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("The topic of the resource"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     // TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
     // For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
     { "coverage", N_("Coverage:"), "dc:coverage", RDF_CONTENT,
-      N_("Extent or scope of this document"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
+      N_("The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
 
     { "description", N_("Description:"), "dc:description", RDF_CONTENT,
-      N_("A short account of the content of this document"), RDF_FORMAT_MULTILINE, RDF_EDIT_GENERIC,
+      N_("An account of the resource"), RDF_FORMAT_MULTILINE, RDF_EDIT_GENERIC,
     },
 
     // FIXME: need to handle 1 agent per line of input
     { "contributor", N_("Contributors:"), "dc:contributor", RDF_AGENT,
-      N_("Names of entities responsible for making contributions to the content of this document"), RDF_FORMAT_MULTILINE, RDF_EDIT_GENERIC,
+      N_("An entity responsible for making contributions to the resource"), RDF_FORMAT_MULTILINE, RDF_EDIT_GENERIC,
     },
 
     // TRANSLATORS: URL to a page that defines the license for the document
@@ -291,7 +295,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
     { "license_fragment", N_("Fragment:"), "License", RDF_XML,
       N_("XML fragment for the RDF 'License' section"), RDF_FORMAT_MULTILINE, RDF_EDIT_SPECIAL,
     },
-    
+
     { NULL, NULL, NULL, RDF_CONTENT,
       NULL, RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     }
@@ -337,7 +341,7 @@ public:
                                      struct rdf_work_entity_t const & entity,
                                      gchar const * text );
 
-    static struct rdf_license_t *getLicense(SPDocument const * document);
+    static struct rdf_license_t *getLicense(SPDocument *document);
 
     static void setLicense(SPDocument * doc, struct rdf_license_t const * license);
 };
@@ -559,7 +563,6 @@ unsigned int RDFImpl::setReprText( Inkscape::XML::Node * repr,
     int i;
 
     Inkscape::XML::Node * temp=NULL;
-    Inkscape::XML::Node * child=NULL;
     Inkscape::XML::Node * parent=repr;
 
     Inkscape::XML::Document * xmldoc = parent->document();
@@ -665,7 +668,7 @@ unsigned int RDFImpl::setReprText( Inkscape::XML::Node * repr,
                 parent->appendChild(temp);
                 Inkscape::GC::release(temp);
 
-                child = xmldoc->createTextNode( g_strstrip(str) );
+                Inkscape::XML::Node * child = xmldoc->createTextNode( g_strstrip(str) );
                 g_return_val_if_fail (child != NULL, 0);
 
                 temp->appendChild(child);
@@ -1027,26 +1030,95 @@ rdf_match_license(Inkscape::XML::Node const *repr, struct rdf_license_t const *l
 }
 
 // Public API:
-struct rdf_license_t *rdf_get_license(SPDocument const * document)
+struct rdf_license_t *rdf_get_license(SPDocument *document)
 {
     return RDFImpl::getLicense(document);
 }
 
-struct rdf_license_t *RDFImpl::getLicense(SPDocument const *document)
+struct rdf_license_t *RDFImpl::getLicense(SPDocument *document)
 {
+    // Base license lookup on the URI of cc:license rather than the license
+    // properties, per instructions from the ccREL gurus.
+    // (Fixes https://bugs.launchpad.net/inkscape/+bug/372427)
+
+    struct rdf_work_entity_t *entity = rdf_find_entity("license_uri");
+    if (entity == NULL) {
+        g_critical("Can't find internal entity structure for 'license_uri'");
+        return NULL;
+    }
+
+    const gchar *uri = getWorkEntity(document, *entity);
+    struct rdf_license_t * license_by_uri = NULL;
+
+    if (uri != NULL) {
+        for (struct rdf_license_t * license = rdf_licenses; license->name; license++) {
+            if (g_strcmp0(uri, license->uri) == 0) {
+                license_by_uri = license;
+                break;
+            }
+        }
+    }
+
+    // To improve backward compatibility, the old license matching code is
+    // kept as fallback and to warn about and fix discrepancies.
+
+    // TODO: would it be better to do this code on document load?  Is
+    // sp_metadata_build() then the right place to put the call to sort out
+    // any RDF mess?
+    
+    struct rdf_license_t * license_by_properties = NULL;
+    
     Inkscape::XML::Node const *repr = getXmlRepr( document, XML_TAG_NAME_LICENSE );
     if (repr) {
         for ( struct rdf_license_t * license = rdf_licenses; license->name; license++ ) {
             if ( rdf_match_license( repr, license ) ) {
-                return license;
+                license_by_properties = license;
+                break;
             }
         }
     }
-#ifdef DEBUG_MATCH
-    else {
-        printf("no license XML\n");
+
+    if (license_by_uri != NULL && license_by_properties != NULL) {
+        // Both property and structure, use property
+        if (license_by_uri != license_by_properties) {
+            // TODO: this should be a user-visible warning, but how?
+            g_warning("Mismatch between %s and %s metadata:\n"
+                      "%s value URI:   %s (using this one!)\n"
+                      "%s derived URI: %s",
+                      XML_TAG_NAME_LICENSE_PROP,
+                      XML_TAG_NAME_LICENSE,
+                      XML_TAG_NAME_LICENSE_PROP,
+                      license_by_uri->uri,
+                      XML_TAG_NAME_LICENSE,
+                      license_by_properties->uri);
+        }
+
+        // Reset license structure to match so the document is consistent
+        // (and this will also silence the warning above on repeated calls).
+        setLicense(document, license_by_uri);
+
+        return license_by_uri;
     }
-#endif
+    else if (license_by_uri != NULL) {
+        // Only cc:license property, set structure for backward compatiblity
+        setLicense(document, license_by_uri);
+
+        return license_by_uri;
+    }
+    else if (license_by_properties != NULL) {
+        // Only cc:License structure
+        // TODO: this could be a user-visible warning too
+        g_warning("No %s metadata found, derived license URI from %s: %s",
+                  XML_TAG_NAME_LICENSE_PROP, XML_TAG_NAME_LICENSE,
+                  license_by_properties->uri);
+        
+        // Set license property to match
+        setWorkEntity(document, *entity, license_by_properties->uri);
+
+        return license_by_properties;
+    }
+
+    // No license info at all
     return NULL;
 }
 
@@ -1058,6 +1130,11 @@ void rdf_set_license(SPDocument * doc, struct rdf_license_t const * license)
 
 void RDFImpl::setLicense(SPDocument * doc, struct rdf_license_t const * license)
 {
+    // When basing license check on only the license URI (see fix for
+    // https://bugs.launchpad.net/inkscape/+bug/372427 above) we should
+    // really drop this license section, but keep writing it for a while for
+    // compatibility with older versions.
+
     // drop old license section
     Inkscape::XML::Node * repr = getXmlRepr( doc, XML_TAG_NAME_LICENSE );
     if (repr) {
@@ -1135,6 +1212,36 @@ void RDFImpl::setDefaults( SPDocument * doc )
     }
 }
 
+/*
+ * Add the metadata stored in the users preferences to the document if
+ *   a) the preference 'Input/Output->Add default metatdata to new documents' is true, and
+ *   b) there is no metadata already in the file (such as from a template)
+ */
+void rdf_add_from_preferences(SPDocument *doc)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (!prefs->getBool("/metadata/addToNewFile")) {
+        return;
+    }
+
+    // If there is already some metadata in the doc (from a template) dont add default metadata
+    for (struct rdf_work_entity_t *entity = rdf_work_entities; entity && entity->name; entity++) {
+        if ( entity->editable == RDF_EDIT_GENERIC &&
+                rdf_get_work_entity (doc, entity)) {
+            return;
+        }
+    }
+
+    // Put the metadata from user preferences into the doc
+    for (struct rdf_work_entity_t *entity = rdf_work_entities; entity && entity->name; entity++) {
+        if ( entity->editable == RDF_EDIT_GENERIC ) {
+            Glib::ustring text = prefs->getString(PREFS_METADATA + Glib::ustring(entity->name));
+            if (text.length() > 0) {
+                rdf_set_work_entity (doc, entity, text.c_str());
+            }
+        }
+    }
+}
 
 /*
   Local Variables:

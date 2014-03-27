@@ -1,15 +1,14 @@
-#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_RANDOM_CPP
-
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/random.h"
 #include "live_effects/effect.h"
+#include <glibmm/i18n.h>
 #include "svg/svg.h"
-#include "ui/widget/registered-widget.h"
 #include "ui/widget/random.h"
 
 #include "svg/stringstream.h"

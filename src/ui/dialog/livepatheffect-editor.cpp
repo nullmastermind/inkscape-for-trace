@@ -48,8 +48,6 @@
 #include "livepatheffect-add.h"
 
 namespace Inkscape {
-class Application;
-
 namespace UI {
 namespace Dialog {
 
@@ -80,6 +78,7 @@ static void lpeeditor_selection_modified (Inkscape::Selection * selection, guint
 
 LivePathEffectEditor::LivePathEffectEditor()
     : UI::Widget::Panel("", "/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
+      deskTrack(),
       lpe_list_locked(false),
       effectwidget(NULL),
       status_label("", Gtk::ALIGN_CENTER),
@@ -108,24 +107,54 @@ LivePathEffectEditor::LivePathEffectEditor()
     effectcontrol_frame.add(effectcontrol_vbox);
 
     button_add.set_tooltip_text(_("Add path effect"));
-    button_add.set_image(*manage(Glib::wrap(gtk_image_new_from_stock ( GTK_STOCK_ADD, GTK_ICON_SIZE_SMALL_TOOLBAR ) )));
+#if GTK_CHECK_VERSION(3,10,0)
+    button_add.set_image_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    Gtk::Image *image_add = Gtk::manage(new Gtk::Image());
+    image_add->set_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    button_add.set_image(*image_add);
+#endif
     button_add.set_relief(Gtk::RELIEF_NONE);
 
     button_remove.set_tooltip_text(_("Delete current path effect"));
-    button_remove.set_image(*manage(Glib::wrap(gtk_image_new_from_stock ( GTK_STOCK_REMOVE, GTK_ICON_SIZE_SMALL_TOOLBAR ) )));
+#if GTK_CHECK_VERSION(3,10,0)
+    button_remove.set_image_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    Gtk::Image *image_remove = Gtk::manage(new Gtk::Image());
+    image_remove->set_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    button_remove.set_image(*image_remove);
+#endif
     button_remove.set_relief(Gtk::RELIEF_NONE);
 
     button_up.set_tooltip_text(_("Raise the current path effect"));
-    button_up.set_image(*manage(Glib::wrap(gtk_image_new_from_stock ( GTK_STOCK_GO_UP, GTK_ICON_SIZE_SMALL_TOOLBAR ) )));
+#if GTK_CHECK_VERSION(3,10,0)
+    button_up.set_image_from_icon_name(INKSCAPE_ICON("go-up"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    Gtk::Image *image_up = Gtk::manage(new Gtk::Image());
+    image_up->set_from_icon_name(INKSCAPE_ICON("go-up"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    button_up.set_image(*image_up);
+#endif
     button_up.set_relief(Gtk::RELIEF_NONE);
 
     button_down.set_tooltip_text(_("Lower the current path effect"));
-    button_down.set_image(*manage(Glib::wrap(gtk_image_new_from_stock ( GTK_STOCK_GO_DOWN, GTK_ICON_SIZE_SMALL_TOOLBAR ) )));
+#if GTK_CHECK_VERSION(3,10,0)
+    button_down.set_image_from_icon_name(INKSCAPE_ICON("go-down"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+#else
+    Gtk::Image *image_down = Gtk::manage(new Gtk::Image());
+    image_down->set_from_icon_name(INKSCAPE_ICON("go-down"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    button_down.set_image(*image_down);
+#endif
     button_down.set_relief(Gtk::RELIEF_NONE);
 
     // Add toolbar items to toolbar
     toolbar_hbox.set_layout (Gtk::BUTTONBOX_END);
+
+#if !WITH_GTKMM_3_0
+    // TODO: This has been removed from Gtkmm 3.0. Check that
+    //       everything still looks OK!
     toolbar_hbox.set_child_min_width( 16 );
+#endif
+
     toolbar_hbox.add( button_add );
     toolbar_hbox.set_child_secondary( button_add , true);
     toolbar_hbox.add( button_remove );
@@ -167,6 +196,9 @@ LivePathEffectEditor::LivePathEffectEditor()
     button_remove.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onRemove));
     button_up.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onUp));
     button_down.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectEditor::onDown));
+
+    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &LivePathEffectEditor::setDesktop) );
+    deskTrack.connect(GTK_WIDGET(gobj()));
 
     show_all_children();
 }
@@ -271,8 +303,8 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                 current_lpeitem = lpeitem;
 
                 set_sensitize_all(true);
-                if ( sp_lpe_item_has_path_effect(lpeitem) ) {
-                    Inkscape::LivePathEffect::Effect *lpe = sp_lpe_item_get_current_lpe(lpeitem);
+                if ( lpeitem->hasPathEffect() ) {
+                    Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
                     if (lpe) {
                         showParams(*lpe);
                         lpe_list_locked = true;
@@ -288,7 +320,7 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                 }
             } else if ( SP_IS_USE(item) ) {
                 // test whether linked object is supported by the CLONE_ORIGINAL LPE
-                SPItem *orig = sp_use_get_original( SP_USE(item) );
+                SPItem *orig = SP_USE(item)->get_original();
                 if ( SP_IS_SHAPE(orig) ||
                      SP_IS_TEXT(orig) )
                 {
@@ -324,7 +356,7 @@ LivePathEffectEditor::effect_list_reload(SPLPEItem *lpeitem)
 {
     effectlist_store->clear();
 
-    PathEffectList effectlist = sp_lpe_item_get_effect_list(lpeitem);
+    PathEffectList effectlist = lpeitem->getEffectList();
     PathEffectList::iterator it;
     for( it = effectlist.begin() ; it!=effectlist.end(); ++it)
     {
@@ -408,7 +440,7 @@ LivePathEffectEditor::onAdd()
 
                 // If item is a SPRect, convert it to path first:
                 if ( SP_IS_RECT(item) ) {
-                    sp_selected_path_to_curves(current_desktop, false);
+                    sp_selected_path_to_curves(sel, current_desktop, false);
                     item = sel->singleItem(); // get new item
                 }
 
@@ -425,7 +457,7 @@ LivePathEffectEditor::onAdd()
                 // convert to path, apply CLONE_ORIGINAL LPE, link it to the cloned path
 
                 // test whether linked object is supported by the CLONE_ORIGINAL LPE
-                SPItem *orig = sp_use_get_original( SP_USE(item) );
+                SPItem *orig = SP_USE(item)->get_original();
                 if ( SP_IS_SHAPE(orig) ||
                      SP_IS_TEXT(orig) )
                 {
@@ -440,9 +472,9 @@ LivePathEffectEditor::onAdd()
 
                     // run sp_selection_clone_original_path_lpe 
                     sp_selection_clone_original_path_lpe(current_desktop);
-                    item = sel->singleItem();
-                    item->getRepr()->setAttribute("id", id);
-                    item->getRepr()->setAttribute("transform", transform);
+                    SPItem *new_item = sel->singleItem();
+                    new_item->getRepr()->setAttribute("id", id);
+                    new_item->getRepr()->setAttribute("transform", transform);
                     g_free(id);
                     g_free(transform);
 
@@ -467,7 +499,7 @@ LivePathEffectEditor::onRemove()
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
         if ( item && SP_IS_LPE_ITEM(item) ) {
-            sp_lpe_item_remove_current_path_effect(SP_LPE_ITEM(item), false);
+            SP_LPE_ITEM(item)->removeCurrentPathEffect(false);
 
             DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Remove path effect") );
@@ -483,13 +515,13 @@ void LivePathEffectEditor::onUp()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( item && SP_IS_LPE_ITEM(item) ) {
-            sp_lpe_item_up_current_path_effect(SP_LPE_ITEM(item));
+        if ( SPLPEItem *lpeitem = SP_LPE_ITEM(item) ) {
+            lpeitem->upCurrentPathEffect();
 
             DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
 
-            effect_list_reload(SP_LPE_ITEM(item));
+            effect_list_reload(lpeitem);
         }
     }
 }
@@ -499,13 +531,13 @@ void LivePathEffectEditor::onDown()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( item && SP_IS_LPE_ITEM(item) ) {
-            sp_lpe_item_down_current_path_effect(SP_LPE_ITEM(item));
+        if ( SPLPEItem *lpeitem = SP_LPE_ITEM(item) ) {
+            lpeitem->downCurrentPathEffect();
 
             DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect down") );
 
-            effect_list_reload(SP_LPE_ITEM(item));
+            effect_list_reload(lpeitem);
         }
     }
 }
@@ -522,7 +554,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
     if (lperef && current_lpeitem) {
         if (lperef->lpeobject->get_lpe()) {
             lpe_list_locked = true; // prevent reload of the list which would lose selection
-            sp_lpe_item_set_current_path_effect(current_lpeitem, lperef);
+            current_lpeitem->setCurrentPathEffect(lperef);
             showParams(*lperef->lpeobject->get_lpe());
         }
     }

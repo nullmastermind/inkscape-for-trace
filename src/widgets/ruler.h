@@ -14,138 +14,63 @@
  */
 
 #include <gtk/gtk.h>
-#include "sp-metric.h"
 #include <iostream>
 #include <glib.h>
 
-#define GTK_DEPRECATED_TYPE_RULER            (gtk_deprecated_ruler_get_type ())
-#define GTK_DEPRECATED_RULER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_DEPRECATED_TYPE_RULER, GtkDeprecatedRuler))
-#define GTK_DEPRECATED_RULER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_DEPRECATED_TYPE_RULER, GtkDeprecatedRulerClass))
-#define GTK_DEPRECATED_IS_RULER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_DEPRECATED_TYPE_RULER))
-#define GTK_DEPRECATED_IS_RULER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_DEPRECATED_TYPE_RULER))
-#define GTK_DEPRECATED_RULER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_DEPRECATED_TYPE_RULER, GtkDeprecatedRulerClass))
+namespace Inkscape {
+    namespace Util {
+        class Unit;
+    }
+}
 
+G_BEGIN_DECLS
 
-typedef struct _GtkDeprecatedRuler        GtkDeprecatedRuler;
-typedef struct _GtkDeprecatedRulerClass   GtkDeprecatedRulerClass;
-typedef struct _GtkDeprecatedRulerMetric  GtkDeprecatedRulerMetric;
+#define SP_TYPE_RULER            (sp_ruler_get_type ())
+#define SP_RULER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_RULER, SPRuler))
+#define SP_RULER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_RULER, SPRulerClass))
+#define SP_IS_RULER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_RULER))
+#define SP_IS_RULER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_RULER))
+#define SP_RULER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SP_TYPE_RULER, SPRulerClass))
 
-/* All distances below are in 1/72nd's of an inch. (According to
- * Adobe that's a point, but points are really 1/72.27 in.)
- */
-struct _GtkDeprecatedRuler
+typedef struct _SPRuler         SPRuler;
+typedef struct _SPRulerClass    SPRulerClass;
+
+struct _SPRuler
 {
-  GtkWidget widget;
-
-  GdkPixmap *backing_store;
-  GdkGC     *non_gr_exp_gc;		/* unused */
-  GtkDeprecatedRulerMetric *metric;
-  gint xsrc;
-  gint ysrc;
-  gint slider_size;
-
-  /* The upper limit of the ruler (in points) */
-  gdouble lower;
-  /* The lower limit of the ruler */
-  gdouble upper;
-  /* The position of the mark on the ruler */
-  gdouble position;
-  /* The maximum size of the ruler */
-  gdouble max_size;
+  GtkWidget parent_instance;
 };
 
-struct _GtkDeprecatedRulerClass
+struct _SPRulerClass
 {
   GtkWidgetClass parent_class;
-
-  void (* draw_ticks) (GtkDeprecatedRuler *ruler);
-  void (* draw_pos)   (GtkDeprecatedRuler *ruler);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
-struct _GtkDeprecatedRulerMetric
-{
-  gchar const *metric_name;
-  gchar const *abbrev;
-  /* This should be points_per_unit. This is the size of the unit
-   * in 1/72nd's of an inch and has nothing to do with screen pixels */
-  gdouble pixels_per_unit;
-  gdouble ruler_scale[10];
-  gint subdivide[5];        /* five possible modes of subdivision */
 };
 
 
-GType           gtk_deprecated_ruler_get_type   (void) G_GNUC_CONST;
-void            gtk_deprecated_ruler_set_range  (GtkDeprecatedRuler       *ruler,
-                                                 gdouble         lower,
-                                                 gdouble         upper,
-                                                 gdouble         position,
-                                                 gdouble         max_size);
-void            gtk_deprecated_ruler_get_range  (GtkDeprecatedRuler       *ruler,
-                                                 gdouble        *lower,
-                                                 gdouble        *upper,
-                                                 gdouble        *position,
-                                                 gdouble        *max_size);
+GType           sp_ruler_get_type            (void) G_GNUC_CONST;
 
-void            gtk_deprecated_ruler_draw_ticks (GtkDeprecatedRuler       *ruler);
-void            gtk_deprecated_ruler_draw_pos   (GtkDeprecatedRuler       *ruler);
+GtkWidget*      sp_ruler_new                 (GtkOrientation  orientation);
 
+void            sp_ruler_add_track_widget    (SPRuler        *ruler,
+		                              GtkWidget      *widget);
+void            sp_ruler_remove_track_widget (SPRuler        *ruler,
+		                              GtkWidget      *widget);
 
-void     sp_ruler_set_metric (GtkDeprecatedRuler * ruler, SPMetric  metric);
-SPMetric sp_ruler_get_metric (GtkDeprecatedRuler *ruler);
+void            sp_ruler_set_unit            (SPRuler        *ruler,
+                                              const Inkscape::Util::Unit *unit);
+Inkscape::Util::Unit const * sp_ruler_get_unit            (SPRuler        *ruler);
+void            sp_ruler_set_position        (SPRuler        *ruler,
+                                              gdouble         set_position);
+gdouble         sp_ruler_get_position        (SPRuler        *ruler);
+void            sp_ruler_set_range           (SPRuler        *ruler,
+                                              gdouble         lower,
+                                              gdouble         upper,
+                                              gdouble         max_size);
+void            sp_ruler_get_range           (SPRuler        *ruler,
+                                              gdouble        *lower,
+                                              gdouble        *upper,
+                                              gdouble        *max_size);
 
-
-#define SP_HRULER(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, sp_hruler_get_type (), SPHRuler)
-#define SP_HRULER_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, sp_hruler_get_type (), SPHRulerClass)
-#define SP_IS_HRULER(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, sp_hruler_get_type ())
-
-
-struct SPHRuler
-{
-  GtkDeprecatedRuler ruler;
-};
-
-struct SPHRulerClass
-{
-  GtkDeprecatedRulerClass parent_class;
-};
-
-
-GType    sp_hruler_get_type (void);
-GtkWidget* sp_hruler_new      (void);
-
-
-
-// vruler
-
-
-
-#define SP_VRULER(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, sp_vruler_get_type (), SPVRuler)
-#define SP_VRULER_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, sp_vruler_get_type (), SPVRulerClass)
-#define SP_IS_VRULER(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, sp_vruler_get_type ())
-
-
-struct SPVRuler
-{
-  GtkDeprecatedRuler ruler;
-};
-
-struct SPVRulerClass
-{
-  GtkDeprecatedRulerClass parent_class;
-};
-
-
-GType    sp_vruler_get_type (void);
-GtkWidget* sp_vruler_new      (void);
-
-
-
+G_END_DECLS
 
 #endif /* __SP_RULER_H__ */
 

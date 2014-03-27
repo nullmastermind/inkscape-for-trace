@@ -2,9 +2,10 @@
 # include <config.h>
 #endif
 
-#ifdef ENABLE_SVG_FONTS
 #ifndef __SP_FONTFACE_H__
 #define __SP_FONTFACE_H__
+
+#include <vector>
 
 /*
  * SVG <font-face> element implementation
@@ -23,11 +24,8 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_FONTFACE (sp_fontface_get_type ())
-#define SP_FONTFACE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FONTFACE, SPFontFace))
-#define SP_FONTFACE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FONTFACE, SPFontFaceClass))
-#define SP_IS_FONTFACE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FONTFACE))
-#define SP_IS_FONTFACE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FONTFACE))
+#define SP_FONTFACE(obj) (dynamic_cast<SPFontFace*>((SPObject*)obj))
+#define SP_IS_FONTFACE(obj) (dynamic_cast<const SPFontFace*>((SPObject*)obj) != NULL)
 
 enum FontFaceStyleType{
 	SP_FONTFACE_STYLE_ALL,
@@ -73,7 +71,11 @@ enum FontFaceUnicodeRangeType{
 	FONTFACE_UNICODERANGE_FIXME_HERE,
 };
 
-struct SPFontFace : public SPObject {
+class SPFontFace : public SPObject {
+public:
+	SPFontFace();
+	virtual ~SPFontFace();
+
     char* font_family;
     std::vector<FontFaceStyleType> font_style;
     std::vector<FontFaceVariantType> font_variant;
@@ -107,13 +109,19 @@ struct SPFontFace : public SPObject {
     double strikethrough_thickness;
     double overline_position;
     double overline_thickness;
-};
 
-struct SPFontFaceClass {
-	SPObjectClass parent_class;
-};
+protected:
+	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	virtual void release();
 
-GType sp_fontface_get_type (void);
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
+
+	virtual void set(unsigned int key, const gchar* value);
+
+	virtual void update(SPCtx* ctx, unsigned int flags);
+
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+};
 
 #endif //#ifndef __SP_FONTFACE_H__
-#endif //#ifdef ENABLE_SVG_FONTS

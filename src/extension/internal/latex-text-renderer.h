@@ -22,14 +22,14 @@
 #include <stack>
 
 class SPItem;
-struct SPRoot;
+class SPRoot;
 
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
 bool latex_render_document_text_to_file(SPDocument *doc, gchar const *filename,
-                                        const gchar * const exportId, bool exportDrawing, bool exportCanvas,
+                                        const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px,
                                         bool pdflatex);
 
 class LaTeXTextRenderer {
@@ -41,16 +41,25 @@ public:
 
     /** Initializes the LaTeXTextRenderer according to the specified
     SPDocument. Important to set the boundingbox to the pdf boundingbox */
-    bool setupDocument(SPDocument *doc, bool pageBoundingBox, SPItem *base);
+    bool setupDocument(SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base);
 
     /** Traverses the object tree and invokes the render methods. */
     void renderItem(SPItem *item);
 
 protected:
+    enum LaTeXOmitTextPageState {
+        EMPTY,
+        GRAPHIC_ON_TOP,
+        NEW_PAGE_ON_GRAPHIC
+    };
+
     FILE * _stream;
     gchar * _filename;
 
     bool _pdflatex; /** true if ouputting for pdfLaTeX*/
+
+    LaTeXOmitTextPageState _omittext_state;
+    gulong _omittext_page;
 
     void push_transform(Geom::Affine const &transform);
     Geom::Affine const & transform();
@@ -59,6 +68,8 @@ protected:
 
     void writePreamble();
     void writePostamble();
+
+    void writeGraphicPage();
 
     void sp_item_invoke_render(SPItem *item);
     void sp_root_render(SPRoot *item);

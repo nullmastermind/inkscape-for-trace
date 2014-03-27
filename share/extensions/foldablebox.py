@@ -58,19 +58,19 @@ class FoldableBox(inkex.Effect):
 
     def effect(self):
 
-        docW = inkex.unittouu(self.document.getroot().get('width'))
-        docH = inkex.unittouu(self.document.getroot().get('height'))
+        docW = self.unittouu(self.document.getroot().get('width'))
+        docH = self.unittouu(self.document.getroot().get('height'))
 
-        boxW = inkex.unittouu( str(self.options.width)  + self.options.unit )
-        boxH = inkex.unittouu( str(self.options.height) + self.options.unit )
-        boxD = inkex.unittouu( str(self.options.depth)  + self.options.unit )
+        boxW = self.unittouu( str(self.options.width)  + self.options.unit )
+        boxH = self.unittouu( str(self.options.height) + self.options.unit )
+        boxD = self.unittouu( str(self.options.depth)  + self.options.unit )
         tabProp = self.options.tabProportion
         tabH = boxD * tabProp
 
         box_id = self.uniqueId('box')
         self.box = g = inkex.etree.SubElement(self.current_layer, 'g', {'id':box_id})
 
-        line_style = simplestyle.formatStyle({ 'stroke': '#000000', 'fill': 'none' })
+        line_style = simplestyle.formatStyle({ 'stroke': '#000000', 'fill': 'none', 'stroke-width': str(self.unittouu('1px')) })
 
         #self.createGuide( 0, docH, 0 );
 

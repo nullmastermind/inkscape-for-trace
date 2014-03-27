@@ -258,9 +258,6 @@ enum SPAttributeEnum {
     SP_ATTR_POINTSATY,
     SP_ATTR_POINTSATZ,
     SP_ATTR_LIMITINGCONEANGLE,
-    /*feFlood*/
-    SP_ATTR_FLOODCOLOR,
-    SP_ATTR_FLOODOPACITY,
     /* SPGaussianBlur */
     SP_ATTR_STDDEVIATION,
     /*feImage*/
@@ -290,6 +287,8 @@ enum SPAttributeEnum {
     /* SPRadialGradient */
     SP_ATTR_FX,
     SP_ATTR_FY,
+    /* SPMeshPatch */
+    SP_ATTR_TENSOR,
     /* SPPattern */
     SP_ATTR_PATTERNUNITS,
     SP_ATTR_PATTERNCONTENTUNITS,
@@ -415,7 +414,10 @@ enum SPAttributeEnum {
     /* Text */
     SP_PROP_TEXT_INDENT,
     SP_PROP_TEXT_ALIGN,
-    SP_PROP_TEXT_DECORATION,
+    SP_PROP_TEXT_DECORATION,       /* SVG 1 underline etc.( no color or style) OR SVG2 with _LINE, _STYLE, _COLOR values */
+    SP_PROP_TEXT_DECORATION_LINE,  /* SVG 2 underline etc. */
+    SP_PROP_TEXT_DECORATION_STYLE, /* SVG 2 proposed solid [SVG 1], dotted, etc.)*/
+    SP_PROP_TEXT_DECORATION_COLOR, /* SVG 2 proposed same as text [SVG 1], specified*/
     SP_PROP_LINE_HEIGHT,
     SP_PROP_LETTER_SPACING,
     SP_PROP_WORD_SPACING,
@@ -439,6 +441,8 @@ enum SPAttributeEnum {
     SP_PROP_DISPLAY,
     SP_PROP_OVERFLOW,
     SP_PROP_VISIBILITY,
+    SP_PROP_BLEND_MODE,
+    SP_PROP_ISOLATION,
     /* SVG */
     /* Clip/Mask */
     SP_PROP_CLIP_PATH,
@@ -454,6 +458,7 @@ enum SPAttributeEnum {
     /* Gradient */
     SP_PROP_STOP_COLOR,
     SP_PROP_STOP_OPACITY,
+    SP_PROP_STOP_PATH,
     /* Interactivity */
     SP_PROP_POINTER_EVENTS,
     /* Paint */
@@ -469,6 +474,7 @@ enum SPAttributeEnum {
     SP_PROP_MARKER_END,
     SP_PROP_MARKER_MID,
     SP_PROP_MARKER_START,
+    SP_PROP_PAINT_ORDER, /* SVG2 */
     SP_PROP_SHAPE_RENDERING,
     SP_PROP_STROKE,
     SP_PROP_STROKE_DASHARRAY,

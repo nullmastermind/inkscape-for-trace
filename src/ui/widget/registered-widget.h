@@ -32,7 +32,6 @@
 
 #include <gtkmm/checkbutton.h>
 
-class SPUnit;
 class SPDocument;
 
 namespace Gtk {
@@ -55,6 +54,11 @@ public:
         event_type = _event_type;
         event_description = _event_description;
         write_undo = true;
+    }
+    void set_xml_target(Inkscape::XML::Node *xml_node, SPDocument *document)
+    {
+        repr = xml_node;
+        doc = document;
     }
 
     bool is_updating() {if (_wr) return _wr->isUpdating(); else return false;}
@@ -128,6 +132,7 @@ private:
         repr = NULL;
         doc = NULL;
         write_undo = false;
+        event_type = -1;
     }
 };
 
@@ -136,7 +141,7 @@ private:
 class RegisteredCheckButton : public RegisteredWidget<Gtk::CheckButton> {
 public:
     virtual ~RegisteredCheckButton();
-    RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL);
+    RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *active_str = "true", char const *inactive_str = "false");
 
     void setActive (bool);
 
@@ -153,6 +158,7 @@ public:
                                 // if a callback checks it, it must reset it back to false
 
 protected:
+    char const *_active_str, *_inactive_str;
     sigc::connection  _toggled_connection;
     void on_toggled();
 };
@@ -166,8 +172,8 @@ public:
                          Inkscape::XML::Node* repr_in = NULL,
                          SPDocument *doc_in = NULL );
 
-    void setUnit (const SPUnit*);
-    Unit getUnit() const { return static_cast<UnitMenu*>(_widget)->getUnit(); };
+    void setUnit (const Glib::ustring);
+    Unit const * getUnit() const { return static_cast<UnitMenu*>(_widget)->getUnit(); };
     UnitMenu* getUnitMenu() const { return static_cast<UnitMenu*>(_widget); };
     sigc::connection _changed_connection;
 

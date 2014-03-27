@@ -9,9 +9,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
 #include <cstdio>
-#include <glibmm.h>
+#include <glibmm/ustring.h>
 
 namespace Inkscape
 {
@@ -190,7 +189,7 @@ public:
     /**
      * Send one byte to the destination stream.
      */
-    virtual void put(int ch) = 0;
+    virtual int put(gunichar ch) = 0;
 
 
 }; // class OutputStream
@@ -213,7 +212,7 @@ public:
     
     virtual void flush();
     
-    virtual void put(int ch);
+    virtual int put(gunichar ch);
 
 protected:
 
@@ -239,8 +238,8 @@ public:
     void flush()
         { }
     
-    void put(int ch)
-        {  putchar(ch); }
+    int put(gunichar ch)
+        {return  putchar(ch); }
 
 };
 

@@ -15,13 +15,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "color.h"
-#include "sp-marker-loc.h"
-#include "sp-filter.h"
-#include "sp-filter-reference.h"
-#include "uri-references.h"
-#include "uri.h"
-#include "sp-paint-server-reference.h"
+#include "style-enums.h"
+#include "style-internal.h"
 
 #include <stddef.h>
 #include <sigc++/connection.h>
@@ -31,241 +26,6 @@ namespace XML {
 class Node;
 }
 }
-
-class SPCSSAttr;
-
-class SPIFloat;
-class SPIScale24;
-class SPIInt;
-class SPIShort;
-class SPIEnum;
-class SPIString;
-class SPILength;
-class SPIPaint;
-class SPIFontSize;
-class SPIBaselineShift;
-
-/// Float type internal to SPStyle.
-struct SPIFloat {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned data : 30;
-    float value;
-};
-
-/*
- * One might think that the best value for SP_SCALE24_MAX would be ((1<<24)-1), which allows the
- * greatest possible precision for fitting [0, 1] fractions into 24 bits.
- *
- * However, in practice, that gives a problem with 0.5, which falls half way between two fractions
- * of ((1<<24)-1).  What's worse is that casting double(1<<23) / ((1<<24)-1) to float on x86
- * produces wrong rounding behaviour, resulting in a fraction of ((1<<23)+2.0f) / (1<<24) rather
- * than ((1<<23)+1.0f) / (1<<24) as one would expect, let alone ((1<<23)+0.0f) / (1<<24) as one
- * would ideally like for this example.
- *
- * The value (1<<23) is thus best if one considers float conversions alone.
- *
- * The value 0xff0000 can exactly represent all 8-bit alpha channel values,
- * and can exactly represent all multiples of 0.1.  I haven't yet tested whether
- * rounding bugs still get in the way of conversions to & from float, but my instinct is that
- * it's fairly safe because 0xff fits three times inside float's significand.
- *
- * We should probably use the value 0xffff00 once we support 16 bits per channel and/or LittleCMS,
- * though that might need to be accompanied by greater use of double instead of float for
- * colours and opacities, to be safe from rounding bugs.
- */
-#define SP_SCALE24_MAX (0xff0000)
-#define SP_SCALE24_TO_FLOAT(v) ((double) (v) / SP_SCALE24_MAX)
-#define SP_SCALE24_FROM_FLOAT(v) unsigned(((v) * SP_SCALE24_MAX) + .5)
-
-/** Returns a scale24 for the product of two scale24 values. */
-#define SP_SCALE24_MUL(_v1, _v2) unsigned((double)(_v1) * (_v2) / SP_SCALE24_MAX + .5)
-
-/// 24 bit data type internal to SPStyle.
-struct SPIScale24 {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned value : 24;
-};
-
-/// Int type internal to SPStyle.
-struct SPIInt {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned data : 30;
-    int value;
-};
-
-/// Short type internal to SPStyle.
-struct SPIShort {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned data : 14;
-    int value : 16;
-};
-
-/// Enum type internal to SPStyle.
-struct SPIEnum {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned value : 8;
-    unsigned computed : 8;
-};
-
-/// String type internal to SPStyle.
-struct SPIString {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned data : 30;
-    gchar *value;
-};
-
-enum {
-    SP_CSS_UNIT_NONE,
-    SP_CSS_UNIT_PX,
-    SP_CSS_UNIT_PT,
-    SP_CSS_UNIT_PC,
-    SP_CSS_UNIT_MM,
-    SP_CSS_UNIT_CM,
-    SP_CSS_UNIT_IN,
-    SP_CSS_UNIT_EM,
-    SP_CSS_UNIT_EX,
-    SP_CSS_UNIT_PERCENT
-};
-
-/// Length type internal to SPStyle.
-struct SPILength {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned unit : 4;
-    float value;
-    float computed;
-};
-
-#define SP_STYLE_FILL_SERVER(s) ((const_cast<SPStyle *> (s))->getFillPaintServer())
-#define SP_STYLE_STROKE_SERVER(s) ((const_cast<SPStyle *> (s))->getStrokePaintServer())
-
-class SVGICCColor;
-
-/// Paint type internal to SPStyle.
-struct SPIPaint {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned currentcolor : 1;
-    unsigned int colorSet : 1;
-    unsigned int noneSet : 1;
-    struct {
-         SPPaintServerReference *href;
-         SPColor color;
-    } value;
-
-    SPIPaint();
-
-    bool isSet() const { return true; /* set || colorSet*/}
-    bool isSameType( SPIPaint const & other ) const {return (isPaintserver() == other.isPaintserver()) && (colorSet == other.colorSet) && (currentcolor == other.currentcolor);}
-
-    bool isNoneSet() const {return noneSet;}
-
-    bool isNone() const {return !currentcolor && !colorSet && !isPaintserver();} // TODO refine
-    bool isColor() const {return colorSet && !isPaintserver();}
-    bool isPaintserver() const {return (value.href) ? value.href->getObject():0;}
-
-    void clear();
-
-    void setColor( float r, float g, float b ) {value.color.set( r, g, b ); colorSet = true;}
-    void setColor( guint32 val ) {value.color.set( val ); colorSet = true;}
-    void setColor( SPColor const& color ) {value.color = color; colorSet = true;}
-
-    void read( gchar const *str, SPStyle &tyle, SPDocument *document = 0);
-
-    // Win32 is a temp work-around until the emf extension is fixed:
-#ifndef WIN32
-private:
-    SPIPaint(SPIPaint const&);
-    SPIPaint &operator=(SPIPaint const &);
-#endif // WIN32
-};
-
-/// Filter type internal to SPStyle
-struct SPIFilter {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    SPFilterReference *href;
-};
-
-enum {
-    SP_FONT_SIZE_LITERAL,
-    SP_FONT_SIZE_LENGTH,
-    SP_FONT_SIZE_PERCENTAGE
-};
-
-enum {
-    SP_BASELINE_SHIFT_LITERAL,
-    SP_BASELINE_SHIFT_LENGTH,
-    SP_BASELINE_SHIFT_PERCENTAGE
-};
-
-/*
-Not used anymore, originally for SPIFontSize
-#define SP_F8_16_TO_FLOAT(v) ((gdouble) (v) / (1 << 16))
-#define SP_F8_16_FROM_FLOAT(v) ((int) ((v) * ((1 << 16) + 0.9999)))
-*/
-
-#define SP_STYLE_FLAG_IFSET (1 << 0)
-#define SP_STYLE_FLAG_IFDIFF (1 << 1)
-#define SP_STYLE_FLAG_ALWAYS (1 << 2)
-
-/// Fontsize type internal to SPStyle (also used by libnrtype/Layout-TNG-Input.cpp).
-struct SPIFontSize {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned type : 2;
-    unsigned unit : 4;
-    unsigned literal: 4;
-    float value;
-    float computed;
-};
-
-/// Baseline shift type internal to SPStyle.
-struct SPIBaselineShift {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned type : 2;
-    unsigned unit : 4;
-    unsigned literal: 2;
-    float value; // Can be negative
-    float computed;
-};
-
-/// Text decoration type internal to SPStyle.
-struct SPITextDecoration {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned underline : 1;
-    unsigned overline : 1;
-    unsigned line_through : 1;
-    unsigned blink : 1;    // "Conforming user agents are not required to support this value." yay!
-};
-
-/// Extended length type internal to SPStyle.
-struct SPILengthOrNormal {
-    unsigned set : 1;
-    unsigned inherit : 1;
-    unsigned normal : 1;
-    unsigned unit : 4;
-    float value;
-    float computed;
-};
-
-class SPTextStyle;
-
-/// Stroke dash details.
-class NRVpathDash {
-public:
-    double offset;
-    int n_dash;
-    double *dash;
-};
 
 /// An SVG style object.
 struct SPStyle {
@@ -297,8 +57,18 @@ struct SPStyle {
     SPILength text_indent;
     /** text alignment (css2 16.2) (not to be confused with text-anchor) */
     SPIEnum text_align;
-    /** text decoration (css2 16.3.1) */
-    SPITextDecoration text_decoration;
+    /** text decoration (css2 16.3.1) is now handled as a subset of css3 2.4 */
+    //    SPITextDecoration      text_decoration; 
+    
+    /** CSS 3 2.1, 2.2, 2.3 */
+    /** Not done yet, test_decoration3        = css3 2.4*/
+    SPITextDecorationLine  text_decoration_line;
+    SPIPaint               text_decoration_color;
+    SPITextDecorationStyle text_decoration_style;
+
+    // used to implement text_decoration, not saved to or read from SVG file
+    SPITextDecorationData  text_decoration_data;
+
     // 16.3.2 is text-shadow. That's complicated.
     /** Line spacing (css2 10.8.1) */
     SPILengthOrNormal line_height;
@@ -346,6 +116,11 @@ struct SPStyle {
     /** opacity */
     SPIScale24 opacity;
 
+    /** mix-blend-mode:  CSS Compositing and Blending Level 1 */
+    SPIEnum isolation;
+    // Could be shared with Filter blending mode
+    SPIEnum blend_mode;
+
     /** color */
     SPIPaint color;
     /** color-interpolation */
@@ -370,17 +145,17 @@ struct SPStyle {
     SPIEnum stroke_linejoin;
     /** stroke-miterlimit */
     SPIFloat stroke_miterlimit;
-    /** stroke-dash* */
-    NRVpathDash stroke_dash;
-    unsigned stroke_dasharray_set : 1;
-    unsigned stroke_dasharray_inherit : 1;
-    unsigned stroke_dashoffset_set : 1;
-    unsigned stroke_dashoffset_inherit : 1;
+    /** stroke-dasharray */
+    SPIDashArray stroke_dasharray;
+    /** stroke-dashoffset */
+    SPILength stroke_dashoffset;
     /** stroke-opacity */
     SPIScale24 stroke_opacity;
 
     /** Marker list */
     SPIString marker[SP_MARKER_LOC_QTY];
+
+    SPIPaintOrder paint_order;
 
     /** Filter effect */
     SPIFilter filter;
@@ -390,6 +165,13 @@ struct SPStyle {
    /** normally not used, but duplicates the Gaussian blur deviation (if any) from the attached
         filter when the style is used for querying */
     SPILength filter_gaussianBlur_deviation;
+
+    /** hints on how to render: e.g. speed vs. accuracy.
+     * As of April, 2013, only image_rendering used. */
+    SPIEnum color_rendering;
+    SPIEnum image_rendering;
+    SPIEnum shape_rendering;
+    SPIEnum text_rendering;
 
     /** enable-background, used for defining where filter effects get
      * their background image */
@@ -441,166 +223,10 @@ gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to);
 
 void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const gchar *uri);
 
-/* SPTextStyle */
+gchar const *sp_style_get_css_unit_string(int unit);
+double sp_style_css_size_px_to_units(double size, int unit);
+double sp_style_css_size_units_to_px(double size, int unit);
 
-enum SPCSSFontSize {
-    SP_CSS_FONT_SIZE_XX_SMALL,
-    SP_CSS_FONT_SIZE_X_SMALL,
-    SP_CSS_FONT_SIZE_SMALL,
-    SP_CSS_FONT_SIZE_MEDIUM,
-    SP_CSS_FONT_SIZE_LARGE,
-    SP_CSS_FONT_SIZE_X_LARGE,
-    SP_CSS_FONT_SIZE_XX_LARGE,
-    SP_CSS_FONT_SIZE_SMALLER,
-    SP_CSS_FONT_SIZE_LARGER
-};
-
-enum SPCSSFontStyle {
-    SP_CSS_FONT_STYLE_NORMAL,
-    SP_CSS_FONT_STYLE_ITALIC,
-    SP_CSS_FONT_STYLE_OBLIQUE
-};
-
-enum SPCSSFontVariant {
-    SP_CSS_FONT_VARIANT_NORMAL,
-    SP_CSS_FONT_VARIANT_SMALL_CAPS
-};
-
-enum SPCSSFontWeight {
-    SP_CSS_FONT_WEIGHT_100,
-    SP_CSS_FONT_WEIGHT_200,
-    SP_CSS_FONT_WEIGHT_300,
-    SP_CSS_FONT_WEIGHT_400,
-    SP_CSS_FONT_WEIGHT_500,
-    SP_CSS_FONT_WEIGHT_600,
-    SP_CSS_FONT_WEIGHT_700,
-    SP_CSS_FONT_WEIGHT_800,
-    SP_CSS_FONT_WEIGHT_900,
-    SP_CSS_FONT_WEIGHT_NORMAL,
-    SP_CSS_FONT_WEIGHT_BOLD,
-    SP_CSS_FONT_WEIGHT_LIGHTER,
-    SP_CSS_FONT_WEIGHT_BOLDER
-};
-
-enum SPCSSFontStretch {
-    SP_CSS_FONT_STRETCH_ULTRA_CONDENSED,
-    SP_CSS_FONT_STRETCH_EXTRA_CONDENSED,
-    SP_CSS_FONT_STRETCH_CONDENSED,
-    SP_CSS_FONT_STRETCH_SEMI_CONDENSED,
-    SP_CSS_FONT_STRETCH_NORMAL,
-    SP_CSS_FONT_STRETCH_SEMI_EXPANDED,
-    SP_CSS_FONT_STRETCH_EXPANDED,
-    SP_CSS_FONT_STRETCH_EXTRA_EXPANDED,
-    SP_CSS_FONT_STRETCH_ULTRA_EXPANDED,
-    SP_CSS_FONT_STRETCH_NARROWER,
-    SP_CSS_FONT_STRETCH_WIDER
-};
-
-enum SPCSSTextAlign {
-    SP_CSS_TEXT_ALIGN_START,
-    SP_CSS_TEXT_ALIGN_END,
-    SP_CSS_TEXT_ALIGN_LEFT,
-    SP_CSS_TEXT_ALIGN_RIGHT,
-    SP_CSS_TEXT_ALIGN_CENTER,
-    SP_CSS_TEXT_ALIGN_JUSTIFY
-    // also <string> is allowed, but only within table calls
-};
-
-enum SPCSSTextTransform {
-    SP_CSS_TEXT_TRANSFORM_CAPITALIZE,
-    SP_CSS_TEXT_TRANSFORM_UPPERCASE,
-    SP_CSS_TEXT_TRANSFORM_LOWERCASE,
-    SP_CSS_TEXT_TRANSFORM_NONE
-};
-
-enum SPCSSDirection {
-    SP_CSS_DIRECTION_LTR,
-    SP_CSS_DIRECTION_RTL
-};
-
-enum SPCSSBlockProgression {
-    SP_CSS_BLOCK_PROGRESSION_TB,
-    SP_CSS_BLOCK_PROGRESSION_RL,
-    SP_CSS_BLOCK_PROGRESSION_LR
-};
-
-enum SPCSSWritingMode {
-    SP_CSS_WRITING_MODE_LR_TB,
-    SP_CSS_WRITING_MODE_RL_TB,
-    SP_CSS_WRITING_MODE_TB_RL,
-    SP_CSS_WRITING_MODE_TB_LR
-};
-
-enum SPTextAnchor {
-    SP_CSS_TEXT_ANCHOR_START,
-    SP_CSS_TEXT_ANCHOR_MIDDLE,
-    SP_CSS_TEXT_ANCHOR_END
-};
-
-enum SPCSSBaselineShift {
-  SP_CSS_BASELINE_SHIFT_BASELINE,
-  SP_CSS_BASELINE_SHIFT_SUB,
-  SP_CSS_BASELINE_SHIFT_SUPER
-};
-
-enum SPVisibility {
-    SP_CSS_VISIBILITY_HIDDEN,
-    SP_CSS_VISIBILITY_COLLAPSE,
-    SP_CSS_VISIBILITY_VISIBLE
-};
-
-enum SPOverflow {
-    SP_CSS_OVERFLOW_VISIBLE,
-    SP_CSS_OVERFLOW_HIDDEN,
-    SP_CSS_OVERFLOW_SCROLL,
-    SP_CSS_OVERFLOW_AUTO
-};
-
-/// \todo more display types
-enum SPCSSDisplay {
-    SP_CSS_DISPLAY_NONE,
-    SP_CSS_DISPLAY_INLINE,
-    SP_CSS_DISPLAY_BLOCK,
-    SP_CSS_DISPLAY_LIST_ITEM,
-    SP_CSS_DISPLAY_RUN_IN,
-    SP_CSS_DISPLAY_COMPACT,
-    SP_CSS_DISPLAY_MARKER,
-    SP_CSS_DISPLAY_TABLE,
-    SP_CSS_DISPLAY_INLINE_TABLE,
-    SP_CSS_DISPLAY_TABLE_ROW_GROUP,
-    SP_CSS_DISPLAY_TABLE_HEADER_GROUP,
-    SP_CSS_DISPLAY_TABLE_FOOTER_GROUP,
-    SP_CSS_DISPLAY_TABLE_ROW,
-    SP_CSS_DISPLAY_TABLE_COLUMN_GROUP,
-    SP_CSS_DISPLAY_TABLE_COLUMN,
-    SP_CSS_DISPLAY_TABLE_CELL,
-    SP_CSS_DISPLAY_TABLE_CAPTION
-};
-
-enum SPEnableBackground {
-    SP_CSS_BACKGROUND_ACCUMULATE,
-    SP_CSS_BACKGROUND_NEW
-};
-
-enum SPColorInterpolation {
-    SP_CSS_COLOR_INTERPOLATION_AUTO,
-    SP_CSS_COLOR_INTERPOLATION_SRGB,
-    SP_CSS_COLOR_INTERPOLATION_LINEARRGB
-};
-
-/// An SPTextStyle has a refcount, a font family, and a font name.
-struct SPTextStyle {
-    int refcount;
-
-    /* CSS font properties */
-    SPIString font_family;
-
-    /* Full font name, as font_factory::ConstructFontSpecification would give */
-    SPIString font_specification;
-
-    /** \todo fixme: The 'font' property is ugly, and not working (lauris) */
-    SPIString font;
-};
 
 SPCSSAttr *sp_css_attr_from_style (SPStyle const *const style, guint flags);
 SPCSSAttr *sp_css_attr_from_object(SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
@@ -613,7 +239,7 @@ void sp_style_unset_property_attrs(SPObject *o);
 void sp_style_set_property_url (SPObject *item, gchar const *property, SPObject *linked, bool recursive);
 
 gchar *attribute_unquote(gchar const *val);
-gchar *css2_escape_quote(gchar const *val);
+Glib::ustring css2_escape_quote(gchar const *val);
 
 #endif // SEEN_SP_STYLE_H
 

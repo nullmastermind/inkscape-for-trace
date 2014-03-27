@@ -1,6 +1,3 @@
-/** @file
- * @brief export to bitmap dialog
- */
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
@@ -17,22 +14,26 @@
 
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
+
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/progressbar.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/comboboxtext.h>
 
 #include "desktop.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h"
-#include "widgets/sp-attribute-widget.h"
+
+namespace Gtk {
+class Dialog;
+}
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
-
 
 /** What type of button is being pressed */
 enum selection_type {
@@ -42,16 +43,6 @@ enum selection_type {
     SELECTION_CUSTOM,    /**< Allows the user to set the region exported */
     SELECTION_NUMBER_OF  /**< A counter for the number of these guys */
 };
-
-/** A list of strings that is used both in the preferences, and in the
-    data fields to describe the various values of \c selection_type. */
-static const char * selection_names[SELECTION_NUMBER_OF] = {
-    "page", "drawing", "selection", "custom"};
-
-/** The names on the buttons for the various selection types. */
-static const char * selection_labels[SELECTION_NUMBER_OF] = {
-    N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")};
-
 
 /**
  * A dialog widget to export to various image formats such as bitmap and png.
@@ -65,7 +56,9 @@ public:
     Export ();
     ~Export ();
 
-    static Export &getInstance() { return *new Export(); }
+    static Export &getInstance() {
+        return *new Export();
+    }
 
 private:
 
@@ -78,6 +71,7 @@ private:
      *
      */
     void setImageX();
+
     /**
      * A function to set the ydpi.
      *
@@ -105,7 +99,7 @@ private:
     float getValue (Gtk::Adjustment *adj);
     float getValuePx (Gtk::Adjustment *adj);
 #endif
-    
+
     /**
      * Helper function to create, style and pack spinbuttons for the export dialog.
      *
@@ -116,7 +110,6 @@ private:
      * @param  max  Maximum value for the spin button
      * @param  step The step size for the spin button
      * @param  page Size of the page increment
-     * @param  us   Unit selector that effects this spin button
      * @param  t    Table to put the spin button in
      * @param  x    X location in the table \c t to start with
      * @param  y    Y location in the table \c t to start with
@@ -125,23 +118,25 @@ private:
      * @param  digits  Number of digits to display after the decimal
      * @param  sensitive  Whether the spin button is sensitive or not
      * @param  cb   Callback for when this spin button is changed (optional)
+     *
+     * No unit_selector is stored in the created spinbutton, relies on external unit management
      */
 #if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> createSpinbutton( gchar const *key, float val, float min, float max,
-                                          float step, float page, GtkWidget *us,
-                                          Gtk::Table *t, int x, int y,
-                                          const Glib::ustring ll, const Glib::ustring lr,
-                                          int digits, unsigned int sensitive,
-                                          void (Export::*cb)() );
+                                                    float step, float page,
+                                                    Gtk::Grid *t, int x, int y,
+                                                    const Glib::ustring& ll, const Glib::ustring& lr,
+                                                    int digits, unsigned int sensitive,
+                                                    void (Export::*cb)() );
 #else
     Gtk::Adjustment * createSpinbutton( gchar const *key, float val, float min, float max,
-                                          float step, float page, GtkWidget *us,
-                                          Gtk::Table *t, int x, int y,
-                                          const Glib::ustring ll, const Glib::ustring lr,
-                                          int digits, unsigned int sensitive,
-                                          void (Export::*cb)() );
+                                        float step, float page,
+                                        Gtk::Table *t, int x, int y,
+                                        const Glib::ustring& ll, const Glib::ustring& lr,
+                                        int digits, unsigned int sensitive,
+                                        void (Export::*cb)() );
 #endif
-    
+
     /**
      * One of the area select radio buttons was pressed
      */
@@ -160,8 +155,12 @@ private:
     /**
      * Area X value changed callback
      */
-    void onAreaX0Change() {areaXChange(x0_adj);} ;
-    void onAreaX1Change() {areaXChange(x1_adj);} ;
+    void onAreaX0Change() {
+        areaXChange(x0_adj);
+    } ;
+    void onAreaX1Change() {
+        areaXChange(x1_adj);
+    } ;
 #if WITH_GTKMM_3_0
     void areaXChange(Glib::RefPtr<Gtk::Adjustment>& adj);
 #else
@@ -171,13 +170,27 @@ private:
     /**
      * Area Y value changed callback
      */
-    void onAreaY0Change() {areaYChange(y0_adj);} ;
-    void onAreaY1Change() {areaYChange(y1_adj);} ;
+    void onAreaY0Change() {
+        areaYChange(y0_adj);
+    } ;
+    void onAreaY1Change() {
+        areaYChange(y1_adj);
+    } ;
 #if WITH_GTKMM_3_0
     void areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj);
 #else
     void areaYChange ( Gtk::Adjustment *adj);
 #endif
+
+    /**
+     * Unit changed callback
+     */
+    void onUnitChanged();
+
+    /**
+     * Hide except selected callback
+     */
+    void onHideExceptSelected ();
 
     /**
      * Area width value changed callback
@@ -232,25 +245,33 @@ private:
 
     /**
      * Creates progress dialog for batch exporting.
-     * 
+     *
      * @param progress_text Text to be shown in the progress bar
      */
     Gtk::Dialog * create_progress_dialog (Glib::ustring progress_text);
+
     /**
      * Callback to be used in for loop to update the progress bar.
-     * 
+     *
      * @param value number between 0 and 1 indicating the fraction of progress (0.17 = 17 % progress)
      * @param dlg void pointer to the Gtk::Dialog progress dialog
      */
-    static unsigned int onProgressCallback (float value, void *dlg);
+    static unsigned int onProgressCallback(float value, void *dlg);
+
     /**
      * Callback for pressing the cancel button.
      */
     void onProgressCancel ();
+
     /**
      * Callback invoked on closing the progress dialog.
      */
     bool onProgressDelete (GdkEventAny *event);
+
+    /**
+     * Handles state changes as exporting starts or stops.
+     */
+    void setExporting(bool exporting, Glib::ustring const &text = "");
 
     /*
      * Utility filename and path functions
@@ -325,7 +346,7 @@ private:
 
     /* Unit selector widgets */
     Gtk::HBox unitbox;
-    Gtk::Widget* unit_selector;
+    Inkscape::UI::Widget::UnitMenu unit_selector;
     Gtk::Label units_label;
 
     /* Filename widgets  */
@@ -340,11 +361,15 @@ private:
     Gtk::HBox hide_box;
     Inkscape::UI::Widget::CheckButton    hide_export;
 
+    Inkscape::UI::Widget::CheckButton closeWhenDone;
+
     /* Export Button widgets */
-    Gtk::HButtonBox button_box;
+    Gtk::HBox button_box;
     Gtk::Button export_button;
     Gtk::Label export_label;
     Gtk::Image export_image;
+
+    Gtk::ProgressBar _prog;
 
     Gtk::Dialog *prog_dlg;
     bool interrupted; // indicates whether export needs to be interrupted (read: user pressed cancel in the progress dialog)
@@ -356,6 +381,7 @@ private:
     sigc::connection selectChangedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
+    sigc::connection unitChangedConn;
 
 };
 

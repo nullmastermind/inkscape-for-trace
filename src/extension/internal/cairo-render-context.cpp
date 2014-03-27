@@ -44,11 +44,10 @@
 #include "sp-pattern.h"
 #include "sp-mask.h"
 #include "sp-clippath.h"
+#include "util/units.h"
 #ifdef WIN32
 #include "libnrtype/FontFactory.h" // USE_PANGO_WIN32
 #endif
-
-#include <unit-constants.h>
 
 #include "cairo-render-context.h"
 #include "cairo-renderer.h"
@@ -73,8 +72,8 @@
 #include <cairo-ft.h>
 #endif
 #ifdef CAIRO_HAS_WIN32_FONT
-#include <cairo-win32.h>
 #include <pango/pangowin32.h>
+#include <cairo-win32.h>
 #endif
 
 #include <pango/pangofc-fontmap.h>
@@ -112,6 +111,7 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _ps_level(1),
     _eps(false),
     _is_texttopath(FALSE),
+    _is_omittext(FALSE),
     _is_filtertobitmap(FALSE),
     _bitmapresolution(72),
     _stream(NULL),
@@ -125,7 +125,8 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _state(NULL),
     _renderer(parent),
     _render_mode(RENDER_MODE_NORMAL),
-    _clip_mode(CLIP_MODE_MASK)
+    _clip_mode(CLIP_MODE_MASK),
+    _omittext_state(EMPTY)
 {
     font_table = g_hash_table_new_full(g_direct_hash, g_direct_equal, NULL, font_data_free);
 }
@@ -427,6 +428,16 @@ void CairoRenderContext::setTextToPath(bool texttopath)
     _is_texttopath = texttopath;
 }
 
+void CairoRenderContext::setOmitText(bool omittext)
+{
+    _is_omittext = omittext;
+}
+
+bool CairoRenderContext::getOmitText(void)
+{
+    return _is_omittext;
+}
+
 void CairoRenderContext::setFilterToBitmap(bool filtertobitmap)
 {
     _is_filtertobitmap = filtertobitmap;
@@ -708,7 +719,7 @@ CairoRenderContext::popLayer(void)
             for (int row = 0 ; row < height; row++) {
                 unsigned char *row_data = pixels + (row * stride);
                 for (int i = 0 ; i < width; i++) {
-                    guint32 *pixel = (guint32 *)row_data + i;
+                    guint32 *pixel = reinterpret_cast<guint32 *>(row_data) + i;
                     float lum_alpha = (((*pixel & 0x00ff0000) >> 16) * coeff_r +
                                        ((*pixel & 0x0000ff00) >>  8) * coeff_g +
                                        ((*pixel & 0x000000ff)      ) * coeff_b );
@@ -792,9 +803,7 @@ CairoRenderContext::setupSurface(double width, double height)
 #ifdef CAIRO_HAS_PDF_SURFACE
         case CAIRO_SURFACE_TYPE_PDF:
             surface = cairo_pdf_surface_create_for_stream(Inkscape::Extension::Internal::_write_callback, _stream, width, height);
-#if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0))
             cairo_pdf_surface_restrict_to_version(surface, (cairo_pdf_version_t)_pdf_level);
-#endif
             break;
 #endif
 #ifdef CAIRO_HAS_PS_SURFACE
@@ -803,10 +812,8 @@ CairoRenderContext::setupSurface(double width, double height)
             if(CAIRO_STATUS_SUCCESS != cairo_surface_status(surface)) {
                 return FALSE;
             }
-#if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 2))
             cairo_ps_surface_restrict_to_level(surface, (cairo_ps_level_t)_ps_level);
             cairo_ps_surface_set_eps(surface, (cairo_bool_t) _eps);
-#endif
             // Cairo calculates the bounding box itself, however we want to override this. See Launchpad bug #380501
 #if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 2))
 //            cairo_ps_dsc_comment(surface, os_bbox.str().c_str());
@@ -855,7 +862,7 @@ CairoRenderContext::_finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t
     _surface = surface;
 
     if (_vector_based_target) {
-        cairo_scale(_cr, PT_PER_PX, PT_PER_PX);
+        cairo_scale(_cr, Inkscape::Util::Quantity::convert(1, "px", "pt"), Inkscape::Util::Quantity::convert(1, "px", "pt"));
     } else if (cairo_surface_get_content(_surface) != CAIRO_CONTENT_ALPHA) {
         // set background color on non-alpha surfaces
         // TODO: bgcolor should be derived from SPDocument
@@ -1080,11 +1087,11 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
 
     // show items and render them
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-        if (pat_i && SP_IS_OBJECT (pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
+        if (pat_i && SP_IS_OBJECT(pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
             for ( SPObject *child = pat_i->firstChild() ; child; child = child->getNext() ) {
-                if (SP_IS_ITEM (child)) {
-                    SP_ITEM (child)->invoke_show (drawing, dkey, SP_ITEM_REFERENCE_FLAGS);
-                    _renderer->renderItem(pattern_ctx, SP_ITEM (child));
+                if (SP_IS_ITEM(child)) {
+                    SP_ITEM(child)->invoke_show(drawing, dkey, SP_ITEM_REFERENCE_FLAGS);
+                    _renderer->renderItem(pattern_ctx, SP_ITEM(child));
                 }
             }
             break; // do not go further up the chain if children are found
@@ -1109,10 +1116,10 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
 
     // hide all items
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-        if (pat_i && SP_IS_OBJECT (pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
+        if (pat_i && SP_IS_OBJECT(pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
             for ( SPObject *child = pat_i->firstChild() ; child; child = child->getNext() ) {
-                if (SP_IS_ITEM (child)) {
-                    SP_ITEM (child)->invoke_hide (dkey);
+                if (SP_IS_ITEM(child)) {
+                    SP_ITEM(child)->invoke_hide(dkey);
                 }
             }
             break; // do not go further up the chain if children are found
@@ -1181,7 +1188,7 @@ CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const pain
         return NULL;
     }
 
-    if (pattern && SP_IS_GRADIENT (paintserver)) {
+    if (pattern && SP_IS_GRADIENT(paintserver)) {
         SPGradient *g = SP_GRADIENT(paintserver);
 
         // set extend type
@@ -1290,12 +1297,16 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
         }
     }
 
-    if (style->stroke_dash.n_dash   &&
-        style->stroke_dash.dash       )
+    if (!style->stroke_dasharray.values.empty())
     {
-        cairo_set_dash(_cr, style->stroke_dash.dash, style->stroke_dash.n_dash, style->stroke_dash.offset);
+        size_t ndashes = style->stroke_dasharray.values.size();
+        double* dashes =(double*)malloc(ndashes*sizeof(double));
+        for( unsigned i = 0; i < ndashes; ++i ) {
+            dashes[i] = style->stroke_dasharray.values[i];
+        }
+        cairo_set_dash(_cr, dashes, ndashes, style->stroke_dashoffset.value);
     } else {
-    	cairo_set_dash(_cr, NULL, 0, 0.0);	// disable dashing
+        cairo_set_dash(_cr, NULL, 0, 0.0);  // disable dashing
     }
 
     cairo_set_line_width(_cr, style->stroke_width.computed);
@@ -1303,39 +1314,64 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
     // set line join type
     cairo_line_join_t join = CAIRO_LINE_JOIN_MITER;
     switch (style->stroke_linejoin.computed) {
-    	case SP_STROKE_LINEJOIN_MITER:
-    	    join = CAIRO_LINE_JOIN_MITER;
-    	    break;
-    	case SP_STROKE_LINEJOIN_ROUND:
-    	    join = CAIRO_LINE_JOIN_ROUND;
-    	    break;
-    	case SP_STROKE_LINEJOIN_BEVEL:
-    	    join = CAIRO_LINE_JOIN_BEVEL;
-    	    break;
+        case SP_STROKE_LINEJOIN_MITER:
+            join = CAIRO_LINE_JOIN_MITER;
+            break;
+        case SP_STROKE_LINEJOIN_ROUND:
+            join = CAIRO_LINE_JOIN_ROUND;
+            break;
+        case SP_STROKE_LINEJOIN_BEVEL:
+            join = CAIRO_LINE_JOIN_BEVEL;
+            break;
     }
     cairo_set_line_join(_cr, join);
 
     // set line cap type
     cairo_line_cap_t cap = CAIRO_LINE_CAP_BUTT;
     switch (style->stroke_linecap.computed) {
-    	case SP_STROKE_LINECAP_BUTT:
-    	    cap = CAIRO_LINE_CAP_BUTT;
-    	    break;
-    	case SP_STROKE_LINECAP_ROUND:
-    	    cap = CAIRO_LINE_CAP_ROUND;
-    	    break;
-    	case SP_STROKE_LINECAP_SQUARE:
-    	    cap = CAIRO_LINE_CAP_SQUARE;
-    	    break;
+        case SP_STROKE_LINECAP_BUTT:
+            cap = CAIRO_LINE_CAP_BUTT;
+            break;
+        case SP_STROKE_LINECAP_ROUND:
+            cap = CAIRO_LINE_CAP_ROUND;
+            break;
+        case SP_STROKE_LINECAP_SQUARE:
+            cap = CAIRO_LINE_CAP_SQUARE;
+            break;
     }
     cairo_set_line_cap(_cr, cap);
     cairo_set_miter_limit(_cr, MAX(1, style->stroke_miterlimit.value));
+}
+
+void
+CairoRenderContext::_prepareRenderGraphic()
+{
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
+        if (_omittext_state == NEW_PAGE_ON_GRAPHIC)
+            cairo_show_page(_cr);
+        _omittext_state = GRAPHIC_ON_TOP;
+    }
+}
+
+void
+CairoRenderContext::_prepareRenderText()
+{
+    // Only PDFLaTeX supports importing a single page of a graphics file,
+    // so only PDF backend gets interleaved text/graphics
+    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
+        if (_omittext_state == GRAPHIC_ON_TOP)
+            _omittext_state = NEW_PAGE_ON_GRAPHIC;
+    }
 }
 
 bool
 CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle const *style, Geom::OptRect const &pbox)
 {
     g_assert( _is_valid );
+
+    _prepareRenderGraphic();
 
     if (_render_mode == RENDER_MODE_CLIP) {
         if (_clip_mode == CLIP_MODE_PATH) {
@@ -1400,8 +1436,8 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
     return true;
 }
 
-bool CairoRenderContext::renderImage(GdkPixbuf *pb,
-                                     Geom::Affine const &image_transform, SPStyle const * /*style*/)
+bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
+                                     Geom::Affine const &image_transform, SPStyle const *style)
 {
     g_assert( _is_valid );
 
@@ -1409,16 +1445,18 @@ bool CairoRenderContext::renderImage(GdkPixbuf *pb,
         return true;
     }
 
-    int w = gdk_pixbuf_get_width (pb);
-    int h = gdk_pixbuf_get_height (pb);
+    _prepareRenderGraphic();
+
+    int w = pb->width();
+    int h = pb->height();
 
     // TODO: reenable merge_opacity if useful
     float opacity = _state->opacity;
 
-    cairo_surface_t *image_surface = ink_cairo_surface_create_for_argb32_pixbuf(pb);
+    cairo_surface_t *image_surface = pb->getSurfaceRaw();
     if (cairo_surface_status(image_surface)) {
         TRACE(("Image surface creation failed:\n%s\n", cairo_status_to_string(cairo_surface_status(image_surface))));
-    	return false;
+        return false;
     }
 
     cairo_save(_cr);
@@ -1434,10 +1472,30 @@ bool CairoRenderContext::renderImage(GdkPixbuf *pb,
         cairo_rectangle(_cr, 0, 0, w, h);
         cairo_clip(_cr);
     }
+        
+    // Cairo filter method will be mapped to PS/PDF 'interpolate' true/false).
+    // See cairo-pdf-surface.c
+    if (style) {
+        // See: http://www.w3.org/TR/SVG/painting.html#ImageRenderingProperty
+        //      http://www.w3.org/TR/css4-images/#the-image-rendering
+        //      style.h/style.cpp
+        switch (style->image_rendering.computed) {
+            case SP_CSS_COLOR_RENDERING_AUTO:
+                // Do nothing
+                break;
+            case SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY:
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST );
+                break;
+            case SP_CSS_COLOR_RENDERING_OPTIMIZESPEED:
+            default:
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST );
+                break;
+        }
+    }
+
     cairo_paint_with_alpha(_cr, opacity);
 
     cairo_restore(_cr);
-    cairo_surface_destroy(image_surface);
     return true;
 }
 
@@ -1490,9 +1548,14 @@ unsigned int CairoRenderContext::_showGlyphs(cairo_t *cr, PangoFont * /*font*/, 
 bool
 CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_matrix,
                                     std::vector<CairoGlyphInfo> const &glyphtext, SPStyle const *style)
-{
+{    
+
+    _prepareRenderText();
+    if (_is_omittext)
+        return true;
+
     // create a cairo_font_face from PangoFont
-    double size = style->font_size.computed;
+    double size = style->font_size.computed; /// \fixme why is this variable never used?
     gpointer fonthash = (gpointer)font;
     cairo_font_face_t *font_face = (cairo_font_face_t *)g_hash_table_lookup(font_table, fonthash);
 
@@ -1633,9 +1696,9 @@ _write_callback(void *closure, const unsigned char *data, unsigned int length)
     written = fwrite (data, 1, length, file);
 
     if (written == length)
-	return CAIRO_STATUS_SUCCESS;
+    return CAIRO_STATUS_SUCCESS;
     else
-	return CAIRO_STATUS_WRITE_ERROR;
+    return CAIRO_STATUS_WRITE_ERROR;
 }
 
 #include "clear-n_.h"

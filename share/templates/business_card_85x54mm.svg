@@ -9,7 +9,8 @@
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    width="85mm"
-   height="54mm">
+   height="54mm"
+   viewBox="0 0 85 54">
   <defs
      id="defs3" />
   <sodipodi:namedview
@@ -34,5 +35,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <inkscape:_templateinfo>
+      <inkscape:_name>Business Card 85x54mm</inkscape:_name>
+      <inkscape:_shortdesc>Empty business card template.</inkscape:_shortdesc>
+      <inkscape:_keywords>business card empty 85x54</inkscape:_keywords>
+  </inkscape:_templateinfo>
   <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" />
 </svg>

@@ -4,13 +4,12 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "../color.h"
 #include "sp-color-slider.h"
 #include "sp-color-selector.h"
 
 
 
-typedef struct _GtkHSV GtkHSV;
+typedef struct _GimpColorWheel GimpColorWheel;
 struct SPColorWheelSelector;
 struct SPColorWheelSelectorClass;
 
@@ -30,7 +29,7 @@ protected:
     static void _sliderGrabbed( SPColorSlider *slider, SPColorWheelSelector *cs );
     static void _sliderReleased( SPColorSlider *slider, SPColorWheelSelector *cs );
     static void _sliderChanged( SPColorSlider *slider, SPColorWheelSelector *cs );
-    static void _wheelChanged( GtkHSV *hsv, SPColorWheelSelector *cs );
+    static void _wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs );
 
     static void _fooChanged( GtkWidget foo, SPColorWheelSelector *cs );
 

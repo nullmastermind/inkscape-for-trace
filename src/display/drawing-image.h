@@ -19,6 +19,7 @@
 #include "display/drawing-item.h"
 
 namespace Inkscape {
+class Pixbuf;
 
 class DrawingImage
     : public DrawingItem
@@ -27,7 +28,7 @@ public:
     DrawingImage(Drawing &drawing);
     ~DrawingImage();
 
-    void setARGB32Pixbuf(GdkPixbuf *pb);
+    void setPixbuf(Inkscape::Pixbuf *pb);
     void setStyle(SPStyle *style);
     void setScale(double sx, double sy);
     void setOrigin(Geom::Point const &o);
@@ -37,12 +38,11 @@ public:
 protected:
     virtual unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
                                  unsigned flags, unsigned reset);
-    virtual unsigned _renderItem(DrawingContext &ct, Geom::IntRect const &area, unsigned flags,
+    virtual unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
                                  DrawingItem *stop_at);
     virtual DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags);
 
-    GdkPixbuf *_pixbuf;
-    cairo_surface_t *_surface;
+    Inkscape::Pixbuf *_pixbuf;
     SPStyle *_style;
 
     // TODO: the following three should probably be merged into a new Geom::Viewbox object

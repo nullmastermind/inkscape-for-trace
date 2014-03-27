@@ -1,5 +1,6 @@
 /** \file
- * SPGradient, SPStop, SPLinearGradient, SPRadialGradient.
+ * SPGradient, SPStop, SPLinearGradient, SPRadialGradient,
+ * SPMeshGradient, SPMeshRow, SPMeshPatch
  */
 /*
  * Authors:
@@ -8,11 +9,13 @@
  *   Jasper van de Gronde <th.v.d.gronde@hccnet.nl>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
+ *   Tavmjong Bah <tavmjong@free.fr>
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2009 Jasper van de Gronde
+ * Copyright (C) 2011 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  *
@@ -24,6 +27,8 @@
 #include <string>
 
 #include <2geom/transforms.h>
+
+#include <cairo.h>
 
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
@@ -39,6 +44,9 @@
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
+#include "sp-mesh-gradient.h"
+#include "sp-mesh-row.h"
+#include "sp-mesh-patch.h"
 #include "sp-stop.h"
 #include "streq.h"
 #include "uri.h"
@@ -49,220 +57,17 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-/// Has to be power of 2
-#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
-
-static void sp_stop_class_init(SPStopClass *klass);
-static void sp_stop_init(SPStop *stop);
-
-static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_stop_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_stop_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
-
-static SPObjectClass *stop_parent_class;
-
-class SPGradientImpl
-{
-    friend class SPGradient;
-
-    static void classInit(SPGradientClass *klass);
-
-    static void init(SPGradient *gr);
-    static void build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-    static void release(SPObject *object);
-    static void modified(SPObject *object, guint flags);
-    static Inkscape::XML::Node *write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-    static void gradientRefModified(SPObject *href, guint flags, SPGradient *gradient);
-    static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
-
-    static void childAdded(SPObject *object,
-                           Inkscape::XML::Node *child,
-                           Inkscape::XML::Node *ref);
-    static void removeChild(SPObject *object, Inkscape::XML::Node *child);
-
-    static void setGradientAttr(SPObject *object, unsigned key, gchar const *value);
-};
-
-/**
- * Registers SPStop class and returns its type.
- */
-GType
-sp_stop_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPStopClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_stop_class_init,
-            NULL, NULL,
-            sizeof(SPStop),
-            16,
-            (GInstanceInitFunc) sp_stop_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "SPStop", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-/**
- * Callback to initialize SPStop vtable.
- */
-static void sp_stop_class_init(SPStopClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
-    stop_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-
-    sp_object_class->build = sp_stop_build;
-    sp_object_class->set = sp_stop_set;
-    sp_object_class->write = sp_stop_write;
-}
-
-/**
- * Callback to initialize SPStop object.
- */
-static void
-sp_stop_init(SPStop *stop)
-{
-    stop->offset = 0.0;
-    stop->currentColor = false;
-    stop->specified_color.set( 0x000000ff );
-    stop->opacity = 1.0;
-}
-
-/**
- * Virtual build: set stop attributes from its associated XML node.
- */
-static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) stop_parent_class)->build)
-        (* ((SPObjectClass *) stop_parent_class)->build)(object, document, repr);
-
-    object->readAttr( "offset" );
-    object->readAttr( "stop-color" );
-    object->readAttr( "stop-opacity" );
-    object->readAttr( "style" );
-}
-
-/**
- * Virtual set: set attribute to value.
- */
-static void
-sp_stop_set(SPObject *object, unsigned key, gchar const *value)
-{
-    SPStop *stop = SP_STOP(object);
-
-    switch (key) {
-        case SP_ATTR_STYLE: {
-        /** \todo
-         * fixme: We are reading simple values 3 times during build (Lauris).
-         * \par
-         * We need presentation attributes etc.
-         * \par
-         * remove the hackish "style reading" from here: see comments in
-         * sp_object_get_style_property about the bugs in our current
-         * approach.  However, note that SPStyle doesn't currently have
-         * stop-color and stop-opacity properties.
-         */
-            {
-                gchar const *p = object->getStyleProperty( "stop-color", "black");
-                if (streq(p, "currentColor")) {
-                    stop->currentColor = true;
-                } else {
-                    stop->specified_color = SPStop::readStopColor( p );
-                }
-            }
-            {
-                gchar const *p = object->getStyleProperty( "stop-opacity", "1");
-                gdouble opacity = sp_svg_read_percentage(p, stop->opacity);
-                stop->opacity = opacity;
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
-        case SP_PROP_STOP_COLOR: {
-            {
-                gchar const *p = object->getStyleProperty( "stop-color", "black");
-                if (streq(p, "currentColor")) {
-                    stop->currentColor = true;
-                } else {
-                    stop->currentColor = false;
-                    stop->specified_color = SPStop::readStopColor( p );
-                }
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
-        case SP_PROP_STOP_OPACITY: {
-            {
-                gchar const *p = object->getStyleProperty( "stop-opacity", "1");
-                gdouble opacity = sp_svg_read_percentage(p, stop->opacity);
-                stop->opacity = opacity;
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
-        case SP_ATTR_OFFSET: {
-            stop->offset = sp_svg_read_percentage(value, 0.0);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
-        default: {
-            if (((SPObjectClass *) stop_parent_class)->set)
-                (* ((SPObjectClass *) stop_parent_class)->set)(object, key, value);
-            break;
-        }
-    }
-}
-
-/**
- * Virtual write: write object attributes to repr.
- */
-static Inkscape::XML::Node *
-sp_stop_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPStop *stop = SP_STOP(object);
-
-    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = xml_doc->createElement("svg:stop");
-    }
-
-    Glib::ustring colorStr = stop->specified_color.toString();
-    gfloat opacity = stop->opacity;
-
-    if (((SPObjectClass *) stop_parent_class)->write) {
-        (* ((SPObjectClass *) stop_parent_class)->write)(object, xml_doc, repr, flags);
-    }
-
-    // Since we do a hackish style setting here (because SPStyle does not support stop-color and
-    // stop-opacity), we must do it AFTER calling the parent write method; otherwise
-    // sp_object_write would clear our style= attribute (bug 1695287)
-
-    Inkscape::CSSOStringStream os;
-    os << "stop-color:";
-    if (stop->currentColor) {
-        os << "currentColor";
-    } else {
-        os << colorStr;
-    }
-    os << ";stop-opacity:" << opacity;
-    repr->setAttribute("style", os.str().c_str());
-    repr->setAttribute("stop-color", NULL);
-    repr->setAttribute("stop-opacity", NULL);
-    sp_repr_set_css_double(repr, "offset", stop->offset);
-    /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
-     * for offset proportions. */
-
-    return repr;
-}
-
+/// Has to be power of 2   Seems to be unused.
+//#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
 
 bool SPGradient::hasStops() const
 {
     return has_stops;
+}
+
+bool SPGradient::hasPatches() const
+{
+    return has_patches;
 }
 
 bool SPGradient::isUnitsSet() const
@@ -296,256 +101,293 @@ void SPGradient::setSwatch( bool swatch )
     }
 }
 
+
 /**
- * Return stop's color as 32bit value.
+ * return true if this gradient is "equivalent" to that gradient.
+ * Equivalent meaning they have the same stop count, same stop colors and same stop opacity
+ * @param that - A gradient to compare this to
  */
-guint32
-sp_stop_get_rgba32(SPStop const *const stop)
+gboolean SPGradient::isEquivalent(SPGradient *that)
 {
-    guint32 rgb0 = 0;
-    /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
-     * value depends on user agent, and don't give any further restrictions that I can
-     * see.) */
-    if (stop->currentColor) {
-        char const *str = stop->getStyleProperty( "color", NULL);
-        if (str) {
-            rgb0 = sp_svg_read_color(str, rgb0);
+    //TODO Make this work for mesh gradients
+
+    bool status = FALSE;
+    
+    while(1){ // not really a loop, used to avoid deep nesting or multiple exit points from function
+        if (this->getStopCount() != that->getStopCount()) { break; }
+        if (this->hasStops() != that->hasStops()) { break; }
+        if (!this->getVector() || !that->getVector()) { break; }
+        if ( (SP_IS_LINEARGRADIENT(this) && SP_IS_LINEARGRADIENT(that)) ||
+             (SP_IS_RADIALGRADIENT(this) && SP_IS_RADIALGRADIENT(that)) ||
+             (SP_IS_MESHGRADIENT(this) && SP_IS_MESHGRADIENT(that))) {
+             /* OK! */ 
         }
-        unsigned const alpha = static_cast<unsigned>(stop->opacity * 0xff + 0.5);
-        g_return_val_if_fail((alpha & ~0xff) == 0,
-                             rgb0 | 0xff);
-        return rgb0 | alpha;
-    } else {
-        return stop->specified_color.toRGBA32( stop->opacity );
+        else { break; }
+
+        SPStop *as = this->getVector()->getFirstStop();
+        SPStop *bs = that->getVector()->getFirstStop();
+
+        bool effective = TRUE;
+        while (effective && (as && bs)) {
+            if (!as->getEffectiveColor().isClose(bs->getEffectiveColor(), 0.001) ||
+                    as->offset != bs->offset) {
+                effective = FALSE;
+                break;
+            } 
+            else {
+                as = as->getNextStop();
+                bs = bs->getNextStop();
+            }
+        }
+        if(!effective)break;
+
+        status = TRUE;
+        break;
     }
+    return status;
+}
+
+/**
+ * return true if this gradient is "aligned" to that gradient.
+ * Aligned means that they have exactly the same coordinates and transform.
+ * @param that - A gradient to compare this to
+ */
+gboolean SPGradient::isAligned(SPGradient *that)
+{
+    bool status = FALSE;
+    
+    while(1){ // not really a loop, used to avoid deep nesting or multiple exit points from function
+        if(this->gradientTransform_set != that->gradientTransform_set) { break; }
+        if(this->gradientTransform_set && 
+            (this->gradientTransform != that->gradientTransform)) { break; }
+        if (SP_IS_LINEARGRADIENT(this) && SP_IS_LINEARGRADIENT(that)) {
+            SPLinearGradient *sg=SP_LINEARGRADIENT(this);
+            SPLinearGradient *tg=SP_LINEARGRADIENT(that);
+ 
+            if( !sg->x1._set     ||    !tg->x1._set  || // assume that if these are set so will be all the others
+                (sg->x1.computed != tg->x1.computed) ||
+                (sg->y1.computed != tg->y1.computed) ||
+                (sg->x2.computed != tg->x2.computed) ||
+                (sg->y2.computed != tg->y2.computed)
+            ) { break; }
+        } else if (SP_IS_RADIALGRADIENT(this) && SP_IS_LINEARGRADIENT(that)) {
+            SPRadialGradient *sg=SP_RADIALGRADIENT(this);
+            SPRadialGradient *tg=SP_RADIALGRADIENT(that);
+            if( !sg->cx._set     ||    !tg->cx._set  || // assume that if these are set so will be all the others
+                (sg->cx.computed != tg->cx.computed) ||
+                (sg->cy.computed != tg->cy.computed) ||
+                (sg->r.computed  != tg->r.computed ) ||
+                (sg->fx.computed != tg->fx.computed) ||
+                (sg->fy.computed != tg->fy.computed)
+            ) { break; }
+        } else if (SP_IS_MESHGRADIENT(this) && SP_IS_MESHGRADIENT(that)) {
+            SPMeshGradient *sg=SP_MESHGRADIENT(this);
+            SPMeshGradient *tg=SP_MESHGRADIENT(that);
+ 
+            if( !sg->x._set     ||    !tg->x._set  ||
+                !sg->y._set     ||    !tg->y._set  ||
+                (sg->x.computed != tg->x.computed) ||
+                (sg->y.computed != tg->y.computed)
+            ) { break; }
+         } else {
+            break;
+        }
+        status = TRUE;
+        break;
+    }
+    return status;
 }
 
 /*
  * Gradient
  */
+SPGradient::SPGradient() : SPPaintServer(), units(),
+        spread(),
+        ref(NULL),
+        state(2),
+        vector() {
 
-static SPPaintServerClass *gradient_parent_class;
+	this->has_patches = 0;
 
-/**
- * Registers SPGradient class and returns its type.
- */
-GType SPGradient::getType()
-{
-    static GType gradient_type = 0;
-    if (!gradient_type) {
-        GTypeInfo gradient_info = {
-            sizeof(SPGradientClass),
-            NULL, NULL,
-            (GClassInitFunc) SPGradientImpl::classInit,
-            NULL, NULL,
-            sizeof(SPGradient),
-            16,
-            (GInstanceInitFunc) SPGradientImpl::init,
-            NULL,   /* value_table */
-        };
-        gradient_type = g_type_register_static(SP_TYPE_PAINT_SERVER, "SPGradient",
-                                               &gradient_info, (GTypeFlags)0);
-    }
-    return gradient_type;
-}
-
-/**
- * SPGradient vtable initialization.
- */
-void SPGradientImpl::classInit(SPGradientClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-
-    gradient_parent_class = (SPPaintServerClass *)g_type_class_ref(SP_TYPE_PAINT_SERVER);
-
-    sp_object_class->build = SPGradientImpl::build;
-    sp_object_class->release = SPGradientImpl::release;
-    sp_object_class->set = SPGradientImpl::setGradientAttr;
-    sp_object_class->child_added = SPGradientImpl::childAdded;
-    sp_object_class->remove_child = SPGradientImpl::removeChild;
-    sp_object_class->modified = SPGradientImpl::modified;
-    sp_object_class->write = SPGradientImpl::write;
-}
-
-/**
- * Callback for SPGradient object initialization.
- */
-void SPGradientImpl::init(SPGradient *gr)
-{
-    gr->ref = new SPGradientReference(gr);
-    gr->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(SPGradientImpl::gradientRefChanged), gr));
+    this->ref = new SPGradientReference(this);
+    this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(SPGradient::gradientRefChanged), this));
 
     /** \todo
      * Fixme: reprs being rearranged (e.g. via the XML editor)
      * may require us to clear the state.
      */
-    gr->state = SP_GRADIENT_STATE_UNKNOWN;
+    this->state = SP_GRADIENT_STATE_UNKNOWN;
 
-    gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
-    gr->units_set = FALSE;
+    this->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
+    this->units_set = FALSE;
 
-    gr->gradientTransform = Geom::identity();
-    gr->gradientTransform_set = FALSE;
+    this->gradientTransform = Geom::identity();
+    this->gradientTransform_set = FALSE;
 
-    gr->spread = SP_GRADIENT_SPREAD_PAD;
-    gr->spread_set = FALSE;
+    this->spread = SP_GRADIENT_SPREAD_PAD;
+    this->spread_set = FALSE;
 
-    gr->has_stops = FALSE;
+    this->has_stops = FALSE;
 
-    gr->vector.built = false;
-    gr->vector.stops.clear();
+    this->vector.built = false;
+    this->vector.stops.clear();
 
-    new (&gr->modified_connection) sigc::connection();
+    //new (&this->modified_connection) sigc::connection();
+}
+
+SPGradient::~SPGradient() {
 }
 
 /**
  * Virtual build: set gradient attributes from its associated repr.
  */
-void SPGradientImpl::build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
+void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
-    SPGradient *gradient = SP_GRADIENT(object);
-
     // Work-around in case a swatch had been marked for immediate collection:
     if ( repr->attribute("osb:paint") && repr->attribute("inkscape:collect") ) {
         repr->setAttribute("inkscape:collect", 0);
     }
 
-    if (((SPObjectClass *) gradient_parent_class)->build) {
-        (* ((SPObjectClass *) gradient_parent_class)->build)(object, document, repr);
-    }
+    SPPaintServer::build(document, repr);
 
-    for ( SPObject *ochild = object->firstChild() ; ochild ; ochild = ochild->getNext() ) {
+    for ( SPObject *ochild = this->firstChild() ; ochild ; ochild = ochild->getNext() ) {
         if (SP_IS_STOP(ochild)) {
-            gradient->has_stops = TRUE;
+            this->has_stops = TRUE;
             break;
         }
     }
 
-    object->readAttr( "gradientUnits" );
-    object->readAttr( "gradientTransform" );
-    object->readAttr( "spreadMethod" );
-    object->readAttr( "xlink:href" );
-    object->readAttr( "osb:paint" );
+    this->readAttr( "gradientUnits" );
+    this->readAttr( "gradientTransform" );
+    this->readAttr( "spreadMethod" );
+    this->readAttr( "xlink:href" );
+    this->readAttr( "osb:paint" );
 
     // Register ourselves
-    document->addResource("gradient", object);
+    document->addResource("gradient", this);
 }
 
 /**
  * Virtual release of SPGradient members before destruction.
  */
-void SPGradientImpl::release(SPObject *object)
+void SPGradient::release()
 {
-    SPGradient *gradient = (SPGradient *) object;
 
 #ifdef SP_GRADIENT_VERBOSE
-    g_print("Releasing gradient %s\n", object->getId());
+    g_print("Releasing this %s\n", this->getId());
 #endif
 
-    if (object->document) {
+    if (this->document) {
         // Unregister ourselves
-        object->document->removeResource("gradient", object);
+        this->document->removeResource("gradient", this);
     }
 
-    if (gradient->ref) {
-        gradient->modified_connection.disconnect();
-        gradient->ref->detach();
-        delete gradient->ref;
-        gradient->ref = NULL;
+    if (this->ref) {
+        this->modified_connection.disconnect();
+        this->ref->detach();
+        delete this->ref;
+        this->ref = NULL;
     }
 
-    gradient->modified_connection.~connection();
+    //this->modified_connection.~connection();
 
-    if (((SPObjectClass *) gradient_parent_class)->release)
-        ((SPObjectClass *) gradient_parent_class)->release(object);
+    SPPaintServer::release();
 }
 
 /**
  * Set gradient attribute to value.
  */
-void SPGradientImpl::setGradientAttr(SPObject *object, unsigned key, gchar const *value)
+void SPGradient::set(unsigned key, gchar const *value)
 {
-    SPGradient *gr = SP_GRADIENT(object);
-
     switch (key) {
         case SP_ATTR_GRADIENTUNITS:
             if (value) {
                 if (!strcmp(value, "userSpaceOnUse")) {
-                    gr->units = SP_GRADIENT_UNITS_USERSPACEONUSE;
+                    this->units = SP_GRADIENT_UNITS_USERSPACEONUSE;
                 } else {
-                    gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
+                    this->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
                 }
-                gr->units_set = TRUE;
+
+                this->units_set = TRUE;
             } else {
-                gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
-                gr->units_set = FALSE;
+                this->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
+                this->units_set = FALSE;
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_GRADIENTTRANSFORM: {
             Geom::Affine t;
             if (value && sp_svg_transform_read(value, &t)) {
-                gr->gradientTransform = t;
-                gr->gradientTransform_set = TRUE;
+                this->gradientTransform = t;
+                this->gradientTransform_set = TRUE;
             } else {
-                gr->gradientTransform = Geom::identity();
-                gr->gradientTransform_set = FALSE;
+                this->gradientTransform = Geom::identity();
+                this->gradientTransform_set = FALSE;
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         }
         case SP_ATTR_SPREADMETHOD:
             if (value) {
                 if (!strcmp(value, "reflect")) {
-                    gr->spread = SP_GRADIENT_SPREAD_REFLECT;
+                    this->spread = SP_GRADIENT_SPREAD_REFLECT;
                 } else if (!strcmp(value, "repeat")) {
-                    gr->spread = SP_GRADIENT_SPREAD_REPEAT;
+                    this->spread = SP_GRADIENT_SPREAD_REPEAT;
                 } else {
-                    gr->spread = SP_GRADIENT_SPREAD_PAD;
+                    this->spread = SP_GRADIENT_SPREAD_PAD;
                 }
-                gr->spread_set = TRUE;
+
+                this->spread_set = TRUE;
             } else {
-                gr->spread_set = FALSE;
+                this->spread_set = FALSE;
             }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
+
         case SP_ATTR_XLINK_HREF:
             if (value) {
                 try {
-                    gr->ref->attach(Inkscape::URI(value));
+                    this->ref->attach(Inkscape::URI(value));
                 } catch (Inkscape::BadURIException &e) {
                     g_warning("%s", e.what());
-                    gr->ref->detach();
+                    this->ref->detach();
                 }
             } else {
-                gr->ref->detach();
+                this->ref->detach();
             }
             break;
+
         case SP_ATTR_OSB_SWATCH:
         {
             bool newVal = (value != 0);
             bool modified = false;
-            if (newVal != gr->swatch) {
-                gr->swatch = newVal;
+
+            if (newVal != this->swatch) {
+                this->swatch = newVal;
                 modified = true;
             }
+
             if (newVal) {
                 // Might need to flip solid/gradient
-                Glib::ustring paintVal = ( gr->hasStops() && (gr->getStopCount() == 0) ) ? "solid" : "gradient";
+                Glib::ustring paintVal = ( this->hasStops() && (this->getStopCount() == 0) ) ? "solid" : "gradient";
+
                 if ( paintVal != value ) {
-                    gr->setAttribute( "osb:paint", paintVal.c_str(), 0 );
+                    this->setAttribute( "osb:paint", paintVal.c_str(), 0 );
                     modified = true;
                 }
             }
+
             if (modified) {
-                object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
         }
             break;
         default:
-            if (((SPObjectClass *) gradient_parent_class)->set) {
-                ((SPObjectClass *) gradient_parent_class)->set(object, key, value);
-            }
+            SPPaintServer::set(key, value);
             break;
     }
 }
@@ -553,7 +395,7 @@ void SPGradientImpl::setGradientAttr(SPObject *object, unsigned key, gchar const
 /**
  * Gets called when the gradient is (re)attached to another gradient.
  */
-void SPGradientImpl::gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr)
+void SPGradient::gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr)
 {
     if (old_ref) {
         gr->modified_connection.disconnect();
@@ -561,7 +403,7 @@ void SPGradientImpl::gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGrad
     if ( SP_IS_GRADIENT(ref)
          && ref != gr )
     {
-        gr->modified_connection = ref->connectModified(sigc::bind<2>(sigc::ptr_fun(&SPGradientImpl::gradientRefModified), gr));
+        gr->modified_connection = ref->connectModified(sigc::bind<2>(sigc::ptr_fun(&SPGradient::gradientRefModified), gr));
     }
 
     // Per SVG, all unset attributes must be inherited from linked gradient.
@@ -582,76 +424,84 @@ void SPGradientImpl::gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGrad
 /**
  * Callback for child_added event.
  */
-void SPGradientImpl::childAdded(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
+void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
-    SPGradient *gr = SP_GRADIENT(object);
+    this->invalidateVector();
 
-    gr->invalidateVector();
+    SPPaintServer::child_added(child, ref);
 
-    if (((SPObjectClass *) gradient_parent_class)->child_added) {
-        (* ((SPObjectClass *) gradient_parent_class)->child_added)(object, child, ref);
-    }
-
-    SPObject *ochild = object->get_child_by_repr(child);
+    SPObject *ochild = this->get_child_by_repr(child);
     if ( ochild && SP_IS_STOP(ochild) ) {
-        gr->has_stops = TRUE;
-        if ( gr->getStopCount() > 0 ) {
-            gchar const * attr = gr->getAttribute("osb:paint");
+        this->has_stops = TRUE;
+        if ( this->getStopCount() > 0 ) {
+            gchar const * attr = this->getAttribute("osb:paint");
             if ( attr && strcmp(attr, "gradient") ) {
-                gr->setAttribute( "osb:paint", "gradient", 0 );
+            	this->setAttribute( "osb:paint", "gradient", 0 );
             }
         }
     }
 
     /// \todo Fixme: should we schedule "modified" here?
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**
  * Callback for remove_child event.
  */
-void SPGradientImpl::removeChild(SPObject *object, Inkscape::XML::Node *child)
+void SPGradient::remove_child(Inkscape::XML::Node *child)
 {
-    SPGradient *gr = SP_GRADIENT(object);
+    this->invalidateVector();
 
-    gr->invalidateVector();
+    SPPaintServer::remove_child(child);
 
-    if (((SPObjectClass *) gradient_parent_class)->remove_child) {
-        (* ((SPObjectClass *) gradient_parent_class)->remove_child)(object, child);
-    }
-
-    gr->has_stops = FALSE;
-    for ( SPObject *ochild = object->firstChild() ; ochild ; ochild = ochild->getNext() ) {
+    this->has_stops = FALSE;
+    for ( SPObject *ochild = this->firstChild() ; ochild ; ochild = ochild->getNext() ) {
         if (SP_IS_STOP(ochild)) {
-            gr->has_stops = TRUE;
+            this->has_stops = TRUE;
             break;
         }
     }
 
-    if ( gr->getStopCount() == 0 ) {
-        gchar const * attr = gr->getAttribute("osb:paint");
+    if ( this->getStopCount() == 0 ) {
+        gchar const * attr = this->getAttribute("osb:paint");
+
         if ( attr && strcmp(attr, "solid") ) {
-            gr->setAttribute( "osb:paint", "solid", 0 );
+            this->setAttribute( "osb:paint", "solid", 0 );
         }
     }
 
     /* Fixme: should we schedule "modified" here? */
-    object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**
  * Callback for modified event.
  */
-void SPGradientImpl::modified(SPObject *object, guint flags)
+void SPGradient::modified(guint flags)
 {
-    SPGradient *gr = SP_GRADIENT(object);
-
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
-        gr->invalidateVector();
+        // CPPIFY
+        // This comparison has never worked (i. e. always evaluated to false),
+        // the right value would have been SP_TYPE_MESHGRADIENT
+        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
+//        if (!SP_IS_MESHGRADIENT(this)) {
+//            this->invalidateVector();
+//        } else {
+//            this->invalidateArray();
+//        }
+        this->invalidateVector();
     }
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        gr->ensureVector();
+        // CPPIFY
+        // see above
+        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
+//        if (!SP_IS_MESHGRADIENT(this)) {
+//            this->ensureVector();
+//        } else {
+//            this->ensureArray();
+//        }
+        this->ensureVector();
     }
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -659,18 +509,23 @@ void SPGradientImpl::modified(SPObject *object, guint flags)
 
     // FIXME: climb up the ladder of hrefs
     GSList *l = NULL;
-    for (SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
-        g_object_ref(G_OBJECT(child));
+
+    for (SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
+        sp_object_ref(child);
         l = g_slist_prepend(l, child);
     }
+
     l = g_slist_reverse(l);
+
     while (l) {
         SPObject *child = SP_OBJECT(l->data);
         l = g_slist_remove(l, child);
+
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-        g_object_unref(G_OBJECT(child));
+
+        sp_object_unref(child);
     }
 }
 
@@ -699,22 +554,21 @@ int SPGradient::getStopCount() const
 /**
  * Write gradient attributes to repr.
  */
-Inkscape::XML::Node *SPGradientImpl::write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
+Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
-    SPGradient *gr = SP_GRADIENT(object);
-
-    if (((SPObjectClass *) gradient_parent_class)->write) {
-        (* ((SPObjectClass *) gradient_parent_class)->write)(object, xml_doc, repr, flags);
-    }
+    SPPaintServer::write(xml_doc, repr, flags);
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         GSList *l = NULL;
-        for (SPObject *child = object->firstChild(); child; child = child->getNext()) {
+
+        for (SPObject *child = this->firstChild(); child; child = child->getNext()) {
             Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
+
             if (crepr) {
                 l = g_slist_prepend(l, crepr);
             }
         }
+
         while (l) {
             repr->addChild((Inkscape::XML::Node *) l->data, NULL);
             Inkscape::GC::release((Inkscape::XML::Node *) l->data);
@@ -722,14 +576,14 @@ Inkscape::XML::Node *SPGradientImpl::write(SPObject *object, Inkscape::XML::Docu
         }
     }
 
-    if (gr->ref->getURI()) {
-        gchar *uri_string = gr->ref->getURI()->toString();
+    if (this->ref->getURI()) {
+        gchar *uri_string = this->ref->getURI()->toString();
         repr->setAttribute("xlink:href", uri_string);
         g_free(uri_string);
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || gr->units_set) {
-        switch (gr->units) {
+    if ((flags & SP_OBJECT_WRITE_ALL) || this->units_set) {
+        switch (this->units) {
             case SP_GRADIENT_UNITS_USERSPACEONUSE:
                 repr->setAttribute("gradientUnits", "userSpaceOnUse");
                 break;
@@ -739,17 +593,17 @@ Inkscape::XML::Node *SPGradientImpl::write(SPObject *object, Inkscape::XML::Docu
         }
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || gr->gradientTransform_set) {
-        gchar *c=sp_svg_transform_write(gr->gradientTransform);
+    if ((flags & SP_OBJECT_WRITE_ALL) || this->gradientTransform_set) {
+        gchar *c=sp_svg_transform_write(this->gradientTransform);
         repr->setAttribute("gradientTransform", c);
         g_free(c);
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || gr->spread_set) {
-        /* FIXME: Ensure that gr->spread is the inherited value
-         * if !gr->spread_set.  Not currently happening: see SPGradient::modified.
+    if ((flags & SP_OBJECT_WRITE_ALL) || this->spread_set) {
+        /* FIXME: Ensure that this->spread is the inherited value
+         * if !this->spread_set.  Not currently happening: see SPGradient::modified.
          */
-        switch (gr->spread) {
+        switch (this->spread) {
             case SP_GRADIENT_SPREAD_REFLECT:
                 repr->setAttribute("spreadMethod", "reflect");
                 break;
@@ -762,8 +616,8 @@ Inkscape::XML::Node *SPGradientImpl::write(SPObject *object, Inkscape::XML::Docu
         }
     }
 
-    if ( (flags & SP_OBJECT_WRITE_EXT) && gr->isSwatch() ) {
-        if ( gr->isSolid() ) {
+    if ( (flags & SP_OBJECT_WRITE_EXT) && this->isSwatch() ) {
+        if ( this->isSolid() ) {
             repr->setAttribute( "osb:paint", "solid" );
         } else {
             repr->setAttribute( "osb:paint", "gradient" );
@@ -784,6 +638,19 @@ void SPGradient::ensureVector()
 {
     if ( !vector.built ) {
         rebuildVector();
+    }
+}
+
+/**
+ * Forces the array to be built, if not present (i.e., changed).
+ *
+ * \pre SP_IS_GRADIENT(gradient).
+ */
+void SPGradient::ensureArray()
+{
+    //std::cout << "SPGradient::ensureArray()" << std::endl;
+    if ( !array.built ) {
+        rebuildArray();
     }
 }
 
@@ -982,7 +849,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
 }
 
 
-void SPGradientImpl::gradientRefModified(SPObject */*href*/, guint /*flags*/, SPGradient *gradient)
+void SPGradient::gradientRefModified(SPObject */*href*/, guint /*flags*/, SPGradient *gradient)
 {
     if ( gradient->invalidateVector() ) {
         gradient->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -998,6 +865,20 @@ bool SPGradient::invalidateVector()
     if (vector.built) {
         vector.built = false;
         vector.stops.clear();
+        ret = true;
+    }
+
+    return ret;
+}
+
+/** Return true if change made. */
+bool SPGradient::invalidateArray()
+{
+    bool ret = false;
+
+    if (array.built) {
+        array.built = false;
+        array.clear();
         ret = true;
     }
 
@@ -1102,6 +983,46 @@ void SPGradient::rebuildVector()
     vector.built = true;
 }
 
+/** Creates normalized color mesh patch array */
+void SPGradient::rebuildArray()
+{
+    // std::cout << "SPGradient::rebuildArray()" << std::endl;
+
+    if( !SP_IS_MESHGRADIENT(this) ) {
+        g_warning( "SPGradient::rebuildArray() called for non-mesh gradient" );
+        return;
+    }
+
+    array.read( SP_MESHGRADIENT( this ) );
+
+    has_patches = false;
+    for ( SPObject *ro = firstChild() ; ro ; ro = ro->getNext() ) {
+        if (SP_IS_MESHROW(ro)) {
+            has_patches = true;
+            // std::cout << "  Has Patches" << std::endl;
+            break;
+        }
+    }
+
+    // MESH_FIXME: TO PROPERLY COPY
+    SPGradient *reffed = ref->getObject();
+    if ( !hasPatches() && reffed ) {
+        std::cout << "SPGradient::rebuildArray(): reffed array    NOT IMPLEMENTED!!!" << std::endl;
+        /* Copy array from referenced gradient */
+        array.built = true;   // Prevent infinite recursion.
+        reffed->ensureArray();
+        // if (!reffed->array.nodes.empty()) {
+        //     array.built = reffed->array.built;
+        //     for( uint i = 0; i < reffed->array.nodes.size(); ++i ) {
+        //         array.nodes[i].assign(reffed->array.nodes[i].begin(), reffed->array.nodes[i].end());
+
+        //         // FILL ME
+        //     }
+        //     return;
+        // }
+    }
+}
+
 Geom::Affine
 sp_gradient_get_g2d_matrix(SPGradient const *gr, Geom::Affine const &ctm, Geom::Rect const &bbox)
 {
@@ -1142,356 +1063,12 @@ sp_gradient_set_gs2d_matrix(SPGradient *gr, Geom::Affine const &ctm,
     gr->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-/*
- * Linear Gradient
- */
 
-static void sp_lineargradient_class_init(SPLinearGradientClass *klass);
-static void sp_lineargradient_init(SPLinearGradient *lg);
 
-static void sp_lineargradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr);
-static void sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_lineargradient_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr,
-                                                    guint flags);
-static cairo_pattern_t *sp_lineargradient_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-static SPGradientClass *lg_parent_class;
-
-/**
- * Register SPLinearGradient class and return its type.
- */
-GType
-sp_lineargradient_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPLinearGradientClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_lineargradient_class_init,
-            NULL, NULL,
-            sizeof(SPLinearGradient),
-            16,
-            (GInstanceInitFunc) sp_lineargradient_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GRADIENT, "SPLinearGradient", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-/**
- * SPLinearGradient vtable initialization.
- */
-static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
-
-    lg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
-
-    sp_object_class->build = sp_lineargradient_build;
-    sp_object_class->set = sp_lineargradient_set;
-    sp_object_class->write = sp_lineargradient_write;
-
-    ps_class->pattern_new = sp_lineargradient_create_pattern;
-}
-
-/**
- * Callback for SPLinearGradient object initialization.
- */
-static void sp_lineargradient_init(SPLinearGradient *lg)
-{
-    lg->x1.unset(SVGLength::PERCENT, 0.0, 0.0);
-    lg->y1.unset(SVGLength::PERCENT, 0.0, 0.0);
-    lg->x2.unset(SVGLength::PERCENT, 1.0, 1.0);
-    lg->y2.unset(SVGLength::PERCENT, 0.0, 0.0);
-}
-
-/**
- * Callback: set attributes from associated repr.
- */
-static void sp_lineargradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) lg_parent_class)->build)
-        (* ((SPObjectClass *) lg_parent_class)->build)(object, document, repr);
-
-    object->readAttr( "x1" );
-    object->readAttr( "y1" );
-    object->readAttr( "x2" );
-    object->readAttr( "y2" );
-}
-
-/**
- * Callback: set attribute.
- */
-static void
-sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value)
-{
-    SPLinearGradient *lg = SP_LINEARGRADIENT(object);
-
-    switch (key) {
-        case SP_ATTR_X1:
-            lg->x1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_Y1:
-            lg->y1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_X2:
-            lg->x2.readOrUnset(value, SVGLength::PERCENT, 1.0, 1.0);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_Y2:
-            lg->y2.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        default:
-            if (((SPObjectClass *) lg_parent_class)->set)
-                (* ((SPObjectClass *) lg_parent_class)->set)(object, key, value);
-            break;
-    }
-}
-
-/**
- * Callback: write attributes to associated repr.
- */
-static Inkscape::XML::Node *
-sp_lineargradient_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPLinearGradient *lg = SP_LINEARGRADIENT(object);
-
-    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = xml_doc->createElement("svg:linearGradient");
-    }
-
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->x1._set)
-        sp_repr_set_svg_double(repr, "x1", lg->x1.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->y1._set)
-        sp_repr_set_svg_double(repr, "y1", lg->y1.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->x2._set)
-        sp_repr_set_svg_double(repr, "x2", lg->x2.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || lg->y2._set)
-        sp_repr_set_svg_double(repr, "y2", lg->y2.computed);
-
-    if (((SPObjectClass *) lg_parent_class)->write)
-        (* ((SPObjectClass *) lg_parent_class)->write)(object, xml_doc, repr, flags);
-
-    return repr;
-}
-
-/**
- * Directly set properties of linear gradient and request modified.
- */
-void
-sp_lineargradient_set_position(SPLinearGradient *lg,
-                               gdouble x1, gdouble y1,
-                               gdouble x2, gdouble y2)
-{
-    g_return_if_fail(lg != NULL);
-    g_return_if_fail(SP_IS_LINEARGRADIENT(lg));
-
-    /* fixme: units? (Lauris)  */
-    lg->x1.set(SVGLength::NONE, x1, x1);
-    lg->y1.set(SVGLength::NONE, y1, y1);
-    lg->x2.set(SVGLength::NONE, x2, x2);
-    lg->y2.set(SVGLength::NONE, y2, y2);
-
-    lg->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
-
-/*
- * Radial Gradient
- */
-
-static void sp_radialgradient_class_init(SPRadialGradientClass *klass);
-static void sp_radialgradient_init(SPRadialGradient *rg);
-
-static void sp_radialgradient_build(SPObject *object,
-                                    SPDocument *document,
-                                    Inkscape::XML::Node *repr);
-static void sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value);
-static Inkscape::XML::Node *sp_radialgradient_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr,
-                                                    guint flags);
-static cairo_pattern_t *sp_radialgradient_create_pattern(SPPaintServer *ps, cairo_t *ct, Geom::OptRect const &bbox, double opacity);
-
-static SPGradientClass *rg_parent_class;
-
-/**
- * Register SPRadialGradient class and return its type.
- */
-GType
-sp_radialgradient_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPRadialGradientClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_radialgradient_class_init,
-            NULL, NULL,
-            sizeof(SPRadialGradient),
-            16,
-            (GInstanceInitFunc) sp_radialgradient_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_GRADIENT, "SPRadialGradient", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-/**
- * SPRadialGradient vtable initialization.
- */
-static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-    SPPaintServerClass *ps_class = (SPPaintServerClass *) klass;
-
-    rg_parent_class = (SPGradientClass*)g_type_class_ref(SP_TYPE_GRADIENT);
-
-    sp_object_class->build = sp_radialgradient_build;
-    sp_object_class->set = sp_radialgradient_set;
-    sp_object_class->write = sp_radialgradient_write;
-
-    ps_class->pattern_new = sp_radialgradient_create_pattern;
-}
-
-/**
- * Callback for SPRadialGradient object initialization.
- */
-static void
-sp_radialgradient_init(SPRadialGradient *rg)
-{
-    rg->cx.unset(SVGLength::PERCENT, 0.5, 0.5);
-    rg->cy.unset(SVGLength::PERCENT, 0.5, 0.5);
-    rg->r.unset(SVGLength::PERCENT, 0.5, 0.5);
-    rg->fx.unset(SVGLength::PERCENT, 0.5, 0.5);
-    rg->fy.unset(SVGLength::PERCENT, 0.5, 0.5);
-}
-
-/**
- * Set radial gradient attributes from associated repr.
- */
-static void
-sp_radialgradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) rg_parent_class)->build)
-        (* ((SPObjectClass *) rg_parent_class)->build)(object, document, repr);
-
-    object->readAttr( "cx" );
-    object->readAttr( "cy" );
-    object->readAttr( "r" );
-    object->readAttr( "fx" );
-    object->readAttr( "fy" );
-}
-
-/**
- * Set radial gradient attribute.
- */
-static void
-sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
-{
-    SPRadialGradient *rg = SP_RADIALGRADIENT(object);
-
-    switch (key) {
-        case SP_ATTR_CX:
-            if (!rg->cx.read(value)) {
-                rg->cx.unset(SVGLength::PERCENT, 0.5, 0.5);
-            }
-            if (!rg->fx._set) {
-                rg->fx.value = rg->cx.value;
-                rg->fx.computed = rg->cx.computed;
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_CY:
-            if (!rg->cy.read(value)) {
-                rg->cy.unset(SVGLength::PERCENT, 0.5, 0.5);
-            }
-            if (!rg->fy._set) {
-                rg->fy.value = rg->cy.value;
-                rg->fy.computed = rg->cy.computed;
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_R:
-            if (!rg->r.read(value)) {
-                rg->r.unset(SVGLength::PERCENT, 0.5, 0.5);
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_FX:
-            if (!rg->fx.read(value)) {
-                rg->fx.unset(rg->cx.unit, rg->cx.value, rg->cx.computed);
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        case SP_ATTR_FY:
-            if (!rg->fy.read(value)) {
-                rg->fy.unset(rg->cy.unit, rg->cy.value, rg->cy.computed);
-            }
-            object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-        default:
-            if (((SPObjectClass *) rg_parent_class)->set)
-                ((SPObjectClass *) rg_parent_class)->set(object, key, value);
-            break;
-    }
-}
-
-/**
- * Write radial gradient attributes to associated repr.
- */
-static Inkscape::XML::Node *
-sp_radialgradient_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPRadialGradient *rg = SP_RADIALGRADIENT(object);
-
-    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = xml_doc->createElement("svg:radialGradient");
-    }
-
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx._set) sp_repr_set_svg_double(repr, "cx", rg->cx.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy._set) sp_repr_set_svg_double(repr, "cy", rg->cy.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->r._set) sp_repr_set_svg_double(repr, "r", rg->r.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx._set) sp_repr_set_svg_double(repr, "fx", rg->fx.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy._set) sp_repr_set_svg_double(repr, "fy", rg->fy.computed);
-
-    if (((SPObjectClass *) rg_parent_class)->write)
-        (* ((SPObjectClass *) rg_parent_class)->write)(object, xml_doc, repr, flags);
-
-    return repr;
-}
-
-/**
- * Directly set properties of radial gradient and request modified.
- */
-void
-sp_radialgradient_set_position(SPRadialGradient *rg,
-                               gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r)
-{
-    g_return_if_fail(rg != NULL);
-    g_return_if_fail(SP_IS_RADIALGRADIENT(rg));
-
-    /* fixme: units? (Lauris)  */
-    rg->cx.set(SVGLength::NONE, cx, cx);
-    rg->cy.set(SVGLength::NONE, cy, cy);
-    rg->fx.set(SVGLength::NONE, fx, fx);
-    rg->fy.set(SVGLength::NONE, fy, fy);
-    rg->r.set(SVGLength::NONE, r, r);
-
-    rg->requestModified(SP_OBJECT_MODIFIED_FLAG);
-}
 
 /* CAIRO RENDERING STUFF */
 
-static void
+void
 sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
                                  SPGradient *gr,
                                  Geom::OptRect const &bbox,
@@ -1529,79 +1106,24 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
     ink_cairo_pattern_set_matrix(cp, gs2user.inverse());
 }
 
-static cairo_pattern_t *
-sp_radialgradient_create_pattern(SPPaintServer *ps,
-                                 cairo_t *ct,
-                                 Geom::OptRect const &bbox,
-                                 double opacity)
-{
-    SPRadialGradient *rg = SP_RADIALGRADIENT(ps);
-    SPGradient *gr = SP_GRADIENT(ps);
-
-    gr->ensureVector();
-
-    Geom::Point focus(rg->fx.computed, rg->fy.computed);
-    Geom::Point center(rg->cx.computed, rg->cy.computed);
-    double radius = rg->r.computed;
-    double scale = 1.0;
-    double tolerance = cairo_get_tolerance(ct);
-
-    // code below suggested by Cairo devs to overcome tolerance problems
-    // more: https://bugs.freedesktop.org/show_bug.cgi?id=40918
-    Geom::Point d = focus - center;
-    if (d.length() + tolerance > radius) {
-        scale = radius / d.length();
-
-        double dx = d.x(), dy = d.y();
-        cairo_user_to_device_distance(ct, &dx, &dy);
-        if (!Geom::are_near(dx, 0, tolerance) ||
-            !Geom::are_near(dy, 0, tolerance))
-        {
-            scale *= 1.0 - 2.0 * tolerance / hypot(dx, dy);
-        }
-    }
-
-    cairo_pattern_t *cp = cairo_pattern_create_radial(
-        scale * d.x() + center.x(), scale * d.y() + center.y(), 0,
-        center.x(), center.y(), radius);
-
-    sp_gradient_pattern_common_setup(cp, gr, bbox, opacity);
-
-    return cp;
-}
-
-static cairo_pattern_t *
-sp_lineargradient_create_pattern(SPPaintServer *ps,
-                                 cairo_t */* ct */,
-                                 Geom::OptRect const &bbox,
-                                 double opacity)
-{
-    SPLinearGradient *lg = SP_LINEARGRADIENT(ps);
-    SPGradient *gr = SP_GRADIENT(ps);
-
-    gr->ensureVector();
-
-    cairo_pattern_t *cp = cairo_pattern_create_linear(
-        lg->x1.computed, lg->y1.computed,
-        lg->x2.computed, lg->y2.computed);
-
-    sp_gradient_pattern_common_setup(cp, gr, bbox, opacity);
-
-    return cp;
-}
-
 cairo_pattern_t *
 sp_gradient_create_preview_pattern(SPGradient *gr, double width)
 {
-    gr->ensureVector();
+    cairo_pattern_t *pat = NULL;
 
-    cairo_pattern_t *pat = cairo_pattern_create_linear(0, 0, width, 0);
+    // CPPIFY
+    //if( gr->get_type() != SP_GRADIENT_TYPE_MESH ) {
+    if (!SP_IS_MESHGRADIENT(gr)) {
+        gr->ensureVector();
 
-    for (std::vector<SPGradientStop>::iterator i = gr->vector.stops.begin();
-         i != gr->vector.stops.end(); ++i)
-    {
-        cairo_pattern_add_color_stop_rgba(pat, i->offset,
-            i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity);
+        pat = cairo_pattern_create_linear(0, 0, width, 0);
+
+        for (std::vector<SPGradientStop>::iterator i = gr->vector.stops.begin();
+             i != gr->vector.stops.end(); ++i)
+        {
+            cairo_pattern_add_color_stop_rgba(pat, i->offset,
+              i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity);
+        }
     }
 
     return pat;

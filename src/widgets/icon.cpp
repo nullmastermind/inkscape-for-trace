@@ -16,6 +16,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/icontheme.h>
 #include <cstring>
 #include <glib.h>
@@ -24,6 +28,7 @@
 #include <gtkmm/image.h>
 #include <gdkmm/pixbuf.h>
 #include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 #include <2geom/transforms.h>
 
 #include "path-prefix.h"
@@ -37,22 +42,12 @@
 #include "display/drawing.h"
 #include "io/sys.h"
 #include "sp-root.h"
+#include "util/units.h"
 
 #include "icon.h"
-
-// Bring in work-around for Glib versions missing GStatBuf
-#if !GLIB_CHECK_VERSION(2,25,0)
-#if defined (_MSC_VER) && !defined(_WIN64)
-typedef struct _stat32 GStatBuf;
-#else //defined (_MSC_VER) && !defined(_WIN64)
-typedef struct stat GStatBuf;
-#endif //defined (_MSC_VER) && !defined(_WIN64)
-#endif //!GLIB_CHECK_VERSION(2,25,0)
+#include "ui/icon-names.h"
 
 struct IconImpl {
-    static void classInit(SPIconClass *klass);
-    static void init(SPIcon *icon);
-
     static GtkWidget *newFull( Inkscape::IconSize lsize, gchar const *name );
 
     static void dispose(GObject *object);
@@ -71,9 +66,11 @@ struct IconImpl {
 		    gint *natural_height);
 
     static void sizeAllocate(GtkWidget *widget, GtkAllocation *allocation);
-    static int expose(GtkWidget *widget, GdkEventExpose *event);
+    static gboolean draw(GtkWidget *widget, cairo_t *cr);
 
-    static void paint(SPIcon *icon, GdkRectangle const *area);
+#if !GTK_CHECK_VERSION(3,0,0)
+    static gboolean expose(GtkWidget *widget, GdkEventExpose *event);
+#endif
 
     static void screenChanged( GtkWidget *widget, GdkScreen *previous_screen );
     static void styleSet( GtkWidget *widget, GtkStyle *previous_style );
@@ -111,12 +108,10 @@ struct IconImpl {
 
 private:
     static const std::string magicNumber;
-    static GtkWidgetClass *parent_class;
     static std::map<Glib::ustring, Glib::ustring> legacyNames;
 };
 
 const std::string IconImpl::magicNumber = "1.0";
-GtkWidgetClass *IconImpl::parent_class = 0;
 std::map<Glib::ustring, Glib::ustring> IconImpl::legacyNames;
 
 
@@ -148,58 +143,37 @@ public:
 static std::map<Glib::ustring, std::vector<IconCacheItem> > iconSetCache;
 static std::set<Glib::ustring> internalNames;
 
-GType SPIcon::getType()
+G_DEFINE_TYPE(SPIcon, sp_icon, GTK_TYPE_WIDGET);
+
+static void
+sp_icon_class_init(SPIconClass *klass)
 {
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPIconClass),
-            NULL,
-            NULL,
-            reinterpret_cast<GClassInitFunc>(IconImpl::classInit),
-            NULL,
-            NULL,
-            sizeof(SPIcon),
-            0,
-            reinterpret_cast<GInstanceInitFunc>(IconImpl::init),
-            NULL
-        };
-        type = g_type_register_static(GTK_TYPE_WIDGET, "SPIcon", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-void IconImpl::classInit(SPIconClass *klass)
-{
-    GObjectClass *object_class;
-    GtkWidgetClass *widget_class;
-
-    object_class = (GObjectClass *) klass;
-    widget_class = (GtkWidgetClass *) klass;
-
-    parent_class = (GtkWidgetClass*)g_type_class_peek_parent(klass);
+    GObjectClass   *object_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->dispose = IconImpl::dispose;
 
 #if GTK_CHECK_VERSION(3,0,0)
     widget_class->get_preferred_width = IconImpl::getPreferredWidth;
     widget_class->get_preferred_height = IconImpl::getPreferredHeight;
+    widget_class->draw = IconImpl::draw;
 #else
     widget_class->size_request = IconImpl::sizeRequest;
+    widget_class->expose_event = IconImpl::expose;
 #endif
     widget_class->size_allocate = IconImpl::sizeAllocate;
-    widget_class->expose_event = IconImpl::expose;
     widget_class->screen_changed = IconImpl::screenChanged;
     widget_class->style_set = IconImpl::styleSet;
 }
 
-void IconImpl::init(SPIcon *icon)
+static void
+sp_icon_init(SPIcon *icon)
 {
     gtk_widget_set_has_window (GTK_WIDGET (icon), FALSE);
     icon->lsize = Inkscape::ICON_SIZE_BUTTON;
     icon->psize = 0;
-    icon->name = 0;
-    icon->pb = 0;
+    icon->name = NULL;
+    icon->pb = NULL;
 }
 
 void IconImpl::dispose(GObject *object)
@@ -208,10 +182,10 @@ void IconImpl::dispose(GObject *object)
     clear(icon);
     if ( icon->name ) {
         g_free( icon->name );
-        icon->name = 0;
+        icon->name = NULL;
     }
 
-    ((GObjectClass *) (parent_class))->dispose(object);
+    (G_OBJECT_CLASS(sp_icon_parent_class))->dispose(object);
 }
 
 void IconImpl::reset( SPIcon *icon )
@@ -262,19 +236,75 @@ void IconImpl::sizeAllocate(GtkWidget *widget, GtkAllocation *allocation)
     }
 }
 
-int IconImpl::expose(GtkWidget *widget, GdkEventExpose *event)
+gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
 {
-    if ( gtk_widget_is_drawable(widget) ) {
-        SPIcon *icon = SP_ICON(widget);
-        if ( !icon->pb ) {
-            fetchPixbuf( icon );
-        }
+    SPIcon *icon = SP_ICON(widget);
+    if ( !icon->pb ) {
+        fetchPixbuf( icon );
+    }
+    
+    GdkPixbuf *image = icon->pb;
+    bool unref_image = false;
 
-        paint(icon, &event->area);
+    /* copied from the expose function of GtkImage */
+    if (gtk_widget_get_state (GTK_WIDGET(icon)) != GTK_STATE_NORMAL && image) {
+        GtkIconSource *source = gtk_icon_source_new();
+        gtk_icon_source_set_pixbuf(source, icon->pb);
+        gtk_icon_source_set_size(source, GTK_ICON_SIZE_SMALL_TOOLBAR); // note: this is boilerplate and not used
+        gtk_icon_source_set_size_wildcarded(source, FALSE);
+
+#if GTK_CHECK_VERSION(3,0,0)
+        image = gtk_render_icon_pixbuf(gtk_widget_get_style_context(widget), 
+                                       source, 
+                                       (GtkIconSize)-1);
+#else
+        image = gtk_style_render_icon(gtk_widget_get_style(widget), source, 
+			gtk_widget_get_direction(widget),
+			(GtkStateType) gtk_widget_get_state(widget), 
+			(GtkIconSize)-1, widget, "gtk-image");
+#endif
+
+        gtk_icon_source_free(source);
+        unref_image = true;
     }
 
+    if (image) {
+        GtkAllocation allocation;
+	GtkRequisition requisition;
+	gtk_widget_get_allocation(widget, &allocation);
+	gtk_widget_get_requisition(widget, &requisition);
+        int x = floor(allocation.x + ((allocation.width - requisition.width) * 0.5));
+        int y = floor(allocation.y + ((allocation.height - requisition.height) * 0.5));
+        int width = gdk_pixbuf_get_width(image);
+        int height = gdk_pixbuf_get_height(image);
+        // Limit drawing to when we actually have something. Avoids some crashes.
+        if ( (width > 0) && (height > 0) ) {
+		gdk_cairo_set_source_pixbuf(cr, image, x, y);
+		cairo_paint(cr);
+        }
+    }
+
+    if (unref_image) {
+        g_object_unref(G_OBJECT(image));
+    }
+    
     return TRUE;
 }
+
+#if !GTK_CHECK_VERSION(3,0,0)
+gboolean IconImpl::expose(GtkWidget *widget, GdkEventExpose * /*event*/)
+{
+    gboolean result = TRUE;
+
+    if (gtk_widget_is_drawable(widget)) {
+	cairo_t * cr = gdk_cairo_create(gtk_widget_get_window(widget));
+        result = draw(widget, cr);
+	cairo_destroy(cr);
+    }
+
+    return result;
+}
+#endif
 
 // PUBLIC CALL:
 void sp_icon_fetch_pixbuf( SPIcon *icon )
@@ -295,7 +325,7 @@ void IconImpl::fetchPixbuf( SPIcon *icon )
 GdkPixbuf* IconImpl::renderup( gchar const* name, Inkscape::IconSize lsize, unsigned psize ) {
     GtkIconTheme *theme = gtk_icon_theme_get_default();
 
-    GdkPixbuf *pb = 0;
+    GdkPixbuf *pb = NULL;
     if (gtk_icon_theme_has_icon(theme, name)) {
         pb = gtk_icon_theme_load_icon(theme, name, psize, (GtkIconLookupFlags) 0, NULL);
     }
@@ -328,8 +358,8 @@ GdkPixbuf* IconImpl::renderup( gchar const* name, Inkscape::IconSize lsize, unsi
 
 void IconImpl::screenChanged( GtkWidget *widget, GdkScreen *previous_screen )
 {
-    if ( GTK_WIDGET_CLASS( parent_class )->screen_changed ) {
-        GTK_WIDGET_CLASS( parent_class )->screen_changed( widget, previous_screen );
+    if ( GTK_WIDGET_CLASS( sp_icon_parent_class )->screen_changed ) {
+        GTK_WIDGET_CLASS( sp_icon_parent_class )->screen_changed( widget, previous_screen );
     }
     SPIcon *icon = SP_ICON(widget);
     themeChanged(icon);
@@ -337,8 +367,8 @@ void IconImpl::screenChanged( GtkWidget *widget, GdkScreen *previous_screen )
 
 void IconImpl::styleSet( GtkWidget *widget, GtkStyle *previous_style )
 {
-    if ( GTK_WIDGET_CLASS( parent_class )->style_set ) {
-        GTK_WIDGET_CLASS( parent_class )->style_set( widget, previous_style );
+    if ( GTK_WIDGET_CLASS( sp_icon_parent_class )->style_set ) {
+        GTK_WIDGET_CLASS( sp_icon_parent_class )->style_set( widget, previous_style );
     }
     SPIcon *icon = SP_ICON(widget);
     themeChanged(icon);
@@ -422,13 +452,13 @@ void IconImpl::validateCache()
 
     std::string present;
     {
-        gchar *contents = 0;
+        gchar *contents = NULL;
         if ( g_file_get_contents(iconCacheFile.c_str(), &contents, 0, 0) ) {
             if ( contents ) {
                 present = contents;
             }
             g_free(contents);
-            contents = 0;
+            contents = NULL;
         }
     }
     bool cacheValid = (present == wanted);
@@ -754,53 +784,29 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
 {
     static bool dump = Inkscape::Preferences::get()->getBool("/debug/icons/dumpGtk");
 
-    GtkWidget *widget = 0;
+    GtkWidget *widget = NULL;
     gint trySize = CLAMP( static_cast<gint>(lsize), 0, static_cast<gint>(G_N_ELEMENTS(iconSizeLookup) - 1) );
     if ( !sizeMapDone ) {
         injectCustomSize();
     }
     GtkIconSize mappedSize = iconSizeLookup[trySize];
 
-    GtkStockItem stock;
-    gboolean stockFound = gtk_stock_lookup( name, &stock );
-
-    GtkWidget *img = 0;
     if ( legacyNames.empty() ) {
         setupLegacyNaming();
     }
 
-    if ( stockFound ) {
-        img = gtk_image_new_from_stock( name, mappedSize );
-    } else {
-        img = gtk_image_new_from_icon_name( name, mappedSize );
-        if ( dump ) {
-            g_message("gtk_image_new_from_icon_name( '%s', %d ) = %p", name, mappedSize, img);
-            GtkImageType thing = gtk_image_get_storage_type(GTK_IMAGE(img));
-            g_message("      Type is %d  %s", (int)thing, (thing == GTK_IMAGE_EMPTY ? "Empty" : "ok"));
-        }
+    GtkWidget *img = gtk_image_new_from_icon_name( name, mappedSize );
+    if ( dump ) {
+        g_message("gtk_image_new_from_icon_name( '%s', %d ) = %p", name, mappedSize, img);
+        GtkImageType thing = gtk_image_get_storage_type(GTK_IMAGE(img));
+        g_message("      Type is %d  %s", (int)thing, (thing == GTK_IMAGE_EMPTY ? "Empty" : "ok"));
     }
 
     if ( img ) {
         GtkImageType type = gtk_image_get_storage_type( GTK_IMAGE(img) );
-        if ( type == GTK_IMAGE_STOCK ) {
-            if ( !stockFound ) {
-                // It's not showing as a stock ID, so assume it will be present internally
-                addPreRender( mappedSize, name );
-
-                // Add a hook to render if set visible before prerender is done.
-                g_signal_connect( G_OBJECT(img), "map", G_CALLBACK(imageMapCB), GINT_TO_POINTER(static_cast<int>(mappedSize)) );
-                if ( dump ) {
-                    g_message("      connecting %p for imageMapCB for [%s] %d", img, name, (int)mappedSize);
-                }
-            }
+        if ( type == GTK_IMAGE_ICON_NAME ) {
             widget = GTK_WIDGET(img);
-            img = 0;
-            if ( dump ) {
-                g_message( "loaded gtk  '%s' %d  (GTK_IMAGE_STOCK) %s  on %p", name, mappedSize, (stockFound ? "STOCK" : "local"), widget );
-            }
-        } else if ( type == GTK_IMAGE_ICON_NAME ) {
-            widget = GTK_WIDGET(img);
-            img = 0;
+            img = NULL;
 
             // Add a hook to render if set visible before prerender is done.
             g_signal_connect( G_OBJECT(widget), "map", G_CALLBACK(imageMapNamedCB), GINT_TO_POINTER(0) );
@@ -813,16 +819,16 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
             }
         } else {
             if ( dump ) {
-                g_message( "skipped gtk '%s' %d  (not GTK_IMAGE_STOCK)", name, lsize );
+                g_message( "skipped gtk '%s' %d  (not GTK_IMAGE_ICON_NAME)", name, lsize );
             }
-            //g_object_unref( (GObject *)img );
-            img = 0;
+            //g_object_unref(G_OBJECT(img));
+            img = NULL;
         }
     }
 
     if ( !widget ) {
         //g_message("Creating an SPIcon instance for %s:%d", name, (int)lsize);
-        SPIcon *icon = (SPIcon *)g_object_new(SP_TYPE_ICON, NULL);
+        SPIcon *icon = SP_ICON(g_object_new(SP_TYPE_ICON, NULL));
         icon->lsize = lsize;
         icon->name = g_strdup(name);
         icon->psize = getPhysSize(lsize);
@@ -839,10 +845,17 @@ GtkWidget *sp_icon_new( Inkscape::IconSize lsize, gchar const *name )
     return IconImpl::newFull( lsize, name );
 }
 
+// PUBLIC CALL for when you REALLY need a pixbuf
+GdkPixbuf *sp_pixbuf_new( Inkscape::IconSize lsize, gchar const *name )
+{
+    int psize = IconImpl::getPhysSize(lsize);
+    return IconImpl::renderup(name, lsize, psize);
+}
+
 // PUBLIC CALL:
 Gtk::Widget *sp_icon_get_icon( Glib::ustring const &oid, Inkscape::IconSize size )
 {
-    Gtk::Widget *result = 0;
+    Gtk::Widget *result = NULL;
     GtkWidget *widget = IconImpl::newFull( static_cast<Inkscape::IconSize>(Inkscape::getRegisteredIconSize(size)), oid.c_str() );
 
     if ( widget ) {
@@ -972,7 +985,7 @@ int IconImpl::getPhysSize(int size)
             "inkscape-decoration"
         };
 
-        GtkWidget *icon = (GtkWidget *)g_object_new(SP_TYPE_ICON, NULL);
+        GtkWidget *icon = GTK_WIDGET(g_object_new(SP_TYPE_ICON, NULL));
 
         for (unsigned i = 0; i < G_N_ELEMENTS(gtkSizes); ++i) {
             guint const val_ix = (gtkSizes[i] <= GTK_ICON_SIZE_DIALOG) ? (guint)gtkSizes[i] : (guint)Inkscape::ICON_SIZE_DECORATION;
@@ -997,7 +1010,7 @@ int IconImpl::getPhysSize(int size)
             //   "The rendered pixbuf may not even correspond to the width/height returned by
             //   gtk_icon_size_lookup(), because themes are free to render the pixbuf however
             //   they like, including changing the usual size."
-            gchar const *id = GTK_STOCK_OPEN;
+            gchar const *id = INKSCAPE_ICON("document-open");
             GdkPixbuf *pb = gtk_widget_render_icon( icon, id, gtkSizes[i], NULL);
             if (pb) {
                 width = gdk_pixbuf_get_width(pb);
@@ -1021,52 +1034,11 @@ int IconImpl::getPhysSize(int size)
     return vals[size];
 }
 
-void IconImpl::paint(SPIcon *icon, GdkRectangle const */*area*/)
-{
-    GtkWidget &widget = *GTK_WIDGET(icon);
-    GdkPixbuf *image = icon->pb;
-    bool unref_image = false;
 
-    /* copied from the expose function of GtkImage */
-    if (gtk_widget_get_state (GTK_WIDGET(icon)) != GTK_STATE_NORMAL && image) {
-        GtkIconSource *source = gtk_icon_source_new();
-        gtk_icon_source_set_pixbuf(source, icon->pb);
-        gtk_icon_source_set_size(source, GTK_ICON_SIZE_SMALL_TOOLBAR); // note: this is boilerplate and not used
-        gtk_icon_source_set_size_wildcarded(source, FALSE);
-        image = gtk_style_render_icon(gtk_widget_get_style(&widget), source, 
-			gtk_widget_get_direction(&widget),
-			(GtkStateType) gtk_widget_get_state(&widget), 
-			(GtkIconSize)-1, &widget, "gtk-image");
-        gtk_icon_source_free(source);
-        unref_image = true;
-    }
-
-    if (image) {
-        GtkAllocation allocation;
-	GtkRequisition requisition;
-	gtk_widget_get_allocation(&widget, &allocation);
-	gtk_widget_get_requisition(&widget, &requisition);
-        int x = floor(allocation.x + ((allocation.width - requisition.width) * 0.5));
-        int y = floor(allocation.y + ((allocation.height - requisition.height) * 0.5));
-        int width = gdk_pixbuf_get_width(image);
-        int height = gdk_pixbuf_get_height(image);
-        // Limit drawing to when we actually have something. Avoids some crashes.
-        if ( (width > 0) && (height > 0) ) {
-            gdk_draw_pixbuf(GDK_DRAWABLE(gtk_widget_get_window(&widget)), 
-			    gtk_widget_get_style(&widget)->black_gc, image,
-                            0, 0, x, y, width, height,
-                            GDK_RGB_DITHER_NORMAL, x, y);
-        }
-    }
-
-    if (unref_image) {
-        g_object_unref(G_OBJECT(image));
-    }
-}
 
 GdkPixbuf *IconImpl::loadPixmap(gchar const *name, unsigned /*lsize*/, unsigned psize)
 {
-    gchar *path = (gchar *) g_strdup_printf("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
+    gchar *path = g_strdup_printf("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
     // TODO: bulia, please look over
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
@@ -1080,7 +1052,7 @@ GdkPixbuf *IconImpl::loadPixmap(gchar const *name, unsigned /*lsize*/, unsigned 
     g_free(localFilename);
     g_free(path);
     if (!pb) {
-        path = (gchar *) g_strdup_printf("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
+        path = g_strdup_printf("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
         // TODO: bulia, please look over
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
@@ -1143,7 +1115,7 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
             if ( object->parent == NULL )
             {
                 dbox = Geom::Rect(Geom::Point(0, 0),
-                                Geom::Point(doc->getWidth(), doc->getHeight()));
+                                Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
             }
 
             /* This is in document coordinates, i.e. pixels */
@@ -1218,9 +1190,9 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                 /* Render */
                 cairo_surface_t *s = cairo_image_surface_create_for_data(px,
                     CAIRO_FORMAT_ARGB32, psize, psize, stride);
-                Inkscape::DrawingContext ct(s, ua.min());
+                Inkscape::DrawingContext dc(s, ua.min());
 
-                drawing.render(ct, ua);
+                drawing.render(dc, ua);
                 cairo_surface_destroy(s);
 
                 // convert to GdkPixbuf format
@@ -1270,7 +1242,7 @@ Glib::ustring icon_cache_key(Glib::ustring const & name, unsigned psize)
 }
 
 GdkPixbuf *get_cached_pixbuf(Glib::ustring const &key) {
-    GdkPixbuf* pb = 0;
+    GdkPixbuf* pb = NULL;
     std::map<Glib::ustring, GdkPixbuf *>::iterator found = pb_cache.find(key);
     if ( found != pb_cache.end() ) {
         pb = found->second;
@@ -1304,7 +1276,7 @@ guchar *IconImpl::load_svg_pixels(std::list<Glib::ustring> const &names,
     guchar *px = NULL;
     for (std::list<gchar*>::iterator i = sources.begin(); (i != sources.end()) && !px; ++i) {
         gchar *doc_filename = *i;
-        SVGDocCache *info = 0;
+        SVGDocCache *info = NULL;
 
         // Did we already load this doc?
         Glib::ustring key(doc_filename);
@@ -1338,11 +1310,11 @@ guchar *IconImpl::load_svg_pixels(std::list<Glib::ustring> const &names,
 }
 
 static void addToIconSet(GdkPixbuf* pb, gchar const* name, GtkIconSize lsize, unsigned psize) {
-    static bool dump = Inkscape::Preferences::get()->getBool("/debug/icons/dumpGtk");
-    GtkStockItem stock;
-    gboolean stockFound = gtk_stock_lookup( name, &stock );
-   if ( !stockFound ) {
+    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
+    bool icon_found = icon_theme->has_icon(name);
+    if ( !icon_found ) {
         Gtk::IconTheme::add_builtin_icon( name, psize, Glib::wrap(pb) );
+        static bool dump = Inkscape::Preferences::get()->getBool("/debug/icons/dumpGtk");
         if (dump) {
             g_message("    set in a builtin for %s:%d:%d", name, lsize, psize);
         }
@@ -1351,10 +1323,8 @@ static void addToIconSet(GdkPixbuf* pb, gchar const* name, GtkIconSize lsize, un
 
 void Inkscape::queueIconPrerender( Glib::ustring const &name, Inkscape::IconSize lsize )
 {
-    GtkStockItem stock;
-    gboolean stockFound = gtk_stock_lookup( name.c_str(), &stock );
     gboolean themedFound = gtk_icon_theme_has_icon(gtk_icon_theme_get_default(), name.c_str());
-    if (!stockFound && !themedFound ) {
+    if ( !themedFound ) {
         gint trySize = CLAMP( static_cast<gint>(lsize), 0, static_cast<gint>(G_N_ELEMENTS(iconSizeLookup) - 1) );
         if ( !sizeMapDone ) {
             IconImpl::injectCustomSize();
@@ -1384,7 +1354,6 @@ static std::string getDestDir( unsigned psize )
 bool IconImpl::prerenderIcon(gchar const *name, GtkIconSize lsize, unsigned psize)
 {
     bool loadNeeded = false;
-    static bool dump = Inkscape::Preferences::get()->getBool("/debug/icons/dumpGtk");
     static bool useCache = Inkscape::Preferences::get()->getBool("/debug/icons/useCache", true);
     static bool cacheValidated = false;
     if (!cacheValidated) {
@@ -1396,6 +1365,7 @@ bool IconImpl::prerenderIcon(gchar const *name, GtkIconSize lsize, unsigned psiz
 
     Glib::ustring key = icon_cache_key(name, psize);
     if ( !get_cached_pixbuf(key) ) {
+        static bool dump = Inkscape::Preferences::get()->getBool("/debug/icons/dumpGtk");
         if ((internalNames.find(name) != internalNames.end())
             || (!gtk_icon_theme_has_icon(gtk_icon_theme_get_default(), name))) {
             if (dump) {
@@ -1620,9 +1590,9 @@ gboolean IconImpl::prerenderTask(gpointer /*data*/) {
 
 void IconImpl::imageMapCB(GtkWidget* widget, gpointer user_data)
 {
-    gchar* id = 0;
+    gchar const* id = NULL;
     GtkIconSize size = GTK_ICON_SIZE_INVALID;
-    gtk_image_get_stock(GTK_IMAGE(widget), &id, &size);
+    gtk_image_get_icon_name(GTK_IMAGE(widget), &id, &size);
     GtkIconSize lsize = static_cast<GtkIconSize>(GPOINTER_TO_INT(user_data));
     if ( id ) {
         int psize = getPhysSize(lsize);
@@ -1647,33 +1617,34 @@ void IconImpl::imageMapCB(GtkWidget* widget, gpointer user_data)
 void IconImpl::imageMapNamedCB(GtkWidget* widget, gpointer user_data)
 {
     GtkImage* img = GTK_IMAGE(widget);
-    gchar const* iconName = 0;
+    gchar const* iconName = NULL;
     GtkIconSize size = GTK_ICON_SIZE_INVALID;
     gtk_image_get_icon_name(img, &iconName, &size);
     if ( iconName ) {
         GtkImageType type = gtk_image_get_storage_type( GTK_IMAGE(img) );
         if ( type == GTK_IMAGE_ICON_NAME ) {
 
-            gint iconSize = 0;
-            gchar* iconName = 0;
+            GtkIconSize iconSize = GTK_ICON_SIZE_INVALID;
+            gchar const* iconName_two = NULL;
             {
                 g_object_get(G_OBJECT(widget),
-                             "icon-name", &iconName,
+                             "icon-name", &iconName_two,
                              "icon-size", &iconSize,
                              NULL);
             }
 
             for ( std::vector<preRenderItem>::iterator it = pendingRenders.begin(); it != pendingRenders.end(); ++it ) {
-                if ( (it->_name == iconName) && (it->_lsize == size) ) {
-                    int psize = getPhysSize(size);
-                    prerenderIcon(iconName, size, psize);
+                /// @todo  fix pointer string comparison here!!! "it->_name == iconName_two", that seems very bug-prone
+                if ( (it->_name == iconName_two) && (it->_lsize == iconSize) ) {
+                    int psize = getPhysSize(iconSize);
+                    prerenderIcon(iconName_two, iconSize, psize);
                     pendingRenders.erase(it);
                     break;
                 }
             }
 
-            gtk_image_set_from_icon_name(img, "", (GtkIconSize)iconSize);
-            gtk_image_set_from_icon_name(img, iconName, (GtkIconSize)iconSize);
+            gtk_image_set_from_icon_name(img, "", iconSize);
+            gtk_image_set_from_icon_name(img, iconName_two, iconSize);
         } else {
             g_warning("UNEXPECTED TYPE of %d", (int)type);
         }

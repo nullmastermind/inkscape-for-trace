@@ -1,4 +1,3 @@
-#define INKSCAPE_LPE_PERP_BISECTOR_CPP
 /** \file
  * LPE <perp_bisector> implementation.
  */
@@ -12,6 +11,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <glibmm/i18n.h>
 
 #include "live_effects/lpe-perp_bisector.h"
 #include "display/curve.h"
@@ -30,41 +31,41 @@ namespace PB {
 class KnotHolderEntityEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityEnd(LPEPerpBisector *effect) : LPEKnotHolderEntity(effect) {};
-    void bisector_end_set(Geom::Point const &p, bool left = true);
+    void bisector_end_set(Geom::Point const &p, guint state, bool left = true);
 };
 
 class KnotHolderEntityLeftEnd : public KnotHolderEntityEnd {
 public:
     KnotHolderEntityLeftEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 class KnotHolderEntityRightEnd : public KnotHolderEntityEnd {
 public:
     KnotHolderEntityRightEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 Geom::Point
-KnotHolderEntityLeftEnd::knot_get() {
-    LPEPerpBisector *lpe = dynamic_cast<LPEPerpBisector *>(_effect);
+KnotHolderEntityLeftEnd::knot_get() const {
+    LPEPerpBisector const* lpe = dynamic_cast<LPEPerpBisector const*>(_effect);
     return Geom::Point(lpe->C);
 }
 
 Geom::Point
-KnotHolderEntityRightEnd::knot_get() {
-    LPEPerpBisector *lpe = dynamic_cast<LPEPerpBisector *>(_effect);
+KnotHolderEntityRightEnd::knot_get() const {
+    LPEPerpBisector const* lpe = dynamic_cast<LPEPerpBisector const*>(_effect);
     return Geom::Point(lpe->D);
 }
 
 void
-KnotHolderEntityEnd::bisector_end_set(Geom::Point const &p, bool left) {
+KnotHolderEntityEnd::bisector_end_set(Geom::Point const &p, guint state, bool left) {
     LPEPerpBisector *lpe = dynamic_cast<LPEPerpBisector *>(_effect);
     if (!lpe) return;
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_point(s, lpe->M, lpe->perp_dir);
     if (left) {
@@ -80,21 +81,21 @@ KnotHolderEntityEnd::bisector_end_set(Geom::Point const &p, bool left) {
 }
 
 void
-KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) {
-    bisector_end_set(p);
+KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) {
+    bisector_end_set(p, state);
 }
 
 void
-KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) {
-    bisector_end_set(p, false);
+KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) {
+    bisector_end_set(p, state, false);
 }
 
 } //namescape PB
 
 LPEPerpBisector::LPEPerpBisector(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    length_left(_("Length left"), _("Specifies the left end of the bisector"), "length-left", &wr, this, 200),
-    length_right(_("Length right"), _("Specifies the right end of the bisector"), "length-right", &wr, this, 200),
+    length_left(_("Length left:"), _("Specifies the left end of the bisector"), "length-left", &wr, this, 200),
+    length_right(_("Length right:"), _("Specifies the right end of the bisector"), "length-right", &wr, this, 200),
     A(0,0), B(0,0), M(0,0), C(0,0), D(0,0), perp_dir(0,0)
 {
     show_orig_path = true;
@@ -110,7 +111,7 @@ LPEPerpBisector::~LPEPerpBisector()
 }
 
 void
-LPEPerpBisector::doOnApply (SPLPEItem */*lpeitem*/)
+LPEPerpBisector::doOnApply (SPLPEItem const*/*lpeitem*/)
 {
     /* make the path a straight line */
     /**
@@ -155,13 +156,13 @@ LPEPerpBisector::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *deskto
     {
         KnotHolderEntity *e = new PB::KnotHolderEntityLeftEnd(this);
         e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the bisector's \"left\" end") );
+                   _("Adjust the \"left\" end of the bisector") );
         knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new PB::KnotHolderEntityRightEnd(this);
         e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the bisector's \"right\" end") );
+                   _("Adjust the \"right\" end of the bisector") );
         knotholder->add(e);
     }
 };

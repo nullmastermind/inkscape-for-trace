@@ -2,6 +2,7 @@
 #include "util/longest-common-suffix.h"
 #include "xml/repr.h"
 #include "xml/node-iterators.h"
+#include "repr-sorting.h"
 
 static bool same_repr(Inkscape::XML::Node const &a, Inkscape::XML::Node const &b)
 {
@@ -13,9 +14,14 @@ Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node
 {
     using Inkscape::Algorithms::longest_common_suffix;
     Inkscape::XML::Node const *ancestor = longest_common_suffix<Inkscape::XML::NodeConstParentIterator>(
-        a, b, NULL, &same_repr
-    );
-    if ( ancestor && ancestor->type() != Inkscape::XML::DOCUMENT_NODE ) {
+        a, b, NULL, &same_repr);
+    bool OK = false;
+    if (ancestor) {
+        if (ancestor->type() != Inkscape::XML::DOCUMENT_NODE) {
+            OK = true;
+        }
+    }
+    if ( OK ) {
         return ancestor;
     } else {
         return NULL;

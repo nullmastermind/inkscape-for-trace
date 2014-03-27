@@ -16,36 +16,21 @@
 
 #include "sp-object.h"
 
-#define SP_TYPE_OBJECTGROUP (SPObjectGroup::sp_objectgroup_get_type ())
-#define SP_OBJECTGROUP(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_OBJECTGROUP, SPObjectGroup))
-#define SP_OBJECTGROUP_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_OBJECTGROUP, SPObjectGroupClass))
-#define SP_IS_OBJECTGROUP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OBJECTGROUP))
-#define SP_IS_OBJECTGROUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_OBJECTGROUP))
+#define SP_OBJECTGROUP(obj) (dynamic_cast<SPObjectGroup*>((SPObject*)obj))
+#define SP_IS_OBJECTGROUP(obj) (dynamic_cast<const SPObjectGroup*>((SPObject*)obj) != NULL)
 
 class SPObjectGroup : public SPObject {
 public:
-    static GType sp_objectgroup_get_type(void);
+	SPObjectGroup();
+	virtual ~SPObjectGroup();
 
-private:
-    static void init(SPObjectGroup *objectgroup);
+protected:
+	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	virtual void remove_child(Inkscape::XML::Node* child);
 
-    static void childAdded(SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
-    static void removeChild(SPObject * object, Inkscape::XML::Node * child);
-    static void orderChanged(SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * old_ref, Inkscape::XML::Node * new_ref);
-    static Inkscape::XML::Node *write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
+	virtual void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old, Inkscape::XML::Node* new_repr);
 
-    friend class SPObjectGroupClass;	
-};
-
-class SPObjectGroupClass {
-public:
-    SPObjectClass parent_class;
-
-private:
-    static void sp_objectgroup_class_init(SPObjectGroupClass *klass);
-    static SPObjectClass *static_parent_class;
-
-    friend class SPObjectGroup;	
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
 };
 
 #endif // SEEN_SP_OBJECTGROUP_H

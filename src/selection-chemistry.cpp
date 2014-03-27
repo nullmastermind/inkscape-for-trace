@@ -11,6 +11,7 @@
  *   Martin Sucha <martin.sucha-inkscape@jts-sro.sk>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Tavmjong Bah <tavmjong@free.fr> (Symbol additions)
  *
  * Copyright (C) 1999-2010,2012 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
@@ -22,19 +23,19 @@
 # include "config.h"
 #endif
 
+#include <gtkmm/clipboard.h>
+
 #include "file.h"
 #include "selection-chemistry.h"
 
 // TOOD fixme: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
-
-#include <gtkmm/clipboard.h>
-
 #include "svg/svg.h"
 #include "desktop.h"
 #include "desktop-style.h"
 #include "dir-util.h"
+#include "layer-model.h"
 #include "selection.h"
 #include "tools-switch.h"
 #include "desktop-handles.h"
@@ -48,12 +49,20 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-flowtext.h"
 #include "sp-flowregion.h"
 #include "sp-image.h"
+#include "sp-rect.h"
+#include "sp-ellipse.h"
+#include "sp-star.h"
+#include "sp-spiral.h"
+#include "sp-switch.h"
+#include "sp-polyline.h"
+#include "sp-line.h"
 #include "text-editing.h"
-#include "text-context.h"
-#include "connector-context.h"
+#include "display/sp-canvas.h"
+#include "ui/tools/text-tool.h"
+#include "ui/tools/connector-tool.h"
 #include "sp-path.h"
 #include "sp-conn-end.h"
-#include "dropper-context.h"
+#include "ui/tools/dropper-tool.h"
 #include <glibmm/i18n.h>
 #include <2geom/transforms.h>
 #include "xml/repr.h"
@@ -63,10 +72,11 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "document-undo.h"
 #include "sp-gradient.h"
 #include "sp-gradient-reference.h"
-#include "sp-linear-gradient-fns.h"
+#include "sp-linear-gradient.h"
 #include "sp-pattern.h"
-#include "sp-radial-gradient-fns.h"
-#include "gradient-context.h"
+#include "sp-symbol.h"
+#include "sp-radial-gradient.h"
+#include "ui/tools/gradient-tool.h"
 #include "sp-namedview.h"
 #include "preferences.h"
 #include "sp-offset.h"
@@ -78,17 +88,17 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include <map>
 #include <cstring>
 #include <string>
-#include "helper/units.h"
 #include "sp-item.h"
 #include "box3d.h"
 #include "persp3d.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "xml/simple-document.h"
 #include "sp-filter-reference.h"
 #include "gradient-drag.h"
 #include "uri-references.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
+#include "display/cairo-utils.h"
 #include "inkscape-private.h"
 #include "path-chemistry.h"
 #include "ui/tool/control-point-selection.h"
@@ -103,7 +113,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
 // For clippath editing
 #include "tools-switch.h"
-#include "ui/tool/node-tool.h"
+#include "ui/tools/node-tool.h"
 
 #include "ui/clipboard.h"
 #include "verbs.h"
@@ -111,19 +121,35 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 using Inkscape::DocumentUndo;
 using Geom::X;
 using Geom::Y;
+using Inkscape::UI::Tools::NodeTool;
 
 /* The clipboard handling is in ui/clipboard.cpp now. There are some legacy functions left here,
 because the layer manipulation code uses them. It should be rewritten specifically
 for that purpose. */
 
 
+// helper for printing error messages, regardless of whether we have a GUI or not
+// If desktop == NULL, errors will be shown on stderr
+static void
+selection_display_message(SPDesktop *desktop, Inkscape::MessageType msgType, Glib::ustring const &msg)
+{
+    if (desktop) {
+        desktop->messageStack()->flash(msgType, msg);
+    } else {
+        if (msgType == Inkscape::IMMEDIATE_MESSAGE ||
+            msgType == Inkscape::WARNING_MESSAGE ||
+            msgType == Inkscape::ERROR_MESSAGE) {
+            g_printerr("%s\n", msg.c_str());
+        }
+    }
+}
 
 namespace Inkscape {
 
 void SelectionHelper::selectAll(SPDesktop *dt)
 {
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         if (!nt->_multipath->empty()) {
             nt->_multipath->selectSubpaths();
             return;
@@ -135,7 +161,7 @@ void SelectionHelper::selectAll(SPDesktop *dt)
 void SelectionHelper::selectAllInAll(SPDesktop *dt)
 {
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         nt->_selected_nodes->selectAll();
     } else {
         sp_edit_select_all_in_all_layers(dt);
@@ -144,11 +170,18 @@ void SelectionHelper::selectAllInAll(SPDesktop *dt)
 
 void SelectionHelper::selectNone(SPDesktop *dt)
 {
+    NodeTool *nt = NULL;
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        nt = static_cast<NodeTool*>(dt->event_context);
+    }
+
+    if (nt && !nt->_selected_nodes->empty()) {
         nt->_selected_nodes->clear();
-    } else {
+    } else if (!sp_desktop_selection(dt)->isEmpty()) {
         sp_desktop_selection(dt)->clear();
+    } else {
+        // If nothing selected switch to selection tool
+        tools_switch(dt, TOOLS_SELECT);
     }
 }
 
@@ -172,10 +205,15 @@ void SelectionHelper::selectSameStrokeStyle(SPDesktop *dt)
     sp_select_same_stroke_style(dt);
 }
 
+void SelectionHelper::selectSameObjectType(SPDesktop *dt)
+{
+    sp_select_same_object_type(dt);
+}
+
 void SelectionHelper::invert(SPDesktop *dt)
 {
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         nt->_multipath->invertSelectionInSubpaths();
     } else {
         sp_edit_invert(dt);
@@ -185,7 +223,7 @@ void SelectionHelper::invert(SPDesktop *dt)
 void SelectionHelper::invertAllInAll(SPDesktop *dt)
 {
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         nt->_selected_nodes->invertSelection();
     } else {
         sp_edit_invert_in_all_layers(dt);
@@ -196,7 +234,7 @@ void SelectionHelper::reverse(SPDesktop *dt)
 {
     // TODO make this a virtual method of event context!
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         nt->_multipath->reverseSubpaths();
     } else {
         sp_selected_path_reverse(dt);
@@ -205,13 +243,13 @@ void SelectionHelper::reverse(SPDesktop *dt)
 
 void SelectionHelper::selectNext(SPDesktop *dt)
 {
-    SPEventContext *ec = dt->event_context;
+    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         nt->_multipath->shiftSelection(1);
     } else if (tools_isactive(dt, TOOLS_GRADIENT)
                && ec->_grdrag->isNonEmpty()) {
-        sp_gradient_context_select_next(ec);
+        Inkscape::UI::Tools::sp_gradient_context_select_next(ec);
     } else {
         sp_selection_item_next(dt);
     }
@@ -219,15 +257,45 @@ void SelectionHelper::selectNext(SPDesktop *dt)
 
 void SelectionHelper::selectPrev(SPDesktop *dt)
 {
-    SPEventContext *ec = dt->event_context;
+    Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
     if (tools_isactive(dt, TOOLS_NODES)) {
-        InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+        NodeTool *nt = static_cast<NodeTool*>(dt->event_context);
         nt->_multipath->shiftSelection(-1);
     } else if (tools_isactive(dt, TOOLS_GRADIENT)
                && ec->_grdrag->isNonEmpty()) {
-        sp_gradient_context_select_prev(ec);
+        Inkscape::UI::Tools::sp_gradient_context_select_prev(ec);
     } else {
         sp_selection_item_prev(dt);
+    }
+}
+
+/*
+ * Fixes the current selection, removing locked objects from it
+ */
+void SelectionHelper::fixSelection(SPDesktop *dt) 
+{
+    if(!dt)
+        return;
+
+    Inkscape::Selection *selection = sp_desktop_selection(dt);
+    
+    GSList *items = NULL;
+
+    GSList const *selList = selection->itemList();
+
+    for( GSList const *i = selList; i; i = i->next ) {
+        if( SP_IS_ITEM(i->data) &&
+            !dt->isLayer(SP_ITEM(i->data)) &&
+            (!SP_ITEM(i->data)->isLocked()))
+        {
+            items = g_slist_prepend(items, SP_ITEM(i->data));
+        }
+    }
+
+    selection->setList(items);
+
+    if(items) {
+        g_slist_free(items);
     }
 }
 
@@ -238,7 +306,7 @@ void SelectionHelper::selectPrev(SPDesktop *dt)
  * Copies repr and its inherited css style elements, along with the accumulated transform 'full_t',
  * then prepends the copy to 'clip'.
  */
-void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t, GSList **clip, Inkscape::XML::Document* xml_doc)
+static void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t, GSList **clip, Inkscape::XML::Document* xml_doc)
 {
     Inkscape::XML::Node *copy = repr->duplicate(xml_doc);
 
@@ -257,7 +325,7 @@ void sp_selection_copy_one(Inkscape::XML::Node *repr, Geom::Affine full_t, GSLis
     *clip = g_slist_prepend(*clip, copy);
 }
 
-void sp_selection_copy_impl(GSList const *items, GSList **clip, Inkscape::XML::Document* xml_doc)
+static void sp_selection_copy_impl(GSList const *items, GSList **clip, Inkscape::XML::Document* xml_doc)
 {
     // Sort items:
     GSList *sorted_items = g_slist_copy(const_cast<GSList *>(items));
@@ -272,7 +340,7 @@ void sp_selection_copy_impl(GSList const *items, GSList **clip, Inkscape::XML::D
     g_slist_free(static_cast<GSList *>(sorted_items));
 }
 
-GSList *sp_selection_paste_impl(SPDocument *doc, SPObject *parent, GSList **clip)
+static GSList *sp_selection_paste_impl(SPDocument *doc, SPObject *parent, GSList **clip)
 {
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
@@ -303,13 +371,13 @@ GSList *sp_selection_paste_impl(SPDocument *doc, SPObject *parent, GSList **clip
     return copied;
 }
 
-void sp_selection_delete_impl(GSList const *items, bool propagate = true, bool propagate_descendants = true)
+static void sp_selection_delete_impl(GSList const *items, bool propagate = true, bool propagate_descendants = true)
 {
     for (GSList const *i = items ; i ; i = i->next ) {
-        sp_object_ref((SPObject *)i->data, NULL);
+        sp_object_ref(static_cast<SPItem *>(i->data), NULL);
     }
     for (GSList const *i = items; i != NULL; i = i->next) {
-        SPItem *item = reinterpret_cast<SPItem *>(i->data);
+        SPItem *item = static_cast<SPItem *>(i->data);
         item->deleteObject(propagate, propagate_descendants);
         sp_object_unref(item, NULL);
     }
@@ -323,7 +391,7 @@ void sp_selection_delete(SPDesktop *desktop)
     }
 
     if (tools_isactive(desktop, TOOLS_TEXT))
-        if (sp_text_delete_selection(desktop->event_context)) {
+        if (Inkscape::UI::Tools::sp_text_delete_selection(desktop->event_context)) {
             DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
                                _("Delete text"));
             return;
@@ -337,10 +405,11 @@ void sp_selection_delete(SPDesktop *desktop)
         return;
     }
 
-    GSList const *selected = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+    GSList *selected = g_slist_copy(const_cast<GSList *>(selection->itemList()));
     selection->clear();
     sp_selection_delete_impl(selected);
-    g_slist_free(const_cast<GSList *>(selected));
+    g_slist_free(selected);
+    desktop->currentLayer()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
     /* a tool may have set up private information in it's selection context
      * that depends on desktop items.  I think the only sane way to deal with
@@ -354,7 +423,7 @@ void sp_selection_delete(SPDesktop *desktop)
                        _("Delete"));
 }
 
-void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
+static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
 {
     if (obj) {
         ids.push_back(obj->getId());
@@ -416,7 +485,7 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
         if (fork_livepatheffects) {
             SPObject *new_obj = doc->getObjectByRepr(copy);
             if (new_obj && SP_IS_LPE_ITEM(new_obj)) {
-                sp_lpe_item_fork_path_effects_if_necessary(SP_LPE_ITEM(new_obj), 1);
+                SP_LPE_ITEM(new_obj)->forkPathEffectsIfNecessary(1);
             }
         }
 
@@ -433,7 +502,7 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
             const gchar *id = old_ids[i];
             SPObject *old_clone = doc->getObjectById(id);
             if (SP_IS_USE(old_clone)) {
-                SPItem *orig = sp_use_get_original(SP_USE(old_clone));
+                SPItem *orig = SP_USE(old_clone)->get_original();
                 if (!orig) // orphaned
                     continue;
                 for (unsigned int j = 0; j < old_ids.size(); j++) {
@@ -471,16 +540,16 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
     g_slist_free(newsel);
 }
 
-void sp_edit_clear_all(SPDesktop *dt)
+void sp_edit_clear_all(Inkscape::Selection *selection)
 {
-    if (!dt)
+    if (!selection)
         return;
 
-    SPDocument *doc = sp_desktop_document(dt);
-    sp_desktop_selection(dt)->clear();
+    SPDocument *doc = selection->layers()->getDocument();
+    selection->clear();
 
-    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
-    GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
+    g_return_if_fail(SP_IS_GROUP(selection->layers()->currentLayer()));
+    GSList *items = sp_item_group_item_list(SP_GROUP(selection->layers()->currentLayer()));
 
     while (items) {
         reinterpret_cast<SPObject*>(items->data)->deleteObject();
@@ -522,7 +591,7 @@ GSList *get_all_items(GSList *list, SPObject *from, SPDesktop *desktop, bool onl
     return list;
 }
 
-void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool invert)
+static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool invert)
 {
     if (!dt)
         return;
@@ -608,7 +677,7 @@ void sp_edit_invert_in_all_layers(SPDesktop *desktop)
     sp_edit_select_all_full(desktop, true, true);
 }
 
-void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc) {
+static void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc) {
 
     p = g_slist_sort(p, (GCompareFunc) sp_repr_compare_position);
 
@@ -671,20 +740,14 @@ void sp_selection_group_impl(GSList *p, Inkscape::XML::Node *group, Inkscape::XM
     group->setPosition(topmost + 1);
 }
 
-void sp_selection_group(SPDesktop *desktop)
+void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL) {
-        return;
-    }
-
-    SPDocument *doc = sp_desktop_document(desktop);
+    SPDocument *doc = selection->layers()->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
 
     // Check if something is selected.
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>some objects</b> to group."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>some objects</b> to group."));
         return;
     }
 
@@ -698,68 +761,103 @@ void sp_selection_group(SPDesktop *desktop)
 
     sp_selection_group_impl(p, group, xml_doc, doc);
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_GROUP,
+    DocumentUndo::done(doc, SP_VERB_SELECTION_GROUP,
                        _("Group"));
 
     selection->set(group);
     Inkscape::GC::release(group);
 }
 
-void sp_selection_ungroup(SPDesktop *desktop)
+static gint clone_depth_descending(gconstpointer a, gconstpointer b) {
+    SPUse *use_a = static_cast<SPUse *>(const_cast<gpointer>(a));
+    SPUse *use_b = static_cast<SPUse *>(const_cast<gpointer>(b));
+    int depth_a = use_a->cloneDepth();
+    int depth_b = use_b->cloneDepth();
+    if (depth_a < depth_b) {
+        return 1;
+    } else if (depth_a == depth_b) {
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
+void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>group</b> to ungroup."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select a <b>group</b> to ungroup."));
+    }
+
+    // first check whether there is anything to ungroup
+    GSList *old_select = const_cast<GSList *>(selection->itemList());
+    GSList *new_select = NULL;
+    GSList *groups = NULL;
+    for (GSList *item = old_select; item; item = item->next) {
+        SPItem *obj = static_cast<SPItem*>(item->data);
+        if (SP_IS_GROUP(obj)) {
+            groups = g_slist_prepend(groups, obj);
+        }
+    }
+
+    if (groups == NULL) {
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
+        g_slist_free(groups);
         return;
     }
 
-    GSList *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+    GSList *items = g_slist_copy(old_select);
     selection->clear();
 
-    // Get a copy of current selection.
-    GSList *new_select = NULL;
-    bool ungrouped = false;
-    for (GSList *i = items;
-         i != NULL;
-         i = i->next)
-    {
-        SPItem *group = static_cast<SPItem *>(i->data);
+    // If any of the clones refer to the groups, unlink them and replace them with successors
+    // in the items list.
+    GSList *clones_to_unlink = NULL;
+    for (GSList *item = items; item; item = item->next) {
+        SPUse *use = dynamic_cast<SPUse *>(static_cast<SPItem *>(item->data));
 
-        // when ungrouping cloned groups with their originals, some objects that were selected may no more exist due to unlinking
-        if (!SP_IS_OBJECT(group)) {
-            continue;
+        SPItem *original = use;
+        while (SP_IS_USE(original)) {
+            original = SP_USE(original)->get_original();
         }
 
-        /* We do not allow ungrouping <svg> etc. (lauris) */
-        if (strcmp(group->getRepr()->name(), "svg:g") && strcmp(group->getRepr()->name(), "svg:switch")) {
-            // keep the non-group item in the new selection
-            new_select = g_slist_append(new_select, group);
-            continue;
+        if (g_slist_find(groups, original) != NULL) {
+            clones_to_unlink = g_slist_prepend(clones_to_unlink, item->data);
         }
-
-        GSList *children = NULL;
-        /* This is not strictly required, but is nicer to rely on group ::destroy (lauris) */
-        sp_item_group_ungroup(SP_GROUP(group), &children, false);
-        ungrouped = true;
-        // Add ungrouped items to the new selection.
-        new_select = g_slist_concat(new_select, children);
     }
 
-    if (new_select) { // Set new selection.
-        selection->addList(new_select);
-        g_slist_free(new_select);
+    // Unlink clones beginning from those with highest clone depth.
+    // This way we can be sure than no additional automatic unlinking happens,
+    // and the items in the list remain valid
+    clones_to_unlink = g_slist_sort(clones_to_unlink, clone_depth_descending);
+
+    for (GSList *item = clones_to_unlink; item; item = item->next) {
+        SPUse *use = static_cast<SPUse *>(item->data);
+        GSList *items_node = g_slist_find(items, item->data);
+        items_node->data = use->unlink();
     }
-    if (!ungrouped) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
+    g_slist_free(clones_to_unlink);
+
+    // do the actual work
+    for (GSList *item = items; item; item = item->next) {
+        SPItem *obj = static_cast<SPItem *>(item->data);
+
+        // ungroup only the groups marked earlier
+        if (g_slist_find(groups, item->data) != NULL) {
+            GSList *children = NULL;
+            sp_item_group_ungroup(SP_GROUP(obj), &children, false);
+            // add the items resulting from ungrouping to the selection
+            new_select = g_slist_concat(new_select, children);
+            item->data = NULL; // zero out the original pointer, which is no longer valid
+        } else {
+            // if not a group, keep in the selection
+            new_select = g_slist_append(new_select, item->data);
+        }
     }
 
+    selection->addList(new_select);
+    g_slist_free(new_select);
     g_slist_free(items);
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_UNGROUP,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_UNGROUP,
                        _("Ungroup"));
 }
 
@@ -827,7 +925,7 @@ enclose_items(GSList const *items)
 }
 
 // TODO determine if this is intentionally different from SPObject::getPrev()
-SPObject *prev_sibling(SPObject *child)
+static SPObject *prev_sibling(SPObject *child)
 {
     SPObject *prev = 0;
     if ( child && SP_IS_GROUP(child->parent) ) {
@@ -837,22 +935,17 @@ SPObject *prev_sibling(SPObject *child)
 }
 
 void
-sp_selection_raise(SPDesktop *desktop)
+sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (!desktop)
-        return;
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     GSList const *items = const_cast<GSList *>(selection->itemList());
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise."));
         return;
     }
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -890,21 +983,17 @@ sp_selection_raise(SPDesktop *desktop)
         g_slist_free(rev);
     }
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_RAISE,
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_RAISE,
                        //TRANSLATORS: "Raise" means "to raise an object" in the undo history
                        C_("Undo action", "Raise"));
 }
 
-void sp_selection_raise_to_top(SPDesktop *desktop)
+void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    SPDocument *document = sp_desktop_document(desktop);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    SPDocument *document = selection->layers()->getDocument();
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise to top."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise to top."));
         return;
     }
 
@@ -912,7 +1001,7 @@ void sp_selection_raise_to_top(SPDesktop *desktop)
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -930,22 +1019,17 @@ void sp_selection_raise_to_top(SPDesktop *desktop)
                        _("Raise to top"));
 }
 
-void sp_selection_lower(SPDesktop *desktop)
+void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-
     GSList const *items = const_cast<GSList *>(selection->itemList());
     if (!items) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower."));
         return;
     }
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -988,20 +1072,17 @@ void sp_selection_lower(SPDesktop *desktop)
         g_slist_free(rev);
     }
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_LOWER,
-                       _("Lower"));
+    DocumentUndo::done(selection->layers()->getDocument(), SP_VERB_SELECTION_LOWER,
+                       //TRANSLATORS: "Lower" means "to lower an object" in the undo history
+                       C_("Undo action", "Lower"));
 }
 
-void sp_selection_lower_to_bottom(SPDesktop *desktop)
+void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    if (desktop == NULL)
-        return;
-
-    SPDocument *document = sp_desktop_document(desktop);
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    SPDocument *document = selection->layers()->getDocument();
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
+        selection_display_message(desktop, Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to lower to bottom."));
         return;
     }
 
@@ -1009,7 +1090,7 @@ void sp_selection_lower_to_bottom(SPDesktop *desktop)
 
     SPGroup const *group = sp_item_list_common_parent_group(items);
     if (!group) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
+        selection_display_message(desktop, Inkscape::ERROR_MESSAGE, _("You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."));
         return;
     }
 
@@ -1042,6 +1123,9 @@ void sp_selection_lower_to_bottom(SPDesktop *desktop)
 void
 sp_undo(SPDesktop *desktop, SPDocument *)
 {
+    // No re/undo while dragging, too dangerous.
+    if(desktop->getCanvas()->is_dragging) return;
+
     if (!DocumentUndo::undo(sp_desktop_document(desktop))) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to undo."));
     }
@@ -1050,6 +1134,9 @@ sp_undo(SPDesktop *desktop, SPDocument *)
 void
 sp_redo(SPDesktop *desktop, SPDocument *)
 {
+    // No re/undo while dragging, too dangerous.
+    if(desktop->getCanvas()->is_dragging) return;
+
     if (!DocumentUndo::redo(sp_desktop_document(desktop))) {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to redo."));
     }
@@ -1065,18 +1152,21 @@ void sp_selection_cut(SPDesktop *desktop)
  * \pre item != NULL
  */
 SPCSSAttr *
-take_style_from_item(SPItem *item)
+take_style_from_item(SPObject *object)
 {
+    // CPPIFY:
+    // This function should only take SPItems, but currently SPString is not an Item.
+
     // write the complete cascaded style, context-free
-    SPCSSAttr *css = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
+    SPCSSAttr *css = sp_css_attr_from_object(object, SP_STYLE_FLAG_ALWAYS);
     if (css == NULL)
         return NULL;
 
-    if ((SP_IS_GROUP(item) && item->children) ||
-        (SP_IS_TEXT(item) && item->children && item->children->next == NULL)) {
+    if ((SP_IS_GROUP(object) && object->children) ||
+        (SP_IS_TEXT(object) && object->children && object->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
-        for (SPObject *last_element = item->lastChild(); last_element != NULL; last_element = last_element->getPrev()) {
+        for (SPObject *last_element = object->lastChild(); last_element != NULL; last_element = last_element->getPrev()) {
             if ( last_element->style ) {
                 SPCSSAttr *temp = sp_css_attr_from_object(last_element, SP_STYLE_FLAG_IFSET);
                 if (temp) {
@@ -1087,15 +1177,18 @@ take_style_from_item(SPItem *item)
             }
         }
     }
-    if (!(SP_IS_TEXT(item) || SP_IS_TSPAN(item) || SP_IS_TREF(item) || SP_IS_STRING(item))) {
+
+    if (!(SP_IS_TEXT(object) || SP_IS_TSPAN(object) || SP_IS_TREF(object) || SP_IS_STRING(object))) {
         // do not copy text properties from non-text objects, it's confusing
         css = sp_css_attr_unset_text(css);
     }
 
-    // FIXME: also transform gradient/pattern fills, by forking? NO, this must be nondestructive
-    double ex = item->i2doc_affine().descrim();
-    if (ex != 1.0) {
-        css = sp_css_attr_scale(css, ex);
+    if (SP_IS_ITEM(object)) {
+        // FIXME: also transform gradient/pattern fills, by forking? NO, this must be nondestructive
+        double ex = SP_ITEM(object)->i2doc_affine().descrim();
+        if (ex != 1.0) {
+            css = sp_css_attr_scale(css, ex);
+        }
     }
 
     return css;
@@ -1135,11 +1228,12 @@ void sp_selection_paste_livepatheffect(SPDesktop *desktop)
 }
 
 
-void sp_selection_remove_livepatheffect_impl(SPItem *item)
+static void sp_selection_remove_livepatheffect_impl(SPItem *item)
 {
-    if ( item && SP_IS_LPE_ITEM(item) &&
-         sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
-        sp_lpe_item_remove_all_path_effects(SP_LPE_ITEM(item), false);
+    if ( SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item) ) {
+        if ( lpeitem->hasPathEffect() ) {
+            lpeitem->removeAllPathEffects(false);
+        }
     }
 }
 
@@ -1296,7 +1390,37 @@ void sp_selection_to_prev_layer(SPDesktop *dt, bool suppressDone)
     g_slist_free(const_cast<GSList *>(items));
 }
 
-bool
+void sp_selection_to_layer(SPDesktop *dt, SPObject *moveto, bool suppressDone)
+{
+    Inkscape::Selection *selection = sp_desktop_selection(dt);
+
+    // check if something is selected
+    if (selection->isEmpty()) {
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move."));
+        return;
+    }
+
+    GSList const *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+
+    if (moveto) {
+        GSList *temp_clip = NULL;
+        sp_selection_copy_impl(items, &temp_clip, dt->doc()->getReprDoc()); // we're in the same doc, so no need to copy defs
+        sp_selection_delete_impl(items, false, false);
+        GSList *copied = sp_selection_paste_impl(sp_desktop_document(dt), moveto, &temp_clip);
+        selection->setReprList((GSList const *) copied);
+        g_slist_free(copied);
+        if (temp_clip) g_slist_free(temp_clip);
+        if (moveto) dt->setCurrentLayer(moveto);
+        if ( !suppressDone ) {
+            DocumentUndo::done(sp_desktop_document(dt), SP_VERB_LAYER_MOVE_TO,
+                               _("Move selection to layer"));
+        }
+    }
+
+    g_slist_free(const_cast<GSList *>(items));
+}
+
+static bool
 selection_contains_original(SPItem *item, Inkscape::Selection *selection)
 {
     bool contains_original = false;
@@ -1306,7 +1430,7 @@ selection_contains_original(SPItem *item, Inkscape::Selection *selection)
     SPItem *item_use_first = item;
     while (is_use && item_use && !contains_original)
     {
-        item_use = sp_use_get_original(SP_USE(item_use));
+        item_use = SP_USE(item_use)->get_original();
         contains_original |= selection->includes(item_use);
         if (item_use == item_use_first)
             break;
@@ -1323,7 +1447,7 @@ selection_contains_original(SPItem *item, Inkscape::Selection *selection)
 }
 
 
-bool
+static bool
 selection_contains_both_clone_and_original(Inkscape::Selection *selection)
 {
     bool clone_with_original = false;
@@ -1373,6 +1497,13 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
     for (GSList const *l = selection->itemList(); l != NULL; l = l->next) {
         SPItem *item = SP_ITEM(l->data);
 
+        if( SP_IS_ROOT(item) ) {
+            // An SVG element cannot have a transform. We could change 'x' and 'y' in response
+            // to a translation... but leave that for another day.
+            selection->desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot transform an embedded SVG."));
+            break;
+        }
+
         Geom::Point old_center(0,0);
         if (set_i2d && item->isCenterSet())
             old_center = item->getCenter();
@@ -1394,7 +1525,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
         // If we're moving a connector, we want to detach it
         // from shapes that aren't part of the selection, but
         // leave it attached if they are
-        if (cc_item_is_connector(item)) {
+        if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             SPItem *attItem[2];
             SP_PATH(item)->connEndPair.getAttachedItems(attItem);
 
@@ -1451,7 +1582,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
                 // we need to cancel out the move compensation, too
 
                 // find out the clone move, same as in sp_use_move_compensate
-                Geom::Affine parent = sp_use_get_parent_transform(SP_USE(item));
+                Geom::Affine parent = SP_USE(item)->get_parent_transform();
                 Geom::Affine clone_move = parent.inverse() * t * parent;
 
                 if (prefs_parallel) {
@@ -1616,7 +1747,7 @@ void sp_selection_rotate_90(SPDesktop *desktop, bool ccw)
 
     DocumentUndo::done(sp_desktop_document(desktop),
                        ccw ? SP_VERB_OBJECT_ROTATE_90_CCW : SP_VERB_OBJECT_ROTATE_90_CW,
-                       ccw ? _("Rotate 90&#176; CCW") : _("Rotate 90&#176; CW"));
+                       ccw ? _("Rotate 90\xc2\xb0 CCW") : _("Rotate 90\xc2\xb0 CW"));
 }
 
 void
@@ -1697,6 +1828,45 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
 
 }
 
+
+/*
+ * Selects all the visible items with the same object type as the items in the current selection
+ *
+ * Params:
+ * desktop - set the selection on this desktop
+ */
+void sp_select_same_object_type(SPDesktop *desktop)
+{
+    if (!desktop) {
+        return;
+    }
+
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
+    bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
+    bool ingroups = TRUE;
+
+    GSList *all_list = get_all_items(NULL, desktop->currentRoot(), desktop, onlyvisible, onlysensitive, ingroups, NULL);
+    GSList *matches = all_list;
+
+    Inkscape::Selection *selection = sp_desktop_selection (desktop);
+
+    for (GSList const* sel_iter = selection->itemList(); sel_iter; sel_iter = sel_iter->next) {
+        SPItem *sel = SP_ITEM(sel_iter->data);
+        matches = sp_get_same_object_type(sel, matches);
+    }
+
+    selection->clear();
+    selection->setList(matches);
+
+    if (matches) {
+        g_slist_free(matches);
+    }
+    if (all_list) {
+        g_slist_free(all_list);
+    }
+}
 
 /*
  * Selects all the visible items with the same stroke style as the items in the current selection
@@ -1795,6 +1965,61 @@ GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrok
     return matches;
 }
 
+static bool item_type_match (SPItem *i, SPItem *j)
+{
+    if ( SP_IS_RECT(i)) {
+        return ( SP_IS_RECT(j) );
+
+    } else if (SP_IS_GENERICELLIPSE(i)) {
+        return (SP_IS_GENERICELLIPSE(j));
+
+    } else if (SP_IS_STAR(i) || SP_IS_POLYGON(i)) {
+        return (SP_IS_STAR(j) || SP_IS_POLYGON(j)) ;
+
+    } else if (SP_IS_SPIRAL(i)) {
+        return (SP_IS_SPIRAL(j));
+
+    } else if (SP_IS_PATH(i) || SP_IS_LINE(i) || SP_IS_POLYLINE(i)) {
+        return (SP_IS_PATH(j) || SP_IS_LINE(j) || SP_IS_POLYLINE(j));
+
+    } else if (SP_IS_TEXT(i) || SP_IS_FLOWTEXT(i) || SP_IS_TSPAN(i) || SP_IS_TREF(i) || SP_IS_STRING(i)) {
+        return (SP_IS_TEXT(j) || SP_IS_FLOWTEXT(j) || SP_IS_TSPAN(j) || SP_IS_TREF(j) || SP_IS_STRING(j));
+
+    }  else if (SP_IS_USE(i)) {
+        return (SP_IS_USE(j)) ;
+
+    } else if (SP_IS_IMAGE(i)) {
+        return (SP_IS_IMAGE(j));
+
+    } else if (SP_IS_OFFSET(i) && SP_OFFSET(i)->sourceHref) {   // Linked offset
+        return (SP_IS_OFFSET(j) && SP_OFFSET(j)->sourceHref);
+
+    }  else if (SP_IS_OFFSET(i) && !SP_OFFSET(i)->sourceHref) { // Dynamic offset
+        return (SP_IS_OFFSET(j) && !SP_OFFSET(j)->sourceHref);
+
+    }
+
+    return false;
+}
+
+/*
+ * Find all items in src list that have the same object type as sel by type
+ * Return the list of matching items
+ */
+GSList *sp_get_same_object_type(SPItem *sel, GSList *src)
+{
+    GSList *matches = NULL;
+
+    for (GSList *i = src; i != NULL; i = i->next) {
+        SPItem *item = SP_ITEM(i->data);
+        if (item_type_match (sel, item)) {
+            matches = g_slist_prepend (matches, item);
+        }
+    }
+
+    return matches;
+}
+
 /*
  * Find all items in src list that have the same stroke style as sel by type
  * Return the list of matching items
@@ -1842,17 +2067,9 @@ GSList *sp_get_same_stroke_style(SPItem *sel, GSList *src, SPSelectStrokeStyleTy
             }
         }
         else if (type == SP_STROKE_STYLE_DASHES ) {
-            match = (sel_style->stroke_dasharray_set == iter_style->stroke_dasharray_set);
-            if (sel_style->stroke_dasharray_set && iter_style->stroke_dasharray_set) {
-                match = (sel_style->stroke_dash.n_dash == iter_style->stroke_dash.n_dash);
-                if (sel_style->stroke_dash.n_dash == iter_style->stroke_dash.n_dash) {
-                    for (int i = 0; i < sel_style->stroke_dash.n_dash; i++) {
-                        if (sel_style->stroke_dash.dash[i] != iter_style->stroke_dash.dash[i]) {
-                            match = false;
-                            break;
-                        }
-                    }
-                }
+            match = (sel_style->stroke_dasharray.set == iter_style->stroke_dasharray.set);
+            if (sel_style->stroke_dasharray.set && iter_style->stroke_dasharray.set) {
+                match = (sel_style->stroke_dasharray.values == iter_style->stroke_dasharray.values);
             }
         }
         else if (type == SP_STROKE_STYLE_MARKERS) {
@@ -1981,49 +2198,49 @@ sp_selection_scale_times(Inkscape::Selection *selection, gdouble times)
 }
 
 void
-sp_selection_move(SPDesktop *desktop, gdouble dx, gdouble dy)
+sp_selection_move(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
     if (selection->isEmpty()) {
         return;
     }
 
     sp_selection_move_relative(selection, dx, dy);
 
+    SPDocument *doc = selection->layers()->getDocument();
     if (dx == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically"));
     } else if (dy == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
                                 _("Move horizontally"));
     } else {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
                            _("Move"));
     }
 }
 
 void
-sp_selection_move_screen(SPDesktop *desktop, gdouble dx, gdouble dy)
+sp_selection_move_screen(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    if (selection->isEmpty()) {
+    if (selection->isEmpty() || !selection->desktop()) {
         return;
     }
 
     // same as sp_selection_move but divide deltas by zoom factor
-    gdouble const zoom = desktop->current_zoom();
+    gdouble const zoom = selection->desktop()->current_zoom();
     gdouble const zdx = dx / zoom;
     gdouble const zdy = dy / zoom;
     sp_selection_move_relative(selection, zdx, zdy);
 
+    SPDocument *doc = selection->layers()->getDocument();
     if (dx == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:vertical", SP_VERB_CONTEXT_SELECT,
                                 _("Move vertically by pixels"));
     } else if (dy == 0) {
-        DocumentUndo::maybeDone(sp_desktop_document(desktop), "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::maybeDone(doc, "selector:move:horizontal", SP_VERB_CONTEXT_SELECT,
                                 _("Move horizontally by pixels"));
     } else {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_SELECT,
+        DocumentUndo::done(doc, SP_VERB_CONTEXT_SELECT,
                            _("Move"));
     }
 }
@@ -2149,9 +2366,9 @@ void sp_selection_next_patheffect_param(SPDesktop * dt)
     Inkscape::Selection *selection = sp_desktop_selection(dt);
     if ( selection && !selection->isEmpty() ) {
         SPItem *item = selection->singleItem();
-        if ( item && SP_IS_SHAPE(item)) {
-            if (sp_lpe_item_has_path_effect(SP_LPE_ITEM(item))) {
-                sp_lpe_item_edit_next_param_oncanvas(SP_LPE_ITEM(item), dt);
+        if ( SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(item) ) {
+            if (lpeitem->hasPathEffect()) {
+                lpeitem->editNextParamOncanvas(dt);
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("The selection has no applied path effect."));
             }
@@ -2342,7 +2559,9 @@ void sp_selection_clone(SPDesktop *desktop)
         Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
         clone->setAttribute("x", "0", false);
         clone->setAttribute("y", "0", false);
-        clone->setAttribute("xlink:href", g_strdup_printf("#%s", sel_repr->attribute("id")), false);
+        gchar *href_str = g_strdup_printf("#%s", sel_repr->attribute("id"));
+        clone->setAttribute("xlink:href", href_str, false);
+        g_free(href_str);
 
         clone->setAttribute("inkscape:transform-center-x", sel_repr->attribute("inkscape:transform-center-x"), false);
         clone->setAttribute("inkscape:transform-center-y", sel_repr->attribute("inkscape:transform-center-y"), false);
@@ -2453,7 +2672,7 @@ sp_selection_unlink(SPDesktop *desktop)
 
         SPItem *unlink;
         if (SP_IS_USE(item)) {
-            unlink = sp_use_unlink(SP_USE(item));
+            unlink = SP_USE(item)->unlink();
             // Unable to unlink use (external or invalid href?)
             if (!unlink) {
                 new_select = g_slist_prepend(new_select, item);
@@ -2501,7 +2720,7 @@ sp_select_clone_original(SPDesktop *desktop)
 
     SPItem *original = NULL;
     if (SP_IS_USE(item)) {
-        original = sp_use_get_original(SP_USE(item));
+        original = SP_USE(item)->get_original();
     } else if (SP_IS_OFFSET(item) && SP_OFFSET(item)->sourceHref) {
         original = sp_offset_get_source(SP_OFFSET(item));
     } else if (SP_IS_TEXT_TEXTPATH(item)) {
@@ -2510,7 +2729,7 @@ sp_select_clone_original(SPDesktop *desktop)
         original = SP_FLOWTEXT(item)->get_frame(NULL); // first frame only
     } else if (SP_IS_LPE_ITEM(item)) {
         // check if the applied LPE is Clone original, if so, go to the refered path
-        Inkscape::LivePathEffect::Effect* lpe = sp_lpe_item_has_path_effect_of_type(SP_LPE_ITEM(item), Inkscape::LivePathEffect::CLONE_ORIGINAL);
+        Inkscape::LivePathEffect::Effect* lpe = SP_LPE_ITEM(item)->getPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL);
         if (lpe) {
             Inkscape::LivePathEffect::Parameter *lpeparam = lpe->getParameter("linkedpath");
             if (Inkscape::LivePathEffect::OriginalPathParam *pathparam = dynamic_cast<Inkscape::LivePathEffect::OriginalPathParam *>(lpeparam)) {
@@ -2607,7 +2826,7 @@ void sp_selection_clone_original_path_lpe(SPDesktop *desktop)
         SPObject *clone_obj = desktop->doc()->getObjectById(clone->attribute("id"));
         if (SP_IS_LPE_ITEM(clone_obj)) {
             gchar *href = g_strdup_printf("#%s", lpe_id);
-            sp_lpe_item_add_path_effect( SP_LPE_ITEM(clone_obj), href, false );
+            SP_LPE_ITEM(clone_obj)->addPathEffect( href, false );
             g_free(href);
         }
     }
@@ -2623,6 +2842,7 @@ void sp_selection_clone_original_path_lpe(SPDesktop *desktop)
 
 void sp_selection_to_marker(SPDesktop *desktop, bool apply)
 {
+    // sp_selection_tile has similar code
     if (desktop == NULL) {
         return;
     }
@@ -2645,25 +2865,28 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
         return;
     }
 
+    // FIXME: Inverted Y coodinate
+    Geom::Point doc_height( 0, doc->getHeight().value("px"));
+
     // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point move_p = Geom::Point(0, doc->getHeight()) - *c;
+    Geom::Point corner( r->min()[Geom::X], r->max()[Geom::Y] ); // FIXME: Inverted Y coodinate  
+    Geom::Point move_p = doc_height - corner;
     move_p[Geom::Y] = -move_p[Geom::Y];
     Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
 
+    Geom::Point center( *c - corner ); // As defined by rotation center
+    center[Geom::Y] = -center[Geom::Y];
+
     GSList *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
 
-    items = g_slist_sort(items, (GCompareFunc) sp_object_compare_position);
+    //items = g_slist_sort(items, (GCompareFunc) sp_object_compare_position);  // Why needed?
 
     // bottommost object, after sorting
     SPObject *parent = SP_OBJECT(items->data)->parent;
 
     Geom::Affine parent_transform(SP_ITEM(parent)->i2doc_affine());
 
-    // remember the position of the first item
-    gint pos = SP_OBJECT(items->data)->getRepr()->position();
-    (void)pos; // TODO check why this was remembered
-
-    // create a list of duplicates
+    // Create a list of duplicates, to be pasted inside marker element.
     GSList *repr_copies = NULL;
     for (GSList *i = items; i != NULL; i = i->next) {
         Inkscape::XML::Node *dup = SP_OBJECT(i->data)->getRepr()->duplicate(xml_doc);
@@ -2673,7 +2896,8 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
     Geom::Rect bbox(desktop->dt2doc(r->min()), desktop->dt2doc(r->max()));
 
     if (apply) {
-        // delete objects so that their clones don't get alerted; this object will be restored shortly
+        // Delete objects so that their clones don't get alerted;
+        // the objects will be restored inside the marker element.
         for (GSList *i = items; i != NULL; i = i->next) {
             SPObject *item = reinterpret_cast<SPObject*>(i->data);
             item->deleteObject(false);
@@ -2687,12 +2911,7 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    gchar const *mark_id = generate_marker(repr_copies, bbox, doc,
-                                           ( Geom::Affine(Geom::Translate(desktop->dt2doc(
-                                                                              Geom::Point(r->min()[Geom::X],
-                                                                                          r->max()[Geom::Y]))))
-                                             * parent_transform.inverse() ),
-                                           parent_transform * move);
+    gchar const *mark_id = generate_marker(repr_copies, bbox, doc, center, parent_transform * move);
     (void)mark_id;
 
     // restore compensation setting
@@ -2705,17 +2924,13 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
                        _("Objects to marker"));
 }
 
-static void sp_selection_to_guides_recursive(SPItem *item, bool deleteitem, bool wholegroups) {
+static void sp_selection_to_guides_recursive(SPItem *item, bool wholegroups) {
     if (SP_IS_GROUP(item) && !SP_IS_BOX3D(item) && !wholegroups) {
         for (GSList *i = sp_item_group_item_list(SP_GROUP(item)); i != NULL; i = i->next) {
-            sp_selection_to_guides_recursive(SP_ITEM(i->data), deleteitem, wholegroups);
+            sp_selection_to_guides_recursive(static_cast<SPItem*>(i->data), wholegroups);
         }
     } else {
-        item->convert_item_to_guides();
-
-        if (deleteitem) {
-            item->deleteObject(true);
-        }
+        item->convert_to_guides();
     }
 }
 
@@ -2735,19 +2950,259 @@ void sp_selection_to_guides(SPDesktop *desktop)
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool deleteitem = !prefs->getBool("/tools/cvg_keep_objects", 0);
+    bool deleteitems = !prefs->getBool("/tools/cvg_keep_objects", 0);
     bool wholegroups = prefs->getBool("/tools/cvg_convert_whole_groups", 0);
 
+    // If an object is earlier in the selection list than its clone, and it is deleted, then the clone will have changed
+    // and its entry in the selection list is invalid (crash).
+    // Therefore: first convert all, then delete all.
+
     for (GSList const *i = items; i != NULL; i = i->next) {
-        sp_selection_to_guides_recursive(SP_ITEM(i->data), deleteitem, wholegroups);
+        sp_selection_to_guides_recursive(static_cast<SPItem*>(i->data), wholegroups);
     }
 
+    if (deleteitems) {
+        selection->clear();
+        sp_selection_delete_impl(items);
+    }
+
+    g_slist_free(items);
+
     DocumentUndo::done(doc, SP_VERB_EDIT_SELECTION_2_GUIDES, _("Objects to guides"));
+}
+
+/*
+ * Convert objects to <symbol>. How that happens depends on what is selected:
+ * 
+ * 1) A random selection of objects will be embedded into a single <symbol> element.
+ *
+ * 2) Except, a single <g> will have its content directly embedded into a <symbol>; the 'id' and
+ *    'style' of the <g> are transferred to the <symbol>.
+ *
+ * 3) Except, a single <g> with a transform that isn't a translation will keep the group when
+ *    embedded into a <symbol> (with 'id' and 'style' transferred to <symbol>). This is because a
+ *    <symbol> cannot have a transform. (If the transform is a pure translation, the translation
+ *    is moved to the referencing <use> element that is created.)
+ *
+ * Possible improvements:
+ *
+ *   Move objects inside symbol so bbox corner at 0,0 (see marker/pattern)
+ *
+ *   For SVG2, set 'refX' 'refY' to object center (with compensating shift in <use>
+ *   transformation).
+ */
+void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
+{
+    if (desktop == NULL) {
+        return;
+    }
+
+    SPDocument *doc = sp_desktop_document(desktop);
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    // Check if something is selected.
+    if (selection->isEmpty()) {
+      desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> to convert to symbol."));
+      return;
+    }
+
+    doc->ensureUpToDate();
+
+    GSList *items = g_slist_copy(const_cast<GSList *>(selection->list()));
+
+    // Keep track of parent, this is where <use> will be inserted.
+    Inkscape::XML::Node *the_first_repr = reinterpret_cast<SPObject *>( items->data )->getRepr();
+    Inkscape::XML::Node *the_parent_repr = the_first_repr->parent();
+
+    // Find out if we have a single group
+    bool single_group = false;
+    SPObject *the_group = NULL;
+    Geom::Affine transform;
+    if( g_slist_length( items ) == 1 ) {
+        SPObject *object = reinterpret_cast<SPObject *>( items->data );
+        if( SP_IS_GROUP( object ) ) {
+            single_group = true;
+            the_group = object;
+
+            if( !sp_svg_transform_read( object->getAttribute("transform"), &transform ))
+                transform = Geom::identity();
+
+            if( transform.isTranslation() ) {
+
+                // Create new list from group children.
+                g_slist_free(items);
+                items = object->childList(false);
+
+                // Hack: Temporarily set clone compensation to unmoved, so that we can move clone-originals
+                // without disturbing clones.
+                // See ActorAlign::on_button_click() in src/ui/dialog/align-and-distribute.cpp
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+                prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
+
+                // Remove transform on group, updating clones.
+                SP_ITEM(object)->doWriteTransform(object->getRepr(), Geom::identity());
+
+                // restore compensation setting
+                prefs->setInt("/options/clonecompensation/value", saved_compensation);
+            }
+        }
+    }
+
+    // Create new <symbol>
+    Inkscape::XML::Node *defsrepr = doc->getDefs()->getRepr();
+    Inkscape::XML::Node *symbol_repr = xml_doc->createElement("svg:symbol");
+    defsrepr->appendChild(symbol_repr);
+
+    // For a single group, copy relevant attributes.
+    if( single_group ) {
+
+        symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
+        symbol_repr->setAttribute("class",  the_group->getAttribute("class"));
+        symbol_repr->setAttribute("id",     the_group->getAttribute("id")   );
+
+        // This should eventually be replaced by 'refX' and 'refY' once SVG WG approves it.
+        // It is done here for round-tripping
+        symbol_repr->setAttribute("inkscape:transform-center-x",
+                                  the_group->getAttribute("inkscape:transform-center-x"));
+        symbol_repr->setAttribute("inkscape:transform-center-y",
+                                  the_group->getAttribute("inkscape:transform-center-y"));
+
+        the_group->setAttribute("style", NULL);
+        std::string id = symbol_repr->attribute("id");
+        id += "_transform";
+        the_group->setAttribute("id", id.c_str());
+
+    }
+
+    // Move selected items to new <symbol>
+    for (GSList *i = items; i != NULL; i = i->next) {
+      Inkscape::XML::Node *repr = SP_OBJECT(i->data)->getRepr();
+      repr->parent()->removeChild(repr);
+      symbol_repr->addChild(repr,NULL);
+    }
+
+    if( single_group && transform.isTranslation() ) {
+        the_group->deleteObject(true);
+    }
+
+    // Create <use> pointing to new symbol (to replace the moved objects).
+    Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
+
+    const gchar *symbol_id = symbol_repr->attribute("id");
+    gchar *href_str = g_strdup_printf("#%s", symbol_id);
+    clone->setAttribute("xlink:href", href_str, false);
+    g_free(href_str);
+
+    the_parent_repr->appendChild(clone);
+
+    if( single_group && transform.isTranslation() ) {
+        if( !transform.isIdentity() )
+            clone->setAttribute("transform", sp_svg_transform_write( transform ));
+    }
+
+    // Change selection to new <use> element.
+    selection->set(clone);
+
+    // Clean up
+    Inkscape::GC::release(symbol_repr);
+    g_slist_free(items);
+
+    DocumentUndo::done(doc, SP_VERB_EDIT_SYMBOL, _("Group to symbol"));
+}
+
+/*
+ * Convert <symbol> to <g>. All <use> elements referencing symbol remain unchanged.
+ */
+void sp_selection_unsymbol(SPDesktop *desktop)
+{
+    if (desktop == NULL) {
+        return;
+    }
+
+    SPDocument *doc = sp_desktop_document(desktop);
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
+    // Check if something is selected.
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select a <b>symbol</b> to extract objects from."));
+        return;
+    }
+
+    SPObject* symbol = selection->single();
+ 
+    // Make sure we have only one object in selection.
+    // Require that we really have a <symbol>.
+    if( symbol == NULL || !SP_IS_SYMBOL( symbol ))  {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>symbol</b> in Symbol dialog to convert to group."));
+        return;
+    }
+
+    doc->ensureUpToDate();
+
+    // Create new <g> and insert in current layer
+    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
+    desktop->currentLayer()->getRepr()->appendChild(group);
+
+    // Move all children of symbol to group
+    GSList* children = symbol->childList(false);
+
+    // Converting a group to a symbol inserts a group for non-translational transform.
+    // In converting a symbol back to a group we strip out the inserted group (or any other
+    // group that only adds a transform to the symbol content).
+    if( g_slist_length( children ) == 1 ) {
+        SPObject *object = reinterpret_cast<SPObject *>( children->data );
+        if( SP_IS_GROUP( object ) ) {
+            if( object->getAttribute("style") == NULL ||
+                object->getAttribute("class") == NULL ) {
+
+                group->setAttribute("transform", object->getAttribute("transform"));
+                g_slist_free(children);
+                children = object->childList(false);
+            }
+        }
+    }
+        
+    for (GSList* i = children; i != NULL; i = i->next ) {
+        Inkscape::XML::Node *repr = SP_OBJECT(i->data)->getRepr();
+        repr->parent()->removeChild(repr);
+        group->addChild(repr,NULL);
+    }
+
+    // Copy relevant attributes
+    group->setAttribute("style", symbol->getAttribute("style"));
+    group->setAttribute("class", symbol->getAttribute("class"));
+    group->setAttribute("inkscape:transform-center-x",
+                        symbol->getAttribute("inkscape:transform-center-x"));
+    group->setAttribute("inkscape:transform-center-y",
+                        symbol->getAttribute("inkscape:transform-center-y"));
+
+
+    // Need to delete <symbol>; all <use> elements that referenced <symbol> should
+    // auto-magically reference <g> (if <symbol> deleted after setting <g> 'id').
+    Glib::ustring id = symbol->getAttribute("id");
+    group->setAttribute("id",id.c_str());
+    symbol->deleteObject(true);
+
+    // Change selection to new <g> element.
+    SPItem *group_item = static_cast<SPItem *>(sp_desktop_document(desktop)->getObjectByRepr(group));
+    selection->set(group_item);
+
+    // Clean up
+    Inkscape::GC::release(group);
+    g_slist_free(children);
+
+    DocumentUndo::done(doc, SP_VERB_EDIT_UNSYMBOL, _("Group from symbol"));
 }
 
 void
 sp_selection_tile(SPDesktop *desktop, bool apply)
 {
+    // sp_selection_to_marker has similar code
     if (desktop == NULL) {
         return;
     }
@@ -2770,7 +3225,7 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     }
 
     // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point move_p = Geom::Point(0, doc->getHeight()) - (r->min() + Geom::Point(0, r->dimensions()[Geom::Y]));
+    Geom::Point move_p = Geom::Point(0, doc->getHeight().value("px")) - (r->min() + Geom::Point(0, r->dimensions()[Geom::Y]));
     move_p[Geom::Y] = -move_p[Geom::Y];
     Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
 
@@ -2823,7 +3278,9 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
 
     if (apply) {
         Inkscape::XML::Node *rect = xml_doc->createElement("svg:rect");
-        rect->setAttribute("style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
+        gchar *style_str = g_strdup_printf("stroke:none;fill:url(#%s)", pat_id);
+        rect->setAttribute("style", style_str);
+        g_free(style_str);
 
         Geom::Point min = bbox.min() * parent_transform.inverse();
         Geom::Point max = bbox.max() * parent_transform.inverse();
@@ -2895,19 +3352,21 @@ void sp_selection_untile(SPDesktop *desktop)
         pat_transform *= item->transform;
 
         for (SPObject *child = pattern->firstChild() ; child != NULL; child = child->next ) {
-            Inkscape::XML::Node *copy = child->getRepr()->duplicate(xml_doc);
-            SPItem *i = SP_ITEM(desktop->currentLayer()->appendChildRepr(copy));
+            if (SP_IS_ITEM(child)) {
+                Inkscape::XML::Node *copy = child->getRepr()->duplicate(xml_doc);
+                SPItem *i = SP_ITEM(desktop->currentLayer()->appendChildRepr(copy));
 
-           // FIXME: relink clones to the new canvas objects
-           // use SPObject::setid when mental finishes it to steal ids of
+               // FIXME: relink clones to the new canvas objects
+               // use SPObject::setid when mental finishes it to steal ids of
 
-            // this is needed to make sure the new item has curve (simply requestDisplayUpdate does not work)
-            doc->ensureUpToDate();
+                // this is needed to make sure the new item has curve (simply requestDisplayUpdate does not work)
+                doc->ensureUpToDate();
 
-            Geom::Affine transform( i->transform * pat_transform );
-            i->doWriteTransform(i->getRepr(), transform);
+                Geom::Affine transform( i->transform * pat_transform );
+                i->doWriteTransform(i->getRepr(), transform);
 
-            new_select = g_slist_prepend(new_select, i);
+                new_select = g_slist_prepend(new_select, i);
+            }
         }
 
         SPCSSAttr *css = sp_repr_css_attr_new();
@@ -3075,7 +3534,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
         res = prefs_res;
     } else if (0 < prefs_min) {
         // If minsize is given, look up minimum bitmap size (default 250 pixels) and calculate resolution from it
-        res = PX_PER_IN * prefs_min / MIN(bbox->width(), bbox->height());
+        res = Inkscape::Util::Quantity::convert(prefs_min, "in", "px") / MIN(bbox->width(), bbox->height());
     } else {
         float hint_xdpi = 0, hint_ydpi = 0;
         Glib::ustring hint_filename;
@@ -3090,14 +3549,14 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
                 res = hint_xdpi;
             } else {
                 // if all else fails, take the default 90 dpi
-                res = PX_PER_IN;
+                res = Inkscape::Util::Quantity::convert(1, "in", "px");
             }
         }
     }
 
     // The width and height of the bitmap in pixels
-    unsigned width = (unsigned) floor(bbox->width() * res / PX_PER_IN);
-    unsigned height =(unsigned) floor(bbox->height() * res / PX_PER_IN);
+    unsigned width = (unsigned) floor(bbox->width() * Inkscape::Util::Quantity::convert(res, "px", "in"));
+    unsigned height =(unsigned) floor(bbox->height() * Inkscape::Util::Quantity::convert(res, "px", "in"));
 
     // Find out if we have to run an external filter
     gchar const *run = NULL;
@@ -3129,12 +3588,13 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
 
     double shift_x = bbox->min()[Geom::X];
     double shift_y = bbox->max()[Geom::Y];
-    if (res == PX_PER_IN) { // for default 90 dpi, snap it to pixel grid
+    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
         shift_x = round(shift_x);
         shift_y = -round(-shift_y); // this gets correct rounding despite coordinate inversion, remove the negations when the inversion is gone
     }
     t = Geom::Scale(1, -1) * Geom::Translate(shift_x, shift_y) * eek.inverse();  /// @fixme hardcoded doc2dt transform?
 
+    // TODO: avoid roundtrip via file
     // Do the export
     sp_export_png_file(document, filepath,
                        bbox->min()[Geom::X], bbox->min()[Geom::Y],
@@ -3150,16 +3610,20 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
     // Run filter, if any
     if (run) {
         g_print("Running external filter: %s\n", run);
-        system(run);
+        int result = system(run);
+
+        if(result == -1)
+            g_warning("Could not run external filter: %s\n", run);
     }
 
     // Import the image back
-    GdkPixbuf *pb = gdk_pixbuf_new_from_file(filepath, NULL);
+    Inkscape::Pixbuf *pb = Inkscape::Pixbuf::create_from_file(filepath);
     if (pb) {
         // Create the repr for the image
+        // TODO: avoid unnecessary roundtrip between data URI and decoded pixbuf
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
-        sp_embed_image(repr, pb, "image/png");
-        if (res == PX_PER_IN) { // for default 90 dpi, snap it to pixel grid
+        sp_embed_image(repr, pb);
+        if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
         } else {
@@ -3384,7 +3848,9 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
             Inkscape::GC::release(group);
         }
 
-        apply_mask_to->setAttribute(attributeName, g_strdup_printf("url(#%s)", mask_id));
+        gchar *value_str = g_strdup_printf("url(#%s)", mask_id);
+        apply_mask_to->setAttribute(attributeName, value_str);
+        g_free(value_str);
 
     }
 
@@ -3456,7 +3922,7 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
             }
 
             // collect distinct mask object (and associate with item to apply transform)
-            if (NULL != uri_ref && NULL != uri_ref->getObject()) {
+            if ((NULL != uri_ref) && (NULL != uri_ref->getObject())) {
                 referenced_objects[uri_ref->getObject()] = item;
             }
         }

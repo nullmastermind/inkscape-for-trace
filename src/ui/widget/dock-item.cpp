@@ -18,6 +18,7 @@
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/stockitem.h>
+#include <glibmm/exceptionhandler.h>
 
 namespace Inkscape {
 namespace UI {
@@ -58,7 +59,11 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
             Gtk::StockItem item;
             Gtk::StockID stockId(icon_name);
             if ( Gtk::StockItem::lookup(stockId, item) ) {
+#if WITH_GTKMM_3_0
+                _icon_pixbuf = _dock.getWidget().render_icon_pixbuf( stockId, Gtk::ICON_SIZE_MENU );
+#else
                 _icon_pixbuf = _dock.getWidget().render_icon( stockId, Gtk::ICON_SIZE_MENU );
+#endif
             }
         }
     }
@@ -168,10 +173,14 @@ DockItem::set_size_request(int width, int height)
     getWidget().set_size_request(width, height);
 }
 
-void
-DockItem::size_request(Gtk::Requisition& requisition)
+void DockItem::size_request(Gtk::Requisition& requisition)
 {
+#if WITH_GTKMM_3_0
+    Gtk::Requisition req_natural;
+    getWidget().get_preferred_size(req_natural, requisition);
+#else
     requisition = getWidget().size_request();
+#endif
 }
 
 void

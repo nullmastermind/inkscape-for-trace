@@ -21,9 +21,8 @@
 #endif
 #include "macros.h"
 #include "inkscape-private.h"
-#include "desktop.h"
-#include "desktop-handles.h"
 #include "document.h"
+#include "layer-model.h"
 #include "selection.h"
 #include <2geom/rect.h>
 #include "xml/repr.h"
@@ -42,10 +41,11 @@
 
 namespace Inkscape {
 
-Selection::Selection(SPDesktop *desktop) :
+Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
     _objs(NULL),
     _reprs(NULL),
     _items(NULL),
+    _layers(layers),
     _desktop(desktop),
     _selection_context(NULL),
     _flags(0),
@@ -55,7 +55,7 @@ Selection::Selection(SPDesktop *desktop) :
 
 Selection::~Selection() {
     _clear();
-    _desktop = NULL;
+    _layers = NULL;
     if (_idle) {
         g_source_remove(_idle);
         _idle = 0;
@@ -96,7 +96,7 @@ void Selection::_emitModified(guint flags) {
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
     if (persist_selection_context) {
         if (NULL == _selection_context) {
-            _selection_context = desktop()->currentLayer();
+            _selection_context = _layers->currentLayer();
             sp_object_ref(_selection_context, NULL);
             _context_release_connection = _selection_context->connectRelease(sigc::mem_fun(*this, &Selection::_releaseContext));
         }
@@ -139,7 +139,7 @@ void Selection::_clear() {
 SPObject *Selection::activeContext() {
     if (NULL != _selection_context)
         return _selection_context;
-    return desktop()->currentLayer();
+    return _layers->currentLayer();
     }
 
 bool Selection::includes(SPObject *obj) const {
@@ -154,6 +154,7 @@ bool Selection::includes(SPObject *obj) const {
 void Selection::add(SPObject *obj, bool persist_selection_context/* = false */) {
     g_return_if_fail(obj != NULL);
     g_return_if_fail(SP_IS_OBJECT(obj));
+    g_return_if_fail(obj->document != NULL);
 
     if (includes(obj)) {
         return;
@@ -237,15 +238,11 @@ void Selection::_remove(SPObject *obj) {
 }
 
 void Selection::setList(GSList const *list) {
-    _clear();
-
-    if ( list != NULL ) {
-        for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-            _add(reinterpret_cast<SPObject *>(iter->data));
-        }
-    }
-
-    _emitChanged();
+    // Clear and add, or just clear with emit.
+    if (list != NULL) {
+        _clear();
+        addList(list);
+    } else clear();
 }
 
 void Selection::addList(GSList const *list) {
@@ -257,9 +254,7 @@ void Selection::addList(GSList const *list) {
 
     for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
         SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
-        if (includes(obj)) {
-            continue;
-        }
+        if (includes(obj)) continue;
         _add (obj);
     }
 
@@ -329,11 +324,11 @@ std::list<Persp3D *> const Selection::perspList() {
 std::list<SPBox3D *> const Selection::box3DList(Persp3D *persp) {
     std::list<SPBox3D *> boxes;
     if (persp) {
-        SPBox3D *box;
         for (std::list<SPBox3D *>::iterator i = _3dboxes.begin(); i != _3dboxes.end(); ++i) {
-            box = *i;
-            if (persp == box3d_get_perspective(box))
+            SPBox3D *box = *i;
+            if (persp == box3d_get_perspective(box)) {
                 boxes.push_back(box);
+            }
         }
     } else {
         boxes = _3dboxes;
@@ -356,6 +351,35 @@ SPItem *Selection::singleItem() {
     } else {
         return NULL;
     }
+}
+
+SPItem *Selection::smallestItem(Selection::CompareSize compare) {
+    return _sizeistItem(true, compare);
+}
+
+SPItem *Selection::largestItem(Selection::CompareSize compare) {
+    return _sizeistItem(false, compare);
+}
+
+SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
+    GSList const *items = const_cast<Selection *>(this)->itemList();
+    gdouble max = sml ? 1e18 : 0;
+    SPItem *ist = NULL;
+
+    for ( GSList const *i = items; i != NULL ; i = i->next ) {
+        Geom::OptRect obox = SP_ITEM(i->data)->desktopPreferredBounds();
+        if (!obox || obox.isEmpty()) continue;
+        Geom::Rect bbox = *obox;
+
+        gdouble size = compare == 2 ? bbox.area() :
+            (compare == 1 ? bbox.width() : bbox.height());
+        size = sml ? size : size * -1;
+        if (size < max) {
+            max = size;
+            ist = SP_ITEM(i->data);
+        }
+    }
+    return ist;
 }
 
 Inkscape::XML::Node *Selection::singleRepr() {
@@ -418,19 +442,13 @@ Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 // will be returned; this is also the case in SelTrans::centerRequest()
 boost::optional<Geom::Point> Selection::center() const {
     GSList *items = (GSList *) const_cast<Selection *>(this)->itemList();
-    Geom::Point center;
     if (items) {
         SPItem *first = reinterpret_cast<SPItem*>(g_slist_last(items)->data); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly
             return first->getCenter();
         }
     }
-    Geom::OptRect bbox;
-    if (Inkscape::Preferences::get()->getInt("/tools/bounding_box") == 0) {
-        bbox = visualBounds();
-    } else{
-        bbox = geometricBounds();
-    }    
+    Geom::OptRect bbox = preferredBounds();
     if (bbox) {
         return bbox->midpoint();
     } else {
@@ -443,51 +461,19 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
 
     SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
     snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
-    //snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP, true); // consider any type of nodes as a snap source
-    //snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_NODE_SMOOTH, true); // i.e. disregard the smooth / cusp node preference
     std::vector<Inkscape::SnapCandidatePoint> p;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
         SPItem *this_item = SP_ITEM(iter->data);
         this_item->getSnappoints(p, &snapprefs_dummy);
 
         //Include the transformation origin for snapping
-        //For a selection or group only the overall origin is considered
+        //For a selection or group only the overall center is considered, not for each item individually
         if (snapprefs != NULL && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
             p.push_back(Inkscape::SnapCandidatePoint(this_item->getCenter(), SNAPSOURCE_ROTATION_CENTER));
         }
     }
 
     return p;
-}
-
-// TODO: both getSnapPoints and getSnapPointsConvexHull are called, subsequently. Can we do this more efficient?
-// Why do we need to include the transformation center in one case and not the other?
-std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPointsConvexHull(SnapPreferences const *snapprefs) const {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
-
-    SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
-    snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP, true); // consider any type of nodes as a snap source
-    snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_NODE_SMOOTH, true); // i.e. disregard the smooth / cusp node preference
-
-    std::vector<Inkscape::SnapCandidatePoint> p;
-    for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        SP_ITEM(iter->data)->getSnappoints(p, &snapprefs_dummy);
-    }
-
-    std::vector<Inkscape::SnapCandidatePoint> pHull;
-    if (!p.empty()) {
-        Geom::Rect cvh((p.front()).getPoint(), (p.front()).getPoint());
-        for (std::vector<Inkscape::SnapCandidatePoint>::iterator i = p.begin(); i != p.end(); ++i) {
-            // these are the points we get back
-            cvh.expandTo((*i).getPoint());
-        }
-
-        for ( unsigned i = 0 ; i < 4 ; ++i ) {
-            pHull.push_back(Inkscape::SnapCandidatePoint(cvh.corner(i), SNAPSOURCE_CONVEX_HULL_CORNER));
-        }
-    }
-
-    return pHull;
 }
 
 void Selection::_removeObjectDescendants(SPObject *obj) {
@@ -520,7 +506,7 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
     gchar const *id = repr->attribute("id");
     g_return_val_if_fail(id != NULL, NULL);
-    SPObject *object=sp_desktop_document(_desktop)->getObjectById(id);
+    SPObject *object=_layers->getDocument()->getObjectById(id);
     g_return_val_if_fail(object != NULL, NULL);
     return object;
 }
@@ -529,7 +515,7 @@ guint Selection::numberOfLayers() {
     GSList const *items = const_cast<Selection *>(this)->itemList();
     GSList *layers = NULL;
     for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        SPObject *layer = desktop()->layerForObject(SP_OBJECT(iter->data));
+        SPObject *layer = _layers->layerForObject(SP_OBJECT(iter->data));
         if (g_slist_find (layers, layer) == NULL) {
             layers = g_slist_prepend (layers, layer);
         }

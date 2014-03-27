@@ -31,7 +31,7 @@ public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
     virtual ~LPECopyRotate();
 
-    virtual void doOnApply (SPLPEItem *lpeitem);
+    virtual void doOnApply (SPLPEItem const* lpeitem);
 
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
@@ -41,7 +41,7 @@ public:
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
-    virtual void addCanvasIndicators(SPLPEItem *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
     ScalarParam starting_angle;

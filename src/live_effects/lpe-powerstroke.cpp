@@ -24,10 +24,12 @@
 #include <2geom/bezier-utils.h>
 #include <2geom/svg-elliptical-arc.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/svg-path.h>
+#include <2geom/path-sink.h>
 #include <2geom/path-intersection.h>
 #include <2geom/crossing.h>
 #include <2geom/ellipse.h>
+#include <2geom/math-utils.h>
+#include <math.h>
 
 #include "spiro.h"
 
@@ -36,7 +38,7 @@ namespace Geom {
 
 /** Find the point where two straight lines cross.
 */
-boost::optional<Point> intersection_point( Point const & origin_a, Point const & vector_a,
+static boost::optional<Point> intersection_point( Point const & origin_a, Point const & vector_a,
                                            Point const & origin_b, Point const & vector_b)
 {
     Coord denom = cross(vector_b, vector_a);
@@ -47,7 +49,7 @@ boost::optional<Point> intersection_point( Point const & origin_a, Point const &
     return boost::none;
 }
 
-Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in)
+static Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in)
 {
     std::vector<Geom::Point> temp;
     sbasis_to_bezier(temp, sbasis_in, 4);
@@ -86,6 +88,96 @@ static Ellipse find_ellipse(Point P, Point Q, Point O)
     return Ellipse(A, B, C, D, E, F);
 }
 
+/**
+ * Refer to: Weisstein, Eric W. "Circle-Circle Intersection."
+             From MathWorld--A Wolfram Web Resource.
+             http://mathworld.wolfram.com/Circle-CircleIntersection.html
+ *
+ * @return 0 if no intersection
+ * @return 1 if one circle is contained in the other
+ * @return 2 if intersections are found (they are written to p0 and p1)
+ */
+static int circle_circle_intersection(Circle const &circle0, Circle const &circle1,
+                                      Point & p0, Point & p1)
+{
+    Point X0 = circle0.center();
+    double r0 = circle0.ray();
+    Point X1 = circle1.center();
+    double r1 = circle1.ray();
+
+    /* dx and dy are the vertical and horizontal distances between
+    * the circle centers.
+    */
+    Point D = X1 - X0;
+
+    /* Determine the straight-line distance between the centers. */
+    double d = L2(D);
+
+    /* Check for solvability. */
+    if (d > (r0 + r1))
+    {
+        /* no solution. circles do not intersect. */
+        return 0;
+    }
+    if (d <= fabs(r0 - r1))
+    {
+        /* no solution. one circle is contained in the other */
+        return 1;
+    }
+
+    /* 'point 2' is the point where the line through the circle
+    * intersection points crosses the line between the circle
+    * centers.  
+    */
+
+    /* Determine the distance from point 0 to point 2. */
+    double a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d) ;
+
+    /* Determine the coordinates of point 2. */
+    Point p2 = X0 + D * (a/d);
+
+    /* Determine the distance from point 2 to either of the
+    * intersection points.
+    */
+    double h = std::sqrt((r0*r0) - (a*a));
+
+    /* Now determine the offsets of the intersection points from
+    * point 2.
+    */
+    Point r = (h/d)*rot90(D);
+
+    /* Determine the absolute intersection points. */
+    p0 = p2 + r;
+    p1 = p2 - r;
+
+    return 2;
+}
+
+/**
+ * Find circle that touches inside of the curve, with radius matching the curvature, at time value \c t.
+ * Because this method internally uses unitTangentAt, t should be smaller than 1.0 (see unitTangentAt).
+ */
+static Circle touching_circle( D2<SBasis> const &curve, double t, double tol=0.01 )
+{
+    //Piecewise<SBasis> k = curvature(curve, tol);
+    D2<SBasis> dM=derivative(curve);
+    if ( are_near(L2sq(dM(t)),0.) ) {
+        dM=derivative(dM);
+    }
+    if ( are_near(L2sq(dM(t)),0.) ) {   // try second time
+        dM=derivative(dM);
+    }
+    Piecewise<D2<SBasis> > unitv = unitVector(dM,tol);
+    Piecewise<SBasis> dMlength = dot(Piecewise<D2<SBasis> >(dM),unitv);
+    Piecewise<SBasis> k = cross(derivative(unitv),unitv);
+    k = divide(k,dMlength,tol,3);
+    double curv = k(t); // note that this value is signed
+
+    Geom::Point normal = unitTangentAt(curve, t).cw();
+    double radius = 1/curv;
+    Geom::Point center = curve(t) + radius*normal;
+    return Geom::Circle(center, fabs(radius));
+}
 
 } // namespace Geom
 
@@ -121,7 +213,8 @@ enum LineJoinType {
   LINEJOIN_ROUND,
   LINEJOIN_EXTRP_MITER,
   LINEJOIN_MITER,
-  LINEJOIN_SPIRO
+  LINEJOIN_SPIRO,
+  LINEJOIN_EXTRP_MITER_ARC
 };
 static const Util::EnumData<unsigned> LineJoinTypeData[] = {
     {LINEJOIN_BEVEL, N_("Beveled"),   "bevel"},
@@ -129,19 +222,22 @@ static const Util::EnumData<unsigned> LineJoinTypeData[] = {
     {LINEJOIN_EXTRP_MITER,  N_("Extrapolated"),      "extrapolated"},
     {LINEJOIN_MITER, N_("Miter"),     "miter"},
     {LINEJOIN_SPIRO, N_("Spiro"),     "spiro"},
+#ifdef LPE_ENABLE_TEST_EFFECTS
+    {LINEJOIN_EXTRP_MITER_ARC, N_("Extrapolated arc"),     "extrp_arc"}, 
+#endif
 };
 static const Util::EnumDataConverter<unsigned> LineJoinTypeConverter(LineJoinTypeData, sizeof(LineJoinTypeData)/sizeof(*LineJoinTypeData));
 
 LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     offset_points(_("Offset points"), _("Offset points"), "offset_points", &wr, this),
-    sort_points(_("Sort points"), _("Sort offset points according to their time value along the curve."), "sort_points", &wr, this, true),
-    interpolator_type(_("Interpolator type"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path."), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CUBICBEZIER_JOHAN),
-    interpolator_beta(_("Smoothness"), _("Sets the smoothness for the CubicBezierJohan interpolator. 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
-    start_linecap_type(_("Start cap"), _("Determines the shape of the path's start."), "start_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ROUND),
-    linejoin_type(_("Join"), _("Specifies the shape of the path's corners."), "linejoin_type", LineJoinTypeConverter, &wr, this, LINEJOIN_ROUND),
-    miter_limit(_("Miter limit"), _("Maximum length of the miter (in units of stroke width)"), "miter_limit", &wr, this, 4.),
-    end_linecap_type(_("End cap"), _("Determines the shape of the path's end."), "end_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ROUND)
+    sort_points(_("Sort points"), _("Sort offset points according to their time value along the curve"), "sort_points", &wr, this, true),
+    interpolator_type(_("Interpolator type:"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path"), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CUBICBEZIER_JOHAN),
+    interpolator_beta(_("Smoothness:"), _("Sets the smoothness for the CubicBezierJohan interpolator; 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
+    start_linecap_type(_("Start cap:"), _("Determines the shape of the path's start"), "start_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ROUND),
+    linejoin_type(_("Join:"), _("Determines the shape of the path's corners"), "linejoin_type", LineJoinTypeConverter, &wr, this, LINEJOIN_ROUND),
+    miter_limit(_("Miter limit:"), _("Maximum length of the miter (in units of stroke width)"), "miter_limit", &wr, this, 4.),
+    end_linecap_type(_("End cap:"), _("Determines the shape of the path's end"), "end_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_ROUND)
 {
     show_orig_path = true;
 
@@ -167,7 +263,7 @@ LPEPowerStroke::~LPEPowerStroke()
 
 
 void
-LPEPowerStroke::doOnApply(SPLPEItem *lpeitem)
+LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 {
     if (SP_IS_SHAPE(lpeitem)) {
         std::vector<Geom::Point> points;
@@ -205,12 +301,11 @@ static bool compare_offsets (Geom::Point first, Geom::Point second)
     return first[Geom::X] < second[Geom::X];
 }
 
-Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis> > const & B,
-                                          Geom::Piecewise<Geom::SBasis> const & y, // width path
-                                          LineJoinType jointype,
-                                          double miter_limit,
-                                          bool /*forward_direction*/,
-                                          double tol=Geom::EPSILON)
+static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis> > const & B,
+                                                 Geom::Piecewise<Geom::SBasis> const & y, // width path
+                                                 LineJoinType jointype,
+                                                 double miter_limit,
+                                                 double tol=Geom::EPSILON)
 {
 /* per definition, each discontinuity should be fixed with a join-ending, as defined by linejoin_type
 */
@@ -310,6 +405,65 @@ Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis>
                     }
                     break;
                 }
+                case LINEJOIN_EXTRP_MITER_ARC: {
+                    Geom::Circle circle1 = Geom::touching_circle(reverse(B[prev_i]),0.);
+                    Geom::Circle circle2 = Geom::touching_circle(B[i],0.);
+                    Geom::Point points[2];
+                    int solutions = circle_circle_intersection(circle1, circle2, points[0], points[1]);
+                    if (solutions == 2) {
+                        Geom::Point sol(0.,0.);
+                        if ( dot(tang2,points[0]-B[i].at0()) > 0 ) {
+                            // points[0] is bad, choose points[1]
+                            sol = points[1];
+                        } else if ( dot(tang2,points[1]-B[i].at0()) > 0 ) { // points[0] could be good, now check points[1]
+                            // points[1] is bad, choose points[0]
+                            sol = points[0];
+                        } else {
+                            // both points are good, choose nearest
+                            sol = ( distanceSq(B[i].at0(), points[0]) < distanceSq(B[i].at0(), points[1]) ) ?
+                                    points[0] : points[1];
+                        }
+
+                        Geom::EllipticalArc *arc0 = circle1.arc(B[prev_i].at1(), 0.5*(B[prev_i].at1()+sol), sol, true);
+                        Geom::EllipticalArc *arc1 = circle2.arc(sol, 0.5*(sol+B[i].at0()), B[i].at0(), true);
+
+                        if (arc0) {
+                            build_from_sbasis(pb,arc0->toSBasis(), tol, false);
+                            delete arc0;
+                            arc0 = NULL;
+                        }
+                        if (arc1) {
+                            build_from_sbasis(pb,arc1->toSBasis(), tol, false);
+                            delete arc1;
+                            arc1 = NULL;
+                        }
+
+                        break;
+                    } else {
+                        // fall back to miter
+                        boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
+                                                                             B[i].at0(), tang2 );
+                        if (p) {
+                            // check size of miter
+                            Geom::Point point_on_path = B[prev_i].at1() - rot90(tang1) * width;
+                            Geom::Coord len = distance(*p, point_on_path);
+                            if (len <= fabs(width) * miter_limit) {
+                                // miter OK
+                                pb.lineTo(*p);
+                            }
+                        }
+                        pb.lineTo(B[i].at0());
+                    }
+                    /*else if (solutions == 1) { // one circle is inside the other
+                        // don't know what to do: default to bevel
+                        pb.lineTo(B[i].at0());
+                    } else { // no intersections
+                        // don't know what to do: default to bevel
+                        pb.lineTo(B[i].at0());
+                    } */
+
+                    break;
+                }
                 case LINEJOIN_MITER: {
                     boost::optional<Geom::Point> p = intersection_point( B[prev_i].at1(), tang1,
                                                                          B[i].at0(), tang2 );
@@ -382,7 +536,7 @@ Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::SBasis>
 
         prev_i = i;
     }
-    pb.finish();
+    pb.flush();
     return pb.peek().front();
 }
 
@@ -453,7 +607,7 @@ LPEPowerStroke::doEffect_path (std::vector<Geom::Path> const & path_in)
     Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
     Piecewise<D2<SBasis> > mirrorpath = reverse(compose(pwd2_in,x) - y*compose(n,x));
 
-    Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y, jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
+    Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
 
     if (path_in[0].closed()) {

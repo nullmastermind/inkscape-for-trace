@@ -35,13 +35,25 @@
 #include "display/rendermode.h"
 #include <glibmm/ustring.h>
 
+#include "sp-gradient.h" // TODO refactor enums out to their own .h file
+
 class SPCSSAttr;
 struct SPCanvas;
 struct SPCanvasItem;
 struct SPCanvasGroup;
-struct SPEventContext;
+
+namespace Inkscape {
+namespace UI {
+namespace Tools {
+
+class ToolBase;
+
+}
+}
+}
+
 class  SPItem;
-struct SPNamedView;
+class SPNamedView;
 class  SPObject;
 struct SPStyle;
 typedef struct _DocumentInterface DocumentInterface;//struct DocumentInterface;
@@ -59,10 +71,10 @@ struct _GdkEventWindowState;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 
 namespace Inkscape {
-  class Application;
+  struct Application;
+  class LayerModel;
   class MessageContext;
   class Selection;
-  class ObjectHierarchy;
   class LayerManager;
   class EventLog;
   namespace UI {
@@ -75,7 +87,7 @@ namespace Inkscape {
       }
 
       namespace View {
-	      class EditWidgetInterface;
+	      struct EditWidgetInterface;
       }
   }
   namespace Whiteboard {
@@ -108,7 +120,7 @@ namespace Inkscape {
  * data, like grid and guideline placement, snapping options and so on.
  *
  * Associated with each SPDesktop are the two most important editing
- * related objects - SPSelection and SPEventContext.
+ * related objects - SPSelection and ToolBase.
  *
  * Sodipodi keeps track of the active desktop and invokes notification
  * signals whenever it changes. UI elements can use these to update their
@@ -123,14 +135,30 @@ public:
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
     SPNamedView               *namedview;
     SPCanvas                  *canvas;
+    Inkscape::LayerModel      *layers;
     /// current selection; will never generally be NULL
     Inkscape::Selection       *selection;
-    SPEventContext            *event_context;
+    Inkscape::UI::Tools::ToolBase            *event_context;
     Inkscape::LayerManager    *layer_manager;
     Inkscape::EventLog        *event_log;
     DocumentInterface *dbus_document_interface;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
+
+    Inkscape::UI::Tools::ToolBase* getEventContext() const;
+    Inkscape::Selection* getSelection() const;
+    SPDocument* getDocument() const;
+    SPCanvas* getCanvas() const;
+    SPCanvasItem* getAcetate() const;
+    SPCanvasGroup* getMain() const;
+    SPCanvasGroup* getGridGroup() const;
+    SPCanvasGroup* getGuides() const;
+    SPCanvasItem* getDrawing() const;
+    SPCanvasGroup* getSketch() const;
+    SPCanvasGroup* getControls() const;
+    SPCanvasGroup* getTempGroup() const;
+    Inkscape::MessageStack* getMessageStack() const;
+    SPNamedView* getNamedView() const;
 
     SPCanvasItem  *acetate;
     SPCanvasGroup *main;
@@ -164,12 +192,10 @@ public:
     // storage for selected dragger used by GrDrag as it's
     // created and deleted by tools
     SPItem *gr_item;
-    guint  gr_point_type;
+    GrPointType  gr_point_type;
     guint  gr_point_i;
-    bool   gr_fill_or_stroke;
+    Inkscape::PaintTarget gr_fill_or_stroke;
 
-
-    Inkscape::ObjectHierarchy *_layer_hierarchy;
     Glib::ustring _reconstruction_old_layer_id;
 
     sigc::signal<void, sp_verb_t>      _tool_changed;
@@ -191,7 +217,7 @@ public:
         return _document_replaced_signal.connect (slot);
     }
 
-    sigc::connection connectEventContextChanged (const sigc::slot<void,SPDesktop*,SPEventContext*> & slot)
+    sigc::connection connectEventContextChanged (const sigc::slot<void,SPDesktop*,Inkscape::UI::Tools::ToolBase*> & slot)
     {
         return _event_context_changed_signal.connect (slot);
     }
@@ -211,16 +237,6 @@ public:
     sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
         return _layer_changed_signal.connect(slot);
     }
-
-    // Whiteboard changes
-
-#ifdef WITH_INKBOARD
-    Inkscape::Whiteboard::SessionManager* whiteboard_session_manager() {
-        return _whiteboard_session_manager;
-    }
-
-    Inkscape::Whiteboard::SessionManager* _whiteboard_session_manager;
-#endif
 
     /**
      * Return new desktop object.
@@ -272,27 +288,32 @@ public:
 
     void set_active (bool new_active);
 
-    // TODO look into making these return a more specific subclass:
+    // Could make all callers use this->layers instead of passing calls through?
     SPObject *currentRoot() const;
     SPObject *currentLayer() const;
-
     void setCurrentLayer(SPObject *object);
     void toggleLayerSolo(SPObject *object);
-    SPObject *layerForObject(SPObject *object);
+    void toggleHideAllLayers(bool hide);
+    void toggleLockAllLayers(bool lock);
+    void toggleLockOtherLayers(SPObject *object);
     bool isLayer(SPObject *object) const;
+
     bool isWithinViewport(SPItem *item) const;
     bool itemIsHidden(SPItem const *item) const;
 
     void activate_guides (bool activate);
     void change_document (SPDocument *document);
 
-    void set_event_context (GType type, const gchar *config);
-    void push_event_context (GType type, const gchar *config, unsigned int key);
+
+    void set_event_context2(const std::string& toolName);
+
+    //void set_event_context (GType type, const gchar *config);
+    //void push_event_context (GType type, const gchar *config, unsigned int key);
 
     void set_coordinate_status (Geom::Point p);
-    SPItem *getItemFromListAtPointBottom(const GSList *list, Geom::Point const p) const;
-    SPItem *getItemAtPoint(Geom::Point const p, bool into_groups, SPItem *upto = NULL) const;
-    SPItem *getGroupAtPoint(Geom::Point const p) const;
+    SPItem *getItemFromListAtPointBottom(const GSList *list, Geom::Point const &p) const;
+    SPItem *getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem *upto = NULL) const;
+    SPItem *getGroupAtPoint(Geom::Point const &p) const;
     Geom::Point point() const;
 
     Geom::Rect get_display_area() const;
@@ -322,7 +343,7 @@ public:
 
     bool scroll_to_point (Geom::Point const &s_dt, gdouble autoscrollspeed = 0);
     void scroll_world (double dx, double dy, bool is_scrolling = false);
-    void scroll_world (Geom::Point const scroll, bool is_scrolling = false)
+    void scroll_world (Geom::Point const &scroll, bool is_scrolling = false)
     {
         scroll_world(scroll[Geom::X], scroll[Geom::Y], is_scrolling);
     }
@@ -335,7 +356,7 @@ public:
     Gtk::Window* getToplevel();
     void presentWindow();
     bool showInfoDialog( Glib::ustring const &message );
-    bool warnDialog (gchar *text);
+    bool warnDialog (Glib::ustring const &text);
     void toggleRulers();
     void toggleScrollbars();
     void layoutWidget();
@@ -355,11 +376,13 @@ public:
     bool isWaitingCursor() const { return waiting_cursor; };
 
     void toggleColorProfAdjust();
+    bool colorProfAdjustEnabled();
 
     void toggleGrids();
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
+    void toggleToolbar(gchar const *toolbar_name);
 
     bool is_iconified();
     bool is_maximized();
@@ -412,7 +435,7 @@ private:
     sigc::signal<void,SPDesktop*,SPDocument*>     _document_replaced_signal;
     sigc::signal<void>                 _activate_signal;
     sigc::signal<void>                 _deactivate_signal;
-    sigc::signal<void,SPDesktop*,SPEventContext*> _event_context_changed_signal;
+    sigc::signal<void,SPDesktop*,Inkscape::UI::Tools::ToolBase*> _event_context_changed_signal;
     sigc::signal<void, gpointer>       _tool_subselection_changed;
 
     sigc::connection _activate_connection;
@@ -424,7 +447,6 @@ private:
     sigc::connection _commit_connection;
     sigc::connection _modified_connection;
 
-    virtual void onPositionSet (double, double);
     virtual void onResized (double, double);
     virtual void onRedrawRequested();
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message);

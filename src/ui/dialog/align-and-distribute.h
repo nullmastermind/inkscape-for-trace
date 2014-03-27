@@ -22,6 +22,7 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/label.h>
 #include "2geom/rect.h"
+#include "ui/dialog/desktop-tracker.h"
 
 #if WITH_GTKMM_3_0
 #include <gtkmm/checkbutton.h>
@@ -46,10 +47,6 @@ public:
 
     static AlignAndDistribute &getInstance() { return *new AlignAndDistribute(); }
 
-    enum AlignTarget { LAST=0, FIRST, BIGGEST, SMALLEST, PAGE, DRAWING, SELECTION };
-
-    AlignTarget getAlignTarget() const;
-
 #if WITH_GTKMM_3_0
     Gtk::Grid &align_table(){return _alignTable;}
     Gtk::Grid &distribute_table(){return _distributeTable;}
@@ -64,7 +61,6 @@ public:
     Gtk::Table &nodes_table(){return _nodesTable;}
 #endif
 
-    std::list<SPItem *>::iterator find_master(std::list <SPItem *> &list, bool horizontal);
     void setMode(bool nodeEdit);
 
     Geom::OptRect randomize_bbox;
@@ -106,6 +102,7 @@ protected:
     void addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
                            guint row, guint col, Gtk::Table &table, Geom::Dim2 orientation, bool distribute);
 #endif
+    void setTargetDesktop(SPDesktop *desktop);
 
     std::list<Action *> _actionList;
     UI::Widget::Frame _alignFrame, _distributeFrame, _rearrangeFrame, _removeOverlapFrame, _nodesFrame;
@@ -117,10 +114,19 @@ protected:
     Gtk::HBox _anchorBox;
     Gtk::HBox _selgrpBox;
     Gtk::VBox _alignBox;
+    Gtk::HBox _alignTableBox;
+    Gtk::HBox _distributeTableBox;
+    Gtk::HBox _rearrangeTableBox;
+    Gtk::HBox _removeOverlapTableBox;
+    Gtk::HBox _nodesTableBox;
     Gtk::Label _anchorLabel;
     Gtk::Label _selgrpLabel;
     Gtk::CheckButton _selgrp;
     Gtk::ComboBoxText _combo;
+
+    SPDesktop *_desktop;
+    DesktopTracker _deskTrack;
+    sigc::connection _desktopChangeConn;
 
 private:
     AlignAndDistribute(AlignAndDistribute const &d);
@@ -137,6 +143,83 @@ struct BBoxSort
     BBoxSort(const BBoxSort &rhs);
 };
 bool operator< (const BBoxSort &a, const BBoxSort &b);
+
+
+class Action {
+public :
+
+    Action(const Glib::ustring &id,
+           const Glib::ustring &tiptext,
+           guint row, guint column,
+    #if WITH_GTKMM_3_0
+       Gtk::Grid &parent,
+    #else
+       Gtk::Table &parent,
+    #endif
+           AlignAndDistribute &dialog);
+
+    virtual ~Action(){}
+
+    AlignAndDistribute &_dialog;
+
+private :
+    virtual void on_button_click(){}
+
+    Glib::ustring _id;
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid &_parent;
+#else
+    Gtk::Table &_parent;
+#endif
+};
+
+
+class ActionAlign : public Action {
+public :
+    struct Coeffs {
+       double mx0, mx1, my0, my1;
+       double sx0, sx1, sy0, sy1;
+       int verb_id;
+    };
+    enum AlignTarget { LAST=0, FIRST, BIGGEST, SMALLEST, PAGE, DRAWING, SELECTION };
+    ActionAlign(const Glib::ustring &id,
+                const Glib::ustring &tiptext,
+                guint row, guint column,
+                AlignAndDistribute &dialog,
+                guint coeffIndex):
+        Action(id, tiptext, row, column,
+               dialog.align_table(), dialog),
+        _index(coeffIndex),
+        _dialog(dialog)
+    {}
+
+    /*
+     * Static function called to align from a keyboard shortcut
+     */
+    static void do_verb_action(SPDesktop *desktop, int verb);
+    static int verb_to_coeff(int verb);
+
+private :
+
+
+    virtual void on_button_click() {
+        //Retreive selected objects
+        SPDesktop *desktop = _dialog.getDesktop();
+        if (!desktop) return;
+
+        do_action(desktop, _index);
+    }
+
+    static void do_action(SPDesktop *desktop, int index);
+
+    guint _index;
+    AlignAndDistribute &_dialog;
+
+    static const Coeffs _allCoeffs[11];
+
+};
+
 
 } // namespace Dialog
 } // namespace UI

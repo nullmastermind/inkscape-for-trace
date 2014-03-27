@@ -245,7 +245,6 @@ namespace XML {}
  *       - SPLinearGradient
  *       - SPRadialGradient
  *     - SPPattern [\ref sp-pattern.cpp, \ref sp-pattern.h]
- *   - SPSkeleton [\ref sp-skeleton.cpp, \ref sp-skeleton.h]
  *   - SPStop [\ref sp-stop.h]
  *   - SPString [\ref sp-string.cpp, \ref sp-string.h]
  *   - SPStyleElem [\ref sp-style-elem.cpp, \ref sp-style-elem.h]
@@ -259,27 +258,27 @@ namespace XML {}
  *
  * \section Event Context Class Hierarchy
  *
- *- SPEventContext[\ref event-context.cpp, \ref event-context.h]
- * - SPArcContext [\ref arc-context.cpp, \ref arc-context.h]
+ *- ToolBase[\ref event-context.cpp, \ref event-context.h]
+ * - ArcTool [\ref arc-context.cpp, \ref arc-context.h]
  * - SPDrawContext [\ref draw-context.cpp, \ref draw-context.h]
- *   - SPPenContext [\ref pen-context.cpp, \ref pen-context.h]
- *   - SPPencilContext [\ref pencil-context.cpp, \ref pencil-context.h]
- *   - SPConnectorContext [\ref connector-context.cpp, \ref connector-context.h, \ref sp-conn-end.cpp, \ref sp-conn-end-pair.cpp]
- * - SPGradientContext [\ref gradient-context.cpp, \ref gradient-context.h, \ref gradient-drag.cpp, \ref gradient-toolbar.cpp]
- * - SPRectContext [\ref rect-context.cpp, \ref rect-context.h]
- * - SPSelectContext [\ref select-context.cpp, \ref select-context.h]
- * - SPSpiralContext [\ref spiral-context.cpp, \ref spiral-context.h]
- * - SPStarContext [\ref star-context.cpp, \ref star-context.h]
+ *   - PenTool [\ref pen-context.cpp, \ref pen-context.h]
+ *   - PencilTool [\ref pencil-context.cpp, \ref pencil-context.h]
+ *   - ConnectorTool [\ref connector-context.cpp, \ref connector-context.h, \ref sp-conn-end.cpp, \ref sp-conn-end-pair.cpp]
+ * - GradientTool [\ref gradient-context.cpp, \ref gradient-context.h, \ref gradient-drag.cpp, \ref gradient-toolbar.cpp]
+ * - RectTool [\ref rect-context.cpp, \ref rect-context.h]
+ * - SelectTool [\ref select-context.cpp, \ref select-context.h]
+ * - SpiralTool [\ref spiral-context.cpp, \ref spiral-context.h]
+ * - StarTool [\ref star-context.cpp, \ref star-context.h]
  * - FloodContext [\ref flood-context.cpp, \ref flood-context.h]
- * - Box3DContext [\ref box3d-context.cpp, \ref box3d-context.h]
+ * - Box3dTool [\ref box3d-context.cpp, \ref box3d-context.h]
  *
  * SPNodeContext [\ref node-context.cpp, \ref node-context.h]
  *
- * SPZoomContext [\ref zoom-context.cpp, \ref zoom-context.h]
+ * ZoomTool [\ref zoom-context.cpp, \ref zoom-context.h]
  *
- * SPDynaDrawContext [\ref dyna-draw-context.cpp, \ref dyna-draw-context.h]
+ * CalligraphicTool [\ref dyna-draw-context.cpp, \ref dyna-draw-context.h]
  *
- * SPDropperContext [\ref dropper-context.cpp, \ref dropper-context.h]
+ * DropperTool [\ref dropper-context.cpp, \ref dropper-context.h]
  */
 /** \page UI User Interface Classes and Files
  *
@@ -303,10 +302,10 @@ namespace XML {}
  * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h, \ref satisfied-guide-cns.cpp, \ref sp-guide-attachment.h, \ref sp-guide-constraint.h]
  *
  * [\ref help.cpp] [\ref inkscape.cpp] [\ref inkscape-stock.cpp]
- * [\ref interface.cpp, \ref memeq.h] [\ref main.cpp, \ref winmain.cpp]
+ * [\ref interface.cpp] [\ref main.cpp, \ref winmain.cpp]
  * [\ref menus-skeleton.h, \ref preferences-skeleton.h]
  * [\ref select-toolbar.cpp] [\ref shortcuts.cpp]
- * [\ref sp-cursor.cpp] [\ref text-edit.cpp] [\ref toolbox.cpp, \ref ui/widget/toolbox.cpp]
+ * [\ref sp-cursor.cpp] [\ref text-edit.cpp] [\ref toolbox.cpp]
  * Inkscape::Verb [\ref verbs.h]
  *
  */
@@ -330,11 +329,9 @@ namespace XML {}
  * [\ref geom.cpp] [\ref mod360.cpp]
  */
 /** \page OtherServices Classes and Files From Other Services
- * [\ref inkview.cpp, \ref slideshow.cpp] [\ref sp-animation.cpp]
+ * [\ref inkview.cpp, \ref slideshow.cpp]
  *
  * Inkscape::GC
- *
- * [\ref sp-metrics.cpp, \ref sp-metrics.h]
  *
  * [\ref prefs-utils.cpp] [\ref print.cpp]
  *
@@ -350,7 +347,7 @@ namespace XML {}
  * Inkscape::Whiteboard::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
  * [\ref document-undo.cpp]
  *
- * {\ref dialogs/} [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] [\ref unit-constants.h]
+ * {\ref dialogs/} [\ref decimal-round.h] [\ref enums.h]
  */
 
 

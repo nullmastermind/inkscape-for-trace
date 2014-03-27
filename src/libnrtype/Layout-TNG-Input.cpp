@@ -9,7 +9,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#ifndef PANGO_ENABLE_ENGINE
 #define PANGO_ENABLE_ENGINE
+#endif
 
 #include <gtk/gtk.h>
 #include "Layout-TNG.h"
@@ -19,20 +25,16 @@
 #include "sp-string.h"
 #include "FontFactory.h"
 
-#if !PANGO_VERSION_CHECK(1,24,0)
-#define PANGO_WEIGHT_THIN       static_cast<PangoWeight>(100)
-#define PANGO_WEIGHT_BOOK       static_cast<PangoWeight>(380)
-#define PANGO_WEIGHT_MEDIUM     static_cast<PangoWeight>(500)
-#define PANGO_WEIGHT_ULTRAHEAVY static_cast<PangoWeight>(1000)
-#endif
 
 namespace Inkscape {
 namespace Text {
 
 void Layout::_clearInputObjects()
 {
-    for(std::vector<InputStreamItem*>::iterator it = _input_stream.begin() ; it != _input_stream.end() ; it++)
+    for(std::vector<InputStreamItem*>::iterator it = _input_stream.begin() ; it != _input_stream.end() ; ++it) {
         delete *it;
+    }
+
     _input_stream.clear();
     _input_wrap_shapes.clear();
 }
@@ -52,7 +54,7 @@ void Layout::appendText(Glib::ustring const &text, SPStyle *style, void *source_
     sp_style_ref(style);
 
     new_source->text_length = 0;
-    for ( ; text_begin != text_end && text_begin != text.end() ; text_begin++)
+    for ( ; text_begin != text_end && text_begin != text.end() ; ++text_begin)
         new_source->text_length++;        // save this because calculating the length of a UTF-8 string is expensive
 
     if (optional_attributes) {
@@ -291,7 +293,7 @@ PangoFontDescription *Layout::InputStreamTextSource::styleGetFontDescription() c
     // pango, so it's not the limiting factor
     Glib::ustring family;
     if (style->text->font_family.value == NULL) {
-        family = "Sans";
+        family = "sans-serif";
     } else {
         gchar **families = g_strsplit(style->text->font_family.value, ",", -1);
         if (families) {

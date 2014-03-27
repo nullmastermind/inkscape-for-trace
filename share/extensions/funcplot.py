@@ -25,11 +25,16 @@ Changes:
  * 21-Jun-2007: Tavmjong: Added polar coordinates
 
 '''
-import inkex, simplepath, simplestyle
+# standard library
 from math import *
 from random import *
-import gettext
-_ = gettext.gettext
+from copy import deepcopy
+# local library
+import inkex
+import simplepath
+import simplestyle
+
+inkex.localize()
 
 def drawfunction(xstart, xend, ybottom, ytop, samples, width, height, left, bottom, 
     fx = "sin(x)", fpx = "cos(x)", fponum = True, times2pi = False, polar = False, isoscale = True, drawaxis = True, endpts = False):
@@ -39,6 +44,9 @@ def drawfunction(xstart, xend, ybottom, ytop, samples, width, height, left, bott
         xend   = 2 * pi * xend   
       
     # coords and scales based on the source rect
+    if xstart == xend:
+        inkex.errormsg(_("x-interval cannot be zero. Please modify 'Start X' or 'End X'"))
+        return []
     scalex = width / (xend - xstart)
     xoff = left
     coordx = lambda x: (x - xstart) * scalex + xoff  #convert x-value to coordinate
@@ -48,6 +56,9 @@ def drawfunction(xstart, xend, ybottom, ytop, samples, width, height, left, bott
         polar_scalex = width/2.0
         coordx = lambda x: x * polar_scalex + centerx  #convert x-value to coordinate
 
+    if ytop == ybottom:
+        inkex.errormsg(_("y-interval cannot be zero. Please modify 'Y top' or 'Y bottom'"))
+        return []
     scaley = height / (ytop - ybottom)
     yoff = bottom
     coordy = lambda y: (ybottom - y) * scaley + yoff  #convert y-value to coordinate
@@ -207,6 +218,10 @@ class FuncPlot(inkex.Effect):
                         action="store", type="string", 
                         dest="fpofx", default="cos(x)",
                         help="f'(x) for plotting") 
+        self.OptionParser.add_option("--clip",
+                        action="store", type="inkbool",
+                        dest="clip", default=False,
+                        help="If True, clip with copy of source rectangle")
         self.OptionParser.add_option("--remove",
                         action="store", type="inkbool", 
                         dest="remove", default=True,
@@ -283,6 +298,16 @@ class FuncPlot(inkex.Effect):
                                 
                 # add path into SVG structure
                 node.getparent().append(newpath)
+                # option whether to clip the path with rect or not.
+                if self.options.clip:
+                    defs = self.xpathSingle('/svg:svg//svg:defs')
+                    if defs == None:
+                        defs = inkex.etree.SubElement(self.document.getroot(),inkex.addNS('defs','svg'))
+                    clip = inkex.etree.SubElement(defs,inkex.addNS('clipPath','svg'))
+                    clip.append(deepcopy(node))
+                    clipId = self.uniqueId('clipPath')
+                    clip.set('id', clipId)
+                    newpath.set('clip-path', 'url(#'+clipId+')')
                 # option wether to remove the rectangle or not.
                 if self.options.remove:
                     node.getparent().remove(node)

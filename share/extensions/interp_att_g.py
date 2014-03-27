@@ -16,9 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
-import inkex, simplestyle, math, re, string
-import gettext
-_ = gettext.gettext
+# standard library
+import math
+import re
+import string
+# local library
+import inkex
+import simplestyle
+
+inkex.localize()
 
 class InterpAttG(inkex.Effect):
 
@@ -97,8 +103,8 @@ class InterpAttG(inkex.Effect):
       sv = self.options.start_val
       ev = self.options.end_val
       if self.inte_att_type and self.inte_att_type != 'none':
-        sv = inkex.unittouu( sv + self.inte_att_type )
-        ev = inkex.unittouu( ev + self.inte_att_type )
+        sv = self.unittouu( sv + self.inte_att_type )
+        ev = self.unittouu( ev + self.inte_att_type )
       self.val_cur = self.val_ini = sv
       self.val_end = ev
       self.val_inc = ( ev - sv ) / float( self.tot_el - 1 )

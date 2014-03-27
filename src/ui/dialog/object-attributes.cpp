@@ -1,28 +1,38 @@
 /** @file
  * Generic object attribute editor
  */
-/* Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *   bulia byak <buliabyak@users.sf.net>
- *   Kris De Gussem <Kris.DeGussem@gmail.com>
- *
- * Copyright (C) 1999-2012 Authors
- *
- * Released under GNU GPL, read the file 'COPYING' for more information
+/* 
+ * Inkscape, an Open Source vector graphics editor
+ * Copyright (C) 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <glibmm/i18n.h>
-
+#include "ui/dialog/dialog-manager.h"
+#include "desktop.h"
 #include "desktop-handles.h"
 #include "macros.h"
 #include "sp-anchor.h"
 #include "sp-image.h"
 #include "verbs.h"
 #include "xml/repr.h"
-#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/object-attributes.h"
+#include "widgets/sp-attribute-widget.h"
 #include "inkscape.h"
 #include "selection.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
@@ -57,6 +67,7 @@ static const SPAttrDesc image_desc[] = {
     { N_("Y:"), "y"},
     { N_("Width:"), "width"},
     { N_("Height:"), "height"},
+    { N_("Image Rendering:"), "image-rendering"},
     { NULL, NULL}
 };
 
@@ -72,14 +83,14 @@ ObjectAttributes::ObjectAttributes (void) :
     UI::Widget::Panel ("", "/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
     blocked (false),
     CurrentItem(NULL),
-    attrTable(),
+    attrTable(Gtk::manage(new SPAttributeTable())),
     desktop(NULL),
     deskTrack(),
     selectChangedConn(),
     subselChangedConn(),
     selectModifiedConn()
 {
-    attrTable.show();
+    attrTable->show();
     widget_setup();
     
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectAttributes::setTargetDesktop) );
@@ -114,16 +125,20 @@ void ObjectAttributes::widget_setup (void)
     }
     
     blocked = true;
-    SPObject *obj = (SPObject*)item; //to get the selected item
-    GObjectClass *klass = G_OBJECT_GET_CLASS(obj); //to deduce the object's type
-    GType type = G_TYPE_FROM_CLASS(klass);
+
+    // CPPIFY
+    SPObject *obj = SP_OBJECT(item); //to get the selected item
+//    GObjectClass *klass = G_OBJECT_GET_CLASS(obj); //to deduce the object's type
+//    GType type = G_TYPE_FROM_CLASS(klass);
     const SPAttrDesc *desc;
     
-    if (type == SP_TYPE_ANCHOR)
+//    if (type == SP_TYPE_ANCHOR)
+    if (SP_IS_ANCHOR(item))
     {
         desc = anchor_desc;
     }
-    else if (type == SP_TYPE_IMAGE)
+//    else if (type == SP_TYPE_IMAGE)
+    else if (SP_IS_IMAGE(item))
     {
         Inkscape::XML::Node *ir = obj->getRepr();
         const gchar *href = ir->attribute("xlink:href");
@@ -154,12 +169,12 @@ void ObjectAttributes::widget_setup (void)
             attrs.push_back (desc[len].attribute);
             len += 1;
         }
-        attrTable.set_object(obj, labels, attrs, (GtkWidget*)gobj());
+        attrTable->set_object(obj, labels, attrs, (GtkWidget*)gobj());
         CurrentItem = item;
     }
     else
     {
-        attrTable.change_object(obj);
+        attrTable->change_object(obj);
     }
     
     set_sensitive (true);
@@ -192,7 +207,7 @@ void ObjectAttributes::selectionModifiedCB( guint flags )
     if (flags & ( SP_OBJECT_MODIFIED_FLAG |
                    SP_OBJECT_PARENT_MODIFIED_FLAG |
                    SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
-        attrTable.reread_properties();
+        attrTable->reread_properties();
     }
 }
 

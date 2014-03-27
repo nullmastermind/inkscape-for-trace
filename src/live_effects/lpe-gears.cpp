@@ -1,5 +1,3 @@
-#define INKSCAPE_LPE_DOEFFECT_STACK_CPP
-
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright 2006 Michael G. Sloan <mgsloan@gmail.com>
@@ -11,6 +9,9 @@
 #include "live_effects/lpe-gears.h"
 
 #include <vector>
+
+#include <glibmm/i18n.h>
+
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
 #include <2geom/bezier-to-sbasis.h>
@@ -111,7 +112,8 @@ private:
     }
 };
 
-void makeContinuous(D2<SBasis> &a, Point const b) {
+static void
+makeContinuous(D2<SBasis> &a, Point const b) {
     for(unsigned d=0;d<2;d++)
         a[d][0][0] = b[d];
 }

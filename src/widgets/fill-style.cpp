@@ -22,8 +22,12 @@
 # include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
+#include <glibmm/i18n.h>
 
 #include "verbs.h"
 
@@ -84,6 +88,7 @@ private:
     static void fillruleChangedCB( SPPaintSelector *psel, SPPaintSelector::FillRule mode, FillNStroke *self );
 
     void selectionModifiedCB(guint flags);
+    void eventContextCB(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext);
 
     void dragFromPaint();
     void updateFromPaint();
@@ -99,6 +104,7 @@ private:
     sigc::connection selectChangedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
+    sigc::connection eventContextConn;
 };
 
 } // namespace Inkscape
@@ -133,7 +139,8 @@ FillNStroke::FillNStroke( FillOrStroke kind ) :
     update(false),
     selectChangedConn(),
     subselChangedConn(),
-    selectModifiedConn()
+    selectModifiedConn(),
+    eventContextConn()
 {
     // Add and connect up the paint selector widget:
     psel = sp_paint_selector_new(kind);
@@ -169,6 +176,7 @@ FillNStroke::~FillNStroke()
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
+    eventContextConn.disconnect();
 }
 
 /**
@@ -197,11 +205,13 @@ void FillNStroke::setDesktop(SPDesktop *desktop)
             selectModifiedConn.disconnect();
             subselChangedConn.disconnect();
             selectChangedConn.disconnect();
+            eventContextConn.disconnect();
         }
         this->desktop = desktop;
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
             subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
+            eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &FillNStroke::eventContextCB), (Inkscape::UI::Tools::ToolBase *)NULL)));
 
             // Must check flags, so can't call performUpdate() directly.
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &FillNStroke::selectionModifiedCB)));
@@ -209,6 +219,16 @@ void FillNStroke::setDesktop(SPDesktop *desktop)
         performUpdate();
     }
 }
+
+/**
+ * Listen to this "change in tool" event, in case a subselection tool (such as Gradient or Node) selection
+ * is changed back to a selection tool - especially needed for selected gradient stops.
+ */
+void FillNStroke::eventContextCB(SPDesktop * /*desktop*/, Inkscape::UI::Tools::ToolBase * /*eventcontext*/)
+{
+    performUpdate();
+}
+
 
 /**
  * Gets the active fill or stroke style property, then sets the appropriate
@@ -566,15 +586,19 @@ void FillNStroke::updateFromPaint()
                         }
 
                         if (!vector) {
-                            SPGradient *gr = sp_gradient_vector_for_object( document, desktop, reinterpret_cast<SPObject*>(i->data), kind == FILL, createSwatch );
+                            SPGradient *gr = sp_gradient_vector_for_object( document,
+                                                                            desktop,
+                                                                            reinterpret_cast<SPObject*>(i->data),
+                                                                            (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE,
+                                                                            createSwatch );
                             if ( gr && createSwatch ) {
                                 gr->setSwatch();
                             }
                             sp_item_set_gradient(SP_ITEM(i->data),
                                                  gr,
-                                                 gradient_type, kind == FILL);
+                                                 gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         } else {
-                            sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, kind == FILL);
+                            sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         }
                     }
                 } else {
@@ -587,7 +611,7 @@ void FillNStroke::updateFromPaint()
                             sp_repr_css_change_recursive(reinterpret_cast<SPObject*>(i->data)->getRepr(), css, "style");
                         }
 
-                        SPGradient *gr = sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, kind == FILL);
+                        SPGradient *gr = sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         psel->pushAttrsToGradient( gr );
                     }
                 }

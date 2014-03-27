@@ -3,6 +3,7 @@
  */
 /* Authors:
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
+ *   Jon A. Cruz <jon@joncruz.org>
  *
  * Copyright (C) 2009 Authors
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -25,7 +26,7 @@
 #include "ui/tool/selectable-control-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/transform-handle-set.h"
-#include "ui/tool/node-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tool/node.h"
 #include "seltrans.h"
 
@@ -38,6 +39,7 @@ namespace Inkscape {
 namespace UI {
 
 namespace {
+
 SPAnchorType corner_to_anchor(unsigned c) {
     switch (c % 4) {
     case 0: return SP_ANCHOR_NE;
@@ -46,6 +48,7 @@ SPAnchorType corner_to_anchor(unsigned c) {
     default: return SP_ANCHOR_SE;
     }
 }
+
 SPAnchorType side_to_anchor(unsigned s) {
     switch (s % 4) {
     case 0: return SP_ANCHOR_N;
@@ -62,30 +65,30 @@ double snap_angle(double a) {
     double unit_angle = M_PI / snaps;
     return CLAMP(unit_angle * round(a / unit_angle), -M_PI, M_PI);
 }
+
 double snap_increment_degrees() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int snaps = prefs->getIntLimited("/options/rotationsnapsperpi/value", 12, 1, 1000);
     return 180.0 / snaps;
 }
 
-ControlPoint::ColorSet thandle_cset = {
+} // anonymous namespace
+
+ControlPoint::ColorSet TransformHandle::thandle_cset = {
+    {0x000000ff, 0x000000ff},
+    {0x00ff6600, 0x000000ff},
+    {0x00ff6600, 0x000000ff},
+    //
     {0x000000ff, 0x000000ff},
     {0x00ff6600, 0x000000ff},
     {0x00ff6600, 0x000000ff}
 };
 
-ControlPoint::ColorSet center_cset = {
-    {0x00000000, 0x000000ff},
-    {0x00000000, 0xff0000b0},
-    {0x00000000, 0xff0000b0}    
-};
-} // anonymous namespace
-
-/** Base class for node transform handles to simplify implementation */
-TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb)
-    : ControlPoint(th._desktop, Geom::Point(), anchor, pb, &thandle_cset,
-        th._transform_handle_group)
-    , _th(th)
+TransformHandle::TransformHandle(TransformHandleSet &th, SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pb) :
+    ControlPoint(th._desktop, Geom::Point(), anchor,
+                 pb,
+                 thandle_cset, th._transform_handle_group),
+    _th(th)
 {
     setVisible(false);
 }
@@ -121,12 +124,13 @@ bool TransformHandle::grabbed(GdkEventMotion *)
     startTransform();
 
     _th._setActiveHandle(this);
-    _cset = &invisible_cset;
+    _setLurking(true);
     _setState(_state);
 
     // Collect the snap-candidates, one for each selected node. These will be stored in the _snap_points vector.
-    InkNodeTool *nt = INK_NODE_TOOL(_th._desktop->event_context);
-    ControlPointSelection *selection = nt->_selected_nodes.get();
+    Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(_th._desktop->event_context);
+    //ControlPointSelection *selection = nt->_selected_nodes.get();
+    ControlPointSelection* selection = nt->_selected_nodes;
 
     selection->setOriginalPoints();
     selection->getOriginalPoints(_snap_points);
@@ -171,7 +175,7 @@ void TransformHandle::ungrabbed(GdkEventButton *)
 {
     _snap_points.clear();
     _th._clearActiveHandle();
-    _cset = &thandle_cset;
+    _setLurking(false);
     _setState(_state);
     endTransform();
     _th.signal_commit.emit(getCommitEvent());
@@ -184,7 +188,7 @@ public:
         : TransformHandle(th, anchor, pb)
     {}
 protected:
-    virtual Glib::ustring _getTip(unsigned state) {
+    virtual Glib::ustring _getTip(unsigned state) const {
         if (state_held_control(state)) {
             if (state_held_shift(state)) {
                 return C_("Transform handle tip",
@@ -205,31 +209,36 @@ protected:
         return C_("Transform handle tip", "<b>Scale handle</b>: drag to scale the selection");
     }
 
-    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) {
+    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) const {
         return format_tip(C_("Transform handle tip",
             "Scale by %.2f%% x %.2f%%"), _last_scale_x * 100, _last_scale_y * 100);
     }
 
-    virtual bool _hasDragTips() { return true; }
+    virtual bool _hasDragTips() const { return true; }
 
     static double _last_scale_x, _last_scale_y;
 };
 double ScaleHandle::_last_scale_x = 1.0;
 double ScaleHandle::_last_scale_y = 1.0;
 
-/// Corner scaling handle for node transforms
+/**
+ * Corner scaling handle for node transforms.
+ */
 class ScaleCornerHandle : public ScaleHandle {
 public:
-    ScaleCornerHandle(TransformHandleSet &th, unsigned corner)
-        : ScaleHandle(th, corner_to_anchor(corner), _corner_to_pixbuf(corner))
-        , _corner(corner)
+
+    ScaleCornerHandle(TransformHandleSet &th, unsigned corner) :
+        ScaleHandle(th, corner_to_anchor(corner), _corner_to_pixbuf(corner)),
+        _corner(corner)
     {}
+
 protected:
     virtual void startTransform() {
         _sc_center = _th.rotationCenter();
         _sc_opposite = _th.bounds().corner(_corner + 2);
         _last_scale_x = _last_scale_y = 1.0;
     }
+
     virtual Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) {
         Geom::Point scc = held_shift(*event) ? _sc_center : _sc_opposite;
         Geom::Point vold = _origin - scc, vnew = new_pos - scc;
@@ -275,25 +284,35 @@ protected:
             * Geom::Translate(scc);
         return t;
     }
+
     virtual CommitEvent getCommitEvent() {
         return _last_transform.isUniformScale()
             ? COMMIT_MOUSE_SCALE_UNIFORM
             : COMMIT_MOUSE_SCALE;
     }
+
 private:
+
     static Glib::RefPtr<Gdk::Pixbuf> _corner_to_pixbuf(unsigned c) {
-        sp_select_context_get_type();
+        //sp_select_context_get_type();
         switch (c % 2) {
-        case 0: return Glib::wrap(handles[1], true);
-        default: return Glib::wrap(handles[0], true);
+            case 0:
+                return Glib::wrap(handles[1], true);
+                break;
+            default:
+                return Glib::wrap(handles[0], true);
+                break;
         }
     }
+
     Geom::Point _sc_center;
     Geom::Point _sc_opposite;
     unsigned _corner;
 };
 
-/// Side scaling handle for node transforms
+/**
+ * Side scaling handle for node transforms.
+ */
 class ScaleSideHandle : public ScaleHandle {
 public:
     ScaleSideHandle(TransformHandleSet &th, unsigned side)
@@ -358,7 +377,7 @@ protected:
     }
 private:
     static Glib::RefPtr<Gdk::Pixbuf> _side_to_pixbuf(unsigned c) {
-        sp_select_context_get_type();
+        //sp_select_context_get_type();
         switch (c % 2) {
         case 0: return Glib::wrap(handles[3], true);
         default: return Glib::wrap(handles[2], true);
@@ -369,7 +388,9 @@ private:
     unsigned _side;
 };
 
-/// Rotation handle for node transforms
+/**
+ * Rotation handle for node transforms.
+ */
 class RotateHandle : public TransformHandle {
 public:
     RotateHandle(TransformHandleSet &th, unsigned corner)
@@ -410,7 +431,7 @@ protected:
 
     virtual CommitEvent getCommitEvent() { return COMMIT_MOUSE_ROTATE; }
 
-    virtual Glib::ustring _getTip(unsigned state) {
+    virtual Glib::ustring _getTip(unsigned state) const {
         if (state_held_shift(state)) {
             if (state_held_control(state)) {
                 return format_tip(C_("Transform handle tip",
@@ -427,20 +448,20 @@ protected:
             "the selection around the rotation center");
     }
 
-    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) {
+    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) const {
         return format_tip(C_("Transform handle tip", "Rotate by %.2f°"),
-            _last_angle * 360.0);
+            _last_angle * 180.0 / M_PI);
     }
 
-    virtual bool _hasDragTips() { return true; }
+    virtual bool _hasDragTips() const { return true; }
 
 private:
     static Glib::RefPtr<Gdk::Pixbuf> _corner_to_pixbuf(unsigned c) {
-        sp_select_context_get_type();
+        //sp_select_context_get_type();
         switch (c % 4) {
-        case 0: return Glib::wrap(handles[10], true);
-        case 1: return Glib::wrap(handles[8], true);
-        case 2: return Glib::wrap(handles[6], true);
+        case 0: return Glib::wrap(handles[7], true);
+        case 1: return Glib::wrap(handles[6], true);
+        case 2: return Glib::wrap(handles[5], true);
         default: return Glib::wrap(handles[4], true);
         }
     }
@@ -550,7 +571,7 @@ protected:
             : COMMIT_MOUSE_SKEW_X;
     }
 
-    virtual Glib::ustring _getTip(unsigned state) {
+    virtual Glib::ustring _getTip(unsigned state) const {
         if (state_held_shift(state)) {
             if (state_held_control(state)) {
                 return format_tip(C_("Transform handle tip",
@@ -568,7 +589,7 @@ protected:
             "the opposite handle");
     }
 
-    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) {
+    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) const {
         if (_last_horizontal) {
             return format_tip(C_("Transform handle tip", "Skew horizontally by %.2f°"),
                 _last_angle * 360.0);
@@ -578,16 +599,16 @@ protected:
         }
     }
 
-    virtual bool _hasDragTips() { return true; }
+    virtual bool _hasDragTips() const { return true; }
 
 private:
 
     static Glib::RefPtr<Gdk::Pixbuf> _side_to_pixbuf(unsigned s) {
-        sp_select_context_get_type();
+        //sp_select_context_get_type();
         switch (s % 4) {
-        case 0: return Glib::wrap(handles[9], true);
-        case 1: return Glib::wrap(handles[7], true);
-        case 2: return Glib::wrap(handles[5], true);
+        case 0: return Glib::wrap(handles[10], true);
+        case 1: return Glib::wrap(handles[9], true);
+        case 2: return Glib::wrap(handles[8], true);
         default: return Glib::wrap(handles[11], true);
         }
     }
@@ -601,11 +622,13 @@ bool SkewHandle::_last_horizontal = false;
 double SkewHandle::_last_angle = 0;
 
 class RotationCenter : public ControlPoint {
+
 public:
-    RotationCenter(TransformHandleSet &th)
-        : ControlPoint(th._desktop, Geom::Point(), SP_ANCHOR_CENTER, _get_pixbuf(),
-            &center_cset, th._transform_handle_group)
-        , _th(th)
+    RotationCenter(TransformHandleSet &th) :
+        ControlPoint(th._desktop, Geom::Point(), SP_ANCHOR_CENTER,
+                     _get_pixbuf(),
+                     _center_cset, th._transform_handle_group),
+        _th(th)
     {
         setVisible(false);
     }
@@ -628,7 +651,7 @@ protected:
         }
         sm.unSetup();
     }
-    virtual Glib::ustring _getTip(unsigned /*state*/) {
+    virtual Glib::ustring _getTip(unsigned /*state*/) const {
         return C_("Transform handle tip",
             "<b>Rotation center</b>: drag to change the origin of transforms");
     }
@@ -636,12 +659,24 @@ protected:
 private:
 
     static Glib::RefPtr<Gdk::Pixbuf> _get_pixbuf() {
-        sp_select_context_get_type();
+        //sp_select_context_get_type();
         return Glib::wrap(handles[12], true);
     }
 
+    static ColorSet _center_cset;
     TransformHandleSet &_th;
 };
+
+ControlPoint::ColorSet RotationCenter::_center_cset = {
+    {0x00000000, 0x000000ff},
+    {0x00000000, 0xff0000b0},
+    {0x00000000, 0xff0000b0},
+    //
+    {0x00000000, 0x000000ff},
+    {0x00000000, 0xff0000b0},
+    {0x00000000, 0xff0000b0}    
+};
+
 
 TransformHandleSet::TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group)
     : Manipulator(d)
@@ -674,16 +709,20 @@ TransformHandleSet::~TransformHandleSet()
     }
 }
 
-/** Sets the mode of transform handles (scale or rotate). */
 void TransformHandleSet::setMode(Mode m)
 {
     _mode = m;
     _updateVisibility(_visible);
 }
 
-Geom::Rect TransformHandleSet::bounds()
+Geom::Rect TransformHandleSet::bounds() const
 {
     return Geom::Rect(*_scale_corners[0], *_scale_corners[2]);
+}
+
+ControlPoint const &TransformHandleSet::rotationCenter() const
+{
+    return *_center;
 }
 
 ControlPoint &TransformHandleSet::rotationCenter()
@@ -715,7 +754,7 @@ void TransformHandleSet::setBounds(Geom::Rect const &r, bool preserve_center)
     }
 }
 
-bool TransformHandleSet::event(SPEventContext *, GdkEvent*)
+bool TransformHandleSet::event(Inkscape::UI::Tools::ToolBase *, GdkEvent*)
 {
     return false;
 }
@@ -746,9 +785,6 @@ void TransformHandleSet::_clearActiveHandle()
     _updateVisibility(_visible);
 }
 
-/** Update the visibility of transformation handles according to settings and the dimensions
- * of the bounding box. It hides the handles that would have no effect or lead to
- * discontinuities. Additionally, side handles for which there is no space are not shown. */
 void TransformHandleSet::_updateVisibility(bool v)
 {
     if (v) {

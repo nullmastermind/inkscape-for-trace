@@ -15,6 +15,7 @@
  * Released under GNU GPL
  */
 
+#include "knot-holder-entity.h"
 #include "knotholder.h"
 #include "sp-item.h"
 #include "style.h"
@@ -88,8 +89,12 @@ KnotHolderEntity::update_knot()
 }
 
 Geom::Point
-KnotHolderEntity::snap_knot_position(Geom::Point const &p)
+KnotHolderEntity::snap_knot_position(Geom::Point const &p, guint state)
 {
+    if (state & GDK_SHIFT_MASK) { // Don't snap when shift-key is held
+        return p;
+    }
+
     Geom::Affine const i2dt (item->i2dt_affine());
     Geom::Point s = p * i2dt;
 
@@ -102,8 +107,12 @@ KnotHolderEntity::snap_knot_position(Geom::Point const &p)
 }
 
 Geom::Point
-KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &p, Inkscape::Snapper::SnapConstraint const &constraint)
+KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &p, Inkscape::Snapper::SnapConstraint const &constraint, guint state)
 {
+    if (state & GDK_SHIFT_MASK) { // Don't snap when shift-key is held
+        return p;
+    }
+
     Geom::Affine const i2d (item->i2dt_affine());
     Geom::Point s = p * i2d;
 
@@ -124,13 +133,13 @@ KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &p, Inkscape:
 
 /*  TODO: this pattern manipulation is not able to handle general transformation matrices. Only matrices that are the result of a pure scale times a pure rotation. */
 
-static gdouble sp_pattern_extract_theta(SPPattern *pat)
+static gdouble sp_pattern_extract_theta(SPPattern const *pat)
 {
     Geom::Affine transf = pat->patternTransform;
     return Geom::atan2(transf.xAxis());
 }
 
-static Geom::Point sp_pattern_extract_scale(SPPattern *pat)
+static Geom::Point sp_pattern_extract_scale(SPPattern const *pat)
 {
     Geom::Affine transf = pat->patternTransform;
     return Geom::Point( transf.expansionX(), transf.expansionY() );
@@ -147,7 +156,7 @@ PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &ori
     SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
 
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
-    Geom::Point p_snapped = snap_knot_position(p);
+    Geom::Point p_snapped = snap_knot_position(p, state);
 
     if ( state & GDK_CONTROL_MASK ) {
         if (fabs((p - origin)[Geom::X]) > fabs((p - origin)[Geom::Y])) {
@@ -166,18 +175,18 @@ PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &ori
 }
 
 Geom::Point
-PatternKnotHolderEntityXY::knot_get()
+PatternKnotHolderEntityXY::knot_get() const
 {
     SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
     return sp_pattern_extract_trans(pat);
 }
 
 Geom::Point
-PatternKnotHolderEntityAngle::knot_get()
+PatternKnotHolderEntityAngle::knot_get() const
 {
-    SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
 
-    gdouble x = (pattern_width(pat));
+    gdouble x = pattern_width(pat);
     gdouble y = 0;
     Geom::Point delta = Geom::Point(x,y);
     Geom::Point scale = sp_pattern_extract_scale(pat);
@@ -219,7 +228,7 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
     SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
 
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
-    Geom::Point p_snapped = snap_knot_position(p);
+    Geom::Point p_snapped = snap_knot_position(p, state);
 
     // get angle from current transform
     gdouble theta = sp_pattern_extract_theta(pat);
@@ -249,9 +258,9 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
 
 
 Geom::Point
-PatternKnotHolderEntityScale::knot_get()
+PatternKnotHolderEntityScale::knot_get() const
 {
-    SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
 
     gdouble x = pattern_width(pat);
     gdouble y = pattern_height(pat);

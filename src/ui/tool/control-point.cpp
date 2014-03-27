@@ -1,7 +1,3 @@
-/**
- * @file
- * Desktop-bound visual control object - implementation.
- */
 /* Authors:
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *   Jon A. Cruz <jon@joncruz.org>
@@ -11,103 +7,46 @@
  */
 
 #include <iostream>
+#include <gdk/gdkkeysyms.h>
 #include <gdkmm.h>
-#include <gtkmm.h>
 #include <2geom/point.h>
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "display/sp-canvas.h"
 #include "display/snap-indicator.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "snap-preferences.h"
 #include "sp-namedview.h"
+#include "ui/control-manager.h"
 #include "ui/tool/control-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/transform-handle-set.h"
 
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
-
 namespace Inkscape {
 namespace UI {
 
-// class and member documentation goes here...
-
-/**
- * @class ControlPoint
- * Draggable point, the workhorse of on-canvas editing.
- *
- * Control points (formerly known as knots) are graphical representations of some significant
- * point in the drawing. The drawing can be changed by dragging the point and the things that are
- * attached to it with the mouse. Example things that could be edited with draggable points
- * are gradient stops, the place where text is attached to a path, text kerns, nodes and handles
- * in a path, and many more.
- *
- * @par Control point event handlers
- * @par
- * The control point has several virtual methods which allow you to react to things that
- * happen to it. The most important ones are the grabbed, dragged, ungrabbed and moved functions.
- * When a drag happens, the order of calls is as follows:
- * - <tt>grabbed()</tt>
- * - <tt>dragged()</tt>
- * - <tt>dragged()</tt>
- * - <tt>dragged()</tt>
- * - ...
- * - <tt>dragged()</tt>
- * - <tt>ungrabbed()</tt>
- *
- * The control point can also respond to clicks and double clicks. On a double click,
- * clicked() is called, followed by doubleclicked(). When deriving from SelectableControlPoint,
- * you need to manually call the superclass version at the appropriate point in your handler.
- *
- * @par Which method to override?
- * @par
- * You might wonder which hook to use when you want to do things when the point is relocated.
- * Here are some tips:
- * - If the point is used to edit an object, override the move() method.
- * - If the point can usually be dragged wherever you like but can optionally be constrained
- *   to axes or the like, add a handler for <tt>signal_dragged</tt> that modifies its new
- *   position argument.
- * - If the point has additional canvas items tied to it (like handle lines), override
- *   the setPosition() method.
- */
-
-/**
- * @enum ControlPoint::State
- * Enumeration representing the possible states of the control point, used to determine
- * its appearance.
- * @var ControlPoint::STATE_NORMAL
- *      Normal state
- * @var ControlPoint::STATE_MOUSEOVER
- *      Mouse is hovering over the control point
- * @var ControlPoint::STATE_CLICKED
- *      First mouse button pressed over the control point
- */
 
 // Default colors for control points
-static ControlPoint::ColorSet default_color_set = {
+ControlPoint::ColorSet ControlPoint::_default_color_set = {
     {0xffffff00, 0x01000000}, // normal fill, stroke
     {0xff0000ff, 0x01000000}, // mouseover fill, stroke
-    {0x0000ffff, 0x01000000}  // clicked fill, stroke
+    {0x0000ffff, 0x01000000}, // clicked fill, stroke
+    //
+    {0x0000ffff, 0x000000ff}, // normal fill, stroke when selected
+    {0xff000000, 0x000000ff}, // mouseover fill, stroke when selected
+    {0xff000000, 0x000000ff}  // clicked fill, stroke when selected
 };
 
-/** Holds the currently mouseovered control point. */
 ControlPoint *ControlPoint::mouseovered_point = 0;
 
-/** Emitted when the mouseovered point changes. The parameter is the new mouseovered point.
- * When a point ceases to be mouseovered, the parameter will be NULL. */
 sigc::signal<void, ControlPoint*> ControlPoint::signal_mouseover_change;
 
-/** Stores the window point over which the cursor was during the last mouse button press */
 Geom::Point ControlPoint::_drag_event_origin(Geom::infinity(), Geom::infinity());
 
-/** Stores the desktop point from which the last drag was initiated */
 Geom::Point ControlPoint::_drag_origin(Geom::infinity(), Geom::infinity());
 
-/** Events which should be captured when a handle is being dragged. */
 int const ControlPoint::_grab_event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_KEY_PRESS_MASK |
         GDK_KEY_RELEASE_MASK);
@@ -115,69 +54,51 @@ int const ControlPoint::_grab_event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_R
 bool ControlPoint::_drag_initiated = false;
 bool ControlPoint::_event_grab = false;
 
-/** A color set which you can use to create an invisible control that can still receive events.
- * @relates ControlPoint */
-ControlPoint::ColorSet invisible_cset = {
+ControlPoint::ColorSet ControlPoint::invisible_cset = {
+    {0x00000000, 0x00000000},
+    {0x00000000, 0x00000000},
+    {0x00000000, 0x00000000},
     {0x00000000, 0x00000000},
     {0x00000000, 0x00000000},
     {0x00000000, 0x00000000}
 };
 
-/**
- * Create a regular control point.
- * Derive to have constructors with a reasonable number of parameters.
- *
- * @param d Desktop for this control
- * @param initial_pos Initial position of the control point in desktop coordinates
- * @param anchor Where is the control point rendered relative to its desktop coordinates
- * @param shape Shape of the control point: square, diamond, circle...
- * @param size Pixel size of the visual representation
- * @param cset Colors of the point
- * @param group The canvas group the point's canvas item should be created in
- */
-ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
-        SPAnchorType anchor, SPCtrlShapeType shape,
-        unsigned int size, ColorSet *cset, SPCanvasGroup *group)
-    : _desktop (d)
-    , _canvas_item (NULL)
-    , _cset (cset ? cset : &default_color_set)
-    , _state (STATE_NORMAL)
-    , _position (initial_pos)
-{
-    _canvas_item = sp_canvas_item_new(
-        group ? group : sp_desktop_controls (_desktop), SP_TYPE_CTRL,
-        "anchor", (SPAnchorType) anchor, "size", (gdouble) size, "shape", shape,
-        "filled", TRUE, "fill_color", _cset->normal.fill,
-        "stroked", TRUE, "stroke_color", _cset->normal.stroke,
-        "mode", SP_CTRL_MODE_XOR, NULL);
-    _commonInit();
-}
-
-/**
- * Create a control point with a pixbuf-based visual representation.
- *
- * @param d Desktop for this control
- * @param initial_pos Initial position of the control point in desktop coordinates
- * @param anchor Where is the control point rendered relative to its desktop coordinates
- * @param pixbuf Pixbuf to be used as the visual representation
- * @param cset Colors of the point
- * @param group The canvas group the point's canvas item should be created in
- */
-ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos,
-        SPAnchorType anchor, Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-        ColorSet *cset, SPCanvasGroup *group)
-    : _desktop (d)
-    , _canvas_item (NULL)
-    , _cset(cset ? cset : &default_color_set)
-    , _position (initial_pos)
+ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
+                           Glib::RefPtr<Gdk::Pixbuf> pixbuf,
+                           ColorSet const &cset, SPCanvasGroup *group) :
+    _desktop(d),
+    _canvas_item(NULL),
+    _cset(cset),
+    _state(STATE_NORMAL),
+    _position(initial_pos),
+    _lurking(false)
 {
     _canvas_item = sp_canvas_item_new(
         group ? group : sp_desktop_controls(_desktop), SP_TYPE_CTRL,
         "anchor", (SPAnchorType) anchor, "size", (gdouble) pixbuf->get_width(),
         "shape", SP_CTRL_SHAPE_BITMAP, "pixbuf", pixbuf->gobj(),
-        "filled", TRUE, "fill_color", _cset->normal.fill,
-        "stroked", TRUE, "stroke_color", _cset->normal.stroke,
+        "filled", TRUE, "fill_color", _cset.normal.fill,
+        "stroked", TRUE, "stroke_color", _cset.normal.stroke,
         "mode", SP_CTRL_MODE_XOR, NULL);
+    _commonInit();
+}
+
+ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
+                           ControlType type,
+                           ColorSet const &cset, SPCanvasGroup *group) :
+    _desktop(d),
+    _canvas_item(NULL),
+    _cset(cset),
+    _state(STATE_NORMAL),
+    _position(initial_pos),
+    _lurking(false)
+{
+    _canvas_item = ControlManager::getManager().createControl(group ? group : sp_desktop_controls(_desktop), type);
+    g_object_set(_canvas_item,
+                 "anchor", anchor,
+                 "filled", TRUE, "fill_color", _cset.normal.fill,
+                 "stroked", TRUE, "stroke_color", _cset.normal.stroke,
+                 "mode", SP_CTRL_MODE_XOR, NULL);
     _commonInit();
 }
 
@@ -190,7 +111,7 @@ ControlPoint::~ControlPoint()
 
     g_signal_handler_disconnect(G_OBJECT(_canvas_item), _event_handler_connection);
     //sp_canvas_item_hide(_canvas_item);
-    gtk_object_destroy(_canvas_item);
+    sp_canvas_item_destroy(_canvas_item);
 }
 
 void ControlPoint::_commonInit()
@@ -200,29 +121,17 @@ void ControlPoint::_commonInit()
                                                  G_CALLBACK(_event_handler), this);
 }
 
-/** Relocate the control point without side effects.
- * Overload this method only if there is an additional graphical representation
- * that must be updated (like the lines that connect handles to nodes). If you override it,
- * you must also call the superclass implementation of the method.
- * @todo Investigate whether this method should be protected */
 void ControlPoint::setPosition(Geom::Point const &pos)
 {
     _position = pos;
     SP_CTRL(_canvas_item)->moveto(pos);
 }
 
-/** Move the control point to new position with side effects.
- * This is called after each drag. Override this method if only some positions make sense
- * for a control point (like a point that must always be on a path and can't modify it),
- * or when moving a control point changes the positions of other points. */
 void ControlPoint::move(Geom::Point const &pos)
 {
     setPosition(pos);
 }
 
-/** Apply an arbitrary affine transformation to a control point. This is used
- * by ControlPointSelection, and is important for things like nodes with handles.
- * The default implementation simply moves the point according to the transform. */
 void ControlPoint::transform(Geom::Affine const &m) {
     move(position() * m);
 }
@@ -232,9 +141,6 @@ bool ControlPoint::visible() const
     return sp_canvas_item_is_visible(_canvas_item);
 }
 
-/** Set the visibility of the control point. An invisible point is not drawn on the canvas
- * and cannot receive any events. If you want to have an invisible point that can respond
- * to events, use <tt>invisible_cset</tt> as its color set. */
 void ControlPoint::setVisible(bool v)
 {
     if (v) sp_canvas_item_show(_canvas_item);
@@ -287,9 +193,9 @@ void ControlPoint::_setSize(unsigned int size)
     g_object_set(_canvas_item, "size", (gdouble) size, NULL);
 }
 
-void ControlPoint::_setShape(SPCtrlShapeType shape)
+bool ControlPoint::_setControlType(Inkscape::ControlType type)
 {
-    g_object_set(_canvas_item, "shape", shape, NULL);
+    return ControlManager::getManager().setControlType(_canvas_item, type);
 }
 
 void ControlPoint::_setAnchor(SPAnchorType anchor)
@@ -305,15 +211,36 @@ void ControlPoint::_setPixbuf(Glib::RefPtr<Gdk::Pixbuf> p)
 // re-routes events into the virtual function
 int ControlPoint::_event_handler(SPCanvasItem */*item*/, GdkEvent *event, ControlPoint *point)
 {
+    if ((point == NULL) || (point->_desktop == NULL)) {
+        return FALSE;
+    }
     return point->_eventHandler(point->_desktop->event_context, event) ? TRUE : FALSE;
 }
 
 // main event callback, which emits all other callbacks.
-bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
+bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event)
 {
     // NOTE the static variables below are shared for all points!
     // TODO handle clicks and drags from other buttons too
 
+    if (event == NULL)
+    {
+        return false;
+    }
+    
+    if (event_context == NULL)
+    {
+        return false;
+    }
+    if (_desktop == NULL)
+    {
+        return false;
+    }
+    if(event_context->desktop !=_desktop)
+    {
+        g_warning ("ControlPoint: desktop pointers not equal!");
+        //return false;
+    }
     // offset from the pointer hotspot to the center of the grabbed knot in desktop coords
     static Geom::Point pointer_offset;
     // number of last doubleclicked button
@@ -321,7 +248,8 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
     
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int drag_tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-    
+    GdkEventMotion em;
+    SPCanvas* Ca;
     switch(event->type)
     {   
     case GDK_BUTTON_PRESS:
@@ -347,18 +275,22 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
         return true;
         
     case GDK_MOTION_NOTIFY:
-        combine_motion_events(_desktop->canvas, event->motion, 0);
-        if (_event_grab && !_desktop->event_context->space_panning) {
+        Ca = _desktop->canvas;
+        em = event->motion;
+        combine_motion_events(Ca, em, 0);
+        if (_event_grab && ! event_context->space_panning) {
             _desktop->snapindicator->remove_snaptarget(); 
             bool transferred = false;
             if (!_drag_initiated) {
-                bool t = fabs(event->motion.x - _drag_event_origin[Geom::X]) <= drag_tolerance &&
-                         fabs(event->motion.y - _drag_event_origin[Geom::Y]) <= drag_tolerance;
-                if (t) return true;
+                bool t = fabs(em.x - _drag_event_origin[Geom::X]) <= drag_tolerance &&
+                         fabs(em.y - _drag_event_origin[Geom::Y]) <= drag_tolerance;
+                if (t){
+                    return true;
+                }
 
                 // if we are here, it means the tolerance was just exceeded.
                 _drag_origin = _position;
-                transferred = grabbed(&event->motion);
+                transferred = grabbed(&em);
                 // _drag_initiated might change during the above virtual call
                 if (!_drag_initiated) {
                     // this guarantees smooth redraws while dragging
@@ -369,17 +301,16 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
             if (!transferred) {
                 // dragging in progress
                 Geom::Point new_pos = _desktop->w2d(event_point(event->motion)) + pointer_offset;
-                
                 // the new position is passed by reference and can be changed in the handlers.
-                dragged(new_pos, &event->motion);
+                dragged(new_pos, &em);
                 move(new_pos);
-                _updateDragTip(&event->motion); // update dragging tip after moving to new position
+                _updateDragTip(&em); // update dragging tip after moving to new position
                 
                 _desktop->scroll_to_point(new_pos);
                 _desktop->set_coordinate_status(_position);
-                sp_event_context_snap_delay_handler(_desktop->event_context, NULL,
+                sp_event_context_snap_delay_handler(event_context, NULL,
                     (gpointer) this, &event->motion,
-                    DelayedSnapEvent::CONTROL_POINT_HANDLER);
+                    Inkscape::UI::Tools::DelayedSnapEvent::CONTROL_POINT_HANDLER);
             }
             return true;
         }
@@ -393,8 +324,9 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
             // We must snap at some point in time though, and this is our last chance)
             // PS: For other contexts this is handled already in sp_event_context_item_handler or
             // sp_event_context_root_handler
-            if (_desktop->event_context->_delayed_snap_event) {
-                sp_event_context_snap_watchdog_callback(_desktop->event_context->_delayed_snap_event);
+            //if (_desktop && _desktop->event_context && _desktop->event_context->_delayed_snap_event) {
+            if (event_context->_delayed_snap_event) {
+                sp_event_context_snap_watchdog_callback(event_context->_delayed_snap_event);
             }
 
             sp_canvas_item_ungrab(_canvas_item, event->button.time);
@@ -429,8 +361,9 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
         if (_event_grab && !event->grab_broken.keyboard) {
             {
                 ungrabbed(NULL);
-                if (_drag_initiated)
+                if (_drag_initiated) {
                     _desktop->canvas->endForcedFullRedraws();
+                }
             }
             _setState(STATE_NORMAL);
             _event_grab = false;
@@ -442,14 +375,14 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
     // update tips on modifier state change
     // TODO add ESC keybinding as drag cancel
     case GDK_KEY_PRESS:
-        switch (get_group0_keyval(&event->key))
+        switch (Inkscape::UI::Tools::get_group0_keyval(&event->key))
         {
         case GDK_KEY_Escape: {
             // ignore Escape if this is not a drag
             if (!_drag_initiated) break;
 
             // temporarily disable snapping - we might snap to a different place than we were initially
-            sp_event_context_discard_delayed_snap_event(_desktop->event_context);
+            sp_event_context_discard_delayed_snap_event(event_context);
             SnapPreferences &snapprefs = _desktop->namedview->snap_manager.snapprefs;
             bool snap_save = snapprefs.getSnapEnabledGlobally();
             snapprefs.setSnapEnabledGlobally(false);
@@ -483,7 +416,8 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
 
             ungrabbed(NULL); // ungrabbed handlers can handle a NULL event
             snapprefs.setSnapEnabledGlobally(snap_save);
-            } return true;
+            }
+            return true;
         case GDK_KEY_Tab:
             {// Downcast from ControlPoint to TransformHandle, if possible
              // This is an ugly hack; we should have the transform handle intercept the keystrokes itself
@@ -509,7 +443,9 @@ bool ControlPoint::_eventHandler(SPEventContext *event_context, GdkEvent *event)
         }
         // Do not break here, to allow for updating tooltips and such
     case GDK_KEY_RELEASE: 
-        if (mouseovered_point != this) return false;
+        if (mouseovered_point != this){
+            return false;
+        }
         if (_drag_initiated) {
             return true; // this prevents the tool from overwriting the drag tip
         } else {
@@ -559,7 +495,9 @@ bool ControlPoint::_updateTip(unsigned state)
 
 bool ControlPoint::_updateDragTip(GdkEventMotion *event)
 {
-    if (!_hasDragTips()) return false;
+    if (!_hasDragTips()) {
+        return false;
+    }
     Glib::ustring tip = _getDragTip(event);
     if (!tip.empty()) {
         _desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE,
@@ -581,16 +519,6 @@ void ControlPoint::_clearMouseover()
     }
 }
 
-/** Transfer the grab to another point. This method allows one to create a draggable point
- * that should be dragged instead of the one that received the grabbed signal.
- * This is used to implement dragging out handles in the new node tool, for example.
- *
- * This method will NOT emit the ungrab signal of @c prev_point, because this would complicate
- * using it with selectable control points. If you use this method while dragging, you must emit
- * the ungrab signal yourself.
- *
- * Note that this will break horribly if you try to transfer grab between points in different
- * desktops, which doesn't make much sense anyway. */
 void ControlPoint::transferGrab(ControlPoint *prev_point, GdkEventMotion *event)
 {
     if (!_event_grab) return;
@@ -608,29 +536,50 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, GdkEventMotion *event)
     _setMouseover(this, event->state);
 }
 
-/**
- * Change the state of the knot.
- * Alters the appearance of the knot to match one of the states: normal, mouseover
- * or clicked.
- */
 void ControlPoint::_setState(State state)
 {
     ColorEntry current = {0, 0};
+    ColorSet const &activeCset = (_isLurking()) ? invisible_cset : _cset;
     switch(state) {
-    case STATE_NORMAL:
-        current = _cset->normal; break;
-    case STATE_MOUSEOVER:
-        current = _cset->mouseover; break;
-    case STATE_CLICKED:
-        current = _cset->clicked; break;
+        case STATE_NORMAL:
+            current = activeCset.normal;
+            break;
+        case STATE_MOUSEOVER:
+            current = activeCset.mouseover;
+            break;
+        case STATE_CLICKED:
+            current = activeCset.clicked;
+            break;
     };
     _setColors(current);
     _state = state;
 }
+
+void ControlPoint::_handleControlStyling()
+{
+    if (_canvas_item->ctrlType != CTRL_TYPE_UNKNOWN) {
+        ControlManager::getManager().updateItem(_canvas_item);
+    }
+}
+
 void ControlPoint::_setColors(ColorEntry colors)
 {
     g_object_set(_canvas_item, "fill_color", colors.fill, "stroke_color", colors.stroke, NULL);
 }
+
+bool ControlPoint::_isLurking()
+{
+    return _lurking;
+}
+
+void ControlPoint::_setLurking(bool lurking)
+{
+    if (lurking != _lurking) {
+        _lurking = lurking;
+        _setState(_state); // TODO refactor out common part
+    }
+}
+
 
 bool ControlPoint::_is_drag_cancelled(GdkEventMotion *event)
 {
@@ -638,12 +587,29 @@ bool ControlPoint::_is_drag_cancelled(GdkEventMotion *event)
 }
 
 // dummy implementations for handlers
-// they are here to avoid unused param warnings
-bool ControlPoint::grabbed(GdkEventMotion *) { return false; }
-void ControlPoint::dragged(Geom::Point &, GdkEventMotion *) {}
-void ControlPoint::ungrabbed(GdkEventButton *) {}
-bool ControlPoint::clicked(GdkEventButton *) { return false; }
-bool ControlPoint::doubleclicked(GdkEventButton *) { return false; }
+
+bool ControlPoint::grabbed(GdkEventMotion * /*event*/)
+{
+    return false;
+}
+
+void ControlPoint::dragged(Geom::Point &/*new_pos*/, GdkEventMotion * /*event*/)
+{
+}
+
+void ControlPoint::ungrabbed(GdkEventButton * /*event*/)
+{
+}
+
+bool ControlPoint::clicked(GdkEventButton * /*event*/)
+{
+    return false;
+}
+
+bool ControlPoint::doubleclicked(GdkEventButton * /*event*/)
+{
+    return false;
+}
 
 } // namespace UI
 } // namespace Inkscape

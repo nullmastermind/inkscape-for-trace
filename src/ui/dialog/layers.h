@@ -12,8 +12,15 @@
 #ifndef SEEN_LAYERS_PANEL_H
 #define SEEN_LAYERS_PANEL_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
-#include <gtkmm/buttonbox.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/scrolledwindow.h>
@@ -65,8 +72,14 @@ private:
     void _preToggle( GdkEvent const *event );
     void _toggled( Glib::ustring const& str, int targetCol );
 
-    void _handleButtonEvent(GdkEventButton* evt);
-    void _handleRowChange( Gtk::TreeModel::Path const& path, Gtk::TreeModel::iterator const& iter );
+    bool _handleButtonEvent(GdkEventButton *event);
+    bool _handleKeyEvent(GdkEventKey *event);
+    bool _handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, guint time);
+    void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleEditingCancelled();
+
+    void _doTreeMove();
+    void _renameLayer(Gtk::TreeModel::Row row, const Glib::ustring& name);
 
     void _pushTreeSelectionToCurrent();
     void _checkTreeSelection();
@@ -102,17 +115,27 @@ private:
     SPDesktop* _desktop;
     ModelColumns* _model;
     InternalUIBounce* _pending;
+    gboolean _dnd_into;
+    SPItem* _dnd_source;
+    SPItem* _dnd_target;
     GdkEvent* _toggleEvent;
+
     Glib::RefPtr<Gtk::TreeStore> _store;
     std::vector<Gtk::Widget*> _watching;
     std::vector<Gtk::Widget*> _watchingNonTop;
     std::vector<Gtk::Widget*> _watchingNonBottom;
 
     Gtk::TreeView _tree;
+    Gtk::CellRendererText *_text_renderer;
+    Gtk::TreeView::Column *_name_column;
 #if WITH_GTKMM_3_0
-    Gtk::ButtonBox _buttonsRow;
+    Gtk::Box _buttonsRow;
+    Gtk::Box _buttonsPrimary;
+    Gtk::Box _buttonsSecondary;
 #else
-    Gtk::HButtonBox _buttonsRow;
+    Gtk::HBox _buttonsRow;
+    Gtk::HBox _buttonsPrimary;
+    Gtk::HBox _buttonsSecondary;
 #endif
     Gtk::ScrolledWindow _scroller;
     Gtk::Menu _popupMenu;

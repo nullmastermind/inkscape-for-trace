@@ -34,9 +34,9 @@ namespace Inkscape {
 using Inkscape::Extension::Internal::CairoRenderContext;
 #endif
 
-class SPStyle;
+struct SPStyle;
 class Shape;
-class SPPrintContext;
+struct SPPrintContext;
 class SVGLength;
 class Path;
 class SPCurve;
@@ -353,6 +353,9 @@ public:
     void showGlyphs(CairoRenderContext *ctx) const;
 #endif
 
+    /** Returns the font family of the indexed span */
+    Glib::ustring getFontFamily(unsigned span_index) const;
+
     /** debug and unit test method. Creates a textual representation of the
     contents of this object. The output is designed to be both human-readable
     and comprehensible when diffed with a known-good dump. */
@@ -429,16 +432,17 @@ public:
     iterator getLetterAt(double x, double y) const;
     inline iterator getLetterAt(Geom::Point &point) const;
 
-    /** Returns an iterator pointing to the character in the output which
+    /* Returns an iterator pointing to the character in the output which
     was created from the given input. If the character at the given byte
     offset was removed (soft hyphens, for example) the next character after
     it is returned. If no input was added with the given cookie, end() is
     returned. If more than one input has the same cookie, the first will
     be used regardless of the value of \a text_iterator. If
     \a text_iterator is out of bounds, the first or last character belonging
-    to the given input will be returned accordingly. */
+    to the given input will be returned accordingly.
     iterator sourceToIterator(void *source_cookie, Glib::ustring::const_iterator text_iterator) const;
-
+ */
+ 
     /** Returns an iterator pointing to the first character in the output
     which was created from the given source. If \a source_cookie is invalid,
     end() is returned. If more than one input has the same cookie, the
@@ -565,6 +569,9 @@ public:
         inline void setZero() {ascent = descent = leading = 0.0;}
         inline LineHeight& operator*=(double x) {ascent *= x; descent *= x; leading *= x; return *this;}
         void max(LineHeight const &other);   /// makes this object contain the largest of all three members between this object and other
+        inline double getAscent() const {return ascent; }
+        inline double getDescent() const {return descent; }
+        inline double getLeading() const {return leading; }
     };
 
     /// see _enum_converter()
@@ -714,6 +721,7 @@ private:
         float font_size;
         float x_start;   /// relative to the start of the chunk
         float x_end;     /// relative to the start of the chunk
+        inline float width() const {return std::abs(x_start - x_end);}
         LineHeight line_height;
         double baseline_shift;  /// relative to the line's baseline
         Direction direction;     /// See CSS3 section 3.2. Either rtl or ltr
@@ -810,7 +818,12 @@ class Layout::iterator {
 public:
     friend class Layout;
     // this is just so you can create uninitialised iterators - don't actually try to use one
-    iterator() : _parent_layout(NULL) {}
+    iterator() :
+        _parent_layout(NULL),
+        _glyph_index(-1),
+        _char_index(0),
+        _cursor_moving_vertically(false),
+        _x_coordinate(0.0){}
     // no copy constructor required, the default does what we want
     bool operator== (iterator const &other) const
         {return _glyph_index == other._glyph_index && _char_index == other._char_index;}

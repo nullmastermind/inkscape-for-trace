@@ -10,6 +10,14 @@
 #ifndef INKSCAPE_UI_WIDGET_SPIN_SLIDER_H
 #define INKSCAPE_UI_WIDGET_SPIN_SLIDER_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
@@ -41,13 +49,14 @@ public:
 #if WITH_GTKMM_3_0
     const Glib::RefPtr<Gtk::Adjustment> get_adjustment() const;
     Glib::RefPtr<Gtk::Adjustment> get_adjustment();
+    const Gtk::Scale& get_scale() const;
+    Gtk::Scale& get_scale();
 #else
     const Gtk::Adjustment& get_adjustment() const;
     Gtk::Adjustment& get_adjustment();
-#endif
-    
     const Gtk::HScale& get_scale() const;
     Gtk::HScale& get_scale();
+#endif
 
     const Inkscape::UI::Widget::SpinButton& get_spin_button() const;
     Inkscape::UI::Widget::SpinButton& get_spin_button();
@@ -57,10 +66,11 @@ public:
 private:
 #if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> _adjustment;
+    Gtk::Scale _scale;
 #else
     Gtk::Adjustment _adjustment;
-#endif
     Gtk::HScale _scale;
+#endif
     Inkscape::UI::Widget::SpinButton _spin;
 };
 

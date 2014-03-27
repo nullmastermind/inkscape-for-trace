@@ -18,6 +18,7 @@ namespace Geom {
 class Point;
 }
 
+
 enum {
   TOOLS_INVALID,
   TOOLS_SELECT,
@@ -34,6 +35,7 @@ enum {
   TOOLS_CALLIGRAPHIC,
   TOOLS_TEXT,
   TOOLS_GRADIENT,
+  TOOLS_MESH,
   TOOLS_ZOOM,
   TOOLS_MEASURE,
   TOOLS_DROPPER,

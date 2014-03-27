@@ -2,6 +2,8 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
 SUBDIRS = src doc share po
 
 Graphicsdir = $(datadir)/applications
@@ -33,7 +35,6 @@ EXTRA_DIST = \
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
-	mkinstalldirs		\
 	$(Graphics_in_files)	\
 	po/check-markup \
 	utf8-to-roff \
@@ -176,6 +177,7 @@ EXTRA_DIST = \
 	packaging/win32/languages/French.nsh	\
 	packaging/win32/languages/Galician.nsh	\
 	packaging/win32/languages/German.nsh	\
+	packaging/win32/languages/Hebrew.nsh	\
 	packaging/win32/languages/Indonesian.nsh \
 	packaging/win32/languages/Italian.nsh	\
 	packaging/win32/languages/Japanese.nsh	\
@@ -209,21 +211,20 @@ EXTRA_DIST = \
 	packaging/win32/portable/App/AppInfo/appicon_32.png \
 	packaging/win32/portable/App/AppInfo/appinfo.ini \
 	packaging/win32/portable/App/AppInfo/installer.ini \
-	packaging/win32/portable/Other/Help/images/donation_button.png \
-	packaging/win32/portable/Other/Help/images/favicon.ico \
-	packaging/win32/portable/Other/Help/images/help_background_footer.png \
-	packaging/win32/portable/Other/Help/images/help_background_header.png \
-	packaging/win32/portable/Other/Help/images/help_logo_top.png \
-	packaging/win32/portable/Other/Source/InkscapePortable.ini \
-	packaging/win32/portable/Other/Source/InkscapePortable.jpg \
-	packaging/win32/portable/Other/Source/InkscapePortable.nsi \
-	packaging/win32/portable/Other/Source/License.txt \
-	packaging/win32/portable/Other/Source/PortableApps.comInstallerCustom.nsh \
-	packaging/win32/portable/Other/Source/PortableApps.comLauncherLANG_ENGLISH.nsh \
-	packaging/win32/portable/Other/Source/Readme.txt \
-	packaging/win32/portable/Other/Source/ReplaceInFileWithTextReplace.nsh \
-        po/inkscape.pot \
-        po/update_po_files.sh \
+	packaging/wix/README \
+	packaging/wix/inkscape.wxs \
+	packaging/wix/gpl-2.0.rtf \
+	packaging/wix/install.bat \
+	packaging/wix/files.py \
+	packaging/wix/version.py \
+	packaging/wix/next_uuid.py \
+	packaging/wix/wixenv.bat \
+	packaging/wix/Bitmaps/banner.bmp \
+	packaging/wix/Bitmaps/banner.svg \
+	packaging/wix/Bitmaps/dialog.bmp \
+	packaging/wix/Bitmaps/dialog.svg \
+	po/inkscape.pot \
+	po/update_po_files.sh \
 	src/inkscape.rc	src/inkview.rc
 
 # We want the built inkscape.1 to go in the distributed .tar.gz so

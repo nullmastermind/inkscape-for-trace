@@ -21,10 +21,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
-
 namespace Inkscape {
 namespace UI {
 
@@ -198,6 +194,8 @@ void ControlPointSelection::align(Geom::Dim2 axis)
         bound.unionWith(Geom::OptInterval((*i)->position()[d]));
     }
 
+    if (!bound) { return; }
+
     double new_coord = bound->middle();
     for (iterator i = _points.begin(); i != _points.end(); ++i) {
         Geom::Point pos = (*i)->position();
@@ -223,6 +221,8 @@ void ControlPointSelection::distribute(Geom::Dim2 d)
         sm.insert(std::make_pair(pos[d], (*i)));
         bound.unionWith(Geom::OptInterval(pos[d]));
     }
+
+    if (!bound) { return; }
 
     // now we iterate over the multimap and set aligned positions.
     double step = size() == 1 ? 0 : bound->extent() / (size() - 1);
@@ -268,7 +268,9 @@ void ControlPointSelection::toggleTransformHandlesMode()
 {
     if (_handles->mode() == TransformHandleSet::MODE_SCALE) {
         _handles->setMode(TransformHandleSet::MODE_ROTATE_SKEW);
-        if (size() == 1) _handles->rotationCenter().setVisible(false);
+        if (size() == 1) {
+            _handles->rotationCenter().setVisible(false);
+        }
     } else {
         _handles->setMode(TransformHandleSet::MODE_SCALE);
     }
@@ -383,8 +385,9 @@ void ControlPointSelection::_pointChanged(SelectableControlPoint *p, bool select
 {
     _updateBounds();
     _updateTransformHandles(false);
-    if (_bounds)
+    if (_bounds) {
         _handles->rotationCenter().move(_bounds->midpoint());
+    }
 
     signal_point_changed.emit(p, selected);
 }
@@ -583,7 +586,7 @@ void ControlPointSelection::_commitHandlesTransform(CommitEvent ce)
     signal_commit.emit(ce);
 }
 
-bool ControlPointSelection::event(SPEventContext * /*event_context*/, GdkEvent *event)
+bool ControlPointSelection::event(Inkscape::UI::Tools::ToolBase * /*event_context*/, GdkEvent *event)
 {
     // implement generic event handling that should apply for all control point selections here;
     // for example, keyboard moves and transformations. This way this functionality doesn't need

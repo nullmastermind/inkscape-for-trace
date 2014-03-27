@@ -1,423 +1,599 @@
 /**
  * @file Object properties dialog.
  */
-/* Authors:
+/* 
+ * Inkscape, an Open Source vector graphics editor
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (C) 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
+ * c++ version based on former C-version (GPL v2) with authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *   Johan Engelen <goejendaagh@zonnet.nl>
  *   Abhishek Sharma
- *   Kris De Gussem <Kris.DeGussem@gmail.com>
- *
- * Copyright (C) 1999-2012 Authors
- * Copyright (C) 2001 Ximian, Inc.
- *
- * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "object-properties.h"
-#include "../../desktop-handles.h"
-#include "../../document.h"
-#include "../../document-undo.h"
+#include "widgets/sp-attribute-widget.h"
+#include "desktop-handles.h"
+#include "document.h"
+#include "document-undo.h"
 #include "verbs.h"
 #include "inkscape.h"
 #include "selection.h"
 #include "desktop.h"
 #include "sp-item.h"
+#include "sp-image.h"
+#include "xml/repr.h"
 #include <glibmm/i18n.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
 
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-ObjectProperties::ObjectProperties (void) :
-    UI::Widget::Panel ("", "/dialogs/object/", SP_VERB_DIALOG_ITEM),
-    blocked (false),
-    CurrentItem(NULL),
-    TopTable (3, 4, false),
-    LabelID(_("_ID:"), 1),
-    LabelLabel(_("_Label:"), 1),
-    LabelTitle(_("_Title:"),1),
-    LabelDescription(_("_Description"),1),
-    FrameDescription("", FALSE),
-    HBoxCheck(FALSE, 0),
-    CheckTable(1, 2, TRUE),
-    CBHide(_("_Hide"), 1),
-    CBLock(_("L_ock"), 1),
-    BSet (_("_Set"), 1),
-    LabelInteractivity(_("_Interactivity"), 1),
-    attrTable(),
-    desktop(NULL),
-    deskTrack(),
-    selectChangedConn(),
-    subselChangedConn()
-    // selectModifiedConn()
+ObjectProperties::ObjectProperties()
+    : UI::Widget::Panel ("", "/dialogs/object/", SP_VERB_DIALOG_ITEM)
+    , _blocked (false)
+    , _current_item(NULL)
+    , _label_id(_("_ID:"), 1)
+    , _label_label(_("_Label:"), 1)
+    , _label_title(_("_Title:"), 1)
+    , _label_image_rendering(_("_Image Rendering:"), 1)
+    , _cb_hide(_("_Hide"), 1)
+    , _cb_lock(_("L_ock"), 1)
+    , _attr_table(Gtk::manage(new SPAttributeTable()))
+    , _desktop(NULL)
 {
     //initialize labels for the table at the bottom of the dialog
-    int_labels.push_back("onclick");
-    int_labels.push_back("onmouseover");
-    int_labels.push_back("onmouseout");
-    int_labels.push_back("onmousedown");
-    int_labels.push_back("onmouseup");
-    int_labels.push_back("onmousemove");
-    int_labels.push_back("onfocusin");
-    int_labels.push_back("onfocusout");
-    int_labels.push_back("onfocusout");
-    int_labels.push_back("onload");
-    
-    desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &ObjectProperties::setTargetDesktop) );
-    deskTrack.connect(GTK_WIDGET(gobj()));
-    
-    MakeWidget();
+    _int_attrs.push_back("onclick");
+    _int_attrs.push_back("onmouseover");
+    _int_attrs.push_back("onmouseout");
+    _int_attrs.push_back("onmousedown");
+    _int_attrs.push_back("onmouseup");
+    _int_attrs.push_back("onmousemove");
+    _int_attrs.push_back("onfocusin");
+    _int_attrs.push_back("onfocusout");
+    _int_attrs.push_back("onload");
+
+    _int_labels.push_back("onclick:");
+    _int_labels.push_back("onmouseover:");
+    _int_labels.push_back("onmouseout:");
+    _int_labels.push_back("onmousedown:");
+    _int_labels.push_back("onmouseup:");
+    _int_labels.push_back("onmousemove:");
+    _int_labels.push_back("onfocusin:");
+    _int_labels.push_back("onfocusout:");
+    _int_labels.push_back("onload:");
+
+    _desktop_changed_connection = _desktop_tracker.connectDesktopChanged(
+        sigc::mem_fun(*this, &ObjectProperties::_setTargetDesktop)
+    );
+    _desktop_tracker.connect(GTK_WIDGET(gobj()));
+
+    _init();
 }
 
-ObjectProperties::~ObjectProperties (void)
+ObjectProperties::~ObjectProperties()
 {
-    // selectModifiedConn.disconnect();
-    subselChangedConn.disconnect();
-    selectChangedConn.disconnect();
-    desktopChangeConn.disconnect();
-    deskTrack.disconnect();
+    _subselection_changed_connection.disconnect();
+    _selection_changed_connection.disconnect();
+    _desktop_changed_connection.disconnect();
+    _desktop_tracker.disconnect();
 }
 
-void ObjectProperties::MakeWidget(void)
+void ObjectProperties::_init()
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
-    
-    TopTable.set_border_width(4);
-    TopTable.set_row_spacings(4);
-    TopTable.set_col_spacings(4);
-    contents->pack_start (TopTable, true, true, 0);
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid *grid_top = Gtk::manage(new Gtk::Grid());
+    grid_top->set_row_spacing(4);
+    grid_top->set_column_spacing(0);
+#else
+    Gtk::Table *grid_top = Gtk::manage(new Gtk::Table(4, 4));
+    grid_top->set_row_spacings(4);
+    grid_top->set_col_spacings(0);
+#endif
+
+    grid_top->set_border_width(4);
+
+    contents->pack_start(*grid_top, false, false, 0);
+
 
     /* Create the label for the object id */
-    LabelID.set_alignment (1, 0.5);
-    TopTable.attach (LabelID, 0, 1, 0, 1,
-                       Gtk::SHRINK | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+    _label_id.set_label(_label_id.get_label() + " ");
+    _label_id.set_alignment(1, 0.5);
+
+#if WITH_GTKMM_3_0
+    _label_id.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_label_id, 0, 0, 1, 1);
+#else
+    grid_top->attach(_label_id, 0, 1, 0, 1,
+                     Gtk::SHRINK | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
 
     /* Create the entry box for the object id */
-    EntryID.set_tooltip_text (_("The id= attribute (only letters, digits, and the characters .-_: allowed)"));
-    EntryID.set_max_length (64);
-    TopTable.attach (EntryID, 1, 2, 0, 1,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
-    LabelID.set_mnemonic_widget (EntryID);
+    _entry_id.set_tooltip_text(_("The id= attribute (only letters, digits, and the characters .-_: allowed)"));
+    _entry_id.set_max_length(64);
+
+#if WITH_GTKMM_3_0
+    _entry_id.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_entry_id, 1, 0, 1, 1);
+#else
+    grid_top->attach(_entry_id, 1, 2, 0, 1,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    _label_id.set_mnemonic_widget(_entry_id);
 
     // pressing enter in the id field is the same as clicking Set:
-    EntryID.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::label_changed));
+    _entry_id.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
     // focus is in the id field initially:
-    EntryID.grab_focus();
+    _entry_id.grab_focus();
+
 
     /* Create the label for the object label */
-    LabelLabel.set_alignment (1, 0.5);
-    TopTable.attach (LabelLabel, 0, 1, 1, 2,
-                       Gtk::SHRINK | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+    _label_label.set_label(_label_label.get_label() + " ");
+    _label_label.set_alignment(1, 0.5);
+
+#if WITH_GTKMM_3_0
+    _label_label.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_label_label, 0, 1, 1, 1);
+#else
+    grid_top->attach(_label_label, 0, 1, 1, 2,
+                     Gtk::SHRINK | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
 
     /* Create the entry box for the object label */
-    EntryLabel.set_tooltip_text (_("A freeform label for the object"));
-    EntryLabel.set_max_length (256);
-    TopTable.attach (EntryLabel, 1, 2, 1, 2,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
-    LabelLabel.set_mnemonic_widget (EntryLabel);
+    _entry_label.set_tooltip_text(_("A freeform label for the object"));
+    _entry_label.set_max_length(256);
+
+#if WITH_GTKMM_3_0
+    _entry_label.set_hexpand();
+    _entry_label.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_entry_label, 1, 1, 1, 1);
+#else
+    grid_top->attach(_entry_label, 1, 2, 1, 2,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    _label_label.set_mnemonic_widget(_entry_label);
 
     // pressing enter in the label field is the same as clicking Set:
-    EntryLabel.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::label_changed));
+    _entry_label.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
+
 
     /* Create the label for the object title */
-    LabelTitle.set_alignment (1, 0.5);
-    TopTable.attach (LabelTitle, 0, 1, 2, 3,
-                       Gtk::SHRINK | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
+    _label_title.set_label(_label_title.get_label() + " ");
+    _label_title.set_alignment (1, 0.5);
+
+#if WITH_GTKMM_3_0
+    _label_title.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_label_title, 0, 2, 1, 1);
+#else
+    grid_top->attach(_label_title, 0, 1, 2, 3,
+                     Gtk::SHRINK | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
 
     /* Create the entry box for the object title */
-    EntryTitle.set_sensitive (FALSE);
-    EntryTitle.set_max_length (256);
-    TopTable.attach (EntryTitle, 1, 3, 2, 3,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
-    LabelTitle.set_mnemonic_widget (EntryTitle);
+    _entry_title.set_sensitive (FALSE);
+    _entry_title.set_max_length (256);
+
+#if WITH_GTKMM_3_0
+    _entry_title.set_hexpand();
+    _entry_title.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_entry_title, 1, 2, 1, 1);
+#else
+    grid_top->attach(_entry_title, 1, 2, 2, 3,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    _label_title.set_mnemonic_widget(_entry_title);
+    // pressing enter in the label field is the same as clicking Set:
+    _entry_title.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
     /* Create the frame for the object description */
-    FrameDescription.set_label_widget (LabelDescription);
-    FrameDescription.set_padding (4,0,0,0);
-
-    TopTable.attach (FrameDescription, 0, 3, 3, 4,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::EXPAND | Gtk::FILL, 0, 0 );
+    Gtk::Label *label_desc = Gtk::manage(new Gtk::Label(_("_Description:"), 1));
+    UI::Widget::Frame *frame_desc = Gtk::manage(new UI::Widget::Frame("", FALSE));
+    frame_desc->set_label_widget(*label_desc);
+    frame_desc->set_padding (0,0,0,0);
+    contents->pack_start(*frame_desc, true, true, 0);
 
     /* Create the text view box for the object description */
-    FrameTextDescription.set_border_width(4);
-    FrameTextDescription.set_sensitive (FALSE);
-    FrameDescription.add (FrameTextDescription);
-    FrameTextDescription.set_shadow_type (Gtk::SHADOW_IN);
+    _ft_description.set_border_width(4);
+    _ft_description.set_sensitive(FALSE);
+    frame_desc->add(_ft_description);
+    _ft_description.set_shadow_type(Gtk::SHADOW_IN);
 
-    TextViewDescription.set_wrap_mode(Gtk::WRAP_WORD);
-    TextViewDescription.get_buffer()->set_text("");
-    FrameTextDescription.add (TextViewDescription);
-    TextViewDescription.add_mnemonic_label(LabelDescription);
+    _tv_description.set_wrap_mode(Gtk::WRAP_WORD);
+    _tv_description.get_buffer()->set_text("");
+    _ft_description.add(_tv_description);
+    _tv_description.add_mnemonic_label(*label_desc);
+
+    /* Image rendering */
+    /* Create the label for the object ImageRendering */
+    _label_image_rendering.set_label(_label_image_rendering.get_label() + " ");
+    _label_image_rendering.set_alignment(1, 0.5);
+
+#if WITH_GTKMM_3_0
+    _label_image_rendering.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_label_image_rendering, 0, 3, 1, 1);
+#else
+    grid_top->attach(_label_image_rendering, 0, 1, 3, 4,
+                     Gtk::SHRINK | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    /* Create the combo box text for the 'image-rendering' property  */
+    _combo_image_rendering.append( "auto" );
+    _combo_image_rendering.append( "optimizeQuality" );
+    _combo_image_rendering.append( "optimizeSpeed" );
+    _combo_image_rendering.set_tooltip_text(_("The 'image-rendering' property can influence how a bitmap is up-scaled:\n\t'auto' no preference;\n\t'optimizeQuality' smooth;\n\t'optimizeSpeed' blocky.\nNote that this behaviour is not defined in the SVG 1.1 specification and not all browsers follow this interpretation."));
+
+#if WITH_GTKMM_3_0
+    _combo_image_rendering.set_valign(Gtk::ALIGN_CENTER);
+    grid_top->attach(_combo_image_rendering, 1, 3, 1, 1);
+#else
+    grid_top->attach(_combo_image_rendering, 1, 2, 3, 4,
+                     Gtk::EXPAND | Gtk::FILL,
+                     Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    _label_image_rendering.set_mnemonic_widget(_combo_image_rendering);
+
+    _combo_image_rendering.signal_changed().connect(
+        sigc::mem_fun(this, &ObjectProperties::_imageRenderingChanged)
+    );
 
     /* Check boxes */
-    contents->pack_start (HBoxCheck, FALSE, FALSE, 0);
-    CheckTable.set_border_width(0);
-    HBoxCheck.pack_start (CheckTable, TRUE, TRUE, 10);
+    Gtk::HBox *hb_checkboxes = Gtk::manage(new Gtk::HBox());
+    contents->pack_start(*hb_checkboxes, FALSE, FALSE, 0);
+
+#if WITH_GTKMM_3_0
+    Gtk::Grid *grid_cb = Gtk::manage(new Gtk::Grid());
+    grid_cb->set_row_homogeneous();
+    grid_cb->set_column_homogeneous(true);
+#else
+    Gtk::Table *grid_cb = Gtk::manage(new Gtk::Table(1, 2, true));
+#endif
+
+    grid_cb->set_border_width(4);
+    hb_checkboxes->pack_start(*grid_cb, true, true, 0);
 
     /* Hide */
-    CBHide.set_tooltip_text (_("Check to make the object invisible"));
-    CheckTable.attach (CBHide, 0, 1, 0, 1,
+    _cb_hide.set_tooltip_text (_("Check to make the object invisible"));
+
+#if WITH_GTKMM_3_0
+    _cb_hide.set_hexpand();
+    _cb_hide.set_valign(Gtk::ALIGN_CENTER);
+    grid_cb->attach(_cb_hide, 0, 0, 1, 1);
+#else
+    grid_cb->attach(_cb_hide, 0, 1, 0, 1,
                        Gtk::EXPAND | Gtk::FILL,
                        Gtk::AttachOptions(), 0, 0 );
-    CBHide.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::hidden_toggled));
+#endif
+
+    _cb_hide.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::_hiddenToggled));
 
     /* Lock */
     // TRANSLATORS: "Lock" is a verb here
-    CBLock.set_tooltip_text (_("Check to make the object insensitive (not selectable by mouse)"));
-    CheckTable.attach (CBLock, 1, 2, 0, 1,
-                       Gtk::EXPAND | Gtk::FILL,
-                       Gtk::AttachOptions(), 0, 0 );
-    CBLock.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::sensitivity_toggled));
+    _cb_lock.set_tooltip_text(_("Check to make the object insensitive (not selectable by mouse)"));
+
+#if WITH_GTKMM_3_0
+    _cb_lock.set_hexpand();
+    _cb_lock.set_valign(Gtk::ALIGN_CENTER);
+    grid_cb->attach(_cb_lock, 1, 0, 1, 1);
+#else
+    grid_cb->attach(_cb_lock, 1, 2, 0, 1,
+                    Gtk::EXPAND | Gtk::FILL,
+                    Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    _cb_lock.signal_toggled().connect(sigc::mem_fun(this, &ObjectProperties::_sensitivityToggled));
 
 
     /* Button for setting the object's id, label, title and description. */
-    HBoxCheck.pack_start (BSet, TRUE, TRUE, 10);
-    BSet.signal_clicked().connect(sigc::mem_fun(this, &ObjectProperties::label_changed));
+    Gtk::Button *btn_set = Gtk::manage(new Gtk::Button(_("_Set"), 1));
+#if WITH_GTKMM_3_0
+    btn_set->set_hexpand();
+    btn_set->set_valign(Gtk::ALIGN_CENTER);
+    grid_cb->attach(*btn_set, 2, 0, 1, 1);
+#else
+    grid_cb->attach(*btn_set, 2, 3, 0, 1,
+                    Gtk::EXPAND | Gtk::FILL,
+                    Gtk::AttachOptions(), 0, 0 );
+#endif
+
+    btn_set->signal_clicked().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
     /* Create the frame for interactivity options */
-    EInteractivity.set_label_widget (LabelInteractivity);
-    contents->pack_start (EInteractivity, FALSE, FALSE, 0);
-    show_all ();
-    widget_setup();
+    Gtk::Label *label_interactivity = Gtk::manage(new Gtk::Label(_("_Interactivity"), 1));
+    _exp_interactivity.set_label_widget(*label_interactivity);
+    contents->pack_start(_exp_interactivity, FALSE, FALSE, 0);
+
+    show_all();
+    update();
 }
 
-void ObjectProperties::widget_setup(void)
+void ObjectProperties::update()
 {
-    if (blocked || !desktop)
-    {
+    if (_blocked || !_desktop) {
         return;
     }
-    if (SP_ACTIVE_DESKTOP != desktop)
-    {
+    if (SP_ACTIVE_DESKTOP != _desktop) {
         return;
     }
 
-    Inkscape::Selection *selection = sp_desktop_selection (SP_ACTIVE_DESKTOP);
+    Inkscape::Selection *selection = sp_desktop_selection(SP_ACTIVE_DESKTOP);
     Gtk::Box *contents = _getContents();
 
     if (!selection->singleItem()) {
         contents->set_sensitive (false);
-        CurrentItem = NULL;
+        _current_item = NULL;
         //no selection anymore or multiple objects selected, means that we need
         //to close the connections to the previously selected object
-        attrTable.clear();
+        _attr_table->clear();
         return;
     } else {
         contents->set_sensitive (true);
     }
     
     SPItem *item = selection->singleItem();
-    if (CurrentItem == item)
+    if (_current_item == item)
     {
         //otherwise we would end up wasting resources through the modify selection
-        //callback when moving an object (endlessly setting the labels and recreating attrTable)
+        //callback when moving an object (endlessly setting the labels and recreating _attr_table)
         return;
     }
-    blocked = true;
+    _blocked = true;
     
-    CBLock.set_active (item->isLocked());           /* Sensitive */
-    CBHide.set_active (item->isExplicitlyHidden()); /* Hidden */
+    _cb_lock.set_active(item->isLocked());           /* Sensitive */
+    _cb_hide.set_active(item->isExplicitlyHidden()); /* Hidden */
     
     if (item->cloned) {
         /* ID */
-        EntryID.set_text ("");
-        EntryID.set_sensitive (FALSE);
-        LabelID.set_text (_("Ref"));
+        _entry_id.set_text("");
+        _entry_id.set_sensitive(FALSE);
+        _label_id.set_text(_("Ref"));
 
         /* Label */
-        EntryLabel.set_text ("");
-        EntryLabel.set_sensitive (FALSE);
-        LabelLabel.set_text (_("Ref"));
+        _entry_label.set_text("");
+        _entry_label.set_sensitive(FALSE);
+        _label_label.set_text(_("Ref"));
 
     } else {
         SPObject *obj = static_cast<SPObject*>(item);
 
         /* ID */
-        EntryID.set_text (obj->getId());
-        EntryID.set_sensitive (TRUE);
-        LabelID.set_markup_with_mnemonic (_("_ID:"));
+        _entry_id.set_text(obj->getId());
+        _entry_id.set_sensitive(TRUE);
+        _label_id.set_markup_with_mnemonic(_("_ID:") + Glib::ustring(" "));
 
         /* Label */
-        EntryLabel.set_text(obj->defaultLabel());
-        EntryLabel.set_sensitive (TRUE);
+        _entry_label.set_text(obj->defaultLabel());
+        _entry_label.set_sensitive(TRUE);
 
         /* Title */
         gchar *title = obj->title();
         if (title) {
-            EntryTitle.set_text(title);
+            _entry_title.set_text(title);
             g_free(title);
         }
         else {
-            EntryTitle.set_text("");
+            _entry_title.set_text("");
         }
-        EntryTitle.set_sensitive(TRUE);
+        _entry_title.set_sensitive(TRUE);
+
+        /* Image Rendering */
+        if (SP_IS_IMAGE(item)) {
+            _combo_image_rendering.show();
+            _label_image_rendering.show();
+            char const *str = obj->getStyleProperty( "image-rendering", "auto" );
+            if (strcmp( str, "auto" ) == 0) {
+                _combo_image_rendering.set_active(0);
+            } else if (strcmp(str, "optimizeQuality") == 0) {
+                _combo_image_rendering.set_active(1);
+            } else {
+                _combo_image_rendering.set_active(2);
+            }
+        } else {
+            _combo_image_rendering.hide();
+            _combo_image_rendering.unset_active();
+            _label_image_rendering.hide();
+        }
 
         /* Description */
         gchar *desc = obj->desc();
         if (desc) {
-            TextViewDescription.get_buffer()->set_text(desc);
+            _tv_description.get_buffer()->set_text(desc);
             g_free(desc);
         } else {
-            TextViewDescription.get_buffer()->set_text("");
+            _tv_description.get_buffer()->set_text("");
         }
-        FrameTextDescription.set_sensitive(TRUE);
+        _ft_description.set_sensitive(TRUE);
         
-        if (CurrentItem == NULL)
-        {
-            attrTable.set_object(obj, int_labels, int_labels, (GtkWidget*)EInteractivity.gobj());
+        if (_current_item == NULL) {
+            _attr_table->set_object(obj, _int_labels, _int_attrs, (GtkWidget*) _exp_interactivity.gobj());
+        } else {
+            _attr_table->change_object(obj);
         }
-        else
-        {
-            attrTable.change_object(obj);
-        }
-        attrTable.show_all();
+        _attr_table->show_all();
     }
-    CurrentItem = item;
-    blocked = false;
+    _current_item = item;
+    _blocked = false;
 }
 
-void ObjectProperties::label_changed(void)
+void ObjectProperties::_labelChanged()
 {
-    if (blocked)
-    {
+    if (_blocked) {
         return;
     }
     
     SPItem *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->singleItem();
     g_return_if_fail (item != NULL);
 
-    blocked = true;
+    _blocked = true;
 
     /* Retrieve the label widget for the object's id */
-    gchar *id = g_strdup(EntryID.get_text().c_str());
-    g_strcanon (id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
-    if (!strcmp (id, item->getId())) {
-        LabelID.set_markup_with_mnemonic(_("_ID:"));
+    gchar *id = g_strdup(_entry_id.get_text().c_str());
+    g_strcanon(id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
+    if (strcmp(id, item->getId()) == 0) {
+        _label_id.set_markup_with_mnemonic(_("_ID:"));
     } else if (!*id || !isalnum (*id)) {
-        LabelID.set_text (_("Id invalid! "));
+        _label_id.set_text(_("Id invalid! "));
     } else if (SP_ACTIVE_DOCUMENT->getObjectById(id) != NULL) {
-        LabelID.set_text (_("Id exists! "));
+        _label_id.set_text(_("Id exists! "));
     } else {
         SPException ex;
-        LabelID.set_markup_with_mnemonic(_("_ID:"));
-        SP_EXCEPTION_INIT (&ex);
+        _label_id.set_markup_with_mnemonic(_("_ID:"));
+        SP_EXCEPTION_INIT(&ex);
         item->setAttribute("id", id, &ex);
         DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM, _("Set object ID"));
     }
-    g_free (id);
+    g_free(id);
 
     /* Retrieve the label widget for the object's label */
-    Glib::ustring label = EntryLabel.get_text();
-    g_assert(!label.empty());
+    Glib::ustring label = _entry_label.get_text();
 
     /* Give feedback on success of setting the drawing object's label
      * using the widget's label text
      */
     SPObject *obj = static_cast<SPObject*>(item);
-    if (label.compare (obj->defaultLabel())) {
+    if (label.compare(obj->defaultLabel())) {
         obj->setLabel(label.c_str());
         DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
                 _("Set object label"));
     }
 
     /* Retrieve the title */
-    if (obj->setTitle(EntryTitle.get_text().c_str()))
+    if (obj->setTitle(_entry_title.get_text().c_str())) {
         DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
                 _("Set object title"));
+    }
 
     /* Retrieve the description */
     Gtk::TextBuffer::iterator start, end;
-    TextViewDescription.get_buffer()->get_bounds(start, end);
-    Glib::ustring desc = TextViewDescription.get_buffer()->get_text(start, end, TRUE);
-    if (obj->setDesc(desc.c_str()))
+    _tv_description.get_buffer()->get_bounds(start, end);
+    Glib::ustring desc = _tv_description.get_buffer()->get_text(start, end, TRUE);
+    if (obj->setDesc(desc.c_str())) {
         DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
                 _("Set object description"));
+    }
     
-    blocked = false;
+    _blocked = false;
 }
 
-void ObjectProperties::sensitivity_toggled (void)
+void ObjectProperties::_imageRenderingChanged()
 {
-    if (blocked)
-    {
+    if (_blocked) {
+        return;
+    }
+    
+    SPItem *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->singleItem();
+    g_return_if_fail (item != NULL);
+
+    _blocked = true;
+
+    Glib::ustring scale = _combo_image_rendering.get_active_text();
+
+    // We should unset if the parent computed value is auto and the desired value is auto.
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    sp_repr_css_set_property(css, "image-rendering", scale.c_str());
+    Inkscape::XML::Node *image_node = item->getRepr();
+    if( image_node ) {
+        sp_repr_css_change(image_node, css, "style");
+    }
+    sp_repr_css_attr_unref( css );
+        
+    _blocked = false;
+}
+
+void ObjectProperties::_sensitivityToggled()
+{
+    if (_blocked) {
         return;
     }
 
     SPItem *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->singleItem();
-    g_return_if_fail (item != NULL);
+    g_return_if_fail(item != NULL);
 
-    blocked = true;
-    item->setLocked(CBLock.get_active());
+    _blocked = true;
+    item->setLocked(_cb_lock.get_active());
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
-               CBLock.get_active()? _("Lock object") : _("Unlock object"));
-    blocked = false;
+                       _cb_lock.get_active() ? _("Lock object") : _("Unlock object"));
+    _blocked = false;
 }
 
-void ObjectProperties::hidden_toggled(void)
+void ObjectProperties::_hiddenToggled()
 {
-    if (blocked)
-    {
+    if (_blocked) {
         return;
     }
 
     SPItem *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->singleItem();
-    g_return_if_fail (item != NULL);
+    g_return_if_fail(item != NULL);
 
-    blocked = true;
-    item->setExplicitlyHidden(CBHide.get_active());
+    _blocked = true;
+    item->setExplicitlyHidden(_cb_hide.get_active());
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
-               CBHide.get_active()? _("Hide object") : _("Unhide object"));
-    blocked = false;
+               _cb_hide.get_active() ? _("Hide object") : _("Unhide object"));
+    _blocked = false;
 }
 
-void ObjectProperties::setDesktop(SPDesktop *desktop)
+void ObjectProperties::_setDesktop(SPDesktop *desktop)
 {
     Panel::setDesktop(desktop);
-    deskTrack.setBase(desktop);
+    _desktop_tracker.setBase(desktop);
 }
 
-void ObjectProperties::setTargetDesktop(SPDesktop *desktop)
+void ObjectProperties::_setTargetDesktop(SPDesktop *desktop)
 {
-    if (this->desktop != desktop) {
-        if (this->desktop) {
-            // selectModifiedConn.disconnect();
-            subselChangedConn.disconnect();
-            selectChangedConn.disconnect();
+    if (this->_desktop != desktop) {
+        if (this->_desktop) {
+            _subselection_changed_connection.disconnect();
+            _selection_changed_connection.disconnect();
         }
-        this->desktop = desktop;
+        this->_desktop = desktop;
         if (desktop && desktop->selection) {
-            selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &ObjectProperties::widget_setup)));
-            subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &ObjectProperties::widget_setup)));
-
-            //// Must check flags, so can't call widget_setup() directly.
-            // selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &ObjectProperties::selectionModifiedCB)));
+            _selection_changed_connection = desktop->selection->connectChanged(
+                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update))
+            );
+            _subselection_changed_connection = desktop->connectToolSubselectionChanged(
+                sigc::hide(sigc::mem_fun(*this, &ObjectProperties::update))
+            );
         }
-        widget_setup();
+        update();
     }
 }
-
-// void ObjectProperties::selectionModifiedCB( guint flags )
-// {
-    // if (flags & ( SP_OBJECT_MODIFIED_FLAG |
-                   // SP_OBJECT_PARENT_MODIFIED_FLAG |
-                   // SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
-        // widget_setup();
-    // }
-// }
 
 }
 }

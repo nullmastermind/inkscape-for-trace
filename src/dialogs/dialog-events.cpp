@@ -15,6 +15,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/entry.h>
 #include <gtkmm/window.h>
 #include <gdk/gdkkeysyms.h>
@@ -23,13 +27,9 @@
 #include "desktop.h"
 #include "inkscape-private.h"
 #include "preferences.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 
 #include "dialog-events.h"
-
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
 
 
 /**
@@ -51,7 +51,7 @@ sp_dialog_defocus (GtkWindow *win)
 {
     GtkWindow *w;
     //find out the document window we're transient for
-    w = gtk_window_get_transient_for ((GtkWindow *) win);
+    w = gtk_window_get_transient_for(GTK_WINDOW(win));
     //switch to it
 
     if (w) {
@@ -69,10 +69,9 @@ void sp_dialog_defocus_callback_cpp(Gtk::Entry *e)
 }
 
 void
-sp_dialog_defocus_callback (GtkWindow */*win*/, gpointer data)
+sp_dialog_defocus_callback (GtkWindow * /*win*/, gpointer data)
 {
-    sp_dialog_defocus ((GtkWindow *)
-        gtk_widget_get_toplevel ((GtkWidget *) data));
+    sp_dialog_defocus( GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(data))) );
 }
 
 
@@ -97,7 +96,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 {
 
 // if the focus is inside the Text and Font textview, do nothing
-    GObject *dlg = (GObject *) data;
+    GObject *dlg = G_OBJECT(data);
     if (g_object_get_data (dlg, "eatkeys")) {
         return FALSE;
     }
@@ -108,7 +107,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 
         case GDK_KEY_PRESS:
 
-            switch (get_group0_keyval (&event->key)) {
+            switch (Inkscape::UI::Tools::get_group0_keyval (&event->key)) {
                 case GDK_KEY_Escape:
                     sp_dialog_defocus (win);
                     ret = TRUE;
@@ -117,7 +116,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
                 case GDK_KEY_w:
                 case GDK_KEY_W:
                     // close dialog
-                    if (MOD__CTRL_ONLY) {
+                    if (MOD__CTRL_ONLY(event)) {
 
                         /* this code sends a delete_event to the dialog,
                          * instead of just destroying it, so that the
@@ -125,12 +124,12 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
                          * its position.
                          */
                         GdkEventAny event;
-                        GtkWidget *widget = (GtkWidget *) win;
+                        GtkWidget *widget = GTK_WIDGET(win);
                         event.type = GDK_DELETE;
                         event.window = gtk_widget_get_window (widget);
                         event.send_event = TRUE;
                         g_object_ref (G_OBJECT (event.window));
-                        gtk_main_do_event ((GdkEvent*)&event);
+                        gtk_main_do_event(reinterpret_cast<GdkEvent*>(&event));
                         g_object_unref (G_OBJECT (event.window));
 
                         ret = TRUE;
@@ -222,7 +221,7 @@ void on_dialog_unhide (GtkWidget *w)
 gboolean
 sp_dialog_hide(GObject * /*object*/, gpointer data)
 {
-    GtkWidget *dlg = (GtkWidget *) data;
+    GtkWidget *dlg = GTK_WIDGET(data);
 
     if (dlg)
         gtk_widget_hide (dlg);
@@ -235,7 +234,7 @@ sp_dialog_hide(GObject * /*object*/, gpointer data)
 gboolean
 sp_dialog_unhide(GObject * /*object*/, gpointer data)
 {
-    GtkWidget *dlg = (GtkWidget *) data;
+    GtkWidget *dlg = GTK_WIDGET(data);
 
     if (dlg)
         gtk_widget_show (dlg);

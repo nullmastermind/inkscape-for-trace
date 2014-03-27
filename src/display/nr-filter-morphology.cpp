@@ -69,6 +69,7 @@ void morphologicalFilter1D(cairo_surface_t * const input, cairo_surface_t * cons
     int limit = w * h;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int numOfThreads = prefs->getIntLimited("/options/threading/numthreads", omp_get_num_procs(), 1, 256);
+    (void) numOfThreads; // suppress unused variable warning
     #pragma omp parallel for if(limit > OPENMP_THRESHOLD) num_threads(numOfThreads)
     #endif // HAVE_OPENMP
     for (int i = 0; i < h; ++i) {
@@ -164,6 +165,7 @@ void FilterMorphology::render_cairo(FilterSlot &slot)
     if (xradius == 0.0 || yradius == 0.0) {
         // output is transparent black
         cairo_surface_t *out = ink_cairo_surface_create_identical(input);
+        copy_cairo_surface_ci(input, out);
         slot.set(_output, out);
         cairo_surface_destroy(out);
         return;
@@ -191,6 +193,9 @@ void FilterMorphology::render_cairo(FilterSlot &slot)
     }
 
     cairo_surface_t *out = ink_cairo_surface_create_identical(interm);
+
+    // color_interpolation_filters for out same as input. See spec (DisplacementMap).
+    copy_cairo_surface_ci(input, out);
 
     if (Operator == MORPHOLOGY_OPERATOR_DILATE) {
         if (bpp == 1) {

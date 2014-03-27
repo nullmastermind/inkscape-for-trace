@@ -27,7 +27,7 @@
 #include "dialogs/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "helper/window.h"
 #include "inkscape.h"
 #include "interface.h"
@@ -47,10 +47,6 @@
 #include "widgets/sp-xmlview-attr-list.h"
 #include "widgets/sp-xmlview-content.h"
 #include "widgets/sp-xmlview-tree.h"
-
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
 
 namespace Inkscape {
 namespace UI {
@@ -83,7 +79,11 @@ XmlTree::XmlTree (void) :
     xml_attribute_delete_button (_("Delete attribute")),
     text_container (),
     attr_container (),
-    attr_subpaned_container (),
+#if WITH_GTKMM_3_0
+    attr_subpaned_container(Gtk::ORIENTATION_VERTICAL),
+#else
+    attr_subpaned_container(),
+#endif
     set_attr (_("Set")),
     new_window(NULL)
 {
@@ -100,6 +100,9 @@ XmlTree::XmlTree (void) :
     status.set_alignment( 0.0, 0.5);
     status.set_size_request(1, -1);
     status.set_markup("");
+#if WITH_GTKMM_3_0
+    status.set_line_wrap(true);
+#endif
     status_box.pack_start( status, TRUE, TRUE, 0);
     contents->pack_end(status_box, false, false, 2);
 
@@ -328,7 +331,7 @@ void XmlTree::attr_reset_context(gint attr)
 
 bool XmlTree::sp_xml_tree_key_press(GdkEventKey *event)
 {
-    unsigned int shortcut = get_group0_keyval (event) |
+    unsigned int shortcut = Inkscape::UI::Tools::get_group0_keyval (event) |
         ( event->state & GDK_SHIFT_MASK ?
           SP_SHORTCUT_SHIFT_MASK : 0 ) |
         ( event->state & GDK_CONTROL_MASK ?
@@ -450,7 +453,7 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 
 void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
 {
-    if (repr && repr->type() == Inkscape::XML::ELEMENT_NODE) {
+    if (repr && (repr->type() == Inkscape::XML::ELEMENT_NODE)) {
         sp_xmlview_attr_list_set_repr(attributes, repr);
     } else {
         sp_xmlview_attr_list_set_repr(attributes, NULL);
@@ -536,7 +539,7 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
         return;
     }
 
-    Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(GTK_TREE_VIEW(self->tree), &iter);
+    Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(model, &iter);
     g_assert(repr != NULL);
 
 
@@ -586,7 +589,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
         return;
     }
 
-    Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(GTK_TREE_VIEW(tree), node);
+    Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(GTK_TREE_MODEL(tree->store), node);
     Inkscape::XML::Node *parent=repr->parent();
 
     //on_tree_select_row_enable_if_mutable
@@ -631,7 +634,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
                   prev && prev->next() != repr ;
                   prev = prev->next() ){};
 
-            if (prev && prev->type() == Inkscape::XML::ELEMENT_NODE) {
+            if (prev && (prev->type() == Inkscape::XML::ELEMENT_NODE)) {
                 indentable = TRUE;
             }
         }
@@ -650,7 +653,7 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
 
     //on_tree_select_row_enable_if_not_last_child
     {
-        if ( parent && parent->parent() && repr->next() ) {
+        if ( parent && (parent->parent() && repr->next())) {
             lower_node_button.set_sensitive(true);
         } else {
             lower_node_button.set_sensitive(false);
@@ -690,7 +693,7 @@ gboolean XmlTree::xml_tree_node_mutable(GtkTreeIter *node)
     }
 
     Inkscape::XML::Node *repr;
-    repr = sp_xmlview_tree_node_get_repr(GTK_TREE_VIEW(tree), node);
+    repr = sp_xmlview_tree_node_get_repr(GTK_TREE_MODEL(tree->store), node);
     g_assert(repr);
 
     // don't let "defs" or "namedview" disappear
@@ -842,8 +845,12 @@ void XmlTree::on_document_uri_set(gchar const * /*uri*/, SPDocument * /*document
 
 gboolean XmlTree::quit_on_esc (GtkWidget *w, GdkEventKey *event, GObject */*tbl*/)
 {
-    switch (get_group0_keyval (event)) {
+    switch (Inkscape::UI::Tools::get_group0_keyval (event)) {
         case GDK_KEY_Escape: // defocus
+            gtk_widget_destroy(w);
+            return TRUE;
+        case GDK_KEY_Return: // create
+        case GDK_KEY_KP_Enter:
             gtk_widget_destroy(w);
             return TRUE;
     }
@@ -866,16 +873,32 @@ void XmlTree::cmd_new_element_node()
     g_signal_connect(G_OBJECT(new_window), "destroy", gtk_main_quit, NULL);
     g_signal_connect(G_OBJECT(new_window), "key-press-event", G_CALLBACK(quit_on_esc), new_window);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
+#else
     vbox = gtk_vbox_new(FALSE, 4);
+#endif
+
     gtk_container_add(GTK_CONTAINER(new_window), vbox);
 
     name_entry = new Gtk::Entry();
     gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(name_entry->gobj()), FALSE, TRUE, 0);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+#else
     sep = gtk_hseparator_new();
+#endif
+
     gtk_box_pack_start(GTK_BOX(vbox), sep, FALSE, TRUE, 0);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+#else
     bbox = gtk_hbutton_box_new();
+#endif
+
     gtk_container_set_border_width(GTK_CONTAINER(bbox), 4);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
     gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, TRUE, 0);
@@ -958,8 +981,6 @@ void XmlTree::cmd_duplicate_node()
     if (sp_xmlview_tree_get_repr_node(SP_XMLVIEW_TREE(tree), dup, &node)) {
         GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
         gtk_tree_selection_select_iter(selection, &node);
-    } else {
-
     }
 }
 
@@ -968,6 +989,7 @@ void XmlTree::cmd_delete_node()
     g_assert(selected_repr != NULL);
     sp_repr_unparent(selected_repr);
 
+    reinterpret_cast<SPObject *>(current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
                        Q_("nodeAsInXMLinHistoryDialog|Delete node"));
 }
@@ -1030,7 +1052,7 @@ void XmlTree::cmd_raise_node()
 
     Inkscape::XML::Node *ref = NULL;
     Inkscape::XML::Node *before = parent->firstChild();
-    while (before && before->next() != selected_repr) {
+    while (before && (before->next() != selected_repr)) {
         ref = before;
         before = before->next();
     }
@@ -1072,7 +1094,7 @@ void XmlTree::cmd_indent_node()
     g_return_if_fail(parent->firstChild() != repr);
 
     Inkscape::XML::Node* prev = parent->firstChild();
-    while (prev && prev->next() != repr) {
+    while (prev && (prev->next() != repr)) {
         prev = prev->next();
     }
     g_return_if_fail(prev != NULL);

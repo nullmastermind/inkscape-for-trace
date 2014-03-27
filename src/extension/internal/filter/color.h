@@ -3,7 +3,7 @@
 /* Change the 'COLOR' above to be your file name */
 
 /*
- * Copyright (C) 2011 Authors:
+ * Copyright (C) 2013 Authors:
  *   Ivan Louette (filters)
  *   Nicolas Dufour (UI) <nicoduf@yahoo.fr>
  *
@@ -20,7 +20,8 @@
  *   Invert
  *   Lighting
  *   Lightness-contrast
- *   Nudge
+ *   Nudge RGB
+ *   Nudge CMY
  *   Quadritone
  *   Solarize
  *   Tritone
@@ -70,9 +71,9 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Brilliance") "</name>\n"
               "<id>org.inkscape.effect.filter.Brilliance</id>\n"
-              "<param name=\"brightness\" gui-text=\"" N_("Brightness:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"1\" max=\"10.00\">2</param>\n"
-              "<param name=\"sat\" gui-text=\"" N_("Over-saturation:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.0\" max=\"10.00\">0.5</param>\n"
-              "<param name=\"lightness\" gui-text=\"" N_("Lightness:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0</param>\n"
+              "<param name=\"brightness\" gui-text=\"" N_("Brightness") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"1\" max=\"10.00\">2</param>\n"
+              "<param name=\"sat\" gui-text=\"" N_("Over-saturation") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.0\" max=\"10.00\">0.5</param>\n"
+              "<param name=\"lightness\" gui-text=\"" N_("Lightness") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0</param>\n"
               "<param name=\"invert\" gui-text=\"" N_("Inverted") "\" type=\"boolean\">false</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
@@ -152,11 +153,11 @@ public:
               "<id>org.inkscape.effect.filter.ChannelPaint</id>\n"
                 "<param name=\"tab\" type=\"notebook\">\n"
                   "<page name=\"optionstab\" _gui-text=\"Options\">\n"
-                    "<param name=\"saturation\" gui-text=\"" N_("Saturation:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.\" max=\"1.\">1</param>\n"
-                    "<param name=\"red\" gui-text=\"" N_("Red:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">-1</param>\n"
-                    "<param name=\"green\" gui-text=\"" N_("Green:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">0.5</param>\n"
-                    "<param name=\"blue\" gui-text=\"" N_("Blue:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">0.5</param>\n"
-                    "<param name=\"alpha\" gui-text=\"" N_("Alpha:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">1</param>\n"
+                    "<param name=\"saturation\" gui-text=\"" N_("Saturation") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.\" max=\"1.\">1</param>\n"
+                    "<param name=\"red\" gui-text=\"" N_("Red") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">-1</param>\n"
+                    "<param name=\"green\" gui-text=\"" N_("Green") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">0.5</param>\n"
+                    "<param name=\"blue\" gui-text=\"" N_("Blue") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">0.5</param>\n"
+                    "<param name=\"alpha\" gui-text=\"" N_("Alpha") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.\" max=\"10.\">1</param>\n"
                     "<param name=\"invert\" gui-text=\"" N_("Inverted") "\" type=\"boolean\">false</param>\n"
                   "</page>\n"
                   "<page name=\"colortab\" _gui-text=\"Color\">\n"
@@ -211,7 +212,7 @@ ChannelPaint::get_filter_text (Inkscape::Extension::Extension * ext)
     }
     
     _filter = g_strdup_printf(
-        "<filter inkscape:label=\"Channel Painting\" style=\"color-interpolation-filters:sRGB;\" >\n"
+        "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Channel Painting\">\n"
           "<feColorMatrix values=\"%s\" type=\"saturate\" result=\"colormatrix1\" />\n"
           "<feColorMatrix values=\"1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 %s %s %s %s 0 \" in=\"SourceGraphic\" result=\"colormatrix2\" />\n"
           "<feFlood flood-color=\"rgb(%s,%s,%s)\" flood-opacity=\"%s\" result=\"flood\" />\n"
@@ -252,8 +253,8 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Color Shift") "</name>\n"
               "<id>org.inkscape.effect.filter.ColorShift</id>\n"
-              "<param name=\"shift\" gui-text=\"" N_("Shift (°):") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">330</param>\n"
-              "<param name=\"sat\" gui-text=\"" N_("Saturation:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.\" max=\"1\">0.6</param>\n"
+              "<param name=\"shift\" gui-text=\"" N_("Shift (°)") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">330</param>\n"
+              "<param name=\"sat\" gui-text=\"" N_("Saturation") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.\" max=\"1\">0.6</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
@@ -317,8 +318,8 @@ public:
                 "<id>org.inkscape.effect.filter.Colorize</id>\n"
                 "<param name=\"tab\" type=\"notebook\">\n"
                   "<page name=\"optionstab\" _gui-text=\"Options\">\n"
-                    "<param name=\"hlight\" gui-text=\"" N_("Harsh light:") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">0</param>\n"
-                    "<param name=\"nlight\" gui-text=\"" N_("Normal light:") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">1</param>\n"
+                    "<param name=\"hlight\" gui-text=\"" N_("Harsh light") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">0</param>\n"
+                    "<param name=\"nlight\" gui-text=\"" N_("Normal light") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">1</param>\n"
                     "<param name=\"duotone\" gui-text=\"" N_("Duotone") "\" type=\"boolean\" >false</param>\n"
                     "<param name=\"blend1\" gui-text=\"" N_("Blend 1:") "\" type=\"enum\">\n"
                       "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
@@ -509,7 +510,7 @@ public:
               "<id>org.inkscape.effect.filter.Duochrome</id>\n"
               "<param name=\"tab\" type=\"notebook\">\n"
                 "<page name=\"optionstab\" _gui-text=\"Options\">\n"
-                  "<param name=\"fluo\" gui-text=\"" N_("Fluorescence level:") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"2\">0</param>\n"
+                  "<param name=\"fluo\" gui-text=\"" N_("Fluorescence level") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"2\">0</param>\n"
                   "<param name=\"swap\" gui-text=\"" N_("Swap:") "\" type=\"enum\">\n"
                     "<_item value=\"none\">" N_("No swap") "</_item>\n"
                     "<_item value=\"full\">" N_("Color and alpha") "</_item>\n"
@@ -615,9 +616,8 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
 
     Filter's parameters:
     * Channel (enum, all colors, default Red) -> colormatrix (values)
-    * Background blend (enum, all blend modes, default Multiply) -> blend (mode)
+    * Background blend (enum, Normal, Multiply, Screen, default Normal) -> blend (mode)
     * Channel to alpha (boolean, default false) -> colormatrix (values)
-    * Invert (boolean, default false) -> colormatrix (values)
 
 */
 class ExtractChannel : public Inkscape::Extension::Internal::Filter::Filter {
@@ -637,16 +637,16 @@ public:
                 "<_item value=\"r\">" N_("Red") "</_item>\n"
                 "<_item value=\"g\">" N_("Green") "</_item>\n"
                 "<_item value=\"b\">" N_("Blue") "</_item>\n"
+                "<_item value=\"c\">" N_("Cyan") "</_item>\n"
+                "<_item value=\"m\">" N_("Magenta") "</_item>\n"
+                "<_item value=\"y\">" N_("Yellow") "</_item>\n"
               "</param>\n"
               "<param name=\"blend\" gui-text=\"" N_("Background blend mode:") "\" type=\"enum\">\n"
                 "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
                 "<_item value=\"normal\">" N_("Normal") "</_item>\n"
                 "<_item value=\"screen\">" N_("Screen") "</_item>\n"
-                "<_item value=\"darken\">" N_("Darken") "</_item>\n"
-                "<_item value=\"lighten\">" N_("Lighten") "</_item>\n"
               "</param>\n"
               "<param name=\"alpha\" gui-text=\"" N_("Channel to alpha") "\" type=\"boolean\">false</param>\n"
-              "<param name=\"invert\" gui-text=\"" N_("Inverted") "\" type=\"boolean\">false</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
@@ -667,45 +667,45 @@ ExtractChannel::get_filter_text (Inkscape::Extension::Extension * ext)
 
     std::ostringstream blend;
     std::ostringstream colors;
-    std::ostringstream alpha;
-    std::ostringstream invert;
 
     blend << ext->get_param_enum("blend");
 
     const gchar *channel = ext->get_param_enum("source");
     if (ext->get_param_bool("alpha")) {
-        colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
-    } else if ((g_ascii_strcasecmp("r", channel) == 0)) {
-        colors << "0 0 0 0 1 0 0 0 0 0 0 0 0 0 0";
-    } else if ((g_ascii_strcasecmp("g", channel) == 0)) {
-        colors << "0 0 0 0 0 0 0 0 0 1 0 0 0 0 0";
-    } else {
-        colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 1";
-    }
-
-    if (ext->get_param_bool("invert")) {
         if ((g_ascii_strcasecmp("r", channel) == 0)) {
-            alpha << "-1 0 0 1";
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0";
         } else if ((g_ascii_strcasecmp("g", channel) == 0)) {
-            alpha << "0 -1 0 1";
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0";
+        } else if ((g_ascii_strcasecmp("b", channel) == 0)) {
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0";
+        } else if ((g_ascii_strcasecmp("c", channel) == 0)) {
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 0 0 1 0";
+        } else if ((g_ascii_strcasecmp("m", channel) == 0)) {
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 0 1 0";
         } else {
-            alpha << "0 0 -1 1";
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1 1 0";
         }
     } else {
         if ((g_ascii_strcasecmp("r", channel) == 0)) {
-            alpha << "1 0 0 0";
+            colors << "0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0";
         } else if ((g_ascii_strcasecmp("g", channel) == 0)) {
-            alpha << "0 1 0 0";
+            colors << "0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0";
+        } else if ((g_ascii_strcasecmp("b", channel) == 0)) {
+            colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0";
+        } else if ((g_ascii_strcasecmp("c", channel) == 0)) {
+            colors << "0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 -1 0 0 1 0";
+        } else if ((g_ascii_strcasecmp("m", channel) == 0)) {
+            colors << "0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 -1 0 1 0";
         } else {
-            alpha << "0 0 1 0";
+            colors << "0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 -1 1 0";
         }
     }
 
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Extract Channel\">\n"
-          "<feColorMatrix in=\"SourceGraphic\" values=\"%s %s %s 0 \" result=\"colormatrix\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"%s 0 \" result=\"colormatrix\" />\n"
           "<feBlend in2=\"BackgroundImage\" mode=\"%s\" result=\"blend\" />\n"
-        "</filter>\n", colors.str().c_str(), alpha.str().c_str(), invert.str().c_str(), blend.str().c_str() );
+        "</filter>\n", colors.str().c_str(), blend.str().c_str() );
 
     return _filter;
 }; /* ExtractChannel filter */
@@ -739,7 +739,7 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Fade to Black or White") "</name>\n"
               "<id>org.inkscape.effect.filter.FadeToBW</id>\n"
-              "<param name=\"level\" gui-text=\"" N_("Level:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"1\">1</param>\n"
+              "<param name=\"level\" gui-text=\"" N_("Level") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"1\">1</param>\n"
               "<param name=\"fadeto\" gui-text=\"" N_("Fade to:") "\" type=\"enum\">\n"
                 "<_item value=\"black\">" N_("Black") "</_item>\n"
                 "<_item value=\"white\">" N_("White") "</_item>\n"
@@ -818,10 +818,10 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Greyscale") "</name>\n"
               "<id>org.inkscape.effect.filter.Greyscale</id>\n"
-              "<param name=\"red\" gui-text=\"" N_("Red:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0.21</param>\n"
-              "<param name=\"green\" gui-text=\"" N_("Green:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0.72</param>\n"
-              "<param name=\"blue\" gui-text=\"" N_("Blue:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0.072</param>\n"
-              "<param name=\"strength\" gui-text=\"" N_("Lightness:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0</param>\n"
+              "<param name=\"red\" gui-text=\"" N_("Red") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0.21</param>\n"
+              "<param name=\"green\" gui-text=\"" N_("Green") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0.72</param>\n"
+              "<param name=\"blue\" gui-text=\"" N_("Blue") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0.072</param>\n"
+              "<param name=\"strength\" gui-text=\"" N_("Lightness") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-10.00\" max=\"10.00\">0</param>\n"
               "<param name=\"transparent\" gui-text=\"" N_("Transparent") "\" type=\"boolean\" >false</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
@@ -910,7 +910,7 @@ public:
                 "<_item value=\"2\">" N_("Red and green") "</_item>\n"
                 "<_item value=\"3\">" N_("Green and blue") "</_item>\n"
               "</param>\n"
-              "<param name=\"opacify\" gui-text=\"" N_("Light transparency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.\" max=\"1\">0</param>\n"
+              "<param name=\"opacify\" gui-text=\"" N_("Light transparency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.\" max=\"1\">0</param>\n"
               "<param name=\"hue\" gui-text=\"" N_("Invert hue") "\" type=\"boolean\" >false</param>\n"
               "<param name=\"lightness\" gui-text=\"" N_("Invert lightness") "\" type=\"boolean\" >false</param>\n"
               "<param name=\"transparency\" gui-text=\"" N_("Invert transparency") "\" type=\"boolean\" >false</param>\n"
@@ -1039,9 +1039,9 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Lighting") "</name>\n"
               "<id>org.inkscape.effect.filter.Lighting</id>\n"
-              "<param name=\"amplitude\" gui-text=\"" N_("Lights:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.00\" max=\"20.00\">1</param>\n"
-              "<param name=\"exponent\" gui-text=\"" N_("Shadows:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.00\" max=\"20.00\">1</param>\n"
-              "<param name=\"offset\" gui-text=\"" N_("Offset:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-1.00\" max=\"1.00\">0</param>\n"
+              "<param name=\"amplitude\" gui-text=\"" N_("Lights") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.00\" max=\"20.00\">1</param>\n"
+              "<param name=\"exponent\" gui-text=\"" N_("Shadows") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.00\" max=\"20.00\">1</param>\n"
+              "<param name=\"offset\" gui-text=\"" N_("Offset") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-1.00\" max=\"1.00\">0</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
@@ -1110,8 +1110,8 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Lightness-Contrast") "</name>\n"
               "<id>org.inkscape.effect.filter.LightnessContrast</id>\n"
-              "<param name=\"lightness\" gui-text=\"" N_("Lightness:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-100\" max=\"100\">0</param>\n"
-              "<param name=\"contrast\" gui-text=\"" N_("Contrast:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-100\" max=\"100\">0</param>\n"
+              "<param name=\"lightness\" gui-text=\"" N_("Lightness") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-100\" max=\"100\">0</param>\n"
+              "<param name=\"contrast\" gui-text=\"" N_("Contrast") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"-100\" max=\"100\">0</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
@@ -1157,72 +1157,52 @@ LightnessContrast::get_filter_text (Inkscape::Extension::Extension * ext)
 }; /* Lightness-Contrast filter */
 
 /**
-    \brief    Custom predefined Nudge filter.
+    \brief    Custom predefined Nudge RGB filter.
     
-    Nudge separately RGB channels and blend them to different types of backgrounds
+    Nudge RGB channels separately and blend them to different types of backgrounds
 
     Filter's parameters:
     Offsets
       * Red
-        * x (-100.->100., default -7) -> offset1 (dx)
-        * y (-100.->100., default 5) -> offset1 (dy)
+        * x (-100.->100., default -6) -> offset1 (dx)
+        * y (-100.->100., default -6) -> offset1 (dy)
       * Green
-        * x (-100.->100., default 0) -> offset2 (dx)
-        * y (-100.->100., default 10) -> offset2 (dy)
+        * x (-100.->100., default 6) -> offset2 (dx)
+        * y (-100.->100., default 7) -> offset2 (dy)
       * Blue
-        * x (-100.->100., default 3) -> offset3 (dx)
-        * y (-100.->100., default -9) -> offset3 (dy)
+        * x (-100.->100., default 1) -> offset3 (dx)
+        * y (-100.->100., default -16) -> offset3 (dy)
     Color
-      * Background color (guint, default -1)-> flood (flood-color, flood-opacity)
-      * Blend type (enum [normal,multiply and screen], default screen) -> blend1,2,3 (mode)
-      * Blend source (enum, default color) ->
-        * color: blend1 (in="flood")
-        * image: blend1 (in="SourceGraphic")
-        * background: blend1 (in="BackgroundImage")
-      * Composite (enum [in,over], default over) -> composite (operator)
+      * Background color (guint, default 255)-> flood (flood-color, flood-opacity)
 
 */
-class Nudge : public Inkscape::Extension::Internal::Filter::Filter {
+class NudgeRGB : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
     virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
 
 public:
-    Nudge ( ) : Filter() { };
-    virtual ~Nudge ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    NudgeRGB ( ) : Filter() { };
+    virtual ~NudgeRGB ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-              "<name>" N_("Nudge") "</name>\n"
-              "<id>org.inkscape.effect.filter.Nudge</id>\n"
+              "<name>" N_("Nudge RGB") "</name>\n"
+              "<id>org.inkscape.effect.filter.NudgeRGB</id>\n"
               "<param name=\"tab\" type=\"notebook\">\n"
                 "<page name=\"offsettab\" _gui-text=\"Offset\">\n"
                   "<_param name=\"redOffset\" type=\"description\" appearance=\"header\">" N_("Red offset") "</_param>\n"
-                    "<param name=\"rx\" gui-text=\"" N_("X:") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-7</param>\n"
-                    "<param name=\"ry\" gui-text=\"" N_("Y:") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">5</param>\n"
+                    "<param name=\"rx\" gui-text=\"" N_("X") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-6</param>\n"
+                    "<param name=\"ry\" gui-text=\"" N_("Y") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-6</param>\n"
                 "<_param name=\"greenOffset\" type=\"description\" appearance=\"header\">" N_("Green offset") "</_param>\n"
-                    "<param name=\"gx\" gui-text=\"" N_("X:") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">0</param>\n"
-                    "<param name=\"gy\" gui-text=\"" N_("Y:") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">10</param>\n"
+                    "<param name=\"gx\" gui-text=\"" N_("X") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">6</param>\n"
+                    "<param name=\"gy\" gui-text=\"" N_("Y") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">7</param>\n"
                   "<_param name=\"redOffset\" type=\"description\" appearance=\"header\">" N_("Blue offset") "</_param>\n"
-                    "<param name=\"bx\" gui-text=\"" N_("X:") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">3</param>\n"
-                    "<param name=\"by\" gui-text=\"" N_("Y:") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-9</param>\n"
+                    "<param name=\"bx\" gui-text=\"" N_("X") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">1</param>\n"
+                    "<param name=\"by\" gui-text=\"" N_("Y") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-16</param>\n"
                 "</page>\n"
                 "<page name=\"coltab\" _gui-text=\"Color\">\n"
                   "<param name=\"color\" gui-text=\"" N_("Background color") "\" type=\"color\">255</param>\n"
-                  "<param name=\"blend\" gui-text=\"" N_("Blend type:") "\" type=\"enum\">\n"
-                    "<_item value=\"screen\">" N_("Screen") "</_item>\n"
-                    "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
-                    "<_item value=\"normal\">" N_("Normal") "</_item>\n"
-                  "</param>\n"
-                  "<param name=\"source\" gui-text=\"" N_("Blend source:") "\" type=\"enum\">\n"
-                    "<_item value=\"flood\">" N_("Color") "</_item>\n"
-                    "<_item value=\"SourceGraphic\">" N_("Image") "</_item>\n"
-                    "<_item value=\"BackgroundImage\">" N_("Background") "</_item>\n"
-                  "</param>\n"
-                  "<param name=\"composite\" gui-text=\"" N_("Composite:") "\" type=\"enum\">\n"
-                    "<_item value=\"over\">" N_("Over") "</_item>\n"
-                    "<_item value=\"in\">" N_("In") "</_item>\n"
-                  "</param>\n"
                 "</page>\n"
               "</param>\n"
               "<effect>\n"
@@ -1232,14 +1212,14 @@ public:
                     "<submenu name=\"" N_("Color") "\"/>\n"
                   "</submenu>\n"
                 "</effects-menu>\n"
-                "<menu-tip>" N_("Nudge separately RGB channels and blend them to different types of backgrounds") "</menu-tip>\n"
+                "<menu-tip>" N_("Nudge RGB channels separately and blend them to different types of backgrounds") "</menu-tip>\n"
               "</effect>\n"
-            "</inkscape-extension>\n", new Nudge());
+            "</inkscape-extension>\n", new NudgeRGB());
     };
 };
 
 gchar const *
-Nudge::get_filter_text (Inkscape::Extension::Extension * ext)
+NudgeRGB::get_filter_text (Inkscape::Extension::Extension * ext)
 {
     if (_filter != NULL) g_free((void *)_filter);
 
@@ -1249,10 +1229,6 @@ Nudge::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream gy;
     std::ostringstream bx;
     std::ostringstream by;
-
-    std::ostringstream blend;
-    std::ostringstream source;
-    std::ostringstream composite;
 
     std::ostringstream a;
     std::ostringstream r;
@@ -1266,9 +1242,117 @@ Nudge::get_filter_text (Inkscape::Extension::Extension * ext)
     bx << ext->get_param_float("bx");
     by << ext->get_param_float("by");
 
-    blend << ext->get_param_enum("blend");
-    source << ext->get_param_enum("source");
-    composite << ext->get_param_enum("composite");
+    guint32 color = ext->get_param_color("color");
+    r << ((color >> 24) & 0xff);
+    g << ((color >> 16) & 0xff);
+    b << ((color >>  8) & 0xff);
+    a << (color & 0xff) / 255.0F;
+    
+    _filter = g_strdup_printf(
+        "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Nudge RGB\">\n"
+          "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 \" result=\"colormatrix1\" />\n"
+          "<feOffset dy=\"%s\" dx=\"%s\" result=\"offset1\" />\n"
+          "<feBlend in2=\"flood\" mode=\"screen\" result=\"blend1\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 \" result=\"colormatrix2\" />\n"
+          "<feOffset dy=\"%s\" dx=\"%s\" result=\"offset2\" />\n"
+          "<feBlend in2=\"blend1\" mode=\"screen\" result=\"blend2\" />\n"
+          "<feOffset dy=\"%s\" dx=\"%s\" result=\"offset3\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 \" result=\"colormatrix3\" />\n"
+          "<feBlend in2=\"offset3\" mode=\"screen\" result=\"blend3\" />\n"
+        "</filter>\n", a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
+                       rx.str().c_str(), ry.str().c_str(),
+                       gx.str().c_str(), gy.str().c_str(),
+                       bx.str().c_str(), by.str().c_str() );
+
+    return _filter;
+
+}; /* Nudge RGB filter */
+
+/**
+    \brief    Custom predefined Nudge CMY filter.
+    
+    Nudge CMY channels separately and blend them to different types of backgrounds
+
+    Filter's parameters:
+    Offsets
+      * Cyan
+        * x (-100.->100., default -6) -> offset1 (dx)
+        * y (-100.->100., default -6) -> offset1 (dy)
+      * Magenta
+        * x (-100.->100., default 6) -> offset2 (dx)
+        * y (-100.->100., default 7) -> offset2 (dy)
+      * Yellow
+        * x (-100.->100., default 1) -> offset3 (dx)
+        * y (-100.->100., default -16) -> offset3 (dy)
+    Color
+      * Background color (guint, default -1)-> flood (flood-color, flood-opacity)
+*/
+class NudgeCMY : public Inkscape::Extension::Internal::Filter::Filter {
+protected:
+    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+
+public:
+    NudgeCMY ( ) : Filter() { };
+    virtual ~NudgeCMY ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+
+    static void init (void) {
+        Inkscape::Extension::build_from_mem(
+            "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+              "<name>" N_("Nudge CMY") "</name>\n"
+              "<id>org.inkscape.effect.filter.NudgeCMY</id>\n"
+              "<param name=\"tab\" type=\"notebook\">\n"
+                "<page name=\"offsettab\" _gui-text=\"Offset\">\n"
+                  "<_param name=\"cyanOffset\" type=\"description\" appearance=\"header\">" N_("Cyan offset") "</_param>\n"
+                    "<param name=\"cx\" gui-text=\"" N_("X") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-6</param>\n"
+                    "<param name=\"cy\" gui-text=\"" N_("Y") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-6</param>\n"
+                "<_param name=\"magentaOffset\" type=\"description\" appearance=\"header\">" N_("Magenta offset") "</_param>\n"
+                    "<param name=\"mx\" gui-text=\"" N_("X") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">6</param>\n"
+                    "<param name=\"my\" gui-text=\"" N_("Y") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">7</param>\n"
+                  "<_param name=\"yellowOffset\" type=\"description\" appearance=\"header\">" N_("Yellow offset") "</_param>\n"
+                    "<param name=\"yx\" gui-text=\"" N_("X") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">1</param>\n"
+                    "<param name=\"yy\" gui-text=\"" N_("Y") "\" type=\"float\" indent=\"1\" appearance=\"full\" precision=\"2\" min=\"-100.\" max=\"100.\">-16</param>\n"
+                "</page>\n"
+                "<page name=\"coltab\" _gui-text=\"Color\">\n"
+                  "<param name=\"color\" gui-text=\"" N_("Background color") "\" type=\"color\">-1</param>\n"
+                "</page>\n"
+              "</param>\n"
+              "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                  "<submenu name=\"" N_("Filters") "\">\n"
+                    "<submenu name=\"" N_("Color") "\"/>\n"
+                  "</submenu>\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Nudge CMY channels separately and blend them to different types of backgrounds") "</menu-tip>\n"
+              "</effect>\n"
+            "</inkscape-extension>\n", new NudgeCMY());
+    };
+};
+
+gchar const *
+NudgeCMY::get_filter_text (Inkscape::Extension::Extension * ext)
+{
+    if (_filter != NULL) g_free((void *)_filter);
+
+    std::ostringstream cx;
+    std::ostringstream cy;
+    std::ostringstream mx;
+    std::ostringstream my;
+    std::ostringstream yx;
+    std::ostringstream yy;
+
+    std::ostringstream a;
+    std::ostringstream r;
+    std::ostringstream g;
+    std::ostringstream b;
+
+    cx << ext->get_param_float("cx");
+    cy << ext->get_param_float("cy");
+    mx << ext->get_param_float("mx");
+    my << ext->get_param_float("my");
+    yx << ext->get_param_float("yx");
+    yy << ext->get_param_float("yy");
 
     guint32 color = ext->get_param_color("color");
     r << ((color >> 24) & 0xff);
@@ -1277,27 +1361,25 @@ Nudge::get_filter_text (Inkscape::Extension::Extension * ext)
     a << (color & 0xff) / 255.0F;
     
     _filter = g_strdup_printf(
-        "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Nudge\">\n"
+        "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Nudge CMY\">\n"
           "<feFlood flood-opacity=\"%s\" flood-color=\"rgb(%s,%s,%s)\" result=\"flood\" />\n"
-          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 \" result=\"colormatrix1\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 -1 0 0 1 0 \" result=\"colormatrix1\" />\n"
           "<feOffset dy=\"%s\" dx=\"%s\" result=\"offset1\" />\n"
-          "<feBlend in2=\"%s\" mode=\"%s\" result=\"blend1\" />\n"
-          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 \" result=\"colormatrix2\" />\n"
+          "<feBlend in2=\"flood\" mode=\"multiply\" result=\"blend1\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 -1 0 1 0 \" result=\"colormatrix2\" />\n"
           "<feOffset dy=\"%s\" dx=\"%s\" result=\"offset2\" />\n"
-          "<feBlend in2=\"blend1\" mode=\"%s\" result=\"blend2\" />\n"
+          "<feBlend in2=\"blend1\" mode=\"multiply\" result=\"blend2\" />\n"
           "<feOffset dy=\"%s\" dx=\"%s\" result=\"offset3\" />\n"
-          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 \" result=\"colormatrix3\" />\n"
-          "<feBlend in2=\"offset3\" mode=\"%s\" result=\"blend3\" />\n"
-          "<feComposite in2=\"SourceGraphic\" operator=\"%s\" />\n"
+          "<feColorMatrix in=\"SourceGraphic\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 -1 1 0 \" result=\"colormatrix3\" />\n"
+          "<feBlend in2=\"offset3\" mode=\"multiply\" result=\"blend3\" />\n"
         "</filter>\n", a.str().c_str(), r.str().c_str(), g.str().c_str(), b.str().c_str(),
-                       rx.str().c_str(), ry.str().c_str(), source.str().c_str(), blend.str().c_str(), 
-                       gx.str().c_str(), gy.str().c_str(), blend.str().c_str(), 
-                       bx.str().c_str(), by.str().c_str(), blend.str().c_str(), 
-                       composite.str().c_str() );
+                       cx.str().c_str(), cy.str().c_str(),
+                       mx.str().c_str(), my.str().c_str(),
+                       yx.str().c_str(), yy.str().c_str() );
 
     return _filter;
 
-}; /* Nudge filter */
+}; /* Nudge CMY filter */
 
 /**
     \brief    Custom predefined Quadritone filter.
@@ -1325,14 +1407,14 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Quadritone fantasy") "</name>\n"
               "<id>org.inkscape.effect.filter.Quadritone</id>\n"
-                "<param name=\"dist\" gui-text=\"" N_("Hue distribution (°):") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">280</param>\n"
-                "<param name=\"colors\" gui-text=\"" N_("Colors:") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">100</param>\n"
+                "<param name=\"dist\" gui-text=\"" N_("Hue distribution (°)") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">280</param>\n"
+                "<param name=\"colors\" gui-text=\"" N_("Colors") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">100</param>\n"
                 "<param name=\"blend1\" gui-text=\"" N_("Blend 1:") "\" type=\"enum\">\n"
                   "<_item value=\"normal\">" N_("Normal") "</_item>\n"
                   "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
                   "<_item value=\"screen\">" N_("Screen") "</_item>\n"
                 "</param>\n"
-                "<param name=\"sat\" gui-text=\"" N_("Over-saturation:") "\" type=\"float\" appearance=\"full\" precision=\"2\"  min=\"0.00\" max=\"1.00\">0</param>\n"
+                "<param name=\"sat\" gui-text=\"" N_("Over-saturation") "\" type=\"float\" appearance=\"full\" precision=\"2\"  min=\"0.00\" max=\"1.00\">0</param>\n"
                 "<param name=\"blend2\" gui-text=\"" N_("Blend 2:") "\" type=\"enum\">\n"
                   "<_item value=\"normal\">" N_("Normal") "</_item>\n"
                   "<_item value=\"screen\">" N_("Screen") "</_item>\n"
@@ -1411,7 +1493,7 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Solarize") "</name>\n"
               "<id>org.inkscape.effect.filter.Solarize</id>\n"
-              "<param name=\"rotate\" gui-text=\"" N_("Hue rotation (°):") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">0</param>\n"
+              "<param name=\"rotate\" gui-text=\"" N_("Hue rotation (°)") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">0</param>\n"
               "<param name=\"type\" gui-text=\"" N_("Type:") "\" type=\"enum\">\n"
                 "<_item value=\"solarize\">" N_("Solarize") "</_item>\n"
                 "<_item value=\"moonarize\">" N_("Moonarize") "</_item>\n"
@@ -1513,14 +1595,14 @@ public:
                     "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
                     "<_item value=\"darken\">" N_("Darken") "</_item>\n"
                   "</param>\n"
-                  "<param name=\"glow\" gui-text=\"" N_("Glow:") "\" type=\"float\" appearance=\"full\" min=\"0.01\" max=\"10\">0.01</param>\n"
+                  "<param name=\"glow\" gui-text=\"" N_("Glow") "\" type=\"float\" appearance=\"full\" min=\"0.01\" max=\"10\">0.01</param>\n"
                   "<param name=\"glowblend\" gui-text=\"" N_("Glow blend:") "\" type=\"enum\">\n"
                     "<_item value=\"normal\">" N_("Normal") "</_item>\n"
                     "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
                     "<_item value=\"darken\">" N_("Darken") "</_item>\n"
                   "</param>\n"
-                  "<param name=\"llight\" gui-text=\"" N_("Local light:") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">0</param>\n"
-                  "<param name=\"glight\" gui-text=\"" N_("Global light:") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">1</param>\n"
+                  "<param name=\"llight\" gui-text=\"" N_("Local light") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">0</param>\n"
+                  "<param name=\"glight\" gui-text=\"" N_("Global light") "\" type=\"float\" appearance=\"full\" min=\"0\" max=\"10\">1</param>\n"
                 "</page>\n"
                 "<page name=\"co1tab\" _gui-text=\"Color\">\n"
                   "<param name=\"dist\" gui-text=\"" N_("Hue distribution (°):") "\" type=\"int\" appearance=\"full\" min=\"0\" max=\"360\">0</param>\n"

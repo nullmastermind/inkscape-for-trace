@@ -9,15 +9,16 @@
 #include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
 #include "../svg/svg-icc-color.h"
+#include "ui/widget/gimpcolorwheel.h"
 
 G_BEGIN_DECLS
 
 static void sp_color_wheel_selector_class_init (SPColorWheelSelectorClass *klass);
 static void sp_color_wheel_selector_init (SPColorWheelSelector *cs);
-static void sp_color_wheel_selector_destroy (GtkObject *object);
+static void sp_color_wheel_selector_dispose(GObject *object);
 
 static void sp_color_wheel_selector_show_all (GtkWidget *widget);
-static void sp_color_wheel_selector_hide_all (GtkWidget *widget);
+static void sp_color_wheel_selector_hide(GtkWidget *widget);
 
 
 G_END_DECLS
@@ -53,27 +54,22 @@ sp_color_wheel_selector_get_type (void)
     return type;
 }
 
-static void
-sp_color_wheel_selector_class_init (SPColorWheelSelectorClass *klass)
+static void sp_color_wheel_selector_class_init(SPColorWheelSelectorClass *klass)
 {
     static const gchar* nameset[] = {N_("Wheel"), 0};
-    GtkObjectClass *object_class;
-    GtkWidgetClass *widget_class;
-    SPColorSelectorClass *selector_class;
-
-    object_class = (GtkObjectClass *) klass;
-    widget_class = (GtkWidgetClass *) klass;
-    selector_class = SP_COLOR_SELECTOR_CLASS (klass);
+    GObjectClass   *object_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+    SPColorSelectorClass *selector_class = SP_COLOR_SELECTOR_CLASS (klass);
 
     parent_class = SP_COLOR_SELECTOR_CLASS (g_type_class_peek_parent (klass));
 
     selector_class->name = nameset;
     selector_class->submode_count = 1;
 
-    object_class->destroy = sp_color_wheel_selector_destroy;
+    object_class->dispose = sp_color_wheel_selector_dispose;
 
     widget_class->show_all = sp_color_wheel_selector_show_all;
-    widget_class->hide_all = sp_color_wheel_selector_hide_all;
+    widget_class->hide = sp_color_wheel_selector_hide;
 }
 
 ColorWheelSelector::ColorWheelSelector( SPColorSelector* csel )
@@ -106,64 +102,37 @@ void sp_color_wheel_selector_init (SPColorWheelSelector *cs)
     }
 }
 
-static void resizeHSVWheel( GtkHSV *hsv, GtkAllocation *allocation )
-{
-    gint diam = std::min(allocation->width, allocation->height);
-
-    // drop a little for resizing
-    diam -= 4;
-
-    GtkStyle *style = gtk_widget_get_style( GTK_WIDGET(hsv) );
-    if ( style ) {
-        gint thick = std::max(style->xthickness, style->ythickness);
-        if (thick > 0) {
-            diam -= thick * 2;
-        }
-    }
-    gint padding = -1;
-    gtk_widget_style_get( GTK_WIDGET(hsv), 
-                          "focus-padding", &padding,
-                          NULL );
-    if (padding > 0) {
-        diam -= padding * 2;
-    }
-     
-    diam = std::max(20, diam);
-    gint ring = static_cast<gint>( static_cast<gdouble>(diam) / (4.0 * 1.618) );
-    gtk_hsv_set_metrics( hsv, diam, ring );
-}
-
-static void handleWheelStyleSet(GtkHSV *hsv, GtkStyle* /*previous*/, gpointer /*userData*/)
-{
-    GtkAllocation allocation = {0, 0, 0, 0};
-    gtk_widget_get_allocation( GTK_WIDGET(hsv), &allocation );
-    resizeHSVWheel( hsv, &allocation );
-}
-
-static void handleWheelAllocation(GtkHSV *hsv, GtkAllocation *allocation, gpointer /*userData*/)
-{
-    resizeHSVWheel( hsv, allocation );
-}
-
 void ColorWheelSelector::init()
 {
-    GtkWidget *t;
     gint row = 0;
 
     _updating = FALSE;
     _dragging = FALSE;
 
-    t = gtk_table_new (5, 3, FALSE);
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *t = gtk_grid_new();
+#else
+    GtkWidget *t = gtk_table_new (5, 3, FALSE);
+#endif
+
     gtk_widget_show (t);
     gtk_box_pack_start (GTK_BOX (_csel), t, TRUE, TRUE, 0);
 
     /* Create components */
     row = 0;
 
-    _wheel = gtk_hsv_new();
-    gtk_hsv_set_metrics( GTK_HSV(_wheel), 48, 8 );
+    _wheel = gimp_color_wheel_new();
     gtk_widget_show( _wheel );
-    gtk_table_attach( GTK_TABLE(t), _wheel, 0, 3, row, row + 1,  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_halign(_wheel, GTK_ALIGN_FILL);
+    gtk_widget_set_valign(_wheel, GTK_ALIGN_FILL);
+    gtk_widget_set_hexpand(_wheel, TRUE);
+    gtk_widget_set_vexpand(_wheel, TRUE);
+    gtk_grid_attach(GTK_GRID(t), _wheel, 0, row, 3, 1);
+#else
+    gtk_table_attach(GTK_TABLE(t), _wheel, 0, 3, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+#endif
 
     row++;
 
@@ -171,16 +140,39 @@ void ColorWheelSelector::init()
     _label = gtk_label_new_with_mnemonic (_("_A:"));
     gtk_misc_set_alignment (GTK_MISC (_label), 1.0, 0.5);
     gtk_widget_show (_label);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_label, XPAD);
+    gtk_widget_set_margin_right(_label, XPAD);
+    gtk_widget_set_margin_top(_label, YPAD);
+    gtk_widget_set_margin_bottom(_label, YPAD);
+    gtk_widget_set_halign(_label, GTK_ALIGN_FILL);
+    gtk_widget_set_valign(_label, GTK_ALIGN_FILL);
+    gtk_grid_attach(GTK_GRID(t), _label, 0, row, 1, 1);
+#else
     gtk_table_attach (GTK_TABLE (t), _label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+#endif
 
     /* Adjustment */
-    _adj = (GtkAdjustment *) gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 10.0, 10.0);
+    _adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
 
     /* Slider */
     _slider = sp_color_slider_new (_adj);
     gtk_widget_set_tooltip_text (_slider, _("Alpha (opacity)"));
     gtk_widget_show (_slider);
-    gtk_table_attach (GTK_TABLE (t), _slider, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)GTK_FILL, XPAD, YPAD);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_slider, XPAD);
+    gtk_widget_set_margin_right(_slider, XPAD);
+    gtk_widget_set_margin_top(_slider, YPAD);
+    gtk_widget_set_margin_bottom(_slider, YPAD);
+    gtk_widget_set_hexpand(_slider, TRUE);
+    gtk_widget_set_halign(_slider, GTK_ALIGN_FILL);
+    gtk_widget_set_valign(_slider, GTK_ALIGN_FILL);
+    gtk_grid_attach(GTK_GRID(t), _slider, 1, row, 1, 1);
+#else
+    gtk_table_attach(GTK_TABLE (t), _slider, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
+#endif
 
     sp_color_slider_set_colors (SP_COLOR_SLIDER (_slider),
                                 SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
@@ -194,7 +186,18 @@ void ColorWheelSelector::init()
     sp_dialog_defocus_on_enter (_sbtn);
     gtk_label_set_mnemonic_widget (GTK_LABEL(_label), _sbtn);
     gtk_widget_show (_sbtn);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_margin_left(_sbtn, XPAD);
+    gtk_widget_set_margin_right(_sbtn, XPAD);
+    gtk_widget_set_margin_top(_sbtn, YPAD);
+    gtk_widget_set_margin_bottom(_sbtn, YPAD);
+    gtk_widget_set_halign(_sbtn, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(_sbtn, GTK_ALIGN_CENTER);
+    gtk_grid_attach(GTK_GRID(t), _sbtn, 2, row, 1, 1);
+#else
     gtk_table_attach (GTK_TABLE (t), _sbtn, 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
+#endif
 
     /* Signals */
     g_signal_connect (G_OBJECT (_adj), "value_changed",
@@ -209,20 +212,12 @@ void ColorWheelSelector::init()
 
     g_signal_connect( G_OBJECT(_wheel), "changed",
                         G_CALLBACK (_wheelChanged), _csel );
-
-
-    // GTK does not automatically scale the color wheel, so we have to add that in:
-    g_signal_connect( G_OBJECT (_wheel), "size-allocate",
-                        G_CALLBACK (handleWheelAllocation), _csel );
-    g_signal_connect( G_OBJECT (_wheel), "style-set",
-                        G_CALLBACK (handleWheelStyleSet), _csel );
 }
 
-static void
-sp_color_wheel_selector_destroy (GtkObject *object)
+static void sp_color_wheel_selector_dispose(GObject *object)
 {
-    if (((GtkObjectClass *) (parent_class))->destroy)
-        (* ((GtkObjectClass *) (parent_class))->destroy) (object);
+    if ((G_OBJECT_CLASS(parent_class))->dispose)
+        (* (G_OBJECT_CLASS(parent_class))->dispose) (object);
 }
 
 static void
@@ -231,18 +226,14 @@ sp_color_wheel_selector_show_all (GtkWidget *widget)
     gtk_widget_show (widget);
 }
 
-static void
-sp_color_wheel_selector_hide_all (GtkWidget *widget)
+static void sp_color_wheel_selector_hide(GtkWidget *widget)
 {
-    gtk_widget_hide (widget);
+    gtk_widget_hide(widget);
 }
 
-GtkWidget *
-sp_color_wheel_selector_new (void)
+GtkWidget *sp_color_wheel_selector_new()
 {
-    SPColorWheelSelector *csel;
-
-    csel = (SPColorWheelSelector*)g_object_new (SP_TYPE_COLOR_WHEEL_SELECTOR, NULL);
+    SPColorWheelSelector *csel = SP_COLOR_WHEEL_SELECTOR(g_object_new (SP_TYPE_COLOR_WHEEL_SELECTOR, NULL));
 
     return GTK_WIDGET (csel);
 }
@@ -261,11 +252,9 @@ void ColorWheelSelector::_colorChanged()
 #endif
     _updating = TRUE;
     {
-        gdouble h = 0;
-        gdouble s = 0;
-        gdouble v = 0;
-        gtk_rgb_to_hsv( _color.v.c[0], _color.v.c[1], _color.v.c[2], &h, &s, &v  );
-        gtk_hsv_set_color( GTK_HSV(_wheel), h, s, v );
+        float hsv[3] = {0,0,0};
+        sp_color_rgb_to_hsv_floatv(hsv, _color.v.c[0], _color.v.c[1], _color.v.c[2]);
+        gimp_color_wheel_set_color( GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2] );
     }
 
     guint32 start = _color.toRGBA32( 0x00 );
@@ -336,21 +325,19 @@ void ColorWheelSelector::_sliderChanged( SPColorSlider *slider, SPColorWheelSele
     wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
 }
 
-void ColorWheelSelector::_wheelChanged( GtkHSV *hsv, SPColorWheelSelector *cs )
+void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs )
 {
     ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
 
     gdouble h = 0;
     gdouble s = 0;
     gdouble v = 0;
-    gtk_hsv_get_color( hsv, &h, &s, &v );
+    gimp_color_wheel_get_color( wheel, &h, &s, &v );
     
-    gdouble r = 0;
-    gdouble g = 0;
-    gdouble b = 0;
-    gtk_hsv_to_rgb(h, s, v, &r, &g, &b);
+    float rgb[3] = {0,0,0};
+    sp_color_hsv_to_rgb_floatv (rgb, h, s, v); 
 
-    SPColor color(r, g, b);
+    SPColor color(rgb[0], rgb[1], rgb[2]);
 
     guint32 start = color.toRGBA32( 0x00 );
     guint32 mid = color.toRGBA32( 0x7f );
@@ -359,7 +346,7 @@ void ColorWheelSelector::_wheelChanged( GtkHSV *hsv, SPColorWheelSelector *cs )
     sp_color_slider_set_colors (SP_COLOR_SLIDER(wheelSelector->_slider), start, mid, end);
 
     preserve_icc(&color, cs);
-    wheelSelector->_updateInternals( color, wheelSelector->_alpha, gtk_hsv_is_adjusting( hsv ) );
+    wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );
 }
 
 

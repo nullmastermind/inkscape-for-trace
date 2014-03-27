@@ -16,7 +16,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-
+#include "filedialogimpl-win32.h"
 //General includes
 #include <list>
 #include <unistd.h>
@@ -26,6 +26,7 @@
 #include <gdk/gdkwin32.h>
 #include <glib/gstdio.h>
 #include <glibmm/i18n.h>
+#include <glibmm/fileutils.h>
 #include <gtkmm/window.h>
 
 //Inkscape includes
@@ -41,7 +42,7 @@
 #include "display/canvas-arena.h"
 
 #include "filedialog.h"
-#include "filedialogimpl-win32.h"
+
 #include "sp-root.h"
 
 #include <zlib.h>
@@ -133,7 +134,11 @@ FileDialogBaseWin32::FileDialogBaseWin32(Gtk::Window &parent,
 
     Glib::RefPtr<const Gdk::Window> parentWindow = parent.get_window();
     g_assert(parentWindow->gobj() != NULL);
+#if WITH_GTKMM_3_0
+    _ownerHwnd = (HWND)gdk_win32_window_get_handle((GdkWindow*)parentWindow->gobj());
+#else
     _ownerHwnd = (HWND)gdk_win32_drawable_get_handle((GdkDrawable*)parentWindow->gobj());
+#endif
 }
 
 FileDialogBaseWin32::~FileDialogBaseWin32()
@@ -188,7 +193,8 @@ FileOpenDialogImplWin32::FileOpenDialogImplWin32(Gtk::Window &parent,
 
     _mutex = NULL;
 
-    createFilterMenu();
+    if (dialogType != CUSTOM_TYPE)
+    	createFilterMenu();
 }
 
 
@@ -203,6 +209,64 @@ FileOpenDialogImplWin32::~FileOpenDialogImplWin32()
         delete[] _extension_map;
 }
 
+void FileOpenDialogImplWin32::addFilterMenu(Glib::ustring name, Glib::ustring pattern)
+{
+    list<Filter> filter_list;
+
+    int extension_index = 0;
+    int filter_length = 1;
+
+    ustring all_exe_files_filter = pattern;
+    Filter all_exe_files;
+
+    const gchar *all_exe_files_filter_name = name.data();
+
+    // Calculate the amount of memory required
+    int filter_count = 1;
+
+    _extension_map = new Inkscape::Extension::Extension*[filter_count];
+
+    // Filter Executable Files
+    all_exe_files.name = g_utf8_to_utf16(all_exe_files_filter_name,
+        -1, NULL, &all_exe_files.name_length, NULL);
+    all_exe_files.filter = g_utf8_to_utf16(all_exe_files_filter.data(),
+            -1, NULL, &all_exe_files.filter_length, NULL);
+    all_exe_files.mod = NULL;
+    filter_list.push_front(all_exe_files);
+
+    _filter = new wchar_t[filter_length];
+    wchar_t *filterptr = _filter;
+
+    for(list<Filter>::iterator filter_iterator = filter_list.begin();
+        filter_iterator != filter_list.end(); ++filter_iterator)
+    {
+        const Filter &filter = *filter_iterator;
+
+        wcsncpy(filterptr, (wchar_t*)filter.name, filter.name_length);
+        filterptr += filter.name_length;
+        g_free(filter.name);
+
+        *(filterptr++) = L'\0';
+        *(filterptr++) = L'*';
+
+        if(filter.filter != NULL)
+        {
+            wcsncpy(filterptr, (wchar_t*)filter.filter, filter.filter_length);
+            filterptr += filter.filter_length;
+            g_free(filter.filter);
+        }
+
+        *(filterptr++) = L'\0';
+
+        // Associate this input extension with the file type name
+        _extension_map[extension_index++] = filter.mod;
+    }
+    *(filterptr++) = L'\0';
+
+    _filter_count = extension_index;
+    _filter_index = 1;  // Select the 1st filter in the list
+}
+
 void FileOpenDialogImplWin32::createFilterMenu()
 {
     list<Filter> filter_list;
@@ -210,6 +274,10 @@ void FileOpenDialogImplWin32::createFilterMenu()
     int extension_index = 0;
     int filter_length = 1;
     
+    if (dialogType == CUSTOM_TYPE) {
+        return;
+    }
+
     if (dialogType != EXE_TYPES) {
         // Compose the filter string
         Inkscape::Extension::DB::InputList extension_list;
@@ -1513,16 +1581,23 @@ FileOpenDialogImplWin32::show()
     // We can only run one worker thread at a time
     if(_mutex != NULL) return false;
 
+#if !GLIB_CHECK_VERSION(2,32,0)
     if(!Glib::thread_supported())
         Glib::thread_init();
+#endif
 
     _result = false;
     _finished = false;
     _file_selected = false;
-    _mutex = new Glib::Mutex();
     _main_loop = g_main_loop_new(g_main_context_default(), FALSE);
 
+#if GLIB_CHECK_VERSION(2,32,0)
+    _mutex = new Glib::Threads::Mutex();
+    if(Glib::Threads::Thread::create(sigc::mem_fun(*this, &FileOpenDialogImplWin32::GetOpenFileName_thread)))
+#else
+    _mutex = new Glib::Mutex();
     if(Glib::Thread::create(sigc::mem_fun(*this, &FileOpenDialogImplWin32::GetOpenFileName_thread), true))
+#endif
     {
         while(1)
         {
@@ -1686,6 +1761,72 @@ void FileSaveDialogImplWin32::createFilterMenu()
     _filter_index = 1;  // A value of 1 selects the 1st filter - NOT the 2nd
 }
 
+
+void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring pattern)
+{
+    list<Filter> filter_list;
+
+    knownExtensions.clear();
+
+    int extension_index = 0;
+    int filter_length = 1;
+
+    ustring all_exe_files_filter = pattern;
+    Filter all_exe_files;
+
+    const gchar *all_exe_files_filter_name = name.data();
+
+    // Calculate the amount of memory required
+    int filter_count = 1;
+
+
+    // Filter Executable Files
+    all_exe_files.name = g_utf8_to_utf16(all_exe_files_filter_name,
+        -1, NULL, &all_exe_files.name_length, NULL);
+    all_exe_files.filter = g_utf8_to_utf16(all_exe_files_filter.data(),
+            -1, NULL, &all_exe_files.filter_length, NULL);
+    all_exe_files.mod = NULL;
+    filter_list.push_front(all_exe_files);
+
+    knownExtensions.insert( Glib::ustring(all_exe_files_filter).casefold() );
+
+    _extension_map = new Inkscape::Extension::Extension*[filter_count];
+
+    _filter = new wchar_t[filter_length];
+    wchar_t *filterptr = _filter;
+
+    for(list<Filter>::iterator filter_iterator = filter_list.begin();
+        filter_iterator != filter_list.end(); ++filter_iterator)
+    {
+        const Filter &filter = *filter_iterator;
+
+        wcsncpy(filterptr, (wchar_t*)filter.name, filter.name_length);
+        filterptr += filter.name_length;
+        g_free(filter.name);
+
+        *(filterptr++) = L'\0';
+        *(filterptr++) = L'*';
+
+        if(filter.filter != NULL)
+        {
+            wcsncpy(filterptr, (wchar_t*)filter.filter, filter.filter_length);
+            filterptr += filter.filter_length;
+            g_free(filter.filter);
+        }
+
+        *(filterptr++) = L'\0';
+
+        // Associate this input extension with the file type name
+        _extension_map[extension_index++] = filter.mod;
+    }
+    *(filterptr++) = L'\0';
+
+    _filter_count = extension_index;
+    _filter_index = 1;  // Select the 1st filter in the list
+
+
+}
+
 void FileSaveDialogImplWin32::GetSaveFileName_thread()
 {
     OPENFILENAMEEXW ofn;
@@ -1741,18 +1882,24 @@ void FileSaveDialogImplWin32::GetSaveFileName_thread()
 bool
 FileSaveDialogImplWin32::show()
 {
+#if !GLIB_CHECK_VERSION(2,32,0)
     if(!Glib::thread_supported())
         Glib::thread_init();
+#endif
 
     _result = false;
     _main_loop = g_main_loop_new(g_main_context_default(), FALSE);
 
     if(_main_loop != NULL)
     {
+#if GLIB_CHECK_VERSION(2,32,0)
+        if(Glib::Threads::Thread::create(sigc::mem_fun(*this, &FileSaveDialogImplWin32::GetSaveFileName_thread)))
+#else
         if(Glib::Thread::create(sigc::mem_fun(*this, &FileSaveDialogImplWin32::GetSaveFileName_thread), true))
+#endif
             g_main_loop_run(_main_loop);
 
-        if(_result)
+        if(_result && _extension)
             appendExtension(myFilename, (Inkscape::Extension::Output*)_extension);
     }
 
@@ -1764,6 +1911,7 @@ void FileSaveDialogImplWin32::setSelectionType( Inkscape::Extension::Extension *
     // If no pointer to extension is passed in, look up based on filename extension.
 
 }
+
 
 UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
     HWND hdlg, UINT uiMsg, WPARAM, LPARAM lParam)

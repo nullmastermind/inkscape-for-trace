@@ -19,13 +19,21 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/table.h>
 
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
+#include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "extension/implementation/implementation.h"
 #include "extension.h"
@@ -417,16 +425,31 @@ gchar const *Extension::get_param_string(gchar const *name, SPDocument const *do
 }
 
 const gchar *
-Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node) const
 {
-    Parameter* param = get_param(name);
+    Parameter const *param = get_param(name);
     return param->get_enum(doc, node);
 }
 
-gchar const *
-Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node)
+/**
+ * This is useful to find out, if a given string \c value is selectable in a ComboBox named \cname.
+ * 
+ * @param name The name of the enum parameter to get.
+ * @param doc The document to look in for document specific parameters.
+ * @param node The node to look in for a specific parameter.
+ * @return true if value exists, false if not
+ */
+bool
+Extension::get_param_enum_contains(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node) const
 {
-    Parameter* param = get_param(name);
+    Parameter const *param = get_param(name);
+    return param->get_enum_contains(value, doc, node);
+}
+
+gchar const *
+Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node) const
+{
+    Parameter const*param = get_param(name);
     return param->get_optiongroup(doc, node);
 }
 
@@ -500,9 +523,9 @@ Extension::get_param_float (const gchar * name, const SPDocument * doc, const In
     found parameter.
 */
 guint32
-Extension::get_param_color (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_color (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node) const
 {
-    Parameter* param = get_param(name);
+    Parameter const *param = get_param(name);
     return param->get_color(doc, node);
 }
 
@@ -591,6 +614,13 @@ Extension::set_param_optiongroup(gchar const * name, gchar const * value, SPDocu
 {
     Parameter * param = get_param(name);
     return param->set_optiongroup(value, doc, node);
+}
+
+gchar const *
+Extension::set_param_enum(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node)
+{
+    Parameter * param = get_param(name);
+    return param->set_enum(value, doc, node);
 }
 
 
@@ -720,7 +750,12 @@ Extension::get_info_widget(void)
     Gtk::Frame * info = Gtk::manage(new Gtk::Frame("General Extension Information"));
     retval->pack_start(*info, true, true, 5);
 
+#if WITH_GTKMM_3_0
+    Gtk::Grid * table = Gtk::manage(new Gtk::Grid());
+#else
     Gtk::Table * table = Gtk::manage(new Gtk::Table());
+#endif
+
     info->add(*table);
 
     int row = 0;
@@ -733,8 +768,11 @@ Extension::get_info_widget(void)
     return retval;
 }
 
-void
-Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Table * table, int * row)
+#if WITH_GTKMM_3_0
+void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row)
+#else
+void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Table * table, int * row)
+#endif
 {
     Gtk::Label * label;
     Gtk::Label * value;
@@ -742,8 +780,14 @@ Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Table * 
     (*row)++; 
     label = Gtk::manage(new Gtk::Label(labelstr));
     value = Gtk::manage(new Gtk::Label(valuestr));
+
+#if WITH_GTKMM_3_0
+    table->attach(*label, 0, (*row) - 1, 1, 1);
+    table->attach(*value, 1, (*row) - 1, 1, 1);
+#else
     table->attach(*label, 0, 1, (*row) - 1, *row);
     table->attach(*value, 1, 2, (*row) - 1, *row);
+#endif
 
     label->show();
     value->show();

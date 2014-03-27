@@ -1,4 +1,3 @@
-#define INKSCAPE_LPE_TANGENT_TO_CURVE_CPP
 /** \file
  * Implementation of tangent-to-curve LPE.
  */
@@ -13,6 +12,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <glibmm/i18n.h>
 
 #include "live_effects/lpe-tangent_to_curve.h"
 // FIXME: The following are only needed to convert the path's SPCurve* to pwd2.
@@ -35,14 +36,14 @@ class KnotHolderEntityAttachPt : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityAttachPt(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityLeftEnd(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 class KnotHolderEntityRightEnd : public LPEKnotHolderEntity
@@ -50,17 +51,17 @@ class KnotHolderEntityRightEnd : public LPEKnotHolderEntity
 public:
     KnotHolderEntityRightEnd(LPETangentToCurve *effect) : LPEKnotHolderEntity(effect) {};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get();
+    virtual Geom::Point knot_get() const;
 };
 
 } // namespace TtC
 
 LPETangentToCurve::LPETangentToCurve(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    angle(_("Angle"), _("Additional angle between tangent and curve"), "angle", &wr, this, 0.0),
-    t_attach(_("Location along curve"), _("Location of the point of attachment along the curve (between 0.0 and number-of-segments)"), "t_attach", &wr, this, 0.5),
-    length_left(_("Length left"), _("Specifies the left end of the tangent"), "length-left", &wr, this, 150),
-    length_right(_("Length right"), _("Specifies the right end of the tangent"), "length-right", &wr, this, 150)
+    angle(_("Angle:"), _("Additional angle between tangent and curve"), "angle", &wr, this, 0.0),
+    t_attach(_("Location along curve:"), _("Location of the point of attachment along the curve (between 0.0 and number-of-segments)"), "t_attach", &wr, this, 0.5),
+    length_left(_("Length left:"), _("Specifies the left end of the tangent"), "length-left", &wr, this, 150),
+    length_right(_("Length right:"), _("Specifies the right end of the tangent"), "length-right", &wr, this, 150)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
@@ -121,13 +122,13 @@ LPETangentToCurve::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desk
 namespace TtC {
 
 void
-KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     using namespace Geom;
 
     LPETangentToCurve* lpe = dynamic_cast<LPETangentToCurve *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     // FIXME: There must be a better way of converting the path's SPCurve* to pwd2.
     SPCurve *curve = SP_PATH(item)->get_curve_for_edit();
@@ -145,11 +146,11 @@ KnotHolderEntityAttachPt::knot_set(Geom::Point const &p, Geom::Point const &/*or
 }
 
 void
-KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     LPETangentToCurve *lpe = dynamic_cast<LPETangentToCurve *>(_effect);
 
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_point(s, lpe->ptA, lpe->derivA);
     lpe->length_left.param_set_value(-lambda);
@@ -158,11 +159,11 @@ KnotHolderEntityLeftEnd::knot_set(Geom::Point const &p, Geom::Point const &/*ori
 }
 
 void
-KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/)
+KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
     LPETangentToCurve *lpe = dynamic_cast<LPETangentToCurve *>(_effect);
     
-    Geom::Point const s = snap_knot_position(p);
+    Geom::Point const s = snap_knot_position(p, state);
 
     double lambda = Geom::nearest_point(s, lpe->ptA, lpe->derivA);
     lpe->length_right.param_set_value(lambda);
@@ -171,23 +172,23 @@ KnotHolderEntityRightEnd::knot_set(Geom::Point const &p, Geom::Point const &/*or
 }
 
 Geom::Point
-KnotHolderEntityAttachPt::knot_get()
+KnotHolderEntityAttachPt::knot_get() const
 {
-    LPETangentToCurve* lpe = dynamic_cast<LPETangentToCurve *>(_effect);
+    LPETangentToCurve const *lpe = dynamic_cast<LPETangentToCurve const*>(_effect);
     return lpe->ptA;
 }
 
 Geom::Point
-KnotHolderEntityLeftEnd::knot_get()
+KnotHolderEntityLeftEnd::knot_get() const
 {
-    LPETangentToCurve *lpe = dynamic_cast<LPETangentToCurve *>(_effect);
+    LPETangentToCurve const *lpe = dynamic_cast<LPETangentToCurve const*>(_effect);
     return lpe->C;
 }
 
 Geom::Point
-KnotHolderEntityRightEnd::knot_get()
+KnotHolderEntityRightEnd::knot_get() const
 {
-    LPETangentToCurve *lpe = dynamic_cast<LPETangentToCurve *>(_effect);
+    LPETangentToCurve const *lpe = dynamic_cast<LPETangentToCurve const*>(_effect);
     return lpe->D;
 }
 

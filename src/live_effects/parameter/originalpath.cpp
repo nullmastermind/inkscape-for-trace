@@ -4,6 +4,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include "live_effects/parameter/originalpath.h"
 
@@ -21,6 +29,7 @@
 #include "inkscape.h"
 #include "desktop-handles.h"
 #include "selection.h"
+#include "ui/icon-names.h"
 
 namespace Inkscape {
 
@@ -51,7 +60,7 @@ OriginalPathParam::param_newWidget()
     }
 
     { // Paste path to link button
-        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_PASTE, Inkscape::ICON_SIZE_BUTTON) );
+        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-paste"), Inkscape::ICON_SIZE_BUTTON) );
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();

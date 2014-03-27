@@ -9,7 +9,6 @@
  */
 
 #include "glibmm/ustring.h"
-#include "xml/node.h"
 #include "xml/sp-css-attr.h"
 
 using Inkscape::XML::Node;
@@ -61,7 +60,7 @@ void sp_attribute_clean_style(Node *repr, unsigned int flags);
 /**
  * Clean style properties for one style string.
  */
-gchar* sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int flags);
+Glib::ustring sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int flags);
 
 /**
  * Clean style properties for one CSS.

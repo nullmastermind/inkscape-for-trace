@@ -38,7 +38,7 @@ Inkscape::XML::Node * Effect::_filters_list = NULL;
 Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
     : Extension(in_repr, in_imp),
       _id_noprefs(Glib::ustring(get_id()) + ".noprefs"),
-      _name_noprefs(Glib::ustring(get_name()) + _(" (No preferences)")),
+      _name_noprefs(Glib::ustring(_(get_name())) + _(" (No preferences)")),
       _verb(get_id(), get_name(), NULL, NULL, this, true),
       _verb_nopref(_id_noprefs.c_str(), _name_noprefs.c_str(), NULL, NULL, this, false),
       _menu_node(NULL), _workingDialog(true),
@@ -89,7 +89,7 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
         } // children of "inkscape-extension"
     } // if we have an XML file
 
-    if (INKSCAPE != NULL) {
+    if (INKSCAPE != NULL && inkscape_use_gui()) {
         if (_effects_list == NULL)
             _effects_list = find_menu(inkscape_get_menus(INKSCAPE), EFFECTS_LIST);
         if (_filters_list == NULL)
@@ -359,22 +359,22 @@ Effect::set_pref_dialog (PrefDialog * prefdialog)
 }
 
 SPAction *
-Effect::EffectVerb::make_action (Inkscape::UI::View::View * view)
+Effect::EffectVerb::make_action (Inkscape::ActionContext const & context)
 {
-    return make_action_helper(view, &perform, static_cast<void *>(this));
+    return make_action_helper(context, &perform, static_cast<void *>(this));
 }
 
 /** \brief  Decode the verb code and take appropriate action */
 void
 Effect::EffectVerb::perform( SPAction *action, void * data )
 {
+    g_return_if_fail(ensure_desktop_valid(action));
     Inkscape::UI::View::View * current_view = sp_action_get_view(action);
-//  SPDocument * current_document = current_view->doc;
+
     Effect::EffectVerb * ev = reinterpret_cast<Effect::EffectVerb *>(data);
     Effect * effect = ev->_effect;
 
     if (effect == NULL) return;
-    if (current_view == NULL) return;
 
     if (ev->_showPrefs) {
         effect->prefs(current_view);

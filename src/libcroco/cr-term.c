@@ -275,10 +275,10 @@ cr_term_prepend_term (CRTerm * a_this, CRTerm * a_new_term)
  *form of #CRTerm. MUST BE FREED BY THE CALLER using g_free().
  */
 guchar *
-cr_term_to_string (CRTerm * a_this)
+cr_term_to_string (CRTerm const * a_this)
 {
         GString *str_buf = NULL;
-        CRTerm *cur = NULL;
+        CRTerm const *cur = NULL;
         guchar *result = NULL;
         gchar *content = NULL;
 
@@ -365,9 +365,9 @@ cr_term_to_string (CRTerm * a_this)
                                                 tmp_str = NULL;
                                         }
 
-                                        g_free (content);
-                                        content = NULL;
                                 }
+                                g_free (content);
+                                content = NULL;
                                 g_string_append (str_buf, ")");
                         }
 
@@ -472,7 +472,7 @@ cr_term_to_string (CRTerm * a_this)
 }
 
 guchar *
-cr_term_one_to_string (CRTerm * a_this)
+cr_term_one_to_string (CRTerm const * a_this)
 {
         GString *str_buf = NULL;
         guchar *result = NULL;
@@ -675,7 +675,7 @@ cr_term_one_to_string (CRTerm * a_this)
  *@param a_fp the destination file pointer.
  */
 void
-cr_term_dump (CRTerm * a_this, FILE * a_fp)
+cr_term_dump (CRTerm const * a_this, FILE * a_fp)
 {
         guchar *content = NULL;
 
@@ -695,9 +695,9 @@ cr_term_dump (CRTerm * a_this, FILE * a_fp)
  *@return number of terms in the expression.
  */
 int
-cr_term_nr_values (CRTerm *a_this)
+cr_term_nr_values (CRTerm const *a_this)
 {
-	CRTerm *cur = NULL ;
+	CRTerm const *cur = NULL ;
 	int nr = 0;
 
 	g_return_val_if_fail (a_this, -1) ;
@@ -766,12 +766,12 @@ cr_term_unref (CRTerm * a_this)
 }
 
 /**
- *The destructor of the the #CRTerm class.
+ *The destructor of the #CRTerm class.
  *@param a_this the "this pointer" of the current instance
  *of #CRTerm.
  */
 void
-cr_term_destroy (CRTerm * a_this)
+cr_term_destroy (CRTerm * const a_this)
 {
         g_return_if_fail (a_this);
 
@@ -782,8 +782,5 @@ cr_term_destroy (CRTerm * a_this)
                 a_this->next = NULL;
         }
 
-        if (a_this) {
-                g_free (a_this);
-        }
-
+        g_free (a_this);
 }

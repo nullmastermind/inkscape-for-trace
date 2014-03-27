@@ -52,6 +52,8 @@
 #include <utime.h>
 #include <dirent.h>
 
+#include <iostream>
+#include <list>
 #include <string>
 #include <map>
 #include <set>
@@ -60,6 +62,8 @@
 
 
 #ifdef __WIN32__
+#define WIN32_LEAN_AND_MEAN
+#define NOGDI
 #include <windows.h>
 #endif
 
@@ -4140,8 +4144,8 @@ bool MakeBase::executeCommand(const String &command,
                               String &errbuf)
 {
 
-    status("============ cmd ============\n%s\n=============================",
-                command.c_str());
+//    status("============ cmd ============\n%s\n=============================",
+//                command.c_str());
 
     outbuf.clear();
     errbuf.clear();
@@ -4163,7 +4167,7 @@ bool MakeBase::executeCommand(const String &command,
        return false;
        }
     strcpy(paramBuf, (char *)command.c_str());
-
+   
     //# Go to http://msdn2.microsoft.com/en-us/library/ms682499.aspx
     //# to see how Win32 pipes work
 
@@ -7060,8 +7064,9 @@ public:
             //# First we check if the source is newer than the .o
             if (isNewerThan(srcFullName, destFullName))
                 {
-                taskstatus("compile of %s required by source: %s",
-                        destFullName.c_str(), srcFullName.c_str());
+//                taskstatus("compile of %s (req. by: %s)",
+//                        destFullName.c_str(), srcFullName.c_str());
+                fprintf(stdout, "compile %s\n", srcFullName.c_str());
                 compileMe = true;
                 }
             else
@@ -7083,8 +7088,8 @@ public:
                     //        destFullName.c_str(), depFullName.c_str());
                     if (depRequires)
                         {
-                        taskstatus("compile of %s required by included: %s",
-                                destFullName.c_str(), depFullName.c_str());
+                        taskstatus("compile %s (%s modified)",
+                                srcFullName.c_str(), depFullName.c_str());
                         compileMe = true;
                         break;
                         }
@@ -7143,11 +7148,13 @@ public:
                 fprintf(f, "#### STDERR ###\n%s\n\n", errString.c_str());
                 fflush(f);
                 }
-            if (!ret)
-                {
+            if (!ret) {
                 error("problem compiling: %s", errString.c_str());
                 errorOccurred = true;
-                }
+            } else if (!errString.empty()) {
+                fprintf(stdout, "STDERR: \n%s\n", errString.c_str());
+            }
+
 
             if (errorOccurred && !continueOnError) {
 #ifndef _OPENMP // figure out a way to break the loop here with OpenMP
@@ -8133,6 +8140,31 @@ public:
     virtual ~TaskLink()
         {}
 
+    virtual void UniqueParams(std::string& source) {
+        size_t prev = 0;
+        size_t next = 0;
+        std::list<std::string> thelist;
+        std::list<std::string>::iterator it;
+        std::string tstring=" ";
+        source +=std::string(" "); // else the last token may be lost
+	while ((next = source.find_first_of(" ", prev)) != std::string::npos){
+	   if (next - prev != 0){
+	      thelist.push_back(source.substr(prev, next - prev));
+	   }
+	   prev = next + 1;
+	}
+        thelist.sort();
+        source.clear();
+        source +=std::string(" ");
+        for(it=thelist.begin(); it!=thelist.end();it++){
+        	if(*it != tstring){
+        		tstring = *it;
+        		source +=tstring;
+        		source +=std::string(" ");
+        	}
+        }
+     }
+
     virtual bool execute()
         {
         String  command        = parent.eval(commandOpt, "g++");
@@ -8174,6 +8206,8 @@ public:
                 doit = true;
             }
         cmd.append(" ");
+        // trim it down to unique elements, reduce command line size
+        UniqueParams(libs);
         cmd.append(libs);
         if (!doit)
             {
@@ -8184,6 +8218,7 @@ public:
 
 
         String outbuf, errbuf;
+        std::cout << "DEBUG command = " << cmd << std::endl;
         if (!executeCommand(cmd.c_str(), "", outbuf, errbuf))
             {
             error("LINK problem: %s", errbuf.c_str());
@@ -8485,7 +8520,7 @@ public:
 
 
             String outString, errString;
-            if (!executeCommand(cmd.c_str(), "", outString, errString))
+           if (!executeCommand(cmd.c_str(), "", outString, errString))
                 {
                 error("<msgfmt> problem: %s", errString.c_str());
                 return false;
@@ -9055,7 +9090,7 @@ public:
             
         cmd = command;
         cmd.append(getNativePath(fullName));
-        if (!executeCommand(cmd, "", outbuf, errbuf))
+       if (!executeCommand(cmd, "", outbuf, errbuf))
             {
             error("<strip> failed : %s", errbuf.c_str());
             return false;

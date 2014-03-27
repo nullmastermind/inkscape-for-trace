@@ -567,7 +567,6 @@ override) the bindings in the main default.xml.
   <bind action="DialogMetadata" />
   <bind action="DialogClonetiler" />
   <bind action="DialogArrange" />
-  <bind action="DialogScript" />
   <bind action="DialogDebug" />
   <bind action="DialogInput" />
 

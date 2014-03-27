@@ -13,6 +13,8 @@
 
 #include "live_effects/lpe-extrude.h"
 
+#include <glibmm/i18n.h>
+
 #include <2geom/path.h>
 #include <2geom/piecewise.h>
 #include <2geom/transforms.h>
@@ -122,9 +124,9 @@ LPEExtrude::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2
         }
 
         std::vector<double> connector_pts;
-        if (rts.size() < 1) {
+        if (rts.empty()) {
             connector_pts = cusps;
-        } else if (cusps.size() < 1) {
+        } else if (cusps.empty()) {
             connector_pts = rts;
         } else {
             connector_pts = rts;
@@ -168,7 +170,7 @@ LPEExtrude::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2
 }
 
 void
-LPEExtrude::resetDefaults(SPItem * item)
+LPEExtrude::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 

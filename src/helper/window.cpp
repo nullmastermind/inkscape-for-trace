@@ -12,19 +12,24 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/window.h>
 
 #include "inkscape.h"
 #include "shortcuts.h"
 #include "desktop.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "window.h"
 #include <gtk/gtk.h>
 
 static bool on_window_key_press(GdkEventKey* event)
 {
 	unsigned int shortcut;
-	shortcut = get_group0_keyval (event) |
+	shortcut = Inkscape::UI::Tools::get_group0_keyval (event) |
 	           ( event->state & GDK_SHIFT_MASK ?
 	             SP_SHORTCUT_SHIFT_MASK : 0 ) |
 	           ( event->state & GDK_CONTROL_MASK ?

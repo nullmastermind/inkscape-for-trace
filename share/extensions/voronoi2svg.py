@@ -27,11 +27,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-import sys, os
-import inkex, simplestyle, simplepath, simpletransform
+# standard library
+import sys
+import os
+# local library
+import inkex
+import simplestyle
+import simplepath
+import simpletransform
 import voronoi
-import gettext
-_ = gettext.gettext
+
+inkex.localize()
 
 class Point:
   def __init__(self,x,y):
@@ -214,15 +220,15 @@ class Voronoi2svg(inkex.Effect):
     #{{{ Drawing styles
 
     linestyle = {
-        'stroke'    : '#000000',
-        'linewidth' : '1',
-        'fill'      : 'none'
+        'stroke'       : '#000000',
+        'stroke-width' : str(self.unittouu('1px')),
+        'fill'         : 'none'
         }
 
     facestyle = {
-        'stroke'    : '#ff0000',
-        'linewidth' : '1',
-        'fill'      : 'none'
+        'stroke'       : '#ff0000',
+        'stroke-width' : str(self.unittouu('1px')),
+        'fill'         : 'none'
         }
 
     #}}}
@@ -284,8 +290,8 @@ class Voronoi2svg(inkex.Effect):
       clipBox = ()
       if self.options.clipBox == 'Page':
         svg = self.document.getroot()
-        w = inkex.unittouu(svg.get('width'))
-        h = inkex.unittouu(svg.get('height'))
+        w = self.unittouu(svg.get('width'))
+        h = self.unittouu(svg.get('height'))
         clipBox = (0,w,0,h)
       else:
         clipBox = (2*gBbox[0]-gBbox[1],

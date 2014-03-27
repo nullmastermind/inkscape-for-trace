@@ -13,7 +13,7 @@
 #include "line-snapper.h"
 
 class  SPDesktop;
-struct SPNamedView;
+class SPNamedView;
 struct SPCanvasBuf;
 class  SPDocument;
 
@@ -26,6 +26,10 @@ class Snapper;
 
 namespace XML {
 class Node;
+}
+
+namespace Util {
+class Unit;
 }
 
 enum GridType {
@@ -61,9 +65,9 @@ public:
     virtual ~CanvasGrid();
 
     // TODO: see effect.h and effect.cpp from live_effects how to link enums to SVGname to typename properly. (johan)
-    const char * getName();
-    const char * getSVGName();
-    GridType     getGridType();
+    const char * getName() const;
+    const char * getSVGName() const;
+    GridType     getGridType() const;
     static const char * getName(GridType type);
     static const char * getSVGName(GridType type);
     static GridType     getGridTypeFromSVGName(const char * typestr);
@@ -88,7 +92,7 @@ public:
     guint32 empcolor;     /**< Color for emphasis lines */
     gint empspacing;      /**< Spacing between emphasis lines */
 
-    SPUnit const* gridunit;
+    Inkscape::Util::Unit const* gridunit;  /**< points to Unit object in UnitTable (so don't delete it) */
 
     Inkscape::XML::Node * repr;
     SPDocument *doc;
@@ -97,8 +101,8 @@ public:
 
     static void on_repr_attr_changed (Inkscape::XML::Node * repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);
 
-    bool isVisible() { return (isEnabled() &&visible); };
-    bool isEnabled();
+    bool isVisible() const { return (isEnabled() &&visible); };
+    bool isEnabled() const;
 
 protected:
     CanvasGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument *in_doc, GridType type);
@@ -163,9 +167,9 @@ public:
 
 private:
     LineList _getSnapLines(Geom::Point const &p) const;
-    void _addSnappedLine(IntermSnapResults &isr, Geom::Point const snapped_point, Geom::Coord const snapped_distance,  SnapSourceType const &source, long source_num, Geom::Point const normal_to_line, const Geom::Point point_on_line) const;
-    void _addSnappedPoint(IntermSnapResults &isr, Geom::Point const snapped_point, Geom::Coord const snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const;
-    void _addSnappedLinePerpendicularly(IntermSnapResults &isr, Geom::Point const snapped_point, Geom::Coord const snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const;
+    void _addSnappedLine(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance,  SnapSourceType const &source, long source_num, Geom::Point const &normal_to_line, const Geom::Point &point_on_line) const;
+    void _addSnappedPoint(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const;
+    void _addSnappedLinePerpendicularly(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const;
     CanvasXYGrid *grid;
 };
 

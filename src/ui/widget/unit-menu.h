@@ -10,6 +10,14 @@
 #ifndef INKSCAPE_UI_WIDGET_UNIT_H
 #define INKSCAPE_UI_WIDGET_UNIT_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/comboboxtext.h>
 #include "util/units.h"
 
@@ -66,7 +74,7 @@ public:
      * Returns the Unit object corresponding to the current selection
      * in the dropdown widget.
      */
-    Unit          getUnit() const;
+    Unit const *  getUnit() const;
 
     /**
      * Returns the abbreviated unit name of the selected unit.
@@ -119,10 +127,7 @@ public:
      */
     bool          isRadial() const;
 
-    UnitTable     &getUnitTable() {return _unit_table;}
-
 protected:
-    UnitTable     _unit_table;
     UnitType          _type;
 };
 

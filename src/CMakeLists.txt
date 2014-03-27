@@ -12,7 +12,6 @@ set(sp_SRC
 	attribute-rel-svg.cpp
 	attribute-rel-util.cpp
 	sp-anchor.cpp
-	# sp-animation.cpp
 	sp-clippath.cpp
 	sp-conn-end-pair.cpp
 	sp-conn-end.cpp
@@ -41,14 +40,17 @@ set(sp_SRC
 	sp-item-update-cns.cpp
 	sp-item.cpp
 	sp-line.cpp
+	sp-linear-gradient.cpp
 	sp-lpe-item.cpp
 	sp-mask.cpp
+	sp-mesh-array.cpp
+	sp-mesh-gradient.cpp
+	sp-mesh-patch.cpp
+	sp-mesh-row.cpp
 	sp-metadata.cpp
-	sp-metrics.cpp
 	sp-missing-glyph.cpp
 	sp-namedview.cpp
 	sp-object-group.cpp
-	sp-object-repr.cpp
 	sp-object.cpp
 	sp-offset.cpp
 	sp-paint-server.cpp
@@ -56,11 +58,11 @@ set(sp_SRC
 	sp-pattern.cpp
 	sp-polygon.cpp
 	sp-polyline.cpp
+	sp-radial-gradient.cpp
 	sp-rect.cpp
 	sp-root.cpp
 	sp-script.cpp
 	sp-shape.cpp
-	# sp-skeleton.cpp
 	sp-spiral.cpp
 	sp-star.cpp
 	sp-stop.cpp
@@ -75,9 +77,8 @@ set(sp_SRC
 	sp-tspan.cpp
 	sp-use-reference.cpp
 	sp-use.cpp
-	spiral-context.cpp
 	splivarot.cpp
-
+	viewbox.cpp
 
 	# -------
 	# Headers
@@ -85,7 +86,6 @@ set(sp_SRC
 	attribute-rel-svg.h
 	attribute-rel-util.h
 	sp-anchor.h
-	sp-animation.h
 	sp-clippath.h
 	sp-conn-end-pair.h
 	sp-conn-end.h
@@ -93,6 +93,7 @@ set(sp_SRC
 	sp-defs.h
 	sp-desc.h
 	sp-ellipse.h
+	sp-factory.h
 	sp-filter-primitive.h
 	sp-filter-reference.h
 	sp-filter-units.h
@@ -104,7 +105,6 @@ set(sp_SRC
 	sp-font.h
 	sp-glyph-kerning.h
 	sp-glyph.h
-	sp-gradient-fns.h
 	sp-gradient-reference.h
 	sp-gradient-spread.h
 	sp-gradient-test.h
@@ -122,18 +122,18 @@ set(sp_SRC
 	sp-item-update-cns.h
 	sp-item.h
 	sp-line.h
-	sp-linear-gradient-fns.h
 	sp-linear-gradient.h
 	sp-lpe-item.h
 	sp-marker-loc.h
 	sp-mask.h
+	sp-mesh-array.h
+	sp-mesh-gradient.h
+	sp-mesh-patch.h
+	sp-mesh-row.h
 	sp-metadata.h
-	sp-metric.h
-	sp-metrics.h
 	sp-missing-glyph.h
 	sp-namedview.h
 	sp-object-group.h
-	sp-object-repr.h
 	sp-object.h
 	sp-offset.h
 	sp-paint-server-reference.h
@@ -142,13 +142,11 @@ set(sp_SRC
 	sp-pattern.h
 	sp-polygon.h
 	sp-polyline.h
-	sp-radial-gradient-fns.h
 	sp-radial-gradient.h
 	sp-rect.h
 	sp-root.h
 	sp-script.h
 	sp-shape.h
-	# sp-skeleton.h
 	sp-spiral.h
 	sp-star.h
 	sp-stop.h
@@ -165,23 +163,19 @@ set(sp_SRC
 	sp-tspan.h
 	sp-use-reference.h
 	sp-use.h
+	viewbox.h
 )
 
 set(inkscape_SRC
-	arc-context.cpp
 	attributes.cpp
 	axis-manip.cpp
-	box3d-context.cpp
 	box3d-side.cpp
 	box3d.cpp
 	color-profile.cpp
 	color.cpp
-	common-context.cpp
 	composite-undo-stack-observer.cpp
 	conditions.cpp
 	conn-avoid-ref.cpp
-	connection-points.cpp
-	connector-context.cpp
 	console-output-undo-observer.cpp
 	context-fns.cpp
 	desktop-events.cpp
@@ -195,27 +189,19 @@ set(inkscape_SRC
 	document.cpp
 	doxygen-main.cpp
 	draw-anchor.cpp
-	draw-context.cpp
-	dropper-context.cpp
-	dyna-draw-context.cpp
 	ege-adjustment-action.cpp
 	ege-color-prof-tracker.cpp
 	ege-output-action.cpp
 	ege-select-one-action.cpp
-	eraser-context.cpp
-	event-context.cpp
 	event-log.cpp
 	extract-uri.cpp
 	file.cpp
 	filter-chemistry.cpp
 	filter-enums.cpp
-	fixes.cpp
-	flood-context.cpp
 	gc-anchored.cpp
 	gc-finalized.cpp
 	gc.cpp
 	gradient-chemistry.cpp
-	gradient-context.cpp
 	gradient-drag.cpp
 	graphlayout.cpp
 	guide-snapper.cpp
@@ -232,12 +218,11 @@ set(inkscape_SRC
 	knotholder.cpp
 	layer-fns.cpp
 	layer-manager.cpp
+	layer-model.cpp
 	line-geometry.cpp
 	line-snapper.cpp
-	lpe-tool-context.cpp
 	main-cmdlineact.cpp
 	marker.cpp
-	measure-context.cpp
 	media.cpp
 	message-context.cpp
 	message-stack.cpp
@@ -246,8 +231,6 @@ set(inkscape_SRC
 	object-hierarchy.cpp
 	object-snapper.cpp
 	path-chemistry.cpp
-	pen-context.cpp
-	pencil-context.cpp
 	persp3d-reference.cpp
 	persp3d.cpp
 	perspective-line.cpp
@@ -257,13 +240,11 @@ set(inkscape_SRC
 	profile-manager.cpp
 	proj_pt.cpp
 	rdf.cpp
-	rect-context.cpp
 	removeoverlap.cpp
 	resource-manager.cpp
 	rubberband.cpp
 	satisfied-guide-cns.cpp
 	selcue.cpp
-	select-context.cpp
 	selection-chemistry.cpp
 	selection-describer.cpp
 	selection.cpp
@@ -277,17 +258,13 @@ set(inkscape_SRC
 	snapped-line.cpp
 	snapped-point.cpp
 	snapper.cpp
-	spray-context.cpp
-	star-context.cpp
 	style.cpp
 	svg-view-widget.cpp
 	svg-view.cpp
 	text-chemistry.cpp
-	text-context.cpp
 	text-editing.cpp
 	tools-switch.cpp
 	transf_mat_3x4.cpp
-	tweak-context.cpp
 	unclump.cpp
 	unicoderange.cpp
 	uri-references.cpp
@@ -295,21 +272,16 @@ set(inkscape_SRC
 	vanishing-point.cpp
 	verbs.cpp
 	version.cpp
-	zoom-context.cpp
-
 
 	# -------
 	# Headers
 	MultiPrinter.h
 	PylogFormatter.h
 	TRPIFormatter.h
-	approx-equal.h
-	arc-context.h
 	attributes-test.h
 	attributes.h
 	axis-manip.h
 	bad-uri-exception.h
-	box3d-context.h
 	box3d-side.h
 	box3d.h
 	cms-color-types.h
@@ -319,13 +291,11 @@ set(inkscape_SRC
 	color-profile.h
 	color-rgba.h
 	color.h
-	common-context.h
+	colorspace.h
 	composite-undo-stack-observer.h
 	conditions.h
 	conn-avoid-ref.h
-	connection-points.h
 	connection-pool.h
-	connector-context.h
 	console-output-undo-observer.h
 	context-fns.h
 	decimal-round.h
@@ -341,25 +311,20 @@ set(inkscape_SRC
 	document-undo.h
 	document.h
 	draw-anchor.h
-	draw-context.h
-	dropper-context.h
-	dyna-draw-context.h
 	ege-adjustment-action.h
 	ege-color-prof-tracker.h
 	ege-output-action.h
 	ege-select-one-action.h
 	enums.h
-	eraser-context.h
-	event-context.h
 	event-log.h
 	event.h
 	extract-uri-test.h
 	extract-uri.h
+	factory.h
 	file.h
 	fill-or-stroke.h
 	filter-chemistry.h
 	filter-enums.h
-	flood-context.h
 	gc-alloc.h
 	gc-allocator.h
 	gc-anchored.h
@@ -368,7 +333,6 @@ set(inkscape_SRC
 	gc-managed.h
 	gc-soft-ptr.h
 	gradient-chemistry.h
-	gradient-context.h
 	gradient-drag.h
 	graphlayout.h
 	guide-snapper.h
@@ -391,16 +355,14 @@ set(inkscape_SRC
 	knotholder.h
 	layer-fns.h
 	layer-manager.h
+	layer-model.h
 	line-geometry.h
 	line-snapper.h
-	lpe-tool-context.h
 	macros.h
 	main-cmdlineact.h
 	marker-test.h
 	marker.h
-	measure-context.h
 	media.h
-	memeq.h
 	menus-skeleton.h
 	message-context.h
 	message-stack.h
@@ -414,8 +376,6 @@ set(inkscape_SRC
 	object-snapper.h
 	path-chemistry.h
 	path-prefix.h
-	pen-context.h
-	pencil-context.h
 	persp3d-reference.h
 	persp3d.h
 	perspective-line.h
@@ -427,7 +387,6 @@ set(inkscape_SRC
 	profile-manager.h
 	proj_pt.h
 	rdf.h
-	rect-context.h
 	registrytool.h
 	remove-last.h
 	removeoverlap.h
@@ -438,7 +397,6 @@ set(inkscape_SRC
 	rubberband.h
 	satisfied-guide-cns.h
 	selcue.h
-	select-context.h
 	selection-chemistry.h
 	selection-describer.h
 	selection.h
@@ -454,41 +412,37 @@ set(inkscape_SRC
 	snapped-line.h
 	snapped-point.h
 	snapper.h
-	spiral-context.h
 	splivarot.h
-	spray-context.h
-	star-context.h
 	streq.h
 	strneq.h
 	style-test.h
 	style.h
+	style-enums.h
+	style-internal.h
 	svg-profile.h
 	svg-view-widget.h
 	svg-view.h
 	syseq.h
 	test-helpers.h
 	text-chemistry.h
-	text-context.h
 	text-editing.h
 	text-tag-attributes.h
+	tool-factory.h
 	tools-switch.h
 	transf_mat_3x4.h
-	tweak-context.h
 	unclump.h
 	undo-stack-observer.h
 	unicoderange.h
-	unit-constants.h
 	uri-references.h
 	uri.h
 	vanishing-point.h
 	verbs-test.h
 	verbs.h
 	version.h
-	zoom-context.h
 )
 
 if(WIN32)
-    list(APPEND inkscape_SRC
+	list(APPEND inkscape_SRC
 		registrytool.cpp
 		#deptool.cpp
 		winmain.cpp
@@ -529,7 +483,6 @@ list(APPEND inkscape_SRC
 
 # All folders for internal inkscape
 # these call add_inkscape_source
-add_subdirectory(bind)
 add_subdirectory(debug)
 add_subdirectory(dialogs)
 add_subdirectory(display)
@@ -553,9 +506,11 @@ add_subdirectory(libavoid)
 add_subdirectory(libcola)
 add_subdirectory(libcroco)
 add_subdirectory(libgdl)
+add_subdirectory(libuemf)
 add_subdirectory(libvpsc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
+add_subdirectory(libdepixelize)
 
 
 get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)
@@ -568,21 +523,21 @@ set(inkscape_SRC
 # -----------------------------------------------------------------------------
 # Setup the executable
 # -----------------------------------------------------------------------------
-add_inkscape_lib(sp_LIB "${sp_SRC}")
-add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
+#add_inkscape_lib(sp_LIB "${sp_SRC}")
+#add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
 
 # make executable for INKSCAPE
-add_executable(inkscape ${main_SRC})
+add_executable(inkscape ${main_SRC} ${inkscape_SRC} ${sp_SRC})
 
 add_dependencies(inkscape inkscape_version)
 
 target_link_libraries(inkscape
 	# order from automake 
-	sp_LIB
+	#sp_LIB
 	nrtype_LIB
 
-	inkscape_LIB
-	sp_LIB # annoying, we need both!
+	#inkscape_LIB
+	#sp_LIB # annoying, we need both!
 	nrtype_LIB # annoying, we need both!
 
 	dom_LIB
@@ -592,7 +547,9 @@ target_link_libraries(inkscape
 	cola_LIB
 	vpsc_LIB
 	livarot_LIB
+	uemf_LIB
 	2geom_LIB
+	depixelize_LIB
 
 	${INKSCAPE_LIBS}
 )

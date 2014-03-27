@@ -47,14 +47,10 @@
 
 #include "icon-size.h"
 #include "ege-adjustment-action.h"
-
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
+#include "ui/widget/gimpspinscale.h"
+#include "ui/icon-names.h"
 
 
-static void ege_adjustment_action_class_init( EgeAdjustmentActionClass* klass );
-static void ege_adjustment_action_init( EgeAdjustmentAction* action );
 static void ege_adjustment_action_finalize( GObject* object );
 static void ege_adjustment_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
 static void ege_adjustment_action_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec );
@@ -73,8 +69,6 @@ static void ege_adjustment_action_defocus( EgeAdjustmentAction* action );
 static void egeAct_free_description( gpointer data, gpointer user_data );
 static void egeAct_free_all_descriptions( EgeAdjustmentAction* action );
 
-
-static GtkActionClass* gParentClass = 0;
 static EgeCreateAdjWidgetCB gFactoryCb = 0;
 static GQuark gDataName = 0;
 
@@ -88,11 +82,11 @@ enum {
 
 /* TODO need to have appropriate icons setup for these: */
 static const gchar *floogles[] = {
-    GTK_STOCK_REMOVE,
-    GTK_STOCK_ADD,
-    GTK_STOCK_GO_DOWN,
-    GTK_STOCK_ABOUT,
-    GTK_STOCK_GO_UP,
+    INKSCAPE_ICON("list-remove"),
+    INKSCAPE_ICON("list-add"),
+    INKSCAPE_ICON("go-down"),
+    INKSCAPE_ICON("help-about"),
+    INKSCAPE_ICON("go-up"),
     0};
 
 typedef struct _EgeAdjustmentDescr EgeAdjustmentDescr;
@@ -122,6 +116,7 @@ struct _EgeAdjustmentActionPrivate
     gchar* appearance;
     gchar* iconId;
     Inkscape::IconSize iconSize;
+    Inkscape::UI::Widget::UnitTracker *unitTracker;
 };
 
 #define EGE_ADJUSTMENT_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentActionPrivate ) )
@@ -135,7 +130,8 @@ enum {
     PROP_TOOL_POST,
     PROP_APPEARANCE,
     PROP_ICON_ID,
-    PROP_ICON_SIZE
+    PROP_ICON_SIZE,
+    PROP_UNIT_TRACKER
 };
 
 enum {
@@ -149,34 +145,11 @@ enum {
     BUMP_CUSTOM = 100
 };
 
-GType ege_adjustment_action_get_type( void )
-{
-    static GType myType = 0;
-    if ( !myType ) {
-        static const GTypeInfo myInfo = {
-            sizeof( EgeAdjustmentActionClass ),
-            NULL, /* base_init */
-            NULL, /* base_finalize */
-            (GClassInitFunc)ege_adjustment_action_class_init,
-            NULL, /* class_finalize */
-            NULL, /* class_data */
-            sizeof( EgeAdjustmentAction ),
-            0, /* n_preallocs */
-            (GInstanceInitFunc)ege_adjustment_action_init,
-            NULL
-        };
-
-        myType = g_type_register_static( GTK_TYPE_ACTION, "EgeAdjustmentAction", &myInfo, (GTypeFlags)0 );
-    }
-
-    return myType;
-}
-
+G_DEFINE_TYPE(EgeAdjustmentAction, ege_adjustment_action, GTK_TYPE_ACTION);
 
 static void ege_adjustment_action_class_init( EgeAdjustmentActionClass* klass )
 {
     if ( klass ) {
-        gParentClass = GTK_ACTION_CLASS( g_type_class_peek_parent( klass ) );
         GObjectClass * objClass = G_OBJECT_CLASS( klass );
 
         gDataName = g_quark_from_string("ege-adj-action");
@@ -264,6 +237,13 @@ static void ege_adjustment_action_class_init( EgeAdjustmentActionClass* klass )
                                                            (int)Inkscape::ICON_SIZE_SMALL_TOOLBAR,
                                                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
 
+        g_object_class_install_property( objClass,
+                                         PROP_UNIT_TRACKER,
+                                         g_param_spec_pointer( "unit_tracker",
+                                                               "Unit Tracker",
+                                                               "The widget that keeps track of the unit",
+                                                               (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
+
         g_type_class_add_private( klass, sizeof(EgeAdjustmentActionClass) );
     }
 }
@@ -293,6 +273,7 @@ static void ege_adjustment_action_init( EgeAdjustmentAction* action )
     action->private_data->appearance = 0;
     action->private_data->iconId = 0;
     action->private_data->iconSize = Inkscape::ICON_SIZE_SMALL_TOOLBAR;
+    action->private_data->unitTracker = NULL;
 }
 
 static void ege_adjustment_action_finalize( GObject* object )
@@ -311,8 +292,8 @@ static void ege_adjustment_action_finalize( GObject* object )
 
     egeAct_free_all_descriptions( action );
 
-    if ( G_OBJECT_CLASS(gParentClass)->finalize ) {
-        (*G_OBJECT_CLASS(gParentClass)->finalize)(object);
+    if ( G_OBJECT_CLASS(ege_adjustment_action_parent_class)->finalize ) {
+        (*G_OBJECT_CLASS(ege_adjustment_action_parent_class)->finalize)(object);
     }
 }
 
@@ -322,7 +303,8 @@ EgeAdjustmentAction* ege_adjustment_action_new( GtkAdjustment* adjustment,
                                                 const gchar *tooltip,
                                                 const gchar *stock_id,
                                                 gdouble climb_rate,
-                                                guint digits )
+                                                guint digits,
+                                                Inkscape::UI::Widget::UnitTracker *unit_tracker )
 {
     GObject* obj = (GObject*)g_object_new( EGE_ADJUSTMENT_ACTION_TYPE,
                                            "name", name,
@@ -332,6 +314,7 @@ EgeAdjustmentAction* ege_adjustment_action_new( GtkAdjustment* adjustment,
                                            "adjustment", adjustment,
                                            "climb-rate", climb_rate,
                                            "digits", digits,
+                                           "unit_tracker", unit_tracker,
                                            NULL );
 
     EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION( obj );
@@ -377,6 +360,10 @@ static void ege_adjustment_action_get_property( GObject* obj, guint propId, GVal
 
         case PROP_ICON_SIZE:
             g_value_set_int( value, action->private_data->iconSize );
+            break;
+
+        case PROP_UNIT_TRACKER:
+            g_value_set_pointer( value, action->private_data->unitTracker );
             break;
 
         default:
@@ -477,6 +464,12 @@ void ege_adjustment_action_set_property( GObject* obj, guint propId, const GValu
         case PROP_ICON_SIZE:
         {
             action->private_data->iconSize = (Inkscape::IconSize)g_value_get_int( value );
+        }
+        break;
+
+        case PROP_UNIT_TRACKER:
+        {
+            action->private_data->unitTracker = (Inkscape::UI::Widget::UnitTracker*)g_value_get_pointer( value );
         }
         break;
 
@@ -775,15 +768,22 @@ static GtkWidget* create_menu_item( GtkAction* action )
         gtk_widget_show_all( subby );
         g_value_unset( &value );
     } else {
-        item = gParentClass->create_menu_item( action );
+        item = GTK_ACTION_CLASS(ege_adjustment_action_parent_class)->create_menu_item( action );
     }
 
     return item;
 }
 
-void value_changed_cb( GtkSpinButton* spin, EgeAdjustmentAction* act )
+static void value_changed_cb( GtkSpinButton* spin, EgeAdjustmentAction* act )
 {
     if ( gtk_widget_has_focus( GTK_WIDGET(spin) ) ) {
+        gint start = 0, end = 0;
+        if (GTK_IS_EDITABLE(spin) && gtk_editable_get_selection_bounds (GTK_EDITABLE(spin), &start, &end)
+                && start != end) {
+            // #167846, #363000 If the spin button has a selection, its probably
+            // because we got here from a Tab key from another spin, if so dont defocus
+            return;
+        }
         ege_adjustment_action_defocus( act );
     }
 }
@@ -806,12 +806,6 @@ static gboolean event_cb( EgeAdjustmentAction* act, GdkEvent* evt )
     return handled;
 }
 
-static gchar *slider_format_falue( GtkScale* scale, gdouble value, gchar *label )
-{
-    (void)scale;
-    return g_strdup_printf("%s %d", label, (int) round(value));
-}
-
 static GtkWidget* create_tool_item( GtkAction* action )
 {
     GtkWidget* item = 0;
@@ -832,15 +826,8 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
         if ( act->private_data->appearanceMode == APPEARANCE_FULL ) {
             /* Slider */
-            gchar *leakyForNow = g_value_dup_string( &value );
-#if GTK_CHECK_VERSION(3,0,0)
-            spinbutton = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, act->private_data->adj);
-#else
-            spinbutton = gtk_hscale_new( act->private_data->adj);
-#endif
+            spinbutton  = gimp_spin_scale_new (act->private_data->adj, g_value_get_string( &value ), 0);
             gtk_widget_set_size_request(spinbutton, 100, -1);
-            gtk_scale_set_digits( GTK_SCALE(spinbutton), 0 );
-            g_signal_connect( G_OBJECT(spinbutton), "format-value", G_CALLBACK(slider_format_falue), leakyForNow );
 
         } else if ( act->private_data->appearanceMode == APPEARANCE_MINIMAL ) {
             spinbutton = gtk_scale_button_new( GTK_ICON_SIZE_MENU, 0, 100, 2, 0 );
@@ -848,7 +835,7 @@ static GtkWidget* create_tool_item( GtkAction* action )
             gtk_scale_button_set_icons( GTK_SCALE_BUTTON(spinbutton), floogles );
         } else {
             if ( gFactoryCb ) {
-                spinbutton = gFactoryCb( act->private_data->adj, act->private_data->climbRate, act->private_data->digits );
+                spinbutton = gFactoryCb( act->private_data->adj, act->private_data->climbRate, act->private_data->digits, act->private_data->unitTracker );
             } else {
                 spinbutton = gtk_spin_button_new( act->private_data->adj, act->private_data->climbRate, act->private_data->digits );
             }
@@ -919,7 +906,7 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
         g_value_unset( &value );
     } else {
-        item = gParentClass->create_tool_item( action );
+        item = GTK_ACTION_CLASS(ege_adjustment_action_parent_class)->create_tool_item( action );
     }
 
     return item;
@@ -927,12 +914,12 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
 static void connect_proxy( GtkAction *action, GtkWidget *proxy )
 {
-    gParentClass->connect_proxy( action, proxy );
+    GTK_ACTION_CLASS(ege_adjustment_action_parent_class)->connect_proxy( action, proxy );
 }
 
 static void disconnect_proxy( GtkAction *action, GtkWidget *proxy )
 {
-    gParentClass->disconnect_proxy( action, proxy );
+    GTK_ACTION_CLASS(ege_adjustment_action_parent_class)->disconnect_proxy( action, proxy );
 }
 
 void ege_adjustment_action_defocus( EgeAdjustmentAction* action )
@@ -996,7 +983,7 @@ static gboolean process_tab( GtkWidget* widget, int direction )
                     if ( mid && GTK_IS_TOOL_ITEM(mid->data) ) {
                         /* potential target */
                         GtkWidget* child = gtk_bin_get_child( GTK_BIN(mid->data) );
-                        if ( child && GTK_IS_HBOX(child) ) { /* could be ours */
+                        if ( child && GTK_IS_BOX(child) ) { /* could be ours */
                             GList* subChildren = gtk_container_get_children( GTK_CONTAINER(child) );
                             if ( subChildren ) {
                                 GList* last = g_list_last(subChildren);
@@ -1114,3 +1101,13 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
 
     return wasConsumed;
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

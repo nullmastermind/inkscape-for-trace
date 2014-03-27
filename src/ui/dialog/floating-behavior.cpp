@@ -10,8 +10,17 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/dialog.h>
 #include <gtkmm/stock.h>
+#include <glibmm/main.h>
 #include <gtk/gtk.h>
 
 #include "floating-behavior.h"
@@ -134,7 +143,13 @@ FloatingBehavior::create(Dialog &dialog)
 
 inline FloatingBehavior::operator Gtk::Widget &()                          { return *_d; }
 inline GtkWidget *FloatingBehavior::gobj()                                { return GTK_WIDGET(_d->gobj()); }
-inline Gtk::Box* FloatingBehavior::get_vbox()                            { return _d->get_vbox(); }
+inline Gtk::Box* FloatingBehavior::get_vbox()                            { 
+#if WITH_GTKMM_3_0
+    return _d->get_content_area();
+#else
+    return _d->get_vbox();
+#endif
+}
 inline void FloatingBehavior::present()                                   { _d->present(); }
 inline void FloatingBehavior::hide()                                      { _d->hide(); }
 inline void FloatingBehavior::show()                                      { _d->show(); }

@@ -23,6 +23,9 @@ struct SPAction;
 class SPDocument;
 
 namespace Inkscape {
+
+class ActionContext;
+
 namespace UI {
 namespace View {
 class View;
@@ -56,6 +59,7 @@ enum {
     SP_VERB_FILE_PREV_DESKTOP,
     SP_VERB_FILE_CLOSE_VIEW,
     SP_VERB_FILE_QUIT,
+    SP_VERB_FILE_TEMPLATES,
     /* Edit */
     SP_VERB_EDIT_UNDO,
     SP_VERB_EDIT_REDO,
@@ -84,6 +88,8 @@ enum {
     SP_VERB_EDIT_SELECTION_2_GUIDES,
     SP_VERB_EDIT_TILE,
     SP_VERB_EDIT_UNTILE,
+    SP_VERB_EDIT_SYMBOL,
+    SP_VERB_EDIT_UNSYMBOL,
     SP_VERB_EDIT_CLEAR_ALL,
     SP_VERB_EDIT_SELECT_ALL,
     SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS,
@@ -91,6 +97,7 @@ enum {
     SP_VERB_EDIT_SELECT_SAME_FILL_COLOR,
     SP_VERB_EDIT_SELECT_SAME_STROKE_COLOR,
     SP_VERB_EDIT_SELECT_SAME_STROKE_STYLE,
+    SP_VERB_EDIT_SELECT_SAME_OBJECT_TYPE,
     SP_VERB_EDIT_INVERT,
     SP_VERB_EDIT_INVERT_IN_ALL_LAYERS,
     SP_VERB_EDIT_SELECT_NEXT,
@@ -127,6 +134,7 @@ enum {
     SP_VERB_SELECTION_SIMPLIFY,
     SP_VERB_SELECTION_REVERSE,
     SP_VERB_SELECTION_TRACE,
+    SP_VERB_SELECTION_PIXEL_ART,
     SP_VERB_SELECTION_CREATE_BITMAP,
     SP_VERB_SELECTION_COMBINE,
     SP_VERB_SELECTION_BREAK_APART,
@@ -138,6 +146,7 @@ enum {
     SP_VERB_LAYER_PREV,
     SP_VERB_LAYER_MOVE_TO_NEXT,
     SP_VERB_LAYER_MOVE_TO_PREV,
+    SP_VERB_LAYER_MOVE_TO,
     SP_VERB_LAYER_TO_TOP,
     SP_VERB_LAYER_TO_BOTTOM,
     SP_VERB_LAYER_RAISE,
@@ -145,6 +154,11 @@ enum {
     SP_VERB_LAYER_DUPLICATE,
     SP_VERB_LAYER_DELETE,
     SP_VERB_LAYER_SOLO,
+    SP_VERB_LAYER_SHOW_ALL,
+    SP_VERB_LAYER_HIDE_ALL,
+    SP_VERB_LAYER_LOCK_ALL,
+    SP_VERB_LAYER_LOCK_OTHERS,
+    SP_VERB_LAYER_UNLOCK_ALL,
     SP_VERB_LAYER_TOGGLE_LOCK,
     SP_VERB_LAYER_TOGGLE_HIDE,
     /* Object */
@@ -178,6 +192,7 @@ enum {
     SP_VERB_CONTEXT_CALLIGRAPHIC,
     SP_VERB_CONTEXT_TEXT,
     SP_VERB_CONTEXT_GRADIENT,
+    SP_VERB_CONTEXT_MESH,
     SP_VERB_CONTEXT_ZOOM,
     SP_VERB_CONTEXT_MEASURE,
     SP_VERB_CONTEXT_DROPPER,
@@ -201,6 +216,7 @@ enum {
     SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS,
     SP_VERB_CONTEXT_TEXT_PREFS,
     SP_VERB_CONTEXT_GRADIENT_PREFS,
+    SP_VERB_CONTEXT_MESH_PREFS,
     SP_VERB_CONTEXT_ZOOM_PREFS,
     SP_VERB_CONTEXT_MEASURE_PREFS,
     SP_VERB_CONTEXT_DROPPER_PREFS,
@@ -216,6 +232,12 @@ enum {
     SP_VERB_TOGGLE_GRID,
     SP_VERB_TOGGLE_GUIDES,
     SP_VERB_TOGGLE_SNAPPING,
+    SP_VERB_TOGGLE_COMMANDS_TOOLBAR,
+    SP_VERB_TOGGLE_SNAP_TOOLBAR,
+    SP_VERB_TOGGLE_TOOL_TOOLBAR,
+    SP_VERB_TOGGLE_TOOLBOX,
+    SP_VERB_TOGGLE_PALETTE,
+    SP_VERB_TOGGLE_STATUSBAR,
     SP_VERB_ZOOM_NEXT,
     SP_VERB_ZOOM_PREV,
     SP_VERB_ZOOM_1_1,
@@ -223,6 +245,7 @@ enum {
     SP_VERB_ZOOM_2_1,
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
     SP_VERB_FULLSCREEN,
+    SP_VERB_FULLSCREENFOCUS,
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
     SP_VERB_FOCUSTOGGLE,
     SP_VERB_VIEW_NEW,
@@ -248,6 +271,7 @@ enum {
     SP_VERB_DIALOG_FILL_STROKE,
     SP_VERB_DIALOG_GLYPHS,
     SP_VERB_DIALOG_SWATCHES,
+    SP_VERB_DIALOG_SYMBOLS,
     SP_VERB_DIALOG_TRANSFORM,
     SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
     SP_VERB_DIALOG_SPRAY_OPTION,
@@ -258,14 +282,10 @@ enum {
     SP_VERB_DIALOG_FINDREPLACE,
     SP_VERB_DIALOG_SPELLCHECK,
     SP_VERB_DIALOG_DEBUG,
-    SP_VERB_DIALOG_SCRIPT,
     SP_VERB_DIALOG_TOGGLE,
     SP_VERB_DIALOG_CLONETILER,
     SP_VERB_DIALOG_ATTR,
     SP_VERB_DIALOG_ITEM,
-/*#ifdef WITH_INKBOARD
-    SP_VERB_XMPP_CLIENT,
-#endif*/
     SP_VERB_DIALOG_INPUT,
     SP_VERB_DIALOG_EXTENSIONEDITOR,
     SP_VERB_DIALOG_LAYERS,
@@ -284,6 +304,7 @@ enum {
     SP_VERB_TUTORIAL_SHAPES,
     SP_VERB_TUTORIAL_ADVANCED,
     SP_VERB_TUTORIAL_TRACING,
+    SP_VERB_TUTORIAL_TRACING_PIXELART,
     SP_VERB_TUTORIAL_CALLIGRAPHY,
     SP_VERB_TUTORIAL_INTERPOLATE,
     SP_VERB_TUTORIAL_DESIGN,
@@ -309,6 +330,19 @@ enum {
     SP_VERB_EDIT_EMBEDDED_SCRIPT,
     SP_VERB_EDIT_REMOVE_EXTERNAL_SCRIPT,
     SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT,
+    /* Alignment */
+    SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR,
+    SP_VERB_ALIGN_HORIZONTAL_LEFT,
+    SP_VERB_ALIGN_HORIZONTAL_CENTER,
+    SP_VERB_ALIGN_HORIZONTAL_RIGHT,
+    SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR,
+    SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR,
+    SP_VERB_ALIGN_VERTICAL_TOP,
+    SP_VERB_ALIGN_VERTICAL_CENTER,
+    SP_VERB_ALIGN_VERTICAL_BOTTOM,
+    SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR,
+    SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER,
+
     /* Footer */
     SP_VERB_LAST
 };
@@ -316,6 +350,7 @@ enum {
 gchar *sp_action_get_title (const SPAction *action);
 
 #include <map>
+#include <vector>
 
 namespace Inkscape {
 
@@ -386,6 +421,9 @@ private:
      */
     unsigned int  _code;
 
+    /** Name of the group the verb belongs to. */
+    gchar const * _group;
+
     /**
      * Whether this verb is set to default to sensitive or
      * insensitive when new actions are created.
@@ -420,10 +458,16 @@ public:
     gchar const * get_name (void) { return _name; }
 
     /** Accessor to get the internal variable. */
+    gchar const * get_short_tip (void) { return _tip; };
+
+    /** Accessor to get the internal variable. */
     gchar const * get_tip (void) ;
 
     /** Accessor to get the internal variable. */
     gchar const * get_image (void) { return _image; }
+
+    /** Get the verbs group */
+    gchar const * get_group (void) { return _group; }
 
     /** Set the name after initialization. */
     gchar const * set_name (gchar const * name) { _name = name; return _name; }
@@ -431,9 +475,10 @@ public:
     /** Set the tooltip after initialization. */
     gchar const * set_tip (gchar const * tip) { _tip = tip; return _tip; }
 
+
 protected:
-    SPAction *make_action_helper (Inkscape::UI::View::View *view, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
-    virtual SPAction *make_action (Inkscape::UI::View::View *view);
+    SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
+    virtual SPAction *make_action (Inkscape::ActionContext const & context);
 
 public:
 
@@ -462,7 +507,8 @@ public:
          gchar const * id,
          gchar const * name,
          gchar const * tip,
-         gchar const * image) :
+         gchar const * image,
+         gchar const * group) :
         _actions(0),
         _id(id),
         _name(name),
@@ -471,15 +517,16 @@ public:
         _shortcut(0),
         _image(image),
         _code(code),
+        _group(group),
         _default_sensitive(true)
     {
         _verbs.insert(VerbTable::value_type(_code, this));
         _verb_ids.insert(VerbIDTable::value_type(_id, this));
     }
-    Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image);
+    Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image, gchar const * group);
     virtual ~Verb (void);
 
-    SPAction * get_action(Inkscape::UI::View::View * view);
+    SPAction * get_action(Inkscape::ActionContext const & context);
 
 private:
     static Verb * get_search (unsigned int code);
@@ -505,6 +552,11 @@ public:
         }
     }
     static Verb * getbyid (gchar const * id);
+    
+    /**
+     * Print a message to stderr indicating that this verb needs a GUI to run
+     */
+    static bool ensure_desktop_valid(SPAction *action);
 
     static void delete_all_view (Inkscape::UI::View::View * view);
     void delete_view (Inkscape::UI::View::View * view);
@@ -528,6 +580,8 @@ protected:
 
 public:
     static void list (void);
+    static std::vector<Inkscape::Verb *>getList (void);
+
 }; /* Verb class */
 
 

@@ -105,7 +105,7 @@ bool CmpNodePos::operator() (const Node* u, const Node* v) const {
 	 */
 }
 
-NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
+static NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
 	NodeSet *leftv = new NodeSet;
 	NodeSet::iterator i=scanline.find(v);
 	while(i--!=scanline.begin()) {
@@ -120,7 +120,7 @@ NodeSet* getLeftNeighbours(NodeSet &scanline,Node *v) {
 	}
 	return leftv;
 }
-NodeSet* getRightNeighbours(NodeSet &scanline,Node *v) {
+static NodeSet* getRightNeighbours(NodeSet &scanline,Node *v) {
 	NodeSet *rightv = new NodeSet;
 	NodeSet::iterator i=scanline.find(v);
 	for(++i;i!=scanline.end(); ++i) {
@@ -144,7 +144,7 @@ struct Event {
 	Event(EventType t, Node *v, double p) : type(t),v(v),pos(p) {};
 };
 Event **events;
-int compare_events(const void *a, const void *b) {
+static int compare_events(const void *a, const void *b) {
 	Event *ea=*(Event**)a;
 	Event *eb=*(Event**)b;
 	if(ea->v->r==eb->v->r) {
@@ -209,7 +209,6 @@ int generateXConstraints(const int n, Rectangle** rs, Variable** vars, Constrain
 			}
 		} else {
 			// Close event
-			int r;
 			if(useNeighbourLists) {
 				for(NodeSet::iterator i=v->leftNeighbours->begin();
 					i!=v->leftNeighbours->end();i++
@@ -217,7 +216,7 @@ int generateXConstraints(const int n, Rectangle** rs, Variable** vars, Constrain
 					Node *u=*i;
 					double sep = (v->r->width()+u->r->width())/2.0;
 					constraints.push_back(new Constraint(u->v,v->v,sep));
-					r=u->rightNeighbours->erase(v);
+					u->rightNeighbours->erase(v);
 				}
 				
 				for(NodeSet::iterator i=v->rightNeighbours->begin();
@@ -226,22 +225,22 @@ int generateXConstraints(const int n, Rectangle** rs, Variable** vars, Constrain
 					Node *u=*i;
 					double sep = (v->r->width()+u->r->width())/2.0;
 					constraints.push_back(new Constraint(v->v,u->v,sep));
-					r=u->leftNeighbours->erase(v);
+					u->leftNeighbours->erase(v);
 				}
 			} else {
 				Node *l=v->firstAbove, *r=v->firstBelow;
 				if(l!=NULL) {
 					double sep = (v->r->width()+l->r->width())/2.0;
 					constraints.push_back(new Constraint(l->v,v->v,sep));
-					l->firstBelow=v->firstBelow;
+					l->firstBelow = v->firstBelow;
 				}
 				if(r!=NULL) {
 					double sep = (v->r->width()+r->r->width())/2.0;
 					constraints.push_back(new Constraint(v->v,r->v,sep));
-					r->firstAbove=v->firstAbove;
+					r->firstAbove = v->firstAbove;
 				}
 			}
-			r=scanline.erase(v);
+			scanline.erase(v);
 			delete v;
 		}
 		delete e;

@@ -5,6 +5,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "ui/widget/point.h"
+#include <glibmm/i18n.h>
+
 #include "live_effects/parameter/path.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
@@ -13,7 +16,6 @@
 #include <2geom/pathvector.h>
 #include <2geom/d2.h>
 
-#include "ui/widget/point.h"
 #include "widgets/icon.h"
 #include <gtk/gtk.h>
 #include "selection-chemistry.h"
@@ -38,12 +40,13 @@
 #include "sp-text.h"
 #include "display/curve.h"
 
-#include "ui/tool/node-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/shape-record.h"
 
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
+#include "ui/icon-names.h"
 
 namespace Inkscape {
 
@@ -75,7 +78,7 @@ PathParam::~PathParam()
 }
 
 std::vector<Geom::Path> const &
-PathParam::get_pathvector()
+PathParam::get_pathvector() const
 {
     return _pathvector;
 }
@@ -151,7 +154,7 @@ PathParam::param_newWidget()
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pLabel, true, true);
     pLabel->set_tooltip_text(param_tooltip);
 
-    Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon( "tool-node-editor", Inkscape::ICON_SIZE_BUTTON) );
+    Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("tool-node-editor"), Inkscape::ICON_SIZE_BUTTON) );
     Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
     pButton->set_relief(Gtk::RELIEF_NONE);
     pIcon->show();
@@ -161,7 +164,7 @@ PathParam::param_newWidget()
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
     pButton->set_tooltip_text(_("Edit on-canvas"));
 
-    pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_COPY, Inkscape::ICON_SIZE_BUTTON) );
+    pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-copy"), Inkscape::ICON_SIZE_BUTTON) );
     pButton = Gtk::manage(new Gtk::Button());
     pButton->set_relief(Gtk::RELIEF_NONE);
     pIcon->show();
@@ -171,7 +174,7 @@ PathParam::param_newWidget()
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
     pButton->set_tooltip_text(_("Copy path"));
 
-    pIcon = Gtk::manage( sp_icon_get_icon( GTK_STOCK_PASTE, Inkscape::ICON_SIZE_BUTTON) );
+    pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-paste"), Inkscape::ICON_SIZE_BUTTON) );
     pButton = Gtk::manage(new Gtk::Button());
     pButton->set_relief(Gtk::RELIEF_NONE);
     pIcon->show();
@@ -181,7 +184,7 @@ PathParam::param_newWidget()
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
     pButton->set_tooltip_text(_("Paste path"));
 
-    pIcon = Gtk::manage( sp_icon_get_icon( "edit-clone", Inkscape::ICON_SIZE_BUTTON) );
+    pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-clone"), Inkscape::ICON_SIZE_BUTTON) );
     pButton = Gtk::manage(new Gtk::Button());
     pButton->set_relief(Gtk::RELIEF_NONE);
     pIcon->show();
@@ -206,7 +209,7 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
         tools_switch(dt, TOOLS_NODES);
     }
 
-    InkNodeTool *nt = static_cast<InkNodeTool*>(dt->event_context);
+    Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(dt->event_context);
     std::set<ShapeRecord> shapes;
     ShapeRecord r;
 
@@ -229,7 +232,7 @@ PathParam::param_setup_nodepath(Inkscape::NodePath::Path *)
 }
 
 void
-PathParam::addCanvasIndicators(SPLPEItem */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+PathParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     hp_vec.push_back(_pathvector);
 }

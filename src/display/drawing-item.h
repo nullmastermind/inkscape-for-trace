@@ -20,7 +20,7 @@
 #include <2geom/rect.h>
 #include <2geom/affine.h>
 
-class SPStyle;
+struct SPStyle;
 
 namespace Inkscape {
 
@@ -108,11 +108,15 @@ public:
     void setCached(bool c, bool persistent = false);
 
     void setOpacity(float opacity);
+    void setAntialiasing(bool a);
+    void setIsolation(unsigned isolation); // CSS Compositing and Blending
+    void setBlendMode(unsigned blend_mode);
     void setTransform(Geom::Affine const &trans);
     void setClip(DrawingItem *item);
     void setMask(DrawingItem *item);
     void setZOrder(unsigned z);
     void setItemBounds(Geom::OptRect const &bounds);
+    void setFilterBounds(Geom::OptRect const &bounds);
 
     void setKey(unsigned key) { _key = key; }
     unsigned key() const { return _key; }
@@ -120,8 +124,8 @@ public:
     void *data() const { return _user_data; }
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = STATE_ALL, unsigned reset = 0);
-    unsigned render(DrawingContext &ct, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = NULL);
-    void clip(DrawingContext &ct, Geom::IntRect const &area);
+    unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = NULL);
+    void clip(DrawingContext &dc, Geom::IntRect const &area);
     DrawingItem *pick(Geom::Point const &p, double delta, unsigned flags = 0);
 
 protected:
@@ -138,7 +142,7 @@ protected:
         RENDER_OK = 0,
         RENDER_STOP = 1
     };
-    void _renderOutline(DrawingContext &ct, Geom::IntRect const &area, unsigned flags);
+    void _renderOutline(DrawingContext &dc, Geom::IntRect const &area, unsigned flags);
     void _markForUpdate(unsigned state, bool propagate);
     void _markForRendering();
     void _invalidateFilterBackground(Geom::IntRect const &area);
@@ -147,9 +151,9 @@ protected:
     Geom::OptIntRect _cacheRect();
     virtual unsigned _updateItem(Geom::IntRect const &/*area*/, UpdateContext const &/*ctx*/,
                                  unsigned /*flags*/, unsigned /*reset*/) { return 0; }
-    virtual unsigned _renderItem(DrawingContext &/*ct*/, Geom::IntRect const &/*area*/, unsigned /*flags*/,
+    virtual unsigned _renderItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/, unsigned /*flags*/,
                                  DrawingItem * /*stop_at*/) { return RENDER_OK; }
-    virtual void _clipItem(DrawingContext &/*ct*/, Geom::IntRect const &/*area*/) {}
+    virtual void _clipItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/) {}
     virtual DrawingItem *_pickItem(Geom::Point const &/*p*/, double /*delta*/, unsigned /*flags*/) { return NULL; }
     virtual bool _canClip() { return false; }
 
@@ -175,7 +179,9 @@ protected:
     Geom::Affine _ctm; ///< Total transform from item coords to display coords
     Geom::OptIntRect _bbox; ///< Bounding box in display (pixel) coords including stroke
     Geom::OptIntRect _drawbox; ///< Full visual bounding box - enlarged by filters, shrunk by clips and masks
-    Geom::OptRect _item_bbox; ///< Geometric bounding box in item coordinates
+    Geom::OptRect _item_bbox; ///< Geometric bounding box in item's user space.
+                              ///  This is used to compute the filter effect region and render in
+                              ///  objectBoundingBox units.
 
     DrawingItem *_clip;
     DrawingItem *_mask;
@@ -200,6 +206,10 @@ protected:
     //unsigned _renders_opacity : 1; ///< Whether object needs temporary surface for opacity
     unsigned _pick_children : 1; ///< For groups: if true, children are returned from pick(),
                                  ///  otherwise the group is returned
+    unsigned _antialias : 1; ///< Whether to use antialiasing
+
+    unsigned _isolation : 1;
+    unsigned _blend_mode : 4;
 
     friend class Drawing;
 };

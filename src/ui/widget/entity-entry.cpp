@@ -17,6 +17,10 @@
 # include <config.h>
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/entry.h>
 
@@ -26,6 +30,8 @@
 #include "ui/widget/registry.h"
 #include "sp-root.h"
 #include "document-undo.h"
+#include "document-private.h"
+#include "preferences.h"
 #include "verbs.h"
 
 #include "entity-entry.h"
@@ -71,6 +77,13 @@ EntityEntry::~EntityEntry()
     _changed_connection.disconnect();
 }
 
+void EntityEntry::save_to_preferences(SPDocument *doc)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    const gchar *text = rdf_get_work_entity (doc, _entity);
+    prefs->setString(PREFS_METADATA + Glib::ustring(_entity->name), Glib::ustring(text ? text : ""));
+}
+
 EntityLineEntry::EntityLineEntry (rdf_work_entity_t* ent, Registry& wr)
 : EntityEntry (ent, wr)
 {
@@ -96,6 +109,16 @@ void EntityLineEntry::update(SPDocument *doc)
     static_cast<Gtk::Entry*>(_packable)->set_text (text ? text : "");
 }
 
+
+void EntityLineEntry::load_from_preferences()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring text = prefs->getString(PREFS_METADATA + Glib::ustring(_entity->name));
+    if (text.length() > 0) {
+        static_cast<Gtk::Entry*>(_packable)->set_text (text.c_str());
+    }
+}
+
 void
 EntityLineEntry::on_changed()
 {
@@ -105,8 +128,9 @@ EntityLineEntry::on_changed()
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     Glib::ustring text = static_cast<Gtk::Entry*>(_packable)->get_text();
     if (rdf_set_work_entity (doc, _entity, text.c_str())) {
-        DocumentUndo::done(doc, SP_VERB_NONE, 
-                           /* TODO: annotate */ "entity-entry.cpp:101");
+        if (doc->priv->sensitive) {
+            DocumentUndo::done(doc, SP_VERB_NONE, "Document metadata updated");
+        }
     }
     _wr->setUpdating (false);
 }
@@ -144,6 +168,19 @@ void EntityMultiLineEntry::update(SPDocument *doc)
     tv->get_buffer()->set_text (text ? text : "");
 }
 
+
+void EntityMultiLineEntry::load_from_preferences()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring text = prefs->getString(PREFS_METADATA + Glib::ustring(_entity->name));
+    if (text.length() > 0) {
+        Gtk::ScrolledWindow *s = static_cast<Gtk::ScrolledWindow*>(_packable);
+        Gtk::TextView *tv = static_cast<Gtk::TextView*>(s->get_child());
+        tv->get_buffer()->set_text (text.c_str());
+    }
+}
+
+
 void
 EntityMultiLineEntry::on_changed()
 {
@@ -155,7 +192,7 @@ EntityMultiLineEntry::on_changed()
     Gtk::TextView *tv = static_cast<Gtk::TextView*>(s->get_child());
     Glib::ustring text = tv->get_buffer()->get_text();
     if (rdf_set_work_entity (doc, _entity, text.c_str())) {
-        DocumentUndo::done(doc, SP_VERB_NONE, 
+        DocumentUndo::done(doc, SP_VERB_NONE,
                             /* TODO: annotate */ "entity-entry.cpp:146");
     }
     _wr->setUpdating (false);

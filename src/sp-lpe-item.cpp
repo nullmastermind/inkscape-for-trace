@@ -16,6 +16,8 @@
 # include "config.h"
 #endif
 
+#include <glibmm/i18n.h>
+
 #include "live_effects/effect.h"
 #include "live_effects/lpe-path_length.h"
 #include "live_effects/lpeobject.h"
@@ -33,25 +35,11 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "shape-editor.h"
+#include "sp-ellipse.h"
 
 #include <algorithm>
 
 /* LPEItem base class */
-
-static void sp_lpe_item_class_init(SPLPEItemClass *klass);
-static void sp_lpe_item_init(SPLPEItem *lpe_item);
-static void sp_lpe_item_finalize(GObject *object);
-
-static void sp_lpe_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void sp_lpe_item_release(SPObject *object);
-static void sp_lpe_item_set(SPObject *object, unsigned int key, gchar const *value);
-static void sp_lpe_item_update(SPObject *object, SPCtx *ctx, guint flags);
-static void sp_lpe_item_modified (SPObject *object, unsigned int flags);
-static Inkscape::XML::Node *sp_lpe_item_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
-
-static void sp_lpe_item_child_added (SPObject * object, Inkscape::XML::Node * child, Inkscape::XML::Node * ref);
-static void sp_lpe_item_remove_child (SPObject * object, Inkscape::XML::Node * child);
-
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 
 static void lpeobject_ref_modified(SPObject *href, guint flags, SPLPEItem *lpeitem);
@@ -62,173 +50,103 @@ typedef std::list<std::string> HRefList;
 static std::string patheffectlist_write_svg(PathEffectList const & list);
 static std::string hreflist_write_svg(HRefList const & list);
 
-static SPItemClass *parent_class;
+SPLPEItem::SPLPEItem() : SPItem() {
+    this->path_effects_enabled = 1;
 
-GType
-sp_lpe_item_get_type()
-{
-    static GType lpe_item_type = 0;
+    this->path_effect_list = new PathEffectList();
+    this->current_path_effect = NULL;
 
-    if (!lpe_item_type) {
-        GTypeInfo lpe_item_info = {
-            sizeof(SPLPEItemClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_lpe_item_class_init,
-            NULL, NULL,
-            sizeof(SPLPEItem),
-            16,
-            (GInstanceInitFunc) sp_lpe_item_init,
-            NULL,    /* value_table */
-        };
-        lpe_item_type = g_type_register_static(SP_TYPE_ITEM, "SPLPEItem", &lpe_item_info, (GTypeFlags)0);
-    }
-    return lpe_item_type;
+    this->lpe_modified_connection_list = new std::list<sigc::connection>();
 }
 
-static void
-sp_lpe_item_class_init(SPLPEItemClass *klass)
-{
-    GObjectClass *gobject_class;
-    SPObjectClass *sp_object_class;
-
-    gobject_class = (GObjectClass *) klass;
-    sp_object_class = (SPObjectClass *) klass;
-    parent_class = (SPItemClass *)g_type_class_peek_parent (klass);
-
-    gobject_class->finalize = sp_lpe_item_finalize;
-
-    sp_object_class->build = sp_lpe_item_build;
-    sp_object_class->release = sp_lpe_item_release;
-    sp_object_class->set = sp_lpe_item_set;
-    sp_object_class->update = sp_lpe_item_update;
-    sp_object_class->modified = sp_lpe_item_modified;
-    sp_object_class->write = sp_lpe_item_write;
-    sp_object_class->child_added = sp_lpe_item_child_added;
-    sp_object_class->remove_child = sp_lpe_item_remove_child;
-
-    klass->update_patheffect = NULL;
+SPLPEItem::~SPLPEItem() {
 }
 
-static void
-sp_lpe_item_init(SPLPEItem *lpeitem)
-{
-    lpeitem->path_effects_enabled = 1;
+void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	this->readAttr( "inkscape:path-effect" );
 
-    lpeitem->path_effect_list = new PathEffectList();
-    lpeitem->current_path_effect = NULL;
-
-    lpeitem->lpe_modified_connection_list = new std::list<sigc::connection>();
+    SPItem::build(document, repr);
 }
 
-static void
-sp_lpe_item_finalize(GObject *object)
-{
-    if (((GObjectClass *) (parent_class))->finalize) {
-        (* ((GObjectClass *) (parent_class))->finalize)(object);
-    }
-}
-
-/**
- * Reads the Inkscape::XML::Node, and initializes SPLPEItem variables.  For this to get called,
- * our name must be associated with a repr via "sp_object_type_register".  Best done through
- * sp-object-repr.cpp's repr_name_entries array.
- */
-static void
-sp_lpe_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    object->readAttr( "inkscape:path-effect" );
-
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
-}
-
-/**
- * Drops any allocated memory.
- */
-static void
-sp_lpe_item_release(SPObject *object)
-{
-    SPLPEItem *lpeitem = (SPLPEItem *) object;
-
+void SPLPEItem::release() {
     // disconnect all modified listeners:
-    for (std::list<sigc::connection>::iterator mod_it = lpeitem->lpe_modified_connection_list->begin();
-         mod_it != lpeitem->lpe_modified_connection_list->end(); ++mod_it)
+    for (std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
+         mod_it != this->lpe_modified_connection_list->end(); ++mod_it)
     {
         mod_it->disconnect();
     }
-    delete lpeitem->lpe_modified_connection_list;
-    lpeitem->lpe_modified_connection_list = NULL;
 
-    PathEffectList::iterator it = lpeitem->path_effect_list->begin();
-    while ( it != lpeitem->path_effect_list->end() ) {
+    delete this->lpe_modified_connection_list;
+    this->lpe_modified_connection_list = NULL;
+
+    PathEffectList::iterator it = this->path_effect_list->begin();
+
+    while ( it != this->path_effect_list->end() ) {
         // unlink and delete all references in the list
         (*it)->unlink();
         delete *it;
-        it = lpeitem->path_effect_list->erase(it);
+        it = this->path_effect_list->erase(it);
     }
-    // delete the list itself
-    delete lpeitem->path_effect_list;
-    lpeitem->path_effect_list = NULL;
 
-    if (((SPObjectClass *) parent_class)->release)
-        ((SPObjectClass *) parent_class)->release(object);
+    // delete the list itself
+    delete this->path_effect_list;
+    this->path_effect_list = NULL;
+
+    SPItem::release();
 }
 
-/**
- * Sets a specific value in the SPLPEItem.
- */
-static void
-sp_lpe_item_set(SPObject *object, unsigned int key, gchar const *value)
-{
-    SPLPEItem *lpeitem = (SPLPEItem *) object;
-
+void SPLPEItem::set(unsigned int key, gchar const* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_PATH_EFFECT:
             {
-                lpeitem->current_path_effect = NULL;
+                this->current_path_effect = NULL;
 
                 // Disable the path effects while populating the LPE list
-                 sp_lpe_item_enable_path_effects(lpeitem, false);
+                 sp_lpe_item_enable_path_effects(this, false);
 
                 // disconnect all modified listeners:
-                for ( std::list<sigc::connection>::iterator mod_it = lpeitem->lpe_modified_connection_list->begin();
-                      mod_it != lpeitem->lpe_modified_connection_list->end();
+                for ( std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
+                      mod_it != this->lpe_modified_connection_list->end();
                       ++mod_it)
                 {
                     mod_it->disconnect();
                 }
-                lpeitem->lpe_modified_connection_list->clear();
+
+                this->lpe_modified_connection_list->clear();
                 // Clear the path effect list
-                PathEffectList::iterator it = lpeitem->path_effect_list->begin();
-                while ( it != lpeitem->path_effect_list->end() )
+                PathEffectList::iterator it = this->path_effect_list->begin();
+
+                while ( it != this->path_effect_list->end() )
                 {
                     (*it)->unlink();
                     delete *it;
-                    it = lpeitem->path_effect_list->erase(it);
+                    it = this->path_effect_list->erase(it);
                 }
 
                 // Parse the contents of "value" to rebuild the path effect reference list
                 if ( value ) {
                     std::istringstream iss(value);
                     std::string href;
+
                     while (std::getline(iss, href, ';'))
                     {
-                        Inkscape::LivePathEffect::LPEObjectReference *path_effect_ref = new Inkscape::LivePathEffect::LPEObjectReference(object);
+                        Inkscape::LivePathEffect::LPEObjectReference *path_effect_ref = new Inkscape::LivePathEffect::LPEObjectReference(this);
+
                         try {
                             path_effect_ref->link(href.c_str());
-                        } catch (Inkscape::BadURIException e) {
+                        } catch (Inkscape::BadURIException &e) {
                             g_warning("BadURIException when trying to find LPE: %s", e.what());
                             path_effect_ref->unlink();
                             delete path_effect_ref;
                             path_effect_ref = NULL;
                         }
 
-                        lpeitem->path_effect_list->push_back(path_effect_ref);
+                        this->path_effect_list->push_back(path_effect_ref);
+
                         if ( path_effect_ref->lpeobject && path_effect_ref->lpeobject->get_lpe() ) {
                             // connect modified-listener
-                            lpeitem->lpe_modified_connection_list->push_back(
-                                                path_effect_ref->lpeobject->connectModified(sigc::bind(sigc::ptr_fun(&lpeobject_ref_modified), lpeitem)) );
+                            this->lpe_modified_connection_list->push_back(
+                                                path_effect_ref->lpeobject->connectModified(sigc::bind(sigc::ptr_fun(&lpeobject_ref_modified), this)) );
                         } else {
                             // something has gone wrong in finding the right patheffect.
                             g_warning("Unknown LPE type specified, LPE stack effectively disabled");
@@ -237,66 +155,42 @@ sp_lpe_item_set(SPObject *object, unsigned int key, gchar const *value)
                     }
                 }
 
-                sp_lpe_item_enable_path_effects(lpeitem, true);
+                sp_lpe_item_enable_path_effects(this, true);
             }
             break;
+
         default:
-            if (((SPObjectClass *) parent_class)->set) {
-                ((SPObjectClass *) parent_class)->set(object, key, value);
-            }
+            SPItem::set(key, value);
             break;
     }
 }
 
-/**
- * Receives update notifications.
- */
-static void
-sp_lpe_item_update(SPObject *object, SPCtx *ctx, guint flags)
-{
-    if (((SPObjectClass *) parent_class)->update) {
-        ((SPObjectClass *) parent_class)->update(object, ctx, flags);
-    }
+void SPLPEItem::update(SPCtx* ctx, unsigned int flags) {
+	SPItem::update(ctx, flags);
 
-    // update the helperpaths of all LPEs applied to the item
+	// update the helperpaths of all LPEs applied to the item
     // TODO: re-add for the new node tool
 }
 
-/**
- * Sets modified flag for all sub-item views.
- */
-static void
-sp_lpe_item_modified (SPObject *object, unsigned int flags)
-{
-    if (SP_IS_GROUP(object) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
-        sp_lpe_item_update_patheffect(SP_LPE_ITEM(object), true, true);
+void SPLPEItem::modified(unsigned int flags) {
+    if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
+        sp_lpe_item_update_patheffect(this, true, true);
     }
 
-    if (((SPObjectClass *) (parent_class))->modified) {
-        (* ((SPObjectClass *) (parent_class))->modified) (object, flags);
-    }
+//    SPItem::onModified(flags);
 }
 
-/**
- * Writes its settings to an incoming repr object, if any.
- */
-static Inkscape::XML::Node *
-sp_lpe_item_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    SPLPEItem *lpeitem = (SPLPEItem *) object;
-
+Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_EXT) {
-        if ( sp_lpe_item_has_path_effect(lpeitem) ) {
-            std::string href = patheffectlist_write_svg(*lpeitem->path_effect_list);
+        if ( hasPathEffect() ) {
+            std::string href = patheffectlist_write_svg(*this->path_effect_list);
             repr->setAttribute("inkscape:path-effect", href.c_str());
         } else {
             repr->setAttribute("inkscape:path-effect", NULL);
         }
     }
 
-    if (((SPObjectClass *)(parent_class))->write) {
-        ((SPObjectClass *)(parent_class))->write(object, xml_doc, repr, flags);
-    }
+    SPItem::write(xml_doc, repr, flags);
 
     return repr;
 }
@@ -304,19 +198,24 @@ sp_lpe_item_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::
 /**
  * returns true when LPE was successful.
  */
-bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve) {
-    if (!lpeitem) return false;
-    if (!curve) return false;
+bool SPLPEItem::performPathEffect(SPCurve *curve) {
+    if (!this) {
+    	return false;
+    }
 
-    if (sp_lpe_item_has_path_effect(lpeitem) && sp_lpe_item_path_effects_enabled(lpeitem)) {
-        for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
+    if (!curve) {
+    	return false;
+    }
+
+    if (this->hasPathEffect() && this->pathEffectsEnabled()) {
+        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
             if (!lpeobj) {
                 /** \todo Investigate the cause of this.
                  * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
                  */
-                g_warning("sp_lpe_item_perform_path_effect - NULL lpeobj in list!");
+                g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
                 return false;
             }
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
@@ -324,7 +223,7 @@ bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve) {
                 /** \todo Investigate the cause of this.
                  * Not sure, but I think this can happen when an unknown effect type is specified...
                  */
-                g_warning("sp_lpe_item_perform_path_effect - lpeobj with invalid lpe in the stack!");
+                g_warning("SPLPEItem::performPathEffect - lpeobj with invalid lpe in the stack!");
                 return false;
             }
 
@@ -336,8 +235,8 @@ bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve) {
                 }
 
                 // Groups have their doBeforeEffect called elsewhere
-                if (!SP_IS_GROUP(lpeitem)) {
-                    lpe->doBeforeEffect(lpeitem);
+                if (!SP_IS_GROUP(this)) {
+                    lpe->doBeforeEffect(this);
                 }
 
                 try {
@@ -358,6 +257,11 @@ bool sp_lpe_item_perform_path_effect(SPLPEItem *lpeitem, SPCurve *curve) {
     return true;
 }
 
+// CPPIFY: make pure virtual
+void SPLPEItem::update_patheffect(bool /*write*/) {
+	//throw;
+}
+
 /**
  * Calls any registered handlers for the update_patheffect action
  */
@@ -370,11 +274,11 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
     g_return_if_fail (lpeitem != NULL);
     g_return_if_fail (SP_IS_LPE_ITEM (lpeitem));
 
-    if (!sp_lpe_item_path_effects_enabled(lpeitem))
+    if (!lpeitem->pathEffectsEnabled())
         return;
 
     // TODO: hack! this will be removed when path length measuring is reimplemented in a better way
-    PathEffectList lpelist = sp_lpe_item_get_effect_list(lpeitem);
+    PathEffectList lpelist = lpeitem->getEffectList();
     std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
     for (i = lpelist.begin(); i != lpelist.end(); ++i) {
         if ((*i)->lpeobject) {
@@ -389,24 +293,22 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
         }
     }
 
-    SPLPEItem *top;
+    SPLPEItem *top = NULL;
 
     if (wholetree) {
-        SPObject *prev_parent = lpeitem;
-        SPObject *parent = prev_parent->parent;
-        while (parent && SP_IS_LPE_ITEM(parent) && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(parent))) {
+        SPLPEItem *prev_parent = lpeitem;
+        SPLPEItem *parent = dynamic_cast<SPLPEItem*>(prev_parent->parent);
+        while (parent && parent->hasPathEffectRecursive()) {
             prev_parent = parent;
-            parent = prev_parent->parent;
+            parent = dynamic_cast<SPLPEItem*>(prev_parent->parent);
         }
-        top = SP_LPE_ITEM(prev_parent);
+        top = prev_parent;
     }
     else {
         top = lpeitem;
     }
 
-    if (SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (top))->update_patheffect) {
-        SP_LPE_ITEM_CLASS (G_OBJECT_GET_CLASS (top))->update_patheffect (top, write);
-    }
+    top->update_patheffect(write);
 }
 
 /**
@@ -455,8 +357,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
     }
     else if (SP_IS_PATH(lpeitem)) {
         Inkscape::XML::Node *repr = lpeitem->getRepr();
-        if (!sp_lpe_item_has_path_effect_recursive(lpeitem)
-                && repr->attribute("inkscape:original-d")) {
+        if (!lpeitem->hasPathEffectRecursive() && repr->attribute("inkscape:original-d")) {
             repr->setAttribute("d", repr->attribute("inkscape:original-d"));
             repr->setAttribute("inkscape:original-d", NULL);
         }
@@ -466,99 +367,112 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
     }
 }
 
-void sp_lpe_item_add_path_effect(SPLPEItem *lpeitem, gchar *value, bool reset)
+void SPLPEItem::addPathEffect(gchar *value, bool reset)
 {
     if (value) {
         // Apply the path effects here because in the casse of a group, lpe->resetDefaults
         // needs that all the subitems have their effects applied
-        sp_lpe_item_update_patheffect(lpeitem, false, true);
+        sp_lpe_item_update_patheffect(this, false, true);
 
         // Disable the path effects while preparing the new lpe
-        sp_lpe_item_enable_path_effects(lpeitem, false);
+        sp_lpe_item_enable_path_effects(this, false);
 
         // Add the new reference to the list of LPE references
         HRefList hreflist;
-        for (PathEffectList::const_iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
+        for (PathEffectList::const_iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
             hreflist.push_back( std::string((*it)->lpeobject_href) );
         }
         hreflist.push_back( std::string(value) );
         std::string hrefs = hreflist_write_svg(hreflist);
 
-        lpeitem->getRepr()->setAttribute("inkscape:path-effect", hrefs.c_str());
+        this->getRepr()->setAttribute("inkscape:path-effect", hrefs.c_str());
 
+        // Make sure that ellipse is stored as <svg:path>
+        if( SP_IS_GENERICELLIPSE(this)) {
+            SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
+        }
         // make sure there is an original-d for paths!!!
-        sp_lpe_item_create_original_path_recursive(lpeitem);
+        sp_lpe_item_create_original_path_recursive(this);
 
-        LivePathEffectObject *lpeobj = lpeitem->path_effect_list->back()->lpeobject;
+        LivePathEffectObject *lpeobj = this->path_effect_list->back()->lpeobject;
         if (lpeobj && lpeobj->get_lpe()) {
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
             // Ask the path effect to reset itself if it doesn't have parameters yet
             if (reset) {
                 // has to be called when all the subitems have their lpes applied
-                lpe->resetDefaults(lpeitem);
+                lpe->resetDefaults(this);
             }
 
             // perform this once when the effect is applied
-            lpe->doOnApply(SP_LPE_ITEM(lpeitem));
+            lpe->doOnApply(this);
 
             // indicate that all necessary preparations are done and the effect can be performed
             lpe->setReady();
         }
 
         //Enable the path effects now that everything is ready to apply the new path effect
-        sp_lpe_item_enable_path_effects(lpeitem, true);
+        sp_lpe_item_enable_path_effects(this, true);
 
         // Apply the path effect
-        sp_lpe_item_update_patheffect(lpeitem, true, true);
+        sp_lpe_item_update_patheffect(this, true, true);
     }
 }
 
-void sp_lpe_item_add_path_effect(SPLPEItem *lpeitem, LivePathEffectObject * new_lpeobj)
+void SPLPEItem::addPathEffect(LivePathEffectObject * new_lpeobj)
 {
     const gchar * repr_id = new_lpeobj->getRepr()->attribute("id");
     gchar *hrefstr = g_strdup_printf("#%s", repr_id);
-    sp_lpe_item_add_path_effect(lpeitem, hrefstr, false);
+    this->addPathEffect(hrefstr, false);
     g_free(hrefstr);
 }
 
-void sp_lpe_item_remove_current_path_effect(SPLPEItem *lpeitem, bool keep_paths)
+void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
 {
-    Inkscape::LivePathEffect::LPEObjectReference* lperef = sp_lpe_item_get_current_lpereference(lpeitem);
+    Inkscape::LivePathEffect::LPEObjectReference* lperef = this->getCurrentLPEReference();
     if (!lperef)
         return;
 
-    PathEffectList new_list = *lpeitem->path_effect_list;
+    PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
     std::string r = patheffectlist_write_svg(new_list);
 
     if (!r.empty()) {
-        lpeitem->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
+        this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
     } else {
-        lpeitem->getRepr()->setAttribute("inkscape:path-effect", NULL);
+        this->getRepr()->setAttribute("inkscape:path-effect", NULL);
+        // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
+        if( SP_IS_GENERICELLIPSE(this)) {
+            SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
+        }
     }
 
     if (!keep_paths) {
-        sp_lpe_item_cleanup_original_path_recursive(lpeitem);
+        sp_lpe_item_cleanup_original_path_recursive(this);
     }
 }
 
-void sp_lpe_item_remove_all_path_effects(SPLPEItem *lpeitem, bool keep_paths)
+void SPLPEItem::removeAllPathEffects(bool keep_paths)
 {
-    lpeitem->getRepr()->setAttribute("inkscape:path-effect", NULL);
+    this->getRepr()->setAttribute("inkscape:path-effect", NULL);
+
+    // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
+    if( SP_IS_GENERICELLIPSE(this)) {
+        SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
+    }
 
     if (!keep_paths) {
-        sp_lpe_item_cleanup_original_path_recursive(lpeitem);
+        sp_lpe_item_cleanup_original_path_recursive(this);
     }
 }
 
-void sp_lpe_item_down_current_path_effect(SPLPEItem *lpeitem)
+void SPLPEItem::downCurrentPathEffect()
 {
-    Inkscape::LivePathEffect::LPEObjectReference* lperef = sp_lpe_item_get_current_lpereference(lpeitem);
+    Inkscape::LivePathEffect::LPEObjectReference* lperef = getCurrentLPEReference();
     if (!lperef)
         return;
 
-    PathEffectList new_list = *lpeitem->path_effect_list;
+    PathEffectList new_list = *this->path_effect_list;
     PathEffectList::iterator cur_it = find( new_list.begin(), new_list.end(), lperef );
     if (cur_it != new_list.end()) {
         PathEffectList::iterator down_it = cur_it;
@@ -568,18 +482,18 @@ void sp_lpe_item_down_current_path_effect(SPLPEItem *lpeitem)
         }
     }
     std::string r = patheffectlist_write_svg(new_list);
-    lpeitem->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
+    this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
 
-    sp_lpe_item_cleanup_original_path_recursive(lpeitem);
+    sp_lpe_item_cleanup_original_path_recursive(this);
 }
 
-void sp_lpe_item_up_current_path_effect(SPLPEItem *lpeitem)
+void SPLPEItem::upCurrentPathEffect()
 {
-    Inkscape::LivePathEffect::LPEObjectReference* lperef = sp_lpe_item_get_current_lpereference(lpeitem);
+    Inkscape::LivePathEffect::LPEObjectReference* lperef = getCurrentLPEReference();
     if (!lperef)
         return;
 
-    PathEffectList new_list = *lpeitem->path_effect_list;
+    PathEffectList new_list = *this->path_effect_list;
     PathEffectList::iterator cur_it = find( new_list.begin(), new_list.end(), lperef );
     if (cur_it != new_list.end() && cur_it != new_list.begin()) {
         PathEffectList::iterator up_it = cur_it;
@@ -588,126 +502,135 @@ void sp_lpe_item_up_current_path_effect(SPLPEItem *lpeitem)
     }
     std::string r = patheffectlist_write_svg(new_list);
 
-    lpeitem->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
+    this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
 
-    sp_lpe_item_cleanup_original_path_recursive(lpeitem);
+    sp_lpe_item_cleanup_original_path_recursive(this);
 }
 
 /** used for shapes so they can see if they should also disable shape calculation and read from d= */
-bool sp_lpe_item_has_broken_path_effect(SPLPEItem const *lpeitem)
+bool SPLPEItem::hasBrokenPathEffect() const
 {
-    if (lpeitem->path_effect_list->empty())
+    if (path_effect_list->empty()) {
         return false;
+    }
 
     // go through the list; if some are unknown or invalid, return true
-    PathEffectList const effect_list =  sp_lpe_item_get_effect_list(lpeitem);
-    for (PathEffectList::const_iterator it = effect_list.begin(); it != effect_list.end(); ++it)
+    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
     {
         LivePathEffectObject *lpeobj = (*it)->lpeobject;
-        if (!lpeobj || !lpeobj->get_lpe())
+        if (!lpeobj || !lpeobj->get_lpe()) {
             return true;
+        }
     }
 
     return false;
 }
 
 
-bool sp_lpe_item_has_path_effect(SPLPEItem const *lpeitem)
+bool SPLPEItem::hasPathEffect() const
 {
-    if (lpeitem->path_effect_list->empty())
+    if (path_effect_list->empty()) {
         return false;
+    }
 
     // go through the list; if some are unknown or invalid, we are not an LPE item!
-    PathEffectList const effect_list =  sp_lpe_item_get_effect_list(lpeitem);
-    for (PathEffectList::const_iterator it = effect_list.begin(); it != effect_list.end(); ++it)
+    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
     {
         LivePathEffectObject *lpeobj = (*it)->lpeobject;
-        if (!lpeobj || !lpeobj->get_lpe())
+        if (!lpeobj || !lpeobj->get_lpe()) {
             return false;
+        }
     }
 
     return true;
 }
 
-bool sp_lpe_item_has_path_effect_recursive(SPLPEItem const *lpeitem)
+bool SPLPEItem::hasPathEffectOfType(int const type) const
 {
-    SPObject const *parent = lpeitem->parent;
+    if (path_effect_list->empty()) {
+        return false;
+    }
+
+    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
+    {
+        LivePathEffectObject const *lpeobj = (*it)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
+            if (lpe && (lpe->effectType() == type)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool SPLPEItem::hasPathEffectRecursive() const
+{
     if (parent && SP_IS_LPE_ITEM(parent)) {
-        return sp_lpe_item_has_path_effect(lpeitem) || sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(parent));
+        return hasPathEffect() || SP_LPE_ITEM(parent)->hasPathEffectRecursive();
     }
     else {
-        return sp_lpe_item_has_path_effect(lpeitem);
+        return hasPathEffect();
     }
 }
 
 Inkscape::LivePathEffect::Effect*
-sp_lpe_item_has_path_effect_of_type(SPLPEItem *lpeitem, int type)
+SPLPEItem::getPathEffectOfType(int type)
 {
     std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = lpeitem->path_effect_list->begin(); i != lpeitem->path_effect_list->end(); ++i) {
-        Inkscape::LivePathEffect::Effect* lpe = (*i)->lpeobject->get_lpe();
-        if (lpe && (lpe->effectType() == type)) {
-            return lpe;
+    for (i = path_effect_list->begin(); i != path_effect_list->end(); ++i) {
+        LivePathEffectObject *lpeobj = (*i)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect* lpe = lpeobj->get_lpe();
+            if (lpe && (lpe->effectType() == type)) {
+                return lpe;
+            }
         }
     }
     return NULL;
 }
 
-/* Return false if the item is not a path or already has a shape applied */
-bool sp_lpe_item_can_accept_freehand_shape(SPLPEItem *lpeitem)
+void SPLPEItem::editNextParamOncanvas(SPDesktop *dt)
 {
-    if (!SP_IS_PATH(lpeitem))
-        return false;
-
-    if (sp_lpe_item_has_path_effect_of_type(lpeitem, Inkscape::LivePathEffect::FREEHAND_SHAPE))
-        return false;
-
-    return true;
-}
-
-void sp_lpe_item_edit_next_param_oncanvas(SPLPEItem *lpeitem, SPDesktop *dt)
-{
-    Inkscape::LivePathEffect::LPEObjectReference *lperef = sp_lpe_item_get_current_lpereference(lpeitem);
+    Inkscape::LivePathEffect::LPEObjectReference *lperef = this->getCurrentLPEReference();
     if (lperef && lperef->lpeobject && lperef->lpeobject->get_lpe()) {
-        lperef->lpeobject->get_lpe()->editNextParamOncanvas(lpeitem, dt);
+        lperef->lpeobject->get_lpe()->editNextParamOncanvas(this, dt);
     }
 }
 
-static void
-sp_lpe_item_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
-{
-    if (((SPObjectClass *) (parent_class))->child_added)
-        (* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
+void SPLPEItem::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
+    SPItem::child_added(child, ref);
 
-    if (SP_IS_LPE_ITEM(object) && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(object))) {
-        SPObject *ochild = object->get_child_by_repr(child);
+    if (this->hasPathEffectRecursive()) {
+        SPObject *ochild = this->get_child_by_repr(child);
+
         if ( ochild && SP_IS_LPE_ITEM(ochild) ) {
             sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(ochild));
         }
     }
 }
+void SPLPEItem::remove_child(Inkscape::XML::Node * child) {
+    if (this->hasPathEffectRecursive()) {
+        SPObject *ochild = this->get_child_by_repr(child);
 
-static void
-sp_lpe_item_remove_child (SPObject * object, Inkscape::XML::Node * child)
-{
-    if (SP_IS_LPE_ITEM(object) && sp_lpe_item_has_path_effect_recursive(SP_LPE_ITEM(object))) {
-        SPObject *ochild = object->get_child_by_repr(child);
         if ( ochild && SP_IS_LPE_ITEM(ochild) ) {
             sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(ochild));
         }
     }
 
-    if (((SPObjectClass *) (parent_class))->remove_child)
-        (* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
+    SPItem::remove_child(child);
 }
 
 static std::string patheffectlist_write_svg(PathEffectList const & list)
 {
     HRefList hreflist;
+
     for (PathEffectList::const_iterator it = list.begin(); it != list.end(); ++it)
     {
         hreflist.push_back( std::string((*it)->lpeobject_href) );
     }
+
     return hreflist_write_svg(hreflist);
 }
 
@@ -722,41 +645,45 @@ static std::string hreflist_write_svg(HRefList const & list)
 {
     std::string r;
     bool semicolon_first = false;
+
     for (HRefList::const_iterator it = list.begin(); it != list.end(); ++it)
     {
         if (semicolon_first) {
             r += ';';
         }
+
         semicolon_first = true;
 
         r += (*it);
     }
+
     return r;
 }
 
 // Return a copy of the effect list
-PathEffectList sp_lpe_item_get_effect_list(SPLPEItem *lpeitem)
+PathEffectList SPLPEItem::getEffectList()
 {
-    return *(lpeitem->path_effect_list);
-}
-// Return a copy of the effect list
-PathEffectList const sp_lpe_item_get_effect_list(SPLPEItem const *lpeitem)
-{
-    return *(lpeitem->path_effect_list);
+    return *path_effect_list;
 }
 
-Inkscape::LivePathEffect::LPEObjectReference* sp_lpe_item_get_current_lpereference(SPLPEItem *lpeitem)
+// Return a copy of the effect list
+PathEffectList const SPLPEItem::getEffectList() const
 {
-    if (!lpeitem->current_path_effect && !lpeitem->path_effect_list->empty()) {
-        sp_lpe_item_set_current_path_effect(lpeitem, lpeitem->path_effect_list->back());
+    return *path_effect_list;
+}
+
+Inkscape::LivePathEffect::LPEObjectReference* SPLPEItem::getCurrentLPEReference()
+{
+    if (!this->current_path_effect && !this->path_effect_list->empty()) {
+        setCurrentPathEffect(this->path_effect_list->back());
     }
 
-    return lpeitem->current_path_effect;
+    return this->current_path_effect;
 }
 
-Inkscape::LivePathEffect::Effect* sp_lpe_item_get_current_lpe(SPLPEItem *lpeitem)
+Inkscape::LivePathEffect::Effect* SPLPEItem::getCurrentLPE()
 {
-    Inkscape::LivePathEffect::LPEObjectReference* lperef = sp_lpe_item_get_current_lpereference(lpeitem);
+    Inkscape::LivePathEffect::LPEObjectReference* lperef = getCurrentLPEReference();
 
     if (lperef && lperef->lpeobject)
         return lperef->lpeobject->get_lpe();
@@ -764,11 +691,11 @@ Inkscape::LivePathEffect::Effect* sp_lpe_item_get_current_lpe(SPLPEItem *lpeitem
         return NULL;
 }
 
-bool sp_lpe_item_set_current_path_effect(SPLPEItem *lpeitem, Inkscape::LivePathEffect::LPEObjectReference* lperef)
+bool SPLPEItem::setCurrentPathEffect(Inkscape::LivePathEffect::LPEObjectReference* lperef)
 {
-    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it) {
+    for (PathEffectList::iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it) {
         if ((*it)->lpeobject_repr == lperef->lpeobject_repr) {
-            lpeitem->current_path_effect = (*it);  // current_path_effect should always be a pointer from the path_effect_list !
+            this->current_path_effect = (*it);  // current_path_effect should always be a pointer from the path_effect_list !
             return true;
         }
     }
@@ -780,14 +707,15 @@ bool sp_lpe_item_set_current_path_effect(SPLPEItem *lpeitem, Inkscape::LivePathE
  * Writes a new "inkscape:path-effect" string to xml, where the old_lpeobjects are substituted by the new ones.
  *  Note that this method messes up the item's \c PathEffectList.
  */
-void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> const old_lpeobjs,
-                                    std::vector<LivePathEffectObject const *> const new_lpeobjs )
+void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> const &old_lpeobjs,
+                                    std::vector<LivePathEffectObject const *> const &new_lpeobjs )
 {
     HRefList hreflist;
     for (PathEffectList::const_iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
     {
         LivePathEffectObject const * current_lpeobj = (*it)->lpeobject;
         std::vector<LivePathEffectObject const *>::const_iterator found_it(std::find(old_lpeobjs.begin(), old_lpeobjs.end(), current_lpeobj));
+
         if ( found_it != old_lpeobjs.end() ) {
             std::vector<LivePathEffectObject const *>::difference_type found_index = std::distance (old_lpeobjs.begin(), found_it);
             const gchar * repr_id = new_lpeobjs[found_index]->getRepr()->attribute("id");
@@ -799,6 +727,7 @@ void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> co
             hreflist.push_back( std::string((*it)->lpeobject_href) );
         }
     }
+
     std::string r = hreflist_write_svg(hreflist);
     this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
 }
@@ -809,21 +738,21 @@ void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> co
  *  use this method instead.
  *  Returns true if one or more effects were forked; returns false if nothing was done.
  */
-bool sp_lpe_item_fork_path_effects_if_necessary(SPLPEItem *lpeitem, unsigned int nr_of_allowed_users)
+bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users)
 {
     bool forked = false;
 
-    if ( sp_lpe_item_has_path_effect(lpeitem) ) {
+    if ( this->hasPathEffect() ) {
         // If one of the path effects is used by 2 or more items, fork it
         // so that each object has its own independent copy of the effect.
         // Note: replacing path effects messes up the path effect list
 
         // Clones of the LPEItem will increase the refcount of the lpeobjects.
         // Therefore, nr_of_allowed_users should be increased with the number of clones (i.e. refs to the lpeitem)
-        nr_of_allowed_users += lpeitem->hrefcount;
+        nr_of_allowed_users += this->hrefcount;
 
         std::vector<LivePathEffectObject const *> old_lpeobjs, new_lpeobjs;
-        PathEffectList effect_list =  sp_lpe_item_get_effect_list(lpeitem);
+        PathEffectList effect_list = this->getEffectList();
         for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
@@ -838,7 +767,7 @@ bool sp_lpe_item_fork_path_effects_if_necessary(SPLPEItem *lpeitem, unsigned int
         }
 
         if (forked) {
-            lpeitem->replacePathEffects(old_lpeobjs, new_lpeobjs);
+            this->replacePathEffects(old_lpeobjs, new_lpeobjs);
         }
     }
 
@@ -858,9 +787,9 @@ static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable)
 }
 
 // Are the path effects enabled on this item ?
-bool sp_lpe_item_path_effects_enabled(SPLPEItem *lpeitem)
+bool SPLPEItem::pathEffectsEnabled() const
 {
-    return lpeitem->path_effects_enabled > 0;
+    return path_effects_enabled > 0;
 }
 
 /*

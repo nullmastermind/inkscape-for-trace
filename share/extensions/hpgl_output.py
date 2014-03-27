@@ -1,6 +1,7 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
+# coding=utf-8
 '''
-Copyright (C) 2008 Aaron Spike, aaron@ekips.org
+Copyright (C) 2013 Sebastian Wüst, sebi@timewaster.de
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,98 +17,66 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
-import inkex, simpletransform, cubicsuperpath, simplestyle, cspsubdiv
 
-class MyEffect(inkex.Effect):
+# standard library
+import sys
+# local libraries
+import hpgl_encoder
+import inkex
+inkex.localize()
+
+
+class HpglOutput(inkex.Effect):
+
     def __init__(self):
         inkex.Effect.__init__(self)
-        self.OptionParser.add_option("-f", "--flatness",
-                        action="store", type="float", 
-                        dest="flat", default=0.2,
-                        help="Minimum flatness of the subdivided curves")
-        self.OptionParser.add_option("-m", "--mirror",
-                        action="store", type="inkbool", 
-                        dest="mirror", default="FALSE",
-                        help="Mirror Y-Axis")
-        self.OptionParser.add_option("-x", "--xOrigin",
-                        action="store", type="float", 
-                        dest="xOrigin", default=0.0,
-                        help="X Origin (pixels)")
-        self.OptionParser.add_option("-y", "--yOrigin",
-                        action="store", type="float", 
-                        dest="yOrigin", default=0.0,
-                        help="Y Origin (pixels)")
-        self.OptionParser.add_option("-r", "--resolution",
-                        action="store", type="int", 
-                        dest="resolution", default=1016,
-                        help="Resolution (dpi)")
-        self.OptionParser.add_option("-n", "--pen",
-                        action="store", type="int",
-                        dest="pen", default=1,
-                        help="Pen number")
-        self.OptionParser.add_option("-p", "--plotInvisibleLayers",
-                        action="store", type="inkbool", 
-                        dest="plotInvisibleLayers", default="FALSE",
-                        help="Plot invisible layers")
-
-    def output(self):
-        print ''.join(self.hpgl)
-
-    def process_path(self, node, mat):
-        d = node.get('d')
-        if d:
-            p = cubicsuperpath.parsePath(d)
-            trans = node.get('transform')
-            if trans:
-                mat = simpletransform.composeTransform(mat, simpletransform.parseTransform(trans))
-            simpletransform.applyTransformToPath(mat, p)
-            cspsubdiv.cspsubdiv(p, self.options.flat)
-            for sp in p:
-                first = True
-                for csp in sp:
-                    cmd = 'PD'
-                    if first:
-                        cmd = 'PU'
-                    first = False
-                    self.hpgl.append('%s%d,%d;' % (cmd,csp[1][0],csp[1][1]))
-
-    def process_group(self, group):
-        style = group.get('style')
-        if style:
-            style = simplestyle.parseStyle(style)
-            if style.has_key('display'):
-                if style['display']=='none':
-                    if not self.options.plotInvisibleLayers:
-                        return
-        trans = group.get('transform')
-        if trans:
-            self.groupmat.append(simpletransform.composeTransform(self.groupmat[-1], simpletransform.parseTransform(trans)))
-        for node in group:
-            if node.tag == inkex.addNS('path','svg'):
-                self.process_path(node, self.groupmat[-1])
-            if node.tag == inkex.addNS('g','svg'):
-                self.process_group(node)
-        if trans:
-            self.groupmat.pop()
+        self.OptionParser.add_option('--tab',           action='store', type='string',  dest='tab')
+        self.OptionParser.add_option('--resolutionX',   action='store', type='float',   dest='resolutionX',   default=1016.0,  help='Resolution X (dpi)')
+        self.OptionParser.add_option('--resolutionY',   action='store', type='float',   dest='resolutionY',   default=1016.0,  help='Resolution Y (dpi)')
+        self.OptionParser.add_option('--pen',           action='store', type='int',     dest='pen',           default=1,       help='Pen number')
+        self.OptionParser.add_option('--force',         action='store', type='int',     dest='force',         default=24,      help='Pen force (g)')
+        self.OptionParser.add_option('--speed',         action='store', type='int',     dest='speed',         default=20,      help='Pen speed (cm/s)')
+        self.OptionParser.add_option('--orientation',   action='store', type='string',  dest='orientation',   default='90',    help='Rotation (Clockwise)')
+        self.OptionParser.add_option('--mirrorX',       action='store', type='inkbool', dest='mirrorX',       default='FALSE', help='Mirror X axis')
+        self.OptionParser.add_option('--mirrorY',       action='store', type='inkbool', dest='mirrorY',       default='FALSE', help='Mirror Y axis')
+        self.OptionParser.add_option('--center',        action='store', type='inkbool', dest='center',        default='FALSE', help='Center zero point')
+        self.OptionParser.add_option('--overcut',       action='store', type='float',   dest='overcut',       default=1.0,     help='Overcut (mm)')
+        self.OptionParser.add_option('--toolOffset',    action='store', type='float',   dest='toolOffset',    default=0.25,    help='Tool offset (mm)')
+        self.OptionParser.add_option('--precut',        action='store', type='inkbool', dest='precut',        default='TRUE',  help='Use precut')
+        self.OptionParser.add_option('--flat',          action='store', type='float',   dest='flat',          default=1.2,     help='Curve flatness')
+        self.OptionParser.add_option('--autoAlign',     action='store', type='inkbool', dest='autoAlign',     default='TRUE',  help='Auto align')
 
     def effect(self):
-        self.hpgl = ['IN;SP%d;' % self.options.pen]
-        x0 = self.options.xOrigin
-        y0 = self.options.yOrigin
-        scale = float(self.options.resolution)/90
-        self.options.flat *= scale
-        mirror = 1.0
-        if self.options.mirror:
-            mirror = -1.0
-            if inkex.unittouu(self.document.getroot().xpath('@height', namespaces=inkex.NSS)[0]):
-                y0 -= float(inkex.unittouu(self.document.getroot().xpath('@height', namespaces=inkex.NSS)[0]))
-        self.groupmat = [[[scale, 0.0, -x0*scale], [0.0, mirror*scale, -y0*scale]]]
-        doc = self.document.getroot()
-        self.process_group(doc)
-        self.hpgl.append('PU;')
+        self.options.debug = False
+        # get hpgl data
+        myHpglEncoder = hpgl_encoder.hpglEncoder(self)
+        try:
+            self.hpgl, debugObject = myHpglEncoder.getHpgl()
+        except Exception as inst:
+            if inst.args[0] == 'NO_PATHS':
+                # issue error if no paths found
+                inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
+                self.hpgl = ''
+                return
+            else:
+                type, value, traceback = sys.exc_info()
+                raise ValueError, ("", type, value), traceback
+        # convert raw HPGL to HPGL
+        hpglInit = 'IN;SP%d' % self.options.pen
+        if self.options.force > 0:
+            hpglInit += ';FS%d' % self.options.force
+        if self.options.speed > 0:
+            hpglInit += ';VS%d' % self.options.speed
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;IN;'
 
-if __name__ == '__main__':   #pragma: no cover
-    e = MyEffect()
+    def output(self):
+        # print to file
+        if self.hpgl != '':
+            print self.hpgl
+
+if __name__ == '__main__':
+    # start extension
+    e = HpglOutput()
     e.affect()
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

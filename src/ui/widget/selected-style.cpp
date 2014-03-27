@@ -23,8 +23,9 @@
 #include "desktop-handles.h"
 #include "style.h"
 #include "desktop-style.h"
-#include "sp-linear-gradient-fns.h"
-#include "sp-radial-gradient-fns.h"
+#include "sp-namedview.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
 #include "sp-pattern.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/fill-and-stroke.h"
@@ -38,8 +39,7 @@
 #include "sp-gradient.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
-#include "helper/units.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "message-context.h"
 #include "verbs.h"
 #include "color.h"
@@ -47,7 +47,12 @@
 #include "pixmaps/cursor-adj-h.xpm"
 #include "pixmaps/cursor-adj-s.xpm"
 #include "pixmaps/cursor-adj-l.xpm"
+#include "pixmaps/cursor-adj-a.xpm"
 #include "sp-cursor.h"
+#include "gradient-chemistry.h"
+#include "util/units.h"
+
+using Inkscape::Util::unit_table;
 
 static gdouble const _sw_presets[]     = { 32 ,  16 ,  10 ,  8 ,  6 ,  4 ,  3 ,  2 ,  1.5 ,  1 ,  0.75 ,  0.5 ,  0.25 ,  0.1 };
 static gchar const *const _sw_presets_str[] = {"32", "16", "10", "8", "6", "4", "3", "2", "1.5", "1", "0.75", "0.5", "0.25", "0.1"};
@@ -102,7 +107,7 @@ typedef enum {
 // pointers/types used need to be read-only. So until we correct the using
 // code, those warnings are actually desired. They say "Hey! Fix this". We
 // definitely don't want to hide/ignore them. --JonCruz
-static GtkTargetEntry ui_drop_target_entries [] = {
+static const GtkTargetEntry ui_drop_target_entries [] = {
     {"application/x-color", 0, APP_X_COLOR}
 };
 
@@ -117,8 +122,11 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
       current_stroke_width(0),
 
       _desktop (NULL),
-
+#if WITH_GTKMM_3_0
+      _table(),
+#else
       _table(2, 6),
+#endif
       _fill_label (_("Fill:")),
       _stroke_label (_("Stroke:")),
       _opacity_label (_("O:")),
@@ -143,10 +151,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
       _opacity_blocked (false),
 
-      _popup_px(_sw_group),
-      _popup_pt(_sw_group),
-      _popup_mm(_sw_group),
-
+      _unit_mis(NULL),
       _sw_unit(NULL)
 {
     _drop[0] = _drop[1] = 0;
@@ -159,8 +164,13 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _opacity_label.set_alignment(0.0, 0.5);
     _opacity_label.set_padding(0, 0);
 
+#if WITH_GTKMM_3_0
+    _table.set_column_spacing(2);
+    _table.set_row_spacing(0);
+#else
     _table.set_col_spacings (2);
     _table.set_row_spacings (0);
+#endif
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
 
@@ -297,34 +307,41 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     }
 
     {
-        _popup_px.add(*(new Gtk::Label(_("px"), 0.0, 0.5)));
-        _popup_px.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_popup_px));
-        _popup_sw.attach(_popup_px, 0,1, 0,1);
+        int row = 0;
 
-        _popup_pt.add(*(new Gtk::Label(_("pt"), 0.0, 0.5)));
-        _popup_pt.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_popup_pt));
-        _popup_sw.attach(_popup_pt, 0,1, 1,2);
+        Inkscape::Util::UnitTable::UnitMap m = unit_table.units(Inkscape::Util::UNIT_TYPE_LINEAR);
+        Inkscape::Util::UnitTable::UnitMap::iterator iter = m.begin();
+        while(iter != m.end()) {
+            Gtk::RadioMenuItem *mi = Gtk::manage(new Gtk::RadioMenuItem(_sw_group));
+            mi->add(*(new Gtk::Label(iter->first, 0.0, 0.5)));
+            _unit_mis = g_slist_append(_unit_mis, mi);
+            Inkscape::Util::Unit const *u = unit_table.getUnit(iter->first);
+            mi->signal_activate().connect(sigc::bind<Inkscape::Util::Unit const *>(sigc::mem_fun(*this, &SelectedStyle::on_popup_units), u));
+            _popup_sw.attach(*mi, 0,1, row, row+1);
+            row++;
+            ++iter;
+        }
 
-        _popup_mm.add(*(new Gtk::Label(_("mm"), 0.0, 0.5)));
-        _popup_mm.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_popup_mm));
-        _popup_sw.attach(_popup_mm, 0,1, 2,3);
-
-        _popup_sw.attach(*(new Gtk::SeparatorMenuItem()), 0,1, 3,4);
+        _popup_sw.attach(*(new Gtk::SeparatorMenuItem()), 0,1, row, row+1);
+        row++;
 
         for (guint i = 0; i < G_N_ELEMENTS(_sw_presets_str); ++i) {
             Gtk::MenuItem *mi = Gtk::manage(new Gtk::MenuItem());
             mi->add(*(new Gtk::Label(_sw_presets_str[i], 0.0, 0.5)));
             mi->signal_activate().connect(sigc::bind<int>(sigc::mem_fun(*this, &SelectedStyle::on_popup_preset), i));
-            _popup_sw.attach(*mi, 0,1, 4+i, 5+i);
+            _popup_sw.attach(*mi, 0,1, row, row+1);
+            row++;
         }
 
-        guint i = G_N_ELEMENTS(_sw_presets_str) + 5;
-
-        _popup_sw.attach(*(new Gtk::SeparatorMenuItem()), 0,1, i,i+1);
+        _popup_sw.attach(*(new Gtk::SeparatorMenuItem()), 0,1, row, row+1);
+        row++;
 
         _popup_sw_remove.add(*(new Gtk::Label(_("Remove"), 0.0, 0.5)));
         _popup_sw_remove.signal_activate().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_remove));
-        _popup_sw.attach(_popup_sw_remove, 0,1, i+1,i+2);
+        _popup_sw.attach(_popup_sw_remove, 0,1, row, row+1);
+        row++;
+
+        sp_set_font_size_smaller (GTK_WIDGET(_popup_sw.gobj()));
 
         _popup_sw.show_all();
     }
@@ -333,9 +350,14 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _stroke_place.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_stroke_click));
     _opacity_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_click));
     _stroke_width_place.signal_button_press_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_sw_click));
+    _stroke_width_place.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectedStyle::on_sw_click));
+
 
     _opacity_sb.signal_populate_popup().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_menu));
     _opacity_sb.signal_value_changed().connect(sigc::mem_fun(*this, &SelectedStyle::on_opacity_changed));
+    // Connect to key-press to ensure focus is consistent with other spin buttons when using the keys vs mouse-click
+    g_signal_connect (G_OBJECT (_opacity_sb.gobj()), "key-press-event", G_CALLBACK (spinbutton_keypress), _opacity_sb.gobj());
+    g_signal_connect (G_OBJECT (_opacity_sb.gobj()), "focus-in-event", G_CALLBACK (spinbutton_focus_in), _opacity_sb.gobj());
 
     _fill_place.add(_na[SS_FILL]);
     _fill_place.set_tooltip_text(__na[SS_FILL]);
@@ -352,6 +374,16 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _opacity_sb.set_size_request (SELECTED_STYLE_SB_WIDTH, -1);
     _opacity_sb.set_sensitive (false);
 
+#if WITH_GTKMM_3_0
+    _table.attach(_fill_label, 0, 0, 1, 1);
+    _table.attach(_stroke_label, 0, 1, 1, 1);
+
+    _table.attach(_fill_flag_place, 1, 0, 1, 1);
+    _table.attach(_stroke_flag_place, 1, 1, 1, 1);
+
+    _table.attach(_fill_place, 2, 0, 1, 1);
+    _table.attach(_stroke, 2, 1, 1, 1);
+#else
     _table.attach(_fill_label, 0,1, 0,1, Gtk::FILL, Gtk::SHRINK);
     _table.attach(_stroke_label, 0,1, 1,2, Gtk::FILL, Gtk::SHRINK);
 
@@ -360,10 +392,17 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
     _table.attach(_fill_place, 2,3, 0,1);
     _table.attach(_stroke, 2,3, 1,2);
+#endif
 
     _opacity_place.add(_opacity_label);
+
+#if WITH_GTKMM_3_0
+    _table.attach(_opacity_place, 4, 0, 1, 2);
+    _table.attach(_opacity_sb, 5, 0, 1, 2);
+#else
     _table.attach(_opacity_place, 4,5, 0,2, Gtk::SHRINK, Gtk::SHRINK);
     _table.attach(_opacity_sb, 5,6, 0,2, Gtk::SHRINK, Gtk::SHRINK);
+#endif
 
     pack_start(_table, true, true, 2);
 
@@ -442,7 +481,17 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
             this )
     ));
 
-    //_sw_unit = (SPUnit *) sp_desktop_namedview(desktop)->doc_units;
+    _sw_unit = sp_desktop_namedview(desktop)->doc_units;
+
+    // Set the doc default unit active in the units list
+    gint length = g_slist_length(_unit_mis);
+    for (int i = 0; i < length; i++) {
+        Gtk::RadioMenuItem *mi = (Gtk::RadioMenuItem *) g_slist_nth_data(_unit_mis, i);
+        if (mi && mi->get_label() == _sw_unit->abbr) {
+            mi->set_active();
+            break;
+        }
+    }
 }
 
 void SelectedStyle::dragDataReceived( GtkWidget */*widget*/,
@@ -594,6 +643,12 @@ void SelectedStyle::on_fill_invert() {
     SPCSSAttr *css = sp_repr_css_attr_new ();
     guint32 color = _thisselected[SS_FILL];
     gchar c[64];
+    if (_mode[SS_FILL] == SS_LGRADIENT || _mode[SS_FILL] == SS_RGRADIENT) {
+        sp_gradient_invert_selected_gradients(_desktop, Inkscape::FOR_FILL);
+        return;
+
+    }
+
     if (_mode[SS_FILL] != SS_COLOR) return;
     sp_svg_write_color (c, sizeof(c),
         SP_RGBA32_U_COMPOSE(
@@ -614,6 +669,10 @@ void SelectedStyle::on_stroke_invert() {
     SPCSSAttr *css = sp_repr_css_attr_new ();
     guint32 color = _thisselected[SS_STROKE];
     gchar c[64];
+    if (_mode[SS_STROKE] == SS_LGRADIENT || _mode[SS_STROKE] == SS_RGRADIENT) {
+        sp_gradient_invert_selected_gradients(_desktop, Inkscape::FOR_STROKE);
+        return;
+    }
     if (_mode[SS_STROKE] != SS_COLOR) return;
     sp_svg_write_color (c, sizeof(c),
         SP_RGBA32_U_COMPOSE(
@@ -872,16 +931,8 @@ SelectedStyle::on_opacity_click(GdkEventButton *event)
     return false;
 }
 
-void SelectedStyle::on_popup_px() {
-    _sw_unit = (SPUnit *) &(sp_unit_get_by_id(SP_UNIT_PX));
-    update();
-}
-void SelectedStyle::on_popup_pt() {
-    _sw_unit = (SPUnit *) &(sp_unit_get_by_id(SP_UNIT_PT));
-    update();
-}
-void SelectedStyle::on_popup_mm() {
-    _sw_unit = (SPUnit *) &(sp_unit_get_by_id(SP_UNIT_MM));
+void SelectedStyle::on_popup_units(Inkscape::Util::Unit const *unit) {
+    _sw_unit = unit;
     update();
 }
 
@@ -889,7 +940,7 @@ void SelectedStyle::on_popup_preset(int i) {
     SPCSSAttr *css = sp_repr_css_attr_new ();
     gdouble w;
     if (_sw_unit) {
-        w = sp_units_get_pixels (_sw_presets[i], *_sw_unit);
+        w = Inkscape::Util::Quantity::convert(_sw_presets[i], _sw_unit, "px");
     } else {
         w = _sw_presets[i];
     }
@@ -967,13 +1018,13 @@ SelectedStyle::update()
 
                     if (SP_IS_LINEARGRADIENT (server)) {
                         SPGradient *vector = SP_GRADIENT(server)->getVector();
-                        sp_gradient_image_set_gradient ((SPGradientImage *) _gradient_preview_l[i], vector);
+                        sp_gradient_image_set_gradient(SP_GRADIENT_IMAGE(_gradient_preview_l[i]), vector);
                         place->add(_gradient_box_l[i]);
                         place->set_tooltip_text(__lgradient[i]);
                         _mode[i] = SS_LGRADIENT;
                     } else if (SP_IS_RADIALGRADIENT (server)) {
                         SPGradient *vector = SP_GRADIENT(server)->getVector();
-                        sp_gradient_image_set_gradient ((SPGradientImage *) _gradient_preview_r[i], vector);
+                        sp_gradient_image_set_gradient(SP_GRADIENT_IMAGE(_gradient_preview_r[i]), vector);
                         place->add(_gradient_box_r[i]);
                         place->set_tooltip_text(__rgradient[i]);
                         _mode[i] = SS_RGRADIENT;
@@ -989,7 +1040,7 @@ SelectedStyle::update()
                 guint32 color = paint->value.color.toRGBA32(
                                      SP_SCALE24_TO_FLOAT ((i == SS_FILL)? query->fill_opacity.value : query->stroke_opacity.value));
                 _lastselected[i] = _thisselected[i];
-                _thisselected[i] = color | 0xff; // only color, opacity === 1
+                _thisselected[i] = color; // include opacity
                 ((Inkscape::UI::Widget::ColorPreview*)_color_preview[i])->setRgba32 (color);
                 _color_preview[i]->show_all();
                 place->add(*_color_preview[i]);
@@ -1068,7 +1119,7 @@ SelectedStyle::update()
     {
         double w;
         if (_sw_unit) {
-            w = sp_pixels_get_units(query->stroke_width.computed, *_sw_unit);
+            w = Inkscape::Util::Quantity::convert(query->stroke_width.computed, "px", _sw_unit);
         } else {
             w = query->stroke_width.computed;
         }
@@ -1082,7 +1133,7 @@ SelectedStyle::update()
         {
             gchar *str = g_strdup_printf(_("Stroke width: %.5g%s%s"),
                                          w,
-                                         _sw_unit? sp_unit_get_abbreviation(_sw_unit) : "px",
+                                         _sw_unit? _sw_unit->abbr.c_str() : "px",
                                          (result_sw == QUERY_STYLE_MULTIPLE_AVERAGED)?
                                          _(" (averaged)") : "");
             _stroke_width_place.set_tooltip_text(str);
@@ -1192,39 +1243,48 @@ RotateableSwatch::~RotateableSwatch() {
 }
 
 double
-RotateableSwatch::color_adjust(float *hsl, double by, guint32 cc, guint modifier)
+RotateableSwatch::color_adjust(float *hsla, double by, guint32 cc, guint modifier)
 {
-    sp_color_rgb_to_hsl_floatv (hsl, SP_RGBA32_R_F(cc), SP_RGBA32_G_F(cc), SP_RGBA32_B_F(cc));
-
+    sp_color_rgb_to_hsl_floatv (hsla, SP_RGBA32_R_F(cc), SP_RGBA32_G_F(cc), SP_RGBA32_B_F(cc));
+    hsla[3] = SP_RGBA32_A_F(cc);
     double diff = 0;
     if (modifier == 2) { // saturation
-        double old = hsl[1];
+        double old = hsla[1];
         if (by > 0) {
-            hsl[1] += by * (1 - hsl[1]);
+            hsla[1] += by * (1 - hsla[1]);
         } else {
-            hsl[1] += by * (hsl[1]);
+            hsla[1] += by * (hsla[1]);
         }
-        diff = hsl[1] - old;
+        diff = hsla[1] - old;
     } else if (modifier == 1) { // lightness
-        double old = hsl[2];
+        double old = hsla[2];
         if (by > 0) {
-            hsl[2] += by * (1 - hsl[2]);
+            hsla[2] += by * (1 - hsla[2]);
         } else {
-            hsl[2] += by * (hsl[2]);
+            hsla[2] += by * (hsla[2]);
         }
-        diff = hsl[2] - old;
+        diff = hsla[2] - old;
+    } else if (modifier == 3) { // alpha
+        double old = hsla[3];
+        hsla[3] += by/2;
+        if (hsla[3] < 0) {
+            hsla[3] = 0;
+        } else if (hsla[3] > 1) {
+            hsla[3] = 1;
+        }
+        diff = hsla[3] - old;
     } else { // hue
-        double old = hsl[0];
-        hsl[0] += by/2;
-        while (hsl[0] < 0)
-            hsl[0] += 1;
-        while (hsl[0] > 1)
-            hsl[0] -= 1;
-        diff = hsl[0] - old;
+        double old = hsla[0];
+        hsla[0] += by/2;
+        while (hsla[0] < 0)
+            hsla[0] += 1;
+        while (hsla[0] > 1)
+            hsla[0] -= 1;
+        diff = hsla[0] - old;
     }
 
     float rgb[3];
-    sp_color_hsl_to_rgb_floatv (rgb, hsl[0], hsl[1], hsl[2]);
+    sp_color_hsl_to_rgb_floatv (rgb, hsla[0], hsla[1], hsla[2]);
 
     gchar c[64];
     sp_svg_write_color (c, sizeof(c),
@@ -1237,10 +1297,14 @@ RotateableSwatch::color_adjust(float *hsl, double by, guint32 cc, guint modifier
     );
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
-    if (fillstroke == SS_FILL)
-        sp_repr_css_set_property (css, "fill", c);
-    else
-        sp_repr_css_set_property (css, "stroke", c);
+
+    if (modifier == 3) { // alpha
+        Inkscape::CSSOStringStream osalpha;
+        osalpha << hsla[3];
+        sp_repr_css_set_property(css, (fillstroke == SS_FILL) ? "fill-opacity" : "stroke-opacity", osalpha.str().c_str());
+    } else {
+        sp_repr_css_set_property (css, (fillstroke == SS_FILL) ? "fill" : "stroke", c);
+    }
     sp_desktop_set_style (parent->getDesktop(), css);
     sp_repr_css_attr_unref (css);
     return diff;
@@ -1251,32 +1315,31 @@ RotateableSwatch::do_motion(double by, guint modifier) {
     if (parent->_mode[fillstroke] != SS_COLOR)
         return;
 
-    if (!cr_set && modifier != 3) {
+    if (!scrolling && !cr_set) {
         GtkWidget *w = GTK_WIDGET(gobj());
+        GdkPixbuf *pixbuf = NULL;
 
-        GdkBitmap *bitmap = NULL;
-        GdkBitmap *mask = NULL;
         if (modifier == 2) { // saturation
-            sp_cursor_bitmap_and_mask_from_xpm(&bitmap, &mask, cursor_adj_s_xpm);
+            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_s_xpm);
         } else if (modifier == 1) { // lightness
-            sp_cursor_bitmap_and_mask_from_xpm(&bitmap, &mask, cursor_adj_l_xpm);
+            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_l_xpm);
+        } else if (modifier == 3) { // alpha
+            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_a_xpm);
         } else { // hue
-            sp_cursor_bitmap_and_mask_from_xpm(&bitmap, &mask, cursor_adj_h_xpm);
+            pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_h_xpm);
         }
-        if ((bitmap != NULL) && (mask != NULL)) {
-            GtkStyle *style = gtk_widget_get_style(w);
-            cr = gdk_cursor_new_from_pixmap(bitmap, mask,
-                                            &style->black,
-                                            &style->white,
-                                            16, 16);
-            g_object_unref (bitmap);
-            g_object_unref (mask);
+
+	if (pixbuf != NULL) {
+	    cr = gdk_cursor_new_from_pixbuf(gdk_display_get_default(), pixbuf, 16, 16);
+
+            g_object_unref(pixbuf);	    
             gdk_window_set_cursor(gtk_widget_get_window(w), cr);
 #if GTK_CHECK_VERSION(3,0,0)
 	    g_object_unref(cr);
 #else
             gdk_cursor_unref(cr);
 #endif
+	    cr = NULL;
             cr_set = true;
         }
     }
@@ -1289,32 +1352,42 @@ RotateableSwatch::do_motion(double by, guint modifier) {
         cc = startcolor;
     }
 
-    float hsl[3];
+    float hsla[4];
     double diff = 0;
-    if (modifier != 3) {
-        diff = color_adjust(hsl, by, cc, modifier);
-    }
 
-    if (modifier == 3) { // Alt, do nothing
+    diff = color_adjust(hsla, by, cc, modifier);
+
+    if (modifier == 3) { // alpha
+        DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
+                                SP_VERB_DIALOG_FILL_STROKE, (_("Adjust alpha")));
+        double ch = hsla[3];
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, with <b>Shift</b> to adjust saturation, without modifiers to adjust hue"), ch - diff, ch, diff);
 
     } else if (modifier == 2) { // saturation
         DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust saturation")));
-        double ch = hsl[1];
-        parent->getDesktop()->event_context->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, without modifiers to adjust hue"), ch - diff, ch, diff);
+        double ch = hsla[1];
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"), ch - diff, ch, diff);
 
     } else if (modifier == 1) { // lightness
         DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust lightness")));
-        double ch = hsl[2];
-        parent->getDesktop()->event_context->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, without modifiers to adjust hue"), ch - diff, ch, diff);
+        double ch = hsla[2];
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without modifiers to adjust hue"), ch - diff, ch, diff);
 
     } else { // hue
         DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust hue")));
-        double ch = hsl[0];
-        parent->getDesktop()->event_context->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Ctrl</b> to adjust lightness"), ch - diff, ch, diff);
+        double ch = hsla[0];
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> to adjust lightness"), ch - diff, ch, diff);
     }
+}
+
+
+void
+RotateableSwatch::do_scroll(double by, guint modifier) {
+    do_motion(by/30.0, modifier);
+    do_release(by/30.0, modifier);
 }
 
 void
@@ -1322,10 +1395,8 @@ RotateableSwatch::do_release(double by, guint modifier) {
     if (parent->_mode[fillstroke] != SS_COLOR)
         return;
 
-    float hsl[3];
-    if (modifier != 3) {
-        color_adjust(hsl, by, startcolor, modifier);
-    }
+    float hsla[4];
+    color_adjust(hsla, by, startcolor, modifier);
 
     if (cr_set) {
         GtkWidget *w = GTK_WIDGET(gobj());
@@ -1341,7 +1412,9 @@ RotateableSwatch::do_release(double by, guint modifier) {
         cr_set = false;
     }
 
-    if (modifier == 3) { // Alt, do nothing
+    if (modifier == 3) { // alpha
+        DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
+                                SP_VERB_DIALOG_FILL_STROKE, ("Adjust alpha"));
     } else if (modifier == 2) { // saturation
         DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, ("Adjust saturation"));
@@ -1361,7 +1434,7 @@ RotateableSwatch::do_release(double by, guint modifier) {
         undokey = "ssrot1";
     }
 
-    parent->getDesktop()->event_context->_message_context->clear();
+    parent->getDesktop()->event_context->message_context->clear();
     startcolor_set = false;
 }
 
@@ -1371,9 +1444,7 @@ RotateableStrokeWidth::RotateableStrokeWidth(SelectedStyle *parent) :
     parent(parent),
     startvalue(0),
     startvalue_set(false),
-    undokey("swrot1"),
-    cr(0),
-    cr_set(false)
+    undokey("swrot1")
 {
 }
 
@@ -1427,7 +1498,7 @@ RotateableStrokeWidth::do_motion(double by, guint modifier) {
         double diff = value_adjust(startvalue, by, modifier, false);
         DocumentUndo::maybeDone(sp_desktop_document(parent->getDesktop()), undokey,
                                 SP_VERB_DIALOG_FILL_STROKE, (_("Adjust stroke width")));
-        parent->getDesktop()->event_context->_message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"), startvalue, startvalue + diff, diff);
+        parent->getDesktop()->event_context->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"), startvalue, startvalue + diff, diff);
     }
 }
 
@@ -1448,9 +1519,14 @@ RotateableStrokeWidth::do_release(double by, guint modifier) {
     } else {
         undokey = "swrot1";
     }
-    parent->getDesktop()->event_context->_message_context->clear();
+    parent->getDesktop()->event_context->message_context->clear();
 }
 
+void
+RotateableStrokeWidth::do_scroll(double by, guint modifier) {
+    do_motion(by/10.0, modifier);
+    startvalue_set = false;
+}
 
 Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop)
 {

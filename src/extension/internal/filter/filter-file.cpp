@@ -20,6 +20,7 @@
 
 /* System includes */
 #include <glibmm/i18n.h>
+#include <glibmm/fileutils.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -43,7 +44,7 @@ void
 Filter::filters_load_dir (gchar const * dirname, gchar * menuname)
 {
     if (!dirname) {
-        g_warning(_("Null external module directory name.  Filters will not be loaded."));
+        g_warning("%s", _("Null external module directory name.  Filters will not be loaded."));
         return;
     }
 

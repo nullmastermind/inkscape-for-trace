@@ -10,6 +10,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
@@ -44,6 +52,11 @@ private:
      * Fill a pixbuf with the dash pattern using standard cairo drawing
      */
     GdkPixbuf* sp_dash_to_pixbuf(double *pattern);
+
+    /**
+     * Fill a pixbuf with text standard cairo drawing
+     */
+    GdkPixbuf* sp_text_to_pixbuf(char *text);
 
     /**
      * Callback for combobox image renderer

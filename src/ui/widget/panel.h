@@ -13,6 +13,14 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_PANEL_H
 #define SEEN_INKSCAPE_UI_WIDGET_PANEL_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/arrow.h>
 #include <gtkmm/button.h>
@@ -27,7 +35,13 @@ class SPDocument;
 
 namespace Gtk {
 	class CheckMenuItem;
+
+#if WITH_GTKMM_3_0
+	class ButtonBox;
+#else
 	class HButtonBox;
+#endif
+
 	class MenuItem;
 }
 
@@ -96,8 +110,8 @@ public:
 
     /* Methods providing a Gtk::Dialog like interface for adding buttons that emit Gtk::RESPONSE
      * signals on click. */
-    Gtk::Button* addResponseButton (const Glib::ustring &button_text, int response_id);
-    Gtk::Button* addResponseButton (const Gtk::StockID &stock_id, int response_id);
+    Gtk::Button* addResponseButton (const Glib::ustring &button_text, int response_id, bool pack_start=false);
+    Gtk::Button* addResponseButton (const Gtk::StockID &stock_id, int response_id, bool pack_start=false);
     void setDefaultResponse(int response_id);
     void setResponseSensitive(int response_id, bool setting);
 
@@ -119,7 +133,7 @@ protected:
     virtual void _handleResponse(int response_id);
 
     /* Helper methods */
-    void _addResponseButton(Gtk::Button *button, int response_id);
+    void _addResponseButton(Gtk::Button *button, int response_id, bool pack_start=false);
     Inkscape::Selection *_getSelection();
 
     /**
@@ -157,7 +171,13 @@ private:
     Gtk::EventBox    _menu_popper;
     Gtk::Button      _close_button;
     Gtk::Menu       *_menu;
+
+#if WITH_GTKMM_3_0
+    Gtk::ButtonBox *_action_area;  //< stores response buttons
+#else
     Gtk::HButtonBox *_action_area;  //< stores response buttons
+#endif
+
     std::vector<Gtk::Widget *> _non_horizontal;
     std::vector<Gtk::Widget *> _non_vertical;
     PreviewFillable *_fillable;

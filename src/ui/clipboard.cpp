@@ -7,9 +7,11 @@
  *   Jon A. Cruz <jon@joncruz.org>
  *   Incorporates some code from selection-chemistry.cpp, see that file for more credits.
  *   Abhishek Sharma
+ *   Tavmjong Bah
  *
  * Copyright (C) 2008 authors
  * Copyright (C) 2010 Jon A. Cruz
+ * Copyright (C) 2012 Tavmjong Bah (Symbol additions)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +21,7 @@
  * See the file COPYING for details.
  */
 
+#include <gtkmm/clipboard.h>
 #include "ui/clipboard.h"
 
 // TODO: reduce header bloat if possible
@@ -26,7 +29,6 @@
 #include "file.h" // for file_import, used in _pasteImage
 #include <list>
 #include <algorithm>
-#include <gtkmm/clipboard.h>
 #include <glibmm/ustring.h>
 #include <glibmm/i18n.h>
 #include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
@@ -42,7 +44,7 @@
 #include "selection.h"
 #include "message-stack.h"
 #include "context-fns.h"
-#include "dropper-context.h" // used in copy()
+#include "ui/tools/dropper-tool.h" // used in copy()
 #include "style.h"
 #include "extension/db.h" // extension database
 #include "extension/input.h"
@@ -59,23 +61,24 @@
 #include "sp-shape.h"
 #include "sp-gradient.h"
 #include "sp-gradient-reference.h"
-#include "sp-gradient-fns.h"
-#include "sp-linear-gradient-fns.h"
-#include "sp-radial-gradient-fns.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-textpath.h"
 #include "sp-rect.h"
+#include "sp-use.h"
+#include "sp-symbol.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
 #include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
 #include "svg/css-ostringstream.h" // used in copy
-#include "text-context.h"
+#include "ui/tools/text-tool.h"
 #include "text-editing.h"
 #include "tools-switch.h"
 #include "path-chemistry.h"
-#include "unit-constants.h"
+#include "util/units.h"
 #include "helper/png-write.h"
 #include "svg/svg-color.h"
 #include "sp-namedview.h"
@@ -90,12 +93,6 @@
 
 #ifdef WIN32
 #include <windows.h>
-// Clipboard Formats: http://msdn.microsoft.com/en-us/library/ms649013(VS.85).aspx
-// On Windows, most graphical applications can handle CF_DIB/CF_BITMAP and/or CF_ENHMETAFILE
-// GTK automatically presents an "image/bmp" target as CF_DIB/CF_BITMAP
-// Presenting "image/x-emf" as CF_ENHMETAFILE must be done by Inkscape ?
-#define CLIPBOARD_WIN32_EMF_TARGET "CF_ENHMETAFILE"
-#define CLIPBOARD_WIN32_EMF_MIME   "image/x-emf"
 #endif
 
 namespace Inkscape {
@@ -109,6 +106,7 @@ class ClipboardManagerImpl : public ClipboardManager {
 public:
     virtual void copy(SPDesktop *desktop);
     virtual void copyPathParameter(Inkscape::LivePathEffect::PathParam *);
+    virtual void copySymbol(Inkscape::XML::Node* symbol, gchar const* style);
     virtual bool paste(SPDesktop *desktop, bool in_place);
     virtual bool pasteStyle(SPDesktop *desktop);
     virtual bool pasteSize(SPDesktop *desktop, bool separately, bool apply_x, bool apply_y);
@@ -174,13 +172,18 @@ ClipboardManagerImpl::ClipboardManagerImpl()
       _text_style(NULL),
       _clipboard( Gtk::Clipboard::get() )
 {
+    // Clipboard Formats: http://msdn.microsoft.com/en-us/library/ms649013(VS.85).aspx
+    // On Windows, most graphical applications can handle CF_DIB/CF_BITMAP and/or CF_ENHMETAFILE
+    // GTK automatically presents an "image/bmp" target as CF_DIB/CF_BITMAP
+    // Presenting "image/x-emf" as CF_ENHMETAFILE must be done by Inkscape ?
+
     // push supported clipboard targets, in order of preference
     _preferred_targets.push_back("image/x-inkscape-svg");
     _preferred_targets.push_back("image/svg+xml");
     _preferred_targets.push_back("image/svg+xml-compressed");
-#ifdef WIN32
-    _preferred_targets.push_back(CLIPBOARD_WIN32_EMF_MIME);
-#endif
+    _preferred_targets.push_back("image/x-emf");
+    _preferred_targets.push_back("CF_ENHMETAFILE");
+    _preferred_targets.push_back("WCF_ENHMETAFILE"); // seen on Wine
     _preferred_targets.push_back("application/pdf");
     _preferred_targets.push_back("image/x-adobe-illustrator");
 }
@@ -234,7 +237,8 @@ void ClipboardManagerImpl::copy(SPDesktop *desktop)
 
     // Special case for when the color picker ("dropper") is active - copies color under cursor
     if (tools_isactive(desktop, TOOLS_DROPPER)) {
-        _setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
+        //_setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
+    	_setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color());
         _discardInternalClipboard();
         return;
     }
@@ -243,13 +247,13 @@ void ClipboardManagerImpl::copy(SPDesktop *desktop)
     // not the object that holds it; also copy the style at cursor into
     if (tools_isactive(desktop, TOOLS_TEXT)) {
         _discardInternalClipboard();
-        Glib::ustring selected_text = sp_text_get_selected_text(desktop->event_context);
+        Glib::ustring selected_text = Inkscape::UI::Tools::sp_text_get_selected_text(desktop->event_context);
         _clipboard->set_text(selected_text);
         if (_text_style) {
             sp_repr_css_attr_unref(_text_style);
             _text_style = NULL;
         }
-        _text_style = sp_text_get_style_at_cursor(desktop->event_context);
+        _text_style = Inkscape::UI::Tools::sp_text_get_style_at_cursor(desktop->event_context);
         return;
     }
 
@@ -289,6 +293,47 @@ void ClipboardManagerImpl::copyPathParameter(Inkscape::LivePathEffect::PathParam
     g_free(svgd);
     _root->appendChild(pathnode);
     Inkscape::GC::release(pathnode);
+
+    fit_canvas_to_drawing(_clipboardSPDoc);
+    _setClipboardTargets();
+}
+
+/**
+ * Copy a symbol from the symbol dialog.
+ * @param symbol The Inkscape::XML::Node for the symbol.
+ */
+void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* style)
+{
+    //std::cout << "ClipboardManagerImpl::copySymbol" << std::endl;
+    if ( symbol == NULL ) {
+        return;
+    }
+
+    _discardInternalClipboard();
+    _createInternalClipboard();
+
+    // We add "_duplicate" to have a well defined symbol name that
+    // bypasses the "prevent_id_classes" routine. We'll get rid of it
+    // when we paste.
+    Inkscape::XML::Node *repr = symbol->duplicate(_doc);
+    Glib::ustring symbol_name = repr->attribute("id");
+
+    symbol_name += "_inkscape_duplicate";
+    repr->setAttribute("id",    symbol_name.c_str());
+    _defs->appendChild(repr);
+
+    Glib::ustring id("#");
+    id += symbol->attribute("id");
+
+    Inkscape::XML::Node *use = _doc->createElement("svg:use");
+    use->setAttribute("xlink:href", id.c_str() );
+    // Set a default style in <use> rather than <symbol> so it can be changed.
+    use->setAttribute("style", style );
+    _root->appendChild(use);
+
+    // This min and max sets offsets, we don't have any so set to zero.
+    sp_repr_set_point(_clipnode, "min", Geom::Point(0,0));
+    sp_repr_set_point(_clipnode, "max", Geom::Point(0,0));
 
     fit_canvas_to_drawing(_clipboardSPDoc);
     _setClipboardTargets();
@@ -679,7 +724,7 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     // For lpe items, copy lpe stack if applicable
     if (SP_IS_LPE_ITEM(item)) {
         SPLPEItem *lpeitem = SP_LPE_ITEM (item);
-        if (sp_lpe_item_has_path_effect(lpeitem)) {
+        if (lpeitem->hasPathEffect()) {
             for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
             {
                 LivePathEffectObject *lpeobj = (*it)->lpeobject;
@@ -863,7 +908,7 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
 
     // if the text editing tool is active, paste the text into the active text object
     if (tools_isactive(desktop, TOOLS_TEXT)) {
-        return sp_text_paste_inline(desktop->event_context);
+        return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
     }
 
     // try to parse the text as a color and, if successful, apply it as the current style
@@ -893,7 +938,7 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
     {
         SPLPEItem *lpeitem = SP_LPE_ITEM(item);
         // for each effect in the stack, check if we need to fork it before adding it to the item
-        sp_lpe_item_fork_path_effects_if_necessary(lpeitem, 1);
+        lpeitem->forkPathEffectsIfNecessary(1);
 
         std::istringstream iss(effectstack);
         std::string href;
@@ -904,7 +949,7 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
                 return;
             }
             LivePathEffectObject *lpeobj = LIVEPATHEFFECT(obj);
-            sp_lpe_item_add_path_effect(lpeitem, lpeobj);
+            lpeitem->addPathEffect(lpeobj);
         }
     }
 }
@@ -935,7 +980,7 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
     Glib::ustring target = best_target;
 
 #ifdef WIN32
-    if (best_target == CLIPBOARD_WIN32_EMF_TARGET)
+    if (best_target == "CF_ENHMETAFILE" || best_target == "WCF_ENHMETAFILE")
     {   // Try to save clipboard data as en emf file (using win32 api)
         if (OpenClipboard(NULL)) {
             HGLOBAL hglb = GetClipboardData(CF_ENHMETAFILE);
@@ -943,7 +988,7 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
                 HENHMETAFILE hemf = CopyEnhMetaFile((HENHMETAFILE) hglb, filename);
                 if (hemf) {
                     file_saved = true;
-                    target = CLIPBOARD_WIN32_EMF_MIME;
+                    target = "image/x-emf";
                     DeleteEnhMetaFile(hemf);
                 }
             }
@@ -973,6 +1018,10 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
     // we use the image/svg+xml mimetype to look up the input extension
     if (target == "image/x-inkscape-svg") {
         target = "image/svg+xml";
+    }
+    // Use the EMF extension to import metafiles
+    if (target == "CF_ENHMETAFILE" || target == "WCF_ENHMETAFILE") {
+        target = "image/x-emf";
     }
 
     Inkscape::Extension::DB::InputList inlist;
@@ -1032,14 +1081,14 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     try {
         if (out == outlist.end() && target == "image/png")
         {
-            gdouble dpi = PX_PER_IN;
+            gdouble dpi = Inkscape::Util::Quantity::convert(1, "in", "px");
             guint32 bgcolor = 0x00000000;
 
             Geom::Point origin (_clipboardSPDoc->getRoot()->x.computed, _clipboardSPDoc->getRoot()->y.computed);
             Geom::Rect area = Geom::Rect(origin, origin + _clipboardSPDoc->getDimensions());
 
-            unsigned long int width = (unsigned long int) (area.width() * dpi / PX_PER_IN + 0.5);
-            unsigned long int height = (unsigned long int) (area.height() * dpi / PX_PER_IN + 0.5);
+            unsigned long int width = (unsigned long int) (Inkscape::Util::Quantity::convert(area.width(), "px", "in") * dpi + 0.5);
+            unsigned long int height = (unsigned long int) (Inkscape::Util::Quantity::convert(area.height(), "in", "px") * dpi + 0.5);
 
             // read from namedview
             Inkscape::XML::Node *nv = sp_repr_lookup_name (_clipboardSPDoc->rroot, "sodipodi:namedview");
@@ -1167,10 +1216,10 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget()
 
     // clipboard target debugging snippet
     /*
-    g_debug("Begin clipboard targets");
+    g_message("Begin clipboard targets");
     for ( std::list<Glib::ustring>::iterator x = targets.begin() ; x != targets.end(); ++x )
-        g_debug("Clipboard target: %s", (*x).data());
-    g_debug("End clipboard targets\n");
+        g_message("Clipboard target: %s", (*x).data());
+    g_message("End clipboard targets\n");
     //*/
 
     for (std::list<Glib::ustring>::iterator i = _preferred_targets.begin() ;
@@ -1193,7 +1242,7 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget()
         CloseClipboard();
 
         if (format == CF_ENHMETAFILE) {
-            return CLIPBOARD_WIN32_EMF_TARGET;
+            return "CF_ENHMETAFILE";
         }
         if (format == CF_DIB || format == CF_BITMAP) {
             return CLIPBOARD_GDK_PIXBUF_TARGET;
@@ -1201,7 +1250,7 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget()
     }
 
     if (IsClipboardFormatAvailable(CF_ENHMETAFILE)) {
-        return CLIPBOARD_WIN32_EMF_TARGET;
+        return "CF_ENHMETAFILE";
     }
 #endif
     if (_clipboard->wait_is_image_available()) {
@@ -1222,7 +1271,13 @@ void ClipboardManagerImpl::_setClipboardTargets()
 {
     Inkscape::Extension::DB::OutputList outlist;
     Inkscape::Extension::db.get_output_list(outlist);
+
+#if WITH_GTKMM_3_0
+    std::vector<Gtk::TargetEntry> target_list;
+#else
     std::list<Gtk::TargetEntry> target_list;
+#endif
+
     bool plaintextSet = false;
     for (Inkscape::Extension::DB::OutputList::const_iterator out = outlist.begin() ; out != outlist.end() ; ++out) {
         if ( !(*out)->deactivated() ) {
@@ -1259,7 +1314,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
 
     if (OpenClipboard(NULL)) {
         if ( _clipboardSPDoc != NULL ) {
-            const Glib::ustring target = CLIPBOARD_WIN32_EMF_MIME;
+            const Glib::ustring target = "image/x-emf";
 
             Inkscape::Extension::DB::OutputList outlist;
             Inkscape::Extension::db.get_output_list(outlist);

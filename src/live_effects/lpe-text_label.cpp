@@ -1,4 +1,3 @@
-#define INKSCAPE_LPE_TEXT_LABEL_CPP
 /** \file
  * LPE <text_label> implementation
  */
@@ -12,6 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glibmm/i18n.h>
+
 #include "live_effects/lpe-text_label.h"
 
 namespace Inkscape {
@@ -19,7 +20,7 @@ namespace LivePathEffect {
 
 LPETextLabel::LPETextLabel(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    label(_("Label"), _("Text label attached to the path"), "label", &wr, this, "This is a label")
+    label(_("Label:"), _("Text label attached to the path"), "label", &wr, this, "This is a label")
 {
     registerParameter( dynamic_cast<Parameter *>(&label) );
 }

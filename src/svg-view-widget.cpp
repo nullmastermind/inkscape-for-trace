@@ -21,10 +21,11 @@
 #include "document.h"
 #include "svg-view.h"
 #include "svg-view-widget.h"
+#include "util/units.h"
 
 static void sp_svg_view_widget_class_init (SPSVGSPViewWidgetClass *klass);
 static void sp_svg_view_widget_init (SPSVGSPViewWidget *widget);
-static void sp_svg_view_widget_destroy (GtkObject *object);
+static void sp_svg_view_widget_dispose(GObject *object);
 
 static void sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static void sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req);
@@ -69,13 +70,13 @@ GType sp_svg_view_widget_get_type(void)
  */
 static void sp_svg_view_widget_class_init(SPSVGSPViewWidgetClass *klass)
 {
-	GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 	SPViewWidgetClass *vw_class = SP_VIEW_WIDGET_CLASS (klass);
 
 	widget_parent_class = static_cast<SPViewWidgetClass *>(g_type_class_peek_parent (klass));
 
-	object_class->destroy = sp_svg_view_widget_destroy;
+	object_class->dispose = sp_svg_view_widget_dispose;
 
 	widget_class->size_allocate = sp_svg_view_widget_size_allocate;
 #if GTK_CHECK_VERSION(3,0,0)
@@ -109,10 +110,17 @@ static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
 	gtk_widget_show (vw->sw);
 
 	/* Canvas */
-	GdkColormap *cmap = gdk_screen_get_system_colormap(gdk_screen_get_default());
+#if !GTK_CHECK_VERSION(3,0,0)
+	GdkColormap *cmap = gdk_colormap_get_system();
 	gtk_widget_push_colormap(cmap);
+#endif
+
 	vw->canvas = SPCanvas::createAA();
+
+#if !GTK_CHECK_VERSION(3,0,0)
 	gtk_widget_pop_colormap ();
+#endif
+
 	style = gtk_style_copy (gtk_widget_get_style (vw->canvas));
 	style->bg[GTK_STATE_NORMAL] = style->white;
 	gtk_widget_set_style (vw->canvas, style);
@@ -128,15 +136,14 @@ static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
 /*
  * Destructor callback for SPSVGSPViewWidget objects.
  */
-static void
-sp_svg_view_widget_destroy (GtkObject *object)
+static void sp_svg_view_widget_dispose(GObject *object)
 {
 	SPSVGSPViewWidget *vw = SP_SVG_VIEW_WIDGET (object);
 
 	vw->canvas = NULL;
 
-	if (((GtkObjectClass *) (widget_parent_class))->destroy) {
-		(* ((GtkObjectClass *) (widget_parent_class))->destroy) (object);
+	if (((GObjectClass *) (widget_parent_class))->dispose) {
+		(* ((GObjectClass *) (widget_parent_class))->dispose) (object);
         }
 }
 
@@ -148,9 +155,20 @@ static void sp_svg_view_widget_size_request(GtkWidget *widget, GtkRequisition *r
 	SPSVGSPViewWidget *vw = SP_SVG_VIEW_WIDGET (widget);
 	Inkscape::UI::View::View *v = SP_VIEW_WIDGET_VIEW (widget);
 
+#if GTK_CHECK_VERSION(3,0,0)
+	if (((GtkWidgetClass *) (widget_parent_class))->get_preferred_width && ((GtkWidgetClass *) (widget_parent_class))->get_preferred_width) {
+		gint width_min, height_min, width_nat, height_nat;
+
+		(* ((GtkWidgetClass *) (widget_parent_class))->get_preferred_width) (widget, &width_min, &width_nat);
+		(* ((GtkWidgetClass *) (widget_parent_class))->get_preferred_height) (widget, &height_min, &height_nat);
+		req->width=width_min;
+		req->height=height_min;
+        }
+#else
 	if (((GtkWidgetClass *) (widget_parent_class))->size_request) {
 		(* ((GtkWidgetClass *) (widget_parent_class))->size_request) (widget, req);
         }
+#endif
 
 	if (v->doc()) {
 		SPSVGView *svgv;
@@ -158,8 +176,8 @@ static void sp_svg_view_widget_size_request(GtkWidget *widget, GtkRequisition *r
 		gdouble width, height;
 
 		svgv = static_cast<SPSVGView*> (v);
-		width = (v->doc())->getWidth () * svgv->_hscale;
-		height = (v->doc())->getHeight () * svgv->_vscale;
+		width = (v->doc())->getWidth().value("px") * svgv->_hscale;
+		height = (v->doc())->getHeight().value("px") * svgv->_vscale;
 
 		if (width <= vw->maxwidth) {
 			hpol = GTK_POLICY_NEVER;

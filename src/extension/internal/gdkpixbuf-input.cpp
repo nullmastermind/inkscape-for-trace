@@ -1,6 +1,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#include <boost/scoped_ptr.hpp>
 #include <glib/gprintf.h>
 #include <glibmm/i18n.h>
 #include "document-private.h"
@@ -12,87 +13,91 @@
 #include "selection-chemistry.h"
 #include "sp-image.h"
 #include "document-undo.h"
+#include "util/units.h"
+#include "image-resolution.h"
+#include "display/cairo-utils.h"
 #include <set>
 
 namespace Inkscape {
 
-namespace IO {
-GdkPixbuf* pixbuf_new_from_file( char const *utf8name, GError **error );
-}
-
 namespace Extension {
 namespace Internal {
-
-static std::set<Glib::ustring> create_lossy_set()
-{
-    std::set<Glib::ustring> lossy;
-    lossy.insert(".jpg");
-    lossy.insert(".jpeg");
-    return lossy;
-}
 
 SPDocument *
 GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 {
-    bool embed = false;
+    // Determine whether the image should be embedded
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring attr = prefs->getString("/dialogs/import/link");
-    if (strcmp(attr.c_str(), "embed") == 0) {
-        embed = true;
-    } else if (strcmp(attr.c_str(), "link") == 0) {
-        embed = false;
-    } else {
-        embed = (strcmp(mod->get_param_optiongroup("link"), "embed") == 0);
-        if (mod->get_param_bool("ask")) {
-            prefs->setString("/dialogs/import/link", mod->get_param_optiongroup("link"));
-            mod->set_param_bool("ask", false);
+    bool ask = prefs->getBool("/dialogs/import/ask");
+    Glib::ustring link  = prefs->getString("/dialogs/import/link");
+    bool forcexdpi = prefs->getBool("/dialogs/import/forcexdpi");
+    Glib::ustring scale = prefs->getString("/dialogs/import/scale");
+    // std::cout << "GkdpixbufInput::open: "
+    //           << " ask: " << ask
+    //           << ", link: " << link 
+    //           << ", forcexdpi: " << forcexdpi 
+    //           << ", scale: " << scale << std::endl;
+    // std::cout << "     in  preferences: "
+    //           << " ask: " << !mod->get_param_bool("do_not_ask")
+    //           << ", link: " << mod->get_param_optiongroup("link")
+    //           << ", mod_dpi: " << mod->get_param_optiongroup("dpi")
+    //           << ", scale: " << mod->get_param_optiongroup("scale") << std::endl;
+    if( ask ) {
+        Glib::ustring mod_link = mod->get_param_optiongroup("link");
+        Glib::ustring mod_dpi = mod->get_param_optiongroup("dpi");
+        bool mod_forcexdpi = ( mod_dpi.compare( "from_default" ) == 0 );
+        Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
+        if( link.compare( mod_link ) != 0 ) {
+            link = mod_link;
         }
+        prefs->setString("/dialogs/import/link", link );
+        if( forcexdpi != mod_forcexdpi ) {
+            forcexdpi = mod_forcexdpi;
+        }
+        prefs->setBool("/dialogs/import/forcexdpi", forcexdpi );
+        if( scale.compare( mod_scale ) != 0 ) {
+            scale = mod_scale;
+        }
+        prefs->setString("/dialogs/import/scale", scale );
+        prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
     }
-
+    bool embed = ( link.compare( "embed" ) == 0 );
+ 
     SPDocument *doc = NULL;
-    GdkPixbuf *pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
-    static std::set<Glib::ustring> lossy = create_lossy_set();
+    boost::scoped_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
 
-    if (pb) {         /* We are readable */
-        // TODO revisit: bool is_lossy;
-        Glib::ustring mime_type, ext;
-        Glib::ustring u = uri;
-        std::size_t dotpos = u.rfind('.');
-        if (dotpos != Glib::ustring::npos) {
-            ext = u.substr(dotpos, Glib::ustring::npos);
-        }
+    // TODO: the pixbuf is created again from the base64-encoded attribute in SPImage.
+    // Find a way to create the pixbuf only once.
 
-        // HACK: replace with something better based on GIO
-        if (!ext.empty() && lossy.find(ext) != lossy.end()) {
-            // TODO revisit: is_lossy = true;
-            mime_type = "image/jpeg";
-        } else {
-            // TODO revisit: is_lossy = false;
-            mime_type = "image/png";
-        }
-
+    if (pb) {
         doc = SPDocument::createNewDoc(NULL, TRUE, TRUE);
         bool saved = DocumentUndo::getUndoSensitive(doc);
         DocumentUndo::setUndoSensitive(doc, false); // no need to undo in this temporary document
 
-        double width = gdk_pixbuf_get_width(pb);
-        double height = gdk_pixbuf_get_height(pb);
-        gchar const *str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
-        if ( str ) {
-            gint dpi = atoi(str);
-            if ( dpi > 0 && dpi != 72 ) {
-                double scale = 72.0 / (double)dpi;
-                width *= scale;
-            }
+        double width = pb->width();
+        double height = pb->height();
+        double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", Inkscape::Util::Quantity::convert(1, "in", "px"));
+        //bool forcexdpi = prefs->getBool("/dialogs/import/forcexdpi");
+        ImageResolution *ir = 0;
+        double xscale = 1;
+        double yscale = 1;
+
+
+        if (!ir && !forcexdpi) {
+            ir = new ImageResolution(uri);
         }
-        str = gdk_pixbuf_get_option( pb, "Inkscape::DpiY" );
-        if ( str ) {
-            gint dpi = atoi(str);
-            if ( dpi > 0 && dpi != 72 ) {
-                double scale = 72.0 / (double)dpi;
-                height *= scale;
-            }
+        if (ir && ir->ok()) {
+            xscale = 900.0 / floor(10.*ir->x() + .5);  // round-off to 0.1 dpi
+            yscale = 900.0 / floor(10.*ir->y() + .5);
+        } else {
+            xscale = 90.0 / defaultxdpi;
+            yscale = 90.0 / defaultxdpi;
         }
+
+        width *= xscale;
+        height *= yscale;
+
+        delete ir; // deleting NULL is safe
 
         // Create image node
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -100,8 +105,19 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         sp_repr_set_svg_double(image_node, "width", width);
         sp_repr_set_svg_double(image_node, "height", height);
 
+        // Added 11 Feb 2014 as we now honor "preserveAspectRatio" and this is
+        // what Inkscaper's expect.
+        image_node->setAttribute("preserveAspectRatio", "none");
+
+        if( scale.compare( "auto" ) != 0 ) {
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            sp_repr_css_set_property(css, "image-rendering", scale.c_str());
+            sp_repr_css_set(image_node, css, "style");
+            sp_repr_css_attr_unref( css );
+        }
+
         if (embed) {
-            sp_embed_image(image_node, pb, mime_type);
+            sp_embed_image(image_node, pb.get());
         } else {
             // convert filename to uri
             gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
@@ -113,12 +129,17 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             }
         }
 
-        g_object_unref(pb);
-
         // Add it to the current layer
         doc->getRoot()->appendChildRepr(image_node);
         Inkscape::GC::release(image_node);
         fit_canvas_to_drawing(doc);
+        
+        // Set viewBox if it doesn't exist
+        if (!doc->getRoot()->viewBox_set) {
+            std::cout << "Viewbox not set, setting" << std::endl;
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDefaultUnit()), doc->getHeight().value(doc->getDefaultUnit())));
+        }
+        
         // restore undo, as now this document may be shown to the user if a bitmap was opened
         DocumentUndo::setUndoSensitive(doc, saved);
     } else {
@@ -166,12 +187,24 @@ GdkpixbufInput::init(void)
                 "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
                   "<name>%s</name>\n"
                   "<id>org.inkscape.input.gdkpixbuf.%s</id>\n"
-                  "<param name='link' type='optiongroup' appearance='full' _gui-text='" N_("Link or embed image:") "' >\n"
+
+                  "<param name='link' type='optiongroup' appearance='full' _gui-text='" N_("Image Import Type:") "' _gui-description='" N_("Embed results in stand-alone, larger SVG files. Link references a file outside this SVG document and all files must be moved together.") "' >\n"
                     "<_option value='embed' >" N_("Embed") "</_option>\n"
                     "<_option value='link' >" N_("Link") "</_option>\n"
                   "</param>\n"
-                  "<_param name='help' type='description'>" N_("Embed results in stand-alone, larger SVG files. Link references a file outside this SVG document and all files must be moved together.") "</_param>\n"
-                  "<param name=\"ask\" _gui-description='" N_("Hide the dialog next time and always apply the same action.") "' gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
+
+                  "<param name='dpi' type='optiongroup' appearance='full' _gui-text='" N_("Image DPI:") "' _gui-description='" N_("Take information from file or use default bitmap import resolution as defined in the preferences.") "' >\n"
+                    "<_option value='from_file' >" N_("From file") "</_option>\n"
+                    "<_option value='from_default' >" N_("Default import resolution") "</_option>\n"
+                  "</param>\n"
+
+                  "<param name='scale' type='optiongroup' appearance='full' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
+                    "<_option value='auto' >" N_("None (auto)") "</_option>\n"
+                    "<_option value='optimizeQuality' >" N_("Smooth (optimizeQuality)") "</_option>\n"
+                    "<_option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</_option>\n"
+                  "</param>\n"
+
+                  "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
                   "<input>\n"
                     "<extension>.%s</extension>\n"
                     "<mimetype>%s</mimetype>\n"

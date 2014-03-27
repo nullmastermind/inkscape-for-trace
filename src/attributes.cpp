@@ -258,9 +258,6 @@ static SPStyleProp const props[] = {
     {SP_ATTR_POINTSATY, "pointsAtY"},
     {SP_ATTR_POINTSATZ, "pointsAtZ"},
     {SP_ATTR_LIMITINGCONEANGLE, "limitingConeAngle"},
-    /*feFlood*/
-    {SP_ATTR_FLOODCOLOR, "flood-color"},
-    {SP_ATTR_FLOODOPACITY, "flood-opacity"},
     /* SPGaussianBlur */
     {SP_ATTR_STDDEVIATION, "stdDeviation"},
     /*feImage*/
@@ -289,6 +286,8 @@ static SPStyleProp const props[] = {
     /* SPRadialGradient */
     {SP_ATTR_FX, "fx"},
     {SP_ATTR_FY, "fy"},
+    /* SPMeshPatch */
+    {SP_ATTR_TENSOR, "tensor"},
     /* SPPattern */
     {SP_ATTR_PATTERNUNITS, "patternUnits"},
     {SP_ATTR_PATTERNCONTENTUNITS, "patternContentUnits"},
@@ -415,6 +414,9 @@ static SPStyleProp const props[] = {
     {SP_PROP_TEXT_INDENT, "text-indent"},
     {SP_PROP_TEXT_ALIGN, "text-align"},
     {SP_PROP_TEXT_DECORATION, "text-decoration"},
+    {SP_PROP_TEXT_DECORATION_LINE, "text-decoration-line"},
+    {SP_PROP_TEXT_DECORATION_STYLE,"text-decoration-style"},
+    {SP_PROP_TEXT_DECORATION_COLOR,"text-decoration-color"},
     {SP_PROP_LINE_HEIGHT, "line-height"},
     {SP_PROP_LETTER_SPACING, "letter-spacing"},
     {SP_PROP_WORD_SPACING, "word-spacing"},
@@ -438,6 +440,8 @@ static SPStyleProp const props[] = {
     {SP_PROP_DISPLAY, "display"},
     {SP_PROP_OVERFLOW, "overflow"},
     {SP_PROP_VISIBILITY, "visibility"},
+    {SP_PROP_BLEND_MODE, "mix-blend-mode"}, // CSS Blending and Compositing
+    {SP_PROP_ISOLATION, "isolation"},
     /* SVG */
     /* Clip/Mask */
     {SP_PROP_CLIP_PATH, "clip-path"},
@@ -453,6 +457,7 @@ static SPStyleProp const props[] = {
     /* Gradient */
     {SP_PROP_STOP_COLOR, "stop-color"},
     {SP_PROP_STOP_OPACITY, "stop-opacity"},
+    {SP_PROP_STOP_PATH, "path"},
     /* Interactivity */
     {SP_PROP_POINTER_EVENTS, "pointer-events"},
     /* Paint */
@@ -468,6 +473,7 @@ static SPStyleProp const props[] = {
     {SP_PROP_MARKER_END, "marker-end"},
     {SP_PROP_MARKER_MID, "marker-mid"},
     {SP_PROP_MARKER_START, "marker-start"},
+    {SP_PROP_PAINT_ORDER, "paint-order" },
     {SP_PROP_SHAPE_RENDERING, "shape-rendering"},
     {SP_PROP_STROKE, "stroke"},
     {SP_PROP_STROKE_DASHARRAY, "stroke-dasharray"},

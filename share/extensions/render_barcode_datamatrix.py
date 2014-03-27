@@ -51,11 +51,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     0.50    2009-10-25  Full functionality, up to 144x144.
                         ASCII and compressed digit encoding only.
 '''
+# local library
+import inkex
+import simplestyle
 
-import inkex, simplestyle
-
-import gettext
-_ = gettext.gettext
+inkex.localize()
     
 symbols = {
     'sq10': (10, 10),
@@ -665,6 +665,7 @@ class DataMatrix(inkex.Effect):
             
     def effect(self):
         
+        scale = self.unittouu('1px')    # convert to document units
         so = self.options
         
         rows = so.ROWS
@@ -680,7 +681,7 @@ class DataMatrix(inkex.Effect):
             #INKSCAPE GROUP TO CONTAIN EVERYTHING
             
             centre = self.view_center   #Put in in the centre of the current view
-            grp_transform = 'translate' + str( centre )
+            grp_transform = 'translate' + str( centre ) + ' scale(%f)' % scale
             grp_name = 'DataMatrix'
             grp_attribs = {inkex.addNS('label','inkscape'):grp_name,
                            'transform':grp_transform }

@@ -19,13 +19,14 @@
 #include "sp-shape.h"
 #include "knot.h"
 #include "knotholder.h"
-#include "rect-context.h"
+#include "knot-holder-entity.h"
+#include "ui/tools/rect-tool.h"
 #include "sp-rect.h"
-#include "arc-context.h"
+#include "ui/tools/arc-tool.h"
 #include "sp-ellipse.h"
-#include "star-context.h"
+#include "ui/tools/tweak-tool.h"
 #include "sp-star.h"
-#include "spiral-context.h"
+#include "ui/tools/spiral-tool.h"
 #include "sp-spiral.h"
 #include "sp-offset.h"
 #include "box3d.h"
@@ -62,13 +63,16 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
         g_print ("Error! Throw an exception, please!\n");
     }
 
-    g_object_ref(G_OBJECT(item)); // TODO: is this still needed after C++-ification?
+    //g_object_ref(G_OBJECT(item)); // TODO: is this still needed after C++-ification?
+    sp_object_ref(item);
 
     sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &KnotHolder::updateControlSizes));
 }
 
 KnotHolder::~KnotHolder() {
-    g_object_unref(G_OBJECT(item));
+    //g_object_unref(G_OBJECT(item));
+	sp_object_unref(item);
+
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
     {
         delete (*i);
@@ -99,10 +103,10 @@ void KnotHolder::update_knots()
 /**
  * Returns true if at least one of the KnotHolderEntities has the mouse hovering above it.
  */
-bool KnotHolder::knot_mouseover()
-{
-    for(std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i) {
-        SPKnot *knot = (*i)->knot;
+bool KnotHolder::knot_mouseover() const {
+    for (std::list<KnotHolderEntity *>::const_iterator i = entity.begin(); i != entity.end(); ++i) {
+        const SPKnot *knot = (*i)->knot;
+
         if (knot && (knot->flags & SP_KNOT_MOUSEOVER)) {
             return true;
         }
@@ -127,7 +131,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     }
 
     if (SP_IS_SHAPE(saved_item)) {
-        SP_SHAPE(saved_item)->setShape();
+        SP_SHAPE(saved_item)->set_shape();
     }
 
     knot_holder->update_knots();
@@ -176,7 +180,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
     }
 
     if (SP_IS_SHAPE (item)) {
-        SP_SHAPE (item)->setShape();
+        SP_SHAPE (item)->set_shape();
     }
 
     this->update_knots();
@@ -205,7 +209,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/)
             // This writes all parameters to SVG. Is this sufficiently efficient or should we only
             // write the ones that were changed?
 
-            Inkscape::LivePathEffect::Effect *lpe = sp_lpe_item_get_current_lpe(SP_LPE_ITEM(object));
+            Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(object)->getCurrentLPE();
             if (lpe) {
                 LivePathEffectObject *lpeobj = lpe->getLPEObj();
                 lpeobj->updateRepr();
@@ -238,7 +242,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/)
 
 void KnotHolder::add(KnotHolderEntity *e)
 {
-    g_message("Adding a knot at %p", e);
+    // g_message("Adding a knot at %p", e);
     entity.push_back(e);
     updateControlSizes();
 }

@@ -32,7 +32,7 @@
 #include "selection.h"
 #include "sp-guide.h"
 #include "preferences.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "util/mathfns.h"
 using std::vector;
 using Inkscape::Util::round_to_upper_multiple_plus;
@@ -46,6 +46,7 @@ SnapManager::SnapManager(SPNamedView const *v) :
     _rotation_center_source_items(NULL),
     _guide_to_ignore(NULL),
     _desktop(NULL),
+    _snapindicator(true),
     _unselected_nodes(NULL)
 {
 }
@@ -76,9 +77,14 @@ SnapManager::SnapperList SnapManager::getGridSnappers() const
     return s;
 }
 
-bool SnapManager::someSnapperMightSnap() const
+bool SnapManager::someSnapperMightSnap(bool immediately) const
 {
-    if ( !snapprefs.getSnapEnabledGlobally() || snapprefs.getSnapPostponedGlobally() ) {
+    if ( !snapprefs.getSnapEnabledGlobally() ) {
+        return false;
+    }
+
+    // If we're asking if some snapper might snap RIGHT NOW (without the snap being postponed)...
+    if ( immediately && snapprefs.getSnapPostponedGlobally() ) {
         return false;
     }
 
@@ -494,7 +500,6 @@ Inkscape::SnappedPoint SnapManager::_snapTransformed(
     /* The current best metric for the best transformation; lower is better, Geom::infinity()
     ** means that we haven't snapped anything.
     */
-    Geom::Point best_scale_metric(Geom::infinity(), Geom::infinity());
     Inkscape::SnappedPoint best_snapped_point;
     g_assert(best_snapped_point.getAlwaysSnap() == false); // Check initialization of snapped point
     g_assert(best_snapped_point.getAtIntersection() == false);

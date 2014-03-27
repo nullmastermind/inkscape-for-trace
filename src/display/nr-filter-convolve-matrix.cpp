@@ -104,8 +104,6 @@ void FilterConvolveMatrix::render_cairo(FilterSlot &slot)
     static bool bias_warning = false;
     static bool edge_warning = false;
 
-    cairo_surface_t *input = slot.getcairo(_input);
-
     if (orderX<=0 || orderY<=0) {
         g_warning("Empty kernel!");
         return;
@@ -119,7 +117,18 @@ void FilterConvolveMatrix::render_cairo(FilterSlot &slot)
         return;
     }
 
+    cairo_surface_t *input = slot.getcairo(_input);
     cairo_surface_t *out = ink_cairo_surface_create_identical(input);
+
+    // We may need to transform input surface to correct color interpolation space. The input surface
+    // might be used as input to another primitive but it is likely that all the primitives in a given
+    // filter use the same color interpolation space so we don't copy the input before converting.
+    SPColorInterpolation ci_fp = SP_CSS_COLOR_INTERPOLATION_AUTO;
+    if( _style ) {
+        ci_fp = (SPColorInterpolation)_style->color_interpolation_filters.computed;
+        set_cairo_surface_ci(out, ci_fp);
+    }
+    set_cairo_surface_ci( input, ci_fp );
 
     if (bias!=0 && !bias_warning) {
         g_warning("It is unknown whether Inkscape's implementation of bias in feConvolveMatrix "

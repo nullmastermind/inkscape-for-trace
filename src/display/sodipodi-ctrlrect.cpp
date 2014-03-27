@@ -28,7 +28,7 @@
 
 static void sp_ctrlrect_class_init(SPCtrlRectClass *c);
 static void sp_ctrlrect_init(CtrlRect *ctrlrect);
-static void sp_ctrlrect_destroy(GtkObject *object);
+static void sp_ctrlrect_destroy(SPCanvasItem *object);
 
 static void sp_ctrlrect_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
 static void sp_ctrlrect_render(SPCanvasItem *item, SPCanvasBuf *buf);
@@ -61,13 +61,11 @@ GType sp_ctrlrect_get_type()
 
 static void sp_ctrlrect_class_init(SPCtrlRectClass *c)
 {
-    GtkObjectClass *object_class = (GtkObjectClass *) c;
-    SPCanvasItemClass *item_class = (SPCanvasItemClass *) c;
+    SPCanvasItemClass *item_class = SP_CANVAS_ITEM_CLASS(c);
 
-    parent_class = (SPCanvasItemClass*) g_type_class_peek_parent(c);
+    parent_class = SP_CANVAS_ITEM_CLASS(g_type_class_peek_parent(c));
 
-    object_class->destroy = sp_ctrlrect_destroy;
-
+    item_class->destroy = sp_ctrlrect_destroy;
     item_class->update = sp_ctrlrect_update;
     item_class->render = sp_ctrlrect_render;
 }
@@ -77,10 +75,10 @@ static void sp_ctrlrect_init(CtrlRect *cr)
     cr->init();
 }
 
-static void sp_ctrlrect_destroy(GtkObject *object)
+static void sp_ctrlrect_destroy(SPCanvasItem *object)
 {
-    if (GTK_OBJECT_CLASS(parent_class)->destroy) {
-        (* GTK_OBJECT_CLASS(parent_class)->destroy)(object);
+    if (SP_CANVAS_ITEM_CLASS(parent_class)->destroy) {
+        (* SP_CANVAS_ITEM_CLASS(parent_class)->destroy)(object);
     }
 }
 
@@ -121,8 +119,6 @@ void CtrlRect::render(SPCanvasBuf *buf)
     using Geom::X;
     using Geom::Y;
 
-    static double const dashes[2] = {4.0, 4.0};
-
     if (!_area) {
         return;
     }
@@ -131,6 +127,7 @@ void CtrlRect::render(SPCanvasBuf *buf)
                                  area[X].max() + _shadow_size, area[Y].max() + _shadow_size);
     if ( area_w_shadow.intersects(buf->rect) )
     {
+        static double const dashes[2] = {4.0, 4.0};
         cairo_save(buf->ct);
         cairo_translate(buf->ct, -buf->rect.left(), -buf->rect.top());
         cairo_set_line_width(buf->ct, 1);
@@ -145,7 +142,18 @@ void CtrlRect::render(SPCanvasBuf *buf)
         ink_cairo_set_source_rgba32(buf->ct, _border_color);
         cairo_stroke(buf->ct);
 
-        if (_shadow_size > 0) {
+        if (_shadow_size == 1) { // highlight the border by drawing it in _shadow_color
+            if (_dashed) {
+                cairo_set_dash(buf->ct, dashes, 2, 4);
+                cairo_rectangle(buf->ct, 0.5 + area[X].min(), 0.5 + area[Y].min(),
+                                area[X].max() - area[X].min(), area[Y].max() - area[Y].min());
+            } else {
+                cairo_rectangle(buf->ct, -0.5 + area[X].min(), -0.5 + area[Y].min(),
+                                area[X].max() - area[X].min(), area[Y].max() - area[Y].min());
+            }
+            ink_cairo_set_source_rgba32(buf->ct, _shadow_color);
+            cairo_stroke(buf->ct);
+        } else if (_shadow_size > 1) { // fill the shadow
             ink_cairo_set_source_rgba32(buf->ct, _shadow_color);
             cairo_rectangle(buf->ct, 1 + area[X].max(), area[Y].min() + _shadow_size,
                                      _shadow_size, area[Y].max() - area[Y].min() + 1); // right shadow
@@ -163,8 +171,8 @@ void CtrlRect::update(Geom::Affine const &affine, unsigned int flags)
     using Geom::X;
     using Geom::Y;
 
-    if (((SPCanvasItemClass *) parent_class)->update) {
-        ((SPCanvasItemClass *) parent_class)->update(this, affine, flags);
+    if ((SP_CANVAS_ITEM_CLASS(parent_class))->update) {
+        (SP_CANVAS_ITEM_CLASS(parent_class))->update(this, affine, flags);
     }
 
     sp_canvas_item_reset_bounds(this);

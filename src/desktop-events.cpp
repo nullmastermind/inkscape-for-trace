@@ -17,12 +17,13 @@
 #endif
 #include <map>
 #include <string>
+#include "ui/dialog/guides.h"
 #include <2geom/line.h>
 #include <2geom/angle.h>
 #include <glibmm/i18n.h>
 
-#include "ui/dialog/guides.h"
 #include "desktop.h"
+#include "desktop-events.h"
 #include "desktop-handles.h"
 #include "dialogs/dialog-events.h"
 #include "display/canvas-axonomgrid.h"
@@ -31,25 +32,18 @@
 #include "display/snap-indicator.h"
 #include "document.h"
 #include "document-undo.h"
-#include "event-context.h"
+#include "ui/tools/tool-base.h"
 #include "helper/action.h"
-#include "helper/unit-menu.h"
-#include "helper/units.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "snap.h"
 #include "display/sp-canvas.h"
 #include "sp-guide.h"
-#include "sp-metrics.h"
 #include "sp-namedview.h"
 #include "tools-switch.h"
 #include "verbs.h"
 #include "widgets/desktop-widget.h"
 #include "xml/repr.h"
-
-#if !GTK_CHECK_VERSION(2,22,0)
-#include "compat-key-syms.h"
-#endif
 
 using Inkscape::DocumentUndo;
 
@@ -82,30 +76,40 @@ int sp_desktop_root_handler(SPCanvasItem */*item*/, GdkEvent *event, SPDesktop *
 
 static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz)
 {
-    static bool dragging = false;
+    static bool clicked = false;
+    static bool dragged = false;
     static SPCanvasItem *guide = NULL;
     static Geom::Point normal;
     int wx, wy;
+    static gint xp = 0, yp = 0; // where drag started
 
     SPDesktop *desktop = dtw->desktop;
     GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(dtw->canvas));
 
-    gdk_window_get_pointer(window, &wx, &wy, NULL);
-    Geom::Point const event_win(wx, wy);
-
     gint width, height;
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDevice *device = gdk_event_get_device(event);
+    gdk_window_get_device_position(window, device, &wx, &wy, NULL);
+    gdk_window_get_geometry(window, NULL /*x*/, NULL /*y*/, &width, &height);
+#else
+    gdk_window_get_pointer(window, &wx, &wy, NULL);
     gdk_window_get_geometry(window, NULL /*x*/, NULL /*y*/, &width, &height, NULL/*depth*/);
+#endif
+    
+    Geom::Point const event_win(wx, wy);
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                dragging = true;
+                clicked = true;
+                dragged = false;
+                // save click origin
+                xp = (gint) event->button.x;
+                yp = (gint) event->button.y;
 
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 Geom::Point const event_dt(desktop->w2d(event_w));
-
-                // explicitly show guidelines; if I draw a guide, I want them on
-                desktop->namedview->setGuides(true);
 
                 // calculate the normal of the guidelines when dragged from the edges of rulers.
                 Geom::Point normal_bl_to_tr(-1.,1.); //bottomleft to topright
@@ -113,15 +117,17 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 normal_bl_to_tr.normalize();
                 normal_tr_to_bl.normalize();
                 Inkscape::CanvasGrid * grid = sp_namedview_get_first_enabled_grid(desktop->namedview);
-                if ( grid && grid->getGridType() == Inkscape::GRID_AXONOMETRIC ) {
-                    Inkscape::CanvasAxonomGrid *axonomgrid = dynamic_cast<Inkscape::CanvasAxonomGrid *>(grid);
-                    if (event->button.state & GDK_CONTROL_MASK) {
-                        // guidelines normal to gridlines
-                        normal_bl_to_tr = Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0);
-                        normal_tr_to_bl = Geom::Point::polar(axonomgrid->angle_rad[2], 1.0);
-                    } else {
-                        normal_bl_to_tr = rot90(Geom::Point::polar(axonomgrid->angle_rad[2], 1.0));
-                        normal_tr_to_bl = rot90(Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0));
+                if (grid){
+                    if (grid->getGridType() == Inkscape::GRID_AXONOMETRIC ) {
+                        Inkscape::CanvasAxonomGrid *axonomgrid = dynamic_cast<Inkscape::CanvasAxonomGrid *>(grid);
+                        if (event->button.state & GDK_CONTROL_MASK) {
+                            // guidelines normal to gridlines
+                            normal_bl_to_tr = Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0);
+                            normal_tr_to_bl = Geom::Point::polar(axonomgrid->angle_rad[2], 1.0);
+                        } else {
+                            normal_bl_to_tr = rot90(Geom::Point::polar(axonomgrid->angle_rad[2], 1.0));
+                            normal_tr_to_bl = rot90(Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0));
+                        }
                     }
                 }
                 if (horiz) {
@@ -144,16 +150,41 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 
                 guide = sp_guideline_new(desktop->guides, NULL, event_dt, normal);
                 sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
+
+#if GTK_CHECK_VERSION(3,0,0)
+                gdk_device_grab(device,
+                                gtk_widget_get_window(widget), 
+                                GDK_OWNERSHIP_NONE,
+                                FALSE,
+                                (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
+                                NULL,
+                                event->button.time);
+#else
                 gdk_pointer_grab(gtk_widget_get_window (widget), FALSE,
                                  (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
                                  NULL, NULL,
                                  event->button.time);
+#endif
             }
             break;
     case GDK_MOTION_NOTIFY:
-            if (dragging) {
+            if (clicked) {
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 Geom::Point event_dt(desktop->w2d(event_w));
+
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                gint tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+                if ( ( abs( (gint) event->motion.x - xp ) < tolerance )
+                        && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+                    break;
+                }
+
+                dragged = true;
+
+                // explicitly show guidelines; if I draw a guide, I want them on
+                if ((horiz ? wy : wx) >= 0) {
+                    desktop->namedview->setGuides(true);
+                }
 
                 if (!(event->motion.state & GDK_SHIFT_MASK)) {
                     sp_dt_ruler_snap_new_guide(desktop, guide, event_dt, normal);
@@ -162,14 +193,18 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 sp_guideline_set_position(SP_GUIDELINE(guide), event_dt);
 
                 desktop->set_coordinate_status(event_dt);
-                desktop->setPosition(event_dt);
             }
             break;
     case GDK_BUTTON_RELEASE:
-            if (dragging && event->button.button == 1) {
+            if (clicked && event->button.button == 1) {
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
 
+#if GTK_CHECK_VERSION(3,0,0)
+                gdk_device_ungrab(device, event->button.time);
+#else
                 gdk_pointer_ungrab(event->button.time);
+#endif
+
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 Geom::Point event_dt(desktop->w2d(event_w));
 
@@ -177,9 +212,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     sp_dt_ruler_snap_new_guide(desktop, guide, event_dt, normal);
                 }
 
-                dragging = false;
-
-                gtk_object_destroy(GTK_OBJECT(guide));
+                sp_canvas_item_destroy(guide);
                 guide = NULL;
                 if ((horiz ? wy : wx) >= 0) {
                     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
@@ -192,6 +225,16 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                                      _("Create guide"));
                 }
                 desktop->set_coordinate_status(event_dt);
+
+                if (!dragged) {
+                    // Ruler click (without drag) toggle the guide visibility on and off
+                    Inkscape::XML::Node *repr = desktop->namedview->getRepr();
+                    sp_namedview_toggle_guides(sp_desktop_document(desktop), repr);
+                    
+                }
+
+                clicked = false;
+                dragged = false;
             }
     default:
             break;
@@ -203,7 +246,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 int sp_dt_hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
     if (event->type == GDK_MOTION_NOTIFY) {
-        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, DelayedSnapEvent::GUIDE_HRULER);
+        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HRULER);
     }
     return sp_dt_ruler_event(widget, event, dtw, true);
 }
@@ -211,7 +254,7 @@ int sp_dt_hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 int sp_dt_vruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
     if (event->type == GDK_MOTION_NOTIFY) {
-        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, DelayedSnapEvent::GUIDE_VRULER);
+        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_VRULER);
     }
     return sp_dt_ruler_event(widget, event, dtw, false);
 }
@@ -282,7 +325,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                                            event->motion.y);
                 Geom::Point motion_dt(desktop->w2d(motion_w));
 
-                sp_event_context_snap_delay_handler(desktop->event_context, (gpointer) item, data, (GdkEventMotion *)event, DelayedSnapEvent::GUIDE_HANDLER);
+                sp_event_context_snap_delay_handler(desktop->event_context, (gpointer) item, data, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HANDLER);
 
                 // This is for snapping while dragging existing guidelines. New guidelines,
                 // which are dragged off the ruler, are being snapped in sp_dt_ruler_event
@@ -349,7 +392,6 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 }
                 moved = true;
                 desktop->set_coordinate_status(motion_dt);
-                desktop->setPosition(motion_dt);
 
                 ret = TRUE;
             }
@@ -437,12 +479,12 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     }
                     moved = false;
                     desktop->set_coordinate_status(event_dt);
-                    desktop->setPosition (event_dt);
                 }
                 drag_type = SP_DRAG_NONE;
                 sp_canvas_item_ungrab(item, event->button.time);
                 ret=TRUE;
             }
+            break;
     case GDK_ENTER_NOTIFY:
     {
             sp_guideline_set_color(SP_GUIDELINE(item), guide->hicolor);
@@ -456,7 +498,16 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
                 gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
-		g_object_unref(guide_cursor);
+                g_object_unref(guide_cursor);
+#else
+                gdk_cursor_unref(guide_cursor);
+#endif
+            } else {
+                GdkCursor *guide_cursor;
+                guide_cursor = gdk_cursor_new (GDK_HAND1);
+                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+#if GTK_CHECK_VERSION(3,0,0)
+                g_object_unref(guide_cursor);
 #else
                 gdk_cursor_unref(guide_cursor);
 #endif
@@ -476,7 +527,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             desktop->guidesMessageContext()->clear();
             break;
         case GDK_KEY_PRESS:
-            switch (get_group0_keyval (&event->key)) {
+            switch (Inkscape::UI::Tools::get_group0_keyval (&event->key)) {
                 case GDK_KEY_Delete:
                 case GDK_KEY_KP_Delete:
                 case GDK_KEY_BackSpace:
@@ -495,7 +546,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                         guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
                         gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
-			g_object_unref(guide_cursor);
+            g_object_unref(guide_cursor);
 #else
                         gdk_cursor_unref(guide_cursor);
 #endif
@@ -509,14 +560,14 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             }
             break;
         case GDK_KEY_RELEASE:
-            switch (get_group0_keyval (&event->key)) {
+            switch (Inkscape::UI::Tools::get_group0_keyval (&event->key)) {
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
                     GdkCursor *guide_cursor;
                     guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
                     gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
-		    g_object_unref(guide_cursor);
+            g_object_unref(guide_cursor);
 #else
                     gdk_cursor_unref(guide_cursor);
 #endif
@@ -525,6 +576,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     // do nothing;
                     break;
             }
+            break;
     default:
         break;
     }
@@ -540,17 +592,21 @@ static GdkInputSource lastType = GDK_SOURCE_MOUSE;
 static void init_extended()
 {
     std::string avoidName = "pad";
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkDisplay *display = gdk_display_get_default();
+    GdkDeviceManager *dm = gdk_display_get_device_manager(display);
+    GList* devices = gdk_device_manager_list_devices(dm, GDK_DEVICE_TYPE_SLAVE);	
+#else
     GList* devices = gdk_devices_list();
+#endif
+    
     if ( devices ) {
         for ( GList* curr = devices; curr; curr = g_list_next(curr) ) {
             GdkDevice* dev = reinterpret_cast<GdkDevice*>(curr->data);
-#if GTK_CHECK_VERSION(2, 22, 0)
             gchar const *devName = gdk_device_get_name(dev);
             GdkInputSource devSrc = gdk_device_get_source(dev);
-#else
-            gchar const *devName = dev->name;
-            GdkInputSource devSrc = dev->source;
-#endif
+            
             if ( devName
                  && (avoidName != devName)
                  && (devSrc != GDK_SOURCE_MOUSE) ) {
@@ -575,6 +631,10 @@ static void init_extended()
             }
         }
     }
+
+#if GTK_CHECK_VERSION(3,0,0)
+    g_list_free(devices);
+#endif
 }
 
 
@@ -588,13 +648,8 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         {
             GdkEventMotion* event2 = reinterpret_cast<GdkEventMotion*>(event);
             if ( event2->device ) {
-#if GTK_CHECK_VERSION(2, 22, 0)
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
-#else
-                source = event2->device->source;
-                name = event2->device->name;
-#endif
             }
         }
         break;
@@ -606,13 +661,8 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         {
             GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
             if ( event2->device ) {
-#if GTK_CHECK_VERSION(2, 22, 0)
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
-#else
-                source = event2->device->source;
-                name = event2->device->name;
-#endif
             }
         }
         break;
@@ -621,13 +671,8 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         {
             GdkEventScroll* event2 = reinterpret_cast<GdkEventScroll*>(event);
             if ( event2->device ) {
-#if GTK_CHECK_VERSION(2, 22, 0)
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
-#else
-                source = event2->device->source;
-                name = event2->device->name;
-#endif
             }
         }
         break;
@@ -637,13 +682,8 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         {
             GdkEventProximity* event2 = reinterpret_cast<GdkEventProximity*>(event);
             if ( event2->device ) {
-#if GTK_CHECK_VERSION(2, 22, 0)
                 source = gdk_device_get_source(event2->device);
                 name = gdk_device_get_name(event2->device);
-#else
-                source = event2->device->source;
-                name = event2->device->source;
-#endif
             }
         }
         break;

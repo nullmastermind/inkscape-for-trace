@@ -27,6 +27,7 @@
 
 #include <signal.h>
 #include <errno.h>
+#include <boost/scoped_ptr.hpp>
 
 #include "libnrtype/Layout-TNG.h"
 #include <2geom/transforms.h>
@@ -55,7 +56,7 @@
 #include "sp-mask.h"
 #include "sp-clippath.h"
 
-#include <unit-constants.h>
+#include "util/units.h"
 #include "helper/png-write.h"
 #include "helper/pixbuf-ops.h"
 
@@ -101,7 +102,6 @@ namespace Extension {
 namespace Internal {
 
 CairoRenderer::CairoRenderer(void)
-  : _omitText(false)
 {}
 
 CairoRenderer::~CairoRenderer(void)
@@ -348,8 +348,8 @@ static void sp_image_render(SPItem *item, CairoRenderContext *ctx)
     if (!image->pixbuf) return;
     if ((image->width.computed <= 0.0) || (image->height.computed <= 0.0)) return;
 
-    w = gdk_pixbuf_get_width (image->pixbuf);
-    h = gdk_pixbuf_get_height (image->pixbuf);
+    w = image->pixbuf->width();
+    h = image->pixbuf->height();
 
     double x = image->x.computed;
     double y = image->y.computed;
@@ -442,7 +442,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     */
     res = ctx->getBitmapResolution();
     if(res == 0) {
-        res = PX_PER_IN;
+        res = Inkscape::Util::Quantity::convert(1, "in", "px");
     }
     TRACE(("sp_asbitmap_render: resolution: %f\n", res ));
 
@@ -450,7 +450,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     Geom::OptRect bbox = item->desktopVisualBounds();
 
     // no bbox, e.g. empty group
-	if (!bbox) {
+    if (!bbox) {
         return;
     }
 
@@ -463,8 +463,8 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     }
 
     // The width and height of the bitmap in pixels
-    unsigned width =  ceil(bbox->width() * (res / PX_PER_IN));
-    unsigned height = ceil(bbox->height() * (res / PX_PER_IN));
+    unsigned width =  ceil(bbox->width() * Inkscape::Util::Quantity::convert(res, "px", "in"));
+    unsigned height = ceil(bbox->height() * Inkscape::Util::Quantity::convert(res, "px", "in"));
 
     if (width == 0 || height == 0) return;
 
@@ -477,7 +477,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     double shift_y = bbox->max()[Geom::Y];
 
     // For default 90 dpi, snap bitmap to pixel grid
-    if (res == PX_PER_IN) { 
+    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { 
         shift_x = round (shift_x);
         shift_y = -round (-shift_y); // Correct rounding despite coordinate inversion.
                                      // Remove the negations when the inversion is gone.
@@ -498,17 +498,15 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     GSList *items = NULL;
     items = g_slist_append(items, item);
 
-    GdkPixbuf *pb = sp_generate_internal_bitmap(document, NULL,
-        bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
-        width, height, res, res, (guint32) 0xffffff00, items );
+    boost::scoped_ptr<Inkscape::Pixbuf> pb(
+        sp_generate_internal_bitmap(document, NULL,
+            bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
+            width, height, res, res, (guint32) 0xffffff00, items ));
 
     if (pb) {
-        TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
-        // TODO this is stupid - we just converted to pixbuf format when generating the bitmap!
-        convert_pixbuf_normal_to_argb32(pb);
-        ctx->renderImage(pb, t, item->style);
-        g_object_unref(pb);
-        pb = 0;
+        //TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
+
+        ctx->renderImage(pb.get(), t, item->style);
     }
     g_slist_free (items);
 }
@@ -578,18 +576,13 @@ CairoRenderer::setStateForItem(CairoRenderContext *ctx, SPItem const *item)
 // TODO change this to accept a const SPItem:
 void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
 {
-    if ( _omitText && (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) ) {
-        // skip text if _omitText is true
-        return;
-    }
-
     ctx->pushState();
     setStateForItem(ctx, item);
 
     CairoRenderState *state = ctx->getCurrentState();
     state->need_layer = ( state->mask || state->clip_path || state->opacity != 1.0 );
 
-    // Draw item on a temporary surface so a mask, clip path, or opacity can be applied to it.
+    // Draw item on a temporary surface so a mask, clip-path, or opacity can be applied to it.
     if (state->need_layer) {
         state->merge_opacity = FALSE;
         ctx->pushLayer();
@@ -598,13 +591,13 @@ void CairoRenderer::renderItem(CairoRenderContext *ctx, SPItem *item)
     sp_item_invoke_render(item, ctx);
 
     if (state->need_layer)
-        ctx->popLayer();
+        ctx->popLayer(); // This applies clipping/masking
 
     ctx->popState();
 }
 
 bool
-CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, SPItem *base)
+CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base)
 {
 // PLEASE note when making changes to the boundingbox and transform calculation, corresponding changes should be made to PDFLaTeXRenderer::setupDocument !!!
 
@@ -625,10 +618,11 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
         }
         d = *bbox;
     }
+    d.expandBy(bleedmargin_px);
 
     if (ctx->_vector_based_target) {
         // convert from px to pt
-        d *= Geom::Scale(PT_PER_PX);
+        d *= Geom::Scale(Inkscape::Util::Quantity::convert(1, "px", "pt"));
     }
 
     ctx->_width = d.width();
@@ -638,16 +632,21 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
 
     bool ret = ctx->setupSurface(ctx->_width, ctx->_height);
 
-    if (ret && !pageBoundingBox)
-    {
-        double high = doc->getHeight();
-        if (ctx->_vector_based_target)
-            high *= PT_PER_PX;
+    if (ret) {
+        if (pageBoundingBox) {
+            // translate to set bleed/margin
+            Geom::Affine tp( Geom::Translate( bleedmargin_px, bleedmargin_px ) );
+            ctx->transform(tp);
+        } else {
+            double high = doc->getHeight().value("px");
+            if (ctx->_vector_based_target)
+                high = Inkscape::Util::Quantity::convert(high, "px", "pt");
 
-        /// @fixme hardcoded dt2doc transform?
-        Geom::Affine tp(Geom::Translate(-d.left() * (ctx->_vector_based_target ? PX_PER_PT : 1.0),
-                                        (d.bottom() - high) * (ctx->_vector_based_target ? PX_PER_PT : 1.0)));
-        ctx->transform(tp);
+            // this transform translates the export drawing to a virtual page (0,0)-(width,height)
+            Geom::Affine tp(Geom::Translate(-d.left() * (ctx->_vector_based_target ? Inkscape::Util::Quantity::convert(1, "pt", "px") : 1.0),
+                                            (d.bottom() - high) * (ctx->_vector_based_target ? Inkscape::Util::Quantity::convert(1, "pt", "px") : 1.0)));
+            ctx->transform(tp);
+        }
     }
 
     return ret;

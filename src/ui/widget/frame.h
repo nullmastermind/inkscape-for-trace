@@ -10,11 +10,17 @@
 #ifndef INKSCAPE_UI_WIDGET_FRAME_H
 #define INKSCAPE_UI_WIDGET_FRAME_H
 
-#include <gtkmm.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
-namespace Gtk {
-class Frame;
-}
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
+#include <gtkmm/alignment.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/label.h>
 
 namespace Inkscape {
 namespace UI {

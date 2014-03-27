@@ -83,7 +83,10 @@ def csparea(csp):
             bezarea += ( 3.0*sp[i-1][1][1] - 1.0*sp[i-1][2][1] - 2.0*sp[i][0][1] + 0.0*sp[i][1][1])*sp[i][1][0]
             area += 0.15*bezarea
     return abs(area)
-
+def appendSuperScript(node, text):
+    super = inkex.etree.SubElement(node, inkex.addNS('tspan', 'svg'), {'style': 'font-size:65%;baseline-shift:super'})
+    super.text = text
+    
 class Length(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
@@ -94,7 +97,11 @@ class Length(inkex.Effect):
         self.OptionParser.add_option("--format",
                         action="store", type="string", 
                         dest="format", default="textonpath",
-                        help="Display Format")
+                        help="Text Orientation")
+        self.OptionParser.add_option("--angle",
+                        action="store", type="float", 
+                        dest="angle", default=0,
+                        help="Angle")             
         self.OptionParser.add_option("-f", "--fontsize",
                         action="store", type="int", 
                         dest="fontsize", default=20,
@@ -114,7 +121,7 @@ class Length(inkex.Effect):
         self.OptionParser.add_option("-s", "--scale",
                         action="store", type="float", 
                         dest="scale", default=1,
-                        help="The distance above the curve")
+                        help="Scale Factor (Drawing:Real Length)")
         self.OptionParser.add_option("-r", "--orient",
                         action="store", type="inkbool", 
                         dest="orient", default=True,
@@ -131,6 +138,7 @@ class Length(inkex.Effect):
     def effect(self):
         # get number of digits
         prec = int(self.options.precision)
+        self.options.offset *= self.unittouu('1px')
         factor = 1.0
         doc = self.document.getroot()
         if doc.get('viewBox'):
@@ -147,7 +155,7 @@ class Length(inkex.Effect):
                 mat = simpletransform.composeParents(node, [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]])
                 p = cubicsuperpath.parsePath(node.get('d'))
                 simpletransform.applyTransformToPath(mat, p)
-                factor = factor/inkex.unittouu('1'+self.options.unit)
+                factor *= self.unittouu('1px')/self.unittouu('1'+self.options.unit)
                 if self.options.type == "length":
                     slengths, stotal = csplength(p)
                 else:
@@ -161,9 +169,9 @@ class Length(inkex.Effect):
                         self.addTextOnPath(self.group, 0, 0, lenstr+' '+self.options.unit+'^2', id, 'start', '0%', self.options.offset)
                 else:
                     if self.options.type == "length":
-                        self.addTextWithTspan(self.group, p[0][0][1][0], p[0][0][1][1], lenstr+' '+self.options.unit, id, 'start', -int(self.options.format), self.options.offset + self.options.fontsize/2)
+                        self.addTextWithTspan(self.group, p[0][0][1][0], p[0][0][1][1], lenstr+' '+self.options.unit, id, 'start', -int(self.options.angle), self.options.offset + self.options.fontsize/2)
                     else:
-                        self.addTextWithTspan(self.group, p[0][0][1][0], p[0][0][1][1], lenstr+' '+self.options.unit+'^2', id, 'start', -int(self.options.format), -self.options.offset + self.options.fontsize/2)
+                        self.addTextWithTspan(self.group, p[0][0][1][0], p[0][0][1][1], lenstr+' '+self.options.unit+'^2', id, 'start', -int(self.options.angle), -self.options.offset + self.options.fontsize/2)
 
     def addTextOnPath(self, node, x, y, text, id, anchor, startOffset, dy = 0):
                 new = inkex.etree.SubElement(node,inkex.addNS('textPath','svg'))
@@ -176,7 +184,11 @@ class Length(inkex.Effect):
                 new.set('startOffset', startOffset)
                 new.set('dy', str(dy)) # dubious merit
                 #new.append(tp)
-                new.text = str(text)
+                if text[-2:] == "^2":
+                    appendSuperScript(new, "2")
+                    new.text = str(text)[:-2]
+                else:
+                    new.text = str(text)
                 #node.set('transform','rotate(180,'+str(-x)+','+str(-y)+')')
                 node.set('x', str(x))
                 node.set('y', str(y))
@@ -189,7 +201,11 @@ class Length(inkex.Effect):
                     'font-weight': 'normal', 'font-style': 'normal', 'fill': '#000000'}
                 new.set('style', simplestyle.formatStyle(s))
                 new.set('dy', str(dy))
-                new.text = str(text)
+                if text[-2:] == "^2":
+                    appendSuperScript(new, "2")
+                    new.text = str(text)[:-2]
+                else:
+                    new.text = str(text)
                 node.set('x', str(x))
                 node.set('y', str(y))
                 node.set('transform', 'rotate(%s, %s, %s)' % (angle, x, y))

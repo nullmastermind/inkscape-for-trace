@@ -11,8 +11,22 @@
 #ifndef INKSCAPE_UI_CURRENT_STYLE_H
 #define INKSCAPE_UI_CURRENT_STYLE_H
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
-#include <gtkmm/table.h>
+
+#if WITH_GTKMM_3_0
+# include <gtkmm/grid.h>
+#else
+# include <gtkmm/table.h>
+#endif
+
 #include <gtkmm/label.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/enums.h>
@@ -29,9 +43,13 @@
 #include "rotateable.h"
 
 class SPDesktop;
-class SPUnit;
 
 namespace Inkscape {
+
+namespace Util {
+    class Unit;
+}
+
 namespace UI {
 namespace Widget {
 
@@ -60,8 +78,10 @@ public:
     ~RotateableSwatch();
 
     double color_adjust (float *hsl, double by, guint32 cc, guint state);
+
     virtual void do_motion (double by, guint state);
     virtual void do_release (double by, guint state);
+    virtual void do_scroll (double by, guint state);
 
 private:
     guint fillstroke;
@@ -86,6 +106,7 @@ public:
     double value_adjust(double current, double by, guint modifier, bool final);
     virtual void do_motion (double by, guint state);
     virtual void do_release (double by, guint state);
+    virtual void do_scroll (double by, guint state);
 
 private:
     SelectedStyle *parent;
@@ -94,9 +115,6 @@ private:
     bool startvalue_set;
 
     gchar const *undokey;
-
-    GdkCursor *cr;
-    bool cr_set;
 };
 
 /**
@@ -123,7 +141,11 @@ public:
 protected:
     SPDesktop *_desktop;
 
+#if WITH_GTKMM_3_0
+    Gtk::Grid _table;
+#else
     Gtk::Table _table;
+#endif
 
     Gtk::Label _fill_label;
     Gtk::Label _stroke_label;
@@ -250,16 +272,12 @@ protected:
 
     Gtk::Menu _popup_sw; 
     Gtk::RadioButtonGroup _sw_group;
-    Gtk::RadioMenuItem _popup_px; 
-    void on_popup_px();
-    Gtk::RadioMenuItem _popup_pt; 
-    void on_popup_pt();
-    Gtk::RadioMenuItem _popup_mm;
-    void on_popup_mm();
+    GSList *_unit_mis;
+    void on_popup_units(Inkscape::Util::Unit const *u);
     void on_popup_preset(int i);
     Gtk::MenuItem _popup_sw_remove;
 
-    SPUnit *_sw_unit;
+    Inkscape::Util::Unit const *_sw_unit;  /// points to object in UnitTable, do not delete
 
     void *_drop[2];
     bool _dropEnabled[2];

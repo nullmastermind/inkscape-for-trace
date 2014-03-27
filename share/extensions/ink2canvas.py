@@ -78,9 +78,9 @@ class Ink2Canvas(inkex.Effect):
     def effect(self):
         """Applies the effect"""
         svg_root = self.document.getroot()
-        width = inkex.unittouu(svg_root.get("width"))
-        height = inkex.unittouu(svg_root.get("height"))
-        self.canvas = Canvas(width, height)
+        width = self.unittouu(svg_root.get("width"))
+        height = self.unittouu(svg_root.get("height"))
+        self.canvas = Canvas(self, width, height)
         self.walk_tree(svg_root)
 
 

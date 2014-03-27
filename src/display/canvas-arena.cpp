@@ -32,7 +32,7 @@ enum {
 
 static void sp_canvas_arena_class_init(SPCanvasArenaClass *klass);
 static void sp_canvas_arena_init(SPCanvasArena *group);
-static void sp_canvas_arena_destroy(GtkObject *object);
+static void sp_canvas_arena_destroy(SPCanvasItem *object);
 
 static void sp_canvas_arena_item_deleted(SPCanvasArena *arena, Inkscape::DrawingItem *item);
 static void sp_canvas_arena_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
@@ -93,24 +93,19 @@ sp_canvas_arena_get_type (void)
 static void
 sp_canvas_arena_class_init (SPCanvasArenaClass *klass)
 {
-    GtkObjectClass *object_class;
-    SPCanvasItemClass *item_class;
-
-    object_class = (GtkObjectClass *) klass;
-    item_class = (SPCanvasItemClass *) klass;
+    SPCanvasItemClass *item_class = (SPCanvasItemClass *) klass;
 
     parent_class = (SPCanvasItemClass*)g_type_class_peek_parent (klass);
 
     signals[ARENA_EVENT] = g_signal_new ("arena_event",
-                                           G_TYPE_FROM_CLASS(object_class),
+                                           G_TYPE_FROM_CLASS(item_class),
                                            G_SIGNAL_RUN_LAST,
                                            ((glong)((guint8*)&(klass->arena_event) - (guint8*)klass)),
 					   NULL, NULL,
                                            sp_marshal_INT__POINTER_POINTER,
                                            G_TYPE_INT, 2, G_TYPE_POINTER, G_TYPE_POINTER);
 
-    object_class->destroy = sp_canvas_arena_destroy;
-
+    item_class->destroy = sp_canvas_arena_destroy;
     item_class->update = sp_canvas_arena_update;
     item_class->render = sp_canvas_arena_render;
     item_class->point = sp_canvas_arena_point;
@@ -147,16 +142,15 @@ sp_canvas_arena_init (SPCanvasArena *arena)
     arena->active = NULL;
 }
 
-static void
-sp_canvas_arena_destroy (GtkObject *object)
+static void sp_canvas_arena_destroy(SPCanvasItem *object)
 {
-    SPCanvasArena *arena = SP_CANVAS_ARENA (object);
+    SPCanvasArena *arena = SP_CANVAS_ARENA(object);
 
     delete arena->observer;
     arena->drawing.~Drawing();
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+    if (SP_CANVAS_ITEM_CLASS(parent_class)->destroy)
+        (* SP_CANVAS_ITEM_CLASS(parent_class)->destroy) (object);
 }
 
 static void
@@ -222,10 +216,10 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
     Geom::OptIntRect r = buf->rect;
     if (!r || r->hasZeroArea()) return;
 
-    Inkscape::DrawingContext ct(buf->ct, r->min());
+    Inkscape::DrawingContext dc(buf->ct, r->min());
 
     arena->drawing.update(Geom::IntRect::infinite(), arena->ctx);
-    arena->drawing.render(ct, *r);
+    arena->drawing.render(dc, *r);
 }
 
 static double
@@ -322,6 +316,18 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
             ret = sp_canvas_arena_send_event (arena, event);
             break;
 
+        case GDK_SCROLL: {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
+            bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
+            if ((ctrl && !wheelzooms) || (!ctrl && wheelzooms)) {
+                /* Zoom is emitted by the canvas as well, ignore here */
+                return FALSE;
+            }
+            ret = sp_canvas_arena_send_event (arena, event);
+            break;
+            }
+
         default:
             /* Just send event */
             ret = sp_canvas_arena_send_event (arena, event);
@@ -380,9 +386,9 @@ sp_canvas_arena_render_surface (SPCanvasArena *ca, cairo_surface_t *surface, Geo
     g_return_if_fail (ca != NULL);
     g_return_if_fail (SP_IS_CANVAS_ARENA (ca));
 
-    Inkscape::DrawingContext ct(surface, r.min());
+    Inkscape::DrawingContext dc(surface, r.min());
     ca->drawing.update(Geom::IntRect::infinite(), ca->ctx);
-    ca->drawing.render(ct, r);
+    ca->drawing.render(dc, r);
 }
 
 /*

@@ -13,22 +13,25 @@
 
 #include <cstring>
 #include <glib.h>
+#include "quote.h"
 
 
 /** \return strlen(xml_quote_strdup(\a val)) (without doing the malloc).
  *  \pre val != NULL
  */
-static size_t
+size_t
 xml_quoted_strlen(char const *val)
 {
     size_t ret = 0;
-    for (; *val != '\0'; val++) {
-        switch (*val) {
-            case '"': ret += sizeof("&quot;") - 1; break;
-            case '&': ret += sizeof("&amp;") - 1; break;
-            case '<': ret += sizeof("&lt;") - 1; break;
-            case '>': ret += sizeof("&gt;") - 1; break;
-            default: ++ret; break;
+    if (val != NULL) {
+        for (; *val != '\0'; val++) {
+            switch (*val) {
+                case '"': ret += sizeof("&quot;") - 1; break;
+                case '&': ret += sizeof("&amp;") - 1; break;
+                case '<': ret += sizeof("&lt;") - 1; break;
+                case '>': ret += sizeof("&gt;") - 1; break;
+                default: ++ret; break;
+            }
         }
     }
     return ret;
@@ -42,11 +45,11 @@ xml_quoted_strlen(char const *val)
 static void
 xml_quote(char *dest, char const *src)
 {
-#define COPY_LIT(_lit) do {	\
-	    size_t cpylen = sizeof(_lit "") - 1; \
-	    memcpy(dest, _lit, cpylen);	      \
-	    dest += cpylen;	              \
-	} while(0)
+#define COPY_LIT(_lit) do {     \
+            size_t cpylen = sizeof(_lit "") - 1; \
+            memcpy(dest, _lit, cpylen);       \
+            dest += cpylen;                   \
+        } while(0)
 
     for (; *src != '\0'; ++src) {
         switch (*src) {

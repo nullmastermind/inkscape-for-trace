@@ -17,33 +17,33 @@
 #include "document-private.h"
 #include "document-undo.h"
 #include "vanishing-point.h"
-#include "box3d-context.h"
+#include "ui/tools/box3d-tool.h"
 #include "box3d.h"
 #include "xml/document.h"
 #include "xml/node-event-vector.h"
 #include "desktop-handles.h"
 #include <glibmm/i18n.h>
 #include "verbs.h"
+#include "util/units.h"
 
 using Inkscape::DocumentUndo;
-
-static void persp3d_class_init(Persp3DClass *klass);
-static void persp3d_init(Persp3D *persp);
-
-static void persp3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
-static void persp3d_release(SPObject *object);
-static void persp3d_set(SPObject *object, unsigned key, gchar const *value);
-static void persp3d_update(SPObject *object, SPCtx *ctx, guint flags);
-static Inkscape::XML::Node *persp3d_write(SPObject *object, Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags);
 
 static void persp3d_on_repr_attr_changed (Inkscape::XML::Node * repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);
 
 static void persp3d_update_with_point (Persp3DImpl *persp_impl, Proj::Axis const axis, Proj::Pt2 const &new_image);
 static gchar * persp3d_pt_to_str (Persp3DImpl *persp_impl, Proj::Axis const axis);
 
-static SPObjectClass *persp3d_parent_class;
-
 static int global_counter = 0;
+
+#include "sp-factory.h"
+
+namespace {
+	SPObject* createPersp3D() {
+		return new Persp3D();
+	}
+
+	bool persp3DRegistered = SPFactory::instance().registerObject("inkscape:persp3d", createPersp3D);
+}
 
 /* Constructor/destructor for the internal class */
 
@@ -54,29 +54,6 @@ Persp3DImpl::Persp3DImpl() {
     my_counter = global_counter++;
 }
 
-/**
- * Registers Persp3d class and returns its type.
- */
-GType
-persp3d_get_type()
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(Persp3DClass),
-            NULL, NULL,
-            (GClassInitFunc) persp3d_class_init,
-            NULL, NULL,
-            sizeof(Persp3D),
-            16,
-            (GInstanceInitFunc) persp3d_init,
-            NULL,   /* value_table */
-        };
-        type = g_type_register_static(SP_TYPE_OBJECT, "Persp3D", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
 static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
@@ -85,58 +62,37 @@ static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
     NULL  /* order_changed */
 };
 
-/**
- * Callback to initialize Persp3D vtable.
- */
-static void persp3d_class_init(Persp3DClass *klass)
-{
-    SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
-    persp3d_parent_class = (SPObjectClass *) g_type_class_ref(SP_TYPE_OBJECT);
-
-    sp_object_class->build = persp3d_build;
-    sp_object_class->release = persp3d_release;
-    sp_object_class->set = persp3d_set;
-    sp_object_class->update = persp3d_update;
-    sp_object_class->write = persp3d_write;
+Persp3D::Persp3D() : SPObject() {
+    this->perspective_impl = new Persp3DImpl();
 }
 
-/**
- * Callback to initialize Persp3D object.
- */
-static void
-persp3d_init(Persp3D *persp)
-{
-    persp->perspective_impl = new Persp3DImpl();
+Persp3D::~Persp3D() {
 }
+
 
 /**
  * Virtual build: set persp3d attributes from its associated XML node.
  */
-static void persp3d_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
-{
-    if (((SPObjectClass *) persp3d_parent_class)->build)
-        (* ((SPObjectClass *) persp3d_parent_class)->build)(object, document, repr);
+void Persp3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
+	SPObject::build(document, repr);
 
-    /* calls sp_object_set for the respective attributes */
-    // The transformation matrix is updated according to the values we read for the VPs
-    object->readAttr( "inkscape:vp_x" );
-    object->readAttr( "inkscape:vp_y" );
-    object->readAttr( "inkscape:vp_z" );
-    object->readAttr( "inkscape:persp3d-origin" );
+    this->readAttr( "inkscape:vp_x" );
+    this->readAttr( "inkscape:vp_y" );
+    this->readAttr( "inkscape:vp_z" );
+    this->readAttr( "inkscape:persp3d-origin" );
 
     if (repr) {
-        repr->addListener (&persp3d_repr_events, object);
+        repr->addListener (&persp3d_repr_events, this);
     }
 }
 
 /**
  * Virtual release of Persp3D members before destruction.
  */
-static void persp3d_release(SPObject *object) {
-    Persp3D *persp = SP_PERSP3D(object);
-    delete persp->perspective_impl;
-    object->getRepr()->removeListenerByData(object);
+void Persp3D::release() {
+    delete this->perspective_impl;
+    this->getRepr()->removeListenerByData(this);
 }
 
 
@@ -145,10 +101,8 @@ static void persp3d_release(SPObject *object) {
  */
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
-static void
-persp3d_set(SPObject *object, unsigned key, gchar const *value)
-{
-    Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
+void Persp3D::set(unsigned key, gchar const *value) {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     switch (key) {
         case SP_ATTR_INKSCAPE_PERSP3D_VP_X: {
@@ -180,16 +134,15 @@ persp3d_set(SPObject *object, unsigned key, gchar const *value)
             }
         }
         default: {
-            if (((SPObjectClass *) persp3d_parent_class)->set)
-                (* ((SPObjectClass *) persp3d_parent_class)->set)(object, key, value);
+        	SPObject::set(key, value);
             break;
         }
     }
 
     // FIXME: Is this the right place for resetting the draggers?
-    SPEventContext *ec = inkscape_active_event_context();
+    Inkscape::UI::Tools::ToolBase *ec = inkscape_active_event_context();
     if (SP_IS_BOX3D_CONTEXT(ec)) {
-        Box3DContext *bc = SP_BOX3D_CONTEXT(ec);
+        Inkscape::UI::Tools::Box3dTool *bc = SP_BOX3D_CONTEXT(ec);
         bc->_vpdrag->updateDraggers();
         bc->_vpdrag->updateLines();
         bc->_vpdrag->updateBoxHandles();
@@ -197,17 +150,14 @@ persp3d_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
-static void
-persp3d_update(SPObject *object, SPCtx *ctx, guint flags)
-{
+void Persp3D::update(SPCtx *ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 
         /* TODO: Should we update anything here? */
 
     }
 
-    if (((SPObjectClass *) persp3d_parent_class)->update)
-        ((SPObjectClass *) persp3d_parent_class)->update(object, ctx, flags);
+    SPObject::update(ctx, flags);
 }
 
 Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// if dup is given, copy the attributes over
@@ -219,10 +169,10 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
     repr = xml_doc->createElement("inkscape:perspective");
     repr->setAttribute("sodipodi:type", "inkscape:persp3d");
 
-    Proj::Pt2 proj_vp_x = Proj::Pt2 (0.0, document->getHeight()/2, 1.0);
+    Proj::Pt2 proj_vp_x = Proj::Pt2 (0.0, document->getHeight().value("px")/2, 1.0);
     Proj::Pt2 proj_vp_y = Proj::Pt2 (0.0, 1000.0, 0.0);
-    Proj::Pt2 proj_vp_z = Proj::Pt2 (document->getWidth(), document->getHeight()/2, 1.0);
-    Proj::Pt2 proj_origin = Proj::Pt2 (document->getWidth()/2, document->getHeight()/3, 1.0);
+    Proj::Pt2 proj_vp_z = Proj::Pt2 (document->getWidth().value("px"), document->getHeight().value("px")/2, 1.0);
+    Proj::Pt2 proj_origin = Proj::Pt2 (document->getWidth().value("px")/2, document->getHeight().value("px")/3, 1.0);
 
     if (dup) {
         proj_vp_x = dup->tmat.column (Proj::X);
@@ -266,10 +216,8 @@ Persp3D *persp3d_document_first_persp(SPDocument *document)
 /**
  * Virtual write: write object attributes to repr.
  */
-static Inkscape::XML::Node *
-persp3d_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-{
-    Persp3DImpl *persp_impl = SP_PERSP3D(object)->perspective_impl;
+Inkscape::XML::Node* Persp3D::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+    Persp3DImpl *persp_impl = this->perspective_impl;
 
     if ((flags & SP_OBJECT_WRITE_BUILD & SP_OBJECT_WRITE_EXT) && !repr) {
         // this is where we end up when saving as plain SVG (also in other circumstances?);
@@ -292,8 +240,7 @@ persp3d_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML:
         repr->setAttribute("inkscape:persp3d-origin", str);
     }
 
-    if (((SPObjectClass *) persp3d_parent_class)->write)
-        (* ((SPObjectClass *) persp3d_parent_class)->write)(object, xml_doc, repr, flags);
+    SPObject::write(xml_doc, repr, flags);
 
     return repr;
 }

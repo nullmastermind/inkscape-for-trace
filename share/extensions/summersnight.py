@@ -17,18 +17,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-import gettext
+# standard library
 import os
-
+# local library
 import cubicsuperpath
 import inkex
 import simplepath
 import simpletransform
 import voronoi2svg
-
 from ffgeom import *
 
-_ = gettext.gettext
+inkex.localize()
 
 try:
     from subprocess import Popen, PIPE
@@ -46,6 +45,7 @@ class Project(inkex.Effect):
             exit()
 
         #obj is selected second
+        scale = self.unittouu('1px')    # convert to document units
         obj = self.selected[self.options.ids[0]]
         trafo = self.selected[self.options.ids[1]]
         if obj.get(inkex.addNS('type','sodipodi')):
@@ -76,11 +76,11 @@ class Project(inkex.Effect):
                     if bsubprocess:
                         p = Popen('inkscape --query-%s --query-id=%s "%s"' % (query,id,file), shell=True, stdout=PIPE, stderr=PIPE)
                         rc = p.wait()
-                        self.q[query] = float(p.stdout.read())
+                        self.q[query] = scale*float(p.stdout.read())
                         err = p.stderr.read()
                     else:
                         f,err = os.popen3('inkscape --query-%s --query-id=%s "%s"' % (query,id,file))[1:]
-                        self.q[query] = float(f.read())
+                        self.q[query] = scale*float(f.read())
                         f.close()
                         err.close()
 
