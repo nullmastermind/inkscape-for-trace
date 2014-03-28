@@ -202,10 +202,15 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 		switch (order)
 		{
 		case 3:
-			start_point = (dynamic_cast<const Geom::CubicBezier*>(&path_in[i]))->operator[] (2);
+			start_point = (static_cast<const Geom::CubicBezier*>(&path_in[i]))->operator[] (2);
+			//major league b***f***ing
+			if (are_near(start_point, cross_point, 0.0000001)) {
+			    start_point = (static_cast<const Geom::CubicBezier*>(&path_in[i]))->operator[] (1);
+			}
 			break;
 		case 2:
-			start_point = (dynamic_cast<const Geom::QuadraticBezier*>(&path_in[i]))->operator[] (1);
+		    //this never happens
+			start_point = (static_cast<const Geom::QuadraticBezier*>(&path_in[i]))->operator[] (1);
 			break;
 		case 1:
 		default:
@@ -217,15 +222,23 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 		switch (order)
 		{
 		case 3:
-			end_point = (dynamic_cast<const Geom::CubicBezier*>(&path_in[i+1]))->operator[] (1);
+			end_point = (static_cast<const Geom::CubicBezier*>(&path_in[i+1]))->operator[] (1);
+			if (are_near(end_point, cross_point, 0.0000001)) {
+			    end_point = (static_cast<const Geom::CubicBezier*>(&path_in[i+1]))->operator[] (2);
+			}
 			break;
 		case 2:
-			end_point = (dynamic_cast<const Geom::QuadraticBezier*>(&path_in[i+1]))->operator[] (1);
+			end_point = (static_cast<const Geom::QuadraticBezier*>(&path_in[i+1]))->operator[] (1);
 			break;
 		case 1:
 		default:
 			end_point = path_in[i+1].finalPoint();
 		}
+		
+		g_assert(!are_near(start_point, cross_point, 0.0000001)); //take that motherf*ckers
+		g_assert(!are_near(cross_point, end_point,   0.0000001));
+		g_assert(!are_near(start_point, end_point,   0.0000001));
+		
 		if (!are_collinear(start_point, cross_point, end_point, smooth_tolerance))
 			break;
 	}
@@ -305,14 +318,14 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	pat_str << "M 1,0 C " << 1 - (double)smoothing << ",0 0,0.5 0,0.5 0,0.5 " << 1 - (double)smoothing << ",1 1,1";
 
 	pat_vec = sp_svg_read_pathv(pat_str.str().c_str());	
-	pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], line_width));	
+	pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], -fabs(line_width)));	
 	throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
 		
 	real_path.append(throwaway_path);
 	}	
 	//append the outside outline of the path (with direction)
 	throwaway_path = Outline::PathOutsideOutline(pathv_out[1], 
-		line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+		-fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 			
 	if (!zeroStart) {	
 	    throwaway_path.setInitial(real_path.finalPoint());
@@ -328,7 +341,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	pat_vec = sp_svg_read_pathv(pat_str_1.str().c_str());
 		
 	pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
-	pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], line_width));
+	pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], -fabs(line_width)));
 		
 	throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
 	throwaway_path.setInitial(real_path.finalPoint());
@@ -336,7 +349,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	}	
 	//append the inside outline of the path (against direction)
 	throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), 
-		line_width, static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+		-fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 	
 	if (!zeroEnd) {	
 	    throwaway_path.setInitial(real_path.finalPoint());

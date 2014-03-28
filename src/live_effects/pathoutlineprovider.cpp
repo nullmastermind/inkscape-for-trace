@@ -154,40 +154,78 @@ unsigned bezierOrder (const Geom::Curve* curve_in)
 
 //returns true if the angle formed by the curves and their handles
 //is >180 clockwise, otherwise false.
-bool outside_angle (const Geom::Curve* cbc1, const Geom::Curve* cbc2)
+bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
 {
-    Geom::Point start_point = cbc1->initialPoint();
-    Geom::Point end_point = cbc2->finalPoint();
-    unsigned order = bezierOrder(cbc1);
-    switch (order) {
-    case 3:
-        start_point = ( dynamic_cast<const Geom::CubicBezier*>(cbc1) )->operator [] (2);
-        break;
-    case 2:
-        start_point = ( dynamic_cast<const Geom::QuadraticBezier*>(cbc1) )->operator [] (1);
-        break;
-    }
-    order = bezierOrder(cbc2);
-    switch (order) {
-    case 3:
-        end_point = ( dynamic_cast<const Geom::CubicBezier*>(cbc2) )->operator [] (1);
-        break;
-    case 2:
-        end_point = ( dynamic_cast<const Geom::QuadraticBezier*>(cbc2) )->operator[] (1);
-        break;
-    }
+    unsigned order = bezierOrder(&cbc1);
+
+    Geom::Point start_point;
+	Geom::Point cross_point = cbc1.finalPoint();
+	Geom::Point end_point;
+	
+	//assert(cbc1.finalPoint() == cbc2.initialPoint());
+        if (cbc1.finalPoint() != cbc2.initialPoint()) {
+            return false;
+        }
+	switch (order)
+	{
+	case 3:
+		start_point = (static_cast<const Geom::CubicBezier*>(&cbc1))->operator[] (2);
+		//major league b***f***ing
+		if (are_near(start_point, cross_point, 0.0000001)) {
+			   start_point = (static_cast<const Geom::CubicBezier*>(&cbc1))->operator[] (1);
+		}
+		break;
+	case 2:
+		   //this never happens
+		start_point = (static_cast<const Geom::QuadraticBezier*>(&cbc1))->operator[] (1);
+		break;
+	case 1:
+	default:
+		start_point = cbc1.initialPoint();
+	}
+
+	order = Outline::bezierOrder(&cbc2);
+
+	switch (order)
+	{
+	case 3:
+		end_point = (static_cast<const Geom::CubicBezier*>(&cbc2))->operator[] (1);
+		if (are_near(end_point, cross_point, 0.0000001)) {
+			end_point = (static_cast<const Geom::CubicBezier*>(&cbc2))->operator[] (2);
+		}
+		break;
+	case 2:
+		end_point = (static_cast<const Geom::QuadraticBezier*>(&cbc2))->operator[] (1);
+		break;
+	case 1:
+	default:
+		end_point = cbc2.finalPoint();
+	}
+	//got our three points, now let's see what their clockwise angle is
+
+    //Much credit to Wikipedia for the following ( http://en.wikipedia.org/wiki/Graham_scan )	
+    /******************************************************************** 
+    # Three points are a counter-clockwise turn if ccw > 0, clockwise if
+    # ccw < 0, and collinear if ccw = 0 because ccw is a determinant that
+    # gives the signed area of the triangle formed by p1, p2 and p3.
+    function ccw(p1, p2, p3):
+        return (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x) 
+    *********************************************************************/
+    
+    double ccw = ( (cross_point.x() - start_point.x()) * (end_point.y() - start_point.y()) ) -
+                 ( (cross_point.y() - start_point.y()) * (end_point.x() - start_point.x()) );
+    if (ccw > 0) return true;
     return false;
 }
 
-void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit)
+void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit, bool outside = false)
 {
 
-    Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
-    if (cross.empty()) {
+    if ( outside ) {
         Geom::Path pth;
         pth.append(*cbc1);
 
-        //Geom::Point tang1 = Geom::unitTangentAt(pth.toPwSb()[0], 1);
+        Geom::Point tang1 = Geom::unitTangentAt(Geom::reverse(pth.toPwSb()[0]), 0.);
 
         pth = Geom::Path();
         pth.append( *cbc2 );
@@ -227,6 +265,12 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
                 arc1 = NULL;
             }
         } else {
+            boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
+            cbc2->initialPoint(), tang2);
+            if (p)
+            {
+            	path_builder.appendNew<Geom::LineSegment> (*p);
+            }
             path_builder.appendNew<Geom::LineSegment> (endPt);
         }
     } else {
@@ -234,21 +278,19 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
     }
 }
 
-void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit)
+void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit, bool outside = false)
 {
     //the most important work for the reflected join is done here
 
     //determine where we are in the path. If we're on the inside, ignore
     //and just lineTo. On the outside, we'll do a little reflection magic :)
+    Geom::Crossings cross;
     
-    //note: this is TERRIBLY inaccurate.
-    Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
-    if (cross.empty()) {
-        //probably on the outside of the corner
+    if (outside) {
         Geom::Path pth;
         pth.append(*cbc1);
 
-        Geom::Point tang1 = Geom::unitTangentAt(pth.toPwSb()[0], 1);
+        Geom::Point tang1 = Geom::unitTangentAt(Geom::reverse(pth.toPwSb()[0]), 0.);
 
         //reflect curves along the bevel
         D2SB newcurve1 = pth.toPwSb()[0] *
@@ -269,12 +311,12 @@ void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cb
         cross = Geom::crossings(bzr1, bzr2);
         if ( cross.empty() ) {
             //curves didn't cross; default to miter
-            /*boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
+            boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
                     cbc2->initialPoint(), tang2);
             if (p)
             {
             	path_builder.appendNew<Geom::LineSegment> (*p);
-            }*/
+            }
             //bevel
             path_builder.appendNew<Geom::LineSegment>( endPt );
         } else {
@@ -336,8 +378,10 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();
             
             //do the reflection/extrapolation:
-            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
-            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
+            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, 
+                               outside_angle ( pv[u - 1] [pv[u - 1].size()], pv[u] [0] )); }
+            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit,
+                               outside_angle ( pv[u - 1] [pv[u - 1].size()], pv[u] [0] )); }
         }
         
         path_builder.append( (*path_vec)[0] );
@@ -359,8 +403,10 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();
             
             //do the reflection/extrapolation:
-            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
-            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit); }
+            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, 
+                               outside_angle ( pv[u] [pv[u].size()-1], pv[u+1] [0] )); }
+            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit,
+                                   outside_angle ( pv[u] [pv[u].size()-1], pv[u+1] [0] )); }
                           
             //Now we can store it.
             path_builder.append( (*path_vec)[0] );
