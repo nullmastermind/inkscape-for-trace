@@ -220,8 +220,8 @@ bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
 
 void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit, bool outside = false)
 {
-
-    if ( outside ) {
+	bool lineProblem = (dynamic_cast<Geom::BezierCurveN<1u> *>(cbc1)) || (dynamic_cast<Geom::BezierCurveN<1u> *>(cbc2));
+    if ( outside && !lineProblem ) {
         Geom::Path pth;
         pth.append(*cbc1);
 
@@ -273,9 +273,26 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             }
             path_builder.appendNew<Geom::LineSegment> (endPt);
         }
-    } else {
+    } 
+	if ( outside && lineProblem ) {
+	    Geom::Path pth;
+        pth.append(*cbc1);
+		Geom::Point tang1 = Geom::unitTangentAt(Geom::reverse(pth.toPwSb()[0]), 0.);
+        pth = Geom::Path();
+        pth.append( *cbc2 );		
+		Geom::Point tang2 = Geom::unitTangentAt(pth.toPwSb()[0], 0);
+		
+		boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
+        cbc2->initialPoint(), tang2);
+        if (p)
+        {
+            path_builder.appendNew<Geom::LineSegment> (*p);
+        }
         path_builder.appendNew<Geom::LineSegment> (endPt);
-    }
+	}
+	if ( !outside ) {
+		path_builder.appendNew<Geom::LineSegment> (endPt);
+	}
 }
 
 void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit, bool outside = false)

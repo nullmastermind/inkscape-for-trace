@@ -279,10 +279,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 	
 	//don't let it be integer
 	if (double(unsigned(attach_start)) == attach_start) {
-		attach_start.param_set_value(attach_start - 0.00000001);
+		attach_start.param_set_value(attach_start - 0.00001);
 	}
 	if (double(unsigned(attach_end)) == attach_end) {
-		attach_end.param_set_value(attach_end - 0.00000001);	
+		attach_end.param_set_value(attach_end -     0.00001);	
 	}
 
 	unsigned allowed_start = first_cusp.size();
