@@ -352,8 +352,8 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 		-fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 	
 	if (!zeroEnd) {	
-	    throwaway_path.setInitial(real_path.finalPoint());
-	    real_path.append(throwaway_path);
+	    //throwaway_path.setInitial(real_path.finalPoint());
+	    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
 	} else {	
 	    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
 	}

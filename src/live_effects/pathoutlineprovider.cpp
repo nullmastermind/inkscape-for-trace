@@ -1,5 +1,5 @@
 #include "pathoutlineprovider.h"
-
+#include "livarot/path-description.h"
 #include <2geom/angle.h>
 #include <2geom/path.h>
 #include <2geom/circle.h>
@@ -7,6 +7,7 @@
 #include <2geom/shape.h>
 #include <2geom/transforms.h>
 #include <2geom/path-sink.h>
+#include <svg/svg.h>
 
 namespace Geom
 {
@@ -163,7 +164,10 @@ bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
 	Geom::Point end_point;
 	
 	//assert(cbc1.finalPoint() == cbc2.initialPoint());
+	//short circuiting?
         if (cbc1.finalPoint() != cbc2.initialPoint()) {
+            printf("There was an issue when asserting that one curve's end is the start of the other. Line %d, File %s\n"
+                      "By default we are going to say that this is an inside join, so we cannot make a line join for it.\n", __LINE__, __FILE__);
             return false;
         }
 	switch (order)
@@ -218,7 +222,8 @@ bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
     return false;
 }
 
-void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit, bool outside = false)
+void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, 
+                        double miter_limit, double line_width, bool outside = false)
 {
 	bool lineProblem = (dynamic_cast<Geom::BezierCurveN<1u> *>(cbc1)) || (dynamic_cast<Geom::BezierCurveN<1u> *>(cbc2));
     if ( outside && !lineProblem ) {
@@ -269,7 +274,13 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             cbc2->initialPoint(), tang2);
             if (p)
             {
-            	path_builder.appendNew<Geom::LineSegment> (*p);
+                //check size of miter
+                Geom::Point point_on_path = cbc1->finalPoint() - rot90(tang1) * line_width;
+                Geom::Coord len = distance(*p, point_on_path);
+                if (len <= miter_limit) {
+                    // miter OK
+                    path_builder.appendNew<Geom::LineSegment> (*p);
+                }
             }
             path_builder.appendNew<Geom::LineSegment> (endPt);
         }
@@ -286,7 +297,13 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
         cbc2->initialPoint(), tang2);
         if (p)
         {
-            path_builder.appendNew<Geom::LineSegment> (*p);
+            //check size of miter
+            Geom::Point point_on_path = cbc1->finalPoint() - rot90(tang1) * line_width;
+            Geom::Coord len = distance(*p, point_on_path);
+            if (len <= miter_limit) {
+                // miter OK
+                path_builder.appendNew<Geom::LineSegment> (*p);
+            }
         }
         path_builder.appendNew<Geom::LineSegment> (endPt);
 	}
@@ -295,7 +312,8 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
 	}
 }
 
-void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, double miter_limit, bool outside = false)
+void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cbc2, Geom::Point endPt, 
+                    double miter_limit, double line_width, bool outside = false)
 {
     //the most important work for the reflected join is done here
 
@@ -332,7 +350,13 @@ void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cb
                     cbc2->initialPoint(), tang2);
             if (p)
             {
-            	path_builder.appendNew<Geom::LineSegment> (*p);
+                //check size of miter
+                Geom::Point point_on_path = cbc1->finalPoint() - rot90(tang1) * line_width;
+                Geom::Coord len = distance(*p, point_on_path);
+                if (len <= miter_limit) {
+                    // miter OK
+                    path_builder.appendNew<Geom::LineSegment> (*p);
+                }
             }
             //bevel
             path_builder.appendNew<Geom::LineSegment>( endPt );
@@ -395,10 +419,10 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();
             
             //do the reflection/extrapolation:
-            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, 
-                               outside_angle ( pv[u - 1] [pv[u - 1].size()], pv[u] [0] )); }
-            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit,
-                               outside_angle ( pv[u - 1] [pv[u - 1].size()], pv[u] [0] )); }
+            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, line_width,
+                               outside_angle ( pv[u - 1] [pv[u - 1].size() - 1], pv[u] [0] )); }
+            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, line_width,
+                               outside_angle ( pv[u - 1] [pv[u - 1].size() - 1], pv[u] [0] )); }
         }
         
         path_builder.append( (*path_vec)[0] );
@@ -420,9 +444,9 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();
             
             //do the reflection/extrapolation:
-            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, 
+            if (extrapolate) { extrapolate_curves(path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, line_width,
                                outside_angle ( pv[u] [pv[u].size()-1], pv[u+1] [0] )); }
-            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit,
+            else { reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, line_width,
                                    outside_angle ( pv[u] [pv[u].size()-1], pv[u+1] [0] )); }
                           
             //Now we can store it.
@@ -449,10 +473,33 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
             //since you've made it this far, hopefully all this is obvious :P
             Geom::Path with_direction;
             Geom::Path against_direction;
-            
-            with_direction = Outline::doAdvHalfOutline( path_in[i], -line_width, miter_lim, extrapolate );
-            against_direction = Outline::doAdvHalfOutline( path_in[i].reverse(), -line_width, extrapolate );
-            
+            if ( !path_in[i].closed() ) {
+                with_direction = Outline::doAdvHalfOutline( path_in[i], -line_width, miter_lim, extrapolate );
+                against_direction = Outline::doAdvHalfOutline( path_in[i].reverse(), -line_width, miter_lim, extrapolate );
+            } else {
+                //Geom::Path absolutely refuses to do what I want with these
+                Geom::Path newPath = path_in[i];
+                newPath.close(false);
+                Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = newPath.toPwSb();
+                newPath = Geom::path_from_piecewise(pwd2, 0.01)[0];
+                //fuk this
+                with_direction = Outline::doAdvHalfOutline( newPath, -line_width, miter_lim, extrapolate );
+                against_direction = Outline::doAdvHalfOutline( newPath.reverse(), -line_width, miter_lim, extrapolate );                 
+                
+                /*if (dynamic_cast<const Geom::BezierCurveN<1u> *>(&newPath[newPath.size()])) {
+                    //delete the 'Z'
+                    newPath.erase_last();
+                    newPath.append(path_in[i][path_in[i].size() - 1]);
+                    newPath.appendNew<Geom::LineSegment>(newPath.initialPoint());
+                    newPath.erase_last();
+                } else {
+                    //delete the 'Z'
+                    newPath.erase_last();
+                    newPath.append(path_in[i][path_in[i].size() - 1]);
+                    newPath.appendNew<Geom::LineSegment>(newPath.initialPoint());
+                    newPath.erase_last();             
+                }*/
+            }
             Geom::PathBuilder pb;
             
             //add in the...do I really need to say this?
