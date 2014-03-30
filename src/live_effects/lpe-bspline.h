@@ -11,46 +11,45 @@
 #include "live_effects/parameter/bool.h"
 #include <vector>
 
-
 namespace Inkscape {
 namespace LivePathEffect {
 
 class LPEBSpline : public Effect {
 
 public:
-    LPEBSpline(LivePathEffectObject *lpeobject);
-    virtual ~LPEBSpline();
+  LPEBSpline(LivePathEffectObject *lpeobject);
+  virtual ~LPEBSpline();
 
-    virtual void createAndApply(const char* name, SPDocument *doc, SPItem *item);
+  virtual void createAndApply(const char *name, SPDocument *doc, SPItem *item);
 
-    virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
+  virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
 
-    virtual void doEffect(SPCurve * curve);
+  virtual void doEffect(SPCurve *curve);
 
-    virtual void doBSplineFromWidget(SPCurve * curve, double value);
+  virtual void doBSplineFromWidget(SPCurve *curve, double value);
 
-    virtual bool nodeIsSelected(Geom::Point nodePoint);
+  virtual bool nodeIsSelected(Geom::Point nodePoint);
 
-    virtual Gtk::Widget * newWidget();
+  virtual Gtk::Widget *newWidget();
 
-    virtual void changeWeight(double weightValue);
+  virtual void changeWeight(double weightValue);
 
-    virtual void toDefaultWeight();
+  virtual void toDefaultWeight();
 
-    virtual void toMakeCusp();
+  virtual void toMakeCusp();
 
-    virtual void toWeight();
+  virtual void toWeight();
 
-    ScalarParam steps;
+  ScalarParam steps;
 
 private:
-    std::vector<Geom::Point> points;
-    BoolParam ignoreCusp;
-    BoolParam onlySelected;
-    ScalarParam weight;
+  std::vector<Geom::Point> points;
+  BoolParam ignoreCusp;
+  BoolParam onlySelected;
+  ScalarParam weight;
 
-    LPEBSpline(const LPEBSpline&);
-    LPEBSpline& operator=(const LPEBSpline&);
+  LPEBSpline(const LPEBSpline &);
+  LPEBSpline &operator=(const LPEBSpline &);
 
 };
 
