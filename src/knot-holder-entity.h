@@ -20,9 +20,8 @@
 #include "snapper.h"
 #include "display/sp-canvas-item.h"
 
-class  SPItem;
-struct SPKnot;
-
+class SPItem;
+class SPKnot;
 class SPDesktop;
 class KnotHolder;
 
@@ -84,6 +83,7 @@ public:
     /** Connection to \a knot's "ungrabbed" signal. */
     guint   _ungrab_handler_id;
 
+private:
     sigc::connection _moved_connection;
     sigc::connection _click_connection;
     sigc::connection _ungrabbed_connection;

@@ -152,6 +152,11 @@ public:
     void updateZOrders();
 
     void printVPs();
+
+private:
+    sigc::connection _moved_connection;
+    sigc::connection _grabbed_connection;
+    sigc::connection _ungrabbed_connection;
 };
 
 struct VPDrag {

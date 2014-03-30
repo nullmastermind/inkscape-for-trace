@@ -62,13 +62,11 @@ public:
 protected:
     void _setup();
 
-    void _onApply();
     void _onOK();
     void _onDelete();
 
     void _response(gint response);
     void _modeChanged();
-    void _colorChanged();
 
 private:
     GuidelinePropertiesDialog(GuidelinePropertiesDialog const &); // no copy
