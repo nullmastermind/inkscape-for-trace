@@ -666,14 +666,11 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
     }
     // if we are removing, we readjust the handlers
     if(isBSpline()){
-        double pos = 0.0000;
         if(start.prev()){
-            pos = BSplineHandlePosition(start.prev()->back());
-            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),pos));
+            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),true));
         }
         if(end){
-            pos = BSplineHandlePosition(end->front());
-            end->back()->setPosition(BSplineHandleReposition(end->back(),pos));
+            end->back()->setPosition(BSplineHandleReposition(end->back(),true));
         }
     }
 
@@ -1209,31 +1206,36 @@ bool PathManipulator::isBSpline(bool recalculate){
     return  _is_bspline;
 }
 
-// returns the corresponding strength to the position of a handler
-double PathManipulator::BSplineHandlePosition(Handle *h){
+// returns the corresponding strength to the position of the handlers
+double PathManipulator::BSplineHandlePosition(Handle *h, bool other){
     using Geom::X;
     using Geom::Y;
     double pos = 0.0000;
     Node *n = h->parent();
     Node * nextNode = NULL;
+    if(other){
+        h = h->other();
+    }
     nextNode = n->nodeToward(h);
-    if(nextNode && n->position() != h->position()){
+    if(nextNode && !Geom::are_near(n->position(), h->position())){
         SPCurve *lineInsideNodes = new SPCurve();
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         pos = Geom::nearest_point(h->position(),*lineInsideNodes->first_segment());
     }
-    n->bsplineWeight = pos;
+    if ((pos == 0.0000 || pos == 1.0000) && other == false){
+        return BSplineHandlePosition(h, true);
+    }
     return pos;
 }
 
-// moves the handler to the corresponding position
-Geom::Point PathManipulator::BSplineHandleReposition(Handle *h){
-    double pos = this->BSplineHandlePosition(h);
+// give the location for the handler in the corresponding position
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, bool other){
+    double pos = this->BSplineHandlePosition(h, other);
     return BSplineHandleReposition(h,pos);
 }
 
-// moves the handler to the specified position
+// give the location for the handler to the specified position
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     using Geom::X;
     using Geom::Y;
@@ -1247,32 +1249,14 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
-        n->bsplineWeight = pos;
         ret = SBasisInsideNodes.valueAt(pos);
         ret = Geom::Point(ret[X] + 0.005,ret[Y] + 0.005);
     }else{
         if(pos == 0.0000){
-            n->bsplineWeight = 0.0000;
             ret = n->position();
         }
     }
     return ret;
-}
-
-//moves the node handlers and its oposite handlers to the strength of its nodes  
-void PathManipulator::BSplineNodeHandlesReposition(Node *n){
-    Node * nextNode = n->nodeToward(n->front());
-    Node * prevNode = n->nodeToward(n->back());
-    if(prevNode){
-        if(!prevNode->isEndNode())
-            prevNode->back()->setPosition(BSplineHandleReposition(prevNode->back(),prevNode->bsplineWeight));
-        prevNode->front()->setPosition(BSplineHandleReposition(prevNode->front(),prevNode->bsplineWeight));
-    }
-    if(nextNode){
-        if(!nextNode->isEndNode())
-            nextNode->front()->setPosition(BSplineHandleReposition(nextNode->front(),nextNode->bsplineWeight));
-        nextNode->back()->setPosition(BSplineHandleReposition(nextNode->back(),nextNode->bsplineWeight));
-    }
 }
 
 /** Construct the geometric representation of nodes and handles, update the outline

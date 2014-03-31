@@ -30,6 +30,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <cmath>
 
+
 namespace {
 
 Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
@@ -168,9 +169,9 @@ void Handle::move(Geom::Point const &new_pos)
         setPosition(new_pos);
 
         //move the handler and its oposite the same proportion
-        if(_pm().isBSpline(false)){
+        if(_pm().isBSpline()){
             setPosition(_pm().BSplineHandleReposition(this));
-            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
+            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),true));
         }
         return;
     }
@@ -185,9 +186,9 @@ void Handle::move(Geom::Point const &new_pos)
         setRelativePos(new_delta);
 
         //move the handler and its oposite the same proportion
-        if(_pm().isBSpline(false)){
+        if(_pm().isBSpline()){
             setPosition(_pm().BSplineHandleReposition(this));
-            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
+            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),true));
         }
         
         return;
@@ -211,9 +212,9 @@ void Handle::move(Geom::Point const &new_pos)
     setPosition(new_pos);
 
     // moves the handler and its oposite the same proportion
-    if(_pm().isBSpline(false)){
+    if(_pm().isBSpline()){
         setPosition(_pm().BSplineHandleReposition(this));
-        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
+        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),true));
     }
     
 }
@@ -305,9 +306,9 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
 
 //this function moves the handler and its oposite to the default proportion of 0.3334
 void Handle::handle_2button_press(){
-    if(_pm().isBSpline(false)){
+    if(_pm().isBSpline()){
         setPosition(_pm().BSplineHandleReposition(this,0.3334));
-        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),_parent->bsplineWeight));
+        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),0.3334));
         _pm().update();
     }
 }
@@ -361,17 +362,16 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         new_pos = result;
         // moves the handler and its oposite in X fixed positions depending on parameter "steps with control" 
         // by default in live BSpline
-        if(_pm().isBSpline(false)){
+        if(_pm().isBSpline()){
             setPosition(new_pos);
             int steps = _pm().BSplineGetSteps();
-            _parent->bsplineWeight = ceilf(_pm().BSplineHandlePosition(this)*steps)/steps;
-            new_pos=_pm().BSplineHandleReposition(this,_parent->bsplineWeight);
+            new_pos=_pm().BSplineHandleReposition(this,ceilf(_pm().BSplineHandlePosition(this)*steps)/steps);
         }
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
     //if the snap adjustment is activated and it is not bspline
-    if (snap && !_pm().isBSpline(false)) {
+    if (snap && !_pm().isBSpline()) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
@@ -412,7 +412,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         }
     }
     //if it is bspline but SHIFT or CONTROL are not pressed it fixes it in the original position
-    if(_pm().isBSpline(false) && !held_shift(*event) && !held_control(*event)){
+    if(_pm().isBSpline() && !held_shift(*event) && !held_control(*event)){
         new_pos=_last_drag_origin();
     }
     move(new_pos); // needed for correct update, even though it's redundant
@@ -431,10 +431,6 @@ void Handle::ungrabbed(GdkEventButton *event)
         Geom::Point dist = _desktop->d2w(_parent->position()) - _desktop->d2w(position());
         if (dist.length() <= drag_tolerance) {
             move(_parent->position());
-            //sets the bspline strength to 0.0000 
-            if(_pm().isBSpline(false)){
-                _parent->bsplineWeight = 0.0000;
-            }
         }
     }
 
@@ -481,8 +477,8 @@ Glib::ustring Handle::_getTip(unsigned state) const
     // to show the appropiate messages. We cannot do it in any different way becasue the function is constant
 
     bool isBSpline = false;
-    if( _parent->bsplineWeight != 0.0000)
-        isBSpline = true;
+    //if( _parent->bsplineWeight != 0.0000)
+    //    isBSpline = true;
     bool can_shift_rotate = _parent->type() == NODE_CUSP && !other()->isDegenerate();
     if (can_shift_rotate && !isBSpline) {
         more = C_("Path handle tip", "more: Shift, Ctrl, Alt");
@@ -622,11 +618,21 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point old_pos = position();
     Geom::Point delta = new_pos - position();
 
-    // save the previous node strength to apply it again once the node is moved 
-    double oldPos = 0.0000;
+    // save the previous nodes strength to apply it again once the node is moved 
+    double nodeWeight = 0.0000;
+    double nextNodeWeight = 0.0000;
+    double prevNodeWeight = 0.0000;
     Node *n = this;
-    if(_pm().isBSpline(false)){
-        oldPos = n->bsplineWeight;
+    Node * nextNode = n->nodeToward(n->front());
+    Node * prevNode = n->nodeToward(n->back());
+    if(_pm().isBSpline()){
+        nodeWeight = _pm().BSplineHandlePosition(n->front());
+        if(nextNode){
+            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->front());
+        }
+        if(prevNode){
+            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front());
+        }
     }
 
     setPosition(new_pos);
@@ -639,21 +645,49 @@ void Node::move(Geom::Point const &new_pos)
     _fixNeighbors(old_pos, new_pos);
 
     // move the affected handlers. First the node ones, later the adjoining ones.
-    if(_pm().isBSpline(false)){
-        _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
-        _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
-        _pm().BSplineNodeHandlesReposition(this);
+    if(_pm().isBSpline()){
+        _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
+        _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
+        if(prevNode){
+            if(prevNode->front()->isDegenerate()){
+                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNodeWeight));
+            }else{
+                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),true));
+            }
+        }
+        if(nextNode){
+            if(nextNode->back()->isDegenerate()){
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
+            }else{
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),true));
+            }
+        }
     }
 }
 
 void Node::transform(Geom::Affine const &m)
 {
-    // save the previous node strength to apply it again later when the node is moved 
-    double oldPos = 0.0000;
-    if(_pm().isBSpline(false)){
-        oldPos = this->bsplineWeight;
-    }
+
     Geom::Point old_pos = position();
+
+    // save the previous nodes strength to apply it again once the node is moved 
+    double nodeWeight = 0.0000;
+    double nextNodeWeight = 0.0000;
+    double prevNodeWeight = 0.0000;
+
+    Node *n = this;
+    Node * nextNode = n->nodeToward(n->front());
+    Node * prevNode = n->nodeToward(n->back());
+    if(_pm().isBSpline()){
+        nodeWeight = _pm().BSplineHandlePosition(n->front());
+        if(nextNode){
+            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->front());
+        }
+        if(prevNode){
+            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front());
+        }
+    }
+
     setPosition(position() * m);
     _front.setPosition(_front.position() * m);
     _back.setPosition(_back.position() * m);
@@ -663,10 +697,23 @@ void Node::transform(Geom::Affine const &m)
     _fixNeighbors(old_pos, position());
 
     // move the involved handlers, first the node ones, later the adjoining ones 
-    if(_pm().isBSpline(false)){
-        _front.setPosition(_pm().BSplineHandleReposition(this->front(),oldPos));
-        _back.setPosition(_pm().BSplineHandleReposition(this->back(),oldPos));
-        _pm().BSplineNodeHandlesReposition(this);
+    if(_pm().isBSpline()){
+        _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
+        _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
+        if(prevNode){
+            if(prevNode->front()->isDegenerate()){
+                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNodeWeight));
+            }else{
+                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),true));
+            }
+        }
+        if(nextNode){
+            if(nextNode->back()->isDegenerate()){
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
+            }else{
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),true));
+            }
+        }
     }
 }
 
@@ -754,19 +801,6 @@ void Node::showHandles(bool v)
         _back.setVisible(v);
     }
 
-    // define the node strength, depending on being or not bspline traced.
-    // every time we operate over these handlers in a trace bspline
-    // that strength needs to be updated.
-
-    this->bsplineWeight = 0.0000;
-    if(_pm().isBSpline(false) && (!_front.isDegenerate() || !_back.isDegenerate())){
-        if (!_front.isDegenerate()) {
-            _pm().BSplineHandlePosition(&_front);
-        }
-        if (!_back.isDegenerate()) {
-            _pm().BSplineHandlePosition(&_back);
-        }
-    }
 }
 
 void Node::updateHandles()
@@ -870,10 +904,13 @@ void Node::setType(NodeType type, bool update_handles)
         }
         /* in node type changes, about bspline traces, we can mantain them with 0.0000 power in border mode,
            or we give them the default power in curve mode */
-        if(_pm().isBSpline(false)){
-            if(this->bsplineWeight !=0.0000) this->bsplineWeight = 0.3334;
-            _front.setPosition(_pm().BSplineHandleReposition(this->front(),this->bsplineWeight));
-            _back.setPosition(_pm().BSplineHandleReposition(this->back(),this->bsplineWeight));
+        if(_pm().isBSpline()){
+            double weight = 0.0000;
+            if(_pm().BSplineHandlePosition(this->front()) != 0.0000){
+                weight = 0.3334;
+            }
+            _front.setPosition(_pm().BSplineHandleReposition(this->front(),weight));
+            _back.setPosition(_pm().BSplineHandleReposition(this->back(),weight));
         }
     }
     _type = type;
@@ -1123,20 +1160,9 @@ void Node::_setState(State state)
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
             //this shows the handlers when selecting the nodes
-            if(_pm().isBSpline(false)){
-                if(!this->back()->isDegenerate()){
-                    _pm().BSplineHandlePosition(this->back());
-                }else if (!this->front()->isDegenerate()){
-                    _pm().BSplineHandlePosition(this->front());
-                }else{
-                    this->bsplineWeight = 0.0000;
-                }
-                if(!this->front()->isDegenerate()){
-                    this->front()->setPosition(_pm().BSplineHandleReposition(this->front(),this->bsplineWeight));
-                }
-                if(!this->back()->isDegenerate()){
-                    this->back()->setPosition(_pm().BSplineHandleReposition(this->back(),this->bsplineWeight));
-                }
+            if(_pm().isBSpline()){
+                this->front()->setPosition(_pm().BSplineHandleReposition(this->front()));
+                this->back()->setPosition(_pm().BSplineHandleReposition(this->back()));
             }
             break;
     }
@@ -1397,8 +1423,8 @@ Glib::ustring Node::_getTip(unsigned state) const
        to show the appropiate messages. We cannot do it in any other way, because the
        function is constant */
     bool isBSpline = false;
-    if( this->bsplineWeight != 0.0000)
-        isBSpline = true;
+    //if( this->bsplineWeight != 0.0000)
+    //    isBSpline = true;
     if (state_held_shift(state)) {
         bool can_drag_out = (_next() && _front.isDegenerate()) || (_prev() && _back.isDegenerate());
         if (can_drag_out) {
@@ -1433,7 +1459,7 @@ Glib::ustring Node::_getTip(unsigned state) const
                 "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"), nodetype);
         }else if(_selection.size() == 1){
             return format_tip(C_("Path node tip",
-                "<b>BSpline node</b>: %g weight, drag to shape the path (more: Shift, Ctrl, Alt)"),this->bsplineWeight);
+                "<b>BSpline node</b>: %g weight, drag to shape the path (more: Shift, Ctrl, Alt)"),0.0000/*this->bsplineWeight*/);
         }
         return format_tip(C_("Path node tip",
             "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
