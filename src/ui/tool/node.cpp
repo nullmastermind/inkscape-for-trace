@@ -28,7 +28,7 @@
 #include "ui/tool/node.h"
 #include "ui/tool/path-manipulator.h"
 #include <gdk/gdkkeysyms.h>
-#include <math.h>
+#include <cmath>
 
 namespace {
 
