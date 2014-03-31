@@ -378,7 +378,6 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
     Geom::Point event_dt(desktop->w2d(event_w));
     //Test whether we hit any anchor.
     SPDrawAnchor * const anchor = spdc_test_inside(this, event_w);
-    ToolBase *event_context = SP_EVENT_CONTEXT(this);
 
     //with this we avoid creating a new point over the existing one
     if(bevent.button != 3 && (this->spiro || this->bspline) && this->npoints > 0 && this->p[0] == this->p[3]){
@@ -1535,7 +1534,7 @@ void PenTool::_bspline_spiro_start_anchor_on()
     if (this->sa->start) {
         tmpCurve = tmpCurve->create_reverse();
     }
-    this->sc = tmpCurve;
+    this->overwriteCurve = tmpCurve;
 }
 
 void PenTool::_bspline_spiro_start_anchor_off()
@@ -1560,7 +1559,7 @@ void PenTool::_bspline_spiro_start_anchor_off()
         if (this->sa->start) {
             tmpCurve = tmpCurve->create_reverse();
         }
-        this->sc = tmpCurve;
+        this->overwriteCurve = tmpCurve;
     }
 
 }
@@ -1582,7 +1581,7 @@ void PenTool::_bspline_spiro_motion(bool shift){
     }else if(!this->green_curve->is_empty()){
         tmpCurve = this->green_curve->copy();
     }else{
-        tmpCurve = this->sc->copy();
+        tmpCurve = this->overwriteCurve->copy();
         if(this->sa->start)
             tmpCurve = tmpCurve->create_reverse();
     }
@@ -1694,7 +1693,7 @@ void PenTool::_bspline_spiro_end_anchor_on()
         if (!this->sa->start) {
             tmpCurve = tmpCurve->create_reverse();
         }
-        this->sc = tmpCurve;
+        this->overwriteCurve = tmpCurve;
     }
 }
 
@@ -1742,8 +1741,8 @@ void PenTool::_bspline_spiro_end_anchor_off()
             if (!this->sa->start) {
                 tmpCurve = tmpCurve->create_reverse();
             }
-            this->sc->reset();
-            this->sc = tmpCurve;
+            this->overwriteCurve->reset();
+            this->overwriteCurve = tmpCurve;
         }
     }
 }
@@ -1758,7 +1757,7 @@ void PenTool::_bspline_spiro_build()
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
     if(this->sa && !this->sa->curve->is_empty()){
-        curve = this->sc->copy();
+        curve = this->overwriteCurve->copy();
         if (this->sa->start) {
             curve = curve->create_reverse();
         }
@@ -2191,8 +2190,7 @@ void PenTool::_finish(gboolean const closed) {
     // cancelate line without a created segment
     this->red_curve->reset();
     spdc_concat_colors_and_flush(this, closed);
-    this->sc = NULL;
-    this->ec = NULL;
+    this->overwriteCurve = NULL;
     this->sa = NULL;
     this->ea = NULL;
 

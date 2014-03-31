@@ -91,10 +91,9 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint ho
     , white_item(NULL)
     , white_curves(NULL)
     , white_anchors(NULL)
+    , overwriteCurve(NULL)
     , sa(NULL)
-    , sc(NULL)
     , ea(NULL)
-    , ec(NULL)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
     , red_curve_is_valid(false)
     , anchor_statusbar(false)
@@ -156,10 +155,7 @@ void FreehandBase::setup() {
     this->green_closed = FALSE;
 
     // Create start anchor alternative curve
-    this->sc = new SPCurve();
-    
-    // Create end anchor alternative curve
-    this->ec = new SPCurve();
+    this->overwriteCurve = new SPCurve();
 
     this->attach = TRUE;
     spdc_attach_selection(this, this->selection);
@@ -533,12 +529,12 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         }
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-            dc->sc->append_continuous(c, 0.0625);
+            dc->overwriteCurve->append_continuous(c, 0.0625);
             c->unref();
-            dc->sc->closepath_current();
+            dc->overwriteCurve->closepath_current();
             if(dc->sa){
                 dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
-                dc->white_curves = g_slist_append(dc->white_curves, dc->sc);
+                dc->white_curves = g_slist_append(dc->white_curves, dc->overwriteCurve);
             }
         }else{
             dc->sa->curve->append_continuous(c, 0.0625);
@@ -555,7 +551,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         dc->white_curves = g_slist_remove(dc->white_curves, s);
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-                s = dc->sc;
+                s = dc->overwriteCurve;
         }
         if (dc->sa->start) {
             s = reverse_then_unref(s);
@@ -566,10 +562,6 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e = dc->ea->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, e);
-        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
-            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-                e = dc->ec;
-        }
         if (!dc->ea->start) {
             e = reverse_then_unref(e);
         }
