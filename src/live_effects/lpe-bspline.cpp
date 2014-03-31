@@ -39,8 +39,6 @@
 #include "inkscape.h"
 #include "desktop.h"
 
-#include <iostream>
-
 using Inkscape::DocumentUndo;
 
 namespace Inkscape {
@@ -367,22 +365,14 @@ void LPEBSpline::changeWeight(double weightValue) {
 bool LPEBSpline::nodeIsSelected(Geom::Point nodePoint) {
   using Geom::X;
   using Geom::Y;
-  std::cout << "\n";
-  std::cout << ":: Executed -> nodeIsSelected(Geom::Point nodePoint) ::\n";
-  std::cout << "Want to check the argument -nodePoint- is in points vector \n";
-  std::cout << "nodePoint::X=" << nodePoint[X] << ";Y=" << nodePoint[Y] << "\n";
-  std::cout << "Checking points std::vector\n";
+
   if (points.size() > 0) {
     for (std::vector<Geom::Point>::iterator i = points.begin();
          i != points.end(); ++i) {
       Geom::Point p = *i;
-      std::cout << "p::X=" << p[X] << ";Y=" << p[Y] << "\n";
-      std::cout << "Are near? ";
-      if (Geom::are_near(p, nodePoint)) {
-        std::cout << "YES\n";
+      if (Geom::are_near(p, nodePoint, 0.0001)) {
         return true;
       } else {
-        std::cout << "NO\n";
       }
     }
   }
@@ -394,9 +384,6 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue) {
   using Geom::Y;
   SPDesktop *desktop = inkscape_active_desktop();
   if (INK_IS_NODE_TOOL(desktop->event_context)) {
-    std::cout << ":: Start -> doBSplineFromWidget(SPCurve * curve, double "
-                 "weightValue) ::\n";
-    std::cout << "Inserting nodes selected into std::vector 'points'\n";
     Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(desktop->event_context);
     Inkscape::UI::ControlPointSelection::Set &selection =
         nt->_selected_nodes->allPoints();
@@ -409,11 +396,8 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue) {
         Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
         pbegin = points.begin();
         points.insert(pbegin, desktop->doc2dt(n->position()));
-        std::cout << "inserting point::X=" << desktop->doc2dt(n->position())[X]
-                  << ";Y=" << desktop->doc2dt(n->position())[Y] << "\n";
       }
     }
-    std::cout << "End inserting selected nodes into vector\n";
   }
   //bool hasNodesSelected = LPEBspline::hasNodesSelected();
   if (curve->get_segment_count() < 2)
@@ -696,7 +680,6 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue) {
     curve->append(nCurve, false);
     nCurve->reset();
     delete nCurve;
-    std::cout << ":: End ::\n";
   }
 }
 
