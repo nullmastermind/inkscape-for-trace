@@ -183,7 +183,6 @@ else
 fi
 
 AC_CHECK_HEADER([boost/unordered_set.hpp], [AC_DEFINE(HAVE_BOOST_UNORDERED_SET, 1, [Boost unordered_set (Boost >= 1.36)])], [])
-AC_CHECK_HEADER([ext/hash_set], [AC_DEFINE(HAVE_EXT_HASH_SET, 1, [Legacy GNU ext/hash_set])], [])
 
 # Test whether GCC emits a spurious warning when using boost::optional
 # If yes, turn off strict aliasing warnings to reduce noise
@@ -700,6 +699,19 @@ if test "x$enable_gtk3" = "xyes"; then
 		AC_MSG_ERROR([Some dependencies were not fulfilled for the experimental GTK+ 3 build. One possible cause for this is a new dependency on the gdl-3.0 development package.])
 	fi
 
+	# Check whether we can use new features in Gtkmm 3.10
+	# TODO: Drop this test and bump the version number in the GTK test above
+	#       as soon as all supported distributions provide Gtkmm >= 3.10
+	PKG_CHECK_MODULES(GTKMM_3_10,
+			  gtkmm-3.0 >= 3.10,
+			  with_gtkmm_3_10=yes,
+			  with_gtkmm_3_10=no)
+
+	if test "x$with_gtkmm_3_10" = "xyes"; then
+		AC_MSG_RESULT([Using Gtkmm 3.10 build])
+		AC_DEFINE(WITH_GTKMM_3_10,1,[Build with Gtkmm 3.10.x or higher])
+	fi
+
 	# Check whether we are using Gdl >= 3.6.  This version introduced an API/ABI change.
 	# TODO: We should drop support for older versions of Gdl once all supported distros
 	#       provide Gdl 3.6 or higher
@@ -855,7 +867,7 @@ if test "x$cairo_pdf" = "xyes"; then
 fi
 
 dnl Shouldn't we test for libz?
-INKSCAPE_LIBS="$INKSCAPE_LIBS -lz -lxml2 -ldl"
+INKSCAPE_LIBS="$INKSCAPE_LIBS -lz"
 if test "x$openmp_ok" = "xyes"; then
 	INKSCAPE_LIBS="$INKSCAPE_LIBS -lgomp"
 fi
