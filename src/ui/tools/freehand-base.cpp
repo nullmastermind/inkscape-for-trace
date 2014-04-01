@@ -250,8 +250,7 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
 }
-
-static bool bend;
+static int previous_shape_type = -1;
 static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item, SPCurve *curve)
 
 {
@@ -262,17 +261,31 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
-        bend = false;
-        static Geom::PathVector pathv;
-        static SPItem *itemEnd;
+
+       //Store the clipboard path to apply in the future without the use of clipboard
+        static Geom::PathVector previous_shape_pathv;
+        //Last shape applied type "-1" means "no previous shape"
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
-        static int previous_shape;
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
+        static SPItem *itemEnd;
 
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
+
+        if(shape == 6){
+            shape = previous_shape_type;
+            if(shape == 4){
+                shape = 6;
+            }
+            if(shape == 5){
+                shape = 7;
+            }
+            if(previous_shape_type == -1){
+                shape = 0;
+            }
+        }
 
         switch (shape) {
             case 0:
@@ -312,6 +325,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 c->closepath();
                 spdc_paste_curve_as_freehand_shape(c, dc, item);
                 c->unref();
+
                 shape_applied = true;
                 break;
             }
@@ -323,7 +337,8 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 static_cast<LPEPatternAlongPath*>(lpe)->pattern.on_paste_button_click();
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 Glib::ustring svgd = cm->getPathParameter(SP_ACTIVE_DESKTOP);
-                pathv = sp_svg_read_pathv(svgd.data());
+                previous_shape_pathv = sp_svg_read_pathv(svgd.data());
+
                 shape_applied = true;
                 break;
             }
@@ -349,7 +364,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                         if(SP_IS_OBJECT(obj)){
                             spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
                             SP_ITEM(obj)->setExplicitlyHidden(false);
-                            bend = true;
                             selection->set(SP_ITEM(obj),true);
                         }
                     }
@@ -358,88 +372,44 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             }
             case 6:
             {
-                // "Last applied"
-                switch(previous_shape){
-                    case 0:
-                        // don't apply any shape
-                        break;
-                    case 1:
-                    {
-                        // "triangle in"
-                        std::vector<Geom::Point> points(1);
-                        points[0] = Geom::Point(0., SHAPE_HEIGHT/2);
-                        spdc_apply_powerstroke_shape(points, dc, item);
+                if(previous_shape_pathv.size() != 0){
+                    SPCurve * c = new SPCurve();
+                    c->set_pathvector(previous_shape_pathv);
+                    spdc_paste_curve_as_freehand_shape(c, dc, item);
+                    c->unref();
 
-                        shape_applied = true;
-                        break;
-                    }
-                    case 2:
-                    {
-                        // "triangle out"
-                        guint curve_length = curve->get_segment_count();
-                        std::vector<Geom::Point> points(1);
-                        points[0] = Geom::Point((double)curve_length, SHAPE_HEIGHT/2);
-                        spdc_apply_powerstroke_shape(points, dc, item);
+                    shape_applied = true;
+                }
 
-                        shape_applied = true;
-                        break;
-                    }
-                    case 3:
-                    {
-                        // "ellipse"
-                        SPCurve *c = new SPCurve();
-                        const double C1 = 0.552;
-                        c->moveto(0, SHAPE_HEIGHT/2);
-                        c->curveto(0, (1 - C1) * SHAPE_HEIGHT/2, (1 - C1) * SHAPE_LENGTH/2, 0, SHAPE_LENGTH/2, 0);
-                        c->curveto((1 + C1) * SHAPE_LENGTH/2, 0, SHAPE_LENGTH, (1 - C1) * SHAPE_HEIGHT/2, SHAPE_LENGTH, SHAPE_HEIGHT/2);
-                        c->curveto(SHAPE_LENGTH, (1 + C1) * SHAPE_HEIGHT/2, (1 + C1) * SHAPE_LENGTH/2, SHAPE_HEIGHT, SHAPE_LENGTH/2, SHAPE_HEIGHT);
-                        c->curveto((1 - C1) * SHAPE_LENGTH/2, SHAPE_HEIGHT, 0, (1 + C1) * SHAPE_HEIGHT/2, 0, SHAPE_HEIGHT/2);
-                        c->closepath();
-                        spdc_paste_curve_as_freehand_shape(c, dc, item);
-                        c->unref();
-                        shape_applied = true;
-                        break;
-                    }
-                    case 4:
-                    {
-                        if(pathv.size() != 0){
-                            SPCurve * c = new SPCurve();
-                            c->set_pathvector(pathv);
-                            spdc_paste_curve_as_freehand_shape(c, dc, item);
-                            c->unref();
-                            shape_applied = true;
-                        }
-                        break;
-                    }
-                    case 5:
-                    {
-                        // take shape from clipboard; TODO: catch the case where clipboard is empty
-                        if(itemEnd != NULL && itemEnd->getRepr() != NULL){
-                            gchar const *svgd = item->getRepr()->attribute("d");
-                            item->deleteObject();
-                            Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
-                            selection->add(SP_OBJECT(itemEnd));
-                            sp_selection_duplicate(dc->desktop);
-                            selection->remove(SP_OBJECT(itemEnd));
-                            GSList *items = const_cast<GSList *>(selection->itemList());
-                            SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
-                            if(SP_IS_OBJECT(obj)){
-                                SP_ITEM(obj)->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                                spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
-                                SP_ITEM(obj)->setExplicitlyHidden(false);
-                                bend = true;
-                                selection->set(SP_ITEM(obj),true);
-                            }
-                        }
-                        break;
+                shape = previous_shape_type;
+                break;
+            }
+            case 7:
+            {
+                // take shape from clipboard; TODO: catch the case where clipboard is empty
+                if(itemEnd != NULL && itemEnd->getRepr() != NULL){
+                    gchar const *svgd = item->getRepr()->attribute("d");
+                    item->deleteObject();
+                    Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
+                    selection->add(SP_OBJECT(itemEnd));
+                    sp_selection_duplicate(dc->desktop);
+                    selection->remove(SP_OBJECT(itemEnd));
+                    GSList *items = const_cast<GSList *>(selection->itemList());
+                    SPObject *obj = reinterpret_cast<SPObject *>(g_slist_nth_data(items,0));
+                    if(SP_IS_OBJECT(obj)){
+                        SP_ITEM(obj)->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                        spdc_apply_bend_shape(svgd, dc, SP_ITEM(obj));
+                        SP_ITEM(obj)->setExplicitlyHidden(false);
+                        selection->set(SP_ITEM(obj),true);
                     }
                 }
-                shape = previous_shape;
+                shape = previous_shape_type;
+                break;
             }
             default:
                 break;
         }
-        previous_shape = shape;
+        previous_shape_type = shape;
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
             SPCSSAttr *css = sp_repr_css_attr_new();
@@ -454,7 +424,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             sp_repr_css_attr_unref(css);
             return;
         }
-        if(shape == 5 || (shape == 6 && previous_shape == 5))return;
+        if(previous_shape_type == 5)return;
 
         if (dc->waiting_LPE_type != INVALID_LPE) {
             Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
@@ -731,11 +701,11 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             // we finished the path; now apply any waiting LPEs or freehand shapes
             spdc_check_for_and_apply_waiting_LPE(dc, item, c);
 
-            if(!bend) dc->selection->set(repr);
+            if(previous_shape_type != 5) dc->selection->set(repr);
             Inkscape::GC::release(repr);
-            if(!bend) item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-            if(!bend) item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
-            if(!bend) item->updateRepr();
+            if(previous_shape_type != 5) item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+            if(previous_shape_type != 5) item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+            if(previous_shape_type != 5) item->updateRepr();
         }
 
         DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,
