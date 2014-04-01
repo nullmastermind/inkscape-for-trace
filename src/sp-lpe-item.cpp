@@ -36,6 +36,10 @@
 #include "desktop.h"
 #include "shape-editor.h"
 #include "sp-ellipse.h"
+#include "tools-switch.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/tool-base.h"
+#include "ui/tool/multi-path-manipulator.h"
 
 #include <algorithm>
 
@@ -416,6 +420,17 @@ void SPLPEItem::addPathEffect(gchar *value, bool reset)
 
         // Apply the path effect
         sp_lpe_item_update_patheffect(this, true, true);
+        
+        //fix bug 1219324
+        Inkscape::UI::Tools::NodeTool *tool = 0;
+        if (SP_ACTIVE_DESKTOP ) {
+        Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+            if (INK_IS_NODE_TOOL(ec)) {
+                tool = static_cast<Inkscape::UI::Tools::NodeTool*>(ec);
+                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_LPETOOL); //mhh
+                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_NODES);
+            }
+        }
     }
 }
 
