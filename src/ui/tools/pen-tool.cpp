@@ -1637,62 +1637,53 @@ void PenTool::_bspline_spiro_end_anchor_on()
     SPCurve *tmpCurve = new SPCurve();
     SPCurve *lastSeg = new SPCurve();
     Geom::Point C(0,0);
-    if(!this->sa || this->sa->curve->is_empty()){
+    bool reverse = false;
+    if( this->green_anchor && this->green_anchor->active ){
         tmpCurve = this->green_curve->create_reverse();
-        if(this->green_curve->get_segment_count()==0)return;
-        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
-        if(this->bspline){
-            C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-            C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
-        }else{
-            C =  this->p[3] + (Geom::Point)(this->p[3] - this->p[2] );
+        if(this->green_curve->get_segment_count()==0){
+            return;
         }
-        if(cubic){
-            lastSeg->moveto((*cubic)[0]);
-            lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
-        }else{
-            lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
-            lastSeg->curveto(tmpCurve->last_segment()->initialPoint(),C,tmpCurve->last_segment()->finalPoint());
+        reverse = true;
+    } else if(this->sa){
+        tmpCurve = this->overwriteCurve;
+        if(!this->sa->start){
+            tmpCurve = tmpCurve->create_reverse();
+            reverse = true;
         }
-        if( tmpCurve->get_segment_count() == 1){
-            tmpCurve = lastSeg;
-        }else{
-            //we eliminate the last segment
-            tmpCurve->backspace();
-            //and we add it again with the recreation
-            tmpCurve->append_continuous(lastSeg, 0.0625);
-        }
+    }else{
+        return;
+    }
+    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+    if(this->bspline){
+        C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
+        C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
+    }else{
+        C =  this->p[3] + (Geom::Point)(this->p[3] - this->p[2] );
+    }
+    if(cubic){
+        lastSeg->moveto((*cubic)[0]);
+        lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
+    }else{
+        lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
+        lastSeg->curveto(tmpCurve->last_segment()->initialPoint(),C,tmpCurve->last_segment()->finalPoint());
+    }
+    if( tmpCurve->get_segment_count() == 1){
+        tmpCurve = lastSeg;
+    }else{
+        //we eliminate the last segment
+        tmpCurve->backspace();
+        //and we add it again with the recreation
+        tmpCurve->append_continuous(lastSeg, 0.0625);
+    }
+    if (reverse) {
         tmpCurve = tmpCurve->create_reverse();
+    }
+    if( this->green_anchor && this->green_anchor->active )
+    {
         this->green_curve->reset();
         this->green_curve = tmpCurve;
-    }else {
-        tmpCurve = this->sa->curve->copy();
-        if(!this->sa->start) tmpCurve = tmpCurve->create_reverse();
-        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
-        if(this->bspline){
-            C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-            C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
-        }else{
-            C =  this->p[3] + (Geom::Point)(this->p[3] - this->p[2] );
-        }
-        if(cubic){
-            lastSeg->moveto((*cubic)[0]);
-            lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
-        }else{
-            lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
-            lastSeg->curveto(tmpCurve->last_segment()->initialPoint(),C,tmpCurve->last_segment()->finalPoint());
-        }
-        if( tmpCurve->get_segment_count() == 1){
-            tmpCurve = lastSeg;
-        }else{
-            //we eliminate the last segment
-            tmpCurve->backspace();
-            //and we add it again with the recreation
-            tmpCurve->append_continuous(lastSeg, 0.0625);
-        }
-        if (!this->sa->start) {
-            tmpCurve = tmpCurve->create_reverse();
-        }
+    }else{
+        this->overwriteCurve->reset();
         this->overwriteCurve = tmpCurve;
     }
 }
@@ -1702,45 +1693,43 @@ void PenTool::_bspline_spiro_end_anchor_off()
 
     SPCurve *tmpCurve = new SPCurve();
     SPCurve *lastSeg = new SPCurve();
+    bool reverse = false;
     this->p[2] = this->p[3];
-    if(!this->sa || this->sa->curve->is_empty()){
-
+    if( this->green_anchor && this->green_anchor->active ){
         tmpCurve = this->green_curve->create_reverse();
-        if(this->green_curve->get_segment_count()==0)return;
-        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
-        if(cubic){
-            lastSeg->moveto((*cubic)[0]);
-            lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
-            if( tmpCurve->get_segment_count() == 1){
-                tmpCurve = lastSeg;
-            }else{
-                //we eliminate the last segment
-                tmpCurve->backspace();
-                //and we add it again with the recreation
-                tmpCurve->append_continuous(lastSeg, 0.0625);
-            }
+        if(this->green_curve->get_segment_count()==0){
+            return;
+        }
+        reverse = true;
+    } else if(this->sa){
+        tmpCurve = this->overwriteCurve;
+        if(!this->sa->start){
             tmpCurve = tmpCurve->create_reverse();
+            reverse = true;
+        }
+    }else{
+        return;
+    }
+    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
+    if(cubic){
+        lastSeg->moveto((*cubic)[0]);
+        lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+        if( tmpCurve->get_segment_count() == 1){
+            tmpCurve = lastSeg;
+        }else{
+            //we eliminate the last segment
+            tmpCurve->backspace();
+            //and we add it again with the recreation
+            tmpCurve->append_continuous(lastSeg, 0.0625);
+        }
+        if (reverse) {
+            tmpCurve = tmpCurve->create_reverse();
+        }
+        if( this->green_anchor && this->green_anchor->active )
+        {
             this->green_curve->reset();
             this->green_curve = tmpCurve;
-        }
-    }else {
-        tmpCurve = this->sa->curve->copy();
-        if(!this->sa->start) tmpCurve = tmpCurve->create_reverse();
-        Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
-        if(cubic){
-            lastSeg->moveto((*cubic)[0]);
-            lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
-            if( tmpCurve->get_segment_count() == 1){
-                tmpCurve = lastSeg;
-            }else{
-                //we eliminate the last segment
-                tmpCurve->backspace();
-                //and we add it again with the recreation
-                tmpCurve->append_continuous(lastSeg, 0.0625);
-            }
-            if (!this->sa->start) {
-                tmpCurve = tmpCurve->create_reverse();
-            }
+        }else{
             this->overwriteCurve->reset();
             this->overwriteCurve = tmpCurve;
         }
@@ -1750,8 +1739,9 @@ void PenTool::_bspline_spiro_end_anchor_off()
 //prepares the curves for its transformation into BSpline curve.
 void PenTool::_bspline_spiro_build()
 {
-    if(!this->spiro && !this->bspline)
+    if(!this->spiro && !this->bspline){
         return;
+    }
 
     //We create the base curve
     SPCurve *curve = new SPCurve();
@@ -1763,14 +1753,19 @@ void PenTool::_bspline_spiro_build()
         }
     }
 
-    if (!this->green_curve->is_empty())
+    if (!this->green_curve->is_empty()){
         curve->append_continuous(this->green_curve, 0.0625);
+    }
 
     //and the red one
     if (!this->red_curve->is_empty()){
         this->red_curve->reset();
         this->red_curve->moveto(this->p[0]);
-        this->red_curve->curveto(this->p[1],this->p[2],this->p[3]);
+        if(this->anchor_statusbar && !this->sa && !(this->green_anchor && this->green_anchor->active)){
+            this->red_curve->curveto(this->p[1],this->p[3],this->p[3]);
+        }else{
+            this->red_curve->curveto(this->p[1],this->p[2],this->p[3]);
+        }
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve);
         curve->append_continuous(this->red_curve, 0.0625);
     }

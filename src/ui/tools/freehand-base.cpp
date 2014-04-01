@@ -565,6 +565,25 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         if (!dc->ea->start) {
             e = reverse_then_unref(e);
         }
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                e = reverse_then_unref(e);
+                Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*e->last_segment());
+                SPCurve *lastSeg = new SPCurve();
+                if(cubic){
+                    lastSeg->moveto((*cubic)[0]);
+                    lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+                    if( e->get_segment_count() == 1){
+                        e = lastSeg;
+                    }else{
+                        //we eliminate the last segment
+                        e->backspace();
+                        //and we add it again with the recreation
+                        e->append_continuous(lastSeg, 0.0625);
+                    }
+                }
+                e = reverse_then_unref(e);
+        }
         c->append_continuous(e, 0.0625);
         e->unref();
     }
