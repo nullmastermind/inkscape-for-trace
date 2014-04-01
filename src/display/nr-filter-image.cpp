@@ -108,17 +108,17 @@ void FilterImage::render_cairo(FilterSlot &slot)
         Geom::Rect sa = slot.get_slot_area();
         cairo_surface_t *out = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
             sa.width(), sa.height());
-        Inkscape::DrawingContext ct(out, sa.min());
-        ct.transform(user2pb); // we are now in primitive units
-        ct.translate(feImageX, feImageY);
-//        ct.scale(scaleX, scaleY);  No scaling should be done
+        Inkscape::DrawingContext dc(out, sa.min());
+        dc.transform(user2pb); // we are now in primitive units
+        dc.translate(feImageX, feImageY);
+//        dc.scale(scaleX, scaleY);  No scaling should be done
 
         Geom::IntRect render_rect = area.roundOutwards();
-        ct.translate(render_rect.min());
+//        dc.translate(render_rect.min());  This seems incorrect
 
         // Update to renderable state
         drawing.update(render_rect);
-        drawing.render(ct, render_rect);
+        drawing.render(dc, render_rect);
         SVGElem->invoke_hide(key);
 
         // For the moment, we'll assume that any image is in sRGB color space
@@ -174,7 +174,8 @@ void FilterImage::render_cairo(FilterSlot &slot)
         sa.width(), sa.height());
 
     // For the moment, we'll assume that any image is in sRGB color space
-    set_cairo_surface_ci(out, SP_CSS_COLOR_INTERPOLATION_SRGB);
+    // set_cairo_surface_ci(out, SP_CSS_COLOR_INTERPOLATION_SRGB);
+    // This seemed like a sensible thing to do but it breaks filters-displace-01-f.svg
 
     cairo_t *ct = cairo_create(out);
     cairo_translate(ct, -sa.min()[Geom::X], -sa.min()[Geom::Y]);

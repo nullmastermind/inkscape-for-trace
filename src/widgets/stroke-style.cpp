@@ -24,6 +24,7 @@
 #include "svg/svg-color.h"
 #include "util/units.h"
 #include "ui/widget/unit-menu.h"
+#include "desktop-widget.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -113,7 +114,7 @@ StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::RadioButtonGroup &grp,
     show();
     set_mode(false);
         
-    Gtk::Widget *px = manage(Glib::wrap(sp_icon_new(Inkscape::ICON_SIZE_LARGE_TOOLBAR, icon)));
+    Gtk::Widget *px = Gtk::manage(Glib::wrap(sp_icon_new(Inkscape::ICON_SIZE_LARGE_TOOLBAR, icon)));
     g_assert(px != NULL);
     px->show();
     add(*px);
@@ -197,7 +198,7 @@ StrokeStyle::StrokeStyle() :
     hb->pack_start(*widthSpin, false, false, 0);
     unitSelector = new Inkscape::UI::Widget::UnitMenu();
     unitSelector->setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
-    Gtk::Widget *us = manage(unitSelector);
+    Gtk::Widget *us = Gtk::manage(unitSelector);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unitSelector->addUnit(*unit_table.getUnit("%"));
@@ -327,7 +328,7 @@ StrokeStyle::StrokeStyle() :
                                             //   implement a set_mnemonic_source function in the
                                             //   SPDashSelector class, so that we do not have to
                                             //   expose any of the underlying widgets?
-    dashSelector = manage(new SPDashSelector);
+    dashSelector = Gtk::manage(new SPDashSelector);
 
     dashSelector->show();
 
@@ -353,7 +354,7 @@ StrokeStyle::StrokeStyle() :
     hb = spw_hbox(table, 1, 1, i);
     i++;
 
-    startMarkerCombo = manage(new MarkerComboBox("marker-start", SP_MARKER_LOC_START));
+    startMarkerCombo = Gtk::manage(new MarkerComboBox("marker-start", SP_MARKER_LOC_START));
     startMarkerCombo->set_tooltip_text(_("Start Markers are drawn on the first node of a path or shape"));
     startMarkerConn = startMarkerCombo->signal_changed().connect(
             sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
@@ -362,7 +363,7 @@ StrokeStyle::StrokeStyle() :
 
     hb->pack_start(*startMarkerCombo, true, true, 0);
 
-    midMarkerCombo =  manage(new MarkerComboBox("marker-mid", SP_MARKER_LOC_MID));
+    midMarkerCombo = Gtk::manage(new MarkerComboBox("marker-mid", SP_MARKER_LOC_MID));
     midMarkerCombo->set_tooltip_text(_("Mid Markers are drawn on every node of a path or shape except the first and last nodes"));
     midMarkerConn = midMarkerCombo->signal_changed().connect(
         sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
@@ -371,7 +372,7 @@ StrokeStyle::StrokeStyle() :
 
     hb->pack_start(*midMarkerCombo, true, true, 0);
 
-    endMarkerCombo = manage(new MarkerComboBox("marker-end", SP_MARKER_LOC_END));
+    endMarkerCombo = Gtk::manage(new MarkerComboBox("marker-end", SP_MARKER_LOC_END));
     endMarkerCombo->set_tooltip_text(_("End Markers are drawn on the last node of a path or shape"));
     endMarkerConn = endMarkerCombo->signal_changed().connect(
         sigc::bind<MarkerComboBox *, StrokeStyle *, SPMarkerLoc>(
@@ -726,18 +727,18 @@ StrokeStyle::getItemColorForMarker(SPItem *item, Inkscape::PaintTarget fill_or_s
 void
 StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
 {
-    if (style->stroke_dash.n_dash > 0) {
+    if (!style->stroke_dasharray.values.empty()) {
         double d[64];
-        int len = MIN(style->stroke_dash.n_dash, 64);
-        for (int i = 0; i < len; i++) {
+        size_t len = MIN(style->stroke_dasharray.values.size(), 64);
+        for (unsigned i = 0; i < len; i++) {
             if (style->stroke_width.computed != 0)
-                d[i] = style->stroke_dash.dash[i] / style->stroke_width.computed;
+                d[i] = style->stroke_dasharray.values[i] / style->stroke_width.computed;
             else
-                d[i] = style->stroke_dash.dash[i]; // is there a better thing to do for stroke_width==0?
+                d[i] = style->stroke_dasharray.values[i]; // is there a better thing to do for stroke_width==0?
         }
         dsel->set_dash(len, d, style->stroke_width.computed != 0 ?
-                       style->stroke_dash.offset / style->stroke_width.computed  :
-                       style->stroke_dash.offset);
+                       style->stroke_dashoffset.value / style->stroke_width.computed  :
+                       style->stroke_dashoffset.value);
     } else {
         dsel->set_dash(0, NULL, 0.0);
     }

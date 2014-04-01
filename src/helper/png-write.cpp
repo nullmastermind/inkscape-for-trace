@@ -142,7 +142,7 @@ sp_png_write_rgba_striped(SPDocument *doc,
 
     Inkscape::IO::dump_fopen_call(filename, "M");
     fp = Inkscape::IO::fopen_utf8name(filename, "wb");
-    g_return_val_if_fail(fp != NULL, false);
+    if(fp == NULL) return false;
 
     /* Create and initialize the png_struct with the desired error handler
      * functions.  If you want to use the default stderr and longjump method,
@@ -335,14 +335,14 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
 
     cairo_surface_t *s = cairo_image_surface_create_for_data(
         px, CAIRO_FORMAT_ARGB32, ebp->width, num_rows, stride);
-    Inkscape::DrawingContext ct(s, bbox.min());
-    ct.setSource(ebp->background);
-    ct.setOperator(CAIRO_OPERATOR_SOURCE);
-    ct.paint();
-    ct.setOperator(CAIRO_OPERATOR_OVER);
+    Inkscape::DrawingContext dc(s, bbox.min());
+    dc.setSource(ebp->background);
+    dc.setOperator(CAIRO_OPERATOR_SOURCE);
+    dc.paint();
+    dc.setOperator(CAIRO_OPERATOR_OVER);
 
     /* Render */
-    ebp->drawing->render(ct, bbox);
+    ebp->drawing->render(dc, bbox);
     cairo_surface_destroy(s);
 
     *to_free = px;

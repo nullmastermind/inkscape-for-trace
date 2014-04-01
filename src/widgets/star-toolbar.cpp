@@ -28,34 +28,26 @@
 # include "config.h"
 #endif
 
-#include "ui/widget/spinbutton.h"
 #include <glibmm/i18n.h>
-#include "toolbox.h"
+
 #include "star-toolbar.h"
-
-#include "../desktop.h"
-#include "../desktop-handles.h"
+#include "desktop-handles.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "../verbs.h"
-#include "../inkscape.h"
-#include "../selection-chemistry.h"
-#include "../selection.h"
-#include "../ege-adjustment-action.h"
-#include "../ege-output-action.h"
-#include "../ege-select-one-action.h"
-#include "../ink-action.h"
-#include "../ink-comboboxentry-action.h"
-#include "../widgets/button.h"
-#include "../widgets/spinbutton-events.h"
-#include "../widgets/spw-utilities.h"
-#include "../widgets/widget-sizes.h"
-#include "../xml/node-event-vector.h"
-#include "../xml/repr.h"
+#include "ege-adjustment-action.h"
+#include "ege-output-action.h"
+#include "ege-select-one-action.h"
+#include "ink-action.h"
+#include "selection.h"
+#include "sp-star.h"
+#include "toolbox.h"
+#include "ui/icon-names.h"
 #include "ui/uxmanager.h"
-#include "../ui/icon-names.h"
-#include "ui/tools/pen-tool.h"
-#include "../sp-star.h"
-
+#include "verbs.h"
+#include "widgets/../preferences.h"
+#include "xml/node-event-vector.h"
+#include "xml/node.h"
+#include "xml/repr.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
@@ -568,13 +560,14 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     {
         /* Reset */
         {
-            GtkAction* act = gtk_action_new( "StarResetAction",
+            InkAction* inky = ink_action_new( "StarResetAction",
                                              _("Defaults"),
                                              _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
-                                             INKSCAPE_ICON("edit-clear"));
-            g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_stb_defaults), holder );
-            gtk_action_group_add_action( mainActions, act );
-            gtk_action_set_sensitive( act, TRUE );
+                                             INKSCAPE_ICON("edit-clear"),
+                                             Inkscape::ICON_SIZE_SMALL_TOOLBAR);
+            g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_stb_defaults), holder );
+            gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+            gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );
         }
     }
 

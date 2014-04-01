@@ -585,23 +585,22 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
 void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
     SPObject* object = this;
 
-    try {
-        const std::string typeString = NodeTraits::get_type_string(*child);
+    const std::string type_string = NodeTraits::get_type_string(*child);
 
-        SPObject* ochild = SPFactory::instance().createObject(typeString);
-
-        SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
-        object->attach(ochild, prev);
-        sp_object_unref(ochild, NULL);
-
-        ochild->invoke_build(object->document, child, object->cloned);
-    } catch (const FactoryExceptions::TypeNotRegistered& e) {
+    SPObject* ochild = SPFactory::instance().createObject(type_string);
+    if (ochild == NULL) {
         // Currenty, there are many node types that do not have
         // corresponding classes in the SPObject tree.
         // (rdf:RDF, inkscape:clipboard, ...)
         // Thus, simply ignore this case for now.
         return;
     }
+
+    SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
+    object->attach(ochild, prev);
+    sp_object_unref(ochild, NULL);
+
+    ochild->invoke_build(object->document, child, object->cloned);
 }
 
 void SPObject::release() {
@@ -645,21 +644,20 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     object->readAttr("inkscape:collect");
 
     for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
-        try {
-            const std::string typeString = NodeTraits::get_type_string(*rchild);
+        const std::string typeString = NodeTraits::get_type_string(*rchild);
 
-            SPObject* child = SPFactory::instance().createObject(typeString);
-
-            object->attach(child, object->lastChild());
-            sp_object_unref(child, NULL);
-            child->invoke_build(document, rchild, object->cloned);
-        } catch (const FactoryExceptions::TypeNotRegistered& e) {
+        SPObject* child = SPFactory::instance().createObject(typeString);
+        if (child == NULL) {
             // Currenty, there are many node types that do not have
             // corresponding classes in the SPObject tree.
             // (rdf:RDF, inkscape:clipboard, ...)
             // Thus, simply ignore this case for now.
             continue;
         }
+
+        object->attach(child, object->lastChild());
+        sp_object_unref(child, NULL);
+        child->invoke_build(document, rchild, object->cloned);
     }
 }
 
@@ -969,31 +967,29 @@ static gchar const *sp_xml_get_space_string(unsigned int space)
 }
 
 Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flags) {
-    SPObject* object = this;
-
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
-        repr = object->getRepr()->duplicate(doc);
+        repr = this->getRepr()->duplicate(doc);
         if (!( flags & SP_OBJECT_WRITE_EXT )) {
             repr->setAttribute("inkscape:collect", NULL);
         }
-    } else {
-        repr->setAttribute("id", object->getId());
+    } else if (repr) {
+        repr->setAttribute("id", this->getId());
 
-        if (object->xml_space.set) {
+        if (this->xml_space.set) {
             char const *xml_space;
-            xml_space = sp_xml_get_space_string(object->xml_space.value);
+            xml_space = sp_xml_get_space_string(this->xml_space.value);
             repr->setAttribute("xml:space", xml_space);
         }
 
         if ( flags & SP_OBJECT_WRITE_EXT &&
-             object->collectionPolicy() == SPObject::ALWAYS_COLLECT )
+             this->collectionPolicy() == SPObject::ALWAYS_COLLECT )
         {
             repr->setAttribute("inkscape:collect", "always");
         } else {
             repr->setAttribute("inkscape:collect", NULL);
         }
 
-        SPStyle const *const obj_style = object->style;
+        SPStyle const *const obj_style = this->style;
         if (obj_style) {
             gchar *s = sp_style_write_string(obj_style, SP_STYLE_FLAG_IFSET);
 
@@ -1030,7 +1026,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             g_warning("Item's style is NULL; repr style attribute is %s", style_str);
         }
 
-        /** \note We treat object->style as authoritative.  Its effects have
+        /** \note We treat this->style as authoritative.  Its effects have
          * been written to the style attribute above; any properties that are
          * unset we take to be deliberately unset (e.g. so that clones can
          * override the property).
@@ -1040,7 +1036,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
          * possibly we should write property attributes instead of a style
          * attribute.
          */
-        sp_style_unset_property_attrs (object);
+        sp_style_unset_property_attrs (this);
     }
 
     return repr;

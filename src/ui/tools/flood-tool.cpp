@@ -94,17 +94,12 @@ const std::string& FloodTool::getPrefsPath() {
 
 const std::string FloodTool::prefsPath = "/tools/paintbucket";
 
-FloodTool::FloodTool() : ToolBase() {
-    this->cursor_shape = cursor_paintbucket_xpm;
-    this->hot_x = 11;
-    this->hot_y = 30;
-    this->xp = 0;
-    this->yp = 0;
+FloodTool::FloodTool()
+    : ToolBase(cursor_paintbucket_xpm, 11, 30)
+    , item(NULL)
+{
+    // TODO: Why does the flood tool use a hardcoded tolerance instead of a pref?
     this->tolerance = 4;
-    this->within_tolerance = false;
-    this->item_to_select = NULL;
-
-    this->item = NULL;
 }
 
 FloodTool::~FloodTool() {
@@ -794,7 +789,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
 
         cairo_surface_t *s = cairo_image_surface_create_for_data(
             px, CAIRO_FORMAT_ARGB32, width, height, stride);
-        Inkscape::DrawingContext ct(s, Geom::Point(0,0));
+        Inkscape::DrawingContext dc(s, Geom::Point(0,0));
         // cairo_translate not necessary here - surface origin is at 0,0
 
         SPNamedView *nv = sp_desktop_namedview(desktop);
@@ -802,12 +797,12 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
         // bgcolor is 0xrrggbbaa, we need 0xaarrggbb
         dtc = (bgcolor >> 8) | (bgcolor << 24);
 
-        ct.setSource(bgcolor);
-        ct.setOperator(CAIRO_OPERATOR_SOURCE);
-        ct.paint();
-        ct.setOperator(CAIRO_OPERATOR_OVER);
+        dc.setSource(bgcolor);
+        dc.setOperator(CAIRO_OPERATOR_SOURCE);
+        dc.paint();
+        dc.setOperator(CAIRO_OPERATOR_OVER);
 
-        drawing.render(ct, final_bbox);
+        drawing.render(dc, final_bbox);
 
         //cairo_surface_write_to_png( s, "cairo.png" );
 

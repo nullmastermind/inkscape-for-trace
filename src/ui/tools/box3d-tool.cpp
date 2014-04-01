@@ -72,22 +72,13 @@ const std::string& Box3dTool::getPrefsPath() {
 
 const std::string Box3dTool::prefsPath = "/tools/shapes/3dbox";
 
-Box3dTool::Box3dTool() : ToolBase() {
-    this->cursor_shape = cursor_3dbox_xpm;
-    this->hot_x = 4;
-    this->hot_y = 4;
-    this->xp = 0;
-    this->yp = 0;
-    this->tolerance = 0;
-    this->within_tolerance = false;
-    this->item_to_select = NULL;
-
-    this->box3d = NULL;
-
-    this->ctrl_dragged = false;
-    this->extruded = false;
-
-    this->_vpdrag = NULL;
+Box3dTool::Box3dTool()
+    : ToolBase(cursor_3dbox_xpm, 4, 4)
+    , _vpdrag(NULL)
+    , box3d(NULL)
+    , ctrl_dragged(false)
+    , extruded(false)
+{
 }
 
 void Box3dTool::finish() {
@@ -322,7 +313,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
             this->drag(event->motion.state);
 
             ret = TRUE;
-        } else if (!sp_event_context_knot_mouseover(this)) {
+        } else if (!this->sp_event_context_knot_mouseover()) {
             SnapManager &m = desktop->namedview->snap_manager;
             m.setup(desktop);
 

@@ -29,11 +29,13 @@
 #include "desktop-handles.h"
 #include "desktop-style.h"
 #include "knot.h"
+#include "message-stack.h"
 #include "snap.h"
 #include "selection.h"
 #include "ui/tools/select-tool.h"
 #include "sp-item.h"
 #include "sp-item-transform.h"
+#include "sp-root.h"
 #include "seltrans-handles.h"
 #include "seltrans.h"
 #include "selection-chemistry.h"
@@ -52,15 +54,15 @@
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
 
-static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
-static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
-static void sp_sel_trans_handle_click(SPKnot *knot, guint state, gpointer data);
-static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point *position, guint32 state, gpointer data);
-static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *p, guint state, gboolean *data);
+static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, SPSelTransHandle const* data);
+static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, SPSelTransHandle const* data);
+static void sp_sel_trans_handle_click(SPKnot *knot, guint state, SPSelTransHandle const* data);
+static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point const &position, guint32 state, SPSelTransHandle const* data);
+static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *p, guint state, SPSelTransHandle const *data);
 
 extern GdkPixbuf *handles[];
 
-static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
+static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, SPSelTransHandle const*)
 {
     switch (event->type) {
         case GDK_MOTION_NOTIFY:
@@ -184,7 +186,7 @@ Inkscape::SelTrans::~SelTrans()
     _sel_modified_connection.disconnect();
 
     for (int i = 0; i < NUMHANDS; i++) {
-        g_object_unref(G_OBJECT(knots[i]));
+        knot_unref(knots[i]);
         knots[i] = NULL;
     }
 
@@ -381,6 +383,10 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
         // update the content
         for (unsigned i = 0; i < _items.size(); i++) {
             SPItem &item = *_items[i];
+            if( SP_IS_ROOT(&item) ) {
+                _desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Cannot transform an embedded SVG."));
+                break;
+            }
             Geom::Affine const &prev_transform = _items_affines[i];
             item.set_i2d_affine(prev_transform * affine);
         }
@@ -568,7 +574,7 @@ void Inkscape::SelTrans::stamp()
 void Inkscape::SelTrans::_updateHandles()
 {
     for (int i = 0; i < NUMHANDS; i++)
-        sp_knot_hide(knots[i]);
+        knots[i]->hide();
 
     if ( !_show_handles || _empty )
         return;
@@ -621,13 +627,13 @@ void Inkscape::SelTrans::_showHandles(SPSelTransType type)
         // Position knots to scale the selection bbox
         Geom::Point const bpos(hands[i].x, hands[i].y);
         Geom::Point p(_bbox->min() + (_bbox->dimensions() * Geom::Scale(bpos)));
-        sp_knot_moveto(knots[i], p);
-        sp_knot_show(knots[i]);
+        knots[i]->moveto(p);
+        knots[i]->show();
 
         // This controls the center handle's position, because the default can
         // be moved and needs to be remembered.
         if( type == HANDLE_CENTER && _center )
-            sp_knot_moveto(knots[i], *_center);
+            knots[i]->moveto(*_center);
     }
 }
 
@@ -635,7 +641,7 @@ void Inkscape::SelTrans::_makeHandles()
 {
     for (int i = 0; i < NUMHANDS; i++) {
         SPSelTransTypeInfo info = handtypes[hands[i].type];
-        knots[i] = sp_knot_new(_desktop, info.tip);
+        knots[i] = new SPKnot(_desktop, info.tip);
 
         knots[i]->setShape(SP_CTRL_SHAPE_BITMAP);
         knots[i]->setSize(13);
@@ -644,50 +650,46 @@ void Inkscape::SelTrans::_makeHandles()
         knots[i]->setFill(info.color[0], info.color[1], info.color[2]);
         knots[i]->setStroke(info.color[3], info.color[4], info.color[5]);
         knots[i]->setPixbuf(handles[hands[i].control]);
-        sp_knot_update_ctrl(knots[i]);
+        knots[i]->updateCtrl();
 
-        g_signal_connect(G_OBJECT(knots[i]), "request",
-                G_CALLBACK(sp_sel_trans_handle_request), (gpointer) &hands[i]);
-        g_signal_connect(G_OBJECT(knots[i]), "moved",
-                G_CALLBACK(sp_sel_trans_handle_new_event), (gpointer) &hands[i]);
-        g_signal_connect(G_OBJECT(knots[i]), "grabbed",
-                G_CALLBACK(sp_sel_trans_handle_grab), (gpointer) &hands[i]);
-        g_signal_connect(G_OBJECT(knots[i]), "ungrabbed",
-                G_CALLBACK(sp_sel_trans_handle_ungrab), (gpointer) &hands[i]);
-        g_signal_connect(G_OBJECT(knots[i]), "clicked",
-                G_CALLBACK(sp_sel_trans_handle_click), (gpointer) &hands[i]);
-        g_signal_connect(G_OBJECT(knots[i]), "event",
-                G_CALLBACK(sp_sel_trans_handle_event), (gpointer) &hands[i]);
+        knots[i]->request_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_request), &hands[i]));
+        knots[i]->moved_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_new_event), &hands[i]));
+        knots[i]->grabbed_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_grab), &hands[i]));
+        knots[i]->ungrabbed_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_ungrab), &hands[i]));
+        knots[i]->click_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_click), &hands[i]));
+        knots[i]->event_signal.connect(sigc::bind(sigc::ptr_fun(sp_sel_trans_handle_event), &hands[i]));
     }
 }
 
-static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data)
+static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, SPSelTransHandle const* data)
 {
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleGrab(
         knot, state, *(SPSelTransHandle const *) data
         );
 }
 
-static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint /*state*/, gpointer /*data*/)
+static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint /*state*/, SPSelTransHandle const* /*data*/)
 {
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->ungrab();
 }
 
-static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point *position, guint state, gpointer data)
+static void sp_sel_trans_handle_new_event(SPKnot *knot, Geom::Point const& position, guint state, SPSelTransHandle const *data)
 {
+    Geom::Point pos = position;
+
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleNewEvent(
-        knot, position, state, *(SPSelTransHandle const *) data
+        knot, &pos, state, *(SPSelTransHandle const *) data
         );
 }
 
-static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *position, guint state, gboolean *data)
+static gboolean sp_sel_trans_handle_request(SPKnot *knot, Geom::Point *position, guint state, SPSelTransHandle const *data)
 {
     return SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleRequest(
         knot, position, state, *(SPSelTransHandle const *) data
         );
 }
 
-static void sp_sel_trans_handle_click(SPKnot *knot, guint state, gpointer data)
+static void sp_sel_trans_handle_click(SPKnot *knot, guint state, SPSelTransHandle const* data)
 {
     SP_SELECT_CONTEXT(knot->desktop->event_context)->_seltrans->handleClick(
         knot, state, *(SPSelTransHandle const *) data
@@ -736,7 +738,7 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
             break;
     }
 
-    grab(sp_knot_position(knot), handle.x, handle.y, FALSE, FALSE);
+    grab(knot->position(), handle.x, handle.y, FALSE, FALSE);
 }
 
 
@@ -794,7 +796,7 @@ gboolean Inkscape::SelTrans::handleRequest(SPKnot *knot, Geom::Point *position, 
         return TRUE;
     }
     if (request(handle, *position, state)) {
-        sp_knot_set_position(knot, *position, state);
+        knot->setPosition(*position, state);
         SP_CTRL(_grip)->moveto(*position);
         if (handle.type == HANDLE_CENTER) {
             SP_CTRL(_norm)->moveto(*position);

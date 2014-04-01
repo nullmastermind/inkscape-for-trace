@@ -12,24 +12,29 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib-object.h>
+#include <stddef.h>
+#include <string>
+
+#include <2geom/point.h>
 #include <gdk/gdk.h>
+#include <glib-object.h>
+#include <sigc++/trackable.h>
 #include "knot.h"
 
-#include "2geom/forward.h"
 #include "preferences.h"
 
-class  GrDrag;
-class  SPDesktop;
-class  SPItem;
-class  ShapeEditor;
+namespace Glib {
+    class ustring;
+}
+
+class GrDrag;
+class SPDesktop;
+class SPItem;
+class ShapeEditor;
 
 namespace Inkscape {
     class MessageContext;
     class SelCue;
-    namespace XML {
-        class Node;
-    }
 }
 
 #define SP_EVENT_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::ToolBase*>((Inkscape::UI::Tools::ToolBase*)obj))
@@ -44,8 +49,7 @@ class ToolBase;
 gboolean sp_event_context_snap_watchdog_callback(gpointer data);
 void sp_event_context_discard_delayed_snap_event(ToolBase *ec);
 
-class DelayedSnapEvent
-{
+class DelayedSnapEvent {
 public:
     enum DelayedSnapEventOrigin {
         UNDEFINED_HANDLER = 0,
@@ -59,12 +63,19 @@ public:
     };
 
     DelayedSnapEvent(ToolBase *event_context, gpointer const dse_item, gpointer dse_item2, GdkEventMotion const *event, DelayedSnapEvent::DelayedSnapEventOrigin const origin)
-    : _timer_id(0), _event(NULL), _item(dse_item), _item2(dse_item2), _origin(origin), _event_context(event_context)
+        : _timer_id(0)
+        , _event(NULL)
+        , _item(dse_item)
+        , _item2(dse_item2)
+        , _origin(origin)
+        , _event_context(event_context)
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         double value = prefs->getDoubleLimited("/options/snapdelay/value", 0, 0, 1000);
+
         _timer_id = g_timeout_add(value, &sp_event_context_snap_watchdog_callback, this);
         _event = gdk_event_copy((GdkEvent*) event);
+
         ((GdkEventMotion *)_event)->time = GDK_CURRENT_TIME;
     }
 
@@ -73,11 +84,25 @@ public:
         if (_event != NULL) gdk_event_free(_event); // Remove the copy of the original event
     }
 
-    ToolBase* getEventContext() {return _event_context;}
-    DelayedSnapEventOrigin getOrigin() {return _origin;}
-    GdkEvent* getEvent() {return _event;}
-    gpointer getItem() {return _item;}
-    gpointer getItem2() {return _item2;}
+    ToolBase* getEventContext() {
+        return _event_context;
+    }
+
+    DelayedSnapEventOrigin getOrigin() {
+        return _origin;
+    }
+
+    GdkEvent* getEvent() {
+        return _event;
+    }
+
+    gpointer getItem() {
+        return _item;
+    }
+
+    gpointer getItem2() {
+        return _item2;
+    }
 
 private:
     guint _timer_id;
@@ -104,13 +129,16 @@ void sp_event_context_snap_delay_handler(ToolBase *ec, gpointer const dse_item, 
  * plus few abstract base classes. Writing a new tool involves
  * subclassing ToolBase.
  */
-class ToolBase {
+class ToolBase
+    : public sigc::trackable
+{
 public:
     void enableSelectionCue (bool enable=true);
     void enableGrDrag (bool enable=true);
     bool deleteSelectedDrag(bool just_one);
 
-    ToolBase();
+    ToolBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y, bool uses_snap = true);
+
     virtual ~ToolBase();
 
     Inkscape::Preferences::Observer *pref_observer;
@@ -118,6 +146,7 @@ public:
 
     gint xp, yp;           ///< where drag started
     gint tolerance;
+
     bool within_tolerance;  ///< are we still within tolerance of origin
 
     SPItem *item_to_select; ///< the item where mouse_press occurred, to
@@ -132,7 +161,10 @@ public:
     Inkscape::SelCue *_selcue;
 
     GrDrag *_grdrag;
-    GrDrag *get_drag () {return _grdrag;}
+
+    GrDrag *get_drag () {
+        return _grdrag;
+    }
 
     ShapeEditor* shape_editor;
 
@@ -157,8 +189,10 @@ public:
 	 */
 	class ToolPrefObserver: public Inkscape::Preferences::Observer {
 	public:
-	    ToolPrefObserver(Glib::ustring const &path, ToolBase *ec) :
-	        Inkscape::Preferences::Observer(path), ec(ec) {
+	    ToolPrefObserver(Glib::ustring const &path, ToolBase *ec)
+	        : Inkscape::Preferences::Observer(path)
+	        , ec(ec)
+	    {
 	    }
 
 	    virtual void notify(Inkscape::Preferences::Entry const &val) {
@@ -176,14 +210,23 @@ public:
 	void sp_event_context_update_cursor();
 
 	SPDesktop *desktop;
+    bool _uses_snap; // TODO: make protected or private
 
 protected:
+	/// An xpm containing the shape of the tool's cursor.
     gchar const *const *cursor_shape;
-    gint hot_x, hot_y; ///< indicates the cursor's hot spot
+
+    /// The cursor's hot spot
+    gint hot_x, hot_y;
+
+    bool sp_event_context_knot_mouseover() const;
 
 private:
 	ToolBase(const ToolBase&);
 	ToolBase& operator=(const ToolBase&);
+
+	void sp_event_context_set_cursor(GdkCursorType cursor_type);
+
 };
 
 void sp_event_context_read(ToolBase *ec, gchar const *key);
@@ -201,7 +244,7 @@ gint gobble_motion_events(gint mask);
 void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEvent *event,
                                 gchar const *ctrl_tip, gchar const *shift_tip, gchar const *alt_tip);
 
-guint get_group0_keyval(GdkEventKey *event);
+guint get_group0_keyval(GdkEventKey const *event);
 
 SPItem *sp_event_context_find_item (SPDesktop *desktop, Geom::Point const &p, bool select_under, bool into_groups);
 SPItem *sp_event_context_over_item (SPDesktop *desktop, SPItem *item, Geom::Point const &p);
@@ -210,9 +253,9 @@ void sp_toggle_dropper(SPDesktop *dt);
 
 bool sp_event_context_knot_mouseover(ToolBase *ec);
 
-}
-}
-}
+} // namespace Tools
+} // namespace UI
+} // namespace Inkscape
 
 #endif // SEEN_SP_EVENT_CONTEXT_H
 

@@ -83,10 +83,10 @@ sp_selected_path_combine(SPDesktop *desktop)
     gint position = 0;
     char const *id = NULL;
     char const *transform = NULL;
-    gchar *style = NULL;
-    gchar *path_effect = NULL;
+    char const *style = NULL;
+    char const *path_effect = NULL;
 
-    SPCurve* curve = 0;
+    SPCurve* curve = NULL;
     SPItem *first = NULL;
     Inkscape::XML::Node *parent = NULL; 
 
@@ -114,18 +114,15 @@ sp_selected_path_combine(SPDesktop *desktop)
             id = first->getRepr()->attribute("id");
             transform = first->getRepr()->attribute("transform");
             // FIXME: merge styles of combined objects instead of using the first one's style
-            style = g_strdup(first->getRepr()->attribute("style"));
-            path_effect = g_strdup(first->getRepr()->attribute("inkscape:path-effect"));
+            style = first->getRepr()->attribute("style");
+            path_effect = first->getRepr()->attribute("inkscape:path-effect");
             //c->transform(item->transform);
             curve = c;
         } else {
             c->transform(item->getRelativeTransform(first));
             curve->append(c, false);
             c->unref();
-        }
 
-        // unless this is the topmost object,
-        if (item != first) {
             // reduce position only if the same parent
             if (item->getRepr()->parent() == parent) {
                 position--;
@@ -150,10 +147,8 @@ sp_selected_path_combine(SPDesktop *desktop)
             repr->setAttribute("transform", transform);
         }
         repr->setAttribute("style", style);
-        g_free(style);
 
         repr->setAttribute("inkscape:path-effect", path_effect);
-        g_free(path_effect);
 
         // set path data corresponding to new curve
         gchar *dstring = sp_svg_write_path(curve->get_pathvector());
@@ -370,7 +365,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
          items = items->next) {
 
         SPItem *item = SP_ITEM(items->data);
-    	SPDocument *document = item->document;
+        SPDocument *document = item->document;
 
         if ( skip_all_lpeitems &&
              SP_IS_LPE_ITEM(item) && 
@@ -448,12 +443,12 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
         parent->appendChild(repr);
         SPObject* newObj = document->getObjectByRepr(repr);
         if (title && newObj) {
-        	newObj->setTitle(title);
-        	g_free(title);
+            newObj->setTitle(title);
+            g_free(title);
         }
         if (desc && newObj) {
-        	newObj->setDesc(desc);
-        	g_free(desc);
+            newObj->setDesc(desc);
+            g_free(desc);
         }
 
         // move to the saved position

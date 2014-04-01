@@ -72,8 +72,8 @@
 #include <cairo-ft.h>
 #endif
 #ifdef CAIRO_HAS_WIN32_FONT
-#include <cairo-win32.h>
 #include <pango/pangowin32.h>
+#include <cairo-win32.h>
 #endif
 
 #include <pango/pangofc-fontmap.h>
@@ -803,9 +803,7 @@ CairoRenderContext::setupSurface(double width, double height)
 #ifdef CAIRO_HAS_PDF_SURFACE
         case CAIRO_SURFACE_TYPE_PDF:
             surface = cairo_pdf_surface_create_for_stream(Inkscape::Extension::Internal::_write_callback, _stream, width, height);
-#if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0))
             cairo_pdf_surface_restrict_to_version(surface, (cairo_pdf_version_t)_pdf_level);
-#endif
             break;
 #endif
 #ifdef CAIRO_HAS_PS_SURFACE
@@ -814,10 +812,8 @@ CairoRenderContext::setupSurface(double width, double height)
             if(CAIRO_STATUS_SUCCESS != cairo_surface_status(surface)) {
                 return FALSE;
             }
-#if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 2))
             cairo_ps_surface_restrict_to_level(surface, (cairo_ps_level_t)_ps_level);
             cairo_ps_surface_set_eps(surface, (cairo_bool_t) _eps);
-#endif
             // Cairo calculates the bounding box itself, however we want to override this. See Launchpad bug #380501
 #if (CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 2))
 //            cairo_ps_dsc_comment(surface, os_bbox.str().c_str());
@@ -1301,10 +1297,14 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
         }
     }
 
-    if (style->stroke_dash.n_dash   &&
-        style->stroke_dash.dash       )
+    if (!style->stroke_dasharray.values.empty())
     {
-        cairo_set_dash(_cr, style->stroke_dash.dash, style->stroke_dash.n_dash, style->stroke_dash.offset);
+        size_t ndashes = style->stroke_dasharray.values.size();
+        double* dashes =(double*)malloc(ndashes*sizeof(double));
+        for( unsigned i = 0; i < ndashes; ++i ) {
+            dashes[i] = style->stroke_dasharray.values[i];
+        }
+        cairo_set_dash(_cr, dashes, ndashes, style->stroke_dashoffset.value);
     } else {
         cairo_set_dash(_cr, NULL, 0, 0.0);  // disable dashing
     }
@@ -1437,7 +1437,7 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
 }
 
 bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
-                                     Geom::Affine const &image_transform, SPStyle const * /*style*/)
+                                     Geom::Affine const &image_transform, SPStyle const *style)
 {
     g_assert( _is_valid );
 
@@ -1472,6 +1472,27 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
         cairo_rectangle(_cr, 0, 0, w, h);
         cairo_clip(_cr);
     }
+        
+    // Cairo filter method will be mapped to PS/PDF 'interpolate' true/false).
+    // See cairo-pdf-surface.c
+    if (style) {
+        // See: http://www.w3.org/TR/SVG/painting.html#ImageRenderingProperty
+        //      http://www.w3.org/TR/css4-images/#the-image-rendering
+        //      style.h/style.cpp
+        switch (style->image_rendering.computed) {
+            case SP_CSS_COLOR_RENDERING_AUTO:
+                // Do nothing
+                break;
+            case SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY:
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST );
+                break;
+            case SP_CSS_COLOR_RENDERING_OPTIMIZESPEED:
+            default:
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST );
+                break;
+        }
+    }
+
     cairo_paint_with_alpha(_cr, opacity);
 
     cairo_restore(_cr);

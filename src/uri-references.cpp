@@ -12,6 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <iostream>
 #include <cstring>
 #include <string>
 
@@ -21,6 +22,7 @@
 #include "uri-references.h"
 #include "extract-uri.h"
 
+#include <glibmm/miscutils.h>
 #include <sigc++/functors/mem_fun.h>
 
 namespace Inkscape {
@@ -45,14 +47,42 @@ URIReference::~URIReference()
 
 void URIReference::attach(const URI &uri) throw(BadURIException)
 {
-    SPDocument *document;
+    SPDocument *document = NULL;
+
+    // Attempt to get the document that contains the URI
     if (_owner) {
         document = _owner->document;
     } else if (_owner_document) {
         document = _owner_document;
-    } else {
-        g_assert_not_reached();
     }
+
+    // createChildDoc() assumes that the referenced file is an SVG.
+    // PNG and JPG files are allowed (in the case of feImage).
+    gchar *filename = uri.toString();
+    bool skip = false;
+    if( g_str_has_suffix( filename, ".jpg" ) ||
+        g_str_has_suffix( filename, ".JPG" ) ||
+        g_str_has_suffix( filename, ".png" ) ||
+        g_str_has_suffix( filename, ".PNG" ) ) {
+        skip = true;
+    }
+ 
+    // The path contains references to seperate document files to load.
+    if(document && uri.getPath() && !skip ) {
+        std::string base = document->getBase() ? document->getBase() : "";
+        std::string path = uri.getFullPath(base);
+        if(!path.empty()) {
+            document = document->createChildDoc(path);
+        } else {
+            document = NULL;
+        }
+    }
+    if(!document) {
+        g_warning("Can't get document for referenced URI: %s", filename);
+        g_free( filename );
+        return;
+    }
+    g_free( filename );
 
     gchar const *fragment = uri.getFragment();
     if ( !uri.isRelative() || uri.getQuery() || !fragment ) {
@@ -63,7 +93,7 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
     /* for now this handles the minimal xpointer form that SVG 1.0
      * requires of us
      */
-    gchar *id;
+    gchar *id = NULL;
     if (!strncmp(fragment, "xpointer(", 9)) {
         /* FIXME !!! this is wasteful */
         /* FIXME: It looks as though this is including "))" in the id.  I suggest moving
@@ -85,12 +115,10 @@ void URIReference::attach(const URI &uri) throw(BadURIException)
 
     /* FIXME !!! validate id as an NCName somewhere */
 
-    if (_uri) {
-        delete _uri;
-    }
+    _connection.disconnect();
+    delete _uri;
     _uri = new URI(uri);
 
-    _connection.disconnect();
     _setObject(document->getObjectById(id));
     _connection = document->connectIdChanged(id, sigc::mem_fun(*this, &URIReference::_setObject));
 
@@ -144,7 +172,7 @@ void URIReference::_release(SPObject *obj)
 
 SPObject* sp_css_uri_reference_resolve( SPDocument *document, const gchar *uri )
 {
-    SPObject* ref = 0;
+    SPObject* ref = NULL;
 
     if ( document && uri && ( strncmp(uri, "url(", 4) == 0 ) ) {
         gchar *trimmed = extract_uri( uri );
@@ -160,7 +188,7 @@ SPObject* sp_css_uri_reference_resolve( SPDocument *document, const gchar *uri )
 SPObject *
 sp_uri_reference_resolve (SPDocument *document, const gchar *uri)
 {
-    SPObject* ref = 0;
+    SPObject* ref = NULL;
 
     if ( uri && (*uri == '#') ) {
         ref = document->getObjectById( uri + 1 );
@@ -168,3 +196,14 @@ sp_uri_reference_resolve (SPDocument *document, const gchar *uri)
 
     return ref;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

@@ -94,7 +94,6 @@ ink_common_sources +=	\
 	message.h							\
 	message-stack.cpp message-stack.h				\
 	mod360.cpp mod360.h						\
-	modifier-fns.h							\
 	object-edit.cpp object-edit.h					\
 	object-hierarchy.cpp object-hierarchy.h				\
 	object-snapper.cpp object-snapper.h				\
@@ -211,6 +210,7 @@ ink_common_sources +=	\
 	streq.h					\
 	strneq.h				\
 	style.cpp style.h			\
+	style-enums.h style-internal.h		\
 	svg-profile.h				\
 	svg-view.cpp svg-view.h			\
 	svg-view-widget.cpp svg-view-widget.h	\
@@ -228,7 +228,8 @@ ink_common_sources +=	\
 	uri-references.cpp uri-references.h	\
 	vanishing-point.cpp vanishing-point.h	\
 	verbs.cpp verbs.h			\
-	version.cpp version.h
+	version.cpp version.h			\
+	viewbox.cpp viewbox.h
 
 # Additional dependencies
 

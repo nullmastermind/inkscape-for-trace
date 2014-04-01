@@ -14,22 +14,29 @@
  * Released under GNU GPL
  */
 
-#include <stddef.h>
-#include <sigc++/sigc++.h>
-#include <2geom/point.h>
+#include <sigc++/connection.h>
+
 #include "ui/tools/tool-base.h"
-#include "live_effects/effect.h"
+#include "live_effects/effect-enum.h"
+
+struct SPCanvasItem;
+class SPCurve;
+struct SPDrawAnchor;
+
+namespace Inkscape {
+    class Selection;
+}
+
+namespace boost {
+    template<class T>
+    class optional;
+}
 
 /* Freehand context */
 
 #define SP_DRAW_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::FreehandBase*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_DRAW_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::FreehandBase*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
-struct SPDrawAnchor;
-namespace Inkscape
-{
-  class Selection;
-}
 
 namespace Inkscape {
 namespace UI {
@@ -37,13 +44,13 @@ namespace Tools {
 
 class FreehandBase : public ToolBase {
 public:
-	FreehandBase();
+	FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y);
 	virtual ~FreehandBase();
 
     Inkscape::Selection *selection;
     SPCanvasItem *grab;
 
-    guint attach : 1;
+    bool attach;
 
     guint32 red_color;
     guint32 blue_color;

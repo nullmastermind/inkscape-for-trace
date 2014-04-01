@@ -371,18 +371,18 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
 
             // objects are not in parent/child relationship;
             // find their lowest common ancestor
-            Inkscape::XML::Node *dad = LCA(a, b);
-            if (dad == NULL) {
+            Inkscape::XML::Node *parent = LCA(a, b);
+            if (parent == NULL) {
                 boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
                 return;
             }
 
             // find the children of the LCA that lead from it to the a and b
-            Inkscape::XML::Node *as = AncetreFils(a, dad);
-            Inkscape::XML::Node *bs = AncetreFils(b, dad);
+            Inkscape::XML::Node *as = AncetreFils(a, parent);
+            Inkscape::XML::Node *bs = AncetreFils(b, parent);
 
             // find out which comes first
-            for (Inkscape::XML::Node *child = dad->firstChild(); child; child = child->next()) {
+            for (Inkscape::XML::Node *child = parent->firstChild(); child; child = child->next()) {
                 if (child == as) {
                     /* a first, so reverse. */
                     reverseOrderForOp = true;
@@ -1004,7 +1004,7 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
     Path *res = new Path;
     res->SetBackData(false);
 
-    if (i_style->stroke_dash.n_dash) {
+    if (!i_style->stroke_dasharray.values.empty()) {
         // For dashed strokes, use Stroke method, because Outline can't do dashes
         // However Stroke adds lots of extra nodes _or_ makes the path crooked, so consider this a temporary workaround
 
@@ -1273,7 +1273,7 @@ sp_selected_path_outline(SPDesktop *desktop)
         Path *res = new Path;
         res->SetBackData(false);
 
-        if (i_style->stroke_dash.n_dash) {
+        if (!i_style->stroke_dasharray.values.empty()) {
             // For dashed strokes, use Stroke method, because Outline can't do dashes
             // However Stroke adds lots of extra nodes _or_ makes the path crooked, so consider this a temporary workaround
 

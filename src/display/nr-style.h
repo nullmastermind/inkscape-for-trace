@@ -28,10 +28,10 @@ struct NRStyle {
     ~NRStyle();
 
     void set(SPStyle *);
-    bool prepareFill(Inkscape::DrawingContext &ct, Geom::OptRect const &paintbox);
-    bool prepareStroke(Inkscape::DrawingContext &ct, Geom::OptRect const &paintbox);
-    void applyFill(Inkscape::DrawingContext &ct);
-    void applyStroke(Inkscape::DrawingContext &ct);
+    bool prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox);
+    bool prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox);
+    void applyFill(Inkscape::DrawingContext &dc);
+    void applyStroke(Inkscape::DrawingContext &dc);
     void update();
 
     enum PaintType {
@@ -67,6 +67,18 @@ struct NRStyle {
 
     cairo_pattern_t *fill_pattern;
     cairo_pattern_t *stroke_pattern;
+
+#ifdef WITH_SVG2
+    enum PaintOrderType {
+        PAINT_ORDER_NORMAL,
+        PAINT_ORDER_FILL,
+        PAINT_ORDER_STROKE,
+        PAINT_ORDER_MARKER
+    };
+
+    static const size_t PAINT_ORDER_LAYERS = 3;
+    PaintOrderType paint_order_layer[PAINT_ORDER_LAYERS];
+#endif
 
 #define TEXT_DECORATION_LINE_CLEAR        0x00
 #define TEXT_DECORATION_LINE_SET          0x01

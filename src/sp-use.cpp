@@ -22,6 +22,7 @@
 
 #include <2geom/transforms.h>
 #include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document.h"
@@ -219,7 +220,11 @@ const char* SPUse::displayName() const {
 gchar* SPUse::description() const {
     if (this->child) {
         if( SP_IS_SYMBOL( this->child ) ) {
-            return g_strdup_printf(_("called %s"), this->child->title());
+            if (this->child->title()) {
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", this->child->title()))).c_str());
+            } else {
+                return g_strdup_printf(_("called %s"), _("Unnamed Symbol"));
+            }
         }
 
         static unsigned recursion_depth = 0;
@@ -297,6 +302,23 @@ SPItem *SPUse::root() {
 
 SPItem const *SPUse::root() const {
 	return const_cast<SPUse*>(this)->root();
+}
+
+/**
+ * Get the number of dereferences or calls to get_original() needed to get an object
+ * which is not an svg:use. Returns -1 if there is no original object.
+ */
+int SPUse::cloneDepth() const {
+    unsigned depth = 1;
+    SPItem *orig = this->child;
+
+    while (orig && SP_IS_USE(orig)) {
+        ++depth;
+        orig = SP_USE(orig)->child;
+    }
+
+    if (!orig) return -1;
+    return depth;
 }
 
 /**

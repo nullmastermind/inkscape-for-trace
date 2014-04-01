@@ -20,8 +20,15 @@
  */
 
 #include "ui/tools/tool-base.h"
-#include "display/curve.h"
-#include <2geom/point.h>
+
+struct SPCanvasItem;
+class SPCurve;
+
+namespace Inkscape {
+    namespace XML {
+        class Node;
+    }
+}
 
 #define SAMPLING_SIZE 8        /* fixme: ?? */
 
@@ -31,7 +38,7 @@ namespace Tools {
 
 class DynamicBase : public ToolBase {
 public:
-	DynamicBase();
+	DynamicBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y);
 	virtual ~DynamicBase();
 
 	virtual void set(const Inkscape::Preferences::Entry& val);
@@ -81,9 +88,9 @@ protected:
     gdouble ytilt;
 
     /* attributes */
-    guint dragging : 1;           /* mouse state: mouse is dragging */
-    guint usepressure : 1;
-    guint usetilt : 1;
+    bool dragging;           /* mouse state: mouse is dragging */
+    bool usepressure;
+    bool usetilt;
     double mass, drag;
     double angle;
     double width;

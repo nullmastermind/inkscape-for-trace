@@ -30,12 +30,15 @@ import inkex
 inkex.localize()
 
 
-# TODO: Unittests
-class MyEffect(inkex.Effect):
+class Plot(inkex.Effect):
 
     def __init__(self):
         inkex.Effect.__init__(self)
         self.OptionParser.add_option('--tab',             action='store', type='string',  dest='tab')
+        self.OptionParser.add_option('--serialPort',      action='store', type='string',  dest='serialPort',      default='COM1',  help='Serial port')
+        self.OptionParser.add_option('--serialBaudRate',  action='store', type='string',  dest='serialBaudRate',  default='9600',  help='Serial Baud rate')
+        self.OptionParser.add_option('--flowControl',     action='store', type='string',  dest='flowControl',     default='0',     help='Flow control')
+        self.OptionParser.add_option('--commandLanguage', action='store', type='string',  dest='commandLanguage', default='hpgl',  help='Command Language')
         self.OptionParser.add_option('--resolutionX',     action='store', type='float',   dest='resolutionX',     default=1016.0,  help='Resolution X (dpi)')
         self.OptionParser.add_option('--resolutionY',     action='store', type='float',   dest='resolutionY',     default=1016.0,  help='Resolution Y (dpi)')
         self.OptionParser.add_option('--pen',             action='store', type='int',     dest='pen',             default=1,       help='Pen number')
@@ -45,18 +48,11 @@ class MyEffect(inkex.Effect):
         self.OptionParser.add_option('--mirrorX',         action='store', type='inkbool', dest='mirrorX',         default='FALSE', help='Mirror X axis')
         self.OptionParser.add_option('--mirrorY',         action='store', type='inkbool', dest='mirrorY',         default='FALSE', help='Mirror Y axis')
         self.OptionParser.add_option('--center',          action='store', type='inkbool', dest='center',          default='FALSE', help='Center zero point')
-        self.OptionParser.add_option('--flat',            action='store', type='float',   dest='flat',            default=1.2,     help='Curve flatness')
-        self.OptionParser.add_option('--useOvercut',      action='store', type='inkbool', dest='useOvercut',      default='TRUE',  help='Use overcut')
         self.OptionParser.add_option('--overcut',         action='store', type='float',   dest='overcut',         default=1.0,     help='Overcut (mm)')
-        self.OptionParser.add_option('--useToolOffset',   action='store', type='inkbool', dest='useToolOffset',   default='TRUE',  help='Correct tool offset')
         self.OptionParser.add_option('--toolOffset',      action='store', type='float',   dest='toolOffset',      default=0.25,    help='Tool offset (mm)')
         self.OptionParser.add_option('--precut',          action='store', type='inkbool', dest='precut',          default='TRUE',  help='Use precut')
-        self.OptionParser.add_option('--offsetX',         action='store', type='float',   dest='offsetX',         default=0.0,     help='X offset (mm)')
-        self.OptionParser.add_option('--offsetY',         action='store', type='float',   dest='offsetY',         default=0.0,     help='Y offset (mm)')
-        self.OptionParser.add_option('--serialPort',      action='store', type='string',  dest='serialPort',      default='COM1',  help='Serial port')
-        self.OptionParser.add_option('--serialBaudRate',  action='store', type='string',  dest='serialBaudRate',  default='9600',  help='Serial Baud rate')
-        self.OptionParser.add_option('--flowControl',     action='store', type='string',  dest='flowControl',     default='0',     help='Flow control')
-        self.OptionParser.add_option('--commandLanguage', action='store', type='string',  dest='commandLanguage', default='hpgl',  help='Command Language')
+        self.OptionParser.add_option('--flat',            action='store', type='float',   dest='flat',            default=1.2,     help='Curve flatness')
+        self.OptionParser.add_option('--autoAlign',       action='store', type='inkbool', dest='autoAlign',     default='TRUE',  help='Auto align')
         self.OptionParser.add_option('--debug',           action='store', type='inkbool', dest='debug',           default='FALSE', help='Show debug information')
 
     def effect(self):
@@ -74,18 +70,21 @@ class MyEffect(inkex.Effect):
                 raise ValueError, ('', type, value), traceback
         # TODO: Get preview to work. This requires some work on the C++ side to be able to determine if it is
         # a preview or a final run. (Remember to set <effect needs-live-preview='false'> to true)
-        # This outcommented code has a user unit issue (getSvg produces px, docWidth could be mm or something else)
         '''
-        # reparse data for preview
-        self.options.showMovements = True
-        self.options.docWidth = float(self.unittouu(self.document.getroot().get('width')))
-        self.options.docHeight = float(self.unittouu(self.document.getroot().get('height')))
-        myHpglDecoder = hpgl_decoder.hpglDecoder(self.hpgl, self.options)
-        doc, warnings = myHpglDecoder.getSvg()
-        # deliver document to inkscape
-        self.document = doc
+        if MAGIC:
+            # reparse data for preview
+            self.options.showMovements = True
+            self.options.docWidth = self.uutounit(self.unittouu(self.document.getroot().get('width')), "px")
+            self.options.docHeight = self.uutounit(self.unittouu(self.document.getroot().get('height')), "px")
+            myHpglDecoder = hpgl_decoder.hpglDecoder(self.hpgl, self.options)
+            doc, warnings = myHpglDecoder.getSvg()
+            # deliver document to inkscape
+            self.document = doc
+        else:
         '''
         # convert to other formats
+        if self.options.commandLanguage == 'HPGL':
+            self.convertToHpgl()
         if self.options.commandLanguage == 'DMPL':
             self.convertToDmpl()
         if self.options.commandLanguage == 'ZING':
@@ -95,6 +94,15 @@ class MyEffect(inkex.Effect):
             self.showDebugInfo(debugObject)
         else:
             self.sendHpglToSerial()
+
+    def convertToHpgl(self):
+        # convert raw HPGL to HPGL
+        hpglInit = 'IN;SP%d' % self.options.pen
+        if self.options.force > 0:
+            hpglInit += ';FS%d' % self.options.force
+        if self.options.speed > 0:
+            hpglInit += ';VS%d' % self.options.speed
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;IN;'
 
     def convertToDmpl(self):
         # convert HPGL to DMPL
@@ -112,16 +120,20 @@ class MyEffect(inkex.Effect):
         self.hpgl = self.hpgl.replace(';', ',')
         self.hpgl = self.hpgl.replace('PU', 'U')
         self.hpgl = self.hpgl.replace('PD', 'D')
-        velocity = ''
+        dmplInit = ';:HAL0P%d' % self.options.pen
         if self.options.speed > 0:
-            velocity = 'V' + str(self.options.speed)
-        self.hpgl = re.sub(r'IN,SP[0-9]+(,FS[0-9]+)?(,VS[0-9]+)?,', r';:HAL0P' + str(self.options.pen) + velocity + 'EC1', self.hpgl)
-        self.hpgl += 'Z'
+            dmplInit += 'V%d' % self.options.speed
+        dmplInit += 'EC1'
+        self.hpgl = dmplInit + self.hpgl[1:] + ',U0,0,P0Z'
 
     def convertToZing(self):
         # convert HPGL to Zing
-        self.hpgl = self.hpgl.replace('IN;', 'ZG;')
-        self.hpgl += '@'
+        hpglInit = 'ZG;SP%d' % self.options.pen
+        if self.options.force > 0:
+            hpglInit += ';FS%d' % self.options.force
+        if self.options.speed > 0:
+            hpglInit += ';VS%d' % self.options.speed
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;@'
 
     def sendHpglToSerial(self):
         # gracefully exit script when pySerial is missing
@@ -173,14 +185,11 @@ class MyEffect(inkex.Effect):
         inkex.errormsg('  Mirror X axis: ' + str(self.options.mirrorX))
         inkex.errormsg('  Mirror Y axis: ' + str(self.options.mirrorY))
         inkex.errormsg('  Center zero point: ' + str(self.options.center))
-        inkex.errormsg('  Use overcut: ' + str(self.options.useOvercut))
         inkex.errormsg('  Overcut (mm): ' + str(self.options.overcut))
-        inkex.errormsg('  Use tool offset correction: ' + str(self.options.useToolOffset))
         inkex.errormsg('  Tool offset (mm): ' + str(self.options.toolOffset))
         inkex.errormsg('  Use precut: ' + str(self.options.precut))
         inkex.errormsg('  Curve flatness: ' + str(self.options.flat))
-        inkex.errormsg('  X offset (mm): ' + str(self.options.offsetX))
-        inkex.errormsg('  Y offset (mm): ' + str(self.options.offsetY))
+        inkex.errormsg('  Auto align: ' + str(self.options.autoAlign))
         inkex.errormsg('  Show debug information: ' + str(self.options.debug))
         inkex.errormsg("\nDocument properties:\n")
         version = self.document.getroot().xpath('//@inkscape:version', namespaces=inkex.NSS)
@@ -189,20 +198,20 @@ class MyEffect(inkex.Effect):
         fileName = self.document.getroot().xpath('//@sodipodi:docname', namespaces=inkex.NSS)
         if fileName:
             inkex.errormsg('  Filename: ' + fileName[0])
-        inkex.errormsg('  Document unit: ' + debugObject.documentUnit)
-        inkex.errormsg('  Width: ' + str(debugObject.debugValues[0]) + ' ' + debugObject.documentUnit)
-        inkex.errormsg('  Height: ' + str(debugObject.debugValues[1]) + ' ' + debugObject.documentUnit)
-        if debugObject.debugValues[2] == 0:
+        inkex.errormsg('  Document unit: ' + self.getDocumentUnit())
+        inkex.errormsg('  Width: ' + str(debugObject.debugValues['docWidth']) + ' ' + self.getDocumentUnit())
+        inkex.errormsg('  Height: ' + str(debugObject.debugValues['docHeight']) + ' ' + self.getDocumentUnit())
+        if debugObject.debugValues['viewBoxWidth'] == "-":
             inkex.errormsg('  Viewbox Width: -')
             inkex.errormsg('  Viewbox Height: -')
         else:
-            inkex.errormsg('  Viewbox Width: ' + str(debugObject.debugValues[2]) + ' ' + debugObject.documentUnit)
-            inkex.errormsg('  Viewbox Height: ' + str(debugObject.debugValues[3]) + ' ' + debugObject.documentUnit)
+            inkex.errormsg('  Viewbox Width: ' + str(self.unittouu(self.addDocumentUnit(debugObject.debugValues['viewBoxWidth']))) + ' ' + self.getDocumentUnit())
+            inkex.errormsg('  Viewbox Height: ' + str(self.unittouu(self.addDocumentUnit(debugObject.debugValues['viewBoxHeight']))) + ' ' + self.getDocumentUnit())
         inkex.errormsg("\n" + self.options.commandLanguage + " properties:\n")
-        inkex.errormsg('  Drawing width: ' + str(debugObject.debugValues[6]) + ' ' + debugObject.documentUnit)
-        inkex.errormsg('  Drawing height: ' + str(debugObject.debugValues[7]) + ' ' + debugObject.documentUnit)
-        inkex.errormsg('  Drawing width: ' + str(debugObject.debugValues[4]) + ' plotter steps')
-        inkex.errormsg('  Drawing height: ' + str(debugObject.debugValues[5]) + ' plotter steps')
+        inkex.errormsg('  Drawing width: ' + str(self.unittouu(self.addDocumentUnit(str(debugObject.debugValues['drawingWidthUU'])))) + ' ' + self.getDocumentUnit())
+        inkex.errormsg('  Drawing height: ' + str(self.unittouu(self.addDocumentUnit(str(debugObject.debugValues['drawingHeightUU'])))) + ' ' + self.getDocumentUnit())
+        inkex.errormsg('  Drawing width: ' + str(debugObject.debugValues['drawingWidth']) + ' plotter steps')
+        inkex.errormsg('  Drawing height: ' + str(debugObject.debugValues['drawingHeight']) + ' plotter steps')
         inkex.errormsg('  Offset X: ' + str(debugObject.offsetX) + ' plotter steps')
         inkex.errormsg('  Offset Y: ' + str(debugObject.offsetX) + ' plotter steps')
         inkex.errormsg('  Overcut: ' + str(debugObject.overcut) + ' plotter steps')
@@ -214,7 +223,7 @@ class MyEffect(inkex.Effect):
 
 if __name__ == '__main__':
     # start extension
-    e = MyEffect()
+    e = Plot()
     e.affect()
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

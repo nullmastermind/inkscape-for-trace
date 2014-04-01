@@ -261,7 +261,7 @@ public:
         expandBy(amount, amount);
     }
     /** @brief Expand the rectangle in both directions.
-     * Note that this is different from scaling. Negative values will shrink the
+     * Note that this is different from scaling. Negative values wil shrink the
      * rectangle. If <code>-x</code> is larger than
      * half of the width, the X interval will contain only the X coordinate
      * of the midpoint; same for height. */
@@ -483,13 +483,13 @@ inline bool GenericRect<C>::contains(OptCRect const &r) const {
     return !r || contains(*r);
 }
 
-#ifdef _GLIBCXX_IOSTREAM
+//#ifdef _GLIBCXX_IOSTREAM
 template <typename C>
 inline std::ostream &operator<<(std::ostream &out, GenericRect<C> const &r) {
     out << "X: " << r[X] << "  Y: " << r[Y];
     return out;
 }
-#endif
+//#endif
 
 } // end namespace Geom
 

@@ -63,14 +63,12 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
         g_print ("Error! Throw an exception, please!\n");
     }
 
-    //g_object_ref(G_OBJECT(item)); // TODO: is this still needed after C++-ification?
     sp_object_ref(item);
 
     sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &KnotHolder::updateControlSizes));
 }
 
 KnotHolder::~KnotHolder() {
-    //g_object_unref(G_OBJECT(item));
 	sp_object_unref(item);
 
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
@@ -103,10 +101,10 @@ void KnotHolder::update_knots()
 /**
  * Returns true if at least one of the KnotHolderEntities has the mouse hovering above it.
  */
-bool KnotHolder::knot_mouseover()
-{
-    for(std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i) {
-        SPKnot *knot = (*i)->knot;
+bool KnotHolder::knot_mouseover() const {
+    for (std::list<KnotHolderEntity *>::const_iterator i = entity.begin(); i != entity.end(); ++i) {
+        const SPKnot *knot = (*i)->knot;
+
         if (knot && (knot->flags & SP_KNOT_MOUSEOVER)) {
             return true;
         }
@@ -187,7 +185,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 }
 
 void
-KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/)
+KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
 {
 	this->dragging = false;
 

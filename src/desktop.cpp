@@ -52,6 +52,7 @@
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "document.h"
+#include "document-undo.h"
 #include "event-log.h"
 #include "helper/action-context.h"
 #include "interface.h"
@@ -167,8 +168,23 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     canvas = aCanvas;
 
     SPDocument *document = namedview->document;
-    /* Kill flicker */
+    /* XXX:
+     * ensureUpToDate() sends a 'modified' signal to the root element.
+     * This is reportedly required to prevent flickering after the document
+     * loads. However, many SPObjects write to their repr in response
+     * to this signal. This is apparently done to support live path effects,
+     * which rewrite their result paths after each modification of the base object.
+     * This causes the generation of an incomplete undo transaction,
+     * which causes problems down the line, including crashes in the
+     * Undo History dialog.
+     *
+     * For now, this is handled by disabling undo tracking during this call.
+     * A proper fix would involve modifying the way ensureUpToDate() works,
+     * so that the LPE results are not rewritten.
+     */
+    Inkscape::DocumentUndo::setUndoSensitive(document, false);
     document->ensureUpToDate();
+    Inkscape::DocumentUndo::setUndoSensitive(document, true);
 
     /* Setup Dialog Manager */
     _dlg_mgr = &Inkscape::UI::Dialog::DialogManager::getInstance();
@@ -647,8 +663,8 @@ SPDesktop::change_document (SPDocument *theDocument)
     SPDesktopWidget *dtw = (SPDesktopWidget *) parent->get_data("desktopwidget");
     if (dtw) {
         dtw->desktop = this;
+        dtw->updateNamedview();
     }
-    dtw->updateNamedview();
 
     _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
     _document_replaced_signal.emit (this, theDocument);
@@ -657,19 +673,26 @@ SPDesktop::change_document (SPDocument *theDocument)
 /**
  * Replaces the currently active tool with a new one.
  */
-void SPDesktop::set_event_context2(const std::string& toolName) {
-	Inkscape::UI::Tools::ToolBase* new_tool = ToolFactory::instance().createObject(toolName);
-	new_tool->desktop = this;
-	new_tool->message_context = new Inkscape::MessageContext(this->messageStack());
-
+void SPDesktop::set_event_context2(const std::string& toolName)
+{
     Inkscape::UI::Tools::ToolBase* old_tool = event_context;
-	event_context = new_tool;
 
-	if (old_tool) {
-		old_tool->finish();
-		delete old_tool;
-	}
-
+    if (old_tool) {
+        if (toolName.compare(old_tool->pref_observer->observed_path) != 0) {
+            //g_message("Old tool: %s", old_tool->pref_observer->observed_path.c_str());
+            //g_message("New tool: %s", toolName.c_str());
+            old_tool->finish();
+            delete old_tool;
+        } else {
+            _event_context_changed_signal.emit(this, event_context);
+            return;
+        }
+    }
+    
+    Inkscape::UI::Tools::ToolBase* new_tool = ToolFactory::instance().createObject(toolName);
+    new_tool->desktop = this;
+    new_tool->message_context = new Inkscape::MessageContext(this->messageStack());
+    event_context = new_tool;
     new_tool->setup();
 
     // Make sure no delayed snapping events are carried over after switching tools
@@ -677,7 +700,7 @@ void SPDesktop::set_event_context2(const std::string& toolName) {
     // tool should take care of this by itself)
     sp_event_context_discard_delayed_snap_event(event_context);
 
-	_event_context_changed_signal.emit(this, event_context);
+    _event_context_changed_signal.emit(this, event_context);
 }
 
 /**
@@ -1514,7 +1537,9 @@ SPDesktop::updateCanvasNow()
 void
 SPDesktop::setDocument (SPDocument *doc)
 {
-    if (this->doc() && doc) {
+    if (!doc) return;
+
+    if (this->doc()) {
         namedview->hide(this);
         this->doc()->getRoot()->invoke_hide(dkey);
     }

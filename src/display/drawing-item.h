@@ -108,6 +108,7 @@ public:
     void setCached(bool c, bool persistent = false);
 
     void setOpacity(float opacity);
+    void setAntialiasing(bool a);
     void setIsolation(unsigned isolation); // CSS Compositing and Blending
     void setBlendMode(unsigned blend_mode);
     void setTransform(Geom::Affine const &trans);
@@ -123,8 +124,8 @@ public:
     void *data() const { return _user_data; }
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = STATE_ALL, unsigned reset = 0);
-    unsigned render(DrawingContext &ct, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = NULL);
-    void clip(DrawingContext &ct, Geom::IntRect const &area);
+    unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = NULL);
+    void clip(DrawingContext &dc, Geom::IntRect const &area);
     DrawingItem *pick(Geom::Point const &p, double delta, unsigned flags = 0);
 
 protected:
@@ -141,7 +142,7 @@ protected:
         RENDER_OK = 0,
         RENDER_STOP = 1
     };
-    void _renderOutline(DrawingContext &ct, Geom::IntRect const &area, unsigned flags);
+    void _renderOutline(DrawingContext &dc, Geom::IntRect const &area, unsigned flags);
     void _markForUpdate(unsigned state, bool propagate);
     void _markForRendering();
     void _invalidateFilterBackground(Geom::IntRect const &area);
@@ -150,9 +151,9 @@ protected:
     Geom::OptIntRect _cacheRect();
     virtual unsigned _updateItem(Geom::IntRect const &/*area*/, UpdateContext const &/*ctx*/,
                                  unsigned /*flags*/, unsigned /*reset*/) { return 0; }
-    virtual unsigned _renderItem(DrawingContext &/*ct*/, Geom::IntRect const &/*area*/, unsigned /*flags*/,
+    virtual unsigned _renderItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/, unsigned /*flags*/,
                                  DrawingItem * /*stop_at*/) { return RENDER_OK; }
-    virtual void _clipItem(DrawingContext &/*ct*/, Geom::IntRect const &/*area*/) {}
+    virtual void _clipItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/) {}
     virtual DrawingItem *_pickItem(Geom::Point const &/*p*/, double /*delta*/, unsigned /*flags*/) { return NULL; }
     virtual bool _canClip() { return false; }
 
@@ -205,6 +206,7 @@ protected:
     //unsigned _renders_opacity : 1; ///< Whether object needs temporary surface for opacity
     unsigned _pick_children : 1; ///< For groups: if true, children are returned from pick(),
                                  ///  otherwise the group is returned
+    unsigned _antialias : 1; ///< Whether to use antialiasing
 
     unsigned _isolation : 1;
     unsigned _blend_mode : 4;

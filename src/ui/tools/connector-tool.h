@@ -12,24 +12,33 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stddef.h>
-#include <sigc++/sigc++.h>
-#include <sigc++/connection.h>
-#include "ui/tools/tool-base.h"
+#include <map>
+#include <string>
+
 #include <2geom/point.h>
-#include "libavoid/connector.h"
-#include <glibmm/i18n.h>
+#include <sigc++/connection.h>
+
+#include "ui/tools/tool-base.h"
+
+class SPItem;
+class SPCurve;
+class SPKnot;
+struct SPCanvasItem;
+
+namespace Avoid {
+    class ConnRef;
+}
+
+namespace Inkscape {
+    class Selection;
+
+    namespace XML {
+        class Node;
+    }
+}
 
 #define SP_CONNECTOR_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::ConnectorTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 //#define SP_IS_CONNECTOR_CONTEXT(obj) (dynamic_cast<const ConnectorTool*>((const ToolBase*)obj) != NULL)
-
-struct SPKnot;
-class SPCurve;
-
-namespace Inkscape
-{
-  class Selection;
-}
 
 enum {
     SP_CONNECTOR_CONTEXT_IDLE,
@@ -108,8 +117,31 @@ public:
 
 	virtual const std::string& getPrefsPath();
 
+    void cc_clear_active_shape();
+    void cc_set_active_conn(SPItem *item);
+    void cc_clear_active_conn();
+
 private:
-	void selection_changed(Inkscape::Selection *selection);
+	void _selectionChanged(Inkscape::Selection *selection);
+
+	bool _handleButtonPress(GdkEventButton const &bevent);
+	bool _handleMotionNotify(GdkEventMotion const &mevent);
+	bool _handleButtonRelease(GdkEventButton const &revent);
+	bool _handleKeyPress(guint const keyval);
+
+	void _setInitialPoint(Geom::Point const p);
+	void _setSubsequentPoint(Geom::Point const p);
+	void _finishSegment(Geom::Point p);
+	void _resetColors();
+	void _finish();
+	void _concatColorsAndFlush();
+	void _flushWhite(SPCurve *gc);
+
+	void _activeShapeAddKnot(SPItem* item);
+	void _setActiveShape(SPItem *item);
+	bool _ptHandleTest(Geom::Point& p, gchar **href);
+
+	void _reroutingFinish(Geom::Point *const p);
 };
 
 void cc_selection_set_avoid(bool const set_ignore);

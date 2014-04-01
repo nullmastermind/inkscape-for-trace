@@ -16,8 +16,8 @@
 
 #include "version.h"
 #include "svg/svg-length.h"
-#include "enums.h"
 #include "sp-item-group.h"
+#include "viewbox.h"
 
 #define SP_ROOT(obj) (dynamic_cast<SPRoot*>((SPObject*)obj))
 #define SP_IS_ROOT(obj) (dynamic_cast<const SPRoot*>((SPObject*)obj) != NULL)
@@ -25,7 +25,7 @@
 class SPDefs;
 
 /** \<svg\> element */
-class SPRoot : public SPGroup {
+class SPRoot : public SPGroup, public SPViewBox {
 public:
 	SPRoot();
 	virtual ~SPRoot();
@@ -39,18 +39,6 @@ public:
     SVGLength y;
     SVGLength width;
     SVGLength height;
-
-    /* viewBox; */
-    bool viewBox_set;
-    Geom::Rect viewBox;
-
-    /* preserveAspectRatio */
-    unsigned int aspect_set : 1;
-    unsigned int aspect_align : 4;
-    unsigned int aspect_clip : 1;
-
-    /** Child to parent additional transform. */
-    Geom::Affine c2p;
 
     gchar *onload;
 
@@ -74,6 +62,7 @@ public:
 
 	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
 	virtual void print(SPPrintContext *ctx);
+    virtual const char* displayName() const;
 };
 
 #endif /* !SP_ROOT_H_SEEN */

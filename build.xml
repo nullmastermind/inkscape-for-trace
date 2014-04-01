@@ -315,8 +315,6 @@
             <!--<exclude name="test-src.cpp"/>-->
             <exclude name="display/test-display.cpp"/>
             <exclude name="display/testnr.cpp"/>
-            <exclude name="dom/work/.*"/>
-            <exclude name="dom/odf/SvgOdg.cpp"/>
             <exclude name="extension/api.cpp"/>
             <exclude name="extension/dbus/.*"/>
             <exclude name="extension/dxf2svg/.*"/>
@@ -352,9 +350,16 @@
             <file name="extension/param"/>
         </excludeinc>
         <flags>
-            <!-- -std=gnu++0x -DCPP11  -->
-            -Wall -Wformat -Werror=format-security -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch
+            <!-- -std=gnu++0x -DCPP11  -Wno-unused-local-typedefs -->
+            -Wall -Wformat -Werror=format-security -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch
             -Werror=return-type
+            <!-- - ->  -Werror <!-- -->
+            <!-- A list of warnings that should not error *yet*, any help is welcome in fixing the code generating these warnings! -->
+            <!-- libcroco is using guchar where it should use gchar, so we need: --> -Wno-error=pointer-sign
+            -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=strict-overflow -Wno-error=write-strings
+            <!-- Format warnings are obviously bad errors, but with the current old compiler on Windows (gcc 4.6.) we run into a problem with long long ints...
+                 The errors can be restored by removing these flags after updating to a newer compiler (soon after 0.91 release hopefully)  -->
+            -Wno-error=format -Wno-error=format-extra-args
             -O2
             -mms-bitfields
             -fopenmp
@@ -439,14 +444,11 @@
               stripcommand="${archutil}strip"
               objcopycommand="${archutil}objcopy">
        <flags>
-           -mwindows
+           -mconsole
            -mthreads
        </flags>
        <fileset dir="${build}/obj">
            <exclude name="winconsole.o"/>
-           <exclude name="dom/prop-css.o"/>
-           <exclude name="dom/prop-css2.o"/>
-           <exclude name="dom/prop-svg.o"/>
            <exclude name="inkview.o"/>
            <exclude name="inkviewres.o"/>
            <!-- CxxTest -->
@@ -532,10 +534,6 @@
            <exclude name="winmain.o"/>
            <exclude name="winconsole.o"/>
            <exclude name="inkres.o"/>
-           <!-- broken files -->
-           <exclude name="dom/prop-css.o"/>
-           <exclude name="dom/prop-css2.o"/>
-           <exclude name="dom/prop-svg.o"/>
            <!-- CxxTest -->
            <exclude name="test-main.o"/>
            <exclude name="test-src.o"/>
@@ -594,10 +592,6 @@
            <exclude name="inkres.o"/>
            <exclude name="inkviewres.o"/>
            <exclude name="inkview.o"/>
-           <!-- broken files -->
-           <exclude name="dom/prop-css.o"/>
-           <exclude name="dom/prop-css2.o"/>
-           <exclude name="dom/prop-svg.o"/>
        </fileset>
        <libs>
            -L${devlibs}/lib

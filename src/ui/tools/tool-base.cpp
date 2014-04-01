@@ -57,6 +57,7 @@
 #include "shape-editor.h"
 #include "sp-guide.h"
 #include "color.h"
+#include "knot.h"
 
 // globals for temporary switching to selector by space
 static bool selector_toggled = FALSE;
@@ -90,28 +91,27 @@ SPDesktop const& ToolBase::getDesktop() const {
     return *desktop;
 }
 
-ToolBase::ToolBase() {
-	this->hot_y = 0;
-	this->xp = 0;
-	this->cursor_shape = 0;
-	this->pref_observer = 0;
-	this->hot_x = 0;
-	this->yp = 0;
-	this->within_tolerance = false;
-	this->tolerance = 0;
-	//this->key = 0;
-	this->item_to_select = 0;
-
-    this->desktop = NULL;
-    this->cursor = NULL;
-    this->message_context = NULL;
-    this->_selcue = NULL;
-    this->_grdrag = NULL;
-    this->space_panning = false;
-    this->shape_editor = NULL;
-    this->_delayed_snap_event = NULL;
-    this->_dse_callback_in_process = false;
-    //this->tool_url = NULL;
+ToolBase::ToolBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y, bool uses_snap)
+    : pref_observer(NULL)
+    , cursor(NULL)
+    , xp(0)
+    , yp(0)
+    , tolerance(0)
+    , within_tolerance(false)
+    , item_to_select(NULL)
+    , message_context(NULL)
+    , _selcue(NULL)
+    , _grdrag(NULL)
+    , shape_editor(NULL)
+    , space_panning(false)
+    , _delayed_snap_event(NULL)
+    , _dse_callback_in_process(false)
+    , desktop(NULL)
+    , _uses_snap(uses_snap)
+    , cursor_shape(cursor_shape)
+    , hot_x(hot_x)
+    , hot_y(hot_y)
+{
 }
 
 ToolBase::~ToolBase() {
@@ -145,9 +145,9 @@ ToolBase::~ToolBase() {
 /**
  * Set the cursor to a standard GDK cursor
  */
-static void sp_event_context_set_cursor(ToolBase *event_context, GdkCursorType cursor_type) {
+void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
 
-    GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(event_context->desktop));
+    GtkWidget *w = GTK_WIDGET(sp_desktop_canvas(this->desktop));
     GdkDisplay *display = gdk_display_get_default();
     GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
 
@@ -386,7 +386,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case 1:
             if (this->space_panning) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                sp_event_context_discard_delayed_snap_event(this);
+                if (_uses_snap) {
+                    sp_event_context_discard_delayed_snap_event(this);
+                }
                 panning = 1;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
@@ -404,7 +406,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 zoom_rb = 2;
             } else {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                sp_event_context_discard_delayed_snap_event(this);
+                if (_uses_snap) {
+                    sp_event_context_discard_delayed_snap_event(this);
+                }
                 panning = 2;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
@@ -420,7 +424,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case 3:
             if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                sp_event_context_discard_delayed_snap_event(this);
+                if (_uses_snap) {
+                    sp_event_context_discard_delayed_snap_event(this);
+                }
                 panning = 3;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
@@ -482,7 +488,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 if (panning_cursor == 0) {
                     panning_cursor = 1;
-                    sp_event_context_set_cursor(this, GDK_FLEUR);
+                    this->sp_event_context_set_cursor(GDK_FLEUR);
                 }
 
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
@@ -741,10 +747,12 @@ bool ToolBase::root_handler(GdkEvent* event) {
             if (within_tolerance == true) {
                 // Space was pressed, but not panned
                 sp_toggle_selector(desktop);
-                ret = TRUE;
+
+                // Be careful, sp_toggle_selector will delete ourselves.
+                // Thus, make sure we return immediately.
+                return true;
             }
 
-            within_tolerance = false;
             break;
 
         case GDK_KEY_Q:
@@ -876,10 +884,9 @@ bool ToolBase::item_handler(SPItem* item, GdkEvent* event) {
 /**
  * Returns true if we're hovering above a knot (needed because we don't want to pre-snap in that case).
  */
-bool sp_event_context_knot_mouseover(ToolBase *ec)
-{
-    if (ec->shape_editor) {
-        return ec->shape_editor->knot_mouseover();
+bool ToolBase::sp_event_context_knot_mouseover() const {
+    if (this->shape_editor) {
+        return this->shape_editor->knot_mouseover();
     }
 
     return false;
@@ -947,6 +954,10 @@ void sp_event_context_read(ToolBase *ec, gchar const *key) {
 gint sp_event_context_root_handler(ToolBase * event_context,
         GdkEvent * event)
 {
+    if (!event_context->_uses_snap) {
+        return sp_event_context_virtual_root_handler(event_context, event);
+    }
+
     switch (event->type) {
     case GDK_MOTION_NOTIFY:
         sp_event_context_snap_delay_handler(event_context, NULL, NULL,
@@ -977,13 +988,18 @@ gint sp_event_context_root_handler(ToolBase * event_context,
 
 gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * event) {
     gint ret = false;
-    if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
-                            // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
-        //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->root_handler(event_context, event);
-    	ret = event_context->root_handler(event);
 
-        set_event_location(event_context->desktop, event);
+    if (event_context) {
+        // The root handler also handles pressing the space key.
+        // This will toggle the current tool and delete the current one.
+        // Thus, save a pointer to the desktop before calling it.
+        SPDesktop* desktop = event_context->desktop;
+
+        ret = event_context->root_handler(event);
+
+        set_event_location(desktop, event);
     }
+
     return ret;
 }
 
@@ -991,7 +1007,12 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
  * Calls virtual item_handler(), the item event handling function.
  */
 gint sp_event_context_item_handler(ToolBase * event_context,
-        SPItem * item, GdkEvent * event) {
+        SPItem * item, GdkEvent * event)
+{
+    if (!event_context->_uses_snap) {
+        return sp_event_context_virtual_item_handler(event_context, item, event);
+    }
+
     switch (event->type) {
     case GDK_MOTION_NOTIFY:
         sp_event_context_snap_delay_handler(event_context, (gpointer) item, NULL, (GdkEventMotion *) event, DelayedSnapEvent::EVENTCONTEXT_ITEM_HANDLER);
@@ -1111,7 +1132,7 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
  * Use this instead of simply event->keyval, so that your keyboard shortcuts
  * work regardless of layouts (e.g., in Cyrillic).
  */
-guint get_group0_keyval(GdkEventKey *event) {
+guint get_group0_keyval(GdkEventKey const *event) {
     guint keyval = 0;
 
     gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
@@ -1228,7 +1249,7 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
     static guint32 prev_time;
     static boost::optional<Geom::Point> prev_pos;
 
-    if (ec->_dse_callback_in_process) {
+    if (!ec->_uses_snap || ec->_dse_callback_in_process) {
         return;
     }
 

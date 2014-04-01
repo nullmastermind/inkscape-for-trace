@@ -151,15 +151,31 @@ class Effect:
         """Collect command line arguments"""
         self.options, self.args = self.OptionParser.parse_args(args)
 
-    def parse(self,file=None):
+    def parse(self, filename=None):
         """Parse document in specified file or on stdin"""
-        try:
+
+        # First try to open the file from the function argument
+        if filename != None:
             try:
-                stream = open(file,'r')
-            except:
-                stream = open(self.svg_file,'r')
-        except:
+                stream = open(filename, 'r')
+            except Exception:
+                errormsg(_("Unable to open specified file: %s") % filename)
+                sys.exit()
+
+        # If it wasn't specified, try to open the file specified as
+        # an object member
+        elif self.svg_file != None:
+            try:
+                stream = open(self.svg_file, 'r')
+            except Exception:
+                errormsg(_("Unable to open specified file: %s") % self.svg_file)
+                sys.exit()
+
+        # Finally, if the filename was not specified anywhere, use
+        # standard input stream
+        else:
             stream = sys.stdin
+
         p = etree.XMLParser(huge_tree=True)
         self.document = etree.parse(stream, parser=p)
         self.original_document = copy.deepcopy(self.document)
@@ -295,5 +311,12 @@ class Effect:
     def uutounit(self, val, unit):
         return val / (self.__uuconv[unit] / self.__uuconv[self.getDocumentUnit()])
 
+    def addDocumentUnit(self, value):
+        ''' Add document unit when no unit is specified in the string '''
+        try:
+            float(value)
+            return value + self.getDocumentUnit()
+        except ValueError:
+            return value
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

@@ -35,9 +35,10 @@
 
 
 #include <2geom/path.h>
+#include <2geom/transforms.h>
 #include <algorithm>
 
-
+using std::swap;
 using namespace Geom::PathInternal;
 
 namespace Geom
@@ -102,10 +103,35 @@ Path &Path::operator*=(Affine const &m) {
   return *this;
 }
 
+Path &Path::operator*=(Translate const &m) {
+  unshare();
+  Sequence::iterator last = get_curves().end() - 1;
+  Sequence::iterator it;
+  Point prev;
+  for (it = get_curves().begin() ; it != last ; ++it) {
+    *(const_cast<Curve*>(&**it)) *= m;
+    if ( it != get_curves().begin() && (*it)->initialPoint() != prev ) {
+      THROW_CONTINUITYERROR();
+    }
+    prev = (*it)->finalPoint();
+  }
+  for ( int i = 0 ; i < 2 ; ++i ) {
+    final_->setPoint(i, (*final_)[i] + m.vector());
+  }
+  if (get_curves().size() > 1) {
+    if ( front().initialPoint() != initialPoint() || back().finalPoint() != finalPoint() ) {
+      THROW_CONTINUITYERROR();
+    }
+  }
+  return *this;
+}
+
 std::vector<double>
 Path::allNearestPoints(Point const& _point, double from, double to) const
 {
-	if ( from > to ) std::swap(from, to);
+  using std::swap;
+
+	if ( from > to ) swap(from, to);
 	const Path& _path = *this;
 	unsigned int sz = _path.size();
 	if ( _path.closed() ) ++sz;
@@ -215,7 +241,9 @@ Path::nearestPointPerCurve(Point const& _point) const
 
 double Path::nearestPoint(Point const &_point, double from, double to, double *distance_squared) const
 {
-	if ( from > to ) std::swap(from, to);
+  using std::swap;
+
+	if ( from > to ) swap(from, to);
 	const Path& _path = *this;
 	unsigned int sz = _path.size();
 	if ( _path.closed() ) ++sz;
@@ -347,16 +375,15 @@ void Path::do_update(Sequence::iterator first_replaced,
 }
 
 void Path::do_append(Curve *c) {
-  boost::shared_ptr<Curve> curve(c);
   if ( get_curves().front().get() == final_ ) {
-    final_->setPoint(1, curve->initialPoint());
+    final_->setPoint(1, c->initialPoint());
   } else {
-    if (curve->initialPoint() != finalPoint()) {
+    if (c->initialPoint() != finalPoint()) {
       THROW_CONTINUITYERROR();
     }
   }
-  get_curves().insert(get_curves().end()-1, curve);
-  final_->setPoint(0, curve->finalPoint());
+  get_curves().insert(get_curves().end()-1, boost::shared_ptr<Curve>(c));
+  final_->setPoint(0, c->finalPoint());
 }
 
 void Path::stitch(Sequence::iterator first_replaced,

@@ -89,11 +89,14 @@ if test "$GCC" = "yes"; then
   # enforced in Gtk+ 3, so it is important to check this in Gtk+ 2 builds
   CPPFLAGS="-DGSEAL_ENABLE $CPPFLAGS"
 
+  # Unfortunately, we cannot (yet) build with -Werror, so we have to manually
+  # change a ton of warnings into errors.
+  # After some more work on fixing warning-inducing code, we can change this set into
+  # it's complement and use -Wno-error=...
   # Test for -Werror=... (introduced some time post-4.0)
-  # If we hit a format error -- it should be fatal.
-  AC_MSG_CHECKING([compiler support for -Werror=format-security])
+  AC_MSG_CHECKING([compiler support for -Werror=...])
   ink_svd_CPPFLAGS="$CPPFLAGS"
-  CPPFLAGS="-Werror=format-security $CPPFLAGS"
+  CPPFLAGS="-Werror=format-security -Wswitch -Werror=return-type $CPPFLAGS"
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [ink_opt_ok=yes], [ink_opt_ok=no])
   AC_MSG_RESULT([$ink_opt_ok])
   if test "x$ink_opt_ok" != "xyes"; then
@@ -101,7 +104,7 @@ if test "$GCC" = "yes"; then
   fi
 
   # Uncomment for SVG2 stuff
-  # CPPFLAGS="-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE $CPPFLAGS"
+  # CPPFLAGS="-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2 $CPPFLAGS"
 
   ####
   # C-specific flags...
@@ -148,21 +151,38 @@ if test "$GCC" = "yes"; then
 fi
 
 # Detect a working version of unordered containers.
+# First try looking for native support (C++11 feature)
+AC_MSG_CHECKING([native support for unordered_set])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unordered_set>]],
+[[
+  std::unordered_set<int> i, j;
+  i = j;
+]])],
+[native_unordered_set_works=yes], [native_unordered_set_works=no])
+
+if test "x$native_unordered_set_works" = "xyes"; then
+	AC_MSG_RESULT([ok])
+	AC_DEFINE(HAVE_NATIVE_UNORDERED_SET, 1, [Has working native unordered_set])
+else
+	AC_MSG_RESULT([not working])
+fi
+
 AC_MSG_CHECKING([TR1 unordered_set usability])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <tr1/unordered_set>]],
 [[
   std::tr1::unordered_set<int> i, j;
   i = j;
 ]])],
-[unordered_set_works=yes], [unordered_set_works=no])
-if test "x$unordered_set_works" = "xyes"; then
+[tr1_unordered_set_works=yes], [tr1_unordered_set_works=no])
+
+if test "x$tr1_unordered_set_works" = "xyes"; then
 	AC_MSG_RESULT([ok])
 	AC_DEFINE(HAVE_TR1_UNORDERED_SET, 1, [Has working standard TR1 unordered_set])
 else
 	AC_MSG_RESULT([not working])
 fi
+
 AC_CHECK_HEADER([boost/unordered_set.hpp], [AC_DEFINE(HAVE_BOOST_UNORDERED_SET, 1, [Boost unordered_set (Boost >= 1.36)])], [])
-AC_CHECK_HEADER([ext/hash_set], [AC_DEFINE(HAVE_EXT_HASH_SET, 1, [Legacy GNU ext/hash_set])], [])
 
 # Test whether GCC emits a spurious warning when using boost::optional
 # If yes, turn off strict aliasing warnings to reduce noise
@@ -679,6 +699,19 @@ if test "x$enable_gtk3" = "xyes"; then
 		AC_MSG_ERROR([Some dependencies were not fulfilled for the experimental GTK+ 3 build. One possible cause for this is a new dependency on the gdl-3.0 development package.])
 	fi
 
+	# Check whether we can use new features in Gtkmm 3.10
+	# TODO: Drop this test and bump the version number in the GTK test above
+	#       as soon as all supported distributions provide Gtkmm >= 3.10
+	PKG_CHECK_MODULES(GTKMM_3_10,
+			  gtkmm-3.0 >= 3.10,
+			  with_gtkmm_3_10=yes,
+			  with_gtkmm_3_10=no)
+
+	if test "x$with_gtkmm_3_10" = "xyes"; then
+		AC_MSG_RESULT([Using Gtkmm 3.10 build])
+		AC_DEFINE(WITH_GTKMM_3_10,1,[Build with Gtkmm 3.10.x or higher])
+	fi
+
 	# Check whether we are using Gdl >= 3.6.  This version introduced an API/ABI change.
 	# TODO: We should drop support for older versions of Gdl once all supported distros
 	#       provide Gdl 3.6 or higher
@@ -834,7 +867,7 @@ if test "x$cairo_pdf" = "xyes"; then
 fi
 
 dnl Shouldn't we test for libz?
-INKSCAPE_LIBS="$INKSCAPE_LIBS -lz -lxml2 -ldl"
+INKSCAPE_LIBS="$INKSCAPE_LIBS -lz"
 if test "x$openmp_ok" = "xyes"; then
 	INKSCAPE_LIBS="$INKSCAPE_LIBS -lgomp"
 fi
@@ -1029,7 +1062,6 @@ src/check-header-compile
 src/debug/makefile
 src/dialogs/makefile
 src/display/makefile
-src/dom/makefile
 src/extension/implementation/makefile
 src/extension/internal/makefile
 src/extension/makefile

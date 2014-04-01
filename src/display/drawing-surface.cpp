@@ -123,7 +123,7 @@ DrawingSurface::scale() const
 Geom::Affine
 DrawingSurface::drawingTransform() const
 {
-    Geom::Affine ret = _scale * Geom::Translate(-_origin);
+    Geom::Affine ret = Geom::Translate(-_origin) * _scale;
     return ret;
 }
 
@@ -215,7 +215,7 @@ DrawingCache::prepare()
     bool is_identity = _pending_transform.isIdentity();
     if (is_identity && _pending_area == old_area) return; // no change
 
-    bool is_integer_translation = false;
+    bool is_integer_translation = is_identity;
     if (!is_identity && _pending_transform.isTranslation()) {
         Geom::IntPoint t = _pending_transform.translation().round();
         if (Geom::are_near(Geom::Point(t), _pending_transform.translation())) {
@@ -224,6 +224,7 @@ DrawingCache::prepare()
             if (old_area + t == _pending_area) {
                 // if the areas match, the only thing to do
                 // is to ensure that the clean area is not too large
+                // we can exit early
                 cairo_rectangle_int_t limit = _convertRect(_pending_area);
                 cairo_region_intersect_rectangle(_clean_region, &limit);
                 _origin += t;
@@ -232,33 +233,36 @@ DrawingCache::prepare()
             }
         }
     }
-    // otherwise, we need to transform the cache
+
+    // the area has changed, so the cache content needs to be copied
     Geom::IntPoint old_origin = old_area.min();
     cairo_surface_t *old_surface = _surface;
     _surface = NULL;
     _pixels = _pending_area.dimensions();
     _origin = _pending_area.min();
 
-    cairo_t *ct = createRawContext();
-    if (!is_identity) {
-        ink_cairo_transform(ct, _pending_transform);
-    }
-    cairo_set_source_surface(ct, old_surface, old_origin[X], old_origin[Y]);
-    cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(ct);
+    if (is_integer_translation) {
+        // transform the cache only for integer translations and identities
+        cairo_t *ct = createRawContext();
+        if (!is_identity) {
+            ink_cairo_transform(ct, _pending_transform);
+        }
+        cairo_set_source_surface(ct, old_surface, old_origin[X], old_origin[Y]);
+        cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
+        cairo_pattern_set_filter(cairo_get_source(ct), CAIRO_FILTER_NEAREST);
+        cairo_paint(ct);
+        cairo_destroy(ct);
 
-    cairo_surface_destroy(old_surface);
-    cairo_destroy(ct);
-
-    if (!is_identity && !is_integer_translation) {
+        cairo_rectangle_int_t limit = _convertRect(_pending_area);
+        cairo_region_intersect_rectangle(_clean_region, &limit);
+    } else {
         // dirty everything
         cairo_region_destroy(_clean_region);
         _clean_region = cairo_region_create();
-    } else {
-        cairo_rectangle_int_t limit = _convertRect(_pending_area);
-        cairo_region_intersect_rectangle(_clean_region, &limit);
     }
+
     //std::cout << _pending_transform << old_area << _pending_area << std::endl;
+    cairo_surface_destroy(old_surface);
     _pending_transform.setIdentity();
 }
 
@@ -267,7 +271,7 @@ DrawingCache::prepare()
  * parameter to the bounds of the region that must be repainted.
  */
 void
-DrawingCache::paintFromCache(DrawingContext &ct, Geom::OptIntRect &area)
+DrawingCache::paintFromCache(DrawingContext &dc, Geom::OptIntRect &area)
 {
     if (!area) return;
 
@@ -296,10 +300,10 @@ DrawingCache::paintFromCache(DrawingContext &ct, Geom::OptIntRect &area)
         cairo_rectangle_int_t tmp;
         for (int i = 0; i < nr; ++i) {
             cairo_region_get_rectangle(cache_region, i, &tmp);
-            ct.rectangle(_convertRect(tmp));
+            dc.rectangle(_convertRect(tmp));
         }
-        ct.setSource(this);
-        ct.fill();
+        dc.setSource(this);
+        dc.fill();
     }
     cairo_region_destroy(cache_region);
 }
@@ -310,21 +314,21 @@ DrawingCache::_dumpCache(Geom::OptIntRect const &area)
 {
     static int dumpnr = 0;
     cairo_surface_t *surface = ink_cairo_surface_copy(_surface);
-    DrawingContext ct(surface, _origin);
+    DrawingContext dc(surface, _origin);
     if (!cairo_region_is_empty(_clean_region)) {
-        Inkscape::DrawingContext::Save save(ct);
+        Inkscape::DrawingContext::Save save(dc);
         int nr = cairo_region_num_rectangles(_clean_region);
         cairo_rectangle_int_t tmp;
         for (int i = 0; i < nr; ++i) {
             cairo_region_get_rectangle(_clean_region, i, &tmp);
-            ct.rectangle(_convertRect(tmp));
+            dc.rectangle(_convertRect(tmp));
         }
-        ct.setSource(0,1,0,0.1);
-        ct.fill();
+        dc.setSource(0,1,0,0.1);
+        dc.fill();
     }
-    ct.rectangle(*area);
-    ct.setSource(1,0,0,0.1);
-    ct.fill();
+    dc.rectangle(*area);
+    dc.setSource(1,0,0,0.1);
+    dc.fill();
     char *fn = g_strdup_printf("dump%d.png", dumpnr++);
     cairo_surface_write_to_png(surface, fn);
     cairo_surface_destroy(surface);

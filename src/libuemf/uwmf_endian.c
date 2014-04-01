@@ -1,14 +1,16 @@
 /**
-  @file uwmf_endian.c Functions for Swaping WMF records
+  @file uwmf_endian.c
+  
+  @brief Functions for converting WMF records between Big Endian and Little Endian byte orders.
 */
 
 /*
 File:      uwmf_endian.c
-Version:   0.1.2
-Date:      18-FEB-2013
+Version:   0.1.3
+Date:      27-MAR-2014
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2012 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2014 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -23,7 +25,7 @@ extern "C" {
 #include "uwmf_endian.h"
 
 // hide almost everything in this file from Doxygen
-//! @cond
+//! \cond
 /* Prototypes for functions used here and defined in uemf_endian.c, but which are not supposed
 to be used in end user code. */
 
@@ -273,8 +275,6 @@ int wmfheader_swap(
 
 
 
-// hide these from Doxygen
-//! @cond
 /* **********************************************************************************************
 These functions contain shared code used by various U_WMR*_Swap functions.  These should NEVER be called
 by end user code and to further that end prototypes are NOT provided and they are hidden from Doxygen.   
@@ -282,7 +282,7 @@ by end user code and to further that end prototypes are NOT provided and they ar
 
 /* Size16 EVERY record type should call this, directly or indirectly*/
 void U_WMRCORE_SIZE16_swap(char *record, int torev){
-   torev = torev;  // shuts up compiler warnings about unused parameters
+   UNUSED_PARAMETER(torev);
    U_swap4(record, 1); /* Size16_4 is at offset 0 in U_METARECORD */
 }
 
@@ -307,7 +307,7 @@ void U_WMRCORE_U16_N16_swap(char *record, int torev){
 
 /* all records that specify palette objects */
 void U_WMRCORE_PALETTE_swap(char *record, int torev){
-   torev = torev;  // shuts up compiler warnings about unused parameters
+   UNUSED_PARAMETER(torev);
    U_WMRCORE_SIZE16_swap(record, torev);
    palette_swap(record + offsetof(U_WMRANIMATEPALETTE,Palette));
 }
@@ -326,9 +326,6 @@ void U_WMRCORE_U16_CR_2U16_swap(char *record, int torev){
    U_swap2(record+off,   1);   off += 2 + sizeof(U_COLORREF);
    U_swap2(record+off,   2);
 }
-
-
-//! @endcond
 
 /* **********************************************************************************************
 These are the core WMR functions, each creates a particular type of record.  
@@ -703,7 +700,7 @@ void U_WMRDIBCREATEPATTERNBRUSH_swap(char *record, int torev){
 }
 
 void U_WMRSTRETCHDIB_swap(char *record, int torev){
-   torev = torev;
+   UNUSED_PARAMETER(torev);
    U_WMRCORE_U32_N16_swap(record,9,torev);
    dibheader_swap(record + offsetof(U_WMRSTRETCHDIB,dib), torev);
 }
@@ -1465,7 +1462,7 @@ void U_WMRCREATEREGION_swap(char *record, int torev){
    U_WMRCORE_SIZE16_swap(record, torev);
    region_swap(record + offsetof(U_WMRCREATEREGION,region), torev);
 }
-//! @endcond
+//! \endcond
 
 /**
     \brief Convert an entire WMF in memory from Big Endian to Little Endian (or vice versa).

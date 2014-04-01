@@ -90,6 +90,8 @@ static void sp_style_read_istring(SPIString *val, gchar const *str);
 static void sp_style_read_ilength(SPILength *val, gchar const *str);
 static void sp_style_read_ilengthornormal(SPILengthOrNormal *val, gchar const *str);
 
+static void sp_style_read_ipaintorder(SPIPaintOrder *val, gchar const *str);
+
 static void sp_style_read_itextdecoration(SPITextDecorationLine *line, SPITextDecorationStyle *style, SPIPaint *color, gchar const *str);
 static void sp_style_read_itextdecorationLine(SPITextDecorationLine *line, gchar const *str);
 static void sp_style_read_itextdecorationStyle(SPITextDecorationStyle *style, gchar const *str);
@@ -112,6 +114,9 @@ static gint sp_style_write_ienum(gchar *p, gint len, gchar const *key, SPStyleEn
 static gint sp_style_write_istring(gchar *p, gint len, gchar const *key, SPIString const *val, SPIString const *base, guint flags);
 static gint sp_style_write_ilength(gchar *p, gint len, gchar const *key, SPILength const *val, SPILength const *base, guint flags);
 static gint sp_style_write_ipaint(gchar *b, gint len, gchar const *key, SPIPaint const *paint, SPIPaint const *base, guint flags);
+static gint sp_style_write_ipaintorder(gchar *p, gint len, gchar const *key, SPIPaintOrder const *paint_order, SPIPaintOrder const *base, guint flags);
+static gint sp_style_write_idasharray(gchar *p, gint const len, gchar const *const key, SPIDashArray const *const val, SPIDashArray const *const base, guint const flags);
+
 static gint sp_style_write_ifontsize(gchar *p, gint len, gchar const *key, SPIFontSize const *val, SPIFontSize const *base, guint flags);
 static gint sp_style_write_ibaselineshift(gchar *p, gint len, gchar const *key, SPIBaselineShift const *val, SPIBaselineShift const *base, guint flags);
 static gint sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key, SPILengthOrNormal const *const val, SPILengthOrNormal const *const base, guint const flags);
@@ -619,7 +624,7 @@ sp_style_unref(SPStyle *style)
         style->stroke.clear();
         sp_style_filter_clear(style);
 
-        g_free(style->stroke_dash.dash);
+        style->stroke_dasharray.values.clear();
 
         for (unsigned i = SP_MARKER_LOC; i < SP_MARKER_LOC_QTY; i++) {
             if (style->marker[i].value) {
@@ -666,6 +671,8 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     }
 
     /* 2. Presentation attributes */
+    /* Attributes are only read in if not already set in a style sheet or style attribute above. */
+
     /* CSS2 */
     SPS_READ_PENUM_IF_UNSET(&style->visibility, repr, "visibility", enum_visibility, true);
     SPS_READ_PENUM_IF_UNSET(&style->display, repr, "display", enum_display, true);
@@ -800,22 +807,21 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
             sp_style_read_iscale24(&style->stroke_opacity, val);
         }
     }
-    if (!style->stroke_dasharray_set) {
+    if (!style->stroke_dasharray.set) {
         val = repr->attribute("stroke-dasharray");
         if (val) {
             sp_style_read_dash(style, val);
         }
     }
+    SPS_READ_PLENGTH_IF_UNSET(&style->stroke_width, repr, "stroke-dashoffset");
 
-    if (!style->stroke_dashoffset_set) {
-        val = repr->attribute("stroke-dashoffset");
-        if (sp_svg_number_read_d(val, &style->stroke_dash.offset)) {
-            style->stroke_dashoffset_set = TRUE;
-        } else if (val && !strcmp(val, "inherit")) {
-            style->stroke_dashoffset_set = TRUE;
-            style->stroke_dashoffset_inherit = TRUE;
+    /* paint-order */
+    if (!style->paint_order.set) {
+        val = repr->attribute("paint-order");
+        if (val) {
+            sp_style_read_ipaintorder(&style->paint_order, val);
         } else {
-            style->stroke_dashoffset_set = FALSE;
+            style->paint_order.layer[0] = SP_CSS_PAINT_ORDER_NORMAL;
         }
     }
 
@@ -1399,21 +1405,12 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             SPS_READ_ILENGTH_IF_UNSET(&style->stroke_width, val);
             break;
         case SP_PROP_STROKE_DASHARRAY:
-            if (!style->stroke_dasharray_set) {
+            if (!style->stroke_dasharray.set) {
                 sp_style_read_dash(style, val);
             }
             break;
         case SP_PROP_STROKE_DASHOFFSET:
-            if (!style->stroke_dashoffset_set) {
-                if (sp_svg_number_read_d(val, &style->stroke_dash.offset)) {
-                    style->stroke_dashoffset_set = TRUE;
-                } else if (val && !strcmp(val, "inherit")) {
-                    style->stroke_dashoffset_set = TRUE;
-                    style->stroke_dashoffset_inherit = TRUE;
-                } else {
-                    style->stroke_dashoffset_set = FALSE;
-                }
-            }
+            SPS_READ_ILENGTH_IF_UNSET(&style->stroke_dashoffset, val);
             break;
         case SP_PROP_STROKE_LINECAP:
             if (!style->stroke_linecap.set) {
@@ -1433,6 +1430,11 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
         case SP_PROP_STROKE_OPACITY:
             if (!style->stroke_opacity.set) {
                 sp_style_read_iscale24(&style->stroke_opacity, val);
+            }
+            break;
+        case SP_PROP_PAINT_ORDER:
+            if (!style->paint_order.set) {
+                sp_style_read_ipaintorder(&style->paint_order, val);
             }
             break;
 
@@ -1873,20 +1875,25 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
         style->stroke_miterlimit.value = parent->stroke_miterlimit.value;
     }
 
-    if (!style->stroke_dasharray_set || style->stroke_dasharray_inherit) {
-        style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
-        if (style->stroke_dash.n_dash > 0) {
-            style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
-            memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
-        }
+    if (!style->stroke_dasharray.set || style->stroke_dasharray.inherit) {
+        style->stroke_dasharray.values = parent->stroke_dasharray.values;
     }
 
-    if (!style->stroke_dashoffset_set || style->stroke_dashoffset_inherit) {
-        style->stroke_dash.offset = parent->stroke_dash.offset;
+    if (!style->stroke_dashoffset.set || style->stroke_dashoffset.inherit) {
+        style->stroke_dashoffset.value = parent->stroke_dashoffset.value;
     }
 
     if (!style->stroke_opacity.set || style->stroke_opacity.inherit) {
         style->stroke_opacity.value = parent->stroke_opacity.value;
+    }
+
+    if (!style->paint_order.set || style->paint_order.inherit) {
+        g_free(style->paint_order.value);
+        style->paint_order.value = g_strdup(parent->paint_order.value);
+        for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
+            style->paint_order.layer[i]     = parent->paint_order.layer[i];
+            style->paint_order.layer_set[i] = parent->paint_order.layer_set[i];
+        }
     }
 
     if (style->text && parent->text) {
@@ -1929,7 +1936,15 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
     if (!style->color_rendering.set || style->color_rendering.inherit) {
         style->color_rendering.computed = parent->color_rendering.computed;
     }
-
+    if (!style->image_rendering.set || style->image_rendering.inherit) {
+        style->image_rendering.computed = parent->image_rendering.computed;
+    }
+    if (!style->shape_rendering.set || style->shape_rendering.inherit) {
+        style->shape_rendering.computed = parent->shape_rendering.computed;
+    }
+    if (!style->text_rendering.set || style->text_rendering.inherit) {
+        style->text_rendering.computed = parent->text_rendering.computed;
+    }
 }
 
 template <typename T>
@@ -2433,8 +2448,8 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
         if (!style->filter.set || style->filter.inherit)
         {
             sp_style_merge_ifilter(style, &parent->filter);
-        }
-
+        
+}
         /** \todo
          * fixme: Check that we correctly handle all properties that don't
          * inherit by default (as shown in
@@ -2472,26 +2487,16 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
     }
 
     /* Note: this will need length handling once dasharray supports units. */
-    if ( ( !style->stroke_dasharray_set || style->stroke_dasharray_inherit )
-         && parent->stroke_dasharray_set && !parent->stroke_dasharray_inherit )
+    if ( ( !style->stroke_dasharray.set || style->stroke_dasharray.inherit )
+         && parent->stroke_dasharray.set && !parent->stroke_dasharray.inherit )
     {
-        style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
-        if (style->stroke_dash.n_dash > 0) {
-            style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
-            memcpy(style->stroke_dash.dash, parent->stroke_dash.dash, style->stroke_dash.n_dash * sizeof(gdouble));
-        }
-        style->stroke_dasharray_set = parent->stroke_dasharray_set;
-        style->stroke_dasharray_inherit = parent->stroke_dasharray_inherit;
+        style->stroke_dasharray.values = parent->stroke_dasharray.values;
+        style->stroke_dasharray.set = parent->stroke_dasharray.set;
+        style->stroke_dasharray.inherit = parent->stroke_dasharray.inherit;
     }
 
-    /* Note: this will need length handling once dasharray_offset supports units. */
-    if ((!style->stroke_dashoffset_set || style->stroke_dashoffset_inherit) && parent->stroke_dashoffset_set && !parent->stroke_dashoffset_inherit) {
-        style->stroke_dash.offset = parent->stroke_dash.offset;
-        style->stroke_dashoffset_set = parent->stroke_dashoffset_set;
-        style->stroke_dashoffset_inherit = parent->stroke_dashoffset_inherit;
-        /* TODO: Try to
-         * represent it as a normal SPILength; though will need to do something about existing
-         * users of stroke_dash.offset and stroke_dashoffset_set. */
+    {
+        sp_style_merge_prop_from_dying_parent<SPILength>(style->stroke_dashoffset, parent->stroke_dashoffset);
     }
 }
 
@@ -2762,44 +2767,14 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
         p += sp_style_write_ienum(p, c + BMAX - p, "stroke-linejoin", enum_stroke_linejoin, &style->stroke_linejoin, NULL, flags);
         p += sp_style_write_ifloat(p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, flags);
         p += sp_style_write_iscale24(p, c + BMAX - p, "stroke-opacity", &style->stroke_opacity, NULL, flags);
+        p += sp_style_write_idasharray(p, c + BMAX - p, "stroke-dasharray", &style->stroke_dasharray, NULL, flags);
+        p += sp_style_write_ilength(p, c + BMAX - p, "stroke-dashoffset", &style->stroke_dashoffset, NULL, flags);
+    }
 
-        /** \todo fixme: */
-        if ((flags == SP_STYLE_FLAG_ALWAYS)
-            || style->stroke_dasharray_set)
-        {
-            if (style->stroke_dasharray_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
-            } else if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
-                gint i;
-                for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                    Inkscape::CSSOStringStream os;
-                    if (i) {
-                        os << ", ";
-                    }
-                    os << style->stroke_dash.dash[i];
-                    p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-                }
-                if (p < c + BMAX) {
-                    *p++ = ';';
-                }
-            } else {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:none;");
-            }
-        }
-
-        /** \todo fixme: */
-        if (style->stroke_dashoffset_set) {
-            if (style->stroke_dashoffset_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dashoffset:inherit;");
-            } else {
-                Inkscape::CSSOStringStream os;
-                os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
-                p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-            }
-        } else if (flags == SP_STYLE_FLAG_ALWAYS) {
-            p += g_snprintf(p, c + BMAX - p, "stroke-dashoffset:0;");
-        }
+    if (style->paint_order.set) {
+        p += sp_style_write_ipaintorder(p, c + BMAX - p, "paint-order", &style->paint_order, NULL, flags);
+    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
+        p += g_snprintf(p, c + BMAX - p, "paint-order:normal;");
     }
 
     bool marker_none = false;
@@ -2944,34 +2919,15 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
                                   &from->stroke_linejoin, &to->stroke_linejoin, SP_STYLE_FLAG_IFDIFF);
         p += sp_style_write_ifloat(p, c + BMAX - p, "stroke-miterlimit",
                                    &from->stroke_miterlimit, &to->stroke_miterlimit, SP_STYLE_FLAG_IFDIFF);
-        /** \todo fixme: */
-        if (from->stroke_dasharray_set) {
-            if (from->stroke_dasharray_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
-            } else if (from->stroke_dash.n_dash && from->stroke_dash.dash) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
-                for (gint i = 0; i < from->stroke_dash.n_dash; i++) {
-                    Inkscape::CSSOStringStream os;
-                    if (i) {
-                        os << ", ";
-                    }
-                    os << from->stroke_dash.dash[i];
-                    p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-                }
-                p += g_snprintf(p, c + BMAX - p, ";");
-            }
-        }
-        /* fixme: */
-        if (from->stroke_dashoffset_set) {
-            if (from->stroke_dashoffset_inherit) {
-                p += g_snprintf(p, c + BMAX - p, "stroke-dashoffset:inherit;");
-            } else {
-                Inkscape::CSSOStringStream os;
-                os << "stroke-dashoffset:" << from->stroke_dash.offset << ";";
-                p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
-            }
-        }
+        p += sp_style_write_idasharray(p, c + BMAX - p, "stroke-dasharray",
+                                   &from->stroke_dasharray, &to->stroke_dasharray, SP_STYLE_FLAG_IFDIFF);
+        p += sp_style_write_ilength(p, c + BMAX - p, "stroke-dashoffset", &from->stroke_dashoffset, &to->stroke_dashoffset, SP_STYLE_FLAG_IFDIFF);
         p += sp_style_write_iscale24(p, c + BMAX - p, "stroke-opacity", &from->stroke_opacity, &to->stroke_opacity, SP_STYLE_FLAG_IFDIFF);
+    }
+
+    /* paint-order */
+    if( from->paint_order.set) {
+        p += sp_style_write_ipaintorder(p, c + BMAX - p, "paint-order", &from->paint_order, &to->paint_order, SP_STYLE_FLAG_IFDIFF);
     }
 
     /* markers */
@@ -3059,12 +3015,9 @@ sp_style_clear(SPStyle *style)
         style->filter.href = NULL;
     }
 
-    if (style->stroke_dash.dash) {
-        g_free(style->stroke_dash.dash);
-    }
-
-    style->stroke_dasharray_inherit = FALSE;
-    style->stroke_dashoffset_inherit = FALSE;
+    style->stroke_dasharray.values.clear();
+    style->stroke_dasharray.inherit = FALSE;
+    style->stroke_dashoffset.inherit = FALSE;
 
     /** \todo fixme: Do that text manipulation via parents */
     SPObject *object = style->object;
@@ -3260,14 +3213,13 @@ sp_style_clear(SPStyle *style)
     style->stroke_miterlimit.inherit = FALSE;
     style->stroke_miterlimit.value = 4.0;
 
-    style->stroke_dash.n_dash = 0;
-    style->stroke_dash.dash = NULL;
-    style->stroke_dash.offset = 0.0;
+    style->stroke_dasharray.values.clear();
+    style->stroke_dasharray.set = FALSE;
+    style->stroke_dasharray.inherit = FALSE;
 
-    style->stroke_dasharray_set = FALSE;
-    style->stroke_dasharray_inherit = FALSE;
-    style->stroke_dashoffset_set = FALSE;
-    style->stroke_dashoffset_inherit = FALSE;
+    style->stroke_dashoffset.value = style->stroke_dashoffset.computed = 0.0;
+    style->stroke_dashoffset.set = FALSE;
+    style->stroke_dashoffset.inherit = FALSE;
 
     for (unsigned i = SP_MARKER_LOC; i < SP_MARKER_LOC_QTY; i++) {
         g_free(style->marker[i].value);
@@ -3276,6 +3228,15 @@ sp_style_clear(SPStyle *style)
         style->marker[i].data = 0;
         style->marker[i].value = NULL;
     }
+
+    /* SVG 2 */
+    style->paint_order.set = FALSE;
+    style->paint_order.inherit = FALSE; // For now
+    for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i) {
+        style->paint_order.layer[i] = SP_CSS_PAINT_ORDER_NORMAL;
+        style->paint_order.layer_set[i] = false;
+    }
+    style->paint_order.value = NULL;
 
     style->filter.set = FALSE;
     style->filter.inherit = FALSE;
@@ -3311,49 +3272,36 @@ static void
 sp_style_read_dash(SPStyle *style, gchar const *str)
 {
     /* Ref: http://www.w3.org/TR/SVG11/painting.html#StrokeDasharrayProperty */
-    style->stroke_dasharray_set = TRUE;
+    style->stroke_dasharray.set = TRUE;
 
     if (strcmp(str, "inherit") == 0) {
-        style->stroke_dasharray_inherit = true;
+        style->stroke_dasharray.inherit = true;
         return;
     }
-    style->stroke_dasharray_inherit = false;
+    style->stroke_dasharray.inherit = false;
 
-    NRVpathDash &dash = style->stroke_dash;
-    g_free(dash.dash);
-    dash.dash = NULL;
+    style->stroke_dasharray.values.clear();
 
     if (strcmp(str, "none") == 0) {
-        dash.n_dash = 0;
         return;
     }
 
-    gint n_dash = 0;
-    gdouble d[64];
     gchar *e = NULL;
-
-    bool LineSolid=true;
-    while (e != str && n_dash < 64) {
+    bool LineSolid = true;
+    while (e != str) {
         /* TODO: Should allow <length> rather than just a unitless (px) number. */
-        d[n_dash] = g_ascii_strtod(str, (char **) &e);
-        if (d[n_dash] > 0.00000001)
+        double number = g_ascii_strtod(str, (char **) &e);
+        style->stroke_dasharray.values.push_back( number );
+        if (number > 0.00000001)
             LineSolid = false;
         if (e != str) {
-            n_dash += 1;
             str = e;
         }
         while (str && *str && !isalnum(*str)) str += 1;
     }
 
     if (LineSolid) {
-        dash.n_dash = 0;
-        return;
-    }
-
-    if (n_dash > 0) {
-        dash.dash = g_new(gdouble, n_dash);
-        memcpy(dash.dash, d, sizeof(gdouble) * n_dash);
-        dash.n_dash = n_dash;
+        style->stroke_dasharray.values.clear();
     }
 }
 
@@ -3645,6 +3593,77 @@ sp_style_read_ilengthornormal(SPILengthOrNormal *val, gchar const *str)
 }
 
 /**
+ * Set SPIPaintOrder object from string.
+ */
+static void
+sp_style_read_ipaintorder(SPIPaintOrder *val, gchar const *str)
+{
+    g_free(val->value);
+
+    if (!strcmp(str, "inherit")) {
+        // NEED TO CHECK FINAL SPEC
+        val->set = TRUE;
+        val->inherit = TRUE;
+        val->value = NULL;
+    } else {
+        val->set = TRUE;
+        val->inherit = FALSE;
+        val->value = g_strdup(str);
+
+        if (!strcmp(str, "normal")) {
+            val->layer[0] = SP_CSS_PAINT_ORDER_NORMAL;
+            val->layer_set[0] = true;
+        } else {
+            // This certainly can be done more efficiently
+            gchar** c = g_strsplit(str, " ", PAINT_ORDER_LAYERS + 1);
+            bool used[3] = {false, false, false};
+            unsigned int i = 0;
+            for( ; i < PAINT_ORDER_LAYERS; ++i ) {
+                if( c[i] ) {
+                    val->layer_set[i] = false;
+                    if( !strcmp( c[i], "fill")) {
+                        val->layer[i] = SP_CSS_PAINT_ORDER_FILL;
+                        val->layer_set[i] = true;
+                        used[0] = true;
+                    } else if( !strcmp( c[i], "stroke")) {
+                        val->layer[i] = SP_CSS_PAINT_ORDER_STROKE;
+                        val->layer_set[i] = true;
+                        used[1] = true;
+                    } else if( !strcmp( c[i], "markers")) {
+                        val->layer[i] = SP_CSS_PAINT_ORDER_MARKER;
+                        val->layer_set[i] = true;
+                        used[2] = true;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            g_strfreev(c);
+
+            // Fill out rest of the layers using the default order
+            if( !used[0] && i < PAINT_ORDER_LAYERS ) {
+                val->layer[i] = SP_CSS_PAINT_ORDER_FILL;
+                val->layer_set[i] = false;
+                ++i;
+            }
+            if( !used[1] && i < PAINT_ORDER_LAYERS ) {
+                val->layer[i] = SP_CSS_PAINT_ORDER_STROKE;
+                val->layer_set[i] = false;
+                ++i;
+            }
+            if( !used[2] && i < PAINT_ORDER_LAYERS ) {
+                val->layer[i] = SP_CSS_PAINT_ORDER_MARKER;
+                val->layer_set[i] = false;
+            }
+        }
+    }
+}
+
+
+
+/**
  * Set SPITextDecoration object from string.
  */
 static void
@@ -3658,7 +3677,7 @@ sp_style_read_itextdecoration(SPITextDecorationLine *line, SPITextDecorationStyl
             int slen = str - hstr;
             gchar *frag = g_strndup(hstr,slen+1); // only send one piece at a time, since keywords may be intermixed
             sp_style_read_itextdecorationColor(color, frag);
-            free(frag);
+            g_free(frag);
             if(color->set)break;
             if(*str == '\0')break;
             hstr = str + 1;
@@ -4351,6 +4370,39 @@ sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key,
 }
 
 /**
+ * Write SPIDashArray object into string.
+ */
+static gint
+sp_style_write_idasharray(gchar *p, gint const len, gchar const *const /*key*/,
+                          SPIDashArray const *const val, SPIDashArray const *const base, guint const flags)
+{
+    if ((flags & SP_STYLE_FLAG_ALWAYS)
+        || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && val->set
+            && (!base->set || (val->values != base->values))))
+    {
+        if (val->inherit) {
+            return g_snprintf(p, len, "stroke-dasharray:inherit;");
+        } else if ( !val->values.empty() ) {
+            Inkscape::CSSOStringStream os;
+            os << "stroke-dasharray:";
+            for (unsigned i = 0; i < val->values.size(); i++) {
+                if (i) {
+                    os << ", ";
+                }
+                os << val->values[i];
+            }
+            os << ";";
+            return g_strlcpy(p, os.str().c_str(), len);
+        } else {
+            return g_snprintf(p, len, "stroke-dasharray:none;");
+        }
+    }
+    return 0;
+}
+
+
+/**
  *
  */
 static bool
@@ -4557,6 +4609,81 @@ sp_style_write_ipaint(gchar *b, gint const len, gchar const *const key,
  *
  */
 static bool
+sp_paint_order_differ(SPIPaintOrder const *const a, SPIPaintOrder const *const b)
+{
+    if( (a->set != b->set) ||
+        (a->inherit!= b->inherit) ) {
+        return true;
+    }
+
+    // Check this works when paint-order value is 'normal'
+    for (unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
+        if( (a->layer[i]     != b->layer[i]) ||
+            (a->layer_set[i] != b->layer_set[i]) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+/**
+ * Write SPIPaintOrder object into string.
+ */
+static gint
+sp_style_write_ipaintorder(gchar *p, gint len, gchar const *key, SPIPaintOrder const *paint_order, SPIPaintOrder const *base, guint flags)
+{
+    int retval = 0;
+
+    if ((flags & SP_STYLE_FLAG_ALWAYS)
+        || ((flags & SP_STYLE_FLAG_IFSET) && paint_order->set)
+        || ((flags & SP_STYLE_FLAG_IFDIFF) && paint_order->set
+            && (!base->set || sp_paint_order_differ(paint_order, base))))
+    {
+        CSSOStringStream css;
+
+        if (paint_order->inherit) {
+            css << "inherit";
+        } else {
+            for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
+                if( paint_order->layer_set[i] == true ) {
+                    switch (paint_order->layer[i]) {
+                        case SP_CSS_PAINT_ORDER_NORMAL:
+                            css << "normal";
+                            assert( i == 0 );
+                            break;
+                        case SP_CSS_PAINT_ORDER_FILL:
+                            if (i!=0) css << " ";
+                            css << "fill";
+                            break;
+                        case SP_CSS_PAINT_ORDER_STROKE:
+                            if (i!=0) css << " ";
+                            css << "stroke";
+                            break;
+                        case SP_CSS_PAINT_ORDER_MARKER:
+                            if (i!=0) css << " ";
+                            css << "markers";
+                            break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
+        if ( !css.str().empty() ) {
+            retval = g_snprintf( p, len, "%s:%s;", key, css.str().c_str() );
+        }
+    }
+
+    return retval;
+}
+
+/**
+ *
+ */
+static bool
 sp_fontsize_differ(SPIFontSize const *const a, SPIFontSize const *const b)
 {
     if (a->type != b->type)
@@ -4589,7 +4716,7 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
             return g_snprintf(p, len, "%s:inherit;", key);
         } else if (val->type == SP_FONT_SIZE_LITERAL) {
             for (unsigned i = 0; enum_font_size[i].key; i++) {
-                if (enum_font_size[i].value == static_cast< gint > (val->value) ) {
+                if (enum_font_size[i].value == static_cast< gint > (val->literal) ) {
                     return g_snprintf(p, len, "%s:%s;", key, enum_font_size[i].key);
                 }
             }
@@ -4836,11 +4963,14 @@ sp_style_unset_property_attrs(SPObject *o)
     if (style->stroke_opacity.set) {
         repr->setAttribute("stroke-opacity", NULL);
     }
-    if (style->stroke_dasharray_set) {
+    if (style->stroke_dasharray.set) {
         repr->setAttribute("stroke-dasharray", NULL);
     }
-    if (style->stroke_dashoffset_set) {
+    if (style->stroke_dashoffset.set) {
         repr->setAttribute("stroke-dashoffset", NULL);
+    }
+    if (style->paint_order.set) {
+        repr->setAttribute("paint-order", NULL);
     }
     if (style->text_private && style->text->font_specification.set) {
         repr->setAttribute("-inkscape-font-specification", NULL);
@@ -5047,7 +5177,7 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
 {
     sp_css_attr_scale_property_single(css, "baseline-shift", ex);
     sp_css_attr_scale_property_single(css, "stroke-width", ex);
-    sp_css_attr_scale_property_list   (css, "stroke-dasharray", ex);
+    sp_css_attr_scale_property_list  (css, "stroke-dasharray", ex);
     sp_css_attr_scale_property_single(css, "stroke-dashoffset", ex);
     sp_css_attr_scale_property_single(css, "font-size", ex);
     sp_css_attr_scale_property_single(css, "kerning", ex);

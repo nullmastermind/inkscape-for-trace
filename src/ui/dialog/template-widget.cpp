@@ -34,7 +34,7 @@ namespace UI {
 
 TemplateWidget::TemplateWidget()
     : _more_info_button(_("More info"))
-    , _short_description_label(_(" "))
+    , _short_description_label(" ")
     , _template_name_label(_("no template selected"))
     , _effect_prefs(NULL)
 {
@@ -47,7 +47,7 @@ TemplateWidget::TemplateWidget()
     _short_description_label.set_line_wrap(true);
 
     Gtk::Alignment *align;
-    align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
+    align = Gtk::manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
     pack_end(*align, Gtk::PACK_SHRINK);
     align->add(_more_info_button);
     

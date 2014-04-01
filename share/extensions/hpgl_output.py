@@ -26,8 +26,7 @@ import inkex
 inkex.localize()
 
 
-# TODO: Unittests
-class MyEffect(inkex.Effect):
+class HpglOutput(inkex.Effect):
 
     def __init__(self):
         inkex.Effect.__init__(self)
@@ -41,14 +40,11 @@ class MyEffect(inkex.Effect):
         self.OptionParser.add_option('--mirrorX',       action='store', type='inkbool', dest='mirrorX',       default='FALSE', help='Mirror X axis')
         self.OptionParser.add_option('--mirrorY',       action='store', type='inkbool', dest='mirrorY',       default='FALSE', help='Mirror Y axis')
         self.OptionParser.add_option('--center',        action='store', type='inkbool', dest='center',        default='FALSE', help='Center zero point')
-        self.OptionParser.add_option('--flat',          action='store', type='float',   dest='flat',          default=1.2,     help='Curve flatness')
-        self.OptionParser.add_option('--useOvercut',    action='store', type='inkbool', dest='useOvercut',    default='TRUE',  help='Use overcut')
         self.OptionParser.add_option('--overcut',       action='store', type='float',   dest='overcut',       default=1.0,     help='Overcut (mm)')
-        self.OptionParser.add_option('--useToolOffset', action='store', type='inkbool', dest='useToolOffset', default='TRUE',  help='Correct tool offset')
         self.OptionParser.add_option('--toolOffset',    action='store', type='float',   dest='toolOffset',    default=0.25,    help='Tool offset (mm)')
         self.OptionParser.add_option('--precut',        action='store', type='inkbool', dest='precut',        default='TRUE',  help='Use precut')
-        self.OptionParser.add_option('--offsetX',       action='store', type='float',   dest='offsetX',       default=0.0,     help='X offset (mm)')
-        self.OptionParser.add_option('--offsetY',       action='store', type='float',   dest='offsetY',       default=0.0,     help='Y offset (mm)')
+        self.OptionParser.add_option('--flat',          action='store', type='float',   dest='flat',          default=1.2,     help='Curve flatness')
+        self.OptionParser.add_option('--autoAlign',     action='store', type='inkbool', dest='autoAlign',     default='TRUE',  help='Auto align')
 
     def effect(self):
         self.options.debug = False
@@ -65,6 +61,13 @@ class MyEffect(inkex.Effect):
             else:
                 type, value, traceback = sys.exc_info()
                 raise ValueError, ("", type, value), traceback
+        # convert raw HPGL to HPGL
+        hpglInit = 'IN;SP%d' % self.options.pen
+        if self.options.force > 0:
+            hpglInit += ';FS%d' % self.options.force
+        if self.options.speed > 0:
+            hpglInit += ';VS%d' % self.options.speed
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;IN;'
 
     def output(self):
         # print to file
@@ -73,7 +76,7 @@ class MyEffect(inkex.Effect):
 
 if __name__ == '__main__':
     # start extension
-    e = MyEffect()
+    e = HpglOutput()
     e.affect()
 
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99

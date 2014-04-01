@@ -10,9 +10,16 @@
 
 #include <glib.h>
 #include "uri.h"
+#include <string>
 #include <glibmm/ustring.h>
+#include <glibmm/miscutils.h>
 
 namespace Inkscape {
+
+URI::URI() {
+    const gchar *in = "";
+    _impl = Impl::create(xmlParseURI(in));
+}
 
 URI::URI(const URI &uri) {
     uri._impl->reference();
@@ -133,6 +140,31 @@ gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
     filename = tmp.toNativeFilename();
     return filename;
 }
+/*
+ * Returns the absolute path to an existing file referenced in this URI,
+ * if the uri is data, the path is empty or the file doesn't exist, then
+ * an empty string is returned.
+ *
+ * Does not check if the returned path is the local document's path (local)
+ * and thus redundent. Caller is expected to check against the document's path.
+ */
+const std::string URI::getFullPath(std::string const base) const {
+    if (!_impl->getPath()) {
+        return "";
+    }
+    std::string path = std::string(_impl->getPath());
+    // Calculate the absolute path from an available base
+    if(!base.empty() && !path.empty() && path[0] != '/') {
+        path = Glib::build_filename(base, path);
+    }
+    // Check the existance of the file
+    if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS) 
+      || g_file_test(path.c_str(), G_FILE_TEST_IS_DIR) ) {
+        path.clear();
+    }
+    return path;
+}
+
 
 /* TODO !!! proper error handling */
 gchar *URI::toNativeFilename() const throw(BadURIException) {

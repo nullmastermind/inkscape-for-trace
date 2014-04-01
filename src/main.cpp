@@ -925,7 +925,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-guint get_group0_keyval(GdkEventKey* event);
+guint get_group0_keyval(GdkEventKey const* event);
 
 }
 }
@@ -1515,7 +1515,7 @@ static int sp_do_export_png(SPDocument *doc)
 
     // set filename and dpi from options, if not yet set from the hints
     if (filename.empty()) {
-        if (!sp_export_png) {
+        if (!sp_export_png || sp_export_png[0] == '\0') {
             g_warning ("No export filename given and no filename hint. Nothing exported.");
             return 1;
         }
@@ -1632,10 +1632,13 @@ static int sp_do_export_png(SPDocument *doc)
 
         g_print("Area %g:%g:%g:%g exported to %lu x %lu pixels (%g dpi)\n", area[Geom::X][0], area[Geom::Y][0], area[Geom::X][1], area[Geom::Y][1], width, height, dpi);
 
-        g_print("Bitmap saved as: %s\n", filename.c_str());
-
         if ((width >= 1) && (height >= 1) && (width <= PNG_UINT_31_MAX) && (height <= PNG_UINT_31_MAX)) {
-            sp_export_png_file(doc, path.c_str(), area, width, height, dpi, dpi, bgcolor, NULL, NULL, true, sp_export_id_only ? items : NULL);
+            if( sp_export_png_file(doc, path.c_str(), area, width, height, dpi,
+              dpi, bgcolor, NULL, NULL, true, sp_export_id_only ? items : NULL) == 1 ) {
+                g_print("Bitmap saved as: %s\n", filename.c_str());
+            } else {
+                g_warning("Bitmap failed to save to: %s", filename.c_str());
+            }
         } else {
             g_warning("Calculated bitmap dimensions %lu %lu are out of range (1 - %lu). Nothing exported.", width, height, (unsigned long int)PNG_UINT_31_MAX);
         }
@@ -1771,6 +1774,11 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
         }
     }
 
+    if(!uri || uri[0] == '\0') {
+        g_warning ("No export filename given. Nothing exported.");
+        return 0;
+    }
+
     //check if specified directory exists
     if (!Inkscape::IO::file_directory_exists(uri)) {
         g_warning("File path \"%s\" includes directory that doesn't exist.\n", uri);
@@ -1789,7 +1797,11 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
                              ? "PostScript level 3" : "PostScript level 2");
     }
 
-    (*i)->save(doc, uri);
+    try {
+        (*i)->save(doc, uri);
+    } catch(...) {
+        g_warning("Failed to save pdf to: %s", uri);
+    }
     return 0;
 }
 
@@ -1837,6 +1849,10 @@ static int do_export_win_metafile_common(SPDocument* doc, gchar const* uri, char
 
 static int do_export_emf(SPDocument* doc, gchar const* uri, char const* mime)
 {
+    if(!uri || uri[0] == '\0') {
+        g_warning("No filename provided for emf export.");
+        return 0;
+    }
     return do_export_win_metafile_common(doc, uri, mime);
 }
 
@@ -1850,6 +1866,10 @@ static int do_export_emf(SPDocument* doc, gchar const* uri, char const* mime)
 
 static int do_export_wmf(SPDocument* doc, gchar const* uri, char const* mime)
 {
+    if(!uri || uri[0] == '\0') {
+        g_warning("No filename provided for wmf export.");
+        return 0;
+    }
     return do_export_win_metafile_common(doc, uri, mime);
 }
 

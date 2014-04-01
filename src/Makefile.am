@@ -23,7 +23,6 @@ endif
 
 
 noinst_LIBRARIES =	\
-	dom/libdom.a			\
 	libcroco/libcroco.a		\
 	libavoid/libavoid.a		\
 	$(internal_GDL)			\
@@ -108,7 +107,6 @@ endif
 include Makefile_insert
 include dialogs/Makefile_insert
 include display/Makefile_insert
-include dom/Makefile_insert
 include extension/Makefile_insert
 include extension/dbus/Makefile_insert
 include extension/implementation/Makefile_insert
@@ -148,7 +146,6 @@ EXTRA_DIST +=	\
 	debug/makefile.in	\
 	dialogs/makefile.in	\
 	display/makefile.in	\
-	dom/makefile.in		\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\
 	extension/makefile.in	\
@@ -223,7 +220,7 @@ endif
 # someone updates the BZR working directory.
 inkscape-version.cpp: $(inkscape_version_deps)
 	VER_PREFIX="$(VERSION)";\
-	VER_BZRREV=" r`bzr revno`"; \
+	VER_BZRREV=" r`bzr revno --tree`"; \
 	if test ! -z "`bzr status -S -V $(srcdir)`"; then \
 	    VER_CUSTOM=" custom"; \
 	fi; \

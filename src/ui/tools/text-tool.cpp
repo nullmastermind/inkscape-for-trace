@@ -61,11 +61,6 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static void sp_text_context_selection_changed(Inkscape::Selection *selection, TextTool *tc);
-static void sp_text_context_selection_modified(Inkscape::Selection *selection, guint flags, TextTool *tc);
-static bool sp_text_context_style_set(SPCSSAttr const *css, TextTool *tc);
-static int sp_text_context_style_query(SPStyle *style, int property, TextTool *tc);
-
 static void sp_text_context_validate_cursor_iterators(TextTool *tc);
 static void sp_text_context_update_cursor(TextTool *tc, bool scroll_to_see = true);
 static void sp_text_context_update_text_selection(TextTool *tc);
@@ -77,51 +72,40 @@ static gint sptc_focus_out(GtkWidget *widget, GdkEventFocus *event, TextTool *tc
 static void sptc_commit(GtkIMContext *imc, gchar *string, TextTool *tc);
 
 namespace {
-	ToolBase* createTextContext() {
-		return new TextTool();
-	}
+    ToolBase* createTextContext() {
+        return new TextTool();
+    }
 
-	bool textContextRegistered = ToolFactory::instance().registerObject("/tools/text", createTextContext);
+    bool textContextRegistered = ToolFactory::instance().registerObject("/tools/text", createTextContext);
 }
 
 const std::string& TextTool::getPrefsPath() {
-	return TextTool::prefsPath;
+    return TextTool::prefsPath;
 }
 
 const std::string TextTool::prefsPath = "/tools/text";
 
 
-TextTool::TextTool() : ToolBase() {
-	this->preedit_string = 0;
-	this->unipos = 0;
-
-    this->cursor_shape = cursor_text_xpm;
-    this->hot_x = 7;
-    this->hot_y = 7;
-
-    this->xp = 0;
-    this->yp = 0;
-    this->tolerance = 0;
-    this->within_tolerance = false;
-
-    this->imc = NULL;
-
-    this->text = NULL;
-    this->pdoc = Geom::Point(0, 0);
-
-    this->unimode = false;
-
-    this->cursor = NULL;
-    this->indicator = NULL;
-    this->frame = NULL;
-    this->grabbed = NULL;
-    this->timeout = 0;
-    this->show = FALSE;
-    this->phase = 0;
-    this->nascent_object = 0;
-    this->over_text = 0;
-    this->dragging = 0;
-    this->creating = 0;
+TextTool::TextTool()
+    : ToolBase(cursor_text_xpm, 7, 7)
+    , imc(NULL)
+    , text(NULL)
+    , pdoc(0, 0)
+    , unimode(false)
+    , unipos(0)
+    , cursor(NULL)
+    , indicator(NULL)
+    , frame(NULL)
+    , timeout(0)
+    , show(false)
+    , phase(false)
+    , nascent_object(false)
+    , over_text(false)
+    , dragging(0)
+    , creating(false)
+    , grabbed(NULL)
+    , preedit_string(NULL)
+{
 }
 
 TextTool::~TextTool() {
@@ -154,6 +138,7 @@ void TextTool::setup() {
     this->indicator = sp_canvas_item_new(sp_desktop_controls(desktop), SP_TYPE_CTRLRECT, NULL);
     SP_CTRLRECT(this->indicator)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->indicator)->setColor(0x0000ff7f, false, 0);
+    SP_CTRLRECT(this->indicator)->setShadow(1, 0xffffff7f);
     sp_canvas_item_hide(this->indicator);
 
     this->frame = sp_canvas_item_new(sp_desktop_controls(desktop), SP_TYPE_CTRLRECT, NULL);
@@ -175,7 +160,7 @@ void TextTool::setup() {
          */
         gtk_im_context_set_use_preedit(this->imc, FALSE);
         gtk_im_context_set_client_window(this->imc, 
-			gtk_widget_get_window (canvas));
+            gtk_widget_get_window (canvas));
 
         g_signal_connect(G_OBJECT(canvas), "focus_in_event", G_CALLBACK(sptc_focus_in), this);
         g_signal_connect(G_OBJECT(canvas), "focus_out_event", G_CALLBACK(sptc_focus_out), this);
@@ -195,20 +180,20 @@ void TextTool::setup() {
         this->shape_editor->set_item(item, SH_KNOTHOLDER);
     }
 
-    this->sel_changed_connection = sp_desktop_selection(desktop)->connectChanged(
-        sigc::bind(sigc::ptr_fun(&sp_text_context_selection_changed), this)
-	);
-    this->sel_modified_connection = sp_desktop_selection(desktop)->connectModified(
-        sigc::bind(sigc::ptr_fun(&sp_text_context_selection_modified), this)
-	);
+    this->sel_changed_connection = sp_desktop_selection(desktop)->connectChangedFirst(
+        sigc::mem_fun(*this, &TextTool::_selectionChanged)
+    );
+    this->sel_modified_connection = sp_desktop_selection(desktop)->connectModifiedFirst(
+        sigc::mem_fun(*this, &TextTool::_selectionModified)
+    );
     this->style_set_connection = desktop->connectSetStyle(
-        sigc::bind(sigc::ptr_fun(&sp_text_context_style_set), this)
-	);
+        sigc::mem_fun(*this, &TextTool::_styleSet)
+    );
     this->style_query_connection = desktop->connectQueryStyle(
-        sigc::bind(sigc::ptr_fun(&sp_text_context_style_query), this)
-	);
+        sigc::mem_fun(*this, &TextTool::_styleQueried)
+    );
 
-    sp_text_context_selection_changed(sp_desktop_selection(desktop), this);
+    _selectionChanged(sp_desktop_selection(desktop));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/text/selcue")) {
@@ -265,6 +250,8 @@ void TextTool::finish() {
     }
     
     this->text_selection_quads.clear();
+
+    ToolBase::finish();
 }
 
 bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
@@ -404,7 +391,7 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
     }
 
     if (!ret) {
-    	ret = ToolBase::item_handler(item, event);
+        ret = ToolBase::item_handler(item, event);
     }
 
     return ret;
@@ -445,7 +432,7 @@ static void sp_text_context_setup_text(TextTool *tc)
     text_item->updateRepr();
     text_item->doWriteTransform(text_item->getRepr(), text_item->transform, NULL, true);
     DocumentUndo::done(sp_desktop_document(ec->desktop), SP_VERB_CONTEXT_TEXT,
-		       _("Create text"));
+               _("Create text"));
 }
 
 /**
@@ -485,7 +472,7 @@ static void insert_uni_char(TextTool *const tc)
         sp_text_context_update_cursor(tc);
         sp_text_context_update_text_selection(tc);
         DocumentUndo::done(sp_desktop_document(tc->desktop), SP_VERB_DIALOG_TRANSFORM,
-			   _("Insert Unicode character"));
+               _("Insert Unicode character"));
     }
 }
 
@@ -610,7 +597,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 g_string_free(xs, FALSE);
                 g_string_free(ys, FALSE);
 
-            } else if (!sp_event_context_knot_mouseover(this)) {
+            } else if (!this->sp_event_context_knot_mouseover()) {
                 SnapManager &m = desktop->namedview->snap_manager;
                 m.setup(desktop);
 
@@ -675,8 +662,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                         sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
                         sp_desktop_selection(desktop)->set(ft);
                         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Flowed text is created."));
-                        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-					   _("Create flowed text"));
+                        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Create flowed text"));
                     } else {
                         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is <b>too small</b> for the current font size. Flowed text not created."));
                     }
@@ -815,8 +801,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
                                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
-                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-						       _("Insert no-break space"));
+                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Insert no-break space"));
                                     return TRUE;
                                 }
                                 break;
@@ -852,8 +837,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         sp_repr_css_set_property(css, "font-weight", "normal");
                                     sp_te_apply_style(this->text, this->text_sel_start, this->text_sel_end, css);
                                     sp_repr_css_attr_unref(css);
-                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-						       _("Make bold"));
+                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Make bold"));
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
                                     return TRUE;
@@ -870,8 +854,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         sp_repr_css_set_property(css, "font-style", "italic");
                                     sp_te_apply_style(this->text, this->text_sel_start, this->text_sel_end, css);
                                     sp_repr_css_attr_unref(css);
-                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-						       _("Make italic"));
+                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Make italic"));
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
                                     return TRUE;
@@ -909,8 +892,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                                 sp_text_context_update_cursor(this);
                                 sp_text_context_update_text_selection(this);
-                                DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-						   _("New line"));
+                                DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("New line"));
                                 return TRUE;
                             }
                             case GDK_KEY_BackSpace:
@@ -951,8 +933,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
-                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-						       _("Backspace"));
+                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Backspace"));
                                 }
                                 return TRUE;
                             case GDK_KEY_Delete:
@@ -990,8 +971,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                                     sp_text_context_update_cursor(this);
                                     sp_text_context_update_text_selection(this);
-                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT,
-						       _("Delete"));
+                                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Delete"));
                                 }
                                 return TRUE;
                             case GDK_KEY_Left:
@@ -1007,8 +987,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*-1, 0));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:left", SP_VERB_CONTEXT_TEXT,
-								_("Kern to the left"));
+                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:left", SP_VERB_CONTEXT_TEXT, _("Kern to the left"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorLeftWithControl();
@@ -1032,8 +1011,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*1, 0));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:right", SP_VERB_CONTEXT_TEXT,
-								_("Kern to the right"));
+                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:right", SP_VERB_CONTEXT_TEXT, _("Kern to the right"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorRightWithControl();
@@ -1057,8 +1035,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*-1));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:up", SP_VERB_CONTEXT_TEXT,
-								_("Kern up"));
+                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:up", SP_VERB_CONTEXT_TEXT, _("Kern up"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorUpWithControl();
@@ -1082,8 +1059,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*1));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
-                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:down", SP_VERB_CONTEXT_TEXT,
-								_("Kern down"));
+                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "kern:down", SP_VERB_CONTEXT_TEXT, _("Kern down"));
                                     } else {
                                         if (MOD__CTRL(event))
                                             this->text_sel_end.cursorDownWithControl();
@@ -1158,8 +1134,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         } else {
                                             sp_te_adjust_rotation(this->text, this->text_sel_start, this->text_sel_end, desktop, -90);
                                         }
-                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "textrot:ccw", SP_VERB_CONTEXT_TEXT,
-								_("Rotate counterclockwise"));
+                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "textrot:ccw", SP_VERB_CONTEXT_TEXT, _("Rotate counterclockwise"));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
                                         return TRUE;
@@ -1179,8 +1154,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                         } else {
                                             sp_te_adjust_rotation(this->text, this->text_sel_start, this->text_sel_end, desktop, 90);
                                         }
-                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "textrot:cw", SP_VERB_CONTEXT_TEXT,
-								_("Rotate clockwise"));
+                                        DocumentUndo::maybeDone(sp_desktop_document(desktop), "textrot:cw", SP_VERB_CONTEXT_TEXT, _("Rotate clockwise"));
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
                                         return TRUE;
@@ -1196,15 +1170,13 @@ bool TextTool::root_handler(GdkEvent* event) {
                                                 sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -10);
                                             else
                                                 sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -1);
-                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "linespacing:dec", SP_VERB_CONTEXT_TEXT,
-								    _("Contract line spacing"));
+                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "linespacing:dec", SP_VERB_CONTEXT_TEXT, _("Contract line spacing"));
                                         } else {
                                             if (MOD__SHIFT(event))
                                                 sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -10);
                                             else
                                                 sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, -1);
-                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "letterspacing:dec", SP_VERB_CONTEXT_TEXT,
-								    _("Contract letter spacing"));
+                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "letterspacing:dec", SP_VERB_CONTEXT_TEXT, _("Contract letter spacing"));
                                         }
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
@@ -1221,15 +1193,13 @@ bool TextTool::root_handler(GdkEvent* event) {
                                                 sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 10);
                                             else
                                                 sp_te_adjust_linespacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 1);
-                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "linespacing:inc", SP_VERB_CONTEXT_TEXT,
-								    _("Expand line spacing"));
+                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "linespacing:inc", SP_VERB_CONTEXT_TEXT, _("Expand line spacing"));
                                         } else {
                                             if (MOD__SHIFT(event))
                                                 sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 10);
                                             else
                                                 sp_te_adjust_tspan_letterspacing_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, 1);
-                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "letterspacing:inc", SP_VERB_CONTEXT_TEXT,
-                                                                    _("Expand letter spacing"));\
+                                            DocumentUndo::maybeDone(sp_desktop_document(desktop), "letterspacing:inc", SP_VERB_CONTEXT_TEXT, _("Expand letter spacing"));\
                                         }
                                         sp_text_context_update_cursor(this);
                                         sp_text_context_update_text_selection(this);
@@ -1313,32 +1283,32 @@ bool sp_text_paste_inline(ToolBase *ec)
         Glib::ustring const clip_text = refClipboard->wait_for_text();
 
         if (!clip_text.empty()) {
-        	// Fix for 244940
-        	// The XML standard defines the following as valid characters
-        	// (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
-        	// char ::=   	#x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
-        	// Since what comes in off the paste buffer will go right into XML, clean
-        	// the text here.
-        	Glib::ustring text(clip_text);
-        	Glib::ustring::iterator itr = text.begin();
-        	gunichar paste_string_uchar;
+            // Fix for 244940
+            // The XML standard defines the following as valid characters
+            // (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
+            // char ::=     #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+            // Since what comes in off the paste buffer will go right into XML, clean
+            // the text here.
+            Glib::ustring text(clip_text);
+            Glib::ustring::iterator itr = text.begin();
+            gunichar paste_string_uchar;
 
-        	while(itr != text.end())
-        	{
-        	    paste_string_uchar = *itr;
+            while(itr != text.end())
+            {
+                paste_string_uchar = *itr;
 
-        	    // Make sure we don't have a control character. We should really check
-        	    // for the whole range above... Add the rest of the invalid cases from
-        	    // above if we find additional issues
-        	    if(paste_string_uchar >= 0x00000020 ||
-        	       paste_string_uchar == 0x00000009 ||
-        	       paste_string_uchar == 0x0000000A ||
-        	       paste_string_uchar == 0x0000000D) {
-        	    	itr++;
-        	    } else {
-        	        itr = text.erase(itr);
-        	    }
-        	}
+                // Make sure we don't have a control character. We should really check
+                // for the whole range above... Add the rest of the invalid cases from
+                // above if we find additional issues
+                if(paste_string_uchar >= 0x00000020 ||
+                   paste_string_uchar == 0x00000009 ||
+                   paste_string_uchar == 0x0000000A ||
+                   paste_string_uchar == 0x0000000D) {
+                    ++itr;
+                } else {
+                    itr = text.erase(itr);
+                }
+            }
 
             if (!tc->text) { // create text if none (i.e. if nascent_object)
                 sp_text_context_setup_text(tc);
@@ -1359,7 +1329,7 @@ bool sp_text_paste_inline(ToolBase *ec)
                 begin = end + 1;
             }
             DocumentUndo::done(sp_desktop_document(ec->desktop), SP_VERB_CONTEXT_TEXT,
-			       _("Paste text"));
+                               _("Paste text"));
 
             return true;
         }
@@ -1435,12 +1405,11 @@ bool sp_text_delete_selection(ToolBase *ec)
 /**
  * \param selection Should not be NULL.
  */
-static void
-sp_text_context_selection_changed(Inkscape::Selection *selection, TextTool *tc)
+void TextTool::_selectionChanged(Inkscape::Selection *selection)
 {
     g_assert(selection != NULL);
 
-    ToolBase *ec = SP_EVENT_CONTEXT(tc);
+    ToolBase *ec = SP_EVENT_CONTEXT(this);
 
     ec->shape_editor->unset_item(SH_KNOTHOLDER);
     SPItem *item = selection->singleItem();
@@ -1448,70 +1417,68 @@ sp_text_context_selection_changed(Inkscape::Selection *selection, TextTool *tc)
         ec->shape_editor->set_item(item, SH_KNOTHOLDER);
     }
 
-    if (tc->text && (item != tc->text)) {
-        sp_text_context_forget_text(tc);
+    if (this->text && (item != this->text)) {
+        sp_text_context_forget_text(this);
     }
-    tc->text = NULL;
+    this->text = NULL;
 
     if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
-        tc->text = item;
-        Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+        this->text = item;
+        Inkscape::Text::Layout const *layout = te_get_layout(this->text);
         if (layout)
-            tc->text_sel_start = tc->text_sel_end = layout->end();
+            this->text_sel_start = this->text_sel_end = layout->end();
     } else {
-        tc->text = NULL;
+        this->text = NULL;
     }
 
     // we update cursor without scrolling, because this position may not be final;
     // item_handler moves cusros to the point of click immediately
-    sp_text_context_update_cursor(tc, false);
-    sp_text_context_update_text_selection(tc);
+    sp_text_context_update_cursor(this, false);
+    sp_text_context_update_text_selection(this);
 }
 
-static void
-sp_text_context_selection_modified(Inkscape::Selection */*selection*/, guint /*flags*/, TextTool *tc)
+void TextTool::_selectionModified(Inkscape::Selection */*selection*/, guint /*flags*/)
 {
-    sp_text_context_update_cursor(tc);
-    sp_text_context_update_text_selection(tc);
+    sp_text_context_update_cursor(this);
+    sp_text_context_update_text_selection(this);
 }
 
-static bool sp_text_context_style_set(SPCSSAttr const *css, TextTool *tc)
+bool TextTool::_styleSet(SPCSSAttr const *css)
 {
-    if (tc->text == NULL)
+    if (this->text == NULL)
         return false;
-    if (tc->text_sel_start == tc->text_sel_end)
+    if (this->text_sel_start == this->text_sel_end)
         return false;    // will get picked up by the parent and applied to the whole text object
 
-    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
-    DocumentUndo::done(sp_desktop_document(tc->desktop), SP_VERB_CONTEXT_TEXT,
-		       _("Set text style"));
-    sp_text_context_update_cursor(tc);
-    sp_text_context_update_text_selection(tc);
+    sp_te_apply_style(this->text, this->text_sel_start, this->text_sel_end, css);
+    DocumentUndo::done(sp_desktop_document(this->desktop), SP_VERB_CONTEXT_TEXT,
+               _("Set text style"));
+    sp_text_context_update_cursor(this);
+    sp_text_context_update_text_selection(this);
 
     return true;
 }
 
-static int
-sp_text_context_style_query(SPStyle *style, int property, TextTool *tc)
+int TextTool::_styleQueried(SPStyle *style, int property)
 {
-    if (tc->text == NULL) {
+    if (this->text == NULL) {
         return QUERY_STYLE_NOTHING;
     }
-    const Inkscape::Text::Layout *layout = te_get_layout(tc->text);
+    const Inkscape::Text::Layout *layout = te_get_layout(this->text);
     if (layout == NULL) {
         return QUERY_STYLE_NOTHING;
     }
-    sp_text_context_validate_cursor_iterators(tc);
+    sp_text_context_validate_cursor_iterators(this);
 
     GSList *styles_list = NULL;
 
     Inkscape::Text::Layout::iterator begin_it, end_it;
-    if (tc->text_sel_start < tc->text_sel_end) {
-        begin_it = tc->text_sel_start;
-        end_it = tc->text_sel_end;
+    if (this->text_sel_start < this->text_sel_end) {
+        begin_it = this->text_sel_start;
+        end_it = this->text_sel_end;
     } else {
-        begin_it = tc->text_sel_end;
-        end_it = tc->text_sel_start;
+        begin_it = this->text_sel_end;
+        end_it = this->text_sel_start;
     }
     if (begin_it == end_it) {
         if (!begin_it.prevCharacter()) {
@@ -1636,7 +1603,7 @@ static void sp_text_context_update_text_selection(TextTool *tc)
     // the selection update (can't do both atomically, alas)
     if (!tc->desktop) return;
 
-    for (std::vector<SPCanvasItem*>::iterator it = tc->text_selection_quads.begin() ; it != tc->text_selection_quads.end() ; it++) {
+    for (std::vector<SPCanvasItem*>::iterator it = tc->text_selection_quads.begin() ; it != tc->text_selection_quads.end() ; ++it) {
         sp_canvas_item_hide(*it);
         sp_canvas_item_destroy(*it);
     }
@@ -1725,7 +1692,7 @@ static void sptc_commit(GtkIMContext */*imc*/, gchar *string, TextTool *tc)
     sp_text_context_update_text_selection(tc);
 
     DocumentUndo::done(tc->text->document, SP_VERB_CONTEXT_TEXT,
-		       _("Type text"));
+               _("Type text"));
 }
 
 void sp_text_context_place_cursor (TextTool *tc, SPObject *text, Inkscape::Text::Layout::iterator where)

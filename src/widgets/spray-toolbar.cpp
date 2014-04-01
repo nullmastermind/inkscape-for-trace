@@ -28,38 +28,26 @@
 # include "config.h"
 #endif
 
-#include "ui/widget/spinbutton.h"
 #include <glibmm/i18n.h>
-#include "toolbox.h"
+
 #include "spray-toolbar.h"
-
-#include "../desktop.h"
-#include "../desktop-handles.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "../verbs.h"
-#include "../inkscape.h"
-#include "../selection-chemistry.h"
-#include "../selection.h"
-#include "../ege-adjustment-action.h"
-#include "../ege-output-action.h"
-#include "../ege-select-one-action.h"
-#include "../ink-action.h"
-#include "../ink-comboboxentry-action.h"
-#include "../widgets/button.h"
-#include "../widgets/spinbutton-events.h"
-#include "../widgets/spw-utilities.h"
-#include "../widgets/widget-sizes.h"
-#include "../xml/repr.h"
-#include "ui/uxmanager.h"
-#include "../ui/icon-names.h"
-#include "ui/tools/pen-tool.h"
-#include "ui/tools/spray-tool.h"
+#include "ege-adjustment-action.h"
+#include "ege-select-one-action.h"
+#include "ink-action.h"
+#include "preferences.h"
+#include "toolbox.h"
+#include "ui/icon-names.h"
 
-using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 
+// Disabled in 0.91 because of Bug #1274831 (crash, spraying an object 
+// with the mode: spray object in single path)
+// Please enable again when working on 1.0
+#define ENABLE_SPRAY_MODE_SINGLE_PATH
 
 //########################
 //##       Spray        ##
@@ -186,14 +174,14 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                             1, _("Spray clones of the initial selection"),
                             2, INKSCAPE_ICON("spray-mode-clone"),
                             -1 );
-
+#ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter,
                             0, _("Spray single path"),
                             1, _("Spray objects in a single path"),
                             2, INKSCAPE_ICON("spray-mode-union"),
                             -1 );
-
+#endif
         EgeSelectOneAction* act = ege_select_one_action_new( "SprayModeAction", _("Mode"), (""), NULL, GTK_TREE_MODEL(model) );
         g_object_set( act, "short_label", _("Mode:"), NULL );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );

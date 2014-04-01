@@ -65,21 +65,13 @@ const std::string& SpiralTool::getPrefsPath() {
 
 const std::string SpiralTool::prefsPath = "/tools/shapes/spiral";
 
-SpiralTool::SpiralTool() : ToolBase() {
-    this->cursor_shape = cursor_spiral_xpm;
-    this->hot_x = 4;
-    this->hot_y = 4;
-    this->xp = 0;
-    this->yp = 0;
-    this->tolerance = 0;
-    this->within_tolerance = false;
-    this->item_to_select = NULL;
-
-    this->spiral = NULL;
-
-    this->revo = 3.0;
-    this->exp = 1.0;
-    this->t0 = 0.0;
+SpiralTool::SpiralTool()
+    : ToolBase(cursor_spiral_xpm, 4, 4)
+    , spiral(NULL)
+    , revo(3)
+    , exp(1)
+    , t0(0)
+{
 }
 
 void SpiralTool::finish() {
@@ -217,7 +209,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                 gobble_motion_events(GDK_BUTTON1_MASK);
 
                 ret = TRUE;
-            } else if (!sp_event_context_knot_mouseover(this)) {
+            } else if (!this->sp_event_context_knot_mouseover()) {
                 SnapManager &m = desktop->namedview->snap_manager;
                 m.setup(desktop);
                 Geom::Point const motion_w(event->motion.x, event->motion.y);

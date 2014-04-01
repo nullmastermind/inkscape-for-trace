@@ -996,7 +996,7 @@ void EditVerb::perform(SPAction *action, void *data)
             sp_selection_untile(dt);
             break;
         case SP_VERB_EDIT_SYMBOL:
-            sp_selection_symbols(dt);
+            sp_selection_symbol(dt);
             break;
         case SP_VERB_EDIT_UNSYMBOL:
             sp_selection_unsymbol(dt);
@@ -1187,9 +1187,9 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_BREAK_APART:
             sp_selected_path_break_apart(dt);
             break;
-        case SP_VERB_SELECTION_GRIDTILE:
+        case SP_VERB_SELECTION_ARRANGE:
             inkscape_dialogs_unhide();
-            dt->_dlg_mgr->showDialog("TileDialog");
+            dt->_dlg_mgr->showDialog("TileDialog"); //FIXME: denis: What's this string (to be changed)
             break;
         default:
             break;
@@ -2472,7 +2472,7 @@ Verb *Verb::_base_verbs[] = {
     new EditVerb(SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"),
                  N_("Deselect any selected objects or nodes"), INKSCAPE_ICON("edit-select-none")),
     new EditVerb(SP_VERB_EDIT_DELETE_ALL_GUIDES, "EditRemoveAllGuides", N_("Delete All Guides"),
-                 N_("Create four guides aligned with the page borders"), NULL),
+                 N_("Delete all the guides in the document"), NULL),
     new EditVerb(SP_VERB_EDIT_GUIDES_AROUND_PAGE, "EditGuidesAroundPage", N_("Create _Guides Around the Page"),
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
@@ -2562,8 +2562,8 @@ Verb *Verb::_base_verbs[] = {
     // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
                       N_("Break selected paths into subpaths"), INKSCAPE_ICON("path-break-apart")),
-    new SelectionVerb(SP_VERB_SELECTION_GRIDTILE, "DialogGridArrange", N_("Ro_ws and Columns..."),
-                      N_("Arrange selected objects in a table"), INKSCAPE_ICON("dialog-rows-and-columns")),
+    new SelectionVerb(SP_VERB_SELECTION_ARRANGE, "DialogArrange", N_("_Arrange..."),
+                      N_("Arrange selected objects in a table or circle"), INKSCAPE_ICON("dialog-rows-and-columns")),
     // Layer
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("_Add Layer..."),
                   N_("Create a new layer"), INKSCAPE_ICON("layer-new")),
@@ -2609,11 +2609,11 @@ Verb *Verb::_base_verbs[] = {
                   N_("Toggle visibility of current layer"), NULL),
 
     // Object
-    new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90&#176; CW"),
+    new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90\xc2\xb0 CW"),
                    // This is shared between tooltips and statusbar, so they
                    // must use UTF-8, not HTML entities for special characters.
                    N_("Rotate selection 90\xc2\xb0 clockwise"), INKSCAPE_ICON("object-rotate-right")),
-    new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CCW, "ObjectRotate90CCW", N_("Rotate 9_0&#176; CCW"),
+    new ObjectVerb(SP_VERB_OBJECT_ROTATE_90_CCW, "ObjectRotate90CCW", N_("Rotate 9_0\xc2\xb0 CCW"),
                    // This is shared between tooltips and statusbar, so they
                    // must use UTF-8, not HTML entities for special characters.
                    N_("Rotate selection 90\xc2\xb0 counter-clockwise"), INKSCAPE_ICON("object-rotate-left")),
@@ -2743,7 +2743,7 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), INKSCAPE_ICON("zoom-out")),
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide the canvas scrollbars"), NULL),
-    new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("_Grid"), N_("Show or hide the grid"), INKSCAPE_ICON("show-grid")),
+    new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Page _Grid"), N_("Show or hide the page grid"), INKSCAPE_ICON("show-grid")),
     new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"), N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
     new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"), N_("Show or hide the Commands bar (under the menu)"), NULL),

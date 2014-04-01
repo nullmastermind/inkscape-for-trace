@@ -67,11 +67,11 @@ Optional compiler switches for development:
 
 
 File:      text_reassemble.c
-Version:   0.0.10
-Date:      06-MAY-2013
+Version:   0.0.14
+Date:      25-MAR-2014
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2013 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2014 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -601,10 +601,13 @@ FT_INFO *ftinfo_init(void){
 */
 int ftinfo_make_insertable(FT_INFO *fti){
    int status=0;
+   FNT_SPECS *tmp;
    if(!fti)return(2);
    if(fti->used >= fti->space){
       fti->space += ALLOCINFO_CHUNK;
-      if((fti->fonts = (FNT_SPECS *) realloc(fti->fonts, fti->space * sizeof(FNT_SPECS) ))){
+      tmp = (FNT_SPECS *) realloc(fti->fonts, fti->space * sizeof(FNT_SPECS) );
+      if(tmp){
+         fti->fonts = tmp;
          memset(&fti->fonts[fti->used],0,(fti->space - fti->used)*sizeof(FNT_SPECS));
       }
       else {
@@ -665,7 +668,7 @@ FT_INFO *ftinfo_clear(FT_INFO *fti){
          free(fsp->file);                /* release memory holding copies of paths         */
          free(fsp->fontspec);               /* release memory holding copies of font names    */
          FcPatternDestroy(fsp->fpat);    /* release memory for FontConfig fpats            */
-         FcFontSetDestroy(fti->fonts[i].fontset);
+         FcFontSetDestroy(fsp->fontset);
          if(fsp->alts){ free(fsp->alts); }
       }
       free(fti->fonts);
@@ -726,9 +729,10 @@ int ftinfo_find_loaded_by_src(const FT_INFO *fti, const uint8_t *filename){
 */
 
 int ftinfo_load_fontname(FT_INFO *fti, const char *fontspec){
-   FcPattern   *pattern, *fpat;
-   FcFontSet   *fontset;
-   FcResult     result = FcResultMatch;
+   FcPattern   *pattern = NULL;
+   FcPattern   *fpat    = NULL;
+   FcFontSet   *fontset = NULL;
+   FcResult     result  = FcResultMatch;
    char        *filename;
    double       fd;
    FNT_SPECS   *fsp;
@@ -738,38 +742,45 @@ int ftinfo_load_fontname(FT_INFO *fti, const char *fontspec){
    if(!fti)return(-1);
 
    /* If it is already loaded, do not load it again */
-   if((status = ftinfo_find_loaded_by_spec(fti, (uint8_t *) fontspec))>=0){
-       return(status);
-   }
+   status = ftinfo_find_loaded_by_spec(fti, (uint8_t *) fontspec);
+   if(status >= 0){ return(status); }
+   status = 0;  /* was -1, reset to 0 */
 
    ftinfo_make_insertable(fti);
    fi_idx = fti->used;
 
-   if(!(pattern = FcNameParse((const FcChar8 *)fontspec))                              )return(2);
-   if(!FcConfigSubstitute(NULL, pattern, FcMatchPattern)                               )return(3);
-   FcDefaultSubstitute(pattern);
-   /*  get a fontset, trimmed to only those with new glyphs as needed, so that missing glyph's may be handled */
-   if(!(fontset = FcFontSort (NULL,pattern, FcTrue, NULL, &result))
-                                                           || result   != FcResultMatch)return(4);
-   if(!(fpat = FcFontRenderPrepare(NULL, pattern, fontset->fonts[0]))                  )return(405);
-   if(FcPatternGetString(  fpat, FC_FILE,   0, (FcChar8 **)&filename)  != FcResultMatch)return(5);
-   if(FcPatternGetDouble(  fpat, FC_SIZE,   0,  &fd)                   != FcResultMatch)return(6);
+   pattern = FcNameParse((const FcChar8 *)fontspec);
+   while(1) {  /* this is NOT a loop, it uses breaks to avoid gotos and deep nesting */
+      if(!(pattern)){                                                                                 status = -2;   break; }
+      if(!FcConfigSubstitute(NULL, pattern, FcMatchPattern)){                                         status = -3;   break; };
+      FcDefaultSubstitute(pattern);
+      /*  get a fontset, trimmed to only those with new glyphs as needed, so that missing glyph's may be handled */
+      if(!(fontset = FcFontSort (NULL,pattern, FcTrue, NULL, &result)) || (result != FcResultMatch)){ status = -4;   break; }
+      if(!(fpat = FcFontRenderPrepare(NULL, pattern, fontset->fonts[0]))){                            status = -405; break; }
+      if(FcPatternGetString(  fpat, FC_FILE,   0, (FcChar8 **)&filename)  != FcResultMatch){          status = -5;   break; }
+      if(FcPatternGetDouble(  fpat, FC_SIZE,   0,  &fd)                   != FcResultMatch){          status = -6;   break; }
 
-   /* copy these into memory for external use */
-   fsp                   = &(fti->fonts[fti->used]);
-   fsp->fontset          = fontset;
-   fsp->alts             = NULL;  /* Initially no links to alternate fonts */
-   fsp->space            = 0;  
-   fsp->file             = (uint8_t *) U_strdup((char *) filename);
-   fsp->fontspec            = (uint8_t *) U_strdup((char *) fontspec);
-   fsp->fpat             = fpat;
-   fsp->fsize            = fd;
-
+      /* copy these into memory for external use */
+      fsp                   = &(fti->fonts[fti->used]);
+      fsp->fontset          = fontset;
+      fsp->alts             = NULL;  /* Initially no links to alternate fonts */
+      fsp->space            = 0;  
+      fsp->file             = (uint8_t *) U_strdup((char *) filename);
+      fsp->fontspec            = (uint8_t *) U_strdup((char *) fontspec);
+      fsp->fpat             = fpat;
+      fsp->fsize            = fd;
+      break;
+   }
    /* release FC's own memory related to this call that does not need to be kept around so that face will work */
-   FcPatternDestroy(pattern);
+   if(pattern)FcPatternDestroy(pattern); /* done with this memory */
+   if(status<0){
+      if(fontset)FcFontSetDestroy(fontset);
+      if(fpat)FcPatternDestroy(fpat);
+      return(status);
+   }
 
    /* get the current face */
-   if(FT_New_Face( fti->library, (const char *) fsp->file, 0, &(fsp->face) )){ return(8); }
+   if(FT_New_Face( fti->library, (const char *) fsp->file, 0, &(fsp->face) )){ return(-8); }
 
    if(FT_Set_Char_Size( 
       fsp->face,       /* handle to face object             */ 
@@ -777,12 +788,12 @@ int ftinfo_load_fontname(FT_INFO *fti, const char *fontspec){
       fd*64,           /* char_height in 1/64th of points   */ 
       72,              /* horizontal device resolution, DPI */ 
       72)              /* vebrical   device resolution, DPI */ 
-      ){ return(9); }
+      ){ return(-9); }
 
    /* The space advance is needed in various places.  Get it now, and get it in the font units,
       so that it can be scaled later with the text size */
    status = TR_getadvance(fti, fsp,' ',0,FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING  | FT_LOAD_NO_BITMAP, FT_KERNING_UNSCALED, NULL, NULL);
-   if(status < 0)return(7);
+   if(status < 0)return(-7);
    fsp->spcadv = ((double) status)/(64.0); 
              
    fti->used++;
@@ -836,10 +847,13 @@ void ftinfo_dump(const FT_INFO *fti){
 */
 int fsp_alts_make_insertable(FNT_SPECS *fsp){
    int status=0;
+   ALT_SPECS *tmp;
    if(!fsp)return(2);
    if(fsp->used >= fsp->space){
       fsp->space += ALLOCINFO_CHUNK;
-      if((fsp->alts = (ALT_SPECS *) realloc(fsp->alts, fsp->space * sizeof(ALT_SPECS) ))){
+      tmp = (ALT_SPECS *) realloc(fsp->alts, fsp->space * sizeof(ALT_SPECS) );
+      if(tmp){
+         fsp->alts = tmp;
          memset(&fsp->alts[fsp->used],0,(fsp->space - fsp->used)*sizeof(ALT_SPECS));
       }
       else {
@@ -904,10 +918,13 @@ int fsp_alts_weight(FNT_SPECS *fsp, uint32_t a_idx){
 */
 int csp_make_insertable(CHILD_SPECS *csp){
    int status=0;
+   int *tmp;
    if(!csp)return(2);
    if(csp->used >= csp->space){
       csp->space += ALLOCINFO_CHUNK;
-      if((csp->members = (int *) realloc(csp->members, csp->space * sizeof(int) ))){
+      tmp = (int *) realloc(csp->members, csp->space * sizeof(int) );
+      if(tmp){
+         csp->members = tmp;
          memset(&csp->members[csp->used],0,(csp->space - csp->used)*sizeof(int));
       }
       else {
@@ -999,9 +1016,12 @@ CX_INFO *cxinfo_init(void){
 */
 int cxinfo_make_insertable(CX_INFO *cxi){
    int status=0;
+   CX_SPECS *tmp;
    if(cxi->used >= cxi->space){
       cxi->space += ALLOCINFO_CHUNK;
-      if((cxi->cx = (CX_SPECS *) realloc(cxi->cx, cxi->space * sizeof(CX_SPECS) ))){
+      tmp = (CX_SPECS *) realloc(cxi->cx, cxi->space * sizeof(CX_SPECS) );
+      if(tmp){
+         cxi->cx = tmp;
          memset(&cxi->cx[cxi->used],0,(cxi->space - cxi->used)*sizeof(CX_SPECS));
       }
       else {
@@ -1170,9 +1190,12 @@ TP_INFO *tpinfo_init(void){
 */
 int tpinfo_make_insertable(TP_INFO *tpi){
    int status=0;
+   TCHUNK_SPECS *tmp;
    if(tpi->used >= tpi->space){
       tpi->space += ALLOCINFO_CHUNK;
-      if((tpi->chunks = (TCHUNK_SPECS *) realloc(tpi->chunks, tpi->space * sizeof(TCHUNK_SPECS) ))){
+      tmp = (TCHUNK_SPECS *) realloc(tpi->chunks, tpi->space * sizeof(TCHUNK_SPECS) );
+      if(tmp){
+         tpi->chunks = tmp;
          memset(&tpi->chunks[tpi->used],0,(tpi->space - tpi->used)*sizeof(TCHUNK_SPECS));
       }
       else {
@@ -1243,10 +1266,13 @@ BR_INFO *brinfo_init(void){
 */
 int brinfo_make_insertable(BR_INFO *bri){
    int status=0;
+   BRECT_SPECS *tmp;
    if(!bri)return(2);
    if(bri->used >= bri->space){
       bri->space += ALLOCINFO_CHUNK;
-      if(!(bri->rects = (BRECT_SPECS *) realloc(bri->rects, bri->space * sizeof(BRECT_SPECS) ))){ status = 1; }
+      tmp = (BRECT_SPECS *) realloc(bri->rects, bri->space * sizeof(BRECT_SPECS) );
+      if(tmp){ bri->rects = tmp; }
+      else { status = 1;}
    }
    return(status);
 }
@@ -1380,7 +1406,7 @@ printf("Overlap rprect (LL,UR) dst:(%lf,%lf),(%lf,%lf) src:(%lf,%lf),(%lf,%lf)\n
 }
 
 /**
-    \brief Check for a text element upstream from the start element and in the reversed direction.
+    \brief Check for various sorts of invalid text elements upstream (language dir changes, draw order backwards from language direction)
     \returns 0 on success (not upstream), 1 if upstream, anything else is an error.
     \param bri  pointer to the BR_INFO structure
     \param dst  index of the destination bounding rectangle.
@@ -1403,6 +1429,12 @@ int brinfo_upstream(BR_INFO *bri, int dst, int src, int ddir, int sdir){
       if(br_dst->xur                     <= (br_src->xll + br_src->xur)/2.0){ status = 1; }
    }
    else if( ddir == LDIR_LR && sdir == LDIR_RL){
+      if((br_src->xll + br_src->xur)/2.0 <= br_dst->xll                    ){ status = 1; }
+   }
+   else if( ddir == LDIR_RL && sdir == LDIR_RL){
+      if(br_dst->xur                     <= (br_src->xll + br_src->xur)/2.0){ status = 1; }
+   }
+   else if( ddir == LDIR_LR && sdir == LDIR_LR){
       if((br_src->xll + br_src->xur)/2.0 <= br_dst->xll                    ){ status = 1; }
    }
    return(status);
@@ -1490,13 +1522,19 @@ TR_INFO *trinfo_init(TR_INFO *tri){
       !(tri->bri = brinfo_init()) ||
       !(tri->cxi = cxinfo_init())
       ){   tri = trinfo_release(tri);  }
+   tri->out        = NULL;                 /* This will allocate as needed, it might not ever be needed. */
+   tri->qe         = 0.0;
+   tri->esc        = 0.0;
+   tri->x          = DBL_MAX;
+   tri->y          = DBL_MAX;
+   tri->dirty      = 0;
    tri->use_kern   = 1;
-   tri->usebk      = BKCLR_NONE;
    tri->load_flags = FT_LOAD_NO_SCALE;
    tri->kern_mode  = FT_KERNING_UNSCALED;
-   tri->out        = NULL;                 /* This will allocate as needed, it might not ever be needed. */
    tri->outspace   = 0;
    tri->outused    = 0;
+   tri->usebk      = BKCLR_NONE;
+   memset(&(tri->bkcolor),0,sizeof(TRCOLORREF));
    return(tri);
 }
 
@@ -1552,9 +1590,6 @@ TR_INFO *trinfo_release_except_FC(TR_INFO *tri){
 */
 TR_INFO *trinfo_clear(TR_INFO *tri){
    if(tri){
-      tri->dirty      = 0;    /* set these back to their defaults  */
-      tri->esc        = 0.0;
-      /* Do NOT modify use_kern, usebk, load_flags, or kern_mode */
 
       if(tri->bri)tri->bri=brinfo_release(tri->bri);
       if(tri->tpi)tri->tpi=tpinfo_release(tri->tpi);
@@ -1565,6 +1600,11 @@ TR_INFO *trinfo_clear(TR_INFO *tri){
          tri->outused  = 0;
          tri->outspace = 0;
       };
+      /* Do NOT modify: qe, use_kern, usebk, load_flags, kern_mode, or bkcolor.  Set the rest back to their defaults */
+      tri->esc        = 0.0;
+      tri->x          = DBL_MAX;
+      tri->y          = DBL_MAX;
+      tri->dirty      = 0;
       if(!(tri->tpi = tpinfo_init()) ||     /* re-init the pieces just released */
          !(tri->bri = brinfo_init()) ||
          !(tri->cxi = cxinfo_init())
@@ -1658,11 +1698,14 @@ int trinfo_load_ft_opts(TR_INFO *tri, int use_kern, int load_flags, int kern_mod
 */
 int trinfo_append_out(TR_INFO *tri, const char *src){
    size_t slen;
+   uint8_t *tmp;
    if(!src)return(-1);
    slen = strlen(src);
    if(tri->outused + (int) slen + 1 >= tri->outspace){
       tri->outspace += TEREMAX(ALLOCOUT_CHUNK,slen+1);
-      if(!(tri->out = realloc(tri->out, tri->outspace )))return(-1);
+      tmp = realloc(tri->out, tri->outspace * sizeof(uint8_t) );
+      if(tmp){ tri->out = tmp; }
+      else { return(-1); }
    }
    memcpy(tri->out + tri->outused, src, slen+1); /* copy the terminator                       */
    tri->outused += slen;                         /* do not count the terminator in the length */
@@ -1958,7 +2001,7 @@ void TR_layout_2_svg(TR_INFO *tri){
             cutat=strcspn((char *)fti->fonts[tsp->fi_idx].fontspec,":");
                sprintf(obuf,"font-family:%.*s;",cutat,fti->fonts[tsp->fi_idx].fontspec);
             TRPRINT(tri, obuf);
-               sprintf(obuf,"\n\">%s</text>\n",tsp->string);    
+               sprintf(obuf,"\n\">%s</text>\n",&tsp->string[tsp->spaces]);    
             TRPRINT(tri, obuf);
 #endif /* DBG_TR_INPUT debugging code, original text objects */
          }
@@ -2033,7 +2076,6 @@ void TR_layout_2_svg(TR_INFO *tri){
    }
 
 
-   tsp  = tpi->chunks;
    /* over all complex members from phase2.  Paragraphs == TR_PARA_*  */
    for(i=cxi->phase1; i<cxi->used;i++){
       csp    = &(cxi->cx[i]);
@@ -2278,7 +2320,10 @@ int TR_layout_analyze(TR_INFO *tri){
          next logical piece of text is "upstream" positionally of its logical predecessor.  The meaning of such
          a construct is at best ambiguous.  The test is only applied with respect to the first text chunk.  This sort
          of construct may appear when a valid initial construct like [1->English][2<-Hebrew][3->English] is edited
-         and the leading chunk of text removed.
+         and the leading chunk of text removed.  
+         
+         Also reject reversed order text as in (English) <A><B><C> (draw order) arranged as <C><B><A>.  This happens
+         if the language direction field is incorrect, perhaps due to a corrupt or malformed input file.
          */
          if(brinfo_upstream(bri,
                             dst_rt,                   /* index into bri for dst */
@@ -2422,10 +2467,28 @@ int TR_layout_analyze(TR_INFO *tri){
             }
          }
          
-         /* if x or y kern is less than the quantization error it is probably noise, set it to zero */
-         if(fabs(tspj->xkern)<tri->qe)tspj->xkern = 0.0;
-         if(fabs(tspj->ykern)<tri->qe)tspj->ykern = 0.0;
+         /* if x or y kern is less than twice the quantization error it is probably noise, set it to zero */
+         if(fabs(tspj->xkern) <= 2.0*tri->qe)tspj->xkern = 0.0;
+         if(fabs(tspj->ykern) <= 2.0*tri->qe)tspj->ykern = 0.0;
 
+         /* reintroduce spaces on the leading edge of text "j" if the kerning can be in part or in whole replaced
+            with 1 or 2 spaces */
+         if(tspj->ykern == 0.0){
+            double spaces = tspj->xkern/spcadv; /* negative on RL language, positive on LR */
+            if((ldir == LDIR_RL && (spaces <= -0.9 && spaces >= -2.1)) ||
+               (ldir == LDIR_LR && (spaces >=  0.9 && spaces <=  2.1)) ){ 
+               int ispaces = lround(spaces);
+               tspj->xkern -= ((double)ispaces*spcadv);
+               if(ispaces<0)ispaces=-ispaces;
+               size_t slen = strlen((char *)tspj->string);
+               uint8_t *newstring = malloc(1 + ispaces + slen);
+               sprintf((char *)newstring,"  ");   /* start with two spaces, possibly overwrite one in the next line  */
+               memcpy(newstring+ispaces,tspj->string,slen+1); /* copy existing string to proper position  */
+               free(tspj->string);
+               tspj->string = newstring;
+               tspj->spaces = ispaces;  // only needed to fix optional debugging SVG output later
+            }
+         }
 
          tspi     = tspj;
          lastldir = ldir;
@@ -2699,7 +2762,7 @@ int main(int argc, char *argv[]){
    tsp.weight     = 80;
    tsp.condensed  = 100;
    tsp.decoration = 0;  /* none */
-   tsp.co         = 0;
+   tsp.spaces     = 0;  /* none */
    tsp.fi_idx     = -1;  /* set to an invalid */
    tsp.rt_tidx    = -1;  /* set to an invalid */
    tsp.xkern      = tsp.ykern = 0.0;

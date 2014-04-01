@@ -10,6 +10,7 @@
 
 #include "template-widget.h"
 #include "template-load-tab.h"
+#include "new-from-template.h"
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
@@ -31,10 +32,8 @@
 #include "xml/document.h"
 #include "xml/node.h"
 
-
 namespace Inkscape {
 namespace UI {
-    
 
 TemplateLoadTab::TemplateLoadTab()
     : _current_keyword("")
@@ -43,10 +42,10 @@ TemplateLoadTab::TemplateLoadTab()
 {
     set_border_width(10);
 
-    _info_widget = manage(new TemplateWidget());
+    _info_widget = Gtk::manage(new TemplateWidget());
     
     Gtk::Label *title;
-    title = manage(new Gtk::Label(_("Search:")));
+    title = Gtk::manage(new Gtk::Label(_("Search:")));
     _search_box.pack_start(*title, Gtk::PACK_SHRINK);
     _search_box.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 5);
     
@@ -56,7 +55,7 @@ TemplateLoadTab::TemplateLoadTab()
     pack_start(*_info_widget, Gtk::PACK_EXPAND_WIDGET, 5);
     
     Gtk::ScrolledWindow *scrolled;
-    scrolled = manage(new Gtk::ScrolledWindow());
+    scrolled = Gtk::manage(new Gtk::ScrolledWindow());
     scrolled->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
     scrolled->add(_tlist_view);
     _tlist_box.pack_start(*scrolled, Gtk::PACK_EXPAND_WIDGET, 5);
@@ -84,7 +83,9 @@ void TemplateLoadTab::createTemplate()
 
 void TemplateLoadTab::_onRowActivated(const Gtk::TreeModel::Path &, Gtk::TreeViewColumn*)
 {
-    _info_widget->create();
+    createTemplate();
+    NewFromTemplate* parent = static_cast<NewFromTemplate*> (this->get_toplevel());
+    parent->_onClose();
 }
 
 void TemplateLoadTab::_displayTemplateInfo()
@@ -219,12 +220,9 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const std::s
     n =  result.display_name.rfind(".svg");
     result.display_name.replace(n, 4, 1, ' ');
     
-    Inkscape::XML::Document *rdoc;
-    rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
-    Inkscape::XML::Node *myRoot;
-
+    Inkscape::XML::Document *rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
     if (rdoc){
-        myRoot = rdoc->root();
+        Inkscape::XML::Node *myRoot = rdoc->root();
         if (strcmp(myRoot->name(), "svg:svg") != 0){     // Wrong file format
             return result;
         }
@@ -290,26 +288,26 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
 {
     Inkscape::XML::Node *currentData;
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != NULL)
-        data.display_name = dgettext("Document template name", currentData->firstChild()->content());
+        data.display_name = _(currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != NULL)
         data.author = currentData->firstChild()->content();
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != NULL)
-        data.short_description = dgettext("Document template short description", currentData->firstChild()->content());
+        data.short_description = _( currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= NULL)
-        data.long_description = dgettext("Document template long description", currentData->firstChild()->content());
+        data.long_description = _(currentData->firstChild()->content());
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != NULL)
         data.preview_name = currentData->firstChild()->content();
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != NULL)
         data.creation_date = currentData->firstChild()->content();
         
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != NULL){
-        Glib::ustring tplKeywords = currentData->firstChild()->content();
+        Glib::ustring tplKeywords = _(currentData->firstChild()->content());
         while (!tplKeywords.empty()){
             std::size_t pos = tplKeywords.find_first_of(" ");
             if (pos == Glib::ustring::npos)
                 pos = tplKeywords.size();
                 
-            Glib::ustring keyword = dgettext("Document template keyword", tplKeywords.substr(0, pos).data());
+            Glib::ustring keyword = tplKeywords.substr(0, pos).data();
             data.keywords.insert(keyword.lowercase());
             _keywords.insert(keyword.lowercase());
                 

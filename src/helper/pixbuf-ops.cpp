@@ -75,8 +75,7 @@ bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
     gchar c[32];
     g_snprintf(c, 32, "%f", quality);
     gboolean saved = gdk_pixbuf_save(pixbuf->getPixbufRaw(), filename, "jpeg", NULL, "quality", c, NULL);
-    g_free(c);
-
+ 
     return saved;
 }
 
@@ -140,10 +139,10 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
     if (cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS) {
-        Inkscape::DrawingContext ct(surface, Geom::Point(0,0));
+        Inkscape::DrawingContext dc(surface, Geom::Point(0,0));
 
         // render items
-        drawing.render(ct, final_bbox, Inkscape::DrawingItem::RENDER_BYPASS_CACHE);
+        drawing.render(dc, final_bbox, Inkscape::DrawingItem::RENDER_BYPASS_CACHE);
 
         inkpb = new Inkscape::Pixbuf(surface);
     }

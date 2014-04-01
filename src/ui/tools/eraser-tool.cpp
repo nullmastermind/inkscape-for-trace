@@ -66,6 +66,7 @@
 #include "verbs.h"
 #include <2geom/math-utils.h>
 #include <2geom/pathvector.h>
+#include "display/curve.h"
 
 #include "ui/tools/eraser-tool.h"
 
@@ -103,10 +104,9 @@ const std::string& EraserTool::getPrefsPath() {
 
 const std::string EraserTool::prefsPath = "/tools/eraser";
 
-EraserTool::EraserTool() : DynamicBase() {
-    this->cursor_shape = cursor_eraser_xpm;
-    this->hot_x = 4;
-    this->hot_y = 4;
+EraserTool::EraserTool()
+    : DynamicBase(cursor_eraser_xpm, 4, 4)
+{
 }
 
 EraserTool::~EraserTool() {

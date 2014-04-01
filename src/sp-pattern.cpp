@@ -53,7 +53,7 @@ namespace {
 	bool patternRegistered = SPFactory::instance().registerObject("svg:pattern", createPattern);
 }
 
-SPPattern::SPPattern() : SPPaintServer() {
+SPPattern::SPPattern() : SPPaintServer(), SPViewBox() {
 	this->href = NULL;
 
 	this->ref = new SPPatternReference(this);
@@ -72,8 +72,6 @@ SPPattern::SPPattern() : SPPaintServer() {
 	this->y.unset();
 	this->width.unset();
 	this->height.unset();
-
-	this->viewBox_set = FALSE;
 }
 
 SPPattern::~SPPattern() {
@@ -90,6 +88,7 @@ void SPPattern::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	this->readAttr( "width" );
 	this->readAttr( "height" );
 	this->readAttr( "viewBox" );
+        this->readAttr( "preserveAspectRatio" );
 	this->readAttr( "xlink:href" );
 
 	/* Register ourselves */
@@ -180,50 +179,16 @@ void SPPattern::set(unsigned int key, const gchar* value) {
 		this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 
-	case SP_ATTR_VIEWBOX: {
-		/* fixme: Think (Lauris) */
-		double x, y, width, height;
-		char *eptr;
+	case SP_ATTR_VIEWBOX:
+            set_viewBox( value );
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+            break;
 
-		if (value) {
-			eptr = (gchar *) value;
-			x = g_ascii_strtod (eptr, &eptr);
+        case SP_ATTR_PRESERVEASPECTRATIO:
+            set_preserveAspectRatio( value );
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+            break;
 
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			y = g_ascii_strtod (eptr, &eptr);
-
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			width = g_ascii_strtod (eptr, &eptr);
-
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			height = g_ascii_strtod (eptr, &eptr);
-
-			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) {
-				eptr++;
-			}
-
-			if ((width > 0) && (height > 0)) {
-			    this->viewBox = Geom::Rect::from_xywh(x, y, width, height);
-			    this->viewBox_set = TRUE;
-			} else {
-				this->viewBox_set = FALSE;
-			}
-		} else {
-			this->viewBox_set = FALSE;
-		}
-
-		this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
-		break;
-	}
 	case SP_ATTR_XLINK_HREF:
 		if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
 			/* Href unchanged, do nothing. */
@@ -577,6 +542,7 @@ static bool pattern_hasItemChildren (SPPattern const *pat)
 }
 
 cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
+
     bool needs_opacity = (1.0 - opacity) >= 1e-3;
     bool visible = opacity >= 1e-3;
 
@@ -615,84 +581,90 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
         }
     }
 
-    // viewBox to pattern server
-    Geom::Affine vb2ps = Geom::identity();
-    if (this->viewBox_set) {
-        Geom::Rect vb = *pattern_viewBox(this);
-        gdouble tmp_x = pattern_width (this) / vb.width();
-        gdouble tmp_y = pattern_height (this) / vb.height();
+    //                 ****** Geometry ******
+    //
+    // * "width" and "height" determine tile size.
+    // * "viewBox" (if defined) or "patternContentUnits" determines placement of content inside
+    //   tile.
+    // * "x", "y", and "patternTransform" transform tile to user space after tile is generated.
 
-        // FIXME: preserveAspectRatio must be taken into account here too!
-        vb2ps = Geom::Affine(tmp_x, 0.0, 0.0, tmp_y, pattern_x(this) - vb.left() * tmp_x, pattern_y(this) - vb.top() * tmp_y);
+    // These functions recursively search up the tree to find the values.
+    double tile_x      = pattern_x(this);
+    double tile_y      = pattern_y(this);
+    double tile_width  = pattern_width(this);
+    double tile_height = pattern_height(this);
+    if (pattern_patternUnits(this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+        tile_x      *= bbox->width();
+        tile_y      *= bbox->height();
+        tile_width  *= bbox->width();
+        tile_height *= bbox->height();
     }
-
-    // We must determine the size and scaling of the pattern at the time it is displayed and render
-    // the pattern onto a surface with that size and at that resolution.
-
-    // Pattern server to user
-    Geom::Affine ps2user;
-    ps2user = pattern_patternTransform(this);
-    if (!this->viewBox_set && pattern_patternContentUnits (this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
-        /* BBox to user coordinate system */
-        Geom::Affine bbox2user (bbox->width(), 0.0, 0.0, bbox->height(), bbox->left(), bbox->top());
-        ps2user *= bbox2user;
-    }
-    ps2user = Geom::Translate (pattern_x (this), pattern_y (this)) * ps2user;
 
     // Pattern size in pattern space
-    Geom::Rect pattern_tile = Geom::Rect::from_xywh(pattern_x(this), pattern_y(this),
-        pattern_width(this), pattern_height(this));
+    Geom::Rect pattern_tile = Geom::Rect::from_xywh(0, 0, tile_width, tile_height);
+ 
+    // Content to tile (pattern space)
+    Geom::Affine content2ps;
+    if (this->viewBox_set) {
+        // viewBox to pattern server (using SPViewBox) 
+        viewBox = *pattern_viewBox(this);
+        c2p.setIdentity();
+        apply_viewbox( pattern_tile );
+        content2ps = c2p;
+    } else {
 
-    if (pattern_patternUnits(this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
-        // interpret x, y, width, height in relation to bbox
-        Geom::Affine bbox2user(bbox->width(), 0.0, 0.0, bbox->height(), bbox->left(), bbox->top());
-        pattern_tile = pattern_tile * bbox2user;
+        // Content to bbox
+        if (pattern_patternContentUnits (this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+            content2ps = Geom::Affine(bbox->width(), 0.0, 0.0, bbox->height(), 0,0);
+        }
     }
+
+
+    // Tile (pattern space) to user.
+    Geom::Affine ps2user = Geom::Translate(tile_x,tile_y) * pattern_patternTransform(this);
+
 
     // Transform of object with pattern (includes screen scaling)
     cairo_matrix_t cm;
     cairo_get_matrix(base_ct, &cm);
     Geom::Affine full(cm.xx, cm.yx, cm.xy, cm.yy, 0, 0);
 
-    // The DrawingSurface class is suppose to handle the mapping from "logical space"
+    // The DrawingSurface class handles the mapping from "logical space"
     // (coordinates in the rendering) to "physical space" (surface pixels).
     // An oversampling is done as the pattern may not pixel align with the final surface.
     // The cairo surface is created when the DrawingContext is declared.
 
-    // oversample the pattern slightly
+    // Oversample the pattern
     // TODO: find optimum value
     // TODO: this is lame. instead of using descrim(), we should extract
     //       the scaling component from the complete matrix and use it
     //       to find the optimum tile size for rendering
     // c is number of pixels in buffer x and y.
     // Scale factor of 1.1 is too small... see bug #1251039
-    Geom::Point c(pattern_tile.dimensions()*vb2ps.descrim()*ps2user.descrim()*full.descrim()*2.0);
+    Geom::Point c(pattern_tile.dimensions()*ps2user.descrim()*full.descrim()*2.0);
 
-    c[Geom::X] = ceil(c[Geom::X]);
-    c[Geom::Y] = ceil(c[Geom::Y]);
-
-    // Create drawing surface with size of pattern tile (in tile space) but with number of pixels
+    // Create drawing surface with size of pattern tile (in pattern space) but with number of pixels
     // based on required resolution (c).
     Inkscape::DrawingSurface pattern_surface(pattern_tile, c.ceil());
-    Inkscape::DrawingContext ct(pattern_surface);
+    Inkscape::DrawingContext dc(pattern_surface);
 
     pattern_tile *= pattern_surface.drawingTransform();
     Geom::IntRect one_tile = pattern_tile.roundOutwards();
 
-    // render pattern.
+    // Render pattern.
     if (needs_opacity) {
-        ct.pushGroup(); // this group is for pattern + opacity
+        dc.pushGroup(); // this group is for pattern + opacity
     }
 
     // TODO: make sure there are no leaks.
     Inkscape::UpdateContext ctx;  // UpdateContext is structure with only ctm!
-    ctx.ctm = vb2ps * pattern_surface.drawingTransform();
-    ct.transform( pattern_surface.drawingTransform().inverse() );
+    ctx.ctm = content2ps * pattern_surface.drawingTransform();
+    dc.transform( pattern_surface.drawingTransform().inverse() );
     drawing.update(Geom::IntRect::infinite(), ctx);
 
     // Render drawing to pattern_surface via drawing context, this calls root->render
     // which is really DrawingItem->render().
-    drawing.render(ct, one_tile);
+    drawing.render(dc, one_tile);
     for (SPObject *child = shown->firstChild() ; child != NULL; child = child->getNext() ) {
         if (SP_IS_ITEM (child)) {
             SP_ITEM(child)->invoke_hide(dkey);
@@ -705,16 +677,17 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     //           << " width: "  << cairo_image_surface_get_width( raw )
     //           << " height: " << cairo_image_surface_get_height( raw )
     //           << std::endl;
-    // cairo_surface_write_to_png( pattern_surface.raw(), "sp-pattern.png" );
+    // std::string filename = "sp-pattern-" + (std::string)getId() + ".png";
+    // cairo_surface_write_to_png( pattern_surface.raw(), filename.c_str() );
 
     if (needs_opacity) {
-        ct.popGroupToSource(); // pop raw pattern
-        ct.paint(opacity); // apply opacity
+        dc.popGroupToSource(); // pop raw pattern
+        dc.paint(opacity); // apply opacity
     }
 
     cairo_pattern_t *cp = cairo_pattern_create_for_surface(pattern_surface.raw());
     // Apply transformation to user space. Also compensate for oversampling.
-    ink_cairo_pattern_set_matrix(cp, ps2user.inverse() * pattern_surface.drawingTransform());
+    ink_cairo_pattern_set_matrix(cp, ps2user.inverse() * pattern_surface.drawingTransform() );
 
     cairo_pattern_set_extend(cp, CAIRO_EXTEND_REPEAT);
 

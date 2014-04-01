@@ -81,16 +81,14 @@ const std::string& LpeTool::getPrefsPath() {
 
 const std::string LpeTool::prefsPath = "/tools/lpetool";
 
-LpeTool::LpeTool() : PenTool() {
-	this->mode = Inkscape::LivePathEffect::BEND_PATH;
-	this->shape_editor = 0;
-
-	this->cursor_shape = cursor_crosshairs_xpm;
-    this->hot_x = 7;
-    this->hot_y = 7;
-
-    this->canvas_bbox = NULL;
-    this->measuring_items = new std::map<SPPath *, SPCanvasItem*>;
+LpeTool::LpeTool()
+    : PenTool(cursor_crosshairs_xpm, 7, 7)
+    , shape_editor(NULL)
+    , canvas_bbox(NULL)
+    , mode(Inkscape::LivePathEffect::BEND_PATH)
+// TODO: pointer?
+    , measuring_items(new std::map<SPPath *, SPCanvasItem*>)
+{
 }
 
 LpeTool::~LpeTool() {
@@ -193,7 +191,7 @@ bool LpeTool::root_handler(GdkEvent* event) {
 
     bool ret = false;
 
-    if (sp_pen_context_has_waiting_LPE(this)) {
+    if (this->hasWaitingLPE()) {
         // quit when we are waiting for a LPE to be applied
         //ret = ((ToolBaseClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);
 	return PenTool::root_handler(event);
@@ -224,7 +222,7 @@ bool LpeTool::root_handler(GdkEvent* event) {
 
                 //bool over_stroke = lc->shape_editor->is_over_stroke(Geom::Point(event->button.x, event->button.y), true);
 
-                sp_pen_context_wait_for_LPE_mouse_clicks(this, type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
+                this->waitForLPEMouseClicks(type, Inkscape::LivePathEffect::Effect::acceptsNumClicks(type));
 
                 // we pass the mouse click on to pen tool as the first click which it should collect
                 //ret = ((ToolBaseClass *) sp_lpetool_context_parent_class)->root_handler(event_context, event);

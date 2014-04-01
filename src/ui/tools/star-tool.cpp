@@ -69,25 +69,15 @@ const std::string& StarTool::getPrefsPath() {
 
 const std::string StarTool::prefsPath = "/tools/shapes/star";
 
-StarTool::StarTool() : ToolBase() {
-	this->randomized = 0;
-	this->rounded = 0;
-
-    this->cursor_shape = cursor_star_xpm;
-    this->hot_x = 4;
-    this->hot_y = 4;
-    this->xp = 0;
-    this->yp = 0;
-    this->tolerance = 0;
-    this->within_tolerance = false;
-    this->item_to_select = NULL;
-    //this->tool_url = "/tools/shapes/star";
-
-    this->star = NULL;
-
-    this->magnitude = 5;
-    this->proportion = 0.5;
-    this->isflatsided = false;
+StarTool::StarTool()
+    : ToolBase(cursor_star_xpm, 4, 4)
+    , star(NULL)
+    , magnitude(5)
+    , proportion(0.5)
+    , isflatsided(false)
+    , rounded(0)
+    , randomized(0)
+{
 }
 
 void StarTool::finish() {
@@ -228,7 +218,7 @@ bool StarTool::root_handler(GdkEvent* event) {
             gobble_motion_events(GDK_BUTTON1_MASK);
 
             ret = TRUE;
-        } else if (!sp_event_context_knot_mouseover(this)) {
+        } else if (!this->sp_event_context_knot_mouseover()) {
             SnapManager &m = desktop->namedview->snap_manager;
             m.setup(desktop);
 

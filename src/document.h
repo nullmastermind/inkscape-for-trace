@@ -25,6 +25,7 @@
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include <glibmm/ustring.h>
+#include <boost/ptr_container/ptr_list.hpp>
 #include <vector>
 
 namespace Avoid {
@@ -83,6 +84,9 @@ public:
 
     SPDocument();
     virtual ~SPDocument();
+
+    sigc::connection connectDestroy(sigc::signal<void>::slot_type slot);
+
 
     unsigned int keepalive : 1;
     unsigned int virgin    : 1; ///< Has the document never been touched?
@@ -202,6 +206,11 @@ private:
     Persp3D *current_persp3d; /**< Currently 'active' perspective (to which, e.g., newly created boxes are attached) */
     Persp3DImpl *current_persp3d_impl;
 
+    // A list of svg documents being used or shown within this document
+    boost::ptr_list<SPDocument> _child_documents;
+    // Conversely this is a parent document because this is a child.
+    SPDocument *_parent_document;
+
 public:
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
@@ -216,16 +225,19 @@ public:
     sigc::connection connectResourcesChanged(const gchar *key, SPDocument::ResourcesChangedSignal::slot_type slot);
 
     void fitToRect(Geom::Rect const &rect, bool with_margins = false);
-    static SPDocument *createNewDoc(const gchar *uri, unsigned int keepalive, bool make_new = false);
+    static SPDocument *createNewDoc(const gchar *uri, unsigned int keepalive,
+            bool make_new = false, SPDocument *parent=NULL );
     static SPDocument *createNewDocFromMem(const gchar *buffer, gint length, unsigned int keepalive);
+           SPDocument *createChildDoc(std::string const &uri);
 
     /**
      * Returns the bottommost item from the list which is at the point, or NULL if none.
      */
     static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const GSList *list, Geom::Point const &p, bool take_insensitive = false);
 
-    // ToDo - Merge createDoc with createNewDoc
-    static SPDocument *createDoc(Inkscape::XML::Document *rdoc, gchar const *uri, gchar const *base, gchar const *name, unsigned int keepalive);
+    static SPDocument *createDoc(Inkscape::XML::Document *rdoc, gchar const *uri,
+            gchar const *base, gchar const *name, unsigned int keepalive,
+            SPDocument *parent);
 
     SPDocument *doRef();
     SPDocument *doUnref();

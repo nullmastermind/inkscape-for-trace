@@ -43,6 +43,7 @@
 #include "sp-namedview.h"
 #include "enums.h"
 #include "ui/control-manager.h"
+#include "knot-enums.h"
 
 using Inkscape::ControlManager;
 using Inkscape::CTLINE_SECONDARY;
@@ -236,12 +237,10 @@ void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom
 } // namespace
 
 
-MeasureTool::MeasureTool() : ToolBase() {
-	this->grabbed = 0;
-
-    this->cursor_shape = cursor_measure_xpm;
-    this->hot_x = 4;
-    this->hot_y = 4;
+MeasureTool::MeasureTool()
+    : ToolBase(cursor_measure_xpm, 4, 4)
+    , grabbed(NULL)
+{
 }
 
 MeasureTool::~MeasureTool() {
@@ -254,6 +253,8 @@ void MeasureTool::finish() {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
         this->grabbed = NULL;
     }
+
+    ToolBase::finish();
 }
 
 //void MeasureTool::setup() {

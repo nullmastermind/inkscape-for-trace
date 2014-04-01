@@ -35,9 +35,9 @@ def point_on_circle(radius, angle):
 def points_to_svgd(p):
     f = p[0]
     p = p[1:]
-    svgd = 'M%.3f,%.3f' % f
+    svgd = 'M%.5f,%.5f' % f
     for x in p:
-        svgd += 'L%.3f,%.3f' % x
+        svgd += ' L%.5f,%.5f' % x
     svgd += 'z'
     return svgd
 
@@ -164,7 +164,7 @@ class Gears(inkex.Effect):
         g = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
 
         # Create SVG Path for gear
-        style = { 'stroke': '#000000', 'fill': 'none' }
+        style = { 'stroke': '#000000', 'fill': 'none', 'stroke-width': str(self.unittouu('1px')) }
         gear_attribs = {'style':simplestyle.formatStyle(style), 'd':path}
         gear = inkex.etree.SubElement(g, inkex.addNS('path','svg'), gear_attribs )
         if(centerdiameter > 0.0):

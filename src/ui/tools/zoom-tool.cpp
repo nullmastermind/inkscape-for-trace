@@ -45,12 +45,11 @@ const std::string& ZoomTool::getPrefsPath() {
 
 const std::string ZoomTool::prefsPath = "/tools/zoom";
 
-ZoomTool::ZoomTool() : ToolBase() {
-	this->grabbed = 0;
-    this->cursor_shape = cursor_zoom_xpm;
-    this->hot_x = 6;
-    this->hot_y = 6;
-    this->escaped = false;
+ZoomTool::ZoomTool()
+    : ToolBase(cursor_zoom_xpm, 6, 6)
+    , grabbed(NULL)
+    , escaped(false)
+{
 }
 
 ZoomTool::~ZoomTool() {
@@ -63,6 +62,8 @@ void ZoomTool::finish() {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
         this->grabbed = NULL;
     }
+
+    ToolBase::finish();
 }
 
 void ZoomTool::setup() {

@@ -112,8 +112,6 @@ share/extensions/alphabet_soup/Makefile
 share/extensions/alphabet_soup/Makefile.in
 share/extensions/ink2canvas/Makefile
 share/extensions/ink2canvas/Makefile.in
-share/symbols/Makefile
-share/symbols/Makefile.in
 share/extensions/test/Makefile
 share/extensions/xaml2svg/Makefile
 share/extensions/xaml2svg/Makefile.in
@@ -138,13 +136,18 @@ share/markers/Makefile
 share/markers/Makefile.in
 share/palettes/Makefile
 share/palettes/Makefile.in
+share/palettes/palettes.h
 share/patterns/Makefile
 share/patterns/Makefile.in
 share/patterns/patterns.svg.h
 share/screens/Makefile
 share/screens/Makefile.in
+share/symbols/Makefile
+share/symbols/Makefile.in
+share/symbols/symbols.h
 share/templates/Makefile
 share/templates/Makefile.in
+share/templates/templates.h
 share/tutorials/Makefile
 share/tutorials/Makefile.in
 share/ui/Makefile
@@ -207,7 +210,6 @@ src/svg/test-svg.cpp
 src/util/test-util.cpp
 src/xml/test-xml.cpp
 gc.log
-share/palettes/palettes.h
 ltmain.sh
 backup.bzr
 mkinstalldirs

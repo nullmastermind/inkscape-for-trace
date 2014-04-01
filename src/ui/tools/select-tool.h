@@ -35,8 +35,8 @@ public:
 	SelectTool();
 	virtual ~SelectTool();
 
-	guint dragging : 1;
-	guint moved : 1;
+	bool dragging;
+	bool moved;
 	bool button_press_shift;
 	bool button_press_ctrl;
 	bool button_press_alt;
@@ -64,6 +64,7 @@ public:
 private:
 	bool sp_select_context_abort();
 	void sp_select_context_cycle_through_items(Inkscape::Selection *selection, GdkEventScroll *scroll_event, bool shift_pressed);
+	void sp_select_context_reset_opacities();
 };
 
 }

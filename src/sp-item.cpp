@@ -599,6 +599,7 @@ void SPItem::update(SPCtx* /*ctx*/, guint flags) {
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
                 v->arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(object->style->opacity.value));
+                v->arenaitem->setAntialiasing(object->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
                 v->arenaitem->setIsolation( object->style->isolation.value );
                 v->arenaitem->setBlendMode( object->style->blend_mode.value );
                 v->arenaitem->setVisible(!item->isHidden());
@@ -1168,11 +1169,11 @@ void SPItem::adjust_stroke( gdouble ex )
         style->stroke_width.computed *= ex;
         style->stroke_width.set = TRUE;
 
-        if ( style->stroke_dash.n_dash != 0 ) {
-            for (int i = 0; i < style->stroke_dash.n_dash; i++) {
-                style->stroke_dash.dash[i] *= ex;
+        if ( !style->stroke_dasharray.values.empty() ) {
+            for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
+                style->stroke_dasharray.values[i] *= ex;
             }
-            style->stroke_dash.offset *= ex;
+            style->stroke_dashoffset.value *= ex;
         }
 
         updateRepr();

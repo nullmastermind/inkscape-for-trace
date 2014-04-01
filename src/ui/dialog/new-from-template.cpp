@@ -29,7 +29,7 @@ NewFromTemplate::NewFromTemplate()
     get_vbox()->pack_start(_main_widget);
    
     Gtk::Alignment *align;
-    align = manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
+    align = Gtk::manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
     get_vbox()->pack_end(*align, Gtk::PACK_SHRINK);
     align->set_padding(0, 0, 0, 15);
     align->add(_create_template_button);
@@ -44,10 +44,13 @@ NewFromTemplate::NewFromTemplate()
 void NewFromTemplate::_createFromTemplate()
 {
     _main_widget.createTemplate();
-    
-    response(0);
+    _onClose();
 }
 
+void NewFromTemplate::_onClose()
+{
+    response(0);
+}
 
 void NewFromTemplate::load_new_from_template()
 {
