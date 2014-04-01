@@ -667,10 +667,10 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
     // if we are removing, we readjust the handlers
     if(isBSpline()){
         if(start.prev()){
-            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),true));
+            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),start.prev()->back()));
         }
         if(end){
-            end->back()->setPosition(BSplineHandleReposition(end->back(),true));
+            end->back()->setPosition(BSplineHandleReposition(end->back(),end->front()));
         }
     }
 
@@ -1207,31 +1207,31 @@ bool PathManipulator::isBSpline(bool recalculate){
 }
 
 // returns the corresponding strength to the position of the handlers
-double PathManipulator::BSplineHandlePosition(Handle *h, bool other){
+double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
     using Geom::X;
     using Geom::Y;
+    if(h2){
+        h = h2;
+    }
     double pos = 0.0000;
     Node *n = h->parent();
     Node * nextNode = NULL;
-    if(other){
-        h = h->other();
-    }
     nextNode = n->nodeToward(h);
-    if(nextNode && !Geom::are_near(n->position(), h->position())){
+    if(nextNode){
         SPCurve *lineInsideNodes = new SPCurve();
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         pos = Geom::nearest_point(h->position(),*lineInsideNodes->first_segment());
     }
-    if ((pos == 0.0000 || pos == 1.0000) && other == false){
-        return BSplineHandlePosition(h, true);
+    if (pos == 0.0000 && !h2){
+        return BSplineHandlePosition(h, h->other());
     }
     return pos;
 }
 
 // give the location for the handler in the corresponding position
-Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, bool other){
-    double pos = this->BSplineHandlePosition(h, other);
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2){
+    double pos = this->BSplineHandlePosition(h, h2);
     return BSplineHandleReposition(h,pos);
 }
 

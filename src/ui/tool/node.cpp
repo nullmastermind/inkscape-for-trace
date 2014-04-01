@@ -170,8 +170,8 @@ void Handle::move(Geom::Point const &new_pos)
 
         //move the handler and its oposite the same proportion
         if(_pm().isBSpline()){
-            setPosition(_pm().BSplineHandleReposition(this));
-            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),true));
+            setPosition(_pm().BSplineHandleReposition(this,this));
+            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
         }
         return;
     }
@@ -187,8 +187,8 @@ void Handle::move(Geom::Point const &new_pos)
 
         //move the handler and its oposite the same proportion
         if(_pm().isBSpline()){
-            setPosition(_pm().BSplineHandleReposition(this));
-            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),true));
+            setPosition(_pm().BSplineHandleReposition(this,this));
+            this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
         }
         
         return;
@@ -213,8 +213,8 @@ void Handle::move(Geom::Point const &new_pos)
 
     // moves the handler and its oposite the same proportion
     if(_pm().isBSpline()){
-        setPosition(_pm().BSplineHandleReposition(this));
-        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),true));
+        setPosition(_pm().BSplineHandleReposition(this,this));
+        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
     }
     
 }
@@ -365,7 +365,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         if(_pm().isBSpline()){
             setPosition(new_pos);
             int steps = _pm().BSplineGetSteps();
-            new_pos=_pm().BSplineHandleReposition(this,ceilf(_pm().BSplineHandlePosition(this)*steps)/steps);
+            new_pos=_pm().BSplineHandleReposition(this,ceilf(_pm().BSplineHandlePosition(this,this)*steps)/steps);
         }
     }
 
@@ -625,13 +625,15 @@ void Node::move(Geom::Point const &new_pos)
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
-    if(_pm().isBSpline()){
-        nodeWeight = _pm().BSplineHandlePosition(n->front());
-        if(nextNode){
-            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->front());
+    nodeWeight = _pm().BSplineHandlePosition(n->front());
+    if(prevNode){
+        if(prevNode->isEndNode()){
+            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front(),prevNode->front());
         }
-        if(prevNode){
-            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front());
+    }
+    if(nextNode){
+        if(nextNode->isEndNode()){
+            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->back(),nextNode->back());
         }
     }
 
@@ -649,17 +651,17 @@ void Node::move(Geom::Point const &new_pos)
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
         if(prevNode){
-            if(prevNode->front()->isDegenerate()){
+            if(prevNode->isEndNode()){
                 prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNodeWeight));
             }else{
-                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),true));
+                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNode->back()));
             }
         }
         if(nextNode){
-            if(nextNode->back()->isDegenerate()){
+            if(nextNode->isEndNode()){
                 nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
             }else{
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),true));
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNode->back()));
             }
         }
     }
@@ -674,17 +676,18 @@ void Node::transform(Geom::Affine const &m)
     double nodeWeight = 0.0000;
     double nextNodeWeight = 0.0000;
     double prevNodeWeight = 0.0000;
-
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
-    if(_pm().isBSpline()){
-        nodeWeight = _pm().BSplineHandlePosition(n->front());
-        if(nextNode){
-            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->front());
+    nodeWeight = _pm().BSplineHandlePosition(n->front());
+    if(prevNode){
+        if(prevNode->isEndNode()){
+            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front(),prevNode->front());
         }
-        if(prevNode){
-            prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front());
+    }
+    if(nextNode){
+        if(nextNode->isEndNode()){
+            nextNodeWeight = _pm().BSplineHandlePosition(nextNode->back(),nextNode->back());
         }
     }
 
@@ -701,17 +704,17 @@ void Node::transform(Geom::Affine const &m)
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
         if(prevNode){
-            if(prevNode->front()->isDegenerate()){
+            if(prevNode->isEndNode()){
                 prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNodeWeight));
             }else{
-                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),true));
+                prevNode->front()->setPosition(_pm().BSplineHandleReposition(prevNode->front(),prevNode->back()));
             }
         }
         if(nextNode){
-            if(nextNode->back()->isDegenerate()){
+            if(nextNode->isEndNode()){
                 nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
             }else{
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),true));
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNode->front()));
             }
         }
     }
@@ -906,7 +909,7 @@ void Node::setType(NodeType type, bool update_handles)
            or we give them the default power in curve mode */
         if(_pm().isBSpline()){
             double weight = 0.0000;
-            if(_pm().BSplineHandlePosition(this->front()) != 0.0000){
+            if(_pm().BSplineHandlePosition(this->front()) != 0.0000 ){
                 weight = 0.3334;
             }
             _front.setPosition(_pm().BSplineHandleReposition(this->front(),weight));
