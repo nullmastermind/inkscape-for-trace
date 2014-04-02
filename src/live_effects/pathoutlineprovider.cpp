@@ -250,17 +250,21 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             }
             Geom::EllipticalArc *arc0 = circle1.arc(cbc1->finalPoint(), 0.5*(cbc1->finalPoint()+sol), sol, true);
             Geom::EllipticalArc *arc1 = circle2.arc(sol, 0.5*(sol+endPt), endPt, true);
+            try {
+                if (arc0) {
+                    path_builder.append (arc0->toSBasis());
+                    delete arc0;
+                    arc0 = NULL;
+                }
 
-            if (arc0) {
-                path_builder.append (arc0->toSBasis());
-                delete arc0;
-                arc0 = NULL;
-            }
-
-            if (arc1) {
-                path_builder.append (arc1->toSBasis());
-                delete arc1;
-                arc1 = NULL;
+                if (arc1) {
+                    path_builder.append (arc1->toSBasis());
+                    delete arc1;
+                    arc1 = NULL;
+                }
+            } catch (std::exception ex) {
+                printf("Exception occured, probably NaN or infinite valued points: %s\n", ex.what());
+                path_builder.appendNew<Geom::LineSegment>(endPt);
             }
         } else {
             boost::optional <Geom::Point> p = intersection_point (cbc1->finalPoint(), tang1,
