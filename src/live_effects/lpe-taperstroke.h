@@ -20,39 +20,39 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace TpS {
-  // we need a separate namespace to avoid clashes with other LPEs
-  class KnotHolderEntityAttachBegin;
-  class KnotHolderEntityAttachEnd;
+// we need a separate namespace to avoid clashes with other LPEs
+class KnotHolderEntityAttachBegin;
+class KnotHolderEntityAttachEnd;
 }
 
 class LPETaperStroke : public Effect {
 public:
-	LPETaperStroke(LivePathEffectObject *lpeobject);
-	virtual ~LPETaperStroke();
-	
-	virtual void doOnApply(SPLPEItem const* lpeitem);
-	virtual void doOnRemove(SPLPEItem const* lpeitem);
+    LPETaperStroke(LivePathEffectObject *lpeobject);
+    virtual ~LPETaperStroke();
 
-	virtual Geom::PathVector doEffect_path (Geom::PathVector const& path_in);
-	Geom::PathVector doEffect_simplePath(Geom::PathVector const& path_in);
-	
-	virtual void addKnotHolderEntities(KnotHolder * knotholder, SPDesktop * desktop, SPItem * item);
+    virtual void doOnApply(SPLPEItem const* lpeitem);
+    virtual void doOnRemove(SPLPEItem const* lpeitem);
 
-	friend class TpS::KnotHolderEntityAttachBegin;
-	friend class TpS::KnotHolderEntityAttachEnd;
+    virtual Geom::PathVector doEffect_path (Geom::PathVector const& path_in);
+    Geom::PathVector doEffect_simplePath(Geom::PathVector const& path_in);
+
+    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPDesktop * desktop, SPItem * item);
+
+    friend class TpS::KnotHolderEntityAttachBegin;
+    friend class TpS::KnotHolderEntityAttachEnd;
 private:
-        ScalarParam line_width;
-	ScalarParam attach_start;
-	ScalarParam attach_end;
-	ScalarParam smoothing;
-	EnumParam<unsigned> join_type;
-	ScalarParam miter_limit;
+    ScalarParam line_width;
+    ScalarParam attach_start;
+    ScalarParam attach_end;
+    ScalarParam smoothing;
+    EnumParam<unsigned> join_type;
+    ScalarParam miter_limit;
 
-	Geom::Point start_attach_point;
-	Geom::Point end_attach_point;
+    Geom::Point start_attach_point;
+    Geom::Point end_attach_point;
 
-	LPETaperStroke(const LPETaperStroke&);
-	LPETaperStroke& operator=(const LPETaperStroke&);
+    LPETaperStroke(const LPETaperStroke&);
+    LPETaperStroke& operator=(const LPETaperStroke&);
 };
 
 } //namespace LivePathEffect
