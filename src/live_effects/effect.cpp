@@ -5,7 +5,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
+//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -363,6 +363,14 @@ void
 Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //Do nothing for simple effects
+}
+
+void Effect::doAfterEffect (SPLPEItem const* lpeitem)
+{
+}
+
+void Effect::doOnRemove (SPLPEItem const* lpeitem)
+{
 }
 
 /**

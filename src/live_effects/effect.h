@@ -55,6 +55,9 @@ public:
 
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    
+    virtual void doAfterEffect (SPLPEItem const* lpeitem);
+    virtual void doOnRemove (SPLPEItem const* lpeitem);
 
     void writeParamsToSVG();
 

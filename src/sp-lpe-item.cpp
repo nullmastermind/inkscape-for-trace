@@ -16,6 +16,9 @@
 # include "config.h"
 #endif
 
+//the gtk devs are really not smart about backwards compatibility
+#include "ui/tool/multi-path-manipulator.h"
+
 #include <glibmm/i18n.h>
 
 #include "live_effects/effect.h"
@@ -39,7 +42,6 @@
 #include "tools-switch.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
-#include "ui/tool/multi-path-manipulator.h"
 
 #include <algorithm>
 
@@ -254,6 +256,9 @@ bool SPLPEItem::performPathEffect(SPCurve *curve) {
                     }
                     return false;
                 }
+                if (!SP_IS_GROUP(this)) {
+                    lpe->doAfterEffect(this);
+                }
             }
         }
     }
@@ -447,11 +452,15 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
     Inkscape::LivePathEffect::LPEObjectReference* lperef = this->getCurrentLPEReference();
     if (!lperef)
         return;
-
+        
+    Inkscape::LivePathEffect::Effect * lpe = this->getCurrentLPE();
+    lpe->doOnRemove(this);
+    
     PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
     std::string r = patheffectlist_write_svg(new_list);
 
+    
     if (!r.empty()) {
         this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
     } else {
