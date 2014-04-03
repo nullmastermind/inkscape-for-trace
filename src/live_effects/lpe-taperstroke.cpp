@@ -248,7 +248,7 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
 Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double width);
 
 //references to pointers, because magic
-void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second);
+void subdivideCurve(const Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second);
 
 Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 {
@@ -269,7 +269,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         }
     }
 
-    //don't ever let it be zero
+    //don't let it be zero
     if (attach_start <= 0.00000001) {
         attach_start.param_set_value( 0.00000001 );
         zeroStart = true;
@@ -329,12 +329,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     throwaway_path = Outline::PathOutsideOutline(pathv_out[1],
                      -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 
-    if (!zeroStart) {
-        throwaway_path.setInitial(real_path.finalPoint());
-        real_path.append(throwaway_path);
-    } else {
-        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
-    }
+    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
 
     if (!zeroEnd) {
         //append the ending taper
@@ -346,25 +341,17 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], -fabs(line_width)));
 
         throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
-        throwaway_path.setInitial(real_path.finalPoint());
-        real_path.append(throwaway_path);
+        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
     }
     //append the inside outline of the path (against direction)
     throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(),
                      -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 
-    if (!zeroEnd) {
-        //throwaway_path.setInitial(real_path.finalPoint());
-        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
-    } else {
-        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
-    }
-    
-    //hmm
-    real_path.setFinal(real_path.initialPoint());
-    
-    real_path.close();
+    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+    real_path.appendNew<Geom::LineSegment>(real_path.initialPoint());
 
+    real_path.close();
+    
     real_pathv.push_back(real_path);
 
     return real_pathv;
