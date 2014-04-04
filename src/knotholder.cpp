@@ -234,9 +234,14 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
             else
                 object_verb = SP_VERB_SELECTION_DYNAMIC_OFFSET;
         }
-
-        DocumentUndo::done(object->document, object_verb,
-                           _("Move handle"));
+        if (object) { //increasingly aggressive sanity checks
+            if (object->document) {
+                if (object_verb <= SP_VERB_LAST && object_verb >= SP_VERB_INVALID) {
+                    DocumentUndo::done(object->document, object_verb,
+                                       _("Move handle"));
+                }
+            }
+        } //else { abort(); }
     }
 }
 
