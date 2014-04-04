@@ -553,6 +553,7 @@ bool SPLPEItem::hasBrokenPathEffect() const
 
 bool SPLPEItem::hasPathEffect() const
 {
+    if (!path_effect_list) return false; //nullptr sucks
     if (path_effect_list->empty()) {
         return false;
     }
@@ -698,6 +699,7 @@ PathEffectList const SPLPEItem::getEffectList() const
 
 Inkscape::LivePathEffect::LPEObjectReference* SPLPEItem::getCurrentLPEReference()
 {
+    if (!this->hasPathEffect()) return NULL;
     if (!this->current_path_effect && !this->path_effect_list->empty()) {
         setCurrentPathEffect(this->path_effect_list->back());
     }
@@ -707,6 +709,9 @@ Inkscape::LivePathEffect::LPEObjectReference* SPLPEItem::getCurrentLPEReference(
 
 Inkscape::LivePathEffect::Effect* SPLPEItem::getCurrentLPE()
 {
+    if (path_effect_list == NULL) {
+        return NULL;
+    }
     Inkscape::LivePathEffect::LPEObjectReference* lperef = getCurrentLPEReference();
 
     if (lperef && lperef->lpeobject)

@@ -203,14 +203,16 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
         /* do cleanup tasks (e.g., for LPE items write the parameter values
          * that were changed by dragging the handle to SVG)
          */
-        if (SP_IS_LPE_ITEM(object)) {
+        if (dynamic_cast<SPLPEItem*> (object)) {
             // This writes all parameters to SVG. Is this sufficiently efficient or should we only
             // write the ones that were changed?
-
-            Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(object)->getCurrentLPE();
-            if (lpe) {
-                LivePathEffectObject *lpeobj = lpe->getLPEObj();
-                lpeobj->updateRepr();
+            SPLPEItem * lpeitem = SP_LPE_ITEM(this->item);
+            if (lpeitem) {
+                Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
+                if (lpe) {
+                    LivePathEffectObject *lpeobj = lpe->getLPEObj();
+                    lpeobj->updateRepr();
+                }
             }
         }
 

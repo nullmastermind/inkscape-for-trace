@@ -657,6 +657,11 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
     Geom::Point const s = snap_knot_position(p, state);
 
     SPCurve *curve = SP_PATH(item)->get_curve_for_edit();
+    if (!curve) {
+        //oops
+        lpe->attach_start.param_set_value(0);
+        return;
+    }
     Geom::PathVector pathv = curve->get_pathvector();
     Piecewise<D2<SBasis> > pwd2;
     Geom::Path p_in = return_at_first_cusp(pathv[0]);
@@ -678,6 +683,11 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
     Geom::Point const s = snap_knot_position(p, state);
 
     SPCurve *curve = SP_PATH(item)->get_curve_for_edit();
+    if (!curve) {
+        //oops
+        lpe->attach_end.param_set_value(0);
+        return;
+    }
     Geom::PathVector pathv = curve->get_pathvector();
     Piecewise<D2<SBasis> > pwd2;
     Geom::Path p_in = return_at_first_cusp(pathv[0].reverse());

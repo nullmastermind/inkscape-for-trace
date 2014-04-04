@@ -1,3 +1,5 @@
+#include <glib.h> //g_critical
+
 #include "pathoutlineprovider.h"
 #include "livarot/path-description.h"
 #include <2geom/angle.h>
@@ -262,7 +264,7 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
                     delete arc1;
                     arc1 = NULL;
                 }
-            } catch (std::exception ex) {
+            } catch (std::exception & ex) {
                 printf("Exception occured, probably NaN or infinite valued points: %s\n", ex.what());
                 path_builder.appendNew<Geom::LineSegment>(endPt);
             }
