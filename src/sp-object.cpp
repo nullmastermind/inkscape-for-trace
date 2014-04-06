@@ -460,6 +460,23 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
     sp_object_unref(this, NULL);
 }
 
+void SPObject::cropToObject(SPObject *except)
+{
+    std::vector<SPObject*> toDelete;
+    for ( SPObject *child = this->firstChild(); child; child = child->getNext() ) {
+        if (SP_IS_ITEM(child)) {
+            if (child->isAncestorOf(except)) {
+                child->cropToObject(except);
+            } else if(child != except) {
+                toDelete.push_back(child);
+            }
+        }
+    }
+    for (std::size_t i = 0; i < toDelete.size(); ++i) {
+        (toDelete[i])->deleteObject(true, true);
+    }
+}
+
 void SPObject::attach(SPObject *object, SPObject *prev)
 {
     //g_return_if_fail(parent != NULL);
