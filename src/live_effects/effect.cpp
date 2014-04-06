@@ -373,6 +373,24 @@ void Effect::doOnRemove (SPLPEItem const* lpeitem)
 {
 }
 
+//secret impl methods (shhhh!)
+void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
+{
+    sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
+    pathvector_before_effect = sp_curve->get_pathvector();
+    doOnApply(lpeitem);
+}
+
+void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
+{
+    sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
+    pathvector_before_effect = sp_curve->get_pathvector();
+    
+    doBeforeEffect(lpeitem);
+}
+
 /**
  * Effects can have a parameter path set before they are applied by accepting a nonzero number of
  * mouse clicks. This method activates the pen context, which waits for the specified number of

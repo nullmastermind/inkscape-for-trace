@@ -53,6 +53,11 @@ public:
 
     EffectType effectType() const;
 
+    //basically, to get this method called before the derived classes, a bit
+    //of indirection is needed. We first call these methods, then the below.
+    void doOnApply_impl(SPLPEItem const* lpeitem);
+    void doBeforeEffect_impl(SPLPEItem const* lpeitem);
+
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     
@@ -149,6 +154,9 @@ protected:
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
 
+    SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
+    SPCurve * sp_curve;
+    std::vector<Geom::Path> pathvector_before_effect;
 private:
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 

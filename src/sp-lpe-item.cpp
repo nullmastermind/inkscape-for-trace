@@ -242,7 +242,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve) {
 
                 // Groups have their doBeforeEffect called elsewhere
                 if (!SP_IS_GROUP(this)) {
-                    lpe->doBeforeEffect(this);
+                    lpe->doBeforeEffect_impl(this);
                 }
 
                 try {
@@ -414,7 +414,7 @@ void SPLPEItem::addPathEffect(gchar *value, bool reset)
             }
 
             // perform this once when the effect is applied
-            lpe->doOnApply(this);
+            lpe->doOnApply_impl(this);
 
             // indicate that all necessary preparations are done and the effect can be performed
             lpe->setReady();

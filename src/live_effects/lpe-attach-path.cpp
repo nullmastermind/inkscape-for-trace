@@ -62,15 +62,10 @@ void LPEAttachPath::resetDefaults(SPItem const * item)
     curve_end_previous_origin = end_path_curve_end.getOrigin();
 }
 
-void LPEAttachPath::doBeforeEffect(SPLPEItem const *lpeitem)
-{
-    lpe_effect = const_cast<SPLPEItem*> (lpeitem);
-}
-
 void LPEAttachPath::doEffect (SPCurve * curve)
 {
     std::vector<Geom::Path> this_pathv = curve->get_pathvector();
-    if (lpe_effect && !this_pathv.empty()) {
+    if (sp_lpe_item && !this_pathv.empty()) {
         Geom::Path p = Geom::Path(this_pathv.front().initialPoint());
         
         bool set_start_end = start_path_curve_end.getOrigin() != curve_start_previous_origin;
@@ -79,7 +74,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
         if (start_path.linksToPath()) {
 
             std::vector<Geom::Path> linked_pathv = start_path.get_pathvector();
-            Geom::Affine linkedtransform = start_path.getObject()->getRelativeTransform(lpe_effect);
+            Geom::Affine linkedtransform = start_path.getObject()->getRelativeTransform(sp_lpe_item);
 
             if ( !linked_pathv.empty() )
             {
@@ -132,7 +127,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
         if (end_path.linksToPath()) {
 
             std::vector<Geom::Path> linked_pathv = end_path.get_pathvector();
-            Geom::Affine linkedtransform = end_path.getObject()->getRelativeTransform(lpe_effect);
+            Geom::Affine linkedtransform = end_path.getObject()->getRelativeTransform(sp_lpe_item);
 
             if ( !linked_pathv.empty() )
             {

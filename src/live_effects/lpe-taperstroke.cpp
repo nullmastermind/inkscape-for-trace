@@ -235,9 +235,11 @@ Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_toler
         }
 
         //clearly it's collinear if two occupy the same point
-        g_assert(!are_near(start_point, cross_point, 0.0000001));
-        g_assert(!are_near(cross_point, end_point,   0.0000001));
-        g_assert(!are_near(start_point, end_point,   0.0000001));
+        if (are_near(start_point, cross_point, 0.0000001) ||
+            are_near(cross_point, end_point,   0.0000001) ||
+            are_near(start_point, end_point,   0.0000001)  ) {
+                g_critical("Holy crap, something went wrong! %s:%d\n", __FILE__, __LINE__);
+            }
 
         if (!are_collinear(start_point, cross_point, end_point, smooth_tolerance))
             break;
@@ -533,12 +535,6 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
         double xspace  = 0;
         double noffset = 0;
         double toffset = 0;
-        /*if (prop_units.get_value() && pattBndsY){
-            xspace  *= pattBndsX->extent();
-            noffset *= pattBndsY->extent();
-            toffset *= pattBndsX->extent();
-        }*/
-
         //Prevent more than 90% overlap...
         if (xspace < -pattBndsX->extent()*.9) {
             xspace = -pattBndsX->extent()*.9;
@@ -587,12 +583,6 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
                 offs+=pattWidth;
             }
         }
-        /*if (false){
-            pre_output = fuse_nearby_ends(pre_output, fuse_tolerance);
-            for (unsigned i=0; i<pre_output.size(); i++){
-                output.concat(pre_output[i]);
-            }
-        }*/
         return output;
     } else {
         return pwd2_in;
@@ -656,19 +646,27 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    SPCurve *curve = SP_PATH(item)->get_curve_for_edit();
-    if (!curve) {
-        //oops
-        lpe->attach_start.param_set_value(0);
+    if (!SP_IS_SHAPE(lpe->sp_lpe_item) ) {
+        g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
         return;
     }
-    Geom::PathVector pathv = curve->get_pathvector();
+    
+    SPCurve* curve;
+    if ( !(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve()) ) {
+        //oops
+        //lpe->attach_start.param_set_value(0);
+        return;
+    }
+    //in case you are wondering, the above are simply sanity checks. we never want to actually
+    //use that object.
+    
+    Geom::PathVector pathv = lpe->pathvector_before_effect;
+    
     Piecewise<D2<SBasis> > pwd2;
     Geom::Path p_in = return_at_first_cusp(pathv[0]);
     pwd2.concat(p_in.toPwSb());
-    std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > pwd_vec = split_at_discontinuities(pwd2);
 
-    double t0 = nearest_point(s, pwd_vec[0]);
+    double t0 = nearest_point(s, pwd2);
     lpe->attach_start.param_set_value(t0);
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
@@ -682,22 +680,24 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    SPCurve *curve = SP_PATH(item)->get_curve_for_edit();
-    if (!curve) {
-        //oops
-        lpe->attach_end.param_set_value(0);
+    if (!SP_IS_SHAPE(lpe->sp_lpe_item) ) {
+        g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
         return;
     }
-    Geom::PathVector pathv = curve->get_pathvector();
-    Piecewise<D2<SBasis> > pwd2;
+    
+    SPCurve* curve;
+    if ( !(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve()) ) {
+        //oops
+        //lpe->attach_end.param_set_value(0);
+        return;
+    }
+    Geom::PathVector pathv = lpe->pathvector_before_effect;
     Geom::Path p_in = return_at_first_cusp(pathv[0].reverse());
-    pwd2.concat(p_in.toPwSb());
-    std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > pwd_vec = split_at_discontinuities(pwd2);
-
-    double t0 = nearest_point(s, pwd_vec[0]);
+    Piecewise<D2<SBasis> > pwd2 = p_in.toPwSb();
+    
+    double t0 = nearest_point(s, pwd2);
     lpe->attach_end.param_set_value(t0);
 
-    // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
 Geom::Point KnotHolderEntityAttachBegin::knot_get() const

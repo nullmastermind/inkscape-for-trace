@@ -25,7 +25,6 @@ public:
     LPEAttachPath(LivePathEffectObject *lpeobject);
     virtual ~LPEAttachPath();
 
-    virtual void doBeforeEffect(const SPLPEItem *lpeitem);
     virtual void doEffect (SPCurve * curve);
     virtual void resetDefaults(SPItem const * item);
 
@@ -45,7 +44,6 @@ private:
     ScalarParam end_path_position;
     TransformedPointParam end_path_curve_start;
     VectorParam end_path_curve_end;
-    SPLPEItem * lpe_effect;
 };
 
 }; //namespace LivePathEffect
