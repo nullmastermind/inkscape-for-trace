@@ -96,6 +96,9 @@ DialogManager::DialogManager() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int dialogs_type = prefs->getIntLimited("/options/dialogtype/value", DOCK, 0, 1);
 
+    // The preferences dialog is broken, the DockBehavior code resizes it's floating window to the smallest size
+    registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
+
     if (dialogs_type == FLOATING) {
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     FloatingBehavior>);
@@ -106,7 +109,6 @@ DialogManager::DialogManager() {
         registerFactory("Find",                &create<Find,                 FloatingBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          FloatingBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     FloatingBehavior>);
-        registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          FloatingBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, FloatingBehavior>);
         registerFactory("Memory",              &create<Memory,               FloatingBehavior>);
@@ -126,8 +128,8 @@ DialogManager::DialogManager() {
         registerFactory("TextFont",            &create<TextEdit,             FloatingBehavior>);
         registerFactory("SpellCheck",          &create<SpellCheck,           FloatingBehavior>);
         registerFactory("Export",              &create<Export,               FloatingBehavior>);
-        registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           FloatingBehavior>);
+        registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
 
     } else {
 
@@ -140,7 +142,6 @@ DialogManager::DialogManager() {
         registerFactory("Find",                &create<Find,                 DockBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          DockBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     DockBehavior>);
-        registerFactory("InkscapePreferences", &create<InkscapePreferences,  DockBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          DockBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, DockBehavior>);
         registerFactory("Memory",              &create<Memory,               DockBehavior>);
@@ -160,8 +161,8 @@ DialogManager::DialogManager() {
         registerFactory("TextFont",            &create<TextEdit,             DockBehavior>);
         registerFactory("SpellCheck",          &create<SpellCheck,           DockBehavior>);
         registerFactory("Export",              &create<Export,               DockBehavior>);
-        registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           DockBehavior>);
+        registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);
 
     }
 }
