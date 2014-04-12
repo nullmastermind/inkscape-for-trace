@@ -328,6 +328,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
     Geom::Curve * temp;
     subdivideCurve(curve_start, attach_start - loc, temp, curve_start);
     trimmed_start.append(*temp);
+    if (temp) delete temp; temp = 0;
 
     //special case: path is one segment long
     //special case: what if the two knots occupy the same segment?
@@ -340,6 +341,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 
         subdivideCurve(curve_start, t, curve_start, temp);
         trimmed_end.append(*temp);
+        if (temp) delete temp; temp = 0;
         
         for (unsigned j = (size - attach_end) + 1; j < size; j++) {
             trimmed_end.append(path_in[0] [j]);
@@ -370,6 +372,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 
     subdivideCurve(curve_end, t, curve_end, temp);
     trimmed_end.append(*temp);
+    if (temp) delete temp; temp = 0;
 
     for (unsigned j = (size - attach_end) + 1; j < size; j++) {
         trimmed_end.append(path_in[0] [j]);
