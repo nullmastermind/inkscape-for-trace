@@ -528,13 +528,22 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
                 case butt_round:
                     pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, against_direction.initialPoint() );
                     break;
-                case butt_pointy:
-                    //I have ZERO idea what to do here.
+                case butt_pointy: {
+                    Geom::Point end_deriv = -Geom::unitTangentAt(Geom::reverse(path_in[i].back().toSBasis()), 0.);
+                    double radius = 0.5 * Geom::distance(with_direction.finalPoint(), against_direction.initialPoint());
+                    Geom::Point midpoint = 0.5 * (with_direction.finalPoint() + against_direction.initialPoint()) + radius*end_deriv;
+                    pb.lineTo(midpoint);
                     pb.lineTo(against_direction.initialPoint());
                     break;
-                case butt_square:
+                }
+                case butt_square: {
+                    Geom::Point end_deriv = -Geom::unitTangentAt(Geom::reverse(path_in[i].back().toSBasis()), 0.);
+                    double radius = 0.5 * Geom::distance(with_direction.finalPoint(), against_direction.initialPoint());
+                    pb.lineTo(with_direction.finalPoint() + radius*end_deriv);
+                    pb.lineTo(against_direction.initialPoint() + radius*end_deriv);
                     pb.lineTo(against_direction.initialPoint());
                     break;
+                }
                 }
             } else {
                 pb.moveTo(against_direction.initialPoint());
@@ -551,13 +560,22 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
                 case butt_round:
                     pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, with_direction.initialPoint() );
                     break;
-                case butt_pointy:
-                    //I have ZERO idea what to do here.
+                case butt_pointy: {
+                    Geom::Point end_deriv = -Geom::unitTangentAt(path_in[i].front().toSBasis(), 0.);
+                    double radius = 0.5 * Geom::distance(against_direction.finalPoint(), with_direction.initialPoint());
+                    Geom::Point midpoint = 0.5 * (against_direction.finalPoint() + with_direction.initialPoint()) + radius*end_deriv;
+                    pb.lineTo(midpoint);
                     pb.lineTo(with_direction.initialPoint());
                     break;
-                case butt_square:
+                }
+                case butt_square: {
+                    Geom::Point end_deriv = -Geom::unitTangentAt(path_in[i].front().toSBasis(), 0.);
+                    double radius = 0.5 * Geom::distance(against_direction.finalPoint(), with_direction.initialPoint());
+                    pb.lineTo(against_direction.finalPoint() + radius*end_deriv);
+                    pb.lineTo(with_direction.initialPoint() + radius*end_deriv);
                     pb.lineTo(with_direction.initialPoint());
                     break;
+                }
                 }
             }
             pb.flush();
