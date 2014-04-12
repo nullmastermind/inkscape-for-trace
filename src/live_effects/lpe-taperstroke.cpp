@@ -197,6 +197,8 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 
     bool zeroStart = false;
     bool zeroEnd = false;
+    bool metInMiddle = false;
+    
     //there is a pretty good chance that people will try to drag the knots
     //on top of each other, so block it
 
@@ -207,6 +209,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         if ( attach_start >= (size - attach_end) ) {
             attach_end.param_set_value( size - attach_start );
         }
+    }
+    
+    if (attach_start == size - attach_end) {
+        metInMiddle = true;
     }
 
     //don't let it be zero
@@ -232,10 +238,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 
     //don't let the knots be farther than they are allowed to be
     if ((unsigned)attach_start >= allowed_start) {
-        attach_start.param_set_value((double)allowed_start - 0.00000001);
+        attach_start.param_set_value((double)allowed_start - 0.00001);
     }
     if ((unsigned)attach_end >= allowed_end) {
-        attach_end.param_set_value((double)allowed_end - 0.00000001);
+        attach_end.param_set_value((double)allowed_end - 0.00001);
     }
 
     //remember, Path::operator () means get point at time t
@@ -265,11 +271,14 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 
         real_path.append(throwaway_path);
     }
-    //append the outside outline of the path (with direction)
-    throwaway_path = Outline::PathOutsideOutline(pathv_out[1],
-                     -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+    
+    if (!metInMiddle) {
+        //append the outside outline of the path (with direction)
+        throwaway_path = Outline::PathOutsideOutline(pathv_out[1],
+                         -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
 
-    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+    }
 
     if (!zeroEnd) {
         //append the ending taper
@@ -460,32 +469,17 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
 
 void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second)
 {
-    unsigned order = Outline::bezierOrder(curve_in);
-    switch (order) {
-    case 3: {
-        Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_in);
-        std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide(t);
-        //trimmed_start.append(cb_pair.first);
-        val_first = cb_pair.first.duplicate();
-        val_second = cb_pair.second.duplicate();
-        break;
-    }
-    case 2: {
-        Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_in);
-        std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide(t);
-        //trimmed_start.append(qb_pair.first);
-        val_first = qb_pair.first.duplicate();
-        val_second = qb_pair.second.duplicate();
-        break;
-    }
-    case 1: {
-        Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_in);
-        std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide(t);
-        //trimmed_start.append(lb_pair.first);
-        val_first = lb_pair.first.duplicate();
-        val_second = lb_pair.second.duplicate();
-        break;
-    }
+    if (Geom::LineSegment* linear = dynamic_cast<Geom::LineSegment*>(curve_in)) {
+        //special case for line segments
+        std::pair<Geom::LineSegment, Geom::LineSegment> seg_pair = linear->subdivide(t);
+        val_first = seg_pair.first.duplicate();
+        val_second = seg_pair.second.duplicate();
+    } else {
+        //all other cases:
+        Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(curve_in->toSBasis());
+        std::pair<Geom::CubicBezier, Geom::CubicBezier> cubic_pair = cubic.subdivide(t);
+        val_first = cubic_pair.first.duplicate();
+        val_second = cubic_pair.second.duplicate();
     }
 }
 

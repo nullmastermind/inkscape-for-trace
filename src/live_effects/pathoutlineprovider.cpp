@@ -261,6 +261,7 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             }
             path_builder.appendNew<Geom::LineSegment> (endPt);
         }
+        path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
     }
     if ( outside && lineProblem ) {
         Geom::Path pth;
@@ -282,9 +283,22 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             }
         }
         path_builder.appendNew<Geom::LineSegment> (endPt);
+        path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
     }
     if ( !outside ) {
-        path_builder.appendNew<Geom::LineSegment> (endPt);
+        /*path_builder.appendNew<Geom::LineSegment> (endPt);*/
+        Geom::Crossings cross = Geom::crossings(*cbc1, *cbc2);
+        if (!cross.empty()) {
+            path_builder.erase_last();
+            Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(cbc1->toSBasis());
+            cubic = cubic.subdivide(cross[0].ta).first;
+            path_builder.append(cubic, Geom::Path::STITCH_DISCONTINUOUS);
+            cubic = Geom::sbasis_to_cubicbezier(cbc2->toSBasis());
+            cubic = cubic.subdivide(cross[0].tb).second;
+            path_builder.append(cubic, Geom::Path::STITCH_DISCONTINUOUS);
+        } else {
+            path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
+        }
     }
 }
 
@@ -346,9 +360,22 @@ void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cb
             path_builder.appendNew <Geom::CubicBezier> (sub1.first[1], sub1.first[2], /*sub1.first[3]*/ sub2.second[0] );
             path_builder.appendNew <Geom::CubicBezier> (sub2.second[1], sub2.second[2], /*sub2.second[3]*/ endPt );
         }
-    } else { // cross.empty()
+        path_builder.append(*cbc2);
+    } else {
         //probably on the inside of the corner
-        path_builder.appendNew<Geom::LineSegment> ( endPt );
+        /*path_builder.appendNew<Geom::LineSegment> ( endPt );*/
+        cross = Geom::crossings(*cbc1, *cbc2);
+        if (!cross.empty()) {
+            path_builder.erase_last();
+            Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(cbc1->toSBasis());
+            cubic = cubic.subdivide(cross[0].ta).first;
+            path_builder.append(cubic, Geom::Path::STITCH_DISCONTINUOUS);
+            cubic = Geom::sbasis_to_cubicbezier(cbc2->toSBasis());
+            cubic = cubic.subdivide(cross[0].tb).second;
+            path_builder.append(cubic, Geom::Path::STITCH_DISCONTINUOUS);
+        } else {
+            path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
+        }
     }
 }
 
@@ -387,6 +414,7 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
         if (u == 0) {
             //I could use the pv->operator[] (0) notation but that looks terrible
             path_builder.start( (*path_vec)[0].initialPoint() );
+            path_builder.append( (*path_vec)[0] );
         } else {
             //get the curves ready for the operation
             Geom::Curve * cbc1 = path_builder[path_builder.size() - 1].duplicate();
@@ -400,9 +428,11 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
                 reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, line_width,
                                 outside_angle ( pv[u - 1] [pv[u - 1].size() - 1], pv[u] [0] ));
             }
+            Geom::Path temp_path = (*path_vec)[0];
+            temp_path.erase(temp_path.begin());
+            
+            path_builder.append( temp_path );
         }
-
-        path_builder.append( (*path_vec)[0] );
 
         //outline the next segment, but don't store it yet
         if (path_vec) delete path_vec;
@@ -430,7 +460,10 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             }
 
             //Now we can store it.
-            path_builder.append( (*path_vec)[0] );
+            Geom::Path temp_path = (*path_vec)[0];
+            temp_path.erase(temp_path.begin());
+            
+            path_builder.append( temp_path );
 
             if (cbc1) delete cbc1;
             if (cbc2) delete cbc2;
