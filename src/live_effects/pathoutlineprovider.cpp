@@ -9,6 +9,7 @@
 #include <2geom/shape.h>
 #include <2geom/transforms.h>
 #include <2geom/path-sink.h>
+#include "helper/geom-nodetype.h"
 #include <svg/svg.h>
 
 namespace Geom {
@@ -99,21 +100,25 @@ static Circle touching_circle( D2<SBasis> const &curve, double t, double tol=0.0
     return Geom::Circle(center, fabs(radius));
 }
 
-static std::vector<Geom::Path> split_at_cusps(const Geom::Path& in)
+std::vector<Geom::Path> split_at_cusps(const Geom::Path& in)
 {
-    Geom::PathVector out = Geom::PathVector();
-    Geom::Path temp = Geom::Path();
+    PathVector out = PathVector();
+    Path temp = Path();
 
-    for (unsigned path_descr = 0; path_descr < in.size(); path_descr++) {
-        temp = Geom::Path();
-        temp.append(in[path_descr]);
+    for (unsigned i = 0; i < in.size(); i++) {
+        temp.append(in[i]);
+        if ( get_nodetype(in[i], in[i + 1]) != Geom::NODE_SMOOTH ) {
+            out.push_back(temp);
+            temp = Path();
+        }
+    }
+    if (temp.size() > 0) {
         out.push_back(temp);
     }
-
     return out;
 }
 
-static Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in)
+Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in)
 {
     std::vector<Geom::Point> temp;
     sbasis_to_bezier(temp, sbasis_in, 4);
@@ -140,13 +145,9 @@ typedef Geom::Piecewise<D2SB> PWD2;
 unsigned bezierOrder (const Geom::Curve* curve_in)
 {
     using namespace Geom;
-    //cast it
-    const CubicBezier *cbc = dynamic_cast<const CubicBezier*>(curve_in);
-    if (cbc) return 3;
-    const QuadraticBezier * qbc = dynamic_cast<const QuadraticBezier*>(curve_in);
-    if (qbc) return 2;
-    const BezierCurveN<1U> * lbc = dynamic_cast<const BezierCurveN<1U> *>(curve_in);
-    if (lbc) return 1;
+    if ( const BezierCurve* bz = dynamic_cast<const BezierCurve*>(curve_in) ) {
+        return bz->order();
+    }
     return 0;
 }
 
@@ -154,8 +155,6 @@ unsigned bezierOrder (const Geom::Curve* curve_in)
 //is >180 clockwise, otherwise false.
 bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
 {
-    unsigned order = bezierOrder(&cbc1);
-
     Geom::Point start_point;
     Geom::Point cross_point = cbc1.finalPoint();
     Geom::Point end_point;
@@ -167,38 +166,18 @@ bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
                "By default we are going to say that this is an inside join, so we cannot make a line join for it.\n", __LINE__, __FILE__);
         return false;
     }
-    switch (order) {
-    case 3:
-        start_point = (static_cast<const Geom::CubicBezier*>(&cbc1))->operator[] (2);
-        //major league b***f***ing
-        if (are_near(start_point, cross_point, 0.0000001)) {
-            start_point = (static_cast<const Geom::CubicBezier*>(&cbc1))->operator[] (1);
-        }
-        break;
-    case 2:
-        //this never happens
-        start_point = (static_cast<const Geom::QuadraticBezier*>(&cbc1))->operator[] (1);
-        break;
-    case 1:
-    default:
-        start_point = cbc1.initialPoint();
+    
+    //let's try:
+    Geom::CubicBezier cubicBezier = Geom::sbasis_to_cubicbezier(cbc1.toSBasis());
+    start_point = cubicBezier [2];
+    //stupid thing Inkscape does:
+    if (are_near(start_point, cross_point, 0.0000001)) {
+         start_point = cubicBezier [1];
     }
-
-    order = Outline::bezierOrder(&cbc2);
-
-    switch (order) {
-    case 3:
-        end_point = (static_cast<const Geom::CubicBezier*>(&cbc2))->operator[] (1);
-        if (are_near(end_point, cross_point, 0.0000001)) {
-            end_point = (static_cast<const Geom::CubicBezier*>(&cbc2))->operator[] (2);
-        }
-        break;
-    case 2:
-        end_point = (static_cast<const Geom::QuadraticBezier*>(&cbc2))->operator[] (1);
-        break;
-    case 1:
-    default:
-        end_point = cbc2.finalPoint();
+    cubicBezier = Geom::sbasis_to_cubicbezier(cbc2.toSBasis());
+    end_point = cubicBezier [1];
+    if (are_near(end_point, cross_point, 0.0000001)) {
+        end_point = cubicBezier [2];
     }
     //got our three points, now let's see what their clockwise angle is
 
@@ -391,7 +370,7 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
     Geom::Path path_builder = Geom::Path(); //the path to store the result in
     Geom::PathVector * path_vec; //needed because livarot returns a goddamn pointer
 
-    const unsigned k = path_in.size();
+    const unsigned k = pv.size();
 
     for (unsigned u = 0; u < k; u+=2) {
         to_outline = Path();

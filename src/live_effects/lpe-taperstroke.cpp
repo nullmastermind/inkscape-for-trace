@@ -180,77 +180,15 @@ void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
 
 //actual effect impl here
 
-Geom::Path return_at_first_cusp (Geom::Path const & path_in, double smooth_tolerance = 0.05)
+Geom::Path return_at_first_cusp (Geom::Path const & path_in, double /*smooth_tolerance*/ = 0.05)
 {
-    Geom::Path path_out = Geom::Path();
-
-    for (unsigned i = 0; i < path_in.size(); i++) {
-        path_out.append(path_in[i]);
-        if (path_in.size() == 1)
-            break;
-
-        //determine order of curve
-        int order = Outline::bezierOrder(&path_in[i]);
-
-        Geom::Point start_point;
-        Geom::Point cross_point = path_in[i].finalPoint();
-        Geom::Point end_point;
-
-        g_assert(path_in[i].finalPoint() == path_in[i+1].initialPoint());
-
-        //can you tell that the following expressions have been shaped by
-        //repeated compiler errors? ;)
-        switch (order) {
-        case 3:
-            start_point = (static_cast<const Geom::CubicBezier*>(&path_in[i]))->operator[] (2);
-            //major league b***f***ing
-            if (are_near(start_point, cross_point, 0.0000001)) {
-                start_point = (static_cast<const Geom::CubicBezier*>(&path_in[i]))->operator[] (1);
-            }
-            break;
-        case 2:
-            //this never happens
-            start_point = (static_cast<const Geom::QuadraticBezier*>(&path_in[i]))->operator[] (1);
-            break;
-        case 1:
-        default:
-            start_point = path_in[i].initialPoint();
-        }
-
-        order = Outline::bezierOrder(&path_in[i+1]);
-
-        switch (order) {
-        case 3:
-            end_point = (static_cast<const Geom::CubicBezier*>(&path_in[i+1]))->operator[] (1);
-            if (are_near(end_point, cross_point, 0.0000001)) {
-                end_point = (static_cast<const Geom::CubicBezier*>(&path_in[i+1]))->operator[] (2);
-            }
-            break;
-        case 2:
-            end_point = (static_cast<const Geom::QuadraticBezier*>(&path_in[i+1]))->operator[] (1);
-            break;
-        case 1:
-        default:
-            end_point = path_in[i+1].finalPoint();
-        }
-
-        //clearly it's collinear if two occupy the same point
-        if (are_near(start_point, cross_point, 0.0000001) ||
-            are_near(cross_point, end_point,   0.0000001) ||
-            are_near(start_point, end_point,   0.0000001)  ) {
-                g_critical("Holy crap, something went wrong! %s:%d\n", __FILE__, __LINE__);
-            }
-
-        if (!are_collinear(start_point, cross_point, end_point, smooth_tolerance))
-            break;
-    }
-    return path_out;
+    return Geom::split_at_cusps(path_in)[0];
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double width);
 
 //references to pointers, because magic
-void subdivideCurve(const Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second);
+void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second);
 
 Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 {
@@ -378,34 +316,9 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
         trimmed_start.append(path_in[0] [i]);
     }
 
-
-    //this is pretty annoying
-    //previously I wrote a function for this but it wasted a lot of time
-    //so I optimized it back into here.
-    unsigned order = Outline::bezierOrder(curve_start);
-    switch (order) {
-    case 3: {
-        Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_start);
-        std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide((attach_start - loc));
-        trimmed_start.append(cb_pair.first);
-        curve_start = cb_pair.second.duplicate(); //goes out of scope
-        break;
-    }
-    case 2: {
-        Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_start);
-        std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide((attach_start - loc));
-        trimmed_start.append(qb_pair.first);
-        curve_start = qb_pair.second.duplicate();
-        break;
-    }
-    case 1: {
-        Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_start);
-        std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide((attach_start - loc));
-        trimmed_start.append(lb_pair.first);
-        curve_start = lb_pair.second.duplicate();
-        break;
-    }
-    }
+    Geom::Curve * temp;
+    subdivideCurve(curve_start, attach_start - loc, temp, curve_start);
+    trimmed_start.append(*temp);
 
     //special case: path is one segment long
     //special case: what if the two knots occupy the same segment?
@@ -416,31 +329,9 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
         //we have to do some shifting here because the value changed when we reduced the length
         //of the previous segment.
 
-        order = Outline::bezierOrder(curve_start);
-        switch (order) {
-        case 3: {
-            Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_start);
-            std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide(t);
-            trimmed_end.append(cb_pair.second);
-            curve_start = cb_pair.first.duplicate();
-            break;
-        }
-        case 2: {
-            Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_start);
-            std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide(t);
-            trimmed_end.append(qb_pair.second);
-            curve_start = qb_pair.first.duplicate();
-            break;
-        }
-        case 1: {
-            Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_start);
-            std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide(t);
-            trimmed_end.append(lb_pair.second);
-            curve_start = lb_pair.first.duplicate();
-            break;
-        }
-        }
-
+        subdivideCurve(curve_start, t, curve_start, temp);
+        trimmed_end.append(*temp);
+        
         for (unsigned j = (size - attach_end) + 1; j < size; j++) {
             trimmed_end.append(path_in[0] [j]);
         }
@@ -468,30 +359,8 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 
     Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_end);
 
-    order = Outline::bezierOrder(curve_end);
-    switch (order) {
-    case 3: {
-        Geom::CubicBezier *cb = static_cast<Geom::CubicBezier * >(curve_end);
-        std::pair<Geom::CubicBezier, Geom::CubicBezier> cb_pair = cb->subdivide(t);
-        trimmed_end.append(cb_pair.second);
-        curve_end = cb_pair.first.duplicate();
-        break;
-    }
-    case 2: {
-        Geom::QuadraticBezier *qb = static_cast<Geom::QuadraticBezier * >(curve_end);
-        std::pair<Geom::QuadraticBezier, Geom::QuadraticBezier> qb_pair = qb->subdivide(t);
-        trimmed_end.append(qb_pair.second);
-        curve_end = qb_pair.first.duplicate();
-        break;
-    }
-    case 1: {
-        Geom::BezierCurveN<1> *lb = static_cast<Geom::BezierCurveN<1> * >(curve_end);
-        std::pair<Geom::BezierCurveN<1>, Geom::BezierCurveN<1> > lb_pair = lb->subdivide(t);
-        trimmed_end.append(lb_pair.second);
-        curve_end = lb_pair.first.duplicate();
-        break;
-    }
-    }
+    subdivideCurve(curve_end, t, curve_end, temp);
+    trimmed_end.append(*temp);
 
     for (unsigned j = (size - attach_end) + 1; j < size; j++) {
         trimmed_end.append(path_in[0] [j]);

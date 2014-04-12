@@ -12,6 +12,12 @@ enum LineJoinType {
     LINEJOIN_EXTRAPOLATED
 };
 
+namespace Geom
+{
+	Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in);
+	std::vector<Geom::Path> split_at_cusps(const Geom::Path& in);
+}
+
 namespace Outline 
 {
     unsigned bezierOrder (const Geom::Curve* curve_in);
