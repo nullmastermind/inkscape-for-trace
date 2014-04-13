@@ -389,7 +389,13 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
 {
     // NOTE: it is important to notice the distinction between a Geom::Path and a livarot Path here!
     // if you do not see "Geom::" there is a different function set!
-    Geom::PathVector pv = split_at_cusps(path_in);
+    Geom::Path temporary(path_in);
+    if (path_in.closed()) {
+        //this is a terrible solution
+        temporary.erase_last();
+        temporary.close(false);
+    }
+    Geom::PathVector pv = split_at_cusps(temporary);
 
     Path to_outline;
     Path outlined_result;
@@ -469,6 +475,12 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             if (cbc2) delete cbc2;
             if (path_vec) delete path_vec;
         }
+        if (path_in.closed()) {
+            temporary = Geom::Path();
+            temporary.append(*path_in.end());
+            Geom::Path temporary2 = doAdvHalfOutline(temporary, line_width, miter_limit, extrapolate);
+            path_builder.append(temporary2/*, Geom::Path::STITCH_DISCONTINUOUS*/);
+        }
     }
 
     return path_builder;
@@ -492,25 +504,19 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
             } else {
                 //Geom::Path absolutely refuses to do what I want with these
                 Geom::Path newPath = path_in[i];
-                newPath.close(false);
-                Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = newPath.toPwSb();
-                newPath = Geom::path_from_piecewise(pwd2, 0.01)[0];
-                //fuk this
+                if (Geom::distance(newPath.finalPoint(), newPath.initialPoint()) == newPath[newPath.size()].length()) {
+                    Geom::LineSegment linear(newPath.finalPoint(), newPath.initialPoint());
+                    Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(linear.toSBasis());
+                    newPath.appendNew<Geom::CubicBezier>(cubic[1], cubic[2], cubic[3]);
+                }
+                //newPath.close(false);
                 with_direction = Outline::doAdvHalfOutline( newPath, -line_width, miter_lim, extrapolate );
                 against_direction = Outline::doAdvHalfOutline( newPath.reverse(), -line_width, miter_lim, extrapolate );
-
-                /*if (dynamic_cast<const Geom::BezierCurveN<1u> *>(&newPath[newPath.size()])) {
-                    //delete the 'Z'
-                    newPath.erase_last();
-                    newPath.append(path_in[i][path_in[i].size() - 1]);
-                    newPath.appendNew<Geom::LineSegment>(newPath.initialPoint());
-                    newPath.erase_last();
-                } else {
-                    //delete the 'Z'
-                    newPath.erase_last();
-                    newPath.append(path_in[i][path_in[i].size() - 1]);
-                    newPath.appendNew<Geom::LineSegment>(newPath.initialPoint());
-                    newPath.erase_last();
+                /*if (Geom::distance(newPath.finalPoint(), newPath.initialPoint()) != newPath[newPath.size()].length()) {
+                    with_direction.erase_last();
+                    with_direction.erase_last();
+                    against_direction.erase(against_direction.begin());
+                    against_direction.erase(against_direction.begin());
                 }*/
             }
             Geom::PathBuilder pb;
@@ -579,8 +585,9 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
                 }
             }
             pb.flush();
-            for (unsigned m = 0; i < pb.peek().size(); i++) {
-                path_out.push_back(pb.peek()[m]);
+            path_out.push_back(pb.peek()[0]);
+            if (path_in[i].closed()) {
+                path_out.push_back(pb.peek()[1]);
             }
         } else {
             Path p = Path();
@@ -658,8 +665,6 @@ Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, Lin
         return path_out;
     } else if (linejoin_type == LINEJOIN_REFLECTED) {
         //reflected half outline
-        Geom::PathVector pathvec;
-        pathvec.push_back(path_in);
         path_out = doAdvHalfOutline(path_in, line_width, miter_lim, false);
         return path_out;
     } else if (linejoin_type == LINEJOIN_EXTRAPOLATED) {
