@@ -88,12 +88,13 @@ ink_common_sources += \
 	live_effects/lpe-attach-path.cpp	\
 	live_effects/lpe-attach-path.h	\
 	live_effects/lpe-fill-between-strokes.cpp	\
-	live_effects/lpe-fill-between-stroke.h	\
+	live_effects/lpe-fill-between-strokes.h	\
 	live_effects/lpe-fill-between-many.cpp	\
 	live_effects/lpe-fill-between-many.h	\
 	live_effects/lpe-ellipse_5pts.cpp	\
 	live_effects/lpe-ellipse_5pts.h	\
 	live_effects/pathoutlineprovider.cpp	\
+	live_effects/pathoutlineprovider.h	\
 	live_effects/lpe-jointype.cpp	\
 	live_effects/lpe-jointype.h	\
 	live_effects/lpe-taperstroke.cpp	\

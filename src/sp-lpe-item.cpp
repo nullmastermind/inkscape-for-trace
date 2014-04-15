@@ -689,12 +689,20 @@ static std::string hreflist_write_svg(HRefList const & list)
 // Return a copy of the effect list
 PathEffectList SPLPEItem::getEffectList()
 {
+    if (!path_effect_list) {
+        g_critical("Broken path effect list in %s\n", __FILE__);
+        return PathEffectList();
+    }
     return *path_effect_list;
 }
 
 // Return a copy of the effect list
 PathEffectList const SPLPEItem::getEffectList() const
 {
+    if (!path_effect_list) {
+        g_critical("Broken path effect list in %s\n", __FILE__);
+        return PathEffectList();
+    }
     return *path_effect_list;
 }
 
