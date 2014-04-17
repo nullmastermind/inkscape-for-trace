@@ -389,13 +389,8 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
 {
     // NOTE: it is important to notice the distinction between a Geom::Path and a livarot Path here!
     // if you do not see "Geom::" there is a different function set!
-    Geom::Path temporary(path_in);
-    if (path_in.closed()) {
-        //this is a terrible solution
-        temporary.erase_last();
-        temporary.close(false);
-    }
-    Geom::PathVector pv = split_at_cusps(temporary);
+
+    Geom::PathVector pv = split_at_cusps(path_in);
 
     Path to_outline;
     Path outlined_result;
@@ -434,6 +429,7 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
                 reflect_curves (path_builder, cbc1, cbc2, (*path_vec)[0].initialPoint(), miter_limit, line_width,
                                 outside_angle ( pv[u - 1] [pv[u - 1].size() - 1], pv[u] [0] ));
             }
+            //store it
             Geom::Path temp_path = (*path_vec)[0];
             temp_path.erase(temp_path.begin());
             
@@ -475,11 +471,44 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             if (cbc2) delete cbc2;
             if (path_vec) delete path_vec;
         }
-        if (path_in.closed()) {
-            temporary = Geom::Path();
-            temporary.append(*path_in.end());
-            Geom::Path temporary2 = doAdvHalfOutline(temporary, line_width, miter_limit, extrapolate);
-            path_builder.append(temporary2/*, Geom::Path::STITCH_DISCONTINUOUS*/);
+    }
+    
+    if (path_in.closed()) {
+        if ( path_in[path_in.size() - 1].length() != Geom::distance(path_in[path_in.size() - 1].finalPoint(), path_in.initialPoint())) {
+            //handle case for last segment curved
+            outlined_result = Path();
+            to_outline = Path();
+            
+            Geom::Path oneCurve; oneCurve.append(path_in[0]);
+
+            to_outline.LoadPath(oneCurve, Geom::Affine(), false, false);
+            to_outline.OutsideOutline(&outlined_result, line_width / 2, join_straight, butt_straight, 10);
+
+            path_vec = outlined_result.MakePathVector();
+
+            Geom::Curve * cbc1 = path_builder[path_builder.size() - 1].duplicate();//(*path_vec)[0]  [0].duplicate();
+            Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();//path_builder[path_builder.size() - 1].duplicate();
+            
+            Geom::Path temporary; //why do we need this? you'll see in a bit
+            temporary.append(*cbc1);
+            
+            if (extrapolate) {
+                extrapolate_curves(temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
+                                   outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+            } else {
+                reflect_curves (temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
+                                outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+            }
+            //extract the appended curves
+            if (temporary[0].finalPoint() != path_builder[path_builder.size() - 1].finalPoint()) {
+                path_builder.erase(path_builder.begin());
+            } else {
+                temporary.erase_last();
+            }
+            path_builder.erase_last();
+            
+            path_builder.append(temporary, Geom::Path::STITCH_DISCONTINUOUS);
+            path_builder.close();
         }
     }
 
@@ -498,27 +527,10 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
             //since you've made it this far, hopefully all this is obvious :P
             Geom::Path with_direction;
             Geom::Path against_direction;
-            if ( !path_in[i].closed() ) {
-                with_direction = Outline::doAdvHalfOutline( path_in[i], -line_width, miter_lim, extrapolate );
-                against_direction = Outline::doAdvHalfOutline( path_in[i].reverse(), -line_width, miter_lim, extrapolate );
-            } else {
-                //Geom::Path absolutely refuses to do what I want with these
-                Geom::Path newPath = path_in[i];
-                if (Geom::distance(newPath.finalPoint(), newPath.initialPoint()) == newPath[newPath.size()].length()) {
-                    Geom::LineSegment linear(newPath.finalPoint(), newPath.initialPoint());
-                    Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(linear.toSBasis());
-                    newPath.appendNew<Geom::CubicBezier>(cubic[1], cubic[2], cubic[3]);
-                }
-                //newPath.close(false);
-                with_direction = Outline::doAdvHalfOutline( newPath, -line_width, miter_lim, extrapolate );
-                against_direction = Outline::doAdvHalfOutline( newPath.reverse(), -line_width, miter_lim, extrapolate );
-                /*if (Geom::distance(newPath.finalPoint(), newPath.initialPoint()) != newPath[newPath.size()].length()) {
-                    with_direction.erase_last();
-                    with_direction.erase_last();
-                    against_direction.erase(against_direction.begin());
-                    against_direction.erase(against_direction.begin());
-                }*/
-            }
+            
+            with_direction = Outline::doAdvHalfOutline( path_in[i], -line_width, miter_lim, extrapolate );
+            against_direction = Outline::doAdvHalfOutline( path_in[i].reverse(), -line_width, miter_lim, extrapolate );
+            
             Geom::PathBuilder pb;
 
             //add in the...do I really need to say this?
