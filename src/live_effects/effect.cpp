@@ -110,8 +110,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
-    {JOIN_TYPE,             N_("Join type"),               "join_type"},
-    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
 #endif
 /* 0.46 */
     {BEND_PATH,             N_("Bend"),                    "bend_path"},
@@ -137,6 +135,9 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
+/* lp:~inkscapebrony/inkscape/inkscape */
+    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
