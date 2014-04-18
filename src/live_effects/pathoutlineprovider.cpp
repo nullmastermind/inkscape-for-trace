@@ -474,6 +474,9 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
     }
     
     if (path_in.closed()) {
+        Geom::Curve * cbc1;
+        Geom::Curve * cbc2;
+        
         if ( path_in[path_in.size() - 1].length() != Geom::distance(path_in[path_in.size() - 1].finalPoint(), path_in.initialPoint())) {
             //handle case for last segment curved
             outlined_result = Path();
@@ -486,30 +489,71 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
 
             path_vec = outlined_result.MakePathVector();
 
-            Geom::Curve * cbc1 = path_builder[path_builder.size() - 1].duplicate();//(*path_vec)[0]  [0].duplicate();
-            Geom::Curve * cbc2 = (*path_vec)[0]  [0].duplicate();//path_builder[path_builder.size() - 1].duplicate();
+            cbc1 = path_builder[path_builder.size() - 1].duplicate();
+            cbc2 = (*path_vec)[0]  [0].duplicate();
             
-            Geom::Path temporary; //why do we need this? you'll see in a bit
-            temporary.append(*cbc1);
+            delete path_vec;
+        } else {
+            //handle case for last segment straight (since the path doesn't actually give us access to it)
+            outlined_result = Path();
+            to_outline = Path();
+            
+            Geom::Path oneCurve; oneCurve.append(Geom::LineSegment(path_in.finalPoint(), path_in.initialPoint()));
+
+            to_outline.LoadPath(oneCurve, Geom::Affine(), false, false);
+            to_outline.OutsideOutline(&outlined_result, line_width / 2, join_straight, butt_straight, 10);
+
+            path_vec = outlined_result.MakePathVector();
+
+            cbc1 = path_builder[path_builder.size() - 1].duplicate();
+            cbc2 = (*path_vec)[0]  [0].duplicate();
+            
+            //append the closing segment
             
             if (extrapolate) {
-                extrapolate_curves(temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
+                extrapolate_curves(path_builder, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
                                    outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
             } else {
-                reflect_curves (temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
+                reflect_curves (path_builder, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
                                 outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
             }
-            //extract the appended curves
-            if (temporary[0].finalPoint() != path_builder[path_builder.size() - 1].finalPoint()) {
-                path_builder.erase(path_builder.begin());
-            } else {
-                temporary.erase_last();
-            }
-            path_builder.erase_last();
             
-            path_builder.append(temporary, Geom::Path::STITCH_DISCONTINUOUS);
-            path_builder.close();
+            delete cbc1; cbc1 = cbc2->duplicate();
+            delete path_vec;
+            
+            oneCurve = Geom::Path(); oneCurve.append(path_in[0]);
+            
+            to_outline.LoadPath(oneCurve, Geom::Affine(), false, false);
+            to_outline.OutsideOutline(&outlined_result, line_width / 2, join_straight, butt_straight, 10);
+
+            path_vec = outlined_result.MakePathVector();
+            delete cbc2; cbc2 = (*path_vec)[0] [0].duplicate();
+            delete path_vec;
         }
+        
+        Geom::Path temporary; //just an accessory path, we won't need it for long
+        temporary.append(*cbc1);
+        
+        if (extrapolate) {
+            extrapolate_curves(temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
+                               outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+        } else {
+            reflect_curves (temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
+                            outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+        }
+        //extract the appended curves
+        if (temporary[0].finalPoint() != path_builder[path_builder.size() - 1].finalPoint()) {
+            path_builder.erase(path_builder.begin());
+        } else {
+            temporary.erase_last();
+        }
+        path_builder.erase_last();
+        
+        path_builder.append(temporary, Geom::Path::STITCH_DISCONTINUOUS);
+        path_builder.close();
+        
+        if (cbc1) delete cbc1;
+        if (cbc2) delete cbc2;
     }
 
     return path_builder;
