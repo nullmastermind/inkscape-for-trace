@@ -448,8 +448,7 @@ private:
         SPDesktop *_desktop;
     };
 
-    // Disabled while stupid init call doesn't work
-    //DesktopPrefObserver _image_render_observer;
+    DesktopPrefObserver _image_render_observer;
 
     bool grids_visible; /* don't set this variable directly, use the method below */
     void set_grids_visible(bool visible);

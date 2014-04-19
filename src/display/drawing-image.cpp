@@ -107,7 +107,7 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
     bool outline = _drawing.outline();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool imgoutline = prefs->getBool("/options/rendering/imageinoutlinemode", true);
+    bool imgoutline = prefs->getBool("/options/rendering/imageinoutlinemode", false);
 
     if (!outline || imgoutline) {
         if (!_pixbuf) return RENDER_OK;
