@@ -34,6 +34,11 @@
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 
+template<typename T>
+inline bool withinRange(T value, T low, T high) {
+    return (value > low && value < high);
+}
+
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -65,12 +70,12 @@ static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinType, sizeo
 
 LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    line_width(_("Stroke width"), _("The (non-tapered) width of the path"), "stroke_width", &wr, this, 3),
+    line_width(_("Stroke width"), _("The (non-tapered) width of the path"), "stroke_width", &wr, this, 1.),
     attach_start(_("Start offset"), _("Taper distance from path start"), "attach_start", &wr, this, 0.2),
     attach_end(_("End offset"), _("The ending position of the taper"), "end_offset", &wr, this, 0.2),
     smoothing(_("Taper smoothing"), _("Amount of smoothing to apply to the tapers"), "smoothing", &wr, this, 0.5),
     join_type(_("Join type"), _("Join type for non-smooth nodes"), "jointype", JoinTypeConverter, &wr, this, LINEJOIN_EXTRAPOLATED),
-    miter_limit(_("Miter limit"), _("Limit for miter joins"), "miter_limit", &wr, this, 30.)
+    miter_limit(_("Miter limit"), _("Limit for miter joins"), "miter_limit", &wr, this, 100.)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
@@ -205,43 +210,47 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     unsigned size = path_in[0].size();
     if (size == first_cusp.size()) {
         //check to see if the knots were dragged over each other
-        //if so, reset the end offset
+        //if so, reset the end offset, but still allow the start offset.
         if ( attach_start >= (size - attach_end) ) {
             attach_end.param_set_value( size - attach_start );
         }
     }
     
-    if (attach_start == size - attach_end) {
+    if (attach_end == size - attach_start) {
         metInMiddle = true;
     }
 
-    //don't let it be zero
-    if (attach_start <= 0.00000001) {
-        attach_start.param_set_value( 0.00000001 );
-        zeroStart = true;
-    }
-    if (attach_end <= 0.00000001) {
-        attach_end.param_set_value( 0.00000001 );
-        zeroEnd = true;
-    }
-
     //don't let it be integer
-    if (double(unsigned(attach_start)) == attach_start) {
-        attach_start.param_set_value(attach_start - 0.00001);
-    }
-    if (double(unsigned(attach_end)) == attach_end) {
-        attach_end.param_set_value(attach_end -     0.00001);
+    {
+        if (double(unsigned(attach_start)) == attach_start) {
+            attach_start.param_set_value(attach_start - 0.00001);
+        }
+        if (double(unsigned(attach_end)) == attach_end) {
+            attach_end.param_set_value(attach_end -     0.00001);
+        }
     }
 
     unsigned allowed_start = first_cusp.size();
     unsigned allowed_end = last_cusp.size();
 
     //don't let the knots be farther than they are allowed to be
-    if ((unsigned)attach_start >= allowed_start) {
-        attach_start.param_set_value((double)allowed_start - 0.00001);
+    {
+        if ((unsigned)attach_start >= allowed_start) {
+            attach_start.param_set_value((double)allowed_start - 0.00001);
+        }
+        if ((unsigned)attach_end >= allowed_end) {
+            attach_end.param_set_value((double)allowed_end - 0.00001);
+        }
     }
-    if ((unsigned)attach_end >= allowed_end) {
-        attach_end.param_set_value((double)allowed_end - 0.00001);
+    
+    //don't let it be zero
+    if (attach_start < 0.0000001 || withinRange(double(attach_start), 0.00000001, 0.000001)) {
+        attach_start.param_set_value( 0.0000001 );
+        zeroStart = true;
+    }
+    if (attach_end < 0.0000001 || withinRange(double(attach_end), 0.00000001, 0.000001)) {
+        attach_end.param_set_value( 0.0000001 );
+        zeroEnd = true;
     }
 
     //remember, Path::operator () means get point at time t
@@ -252,7 +261,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     //the following function just splits it up into three pieces.
     pathv_out = doEffect_simplePath(path_in);
 
-    //now for the actual tapering. We use a Pattern Along Path method to get this done.
+    //now for the actual tapering. We use the stretch_along method to get this done.
 
     Geom::PathVector real_pathv;
     Geom::Path real_path;
@@ -261,13 +270,13 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     Geom::Path throwaway_path;
 
     if (!zeroStart) {
-        //Construct the pattern (pat_str stands for pattern string) (yes, this is easier, trust me)
+        //Construct the pattern (pat_str stands for pattern string) (and yes, this is easier, trust me)
         std::stringstream pat_str;
         pat_str << "M 1,0 C " << 1 - (double)smoothing << ",0 0,0.5 0,0.5 0,0.5 " << 1 - (double)smoothing << ",1 1,1";
 
         pat_vec = sp_svg_read_pathv(pat_str.str().c_str());
         pwd2.concat(stretch_along(pathv_out[0].toPwSb(), pat_vec[0], -fabs(line_width)));
-        throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
+        throwaway_path = Geom::path_from_piecewise(pwd2, LPE_CONVERSION_TOLERANCE)[0];
 
         real_path.append(throwaway_path);
     }
@@ -276,29 +285,52 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         //append the outside outline of the path (with direction)
         throwaway_path = Outline::PathOutsideOutline(pathv_out[1],
                          -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
-
-        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+        if (!zeroStart) {
+            if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
+                real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
+            } else {
+                real_path.setFinal(throwaway_path.initialPoint());
+            }
+        }
+        real_path.append(throwaway_path);
     }
 
     if (!zeroEnd) {
         //append the ending taper
         std::stringstream pat_str_1;
-        pat_str_1 << "M 0,0 0,1 C " << (double)smoothing << ",1 1,0.5 1,0.5 1,0.5 " << double(smoothing) << ",0 0,0";
+        pat_str_1 << "M 0,1 C " << (double)smoothing << ",1 1,0.5 1,0.5 1,0.5 " << double(smoothing) << ",0 0,0";
         pat_vec = sp_svg_read_pathv(pat_str_1.str().c_str());
 
         pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
         pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], -fabs(line_width)));
 
-        throwaway_path = Geom::path_from_piecewise(pwd2, 0.001)[0];
-        real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
+        throwaway_path = Geom::path_from_piecewise(pwd2, LPE_CONVERSION_TOLERANCE)[0];
+        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
+            real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
+        } else {
+            real_path.setFinal(throwaway_path.initialPoint());
+        }
+        real_path.append(throwaway_path);
     }
-    //append the inside outline of the path (against direction)
-    throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(),
-                     -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
-
-    real_path.append(throwaway_path, Geom::Path::STITCH_DISCONTINUOUS);
-    real_path.appendNew<Geom::LineSegment>(real_path.initialPoint());
-
+    
+    if (!metInMiddle) {
+        //append the inside outline of the path (against direction)
+        throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(),
+                         -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+        
+        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
+            real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
+        } else {
+            real_path.setFinal(throwaway_path.initialPoint());
+        }
+        real_path.append(throwaway_path);
+    }
+    
+    if (Geom::distance(real_path.finalPoint(), real_path.initialPoint()) > 0.0000001) {
+        real_path.appendNew<Geom::LineSegment>(real_path.initialPoint());
+    } else {
+        real_path.setFinal(real_path.initialPoint());
+    }
     real_path.close();
     
     real_pathv.push_back(real_path);

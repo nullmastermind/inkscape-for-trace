@@ -162,8 +162,7 @@ bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
     //assert(cbc1.finalPoint() == cbc2.initialPoint());
     //short circuiting?
     if (cbc1.finalPoint() != cbc2.initialPoint()) {
-        printf("There was an issue when asserting that one curve's end is the start of the other. Line %d, File %s\n"
-               "By default we are going to say that this is an inside join, so we cannot make a line join for it.\n", __LINE__, __FILE__);
+        printf("erk! Line %d, File %s\n", __LINE__, __FILE__);
         return false;
     }
     
@@ -261,7 +260,10 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             }
             path_builder.appendNew<Geom::LineSegment> (endPt);
         }
-        path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
+        if (cbc1->finalPoint() != cbc2->initialPoint()) {
+            path_builder.appendNew<Geom::LineSegment>(cbc2->initialPoint());
+        }
+        path_builder.append(*cbc2);
     }
     if ( outside && lineProblem ) {
         Geom::Path pth;
@@ -283,7 +285,10 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             }
         }
         path_builder.appendNew<Geom::LineSegment> (endPt);
-        path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
+        if (cbc1->finalPoint() != cbc2->initialPoint()) {
+            path_builder.appendNew<Geom::LineSegment>(cbc2->initialPoint());
+        }
+        path_builder.append(*cbc2);
     }
     if ( !outside ) {
         /*path_builder.appendNew<Geom::LineSegment> (endPt);*/
@@ -297,7 +302,12 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve
             cubic = cubic.subdivide(cross[0].tb).second;
             path_builder.append(cubic, Geom::Path::STITCH_DISCONTINUOUS);
         } else {
-            path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
+            if (Geom::distance(path_builder.finalPoint(), cbc2->initialPoint()) > 0.0000001) {
+                path_builder.appendNew<Geom::LineSegment>(cbc2->initialPoint());
+            } else {
+                path_builder.setFinal(cbc2->initialPoint());
+            }
+            path_builder.append(*cbc2);
         }
     }
 }
@@ -360,6 +370,9 @@ void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cb
             path_builder.appendNew <Geom::CubicBezier> (sub1.first[1], sub1.first[2], /*sub1.first[3]*/ sub2.second[0] );
             path_builder.appendNew <Geom::CubicBezier> (sub2.second[1], sub2.second[2], /*sub2.second[3]*/ endPt );
         }
+        if (cbc1->finalPoint() != cbc2->initialPoint()) {
+            path_builder.appendNew<Geom::LineSegment>(cbc2->initialPoint());
+        }
         path_builder.append(*cbc2);
     } else {
         //probably on the inside of the corner
@@ -374,7 +387,12 @@ void reflect_curves(Geom::Path& path_builder, Geom::Curve* cbc1, Geom::Curve* cb
             cubic = cubic.subdivide(cross[0].tb).second;
             path_builder.append(cubic, Geom::Path::STITCH_DISCONTINUOUS);
         } else {
-            path_builder.append(*cbc2, Geom::Path::STITCH_DISCONTINUOUS);
+            if (Geom::distance(path_builder.finalPoint(), cbc2->initialPoint()) > 0.0000001) {
+                path_builder.appendNew<Geom::LineSegment>(cbc2->initialPoint());
+            } else {
+                path_builder.setFinal(cbc2->initialPoint());
+            }
+            path_builder.append(*cbc2);
         }
     }
 }
@@ -431,6 +449,7 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             }
             //store it
             Geom::Path temp_path = (*path_vec)[0];
+            //erase the first segment since the join code already appended it
             temp_path.erase(temp_path.begin());
             
             path_builder.append( temp_path );
@@ -477,7 +496,7 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
         Geom::Curve * cbc1;
         Geom::Curve * cbc2;
         
-        if ( path_in[path_in.size() - 1].length() != Geom::distance(path_in[path_in.size() - 1].finalPoint(), path_in.initialPoint())) {
+        if ( path_in[path_in.size()].isDegenerate() ) {
             //handle case for last segment curved
             outlined_result = Path();
             to_outline = Path();
@@ -512,10 +531,10 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
             
             if (extrapolate) {
                 extrapolate_curves(path_builder, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
-                                   outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+                                   outside_angle ( path_in[path_in.size() - 1], oneCurve [0] ));
             } else {
                 reflect_curves (path_builder, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
-                                outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+                                outside_angle ( path_in[path_in.size() - 1], oneCurve [0] ));
             }
             
             delete cbc1; cbc1 = cbc2->duplicate();
@@ -534,22 +553,29 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
         Geom::Path temporary; //just an accessory path, we won't need it for long
         temporary.append(*cbc1);
         
+        const Geom::Curve& prev_curve = path_in[path_in.size()].isDegenerate() ? path_in[path_in.size() - 1] : 
+                                        path_in[path_in.size()];
+        
         if (extrapolate) {
             extrapolate_curves(temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
-                               outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+                               outside_angle ( prev_curve, path_in [0] ));
         } else {
             reflect_curves (temporary, cbc1, cbc2, cbc2->initialPoint(), miter_limit, line_width,
-                            outside_angle ( path_in[path_in.size() - 1], path_in [0] ));
+                            outside_angle ( prev_curve, path_in [0] ));
         }
         //extract the appended curves
-        if (temporary[0].finalPoint() != path_builder[path_builder.size() - 1].finalPoint()) {
+        //if (temporary[temporary.size()].initialPoint() != path_builder[0].initialPoint()) {
             path_builder.erase(path_builder.begin());
-        } else {
+        /*} else {
             temporary.erase_last();
-        }
+        }*/
         path_builder.erase_last();
-        
-        path_builder.append(temporary, Geom::Path::STITCH_DISCONTINUOUS);
+        if (Geom::distance(path_builder.finalPoint(), temporary.initialPoint()) > 0.0000001) {
+            path_builder.appendNew<Geom::LineSegment>(temporary.initialPoint());
+        } else {
+            path_builder.setFinal(temporary.initialPoint());
+        }
+        path_builder.append(temporary);
         path_builder.close();
         
         if (cbc1) delete cbc1;

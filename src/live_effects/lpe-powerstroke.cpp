@@ -662,6 +662,9 @@ LPEPowerStroke::doEffect_path (std::vector<Geom::Path> const & path_in)
     if (Geom::Interpolate::CubicBezierJohan *johan = dynamic_cast<Geom::Interpolate::CubicBezierJohan*>(interpolator)) {
         johan->setBeta(interpolator_beta);
     }
+    if (Geom::Interpolate::CubicBezierSmooth *smooth = dynamic_cast<Geom::Interpolate::CubicBezierSmooth*>(interpolator)) {
+        smooth->setBeta(interpolator_beta);
+    }
     Geom::Path strokepath = interpolator->interpolateToPath(ts);
     delete interpolator;
 

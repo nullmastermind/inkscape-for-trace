@@ -52,9 +52,9 @@ static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinTypeData, s
 
 LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
 	Effect(lpeobject),
-	line_width(_("Line width"), _("Thickness of the stroke"), "line_width", &wr, this, 10.),
+	line_width(_("Line width"), _("Thickness of the stroke"), "line_width", &wr, this, 1.),
 	linecap_type(_("Line cap"), _("The end shape of the stroke"), "linecap_type", CapTypeConverter, &wr, this, butt_straight),
-	linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, join_pointy),
+	linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, LINEJOIN_EXTRAPOLATED),
 	miter_limit(_("Miter limit:"), _("Maximum length of the miter join (in units of stroke width)"), "miter_limit", &wr, this, 100.),
 	attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true)
 {
@@ -164,7 +164,8 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
 std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const & path_in)
 {       
 	return Outline::PathVectorOutline(path_in, line_width, static_cast<ButtType>(linecap_type.get_value()), 
-						static_cast<LineJoinType>(linejoin_type.get_value()), miter_limit);
+                                      static_cast<LineJoinType>(linejoin_type.get_value()),
+						              (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit));
 }
 
 } //namespace LivePathEffect
