@@ -213,10 +213,14 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         //if so, reset the end offset, but still allow the start offset.
         if ( attach_start >= (size - attach_end) ) {
             attach_end.param_set_value( size - attach_start );
+	    metInMiddle = true;
         }
     }
     
     if (attach_start == size - attach_end) {
+        metInMiddle = true;
+    }
+    if (attach_end == size - attach_start) {
         metInMiddle = true;
     }
 
@@ -285,7 +289,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         //append the outside outline of the path (with direction)
         throwaway_path = Outline::PathOutsideOutline(pathv_out[1],
                          -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
-        if (!zeroStart) {
+        if (!zeroStart && real_path.size() >= 1 && throwaway_path.size() >= 1) {
             if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
                 real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
             } else {
@@ -305,7 +309,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], -fabs(line_width)));
 
         throwaway_path = Geom::path_from_piecewise(pwd2, LPE_CONVERSION_TOLERANCE)[0];
-        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
+        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001 && real_path.size() >= 1) {
             real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
         } else {
             real_path.setFinal(throwaway_path.initialPoint());
@@ -318,7 +322,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(),
                          -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
         
-        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
+        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001 && real_path.size() >= 1) {
             real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
         } else {
             real_path.setFinal(throwaway_path.initialPoint());
