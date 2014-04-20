@@ -216,7 +216,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         }
     }
     
-    if (attach_end == size - attach_start) {
+    if (attach_start == size - attach_end) {
         metInMiddle = true;
     }
 
