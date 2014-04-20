@@ -378,8 +378,8 @@ void Effect::doOnRemove (SPLPEItem const* lpeitem)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
-    pathvector_before_effect = sp_curve->get_pathvector();
+    /*sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
+    pathvector_before_effect = sp_curve->get_pathvector();*/
     doOnApply(lpeitem);
 }
 
