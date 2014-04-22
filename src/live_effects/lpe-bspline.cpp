@@ -2,7 +2,8 @@
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include <gtkmm/box.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
@@ -59,10 +60,10 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
                    false),
       weight(_("Change weight:"), _("Change weight of the effect"), "weight",
              &wr, this, 0.3334) {
-  registerParameter(dynamic_cast<Parameter *>(&ignoreCusp));
-  registerParameter(dynamic_cast<Parameter *>(&onlySelected));
   registerParameter(dynamic_cast<Parameter *>(&weight));
   registerParameter(dynamic_cast<Parameter *>(&steps));
+  registerParameter(dynamic_cast<Parameter *>(&ignoreCusp));
+  registerParameter(dynamic_cast<Parameter *>(&onlySelected));
   weight.param_set_range(0.0000, 1);
   weight.param_set_increments(0.1, 0.1);
   weight.param_set_digits(4);
@@ -287,12 +288,32 @@ Gtk::Widget *LPEBSpline::newWidget() {
     if ((*it)->widget_is_visible) {
       Parameter *param = *it;
       Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+      if (param->param_key == "weight"){
+          Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true,0));
+          Gtk::Button *defaultWeight =
+              Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight"))));
+          defaultWeight->signal_clicked()
+              .connect(sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &LPEBSpline::toDefaultWeight), widg));
+          buttons->pack_start(*defaultWeight, true, true, 2);
+          Gtk::Button *makeCusp =
+              Gtk::manage(new Gtk::Button(Glib::ustring(_("Make cusp"))));
+          makeCusp->signal_clicked()
+              .connect(sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &LPEBSpline::toMakeCusp), widg));
+          buttons->pack_start(*makeCusp, true, true, 2);
+          vbox->pack_start(*buttons, true, true, 2);
+      }
       if (param->param_key == "weight" || param->param_key == "steps") {
         Inkscape::UI::Widget::Scalar *widgRegistered =
             Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
         widgRegistered->signal_value_changed()
             .connect(sigc::mem_fun(*this, &LPEBSpline::toWeight));
         widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
+        if (widg){
+            Gtk::HBox * scalarParameter = dynamic_cast<Gtk::HBox *>(widg);
+            std::vector< Gtk::Widget* > childList = scalarParameter->get_children();
+            Gtk::Entry* entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
+            entryWidg->set_width_chars(6);
+        }
       }
       if (param->param_key == "onlySelected") {
         Gtk::CheckButton *widgRegistered =
@@ -318,24 +339,26 @@ Gtk::Widget *LPEBSpline::newWidget() {
 
     ++it;
   }
-  Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true,0));
-  Gtk::Button *defaultWeight =
-      Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight 0.3334"))));
-  defaultWeight->signal_clicked()
-      .connect(sigc::mem_fun(*this, &LPEBSpline::toDefaultWeight));
-  buttons->pack_start(*defaultWeight, true, true, 2);
-  Gtk::Button *makeCusp =
-      Gtk::manage(new Gtk::Button(Glib::ustring(_("Make cusp"))));
-  makeCusp->signal_clicked()
-      .connect(sigc::mem_fun(*this, &LPEBSpline::toMakeCusp));
-  buttons->pack_start(*makeCusp, true, true, 2);
-  vbox->pack_start(*buttons, true, true, 2);
   return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
-void LPEBSpline::toDefaultWeight() { changeWeight(0.3334); }
+void LPEBSpline::toDefaultWeight(Gtk::Widget *widgWeight) { 
+    weight.param_set_value(0.3334);
+    changeWeight(0.3334);
+    Gtk::HBox * scalarParameter = dynamic_cast<Gtk::HBox *>(widgWeight);
+    std::vector< Gtk::Widget* > childList = scalarParameter->get_children();
+    Gtk::Entry* entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
+    entryWidg->set_text("0.3334");
+}
 
-void LPEBSpline::toMakeCusp() { changeWeight(0.0000); }
+void LPEBSpline::toMakeCusp(Gtk::Widget *widgWeight) { 
+    weight.param_set_value(0.0000);
+    changeWeight(0.0000);
+    Gtk::HBox * scalarParameter = dynamic_cast<Gtk::HBox *>(widgWeight);
+    std::vector< Gtk::Widget* > childList = scalarParameter->get_children();
+    Gtk::Entry* entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
+    entryWidg->set_text("0.0000");
+}
 
 void LPEBSpline::toWeight() { changeWeight(weight); }
 

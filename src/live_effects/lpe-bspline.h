@@ -34,9 +34,9 @@ public:
 
   virtual void changeWeight(double weightValue);
 
-  virtual void toDefaultWeight();
+  virtual void toDefaultWeight(Gtk::Widget *widgWeight);
 
-  virtual void toMakeCusp();
+  virtual void toMakeCusp(Gtk::Widget *widgWeight);
 
   virtual void toWeight();
 
