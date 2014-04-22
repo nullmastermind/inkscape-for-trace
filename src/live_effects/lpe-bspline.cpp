@@ -318,20 +318,18 @@ Gtk::Widget *LPEBSpline::newWidget() {
 
     ++it;
   }
+  Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true,0));
   Gtk::Button *defaultWeight =
       Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight 0.3334"))));
-  defaultWeight->set_alignment(0.0, 0.5);
   defaultWeight->signal_clicked()
       .connect(sigc::mem_fun(*this, &LPEBSpline::toDefaultWeight));
-  Gtk::Widget *defaultWeightWidget = dynamic_cast<Gtk::Widget *>(defaultWeight);
-  vbox->pack_start(*defaultWeightWidget, true, true, 2);
+  buttons->pack_start(*defaultWeight, true, true, 2);
   Gtk::Button *makeCusp =
       Gtk::manage(new Gtk::Button(Glib::ustring(_("Make cusp"))));
-  makeCusp->set_alignment(0.0, 0.5);
   makeCusp->signal_clicked()
       .connect(sigc::mem_fun(*this, &LPEBSpline::toMakeCusp));
-  Gtk::Widget *makeCuspWidget = dynamic_cast<Gtk::Widget *>(makeCusp);
-  vbox->pack_start(*makeCuspWidget, true, true, 2);
+  buttons->pack_start(*makeCusp, true, true, 2);
+  vbox->pack_start(*buttons, true, true, 2);
   return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
