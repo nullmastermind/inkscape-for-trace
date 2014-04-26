@@ -53,12 +53,12 @@ const char *href_like_attributes[] = {
 #define NUM_HREF_LIKE_ATTRIBUTES (sizeof(href_like_attributes) / sizeof(*href_like_attributes))
 
 const SPIPaint SPStyle::* SPIPaint_members[] = {
-    &SPStyle::color,
+    //&SPStyle::color,
     &SPStyle::fill,
     &SPStyle::stroke,
 };
 const char* SPIPaint_properties[] = {
-    "color",
+    //"color",
     "fill",
     "stroke",
 };
@@ -76,7 +76,7 @@ const char* other_url_properties[] = {
 #define NUM_OTHER_URL_PROPERTIES (sizeof(other_url_properties) / sizeof(*other_url_properties))
 
 const char* clipboard_properties[] = {
-    "color",
+    //"color",
     "fill",
     "filter",
     "stroke",
@@ -161,7 +161,7 @@ find_references(SPObject *elem, refmap_type *refmap)
     /* check for url(#...) references in markers */
     const gchar *markers[4] = { "", "marker-start", "marker-mid", "marker-end" };
     for (unsigned i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
-        const gchar *value = style->marker[i].value;
+        const gchar *value = style->marker_ptrs[i]->value;
         if (value) {
             gchar *uri = extract_uri(value);
             if (uri && uri[0] == '#') {
