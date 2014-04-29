@@ -16,7 +16,6 @@
 # include "config.h"
 #endif
 
-//the gtk devs are really not smart about backwards compatibility
 #include "ui/tool/multi-path-manipulator.h"
 
 #include <glibmm/i18n.h>
@@ -243,7 +242,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve) {
 
                 // Groups have their doBeforeEffect called elsewhere
                 if (!SP_IS_GROUP(this)) {
-                    lpe->doBeforeEffect_impl(this);
+                    lpe->doBeforeEffect(this);
                 }
 
                 try {
@@ -256,9 +255,6 @@ bool SPLPEItem::performPathEffect(SPCurve *curve) {
                                         _("An exception occurred during execution of the Path Effect.") );
                     }
                     return false;
-                }
-                if (!SP_IS_GROUP(this)) {
-                    lpe->doAfterEffect(this);
                 }
             }
         }
@@ -415,7 +411,7 @@ void SPLPEItem::addPathEffect(gchar *value, bool reset)
             }
 
             // perform this once when the effect is applied
-            lpe->doOnApply_impl(this);
+            lpe->doOnApply(this);
 
             // indicate that all necessary preparations are done and the effect can be performed
             lpe->setReady();
@@ -428,11 +424,9 @@ void SPLPEItem::addPathEffect(gchar *value, bool reset)
         sp_lpe_item_update_patheffect(this, true, true);
         
         //fix bug 1219324
-        Inkscape::UI::Tools::NodeTool *tool = 0;
         if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
             if (INK_IS_NODE_TOOL(ec)) {
-                tool = static_cast<Inkscape::UI::Tools::NodeTool*>(ec);
                 tools_switch(SP_ACTIVE_DESKTOP, TOOLS_LPETOOL); //mhh
                 tools_switch(SP_ACTIVE_DESKTOP, TOOLS_NODES);
             }
@@ -448,45 +442,48 @@ void SPLPEItem::addPathEffect(LivePathEffectObject * new_lpeobj)
     g_free(hrefstr);
 }
 
+/**
+ *  If keep_path == true, the item should not be updated, effectively 'flattening' the LPE.
+ */
 void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
 {
     Inkscape::LivePathEffect::LPEObjectReference* lperef = this->getCurrentLPEReference();
     if (!lperef)
         return;
-        
-    Inkscape::LivePathEffect::Effect * lpe = this->getCurrentLPE();
-    lpe->doOnRemove(this);
-    
+
     PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
     std::string r = patheffectlist_write_svg(new_list);
 
-    
     if (!r.empty()) {
         this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
     } else {
         this->getRepr()->setAttribute("inkscape:path-effect", NULL);
+    }
+
+    if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
         }
-    }
 
-    if (!keep_paths) {
         sp_lpe_item_cleanup_original_path_recursive(this);
     }
 }
 
+/**
+ *  If keep_path == true, the item should not be updated, effectively 'flattening' the LPE.
+ */
 void SPLPEItem::removeAllPathEffects(bool keep_paths)
 {
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
 
-    // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
-    if( SP_IS_GENERICELLIPSE(this)) {
-        SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
-    }
-
     if (!keep_paths) {
+        // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
+        if (SP_IS_GENERICELLIPSE(this)) {
+            SP_GENERICELLIPSE(this)->write(this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT);
+        }
+
         sp_lpe_item_cleanup_original_path_recursive(this);
     }
 }
@@ -554,7 +551,6 @@ bool SPLPEItem::hasBrokenPathEffect() const
 
 bool SPLPEItem::hasPathEffect() const
 {
-    if (!path_effect_list) return false; //nullptr sucks
     if (path_effect_list->empty()) {
         return false;
     }
@@ -689,26 +685,17 @@ static std::string hreflist_write_svg(HRefList const & list)
 // Return a copy of the effect list
 PathEffectList SPLPEItem::getEffectList()
 {
-    if (!path_effect_list) {
-        g_critical("Broken path effect list in %s\n", __FILE__);
-        return PathEffectList();
-    }
     return *path_effect_list;
 }
 
 // Return a copy of the effect list
 PathEffectList const SPLPEItem::getEffectList() const
 {
-    if (!path_effect_list) {
-        g_critical("Broken path effect list in %s\n", __FILE__);
-        return PathEffectList();
-    }
     return *path_effect_list;
 }
 
 Inkscape::LivePathEffect::LPEObjectReference* SPLPEItem::getCurrentLPEReference()
 {
-    if (!this->hasPathEffect()) return NULL;
     if (!this->current_path_effect && !this->path_effect_list->empty()) {
         setCurrentPathEffect(this->path_effect_list->back());
     }
@@ -718,9 +705,6 @@ Inkscape::LivePathEffect::LPEObjectReference* SPLPEItem::getCurrentLPEReference(
 
 Inkscape::LivePathEffect::Effect* SPLPEItem::getCurrentLPE()
 {
-    if (path_effect_list == NULL) {
-        return NULL;
-    }
     Inkscape::LivePathEffect::LPEObjectReference* lperef = getCurrentLPEReference();
 
     if (lperef && lperef->lpeobject)

@@ -98,4 +98,4 @@ ink_common_sources += \
 	live_effects/lpe-jointype.cpp	\
 	live_effects/lpe-jointype.h	\
 	live_effects/lpe-taperstroke.cpp	\
-	live_effects/lpe-taperstroke.h
+	live_effects/lpe-taperstroke.h 

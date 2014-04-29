@@ -97,6 +97,34 @@ namespace Inkscape
     // }
     // font_list_store->foreach_iter( sigc::mem_fun(*this, &FontLister::print_document_font ));
 
+
+    /* Used to insert a font that was not in the document and not on the system into the font list. */
+    void
+    FontLister::insert_font_family( Glib::ustring new_family ) {
+
+      GList *styles = default_styles;
+
+      /* In case this is a fallback list, check if first font-family on system. */
+      std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", new_family );
+      if( !tokens.empty() && !tokens[0].empty() ) {
+
+        Gtk::TreeModel::iterator iter2 = font_list_store->get_iter( "0" );
+        while( iter2 != font_list_store->children().end() ) {
+          Gtk::TreeModel::Row row = *iter2;
+          if( row[FontList.onSystem] && tokens[0].compare( row[FontList.family] ) == 0 ) {
+            styles = row[FontList.styles];
+            break;
+          }
+          ++iter2;
+        }
+      }
+
+      Gtk::TreeModel::iterator treeModelIter = font_list_store->prepend();
+      (*treeModelIter)[FontList.family] = reinterpret_cast<const char*>(g_strdup(new_family.c_str()));
+      (*treeModelIter)[FontList.styles] = styles;
+      (*treeModelIter)[FontList.onSystem] = false;
+    }
+
     void
     FontLister::update_font_list( SPDocument* document ) {
 
@@ -330,8 +358,8 @@ namespace Inkscape
 	sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONT_SPECIFICATION);
 
       //std::cout << "  Attempting selected style" << std::endl;
-      if( result != QUERY_STYLE_NOTHING && query->text->font_specification.set ) {
-	fontspec = query->text->font_specification.value;
+      if( result != QUERY_STYLE_NOTHING && query->font_specification.set ) {
+	fontspec = query->font_specification.value;
 	//std::cout << "   fontspec from query   :" << fontspec << ":" << std::endl;
       }
 
@@ -665,15 +693,15 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
       if (style) {
 
 	//  First try to use the font specification if it is set
-        if (style->text->font_specification.set
-            && style->text->font_specification.value
-            && *style->text->font_specification.value) {
+        if (style->font_specification.set
+            && style->font_specification.value
+            && *style->font_specification.value) {
 
-	  fontspec = style->text->font_specification.value;
+	  fontspec = style->font_specification.value;
 
         } else {
 
-	  fontspec = style->text->font_family.value;
+	  fontspec = style->font_family.value;
 	  fontspec += ",";
 
 	  switch (style->font_weight.computed) {

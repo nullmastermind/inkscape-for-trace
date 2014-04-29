@@ -81,7 +81,7 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
         
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (lpeitem->style->stroke.isSet()) {
+        if (true) {
             if (lpeitem->style->stroke.isPaintserver()) {
                 SPPaintServer * server = lpeitem->style->getStrokePaintServer();
                 if (server) {
@@ -125,7 +125,7 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
         SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (lpeitem->style->fill.isSet()) {
+        if (true) {
             if (lpeitem->style->fill.isPaintserver()) {
                 SPPaintServer * server = lpeitem->style->getFillPaintServer();
                 if (server) {

@@ -57,7 +57,7 @@ class SPObject;
 #include "util/forward-pointer-iterator.h"
 
 class SPCSSAttr;
-struct SPStyle;
+class SPStyle;
 
 namespace Inkscape {
 namespace XML {

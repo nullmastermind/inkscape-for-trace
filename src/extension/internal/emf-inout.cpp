@@ -33,9 +33,8 @@
 #include <stdint.h>
 #include <libuemf/symbol_convert.h>
 
-#include "sp-root.h"
+#include "sp-root.h" // even though it is included indirectly by wmf-inout.h
 #include "sp-path.h"
-#include "style.h"
 #include "print.h"
 #include "extension/system.h"
 #include "extension/print.h"
@@ -45,12 +44,8 @@
 #include "display/drawing.h"
 #include "display/drawing-item.h"
 #include "clear-n_.h"
-#include "document.h"
-#include "util/units.h"
-#include "shape-editor.h"
-#include "sp-namedview.h"
-#include "document-undo.h"
-#include "inkscape.h"
+#include "util/units.h" // even though it is included indirectly by wmf-inout.h
+#include "inkscape.h" // even though it is included indirectly by wmf-inout.h
 
 #include "emf-print.h"
 #include "emf-inout.h"
@@ -273,54 +268,54 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
         d->hatches.strings[d->hatches.count++]=strdup(hpathname);
 
-        *(d->defs) += "\n";
+        d->defs += "\n";
         switch(hatchType){
             case U_HS_HORIZONTAL:
-                *(d->defs) += "   <path id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
+                d->defs += tmpcolor;
+                d->defs += "\" />\n";
                 break;
             case U_HS_VERTICAL:
-                *(d->defs) += "   <path id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
+                d->defs += tmpcolor;
+                d->defs += "\" />\n";
                 break;
             case U_HS_FDIAGONAL:
-                *(d->defs) += "   <line  id=\"sub";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
+                d->defs += "   <line  id=\"sub";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
                 break;
             case U_HS_BDIAGONAL:
-                *(d->defs) += "   <line  id=\"sub";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
+                d->defs += "   <line  id=\"sub";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
                 break;
             case U_HS_CROSS:
-                *(d->defs) += "   <path   id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path   id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
+                d->defs += tmpcolor;
+                d->defs += "\" />\n";
                  break;
             case U_HS_DIAGCROSS:
-                *(d->defs) += "   <line   id=\"subfd";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
-                *(d->defs) += "   <line   id=\"subbd";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
+                d->defs += "   <line   id=\"subfd";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
+                d->defs += "   <line   id=\"subbd";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
                 break;
             case U_HS_SOLIDCLR:
             case U_HS_DITHEREDCLR:
@@ -329,12 +324,12 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             case U_HS_SOLIDBKCLR:
             case U_HS_DITHEREDBKCLR:
             default:
-                *(d->defs) += "   <path   id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += ";stroke:none";
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path   id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
+                d->defs += tmpcolor;
+                d->defs += ";stroke:none";
+                d->defs += "\" />\n";
                 break;
         }
     }
@@ -396,12 +391,12 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            *(d->defs) += "\n";
-            *(d->defs) += "   <pattern id=\"";
-            *(d->defs) += hatchname;
-            *(d->defs) += "\"  xlink:href=\"#EMFhbasepattern\">\n";
-            *(d->defs) += refpath;
-            *(d->defs) += "   </pattern>\n";
+            d->defs += "\n";
+            d->defs += "   <pattern id=\"";
+            d->defs += hatchname;
+            d->defs += "\"  xlink:href=\"#EMFhbasepattern\">\n";
+            d->defs += refpath;
+            d->defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -414,12 +409,12 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hbkname);
 
-            *(d->defs) += "\n";
-            *(d->defs) += "   <rect id=\"";
-            *(d->defs) += hbkname;
-            *(d->defs) += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
-            *(d->defs) += bkcolor;
-            *(d->defs) += "\" />\n";
+            d->defs += "\n";
+            d->defs += "   <rect id=\"";
+            d->defs += hbkname;
+            d->defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
+            d->defs += bkcolor;
+            d->defs += "\" />\n";
         }
 
         // this is the pattern, its name will show up in Inkscape's pattern selector
@@ -428,15 +423,15 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            *(d->defs) += "\n";
-            *(d->defs) += "   <pattern id=\"";
-            *(d->defs) += hatchname;
-            *(d->defs) += "\"  xlink:href=\"#EMFhbasepattern\">\n";
-            *(d->defs) += "      <use xlink:href=\"#";
-            *(d->defs) += hbkname;
-            *(d->defs) += "\" />\n";
-            *(d->defs) += refpath;
-            *(d->defs) += "   </pattern>\n";
+            d->defs += "\n";
+            d->defs += "   <pattern id=\"";
+            d->defs += hatchname;
+            d->defs += "\"  xlink:href=\"#EMFhbasepattern\">\n";
+            d->defs += "      <use xlink:href=\"#";
+            d->defs += hbkname;
+            d->defs += "\" />\n";
+            d->defs += refpath;
+            d->defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -544,35 +539,35 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
         sprintf(imagename,"EMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        *(d->defs) += "\n";
-        *(d->defs) += "   <image id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "\"\n      ";
-        *(d->defs) += xywh;
-        *(d->defs) += "\n";
-        if(dibparams == U_BI_JPEG){    *(d->defs) += "       xlink:href=\"data:image/jpeg;base64,"; }
-        else {                         *(d->defs) += "       xlink:href=\"data:image/png;base64,";  }
-        *(d->defs) += base64String;
-        *(d->defs) += "\"\n";
-        *(d->defs) += "    preserveAspectRatio=\"none\"\n";
-        *(d->defs) += "    />\n";
+        d->defs += "\n";
+        d->defs += "   <image id=\"";
+        d->defs += imagename;
+        d->defs += "\"\n      ";
+        d->defs += xywh;
+        d->defs += "\n";
+        if(dibparams == U_BI_JPEG){    d->defs += "       xlink:href=\"data:image/jpeg;base64,"; }
+        else {                         d->defs += "       xlink:href=\"data:image/png;base64,";  }
+        d->defs += base64String;
+        d->defs += "\"\n";
+        d->defs += "    preserveAspectRatio=\"none\"\n";
+        d->defs += "    />\n";
 
 
-        *(d->defs) += "\n";
-        *(d->defs) += "   <pattern id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "_ref\"\n      ";
-        *(d->defs) += xywh;
-        *(d->defs) += "\n       patternUnits=\"userSpaceOnUse\"";
-        *(d->defs) += " >\n";
-        *(d->defs) += "      <use id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "_ign\" ";
-        *(d->defs) += " xlink:href=\"#";
-        *(d->defs) += imagename;
-        *(d->defs) += "\" />\n";
-        *(d->defs) += "    ";
-        *(d->defs) += "   </pattern>\n";
+        d->defs += "\n";
+        d->defs += "   <pattern id=\"";
+        d->defs += imagename;
+        d->defs += "_ref\"\n      ";
+        d->defs += xywh;
+        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        d->defs += " >\n";
+        d->defs += "      <use id=\"";
+        d->defs += imagename;
+        d->defs += "_ign\" ";
+        d->defs += " xlink:href=\"#";
+        d->defs += imagename;
+        d->defs += "\" />\n";
+        d->defs += "    ";
+        d->defs += "   </pattern>\n";
     }
     g_free(base64String);//wait until this point to free because it might be a duplicate image
 
@@ -596,17 +591,17 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
             d->images.strings[d->images.count++]=strdup(base64String);
             sprintf(imrotname,"EMFimage%d",idx++);
 
-            *(d->defs) += "\n";
-            *(d->defs) += "   <pattern\n";
-            *(d->defs) += "       id=\"";
-            *(d->defs) += imrotname;
-            *(d->defs) += "_ref\"\n";
-            *(d->defs) += "       xlink:href=\"#";
-            *(d->defs) += imagename;
-            *(d->defs) += "_ref\"\n";
-            *(d->defs) += "       patternTransform=";
-            *(d->defs) += current_matrix(d, 0.0, 0.0, 0); //j use offset 0,0
-            *(d->defs) += " />\n";
+            d->defs += "\n";
+            d->defs += "   <pattern\n";
+            d->defs += "       id=\"";
+            d->defs += imrotname;
+            d->defs += "_ref\"\n";
+            d->defs += "       xlink:href=\"#";
+            d->defs += imagename;
+            d->defs += "_ref\"\n";
+            d->defs += "       patternTransform=";
+            d->defs += current_matrix(d, 0.0, 0.0, 0); //j use offset 0,0
+            d->defs += " />\n";
         }
         g_free(base64String);
     }
@@ -716,7 +711,7 @@ uint32_t Emf::add_gradient(PEMF_CALLBACK_DATA d, uint32_t gradientType, U_TRIVER
         stmp << tmpcolor2;
         stmp << ";stop-opacity:1\" />\n";
         stmp << "   </linearGradient>\n";
-        *(d->defs) += stmp.str().c_str();
+        d->defs += stmp.str().c_str();
     }
 
     return(idx-1);
@@ -811,8 +806,8 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
 
 
 //    tmp_id << "\n\tid=\"" << (d->id++) << "\"";
-//    *(d->outsvg) += tmp_id.str().c_str();
-    *(d->outsvg) += "\n\tstyle=\"";
+//    d->outsvg += tmp_id.str().c_str();
+    d->outsvg += "\n\tstyle=\"";
     if (iType == U_EMR_STROKEPATH || !d->dc[d->level].fill_set) {
         tmp_style << "fill:none;";
     } else {
@@ -936,7 +931,7 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
         tmp_style << "\n\tclip-path=\"url(#clipEmfPath" << d->id << ")\" ";
     clipset = false;
 
-    *(d->outsvg) += tmp_style.str().c_str();
+    d->outsvg += tmp_style.str().c_str();
 }
 
 
@@ -1104,14 +1099,11 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                 if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray.values!=d->dc[d->level-1].style.stroke_dasharray.values)))
                     d->dc[d->level].style.stroke_dasharray.values.clear();
                 for (unsigned int i=0; i<pEmr->elp.elpNumEntries; i++) {
-                    int cur_level = d->level;
-                    d->level = d->emf_obj[index].level;
 //  Doing it this way typically results in a pattern that is tiny, better to assume the array
 //  is the same scale as for dot/dash below, that is, no scaling should be applied
 //                    double dash_length = pix_to_abs_size( d, pEmr->elp.elpStyleEntry[i] );
                     double dash_length = pEmr->elp.elpStyleEntry[i];
-                    d->level = cur_level;
-                    d->dc[d->level].style.stroke_dasharray.values[i] = dash_length;
+                    d->dc[d->level].style.stroke_dasharray.values.push_back(dash_length);
                 }
                 d->dc[d->level].style.stroke_dasharray.set = 1;
             } else {
@@ -1525,8 +1517,8 @@ void Emf::common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
     tmp_image << " preserveAspectRatio=\"none\"\n";
     tmp_image <<  "/> \n";
 
-    *(d->outsvg) += tmp_image.str().c_str();
-    *(d->path) = "";
+    d->outsvg += tmp_image.str().c_str();
+    d->path = "";
 }
 
 /**
@@ -1595,7 +1587,7 @@ int Emf::myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DA
         TR_layout_2_svg(d->tri);
         SVGOStringStream ts;
         ts << d->tri->out;
-        *(d->outsvg) += ts.str().c_str();
+        d->outsvg += ts.str().c_str();
         d->tri = trinfo_clear(d->tri);
     }
     if(d->dc[d->level].dirty){  //Apply the delayed background changes, clear the flag
@@ -1652,7 +1644,7 @@ std::cout << "BEFORE DRAW"
         )
     ){
 // std::cout << "PATH DRAW at TOP" << std::endl;
-        *(d->outsvg) += "   <path ";     // this is the ONLY place <path should be used!!!  One exception, gradientfill.
+        d->outsvg += "   <path ";     // this is the ONLY place <path should be used!!!  One exception, gradientfill.
         if(d->drawtype){                 // explicit draw type EMR record
             output_style(d, d->drawtype);
         }
@@ -1662,11 +1654,11 @@ std::cout << "BEFORE DRAW"
         else {
             output_style(d, U_EMR_STROKEPATH);
         }
-        *(d->outsvg) += "\n\t";
-        *(d->outsvg) += "\n\td=\"";      // this is the ONLY place d=" should be used!!!!  One exception, gradientfill.
-        *(d->outsvg) += *(d->path);
-        *(d->outsvg) += " \" /> \n";
-        *(d->path) = "";
+        d->outsvg += "\n\t";
+        d->outsvg += "\n\td=\"";      // this is the ONLY place d=" should be used!!!!  One exception, gradientfill.
+        d->outsvg += d->path;
+        d->outsvg += " \" /> \n";
+        d->path = "";
         // reset the flags
         d->mask = 0;
         d->drawtype = 0;
@@ -1679,12 +1671,12 @@ std::cout << "BEFORE DRAW"
         {
             dbg_str << "<!-- U_EMR_HEADER -->\n";
 
-            *(d->outdef) += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+            d->outdef += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 
             if (d->pDesc) {
-                *(d->outdef) += "<!-- ";
-                *(d->outdef) += d->pDesc;
-                *(d->outdef) += " -->\n";
+                d->outdef += "<!-- ";
+                d->outdef += d->pDesc;
+                d->outdef += " -->\n";
             }
 
             PU_EMRHEADER pEmr = (PU_EMRHEADER) lpEMFR;
@@ -1745,8 +1737,8 @@ std::cout << "BEFORE DRAW"
             tmp_outdef <<
                 "  width=\"" << d->MMX << "mm\"\n" <<
                 "  height=\"" << d->MMY << "mm\">\n";
-            *(d->outdef) += tmp_outdef.str().c_str();
-            *(d->outdef) += "<defs>";                           // temporary end of header
+            d->outdef += tmp_outdef.str().c_str();
+            d->outdef += "<defs>";                           // temporary end of header
 
             // d->defs holds any defines which are read in.
 
@@ -2015,7 +2007,7 @@ std::cout << "BEFORE DRAW"
             dbg_str << "<!-- U_EMR_EOF -->\n";
 
             tmp_outsvg << "</svg>\n";
-            *(d->outsvg) = *(d->outdef) + *(d->defs) + *(d->outsvg);
+            d->outsvg = d->outdef + d->defs + d->outsvg;
             OK=0;
             break;
         }
@@ -2167,8 +2159,8 @@ std::cout << "BEFORE DRAW"
             tmp_rectangle << "\n   transform=" << current_matrix(d, dx, dy, 1); // calculate appropriate offset
             tmp_rectangle << "/>\n</clipPath>";
 
-            *(d->outdef) += tmp_rectangle.str().c_str();
-            *(d->path) = "";
+            d->outdef += tmp_rectangle.str().c_str();
+            d->path = "";
             break;
         }
         case U_EMR_SCALEVIEWPORTEXTEX:   dbg_str << "<!-- U_EMR_SCALEVIEWPORTEXTEX -->\n"; break;
@@ -2453,12 +2445,12 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= emr_mask;
 
-            *(d->outsvg) += "   <ellipse ";
+            d->outsvg += "   <ellipse ";
             output_style(d, lpEMFR->iType);  //
-            *(d->outsvg) += "\n\t";
-            *(d->outsvg) += tmp_ellipse.str().c_str();
-            *(d->outsvg) += "/> \n";
-            *(d->path) = "";
+            d->outsvg += "\n\t";
+            d->outsvg += tmp_ellipse.str().c_str();
+            d->outsvg += "/> \n";
+            d->path = "";
             break;
         }
         case U_EMR_RECTANGLE:
@@ -2679,7 +2671,7 @@ std::cout << "BEFORE DRAW"
             // The next line should never be needed, should have been handled before main switch
             // qualifier added because EMF's encountered where moveto preceded beginpath followed by lineto
             if(d->mask & U_DRAW_VISIBLE){
-               *(d->path) = "";
+               d->path = "";
             }
             d->mask |= emr_mask;
             break;
@@ -2739,7 +2731,7 @@ std::cout << "BEFORE DRAW"
         case U_EMR_ABORTPATH:
         {
             dbg_str << "<!-- U_EMR_ABORTPATH -->\n";
-            *(d->path) = "";
+            d->path = "";
             d->drawtype = 0;
             break;
         }
@@ -3048,7 +3040,7 @@ std::cout << "BEFORE DRAW"
                     TR_layout_analyze(d->tri);
                     TR_layout_2_svg(d->tri);
                     ts << d->tri->out;
-                    *(d->outsvg) += ts.str().c_str();
+                    d->outsvg += ts.str().c_str();
                     d->tri = trinfo_clear(d->tri);
                     (void) trinfo_load_textrec(d->tri, &tsp, tsp.ori,TR_EMFBOT); // ignore return status, it must work
                 }
@@ -3292,7 +3284,7 @@ std::cout << "BEFORE DRAW"
                      tmp_rectangle << d->gradients.strings[fill_idx];
                      tmp_rectangle << ");\"\n/>\n";
                  }
-                 *(d->outsvg) += tmp_rectangle.str().c_str();
+                 d->outsvg += tmp_rectangle.str().c_str();
             }
             else if(pEmr->ulMode == U_GRADIENT_FILL_TRIANGLE){
                  SVGOStringStream tmp_triangle;
@@ -3310,9 +3302,9 @@ std::cout << "BEFORE DRAW"
                      tmp_triangle << tmpcolor;
                      tmp_triangle << ";\"\n/>\n";
                  }
-                 *(d->outsvg) += tmp_triangle.str().c_str();
+                 d->outsvg += tmp_triangle.str().c_str();
             }
-            *(d->path) = "";            
+            d->path = "";            
             // if it is anything else the record is bogus, so ignore it
             break;
         }
@@ -3325,13 +3317,13 @@ std::cout << "BEFORE DRAW"
             break;
     }  //end of switch
 // When testing, uncomment the following to place a comment for each processed EMR record in the SVG
-//    *(d->outsvg) += dbg_str.str().c_str();
-    *(d->outsvg) += tmp_outsvg.str().c_str();
-    *(d->path) += tmp_path.str().c_str();
+//    d->outsvg += dbg_str.str().c_str();
+    d->outsvg += tmp_outsvg.str().c_str();
+    d->path += tmp_path.str().c_str();
 
     }  //end of while
 // When testing, uncomment the following to show the final SVG derived from the EMF
-// std::cout << *(d->outsvg) << std::endl;
+// std::cout << d->outsvg << std::endl;
     (void) emr_properties(U_EMR_INVALID);  // force the release of the lookup table memory, returned value is irrelevant
 
     return 1;
@@ -3349,61 +3341,20 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 {
     EMF_CALLBACK_DATA d;
 
-//    memset(&d, 0, sizeof(d));
-    memset(&d, 0, sizeof(EMF_CALLBACK_DATA));
-
-    for(int i = 0; i < EMF_MAX_DC+1; i++){  // be sure all values and pointers are empty to start with
-        memset(&(d.dc[i]),0,sizeof(EMF_DEVICE_CONTEXT));
-    }
-
-    d.dc[0].worldTransform.eM11 = 1.0;
-    d.dc[0].worldTransform.eM12 = 0.0;
-    d.dc[0].worldTransform.eM21 = 0.0;
-    d.dc[0].worldTransform.eM22 = 1.0;
-    d.dc[0].worldTransform.eDx  = 0.0;
-    d.dc[0].worldTransform.eDy  = 0.0;
-    d.dc[0].font_name = strdup("Arial");  // Default font, EMF spec says device can pick whatever it wants
-    d.dc[0].textColor           = U_RGB(0, 0, 0);        // default foreground color (black)
-    d.dc[0].bkColor             = U_RGB(255, 255, 255);  // default background color (white)
-    d.dc[0].bkMode              = U_TRANSPARENT;
-    d.dc[0].dirty               = 0;
-
     if (uri == NULL) {
         return NULL;
     }
 
-    d.outsvg            = new Glib::ustring("");
-    d.path              = new Glib::ustring("");
-    d.outdef            = new Glib::ustring("");
-    d.defs              = new Glib::ustring("");
-    d.mask              = 0;
-    d.drawtype          = 0;
-    d.arcdir            = U_AD_COUNTERCLOCKWISE;
-    d.dwRop2            = U_R2_COPYPEN;
-    d.dwRop3            = 0;
-    d.E2IdirY           = 1.0;
-    d.D2PscaleX         = 1.0;
-    d.D2PscaleY         = 1.0;
-    d.hatches.size      = 0;
-    d.hatches.count     = 0;
-    d.hatches.strings   = NULL;
-    d.images.size       = 0;
-    d.images.count      = 0;
-    d.images.strings    = NULL;
-    d.gradients.size    = 0;
-    d.gradients.count   = 0;
-    d.gradients.strings = NULL;
-
     // set up the size default for patterns in defs.  This might not be referenced if there are no patterns defined in the drawing.
 
-    *(d.defs) += "\n";
-    *(d.defs) += "   <pattern id=\"EMFhbasepattern\"     \n";
-    *(d.defs) += "        patternUnits=\"userSpaceOnUse\"\n";
-    *(d.defs) += "        width=\"6\"                    \n";
-    *(d.defs) += "        height=\"6\"                   \n";
-    *(d.defs) += "        x=\"0\"                        \n";
-    *(d.defs) += "        y=\"0\">                       \n";
-    *(d.defs) += "   </pattern>                          \n";
+    d.defs += "\n";
+    d.defs += "   <pattern id=\"EMFhbasepattern\"     \n";
+    d.defs += "        patternUnits=\"userSpaceOnUse\"\n";
+    d.defs += "        width=\"6\"                    \n";
+    d.defs += "        height=\"6\"                   \n";
+    d.defs += "        x=\"0\"                        \n";
+    d.defs += "        y=\"0\">                       \n";
+    d.defs += "   </pattern>                          \n";
 
 
     size_t length;
@@ -3425,12 +3376,8 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
 //    std::cout << "SVG Output: " << std::endl << *(d.outsvg) << std::endl;
 
-    SPDocument *doc = SPDocument::createNewDocFromMem(d.outsvg->c_str(), strlen(d.outsvg->c_str()), TRUE);
+    SPDocument *doc = SPDocument::createNewDocFromMem(d.outsvg.c_str(), strlen(d.outsvg.c_str()), TRUE);
 
-    delete d.outsvg;
-    delete d.path;
-    delete d.outdef;
-    delete d.defs;
     free_emf_strings(d.hatches);
     free_emf_strings(d.images);
     free_emf_strings(d.gradients);
@@ -3450,39 +3397,7 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     d.tri = trinfo_release_except_FC(d.tri);
 
-    // Set viewBox if it doesn't exist
-    if (doc && !doc->getRoot()->viewBox_set) {
-        bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
-        Inkscape::DocumentUndo::setUndoSensitive(doc, false);
-        
-        doc->ensureUpToDate();
-        
-        // Set document unit
-        Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
-        Inkscape::SVGOStringStream os;
-        Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
-        os << doc_unit->abbr;
-        repr->setAttribute("inkscape:document-units", os.str().c_str());
-
-        // Set viewBox
-        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc_unit), doc->getHeight().value(doc_unit)));
-        doc->ensureUpToDate();
-
-        // Scale and translate objects
-        double scale = Inkscape::Util::Quantity::convert(1, "px", doc_unit);
-        ShapeEditor::blockSetItem(true);
-        double dh;
-        if(SP_ACTIVE_DOCUMENT){ // for file menu open or import, or paste from clipboard
-            dh = SP_ACTIVE_DOCUMENT->getHeight().value("px");
-        }
-        else { // for open via --file on command line
-            dh = doc->getHeight().value("px");
-        }
-        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, dh));
-        ShapeEditor::blockSetItem(false);
-
-        Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
-    }
+    setViewBoxIfMissing(doc);
 
     return doc;
 }
