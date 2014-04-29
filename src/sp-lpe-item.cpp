@@ -242,7 +242,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve) {
 
                 // Groups have their doBeforeEffect called elsewhere
                 if (!SP_IS_GROUP(this)) {
-                    lpe->doBeforeEffect(this);
+                    lpe->doBeforeEffect_impl(this);
                 }
 
                 try {
@@ -256,6 +256,9 @@ bool SPLPEItem::performPathEffect(SPCurve *curve) {
                     }
                     return false;
                 }
+                if (!SP_IS_GROUP(this)) {
+                    lpe->doAfterEffect(this);
+		}
             }
         }
     }
