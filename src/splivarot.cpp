@@ -1340,10 +1340,6 @@ sp_selected_path_outline(SPDesktop *desktop)
         gchar *title = item->title();
         // remember description
         gchar *desc = item->desc();
-        // remember highlight color
-        guint32 highlight_color = 0;
-        if (item->isHighlightSet())
-            highlight_color = item->highlight_color();
         
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
@@ -1385,9 +1381,6 @@ sp_selected_path_outline(SPDesktop *desktop)
                 }
                 if (desc) {
                 	newitem->setDesc(desc);
-                }
-                if (highlight_color && newitem) {
-                        newitem->setHighlightColor( highlight_color );
                 }
                 
                 SPShape *shape = SP_SHAPE(item);
@@ -1464,8 +1457,7 @@ sp_selected_path_outline(SPDesktop *desktop)
                                                              g_repr, xml_doc, doc );
                     }
                 }
-                //bug 1290573: completely destroy the old object first to prevent
-                //an ID clash, which has issues on undo
+                //bug lp:1290573 : completely destroy the old object first
                 curve->unref();
                 selection->remove(item);
                 item->deleteObject(false);
@@ -1476,8 +1468,7 @@ sp_selected_path_outline(SPDesktop *desktop)
 
             } else
             {
-                //bug 1290573: completely destroy the old object first to prevent
-                //an ID clash, which has issues on undo
+                //lp:1290573
                 curve->unref();
                 selection->remove(item);
                 item->deleteObject(false);
@@ -1498,9 +1489,6 @@ sp_selected_path_outline(SPDesktop *desktop)
                 }
                 if (desc) {
                 	newitem->setDesc(desc);
-                }
-                if (highlight_color && newitem) {
-                        newitem->setHighlightColor( highlight_color );
                 }
                 
                 selection->add(repr);

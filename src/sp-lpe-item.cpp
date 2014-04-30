@@ -454,10 +454,13 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
     if (!lperef)
         return;
 
+    if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
+        effect_->doOnRemove(this);
+    }    
     PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
     std::string r = patheffectlist_write_svg(new_list);
-
+    
     if (!r.empty()) {
         this->getRepr()->setAttribute("inkscape:path-effect", r.c_str());
     } else {
