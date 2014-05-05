@@ -131,6 +131,7 @@ protected:
 private:
 
     inline PathManipulator &_pm();
+    inline PathManipulator &_pm() const;
     Node *_parent; // the handle's lifetime does not extend beyond that of the parent node,
     // so a naked pointer is OK and allows setting it during Node's construction
     SPCtrlLine *_handle_line;
@@ -490,6 +491,9 @@ inline double Handle::length() const {
     return relativePos().length();
 }
 inline PathManipulator &Handle::_pm() {
+    return _parent->_pm();
+}
+inline PathManipulator &Handle::_pm() const {
     return _parent->_pm();
 }
 inline PathManipulator &Node::_pm() {
