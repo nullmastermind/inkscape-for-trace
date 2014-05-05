@@ -128,6 +128,7 @@ class SPIBase {
         set         = rhs.set;
         inherit     = rhs.inherit;
         style_att   = rhs.style_att;
+        style       = rhs.style;
         return *this;
     }
 
@@ -166,7 +167,7 @@ class SPIFloat : public SPIBase {
     SPIFloat& operator=(const SPIFloat& rhs) {
         SPIBase::operator=(rhs);
         value         = rhs.value;
-        value_default = value_default;
+        value_default = rhs.value_default;
         return *this;
     }
 
@@ -229,7 +230,8 @@ class SPIScale24 : public SPIBase {
 
     SPIScale24& operator=(const SPIScale24& rhs) {
         SPIBase::operator=(rhs);
-        value = rhs.value;
+        value         = rhs.value;
+        value_default = rhs.value_default;
         return *this;
     }
 
@@ -385,19 +387,24 @@ class SPIString : public SPIBase {
   public:
     SPIString() :
         SPIBase( "anonymous_string" ), value(NULL) {};
-    SPIString( Glib::ustring name ) :
-        SPIBase( name ) , value(NULL) {};
-    virtual ~SPIString() { g_free(value); };
+    SPIString( Glib::ustring name, gchar* value_default_in = NULL ) :
+        SPIBase( name ) , value(NULL) , value_default(NULL) {
+        value_default = value_default_in?g_strdup(value_default_in):NULL;
+    };
+    virtual ~SPIString() { g_free(value); g_free(value_default); };
     virtual void read( gchar const *str );
     virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPIBase const *const base = NULL ) const;
-    virtual void clear() { SPIBase::clear(); g_free( value ); value = NULL; };
+    virtual void clear();
     virtual void cascade( const SPIBase* const parent );
     virtual void merge(   const SPIBase* const parent );
 
     SPIString& operator=(const SPIString& rhs) {
         SPIBase::operator=(rhs);
+        g_free(value);
+        g_free(value_default);
         value            = rhs.value?g_strdup(rhs.value):NULL;
+        value_default    = rhs.value_default?g_strdup(rhs.value_default):NULL;
         return *this;
     }
 
@@ -407,6 +414,7 @@ class SPIString : public SPIBase {
   // To do: make private, convert value to Glib::ustring
   public:
     gchar *value;
+    gchar *value_default;
 };
 
 /// Color type interal to SPStyle, FIXME Add string value to store SVG named color.
@@ -425,7 +433,8 @@ class SPIColor : public SPIBase {
 
     SPIColor& operator=(const SPIColor& rhs) {
         SPIBase::operator=(rhs);
-        value.color = rhs.value.color;
+        currentcolor = rhs.currentcolor;
+        value.color  = rhs.value.color;
         return *this;
     }
 
@@ -553,6 +562,7 @@ class SPIPaintOrder : public SPIBase {
             layer[i]     = rhs.layer[i];
             layer_set[i] = rhs.layer_set[i];
         }
+        g_free(value);
         value            = g_strdup(rhs.value);
         return *this;
     }
