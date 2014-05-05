@@ -217,6 +217,7 @@ public:
     Node *nodeAwayFrom(Handle *h);
 
     NodeList &nodeList() { return *(static_cast<ListNode*>(this)->ln_list); }
+    NodeList &nodeList() const { return *(static_cast<ListNode const*>(this)->ln_list); }
 
     /**
      * Move the node to the bottom of its canvas group.
@@ -263,6 +264,7 @@ private:
     Inkscape::SnapSourceType _snapSourceType() const;
     Inkscape::SnapTargetType _snapTargetType() const;
     inline PathManipulator &_pm();
+    inline PathManipulator &_pm() const;
 
     /** Determine whether two nodes are joined by a linear segment. */
     static bool _is_line_segment(Node *first, Node *second);
@@ -491,6 +493,10 @@ inline PathManipulator &Handle::_pm() {
     return _parent->_pm();
 }
 inline PathManipulator &Node::_pm() {
+    return nodeList().subpathList().pm();
+}
+
+inline PathManipulator &Node::_pm() const {
     return nodeList().subpathList().pm();
 }
 

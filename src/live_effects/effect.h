@@ -101,6 +101,7 @@ public:
     Inkscape::XML::Node *  getRepr();
     SPDocument *           getSPDoc();
     LivePathEffectObject * getLPEObj() {return lpeobj;};
+    LivePathEffectObject const * getLPEObj() const {return lpeobj;};
     Parameter *            getParameter(const char * key);
 
     void readallParameters(Inkscape::XML::Node const* repr);

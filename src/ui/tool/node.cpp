@@ -1421,13 +1421,7 @@ Node *Node::nodeAwayFrom(Handle *h)
 
 Glib::ustring Node::_getTip(unsigned state) const
 {
-
-    /* if the node doesnt have strength, it marks it as bspline, we'll use it later
-       to show the appropiate messages. We cannot do it in any other way, because the
-       function is constant */
-    bool isBSpline = false;
-    //if( this->bsplineWeight != 0.0000)
-    //    isBSpline = true;
+    bool isBSpline = _pm().isBSpline();
     if (state_held_shift(state)) {
         bool can_drag_out = (_next() && _front.isDegenerate()) || (_prev() && _back.isDegenerate());
         if (can_drag_out) {
