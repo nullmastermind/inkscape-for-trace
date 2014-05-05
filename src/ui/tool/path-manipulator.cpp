@@ -1181,14 +1181,14 @@ void PathManipulator::_createControlPointsFromGeometry()
 }
 
 //determines if the trace has a bspline effect and the number of steps that it takes
-int PathManipulator::BSplineGetSteps(){
+int PathManipulator::BSplineGetSteps() const {
 
-    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+    LivePathEffect::LPEBSpline const *lpe_bsp = NULL;
 
     if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
-        Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        Inkscape::LivePathEffect::Effect const *thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
         if(thisEffect){
-            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline*>(thisEffect->getLPEObj()->get_lpe());
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline const*>(thisEffect->getLPEObj()->get_lpe());
         }
     }
     int steps = 0;
@@ -1204,6 +1204,10 @@ bool PathManipulator::isBSpline(bool recalculate){
         _is_bspline = this->BSplineGetSteps() > 0;
     }
     return  _is_bspline;
+}
+
+bool PathManipulator::isBSpline() const {
+    return BSplineGetSteps() > 0;
 }
 
 // returns the corresponding strength to the position of the handlers

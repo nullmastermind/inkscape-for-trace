@@ -476,9 +476,7 @@ Glib::ustring Handle::_getTip(unsigned state) const
     // a trick to mark as bspline if the node has no strength, we are going to use it later
     // to show the appropiate messages. We cannot do it in any different way becasue the function is constant
 
-    bool isBSpline = false;
-    //if( _parent->bsplineWeight != 0.0000)
-    //    isBSpline = true;
+    bool isBSpline = _pm().isBSpline();
     bool can_shift_rotate = _parent->type() == NODE_CUSP && !other()->isDegenerate();
     if (can_shift_rotate && !isBSpline) {
         more = C_("Path handle tip", "more: Shift, Ctrl, Alt");
@@ -1421,13 +1419,7 @@ Node *Node::nodeAwayFrom(Handle *h)
 
 Glib::ustring Node::_getTip(unsigned state) const
 {
-
-    /* if the node doesnt have strength, it marks it as bspline, we'll use it later
-       to show the appropiate messages. We cannot do it in any other way, because the
-       function is constant */
-    bool isBSpline = false;
-    //if( this->bsplineWeight != 0.0000)
-    //    isBSpline = true;
+    bool isBSpline = _pm().isBSpline();
     if (state_held_shift(state)) {
         bool can_drag_out = (_next() && _front.isDegenerate()) || (_prev() && _back.isDegenerate());
         if (can_drag_out) {

@@ -77,6 +77,7 @@ public:
     bool hasPathEffectOfType(int const type) const;
     bool hasPathEffectRecursive() const;
     Inkscape::LivePathEffect::Effect* getPathEffectOfType(int type);
+    Inkscape::LivePathEffect::Effect const* getPathEffectOfType(int type) const;
     bool hasBrokenPathEffect() const;
 
     PathEffectList getEffectList();
