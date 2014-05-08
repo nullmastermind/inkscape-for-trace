@@ -143,6 +143,8 @@ src/live_effects/lpe-patternalongpath.cpp
 src/live_effects/lpe-powerstroke.cpp
 src/live_effects/lpe-rough-hatches.cpp
 src/live_effects/lpe-ruler.cpp
+src/live_effects/lpe-bspline.cpp
+src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-vonkoch.cpp
 src/live_effects/parameter/bool.cpp

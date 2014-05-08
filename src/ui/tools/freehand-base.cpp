@@ -82,6 +82,8 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint ho
     , red_curve(NULL)
     , blue_bpath(NULL)
     , blue_curve(NULL)
+    , blue2_bpath(NULL)
+    , blue2_curve(NULL)
     , green_bpaths(NULL)
     , green_curve(NULL)
     , green_anchor(NULL)
@@ -89,6 +91,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint ho
     , white_item(NULL)
     , white_curves(NULL)
     , white_anchors(NULL)
+    , overwriteCurve(NULL)
     , sa(NULL)
     , ea(NULL)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
@@ -137,12 +140,22 @@ void FreehandBase::setup() {
     // Create blue curve
     this->blue_curve = new SPCurve();
 
+    // Create blue2 bpath
+    this->blue2_bpath = sp_canvas_bpath_new(sp_desktop_sketch(this->desktop), NULL);
+    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue2_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+
+    // Create blue2 curve
+    this->blue2_curve = new SPCurve();
+
     // Create green curve
     this->green_curve = new SPCurve();
 
     // No green anchor by default
     this->green_anchor = NULL;
     this->green_closed = FALSE;
+
+    // Create start anchor alternative curve
+    this->overwriteCurve = new SPCurve();
 
     this->attach = TRUE;
     spdc_attach_selection(this, this->selection);
@@ -242,6 +255,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
     if (item && SP_IS_LPE_ITEM(item)) {
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
+        }
+        //add the bspline node in the waiting effects
+        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
+            Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
 
         int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
@@ -459,7 +476,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 {
     // Concat RBG
     SPCurve *c = dc->green_curve;
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // Green
     dc->green_curve = new SPCurve();
     while (dc->green_bpaths) {
@@ -471,6 +488,10 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     c->append_continuous(dc->blue_curve, 0.0625);
     dc->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), NULL);
+
+    // Blue2
+    dc->blue2_curve->reset();
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue2_bpath), NULL);
 
     // Red
     if (dc->red_curve_is_valid) {
@@ -506,9 +527,20 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
             c = reverse_then_unref(c);
         }
-        dc->sa->curve->append_continuous(c, 0.0625);
-        c->unref();
-        dc->sa->curve->closepath_current();
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+            dc->overwriteCurve->append_continuous(c, 0.0625);
+            c->unref();
+            dc->overwriteCurve->closepath_current();
+            if(dc->sa){
+                dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
+                dc->white_curves = g_slist_append(dc->white_curves, dc->overwriteCurve);
+            }
+        }else{
+            dc->sa->curve->append_continuous(c, 0.0625);
+            c->unref();
+            dc->sa->curve->closepath_current();
+        }
         spdc_flush_white(dc, NULL);
         return;
     }
@@ -517,6 +549,10 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     if (dc->sa) {
         SPCurve *s = dc->sa->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, s);
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                s = dc->overwriteCurve;
+        }
         if (dc->sa->start) {
             s = reverse_then_unref(s);
         }
@@ -528,6 +564,25 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         dc->white_curves = g_slist_remove(dc->white_curves, e);
         if (!dc->ea->start) {
             e = reverse_then_unref(e);
+        }
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                e = reverse_then_unref(e);
+                Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*e->last_segment());
+                SPCurve *lastSeg = new SPCurve();
+                if(cubic){
+                    lastSeg->moveto((*cubic)[0]);
+                    lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
+                    if( e->get_segment_count() == 1){
+                        e = lastSeg;
+                    }else{
+                        //we eliminate the last segment
+                        e->backspace();
+                        //and we add it again with the recreation
+                        e->append_continuous(lastSeg, 0.0625);
+                    }
+                }
+                e = reverse_then_unref(e);
         }
         c->append_continuous(e, 0.0625);
         e->unref();
@@ -572,6 +627,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         bool has_lpe = false;
         Inkscape::XML::Node *repr;
+
         if (dc->white_item) {
             repr = dc->white_item->getRepr();
             has_lpe = SP_LPE_ITEM(dc->white_item)->hasPathEffectRecursive();
@@ -635,7 +691,6 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
             active = na;
         }
     }
-
     return active;
 }
 
@@ -673,6 +728,15 @@ static void spdc_free_colors(FreehandBase *dc)
     }
     if (dc->blue_curve) {
         dc->blue_curve = dc->blue_curve->unref();
+    }
+
+    // Blue2
+    if (dc->blue2_bpath) {
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->blue2_bpath));
+        dc->blue2_bpath = NULL;
+    }
+    if (dc->blue2_curve) {
+        dc->blue2_curve = dc->blue2_curve->unref();
     }
 
     // Green
