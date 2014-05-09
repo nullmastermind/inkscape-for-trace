@@ -670,7 +670,18 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
                 // a) del preserves shape, and control is not pressed
                 // b) ctrl+del preserves shape (del_preserves_shape is false), and control is pressed
                 // Hence xor
-                deleteNodes(del_preserves_shape ^ held_control(event->key));
+                guint mode = prefs->getInt("/tools/freehand/pen/freehand-mode", 0);
+
+                //if the trace is bspline ( mode 2)
+                if(mode==2){
+                    //  is this correct ?
+                    if(del_preserves_shape ^ held_control(event->key))
+                        deleteNodes(false);
+                    else
+                        deleteNodes(true);
+                }
+                else
+                    deleteNodes(del_preserves_shape ^ held_control(event->key));
 
                 // Delete any selected gradient nodes as well
                 event_context->deleteSelectedDrag(held_control(event->key));

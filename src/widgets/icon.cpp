@@ -685,6 +685,7 @@ void IconImpl::setupLegacyNaming() {
     legacyNames["draw-star"] ="star_angled";
     legacyNames["path-mode-bezier"] ="bezier_mode";
     legacyNames["path-mode-spiro"] ="spiro_splines_mode";
+    legacyNames["path-mode-bspline"] ="bspline_mode";
     legacyNames["path-mode-polyline"] ="polylines_mode";
     legacyNames["path-mode-polyline-paraxial"] ="paraxial_lines_mode";
     legacyNames["draw-use-tilt"] ="guse_tilt";

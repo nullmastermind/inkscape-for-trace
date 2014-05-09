@@ -117,7 +117,7 @@ public:
 protected:
 
     Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent);
-
+    virtual void handle_2button_press();
     virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
     virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
     virtual bool grabbed(GdkEventMotion *event);
@@ -131,6 +131,7 @@ protected:
 private:
 
     inline PathManipulator &_pm();
+    inline PathManipulator &_pm() const;
     Node *_parent; // the handle's lifetime does not extend beyond that of the parent node,
     // so a naked pointer is OK and allows setting it during Node's construction
     SPCtrlLine *_handle_line;
@@ -217,6 +218,7 @@ public:
     Node *nodeAwayFrom(Handle *h);
 
     NodeList &nodeList() { return *(static_cast<ListNode*>(this)->ln_list); }
+    NodeList &nodeList() const { return *(static_cast<ListNode const*>(this)->ln_list); }
 
     /**
      * Move the node to the bottom of its canvas group.
@@ -263,6 +265,7 @@ private:
     Inkscape::SnapSourceType _snapSourceType() const;
     Inkscape::SnapTargetType _snapTargetType() const;
     inline PathManipulator &_pm();
+    inline PathManipulator &_pm() const;
 
     /** Determine whether two nodes are joined by a linear segment. */
     static bool _is_line_segment(Node *first, Node *second);
@@ -490,7 +493,14 @@ inline double Handle::length() const {
 inline PathManipulator &Handle::_pm() {
     return _parent->_pm();
 }
+inline PathManipulator &Handle::_pm() const {
+    return _parent->_pm();
+}
 inline PathManipulator &Node::_pm() {
+    return nodeList().subpathList().pm();
+}
+
+inline PathManipulator &Node::_pm() const {
     return nodeList().subpathList().pm();
 }
 

@@ -38,6 +38,8 @@ ink_common_sources += \
 	live_effects/lpe-interpolate.h	\
 	live_effects/lpe-test-doEffect-stack.cpp	\
 	live_effects/lpe-test-doEffect-stack.h	\
+	live_effects/lpe-bspline.cpp	\
+	live_effects/lpe-bspline.h	\
 	live_effects/lpe-lattice.cpp	\
 	live_effects/lpe-lattice.h	\
 	live_effects/lpe-envelope.cpp	\
