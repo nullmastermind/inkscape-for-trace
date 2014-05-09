@@ -64,6 +64,10 @@ public:
     SPCanvasItem *blue_bpath;
     SPCurve *blue_curve;
 
+    // Blue2
+    SPCanvasItem *blue2_bpath;
+    SPCurve *blue2_curve;
+
     // Green
     GSList *green_bpaths;
     SPCurve *green_curve;
@@ -75,11 +79,16 @@ public:
     GSList *white_curves;
     GSList *white_anchors;
 
+    //ALternative curve to use on continuing exisiting curve in case of bspline or spirolive 
+    //because usigh anchor curves give memory and random bugs, - and obscure code- in some plataform reported by su_v in mac
+    SPCurve *overwriteCurve;
+
     // Start anchor
     SPDrawAnchor *sa;
 
     // End anchor
     SPDrawAnchor *ea;
+
 
     /* type of the LPE that is to be applied automatically to a finished path (if any) */
     Inkscape::LivePathEffect::EffectType waiting_LPE_type;

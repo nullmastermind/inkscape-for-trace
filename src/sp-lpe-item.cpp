@@ -619,6 +619,22 @@ SPLPEItem::getPathEffectOfType(int type)
     return NULL;
 }
 
+Inkscape::LivePathEffect::Effect const*
+SPLPEItem::getPathEffectOfType(int type) const
+{
+    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::const_iterator i;
+    for (i = path_effect_list->begin(); i != path_effect_list->end(); ++i) {
+        LivePathEffectObject const *lpeobj = (*i)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect const *lpe = lpeobj->get_lpe();
+            if (lpe && (lpe->effectType() == type)) {
+                return lpe;
+            }
+        }
+    }
+    return NULL;
+}
+
 void SPLPEItem::editNextParamOncanvas(SPDesktop *dt)
 {
     Inkscape::LivePathEffect::LPEObjectReference *lperef = this->getCurrentLPEReference();

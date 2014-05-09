@@ -39,6 +39,7 @@ set(live_effects_SRC
 	lpe-spiro.cpp
 	lpe-tangent_to_curve.cpp
 	lpe-test-doEffect-stack.cpp
+	lpe-bspline.cpp
 	lpe-text_label.cpp
 	lpe-vonkoch.cpp
 	lpegroupbbox.cpp
@@ -106,6 +107,7 @@ set(live_effects_SRC
 	lpe-spiro.h
 	lpe-tangent_to_curve.h
 	lpe-test-doEffect-stack.h
+	lpe-bspline.h
 	lpe-text_label.h
 	lpe-vonkoch.h
 	lpegroupbbox.h

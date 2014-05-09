@@ -42,6 +42,7 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
+#include "live_effects/lpe-bspline.h"
 
 namespace Inkscape {
 namespace UI {
@@ -102,7 +103,6 @@ private:
 };
 
 void build_segment(Geom::PathBuilder &, Node *, Node *);
-
 PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         Geom::Affine const &et, guint32 outline_color, Glib::ustring lpe_key)
     : PointManipulator(mpm._path_data.node_data.desktop, *mpm._path_data.node_data.selection)
@@ -145,6 +145,8 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
     _createControlPointsFromGeometry();
+    //Define if the path is BSpline on construction
+    isBSpline(true);
 }
 
 PathManipulator::~PathManipulator()
@@ -662,6 +664,15 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         nl.erase(start);
         start = next;
     }
+    // if we are removing, we readjust the handlers
+    if(isBSpline()){
+        if(start.prev()){
+            start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),start.prev()->back()));
+        }
+        if(end){
+            end->back()->setPosition(BSplineHandleReposition(end->back(),end->front()));
+        }
+    }
 
     return del_len;
 }
@@ -816,7 +827,6 @@ void PathManipulator::scaleHandle(Node *n, int which, int dir, bool pixel)
     }
     h->setRelativePos(relpos);
     update();
-
     gchar const *key = which < 0 ? "handle:scale:left" : "handle:scale:right";
     _commit(_("Scale handle"), key);
 }
@@ -1104,7 +1114,6 @@ void PathManipulator::_createControlPointsFromGeometry()
         Geom::Curve const &cseg = pit->back_closed();
         bool fuse_ends = pit->closed()
             && Geom::are_near(cseg.initialPoint(), cseg.finalPoint());
-
         for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
             Geom::Point pos = cit->finalPoint();
             Node *current_node;
@@ -1171,6 +1180,89 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
 }
 
+//determines if the trace has a bspline effect and the number of steps that it takes
+int PathManipulator::BSplineGetSteps() const {
+
+    LivePathEffect::LPEBSpline const *lpe_bsp = NULL;
+
+    if (SP_IS_LPE_ITEM(_path) && _path->hasPathEffect()){
+        Inkscape::LivePathEffect::Effect const *thisEffect = SP_LPE_ITEM(_path)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+        if(thisEffect){
+            lpe_bsp = dynamic_cast<LivePathEffect::LPEBSpline const*>(thisEffect->getLPEObj()->get_lpe());
+        }
+    }
+    int steps = 0;
+    if(lpe_bsp){
+        steps = lpe_bsp->steps+1;
+    }
+    return steps;
+}
+
+// determines if the trace has bspline effect
+bool PathManipulator::isBSpline(bool recalculate){
+    if(recalculate){
+        _is_bspline = this->BSplineGetSteps() > 0;
+    }
+    return  _is_bspline;
+}
+
+bool PathManipulator::isBSpline() const {
+    return BSplineGetSteps() > 0;
+}
+
+// returns the corresponding strength to the position of the handlers
+double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
+    using Geom::X;
+    using Geom::Y;
+    if(h2){
+        h = h2;
+    }
+    double pos = 0.0000;
+    Node *n = h->parent();
+    Node * nextNode = NULL;
+    nextNode = n->nodeToward(h);
+    if(nextNode){
+        SPCurve *lineInsideNodes = new SPCurve();
+        lineInsideNodes->moveto(n->position());
+        lineInsideNodes->lineto(nextNode->position());
+        pos = Geom::nearest_point(h->position(),*lineInsideNodes->first_segment());
+    }
+    if (pos == 0.0000 && !h2){
+        return BSplineHandlePosition(h, h->other());
+    }
+    return pos;
+}
+
+// give the location for the handler in the corresponding position
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2){
+    double pos = this->BSplineHandlePosition(h, h2);
+    return BSplineHandleReposition(h,pos);
+}
+
+// give the location for the handler to the specified position
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
+    using Geom::X;
+    using Geom::Y;
+    Geom::Point ret = h->position();
+    Node *n = h->parent();
+    Geom::D2< Geom::SBasis > SBasisInsideNodes;
+    SPCurve *lineInsideNodes = new SPCurve();
+    Node * nextNode = NULL;
+    nextNode = n->nodeToward(h);
+    if(nextNode && pos != 0.0000){
+        lineInsideNodes->moveto(n->position());
+        lineInsideNodes->lineto(nextNode->position());
+        SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
+        ret = SBasisInsideNodes.valueAt(pos);
+        ret = Geom::Point(ret[X] + 0.005,ret[Y] + 0.005);
+    }else{
+        if(pos == 0.0000){
+            ret = n->position();
+        }
+    }
+    return ret;
+}
+
 /** Construct the geometric representation of nodes and handles, update the outline
  * and display
  * \param alert_LPE if true, first the LPE is warned what the new path is going to be before updating it
@@ -1178,6 +1270,8 @@ void PathManipulator::_createControlPointsFromGeometry()
 void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
 {
     Geom::PathBuilder builder;
+    //Refresh if is bspline some times -think on path change selection, this value get lost
+    isBSpline(true);
     for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
@@ -1186,7 +1280,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
         }
         NodeList::iterator prev = subpath->begin();
         builder.moveTo(prev->position());
-
         for (NodeList::iterator i = ++subpath->begin(); i != subpath->end(); ++i) {
             build_segment(builder, prev.ptr(), i.ptr());
             prev = i;

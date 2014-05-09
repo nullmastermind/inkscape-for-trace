@@ -47,6 +47,7 @@
 #include "live_effects/lpe-extrude.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-attach-path.h"
 #include "live_effects/lpe-fill-between-strokes.h"
 #include "live_effects/lpe-fill-between-many.h"
@@ -129,15 +130,15 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.49 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+    {BSPLINE,               N_("BSpline"),                 "bspline"},
+    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
 /* Ponyscape */
     {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
-/* lp:~inkscapebrony/inkscape/inkscape */
-    {JOIN_TYPE,             N_("Join type"),               "join_type"},
-    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -245,6 +246,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case DOEFFECTSTACK_TEST:
             neweffect = static_cast<Effect*> ( new LPEdoEffectStackTest(lpeobj) );
+            break;
+        case BSPLINE:
+            neweffect = static_cast<Effect*> ( new LPEBSpline(lpeobj) );
             break;
         case DYNASTROKE:
             neweffect = static_cast<Effect*> ( new LPEDynastroke(lpeobj) );
