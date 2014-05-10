@@ -52,6 +52,7 @@ enum SPAttributeEnum {
     SP_ATTR_TARGET,
     /* SPGroup */
     SP_ATTR_INKSCAPE_GROUPMODE,
+    SP_ATTR_INKSCAPE_EXPANDED,
     /* SPRoot */
     SP_ATTR_VERSION,
     SP_ATTR_WIDTH,

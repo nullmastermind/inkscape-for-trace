@@ -64,6 +64,7 @@
 #include "seltrans.h"
 #include "shape-editor.h"
 #include "shortcuts.h"
+#include "sp-defs.h"
 #include "sp-flowtext.h"
 #include "sp-guide.h"
 #include "splivarot.h"
@@ -213,6 +214,25 @@ public:
         Verb(code, id, name, tip, image, _("Object"))
     { }
 }; // ObjectVerb class
+
+/**
+ * A class to encompass all of the verbs which deal with operations related to tags.
+ */
+class TagVerb : public Verb {
+private:
+    static void perform(SPAction *action, void *mydata);
+protected:
+    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+public:
+    /** Use the Verb initializer with the same parameters. */
+    TagVerb(unsigned int const code,
+               gchar const *id,
+               gchar const *name,
+               gchar const *tip,
+               gchar const *image) :
+        Verb(code, id, name, tip, image, _("Tag"))
+    { }
+}; // TagVerb class
 
 /**
  * A class to encompass all of the verbs which deal with operations relative to context.
@@ -455,6 +475,19 @@ SPAction *LayerVerb::make_action(Inkscape::ActionContext const & context)
  * @return The built action.
  */
 SPAction *ObjectVerb::make_action(Inkscape::ActionContext const & context)
+{
+    return make_action_helper(context, &perform);
+}
+
+/**
+ * Create an action for a \c TagVerb.
+ *
+ * Calls \c make_action_helper with the \c vector.
+ *
+ * @param  view  Which view the action should be created for.
+ * @return The built action.
+ */
+SPAction *TagVerb::make_action(Inkscape::ActionContext const & context)
 {
     return make_action_helper(context, &perform);
 }
@@ -1550,6 +1583,47 @@ void ObjectVerb::perform( SPAction *action, void *data)
 /**
  * Decode the verb code and take appropriate action.
  */
+void TagVerb::perform( SPAction *action, void *data)
+{
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
+    if (!dt)
+        return;
+
+    //Inkscape::UI::Tools::ToolBase *ec = dt->event_context;
+
+    Inkscape::Selection *sel = sp_desktop_selection(dt);
+
+    Inkscape::XML::Document * doc;
+    Inkscape::XML::Node * repr;
+    gchar *id;
+
+    switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_TAG_NEW:
+            static int tag_suffix=1;
+            id=NULL;
+            do {
+                g_free(id);
+                id = g_strdup_printf("tag%d", tag_suffix++);
+            } while (dt->doc()->getObjectById(id));
+            
+            doc = dt->doc()->getReprDoc();
+            repr = doc->createElement("inkscape:tag");
+            repr->setAttribute("id", id);
+            g_free(id);
+            
+            dt->doc()->getDefs()->addChild(repr, NULL);
+            Inkscape::DocumentUndo::done(dt->doc(), SP_VERB_DIALOG_TAGS, _("Create new selection set"));
+            break;
+        default:
+            break;
+    }
+
+} // end of sp_verb_action_tag_perform()
+
+
+/**
+ * Decode the verb code and take appropriate action.
+ */
 void ContextVerb::perform(SPAction *action, void *data)
 {
     SPDesktop *dt;
@@ -2040,9 +2114,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_OBJECTS:
             dt->_dlg_mgr->showDialog("ObjectsPanel");
             break;
-        /*case SP_VERB_DIALOG_TAGS:
+        case SP_VERB_DIALOG_TAGS:
             dt->_dlg_mgr->showDialog("TagsPanel");
-            break;*/ //in a moment my dear
+            break;
         case SP_VERB_DIALOG_LIVE_PATH_EFFECT:
             dt->_dlg_mgr->showDialog("LivePathEffect");
             break;
@@ -2647,7 +2721,9 @@ Verb *Verb::_base_verbs[] = {
                  N_("Edit clipping path"), INKSCAPE_ICON("path-clip-edit")),
     new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),
                  N_("Remove clipping path from selection"), NULL),
-
+    // Tag
+    new TagVerb(SP_VERB_TAG_NEW, "TagNew", N_("_New"),
+                 N_("Create new selection set"), NULL),
     // Tools
     new ContextVerb(SP_VERB_CONTEXT_SELECT, "ToolSelector", NC_("ContextVerb", "Select"),
                     N_("Select and transform objects"), INKSCAPE_ICON("tool-pointer")),
@@ -2862,8 +2938,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("View Layers"), INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."),
                    N_("View Objects"), INKSCAPE_ICON("dialog-layers")),
-    /*new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogObjects", N_("Ta_gs..."),
-                   N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),*/
+    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Ta_gs..."),
+                   N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
                    N_("Manage, edit, and apply path effects"), NULL),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
