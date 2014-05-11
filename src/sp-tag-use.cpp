@@ -175,6 +175,7 @@ SPTagUse::href_changed(SPObject */*old_ref*/, SPObject */*ref*/)
             
             SPObject* child_ = SPFactory::instance().createObject(typeString);
             if (child_) {
+                child = child_;
                 attach(child_, lastChild());
                 sp_object_unref(child_, 0);
                 child_->invoke_build(this->document, childrepr, TRUE);

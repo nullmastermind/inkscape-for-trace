@@ -280,7 +280,8 @@ bool TagsPanel::_executeAction()
                 for (std::vector<SPObject *>::iterator iter = todelete.begin(); iter != todelete.end(); ++iter) {
                     SPObject * obj = *iter;
                     if (obj && obj->parent && obj->getRepr() && obj->parent->getRepr()) {
-                        obj->parent->getRepr()->removeChild(obj->getRepr());
+                        //obj->parent->getRepr()->removeChild(obj->getRepr());
+                        obj->deleteObject(true, true);
                     }
                 }
                 DocumentUndo::done(_document, SP_VERB_DIALOG_TAGS, _("Remove from selection set"));
@@ -576,7 +577,8 @@ bool TagsPanel::_handleKeyEvent(GdkEventKey *event)
                 for (std::vector<SPObject *>::iterator iter = todelete.begin(); iter != todelete.end(); ++iter) {
                     SPObject * obj = *iter;
                     if (obj && obj->parent && obj->getRepr() && obj->parent->getRepr()) {
-                        obj->parent->getRepr()->removeChild(obj->getRepr());
+                        //obj->parent->getRepr()->removeChild(obj->getRepr());
+                        obj->deleteObject(true, true);
                     }
                 }
                 DocumentUndo::done(_document, SP_VERB_DIALOG_TAGS, _("Remove from selection set"));
@@ -680,12 +682,14 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                             }
                         } else {
                             std::vector<SPObject *> todelete;
+                            // FIXME unnecessary use of XML tree
                             _tree.get_selection()->selected_foreach_iter(sigc::bind<std::vector<SPObject *>*>(sigc::mem_fun(*this, &TagsPanel::_checkForDeleted), &todelete));
                             if (!todelete.empty()) {
                                 for (std::vector<SPObject *>::iterator iter = todelete.begin(); iter != todelete.end(); ++iter) {
                                     SPObject * tobj = *iter;
                                     if (tobj && tobj->parent && tobj->getRepr() && tobj->parent->getRepr()) {
-                                        tobj->parent->getRepr()->removeChild(tobj->getRepr());
+                                        //tobj->parent->getRepr()->removeChild(tobj->getRepr());
+                                        tobj->deleteObject(true, true);
                                     }
                                 }
                             } else if (obj && obj->parent && obj->getRepr() && obj->parent->getRepr()) {
