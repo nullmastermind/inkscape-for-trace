@@ -1025,7 +1025,7 @@ TagsPanel::TagsPanel() :
 
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_TAG_NEW, 0, "New", (int)BUTTON_NEW ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_TAG_NEW, 0, "Add a new selection set", (int)BUTTON_NEW ) );
 
         _popupMenu.show_all_children();
     }

@@ -1603,7 +1603,7 @@ void TagVerb::perform( SPAction *action, void *data)
             id=NULL;
             do {
                 g_free(id);
-                id = g_strdup_printf("tag%d", tag_suffix++);
+                id = g_strdup_printf("Set %d", tag_suffix++);
             } while (dt->doc()->getObjectById(id));
             
             doc = dt->doc()->getReprDoc();
@@ -2938,7 +2938,7 @@ Verb *Verb::_base_verbs[] = {
                    N_("View Layers"), INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."),
                    N_("View Objects"), INKSCAPE_ICON("dialog-layers")),
-    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Ta_gs..."),
+    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection se_ts..."),
                    N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
                    N_("Manage, edit, and apply path effects"), NULL),
