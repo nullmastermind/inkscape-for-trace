@@ -41,10 +41,11 @@ static const Util::EnumData<unsigned> JoinTypeData[] = {
 };
 
 static const Util::EnumData<unsigned> CapTypeData[] = {
-	{butt_straight, N_("Butt"), "butt"},
-	{butt_round, N_("Rounded"), "round"},
-	{butt_square, N_("Square"), "square"},
-	{butt_pointy, N_("Peak"), "peak"}
+	{BUTT_STRAIGHT, N_("Butt"), "butt"},
+	{BUTT_ROUND, N_("Rounded"), "round"},
+	{BUTT_SQUARE, N_("Square"), "square"},
+	{BUTT_POINTY, N_("Peak"), "peak"},
+	{BUTT_LEANED, N_("Leaned"), "leaned"}
 };
 
 static const Util::EnumDataConverter<unsigned> CapTypeConverter(CapTypeData, sizeof(CapTypeData)/sizeof(*CapTypeData));
@@ -55,6 +56,8 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
 	line_width(_("Line width"), _("Thickness of the stroke"), "line_width", &wr, this, 1.),
 	linecap_type(_("Line cap"), _("The end shape of the stroke"), "linecap_type", CapTypeConverter, &wr, this, butt_straight),
 	linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, LINEJOIN_EXTRAPOLATED),
+	start_lean(_("Start path lean"), _("Start path lean"), "start_lean", &wr, this, 0.),
+	end_lean(_("End path lean"), _("End path lean"), "end_lean", &wr, this, 0.),
 	miter_limit(_("Miter limit:"), _("Maximum length of the miter join (in units of stroke width)"), "miter_limit", &wr, this, 100.),
 	attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true)
 {
@@ -62,9 +65,17 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
 	registerParameter( dynamic_cast<Parameter *>(&linecap_type) );
 	registerParameter( dynamic_cast<Parameter *>(&line_width) );
 	registerParameter( dynamic_cast<Parameter *>(&linejoin_type) );
+	registerParameter( dynamic_cast<Parameter *>(&start_lean) );
+	registerParameter( dynamic_cast<Parameter *>(&end_lean) );
 	registerParameter( dynamic_cast<Parameter *>(&miter_limit) );
 	registerParameter( dynamic_cast<Parameter *>(&attempt_force_join) );
 	was_initialized = false;
+	start_lean.param_set_range(-1,1);
+	start_lean.param_set_increments(0.1, 0.1);
+	start_lean.param_set_digits(4);
+	end_lean.param_set_range(-1,1);
+	end_lean.param_set_increments(0.1, 0.1);
+	end_lean.param_set_digits(4);
 }
 
 LPEJoinType::~LPEJoinType()
@@ -163,9 +174,10 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
 //wrapper around it.
 std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const & path_in)
 {       
-	return Outline::PathVectorOutline(path_in, line_width, static_cast<ButtType>(linecap_type.get_value()), 
+	return Outline::PathVectorOutline(path_in, line_width, static_cast<ButtTypeMod>(linecap_type.get_value()), 
                                       static_cast<LineJoinType>(linejoin_type.get_value()),
-						              (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit));
+						              (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
+                                      start_lean/2 ,end_lean/2);
 }
 
 } //namespace LivePathEffect

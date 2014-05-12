@@ -11,7 +11,13 @@ enum LineJoinType {
     LINEJOIN_REFLECTED,
     LINEJOIN_EXTRAPOLATED
 };
-
+enum ButtTypeMod {
+    BUTT_STRAIGHT,
+    BUTT_ROUND,
+    BUTT_SQUARE,
+    BUTT_POINTY,
+    BUTT_LEANED
+};
 namespace Geom
 {
 	Geom::CubicBezier sbasis_to_cubicbezier(Geom::D2<Geom::SBasis> const & sbasis_in);
@@ -21,11 +27,11 @@ namespace Geom
 namespace Outline 
 {
     unsigned bezierOrder (const Geom::Curve* curve_in);
-    std::vector<Geom::Path> PathVectorOutline(std::vector<Geom::Path> const & path_in, double line_width, ButtType linecap_type,
-                                              LineJoinType linejoin_type, double miter_limit);
+    std::vector<Geom::Path> PathVectorOutline(std::vector<Geom::Path> const & path_in, double line_width, ButtTypeMod linecap_type,
+                                              LineJoinType linejoin_type, double miter_limit, double start_lean = 0, double end_lean = 0);
 
     /*Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width, LineJoinType join,
-                                 ButtType butt, double miter_lim, bool extrapolate = false);*/
+                                 ButtTypeMod butt, double miter_lim, bool extrapolate = false);*/
     Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, LineJoinType linejoin_type, double miter_limit);
 }
 

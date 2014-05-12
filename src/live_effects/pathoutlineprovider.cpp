@@ -586,7 +586,7 @@ Geom::Path doAdvHalfOutline(const Geom::Path& path_in, double line_width, double
 }
 
 Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width, LineJoinType join,
-                             ButtType butt, double miter_lim, bool extrapolate)
+                             ButtTypeMod butt, double miter_lim, bool extrapolate, double start_lean, double end_lean)
 {
     Geom::PathVector path_out;
 
@@ -610,13 +610,13 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
             //add in our line caps
             if (!path_in[i].closed()) {
                 switch (butt) {
-                case butt_straight:
+                case BUTT_STRAIGHT:
                     pb.lineTo(against_direction.initialPoint());
                     break;
-                case butt_round:
+                case BUTT_ROUND:
                     pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, against_direction.initialPoint() );
                     break;
-                case butt_pointy: {
+                case BUTT_POINTY: {
                     Geom::Point end_deriv = -Geom::unitTangentAt(Geom::reverse(path_in[i].back().toSBasis()), 0.);
                     double radius = 0.5 * Geom::distance(with_direction.finalPoint(), against_direction.initialPoint());
                     Geom::Point midpoint = 0.5 * (with_direction.finalPoint() + against_direction.initialPoint()) + radius*end_deriv;
@@ -624,11 +624,20 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
                     pb.lineTo(against_direction.initialPoint());
                     break;
                 }
-                case butt_square: {
+                case BUTT_SQUARE: {
                     Geom::Point end_deriv = -Geom::unitTangentAt(Geom::reverse(path_in[i].back().toSBasis()), 0.);
                     double radius = 0.5 * Geom::distance(with_direction.finalPoint(), against_direction.initialPoint());
                     pb.lineTo(with_direction.finalPoint() + radius*end_deriv);
                     pb.lineTo(against_direction.initialPoint() + radius*end_deriv);
+                    pb.lineTo(against_direction.initialPoint());
+                    break;
+                }
+                case BUTT_LEANED: {
+                    Geom::Point end_deriv = -Geom::unitTangentAt(Geom::reverse(path_in[i].back().toSBasis()), 0.);
+                    double maxRadius = (end_lean+0.5) * Geom::distance(with_direction.finalPoint(), against_direction.initialPoint());
+                    double minRadius = ((end_lean*-1)+0.5) * Geom::distance(with_direction.finalPoint(), against_direction.initialPoint());
+                    pb.lineTo(with_direction.finalPoint() + maxRadius*end_deriv);
+                    pb.lineTo(against_direction.initialPoint() + minRadius*end_deriv);
                     pb.lineTo(against_direction.initialPoint());
                     break;
                 }
@@ -642,13 +651,13 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
             //cap (if necessary)
             if (!path_in[i].closed()) {
                 switch (butt) {
-                case butt_straight:
+                case BUTT_STRAIGHT:
                     pb.lineTo(with_direction.initialPoint());
                     break;
-                case butt_round:
+                case BUTT_ROUND:
                     pb.arcTo((-line_width) / 2, (-line_width) / 2, 0., true, true, with_direction.initialPoint() );
                     break;
-                case butt_pointy: {
+                case BUTT_POINTY: {
                     Geom::Point end_deriv = -Geom::unitTangentAt(path_in[i].front().toSBasis(), 0.);
                     double radius = 0.5 * Geom::distance(against_direction.finalPoint(), with_direction.initialPoint());
                     Geom::Point midpoint = 0.5 * (against_direction.finalPoint() + with_direction.initialPoint()) + radius*end_deriv;
@@ -656,11 +665,20 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
                     pb.lineTo(with_direction.initialPoint());
                     break;
                 }
-                case butt_square: {
+                case BUTT_SQUARE: {
                     Geom::Point end_deriv = -Geom::unitTangentAt(path_in[i].front().toSBasis(), 0.);
                     double radius = 0.5 * Geom::distance(against_direction.finalPoint(), with_direction.initialPoint());
                     pb.lineTo(against_direction.finalPoint() + radius*end_deriv);
                     pb.lineTo(with_direction.initialPoint() + radius*end_deriv);
+                    pb.lineTo(with_direction.initialPoint());
+                    break;
+                }
+                case BUTT_LEANED: {
+                    Geom::Point end_deriv = -Geom::unitTangentAt(path_in[i].front().toSBasis(), 0.);
+                    double maxRadius = (start_lean+0.5) * Geom::distance(against_direction.finalPoint(), with_direction.initialPoint());
+                    double minRadius = ((start_lean*-1)+0.5) * Geom::distance(against_direction.finalPoint(), with_direction.initialPoint());
+                    pb.lineTo(against_direction.finalPoint() + minRadius*end_deriv);
+                    pb.lineTo(with_direction.initialPoint() + maxRadius*end_deriv);
                     pb.lineTo(with_direction.initialPoint());
                     break;
                 }
@@ -674,9 +692,29 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
         } else {
             Path p = Path();
             Path outlinepath = Path();
-
+            ButtType original_butt;
+            switch (butt) {
+            case BUTT_STRAIGHT:
+                original_butt = butt_straight;
+               break;
+            case BUTT_ROUND:
+               original_butt = butt_round;
+                break;
+            case butt_pointy: {
+                original_butt = butt_pointy;
+                break;
+            }
+            case BUTT_SQUARE: {
+                original_butt = butt_square;
+                break;
+            }
+            case BUTT_LEANED: {
+                original_butt = butt_straight;
+                break;
+            }
+            }
             p.LoadPath(path_in[i], Geom::Affine(), false, false);
-            p.Outline(&outlinepath, line_width / 2, static_cast<join_typ>(join), butt, miter_lim);
+            p.Outline(&outlinepath, line_width / 2, static_cast<join_typ>(join), original_butt, miter_lim);
             Geom::PathVector *pv_p = outlinepath.MakePathVector();
             //somewhat hack-ish
             path_out.push_back( (*pv_p)[0].reverse() );
@@ -686,8 +724,8 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
     return path_out;
 }
 
-Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line_width, ButtType linecap_type,
-                                   LineJoinType linejoin_type, double miter_limit)
+Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line_width, ButtTypeMod linecap_type,
+                                   LineJoinType linejoin_type, double miter_limit, double start_lean, double end_lean)
 {
     std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
     if (path_in.empty()) {
@@ -702,9 +740,30 @@ Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line
 #define miter_lim fabs(line_width * miter_limit)
 
     //magic!
+    ButtType original_butt;
+    switch (linecap_type) {
+        case BUTT_STRAIGHT:
+            original_butt = butt_straight;
+            break;
+        case BUTT_ROUND:
+            original_butt = butt_round;
+            break;
+        case butt_pointy: {
+            original_butt = butt_pointy;
+            break;
+        }
+        case BUTT_SQUARE: {
+            original_butt = butt_square;
+            break;
+        }
+        case BUTT_LEANED: {
+            original_butt = butt_straight;
+            break;
+        }
+    }
     if (linejoin_type <= 2) {
         p.Outline(&outlinepath, line_width / 2, static_cast<join_typ>(linejoin_type),
-                  linecap_type, miter_lim);
+                  original_butt, miter_lim);
         //fix memory leak
         std::vector<Geom::Path> *pv_p = outlinepath.MakePathVector();
         path_out = *pv_p;
@@ -713,12 +772,11 @@ Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line
     } else if (linejoin_type == 3) {
         //reflected arc join
         path_out = outlinePath(path_in, line_width, static_cast<LineJoinType>(linejoin_type),
-                               linecap_type , miter_lim, false);
+                               linecap_type , miter_lim, false, start_lean, end_lean);
 
     } else if (linejoin_type == 4) {
         //extrapolated arc join
-        path_out = outlinePath(path_in, line_width, LINEJOIN_STRAIGHT, linecap_type, miter_lim, true);
-
+        path_out = outlinePath(path_in, line_width, LINEJOIN_STRAIGHT, linecap_type, miter_lim, true, start_lean, end_lean);
     }
 
 #undef miter_lim
