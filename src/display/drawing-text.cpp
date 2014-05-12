@@ -95,12 +95,10 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
     */
 
     Geom::OptRect pb;
-    bool fallback = true;
     if(_drawable){
         pb  = bounds_exact_transformed(*_font->PathVector(_glyph), ctx.ctm);
-        if(pb) fallback = false;
     }
-    if(fallback){
+    if(!pb){ // Fallback
         Geom::Rect pbigbox(Geom::Point(0.0, _asc*scale_bigbox*0.66),Geom::Point(_width*scale_bigbox, 0.0));
         pb = pbigbox * ctx.ctm;
     }
