@@ -26,6 +26,7 @@
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-lattice.h"
+#include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-envelope.h"
 #include "live_effects/lpe-constructgrid.h"
@@ -124,6 +125,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
     {SIMPLIFY,               N_("Simplify"),     "simplify"},
+    {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -252,6 +254,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case SIMPLIFY:
             neweffect = static_cast<Effect*> ( new LPESimplify(lpeobj) );
+            break;
+        case LATTICE2:
+            neweffect = static_cast<Effect*> ( new LPELattice2(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);

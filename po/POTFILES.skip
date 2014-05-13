@@ -13,6 +13,7 @@ src/live_effects/lpe-circle_with_radius.cpp
 src/live_effects/lpe-copy_rotate.cpp
 src/live_effects/lpe-dynastroke.cpp
 src/live_effects/lpe-lattice.cpp
+src/live_effects/lpe-lattice2.cpp
 src/live_effects/lpe-line_segment.cpp
 src/live_effects/lpe-mirror_symmetry.cpp
 src/live_effects/lpe-offset.cpp
