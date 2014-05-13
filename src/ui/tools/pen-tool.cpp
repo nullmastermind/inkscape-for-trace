@@ -1811,9 +1811,9 @@ void PenTool::_bspline_spiro_build()
 void PenTool::_bspline_doEffect(SPCurve * curve)
 {
     // commenting the function doEffect in src/live_effects/lpe-bspline.cpp
-    Geom::PathVector const original_pathv = curve->get_pathvector();
-    if (curve->get_segment_count() < 1)
+    if(curve->get_segment_count() < 2)
         return;
+    Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
 
     for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
@@ -1890,25 +1890,9 @@ void PenTool::_bspline_doEffect(SPCurve * curve)
             ++curve_it1;
             ++curve_it2;
         }
-        SPCurve *out = new SPCurve();
-        out->moveto(curve_it1->initialPoint());
-        out->lineto(curve_it1->finalPoint());
-        cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
-        if (cubic) {
-            SBasisOut = out->first_segment()->toSBasis();
-            nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1], *out->first_segment()));
-            nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[2], *out->first_segment()));
-            nextPointAt3 = out->first_segment()->finalPoint();
-        } else {
-            nextPointAt1 = out->first_segment()->initialPoint();
-            nextPointAt2 = out->first_segment()->finalPoint();
-            nextPointAt3 = out->first_segment()->finalPoint();
-        }
-        out->reset();
-        delete out;
         SPCurve *curveHelper = new SPCurve();
         curveHelper->moveto(node);
-        Geom::Point startNode = path_it->begin()->initialPoint();
+        Geom::Point startNode(0,0);
         if (path_it->closed()) {
             SPCurve * start = new SPCurve();
             start->moveto(path_it->begin()->initialPoint());

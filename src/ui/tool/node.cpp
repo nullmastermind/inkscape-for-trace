@@ -371,7 +371,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
     //if the snap adjustment is activated and it is not bspline
-    if (snap && !_pm().isBSpline(false)) {
+    if (snap && !_pm().isBSpline()) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
             Node *n = static_cast<Node*>(*i);
