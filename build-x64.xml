@@ -761,6 +761,9 @@
           <exclude name=".*\.sh"/>
         </fileset>
     </copy>
+    <!-- Quick fix for the following problem: having the hicolor folder there with empty index file bugs booting inkscape... -->
+    <delete dir="${dist}/share/icons/hicolor"/>
+
     <copy todir="${dist}/share"> <fileset dir="${devlibs}/share/locale"/> </copy>
     <copy todir="${dist}/share"> <fileset dir="${devlibs}/share/themes"/> </copy>
     <copy todir="${dist}/lib">
