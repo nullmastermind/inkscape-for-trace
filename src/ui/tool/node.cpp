@@ -623,7 +623,7 @@ void Node::move(Geom::Point const &new_pos)
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
-    nodeWeight = _pm().BSplineHandlePosition(n->front());
+    nodeWeight = fmax(_pm().BSplineHandlePosition(n->front()),_pm().BSplineHandlePosition(n->back()));
     if(prevNode){
         if(prevNode->isEndNode()){
             prevNodeWeight = _pm().BSplineHandlePosition(prevNode->front(),prevNode->front());
@@ -659,7 +659,7 @@ void Node::move(Geom::Point const &new_pos)
             if(nextNode->isEndNode()){
                 nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNodeWeight));
             }else{
-                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNode->back()));
+                nextNode->back()->setPosition(_pm().BSplineHandleReposition(nextNode->back(),nextNode->front()));
             }
         }
     }
