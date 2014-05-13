@@ -96,7 +96,7 @@ void LPEBSpline::createAndApply(const char *name, SPDocument *doc,
 }
 
 void LPEBSpline::doEffect(SPCurve *curve) {
-  if (curve->get_segment_count() < 2)
+  if (curve->get_segment_count() < 1)
     return;
   // Make copy of old path as it is changed during processing
   Geom::PathVector const original_pathv = curve->get_pathvector();
@@ -216,10 +216,26 @@ void LPEBSpline::doEffect(SPCurve *curve) {
       ++curve_it1;
       ++curve_it2;
     }
+    SPCurve *out = new SPCurve();
+    out->moveto(curve_it1->initialPoint());
+    out->lineto(curve_it1->finalPoint());
+    cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
+    if (cubic) {
+        SBasisOut = out->first_segment()->toSBasis();
+        nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1], *out->first_segment()));
+        nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[2], *out->first_segment()));
+        nextPointAt3 = out->first_segment()->finalPoint();
+    } else {
+        nextPointAt1 = out->first_segment()->initialPoint();
+        nextPointAt2 = out->first_segment()->finalPoint();
+        nextPointAt3 = out->first_segment()->finalPoint();
+    }
+    out->reset();
+    delete out;
     //Si está cerrada la curva, la cerramos sobre  el valor guardado
     //previamente
     //Si no finalizamos en el punto final
-    Geom::Point startNode(0, 0);
+    Geom::Point startNode = path_it->begin()->initialPoint();
     if (path_it->closed()) {
       SPCurve *start = new SPCurve();
       start->moveto(path_it->begin()->initialPoint());
@@ -421,7 +437,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue) {
     }
   }
   //bool hasNodesSelected = LPEBspline::hasNodesSelected();
-  if (curve->get_segment_count() < 2)
+  if (curve->get_segment_count() < 1)
     return;
   // Make copy of old path as it is changed during processing
   Geom::PathVector const original_pathv = curve->get_pathvector();
