@@ -22,6 +22,8 @@ ink_common_sources += \
 	live_effects/parameter/powerstrokepointarray.h	\
 	live_effects/parameter/text.cpp	\
 	live_effects/parameter/text.h	\
+	live_effects/parameter/togglebutton.cpp	\
+	live_effects/parameter/togglebutton.h	\
 	live_effects/parameter/unit.cpp	\
 	live_effects/parameter/unit.h	\
 	live_effects/parameter/vector.cpp	\

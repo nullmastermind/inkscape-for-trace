@@ -29,6 +29,7 @@ set(live_effects_SRC
 	lpe-recursiveskeleton.cpp
 	lpe-rough-hatches.cpp
 	lpe-ruler.cpp
+	lpe-simplify.cpp
 	# lpe-skeleton.cpp
 	lpe-sketch.cpp
 	lpe-spiro.cpp
@@ -53,6 +54,7 @@ set(live_effects_SRC
 	parameter/powerstrokepointarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
+	parameter/togglebutton.cpp
 	parameter/unit.cpp
 	parameter/vector.cpp
 
@@ -90,6 +92,7 @@ set(live_effects_SRC
 	lpe-recursiveskeleton.h
 	lpe-rough-hatches.h
 	lpe-ruler.h
+	lpe-simplify.h
 	lpe-skeleton.h
 	lpe-sketch.h
 	lpe-spiro.h
@@ -115,6 +118,7 @@ set(live_effects_SRC
 	parameter/powerstrokepointarray.h
 	parameter/random.h
 	parameter/text.h
+	parameter/togglebutton.h
 	parameter/unit.h
 	parameter/vector.h
 

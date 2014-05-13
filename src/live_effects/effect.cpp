@@ -26,6 +26,7 @@
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-lattice.h"
+#include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-envelope.h"
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-perp_bisector.h"
@@ -122,6 +123,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
+    {SIMPLIFY,               N_("Simplify"),     "simplify"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -247,6 +249,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case CLONE_ORIGINAL:
             neweffect = static_cast<Effect*> ( new LPECloneOriginal(lpeobj) );
+            break;
+        case SIMPLIFY:
+            neweffect = static_cast<Effect*> ( new LPESimplify(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
@@ -499,9 +504,12 @@ Effect::getCanvasIndicators(SPLPEItem const* lpeitem)
 {
     std::vector<Geom::PathVector> hp_vec;
 
-    if (!SP_IS_SHAPE(lpeitem)) {
-//        g_print ("How to handle helperpaths for non-shapes?\n"); // non-shapes are for example SPGroups.
-        return hp_vec;
+    // TODO: we can probably optimize this by using a lot more references
+    //       rather than copying PathVectors all over the place
+    if (SP_IS_SHAPE(lpeitem) && show_orig_path) {
+        // add original path to helperpaths
+        SPCurve* curve = SP_SHAPE(lpeitem)->getCurve ();
+        hp_vec.push_back(curve->get_pathvector());
     }
 
     // add indicators provided by the effect itself

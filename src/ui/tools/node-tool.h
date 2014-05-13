@@ -54,6 +54,7 @@ public:
 	static const std::string prefsPath;
 
 	virtual void setup();
+	virtual void update_helperpath();
 	virtual void set(const Inkscape::Preferences::Entry& val);
 	virtual bool root_handler(GdkEvent* event);
 
@@ -66,6 +67,7 @@ private:
 
     SPItem *flashed_item;
     Inkscape::Display::TemporaryItem *flash_tempitem;
+    Inkscape::Display::TemporaryItem *helperpath_tmpitem;
     Inkscape::UI::Selector* _selector;
     Inkscape::UI::PathSharedData* _path_data;
     SPCanvasGroup *_transform_handle_group;

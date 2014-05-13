@@ -42,6 +42,8 @@ ink_common_sources += \
 	live_effects/lpe-bspline.h	\
 	live_effects/lpe-lattice.cpp	\
 	live_effects/lpe-lattice.h	\
+	live_effects/lpe-simplify.cpp	\
+	live_effects/lpe-simplify.h	\
 	live_effects/lpe-envelope.cpp	\
 	live_effects/lpe-envelope.h	\
 	live_effects/lpe-spiro.cpp	\
