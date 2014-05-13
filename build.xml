@@ -659,14 +659,12 @@
     <copy todir="${dist}" file="${devlibs}/bin/libgio-2.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libcairo-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpixman-1-0.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/libgcc_s_sjlj-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpoppler-5.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpoppler-glib-4.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangocairo-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpango-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangoft2-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangowin32-1.0-0.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/freetype6.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libfontconfig-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxml2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxslt.dll"/>
