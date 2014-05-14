@@ -183,9 +183,11 @@
         #undef HAVE_SSL
 
         /* use poppler for pdf import? */
-        //#define HAVE_POPPLER                  1
-        //#define HAVE_POPPLER_GLIB             1
-        //#define HAVE_POPPLER_CAIRO            1
+        #define HAVE_POPPLER                  1
+        #define HAVE_POPPLER_GLIB             1
+        #define HAVE_POPPLER_CAIRO            1
+        #define POPPLER_NEW_ERRORAPI          1
+        #define POPPLER_NEW_GFXPATCH          1
 
         /* do we want bitmap manipulation? */
         #define WITH_IMAGE_MAGICK             1
@@ -723,19 +725,16 @@
     <copy todir="${dist}" file="${devlibs}/bin/bz2-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libiconv-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpopt-0.dll"/>
-<!--    <copy todir="${dist}" file="${devlibs}/bin/liblcms-1.dll"/> -->
     <copy todir="${dist}" file="${devlibs}/bin/liblcms2-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libMagick++-6.Q16-3.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libMagickCore-6.Q16-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libMagickWand-6.Q16-2.dll"/>
-<!--    <copy todir="${dist}" file="${devlibs}/bin/intl.dll"/> -->
     <copy todir="${dist}" file="${devlibs}/bin/libintl-8.dll"/>
     <!-- MINGW support DLLs -->
     <copy todir="${dist}" file="${mingw_bin}/libstdc++-6.dll"/>
     <copy todir="${dist}" file="${mingw_bin}/libwinpthread-1.dll"/>
     <copy todir="${dist}" file="${mingw_bin}/libgcc_s_sjlj-1.dll"/>
     <!-- MINGW support DLLs needed for openmp support  -->
-<!--    <copy todir="${dist}" file="${mingw_bin}/mingwm10.dll"/> -->
     <copy todir="${dist}" file="${mingw_bin}/libgomp-1.dll"/>
 
     <!-- MSGFMT files -->
