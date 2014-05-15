@@ -42,7 +42,7 @@
     </description>
 
   <!-- set global properties for this build -->
-  <property name="version"       value="0.48+devel"/>
+  <property name="version"       value="0.48+devel_64bit"/>
   <property name="src"           location="src"/>
   <property name="lib"           location="lib"/>
   <property name="build"         location="build"/>
@@ -212,7 +212,7 @@
         #define ENABLE_SVG_FONTS              1
 
         /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
-        //#define LPE_ENABLE_TEST_EFFECTS    1
+        #define LPE_ENABLE_TEST_EFFECTS    1
 
         /* Do we want experimental, unsupported, unguaranteed, etc., SVG2 features enabled? */
         //#define WITH_SVG2                  1
@@ -359,8 +359,7 @@
             <file name="extension/param"/>
         </excludeinc>
         <flags>
-            <!-- -std=gnu++0x -DCPP11   -Wno-unused-local-typedefs -->
-            -Wall -Wformat -Werror=format-security -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch
+            -Wall -Wformat -Werror=format-security -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Wswitch
             -Werror=return-type
             <!-- - ->  -Werror <!-- -->
             <!-- A list of warnings that should not error *yet*, any help is welcome in fixing the code generating these warnings! -->
@@ -374,6 +373,11 @@
             -mms-bitfields
             -fopenmp
         </flags>
+        <cxxflags>
+            -std=gnu++0x -DCPP11  
+            -Woverloaded-virtual
+            <!-- -Wno-unused-local-typedefs -->
+        </cxxflags>
         <defines>
             -DVERSION=\"${version}\"
             -DHAVE_CONFIG_H
