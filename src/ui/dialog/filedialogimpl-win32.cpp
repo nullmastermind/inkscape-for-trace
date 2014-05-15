@@ -72,13 +72,6 @@ const unsigned long MaxPreviewFileSize = 10240; // kB
 
 #define IDC_SHOW_PREVIEW    1000
 
-// Windows 2000 version of OPENFILENAMEW
-struct OPENFILENAMEEXW : public OPENFILENAMEW {
-  void *        pvReserved;
-  DWORD         dwReserved;
-  DWORD         FlagsEx;
-};
-
 struct Filter
 {
     gunichar2* name;
@@ -483,7 +476,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
 
 void FileOpenDialogImplWin32::GetOpenFileName_thread()
 {
-    OPENFILENAMEEXW ofn;
+    OPENFILENAMEW ofn;
 
     g_assert(this != NULL);
     g_assert(_mutex != NULL);
@@ -1829,7 +1822,7 @@ void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring patt
 
 void FileSaveDialogImplWin32::GetSaveFileName_thread()
 {
-    OPENFILENAMEEXW ofn;
+    OPENFILENAMEW ofn;
 
     g_assert(this != NULL);
     g_assert(_main_loop != NULL);
@@ -1860,7 +1853,6 @@ void FileSaveDialogImplWin32::GetSaveFileName_thread()
     ofn.nFilterIndex = _filter_index;
     ofn.lpfnHook = GetSaveFileName_hookproc;
     ofn.lCustData = (LPARAM)this;
-
     _result = GetSaveFileNameW(&ofn) != 0;
 
     g_assert(ofn.nFilterIndex >= 1 && ofn.nFilterIndex <= _filter_count);
