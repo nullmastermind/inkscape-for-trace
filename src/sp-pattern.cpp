@@ -593,7 +593,7 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     double tile_y      = pattern_y(this);
     double tile_width  = pattern_width(this);
     double tile_height = pattern_height(this);
-    if (pattern_patternUnits(this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX && bbox) {
+    if ( bbox && (pattern_patternUnits(this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) ) {
         tile_x      *= bbox->width();
         tile_y      *= bbox->height();
         tile_width  *= bbox->width();
@@ -614,7 +614,7 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     } else {
 
         // Content to bbox
-        if (pattern_patternContentUnits (this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX && bbox) {
+        if (bbox && (pattern_patternContentUnits(this) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) ) {
             content2ps = Geom::Affine(bbox->width(), 0.0, 0.0, bbox->height(), 0,0);
         }
     }
