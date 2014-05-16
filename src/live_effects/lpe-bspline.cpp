@@ -1,14 +1,27 @@
 #define INKSCAPE_LPE_BSPLINE_C
+
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if WITH_GLIBMM_2_32
+# include <glibmm/threads.h>
+#endif
+
 #include <gtkmm/box.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
+
 #include <glib.h>
 #include <glibmm/i18n.h>
+
+
 #include "display/curve.h"
 #include <2geom/bezier-curve.h>
 #include <2geom/point.h>
