@@ -186,8 +186,9 @@
         #define HAVE_POPPLER                  1
         #define HAVE_POPPLER_GLIB             1
         #define HAVE_POPPLER_CAIRO            1
-        #define POPPLER_NEW_ERRORAPI          1
+        #define POPPLER_NEW_ERRORAPI          1 <!-- poppler changed the error api >= 0.20.0 -->
         #define POPPLER_NEW_GFXPATCH          1
+        #define POPPLER_NEW_GFXFONT           1 <!-- poppler changed the api for 0.8.3 -->
 
         /* do we want bitmap manipulation? */
         #define WITH_IMAGE_MAGICK             1
@@ -215,10 +216,10 @@
         #define LPE_ENABLE_TEST_EFFECTS    1
 
         /* Do we want experimental, unsupported, unguaranteed, etc., SVG2 features enabled? */
-        //#define WITH_SVG2                  1
-        //#define WITH_CSSCOMPOSITE          1
-        //#define WITH_CSSBLEND              1
-        //#define WITH_MESH                  1
+        #define WITH_SVG2                  1
+        #define WITH_CSSCOMPOSITE          1
+        #define WITH_CSSBLEND              1
+        #define WITH_MESH                  1
 
         //#define HAVE_ASPELL                   1
 
@@ -369,7 +370,7 @@
                  The errors can be restored by removing these flags after updating to a newer compiler (soon after 0.91 release hopefully)  -->
             -Wno-error=format -Wno-error=format-extra-args
             -Wno-unused-local-typedefs <!-- triggers ton of warnings in (too old?) Boost with newer gcc -->
-            -O2
+            -O3
             -mms-bitfields
             -fopenmp
         </flags>
@@ -384,9 +385,6 @@
             -D_INTL_REDIRECT_INLINE
             -DHAVE_SSL
             -DRELAYTOOL_SSL="static const int libssl_is_present=1; static int __attribute__((unused)) libssl_symbol_is_present(char *s){ return 1; }" <!-- inkboard -->
-            -DPOPPLER_NEW_GFXFONT <!-- poppler changed the api for 0.8.3 -->
-	    <!-- uncomment below for future devlibs, if poppler >= 0.20.0 -->
-	    <!-- -DPOPPLER_NEW_ERRORAPI --> <!-- poppler changed the error api for 0.20.0 -->
             <!-- GTK+3 migration -->
             -DGLIBMM_DISABLE_DEPRECATED
             -DG_DISABLE_DEPRECATED
