@@ -95,7 +95,14 @@ NRStyle::~NRStyle()
 void NRStyle::set(SPStyle *style)
 {
     if ( style->fill.isPaintserver() ) {
-        fill.set(style->getFillPaintServer());
+    	SPPaintServer* server = style->getFillPaintServer();
+    	if ( server && server->isValid() ) {
+    		fill.set(server);
+    	} else if ( style->fill.colorSet ) {
+    		fill.set(style->fill.value.color);
+    	} else {
+    		fill.clear();
+    	}
     } else if ( style->fill.isColor() ) {
         fill.set(style->fill.value.color);
     } else if ( style->fill.isNone() ) {
@@ -117,7 +124,14 @@ void NRStyle::set(SPStyle *style)
     }
 
     if ( style->stroke.isPaintserver() ) {
-        stroke.set(style->getStrokePaintServer());
+    	SPPaintServer* server = style->getStrokePaintServer();
+		if ( server && server->isValid() ) {
+			stroke.set(server);
+		} else if ( style->stroke.isColor() ) {
+			stroke.set(style->stroke.colorSet);
+		} else {
+			stroke.clear();
+		}
     } else if ( style->stroke.isColor() ) {
         stroke.set(style->stroke.value.color);
     } else if ( style->stroke.isNone() ) {

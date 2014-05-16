@@ -541,6 +541,16 @@ static bool pattern_hasItemChildren (SPPattern const *pat)
     return hasChildren;
 }
 
+bool SPPattern::isValid() const
+{
+	double tile_width = pattern_width(this);
+	double tile_height = pattern_height(this);
+
+	if (tile_width <= 0 || tile_height <= 0)
+		return false;
+	return true;
+}
+
 cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &bbox, double opacity) {
 
     bool needs_opacity = (1.0 - opacity) >= 1e-3;
