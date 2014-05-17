@@ -8,8 +8,13 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
 #ifdef HAVE_CONFIG_H
 # include <config.h>
+#endif
+
+#if WITH_GLIBMM_2_32
+# include <glibmm/threads.h>
 #endif
 
 #include "tags.h"
@@ -18,6 +23,7 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
+#include <glibmm/main.h>
 #include <glibmm/i18n.h>
 
 #include "desktop.h"

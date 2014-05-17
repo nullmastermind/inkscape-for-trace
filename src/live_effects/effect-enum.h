@@ -28,6 +28,8 @@ enum EffectType {
     PERSPECTIVE_PATH,
     SPIRO,
     LATTICE,
+    LATTICE2,
+    SIMPLIFY,
     ENVELOPE,
     CONSTRUCT_GRID,
     PERP_BISECTOR,

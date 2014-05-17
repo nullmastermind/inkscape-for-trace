@@ -56,6 +56,8 @@ public:
 
     sigc::connection modified_connection;
 
+    bool isValid() const;
+
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
 protected:

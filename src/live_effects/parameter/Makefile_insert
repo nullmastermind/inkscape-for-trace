@@ -11,6 +11,8 @@ ink_common_sources += \
 	live_effects/parameter/random.h	\
 	live_effects/parameter/point.cpp	\
 	live_effects/parameter/point.h	\
+	live_effects/parameter/pointreseteable.cpp	\
+	live_effects/parameter/pointreseteable.h	\
 	live_effects/parameter/enum.h	\
 	live_effects/parameter/path-reference.cpp	\
 	live_effects/parameter/path-reference.h	\
@@ -26,6 +28,8 @@ ink_common_sources += \
 	live_effects/parameter/text.h	\
 	live_effects/parameter/transformedpoint.cpp	\
 	live_effects/parameter/transformedpoint.h	\
+	live_effects/parameter/togglebutton.cpp	\
+	live_effects/parameter/togglebutton.h	\
 	live_effects/parameter/unit.cpp	\
 	live_effects/parameter/unit.h	\
 	live_effects/parameter/vector.cpp	\

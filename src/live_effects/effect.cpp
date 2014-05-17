@@ -27,6 +27,8 @@
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-lattice.h"
+#include "live_effects/lpe-lattice2.h"
+#include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-envelope.h"
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-perp_bisector.h"
@@ -139,6 +141,9 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
+/* 0.91 */
+    {SIMPLIFY,               N_("Simplify"),     "simplify"},
+    {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -285,9 +290,14 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case TAPER_STROKE:
             neweffect = static_cast<Effect*> ( new LPETaperStroke(lpeobj) );
+        case SIMPLIFY:
+            neweffect = static_cast<Effect*> ( new LPESimplify(lpeobj) );
+            break;
+        case LATTICE2:
+            neweffect = static_cast<Effect*> ( new LPELattice2(lpeobj) );
             break;
         default:
-            g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
+            g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
             neweffect = NULL;
             break;
     }
@@ -564,9 +574,12 @@ Effect::getCanvasIndicators(SPLPEItem const* lpeitem)
 {
     std::vector<Geom::PathVector> hp_vec;
 
-    if (!SP_IS_SHAPE(lpeitem)) {
-//        g_print ("How to handle helperpaths for non-shapes?\n"); // non-shapes are for example SPGroups.
-        return hp_vec;
+    // TODO: we can probably optimize this by using a lot more references
+    //       rather than copying PathVectors all over the place
+    if (SP_IS_SHAPE(lpeitem) && show_orig_path) {
+        // add original path to helperpaths
+        SPCurve* curve = SP_SHAPE(lpeitem)->getCurve ();
+        hp_vec.push_back(curve->get_pathvector());
     }
 
     // add indicators provided by the effect itself
