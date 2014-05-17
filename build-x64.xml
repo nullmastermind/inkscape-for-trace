@@ -198,16 +198,16 @@
         #define HAVE_JPEG                     1
 
         /* Allow reading WordPerfect? */
-        //#define WITH_LIBWPG                   1
+        #define WITH_LIBWPG                   1
 
         /* Default  to libwpg 0.2.x */
-        //#define WITH_LIBWPG02                 1
+        #define WITH_LIBWPG02                 1
 
         /* Visio import filter */
-        //#define WITH_LIBVISIO                 1
+        #define WITH_LIBVISIO                 1
 
         /* Corel Draw import filter */
-        //#define WITH_LIBCDR                   1
+        #define WITH_LIBCDR                   1
 
         /* Do we support SVG Fonts? */
         #define ENABLE_SVG_FONTS              1
@@ -370,7 +370,7 @@
                  The errors can be restored by removing these flags after updating to a newer compiler (soon after 0.91 release hopefully)  -->
             -Wno-error=format -Wno-error=format-extra-args
             -Wno-unused-local-typedefs <!-- triggers ton of warnings in (too old?) Boost with newer gcc -->
-            -O3
+            -O2
             -mms-bitfields
             -fopenmp
         </flags>
@@ -410,7 +410,7 @@
             ${pcc.cairo}
             ${pcc.poppler}
             -I${devlibs}/include/gc
-            <!-- ${pcc.libwpg-0.2} ${pcc.libvisio-0.0} ${pcc.libcdr-0.0} -->
+            ${pcc.libwpg-0.2} ${pcc.libvisio-0.0} ${pcc.libcdr-0.0}
             -I${cxxtest}
             <!-- PERL -->
             <!-- -Wno-comment -I${devlibs}/perl/lib/CORE -->
@@ -486,7 +486,7 @@
            ${devlibs}/bin/libxslt-1.dll
            ${devlibs}/bin/libexslt-0.dll
            ${pcl.cairo} ${pcl.cairomm-1.0}
-           <!-- ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0} -->
+           ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0}
            ${pcl.glibmm-2.4}
            ${pcl.gtk+-2.0}
            ${pcl.gdkmm-2.4}
@@ -574,7 +574,7 @@
            ${devlibs}/bin/libxslt-1.dll
            ${devlibs}/bin/libexslt-0.dll
            ${pcl.cairo} ${pcl.cairomm-1.0}
-           <!-- ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0} -->
+           ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0}
            ${pcl.glibmm-2.4}
            ${pcl.gtk+-2.0}
            ${pcl.gdkmm-2.4}
@@ -630,7 +630,7 @@
            ${devlibs}/bin/libxslt-1.dll
            ${devlibs}/bin/libexslt-0.dll
            ${pcl.cairo} ${pcl.cairomm-1.0}
-           <!-- ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0} -->
+           ${pcl.libwpg-0.2} ${pcl.libvisio-0.0} ${pcl.libcdr-0.0}
            -liconv
            ${pcl.Magick++}
            ${pcl.fontconfig} ${pcl.freetype2}
@@ -700,20 +700,17 @@
     <copy todir="${dist}" file="${devlibs}/bin/libxml2-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxslt-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libexslt-0.dll"/>
-<!--
-    <copy todir="${dist}" file="${devlibs}/bin/libexpat-1.dll"/>
-    <!--
+    <!-- <copy todir="${dist}" file="${devlibs}/bin/libexpat-1.dll"/> -->
+
     <copy todir="${dist}" file="${devlibs}/bin/libwpg-0.2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libwpd-0.9.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libwpd-stream-0.9.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libvisio-0.0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libcdr-0.0.dll"/>
-  -->
-  <!--
-    <copy todir="${dist}" file="${devlibs}/bin/icui18n50.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/icudata50.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/icuuc50.dll"/>
-  -->
+    <copy todir="${dist}" file="${devlibs}/bin/icuin53.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/icudt53.dll"/>
+    <copy todir="${dist}" file="${devlibs}/bin/icuuc53.dll"/>
+
     <copy todir="${dist}" file="${devlibs}/bin/libjpeg-9.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpng16-16.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libtiff-5.dll"/>
