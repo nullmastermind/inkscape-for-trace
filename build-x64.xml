@@ -771,7 +771,7 @@
         </fileset>
     </copy>
 <!--    <copy todir="${dist}/share"> <fileset dir="${devlibs}/share/poppler"/> </copy> -->
-    <copy todir="${dist}" file="${mingw_bin}/gdb.exe"/>
+    <copy todir="${dist}" file="${devlibs}/bin/gdb.exe"/>
 
     <!-- Aspell dictionaries -->
  <!--   <copy todir="${dist}/lib"> <fileset dir="${devlibs}/lib/aspell-0.60"/> </copy> -->
