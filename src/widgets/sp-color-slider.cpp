@@ -1,7 +1,8 @@
-/*
- * A slider with colored background
- *
- * Author:
+/**
+ * @file
+ * A slider with colored background - implementation.
+ */
+/* Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *
@@ -10,13 +11,200 @@
  * This code is in public domain
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "sp-color-slider.h"
+
 #include <gtk/gtk.h>
+#include <gdkmm/screen.h>
+#include <gdkmm/general.h>
+#include <gtkmm/adjustment.h>
+
 #include "sp-color-scales.h"
 #include "preferences.h"
 
-#define SLIDER_WIDTH 96
-#define SLIDER_HEIGHT 8
-#define ARROW_SIZE 7
+static const gint SLIDER_WIDTH = 96;
+static const gint SLIDER_HEIGHT = 8;
+static const gint ARROW_SIZE = 7;
+
+
+ColorSlider::ColorSlider(Gtk::Adjustment* adjustment)
+    : _dragging(false)
+    , _adjustment(NULL)
+    , _value(0.0)
+    , _oldvalue(0.0)
+    , _mapsize(0)
+    , _map(NULL)
+{
+    _c0[0] = 0x00;
+    _c0[1] = 0x00;
+    _c0[2] = 0x00;
+    _c0[3] = 0xff;
+
+    _cm[0] = 0xff;
+    _cm[1] = 0x00;
+    _cm[2] = 0x00;
+    _cm[3] = 0xff;
+
+    _c0[0] = 0xff;
+    _c0[1] = 0xff;
+    _c0[2] = 0xff;
+    _c0[3] = 0xff;
+
+    _b0 = 0x5f;
+    _b1 = 0xa0;
+    _bmask = 0x08;
+
+    set_adjustment(adjustment);
+}
+
+ColorSlider::~ColorSlider() {
+    if (_adjustment) {
+        //TODO: disconnect all connections
+        delete _adjustment;
+        _adjustment = NULL;
+    }
+}
+
+void ColorSlider::on_realize() {
+    set_realized();
+
+    if(!_refGdkWindow)
+    {
+      GdkWindowAttr attributes;
+      gint attributes_mask;
+      Gtk::Allocation allocation = get_allocation();
+
+      memset(&attributes, 0, sizeof(attributes));
+      attributes.x = allocation.get_x();
+      attributes.y = allocation.get_y();
+      attributes.width = allocation.get_width();
+      attributes.height = allocation.get_height();
+      attributes.window_type = GDK_WINDOW_CHILD;
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.visual = gdk_screen_get_system_visual(gdk_screen_get_default());
+#if !GTK_CHECK_VERSION(3,0,0)
+      attributes.colormap = gdk_screen_get_system_colormap(gdk_screen_get_default());
+#endif
+      attributes.event_mask = get_events ();
+      attributes.event_mask |= (Gdk::EXPOSURE_MASK |
+                                Gdk::BUTTON_PRESS_MASK |
+                                Gdk::BUTTON_RELEASE_MASK |
+                                Gdk::POINTER_MOTION_MASK |
+                                Gdk::ENTER_NOTIFY_MASK |
+                                Gdk::LEAVE_NOTIFY_MASK);
+
+#if GTK_CHECK_VERSION(3,0,0)
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+#else
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+#endif
+
+      _refGdkWindow = Gdk::Window::create(get_parent_window(), &attributes,
+              attributes_mask);
+      set_window(_refGdkWindow);
+      _refGdkWindow->set_user_data(gobj());
+
+      style_attach();
+    }
+}
+
+void ColorSlider::on_unrealize() {
+    _refGdkWindow.reset();
+
+    Gtk::Widget::on_unrealize();
+}
+
+void ColorSlider::on_size_request(Gtk::Requisition* requisition) {
+    GtkStyle *style = gtk_widget_get_style(gobj());
+    requisition->width = SLIDER_WIDTH + style->xthickness * 2;
+    requisition->height = SLIDER_HEIGHT + style->ythickness * 2;
+}
+
+//TODO: GTK3 prefferred width/height
+
+void ColorSlider::on_size_allocate(Gtk::Allocation& allocation) {
+    if (get_realized()) {
+        _refGdkWindow->move_resize(allocation.get_x(), allocation.get_y(),
+                allocation.get_width(), allocation.get_height());
+    }
+}
+
+//TODO: if not GTK3
+bool ColorSlider::on_expose_event(GdkEventExpose* event) {
+    bool result = false;
+
+    if (get_is_drawable()) {
+        Cairo::RefPtr<Cairo::Context> cr = _refGdkWindow->create_cairo_context();
+        result = on_draw(cr);
+    }
+    return result;
+}
+
+bool ColorSlider::on_button_press_event(GdkEventButton *event) {
+    //TODO: implementation
+    return false;
+}
+
+bool ColorSlider::on_button_release_event(GdkEventButton *event) {
+    //TODO: implementation
+    return false;
+}
+
+bool ColorSlider::on_motion_notify_event(GdkEventMotion *event) {
+    //TODO: implementation
+    return false;
+}
+
+void ColorSlider::set_adjustment(Gtk::Adjustment* /*adjustment*/) {
+    //TODO: implementation
+}
+
+void ColorSlider::set_colors(guint32 start, guint32 min, guint32 end) {
+
+}
+
+void ColorSlider::set_map(const guchar *map) {
+
+}
+
+void ColorSlider::set_background(guint dark, guint light, guint size) {
+
+}
+
+bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 enum {
 	GRABBED,

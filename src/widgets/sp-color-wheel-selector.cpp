@@ -1,11 +1,13 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#include "sp-color-wheel-selector.h"
+
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
-#include "sp-color-wheel-selector.h"
 #include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
 #include "../svg/svg-icc-color.h"
