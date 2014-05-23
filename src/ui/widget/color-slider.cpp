@@ -29,6 +29,11 @@ static const gint SLIDER_WIDTH = 96;
 static const gint SLIDER_HEIGHT = 8;
 static const gint ARROW_SIZE = 7;
 
+static const guchar *sp_color_slider_render_gradient (gint x0, gint y0, gint width, gint height,
+                              gint c[], gint dc[], guint b0, guint b1, guint mask);
+static const guchar *sp_color_slider_render_map (gint x0, gint y0, gint width, gint height,
+                         guchar *map, gint start, gint step, guint b0, guint b1, guint mask);
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -165,8 +170,26 @@ void ColorSlider::set_adjustment(Gtk::Adjustment* /*adjustment*/) {
     //TODO: implementation
 }
 
-void ColorSlider::set_colors(guint32 start, guint32 min, guint32 end) {
+void ColorSlider::set_colors(guint32 start, guint32 mid, guint32 end) {
+    // Remove any map, if set
+    _map = 0;
 
+    _c0[0] = start >> 24;
+    _c0[1] = (start >> 16) & 0xff;
+    _c0[2] = (start >> 8) & 0xff;
+    _c0[3] = start & 0xff;
+
+    _cm[0] = mid >> 24;
+    _cm[1] = (mid >> 16) & 0xff;
+    _cm[2] = (mid >> 8) & 0xff;
+    _cm[3] = mid & 0xff;
+
+    _c1[0] = end >> 24;
+    _c1[1] = (end >> 16) & 0xff;
+    _c1[2] = (end >> 8) & 0xff;
+    _c1[3] = end & 0xff;
+
+    queue_draw();
 }
 
 void ColorSlider::set_map(const guchar *map) {
@@ -178,6 +201,149 @@ void ColorSlider::set_background(guint dark, guint light, guint size) {
 }
 
 bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
+    gboolean colorsOnTop = Inkscape::Preferences::get()->getBool("/options/workarounds/colorsontop", false);
+
+    Gtk::Allocation allocation = get_allocation();
+
+#if GTK_CHECK_VERSION(3,0,0)
+    Glib::RefPtr<Gtk::StyleContext> context = get_style_context();
+#else
+    Glib::RefPtr<Gdk::Window> window = get_window();
+    Glib::RefPtr<Gtk::Style> style = get_style();
+#endif
+
+    // Draw shadow
+    if (colorsOnTop) {
+#if GTK_CHECK_VERSION(3,0,0)
+        context->render_frame(cr, 0, 0,
+                allocation.get_width(), allocation.get_height());
+#else
+        style->paint_shadow(window, get_state(), Gtk::SHADOW_IN,
+                Gdk::Rectangle(), *this, "colorslider",
+                0, 0,
+                allocation.get_width(), allocation.get_height());
+#endif
+    }
+
+    /* Paintable part of color gradient area */
+    Gdk::Rectangle carea;
+
+#if GTK_CHECK_VERSION(3,0,0)
+    Gtk::Border padding;
+
+    padding = style_context->get_padding(get_state_flags());
+
+    carea.set_x(padding.get_left());
+    carea.set_y(padding.get_top());;
+#else
+    carea.set_x(style->get_xthickness());
+    carea.set_y(style->get_ythickness());
+#endif
+
+    carea.set_width(allocation.get_width() - 2 * carea.get_x());
+    carea.set_height(allocation.get_height() - 2 * carea.get_y());
+
+    if (_map) {
+        /* Render map pixelstore */
+        gint d = (1024 << 16) / carea.get_width();
+        gint s = 0;
+
+        const guchar *b = sp_color_slider_render_map(0, 0, carea.get_width(), carea.get_height(),
+                                                             _map, s, d,
+                                                             _b0, _b1, _bmask);
+
+        if (b != NULL && carea.get_width() > 0) {
+            Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB,
+                    false, 8, carea.get_width(), carea.get_height(), carea.get_width() * 3);
+
+            Gdk::Cairo::set_source_pixbuf(cr, pb, carea.get_x(), carea.get_y());
+            cr->paint();
+        }
+
+    } else {
+        gint c[4], dc[4];
+
+        /* Render gradient */
+
+        // part 1: from c0 to cm
+        if (carea.get_width() > 0) {
+            for (gint i = 0; i < 4; i++) {
+                c[i] = _c0[i] << 16;
+                dc[i] = ((_cm[i] << 16) - c[i]) / (carea.get_width()/2);
+            }
+            guint wi = carea.get_width()/2;
+            const guchar *b = sp_color_slider_render_gradient(0, 0, wi, carea.get_height(),
+                                                                          c, dc, _b0, _b1, _bmask);
+
+            /* Draw pixelstore 1 */
+            if (b != NULL && wi > 0) {
+                Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB,
+                        false, 8, wi, carea.get_height(), carea.get_width() * 3);
+
+                Gdk::Cairo::set_source_pixbuf(cr, pb, carea.get_x(), carea.get_y());
+                cr->paint();
+            }
+        }
+
+        // part 2: from cm to c1
+        if (carea.get_width() > 0) {
+            for (gint i = 0; i < 4; i++) {
+                c[i] = _cm[i] << 16;
+                dc[i] = ((_c1[i] << 16) - c[i]) / (carea.get_width()/2);
+            }
+            guint wi = carea.get_width()/2;
+            const guchar *b = sp_color_slider_render_gradient(carea.get_width()/2, 0, wi, carea.get_height(),
+                                                      c, dc,
+                                                                          _b0, _b1, _bmask);
+
+            /* Draw pixelstore 2 */
+            if (b != NULL && wi > 0) {
+                Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB,
+                        false, 8, wi, carea.get_height(), carea.get_width() * 3);
+
+                Gdk::Cairo::set_source_pixbuf(cr, pb,  carea.get_width()/2 + carea.get_x(), carea.get_y());
+                cr->paint();
+            }
+        }
+    }
+
+        /* Draw shadow */
+        if (!colorsOnTop) {
+#if GTK_CHECK_VERSION(3,0,0)
+            context->render_frame(cr, 0, 0,
+                    allocation.get_width(), allocation.get_height());
+#else
+            style->paint_shadow(window, get_state(), Gtk::SHADOW_IN,
+                    Gdk::Rectangle(), *this, "colorslider",
+                    0, 0,
+                    allocation.get_width(), allocation.get_height());
+#endif
+        }
+
+    /* Draw arrow */
+    gint x = (int)(_value * (carea.get_width() - 1) - ARROW_SIZE / 2 + carea.get_x());
+    gint y1 = carea.get_y();
+    gint y2 = carea.get_y() + carea.get_height() - 1;
+    cr->set_line_width(1.0);
+
+    // Define top arrow
+    cr->move_to(x - 0.5,                y1 + 0.5);
+    cr->line_to(x + ARROW_SIZE - 0.5,   y1 + 0.5);
+    cr->line_to(x + (ARROW_SIZE-1)/2.0, y1 + ARROW_SIZE/2.0 + 0.5);
+    cr->line_to(x - 0.5,                y1 + 0.5);
+
+    // Define bottom arrow
+    cr->move_to(x - 0.5,                y2 + 0.5);
+    cr->line_to(x + ARROW_SIZE - 0.5,   y2 + 0.5);
+    cr->line_to(x + (ARROW_SIZE-1)/2.0, y2 - ARROW_SIZE/2.0 + 0.5);
+    cr->line_to(x - 0.5,                y2 + 0.5);
+
+    // Render both arrows
+    cr->set_source_rgb(1.0, 1.0, 1.0);
+    cr->stroke_preserve();
+    cr->set_source_rgb(0.0, 0.0, 0.0);
+    cr->fill();
+
     return false;
 }
 
@@ -245,11 +411,6 @@ static gint sp_color_slider_motion_notify (GtkWidget *widget, GdkEventMotion *ev
 
 static void sp_color_slider_adjustment_changed (GtkAdjustment *adjustment, SPColorSlider *slider);
 static void sp_color_slider_adjustment_value_changed (GtkAdjustment *adjustment, SPColorSlider *slider);
-
-static const guchar *sp_color_slider_render_gradient (gint x0, gint y0, gint width, gint height,
-						      gint c[], gint dc[], guint b0, guint b1, guint mask);
-static const guchar *sp_color_slider_render_map (gint x0, gint y0, gint width, gint height,
-						 guchar *map, gint start, gint step, guint b0, guint b1, guint mask);
 
 static GtkWidgetClass *parent_class;
 static guint slider_signals[LAST_SIGNAL] = {0};
