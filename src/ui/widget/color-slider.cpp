@@ -70,8 +70,9 @@ ColorSlider::ColorSlider(Gtk::Adjustment* adjustment)
 
 ColorSlider::~ColorSlider() {
     if (_adjustment) {
-        //TODO: disconnect all connections
-        delete _adjustment;
+        _adjustment_changed_connection.disconnect();
+        _adjustment_value_changed_connection.disconnect();
+        _adjustment->unreference();
         _adjustment = NULL;
     }
 }
@@ -134,6 +135,8 @@ void ColorSlider::on_size_request(Gtk::Requisition* requisition) {
 //TODO: GTK3 prefferred width/height
 
 void ColorSlider::on_size_allocate(Gtk::Allocation& allocation) {
+    set_allocation(allocation);
+
     if (get_realized()) {
         _refGdkWindow->move_resize(allocation.get_x(), allocation.get_y(),
                 allocation.get_width(), allocation.get_height());
@@ -166,8 +169,64 @@ bool ColorSlider::on_motion_notify_event(GdkEventMotion *event) {
     return false;
 }
 
-void ColorSlider::set_adjustment(Gtk::Adjustment* /*adjustment*/) {
-    //TODO: implementation
+void ColorSlider::set_adjustment(Gtk::Adjustment *adjustment) {
+    if (!adjustment) {
+        _adjustment = Gtk::manage(new Gtk::Adjustment(0.0, 0.0, 1.0, 0.01, 0.0, 0.0));
+    } else {
+        adjustment->set_page_increment(0.0);
+        adjustment->set_page_size(0.0);
+    }
+
+    if (_adjustment != adjustment) {
+        if (_adjustment) {
+            _adjustment_changed_connection.disconnect();
+            _adjustment_value_changed_connection.disconnect();
+            //if GTK2
+            _adjustment->unreference();
+        }
+
+        _adjustment = adjustment;
+        _adjustment->reference();
+
+        _adjustment_changed_connection = _adjustment->signal_changed().connect(
+                sigc::mem_fun(this, &ColorSlider::on_adjustment_changed));
+        _adjustment_value_changed_connection = _adjustment->signal_value_changed().connect(
+                sigc::mem_fun(this, &ColorSlider::on_adjustment_value_changed));
+
+        _value = ColorScales::getScaled(_adjustment->gobj());
+
+        on_adjustment_changed();
+    }
+}
+
+void ColorSlider::on_adjustment_changed() {
+    queue_draw();
+}
+
+void ColorSlider::on_adjustment_value_changed() {
+    if (_value != ColorScales::getScaled( _adjustment->gobj() )) {
+        gint cx, cy, cw, ch;
+        Glib::RefPtr<Gtk::Style> style = get_style();
+        Gtk::Allocation allocation = get_allocation();
+        cx = style->get_xthickness();
+        cy = style->get_ythickness();
+        cw = allocation.get_width() - 2 * cx;
+        ch = allocation.get_height() - 2 * cy;
+        if ((gint) (ColorScales::getScaled( _adjustment->gobj() ) * cw) != (gint) (_value * cw)) {
+            gint ax, ay;
+            gfloat value;
+            value = _value;
+            _value = ColorScales::getScaled( _adjustment->gobj() );
+            ax = (int)(cx + value * cw - ARROW_SIZE / 2 - 2);
+            ay = cy;
+            queue_draw_area(ax, ay, ARROW_SIZE + 4, ch);
+            ax = (int)(cx + _value * cw - ARROW_SIZE / 2 - 2);
+            ay = cy;
+            queue_draw_area(ax, ay, ARROW_SIZE + 4, ch);
+        } else {
+            _value = ColorScales::getScaled( _adjustment->gobj() );
+        }
+    }
 }
 
 void ColorSlider::set_colors(guint32 start, guint32 mid, guint32 end) {
@@ -193,11 +252,17 @@ void ColorSlider::set_colors(guint32 start, guint32 mid, guint32 end) {
 }
 
 void ColorSlider::set_map(const guchar *map) {
+    _map = const_cast<guchar *>(map);
 
+    queue_draw();
 }
 
 void ColorSlider::set_background(guint dark, guint light, guint size) {
+    _b0 = dark;
+    _b1 = light;
+    _bmask = size;
 
+    queue_draw();
 }
 
 bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
@@ -278,7 +343,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
             /* Draw pixelstore 1 */
             if (b != NULL && wi > 0) {
                 Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB,
-                        false, 8, wi, carea.get_height(), carea.get_width() * 3);
+                        false, 8, wi, carea.get_height(), wi * 3);
 
                 Gdk::Cairo::set_source_pixbuf(cr, pb, carea.get_x(), carea.get_y());
                 cr->paint();
@@ -299,7 +364,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
             /* Draw pixelstore 2 */
             if (b != NULL && wi > 0) {
                 Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB,
-                        false, 8, wi, carea.get_height(), carea.get_width() * 3);
+                        false, 8, wi, carea.get_height(), wi * 3);
 
                 Gdk::Cairo::set_source_pixbuf(cr, pb,  carea.get_width()/2 + carea.get_x(), carea.get_y());
                 cr->paint();
@@ -1012,7 +1077,7 @@ static gboolean sp_color_slider_draw(GtkWidget *widget, cairo_t *cr)
 	cairo_stroke_preserve(cr);
 	cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
 	cairo_fill(cr);
-	
+
 	return FALSE;
 }
 

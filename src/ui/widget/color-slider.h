@@ -36,6 +36,7 @@ public:
     ColorSlider(Gtk::Adjustment *adjustment);
     ~ColorSlider();
 
+    //if GTK2
     void set_adjustment(Gtk::Adjustment *adjustment);
 
     void set_colors(guint32 start, guint32 mid, guint32 end);
@@ -70,9 +71,14 @@ protected:
     //TODO: on_adjustment value changed method + connection
 
 private:
+    void on_adjustment_changed();
+    void on_adjustment_value_changed();
+
     bool _dragging;
 
     Gtk::Adjustment *_adjustment;
+    sigc::connection _adjustment_changed_connection;
+    sigc::connection _adjustment_value_changed_connection;
 
     gfloat _value;
     gfloat _oldvalue;
