@@ -13,6 +13,7 @@
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
 #include "svg/svg-icc-color.h"
+#include "ui/widget/color-slider.h"
 
 #define CSC_CHANNEL_R (1 << 0)
 #define CSC_CHANNEL_G (1 << 1)

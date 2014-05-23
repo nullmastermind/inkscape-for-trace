@@ -15,20 +15,23 @@
 # include "config.h"
 #endif
 
-#include "sp-color-slider.h"
+#include "color-slider.h"
 
 #include <gtk/gtk.h>
 #include <gdkmm/screen.h>
 #include <gdkmm/general.h>
 #include <gtkmm/adjustment.h>
 
-#include "sp-color-scales.h"
+#include "widgets/sp-color-scales.h"
 #include "preferences.h"
 
 static const gint SLIDER_WIDTH = 96;
 static const gint SLIDER_HEIGHT = 8;
 static const gint ARROW_SIZE = 7;
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 ColorSlider::ColorSlider(Gtk::Adjustment* adjustment)
     : _dragging(false)
@@ -178,10 +181,9 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
     return false;
 }
 
-
-
-
-
+}//namespace Widget
+}//namespace UI
+}//namespace Inkscape
 
 
 

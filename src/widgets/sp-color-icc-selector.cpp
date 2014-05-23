@@ -13,7 +13,7 @@
 #include "../dialogs/dialog-events.h"
 #include "sp-color-icc-selector.h"
 #include "sp-color-scales.h"
-#include "sp-color-slider.h"
+#include "ui/widget/color-slider.h"
 #include "svg/svg-icc-color.h"
 #include "colorspace.h"
 #include "document.h"

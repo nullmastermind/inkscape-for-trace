@@ -40,7 +40,6 @@ set(widgets_SRC
 	sp-color-notebook.cpp
 	sp-color-scales.cpp
 	sp-color-selector.cpp
-	sp-color-slider.cpp
 	sp-color-wheel-selector.cpp
 	sp-widget.cpp
 	sp-xmlview-attr-list.cpp
@@ -97,7 +96,6 @@ set(widgets_SRC
 	sp-color-notebook.h
 	sp-color-scales.h
 	sp-color-selector.h
-	sp-color-slider.h
 	sp-color-wheel-selector.h
 	sp-widget.h
 	sp-xmlview-attr-list.h

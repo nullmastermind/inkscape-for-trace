@@ -18,9 +18,14 @@
 #endif
 
 #include <gtkmm/widget.h>
-
 #include <sigc++/signal.h>
 
+namespace Inkscape
+{
+namespace UI
+{
+namespace Widget
+{
 
 /*
  * A slider with colored background
@@ -81,8 +86,9 @@ private:
     Glib::RefPtr<Gdk::Window> _refGdkWindow;
 };
 
-
-
+}//namespace Widget
+}//namespace UI
+}//namespace Inkscape
 
 
 #include <gtk/gtk.h>

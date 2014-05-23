@@ -11,6 +11,7 @@
 #include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
 #include "../svg/svg-icc-color.h"
+#include "ui/widget/color-slider.h"
 #include "ui/widget/gimpcolorwheel.h"
 
 G_BEGIN_DECLS
