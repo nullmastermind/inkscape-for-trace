@@ -7,6 +7,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/adjustment.h>
 #include "../dialogs/dialog-events.h"
 #include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
@@ -160,28 +161,26 @@ void ColorWheelSelector::init()
     _adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
 
     /* Slider */
-    _slider = sp_color_slider_new (_adj);
-    gtk_widget_set_tooltip_text (_slider, _("Alpha (opacity)"));
-    gtk_widget_show (_slider);
+    _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_adj)));
+    _slider->set_tooltip_text(_("Alpha (opacity)"));
+    _slider->show();
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_slider, XPAD);
-    gtk_widget_set_margin_right(_slider, XPAD);
-    gtk_widget_set_margin_top(_slider, YPAD);
-    gtk_widget_set_margin_bottom(_slider, YPAD);
-    gtk_widget_set_hexpand(_slider, TRUE);
-    gtk_widget_set_halign(_slider, GTK_ALIGN_FILL);
-    gtk_widget_set_valign(_slider, GTK_ALIGN_FILL);
-    gtk_grid_attach(GTK_GRID(t), _slider, 1, row, 1, 1);
+    _slider->set_margin_left(XPAD);
+    _slider->set_margin_right(XPAD);
+    _slider->set_margin_top(YPAD);
+    _slider->set_margin_bottom(YPAD);
+    _slider->set_hexpand(true);
+    _slider->set_halign(Gtk::ALIGN_FILL);
+    _slider->set_valign(Gtk::ALIGN_FILL);
+    gtk_grid_attach(GTK_GRID(t), _slider->gobj(), 1, row, 1, 1);
 #else
-    gtk_table_attach(GTK_TABLE (t), _slider, 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
+    gtk_table_attach(GTK_TABLE (t), _slider->gobj(), 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
 #endif
 
-    sp_color_slider_set_colors (SP_COLOR_SLIDER (_slider),
-                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
-                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.5),
-                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 1.0));
-
+    _slider->set_colors(SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
+                        SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.5),
+                        SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 1.0));
 
     /* Spinbutton */
     _sbtn = gtk_spin_button_new (GTK_ADJUSTMENT (_adj), 1.0, 0);
@@ -206,12 +205,9 @@ void ColorWheelSelector::init()
     g_signal_connect (G_OBJECT (_adj), "value_changed",
                         G_CALLBACK (_adjustmentChanged), _csel);
 
-    g_signal_connect (G_OBJECT (_slider), "grabbed",
-                        G_CALLBACK (_sliderGrabbed), _csel);
-    g_signal_connect (G_OBJECT (_slider), "released",
-                        G_CALLBACK (_sliderReleased), _csel);
-    g_signal_connect (G_OBJECT (_slider), "changed",
-                        G_CALLBACK (_sliderChanged), _csel);
+    _slider->signal_grabbed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderGrabbed));
+    _slider->signal_released.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderReleased));
+    _slider->signal_value_changed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderChanged));
 
     g_signal_connect( G_OBJECT(_wheel), "changed",
                         G_CALLBACK (_wheelChanged), _csel );
@@ -243,9 +239,8 @@ GtkWidget *sp_color_wheel_selector_new()
 
 /* Helpers for setting color value */
 
-static void preserve_icc(SPColor *color, SPColorWheelSelector *cs){
-    ColorSelector* selector = static_cast<ColorSelector*>(SP_COLOR_SELECTOR(cs)->base);
-    color->icc = selector->getColor().icc ? new SVGICCColor(*selector->getColor().icc) : 0;
+void ColorWheelSelector::_preserve_icc(SPColor *color) const {
+    color->icc = getColor().icc ? new SVGICCColor(*getColor().icc) : 0;
 }
 
 void ColorWheelSelector::_colorChanged()
@@ -264,7 +259,7 @@ void ColorWheelSelector::_colorChanged()
     guint32 mid = _color.toRGBA32( 0x7f );
     guint32 end = _color.toRGBA32( 0xff );
 
-    sp_color_slider_set_colors(SP_COLOR_SLIDER(_slider), start, mid, end);
+    _slider->set_colors(start, mid, end);
 
     ColorScales::setScaled(_adj, _alpha);
 
@@ -287,45 +282,38 @@ void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorW
 
     wheelSelector->_updating = TRUE;
 
-    preserve_icc(&wheelSelector->_color, cs);
+    wheelSelector->_preserve_icc(&wheelSelector->_color);
     wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
 
     wheelSelector->_updating = FALSE;
 }
 
-void ColorWheelSelector::_sliderGrabbed( SPColorSlider *slider, SPColorWheelSelector *cs )
+void ColorWheelSelector::_sliderGrabbed()
 {
-    (void)slider;
-    ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
-    if (!wheelSelector->_dragging) {
-        wheelSelector->_dragging = TRUE;
-        wheelSelector->_grabbed();
+    if (!_dragging) {
+        _dragging = TRUE;
+        _grabbed();
 
-        preserve_icc(&wheelSelector->_color, cs);
-        wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+        _preserve_icc(&_color);
+        _updateInternals( _color, ColorScales::getScaled( _adj ), _dragging );
     }
 }
 
-void ColorWheelSelector::_sliderReleased( SPColorSlider *slider, SPColorWheelSelector *cs )
+void ColorWheelSelector::_sliderReleased()
 {
-    (void)slider;
-    ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
-    if (wheelSelector->_dragging) {
-        wheelSelector->_dragging = FALSE;
-        wheelSelector->_released();
+    if (_dragging) {
+        _dragging = FALSE;
+        _released();
 
-        preserve_icc(&wheelSelector->_color, cs);
-        wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+        _preserve_icc(&_color);
+        _updateInternals( _color, ColorScales::getScaled( _adj ), _dragging );
     }
 }
 
-void ColorWheelSelector::_sliderChanged( SPColorSlider *slider, SPColorWheelSelector *cs )
+void ColorWheelSelector::_sliderChanged()
 {
-    (void)slider;
-    ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
-
-    preserve_icc(&wheelSelector->_color, cs);
-    wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+    _preserve_icc(&_color);
+    _updateInternals( _color, ColorScales::getScaled( _adj ), _dragging );
 }
 
 void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs )
@@ -346,9 +334,9 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
     guint32 mid = color.toRGBA32( 0x7f );
     guint32 end = color.toRGBA32( 0xff );
 
-    sp_color_slider_set_colors (SP_COLOR_SLIDER(wheelSelector->_slider), start, mid, end);
+    wheelSelector->_slider->set_colors(start, mid, end);
 
-    preserve_icc(&color, cs);
+    wheelSelector->_preserve_icc(&color);
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );
 }
 
