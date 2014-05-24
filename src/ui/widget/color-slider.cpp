@@ -18,6 +18,7 @@
 #include "color-slider.h"
 
 #include <gtk/gtk.h>
+#include <gdkmm/cursor.h>
 #include <gdkmm/screen.h>
 #include <gdkmm/general.h>
 #include <gtkmm/adjustment.h>
@@ -155,17 +156,63 @@ bool ColorSlider::on_expose_event(GdkEventExpose* event) {
 }
 
 bool ColorSlider::on_button_press_event(GdkEventButton *event) {
-    //TODO: implementation
+    if (event->button == 1) {
+        Gtk::Allocation allocation = get_allocation();
+        gint cx, cw;
+        cx = get_style()->get_xthickness();
+        cw = allocation.get_width() - 2 * cx;
+        signal_grabbed.emit();
+        _dragging = true;
+        _oldvalue = _value;
+        ColorScales::setScaled( _adjustment->gobj(), CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0) );
+        signal_dragged.emit();
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gdk_device_grab(gdk_event_get_device(reinterpret_cast<GdkEvent *>(event)),
+                _refGdkWindow->gobj(),
+                GDK_OWNERSHIP_NONE,
+                FALSE,
+                static_cast<GdkEventMask>(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
+                NULL,
+                event->time);
+#else
+        get_window()->pointer_grab(false, Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_RELEASE_MASK, Gdk::Cursor(), event->time);
+#endif
+    }
+
     return false;
 }
 
 bool ColorSlider::on_button_release_event(GdkEventButton *event) {
-    //TODO: implementation
+    if (event->button == 1) {
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gdk_device_ungrab(gdk_event_get_device(reinterpret_cast<GdkEvent *>(event)),
+                                  gdk_event_get_time(reinterpret_cast<GdkEvent *>(event)));
+#else
+        get_window()->pointer_ungrab(event->time);
+#endif
+
+        _dragging = false;
+        signal_released.emit();
+        if (_value != _oldvalue) {
+            signal_value_changed.emit();
+        }
+    }
+
     return false;
 }
 
 bool ColorSlider::on_motion_notify_event(GdkEventMotion *event) {
-    //TODO: implementation
+    if (_dragging) {
+        gint cx, cw;
+        Gtk::Allocation allocation = get_allocation();
+        cx = get_style()->get_xthickness();
+        cw = allocation.get_width() - 2 * cx;
+        ColorScales::setScaled( _adjustment->gobj(), CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0) );
+        signal_dragged.emit();
+    }
+
     return false;
 }
 
