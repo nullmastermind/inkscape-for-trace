@@ -297,9 +297,6 @@ void ColorSlider::set_adjustment(Gtk::Adjustment *adjustment) {
         }
 
         _adjustment = adjustment;
-#if !GTK_CHECK_VERSION(3,0,0)
-        _adjustment->reference();
-#endif
         _adjustment_changed_connection = _adjustment->signal_changed().connect(
                 sigc::mem_fun(this, &ColorSlider::_on_adjustment_changed));
         _adjustment_value_changed_connection = _adjustment->signal_value_changed().connect(
