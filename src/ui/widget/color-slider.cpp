@@ -160,16 +160,26 @@ void ColorSlider::get_preferred_width_vfunc(int& minimum_width, int& natural_wid
     Gtk::Border padding = style_context->get_padding(get_state_flags());
     int width = SLIDER_WIDTH + padding.get_left() + padding.get_right();
     minimum_width = natural_width = width;
+}
 
+void ColorSlider::get_preferred_width_for_height_vfunc(int /*height*/, int& minimum_width, int& natural_width) const
+{
+    get_preferred_width(minimum_width, natural_width);
 }
 
 void ColorSlider::get_preferred_height_vfunc(int& minimum_height, int& natural_height) const
 {
     Glib::RefPtr<Gtk::StyleContext>style_context = get_style_context();
     Gtk::Border padding = style_context->get_padding(get_state_flags());
-    int height = SLIDER_WIDTH + padding.get_top() + padding.get_bottom();
+    int height = SLIDER_HEIGHT + padding.get_top() + padding.get_bottom();
     minimum_height = natural_height = height;
 }
+
+void ColorSlider::get_preferred_height_for_width_vfunc(int /*width*/, int& minimum_height, int& natural_height) const
+{
+    get_preferred_height(minimum_height, natural_height);
+}
+
 #else
 
 void ColorSlider::on_size_request(Gtk::Requisition* requisition) {
