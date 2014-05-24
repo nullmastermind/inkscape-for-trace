@@ -330,10 +330,11 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
         context->render_frame(cr, 0, 0,
                 allocation.get_width(), allocation.get_height());
 #else
-        style->paint_shadow(window, get_state(), Gtk::SHADOW_IN,
-                Gdk::Rectangle(), *this, "colorslider",
-                0, 0,
-                allocation.get_width(), allocation.get_height());
+        gtk_paint_shadow( style->gobj(), window->gobj(),
+                  gtk_widget_get_state(gobj()), GTK_SHADOW_IN,
+                  NULL, gobj(), "colorslider",
+                  0, 0,
+                  allocation.get_width(), allocation.get_height());
 #endif
     }
 
@@ -425,10 +426,11 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
             context->render_frame(cr, 0, 0,
                     allocation.get_width(), allocation.get_height());
 #else
-            style->paint_shadow(window, get_state(), Gtk::SHADOW_IN,
-                    Gdk::Rectangle(), *this, "colorslider",
-                    0, 0,
-                    allocation.get_width(), allocation.get_height());
+            gtk_paint_shadow( style->gobj(), window->gobj(),
+                      gtk_widget_get_state(gobj()), GTK_SHADOW_IN,
+                      NULL, gobj(), "colorslider",
+                      0, 0,
+                      allocation.get_width(), allocation.get_height());
 #endif
         }
 
