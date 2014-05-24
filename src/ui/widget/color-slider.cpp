@@ -176,7 +176,9 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event) {
                 NULL,
                 event->time);
 #else
-        get_window()->pointer_grab(false, Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_RELEASE_MASK, Gdk::Cursor(), event->time);
+        gdk_pointer_grab(get_window()->gobj(), FALSE,
+                static_cast<GdkEventMask>(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
+                NULL, NULL, event->time);
 #endif
     }
 
