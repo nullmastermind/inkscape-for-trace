@@ -161,7 +161,7 @@ void ColorWheelSelector::init()
     _adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
 
     /* Slider */
-    _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_adj)));
+    _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_adj, true)));
     _slider->set_tooltip_text(_("Alpha (opacity)"));
     _slider->show();
 
