@@ -615,9 +615,10 @@ cairo_pattern_t* SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
  
     // Content to tile (pattern space)
     Geom::Affine content2ps;
-    if (this->viewBox_set) {
+    Geom::OptRect effective_view_box = pattern_viewBox(this);
+    if (effective_view_box) {
         // viewBox to pattern server (using SPViewBox) 
-        viewBox = *pattern_viewBox(this);
+        viewBox = *effective_view_box;
         c2p.setIdentity();
         apply_viewbox( pattern_tile );
         content2ps = c2p;
