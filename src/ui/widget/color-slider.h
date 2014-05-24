@@ -32,12 +32,18 @@ namespace Widget
  */
 class ColorSlider: public Gtk::Widget {
 public:
-    //if GTK2
+#if GTK_CHECK_VERSION(3,0,0)
+    ColorSlider(Glib::RefPtr<Gtk::Adjustment> adjustment);
+#else
     ColorSlider(Gtk::Adjustment *adjustment);
+#endif
     ~ColorSlider();
 
-    //if GTK2
+#if GTK_CHECK_VERSION(3,0,0)
+    void set_adjustment(Glib::RefPtr<Gtk::Adjustment> adjustment);
+#else
     void set_adjustment(Gtk::Adjustment *adjustment);
+#endif
 
     void set_colors(guint32 start, guint32 mid, guint32 end);
 
@@ -57,26 +63,27 @@ protected:
     bool on_button_press_event(GdkEventButton *event);
     bool on_button_release_event(GdkEventButton *event);
     bool on_motion_notify_event(GdkEventMotion *event);
-
-    //if GTK2
-    void on_size_request(Gtk::Requisition* requisition);
-    bool on_expose_event(GdkEventExpose* event);
-    //if GTK3
-    //request mode, get preffered width/height vfunc
-    //endif
-
     bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 
-    //TODO: on_adjustment_changed method
-    //TODO: on_adjustment value changed method + connection
+#if GTK_CHECK_VERSION(3,0,0)
+    void get_preferred_width_vfunc(int& minimum_width, int& natural_width) const;
+    void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const;
+#else
+    void on_size_request(Gtk::Requisition* requisition);
+    bool on_expose_event(GdkEventExpose* event);
+#endif
 
 private:
-    void on_adjustment_changed();
-    void on_adjustment_value_changed();
+    void _on_adjustment_changed();
+    void _on_adjustment_value_changed();
 
     bool _dragging;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    Glib::RefPtr<Gtk::Adjustment> _adjustment;
+#else
     Gtk::Adjustment *_adjustment;
+#endif
     sigc::connection _adjustment_changed_connection;
     sigc::connection _adjustment_value_changed_connection;
 

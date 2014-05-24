@@ -22,6 +22,11 @@
 #include <gdkmm/screen.h>
 #include <gdkmm/general.h>
 #include <gtkmm/adjustment.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkmm/stylecontext.h>
+#else
+#include <gtkmm/style.h>
+#endif
 
 #include "widgets/sp-color-scales.h"
 #include "preferences.h"
@@ -39,9 +44,14 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+#if GTK_CHECK_VERSION(3,0,0)
+ColorSlider::ColorSlider(Glib::RefPtr<Gtk::Adjustment> adjustment)
+    : _dragging(false)
+#else
 ColorSlider::ColorSlider(Gtk::Adjustment* adjustment)
     : _dragging(false)
     , _adjustment(NULL)
+#endif
     , _value(0.0)
     , _oldvalue(0.0)
     , _mapsize(0)
@@ -73,8 +83,12 @@ ColorSlider::~ColorSlider() {
     if (_adjustment) {
         _adjustment_changed_connection.disconnect();
         _adjustment_value_changed_connection.disconnect();
+#if GTK_CHECK_VERSION(3,0,0)
+        _adjustment.reset();
+#else
         _adjustment->unreference();
         _adjustment = NULL;
+#endif
     }
 }
 
@@ -117,7 +131,9 @@ void ColorSlider::on_realize() {
       set_window(_refGdkWindow);
       _refGdkWindow->set_user_data(gobj());
 
+#if !GTK_CHECK_VERSION(3,0,0)
       style_attach();
+#endif
     }
 }
 
@@ -126,14 +142,6 @@ void ColorSlider::on_unrealize() {
 
     Gtk::Widget::on_unrealize();
 }
-
-void ColorSlider::on_size_request(Gtk::Requisition* requisition) {
-    GtkStyle *style = gtk_widget_get_style(gobj());
-    requisition->width = SLIDER_WIDTH + style->xthickness * 2;
-    requisition->height = SLIDER_HEIGHT + style->ythickness * 2;
-}
-
-//TODO: GTK3 prefferred width/height
 
 void ColorSlider::on_size_allocate(Gtk::Allocation& allocation) {
     set_allocation(allocation);
@@ -144,7 +152,32 @@ void ColorSlider::on_size_allocate(Gtk::Allocation& allocation) {
     }
 }
 
-//TODO: if not GTK3
+#if GTK_CHECK_VERSION(3,0,0)
+
+void ColorSlider::get_preferred_width_vfunc(int& minimum_width, int& natural_width) const
+{
+    Glib::RefPtr<Gtk::StyleContext>style_context = get_style_context();
+    Gtk::Border padding = style_context->get_padding(get_state_flags());
+    int width = SLIDER_WIDTH + padding.get_left() + padding.get_right();
+    minimum_width = natural_width = width;
+
+}
+
+void ColorSlider::get_preferred_height_vfunc(int& minimum_height, int& natural_height) const
+{
+    Glib::RefPtr<Gtk::StyleContext>style_context = get_style_context();
+    Gtk::Border padding = style_context->get_padding(get_state_flags());
+    int height = SLIDER_WIDTH + padding.get_top() + padding.get_bottom();
+    minimum_height = natural_height = height;
+}
+#else
+
+void ColorSlider::on_size_request(Gtk::Requisition* requisition) {
+    GtkStyle *style = gtk_widget_get_style(gobj());
+    requisition->width = SLIDER_WIDTH + style->xthickness * 2;
+    requisition->height = SLIDER_HEIGHT + style->ythickness * 2;
+}
+
 bool ColorSlider::on_expose_event(GdkEventExpose* event) {
     bool result = false;
 
@@ -155,11 +188,17 @@ bool ColorSlider::on_expose_event(GdkEventExpose* event) {
     return result;
 }
 
+#endif
+
 bool ColorSlider::on_button_press_event(GdkEventButton *event) {
     if (event->button == 1) {
         Gtk::Allocation allocation = get_allocation();
         gint cx, cw;
+#if GTK_CHECK_VERSION(3,0,0)
+        cx = get_style_context()->get_padding(get_state_flags()).get_left();
+#else
         cx = get_style()->get_xthickness();
+#endif
         cw = allocation.get_width() - 2 * cx;
         signal_grabbed.emit();
         _dragging = true;
@@ -209,7 +248,11 @@ bool ColorSlider::on_motion_notify_event(GdkEventMotion *event) {
     if (_dragging) {
         gint cx, cw;
         Gtk::Allocation allocation = get_allocation();
+#if GTK_CHECK_VERSION(3,0,0)
+        cx = get_style_context()->get_padding(get_state_flags()).get_left();
+#else
         cx = get_style()->get_xthickness();
+#endif
         cw = allocation.get_width() - 2 * cx;
         ColorScales::setScaled( _adjustment->gobj(), CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0) );
         signal_dragged.emit();
@@ -218,9 +261,17 @@ bool ColorSlider::on_motion_notify_event(GdkEventMotion *event) {
     return false;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
+void ColorSlider::set_adjustment(Glib::RefPtr<Gtk::Adjustment> adjustment) {
+#else
 void ColorSlider::set_adjustment(Gtk::Adjustment *adjustment) {
+#endif
     if (!adjustment) {
+#if GTK_CHECK_VERSION(3,0,0)
+        _adjustment = Gtk::Adjustment::create(0.0, 0.0, 1.0, 0.01, 0.0, 0.0);
+#else
         _adjustment = Gtk::manage(new Gtk::Adjustment(0.0, 0.0, 1.0, 0.01, 0.0, 0.0));
+#endif
     } else {
         adjustment->set_page_increment(0.0);
         adjustment->set_page_size(0.0);
@@ -230,35 +281,45 @@ void ColorSlider::set_adjustment(Gtk::Adjustment *adjustment) {
         if (_adjustment) {
             _adjustment_changed_connection.disconnect();
             _adjustment_value_changed_connection.disconnect();
-            //if GTK2
+#if !GTK_CHECK_VERSION(3,0,0)
             _adjustment->unreference();
+#endif
         }
 
         _adjustment = adjustment;
+#if !GTK_CHECK_VERSION(3,0,0)
         _adjustment->reference();
-
+#endif
         _adjustment_changed_connection = _adjustment->signal_changed().connect(
-                sigc::mem_fun(this, &ColorSlider::on_adjustment_changed));
+                sigc::mem_fun(this, &ColorSlider::_on_adjustment_changed));
         _adjustment_value_changed_connection = _adjustment->signal_value_changed().connect(
-                sigc::mem_fun(this, &ColorSlider::on_adjustment_value_changed));
+                sigc::mem_fun(this, &ColorSlider::_on_adjustment_value_changed));
 
         _value = ColorScales::getScaled(_adjustment->gobj());
 
-        on_adjustment_changed();
+        _on_adjustment_changed();
     }
 }
 
-void ColorSlider::on_adjustment_changed() {
+void ColorSlider::_on_adjustment_changed() {
     queue_draw();
 }
 
-void ColorSlider::on_adjustment_value_changed() {
+void ColorSlider::_on_adjustment_value_changed() {
     if (_value != ColorScales::getScaled( _adjustment->gobj() )) {
         gint cx, cy, cw, ch;
+#if GTK_CHECK_VERSION(3,0,0)
+        Glib::RefPtr<Gtk::StyleContext>style_context = get_style_context();
+        Gtk::Allocation allocation = get_allocation();
+        Gtk::Border padding = style_context->get_padding(get_state_flags());
+        cx = padding.get_left();
+        cy = padding.get_top();
+#else
         Glib::RefPtr<Gtk::Style> style = get_style();
         Gtk::Allocation allocation = get_allocation();
         cx = style->get_xthickness();
         cy = style->get_ythickness();
+#endif
         cw = allocation.get_width() - 2 * cx;
         ch = allocation.get_height() - 2 * cy;
         if ((gint) (ColorScales::getScaled( _adjustment->gobj() ) * cw) != (gint) (_value * cw)) {
@@ -320,7 +381,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
     Gtk::Allocation allocation = get_allocation();
 
 #if GTK_CHECK_VERSION(3,0,0)
-    Glib::RefPtr<Gtk::StyleContext> context = get_style_context();
+    Glib::RefPtr<Gtk::StyleContext> style_context = get_style_context();
 #else
     Glib::RefPtr<Gdk::Window> window = get_window();
     Glib::RefPtr<Gtk::Style> style = get_style();
@@ -329,7 +390,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
     // Draw shadow
     if (colorsOnTop) {
 #if GTK_CHECK_VERSION(3,0,0)
-        context->render_frame(cr, 0, 0,
+        style_context->render_frame(cr, 0, 0,
                 allocation.get_width(), allocation.get_height());
 #else
         gtk_paint_shadow( style->gobj(), window->gobj(),
@@ -425,7 +486,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
         /* Draw shadow */
         if (!colorsOnTop) {
 #if GTK_CHECK_VERSION(3,0,0)
-            context->render_frame(cr, 0, 0,
+            style_context->render_frame(cr, 0, 0,
                     allocation.get_width(), allocation.get_height());
 #else
             gtk_paint_shadow( style->gobj(), window->gobj(),
