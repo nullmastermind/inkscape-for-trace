@@ -54,8 +54,6 @@ namespace {
 }
 
 SPPattern::SPPattern() : SPPaintServer(), SPViewBox() {
-	this->href = NULL;
-
 	this->ref = new SPPatternReference(this);
 	this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), this));
 
@@ -190,15 +188,14 @@ void SPPattern::set(unsigned int key, const gchar* value) {
             break;
 
 	case SP_ATTR_XLINK_HREF:
-		if ( value && this->href && ( strcmp(value, this->href) == 0 ) ) {
+		if ( value && this->href == value ) {
 			/* Href unchanged, do nothing. */
 		} else {
-			g_free(this->href);
-			this->href = NULL;
+			this->href.clear();
 
 			if (value) {
 				// First, set the href field; it's only used in the "unchanged" check above.
-				this->href = g_strdup(value);
+				this->href = value;
 				// Now do the attaching, which emits the changed signal.
 				if (value) {
 					try {
@@ -360,9 +357,8 @@ SPPattern *pattern_chain(SPPattern *pattern)
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:pattern");
     repr->setAttribute("inkscape:collect", "always");
-    gchar *parent_ref = g_strconcat("#", pattern->getRepr()->attribute("id"), NULL);
+    Glib::ustring parent_ref = Glib::ustring::compose("#%1", pattern->getRepr()->attribute("id"));
     repr->setAttribute("xlink:href",  parent_ref);
-    g_free (parent_ref);
 
     defsrepr->addChild(repr, NULL);
     const gchar *child_id = repr->attribute("id");
@@ -375,13 +371,14 @@ SPPattern *pattern_chain(SPPattern *pattern)
 SPPattern *
 sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property)
 {
-    if (!pattern->href || pattern->hrefcount > count_pattern_hrefs(item, pattern)) {
+    if (pattern->href.empty() || pattern->hrefcount > count_pattern_hrefs(item, pattern)) {
         pattern = pattern_chain (pattern);
-        gchar *href = g_strconcat("url(#", pattern->getRepr()->attribute("id"), ")", NULL);
+        Glib::ustring href = Glib::ustring::compose("url(#%1)", pattern->getRepr()->attribute("id"));
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        sp_repr_css_set_property (css, property, href);
+        sp_repr_css_set_property (css, property, href.c_str());
         sp_repr_css_change_recursive(item->getRepr(), css, "style");
+
     }
     return pattern;
 }
@@ -401,9 +398,8 @@ sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool se
     }
     pattern->patternTransform_set = true;
 
-    gchar *c=sp_svg_transform_write(pattern->patternTransform);
+    Glib::ustring c=sp_svg_transform_write(pattern->patternTransform);
     pattern->getRepr()->setAttribute("patternTransform", c);
-    g_free(c);
 }
 
 const gchar *pattern_tile(GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move)
@@ -416,9 +412,8 @@ const gchar *pattern_tile(GSList *reprs, Geom::Rect bounds, SPDocument *document
     sp_repr_set_svg_double(repr, "width", bounds.dimensions()[Geom::X]);
     sp_repr_set_svg_double(repr, "height", bounds.dimensions()[Geom::Y]);
 
-    gchar *t=sp_svg_transform_write(transform);
+    Glib::ustring t=sp_svg_transform_write(transform);
     repr->setAttribute("patternTransform", t);
-    g_free(t);
 
     defsrepr->appendChild(repr);
     const gchar *pat_id = repr->attribute("id");

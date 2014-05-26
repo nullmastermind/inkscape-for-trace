@@ -42,7 +42,7 @@ public:
 	virtual ~SPPattern();
 
     /* Reference (href) */
-    gchar *href;
+	Glib::ustring href;
     SPPatternReference *ref;
 
     /* patternUnits and patternContentUnits attribute */
