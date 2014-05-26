@@ -1015,7 +1015,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
 
     TRACE(("%f x %f pattern\n", width, height));
 
-    if (pbox && pattern_patternUnits(pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+    if (pbox && pattern_patternUnits(pat) == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
         //Geom::Affine bbox2user (pbox->x1 - pbox->x0, 0.0, 0.0, pbox->y1 - pbox->y0, pbox->x0, pbox->y0);
         bbox_width_scaler = pbox->width();
         bbox_height_scaler = pbox->height();
@@ -1048,7 +1048,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
         pcs2dev[3] = h / view_box.height();
         pcs2dev[4] = x - view_box.left() * pcs2dev[0];
         pcs2dev[5] = y - view_box.top() * pcs2dev[3];
-    } else if (pbox && pattern_patternContentUnits(pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+    } else if (pbox && pattern_patternContentUnits(pat) == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
         pcs2dev[0] = pbox->width();
         pcs2dev[3] = pbox->height();
     }

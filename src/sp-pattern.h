@@ -33,6 +33,11 @@ class SPPatternReference;
 
 class SPPattern : public SPPaintServer, public SPViewBox {
 public:
+    enum PatternUnits {
+        UNITS_USERSPACEONUSE,
+        UNITS_OBJECTBOUNDINGBOX
+    };
+
 	SPPattern();
 	virtual ~SPPattern();
 
@@ -41,13 +46,13 @@ public:
     SPPatternReference *ref;
 
     /* patternUnits and patternContentUnits attribute */
-    guint patternUnits : 1;
-    guint patternUnits_set : 1;
-    guint patternContentUnits : 1;
-    guint patternContentUnits_set : 1;
+    PatternUnits patternUnits : 1;
+    bool patternUnits_set : 1;
+    PatternUnits patternContentUnits : 1;
+    bool patternContentUnits_set : 1;
     /* patternTransform attribute */
     Geom::Affine patternTransform;
-    guint patternTransform_set : 1;
+    bool patternTransform_set : 1;
     /* Tile rectangle */
     SVGLength x;
     SVGLength y;
@@ -82,11 +87,6 @@ protected:
     }
 };
 
-enum {
-    SP_PATTERN_UNITS_USERSPACEONUSE,
-    SP_PATTERN_UNITS_OBJECTBOUNDINGBOX
-};
-
 guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);
 SPPattern *sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property);
@@ -96,8 +96,8 @@ const gchar *pattern_tile (GSList *reprs, Geom::Rect bounds, SPDocument *documen
 
 SPPattern *pattern_getroot (SPPattern *pat);
 
-guint pattern_patternUnits (SPPattern const *pat);
-guint pattern_patternContentUnits (SPPattern const *pat);
+SPPattern::PatternUnits pattern_patternUnits (SPPattern const *pat);
+SPPattern::PatternUnits pattern_patternContentUnits (SPPattern const *pat);
 Geom::Affine const &pattern_patternTransform(SPPattern const *pat);
 gdouble pattern_x (SPPattern const *pat);
 gdouble pattern_y (SPPattern const *pat);
