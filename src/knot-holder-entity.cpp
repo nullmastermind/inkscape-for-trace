@@ -187,7 +187,7 @@ PatternKnotHolderEntityAngle::knot_get() const
 {
     SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
 
-    gdouble x = pattern_width(pat);
+    gdouble x = pat->get_width();
     gdouble y = 0;
     Geom::Point delta = Geom::Point(x,y);
     Geom::Point scale = sp_pattern_extract_scale(pat);
@@ -236,8 +236,8 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
 
     // Get the new scale from the position of the knotholder
     Geom::Point d = p_snapped - sp_pattern_extract_trans(pat);
-    gdouble pat_x = pattern_width(pat);
-    gdouble pat_y = pattern_height(pat);
+    gdouble pat_x = pat->get_width();
+    gdouble pat_y = pat->get_height();
     Geom::Scale scl(1);
     if ( state & GDK_CONTROL_MASK ) {
         // if ctrl is pressed: use 1:1 scaling
@@ -263,8 +263,8 @@ PatternKnotHolderEntityScale::knot_get() const
 {
     SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
 
-    gdouble x = pattern_width(pat);
-    gdouble y = pattern_height(pat);
+    gdouble x = pat->get_width();
+    gdouble y = pat->get_height();
     Geom::Point delta = Geom::Point(x,y);
     Geom::Affine a = pat->patternTransform;
     a[4] = 0;

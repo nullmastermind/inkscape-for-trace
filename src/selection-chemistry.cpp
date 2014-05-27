@@ -3344,12 +3344,13 @@ void sp_selection_untile(SPDesktop *desktop)
 
         did = true;
 
-        SPPattern *pattern = pattern_getroot(SP_PATTERN(server));
+        SPPattern *pattern = SP_PATTERN(server);
+        SPPattern *pattern_root = pattern_getroot(pattern);
 
-        Geom::Affine pat_transform = pattern_patternTransform(SP_PATTERN(server));
+        Geom::Affine pat_transform = pattern->get_transform();
         pat_transform *= item->transform;
 
-        for (SPObject *child = pattern->firstChild() ; child != NULL; child = child->next ) {
+        for (SPObject *child = pattern_root->firstChild() ; child != NULL; child = child->next ) {
             if (SP_IS_ITEM(child)) {
                 Inkscape::XML::Node *copy = child->getRepr()->duplicate(xml_doc);
                 SPItem *i = SP_ITEM(desktop->currentLayer()->appendChildRepr(copy));

@@ -70,6 +70,15 @@ public:
 
     bool isValid() const;
 
+    gdouble get_x() const;
+    gdouble get_y() const;
+    gdouble get_width() const;
+    gdouble get_height() const;
+    Geom::OptRect get_viewbox() const;
+    SPPattern::PatternUnits get_pattern_units() const;
+    SPPattern::PatternUnits get_pattern_content_units() const;
+    Geom::Affine const &get_transform() const;
+
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
 protected:
@@ -78,6 +87,9 @@ protected:
 	virtual void set(unsigned int key, const gchar* value);
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
+
+private:
+	bool _has_item_children() const;
 };
 
 
@@ -103,14 +115,6 @@ const gchar *pattern_tile (const std::list<Inkscape::XML::Node*> &reprs, Geom::R
 
 SPPattern *pattern_getroot (SPPattern *pat);
 
-SPPattern::PatternUnits pattern_patternUnits (SPPattern const *pat);
-SPPattern::PatternUnits pattern_patternContentUnits (SPPattern const *pat);
-Geom::Affine const &pattern_patternTransform(SPPattern const *pat);
-gdouble pattern_x (SPPattern const *pat);
-gdouble pattern_y (SPPattern const *pat);
-gdouble pattern_width (SPPattern const *pat);
-gdouble pattern_height (SPPattern const *pat);
-Geom::OptRect pattern_viewBox (SPPattern const *pat);
 
 #endif // SEEN_SP_PATTERN_H
 
