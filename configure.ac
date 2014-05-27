@@ -526,28 +526,14 @@ AC_ARG_ENABLE(wpg,
 with_libwpg=no
 
 if test "x$enable_wpg" = "xyes"; then
-	PKG_CHECK_MODULES(LIBWPG01, libwpg-0.1 libwpg-stream-0.1, with_libwpg01=yes, with_libwpg01=no)
-	if test "x$with_libwpg01" = "xyes"; then
-		AC_DEFINE(WITH_LIBWPG01,1,[Build in libwpg 0.1.x])
-		with_libwpg=yes
-		AC_SUBST(LIBWPG_LIBS, $LIBWPG01_LIBS)
-		AC_SUBST(LIBWPG_CFLAGS, $LIBWPG01_CFLAGS)
-	fi
-
-	PKG_CHECK_MODULES(LIBWPG02, libwpg-0.2 libwpd-0.9 libwpd-stream-0.9, with_libwpg02=yes, with_libwpg02=no)
-	if test "x$with_libwpg02" = "xyes"; then
-		AC_DEFINE(WITH_LIBWPG02,1,[Build in libwpg 0.2.x])
-		with_libwpg=yes
-		AC_SUBST(LIBWPG_LIBS, $LIBWPG02_LIBS)
-		AC_SUBST(LIBWPG_CFLAGS, $LIBWPG02_CFLAGS)
-	fi
+	PKG_CHECK_MODULES(LIBWPG, libwpg-0.3 librevenge-0.0 librevenge-stream-0.0, with_libwpg=yes, with_libwpg=no)
 
 	if test "x$with_libwpg" = "xyes"; then
 		AC_DEFINE(WITH_LIBWPG,1,[Build in libwpg])
 	fi
 fi
-AM_CONDITIONAL(WITH_LIBWPG01, test "x$with_libwpg01" = "xyes")
-AM_CONDITIONAL(WITH_LIBWPG02, test "x$with_libwpg02" = "xyes")
+AC_SUBST(LIBWPG_LIBS)
+AC_SUBST(LIBWPG_CFLAGS)
 AM_CONDITIONAL(WITH_LIBWPG, test "x$with_libwpg" = "xyes")
 
 dnl ********************************
@@ -561,7 +547,7 @@ AC_ARG_ENABLE(visio,
 with_libvisio=no
 
 if test "x$enable_visio" = "xyes"; then
-	PKG_CHECK_MODULES(LIBVISIO, libvisio-0.0 >= 0.0.20 libwpd-0.9 libwpd-stream-0.9 libwpg-0.2, with_libvisio=yes, with_libvisio=no)
+	PKG_CHECK_MODULES(LIBVISIO, libvisio-0.1 librevenge-0.0 librevenge-stream-0.0, with_libvisio=yes, with_libvisio=no)
 
 	if test "x$with_libvisio" = "xyes"; then
 		AC_DEFINE(WITH_LIBVISIO,1,[Build in libvisio])
@@ -582,7 +568,7 @@ AC_ARG_ENABLE(cdr,
 with_libcdr=no
 
 if test "x$enable_cdr" = "xyes"; then
-	PKG_CHECK_MODULES(LIBCDR, libcdr-0.0 >= 0.0.3 libwpd-0.9 libwpd-stream-0.9 libwpg-0.2, with_libcdr=yes, with_libcdr=no)
+	PKG_CHECK_MODULES(LIBCDR, libcdr-0.1 librevenge-0.0 librevenge-stream-0.0, with_libcdr=yes, with_libcdr=no)
 
 	if test "x$with_libcdr" = "xyes"; then
 		AC_DEFINE(WITH_LIBCDR,1,[Build in libcdr])

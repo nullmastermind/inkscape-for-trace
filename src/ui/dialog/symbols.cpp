@@ -63,7 +63,7 @@
 
 #ifdef WITH_LIBVISIO
 #include <libvisio/libvisio.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 #endif
 
 #include "verbs.h"
@@ -449,14 +449,16 @@ void SymbolsDialog::iconChanged() {
 // Read Visio stencil files
 SPDocument* read_vss( gchar* fullname, gchar* filename ) {
 
-  WPXFileStream input(fullname);
+  librevenge::RVNGFileStream input(fullname);
 
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
   }
 
-  libvisio::VSDStringVector output;
-  if (!libvisio::VisioDocument::generateSVGStencils(&input, output)) {
+  librevenge::RVNGStringVector output;
+  librevenge::RVNGSVGDrawingGenerator generator(output, "svg");
+
+  if (!libvisio::VisioDocument::parseStencils(&input, &generator)) {
     return NULL;
   }
 

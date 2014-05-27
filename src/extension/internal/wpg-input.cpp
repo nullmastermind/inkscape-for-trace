@@ -52,17 +52,8 @@
 #include "util/units.h"
 #include <cstring>
 
-// Take a guess and fallback to 0.1.x if no configure has run
-#if !defined(WITH_LIBWPG01) && !defined(WITH_LIBWPG02)
-#define WITH_LIBWPG01 1
-#endif
-
 #include "libwpg/libwpg.h"
-#if WITH_LIBWPG01
-#include "libwpg/WPGStreamImplementation.h"
-#elif WITH_LIBWPG02
-#include "libwpd-stream/libwpd-stream.h"
-#endif
+#include "librevenge-stream/librevenge-stream.h"
 
 using namespace libwpg;
 
@@ -73,17 +64,9 @@ namespace Internal {
 
 SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
-#if WITH_LIBWPG01
-    WPXInputStream* input = new libwpg::WPGFileStream(uri);
-#elif WITH_LIBWPG02
-    WPXInputStream* input = new WPXFileStream(uri);
-#endif
-    if (input->isOLEStream()) {
-#if WITH_LIBWPG01
-        WPXInputStream* olestream = input->getDocumentOLEStream();
-#elif WITH_LIBWPG02
-        WPXInputStream* olestream = input->getDocumentOLEStream("PerfectOffice_MAIN");
-#endif
+    librevenge::RVNGInputStream* input = new librevenge::RVNGFileStream(uri);
+    if (input->isStructured()) {
+        librevenge::RVNGInputStream* olestream = input->getSubStreamByName("PerfectOffice_MAIN");
         if (olestream) {
             delete input;
             input = olestream;
@@ -98,15 +81,17 @@ SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
         return NULL;
     }
 
-#if WITH_LIBWPG01
-    libwpg::WPGString output;
-#elif WITH_LIBWPG02
-    WPXString output;
-#endif
-    if (!libwpg::WPGraphics::generateSVG(input, output)) {
+	librevenge::RVNGStringVector vec;
+	librevenge::RVNGSVGDrawingGenerator generator(vec, "");
+
+	if (!libwpg::WPGraphics::parse(input, &generator) || vec.empty() || vec[0].empty())
+ 	{
         delete input;
         return NULL;
-    }
+ 	}
+
+    librevenge::RVNGString output("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+	output.append(vec[0]);
 
     //printf("I've got a doc: \n%s", painter.document.c_str());
 
