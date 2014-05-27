@@ -3242,13 +3242,11 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     gint pos = SP_OBJECT(items->data)->getRepr()->position();
 
     // create a list of duplicates
-    GSList *repr_copies = NULL;
+    std::list<Inkscape::XML::Node*> repr_copies;
     for (GSList *i = items; i != NULL; i = i->next) {
         Inkscape::XML::Node *dup = SP_OBJECT(i->data)->getRepr()->duplicate(xml_doc);
-        repr_copies = g_slist_prepend(repr_copies, dup);
+        repr_copies.push_back(dup);
     }
-    // restore the z-order after prepends
-    repr_copies = g_slist_reverse(repr_copies);
 
     Geom::Rect bbox(desktop->dt2doc(r->min()), desktop->dt2doc(r->max()));
 

@@ -13,22 +13,29 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <list>
 #include <gtk/gtk.h>
+#include <stddef.h>
+#include <sigc++/connection.h>
 
 #include "sp-item.h"
+#include "svg/svg-length.h"
+#include "sp-paint-server.h"
+#include "uri-references.h"
+#include "viewbox.h"
 
 #define SP_PATTERN(obj) (dynamic_cast<SPPattern*>((SPObject*)obj))
 #define SP_IS_PATTERN(obj) (dynamic_cast<const SPPattern*>((SPObject*)obj) != NULL)
 
 class SPPatternReference;
 
-#include "svg/svg-length.h"
-#include "sp-paint-server.h"
-#include "uri-references.h"
-#include "viewbox.h"
+namespace Inkscape {
+namespace XML {
 
-#include <stddef.h>
-#include <sigc++/connection.h>
+class Node;
+
+}
+}
 
 
 class SPPattern : public SPPaintServer, public SPViewBox {
@@ -92,7 +99,7 @@ SPPattern *pattern_chain (SPPattern *pattern);
 SPPattern *sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property);
 void sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool set);
 
-const gchar *pattern_tile (GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
+const gchar *pattern_tile (const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
 
 SPPattern *pattern_getroot (SPPattern *pat);
 

@@ -222,37 +222,34 @@ void SPPattern::set(unsigned int key, const gchar* value) {
 
 /* fixme: We need ::order_changed handler too (Lauris) */
 
-static GSList *pattern_getchildren(SPPattern *pat)
+void pattern_getchildren(SPPattern *pat, std::list<SPObject*>& l)
 {
-    GSList *l = NULL;
-
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->firstChild()) { // find the first one with children
 			for (SPObject *child = pat->firstChild() ; child ; child = child->getNext() ) {
-				l = g_slist_prepend (l, child);
+				l.push_back(child);
 			}
 			break; // do not go further up the chain if children are found
         }
     }
-
-    return l;
 }
 
 void SPPattern::update(SPCtx* ctx, unsigned int flags) {
-	if (flags & SP_OBJECT_MODIFIED_FLAG) {
+	typedef std::list<SPObject*>::iterator SPObjectIterator;
+
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	}
 
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	GSList *l = pattern_getchildren (this);
-	l = g_slist_reverse (l);
+	std::list<SPObject*> l;
+	pattern_getchildren (this, l);
 
-	while (l) {
-		SPObject *child = SP_OBJECT (l->data);
+	for (SPObjectIterator it = l.begin(); it != l.end(); it++) {
+		SPObject *child = *it;
 
 		sp_object_ref (child, NULL);
-		l = g_slist_remove (l, child);
 
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			child->updateDisplay(ctx, flags);
@@ -263,20 +260,21 @@ void SPPattern::update(SPCtx* ctx, unsigned int flags) {
 }
 
 void SPPattern::modified(unsigned int flags) {
+    typedef std::list<SPObject*>::iterator SPObjectIterator;
+
 	if (flags & SP_OBJECT_MODIFIED_FLAG) {
 		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	}
 
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	GSList *l = pattern_getchildren (this);
-	l = g_slist_reverse (l);
+	std::list<SPObject*> l;
+	pattern_getchildren (this, l);
 
-	while (l) {
-		SPObject *child = SP_OBJECT (l->data);
+	for (SPObjectIterator it = l.begin(); it != l.end(); it++) {
+		SPObject *child = *it;
 
 		sp_object_ref (child, NULL);
-		l = g_slist_remove (l, child);
 
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			child->emitModified(flags);
@@ -402,8 +400,11 @@ sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool se
     pattern->getRepr()->setAttribute("patternTransform", c);
 }
 
-const gchar *pattern_tile(GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move)
+const gchar *pattern_tile(const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds,
+        SPDocument *document, Geom::Affine transform, Geom::Affine move)
 {
+    typedef std::list<Inkscape::XML::Node*>::const_iterator NodePtrIterator;
+
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
 
@@ -419,8 +420,8 @@ const gchar *pattern_tile(GSList *reprs, Geom::Rect bounds, SPDocument *document
     const gchar *pat_id = repr->attribute("id");
     SPObject *pat_object = document->getObjectById(pat_id);
 
-    for (GSList *i = reprs; i != NULL; i = i->next) {
-            Inkscape::XML::Node *node = (Inkscape::XML::Node *)(i->data);
+    for (NodePtrIterator i = reprs.begin(); i != reprs.end(); i++) {
+        Inkscape::XML::Node *node = *i;
         SPItem *copy = SP_ITEM(pat_object->appendChildRepr(node));
 
         Geom::Affine dup_transform;
