@@ -1,9 +1,6 @@
-#ifndef SEEN_SP_PATTERN_H
-#define SEEN_SP_PATTERN_H
-
-/*
+/** @file
  * SVG <pattern> implementation
- *
+ *//*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Abhishek Sharma
@@ -13,21 +10,21 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifndef SEEN_SP_PATTERN_H
+#define SEEN_SP_PATTERN_H
+
 #include <list>
-#include <gtk/gtk.h>
 #include <stddef.h>
+#include <glibmm/ustring.h>
 #include <sigc++/connection.h>
 
-#include "sp-item.h"
 #include "svg/svg-length.h"
 #include "sp-paint-server.h"
 #include "uri-references.h"
 #include "viewbox.h"
 
-#define SP_PATTERN(obj) (dynamic_cast<SPPattern*>((SPObject*)obj))
-#define SP_IS_PATTERN(obj) (dynamic_cast<const SPPattern*>((SPObject*)obj) != NULL)
-
 class SPPatternReference;
+class SPItem;
 
 namespace Inkscape {
 namespace XML {
@@ -37,6 +34,8 @@ class Node;
 }
 }
 
+#define SP_PATTERN(obj) (dynamic_cast<SPPattern*>((SPObject*)obj))
+#define SP_IS_PATTERN(obj) (dynamic_cast<const SPPattern*>((SPObject*)obj) != NULL)
 
 class SPPattern : public SPPaintServer, public SPViewBox {
 public:
@@ -106,7 +105,6 @@ protected:
     }
 };
 
-guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);
 SPPattern *sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property);
 void sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool set);
