@@ -1113,16 +1113,16 @@ void SPItem::adjust_pattern (Geom::Affine const &postmul, bool set)
     if (style && (style->fill.isPaintserver())) {
         SPObject *server = style->getFillPaintServer();
         if ( SP_IS_PATTERN(server) ) {
-            SPPattern *pattern = sp_pattern_clone_if_necessary(this, SP_PATTERN(server), "fill");
-            sp_pattern_transform_multiply(pattern, postmul, set);
+            SPPattern *pattern = SP_PATTERN(server)->clone_if_necessary(this, "fill");
+            pattern->transform_multiply(postmul, set);
         }
     }
 
     if (style && (style->stroke.isPaintserver())) {
         SPObject *server = style->getStrokePaintServer();
         if ( SP_IS_PATTERN(server) ) {
-            SPPattern *pattern = sp_pattern_clone_if_necessary(this, SP_PATTERN(server), "stroke");
-            sp_pattern_transform_multiply(pattern, postmul, set);
+            SPPattern *pattern = SP_PATTERN(server)->clone_if_necessary(this, "stroke");
+            pattern->transform_multiply(postmul, set);
         }
     }
 }

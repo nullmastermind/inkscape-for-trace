@@ -77,6 +77,10 @@ public:
     SPPattern::PatternUnits get_pattern_units() const;
     SPPattern::PatternUnits get_pattern_content_units() const;
     Geom::Affine const &get_transform() const;
+    SPPattern *get_root(); //TODO: const
+
+    SPPattern *clone_if_necessary(SPItem *item, const gchar *property);
+    void transform_multiply(Geom::Affine postmul, bool set);
 
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
@@ -89,6 +93,12 @@ protected:
 
 private:
 	bool _has_item_children() const;
+	SPPattern *_chain() const;
+
+	/**
+	Count how many times pat is used by the styles of o and its descendants
+	*/
+	guint _count_hrefs(SPObject* o) const;
 };
 
 
@@ -105,13 +115,8 @@ protected:
     }
 };
 
-SPPattern *pattern_chain (SPPattern *pattern);
-SPPattern *sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property);
-void sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool set);
 
 const gchar *pattern_tile (const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
-
-SPPattern *pattern_getroot (SPPattern *pat);
 
 
 #endif // SEEN_SP_PATTERN_H

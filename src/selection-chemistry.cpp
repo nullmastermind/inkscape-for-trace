@@ -1945,8 +1945,8 @@ GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrok
                 }
 
             } else if (SP_IS_PATTERN(sel_server) && SP_IS_PATTERN(iter_server)) {
-                SPPattern *sel_pat = pattern_getroot(SP_PATTERN(sel_server));
-                SPPattern *iter_pat = pattern_getroot(SP_PATTERN(iter_server));
+                SPPattern *sel_pat = SP_PATTERN(sel_server)->get_root();
+                SPPattern *iter_pat = SP_PATTERN(iter_server)->get_root();
                 if (sel_pat == iter_pat) {
                     match = true;
                 }
@@ -3345,7 +3345,7 @@ void sp_selection_untile(SPDesktop *desktop)
         did = true;
 
         SPPattern *pattern = SP_PATTERN(server);
-        SPPattern *pattern_root = pattern_getroot(pattern);
+        SPPattern *pattern_root = pattern->get_root();
 
         Geom::Affine pat_transform = pattern->get_transform();
         pat_transform *= item->transform;

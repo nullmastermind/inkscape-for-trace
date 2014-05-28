@@ -312,12 +312,7 @@ static void pattern_ref_modified (SPObject */*ref*/, guint /*flags*/, SPPattern 
     // Conditional to avoid causing infinite loop if there's a cycle in the href chain.
 }
 
-
-/**
-Count how many times pat is used by the styles of o and its descendants
-*/
-static guint
-count_pattern_hrefs(SPObject *o, SPPattern *pat)
+guint SPPattern::_count_hrefs(SPObject *o) const
 {
     if (!o)
         return 1;
@@ -328,34 +323,32 @@ count_pattern_hrefs(SPObject *o, SPPattern *pat)
     if (style
         && style->fill.isPaintserver()
         && SP_IS_PATTERN(SP_STYLE_FILL_SERVER(style))
-        && SP_PATTERN(SP_STYLE_FILL_SERVER(style)) == pat)
+        && SP_PATTERN(SP_STYLE_FILL_SERVER(style)) == this)
     {
         i ++;
     }
     if (style
         && style->stroke.isPaintserver()
         && SP_IS_PATTERN(SP_STYLE_STROKE_SERVER(style))
-        && SP_PATTERN(SP_STYLE_STROKE_SERVER(style)) == pat)
+        && SP_PATTERN(SP_STYLE_STROKE_SERVER(style)) == this)
     {
         i ++;
     }
 
     for ( SPObject *child = o->firstChild(); child != NULL; child = child->next ) {
-        i += count_pattern_hrefs(child, pat);
+        i += _count_hrefs(child);
     }
 
     return i;
 }
 
-SPPattern *pattern_chain(SPPattern *pattern)
-{
-    SPDocument *document = pattern->document;
-        Inkscape::XML::Document *xml_doc = document->getReprDoc();
+SPPattern *SPPattern::_chain() const {
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:pattern");
     repr->setAttribute("inkscape:collect", "always");
-    Glib::ustring parent_ref = Glib::ustring::compose("#%1", pattern->getRepr()->attribute("id"));
+    Glib::ustring parent_ref = Glib::ustring::compose("#%1", getRepr()->attribute("id"));
     repr->setAttribute("xlink:href",  parent_ref);
 
     defsrepr->addChild(repr, NULL);
@@ -366,11 +359,10 @@ SPPattern *pattern_chain(SPPattern *pattern)
     return SP_PATTERN (child);
 }
 
-SPPattern *
-sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property)
-{
-    if (pattern->href.empty() || pattern->hrefcount > count_pattern_hrefs(item, pattern)) {
-        pattern = pattern_chain (pattern);
+SPPattern *SPPattern::clone_if_necessary(SPItem *item, const gchar *property) {
+    SPPattern *pattern = this;
+    if (pattern->href.empty() || pattern->hrefcount > _count_hrefs(item)) {
+        pattern = _chain();
         Glib::ustring href = Glib::ustring::compose("url(#%1)", pattern->getRepr()->attribute("id"));
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -381,23 +373,21 @@ sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *pr
     return pattern;
 }
 
-void
-sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool set)
-{
+void SPPattern::transform_multiply(Geom::Affine postmul, bool set) {
     // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
     // for it to work, we also need    sp_object_read_attr( item, "transform");
     //pattern->patternTransform = premul * item->transform * pattern->patternTransform * item->transform.inverse() * postmul;
 
     // otherwise the formula is much simpler
     if (set) {
-        pattern->patternTransform = postmul;
+        patternTransform = postmul;
     } else {
-        pattern->patternTransform = pattern->get_transform() * postmul;
+        patternTransform = get_transform() * postmul;
     }
-    pattern->patternTransform_set = true;
+    patternTransform_set = true;
 
-    Glib::ustring c=sp_svg_transform_write(pattern->patternTransform);
-    pattern->getRepr()->setAttribute("patternTransform", c);
+    Glib::ustring c=sp_svg_transform_write(patternTransform);
+    getRepr()->setAttribute("patternTransform", c);
 }
 
 const gchar *pattern_tile(const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds,
@@ -436,14 +426,14 @@ const gchar *pattern_tile(const std::list<Inkscape::XML::Node*> &reprs, Geom::Re
     return pat_id;
 }
 
-SPPattern *pattern_getroot(SPPattern *pat)
+SPPattern *SPPattern::get_root()
 {
-    for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if ( pat_i->firstChild() ) { // find the first one with children
             return pat_i;
         }
     }
-    return pat; // document is broken, we can't get to root; but at least we can return pat which is supposedly a valid pattern
+    return this; // document is broken, we can't get to root; but at least we can return pat which is supposedly a valid pattern
 }
 
 
