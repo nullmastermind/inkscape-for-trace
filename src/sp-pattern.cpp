@@ -214,10 +214,9 @@ void SPPattern::set(unsigned int key, const gchar* value) {
 /* fixme: We need ::order_changed handler too (Lauris) */
 
 void SPPattern::_get_children(std::list<SPObject*>& l) {
-	SPPattern *pat = this;
-    for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->firstChild()) { // find the first one with children
-			for (SPObject *child = pat->firstChild() ; child ; child = child->getNext() ) {
+			for (SPObject *child = pat_i->firstChild() ; child ; child = child->getNext() ) {
 				l.push_back(child);
 			}
 			break; // do not go further up the chain if children are found
