@@ -82,6 +82,14 @@ public:
     SPPattern *clone_if_necessary(SPItem *item, const gchar *property);
     void transform_multiply(Geom::Affine postmul, bool set);
 
+    /**
+     * @brief create a new pattern in XML tree
+     * @return created pattern id
+     */
+    static const gchar *produce(const std::list<Inkscape::XML::Node*> &reprs,
+    		Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
+
+
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
 protected:
@@ -96,9 +104,19 @@ private:
 	SPPattern *_chain() const;
 
 	/**
-	Count how many times pat is used by the styles of o and its descendants
+	Count how many times pattern is used by the styles of o and its descendants
 	*/
 	guint _count_hrefs(SPObject* o) const;
+
+	/**
+	Gets called when the pattern is reattached to another <pattern>
+	*/
+	void _on_ref_changed(SPObject *old_ref, SPObject *ref);
+
+	/**
+	Gets called when the referenced <pattern> is changed
+	*/
+	void _on_ref_modified(SPObject *ref, guint flags);
 };
 
 
@@ -114,10 +132,6 @@ protected:
         return SP_IS_PATTERN (obj);
     }
 };
-
-
-const gchar *pattern_tile (const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
-
 
 #endif // SEEN_SP_PATTERN_H
 

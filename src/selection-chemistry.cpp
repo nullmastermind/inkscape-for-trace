@@ -3265,7 +3265,7 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    gchar const *pat_id = pattern_tile(repr_copies, bbox, doc,
+    gchar const *pat_id = SPPattern::produce(repr_copies, bbox, doc,
                                        ( Geom::Affine(Geom::Translate(desktop->dt2doc(Geom::Point(r->min()[Geom::X],
                                                                                             r->max()[Geom::Y]))))
                                          * parent_transform.inverse() ),

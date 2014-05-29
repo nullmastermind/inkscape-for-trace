@@ -19,7 +19,8 @@
 #include <cstring>
 #include <string>
 #include <2geom/transforms.h>
-#include "macros.h"
+#include <sigc++/functors/mem_fun.h>
+
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -32,16 +33,6 @@
 #include "style.h"
 #include "sp-pattern.h"
 #include "xml/repr.h"
-#include "display/grayscale.h"
-
-#include <sigc++/functors/ptr_fun.h>
-#include <sigc++/adaptors/bind.h>
-
-/*
- * Pattern
- */
-static void pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat);
-static void pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern);
 
 #include "sp-factory.h"
 
@@ -55,7 +46,7 @@ namespace {
 
 SPPattern::SPPattern() : SPPaintServer(), SPViewBox() {
 	this->ref = new SPPatternReference(this);
-	this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(pattern_ref_changed), this));
+	this->ref->changedSignal().connect(sigc::mem_fun(this, &SPPattern::_on_ref_changed));
 
 	this->patternUnits = UNITS_OBJECTBOUNDINGBOX;
 	this->patternUnits_set = false;
@@ -284,31 +275,21 @@ void SPPattern::modified(unsigned int flags) {
 	}
 }
 
-/**
-Gets called when the pattern is reattached to another <pattern>
-*/
-static void
-pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat)
-{
+void SPPattern::_on_ref_changed(SPObject *old_ref, SPObject *ref) {
 	if (old_ref) {
-		pat->modified_connection.disconnect();
+		modified_connection.disconnect();
 	}
 
 	if (SP_IS_PATTERN (ref)) {
-		pat->modified_connection = ref->connectModified(sigc::bind<2>(sigc::ptr_fun(&pattern_ref_modified), pat));
+		modified_connection = ref->connectModified(sigc::mem_fun(this, &SPPattern::_on_ref_modified));
 	}
 
-    pattern_ref_modified (ref, 0, pat);
+	_on_ref_modified(ref, 0);
 }
 
-/**
-Gets called when the referenced <pattern> is changed
-*/
-static void pattern_ref_modified (SPObject */*ref*/, guint /*flags*/, SPPattern *pattern)
+void SPPattern::_on_ref_modified(SPObject */*ref*/, guint /*flags*/)
 {
-    if ( SP_IS_OBJECT(pattern) ) {
-        pattern->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    }
+	requestModified(SP_OBJECT_MODIFIED_FLAG);
     // Conditional to avoid causing infinite loop if there's a cycle in the href chain.
 }
 
@@ -390,7 +371,7 @@ void SPPattern::transform_multiply(Geom::Affine postmul, bool set) {
     getRepr()->setAttribute("patternTransform", c);
 }
 
-const gchar *pattern_tile(const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds,
+const gchar *SPPattern::produce(const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds,
         SPDocument *document, Geom::Affine transform, Geom::Affine move)
 {
     typedef std::list<Inkscape::XML::Node*>::const_iterator NodePtrIterator;
