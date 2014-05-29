@@ -136,19 +136,19 @@ KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &p, Inkscape:
 
 static gdouble sp_pattern_extract_theta(SPPattern const *pat)
 {
-    Geom::Affine transf = pat->patternTransform;
+    Geom::Affine transf = pat->get_transform();
     return Geom::atan2(transf.xAxis());
 }
 
 static Geom::Point sp_pattern_extract_scale(SPPattern const *pat)
 {
-    Geom::Affine transf = pat->patternTransform;
+    Geom::Affine transf = pat->get_transform();
     return Geom::Point( transf.expansionX(), transf.expansionY() );
 }
 
 static Geom::Point sp_pattern_extract_trans(SPPattern const *pat)
 {
-    return Geom::Point(pat->patternTransform[4], pat->patternTransform[5]);
+    return Geom::Point(pat->get_transform()[4], pat->get_transform()[5]);
 }
 
 void
@@ -266,7 +266,7 @@ PatternKnotHolderEntityScale::knot_get() const
     gdouble x = pat->get_width();
     gdouble y = pat->get_height();
     Geom::Point delta = Geom::Point(x,y);
-    Geom::Affine a = pat->patternTransform;
+    Geom::Affine a = pat->get_transform();
     a[4] = 0;
     a[5] = 0;
     delta = delta * a;

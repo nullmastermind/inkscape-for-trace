@@ -213,8 +213,8 @@ void SPPattern::set(unsigned int key, const gchar* value) {
 
 /* fixme: We need ::order_changed handler too (Lauris) */
 
-void pattern_getchildren(SPPattern *pat, std::list<SPObject*>& l)
-{
+void SPPattern::_get_children(std::list<SPObject*>& l) {
+	SPPattern *pat = this;
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->firstChild()) { // find the first one with children
 			for (SPObject *child = pat->firstChild() ; child ; child = child->getNext() ) {
@@ -235,7 +235,7 @@ void SPPattern::update(SPCtx* ctx, unsigned int flags) {
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
 	std::list<SPObject*> l;
-	pattern_getchildren (this, l);
+	_get_children(l);
 
 	for (SPObjectIterator it = l.begin(); it != l.end(); it++) {
 		SPObject *child = *it;
@@ -260,7 +260,7 @@ void SPPattern::modified(unsigned int flags) {
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
 	std::list<SPObject*> l;
-	pattern_getchildren (this, l);
+	_get_children(l);
 
 	for (SPObjectIterator it = l.begin(); it != l.end(); it++) {
 		SPObject *child = *it;

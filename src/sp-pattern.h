@@ -51,24 +51,6 @@ public:
 	Glib::ustring href;
     SPPatternReference *ref;
 
-    /* patternUnits and patternContentUnits attribute */
-    PatternUnits patternUnits : 1;
-    bool patternUnits_set : 1;
-    PatternUnits patternContentUnits : 1;
-    bool patternContentUnits_set : 1;
-    /* patternTransform attribute */
-    Geom::Affine patternTransform;
-    bool patternTransform_set : 1;
-    /* Tile rectangle */
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
-
-    sigc::connection modified_connection;
-
-    bool isValid() const;
-
     gdouble get_x() const;
     gdouble get_y() const;
     gdouble get_width() const;
@@ -89,7 +71,7 @@ public:
     static const gchar *produce(const std::list<Inkscape::XML::Node*> &reprs,
     		Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
 
-
+    bool isValid() const;
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
 protected:
@@ -101,6 +83,7 @@ protected:
 
 private:
 	bool _has_item_children() const;
+	void _get_children(std::list<SPObject*>& l);
 	SPPattern *_chain() const;
 
 	/**
@@ -117,6 +100,22 @@ private:
 	Gets called when the referenced <pattern> is changed
 	*/
 	void _on_ref_modified(SPObject *ref, guint flags);
+
+    /* patternUnits and patternContentUnits attribute */
+    PatternUnits patternUnits : 1;
+    bool patternUnits_set : 1;
+    PatternUnits patternContentUnits : 1;
+    bool patternContentUnits_set : 1;
+    /* patternTransform attribute */
+    Geom::Affine patternTransform;
+    bool patternTransform_set : 1;
+    /* Tile rectangle */
+    SVGLength x;
+    SVGLength y;
+    SVGLength width;
+    SVGLength height;
+
+    sigc::connection modified_connection;
 };
 
 
