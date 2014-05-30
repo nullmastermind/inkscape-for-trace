@@ -141,47 +141,6 @@ void ColorNotebook::switchPage(GtkNotebook*,
     }
 }
 
-static gint sp_color_notebook_menu_handler( GtkWidget *widget, GdkEvent *event )
-{
-    if (event->type == GDK_BUTTON_PRESS)
-    {
-        SPColorSelector* csel = SP_COLOR_SELECTOR(widget);
-        (dynamic_cast<ColorNotebook*>(csel->base))->menuHandler( event );
-
-        /* Tell calling code that we have handled this event; the buck
-         * stops here. */
-        return TRUE;
-    }
-
-    /* Tell calling code that we have not handled this event; pass it on. */
-    return FALSE;
-}
-
-gint ColorNotebook::menuHandler( GdkEvent* event )
-{
-    GdkEventButton *bevent = (GdkEventButton *) event;
-    gtk_menu_popup (GTK_MENU( _popup ), NULL, NULL, NULL, NULL,
-                    bevent->button, bevent->time);
-    return TRUE;
-}
-
-static void sp_color_notebook_menuitem_response (GtkMenuItem *menuitem, gpointer user_data)
-{
-    gboolean active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem));
-    SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (user_data);
-    if ( entry )
-    {
-        if ( active )
-        {
-            (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(entry->backPointer)->base))->addPage(entry->type, entry->submode);
-        }
-        else
-        {
-            (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(entry->backPointer)->base))->removePage(entry->type, entry->submode);
-        }
-    }
-}
-
 static void
 sp_color_notebook_init (SPColorNotebook *colorbook)
 {
@@ -196,28 +155,9 @@ sp_color_notebook_init (SPColorNotebook *colorbook)
 void ColorNotebook::init()
 {
     guint row = 0;
-    guint i = 0;
-    guint j = 0;
-    GType *selector_types = 0;
-    guint selector_type_count = 0;
-
-    /* tempory hardcoding to get types loaded */
-    SP_TYPE_COLOR_SCALES;
-    SP_TYPE_COLOR_WHEEL_SELECTOR;
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    SP_TYPE_COLOR_ICC_SELECTOR;
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-    /* REJON: Comment out the next line to not use the normal GTK Color
-           wheel. */
-
-//        SP_TYPE_COLOR_GTKSELECTOR;
 
     _updating = FALSE;
     _updatingrgba = FALSE;
-    _btn = 0;
-    _popup = 0;
-    _trackerList = g_ptr_array_new ();
 
     _book = gtk_notebook_new ();
     gtk_widget_show (_book);
@@ -225,38 +165,6 @@ void ColorNotebook::init()
     // Dont show the notebook tabs, use radiobuttons instead
     gtk_notebook_set_show_border (GTK_NOTEBOOK (_book), false);
     gtk_notebook_set_show_tabs (GTK_NOTEBOOK (_book), false);
-
-    selector_types = g_type_children (SP_TYPE_COLOR_SELECTOR, &selector_type_count);
-
-    for ( i = 0; i < selector_type_count; i++ )
-    {
-        if (!g_type_is_a (selector_types[i], SP_TYPE_COLOR_NOTEBOOK))
-        {
-            guint howmany = 1;
-            gpointer klass = g_type_class_ref (selector_types[i]);
-            if ( klass && SP_IS_COLOR_SELECTOR_CLASS(klass) )
-            {
-                SPColorSelectorClass *ck = SP_COLOR_SELECTOR_CLASS (klass);
-                howmany = MAX (1, ck->submode_count);
-                for ( j = 0; j < howmany; j++ )
-                {
-                    SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (malloc(sizeof(SPColorNotebookTracker)));
-                    if ( entry )
-                    {
-                        memset( entry, 0, sizeof(SPColorNotebookTracker) );
-                        entry->name = ck->name[j];
-                        entry->type = selector_types[i];
-                        entry->submode = j;
-                        entry->enabledFull = TRUE;
-                        entry->enabledBrief = TRUE;
-                        entry->backPointer = SP_COLOR_NOTEBOOK(_csel);
-
-                        g_ptr_array_add (_trackerList, entry);
-                    }
-                }
-            }
-        }
-    }
 
 #if GTK_CHECK_VERSION(3,0,0)
     _buttonbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
@@ -268,7 +176,7 @@ void ColorNotebook::init()
     gtk_widget_show (_buttonbox);
     _buttons = new GtkWidget *[_available_pages.size()];
 
-    for ( i = 0; i < _available_pages.size(); i++ )
+    for (int i = 0; static_cast<size_t>(i) < _available_pages.size(); i++ )
     {
         _addPage(_available_pages[i]);
     }
@@ -321,13 +229,15 @@ void ColorNotebook::init()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _setCurrentPage(prefs->getInt("/colorselector/page", 0));
 
+
+    /* Commented out: see comment at the bottom of the header file
     {
         gboolean found = FALSE;
 
         _popup = gtk_menu_new();
         GtkMenu *menu = GTK_MENU (_popup);
 
-        for ( i = 0; i < _trackerList->len; i++ )
+        for (int i = 0; i < _trackerList->len; i++ )
         {
             SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (g_ptr_array_index (_trackerList, i));
             if ( entry )
@@ -365,6 +275,7 @@ void ColorNotebook::init()
             gtk_widget_set_sensitive (_btn, FALSE);
         }
     }
+    */
 
     row++;
 
@@ -403,7 +314,6 @@ void ColorNotebook::init()
     GtkWidget *picker = gtk_image_new_from_icon_name ("color-picker", GTK_ICON_SIZE_SMALL_TOOLBAR);
     _btn_picker = gtk_button_new ();
     gtk_button_set_relief(GTK_BUTTON(_btn_picker), GTK_RELIEF_NONE);
-    gtk_widget_show (_btn);
     gtk_container_add (GTK_CONTAINER (_btn_picker), picker);
     gtk_widget_set_tooltip_text (_btn_picker, _("Pick colors from image"));
     gtk_box_pack_start(GTK_BOX(rgbabox), _btn_picker, FALSE, FALSE, 2);
@@ -460,12 +370,6 @@ static void sp_color_notebook_dispose(GObject *object)
 
 ColorNotebook::~ColorNotebook()
 {
-    if ( _trackerList )
-    {
-        g_ptr_array_free (_trackerList, TRUE);
-        _trackerList = 0;
-    }
-
     if ( _switchId )
     {
         if ( _book )
@@ -670,7 +574,7 @@ void ColorNotebook::_setCurrentPage(int i)
 {
     gtk_notebook_set_current_page(GTK_NOTEBOOK(_book), i);
 
-    if (_buttons && _trackerList && (static_cast<size_t>(i) < _trackerList->len) ) {
+    if (_buttons && (static_cast<size_t>(i) < _available_pages.size())) {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(_buttons[i]), TRUE);
     }
 }
@@ -744,48 +648,6 @@ void ColorNotebook::_entryModified (SPColorSelector *csel, SPColorNotebook *colo
     nb->_updateInternals( color, alpha, nb->_dragging );
 }
 
-GtkWidget* ColorNotebook::addPage(GType page_type, guint submode)
-{
-    GtkWidget *page;
-
-    page = sp_color_selector_new( page_type );
-    if ( page )
-    {
-        GtkWidget* tab_label = 0;
-        SPColorSelector* csel;
-
-        csel = SP_COLOR_SELECTOR (page);
-        if ( submode > 0 )
-        {
-            csel->base->setSubmode( submode );
-        }
-        gtk_widget_show (page);
-        int index = csel->base ? csel->base->getSubmode() : 0;
-        const gchar* str = _(SP_COLOR_SELECTOR_GET_CLASS (csel)->name[index]);
-//         g_message( "Hitting up for tab for '%s'", str );
-        tab_label = gtk_label_new(_(str));
-        gint pageNum = gtk_notebook_append_page( GTK_NOTEBOOK (_book), page, tab_label );
-
-        // Add a button for each page
-        _buttons[pageNum] = gtk_radio_button_new_with_label(NULL, _(str));
-        gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[pageNum]), FALSE);
-        if (pageNum > 0) {
-            GSList *group =  gtk_radio_button_get_group (GTK_RADIO_BUTTON(_buttons[0]));
-            gtk_radio_button_set_group (GTK_RADIO_BUTTON(_buttons[pageNum]), group);
-        }
-        gtk_widget_show (_buttons[pageNum]);
-        gtk_box_pack_start (GTK_BOX (_buttonbox), _buttons[pageNum], TRUE, TRUE, 0);
-
-        g_signal_connect (G_OBJECT (_buttons[pageNum]), "clicked", G_CALLBACK (_buttonClicked), _csel);
-        g_signal_connect (G_OBJECT (page), "grabbed", G_CALLBACK (_entryGrabbed), _csel);
-        g_signal_connect (G_OBJECT (page), "dragged", G_CALLBACK (_entryDragged), _csel);
-        g_signal_connect (G_OBJECT (page), "released", G_CALLBACK (_entryReleased), _csel);
-        g_signal_connect (G_OBJECT (page), "changed", G_CALLBACK (_entryChanged), _csel);
-    }
-
-    return page;
-}
-
 GtkWidget* ColorNotebook::_addPage(Page& page) {
     Gtk::Widget *selector_widget;
 
@@ -817,6 +679,9 @@ GtkWidget* ColorNotebook::_addPage(Page& page) {
 
     return selector_widget->gobj();
 }
+
+
+/* Commented out: see comment at the bottom of the header file
 
 GtkWidget* ColorNotebook::getPage(GType page_type, guint submode)
 {
@@ -872,6 +737,49 @@ void ColorNotebook::removePage( GType page_type, guint submode )
         }
     }
 }
+
+
+static gint sp_color_notebook_menu_handler( GtkWidget *widget, GdkEvent *event )
+{
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        SPColorSelector* csel = SP_COLOR_SELECTOR(widget);
+        (dynamic_cast<ColorNotebook*>(csel->base))->menuHandler( event );
+
+        // Tell calling code that we have handled this event; the buck
+        // stops here.
+        return TRUE;
+    }
+
+   //Tell calling code that we have not handled this event; pass it on.
+    return FALSE;
+}
+
+gint ColorNotebook::menuHandler( GdkEvent* event )
+{
+    GdkEventButton *bevent = (GdkEventButton *) event;
+    gtk_menu_popup (GTK_MENU( _popup ), NULL, NULL, NULL, NULL,
+                    bevent->button, bevent->time);
+    return TRUE;
+}
+
+static void sp_color_notebook_menuitem_response (GtkMenuItem *menuitem, gpointer user_data)
+{
+    gboolean active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem));
+    SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (user_data);
+    if ( entry )
+    {
+        if ( active )
+        {
+            (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(entry->backPointer)->base))->addPage(entry->type, entry->submode);
+        }
+        else
+        {
+            (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(entry->backPointer)->base))->removePage(entry->type, entry->submode);
+        }
+    }
+}
+*/
 
 /*
   Local Variables:
