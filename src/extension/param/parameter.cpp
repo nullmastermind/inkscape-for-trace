@@ -15,6 +15,10 @@
 # include "config.h"
 #endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
 #ifdef linux  // does the dollar sign need escaping when passed as string parameter?
 # define ESCAPE_DOLLAR_COMMANDLINE
 #endif

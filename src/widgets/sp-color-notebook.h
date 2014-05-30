@@ -12,12 +12,21 @@
  * This code is in public domain
  */
 
-#include <gtk/gtk.h>
-#include "../color.h"
-#include "sp-color-selector.h"
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <gtk/gtk.h>
 #include <glib.h>
 
+#include "../color.h"
+#include "sp-color-selector.h"
+#include "ui/selected-color.h"
 
 
 struct SPColorNotebook;
@@ -40,6 +49,13 @@ public:
     gint menuHandler( GdkEvent* event );
 
 protected:
+    struct Page {
+        Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full);
+
+        Inkscape::UI::ColorSelectorFactory *selector_factory;
+        bool enabled_full;
+    };
+
     static void _rgbaEntryChangedHook( GtkEntry* entry, SPColorNotebook *colorbook );
     static void _entryGrabbed( SPColorSelector *csel, SPColorNotebook *colorbook );
     static void _entryDragged( SPColorSelector *csel, SPColorNotebook *colorbook );
@@ -55,6 +71,9 @@ protected:
     void _updateRgbaEntry( const SPColor& color, gfloat alpha );
     void _setCurrentPage(int i);
 
+    GtkWidget* _addPage(Page& page);
+
+    Inkscape::UI::SelectedColor _selected_color;
     gboolean _updating : 1;
     gboolean _updatingrgba : 1;
     gboolean _dragging : 1;
@@ -72,12 +91,15 @@ protected:
     GtkWidget *_btn;
     GtkWidget *_popup;
     GPtrArray *_trackerList;
+    boost::ptr_vector<Page> _available_pages;
 
 private:
     // By default, disallow copy constructor and assignment operator
     ColorNotebook( const ColorNotebook& obj );
     ColorNotebook& operator=( const ColorNotebook& obj );
 };
+
+
 
 
 

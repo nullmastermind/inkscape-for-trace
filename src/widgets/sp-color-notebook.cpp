@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/label.h>
 
 #include "../dialogs/dialog-events.h"
 #include "../preferences.h"
@@ -52,6 +53,7 @@ struct SPColorNotebookTracker {
     gboolean enabledBrief;
     SPColorNotebook *backPointer;
 };
+
 
 static void sp_color_notebook_class_init (SPColorNotebookClass *klass);
 static void sp_color_notebook_init (SPColorNotebook *colorbook);
@@ -264,16 +266,11 @@ void ColorNotebook::init()
 #endif
 
     gtk_widget_show (_buttonbox);
-    _buttons = new GtkWidget *[_trackerList->len];
+    _buttons = new GtkWidget *[_available_pages.size()];
 
-    for ( i = 0; i < _trackerList->len; i++ )
+    for ( i = 0; i < _available_pages.size(); i++ )
     {
-        SPColorNotebookTracker *entry =
-            reinterpret_cast< SPColorNotebookTracker* > (g_ptr_array_index (_trackerList, i));
-        if ( entry )
-        {
-            addPage(entry->type, entry->submode);
-        }
+        _addPage(_available_pages[i]);
     }
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -507,6 +504,20 @@ GtkWidget *sp_color_notebook_new()
 ColorNotebook::ColorNotebook( SPColorSelector* csel )
     : ColorSelector( csel )
 {
+    Page *page;
+
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_CMYK), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorWheelSelectorFactory, true);
+    _available_pages.push_back(page);
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    page = new Page(new ColorICCSelectorFactory, true);
+    _available_pages.push_back(page);
+#endif
 }
 
 SPColorSelector* ColorNotebook::getCurrentSelector()
@@ -524,6 +535,12 @@ SPColorSelector* ColorNotebook::getCurrentSelector()
     }
 
     return csel;
+}
+
+ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
+    : selector_factory(selector_factory)
+    , enabled_full(enabled_full)
+{
 }
 
 void ColorNotebook::_colorChanged()
@@ -767,6 +784,38 @@ GtkWidget* ColorNotebook::addPage(GType page_type, guint submode)
     }
 
     return page;
+}
+
+GtkWidget* ColorNotebook::_addPage(Page& page) {
+    Gtk::Widget *selector_widget;
+
+    selector_widget = page.selector_factory->createWidget(_selected_color);
+    if (selector_widget) {
+        selector_widget->show();
+
+        Glib::ustring mode_name = page.selector_factory->modeName();
+        Gtk::Widget* tab_label = Gtk::manage(new Gtk::Label(mode_name));
+        gint page_num = gtk_notebook_append_page( GTK_NOTEBOOK(_book), selector_widget->gobj(), tab_label->gobj());
+
+        _buttons[page_num] = gtk_radio_button_new_with_label(NULL, mode_name.c_str());
+        gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[page_num]), FALSE);
+        if (page_num > 0) {
+            GSList *group =  gtk_radio_button_get_group (GTK_RADIO_BUTTON(_buttons[0]));
+            gtk_radio_button_set_group (GTK_RADIO_BUTTON(_buttons[page_num]), group);
+        }
+        gtk_widget_show (_buttons[page_num]);
+        gtk_box_pack_start (GTK_BOX (_buttonbox), _buttons[page_num], TRUE, TRUE, 0);
+
+        g_signal_connect (G_OBJECT (_buttons[page_num]), "clicked", G_CALLBACK (_buttonClicked), _csel);
+
+        //Connect glib signals of non-refactored widgets
+        g_signal_connect (selector_widget->gobj(), "grabbed", G_CALLBACK (_entryGrabbed), _csel);
+        g_signal_connect (selector_widget->gobj(), "dragged", G_CALLBACK (_entryDragged), _csel);
+        g_signal_connect (selector_widget->gobj(), "released", G_CALLBACK (_entryReleased), _csel);
+        g_signal_connect (selector_widget->gobj(), "changed", G_CALLBACK (_entryChanged), _csel);
+    }
+
+    return selector_widget->gobj();
 }
 
 GtkWidget* ColorNotebook::getPage(GType page_type, guint submode)
