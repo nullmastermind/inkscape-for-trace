@@ -38,6 +38,7 @@ set(live_effects_SRC
 	lpe-bspline.cpp
 	lpe-text_label.cpp
 	lpe-vonkoch.cpp
+	lpe-envelope-perspective.cpp
 	lpegroupbbox.cpp
 	lpeobject-reference.cpp
 	lpeobject.cpp
@@ -101,6 +102,7 @@ set(live_effects_SRC
 	lpe-bspline.h
 	lpe-text_label.h
 	lpe-vonkoch.h
+	lpe-envelope-perspective.h
 	lpegroupbbox.h
 	lpeobject-reference.h
 	lpeobject.h
