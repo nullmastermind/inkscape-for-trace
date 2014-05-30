@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 
 #include "sp-color-selector.h"
+#include "ui/selected-color.h"
 
 namespace Inkscape {
 class ColorProfile;
@@ -18,6 +19,8 @@ class ColorICCSelectorImpl;
 class ColorICCSelector: public ColorSelector
 {
 public:
+    static const gchar* MODE_NAME;
+
     ColorICCSelector( SPColorSelector* csel );
     virtual ~ColorICCSelector();
 
@@ -58,7 +61,11 @@ GType sp_color_icc_selector_get_type(void);
 
 GtkWidget *sp_color_icc_selector_new(void);
 
-
+class ColorICCSelectorFactory: public Inkscape::UI::ColorSelectorFactory {
+public:
+    Gtk::Widget* createWidget(Inkscape::UI::SelectedColor &color) const;
+    Glib::ustring modeName() const;
+};
 
 #endif // SEEN_SP_COLOR_ICC_SELECTOR_H
 

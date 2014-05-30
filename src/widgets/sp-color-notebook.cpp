@@ -360,7 +360,7 @@ void ColorNotebook::init()
 
         // uncomment to reenable the "show/hide modes" menu,
         // but first fix it so it remembers its settings in prefs and does not take that much space (entire vertical column!)
-        //gtk_table_attach (GTK_TABLE (table), align, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+        gtk_table_attach (GTK_TABLE (table), align, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 
         g_signal_connect_swapped(G_OBJECT(_btn), "event", G_CALLBACK (sp_color_notebook_menu_handler), G_OBJECT(_csel));
         if ( !found )

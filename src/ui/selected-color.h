@@ -14,10 +14,13 @@
 #define SEEN_SELECTED_COLOR
 
 #include <sigc++/signal.h>
+#include <gtkmm/widget.h>
 #include "color.h"
 
-class SelectedColor
-{
+namespace Inkscape {
+namespace UI {
+
+class SelectedColor {
 public:
     SelectedColor();
     virtual ~SelectedColor();
@@ -50,6 +53,19 @@ private:
 
     static double _epsilon;
 };
+
+
+class ColorSelectorFactory {
+public:
+    virtual ~ColorSelectorFactory() {}
+
+    virtual Gtk::Widget* createWidget(SelectedColor& color) const = 0;
+    virtual Glib::ustring modeName() const = 0;
+};
+
+
+}
+}
 
 #endif
 

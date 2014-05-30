@@ -32,6 +32,9 @@ static SPColorSelectorClass *parent_class;
 #define XPAD 4
 #define YPAD 1
 
+
+const gchar* ColorWheelSelector::MODE_NAME = N_("Wheel");
+
 GType
 sp_color_wheel_selector_get_type (void)
 {
@@ -338,6 +341,17 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
 
     wheelSelector->_preserve_icc(&color);
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );
+}
+
+
+Gtk::Widget *ColorWheelSelectorFactory::createWidget(Inkscape::UI::SelectedColor &color) const {
+    GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_WHEEL_SELECTOR);
+    Gtk::Widget *wrapped = Glib::wrap(w);
+    return wrapped;
+}
+
+Glib::ustring ColorWheelSelectorFactory::modeName() const {
+    return gettext(ColorWheelSelector::MODE_NAME);
 }
 
 

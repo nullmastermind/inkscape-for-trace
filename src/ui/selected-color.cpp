@@ -15,6 +15,9 @@
 
 #include "selected-color.h"
 
+namespace Inkscape {
+namespace UI {
+
 double SelectedColor::_epsilon = 1e-4;
 
 SelectedColor::SelectedColor()
@@ -88,5 +91,8 @@ void SelectedColor::set_color_alpha(const SPColor& color, gfloat alpha, bool emi
 void SelectedColor::get_color_alpha(SPColor &color, gfloat &alpha) const {
 	color = _color;
 	alpha = _alpha;
+}
+
+}
 }
 
