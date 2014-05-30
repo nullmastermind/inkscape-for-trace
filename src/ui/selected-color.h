@@ -33,47 +33,55 @@ public:
     SelectedColor();
     virtual ~SelectedColor();
 
-    void set_color( const SPColor& color );
-    SPColor get_color() const;
+    void setColor(SPColor const &color);
+    SPColor color() const;
 
-    void set_alpha( gfloat alpha );
-    gfloat get_alpha() const;
+    void setAlpha(gfloat alpha);
+    gfloat alpha() const;
 
-    void set_color_alpha( const SPColor& color, gfloat alpha, bool emit = false );
-    void get_color_alpha( SPColor &color, gfloat &alpha ) const;
+    void setColorAlpha(SPColor const &color, gfloat alpha, bool emit = false);
+    void colorAlpha(SPColor &color, gfloat &alpha) const;
 
     sigc::signal<void> signal_changed;
 private:
     // By default, disallow copy constructor and assignment operator
-    SelectedColor( const SelectedColor& obj );
-    SelectedColor& operator=( const SelectedColor& obj );
+    SelectedColor(SelectedColor const &obj);
+    SelectedColor& operator=(SelectedColor const &obj);
 
-	SPColor _color;
-	/**
-	 * Color alpha value guaranteed to be in [0, 1].
-	 */
-	gfloat _alpha;
+    SPColor _color;
+    /**
+     * Color alpha value guaranteed to be in [0, 1].
+     */
+    gfloat _alpha;
 
     /**
      * This flag is true if no color is set yet
      */
     bool _virgin;
 
-    static double _epsilon;
+    static double const _EPSILON;
 };
-
 
 class ColorSelectorFactory {
 public:
-    virtual ~ColorSelectorFactory() {}
+    virtual ~ColorSelectorFactory() {
+    }
 
-    virtual Gtk::Widget* createWidget(SelectedColor& color) const = 0;
+    virtual Gtk::Widget* createWidget(SelectedColor &color) const = 0;
     virtual Glib::ustring modeName() const = 0;
 };
-
 
 }
 }
 
 #endif
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
