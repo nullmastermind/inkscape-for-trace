@@ -50,7 +50,6 @@ protected:
         bool enabled_full;
     };
 
-    static void _rgbaEntryChangedHook( GtkEntry* entry, SPColorNotebook *colorbook );
     static void _entryGrabbed( SPColorSelector *csel, SPColorNotebook *colorbook );
     static void _entryDragged( SPColorSelector *csel, SPColorNotebook *colorbook );
     static void _entryReleased( SPColorSelector *csel, SPColorNotebook *colorbook );
@@ -61,7 +60,8 @@ protected:
 
     virtual void _colorChanged();
 
-    void _rgbaEntryChanged( GtkEntry* entry );
+    virtual void _onSelectedColorChanged();
+
     void _updateRgbaEntry( const SPColor& color, gfloat alpha );
     void _setCurrentPage(int i);
 
@@ -76,7 +76,7 @@ protected:
     GtkWidget *_book;
     GtkWidget *_buttonbox;
     GtkWidget **_buttons;
-    GtkWidget *_rgbal, *_rgbae; /* RGBA entry */
+    GtkWidget *_rgbal; /* RGBA entry */
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     GtkWidget *_box_outofgamut, *_box_colormanaged, *_box_toomuchink;
 #endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)

@@ -41,8 +41,11 @@
 #include "cms-system.h"
 #include "tools-switch.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/color-entry.h"
 
 using Inkscape::CMSSystem;
+
+using namespace Inkscape::UI::Widget;
 
 struct SPColorNotebookTracker {
     const gchar* name;
@@ -156,8 +159,7 @@ void ColorNotebook::init()
 {
     guint row = 0;
 
-    _updating = FALSE;
-    _updatingrgba = FALSE;
+    _updating = false;
 
     _book = gtk_notebook_new ();
     gtk_widget_show (_book);
@@ -324,13 +326,10 @@ void ColorNotebook::init()
     gtk_misc_set_alignment (GTK_MISC (_rgbal), 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(rgbabox), _rgbal, TRUE, TRUE, 2);
 
-    _rgbae = gtk_entry_new ();
-    sp_dialog_defocus_on_enter (_rgbae);
-    gtk_entry_set_max_length (GTK_ENTRY (_rgbae), 8);
-    gtk_entry_set_width_chars (GTK_ENTRY (_rgbae), 8);
-    gtk_widget_set_tooltip_text (_rgbae, _("Hexadecimal RGBA value of the color"));
-    gtk_box_pack_start(GTK_BOX(rgbabox), _rgbae, FALSE, FALSE, 0);
-    gtk_label_set_mnemonic_widget (GTK_LABEL(_rgbal), _rgbae);
+    ColorEntry* rgba_entry = Gtk::manage(new ColorEntry(_selected_color));
+    sp_dialog_defocus_on_enter (GTK_WIDGET(rgba_entry->gobj()));
+    gtk_box_pack_start(GTK_BOX(rgbabox), GTK_WIDGET(rgba_entry->gobj()), FALSE, FALSE, 0);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(_rgbal), GTK_WIDGET(rgba_entry->gobj()));
 
     sp_set_font_size_smaller (rgbabox);
     gtk_widget_show_all (rgbabox);
@@ -359,7 +358,7 @@ void ColorNotebook::init()
     _switchId = g_signal_connect(G_OBJECT (_book), "switch-page",
                                  G_CALLBACK (sp_color_notebook_switch_page), SP_COLOR_NOTEBOOK(_csel));
 
-    _entryId = g_signal_connect (G_OBJECT (_rgbae), "changed", G_CALLBACK (ColorNotebook::_rgbaEntryChangedHook), _csel);
+    _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorChanged));
 }
 
 static void sp_color_notebook_dispose(GObject *object)
@@ -449,13 +448,13 @@ ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, 
 
 void ColorNotebook::_colorChanged()
 {
+    _selected_color.setColorAlpha(_color, _alpha, true);
+
     SPColorSelector* cselPage = getCurrentSelector();
     if ( cselPage )
     {
         cselPage->base->setColorAlpha( _color, _alpha );
     }
-
-    _updateRgbaEntry( _color, _alpha );
 }
 
 void ColorNotebook::_picker_clicked(GtkWidget * /*widget*/, SPColorNotebook * /*colorbook*/)
@@ -464,52 +463,6 @@ void ColorNotebook::_picker_clicked(GtkWidget * /*widget*/, SPColorNotebook * /*
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/dropper/onetimepick", true);
     Inkscape::UI::Tools::sp_toggle_dropper(SP_ACTIVE_DESKTOP);
-}
-
-void ColorNotebook::_rgbaEntryChangedHook(GtkEntry *entry, SPColorNotebook *colorbook)
-{
-    (dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base))->_rgbaEntryChanged( entry );
-}
-
-void ColorNotebook::_rgbaEntryChanged(GtkEntry* entry)
-{
-    if (_updating) return;
-    if (_updatingrgba) return;
-
-    const gchar *t = gtk_entry_get_text( entry );
-
-    if (t) {
-        Glib::ustring text = t;
-        bool changed = false;
-        if (!text.empty() && text[0] == '#') {
-            changed = true;
-            text.erase(0,1);
-            if (text.size() == 6) {
-                // it was a standard RGB hex
-                unsigned int alph = SP_COLOR_F_TO_U(_alpha);
-                gchar* tmp = g_strdup_printf("%02x", alph);
-                text += tmp;
-                g_free(tmp);
-            }
-        }
-        gchar* str = g_strdup(text.c_str());
-        gchar* end = 0;
-        guint64 rgba = g_ascii_strtoull( str, &end, 16 );
-        if ( end != str ) {
-            ptrdiff_t len = end - str;
-            if ( len < 8 ) {
-                rgba = rgba << ( 4 * ( 8 - len ) );
-            }
-            _updatingrgba = TRUE;
-            if ( changed ) {
-                gtk_entry_set_text( entry, str );
-            }
-            SPColor color( rgba );
-            setColorAlpha( color, SP_RGBA32_A_F(rgba), true );
-            _updatingrgba = FALSE;
-        }
-        g_free(str);
-    }
 }
 
 // TODO pass in param so as to avoid the need for SP_ACTIVE_DOCUMENT
@@ -550,24 +503,6 @@ void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
         }
     }
 #endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-    if ( !_updatingrgba )
-    {
-        gchar s[32];
-        guint32 rgba;
-
-        /* Update RGBA entry */
-        rgba = color.toRGBA32( alpha );
-
-        g_snprintf (s, 32, "%08x", rgba);
-        const gchar* oldText = gtk_entry_get_text( GTK_ENTRY( _rgbae ) );
-        if ( strcmp( oldText, s ) != 0 )
-        {
-            g_signal_handler_block( _rgbae, _entryId );
-            gtk_entry_set_text( GTK_ENTRY(_rgbae), s );
-            g_signal_handler_unblock( _rgbae, _entryId );
-        }
-    }
 }
 
 void ColorNotebook::_setCurrentPage(int i)
@@ -644,8 +579,23 @@ void ColorNotebook::_entryModified (SPColorSelector *csel, SPColorNotebook *colo
     gfloat alpha = 1.0;
 
     csel->base->getColorAlpha( color, alpha );
-    nb->_updateRgbaEntry( color, alpha );
+
+    nb->_updating = true;
+    nb->_selected_color.setColorAlpha(color, alpha, true);
+    nb->_updating = false;
     nb->_updateInternals( color, alpha, nb->_dragging );
+}
+
+void ColorNotebook::_onSelectedColorChanged() {
+    if (_updating) {
+        return;
+    }
+
+    SPColor color;
+    gfloat alpha = 1.0;
+
+    _selected_color.colorAlpha(color, alpha);
+    _updateInternals(color, alpha, _dragging);
 }
 
 GtkWidget* ColorNotebook::_addPage(Page& page) {
