@@ -1,27 +1,43 @@
 #ifndef SEEN_SP_COLOR_ICC_SELECTOR_H
 #define SEEN_SP_COLOR_ICC_SELECTOR_H
 
-#include <glib.h>
-#include <gtk/gtk.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
-#include "widgets/sp-color-selector.h"
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
+#include <gtkmm/widget.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkmm/grid.h>
+#else
+#include <gtkmm/table.h>
+#endif
+
 #include "ui/selected-color.h"
 
 namespace Inkscape {
-class ColorProfile;
-}
 
-struct SPColorICCSelector;
-struct SPColorICCSelectorClass;
+class ColorProfile;
+
+namespace UI {
+namespace Widget {
 
 class ColorICCSelectorImpl;
 
-class ColorICCSelector: public ColorSelector
+class ColorICCSelector
+#if GTK_CHECK_VERSION(3,0,0)
+    : public Gtk::Grid
+#else
+    : public Gtk::Table
+#endif
 {
 public:
     static const gchar* MODE_NAME;
 
-    ColorICCSelector( SPColorSelector* csel );
+    ColorICCSelector(SelectedColor &color);
     virtual ~ColorICCSelector();
 
     virtual void init();
@@ -42,31 +58,15 @@ private:
 };
 
 
-
-#define SP_TYPE_COLOR_ICC_SELECTOR (sp_color_icc_selector_get_type())
-#define SP_COLOR_ICC_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_COLOR_ICC_SELECTOR, SPColorICCSelector))
-#define SP_COLOR_ICC_SELECTOR_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_COLOR_ICC_SELECTOR, SPColorICCSelectorClass))
-#define SP_IS_COLOR_ICC_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_COLOR_ICC_SELECTOR))
-#define SP_IS_COLOR_ICC_SELECTOR_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_COLOR_ICC_SELECTOR))
-
-struct SPColorICCSelector {
-    SPColorSelector parent;
-};
-
-struct SPColorICCSelectorClass {
-    SPColorSelectorClass parent_class;
-};
-
-GType sp_color_icc_selector_get_type(void);
-
-GtkWidget *sp_color_icc_selector_new(void);
-
-class ColorICCSelectorFactory: public Inkscape::UI::ColorSelectorFactory {
+class ColorICCSelectorFactory: public ColorSelectorFactory {
 public:
-    Gtk::Widget* createWidget(Inkscape::UI::SelectedColor &color) const;
+    Gtk::Widget* createWidget(SelectedColor &color) const;
     Glib::ustring modeName() const;
 };
 
+}
+}
+}
 #endif // SEEN_SP_COLOR_ICC_SELECTOR_H
 
 /*
