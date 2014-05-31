@@ -3,6 +3,7 @@ set(ui_SRC
 	clipboard.cpp
 	control-manager.cpp
 	previewholder.cpp
+	selected-color.cpp
 	uxmanager.cpp
 
 	cache/svg_preview_cache.cpp
@@ -107,9 +108,12 @@ set(ui_SRC
 
 	widget/anchor-selector.cpp
 	widget/button.cpp
+	widget/color-entry.cpp
 	widget/color-picker.cpp
 	widget/color-preview.cpp
+	widget/color-scales.cpp
 	widget/color-slider.cpp
+	widget/color-wheel-selector.cpp
 	widget/dock-item.cpp
 	widget/dock.cpp
 	widget/entity-entry.cpp
@@ -160,6 +164,7 @@ set(ui_SRC
 	previewable.h
 	previewfillable.h
 	previewholder.h
+	selected-color.h
 	uxmanager.h
 
 	cache/svg_preview_cache.h
@@ -269,9 +274,12 @@ set(ui_SRC
 	widget/anchor-selector.h
 	widget/attr-widget.h
 	widget/button.h
+	widget/color-entry.h
 	widget/color-picker.h
 	widget/color-preview.h
+	widget/color-scales.h
 	widget/color-slider.h
+	widget/color-wheel-selector.h
 	widget/combo-enums.h
 	widget/dock-item.h
 	widget/dock.h
