@@ -12,7 +12,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "sp-color-selector.h"
+#include "widgets/sp-color-selector.h"
 #include "ui/selected-color.h"
 
 typedef struct _GimpColorWheel GimpColorWheel;

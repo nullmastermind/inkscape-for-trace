@@ -2,16 +2,15 @@
 # include "config.h"
 #endif
 
-#include "sp-color-wheel-selector.h"
+#include "color-wheel-selector.h"
 
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
-#include "../dialogs/dialog-events.h"
-#include "sp-color-scales.h"
-#include "sp-color-icc-selector.h"
-#include "../svg/svg-icc-color.h"
+#include "dialogs/dialog-events.h"
+#include "widgets/sp-color-scales.h"
+#include "svg/svg-icc-color.h"
 #include "ui/widget/color-slider.h"
 #include "ui/widget/gimpcolorwheel.h"
 

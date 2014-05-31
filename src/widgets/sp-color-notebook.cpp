@@ -32,7 +32,6 @@
 #include "spw-utilities.h"
 #include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
-#include "sp-color-wheel-selector.h"
 #include "svg/svg-icc-color.h"
 #include "../inkscape.h"
 #include "../document.h"
@@ -42,6 +41,7 @@
 #include "tools-switch.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-entry.h"
+#include "ui/widget/color-wheel-selector.h"
 
 using Inkscape::CMSSystem;
 
