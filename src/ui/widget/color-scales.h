@@ -9,16 +9,16 @@
 #include <glibmm/threads.h>
 #endif
 
+#include <color.h>
 #include <glib.h>
 #include <gtk/gtk.h>
-
-#include <color.h>
-#include <widgets/sp-color-selector.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkmm/grid.h>
+#else
+#include <gtkmm/table.h>
+#endif
 
 #include "ui/selected-color.h"
-
-struct SPColorScales;
-struct SPColorScalesClass;
 
 namespace Inkscape {
 namespace UI {
@@ -26,9 +26,6 @@ namespace Widget {
 
 class ColorSlider;
 
-}
-}
-}
 
 typedef enum {
     SP_COLOR_SCALES_MODE_NONE = 0,
@@ -39,7 +36,12 @@ typedef enum {
 
 
 
-class ColorScales: public ColorSelector
+class ColorScales
+#if GTK_CHECK_VERSION(3,0,0)
+    : public Gtk::Grid
+#else
+    : public Gtk::Table
+#endif
 {
 public:
     static const gchar* SUBMODE_NAMES[];
@@ -47,26 +49,22 @@ public:
     static gfloat getScaled( const GtkAdjustment *a );
     static void setScaled( GtkAdjustment *a, gfloat v);
 
-    ColorScales(SPColorSelector *csel);
+    ColorScales(SelectedColor &color, SPColorScalesMode mode);
     virtual ~ColorScales();
 
-    virtual void init();
-
-    virtual void setSubmode(guint submode);
-    virtual guint getSubmode() const;
+    virtual void _initUI(SPColorScalesMode mode);
 
     void setMode(SPColorScalesMode mode);
     SPColorScalesMode getMode() const;
 
-
 protected:
-    virtual void _colorChanged();
+    void _onColorChanged();
 
-    static void _adjustmentAnyChanged(GtkAdjustment *adjustment, SPColorScales *cs);
+    static void _adjustmentAnyChanged(GtkAdjustment *adjustment, ColorScales *cs);
     void _sliderAnyGrabbed();
     void _sliderAnyReleased();
     void _sliderAnyChanged();
-    static void _adjustmentChanged(SPColorScales *cs, guint channel);
+    static void _adjustmentChanged(ColorScales *cs, guint channel);
 
     void _getRgbaFloatv(gfloat *rgba);
     void _getCmykaFloatv(gfloat *cmyka);
@@ -76,6 +74,7 @@ protected:
 
     void _setRangeLimit( gdouble upper );
 
+    SelectedColor &_color;
     SPColorScalesMode _mode;
     gdouble _rangeLimit;
     gboolean _updating : 1;
@@ -92,26 +91,6 @@ private:
 };
 
 
-
-#define SP_TYPE_COLOR_SCALES (sp_color_scales_get_type())
-#define SP_COLOR_SCALES(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_COLOR_SCALES, SPColorScales))
-#define SP_COLOR_SCALES_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_COLOR_SCALES, SPColorScalesClass))
-#define SP_IS_COLOR_SCALES(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_COLOR_SCALES))
-#define SP_IS_COLOR_SCALES_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_COLOR_SCALES))
-
-struct SPColorScales {
-    SPColorSelector parent;
-};
-
-struct SPColorScalesClass {
-    SPColorSelectorClass parent_class;
-};
-
-GType sp_color_scales_get_type();
-
-GtkWidget *sp_color_scales_new();
-
-
 class ColorScalesFactory: public Inkscape::UI::ColorSelectorFactory {
 public:
     ColorScalesFactory(SPColorScalesMode submode);
@@ -124,9 +103,11 @@ private:
     SPColorScalesMode _submode;
 };
 
+}
+}
+}
 
-#endif /* !SEEN_SP_COLOR_SCALES_H */
-
+#endif
 /*
   Local Variables:
   mode:c++

@@ -455,7 +455,9 @@ ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, 
 
 void ColorNotebook::_colorChanged()
 {
+    _updating = true;
     _selected_color.setColorAlpha(_color, _alpha, true);
+    _updating = false;
 
     SPColorSelector* cselPage = getCurrentSelector();
     if ( cselPage )
@@ -613,13 +615,13 @@ void ColorNotebook::_onSelectedColorDragged() {
     }
     bool oldState = _dragging;
 
-    _dragging = TRUE;
+    _dragging = true;
     SPColor color;
     gfloat alpha = 1.0;
 
     _updating = true;
     _selected_color.colorAlpha(color, alpha);
-    _updateInternals(color, alpha, _dragging);
+    _updateInternals(color, alpha, true);
     _updating = false;
 
     _dragging = oldState;

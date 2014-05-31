@@ -33,6 +33,9 @@
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 
+using namespace Inkscape::UI::Widget;
+
+
 #ifdef DEBUG_LCMS
 extern guint update_in_progress;
 #define DEBUG_MESSAGE(key, ...) \

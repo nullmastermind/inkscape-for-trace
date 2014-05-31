@@ -32,26 +32,17 @@
 
 #define CSC_CHANNELS_ALL 0
 
-
-G_BEGIN_DECLS
-
-static void sp_color_scales_class_init (SPColorScalesClass *klass);
-static void sp_color_scales_init (SPColorScales *cs);
-static void sp_color_scales_dispose(GObject *object);
-
-static void sp_color_scales_show_all (GtkWidget *widget);
-static void sp_color_scales_hide(GtkWidget *widget);
-
-static const gchar *sp_color_scales_hue_map (void);
-
-G_END_DECLS
-
-static SPColorSelectorClass *parent_class;
-
 #define XPAD 4
 #define YPAD 1
 
 #define noDUMP_CHANGE_INFO 1
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+
+static const gchar * sp_color_scales_hue_map ();
 
 const gchar* ColorScales::SUBMODE_NAMES[] = {
     N_("None"),
@@ -60,54 +51,14 @@ const gchar* ColorScales::SUBMODE_NAMES[] = {
     N_("CMYK")
 };
 
-GType
-sp_color_scales_get_type (void)
-{
-	static GType type = 0;
-	if (!type) {
-		static const GTypeInfo info = {
-			sizeof (SPColorScalesClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) sp_color_scales_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (SPColorScales),
-			0,	  /* n_preallocs */
-			(GInstanceInitFunc) sp_color_scales_init,
-			NULL
-		};
-
-		type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,
-									   "SPColorScales",
-									   &info,
-									   static_cast< GTypeFlags > (0) );
-	}
-	return type;
-}
-
-static void
-sp_color_scales_class_init (SPColorScalesClass *klass)
-{
-	static const gchar* nameset[] = {N_("RGB"), N_("HSL"), N_("CMYK"), 0};
-	GObjectClass *object_class = G_OBJECT_CLASS(klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-	SPColorSelectorClass *selector_class = SP_COLOR_SELECTOR_CLASS (klass);
-
-	parent_class = SP_COLOR_SELECTOR_CLASS (g_type_class_peek_parent (klass));
-
-	selector_class->name = nameset;
-	selector_class->submode_count = 3;
-
-	object_class->dispose = sp_color_scales_dispose;
-
-	widget_class->show_all = sp_color_scales_show_all;
-	widget_class->hide = sp_color_scales_hide;
-}
-
-ColorScales::ColorScales( SPColorSelector* csel )
-    : ColorSelector( csel ),
-      _mode( SP_COLOR_SCALES_MODE_NONE ),
+ColorScales::ColorScales(SelectedColor &color, SPColorScalesMode mode)
+#if GTK_CHECK_VERSION(3,0,0)
+    : Gtk::Grid()
+#else
+    : Gtk::Table(5, 3, false)
+#endif
+    , _color(color)
+    ,
       _rangeLimit( 255.0 ),
       _updating( FALSE ),
       _dragging( FALSE )
@@ -118,6 +69,12 @@ ColorScales::ColorScales( SPColorSelector* csel )
         _s[i] = 0;
         _b[i] = 0;
     }
+
+    _initUI(mode);
+
+    _color.signal_changed.connect(sigc::mem_fun(this, &ColorScales::_onColorChanged));
+    _color.signal_dragged.connect(sigc::mem_fun(this, &ColorScales::_onColorChanged));
+
 }
 
 ColorScales::~ColorScales()
@@ -130,30 +87,14 @@ ColorScales::~ColorScales()
     }
 }
 
-void sp_color_scales_init (SPColorScales *cs)
-{
-    SP_COLOR_SELECTOR(cs)->base = new ColorScales( SP_COLOR_SELECTOR(cs) );
-
-    if ( SP_COLOR_SELECTOR(cs)->base )
-    {
-        SP_COLOR_SELECTOR(cs)->base->init();
-    }
-}
-
-void ColorScales::init()
+void ColorScales::_initUI(SPColorScalesMode mode)
 {
 	gint i;
 
 	_updating = FALSE;
 	_dragging = FALSE;
 
-#if GTK_CHECK_VERSION(3,0,0)
-	GtkWidget *t = gtk_grid_new();
-#else
-	GtkWidget *t = gtk_table_new (5, 3, FALSE);
-#endif
-	gtk_widget_show (t);
-	gtk_box_pack_start (GTK_BOX (_csel), t, TRUE, TRUE, 4);
+	GtkWidget *t = GTK_WIDGET(gobj());
 
 	/* Create components */
 	for (i = 0; i < static_cast< gint > (G_N_ELEMENTS(_a)) ; i++) {
@@ -211,42 +152,23 @@ void ColorScales::init()
 		g_object_set_data (G_OBJECT (_a[i]), "channel", GINT_TO_POINTER (i));
 		/* Signals */
 		g_signal_connect (G_OBJECT (_a[i]), "value_changed",
-					G_CALLBACK (_adjustmentAnyChanged), _csel);
+					G_CALLBACK (_adjustmentAnyChanged), this);
 		_s[i]->signal_grabbed.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyGrabbed));
 		_s[i]->signal_released.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyReleased));
 		_s[i]->signal_value_changed.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyChanged));
 	}
 
 	/* Initial mode is none, so it works */
-	setMode(SP_COLOR_SCALES_MODE_RGB);
-}
-
-static void sp_color_scales_dispose(GObject *object)
-{
-	if ((G_OBJECT_CLASS(parent_class))->dispose)
-		(* (G_OBJECT_CLASS(parent_class))->dispose) (object);
-}
-
-static void
-sp_color_scales_show_all (GtkWidget *widget)
-{
-	gtk_widget_show (widget);
-}
-
-static void sp_color_scales_hide(GtkWidget *widget)
-{
-	gtk_widget_hide(widget);
-}
-
-GtkWidget *sp_color_scales_new()
-{
-	SPColorScales *csel = SP_COLOR_SCALES(g_object_new (SP_TYPE_COLOR_SCALES, NULL));
-
-	return GTK_WIDGET (csel);
+	setMode(mode);
 }
 
 void ColorScales::_recalcColor( gboolean changing )
 {
+    if (_updating) {
+        return;
+    }
+    _updating = true;
+
     if ( changing )
     {
         SPColor color;
@@ -275,15 +197,14 @@ void ColorScales::_recalcColor( gboolean changing )
             break;
         }
 
-        /* Preserve ICC */
-        color.icc = _color.icc ? new SVGICCColor(*_color.icc) : 0;
-
-        _updateInternals( color, alpha, _dragging );
+        _color.preserveICC();
+        _color.setColorAlpha(color, alpha, true);
     }
     else
     {
-        _updateInternals( _color, _alpha, _dragging );
+        // _updateInternals( _color, _alpha, _dragging );
     }
+    _updating = false;
 }
 
 /* Helpers for setting color value */
@@ -309,29 +230,34 @@ void ColorScales::_setRangeLimit( gdouble upper )
     }
 }
 
-void ColorScales::_colorChanged()
+void ColorScales::_onColorChanged()
 {
+    if (_updating || !get_visible()) {
+        return;
+    }
 #ifdef DUMP_CHANGE_INFO
-    g_message("ColorScales::_colorChanged( this=%p, %f, %f, %f,   %f)", this, _color.v.c[0], _color.v.c[1], _color.v.c[2], _alpha );
+    g_message("ColorScales::_onColorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2], _color.alpha() );
 #endif
     gfloat tmp[3];
     gfloat c[5] = {0.0, 0.0, 0.0, 0.0};
 
+    SPColor color = _color.color();
+
     switch (_mode) {
     case SP_COLOR_SCALES_MODE_RGB:
-        sp_color_get_rgb_floatv( &_color, c );
-        c[3] = _alpha;
+        sp_color_get_rgb_floatv( &color, c );
+        c[3] = _color.alpha();
         c[4] = 0.0;
         break;
     case SP_COLOR_SCALES_MODE_HSV:
-        sp_color_get_rgb_floatv( &_color, tmp );
+        sp_color_get_rgb_floatv( &color, tmp );
         sp_color_rgb_to_hsl_floatv (c, tmp[0], tmp[1], tmp[2]);
-        c[3] = _alpha;
+        c[3] = _color.alpha();
         c[4] = 0.0;
         break;
     case SP_COLOR_SCALES_MODE_CMYK:
-        sp_color_get_cmyk_floatv( &_color, c );
-        c[4] = _alpha;
+        sp_color_get_cmyk_floatv( &color, c );
+        c[4] = _color.alpha();
         break;
     default:
         g_warning ("file %s: line %d: Illegal color selector mode %d", __FILE__, __LINE__, _mode);
@@ -530,48 +456,7 @@ SPColorScalesMode ColorScales::getMode() const
 	return _mode;
 }
 
-void ColorScales::setSubmode( guint submode )
-{
-	g_return_if_fail (_csel != NULL);
-	g_return_if_fail (SP_IS_COLOR_SCALES (_csel));
-	g_return_if_fail (submode < 3);
-
-	switch ( submode )
-	{
-	default:
-	case 0:
-		setMode(SP_COLOR_SCALES_MODE_RGB);
-		break;
-	case 1:
-		setMode(SP_COLOR_SCALES_MODE_HSV);
-		break;
-	case 2:
-		setMode(SP_COLOR_SCALES_MODE_CMYK);
-		break;
-	}
-}
-
-guint ColorScales::getSubmode() const
-{
-	guint submode = 0;
-
-	switch ( _mode )
-	{
-	case SP_COLOR_SCALES_MODE_HSV:
-		submode = 1;
-		break;
-	case SP_COLOR_SCALES_MODE_CMYK:
-		submode = 2;
-		break;
-	case SP_COLOR_SCALES_MODE_RGB:
-	default:
-		submode = 0;
-	}
-
-	return submode;
-}
-
-void ColorScales::_adjustmentAnyChanged( GtkAdjustment *adjustment, SPColorScales *cs )
+void ColorScales::_adjustmentAnyChanged( GtkAdjustment *adjustment, ColorScales *cs )
 {
 	gint channel = GPOINTER_TO_INT (g_object_get_data(G_OBJECT (adjustment), "channel"));
 
@@ -580,39 +465,46 @@ void ColorScales::_adjustmentAnyChanged( GtkAdjustment *adjustment, SPColorScale
 
 void ColorScales::_sliderAnyGrabbed()
 {
+    if (_updating) {
+        return;
+    }
+    _updating = true;
 	if (!_dragging) {
 		_dragging = TRUE;
-        _grabbed();
+        _color.setHeld(true);
         _recalcColor( FALSE );
 	}
+	_updating = false;
 }
 
 void ColorScales::_sliderAnyReleased()
 {
+    if (_updating) {
+        return;
+    }
+    _updating = true;
 	if (_dragging) {
 		_dragging = FALSE;
-        _released();
+        _color.setHeld(false);
         _recalcColor( FALSE );
 	}
+	_updating = false;
 }
 
 void ColorScales::_sliderAnyChanged()
 {
+    if (_updating) {
+        return;
+    }
     _recalcColor( TRUE );
 }
 
-void ColorScales::_adjustmentChanged( SPColorScales *cs, guint channel )
+void ColorScales::_adjustmentChanged( ColorScales *scales, guint channel )
 {
-	ColorScales* scales = static_cast<ColorScales*>(SP_COLOR_SELECTOR(cs)->base);
 	if (scales->_updating) return;
 
-	scales->_updating = TRUE;
-
 	scales->_updateSliders( (1 << channel) );
-
 	scales->_recalcColor (TRUE);
-
-	scales->_updating = FALSE;
 }
 
 void ColorScales::_updateSliders( guint channels )
@@ -770,19 +662,14 @@ ColorScalesFactory::~ColorScalesFactory() {
 }
 
 Gtk::Widget *ColorScalesFactory::createWidget(Inkscape::UI::SelectedColor &color) const {
-    GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_SCALES);
-    SPColorSelector* csel;
-
-    csel = SP_COLOR_SELECTOR (w);
-    if ( _submode > 0 )
-    {
-        csel->base->setSubmode( _submode - 1 );
-    }
-
-    Gtk::Widget *wrapped = Gtk::manage(Glib::wrap(w));
-    return wrapped;
+    Gtk::Widget *w = Gtk::manage(new ColorScales(color, _submode));
+    return w;
 }
 
 Glib::ustring ColorScalesFactory::modeName() const {
     return gettext(ColorScales::SUBMODE_NAMES[_submode]);
+}
+
+}
+}
 }

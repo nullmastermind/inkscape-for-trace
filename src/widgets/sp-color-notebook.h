@@ -23,6 +23,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <gtkmm/table.h>
 
 #include "../color.h"
 #include "sp-color-selector.h"
