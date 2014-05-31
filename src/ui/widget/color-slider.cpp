@@ -76,7 +76,7 @@ ColorSlider::ColorSlider(Gtk::Adjustment* adjustment)
     _b1 = 0xa0;
     _bmask = 0x08;
 
-    set_adjustment(adjustment);
+    setAdjustment(adjustment);
 }
 
 ColorSlider::~ColorSlider() {
@@ -95,7 +95,7 @@ ColorSlider::~ColorSlider() {
 void ColorSlider::on_realize() {
     set_realized();
 
-    if(!_refGdkWindow)
+    if(!_gdk_window)
     {
       GdkWindowAttr attributes;
       gint attributes_mask;
@@ -126,10 +126,10 @@ void ColorSlider::on_realize() {
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 #endif
 
-      _refGdkWindow = Gdk::Window::create(get_parent_window(), &attributes,
+      _gdk_window = Gdk::Window::create(get_parent_window(), &attributes,
               attributes_mask);
-      set_window(_refGdkWindow);
-      _refGdkWindow->set_user_data(gobj());
+      set_window(_gdk_window);
+      _gdk_window->set_user_data(gobj());
 
 #if !GTK_CHECK_VERSION(3,0,0)
       style_attach();
@@ -138,7 +138,7 @@ void ColorSlider::on_realize() {
 }
 
 void ColorSlider::on_unrealize() {
-    _refGdkWindow.reset();
+    _gdk_window.reset();
 
     Gtk::Widget::on_unrealize();
 }
@@ -147,7 +147,7 @@ void ColorSlider::on_size_allocate(Gtk::Allocation& allocation) {
     set_allocation(allocation);
 
     if (get_realized()) {
-        _refGdkWindow->move_resize(allocation.get_x(), allocation.get_y(),
+        _gdk_window->move_resize(allocation.get_x(), allocation.get_y(),
                 allocation.get_width(), allocation.get_height());
     }
 }
@@ -192,7 +192,7 @@ bool ColorSlider::on_expose_event(GdkEventExpose* event) {
     bool result = false;
 
     if (get_is_drawable()) {
-        Cairo::RefPtr<Cairo::Context> cr = _refGdkWindow->create_cairo_context();
+        Cairo::RefPtr<Cairo::Context> cr = _gdk_window->create_cairo_context();
         result = on_draw(cr);
     }
     return result;
@@ -218,7 +218,7 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event) {
 
 #if GTK_CHECK_VERSION(3,0,0)
         gdk_device_grab(gdk_event_get_device(reinterpret_cast<GdkEvent *>(event)),
-                _refGdkWindow->gobj(),
+                _gdk_window->gobj(),
                 GDK_OWNERSHIP_NONE,
                 FALSE,
                 static_cast<GdkEventMask>(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
@@ -272,9 +272,9 @@ bool ColorSlider::on_motion_notify_event(GdkEventMotion *event) {
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-void ColorSlider::set_adjustment(Glib::RefPtr<Gtk::Adjustment> adjustment) {
+void ColorSlider::setAdjustment(Glib::RefPtr<Gtk::Adjustment> adjustment) {
 #else
-void ColorSlider::set_adjustment(Gtk::Adjustment *adjustment) {
+void ColorSlider::setAdjustment(Gtk::Adjustment *adjustment) {
 #endif
     if (!adjustment) {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -298,21 +298,21 @@ void ColorSlider::set_adjustment(Gtk::Adjustment *adjustment) {
 
         _adjustment = adjustment;
         _adjustment_changed_connection = _adjustment->signal_changed().connect(
-                sigc::mem_fun(this, &ColorSlider::_on_adjustment_changed));
+                sigc::mem_fun(this, &ColorSlider::_onAdjustmentChanged));
         _adjustment_value_changed_connection = _adjustment->signal_value_changed().connect(
-                sigc::mem_fun(this, &ColorSlider::_on_adjustment_value_changed));
+                sigc::mem_fun(this, &ColorSlider::_onAdjustmentValueChanged));
 
         _value = ColorScales::getScaled(_adjustment->gobj());
 
-        _on_adjustment_changed();
+        _onAdjustmentChanged();
     }
 }
 
-void ColorSlider::_on_adjustment_changed() {
+void ColorSlider::_onAdjustmentChanged() {
     queue_draw();
 }
 
-void ColorSlider::_on_adjustment_value_changed() {
+void ColorSlider::_onAdjustmentValueChanged() {
     if (_value != ColorScales::getScaled( _adjustment->gobj() )) {
         gint cx, cy, cw, ch;
 #if GTK_CHECK_VERSION(3,0,0)
@@ -346,7 +346,7 @@ void ColorSlider::_on_adjustment_value_changed() {
     }
 }
 
-void ColorSlider::set_colors(guint32 start, guint32 mid, guint32 end) {
+void ColorSlider::setColors(guint32 start, guint32 mid, guint32 end) {
     // Remove any map, if set
     _map = 0;
 
@@ -368,13 +368,13 @@ void ColorSlider::set_colors(guint32 start, guint32 mid, guint32 end) {
     queue_draw();
 }
 
-void ColorSlider::set_map(const guchar *map) {
+void ColorSlider::setMap(const guchar *map) {
     _map = const_cast<guchar *>(map);
 
     queue_draw();
 }
 
-void ColorSlider::set_background(guint dark, guint light, guint size) {
+void ColorSlider::setBackground(guint dark, guint light, guint size) {
     _b0 = dark;
     _b1 = light;
     _bmask = size;

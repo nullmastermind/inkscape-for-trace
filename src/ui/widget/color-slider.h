@@ -1,6 +1,3 @@
-#ifndef __SP_COLOR_SLIDER_H__
-#define __SP_COLOR_SLIDER_H__
-
 /* Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -8,6 +5,9 @@
  *
  * This code is in public domain
  */
+
+#ifndef SEEN_COLOR_SLIDER_H
+#define SEEN_COLOR_SLIDER_H
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -40,16 +40,16 @@ public:
     ~ColorSlider();
 
 #if GTK_CHECK_VERSION(3,0,0)
-    void set_adjustment(Glib::RefPtr<Gtk::Adjustment> adjustment);
+    void setAdjustment(Glib::RefPtr<Gtk::Adjustment> adjustment);
 #else
-    void set_adjustment(Gtk::Adjustment *adjustment);
+    void setAdjustment(Gtk::Adjustment *adjustment);
 #endif
 
-    void set_colors(guint32 start, guint32 mid, guint32 end);
+    void setColors(guint32 start, guint32 mid, guint32 end);
 
-    void set_map(const guchar* map);
+    void setMap(const guchar* map);
 
-    void set_background(guint dark, guint light, guint size);
+    void setBackground(guint dark, guint light, guint size);
 
     sigc::signal<void> signal_grabbed;
     sigc::signal<void> signal_dragged;
@@ -76,8 +76,8 @@ protected:
 #endif
 
 private:
-    void _on_adjustment_changed();
-    void _on_adjustment_value_changed();
+    void _onAdjustmentChanged();
+    void _onAdjustmentValueChanged();
 
     bool _dragging;
 
@@ -98,7 +98,7 @@ private:
     gint _mapsize;
     guchar *_map;
 
-    Glib::RefPtr<Gdk::Window> _refGdkWindow;
+    Glib::RefPtr<Gdk::Window> _gdk_window;
 };
 
 }//namespace Widget
@@ -106,3 +106,13 @@ private:
 }//namespace Inkscape
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
