@@ -8,6 +8,8 @@
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
+#include <gtkmm/label.h>
+#include <gtkmm/spinbutton.h>
 #include "dialogs/dialog-events.h"
 #include "widgets/sp-color-scales.h"
 #include "svg/svg-icc-color.h"
@@ -33,12 +35,12 @@ ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
     : Gtk::Table(5, 3, false)
 #endif
     , _color(color)
-    , _updating(false),
-      _adj(0),
-      _wheel(0),
-      _slider(0),
-      _sbtn(0),
-      _label(0)
+    , _updating(false)
+#if !GTK_CHECK_VERSION(3,0,0)
+    , _alpha_adjustment(NULL)
+#endif
+    , _wheel(0)
+    , _slider(0)
 {
     _initUI();
     _color_changed_connection = color.signal_changed.connect(sigc::mem_fun(this, &ColorWheelSelector::_colorChanged));
@@ -48,24 +50,18 @@ ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
 
 ColorWheelSelector::~ColorWheelSelector()
 {
-    _adj = 0;
     _wheel = 0;
-    _sbtn = 0;
-    _label = 0;
+#if !GTK_CHECK_VERSION(3,0,0)
+    delete _alpha_adjustment;
+#endif
 
     _color_changed_connection.disconnect();
     _color_dragged_connection.disconnect();
 }
 
 void ColorWheelSelector::_initUI() {
-    gint row = 0;
-
-    GtkWidget *t = GTK_WIDGET(gobj());
-
-    //gtk_widget_show (t);
-
     /* Create components */
-    row = 0;
+    gint row = 0;
 
     _wheel = gimp_color_wheel_new();
     gtk_widget_show( _wheel );
@@ -75,35 +71,38 @@ void ColorWheelSelector::_initUI() {
     gtk_widget_set_valign(_wheel, GTK_ALIGN_FILL);
     gtk_widget_set_hexpand(_wheel, TRUE);
     gtk_widget_set_vexpand(_wheel, TRUE);
-    gtk_grid_attach(GTK_GRID(t), _wheel, 0, row, 3, 1);
+    gtk_grid_attach(GTK_GRID(gobj()), _wheel, 0, row, 3, 1);
 #else
-    gtk_table_attach(GTK_TABLE(t), _wheel, 0, 3, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_table_attach(GTK_TABLE(gobj()), _wheel, 0, 3, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
 #endif
 
     row++;
 
     /* Label */
-    _label = gtk_label_new_with_mnemonic (_("_A:"));
-    gtk_misc_set_alignment (GTK_MISC (_label), 1.0, 0.5);
-    gtk_widget_show (_label);
+    Gtk::Label* label = Gtk::manage(new Gtk::Label(_("_A:"), true));
+    label->set_alignment(1.0, 0.5);
+    label->show();
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_label, XPAD);
-    gtk_widget_set_margin_right(_label, XPAD);
-    gtk_widget_set_margin_top(_label, YPAD);
-    gtk_widget_set_margin_bottom(_label, YPAD);
-    gtk_widget_set_halign(_label, GTK_ALIGN_FILL);
-    gtk_widget_set_valign(_label, GTK_ALIGN_FILL);
-    gtk_grid_attach(GTK_GRID(t), _label, 0, row, 1, 1);
+    label->set_margin_left(XPAD);
+    label->set_margin_right(XPAD);
+    label->set_margin_top(YPAD);
+    label->set_margin_bottom(YPAD);
+    label->set_halign(Gtk::ALIGN_FILL);
+    label->set_valign(Gtk::ALIGN_FILL);
+    attach(*label, 0, row, 1, 1);
 #else
-    gtk_table_attach (GTK_TABLE (t), _label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+    attach(*label, 0, 1, row, row + 1, Gtk::FILL, Gtk::FILL, XPAD, YPAD);
 #endif
 
     /* Adjustment */
-    _adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
-
+#if GTK_CHECK_VERSION(3,0,0)
+    _alpha_adjustment = Gtk::Adjustment::create(0.0, 0.0, 255.0, 1.0, 10.0, 10.0);
+#else
+    _alpha_adjustment = new Gtk::Adjustment(0.0, 0.0, 255.0, 1.0, 10.0, 10.0);
+#endif
     /* Slider */
-    _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_adj, true)));
+    _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(_alpha_adjustment));
     _slider->set_tooltip_text(_("Alpha (opacity)"));
     _slider->show();
 
@@ -115,9 +114,9 @@ void ColorWheelSelector::_initUI() {
     _slider->set_hexpand(true);
     _slider->set_halign(Gtk::ALIGN_FILL);
     _slider->set_valign(Gtk::ALIGN_FILL);
-    gtk_grid_attach(GTK_GRID(t), _slider->gobj(), 1, row, 1, 1);
+    attach(*_slider, 1, row, 1, 1);
 #else
-    gtk_table_attach(GTK_TABLE (t), _slider->gobj(), 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
+    attach(*_slider, 1, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::FILL, XPAD, YPAD);
 #endif
 
     _slider->setColors(SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
@@ -125,32 +124,34 @@ void ColorWheelSelector::_initUI() {
                         SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 1.0));
 
     /* Spinbutton */
-    _sbtn = gtk_spin_button_new (GTK_ADJUSTMENT (_adj), 1.0, 0);
-    gtk_widget_set_tooltip_text (_sbtn, _("Alpha (opacity)"));
-    sp_dialog_defocus_on_enter (_sbtn);
-    gtk_label_set_mnemonic_widget (GTK_LABEL(_label), _sbtn);
-    gtk_widget_show (_sbtn);
+#if GTK_CHECK_VERSION(3,0,0)
+    Gtk::SpinButton* spin_button = Gtk::manage(new Gtk::SpinButton(_alpha_adjustment, 1.0, 0));
+    #else
+    Gtk::SpinButton* spin_button = Gtk::manage(new Gtk::SpinButton(*_alpha_adjustment, 1.0, 0));
+#endif
+    spin_button->set_tooltip_text(_("Alpha (opacity)"));
+    sp_dialog_defocus_on_enter(GTK_WIDGET(spin_button->gobj()));
+    label->set_mnemonic_widget(*spin_button);
+    spin_button->show();
 
 #if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_margin_left(_sbtn, XPAD);
-    gtk_widget_set_margin_right(_sbtn, XPAD);
-    gtk_widget_set_margin_top(_sbtn, YPAD);
-    gtk_widget_set_margin_bottom(_sbtn, YPAD);
-    gtk_widget_set_halign(_sbtn, GTK_ALIGN_CENTER);
-    gtk_widget_set_valign(_sbtn, GTK_ALIGN_CENTER);
-    gtk_grid_attach(GTK_GRID(t), _sbtn, 2, row, 1, 1);
+
+    spin_button->set_margin_left(XPAD);
+    spin_button->set_margin_right(XPAD);
+    spin_button->set_margin_top(YPAD);
+    spin_button->set_margin_bottom(YPAD);
+    spin_button->set_halign(Gtk::ALIGN_CENTER);
+    spin_button->set_valign(Gtk::ALIGN_CENTER);
+    attach(*spin_button, 2, row, 1, 1);
 #else
-    gtk_table_attach (GTK_TABLE (t), _sbtn, 2, 3, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, XPAD, YPAD);
+    attach(*spin_button, 2, 3, row, row + 1, (Gtk::AttachOptions)0, (Gtk::AttachOptions)0, XPAD, YPAD);
 #endif
 
     /* Signals */
-    g_signal_connect (G_OBJECT (_adj), "value_changed",
-                        G_CALLBACK (_adjustmentChanged), this);
-
+    _alpha_adjustment->signal_value_changed().connect(sigc::mem_fun(this, &ColorWheelSelector::_adjustmentChanged));
     _slider->signal_grabbed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderGrabbed));
     _slider->signal_released.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderReleased));
     _slider->signal_value_changed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderChanged));
-
     g_signal_connect( G_OBJECT(_wheel), "changed",
                         G_CALLBACK (_wheelChanged), this );
 }
@@ -158,7 +159,7 @@ void ColorWheelSelector::_initUI() {
 void ColorWheelSelector::_colorChanged()
 {
 #ifdef DUMP_CHANGE_INFO
-    g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, color.v.c[0], color.v.c[1], color.v.c[2], alpha );
+    g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2], alpha );
 #endif
     if (_updating) {
         return;
@@ -177,33 +178,30 @@ void ColorWheelSelector::_colorChanged()
 
     _slider->setColors(start, mid, end);
 
-    ColorScales::setScaled(_adj, _color.alpha());
+    ColorScales::setScaled(_alpha_adjustment->gobj(), _color.alpha());
 
-    _updating = FALSE;
+    _updating = false;
 }
 
-void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, ColorWheelSelector *cs )
+void ColorWheelSelector::_adjustmentChanged()
 {
-    if (cs->_updating) {
+    if (_updating) {
         return;
     }
+    _updating = true;
 
-// TODO check this. It looks questionable:
+    // TODO check this. It looks questionable:
     // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
-    gdouble value = gtk_adjustment_get_value (adjustment);
-    gdouble upper = gtk_adjustment_get_upper (adjustment);
-    
+    gdouble value = _alpha_adjustment->get_value();
+    gdouble upper = _alpha_adjustment->get_upper();
     if (value > 0.0 && value < 1.0) {
-        gtk_adjustment_set_value( adjustment, floor (value * upper + 0.5) );
+        _alpha_adjustment->set_value(floor(value * upper + 0.5));
     }
 
-    cs->_updating = true;
+    _color.preserveICC();
+    _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
 
-    cs->_color.preserveICC();
-
-    cs->_color.setAlpha(ColorScales::getScaled( cs->_adj ));
-
-    cs->_updating = false;
+    _updating = false;
 }
 
 void ColorWheelSelector::_sliderGrabbed()
@@ -226,13 +224,16 @@ void ColorWheelSelector::_sliderChanged()
 
     _updating = true;
     _color.preserveICC();
-    _color.setAlpha(ColorScales::getScaled(_adj));
+    _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
     _updating = false;
 }
 
-void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, ColorWheelSelector *wheelSelector )
+void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *wheelSelector)
 {
-    if (wheelSelector->_updating) return;
+    if (wheelSelector->_updating){
+        return;
+    }
+    wheelSelector->_updating = true;
 
     gdouble h = 0;
     gdouble s = 0;
@@ -249,8 +250,6 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, ColorWheelSelecto
     guint32 end = color.toRGBA32( 0xff );
 
     wheelSelector->_slider->setColors(start, mid, end);
-
-    wheelSelector->_updating = true;
 
     wheelSelector->_color.preserveICC();
 
@@ -273,9 +272,6 @@ Glib::ustring ColorWheelSelectorFactory::modeName() const {
 }
 }
 }
-
-
-
 /*
   Local Variables:
   mode:c++

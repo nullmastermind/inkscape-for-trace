@@ -22,7 +22,11 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkmm/grid.h>
+#else
 #include <gtkmm/table.h>
+#endif
 
 #include "ui/selected-color.h"
 
@@ -35,7 +39,11 @@ namespace Widget {
 class ColorSlider;
 
 class ColorWheelSelector
-    : public Gtk::Table      //if GTK2
+#if GTK_CHECK_VERSION(3,0,0)
+    : public Gtk::Grid
+#else
+    : public Gtk::Table
+#endif
 {
 public:
 	static const gchar* MODE_NAME;
@@ -45,25 +53,25 @@ public:
 
 protected:
     void _initUI();
-    virtual void _colorChanged();
 
-    static void _adjustmentChanged ( GtkAdjustment *adjustment, ColorWheelSelector *cs );
-
+    void _colorChanged();
+    void _adjustmentChanged();
     void _sliderGrabbed();
     void _sliderReleased();
     void _sliderChanged();
-    static void _wheelChanged( GimpColorWheel *wheel, ColorWheelSelector *cs );
+    static void _wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *cs);
 
-    void _recalcColor( gboolean changing );
+    void _recalcColor(gboolean changing);
 
     SelectedColor &_color;
     bool _updating;
-
-    GtkAdjustment* _adj; // Channel adjustment
+#if GTK_CHECK_VERSION(3,0,0)
+    Glib::RefPtr<Gtk::Adjustment> _alpha_adjustment;
+#else
+    Gtk::Adjustment* _alpha_adjustment;
+#endif
     GtkWidget* _wheel;
     Inkscape::UI::Widget::ColorSlider* _slider;
-    GtkWidget* _sbtn; // Spinbutton
-    GtkWidget* _label; // Label
 
 private:
     // By default, disallow copy constructor and assignment operator
@@ -74,6 +82,7 @@ private:
     sigc::connection _color_dragged_connection;
 };
 
+
 class ColorWheelSelectorFactory: public ColorSelectorFactory {
 public:
     Gtk::Widget *createWidget(SelectedColor &color) const;
@@ -83,7 +92,6 @@ public:
 }
 }
 }
-
 
 #endif // SEEN_SP_COLOR_WHEEL_SELECTOR_H
 
