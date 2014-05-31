@@ -109,6 +109,7 @@ set(ui_SRC
 	widget/anchor-selector.cpp
 	widget/button.cpp
 	widget/color-entry.cpp
+	widget/color-icc-selector.cpp
 	widget/color-picker.cpp
 	widget/color-preview.cpp
 	widget/color-scales.cpp
@@ -275,6 +276,7 @@ set(ui_SRC
 	widget/attr-widget.h
 	widget/button.h
 	widget/color-entry.h
+	widget/color-icc-selector.h
 	widget/color-picker.h
 	widget/color-preview.h
 	widget/color-scales.h

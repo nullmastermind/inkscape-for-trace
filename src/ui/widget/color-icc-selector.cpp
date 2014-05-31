@@ -2,7 +2,7 @@
 # include "config.h"
 #endif
 
-#include "gradient-vector.h"
+#include "widgets/gradient-vector.h"
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
@@ -10,8 +10,8 @@
 #include <set>
 #include <vector>
 
-#include "../dialogs/dialog-events.h"
-#include "sp-color-icc-selector.h"
+#include "dialogs/dialog-events.h"
+#include "ui/widget/color-icc-selector.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
 #include "svg/svg-icc-color.h"

@@ -36,7 +36,6 @@ set(widgets_SRC
 	select-toolbar.cpp
 	shrink-wrap-button.cpp
 	sp-attribute-widget.cpp
-	sp-color-icc-selector.cpp
 	sp-color-notebook.cpp
 	sp-color-selector.cpp
 	sp-widget.cpp
@@ -90,7 +89,6 @@ set(widgets_SRC
 	select-toolbar.h
 	shrink-wrap-button.h
 	sp-attribute-widget.h
-	sp-color-icc-selector.h
 	sp-color-notebook.h
 	sp-color-selector.h
 	sp-widget.h
