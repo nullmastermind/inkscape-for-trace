@@ -11,22 +11,14 @@
 #include "dialogs/dialog-events.h"
 #include "widgets/sp-color-scales.h"
 #include "svg/svg-icc-color.h"
+#include "ui/selected-color.h"
 #include "ui/widget/color-slider.h"
 #include "ui/widget/gimpcolorwheel.h"
 
-G_BEGIN_DECLS
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
-static void sp_color_wheel_selector_class_init (SPColorWheelSelectorClass *klass);
-static void sp_color_wheel_selector_init (SPColorWheelSelector *cs);
-static void sp_color_wheel_selector_dispose(GObject *object);
-
-static void sp_color_wheel_selector_show_all (GtkWidget *widget);
-static void sp_color_wheel_selector_hide(GtkWidget *widget);
-
-
-G_END_DECLS
-
-static SPColorSelectorClass *parent_class;
 
 #define XPAD 4
 #define YPAD 1
@@ -34,60 +26,24 @@ static SPColorSelectorClass *parent_class;
 
 const gchar* ColorWheelSelector::MODE_NAME = N_("Wheel");
 
-GType
-sp_color_wheel_selector_get_type (void)
-{
-    static GType type = 0;
-    if (!type) {
-        static const GTypeInfo info = {
-            sizeof (SPColorWheelSelectorClass),
-            NULL, /* base_init */
-            NULL, /* base_finalize */
-            (GClassInitFunc) sp_color_wheel_selector_class_init,
-            NULL, /* class_finalize */
-            NULL, /* class_data */
-            sizeof (SPColorWheelSelector),
-            0,    /* n_preallocs */
-            (GInstanceInitFunc) sp_color_wheel_selector_init,
-            0,    /* value_table */
-        };
-
-        type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,
-                                       "SPColorWheelSelector",
-                                       &info,
-                                       static_cast< GTypeFlags > (0) );
-    }
-    return type;
-}
-
-static void sp_color_wheel_selector_class_init(SPColorWheelSelectorClass *klass)
-{
-    static const gchar* nameset[] = {N_("Wheel"), 0};
-    GObjectClass   *object_class = G_OBJECT_CLASS(klass);
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-    SPColorSelectorClass *selector_class = SP_COLOR_SELECTOR_CLASS (klass);
-
-    parent_class = SP_COLOR_SELECTOR_CLASS (g_type_class_peek_parent (klass));
-
-    selector_class->name = nameset;
-    selector_class->submode_count = 1;
-
-    object_class->dispose = sp_color_wheel_selector_dispose;
-
-    widget_class->show_all = sp_color_wheel_selector_show_all;
-    widget_class->hide = sp_color_wheel_selector_hide;
-}
-
-ColorWheelSelector::ColorWheelSelector( SPColorSelector* csel )
-    : ColorSelector( csel ),
-      _updating( FALSE ),
-      _dragging( FALSE ),
+ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
+#if GTK_CHECK_VERSION(3,0,0)
+    : Gtk::Grid()
+#else
+    : Gtk::Table(5, 3, false)
+#endif
+    , _color(color)
+    , _updating(false),
       _adj(0),
       _wheel(0),
       _slider(0),
       _sbtn(0),
       _label(0)
 {
+    _initUI();
+    _color_changed_connection = color.signal_changed.connect(sigc::mem_fun(this, &ColorWheelSelector::_colorChanged));
+    _color_dragged_connection = color.signal_dragged.connect(sigc::mem_fun(this, &ColorWheelSelector::_colorChanged));
+
 }
 
 ColorWheelSelector::~ColorWheelSelector()
@@ -96,33 +52,17 @@ ColorWheelSelector::~ColorWheelSelector()
     _wheel = 0;
     _sbtn = 0;
     _label = 0;
+
+    _color_changed_connection.disconnect();
+    _color_dragged_connection.disconnect();
 }
 
-void sp_color_wheel_selector_init (SPColorWheelSelector *cs)
-{
-    SP_COLOR_SELECTOR(cs)->base = new ColorWheelSelector( SP_COLOR_SELECTOR(cs) );
-
-    if ( SP_COLOR_SELECTOR(cs)->base )
-    {
-        SP_COLOR_SELECTOR(cs)->base->init();
-    }
-}
-
-void ColorWheelSelector::init()
-{
+void ColorWheelSelector::_initUI() {
     gint row = 0;
 
-    _updating = FALSE;
-    _dragging = FALSE;
+    GtkWidget *t = GTK_WIDGET(gobj());
 
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkWidget *t = gtk_grid_new();
-#else
-    GtkWidget *t = gtk_table_new (5, 3, FALSE);
-#endif
-
-    gtk_widget_show (t);
-    gtk_box_pack_start (GTK_BOX (_csel), t, TRUE, TRUE, 0);
+    //gtk_widget_show (t);
 
     /* Create components */
     row = 0;
@@ -205,44 +145,14 @@ void ColorWheelSelector::init()
 
     /* Signals */
     g_signal_connect (G_OBJECT (_adj), "value_changed",
-                        G_CALLBACK (_adjustmentChanged), _csel);
+                        G_CALLBACK (_adjustmentChanged), this);
 
     _slider->signal_grabbed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderGrabbed));
     _slider->signal_released.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderReleased));
     _slider->signal_value_changed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderChanged));
 
     g_signal_connect( G_OBJECT(_wheel), "changed",
-                        G_CALLBACK (_wheelChanged), _csel );
-}
-
-static void sp_color_wheel_selector_dispose(GObject *object)
-{
-    if ((G_OBJECT_CLASS(parent_class))->dispose)
-        (* (G_OBJECT_CLASS(parent_class))->dispose) (object);
-}
-
-static void
-sp_color_wheel_selector_show_all (GtkWidget *widget)
-{
-    gtk_widget_show (widget);
-}
-
-static void sp_color_wheel_selector_hide(GtkWidget *widget)
-{
-    gtk_widget_hide(widget);
-}
-
-GtkWidget *sp_color_wheel_selector_new()
-{
-    SPColorWheelSelector *csel = SP_COLOR_WHEEL_SELECTOR(g_object_new (SP_TYPE_COLOR_WHEEL_SELECTOR, NULL));
-
-    return GTK_WIDGET (csel);
-}
-
-/* Helpers for setting color value */
-
-void ColorWheelSelector::_preserve_icc(SPColor *color) const {
-    color->icc = getColor().icc ? new SVGICCColor(*getColor().icc) : 0;
+                        G_CALLBACK (_wheelChanged), this );
 }
 
 void ColorWheelSelector::_colorChanged()
@@ -250,26 +160,34 @@ void ColorWheelSelector::_colorChanged()
 #ifdef DUMP_CHANGE_INFO
     g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, color.v.c[0], color.v.c[1], color.v.c[2], alpha );
 #endif
-    _updating = TRUE;
+    if (_updating) {
+        return;
+    }
+
+    _updating = true;
     {
         float hsv[3] = {0,0,0};
-        sp_color_rgb_to_hsv_floatv(hsv, _color.v.c[0], _color.v.c[1], _color.v.c[2]);
+        sp_color_rgb_to_hsv_floatv(hsv, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
         gimp_color_wheel_set_color( GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2] );
     }
 
-    guint32 start = _color.toRGBA32( 0x00 );
-    guint32 mid = _color.toRGBA32( 0x7f );
-    guint32 end = _color.toRGBA32( 0xff );
+    guint32 start = _color.color().toRGBA32( 0x00 );
+    guint32 mid = _color.color().toRGBA32( 0x7f );
+    guint32 end = _color.color().toRGBA32( 0xff );
 
     _slider->setColors(start, mid, end);
 
-    ColorScales::setScaled(_adj, _alpha);
+    ColorScales::setScaled(_adj, _color.alpha());
 
     _updating = FALSE;
 }
 
-void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorWheelSelector *cs )
+void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, ColorWheelSelector *cs )
 {
+    if (cs->_updating) {
+        return;
+    }
+
 // TODO check this. It looks questionable:
     // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
     gdouble value = gtk_adjustment_get_value (adjustment);
@@ -279,48 +197,42 @@ void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorW
         gtk_adjustment_set_value( adjustment, floor (value * upper + 0.5) );
     }
 
-    ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
-    if (wheelSelector->_updating) return;
+    cs->_updating = true;
 
-    wheelSelector->_updating = TRUE;
+    cs->_color.preserveICC();
 
-    wheelSelector->_preserve_icc(&wheelSelector->_color);
-    wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
+    cs->_color.setAlpha(ColorScales::getScaled( cs->_adj ));
 
-    wheelSelector->_updating = FALSE;
+    cs->_updating = false;
 }
 
 void ColorWheelSelector::_sliderGrabbed()
 {
-    if (!_dragging) {
-        _dragging = TRUE;
-        _grabbed();
-
-        _preserve_icc(&_color);
-        _updateInternals( _color, ColorScales::getScaled( _adj ), _dragging );
-    }
+    _color.preserveICC();
+    _color.setHeld(true);
 }
 
 void ColorWheelSelector::_sliderReleased()
 {
-    if (_dragging) {
-        _dragging = FALSE;
-        _released();
-
-        _preserve_icc(&_color);
-        _updateInternals( _color, ColorScales::getScaled( _adj ), _dragging );
-    }
+    _color.preserveICC();
+    _color.setHeld(false);
 }
 
 void ColorWheelSelector::_sliderChanged()
 {
-    _preserve_icc(&_color);
-    _updateInternals( _color, ColorScales::getScaled( _adj ), _dragging );
+    if (_updating) {
+        return;
+    }
+
+    _updating = true;
+    _color.preserveICC();
+    _color.setAlpha(ColorScales::getScaled(_adj));
+    _updating = false;
 }
 
-void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs )
+void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, ColorWheelSelector *wheelSelector )
 {
-    ColorWheelSelector* wheelSelector = static_cast<ColorWheelSelector*>(SP_COLOR_SELECTOR(cs)->base);
+    if (wheelSelector->_updating) return;
 
     gdouble h = 0;
     gdouble s = 0;
@@ -338,20 +250,30 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
 
     wheelSelector->_slider->setColors(start, mid, end);
 
-    wheelSelector->_preserve_icc(&color);
-    wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );
+    wheelSelector->_updating = true;
+
+    wheelSelector->_color.preserveICC();
+
+    wheelSelector->_color.setHeld(gimp_color_wheel_is_adjusting(wheel));
+    wheelSelector->_color.setColor(color);
+
+    wheelSelector->_updating = false;
 }
 
 
 Gtk::Widget *ColorWheelSelectorFactory::createWidget(Inkscape::UI::SelectedColor &color) const {
-    GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_WHEEL_SELECTOR);
-    Gtk::Widget *wrapped = Gtk::manage(Glib::wrap(w));
-    return wrapped;
+    Gtk::Widget *w = Gtk::manage(new ColorWheelSelector(color));
+    return w;
 }
 
 Glib::ustring ColorWheelSelectorFactory::modeName() const {
     return gettext(ColorWheelSelector::MODE_NAME);
 }
+
+}
+}
+}
+
 
 
 /*

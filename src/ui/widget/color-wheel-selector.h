@@ -1,3 +1,14 @@
+/**
+ * @file
+ * Color selector widget containing GIMP color wheel and slider
+ */
+/* Authors:
+ *   Tomasz Boczkowski <penginsbacon@gmail.com> (c++-sification)
+ *
+ * Copyright (C) 2014 Authors
+ *
+ * This code is in public domain
+ */
 #ifndef SEEN_SP_COLOR_WHEEL_SELECTOR_H
 #define SEEN_SP_COLOR_WHEEL_SELECTOR_H
 
@@ -11,13 +22,11 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <gtkmm/table.h>
 
-#include "widgets/sp-color-selector.h"
 #include "ui/selected-color.h"
 
 typedef struct _GimpColorWheel GimpColorWheel;
-struct SPColorWheelSelector;
-struct SPColorWheelSelectorClass;
 
 namespace Inkscape {
 namespace UI {
@@ -25,36 +34,31 @@ namespace Widget {
 
 class ColorSlider;
 
-}
-}
-}
-
-class ColorWheelSelector: public ColorSelector
+class ColorWheelSelector
+    : public Gtk::Table      //if GTK2
 {
 public:
 	static const gchar* MODE_NAME;
 
-    ColorWheelSelector( SPColorSelector* csel );
+    ColorWheelSelector(SelectedColor &color);
     virtual ~ColorWheelSelector();
 
-    virtual void init();
-
 protected:
+    void _initUI();
     virtual void _colorChanged();
 
-    static void _adjustmentChanged ( GtkAdjustment *adjustment, SPColorWheelSelector *cs );
+    static void _adjustmentChanged ( GtkAdjustment *adjustment, ColorWheelSelector *cs );
 
     void _sliderGrabbed();
     void _sliderReleased();
     void _sliderChanged();
-    static void _wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs );
-
-    static void _fooChanged( GtkWidget foo, SPColorWheelSelector *cs );
+    static void _wheelChanged( GimpColorWheel *wheel, ColorWheelSelector *cs );
 
     void _recalcColor( gboolean changing );
 
-    gboolean _updating : 1;
-    gboolean _dragging : 1;
+    SelectedColor &_color;
+    bool _updating;
+
     GtkAdjustment* _adj; // Channel adjustment
     GtkWidget* _wheel;
     Inkscape::UI::Widget::ColorSlider* _slider;
@@ -66,35 +70,19 @@ private:
     ColorWheelSelector( const ColorWheelSelector& obj );
     ColorWheelSelector& operator=( const ColorWheelSelector& obj );
 
-    void _preserve_icc(SPColor *color) const;
+    sigc::connection _color_changed_connection;
+    sigc::connection _color_dragged_connection;
 };
 
-
-
-#define SP_TYPE_COLOR_WHEEL_SELECTOR (sp_color_wheel_selector_get_type ())
-#define SP_COLOR_WHEEL_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_COLOR_WHEEL_SELECTOR, SPColorWheelSelector))
-#define SP_COLOR_WHEEL_SELECTOR_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_COLOR_WHEEL_SELECTOR, SPColorWheelSelectorClass))
-#define SP_IS_COLOR_WHEEL_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_COLOR_WHEEL_SELECTOR))
-#define SP_IS_COLOR_WHEEL_SELECTOR_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_WHEEL_SELECTOR))
-
-struct SPColorWheelSelector {
-    SPColorSelector parent;
-};
-
-struct SPColorWheelSelectorClass {
-    SPColorSelectorClass parent_class;
-};
-
-GType sp_color_wheel_selector_get_type (void);
-
-GtkWidget *sp_color_wheel_selector_new (void);
-
-
-class ColorWheelSelectorFactory: public Inkscape::UI::ColorSelectorFactory {
+class ColorWheelSelectorFactory: public ColorSelectorFactory {
 public:
-    Gtk::Widget *createWidget(Inkscape::UI::SelectedColor &color) const;
+    Gtk::Widget *createWidget(SelectedColor &color) const;
     Glib::ustring modeName() const;
 };
+
+}
+}
+}
 
 
 #endif // SEEN_SP_COLOR_WHEEL_SELECTOR_H
