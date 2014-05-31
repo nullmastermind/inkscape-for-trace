@@ -70,8 +70,6 @@ ink_common_sources +=	\
 	widgets/sp-color-icc-selector.h	\
 	widgets/sp-color-notebook.cpp	\
 	widgets/sp-color-notebook.h	\
-	widgets/sp-color-scales.cpp	\
-	widgets/sp-color-scales.h	\
 	widgets/sp-color-selector.cpp	\
 	widgets/sp-color-selector.h	\
 	widgets/spinbutton-events.cpp	\

@@ -6,14 +6,14 @@
 # include "config.h"
 #endif
 
-#include "sp-color-scales.h"
+#include "ui/widget/color-scales.h"
 
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 
-#include "../dialogs/dialog-events.h"
+#include "dialogs/dialog-events.h"
 #include "svg/svg-icc-color.h"
 #include "ui/widget/color-slider.h"
 
