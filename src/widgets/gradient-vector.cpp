@@ -54,7 +54,10 @@
 #include <sigc++/adaptors/bind.h>
 #include "document-undo.h"
 
+#include "ui/selected-color.h"
+
 using Inkscape::DocumentUndo;
+using Inkscape::UI::SelectedColor;
 
 enum {
     VECTOR_SET,
@@ -511,8 +514,8 @@ static void sp_gradient_vector_widget_destroy(GtkObject *object, gpointer data);
 
 static void sp_gradient_vector_gradient_release(SPObject *obj, GtkWidget *widget);
 static void sp_gradient_vector_gradient_modified(SPObject *obj, guint flags, GtkWidget *widget);
-static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GObject *object);
-static void sp_gradient_vector_color_changed(SPColorSelector *csel, GObject *object);
+static void sp_gradient_vector_color_dragged(Inkscape::UI::SelectedColor *selected_color, GObject *object);
+static void sp_gradient_vector_color_changed(Inkscape::UI::SelectedColor *selected_color, GObject *object);
 static void update_stop_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_stop);
 
 static gboolean blocked = FALSE;
@@ -668,9 +671,11 @@ static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget 
 
     blocked = TRUE;
 
-    SPColorSelector *csel = static_cast<SPColorSelector*>(g_object_get_data(G_OBJECT(tbl), "cselector"));
+    SelectedColor *csel = static_cast<SelectedColor*>(g_object_get_data(G_OBJECT(tbl), "cselector"));
     // set its color, from the stored array
-    csel->base->setColorAlpha( stop->getEffectiveColor(), stop->opacity );
+    g_object_set_data(G_OBJECT(tbl), "updating_color", reinterpret_cast<void*>(1));
+    csel->setColorAlpha(stop->getEffectiveColor(), stop->opacity);
+    g_object_set_data(G_OBJECT(tbl), "updating_color", reinterpret_cast<void*>(0));
     GtkWidget *offspin = GTK_WIDGET(g_object_get_data(G_OBJECT(tbl), "offspn"));
     GtkWidget *offslide =GTK_WIDGET(g_object_get_data(G_OBJECT(tbl), "offslide"));
 
@@ -851,7 +856,7 @@ static void sp_grd_ed_del_stop(GtkWidget */*widget*/,  GtkWidget *vb)
 
 static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *select_stop)
 {
-    GtkWidget *vb, *w, *f, *csel;
+    GtkWidget *vb, *w, *f;
 
     g_return_val_if_fail(!gradient || SP_IS_GRADIENT(gradient), NULL);
 
@@ -979,12 +984,23 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     f = gtk_frame_new(_("Stop Color"));
     gtk_widget_show(f);
     gtk_box_pack_start(GTK_BOX(vb), f, TRUE, TRUE, PAD);
-    csel = static_cast<GtkWidget*>(sp_color_selector_new(SP_TYPE_COLOR_NOTEBOOK));
-    g_object_set_data(G_OBJECT(vb), "cselector", csel);
+
+    Inkscape::UI::SelectedColor *selected_color = new Inkscape::UI::SelectedColor;
+    g_object_set_data(G_OBJECT(vb), "cselector", selected_color);
+    g_object_set_data(G_OBJECT(vb), "updating_color", reinterpret_cast<void*>(0));
+    selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_dragged), selected_color, G_OBJECT(vb)));
+    selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_changed), selected_color, G_OBJECT(vb)));
+
+    Gtk::Widget *color_selector = Gtk::manage(ColorNotebook::create(*selected_color));
+    color_selector->show();
+    gtk_container_add(GTK_CONTAINER(f), color_selector->gobj());
+
+    /*
     gtk_widget_show(csel);
     gtk_container_add(GTK_CONTAINER(f), csel);
     g_signal_connect(G_OBJECT(csel), "dragged", G_CALLBACK(sp_gradient_vector_color_dragged), vb);
     g_signal_connect(G_OBJECT(csel), "changed", G_CALLBACK(sp_gradient_vector_color_changed), vb);
+    */
 
     gtk_widget_show(vb);
 
@@ -1130,9 +1146,11 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         }
 
         // get the color selector
-        SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data(G_OBJECT(widget), "cselector"));
+        SelectedColor *csel =  static_cast<SelectedColor*>(g_object_get_data(G_OBJECT(widget), "cselector"));
 
-        csel->base->setColorAlpha( stop->getEffectiveColor(), stop->opacity );
+        g_object_set_data(G_OBJECT(widget), "updating_color", reinterpret_cast<void*>(1));
+        csel->setColorAlpha(stop->getEffectiveColor(), stop->opacity);
+        g_object_set_data(G_OBJECT(widget), "updating_color", reinterpret_cast<void*>(0));
 
         /* Fill preview */
         GtkWidget *w = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(widget), "preview"));
@@ -1210,6 +1228,12 @@ static void sp_gradient_vector_widget_destroy(GtkObject *object, gpointer /*data
             sp_repr_remove_listener_by_data(gradient->getRepr(), object);
         }
     }
+
+    SelectedColor *selected_color = static_cast<SelectedColor *>(g_object_get_data(G_OBJECT(object), "cselector"));
+    if (selected_color) {
+        delete selected_color;
+        g_object_set_data(G_OBJECT(object), "cselector", NULL);
+    }
 }
 
 static void sp_gradient_vector_gradient_release(SPObject */*object*/, GtkWidget *widget)
@@ -1227,7 +1251,7 @@ static void sp_gradient_vector_gradient_modified(SPObject *object, guint /*flags
     }
 }
 
-static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GObject *object)
+static void sp_gradient_vector_color_dragged(Inkscape::UI::SelectedColor *selected_color, GObject *object)
 {
     SPGradient *gradient, *ngr;
 
@@ -1255,14 +1279,21 @@ static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GObject *obj
         return;
     }
 
-    csel->base->getColorAlpha(stop->specified_color, stop->opacity);
+    selected_color->colorAlpha(stop->specified_color, stop->opacity);
     stop->currentColor = false;
 
     blocked = FALSE;
 }
 
-static void sp_gradient_vector_color_changed(SPColorSelector *csel, GObject *object)
+static void sp_gradient_vector_color_changed(Inkscape::UI::SelectedColor *selected_color, GObject *object)
 {
+    (void)selected_color;
+
+    void* updating_color = g_object_get_data(G_OBJECT(object), "updating_color");
+    if (updating_color) {
+        return;
+    }
+
     if (blocked) {
         return;
     }
@@ -1291,10 +1322,10 @@ static void sp_gradient_vector_color_changed(SPColorSelector *csel, GObject *obj
         return;
     }
 
-    csel = static_cast<SPColorSelector*>(g_object_get_data(G_OBJECT(object), "cselector"));
+    SelectedColor *csel = static_cast<SelectedColor *>(g_object_get_data(G_OBJECT(object), "cselector"));
     SPColor color;
     float alpha = 0;
-    csel->base->getColorAlpha( color, alpha );
+    csel->colorAlpha(color, alpha);
 
     sp_repr_set_css_double(stop->getRepr(), "offset", stop->offset);
     Inkscape::CSSOStringStream os;
