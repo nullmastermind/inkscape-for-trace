@@ -164,11 +164,6 @@ void ColorScales::_initUI(SPColorScalesMode mode)
 
 void ColorScales::_recalcColor( gboolean changing )
 {
-    if (_updating) {
-        return;
-    }
-    _updating = true;
-
     if ( changing )
     {
         SPColor color;
@@ -198,13 +193,12 @@ void ColorScales::_recalcColor( gboolean changing )
         }
 
         _color.preserveICC();
-        _color.setColorAlpha(color, alpha, true);
+        _color.setColorAlpha(color, alpha);
     }
     else
     {
         // _updateInternals( _color, _alpha, _dragging );
     }
-    _updating = false;
 }
 
 /* Helpers for setting color value */
@@ -232,7 +226,7 @@ void ColorScales::_setRangeLimit( gdouble upper )
 
 void ColorScales::_onColorChanged()
 {
-    if (_updating || !get_visible()) {
+    if (!get_visible()) {
         return;
     }
 #ifdef DUMP_CHANGE_INFO
@@ -468,13 +462,11 @@ void ColorScales::_sliderAnyGrabbed()
     if (_updating) {
         return;
     }
-    _updating = true;
 	if (!_dragging) {
 		_dragging = TRUE;
         _color.setHeld(true);
         _recalcColor( FALSE );
 	}
-	_updating = false;
 }
 
 void ColorScales::_sliderAnyReleased()
@@ -482,13 +474,11 @@ void ColorScales::_sliderAnyReleased()
     if (_updating) {
         return;
     }
-    _updating = true;
 	if (_dragging) {
 		_dragging = FALSE;
         _color.setHeld(false);
         _recalcColor( FALSE );
 	}
-	_updating = false;
 }
 
 void ColorScales::_sliderAnyChanged()
@@ -501,7 +491,9 @@ void ColorScales::_sliderAnyChanged()
 
 void ColorScales::_adjustmentChanged( ColorScales *scales, guint channel )
 {
-	if (scales->_updating) return;
+	if (scales->_updating) {
+	    return;
+	}
 
 	scales->_updateSliders( (1 << channel) );
 	scales->_recalcColor (TRUE);

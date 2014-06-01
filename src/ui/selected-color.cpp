@@ -28,6 +28,7 @@ SelectedColor::SelectedColor()
     , _alpha(1.0)
     , _held(false)
     , _virgin(true)
+    , _updating(false)
 {
 
 }
@@ -38,7 +39,7 @@ SelectedColor::~SelectedColor() {
 
 void SelectedColor::setColor(SPColor const &color)
 {
-    setColorAlpha( color, _alpha, true);
+    setColorAlpha( color, _alpha);
 }
 
 SPColor SelectedColor::color() const
@@ -49,7 +50,7 @@ SPColor SelectedColor::color() const
 void SelectedColor::setAlpha(gfloat alpha)
 {
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
-    setColorAlpha( _color, alpha, true);
+    setColorAlpha( _color, alpha);
 }
 
 gfloat SelectedColor::alpha() const
@@ -57,12 +58,16 @@ gfloat SelectedColor::alpha() const
     return _alpha;
 }
 
-void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit)
+void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha)
 {
 #ifdef DUMP_CHANGE_INFO
     g_message("SelectedColor::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s) in %s", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit?"YES":"no"), FOO_NAME(_csel));
 #endif
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
+
+    if (_updating) {
+        return;
+    }
 
 #ifdef DUMP_CHANGE_INFO
     g_message("---- SelectedColor::setColorAlpha    virgin:%s   !close:%s    alpha is:%s in %s",
@@ -81,13 +86,14 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit)
         _color = color;
         _alpha = alpha;
 
-        if (emit) {
-            if (_held) {
-                signal_dragged.emit();
-            } else {
-                signal_changed.emit();
-            }
+        _updating = true;
+        if (_held) {
+            signal_dragged.emit();
+        } else {
+            signal_changed.emit();
         }
+        _updating = false;
+
 #ifdef DUMP_CHANGE_INFO
     } else {
         g_message("++++ SelectedColor::setColorAlpha   color:%08x  ==>  _color:%08X   isClose:%s   in %s", color.toRGBA32(alpha), _color.toRGBA32(_alpha),
@@ -102,11 +108,15 @@ void SelectedColor::colorAlpha(SPColor &color, gfloat &alpha) const {
 }
 
 void SelectedColor::setHeld(bool held) {
+    if (_updating) {
+        return;
+    }
     bool grabbed = held && !_held;
     bool released = !held && _held;
 
     _held = held;
 
+    _updating = true;
     if (grabbed) {
         signal_grabbed.emit();
     }
@@ -115,6 +125,7 @@ void SelectedColor::setHeld(bool held) {
         signal_released.emit();
         signal_changed.emit();
     }
+    _updating = false;
 }
 
 void SelectedColor::preserveICC() {

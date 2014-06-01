@@ -456,7 +456,7 @@ ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, 
 void ColorNotebook::_colorChanged()
 {
     _updating = true;
-    _selected_color.setColorAlpha(_color, _alpha, true);
+    _selected_color.setColorAlpha(_color, _alpha);
     _updating = false;
 
     SPColorSelector* cselPage = getCurrentSelector();
@@ -590,7 +590,7 @@ void ColorNotebook::_entryModified (SPColorSelector *csel, SPColorNotebook *colo
     csel->base->getColorAlpha( color, alpha );
 
     nb->_updating = true;
-    nb->_selected_color.setColorAlpha(color, alpha, true);
+    nb->_selected_color.setColorAlpha(color, alpha);
     nb->_updating = false;
     nb->_updateInternals( color, alpha, nb->_dragging );
 }
