@@ -22,6 +22,8 @@ SwatchSelector::SwatchSelector() :
     _gsel(0),
     _updating_color(false)
 {
+    using Inkscape::UI::Widget::ColorNotebook;
+
     GtkWidget *gsel = sp_gradient_selector_new();
     _gsel = SP_GRADIENT_SELECTOR(gsel);
     g_object_set_data( G_OBJECT(gobj()), "base", this );
@@ -31,7 +33,7 @@ SwatchSelector::SwatchSelector() :
 
     pack_start(*Gtk::manage(Glib::wrap(gsel)));
 
-    Gtk::Widget *color_selector = Gtk::manage(ColorNotebook::create(_selected_color));
+    Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(_selected_color));
     color_selector->show();
     pack_start(*color_selector);
 

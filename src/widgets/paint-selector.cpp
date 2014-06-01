@@ -657,6 +657,8 @@ void SPPaintSelector::onSelectedColorChanged() {
 
 static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelector::Mode /*mode*/)
 {
+    using Inkscape::UI::Widget::ColorNotebook;
+
     sp_paint_selector_set_style_buttons(psel, psel->solid);
     gtk_widget_set_sensitive(psel->style, TRUE);
 
@@ -677,7 +679,7 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
         gtk_widget_show(vb);
 
         /* Color selector */
-        Gtk::Widget *color_selector = Gtk::manage(ColorNotebook::create(*(psel->selected_color)));
+        Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*(psel->selected_color)));
         color_selector->show();
         gtk_box_pack_start(GTK_BOX(vb), color_selector->gobj(), TRUE, TRUE, 0);
 

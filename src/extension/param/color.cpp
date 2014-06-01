@@ -32,7 +32,6 @@
 #include "ui/widget/color-notebook.h"
 #include "preferences.h"
 
-
 namespace Inkscape {
 namespace Extension {
 
@@ -88,6 +87,8 @@ void ParamColor::string(std::string &string) const
 
 Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * changeSignal )
 {
+    using Inkscape::UI::Widget::ColorNotebook;
+
 	if (_gui_hidden) return NULL;
 
     _changeSignal = new sigc::signal<void>(*changeSignal);
@@ -99,7 +100,7 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
     }
 
     Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, 4));
-    Gtk::Widget *selector = Gtk::manage(ColorNotebook::create(_color));
+    Gtk::Widget *selector = Gtk::manage(new ColorNotebook(_color));
     hbox->pack_start (*selector, true, true, 0);
     selector->show();
     hbox->show();

@@ -856,6 +856,8 @@ static void sp_grd_ed_del_stop(GtkWidget */*widget*/,  GtkWidget *vb)
 
 static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *select_stop)
 {
+    using Inkscape::UI::Widget::ColorNotebook;
+
     GtkWidget *vb, *w, *f;
 
     g_return_val_if_fail(!gradient || SP_IS_GRADIENT(gradient), NULL);
@@ -991,7 +993,7 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
     selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_dragged), selected_color, G_OBJECT(vb)));
     selected_color->signal_dragged.connect(sigc::bind(sigc::ptr_fun(&sp_gradient_vector_color_changed), selected_color, G_OBJECT(vb)));
 
-    Gtk::Widget *color_selector = Gtk::manage(ColorNotebook::create(*selected_color));
+    Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*selected_color));
     color_selector->show();
     gtk_container_add(GTK_CONTAINER(f), color_selector->gobj());
 

@@ -57,7 +57,7 @@ void ColorPicker::setupDialog(const Glib::ustring &title)
     _colorSelectorDialog.set_title (title);
     _colorSelectorDialog.set_border_width (4);
 
-    _color_selector = Gtk::manage(ColorNotebook::create(_selected_color));
+    _color_selector = Gtk::manage(new ColorNotebook(_selected_color));
 
 #if WITH_GTKMM_3_0
     _colorSelectorDialog.get_content_area()->pack_start (

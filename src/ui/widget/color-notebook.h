@@ -1,16 +1,18 @@
-#ifndef SEEN_SP_COLOR_NOTEBOOK_H
-#define SEEN_SP_COLOR_NOTEBOOK_H
-
-/*
+/**
+ * @file
  * A notebook with RGB, CMYK, CMS, HSL, and Wheel pages
- *
- * Author:
+ */
+/* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
+ *   Tomasz Boczkowski <penginsbacon@gmail.com> (c++-sification)
  *
- * Copyright (C) 2001-2002 Lauris Kaplinski
+ * Copyright (C) 2001-2014 Authors
  *
  * This code is in public domain
  */
+#ifndef SEEN_SP_COLOR_NOTEBOOK_H
+#define SEEN_SP_COLOR_NOTEBOOK_H
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -23,25 +25,29 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <gtk/gtk.h>
 #include <glib.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkmm/grid.h>
+#else
 #include <gtkmm/table.h>
+#endif
 
 #include "color.h"
-#include "widgets/sp-color-selector.h"
 #include "ui/selected-color.h"
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
-struct SPColorNotebook;
-
-class ColorNotebook: public ColorSelector
+class ColorNotebook
+#if GTK_CHECK_VERSION(3,0,0)
+    : public Gtk::Grid
+#else
+    : public Gtk::Table
+#endif
 {
 public:
-    ColorNotebook( SPColorSelector* csel );
+    ColorNotebook(SelectedColor &color);
     virtual ~ColorNotebook();
-
-    //Temporary factory method - transition from SPColorSelector
-    static Gtk::Widget* create(Inkscape::UI::SelectedColor &color);
-
-    virtual void init();
 
 protected:
     struct Page {
@@ -51,25 +57,19 @@ protected:
         bool enabled_full;
     };
 
-    static void _buttonClicked(GtkWidget *widget,  SPColorNotebook *colorbook);
-    static void _picker_clicked(GtkWidget *widget,  SPColorNotebook *colorbook);
+    virtual void _initUI();
+    void _addPage(Page& page);
 
-    virtual void _colorChanged();
-
+    static void _onButtonClicked(GtkWidget *widget, ColorNotebook *colorbook);
+    static void _onPickerClicked(GtkWidget *widget, ColorNotebook *colorbook);
+    static void _onPageSwitched(GtkNotebook *notebook, GtkWidget *page,
+            guint page_num, ColorNotebook *colorbook);
     virtual void _onSelectedColorChanged();
-    virtual void _onSelectedColorDragged();
-    virtual void _onSelectedColorGrabbed();
-    virtual void _onSelectedColorReleased();
 
     void _updateICCButtons();
     void _setCurrentPage(int i);
 
-    GtkWidget* _addPage(Page& page);
-
-    Inkscape::UI::SelectedColor _selected_color_tmp;
     Inkscape::UI::SelectedColor &_selected_color;
-    gboolean _updating : 1;
-    gulong _switchId;
     gulong _entryId;
     GtkWidget *_book;
     GtkWidget *_buttonbox;
@@ -103,40 +103,10 @@ private:
     */
 };
 
-
-
-
-
-#define SP_TYPE_COLOR_NOTEBOOK (sp_color_notebook_get_type ())
-#define SP_COLOR_NOTEBOOK(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_COLOR_NOTEBOOK, SPColorNotebook))
-#define SP_COLOR_NOTEBOOK_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_COLOR_NOTEBOOK, SPColorNotebookClass))
-#define SP_IS_COLOR_NOTEBOOK(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_COLOR_NOTEBOOK))
-#define SP_IS_COLOR_NOTEBOOK_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_NOTEBOOK))
-
-struct SPColorNotebook {
-    SPColorSelector parent;    /* Parent */
-};
-
-struct SPColorNotebookClass {
-    SPColorSelectorClass parent_class;
-
-    void (* grabbed) (SPColorNotebook *rgbsel);
-    void (* dragged) (SPColorNotebook *rgbsel);
-    void (* released) (SPColorNotebook *rgbsel);
-    void (* changed) (SPColorNotebook *rgbsel);
-};
-
-GType sp_color_notebook_get_type(void);
-
-GtkWidget *sp_color_notebook_new (void);
-
-/* void sp_color_notebook_set_mode (SPColorNotebook *csel, SPColorNotebookMode mode); */
-/* SPColorNotebookMode sp_color_notebook_get_mode (SPColorNotebook *csel); */
-
-
-
+}
+}
+}
 #endif // SEEN_SP_COLOR_NOTEBOOK_H
-
 /*
   Local Variables:
   mode:c++
