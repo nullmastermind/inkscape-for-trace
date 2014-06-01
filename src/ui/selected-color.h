@@ -39,6 +39,9 @@ public:
     void setAlpha(gfloat alpha);
     gfloat alpha() const;
 
+    void setValue(guint32 value);
+    guint32 value() const;
+
     void setColorAlpha(SPColor const &color, gfloat alpha);
     void colorAlpha(SPColor &color, gfloat &alpha) const;
 

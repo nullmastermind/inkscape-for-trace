@@ -45,6 +45,7 @@
 
 using Inkscape::CMSSystem;
 
+using namespace Inkscape::UI;
 using namespace Inkscape::UI::Widget;
 
 struct SPColorNotebookTracker {
@@ -383,6 +384,7 @@ GtkWidget *sp_color_notebook_new()
 
 ColorNotebook::ColorNotebook( SPColorSelector* csel )
     : ColorSelector( csel )
+    , _selected_color(_selected_color_tmp)
 {
     Page *page;
 
@@ -398,6 +400,13 @@ ColorNotebook::ColorNotebook( SPColorSelector* csel )
     page = new Page(new ColorICCSelectorFactory, true);
     _available_pages.push_back(page);
 #endif
+}
+
+Gtk::Widget *ColorNotebook::create(SelectedColor &color) {
+    GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_NOTEBOOK);
+    SPColorSelector *s = SP_COLOR_SELECTOR(w);
+    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(s->base);
+    return Glib::wrap(w);
 }
 
 ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)

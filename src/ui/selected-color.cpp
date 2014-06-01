@@ -58,6 +58,18 @@ gfloat SelectedColor::alpha() const
     return _alpha;
 }
 
+void SelectedColor::setValue(guint32 value)
+{
+    SPColor color(value);
+    gfloat alpha = SP_RGBA32_A_F(value);
+    setColorAlpha(color, alpha);
+}
+
+guint32 SelectedColor::value() const
+{
+    return color().toRGBA32(_alpha);
+}
+
 void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha)
 {
 #ifdef DUMP_CHANGE_INFO

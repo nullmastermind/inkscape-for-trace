@@ -38,6 +38,9 @@ public:
     ColorNotebook( SPColorSelector* csel );
     virtual ~ColorNotebook();
 
+    //Temporary factory method - transition from SPColorSelector
+    static Gtk::Widget* create(Inkscape::UI::SelectedColor &color);
+
     virtual void init();
 
 protected:
@@ -63,7 +66,8 @@ protected:
 
     GtkWidget* _addPage(Page& page);
 
-    Inkscape::UI::SelectedColor _selected_color;
+    Inkscape::UI::SelectedColor _selected_color_tmp;
+    Inkscape::UI::SelectedColor &_selected_color;
     gboolean _updating : 1;
     gulong _switchId;
     gulong _entryId;
