@@ -274,7 +274,6 @@ void ColorNotebook::_initUI()
     gtk_widget_set_margin_top(rgbabox, YPAD);
     gtk_widget_set_margin_bottom(rgbabox, YPAD);
     attach(*Glib::wrap(rgbabox), 0, row, 2, 1);
-    gtk_grid_attach(GTK_GRID(table), rgbabox, 0, row, 2, 1);
 #else
     attach(*Glib::wrap(rgbabox), 0, 2, row, row + 1, Gtk::FILL, Gtk::SHRINK, XPAD, YPAD);
 #endif
