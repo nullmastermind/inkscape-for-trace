@@ -40,9 +40,6 @@ public:
 
     virtual void init();
 
-    SPColorSelector* getCurrentSelector();
-    void switchPage( GtkNotebook *notebook, GtkWidget *page, guint page_num );
-
 protected:
     struct Page {
         Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full);
@@ -51,11 +48,6 @@ protected:
         bool enabled_full;
     };
 
-    static void _entryGrabbed( SPColorSelector *csel, SPColorNotebook *colorbook );
-    static void _entryDragged( SPColorSelector *csel, SPColorNotebook *colorbook );
-    static void _entryReleased( SPColorSelector *csel, SPColorNotebook *colorbook );
-    static void _entryChanged( SPColorSelector *csel, SPColorNotebook *colorbook );
-    static void _entryModified( SPColorSelector *csel, SPColorNotebook *colorbook );
     static void _buttonClicked(GtkWidget *widget,  SPColorNotebook *colorbook);
     static void _picker_clicked(GtkWidget *widget,  SPColorNotebook *colorbook);
 
@@ -66,15 +58,13 @@ protected:
     virtual void _onSelectedColorGrabbed();
     virtual void _onSelectedColorReleased();
 
-    void _updateRgbaEntry( const SPColor& color, gfloat alpha );
+    void _updateICCButtons();
     void _setCurrentPage(int i);
 
     GtkWidget* _addPage(Page& page);
 
     Inkscape::UI::SelectedColor _selected_color;
     gboolean _updating : 1;
-    gboolean _updatingrgba : 1;
-    gboolean _dragging : 1;
     gulong _switchId;
     gulong _entryId;
     GtkWidget *_book;

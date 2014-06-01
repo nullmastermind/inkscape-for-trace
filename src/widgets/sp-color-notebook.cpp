@@ -112,39 +112,9 @@ sp_color_notebook_switch_page(GtkNotebook *notebook,
 {
     if ( colorbook )
     {
-        ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-        nb->switchPage( notebook, page, page_num );
-
         // remember the page we switched to
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setInt("/colorselector/page", page_num);
-    }
-}
-
-void ColorNotebook::switchPage(GtkNotebook*,
-                              GtkWidget*,
-                              guint page_num)
-{
-    SPColorSelector* csel;
-    GtkWidget* widget;
-
-    if ( gtk_notebook_get_current_page (GTK_NOTEBOOK (_book)) >= 0 )
-    {
-        csel = getCurrentSelector();
-        if (csel) {
-            csel->base->getColorAlpha(_color, _alpha);
-        }
-    }
-    widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (_book), page_num);
-    if ( widget && SP_IS_COLOR_SELECTOR(widget) )
-    {
-        csel = SP_COLOR_SELECTOR (widget);
-        if (csel) {
-            csel->base->setColorAlpha( _color, _alpha );
-        }
-
-        // Temporary workaround to undo a spurious GRABBED
-        _released();
     }
 }
 
@@ -430,23 +400,6 @@ ColorNotebook::ColorNotebook( SPColorSelector* csel )
 #endif
 }
 
-SPColorSelector* ColorNotebook::getCurrentSelector()
-{
-    SPColorSelector* csel = NULL;
-    gint current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (_book));
-
-    if ( current_page >= 0 )
-    {
-        GtkWidget* widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (_book), current_page);
-        if ( SP_IS_COLOR_SELECTOR (widget) )
-        {
-            csel = SP_COLOR_SELECTOR (widget);
-        }
-    }
-
-    return csel;
-}
-
 ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
     : selector_factory(selector_factory)
     , enabled_full(enabled_full)
@@ -457,13 +410,8 @@ void ColorNotebook::_colorChanged()
 {
     _updating = true;
     _selected_color.setColorAlpha(_color, _alpha);
+    _updateICCButtons();
     _updating = false;
-
-    SPColorSelector* cselPage = getCurrentSelector();
-    if ( cselPage )
-    {
-        cselPage->base->setColorAlpha( _color, _alpha );
-    }
 }
 
 void ColorNotebook::_picker_clicked(GtkWidget * /*widget*/, SPColorNotebook * /*colorbook*/)
@@ -475,8 +423,11 @@ void ColorNotebook::_picker_clicked(GtkWidget * /*widget*/, SPColorNotebook * /*
 }
 
 // TODO pass in param so as to avoid the need for SP_ACTIVE_DOCUMENT
-void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
+void ColorNotebook::_updateICCButtons()
 {
+    SPColor color = _selected_color.color();
+    gfloat alpha = _selected_color.alpha();
+
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -538,63 +489,6 @@ void ColorNotebook::_buttonClicked(GtkWidget *widget,  SPColorNotebook *colorboo
     }
 }
 
-void ColorNotebook::_entryGrabbed (SPColorSelector *, SPColorNotebook *colorbook)
-{
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-    nb->_grabbed();
-}
-
-void ColorNotebook::_entryDragged (SPColorSelector *csel, SPColorNotebook *colorbook)
-{
-    gboolean oldState;
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-
-    oldState = nb->_dragging;
-
-    nb->_dragging = TRUE;
-    nb->_entryModified( csel, colorbook );
-
-    nb->_dragging = oldState;
-}
-
-void ColorNotebook::_entryReleased (SPColorSelector *, SPColorNotebook *colorbook)
-{
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-    nb->_released();
-}
-
-void ColorNotebook::_entryChanged (SPColorSelector *csel, SPColorNotebook *colorbook)
-{
-    gboolean oldState;
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-
-    oldState = nb->_dragging;
-
-    nb->_dragging = FALSE;
-    nb->_entryModified( csel, colorbook );
-
-    nb->_dragging = oldState;
-}
-
-void ColorNotebook::_entryModified (SPColorSelector *csel, SPColorNotebook *colorbook)
-{
-    g_return_if_fail (colorbook != NULL);
-    g_return_if_fail (SP_IS_COLOR_NOTEBOOK (colorbook));
-    g_return_if_fail (csel != NULL);
-    g_return_if_fail (SP_IS_COLOR_SELECTOR (csel));
-
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-    SPColor color;
-    gfloat alpha = 1.0;
-
-    csel->base->getColorAlpha( color, alpha );
-
-    nb->_updating = true;
-    nb->_selected_color.setColorAlpha(color, alpha);
-    nb->_updating = false;
-    nb->_updateInternals( color, alpha, nb->_dragging );
-}
-
 void ColorNotebook::_onSelectedColorChanged() {
     if (_updating) {
         return;
@@ -602,36 +496,34 @@ void ColorNotebook::_onSelectedColorChanged() {
 
     SPColor color;
     gfloat alpha = 1.0;
-
-    _updating = true;
     _selected_color.colorAlpha(color, alpha);
-    _updateInternals(color, alpha, _dragging);
-    _updating = false;
+    _updateInternals(color, alpha, false);
+    _updateICCButtons();
 }
 
 void ColorNotebook::_onSelectedColorDragged() {
     if (_updating) {
         return;
     }
-    bool oldState = _dragging;
-
-    _dragging = true;
     SPColor color;
     gfloat alpha = 1.0;
-
-    _updating = true;
     _selected_color.colorAlpha(color, alpha);
     _updateInternals(color, alpha, true);
-    _updating = false;
-
-    _dragging = oldState;
+    _updateICCButtons();
 }
 
 void ColorNotebook::_onSelectedColorGrabbed() {
+    if (_updating) {
+        return;
+    }
+
     _grabbed();
 }
 
 void ColorNotebook::_onSelectedColorReleased() {
+    if (_updating) {
+        return;
+    }
     _released();
 }
 
@@ -656,14 +548,6 @@ GtkWidget* ColorNotebook::_addPage(Page& page) {
         gtk_box_pack_start (GTK_BOX (_buttonbox), _buttons[page_num], TRUE, TRUE, 0);
 
         g_signal_connect (G_OBJECT (_buttons[page_num]), "clicked", G_CALLBACK (_buttonClicked), _csel);
-
-        if (SP_IS_COLOR_SELECTOR(selector_widget->gobj())) {
-            //Connect glib signals of non-refactored widgets
-            g_signal_connect (selector_widget->gobj(), "grabbed", G_CALLBACK (_entryGrabbed), _csel);
-            g_signal_connect (selector_widget->gobj(), "dragged", G_CALLBACK (_entryDragged), _csel);
-            g_signal_connect (selector_widget->gobj(), "released", G_CALLBACK (_entryReleased), _csel);
-            g_signal_connect (selector_widget->gobj(), "changed", G_CALLBACK (_entryChanged), _csel);
-        }
     }
 
     return selector_widget->gobj();
