@@ -38,7 +38,7 @@ namespace Extension {
 
 ParamColor::~ParamColor(void)
 {
-
+    _color_changed.disconnect();
 }
 
 guint32 ParamColor::set( guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/ )
