@@ -29,7 +29,7 @@
 
 #include <color.h>
 #include "widgets/sp-color-selector.h"
-#include "widgets/sp-color-notebook.h"
+#include "ui/widget/color-notebook.h"
 #include "preferences.h"
 
 

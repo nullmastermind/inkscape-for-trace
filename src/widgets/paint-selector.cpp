@@ -35,7 +35,6 @@
 #include "widgets/widget-sizes.h"
 #include "xml/repr.h"
 
-#include "sp-color-notebook.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 /* fixme: Move it from dialogs to here */
@@ -50,6 +49,7 @@
 #include "io/sys.h"
 #include "helper/stock-items.h"
 #include "ui/icon-names.h"
+#include "ui/widget/color-notebook.h"
 
 #include "paint-selector.h"
 

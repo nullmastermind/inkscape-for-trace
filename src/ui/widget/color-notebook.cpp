@@ -26,20 +26,20 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 
-#include "../dialogs/dialog-events.h"
-#include "../preferences.h"
-#include "sp-color-notebook.h"
-#include "spw-utilities.h"
+#include "dialogs/dialog-events.h"
+#include "preferences.h"
+#include "widgets/spw-utilities.h"
 #include "svg/svg-icc-color.h"
-#include "../inkscape.h"
-#include "../document.h"
-#include "../profile-manager.h"
+#include "inkscape.h"
+#include "document.h"
+#include "profile-manager.h"
 #include "color-profile.h"
 #include "cms-system.h"
 #include "tools-switch.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-entry.h"
 #include "ui/widget/color-icc-selector.h"
+#include "ui/widget/color-notebook.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-wheel-selector.h"
 

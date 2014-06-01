@@ -25,8 +25,8 @@
 #include <glib.h>
 #include <gtkmm/table.h>
 
-#include "../color.h"
-#include "sp-color-selector.h"
+#include "color.h"
+#include "widgets/sp-color-selector.h"
 #include "ui/selected-color.h"
 
 

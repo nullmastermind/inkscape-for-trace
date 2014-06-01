@@ -5,11 +5,11 @@
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
-#include "sp-color-notebook.h"
 #include "sp-stop.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
 #include "verbs.h"
+#include "ui/widget/color-notebook.h"
 #include "xml/node.h"
 
 namespace Inkscape

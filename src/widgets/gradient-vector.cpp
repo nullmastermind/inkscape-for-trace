@@ -55,6 +55,7 @@
 #include "document-undo.h"
 
 #include "ui/selected-color.h"
+#include "ui/widget/color-notebook.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::SelectedColor;
@@ -491,11 +492,10 @@ void SPGradientVectorSelector::setSwatched()
   ###                 Vector Editing Widget
   ##################################################################*/
 
-#include "../widgets/sp-color-notebook.h"
 #include "../widgets/widget-sizes.h"
 #include "../xml/node-event-vector.h"
 #include "../svg/svg-color.h"
-
+#include "ui/widget/color-notebook.h"
 
 #define PAD 4
 

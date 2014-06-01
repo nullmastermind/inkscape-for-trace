@@ -17,7 +17,7 @@
 #include "document-undo.h"
 #include "dialogs/dialog-events.h"
 
-#include "widgets/sp-color-notebook.h"
+#include "ui/widget/color-notebook.h"
 #include "verbs.h"
 
 
