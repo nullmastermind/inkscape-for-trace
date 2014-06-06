@@ -12,6 +12,7 @@ set(live_effects_SRC
 	lpe-curvestitch.cpp
 	lpe-dynastroke.cpp
 	lpe-envelope.cpp
+	lpe-envelope-perspective.cpp
 	lpe-extrude.cpp
 	lpe-gears.cpp
 	lpe-interpolate.cpp
