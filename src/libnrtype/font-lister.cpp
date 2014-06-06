@@ -25,6 +25,13 @@
 
 //#define DEBUG_FONT
 
+// CSS dictates that font family names are case insensitive.
+// This should really implement full Unicode case unfolding.
+bool familyNamesAreEqual( const Glib::ustring &a, const Glib::ustring &b ) {
+
+    return( a.casefold().compare( b.casefold() ) == 0 );
+}
+
 namespace Inkscape
 {
     FontLister::FontLister ()
@@ -83,6 +90,15 @@ namespace Inkscape
 	font_list_store->thaw_notify();
 
         style_list_store       = Gtk::ListStore::create (FontStyleList);
+
+        // Initialize style store with defaults
+        style_list_store->freeze_notify();
+        style_list_store->clear();
+        for (GList *l=default_styles; l; l = l->next) {
+            Gtk::TreeModel::iterator treeModelIter = style_list_store->append();
+            (*treeModelIter)[FontStyleList.styles] = (char*)l->data;
+        }
+        style_list_store->thaw_notify();
     }
 
     // Example of how to use "foreach_iter"
@@ -111,7 +127,7 @@ namespace Inkscape
         Gtk::TreeModel::iterator iter2 = font_list_store->get_iter( "0" );
         while( iter2 != font_list_store->children().end() ) {
           Gtk::TreeModel::Row row = *iter2;
-          if( row[FontList.onSystem] && tokens[0].compare( row[FontList.family] ) == 0 ) {
+          if( row[FontList.onSystem] && familyNamesAreEqual( tokens[0], row[FontList.family] ) ) {
             styles = row[FontList.styles];
             break;
           }
@@ -188,7 +204,7 @@ namespace Inkscape
 	  Gtk::TreeModel::iterator iter2 = font_list_store->get_iter( "0" );
 	  while( iter2 != font_list_store->children().end() ) {
 	    Gtk::TreeModel::Row row = *iter2;
-	    if( row[FontList.onSystem] && tokens[0].compare( row[FontList.family] ) == 0 ) {
+	    if( row[FontList.onSystem] && familyNamesAreEqual( tokens[0], row[FontList.family] ) ) {
 	      styles = row[FontList.styles];
 	      break;
 	    }
@@ -219,7 +235,7 @@ namespace Inkscape
 	  path.push_back( row );
 	  Gtk::TreeModel::iterator iter = font_list_store->get_iter( path );
 	  if( iter ) {
-	    if( current_family.compare( (*iter)[FontList.family] ) == 0 ) {
+            if( familyNamesAreEqual( current_family, (*iter)[FontList.family] ) ) {
 	      current_family_row = row;
 	      break;
 	    }
@@ -231,37 +247,12 @@ namespace Inkscape
       font_list_store->thaw_notify();
     }
 
-    // FIXME: why do we parse the style attribute instead of the object's SPStyle?
     void
     FontLister::update_font_list_recursive( SPObject *r, std::list<Glib::ustring> *l ) {
 
-      const gchar *style = r->getRepr()->attribute("style");
-      if( style != NULL ) {
-
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(";", style );
-        for( size_t i=0; i < tokens.size(); ++i ) {
-
-	  Glib::ustring token = tokens[i];
-	  size_t found = token.find("font-family:");
-
-	  if( found != Glib::ustring::npos ) {
-
-	    // Remove "font-family:"
-	    token.erase(found,12);
-
-	    // Remove any leading single or double quote
-	    if( token[0] == '\'' || token[0] == '"' ) {
-	      token.erase(0,1);
-	    }
-
-	    // Remove any trailing single or double quote
-	    if( token[token.length()-1] == '\'' || token[token.length()-1] == '"' ) {
-	      token.erase(token.length()-1);
-	    }
-
-	    l->push_back( token );
-	  }
-        }
+      const gchar *font_family = r->style->font_family.value;
+      if( font_family ) {
+          l->push_back( Glib::ustring( font_family ) );
       }
 
       for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
@@ -400,6 +391,7 @@ namespace Inkscape
 
       std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec( current_fontspec );
       set_font_family( ui.first );
+      set_font_style( ui.second );
 
 #ifdef DEBUG_FONT
       std::cout << "   family_row:           :" << current_family_row << ":" << std::endl;
@@ -440,7 +432,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
 #endif
 
     // No need to do anything if new family is same as old family.
-    if ( new_family.compare( current_family ) == 0 ) {
+    if ( familyNamesAreEqual( new_family, current_family ) ) {
 #ifdef DEBUG_FONT
 	std::cout << "FontLister::new_font_family: exit: no change in family." << std::endl;
 	std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
@@ -459,7 +451,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
 
 	Gtk::TreeModel::Row row = *iter;
 
-	if( new_family.compare( row[FontList.family] ) == 0 ) {
+	if( familyNamesAreEqual( new_family, row[FontList.family] ) ) {
             styles = row[FontList.styles];
             break;
 	}
@@ -704,18 +696,19 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
 	  fontspec = style->font_family.value;
 	  fontspec += ",";
 
+          // Use weight names as defined by Pango
 	  switch (style->font_weight.computed) {
 
 	  case SP_CSS_FONT_WEIGHT_100:
-	    fontspec += " 100";
+	    fontspec += " Thin";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_200:
-		fontspec += " 200";
+		fontspec += " Ultra-Light";
 		break;
 
 	  case SP_CSS_FONT_WEIGHT_300:
-	    fontspec += " 300";
+	    fontspec += " Light";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_400:
@@ -724,24 +717,24 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_500:
-	    fontspec += " 500";
+	    fontspec += " Medium";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_600:
-	    fontspec += " 600";
+	    fontspec += " Semi-Bold";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_700:
 	  case SP_CSS_FONT_WEIGHT_BOLD:
-	    fontspec += " bold";
+	    fontspec += " Bold";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_800:
-	    fontspec += " 800";
+	    fontspec += " Ultra-Bold";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_900:
-	    fontspec += " 900";
+	    fontspec += " Heavy";
 	    break;
 
 	  case SP_CSS_FONT_WEIGHT_LIGHTER:
@@ -837,7 +830,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
 
 	Gtk::TreeModel::Row row = *iter;
 
-	if( family.compare( row[FontList.family] ) == 0 ) {
+	if( familyNamesAreEqual( family, row[FontList.family] ) ) {
 	  return row;
 	}
 
@@ -863,7 +856,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family (Glib::ustri
 
 	Gtk::TreeModel::Row row = *iter;
 
-	if( style.compare( row[FontStyleList.styles] ) == 0 ) {
+	if( familyNamesAreEqual( style, row[FontStyleList.styles] ) ) {
 	  return row;
 	}
 
@@ -1051,7 +1044,7 @@ void font_lister_cell_data_func(GtkCellLayout     */*cell_layout*/,
                  valid = gtk_tree_model_iter_next( GTK_TREE_MODEL(model), &iter ) ) {
 
                 gtk_tree_model_get(model, &iter, 0, &family, 2, &onSystem, -1);
-                if( onSystem && token.compare( family ) == 0 ) {
+                if( onSystem && familyNamesAreEqual( token,  family ) ) {
                     found = true;
                     break;
                 }

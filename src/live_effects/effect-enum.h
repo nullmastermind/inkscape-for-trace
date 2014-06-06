@@ -60,6 +60,7 @@ enum EffectType {
     BOUNDING_BOX,
     JOIN_TYPE,
     TAPER_STROKE,
+    ENVELOPE_PERSPECTIVE,
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
 };
 

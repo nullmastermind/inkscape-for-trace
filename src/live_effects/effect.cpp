@@ -57,6 +57,7 @@
 #include "live_effects/lpe-bounding-box.h"
 #include "live_effects/lpe-jointype.h"
 #include "live_effects/lpe-taperstroke.h"
+#include "live_effects/lpe-envelope-perspective.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -144,6 +145,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.91 */
     {SIMPLIFY,               N_("Simplify"),     "simplify"},
     {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
+    {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -290,11 +292,15 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case TAPER_STROKE:
             neweffect = static_cast<Effect*> ( new LPETaperStroke(lpeobj) );
+            break;
         case SIMPLIFY:
             neweffect = static_cast<Effect*> ( new LPESimplify(lpeobj) );
             break;
         case LATTICE2:
             neweffect = static_cast<Effect*> ( new LPELattice2(lpeobj) );
+            break;
+        case ENVELOPE_PERSPECTIVE:
+            neweffect = static_cast<Effect*> ( new LPEEnvelopePerspective(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
