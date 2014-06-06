@@ -135,26 +135,26 @@ public:
   // closeIfNeeded=false prevent the function from closing the path (resulting in a non-eulerian graph
   // pathID is a identification number for the path, and is used for recomposing curves from polylines
   // give each different Path a different ID, and feed the appropriate orig[] to the ConvertToForme() function
-  void Fill(Shape *dest, int pathID = -1, bool justAdd = false,
+  void Fill(Shape &dest, int pathID = -1, bool justAdd = false,
             bool closeIfNeeded = true, bool invert = false);
 
   // - stroke the path; usual parameters: type of cap=butt, type of join=join and miter (see LivarotDefs.h)
   // doClose treat the path as closed (ie a loop)
-  void Stroke(Shape *dest, bool doClose, double width, JoinType join,
+  void Stroke(Shape &dest, bool doClose, double width, JoinType join,
               ButtType butt, double miter, bool justAdd = false);
 
   // build a Path that is the outline of the Path instance's description (the result is stored in dest)
   // it doesn't compute the exact offset (it's way too complicated, but an approximation made of cubic bezier patches
   //  and segments. the algorithm was found in a plugin for Impress (by Chris Cox), but i can't find it back...
-  void Outline(Path *dest, double width, JoinType join, ButtType butt,
+  void Outline(Path &dest, double width, JoinType join, ButtType butt,
                double miter);
 
   // half outline with edges having the same direction as the original
-  void OutsideOutline(Path *dest, double width, JoinType join, ButtType butt,
+  void OutsideOutline(Path &dest, double width, JoinType join, ButtType butt,
                       double miter);
 
   // half outline with edges having the opposite direction as the original
-  void InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
+  void InsideOutline (Path & dest, double width, JoinType join, ButtType butt,
 		      double miter);
 
   // polyline to cubic bezier patches
@@ -184,7 +184,7 @@ public:
   void  LoadPath(Geom::Path const &path, Geom::Affine const &tr, bool doTransformation, bool append = false);
   void  LoadPathVector(Geom::PathVector const &pv, Geom::Affine const &tr, bool doTransformation);
   void  LoadPathVector(Geom::PathVector const &pv);
-  Geom::PathVector* MakePathVector();
+  Geom::PathVector MakePathVector();
 
   void  Transform(const Geom::Affine &trans);
 

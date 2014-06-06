@@ -406,12 +406,12 @@ void SPOffset::set_shape() {
         if (this->rad >= 0)
         {
             o_width = this->rad;
-            orig->OutsideOutline (res, o_width, join_round, butt_straight, 20.0);
+            orig->OutsideOutline (*res, o_width, join_round, butt_straight, 20.0);
         }
         else
         {
             o_width = -this->rad;
-            orig->OutsideOutline (res, -o_width, join_round, butt_straight, 20.0);
+            orig->OutsideOutline (*res, -o_width, join_round, butt_straight, 20.0);
         }
 
         if (o_width >= 1.0)
@@ -424,7 +424,7 @@ void SPOffset::set_shape() {
             //      res->ConvertForOffset (o_width, orig, offset->rad);
             res->ConvertWithBackData (o_width);
         }
-        res->Fill (theShape, 0);
+        res->Fill (*theShape, 0);
         theRes->ConvertToShape (theShape, fill_positive);
         originaux[0] = res;
 
@@ -489,7 +489,7 @@ void SPOffset::set_shape() {
             orig->ConvertWithBackData (0.5*o_width);
         }
 
-        orig->Fill (theShape, 0);
+        orig->Fill (*theShape, 0);
         theRes->ConvertToShape (theShape, fill_positive);
 
         Path *originaux[1];
@@ -527,7 +527,7 @@ void SPOffset::set_shape() {
                 if ( partSurf < 0 ) { // inverse par rapport a la realite
                     // plein
                     holes[i]=0;
-                    parts[i]->Fill(oneCleanPart,0);
+                    parts[i]->Fill(*oneCleanPart, 0);
                     onePart->ConvertToShape(oneCleanPart,fill_positive); // there aren't intersections in that one, but maybe duplicate points and null edges
                     oneCleanPart->MakeOffset(onePart,this->rad,join_round,20.0);
                     onePart->ConvertToShape(oneCleanPart,fill_positive);
@@ -564,7 +564,7 @@ void SPOffset::set_shape() {
                 } else {
                     // trou
                     holes[i]=1;
-                    parts[i]->Fill(oneCleanPart,0,false,true,true);
+                    parts[i]->Fill(*oneCleanPart, 0, false, true, true);
                     onePart->ConvertToShape(oneCleanPart,fill_positive);
                     oneCleanPart->MakeOffset(onePart,-this->rad,join_round,20.0);
                     onePart->ConvertToShape(oneCleanPart,fill_positive);
@@ -614,9 +614,9 @@ void SPOffset::set_shape() {
                     parts[i]->ConvertWithBackData(1.0);
 
                     if ( holes[i] ) {
-                        parts[i]->Fill(theShape,i,true,true,true);
+                        parts[i]->Fill(*theShape,i,true,true,true);
                     } else {
-                        parts[i]->Fill(theShape,i,true,true,false);
+                        parts[i]->Fill(*theShape,i,true,true,false);
                     }
                 }
             }
@@ -808,7 +808,7 @@ sp_offset_distance_to_original (SPOffset * offset, Geom::Point px)
      */
     // move
     ((Path *) offset->originalPath)->Convert (1.0);
-    ((Path *) offset->originalPath)->Fill (theShape, 0);
+    ((Path *) offset->originalPath)->Fill (*theShape, 0);
     theRes->ConvertToShape (theShape, fill_oddEven);
 
     if (theRes->numberOfEdges() <= 1)
@@ -987,7 +987,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
     Shape *theShape = new Shape;
 
     finalPath->Convert (1.0);
-    finalPath->Fill (theShape, 0);
+    finalPath->Fill (*theShape, 0);
 
     if (theShape->hasPoints())
     {
@@ -1174,7 +1174,7 @@ refresh_offset_source(SPOffset* offset)
         Shape *theRes = new Shape;
 
         orig->ConvertWithBackData (1.0);
-        orig->Fill (theShape, 0);
+        orig->Fill (*theShape, 0);
 
         css = sp_repr_css_attr (offset->sourceRepr , "style");
         val = sp_repr_css_property (css, "fill-rule", NULL);

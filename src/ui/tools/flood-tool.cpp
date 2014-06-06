@@ -408,7 +408,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
             Shape *path_shape = new Shape();
         
             path->ConvertWithBackData(0.03);
-            path->Fill(path_shape, 0);
+            path->Fill(*path_shape, 0);
             delete path;
         
             Shape *expanded_path_shape = new Shape();

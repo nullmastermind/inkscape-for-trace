@@ -1,4 +1,5 @@
 /*
+ * TODO: clean this up
  */
 
 #ifdef HAVE_CONFIG_H
@@ -382,7 +383,7 @@ static void         GetDest(SPObject* child,Shape **computed)
         temp->LoadPathVector(curve->get_pathvector(), tr_mat, true);
 		Shape*  n_shp=new Shape;
 		temp->Convert(0.25);
-		temp->Fill(n_shp,0);
+		temp->Fill(*n_shp,0);
 		Shape*  uncross=new Shape;
 		SPStyle* style = u_child->style;
 		if ( style && style->fill_rule.computed == SP_WIND_RULE_EVENODD ) {

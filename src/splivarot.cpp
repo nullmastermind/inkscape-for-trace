@@ -156,13 +156,13 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
         originaux[0]->ConvertWithBackData(0.1);
 
-        originaux[0]->Fill(theShape, 0);
+        originaux[0]->Fill(*theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
         originaux[1]->ConvertWithBackData(0.1);
 
-        originaux[1]->Fill(theShape, 1);
+        originaux[1]->Fill(*theShape, 1);
 
         theShapeB->ConvertToShape(theShape, origWind[1]);
         
@@ -191,13 +191,13 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
         }
         originaux[0]->ConvertWithBackData(1.0);
 
-        originaux[0]->Fill(theShape, 0);
+        originaux[0]->Fill(*theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
         originaux[1]->ConvertWithBackData(1.0);
 
-        originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
+        originaux[1]->Fill(*theShape, 1,false,false,false); //do not closeIfNeeded
 
         theShapeB->ConvertToShape(theShape, fill_justDont); // fill_justDont doesn't computes winding numbers
 
@@ -218,11 +218,11 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
         }
         originaux[0]->ConvertWithBackData(1.0);
 
-        originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
+        originaux[0]->Fill(*theShapeA, 0,false,false,false); // don't closeIfNeeded
 
         originaux[1]->ConvertWithBackData(1.0);
 
-        originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
+        originaux[1]->Fill(*theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
 
         theShape->ConvertToShape(theShapeA, fill_justDont);
 
@@ -467,7 +467,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
         originaux[0]->ConvertWithBackData(0.1);
 
-        originaux[0]->Fill(theShape, 0);
+        originaux[0]->Fill(*theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
@@ -475,7 +475,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         for (GSList *l = il->next; l != NULL; l = l->next) {
             originaux[curOrig]->ConvertWithBackData(0.1);
 
-            originaux[curOrig]->Fill(theShape, curOrig);
+            originaux[curOrig]->Fill(*theShape, curOrig);
 
             theShapeB->ConvertToShape(theShape, origWind[curOrig]);
 
@@ -549,16 +549,16 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         }
         originaux[0]->ConvertWithBackData(1.0);
 
-        originaux[0]->Fill(theShape, 0);
+        originaux[0]->Fill(*theShape, 0);
 
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
         originaux[1]->ConvertWithBackData(1.0);
 
         if ((originaux[1]->pts.size() == 2) && originaux[1]->pts[0].isMoveTo && !originaux[1]->pts[1].isMoveTo)
-            originaux[1]->Fill(theShape, 1,false,true,false); // see LP Bug 177956
+            originaux[1]->Fill(*theShape, 1,false,true,false); // see LP Bug 177956
         else
-            originaux[1]->Fill(theShape, 1,false,false,false); //do not closeIfNeeded
+            originaux[1]->Fill(*theShape, 1,false,false,false); //do not closeIfNeeded
 
         theShapeB->ConvertToShape(theShape, fill_justDont); // fill_justDont doesn't computes winding numbers
 
@@ -579,11 +579,11 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         }
         originaux[0]->ConvertWithBackData(1.0);
 
-        originaux[0]->Fill(theShapeA, 0,false,false,false); // don't closeIfNeeded
+        originaux[0]->Fill(*theShapeA, 0,false,false,false); // don't closeIfNeeded
 
         originaux[1]->ConvertWithBackData(1.0);
 
-        originaux[1]->Fill(theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
+        originaux[1]->Fill(*theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
 
         theShape->ConvertToShape(theShapeA, fill_justDont);
 
@@ -1014,9 +1014,9 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
         orig->DashPolylineFromStyle(i_style, scale, 0);
 
         Shape* theShape = new Shape;
-        orig->Stroke(theShape, false, 0.5*o_width, o_join, o_butt,
+        orig->Stroke(*theShape, false, 0.5*o_width, o_join, o_butt,
                      0.5 * o_miter);
-        orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
+        orig->Outline(*res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
 
         if (!bbox_only) {
             Shape *theRes = new Shape;
@@ -1030,7 +1030,7 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
         }
         delete theShape;
     } else {
-        orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
+        orig->Outline(*res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
 
         if (!bbox_only) {
             orig->Coalesce(0.5 * o_width);
@@ -1038,7 +1038,7 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
             Shape *theRes = new Shape;
 
             res->ConvertWithBackData(1.0);
-            res->Fill(theShape, 0);
+            res->Fill(*theShape, 0);
             theRes->ConvertToShape(theShape, fill_positive);
 
             Path *originaux[1];
@@ -1060,7 +1060,7 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
 
 
     if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
-        ret_pathv = bbox_only ? res->MakePathVector() : orig->MakePathVector();
+        ret_pathv = new Geom::PathVector(bbox_only ? (res->MakePathVector()) : (orig->MakePathVector()));
 
         if (SP_IS_SHAPE(item) && SP_SHAPE(item)->hasMarkers() && !bbox_only) {
             SPShape *shape = SP_SHAPE(item);
@@ -1283,9 +1283,9 @@ sp_selected_path_outline(SPDesktop *desktop)
             orig->DashPolylineFromStyle(i_style, scale, 0);
 
             Shape* theShape = new Shape;
-            orig->Stroke(theShape, false, 0.5*o_width, o_join, o_butt,
+            orig->Stroke(*theShape, false, 0.5*o_width, o_join, o_butt,
                          0.5 * o_miter);
-            orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
+            orig->Outline(*res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
 
             Shape *theRes = new Shape;
 
@@ -1302,7 +1302,7 @@ sp_selected_path_outline(SPDesktop *desktop)
 
         } else {
 
-            orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
+            orig->Outline(*res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
 
             orig->Coalesce(0.5 * o_width);
 
@@ -1310,7 +1310,7 @@ sp_selected_path_outline(SPDesktop *desktop)
             Shape *theRes = new Shape;
 
             res->ConvertWithBackData(1.0);
-            res->Fill(theShape, 0);
+            res->Fill(*theShape, 0);
             theRes->ConvertToShape(theShape, fill_positive);
 
             Path *originaux[1];
@@ -1644,7 +1644,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         Shape *theRes = new Shape;
 
         orig->ConvertWithBackData(1.0);
-        orig->Fill(theShape, 0);
+        orig->Fill(*theShape, 0);
 
         SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
         gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
@@ -1843,7 +1843,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             Shape *theRes = new Shape;
 
             orig->ConvertWithBackData(0.03);
-            orig->Fill(theShape, 0);
+            orig->Fill(*theShape, 0);
 
             SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
             gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);

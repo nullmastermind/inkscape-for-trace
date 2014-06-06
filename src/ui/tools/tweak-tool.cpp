@@ -551,7 +551,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
             Geom::Affine i2doc(item->i2doc_affine());
 
             orig->ConvertWithBackData((0.08 - (0.07 * fidelity)) / i2doc.descrim()); // default 0.059
-            orig->Fill(theShape, 0);
+            orig->Fill(*theShape, 0);
 
             SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
             gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);

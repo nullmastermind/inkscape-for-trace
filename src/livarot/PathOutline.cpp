@@ -21,8 +21,9 @@
 // outline of a path.
 // computed by making 2 offsets, one of the "left" side of the path, one of the right side, and then glueing the two
 // the left side has to be reversed to make a contour
-void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, double miter)
+void Path::Outline(Path &destr, double width, JoinType join, ButtType butt, double miter)
 {
+    ::Path * dest = &destr;
     if ( descr_flags & descr_adding_bezier ) {
         CancelBezier();
     }
@@ -198,9 +199,10 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
 
 // versions for outlining closed path: they only make one side of the offset contour
 void
-Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
+Path::OutsideOutline (Path & destr, double width, JoinType join, ButtType butt,
                       double miter)
 {
+        ::Path * dest = &destr;
 	if (descr_flags & descr_adding_bezier) {
 		CancelBezier();
 	}
@@ -223,9 +225,10 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 }
 
 void
-Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
+Path::InsideOutline (Path & destr, double width, JoinType join, ButtType butt,
                      double miter)
 {
+        ::Path * dest = &destr;
 	if ( descr_flags & descr_adding_bezier ) {
 		CancelBezier();
 	}
