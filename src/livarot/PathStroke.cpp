@@ -38,10 +38,9 @@ static Geom::Point StrokeNormalize(const Geom::Point value, double length) {
     }
 }
 
-void Path::Stroke(Shape &destr, bool doClose, double width, JoinType join,
+void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
         ButtType butt, double miter, bool justAdd)
 {
-    ::Shape* dest = &destr;
     if (dest == NULL) {
         return;
     }

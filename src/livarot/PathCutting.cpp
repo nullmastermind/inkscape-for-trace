@@ -269,11 +269,10 @@ void Path::DashSubPath(int spL, int spP, std::vector<path_lineto> const &orig_pt
   }
 }
 
-Geom::PathVector 
+Geom::PathVector *
 Path::MakePathVector()
 {
-    Geom::PathVector retPv;
-    Geom::PathVector *pv = &retPv;
+    Geom::PathVector *pv = new Geom::PathVector();
     Geom::Path * currentpath = NULL;
 
     Geom::Point   lastP,bezSt,bezEn;
@@ -381,7 +380,7 @@ Path::MakePathVector()
         }
     }
 
-    return *pv;
+    return pv;
 }
 
 void  Path::AddCurve(Geom::Curve const &c)
