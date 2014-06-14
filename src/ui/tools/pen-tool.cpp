@@ -1556,12 +1556,11 @@ void PenTool::_bspline_spiro_start_anchor_off()
             //and we add it again with the recreation
             tmpCurve->append_continuous(lastSeg, 0.0625);
         }
-        if (this->sa->start) {
-            tmpCurve = tmpCurve->create_reverse();
-        }
-        this->overwriteCurve = tmpCurve;
     }
-
+    if (this->sa->start) {
+        tmpCurve = tmpCurve->create_reverse();
+    }
+    this->overwriteCurve = tmpCurve;
 }
 
 void PenTool::_bspline_spiro_motion(bool shift){
@@ -1645,7 +1644,7 @@ void PenTool::_bspline_spiro_end_anchor_on()
         }
         reverse = true;
     } else if(this->sa){
-        tmpCurve = this->overwriteCurve;
+        tmpCurve = this->overwriteCurve->copy();
         if(!this->sa->start){
             tmpCurve = tmpCurve->create_reverse();
             reverse = true;
@@ -1665,7 +1664,7 @@ void PenTool::_bspline_spiro_end_anchor_on()
         lastSeg->curveto((*cubic)[1],C,(*cubic)[3]);
     }else{
         lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
-        lastSeg->curveto(tmpCurve->last_segment()->initialPoint(),C,tmpCurve->last_segment()->finalPoint());
+        lastSeg->lineto(tmpCurve->last_segment()->finalPoint());
     }
     if( tmpCurve->get_segment_count() == 1){
         tmpCurve = lastSeg;
@@ -1702,7 +1701,7 @@ void PenTool::_bspline_spiro_end_anchor_off()
         }
         reverse = true;
     } else if(this->sa){
-        tmpCurve = this->overwriteCurve;
+        tmpCurve = this->overwriteCurve->copy();
         if(!this->sa->start){
             tmpCurve = tmpCurve->create_reverse();
             reverse = true;
@@ -1714,25 +1713,28 @@ void PenTool::_bspline_spiro_end_anchor_off()
     if(cubic){
         lastSeg->moveto((*cubic)[0]);
         lastSeg->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
-        if( tmpCurve->get_segment_count() == 1){
-            tmpCurve = lastSeg;
-        }else{
-            //we eliminate the last segment
-            tmpCurve->backspace();
-            //and we add it again with the recreation
-            tmpCurve->append_continuous(lastSeg, 0.0625);
-        }
-        if (reverse) {
-            tmpCurve = tmpCurve->create_reverse();
-        }
-        if( this->green_anchor && this->green_anchor->active )
-        {
-            this->green_curve->reset();
-            this->green_curve = tmpCurve;
-        }else{
-            this->overwriteCurve->reset();
-            this->overwriteCurve = tmpCurve;
-        }
+    }else{
+        lastSeg->moveto(tmpCurve->last_segment()->initialPoint());
+        lastSeg->lineto(tmpCurve->last_segment()->finalPoint());
+    }
+    if( tmpCurve->get_segment_count() == 1){
+        tmpCurve = lastSeg;
+    }else{
+        //we eliminate the last segment
+        tmpCurve->backspace();
+        //and we add it again with the recreation
+        tmpCurve->append_continuous(lastSeg, 0.0625);
+    }
+    if (reverse) {
+        tmpCurve = tmpCurve->create_reverse();
+    }
+    if( this->green_anchor && this->green_anchor->active )
+    {
+        this->green_curve->reset();
+        this->green_curve = tmpCurve;
+    }else{
+        this->overwriteCurve->reset();
+        this->overwriteCurve = tmpCurve;
     }
 }
 

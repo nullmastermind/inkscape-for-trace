@@ -580,14 +580,6 @@ Effect::getCanvasIndicators(SPLPEItem const* lpeitem)
 {
     std::vector<Geom::PathVector> hp_vec;
 
-    // TODO: we can probably optimize this by using a lot more references
-    //       rather than copying PathVectors all over the place
-    if (SP_IS_SHAPE(lpeitem) && show_orig_path) {
-        // add original path to helperpaths
-        SPCurve* curve = SP_SHAPE(lpeitem)->getCurve ();
-        hp_vec.push_back(curve->get_pathvector());
-    }
-
     // add indicators provided by the effect itself
     addCanvasIndicators(lpeitem, hp_vec);
 
