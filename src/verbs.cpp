@@ -1568,6 +1568,9 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_SET_CLIPPATH:
             sp_selection_set_mask(dt, true, false);
             break;
+        case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
+            sp_selection_set_clipgroup(dt);
+            break;
         case SP_VERB_OBJECT_EDIT_CLIPPATH:
             sp_selection_edit_clip_or_mask(dt, true);
             break;
@@ -2717,6 +2720,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove mask from selection"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_SET_CLIPPATH, "ObjectSetClipPath", N_("_Set"),
                  N_("Apply clipping path to selection (using the topmost object as clipping path)"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_CREATE_CLIP_GROUP, "ObjectCreateClipGroup", N_("Create Cl_ip Group"),
+                 N_("Creates a clip group using the selected objects as a base"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_EDIT_CLIPPATH, "ObjectEditClipPath", N_("_Edit"),
                  N_("Edit clipping path"), INKSCAPE_ICON("path-clip-edit")),
     new ObjectVerb(SP_VERB_OBJECT_UNSET_CLIPPATH, "ObjectUnSetClipPath", N_("_Release"),

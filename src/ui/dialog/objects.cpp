@@ -106,7 +106,7 @@ enum {
     BUTTON_LOCK_ALL,
     BUTTON_UNLOCK_ALL,
     BUTTON_SETCLIP,
-//    BUTTON_CLIPGROUP,
+    BUTTON_CLIPGROUP,
 //    BUTTON_SETINVCLIP,
     BUTTON_UNSETCLIP,
     BUTTON_SETMASK,
@@ -269,7 +269,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
             }
 
             if ( action ) {
-                label = action->name;
+               // label = action->name;
             }
         }
     }
@@ -1257,6 +1257,10 @@ bool ObjectsPanel::_executeAction()
                 _fireAction( SP_VERB_LAYER_UNLOCK_ALL );
             }
             break;
+            case BUTTON_CLIPGROUP:
+            {
+               _fireAction ( SP_VERB_OBJECT_CREATE_CLIP_GROUP );
+            }
             case BUTTON_SETCLIP:
             {
                 _fireAction( SP_VERB_OBJECT_SET_CLIPPATH );
@@ -1935,8 +1939,8 @@ ObjectsPanel::ObjectsPanel() :
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, 0, "Set Clip", (int)BUTTON_SETCLIP ) );
-        //not implemented
-	//_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, 0, "Create Clip Group", (int)BUTTON_CLIPGROUP ) );
+        
+	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, 0, "Create Clip Group", (int)BUTTON_CLIPGROUP ) );
 
         //will never be implemented
         //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
