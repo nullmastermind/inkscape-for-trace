@@ -26,8 +26,7 @@
 # include <config.h>
 #endif
 
-
-#include "kopftracer2011.h"
+#include <glibmm.h>
 
 // Build fix under Inkscape build tree
 #if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
@@ -35,6 +34,7 @@
 #endif
 
 #include <algorithm>
+#include "kopftracer2011.h"
 #include "priv/colorspace.h"
 #include "priv/homogeneoussplines.h"
 #include "priv/branchless.h"

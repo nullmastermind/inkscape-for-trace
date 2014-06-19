@@ -89,7 +89,6 @@ src/extension/internal/javafx-out.cpp
 src/extension/internal/latex-pstricks-out.cpp
 src/extension/internal/latex-pstricks.cpp
 src/extension/internal/odf.cpp
-src/extension/internal/pdf-input-cairo.cpp
 src/extension/internal/pdfinput/pdf-input.cpp
 src/extension/internal/pov-out.cpp
 src/extension/internal/svg.cpp
@@ -147,6 +146,9 @@ src/live_effects/lpe-bspline.cpp
 src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-vonkoch.cpp
+src/live_effects/lpe-envelope-perspective.cpp
+src/live_effects/parameter/pointreseteable.cpp
+src/live_effects/parameter/togglebutton.cpp
 src/live_effects/parameter/bool.cpp
 src/live_effects/parameter/enum.h
 src/live_effects/parameter/originalpath.cpp
