@@ -538,6 +538,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         ret = true;
     } else if (bevent.button == 3 && this->npoints != 0) {
         // right click - finish path
+        this->ea = NULL; // unset end anchor if set (otherwise crashes)
         this->_finish(false);
         ret = true;
     }
@@ -1202,6 +1203,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
             if (this->npoints != 0) {
+                this->ea = NULL; // unset end anchor if set (otherwise crashes)
                 this->_finish(false);
                 ret = true;
             }
