@@ -13,10 +13,6 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#ifdef WIN32
-#include <io.h>
-#include <windows.h>
-#endif
 
 #include "print.h"
 #include <gtkmm/stock.h>
@@ -32,6 +28,11 @@
 #include "io/sys.h"
 
 #include <glibmm/i18n.h>
+
+#ifdef WIN32
+#include <io.h>
+#include <windows.h>
+#endif
 
 
 static void draw_page(
