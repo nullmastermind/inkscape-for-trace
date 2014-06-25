@@ -43,6 +43,9 @@ struct SPWidget {
     GtkBin bin;
     Inkscape::Application *inkscape;
 
+    sigc::connection selModified;
+    sigc::connection selChanged;
+    sigc::connection selSet;
 private:
     Inkscape::SPWidgetImpl *_impl;
 };

@@ -47,16 +47,13 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-static void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection *selection, Transformation *daad)
+static void on_selection_changed(Inkscape::Selection *selection, Transformation *daad)
 {
     int page = daad->getCurrentPage();
     daad->updateSelection((Inkscape::UI::Dialog::Transformation::PageType)page, selection);
 }
 
-static void on_selection_modified( Inkscape::Application */*inkscape*/,
-                                   Inkscape::Selection *selection,
-                                   guint /*flags*/,
-                                   Transformation *daad )
+static void on_selection_modified(Inkscape::Selection *selection, Transformation *daad)
 {
     int page = daad->getCurrentPage();
     daad->updateSelection((Inkscape::UI::Dialog::Transformation::PageType)page, selection);
@@ -159,8 +156,10 @@ Transformation::Transformation()
     }
 
     // Connect to the global selection changed & modified signals
-    g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
-    g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (on_selection_modified), this);
+    INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
+    INKSCAPE->signal_selection_modified.connect(sigc::hide<0>(sigc::hide<1>(sigc::bind(sigc::ptr_fun(&on_selection_modified), this))));
+    //g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
+    //g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (on_selection_modified), this);
 
     _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Transformation::setDesktop) );
     _deskTrack.connect(GTK_WIDGET(gobj()));

@@ -74,6 +74,8 @@ struct SPDocumentPrivate {
 	Inkscape::ConsoleOutputUndoObserver console_output_undo_observer;
 
 	bool seeking;
+    sigc::connection selChangeConnection;
+    sigc::connection desktopActivatedConnection;
 };
 
 #endif // SEEN_SP_DOCUMENT_PRIVATE_H

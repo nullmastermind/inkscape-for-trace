@@ -154,6 +154,17 @@ SPDocument::~SPDocument() {
         router = NULL;
     }
 
+    if (oldSignalsConnected) {
+        priv->selChangeConnection.disconnect();
+        priv->desktopActivatedConnection.disconnect();
+        //g_signal_handlers_disconnect_by_func(G_OBJECT(INKSCAPE),
+                                             //reinterpret_cast<gpointer>(DocumentUndo::resetKey),
+                                             //static_cast<gpointer>(this));
+    } else {
+        _selection_changed_connection.disconnect();
+        _desktop_activated_connection.disconnect();
+    }
+
     if (priv) {
         if (priv->partial) {
             sp_repr_free_log(priv->partial);
@@ -206,15 +217,6 @@ SPDocument::~SPDocument() {
     if (rerouting_handler_id) {
         g_source_remove(rerouting_handler_id);
         rerouting_handler_id = 0;
-    }
-
-    if (oldSignalsConnected) {
-        g_signal_handlers_disconnect_by_func(G_OBJECT(INKSCAPE),
-                                             reinterpret_cast<gpointer>(DocumentUndo::resetKey),
-                                             static_cast<gpointer>(this));
-    } else {
-        _selection_changed_connection.disconnect();
-        _desktop_activated_connection.disconnect();
     }
 
     if (keepalive) {
@@ -463,10 +465,21 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     DocumentUndo::setUndoSensitive(document, true);
 
     // reset undo key when selection changes, so that same-key actions on different objects are not coalesced
-    g_signal_connect(G_OBJECT(INKSCAPE), "change_selection",
+    document->priv->selChangeConnection = INKSCAPE->signal_selection_changed.connect(
+                sigc::hide( // hide unused first and second args
+                sigc::hide(sigc::bind(
+                sigc::ptr_fun(&DocumentUndo::resetKey), document)
+    )));
+    document->priv->desktopActivatedConnection = INKSCAPE->signal_activate_desktop.connect(
+                sigc::hide( // hide unused first and second args
+                sigc::hide(sigc::bind(
+                sigc::ptr_fun(&DocumentUndo::resetKey), document)
+    )));
+
+    /*g_signal_connect(G_OBJECT(INKSCAPE), "change_selection",
                      G_CALLBACK(DocumentUndo::resetKey), document);
     g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop",
-                     G_CALLBACK(DocumentUndo::resetKey), document);
+                     G_CALLBACK(DocumentUndo::resetKey), document);*/
     document->oldSignalsConnected = true;
 
     return document;

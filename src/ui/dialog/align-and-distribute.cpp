@@ -829,14 +829,14 @@ private :
 
 
 
-static void on_tool_changed(Inkscape::Application */*inkscape*/, Inkscape::UI::Tools::ToolBase */*context*/, AlignAndDistribute *daad)
+static void on_tool_changed(AlignAndDistribute *daad)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && desktop->getEventContext())
         daad->setMode(tools_active(desktop) == TOOLS_NODES);
 }
 
-static void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
+static void on_selection_changed(AlignAndDistribute *daad)
 {
     daad->randomize_bbox = Geom::OptRect();
 }
@@ -1044,10 +1044,12 @@ AlignAndDistribute::AlignAndDistribute()
     contents->pack_start(_nodesFrame, true, true);
 
     //Connect to the global tool change signal
-    g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (on_tool_changed), this);
+    INKSCAPE->signal_eventcontext_set.connect(sigc::hide<0>(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this))));
+    //g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (on_tool_changed), this);
 
     // Connect to the global selection change, to invalidate cached randomize_bbox
-    g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
+    INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this))));
+    //g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
     randomize_bbox = Geom::OptRect();
 
     _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &AlignAndDistribute::setDesktop) );
@@ -1055,7 +1057,7 @@ AlignAndDistribute::AlignAndDistribute()
 
     show_all_children();
 
-    on_tool_changed (NULL, NULL, this); // set current mode
+    on_tool_changed (this); // set current mode
 }
 
 AlignAndDistribute::~AlignAndDistribute()
@@ -1075,7 +1077,7 @@ void AlignAndDistribute::setTargetDesktop(SPDesktop *desktop)
 {
     if (_desktop != desktop) {
         _desktop = desktop;
-        on_tool_changed (NULL, NULL, this);
+        on_tool_changed (this);
     }
 }
 

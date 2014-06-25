@@ -506,7 +506,7 @@ Application::Application()
     }
 
     this->menus = NULL;
-    //this->desktops = NULL;
+    this->desktops = NULL;
     this->_dialogs_toggle = TRUE;
     this->_mapalt = GDK_MOD1_MASK;
     this->_trackalt = FALSE;
@@ -976,6 +976,10 @@ void
 Application::add_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != NULL);
+    if (desktops == NULL) {
+        desktops = new std::list<SPDesktop*>;
+        g_message("Creating new desktop list.");
+    }
     //g_return_if_fail (inkscape != NULL);
 
     g_assert (std::find(desktops->begin(), desktops->end(), desktop) == desktops->end());
@@ -1030,7 +1034,9 @@ Application::remove_desktop (SPDesktop * desktop)
 
     // if this was the last desktop, shut down the program
     if (desktops->empty()) {
+        g_message("Shutting down.");
         this->exit();
+        delete desktops;
     }
 }
 
@@ -1285,7 +1291,7 @@ Application::remove_document (SPDocument *document)
 SPDesktop *
 Application::active_desktop()
 {
-    if (desktops == NULL) {
+    if (!desktops || desktops->empty()) {
         return NULL;
     }
 

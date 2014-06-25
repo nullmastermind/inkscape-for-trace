@@ -247,8 +247,10 @@ PanelDialog<Behavior::FloatingBehavior> *PanelDialog<Behavior::FloatingBehavior>
         new PanelDialog<Behavior::FloatingBehavior>(panel, panel.getPrefsPath(),
                                                     panel.getVerb(), panel.getApplyLabel());
 
-    g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(_handle_activate_desktop), instance);
-    g_signal_connect(G_OBJECT(INKSCAPE), "deactivate_desktop", G_CALLBACK(handle_deactivate_desktop), instance);
+    INKSCAPE->signal_activate_desktop.connect    (sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated));
+    INKSCAPE->signal_deactivate_desktop.connect(sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopDeactivated));
+    //g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(_handle_activate_desktop), instance);
+    //g_signal_connect(G_OBJECT(INKSCAPE), "deactivate_desktop", G_CALLBACK(handle_deactivate_desktop), instance);
 
     return instance;
 }
