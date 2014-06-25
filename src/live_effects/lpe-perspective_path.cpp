@@ -60,7 +60,7 @@ LPEPerspectivePath::LPEPerspectivePath(LivePathEffectObject *lpeobject) :
     concatenate_before_pwd2 = true; // don't split the path into its subpaths
     _provides_knotholder_entities = true;
 
-    Persp3D *persp = persp3d_document_first_persp(inkscape_active_document());
+    Persp3D *persp = persp3d_document_first_persp(SP_ACTIVE_DOCUMENT);
     Proj::TransfMat3x4 pmat = persp->perspective_impl->tmat;
     pmat.copy_tmat(tmat);
 }

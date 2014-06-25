@@ -3512,7 +3512,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
         directory = g_path_get_dirname( document->getURI() );
     }
     if (directory == NULL) {
-        directory = homedir_path(NULL);
+        directory = INKSCAPE->homedir_path(NULL);
     }
     gchar *filepath = g_build_filename(directory, basename, NULL);
     g_free(directory);

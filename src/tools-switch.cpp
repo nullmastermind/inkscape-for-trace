@@ -153,7 +153,7 @@ tools_switch(SPDesktop *dt, int num)
     /* fixme: This is really ugly hack. We should bind and unbind class methods */
     /* First 4 tools use guides, first is undefined but we don't care */
     dt->activate_guides(num < 5);
-    inkscape_eventcontext_set(dt->getEventContext());
+    INKSCAPE->eventcontext_set(dt->getEventContext());
 }
 
 void tools_switch_by_item(SPDesktop *dt, SPItem *item, Geom::Point const p)

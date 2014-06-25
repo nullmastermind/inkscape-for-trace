@@ -1257,7 +1257,7 @@ std::list<gchar*> &IconImpl::icons_svg_paths()
     static bool initialized = false;
     if (!initialized) {
         // Fall back from user prefs dir into system locations.
-        gchar *userdir = profile_path("icons");
+        gchar *userdir = INKSCAPE->profile_path("icons");
         sources.push_back(g_build_filename(userdir,"icons.svg", NULL));
         sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, "icons.svg", NULL));
         g_free(userdir);

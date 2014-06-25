@@ -1431,7 +1431,7 @@ void
 SPDesktop::emitToolSubselectionChanged(gpointer data)
 {
     _tool_subselection_changed.emit(data);
-    inkscape_subselection_changed (this);
+    INKSCAPE->subselection_changed (this);
 }
 
 void SPDesktop::updateNow()

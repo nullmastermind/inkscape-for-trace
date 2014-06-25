@@ -588,7 +588,7 @@ Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ust
     }
 
     if (directory.empty()) {
-        directory = homedir_path(NULL);
+        directory = INKSCAPE->homedir_path(NULL);
     }
 
     Glib::ustring filename = Glib::build_filename(directory, id+".png");

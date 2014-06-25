@@ -218,7 +218,7 @@ SPDocument::~SPDocument() {
     }
 
     if (keepalive) {
-        inkscape_unref();
+        inkscape_unref(INKSCAPE);
         keepalive = FALSE;
     }
 
@@ -448,7 +448,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     rdf_set_defaults( document );
 
     if (keepalive) {
-        inkscape_ref();
+        inkscape_ref(INKSCAPE);
     }
 
     // Check if the document already has a perspective (e.g., when opening an existing

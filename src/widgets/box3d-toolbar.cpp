@@ -194,7 +194,7 @@ static void box3d_toolbox_selection_changed(Inkscape::Selection *selection, GObj
             sp_repr_synthesize_events(persp_repr, &box3d_persp_tb_repr_events, tbl);
         }
 
-        inkscape_active_document()->setCurrentPersp3D(persp3d_get_from_repr(persp_repr));
+        SP_ACTIVE_DOCUMENT->setCurrentPersp3D(persp3d_get_from_repr(persp_repr));
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString("/tools/shapes/3dbox/persp", persp_repr->attribute("id"));
 

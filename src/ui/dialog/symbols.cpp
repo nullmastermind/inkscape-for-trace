@@ -572,9 +572,9 @@ void SymbolsDialog::get_symbols() {
       Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_IS_DIR ) ) {
     directories.push_back( INKSCAPE_SYMBOLSDIR );
   }
-  if( Inkscape::IO::file_test( profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( profile_path("symbols") );
+  if( Inkscape::IO::file_test( INKSCAPE->profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
+      Inkscape::IO::file_test( INKSCAPE->profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
+    directories.push_back( INKSCAPE->profile_path("symbols") );
   }
 
   std::list<Glib::ustring>::iterator it;

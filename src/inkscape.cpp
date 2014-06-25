@@ -76,6 +76,7 @@ static Inkscape::Application *inkscape = NULL;
 /* Backbones of configuration xml data */
 #include "menus-skeleton.h"
 
+#if 0
 enum {
     MODIFY_SELECTION, // global: one of selections modified
     CHANGE_SELECTION, // global: one of selections changed
@@ -91,25 +92,27 @@ enum {
                      // may not be reflected by a selection change and thus needs a separate signal
     LAST_SIGNAL
 };
+#endif
 
-#define DESKTOP_IS_ACTIVE(d) (inkscape->desktops && ((d) == inkscape->desktops->data))
+#define DESKTOP_IS_ACTIVE(d) (!inkscape->desktops->empty() && ((d) == inkscape->desktops->front()))
 
 
 /*################################
 # FORWARD DECLARATIONS
 ################################*/
 
-namespace Inkscape {
-struct ApplicationClass;
-}
+//namespace Inkscape {
+//struct ApplicationClass;
+//}
 
-static void inkscape_class_init (Inkscape::ApplicationClass *klass);
-static void inkscape_init (SPObject *object);
-static void inkscape_dispose (GObject *object);
+//static void inkscape_class_init (Inkscape::ApplicationClass *klass);
+//static void inkscape_init (SPObject *object);
+//static void inkscape_dispose (GObject *object);
 
-static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
-static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
+//static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
+//static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 
+#if 0
 class AppSelectionModel {
     Inkscape::LayerModel _layer_model;
     Inkscape::Selection *_selection;
@@ -125,21 +128,9 @@ public:
 
     Inkscape::Selection *getSelection() const { return _selection; }
 };
+#endif
 
-struct Inkscape::Application {
-    GObject object;
-    Inkscape::XML::Document *menus;
-    std::map<SPDocument *, int> document_set;
-    std::map<SPDocument *, AppSelectionModel *> selection_models;
-    GSList *desktops;
-    gchar *argv0;
-    gboolean dialogs_toggle;
-    gboolean use_gui;         // may want to consider a virtual function
-                              // for overriding things like the warning dlg's
-    guint mapalt;
-    guint trackalt;
-};
-
+#if 0
 struct Inkscape::ApplicationClass {
     GObjectClass object_class;
 
@@ -158,9 +149,9 @@ struct Inkscape::ApplicationClass {
     void (* dialogs_unhide) (Inkscape::Application *inkscape);
     void (* external_change) (Inkscape::Application *inkscape);
 };
+#endif
 
-static GObjectClass * parent_class;
-static guint inkscape_signals[LAST_SIGNAL] = {0};
+// static guint inkscape_signals[LAST_SIGNAL] = {0};
 
 static void (* segv_handler) (int) = SIG_DFL;
 static void (* abrt_handler) (int) = SIG_DFL;
@@ -177,33 +168,11 @@ static void (* bus_handler)  (int) = SIG_DFL;
 
 
 /**
- *  Retrieves the GType for the Inkscape Application object.
- */
-GType
-inkscape_get_type (void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (Inkscape::ApplicationClass),
-            NULL, NULL,
-            (GClassInitFunc) inkscape_class_init,
-            NULL, NULL,
-            sizeof (Inkscape::Application),
-            4,
-            (GInstanceInitFunc) inkscape_init,
-            NULL
-        };
-        type = g_type_register_static (G_TYPE_OBJECT, "Inkscape_Application", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-
-/**
  *  Initializes the inkscape class, registering all of its signal handlers
  *  and virtual functions
  */
+ 
+#if 0
 static void
 inkscape_class_init (Inkscape::ApplicationClass * klass)
 {
@@ -303,11 +272,37 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
     klass->activate_desktop = inkscape_activate_desktop_private;
     klass->deactivate_desktop = inkscape_deactivate_desktop_private;
 }
+#endif
 
 #ifdef WIN32
 typedef int uid_t;
 #define getuid() 0
 #endif
+
+Inkscape::Application * inkscape_ref(Inkscape::Application * in)
+{
+    g_return_val_if_fail(in != NULL, NULL);
+    g_return_val_if_fail(dynamic_cast<Inkscape::Application *>(in) != NULL, NULL);
+
+    in->refCount++;
+    return in;
+}
+
+Inkscape::Application * inkscape_unref(Inkscape::Application * in)
+{
+    g_return_val_if_fail(in != NULL, NULL);
+    g_return_val_if_fail(dynamic_cast<Inkscape::Application *>(in) != NULL, NULL);
+
+    in->refCount--;
+
+    if (in->refCount <= 0) {
+        delete in;
+    }
+
+    return NULL;
+}
+
+namespace Inkscape {
 
 /**
  * static gint inkscape_autosave(gpointer);
@@ -315,9 +310,9 @@ typedef int uid_t;
  * Callback passed to g_timeout_add_seconds()
  * Responsible for autosaving all open documents
  */
-static gint inkscape_autosave(gpointer)
+int Application::autosave()
 {
-    if (inkscape->document_set.empty()) { // nothing to autosave
+    if (document_set.empty()) { // nothing to autosave
         return TRUE;
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -336,7 +331,7 @@ static gint inkscape_autosave(gpointer)
     }
 
     GDir *autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, NULL);
-    if( !autosave_dir_ptr ){
+    if (!autosave_dir_ptr) {
         // Try to create the autosave directory if it doesn't exist
         if (g_mkdir(autosave_dir.c_str(), 0755)) {
             // the creation failed
@@ -367,8 +362,8 @@ static gint inkscape_autosave(gpointer)
     gint docnum = 0;
 
     SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosaving documents..."));
-    for (std::map<SPDocument*,int>::iterator iter = inkscape->document_set.begin();
-          iter != inkscape->document_set.end();
+    for (std::map<SPDocument*,int>::iterator iter = document_set.begin();
+          iter != document_set.end();
           ++iter) {
 
         SPDocument *doc = iter->first;
@@ -469,7 +464,16 @@ static gint inkscape_autosave(gpointer)
     return TRUE;
 }
 
-void inkscape_autosave_init()
+} // namespace Inkscape
+
+int inkscape_autosave(gpointer) {
+    g_assert(inkscape != NULL);
+    return inkscape->autosave();
+}
+
+namespace Inkscape {
+
+void Application::autosave_init()
 {
     static guint32 autosave_timeout_id = 0;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -493,105 +497,61 @@ void inkscape_autosave_init()
 }
 
 
-static void
-inkscape_init (SPObject * object)
+Application::Application()
 {
     if (!inkscape) {
-        inkscape = (Inkscape::Application *) object;
+        inkscape = this;
     } else {
-        g_assert_not_reached ();
+        g_assert_not_reached();
     }
 
-    new (&inkscape->document_set) std::map<SPDocument *, int>();
-    new (&inkscape->selection_models) std::map<SPDocument *, AppSelectionModel *>();
-
-    inkscape->menus = NULL;
-    inkscape->desktops = NULL;
-    inkscape->dialogs_toggle = TRUE;
-    inkscape->mapalt = GDK_MOD1_MASK;
-    inkscape->trackalt = FALSE;
+    this->menus = NULL;
+    //this->desktops = NULL;
+    this->_dialogs_toggle = TRUE;
+    this->_mapalt = GDK_MOD1_MASK;
+    this->_trackalt = FALSE;
 }
 
-static void
-inkscape_dispose (GObject *object)
+Application::~Application()
 {
-    Inkscape::Application *inkscape = (Inkscape::Application *) object;
-
-    g_assert (!inkscape->desktops);
+    g_assert (!desktops);
 
     Inkscape::Preferences::unload();
 
-    if (inkscape->menus) {
+    if (menus) {
         /* fixme: This is not the best place */
-        Inkscape::GC::release(inkscape->menus);
-        inkscape->menus = NULL;
+        Inkscape::GC::release(menus);
+        menus = NULL;
     }
-
-    inkscape->selection_models.~map();
-    inkscape->document_set.~map();
-
-    G_OBJECT_CLASS (parent_class)->dispose (object);
 
     gtk_main_quit ();
 }
 
-
-void
-inkscape_ref (void)
-{
-    if (inkscape)
-        g_object_ref (G_OBJECT (inkscape));
-}
-
-
-void
-inkscape_unref (void)
-{
-    if (inkscape)
-        g_object_unref (G_OBJECT (inkscape));
-}
-
-/* returns the mask of the keyboard modifier to map to Alt, zero if no mapping */
-/* Needs to be a guint because gdktypes.h does not define a 'no-modifier' value */
-guint
-inkscape_mapalt() {
-    return inkscape->mapalt;
-}
-
 /* Sets the keyboard modifer to map to Alt. Zero switches off mapping, as does '1', which is the default */
-void inkscape_mapalt(guint maskvalue)
+void Application::mapalt(guint maskvalue)
 {
-    if(maskvalue<2 || maskvalue> 5 ){  /* MOD5 is the highest defined in gdktypes.h */
-        inkscape->mapalt=0;
-    }else{
-        inkscape->mapalt=(GDK_MOD1_MASK << (maskvalue-1));
+    if ( maskvalue < 2 || maskvalue > 5 ) {  // MOD5 is the highest defined in gdktypes.h
+        _mapalt = 0;
+    } else {
+        _mapalt = (GDK_MOD1_MASK << (maskvalue-1));
     }
 }
 
-guint
-inkscape_trackalt() {
-    return inkscape->trackalt;
-}
-
-void inkscape_trackalt(guint trackvalue)
-{
-    inkscape->trackalt = trackvalue;
-}
-
-
+} // namespace Inkscape
+#if 0
 static void
-inkscape_activate_desktop_private (Inkscape::Application */*inkscape*/, SPDesktop *desktop)
+inkscape_activate_desktop_private (Inkscape::Application *, SPDesktop *desktop)
 {
     desktop->set_active (true);
 }
 
 
 static void
-inkscape_deactivate_desktop_private (Inkscape::Application */*inkscape*/, SPDesktop *desktop)
+inkscape_deactivate_desktop_private (Inkscape::Application *, SPDesktop *desktop)
 {
     desktop->set_active (false);
 }
-
+#endif
 
 /* fixme: This is EVIL, and belongs to main after all */
 
@@ -791,7 +751,10 @@ inkscape_crash_handler (int /*signum*/)
     }
     *(b + pos) = '\0';
 
-    if ( inkscape_get_instance() && inkscape_use_gui() ) {
+    // checking whether we have an Inkscape instance after that instance caused an exception is like
+    // checking if your mother existed after sitting on you and nearly hospitalizing you
+
+    if ( inkscape_get_instance() && inkscape->use_gui() ) {
         GtkWidget *msgbox = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
         gtk_dialog_run (GTK_DIALOG (msgbox));
         gtk_widget_destroy (msgbox);
@@ -835,7 +798,7 @@ private:
 void
 inkscape_application_init (const gchar *argv0, gboolean use_gui)
 {
-    inkscape = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
+    inkscape = new Inkscape::Application();
     /* fixme: load application defaults */
 
     segv_handler = signal (SIGSEGV, inkscape_crash_handler);
@@ -846,7 +809,7 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
     bus_handler  = signal (SIGBUS,  inkscape_crash_handler);
 #endif
 
-    inkscape->use_gui = use_gui;
+    inkscape->use_gui(use_gui);
     inkscape->argv0 = g_strdup(argv0);
 
     /* Load the preferences and menus */
@@ -862,7 +825,7 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
     }
 
     if (use_gui) {
-        inkscape_load_menus(inkscape);
+        inkscape->load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }
     Inkscape::ResourceManager::getManager();
@@ -891,16 +854,16 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
     /* Check for global remapping of Alt key */
     if (use_gui)
     {
-        inkscape_mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
-        inkscape_trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
+        inkscape->mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
+        inkscape->trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
     }
 
     /* Initialize the extensions */
     Inkscape::Extension::init();
 
-    inkscape_autosave_init();
+    inkscape->autosave_init();
 
-    return;
+    //return;
 }
 
 /**
@@ -912,24 +875,22 @@ inkscape_get_instance()
         return inkscape;
 }
 
-gboolean inkscape_use_gui()
-{
-    return inkscape_get_instance()->use_gui;
-}
+namespace Inkscape {
+
+//gboolean inkscape_use_gui()
+//{
+//    return inkscape_get_instance()->use_gui;
+//}
 
 /**
  *  Menus management
  *
  */
-bool inkscape_load_menus( Inkscape::Application * inkscape )
+bool Application::load_menus()
 {
     gchar *fn = profile_path(MENUS_FILE);
     gchar *menus_xml = 0;
     gsize len = 0;
-
-    if ( inkscape != inkscape_get_instance() ) {
-        g_warning("BAD BAD BAD THINGS");
-    }
 
     if ( g_file_get_contents(fn, &menus_xml, &len, NULL) ) {
         // load the menus_xml file
@@ -941,8 +902,8 @@ bool inkscape_load_menus( Inkscape::Application * inkscape )
     g_free(fn);
     fn = 0;
 
-    if ( !inkscape->menus ) {
-        inkscape->menus = sp_repr_read_mem(menus_skeleton, MENUS_SKELETON_SIZE, NULL);
+    if ( !menus ) {
+        menus = sp_repr_read_mem(menus_skeleton, MENUS_SKELETON_SIZE, NULL);
     }
 
     return (inkscape->menus != 0);
@@ -950,137 +911,162 @@ bool inkscape_load_menus( Inkscape::Application * inkscape )
 
 
 void
-inkscape_selection_modified (Inkscape::Selection *selection, guint flags)
+Application::selection_modified (Inkscape::Selection *selection, guint flags)
 {
     g_return_if_fail (selection != NULL);
 
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[MODIFY_SELECTION], 0, selection, flags);
+        signal_selection_modified.emit(this, selection, flags);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[MODIFY_SELECTION], 0, selection, flags);
     }
 }
 
 
 void
-inkscape_selection_changed (Inkscape::Selection * selection)
+Application::selection_changed (Inkscape::Selection * selection)
 {
     g_return_if_fail (selection != NULL);
-
+    
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
+        signal_selection_changed.emit(this, selection);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
     }
 }
 
 void
-inkscape_subselection_changed (SPDesktop *desktop)
+Application::subselection_changed (SPDesktop *desktop)
 {
     g_return_if_fail (desktop != NULL);
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SUBSELECTION], 0, desktop);
+        signal_subselection_changed.emit(this, desktop);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SUBSELECTION], 0, desktop);
     }
 }
 
 
 void
-inkscape_selection_set (Inkscape::Selection * selection)
+Application::selection_set (Inkscape::Selection * selection)
 {
     g_return_if_fail (selection != NULL);
 
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, selection);
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
+        signal_selection_set.emit(this, selection);
+        signal_selection_changed.emit(this, selection);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, selection);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
     }
 }
 
 
 void
-inkscape_eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext)
+Application::eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext)
 {
     g_return_if_fail (eventcontext != NULL);
     g_return_if_fail (SP_IS_EVENT_CONTEXT (eventcontext));
 
     if (DESKTOP_IS_ACTIVE (eventcontext->desktop)) {
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, eventcontext);
+        signal_eventcontext_set.emit(this, eventcontext);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, eventcontext);
     }
 }
 
 
 void
-inkscape_add_desktop (SPDesktop * desktop)
+Application::add_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != NULL);
-    g_return_if_fail (inkscape != NULL);
+    //g_return_if_fail (inkscape != NULL);
 
-    g_assert (!g_slist_find (inkscape->desktops, desktop));
+    g_assert (std::find(desktops->begin(), desktops->end(), desktop) == desktops->end());
 
-    inkscape->desktops = g_slist_prepend (inkscape->desktops, desktop);
+    desktops->push_front(desktop);
 
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, desktop->getEventContext());
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, sp_desktop_selection (desktop));
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, sp_desktop_selection (desktop));
+    signal_activate_desktop.emit(this, desktop);
+    signal_eventcontext_set.emit(this, desktop->getEventContext());
+    signal_selection_set.emit(this, sp_desktop_selection(desktop));
+    signal_selection_changed.emit(this, sp_desktop_selection(desktop));
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, desktop->getEventContext());
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, sp_desktop_selection (desktop));
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, sp_desktop_selection (desktop));
 }
 
 
 
 void
-inkscape_remove_desktop (SPDesktop * desktop)
+Application::remove_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != NULL);
     g_return_if_fail (inkscape != NULL);
 
-    g_assert (g_slist_find (inkscape->desktops, desktop));
+    g_assert (std::find (desktops->begin(), desktops->end(), desktop) != desktops->end() );
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, desktop);
-        if (inkscape->desktops->next != NULL) {
-            SPDesktop * new_desktop = static_cast<SPDesktop *>(inkscape->desktops->next->data);
-            inkscape->desktops = g_slist_remove (inkscape->desktops, new_desktop);
-            inkscape->desktops = g_slist_prepend (inkscape->desktops, new_desktop);
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, new_desktop);
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, new_desktop->getEventContext());
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, sp_desktop_selection (new_desktop));
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, sp_desktop_selection (new_desktop));
+        signal_deactivate_desktop.emit(this, desktop);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, desktop);
+        if (desktops->size() > 1) {
+            SPDesktop * new_desktop = *(++desktops->begin());
+            desktops->remove(new_desktop);
+            desktops->push_front(new_desktop);
+            
+            signal_activate_desktop.emit(this, new_desktop);
+            signal_eventcontext_set.emit(this, new_desktop->getEventContext());
+            signal_selection_set.emit(this, sp_desktop_selection(new_desktop));
+            signal_selection_changed.emit(this, sp_desktop_selection(new_desktop));
+            //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, new_desktop);
+            //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, new_desktop->getEventContext());
+            //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, sp_desktop_selection (new_desktop));
+            //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, sp_desktop_selection (new_desktop));
         } else {
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
+            signal_eventcontext_set.emit(this, NULL);
+            //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
             if (sp_desktop_selection(desktop))
                 sp_desktop_selection(desktop)->clear();
         }
     }
 
-    inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
+    desktops->remove(desktop);
 
     // if this was the last desktop, shut down the program
-    if (inkscape->desktops == NULL) {
-        inkscape_exit (inkscape);
+    if (desktops->empty()) {
+        this->exit();
     }
 }
 
 
 
 void
-inkscape_activate_desktop (SPDesktop * desktop)
+Application::activate_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != NULL);
-    g_return_if_fail (inkscape != NULL);
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
         return;
     }
 
-    g_assert (g_slist_find (inkscape->desktops, desktop));
+    SPDesktop* oldDesktop = 0;
+    std::list<SPDesktop*>::iterator i;
+    
+    g_assert ((i = std::find (desktops->begin(), desktops->end(), desktop)) != desktops->end());
 
-    SPDesktop *current = static_cast<SPDesktop *>(inkscape->desktops->data);
+    oldDesktop = *i;
+    SPDesktop *current = desktops->front();
 
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, current);
+    signal_deactivate_desktop.emit(this, current);
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, current);
 
-    inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
-    inkscape->desktops = g_slist_prepend (inkscape->desktops, desktop);
+    desktops->remove (desktop);
+    desktops->push_front (desktop);
 
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, desktop->getEventContext());
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, sp_desktop_selection (desktop));
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, sp_desktop_selection (desktop));
+    signal_activate_desktop.emit(this, desktop);
+    signal_eventcontext_set.emit(this, desktop->getEventContext());
+    signal_selection_set(this, sp_desktop_selection(desktop));
+    signal_selection_changed(this, sp_desktop_selection(desktop));
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, desktop->getEventContext());
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, sp_desktop_selection (desktop));
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, sp_desktop_selection (desktop));
 }
 
 
@@ -1088,65 +1074,63 @@ inkscape_activate_desktop (SPDesktop * desktop)
  *  Resends ACTIVATE_DESKTOP for current desktop; needed when a new desktop has got its window that dialogs will transientize to
  */
 void
-inkscape_reactivate_desktop (SPDesktop * desktop)
+Application::reactivate_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (desktop != NULL);
-    g_return_if_fail (inkscape != NULL);
 
-    if (DESKTOP_IS_ACTIVE (desktop))
-        g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
+    if (DESKTOP_IS_ACTIVE (desktop)) {
+        signal_activate_desktop.emit(this, desktop);
+        //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
+    }
 }
 
 
 
 SPDesktop *
-inkscape_find_desktop_by_dkey (unsigned int dkey)
+Application::find_desktop_by_dkey (unsigned int dkey)
 {
-    for (GSList *r = inkscape->desktops; r; r = r->next) {
-        if ((static_cast<SPDesktop *>(r->data))->dkey == dkey){
-            return (static_cast<SPDesktop *>(r->data));
+    for (std::list<SPDesktop*>::iterator r = desktops->begin(); r != desktops->end(); r++) {
+        if ((*r)->dkey == dkey){
+            return *r;
         }
     }
     return NULL;
 }
 
 
-
-
-static unsigned int
-inkscape_maximum_dkey()
+unsigned int
+Application::maximum_dkey()
 {
     unsigned int dkey = 0;
 
-    for (GSList *r = inkscape->desktops; r; r = r->next) {
-        if ((static_cast<SPDesktop *>(r->data))->dkey > dkey){
-            dkey = (static_cast<SPDesktop *>(r->data))->dkey;
+    for (std::list<SPDesktop*>::iterator r = desktops->begin(); r != desktops->end(); r++) {
+        if ((*r)->dkey > dkey){
+            dkey = (*r)->dkey;
         }
     }
-
     return dkey;
 }
 
 
 
-static SPDesktop *
-inkscape_next_desktop ()
+SPDesktop *
+Application::next_desktop ()
 {
     SPDesktop *d = NULL;
-    unsigned int dkey_current = (static_cast<SPDesktop *>(inkscape->desktops->data))->dkey;
+    unsigned int dkey_current = (desktops->front())->dkey;
 
-    if (dkey_current < inkscape_maximum_dkey()) {
+    if (dkey_current < maximum_dkey()) {
         // find next existing
-        for (unsigned int i = dkey_current + 1; i <= inkscape_maximum_dkey(); i++) {
-            d = inkscape_find_desktop_by_dkey (i);
+        for (unsigned int i = dkey_current + 1; i <= maximum_dkey(); i++) {
+            d = find_desktop_by_dkey (i);
             if (d) {
                 break;
             }
         }
     } else {
         // find first existing
-        for (unsigned int i = 0; i <= inkscape_maximum_dkey(); i++) {
-            d = inkscape_find_desktop_by_dkey (i);
+        for (unsigned int i = 0; i <= maximum_dkey(); i++) {
+            d = find_desktop_by_dkey (i);
             if (d) {
                 break;
             }
@@ -1154,22 +1138,21 @@ inkscape_next_desktop ()
     }
 
     g_assert (d);
-
     return d;
 }
 
 
 
-static SPDesktop *
-inkscape_prev_desktop ()
+SPDesktop *
+Application::prev_desktop ()
 {
     SPDesktop *d = NULL;
-    unsigned int dkey_current = (static_cast<SPDesktop *>(inkscape->desktops->data))->dkey;
+    unsigned int dkey_current = (desktops->front())->dkey;
 
     if (dkey_current > 0) {
         // find prev existing
         for (signed int i = dkey_current - 1; i >= 0; i--) {
-            d = inkscape_find_desktop_by_dkey (i);
+            d = find_desktop_by_dkey (i);
             if (d) {
                 break;
             }
@@ -1177,81 +1160,78 @@ inkscape_prev_desktop ()
     }
     if (!d) {
         // find last existing
-        d = inkscape_find_desktop_by_dkey (inkscape_maximum_dkey());
+        d = find_desktop_by_dkey (maximum_dkey());
     }
 
     g_assert (d);
-
     return d;
 }
 
 
 
 void
-inkscape_switch_desktops_next ()
+Application::switch_desktops_next ()
 {
-    inkscape_next_desktop()->presentWindow();
+    next_desktop()->presentWindow();
+}
+
+void
+Application::switch_desktops_prev()
+{
+    prev_desktop()->presentWindow();
+}
+
+void
+Application::dialogs_hide()
+{
+    signal_dialogs_hide.emit(this);
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_HIDE], 0);
+    _dialogs_toggle = FALSE;
 }
 
 
 
 void
-inkscape_switch_desktops_prev ()
+Application::dialogs_unhide()
 {
-    inkscape_prev_desktop()->presentWindow();
+    signal_dialogs_unhide.emit(this);
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_UNHIDE], 0);
+    _dialogs_toggle = TRUE;
 }
 
 
 
 void
-inkscape_dialogs_hide ()
+Application::dialogs_toggle()
 {
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_HIDE], 0);
-    inkscape->dialogs_toggle = FALSE;
-}
-
-
-
-void
-inkscape_dialogs_unhide ()
-{
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DIALOGS_UNHIDE], 0);
-    inkscape->dialogs_toggle = TRUE;
-}
-
-
-
-void
-inkscape_dialogs_toggle ()
-{
-    if (inkscape->dialogs_toggle) {
-        inkscape_dialogs_hide ();
+    if (_dialogs_toggle) {
+        dialogs_hide();
     } else {
-        inkscape_dialogs_unhide ();
+        dialogs_unhide();
     }
 }
 
 void
-inkscape_external_change ()
+Application::external_change()
 {
-    g_return_if_fail (inkscape != NULL);
-
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[EXTERNAL_CHANGE], 0);
+    //g_return_if_fail (inkscape != NULL);
+    signal_external_change.emit(this);
+    //g_signal_emit (G_OBJECT (inkscape), inkscape_signals[EXTERNAL_CHANGE], 0);
 }
 
 /**
  * fixme: These need probably signals too
  */
 void
-inkscape_add_document (SPDocument *document)
+Application::add_document (SPDocument *document)
 {
     g_return_if_fail (document != NULL);
 
     // try to insert the pair into the list
-    if (!(inkscape->document_set.insert(std::make_pair(document, 1)).second)) {
+    if (!(document_set.insert(std::make_pair(document, 1)).second)) {
         //insert failed, this key (document) is already in the list
-        for (std::map<SPDocument*,int>::iterator iter = inkscape->document_set.begin();
-               iter != inkscape->document_set.end();
+        for (std::map<SPDocument*,int>::iterator iter = document_set.begin();
+               iter != document_set.end();
                ++iter) {
             if (iter->first == document) {
                 // found this document in list, increase its count
@@ -1261,10 +1241,10 @@ inkscape_add_document (SPDocument *document)
     } else {
         // insert succeeded, this document is new. Do we need to create a
         // selection model for it, i.e. are we running without a desktop?
-        if (!inkscape->use_gui) {
+        if (!_use_gui) {
             // Create layer model and selection model so we can run some verbs without a GUI
-            g_assert(inkscape->selection_models.find(document) == inkscape->selection_models.end());
-            inkscape->selection_models[document] = new AppSelectionModel(document);
+            g_assert(selection_models.find(document) == selection_models.end());
+            selection_models[document] = new AppSelectionModel(document);
         }
     }
 }
@@ -1272,24 +1252,24 @@ inkscape_add_document (SPDocument *document)
 
 // returns true if this was last reference to this document, so you can delete it
 bool
-inkscape_remove_document (SPDocument *document)
+Application::remove_document (SPDocument *document)
 {
     g_return_val_if_fail (document != NULL, false);
 
-    for (std::map<SPDocument*,int>::iterator iter = inkscape->document_set.begin();
-              iter != inkscape->document_set.end();
+    for (std::map<SPDocument *,int>::iterator iter = document_set.begin();
+              iter != document_set.end();
               ++iter) {
         if (iter->first == document) {
             // found this document in list, decrease its count
             iter->second --;
             if (iter->second < 1) {
                 // this was the last one, remove the pair from list
-                inkscape->document_set.erase (iter);
+                document_set.erase (iter);
 
                 // also remove the selection model
-                std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = inkscape->selection_models.find(document);
-                if (sel_iter != inkscape->selection_models.end()) {
-                    inkscape->selection_models.erase(sel_iter);
+                std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = selection_models.find(document);
+                if (sel_iter != selection_models.end()) {
+                    selection_models.erase(sel_iter);
                 }
 
                 return true;
@@ -1303,37 +1283,38 @@ inkscape_remove_document (SPDocument *document)
 }
 
 SPDesktop *
-inkscape_active_desktop (void)
+Application::active_desktop()
 {
-    if (inkscape->desktops == NULL) {
+    if (desktops == NULL) {
         return NULL;
     }
 
-    return static_cast<SPDesktop *>(inkscape->desktops->data);
+    return desktops->front();
 }
 
 SPDocument *
-inkscape_active_document (void)
+Application::active_document()
 {
     if (SP_ACTIVE_DESKTOP) {
         return sp_desktop_document (SP_ACTIVE_DESKTOP);
-    } else if (!inkscape->document_set.empty()) {
+    } else if (!document_set.empty()) {
         // If called from the command line there will be no desktop
         // So 'fall back' to take the first listed document in the Inkscape instance
-        return inkscape->document_set.begin()->first;
+        return document_set.begin()->first;
     }
 
     return NULL;
 }
 
-bool inkscape_is_sole_desktop_for_document(SPDesktop const &desktop) {
+bool
+Application::sole_desktop_for_document(SPDesktop const &desktop) {
     SPDocument const* document = desktop.doc();
     if (!document) {
         return false;
     }
-    for ( GSList *iter = inkscape->desktops ; iter ; iter = iter->next ) {
-        SPDesktop *other_desktop=static_cast<SPDesktop *>(iter->data);
-        SPDocument *other_document=other_desktop->doc();
+    for ( std::list<SPDesktop*>::iterator iter = desktops->begin() ; iter != desktops->end() ; iter++ ) {
+        SPDesktop *other_desktop = *iter;
+        SPDocument *other_document = other_desktop->doc();
         if ( other_document == document && other_desktop != &desktop ) {
             return false;
         }
@@ -1342,7 +1323,7 @@ bool inkscape_is_sole_desktop_for_document(SPDesktop const &desktop) {
 }
 
 Inkscape::UI::Tools::ToolBase *
-inkscape_active_event_context (void)
+Application::active_event_context (void)
 {
     if (SP_ACTIVE_DESKTOP) {
         return SP_ACTIVE_DESKTOP->getEventContext();
@@ -1352,26 +1333,26 @@ inkscape_active_event_context (void)
 }
 
 Inkscape::ActionContext
-inkscape_active_action_context()
+Application::active_action_context()
 {
     if (SP_ACTIVE_DESKTOP) {
         return Inkscape::ActionContext(SP_ACTIVE_DESKTOP);
     }
 
-    SPDocument *doc = inkscape_active_document();
+    SPDocument *doc = active_document();
     if (!doc) {
         return Inkscape::ActionContext();
     }
 
-    return inkscape_action_context_for_document(doc);
+    return action_context_for_document(doc);
 }
 
 Inkscape::ActionContext
-inkscape_action_context_for_document(SPDocument *doc)
+Application::action_context_for_document(SPDocument *doc)
 {
     // If there are desktops, check them first to see if the document is bound to one of them
-    for (GSList *iter = inkscape->desktops ; iter ; iter = iter->next) {
-        SPDesktop *desktop=static_cast<SPDesktop *>(iter->data);
+    for (std::list<SPDesktop*>::iterator iter = desktops->begin() ; iter != desktops->end() ; iter++) {
+        SPDesktop *desktop = *iter;
         if (desktop->doc() == doc) {
             return Inkscape::ActionContext(desktop);
         }
@@ -1391,10 +1372,10 @@ inkscape_action_context_for_document(SPDocument *doc)
 #####################*/
 
 void
-inkscape_refresh_display (Inkscape::Application *inkscape)
+Application::refresh_display ()
 {
-    for (GSList *l = inkscape->desktops; l != NULL; l = l->next) {
-        (static_cast<Inkscape::UI::View::View*>(l->data))->requestRedraw();
+    for (std::list<SPDesktop*>::iterator l = desktops->begin(); l != desktops->end(); l++) {
+        (*l)->requestRedraw();
     }
 }
 
@@ -1404,19 +1385,20 @@ inkscape_refresh_display (Inkscape::Application *inkscape)
  *  saves the preferences if appropriate, and quits.
  */
 void
-inkscape_exit (Inkscape::Application */*inkscape*/)
+Application::exit ()
 {
     g_assert (INKSCAPE);
 
     //emit shutdown signal so that dialogs could remember layout
-    g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
+    signal_shut_down.emit(this);
+    //g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
 
     Inkscape::Preferences::unload();
     gtk_main_quit ();
 }
 
 char *
-homedir_path(const char *filename)
+Application::homedir_path(const char *filename)
 {
     static const gchar *homedir = NULL;
     if (!homedir) {
@@ -1434,7 +1416,7 @@ homedir_path(const char *filename)
  * file should be located.
  */
 gchar *
-profile_path(const char *filename)
+Application::profile_path(const char *filename)
 {
     static const gchar *prefdir = NULL;
 
@@ -1546,20 +1528,22 @@ profile_path(const char *filename)
 }
 
 Inkscape::XML::Node *
-inkscape_get_menus (Inkscape::Application * inkscape)
+Application::get_menus()
 {
-    Inkscape::XML::Node *repr = inkscape->menus->root();
+    Inkscape::XML::Node *repr = menus->root();
     g_assert (!(strcmp (repr->name(), "inkscape")));
     return repr->firstChild();
 }
 
 void
-inkscape_get_all_desktops(std::list< SPDesktop* >& listbuf)
+Application::get_all_desktops(std::list< SPDesktop* >& listbuf)
 {
-    for(GSList* l = inkscape->desktops; l != NULL; l = l->next) {
-        listbuf.push_back(static_cast< SPDesktop* >(l->data));
+    for (std::list<SPDesktop*>::iterator it = desktops->begin(); it != desktops->end(); it++) {
+        listbuf.push_back(*it);
     }
 }
+
+} // namespace Inkscape
 
 /*
   Local Variables:
