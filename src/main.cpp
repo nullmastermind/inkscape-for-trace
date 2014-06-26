@@ -1042,7 +1042,7 @@ sp_main_gui(int argc, char const **argv)
     }
 
     // Add our icon directory to the search path for icon theme lookups.
-    gchar *usericondir = INKSCAPE->profile_path("icons");
+    gchar *usericondir = Inkscape::Application::profile_path("icons");
     gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), usericondir);
     gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_PIXMAPDIR);
     g_free(usericondir);

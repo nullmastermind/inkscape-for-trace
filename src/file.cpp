@@ -175,7 +175,7 @@ SPDesktop *sp_file_new(const std::string &templ)
 Glib::ustring sp_file_default_template_uri()
 {
     std::list<gchar *> sources;
-    sources.push_back( INKSCAPE->profile_path("templates") ); // first try user's local dir
+    sources.push_back( Inkscape::Application::profile_path("templates") ); // first try user's local dir
     sources.push_back( g_strdup(INKSCAPE_TEMPLATESDIR) ); // then the system templates dir
     std::list<gchar const*> baseNames;
     gchar const* localized = _("default.svg");

@@ -1044,7 +1044,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     }
 
     // allow easy access to the user's own templates folder
-    gchar *templates = INKSCAPE->profile_path("templates");
+    gchar *templates = Inkscape::Application::profile_path("templates");
     if (Inkscape::IO::file_test(templates, G_FILE_TEST_EXISTS) &&
         Inkscape::IO::file_test(templates, G_FILE_TEST_IS_DIR) && g_path_is_absolute(templates)) {
         add_shortcut_folder(templates);
