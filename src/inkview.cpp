@@ -232,7 +232,8 @@ main (int argc, const char **argv)
     ss.view = NULL;
     ss.fullscreen = false;
 
-    inkscape = new Inkscape::Application(argv[0], true);
+    Inkscape::Application::init(argv[0], true);
+    inkscape = Inkscape::Application::instance();
 
     // starting at where the commandline options stopped parsing because
     // we want all the files to be in the list

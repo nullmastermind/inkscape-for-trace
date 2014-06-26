@@ -120,8 +120,8 @@ Dock::Dock(Gtk::Orientation orientation)
     gdl_dock_bar_set_style(_gdl_dock_bar, gdl_dock_bar_style);
 
 
-    INKSCAPE->signal_dialogs_hide.connect(sigc::hide(sigc::mem_fun(*this, &Dock::hide)));
-    INKSCAPE->signal_dialogs_unhide.connect(sigc::hide(sigc::mem_fun(*this, &Dock::show)));
+    INKSCAPE->signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dock::hide));
+    INKSCAPE->signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dock::show));
 
     g_signal_connect(_paned->gobj(), "button-press-event", G_CALLBACK(_on_paned_button_event), (void *)this);
     g_signal_connect(_paned->gobj(), "button-release-event", G_CALLBACK(_on_paned_button_event), (void *)this);

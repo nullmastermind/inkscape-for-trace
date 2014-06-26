@@ -48,7 +48,7 @@ struct Document;
 Inkscape::Application * inkscape_ref  (Inkscape::Application * in);
 Inkscape::Application * inkscape_unref(Inkscape::Application * in);
 
-#define INKSCAPE inkscape_get_instance()
+#define INKSCAPE (Inkscape::Application::instance())
 #define SP_INKSCAPE(obj) (dynamic_cast<Inkscape::Application*>(obj))
 #define SP_IS_INKSCAPE(obj) (dynamic_cast<Inkscape::Application*> (obj) != NULL)
 #define SP_ACTIVE_EVENTCONTEXT (INKSCAPE->active_event_context())
@@ -76,23 +76,15 @@ public:
 namespace Inkscape {
 
 class Application {
-private:
-    unsigned refCount;
-    gboolean _dialogs_toggle;
-    guint _mapalt;
-    guint _trackalt;
-    char * _argv0;
-    bool _use_gui; // may want to consider a virtual function
-                   // for overriding things like the warning dlg's
+protected:
+    static Inkscape::Application * _S_inst;
 
-public:
     Application(const char* argv0, bool use_gui);
     ~Application();
 
-    Inkscape::XML::Document *menus;
-    std::map<SPDocument *, int> document_set;
-    std::map<SPDocument *, AppSelectionModel *> selection_models;
-    std::vector<SPDesktop *> * desktops;
+public:
+    static Application* instance();
+    static void init(const char* argv0, bool use_gui);
     
     // returns the mask of the keyboard modifier to map to Alt, zero if no mapping
     // Needs to be a guint because gdktypes.h does not define a 'no-modifier' value
@@ -110,36 +102,8 @@ public:
     char const* argv0() const { return _argv0; }
     void argv0(char const *);
 
-    // signals
-    
-    // one of selections changed
-    sigc::signal<void, Inkscape::Application *, Inkscape::Selection *> signal_selection_changed;
-    // one of subselections (text selection, gradient handle, etc) changed
-    sigc::signal<void, Inkscape::Application *, SPDesktop *> signal_subselection_changed;
-    // one of selections modified
-    sigc::signal<void, Inkscape::Application *, Inkscape::Selection *, guint /*flags*/> signal_selection_modified;
-    // one of selections set
-    sigc::signal<void, Inkscape::Application *, Inkscape::Selection *> signal_selection_set;
-    // tool switched
-    sigc::signal<void, Inkscape::Application *, Inkscape::UI::Tools::ToolBase * /*eventcontext*/> signal_eventcontext_set;
-    // some desktop got focus
-    sigc::signal<void, Inkscape::Application *, SPDesktop *> signal_activate_desktop;
-    // some desktop lost focus
-    sigc::signal<void, Inkscape::Application *, SPDesktop *> signal_deactivate_desktop;
-    
-    // probably orphaned signals
-    sigc::signal<void, Inkscape::Application *, SPDocument *> signal_destroy_document;
-    sigc::signal<void, Inkscape::Application *, SPColor *, double /*opacity*/> signal_color_set;
-    
-    // inkscape is quitting
-    sigc::signal<void, Inkscape::Application *> signal_shut_down;
-    // user pressed F12
-    sigc::signal<void, Inkscape::Application *> signal_dialogs_hide;
-    // user pressed F12
-    sigc::signal<void, Inkscape::Application *> signal_dialogs_unhide;
-    // a document was changed by some external means (undo or XML editor); this
-    // may not be reflected by a selection change and thus needs a separate signal
-    sigc::signal<void, Inkscape::Application *> signal_external_change;
+    // no setter for this -- only we can control this variable
+    static bool isCrashing() { return _crashIsHappening; }
 
     // useful functions
     void autosave_init();
@@ -207,22 +171,57 @@ public:
 
     int autosave();
 
+    // nobody should be accessing our reference count, so it's made private.
     friend Application * ::inkscape_ref  (Application * in);
     friend Application * ::inkscape_unref(Application * in);
+
+    // signals
+    
+    // one of selections changed
+    sigc::signal<void, Inkscape::Selection *> signal_selection_changed;
+    // one of subselections (text selection, gradient handle, etc) changed
+    sigc::signal<void, SPDesktop *> signal_subselection_changed;
+    // one of selections modified
+    sigc::signal<void, Inkscape::Selection *, guint /*flags*/> signal_selection_modified;
+    // one of selections set
+    sigc::signal<void, Inkscape::Selection *> signal_selection_set;
+    // tool switched
+    sigc::signal<void, Inkscape::UI::Tools::ToolBase * /*eventcontext*/> signal_eventcontext_set;
+    // some desktop got focus
+    sigc::signal<void, SPDesktop *> signal_activate_desktop;
+    // some desktop lost focus
+    sigc::signal<void, SPDesktop *> signal_deactivate_desktop;
+    
+    // these are orphaned signals (nothing emits them and nothing connects to them)
+    sigc::signal<void, SPDocument *> signal_destroy_document;
+    sigc::signal<void, SPColor *, double /*opacity*/> signal_color_set;
+    
+    // inkscape is quitting
+    sigc::signal<void> signal_shut_down;
+    // user pressed F12
+    sigc::signal<void> signal_dialogs_hide;
+    // user pressed F12
+    sigc::signal<void> signal_dialogs_unhide;
+    // a document was changed by some external means (undo or XML editor); this
+    // may not be reflected by a selection change and thus needs a separate signal
+    sigc::signal<void> signal_external_change;
+
+private:
+    Inkscape::XML::Document * _menus;
+    std::map<SPDocument *, int> _document_set;
+    std::map<SPDocument *, AppSelectionModel *> _selection_models;
+    std::vector<SPDesktop *> * _desktops;
+
+    unsigned refCount;
+    bool _dialogs_toggle;
+    guint _mapalt;
+    guint _trackalt;
+    char * _argv0;
+    static bool _crashIsHappening;
+    bool _use_gui;
 };
 
 } // namespace Inkscape
-
-bool inkscapeIsCrashing();
-
-// gets the current instance and calls autosave()
-int inkscape_autosave(gpointer unused);
-
-// hmm, I wonder what this does /s
-Inkscape::Application* inkscape_get_instance();
-
-// only temporary until I can properly clean this up
-void inkscape_application_init (const gchar *argv0, gboolean use_gui);
 
 #endif
 

@@ -211,12 +211,21 @@ void SPWidgetImpl::show(GtkWidget *widget)
 
     if (spw->inkscape) {
         // Connect signals
-        spw->selModified = spw->inkscape->signal_selection_modified.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::modifySelectionCB), spw));
-        spw->selChanged = spw->inkscape->signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::changeSelectionCB), spw));
-        spw->selSet = spw->inkscape->signal_selection_set.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::setSelectionCB), spw));
-        //g_signal_connect(spw->inkscape, "modify_selection", G_CALLBACK(SPWidgetImpl::modifySelectionCB), spw);
-        //g_signal_connect(spw->inkscape, "change_selection", G_CALLBACK(SPWidgetImpl::changeSelectionCB), spw);
-        //g_signal_connect(spw->inkscape, "set_selection", G_CALLBACK(SPWidgetImpl::setSelectionCB), spw);
+        spw->selModified = spw->inkscape->signal_selection_modified.connect(
+                sigc::bind<0>(
+                sigc::bind(
+                sigc::ptr_fun(SPWidgetImpl::modifySelectionCB), spw), spw->inkscape
+        ));
+        spw->selChanged = spw->inkscape->signal_selection_changed.connect(
+                sigc::bind<0>(
+                sigc::bind(
+                sigc::ptr_fun(SPWidgetImpl::changeSelectionCB), spw), spw->inkscape
+        ));
+        spw->selSet = spw->inkscape->signal_selection_set.connect(
+                sigc::bind<0>(
+                sigc::bind(
+                sigc::ptr_fun(SPWidgetImpl::setSelectionCB), spw), spw->inkscape
+        ));
     }
 
     if (reinterpret_cast<GtkWidgetClass *>(parentClass)->show) {
@@ -233,7 +242,6 @@ void SPWidgetImpl::hide(GtkWidget *widget)
         spw->selModified.disconnect();
         spw->selChanged.disconnect();
         spw->selSet.disconnect();
-        //sp_signal_disconnect_by_data(spw->inkscape, spw);
     }
 
     if (reinterpret_cast<GtkWidgetClass *>(parentClass)->hide) {
@@ -311,9 +319,21 @@ GtkWidget *SPWidgetImpl::constructGlobal(SPWidget *spw, Inkscape::Application *i
 
     spw->inkscape = inkscape;
     if (gtk_widget_get_visible(GTK_WIDGET(spw))) {
-        spw->selModified = spw->inkscape->signal_selection_modified.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::modifySelectionCB), spw));
-        spw->selChanged = spw->inkscape->signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::changeSelectionCB), spw));
-        spw->selSet = spw->inkscape->signal_selection_set.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::setSelectionCB), spw));
+        spw->selModified = spw->inkscape->signal_selection_modified.connect(
+                sigc::bind<0>(
+                sigc::bind(
+                sigc::ptr_fun(SPWidgetImpl::modifySelectionCB), spw), spw->inkscape
+        ));
+        spw->selChanged = spw->inkscape->signal_selection_changed.connect(
+                sigc::bind<0>(
+                sigc::bind(
+                sigc::ptr_fun(SPWidgetImpl::changeSelectionCB), spw), spw->inkscape
+        ));
+        spw->selSet = spw->inkscape->signal_selection_set.connect(
+                sigc::bind<0>(
+                sigc::bind(
+                sigc::ptr_fun(SPWidgetImpl::setSelectionCB), spw), spw->inkscape
+        ));
     }
 
     g_signal_emit(spw, signals[CONSTRUCT], 0);

@@ -88,8 +88,9 @@ ImageIcon::~ImageIcon()
  */
 void ImageIcon::init()
 {
+    //  \FIXME Why?
     if (!INKSCAPE)
-        inkscape_application_init("",false);
+        Inkscape::Application::init("", false);
     document = NULL;
     viewerGtkmm = NULL;
     //set_size_request(150,150);

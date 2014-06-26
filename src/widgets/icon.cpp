@@ -1568,7 +1568,7 @@ void IconImpl::addPreRender( GtkIconSize lsize, gchar const *name )
 }
 
 gboolean IconImpl::prerenderTask(gpointer /*data*/) {
-    if ( inkscapeIsCrashing() ) {
+    if ( Inkscape::Application::isCrashing() ) {
         // stop
     } else if (!pendingRenders.empty()) {
         bool workDone = false;
@@ -1580,7 +1580,7 @@ gboolean IconImpl::prerenderTask(gpointer /*data*/) {
         } while (!pendingRenders.empty() && !workDone);
     }
 
-    if (!inkscapeIsCrashing() && !pendingRenders.empty()) {
+    if (!Inkscape::Application::isCrashing() && !pendingRenders.empty()) {
         return TRUE;
     } else {
         callbackHooked = false;

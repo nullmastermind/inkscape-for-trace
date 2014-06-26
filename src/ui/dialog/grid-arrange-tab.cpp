@@ -594,7 +594,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     {
         // Selection Change signal
-        INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::hide<0>(sigc::mem_fun(*this, &GridArrangeTab::updateSelection))));
+        INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::mem_fun(*this, &GridArrangeTab::updateSelection)));
     }
 
     Gtk::Box *contents = this;

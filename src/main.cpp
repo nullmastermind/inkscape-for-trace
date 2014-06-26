@@ -1059,7 +1059,7 @@ sp_main_gui(int argc, char const **argv)
     gboolean create_new = TRUE;
 
     /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
-    inkscape_application_init(argv[0], true);
+    Inkscape::Application::init(argv[0], true);
 
     while (fl) {
         if (sp_file_open((gchar *)fl->data,NULL)) {
@@ -1335,7 +1335,7 @@ int sp_main_console(int argc, char const **argv)
         exit(0);
     }
 
-    inkscape_application_init(argv[0], false);
+    Inkscape::Application::init(argv[0], false);
 
     if (sp_shell) {
         int retVal = sp_main_shell(argv[0]); // Run as interactive shell
