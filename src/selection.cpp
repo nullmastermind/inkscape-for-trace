@@ -20,7 +20,7 @@
 # include <config.h>
 #endif
 #include "macros.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "document.h"
 #include "layer-model.h"
 #include "selection.h"

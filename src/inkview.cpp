@@ -232,7 +232,7 @@ main (int argc, const char **argv)
     ss.view = NULL;
     ss.fullscreen = false;
 
-    inkscape = new Inkscape::Application;//(Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
+    inkscape = new Inkscape::Application(argv[0], true);
 
     // starting at where the commandline options stopped parsing because
     // we want all the files to be in the list

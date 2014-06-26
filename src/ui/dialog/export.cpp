@@ -51,7 +51,7 @@
 #include "ui/widget/unit-menu.h"
 #include "util/units.h"
 #include "helper/window.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "document.h"
 #include "document-undo.h"
 #include "desktop-handles.h"

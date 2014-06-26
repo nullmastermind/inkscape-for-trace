@@ -48,37 +48,6 @@ gboolean sp_retransientize_again(gpointer dlgPtr)
     return FALSE; // so that it is only called once
 }
 
-#if 0
-void sp_retransientize(SPDesktop *desktop, Dialog * dlgPtr)
-{
-    Dialog *dlg = static_cast<Dialog *>(dlgPtr);
-    dlg->onDesktopActivated (desktop);
-}
-
-void sp_dialog_shutdown(GObject * /*object*/, Dialog * dlgPtr)
-{
-    Dialog *dlg = static_cast<Dialog *>(dlgPtr);
-    dlg->onShutdown();
-}
-
-
-static void hideCallback(GObject * /*object*/, Dialog * dlgPtr)
-{
-    g_return_if_fail( dlgPtr != NULL );
-
-    Dialog *dlg = static_cast<Dialog *>(dlgPtr);
-    dlg->onHideF12();
-}
-
-static void unhideCallback(GObject * /*object*/, Dialog* dlgPtr)
-{
-    g_return_if_fail( dlgPtr != NULL );
-
-    Dialog *dlg = static_cast<Dialog *>(dlgPtr);
-    dlg->onShowF12();
-}
-#endif
-
 //=====================================================================
 
 Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_path, int verb_num,
@@ -108,10 +77,6 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
     INKSCAPE->signal_dialogs_hide.connect(sigc::hide<0>(sigc::mem_fun(*this, &Dialog::onHideF12)));
     INKSCAPE->signal_dialogs_unhide.connect(sigc::hide<0>(sigc::mem_fun(*this, &Dialog::onShowF12)));
     INKSCAPE->signal_shut_down.connect(sigc::hide<0>(sigc::mem_fun(*this, &Dialog::onShutdown)));
-    //g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(sp_retransientize), (void *)this);
-    //g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this);
-    //g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this);
-    //g_signal_connect(G_OBJECT(INKSCAPE), "shut_down", G_CALLBACK(sp_dialog_shutdown), (void *)this);
 
     Glib::wrap(gobj())->signal_event().connect(sigc::mem_fun(*this, &Dialog::_onEvent));
     Glib::wrap(gobj())->signal_key_press_event().connect(sigc::mem_fun(*this, &Dialog::_onKeyPress));

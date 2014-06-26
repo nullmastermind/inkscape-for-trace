@@ -344,7 +344,6 @@ set(inkscape_SRC
 	# ige-mac-menu.h
 	ink-action.h
 	ink-comboboxentry-action.h
-	inkscape-private.h
 	inkscape-version.h
 	inkscape.h
 	interface.h

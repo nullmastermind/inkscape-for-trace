@@ -29,7 +29,7 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/input.h"

@@ -567,17 +567,6 @@ void GridArrangeTab::updateSelection()
 }
 
 
-
-/*##########################
-## Experimental
-##########################*/
-
-static void updateSelectionCallback(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, GridArrangeTab *dlg)
-{
-    dlg->updateSelection();
-}
-
-
 //#########################################################################
 //## C O N S T R U C T O R    /    D E S T R U C T O R
 //#########################################################################
@@ -606,7 +595,6 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     {
         // Selection Change signal
         INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::hide<0>(sigc::mem_fun(*this, &GridArrangeTab::updateSelection))));
-        //g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
     }
 
     Gtk::Box *contents = this;

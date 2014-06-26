@@ -14,19 +14,20 @@
  */
 
 #include <map>
-#include <list>
-#include "selection.h"
-#include "color.h"
-#include "layer-model.h"
+#include <vector>
 #include <glib.h>
+#include <glib-object.h>
 #include <sigc++/signal.h>
+#include "layer-model.h"
+#include "selection.h"
 
 class SPDesktop;
 class SPDocument;
+struct SPColor;
 
 namespace Inkscape {
 
-struct Application;
+class Application;
 namespace UI {
 namespace Tools {
 
@@ -48,6 +49,8 @@ Inkscape::Application * inkscape_ref  (Inkscape::Application * in);
 Inkscape::Application * inkscape_unref(Inkscape::Application * in);
 
 #define INKSCAPE inkscape_get_instance()
+#define SP_INKSCAPE(obj) (dynamic_cast<Inkscape::Application*>(obj))
+#define SP_IS_INKSCAPE(obj) (dynamic_cast<Inkscape::Application*> (obj) != NULL)
 #define SP_ACTIVE_EVENTCONTEXT (INKSCAPE->active_event_context())
 #define SP_ACTIVE_DOCUMENT (INKSCAPE->active_document())
 #define SP_ACTIVE_DESKTOP (INKSCAPE->active_desktop())
@@ -72,24 +75,24 @@ public:
 
 namespace Inkscape {
 
-struct Application {
+class Application {
 private:
     unsigned refCount;
     gboolean _dialogs_toggle;
     guint _mapalt;
     guint _trackalt;
-    gboolean _use_gui; // may want to consider a virtual function
-                       // for overriding things like the warning dlg's
+    char * _argv0;
+    bool _use_gui; // may want to consider a virtual function
+                   // for overriding things like the warning dlg's
 
 public:
-    Application();
+    Application(const char* argv0, bool use_gui);
     ~Application();
 
     Inkscape::XML::Document *menus;
     std::map<SPDocument *, int> document_set;
     std::map<SPDocument *, AppSelectionModel *> selection_models;
-    std::list<SPDesktop *> * desktops;
-    gchar *argv0;
+    std::vector<SPDesktop *> * desktops;
     
     // returns the mask of the keyboard modifier to map to Alt, zero if no mapping
     // Needs to be a guint because gdktypes.h does not define a 'no-modifier' value
@@ -101,8 +104,11 @@ public:
     guint trackalt() const { return _trackalt; }
     void trackalt(guint trackvalue) { _trackalt = trackvalue; }
 
-    gboolean use_gui() const { return _use_gui; }
+    bool use_gui() const { return _use_gui; }
     void use_gui(gboolean guival) { _use_gui = guival; }
+
+    char const* argv0() const { return _argv0; }
+    void argv0(char const *);
 
     // signals
     
@@ -188,8 +194,8 @@ public:
     void add_document (SPDocument *document);
     bool remove_document (SPDocument *document);
     
-    gchar *homedir_path(const char *filename);
-    gchar *profile_path(const char *filename);
+    static char *homedir_path(const char *filename);
+    static char *profile_path(const char *filename);
     
     // fixme: This has to be rethought
     void refresh_display ();
@@ -197,6 +203,8 @@ public:
     // fixme: This also
     void exit ();
     
+    static void crash_handler(int signum);
+
     int autosave();
 
     friend Application * ::inkscape_ref  (Application * in);

@@ -74,7 +74,7 @@
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "inkscape-version.h"
 
 #include "sp-namedview.h"

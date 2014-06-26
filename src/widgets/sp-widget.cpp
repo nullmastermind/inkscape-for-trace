@@ -314,9 +314,6 @@ GtkWidget *SPWidgetImpl::constructGlobal(SPWidget *spw, Inkscape::Application *i
         spw->selModified = spw->inkscape->signal_selection_modified.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::modifySelectionCB), spw));
         spw->selChanged = spw->inkscape->signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::changeSelectionCB), spw));
         spw->selSet = spw->inkscape->signal_selection_set.connect(sigc::bind(sigc::ptr_fun(SPWidgetImpl::setSelectionCB), spw));
-        //g_signal_connect(inkscape, "modify_selection", G_CALLBACK(SPWidgetImpl::modifySelectionCB), spw);
-        //g_signal_connect(inkscape, "change_selection", G_CALLBACK(SPWidgetImpl::changeSelectionCB), spw);
-        //g_signal_connect(inkscape, "set_selection", G_CALLBACK(SPWidgetImpl::setSelectionCB), spw);
     }
 
     g_signal_emit(spw, signals[CONSTRUCT], 0);

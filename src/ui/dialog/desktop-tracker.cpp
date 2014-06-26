@@ -45,7 +45,6 @@ void DesktopTracker::connect(GtkWidget *widget)
               sigc::bind(
                 sigc::ptr_fun(&DesktopTracker::activateDesktopCB), this)
     ));
-    //inkID = g_signal_connect( G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(activateDesktopCB), this );
 
     GtkWidget *wdgt = gtk_widget_get_ancestor(widget, SP_TYPE_DESKTOP_WIDGET);
     if (wdgt && !base) {
@@ -66,8 +65,6 @@ void DesktopTracker::disconnect()
     }
     if (inkID.connected()) {
         inkID.disconnect();
-        //g_signal_handler_disconnect(G_OBJECT(INKSCAPE), inkID);
-        //inkID = 0;
     }
 }
 

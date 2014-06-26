@@ -45,7 +45,7 @@
 #include "helper/action-context.h"
 #include "util/units.h"
 #include "ui/widget/unit-tracker.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "interface.h"
 #include "macros.h"
 #include "preferences.h"

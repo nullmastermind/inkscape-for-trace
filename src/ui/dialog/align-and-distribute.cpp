@@ -1044,12 +1044,10 @@ AlignAndDistribute::AlignAndDistribute()
     contents->pack_start(_nodesFrame, true, true);
 
     //Connect to the global tool change signal
-    INKSCAPE->signal_eventcontext_set.connect(sigc::hide<0>(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this))));
-    //g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (on_tool_changed), this);
+    _toolChangeConn = INKSCAPE->signal_eventcontext_set.connect(sigc::hide<0>(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this))));
 
     // Connect to the global selection change, to invalidate cached randomize_bbox
-    INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this))));
-    //g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
+    _selChangeConn = INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this))));
     randomize_bbox = Geom::OptRect();
 
     _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &AlignAndDistribute::setDesktop) );
@@ -1062,13 +1060,13 @@ AlignAndDistribute::AlignAndDistribute()
 
 AlignAndDistribute::~AlignAndDistribute()
 {
-    sp_signal_disconnect_by_data (G_OBJECT (INKSCAPE), this);
-
     for (std::list<Action *>::iterator it = _actionList.begin();
          it != _actionList.end();  ++it) {
         delete *it;
     }
 
+    _toolChangeConn.disconnect();
+    _selChangeConn.disconnect();
     _desktopChangeConn.disconnect();
     _deskTrack.disconnect();
 }

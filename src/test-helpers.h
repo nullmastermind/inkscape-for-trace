@@ -5,7 +5,7 @@
 #include <cxxtest/TestSuite.h>
 
 #include "document.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 
 
 // Dummy functions to keep linker happy

@@ -18,7 +18,7 @@
 #include <cstring>
 #include <string>
 
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include <glibmm/i18n.h>

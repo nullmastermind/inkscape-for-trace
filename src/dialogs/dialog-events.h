@@ -4,7 +4,7 @@
 /* Authors:
  *   bulia byak <bulia@dr.com>
  *
- * Copyright (C) 2003 authors
+ * Copyright (C) 2003-2014 authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

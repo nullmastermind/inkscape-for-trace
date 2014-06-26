@@ -1271,8 +1271,7 @@ CloneTiler::CloneTiler () :
                 // external_change (so we're not fooled by undo)
                 selectChangedConn = INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_change_selection), dlg)));
                 externChangedConn = INKSCAPE->signal_external_change.connect   (sigc::hide<0>(sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_external_change), dlg)));
-                //g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (clonetiler_change_selection), dlg);
-                //g_signal_connect (G_OBJECT (INKSCAPE), "external_change", G_CALLBACK (clonetiler_external_change), dlg);
+
                 g_signal_connect(G_OBJECT(dlg), "destroy", G_CALLBACK(clonetiler_disconnect_gsignal), this);
 
                 // update now
@@ -1384,9 +1383,6 @@ void CloneTiler::clonetiler_external_change(GtkWidget *dlg)
 
 void CloneTiler::clonetiler_disconnect_gsignal(GObject *, gpointer source)
 {
-    //if (source && G_IS_OBJECT(source)) {
-        //sp_signal_disconnect_by_data (source, widget);
-    //}
     g_return_if_fail(source != NULL);
 
     CloneTiler* dlg = reinterpret_cast<CloneTiler*>(source);

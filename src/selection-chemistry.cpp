@@ -99,7 +99,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "path-chemistry.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"

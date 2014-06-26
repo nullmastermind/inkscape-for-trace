@@ -156,10 +156,8 @@ Transformation::Transformation()
     }
 
     // Connect to the global selection changed & modified signals
-    INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
-    INKSCAPE->signal_selection_modified.connect(sigc::hide<0>(sigc::hide<1>(sigc::bind(sigc::ptr_fun(&on_selection_modified), this))));
-    //g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
-    //g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (on_selection_modified), this);
+    _selChangeConn = INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
+    _selModifyConn = INKSCAPE->signal_selection_modified.connect(sigc::hide<0>(sigc::hide<1>(sigc::bind(sigc::ptr_fun(&on_selection_modified), this))));
 
     _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &Transformation::setDesktop) );
     _deskTrack.connect(GTK_WIDGET(gobj()));
@@ -169,7 +167,8 @@ Transformation::Transformation()
 
 Transformation::~Transformation()
 {
-    sp_signal_disconnect_by_data (G_OBJECT (INKSCAPE), this);
+    _selModifyConn.disconnect();
+    _selChangeConn.disconnect();   
     _desktopChangeConn.disconnect();
     _deskTrack.disconnect();
 }

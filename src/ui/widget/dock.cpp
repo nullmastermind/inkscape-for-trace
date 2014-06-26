@@ -119,9 +119,7 @@ Dock::Dock(Gtk::Orientation orientation)
 
     gdl_dock_bar_set_style(_gdl_dock_bar, gdl_dock_bar_style);
 
-    
-    //g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this);
-    //g_signal_connect(G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this);
+
     INKSCAPE->signal_dialogs_hide.connect(sigc::hide(sigc::mem_fun(*this, &Dock::hide)));
     INKSCAPE->signal_dialogs_unhide.connect(sigc::hide(sigc::mem_fun(*this, &Dock::show)));
 

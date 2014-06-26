@@ -56,7 +56,6 @@
 #include "event-log.h"
 #include "helper/action-context.h"
 #include "interface.h"
-#include "inkscape-private.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 #include "layer-model.h"

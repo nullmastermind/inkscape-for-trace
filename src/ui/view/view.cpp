@@ -20,7 +20,7 @@
 #include "message-stack.h"
 #include "message-context.h"
 #include "verbs.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 
 namespace Inkscape {
 namespace UI {

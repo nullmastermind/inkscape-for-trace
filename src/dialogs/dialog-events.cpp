@@ -6,7 +6,7 @@
  *   bulia byak <bulia@dr.com>
  *   Johan Engelen <j.b.c.engelen@ewi.utwente.nl>
  *
- * Copyright (C) 2003-2007 Authors
+ * Copyright (C) 2003-2014 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -25,7 +25,7 @@
 #include "macros.h"
 #include <gtk/gtk.h>
 #include "desktop.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "preferences.h"
 #include "ui/tools/tool-base.h"
 

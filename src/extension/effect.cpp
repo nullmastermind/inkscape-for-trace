@@ -9,7 +9,7 @@
  */
 
 #include "prefdialog.h"
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "helper/action.h"
 #include "ui/view/view.h"
 #include "desktop-handles.h"
