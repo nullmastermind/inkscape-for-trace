@@ -172,7 +172,7 @@ void
 inkscape_application_init (const gchar *argv0, gboolean use_gui)
 {
    if (!inkscape) {
-        inkscape = new Inkscape::Application(argv0, use_gui);
+        new Inkscape::Application(argv0, use_gui);
     } else {
         g_assert_not_reached();
     }
@@ -361,6 +361,11 @@ void Application::argv0(char const* argv)
     _argv0 = g_strdup(argv);
 }
 
+/* \brief Constructor for the application.
+ *  Creates a new Inkscape::Application.
+ *
+ *  \pre inkscape == NULL
+ */
 
 Application::Application(const char* argv, bool use_gui) :
     refCount(1),
@@ -382,6 +387,10 @@ Application::Application(const char* argv, bool use_gui) :
 #endif
 
     _argv0 = g_strdup(argv);
+
+    // \TODO: this belongs to inkscape_application_init but if it isn't here
+    // then the Filters and Extensions menus don't work.
+    inkscape = this;
 
     /* Load the preferences and menus */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
