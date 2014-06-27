@@ -85,7 +85,7 @@ void View::_close() {
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();
-        if (INKSCAPE->remove_document(_doc)) {
+        if (INKSCAPE.remove_document(_doc)) {
             // this was the last view of this document, so delete it
             delete _doc;
         }
@@ -111,13 +111,13 @@ void View::setDocument(SPDocument *doc) {
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();
-        if (INKSCAPE->remove_document(_doc)) {
+        if (INKSCAPE.remove_document(_doc)) {
             // this was the last view of this document, so delete it
             delete _doc;
         }
     }
 
-    INKSCAPE->add_document(doc);
+    INKSCAPE.add_document(doc);
 
     _doc = doc;
     _document_uri_set_connection = 

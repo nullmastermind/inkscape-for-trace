@@ -28,10 +28,6 @@ class Entry;
 }
 
 class SPDesktop;
-
-namespace Inkscape {
-struct Application;
-} // namespace Inkscape
  
 typedef struct { 
     GtkWidget *win;
@@ -55,14 +51,14 @@ void sp_transientize             ( GtkWidget *win );
 void on_transientize             ( SPDesktop *desktop, 
                                    win_data *wd );
 
-void sp_transientize_callback    ( Inkscape::Application *inkscape, 
-                                   SPDesktop *desktop, 
+void sp_transientize_callback    ( SPDesktop *desktop, 
                                    win_data *wd );
 
 void on_dialog_hide (GtkWidget *w);
 void on_dialog_unhide (GtkWidget *w);
-gboolean sp_dialog_hide (GObject *object, gpointer data);
-gboolean sp_dialog_unhide (GObject *object, gpointer data);
+
+//gboolean sp_dialog_hide (GObject *object, gpointer data);
+//gboolean sp_dialog_unhide (GObject *object, gpointer data);
 
 #endif
 

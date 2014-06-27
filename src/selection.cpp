@@ -89,7 +89,7 @@ Selection::_emit_modified(Selection *selection)
 }
 
 void Selection::_emitModified(guint flags) {
-    INKSCAPE->selection_modified(this, flags);
+    INKSCAPE.selection_modified(this, flags);
     _modified_signal.emit(this, flags);
 }
 
@@ -104,7 +104,7 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
         _releaseContext(_selection_context);
     }
 
-    INKSCAPE->selection_changed(this);
+    INKSCAPE.selection_changed(this);
     _changed_signal.emit(this);
 }
 

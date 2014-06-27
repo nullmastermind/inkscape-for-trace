@@ -51,8 +51,8 @@ public:
 protected:
 
     inline virtual void _propagateDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    inline virtual void _propagateDesktopActivated(Inkscape::Application *, SPDesktop *);
-    inline virtual void _propagateDesktopDeactivated(Inkscape::Application *, SPDesktop *);
+    inline virtual void _propagateDesktopActivated(SPDesktop *);
+    inline virtual void _propagateDesktopDeactivated(SPDesktop *);
 
     UI::Widget::Panel &_panel;
     sigc::connection _document_replaced_connection;
@@ -125,17 +125,17 @@ void PanelDialogBase::_propagateDocumentReplaced(SPDesktop *desktop, SPDocument 
     _panel.signalDocumentReplaced().emit(desktop, document);
 }
 
-void PanelDialogBase::_propagateDesktopActivated(Inkscape::Application *application, SPDesktop *desktop)
+void PanelDialogBase::_propagateDesktopActivated(SPDesktop *desktop)
 {
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialogBase::_propagateDocumentReplaced));
-    _panel.signalActivateDesktop().emit(application, desktop);
+    _panel.signalActivateDesktop().emit(desktop);
 }
 
-void PanelDialogBase::_propagateDesktopDeactivated(Inkscape::Application *application, SPDesktop *desktop)
+void PanelDialogBase::_propagateDesktopDeactivated(SPDesktop *desktop)
 {
     _document_replaced_connection.disconnect();
-    _panel.signalDeactiveDesktop().emit(application, desktop);
+    _panel.signalDeactiveDesktop().emit(desktop);
 }
 
 
@@ -153,7 +153,7 @@ PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int co
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    _propagateDesktopActivated(INKSCAPE, desktop);
+    _propagateDesktopActivated(desktop);
 
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
@@ -202,7 +202,7 @@ PanelDialog<Behavior::FloatingBehavior>::PanelDialog(UI::Widget::Panel &panel, c
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    _propagateDesktopActivated(INKSCAPE, desktop);
+    _propagateDesktopActivated(desktop);
 
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
@@ -238,14 +238,12 @@ PanelDialog<Behavior::FloatingBehavior> *PanelDialog<Behavior::FloatingBehavior>
         new PanelDialog<Behavior::FloatingBehavior>(panel, panel.getPrefsPath(),
                                                     panel.getVerb(), panel.getApplyLabel());
 
-    INKSCAPE->signal_activate_desktop.connect(
-            sigc::bind<0>(
-            sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated), INKSCAPE
-    ));
-    INKSCAPE->signal_deactivate_desktop.connect(
-            sigc::bind<0>(            
-            sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopDeactivated), INKSCAPE
-    ));
+    INKSCAPE.signal_activate_desktop.connect(
+            sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated)
+    );
+    INKSCAPE.signal_deactivate_desktop.connect(        
+            sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopDeactivated)
+    );
 
     return instance;
 }

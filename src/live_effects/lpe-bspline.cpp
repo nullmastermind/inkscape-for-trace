@@ -392,7 +392,7 @@ void LPEBSpline::toMakeCusp(Gtk::Widget *widgWeight) {
 void LPEBSpline::toWeight() { changeWeight(weight); }
 
 void LPEBSpline::changeWeight(double weightValue) {
-  SPDesktop *desktop = inkscape_active_desktop();
+  SPDesktop *desktop = INKSCAPE.active_desktop();
   Inkscape::Selection *selection = sp_desktop_selection(desktop);
   GSList *items = (GSList *)selection->itemList();
   SPItem *item = (SPItem *)g_slist_nth(items, 0)->data;
@@ -432,7 +432,7 @@ bool LPEBSpline::nodeIsSelected(Geom::Point nodePoint) {
 void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue) {
   using Geom::X;
   using Geom::Y;
-  SPDesktop *desktop = inkscape_active_desktop();
+  SPDesktop *desktop = INKSCAPE.active_desktop();
   if (INK_IS_NODE_TOOL(desktop->event_context)) {
     Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(desktop->event_context);
     Inkscape::UI::ControlPointSelection::Set &selection =

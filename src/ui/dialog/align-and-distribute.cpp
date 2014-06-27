@@ -1044,10 +1044,10 @@ AlignAndDistribute::AlignAndDistribute()
     contents->pack_start(_nodesFrame, true, true);
 
     //Connect to the global tool change signal
-    _toolChangeConn = INKSCAPE->signal_eventcontext_set.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this)));
+    _toolChangeConn = INKSCAPE.signal_eventcontext_set.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this)));
 
     // Connect to the global selection change, to invalidate cached randomize_bbox
-    _selChangeConn = INKSCAPE->signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
+    _selChangeConn = INKSCAPE.signal_selection_changed.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_selection_changed), this)));
     randomize_bbox = Geom::OptRect();
 
     _desktopChangeConn = _deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &AlignAndDistribute::setDesktop) );

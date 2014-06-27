@@ -17,6 +17,7 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include "inkscape.h"
 
 #define SP_TYPE_WIDGET (SPWidget::getType())
 #define SP_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_WIDGET, SPWidget))
@@ -27,7 +28,6 @@
 
 namespace Inkscape {
 
-struct Application;
 class Selection;
 class SPWidgetImpl;
 
@@ -38,10 +38,7 @@ struct SPWidget {
 
     static GType getType();
 
-    //
-
     GtkBin bin;
-    Inkscape::Application *inkscape;
 
     sigc::connection selModified;
     sigc::connection selChanged;
@@ -64,7 +61,7 @@ struct SPWidgetClass {
 /* fixme: Think (Lauris) */
 
 /** Generic constructor for global widget. */
-GtkWidget *sp_widget_new_global(Inkscape::Application *inkscape);
+GtkWidget *sp_widget_new_global();
 
 #endif // SEEN_SP_WIDGET_H
 /*

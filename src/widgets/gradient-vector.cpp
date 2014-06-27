@@ -1033,18 +1033,18 @@ GtkWidget * sp_gradient_vector_editor_new(SPGradient *gradient, SPStop *stop)
         wd.win = dlg;
         wd.stop = 0;
 
-        INKSCAPE->signal_activate_desktop.connect(sigc::bind<0>(sigc::bind(sigc::ptr_fun(&sp_transientize_callback), &wd), INKSCAPE));
+        INKSCAPE.signal_activate_desktop.connect(sigc::bind(sigc::ptr_fun(&sp_transientize_callback), &wd));
 
         g_signal_connect(G_OBJECT(dlg), "event", G_CALLBACK(sp_dialog_event_handler), dlg);
         g_signal_connect(G_OBJECT(dlg), "destroy", G_CALLBACK(sp_gradient_vector_dialog_destroy), dlg);
         g_signal_connect(G_OBJECT(dlg), "delete_event", G_CALLBACK(sp_gradient_vector_dialog_delete), dlg);
 
-        INKSCAPE->signal_shut_down.connect(
+        INKSCAPE.signal_shut_down.connect(
             sigc::hide_return(
             sigc::bind(sigc::ptr_fun(&sp_gradient_vector_dialog_delete), (GtkWidget *) NULL, (GdkEvent *) NULL, (GtkWidget *) NULL)
         ));
-        INKSCAPE->signal_dialogs_hide.connect(sigc::bind(sigc::ptr_fun(&gtk_widget_hide), dlg));
-        INKSCAPE->signal_dialogs_unhide.connect(sigc::bind(sigc::ptr_fun(&gtk_widget_show), dlg));
+        INKSCAPE.signal_dialogs_hide.connect(sigc::bind(sigc::ptr_fun(&gtk_widget_hide), dlg));
+        INKSCAPE.signal_dialogs_unhide.connect(sigc::bind(sigc::ptr_fun(&gtk_widget_show), dlg));
 
         gtk_container_set_border_width(GTK_CONTAINER(dlg), PAD);
 
@@ -1161,13 +1161,14 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
     blocked = FALSE;
 }
 
+// \FIXME this
 #if GTK_CHECK_VERSION(3,0,0)
 static void sp_gradient_vector_dialog_destroy(GtkWidget * /*object*/, gpointer /*data*/)
 #else
 static void sp_gradient_vector_dialog_destroy(GtkObject * /*object*/, gpointer /*data*/)
 #endif
 {
-    sp_signal_disconnect_by_data(INKSCAPE, dlg);
+    //sp_signal_disconnect_by_data(INKSCAPE, dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
 }

@@ -270,7 +270,7 @@ gboolean Inkscape::DocumentUndo::undo(SPDocument *doc)
         doc->priv->seeking = false;
 
 	if (ret)
-		INKSCAPE->external_change();
+		INKSCAPE.external_change();
 
 	return ret;
 }
@@ -315,7 +315,7 @@ gboolean Inkscape::DocumentUndo::redo(SPDocument *doc)
         doc->priv->seeking = false;
 
 	if (ret)
-		INKSCAPE->external_change();
+		INKSCAPE.external_change();
 
 	return ret;
 }

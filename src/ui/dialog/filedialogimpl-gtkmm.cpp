@@ -538,7 +538,8 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
 
 SVGPreview::SVGPreview()
 {
-    if (!INKSCAPE)
+    // \FIXME Why?!!??
+    if (!Inkscape::Application::exists())
         Inkscape::Application::create("", false);
     document = NULL;
     viewerGtk = NULL;

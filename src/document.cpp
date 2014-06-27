@@ -462,11 +462,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     DocumentUndo::setUndoSensitive(document, true);
 
     // reset undo key when selection changes, so that same-key actions on different objects are not coalesced
-    document->priv->selChangeConnection = INKSCAPE->signal_selection_changed.connect(
+    document->priv->selChangeConnection = INKSCAPE.signal_selection_changed.connect(
                 sigc::hide(sigc::bind(
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
-    document->priv->desktopActivatedConnection = INKSCAPE->signal_activate_desktop.connect(
+    document->priv->desktopActivatedConnection = INKSCAPE.signal_activate_desktop.connect(
                 sigc::hide(sigc::bind(
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));

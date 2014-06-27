@@ -89,11 +89,13 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
         } // children of "inkscape-extension"
     } // if we have an XML file
 
-    if (INKSCAPE != NULL && INKSCAPE->use_gui()) {
+    // \TODO this gets called from the Inkscape::Application constructor, where it initializes the menus.
+    // But in the constructor, our object isn't quite there yet!
+    if (Inkscape::Application::exists() && INKSCAPE.use_gui()) {
         if (_effects_list == NULL)
-            _effects_list = find_menu(INKSCAPE->get_menus(), EFFECTS_LIST);
+            _effects_list = find_menu(INKSCAPE.get_menus(), EFFECTS_LIST);
         if (_filters_list == NULL)
-            _filters_list = find_menu(INKSCAPE->get_menus(), FILTERS_LIST);
+            _filters_list = find_menu(INKSCAPE.get_menus(), FILTERS_LIST);
     }
 
     if ((_effects_list != NULL || _filters_list != NULL)) {

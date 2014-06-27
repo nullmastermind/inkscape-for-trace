@@ -62,8 +62,6 @@
 
 #include "inkscape.h"
 
-Inkscape::Application *inkscape;
-
 #include <iostream>
 
 #ifndef HAVE_BIND_TEXTDOMAIN_CODESET
@@ -233,7 +231,7 @@ main (int argc, const char **argv)
     ss.fullscreen = false;
 
     Inkscape::Application::create(argv[0], true);
-    inkscape = Inkscape::Application::instance();
+    //Inkscape::Application &inkscape = Inkscape::Application::instance();
 
     // starting at where the commandline options stopped parsing because
     // we want all the files to be in the list
@@ -571,7 +569,7 @@ static void usage()
     exit(1);
 }
 
-#ifdef XXX
+#if 0
 /* TODO !!! make this temporary stub unnecessary */
 Inkscape::Application *inkscape_get_instance() { return NULL; }
 void inkscape_ref (void) {}

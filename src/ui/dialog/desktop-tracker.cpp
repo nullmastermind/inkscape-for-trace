@@ -40,7 +40,7 @@ void DesktopTracker::connect(GtkWidget *widget)
 
     // Use C/gobject callbacks to avoid gtkmm rewrap-during-destruct issues:
     hierID = g_signal_connect( G_OBJECT(widget), "hierarchy-changed", G_CALLBACK(hierarchyChangeCB), this );
-    inkID = INKSCAPE->signal_activate_desktop.connect(
+    inkID = INKSCAPE.signal_activate_desktop.connect(
               sigc::bind(
               sigc::ptr_fun(&DesktopTracker::activateDesktopCB), this)
     );

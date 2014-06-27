@@ -47,7 +47,6 @@ namespace Gtk {
 
 namespace Inkscape {
 
-struct Application;
 class Selection;
 
 namespace UI {
@@ -116,8 +115,8 @@ public:
     void setResponseSensitive(int response_id, bool setting);
 
     virtual sigc::signal<void, SPDesktop *, SPDocument *> &signalDocumentReplaced();
-    virtual sigc::signal<void, Inkscape::Application *, SPDesktop *> &signalActivateDesktop();
-    virtual sigc::signal<void, Inkscape::Application *, SPDesktop *> &signalDeactiveDesktop();
+    virtual sigc::signal<void, SPDesktop *> &signalActivateDesktop();
+    virtual sigc::signal<void, SPDesktop *> &signalDeactiveDesktop();
 
 protected:
     /**
@@ -147,8 +146,8 @@ protected:
     sigc::signal<void, int> _signal_response;
     sigc::signal<void>      _signal_present;
     sigc::signal<void, SPDesktop *, SPDocument *> _signal_document_replaced;
-    sigc::signal<void, Inkscape::Application *, SPDesktop *> _signal_activate_desktop;
-    sigc::signal<void, Inkscape::Application *, SPDesktop *> _signal_deactive_desktop;
+    sigc::signal<void, SPDesktop *> _signal_activate_desktop;
+    sigc::signal<void, SPDesktop *> _signal_deactive_desktop;
 
 private:
     void _init();

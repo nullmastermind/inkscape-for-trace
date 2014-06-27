@@ -73,7 +73,6 @@ struct _GdkEventWindowState;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 
 namespace Inkscape {
-  struct Application;
   class LayerModel;
   class MessageContext;
   class Selection;
@@ -423,7 +422,6 @@ public:
 
 private:
     Inkscape::UI::View::EditWidgetInterface       *_widget;
-    Inkscape::Application     *_inkscape;
     Inkscape::MessageContext  *_guides_message_context;
     bool _active;
     Geom::Affine _w2d;

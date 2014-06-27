@@ -89,7 +89,7 @@ ImageIcon::~ImageIcon()
 void ImageIcon::init()
 {
     //  \FIXME Why?
-    if (!INKSCAPE)
+    if (!Inkscape::Application::exists())
         Inkscape::Application::create("", false);
     document = NULL;
     viewerGtkmm = NULL;

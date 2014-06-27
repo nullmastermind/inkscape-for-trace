@@ -183,12 +183,11 @@ void sp_transientize(GtkWidget *dialog)
 
 void on_transientize (SPDesktop *desktop, win_data *wd )
 {
-    sp_transientize_callback (0, desktop, wd);
+    sp_transientize_callback (desktop, wd);
 }
 
 void
-sp_transientize_callback ( Inkscape::Application * /*inkscape*/,
-                           SPDesktop *desktop, win_data *wd )
+sp_transientize_callback ( SPDesktop *desktop, win_data *wd )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint transient_policy = prefs->getIntLimited( "/options/transientpolicy/value", 1, 0, 2);

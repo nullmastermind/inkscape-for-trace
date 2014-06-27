@@ -314,7 +314,7 @@ bool sp_file_open(const Glib::ustring &uri,
             sp_file_add_recent( doc->getURI() );
         }
 
-        if ( INKSCAPE->use_gui() ) {
+        if ( INKSCAPE.use_gui() ) {
             // Perform a fixup pass for hrefs.
             if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(doc) ) {
                 Glib::ustring msg = _("Broken links have been changed to point to existing files.");

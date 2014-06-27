@@ -1269,8 +1269,8 @@ CloneTiler::CloneTiler () :
 
                 // connect to global selection changed signal (so we can change desktops) and
                 // external_change (so we're not fooled by undo)
-                selectChangedConn = INKSCAPE->signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_change_selection), dlg));
-                externChangedConn = INKSCAPE->signal_external_change.connect   (sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_external_change), dlg));
+                selectChangedConn = INKSCAPE.signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_change_selection), dlg));
+                externChangedConn = INKSCAPE.signal_external_change.connect   (sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_external_change), dlg));
 
                 g_signal_connect(G_OBJECT(dlg), "destroy", G_CALLBACK(clonetiler_disconnect_gsignal), this);
 

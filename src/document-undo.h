@@ -12,8 +12,6 @@ class SPDocument;
 
 namespace Inkscape {
 
-struct Application;
-
 class DocumentUndo
 {
 public:

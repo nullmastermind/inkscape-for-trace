@@ -933,9 +933,9 @@ guint get_group0_keyval(GdkEventKey const* event);
 
 static void
 snooper(GdkEvent *event, gpointer /*data*/) {
-    if (INKSCAPE->mapalt())  /* returns the map of the keyboard modifier to map to Alt, zero if no mapping */
+    if (INKSCAPE.mapalt())  /* returns the map of the keyboard modifier to map to Alt, zero if no mapping */
     {
-        GdkModifierType mapping=(GdkModifierType)INKSCAPE->mapalt();
+        GdkModifierType mapping=(GdkModifierType)INKSCAPE.mapalt();
         switch (event->type) {
             case GDK_MOTION_NOTIFY:
                 if(event->motion.state & mapping) {
@@ -957,7 +957,7 @@ snooper(GdkEvent *event, gpointer /*data*/) {
         }
     }
 
-    if (INKSCAPE->trackalt()) {
+    if (INKSCAPE.trackalt()) {
         // MacOS X with X11 has some problem with the default
         // xmodmapping.  A ~/.xmodmap solution does not work reliably due
         // to the way we package our executable in a .app that can launch
@@ -1125,14 +1125,14 @@ static int sp_process_file_list(GSList *fl)
             retVal++;
         } else {
 
-            INKSCAPE->add_document(doc);
+            INKSCAPE.add_document(doc);
 
             if (sp_vacuum_defs) {
                 doc->vacuumDocument();
             }
             
             // Execute command-line actions (selections and verbs) using our local models
-            bool has_performed_actions = Inkscape::CmdLineAction::doList(INKSCAPE->active_action_context());
+            bool has_performed_actions = Inkscape::CmdLineAction::doList(INKSCAPE.active_action_context());
 
 #ifdef WITH_DBUS
             // If we've been asked to listen for D-Bus messages, enter a main loop here
@@ -1221,7 +1221,7 @@ static int sp_process_file_list(GSList *fl)
                 do_query_dimension (doc, false, sp_query_x? Geom::X : Geom::Y, sp_query_id);
             }
 
-            INKSCAPE->remove_document(doc);
+            INKSCAPE.remove_document(doc);
 
             delete doc;
         }

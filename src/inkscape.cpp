@@ -81,7 +81,7 @@
 Inkscape::Application * Inkscape::Application::_S_inst = NULL;
 bool Inkscape::Application::_crashIsHappening = false;
 
-#define DESKTOP_IS_ACTIVE(d) (!INKSCAPE->_desktops->empty() && ((d) == INKSCAPE->_desktops->front()))
+#define DESKTOP_IS_ACTIVE(d) (!INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
 
 static void (* segv_handler) (int) = SIG_DFL;
 static void (* abrt_handler) (int) = SIG_DFL;
@@ -139,53 +139,77 @@ private:
     bool _useGui;
 };
 
-Inkscape::Application * inkscape_ref(Inkscape::Application * in)
+void inkscape_ref(Inkscape::Application & in)
 {
-    g_return_val_if_fail(in != NULL, NULL);
-
-    in->refCount++;
-    return in;
+    in.refCount++;
 }
 
-Inkscape::Application * inkscape_unref(Inkscape::Application * in)
+void inkscape_unref(Inkscape::Application & in)
 {
-    g_return_val_if_fail(in != NULL, NULL);
+    in.refCount--;
 
-    in->refCount--;
-
-    if (in->refCount <= 0) {
-        delete in;
+    if (&in == Inkscape::Application::_S_inst) {
+        if (in.refCount <= 0) {
+            delete Inkscape::Application::_S_inst;
+        }
+    } else {
+        g_error("Attempt to unref an Application (=%p) not the current instance (=%p) (maybe it's already been destroyed?)", 
+                &in, Inkscape::Application::_S_inst);
     }
-
-    return NULL;
 }
 
 // Callback passed to g_timeout_add_seconds()
 // gets the current instance and calls autosave()
 int inkscape_autosave(gpointer) {
-    g_assert(INKSCAPE != NULL);
-    return INKSCAPE->autosave();
+    g_assert(Inkscape::Application::exists());
+    return INKSCAPE.autosave();
 }
 
 namespace Inkscape {
 
+/**
+ * Defined only for debugging purposes. If we are certain the bugs are gone we can remove this
+ * and the references in inkscape_ref and inkscape_unref.
+ */
+Application*
+Application::operator &() const
+{
+    return const_cast<Application*>(this);
+}
+/**
+ *  Creates a new Inkscape::Application global object.
+ */
 void
 Application::create(const char *argv0, bool use_gui)
 {
-   if (!Application::instance()) {
+   if (!Application::exists()) {
         new Application(argv0, use_gui);
     } else {
         g_assert_not_reached();
     }
 }
 
+
 /**
- *  Returns the current Inkscape::Application global object
+ *  Checks whether the current Inkscape::Application global object exists.
  */
-Application *
+bool
+Application::exists()
+{
+    return Application::_S_inst != NULL;
+}
+
+/**
+ *  Returns the current Inkscape::Application global object.
+ *  \pre Application::_S_inst != NULL
+ */
+Application&
 Application::instance()
 {
-    return Application::_S_inst;
+    if (!exists()) {
+         g_error("Inkscape::Application does not yet exist.");
+    }
+    return *Application::_S_inst;
 }
 
 /**
@@ -469,6 +493,8 @@ Application::~Application()
         _argv0 = NULL;
     }
 
+    _S_inst = NULL; // this will probably break things
+
     refCount = 0;
     gtk_main_quit ();
 }
@@ -527,10 +553,10 @@ Application::crash_handler (int /*signum*/)
 
     gint count = 0;
     gchar *curdir = g_get_current_dir(); // This one needs to be freed explicitly
-    gchar *inkscapedir = g_path_get_dirname(INKSCAPE->_argv0); // Needs to be freed
+    gchar *inkscapedir = g_path_get_dirname(INKSCAPE._argv0); // Needs to be freed
     GSList *savednames = NULL;
     GSList *failednames = NULL;
-    for (std::map<SPDocument*,int>::iterator iter = INKSCAPE->_document_set.begin(), e = INKSCAPE->_document_set.end();
+    for (std::map<SPDocument*,int>::iterator iter = INKSCAPE._document_set.begin(), e = INKSCAPE._document_set.end();
           iter != e;
           ++iter) {
         SPDocument *doc = iter->first;
@@ -672,7 +698,7 @@ Application::crash_handler (int /*signum*/)
     }
     *(b + pos) = '\0';
 
-    if ( instance() && instance()->use_gui() ) {
+    if ( exists() && instance().use_gui() ) {
         GtkWidget *msgbox = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
         gtk_dialog_run (GTK_DIALOG (msgbox));
         gtk_widget_destroy (msgbox);
@@ -1190,8 +1216,8 @@ Application::homedir_path(const char *filename)
         homedir = g_get_home_dir();
     }
     if (!homedir) {
-        if (Application::instance()) {
-            homedir = g_path_get_dirname(Application::instance()->_argv0);
+        if (Application::exists()) {
+            homedir = g_path_get_dirname(Application::instance()._argv0);
         }
     }
     return g_build_filename(homedir, filename, NULL);

@@ -45,17 +45,13 @@ struct Document;
 
 } // namespace Inkscape
 
-Inkscape::Application * inkscape_ref  (Inkscape::Application * in);
-Inkscape::Application * inkscape_unref(Inkscape::Application * in);
+void inkscape_ref  (Inkscape::Application & in);
+void inkscape_unref(Inkscape::Application & in);
 
 #define INKSCAPE (Inkscape::Application::instance())
-#define SP_INKSCAPE(obj) (dynamic_cast<Inkscape::Application*>(obj))
-#define SP_IS_INKSCAPE(obj) (dynamic_cast<Inkscape::Application*> (obj) != NULL)
-#define SP_ACTIVE_EVENTCONTEXT (INKSCAPE->active_event_context())
-#define SP_ACTIVE_DOCUMENT (INKSCAPE->active_document())
-#define SP_ACTIVE_DESKTOP (INKSCAPE->active_desktop())
-// \TODO hack
-#define inkscape_active_desktop() SP_ACTIVE_DESKTOP
+#define SP_ACTIVE_EVENTCONTEXT (INKSCAPE.active_event_context())
+#define SP_ACTIVE_DOCUMENT (INKSCAPE.active_document())
+#define SP_ACTIVE_DESKTOP (INKSCAPE.active_desktop())
 
 class AppSelectionModel {
     Inkscape::LayerModel _layer_model;
@@ -77,7 +73,8 @@ namespace Inkscape {
 
 class Application {
 public:
-    static Application* instance();
+    static Application& instance();
+    static bool exists();
     static void create(const char* argv0, bool use_gui);
     
     // returns the mask of the keyboard modifier to map to Alt, zero if no mapping
@@ -109,8 +106,6 @@ public:
     bool load_menus();
     bool save_menus();
     Inkscape::XML::Node * get_menus();
-    
-    //static Inkscape::Application* get_instance();
     
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
@@ -166,8 +161,8 @@ public:
     int autosave();
 
     // nobody should be accessing our reference count, so it's made private.
-    friend Application * ::inkscape_ref  (Application * in);
-    friend Application * ::inkscape_unref(Application * in);
+    friend void ::inkscape_ref  (Application & in);
+    friend void ::inkscape_unref(Application & in);
 
     // signals
     
@@ -205,6 +200,10 @@ private:
 
     Application(const char* argv0, bool use_gui);
     ~Application();
+
+    Application(Application const&); // no copy
+    Application& operator=(Application const&); // no assign
+    Application* operator&() const; // no pointer access
 
     Inkscape::XML::Document * _menus;
     std::map<SPDocument *, int> _document_set;
