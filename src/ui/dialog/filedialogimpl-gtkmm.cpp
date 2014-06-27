@@ -539,7 +539,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
 SVGPreview::SVGPreview()
 {
     if (!INKSCAPE)
-        Inkscape::Application::init("", false);
+        Inkscape::Application::create("", false);
     document = NULL;
     viewerGtk = NULL;
     set_size_request(150, 150);

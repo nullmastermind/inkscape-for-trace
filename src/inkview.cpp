@@ -232,7 +232,7 @@ main (int argc, const char **argv)
     ss.view = NULL;
     ss.fullscreen = false;
 
-    Inkscape::Application::init(argv[0], true);
+    Inkscape::Application::create(argv[0], true);
     inkscape = Inkscape::Application::instance();
 
     // starting at where the commandline options stopped parsing because

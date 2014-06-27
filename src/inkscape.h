@@ -76,15 +76,9 @@ public:
 namespace Inkscape {
 
 class Application {
-protected:
-    static Inkscape::Application * _S_inst;
-
-    Application(const char* argv0, bool use_gui);
-    ~Application();
-
 public:
     static Application* instance();
-    static void init(const char* argv0, bool use_gui);
+    static void create(const char* argv0, bool use_gui);
     
     // returns the mask of the keyboard modifier to map to Alt, zero if no mapping
     // Needs to be a guint because gdktypes.h does not define a 'no-modifier' value
@@ -207,6 +201,11 @@ public:
     sigc::signal<void> signal_external_change;
 
 private:
+    static Inkscape::Application * _S_inst;
+
+    Application(const char* argv0, bool use_gui);
+    ~Application();
+
     Inkscape::XML::Document * _menus;
     std::map<SPDocument *, int> _document_set;
     std::map<SPDocument *, AppSelectionModel *> _selection_models;

@@ -90,7 +90,7 @@ void ImageIcon::init()
 {
     //  \FIXME Why?
     if (!INKSCAPE)
-        Inkscape::Application::init("", false);
+        Inkscape::Application::create("", false);
     document = NULL;
     viewerGtkmm = NULL;
     //set_size_request(150,150);

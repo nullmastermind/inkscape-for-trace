@@ -9,7 +9,7 @@
  *
  * Copyright (C) 1999-2014 authors
  * c++ port Copyright (C) 2003 Nathan Hurst 
- * c++ification copyright (C) 2014 Liam P. White
+ * c++ification Copyright (C) 2014 Liam P. White
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -103,6 +103,19 @@ typedef int uid_t;
 #define getuid() 0
 #endif
 
+/**  C++ification TODO list
+ * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break. 
+ * - Application::_deskops has to be a pointer because of a signal bug somewhere else. Basically, it will attempt to access a deleted object in sp_ui_close_all(),
+ *   but if it's a pointer we can stop and return NULL in Application::active_desktop()
+ * - These functions are calling Application::create for no good reason I can determine:
+ *
+ *   Inkscape::UI::Dialog::SVGPreview::SVGPreview()
+ *       src/ui/dialog/filedialogimpl-gtkmm.cpp:542:9
+ *   void Inkscape::UI::Widget::ImageIcon::init()
+ *       src/ui/widget/imageicon.cpp:93:9
+ */
+
+
 class InkErrorHandler : public Inkscape::ErrorReporter {
 public:
     InkErrorHandler(bool useGui) : Inkscape::ErrorReporter(),
@@ -157,7 +170,7 @@ int inkscape_autosave(gpointer) {
 namespace Inkscape {
 
 void
-Application::init (const char *argv0, bool use_gui)
+Application::create(const char *argv0, bool use_gui)
 {
    if (!Application::instance()) {
         new Application(argv0, use_gui);
