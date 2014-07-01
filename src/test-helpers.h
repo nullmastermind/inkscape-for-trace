@@ -28,10 +28,10 @@ T* createSuiteAndDocument( void (*fun)(T*&) )
 #endif
 
     Inkscape::GC::init();
-    if ( !inkscape_get_instance() )
+    if ( !Inkscape::Application::exists() )
     {
         // Create the global inkscape object.
-        static_cast<void>(g_object_new(inkscape_get_type(), NULL));
+        Inkscape::Application::create("", false);
     }
 
     SPDocument* tmp = SPDocument::createNewDoc( NULL, TRUE, true );
