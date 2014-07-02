@@ -525,7 +525,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     int counter = 0;
     //from http://launchpadlibrarian.net/12692602/rcp.svg
-    const double K = (4. / 3) * (sqrt(2) - 1);
+    const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
     for (PathVector::const_iterator path_it = path_in.begin();
             path_it != path_in.end(); ++path_it) {
         if (path_it->empty())
