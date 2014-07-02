@@ -49,6 +49,7 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-clone-original.h"
 #include "live_effects/lpe-envelope-perspective.h"
+#include "live_effects/lpe-fillet-chamfer.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
