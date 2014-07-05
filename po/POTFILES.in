@@ -154,6 +154,8 @@ src/live_effects/lpe-fill-between-many.cpp
 src/live_effects/lpe-fill-between-strokes.cpp
 src/live_effects/lpe-jointype.cpp
 src/live_effects/lpe-taperstroke.cpp
+src/live_effects/lpe-fillet-chamfer.cpp
+src/live_effects/parameter/filletchamferpointarray.cpp
 src/live_effects/parameter/originalpatharray.cpp
 src/live_effects/parameter/transformedpoint.cpp
 src/live_effects/parameter/pointreseteable.cpp
@@ -261,6 +263,7 @@ src/ui/dialog/tile.cpp
 src/ui/dialog/tracedialog.cpp
 src/ui/dialog/transformation.cpp
 src/ui/dialog/xml-tree.cpp
+src/ui/dialog/lpe-fillet-chamfer-properties.cpp
 src/ui/dialog/lpe-powerstroke-properties.cpp
 src/ui/dialog/objects.cpp
 src/ui/dialog/tags.cpp
