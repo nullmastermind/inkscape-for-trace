@@ -9,15 +9,7 @@
 #define INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 
 #include <2geom/point.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/label.h>
-#include <gtkmm/table.h>
-#include <gtkmm/combobox.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/treestore.h>
-#include <gtkmm/scrolledwindow.h>
+#include <gtkmm.h>
 #include "live_effects/parameter/filletchamferpointarray.h"
 
 class SPDesktop;

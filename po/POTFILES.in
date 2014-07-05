@@ -147,6 +147,8 @@ src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-vonkoch.cpp
 src/live_effects/lpe-envelope-perspective.cpp
+src/live_effects/lpe-fillet-chamfer.cpp
+src/live_effects/parameter/filletchamferpointarray.cpp
 src/live_effects/parameter/pointreseteable.cpp
 src/live_effects/parameter/togglebutton.cpp
 src/live_effects/parameter/bool.cpp
@@ -231,6 +233,7 @@ src/ui/dialog/layer-properties.cpp
 src/ui/dialog/layers.cpp
 src/ui/dialog/livepatheffect-add.cpp
 src/ui/dialog/livepatheffect-editor.cpp
+src/ui/dialog/lpe-fillet-chamfer-properties.cpp
 src/ui/dialog/memory.cpp
 src/ui/dialog/messages.cpp
 src/ui/dialog/new-from-template.cpp

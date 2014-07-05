@@ -8,6 +8,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <2geom/piecewise.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/sbasis-geometric.h>
+
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "live_effects/parameter/filletchamferpointarray.h"
 #include "live_effects/effect.h"
@@ -15,9 +19,6 @@
 #include "svg/stringstream.h"
 #include "knotholder.h"
 #include "sp-lpe-item.h"
-#include <2geom/piecewise.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/sbasis-geometric.h>
 #include "selection.h"
 
 // needed for on-canvas editting:
@@ -25,8 +26,10 @@
 #include "live_effects/lpeobject.h"
 #include "helper/geom-nodetype.h"
 #include "helper/geom-curves.h"
-#include <cmath>
 #include "ui/tools/node-tool.h"
+
+// TODO due to internal breakage in glibmm headers,
+// this has to be included last.
 #include <glibmm/i18n.h>
 
 using namespace Geom;
