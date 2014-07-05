@@ -120,4 +120,6 @@ ink_common_sources +=		\
 	ui/dialog/lpe-powerstroke-properties.h	\
 	ui/dialog/objects.cpp	\
 	ui/dialog/objects.h	\
+	ui/dialog/lpe-fillet-chamfer-properties.cpp		\
+	ui/dialog/lpe-fillet-chamfer-properties.h		\
 	$(inkboard_dialogs)

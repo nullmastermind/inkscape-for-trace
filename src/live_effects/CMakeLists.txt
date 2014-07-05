@@ -19,6 +19,7 @@ set(live_effects_SRC
 	lpe-extrude.cpp
 	lpe-fill-between-many.cpp
 	lpe-fill-between-strokes.cpp
+	lpe-fillet-chamfer.cpp
 	lpe-gears.cpp
 	lpe-interpolate.cpp
 	lpe-knot.cpp
@@ -53,6 +54,7 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
+	parameter/filletchamferpointarray.cpp
 	parameter/parameter.cpp
 	parameter/path.cpp
 	parameter/originalpath.cpp
@@ -89,6 +91,7 @@ set(live_effects_SRC
 	lpe-extrude.h
 	lpe-fill-between-many.h
 	lpe-fill-between-strokes.h
+	lpe-fillet-chamfer.h
 	lpe-gears.h
 	lpe-interpolate.h
 	lpe-knot.h
@@ -124,6 +127,7 @@ set(live_effects_SRC
 
 	parameter/array.h
 	parameter/bool.h
+	parameter/filletchamferpointarray.h
 	parameter/enum.h
 	parameter/parameter.h
 	parameter/path-reference.h

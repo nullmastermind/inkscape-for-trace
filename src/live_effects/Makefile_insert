@@ -32,6 +32,8 @@ ink_common_sources += \
 	live_effects/lpe-curvestitch.h	\
 	live_effects/lpe-constructgrid.cpp	\
 	live_effects/lpe-constructgrid.h	\
+	live_effects/lpe-fillet-chamfer.cpp	\
+	live_effects/lpe-fillet-chamfer.h	\
 	live_effects/lpe-gears.cpp	\
 	live_effects/lpe-gears.h	\
 	live_effects/lpe-interpolate.cpp	\

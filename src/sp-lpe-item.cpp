@@ -50,6 +50,8 @@
 #include <algorithm>
 
 /* LPEItem base class */
+static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
+
 static void lpeobject_ref_modified(SPObject *href, guint flags, SPLPEItem *lpeitem);
 
 static void sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem);
@@ -113,7 +115,7 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                 this->current_path_effect = NULL;
 
                 // Disable the path effects while populating the LPE list
-                enablePathEffects(false);
+                 sp_lpe_item_enable_path_effects(this, false);
 
                 // disconnect all modified listeners:
                 for ( std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
@@ -166,7 +168,7 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                     }
                 }
 
-                enablePathEffects(true);
+                sp_lpe_item_enable_path_effects(this, true);
             }
             break;
 
@@ -341,22 +343,6 @@ static void
 sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
 {
     g_return_if_fail(lpeitem != NULL);
-    SPMask * mask = lpeitem->mask_ref->getObject();
-
-    if (mask)
-    {
-	if (SPLPEItem* maskChild = dynamic_cast<SPLPEItem*>(mask->firstChild())) {
-            sp_lpe_item_create_original_path_recursive(maskChild);
-	}
-    }
-
-    SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-    if (clipPath)
-    {
-	if (SPLPEItem* clipChild = dynamic_cast<SPLPEItem*>(clipPath->firstChild())) {
-            sp_lpe_item_create_original_path_recursive(clipChild);
-	}
-    }
     if (SP_IS_GROUP(lpeitem)) {
         GSList const *item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
         for ( GSList const *iter = item_list; iter; iter = iter->next ) {
@@ -378,23 +364,6 @@ static void
 sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
 {
     g_return_if_fail(lpeitem != NULL);
-    SPMask * mask = lpeitem->mask_ref->getObject();
-
-    if (mask)
-    {
-	if (SPLPEItem* maskChild = dynamic_cast<SPLPEItem*>(mask->firstChild())) {
-            sp_lpe_item_cleanup_original_path_recursive(maskChild);
-	}
-    }
-
-    SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-    if (clipPath)
-    {
-	if (SPLPEItem* clipChild = dynamic_cast<SPLPEItem*>(clipPath->firstChild())) {
-            sp_lpe_item_cleanup_original_path_recursive(clipChild);
-	}
-    }
-
     if (SP_IS_GROUP(lpeitem)) {
         GSList const *item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
         for ( GSList const *iter = item_list; iter; iter = iter->next ) {
@@ -424,7 +393,7 @@ void SPLPEItem::addPathEffect(gchar *value, bool reset)
         sp_lpe_item_update_patheffect(this, false, true);
 
         // Disable the path effects while preparing the new lpe
-        enablePathEffects(false);
+        sp_lpe_item_enable_path_effects(this, false);
 
         // Add the new reference to the list of LPE references
         HRefList hreflist;
@@ -461,7 +430,7 @@ void SPLPEItem::addPathEffect(gchar *value, bool reset)
         }
 
         //Enable the path effects now that everything is ready to apply the new path effect
-        enablePathEffects(true);
+        sp_lpe_item_enable_path_effects(this, true);
 
         // Apply the path effect
         sp_lpe_item_update_patheffect(this, true, true);
@@ -642,6 +611,9 @@ bool SPLPEItem::hasPathEffectRecursive() const
         return hasPathEffect();
     }
 }
+
+//The next 3 functions are because the revert of the bug 1241902
+//for the moment not used
 
 void
 sp_lpe_item_apply_to_clippath(SPItem * item)
@@ -974,6 +946,24 @@ bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users)
     }
 
     return forked;
+}
+
+// Enable or disable the path effects of the item.
+// The counter allows nested calls
+static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable)
+{
+    if (enable) {
+        lpeitem->path_effects_enabled++;
+    }
+    else {
+        lpeitem->path_effects_enabled--;
+    }
+}
+
+// Are the path effects enabled on this item ?
+bool SPLPEItem::pathEffectsEnabled() const
+{
+    return path_effects_enabled > 0;
 }
 
 /*

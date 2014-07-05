@@ -58,6 +58,7 @@
 #include "live_effects/lpe-jointype.h"
 #include "live_effects/lpe-taperstroke.h"
 #include "live_effects/lpe-envelope-perspective.h"
+#include "live_effects/lpe-fillet-chamfer.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -301,6 +302,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case ENVELOPE_PERSPECTIVE:
             neweffect = static_cast<Effect*> ( new LPEEnvelopePerspective(lpeobj) );
+            break;
+        case FILLET_CHAMFER:
+            neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
