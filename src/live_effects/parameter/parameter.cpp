@@ -43,6 +43,14 @@ Parameter::param_write_to_repr(const char * svgd)
     param_effect->getRepr()->setAttribute(param_key.c_str(), svgd);
 }
 
+
+// In gtk2, this wasn't an issue; we could toss around
+// G_MAXDOUBLE and not worry about size allocations. But
+// in gtk3, it is an issue: it allocates widget size for the maxmium
+// value you pass to it, leading to some insane lengths.
+const double SCALARPARAM_G_MAXDOUBLE = 10000000000;
+
+
 /*###########################################
  *   REAL PARAM
  */
@@ -51,8 +59,8 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
                       Effect* effect, gdouble default_value)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
-      min(-G_MAXDOUBLE),
-      max(G_MAXDOUBLE),
+      min(-SCALARPARAM_G_MAXDOUBLE),
+      max(SCALARPARAM_G_MAXDOUBLE),
       integer(false),
       defvalue(default_value),
       digits(2),
