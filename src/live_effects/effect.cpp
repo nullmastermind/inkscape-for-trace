@@ -108,7 +108,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
 #endif
 /* 0.46 */
-    {BEND_PATH,             N_("Bend"),                     "bend_path"},
+    {BEND_PATH,             N_("Bend"),                    "bend_path"},
     {GEARS,                 N_("Gears"),                   "gears"},
     {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),      "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
     {CURVE_STITCH,          N_("Stitch Sub-Paths"),        "curvestitching"},
@@ -122,13 +122,15 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
     {SKETCH,                N_("Sketch"),                  "sketch"},
     {RULER,                 N_("Ruler"),                   "ruler"},
-/* 0.49 */
-    {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
+/* 0.91 */
+    {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
+    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
-    {SIMPLIFY,               N_("Simplify"),     "simplify"},
-    {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
-    {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
+    {SIMPLIFY,              N_("Simplify"),                "simplify"},
+    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
+    // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
+    {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
