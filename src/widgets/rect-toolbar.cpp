@@ -87,6 +87,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
     Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
 
     if (DocumentUndo::getUndoSensitive(sp_desktop_document(desktop))) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -180,6 +181,7 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar con
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
     Unit const *unit = tracker->getActiveUnit();
     Unit const *doc_unit = sp_desktop_namedview(SP_ACTIVE_DESKTOP)->doc_units;
+    g_return_if_fail(unit != NULL);
 
     gpointer item = g_object_get_data( tbl, "item" );
     if (item && SP_IS_RECT(item)) {

@@ -83,6 +83,8 @@ static void paintbucket_offset_changed(GtkAdjustment *adj, GObject *tbl)
     // Don't adjust the offset value because we're saving the
     // unit and it'll be correctly handled on load.
     prefs->setDouble("/tools/paintbucket/offset", (gdouble)gtk_adjustment_get_value(adj));
+
+    g_return_if_fail(unit != NULL);
     prefs->setString("/tools/paintbucket/offsetunits", unit->abbr);
 }
 
