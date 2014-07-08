@@ -434,9 +434,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
     if (SP_IS_SHAPE(lpeItem)) {
         fillet_chamfer_values.set_helper_size(helper_size);
         fillet_chamfer_values.set_unit(unit.get_abbreviation());
-        SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)
-                     ->get_original_curve()
-                     : SP_SHAPE(lpeItem)->getCurve();
+        SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)->get_original_curve() : SP_SHAPE(lpeItem)->getCurve();
         std::vector<Point> filletChamferData = fillet_chamfer_values.data();
         if (!filletChamferData.empty() && getKnotsNumber(c) != (int)
                 filletChamferData.size()) {

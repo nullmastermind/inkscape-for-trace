@@ -2,14 +2,14 @@
 #define INKSCAPE_LIVEPATHEFFECT_PARAMETER_TOGGLEBUTTON_H
 
 /*
- * Inkscape::LivePathEffectParameters
- *
-* Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
+ * Copyright (C) Jabiertxo Arraiza Cenoz 2014
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include <glib.h>
+#include <sigc++/connection.h>
+#include <sigc++/signal.h>
 
 #include "live_effects/parameter/parameter.h"
 
@@ -17,7 +17,10 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-
+/**
+ * class ToggleButtonParam:
+ *    represents a Gtk::ToggleButton as a Live Path Effect parameter
+ */
 class ToggleButtonParam : public Parameter {
 public:
     ToggleButtonParam( const Glib::ustring& label,
@@ -39,6 +42,9 @@ public:
     bool get_value() const { return value; };
 
     inline operator bool() const { return value; };
+    
+    sigc::signal<void>& signal_toggled() { return _signal_toggled; }
+    virtual void toggled();
 
 private:
     ToggleButtonParam(const ToggleButtonParam&);
@@ -46,6 +52,9 @@ private:
 
     bool value;
     bool defvalue;
+    
+    sigc::signal<void> _signal_toggled;
+    sigc::connection _toggled_connection;
 };
 
 
