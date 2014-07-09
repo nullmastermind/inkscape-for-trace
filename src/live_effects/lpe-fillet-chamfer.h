@@ -2,50 +2,57 @@
 #define INKSCAPE_LPE_FILLET_CHAMFER_H
 
 /*
- * Inkscape::LPEFilletChamfer
- * Copyright (C) Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
+ * Author(s):
+ *     Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2014 Author(s)
+ *
  * Special thanks to Johan Engelen for the base of the effect -powerstroke-
  * Also to ScislaC for point me to the idea
  * Also su_v for his construvtive feedback and time
- * and finaly to Liam P. White for his big help on coding, that save me a lot of
- * hours
+ * and finaly to Liam P. White for his big help on coding, that save me a lot of hours
+ *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <glibmm/threads.h>
+
 #include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/unit.h"
-#include "live_effects/effect.h"
 #include "live_effects/parameter/bool.h"
+#include "live_effects/parameter/unit.h"
+
 #include "live_effects/parameter/filletchamferpointarray.h"
+#include "live_effects/effect.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
 
-class LPEFilletChamfer : public Effect {
 
+class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
     virtual ~LPEFilletChamfer();
 
-    std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
+    virtual std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
 
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual int getKnotsNumber(SPCurve const *c);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
-    virtual void toggleHide();
-    virtual void toggleFlexFixed();
-    virtual void chamfer();
-    virtual void fillet();
-    virtual void doubleChamfer();
-    virtual void inverse();
-    virtual void updateFillet();
-    virtual void doUpdateFillet(std::vector<Geom::Path> original_pathv,
-                                double power);
-    virtual void doChangeType(std::vector<Geom::Path> original_pathv, int type);
-    virtual bool nodeIsSelected(Geom::Point nodePoint,
-                                std::vector<Geom::Point> points);
-    virtual void refreshKnots();
-    virtual Gtk::Widget *newWidget();
+    virtual Gtk::Widget* newWidget();
+
+    int getKnotsNumber(SPCurve const *c);
+    void toggleHide();
+    void toggleFlexFixed();
+    void chamfer();
+    void fillet();
+    void doubleChamfer();
+    void inverse();
+    void updateFillet();
+    void doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power);
+    void doChangeType(std::vector<Geom::Path> const& original_pathv, int type);
+    bool nodeIsSelected(Geom::Point nodePoint, std::vector<Geom::Point> points);
+    void refreshKnots();
+
     FilletChamferPointArrayParam fillet_chamfer_values;
 
 private:
@@ -63,6 +70,18 @@ private:
 
 };
 
-}; //namespace LivePathEffect
-}; //namespace Inkscape
+} //namespace LivePathEffect
+} //namespace Inkscape
+
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

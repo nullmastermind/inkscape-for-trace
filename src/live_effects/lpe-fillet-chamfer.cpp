@@ -1,36 +1,39 @@
 /*
- * Copyright (C) Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
+ * Author(s):
+ *   Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2014 Author(s)
+ *
  * Special thanks to Johan Engelen for the base of the effect -powerstroke-
  * Also to ScislaC for point me to the idea
  * Also su_v for his construvtive feedback and time
  * Also to Mc- (IRC nick) for his important contribution to find real time
  * values based on
- * and finaly to Liam P. White for his big help on coding, that save me a lot of
- * hours
+ * and finaly to Liam P. White for his big help on coding, that save me a lot of hours
+ *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
 #include "live_effects/lpe-fillet-chamfer.h"
-#include <glibmm/i18n.h>
-#include "style.h"
-#include "live_effects/parameter/filletchamferpointarray.h"
-//for update knot
+ 
+#include <2geom/sbasis-to-bezier.h>
 #include <2geom/svg-elliptical-arc.h>
 #include <2geom/line.h>
-#include "selection.h"
-#include "ui/tool/control-point-selection.h"
-#include "ui/tool/selectable-control-point.h"
-#include <2geom/sbasis-to-bezier.h>
-#include "ui/tool/node.h"
-// FIXME: The following are only needed to convert the path's SPCurve* to pwd2.
-//        There must be a more convenient way to achieve this.
+
+#include "desktop.h"
 #include "display/curve.h"
 #include "helper/geom-nodetype.h"
-#include "desktop.h"
+#include "live_effects/parameter/filletchamferpointarray.h"
+
+// for programmatically updating knots
+#include "selection.h"
+#include "tools-switch.h"
+#include "ui/tool/control-point-selection.h"
+#include "ui/tool/selectable-control-point.h"
+#include "ui/tool/node.h"
 #include "ui/tools/node-tool.h"
-#include <iostream>
-#include <tools-switch.h>
-#include <cmath>
+
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 using namespace Geom;
 namespace Inkscape {
@@ -39,34 +42,26 @@ namespace LivePathEffect {
 const double tolerance = 0.001;
 const double gapHelper = 0.00001;
 
-LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
-    : Effect(lpeobject),
-      fillet_chamfer_values(_("Fillet point"), _("Fillet point"),
-                            "fillet_chamfer_values", &wr, this),
-      hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this,
-                 false),
-      ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"),
-                      "ignore_radius_0", &wr, this, false),
-      only_selected(_("Change only selected nodes"),
-                    _("Change only selected nodes"), "only_selected", &wr, this,
-                    false),
-      flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"),
-               "flexible", &wr, this, false),
-      unit(_("Unit"), _("Unit"), "unit", &wr, this),
-      radius(_("Radius (unit or %)"), _("Radius, in unit or %"), "radius", &wr,
-             this, 0.),
-      helper_size(_("Helper size with direction"),
-                  _("Helper size with direction"), "helper_size", &wr, this,
-                  0)
+LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
+    Effect(lpeobject),
+    fillet_chamfer_values(_("Fillet point"), _("Fillet point"), "fillet_chamfer_values", &wr, this),
+    hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this, false),
+    ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
+    only_selected(_("Change only selected nodes"), _("Change only selected nodes"), "only_selected", &wr, this, false),
+    flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
+    unit(_("Unit"), _("Unit"), "unit", &wr, this),
+    radius(_("Radius (unit or %)"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
+    helper_size(_("Helper size with direction"), _("Helper size with direction"), "helper_size", &wr, this, 0)
 {
-    registerParameter(dynamic_cast<Parameter *>(&fillet_chamfer_values));
-    registerParameter(dynamic_cast<Parameter *>(&unit));
-    registerParameter(dynamic_cast<Parameter *>(&radius));
-    registerParameter(dynamic_cast<Parameter *>(&helper_size));
-    registerParameter(dynamic_cast<Parameter *>(&flexible));
-    registerParameter(dynamic_cast<Parameter *>(&ignore_radius_0));
-    registerParameter(dynamic_cast<Parameter *>(&only_selected));
-    registerParameter(dynamic_cast<Parameter *>(&hide_knots));
+    registerParameter(&fillet_chamfer_values);
+    registerParameter(&unit);
+    registerParameter(&radius);
+    registerParameter(&helper_size);
+    registerParameter(&flexible);
+    registerParameter(&ignore_radius_0);
+    registerParameter(&only_selected);
+    registerParameter(&hide_knots);
+
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
     radius.param_set_digits(4);
@@ -90,53 +85,32 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
-            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            Gtk::Widget *widg = param->param_newWidget();
             if (param->param_key == "radius") {
-                Inkscape::UI::Widget::Scalar *widgRegistered =
-                    Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
-                widgRegistered->signal_value_changed()
-                    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::updateFillet));
-                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::updateFillet));
+                widg = widgRegistered;
                 if (widg) {
                     Gtk::HBox *scalarParameter = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector<Gtk::Widget *> childList =
-                        scalarParameter->get_children();
+                    std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
                     Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entryWidg->set_width_chars(6);
                 }
+            } else if (param->param_key == "flexible") {
+                Gtk::CheckButton *widgRegistered = Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
+                widgRegistered->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::toggleFlexFixed));
+            } else if (param->param_key == "helper_size") {
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
+            } else if (param->param_key == "hide_knots") {
+                Gtk::CheckButton *widgRegistered = Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
+                widgRegistered->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::toggleHide));
+            } else if (param->param_key == "only_selected") {
+                Gtk::manage(widg);
+            } else if (param->param_key == "ignore_radius_0") {
+                Gtk::manage(widg);
             }
-            if (param->param_key == "flexible") {
-                Gtk::CheckButton *widgRegistered =
-                    Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
-                widgRegistered->signal_clicked()
-                    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::toggleFlexFixed));
-                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
-            }
-            if (param->param_key == "helper_size") {
-                Inkscape::UI::Widget::Scalar *widgRegistered =
-                    Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
-                widgRegistered->signal_value_changed()
-                    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
-                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
 
-            }
-            if (param->param_key == "hide_knots") {
-                Gtk::CheckButton *widgRegistered =
-                    Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
-                widgRegistered->signal_clicked()
-                    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::toggleHide));
-                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
-            }
-            if (param->param_key == "only_selected") {
-                Gtk::CheckButton *widgRegistered =
-                    Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
-                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
-            }
-            if (param->param_key == "ignore_radius_0") {
-                Gtk::CheckButton *widgRegistered =
-                    Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
-                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
-            }
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
                 vbox->pack_start(*widg, true, true, 2);
@@ -153,32 +127,27 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     }
 
     Gtk::HBox *filletButtonsContainer = Gtk::manage(new Gtk::HBox(true, 0));
-    Gtk::Button *fillet =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
-    fillet->signal_clicked()
-        .connect(sigc::mem_fun(*this, &LPEFilletChamfer::fillet));
+    Gtk::Button *fillet = Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
+    fillet->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::fillet));
+
     filletButtonsContainer->pack_start(*fillet, true, true, 2);
-    Gtk::Button *inverse =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse fillet"))));
-    inverse->signal_clicked()
-        .connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverse));
+    Gtk::Button *inverse = Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse fillet"))));
+    inverse->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverse));
     filletButtonsContainer->pack_start(*inverse, true, true, 2);
 
     Gtk::HBox *chamferButtonsContainer = Gtk::manage(new Gtk::HBox(true, 0));
-    Gtk::Button *chamfer =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
-    chamfer->signal_clicked()
-        .connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamfer));
+    Gtk::Button *chamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
+    chamfer->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamfer));
+
     chamferButtonsContainer->pack_start(*chamfer, true, true, 2);
-    Gtk::Button *doubleChamfer =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Double chamfer"))));
-    doubleChamfer->signal_clicked()
-        .connect(sigc::mem_fun(*this, &LPEFilletChamfer::doubleChamfer));
+    Gtk::Button *doubleChamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Double chamfer"))));
+    doubleChamfer->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::doubleChamfer));
     chamferButtonsContainer->pack_start(*doubleChamfer, true, true, 2);
+
     vbox->pack_start(*filletButtonsContainer, true, true, 2);
     vbox->pack_start(*chamferButtonsContainer, true, true, 2);
 
-    return dynamic_cast<Gtk::Widget *>(vbox);
+    return vbox;
 }
 
 void LPEFilletChamfer::toggleHide()
@@ -227,8 +196,7 @@ void LPEFilletChamfer::updateFillet()
 {
     double power = 0;
     if (!flexible) {
-        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(),
-                "px") * -1;
+        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), "px") * -1;
     } else {
         power = radius;
     }
@@ -271,8 +239,7 @@ void LPEFilletChamfer::refreshKnots()
     }
 }
 
-bool LPEFilletChamfer::nodeIsSelected(Geom::Point nodePoint,
-                                      std::vector<Geom::Point> point)
+bool LPEFilletChamfer::nodeIsSelected(Geom::Point nodePoint, std::vector<Geom::Point> point)
 {
     if (point.size() > 0) {
         for (std::vector<Geom::Point>::iterator i = point.begin(); i != point.end();
@@ -285,20 +252,15 @@ bool LPEFilletChamfer::nodeIsSelected(Geom::Point nodePoint,
     }
     return false;
 }
-void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> original_pathv,
-                                      double power)
+void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power)
 {
     std::vector<Geom::Point> point;
     SPDesktop *desktop = inkscape_active_desktop();
     if (INK_IS_NODE_TOOL(desktop->event_context)) {
-        Inkscape::UI::Tools::NodeTool *nodeTool =
-            INK_NODE_TOOL(desktop->event_context);
-        Inkscape::UI::ControlPointSelection::Set &selection =
-            nodeTool->_selected_nodes->allPoints();
+        Inkscape::UI::Tools::NodeTool *nodeTool = INK_NODE_TOOL(desktop->event_context);
+        Inkscape::UI::ControlPointSelection::Set &selection = nodeTool->_selected_nodes->allPoints();
         std::vector<Geom::Point>::iterator pBegin;
-        for (Inkscape::UI::ControlPointSelection::Set::iterator i =
-                    selection.begin();
-                i != selection.end(); ++i) {
+        for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection.begin(); i != selection.end(); ++i) {
             if ((*i)->selected()) {
                 Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
                 pBegin = point.begin();
@@ -350,8 +312,7 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> original_pathv,
     fillet_chamfer_values.param_set_and_write_new_value(result);
 }
 
-void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> original_pathv,
-                                    int type)
+void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> const& original_pathv, int type)
 {
     std::vector<Geom::Point> point;
     SPDesktop *desktop = inkscape_active_desktop();
@@ -374,8 +335,7 @@ void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> original_pathv,
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
     int counter = 0;
-    for (PathVector::const_iterator path_it = original_pathv.begin();
-            path_it != original_pathv.end(); ++path_it) {
+    for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
         int pathCounter = 0;
         if (path_it->empty())
             continue;
@@ -418,11 +378,9 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
 {
     if (SP_IS_SHAPE(lpeItem)) {
         std::vector<Point> point;
-        PathVector const &original_pathv =
-            SP_SHAPE(lpeItem)->_curve->get_pathvector();
+        PathVector const &original_pathv = SP_SHAPE(lpeItem)->_curve->get_pathvector();
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
-        for (PathVector::const_iterator path_it = original_pathv.begin();
-                path_it != original_pathv.end(); ++path_it) {
+        for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty())
                 continue;
 
@@ -476,9 +434,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
     if (SP_IS_SHAPE(lpeItem)) {
         fillet_chamfer_values.set_helper_size(helper_size);
         fillet_chamfer_values.set_unit(unit.get_abbreviation());
-        SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)
-                     ->get_original_curve()
-                     : SP_SHAPE(lpeItem)->getCurve();
+        SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)->get_original_curve() : SP_SHAPE(lpeItem)->getCurve();
         std::vector<Point> filletChamferData = fillet_chamfer_values.data();
         if (!filletChamferData.empty() && getKnotsNumber(c) != (int)
                 filletChamferData.size()) {

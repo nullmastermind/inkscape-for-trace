@@ -60,7 +60,7 @@ protected:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 private:
 
-    BoolParam perspective;
+    EnumParam<unsigned> deform_type;
     PointReseteableParam Up_Left_Point;
     PointReseteableParam Up_Right_Point;
     PointReseteableParam Down_Left_Point;

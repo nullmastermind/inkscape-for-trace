@@ -131,7 +131,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
     {SKETCH,                N_("Sketch"),                  "sketch"},
     {RULER,                 N_("Ruler"),                   "ruler"},
-/* 0.49 */
+/* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
@@ -147,6 +147,11 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {SIMPLIFY,               N_("Simplify"),     "simplify"},
     {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
     {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
+    {SIMPLIFY,              N_("Simplify"),                "simplify"},
+    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
+    // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
+    {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 

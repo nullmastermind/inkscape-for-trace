@@ -29,6 +29,9 @@ ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::us
 
 ToggleButtonParam::~ToggleButtonParam()
 {
+    if (_toggled_connection.connected()) {
+        _toggled_connection.disconnect();
+    }
 }
 
 void
@@ -54,6 +57,10 @@ ToggleButtonParam::param_getSVGValue() const
 Gtk::Widget *
 ToggleButtonParam::param_newWidget()
 {
+    if (_toggled_connection.connected()) {
+        _toggled_connection.disconnect();
+    }
+
     Inkscape::UI::Widget::RegisteredToggleButton * checkwdg = Gtk::manage(
         new Inkscape::UI::Widget::RegisteredToggleButton( param_label,
                                                          param_tooltip,
@@ -65,15 +72,23 @@ ToggleButtonParam::param_newWidget()
 
     checkwdg->setActive(value);
     checkwdg->setProgrammatically = false;
-    checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
+    // TRANSLATORS: "toggle" is a verb here
+    checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Toggle path effect parameter"));
 
-    return dynamic_cast<Gtk::Widget *> (checkwdg);
+    _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
+
+    return checkwdg;
 }
 
 void
 ToggleButtonParam::param_setValue(bool newvalue)
 {
     value = newvalue;
+}
+
+void
+ToggleButtonParam::toggled() {
+    _signal_toggled.emit();
 }
 
 } /* namespace LivePathEffect */

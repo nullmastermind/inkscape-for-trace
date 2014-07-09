@@ -27,8 +27,10 @@
 #include "live_effects/lpeobject.h"
 #include "helper/geom-nodetype.h"
 #include "helper/geom-curves.h"
-#include <cmath>
 #include "ui/tools/node-tool.h"
+
+// TODO due to internal breakage in glibmm headers,
+// this has to be included last.
 #include <glibmm/i18n.h>
 
 using namespace Geom;
