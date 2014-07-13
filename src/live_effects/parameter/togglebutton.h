@@ -12,6 +12,8 @@
 #include <sigc++/signal.h>
 
 #include "live_effects/parameter/parameter.h"
+#include "icon-size.h"
+#include "ui/widget/registered-widget.h"
 
 namespace Inkscape {
 
@@ -28,7 +30,11 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               bool default_value = false);
+               bool default_value = false,
+               const Glib::ustring& inactive_label = "",
+               char const * icon_active = NULL,
+               char const * icon_inactive = NULL,
+               Inkscape::IconSize icon_size  = Inkscape::ICON_SIZE_SMALL_TOOLBAR);
     virtual ~ToggleButtonParam();
 
     virtual Gtk::Widget * param_newWidget();
@@ -50,9 +56,15 @@ private:
     ToggleButtonParam(const ToggleButtonParam&);
     ToggleButtonParam& operator=(const ToggleButtonParam&);
 
+    void refresh_button();
     bool value;
     bool defvalue;
-    
+    const Glib::ustring inactiveLabel;
+    const char * iconActive;
+    const char * iconInactive;
+    Inkscape::IconSize  iconSize;
+    Inkscape::UI::Widget::RegisteredToggleButton * checkwdg;
+
     sigc::signal<void> _signal_toggled;
     sigc::connection _toggled_connection;
 };

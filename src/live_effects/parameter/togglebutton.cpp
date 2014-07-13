@@ -5,6 +5,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+#include <gtkmm/widget.h>
+#include <glibmm/i18n.h>
+
 #include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/togglebutton.h"
 #include "live_effects/effect.h"
@@ -14,7 +19,6 @@
 #include "inkscape.h"
 #include "verbs.h"
 #include "helper-fns.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 
@@ -22,9 +26,13 @@ namespace LivePathEffect {
 
 ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value )
-    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value)
+                      Effect* effect, bool default_value, const Glib::ustring& inactive_label,
+                      char const * icon_active, char const * icon_inactive, 
+                      Inkscape::IconSize icon_size)
+    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
+      inactiveLabel(inactive_label), iconActive(icon_active), iconInactive(icon_inactive), iconSize(icon_size)
 {
+    checkwdg = NULL;
 }
 
 ToggleButtonParam::~ToggleButtonParam()
@@ -61,7 +69,7 @@ ToggleButtonParam::param_newWidget()
         _toggled_connection.disconnect();
     }
 
-    Inkscape::UI::Widget::RegisteredToggleButton * checkwdg = Gtk::manage(
+   checkwdg = Gtk::manage(
         new Inkscape::UI::Widget::RegisteredToggleButton( param_label,
                                                          param_tooltip,
                                                          param_key,
@@ -69,11 +77,37 @@ ToggleButtonParam::param_newWidget()
                                                          false,
                                                          param_effect->getRepr(),
                                                          param_effect->getSPDoc()) );
-
+    GtkWidget * boxButton = gtk_hbox_new (false, 0);
+    GtkWidget * labelButton = gtk_label_new ("");
+    if (!param_label.empty()) {
+        if(value || inactiveLabel.empty()){
+            gtk_label_set_text(GTK_LABEL(labelButton), param_label.c_str());
+        }else{
+            gtk_label_set_text(GTK_LABEL(labelButton), inactiveLabel.c_str());
+        }
+    }
+    gtk_widget_show(labelButton);
+    if ( iconActive ) {
+        if(!iconInactive){
+            iconInactive = iconActive;
+        }
+        gtk_widget_show(boxButton);
+        GtkWidget *iconButton = sp_icon_new(iconSize, iconActive);
+        if(!value){ 
+            iconButton = sp_icon_new(iconSize, iconInactive);
+        }
+        gtk_widget_show(iconButton);
+        gtk_box_pack_start (GTK_BOX(boxButton), iconButton, true, true, 2);
+        if (!param_label.empty()) {
+            gtk_box_pack_start (GTK_BOX(boxButton), labelButton, true, true, 2);
+        }
+    }else{
+        gtk_box_pack_start (GTK_BOX(boxButton), labelButton, true, true, 2);
+    }
+    checkwdg->add(*Gtk::manage(Glib::wrap(boxButton)));
     checkwdg->setActive(value);
     checkwdg->setProgrammatically = false;
-    // TRANSLATORS: "toggle" is a verb here
-    checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Toggle path effect parameter"));
+    checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
 
     _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
 
@@ -81,9 +115,38 @@ ToggleButtonParam::param_newWidget()
 }
 
 void
+ToggleButtonParam::refresh_button()
+{
+    if(!checkwdg){
+        return;
+    }
+    Gtk::Widget * boxButton = checkwdg->get_child();
+    if(!boxButton){
+        return;
+    }
+    GList * childs = gtk_container_get_children(GTK_CONTAINER(boxButton->gobj()));
+    guint totalWidgets = g_list_length (childs);
+    if (!param_label.empty()) {
+        if(value || inactiveLabel.empty()){
+            gtk_label_set_text(GTK_LABEL(g_list_nth_data(childs, totalWidgets-1)), param_label.c_str());
+        }else{
+            gtk_label_set_text(GTK_LABEL(g_list_nth_data(childs, totalWidgets-1)), inactiveLabel.c_str());
+        }
+    }
+    if ( iconActive ) {
+        GdkPixbuf * iconPixbuf = sp_pixbuf_new( iconSize, iconActive );
+        if(!value){ 
+            iconPixbuf = sp_pixbuf_new( iconSize, iconInactive);
+        }
+        gtk_image_set_from_pixbuf (GTK_IMAGE(g_list_nth_data(childs, 0)), iconPixbuf);
+    }
+}
+
+void
 ToggleButtonParam::param_setValue(bool newvalue)
 {
     value = newvalue;
+    refresh_button();
 }
 
 void

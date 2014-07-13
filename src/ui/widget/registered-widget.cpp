@@ -109,7 +109,7 @@ RegisteredToggleButton::~RegisteredToggleButton()
 }
 
 RegisteredToggleButton::RegisteredToggleButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in, char const *active_str, char const *inactive_str)
-    : RegisteredWidget<Gtk::ToggleButton>(label)
+    : RegisteredWidget<Gtk::ToggleButton>()
     , _active_str(active_str)
     , _inactive_str(inactive_str)
 {
