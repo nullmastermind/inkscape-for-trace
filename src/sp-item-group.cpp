@@ -664,7 +664,8 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                         
                         Geom::Point old_center(0,0);
                         if (item->isCenterSet()) {
-                            old_center = item->getCenter();
+                            item->scaleCenter(sc.inverse()); // Convert the old relative center position to the new coordinates already now
+                            old_center = item->getCenter(); // because getCenter() will use the bbox midpoint, which is also already in the new coordinates
                         }
                         
                         gchar const *conn_type = NULL;
@@ -778,31 +779,17 @@ void SPGroup::update_patheffect(bool write) {
     }
 }
 
-
-void
-sp_gslist_update_by_clip_or_mask(GSList *item_list,SPItem * item)
-{
-    if(item->mask_ref->getObject()) {
-        SPObject * clipormask = item->mask_ref->getObject()->firstChild();
-        item_list = g_slist_append(item_list,clipormask);
-    }
-    if(item->clip_ref->getObject()) {
-        SPObject * clipormask = item->clip_ref->getObject()->firstChild();
-        item_list = g_slist_append(item_list,clipormask);
-    }
-}
-
 static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
 {
-    GSList *item_list = sp_item_group_item_list(group);
-    sp_gslist_update_by_clip_or_mask(item_list,group);
-    for ( GSList *iter = item_list; iter; iter = iter->next ) {
+    GSList const *item_list = sp_item_group_item_list(SP_GROUP(group));
+
+    for ( GSList const *iter = item_list; iter; iter = iter->next ) {
         SPObject *subitem = static_cast<SPObject *>(iter->data);
+
         if (SP_IS_GROUP(subitem)) {
             sp_group_perform_patheffect(SP_GROUP(subitem), topgroup, write);
         } else if (SP_IS_SHAPE(subitem)) {
-            sp_gslist_update_by_clip_or_mask(item_list,SP_ITEM(subitem));
             SPCurve * c = NULL;
 
             if (SP_IS_PATH(subitem)) {
@@ -813,17 +800,9 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
 
             // only run LPEs when the shape has a curve defined
             if (c) {
-                if(SP_IS_MASK(subitem->parent) || SP_IS_CLIPPATH(subitem->parent)) {
-                    c->transform(i2anc_affine(group, topgroup));
-                } else {
-                    c->transform(i2anc_affine(subitem, topgroup));
-                }
+                c->transform(i2anc_affine(subitem, topgroup));
                 SP_LPE_ITEM(topgroup)->performPathEffect(c);
-                if(SP_IS_MASK(subitem->parent) || SP_IS_CLIPPATH(subitem->parent)) {
-                    c->transform(i2anc_affine(group, topgroup).inverse());
-                } else {
-                    c->transform(i2anc_affine(subitem, topgroup).inverse());
-                }
+                c->transform(i2anc_affine(subitem, topgroup).inverse());
                 SP_SHAPE(subitem)->setCurve(c, TRUE);
 
                 if (write) {
@@ -831,7 +810,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
                     gchar *str = sp_svg_write_path(c->get_pathvector());
                     repr->setAttribute("d", str);
 #ifdef GROUP_VERBOSE
-                    g_message("sp_group_perform_patheffect writes 'd' attribute");
+g_message("sp_group_perform_patheffect writes 'd' attribute");
 #endif
                     g_free(str);
                 }

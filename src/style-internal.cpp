@@ -1390,9 +1390,8 @@ SPIFilter::read( gchar const *str ) {
     }
 }
 
-const Glib::ustring
-SPIFilter::write( guint const flags, SPIBase const *const base) const {
-
+const Glib::ustring SPIFilter::write( guint const flags, SPIBase const *const /*base*/) const
+{
     // TODO: fix base
     //SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
     if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
@@ -1440,7 +1439,7 @@ SPIFilter::cascade( const SPIBase* const parent ) {
 void
 SPIFilter::merge( const SPIBase* const parent ) {
     if( const SPIFilter* p = dynamic_cast<const SPIFilter*>(parent) ) {
-        // The "correct" thing to due is to combine the filter primitives.
+        // The "correct" thing to do is to combine the filter primitives.
         // The next best thing is to keep any filter on this object. If there
         // is no filter on this object, then use any filter on the parent.
         if( (!set || inherit) && p->href && p->href->getObject() ) { // is the getObject()  needed?
@@ -1453,9 +1452,11 @@ SPIFilter::merge( const SPIBase* const parent ) {
                 }
             } else {
                 // If we don't have an href, create it
-                if( &style->document ) { // FIXME
+                if( style->document ) { // FIXME
                     href = new SPFilterReference(style->document);
                     //href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_filter_ref_changed), style));
+                } else if (style->object) {
+                    href = new SPFilterReference(style->object);
                 }
             }
             if( href ) {
@@ -1921,9 +1922,8 @@ SPIFont::read( gchar const *str ) {
     }
 }
 
-const Glib::ustring
-SPIFont::write( guint const flags, SPIBase const *const base) const {
-
+const Glib::ustring SPIFont::write( guint const /*flags*/, SPIBase const *const /*base*/) const
+{
     // At the moment, do nothing. We could add a preference to write out
     // 'font' shorthand rather than longhand properties.
 

@@ -1621,10 +1621,13 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
             item->doWriteTransform(item->getRepr(), item->transform, NULL, compensate);
         }
 
-        // if we're moving the actual object, not just updating the repr, we can transform the
+        // if we're transforming the actual object, not just updating the repr, we can transform the
         // center by the same matrix (only necessary for non-translations)
         if (set_i2d && item->isCenterSet() && !(affine.isTranslation() || affine.isIdentity())) {
-            item->setCenter(old_center * affine);
+            // If there's a viewbox, we might have an affine with a translation component;
+            // we will only apply the scaling/skewing components, not the translations
+            // because otherwise the center will move relative to the item
+            item->setCenter(old_center * affine.withoutTranslation());
             item->updateRepr();
         }
     }
@@ -3950,10 +3953,6 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
         for ( SPObject *child = obj->firstChild() ; child; child = child->getNext() ) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = SP_OBJECT(child)->getRepr()->duplicate(xml_doc);
-            if(copy->attribute("inkscape:original-d"))
-            {
-                copy->setAttribute("d", copy->attribute("inkscape:original-d"));
-            }
             items_to_move = g_slist_prepend(items_to_move, copy);
         }
 
