@@ -5,9 +5,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/widget.h>
+#include <gtkmm.h>
 #include <glibmm/i18n.h>
 
 #include "ui/widget/registered-widget.h"

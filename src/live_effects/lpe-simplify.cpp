@@ -1,9 +1,9 @@
-#define INKSCAPE_LPE_SIMPLIFY_C
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <gtkmm/box.h>
-#include <gtkmm/entry.h>
+
+#include <gtkmm.h>
+
 #include "live_effects/lpe-simplify.h"
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
