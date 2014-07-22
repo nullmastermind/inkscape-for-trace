@@ -1611,7 +1611,6 @@ void PenTool::_bspline_spiro_motion(bool shift){
                     this->p[2] = this->p[3];
             }else{
                 this->p[1] =  (*cubic)[3] + ((*cubic)[3] - (*cubic)[2] );
-                this->p[1] = Geom::Point(this->p[1][X] + 0.005,this->p[1][Y] + 0.005);
             }
         }else{
             this->p[1] = this->p[0];
