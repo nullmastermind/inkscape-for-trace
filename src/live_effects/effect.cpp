@@ -147,11 +147,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {SIMPLIFY,               N_("Simplify"),     "simplify"},
     {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
     {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
-    {SIMPLIFY,              N_("Simplify"),                "simplify"},
-    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
-    // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
-    {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
