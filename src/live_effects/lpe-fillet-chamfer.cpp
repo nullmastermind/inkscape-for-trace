@@ -512,24 +512,27 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if (filletChamferData[counter][Y] == 0) {
                 time_it1 = 0;
             }
-            time_it2 = modf(fillet_chamfer_values.to_time(
-                                counter + 1, filletChamferData[counter + 1][X]),
-                            &intpart);
-            if (curve_it2 == curve_endit) {
+            if (path_it->closed() && curve_it2 == curve_endit) {
                 time_it2 = modf(fillet_chamfer_values.to_time(
                                     counter - counterCurves,
                                     filletChamferData[counter - counterCurves][X]),
                                 &intpart);
+            } else {
+                time_it2 = modf(fillet_chamfer_values.to_time(
+                                    counter + 1, filletChamferData[counter + 1][X]),
+                                &intpart);
             }
-            double resultLenght =
-                it1_length + fillet_chamfer_values.to_len(
-                    counter + 1, filletChamferData[counter + 1][X]);
+            double resultLenght = 0;
             time_it1_B = 1;
             if (path_it->closed() && curve_it2 == curve_endit) {
                 resultLenght =
                     it1_length + fillet_chamfer_values.to_len(
                         counter - counterCurves,
                         filletChamferData[counter - counterCurves][X]);
+            } else {
+                resultLenght =
+                    it1_length + fillet_chamfer_values.to_len(
+                        counter + 1, filletChamferData[counter + 1][X]);
             }
             if (resultLenght > 0 && time_it2 != 0) {
                 time_it1_B = modf(fillet_chamfer_values.to_time(counter, -resultLenght),
@@ -541,7 +544,12 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     time_it1_B = gapHelper;
                 }
             }
-            if (filletChamferData[counter + 1][Y] == 0) {
+            if (path_it->closed() && curve_it2 == curve_endit &&
+                    filletChamferData[counter - counterCurves][Y] == 0) {
+                time_it1_B = 1;
+                time_it2 = 0;
+            } else if (path_it->size() > counterCurves + 1 &&
+                       filletChamferData[counter + 1][Y] == 0) {
                 time_it1_B = 1;
                 time_it2 = 0;
             }
