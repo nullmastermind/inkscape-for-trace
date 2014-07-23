@@ -5,9 +5,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/widget.h>
+#include <gtkmm.h>
 #include <glibmm/i18n.h>
 
 #include "ui/widget/registered-widget.h"
@@ -97,12 +95,12 @@ ToggleButtonParam::param_newWidget()
             iconButton = sp_icon_new(iconSize, iconInactive);
         }
         gtk_widget_show(iconButton);
-        gtk_box_pack_start (GTK_BOX(boxButton), iconButton, true, true, 2);
+        gtk_box_pack_start (GTK_BOX(boxButton), iconButton, false, false, 1);
         if (!param_label.empty()) {
-            gtk_box_pack_start (GTK_BOX(boxButton), labelButton, true, true, 2);
+            gtk_box_pack_start (GTK_BOX(boxButton), labelButton, false, false, 1);
         }
     }else{
-        gtk_box_pack_start (GTK_BOX(boxButton), labelButton, true, true, 2);
+        gtk_box_pack_start (GTK_BOX(boxButton), labelButton, false, false, 1);
     }
     checkwdg->add(*Gtk::manage(Glib::wrap(boxButton)));
     checkwdg->setActive(value);

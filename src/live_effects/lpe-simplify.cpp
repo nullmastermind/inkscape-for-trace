@@ -1,9 +1,9 @@
-#define INKSCAPE_LPE_SIMPLIFY_C
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <gtkmm/box.h>
-#include <gtkmm/entry.h>
+
+#include <gtkmm.h>
+
 #include "live_effects/lpe-simplify.h"
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
@@ -30,13 +30,13 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
             threshold(_("Roughly threshold:"), _("Roughly threshold:"), "threshold", &wr, this, 0.003),
             helper_size(_("Helper size:"), _("Helper size"), "helper_size", &wr, this, 2.),
             nodes(_("Helper nodes"), _("Show helper nodes"), "nodes", &wr, this, false,
-                  "", INKSCAPE_ICON("system-run"), INKSCAPE_ICON("process-stop")),
+                  "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
             handles(_("Helper handles"), _("Show helper handles"), "handles", &wr, this, false,
-                    "", INKSCAPE_ICON("system-run"), INKSCAPE_ICON("process-stop")),
+                    "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
             simplifyindividualpaths(_("Paths separately"), _("Simplifying paths (separately)"), "simplifyindividualpaths", &wr, this, false,
-                                    "", INKSCAPE_ICON("system-run"), INKSCAPE_ICON("process-stop")),
+                                    "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
             simplifyJustCoalesce(_("Just coalesce"), _("Simplify just coalesce"), "simplifyJustCoalesce", &wr, this, false,
-                                 "", INKSCAPE_ICON("system-run"), INKSCAPE_ICON("process-stop"))
+                                 "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off"))
             {
                 registerParameter(dynamic_cast<Parameter *>(&steps));
                 registerParameter(dynamic_cast<Parameter *>(&threshold));
