@@ -479,7 +479,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
     Piecewise<D2<SBasis> > n = rot90(unitVector(der));
     fillet_chamfer_values.set_pwd2(pwd2_in, n);
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
-    int counter = 0;
+    unsigned int counter = 0;
     //from http://launchpadlibrarian.net/12692602/rcp.svg
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
     for (PathVector::const_iterator path_it = path_in.begin();
@@ -502,7 +502,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             curve_endit = path_it->end_open();
           }
         }
-        int counterCurves = 0;
+        unsigned int counterCurves = 0;
         while (curve_it1 != curve_endit) {
             Coord it1_length = (*curve_it1).length(tolerance);
             double time_it1, time_it2, time_it1_B, intpart;
@@ -604,7 +604,12 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 if (time_it1_B != gapHelper && time_it1_B != time_it1 + gapHelper) {
                     path_out.append(*knotCurve1);
                 }
-                int type = abs(filletChamferData[counter + 1][Y]);
+                int type = 0;
+                if(path_it->closed() && curve_it2 == curve_endit){
+                    type = abs(filletChamferData[counter - counterCurves][Y]);
+                } else {
+                    type = abs(filletChamferData[counter + 1][Y]);
+                }
                 if (type == 3 || type == 4) {
                     if (type == 4) {
                         Geom::Point central = middle_point(startArcPoint, endArcPoint);
