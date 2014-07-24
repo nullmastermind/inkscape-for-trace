@@ -1165,10 +1165,12 @@ Inkscape::ActionContext
 Application::action_context_for_document(SPDocument *doc)
 {
     // If there are desktops, check them first to see if the document is bound to one of them
-    for (std::vector<SPDesktop*>::iterator iter = _desktops->begin(), e = _desktops->end() ; iter != e ; ++iter) {
-        SPDesktop *desktop = *iter;
-        if (desktop->doc() == doc) {
-            return Inkscape::ActionContext(desktop);
+    if (_desktops != NULL) {
+        for (std::vector<SPDesktop*>::iterator iter = _desktops->begin(), e = _desktops->end() ; iter != e ; ++iter) {
+            SPDesktop *desktop = *iter;
+            if (desktop->doc() == doc) {
+                return Inkscape::ActionContext(desktop);
+            }
         }
     }
 
