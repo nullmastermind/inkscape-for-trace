@@ -169,7 +169,7 @@ init_active_document()
         return NULL;
     }
     
-    return dbus_register_document(INKSCAPEactive_action_context());
+    return dbus_register_document(INKSCAPE.active_action_context());
 }
 
 gchar *
