@@ -958,40 +958,42 @@ void PenTool::_lastpointToCurve() {
     // avoid that if the "red_curve" contains only two points ( rect ), it doesn't stop here.
     if (this->npoints != 5 && !this->spiro && !this->bspline)
         return;
-    Geom::CubicBezier const * cubic;
-    this->p[1] = this->red_curve->last_segment()->initialPoint() + (1./3)* (Geom::Point)(this->red_curve->last_segment()->finalPoint() - this->red_curve->last_segment()->initialPoint());
+
+    this->p[1] = this->red_curve->last_segment()->initialPoint() + (1./3.)*(this->red_curve->last_segment()->finalPoint() - this->red_curve->last_segment()->initialPoint());
     //modificate the last segment of the green curve so it creates the type of node we need
-    if(this->spiro||this->bspline){
-        if(!this->green_curve->is_empty()){
+    if (this->spiro||this->bspline) {
+        if (!this->green_curve->is_empty()) {
             Geom::Point A(0,0);
             Geom::Point B(0,0);
             Geom::Point C(0,0);
             Geom::Point D(0,0);
-            SPCurve * previous = new SPCurve();
-            cubic = dynamic_cast<Geom::CubicBezier const *>( this->green_curve->last_segment() );
+            Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>( this->green_curve->last_segment() );
             //We obtain the last segment 4 points in the previous curve 
             if ( cubic ){
                 A = (*cubic)[0];
                 B = (*cubic)[1];
-                if(this->spiro){
-                    C = this->p[0] + (Geom::Point)(this->p[0] - this->p[1]);
-                }else
-                    C = this->green_curve->last_segment()->finalPoint() + (1./3)* (Geom::Point)(this->green_curve->last_segment()->initialPoint() - this->green_curve->last_segment()->finalPoint());
+                if (this->spiro) {
+                    C = this->p[0] + (this->p[0] - this->p[1]);
+                } else {
+                    C = this->green_curve->last_segment()->finalPoint() + (1./3.)*(this->green_curve->last_segment()->initialPoint() - this->green_curve->last_segment()->finalPoint());
+                }
                 D = (*cubic)[3];
-            }else{
+            } else {
                 A = this->green_curve->last_segment()->initialPoint();
                 B = this->green_curve->last_segment()->initialPoint();
-                if(this->spiro)
-                    C = this->p[0] + (Geom::Point)(this->p[0] - this->p[1]);
-                else
-                    C = this->green_curve->last_segment()->finalPoint() + (1./3)* (Geom::Point)(this->green_curve->last_segment()->initialPoint() - this->green_curve->last_segment()->finalPoint());
+                if (this->spiro) {
+                    C = this->p[0] + (this->p[0] - this->p[1]);
+                } else {
+                    C = this->green_curve->last_segment()->finalPoint() + (1./3.)*(this->green_curve->last_segment()->initialPoint() - this->green_curve->last_segment()->finalPoint());
+                }
                 D = this->green_curve->last_segment()->finalPoint();
             }
+            SPCurve *previous = new SPCurve();
             previous->moveto(A);
             previous->curveto(B, C, D);
-            if( this->green_curve->get_segment_count() == 1){
+            if ( this->green_curve->get_segment_count() == 1) {
                 this->green_curve = previous;
-            }else{
+            } else {
                 //we eliminate the last segment
                 this->green_curve->backspace();
                 //and we add it again with the recreation
@@ -999,7 +1001,7 @@ void PenTool::_lastpointToCurve() {
             }
         }
         //if the last node is an union with another curve
-        if(this->green_curve->is_empty() && this->sa && !this->sa->curve->is_empty()){
+        if (this->green_curve->is_empty() && this->sa && !this->sa->curve->is_empty()) {
             this->_bspline_spiro_start_anchor(false);
         }
     }
@@ -1242,12 +1244,12 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
                 }
             } else {
                 // Reset red curve
-                Geom::CubicBezier const * cubic = NULL;
                 this->red_curve->reset();
                 // Destroy topmost green bpath
                 if (this->green_bpaths) {
-                    if (this->green_bpaths->data)
+                    if (this->green_bpaths->data) {
                         sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
+                    }
                     this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
                 }
                 // Get last segment
@@ -1270,17 +1272,16 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
                     this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
                 }
 
-                Geom::Point const pt((this->npoints < 4
-                                     ? (Geom::Point)(crv->finalPoint())
-                                     : this->p[3]));
+                Geom::Point const pt( (this->npoints < 4) ? crv->finalPoint() : this->p[3] );
                 
                 this->npoints = 2;
                 // delete the last segment of the green curve
                 if( this->green_curve->get_segment_count() == 1){
                     this->npoints = 5;
                     if (this->green_bpaths) {
-                        if (this->green_bpaths->data)
+                        if (this->green_bpaths->data) {
                             sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
+                        }
                         this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
                     }
                     this->green_curve->reset();
@@ -1289,14 +1290,16 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
                 }
                 // assign the value of this->p[1] to the oposite of the green line last segment 
                 if(this->spiro){
-                    cubic = dynamic_cast<Geom::CubicBezier const *>(this->green_curve->last_segment());
+                    Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(this->green_curve->last_segment());
                     if ( cubic ) {
-                        this->p[1] = (*cubic)[3] + (Geom::Point)((*cubic)[3] - (*cubic)[2]);
+                        this->p[1] = (*cubic)[3] + (*cubic)[3] - (*cubic)[2];
                         SP_CTRL(this->c1)->moveto(this->p[0]);
                     } else {
                         this->p[1] = this->p[0];
                     }
                 }
+                sp_canvas_item_hide(this->c0);
+                sp_canvas_item_hide(this->c1);
                 sp_canvas_item_hide(this->cl0);
                 sp_canvas_item_hide(this->cl1);
                 this->state = PenTool::POINT;
@@ -1607,8 +1610,7 @@ void PenTool::_bspline_spiro_motion(bool shift){
                 if(shift)
                     this->p[2] = this->p[3];
             }else{
-                this->p[1] =  (*cubic)[3] + (Geom::Point)((*cubic)[3] - (*cubic)[2] );
-                this->p[1] = Geom::Point(this->p[1][X] + 0.005,this->p[1][Y] + 0.005);
+                this->p[1] =  (*cubic)[3] + ((*cubic)[3] - (*cubic)[2] );
             }
         }else{
             this->p[1] = this->p[0];
@@ -1659,7 +1661,7 @@ void PenTool::_bspline_spiro_end_anchor_on()
         C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
         C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
     }else{
-        C =  this->p[3] + (Geom::Point)(this->p[3] - this->p[2] );
+        C = this->p[3] + this->p[3] - this->p[2];
     }
     if(cubic){
         lastSeg->moveto((*cubic)[0]);
@@ -2164,7 +2166,7 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
         pen_last_paraxial_dir = this->nextParaxialDirection(p, this->p[0], state);
     }
 
-    ++this->num_clicks;
+    ++num_clicks;
 
 
     if (!this->red_curve->is_empty()) {

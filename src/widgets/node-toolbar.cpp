@@ -229,6 +229,7 @@ static void sp_node_toolbox_coord_changed(gpointer /*shape_editor*/, GObject *tb
         return;
     }
     Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
 
     NodeTool *nt = get_node_tool();
     if (!nt || !(nt->_selected_nodes) ||nt->_selected_nodes->empty()) {

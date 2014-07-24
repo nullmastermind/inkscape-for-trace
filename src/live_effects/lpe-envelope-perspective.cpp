@@ -29,17 +29,29 @@ using namespace Geom;
 namespace Inkscape {
 namespace LivePathEffect {
 
+enum DeformationType {
+  DEFORMATION_ENVELOPE,
+  DEFORMATION_PERSPECTIVE
+};
+
+static const Util::EnumData<unsigned> DeformationTypeData[] = {
+    {DEFORMATION_ENVELOPE          , N_("Envelope deformation"), "Envelope deformation"},
+    {DEFORMATION_PERSPECTIVE          , N_("Perspective"), "Perspective"}
+};
+
+static const Util::EnumDataConverter<unsigned> DeformationTypeConverter(DeformationTypeData, sizeof(DeformationTypeData)/sizeof(*DeformationTypeData));
+
 LPEEnvelopePerspective::LPEEnvelopePerspective(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // initialise your parameters here:
-    perspective(_("Perspective"), _("Perspective"), "Perspective", &wr, this, false),
-    Up_Left_Point(_("Top Left:"), _("Top Left - Ctrl+Alt+Click to reset"), "Up_Left_Point", &wr, this),
-    Up_Right_Point(_("Top Right:"), _("Top Right - Ctrl+Alt+Click to reset"), "Up_Right_Point", &wr, this),
-    Down_Left_Point(_("Down Left:"), _("Down Left - Ctrl+Alt+Click to reset"), "Down_Left_Point", &wr, this),
-    Down_Right_Point(_("Down Right:"), _("Down Right - Ctrl+Alt+Click to reset"), "Down_Right_Point", &wr, this)
+    deform_type(_("Type"), _("Select the type of deformation"), "deform_type", DeformationTypeConverter, &wr, this, DEFORMATION_ENVELOPE),
+    Up_Left_Point(_("Top Left"), _("Top Left - Ctrl+Alt+Click to reset"), "Up_Left_Point", &wr, this),
+    Up_Right_Point(_("Top Right"), _("Top Right - Ctrl+Alt+Click to reset"), "Up_Right_Point", &wr, this),
+    Down_Left_Point(_("Down Left"), _("Down Left - Ctrl+Alt+Click to reset"), "Down_Left_Point", &wr, this),
+    Down_Right_Point(_("Down Right"), _("Down Right - Ctrl+Alt+Click to reset"), "Down_Right_Point", &wr, this)
 {
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    registerParameter( dynamic_cast<Parameter *>(&perspective));
+    registerParameter( dynamic_cast<Parameter *>(&deform_type));
     registerParameter( dynamic_cast<Parameter *>(&Up_Left_Point) );
     registerParameter( dynamic_cast<Parameter *>(&Up_Right_Point) );
     registerParameter( dynamic_cast<Parameter *>(&Down_Left_Point) );
@@ -54,7 +66,7 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
     using Geom::X;
     using Geom::Y;
     double projmatrix[3][3];
-    if(perspective){
+    if(deform_type == DEFORMATION_PERSPECTIVE){
         std::vector<Geom::Point> handles(4);
         handles[0] = Down_Left_Point;
         handles[1] = Up_Left_Point;
@@ -144,7 +156,7 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
             curve_endit = path_it->end_open();
           }
         }
-        if(perspective){
+        if(deform_type == DEFORMATION_PERSPECTIVE){
             nCurve->moveto(project_point(curve_it1->initialPoint(),projmatrix));
         }else{
             nCurve->moveto(project_point(curve_it1->initialPoint()));
@@ -159,7 +171,7 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
             pointAt2 = curve_it1->finalPoint();
           }
           pointAt3 = curve_it1->finalPoint();
-          if(perspective){
+          if(deform_type == DEFORMATION_PERSPECTIVE){
             pointAt1 = project_point(pointAt1,projmatrix);
             pointAt2 = project_point(pointAt2,projmatrix);
             pointAt3 = project_point(pointAt3,projmatrix);
@@ -181,7 +193,7 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
             pointAt2 = curve_it1->finalPoint();
         }
         pointAt3 = curve_it1->finalPoint();
-        if(perspective){
+        if(deform_type == DEFORMATION_PERSPECTIVE){
             pointAt1 = project_point(pointAt1,projmatrix);
             pointAt2 = project_point(pointAt2,projmatrix);
             pointAt3 = project_point(pointAt3,projmatrix);
@@ -191,7 +203,7 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
             pointAt3 = project_point(pointAt3);
         }
         nCurve->curveto(pointAt1, pointAt2, pointAt3);
-        if(perspective){
+        if(deform_type == DEFORMATION_PERSPECTIVE){
             nCurve->move_endpoints(project_point(path_it->begin()->initialPoint(),projmatrix), pointAt3);
         }else{
             nCurve->move_endpoints(project_point(path_it->begin()->initialPoint()), pointAt3);
@@ -251,13 +263,6 @@ LPEEnvelopePerspective::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(6);
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-
-    Gtk::Button* resetButton = Gtk::manage(new Gtk::Button(Gtk::Stock::CLEAR));
-    resetButton->signal_clicked().connect(sigc::mem_fun (*this,&LPEEnvelopePerspective::resetGrid));
-    resetButton->set_size_request(140,45);
-    vbox->pack_start(*hbox, true,true,2);
-    hbox->pack_start(*resetButton, false, false,2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Gtk::HBox * hboxUpHandles = Gtk::manage(new Gtk::HBox(false,0));
     Gtk::HBox * hboxDownHandles = Gtk::manage(new Gtk::HBox(false,0));
@@ -319,6 +324,12 @@ LPEEnvelopePerspective::newWidget()
     hboxMiddle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
     vbox->pack_start(*hboxMiddle, false, true, 2);
     vbox->pack_start(*hboxDownHandles, true, true, 2);
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Button* resetButton = Gtk::manage(new Gtk::Button(Gtk::Stock::CLEAR));
+    resetButton->signal_clicked().connect(sigc::mem_fun (*this,&LPEEnvelopePerspective::resetGrid));
+    resetButton->set_size_request(140,45);
+    vbox->pack_start(*hbox, true,true,2);
+    hbox->pack_start(*resetButton, false, false,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -411,4 +422,4 @@ LPEEnvelopePerspective::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::v
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: file_type=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

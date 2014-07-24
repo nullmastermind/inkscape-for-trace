@@ -180,6 +180,7 @@ static void lpetool_unit_changed(GtkAction* /*act*/, GObject* tbl)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/lpetool/unit", unit->abbr);
 
@@ -281,6 +282,7 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
     tracker->setActiveUnit(sp_desktop_namedview(desktop)->doc_units);
     g_object_set_data(holder, "tracker", tracker);
     Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/lpetool/unit", unit->abbr);

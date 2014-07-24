@@ -28,6 +28,7 @@ class Node;
 }
 namespace LivePathEffect {
 class PowerStrokePointArrayParamKnotHolderEntity;
+class FilletPointArrayParamKnotHolderEntity;
 }
 }
 
@@ -60,6 +61,7 @@ public:
 
     friend class ShapeEditor;
     friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity;
+    friend class Inkscape::LivePathEffect::FilletPointArrayParamKnotHolderEntity;
 
 protected:
 

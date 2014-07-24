@@ -1,9 +1,9 @@
-#define INKSCAPE_LPE_SIMPLIFY_C
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <gtkmm/box.h>
-#include <gtkmm/entry.h>
+
+#include <gtkmm.h>
+
 #include "live_effects/lpe-simplify.h"
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
@@ -19,7 +19,7 @@
 #include <2geom/d2.h>
 #include <2geom/generic-rect.h>
 #include <2geom/interval.h>
-
+#include "ui/icon-names.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -29,10 +29,14 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
             steps(_("Steps:"),_("Change number of simplify steps "), "steps", &wr, this,1),
             threshold(_("Roughly threshold:"), _("Roughly threshold:"), "threshold", &wr, this, 0.003),
             helper_size(_("Helper size:"), _("Helper size"), "helper_size", &wr, this, 2.),
-            nodes(_("Helper nodes"), _("Show helper nodes"), "nodes", &wr, this, false),
-            handles(_("Helper handles"), _("Show helper handles"), "handles", &wr, this, false),
-            simplifyindividualpaths(_("Paths separately"), _("Simplifying paths (separately)"), "simplifyindividualpaths", &wr, this, false),
-            simplifyJustCoalesce(_("Just coalesce"), _("Simplify just coalesce"), "simplifyJustCoalesce", &wr, this, false)
+            nodes(_("Helper nodes"), _("Show helper nodes"), "nodes", &wr, this, false,
+                  "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
+            handles(_("Helper handles"), _("Show helper handles"), "handles", &wr, this, false,
+                    "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
+            simplifyindividualpaths(_("Paths separately"), _("Simplifying paths (separately)"), "simplifyindividualpaths", &wr, this, false,
+                                    "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
+            simplifyJustCoalesce(_("Just coalesce"), _("Simplify just coalesce"), "simplifyJustCoalesce", &wr, this, false,
+                                 "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off"))
             {
                 registerParameter(dynamic_cast<Parameter *>(&steps));
                 registerParameter(dynamic_cast<Parameter *>(&threshold));
@@ -41,7 +45,7 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
                 registerParameter(dynamic_cast<Parameter *>(&handles));
                 registerParameter(dynamic_cast<Parameter *>(&simplifyindividualpaths));
                 registerParameter(dynamic_cast<Parameter *>(&simplifyJustCoalesce));
-                threshold.param_set_range(0., Geom::infinity());
+                threshold.param_set_range(0.0001, Geom::infinity());
                 threshold.param_set_increments(0.0001, 0.0001);
                 threshold.param_set_digits(6);
                 steps.param_set_range(0, 100);

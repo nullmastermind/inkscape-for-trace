@@ -49,6 +49,7 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-clone-original.h"
 #include "live_effects/lpe-envelope-perspective.h"
+#include "live_effects/lpe-fillet-chamfer.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -107,7 +108,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
 #endif
 /* 0.46 */
-    {BEND_PATH,             N_("Bend"),                     "bend_path"},
+    {BEND_PATH,             N_("Bend"),                    "bend_path"},
     {GEARS,                 N_("Gears"),                   "gears"},
     {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),      "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
     {CURVE_STITCH,          N_("Stitch Sub-Paths"),        "curvestitching"},
@@ -121,13 +122,15 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
     {SKETCH,                N_("Sketch"),                  "sketch"},
     {RULER,                 N_("Ruler"),                   "ruler"},
-/* 0.49 */
-    {POWERSTROKE,           N_("Power stroke"), "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"), "clone_original"},
+/* 0.91 */
+    {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
+    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
-    {SIMPLIFY,               N_("Simplify"),     "simplify"},
-    {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
-    {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
+    {SIMPLIFY,              N_("Simplify"),                "simplify"},
+    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
+    // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
+    {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -262,6 +265,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case ENVELOPE_PERSPECTIVE:
             neweffect = static_cast<Effect*> ( new LPEEnvelopePerspective(lpeobj) );
+            break;
+        case FILLET_CHAMFER:
+            neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
