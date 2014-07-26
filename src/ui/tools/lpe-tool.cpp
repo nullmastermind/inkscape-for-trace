@@ -129,8 +129,7 @@ void LpeTool::setup() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (item) {
-        this->shape_editor->set_item(item, SH_NODEPATH);
-        this->shape_editor->set_item(item, SH_KNOTHOLDER);
+        this->shape_editor->set_item(item);
     }
 
     if (prefs->getBool("/tools/lpetool/selcue")) {
@@ -146,9 +145,9 @@ void sp_lpetool_context_selection_changed(Inkscape::Selection *selection, gpoint
 {
     LpeTool *lc = SP_LPETOOL_CONTEXT(data);
 
-    lc->shape_editor->unset_item(SH_KNOTHOLDER);
+    lc->shape_editor->unset_item();
     SPItem *item = selection->singleItem();
-    lc->shape_editor->set_item(item, SH_KNOTHOLDER);
+    lc->shape_editor->set_item(item);
 }
 
 void LpeTool::set(const Inkscape::Preferences::Entry& val) {

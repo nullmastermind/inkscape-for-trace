@@ -177,7 +177,7 @@ void TextTool::setup() {
 
     SPItem *item = sp_desktop_selection(this->desktop)->singleItem();
     if (item && SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) {
-        this->shape_editor->set_item(item, SH_KNOTHOLDER);
+        this->shape_editor->set_item(item);
     }
 
     this->sel_changed_connection = sp_desktop_selection(desktop)->connectChangedFirst(
@@ -1411,10 +1411,10 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
 
     ToolBase *ec = SP_EVENT_CONTEXT(this);
 
-    ec->shape_editor->unset_item(SH_KNOTHOLDER);
+    ec->shape_editor->unset_item();
     SPItem *item = selection->singleItem();
     if (item && SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) {
-        ec->shape_editor->set_item(item, SH_KNOTHOLDER);
+        ec->shape_editor->set_item(item);
     }
 
     if (this->text && (item != this->text)) {
