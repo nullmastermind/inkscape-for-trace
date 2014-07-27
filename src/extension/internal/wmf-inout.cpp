@@ -63,7 +63,6 @@ namespace Extension {
 namespace Internal {
 
 
-static U_RECT16 rc_old;
 static bool clipset = false;
 static uint32_t BLTmode=0;
 
@@ -2054,8 +2053,8 @@ std::cout << "BEFORE DRAW"
 
             double cx = pix_to_x_point( d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0 );
             double cy = pix_to_y_point( d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0 );
-            double rx = pix_to_abs_size( d, fabs(rc.right - rc.left  )/2.0 );
-            double ry = pix_to_abs_size( d, fabs(rc.top   - rc.bottom)/2.0 );
+            double rx = pix_to_abs_size( d, std::abs(rc.right - rc.left  )/2.0 );
+            double ry = pix_to_abs_size( d, std::abs(rc.top   - rc.bottom)/2.0 );
 
             SVGOStringStream tmp_ellipse;
             tmp_ellipse << "cx=\"" << cx << "\" ";

@@ -86,15 +86,15 @@ static bool pen_within_tolerance = false;
 static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
 
 namespace {
-	ToolBase* createPenContext() {
-		return new PenTool();
-	}
+    ToolBase* createPenContext() {
+        return new PenTool();
+    }
 
-	bool penContextRegistered = ToolFactory::instance().registerObject("/tools/freehand/pen", createPenContext);
+    bool penContextRegistered = ToolFactory::instance().registerObject("/tools/freehand/pen", createPenContext);
 }
 
 const std::string& PenTool::getPrefsPath() {
-	return PenTool::prefsPath;
+    return PenTool::prefsPath;
 }
 
 const std::string PenTool::prefsPath = "/tools/freehand/pen";
@@ -321,7 +321,7 @@ bool PenTool::item_handler(SPItem* item, GdkEvent* event) {
     }
 
     if (!ret) {
-    	ret = FreehandBase::item_handler(item, event);
+        ret = FreehandBase::item_handler(item, event);
     }
 
     return ret;
@@ -359,7 +359,7 @@ bool PenTool::root_handler(GdkEvent* event) {
     }
 
     if (!ret) {
-    	ret = FreehandBase::root_handler(event);
+        ret = FreehandBase::root_handler(event);
     }
 
     return ret;
@@ -1268,15 +1268,15 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
                 }
 
                 // asign the value in a third of the distance of the last segment.
-                if(this->bspline){
+                if (this->bspline){
                     this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
                 }
 
                 Geom::Point const pt( (this->npoints < 4) ? crv->finalPoint() : this->p[3] );
-                
+
                 this->npoints = 2;
                 // delete the last segment of the green curve
-                if( this->green_curve->get_segment_count() == 1){
+                if (this->green_curve->get_segment_count() == 1) {
                     this->npoints = 5;
                     if (this->green_bpaths) {
                         if (this->green_bpaths->data) {
@@ -1285,11 +1285,12 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
                         this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
                     }
                     this->green_curve->reset();
-                }else{
+                } else {
                     this->green_curve->backspace();
                 }
+
                 // assign the value of this->p[1] to the oposite of the green line last segment 
-                if(this->spiro){
+                if (this->spiro){
                     Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(this->green_curve->last_segment());
                     if ( cubic ) {
                         this->p[1] = (*cubic)[3] + (*cubic)[3] - (*cubic)[2];
@@ -1298,6 +1299,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
                         this->p[1] = this->p[0];
                     }
                 }
+
                 sp_canvas_item_hide(this->c0);
                 sp_canvas_item_hide(this->c1);
                 sp_canvas_item_hide(this->cl0);
@@ -2084,7 +2086,7 @@ void PenTool::_setSubsequentPoint(Geom::Point const p, bool statusbar, guint sta
         // we are drawing horizontal/vertical lines and hit an anchor;
         Geom::Point const origin = this->p[0];
         // if the previous point and the anchor are not aligned either horizontally or vertically...
-        if ((abs(p[Geom::X] - origin[Geom::X]) > 1e-9) && (abs(p[Geom::Y] - origin[Geom::Y]) > 1e-9)) {
+        if ((std::abs(p[Geom::X] - origin[Geom::X]) > 1e-9) && (std::abs(p[Geom::Y] - origin[Geom::Y]) > 1e-9)) {
             // ...then we should draw an L-shaped path, consisting of two paraxial segments
             Geom::Point intermed = p;
             this->_setToNearestHorizVert(intermed, status, false);

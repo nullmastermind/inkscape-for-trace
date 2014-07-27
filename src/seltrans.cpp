@@ -377,12 +377,6 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
     g_return_if_fail(_grabbed);
     g_return_if_fail(!_empty);
 
-    // E.g. scaling a perfectly vertical line in horizontal direction will not work, and will produce an identity affine
-
-    if (rel_affine.isIdentity()) {
-        return;
-    }
-
     Geom::Affine const affine( Geom::Translate(-norm) * rel_affine * Geom::Translate(norm) );
 
     if (_show == SHOW_CONTENT) {

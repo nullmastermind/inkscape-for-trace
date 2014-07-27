@@ -21,7 +21,6 @@
 #include <glibmm/i18n.h>
 #include <cstring>
 #include <string>
-//#include <2geom/bezier-curve.h>
 
 #include "desktop-handles.h"
 #include "selection.h"
@@ -795,8 +794,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 d_new->updateKnotShape ();
                 d_new->updateTip ();
                 d_new->updateDependencies(true);
-                DocumentUndo::done(sp_desktop_document (d_new->parent->desktop), SP_VERB_CONTEXT_GRADIENT,
-                                   _("Merge gradient handles"));
+                DocumentUndo::done(sp_desktop_document (d_new->parent->desktop), SP_VERB_CONTEXT_GRADIENT, _("Merge gradient handles"));
                 return;
             }
         }

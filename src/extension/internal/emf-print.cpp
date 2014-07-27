@@ -977,8 +977,8 @@ unsigned int PrintEmf::fill(
     using Geom::X;
     using Geom::Y;
     
-    SPItem *item = SP_ITEM(style->object);
-    SPClipPath *scp = (item->clip_ref ? item->clip_ref->getObject() : NULL);
+    //SPItem *item = SP_ITEM(style->object);
+    //SPClipPath *scp = (item->clip_ref ? item->clip_ref->getObject() : NULL);
 
     Geom::Affine tf = m_tr_stack.top();
 
@@ -1882,7 +1882,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
                 fix90n = 1; //assume vertical
                 rot  = (double)(((int) round(rot)) - irem);
                 rotb =  rot * M_PI / 1800.0;
-                if (abs(rot) == 900.0) {
+                if (std::abs(rot) == 900.0) {
                     fix90n = 2;
                 }
             }
