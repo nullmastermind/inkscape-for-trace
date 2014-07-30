@@ -517,6 +517,8 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                                     counter - counterCurves,
                                     filletChamferData[counter - counterCurves][X]),
                                 &intpart);
+            } else if (!path_it->closed() && curve_it2 == curve_endit){
+                time_it2 = 0;
             } else {
                 time_it2 = modf(fillet_chamfer_values.to_time(
                                     counter + 1, filletChamferData[counter + 1][X]),
@@ -529,6 +531,8 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     it1_length + fillet_chamfer_values.to_len(
                         counter - counterCurves,
                         filletChamferData[counter - counterCurves][X]);
+            } else if (!path_it->closed() && curve_it2 == curve_endit){
+                resultLenght = 0;
             } else {
                 resultLenght =
                     it1_length + fillet_chamfer_values.to_len(
@@ -607,6 +611,8 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 int type = 0;
                 if(path_it->closed() && curve_it2 == curve_endit){
                     type = abs(filletChamferData[counter - counterCurves][Y]);
+                } else if (!path_it->closed() && curve_it2 == curve_endit){
+                    //0
                 } else {
                     type = abs(filletChamferData[counter + 1][Y]);
                 }
