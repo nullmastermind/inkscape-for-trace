@@ -1,14 +1,14 @@
-#define INKSCAPE_LPE_ROUGHEN_C
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <gtkmm.h>
 
 #include "live_effects/lpe-roughen.h"
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
 #include "helper/geom.h"
 #include <glibmm/i18n.h>
-#include <gtkmm/separator.h>
 #include <cmath>
 
 namespace Inkscape {
