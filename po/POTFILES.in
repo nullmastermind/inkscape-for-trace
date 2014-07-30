@@ -141,6 +141,7 @@ src/live_effects/lpe-knot.cpp
 src/live_effects/lpe-patternalongpath.cpp
 src/live_effects/lpe-powerstroke.cpp
 src/live_effects/lpe-rough-hatches.cpp
+src/live_effects/lpe-roughen.cpp
 src/live_effects/lpe-ruler.cpp
 src/live_effects/lpe-bspline.cpp
 src/live_effects/lpe-skeleton.cpp
