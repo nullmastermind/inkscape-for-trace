@@ -29,6 +29,7 @@ enum EffectType {
     SPIRO,
     LATTICE,
     LATTICE2,
+    ROUGHEN,
     SIMPLIFY,
     ENVELOPE,
     CONSTRUCT_GRID,
