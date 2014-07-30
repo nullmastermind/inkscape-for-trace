@@ -44,6 +44,8 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
+// clipboard support
+#include "ui/clipboard.h"
 #include "ui/tools/freehand-base.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -261,7 +263,13 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
 
-        int shape = prefs->getInt(tool_name(dc) + "/shape", 0);
+        //Store the clipboard path to apply in the future without the use of clipboard
+        static Geom::PathVector previous_shape_pathv;
+        enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, LAST_APPLIED };
+        static shapeType previous_shape_type = NONE;
+
+
+        shapeType shape = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
@@ -269,11 +277,18 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
 
+        if(shape == LAST_APPLIED){
+            shape = previous_shape_type;
+            if(shape == CLIPBOARD){
+                shape = LAST_APPLIED;
+            }
+        }
+
         switch (shape) {
-            case 0:
+            case NONE:
                 // don't apply any shape
                 break;
-            case 1:
+            case TRIANGLE_IN:
             {
                 // "triangle in"
                 std::vector<Geom::Point> points(1);
@@ -283,7 +298,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 shape_applied = true;
                 break;
             }
-            case 2:
+            case TRIANGLE_OUT:
             {
                 // "triangle out"
                 guint curve_length = curve->get_segment_count();
@@ -294,7 +309,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 shape_applied = true;
                 break;
             }
-            case 3:
+            case ELLIPSE:
             {
                 // "ellipse"
                 SPCurve *c = new SPCurve();
@@ -307,22 +322,40 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 c->closepath();
                 spdc_paste_curve_as_freehand_shape(c, dc, item);
                 c->unref();
+
                 shape_applied = true;
                 break;
             }
-            case 4:
+            case CLIPBOARD:
             {
                 // take shape from clipboard; TODO: catch the case where clipboard is empty
                 Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
                 Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
                 static_cast<LPEPatternAlongPath*>(lpe)->pattern.on_paste_button_click();
+                Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
+                Glib::ustring svgd = cm->getPathParameter(SP_ACTIVE_DESKTOP);
+                previous_shape_pathv = sp_svg_read_pathv(svgd.data());
 
                 shape_applied = true;
+                break;
+            }
+            case LAST_APPLIED:
+            {
+                if(previous_shape_pathv.size() != 0){
+                    SPCurve * c = new SPCurve();
+                    c->set_pathvector(previous_shape_pathv);
+                    spdc_paste_curve_as_freehand_shape(c, dc, item);
+                    c->unref();
+
+                    shape_applied = true;
+                }
                 break;
             }
             default:
                 break;
         }
+        previous_shape_type = shape;
+
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
             SPCSSAttr *css = sp_repr_css_attr_new();
