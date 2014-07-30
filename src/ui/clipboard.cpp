@@ -601,11 +601,11 @@ Glib::ustring ClipboardManagerImpl::getPathParameter(SPDesktop* desktop)
  */
 Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
 {
-    //https://bugs.launchpad.net/inkscape/+bug/1293979
-    //basically, when we do a depth-first search, we're stopping
-    //at the first object to be <svg:path> or <svg:text>.
-    //but that could then return the id of the object's 
-    //clip path or mask, not the original path!
+    // https://bugs.launchpad.net/inkscape/+bug/1293979
+    // basically, when we do a depth-first search, we're stopping
+    // at the first object to be <svg:path> or <svg:text>.
+    // but that could then return the id of the object's 
+    // clip path or mask, not the original path!
 	
     SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
     if ( tempdoc == NULL ) {
@@ -614,7 +614,7 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
     }
     Inkscape::XML::Node *root = tempdoc->getReprRoot();
 
-    //1293979: strip out the defs of the document
+    // 1293979: strip out the defs of the document
     root->removeChild(tempdoc->getDefs()->getRepr());
 
     Inkscape::XML::Node *repr = sp_repr_lookup_name(root, "svg:path", -1); // unlimited search depth

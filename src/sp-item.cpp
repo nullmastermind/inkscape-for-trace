@@ -120,10 +120,6 @@ SPItem::SPItem() : SPObject() {
     mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), this));
 
     avoidRef = new SPAvoidRef(this);
-
-    //new (&constraints) std::vector<SPGuideConstraint>();
-
-    //new (&_transformed_signal) sigc::signal<void, Geom::Affine const *, SPItem *>();
 }
 
 SPItem::~SPItem() {
@@ -293,6 +289,11 @@ Geom::Point SPItem::getCenter() const {
     }
 }
 
+void
+SPItem::scaleCenter(Geom::Scale const &sc) {
+    transform_center_x *= sc[Geom::X];
+    transform_center_y *= sc[Geom::Y];
+}
 
 namespace {
 

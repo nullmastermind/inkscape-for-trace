@@ -438,7 +438,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
             this->_shape_editors.find(r.item) == this->_shape_editors.end())
         {
             ShapeEditor *si = new ShapeEditor(this->desktop);
-            si->set_item(r.item, SH_KNOTHOLDER);
+            si->set_item(r.item);
             this->_shape_editors.insert(const_cast<SPItem*&>(r.item), si);
         }
     }

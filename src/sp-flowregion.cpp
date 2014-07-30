@@ -42,15 +42,12 @@ static void         GetDest(SPObject* child,Shape **computed);
 
 
 SPFlowregion::SPFlowregion() : SPItem() {
-	//new (&this->computed) std::vector<Shape*>;
 }
 
 SPFlowregion::~SPFlowregion() {
 	for (std::vector<Shape*>::iterator it = this->computed.begin() ; it != this->computed.end() ; ++it) {
         delete *it;
 	}
-
-    //this->computed.~vector<Shape*>();
 }
 
 void SPFlowregion::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
@@ -184,6 +181,8 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
     }
 
     SPItem::write(xml_doc, repr, flags);
+
+    this->UpdateComputed();  // copied from update(), see LP Bug 1339305
 
     return repr;
 }
@@ -372,6 +371,8 @@ static void         GetDest(SPObject* child,Shape **computed)
 		tr_mat = SP_ITEM(u_child)->transform;
 	}
 	if ( SP_IS_SHAPE (u_child) ) {
+        if (!(SP_SHAPE(u_child)->_curve))
+            SP_SHAPE (u_child)->set_shape ();
 		curve = SP_SHAPE (u_child)->getCurve ();
 	} else if ( SP_IS_TEXT (u_child) ) {
 	curve = SP_TEXT (u_child)->getNormalizedBpath ();

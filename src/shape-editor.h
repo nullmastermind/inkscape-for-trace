@@ -4,8 +4,8 @@
 /*
  * Inkscape::ShapeEditor
  *
- * This is a container class which contains either knotholder (for shapes) or nodepath (for
- * paths). It is attached to a single item so only one of these is active at a time.
+ * This is a container class which contains a knotholder for shapes.
+ * It is attached to a single item.
  *
  * Authors:
  *   bulia byak <buliabyak@users.sf.net>
@@ -14,27 +14,12 @@
 
 #include <glib.h>
 
-#include <2geom/forward.h>
-
-
-namespace Inkscape { namespace NodePath { class Path; } }
 namespace Inkscape { namespace XML { class Node; } }
 
 class KnotHolder;
 class LivePathEffectObject;
 class SPDesktop;
 class SPItem;
-class SPNodeContext;
-class ShapeEditorsCollective;
-
-#include <2geom/point.h>
-#include <boost/optional.hpp>
-#include <vector>
-
-enum SubType{
-    SH_NODEPATH,
-    SH_KNOTHOLDER
-};
 
 class ShapeEditor {
 public:
@@ -42,36 +27,25 @@ public:
     ShapeEditor(SPDesktop *desktop);
     ~ShapeEditor();
 
-    void set_item (SPItem *item, SubType type, bool keep_knotholder = false);
-    void unset_item (SubType type, bool keep_knotholder = false);
+    void set_item(SPItem *item, bool keep_knotholder = false);
+    void unset_item(bool keep_knotholder = false);
 
-    bool has_nodepath (); //((deprecated))
-    void update_knotholder (); //((deprecated))
+    void update_knotholder(); //((deprecated))
 
-    bool has_local_change (SubType type);
-    void decrement_local_change (SubType type);
-
-    GList *save_nodepath_selection ();
-    void restore_nodepath_selection (GList *saved);
-
-    void nodepath_destroyed ();
-
-    bool has_selection ();
-
-    Inkscape::NodePath::Path *get_nodepath() {return NULL;} //((deprecated))
-    ShapeEditorsCollective *get_container() {return NULL;}
-
-    // this one is only public because it's called from non-C++ repr changed callback
-    void shapeeditor_event_attr_changed(gchar const *name);
+    bool has_local_change();
+    void decrement_local_change();
 
     bool knot_mouseover() const;
     
-    static void blockSetItem(bool b) {_blockSetItem = b;}
+    static void blockSetItem(bool b) { _blockSetItem = b; } // kludge?
 
+    static void event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar const *name, gchar const * /*old_value*/,
+                                   gchar const * /*new_value*/, bool /*is_interactive*/, void *data);
 private:
-    bool has_knotholder ();
-    void reset_item (SubType type, bool keep_knotholder = true);
-    const SPItem *get_item (SubType type);
+    bool has_knotholder();
+    void reset_item (bool keep_knotholder = true);
+    const SPItem *get_item();
+
     static bool _blockSetItem;
 
     SPDesktop *desktop;

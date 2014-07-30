@@ -46,11 +46,9 @@ namespace {
 
 SPFlowtext::SPFlowtext() : SPItem() {
     this->par_indent = 0;
-    //new (&this->layout) Inkscape::Text::Layout();
 }
 
 SPFlowtext::~SPFlowtext() {
-	//this->layout.~Layout();
 }
 
 void SPFlowtext::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
@@ -254,6 +252,8 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
             }
         }
     }
+
+    this->rebuildLayout();  // copied from update(), see LP Bug 1339305
 
     SPItem::write(doc, repr, flags);
 

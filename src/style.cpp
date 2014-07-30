@@ -135,6 +135,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     writing_mode(     "writing-mode",    enum_writing_mode,    SP_CSS_WRITING_MODE_LR_TB  ),
     baseline_shift(),
     text_anchor(      "text-anchor",     enum_text_anchor,     SP_CSS_TEXT_ANCHOR_START   ),
+    white_space(      "white-space",     enum_white_space,     SP_CSS_WHITE_SPACE_NORMAL  ),
 
     // General visual properties
     clip_rule(        "clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO       ),
@@ -152,6 +153,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     color(            "color"                                ),  // SPIColor
     color_interpolation(        "color-interpolation",         enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_SRGB),
     color_interpolation_filters("color-interpolation-filters", enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_LINEARRGB),
+
+    // Solid color properties
+    solid_color(      "solid-color"                          ), // SPIColor
+    solid_opacity(    "solid-opacity",                         SP_SCALE24_MAX             ),
 
     // Fill properties
     fill(             "fill"                                 ),  // SPIPaint
@@ -227,11 +232,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
         document = document_in;
     }
 
-    new (&release_connection) sigc::connection();
-    new (&filter_modified_connection) sigc::connection();
-    new (&fill_ps_modified_connection) sigc::connection();
-    new (&stroke_ps_modified_connection) sigc::connection();
-
     // 'font' shorthand requires access to included properties.
     font.setStylePointer(              this );
 
@@ -298,6 +298,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &writing_mode );
     _properties.push_back( &baseline_shift );
     _properties.push_back( &text_anchor );
+    _properties.push_back( &white_space );
 
     _properties.push_back( &clip_rule );
     _properties.push_back( &display );
@@ -310,6 +311,9 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
     _properties.push_back( &color_interpolation );
     _properties.push_back( &color_interpolation_filters );
+
+    _properties.push_back( &solid_color );
+    _properties.push_back( &solid_opacity );
 
     _properties.push_back( &fill );
     _properties.push_back( &fill_opacity );
@@ -377,6 +381,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //     _propmap.insert( std::make_pair( writing_mode.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::writing_mode          ) ) );
     //     _propmap.insert( std::make_pair( baseline_shift.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::baseline_shift        ) ) );
     //     _propmap.insert( std::make_pair( text_anchor.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::text_anchor           ) ) );
+    //     _propmap.insert( std::make_pair( white_space.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::white_space           ) ) );
 
     //     _propmap.insert( std::make_pair( clip_rule.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::clip_rule             ) ) );
     //     _propmap.insert( std::make_pair( display.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::display               ) ) );
@@ -390,9 +395,13 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //     _propmap.insert( std::make_pair( color_interpolation.name,   reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation   ) ) );
     //     _propmap.insert( std::make_pair( color_interpolation_filters.name, reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation_filters ) ) );
 
+    //     _propmap.insert( std::make_pair( solid_color.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::solid_color           ) ) );
+    //     _propmap.insert( std::make_pair( solid_opacity.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::solid_opacity         ) ) );
+
     //     _propmap.insert( std::make_pair( fill.name,                  reinterpret_cast<SPIBasePtr>(&SPStyle::fill                  ) ) );
     //     _propmap.insert( std::make_pair( fill_opacity.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::fill_opacity          ) ) );
     //     _propmap.insert( std::make_pair( fill_rule.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::fill_rule             ) ) );
+
 
     //     _propmap.insert( std::make_pair( stroke.name,                reinterpret_cast<SPIBasePtr>(&SPStyle::stroke                ) ) );
     //     _propmap.insert( std::make_pair( stroke_width.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_width          ) ) );
@@ -431,7 +440,6 @@ SPStyle::~SPStyle() {
 
     // Remove connections
     release_connection.disconnect();
-    release_connection.~connection();
 
     // The following shoud be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
@@ -446,12 +454,7 @@ SPStyle::~SPStyle() {
         filter_modified_connection.disconnect();
     }
 
-    filter_modified_connection.~connection();
-    fill_ps_modified_connection.~connection();
-    stroke_ps_modified_connection.~connection();
-
     _properties.clear();
-    //_propmap.clear();
 
     // std::cout << "SPStyle::~SPstyle(): Exit\n" << std::endl;
 }
@@ -670,6 +673,9 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
         case SP_PROP_TEXT_ANCHOR:
             text_anchor.readIfUnset( val );
             break;
+        case SP_PROP_WHITE_SPACE:
+            white_space.readIfUnset( val );
+            break;
         case SP_PROP_BASELINE_SHIFT:
             baseline_shift.readIfUnset( val );
             break;
@@ -789,6 +795,12 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             break;
         case SP_PROP_COLOR_RENDERING:
             color_rendering.readIfUnset( val );
+            break;
+        case SP_PROP_SOLID_COLOR:
+            solid_color.readIfUnset( val );
+            break;
+        case SP_PROP_SOLID_OPACITY:
+            solid_opacity.readIfUnset( val );
             break;
         case SP_PROP_FILL:
             fill.readIfUnset( val );
@@ -1557,6 +1569,12 @@ sp_style_unset_property_attrs(SPObject *o)
     if (style->color_interpolation_filters.set) {
         repr->setAttribute("color-interpolation-filters", NULL);
     }
+    if (style->solid_color.set) {
+        repr->setAttribute("solid-color", NULL);
+    }
+    if (style->solid_opacity.set) {
+        repr->setAttribute("solid-opacity", NULL);
+    }
     if (style->fill.set) {
         repr->setAttribute("fill", NULL);
     }
@@ -1610,6 +1628,9 @@ sp_style_unset_property_attrs(SPObject *o)
     }
     if (style->text_anchor.set) {
         repr->setAttribute("text-anchor", NULL);
+    }
+    if (style->white_space.set) {
+        repr->setAttribute("white_space", NULL);
     }
     if (style->writing_mode.set) {
         repr->setAttribute("writing_mode", NULL);
@@ -1700,6 +1721,7 @@ sp_css_attr_unset_text(SPCSSAttr *css)
     sp_repr_css_set_property(css, "block-progression", NULL);
     sp_repr_css_set_property(css, "writing-mode", NULL);
     sp_repr_css_set_property(css, "text-anchor", NULL);
+    sp_repr_css_set_property(css, "white_space", NULL);
     sp_repr_css_set_property(css, "kerning", NULL); // not implemented yet
     sp_repr_css_set_property(css, "dominant-baseline", NULL); // not implemented yet
     sp_repr_css_set_property(css, "alignment-baseline", NULL); // not implemented yet
