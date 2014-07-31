@@ -213,7 +213,7 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
         if (dynamic_cast<SPLPEItem*> (object)) {
             // This writes all parameters to SVG. Is this sufficiently efficient or should we only
             // write the ones that were changed?
-            SPLPEItem * lpeitem = SP_LPE_ITEM(this->item);
+            SPLPEItem * lpeitem = SP_LPE_ITEM(object);
             if (lpeitem) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
                 if (lpe) {
