@@ -145,7 +145,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     opacity(          "opacity",                               SP_SCALE24_MAX,          false ),
 
     isolation(        "isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO      ),
-    mix_blend_mode(   "mix_blend_mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
+    mix_blend_mode(   "mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
 
     paint_order(), // SPIPaintOrder
 
