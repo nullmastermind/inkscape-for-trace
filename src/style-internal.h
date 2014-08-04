@@ -340,7 +340,7 @@ class SPIEnum : public SPIBase {
   public:
     SPIEnum() :
         SPIBase( "anonymous_enum" ), enums( NULL ), value(0), computed(0) {};
-    SPIEnum( Glib::ustring name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
+    SPIEnum( Glib::ustring const name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
         SPIBase( name, inherits ), enums( enums ), value(value), computed(value),
         value_default(value), computed_default(value) {};
     // Following is needed for font-weight
