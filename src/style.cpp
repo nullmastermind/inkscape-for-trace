@@ -144,7 +144,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     opacity(          "opacity",                               SP_SCALE24_MAX,          false ),
 
     isolation(        "isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO      ),
-    blend_mode(       "blend_mode",      enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
+    mix_blend_mode(   "mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
 
     paint_order(), // SPIPaintOrder
 
@@ -152,6 +152,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     color(            "color"                                ),  // SPIColor
     color_interpolation(        "color-interpolation",         enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_SRGB),
     color_interpolation_filters("color-interpolation-filters", enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_LINEARRGB),
+
+    // Solid color properties
+    solid_color(      "solid-color"                          ), // SPIColor
+    solid_opacity(    "solid-opacity",                         SP_SCALE24_MAX             ),
 
     // Fill properties
     fill(             "fill"                                 ),  // SPIPaint
@@ -227,11 +231,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
         document = document_in;
     }
 
-    new (&release_connection) sigc::connection();
-    new (&filter_modified_connection) sigc::connection();
-    new (&fill_ps_modified_connection) sigc::connection();
-    new (&stroke_ps_modified_connection) sigc::connection();
-
     // 'font' shorthand requires access to included properties.
     font.setStylePointer(              this );
 
@@ -306,10 +305,13 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &opacity );
 
     _properties.push_back( &isolation );
-    _properties.push_back( &blend_mode );
+    _properties.push_back( &mix_blend_mode );
 
     _properties.push_back( &color_interpolation );
     _properties.push_back( &color_interpolation_filters );
+
+    _properties.push_back( &solid_color );
+    _properties.push_back( &solid_opacity );
 
     _properties.push_back( &fill );
     _properties.push_back( &fill_opacity );
@@ -385,14 +387,18 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //     _propmap.insert( std::make_pair( opacity.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::opacity               ) ) );
 
     //     _propmap.insert( std::make_pair( isolation.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::isolation             ) ) );
-    //     _propmap.insert( std::make_pair( blend_mode.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::blend_mode            ) ) );
+    //     _propmap.insert( std::make_pair( mix_blend_mode.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::mix_blend_mode        ) ) );
 
     //     _propmap.insert( std::make_pair( color_interpolation.name,   reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation   ) ) );
     //     _propmap.insert( std::make_pair( color_interpolation_filters.name, reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation_filters ) ) );
 
+    //     _propmap.insert( std::make_pair( solid_color.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::solid_color           ) ) );
+    //     _propmap.insert( std::make_pair( solid_opacity.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::solid_opacity         ) ) );
+
     //     _propmap.insert( std::make_pair( fill.name,                  reinterpret_cast<SPIBasePtr>(&SPStyle::fill                  ) ) );
     //     _propmap.insert( std::make_pair( fill_opacity.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::fill_opacity          ) ) );
     //     _propmap.insert( std::make_pair( fill_rule.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::fill_rule             ) ) );
+
 
     //     _propmap.insert( std::make_pair( stroke.name,                reinterpret_cast<SPIBasePtr>(&SPStyle::stroke                ) ) );
     //     _propmap.insert( std::make_pair( stroke_width.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_width          ) ) );
@@ -431,7 +437,6 @@ SPStyle::~SPStyle() {
 
     // Remove connections
     release_connection.disconnect();
-    release_connection.~connection();
 
     // The following shoud be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
@@ -446,12 +451,7 @@ SPStyle::~SPStyle() {
         filter_modified_connection.disconnect();
     }
 
-    filter_modified_connection.~connection();
-    fill_ps_modified_connection.~connection();
-    stroke_ps_modified_connection.~connection();
-
     _properties.clear();
-    //_propmap.clear();
 
     // std::cout << "SPStyle::~SPstyle(): Exit\n" << std::endl;
 }
@@ -713,8 +713,8 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
         case SP_PROP_ISOLATION:
             isolation.readIfUnset( val );
             break;
-        case SP_PROP_BLEND_MODE:
-            blend_mode.readIfUnset( val );
+        case SP_PROP_MIX_BLEND_MODE:
+            mix_blend_mode.readIfUnset( val );
             break;
 
             /* SVG */
@@ -789,6 +789,12 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             break;
         case SP_PROP_COLOR_RENDERING:
             color_rendering.readIfUnset( val );
+            break;
+        case SP_PROP_SOLID_COLOR:
+            solid_color.readIfUnset( val );
+            break;
+        case SP_PROP_SOLID_OPACITY:
+            solid_opacity.readIfUnset( val );
             break;
         case SP_PROP_FILL:
             fill.readIfUnset( val );
@@ -1556,6 +1562,12 @@ sp_style_unset_property_attrs(SPObject *o)
     }
     if (style->color_interpolation_filters.set) {
         repr->setAttribute("color-interpolation-filters", NULL);
+    }
+    if (style->solid_color.set) {
+        repr->setAttribute("solid-color", NULL);
+    }
+    if (style->solid_opacity.set) {
+        repr->setAttribute("solid-opacity", NULL);
     }
     if (style->fill.set) {
         repr->setAttribute("fill", NULL);

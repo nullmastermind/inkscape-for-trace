@@ -440,7 +440,7 @@ static SPStyleProp const props[] = {
     {SP_PROP_DISPLAY, "display"},
     {SP_PROP_OVERFLOW, "overflow"},
     {SP_PROP_VISIBILITY, "visibility"},
-    {SP_PROP_BLEND_MODE, "mix-blend-mode"}, // CSS Blending and Compositing
+    {SP_PROP_MIX_BLEND_MODE, "mix-blend-mode"}, // CSS Blending and Compositing
     {SP_PROP_ISOLATION, "isolation"},
     /* SVG */
     /* Clip/Mask */
@@ -475,6 +475,8 @@ static SPStyleProp const props[] = {
     {SP_PROP_MARKER_START, "marker-start"},
     {SP_PROP_PAINT_ORDER, "paint-order" },
     {SP_PROP_SHAPE_RENDERING, "shape-rendering"},
+    {SP_PROP_SOLID_COLOR, "solid-color"},
+    {SP_PROP_SOLID_OPACITY, "solid-opacity"},
     {SP_PROP_STROKE, "stroke"},
     {SP_PROP_STROKE_DASHARRAY, "stroke-dasharray"},
     {SP_PROP_STROKE_DASHOFFSET, "stroke-dashoffset"},
