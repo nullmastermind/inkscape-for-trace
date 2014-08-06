@@ -84,7 +84,7 @@ namespace Tools {
 static Geom::Point pen_drag_origin_w(0, 0);
 static bool pen_within_tolerance = false;
 static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
-
+const double handleCubicGap = 0.01;
 namespace {
     ToolBase* createPenContext() {
         return new PenTool();
@@ -1454,7 +1454,7 @@ void PenTool::_bspline_spiro_on()
         this->p[0] = this->red_curve->first_segment()->initialPoint();
         this->p[3] = this->red_curve->first_segment()->finalPoint();
         this->p[2] = this->p[3] + (1./3)*(this->p[0] - this->p[3]);
-        this->p[2] = Geom::Point(this->p[2][X] + 0.005,this->p[2][Y] + 0.005);
+        this->p[2] = Geom::Point(this->p[2][X] + handleCubicGap,this->p[2][Y] + handleCubicGap);
     }
 }
 
@@ -1522,7 +1522,7 @@ void PenTool::_bspline_spiro_start_anchor_on()
     Geom::Point A = tmpCurve->last_segment()->initialPoint();
     Geom::Point D = tmpCurve->last_segment()->finalPoint();
     Geom::Point C = D + (1./3)*(A - D);
-    C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
+    C = Geom::Point(C[X] + handleCubicGap,C[Y] + handleCubicGap);
     if(cubic){
         lastSeg->moveto(A);
         lastSeg->curveto((*cubic)[1],C,D);
@@ -1580,10 +1580,10 @@ void PenTool::_bspline_spiro_motion(bool shift){
     this->npoints = 5;
     SPCurve *tmpCurve = new SPCurve();
     this->p[2] = this->p[3] + (1./3)*(this->p[0] - this->p[3]);
-    this->p[2] = Geom::Point(this->p[2][X] + 0.005,this->p[2][Y] + 0.005);
+    this->p[2] = Geom::Point(this->p[2][X] + handleCubicGap,this->p[2][Y] + handleCubicGap);
     if(this->green_curve->is_empty() && !this->sa){
         this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
-        this->p[1] = Geom::Point(this->p[1][X] + 0.005,this->p[1][Y] + 0.005);
+        this->p[1] = Geom::Point(this->p[1][X] + handleCubicGap,this->p[1][Y] + handleCubicGap);
     }else if(!this->green_curve->is_empty()){
         tmpCurve = this->green_curve->copy();
     }else{
@@ -1608,7 +1608,7 @@ void PenTool::_bspline_spiro_motion(bool shift){
                 WPower->reset();
                 this->p[1] = SBasisWPower.valueAt(WP);
                 if(!Geom::are_near(this->p[1],this->p[0]))
-                    this->p[1] = Geom::Point(this->p[1][X] + 0.005,this->p[1][Y] + 0.005);
+                    this->p[1] = Geom::Point(this->p[1][X] + handleCubicGap,this->p[1][Y] + handleCubicGap);
                 if(shift)
                     this->p[2] = this->p[3];
             }else{
@@ -1638,7 +1638,7 @@ void PenTool::_bspline_spiro_end_anchor_on()
     using Geom::X;
     using Geom::Y;
     this->p[2] = this->p[3] + (1./3)*(this->p[0] - this->p[3]);
-    this->p[2] = Geom::Point(this->p[2][X] + 0.005,this->p[2][Y] + 0.005);
+    this->p[2] = Geom::Point(this->p[2][X] + handleCubicGap,this->p[2][Y] + handleCubicGap);
     SPCurve *tmpCurve = new SPCurve();
     SPCurve *lastSeg = new SPCurve();
     Geom::Point C(0,0);
@@ -1661,7 +1661,7 @@ void PenTool::_bspline_spiro_end_anchor_on()
     Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmpCurve->last_segment());
     if(this->bspline){
         C = tmpCurve->last_segment()->finalPoint() + (1./3)*(tmpCurve->last_segment()->initialPoint() - tmpCurve->last_segment()->finalPoint());
-        C = Geom::Point(C[X] + 0.005,C[Y] + 0.005);
+        C = Geom::Point(C[X] + handleCubicGap,C[Y] + handleCubicGap);
     }else{
         C = this->p[3] + this->p[3] - this->p[2];
     }

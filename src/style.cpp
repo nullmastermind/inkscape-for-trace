@@ -121,10 +121,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // Text related properties
     text_indent(      "text-indent",                     0.0 ),  // SPILength
     text_align(       "text-align",      enum_text_align,      SP_CSS_TEXT_ALIGN_START    ),
-    text_decoration(),
-    text_decoration_line(),
-    text_decoration_style(),
-    text_decoration_color( "text-decoration-color" ),            // SPIColor
 
     letter_spacing(   "letter-spacing",                  0.0 ),  // SPILengthOrNormal
     word_spacing(     "word-spacing",                    0.0 ),  // SPILengthOrNormal
@@ -137,6 +133,11 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     text_anchor(      "text-anchor",     enum_text_anchor,     SP_CSS_TEXT_ANCHOR_START   ),
     white_space(      "white-space",     enum_white_space,     SP_CSS_WHITE_SPACE_NORMAL  ),
 
+    text_decoration(),
+    text_decoration_line(),
+    text_decoration_style(),
+    text_decoration_color( "text-decoration-color" ),            // SPIColor
+
     // General visual properties
     clip_rule(        "clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO       ),
     display(          "display",         enum_display,         SP_CSS_DISPLAY_INLINE,   false ),
@@ -145,7 +146,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     opacity(          "opacity",                               SP_SCALE24_MAX,          false ),
 
     isolation(        "isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO      ),
-    blend_mode(       "blend_mode",      enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
+    mix_blend_mode(   "mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
 
     paint_order(), // SPIPaintOrder
 
@@ -190,7 +191,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     image_rendering(  "image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
     shape_rendering(  "shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
     text_rendering(    "text-rendering", enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO )
-
 {
     // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
     // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;
@@ -307,7 +307,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &opacity );
 
     _properties.push_back( &isolation );
-    _properties.push_back( &blend_mode );
+    _properties.push_back( &mix_blend_mode );
 
     _properties.push_back( &color_interpolation );
     _properties.push_back( &color_interpolation_filters );
@@ -390,7 +390,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //     _propmap.insert( std::make_pair( opacity.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::opacity               ) ) );
 
     //     _propmap.insert( std::make_pair( isolation.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::isolation             ) ) );
-    //     _propmap.insert( std::make_pair( blend_mode.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::blend_mode            ) ) );
+    //     _propmap.insert( std::make_pair( mix_blend_mode.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::mix_blend_mode        ) ) );
 
     //     _propmap.insert( std::make_pair( color_interpolation.name,   reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation   ) ) );
     //     _propmap.insert( std::make_pair( color_interpolation_filters.name, reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation_filters ) ) );
@@ -719,8 +719,8 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
         case SP_PROP_ISOLATION:
             isolation.readIfUnset( val );
             break;
-        case SP_PROP_BLEND_MODE:
-            blend_mode.readIfUnset( val );
+        case SP_PROP_MIX_BLEND_MODE:
+            mix_blend_mode.readIfUnset( val );
             break;
 
             /* SVG */
