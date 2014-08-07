@@ -58,6 +58,7 @@
 #include "sp-guide.h"
 #include "color.h"
 #include "knot.h"
+#include "knot-ptr.h"
 
 // globals for temporary switching to selector by space
 static bool selector_toggled = FALSE;
@@ -1359,6 +1360,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         break;
     case DelayedSnapEvent::KNOT_HANDLER: {
         gpointer knot = dse->getItem2();
+        check_if_knot_deleted(knot);
         if (knot && SP_IS_KNOT(knot)) {
             sp_knot_handler_request_position(dse->getEvent(), SP_KNOT(knot));
         }
