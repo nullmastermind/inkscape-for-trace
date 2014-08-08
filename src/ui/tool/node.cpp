@@ -1623,7 +1623,37 @@ void NodeList::reverse()
 
 void NodeList::clear()
 {
-    for (iterator i = begin(); i != end();) erase (i++);
+    // ugly but more efficient clearing mechanism
+    std::vector<ControlPointSelection *> to_clear;
+    std::vector<std::pair<SelectableControlPoint *, long> > nodes;
+    long in = -1;
+    for (iterator i = begin(); i != end(); ++i) {
+        SelectableControlPoint *rm = static_cast<Node*>(i._node);
+        if (std::find(to_clear.begin(), to_clear.end(), &rm->_selection) == to_clear.end()) {
+            to_clear.push_back(&rm->_selection);
+            ++in;
+        }
+        nodes.push_back(std::make_pair(rm, in));
+    }
+    for (size_t i = 0, e = nodes.size(); i != e; ++i) {
+        to_clear[nodes[i].second]->erase(nodes[i].first, false);
+    }
+    std::vector<std::vector<SelectableControlPoint *> > emission;
+    for (long i = 0, e = to_clear.size(); i != e; ++i) {
+        emission.push_back(std::vector<SelectableControlPoint *>());
+        for (size_t j = 0, f = nodes.size(); j != f; ++j) {
+            if (nodes[j].second != i)
+                break;
+            emission[i].push_back(nodes[j].first);
+        }
+    }
+
+    for (size_t i = 0, e = emission.size(); i != e; ++i) {
+        to_clear[i]->signal_selection_changed.emit(emission[i], false);
+    }
+
+    for (iterator i = begin(); i != end();)
+        erase (i++);
 }
 
 NodeList::iterator NodeList::erase(iterator i)
