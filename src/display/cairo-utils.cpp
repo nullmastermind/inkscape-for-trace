@@ -539,12 +539,12 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
         Geom::Point b1 = points[0] + (2./3) * (points[1] - points[0]);
         Geom::Point b2 = b1 + (1./3) * (points[2] - points[0]);
         if (!optimize_stroke) {
-            cairo_curve_to(cr, b1[0], b1[1], b2[0], b2[1], points[2][X], points[2][Y]);
+            cairo_curve_to(cr, b1[X], b1[Y], b2[X], b2[Y], points[2][X], points[2][Y]);
         } else {
             Geom::Rect swept(points[0], points[2]);
             swept.expandTo(points[1]);
             if (swept.intersects(view)) {
-                cairo_curve_to(cr, b1[0], b1[1], b2[0], b2[1], points[2][X], points[2][Y]);
+                cairo_curve_to(cr, b1[X], b1[Y], b2[X], b2[Y], points[2][X], points[2][Y]);
             } else {
                 cairo_move_to(cr, points[2][X], points[2][Y]);
             }
@@ -577,10 +577,10 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
     default:
     {
         if (Geom::EllipticalArc const *a = dynamic_cast<Geom::EllipticalArc const*>(&c)) {
-            if (!optimize_stroke || a->boundsFast().intersects(view)) {
+            //if (!optimize_stroke || a->boundsFast().intersects(view)) {
                 Geom::Affine xform = a->unitCircleTransform() * trans;
-                bool sweep = a->sweep();
                 Geom::Point ang(a->initialAngle().radians(), a->finalAngle().radians());
+
                 // Apply the transformation to the current context
                 cairo_matrix_t cm;
                 cm.xx = xform[0];
@@ -594,16 +594,17 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
                 cairo_transform(cr, &cm);
 
                 // Draw the circle
-                if (sweep) {
+                if (a->sweep()) {
                     cairo_arc(cr, 0, 0, 1, ang[0], ang[1]);
                 } else {
                     cairo_arc_negative(cr, 0, 0, 1, ang[0], ang[1]);
                 }
-
+                // Revert the current context
                 cairo_restore(cr);
-            } else {
-                cairo_move_to(cr, a->finalPoint()[X], a->finalPoint()[Y]);
-            }
+            //} else {
+            //    Geom::Point f = a->finalPoint() * trans;
+            //    cairo_move_to(cr, f[X], f[Y]);
+            //}
         } else {
             // handles sbasis as well as all other curve types
             // this is very slow
