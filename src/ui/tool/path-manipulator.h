@@ -122,7 +122,8 @@ private:
     Glib::ustring _nodetypesKey();
     Inkscape::XML::Node *_getXMLNode();
 
-    void _selectionChanged(SelectableControlPoint *p, bool selected);
+    void _selectionChangedM(std::vector<SelectableControlPoint *> pvec, bool selected);
+    void _selectionChanged(SelectableControlPoint * p, bool selected);
     bool _nodeClicked(Node *, GdkEventButton *);
     void _handleGrabbed();
     bool _handleClicked(Handle *, GdkEventButton *);

@@ -245,7 +245,7 @@ void NodeTool::setup() {
         )
     );
 
-    this->_selected_nodes->signal_point_changed.connect(
+    this->_selected_nodes->signal_selection_changed.connect(
 		// Hide both signal parameters and bind the function parameter to 0
 		// sigc::signal<void, SelectableControlPoint *, bool>
 		// <=>

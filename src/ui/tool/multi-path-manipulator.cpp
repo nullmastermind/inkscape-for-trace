@@ -122,7 +122,7 @@ MultiPathManipulator::MultiPathManipulator(PathSharedData &data, sigc::connectio
 {
     _selection.signal_commit.connect(
         sigc::mem_fun(*this, &MultiPathManipulator::_commit));
-    _selection.signal_point_changed.connect(
+    _selection.signal_selection_changed.connect(
         sigc::hide( sigc::hide(
             signal_coords_changed.make_slot())));
 }
