@@ -239,7 +239,9 @@ void PenTool::finish() {
     sp_event_context_discard_delayed_snap_event(this);
 
     if (this->npoints != 0) {
-        this->_cancel();
+        // switching context - finish path
+        this->ea = NULL; // unset end anchor if set (otherwise crashes)
+        this->_finish(false);
     }
 
     FreehandBase::finish();
