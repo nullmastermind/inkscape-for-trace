@@ -70,8 +70,6 @@ namespace {
 #  SPTEXT
 #####################################################*/
 SPText::SPText() : SPItem() {
-    //new (&this->layout) Inkscape::Text::Layout;
-    //new (&this->attributes) TextTagAttributes;
 }
 
 SPText::~SPText() {
@@ -84,19 +82,22 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "dy" );
     this->readAttr( "rotate" );
 
+    // SVG 2 Auto wrapped text
+    this->readAttr( "width" );
+    this->readAttr( "height" );
+
     SPItem::build(doc, repr);
 
     this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
 }
 
 void SPText::release() {
-    //this->attributes.~TextTagAttributes();
-    //this->layout.~Layout();
-
     SPItem::release();
 }
 
 void SPText::set(unsigned int key, const gchar* value) {
+    //std::cout << "SPText::set: " << sp_attribute_name( key ) << ": " << (value?value:"Null") << std::endl;
+
     if (this->attributes.readSingleAttribute(key, value)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
@@ -112,6 +113,22 @@ void SPText::set(unsigned int key, const gchar* value) {
                 }
 
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+                break;
+
+            case SP_ATTR_WIDTH:
+                if (!this->width.read(value) || this->width.value < 0.0) {
+                    this->width.unset();
+                }
+
+                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                break;
+
+            case SP_ATTR_HEIGHT:
+                if (!this->height.read(value) || this->height.value < 0.0) {
+                    this->height.unset();
+                }
+
+                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 break;
 
             default:
@@ -278,6 +295,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     }
 
     this->attributes.writeTo(repr);
+    this->rebuildLayout();  // copied from update(), see LP Bug 1339305
 
     // deprecated attribute, but keep it around for backwards compatibility
     if (this->style->line_height.set && !this->style->line_height.inherit && !this->style->line_height.normal && this->style->line_height.unit == SP_CSS_UNIT_PERCENT) {
@@ -286,6 +304,14 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         this->getRepr()->setAttribute("sodipodi:linespacing", os.str().c_str());
     } else {
         this->getRepr()->setAttribute("sodipodi:linespacing", NULL);
+    }
+
+    // SVG 2 Auto-wrapped text
+    if( this->width.computed > 0.0 ) {
+        sp_repr_set_svg_double(repr, "width", this->width.computed);
+    }
+    if( this->height.computed > 0.0 ) {
+        sp_repr_set_svg_double(repr, "height", this->height.computed);
     }
 
     SPItem::write(xml_doc, repr, flags);

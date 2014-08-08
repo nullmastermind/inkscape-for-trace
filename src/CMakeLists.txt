@@ -218,6 +218,7 @@ set(inkscape_SRC
 	knot-holder-entity.cpp
 	knot.cpp
 	knotholder.cpp
+	knot-ptr.cpp
 	layer-fns.cpp
 	layer-manager.cpp
 	layer-model.cpp
@@ -355,6 +356,7 @@ set(inkscape_SRC
 	knot-holder-entity.h
 	knot.h
 	knotholder.h
+	knot-ptr.h
 	layer-fns.h
 	layer-manager.h
 	layer-model.h

@@ -140,10 +140,10 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     SPShape::build(document, repr);
 
-    //this->readAttr( "inkscape:original-d" ); //lp1299948
+    // this->readAttr( "inkscape:original-d" ); // lp1299948
     if (gchar const* s = this->getRepr()->attribute("inkscape:original-d"))
     {
-        //write it to XML, and to my curve, but don't update patheffects
+        // write it to XML, and to my curve, but don't update patheffects
         Geom::PathVector pv = sp_svg_read_pathv(s);
         SPCurve *curve = new SPCurve(pv);
         
@@ -154,7 +154,6 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
         if (curve) {
             _curve_before_lpe = curve->ref();
         }
-        //this->getRepr()->setAttribute("inkscape:original-d", s);
     }
     this->readAttr( "d" );
 

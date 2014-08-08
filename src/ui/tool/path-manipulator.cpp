@@ -1219,6 +1219,7 @@ double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
         h = h2;
     }
     double pos = 0.0000;
+    const double handleCubicGap = 0.01;
     Node *n = h->parent();
     Node * nextNode = NULL;
     nextNode = n->nodeToward(h);
@@ -1226,7 +1227,7 @@ double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
         SPCurve *lineInsideNodes = new SPCurve();
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
-        pos = Geom::nearest_point(h->position(),*lineInsideNodes->first_segment());
+        pos = Geom::nearest_point(Geom::Point(h->position()[X] - handleCubicGap,h->position()[Y] - handleCubicGap),*lineInsideNodes->first_segment());
     }
     if (pos == 0.0000 && !h2){
         return BSplineHandlePosition(h, h->other());
@@ -1244,6 +1245,7 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2){
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     using Geom::X;
     using Geom::Y;
+    const double handleCubicGap = 0.01;
     Geom::Point ret = h->position();
     Node *n = h->parent();
     Geom::D2< Geom::SBasis > SBasisInsideNodes;
@@ -1255,7 +1257,7 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
         lineInsideNodes->lineto(nextNode->position());
         SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
         ret = SBasisInsideNodes.valueAt(pos);
-        ret = Geom::Point(ret[X] + 0.005,ret[Y] + 0.005);
+        ret = Geom::Point(ret[X] + handleCubicGap,ret[Y] + handleCubicGap);
     }else{
         if(pos == 0.0000){
             ret = n->position();

@@ -19,6 +19,7 @@
 #include "display/curve.h"
 #include "display/sp-canvas.h"
 #include "document.h"
+#include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
 #include "message-context.h"
 #include "selection.h"
@@ -168,6 +169,9 @@ NodeTool::~NodeTool() {
     if (this->flash_tempitem) {
         this->desktop->remove_temporary_canvasitem(this->flash_tempitem);
     }
+    if (this->helperpath_tmpitem) {
+        this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
+    }
 
     if (this->helperpath_tmpitem) {
         this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
@@ -252,6 +256,7 @@ void NodeTool::setup() {
 		)))
     );
 
+    this->helperpath_tmpitem = NULL;
     this->cursor_drag = false;
     this->show_transform_handles = true;
     this->single_node_transform_handles = false;
@@ -288,12 +293,15 @@ void NodeTool::setup() {
     this->update_helperpath();
 }
 
-void  NodeTool::update_helperpath(){
+// show helper paths of the applied LPE, if any
+void  NodeTool::update_helperpath () {
     Inkscape::Selection *selection = sp_desktop_selection (this->desktop);
+
     if (this->helperpath_tmpitem) {
         this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
         this->helperpath_tmpitem = NULL;
     }
+
     if (SP_IS_LPE_ITEM(selection->singleItem())) {
         Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(selection->singleItem())->getCurrentLPE();
         if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
@@ -310,7 +318,7 @@ void  NodeTool::update_helperpath(){
                     c->transform(selection->singleItem()->i2dt_affine());
                     SPCanvasItem *helperpath = sp_canvas_bpath_new(sp_desktop_tempgroup(this->desktop), c);
                     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath),
-                       0x0000ff9A, 1.0,
+                        0x0000ff9A, 1.0,
                         SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
                     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
                     this->helperpath_tmpitem = this->desktop->add_temporary_canvasitem(helperpath,0);
@@ -438,7 +446,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
             this->_shape_editors.find(r.item) == this->_shape_editors.end())
         {
             ShapeEditor *si = new ShapeEditor(this->desktop);
-            si->set_item(r.item, SH_KNOTHOLDER);
+            si->set_item(r.item);
             this->_shape_editors.insert(const_cast<SPItem*&>(r.item), si);
         }
     }
@@ -474,6 +482,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
+	this->update_helperpath();
         combine_motion_events(desktop->canvas, event->motion, 0);
         this->update_helperpath();
         SPItem *over_item = sp_event_context_find_item (desktop, event_point(event->button),

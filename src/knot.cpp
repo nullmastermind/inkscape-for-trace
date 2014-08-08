@@ -21,6 +21,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "knot.h"
+#include "knot-ptr.h"
 #include "document.h"
 #include "document-undo.h"
 #include "preferences.h"
@@ -118,6 +119,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
 
     this->_event_handler_id = g_signal_connect(G_OBJECT(this->item), "event",
                                                  G_CALLBACK(sp_knot_handler), this);
+    knot_created_callback(this);
 }
 
 SPKnot::~SPKnot() {
@@ -162,6 +164,10 @@ SPKnot::~SPKnot() {
         g_free(this->tip);
         this->tip = NULL;
     }
+
+    // FIXME: cannot snap to destroyed knot (lp:1309050)
+    //sp_event_context_discard_delayed_snap_event(this->desktop->event_context);
+    knot_deleted_callback(this);
 }
 
 void SPKnot::startDragging(Geom::Point const &p, gint x, gint y, guint32 etime) {
@@ -282,7 +288,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                     knot->setFlag(SP_KNOT_DRAGGING, TRUE);
                 }
 
-                sp_event_context_snap_delay_handler(knot->desktop->event_context, NULL, (gpointer) knot, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::KNOT_HANDLER);
+                sp_event_context_snap_delay_handler(knot->desktop->event_context, NULL, knot, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::KNOT_HANDLER);
                 sp_knot_handler_request_position(event, knot);
                 moved = TRUE;
             }

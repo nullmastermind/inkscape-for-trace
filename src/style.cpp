@@ -121,10 +121,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // Text related properties
     text_indent(      "text-indent",                     0.0 ),  // SPILength
     text_align(       "text-align",      enum_text_align,      SP_CSS_TEXT_ALIGN_START    ),
-    text_decoration(),
-    text_decoration_line(),
-    text_decoration_style(),
-    text_decoration_color( "text-decoration-color" ),            // SPIColor
 
     letter_spacing(   "letter-spacing",                  0.0 ),  // SPILengthOrNormal
     word_spacing(     "word-spacing",                    0.0 ),  // SPILengthOrNormal
@@ -135,6 +131,12 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     writing_mode(     "writing-mode",    enum_writing_mode,    SP_CSS_WRITING_MODE_LR_TB  ),
     baseline_shift(),
     text_anchor(      "text-anchor",     enum_text_anchor,     SP_CSS_TEXT_ANCHOR_START   ),
+    white_space(      "white-space",     enum_white_space,     SP_CSS_WHITE_SPACE_NORMAL  ),
+
+    text_decoration(),
+    text_decoration_line(),
+    text_decoration_style(),
+    text_decoration_color( "text-decoration-color" ),            // SPIColor
 
     // General visual properties
     clip_rule(        "clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO       ),
@@ -144,7 +146,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     opacity(          "opacity",                               SP_SCALE24_MAX,          false ),
 
     isolation(        "isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO      ),
-    blend_mode(       "blend_mode",      enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
+    mix_blend_mode(   "mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
 
     paint_order(), // SPIPaintOrder
 
@@ -189,7 +191,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     image_rendering(  "image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
     shape_rendering(  "shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
     text_rendering(    "text-rendering", enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO )
-
 {
     // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
     // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;
@@ -230,11 +231,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     } else {
         document = document_in;
     }
-
-    new (&release_connection) sigc::connection();
-    new (&filter_modified_connection) sigc::connection();
-    new (&fill_ps_modified_connection) sigc::connection();
-    new (&stroke_ps_modified_connection) sigc::connection();
 
     // 'font' shorthand requires access to included properties.
     font.setStylePointer(              this );
@@ -302,6 +298,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &writing_mode );
     _properties.push_back( &baseline_shift );
     _properties.push_back( &text_anchor );
+    _properties.push_back( &white_space );
 
     _properties.push_back( &clip_rule );
     _properties.push_back( &display );
@@ -310,7 +307,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &opacity );
 
     _properties.push_back( &isolation );
-    _properties.push_back( &blend_mode );
+    _properties.push_back( &mix_blend_mode );
 
     _properties.push_back( &color_interpolation );
     _properties.push_back( &color_interpolation_filters );
@@ -384,6 +381,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //     _propmap.insert( std::make_pair( writing_mode.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::writing_mode          ) ) );
     //     _propmap.insert( std::make_pair( baseline_shift.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::baseline_shift        ) ) );
     //     _propmap.insert( std::make_pair( text_anchor.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::text_anchor           ) ) );
+    //     _propmap.insert( std::make_pair( white_space.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::white_space           ) ) );
 
     //     _propmap.insert( std::make_pair( clip_rule.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::clip_rule             ) ) );
     //     _propmap.insert( std::make_pair( display.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::display               ) ) );
@@ -392,7 +390,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //     _propmap.insert( std::make_pair( opacity.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::opacity               ) ) );
 
     //     _propmap.insert( std::make_pair( isolation.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::isolation             ) ) );
-    //     _propmap.insert( std::make_pair( blend_mode.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::blend_mode            ) ) );
+    //     _propmap.insert( std::make_pair( mix_blend_mode.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::mix_blend_mode        ) ) );
 
     //     _propmap.insert( std::make_pair( color_interpolation.name,   reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation   ) ) );
     //     _propmap.insert( std::make_pair( color_interpolation_filters.name, reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation_filters ) ) );
@@ -442,7 +440,6 @@ SPStyle::~SPStyle() {
 
     // Remove connections
     release_connection.disconnect();
-    release_connection.~connection();
 
     // The following shoud be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
@@ -457,12 +454,7 @@ SPStyle::~SPStyle() {
         filter_modified_connection.disconnect();
     }
 
-    filter_modified_connection.~connection();
-    fill_ps_modified_connection.~connection();
-    stroke_ps_modified_connection.~connection();
-
     _properties.clear();
-    //_propmap.clear();
 
     // std::cout << "SPStyle::~SPstyle(): Exit\n" << std::endl;
 }
@@ -681,6 +673,9 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
         case SP_PROP_TEXT_ANCHOR:
             text_anchor.readIfUnset( val );
             break;
+        case SP_PROP_WHITE_SPACE:
+            white_space.readIfUnset( val );
+            break;
         case SP_PROP_BASELINE_SHIFT:
             baseline_shift.readIfUnset( val );
             break;
@@ -724,8 +719,8 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
         case SP_PROP_ISOLATION:
             isolation.readIfUnset( val );
             break;
-        case SP_PROP_BLEND_MODE:
-            blend_mode.readIfUnset( val );
+        case SP_PROP_MIX_BLEND_MODE:
+            mix_blend_mode.readIfUnset( val );
             break;
 
             /* SVG */
@@ -1634,6 +1629,9 @@ sp_style_unset_property_attrs(SPObject *o)
     if (style->text_anchor.set) {
         repr->setAttribute("text-anchor", NULL);
     }
+    if (style->white_space.set) {
+        repr->setAttribute("white_space", NULL);
+    }
     if (style->writing_mode.set) {
         repr->setAttribute("writing_mode", NULL);
     }
@@ -1723,6 +1721,7 @@ sp_css_attr_unset_text(SPCSSAttr *css)
     sp_repr_css_set_property(css, "block-progression", NULL);
     sp_repr_css_set_property(css, "writing-mode", NULL);
     sp_repr_css_set_property(css, "text-anchor", NULL);
+    sp_repr_css_set_property(css, "white_space", NULL);
     sp_repr_css_set_property(css, "kerning", NULL); // not implemented yet
     sp_repr_css_set_property(css, "dominant-baseline", NULL); // not implemented yet
     sp_repr_css_set_property(css, "alignment-baseline", NULL); // not implemented yet

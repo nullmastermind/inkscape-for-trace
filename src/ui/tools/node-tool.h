@@ -66,8 +66,8 @@ private:
     sigc::connection _sizeUpdatedConn;
 
     SPItem *flashed_item;
-    Inkscape::Display::TemporaryItem *flash_tempitem;
     Inkscape::Display::TemporaryItem *helperpath_tmpitem;
+    Inkscape::Display::TemporaryItem *flash_tempitem;
     Inkscape::UI::Selector* _selector;
     Inkscape::UI::PathSharedData* _path_data;
     SPCanvasGroup *_transform_handle_group;

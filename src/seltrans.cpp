@@ -304,6 +304,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         /* Snapping a huge number of nodes will take way too long, so limit the number of snappable nodes
         A typical user would rarely ever try to snap such a large number of nodes anyway, because
         (s)he would hardly be able to discern which node would be snapping */
+        std::cout << "Warning: limit of 200 snap sources reached, some will be ignored" << std::endl;
         _snap_points.resize(200);
         // Unfortunately, by now we will have lost the font-baseline snappoints :-(
     }
@@ -376,12 +377,6 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
 {
     g_return_if_fail(_grabbed);
     g_return_if_fail(!_empty);
-
-    // E.g. scaling a perfectly vertical line in horizontal direction will not work, and will produce an identity affine
-
-    if (rel_affine.isIdentity()) {
-        return;
-    }
 
     Geom::Affine const affine( Geom::Translate(-norm) * rel_affine * Geom::Translate(norm) );
 

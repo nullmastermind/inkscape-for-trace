@@ -35,6 +35,7 @@ set(live_effects_SRC
 	# lpe-skeleton.cpp
 	lpe-sketch.cpp
 	lpe-spiro.cpp
+	lpe-roughen.cpp
 	lpe-tangent_to_curve.cpp
 	lpe-test-doEffect-stack.cpp
 	lpe-bspline.cpp
@@ -101,6 +102,7 @@ set(live_effects_SRC
 	lpe-skeleton.h
 	lpe-sketch.h
 	lpe-spiro.h
+	lpe-roughen.h
 	lpe-tangent_to_curve.h
 	lpe-test-doEffect-stack.h
 	lpe-bspline.h

@@ -118,10 +118,6 @@ SPItem::SPItem() : SPObject() {
     mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), this));
 
     avoidRef = new SPAvoidRef(this);
-
-    //new (&constraints) std::vector<SPGuideConstraint>();
-
-    //new (&_transformed_signal) sigc::signal<void, Geom::Affine const *, SPItem *>();
 }
 
 SPItem::~SPItem() {
@@ -271,6 +267,11 @@ Geom::Point SPItem::getCenter() const {
     }
 }
 
+void
+SPItem::scaleCenter(Geom::Scale const &sc) {
+    transform_center_x *= sc[Geom::X];
+    transform_center_y *= sc[Geom::Y];
+}
 
 namespace {
 
@@ -601,7 +602,7 @@ void SPItem::update(SPCtx* /*ctx*/, guint flags) {
                 v->arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(object->style->opacity.value));
                 v->arenaitem->setAntialiasing(object->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
                 v->arenaitem->setIsolation( object->style->isolation.value );
-                v->arenaitem->setBlendMode( object->style->blend_mode.value );
+                v->arenaitem->setBlendMode( object->style->mix_blend_mode.value );
                 v->arenaitem->setVisible(!item->isHidden());
             }
         }
@@ -777,6 +778,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     	bbox = const_cast<SPItem*>(this)->bbox(transform, SPItem::VISUAL_BBOX);
     }
     if (clip_ref->getObject()) {
+        SP_ITEM(clip_ref->getOwner())->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(SP_CLIPPATH(clip_ref->getObject())->geometricBounds(transform));
     }
 
@@ -1027,7 +1029,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
         ai->setTransform(transform);
         ai->setOpacity(SP_SCALE24_TO_FLOAT(style->opacity.value));
         ai->setIsolation( style->isolation.value );
-        ai->setBlendMode( style->blend_mode.value );
+        ai->setBlendMode( style->mix_blend_mode.value );
         //ai->setCompositeOperator( style->composite_op.value );
         ai->setVisible(!isHidden());
         ai->setSensitive(sensitive);
@@ -1108,9 +1110,10 @@ void SPItem::invoke_hide(unsigned key)
 
 // Adjusters
 
-void SPItem::adjust_pattern (Geom::Affine const &postmul, bool set)
+void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PatternTransform pt)
 {
-    if (style && (style->fill.isPaintserver())) {
+    bool fill = (pt == TRANSFORM_FILL || pt == TRANSFORM_BOTH);
+    if (fill && style && (style->fill.isPaintserver())) {
         SPObject *server = style->getFillPaintServer();
         if ( SP_IS_PATTERN(server) ) {
             SPPattern *pattern = sp_pattern_clone_if_necessary(this, SP_PATTERN(server), "fill");
@@ -1118,7 +1121,8 @@ void SPItem::adjust_pattern (Geom::Affine const &postmul, bool set)
         }
     }
 
-    if (style && (style->stroke.isPaintserver())) {
+    bool stroke = (pt == TRANSFORM_STROKE || pt == TRANSFORM_BOTH);
+    if (stroke && style && (style->stroke.isPaintserver())) {
         SPObject *server = style->getStrokePaintServer();
         if ( SP_IS_PATTERN(server) ) {
             SPPattern *pattern = sp_pattern_clone_if_necessary(this, SP_PATTERN(server), "stroke");

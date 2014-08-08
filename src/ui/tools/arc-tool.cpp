@@ -102,8 +102,8 @@ ArcTool::~ArcTool() {
  * destroys old and creates new knotholder.
  */
 void ArcTool::selection_changed(Inkscape::Selection* selection) {
-    this->shape_editor->unset_item(SH_KNOTHOLDER);
-    this->shape_editor->set_item(selection->singleItem(), SH_KNOTHOLDER);
+    this->shape_editor->unset_item();
+    this->shape_editor->set_item(selection->singleItem());
 }
 
 void ArcTool::setup() {
@@ -115,7 +115,7 @@ void ArcTool::setup() {
 
     SPItem *item = sp_desktop_selection(this->desktop)->singleItem();
     if (item) {
-        this->shape_editor->set_item(item, SH_KNOTHOLDER);
+        this->shape_editor->set_item(item);
     }
 
     this->sel_changed_connection.disconnect();
