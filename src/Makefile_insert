@@ -80,6 +80,7 @@ ink_common_sources +=	\
 	knot-enums.h							\
 	knotholder.cpp knotholder.h					\
 	knot-holder-entity.h knot-holder-entity.cpp			\
+	knot-ptr.h knot-ptr.cpp						\
 	layer-fns.cpp layer-fns.h					\
 	layer-manager.cpp layer-manager.h				\
   layer-model.cpp layer-model.h         \
