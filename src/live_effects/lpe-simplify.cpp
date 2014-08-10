@@ -209,7 +209,7 @@ LPESimplify::generateHelperPath(Geom::PathVector result)
                 drawHandle((*cubic)[1]);
                 drawHandle((*cubic)[2]);
                 drawHandleLine((*cubic)[0],(*cubic)[1]);
-                drawHandleLine((*cubic)[2],(*cubic)[3]);
+                drawHandleLine((*cubic)[3],(*cubic)[2]);
             }
           } 
           if(nodes){
@@ -224,7 +224,7 @@ LPESimplify::generateHelperPath(Geom::PathVector result)
             drawHandle((*cubic)[1]);
             drawHandle((*cubic)[2]);
             drawHandleLine((*cubic)[0],(*cubic)[1]);
-            drawHandleLine((*cubic)[2],(*cubic)[3]);
+            drawHandleLine((*cubic)[3],(*cubic)[2]);
           }
         } 
         if(nodes){
@@ -238,13 +238,12 @@ LPESimplify::drawNode(Geom::Point p)
 {
     double r = helper_size/0.67;
     char const * svgd;
-    svgd = "M 0.999993,0.5 C 1.000065,0.7757576 0.7761859,1 0.4999926,1 0.2237994,1 -7.933901e-5,0.7757576 -7.339015e-6,0.5 -7.933901e-5,0.2242424 0.2237994,0 0.4999926,0 0.7761859,0 1.000065,0.2242424 0.999993,0.5 Z m -0.058561,0 C 0.9414949,0.74327 0.7438375,0.9416286 0.4999928,0.9416286 0.2561481,0.9416286 0.0584908,0.74327 0.0585543,0.5 0.0584908,0.25673 0.2561481,0.0583714 0.4999928,0.0583714 0.7438375,0.0583714 0.9414949,0.25673 0.9414313,0.5 Z m -0.3828447,0 c 8.5e-6,0.030303 -0.026228,0.060606 -0.058593,0.060606 -0.032366,0 -0.058603,-0.030303 -0.058593,-0.060606 -8.5e-6,-0.030303 0.026227,-0.060606 0.058593,-0.060606 0.032366,0 0.058603,0.030303 0.058593,0.060606 z";
+    svgd = "M 0,-4.270368e-5 1,-4.270368e-5 1,0.9999573 0,0.9999573 Z M 0.5585873,0.5 C 0.5585958,0.530303 0.5323593,0.560606 0.4999943,0.560606 0.4676283,0.560606 0.4413913,0.530303 0.4414013,0.5 0.4413928,0.469697 0.4676283,0.439394 0.4999943,0.439394 0.5323603,0.439394 0.5585973,0.469697 0.5585873,0.5 Z"";
     Geom::PathVector pathv = sp_svg_read_pathv(svgd);
     pathv *= Geom::Affine(r,0,0,r,0,0);
     pathv += p - Geom::Point(0.5*r,0.5*r);
     hp.push_back(pathv[0]);
     hp.push_back(pathv[1]);
-    hp.push_back(pathv[2]);
 }
 
 void
@@ -265,6 +264,11 @@ LPESimplify::drawHandleLine(Geom::Point p,Geom::Point p2)
 {
     Geom::Path path;
     path.start( p );
+    if(helper_size > 0.0){
+        double diameter = helper_size/0.67;
+        Geom::Ray ray2(p, p2);
+        p2 =  p2 - Geom::Point::polar(ray2.angle(),(diameter * 0.35));
+    }
     path.appendNew<Geom::LineSegment>( p2 );
     hp.push_back(path);
 }
