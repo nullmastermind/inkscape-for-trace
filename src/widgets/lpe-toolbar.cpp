@@ -276,6 +276,8 @@ static void lpetool_open_lpe_dialog(GtkToggleAction *act, gpointer data)
     gtk_toggle_action_set_active(act, false);
 }
 
+static void lpetool_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
+
 void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -402,20 +404,26 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), FALSE );
     }
 
-    //watch selection
-    Inkscape::ConnectionPool* pool = Inkscape::ConnectionPool::new_connection_pool ("ISNodeToolbox");
-
-    sigc::connection *c_selection_modified =
-        new sigc::connection (sp_desktop_selection (desktop)->connectModified
-                              (sigc::bind (sigc::ptr_fun (sp_lpetool_toolbox_sel_modified), holder)));
-    pool->add_connection ("selection-modified", c_selection_modified);
-
-    sigc::connection *c_selection_changed =
-        new sigc::connection (sp_desktop_selection (desktop)->connectChanged
-                              (sigc::bind (sigc::ptr_fun(sp_lpetool_toolbox_sel_changed), holder)));
-    pool->add_connection ("selection-changed", c_selection_changed);
+    desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(lpetool_toolbox_watch_ec), holder));
 }
 
+static void lpetool_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder)
+{
+    static sigc::connection c_selection_modified;
+    static sigc::connection c_selection_changed;
+
+    if (SP_IS_LPETOOL_CONTEXT(ec)) {
+        // Watch selection
+        c_selection_modified = sp_desktop_selection(desktop)->connectModified(sigc::bind(sigc::ptr_fun(sp_lpetool_toolbox_sel_modified), holder));
+        c_selection_changed = sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_lpetool_toolbox_sel_changed), holder));
+        sp_lpetool_toolbox_sel_changed(sp_desktop_selection(desktop), holder);
+    } else {
+        if (c_selection_modified)
+            c_selection_modified.disconnect();
+        if (c_selection_changed)
+            c_selection_changed.disconnect();
+    }
+}
 
 /*
   Local Variables:
@@ -426,4 +434,4 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :
