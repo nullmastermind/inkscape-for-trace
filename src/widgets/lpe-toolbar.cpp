@@ -30,7 +30,6 @@
 
 #include "live_effects/lpe-line_segment.h"
 #include "lpe-toolbar.h"
-#include "connection-pool.h"
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "document-undo.h"

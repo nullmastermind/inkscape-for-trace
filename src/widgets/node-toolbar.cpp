@@ -31,7 +31,6 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include <glibmm/i18n.h>
 #include "node-toolbar.h"
-#include "connection-pool.h"
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "document-undo.h"
