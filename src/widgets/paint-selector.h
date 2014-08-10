@@ -45,6 +45,9 @@ struct SPPaintSelector {
         MODE_COLOR_CMYK,
         MODE_GRADIENT_LINEAR,
         MODE_GRADIENT_RADIAL,
+#ifdef WITH_MESH
+        MODE_GRADIENT_MESH,
+#endif
         MODE_PATTERN,
         MODE_SWATCH,
         MODE_UNSET
@@ -64,6 +67,9 @@ struct SPPaintSelector {
     GtkWidget *solid;
     GtkWidget *gradient;
     GtkWidget *radial;
+#ifdef WITH_MESH
+    GtkWidget *mesh;
+#endif
     GtkWidget *pattern;
     GtkWidget *swatch;
     GtkWidget *unset;
@@ -88,6 +94,9 @@ struct SPPaintSelector {
 
     void setGradientLinear( SPGradient *vector );
     void setGradientRadial( SPGradient *vector );
+#ifdef WITH_MESH
+    void setGradientMesh(SPGradient *vector);
+#endif
     void setSwatch( SPGradient *vector );
 
     void setGradientProperties( SPGradientUnits units, SPGradientSpread spread );

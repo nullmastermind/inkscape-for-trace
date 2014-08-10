@@ -20,9 +20,9 @@
 #include <gtk/gtk.h>
 
 #include "document.h"
-#include "../document-undo.h"
-#include "../document-private.h"
-#include "../gradient-chemistry.h"
+#include "document-undo.h"
+#include "document-private.h"
+#include "gradient-chemistry.h"
 #include "inkscape.h"
 #include "verbs.h"
 #include "helper/action.h"

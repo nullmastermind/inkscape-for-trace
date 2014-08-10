@@ -29,14 +29,15 @@
 #endif
 
 #include "widgets/swatch-selector.h"
-#include "../sp-pattern.h"
+#include "sp-pattern.h"
 #include <glibmm/i18n.h>
-#include "../widgets/icon.h"
+#include "widgets/icon.h"
 #include "widgets/widget-sizes.h"
 #include "xml/repr.h"
 
 #include "sp-color-notebook.h"
 #include "sp-linear-gradient.h"
+#include "sp-mesh-gradient.h"
 #include "sp-radial-gradient.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
@@ -113,10 +114,13 @@ static gchar const* modeStrings[] = {
 #endif
 
 
-static bool isPaintModeGradient( SPPaintSelector::Mode mode )
+static bool isPaintModeGradient(SPPaintSelector::Mode mode)
 {
     bool isGrad = (mode == SPPaintSelector::MODE_GRADIENT_LINEAR) ||
         (mode == SPPaintSelector::MODE_GRADIENT_RADIAL) ||
+#ifdef WITH_MESH
+        (mode == SPPaintSelector::MODE_GRADIENT_MESH) ||
+#endif
         (mode == SPPaintSelector::MODE_SWATCH);
 
     return isGrad;
@@ -238,6 +242,10 @@ sp_paint_selector_init(SPPaintSelector *psel)
                                                         SPPaintSelector::MODE_GRADIENT_LINEAR, _("Linear gradient"));
     psel->radial = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-gradient-radial"),
                                                       SPPaintSelector::MODE_GRADIENT_RADIAL, _("Radial gradient"));
+#ifdef WITH_MESH
+    psel->mesh = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-gradient-mesh"),
+                                                      SPPaintSelector::MODE_GRADIENT_MESH, _("Mesh gradient"));
+#endif
     psel->pattern = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-pattern"),
                                                        SPPaintSelector::MODE_PATTERN, _("Pattern"));
     psel->swatch = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-swatch"),
@@ -413,6 +421,9 @@ void SPPaintSelector::setMode(Mode mode)
                 break;
             case MODE_GRADIENT_LINEAR:
             case MODE_GRADIENT_RADIAL:
+#ifdef WITH_MESH
+            case MODE_GRADIENT_MESH:
+#endif
                 sp_paint_selector_set_mode_gradient(this, mode);
                 break;
             case MODE_PATTERN:
@@ -510,6 +521,21 @@ void SPPaintSelector::setGradientRadial(SPGradient *vector)
 
     gsel->setVector((vector) ? vector->document : 0, vector);
 }
+
+#ifdef WITH_MESH
+void SPPaintSelector::setGradientMesh(SPGradient *vector)
+{
+#ifdef SP_PS_VERBOSE
+    g_print("PaintSelector set GRADIENT MESH\n");
+#endif
+    setMode(MODE_GRADIENT_RADIAL);
+
+    SPGradientSelector *gsel = getGradientFromData(this);
+
+    gsel->setMode(SPGradientSelector::MODE_MESH);
+    gsel->setVector((vector) ? vector->document : 0, vector);
+}
+#endif
 
 void SPPaintSelector::setGradientProperties( SPGradientUnits units, SPGradientSpread spread )
 {
@@ -728,9 +754,14 @@ static void sp_paint_selector_set_mode_gradient(SPPaintSelector *psel, SPPaintSe
 
     if (mode == SPPaintSelector::MODE_GRADIENT_LINEAR) {
         sp_paint_selector_set_style_buttons(psel, psel->gradient);
-    } else {
+    } else if (mode == SPPaintSelector::MODE_GRADIENT_RADIAL) {
         sp_paint_selector_set_style_buttons(psel, psel->radial);
     }
+#ifdef WITH_MESH
+    else {
+        sp_paint_selector_set_style_buttons(psel, psel->mesh);
+    }
+#endif
     gtk_widget_set_sensitive(psel->style, TRUE);
 
     if ((psel->mode == SPPaintSelector::MODE_GRADIENT_LINEAR) || (psel->mode == SPPaintSelector::MODE_GRADIENT_RADIAL)) {
@@ -756,10 +787,17 @@ static void sp_paint_selector_set_mode_gradient(SPPaintSelector *psel, SPPaintSe
         SP_GRADIENT_SELECTOR(gsel)->setMode(SPGradientSelector::MODE_LINEAR);
         //sp_gradient_selector_set_mode(SP_GRADIENT_SELECTOR(gsel), SP_GRADIENT_SELECTOR_MODE_LINEAR);
         gtk_label_set_markup(GTK_LABEL(psel->label), _("<b>Linear gradient</b>"));
-    } else {
+    } else if (mode == SPPaintSelector::MODE_GRADIENT_LINEAR) {
         SP_GRADIENT_SELECTOR(gsel)->setMode(SPGradientSelector::MODE_RADIAL);
         gtk_label_set_markup(GTK_LABEL(psel->label), _("<b>Radial gradient</b>"));
     }
+#ifdef WITH_MESH
+    else {
+        SP_GRADIENT_SELECTOR(gsel)->setMode(SPGradientSelector::MODE_RADIAL);
+        gtk_label_set_markup(GTK_LABEL(psel->label), _("<b>Mesh gradient</b>"));
+    }
+#endif
+
 #ifdef SP_PS_VERBOSE
     g_print("Gradient req\n");
 #endif
@@ -772,6 +810,9 @@ sp_paint_selector_set_style_buttons(SPPaintSelector *psel, GtkWidget *active)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->solid), (active == psel->solid));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->gradient), (active == psel->gradient));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->radial), (active == psel->radial));
+#ifdef WITH_MESH
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->radial), (active == psel->mesh));
+#endif
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->pattern), (active == psel->pattern));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->swatch), (active == psel->swatch));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->unset), (active == psel->unset));
@@ -1218,6 +1259,10 @@ SPPaintSelector::Mode SPPaintSelector::getModeForStyle(SPStyle const & style, Fi
             mode = MODE_GRADIENT_LINEAR;
         } else if (SP_IS_RADIALGRADIENT(server)) {
             mode = MODE_GRADIENT_RADIAL;
+#ifdef WITH_MESH
+        } else if (SP_IS_MESHGRADIENT(server)) {
+            mode = MODE_GRADIENT_MESH;
+#endif
         } else if (SP_IS_PATTERN(server)) {
             mode = MODE_PATTERN;
         } else {
