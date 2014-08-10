@@ -811,7 +811,7 @@ sp_paint_selector_set_style_buttons(SPPaintSelector *psel, GtkWidget *active)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->gradient), (active == psel->gradient));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->radial), (active == psel->radial));
 #ifdef WITH_MESH
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->radial), (active == psel->mesh));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->mesh), (active == psel->mesh));
 #endif
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->pattern), (active == psel->pattern));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(psel->swatch), (active == psel->swatch));
