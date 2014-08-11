@@ -202,33 +202,27 @@ LPESimplify::generateHelperPath(Geom::PathVector result)
         if(nodes){
             drawNode(curve_it1->initialPoint());
         }
-        while (curve_it2 != curve_endit) {
-          cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
-          if (cubic) {
-            if(handles){
-                drawHandle((*cubic)[1]);
-                drawHandle((*cubic)[2]);
-                drawHandleLine((*cubic)[0],(*cubic)[1]);
-                drawHandleLine((*cubic)[3],(*cubic)[2]);
+        while (curve_it1 != curve_endit) {
+            cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
+            if (cubic) {
+                if(handles) {
+                    if(!are_near((*cubic)[0],(*cubic)[1])){
+                        drawHandle((*cubic)[1]);
+                        drawHandleLine((*cubic)[0],(*cubic)[1]);
+                    }
+                    if(!are_near((*cubic)[3],(*cubic)[2])){
+                        drawHandle((*cubic)[2]);
+                        drawHandleLine((*cubic)[3],(*cubic)[2]);
+                    }
+                }
             }
-          } 
-          if(nodes){
-              drawNode(curve_it1->finalPoint());
-          }
-          ++curve_it1;
-          ++curve_it2;
-        }
-        cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
-        if (cubic) {
-          if(handles){
-            drawHandle((*cubic)[1]);
-            drawHandle((*cubic)[2]);
-            drawHandleLine((*cubic)[0],(*cubic)[1]);
-            drawHandleLine((*cubic)[3],(*cubic)[2]);
-          }
-        } 
-        if(nodes){
-          drawNode(curve_it1->finalPoint());
+            if(nodes) {
+                drawNode(curve_it1->finalPoint());
+            }
+            ++curve_it1;
+            if(curve_it2 != curve_endit){
+                ++curve_it2;
+            }
         }
     }
 }
@@ -264,8 +258,8 @@ LPESimplify::drawHandleLine(Geom::Point p,Geom::Point p2)
 {
     Geom::Path path;
     path.start( p );
-    if(helper_size > 0.0){
-        double diameter = helper_size/0.67;
+    double diameter = helper_size/0.67;
+    if(helper_size > 0.0 && Geom::distance(p,p2) > (diameter * 0.35)){
         Geom::Ray ray2(p, p2);
         p2 =  p2 - Geom::Point::polar(ray2.angle(),(diameter * 0.35));
     }
