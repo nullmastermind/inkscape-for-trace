@@ -332,10 +332,10 @@ void FilletChamferPointArrayParam::recalculate_knots(
                     result.push_back(Point(xPos, 0));
                 }
                 ++curve_it1;
-                ++curve_it2;
                 if (curve_it2 != curve_endit) {
-                    counter++;
+                    ++curve_it2;
                 }
+                counter++;
                 counterCurves++;
             }
         }
