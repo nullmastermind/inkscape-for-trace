@@ -6,8 +6,9 @@
 #  http://wiki.inkscape.org/wiki/index.php?title=CompilingMacOsX
 # for more complete information
 #
-# Author:
+# Authors:
 #	Jean-Olivier Irisson <jo.irisson@gmail.com>
+#       Liam P. White <inkscapebrony@gmail.com>
 # with information from
 #	Kees Cook
 #	Michael Wybrow
@@ -23,9 +24,7 @@
 # Configure flags
 CONFFLAGS="--disable-openmp --enable-osxapp"
 # Libraries prefix (Warning: NO trailing slash)
-LIBPREFIX="/opt/local"
-# User name on Modevia
-MODEVIA_NAME=""
+LIBPREFIX="/opt/local-x11"
 
 ############################################################
 
@@ -64,12 +63,6 @@ Compilation script for Inkscape on Mac OS X.
     \033[1m-py,--with-python\033[0m	specify python modules path for inclusion into the app bundle
   \033[1md,dist,distrib\033[0m
     store Inkscape.app in a disk image (dmg) for distribution
-  \033[1mf,fat,universal\033[0m
-    compile inkscape as a universal binary as both i386 and ppc architectures
-  \033[1mput,upload\033[0m
-    upload the dmg and the associate info file on Modevia server
-  \033[1mall\033[0m
-    do everything (update, configure, build, install, package, distribute)
 
 \033[1mEXAMPLES\033[0m
   \033[1m$0 conf build install\033[0m
@@ -92,7 +85,7 @@ SRCROOT=$HERE/../..		# we are currently in packaging/macosx
 # Defaults
 if [ "$INSTALLPREFIX" = "" ]
 then
-	INSTALLPREFIX=$SRCROOT/Build/
+	INSTALLPREFIX=$SRCROOT/inst-osxapp/
 fi
 BZRUPDATE="f"
 AUTOGEN="f"
@@ -102,7 +95,6 @@ NJOBS=1
 INSTALL="f"
 PACKAGE="f"
 DISTRIB="f"
-UPLOAD="f"
 UNIVERSAL="f"
 
 STRIP=""
@@ -129,8 +121,6 @@ do
 		AUTOGEN="t" ;;
 	c|conf|configure)
 		CONFIGURE="t" ;;
-	-u|--universal)
-		UNIVERSAL="t" ;;
 	b|build)
 		BUILD="t" ;;
 	-j|--jobs)
@@ -142,8 +132,6 @@ do
 		PACKAGE="t" ;;
 	d|dist|distrib)
 		DISTRIB="t" ;;
-	put|upload)
-		UPLOAD="t" ;;
 	-p|--prefix)
 	  	INSTALLPREFIX=$2
 	  	shift 1 ;;
@@ -159,34 +147,21 @@ do
 	shift 1
 done
 
-OSXMINORVER=`/usr/bin/sw_vers | grep ProductVersion | cut -d'	' -f2 | cut -f1-2 -d.`
+# OSXMINORVER=`/usr/bin/sw_vers | grep ProductVersion | cut -d'	' -f2 | cut -f1-2 -d.`
 
 # Set environment variables
 # ----------------------------------------------------------
-export LIBPREFIX
+export LIBPREFIX="/opt/local-x11"
 
 # Specific environment variables
 #  automake seach path
 export CPATH="$LIBPREFIX/include"
 #  configure search path
 export CPPFLAGS="-I$LIBPREFIX/include"
-# export CPPFLAGS="-I$LIBPREFIX/include -I /System/Library/Frameworks/Carbon.framework/Versions/Current/Headers"
 export LDFLAGS="-L$LIBPREFIX/lib"
 #  compiler arguments
-export CFLAGS="-O3 -Wall"
+export CFLAGS="-O0 -Wall"
 export CXXFLAGS="$CFLAGS"
-
-if [[ "$UNIVERSAL" == "t" ]]
-then
-	MINOSXVER="$OSXMINORVER"
-	
-	export SDK=/Developer/SDKs/MacOSX${MINOSXVER}.sdk
-	
-	export CFLAGS="$CFLAGS -isysroot $SDK -arch ppc -arch i386"
-	export CXXFLAGS="$CFLAGS"
-
-	export CONFFLAGS="$CONFFLAGS --disable-dependency-tracking"
-fi
 
 # Actions
 # ----------------------------------------------------------
@@ -203,55 +178,17 @@ then
 fi
 
 # Fetch some information
-REVISION=`bzr version-info 2>/dev/null | grep revno | cut -d' ' -f2`
-ARCH=`arch | tr [p,c] [P,C]`
-OSXVERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -d'	' -f2`
-
-if [[ "$OSXMINORVER" == "10.3" ]]; then
-	TARGETNAME="PANTHER"
-	TARGETVERSION="10.3"
-elif [[ "$OSXMINORVER" == "10.4" ]]; then
-        TARGETNAME="TIGER"
-	TARGETVERSION="10.4"
-elif [[ "$OSXMINORVER" == "10.5" ]]; then
-	TARGETNAME="LEOPARD+"
-	TARGETVERSION="10.5+"
-fi
-
-TARGETARCH="$ARCH"
-if [[ "$UNIVERSAL" == "t" ]]; then
-	TARGETARCH="UNIVERSAL"
-fi
+REVISION=$(bzr revno)
+ARCH=$(arch)
+TARGETVERSION=$(/usr/bin/sw_vers | fgrep ProductVersion | tr -d \  | cut -d: -f2)
 
 NEWNAME="Inkscape-r$REVISION-$TARGETVERSION-$TARGETARCH"
 DMGFILE="$NEWNAME.dmg"
 INFOFILE="$NEWNAME-info.txt"
 
-
-if [[ "$UPLOAD" == "t" ]]
-then
-	# If we are uploading, we are probably building nightlies and don't
-	# need to build a new one if the repository hasn't changed since the
-	# last.  Hence, if a dmg for this version already exists, then just
-	# exit here.
-	if [[ -f "$DMGFILE" ]]; then
-		echo -e "\nRepository hasn't changed: $DMGFILE already exists."
-		exit 0
-	fi
-fi
-
 if [[ "$AUTOGEN" == "t" ]]
 then
 	cd $SRCROOT
-	if [[ "$UNIVERSAL" == "t" ]]
-	then
-		# Universal builds have to be built with the option
-		# --disable-dependency-tracking.  So they need to be
-		# started from scratch each time.
-		if [[ -f Makefile ]]; then
-			make distclean
-		fi
-	fi
 	export NOCONFIGURE=true && ./autogen.sh
 	status=$?
 	if [[ $status -ne 0 ]]; then
@@ -263,14 +200,15 @@ fi
 
 if [[ "$CONFIGURE" == "t" ]]
 then
-	ALLCONFFLAGS=`echo "$CONFFLAGS --prefix=$INSTALLPREFIX"`
+	ALLCONFFLAGS="$CONFFLAGS --prefix=$INSTALLPREFIX"
 	cd $SRCROOT
 	if [ ! -f configure ]
 	then
 		echo "Configure script not found in $SRCROOT. Run '$0 autogen' first"
 		exit 1
 	fi
-	./configure $ALLCONFFLAGS
+        mkdir -p build-osxapp; cd build-osxapp
+	../configure $ALLCONFFLAGS
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nConfigure failed"
@@ -281,7 +219,7 @@ fi
 
 if [[ "$BUILD" == "t" ]]
 then
-	cd $SRCROOT
+	cd $SRCROOT/build-osxapp
 	make -j $NJOBS
 	status=$?
 	if [[ $status -ne 0 ]]; then
@@ -293,7 +231,7 @@ fi
 
 if [[ "$INSTALL" == "t" ]] 
 then
-	cd $SRCROOT
+	cd $SRCROOT/build-osxapp
 	make install
 	status=$?
 	if [[ $status -ne 0 ]]; then
@@ -312,9 +250,9 @@ then
 		echo "The inkscape executable \"$INSTALLPREFIX/bin/inkscape\" cound not be found."
 		exit 1
 	fi
-	if [ ! -e $SRCROOT/Info.plist ]
+	if [ ! -e $SRCROOT/build-osxapp/Info.plist ]
 	then
-		echo "The file \"$SRCROOT/Info.plist\" could not be found, please re-run configure."
+		echo "The file \"$SRCROOT/build-osxapp/Info.plist\" could not be found, please re-run configure."
 		exit 1
 	fi
 	
@@ -325,7 +263,7 @@ then
 	fi
 
 	# Create app bundle
-	./osx-app.sh $STRIP -b $INSTALLPREFIX/bin/inkscape -p $SRCROOT/Info.plist $PYTHON_MODULES
+	./osx-app.sh $STRIP -b $INSTALLPREFIX/bin/inkscape -p $SRCROOT/build-osxapp/Info.plist $PYTHON_MODULES
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nApplication bundle creation failed"
@@ -390,21 +328,6 @@ Configure options:
 		echo "Debug info
 	yes" >> $INFOFILE
 	fi	
-fi
-
-if [[ "$UPLOAD" == "t" ]]
-then
-	# Provide default for user name on modevia
-	if [[ "$MODEVIA_NAME" == "" ]]; then
-		MODEVIA_NAME=$USER
-	fi
-	# Uploasd file
-	scp $DMGFILE $INFOFILE "$MODEVIA_NAME"@inkscape.modevia.com:inkscape/docs/macosx-snap/
-	status=$?
-	if [[ $status -ne 0 ]]; then
-		echo -e "\nUpload failed"
-		exit $status
-	fi
 fi
 
 if [[ "$PACKAGE" == "t" || "$DISTRIB" == "t" ]]; then

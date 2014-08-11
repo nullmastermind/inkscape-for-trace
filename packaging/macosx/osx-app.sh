@@ -15,10 +15,12 @@
 #		 Kees Cook <kees@outflux.net>
 #		 Michael Wybrow <mjwybrow@users.sourceforge.net>
 #		 Jean-Olivier Irisson <jo.irisson@gmail.com>
+#                Liam P. White <inkscapebrony@gmail.com>
 # 
 # Copyright (C) 2005 Kees Cook
 # Copyright (C) 2005-2009 Michael Wybrow
 # Copyright (C) 2007-2009 Jean-Olivier Irisson
+# Copyright (C) 2014 Liam P. White
 #
 # Released under GNU GPL, read the file 'COPYING' for more information
 #
@@ -131,20 +133,9 @@ if [ ! -f "$plist" ]; then
 	exit 1
 fi
 
-PYTHONPACKURL="http://inkscape.modevia.com/macosx-snap/Python-packages.dmg"
-
 if [ "x$python_dir" == "x" ]; then
 	echo "Python modules directory not specified." >&2
-	echo "Python modules can be downloaded from:" >&2
-	echo "    $PYTHONPACKURL" >&2
-	exit 1
-fi
 
-if [ ! -e "$python_dir/i386" -o ! -e "$python_dir/ppc" ]; then
-	echo "Directory does not appear to contain the i386 and ppc python modules:" >&2
-	echo "    $python_dir" >&2
-	echo "Python modules can be downloaded from:" >&2
-	echo "    $PYTHONPACKURL" >&2
 	exit 1
 fi
 
@@ -175,7 +166,7 @@ fi
 
 if [ ! -e "$LIBPREFIX/lib/aspell-0.60/en.dat" ]; then
 	echo "Missing aspell en dictionary -- please install at least 'aspell-dict-en', but" >&2
-	echo "preferably all dictionaries ('aspell-dict-*') and try again." >&2
+	echo "preferably more dictionaries ('aspell-dict-*') and try again." >&2
 	exit 1
 fi
 
@@ -203,7 +194,7 @@ package="Inkscape.app"
 # Remove a previously existing package if necessary
 if [ -d $package ]; then
 	echo "Removing previous Inkscape.app"
-	rm -Rf $package
+	rm -rf $package
 fi
 
 
@@ -215,6 +206,7 @@ resdir=`pwd`
 #----------------------------------------------------------
 pkgexec="$package/Contents/MacOS"
 pkgbin="$package/Contents/Resources/bin"
+pkgshare="$package/Contents/Resources/share"
 pkglib="$package/Contents/Resources/lib"
 pkglocale="$package/Contents/Resources/locale"
 pkgpython="$package/Contents/Resources/python/site-packages/"
@@ -223,6 +215,7 @@ pkgresources="$package/Contents/Resources"
 mkdir -p "$pkgexec"
 mkdir -p "$pkgbin"
 mkdir -p "$pkglib"
+mkdir -p "$pkgshare"
 mkdir -p "$pkglocale"
 mkdir -p "$pkgpython"
 
@@ -274,6 +267,13 @@ cp -rp "$LIBPREFIX/share/mime" "$pkgresources/share/"
 mkdir -p "$pkgresources/share/icons/hicolor"
 cp "$LIBPREFIX/share/icons/hicolor/index.theme"  "$pkgresources/share/icons/hicolor"
 
+# GTK+ themes
+cp -RP "$LIBPREFIX/share/gtk-engines" "$pkgshare/"
+for item in Adwaita Clearlooks HighContrast Industrial Raleigh Redmond ThinIce; do
+    mkdir -p "$pkgshare/themes/$item"
+    cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
+done
+
 # Icons and the rest of the script framework
 rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
 
@@ -283,7 +283,7 @@ sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" $pkgbin/inkscape
 
 # Add python modules if requested
 if [ ${add_python} = "true" ]; then
-	# copy python site-packages. They need to be organized in a hierarchical set of directories, by architecture and python major+minor version, e.g. i386/2.3/ for Ptyhon 2.3 on Intel; ppc/2.4/ for Python 2.4 on PPC
+	# copy python site-packages. They need to be organized in a hierarchical set of directories, by architecture and python major+minor version, e.g. i386/2.3/ for Ptyhon 2.3 on Intel
 	cp -rvf "$python_dir"/* "$pkgpython"
 fi
 
@@ -293,20 +293,16 @@ echo "APPLInks" > $package/Contents/PkgInfo
 # Pull in extra requirements for Pango and GTK
 pkgetc="$package/Contents/Resources/etc"
 mkdir -p $pkgetc/pango
-cp $LIBPREFIX/etc/pango/pangox.aliases $pkgetc/pango/
+
 # Need to adjust path and quote in case of spaces in path.
 sed -e "s,$LIBPREFIX,\"\${CWD},g" -e 's,\.so ,.so" ,g' $LIBPREFIX/etc/pango/pango.modules > $pkgetc/pango/pango.modules
 cat > $pkgetc/pango/pangorc <<END_PANGO
 [Pango]
-ModuleFiles=\${HOME}/.inkscape-etc/pango.modules
-[PangoX]
-AliasFiles=\${HOME}/.inkscape-etc/pangox.aliases
+ModuleFiles=\${HOME}/Library/Application Support/org.inkscape.Inkscape/0.91/pango.modules
 END_PANGO
 
-# We use a modified fonts.conf file so only need the dtd
 mkdir -p $pkgetc/fonts
-cp $LIBPREFIX/etc/fonts/fonts.dtd $pkgetc/fonts/
-cp -r $LIBPREFIX/etc/fonts/conf.avail $pkgetc/fonts/
+cp -r $LIBPREFIX/etc/fonts/fonts.conf $pkgetc/fonts/
 cp -r $LIBPREFIX/etc/fonts/conf.d $pkgetc/fonts/
 
 mkdir -p $pkgetc/gtk-2.0
@@ -323,7 +319,7 @@ mkdir -p $pkglib/pango/$pango_version/modules
 cp $LIBPREFIX/lib/pango/$pango_version/modules/*.so $pkglib/pango/$pango_version/modules/
 
 gtk_version=`pkg-config --variable=gtk_binary_version gtk+-2.0`
-mkdir -p $pkglib/gtk-2.0/$gtk_version/{engines,immodules,loaders,printbackends}
+mkdir -p $pkglib/gtk-2.0/$gtk_version/{engines,immodules,printbackends}
 cp -r $LIBPREFIX/lib/gtk-2.0/$gtk_version/* $pkglib/gtk-2.0/$gtk_version/
 
 mkdir -p $pkglib/gnome-vfs-2.0/modules
@@ -333,167 +329,122 @@ mkdir -p $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders
 cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gtk_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/
 
 cp -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
-cp -r "$LIBPREFIX/share/ImageMagick-$IMAGEMAGICKVER" "$pkgresources/share/"
+cp -r "$LIBPREFIX/share/ImageMagick-6" "$pkgresources/share/"
 
 # Copy aspell dictionary files:
-cp -r "$LIBPREFIX/lib/aspell-0.60" "$pkglib/"
 cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
 
-# Find out libs we need from fink, darwinports, or from a custom install
+# Copy all linked libraries into the bundle
+#----------------------------------------------------------
+# get list of *.so modules from python modules
+python_libs="$(find $pkgpython -name *.so -or -name *.dylib)"
+
+# get list of included binary executables
+extra_bin=$(find $pkgbin -exec file {} \; | grep executable | grep -v text | cut -d: -f1)
+
+# Find out libs we need from MacPorts, Fink, or from a custom install
 # (i.e. $LIBPREFIX), then loop until no changes.
 a=1
 nfiles=0
 endl=true
 while $endl; do
-	echo -e "\033[1mLooking for dependencies.\033[0m Round" $a
-	libs="`otool -L $pkglib/gtk-2.0/$gtk_version/{engines,immodules,loaders,printbackends}/*.{dylib,so} $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/* $pkglib/pango/$pango_version/modules/* $pkglib/gnome-vfs-2.0/modules/* $package/Contents/Resources/lib/* $pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/{filters,coders}/*.so $binary 2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq`"
-	cp -f $libs $package/Contents/Resources/lib
-	let "a+=1"	
-	nnfiles=`ls $package/Contents/Resources/lib | wc -l`
-	if [ $nnfiles = $nfiles ]; then
-		endl=false
-	else
-		nfiles=$nnfiles
-	fi
-done
-
-# Add extra libraries of necessary
-for libfile in $EXTRALIBS
-do
-	cp -f $libfile $package/Contents/Resources/lib
+    echo -e "\033[1mLooking for dependencies.\033[0m Round" $a
+    libs="$(otool -L \
+        $pkglib/gtk-2.0/$gtk_version/{engines,immodules,printbackends}/*.{dylib,so} \
+        $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/*.so \
+        $pkglib/pango/$pango_version/modules/*.so \
+        $pkglib/gnome-vfs-2.0/modules/*.so \
+        $pkglib/gio/modules/*.so \
+        $pkglib/ImageMagick-$IMAGEMAGICK_VER/modules-Q16/{filters,coders}/*.so \
+        $pkglib/*.{dylib,so} \
+        $pkgbin/*.so \
+	$python_libs \
+        $extra_bin \
+        2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq)"
+    cp -f $libs "$pkglib"
+    let "a+=1"	
+    nnfiles="$(ls "$pkglib" | wc -l)"
+    if [ $nnfiles = $nfiles ]; then
+        endl=false
+    else
+        nfiles=$nnfiles
+    fi
 done
 
 # Some libraries don't seem to have write permission, fix this.
-chmod -R u+w $package/Contents/Resources/lib
+chmod -R u+w "$package/Contents/Resources/lib"
 
-# Strip libraries and executables if requested
+# Rewrite id and paths of linked libraries
 #----------------------------------------------------------
-if [ "$strip" = "true" ]; then
-	echo -e "\n\033[1mStripping debugging symbols...\033[0m\n"
-	chmod +w "$pkglib"/*.dylib
-	strip -x "$pkglib"/*.dylib
-	strip -ur "$binpath"
-fi
+# extract level for relative path to libs
+echo -e "\n\033[1mRewriting library paths ...\033[0m\n"
 
-# NOTE: This works for all the dylibs but causes GTK to crash at startup.
-#				Instead we leave them with their original install_names and set
-#				DYLD_LIBRARY_PATH within the app bundle before running Inkscape.
-#
+LIBPREFIX_levels="$(echo "$LIBPREFIX"|awk -F/ '{print NF+1}')"
+
 fixlib () {
-	libPath="`echo $2 | sed 's/.*Resources//'`"
-	pkgPath="`echo $2 | sed 's/Resources\/.*/Resources/'`"
-	# Fix a given executable or library to be relocatable
-	if [ ! -d "$1" ]; then
-		libs="`otool -L $1 | fgrep compatibility | cut -d\( -f1`"
-		for lib in $libs; do
-			echo "	$lib"
-			base=`echo $lib | awk -F/ '{print $NF}'`
-			first=`echo $lib | cut -d/ -f1-3`
-			relative=`echo $lib | cut -d/ -f4-`
-			to=@executable_path/../$relative
-			if [ $first != /usr/lib -a $first != /usr/X11 -a $first != /System/Library ]; then
-				/usr/bin/install_name_tool -change $lib $to $1
-				if [ "`echo $lib | fgrep libcrypto`" = "" ]; then
-					/usr/bin/install_name_tool -id $to $1
-					for ll in $libs; do
-						base=`echo $ll | awk -F/ '{print $NF}'`
-						first=`echo $ll | cut -d/ -f1-3`
-						relative=`echo $ll | cut -d/ -f4-`
-						to=@executable_path/../$relative
-						if [ $first != /usr/lib -a $first != /usr/X11 -a $first != /System/Library -a "`echo $ll | fgrep libcrypto`" = "" ]; then
-							/usr/bin/install_name_tool -change $ll $to $pkgPath/$relative
-						fi
-					done
-				fi
-			fi
-		done
-	fi
+    if [ ! -d "$1" ]; then
+        fileLibs="$(otool -L $1 | fgrep compatibility | cut -d\( -f1)"
+        filePath="$(echo "$2" | sed 's/.*Resources//')"
+        fileType="$3"
+        unset to_id
+        case $fileType in
+            lib)
+                # TODO: verfiy correct/expected install name for relocated libs
+                to_id="$package/Contents/Resources$filePath/$1"
+                loader_to_res="$(echo $filePath | gawk -F/ '{for (i=1;i<NF;i++) sub($i,".."); sub($NF,"",$0); print $0}')"
+                ;;
+            bin)
+                loader_to_res="../"
+                ;;
+            exec)
+                loader_to_res="../Resources/"
+                ;;
+            *)
+                echo "Skipping loader_to_res for $1"
+                ;;
+        esac
+        [ $to_id ] && install_name_tool -id "$to_id" "$1"
+        for lib in $fileLibs; do
+            first="$(echo $lib | cut -d/ -f1-3)"
+            if [ $first != /usr/lib -a $first != /usr/X11 -a $first != /opt/X11 -a $first != /System/Library ]; then
+                lib_prefix_levels="$(echo $lib | awk -F/ '{for (i=NF;i>0;i--) if($i=="lib") j=i; print j}')"
+                res_to_lib="$(echo $lib | cut -d/ -f$lib_prefix_levels-)"
+                unset to_path
+                case $fileType in
+                    lib)
+                        to_path="@loader_path/$loader_to_res$res_to_lib"
+                        ;;
+                    bin)
+                        to_path="@executable_path/$loader_to_res$res_to_lib"
+                        ;;
+                    exec)
+                        to_path="@executable_path/$loader_to_res$res_to_lib"
+                        ;;
+                    *)
+                        echo "Skipping to_path for $lib in $1"
+                        ;;
+                esac
+                [ $to_path ] && ${LIBPREFIX}/bin/install_name_tool -change "$lib" "$to_path" "$1"
+            fi
+        done
+    fi
 }
 
 rewritelibpaths () {
-	# 
-	# Fix package deps
-	(cd "$package/Contents/Resources/lib/gtk-2.0/$gtk_version/loaders"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/gtk-2.0/$gtk_version/engines"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/gtk-2.0/$gtk_version/immodules"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/gtk-2.0/$gtk_version/printbackends"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/gnome-vfs-2.0/modules"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/gdk-pixbuf-2.0/$gtk_version/loaders"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/pango/$pango_version/modules"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/coders"
-	for file in *.so; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
-	(cd "$package/Contents/Resources/bin"
-	for file in *; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	cd ../lib
-	for file in *.dylib; do
-		echo "Rewriting dylib paths for $file..."
-		fixlib "$file" "`pwd`"
-	done
-	)
+    echo "Rewriting dylib paths for included binaries:"
+    for file in $extra_bin; do
+        echo -n "Rewriting dylib paths for $file ... "
+        (cd "$(dirname $file)" ; fixlib "$(basename $file)" "$(dirname $file)" "bin")
+        echo "done"
+    done
+    echo "Rewriting dylib paths for included libraries:"
+    for file in $(find $package \( -name '*.so' -or -name '*.dylib' \) -and -not -ipath '*.dSYM*'); do
+        echo -n "Rewriting dylib paths for $file ... "
+        (cd "$(dirname $file)" ; fixlib "$(basename $file)" "$(dirname $file)" "lib")
+        echo "done"
+    done
 }
 
-PATHLENGTH=`echo $LIBPREFIX | wc -c`
-if [ "$PATHLENGTH" -ge "50" ]; then
-	# If the LIBPREFIX path is long enough to allow 
-	# path rewriting, then do this.
-	rewritelibpaths
-else
-	echo "Could not rewrite dylb paths for bundled libraries.  This requires" >&2
-	echo "Macports to be installed in a PREFIX of at least 50 characters in length." >&2
-	echo "" >&2
-	echo "The package will still work if the following line is uncommented in" >&2
-	echo "Inkscape.app/Contents/Resources/bin/inkscape:" >&2
-	echo '        export DYLD_LIBRARY_PATH="$TOP/lib"' >&2
-	exit 1
-
-fi
+rewritelibpaths
 
 exit 0
