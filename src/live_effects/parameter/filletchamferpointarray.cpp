@@ -552,31 +552,40 @@ Point FilletChamferPointArrayParamKnotHolderEntity::knot_get() const
 void FilletChamferPointArrayParamKnotHolderEntity::knot_click(guint state)
 {
     if (state & GDK_CONTROL_MASK) {
-        using namespace Geom;
-        double type = _pparam->_vector.at(_index)[Y] + 1;
-        if (type > 4) {
-            type = 1;
+        if (state & GDK_MOD1_MASK) {
+            _pparam->_vector.at(_index) = Point(_index, _pparam->_vector.at(_index)[Y]);
+            _pparam->param_set_and_write_new_value(_pparam->_vector);
+            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+        }else{
+            using namespace Geom;
+            double type = _pparam->_vector.at(_index)[Y] + 1;
+            if (type > 4) {
+                type = 1;
+            }
+            _pparam->_vector.at(_index) = Point(_pparam->_vector.at(_index)[X], type);
+            _pparam->param_set_and_write_new_value(_pparam->_vector);
+            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+            const gchar *tip;
+            if (type == 3) {
+                tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            } else if (type == 2) {
+                tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toogle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            } else if (type == 1) {
+                tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toogle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            } else {
+                tip = _("<b>Double Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            }
+            this->knot->tip = g_strdup(tip);
+            this->knot->show();
         }
-        _pparam->_vector.at(_index) = Point(_pparam->_vector.at(_index)[X], type);
-        _pparam->param_set_and_write_new_value(_pparam->_vector);
-        sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
-        const gchar *tip;
-        if (type == 3) {
-            tip = _("<b>Chamfer</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
-        } else if (type == 2) {
-            tip = _("<b>Inverse Fillet</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
-        } else if (type == 1) {
-            tip = _("<b>Fillet</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
-        } else {
-            tip = _("<b>Double Chamfer</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
-        }
-        this->knot->tip = g_strdup(tip);
-        this->knot->show();
-        //}
     } else if ((state & GDK_MOD1_MASK) || (state & GDK_SHIFT_MASK)) {
         Geom::Point offset = Geom::Point(_pparam->_vector.at(_index).x(),
                                          _pparam->_vector.at(_index).y());
@@ -619,18 +628,23 @@ void FilletChamferPointArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         }
         const gchar *tip;
         if (_vector[i][Y] == 3) {
-            tip = _("<b>Chamfer</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
+            tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
         } else if (_vector[i][Y] == 2) {
-            tip = _("<b>Inverse Fillet</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
+            tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toogle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
         } else if (_vector[i][Y] == 1) {
-            tip = _("<b>Fillet</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
+            tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toogle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
         } else {
-            tip = _("<b>Double Chamfer</b>: <b>Ctrl+click</b> toogle type, "
-                    "<b>Shift+click</b> open dialog");
+            tip = _("<b>Double Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
         }
+        
         FilletChamferPointArrayParamKnotHolderEntity *e =
             new FilletChamferPointArrayParamKnotHolderEntity(this, i);
         e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),
