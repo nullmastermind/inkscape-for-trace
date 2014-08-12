@@ -513,12 +513,11 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
     }
 }
 
-Geom::Affine SPStar::set_transform(Geom::Affine const &tform)
+Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
-    Geom::Affine xform = (randomized == 0 ? tform.withoutTranslation() : tform);
-
+    bool opt_trans = (randomized == 0);
     // Only set transform with proportional scaling
-    if (!xform.isUniformScale()) {
+    if (!xform.withoutTranslation().isUniformScale()) {
         return xform;
     }
 
@@ -532,7 +531,7 @@ Geom::Affine SPStar::set_transform(Geom::Affine const &tform)
 
     /* This function takes care of translation and scaling, we return whatever parts we can't
        handle. */
-    Geom::Affine ret(xform);
+    Geom::Affine ret(opt_trans ? xform.withoutTranslation() : xform);
     gdouble const s = hypot(ret[0], ret[1]);
     if (s > 1e-9) {
         ret[0] /= s;

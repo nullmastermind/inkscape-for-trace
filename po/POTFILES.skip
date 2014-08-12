@@ -13,7 +13,6 @@ src/live_effects/lpe-circle_with_radius.cpp
 src/live_effects/lpe-copy_rotate.cpp
 src/live_effects/lpe-dynastroke.cpp
 src/live_effects/lpe-lattice.cpp
-src/live_effects/lpe-lattice2.cpp
 src/live_effects/lpe-line_segment.cpp
 src/live_effects/lpe-mirror_symmetry.cpp
 src/live_effects/lpe-offset.cpp
@@ -26,7 +25,6 @@ src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-tangent_to_curve.cpp
 src/live_effects/lpe-test-doEffect-stack.cpp
 src/live_effects/lpe-text_label.cpp
-src/live_effects/lpe-simplify.cpp
 src/lpe-tool-context.cpp
 src/ui/dialog/session-player.cpp
 src/ui/dialog/whiteboard-connect.cpp

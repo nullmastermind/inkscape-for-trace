@@ -213,17 +213,20 @@ sp_gradient_context_is_over_line (GradientTool *rc, SPItem *item, Geom::Point ev
     //Translate mouse point into proper coord system
     rc->mousepoint_doc = desktop->w2d(event_p);
 
-    SPCtrlLine* line = SP_CTRLLINE(item);
+    if (SP_IS_CTRLLINE(item)) {
+        SPCtrlLine* line = SP_CTRLLINE(item);
 
-    Geom::LineSegment ls(line->s, line->e);
-    Geom::Point nearest = ls.pointAt(ls.nearestPoint(rc->mousepoint_doc));
-    double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
+        Geom::LineSegment ls(line->s, line->e);
+        Geom::Point nearest = ls.pointAt(ls.nearestPoint(rc->mousepoint_doc));
+        double dist_screen = Geom::L2 (rc->mousepoint_doc - nearest) * desktop->current_zoom();
 
-    double tolerance = (double) SP_EVENT_CONTEXT(rc)->tolerance;
+        double tolerance = (double) SP_EVENT_CONTEXT(rc)->tolerance;
 
-    bool close = (dist_screen < tolerance);
+        bool close = (dist_screen < tolerance);
 
-    return close;
+        return close;
+    }
+    return false;
 }
 
 static std::vector<Geom::Point>

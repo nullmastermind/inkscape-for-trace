@@ -299,7 +299,6 @@ set(inkscape_SRC
 	composite-undo-stack-observer.h
 	conditions.h
 	conn-avoid-ref.h
-	connection-pool.h
 	console-output-undo-observer.h
 	context-fns.h
 	decimal-round.h
