@@ -30,6 +30,7 @@ enum EffectType {
     LATTICE,
     LATTICE2,
     ROUGHEN,
+    SHOW_HANDLES,
     SIMPLIFY,
     ENVELOPE,
     CONSTRUCT_GRID,

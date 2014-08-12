@@ -148,6 +148,7 @@ src/live_effects/lpe-rough-hatches.cpp
 src/live_effects/lpe-roughen.cpp
 src/live_effects/lpe-ruler.cpp
 src/live_effects/lpe-simplify.cpp
+src/live_effects/lpe-show_handles.cpp
 src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-vonkoch.cpp
