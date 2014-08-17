@@ -1122,13 +1122,14 @@ void font_lister_cell_data_func(GtkCellLayout * /*cell_layout*/,
     if (show_sample) {
 
         Glib::ustring sample = prefs->getString("/tools/text/font_sample");
-        Glib::ustring sample_escaped = Glib::Markup::escape_text(sample);
+        gchar* sample_escaped = g_markup_escape_text(sample.data(), -1);
 
         markup += "  <span foreground='gray' font_family='";
         markup += family_escaped;
         markup += "'>";
         markup += sample_escaped;
         markup += "</span>";
+        g_free(sample_escaped);
     }
 
     g_object_set(G_OBJECT(cell), "markup", markup.c_str(), NULL);
