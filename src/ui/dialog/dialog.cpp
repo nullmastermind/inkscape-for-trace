@@ -318,6 +318,7 @@ void Dialog::_apply()
 void Dialog::_close()
 {
     _behavior->hide();
+    _onDeleteEvent(NULL);
 }
 
 void Dialog::_defocus()
