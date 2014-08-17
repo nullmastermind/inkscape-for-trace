@@ -513,6 +513,82 @@ static bool StyleNameCompareInternal(const StyleNames &style1, const StyleNames 
     return( StyleNameValue( style1.CssName ) < StyleNameValue( style2.CssName ) );
 }
 
+static bool ustringPairSort(std::pair<PangoFontFamily*, Glib::ustring> const& first, std::pair<PangoFontFamily*, Glib::ustring> const& second)
+{
+    // well, this looks weird.
+    return first.second < second.second;
+}
+
+void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
+{
+    // Gather the family names as listed by Pango
+    PangoFontFamily** families = NULL;
+    int numFamilies = 0;
+    pango_font_map_list_families(fontServer, &families, &numFamilies);
+    
+    std::vector<std::pair<PangoFontFamily *, Glib::ustring> > sorted;
+
+    // not size_t
+    for (int currentFamily = 0; currentFamily < numFamilies; ++currentFamily) {
+        const char* displayName = pango_font_family_get_name(families[currentFamily]);
+        
+        if (displayName == 0 || *displayName == '\0') {
+            continue;
+        }
+        sorted.push_back(std::make_pair(families[currentFamily], displayName));
+    }
+
+    std::sort(sorted.begin(), sorted.end(), ustringPairSort);
+    
+    for (size_t i = 0; i < sorted.size(); ++i) {
+        out.push_back(sorted[i].first);
+    }
+}
+
+GList* font_factory::GetUIStyles(PangoFontFamily * in)
+{
+    GList* ret = NULL;
+    // Gather the styles for this family
+    PangoFontFace** faces = NULL;
+    int numFaces = 0;
+    pango_font_family_list_faces(in, &faces, &numFaces);
+
+    for (int currentFace = 0; currentFace < numFaces; currentFace++) {
+
+        // If the face has a name, describe it, and then use the
+        // description to get the UI family and face strings
+        const gchar* displayName = pango_font_face_get_face_name(faces[currentFace]);
+        if (displayName == NULL || *displayName == '\0') {
+            continue;
+        }
+
+        PangoFontDescription *faceDescr = pango_font_face_describe(faces[currentFace]);
+        if (faceDescr) {
+            Glib::ustring familyUIName = GetUIFamilyString(faceDescr);
+            Glib::ustring styleUIName = GetUIStyleString(faceDescr);
+
+            // Disable synthesized (faux) font faces except for CSS generic faces
+            if (pango_font_face_is_synthesized(faces[currentFace]) ) {
+                if (familyUIName.compare( "sans-serif" ) != 0 &&
+                    familyUIName.compare( "serif"      ) != 0 &&
+                    familyUIName.compare( "monospace"  ) != 0 &&
+                    familyUIName.compare( "fantasy"    ) != 0 &&
+                    familyUIName.compare( "cursive"    ) != 0 ) {
+                    continue;
+                }
+            }
+
+            if (!familyUIName.empty() && !styleUIName.empty()) {
+                // Add the style information
+                ret = g_list_append(ret, new StyleNames(styleUIName, displayName));
+            }
+        }
+        pango_font_description_free(faceDescr);
+    }
+    g_free(faces);
+    return ret;
+}
+
 void font_factory::GetUIFamiliesAndStyles(FamilyToStylesMap *map)
 {
     g_assert(map);
