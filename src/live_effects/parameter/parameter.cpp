@@ -36,13 +36,11 @@ Parameter::Parameter( const Glib::ustring& label, const Glib::ustring& tip,
 {
 }
 
-
 void
 Parameter::param_write_to_repr(const char * svgd)
 {
     param_effect->getRepr()->setAttribute(param_key.c_str(), svgd);
 }
-
 
 // In gtk2, this wasn't an issue; we could toss around
 // G_MAXDOUBLE and not worry about size allocations. But
@@ -51,6 +49,12 @@ Parameter::param_write_to_repr(const char * svgd)
 // If you need this to be more, please be conservative about it.
 const double SCALARPARAM_G_MAXDOUBLE = 10000000000;
 
+void Parameter::write_to_SVG(void)
+{
+    gchar * str = param_getSVGValue();
+    param_write_to_repr(str);
+    g_free(str);
+}
 
 /*###########################################
  *   REAL PARAM
