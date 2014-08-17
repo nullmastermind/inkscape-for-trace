@@ -157,6 +157,10 @@ static void sp_font_selector_init(SPFontSelector *fsel)
         gtk_container_add(GTK_CONTAINER(f), sw);
 
         fsel->family_treeview = gtk_tree_view_new ();
+        gtk_tree_view_set_row_separator_func( GTK_TREE_VIEW(fsel->family_treeview),
+                                              GtkTreeViewRowSeparatorFunc ((gpointer)font_lister_separator_func),
+                                              NULL, NULL );
+        gtk_widget_show_all(GTK_WIDGET (fsel->family_treeview));
         GtkTreeViewColumn *column = gtk_tree_view_column_new ();
         GtkCellRenderer *cell = gtk_cell_renderer_text_new ();
         gtk_tree_view_column_pack_start (column, cell, FALSE);
@@ -166,9 +170,6 @@ static void sp_font_selector_init(SPFontSelector *fsel)
                                                  NULL, NULL );
         gtk_tree_view_append_column (GTK_TREE_VIEW(fsel->family_treeview), column);
         gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(fsel->family_treeview), FALSE);
-        gtk_tree_view_set_row_separator_func( GTK_TREE_VIEW(fsel->family_treeview),
-                                              GtkTreeViewRowSeparatorFunc ((gpointer)font_lister_separator_func),
-                                              NULL, NULL );
 
         /* Muck with style, see text-toolbar.cpp */
         gtk_widget_set_name( GTK_WIDGET(fsel->family_treeview), "font_selector_family" );
@@ -303,6 +304,9 @@ static void sp_font_selector_family_select_row(GtkTreeSelection *selection,
     GtkTreeModel *model;
     GtkTreeIter   iter;
     if (!gtk_tree_selection_get_selected (selection, &model, &iter)) return;
+    
+    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
+    fontlister->ensureRowStyles(model, &iter);
 
     // Next get family name with its style list
     gchar        *family;
@@ -310,7 +314,6 @@ static void sp_font_selector_family_select_row(GtkTreeSelection *selection,
     gtk_tree_model_get (model, &iter, 0, &family, 1, &list, -1);
 
     // Find best style match for selected family with current style (e.g. of selected text).
-    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
     Glib::ustring style = fontlister->get_font_style();
     Glib::ustring best  = fontlister->get_best_style_match (family, style);    
 

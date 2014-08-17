@@ -29,6 +29,7 @@
 #include "live_effects/lpe-lattice.h"
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-roughen.h"
+#include "live_effects/lpe-show_handles.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-envelope.h"
 #include "live_effects/lpe-constructgrid.h"
@@ -135,7 +136,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
-    {ROUGHEN,               N_("Roughen"),     "roughen"},
+    {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
+    {ROUGHEN,               N_("Roughen"),                 "roughen"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
     {JOIN_TYPE,             N_("Join type"),               "join_type"},
     {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
@@ -310,6 +312,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case ROUGHEN:
             neweffect = static_cast<Effect*> ( new LPERoughen(lpeobj) );
+            break;
+        case SHOW_HANDLES:
+            neweffect = static_cast<Effect*> ( new LPEShowHandles(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
