@@ -1,6 +1,4 @@
-#define __SP_XMLVIEW_TREE_C__
-
-/*
+/**
  * Specialization of GtkTreeView for the XML tree view
  *
  * Authors:
@@ -14,7 +12,7 @@
 #include <cstring>
 #include <string>
 
-#include "../xml/node-event-vector.h"
+#include "xml/node-event-vector.h"
 #include "sp-xmlview-tree.h"
 
 struct NodeData {
@@ -734,4 +732,4 @@ gboolean search_equal_func(GtkTreeModel *model, gint /*column*/, const gchar *ke
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

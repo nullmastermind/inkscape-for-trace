@@ -1,10 +1,4 @@
-#define __CURVE_C__
-
-/** \file
- * Routines for SPCurve and for its Geom::PathVector
- */
-
-/*
+/**
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Johan Engelen
@@ -14,7 +8,7 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2008 Johan Engelen
  *
- * Released under GNU GPL
+ * Released under GNU GPL, see file 'COPYING' for more information
  */
 
 #include "display/curve.h"
@@ -24,6 +18,10 @@
 #include <2geom/sbasis-geometric.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/point.h>
+
+/**
+ * Routines for SPCurve and for its Geom::PathVector
+ */
 
 /* Constructors */
 
@@ -686,4 +684,4 @@ SPCurve::last_point_additive_move(Geom::Point const & p)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:

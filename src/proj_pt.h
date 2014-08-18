@@ -1,7 +1,4 @@
-#ifndef __PROJ_PT_H__
-#define __PROJ_PT_H__
-
-/*
+/**
  * 3x4 transformation matrix to map points from projective 3-space into the projective plane
  *
  * Authors:
@@ -11,6 +8,9 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#ifndef SEEN_PROJ_PT_H
+#define SEEN_PROJ_PT_H
 
 #include <2geom/point.h>
 #include <gtk/gtk.h>
@@ -157,7 +157,7 @@ private:
 
 } // namespace Proj
 
-#endif /* __PROJ_PT_H__ */
+#endif // !SEEN_PROJ_PT_H
 
 /*
   Local Variables:
@@ -168,4 +168,4 @@ private:
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

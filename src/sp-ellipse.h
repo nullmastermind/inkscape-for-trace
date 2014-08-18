@@ -1,7 +1,4 @@
-#ifndef __SP_ELLIPSE_H__
-#define __SP_ELLIPSE_H__
-
-/*
+/**
  * SVG <ellipse> and related implementations
  *
  * Authors:
@@ -16,12 +13,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifndef SEEN_SP_ELLIPSE_H
+#define SEEN_SP_ELLIPSE_H
+
 #include "svg/svg-length.h"
 #include "sp-shape.h"
 
 /* Common parent class */
-#define SP_GENERICELLIPSE(obj) (dynamic_cast<SPGenericEllipse*>((SPObject*)obj))
-#define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((SPObject*)obj) != NULL)
+#define SP_GENERICELLIPSE(obj) (dynamic_cast<SPGenericEllipse*>(obj))
+#define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((obj)) != NULL)
 
 enum GenericEllipseType {
     SP_GENERIC_ELLIPSE_UNDEFINED,
@@ -98,4 +98,4 @@ protected:
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

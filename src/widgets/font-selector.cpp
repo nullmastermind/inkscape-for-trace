@@ -1,6 +1,4 @@
-#define __SP_FONT_SELECTOR_C__
-
-/*
+/**
  * Font selection widgets
  *
  * Authors:
@@ -554,4 +552,4 @@ double sp_font_selector_get_size(SPFontSelector *fsel)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

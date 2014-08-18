@@ -1,6 +1,4 @@
-#define __AXIS_MANIP_C__
-
-/*
+/**
  * Generic auxiliary routines for 3D axes
  *
  * Authors:
@@ -44,4 +42,4 @@ get_remaining_axes (Axis axis) {
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

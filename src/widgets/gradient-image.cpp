@@ -1,6 +1,4 @@
-#define __SP_GRADIENT_IMAGE_C__
-
-/*
+/**
  * A simple gradient preview
  *
  * Author:
@@ -12,13 +10,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "macros.h"
+#include <sigc++/signal.h>
+
 #include "display/cairo-utils.h"
 #include "gradient-image.h"
+#include "macros.h"
 #include "sp-gradient.h"
-
-#include <sigc++/functors/ptr_fun.h>
-#include <sigc++/adaptors/bind.h>
 
 #define VBLOCK 16
 
@@ -269,3 +266,14 @@ sp_gradient_image_update (SPGradientImage *image)
                 gtk_widget_queue_draw (GTK_WIDGET (image));
         }
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

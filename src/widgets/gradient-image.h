@@ -1,7 +1,7 @@
-#ifndef __SP_GRADIENT_IMAGE_H__
-#define __SP_GRADIENT_IMAGE_H__
+#ifndef SEEN_SP_GRADIENT_IMAGE_H
+#define SEEN_SP_GRADIENT_IMAGE_H
 
-/*
+/**
  * A simple gradient preview
  *
  * Author:
@@ -29,15 +29,15 @@ class SPGradient;
 #define SP_IS_GRADIENT_IMAGE_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_GRADIENT_IMAGE))
 
 struct SPGradientImage {
-	GtkWidget widget;
-	SPGradient *gradient;
+    GtkWidget widget;
+    SPGradient *gradient;
 
-	sigc::connection release_connection;
-	sigc::connection modified_connection;
+    sigc::connection release_connection;
+    sigc::connection modified_connection;
 };
 
 struct SPGradientImageClass {
-	GtkWidgetClass parent_class;
+    GtkWidgetClass parent_class;
 };
 
 GType sp_gradient_image_get_type (void);
@@ -47,3 +47,14 @@ GdkPixbuf *sp_gradient_to_pixbuf (SPGradient *gr, int width, int height);
 void sp_gradient_image_set_gradient (SPGradientImage *gi, SPGradient *gr);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :
