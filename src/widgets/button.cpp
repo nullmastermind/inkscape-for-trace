@@ -11,6 +11,7 @@
  * This code is in public domain
  */
 
+#include <glibmm.h>
 #include "icon.h"
 
 #include "button.h"
