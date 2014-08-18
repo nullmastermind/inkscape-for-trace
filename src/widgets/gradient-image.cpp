@@ -10,7 +10,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <sigc++/signal.h>
+#include <sigc++/sigc++.h>
 
 #include "display/cairo-utils.h"
 #include "gradient-image.h"

@@ -11,6 +11,7 @@
 #ifndef SEEN_NR_FILTER_PRIMITIVE_H
 #define SEEN_NR_FILTER_PRIMITIVE_H
 
+#include <glib.h>
 #include <2geom/forward.h>
 #include <2geom/rect.h>
 #include "display/nr-filter-types.h"

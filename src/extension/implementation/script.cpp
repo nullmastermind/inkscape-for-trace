@@ -22,7 +22,7 @@
 #include <unistd.h>
 
 #include <errno.h>
-#include <glib.h>
+#include <glib/gstdio.h>
 
 #include "desktop-handles.h"
 #include "desktop.h"
@@ -37,7 +37,7 @@
 #include "script.h"
 #include "selection.h"
 #include "sp-namedview.h"
-#include "system.h"
+#include "extension/system.h"
 #include "ui/view/view.h"
 #include "xml/node.h"
 #include "xml/attribute-record.h"

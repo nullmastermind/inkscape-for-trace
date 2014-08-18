@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtk.h>
+#include <gtkmm.h>
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/canvas-arena.h"

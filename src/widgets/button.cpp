@@ -11,10 +11,10 @@
  * This code is in public domain
  */
 
-#include "button.h"
-
-#include "helper/action-context.h"
 #include "icon.h"
+
+#include "button.h"
+#include "helper/action-context.h"
 #include "interface.h"
 #include "shortcuts.h"
 

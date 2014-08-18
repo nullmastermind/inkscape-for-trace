@@ -11,7 +11,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtk.h>
+#include <gtkmm.h>
 
 #include "display/sp-canvas-util.h"
 #include "helper/sp-marshal.h"

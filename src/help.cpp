@@ -11,7 +11,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include <glibmm.h>
 
 #include "file.h"
 #include "help.h"

@@ -18,7 +18,9 @@
 
 #include <cstring>
 #include <string>
+#include <glibmm.h>
 #include <2geom/transforms.h>
+
 #include "macros.h"
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
