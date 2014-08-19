@@ -65,7 +65,7 @@ Create an app bundle for OS X
 	\033[1m-l,--libraries\033[0m
 		specify the path to the librairies Inkscape depends on
 		(typically /sw or /opt/local)
-	\033[1m-b--binary\033[0m
+	\033[1m-b,--binary\033[0m
 		specify the path to Inkscape's binary. By default it is in
 		Build/bin/ at the base of the source code directory
 	\033[1m-p,--plist\033[0m
