@@ -330,6 +330,8 @@
     <string>@VERSION@</string>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright 2014 Inkscape Developers, GNU General Public License.</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.graphics-design</string>
     <key>LSMinimumSystemVersion</key>
     <string>10.3</string>
 </dict>
