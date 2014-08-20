@@ -304,7 +304,9 @@ cat > $pkgetc/pango/pangorc <<END_PANGO
 ModuleFiles=\${INK_CACHE_DIR}/pango.modules
 END_PANGO
 
+# We use a modified fonts.conf file so only need the dtd
 mkdir -p $pkgetc/fonts
+cp $LIBPREFIX/etc/fonts/fonts.dtd $pkgetc/fonts/
 cp -r $LIBPREFIX/etc/fonts/conf.d $pkgetc/fonts/
 mkdir -p $pkgshare/fontconfig
 cp -r $LIBPREFIX/share/fontconfig/conf.avail $pkgshare/fontconfig/
