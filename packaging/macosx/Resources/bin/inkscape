@@ -42,12 +42,22 @@ export PYTHONPATH="$TOP/python/site-packages/$ARCH/$PYTHON_VERS"
 # No longer required if path rewriting has been conducted.
 # export DYLD_LIBRARY_PATH="$TOP/lib"
 
-mkdir -p "${HOME}/.inkscape-etc"
+XDG_CACHE_HOME="${HOME}/.cache"
+XDG_CONFIG_HOME="${HOME}/.config"
+XDG_DATA_HOME="${HOME}/.local/share"
+
+mkdir -p "$XDG_CACHE_HOME"
+mkdir -p "$XDG_CONFIG_HOME"
+mkdir -p "$XDG_DATA_HOME"
+
+#INK_CACHE_DIR="${XDG_CACHE_HOME}/inkscape"
+INK_CACHE_DIR="${HOME}/.inkscape-etc"
+mkdir -p "$INK_CACHE_DIR"
 
 export FONTCONFIG_PATH="$TOP/etc/fonts"
-export PANGO_RC_FILE="${HOME}/.inkscape-etc/pangorc"
-export GTK_IM_MODULE_FILE="${HOME}/.inkscape-etc/immodules.cache"
-export GDK_PIXBUF_MODULE_FILE="${HOME}/.inkscape-etc/loaders.cache"
+export PANGO_RC_FILE="${INK_CACHE_DIR}/pangorc"
+export GTK_IM_MODULE_FILE="${INK_CACHE_DIR}/immodules.cache"
+export GDK_PIXBUF_MODULE_FILE="${INK_CACHE_DIR}/loaders.cache"
 export GTK_DATA_PREFIX="$TOP"
 export GTK_EXE_PREFIX="$TOP"
 export GNOME_VFS_MODULE_CONFIG_PATH="$TOP/etc/gnome-vfs-2.0/modules"
@@ -115,12 +125,12 @@ fi
 [ $_DEBUG ] && echo "Setting Language: $LANG" 1>&2
 export LC_ALL="$LANG"
 
-sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "${HOME}/.inkscape-etc/pangorc"
+sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "${INK_CACHE_DIR}/pangorc"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
-    > "${HOME}/.inkscape-etc/pango.modules"
+    > "${INK_CACHE_DIR}/pango.modules"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gtk-2.0/__gtk_version__/immodules.cache" \
-    > "${HOME}/.inkscape-etc/immodules.cache"
+    > "${INK_CACHE_DIR}/immodules.cache"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gdk-pixbuf-2.0/__gdk_pixbuf_version__/loaders.cache" \
-    > "${HOME}/.inkscape-etc/loaders.cache"
+    > "${INK_CACHE_DIR}/loaders.cache"
 
 exec "$CWD/inkscape-bin" "$@"
