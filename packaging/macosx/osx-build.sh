@@ -22,9 +22,11 @@
 # User modifiable parameters
 #----------------------------------------------------------
 # Configure flags
-CONFFLAGS="--disable-openmp --enable-osxapp"
+CONFFLAGS="--enable-osxapp --enable-localinstall"
 # Libraries prefix (Warning: NO trailing slash)
-LIBPREFIX="/opt/local-x11"
+if [ -z "$LIBPREFIX" ]; then
+	LIBPREFIX="/opt/local-x11"
+fi
 
 ############################################################
 
@@ -151,7 +153,7 @@ done
 
 # Set environment variables
 # ----------------------------------------------------------
-export LIBPREFIX="/opt/local-x11"
+export LIBPREFIX
 
 # Specific environment variables
 #  automake seach path
@@ -160,8 +162,8 @@ export CPATH="$LIBPREFIX/include"
 export CPPFLAGS="-I$LIBPREFIX/include"
 export LDFLAGS="-L$LIBPREFIX/lib"
 #  compiler arguments
-export CFLAGS="-O0 -Wall"
-export CXXFLAGS="$CFLAGS"
+export CFLAGS="-pipe -Os"
+export CXXFLAGS="$CFLAGS -Wno-cast-align"
 
 # Actions
 # ----------------------------------------------------------
