@@ -202,7 +202,7 @@ fi
 # Set the 'macosx' directory, usually the current directory.
 resdir=`pwd`
 
-# Custom resources used for symbolic icons and dark theme
+# Custom resources used to generate resources during app bundle creation.
 if [ -z "$custom_res" ] ; then
     custom_res="${resdir}/Resources-extras"
 fi

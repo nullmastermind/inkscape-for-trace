@@ -11,7 +11,7 @@
 #---------------------------------------------------------
 
 if [ -z $LIBPREFIX ]; then
-    LIBPREFIX="$MP_QUARTZ_PREFIX"
+    LIBPREFIX="/opt/local-x11"
 fi
 if [ -z $stock_src ]; then
     stock_src="$(pwd)/stock-icons"
