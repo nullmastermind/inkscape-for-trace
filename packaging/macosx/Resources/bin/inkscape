@@ -120,7 +120,7 @@ sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "$PREFDIR/pangorc"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
     > "$PREFDIR/pango.modules"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gtk.immodules" \
-    > "$PREFDIR/.inkscape-etc/gtk.immodules"
+    > "$PREFDIR/gtk.immodules"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gdk-pixbuf.loaders" \
     > "$PREFDIR/gdk-pixbuf.loaders"
 
