@@ -81,13 +81,15 @@ Compilation script for Inkscape on Mac OS X.
 # Parameters
 #----------------------------------------------------------
 # Paths
-HERE=`pwd`
-SRCROOT=$HERE/../..		# we are currently in packaging/macosx
+HERE="$(pwd)"
+SRCROOT="$(cd ../.. && pwd)"	# we are currently in packaging/macosx
 
 # Defaults
-if [ "$INSTALLPREFIX" = "" ]
-then
-	INSTALLPREFIX=$SRCROOT/inst-osxapp/
+if [ -z "$BUILDPREFIX" ]; then
+	BUILDPREFIX="$SRCROOT/build-osxapp/"
+fi
+if [ -z "$INSTALLPREFIX" ]; then
+	INSTALLPREFIX="$SRCROOT/inst-osxapp/"
 fi
 BZRUPDATE="f"
 AUTOGEN="f"
@@ -170,7 +172,6 @@ export CPPFLAGS="$CPPFLAGS -I$LIBPREFIX/include"
 export LDFLAGS="$LDFLAGS -L$LIBPREFIX/lib"
 #  compiler arguments
 export CFLAGS="$CFLAGS -pipe -Os"
-#export CXXFLAGS="$CFLAGS -Wno-cast-align"
 
 # compiler
 # TODO: detailed configure flags for each OS X version (Mavericks!)
@@ -211,6 +212,42 @@ else
 	exit 1
 fi
 
+# Utility functions
+# ----------------------------------------------------------
+function getinkscapeinfo () {
+	# Fetch some information
+	osxapp_domain="$BUILDPREFIX/Info"
+	INKVERSION="$(defaults read $osxapp_domain CFBundleVersion)"
+	[ $? -ne 0 ] && INKVERSION="devel"
+	REVISION="$(bzr revno)"
+	[ $? -ne 0 ] && REVISION="" || REVISION="-r$REVISION"
+
+	if [[ "$OSXMINORVER" == "10.5" ]]; then
+		TARGETNAME="LEOPARD+"
+		TARGETVERSION="10.5"
+	elif [[ "$OSXMINORVER" == "10.6" ]]; then
+		TARGETNAME="SNOW LEOPARD+"
+		TARGETVERSION="10.6"
+	elif [[ "$OSXMINORVER" == "10.7" ]]; then
+		TARGETNAME="LION+"
+		TARGETVERSION="10.7"
+	elif [[ "$OSXMINORVER" == "10.8" ]]; then
+		TARGETNAME="MOUTAIN LION+"
+		TARGETVERSION="10.8"
+	elif [[ "$OSXMINORVER" == "10.9" ]]; then
+		TARGETNAME="MAVERICKS+"
+		TARGETVERSION="10.9"
+	else
+		echo "Unsupported OS X version."
+		exit 1
+	fi
+
+	TARGETARCH="$ARCH"
+	NEWNAME="Inkscape-$INKVERSION$REVISION-$TARGETVERSION-$TARGETARCH"
+	DMGFILE="$NEWNAME.dmg"
+	INFOFILE="$NEWNAME-info.txt"
+}
+
 # Actions
 # ----------------------------------------------------------
 if [[ "$BZRUPDATE" == "t" ]]
@@ -224,16 +261,6 @@ then
 	fi
 	cd $HERE
 fi
-
-# Fetch some information
-REVISION=$(bzr revno)
-ARCH=$(arch)
-TARGETVERSION=$(/usr/bin/sw_vers | fgrep ProductVersion | tr -d \  | cut -d: -f2)
-TARGETARCH=$ARCH
-
-NEWNAME="Inkscape-r$REVISION-$TARGETVERSION-$TARGETARCH"
-DMGFILE="$NEWNAME.dmg"
-INFOFILE="$NEWNAME-info.txt"
 
 if [[ "$AUTOGEN" == "t" ]]
 then
@@ -251,13 +278,17 @@ if [[ "$CONFIGURE" == "t" ]]
 then
 	ALLCONFFLAGS="$CONFFLAGS --prefix=$INSTALLPREFIX --enable-localinstall"
 	cd $SRCROOT
-	if [ ! -f configure ]
+	if [ ! -d $BUILDPREFIX ]
+	then
+		mkdir $BUILDPREFIX || exit 1
+	fi
+	cd $BUILDPREFIX
+	if [ ! -f $SRCROOT/configure ]
 	then
 		echo "Configure script not found in $SRCROOT. Run '$0 autogen' first"
 		exit 1
 	fi
-        mkdir -p build-osxapp; cd build-osxapp
-	../configure $ALLCONFFLAGS
+	$SRCROOT/configure $ALLCONFFLAGS
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nConfigure failed"
@@ -268,7 +299,8 @@ fi
 
 if [[ "$BUILD" == "t" ]]
 then
-	cd $SRCROOT/build-osxapp
+	cd $BUILDPREFIX || exit 1
+	touch "$SRCROOT/src/main.cpp" "$SRCROOT/src/ui/dialog/aboutbox.cpp"
 	make -j $NJOBS
 	status=$?
 	if [[ $status -ne 0 ]]; then
@@ -280,7 +312,7 @@ fi
 
 if [[ "$INSTALL" == "t" ]] 
 then
-	cd $SRCROOT/build-osxapp
+	cd $BUILDPREFIX || exit 1
 	make install
 	status=$?
 	if [[ $status -ne 0 ]]; then
@@ -299,9 +331,9 @@ then
 		echo "The inkscape executable \"$INSTALLPREFIX/bin/inkscape\" cound not be found."
 		exit 1
 	fi
-	if [ ! -e $SRCROOT/build-osxapp/Info.plist ]
+	if [ ! -e $BUILDPREFIX/Info.plist ]
 	then
-		echo "The file \"$SRCROOT/build-osxapp/Info.plist\" could not be found, please re-run configure."
+		echo "The file \"$BUILDPREFIX/Info.plist\" could not be found, please re-run configure."
 		exit 1
 	fi
 	
@@ -312,7 +344,7 @@ then
 	fi
 
 	# Create app bundle
-	./osx-app.sh $STRIP -b $INSTALLPREFIX/bin/inkscape -p $SRCROOT/build-osxapp/Info.plist $PYTHON_MODULES
+	./osx-app.sh $STRIP -b $INSTALLPREFIX/bin/inkscape -p $BUILDPREFIX/Info.plist $PYTHON_MODULES
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nApplication bundle creation failed"
@@ -331,6 +363,7 @@ function checkversion {
 
 if [[ "$DISTRIB" == "t" ]]
 then
+	getinkscapeinfo
 	# Create dmg bundle
 	./osx-dmg.sh -p "Inkscape.app"
 	status=$?
