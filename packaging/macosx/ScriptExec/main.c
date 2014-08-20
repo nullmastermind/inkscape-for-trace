@@ -28,7 +28,7 @@
 
 /*
  * This app laucher basically takes care of:
- * - launching Inkscape and X11 when double-clicked 
+ * - launching Inkscape when double-clicked 
  * - bringing X11 to the top when its icon is clicked in the dock (via a small applescript)
  * - catch file dropped on icon events (and double-clicked gimp documents) and notify gimp.
  * - catch quit events performed outside gimp, e.g. on the dock icon.
@@ -43,7 +43,7 @@
 
 // Note: including Carbon prevents building the launcher app in x86_64
 //       used for StandardAlert in RequestUserAttention(), 
-//       RedFatalAlert() and X11FailedHandler()
+//       RedFatalAlert()
 #include <Carbon/Carbon.h>
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -73,7 +73,6 @@
 #define kEventClassRedFatalAlert 911
 
 // custom carbon event types
-#define kEventKindX11Failed 911
 #define kEventKindFCCacheFailed 912
 
 //maximum arguments the script accepts 
@@ -104,8 +103,6 @@ static OSErr AppOpenDocAEHandler(const AppleEvent *theAppleEvent,
                                  AppleEvent *reply, long refCon);
 static OSErr AppOpenAppAEHandler(const AppleEvent *theAppleEvent,
                                  AppleEvent *reply, long refCon);
-static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall,
-                                 EventRef theEvent, void *userData);
 static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
                                  EventRef theEvent, void *userData);
 static OSErr AppReopenAppAEHandler(const AppleEvent *theAppleEvent,
@@ -149,7 +146,6 @@ extern char **environ;
 int main(int argc, char* argv[])
 {
     OSErr err = noErr;
-    EventTypeSpec X11events = { kEventClassRedFatalAlert, kEventKindX11Failed };
     EventTypeSpec FCCacheEvents = { kEventClassRedFatalAlert, kEventKindFCCacheFailed };
 
     InitCursor();
@@ -169,9 +165,6 @@ int main(int argc, char* argv[])
                                  NewAEEventHandlerUPP(AppReopenAppAEHandler),
                                  0, false);
     
-    err += InstallEventHandler(GetApplicationEventTarget(),
-                               NewEventHandlerUPP(X11FailedHandler), 1,
-                               &X11events, NULL, NULL);
     err += InstallEventHandler(GetApplicationEventTarget(),
                                NewEventHandlerUPP(FCCacheFailedHandler), 1,
                                &FCCacheEvents, NULL, NULL);
@@ -268,12 +261,7 @@ static void *Execute (void *arg)
     taskDone = false;
     
     OSErr err = ExecuteScript(scriptPath, &pid);
-    if (err == (OSErr)11) {
-        CreateEvent(NULL, kEventClassRedFatalAlert, kEventKindX11Failed, 0,
-                    kEventAttributeNone, &event);
-        PostEventToQueue(GetMainEventQueue(), event, kEventPriorityStandard);
-    }
-    else if (err == (OSErr)12) {
+    if (err == (OSErr)12) {
         CreateEvent(NULL, kEventClassRedFatalAlert, kEventKindFCCacheFailed, 0,
                     kEventAttributeNone, &event);
         PostEventToQueue(GetMainEventQueue(), event, kEventPriorityHigh);
@@ -574,47 +562,6 @@ static void OpenURL(Str255 url)
 		ICLaunchURL( icInstance, hint, data, length, &start, &end );
 		ICStop( icInstance );
 	}
-}
-
-
-//////////////////////////////////
-// Handler for when X11 fails to start
-//////////////////////////////////
-static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall, 
-                                 EventRef theEvent, void *userData)
-{
-    #pragma unused(theHanderCall, theEvent, userData)
-
-    pthread_join(tid, NULL);
-    if (odtid) pthread_join(odtid, NULL);
- 
-	SInt16 itemHit;
-	const char *getX11 = "\pGet X11 for Panther";
-
-	AlertStdAlertParamRec params;
-	params.movable = true;
-	params.helpButton = false;
-	params.filterProc = NULL;
-	params.defaultText = (StringPtr) kAlertDefaultOKText;
-	params.cancelText = getX11;
-	params.otherText = NULL;
-	params.defaultButton = kAlertStdAlertOKButton;
-	params.cancelButton = kAlertStdAlertCancelButton;
-	params.position = kWindowDefaultPosition;
-
-	StandardAlert(kAlertStopAlert, "\pFailed to start X11",
-			"\pInkscape.app requires XQuartz.",
-			&params, &itemHit);
-
-	if (itemHit == kAlertStdAlertCancelButton)
-	{
-		OpenURL("http://xquartz.macosforge.org/landing/");
-	}
-
-    ExitToShell();
-
-
-    return noErr;
 }
 
 
