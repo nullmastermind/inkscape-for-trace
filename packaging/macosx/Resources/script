@@ -9,7 +9,9 @@ CWD=`dirname "$0"`
 export VERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -f2 -d'.'`
 
 # Warn the user about time-consuming generation of fontconfig caches.
-test -f "${HOME}/.inkscape-etc/.fccache-new" || exit 12
+# TODO: Somehow keep in sync with ScriptExec and bin/inkscape. 
+#       Ideally refer to $XDG_CACHE_HOME/inkscape everywhere, but how?
+test -f "${HOME}/.cache/inkscape/.fccache-new" || exit 12
 
 
 

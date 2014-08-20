@@ -241,8 +241,9 @@ static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
     ShowFirstStartWarningDialog();
 
     // Note that we've seen the warning.
-    system("test -d \"$HOME/.inkscape-etc\" || mkdir -p \"$HOME/.inkscape-etc\"; "
-           "touch \"$HOME/.inkscape-etc/.fccache-new\"");
+    // TODO: somehow make this aware of $XDG_CACHE_HOME as set in the launcher
+    system("test -d \"$HOME/.cache/inkscape\" || mkdir -p \"$HOME/.cache/inkscape\"; "
+           "touch \"$HOME/.cache/inkscape/.fccache-new\"");
     // Rerun now.
     OSErr err = ExecuteScript(scriptPath, &pid);
     ExitToShell();

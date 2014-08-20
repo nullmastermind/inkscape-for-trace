@@ -300,7 +300,7 @@ mkdir -p $pkgetc/pango
 sed -e "s,$LIBPREFIX,\"\${CWD},g" -e 's,\.so ,.so" ,g' $LIBPREFIX/etc/pango/pango.modules > $pkgetc/pango/pango.modules
 cat > $pkgetc/pango/pangorc <<END_PANGO
 [Pango]
-ModuleFiles=\${HOME}/.inkscape-etc/pango.modules
+ModuleFiles=\${INK_CACHE_DIR}/pango.modules
 END_PANGO
 
 mkdir -p $pkgetc/fonts
