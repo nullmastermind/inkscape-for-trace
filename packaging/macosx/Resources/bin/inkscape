@@ -42,13 +42,12 @@ export PYTHONPATH="$TOP/python/site-packages/$ARCH/$PYTHON_VERS"
 # No longer required if path rewriting has been conducted.
 # export DYLD_LIBRARY_PATH="$TOP/lib"
 
-PREFDIR="${HOME}/Library/Application Support/org.inkscape.Inkscape/0.91"
-mkdir -p "$PREFDIR"
+mkdir -p "${HOME}/.inkscape-etc"
 
 export FONTCONFIG_PATH="$TOP/etc/fonts"
-export PANGO_RC_FILE="$PREFDIR/pangorc"
-export GTK_IM_MODULE_FILE="$PREFDIR/gtk.immodules"
-export GDK_PIXBUF_MODULE_FILE="$PREFDIR/gdk-pixbuf.loaders"
+export PANGO_RC_FILE="${HOME}/.inkscape-etc/pangorc"
+export GTK_IM_MODULE_FILE="${HOME}/.inkscape-etc/gtk.immodules"
+export GDK_PIXBUF_MODULE_FILE="${HOME}/.inkscape-etc/gdk-pixbuf.loaders"
 export GTK_DATA_PREFIX="$TOP"
 export GTK_EXE_PREFIX="$TOP"
 export GNOME_VFS_MODULE_CONFIG_PATH="$TOP/etc/gnome-vfs-2.0/modules"
@@ -116,12 +115,12 @@ fi
 [ $_DEBUG ] && echo "Setting Language: $LANG" 1>&2
 export LC_ALL="$LANG"
 
-sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "$PREFDIR/pangorc"
+sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "${HOME}/.inkscape-etc/pangorc"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
-    > "$PREFDIR/pango.modules"
+    > "${HOME}/.inkscape-etc/pango.modules"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gtk.immodules" \
-    > "$PREFDIR/gtk.immodules"
+    > "${HOME}/.inkscape-etc/gtk.immodules"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gdk-pixbuf.loaders" \
-    > "$PREFDIR/gdk-pixbuf.loaders"
+    > "${HOME}/.inkscape-etc/gdk-pixbuf.loaders"
 
 exec "$CWD/inkscape-bin" "$@"
