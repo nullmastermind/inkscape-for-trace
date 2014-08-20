@@ -5,9 +5,6 @@
 
 CWD=`dirname "$0"`
 
-# System version: 3 for Panther, 4 for Tiger, 5 for Leopard
-export VERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -f2 -d'.'`
-
 # Warn the user about time-consuming generation of fontconfig caches.
 # TODO: Somehow keep in sync with ScriptExec and bin/inkscape. 
 #       Ideally refer to $XDG_CACHE_HOME/inkscape everywhere, but how?
