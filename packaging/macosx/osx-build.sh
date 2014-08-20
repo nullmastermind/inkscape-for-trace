@@ -22,7 +22,7 @@
 # User modifiable parameters
 #----------------------------------------------------------
 # Configure flags
-CONFFLAGS="--enable-osxapp --enable-localinstall"
+CONFFLAGS="--enable-osxapp"
 # Libraries prefix (Warning: NO trailing slash)
 if [ -z "$LIBPREFIX" ]; then
 	LIBPREFIX="/opt/local-x11"
@@ -151,6 +151,13 @@ done
 
 # OSXMINORVER=`/usr/bin/sw_vers | grep ProductVersion | cut -d'	' -f2 | cut -f1-2 -d.`
 
+# OS X version
+OSXVERSION="$(/usr/bin/sw_vers | grep ProductVersion | cut -f2)"
+OSXMINORVER="$(echo "$OSXVERSION" | cut -d. -f 1,2)"
+OSXMINORNO="$(echo "$OSXVERSION" | cut -d. -f2)"
+OSXPOINTNO="$(echo "$OSXVERSION" | cut -d. -f3)"
+ARCH="$(uname -a | awk '{print $NF;}')"
+
 # Set environment variables
 # ----------------------------------------------------------
 export LIBPREFIX
@@ -159,11 +166,50 @@ export LIBPREFIX
 #  automake seach path
 export CPATH="$LIBPREFIX/include"
 #  configure search path
-export CPPFLAGS="-I$LIBPREFIX/include"
-export LDFLAGS="-L$LIBPREFIX/lib"
+export CPPFLAGS="$CPPFLAGS -I$LIBPREFIX/include"
+export LDFLAGS="$LDFLAGS -L$LIBPREFIX/lib"
 #  compiler arguments
-export CFLAGS="-pipe -Os"
-export CXXFLAGS="$CFLAGS -Wno-cast-align"
+export CFLAGS="$CFLAGS -pipe -Os"
+#export CXXFLAGS="$CFLAGS -Wno-cast-align"
+
+# compiler
+# TODO: detailed configure flags for each OS X version (Mavericks!)
+if [ "$OSXMINORNO" -gt "8" ]; then
+	## Apple's clang on Mavericks and later
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CLAGS  -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+elif [ "$OSXMINORNO" -gt "7" ]; then
+	## Apple's clang on Mountain Lion and later
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS  -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libstdc++"
+elif [ "$OSXMINORNO" -gt "6" ]; then
+	## Apple's clang on Lion and later
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS  -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
+elif [ "$OSXMINORNO" -gt "5" ]; then
+	## Apple's LLVM-GCC 4.2.1 on Snow Leopard and later
+	export CC="/usr/bin/llvm-gcc-4.2"
+	export CXX="/usr/bin/llvm-g++-4.2"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS"
+	CONFFLAGS="--disable-openmp $CONFFLAGS"
+elif [ "$OSXMINORNO" -eq "5" ]; then
+	## Apple's GCC 4.2.1 on Leopard
+	export CC="/usr/bin/gcc-4.2"
+	export CXX="/usr/bin/g++-4.2"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS"
+	CONFFLAGS="--disable-openmp $CONFFLAGS"
+else
+	echo "Unsupported OS X version."
+	exit 1
+fi
 
 # Actions
 # ----------------------------------------------------------
@@ -203,7 +249,7 @@ fi
 
 if [[ "$CONFIGURE" == "t" ]]
 then
-	ALLCONFFLAGS="$CONFFLAGS --prefix=$INSTALLPREFIX"
+	ALLCONFFLAGS="$CONFFLAGS --prefix=$INSTALLPREFIX --enable-localinstall"
 	cd $SRCROOT
 	if [ ! -f configure ]
 	then
