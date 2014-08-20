@@ -155,9 +155,9 @@ done
 
 # OS X version
 OSXVERSION="$(/usr/bin/sw_vers | grep ProductVersion | cut -f2)"
-OSXMINORVER="$(echo "$OSXVERSION" | cut -d. -f 1,2)"
-OSXMINORNO="$(echo "$OSXVERSION" | cut -d. -f2)"
-OSXPOINTNO="$(echo "$OSXVERSION" | cut -d. -f3)"
+OSXMINORVER="$(cut -d. -f 1,2 <<< $OSXVERSION)"
+OSXMINORNO="$(cut -d. -f2 <<< $OSXVERSION)"
+OSXPOINTNO="$(cut -d. -f3 <<< $OSXVERSION)"
 ARCH="$(uname -a | awk '{print $NF;}')"
 
 # Set environment variables
@@ -177,24 +177,32 @@ export CFLAGS="$CFLAGS -pipe -Os"
 # TODO: detailed configure flags for each OS X version (Mavericks!)
 if [ "$OSXMINORNO" -gt "8" ]; then
 	## Apple's clang on Mavericks and later
+	TARGETNAME="MAVERICKS+"
+	TARGETVERSION="10.9"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
 	export CLAGS="$CFLAGS -arch $ARCH"
 	export CXXFLAGS="$CLAGS  -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 elif [ "$OSXMINORNO" -gt "7" ]; then
 	## Apple's clang on Mountain Lion and later
+	TARGETNAME="MOUTAIN LION+"
+	TARGETVERSION="10.8"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
 	export CLAGS="$CFLAGS -arch $ARCH"
 	export CXXFLAGS="$CFLAGS  -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libstdc++"
 elif [ "$OSXMINORNO" -gt "6" ]; then
 	## Apple's clang on Lion and later
+	TARGETNAME="LION+"
+	TARGETVERSION="10.7"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
 	export CLAGS="$CFLAGS -arch $ARCH"
 	export CXXFLAGS="$CFLAGS  -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
 elif [ "$OSXMINORNO" -gt "5" ]; then
 	## Apple's LLVM-GCC 4.2.1 on Snow Leopard and later
+	TARGETNAME="SNOW LEOPARD+"
+	TARGETVERSION="10.6"
 	export CC="/usr/bin/llvm-gcc-4.2"
 	export CXX="/usr/bin/llvm-g++-4.2"
 	export CLAGS="$CFLAGS -arch $ARCH"
@@ -202,6 +210,8 @@ elif [ "$OSXMINORNO" -gt "5" ]; then
 	CONFFLAGS="--disable-openmp $CONFFLAGS"
 elif [ "$OSXMINORNO" -eq "5" ]; then
 	## Apple's GCC 4.2.1 on Leopard
+	TARGETNAME="LEOPARD+"
+	TARGETVERSION="10.5"
 	export CC="/usr/bin/gcc-4.2"
 	export CXX="/usr/bin/g++-4.2"
 	export CLAGS="$CFLAGS -arch $ARCH"
@@ -215,37 +225,18 @@ fi
 # Utility functions
 # ----------------------------------------------------------
 function getinkscapeinfo () {
-	# Fetch some information
+
 	osxapp_domain="$BUILDPREFIX/Info"
 	INKVERSION="$(defaults read $osxapp_domain CFBundleVersion)"
 	[ $? -ne 0 ] && INKVERSION="devel"
 	REVISION="$(bzr revno)"
 	[ $? -ne 0 ] && REVISION="" || REVISION="-r$REVISION"
 
-	if [[ "$OSXMINORVER" == "10.5" ]]; then
-		TARGETNAME="LEOPARD+"
-		TARGETVERSION="10.5"
-	elif [[ "$OSXMINORVER" == "10.6" ]]; then
-		TARGETNAME="SNOW LEOPARD+"
-		TARGETVERSION="10.6"
-	elif [[ "$OSXMINORVER" == "10.7" ]]; then
-		TARGETNAME="LION+"
-		TARGETVERSION="10.7"
-	elif [[ "$OSXMINORVER" == "10.8" ]]; then
-		TARGETNAME="MOUTAIN LION+"
-		TARGETVERSION="10.8"
-	elif [[ "$OSXMINORVER" == "10.9" ]]; then
-		TARGETNAME="MAVERICKS+"
-		TARGETVERSION="10.9"
-	else
-		echo "Unsupported OS X version."
-		exit 1
-	fi
-
 	TARGETARCH="$ARCH"
 	NEWNAME="Inkscape-$INKVERSION$REVISION-$TARGETVERSION-$TARGETARCH"
 	DMGFILE="$NEWNAME.dmg"
 	INFOFILE="$NEWNAME-info.txt"
+
 }
 
 # Actions
