@@ -6,6 +6,7 @@
     With modifications by Aaron Voisine for gimp.app
     With modifications by Marianne gagnon for Wilber-loves-apple
     With modifications by Michael Wybrow for Inkscape.app
+    With modifications by ~suv for Inkscape.app
  
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,7 +40,12 @@
 #pragma mark Includes
 
 // Apple stuff
+
+// Note: including Carbon prevents building the launcher app in x86_64
+//       used for StandardAlert in RequestUserAttention(), 
+//       RedFatalAlert() and X11FailedHandler()
 #include <Carbon/Carbon.h>
+
 #include <CoreFoundation/CoreFoundation.h>
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
@@ -83,15 +89,14 @@ static void *OpenDoc(void *arg);
 static OSErr ExecuteScript(char *script, pid_t *pid);
 
 static void  GetParameters(void);
-static char* GetScript(void);
-static char* GetOpenDoc(void);
+static unsigned char* GetScript(void);
+static unsigned char* GetOpenDoc(void);
 
 OSErr LoadMenuBar(char *appName);
 
-static OSStatus FSMakePath(FSSpec file, char *path, long maxPathSize);
+static OSStatus FSMakePath(FSRef fileRef, unsigned char *path, long maxPathSize);
 static void RedFatalAlert(Str255 errorString, Str255 expStr);
-static short DoesFileExist(char *path);
-static OSStatus FixFCCache(void);
+static short DoesFileExist(unsigned char *path);
 
 static OSErr AppQuitAEHandler(const AppleEvent *theAppleEvent,
                               AppleEvent *reply, long refCon);
@@ -109,7 +114,7 @@ static OSErr AppReopenAppAEHandler(const AppleEvent *theAppleEvent,
 static OSStatus CompileAppleScript(const void* text, long textLength,
                                   AEDesc *resultData);
 static OSStatus SimpleCompileAppleScript(const char* theScript);
-static void runScript();
+static OSErr runScript();
 
 ///////////////////////////////////////
 // Globals
@@ -181,7 +186,7 @@ int main(int argc, char* argv[])
     GetParameters(); //load data from files containing exec settings
 
     // compile "icon clicked" script so it's ready to execute
-    SimpleCompileAppleScript("tell application \"X11\" to activate");
+    SimpleCompileAppleScript("tell application \"XQuartz\" to activate");
     
     RunApplicationEventLoop(); //Run the event loop
     return 0;
@@ -250,116 +255,6 @@ static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
     ExitToShell();
 
     return noErr;
-}
-
-
-static size_t safeRead(int d, void *buf, size_t nbytes)
-{
-	ssize_t bytesToRead = nbytes;
-	ssize_t bytesRead = 0;
-	char *offset = (char *) buf;
-
-	while ((bytesToRead > 0))
-	{
-		bytesRead = read(d, offset, bytesToRead);
-		if (bytesRead > 0)
-		{
-			offset += bytesRead;
-			bytesToRead -= bytesRead;
-		}
-		else if (bytesRead == 0)
-		{	
-			// Reached EOF.
-			break;
-		}
-		else if (bytesRead == -1)
-		{
-			if ((errno == EINTR) || (errno == EAGAIN))
-			{
-				// Try again.
-				continue;
-			}
-			return 0;
-		}
-	}
-	return bytesRead;
-}
-
-
-/////////////////////////////////////
-// Code to run fc-cache on first run
-/////////////////////////////////////
-static OSStatus FixFCCache (void)
-{
-	FILE *fileConnToChild = NULL;
-	int fdConnToChild = 0;
-	pid_t childPID = WAIT_ANY;
-	size_t bytesChildPID;
-	size_t bytesRead;
-	int status;
-
-	char commandStr[] = "/usr/X11R6/bin/fc-cache";
-	char *commandArgs[] = { "-f", NULL };
-
-	// Run fc-cache
-	AuthorizationItem authItems[] = 
-	{
-	{
-		kAuthorizationRightExecute,
-		strlen(commandStr),
-		commandStr,
-		0
-	}
-	};
-	AuthorizationItemSet authItemSet =
-	{
-		1,
-		authItems
-	};
-	AuthorizationRef authRef = NULL;
-	OSStatus err = AuthorizationCreate (NULL, &authItemSet,
-			kAuthorizationFlagInteractionAllowed | 
-			kAuthorizationFlagExtendRights, &authRef);
-
-	if (err == errAuthorizationSuccess)
-	{
-		err = AuthorizationExecuteWithPrivileges(authRef, commandStr, 
-				kAuthorizationFlagDefaults, commandArgs,
-				&fileConnToChild);
-
-		if (err == errAuthorizationSuccess)
-		{
-			// Unfortunately, AuthorizationExecuteWithPrivileges
-			// does not return the process ID associated with the
-			// process it runs.  The best solution we have it to
-			// try and get the process ID from the file descriptor.
-			// This is based on example code from Apple's
-			// MoreAuthSample.
-
-			fdConnToChild = fileno(fileConnToChild);
-			
-			// Try an get the process ID of the fc-cache command
-			bytesChildPID = sizeof(childPID);
-			bytesRead = safeRead(fdConnToChild, &childPID,
-					bytesChildPID);
-			if (bytesRead != bytesChildPID)
-			{
-				// If we can't get it the best alternative
-				// is to wait for any child to finish.
-				childPID = WAIT_ANY;
-			}
-
-			if (fileConnToChild != NULL) {
-				fclose(fileConnToChild);
-			}
-
-			// Wait for child process to finish.
-			waitpid(childPID, &status, 0);
-		}
-	}
-	AuthorizationFree(authRef, kAuthorizationFlagDestroyRights);
-
-	return err;
 }
 
 
@@ -448,14 +343,13 @@ static void GetParameters (void)
 ///////////////////////////////////////
 // Get path to the script in Resources folder
 ///////////////////////////////////////
-static char* GetScript (void)
+static unsigned char* GetScript (void)
 {
     CFStringRef fileName;
     CFBundleRef appBundle;
     CFURLRef scriptFileURL;
     FSRef fileRef;
-    FSSpec fileSpec;
-    char *path;
+    unsigned char *path;
 
     //get CF URL for script
     if (! (appBundle = CFBundleGetMainBundle())) return NULL;
@@ -472,13 +366,9 @@ static char* GetScript (void)
     CFRelease(scriptFileURL);
     CFRelease(fileName);
     
-    //convert FSRef to FSSpec
-    if (FSGetCatalogInfo(&fileRef, kFSCatInfoNone, NULL, NULL, &fileSpec,
-                         NULL)) return NULL;
-        
     //create path string
     if (! (path = malloc(kMaxPathLength))) return NULL;
-    if (FSMakePath(fileSpec, path, kMaxPathLength)) return NULL;
+    if (FSMakePath(fileRef, path, kMaxPathLength)) return NULL;
     if (! DoesFileExist(path)) return NULL;
     
     return path;
@@ -487,14 +377,13 @@ static char* GetScript (void)
 ///////////////////////////////////////
 // Gets the path to openDoc in Resources folder
 ///////////////////////////////////////
-static char* GetOpenDoc (void)
+static unsigned char* GetOpenDoc (void)
 {
     CFStringRef fileName;
     CFBundleRef appBundle;
     CFURLRef openDocFileURL;
     FSRef fileRef;
-    FSSpec fileSpec;
-    char *path;
+    unsigned char *path;
     
     //get CF URL for openDoc
     if (! (appBundle = CFBundleGetMainBundle())) return NULL;
@@ -511,13 +400,9 @@ static char* GetOpenDoc (void)
     CFRelease(openDocFileURL);
     CFRelease(fileName);
         
-    //convert FSRef to FSSpec
-    if (FSGetCatalogInfo(&fileRef, kFSCatInfoNone, NULL, NULL, &fileSpec,
-                         NULL)) return NULL;
-
     //create path string
     if (! (path = malloc(kMaxPathLength))) return NULL;
-    if (FSMakePath(fileSpec, path, kMaxPathLength)) return NULL;
+    if (FSMakePath(fileRef, path, kMaxPathLength)) return NULL;
     if (! DoesFileExist(path)) return NULL;
     
     return path;
@@ -545,14 +430,8 @@ OSErr LoadMenuBar (char *appName)
 ///////////////////////////////////////
 // Generate path string from FSSpec record
 ///////////////////////////////////////
-static OSStatus FSMakePath(FSSpec file, char *path, long maxPathSize)
+static OSStatus FSMakePath(FSRef fileRef, unsigned char *path, long maxPathSize)
 {
-    OSErr err = noErr;
-    FSRef fileRef;
-
-    //create file reference from file spec
-    if (err = FSpMakeFSRef(&file, &fileRef)) return err;
-
     // and then convert the FSRef to a path
     return FSRefMakePath(&fileRef, path, maxPathSize);
 }
@@ -569,9 +448,9 @@ static void RedFatalAlert (Str255 errorString, Str255 expStr)
 ///////////////////////////////////////
 // Determines whether file exists at path or not
 ///////////////////////////////////////
-static short DoesFileExist (char *path)
+static short DoesFileExist (unsigned char *path)
 {
-    if (access(path, F_OK) == -1) return false;
+    if (access((char *)path, F_OK) == -1) return false;
     return true;	
 }
 
@@ -590,7 +469,7 @@ static OSErr AppQuitAEHandler(const AppleEvent *theAppleEvent,
     
     if (! taskDone && pid) { //kill the script process brutally
         kill(pid, 9);
-        printf("Platypus App: PID %d killed brutally\n", pid);
+        printf("Inkscape.app: PID %d killed brutally\n", pid);
     }
     
     pthread_cancel(tid);
@@ -610,31 +489,31 @@ static OSErr AppOpenDocAEHandler(const AppleEvent *theAppleEvent,
     #pragma unused (reply, refCon)
 	
     OSErr err = noErr;
-    AEDescList fileSpecList;
+    AEDescList fileRefList;
     AEKeyword keyword;
     DescType type;
         
     short i;
     long count, actualSize;
         
-    FSSpec fileSpec;
-    char path[kMaxPathLength];
+    FSRef fileRef;
+    unsigned char path[kMaxPathLength];
     
     while (numArgs > 0) free(fileArgs[numArgs--]);
         
     //Read the AppleEvent
     err = AEGetParamDesc(theAppleEvent, keyDirectObject, typeAEList,
-                         &fileSpecList);
+                         &fileRefList);
 		
-    err = AECountItems(&fileSpecList, &count); //Count number of files
+    err = AECountItems(&fileRefList, &count); //Count number of files
                 
     for (i = 1; i <= count; i++) { //iteratively process each file
-        //get fsspec from apple event
-        if (! (err = AEGetNthPtr(&fileSpecList, i, typeFSS, &keyword, &type,
-                                 (Ptr)&fileSpec, sizeof(FSSpec), &actualSize)))
+        //get fsref from apple event
+        if (! (err = AEGetNthPtr(&fileRefList, i, typeFSRef, &keyword, &type,
+                                 (Ptr)&fileRef, sizeof(FSRef), &actualSize)))
         {
-            //get path from file spec
-            if ((err = FSMakePath(fileSpec, (unsigned char *)&path,
+            //get path from file ref
+            if ((err = FSMakePath(fileRef, (unsigned char *)&path,
                                   kMaxPathLength))) return err;
                             
             if (numArgs == kMaxArgumentsToScript) break;
@@ -659,7 +538,7 @@ static OSErr AppOpenDocAEHandler(const AppleEvent *theAppleEvent,
 static OSErr AppReopenAppAEHandler(const AppleEvent *theAppleEvent,
                                  AppleEvent *reply, long refCon)
 {
-    runScript();
+    return runScript();
 }
 
 // if app is being opened
@@ -724,12 +603,12 @@ static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall,
 	params.position = kWindowDefaultPosition;
 
 	StandardAlert(kAlertStopAlert, "\pFailed to start X11",
-			"\pInkscape.app requires Apple's X11, which is freely downloadable from Apple's website for Panther (10.3.x) users and available as an optional install from the installation DVD for Tiger (10.4.x) users.\n\nPlease install X11 and restart Inkscape.",
+			"\pInkscape.app requires XQuartz.",
 			&params, &itemHit);
 
 	if (itemHit == kAlertStdAlertCancelButton)
 	{
-		OpenURL("http://www.apple.com/downloads/macosx/apple/macosx_updates/x11formacosx.html");
+		OpenURL("http://xquartz.macosforge.org/landing/");
 	}
 
     ExitToShell();
@@ -774,7 +653,7 @@ static OSStatus CompileAppleScript(const void* text, long textLength,
 }
 
 /* runs the compiled applescript */
-static void runScript()
+static OSErr runScript()
 {
     /* run the script */
     err = OSAExecute(theComponent, scriptID, kOSANullScript,
