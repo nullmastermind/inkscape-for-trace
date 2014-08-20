@@ -46,8 +46,8 @@ mkdir -p "${HOME}/.inkscape-etc"
 
 export FONTCONFIG_PATH="$TOP/etc/fonts"
 export PANGO_RC_FILE="${HOME}/.inkscape-etc/pangorc"
-export GTK_IM_MODULE_FILE="${HOME}/.inkscape-etc/gtk.immodules"
-export GDK_PIXBUF_MODULE_FILE="${HOME}/.inkscape-etc/gdk-pixbuf.loaders"
+export GTK_IM_MODULE_FILE="${HOME}/.inkscape-etc/immodules.cache"
+export GDK_PIXBUF_MODULE_FILE="${HOME}/.inkscape-etc/loaders.cache"
 export GTK_DATA_PREFIX="$TOP"
 export GTK_EXE_PREFIX="$TOP"
 export GNOME_VFS_MODULE_CONFIG_PATH="$TOP/etc/gnome-vfs-2.0/modules"
@@ -118,9 +118,9 @@ export LC_ALL="$LANG"
 sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "${HOME}/.inkscape-etc/pangorc"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
     > "${HOME}/.inkscape-etc/pango.modules"
-sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gtk.immodules" \
-    > "${HOME}/.inkscape-etc/gtk.immodules"
-sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gdk-pixbuf.loaders" \
-    > "${HOME}/.inkscape-etc/gdk-pixbuf.loaders"
+sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gtk-2.0/__gtk_version__/immodules.cache" \
+    > "${HOME}/.inkscape-etc/immodules.cache"
+sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gdk-pixbuf-2.0/__gdk_pixbuf_version__/loaders.cache" \
+    > "${HOME}/.inkscape-etc/loaders.cache"
 
 exec "$CWD/inkscape-bin" "$@"

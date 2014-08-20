@@ -327,12 +327,14 @@ cp -r $LIBPREFIX/lib/gtk-2.0/$gtk_version/* $pkglib/gtk-2.0/$gtk_version/
 mkdir -p $pkglib/gnome-vfs-2.0/modules
 cp $LIBPREFIX/lib/gnome-vfs-2.0/modules/*.so $pkglib/gnome-vfs-2.0/modules/
 
-mkdir -p $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders
-cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gtk_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/
+gdk_pixbuf_version=`pkg-config --variable=gdk_pixbuf_binary_version gdk-pixbuf-2.0`
+mkdir -p $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders
+cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/
 
-mkdir -p "$pkgetc/gtk-2.0/"
-sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkgetc/gtk-2.0/gtk.immodules
-sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gtk_version/loaders.cache > $pkgetc/gtk-2.0/gdk-pixbuf.loaders
+sed -e "s,__gtk_version__,$gtk_version,g" -i "" $pkgbin/inkscape
+sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" $pkgbin/inkscape
+sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkglib/gtk-2.0/$gtk_version/immodules.cache
+sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache > $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache
 
 cp -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
 cp -r "$LIBPREFIX/share/ImageMagick-6" "$pkgresources/share/"
