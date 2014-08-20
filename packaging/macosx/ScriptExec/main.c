@@ -542,29 +542,6 @@ static OSErr AppOpenAppAEHandler(const AppleEvent *theAppleEvent,
 }
 
 
-static void OpenURL(Str255 url)
-{
-	// Use Internet Config to hand the URL to the appropriate application, as
-	// set by the user in the Internet Preferences pane.
-	ICInstance icInstance;
-	// Applications creator code:
-	OSType signature = 'Inks';
-	OSStatus error = ICStart( &icInstance, signature );
-	if ( error == noErr )
-	{
-		ConstStr255Param hint = 0x0;
-		const char* data = url;
-		long length = strlen(url);
-		long start =  0;
-		long end = length;
-		// Don't bother testing return value (error); launched application will
-		// report problems.
-		ICLaunchURL( icInstance, hint, data, length, &start, &end );
-		ICStop( icInstance );
-	}
-}
-
-
 // Compile and run a small AppleScript. The code below does no cleanup and no proper error checks
 // but since it's there until the app is shut down, and since we know the script is okay,
 // there should not be any problems.
