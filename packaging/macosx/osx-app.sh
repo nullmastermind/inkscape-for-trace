@@ -314,10 +314,11 @@ ModuleFiles=\${HOME}/Library/Application Support/org.inkscape.Inkscape/0.91/pang
 END_PANGO
 
 mkdir -p $pkgetc/fonts
-#cp -r $LIBPREFIX/etc/fonts/fonts.conf $pkgetc/fonts/
 cp -r $LIBPREFIX/etc/fonts/conf.d $pkgetc/fonts/
+mkdir -p $pkgshare/fontconfig
 cp -r $LIBPREFIX/share/fontconfig/conf.avail $pkgshare/fontconfig/
-(cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/10-autohint.conf . )
+(cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/10-autohint.conf)
+(cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/70-no-bitmaps.conf)
 
 
 for item in gnome-vfs-mime-magic gnome-vfs-2.0
