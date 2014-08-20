@@ -133,10 +133,11 @@ if [ ! -f "$plist" ]; then
 	exit 1
 fi
 
-if [ "x$python_dir" == "x" ]; then
-	echo "Python modules directory not specified." >&2
-
-	exit 1
+if [ ${add_python} = "true" ]; then
+	if [ "x$python_dir" == "x" ]; then
+		echo "Python modules directory not specified." >&2
+		exit 1
+	fi
 fi
 
 if [ ! -e "$LIBPREFIX" ]; then
@@ -273,6 +274,7 @@ for item in Adwaita Clearlooks HighContrast Industrial Raleigh Redmond ThinIce; 
     mkdir -p "$pkgshare/themes/$item"
     cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
 done
+(cd "$pkgshare/themes/" && ln -s Adwaita Adwaita-osxapp)
 
 # Icons and the rest of the script framework
 rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
@@ -302,12 +304,11 @@ ModuleFiles=\${HOME}/Library/Application Support/org.inkscape.Inkscape/0.91/pang
 END_PANGO
 
 mkdir -p $pkgetc/fonts
-cp -r $LIBPREFIX/etc/fonts/fonts.conf $pkgetc/fonts/
+#cp -r $LIBPREFIX/etc/fonts/fonts.conf $pkgetc/fonts/
 cp -r $LIBPREFIX/etc/fonts/conf.d $pkgetc/fonts/
+cp -r $LIBPREFIX/share/fontconfig/conf.avail $pkgshare/fontconfig/
+(cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/10-autohint.conf . )
 
-mkdir -p $pkgetc/gtk-2.0
-sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/etc/gtk-2.0/gdk-pixbuf.loaders > $pkgetc/gtk-2.0/gdk-pixbuf.loaders
-sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/etc/gtk-2.0/gtk.immodules > $pkgetc/gtk-2.0/gtk.immodules
 
 for item in gnome-vfs-mime-magic gnome-vfs-2.0
 do
@@ -327,6 +328,10 @@ cp $LIBPREFIX/lib/gnome-vfs-2.0/modules/*.so $pkglib/gnome-vfs-2.0/modules/
 
 mkdir -p $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders
 cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gtk_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/
+
+mkdir -p "$pkgetc/gtk-2.0/"
+sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkgetc/gtk-2.0/gtk.immodules
+sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gtk_version/loaders.cache > $pkgetc/gtk-2.0/gdk-pixbuf.loaders
 
 cp -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
 cp -r "$LIBPREFIX/share/ImageMagick-6" "$pkgresources/share/"
@@ -424,7 +429,7 @@ fixlib () {
                         echo "Skipping to_path for $lib in $1"
                         ;;
                 esac
-                [ $to_path ] && ${LIBPREFIX}/bin/install_name_tool -change "$lib" "$to_path" "$1"
+                [ $to_path ] && install_name_tool -change "$lib" "$to_path" "$1"
             fi
         done
     fi

@@ -78,7 +78,7 @@ ESCAPEDTOP=`echo "$TOP" | sed 's/#/\\\\\\\\#/' | sed 's/&/\\\\\\&/g' | sed 's/|/
 
 # Set GTK theme (only if there is no .gtkrc-2.0 in the user's home)
 if [[ ! -e "$HOME/.gtkrc-2.0" ]]; then
-	export GTK2_RC_FILES="$ESCAPEDTOP/themes/Adwaita/gtk-2.0/gtkrc"
+	export GTK2_RC_FILES="$ESCAPEDTOP/etc/gtk-2.0/gtkrc"
 fi
 
 # If the AppleCollationOrder preference doesn't exist, we fall back to using
@@ -119,6 +119,8 @@ export LC_ALL="$LANG"
 sed 's|${HOME}|'"$HOME|g" "$TOP/etc/pango/pangorc" > "$PREFDIR/pangorc"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
     > "$PREFDIR/pango.modules"
+sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gtk.immodules" \
+    > "$PREFDIR/.inkscape-etc/gtk.immodules"
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/gtk-2.0/gdk-pixbuf.loaders" \
     > "$PREFDIR/gdk-pixbuf.loaders"
 
