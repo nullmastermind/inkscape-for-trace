@@ -214,12 +214,14 @@ pkgexec="$package/Contents/MacOS"
 pkgbin="$package/Contents/Resources/bin"
 pkgshare="$package/Contents/Resources/share"
 pkglib="$package/Contents/Resources/lib"
-pkglocale="$package/Contents/Resources/locale"
+pkgetc="$package/Contents/Resources/etc"
+pkglocale="$package/Contents/Resources/share/locale"
 pkgpython="$package/Contents/Resources/python/site-packages/"
 pkgresources="$package/Contents/Resources"
 
 mkdir -p "$pkgexec"
 mkdir -p "$pkgbin"
+mkdir -p "$pkgetc"
 mkdir -p "$pkglib"
 mkdir -p "$pkgshare"
 mkdir -p "$pkglocale"
@@ -251,13 +253,13 @@ cp -v "$binary" "$binpath"
 # TODO Add a "$verbose" variable and command line switch, which sets wether these commands are verbose or not
 
 # Share files
-rsync -av "$binary_dir/../share/$binary_name"/* "$pkgresources/"
+rsync -av "$binary_dir/../share/$binary_name"/* "$pkgshare/$binary_name"
 cp "$plist" "$package/Contents/Info.plist"
-rsync -av "$binary_dir/../share/locale"/* "$pkgresources/locale"
+rsync -av "$binary_dir/../share/locale"/* "$pkglocale"
 
 # Copy GTK shared mime information
 mkdir -p "$pkgresources/share"
-cp -rp "$LIBPREFIX/share/mime" "$pkgresources/share/"
+cp -rp "$LIBPREFIX/share/mime" "$pkgshare/"
 
 # Copy GTK hicolor icon theme index file
 mkdir -p "$pkgresources/share/icons/hicolor"
@@ -293,7 +295,6 @@ fi
 echo "APPLInks" > $package/Contents/PkgInfo
 
 # Pull in extra requirements for Pango and GTK
-pkgetc="$package/Contents/Resources/etc"
 mkdir -p $pkgetc/pango
 
 # Need to adjust path and quote in case of spaces in path.
