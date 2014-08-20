@@ -12,7 +12,7 @@ test -f "${HOME}/.cache/inkscape/.fccache-new" || exit 12
 
 
 
-BASE=`echo "$0" | sed -e 's/\/Contents\/Resources\/script/\//'`
+BASE="$(echo "$0" | sed -e 's/\/Contents\/Resources\/script/\//')"
 cd "$BASE"
 exec "$CWD/bin/inkscape" "$@"
 # TODO examine whether it would be wisest to move the code from inkscape shell
