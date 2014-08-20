@@ -2,7 +2,7 @@
 # gtkrc file for Inkscape.app (X11)
 #
 
-gtk-theme-name = "Adwaita-osxapp"
+gtk-theme-name = "Adwaita"
 gtk-font-name = "Lucida Grande 9"
 
 gtk-icon-theme-name = "GtkStock"

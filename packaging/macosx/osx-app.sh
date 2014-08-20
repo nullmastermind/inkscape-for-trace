@@ -202,6 +202,11 @@ fi
 # Set the 'macosx' directory, usually the current directory.
 resdir=`pwd`
 
+# Custom resources used for symbolic icons and dark theme
+if [ -z "$custom_res" ] ; then
+    custom_res="${resdir}/Resources-extras"
+fi
+
 
 # Prepare Package
 #----------------------------------------------------------
@@ -268,13 +273,18 @@ cp -rp "$LIBPREFIX/share/mime" "$pkgresources/share/"
 mkdir -p "$pkgresources/share/icons/hicolor"
 cp "$LIBPREFIX/share/icons/hicolor/index.theme"  "$pkgresources/share/icons/hicolor"
 
+# GTK+ stock icons with legacy icon mapping
+echo "Creating GtkStock icon theme ..."
+stock_src="${custom_res}/src/icons/stock-icons" \
+    ./create-stock-icon-theme.sh "${pkgshare}/icons/GtkStock"
+gtk-update-icon-cache --index-only "${pkgshare}/icons/GtkStock"
+
 # GTK+ themes
 cp -RP "$LIBPREFIX/share/gtk-engines" "$pkgshare/"
 for item in Adwaita Clearlooks HighContrast Industrial Raleigh Redmond ThinIce; do
     mkdir -p "$pkgshare/themes/$item"
     cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
 done
-(cd "$pkgshare/themes/" && ln -s Adwaita Adwaita-osxapp)
 
 # Icons and the rest of the script framework
 rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
