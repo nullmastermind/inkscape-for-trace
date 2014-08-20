@@ -183,6 +183,7 @@ fi
 REVISION=$(bzr revno)
 ARCH=$(arch)
 TARGETVERSION=$(/usr/bin/sw_vers | fgrep ProductVersion | tr -d \  | cut -d: -f2)
+TARGETARCH=$ARCH
 
 NEWNAME="Inkscape-r$REVISION-$TARGETVERSION-$TARGETARCH"
 DMGFILE="$NEWNAME.dmg"
@@ -320,7 +321,7 @@ Included dependency versions:
 	Poppler       `checkversion poppler-cairo`
 	LittleCMS     `checkversion lcms`
 	GnomeVFS      `checkversion gnome-vfs-2.0`
-	LibWPG        `checkversion libwpg-0.1`
+	LibWPG        `checkversion libwpg-0.2`
 Configure options:
 	$CONFFLAGS" > $INFOFILE
 	if [[ "$STRIP" == "t" ]]; then
