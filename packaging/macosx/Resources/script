@@ -3,7 +3,7 @@
 # Author: Aaron Voisine <aaron@voisine.org>
 # Inkscape Modifications: Michael Wybrow <mjwybrow@users.sourceforge.net>
 
-CWD=`dirname "$0"`
+CWD="$(cd "$(dirname "$0")" && pwd)"
 
 # Warn the user about time-consuming generation of fontconfig caches.
 # TODO: Somehow keep in sync with ScriptExec and bin/inkscape. 
