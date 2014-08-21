@@ -27,19 +27,25 @@ export PATH="/usr/texbin:/opt/local/bin:/sw/bin/:/Library/Frameworks/Python.fram
 # over one that may be installed be Macports, Fink or some other means.
 export PATH="/usr/bin:$PATH"
 
-# On Snow Leopard, use the 32-bit version of python from Universal build.
-# This is because our bundled i386 python libraries are 32-bit only.
-export VERSIONER_PYTHON_VERSION=2.6
-export VERSIONER_PYTHON_PREFER_32_BIT=yes
-
-
 # Setup PYTHONPATH to use python modules shipped with Inkscape
-ARCH=`arch`
-PYTHON_VERS=`python -V 2>&1 | cut -c 8-10`
-export PYTHONPATH="$TOP/python/site-packages/$ARCH/$PYTHON_VERS"
-# NB: we are only preprending some stuff to the default python path so if the directory does not exist it should not harm the rest
+OSXMINORNO="$(/usr/bin/sw_vers -productVersion | cut -d. -f2)"
+build_arch=__build_arch__
+if [ $OSXMINORNO -gt "5" ]; then
+	if [ $OSXMINORNO -eq "6" ]; then
+		export VERSIONER_PYTHON_VERSION=2.6
+	else # if [ $OSXMINORNO -ge "7" ]; then
+		export VERSIONER_PYTHON_VERSION=2.7
+	fi
+	if [ $build_arch = "i386" ]; then
+		export VERSIONER_PYTHON_PREFER_32_BIT=yes
+	else # build & runtime arch x86_64
+		export VERSIONER_PYTHON_PREFER_32_BIT=no
+	fi
+fi
+PYTHON_VERS="$(python -V 2>&1 | cut -c 8-10)"
+export PYTHONPATH="$TOP/lib/python$PYTHON_VERS/site-packages/"
 
-# fallback
+# fallback for missing $INK_CACHE_DIR
 if [ -z "$INK_CACHE_DIR" ]; then
 	INK_CACHE_DIR="${HOME}/.cache/inkscape"
 	mkdir -p "$INK_CACHE_DIR"

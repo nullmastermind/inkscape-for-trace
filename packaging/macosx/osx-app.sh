@@ -35,7 +35,7 @@
 
 # Defaults
 strip=false
-add_python=false
+add_python=true #false
 python_dir=""
 
 # If LIBPREFIX is not already set (by osx-build.sh for example) set it to blank (one should use the command line argument to set it correctly)
@@ -135,12 +135,12 @@ if [ ! -f "$plist" ]; then
 	exit 1
 fi
 
-if [ ${add_python} = "true" ]; then
-	if [ "x$python_dir" == "x" ]; then
-		echo "Python modules directory not specified." >&2
-		exit 1
-	fi
-fi
+# if [ ${add_python} = "true" ]; then
+# 	if [ "x$python_dir" == "x" ]; then
+# 		echo "Python modules directory not specified." >&2
+# 		exit 1
+# 	fi
+# fi
 
 if [ ! -e "$LIBPREFIX" ]; then
 	echo "Cannot find the directory containing the libraires: $LIBPREFIX" >&2
@@ -224,7 +224,7 @@ pkgetc="$package/Contents/Resources/etc"
 pkglib="$package/Contents/Resources/lib"
 pkgshare="$package/Contents/Resources/share"
 pkglocale="$package/Contents/Resources/share/locale"
-pkgpython="$package/Contents/Resources/python/site-packages/"
+#pkgpython="$package/Contents/Resources/python/site-packages/"
 pkgresources="$package/Contents/Resources"
 
 mkdir -p "$pkgexec"
@@ -233,7 +233,21 @@ mkdir -p "$pkgetc"
 mkdir -p "$pkglib"
 mkdir -p "$pkgshare"
 mkdir -p "$pkglocale"
-mkdir -p "$pkgpython"
+#mkdir -p "$pkgpython"
+
+
+# utility
+#----------------------------------------------------------
+
+if [ $verbose_mode ] ; then 
+    cp_cmd="/bin/cp -v"
+    ln_cmd="/bin/ln -sv"
+    rsync_cmd="/usr/bin/rsync -av"
+else
+    cp_cmd="/bin/cp"
+    ln_cmd="/bin/ln -s"
+    rsync_cmd="/usr/bin/rsync -a"
+fi
 
 
 # Build and add the launcher
@@ -296,9 +310,42 @@ sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" $pkgbin/inkscape
 
 # Add python modules if requested
 if [ ${add_python} = "true" ]; then
-	# copy python site-packages. They need to be organized in a hierarchical set of directories, by architecture and python major+minor version, e.g. i386/2.3/ for Ptyhon 2.3 on Intel
-	cp -rvf "$python_dir"/* "$pkgpython"
+	function install_py_modules ()
+	{
+		# lxml
+		$cp_cmd -RL "$packages_path/lxml" "$pkgpython"
+		# numpy
+		$cp_cmd -RL "$packages_path/numpy" "$pkgpython"
+		$cp_cmd -RL "$packages_path/nose" "$pkgpython"
+		# UniConvertor
+		$cp_cmd -RL "$packages_path/sk1libs" "$pkgpython"
+		$cp_cmd -RL "$packages_path/uniconvertor" "$pkgpython"
+		# cleanup python modules
+		find "$pkgpython" -name *.pyc -print0 | xargs -0 rm -f
+		find "$pkgpython" -name *.pyo -print0 | xargs -0 rm -f
+
+		# TODO: test whether to remove hard-coded paths from *.la files or to exclude them altogether
+		for la_file in $(find "$pkgpython" -name *.la); do
+			sed -e "s,libdir=\'.*\',libdir=\'\',g" -i "" "$la_file"
+		done
+	}
+
+	if [ $OSXMINORNO -eq "5" ]; then
+		PYTHON_VERSIONS=("2.5" "2.6" "2.7")
+	elif [ $OSXMINORNO -eq "6" ]; then
+		PYTHON_VERSIONS=("2.6" "2.7")
+	else # if [ $OSXMINORNO -ge "7" ]; then
+		PYTHON_VERSIONS=("2.7")
+	fi
+	for PYTHON_VER in $PYTHON_VERSIONS; do
+		python_dir="$(${LIBPREFIX}/bin/python${PYTHON_VER}-config --prefix)"
+		packages_path="${python_dir}/lib/python${PYTHON_VER}/site-packages"
+		pkgpython="${pkglib}/python${PYTHON_VER}/site-packages"
+		mkdir -p $pkgpython
+		install_py_modules
+	done
 fi
+sed -e "s,__build_arch__,$ARCH,g" -i "" $pkgbin/inkscape
 
 # PkgInfo must match bundle type and creator code from Info.plist
 echo "APPLInks" > $package/Contents/PkgInfo
@@ -358,7 +405,10 @@ cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
 # Copy all linked libraries into the bundle
 #----------------------------------------------------------
 # get list of *.so modules from python modules
-python_libs="$(find $pkgpython -name *.so -or -name *.dylib)"
+python_libs=""
+for PYTHON_VER in "2.5" "2.6" "2.7"; do
+	python_libs="$python_libs $(find "${pkglib}/python${PYTHON_VER}" -name *.so -or -name *.dylib)"
+done
 
 # get list of included binary executables
 extra_bin=$(find $pkgbin -exec file {} \; | grep executable | grep -v text | cut -d: -f1)
