@@ -402,6 +402,9 @@ cp -r "$LIBPREFIX/share/ImageMagick-6" "$pkgresources/share/"
 # Copy aspell dictionary files:
 cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
 
+# Copy Poppler data:
+cp -r "$LIBPREFIX/share/poppler" "$pkgshare"
+
 # Copy all linked libraries into the bundle
 #----------------------------------------------------------
 # get list of *.so modules from python modules
