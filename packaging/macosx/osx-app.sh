@@ -304,10 +304,6 @@ done
 # Icons and the rest of the script framework
 rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
 
-# Update the ImageMagick path in startup script.
-IMAGEMAGICKVER=`pkg-config --modversion ImageMagick`
-sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" $pkgbin/inkscape
-
 # Add python modules if requested
 if [ ${add_python} = "true" ]; then
 	function install_py_modules ()
@@ -396,8 +392,31 @@ sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" $pkgbin/inkscape
 sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkglib/gtk-2.0/$gtk_version/immodules.cache
 sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache > $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache
 
+# ImageMagick version
+IMAGEMAGICKVER="$(pkg-config --modversion ImageMagick)"
+IMAGEMAGICKVER_MAJOR="$(cut -d. -f1 <<< "$IMAGEMAGICKVER")"
+
+# ImageMagick data
+# include *.la files for main libs too
+for item in "$LIBPREFIX/lib/libMagick"*.la; do
+    cp "$item" "$pkglib/"
+done
+# ImageMagick modules
 cp -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
-cp -r "$LIBPREFIX/share/ImageMagick-6" "$pkgresources/share/"
+cp -r "$LIBPREFIX/etc/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgetc/"
+cp -r "$LIBPREFIX/share/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgshare/"
+# REQUIRED: remove hard-coded paths from *.la files
+for la_file in "$pkglib/libMagick"*.la; do
+    sed -e "s,$LIBPREFIX/lib,,g" -i "" "$la_file"
+done
+for la_file in "$pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/coders"/*.la; do
+    sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/coders,,g" -i "" "$la_file"
+done
+for la_file in "$pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters"/*.la; do
+    sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters,,g" -i "" "$la_file"
+done
+sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" $pkgbin/inkscape
+sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" $pkgbin/inkscape
 
 # Copy aspell dictionary files:
 cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
